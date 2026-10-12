@@ -113900,6 +113900,19 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder/diff validation", :exit 0}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791773353471-6205-5482fc2b",
+     :commands
+     ["git show/diff-tree f73171cdd"
+      "sha256/diff/placeholder checks"
+      "statement-registry.py check"
+      "lake env lean ConstructionTargets/PointWedgeVanKampen.lean"
+      "lake build ConstructionTargets.PointWedgeVanKampen"
+      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (expected absent)"],
+     :finding
+     "Exact scoped commit and frozen fixture 0bca6c...8c8b0 verified. New simp lemma correctly identifies funInvIdAssoc.hom with the target functor map of eK.unitInv at the explicit representative; direction and representation boundary are faithful. Source is sorry-free; hashes and 131/131 registry reproduce; Lean/build pass; only standard axioms. Valid program STOP with compiled progress and residual listing exact unit/unitInv maps, two span maps, literal lifts, then B12; final target is absent as reported."},
     :commit "f73171cddd7078f62f85d816497d19b4bad73b99",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
@@ -113910,7 +113923,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113931,7 +113944,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Inverse left component is the target map of the overlap unit.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Forward right component is the target map of overlap unitInv.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -114127,7 +114140,11 @@
     {:job 8,
      :commit "1696242d8613e9cb7f3074d32fa70292452a3caa",
      :reason
-     "Inverse left component is the target map of the overlap unit."}]}
+     "Inverse left component is the target map of the overlap unit."}
+    {:job 9,
+     :commit "f73171cddd7078f62f85d816497d19b4bad73b99",
+     :reason
+     "Forward right component is the target map of overlap unitInv."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
