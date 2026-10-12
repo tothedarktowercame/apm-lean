@@ -3101,6 +3101,30 @@ theorem integralRelativeHomologyComparisonWithTransport_pairMap_naturality
           forgetIntModules).inv ≫ q) hchain').trans
         (Category.assoc _ _ _).symm))))
 
+theorem coefficientOpenDiskRelativeHomologyComparison_naturality
+    (k : ℕ) :
+    forgetIntModules.map (HomologicalComplex.homologyMap
+          (CoefficientRadialPair.pairMap ℤ
+            (T02A06HemisphereExcision.puncturedOpenDiskSet (k + 2))
+            (CoefficientModelLocal.puncture (k + 2))
+            (coefficientOpenDiskAmbientInclusion (k + 2))
+            (coefficientOpenDiskAmbientInclusion_mapsTo (k + 2))) (k + 2)) ≫
+        (integralRelativeHomologyComparisonWithTransport
+          (CoefficientModelLocal.puncture (k + 2)) (k + 2)).hom =
+      (integralOpenDiskRelativeHomologyComparison k).hom ≫
+        HomologicalComplex.homologyMap
+          (relativeSingularMap
+            (T02A06HemisphereExcision.puncturedOpenDiskSet (k + 2))
+            (CoefficientModelLocal.puncture (k + 2))
+            (coefficientOpenDiskAmbientInclusion (k + 2))
+            (coefficientOpenDiskAmbientInclusion_mapsTo (k + 2))) (k + 2) := by
+  simpa only [integralOpenDiskRelativeHomologyComparison_hom] using
+    integralRelativeHomologyComparisonWithTransport_pairMap_naturality
+      (T02A06HemisphereExcision.puncturedOpenDiskSet (k + 2))
+      (CoefficientModelLocal.puncture (k + 2))
+      (coefficientOpenDiskAmbientInclusion (k + 2))
+      (coefficientOpenDiskAmbientInclusion_mapsTo (k + 2)) (k + 2)
+
 end ConstructionTargets.ManifoldFundamentalClass
 
 #print axioms ConstructionTargets.ManifoldFundamentalClass.neighborhoodInclusion_Hsucc_isIso
@@ -3207,6 +3231,7 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientRelativeProjection_forgotten_epi
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeChainsComparisonWithTransport_pairMap_naturality
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_pairMap_naturality
+#print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientOpenDiskRelativeHomologyComparison_naturality
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_projection
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_generator_of_normalization
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_normalization_of_generator
