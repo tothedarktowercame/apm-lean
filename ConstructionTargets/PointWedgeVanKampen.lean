@@ -2169,6 +2169,26 @@ theorem genericPointWedgeLeftLiftedLoop_coverInclusion
   rcases g with ⟨p⟩
   rfl
 
+omit [PathConnectedSpace X] [PathConnectedSpace Y] in
+/-- Including the lifted right loop from the cover member back into the wedge
+recovers the literal right-leg map, including its quotient basepoint change. -/
+theorem genericPointWedgeRightLiftedLoop_coverInclusion
+    (g : FundamentalGroup Y y₀) :
+    FundamentalGroup.map
+        (TwoOpenDescentRestriction.coverPieceInclusion
+          (U := genericLeftOpen x₀ y₀ M)
+          (V := genericRightOpen x₀ y₀ N) false)
+        (genericPointWedgeRightBase x₀ y₀ N).as
+        (genericPointWedgeRightLiftedLoop x₀ y₀ N g) =
+      genericPointWedgeRightLegMap x₀ y₀ g := by
+  rcases g with ⟨p⟩
+  change
+    (FundamentalGroup.map _ _)
+        (FundamentalGroup.mapOfEq _ _ (FundamentalGroup.fromPath (.mk p))) =
+      FundamentalGroup.mapOfEq _ _ (FundamentalGroup.fromPath (.mk p))
+  rw [FundamentalGroup.mapOfEq_apply, FundamentalGroup.mapOfEq_apply]
+  rfl
+
 /-- Once B3's two mapped actions are identified with the images of the
 literal topological legs under B5, the normalized equivalence has exactly the
 two coproduct coordinates required by B6. -/
@@ -2664,6 +2684,7 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeLeftLiftedLoop
 #print axioms genericPointWedgeRightLiftedLoop
 #print axioms genericPointWedgeLeftLiftedLoop_coverInclusion
+#print axioms genericPointWedgeRightLiftedLoop_coverInclusion
 #print axioms genericPointWedgeIdentityActualSpan_left_map
 #print axioms genericPointWedgeIdentityActualSpan_right_map
 #print axioms genericPointWedgeSingleObjPostcomposeIso

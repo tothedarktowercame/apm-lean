@@ -473,3 +473,6 @@ through `FundamentalGroup.mapOfEq`.
 
 `genericPointWedgeLeftLiftedLoop_coverInclusion` verifies that including a
 lifted left loop back into the wedge recovers the frozen literal left-leg map.
+
+`genericPointWedgeRightLiftedLoop_coverInclusion` gives the symmetric right
+comparison while retaining the quotient equality that changes representatives.
