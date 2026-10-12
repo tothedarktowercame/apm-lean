@@ -154,4 +154,27 @@ theorem embeddedCircleLocallyFlat_reparam_iff
     exact ⟨EmbeddedCircleFlatNeighborhood.reparam j e z
       (Classical.choice (h (e z)))⟩
 
+def circleZeroSection : C(Circle, Circle × ℝ) where
+  toFun z := (z, 0)
+  continuous_toFun := continuous_id.prodMk continuous_const
+
+def circleZeroSectionFlatNeighborhood (z : Circle) :
+    EmbeddedCircleFlatNeighborhood circleZeroSection z where
+  V := Set.univ
+  U := Set.univ ×ˢ Set.Ioo (-1 : ℝ) 1
+  open_V := isOpen_univ
+  open_U := isOpen_univ.prod (isOpen_Ioo)
+  mem_source := Set.mem_univ z
+  mem_target := ⟨Set.mem_univ z, by simp [circleZeroSection]⟩
+  productChart := Homeomorph.Set.prod Set.univ (Set.Ioo (-1 : ℝ) 1)
+  flatten := by
+    intro w hw
+    refine ⟨⟨Set.mem_univ w, by simp [circleZeroSection]⟩, ?_⟩
+    rfl
+
+theorem circleZeroSection_locallyFlat :
+    EmbeddedCircleLocallyFlat circleZeroSection := by
+  intro z
+  exact ⟨circleZeroSectionFlatNeighborhood z⟩
+
 end ConstructionTargets.SurfaceSchoenflies
