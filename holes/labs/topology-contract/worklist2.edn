@@ -72831,6 +72831,18 @@
      {:cmd "module no-sorry", :exit 1, :expected-exit 1}
      {:cmd "placeholder count", :exit 0, :output "1"}
      {:cmd "git show --check 8a0ee1d0a", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791774581097-6234-0e71e31b",
+     :commands
+     ["git scope/blob/SHA/ancestry checks"
+      "lake env lean ConstructionTargets/T02A03GeometricTubeDeformation.lean"
+      "lake env lean problems/t02A03/lean/Main.lean"
+      "statement-registry check/fingerprint"
+      "commit placeholder counts"],
+     :finding
+     "PASS: commit 8a0ee1d0a adds compiled, sorry-free, standard-axiom progress by packaging the rotated endpoint waypoint as a continuous family. Scope and fixture hash match; registry 131/0, fingerprint d123afd5, placeholders module/Main 0/1. STOP now truthfully lists correctedRotatedEndpointWaypointPath as not started and safeRightTubeMeridianDeformation as partial, with the required endpoint, tube-membership, and deletion certificates still residual."},
     :commit "8a0ee1d0a2e73e0f8ceb581676bf1209fd45686e",
     :changed-paths
     ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
@@ -72842,7 +72854,7 @@
    :phase :implementation,
    :type
    "∀ (t : unitInterval) (p : RightTubeMinusLeftCore), (t:ℝ) ≤ 1/2 → (((1-2*(t:ℝ):ℝ):ℂ)+((2*(t:ℝ):ℝ):ℂ)*rotatedEndpointWaypoint p)=0 → 0 < (t:ℝ)*(1-2*(t:ℝ))",
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/safe-right-tube-meridian-deformation",
@@ -73007,7 +73019,7 @@
      :residual
      "Lift the banked safe ambient deformation to the frozen subtype and package the requested ContinuousMap.Homotopy."}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/right-tube-meridian-retraction-homotopy",
@@ -79594,7 +79606,9 @@
      :commit "68d614508",
      :reason :program-milestone-complete}]}
   {:consumer :t94A10,
-   :stop-count 10,
+   :owner-reopen
+   "reopened: a lemma this row reported missing is now banked",
+   :stop-count 0,
    :review-finding
    "Incomplete representation-boundary repair in commit e7ba5fee3: heta is now punctured, but exact_sphereParam_identity still requires hexact : forall x, extDeriv eta x = omega x, including x=0. Frozen apm_t94a10_IsExact supplies exactness only for punctured x, so the claimed B7 theorem still cannot be instantiated. Change hexact to forall x, x != 0 -> extDeriv eta x = omega x and rewrite with hexact _ (sphereParam_ne_zero p); then recompile, retaining B8-B11 as residual.",
    :evidence
@@ -79642,7 +79656,7 @@
      "10dcf20e09c341afea028f4b52aecb9b384155686a0a5c3f5b07f201032311b0"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["problems/t94A10/lean/Main.lean"
     "problems/t94A10/status.json"
@@ -79662,7 +79676,7 @@
    :id :program-2026-10-11-close-t94a10,
    :kind :final-adapter,
    :campaign-priority 46,
-   :fail-count 3,
+   :fail-count 0,
    :depends-on [],
    :program true,
    :other-consumers [],
@@ -81792,30 +81806,42 @@
    :other-consumers []}
   {:consumer :portfolio,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance {:lemma "spherePullbackLongCoeff_eq"},
-   :lemma {:name "spherePullbackLongCoeff_eq", :reported-by []},
+   :lemma
+   {:name "spherePullbackLongCoeff_eq",
+    :reported-by [],
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t94A10Closure.lean"]},
    :id :lemma-spherepullbacklongcoeff-eq,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}
   {:consumer :portfolio,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance {:lemma "solidAngle_pullback_sphereParam"},
-   :lemma {:name "solidAngle_pullback_sphereParam", :reported-by []},
+   :lemma
+   {:name "solidAngle_pullback_sphereParam",
+    :reported-by [],
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t94A10Closure.lean"]},
    :id :lemma-solidangle-pullback-sphereparam,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}
   {:consumer :portfolio,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance {:lemma "exact_sphereParam_identity"},
-   :lemma {:name "exact_sphereParam_identity", :reported-by []},
+   :lemma
+   {:name "exact_sphereParam_identity",
+    :reported-by [],
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t94A10Closure.lean"]},
    :id :lemma-exact-sphereparam-identity,
    :kind :lemma,
    :depends-on [],
@@ -81845,13 +81871,16 @@
    :other-consumers []}
   {:consumer :portfolio,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "rotatedEndpointWaypoint_departure_zero_support_pos"},
    :lemma
    {:name "rotatedEndpointWaypoint_departure_zero_support_pos",
-    :reported-by []},
+    :reported-by [],
+    :banked-by :declaration-found,
+    :found-in
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"]},
    :id :lemma-rotatedendpointwaypoint-departure-zero-support-pos,
    :kind :lemma,
    :depends-on [],
