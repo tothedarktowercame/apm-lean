@@ -667,3 +667,7 @@ counit leg whose unique-object value was computed above.
 `genericPointWedgePreFreeProductCounit_right_eq_preCoordinate_coordinatePoint`
 projects the same split to the right natural transformation, in the same
 mapped-pre-coordinate then coordinate-point order.
+
+`genericPointWedgePreFreeProductCounit_left_app_eq_preCoordinate_injection`
+evaluates the left split at its unique source object and replaces the final
+factor by the coproduct injection of the actual left based connector counit.
