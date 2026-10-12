@@ -2663,6 +2663,64 @@ theorem genericPointWedgeCoordinateSpanOuterComparison_counitSplice :
     _ _ _ (𝟙 _) _ _ _ _ h.1 h.2
   simpa only [Category.id_comp, Category.comp_id] using hChain
 
+/-- The reconstructed coordinate glue is exactly the outer-comparison chain
+appearing in the specialized counit splice. -/
+theorem genericPointWedgeCoordinateSpanReconstructedGlue_eq_counitSpliceChain :
+    let l := genericPointWedgeActualLeft x₀ y₀ M N
+    let r := genericPointWedgeActualRight x₀ y₀ M N
+    let l' := genericPointWedgeCoordinateLeft x₀
+    let r' := genericPointWedgeCoordinateRight y₀
+    let eK := genericPointWedgeOverlapGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let eL := genericPointWedgeLeftGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let eR := genericPointWedgeRightGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let aL := genericPointWedgeLeftSpanIso
+      x₀ y₀ M N hM hN hy hx cM cN
+    let aR := genericPointWedgeRightSpanIso
+      x₀ y₀ M N hM hN hy hx cM cN
+    let Q := genericPointWedgeIdentityCoordinateSpan x₀ y₀
+    let P := reverseTransportObj l r l' r' eK eL eR aL aR Q
+    let u : FundamentalGroupoid Unit := FundamentalGroupoid.mk ()
+    (transportObj l r l' r' eK eL eR aL aR P).glue.hom.app u =
+      (leftComparison l l' eK eL aL (eL.functor ⋙ Q.left)).hom.app u ≫
+        ((Functor.whiskerLeft eK.inverse
+          (reverseLeftComparison l l' eK eL aL Q.left).inv).app u ≫
+        ((eK.invFunIdAssoc (l' ⋙ Q.left)).hom.app u ≫
+          (eK.invFunIdAssoc (r' ⋙ Q.right)).inv.app u) ≫
+        (Functor.whiskerLeft eK.inverse
+          (reverseRightComparison r r' eK eR aR Q.right).hom).app u) ≫
+        (rightComparison r r' eK eR aR
+          (eR.functor ⋙ Q.right)).inv.app u := by
+  have hG := genericPointWedgeCoordinateSpanReconstructedGlue_app
+    x₀ y₀ M N hM hN hy hx cM cN
+  have hW := congrArg (fun k => k.app (FundamentalGroupoid.mk ()))
+    (whiskered_reverse_glue
+      (genericPointWedgeActualLeft x₀ y₀ M N)
+      (genericPointWedgeActualRight x₀ y₀ M N)
+      (genericPointWedgeCoordinateLeft x₀)
+      (genericPointWedgeCoordinateRight y₀)
+      (genericPointWedgeOverlapGroupoidEquivalence
+        x₀ y₀ M N hM hN hy hx cM cN)
+      (genericPointWedgeLeftGroupoidEquivalence
+        x₀ y₀ M N hM hN hy hx cM cN)
+      (genericPointWedgeRightGroupoidEquivalence
+        x₀ y₀ M N hM hN hy hx cM cN)
+      (genericPointWedgeLeftSpanIso x₀ y₀ M N hM hN hy hx cM cN)
+      (genericPointWedgeRightSpanIso x₀ y₀ M N hM hN hy hx cM cN)
+      (genericPointWedgeIdentityCoordinateSpan x₀ y₀))
+  have hM := genericPointWedgeCoordinateSpanMiddleCounit_eq_roundTrips
+    x₀ y₀ M N hM hN hy hx cM cN
+  dsimp only at hG hW hM ⊢
+  rw [Functor.isoWhiskerLeft_hom] at hG
+  rw [Functor.isoWhiskerLeft_hom] at hM
+  rw [Functor.isoWhiskerLeft_hom] at hW
+  simp only [NatTrans.comp_app] at hW
+  rw [hM] at hW
+  rw [hW] at hG
+  exact hG
+
 /-- At the identity point-span object, the remaining coordinate-to-point
 counit is exactly the generic span-transport counit. -/
 theorem genericPointWedgeCoordinatePointCounit_eq_transportCounit :
@@ -4203,6 +4261,7 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeCoordinateSpanOuterComparison_counitTriangles
 #print axioms genericPointWedgeCoordinateSpanMiddleCounit_eq_roundTrips
 #print axioms genericPointWedgeCoordinateSpanOuterComparison_counitSplice
+#print axioms genericPointWedgeCoordinateSpanReconstructedGlue_eq_counitSpliceChain
 #print axioms genericPointWedgeCoordinatePointCounit_eq_transportCounit
 #print axioms genericPointWedgeCoordinatePointCounit_legs
 #print axioms genericPointWedgeCoordinatePointCounit_uniqueObjects

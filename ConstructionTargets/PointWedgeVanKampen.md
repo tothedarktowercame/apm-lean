@@ -757,3 +757,9 @@ typed nested reassociation lemma to those two triangles.  The full left
 comparison, overlap round-trip, right comparison, and right counit chain is
 therefore the left counit, with no endpoint casts or normalization of an
 arbitrary equivalence counit.
+
+`genericPointWedgeCoordinateSpanReconstructedGlue_eq_counitSpliceChain`
+identifies the reconstructed transport glue with that same fully typed chain.
+It combines the generic reverse-glue factorization with the unit middle
+conjugation, so the splice theorem now applies to the actual reconstructed
+glue without changing representatives.
