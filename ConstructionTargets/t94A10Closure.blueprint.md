@@ -7,7 +7,7 @@ Audit: `~/notes/closer/t94a10-report.md`, covering
 
 The formalisation uses Mathlib's `extDeriv_apply`, `extDeriv_pullback`,
 `Filter.EventuallyEq.extDeriv_eq`,
-`MeasureTheory.integral2_divergence_prod_of_hasFDerivWithinAt_off_countable`,
+`MeasureTheory.integral2_divergence_prod_of_hasFDerivAt_off_countable`,
 and one-variable trigonometric integral lemmas.  The ambient representation is
 `EuclideanSpace ℝ (Fin 3)`; forms are bundled continuous alternating maps, as
 in the frozen file.  Parameter rectangles use ordinary `ℝ × ℝ` coordinates,
@@ -122,15 +122,20 @@ lean: `ConstructionTargets.T94A10Closure.sphericalRectangle_curl_integral_zero` 
 the double integral of the B7 curl over `[0,π] × [0,2π]` is zero
 
 uses: B5, B7,
-`MeasureTheory.integral2_divergence_prod_of_hasFDerivWithinAt_off_countable`
+`MeasureTheory.integral2_divergence_prod_of_hasFDerivAt_off_countable`
 
 status: planned
 
 Apply the rectangle Green theorem to the two pulled-back coefficient
-functions.  Longitude-edge terms cancel using `Φ(s,t+2π)=Φ(s,t)` and equality
-of its derivatives.  Latitude-edge terms vanish because `∂t Φ=0` at both
-poles.  Supply differentiability, integrability, and the empty (hence
-countable) exceptional set explicitly.
+functions with the empty (hence countable) exceptional set.  Supply its two
+`ContinuousOn` hypotheses on the closed product interval from continuity of
+the primitive and B5.  On every point of the open product interval, supply
+the two pointwise `HasFDerivAt` hypotheses by differentiating the pulled-back
+coefficients and use B7 to identify the required directional-derivative sum.
+Supply `IntegrableOn` for that sum on the closed rectangle by rewriting it to
+the continuous function `sin s`.  Longitude-edge terms cancel using
+`Φ(s,t+2π)=Φ(s,t)` and equality of its derivatives.  Latitude-edge terms
+vanish because `∂t Φ=0` at both poles.
 
 ### B9. The spherical coefficient has nonzero integral
 
