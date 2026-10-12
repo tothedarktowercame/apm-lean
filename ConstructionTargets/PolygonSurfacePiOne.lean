@@ -759,4 +759,80 @@ def orientableStandardSpaceHomeomorph (g : ℕ) :
     orientableStandardSpaceHomeomorph g (Quotient.mk _ x) =
       surfaceQuotient true g x := rfl
 
+open PolygonBoundaryVertexClasses in
+theorem nonorientable_vertex_even_to_odd (g j : ℕ) (hj : j < g) :
+    Relation.EqvGen (SurfaceRel false g)
+      (polygonVertex (2 * g) ⟨2 * j, by omega⟩)
+      (polygonVertex (2 * g) ⟨2 * j + 1, by omega⟩) := by
+  apply Relation.EqvGen.rel _ _
+  exact ⟨j, hj, zeroIcc, rfl, rfl⟩
+
+open PolygonBoundaryVertexClasses in
+theorem nonorientable_vertex_odd_to_next (g j : ℕ) (hj : j + 1 < g) :
+    Relation.EqvGen (SurfaceRel false g)
+      (polygonVertex (2 * g) ⟨2 * j + 1, by omega⟩)
+      (polygonVertex (2 * g) ⟨2 * (j + 1), by omega⟩) := by
+  have h := Relation.EqvGen.rel _ _
+    (show SurfaceRel false g
+      (edgePoint (2 * g) (2 * j) oneIcc)
+      (edgePoint (2 * g) (2 * j + 1) oneIcc) from
+      ⟨j, by omega, oneIcc, rfl, rfl⟩)
+  rw [edgePoint_one_eq_succ_zero, edgePoint_one_eq_succ_zero] at h
+  convert h using 1
+
+theorem nonorientable_standard_oneVertex (g : ℕ) :
+    ∀ i j : Fin (2 * g),
+      Relation.EqvGen (boundaryRel (2 * g) (standardPair false g)
+        (standardSign false g)) (polygonVertex (2 * g) i)
+        (polygonVertex (2 * g) j) := by
+  intro i j
+  have hi_lt := i.isLt
+  have hg : 0 < g := by omega
+  have hzero : ∀ k (hk : k < g),
+      Relation.EqvGen (SurfaceRel false g)
+        (polygonVertex (2 * g) ⟨2 * k, by omega⟩)
+        (polygonVertex (2 * g) ⟨0, by omega⟩) := by
+    intro k hk
+    induction k with
+    | zero => exact .refl _
+    | succ k ih =>
+        exact .trans _ _ _
+          (nonorientable_vertex_odd_to_next g k (by omega)).symm
+          (.trans _ _ _ (nonorientable_vertex_even_to_odd g k (by omega)).symm
+            (ih (by omega)))
+  have hall : ∀ i : Fin (2 * g),
+      Relation.EqvGen (SurfaceRel false g)
+        (polygonVertex (2 * g) i) (polygonVertex (2 * g) ⟨0, by omega⟩) := by
+    intro i
+    generalize hc : nonorientableCoord g i = c
+    rcases c with ⟨a, b⟩
+    have hi : i = (nonorientableCoord g).symm (a, b) := by
+      apply (nonorientableCoord g).injective
+      simpa using hc
+    subst i
+    fin_cases b
+    · convert hzero a a.isLt using 1
+      congr 1
+      apply Fin.ext
+      simp [nonorientableCoord]
+    · have hh : Relation.EqvGen (SurfaceRel false g)
+          (polygonVertex (2 * g) ⟨2 * a + 1, by omega⟩)
+          (polygonVertex (2 * g) ⟨0, by omega⟩) :=
+        Relation.EqvGen.trans _ _ _
+        (nonorientable_vertex_even_to_odd g a a.isLt).symm
+        (hzero a a.isLt)
+      convert hh using 1
+      congr 1
+      apply Fin.ext
+      simp [nonorientableCoord, Nat.add_comm]
+  apply (nonorientable_eqvGen_iff g _ _).mpr
+  exact .trans _ _ _ (hall i) (hall j).symm
+
+def nonorientableStandardPairingData (g : ℕ) (hg : 0 < g) : PairingData :=
+  standardPairingDataOfOneVertex false g hg (nonorientable_standard_oneVertex g)
+
+@[simp] theorem nonorientableStandardPairingData_edgeCount
+    (g : ℕ) (hg : 0 < g) :
+    (nonorientableStandardPairingData g hg).edgeCount = 2 * g := rfl
+
 end ConstructionTargets.PolygonSurfacePiOne
