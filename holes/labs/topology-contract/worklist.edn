@@ -113850,13 +113850,14 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 9,
+   :stop-count 10,
    :review-finding
    "Blueprint B3 is marked proved but its proof uses the unlisted ConnectedGroupoidSingleObjEquivalence.connectorSingleObjEquivalence (and connector-system representation) instead of only the declared uses; add the actual connector dependency and proof route to B3 uses.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
    :evidence
    {:placeholder-delta {:source-before 0, :source-after 0},
-    :residual "Identify literal morphism lifts; then B12.",
+    :residual
+    "Lift left morphisms through the cover; add symmetric right lift; then B12.",
     :outcome :stop,
     :warnings [],
     :missing-theorems
@@ -113870,9 +113871,9 @@
       :area "fundamental-group-wedge-of-circles"}],
     :statement-hashes
     {:source
-     "cfce3cbed7adfc5d1a0b6e07475c10f4588e257b6966201040cdc6190f8a530d",
+     "71ea2e8b6b1d6c36fc8463383f759eccf62bbb95d40864d688282688d96146e0",
      :documentation
-     "50084982622b6e11df17fdf4b50160b7020090b7b1f49e174bc5009c3bb25f87",
+     "15dba2402f342bba4762119f874e12c898ce01d32dedbeb066b1bf3f35b49945",
      :blueprint
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0",
      :registry "131/131"},
@@ -113880,7 +113881,7 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
     :reason
-    "Right overlap inclusion sends the chosen overlap base to the literal right cover base.",
+    "The literal left wedge leg now lifts continuously to the left cover and is based at its fixed representative.",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/PointWedgeVanKampen.lean",
@@ -113889,21 +113890,11 @@
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder/diff validation", :exit 0}],
-    :diagnostic-history [],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1791787565354-6525-d5b3064a",
-     :commands
-     ["git show/diff-tree dd6214bf"
-      "sha256/diff/placeholder checks"
-      "statement-registry.py check"
-      "lake env lean ConstructionTargets/PointWedgeVanKampen.lean"
-      "lake build ConstructionTargets.PointWedgeVanKampen"
-      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (expected absent)"],
-     :finding
-     "PASS program STOP: new compiled sorry-free milestone proves the literal overlap-to-right inclusion maps the chosen overlap base to the chosen right base, in the useful direction and before equivalence transport. Exact 2-file scope; fixture/source/doc hashes match; placeholders 0->0; registry 131/131; standard axioms only. Final module remains absent; residual lists literal morphism lifts, then B12."},
-    :commit "dd6214bffac4daad37b505cd85c3d697643383f4",
+    :diagnostic-history
+    [{:cmd "lean initial",
+      :exit 1,
+      :finding "Corrected Continuous.subtype_mk API."}],
+    :commit "3b6b07efe8003c9eae07e0615c0d3c1235d4488c",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
      "ConstructionTargets/PointWedgeVanKampen.md"],
@@ -113913,7 +113904,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :needs-owner,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
