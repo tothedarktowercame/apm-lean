@@ -113850,14 +113850,14 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "Blueprint B3 is marked proved but its proof uses the unlisted ConnectedGroupoidSingleObjEquivalence.connectorSingleObjEquivalence (and connector-system representation) instead of only the declared uses; add the actual connector dependency and proof route to B3 uses.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
    :evidence
    {:placeholder-delta {:source-before 0, :source-after 0},
     :residual
-    "Match the pre-free-product counit with the outer comparisons; close B6/B12.",
+    "Identify the mapped pre-free-product counit with the outer comparisons; close B6/B12.",
     :outcome :stop,
     :warnings [],
     :missing-theorems
@@ -113871,9 +113871,9 @@
       :area "fundamental-group-wedge-of-circles"}],
     :statement-hashes
     {:source
-     "6df1cfb481ef501e30271d82d8a634d95540e4cc518428859feb6e5f50d4a2fa",
+     "ea4d19a3bbab1a2e9b49d462eb6d54a2813f6f93d5ff4f5644077a49d11354b7",
      :documentation
-     "4c9feb92947b09afa9f79611beb99276976e648f289df14f63d6c78a003f3ca3",
+     "51c9657fe2aa4c9e720b860cc3bda77df90c8c1db42ec2b94fa733e0f0e63954",
      :blueprint
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0",
      :registry "131/131"},
@@ -113881,7 +113881,7 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
     :reason
-    "The final point-span counit has identity underlying target morphism.",
+    "The free-product counit is the mapped pre-counit followed by the point-span counit.",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/PointWedgeVanKampen.lean",
@@ -113890,11 +113890,8 @@
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder/diff validation", :exit 0}],
-    :diagnostic-history
-    [{:cmd "lean point-span counit",
-      :exit 1,
-      :finding "Corrected malformed identity token."}],
-    :commit "3dfe352795ca3d843a1e436c4c48f81635858ff8",
+    :diagnostic-history [],
+    :commit "e97f4dcff7045aa253bcdcb46aaaf10c143fdf03",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
      "ConstructionTargets/PointWedgeVanKampen.md"],
@@ -113904,7 +113901,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
