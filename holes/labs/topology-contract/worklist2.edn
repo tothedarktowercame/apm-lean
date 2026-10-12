@@ -75002,7 +75002,7 @@
   {:consumer :t96J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 0,
    :review-finding
    "STOP remainder is incomplete: cdbdc979d proves the six-edge involution/signs, orbit equivalence, generated-relation iff, and quotient Equiv, but defines no torusRP2PairingData and proves no six-edge oneVertex field. Thus the claim that six-edge B2 is complete is false, and the required missing theorem is omitted from :missing-theorems. Add torusRP2PairingData/oneVertex to the remaining milestones or state and prove it in scope.",
    :implements-lemma
@@ -75048,6 +75048,17 @@
       :output "131/0"}
      {:cmd "placeholder scan", :exit 0, :output "0"}
      {:cmd "git show --check d96bd5106", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791838091281-7882-1a8d35ca",
+     :commands
+     ["git show d96bd5106:ConstructionTargets/PolygonSurfacePiOne.lean | lake env lean /dev/stdin"
+      "python3 scripts/statement-registry.py check"
+      "git show --check/hash/diff-tree d96bd5106"
+      "comment-stripped placeholder scan"],
+     :finding
+     "PASS: exact recorded source compiles; sole changed path and fixture hash match; registry 131/0 and placeholders 0. The constructor preserves the representation boundary: hvertex has exactly PairingData.oneVertex over standard edge count, pair, sign, and polygon vertices, and no hypothesis is weakened. This is compiled packaging progress; the substantive uniform oneVertex proof and orbit/quotient comparisons remain explicitly listed."},
     :commit "d96bd5106",
     :changed-paths ["ConstructionTargets/PolygonSurfacePiOne.lean"],
     :fixture
@@ -75056,7 +75067,7 @@
      "329b983926e50cd0bf5ec0cbfbbff2ff7304ec4aeb66a835fc8994b737f1c493"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope ["ConstructionTargets/PolygonSurfacePiOne.lean"],
    :dag-node "ConstructionTargets/PolygonSurfacePiOne.blueprint.md/B2",
    :acceptance
@@ -84707,7 +84718,7 @@
    :other-consumers [:t92J05 :t94J04 :t97A03]}
   {:consumer :t96J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "standardPairingDataOfOneVertex",
@@ -84719,7 +84730,9 @@
     :type
     "packages edge count, pair, signs and oneVertex into PairingData",
     :area "polygon-surface-pi1",
-    :proved-in :routes-2026-10-12-polygon-b2-completion-topo2-r1},
+    :proved-in :routes-2026-10-12-polygon-b2-completion-topo2-r1,
+    :banked-by :routes-2026-10-12-polygon-b2-completion-topo2-r1,
+    :banked-commit "d96bd5106"},
    :id :lemma-standardpairingdataofonevertex,
    :kind :lemma,
    :depends-on [:lemma-standardsign-orientable-pair],
