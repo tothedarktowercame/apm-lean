@@ -113857,14 +113857,14 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 8,
+   :stop-count 9,
    :review-finding
    "Blueprint B3 is marked proved but its proof uses the unlisted ConnectedGroupoidSingleObjEquivalence.connectorSingleObjEquivalence (and connector-system representation) instead of only the declared uses; add the actual connector dependency and proof route to B3 uses.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
    :evidence
    {:placeholder-delta {:source-before 0, :source-after 0},
     :residual
-    "Evaluate three inner factors, then outer comparisons/literal lifts and B12.",
+    "Evaluate two Unit round-trip factors, then outer comparisons/literal lifts and B12.",
     :outcome :stop,
     :warnings [{:kind :upstream-lint}],
     :missing-theorems
@@ -113878,16 +113878,16 @@
       :area "fundamental-group-wedge-of-circles"}],
     :statement-hashes
     {:source
-     "d1ee979e7daa77c7747b86e1012f71e93e4c0aaa454e3f4fc8a38e224d3e4cd3",
+     "a9b9ff820e5f0b1e7d548fe0921dcd64124e6de33b1a3ad6db758f252dc90bd4",
      :documentation
-     "6d59a83aaae865b60652275e9d03f13fcaa5b2ae0d86a09a53085a58341f335f",
+     "7be711035b6b8ea64ed572b542c0c04bbcb35ca6faeedee3a61b751587704ace",
      :blueprint
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0",
      :registry "131/131"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
-    :reason "Inverse left-leg factor is the free-product unit.",
+    :reason "Right-leg factor is the free-product unit.",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/PointWedgeVanKampen.lean",
@@ -113896,25 +113896,8 @@
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder/diff validation", :exit 0}],
-    :diagnostic-history
-    [{:cmd "lean", :exit 1, :finding "rfl failed."}
-     {:cmd "lean", :exit 1, :finding "simp exposed map."}
-     {:cmd "lean", :exit 1, :finding "rewrite hidden."}
-     {:cmd "lean", :exit 1, :finding "removed extra tactic."}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1791764950910-6052-154d6c73",
-     :commands
-     ["git show/diff-tree ca8094a5"
-      "sha256/diff/placeholder checks"
-      "statement-registry.py check"
-      "lake env lean ConstructionTargets/PointWedgeVanKampen.lean"
-      "lake build ConstructionTargets.PointWedgeVanKampen"
-      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (expected absent)"],
-     :finding
-     "PASS: new compiled sorry-free B6 progress proves the inverse left-leg factor is the unit using the concrete subsingleton-source comparison and point-span map_id; the Unit round-trip remains explicit, so no blanket counit normalization is used. Exact two-file scope and frozen hashes match; 0 placeholders; registry 131/131; standard axioms. Three inner factors, outer comparisons, literal lifts, and B12 remain listed; absent final target is a valid program STOP."},
-    :commit "ca8094a55fb71772404199f3d7f086cf5c4cdad7",
+    :diagnostic-history [],
+    :commit "a51f7df5302ed498e056d7b073a2df06f8d4d422",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
      "ConstructionTargets/PointWedgeVanKampen.md"],
@@ -113924,7 +113907,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
