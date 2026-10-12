@@ -113850,14 +113850,14 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 4,
+   :stop-count 5,
    :review-finding
    "Blueprint B3 is marked proved but its proof uses the unlisted ConnectedGroupoidSingleObjEquivalence.connectorSingleObjEquivalence (and connector-system representation) instead of only the declared uses; add the actual connector dependency and proof route to B3 uses.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
    :evidence
    {:placeholder-delta {:source-before 0, :source-after 0},
     :residual
-    "Normalize this left-equivalence round trip and the right comparison; then point-span transport, counits, B6/B12.",
+    "Specialize left counits and normalize the right comparison; then point-span, counits, B6/B12.",
     :outcome :stop,
     :warnings [],
     :missing-theorems
@@ -113871,9 +113871,9 @@
       :area "fundamental-group-wedge-of-circles"}],
     :statement-hashes
     {:source
-     "68626f971b287eb7d4186ee68987db4e3eecea0e81fc80b5616240f79ad02b9e",
+     "ba1a4ac6a055e8152104703511cb53eaacf46986a3042a7e4f4cc7b7967b202c",
      :documentation
-     "c1cdaa8f06f2b43fa0eebee5bcded5e2b33546dc012b8befea66eba84eadd94f",
+     "8afb08e7db3a8347e3a58fbc058190564cb82ff5518db555012a0aae292584f5",
      :blueprint
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0",
      :registry "131/131"},
@@ -113881,7 +113881,7 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
     :reason
-    "The actual-span inverse comparison map is the left coproduct injection of its explicit connector normal form.",
+    "The left round trip now has its exact counit-naturality equation.",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/PointWedgeVanKampen.lean",
@@ -113890,18 +113890,14 @@
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder/diff validation", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1791839087873-7902-cba413b2",
-     :commands
-     ["git show/diff-tree d43ab056"
-      "lake build ConstructionTargets.PointWedgeVanKampen"
-      "python3 scripts/statement-registry.py check"
-      "commit hash and placeholder checks"],
-     :finding
-     "PASS program STOP: d43ab056 by topo-2 adds the actual-span evaluation of the left strict factor plus documentation, exactly within scope and new since history. Source 68626f97..., documentation c1cdaa8f..., fixture 0bca6ce3..., registry 131/131, and placeholders 0->0 reproduce. The theorem rewrites through the literal actual-span and coordinate-span map results, yielding HEq to the left coproduct injection of the explicit connector normal form. HEq correctly retains dependent endpoints instead of asserting a false cross-representation Eq, and orientation remains inverse then forward. Fresh build passes with standard axioms. Round-trip normalization, right comparison, point-span transport, counits, and B6/B12 remain listed."},
-    :commit "d43ab056fc44e6503deab63b8ffabbb597c9ead6",
+    :diagnostic-history
+    [{:cmd "lean counit projection",
+      :exit 1,
+      :finding "Expanded lets; used explicit equivalence."}
+     {:cmd "lean omit placement",
+      :exit 1,
+      :finding "Moved omit before doc."}],
+    :commit "ccb19862149781e5d177caa693e7e94e2e55b1f8",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
      "ConstructionTargets/PointWedgeVanKampen.md"],
@@ -113911,7 +113907,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
