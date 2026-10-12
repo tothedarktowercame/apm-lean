@@ -2332,6 +2332,28 @@ theorem genericPointWedgeCoordinatePointCounit_uniqueObjects_eq_injections :
   exact ⟨genericPointWedgeIdentityPointSpan_left x₀ y₀ _,
     genericPointWedgeIdentityPointSpan_right x₀ y₀ _⟩
 
+/-- On the left leg, the pre-free-product counit is the mapped
+pre-coordinate counit followed by the coordinate-to-point counit. -/
+theorem genericPointWedgePreFreeProductCounit_left_eq_preCoordinate_coordinatePoint :
+    let C := genericPointWedgeTarget x₀ y₀
+    let P := genericPointWedgePreCoordinatePointSpanMappingEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN C
+    let Q := genericPointWedgeCoordinatePointSpanEquivalence x₀ y₀ C
+    let S := freeProductPointSpanEquivalence
+      (genericPointWedgeLeftGroup x₀) (genericPointWedgeRightGroup y₀) C
+    let R := representationSingleObjEquivalence
+      (C := C) (genericPointWedgeLeftGroup x₀)
+        (genericPointWedgeRightGroup y₀)
+    let F := Functor.id (SingleObj (genericPointWedgeFreeProduct x₀ y₀))
+    let Z := S.inverse.obj (R.inverse.obj F)
+    ((P.trans Q).counitIso.hom.app Z).left =
+      (Q.functor.map (P.counitIso.hom.app (Q.inverse.obj Z))).left ≫
+        (Q.counitIso.hom.app Z).left := by
+  exact congrArg
+    (fun k => k.left)
+    (genericPointWedgePreFreeProductCounit_eq_preCoordinate_coordinatePoint
+      x₀ y₀ M N hM hN hy hx cM cN)
+
 /-- Consequently the full B3 counit element is just the mapped counit of the
 preceding free-product-representation equivalence. -/
 theorem genericPointWedgeCounitElement_eq_mappedRepresentationCounit :
@@ -3627,6 +3649,7 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeLeftBasedCounit
 #print axioms genericPointWedgeRightBasedCounit
 #print axioms genericPointWedgeCoordinatePointCounit_uniqueObjects_eq_injections
+#print axioms genericPointWedgePreFreeProductCounit_left_eq_preCoordinate_coordinatePoint
 #print axioms genericPointWedgeCounitElement_eq_mappedRepresentationCounit
 #print axioms genericPointWedgeMappedLeft_eq_conj
 #print axioms genericPointWedgeMappedRight_eq_conj

@@ -658,3 +658,8 @@ by the connector equivalences.  The theorem
 `genericPointWedgeCoordinatePointCounit_uniqueObjects_eq_injections` shows
 that the coordinate-to-point counit contributes their coproduct injections;
 it deliberately makes no false identity normalization.
+
+`genericPointWedgePreFreeProductCounit_left_eq_preCoordinate_coordinatePoint`
+projects the pre-free-product counit split to the left natural transformation:
+the mapped pre-coordinate leg is followed, in order, by the coordinate-point
+counit leg whose unique-object value was computed above.
