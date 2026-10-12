@@ -3112,6 +3112,31 @@ def genericPointWedgeMappedOpenCoverSourceGlue :
   (Q.functor.obj (B.functor.obj (A.functor.obj (A.inverse.obj Z)))).glue.hom.app
     (SingleObj.star PUnit)
 
+/-- The same predecessor glue expressed from the named reconstructed global
+functor before restriction to the two-open pseudococone. -/
+def genericPointWedgeMappedGlobalRestrictionGlue :
+    genericPointWedgeFreeProduct x₀ y₀ :=
+  let C := genericPointWedgeTarget x₀ y₀
+  let E := genericPointWedgeOpenCoverEquivalence
+    x₀ y₀ M N hM hN hy hx cM cN C
+  let P := genericPointWedgePseudoSpanEquivalence x₀ y₀ M N C
+  let B := genericPointWedgeCoordinateSpanEquivalence
+    x₀ y₀ M N hM hN hy hx cM cN C
+  let Q := genericPointWedgeCoordinatePointSpanEquivalence x₀ y₀ C
+  let F := genericPointWedgeIdentityGlobalFunctor
+    x₀ y₀ M N hM hN hy hx cM cN
+  (Q.functor.obj (B.functor.obj (P.functor.obj (E.functor.obj F)))).glue.hom.app
+    (SingleObj.star PUnit)
+
+/-- The remaining predecessor is exactly the mapped canonical overlap of the
+named reconstructed global functor. -/
+theorem genericPointWedgeMappedOpenCoverSourceGlue_eq_globalRestriction :
+    genericPointWedgeMappedOpenCoverSourceGlue
+        x₀ y₀ M N hM hN hy hx cM cN =
+      genericPointWedgeMappedGlobalRestrictionGlue
+        x₀ y₀ M N hM hN hy hx cM cN := by
+  rfl
+
 /-- The mapped coordinate-span counit's glue square, specialized at the
 unique point-span overlap object.  This is the equation in which its two
 named leg factors are related by the mapped reconstructed glue. -/
@@ -4691,6 +4716,8 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeMappedPreCoordinateCounits_eq_openCover_coordinateSpan
 #print axioms genericPointWedgeMappedPreCoordinateCounits_eq_namedFactors
 #print axioms genericPointWedgeMappedOpenCoverSourceGlue
+#print axioms genericPointWedgeMappedGlobalRestrictionGlue
+#print axioms genericPointWedgeMappedOpenCoverSourceGlue_eq_globalRestriction
 #print axioms genericPointWedgeMappedOpenCoverCounit_namedGlueSquare
 #print axioms genericPointWedgeMappedCoordinateSpanCounit_glueSquare
 #print axioms genericPointWedgeMappedCoordinateSpanSourceGlue

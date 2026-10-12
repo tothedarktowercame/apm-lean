@@ -838,3 +838,11 @@ open-cover counit factors now occur in exactly the three-factor order used by
 the pre-free-product counit formulas; the only extra factor is the named
 pseudopushout predecessor glue.  Its normalization is therefore the sole
 remaining equality before those two counit applications coincide.
+
+`genericPointWedgeMappedGlobalRestrictionGlue` expresses that predecessor
+from the named reconstructed global functor and its literal restriction
+pseudococone.  The theorem
+`genericPointWedgeMappedOpenCoverSourceGlue_eq_globalRestriction` proves this
+is definitionally the previously named predecessor.  The remaining unit
+calculation is therefore localized to the canonical descent-overlap
+component of that global restriction.
