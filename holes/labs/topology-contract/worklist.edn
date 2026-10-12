@@ -113894,6 +113894,18 @@
     [{:cmd "lean pre-equivalence theorem",
       :exit 1,
       :finding "Added explicit target-category binder."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791812685077-7010-61960730",
+     :commands
+     ["git show/diff-tree 815b76721"
+      "sha256/placeholder/registry checks"
+      "lake env lean ConstructionTargets/PointWedgeVanKampen.lean"
+      "lake build ConstructionTargets.PointWedgeVanKampen"
+      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (expected absent)"],
+     :finding
+     "PASS: exact two-file scope and frozen hashes match; placeholders 0->0, registry 131/131. The pre-free-product equivalence names the actual B3 composite boundary, and the full equivalence factors through the final point-span representation without changing orientation; standard axioms only. Valid program STOP; compute final point-span counit, match outer comparisons, then B6/B12."},
     :commit "815b767218b7539df263338ec73889fe56eb7f9f",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
@@ -113904,7 +113916,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113925,7 +113937,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Final representation counit is the unit; B3 counit is now only the mapped preceding counit.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Named the B3 composite before its final point-span free-product representation.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -114301,7 +114313,11 @@
     {:job 8,
      :commit "d0bd5a442ddaef5a3d6aaafc42b11047601c3bcb",
      :reason
-     "Final representation counit is the unit; B3 counit is now only the mapped preceding counit."}]}
+     "Final representation counit is the unit; B3 counit is now only the mapped preceding counit."}
+    {:job 9,
+     :commit "815b767218b7539df263338ec73889fe56eb7f9f",
+     :reason
+     "Named the B3 composite before its final point-span free-product representation."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
