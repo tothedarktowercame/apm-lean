@@ -83428,7 +83428,7 @@
    {:placeholder-delta 0,
     :residual "Program complete; B1-B4 ready for consumer adapters.",
     :outcome :done-unreviewed,
-    :warnings ["Fresh verification; no new scoped edit required."],
+    :warnings [],
     :missing-theorems
     [{:name "coveringFundamentalGroupEquivRange",
       :type "pi1 equiv range",
@@ -83443,20 +83443,20 @@
       :depends-on [],
       :area "covering-subgroup-correspondence"}
      {:name "coveringFundamentalGroupEquivFreeSubgroup",
-      :type "pi1 equiv mapped free subgroup; index",
+      :type "pi1 equiv mapped subgroup; index",
       :status :proved,
       :consumers [:t99J01 :t97A03],
       :depends-on ["coveringFundamentalGroupEquivRange"],
       :area "covering-subgroup-correspondence"}
      {:name "isCoveringMap_homeomorph_comp_quotientMk",
-      :type "orbit cover target transport",
+      :type "orbit cover transport",
       :status :proved,
       :consumers [:t93J03 :t00A02],
       :depends-on [],
       :area "covering-subgroup-correspondence"}],
     :statement-hashes
     {:registry "131/0",
-     :module "49e3342f19d373bc025485e3e6651efed315ca12",
+     :module "3bf5c7f5d0c53397e58887d1c0da2ce895e0e3e4",
      :main "21d5ee491d63501c124f113474ddedee9223d81b"},
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
@@ -83467,25 +83467,19 @@
       :exit 0,
       :output "131/0"}
      {:cmd "placeholder/blueprint scan", :exit 0, :output "0/4"}
-     {:cmd "git show --check 994accb6c 1ecb73d0a", :exit 0}],
-    :review
-    {:outcome :fail,
-     :seat "codex-7",
-     :job "invoke-1791823200003-7431-0d336964",
-     :finding
-     "Program STOP commits no compiled, sorry-free theorem progress: 9a443d45a adds only SuppliedCoverAlgebra.md, creates no SuppliedCoverAlgebra.lean, and records A1/A2/A3/C7 all :not-started. Exact repair: extend Mathlib: state and prove at least one missing milestone in scope, commit the compiling Lean result, and list the remaining milestones in :missing-theorems."},
-    :commit "994accb6c",
-    :commits ["1ecb73d0a" "994accb6c"],
+     {:cmd "git show --check HEAD", :exit 0}],
+    :commit "575f9ce4a",
+    :commits ["1ecb73d0a" "994accb6c" "575f9ce4a" "df216abcc"],
     :changed-paths
     ["ConstructionTargets/SuppliedCoverAlgebra.lean"
      "ConstructionTargets/SuppliedCoverAlgebra.md"],
     :fixture
     {:path "ConstructionTargets/SuppliedCoverAlgebra.lean",
      :sha256
-     "2d4c1b913f0dcc56a3b3fc9a70d3ebf8a7f21bc4f338fea36bcfe7575f9d2c43"},
+     "8e2b05fc2da21acb000c622b502360f2835a454e138dbfeb505f29eedb0c7769"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SuppliedCoverAlgebra.lean"
     "ConstructionTargets/SuppliedCoverAlgebra.md"],
