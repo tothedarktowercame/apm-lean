@@ -21089,15 +21089,14 @@
   {:consumer :t00J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 2,
    :review-finding
    "Frozen fixture metadata mismatch persists: authoritative row acceptance and duplicated prerequisite still record aad5a9cda739c1cbcceb1eca8ab8b33395db8a08c9d68941a87c644f4d13586e without :mode, while the compiling fixture freshly hashes to 7e72195e1214d7580994264481ae57d0ecf87755d31825ab85cbda5f1220c4b1. Supervisor must update both acceptance maps to that digest with :mode :post-build-export-check, then resubmit.",
    :implements-lemma
    :lemma-constructiontargets-manifoldfundamentalclass-coefficientclosedboundary-coordinat,
    :evidence
    {:placeholder-delta {:t00J02 [1 1], :t98A02 [1 1]},
-    :residual
-    "Repair authoritative acceptance metadata, then resubmit f0afa7bd.",
+    :residual "Repair both acceptance maps, then resubmit f0afa7bd.",
     :outcome :stop,
     :warnings [],
     :statement-hashes {:registry "131/131"},
@@ -21105,7 +21104,7 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Supervisor must replace top-level acceptance hash aad5a9cda739c1cbcceb1eca8ab8b33395db8a08c9d68941a87c644f4d13586e with the verified fixture hash and add :mode :post-build-export-check; also update duplicated prerequisite acceptance.",
+    "Supervisor must update authoritative row and duplicated prerequisite acceptance: replace stale fixture hash with 7e72195e1214d7580994264481ae57d0ecf87755d31825ab85cbda5f1220c4b1 and add :mode :post-build-export-check.",
     :commands
     [{:cmd "sha256sum /tmp/closedboundarycoords.lean", :exit 0}
      {:cmd
@@ -21113,12 +21112,6 @@
       :exit 0}
      {:cmd "lake env lean /tmp/closedboundarycoords.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1791822368453-7399-8c75780a",
-     :finding
-     "Frozen fixture metadata mismatch persists: authoritative row acceptance and duplicated prerequisite still record aad5a9cda739c1cbcceb1eca8ab8b33395db8a08c9d68941a87c644f4d13586e without :mode, while the compiling fixture freshly hashes to 7e72195e1214d7580994264481ae57d0ecf87755d31825ab85cbda5f1220c4b1. Supervisor must update both acceptance maps to that digest with :mode :post-build-export-check, then resubmit."},
     :commit "f0afa7bdc4c95a8c87143342ceb8c9ce51cd5612",
     :changed-paths [],
     :fixture
@@ -21128,7 +21121,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :repair,
+   :state :needs-owner,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/manifold-fundamental-class",
    :acceptance
