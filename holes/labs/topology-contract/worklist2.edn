@@ -72788,40 +72788,35 @@
    :consumer :t02A03,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "Commit b07bee059 does not implement the row acceptance theorem. It adds only rotatedEndpointWaypoint_departure_zero_support_pos; safeRightTubeMeridianDeformation is absent, although the row is marked done-unreviewed rather than a STOP with missing-theorems. Exact repair: extend Mathlib in scope by state/proving the required continuous ambient H with both endpoints, pointwise rightTube membership, and leftCore avoidance (or record a legitimate STOP after committed progress with remaining theorem listed).",
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Correct departure zeros transversely; construct and certify ambient H.",
+    "Proved transverse removal of old zeros; exclude new zeros, then certify H.",
     :outcome :stop,
-    :warnings
-    ["Main: 1 placeholder."
-     "Style lint only."
-     "Unrelated dirty files preserved."],
+    :warnings ["Main: 1 placeholder." "Style lint only."],
     :missing-theorems
     [{:name
       "ConstructionTargets.T02A03GeometricTubeDeformation.correctedRotatedEndpointWaypointPath",
-      :type
-      "continuous endpoint-fixed correction of the rotated waypoint path with no zeros",
-      :status :not-started,
+      :type "continuous endpoint-fixed correction with no zeros",
+      :status :partial,
       :consumers [:t02A03],
       :depends-on
-      ["rotatedEndpointWaypoint_departure_zero_support_pos"],
+      ["rotatedEndpointWaypoint_transverse_correction_ne_zero_at_departure_zero"],
       :area "explicit-r3-tube-deformation-retraction"}
      {:name
       "ConstructionTargets.T02A03GeometricTubeDeformation.safeRightTubeMeridianDeformation",
-      :type
-      "continuous ambient H with endpoints, rightTube membership, and leftCore avoidance",
+      :type "ambient H with endpoints, tube and deletion certificates",
       :status :partial,
       :consumers [:t02A03],
       :depends-on ["correctedRotatedEndpointWaypointPath"],
       :area "explicit-r3-tube-deformation-retraction"}],
     :statement-hashes
     {:registry "131/0",
-     :module "0d0cbcb624a3ed3b6a8877a228ad05a9ced8747b",
-     :main "0cdf95eb76a04229a0d53fb09b654d44fd3c551c"},
+     :module "0629f3f5173ebeb052ef8e54c12c88e30ee6c3a3",
+     :main "ce9da0dbb4300e81e5a5f31c95d0a0f8344c4325"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
@@ -72831,32 +72826,24 @@
      {:cmd "Main compile", :exit 0}
      {:cmd "registry check", :exit 0}
      {:cmd "module no-sorry", :exit 1, :expected-exit 1}
-     {:cmd "placeholder count", :exit 0, :output "1"}
-     {:cmd "git show --check 8a0ee1d0a", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1791774581097-6234-0e71e31b",
-     :commands
-     ["git scope/blob/SHA/ancestry checks"
-      "lake env lean ConstructionTargets/T02A03GeometricTubeDeformation.lean"
-      "lake env lean problems/t02A03/lean/Main.lean"
-      "statement-registry check/fingerprint"
-      "commit placeholder counts"],
-     :finding
-     "PASS: commit 8a0ee1d0a adds compiled, sorry-free, standard-axiom progress by packaging the rotated endpoint waypoint as a continuous family. Scope and fixture hash match; registry 131/0, fingerprint d123afd5, placeholders module/Main 0/1. STOP now truthfully lists correctedRotatedEndpointWaypointPath as not started and safeRightTubeMeridianDeformation as partial, with the required endpoint, tube-membership, and deletion certificates still residual."},
-    :commit "8a0ee1d0a2e73e0f8ceb581676bf1209fd45686e",
+     {:cmd "Main placeholders", :exit 0, :output "1"}
+     {:cmd "git show --check", :exit 0}],
+    :diagnostic-history
+    [{:cmd "module compile",
+      :exit 1,
+      :finding "Corrected complex imaginary-coordinate proof."}],
+    :commit "2a9c5d5d69e2f19806b70df780c4643a14cbe29e",
     :changed-paths
     ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
     :fixture
     {:path "ConstructionTargets/T02A03GeometricTubeDeformation.lean",
      :sha256
-     "e7e7a115db62e38d67f01164a11d26d2f608c5866dff82c09dcc557ac585de85"},
+     "27f6b936bfd884372fc1d885f2bcd360d3c48aeae2a078c35d31120e1db03756"},
     :seat "topo-6"},
    :phase :implementation,
    :type
    "∀ (t : unitInterval) (p : RightTubeMinusLeftCore), (t:ℝ) ≤ 1/2 → (((1-2*(t:ℝ):ℝ):ℂ)+((2*(t:ℝ):ℝ):ℂ)*rotatedEndpointWaypoint p)=0 → 0 < (t:ℝ)*(1-2*(t:ℝ))",
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/safe-right-tube-meridian-deformation",
@@ -82116,7 +82103,8 @@
    :lemma-constructiontargets-t02a03geometrictubedeformation-correctedrotatedendpointwaypo,
    :kind :lemma,
    :depends-on
-   [:lemma-rotatedendpointwaypoint-departure-zero-support-pos],
+   [:lemma-rotatedendpointwaypoint-departure-zero-support-pos
+    :lemma-rotatedendpointwaypoint-transverse-correction-ne-zero-at-departure-zero],
    :other-consumers []}
   {:consumer :portfolio,
    :phase :lemma,
@@ -82294,4 +82282,20 @@
    :kind :lemma,
    :depends-on
    [:lemma-constructiontargets-t02a03geometrictubedeformation-saferighttubemeridiandeformat],
+   :other-consumers []}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "rotatedEndpointWaypoint_transverse_correction_ne_zero_at_departure_zero"},
+   :lemma
+   {:name
+    "rotatedEndpointWaypoint_transverse_correction_ne_zero_at_departure_zero",
+    :reported-by []},
+   :id
+   :lemma-rotatedendpointwaypoint-transverse-correction-ne-zero-at-departure-zero,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers []}]}
