@@ -113890,6 +113890,17 @@
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder/diff validation", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791838140211-7884-fda25433",
+     :commands
+     ["git show/diff-tree 9f33f284"
+      "lake build ConstructionTargets.PointWedgeVanKampen"
+      "python3 scripts/statement-registry.py check"
+      "commit hash and placeholder checks"],
+     :finding
+     "PASS program STOP: 9f33f284 by topo-2 adds the isolated left strict-span factor, its map formula, and documentation, exactly within scope and new since history. Source fa928e53..., documentation 0858b69a..., fixture 0bca6ce3..., registry 131/131, and placeholders 0->0 reproduce. The formula faithfully unfolds right-whiskering of aL.symm: the reconstructed left restriction maps aL.inv at the overlap object; orientation and the strict-span/left-equivalence boundary are preserved. Fresh build passes with standard axioms. Applying the literal restriction theorem, normalizing the unit and right factors, then point-span transport, counits, and B6/B12 remain explicitly listed."},
     :commit "9f33f28420a506f4a1ab8cf487d2463271ce13de",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
@@ -113900,7 +113911,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113921,7 +113932,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: The coordinate-span forward left comparison is isolated and expanded into its two ordered factors.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: The left strict-span factor is the reconstructed left restriction map of the inverse span comparison.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -114448,7 +114459,11 @@
     {:job 1,
      :commit "bdda6927989d58fcb6a65ffdc374e8d08cdcf9d8",
      :reason
-     "The coordinate-span forward left comparison is isolated and expanded into its two ordered factors."}]}
+     "The coordinate-span forward left comparison is isolated and expanded into its two ordered factors."}
+    {:job 2,
+     :commit "9f33f28420a506f4a1ab8cf487d2463271ce13de",
+     :reason
+     "The left strict-span factor is the reconstructed left restriction map of the inverse span comparison."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
