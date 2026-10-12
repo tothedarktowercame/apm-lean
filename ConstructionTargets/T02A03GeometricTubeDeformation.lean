@@ -2823,6 +2823,24 @@ theorem rotatedEndpointWaypoint_strongTransverse_departure_eq_zero_iff
     · simpa [rotatedEndpointWaypoint, strongTransverseDepartureCorrection,
         Complex.mul_re, Complex.mul_im] using him
 
+/-- The factor-four transverse branch also has an annulus-admissible forced
+coordinate: at `t = 1/3` the zero equations select `2/3 - 1/2 I`. -/
+theorem strongTransverseThirdCandidate_mem_planarAnnulus :
+    (9 / 16 : ℝ) <
+        Complex.normSq
+          (((2 / 3 : ℝ) : ℂ) + ((-1 / 2 : ℝ) : ℂ) * Complex.I) ∧
+      Complex.normSq
+          (((2 / 3 : ℝ) : ℂ) + ((-1 / 2 : ℝ) : ℂ) * Complex.I) <
+        (25 / 16 : ℝ) := by
+  norm_num [Complex.normSq_apply, Complex.mul_re, Complex.mul_im]
+
+theorem strongTransverseThirdCandidate_scalarEquations :
+    1 - 2 * (1 / 3 : ℝ) +
+          2 * (1 / 3 : ℝ) * (-1 / 2 : ℝ) = 0 ∧
+      -2 * (1 / 3 : ℝ) * (2 / 3 : ℝ) +
+          4 * (1 / 3 : ℝ) * (1 - 2 * (1 / 3 : ℝ)) = 0 := by
+  norm_num
+
 end ConstructionTargets.T02A03GeometricTubeDeformation
 
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeNormalComplex_eq_zero_iff
@@ -2920,6 +2938,7 @@ end ConstructionTargets.T02A03GeometricTubeDeformation
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.doubledCorrectedDepartureQuarterCandidate_mem_planarAnnulus
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.doubledCorrection_quarterCandidate_actual_zero
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_strongTransverse_departure_eq_zero_iff
+#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.strongTransverseThirdCandidate_mem_planarAnnulus
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_twiceCorrected_departure_zero_coordinates
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_twiceCorrected_departure_zero_normSq
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_twiceCorrected_departure_zero_scalar_bounds
