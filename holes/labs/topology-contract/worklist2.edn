@@ -76152,7 +76152,8 @@
    :kind :lemma,
    :depends-on
    [:lemma-constructiontargets-t02a03geometrictubedeformation-righttubemeridiancoordinate
-    :lemma-correctedrotatedendpointwaypointpath],
+    :lemma-correctedrotatedendpointwaypointpath
+    :lemma-constructiontargets-t02a03geometrictubedeformation-correctedrotatedendpointwaypo],
    :other-consumers []}
   {:consumer :t02A03,
    :phase :lemma,
@@ -78728,7 +78729,8 @@
    :lemma-constructiontargets-t02a03geometrictubedeformation-geometricyhomotopyequivgeneri,
    :kind :lemma,
    :depends-on
-   [:lemma-constructiontargets-t02a03geometrictubecover-righttubeminusleftcoremeridianhomot],
+   [:lemma-constructiontargets-t02a03geometrictubecover-righttubeminusleftcoremeridianhomot
+    :lemma-constructiontargets-t02a03geometrictubecover-righttubeminusleftcorehomotopyequiv],
    :other-consumers []}
   {:consumer :t02A03,
    :phase :lemma,
@@ -82041,7 +82043,8 @@
    {:name
     "ConstructionTargets.T02A03GeometricTubeDeformation.correctedRotatedEndpointWaypointPath",
     :reported-by
-    [:routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1],
+    [:routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1
+     :owner],
     :type
     "continuous endpoint-fixed correction of the rotated waypoint path with no zeros",
     :area "explicit-r3-tube-deformation-retraction"},
@@ -82205,4 +82208,26 @@
    :id :lemma-polygonsurfacepione-pairingdata,
    :kind :lemma,
    :depends-on [],
+   :other-consumers []}
+  {:consumer :t02A03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.T02A03GeometricTubeCover.rightTubeMinusLeftCoreHomotopyEquivCircle",
+    :type
+    "Nonempty (ContinuousMap.HomotopyEquiv RightTubeMinusLeftCore Circle)  (size: 80-160 lines / 1-3 days)"},
+   :lemma
+   {:name
+    "ConstructionTargets.T02A03GeometricTubeCover.rightTubeMinusLeftCoreHomotopyEquivCircle",
+    :reported-by [:owner],
+    :type
+    "Nonempty (ContinuousMap.HomotopyEquiv RightTubeMinusLeftCore Circle)  (size: 80-160 lines / 1-3 days)",
+    :area "surface-curve-collar"},
+   :id
+   :lemma-constructiontargets-t02a03geometrictubecover-righttubeminusleftcorehomotopyequiv,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-t02a03geometrictubedeformation-saferighttubemeridiandeformat],
    :other-consumers []}]}
