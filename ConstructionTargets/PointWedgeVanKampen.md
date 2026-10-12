@@ -707,3 +707,11 @@ equivalences.  `genericPointWedgeCoordinateSpanCounit_baseObjects` evaluates
 both at the literal summand base objects: each is the corresponding identity
 coordinate-span functor applied to that groupoid-equivalence counit.  The next
 comparison can therefore work with two concrete mapped base-object morphisms.
+
+`genericPointWedgeCoordinateSpanCounit_glueSquare_unitBase` evaluates the
+transport counit's glue-naturality square at the unique overlap-coordinate
+object.  It directly relates the reconstructed reverse glue and the right
+base counit to the left base counit and coordinate glue.  Since the reverse
+glue and coordinate glue were already reduced to the outer comparisons and
+the unit respectively, this is the exact equation needed for their final
+identification.
