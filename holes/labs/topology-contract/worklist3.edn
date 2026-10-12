@@ -30144,11 +30144,26 @@
       "lake env lean ConstructionTargets/SurfaceClassification.lean (2 attempts)",
       :exit 1,
       :stage "numeric midpoint normalization; fixed"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791819890909-7282-731cacdf",
+     :commands
+     ["git show/diff 754add487"
+      "sha256sum fixtures"
+      "git diff --check; blob-current"
+      "rg Lean placeholders"
+      "statement-registry.py check"
+      "#print axioms two-segment theorem"
+      "lake env lean fixtures/module"
+      "lake build ConstructionTargets.SurfaceClassification"],
+     :finding
+     "PASS program STOP: new compiled milestone after 70ab591fd defines the two-segment affine path and proves an avoiding bend with exact start/midpoint/finish values. One-file scope; blob current; fixture hashes recomputed; fixtures/module/build pass; registry 131/131; zero Lean placeholders; standard axioms. Continuity, chart containment, and transversality remain listed."},
     :commit "754add4876b7ca30784a885d5b4d92c645e87b80",
     :changed-paths ["ConstructionTargets/SurfaceClassification.lean"],
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/SurfaceClassification.lean"
     "ConstructionTargets/SurfaceClassification.md"
@@ -30168,7 +30183,7 @@
     :blueprint
     "ConstructionTargets/SurfaceClassification.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: B4 affine chart perturbation avoiding finite planar sets proved",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: B4 endpoint-fixed polygonal path constructed",
    :id :program-2026-10-12-surface-classification,
    :kind :reusable-theorem,
    :campaign-priority 40,
@@ -30223,7 +30238,10 @@
     {:job 6,
      :commit "70ab591fd4d57d6a727872d4e556386352df42bd",
      :reason
-     "B4 affine chart perturbation avoiding finite planar sets proved"}]}
+     "B4 affine chart perturbation avoiding finite planar sets proved"}
+    {:job 7,
+     :commit "754add4876b7ca30784a885d5b4d92c645e87b80",
+     :reason "B4 endpoint-fixed polygonal path constructed"}]}
   {:consumer :t00J02,
    :phase :lemma,
    :state :banked,
@@ -30574,7 +30592,7 @@
    :other-consumers [:t00A03 :t91J05 :t92J05 :t94J04 :t96A01 :t97J02]}
   {:consumer :t00A02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -30588,7 +30606,9 @@
     :type
     "(start finish base direction : EuclideanPlane) (hdirection : direction ≠ 0) {a b : ℝ} (hab : a < b) {forbidden : Set EuclideanPlane} (hforbidden : forbidden.Finite) : ∃ t ∈ Set.Ioo a b, base + t • direction ∉ forbidden ∧ twoSegmentPath start (base + t • direction) finish 0 = start ∧ twoSegmentPath start (base + t • direction) finish (1/2) = base + t • direction ∧ twoSegmentPath start (base + t • direction) finish 1 = finish",
     :area "surface-classification",
-    :proved-in :program-2026-10-12-surface-classification},
+    :proved-in :program-2026-10-12-surface-classification,
+    :banked-by :program-2026-10-12-surface-classification,
+    :banked-commit "754add4876b7ca30784a885d5b4d92c645e87b80"},
    :id
    :lemma-constructiontargets-surfaceclassification-exists-twosegmentpath-bend-avoiding-fi,
    :kind :lemma,
