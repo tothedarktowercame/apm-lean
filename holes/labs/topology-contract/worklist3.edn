@@ -30162,7 +30162,7 @@
    "reopened: a lemma this row reported missing is now banked",
    :stop-count 1,
    :review-finding
-   "Program-row defect: commit ebbfe625 repairs the B5 mathematics, but changes only SurfaceClassification.blueprint.md and commits no new compiled, sorry-free, standard-axiom result since the prior program-history entry; :missing-theorems is empty. The successful 8245-job build merely rebuilds pre-existing SurfaceClassification code and is not a new milestone. Repair by implementing and committing the next listed milestone (B1 FiniteTwoComplex/Realization or another genuine supporting result), compiling it without placeholders, and recording that proved milestone in :missing-theorems.",
+   "Program-row evidence defect: commit 4244c6e3e adds compiled theorem continuous_twoSegmentPath after history commit 754add487, but the row records :changed-paths [] and no :missing-theorems milestone. Repair by recording ConstructionTargets.SurfaceClassification.continuous_twoSegmentPath with its exact type/status/dependency, correcting changed-paths to SurfaceClassification.lean, and retaining the owner park/residual route redesign.",
    :implements-lemma
    :lemma-constructiontargets-surfaceclassification-compactsmoothsurfacefinitetriangulatio,
    :evidence
@@ -30196,11 +30196,17 @@
      {:cmd
       "lake env lean ConstructionTargets/SurfaceClassification.lean",
       :exit 0}],
+    :review
+    {:outcome :fail,
+     :seat "codex-11",
+     :job "invoke-1791821123198-7336-724c113f",
+     :finding
+     "Program-row evidence defect: commit 4244c6e3e adds compiled theorem continuous_twoSegmentPath after history commit 754add487, but the row records :changed-paths [] and no :missing-theorems milestone. Repair by recording ConstructionTargets.SurfaceClassification.continuous_twoSegmentPath with its exact type/status/dependency, correcting changed-paths to SurfaceClassification.lean, and retaining the owner park/residual route redesign."},
     :commit "4244c6e3e1737b3b867f576275c8a301785a3df6",
     :changed-paths [],
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :repair,
    :scope
    ["ConstructionTargets/SurfaceClassification.lean"
     "ConstructionTargets/SurfaceClassification.md"
@@ -30224,7 +30230,7 @@
    :id :program-2026-10-12-surface-classification,
    :kind :reusable-theorem,
    :campaign-priority 40,
-   :fail-count 0,
+   :fail-count 1,
    :depends-on [],
    :program true,
    :other-consumers [:t00A03 :t91J05 :t92J05 :t94J04 :t96A01 :t97J02],
