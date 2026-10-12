@@ -30202,11 +30202,25 @@
       :exit 0}
      {:cmd "lake env lean /tmp/surface_parameter_axioms.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791821225746-7344-0452bc9e",
+     :commands
+     ["git show/diff-tree 4244c6e3e"
+      "git diff --check; blob-current"
+      "rg Lean placeholders"
+      "statement-registry.py check"
+      "#check/#print axioms continuity theorem"
+      "lake env lean parameter fixture/module"
+      "lake build ConstructionTargets.SurfaceClassification"],
+     :finding
+     "PASS program STOP: corrected evidence records new compiled continuous_twoSegmentPath milestone after 754add487 and the exact changed file. Piecewise affine branches are continuous and agree at 1/2. Blob current; module/build and fixture pass; registry 131/131; zero Lean placeholders; standard axioms. Owner park and blueprint-redesign residual remain explicit."},
     :commit "4244c6e3e1737b3b867f576275c8a301785a3df6",
     :changed-paths ["ConstructionTargets/SurfaceClassification.lean"],
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/SurfaceClassification.lean"
     "ConstructionTargets/SurfaceClassification.md"
@@ -30226,7 +30240,7 @@
     :blueprint
     "ConstructionTargets/SurfaceClassification.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: B4 endpoint-fixed polygonal path constructed",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Evidence repaired for the compiled continuity milestone; owner park remains pending blueprint replacement from reviewed surfaces.md.",
    :id :program-2026-10-12-surface-classification,
    :kind :reusable-theorem,
    :campaign-priority 40,
@@ -30284,7 +30298,11 @@
      "B4 affine chart perturbation avoiding finite planar sets proved"}
     {:job 7,
      :commit "754add4876b7ca30784a885d5b4d92c645e87b80",
-     :reason "B4 endpoint-fixed polygonal path constructed"}]}
+     :reason "B4 endpoint-fixed polygonal path constructed"}
+    {:job 2,
+     :commit "4244c6e3e1737b3b867f576275c8a301785a3df6",
+     :reason
+     "Evidence repaired for the compiled continuity milestone; owner park remains pending blueprint replacement from reviewed surfaces.md."}]}
   {:consumer :t00J02,
    :phase :lemma,
    :state :banked,
@@ -30660,7 +30678,7 @@
    :other-consumers [:t00A03 :t91J05 :t92J05 :t94J04 :t96A01 :t97J02]}
   {:consumer :t00A02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -30674,7 +30692,9 @@
     :type
     "(start bend finish : EuclideanPlane) : Continuous (twoSegmentPath start bend finish)",
     :area "surface-classification",
-    :proved-in :program-2026-10-12-surface-classification},
+    :proved-in :program-2026-10-12-surface-classification,
+    :banked-by :program-2026-10-12-surface-classification,
+    :banked-commit "4244c6e3e1737b3b867f576275c8a301785a3df6"},
    :id
    :lemma-constructiontargets-surfaceclassification-continuous-twosegmentpath,
    :kind :lemma,
