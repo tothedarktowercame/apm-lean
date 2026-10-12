@@ -1023,4 +1023,38 @@ theorem interiorOpenEmbedding (P : PairingData) :
 theorem interior_isOpen (P : PairingData) : IsOpen P.interior :=
   (interiorOpenEmbedding P).isOpen_range
 
+/-! ### Radial input for the polygon open cover -/
+
+/-- The inner radial region used for the centre side of the polygon cover. -/
+def innerDisk : Set Disk := {z | ‖(z : ℂ)‖ < (2 : ℝ) / 3}
+
+/-- The outer radial region used for the annular side of the polygon cover. -/
+def outerDisk : Set Disk := {z | (1 : ℝ) / 3 < ‖(z : ℂ)‖}
+
+theorem innerDisk_isOpen : IsOpen innerDisk := by
+  exact isOpen_lt (continuous_norm.comp continuous_subtype_val) continuous_const
+
+theorem outerDisk_isOpen : IsOpen outerDisk := by
+  exact isOpen_lt continuous_const (continuous_norm.comp continuous_subtype_val)
+
+theorem innerDisk_union_outerDisk : innerDisk ∪ outerDisk = Set.univ := by
+  ext z
+  simp only [innerDisk, outerDisk, Set.mem_union, Set.mem_setOf_eq, Set.mem_univ,
+    iff_true]
+  by_cases h : ‖(z : ℂ)‖ < (2 : ℝ) / 3
+  · exact Or.inl h
+  · right
+    have : (2 : ℝ) / 3 ≤ ‖(z : ℂ)‖ := le_of_not_gt h
+    linarith
+
+theorem innerDisk_subset_interior : innerDisk ⊆ {z : Disk | ‖(z : ℂ)‖ < 1} := by
+  intro z hz
+  dsimp [innerDisk] at hz ⊢
+  linarith
+
+theorem boundary_subset_outerDisk
+    {z : Disk} (hz : ‖(z : ℂ)‖ = 1) : z ∈ outerDisk := by
+  simp [outerDisk, hz]
+  norm_num
+
 end ConstructionTargets.PolygonSurfacePiOne
