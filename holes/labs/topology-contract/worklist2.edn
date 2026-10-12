@@ -72784,7 +72784,7 @@
    "Construct a continuous transverse correction using the positive support factor and prove the corrected departure creates no new zeros; then combine it with the banked safe arrival leg and downstream adapters.",
    :other-consumers []}
   {:owner-park
-   "2026-10-12 claude-14 (Joe: pull topo2 off t02A03 onto shared foundations). Parked behind the covering-subgroup program, which outranks it (campaign-priority 40); when that program ends, resume from the last commit of ConstructionTargets/T02A03GeometricTubeDeformation.lean.",
+   "2026-10-12 claude-14 (Joe: blueprints that match the real need and available tooling, not textbook formalization). Paused for a route redesign: ~/notes/closer/routes/<foundation>.md. Resume or replace once the reviewed blueprint is in.",
    :bounded-exception
    "single-consumer explicit ambient deformation with frozen tube and deletion invariants",
    :consumer :t02A03,
@@ -72837,7 +72837,7 @@
    :phase :implementation,
    :type
    "∀ (t : unitInterval) (p : RightTubeMinusLeftCore), (t:ℝ) ≤ 1/2 → (((1-2*(t:ℝ):ℝ):ℂ)+((2*(t:ℝ):ℝ):ℂ)*rotatedEndpointWaypoint p)=0 → 0 < (t:ℝ)*(1-2*(t:ℝ))",
-   :state :done-unreviewed,
+   :state :needs-owner,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/safe-right-tube-meridian-deformation",
@@ -83281,7 +83281,9 @@
    :kind :lemma,
    :depends-on [],
    :other-consumers []}
-  {:consumer :t94J04,
+  {:owner-park
+   "2026-10-12 claude-14 (Joe: blueprints that match the real need and available tooling, not textbook formalization). Paused for a route redesign: ~/notes/closer/routes/<foundation>.md. Resume or replace once the reviewed blueprint is in.",
+   :consumer :t94J04,
    :stop-count 4,
    :review-finding
    "Blueprint defect: B10 is false with B3 orientation. B3 identifies loop representatives g,h when g*h⁻¹ ∈ H, which classifies left cosets H*g, not right cosets g*H. Counterexample in S3: let H=⟨(12)⟩, h=(123), g=(12)h. Then g*h⁻¹=(12)∈H, so B3 identifies g,h, but gH≠hH because h⁻¹(12)h∉H. Thus the claimed map to right cosets is not well-defined, and the displayed quotient type does not faithfully encode arbitrary nonnormal cosets. Repair B10 to use left-coset quotient data, or reverse B3 consistently to classify right cosets, then propagate B5/B8/B10-B12 and re-review.",

@@ -872,7 +872,9 @@
    [:routes-2026-10-11-surface-embedded-circle-closed-range-topo3-r1],
    :current-residual "Local flatness; gluing.",
    :other-consumers [:t01J01 :t03J02]}
-  {:consumer :t00A03,
+  {:owner-park
+   "2026-10-12 claude-14: paused for the surface route redesign, ~/notes/closer/routes/surfaces.md",
+   :consumer :t00A03,
    :implements-lemma
    :lemma-constructiontargets-surfaceschoenflies-embeddedcirclecollar,
    :evidence
@@ -927,7 +929,7 @@
       "225e1e486ac81111c253922678840dfcf8e2a855d149093d07d745cb253f664e"},
      :seat "topo-12"}},
    :phase :probe,
-   :state :open,
+   :state :needs-owner,
    :scope ["ConstructionTargets/SurfaceSchoenflies.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/topo3/schoenflies-2d/embedded-circle-collar",
@@ -30096,7 +30098,9 @@
    :kind :lemma,
    :depends-on [],
    :other-consumers []}
-  {:consumer :t00A02,
+  {:owner-park
+   "2026-10-12 claude-14 (Joe: blueprints that match the real need and available tooling, not textbook formalization). Paused for a route redesign: ~/notes/closer/routes/<foundation>.md. Resume or replace once the reviewed blueprint is in.",
+   :consumer :t00A02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
    :stop-count 8,
@@ -30146,7 +30150,7 @@
     :changed-paths ["ConstructionTargets/SurfaceClassification.lean"],
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :needs-owner,
    :scope
    ["ConstructionTargets/SurfaceClassification.lean"
     "ConstructionTargets/SurfaceClassification.md"
