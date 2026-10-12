@@ -30261,7 +30261,7 @@
    :consumer :t00A02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "Program-row defect persists unchanged: 92a672b41 is blueprint-only, SurfaceClassification.lean is unchanged after history commit 4244c6e3e, and no compiled milestone is listed; registry is 131/131. Supervisor must retire/supersede this :program/:implementation row and create an independent blueprint-review row for 92a672b41 before electing R1-R7. No author-side compiled workaround is valid under the owner park.",
    :implements-lemma
@@ -30284,7 +30284,7 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Supervisor must retire/supersede this parked implementation program and submit 92a672b41 as an independent blueprint-review row; no author-side compiled repair is valid.",
+    "Supervisor must retire/supersede this owner-parked implementation program and submit blueprint commit 92a672b41 as an independent blueprint-review row; author-side compiled work would violate the reviewed route.",
     :commands
     [{:cmd "git show --format=%H\\ %P --no-patch 92a672b41", :exit 0}
      {:cmd "git diff-tree --no-commit-id --name-only -r 92a672b41",
@@ -30293,17 +30293,11 @@
       "git diff --exit-code 4244c6e3e..92a672b41 -- ConstructionTargets/SurfaceClassification.lean",
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1791821844033-7376-ec7bfbd8",
-     :finding
-     "Program-row defect persists unchanged: 92a672b41 is blueprint-only, SurfaceClassification.lean is unchanged after history commit 4244c6e3e, and no compiled milestone is listed; registry is 131/131. Supervisor must retire/supersede this :program/:implementation row and create an independent blueprint-review row for 92a672b41 before electing R1-R7. No author-side compiled workaround is valid under the owner park."},
     :commit "92a672b41fa1f7e45df1987a4aca7d2f8460d2e0",
     :changed-paths [],
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SurfaceClassification.lean"
     "ConstructionTargets/SurfaceClassification.md"
