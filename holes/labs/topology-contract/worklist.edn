@@ -113897,6 +113897,19 @@
       :exit 1,
       :finding
       "Connector is classical; used target equality and base lemma."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791784376189-6449-32490c9a",
+     :commands
+     ["git show/diff-tree 8cb2bd00c"
+      "sha256/diff/placeholder checks"
+      "statement-registry.py check"
+      "lake env lean ConstructionTargets/PointWedgeVanKampen.lean"
+      "lake build ConstructionTargets.PointWedgeVanKampen"
+      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (expected absent)"],
+     :finding
+     "Exact scoped commit and frozen fixture 0bca6c...8c8b0 verified. New theorem correctly uses the left target-object equality and based-connector lemma to obtain HEq with Iso.refl; heterogeneous typing preserves dependent arrow indices. Source is sorry-free; hashes and 131/131 registry reproduce; Lean/build pass; only standard axioms. Valid program STOP with compiled progress and residual naming right target/source connectors, inclusion images, literal lifts, then B12; final target is absent as reported."},
     :commit "8cb2bd00ccb97ac78221c2722efc97ea13f4265d",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
@@ -113907,7 +113920,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113928,7 +113941,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Right outer connector normal form is expanded into its three ordered dependent factors.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Left target connector is HEq to the base reflexive connector.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -114176,7 +114189,11 @@
     {:job 3,
      :commit "14debc39f803d552629ecc0f3f53a8367cce78cb",
      :reason
-     "Right outer connector normal form is expanded into its three ordered dependent factors."}]}
+     "Right outer connector normal form is expanded into its three ordered dependent factors."}
+    {:job 4,
+     :commit "8cb2bd00ccb97ac78221c2722efc97ea13f4265d",
+     :reason
+     "Left target connector is HEq to the base reflexive connector."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
