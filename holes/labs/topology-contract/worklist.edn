@@ -116767,13 +116767,12 @@
      :reason
      "Receipt repaired: fixture now records the exact reviewed blueprint hash."}]}
   {:consumer :t91J06,
-   :stop-count 1,
+   :stop-count 2,
    :review-finding
    "Blueprint B1 proof omits the orientation of arbitrary q. The middle prescription q o t^-1 is increasing iff q and t have the same orientation, but the plan swaps target endpoints based only on t. Counterexample to that plan: t(x)=1/4+x/2 is increasing while q(x)=1-2x maps [0,1] homeomorphically and decreasingly to [-1,1]; the middle map decreases from 1 to -1, so the increasing-t endpoint assignment cannot paste to the claimed affine side pieces. Split on q (or directly on q o t^-1) and assign complementary target endpoints from the composite orientation.",
    :evidence
    {:placeholder-delta {:source-before 3, :source-after 3},
-    :residual
-    "Review B1-B5, then formalize B1; never consume the old glue helper without hf.",
+    :residual "Re-review blueprint; then formalize B1's four cases.",
     :outcome :stop,
     :warnings [{:kind :existing-placeholder}],
     :missing-theorems
@@ -116800,33 +116799,27 @@
     {:target
      "77deaa5c86092187afc0ba92eefe4692bc1991508f81deb6a626c3d106b86625",
      :blueprint
-     "2a59c25774711b97b297f19f06dc02ece1b2a1e9005c53cada4d10b508bfef6c",
+     "2424bbb21000e8d3a2672f1774f622351b6b89f77002cab4bd36727ffdaf85a7",
      :registry "131/131"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
     :reason
-    "Blueprint written; independent review precedes formalization.",
+    "B1 repaired: endpoint pieces follow the composite orientation.",
     :commands
     [{:cmd "lake env lean problems/t91J06/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder/diff validation", :exit 0}],
     :diagnostic-history [],
-    :review
-    {:outcome :fail,
-     :seat "codex-3",
-     :job "invoke-1791796827342-6724-e40e8965",
-     :finding
-     "Blueprint B1 proof omits the orientation of arbitrary q. The middle prescription q o t^-1 is increasing iff q and t have the same orientation, but the plan swaps target endpoints based only on t. Counterexample to that plan: t(x)=1/4+x/2 is increasing while q(x)=1-2x maps [0,1] homeomorphically and decreasingly to [-1,1]; the middle map decreases from 1 to -1, so the increasing-t endpoint assignment cannot paste to the claimed affine side pieces. Split on q (or directly on q o t^-1) and assign complementary target endpoints from the composite orientation."},
-    :commit "b08d55a0b6aaabf59da2d01615bcbfd00b31c2b3",
+    :commit "cc04d44ab8eaebaaa3e62ff918db6b5c755d1aa1",
     :changed-paths ["ConstructionTargets/t91J06Closure.blueprint.md"],
     :fixture
     {:path "ConstructionTargets/t91J06Closure.blueprint.md",
      :sha256
-     "2a59c25774711b97b297f19f06dc02ece1b2a1e9005c53cada4d10b508bfef6c"},
+     "2424bbb21000e8d3a2672f1774f622351b6b89f77002cab4bd36727ffdaf85a7"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope
    ["problems/t91J06/lean/Main.lean"
     "problems/t91J06/status.json"
