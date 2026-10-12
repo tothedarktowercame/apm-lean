@@ -1,5 +1,6 @@
 import ConstructionTargets.Surfaces
 import ConstructionTargets.PolygonTorusCrosscapRelation
+import ConstructionTargets.PolygonBoundaryVertexClasses
 
 /-!
 # Polygon surface fundamental groups
@@ -235,5 +236,68 @@ def torusRP2SpaceEquiv :
   apply Quotient.congrRight
   intro x y
   exact torusRP2_eqvGen_iff x y
+
+open PolygonBoundaryVertexClasses in
+theorem torusRP2_all_vertices (i : Fin 6) :
+    Relation.EqvGen PolygonTorusCrosscapRelation.TorusCrosscapRel
+      (polygonVertex 6 i) (polygonVertex 6 0) := by
+  have h03 : Relation.EqvGen PolygonTorusCrosscapRelation.TorusCrosscapRel
+      (polygonVertex 6 0) (polygonVertex 6 3) := by
+    have h := Relation.EqvGen.rel _ _
+      (PolygonTorusCrosscapRelation.TorusCrosscapRel.a zeroIcc)
+    rw [reverse_zeroIcc] at h
+    rw [polygonVertex]
+    convert h using 1
+    exact (edgePoint_one_eq_succ_zero 6 2).symm
+  have h12 : Relation.EqvGen PolygonTorusCrosscapRelation.TorusCrosscapRel
+      (polygonVertex 6 1) (polygonVertex 6 2) := by
+    have h := Relation.EqvGen.rel _ _
+      (PolygonTorusCrosscapRelation.TorusCrosscapRel.a oneIcc)
+    rw [reverse_oneIcc] at h
+    rw [polygonVertex]
+    convert h using 1
+    exact (edgePoint_one_eq_succ_zero 6 0).symm
+  have h14 : Relation.EqvGen PolygonTorusCrosscapRelation.TorusCrosscapRel
+      (polygonVertex 6 1) (polygonVertex 6 4) := by
+    have h := Relation.EqvGen.rel _ _
+      (PolygonTorusCrosscapRelation.TorusCrosscapRel.b zeroIcc)
+    rw [reverse_zeroIcc] at h
+    rw [polygonVertex]
+    convert h using 1
+    exact (edgePoint_one_eq_succ_zero 6 3).symm
+  have h23 : Relation.EqvGen PolygonTorusCrosscapRelation.TorusCrosscapRel
+      (polygonVertex 6 2) (polygonVertex 6 3) := by
+    have h := Relation.EqvGen.rel _ _
+      (PolygonTorusCrosscapRelation.TorusCrosscapRel.b oneIcc)
+    rw [reverse_oneIcc] at h
+    rw [polygonVertex]
+    convert h using 1
+    exact (edgePoint_one_eq_succ_zero 6 1).symm
+  have h45 : Relation.EqvGen PolygonTorusCrosscapRelation.TorusCrosscapRel
+      (polygonVertex 6 4) (polygonVertex 6 5) := by
+    exact Relation.EqvGen.rel _ _
+      (PolygonTorusCrosscapRelation.TorusCrosscapRel.c zeroIcc)
+  fin_cases i
+  · exact .refl _
+  · exact .trans _ _ _ h12 (.trans _ _ _ h23 h03.symm)
+  · exact .trans _ _ _ h23 h03.symm
+  · exact h03.symm
+  · exact .trans _ _ _ h14.symm
+      (.trans _ _ _ h12 (.trans _ _ _ h23 h03.symm))
+  · exact .trans _ _ _ h45.symm (.trans _ _ _ h14.symm
+      (.trans _ _ _ h12 (.trans _ _ _ h23 h03.symm)))
+
+/-- The complete B1 data for the six-edge word `a b a⁻¹ b⁻¹ c c`. -/
+def torusRP2PairingData : PairingData where
+  edgeCount := 6
+  edgeCount_pos := by omega
+  pair := torusRP2Pair
+  pair_pair := torusRP2PairIndex_involutive
+  pair_ne := torusRP2Pair_ne
+  sign := torusRP2Sign
+  oneVertex := by
+    intro i j
+    apply (torusRP2_eqvGen_iff _ _).mpr
+    exact .trans _ _ _ (torusRP2_all_vertices i) (torusRP2_all_vertices j).symm
 
 end ConstructionTargets.PolygonSurfacePiOne
