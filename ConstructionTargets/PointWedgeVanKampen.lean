@@ -4298,6 +4298,20 @@ theorem genericPointWedgeRightInverseBaseToRightBase_normalForm_eq_maps :
   rw [genericPointWedgeRightEquiv_rightBase_connector]
   rfl
 
+omit [PathConnectedSpace X] [PathConnectedSpace Y] in
+/-- The mapped inverse unit at the fixed right-cover base is the equivalence
+counit at its image; this is the inverse form of the equivalence triangle. -/
+theorem genericPointWedgeRightEquiv_map_unitInv_rightBase :
+    let eR := genericPointWedgeRightGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    eR.functor.map
+        (eR.unitIso.inv.app (genericPointWedgeRightBase x₀ y₀ N)) =
+      eR.counitIso.hom.app
+        (eR.functor.obj (genericPointWedgeRightBase x₀ y₀ N)) := by
+  exact ((genericPointWedgeRightGroupoidEquivalence
+    x₀ y₀ M N hM hN hy hx cM cN).counit_app_functor
+      (genericPointWedgeRightBase x₀ y₀ N)).symm
+
 omit [PathConnectedSpace X] in
 /-- The connector normal form of the mapped lifted right loop is conjugation
 by the explicit equality transport at its common endpoint. -/
@@ -5369,6 +5383,7 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeCoordinateSpanGlobalRestrictionRightComparison_sourceObj
 #print axioms genericPointWedgeRightInverseBaseToRightBase_normalForm
 #print axioms genericPointWedgeRightInverseBaseToRightBase_normalForm_eq_maps
+#print axioms genericPointWedgeRightEquiv_map_unitInv_rightBase
 #print axioms genericPointWedgeMappedOpenCoverCounit_namedGlueSquare
 #print axioms genericPointWedgeMappedCoordinateSpanCounit_glueSquare
 #print axioms genericPointWedgeMappedCoordinateSpanSourceGlue

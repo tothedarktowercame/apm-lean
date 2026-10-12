@@ -975,3 +975,7 @@ then inverse target connector.
 middle morphism into the two equivalence-functor maps and normalizes the target
 connector to its named equality transport.  The source connector remains
 explicit; no arbitrary connector or counit is identified with the identity.
+
+`genericPointWedgeRightEquiv_map_unitInv_rightBase` applies the inverse
+equivalence triangle at the fixed right-cover base: the mapped inverse unit is
+exactly the equivalence counit at the transported base.
