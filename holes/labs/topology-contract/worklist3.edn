@@ -20886,6 +20886,20 @@
       "git diff --check -- ConstructionTargets/ManifoldFundamentalClass.lean",
       :exit 0}
      {:cmd "rg forbidden scoped file", :exit 1, :expected-exit 1}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791811654130-6982-44e08ab0",
+     :commands
+     ["git show/diff-tree b431d946"
+      "sha256sum /tmp/closedgeneratorbridge.lean"
+      "lake env lean /tmp/closedgeneratorbridge.lean"
+      "lake env lean ConstructionTargets/ManifoldFundamentalClass.lean"
+      "python3 scripts/statement-registry.py check"
+      "git diff b431d946^ b431d946 --check"
+      "rg placeholder counts"],
+     :finding
+     "PASS: reviewer codex-11. Commit scope is exactly ManifoldFundamentalClass.lean; recorded blob is current; fixture SHA matches. Fixture and module compile with 9 pre-existing warnings; theorem uses only propext, Classical.choice, Quot.sound. The closed-disk-to-interval relative homology map and connecting-map naturality have the required direction; rewriting by hcomparison yields exactly hcoordinates, then the interval detector proves the generator equality. Registry 131/131; scoped forbidden count 0; counts unchanged: t00 bridge=1/sorry=1, t98 sorry=1."},
     :commit "b431d946466ae9b990f2f8d55c199be73fe07f69",
     :changed-paths
     ["ConstructionTargets/ManifoldFundamentalClass.lean"],
@@ -20895,7 +20909,7 @@
      "2b27eb4c9c471e1a2e8bdbf209a4fb68e2264f73cdcfae8df5c30030b1433f86"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/manifold-fundamental-class",
    :acceptance
@@ -20964,7 +20978,7 @@
       "2b27eb4c9c471e1a2e8bdbf209a4fb68e2264f73cdcfae8df5c30030b1433f86"},
      :seat "topo-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -29896,7 +29910,7 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -29909,7 +29923,9 @@
     [:routes-2026-10-10-manifold-fundamental-class-topo3-r2],
     :type "exact type in fixture",
     :area "manifold-fundamental-class",
-    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2,
+    :banked-by :routes-2026-10-12-mfclass-closed-generator-bridge-r1,
+    :banked-commit "b431d946466ae9b990f2f8d55c199be73fe07f69"},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-coefficientclosedrelativeclass-eq-i,
    :kind :lemma,
@@ -29918,7 +29934,7 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "intervalDetectorLocal",
@@ -29931,7 +29947,9 @@
     :type
     "∀ z, intervalBoundaryH0Iso.hom.hom ((singularPairConnecting intervalBoundary 0).hom z) = boolIntDifference.hom 1 → z = intervalBoundaryRelativeH1Generator",
     :area "manifold-fundamental-class",
-    :proved-in :routes-2026-10-12-mfclass-closed-generator-bridge-r1},
+    :proved-in :routes-2026-10-12-mfclass-closed-generator-bridge-r1,
+    :banked-by :routes-2026-10-12-mfclass-closed-generator-bridge-r1,
+    :banked-commit "b431d946466ae9b990f2f8d55c199be73fe07f69"},
    :id :lemma-intervaldetectorlocal,
    :kind :lemma,
    :depends-on
@@ -29939,14 +29957,16 @@
    :other-consumers [:t98A02]}
   {:consumer :portfolio,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
     "intervalRelativeClass_eq_generator_of_boundary_coordinates"},
    :lemma
    {:name "intervalRelativeClass_eq_generator_of_boundary_coordinates",
-    :reported-by []},
+    :reported-by [],
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/ManifoldFundamentalClass.lean"]},
    :id
    :lemma-intervalrelativeclass-eq-generator-of-boundary-coordinates,
    :kind :lemma,
