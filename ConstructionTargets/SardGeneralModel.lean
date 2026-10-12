@@ -38,6 +38,22 @@ theorem modelRange_geometry
   exact ⟨I.convex_range, I.isClosed_range, I.nonempty_interior,
     I.range_eq_closure_interior⟩
 
+/-- On the interior of a model-with-corners range, the within derivative is
+the unrestricted derivative, so their surjectivity conditions agree. -/
+abbrev InteriorDerivativeComparison
+    {E H : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E] [TopologicalSpace H]
+    (I : ModelWithCorners ℝ E H) : Prop :=
+  ∀ {F : Type*} [NormedAddCommGroup F] [NormedSpace ℝ F] (f : E → F) (x : E),
+    x ∈ interior (Set.range I) →
+      (Function.Surjective (fderivWithin ℝ f (Set.range I) x) ↔
+        Function.Surjective (fderiv ℝ f x))
+
+theorem modelRange_interior_surjective_fderivWithin_iff
+    {E H : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E] [TopologicalSpace H]
+    (I : ModelWithCorners ℝ E H) : InteriorDerivativeComparison I := by
+  intro F _ _ f x hx
+  rw [fderivWithin_of_mem_nhds (mem_interior_iff_mem_nhds.mp hx)]
+
 end ConstructionTargets.SardGeneralModel
 
 #print axioms ConstructionTargets.SardGeneralModel.linearTargetTransport
