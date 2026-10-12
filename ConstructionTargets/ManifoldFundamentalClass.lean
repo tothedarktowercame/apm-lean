@@ -3243,6 +3243,23 @@ theorem coefficientSphereNormalizationComparisonDegree_zero_eq_circle_endpoint :
     SphereHomology.sphereTopHomologyIsoInt
   rfl
 
+theorem coefficientCircleEndpoint_eq_one_of_generator_comparison
+    (hgenerator :
+      (singularHomologyComparison
+        (TopCat.of (T02A06.euclideanUnitSphere 2)) 1).hom.hom
+        ((forgetIntModules.mapIso
+          (CoefficientSphereEndpoints.circleH1 ℤ)).inv.hom
+          (by change ℤ; exact 1)) =
+      T02A06SphereOne.sphereOneH1IsoInt.inv.hom (1 : ℤ)) :
+    T02A06SphereOne.sphereOneH1IsoInt.hom.hom
+      ((singularHomologyComparison
+        (TopCat.of (T02A06.euclideanUnitSphere 2)) 1).hom.hom
+        ((forgetIntModules.mapIso
+          (CoefficientSphereEndpoints.circleH1 ℤ)).inv.hom
+          (by change ℤ; exact 1))) = 1 := by
+  rw [hgenerator]
+  simp
+
 end ConstructionTargets.ManifoldFundamentalClass
 
 #print axioms ConstructionTargets.ManifoldFundamentalClass.neighborhoodInclusion_Hsucc_isIso
@@ -3357,6 +3374,7 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientSphereNormalizationComparisonAutomorphism_hom_eq_id_of_degree_eq_one
 #print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientSphereNormalizationComparisonDegree_eq_one_of_base_step
 #print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientSphereNormalizationComparisonDegree_zero_eq_circle_endpoint
+#print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientCircleEndpoint_eq_one_of_generator_comparison
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_projection
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_generator_of_normalization
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_normalization_of_generator
