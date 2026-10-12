@@ -2831,6 +2831,23 @@ theorem coefficientSphereNormalizationComparisonAutomorphism_hom_eq_neg_implies_
   have hh := congrArg (fun f => e.hom ≫ f) hneg
   simpa only [Category.assoc, e.hom_inv_id_assoc] using hh
 
+theorem coefficientOpenDiskRadial_forgotten_naturality (k : ℕ) :
+    forgetIntModules.map
+        ((CoefficientRadialPair.F ℤ (k + 1)).map
+          (TopCat.ofHom
+            (T02A06DiskRadialComparison.radialNormalizeMap (k + 2)))) ≫
+      (singularHomologyComparison
+        (TopCat.of (T02A06.euclideanUnitSphere (k + 2))) (k + 1)).hom =
+    (integralOpenDiskPunctureHomologyComparison k).hom ≫
+      ((AlgebraicTopology.singularHomologyFunctor AddCommGrpCat (k + 1)).obj
+        (AddCommGrpCat.of ℤ)).map
+          (TopCat.ofHom
+            (T02A06DiskRadialComparison.radialNormalizeMap (k + 2))) := by
+  simpa only [integralOpenDiskPunctureHomologyComparison_hom] using
+    singularHomologyComparison_naturality
+      (TopCat.ofHom
+        (T02A06DiskRadialComparison.radialNormalizeMap (k + 2))) (k + 1)
+
 end ConstructionTargets.ManifoldFundamentalClass
 
 #print axioms ConstructionTargets.ManifoldFundamentalClass.neighborhoodInclusion_Hsucc_isIso
@@ -2926,6 +2943,7 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientSphereNormalization_comparison
 #print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientSphereNormalizationComparisonAutomorphism_hom_eq_id_or_neg
 #print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientSphereNormalizationComparisonAutomorphism_hom_eq_neg_implies_endpoints
+#print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientOpenDiskRadial_forgotten_naturality
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_projection
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_generator_of_normalization
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_normalization_of_generator
