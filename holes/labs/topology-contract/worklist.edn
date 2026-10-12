@@ -113850,14 +113850,14 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 7,
+   :stop-count 8,
    :review-finding
    "Blueprint B3 is marked proved but its proof uses the unlisted ConnectedGroupoidSingleObjEquivalence.connectorSingleObjEquivalence (and connector-system representation) instead of only the declared uses; add the actual connector dependency and proof route to B3 uses.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
    :evidence
    {:placeholder-delta {:source-before 0, :source-after 0},
     :residual
-    "Transport the lifted loop across the left base-object equality and compute its connector normal form; then symmetric right and B12.",
+    "Transport lifted loops across induced base-object equalities and compute both connector normal forms; then B12.",
     :outcome :stop,
     :warnings [],
     :missing-theorems
@@ -113871,9 +113871,9 @@
       :area "fundamental-group-wedge-of-circles"}],
     :statement-hashes
     {:source
-     "d8209b7480a969edc0bfdca5ba2ad10b215f6b4c427b4bb2057bc9192d7beef3",
+     "b04cac159bb6b72fe452185319cbf54897cf24854666d21d2d9e4a8df1d4878f",
      :documentation
-     "7f05c79d10b44292075c53b472f4a031699ad923d6869b0e04ddb78b1e9961eb",
+     "07364f5141a0ddf16e2505b5e07c2a20e7966c6b2f102a95237d2de5cf91350f",
      :blueprint
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0",
      :registry "131/131"},
@@ -113881,7 +113881,7 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
     :reason
-    "The left cover equivalence composed with the lifted wedge leg is the identity continuous map.",
+    "Right cover equivalence composed with the lifted right wedge leg is the identity continuous map.",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/PointWedgeVanKampen.lean",
@@ -113890,25 +113890,8 @@
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder/diff validation", :exit 0}],
-    :diagnostic-history
-    [{:cmd "lean direct lifted-loop equality",
-      :exit 1,
-      :finding
-      "Base objects are propositionally, not definitionally, equal."}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1791794148795-6656-0b74d1ed",
-     :commands
-     ["git show/diff-tree 6fd450c1"
-      "sha256/diff/placeholder checks"
-      "statement-registry.py check"
-      "lake env lean ConstructionTargets/PointWedgeVanKampen.lean"
-      "lake build ConstructionTargets.PointWedgeVanKampen"
-      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (expected absent)"],
-     :finding
-     "PASS program STOP: exact 2-file commit adds the compiled sorry-free continuous-map identity leftEquiv.toFun comp leftLegLift=id. It respects the representation boundary by not claiming definitional equality of induced base objects; transport remains explicit in the residual. Fixture/source/doc hashes match; placeholders 0->0; registry 131/131; standard axioms only. Final module remains absent; residual lists left transport/connector form, symmetric right, then B12."},
-    :commit "6fd450c140b9f06f8f81fb28d92b1704fcffcda3",
+    :diagnostic-history [],
+    :commit "e58eeba476f9e620aa6e81cb061e7237e6945d37",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
      "ConstructionTargets/PointWedgeVanKampen.md"],
@@ -113918,7 +113901,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
