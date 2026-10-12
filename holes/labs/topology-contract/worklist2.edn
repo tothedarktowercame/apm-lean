@@ -75002,41 +75002,46 @@
   {:consumer :t96J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "STOP remainder is incomplete: cdbdc979d proves the six-edge involution/signs, orbit equivalence, generated-relation iff, and quotient Equiv, but defines no torusRP2PairingData and proves no six-edge oneVertex field. Thus the claim that six-edge B2 is complete is false, and the required missing theorem is omitted from :missing-theorems. Add torusRP2PairingData/oneVertex to the remaining milestones or state and prove it in scope.",
    :implements-lemma
    :lemma-constructiontargets-polygonsurfacepione-standardpairingdata,
    :evidence
    {:placeholder-delta 0,
-    :residual "Construct uniform standardPairingData; then B3/B4.",
+    :residual "Build standardPair then standardPairingData.",
     :outcome :stop,
     :warnings
-    ["Two pre-existing unnecessarySimpa warnings in imported PolygonBoundaryCircleSource."],
+    ["Imported PolygonBoundaryCircleSource emits two unnecessarySimpa warnings."],
     :missing-theorems
-    [{:name "torusRP2PairingData",
-      :type
-      "six-edge PairingData with all vertices in one generated class",
+    [{:name "standardEdgeCount_pos",
+      :type "0<g -> 0 < (if o then 4*g else 2*g)",
       :status :proved,
-      :consumers [:t97A01],
-      :depends-on ["torusRP2_eqvGen_iff"],
-      :area "polygon-surface-pi1"}
-     {:name
-      "ConstructionTargets.PolygonSurfacePiOne.standardPairingData",
-      :type
-      "uniform standard-surface PairingData and quotient comparison",
-      :status :partial,
       :consumers [:t96J02 :t92J05 :t94J04 :t97A03],
       :depends-on [],
+      :area "polygon-surface-pi1"}
+     {:name "standardPair",
+      :type
+      "fixed-point-free involution on Fin (standardEdgeCount o g)",
+      :status :not-started,
+      :consumers [:t96J02 :t92J05 :t94J04 :t97A03],
+      :depends-on ["standardEdgeCount_pos"],
+      :area "polygon-surface-pi1"}
+     {:name "standardPairingData",
+      :type
+      "uniform PairingData with oneVertex, orbit and quotient comparisons",
+      :status :partial,
+      :consumers [:t96J02 :t92J05 :t94J04 :t97A03],
+      :depends-on ["standardPair"],
       :area "polygon-surface-pi1"}],
     :statement-hashes
     {:registry "131/0",
-     :module "5bac10a157b539f5321fc804de167d1a7572b57c"},
+     :module "2d4d03706c5b5a5b322c2d6ca4823af44144d686"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
     :reason
-    "Six-edge B2 now includes torusRP2PairingData and its proved oneVertex field; uniform standardPairingData remains.",
+    "Uniform B2 remains after banking its positive canonical edge count; next construct the standard involution, then oneVertex, orbit and quotient proofs.",
     :commands
     [{:cmd "lake build ConstructionTargets.PolygonSurfacePiOne",
       :exit 0}
@@ -75044,21 +75049,16 @@
       :exit 0,
       :output "131/0"}
      {:cmd "comment-stripped placeholder scan", :exit 0, :output "0"}
-     {:cmd "git show --check a6ec41bed", :exit 0}],
-    :diagnostic-history
-    [{:cmd "first oneVertex compile",
-      :exit 1,
-      :correction
-      "oriented endpoint equalities and explicit EqvGen.trans"}],
-    :commit "a6ec41bed",
+     {:cmd "git show --check 473f0437e", :exit 0}],
+    :commit "473f0437e",
     :changed-paths ["ConstructionTargets/PolygonSurfacePiOne.lean"],
     :fixture
     {:path "ConstructionTargets/PolygonSurfacePiOne.lean",
      :sha256
-     "565354eda084c50a96c1af9f0d3595a2bba133ceae21f602f0668b2b1b872fed"},
+     "64116d2d92ef90978405b2241e409fe8efe9c02a609d754f12a1483e441299de"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/PolygonSurfacePiOne.lean"],
    :dag-node "ConstructionTargets/PolygonSurfacePiOne.blueprint.md/B2",
    :acceptance
@@ -84589,4 +84589,56 @@
    :id :lemma-torusrp2-eqvgen-iff,
    :kind :lemma,
    :depends-on [],
-   :other-consumers []}]}
+   :other-consumers []}
+  {:consumer :t96J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "standardEdgeCount_pos",
+    :type "0<g -> 0 < (if o then 4*g else 2*g)"},
+   :lemma
+   {:name "standardEdgeCount_pos",
+    :reported-by [:routes-2026-10-12-polygon-b2-completion-topo2-r1],
+    :type "0<g -> 0 < (if o then 4*g else 2*g)",
+    :area "polygon-surface-pi1",
+    :proved-in :routes-2026-10-12-polygon-b2-completion-topo2-r1},
+   :id :lemma-standardedgecount-pos,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t92J05 :t94J04 :t97A03]}
+  {:consumer :t96J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "standardPair",
+    :type
+    "fixed-point-free involution on Fin (standardEdgeCount o g)"},
+   :lemma
+   {:name "standardPair",
+    :reported-by [:routes-2026-10-12-polygon-b2-completion-topo2-r1],
+    :type "fixed-point-free involution on Fin (standardEdgeCount o g)",
+    :area "polygon-surface-pi1"},
+   :id :lemma-standardpair,
+   :kind :lemma,
+   :depends-on [:lemma-standardedgecount-pos],
+   :other-consumers [:t92J05 :t94J04 :t97A03]}
+  {:consumer :t96J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "standardPairingData",
+    :type
+    "uniform PairingData with oneVertex, orbit and quotient comparisons"},
+   :lemma
+   {:name "standardPairingData",
+    :reported-by [:routes-2026-10-12-polygon-b2-completion-topo2-r1],
+    :type
+    "uniform PairingData with oneVertex, orbit and quotient comparisons",
+    :area "polygon-surface-pi1"},
+   :id :lemma-standardpairingdata,
+   :kind :lemma,
+   :depends-on [:lemma-standardpair],
+   :other-consumers [:t92J05 :t94J04 :t97A03]}]}
