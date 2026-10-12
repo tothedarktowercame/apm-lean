@@ -113850,14 +113850,14 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 3,
+   :stop-count 4,
    :review-finding
    "Blueprint B3 is marked proved but its proof uses the unlisted ConnectedGroupoidSingleObjEquivalence.connectorSingleObjEquivalence (and connector-system representation) instead of only the declared uses; add the actual connector dependency and proof route to B3 uses.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
    :evidence
    {:placeholder-delta {:source-before 0, :source-after 0},
     :residual
-    "Identify reconstructed glue with the spliced chain, then cancel the based counits; close B6/B12.",
+    "Apply the splice through the pre-coordinate counit factors and cancel both injected based counits; close B6/B12.",
     :outcome :stop,
     :warnings [],
     :missing-theorems
@@ -113871,9 +113871,9 @@
       :area "fundamental-group-wedge-of-circles"}],
     :statement-hashes
     {:source
-     "975e78f8a92098b1981dda65c026ad1b236e1a8c0f6952732dece446da8d08db",
+     "9a5b4e52b080a2b26dff4358f66420ebc10c31dfb8d11479fd42def26aac3947",
      :documentation
-     "ed4f2e78767938f0579ec4744ab7cac75ef72c64a3cf2cc0fb25dea088b6bce0",
+     "a3a8ceeb1a6aa51ce2dfc87adcad956f370e92fedcd88373151a44855f781f6e",
      :blueprint
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0",
      :registry "131/131"},
@@ -113881,7 +113881,7 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
     :reason
-    "The two specialized counit triangles now splice across the overlap round trips.",
+    "Reconstructed coordinate glue is now the exact outer-comparison counit-splice chain.",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/PointWedgeVanKampen.lean",
@@ -113890,19 +113890,12 @@
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder/diff validation", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1791826389621-7571-cd2f09a2",
-     :commands
-     ["git show/diff-tree d1531c53b"
-      "sha256 + placeholder + registry checks"
-      "lake env lean ConstructionTargets/PointWedgeVanKampen.lean"
-      "lake build ConstructionTargets.PointWedgeVanKampen"
-      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (expected absent)"],
-     :finding
-     "Scope is exactly Lean+MD; source/doc/blueprint hashes match; placeholders 0->0; registry 131/131. The typed nested substitution correctly splices the left counit triangle and right cancellation across both overlap round trips: the full comparison chain followed by right counit equals left counit, with dependent endpoints preserved and no arbitrary counit normalization. It compiles sorry-free with only propext, Classical.choice, Quot.sound. This is new progress; residual is identifying reconstructed glue with this chain and cancelling based counits, then B6/B12. Final target remains absent as declared."},
-    :commit "d1531c53bae7e952017d5a46cec5d12db815440b",
+    :diagnostic-history
+    [{:cmd "lean direct nested rewrites",
+      :exit 1,
+      :finding
+      "Normalized both iso whiskerings before component substitution."}],
+    :commit "434251b8489c6b1be872efe6274aaf208afd1ae0",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
      "ConstructionTargets/PointWedgeVanKampen.md"],
@@ -113912,7 +113905,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
