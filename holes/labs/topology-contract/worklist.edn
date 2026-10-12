@@ -113890,6 +113890,18 @@
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder/diff validation", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791832571862-7765-0276a76e",
+     :commands
+     ["git show/diff-tree 67cf94a2"
+      "lake env lean ConstructionTargets/PointWedgeVanKampen.lean"
+      "lake build ConstructionTargets.PointWedgeVanKampen"
+      "python3 scripts/statement-registry.py check"
+      "commit hash and placeholder checks"],
+     :finding
+     "PASS program STOP: 67cf94a2 by topo-2 adds one theorem plus documentation, exactly within scope and new since history. Recorded source f90bcde0..., documentation 860d85aa..., fixture 0bca6ce3..., registry 131/131, and placeholders 0->0 reproduce. The injected-splice theorem correctly reassociates the named coordinate-span square, then applies the target-glue splice in multiplication order; connector counits and coordinate/point-span boundaries remain explicit. Fresh Lean/build pass with only propext/choice/Quot.sound. This is compiled sorry-free progress toward the declared literal-leg equivalence; source-glue/open-cover factor identification and B6/B12 remain listed."},
     :commit "67cf94a2fc7c6cdc653f8173323b0e4c5d3152de",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
@@ -113900,7 +113912,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113921,7 +113933,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Coordinate-to-point target glue now satisfies the injected connector-counit splice.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: The target-glue splice and coordinate-span square now compose into one injected-counit equation.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -114412,7 +114424,11 @@
     {:job 1,
      :commit "f58e73a9c7f3d0cd03bd204061e8e386ae9b80b5",
      :reason
-     "Coordinate-to-point target glue now satisfies the injected connector-counit splice."}]}
+     "Coordinate-to-point target glue now satisfies the injected connector-counit splice."}
+    {:job 2,
+     :commit "67cf94a2fc7c6cdc653f8173323b0e4c5d3152de",
+     :reason
+     "The target-glue splice and coordinate-span square now compose into one injected-counit equation."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
