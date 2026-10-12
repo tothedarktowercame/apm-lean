@@ -870,3 +870,10 @@ combining it with the raw evaluation proves
 `genericPointWedgePseudoSpanGlobalRestrictionGlue_eq_one`.  The remaining
 coordinate-span transport is nontrivial because it inserts its left and right
 comparison factors.
+
+`genericPointWedgeCoordinateSpanGlobalRestrictionGlue` names the component
+after that nontrivial transport.  Its `_app` theorem unfolds the transport
+into the exact ordered composite: the forward left comparison, the raw unit
+glue whiskered through the inverse overlap equivalence, and the inverse right
+comparison.  Thus the next calculations can normalize the middle factor and
+the two comparisons separately without identifying distinct representations.
