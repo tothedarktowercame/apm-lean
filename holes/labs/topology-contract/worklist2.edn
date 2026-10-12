@@ -74846,49 +74846,58 @@
    "Deterministic defect: the STOP commits no B2 progress; e949a5129 is the already-reviewed B1 repair, contains no standardPairingData or six-edge/orbit/quotient comparison, and its actual SHA-256 is 8d3f275f0298df761fad9b234b1cbb764e812925a1c078e4d95347aa7b84f885, not the recorded fixture hash. Extend Mathlib: state and prove the missing theorem in scope.",
    :evidence
    {:placeholder-delta 0,
-    :residual "Complete B2 from torusRP2Pair and torusRP2Sign.",
-    :outcome :stop,
-    :warnings [],
+    :residual "Implement B3/B4.",
+    :outcome :done-unreviewed,
+    :warnings ["12 unnecessarySeqFocus"],
     :missing-theorems
     [{:name
+      "ConstructionTargets.PolygonSurfacePiOne.torusRP2PairingData",
+      :type "six-edge PairingData with one vertex",
+      :status :proved,
+      :consumers [:t97A01],
+      :depends-on ["PairingData"],
+      :area "polygon-surface-pi1"}
+     {:name
       "ConstructionTargets.PolygonSurfacePiOne.standardPairingData",
-      :type
-      "standard and six-edge PairingData with orbit and quotient comparisons",
-      :status :partial,
-      :consumers [:t96J02 :t92J05 :t94J04 :t97A01 :t97A03],
-      :depends-on
-      ["ConstructionTargets.PolygonSurfacePiOne.PairingData"],
+      :type "uniform standard PairingData",
+      :status :proved,
+      :consumers [:t96J02 :t92J05 :t94J04 :t97A03],
+      :depends-on ["PairingData"],
+      :area "polygon-surface-pi1"}
+     {:name
+      "ConstructionTargets.PolygonSurfacePiOne.standardPairingData_space_homeomorph",
+      :type "uniform quotient Homeomorph to Surface",
+      :status :proved,
+      :consumers [:t96J02 :t92J05 :t94J04 :t97A03],
+      :depends-on ["standardPairingData"],
       :area "polygon-surface-pi1"}],
     :statement-hashes
     {:registry "131/0",
-     :module "189a1a78b675e41fe713050f6b74064f7bfc8f74"},
-    :disposition :stop,
-    :axioms [],
+     :module "0a217d45bf614730372e509eaed46c9939afb940"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason
-    "Partial B2: six-edge involution and signs compile; PairingData oneVertex, orbit equivalence, relation equality, quotient comparison, and general standardPairingData remain.",
     :commands
-    [{:cmd "lake build ConstructionTargets.PolygonSurfacePiOne",
+    [{:cmd
+      "git show dc5733b05:ConstructionTargets/PolygonSurfacePiOne.lean | lake env lean /dev/stdin",
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check",
       :exit 0,
       :output "131/0"}
-     {:cmd "comment-stripped placeholder scan", :exit 0, :output "0"}
-     {:cmd "git show --check 0aedfe204", :exit 0}],
-    :diagnostic-history
-    [{:cmd "initial Lean check",
-      :exit 1,
-      :correction
-      "replaced unavailable constructor and removed unfinished relation proof"}],
-    :commit "0aedfe204",
+     {:cmd "recorded-source placeholder scan", :exit 0, :output "0"}
+     {:cmd
+      "#print axioms standardPairingData/standardPairingData_space_homeomorph",
+      :exit 0}
+     {:cmd "git show --check dc5733b05", :exit 0}],
+    :commit "dc5733b05",
+    :commits ["0aedfe204" "dc5733b05"],
     :changed-paths ["ConstructionTargets/PolygonSurfacePiOne.lean"],
     :fixture
     {:path "ConstructionTargets/PolygonSurfacePiOne.lean",
      :sha256
-     "c079c9d965537cd9a0c270a763e2b4bedccd298d468ad95a02f83e66fc9fbe11"},
+     "ab615ed1a9e6a24c1d6b09a6c4b082dadb10c9eb46bd268c8fe954ce81db94bc"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/PolygonSurfacePiOne.lean"],
    :dag-node "ConstructionTargets/PolygonSurfacePiOne.blueprint.md/B2",
    :acceptance
@@ -84606,7 +84615,8 @@
    :lemma-constructiontargets-polygonsurfacepione-standardpairingdata,
    :kind :lemma,
    :depends-on
-   [:lemma-constructiontargets-polygonsurfacepione-pairingdata],
+   [:lemma-constructiontargets-polygonsurfacepione-pairingdata
+    :lemma-pairingdata],
    :other-consumers [:t92J05 :t94J04 :t97A01 :t97A03]}
   {:consumer :t97A01,
    :phase :lemma,
@@ -85040,4 +85050,54 @@
    :id :lemma-orientable-standard-onevertex,
    :kind :lemma,
    :depends-on [],
-   :other-consumers [:t94J04 :t97A03]}]}
+   :other-consumers [:t94J04 :t97A03]}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.PolygonSurfacePiOne.torusRP2PairingData",
+    :type "six-edge PairingData with one vertex"},
+   :lemma
+   {:name
+    "ConstructionTargets.PolygonSurfacePiOne.torusRP2PairingData",
+    :reported-by [:routes-2026-10-12-polygon-b2-topo2-r1],
+    :type "six-edge PairingData with one vertex",
+    :area "polygon-surface-pi1",
+    :proved-in :routes-2026-10-12-polygon-b2-topo2-r1},
+   :id
+   :lemma-constructiontargets-polygonsurfacepione-torusrp2pairingdata,
+   :kind :lemma,
+   :depends-on [:lemma-pairingdata],
+   :other-consumers []}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance {:lemma "PairingData"},
+   :lemma {:name "PairingData", :reported-by []},
+   :id :lemma-pairingdata,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t96J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.PolygonSurfacePiOne.standardPairingData_space_homeomorph",
+    :type "uniform quotient Homeomorph to Surface"},
+   :lemma
+   {:name
+    "ConstructionTargets.PolygonSurfacePiOne.standardPairingData_space_homeomorph",
+    :reported-by [:routes-2026-10-12-polygon-b2-topo2-r1],
+    :type "uniform quotient Homeomorph to Surface",
+    :area "polygon-surface-pi1",
+    :proved-in :routes-2026-10-12-polygon-b2-topo2-r1},
+   :id
+   :lemma-constructiontargets-polygonsurfacepione-standardpairingdata-space-homeomorph,
+   :kind :lemma,
+   :depends-on [:lemma-standardpairingdata],
+   :other-consumers [:t92J05 :t94J04 :t97A03]}]}
