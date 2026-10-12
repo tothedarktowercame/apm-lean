@@ -113596,7 +113596,8 @@
    {:name "KleinPlaneOrbitQuotient.sameOrbit_isClosed",
     :reported-by
     [:routes-2026-10-11-klein-orbit-quotient-homeomorph-96
-     :routes-2026-10-11-klein-plane-same-orbit-closed-110],
+     :routes-2026-10-11-klein-plane-same-orbit-closed-110
+     :owner],
     :type "IsClosed {pq : (ℝ × ℝ) × (ℝ × ℝ) | SameOrbit pq.1 pq.2}.",
     :area "deck-group-fundamental-group"},
    :id :lemma-kleinplaneorbitquotient-sameorbit-isclosed,
@@ -118000,7 +118001,98 @@
    :kind :lemma,
    :depends-on
    [:lemma-pointwedgevankampen-genericpointwedgesingleobjmappingequivalence],
-   :other-consumers [:t01A03 :t92J06 :t97A01 :t97A03]}],
+   :other-consumers [:t01A03 :t92J06 :t97A01 :t97A03]}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t93J03_planeOrbitQuotient_homeomorph_kleinBottle",
+    :type
+    "MulAction.orbitRel.Quotient PresentedKleinGroup (ℝ × ℝ) ≃ₜ StatementSurfaceModels.KleinBottle (the banked KleinOrbitQuotientHomeomorph file does NOT give this)  (size: 180-300 lines / 1-2 days)"},
+   :lemma
+   {:name "t93J03_planeOrbitQuotient_homeomorph_kleinBottle",
+    :reported-by [:owner],
+    :type
+    "MulAction.orbitRel.Quotient PresentedKleinGroup (ℝ × ℝ) ≃ₜ StatementSurfaceModels.KleinBottle (the banked KleinOrbitQuotientHomeomorph file does NOT give this)  (size: 180-300 lines / 1-2 days)",
+    :area "klein-orbit-quotient"},
+   :id :lemma-t93j03-planeorbitquotient-homeomorph-kleinbottle,
+   :kind :lemma,
+   :depends-on [:lemma-kleinplaneorbitquotient-sameorbit-isclosed],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t93J03_kleinBottle_pi1_every_basepoint",
+    :type
+    "∀ k : KleinBottle, Nonempty (FundamentalGroup KleinBottle k ≃* T93J03.PresentedKleinGroup), via the deck-group pi1 theorem, basepoint transport and a plane lift  (size: 60-120 lines / 4-8 hours)"},
+   :lemma
+   {:name "t93J03_kleinBottle_pi1_every_basepoint",
+    :reported-by [:owner],
+    :type
+    "∀ k : KleinBottle, Nonempty (FundamentalGroup KleinBottle k ≃* T93J03.PresentedKleinGroup), via the deck-group pi1 theorem, basepoint transport and a plane lift  (size: 60-120 lines / 4-8 hours)",
+    :area "deck-group-quotient-pi1"},
+   :id :lemma-t93j03-kleinbottle-pi1-every-basepoint,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t93j03-planeorbitquotient-homeomorph-kleinbottle],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t93J03_cyclicCover_zpowers_generatorA",
+    :type
+    "Intermediate cover for Subgroup.zpowers generatorA: construct it, identify with an open cylinder embedded in ℝ × ℝ, and compute its induced subgroup  (size: 250-450 lines / 2-4 days)"},
+   :lemma
+   {:name "t93J03_cyclicCover_zpowers_generatorA",
+    :reported-by [:owner],
+    :type
+    "Intermediate cover for Subgroup.zpowers generatorA: construct it, identify with an open cylinder embedded in ℝ × ℝ, and compute its induced subgroup  (size: 250-450 lines / 2-4 days)",
+    :area "covering-subgroup-correspondence"},
+   :id :lemma-t93j03-cycliccover-zpowers-generatora,
+   :kind :lemma,
+   :depends-on [:lemma-t93j03-kleinbottle-pi1-every-basepoint],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t93J03_coveringLift_of_subgroup_le",
+    :type
+    "Lifting criterion: (FundamentalGroup.mapOfEq (inclusion X) hx).range ≤ Subgroup.zpowers generatorA → ∃ lift : C(X, C), p.comp lift = inclusion X (based)  (size: 250-500 lines / 2-4 days)"},
+   :lemma
+   {:name "t93J03_coveringLift_of_subgroup_le",
+    :reported-by [:owner],
+    :type
+    "Lifting criterion: (FundamentalGroup.mapOfEq (inclusion X) hx).range ≤ Subgroup.zpowers generatorA → ∃ lift : C(X, C), p.comp lift = inclusion X (based)  (size: 250-500 lines / 2-4 days)",
+    :area "covering-subgroup-correspondence"},
+   :id :lemma-t93j03-coveringlift-of-subgroup-le,
+   :kind :lemma,
+   :depends-on [:lemma-t93j03-cycliccover-zpowers-generatora],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t93J03_lift_isEmbedding_assembly",
+    :type
+    "Topology.IsEmbedding of the lift (covering projection + subtype inclusion), composed with the cylinder embedding; assemble apm_t93j03  (size: 80-160 lines / 6-12 hours)"},
+   :lemma
+   {:name "t93J03_lift_isEmbedding_assembly",
+    :reported-by [:owner],
+    :type
+    "Topology.IsEmbedding of the lift (covering projection + subtype inclusion), composed with the cylinder embedding; assemble apm_t93j03  (size: 80-160 lines / 6-12 hours)",
+    :area "covering-subgroup-correspondence"},
+   :id :lemma-t93j03-lift-isembedding-assembly,
+   :kind :lemma,
+   :depends-on [:lemma-t93j03-coveringlift-of-subgroup-le],
+   :other-consumers []}],
  :consumer-baselines
  {:t00A01
   {:path "problems/t00A01/lean/Main.lean",
