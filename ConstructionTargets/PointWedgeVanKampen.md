@@ -313,3 +313,9 @@ forward-oriented calculation using the particular `unitInv` component of the
 Unit equivalence.  Consequently all four inner connector-stage factors are
 units.  Only the two outer cover-to-coordinate comparisons and the literal
 lift identifications remain before completing B6.
+
+`genericPointWedgeIdentityOuterLeftComparison_app` now expands the inverse
+outer left comparison at the explicit overlap representative.  Its order is
+the inverse overlap-equivalence round-trip followed by the inverse left-span
+comparison.  Evaluating these factors, the outer right comparison, and the
+literal lift identifications remains before completing B6.
