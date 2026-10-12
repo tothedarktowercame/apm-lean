@@ -75173,8 +75173,46 @@
   {:bounded-exception "single-consumer six-edge B2 instance",
    :consumer :t97A01,
    :implements-lemma :lemma-torusrp2pairingdata,
+   :evidence
+   {:placeholder-delta 0,
+    :residual "Uniform B2.",
+    :outcome :done-unreviewed,
+    :warnings ["Two imported linter warnings."],
+    :missing-theorems
+    [{:name "torusRP2PairingData",
+      :type "six-edge PairingData with one vertex",
+      :status :proved,
+      :consumers [:t97A01],
+      :depends-on ["torusRP2_eqvGen_iff"],
+      :area "polygon-surface-pi1"}
+     {:name "torusRP2PairingData_oneVertex",
+      :type "named generated-relation one-vertex certificate",
+      :status :proved,
+      :consumers [:t97A01],
+      :depends-on ["torusRP2PairingData"],
+      :area "polygon-surface-pi1"}],
+    :statement-hashes
+    {:registry "131/0",
+     :module "0acb1236a763eda0685219d0e0daee9b1b3e9bfc"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-6",
+    :commands
+    [{:cmd "lake build ConstructionTargets.PolygonSurfacePiOne",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131/0"}
+     {:cmd "placeholder scan", :exit 0, :output "0"}
+     {:cmd "git show --check d6bd0cc3b", :exit 0}],
+    :commit "d6bd0cc3b",
+    :changed-paths ["ConstructionTargets/PolygonSurfacePiOne.lean"],
+    :fixture
+    {:path "ConstructionTargets/PolygonSurfacePiOne.lean",
+     :sha256
+     "310a9e549187c825f6b8e43e9bf251d53a31aa021ae67a404fd7843c1325de0f"},
+    :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/PolygonSurfacePiOne.lean"],
    :dag-node "ConstructionTargets/PolygonSurfacePiOne.blueprint.md/B2",
    :acceptance
@@ -84566,7 +84604,9 @@
     "six-edge PairingData with all vertices in one generated class"},
    :lemma
    {:name "torusRP2PairingData",
-    :reported-by [:routes-2026-10-12-polygon-b2-completion-topo2-r1],
+    :reported-by
+    [:routes-2026-10-12-polygon-b2-completion-topo2-r1
+     :routes-2026-10-12-polygon-b2-six-edge-topo2-r1],
     :type
     "six-edge PairingData with all vertices in one generated class",
     :area "polygon-surface-pi1",
@@ -84830,4 +84870,21 @@
    :id :lemma-standardpairingdata-space-homeomorph,
    :kind :lemma,
    :depends-on [:lemma-standardpairingdata-onevertex],
-   :other-consumers [:t92J05 :t94J04 :t97A03]}]}
+   :other-consumers [:t92J05 :t94J04 :t97A03]}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "torusRP2PairingData_oneVertex",
+    :type "named generated-relation one-vertex certificate"},
+   :lemma
+   {:name "torusRP2PairingData_oneVertex",
+    :reported-by [:routes-2026-10-12-polygon-b2-six-edge-topo2-r1],
+    :type "named generated-relation one-vertex certificate",
+    :area "polygon-surface-pi1",
+    :proved-in :routes-2026-10-12-polygon-b2-six-edge-topo2-r1},
+   :id :lemma-torusrp2pairingdata-onevertex,
+   :kind :lemma,
+   :depends-on [:lemma-torusrp2pairingdata],
+   :other-consumers []}]}
