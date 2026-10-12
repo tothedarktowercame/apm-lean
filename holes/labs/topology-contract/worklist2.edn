@@ -79612,19 +79612,19 @@
      :commit "68d614508",
      :reason :program-milestone-complete}]}
   {:consumer :t94A10,
-   :stop-count 9,
+   :stop-count 10,
    :review-finding
    "Incomplete representation-boundary repair in commit e7ba5fee3: heta is now punctured, but exact_sphereParam_identity still requires hexact : forall x, extDeriv eta x = omega x, including x=0. Frozen apm_t94a10_IsExact supplies exactness only for punctured x, so the claimed B7 theorem still cannot be instantiated. Change hexact to forall x, x != 0 -> extDeriv eta x = omega x and rewrite with hexact _ (sphereParam_ne_zero p); then recompile, retaining B8-B11 as residual.",
    :evidence
    {:placeholder-delta 0,
     :residual "Formalize B8 Green cancellation; then B9-B11.",
     :outcome :stop,
-    :warnings
-    ["Main: 1 placeholder." "Unrelated dirty files preserved."],
+    :warnings ["Main: 1 placeholder."],
     :missing-theorems
     [{:name
       "ConstructionTargets.T94A10Closure.exact_sphereParam_identity",
-      :type "B7 punctured exactness pullback curl identity",
+      :type
+      "B7 punctured differentiability and exactness pullback curl identity",
       :status :proved,
       :consumers [:t94A10],
       :depends-on
@@ -79639,7 +79639,7 @@
       :area "periodic-stokes-square"}],
     :statement-hashes
     {:registry "131/0",
-     :closure "af3dece91dc5a3ee7cbb57d735b7e99a0474c1fd",
+     :closure "fdc2c27c148a77428b4c1ca8fe59e2c8ade3799c",
      :blueprint "808e174fd0529d3c85b60b506988b0a55526c8e0"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
@@ -79651,22 +79651,16 @@
      {:cmd "registry check", :exit 0}
      {:cmd "closure no-sorry", :exit 1, :expected-exit 1}
      {:cmd "placeholder count", :exit 0, :output "1"}
-     {:cmd "git show --check e7ba5fee3", :exit 0}],
-    :review
-    {:outcome :fail,
-     :seat "codex-7",
-     :job "invoke-1791773355432-6206-ec10b764",
-     :finding
-     "Incomplete representation-boundary repair in commit e7ba5fee3: heta is now punctured, but exact_sphereParam_identity still requires hexact : forall x, extDeriv eta x = omega x, including x=0. Frozen apm_t94a10_IsExact supplies exactness only for punctured x, so the claimed B7 theorem still cannot be instantiated. Change hexact to forall x, x != 0 -> extDeriv eta x = omega x and rewrite with hexact _ (sphereParam_ne_zero p); then recompile, retaining B8-B11 as residual."},
-    :commit "e7ba5fee30e3d361e8323b44544aea7fa72ac6c9",
+     {:cmd "git show --check e157e8999", :exit 0}],
+    :commit "e157e8999cc6a8c81fd62043035d79f7ec0bf9be",
     :changed-paths ["ConstructionTargets/t94A10Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t94A10Closure.lean",
      :sha256
-     "a6b81220ba8b3e9fcfea357e0b66383a2863105bde9c8cb37c3a6db5de417c20"},
+     "10dcf20e09c341afea028f4b52aecb9b384155686a0a5c3f5b07f201032311b0"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :repair,
+   :state :needs-owner,
    :scope
    ["problems/t94A10/lean/Main.lean"
     "problems/t94A10/status.json"
