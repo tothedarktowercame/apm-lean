@@ -19763,6 +19763,19 @@
      {:cmd "rg forbidden tokens in scoped file",
       :exit 1,
       :expected-exit 1}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791794992230-6674-2d6a3e2a",
+     :commands
+     ["git show/diff-tree c089c5efd"
+      "sha256sum /tmp/modeltransportneg.lean"
+      "lake env lean /tmp/modeltransportneg.lean"
+      "lake env lean ConstructionTargets/ManifoldFundamentalClass.lean"
+      "python3 scripts/statement-registry.py check"
+      "git diff --check; rg placeholder/forbidden counts"],
+     :finding
+     "PASS: c089c5efd changes only the scoped module and its blob is current; fixture SHA-256 matches. Frozen type and module compile. The production composite inserts the model comparison inverse; naturality substitution cancels the adjacent hom/inv pair and preserves the terminal negative identity factor. Registry 131/131; standard axioms only; no scoped placeholders. Counts unchanged: t00J02 bridge_1=1, sorry=1; t98A02 sorry=1."},
     :commit "c089c5efd98a34ec713fad1f11730177a7a9584a",
     :changed-paths
     ["ConstructionTargets/ManifoldFundamentalClass.lean"],
@@ -19772,7 +19785,7 @@
      "e91c7ff963cf5f1ee96b73010dc5ed9237dc4599f8ceea25ffd1267b4e109e75"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/manifold-fundamental-class",
    :acceptance
@@ -19840,7 +19853,7 @@
       "e91c7ff963cf5f1ee96b73010dc5ed9237dc4599f8ceea25ffd1267b4e109e75"},
      :seat "topo-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -28326,7 +28339,7 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -28339,7 +28352,9 @@
     [:routes-2026-10-10-manifold-fundamental-class-topo3-r2],
     :type "exact type in fixture",
     :area "manifold-fundamental-class",
-    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2,
+    :banked-by :routes-2026-10-12-mfclass-od-prod-neg-r1,
+    :banked-commit "c089c5efd98a34ec713fad1f11730177a7a9584a"},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-coefficientsphe-4046b5628d35,
    :kind :lemma,
