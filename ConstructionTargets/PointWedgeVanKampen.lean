@@ -3149,6 +3149,19 @@ def genericPointWedgeGlobalRestrictionOverlapGlue :
   (E.functor.obj F).glue.hom.app
     (genericPointWedgeOverlapBase x₀ y₀ M N)
 
+/-- At the fixed overlap base, the canonical descent component is the unit.
+The final `eqToHom` records only equality of the unique target object. -/
+theorem genericPointWedgeGlobalRestrictionOverlapGlue_eq_one :
+    genericPointWedgeGlobalRestrictionOverlapGlue
+      x₀ y₀ M N hM hN hy hx cM cN = 1 := by
+  simp [genericPointWedgeGlobalRestrictionOverlapGlue,
+    genericPointWedgeOpenCoverEquivalence,
+    pseudopushoutEquivalence_functor_obj_glue,
+    descentOverlapIso, descentOverlapAppIso]
+  generalize_proofs h
+  cases h
+  rfl
+
 /-- The mapped coordinate-span counit's glue square, specialized at the
 unique point-span overlap object.  This is the equation in which its two
 named leg factors are related by the mapped reconstructed glue. -/
@@ -4731,6 +4744,7 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeMappedGlobalRestrictionGlue
 #print axioms genericPointWedgeMappedOpenCoverSourceGlue_eq_globalRestriction
 #print axioms genericPointWedgeGlobalRestrictionOverlapGlue
+#print axioms genericPointWedgeGlobalRestrictionOverlapGlue_eq_one
 #print axioms genericPointWedgeMappedOpenCoverCounit_namedGlueSquare
 #print axioms genericPointWedgeMappedCoordinateSpanCounit_glueSquare
 #print axioms genericPointWedgeMappedCoordinateSpanSourceGlue

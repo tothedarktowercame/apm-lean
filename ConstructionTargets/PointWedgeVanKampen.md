@@ -853,3 +853,11 @@ coordinate-span, and point-span transports.  This separates the remaining
 calculation into evaluation of the raw open-cover component and preservation
 of that value by the three named transports; no cross-representation
 normalization is assumed.
+
+`genericPointWedgeGlobalRestrictionOverlapGlue_eq_one` evaluates this raw
+component.  Unfolding the forward two-open pseudopushout construction leaves
+an `eqToHom` between the unique objects of the single-object target; after
+eliminating that equality proof, the component is literally the group unit.
+The remaining calculation is now only to record how the pseudo-span,
+coordinate-span, and point-span functors carry this unit to the previously
+named mapped predecessor.
