@@ -79612,78 +79612,61 @@
      :commit "68d614508",
      :reason :program-milestone-complete}]}
   {:consumer :t94A10,
-   :stop-count 6,
+   :stop-count 7,
    :review-finding
    "B8 cites nonexistent Mathlib theorem MeasureTheory.integral2_divergence_prod_of_hasFDerivWithinAt_off_countable. Revise B8 to use the available integral2_divergence_prod_of_hasFDerivAt_off_countable and explicitly supply its ContinuousOn, pointwise HasFDerivAt, and IntegrableOn hypotheses; then re-review the blueprint.",
    :evidence
    {:placeholder-delta 0,
-    :residual "Formalize B7 pullback exactness; then B8-B11.",
+    :residual
+    "Expand extDeriv_pullback into oriented curl; then B8-B11.",
     :outcome :stop,
-    :warnings ["Main: 1 placeholder."],
+    :warnings
+    ["Main: 1 placeholder." "Unrelated dirty file preserved."],
     :missing-theorems
-    [{:name "ConstructionTargets.T94A10Closure.sphereParam",
-      :type "B5 map, derivatives, periodicity, unit norm, polar edges",
-      :status :proved,
-      :consumers [:t94A10],
-      :depends-on [],
-      :area "periodic-stokes-square"}
-     {:name
-      "ConstructionTargets.T94A10Closure.solidAngle_pullback_sphereParam",
-      :type "B6 pullback coefficient is sin latitude",
+    [{:name
+      "ConstructionTargets.T94A10Closure.spherePullbackLongCoeff_eq",
+      :type "sphere basis derivatives and pullback coefficients",
       :status :proved,
       :consumers [:t94A10],
       :depends-on ["ConstructionTargets.T94A10Closure.sphereParam"],
       :area "periodic-stokes-square"}
      {:name
       "ConstructionTargets.T94A10Closure.exact_sphereParam_identity",
-      :type "B7 pullback curl identity",
-      :status :not-started,
+      :type "B7 extDeriv pullback curl identity",
+      :status :partial,
       :consumers [:t94A10],
       :depends-on
-      ["ConstructionTargets.T94A10Closure.solidAngle_pullback_sphereParam"],
+      ["ConstructionTargets.T94A10Closure.spherePullbackLongCoeff_eq"
+       "ConstructionTargets.T94A10Closure.solidAngle_pullback_sphereParam"],
       :area "periodic-stokes-square"}],
     :statement-hashes
     {:registry "131/0",
-     :closure "04f8ac645e16d6827c6f36a01487b6ee8a523bb6",
+     :closure "409275056c6632f799b745fbdca695b75ea408b3",
      :blueprint "808e174fd0529d3c85b60b506988b0a55526c8e0"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason :program-milestone-complete,
+    :reason :program-progress-committed,
     :commands
     [{:cmd "closure build/compile", :exit 0}
      {:cmd "Main compile", :exit 0}
      {:cmd "registry check", :exit 0}
      {:cmd "closure no-sorry", :exit 1, :expected-exit 1}
      {:cmd "placeholder count", :exit 0, :output "1"}
-     {:cmd "git show --check 0f4ab1a51", :exit 0}],
+     {:cmd "git show --check a3f4e9be9", :exit 0}],
     :diagnostic-history
     [{:cmd "closure compile",
       :exit 1,
-      :finding
-      "Wrapped coordinates in PiLp and factored trig identity."}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1791771275651-6176-2d60687a",
-     :commands
-     ["git metadata/blob/SHA checks"
-      "lake build ConstructionTargets.t94A10Closure"
-      "lake env lean ConstructionTargets/t94A10Closure.lean"
-      "lake env lean problems/t94A10/lean/Main.lean"
-      "statement-registry check/fingerprint"
-      "placeholder counts"],
-     :finding
-     "PASS: recorded topo-6 commit 0f4ab1a adds compiled, sorry-free B5-B6 progress after 1fda42f; sole changed path is scoped, fixture/blob hashes match, derivatives/periodicity/polar edges and +sin orientation are correct, standard axioms only, registry 131/0 and fingerprint d1822221 reproduce, closure/Main placeholders 0/1; STOP lists B7 then B8-B11."},
-    :commit "0f4ab1a5170d4ff38120c231e7de5ca0c94f47f3",
+      :finding "Corrected product derivatives."}],
+    :commit "a3f4e9be9fb888a87c8de2819484f58561bc9e26",
     :changed-paths ["ConstructionTargets/t94A10Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t94A10Closure.lean",
      :sha256
-     "830d088e06155b59ace263438139ffc774850789d95371126f026ec6346e342a"},
+     "44da7c483df881fa617dc7f8605b0ae0b38267af6a80f5f59a702d3e43ab39e7"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t94A10/lean/Main.lean"
     "problems/t94A10/status.json"
@@ -81779,5 +81762,26 @@
    :lemma-constructiontargets-t94a10closure-exact-sphereparam-identity,
    :kind :lemma,
    :depends-on
-   [:lemma-constructiontargets-t94a10closure-solidangle-pullback-sphereparam],
+   [:lemma-constructiontargets-t94a10closure-solidangle-pullback-sphereparam
+    :lemma-constructiontargets-t94a10closure-spherepullbacklongcoeff-eq],
+   :other-consumers []}
+  {:consumer :t94A10,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.T94A10Closure.spherePullbackLongCoeff_eq",
+    :type "sphere basis derivatives and pullback coefficients"},
+   :lemma
+   {:name
+    "ConstructionTargets.T94A10Closure.spherePullbackLongCoeff_eq",
+    :reported-by [:program-2026-10-11-close-t94a10],
+    :type "sphere basis derivatives and pullback coefficients",
+    :area "periodic-stokes-square",
+    :proved-in :program-2026-10-11-close-t94a10},
+   :id
+   :lemma-constructiontargets-t94a10closure-spherepullbacklongcoeff-eq,
+   :kind :lemma,
+   :depends-on [:lemma-constructiontargets-t94a10closure-sphereparam],
    :other-consumers []}]}
