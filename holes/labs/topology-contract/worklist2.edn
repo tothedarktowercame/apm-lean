@@ -83389,7 +83389,8 @@
    {:placeholder-delta 0,
     :residual "Program complete; B1-B4 compiled.",
     :outcome :done-unreviewed,
-    :warnings ["Review targets obsolete 9a443d45a."],
+    :warnings
+    ["Review targets ancestor 9a443d45a, not theorem commits."],
     :missing-theorems
     [{:name "coveringFundamentalGroupEquivRange",
       :type "pi1 equiv range",
@@ -83422,19 +83423,12 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
     :commands
-    [{:cmd
-      "lake env lean ConstructionTargets/SuppliedCoverAlgebra.lean",
+    [{:cmd "lake build ConstructionTargets.SuppliedCoverAlgebra",
       :exit 0}
-     {:cmd "four declarations and fixture hash", :exit 0}
+     {:cmd "ancestry/show-check theorem commits", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check",
       :exit 0,
       :output "131/0"}],
-    :review
-    {:outcome :fail,
-     :seat "codex-7",
-     :job "invoke-1791826499297-7581-8cd2d841",
-     :finding
-     "Program STOP commits no compiled, sorry-free theorem progress: 9a443d45a adds only SuppliedCoverAlgebra.md, creates no SuppliedCoverAlgebra.lean, and records A1/A2/A3/C7 all :not-started. Exact repair: extend Mathlib: state and prove at least one missing milestone in scope, commit the compiling Lean result, and list the remaining milestones in :missing-theorems."},
     :commit "575f9ce4a",
     :commits ["1ecb73d0a" "994accb6c" "575f9ce4a" "df216abcc"],
     :changed-paths
@@ -83446,7 +83440,7 @@
      "8e2b05fc2da21acb000c622b502360f2835a454e138dbfeb505f29eedb0c7769"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SuppliedCoverAlgebra.lean"
     "ConstructionTargets/SuppliedCoverAlgebra.md"],
