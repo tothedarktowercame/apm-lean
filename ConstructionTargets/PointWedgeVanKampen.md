@@ -619,3 +619,9 @@ counit with the open-cover outer comparisons.
 identity representation: the final point-span-to-free-product counit has
 identity underlying target morphism.  Thus the remaining comparison belongs
 entirely to the pre-free-product composite.
+
+`genericPointWedgeFreeProductCounit_eq_pre_pointSpan` expands the counit of
+the named composite with its exact orientation: the pre-free-product counit
+is mapped through the point-span equivalence and then followed by the final
+point-span counit.  Together with the identity computation above, this leaves
+only the mapped pre-free-product component to compare with the outer factors.

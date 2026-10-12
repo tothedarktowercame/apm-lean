@@ -2196,6 +2196,24 @@ theorem genericPointWedgePointSpanCounit_hom_eq_id :
       𝟙 (R.inverse.obj F).target := by
   simp
 
+/-- The counit of the free-product mapping equivalence splits into the mapped
+pre-free-product counit followed by the final point-span counit. -/
+theorem genericPointWedgeFreeProductCounit_eq_pre_pointSpan :
+    let C := genericPointWedgeTarget x₀ y₀
+    let P := genericPointWedgePreFreeProductMappingEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN C
+    let Q := freeProductPointSpanEquivalence
+      (genericPointWedgeLeftGroup x₀) (genericPointWedgeRightGroup y₀) C
+    let R := representationSingleObjEquivalence
+      (C := C) (genericPointWedgeLeftGroup x₀)
+        (genericPointWedgeRightGroup y₀)
+    let F := Functor.id (SingleObj (genericPointWedgeFreeProduct x₀ y₀))
+    ((P.trans Q).counitIso.hom.app (R.inverse.obj F)) =
+      Q.functor.map
+          (P.counitIso.hom.app (Q.inverse.obj (R.inverse.obj F))) ≫
+        Q.counitIso.hom.app (R.inverse.obj F) := by
+  rfl
+
 /-- Consequently the full B3 counit element is just the mapped counit of the
 preceding free-product-representation equivalence. -/
 theorem genericPointWedgeCounitElement_eq_mappedRepresentationCounit :
@@ -3481,6 +3499,7 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeCounitElement_eq_representationCounits
 #print axioms genericPointWedgeRepresentationCounit_app_eq_one
 #print axioms genericPointWedgePointSpanCounit_hom_eq_id
+#print axioms genericPointWedgeFreeProductCounit_eq_pre_pointSpan
 #print axioms genericPointWedgeCounitElement_eq_mappedRepresentationCounit
 #print axioms genericPointWedgeMappedLeft_eq_conj
 #print axioms genericPointWedgeMappedRight_eq_conj
