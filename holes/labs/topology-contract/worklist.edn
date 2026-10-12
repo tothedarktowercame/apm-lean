@@ -113895,6 +113895,19 @@
       :exit 1,
       :finding
       "Base objects are propositionally, not definitionally, equal."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791794148795-6656-0b74d1ed",
+     :commands
+     ["git show/diff-tree 6fd450c1"
+      "sha256/diff/placeholder checks"
+      "statement-registry.py check"
+      "lake env lean ConstructionTargets/PointWedgeVanKampen.lean"
+      "lake build ConstructionTargets.PointWedgeVanKampen"
+      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (expected absent)"],
+     :finding
+     "PASS program STOP: exact 2-file commit adds the compiled sorry-free continuous-map identity leftEquiv.toFun comp leftLegLift=id. It respects the representation boundary by not claiming definitional equality of induced base objects; transport remains explicit in the residual. Fixture/source/doc hashes match; placeholders 0->0; registry 131/131; standard axioms only. Final module remains absent; residual lists left transport/connector form, symmetric right, then B12."},
     :commit "6fd450c140b9f06f8f81fb28d92b1704fcffcda3",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
@@ -113905,7 +113918,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113926,7 +113939,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: B3 inverse-identity action on the right literal leg is the conjugated actual-span action on its lifted cover loop.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: The left cover equivalence composed with the lifted wedge leg is the identity continuous map.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -114222,7 +114235,11 @@
     {:job 6,
      :commit "014f591cef490b4cd23855d38b77b801ccc45d0a",
      :reason
-     "B3 inverse-identity action on the right literal leg is the conjugated actual-span action on its lifted cover loop."}]}
+     "B3 inverse-identity action on the right literal leg is the conjugated actual-span action on its lifted cover loop."}
+    {:job 7,
+     :commit "6fd450c140b9f06f8f81fb28d92b1704fcffcda3",
+     :reason
+     "The left cover equivalence composed with the lifted wedge leg is the identity continuous map."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
