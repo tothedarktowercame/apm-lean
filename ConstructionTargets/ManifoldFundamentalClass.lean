@@ -3219,6 +3219,16 @@ theorem coefficientSphereNormalizationComparisonAutomorphism_hom_eq_id_of_degree
   change (coefficientSphereNormalizationComparisonAutomorphism k).hom.hom 1 = 1
   rw [coefficientSphereNormalizationComparisonAutomorphism_apply_one, hu]
 
+theorem coefficientSphereNormalizationComparisonDegree_eq_one_of_base_step
+    (hzero : coefficientSphereNormalizationComparisonDegree 0 = 1)
+    (hsucc : ∀ k, coefficientSphereNormalizationComparisonDegree (k + 1) =
+      coefficientSphereNormalizationComparisonDegree k) :
+    ∀ k, coefficientSphereNormalizationComparisonDegree k = 1 := by
+  intro k
+  induction k with
+  | zero => exact hzero
+  | succ k ih => exact (hsucc k).trans ih
+
 end ConstructionTargets.ManifoldFundamentalClass
 
 #print axioms ConstructionTargets.ManifoldFundamentalClass.neighborhoodInclusion_Hsucc_isIso
@@ -3331,6 +3341,7 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientSphereNormalizationComparisonUnit_eq_one_of_nonneg
 #print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientSphereNormalizationComparisonUnit_eq_degree
 #print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientSphereNormalizationComparisonAutomorphism_hom_eq_id_of_degree_eq_one
+#print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientSphereNormalizationComparisonDegree_eq_one_of_base_step
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_projection
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_generator_of_normalization
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_normalization_of_generator
