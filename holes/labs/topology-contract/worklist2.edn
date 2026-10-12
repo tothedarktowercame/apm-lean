@@ -83350,12 +83350,13 @@
    "Program STOP commits no compiled, sorry-free theorem progress: 9a443d45a adds only SuppliedCoverAlgebra.md, creates no SuppliedCoverAlgebra.lean, and records A1/A2/A3/C7 all :not-started. Exact repair: extend Mathlib: state and prove at least one missing milestone in scope, commit the compiling Lean result, and list the remaining milestones in :missing-theorems.",
    :evidence
    {:placeholder-delta 0,
-    :residual "B1-B3 compiled; implement B4 orbit-cover transport.",
-    :outcome :stop,
-    :warnings ["Unrelated PointWedgeVanKampen edit preserved."],
+    :residual
+    "Program complete; B1-B4 compiled for consumer adapters.",
+    :outcome :done-unreviewed,
+    :warnings [],
     :missing-theorems
     [{:name "coveringFundamentalGroupEquivRange",
-      :type "pi1 equiv range",
+      :type "pi1 equiv induced range",
       :status :proved,
       :consumers [:t99J01 :t97A03],
       :depends-on [],
@@ -83367,52 +83368,45 @@
       :depends-on [],
       :area "covering-subgroup-correspondence"}
      {:name "coveringFundamentalGroupEquivFreeSubgroup",
-      :type "pi1 equiv mapped subgroup; index",
+      :type "pi1 equiv mapped free subgroup with index",
       :status :proved,
       :consumers [:t99J01 :t97A03],
       :depends-on ["coveringFundamentalGroupEquivRange"],
       :area "covering-subgroup-correspondence"}
      {:name "isCoveringMap_homeomorph_comp_quotientMk",
-      :type "orbit cover transport",
-      :status :not-started,
+      :type
+      "orbit quotient covering transported along target homeomorphism",
+      :status :proved,
       :consumers [:t93J03 :t00A02],
       :depends-on [],
       :area "covering-subgroup-correspondence"}],
     :statement-hashes
     {:registry "131/0",
-     :module "696828cf2f7258a58907ea89fe41c4bdd26fee20",
+     :module "49e3342f19d373bc025485e3e6651efed315ca12",
      :main "21d5ee491d63501c124f113474ddedee9223d81b"},
-    :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason :program-milestone,
     :commands
     [{:cmd "lake build ConstructionTargets.SuppliedCoverAlgebra",
       :exit 0}
-     {:cmd "registry", :exit 0, :output "131/0"}
-     {:cmd "placeholders", :exit 0, :output "0"}
-     {:cmd "git checks", :exit 0}],
-    :diagnostic-history
-    [{:cmd "initial B3 lean",
-      :exit 1,
-      :note "Fixed import and call syntax."}],
-    :review
-    {:outcome :fail,
-     :seat "codex-7",
-     :job "invoke-1791821600022-7355-c08f9071",
-     :finding
-     "Program STOP commits no compiled, sorry-free theorem progress: 9a443d45a adds only SuppliedCoverAlgebra.md, creates no SuppliedCoverAlgebra.lean, and records A1/A2/A3/C7 all :not-started. Exact repair: extend Mathlib: state and prove at least one missing milestone in scope, commit the compiling Lean result, and list the remaining milestones in :missing-theorems."},
-    :commit "1ecb73d0a",
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131/0"}
+     {:cmd "placeholder scan", :exit 0, :output "0"}
+     {:cmd "blueprint milestone scan", :exit 0, :output "4 proved"}
+     {:cmd "git show --check HEAD", :exit 0}],
+    :commit "994accb6c",
+    :commits ["1ecb73d0a" "994accb6c"],
     :changed-paths
     ["ConstructionTargets/SuppliedCoverAlgebra.lean"
      "ConstructionTargets/SuppliedCoverAlgebra.md"],
     :fixture
     {:path "ConstructionTargets/SuppliedCoverAlgebra.lean",
      :sha256
-     "5adbc66ae6ff1a332efee3ca6f127819087f34213c4e5933a1854e28e5472917"},
+     "2d4c1b913f0dcc56a3b3fc9a70d3ebf8a7f21bc4f338fea36bcfe7575f9d2c43"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SuppliedCoverAlgebra.lean"
     "ConstructionTargets/SuppliedCoverAlgebra.md"],
@@ -83497,7 +83491,8 @@
    {:name "isCoveringMap_homeomorph_comp_quotientMk",
     :reported-by [:program-2026-10-12-supplied-cover-algebra],
     :type "orbit quotient covering transported by homeomorphism",
-    :area "covering-subgroup-correspondence"},
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-12-supplied-cover-algebra},
    :id :lemma-iscoveringmap-homeomorph-comp-quotientmk,
    :kind :lemma,
    :depends-on [],
