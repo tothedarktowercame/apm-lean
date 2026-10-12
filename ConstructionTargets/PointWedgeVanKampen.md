@@ -432,3 +432,8 @@ explicit for the subsequent literal-base specialization.
 `genericPointWedgeIdentityOuterRightSpan_normalForm_eq_connectors` gives the
 symmetric expansion for `aR.inv`: source connector, inverse comparison
 component, then inverse target connector.  No dependent endpoint is rewritten.
+
+`genericPointWedgeIdentityOuterLeftSpan_targetConnector_heq_refl` identifies
+the left expansion's terminal connector with the reflexive connector at
+`FundamentalGroupoid.mk x₀`.  The heterogeneous statement preserves the
+dependent object type needed by the surrounding composite.
