@@ -83345,70 +83345,69 @@
    :depends-on [],
    :other-consumers []}
   {:consumer :t99J01,
-   :stop-count 1,
+   :stop-count 2,
    :review-finding
    "Program STOP commits no compiled, sorry-free theorem progress: 9a443d45a adds only SuppliedCoverAlgebra.md, creates no SuppliedCoverAlgebra.lean, and records A1/A2/A3/C7 all :not-started. Exact repair: extend Mathlib: state and prove at least one missing milestone in scope, commit the compiling Lean result, and list the remaining milestones in :missing-theorems.",
    :evidence
    {:placeholder-delta 0,
-    :residual "Blueprint written; review it, then formalize B1.",
+    :residual
+    "Continue B3 equivalence/index, then B4 orbit-cover transport.",
     :outcome :stop,
-    :warnings
-    ["Unrelated PointWedgeVanKampen.lean modification preserved."],
+    :warnings [],
     :missing-theorems
     [{:name "coveringFundamentalGroupEquivRange",
-      :type "pi1 total equiv induced range",
-      :status :not-started,
+      :type "pi1 equiv range",
+      :status :proved,
       :consumers [:t99J01 :t97A03],
       :depends-on [],
       :area "covering-subgroup-correspondence"}
      {:name "isEmbedding_of_comp_eq",
-      :type "embedding from embedded composite",
-      :status :not-started,
+      :type "embedding via composite",
+      :status :proved,
       :consumers [:t93J03],
       :depends-on [],
       :area "covering-subgroup-correspondence"}
      {:name "coveringFundamentalGroupEquivFreeSubgroup",
-      :type "pi1 total equiv mapped free subgroup with index",
+      :type "pi1 equiv mapped subgroup; index",
       :status :not-started,
       :consumers [:t99J01 :t97A03],
       :depends-on ["coveringFundamentalGroupEquivRange"],
       :area "covering-subgroup-correspondence"}
      {:name "isCoveringMap_homeomorph_comp_quotientMk",
-      :type "orbit quotient covering transported by homeomorphism",
+      :type "orbit cover target transport",
       :status :not-started,
       :consumers [:t93J03 :t00A02],
       :depends-on [],
       :area "covering-subgroup-correspondence"}],
     :statement-hashes
     {:registry "131/0",
-     :module "f874c504426d281d2d6caf1aaf1c318e5b3f13ac",
+     :module "8056daa220b2cc01795ecbdaef797f8fd66359f4",
      :main "21d5ee491d63501c124f113474ddedee9223d81b"},
     :disposition :stop,
-    :axioms [],
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason :blueprint-written,
+    :reason :program-milestone,
     :commands
-    [{:cmd "python3 scripts/statement-registry.py check",
-      :exit 0,
-      :output "131/0"}
-     {:cmd "git diff --check", :exit 0}
-     {:cmd "blueprint node/schema scan", :exit 0}
-     {:cmd "git show --check HEAD", :exit 0}],
-    :review
-    {:outcome :fail,
-     :seat "codex-7",
-     :job "invoke-1791821121616-7335-486d0f8a",
-     :finding
-     "Program STOP commits no compiled, sorry-free theorem progress: 9a443d45a adds only SuppliedCoverAlgebra.md, creates no SuppliedCoverAlgebra.lean, and records A1/A2/A3/C7 all :not-started. Exact repair: extend Mathlib: state and prove at least one missing milestone in scope, commit the compiling Lean result, and list the remaining milestones in :missing-theorems."},
-    :commit "9a443d45a",
-    :changed-paths ["ConstructionTargets/SuppliedCoverAlgebra.md"],
+    [{:cmd "lake build ConstructionTargets.SuppliedCoverAlgebra",
+      :exit 0}
+     {:cmd "statement registry", :exit 0, :output "131/0"}
+     {:cmd "placeholder scan", :exit 0, :output "0"}
+     {:cmd "git checks", :exit 0}],
+    :diagnostic-history
+    [{:cmd "initial lean",
+      :exit 1,
+      :note "Removed redundant import."}],
+    :commit "df216abcc",
+    :changed-paths
+    ["ConstructionTargets/SuppliedCoverAlgebra.lean"
+     "ConstructionTargets/SuppliedCoverAlgebra.md"],
     :fixture
-    {:path "ConstructionTargets/SuppliedCoverAlgebra.md",
+    {:path "ConstructionTargets/SuppliedCoverAlgebra.lean",
      :sha256
-     "bac24aabaea2654725e18a05c51bdbab93e92df4d578dc913c56c5eae32f3595"},
+     "320c05cb749b5f66495c72c40a5796492d0c23ae98b73ac4838befcdbaa9e110"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SuppliedCoverAlgebra.lean"
     "ConstructionTargets/SuppliedCoverAlgebra.md"],
@@ -83442,7 +83441,8 @@
    {:name "coveringFundamentalGroupEquivRange",
     :reported-by [:program-2026-10-12-supplied-cover-algebra],
     :type "pi1 total equiv induced range",
-    :area "covering-subgroup-correspondence"},
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-12-supplied-cover-algebra},
    :id :lemma-coveringfundamentalgroupequivrange,
    :kind :lemma,
    :depends-on [],
@@ -83458,7 +83458,8 @@
    {:name "isEmbedding_of_comp_eq",
     :reported-by [:program-2026-10-12-supplied-cover-algebra],
     :type "embedding from embedded composite",
-    :area "covering-subgroup-correspondence"},
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-12-supplied-cover-algebra},
    :id :lemma-isembedding-of-comp-eq,
    :kind :lemma,
    :depends-on [],
