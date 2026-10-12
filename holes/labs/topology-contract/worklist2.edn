@@ -75810,8 +75810,69 @@
      :typed-residual-change
      :infrastructure-packets
      :review-outcomes]},
+   :evidence
+   {:outcome :replan,
+    :seat "topo-8",
+    :commands
+    [{:cmd
+      "bb holes/labs/topology-contract/build_step.bb priorities holes/labs/topology-contract/worklist2.edn",
+      :exit 0}],
+    :finding
+    {:measures
+     {:placeholder-delta 0,
+      :typed-residual-change "radial opens banked; B4 pieces ready",
+      :infrastructure-packets 1,
+      :review-outcomes {:pass 1}},
+     :top "SLSC 6; annular side 5",
+     :routes "five await side/contraction/overlap/B4"},
+    :replacement-items
+    [{:consumer :t96J02,
+      :implements-lemma :lemma-polygonannularside,
+      :phase :implementation,
+      :state :open,
+      :scope ["ConstructionTargets/PolygonSurfacePiOne.lean"],
+      :dag-node
+      "ConstructionTargets/PolygonSurfacePiOne.blueprint.md/B4",
+      :acceptance
+      {:declaration
+       "ConstructionTargets.PolygonSurfacePiOne.polygonAnnularSide",
+       :type "outer quotient open represented by annular side",
+       :blueprint
+       "ConstructionTargets/PolygonSurfacePiOne.blueprint.md",
+       :placeholder "five π₁ routes",
+       :route-step "B4 annular side"},
+      :id :routes-2026-10-12-polygon-b4-annular-side-topo2-r1,
+      :kind :reusable-theorem,
+      :area "polygon-surface-pi1",
+      :depends-on
+      [:routes-2026-10-12-polygon-b4-radial-opens-topo2-r1],
+      :current-residual "Contraction/overlap.",
+      :other-consumers [:t92J05 :t94J04 :t97A01 :t97A03]}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 1,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :phase :strategy,
+      :state :blocked,
+      :scope [],
+      :dag-node "TOPOLOGY-ROUTES.md",
+      :acceptance {:strategy "Rerun after annular side."},
+      :id :routes-2026-10-12-checkpoint-topo2-r19,
+      :kind :strategy-checkpoint,
+      :area "portfolio",
+      :depends-on
+      [:routes-2026-10-12-polygon-b4-annular-side-topo2-r1],
+      :current-residual "Elect contraction/overlap.",
+      :other-consumers []}],
+    :author "topo-8",
+    :disposition :replan},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance {:strategy "Rerun after radial opens."},
@@ -75821,6 +75882,49 @@
    :depends-on
    [:routes-2026-10-12-polygon-b4-radial-opens-topo2-r1
     :routes-2026-10-12-checkpoint-topo2-r17],
+   :current-residual "Elect contraction/overlap.",
+   :other-consumers []}
+  {:consumer :t96J02,
+   :implements-lemma :lemma-polygonannularside,
+   :phase :implementation,
+   :state :blocked,
+   :scope ["ConstructionTargets/PolygonSurfacePiOne.lean"],
+   :dag-node "ConstructionTargets/PolygonSurfacePiOne.blueprint.md/B4",
+   :acceptance
+   {:declaration
+    "ConstructionTargets.PolygonSurfacePiOne.polygonAnnularSide",
+    :type "outer quotient open represented by annular side",
+    :blueprint "ConstructionTargets/PolygonSurfacePiOne.blueprint.md",
+    :placeholder "five π₁ routes",
+    :route-step "B4 annular side"},
+   :id :routes-2026-10-12-polygon-b4-annular-side-topo2-r1,
+   :kind :reusable-theorem,
+   :area "polygon-surface-pi1",
+   :depends-on
+   [:routes-2026-10-12-polygon-b4-radial-opens-topo2-r1
+    :routes-2026-10-12-checkpoint-topo2-r18],
+   :current-residual "Contraction/overlap.",
+   :other-consumers [:t92J05 :t94J04 :t97A01 :t97A03]}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 1,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md",
+   :acceptance {:strategy "Rerun after annular side."},
+   :id :routes-2026-10-12-checkpoint-topo2-r19,
+   :kind :strategy-checkpoint,
+   :area "portfolio",
+   :depends-on
+   [:routes-2026-10-12-polygon-b4-annular-side-topo2-r1
+    :routes-2026-10-12-checkpoint-topo2-r18],
    :current-residual "Elect contraction/overlap.",
    :other-consumers []}
   {:consumer :t94A08,
