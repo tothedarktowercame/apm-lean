@@ -728,3 +728,8 @@ the forward left comparison, the reverse-span glue whiskered through the
 overlap inverse, and the inverse forward right comparison.  The middle factor
 now exposes the reverse-span glue whose chosen representative was previously
 reduced to the outer comparisons.
+
+`genericPointWedgeCoordinateSpanWhiskeredReverseGlue_app` evaluates that
+inverse-whiskered middle factor definitionally at the fixed overlap
+representative.  Its right-hand side is now exactly the reverse-span glue to
+which the existing outer-comparison normal form applies.
