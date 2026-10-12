@@ -1,5 +1,6 @@
 import ConstructionTargets.CoveringMonodromyCosets
 import Mathlib.GroupTheory.FreeGroup.Basic
+import Mathlib.Topology.Covering.Quotient
 
 /-!
 # Small adapters for supplied covering spaces
@@ -57,9 +58,25 @@ theorem coveringFreeSubgroup_index
       (ConstructionTargets.coveringInducedFundamentalGroupMap cov e).range.index := by
   exact Subgroup.index_map_equiv _ base
 
+/-- A free properly discontinuous orbit quotient remains a covering after its
+target is identified with another space by a homeomorphism. -/
+theorem isCoveringMap_homeomorph_comp_quotientMk
+    {G X B : Type*} [Group G] [TopologicalSpace X] [TopologicalSpace B]
+    [MulAction G X] [ContinuousConstSMul G X]
+    [ProperlyDiscontinuousSMul G X] [LocallyCompactSpace X] [T2Space X]
+    (free : ∀ g : G, ∀ x : X, g • x = x → g = 1)
+    (h : MulAction.orbitRel.Quotient G X ≃ₜ B) :
+    IsCoveringMap (h ∘ Quotient.mk (MulAction.orbitRel G X)) := by
+  letI : IsCancelSMul G X :=
+    isCancelSMul_iff_eq_one_of_smul_eq.mpr free
+  exact
+    (isQuotientCoveringMap_quotientMk_of_properlyDiscontinuousSMul
+      (G := G) (E := X)).isCoveringMap.homeomorph_comp h
+
 end ConstructionTargets.SuppliedCoverAlgebra
 
 #print axioms ConstructionTargets.SuppliedCoverAlgebra.coveringFundamentalGroupEquivRange
 #print axioms ConstructionTargets.SuppliedCoverAlgebra.isEmbedding_of_comp_eq
 #print axioms ConstructionTargets.SuppliedCoverAlgebra.coveringFundamentalGroupEquivFreeSubgroup
 #print axioms ConstructionTargets.SuppliedCoverAlgebra.coveringFreeSubgroup_index
+#print axioms ConstructionTargets.SuppliedCoverAlgebra.isCoveringMap_homeomorph_comp_quotientMk

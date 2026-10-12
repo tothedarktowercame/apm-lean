@@ -111,7 +111,7 @@ uses: Mathlib
 `IsQuotientCoveringMap.isCoveringMap`, and composition of a covering with a
 homeomorphism
 
-status: planned
+status: proved (current program commit)
 
 Use `free` to install `IsCancelSMul G X`: if `g • x = g' • x`, cancel by
 the group action and apply `free` to `g'⁻¹ * g`.  The Mathlib quotient theorem
