@@ -225,6 +225,14 @@ noncomputable def standardSide (i : Fin 3) :
 theorem standardSide_continuous (i : Fin 3) : Continuous (standardSide i) :=
   stdSimplex.continuous_map (Fin.succAbove i)
 
+theorem standardSide_injective (i : Fin 3) : Function.Injective (standardSide i) := by
+  intro x y h
+  apply Subtype.ext
+  funext j
+  have hj := congrArg (fun z : stdSimplex ℝ (Fin 3) => z (i.succAbove j)) h
+  simpa [standardSide, FunOnFinite.linearMap_apply_apply,
+    Fin.succAbove_right_injective.eq_iff, Finset.sum_eq_single j] using hj
+
 /-- The polygonal boundary arc selected by a cover center and a side index. -/
 noncomputable def boundaryArc {M : Type*} [TopologicalSpace M] [T2Space M]
     [ChartedSpace EuclideanPlane M] (C : FiniteClosedDiskCover M)
@@ -237,6 +245,22 @@ theorem boundaryArc_continuous {M : Type*} [TopologicalSpace M] [T2Space M]
     (a : C.BoundaryArcIndex) : Continuous (C.boundaryArc a) := by
   exact (C.outer_good a.1.1 a.1.2).2.2.1.continuous.comp
     (standardSide_continuous a.2)
+
+theorem boundaryArc_injective {M : Type*} [TopologicalSpace M] [T2Space M]
+    [ChartedSpace EuclideanPlane M] (C : FiniteClosedDiskCover M)
+    (a : C.BoundaryArcIndex) : Function.Injective (C.boundaryArc a) :=
+  (C.outer_good a.1.1 a.1.2).2.2.1.injective.comp (standardSide_injective a.2)
+
+/-- In its owning coordinate chart, a scheduled boundary arc is exactly an
+affine side of the scaled standard triangle. -/
+theorem planeChart_boundaryArc {M : Type*} [TopologicalSpace M] [T2Space M]
+    [ChartedSpace EuclideanPlane M] (C : FiniteClosedDiskCover M)
+    (a : C.BoundaryArcIndex) (t : stdSimplex ℝ (Fin 2)) :
+    planeChart euclideanPlane_finrank a.1.1 (C.boundaryArc a t) =
+      scaled (planeChart euclideanPlane_finrank a.1.1 a.1.1) (C.radius a.1.1)
+        (standardSide a.2 t) := by
+  apply (planeChart euclideanPlane_finrank a.1.1).right_inv
+  exact (C.outer_good a.1.1 a.1.2).2.1 ⟨standardSide a.2 t, rfl⟩
 
 theorem boundaryArc_range_subset_outer {M : Type*} [TopologicalSpace M] [T2Space M]
     [ChartedSpace EuclideanPlane M] (C : FiniteClosedDiskCover M)
