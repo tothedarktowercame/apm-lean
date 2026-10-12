@@ -116768,6 +116768,8 @@
      "Receipt repaired: fixture now records the exact reviewed blueprint hash."}]}
   {:consumer :t91J06,
    :stop-count 1,
+   :review-finding
+   "Blueprint B1 proof omits the orientation of arbitrary q. The middle prescription q o t^-1 is increasing iff q and t have the same orientation, but the plan swaps target endpoints based only on t. Counterexample to that plan: t(x)=1/4+x/2 is increasing while q(x)=1-2x maps [0,1] homeomorphically and decreasingly to [-1,1]; the middle map decreases from 1 to -1, so the increasing-t endpoint assignment cannot paste to the claimed affine side pieces. Split on q (or directly on q o t^-1) and assign complementary target endpoints from the composite orientation.",
    :evidence
    {:placeholder-delta {:source-before 3, :source-after 3},
     :residual
@@ -116810,6 +116812,12 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder/diff validation", :exit 0}],
     :diagnostic-history [],
+    :review
+    {:outcome :fail,
+     :seat "codex-3",
+     :job "invoke-1791796827342-6724-e40e8965",
+     :finding
+     "Blueprint B1 proof omits the orientation of arbitrary q. The middle prescription q o t^-1 is increasing iff q and t have the same orientation, but the plan swaps target endpoints based only on t. Counterexample to that plan: t(x)=1/4+x/2 is increasing while q(x)=1-2x maps [0,1] homeomorphically and decreasingly to [-1,1]; the middle map decreases from 1 to -1, so the increasing-t endpoint assignment cannot paste to the claimed affine side pieces. Split on q (or directly on q o t^-1) and assign complementary target endpoints from the composite orientation."},
     :commit "b08d55a0b6aaabf59da2d01615bcbfd00b31c2b3",
     :changed-paths ["ConstructionTargets/t91J06Closure.blueprint.md"],
     :fixture
@@ -116818,7 +116826,7 @@
      "2a59c25774711b97b297f19f06dc02ece1b2a1e9005c53cada4d10b508bfef6c"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :repair,
    :scope
    ["problems/t91J06/lean/Main.lean"
     "problems/t91J06/status.json"
@@ -116838,6 +116846,7 @@
    :id :program-2026-10-11-close-t91j06,
    :kind :final-adapter,
    :campaign-priority 47,
+   :fail-count 1,
    :depends-on [],
    :program true,
    :other-consumers []}
