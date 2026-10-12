@@ -18341,8 +18341,39 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :implements-lemma :lemma-mfclass-forget-delta-apply,
+   :evidence
+   {:placeholder-delta {:t00J02 [1 1], :t98A02 [1 1]},
+    :residual "Compare the transported connecting map.",
+    :outcome :done-unreviewed,
+    :warnings ["9 pre-existing unnecessarySimpa warnings"],
+    :missing-theorems [],
+    :statement-hashes {:check "131/131"},
+    :axioms [propext Classical.choice Quot.sound],
+    :author "Joe Corneli",
+    :commands
+    [{:cmd "sha256sum /tmp/fdapply.lean", :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.ManifoldFundamentalClass",
+      :exit 0}
+     {:cmd "lake env lean /tmp/fdapply_check.lean", :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "rg -n '\\b(sorry|admit|axiom)\\b' ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 1,
+      :expected-exit 1}],
+    :commit "a669b10f8ac1d3e3361df214a4304f4dfa347de1",
+    :changed-paths
+    ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+    :fixture
+    {:path "/tmp/fdapply.lean",
+     :sha256
+     "ddd7a08b3b8dad08c37037b289af9f9bb9726bcd4fc2faf62b542084f3511eb0"},
+    :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/manifold-fundamental-class/delta-map",
    :acceptance
