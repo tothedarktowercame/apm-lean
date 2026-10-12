@@ -113891,6 +113891,18 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder/diff validation", :exit 0}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791818337658-7212-2eeb270d",
+     :commands
+     ["git show/diff-tree 56bab4626"
+      "sha256 + placeholder + registry checks"
+      "lake env lean ConstructionTargets/PointWedgeVanKampen.lean"
+      "lake build ConstructionTargets.PointWedgeVanKampen"
+      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (expected absent)"],
+     :finding
+     "Scope is exactly Lean+MD; source/doc/blueprint hashes match; placeholders 0->0; registry 131/131. The theorem correctly projects the established composite counit equality to the right leg, preserving the mapped-pre-coordinate then coordinate-point order across the span boundary. It compiles sorry-free using only propext, Classical.choice, Quot.sound. This is new symmetric progress after the left projection; residual is evaluating both projected factors with injected counits, matching outer factors, and closing B6/B12. Final target remains absent as declared."},
     :commit "56bab46264bd50cc263950b318fc95530908b8cb",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
@@ -113901,7 +113913,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113922,7 +113934,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Left pre-free-product counit factors as mapped pre-coordinate then coordinate-point legs.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Right pre-free-product counit factors as mapped pre-coordinate then coordinate-point legs.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -114334,7 +114346,11 @@
     {:job 8,
      :commit "43db81b6b781697306ba02f8677190330d7a789e",
      :reason
-     "Left pre-free-product counit factors as mapped pre-coordinate then coordinate-point legs."}]}
+     "Left pre-free-product counit factors as mapped pre-coordinate then coordinate-point legs."}
+    {:job 9,
+     :commit "56bab46264bd50cc263950b318fc95530908b8cb",
+     :reason
+     "Right pre-free-product counit factors as mapped pre-coordinate then coordinate-point legs."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
