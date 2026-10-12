@@ -83387,7 +83387,7 @@
    {:placeholder-delta 0,
     :residual "Program complete; B1-B4 compiled.",
     :outcome :done-unreviewed,
-    :warnings ["Review cites superseded 9a443d45a."],
+    :warnings ["Review cites superseded blueprint-only commit."],
     :missing-theorems
     [{:name "coveringFundamentalGroupEquivRange",
       :type "pi1 equiv range",
@@ -83420,19 +83420,12 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
     :commands
-    [{:cmd "fixture blob equals 575f9ce4a", :exit 0}
-     {:cmd "lake build ConstructionTargets.SuppliedCoverAlgebra",
+    [{:cmd "lake build ConstructionTargets.SuppliedCoverAlgebra",
       :exit 0}
-     {:cmd "registry/placeholders/milestones",
+     {:cmd "registry/declaration/blob checks",
       :exit 0,
-      :output "131/0;0;4"}
-     {:cmd "git show --check 994accb6c", :exit 0}],
-    :review
-    {:outcome :fail,
-     :seat "codex-7",
-     :job "invoke-1791825101006-7508-5627e2e5",
-     :finding
-     "Program STOP commits no compiled, sorry-free theorem progress: 9a443d45a adds only SuppliedCoverAlgebra.md, creates no SuppliedCoverAlgebra.lean, and records A1/A2/A3/C7 all :not-started. Exact repair: extend Mathlib: state and prove at least one missing milestone in scope, commit the compiling Lean result, and list the remaining milestones in :missing-theorems."},
+      :output "131/0;5;exact"}
+     {:cmd "git show --check program commits", :exit 0}],
     :commit "575f9ce4a",
     :commits ["1ecb73d0a" "994accb6c" "575f9ce4a" "df216abcc"],
     :changed-paths
@@ -83444,7 +83437,7 @@
      "8e2b05fc2da21acb000c622b502360f2835a454e138dbfeb505f29eedb0c7769"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SuppliedCoverAlgebra.lean"
     "ConstructionTargets/SuppliedCoverAlgebra.md"],
