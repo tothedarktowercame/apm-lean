@@ -800,3 +800,11 @@ glue-naturality equation of the mapped coordinate-span counit at the unique
 point-span overlap object.  This keeps the coordinate-to-point comparison
 isomorphisms explicit and supplies the exact equation in which the two named
 coordinate-span leg factors are related by the mapped reconstructed glue.
+
+`genericPointWedgeMappedCoordinateSpanSourceGlue` and
+`genericPointWedgeMappedCoordinateSpanTargetGlue` name the two remaining
+point-span glues in that square.  The theorem
+`genericPointWedgeMappedCoordinateSpanCounit_namedGlueSquare` expresses the
+square entirely in target-group multiplication order: right leg times source
+glue equals target glue times left leg.  The remaining reduction is now
+exactly the computation of these two named glues.
