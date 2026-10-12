@@ -79612,73 +79612,58 @@
      :commit "68d614508",
      :reason :program-milestone-complete}]}
   {:consumer :t94A10,
-   :stop-count 3,
+   :stop-count 4,
    :review-finding
    "B8 cites nonexistent Mathlib theorem MeasureTheory.integral2_divergence_prod_of_hasFDerivWithinAt_off_countable. Revise B8 to use the available integral2_divergence_prod_of_hasFDerivAt_off_countable and explicitly supply its ContinuousOn, pointwise HasFDerivAt, and IntegrableOn hypotheses; then re-review the blueprint.",
    :evidence
    {:placeholder-delta 0,
-    :residual
-    "Formalize B2 radial inverse-cube derivative; then B3-B11.",
+    :residual "Formalize B3 ambient closedness; then B4-B11.",
     :outcome :stop,
-    :warnings
-    ["Main: 2 placeholders." "Unrelated dirty file preserved."],
+    :warnings ["Main: 2 placeholders."],
     :missing-theorems
-    [{:name "ConstructionTargets.T94A10Closure.solidAngleAmbient",
-      :type
-      "determinant radial ambient two-form with frozen coordinate formula",
+    [{:name
+      "ConstructionTargets.T94A10Closure.hasFDerivAt_radialInvCube",
+      :type "derivative is -3 norm^-5 times inner product off zero",
       :status :proved,
       :consumers [:t94A10],
       :depends-on [],
       :area "periodic-stokes-square"}
      {:name
-      "ConstructionTargets.T94A10Closure.hasFDerivAt_radialInvCube",
-      :type "derivative of norm inverse cube off zero",
+      "ConstructionTargets.T94A10Closure.solidAngleAmbient_closed",
+      :type "solid-angle extDeriv vanishes off zero",
       :status :not-started,
       :consumers [:t94A10],
-      :depends-on [],
+      :depends-on ["solidAngleAmbient" "hasFDerivAt_radialInvCube"],
       :area "periodic-stokes-square"}],
     :statement-hashes
     {:registry "131/0",
-     :closure "d7050d4a7a94ad4c3c2a22c98d50378fabdc2eee",
+     :closure "96c1b05e6857a77c7d58a02e573722c0467668ef",
      :blueprint "808e174fd0529d3c85b60b506988b0a55526c8e0"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
     :reason :program-milestone-complete,
     :commands
-    [{:cmd "closure compile", :exit 0}
+    [{:cmd "closure build/compile", :exit 0}
      {:cmd "Main compile", :exit 0}
      {:cmd "registry check", :exit 0}
      {:cmd "closure no-sorry", :exit 1, :expected-exit 1}
      {:cmd "placeholder count", :exit 0, :output "2"}
-     {:cmd "git show --check 9950771b4", :exit 0}],
+     {:cmd "git show --check da84484c8", :exit 0}],
     :diagnostic-history
     [{:cmd "closure compile",
       :exit 1,
       :finding
-      "Exposed determinant application before coordinate normalization."}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1791768807423-6137-12f46983",
-     :commands
-     ["git show/check/diff 2e890e314..9950771b4"
-      "verify scoped blobs, fixture SHA, ancestry"
-      "lake build ConstructionTargets.t94A10Closure"
-      "lake env lean closure and t94A10 Main"
-      "statement-registry check/fingerprint"
-      "placeholder and axiom checks"],
-     :finding
-     "PASS: 9950771b499e811ca922c1509ed06d8cf71d111a adds compiled, sorry-free B1 progress after blueprint commit 2e890e314; its sole changed path is scoped. Closure/blueprint blobs d7050d4a/808e174f and fixture de8376a4 match. Contracting the standard row-determinant volume form with x and scaling by norm^-3 expands with the frozen signs and square-root denominator; the origin value is irrelevant on the punctured domain. Lean gates pass with standard axioms only; registry 131/0, frozen hash d1822221 unchanged, closure/Main placeholders 0/2. STOP lists B2 then B3-B11."},
-    :commit "9950771b4",
+      "Normalized nested scalar actions using nonzero norm."}],
+    :commit "da84484c8",
     :changed-paths ["ConstructionTargets/t94A10Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t94A10Closure.lean",
      :sha256
-     "de8376a421dd5d6c5af7ba7e5b1041dde8605f8718413b74a0e9cf2d1158b47e"},
+     "0776e72dddde7a91f0b1cba48d8c0d9b7dd5054295b2111df46974d3182ba330"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t94A10/lean/Main.lean"
     "problems/t94A10/status.json"
@@ -81322,7 +81307,8 @@
     "ConstructionTargets.T94A10Closure.hasFDerivAt_radialInvCube",
     :reported-by [:program-2026-10-11-close-t94a10],
     :type "derivative of norm inverse cube off zero",
-    :area "periodic-stokes-square"},
+    :area "periodic-stokes-square",
+    :proved-in :program-2026-10-11-close-t94a10},
    :id
    :lemma-constructiontargets-t94a10closure-hasfderivat-radialinvcube,
    :kind :lemma,
@@ -81346,7 +81332,9 @@
    :kind :lemma,
    :depends-on
    [:lemma-constructiontargets-t94a10closure-solidangleambient
-    :lemma-constructiontargets-t94a10closure-hasfderivat-radialinvcube],
+    :lemma-constructiontargets-t94a10closure-hasfderivat-radialinvcube
+    :lemma-solidangleambient
+    :lemma-hasfderivat-radialinvcube],
    :other-consumers []}
   {:consumer :t96A07,
    :phase :lemma,
@@ -81649,6 +81637,26 @@
    :acceptance {:lemma "horizontal_levels_infinite"},
    :lemma {:name "horizontal_levels_infinite", :reported-by []},
    :id :lemma-horizontal-levels-infinite,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance {:lemma "solidAngleAmbient"},
+   :lemma {:name "solidAngleAmbient", :reported-by []},
+   :id :lemma-solidangleambient,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance {:lemma "hasFDerivAt_radialInvCube"},
+   :lemma {:name "hasFDerivAt_radialInvCube", :reported-by []},
+   :id :lemma-hasfderivat-radialinvcube,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}]}
