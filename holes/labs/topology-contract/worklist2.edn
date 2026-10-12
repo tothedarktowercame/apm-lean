@@ -76281,6 +76281,18 @@
     [{:cmd "first compile",
       :exit 1,
       :correction "normalized boundary radius inequality"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791849342726-8070-9a726f99",
+     :commands
+     ["git show/diff/hash 75b0677c9"
+      "lake env lean ConstructionTargets/PolygonSurfacePiOne.lean"
+      "lake build ConstructionTargets.PolygonSurfacePiOne"
+      "python3 scripts/statement-registry.py check"
+      "#print axioms + placeholder scan"],
+     :finding
+     "PASS: recorded commit changes only the scoped module; fixture SHA-256 0f280f00...21bc and blob b4f434f4...2735 match, with support source unchanged. Fresh Lean/build gates pass, registry is 131/0, and sorry/admit/axiom counts are 0. PunctureDeformationRetract faithfully encodes a strong deformation retraction: a continuous homotopy on outerOpen, identity at t=0, boundary-skeleton membership at t=1, and pointwise fixation of every skeleton point for all t. mem_outerBoundarySkeleton_iff identifies that subtype skeleton with P.skeleton in P.Space with the correct quotient orientation. Axioms are propext, Classical.choice, Quot.sound."},
     :commit "75b0677c9",
     :changed-paths ["ConstructionTargets/PolygonSurfacePiOne.lean"],
     :fixture
@@ -76289,7 +76301,7 @@
      "0f280f00962c666a7d61ba17262b472d983696752269ec1cb1168122a8a421bc"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/PolygonSurfacePiOne.lean"],
    :dag-node "ConstructionTargets/PolygonSurfacePiOne.blueprint.md/B6",
    :acceptance
@@ -76318,7 +76330,7 @@
      :infrastructure-packets
      :review-outcomes]},
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance {:strategy "Rerun after B6."},
@@ -86450,7 +86462,7 @@
    :other-consumers [:t92J05 :t94J04 :t97A01 :t97A03]}
   {:consumer :t96J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "PairingData.skeleton",
@@ -86460,14 +86472,16 @@
     :reported-by [:routes-2026-10-12-polygon-b6-topo2-r1],
     :type "quotient image of the norm-one disk boundary",
     :area "polygon-surface-pi1",
-    :proved-in :routes-2026-10-12-polygon-b6-topo2-r1},
+    :proved-in :routes-2026-10-12-polygon-b6-topo2-r1,
+    :banked-by :routes-2026-10-12-polygon-b6-topo2-r1,
+    :banked-commit "75b0677c9"},
    :id :lemma-pairingdata-skeleton,
    :kind :lemma,
    :depends-on [],
    :other-consumers [:t92J05 :t94J04 :t97A01 :t97A03]}
   {:consumer :t96J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -86481,7 +86495,9 @@
     :type
     "strong deformation retraction of outerOpen P.Rel onto P.outerBoundarySkeleton, identified with P.skeleton",
     :area "polygon-surface-pi1",
-    :proved-in :routes-2026-10-12-polygon-b6-topo2-r1},
+    :proved-in :routes-2026-10-12-polygon-b6-topo2-r1,
+    :banked-by :routes-2026-10-12-polygon-b6-topo2-r1,
+    :banked-commit "75b0677c9"},
    :id
    :lemma-constructiontargets-polygonsurfacepione-puncturedeformationretract,
    :kind :lemma,
