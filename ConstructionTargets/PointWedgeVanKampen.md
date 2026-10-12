@@ -561,3 +561,12 @@ the fixed right-cover representative.  After aligning its groupoid image,
 endpoint conjugation with `FundamentalGroup.mapOfEq` for the right cover
 equivalence.  The remaining comparison is the composition law across the
 quotient-adjusted lifted loop.
+
+`genericPointWedgeRightLiftedLoop_mapOfEq_comp` proves that composition law
+with all three basepoint witnesses explicit.  Together with the composite
+identity it yields `genericPointWedgeRightLiftedLoop_concrete_eq` and hence
+`genericPointWedgeRightLiftedLoop_normalForm`.  The corresponding left and
+right actual-cover actions now reduce to `Monoid.Coprod.inl` and
+`Monoid.Coprod.inr` in
+`genericPointWedgeIdentityActualSpan_left_lifted` and
+`genericPointWedgeIdentityActualSpan_right_lifted`.

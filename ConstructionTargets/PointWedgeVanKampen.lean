@@ -2457,6 +2457,63 @@ theorem genericPointWedgeRightLiftedLoop_concrete_eq_mapOfEq
     apply Subsingleton.elim]
   rfl
 
+omit [PathConnectedSpace X] [PathConnectedSpace Y] in
+/-- Applying the right-cover based map to the quotient-adjusted lifted loop
+is the based map of the composite, with its literal right-inclusion witness. -/
+theorem genericPointWedgeRightLiftedLoop_mapOfEq_comp
+    (g : FundamentalGroup Y y₀) :
+    FundamentalGroup.mapOfEq
+        (genericPointWedgePackage
+          x₀ y₀ M N hM hN hy hx cM cN).rightEquiv.toFun
+        (genericPointWedgeRightEquiv_rightBase_as
+          x₀ y₀ M N hM hN hy hx cM cN)
+        (genericPointWedgeRightLiftedLoop x₀ y₀ N g) =
+      FundamentalGroup.mapOfEq
+        ((genericPointWedgePackage
+          x₀ y₀ M N hM hN hy hx cM cN).rightEquiv.toFun.comp
+            (genericPointWedgeRightLegLift x₀ y₀ N))
+        ((genericPointWedgePackage
+          x₀ y₀ M N hM hN hy hx cM cN).right_inclusion y₀) g := by
+  rcases g with ⟨p⟩
+  change FundamentalGroup.mapOfEq _ _
+      (FundamentalGroup.mapOfEq _ _
+        (FundamentalGroup.fromPath (.mk p))) =
+    FundamentalGroup.mapOfEq _ _ (FundamentalGroup.fromPath (.mk p))
+  rw [FundamentalGroup.mapOfEq_apply,
+    FundamentalGroup.mapOfEq_apply,
+    FundamentalGroup.mapOfEq_apply]
+  rfl
+
+omit [PathConnectedSpace X] [PathConnectedSpace Y] in
+/-- The endpoint-conjugated image of the quotient-adjusted right lifted loop
+is the original loop. -/
+theorem genericPointWedgeRightLiftedLoop_concrete_eq
+    (g : FundamentalGroup Y y₀) :
+    eqToHom (genericPointWedgeRightEquiv_obj_rightBase
+        x₀ y₀ M N hM hN hy hx cM cN).symm ≫
+        (FundamentalGroupoid.map
+          (genericPointWedgePackage
+            x₀ y₀ M N hM hN hy hx cM cN).rightEquiv.toFun).map
+              (genericPointWedgeRightLiftedLoop x₀ y₀ N g) ≫
+      eqToHom (genericPointWedgeRightEquiv_obj_rightBase
+        x₀ y₀ M N hM hN hy hx cM cN) = g := by
+  rw [genericPointWedgeRightLiftedLoop_concrete_eq_mapOfEq,
+    genericPointWedgeRightLiftedLoop_mapOfEq_comp,
+    genericPointWedgeRightComposite_mapOfEq]
+
+omit [PathConnectedSpace X] in
+/-- The connector normal form of the mapped lifted right loop is the original
+right-summand loop. -/
+theorem genericPointWedgeRightLiftedLoop_normalForm
+    (g : FundamentalGroup Y y₀) :
+    (genericPointWedgeConnectors y₀).normalForm
+        ((genericPointWedgeRightGroupoidEquivalence
+          x₀ y₀ M N hM hN hy hx cM cN).functor.map
+            (genericPointWedgeRightLiftedLoop x₀ y₀ N g)) = g := by
+  rw [genericPointWedgeRightLiftedLoop_normalForm_eq_transport,
+    genericPointWedgeRightLiftedLoop_transport_eq_concrete,
+    genericPointWedgeRightLiftedLoop_concrete_eq]
+
 omit [PathConnectedSpace Y] in
 /-- The connector normal form of the mapped lifted left loop is conjugation
 by the explicit equality transport at its common endpoint. -/
@@ -2624,6 +2681,36 @@ theorem genericPointWedgeLeftLiftedLoop_normalForm
   rw [genericPointWedgeLeftLiftedLoop_normalForm_eq_transport,
     genericPointWedgeLeftLiftedLoop_transport_eq_concrete,
     genericPointWedgeLeftLiftedLoop_concrete_eq]
+
+/-- The actual left-cover action on a lifted summand loop is the left
+coproduct injection. -/
+theorem genericPointWedgeIdentityActualSpan_left_lifted
+    (g : FundamentalGroup X x₀) :
+    (genericPointWedgeIdentityActualSpan
+      x₀ y₀ M N hM hN hy hx cM cN).left.map
+        (genericPointWedgeLeftLiftedLoop x₀ y₀ M g) =
+      Monoid.Coprod.inl g := by
+  rw [genericPointWedgeIdentityActualSpan_left_map]
+  rw [eq_of_heq (genericPointWedgeIdentityCoordinateSpan_left_map
+    x₀ y₀ ((genericPointWedgeLeftGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN).functor.map
+        (genericPointWedgeLeftLiftedLoop x₀ y₀ M g)))]
+  rw [genericPointWedgeLeftLiftedLoop_normalForm]
+
+/-- The actual right-cover action on a lifted summand loop is the right
+coproduct injection. -/
+theorem genericPointWedgeIdentityActualSpan_right_lifted
+    (g : FundamentalGroup Y y₀) :
+    (genericPointWedgeIdentityActualSpan
+      x₀ y₀ M N hM hN hy hx cM cN).right.map
+        (genericPointWedgeRightLiftedLoop x₀ y₀ N g) =
+      Monoid.Coprod.inr g := by
+  rw [genericPointWedgeIdentityActualSpan_right_map]
+  rw [eq_of_heq (genericPointWedgeIdentityCoordinateSpan_right_map
+    x₀ y₀ ((genericPointWedgeRightGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN).functor.map
+        (genericPointWedgeRightLiftedLoop x₀ y₀ N g)))]
+  rw [genericPointWedgeRightLiftedLoop_normalForm]
 
 /-- Once B3's two mapped actions are identified with the images of the
 literal topological legs under B5, the normalized equivalence has exactly the
@@ -3137,6 +3224,9 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeRightComposite_mapOfEq
 #print axioms genericPointWedgeRightEquiv_rightBase_as
 #print axioms genericPointWedgeRightLiftedLoop_concrete_eq_mapOfEq
+#print axioms genericPointWedgeRightLiftedLoop_mapOfEq_comp
+#print axioms genericPointWedgeRightLiftedLoop_concrete_eq
+#print axioms genericPointWedgeRightLiftedLoop_normalForm
 #print axioms genericPointWedgeLeftLiftedLoop_normalForm_eq_transport
 #print axioms genericPointWedgeLeftComposite_baseProof
 #print axioms genericPointWedgeLeftComposite_mapOfEq
@@ -3145,6 +3235,8 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeLeftLiftedLoop_transport_eq_concrete
 #print axioms genericPointWedgeLeftLiftedLoop_concrete_eq
 #print axioms genericPointWedgeLeftLiftedLoop_normalForm
+#print axioms genericPointWedgeIdentityActualSpan_left_lifted
+#print axioms genericPointWedgeIdentityActualSpan_right_lifted
 #print axioms genericPointWedgeIdentityActualSpan_left_map
 #print axioms genericPointWedgeIdentityActualSpan_right_map
 #print axioms genericPointWedgeSingleObjPostcomposeIso
