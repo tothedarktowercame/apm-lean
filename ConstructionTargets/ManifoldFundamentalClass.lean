@@ -2663,6 +2663,43 @@ theorem coefficientOpenDiskConnecting_comparison (k : ℕ) :
   exact (Category.assoc r d h).trans
     ((congrArg (fun z => r ≫ z) hd).trans (Category.assoc r m q).symm)
 
+def coefficientOpenDiskAmbientInclusion (d : ℕ) :
+    C(T02A06HemisphereExcision.euclideanOpenDisk d,
+      CoefficientModelLocal.E d) where
+  toFun x := x.1
+  continuous_toFun := continuous_subtype_val
+
+theorem coefficientOpenDiskAmbientInclusion_mapsTo (d : ℕ) :
+    Set.MapsTo (coefficientOpenDiskAmbientInclusion d)
+      (T02A06HemisphereExcision.puncturedOpenDiskSet d)
+      (CoefficientModelLocal.puncture d) := by
+  intro x hx
+  change x.1 ≠ 0 at hx ⊢
+  exact hx
+
+theorem coefficientOpenDiskConnecting_model_naturality (k : ℕ) :
+    CoefficientPairSequence.connecting ℤ
+        (T02A06HemisphereExcision.puncturedOpenDiskSet (k + 2)) (k + 1) ≫
+      HomologicalComplex.homologyMap
+        (CoefficientRadialPair.subMap ℤ
+          (T02A06HemisphereExcision.puncturedOpenDiskSet (k + 2))
+          (CoefficientModelLocal.puncture (k + 2))
+          (coefficientOpenDiskAmbientInclusion (k + 2))
+          (coefficientOpenDiskAmbientInclusion_mapsTo (k + 2))) (k + 1) =
+    HomologicalComplex.homologyMap
+        (CoefficientRadialPair.pairMap ℤ
+          (T02A06HemisphereExcision.puncturedOpenDiskSet (k + 2))
+          (CoefficientModelLocal.puncture (k + 2))
+          (coefficientOpenDiskAmbientInclusion (k + 2))
+          (coefficientOpenDiskAmbientInclusion_mapsTo (k + 2))) (k + 2) ≫
+      CoefficientPairSequence.connecting ℤ
+        (CoefficientModelLocal.puncture (k + 2)) (k + 1) := by
+  exact CoefficientPairNaturality.connecting_naturality ℤ
+    (T02A06HemisphereExcision.puncturedOpenDiskSet (k + 2))
+    (CoefficientModelLocal.puncture (k + 2))
+    (coefficientOpenDiskAmbientInclusion (k + 2))
+    (coefficientOpenDiskAmbientInclusion_mapsTo (k + 2)) (k + 1)
+
 end ConstructionTargets.ManifoldFundamentalClass
 
 #print axioms ConstructionTargets.ManifoldFundamentalClass.neighborhoodInclusion_Hsucc_isIso
@@ -2753,6 +2790,7 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.forgetSnakeInput_delta_map
 #print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientOpenDiskConnecting_forgotten_naturality
 #print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientOpenDiskConnecting_comparison
+#print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientOpenDiskConnecting_model_naturality
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_projection
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_generator_of_normalization
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_normalization_of_generator
