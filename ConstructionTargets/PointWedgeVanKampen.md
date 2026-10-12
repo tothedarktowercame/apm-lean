@@ -380,3 +380,9 @@ map, both span maps, and the literal lifts remains for B6.
 the symmetric inner right stage to the fundamental-groupoid map induced by
 the literal overlap-to-right inclusion.  Evaluating both inclusion images,
 the two span maps, and the literal lifts remains for B6.
+
+`genericPointWedgeIdentityOuterLeftSpanComponent_target` identifies the
+target endpoint of the left-span comparison at the transported overlap
+representative with the literal object `FundamentalGroupoid.mk x₀`.  The
+source endpoint and resulting endomorphism cast must still be evaluated before
+the coordinate-span injection theorem applies.

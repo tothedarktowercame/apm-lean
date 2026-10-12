@@ -717,6 +717,22 @@ theorem genericPointWedgeIdentityOuterRightUnitInv_actualMap_eq_inclusionMap :
         (eK.unitInv.app z) := by
   rfl
 
+omit [PathConnectedSpace X] [PathConnectedSpace Y] in
+/-- The target endpoint of the left-span comparison at the transported
+overlap representative is the literal left base object. -/
+theorem genericPointWedgeIdentityOuterLeftSpanComponent_target :
+    let eK := genericPointWedgeOverlapGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let z : FundamentalGroupoid (genericPointWedgeOverlapPiece x₀ y₀ M N) :=
+      FundamentalGroupoid.mk
+        ⟨quotientMap x₀ y₀ (.inl x₀),
+          ⟨⟨.inl x₀, by trivial, rfl⟩,
+            ⟨.inr y₀, by trivial,
+              (Quotient.sound (Relation.EqvGen.rel _ _ Rel.base)).symm⟩⟩⟩
+    (genericPointWedgeCoordinateLeft x₀).obj (eK.functor.obj z) =
+      FundamentalGroupoid.mk x₀ := by
+  rfl
+
 /-- The middle factor in the reverse coordinate glue evaluates at the image
 of the chosen overlap representative under the overlap equivalence. -/
 theorem genericPointWedgeIdentityCoordinateWhiskeredGlue_app :
@@ -2260,6 +2276,7 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeIdentityOuterRightUnitInv_targetMap_eq_nestedMap
 #print axioms genericPointWedgeIdentityOuterLeftUnit_actualMap_eq_inclusionMap
 #print axioms genericPointWedgeIdentityOuterRightUnitInv_actualMap_eq_inclusionMap
+#print axioms genericPointWedgeIdentityOuterLeftSpanComponent_target
 #print axioms genericPointWedgeIdentityCoordinateWhiskeredGlue_app
 #print axioms genericPointWedgeIdentityCoordinateWhiskeredGlue_app_eq_unitBase
 #print axioms genericPointWedgeIdentityCoordinateSpan_glue_unitBase
