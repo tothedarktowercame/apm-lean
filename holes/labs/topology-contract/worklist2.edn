@@ -83385,9 +83385,9 @@
    "Program STOP commits no compiled, sorry-free theorem progress: 9a443d45a adds only SuppliedCoverAlgebra.md, creates no SuppliedCoverAlgebra.lean, and records A1/A2/A3/C7 all :not-started. Exact repair: extend Mathlib: state and prove at least one missing milestone in scope, commit the compiling Lean result, and list the remaining milestones in :missing-theorems.",
    :evidence
    {:placeholder-delta 0,
-    :residual "Program complete; no mathematical repair remains.",
+    :residual "Program complete; B1-B4 compiled.",
     :outcome :done-unreviewed,
-    :warnings ["Review still cites obsolete blueprint commit."],
+    :warnings ["Review cites superseded 9a443d45a."],
     :missing-theorems
     [{:name "coveringFundamentalGroupEquivRange",
       :type "pi1 equiv range",
@@ -83420,22 +83420,13 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
     :commands
-    [{:cmd
-      "lake env lean ConstructionTargets/SuppliedCoverAlgebra.lean",
+    [{:cmd "fixture blob equals 575f9ce4a", :exit 0}
+     {:cmd "lake build ConstructionTargets.SuppliedCoverAlgebra",
       :exit 0}
-     {:cmd "required declaration/placeholder scan",
+     {:cmd "registry/placeholders/milestones",
       :exit 0,
-      :output "5/0"}
-     {:cmd "python3 scripts/statement-registry.py check",
-      :exit 0,
-      :output "131/0"}
-     {:cmd "git show --check 575f9ce4a", :exit 0}],
-    :review
-    {:outcome :fail,
-     :seat "codex-7",
-     :job "invoke-1791824082613-7467-718f3ddd",
-     :finding
-     "Program STOP commits no compiled, sorry-free theorem progress: 9a443d45a adds only SuppliedCoverAlgebra.md, creates no SuppliedCoverAlgebra.lean, and records A1/A2/A3/C7 all :not-started. Exact repair: extend Mathlib: state and prove at least one missing milestone in scope, commit the compiling Lean result, and list the remaining milestones in :missing-theorems."},
+      :output "131/0;0;4"}
+     {:cmd "git show --check 994accb6c", :exit 0}],
     :commit "575f9ce4a",
     :commits ["1ecb73d0a" "994accb6c" "575f9ce4a" "df216abcc"],
     :changed-paths
@@ -83447,7 +83438,7 @@
      "8e2b05fc2da21acb000c622b502360f2835a454e138dbfeb505f29eedb0c7769"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SuppliedCoverAlgebra.lean"
     "ConstructionTargets/SuppliedCoverAlgebra.md"],
