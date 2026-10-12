@@ -113850,14 +113850,14 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 2,
+   :stop-count 3,
    :review-finding
    "Blueprint B3 is marked proved but its proof uses the unlisted ConnectedGroupoidSingleObjEquivalence.connectorSingleObjEquivalence (and connector-system representation) instead of only the declared uses; add the actual connector dependency and proof route to B3 uses.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
    :evidence
    {:placeholder-delta {:source-before 0, :source-after 0},
     :residual
-    "Reconcile the literal actual-span injections with the reconstructed source-coordinate maps; then close B6 and B12.",
+    "Compare the right restriction element and counit coordinate, then close B6 and B12.",
     :outcome :stop,
     :warnings [],
     :missing-theorems
@@ -113871,9 +113871,9 @@
       :area "fundamental-group-wedge-of-circles"}],
     :statement-hashes
     {:source
-     "c08686dd328ee9d265394873a18d73b932b055748bacb38d477b60ea11b710fd",
+     "14aae0a4fa97aad0e23fe5ffc21a764b5d0c0da1f3fc320ef00ca618f8137750",
      :documentation
-     "53b56ad24844ee0aa42c3d02e5291ffb85882249d48218c871fdf7f0770e2362",
+     "07b3e2e0da443f1b3e8db02ddcc64dd57c84035f64530997f50e969533f8b255",
      :blueprint
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0",
      :registry "131/131"},
@@ -113881,7 +113881,7 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
     :reason
-    "The quotient-aware composition closes the right normal form; both actual cover actions are literal coproduct injections.",
+    "The reconstructed source functor is literal on the left leg and has one explicit restriction conjugator on the right.",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/PointWedgeVanKampen.lean",
@@ -113890,20 +113890,11 @@
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder/diff validation", :exit 0}],
-    :diagnostic-history [],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1791806928235-6907-21f43b06",
-     :commands
-     ["git show/diff-tree b9ba104ea"
-      "sha256/placeholder/registry checks"
-      "lake env lean ConstructionTargets/PointWedgeVanKampen.lean"
-      "lake build ConstructionTargets.PointWedgeVanKampen"
-      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (expected absent)"],
-     :finding
-     "PASS: exact two-file scope and frozen hashes match; placeholders 0->0, registry 131/131. Quotient-aware mapOfEq composition closes the right normal form with correct endpoint orientation; actual-span lifted actions faithfully become Coprod.inl/inr across HEq boundaries. Standard axioms only. Valid program STOP; source-coordinate reconciliation, B6, and B12 remain."},
-    :commit "b9ba104ea5a2f8d1c4385e5ff6186891d04fff72",
+    :diagnostic-history
+    [{:cmd "lean counit rfl probe",
+      :exit 1,
+      :finding "Counit element is not definitionally one."}],
+    :commit "07240e5a3062a6d1758610732aa7d141e4bfa5e9",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
      "ConstructionTargets/PointWedgeVanKampen.md"],
@@ -113913,7 +113904,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
