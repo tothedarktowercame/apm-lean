@@ -113894,6 +113894,17 @@
     [{:cmd "lean raw-glue simp",
       :exit 1,
       :finding "Residual eqToHom needed proof elimination."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791835437061-7821-0c95e90e",
+     :commands
+     ["git show/diff-tree 3936bc31"
+      "lake build ConstructionTargets.PointWedgeVanKampen"
+      "python3 scripts/statement-registry.py check"
+      "commit hash and placeholder checks"],
+     :finding
+     "PASS program STOP: 3936bc31 by topo-2 adds a raw-overlap unit theorem plus documentation, exactly within scope and new since history. Source 4db7e82c..., documentation 8bcf7686..., fixture 0bca6ce3..., registry 131/131, and placeholders 0->0 reproduce. Unfolding the two-open descent component leaves eqToHom between the unique SingleObj target object; eliminating that equality proof yields the group unit, with no transport or connector normalization assumed. The statement orientation rawGlue=1 is what later functorial transport needs. Fresh build passes with only standard axioms. This is compiled sorry-free progress; three transport-preservation results, counit substitution, and B6/B12 remain explicitly listed."},
     :commit "3936bc31f2fa7f8d56e85e72705fd1c3b66eb339",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
@@ -113904,7 +113915,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113925,7 +113936,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Named the raw descent-overlap component before three span transports.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: The raw canonical descent-overlap component is the group unit.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -114436,7 +114447,11 @@
     {:job 6,
      :commit "0f80d13767beb28cd81839f639693399e7a6943e",
      :reason
-     "Named the raw descent-overlap component before three span transports."}]}
+     "Named the raw descent-overlap component before three span transports."}
+    {:job 7,
+     :commit "3936bc31f2fa7f8d56e85e72705fd1c3b66eb339",
+     :reason
+     "The raw canonical descent-overlap component is the group unit."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
