@@ -113850,14 +113850,14 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 2,
    :review-finding
    "Blueprint B3 is marked proved but its proof uses the unlisted ConnectedGroupoidSingleObjEquivalence.connectorSingleObjEquivalence (and connector-system representation) instead of only the declared uses; add the actual connector dependency and proof route to B3 uses.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
    :evidence
    {:placeholder-delta {:source-before 0, :source-after 0},
     :residual
-    "Combine the target counit splice with reconstructed source glue and open-cover factors; close B6/B12.",
+    "Identify source glue with mapped open-cover factors, substitute three-factor counits, then close B6/B12.",
     :outcome :stop,
     :warnings [],
     :missing-theorems
@@ -113871,9 +113871,9 @@
       :area "fundamental-group-wedge-of-circles"}],
     :statement-hashes
     {:source
-     "c032da8dcfc5282d3351a3ab2a2715542832290ed8664065c5ff8b33262b49a5",
+     "f90bcde08984c827de15f2ab401f581f5b3f218dea7b47312008c333a8cac57d",
      :documentation
-     "6441dd3970307e2d9a1b30c302d9bafc2699fbe9fd5031292708e57894be29c3",
+     "860d85aa76e1bd1b99ff1214a8e960f54fd914fd766780de83bd4d97ff33d88c",
      :blueprint
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0",
      :registry "131/131"},
@@ -113881,7 +113881,7 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
     :reason
-    "Coordinate-to-point target glue now satisfies the injected connector-counit splice.",
+    "The target-glue splice and coordinate-span square now compose into one injected-counit equation.",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/PointWedgeVanKampen.lean",
@@ -113890,24 +113890,7 @@
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder/diff validation", :exit 0}],
-    :diagnostic-history
-    [{:cmd "lean target-glue rfl",
-      :exit 1,
-      :finding "Round trip retains connector counits."}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1791832133793-7755-d19c8250",
-     :commands
-     ["git show/diff-tree f58e73a9"
-      "hash/fingerprint/placeholder checks"
-      "lake env lean ConstructionTargets/PointWedgeVanKampen.lean"
-      "lake build ConstructionTargets.PointWedgeVanKampen"
-      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (expected missing milestone)"
-      "python3 scripts/statement-registry.py check"],
-     :finding
-     "PASS program STOP: f58e73a9 by topo-2 changes exactly two scoped files. Fixture 0bca6ce3..., documentation 6441dd39..., frozen t99J01 fingerprint be7f7cf0..., and registry 131/131 verify; placeholders remain 0->0. The new counit-splice equation has the documented multiplication orientation and follows from coordinate-to-point counit glue naturality without normalizing connector counits; representation boundaries remain explicit. Blueprint B3 now lists its connector-system dependency and route. Foundation Lean/build pass with only propext/choice/Quot.sound. Final ThreeCircles target is still absent, consistently listed among remaining milestones; source-glue/open-cover composition and B6/B12 remain."},
-    :commit "f58e73a9c7f3d0cd03bd204061e8e386ae9b80b5",
+    :commit "67cf94a2fc7c6cdc653f8173323b0e4c5d3152de",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
      "ConstructionTargets/PointWedgeVanKampen.md"],
@@ -113917,7 +113900,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
