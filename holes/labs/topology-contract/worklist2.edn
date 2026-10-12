@@ -73984,9 +73984,9 @@
     :finding
     {:measures
      {:placeholder-delta 0,
-      :typed-residual-change "3 edges banked",
+      :typed-residual-change "2 edges banked; t02A03 revised/blocked",
       :infrastructure-packets 3,
-      :review-outcomes {:pass 3}},
+      :review-outcomes {:pass 2, :revise 1, :blocked 1}},
      :top
      "polygonSurface_pi1_presentation: ready; 5 consumers; blueprint required",
      :routes "five await polygon π₁; three await affineChart"},
@@ -74030,15 +74030,9 @@
       :current-residual "Refill.",
       :other-consumers []}],
     :author "topo-8",
-    :disposition :replan,
-    :review
-    {:outcome :fail,
-     :seat "codex-7",
-     :job "invoke-1791778418402-6307-5b5ca20f",
-     :finding
-     "Checkpoint evidence miscounts its three dependency reviews. RP2 descent records PASS and production naturality records PASS-on-STOP, but t02A03 right-tube circle equivalence remains :blocked with probe :outcome :revise and no review PASS. Thus :review-outcomes {:pass 3} and typed-residual-change \"3 edges banked\" are false. Recompute the required measures as two passes plus one revise/blocked edge (and the corresponding banked-edge count), then retain the priority-supported single polygonSurface_pi1 blueprint election."}},
+    :disposition :replan},
    :phase :strategy,
-   :state :repair,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -74057,7 +74051,7 @@
    :other-consumers []}
   {:consumer :t96J02,
    :phase :implementation,
-   :state :superseded,
+   :state :blocked,
    :scope ["ConstructionTargets/PolygonSurfacePiOne.blueprint.md"],
    :dag-node "TOPOLOGY-ROUTES.md/polygon-surface-pi1",
    :acceptance
@@ -74081,7 +74075,7 @@
      :infrastructure-packets
      :review-outcomes]},
    :phase :strategy,
-   :state :superseded,
+   :state :blocked,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance {:strategy "Rerun priorities after blueprint review."},
