@@ -3675,6 +3675,34 @@ theorem complexArrivalCorrection_ne_zero_of_scaled_normSq_outside
   have hshi := mul_le_mul_of_nonneg_left hhi ht
   rcases hc with hc | hc <;> nlinarith
 
+def arrivalThreeQuarters : unitInterval :=
+  ⟨3 / 4, by constructor <;> norm_num⟩
+
+/-- The exceptional slice omitted by the scaled certificate is safe whenever
+the correction misses its forced real value or has sufficiently large
+imaginary part. -/
+theorem complexArrivalCorrection_threeQuarters_ne_zero
+    (c : ℂ) (hc : c.re ≠ -1 ∨ (5 / 4 : ℝ) < |c.im|)
+    (p : RightTubeMinusLeftCore) :
+    (((2 - 2 * (arrivalThreeQuarters : ℝ) : ℝ) : ℂ) *
+          positiveRealPlanarWaypointMap p +
+        ((2 * (arrivalThreeQuarters : ℝ) - 1 : ℝ) : ℂ) *
+          rightTubeCorePlanarComplex p.1 + c) ≠ 0 := by
+  intro hz
+  obtain ⟨h0, h1⟩ :=
+    complexArrivalCorrection_zero_equations arrivalThreeQuarters c p hz
+  have hb := rightTubeCorePlanarNormBounds p.1 p.2.1
+  have him : |p.1 1| ≤ ‖rightTubeCorePlanarComplex p.1‖ := by
+    simpa [rightTubeCorePlanarComplex] using
+      (RCLike.abs_im_le_norm (rightTubeCorePlanarComplex p.1))
+  rcases hc with hc | hc
+  · apply hc
+    norm_num [arrivalThreeQuarters] at h0
+    linarith
+  · have heq : |p.1 1| = |c.im| := by
+      rw [show p.1 1 = -c.im by linarith, abs_neg]
+    linarith
+
 end ConstructionTargets.T02A03GeometricTubeDeformation
 
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeNormalComplex_eq_zero_iff
@@ -3789,6 +3817,7 @@ end ConstructionTargets.T02A03GeometricTubeDeformation
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.complexArrivalCorrection_sevenEighths_ne_zero_of_normSq_outside
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.complexArrivalCorrection_zero_scaled_normSq
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.complexArrivalCorrection_ne_zero_of_scaled_normSq_outside
+#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.complexArrivalCorrection_threeQuarters_ne_zero
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_twiceCorrected_departure_zero_coordinates
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_twiceCorrected_departure_zero_normSq
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_twiceCorrected_departure_zero_scalar_bounds
