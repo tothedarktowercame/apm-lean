@@ -3774,6 +3774,111 @@ theorem arrivalTransverseCorrection_threeQuarters_ne_zero
   norm_num [arrivalTransverseCorrection, arrivalThreeQuarters,
     Complex.mul_re, Complex.mul_im]
 
+def arrivalTwentyFourTwentyFive : unitInterval :=
+  ⟨24 / 25, by constructor <;> norm_num⟩
+
+noncomputable def arrivalTransverseCandidate : ℂ :=
+  ((-4 / 21 : ℝ) : ℂ) + ((-552 / 625 : ℝ) : ℂ) * Complex.I
+
+theorem arrivalTransverseCandidate_ne_zero :
+    arrivalTransverseCandidate ≠ 0 := by
+  intro h
+  have hre := congrArg Complex.re h
+  norm_num [arrivalTransverseCandidate, Complex.mul_re, Complex.mul_im] at hre
+
+theorem arrivalTransverseCandidate_norm_bounds :
+    (3 / 4 : ℝ) < ‖arrivalTransverseCandidate‖ ∧
+      ‖arrivalTransverseCandidate‖ < (5 / 4 : ℝ) := by
+  have hs : ‖arrivalTransverseCandidate‖ ^ 2 =
+      Complex.normSq arrivalTransverseCandidate := Complex.sq_norm _
+  have hn : 0 ≤ ‖arrivalTransverseCandidate‖ := norm_nonneg _
+  have hv : Complex.normSq arrivalTransverseCandidate =
+      (140624464 / 172265625 : ℝ) := by
+    norm_num [arrivalTransverseCandidate, Complex.normSq_apply,
+      Complex.mul_re, Complex.mul_im]
+  rw [hv] at hs
+  constructor <;> nlinarith
+
+noncomputable def arrivalTransverseCandidateCircle : Circle :=
+  ⟨NormedSpace.normalize arrivalTransverseCandidate,
+    mem_sphere_zero_iff_norm.mpr
+      (NormedSpace.norm_normalize arrivalTransverseCandidate_ne_zero)⟩
+
+noncomputable def arrivalTransverseCandidateNormal : ℂ :=
+  ((1 - ‖arrivalTransverseCandidate‖ : ℝ) : ℂ)
+
+noncomputable def arrivalTransverseCandidatePoint : apm_t02a03_E3 :=
+  rightTubeCorePolarReconstruction arrivalTransverseCandidateCircle
+    arrivalTransverseCandidateNormal
+
+theorem arrivalTransverseCandidatePoint_mem_rightTube :
+    arrivalTransverseCandidatePoint ∈ apm_t02a03_rightTube := by
+  apply reconstructionMemRightTube_rightTubeCorePolar
+  unfold arrivalTransverseCandidateNormal
+  rw [Complex.norm_real, Real.norm_eq_abs, abs_le]
+  have hb := arrivalTransverseCandidate_norm_bounds
+  constructor <;> linarith
+
+theorem rightTubeCorePlanarComplex_arrivalTransverseCandidatePoint :
+    rightTubeCorePlanarComplex arrivalTransverseCandidatePoint =
+      arrivalTransverseCandidate := by
+  have hs := NormedSpace.norm_smul_normalize arrivalTransverseCandidate
+  rw [show rightTubeCorePlanarComplex arrivalTransverseCandidatePoint =
+      (‖arrivalTransverseCandidate‖ : ℝ) •
+        NormedSpace.normalize arrivalTransverseCandidate by
+    apply Complex.ext <;>
+      simp [arrivalTransverseCandidatePoint, arrivalTransverseCandidateNormal,
+        arrivalTransverseCandidateCircle, rightTubeCorePlanarComplex,
+        rightTubeCorePolarReconstruction]]
+  exact hs
+
+theorem arrivalTransverseCandidatePoint_not_mem_leftCore :
+    arrivalTransverseCandidatePoint ∉ Set.range apm_t02a03_leftCore := by
+  intro hmem
+  obtain ⟨s, hs⟩ := hmem
+  have hp := congrArg Complex.re
+    rightTubeCorePlanarComplex_arrivalTransverseCandidatePoint
+  have hx := congrArg (fun q : apm_t02a03_E3 => q 0) hs
+  have hcos := Real.cos_le_one s
+  norm_num [rightTubeCorePlanarComplex, arrivalTransverseCandidate,
+    Complex.mul_re, Complex.mul_im] at hp
+  simp [apm_t02a03_leftCore] at hx
+  linarith
+
+noncomputable def arrivalTransverseCandidateSubtype :
+    RightTubeMinusLeftCore :=
+  ⟨arrivalTransverseCandidatePoint,
+    arrivalTransverseCandidatePoint_mem_rightTube,
+    arrivalTransverseCandidatePoint_not_mem_leftCore⟩
+
+/-- The supported time-only correction still has an actual zero in the
+frozen right-tube complement, so the final construction must depend on the
+ambient point or use additional legs. -/
+theorem arrivalTransverseCorrection_actual_zero :
+    (((2 - 2 * (arrivalTwentyFourTwentyFive : ℝ) : ℝ) : ℂ) *
+          positiveRealPlanarWaypointMap arrivalTransverseCandidateSubtype +
+        ((2 * (arrivalTwentyFourTwentyFive : ℝ) - 1 : ℝ) : ℂ) *
+          rightTubeCorePlanarComplex arrivalTransverseCandidateSubtype.1 +
+        arrivalTransverseCorrection arrivalTwentyFourTwentyFive) = 0 := by
+  apply (arrivalTransverseCorrection_eq_zero_iff
+    arrivalTwentyFourTwentyFive arrivalTransverseCandidateSubtype).2
+  have hp := rightTubeCorePlanarComplex_arrivalTransverseCandidatePoint
+  have hre := congrArg Complex.re hp
+  have him := congrArg Complex.im hp
+  norm_num [rightTubeCorePlanarComplex, arrivalTransverseCandidate,
+    Complex.mul_re, Complex.mul_im] at hre him
+  have hp0 : arrivalTransverseCandidateSubtype.1 0 = 25 / 21 := by
+    change arrivalTransverseCandidatePoint 0 = 25 / 21
+    linarith
+  have hp1 : arrivalTransverseCandidateSubtype.1 1 = -552 / 625 := by
+    change arrivalTransverseCandidatePoint 1 = -552 / 625
+    linarith
+  constructor
+  · norm_num [arrivalTwentyFourTwentyFive]
+    linarith [hp0]
+  · norm_num [arrivalTwentyFourTwentyFive]
+    linarith [hp1]
+
 end ConstructionTargets.T02A03GeometricTubeDeformation
 
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeNormalComplex_eq_zero_iff
@@ -3892,6 +3997,7 @@ end ConstructionTargets.T02A03GeometricTubeDeformation
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.continuous_arrivalTransverseCorrection
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.arrivalTransverseCorrection_eq_zero_iff
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.arrivalTransverseCorrection_threeQuarters_ne_zero
+#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.arrivalTransverseCorrection_actual_zero
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_twiceCorrected_departure_zero_coordinates
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_twiceCorrected_departure_zero_normSq
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_twiceCorrected_departure_zero_scalar_bounds
