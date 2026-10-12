@@ -2393,6 +2393,28 @@ theorem twiceCorrectedDepartureExplicitBounds_consistent_at_quarter :
         25 * (1 / 4 : ℝ) ^ 2 := by
   norm_num
 
+/-- The planar coordinate forced by a putative zero at `t = 1/4` lies
+strictly inside the allowed right-tube annulus. -/
+theorem twiceCorrectedDepartureQuarterCandidate_mem_planarAnnulus :
+    (9 / 16 : ℝ) <
+        Complex.normSq
+          (((1 / 4 : ℝ) : ℂ) + ((-33 / 32 : ℝ) : ℂ) * Complex.I) ∧
+      Complex.normSq
+          (((1 / 4 : ℝ) : ℂ) + ((-33 / 32 : ℝ) : ℂ) * Complex.I) <
+        (25 / 16 : ℝ) := by
+  norm_num [Complex.normSq_apply, Complex.mul_re, Complex.mul_im]
+
+/-- At quarter time the explicit bump equation forces imaginary coordinate
+`-33/32`, so the annulus-admissible candidate satisfies both scalar zero
+equations. -/
+theorem twiceCorrectedDepartureQuarterCandidate_scalarEquations :
+    1 - 2 * (1 / 4 : ℝ) +
+          2 * (1 / 4 : ℝ) * (-33 / 32 : ℝ) +
+          ((1 / 4 : ℝ) - 1 / 8) * (3 / 8 - (1 / 4 : ℝ)) = 0 ∧
+      -2 * (1 / 4 : ℝ) * (1 / 4 : ℝ) +
+          (1 / 4 : ℝ) * (1 - 2 * (1 / 4 : ℝ)) = 0 := by
+  norm_num
+
 end ConstructionTargets.T02A03GeometricTubeDeformation
 
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeNormalComplex_eq_zero_iff
@@ -2490,3 +2512,5 @@ end ConstructionTargets.T02A03GeometricTubeDeformation
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_twiceCorrected_departure_zero_bump_polynomial
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_twiceCorrected_departure_zero_explicit_bounds
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.twiceCorrectedDepartureExplicitBounds_consistent_at_quarter
+#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.twiceCorrectedDepartureQuarterCandidate_mem_planarAnnulus
+#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.twiceCorrectedDepartureQuarterCandidate_scalarEquations
