@@ -113890,6 +113890,17 @@
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder/diff validation", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791838490944-7892-bfcafdba",
+     :commands
+     ["git show/diff-tree 17d0c2b6"
+      "lake build ConstructionTargets.PointWedgeVanKampen"
+      "python3 scripts/statement-registry.py check"
+      "commit hash and placeholder checks"],
+     :finding
+     "PASS program STOP: 17d0c2b6 by topo-2 adds the strict-factor identification with the literal actual-span map plus documentation, exactly within scope and new since history. Source d80402c5..., documentation 24cf93dc..., fixture 0bca6ce3..., registry 131/131, and placeholders 0->0 reproduce. It first uses the reviewed whisker-to-map formula, then the literal global-left-restriction map theorem; the inverse strict-span morphism and its direction are unchanged across the representation boundary. Fresh build passes with standard axioms. Evaluating that actual-span map, normalizing the unit/right factors, point-span transport, counits, and B6/B12 remain explicitly listed."},
     :commit "17d0c2b652008083bd237bb4d5e502b5cef68d8c",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
@@ -113900,7 +113911,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113921,7 +113932,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: The left strict-span factor is the reconstructed left restriction map of the inverse span comparison.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: The reconstructed left strict factor is identified with the literal actual-span map.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -114452,7 +114463,11 @@
     {:job 2,
      :commit "9f33f28420a506f4a1ab8cf487d2463271ce13de",
      :reason
-     "The left strict-span factor is the reconstructed left restriction map of the inverse span comparison."}]}
+     "The left strict-span factor is the reconstructed left restriction map of the inverse span comparison."}
+    {:job 3,
+     :commit "17d0c2b652008083bd237bb4d5e502b5cef68d8c",
+     :reason
+     "The reconstructed left strict factor is identified with the literal actual-span map."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
