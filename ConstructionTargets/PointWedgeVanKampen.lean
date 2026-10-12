@@ -585,6 +585,26 @@ theorem genericPointWedgeIdentityOuterLeftRoundTrip_eq_map :
         Q.left.map ((eK.funInvIdAssoc (l ⋙ eL.functor)).inv.app z) := by
   rfl
 
+/-- The forward right overlap round-trip factor is the corresponding
+equivalence component mapped by the coordinate representation. -/
+theorem genericPointWedgeIdentityOuterRightRoundTrip_eq_map :
+    let r := genericPointWedgeActualRight x₀ y₀ M N
+    let eK := genericPointWedgeOverlapGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let eR := genericPointWedgeRightGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let Q := genericPointWedgeIdentityCoordinateSpan x₀ y₀
+    let z : FundamentalGroupoid (genericPointWedgeOverlapPiece x₀ y₀ M N) :=
+      FundamentalGroupoid.mk
+        ⟨quotientMap x₀ y₀ (.inl x₀),
+          ⟨⟨.inl x₀, by trivial, rfl⟩,
+            ⟨.inr y₀, by trivial,
+              (Quotient.sound (Relation.EqvGen.rel _ _ Rel.base)).symm⟩⟩⟩
+    (Functor.isoWhiskerRight
+      (eK.funInvIdAssoc (r ⋙ eR.functor)) Q.right).hom.app z =
+        Q.right.map ((eK.funInvIdAssoc (r ⋙ eR.functor)).hom.app z) := by
+  rfl
+
 /-- The middle factor in the reverse coordinate glue evaluates at the image
 of the chosen overlap representative under the overlap equivalence. -/
 theorem genericPointWedgeIdentityCoordinateWhiskeredGlue_app :
@@ -2121,6 +2141,7 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeIdentityOuterLeftSpanFactor_eq_map
 #print axioms genericPointWedgeIdentityOuterRightSpanFactor_eq_map
 #print axioms genericPointWedgeIdentityOuterLeftRoundTrip_eq_map
+#print axioms genericPointWedgeIdentityOuterRightRoundTrip_eq_map
 #print axioms genericPointWedgeIdentityCoordinateWhiskeredGlue_app
 #print axioms genericPointWedgeIdentityCoordinateWhiskeredGlue_app_eq_unitBase
 #print axioms genericPointWedgeIdentityCoordinateSpan_glue_unitBase

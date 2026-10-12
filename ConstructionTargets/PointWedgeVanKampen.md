@@ -342,3 +342,8 @@ postcomposition whiskering from the inverse left overlap round-trip.  It is
 now the left coordinate representation applied to the explicit inverse
 `funInvIdAssoc` component.  Its evaluation, the right round-trip, both mapped
 span comparisons, and the literal lifts remain for B6.
+
+`genericPointWedgeIdentityOuterRightRoundTrip_eq_map` performs the hom-oriented
+right calculation.  Both overlap round-trips are now explicit representation
+maps of their `funInvIdAssoc` components.  Evaluating those two component maps,
+the two span-comparison maps, and the literal lifts remains for B6.
