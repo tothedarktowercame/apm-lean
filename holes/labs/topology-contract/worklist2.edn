@@ -79530,6 +79530,19 @@
     [{:cmd "closure compile",
       :exit 1,
       :finding "Expanded scalar real inner product."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791765913662-6076-ea6060f1",
+     :commands
+     ["git show/check/diff 52919bc16..7e8ef8563"
+      "verify scoped blobs, fixture SHA, ancestry"
+      "lake build ConstructionTargets.t96A07Closure"
+      "lake env lean closure and t96A07 Main"
+      "statement-registry check/fingerprint"
+      "placeholder and axiom checks"],
+     :finding
+     "PASS: 7e8ef85635e80065ef690437f799d78f5ff1dcba adds compiled, sorry-free B9 progress after 52919bc16; its sole changed path is scoped. Closure/blueprint blobs f2c97eea/69b59fb6 and fixture a94c27e2 match. For p2 nonzero, the explicit vector is orthogonal to p and its quadratic derivative has vertical component one, in the correct ambient/tangent representation. Lean gates pass with standard axioms only; registry 131/0, frozen hash 2ba67b04 unchanged, closure/Main placeholders 0/1. STOP lists the p2=0 case and surjectivity assembly, then B10-B13."},
     :commit "7e8ef85635e80065ef690437f799d78f5ff1dcba",
     :changed-paths ["ConstructionTargets/t96A07Closure.lean"],
     :fixture
@@ -79538,7 +79551,7 @@
      "a94c27e207b70d42878e65d3685decfd5aa471a59f9c34af8295be13aa8f7a38"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t96A07/lean/Main.lean"
     "problems/t96A07/status.json"
@@ -79588,6 +79601,9 @@
      :reason :program-milestone-complete}
     {:job 3,
      :commit "52919bc163666e19eb0266a57b9a555af49e3dc7",
+     :reason :program-progress-committed}
+    {:job 4,
+     :commit "7e8ef85635e80065ef690437f799d78f5ff1dcba",
      :reason :program-progress-committed}]}
   {:consumer :t94A10,
    :stop-count 2,
@@ -81387,7 +81403,7 @@
    :other-consumers []}
   {:consumer :t96A07,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -81401,7 +81417,9 @@
     :type
     "explicit tangent with vertical derivative one when p2 nonzero",
     :area "projective-smooth-descent",
-    :proved-in :program-2026-10-11-close-t96a07},
+    :proved-in :program-2026-10-11-close-t96a07,
+    :banked-by :program-2026-10-11-close-t96a07,
+    :banked-commit "7e8ef85635e80065ef690437f799d78f5ff1dcba"},
    :id
    :lemma-constructiontargets-t96a07closure-spheremap-vertical-tangent-of-third-ne-zero,
    :kind :lemma,
