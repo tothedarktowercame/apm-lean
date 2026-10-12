@@ -1,5 +1,6 @@
 import Mathlib
 import Mathlib.Analysis.Calculus.DifferentialForm.Basic
+import ConstructionTargets.t94A10Closure
 
 /-!
 # APM t94A10 — the solid-angle form on punctured three-space
@@ -18,6 +19,7 @@ on the actual punctured space.
 -/
 
 noncomputable section
+open Filter Topology
 
 abbrev apm_t94a10_E3 := EuclideanSpace ℝ (Fin 3)
 abbrev apm_t94a10_Punctured := {x : apm_t94a10_E3 // x ≠ 0}
@@ -120,7 +122,22 @@ theorem apm_t94A10_bridge_solidAngle_closed
     (omega : apm_t94a10_Form 2)
     (homega : apm_t94a10_IsOmega omega) :
     apm_t94a10_IsClosed omega := by
-  sorry
+  have hlocal (x : apm_t94a10_Punctured) :
+      apm_t94a10_ambientExtension omega =ᶠ[𝓝 x.1]
+        ConstructionTargets.T94A10Closure.solidAngleAmbient := by
+    filter_upwards [isOpen_compl_singleton.eventually_mem x.2] with y hy
+    have hy0 : y ≠ 0 := hy
+    ext v
+    rw [apm_t94a10_ambientExtension]
+    rw [dif_pos hy0, homega ⟨y, hy0⟩ v]
+    exact (ConstructionTargets.T94A10Closure.solidAngleAmbient_apply_coordinate y v).symm
+  constructor
+  · intro x
+    exact (hlocal x).differentiableAt_iff.mpr
+      (ConstructionTargets.T94A10Closure.solidAngleAmbient_closed x.1 x.2).1
+  · intro x
+    rw [(hlocal x).extDeriv_eq]
+    exact (ConstructionTargets.T94A10Closure.solidAngleAmbient_closed x.1 x.2).2
 
 /-- Why this unblocks `apm_t94a10`: this is the specialized sphere-period
 and Stokes obstruction in the exact vocabulary available in this file.  Its

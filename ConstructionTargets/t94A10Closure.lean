@@ -16,6 +16,9 @@ def volumeForm : E3 [⋀^Fin 3]→L[ℝ] ℝ where
     change Continuous (fun v : Fin 3 → E3 => Matrix.det (fun i j => v i j))
     fun_prop
 
+@[simp] theorem volumeForm_apply (v : Fin 3 → E3) :
+    volumeForm v = Matrix.det (fun i j => v i j) := rfl
+
 /-- The ambient solid-angle two-form: contraction of the volume form with
 the radial vector, scaled by the inverse cube of the radius. -/
 def solidAngleAmbient (x : E3) : E3 [⋀^Fin 2]→L[ℝ] ℝ :=
@@ -23,6 +26,10 @@ def solidAngleAmbient (x : E3) : E3 [⋀^Fin 2]→L[ℝ] ℝ :=
 
 /-- The scalar radial coefficient of the solid-angle form. -/
 def radialInvCube (x : E3) : ℝ := (‖x‖ ^ 3)⁻¹
+
+/-- The unscaled contraction with the radial vector. -/
+def radialNumerator (x : E3) : E3 [⋀^Fin 2]→L[ℝ] ℝ :=
+  volumeForm.curryLeft x
 
 /-- Coordinate expansion of the ambient solid-angle form. -/
 theorem solidAngleAmbient_apply (x : E3) (v : Fin 2 → E3) :
@@ -79,9 +86,46 @@ theorem hasFDerivAt_radialInvCube (x : E3) (hx : x ≠ 0) :
   field_simp [hnorm]
   ring
 
+/-- The unscaled radial contraction is linear in its base point. -/
+theorem hasFDerivAt_radialNumerator (x : E3) :
+    HasFDerivAt radialNumerator volumeForm.curryLeft x := by
+  simpa [radialNumerator] using volumeForm.curryLeft.hasFDerivAt
+
+/-- Product-rule derivative of the ambient solid-angle form. -/
+theorem hasFDerivAt_solidAngleAmbient (x : E3) (hx : x ≠ 0) :
+    HasFDerivAt solidAngleAmbient
+      ((radialInvCube x) • volumeForm.curryLeft +
+        (((-3 * ‖x‖⁻¹ ^ 5) • innerSL ℝ x).smulRight
+          (volumeForm.curryLeft x))) x := by
+  simpa [solidAngleAmbient, radialInvCube, radialNumerator] using
+    (hasFDerivAt_radialInvCube x hx).smul (hasFDerivAt_radialNumerator x)
+
+/-- The ambient solid-angle form is closed away from the origin. -/
+theorem solidAngleAmbient_closed (x : E3) (hx : x ≠ 0) :
+    DifferentiableAt ℝ solidAngleAmbient x ∧ extDeriv solidAngleAmbient x = 0 := by
+  have hd := hasFDerivAt_solidAngleAmbient x hx
+  refine ⟨hd.differentiableAt, ?_⟩
+  ext v
+  rw [extDeriv_apply hd.differentiableAt]
+  simp_rw [(hd.continuousAlternatingMap_apply_const _).fderiv]
+  simp only [ContinuousLinearMap.flipAlternating_apply_apply,
+    ContinuousLinearMap.add_apply, ContinuousLinearMap.smul_apply,
+    ContinuousLinearMap.smulRight_apply, smul_eq_mul]
+  simp [Fin.sum_univ_three, volumeForm_apply, Matrix.det_fin_three, Fin.removeNth,
+    Fin.succAbove, PiLp.inner_apply, real_inner_eq_re_inner]
+  have hn : ‖x‖ ≠ 0 := (norm_pos_iff.mpr hx).ne'
+  rw [show radialInvCube x = ‖x‖⁻¹ ^ 3 by simp [radialInvCube]]
+  field_simp [hn]
+  ring_nf
+  rw [EuclideanSpace.norm_sq_eq]
+  simp [Fin.sum_univ_three]
+  ring
+
 #print axioms solidAngleAmbient_apply
 #print axioms norm_cube_eq_coordinate_denominator
 #print axioms solidAngleAmbient_apply_coordinate
 #print axioms hasFDerivAt_radialInvCube
+#print axioms hasFDerivAt_solidAngleAmbient
+#print axioms solidAngleAmbient_closed
 
 end ConstructionTargets.T94A10Closure
