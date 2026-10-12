@@ -497,6 +497,17 @@
       "rg -n '\\b(sorry|admit|axiom)\\b' ConstructionTargets/SurfaceClassification.lean",
       :exit 1,
       :expected-exit 1}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791765400175-6066-26841148",
+     :commands
+     ["git scope/diff/hash checks at 966eeee9b15271adc67ac1f0ec106539dc04a7fa"
+      "renamed fixture and module: lake env lean"
+      "statement registry and placeholder scans"
+      "lake build ConstructionTargets.SurfaceClassification"],
+     :finding
+     "Recorded new-file scope, blob, and frozen fixture hash match. The Euclidean-plane specialization preserves outer/inner Good, inner-in-outer nesting, original chart-target containment, and finite inner-interior coverage. It makes no triangulation or classification claim. Fixture/module compile; registry 131/0; build 8245 jobs; axioms propext, choice, Quot.sound; source placeholders 0; consumer sorry counts 2/2/3/3/3/1/3."},
     :commit "966eeee9b15271adc67ac1f0ec106539dc04a7fa",
     :changed-paths ["ConstructionTargets/SurfaceClassification.lean"],
     :fixture
@@ -505,7 +516,7 @@
      "146359f9b6d66784df548d61fa6ce5fd8fbc113f5184b1b660856e2d3232d894"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/SurfaceClassification.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/topo3/surface-classification/finite-nested-coordinate-triangle-cover",
@@ -629,7 +640,7 @@
      "The existing reviewed results provide finite covers by compact embedded chart triangles and, more strongly, finite inner triangles nested in outer chart triangles. They do not supply compatible intersections along common faces, an abstract finite simplicial complex, or a homeomorphism from its realization, so treating them as the requested triangulation would be a facade. The compiled prerequisite specializes the genuine nested-cover theorem to EuclideanSpace Real (Fin 2), exactly the smooth-surface model used by the route, while retaining all geometric conclusions. The next theorem must perform the overlap refinement and gluing needed for an actual finite triangulation.",
      :seat "topo-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/SurfaceClassification.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/topo3/surface-classification/triangulation-first-milestone",
@@ -20016,7 +20027,7 @@
    :other-consumers [:t01J01 :t03J02]}
   {:consumer :t00A02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -20030,7 +20041,10 @@
     :type
     "forall {M : Type*} [TopologicalSpace M] [T2Space M] [ChartedSpace (EuclideanSpace Real (Fin 2)) M] [CompactSpace M], let hd : Module.finrank Real (EuclideanSpace Real (Fin 2)) = 2 := by simp; exists (s : Finset M) (r : M -> Real), (forall x in s, SurfaceNestedTriangleCover.Good (CompactSurfaceTriangleCover.planeChart hd x) x (r x) and SurfaceNestedTriangleCover.Good (CompactSurfaceTriangleCover.planeChart hd x) x (r x / 2) and Set.range (SurfaceNestedTriangleCover.triangle (CompactSurfaceTriangleCover.planeChart hd x) x (r x / 2)) subset SurfaceNestedTriangleCover.triangle (CompactSurfaceTriangleCover.planeChart hd x) x (r x) '' StandardTriangleEmbedding.interiorParameters) and (forall y : M, exists x in s, y in SurfaceNestedTriangleCover.triangle (CompactSurfaceTriangleCover.planeChart hd x) x (r x / 2) '' StandardTriangleEmbedding.interiorParameters)",
     :area "surface-classification",
-    :proved-in :routes-2026-10-10-surface-triangulation-topo3-r2},
+    :proved-in :routes-2026-10-10-surface-triangulation-topo3-r2,
+    :banked-by
+    :routes-2026-10-11-surface-finite-nested-triangle-cover-topo3-r1,
+    :banked-commit "966eeee9b15271adc67ac1f0ec106539dc04a7fa"},
    :id
    :lemma-constructiontargets-surfaceclassification-compactsurfacefinitenestedtrianglecover,
    :kind :lemma,
