@@ -1972,6 +1972,30 @@ theorem rotatedEndpointWaypoint_corrected_departure_eq_zero_iff
     · simpa [rotatedEndpointWaypoint, Complex.mul_re, Complex.mul_im]
         using him
 
+/-- A zero of the transversely corrected departure leg occurs at positive
+time and forces explicit real and imaginary coordinates. -/
+theorem rotatedEndpointWaypoint_corrected_departure_zero_coordinates
+    (t : unitInterval) (p : RightTubeMinusLeftCore)
+    (hz : (((1 - 2 * (t : ℝ) : ℝ) : ℂ) +
+        ((2 * (t : ℝ) : ℝ) : ℂ) * rotatedEndpointWaypoint p +
+        (((t : ℝ) * (1 - 2 * (t : ℝ)) : ℝ) : ℂ) * Complex.I) = 0) :
+    0 < (t : ℝ) ∧
+      (rightTubeCorePlanarComplex p.1).re = (1 - 2 * (t : ℝ)) / 2 ∧
+      (rightTubeCorePlanarComplex p.1).im =
+        -(1 - 2 * (t : ℝ)) / (2 * (t : ℝ)) := by
+  have heq :=
+    (rotatedEndpointWaypoint_corrected_departure_eq_zero_iff t p).mp hz
+  have ht0 : 0 ≤ (t : ℝ) := t.2.1
+  have htpos : 0 < (t : ℝ) := by
+    by_contra h
+    have htzero : (t : ℝ) = 0 := le_antisymm (le_of_not_gt h) ht0
+    rw [htzero] at heq
+    norm_num at heq
+  refine ⟨htpos, ?_, ?_⟩
+  · nlinarith [heq.2]
+  · field_simp
+    nlinarith [heq.1]
+
 end ConstructionTargets.T02A03GeometricTubeDeformation
 
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeNormalComplex_eq_zero_iff
@@ -2047,3 +2071,4 @@ end ConstructionTargets.T02A03GeometricTubeDeformation
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_departure_zero_support_pos
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_transverse_correction_ne_zero_at_departure_zero
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_corrected_departure_eq_zero_iff
+#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_corrected_departure_zero_coordinates
