@@ -19629,6 +19629,19 @@
      {:cmd "rg forbidden tokens in scoped file",
       :exit 1,
       :expected-exit 1}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791792888258-6638-64f912f9",
+     :commands
+     ["git show/diff-tree 76f3bd9b5"
+      "sha256sum /tmp/pairhomnat.lean"
+      "lake env lean /tmp/pairhomnat.lean"
+      "lake env lean ConstructionTargets/ManifoldFundamentalClass.lean"
+      "python3 scripts/statement-registry.py check"
+      "git diff --check; rg placeholder/forbidden counts"],
+     :finding
+     "PASS: 76f3bd9b5 changes only the scoped module and its blob is current; fixture SHA-256 matches. Frozen type and module compile. The inverse mapHomologyIso naturality orientation composes correctly with homologyMap of the chain square across the forgetful boundary. Registry 131/131; standard axioms only; no scoped placeholders. Counts unchanged: t00J02 bridge_1=1, sorry=1; t98A02 sorry=1."},
     :commit "76f3bd9b52822280fc3ffae475130a0c79340ceb",
     :changed-paths
     ["ConstructionTargets/ManifoldFundamentalClass.lean"],
@@ -19638,7 +19651,7 @@
      "aac31004a9d20fa635e51b7d3c62825d311041cf414a588d624f3a1ed2606084"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/manifold-fundamental-class/model-transport",
@@ -19712,7 +19725,7 @@
       "aac31004a9d20fa635e51b7d3c62825d311041cf414a588d624f3a1ed2606084"},
      :seat "topo-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -28147,7 +28160,7 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -28160,7 +28173,10 @@
     [:routes-2026-10-10-manifold-fundamental-class-topo3-r2],
     :type "exact type in fixture",
     :area "manifold-fundamental-class",
-    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2,
+    :banked-by
+    :routes-2026-10-12-mfclass-relative-homology-pair-naturality-r1,
+    :banked-commit "76f3bd9b52822280fc3ffae475130a0c79340ceb"},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-integralrelativehomologycomparisonw,
    :kind :lemma,
