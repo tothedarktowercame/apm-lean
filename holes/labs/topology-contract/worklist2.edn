@@ -74839,55 +74839,54 @@
    :current-residual "Elect B2 or route B1 residual.",
    :other-consumers []}
   {:consumer :t96J02,
-   :stop-count 1,
+   :stop-count 2,
    :review-finding
    "Deterministic defect: the STOP commits no B2 progress; e949a5129 is the already-reviewed B1 repair, contains no standardPairingData or six-edge/orbit/quotient comparison, and its actual SHA-256 is 8d3f275f0298df761fad9b234b1cbb764e812925a1c078e4d95347aa7b84f885, not the recorded fixture hash. Extend Mathlib: state and prove the missing theorem in scope.",
    :evidence
    {:placeholder-delta 0,
-    :residual "Implement B2 instances.",
+    :residual "Complete B2 from torusRP2Pair and torusRP2Sign.",
     :outcome :stop,
-    :warnings ["No scoped change committed."],
+    :warnings [],
     :missing-theorems
     [{:name
       "ConstructionTargets.PolygonSurfacePiOne.standardPairingData",
       :type
       "standard and six-edge PairingData with orbit and quotient comparisons",
-      :status :not-started,
+      :status :partial,
       :consumers [:t96J02 :t92J05 :t94J04 :t97A01 :t97A03],
       :depends-on
       ["ConstructionTargets.PolygonSurfacePiOne.PairingData"],
       :area "polygon-surface-pi1"}],
-    :statement-hashes {:registry "131/0"},
+    :statement-hashes
+    {:registry "131/0",
+     :module "189a1a78b675e41fe713050f6b74064f7bfc8f74"},
     :disposition :stop,
     :axioms [],
     :author "topo-6",
     :reason
-    "B2 is not completed: compiled B1 exists, but standard PairingData requires explicit general Fin(4g)/Fin(2g) involutions, one-vertex EqvGen proofs, orbit equivalences, and generated-relation equality; no false boundary was established this invocation.",
+    "Partial B2: six-edge involution and signs compile; PairingData oneVertex, orbit equivalence, relation equality, quotient comparison, and general standardPairingData remain.",
     :commands
     [{:cmd "lake build ConstructionTargets.PolygonSurfacePiOne",
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check",
       :exit 0,
-      :output "131/0"}],
+      :output "131/0"}
+     {:cmd "comment-stripped placeholder scan", :exit 0, :output "0"}
+     {:cmd "git show --check 0aedfe204", :exit 0}],
     :diagnostic-history
-    [{:cmd "inspect from /home/joe/code",
-      :exit 2,
-      :correction "reran in /home/joe/code/apm-lean"}],
-    :review
-    {:outcome :fail,
-     :seat "codex-7",
-     :job "invoke-1791834665843-7806-500d00ee",
-     :finding
-     "Deterministic defect: the STOP commits no B2 progress; e949a5129 is the already-reviewed B1 repair, contains no standardPairingData or six-edge/orbit/quotient comparison, and its actual SHA-256 is 8d3f275f0298df761fad9b234b1cbb764e812925a1c078e4d95347aa7b84f885, not the recorded fixture hash. Extend Mathlib: state and prove the missing theorem in scope."},
-    :commit "e949a5129",
-    :changed-paths [],
+    [{:cmd "initial Lean check",
+      :exit 1,
+      :correction
+      "replaced unavailable constructor and removed unfinished relation proof"}],
+    :commit "0aedfe204",
+    :changed-paths ["ConstructionTargets/PolygonSurfacePiOne.lean"],
     :fixture
     {:path "ConstructionTargets/PolygonSurfacePiOne.lean",
      :sha256
-     "8d3f275fb1a1f6717a934377659932acaa40e2c09d75b9775f3378e6267cc7d2"},
+     "c079c9d965537cd9a0c270a763e2b4bedccd298d468ad95a02f83e66fc9fbe11"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :repair,
+   :state :needs-owner,
    :scope ["ConstructionTargets/PolygonSurfacePiOne.lean"],
    :dag-node "ConstructionTargets/PolygonSurfacePiOne.blueprint.md/B2",
    :acceptance
@@ -74917,7 +74916,7 @@
      :infrastructure-packets
      :review-outcomes]},
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance {:strategy "Rerun priorities after B2 review."},
