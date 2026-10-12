@@ -2533,6 +2533,43 @@ theorem rotatedEndpointWaypoint_twiceCorrected_departure_quarter_zero :
   norm_num [departureQuarter, correctedDepartureBump,
     twiceCorrectedDepartureQuarterCandidate, Complex.mul_re, Complex.mul_im]
 
+/-- Exact obstruction for any endpoint-fixed correction confined to the real
+direction: on the compiled complement point above, its quarter-time value must
+avoid `1/64`.  This isolates why changing only the bump profile cannot certify
+nonvanishing without controlling that value. -/
+theorem realDepartureCorrection_quarterCandidate_eq_zero_iff
+    (b : unitInterval → ℝ) :
+    (((1 - 2 * (departureQuarter : ℝ) : ℝ) : ℂ) +
+        ((2 * (departureQuarter : ℝ) : ℝ) : ℂ) *
+          rotatedEndpointWaypoint
+            twiceCorrectedDepartureQuarterCandidateSubtype +
+        (((departureQuarter : ℝ) * (1 - 2 * (departureQuarter : ℝ)) : ℝ) : ℂ) *
+          Complex.I + (b departureQuarter : ℂ)) = 0 ↔
+      b departureQuarter = 1 / 64 := by
+  rw [show rotatedEndpointWaypoint
+      twiceCorrectedDepartureQuarterCandidateSubtype =
+      -Complex.I * twiceCorrectedDepartureQuarterCandidate by
+    unfold rotatedEndpointWaypoint
+    change -Complex.I * rightTubeCorePlanarComplex
+      twiceCorrectedDepartureQuarterCandidatePoint = _
+    rw [rightTubeCorePlanarComplex_quarterCandidatePoint]]
+  let x := b departureQuarter
+  change (((1 - 2 * (departureQuarter : ℝ) : ℝ) : ℂ) +
+      ((2 * (departureQuarter : ℝ) : ℝ) : ℂ) *
+        (-Complex.I * twiceCorrectedDepartureQuarterCandidate) +
+      (((departureQuarter : ℝ) * (1 - 2 * (departureQuarter : ℝ)) : ℝ) : ℂ) *
+        Complex.I + (x : ℂ)) = 0 ↔ x = 1 / 64
+  constructor
+  · intro h
+    have hre := congrArg Complex.re h
+    norm_num [departureQuarter, twiceCorrectedDepartureQuarterCandidate,
+      Complex.mul_re, Complex.mul_im] at hre ⊢
+    linarith
+  · intro hx
+    apply Complex.ext <;>
+      norm_num [departureQuarter, twiceCorrectedDepartureQuarterCandidate,
+        Complex.mul_re, Complex.mul_im, hx]
+
 end ConstructionTargets.T02A03GeometricTubeDeformation
 
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeNormalComplex_eq_zero_iff
@@ -2623,6 +2660,7 @@ end ConstructionTargets.T02A03GeometricTubeDeformation
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.correctedDepartureBump_ne_zero_at_corrected_zero
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_twiceCorrected_departure_eq_zero_iff
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_twiceCorrected_departure_quarter_zero
+#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.realDepartureCorrection_quarterCandidate_eq_zero_iff
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_twiceCorrected_departure_zero_coordinates
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_twiceCorrected_departure_zero_normSq
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_twiceCorrected_departure_zero_scalar_bounds
