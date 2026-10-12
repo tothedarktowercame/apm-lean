@@ -177,4 +177,16 @@ theorem circleZeroSection_locallyFlat :
   intro z
   exact ⟨circleZeroSectionFlatNeighborhood z⟩
 
+theorem embeddedCircleLocallyFlat_of_zeroSection_normalForm
+    {M : Type} [TopologicalSpace M] (j : C(Circle, M))
+    (ambient : M ≃ₜ Circle × ℝ) (param : Circle ≃ₜ Circle)
+    (h : (⟨ambient, ambient.continuous⟩ : C(M, Circle × ℝ)).comp j =
+      circleZeroSection.comp
+        (⟨param, param.continuous⟩ : C(Circle, Circle))) :
+    EmbeddedCircleLocallyFlat j := by
+  apply (embeddedCircleLocallyFlat_homeomorph_iff ambient j).mp
+  rw [h]
+  exact (embeddedCircleLocallyFlat_reparam_iff circleZeroSection param).mpr
+    circleZeroSection_locallyFlat
+
 end ConstructionTargets.SurfaceSchoenflies
