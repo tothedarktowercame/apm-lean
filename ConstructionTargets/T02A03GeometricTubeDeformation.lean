@@ -1926,6 +1926,26 @@ theorem rotatedEndpointWaypoint_departure_zero_support_pos
     exact rightTubeCorePlanarComplex_ne_zero p.1 p.2.1 hz
   exact mul_pos htpos (by linarith)
 
+/-- The natural endpoint-fixed transverse term is nonzero at every zero of
+the uncorrected departure leg.  A subsequent global zero-locus argument must
+still show that this correction creates no new zeros. -/
+theorem rotatedEndpointWaypoint_transverse_correction_ne_zero_at_departure_zero
+    (t : unitInterval) (p : RightTubeMinusLeftCore)
+    (ht : (t : ℝ) ≤ 1 / 2)
+    (hz : (((1 - 2 * (t : ℝ) : ℝ) : ℂ) +
+      ((2 * (t : ℝ) : ℝ) : ℂ) * rotatedEndpointWaypoint p) = 0) :
+    (((1 - 2 * (t : ℝ) : ℝ) : ℂ) +
+        ((2 * (t : ℝ) : ℝ) : ℂ) * rotatedEndpointWaypoint p +
+        (((t : ℝ) * (1 - 2 * (t : ℝ)) : ℝ) : ℂ) * Complex.I) ≠ 0 := by
+  rw [hz, zero_add]
+  intro h
+  have him : (t : ℝ) * (1 - 2 * (t : ℝ)) = 0 := by
+    simpa only [Complex.mul_im, Complex.ofReal_re, Complex.ofReal_im,
+      Complex.I_re, Complex.I_im, mul_one, zero_mul, add_zero,
+      Complex.zero_im] using congrArg Complex.im h
+  have hpos := rotatedEndpointWaypoint_departure_zero_support_pos t p ht hz
+  exact (ne_of_gt hpos) him
+
 end ConstructionTargets.T02A03GeometricTubeDeformation
 
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeNormalComplex_eq_zero_iff
@@ -1999,3 +2019,4 @@ end ConstructionTargets.T02A03GeometricTubeDeformation
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_departure_zero_time_pos
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_departure_zero_time_lt_half
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_departure_zero_support_pos
+#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_transverse_correction_ne_zero_at_departure_zero
