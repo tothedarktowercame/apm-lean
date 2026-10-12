@@ -315,7 +315,7 @@ theorem exact_sphereParam_identity
     (eta : E3 → E3 [⋀^Fin 1]→L[ℝ] ℝ)
     (omega : E3 → E3 [⋀^Fin 2]→L[ℝ] ℝ)
     (heta : ∀ x, x ≠ 0 → DifferentiableAt ℝ eta x)
-    (hexact : ∀ x, extDeriv eta x = omega x)
+    (hexact : ∀ x, x ≠ 0 → extDeriv eta x = omega x)
     (homega : ∀ x, x ≠ 0 → omega x = solidAngleAmbient x)
     (p : ℝ × ℝ) :
     fderiv ℝ (spherePullbackLongCoeff eta) p (1, 0) -
@@ -331,7 +331,7 @@ theorem exact_sphereParam_identity
   have heval := congrArg (fun a => a ![(1, 0), (0, 1)]) hpull
   change (extDeriv (spherePullbackOneForm eta) p) ![(1, 0), (0, 1)] = _ at heval
   rw [extDeriv_apply hpullDiff] at heval
-  rw [hexact, homega _ (sphereParam_ne_zero p)] at heval
+  rw [hexact _ (sphereParam_ne_zero p), homega _ (sphereParam_ne_zero p)] at heval
   simp [Fin.sum_univ_two, spherePullbackOneForm] at heval
   have hlongfun :
       (fun x => (eta (sphereParam x)) (⇑(fderiv ℝ sphereParam x) ∘ ![(0, 1)])) =
