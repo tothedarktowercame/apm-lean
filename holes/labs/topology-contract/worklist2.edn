@@ -74482,6 +74482,17 @@
       :exit 0,
       :output "B1,B7-B12 certified"}
      {:cmd "git show --check HEAD", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791830739695-7721-1ad5129f",
+     :commands
+     ["git show 1f54f90d8:ConstructionTargets/PolygonSurfacePiOne.blueprint.md"
+      "git rev-parse/diff-tree/show --check 1f54f90d8; sha256sum"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS: commit scope is the blueprint only; SHA-256 matches the fixture. B1-B12 are mathematically coherent, dependencies and hypotheses suffice, Lean types match the statements, and PairingOrbit remains the generator index through B7/B9/B11; B8/B10 are index-neutral and B12 reindexes only by proved equivalences."},
     :commit "1f54f90d8",
     :changed-paths
     ["ConstructionTargets/PolygonSurfacePiOne.blueprint.md"],
@@ -74493,7 +74504,7 @@
     "Certified: B1 uses PairingOrbit as the generator type; B7/B9/B11 retain that index, B8/B10 are representation-independent, and B12 reindexes only by equivalences with both inverse laws.",
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/PolygonSurfacePiOne.blueprint.md"],
    :dag-node "TOPOLOGY-ROUTES.md/polygon-surface-pi1",
    :acceptance
@@ -74518,7 +74529,7 @@
      :infrastructure-packets
      :review-outcomes]},
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -83701,7 +83712,7 @@
      "8e2b05fc2da21acb000c622b502360f2835a454e138dbfeb505f29eedb0c7769"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["ConstructionTargets/SuppliedCoverAlgebra.lean"
     "ConstructionTargets/SuppliedCoverAlgebra.md"],
@@ -83720,7 +83731,7 @@
    :id :program-2026-10-12-supplied-cover-algebra,
    :kind :reusable-theorem,
    :campaign-priority 40,
-   :fail-count 4,
+   :fail-count 0,
    :depends-on [],
    :program true,
    :other-consumers [:t97A03 :t93J03 :t00A02]}
