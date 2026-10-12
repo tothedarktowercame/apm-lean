@@ -113894,6 +113894,18 @@
     [{:cmd "lean pre-coordinate factor",
       :exit 1,
       :finding "Corrected equivalence syntax."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791814259014-7068-4af81c5f",
+     :commands
+     ["git show/diff-tree 57644bfcf"
+      "sha256/placeholder/registry checks"
+      "lake env lean ConstructionTargets/PointWedgeVanKampen.lean"
+      "lake build ConstructionTargets.PointWedgeVanKampen"
+      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (expected absent)"],
+     :finding
+     "PASS: exact two-file scope and frozen hashes match; placeholders 0->0, registry 131/131. Pre-free-product equivalence is faithfully factored at the coordinate-to-point-span boundary with functor directions intact; standard axioms only. Valid program STOP; split this counit, compare outer factors, then B6/B12."},
     :commit "57644bfcff1373a23435fab4f99e2b227834e75d",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
@@ -113904,7 +113916,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113925,7 +113937,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: The free-product counit is the mapped pre-counit followed by the point-span counit.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: The pre-free-product equivalence now factors through a named pre-coordinate composite.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -114309,7 +114321,11 @@
     {:job 1,
      :commit "e97f4dcff7045aa253bcdcb46aaaf10c143fdf03",
      :reason
-     "The free-product counit is the mapped pre-counit followed by the point-span counit."}]}
+     "The free-product counit is the mapped pre-counit followed by the point-span counit."}
+    {:job 2,
+     :commit "57644bfcff1373a23435fab4f99e2b227834e75d",
+     :reason
+     "The pre-free-product equivalence now factors through a named pre-coordinate composite."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
