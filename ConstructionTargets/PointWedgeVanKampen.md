@@ -397,3 +397,9 @@ the left-span source endpoint without collapsing it to the base object: it is
 the left equivalence applied after the actual-left map to the overlap
 equivalence's inverse/forward round trip.  Evaluating that round trip and its
 endomorphism cast remains before the left injection theorem applies.
+
+`genericPointWedgeIdentityOuterRightSpanComponent_source_eq_nestedObj` gives
+the symmetric source endpoint: the right equivalence follows the actual-right
+map after the same overlap inverse/forward object round trip.  Evaluating the
+two round trips and dependent casts remains before both injection theorems
+apply.
