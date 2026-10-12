@@ -79582,15 +79582,14 @@
      :commit "1ac8a7376",
      :reason :program-progress-committed}]}
   {:consumer :t94A10,
-   :stop-count 1,
+   :stop-count 2,
    :review-finding
    "B8 cites nonexistent Mathlib theorem MeasureTheory.integral2_divergence_prod_of_hasFDerivWithinAt_off_countable. Revise B8 to use the available integral2_divergence_prod_of_hasFDerivAt_off_countable and explicitly supply its ContinuousOn, pointwise HasFDerivAt, and IntegrableOn hypotheses; then re-review the blueprint.",
    :evidence
    {:placeholder-delta 0,
-    :residual "Formalize B1-B4; then B5-B11.",
+    :residual "Re-review blueprint; then formalize B1-B4 and B5-B11.",
     :outcome :stop,
-    :warnings
-    ["Main: 2 placeholders." "Unrelated dirty file preserved."],
+    :warnings ["Main: 2 placeholders."],
     :missing-theorems
     [{:name "ConstructionTargets.T94A10Closure.solidAngleAmbient",
       :type "determinant radial ambient two-form",
@@ -79616,37 +79615,27 @@
       :area "periodic-stokes-square"}],
     :statement-hashes
     {:registry "131/0",
-     :blueprint "968e5ee95f529b6c0f3da2fe3988a8b993dafd0b"},
+     :blueprint "808e174fd0529d3c85b60b506988b0a55526c8e0"},
     :disposition :stop,
     :axioms [],
     :author "topo-6",
-    :reason :blueprint-written,
+    :reason :blueprint-revised,
     :commands
-    [{:cmd "Main compile", :exit 0}
+    [{:cmd "verify Green theorem API and B8 hypotheses", :exit 0}
+     {:cmd "Main compile", :exit 0}
      {:cmd "registry check", :exit 0}
-     {:cmd "placeholder count", :exit 0, :output "2"}
      {:cmd "blueprint node check", :exit 0}
-     {:cmd "git show --check 94c8f5c63", :exit 0}],
-    :diagnostic-history
-    [{:cmd "package-link check",
-      :exit 1,
-      :finding
-      "Canonical authority is not a frame; symlink rule inapplicable."}],
-    :review
-    {:outcome :fail,
-     :seat "codex-7",
-     :job "invoke-1791763334921-6021-3f243fec",
-     :finding
-     "B8 cites nonexistent Mathlib theorem MeasureTheory.integral2_divergence_prod_of_hasFDerivWithinAt_off_countable. Revise B8 to use the available integral2_divergence_prod_of_hasFDerivAt_off_countable and explicitly supply its ContinuousOn, pointwise HasFDerivAt, and IntegrableOn hypotheses; then re-review the blueprint."},
-    :commit "94c8f5c63c4c72026a506d1b7bbdf8addd48f5e4",
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git show --check 2e890e314", :exit 0}],
+    :commit "2e890e314aa6f3a9d846fc01cb336afd0664f039",
     :changed-paths ["ConstructionTargets/t94A10Closure.blueprint.md"],
     :fixture
     {:path "ConstructionTargets/t94A10Closure.blueprint.md",
      :sha256
-     "583bff9e8bec3437e623c82dbbaeadb1e1cb7bf6f9efd26227de5750e3d01c88"},
+     "f1cea2186cd7f79d42b118e44e9cc56db23f668545c19d9d50a62317db3353cd"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope
    ["problems/t94A10/lean/Main.lean"
     "problems/t94A10/status.json"
