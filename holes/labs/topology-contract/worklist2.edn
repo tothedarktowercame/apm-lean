@@ -74888,6 +74888,18 @@
       "#print axioms standardPairingData/standardPairingData_space_homeomorph",
       :exit 0}
      {:cmd "git show --check dc5733b05", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791841626226-7952-454b2ff6",
+     :commands
+     ["git show dc5733b05:ConstructionTargets/PolygonSurfacePiOne.lean | lake env lean /dev/stdin"
+      "#print axioms on frozen B2 declarations"
+      "python3 scripts/statement-registry.py check"
+      "git show --check/hash/diff-tree dc5733b05"
+      "comment-stripped placeholder scan"],
+     :finding
+     "PASS: exact recorded source compiles; sole scoped path and SHA-256 match; registry 131/0, placeholders 0, standard axioms only. The six-edge instance has its exact PairingData oneVertex field, three-orbit equivalence, and generated-relation quotient equivalence. Uniform orientable/nonorientable PairingData, orbit equivalences, relation comparisons, and genuine coinduced-quotient Homeomorph are all present. The earlier empty-progress parent defect is repaired; B2 is discharged."},
     :commit "dc5733b05",
     :commits ["0aedfe204" "dc5733b05"],
     :changed-paths ["ConstructionTargets/PolygonSurfacePiOne.lean"],
@@ -74897,7 +74909,7 @@
      "ab615ed1a9e6a24c1d6b09a6c4b082dadb10c9eb46bd268c8fe954ce81db94bc"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/PolygonSurfacePiOne.lean"],
    :dag-node "ConstructionTargets/PolygonSurfacePiOne.blueprint.md/B2",
    :acceptance
@@ -85053,7 +85065,7 @@
    :other-consumers [:t94J04 :t97A03]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -85065,7 +85077,9 @@
     :reported-by [:routes-2026-10-12-polygon-b2-topo2-r1],
     :type "six-edge PairingData with one vertex",
     :area "polygon-surface-pi1",
-    :proved-in :routes-2026-10-12-polygon-b2-topo2-r1},
+    :proved-in :routes-2026-10-12-polygon-b2-topo2-r1,
+    :banked-by :routes-2026-10-12-polygon-b2-topo2-r1,
+    :banked-commit "dc5733b05"},
    :id
    :lemma-constructiontargets-polygonsurfacepione-torusrp2pairingdata,
    :kind :lemma,
@@ -85073,17 +85087,21 @@
    :other-consumers []}
   {:consumer :portfolio,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance {:lemma "PairingData"},
-   :lemma {:name "PairingData", :reported-by []},
+   :lemma
+   {:name "PairingData",
+    :reported-by [],
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/PolygonSurfacePiOne.lean"]},
    :id :lemma-pairingdata,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}
   {:consumer :t96J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -85095,7 +85113,9 @@
     :reported-by [:routes-2026-10-12-polygon-b2-topo2-r1],
     :type "uniform quotient Homeomorph to Surface",
     :area "polygon-surface-pi1",
-    :proved-in :routes-2026-10-12-polygon-b2-topo2-r1},
+    :proved-in :routes-2026-10-12-polygon-b2-topo2-r1,
+    :banked-by :routes-2026-10-12-polygon-b2-topo2-r1,
+    :banked-commit "dc5733b05"},
    :id
    :lemma-constructiontargets-polygonsurfacepione-standardpairingdata-space-homeomorph,
    :kind :lemma,
