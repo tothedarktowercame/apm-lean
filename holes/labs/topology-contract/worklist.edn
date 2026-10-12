@@ -113850,14 +113850,14 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 5,
+   :stop-count 6,
    :review-finding
    "Blueprint B3 is marked proved but its proof uses the unlisted ConnectedGroupoidSingleObjEquivalence.connectorSingleObjEquivalence (and connector-system representation) instead of only the declared uses; add the actual connector dependency and proof route to B3 uses.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
    :evidence
    {:placeholder-delta {:source-before 0, :source-after 0},
     :residual
-    "Evaluate the canonical descent-overlap component at the fixed overlap base, then substitute the three-factor counits and close B6/B12.",
+    "Evaluate raw overlap glue; map it through three transports; substitute counits; close B6/B12.",
     :outcome :stop,
     :warnings [],
     :missing-theorems
@@ -113871,9 +113871,9 @@
       :area "fundamental-group-wedge-of-circles"}],
     :statement-hashes
     {:source
-     "91957d197eae33ecb165c78e77422716ada20f3de396502df3d988c0b641c15f",
+     "fd5925897fe172b45c818d7c853d6113594d12fb7dc1938df32ce91fb4f892c4",
      :documentation
-     "1657cc42c248db46255d0d000ca7afaca5cc766f9465d0b3d61d57156c710ad2",
+     "2c6ca7026dc90a1d490144f4fb351283ad7fcfaf3e9b6507a1ca900b93cd21db",
      :blueprint
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0",
      :registry "131/131"},
@@ -113881,7 +113881,7 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
     :reason
-    "The predecessor is now the mapped canonical overlap of the named reconstructed global functor.",
+    "Named the raw descent-overlap component before three span transports.",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/PointWedgeVanKampen.lean",
@@ -113890,18 +113890,11 @@
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder/diff validation", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1791833960901-7797-4796b369",
-     :commands
-     ["git show/diff-tree aff8c2cb"
-      "lake build ConstructionTargets.PointWedgeVanKampen"
-      "python3 scripts/statement-registry.py check"
-      "commit hash and placeholder checks"],
-     :finding
-     "PASS program STOP: aff8c2cb by topo-2 adds a named global-restriction glue, its definitional identification with the predecessor, and documentation, exactly within scope and new since history. Source 91957d19..., documentation 1657cc42..., fixture 0bca6ce3..., registry 131/131, and placeholders 0->0 reproduce. Unfolding both sides follows the same open-cover, pseudo-span, coordinate-span, and point-span composite, so rfl is faithful rather than a cross-representation assumption; direction is predecessor=global restriction. Fresh build passes with standard axioms. This is compiled sorry-free progress; evaluating the canonical overlap component, substituting counit factors, and B6/B12 remain explicitly listed."},
-    :commit "aff8c2cb871c3702c79dc1a6b4fea1e41c70b97e",
+    :diagnostic-history
+    [{:cmd "lean full mapped-glue normalization",
+      :exit 1,
+      :finding "Outer transports hide the raw component."}],
+    :commit "0f80d13767beb28cd81839f639693399e7a6943e",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
      "ConstructionTargets/PointWedgeVanKampen.md"],
@@ -113911,7 +113904,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
