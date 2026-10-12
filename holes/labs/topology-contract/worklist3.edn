@@ -826,6 +826,20 @@
      {:cmd
       "git diff --check -- ConstructionTargets/SurfaceSchoenflies.lean",
       :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791817194545-7173-227b2d16",
+     :commands
+     ["git show/diff-tree 5826e19a"
+      "sha256sum fixture"
+      "git diff --check; blob-current"
+      "statement-registry.py check"
+      "rg placeholders"
+      "lake env lean fixture/module"
+      "lake build ConstructionTargets.SurfaceSchoenflies"],
+     :finding
+     "PASS: exact one-file scope; fixture SHA matches; recorded blob current. Continuous image of compact Circle is compact, and elim_finite_subcover yields the stated finite indexed cover with orientation unchanged. Fixture/module/build pass; registry 131/131; source placeholders 0; only standard axioms; pre-existing unused-hj warning."},
     :commit "5826e19a339ddaffddd8abeed28c3bbfbd7d7a61",
     :changed-paths ["ConstructionTargets/SurfaceSchoenflies.lean"],
     :declaration
@@ -836,7 +850,7 @@
      "225e1e486ac81111c253922678840dfcf8e2a855d149093d07d745cb253f664e"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/SurfaceSchoenflies.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/schoenflies/finite",
    :acceptance
@@ -913,7 +927,7 @@
       "225e1e486ac81111c253922678840dfcf8e2a855d149093d07d745cb253f664e"},
      :seat "topo-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/SurfaceSchoenflies.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/topo3/schoenflies-2d/embedded-circle-collar",
@@ -20968,7 +20982,9 @@
    :current-residual "Boundary coordinate comparison.",
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
-   :stop-count 1,
+   :owner-reopen
+   "reopened: a lemma this row reported missing is now banked",
+   :stop-count 0,
    :review-finding
    "Frozen fixture hash mismatch persists: the row top-level :acceptance still records aad5a9cda739c1cbcceb1eca8ab8b33395db8a08c9d68941a87c644f4d13586e and lacks :mode, while /tmp/closedboundarycoords.lean hashes to 7e72195e1214d7580994264481ae57d0ecf87755d31825ab85cbda5f1220c4b1. Evidence-local metadata does not override the row acceptance map. Exact supervisor repair: edit the top-level :acceptance in worklist3.edn, replacing the hash with 7e72195e... and adding :mode :post-build-export-check; also update the duplicated prerequisite acceptance or regenerate it from the authoritative row. Then resubmit. Current fixture compilation, source commit, standard axioms, registry and placeholders were already verified.",
    :implements-lemma
@@ -21005,7 +21021,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/manifold-fundamental-class",
    :acceptance
@@ -21020,7 +21036,7 @@
    :id :routes-2026-10-12-mfclass-boundary-coordinates-r1,
    :kind :reusable-theorem,
    :area "manifold-fundamental-class",
-   :fail-count 4,
+   :fail-count 0,
    :depends-on [:routes-2026-10-12-mfclass-closed-generator-bridge-r1],
    :current-residual "Prove Bool H0 comparison.",
    :other-consumers [:t98A02]}
@@ -28932,7 +28948,7 @@
    :other-consumers [:t98A02]}
   {:consumer :t00A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -28948,7 +28964,9 @@
     :type
     "∀ {M} [TopologicalSpace M] (j : C(Circle,M)), EmbeddedCircleFiniteOpenSubcover j",
     :area "embedded-circle-collar-surface",
-    :proved-in :routes-2026-10-12-surface-finite-cover-r1},
+    :proved-in :routes-2026-10-12-surface-finite-cover-r1,
+    :banked-by :routes-2026-10-12-surface-finite-cover-r1,
+    :banked-commit "5826e19a339ddaffddd8abeed28c3bbfbd7d7a61"},
    :id :lemma-schoenflies-finite-cover,
    :kind :lemma,
    :depends-on
@@ -30079,7 +30097,9 @@
    :depends-on [],
    :other-consumers []}
   {:consumer :t00A02,
-   :stop-count 10,
+   :owner-reopen
+   "reopened: a lemma this row reported missing is now banked",
+   :stop-count 0,
    :review-finding
    "Program-row defect: commit ebbfe625 repairs the B5 mathematics, but changes only SurfaceClassification.blueprint.md and commits no new compiled, sorry-free, standard-axiom result since the prior program-history entry; :missing-theorems is empty. The successful 8245-job build merely rebuilds pre-existing SurfaceClassification code and is not a new milestone. Repair by implementing and committing the next listed milestone (B1 FiniteTwoComplex/Realization or another genuine supporting result), compiling it without placeholders, and recording that proved milestone in :missing-theorems.",
    :implements-lemma
@@ -30135,7 +30155,7 @@
       :result :B4-polygonal-proved}],
     :seat :topo-10},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["ConstructionTargets/SurfaceClassification.lean"
     "ConstructionTargets/SurfaceClassification.md"
@@ -30159,7 +30179,7 @@
    :id :program-2026-10-12-surface-classification,
    :kind :reusable-theorem,
    :campaign-priority 40,
-   :fail-count 3,
+   :fail-count 0,
    :depends-on [],
    :program true,
    :other-consumers [:t00A03 :t91J05 :t92J05 :t94J04 :t96A01 :t97J02],
@@ -30189,7 +30209,7 @@
      "B4 scheduled boundary arcs defined and proved continuous"}]}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -30203,7 +30223,9 @@
      :routes-2026-10-12-mfclass-boundary-coordinates-r1],
     :type "exact type in fixture",
     :area "manifold-fundamental-class",
-    :proved-in :routes-2026-10-12-mfclass-boundary-coordinates-r1},
+    :proved-in :routes-2026-10-12-mfclass-boundary-coordinates-r1,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/ManifoldFundamentalClass.lean"]},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-coefficientclosedboundary-coordinat,
    :kind :lemma,
@@ -30369,10 +30391,14 @@
    :other-consumers []}
   {:consumer :portfolio,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance {:lemma "embeddedCircle_isClosed_range"},
-   :lemma {:name "embeddedCircle_isClosed_range", :reported-by []},
+   :lemma
+   {:name "embeddedCircle_isClosed_range",
+    :reported-by [],
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/SurfaceSchoenflies.lean"]},
    :id :lemma-embeddedcircle-isclosed-range,
    :kind :lemma,
    :depends-on [],
