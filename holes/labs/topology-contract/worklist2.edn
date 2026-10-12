@@ -75548,7 +75548,7 @@
   {:consumer :t96J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 0,
    :review-finding
    "The STOP incorrectly marks the center-contraction milestone proved. commit 194ea4781 establishes only ContractibleSpace for the inner open, which chooses an unspecified contraction point; it neither supplies a deformation retraction nor identifies that point with PairingData.center. B4 explicitly requires U P to deformation-retract to P.center. Add this exact center-based deformation retraction to :missing-theorems and prove it in scope; annular side/overlap are not the only residual.",
    :evidence
@@ -75596,6 +75596,18 @@
       :exit 1,
       :correction
       "removed unfinished declarations; retained exact residual"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791845901940-8028-a1f0222c",
+     :commands
+     ["git show/diff/hash 0e69eda9a"
+      "lake env lean ConstructionTargets/PolygonSurfacePiOne.lean"
+      "python3 scripts/statement-registry.py check"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn"
+      "placeholder scan"],
+     :finding
+     "PASS on STOP after real progress: commit 0e69eda9a adds the compiled annular-side result since the prior failed STOP, and the revised residual now correctly lists the exact Homotopy to P.center fixing P.center plus the overlap Homeomorph and partial openCover. It no longer treats ContractibleSpace as the required center deformation retract. Scope is exact; fixture SHA-256 c504bbc5...ed8 and module blob 74f76224...be3 match. Fresh Lean/worklist gates pass, registry is 131/0, and sorry/admit/axiom counts are 0. Remaining theorem orientations and representation boundaries match B4."},
     :commit "0e69eda9a",
     :changed-paths [],
     :fixture
@@ -75604,7 +75616,7 @@
      "c504bbc5e46e0c5565ec2690cc884c2ced3084763b091e264bdcde548fb74ed8"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope ["ConstructionTargets/PolygonSurfacePiOne.lean"],
    :dag-node "ConstructionTargets/PolygonSurfacePiOne.blueprint.md/B4",
    :acceptance
