@@ -601,7 +601,7 @@
    :implements-lemma
    :lemma-constructiontargets-surfaceclassification-finitetwocomplex-face-card-le-three,
    :phase :implementation,
-   :state :open,
+   :state :superseded,
    :scope ["ConstructionTargets/SurfaceClassification.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/surface/finite-complex",
    :acceptance
@@ -622,6 +622,7 @@
     :route-step "finite 2-complex representation",
     :implementation "Promote."},
    :id :routes-2026-10-12-surface-finite-complex-r1,
+   :superseded-by :program-2026-10-12-surface-classification,
    :kind :reusable-theorem,
    :area "surface-classification",
    :depends-on
@@ -687,7 +688,7 @@
       [:t00A03 :t91J05 :t92J05 :t94J04 :t96A01 :t97J02]},
      :residual "Then construct complex."}},
    :phase :probe,
-   :state :blocked,
+   :state :superseded,
    :scope ["ConstructionTargets/SurfaceClassification.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/topo3/surface-classification/triangulation-first-milestone",
@@ -706,6 +707,7 @@
      "t97J02 classify bridge"],
     :route-step "shared first surface-classification step"},
    :id :routes-2026-10-10-surface-triangulation-topo3-r2,
+   :superseded-by :program-2026-10-12-surface-classification,
    :kind :reusable-theorem,
    :area "surface-classification",
    :depends-on
@@ -29971,7 +29973,39 @@
    :lemma-intervalrelativeclass-eq-generator-of-boundary-coordinates,
    :kind :lemma,
    :depends-on [],
-   :other-consumers []}],
+   :other-consumers []}
+  {:consumer :t00A02,
+   :stop-count 0,
+   :implements-lemma
+   :lemma-constructiontargets-surfaceclassification-compactsmoothsurfacefinitetriangulatio,
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SurfaceClassification.lean"
+    "ConstructionTargets/SurfaceClassification.md"
+    "ConstructionTargets/SurfaceClassification.blueprint.md"],
+   :dag-node "area surface-classification (8 open problems)",
+   :acceptance
+   {:implementation
+    "FOUNDATION PROGRAM (owner, 2026-10-12, Joe: shared foundations before single problems). Surface classification. Supersedes routes-2026-10-12-surface-finite-complex-r1 and routes-2026-10-10-surface-triangulation-topo3-r2 (same file). Builds on the banked compactSurfaceFiniteNestedTriangleCover in this file. Milestones, each banked by :missing-theorems :status :proved: (1) FiniteTwoComplex.FaceBound for every FiniteTwoComplex (face_card_le_three); (2) compactSmoothSurfaceFiniteTriangulation: compact connected smooth 2-manifolds admit finite triangulations, inherited by finite covers (final declaration below); (3) then toward closedOrientableSurface_classification: polygon normal form for a triangulated closed surface, recognition by orientability and Euler characteristic. Expected 1500-3000 lines over many jobs.",
+    :declaration
+    "ConstructionTargets.SurfaceClassification.compactSmoothSurfaceFiniteTriangulation",
+    :type
+    "Compact connected smooth two-manifolds admit finite triangulations (a FiniteTwoComplex whose realization is homeomorphic to the surface), inherited by finite covers; exact statement fixed in the blueprint, every hypothesis used",
+    :axioms :standard-only,
+    :commands
+    ["lake build ConstructionTargets.SurfaceClassification"
+     "python3 scripts/statement-registry.py check"],
+    :blueprint
+    "ConstructionTargets/SurfaceClassification.blueprint.md"},
+   :id :program-2026-10-12-surface-classification,
+   :kind :reusable-theorem,
+   :campaign-priority 40,
+   :fail-count 0,
+   :depends-on [],
+   :program true,
+   :other-consumers
+   [:t00A03 :t91J05 :t92J05 :t94J04 :t96A01 :t97J02]}],
  :consumer-baselines {},
  :statuses
  #{:open

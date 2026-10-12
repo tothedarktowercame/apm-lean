@@ -72783,7 +72783,9 @@
    :current-residual
    "Construct a continuous transverse correction using the positive support factor and prove the corrected departure creates no new zeros; then combine it with the banked safe arrival leg and downstream adapters.",
    :other-consumers []}
-  {:bounded-exception
+  {:owner-park
+   "2026-10-12 claude-14 (Joe: pull topo2 off t02A03 onto shared foundations). Parked behind the covering-subgroup program, which outranks it (campaign-priority 40); when that program ends, resume from the last commit of ConstructionTargets/T02A03GeometricTubeDeformation.lean.",
+   :bounded-exception
    "single-consumer explicit ambient deformation with frozen tube and deletion invariants",
    :consumer :t02A03,
    :owner-reopen
@@ -83294,4 +83296,54 @@
    :id :lemma-radialarrivalcorrection-ne-zero-of-planaraxis,
    :kind :lemma,
    :depends-on [],
-   :other-consumers []}]}
+   :other-consumers []}
+  {:consumer :t94J04,
+   :stop-count 0,
+   :implements-lemma :lemma-subgroup-cover-correspondence,
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/CoveringSubgroupCorrespondence.lean"
+    "ConstructionTargets/CoveringSubgroupCorrespondence.md"
+    "ConstructionTargets/CoveringSubgroupCorrespondence.blueprint.md"],
+   :dag-node "area covering-subgroup-correspondence (6 open problems)",
+   :acceptance
+   {:implementation
+    "FOUNDATION PROGRAM (owner, 2026-10-12, Joe: shared foundations before single problems). Covering-subgroup correspondence, the existence half. Milestones, each banked by :missing-theorems :status :proved: (1) check Mathlib (IsCoveringMap, lifting, any universal-cover or monodromy API) and the repo's Covering*.lean, CoveringMonodromyCosets, DeckGroupQuotientFundamentalGroup, LiteralCoveringPullback before building; (2) for X path-connected, locally path-connected and semilocally simply connected, and H ≤ FundamentalGroup X x, construct the covering space X_H (path classes modulo H) with its covering map; (3) X_H is path-connected and the projection induces FundamentalGroup X_H ≃* H; (4) if H has finite index then the fibres have H.index points; (5) final declaration below. Then the specialisations consumers need: closed surfaces (t94J04, t96A01), the three-circle wedge (t99J01), and finite free covers (t97A03, t00A02). Expected 800-1600 lines over several jobs.",
+    :declaration
+    "ConstructionTargets.CoveringSubgroupCorrespondence.connectedCover",
+    :type
+    "theorem connectedCover {X : Type*} [TopologicalSpace X] [PathConnectedSpace X] [LocPathConnectedSpace X] (hsl : semilocally simply connected X, stated in the blueprint) (x : X) (H : Subgroup (FundamentalGroup X x)) [H.FiniteIndex] : ∃ (E : Type*) (_ : TopologicalSpace E) (p : E → X) (e : E), IsCoveringMap p ∧ PathConnectedSpace E ∧ p e = x ∧ Nat.card (p ⁻¹' {x}) = H.index ∧ Nonempty (FundamentalGroup E e ≃* H)  -- the author fixes the exact hypotheses in the blueprint; every hypothesis must be used",
+    :axioms :standard-only,
+    :commands
+    ["lake build ConstructionTargets.CoveringSubgroupCorrespondence"
+     "python3 scripts/statement-registry.py check"],
+    :blueprint
+    "ConstructionTargets/CoveringSubgroupCorrespondence.blueprint.md"},
+   :id :program-2026-10-12-covering-subgroup-correspondence,
+   :kind :reusable-theorem,
+   :campaign-priority 40,
+   :fail-count 0,
+   :depends-on [],
+   :program true,
+   :other-consumers [:t96A01 :t99J01 :t97A03 :t00A02 :t93J03]}
+  {:consumer :t94J04,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.CoveringSubgroupCorrespondence.connectedCover",
+    :type
+    "Realize a (finite-index) subgroup of pi1 as the fundamental group of a connected cover with index-many sheets"},
+   :lemma
+   {:name
+    "ConstructionTargets.CoveringSubgroupCorrespondence.connectedCover",
+    :reported-by [:owner],
+    :type
+    "Realize a (finite-index) subgroup of pi1 as the fundamental group of a connected cover with index-many sheets",
+    :area "covering-subgroup-correspondence"},
+   :id :lemma-subgroup-cover-correspondence,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t96A01 :t99J01 :t97A03 :t00A02 :t93J03]}]}
