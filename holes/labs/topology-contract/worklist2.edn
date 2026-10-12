@@ -76040,9 +76040,20 @@
       :current-residual "Elect B6.",
       :other-consumers []}],
     :author "topo-8",
-    :disposition :replan},
+    :disposition :replan,
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791848092608-8050-36003a76",
+     :commands
+     ["bb holes/labs/topology-contract/build_step.bb priorities holes/labs/topology-contract/worklist2.edn"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn"
+      "python3 scripts/statement-registry.py check"
+      "EDN dependency/measure audit"],
+     :finding
+     "PASS: strategy row has empty scope, so no commit/fixture applies. Annular side and complete B4 are independently PASS and placeholder-free; the stated zero placeholder delta, one infrastructure packet, and one PASS are coherent. Routing the five polygon consumers to B5 is dependency-valid and follows the blueprint: B5 supplies product-quotient homotopy descent before B6. The next checkpoint correctly waits on B5. Fresh gates report worklist 1017 OK and registry 131/0; priorities reproduce SLSC unblocking 6 and polygon presentation unblocking 5."}},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance {:strategy "Rerun after annular side."},
@@ -76056,7 +76067,7 @@
    :other-consumers []}
   {:consumer :t96J02,
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/PolygonSurfacePiOne.lean"],
    :dag-node "ConstructionTargets/PolygonSurfacePiOne.blueprint.md/B5",
    :acceptance
