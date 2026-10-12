@@ -75002,7 +75002,7 @@
   {:consumer :t96J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "STOP remainder is incomplete: cdbdc979d proves the six-edge involution/signs, orbit equivalence, generated-relation iff, and quotient Equiv, but defines no torusRP2PairingData and proves no six-edge oneVertex field. Thus the claim that six-edge B2 is complete is false, and the required missing theorem is omitted from :missing-theorems. Add torusRP2PairingData/oneVertex to the remaining milestones or state and prove it in scope.",
    :implements-lemma
@@ -75010,66 +75010,59 @@
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Prove oneVertex and turn invariant labels into orbit/quotient equivalences.",
+    "Prove oneVertex, package data, then quotient comparison.",
     :outcome :stop,
     :warnings ["Two imported linter warnings."],
     :missing-theorems
-    [{:name "standardOrbitLabel_pair",
-      :type
-      "canonical standard generator labels are invariant under pairing",
+    [{:name "orientableOrbitEquiv/nonorientableOrbitEquiv",
+      :type "standard pairing-orbit equivalences",
       :status :proved,
       :consumers [:t96J02 :t92J05 :t94J04 :t97A03],
-      :depends-on ["standardPair"],
+      :depends-on ["standardOrbitLabel_pair"],
       :area "polygon-surface-pi1"}
      {:name "standardPairingData_oneVertex",
-      :type "all standard polygon vertices lie in one generated class",
+      :type "all standard vertices form one class",
       :status :not-started,
       :consumers [:t96J02 :t92J05 :t94J04 :t97A03],
       :depends-on ["standardSign_orientable_pair"],
       :area "polygon-surface-pi1"}
      {:name "standardPairingData",
-      :type "uniform data with orbit/quotient comparisons",
+      :type "uniform data and quotient comparison",
       :status :partial,
       :consumers [:t96J02 :t92J05 :t94J04 :t97A03],
       :depends-on
-      ["standardPairingData_oneVertex" "standardOrbitLabel_pair"],
+      ["standardPairingData_oneVertex"
+       "orientableOrbitEquiv/nonorientableOrbitEquiv"],
       :area "polygon-surface-pi1"}],
     :statement-hashes
     {:registry "131/0",
-     :module "759954232ad1da2d6c410b558d102eb883727c79"},
+     :module "ed1ab9436307ded3893ababfa4d062f0f376a90a"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
     :reason
-    "Canonical orientable/crosscap orbit labels and pair invariance compile; uniform oneVertex and orbit/quotient equivalences remain.",
+    "Uniform orbit equivalences compile; oneVertex and quotient comparison remain.",
     :commands
     [{:cmd "lake build ConstructionTargets.PolygonSurfacePiOne",
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check",
       :exit 0,
       :output "131/0"}
-     {:cmd "comment-stripped placeholder scan", :exit 0, :output "0"}
-     {:cmd "git show --check c985d40ba", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1791838435439-7890-0e7c385a",
-     :commands
-     ["git show c985d40ba:ConstructionTargets/PolygonSurfacePiOne.lean | lake env lean /dev/stdin"
-      "python3 scripts/statement-registry.py check"
-      "git show --check/hash/diff-tree c985d40ba"
-      "comment-stripped placeholder scan"],
-     :finding
-     "PASS: exact recorded source compiles; sole changed path and fixture hash match; registry 131/0 and placeholders 0. Orbit labels respect the representation: handlePair 0↔2 and 1↔3 preserves the Bool generator label, while crosscapPair preserves the Fin g block coordinate. This is new compiled progress toward the promised orbit equivalences; oneVertex and construction of those equivalences/quotient comparisons remain explicitly listed."},
-    :commit "c985d40ba",
+     {:cmd "placeholder scan", :exit 0, :output "0"}
+     {:cmd "git show --check 1865af745", :exit 0}],
+    :diagnostic-history
+    [{:cmd "first compile",
+      :exit 1,
+      :correction "fixed relation orientation/coordinates"}],
+    :commit "1865af745",
     :changed-paths ["ConstructionTargets/PolygonSurfacePiOne.lean"],
     :fixture
     {:path "ConstructionTargets/PolygonSurfacePiOne.lean",
      :sha256
-     "a3d92ec0744f6f9b6a6e8daa00a5f8e1af1852e7fd51daaccd0f35e8ef5f8ebf"},
+     "be9ebb87f78a0dc68327100d3f9d8347e32074f9c4aab5a4dbddb5d93042f0c2"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/PolygonSurfacePiOne.lean"],
    :dag-node "ConstructionTargets/PolygonSurfacePiOne.blueprint.md/B2",
    :acceptance
@@ -84662,7 +84655,8 @@
    [:lemma-standardpair
     :lemma-standardpairingdata-onevertex
     :lemma-standardsign-orientable-pair
-    :lemma-standardorbitlabel-pair],
+    :lemma-standardorbitlabel-pair
+    :lemma-orientableorbitequiv-nonorientableorbitequiv],
    :other-consumers [:t92J05 :t94J04 :t97A03]}
   {:consumer :t96J02,
    :phase :lemma,
@@ -84760,4 +84754,21 @@
    :id :lemma-standardorbitlabel-pair,
    :kind :lemma,
    :depends-on [:lemma-standardpair],
+   :other-consumers [:t92J05 :t94J04 :t97A03]}
+  {:consumer :t96J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "orientableOrbitEquiv/nonorientableOrbitEquiv",
+    :type "standard pairing-orbit equivalences"},
+   :lemma
+   {:name "orientableOrbitEquiv/nonorientableOrbitEquiv",
+    :reported-by [:routes-2026-10-12-polygon-b2-completion-topo2-r1],
+    :type "standard pairing-orbit equivalences",
+    :area "polygon-surface-pi1",
+    :proved-in :routes-2026-10-12-polygon-b2-completion-topo2-r1},
+   :id :lemma-orientableorbitequiv-nonorientableorbitequiv,
+   :kind :lemma,
+   :depends-on [:lemma-standardorbitlabel-pair],
    :other-consumers [:t92J05 :t94J04 :t97A03]}]}
