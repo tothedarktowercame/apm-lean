@@ -938,3 +938,10 @@ does the corresponding calculation for the second factor.  After the forward
 strict comparison is mapped through the inverse right equivalence, the
 reconstructed restriction is again the literal actual-span map conjugated by
 its coordinate-target and transported-source counit components.
+
+`genericPointWedgeCoordinateSpanGlobalRestrictionRightComparison_eq_factors`
+recombines the two named right factors in exact single-object group order
+(strict times unit, corresponding to unit followed categorically by strict).  This leaves
+the four endpoint counit components visible, providing the exact expression
+for the next cancellation rather than simplifying across representation
+changes implicitly.

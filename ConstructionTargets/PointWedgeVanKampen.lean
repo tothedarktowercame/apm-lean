@@ -3590,6 +3590,22 @@ theorem genericPointWedgeCoordinateSpanGlobalRestrictionRightStrictFactor_eq_act
   exact genericPointWedgeIdentityGlobalRightRestriction_map
     x₀ y₀ M N hM hN hy hx cM cN _
 
+/-- The inverse right comparison is exactly the ordered product of its named
+unit and strict factors.  This records the recombination boundary before the
+four endpoint counit components are simplified. -/
+theorem genericPointWedgeCoordinateSpanGlobalRestrictionRightComparison_eq_factors :
+    genericPointWedgeCoordinateSpanGlobalRestrictionRightComparison
+        x₀ y₀ M N hM hN hy hx cM cN =
+      genericPointWedgeCoordinateSpanGlobalRestrictionRightStrictFactor
+          x₀ y₀ M N hM hN hy hx cM cN *
+        genericPointWedgeCoordinateSpanGlobalRestrictionRightUnitFactor
+          x₀ y₀ M N hM hN hy hx cM cN := by
+  simpa only [genericPointWedgeCoordinateSpanGlobalRestrictionRightUnitFactor,
+    genericPointWedgeCoordinateSpanGlobalRestrictionRightStrictFactor,
+    SingleObj.comp_as_mul] using
+      (genericPointWedgeCoordinateSpanGlobalRestrictionRightComparison_app
+        x₀ y₀ M N hM hN hy hx cM cN)
+
 /-- The mapped coordinate-span counit's glue square, specialized at the
 unique point-span overlap object.  This is the equation in which its two
 named leg factors are related by the mapped reconstructed glue. -/
@@ -5196,6 +5212,7 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeCoordinateSpanGlobalRestrictionRightStrictFactor
 #print axioms genericPointWedgeCoordinateSpanGlobalRestrictionRightStrictFactor_eq_map
 #print axioms genericPointWedgeCoordinateSpanGlobalRestrictionRightStrictFactor_eq_actual
+#print axioms genericPointWedgeCoordinateSpanGlobalRestrictionRightComparison_eq_factors
 #print axioms genericPointWedgeMappedOpenCoverCounit_namedGlueSquare
 #print axioms genericPointWedgeMappedCoordinateSpanCounit_glueSquare
 #print axioms genericPointWedgeMappedCoordinateSpanSourceGlue
