@@ -113891,6 +113891,19 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder/diff validation", :exit 0}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791784976598-6467-ae87edb8",
+     :commands
+     ["git show/diff-tree 70e9e1410"
+      "sha256/diff/placeholder checks"
+      "statement-registry.py check"
+      "lake env lean ConstructionTargets/PointWedgeVanKampen.lean"
+      "lake build ConstructionTargets.PointWedgeVanKampen"
+      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (expected absent)"],
+     :finding
+     "Exact scoped commit and frozen fixture 0bca6c...8c8b0 verified. For aR.inv the coordinate-right endpoint is the source; the theorem correctly uses its object equality and based-connector lemma to obtain HEq with Iso.refl at y0, preserving dependent indices. Source is sorry-free; hashes and 131/131 registry reproduce; Lean/build pass; only standard axioms. Valid program STOP with compiled progress and residual naming remaining connectors, inclusion images, literal lifts, then B12; final target is absent as reported."},
     :commit "70e9e141091606c47f534597ca5c9fe4df1113f8",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
@@ -113901,7 +113914,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113922,7 +113935,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Left target connector is HEq to the base reflexive connector.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Right inverse-component source connector is HEq to the base reflexive connector.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -114174,7 +114187,11 @@
     {:job 4,
      :commit "8cb2bd00ccb97ac78221c2722efc97ea13f4265d",
      :reason
-     "Left target connector is HEq to the base reflexive connector."}]}
+     "Left target connector is HEq to the base reflexive connector."}
+    {:job 5,
+     :commit "70e9e141091606c47f534597ca5c9fe4df1113f8",
+     :reason
+     "Right inverse-component source connector is HEq to the base reflexive connector."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
