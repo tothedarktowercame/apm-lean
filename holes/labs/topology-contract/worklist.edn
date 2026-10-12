@@ -113850,7 +113850,7 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 10,
+   :stop-count 0,
    :review-finding
    "Recorded fixture hash mismatch: :fixture.sha256 is 0bca6ce32c019fc3053c7f813c26917169cf817375b44d5e722b864b61a526450c1, but ConstructionTargets/PointWedgeVanKampen.blueprint.md at recorded commit c9b3af27 has exact SHA-256 0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0. Re-record the fixture hash for the reviewed commit.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
@@ -113907,7 +113907,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -116985,6 +116985,18 @@
      {:cmd "lake env lean problems/t97A07/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder/diff validation", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791848772380-8060-8b63abf2",
+     :commands
+     ["lake env lean <commit-archive>/ConstructionTargets/t97A07Closure.lean"
+      "lake build ConstructionTargets.t97A07Closure"
+      "lake env lean problems/t97A07/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "git-show sha256/placeholders/scope"],
+     :finding
+     "PASS program STOP. Commit 5125176c adds compiled progress beyond history and changes only scoped closure Lean/blueprint files. Exact source/target/fixture hashes match evidence (fixture 858b28f9...49f720); registry 131/131; sorry/admit remains 1->1, the declared existing Main placeholder. B2 is mathematically sound: chart-source membership yields eventual pointwise equality; the interface packages continuity of both fixed-coordinate families, that equality, and the centre value mfderiv f x. It does not identify varying tangent fibers; transport remains explicit. The blueprint status/proof account is faithful, uses its stated chart-calculus ingredients, and B3 consumes exactly B1+B2. New declarations use only propext, Classical.choice, Quot.sound. Residual B3-B9 milestones are listed."},
     :commit "5125176c03b6cd10e63f6124bda1d607e83cf3e1",
     :changed-paths
     ["ConstructionTargets/t97A07Closure.lean"
@@ -116995,7 +117007,7 @@
      "858b28f951dba2dc109f8bf6b8d88934b79b5b0d4cf84f80dced6b5e6849f720"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A07/lean/Main.lean"
     "problems/t97A07/status.json"
@@ -117011,7 +117023,7 @@
     ["lake env lean problems/t97A07/lean/Main.lean"
      "python3 scripts/statement-registry.py check"]},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: The fixed-chart derivative equals the transported mfderiv pointwise on the common chart neighbourhood.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: B2 interface proved: both coordinate families are continuous, eventually equal, and anchored at mfderiv.",
    :id :program-2026-10-11-close-t97a07,
    :kind :final-adapter,
    :campaign-priority 44,
@@ -117077,7 +117089,11 @@
     {:job 7,
      :commit "387bfd4a0aa97c0e9e2e5aaceeac729569ee4811",
      :reason
-     "The fixed-chart derivative equals the transported mfderiv pointwise on the common chart neighbourhood."}]}
+     "The fixed-chart derivative equals the transported mfderiv pointwise on the common chart neighbourhood."}
+    {:job 8,
+     :commit "5125176c03b6cd10e63f6124bda1d607e83cf3e1",
+     :reason
+     "B2 interface proved: both coordinate families are continuous, eventually equal, and anchored at mfderiv."}]}
   {:consumer :t91J06,
    :stop-count 2,
    :review-finding
@@ -118193,7 +118209,7 @@
    :other-consumers []}
   {:consumer :t97A07,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t97A07Closure.continuousAt_coordinate_mfderiv",
@@ -118205,7 +118221,9 @@
     :type
     "The fixed-chart coordinate representative of a smooth manifold map has a continuous derivative and represents mfderiv by chart transport",
     :area "regular-points-open",
-    :proved-in :program-2026-10-11-close-t97a07},
+    :proved-in :program-2026-10-11-close-t97a07,
+    :banked-by :program-2026-10-11-close-t97a07,
+    :banked-commit "5125176c03b6cd10e63f6124bda1d607e83cf3e1"},
    :id :lemma-t97a07closure-continuousat-coordinate-mfderiv,
    :kind :lemma,
    :depends-on [],
