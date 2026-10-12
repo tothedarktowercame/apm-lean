@@ -20396,57 +20396,78 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :implements-lemma
+   :lemma-constructiontargets-manifoldfundamentalclass-coefficientcirclecoordinates-eq-id-,
+   :phase :implementation,
+   :state :open,
+   :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+   :dag-node "TOPOLOGY-ROUTES.md/manifold-fundamental-class",
+   :acceptance
+   {:declaration
+    "ConstructionTargets.ManifoldFundamentalClass.coefficientCircleCoordinates_eq_id_of_apply_one",
+    :type "exact type in fixture",
+    :fixture "/tmp/circlecoordone.lean",
+    :fixture-sha256
+    "7f56adf0f60f4bd2b962d5d1335fc3fef1c5de37ed43ebaba05e2c6c07fccaac",
+    :placeholders ["t00J02 bridge_1" "t98A02 sorry"],
+    :route-step "circle coordinates determined by one"},
+   :id :routes-2026-10-12-mfclass-circle-one-r1,
+   :kind :reusable-theorem,
+   :area "manifold-fundamental-class",
+   :depends-on [:routes-2026-10-12-mfclass-circle-coords-r1],
+   :current-residual
+   "Compute signed circle generator coordinate at one.",
+   :other-consumers [:t98A02]}
+  {:consumer :t00J02,
+   :implements-lemma
    :lemma-constructiontargets-manifoldfundamentalclass-closedorientedfundamentalclass,
    :evidence
    {:probe
-    {:residual "Promote; compute circle coordinate endomorphism.",
-     :outcome :revise,
+    {:outcome :revise,
+     :seat "topo-12",
+     :fixture
+     {:path "/tmp/circlecoordone.lean",
+      :sha256
+      "7f56adf0f60f4bd2b962d5d1335fc3fef1c5de37ed43ebaba05e2c6c07fccaac"},
+     :commands
+     [{:cmd
+       "lake env lean /tmp/circlecoordone.lean && sha256sum /tmp/circlecoordone.lean && python3 scripts/statement-registry.py check",
+       :exit 0}],
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
      :missing-theorems
      [{:name
-       "ConstructionTargets.ManifoldFundamentalClass.coefficientCircleComparisonIso_hom_eq_of_coordinates",
+       "ConstructionTargets.ManifoldFundamentalClass.coefficientCircleCoordinates_eq_id_of_apply_one",
        :type "exact type in fixture",
        :status :proved,
        :consumers [:t00J02 :t98A02],
        :depends-on
-       ["ConstructionTargets.ManifoldFundamentalClass.coefficientCircleGeneratorComparison_of_iso_hom"],
+       ["ConstructionTargets.ManifoldFundamentalClass.coefficientCircleComparisonIso_hom_eq_of_coordinates"],
        :area "manifold-fundamental-class"}],
      :prerequisite
      {:consumer :t00J02,
-      :implements-lemma :lemma-mfclass-circle-coords,
+      :implements-lemma :lemma-mfclass-circle-one,
       :phase :implementation,
       :state :open,
       :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
       :dag-node "TOPOLOGY-ROUTES.md/manifold-fundamental-class",
       :acceptance
       {:declaration
-       "ConstructionTargets.ManifoldFundamentalClass.coefficientCircleComparisonIso_hom_eq_of_coordinates",
+       "ConstructionTargets.ManifoldFundamentalClass.coefficientCircleCoordinates_eq_id_of_apply_one",
        :type "exact type in fixture",
-       :fixture "/tmp/circleisocoords.lean",
+       :fixture "/tmp/circlecoordone.lean",
        :fixture-sha256
-       "6cf55d0bda1004f817aaf4a07932dbf1491ec2f8b8b505fac604c9f016192646",
+       "7f56adf0f60f4bd2b962d5d1335fc3fef1c5de37ed43ebaba05e2c6c07fccaac",
        :placeholders ["t00J02 bridge_1" "t98A02 sorry"],
-       :route-step "circle coordinate cancellation"},
-      :id :routes-2026-10-12-mfclass-circle-coords-r1,
+       :route-step "circle coordinates determined by one"},
+      :id :routes-2026-10-12-mfclass-circle-one-r1,
       :kind :reusable-theorem,
       :area "manifold-fundamental-class",
-      :depends-on [:routes-2026-10-12-mfclass-circle-iso-r1],
+      :depends-on [:routes-2026-10-12-mfclass-circle-coords-r1],
       :current-residual
-      "Compute coefficient-to-native circle coordinate endomorphism as identity.",
+      "Compute signed circle generator coordinate at one.",
       :other-consumers [:t98A02]},
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :commands
-     [{:cmd
-       "lake env lean /tmp/circleisocoords.lean && sha256sum /tmp/circleisocoords.lean && python3 scripts/statement-registry.py check",
-       :exit 0}],
-     :diagnostic-history
-     [{:exit 1, :correction "Reversed iso identity."}],
-     :fixture
-     {:path "/tmp/circleisocoords.lean",
-      :sha256
-      "6cf55d0bda1004f817aaf4a07932dbf1491ec2f8b8b505fac604c9f016192646"},
-     :seat "topo-12"}},
+     :residual "Promote; compute the circle generator sign."}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -20607,7 +20628,8 @@
     :routes-2026-10-12-mfclass-circle-end-r1
     :routes-2026-10-12-mfclass-circle-generator-r1
     :routes-2026-10-12-mfclass-circle-iso-r1
-    :routes-2026-10-12-mfclass-circle-coords-r1],
+    :routes-2026-10-12-mfclass-circle-coords-r1
+    :routes-2026-10-12-mfclass-circle-one-r1],
    :current-residual
    "Local-degree counts and wild-ball complement homology remain.",
    :other-consumers [:t98A02]}
@@ -29178,6 +29200,28 @@
    :kind :lemma,
    :depends-on
    [:lemma-constructiontargets-manifoldfundamentalclass-coefficientcirclegeneratorcompariso],
+   :other-consumers [:t98A02]}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.ManifoldFundamentalClass.coefficientCircleCoordinates_eq_id_of_apply_one",
+    :type "exact type in fixture"},
+   :lemma
+   {:name
+    "ConstructionTargets.ManifoldFundamentalClass.coefficientCircleCoordinates_eq_id_of_apply_one",
+    :reported-by
+    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2],
+    :type "exact type in fixture",
+    :area "manifold-fundamental-class",
+    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+   :id
+   :lemma-constructiontargets-manifoldfundamentalclass-coefficientcirclecoordinates-eq-id-,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-manifoldfundamentalclass-coefficientcirclecomparisoniso-hom-],
    :other-consumers [:t98A02]}],
  :consumer-baselines {},
  :statuses
