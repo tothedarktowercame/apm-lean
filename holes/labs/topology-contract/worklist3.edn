@@ -20930,54 +20930,30 @@
    :current-residual "Boundary coordinate comparison.",
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
+   :stop-count 1,
    :review-finding
    "Frozen fixture hash mismatch remains. The supervisor added a nested :evidence :acceptance with hash 7e72195e1214d7580994264481ae57d0ecf87755d31825ab85cbda5f1220c4b1, but the row top-level authoritative :acceptance :fixture-sha256 still equals aad5a9cda739c1cbcceb1eca8ab8b33395db8a08c9d68941a87c644f4d13586e. Two conflicting acceptance maps do not repair the frozen interface. Exact repair: replace the top-level row :acceptance hash with 7e72195e... and add :mode :post-build-export-check there; do not add another evidence-local acceptance map. The current fixture itself compiles, registry is 131/131, source blob matches f0afa7bd, and axioms are standard-only.",
    :implements-lemma
    :lemma-constructiontargets-manifoldfundamentalclass-coefficientclosedboundary-coordinat,
    :evidence
    {:placeholder-delta {:t00J02 [1 1], :t98A02 [1 1]},
-    :residual "Apply comparison in both closure adapters.",
-    :outcome :done-unreviewed,
-    :warnings ["pre-existing lints only"],
-    :missing-theorems
-    [{:name
-      "ConstructionTargets.ManifoldFundamentalClass.coefficientClosedBoundary_coordinate_comparison_of_bool",
-      :type "exact fixture type",
-      :status :proved,
-      :consumers [:t00J02 :t98A02],
-      :depends-on ["closed-generator bridge"],
-      :area "manifold-fundamental-class"}],
+    :residual
+    "After authoritative acceptance repair, resubmit commit f0afa7bd for review.",
+    :outcome :stop,
+    :warnings [],
     :statement-hashes {:registry "131/131"},
-    :acceptance
-    {:declaration
-     "ConstructionTargets.ManifoldFundamentalClass.coefficientClosedBoundary_coordinate_comparison_of_bool",
-     :type "exact type in fixture",
-     :fixture "/tmp/closedboundarycoords.lean",
-     :fixture-sha256
-     "7e72195e1214d7580994264481ae57d0ecf87755d31825ab85cbda5f1220c4b1",
-     :mode :post-build-export-check,
-     :placeholders ["t00J02 bridge_1" "t98A02 sorry"],
-     :route-step "closed-boundary coordinates"},
+    :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
-    :author "Joe Corneli",
+    :author :topo-10,
+    :reason
+    "Supervisor-only ledger repair: replace the row top-level :acceptance :fixture-sha256 aad5a9cda739c1cbcceb1eca8ab8b33395db8a08c9d68941a87c644f4d13586e with 7e72195e1214d7580994264481ae57d0ecf87755d31825ab85cbda5f1220c4b1 and add top-level :acceptance :mode :post-build-export-check. Do not add :evidence :acceptance. This is a scheduling boundary, not a mathematical refutation.",
     :commands
-    [{:cmd "lake build ConstructionTargets.ManifoldFundamentalClass",
+    [{:cmd "rg transition acceptance mutation in build_step.bb",
       :exit 0}
      {:cmd "sha256sum /tmp/closedboundarycoords.lean", :exit 0}
-     {:cmd "lake env lean /tmp/closedboundarycoords.lean", :exit 0}
-     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-     {:cmd
-      "git diff --exit-code f0afa7bd -- ConstructionTargets/ManifoldFundamentalClass.lean",
-      :exit 0}],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1791816657339-7149-bd4bef0e",
-     :finding
-     "Frozen fixture hash mismatch remains. The supervisor added a nested :evidence :acceptance with hash 7e72195e1214d7580994264481ae57d0ecf87755d31825ab85cbda5f1220c4b1, but the row top-level authoritative :acceptance :fixture-sha256 still equals aad5a9cda739c1cbcceb1eca8ab8b33395db8a08c9d68941a87c644f4d13586e. Two conflicting acceptance maps do not repair the frozen interface. Exact repair: replace the top-level row :acceptance hash with 7e72195e... and add :mode :post-build-export-check there; do not add another evidence-local acceptance map. The current fixture itself compiles, registry is 131/131, source blob matches f0afa7bd, and axioms are standard-only."},
+     {:cmd "lake env lean /tmp/closedboundarycoords.lean", :exit 0}],
     :commit "f0afa7bdc4c95a8c87143342ceb8c9ce51cd5612",
-    :changed-paths
-    ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+    :changed-paths [],
     :fixture
     {:path "/tmp/closedboundarycoords.lean",
      :sha256
@@ -20985,7 +20961,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/manifold-fundamental-class",
    :acceptance
