@@ -39,6 +39,41 @@ theorem exists_affinePerturbation_avoiding_finite
   simpa only [Set.mem_preimage] using
     exists_perturbationParameter_avoiding_finite hab hpreimage
 
+/-- The polygonal path from `start` to `finish` with one prescribed bend. -/
+def twoSegmentPath (start bend finish : EuclideanPlane) (t : ℝ) : EuclideanPlane :=
+  if t ≤ 1 / 2 then
+    (1 - 2 * t) • start + (2 * t) • bend
+  else
+    (2 - 2 * t) • bend + (2 * t - 1) • finish
+
+@[simp] theorem twoSegmentPath_zero (start bend finish : EuclideanPlane) :
+    twoSegmentPath start bend finish 0 = start := by
+  simp [twoSegmentPath]
+
+@[simp] theorem twoSegmentPath_half (start bend finish : EuclideanPlane) :
+    twoSegmentPath start bend finish (1 / 2) = bend := by
+  norm_num [twoSegmentPath]
+
+@[simp] theorem twoSegmentPath_one (start bend finish : EuclideanPlane) :
+    twoSegmentPath start bend finish 1 = finish := by
+  norm_num [twoSegmentPath]
+
+/-- There is an endpoint-fixed two-segment perturbation whose bend lies on a
+chosen nonconstant affine line and avoids a prescribed finite planar set. -/
+theorem exists_twoSegmentPath_bend_avoiding_finite
+    (start finish base direction : EuclideanPlane) (hdirection : direction ≠ 0)
+    {a b : ℝ} (hab : a < b) {forbidden : Set EuclideanPlane}
+    (hforbidden : forbidden.Finite) :
+    ∃ t ∈ Set.Ioo a b,
+      base + t • direction ∉ forbidden ∧
+      twoSegmentPath start (base + t • direction) finish 0 = start ∧
+      twoSegmentPath start (base + t • direction) finish (1 / 2) = base + t • direction ∧
+      twoSegmentPath start (base + t • direction) finish 1 = finish := by
+  rcases exists_affinePerturbation_avoiding_finite base direction hdirection hab hforbidden with
+    ⟨t, ht, havoid⟩
+  exact ⟨t, ht, havoid, twoSegmentPath_zero _ _ _, twoSegmentPath_half _ _ _,
+    twoSegmentPath_one _ _ _⟩
+
 /-- A finite semisimplicial complex truncated in dimensions zero through two.
 The compatibility field records the two vertices of each boundary edge of a
 face; injectivity excludes degenerate triangular faces. -/
