@@ -642,3 +642,7 @@ component followed by the coordinate-to-point component, in that order.
 last coordinate-to-point component, at the identity point-span object, with
 the explicit counit from the generic span-transport construction.  Its two
 legs can now be normalized using the underlying single-object equivalences.
+
+`genericPointWedgeCoordinatePointCounit_legs` performs that projection: the
+left and right components are exactly the `congrLeft` counits of the based
+single-object equivalences, evaluated on the two identity point-span legs.

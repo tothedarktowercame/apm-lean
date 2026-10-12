@@ -2276,6 +2276,18 @@ theorem genericPointWedgeCoordinatePointCounit_eq_transportCounit :
         (genericPointWedgeCoordinateRightPointIso y₀) Q := by
   rfl
 
+/-- The two legs of the coordinate-to-point counit are precisely the
+single-object equivalence counits on the identity point-span legs. -/
+theorem genericPointWedgeCoordinatePointCounit_legs :
+    let C := SingleObj (genericPointWedgeFreeProduct x₀ y₀)
+    let Q := genericPointWedgeIdentityPointSpan x₀ y₀
+    let E := genericPointWedgeCoordinatePointSpanEquivalence x₀ y₀ C
+    (E.counitIso.hom.app Q).left =
+        ((genericPointWedgeSingleObjEquivalence x₀).congrLeft).counitIso.hom.app Q.left ∧
+      (E.counitIso.hom.app Q).right =
+        ((genericPointWedgeSingleObjEquivalence y₀).congrLeft).counitIso.hom.app Q.right := by
+  exact ⟨rfl, rfl⟩
+
 /-- Consequently the full B3 counit element is just the mapped counit of the
 preceding free-product-representation equivalence. -/
 theorem genericPointWedgeCounitElement_eq_mappedRepresentationCounit :
@@ -3566,6 +3578,7 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeFreeProductCounit_eq_pre_pointSpan
 #print axioms genericPointWedgePreFreeProductCounit_eq_preCoordinate_coordinatePoint
 #print axioms genericPointWedgeCoordinatePointCounit_eq_transportCounit
+#print axioms genericPointWedgeCoordinatePointCounit_legs
 #print axioms genericPointWedgeCounitElement_eq_mappedRepresentationCounit
 #print axioms genericPointWedgeMappedLeft_eq_conj
 #print axioms genericPointWedgeMappedRight_eq_conj
