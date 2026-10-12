@@ -113850,14 +113850,14 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 3,
+   :stop-count 4,
    :review-finding
    "Blueprint B3 is marked proved but its proof uses the unlisted ConnectedGroupoidSingleObjEquivalence.connectorSingleObjEquivalence (and connector-system representation) instead of only the declared uses; add the actual connector dependency and proof route to B3 uses.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
    :evidence
    {:placeholder-delta {:source-before 0, :source-after 0},
     :residual
-    "Compare the right restriction element and counit coordinate, then close B6 and B12.",
+    "Transport the unit glue through the outer overlap comparisons and reconstruction counit; then close B6 and B12.",
     :outcome :stop,
     :warnings [],
     :missing-theorems
@@ -113871,9 +113871,9 @@
       :area "fundamental-group-wedge-of-circles"}],
     :statement-hashes
     {:source
-     "14aae0a4fa97aad0e23fe5ffc21a764b5d0c0da1f3fc320ef00ca618f8137750",
+     "e3029916ff2d0f5abcf6c97afd63df225cb8cf0293be96cf96bc3dbecb3a0895",
      :documentation
-     "07b3e2e0da443f1b3e8db02ddcc64dd57c84035f64530997f50e969533f8b255",
+     "8972d9be17101fe6010b939a6d2738f28f6387223189f271c2019eac112f26ab",
      :blueprint
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0",
      :registry "131/131"},
@@ -113881,7 +113881,7 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
     :reason
-    "The reconstructed source functor is literal on the left leg and has one explicit restriction conjugator on the right.",
+    "All four inner connector factors cancel, so the coordinate-span glue at the Unit base is exactly one.",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/PointWedgeVanKampen.lean",
@@ -113891,22 +113891,11 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder/diff validation", :exit 0}],
     :diagnostic-history
-    [{:cmd "lean counit rfl probe",
+    [{:cmd "lean direct conjugator equality",
       :exit 1,
-      :finding "Counit element is not definitionally one."}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1791807937410-6921-071457b4",
-     :commands
-     ["git show/diff-tree 07240e5a3"
-      "sha256/placeholder/registry checks"
-      "lake env lean ConstructionTargets/PointWedgeVanKampen.lean"
-      "lake build ConstructionTargets.PointWedgeVanKampen"
-      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (expected absent)"],
-     :finding
-     "PASS: exact two-file scope and frozen hashes match; placeholders 0->0, registry 131/131. Reconstructed source is literal on the left and retains correctly oriented restriction conjugation on the right; no false counit normalization or representation bypass. Standard axioms only. Valid program STOP; compare restriction element with counit coordinate, then B6/B12."},
-    :commit "07240e5a3062a6d1758610732aa7d141e4bfa5e9",
+      :finding
+      "Expanded the four inner factors instead of assuming definitional equality."}],
+    :commit "3cfdfdc2b6150d3b0b471f2fddd57a7f2d9255ca",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
      "ConstructionTargets/PointWedgeVanKampen.md"],
@@ -113916,7 +113905,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
