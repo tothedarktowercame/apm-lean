@@ -2381,6 +2381,18 @@ theorem rotatedEndpointWaypoint_twiceCorrected_departure_zero_explicit_bounds
     t p ht hz] at hb
   exact hb
 
+/-- The annulus inequalities left by the localized real bump are consistent:
+at `t = 1/4` both bounds hold.  Thus those bounds alone cannot prove the
+twice-corrected path nonzero. -/
+theorem twiceCorrectedDepartureExplicitBounds_consistent_at_quarter :
+    9 * (1 / 4 : ℝ) ^ 2 ≤
+        4 * (1 - 2 * (1 / 4 : ℝ)) ^ 2 * (1 / 4 : ℝ) ^ 2 +
+          4 * (61 / 64 - (3 / 2) * (1 / 4 : ℝ) - (1 / 4 : ℝ) ^ 2) ^ 2 ∧
+      4 * (1 - 2 * (1 / 4 : ℝ)) ^ 2 * (1 / 4 : ℝ) ^ 2 +
+          4 * (61 / 64 - (3 / 2) * (1 / 4 : ℝ) - (1 / 4 : ℝ) ^ 2) ^ 2 ≤
+        25 * (1 / 4 : ℝ) ^ 2 := by
+  norm_num
+
 end ConstructionTargets.T02A03GeometricTubeDeformation
 
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeNormalComplex_eq_zero_iff
@@ -2477,3 +2489,4 @@ end ConstructionTargets.T02A03GeometricTubeDeformation
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_twiceCorrected_departure_zero_time_bounds
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_twiceCorrected_departure_zero_bump_polynomial
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_twiceCorrected_departure_zero_explicit_bounds
+#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.twiceCorrectedDepartureExplicitBounds_consistent_at_quarter
