@@ -995,6 +995,41 @@ theorem genericPointWedgeIdentityCoordinateSpan_glue_unitBase_eq_one :
     genericPointWedgeIdentityCoordinateRightRoundTrip_eq_one]
   simp only [SingleObj.comp_as_mul, one_mul]
 
+/-- After transporting the unit coordinate glue through the overlap
+equivalence, the reverse-coordinate glue at the chosen overlap representative
+is exactly the composite of the two outer span comparisons. -/
+theorem genericPointWedgeIdentityCoordinateReverseSpan_glue_eq_outerComparisons :
+    let l := genericPointWedgeActualLeft x₀ y₀ M N
+    let r := genericPointWedgeActualRight x₀ y₀ M N
+    let l' := genericPointWedgeCoordinateLeft x₀
+    let r' := genericPointWedgeCoordinateRight y₀
+    let eK := genericPointWedgeOverlapGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let eL := genericPointWedgeLeftGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let eR := genericPointWedgeRightGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let aL := genericPointWedgeLeftSpanIso
+      x₀ y₀ M N hM hN hy hx cM cN
+    let aR := genericPointWedgeRightSpanIso
+      x₀ y₀ M N hM hN hy hx cM cN
+    let Q := genericPointWedgeIdentityCoordinateSpan x₀ y₀
+    let z : FundamentalGroupoid (genericPointWedgeOverlapPiece x₀ y₀ M N) :=
+      FundamentalGroupoid.mk
+        ⟨quotientMap x₀ y₀ (.inl x₀),
+          ⟨⟨.inl x₀, by trivial, rfl⟩,
+            ⟨.inr y₀, by trivial,
+              (Quotient.sound (Relation.EqvGen.rel _ _ Rel.base)).symm⟩⟩⟩
+    (genericPointWedgeIdentityCoordinateReverseSpan
+      x₀ y₀ M N hM hN hy hx cM cN).glue.hom.app z =
+      (reverseLeftComparison l l' eK eL aL Q.left).inv.app z ≫
+        (reverseRightComparison r r' eK eR aR Q.right).hom.app z := by
+  dsimp only
+  rw [genericPointWedgeIdentityCoordinateReverseSpan_glue_app,
+    genericPointWedgeIdentityCoordinateWhiskeredGlue_app_eq_unitBase,
+    genericPointWedgeIdentityCoordinateSpan_glue_unitBase_eq_one]
+  simp only [SingleObj.comp_as_mul, mul_one]
+
 /-- The penultimate inverse stage of B3, now expressed as the literal
 pseudococone on the two open pieces. -/
 def genericPointWedgeIdentityPseudoCocone :
@@ -3245,6 +3280,7 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeIdentityCoordinateLeftRoundTrip_eq_one
 #print axioms genericPointWedgeIdentityCoordinateRightRoundTrip_eq_one
 #print axioms genericPointWedgeIdentityCoordinateSpan_glue_unitBase_eq_one
+#print axioms genericPointWedgeIdentityCoordinateReverseSpan_glue_eq_outerComparisons
 #print axioms genericPointWedgeIdentityGlobalRightRestriction_map
 #print axioms genericPointWedgeIdentityGlobalRightBase_map
 #print axioms genericPointWedgeIdentityRepresentation_inl

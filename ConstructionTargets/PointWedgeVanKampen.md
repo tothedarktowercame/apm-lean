@@ -584,3 +584,9 @@ their two leg factors and two Unit round-trip factors are all identities, so
 the coordinate-span glue at the unique Unit object is exactly `1`.  The
 remaining conjugator comparison must transport this unit through the outer
 overlap-to-cover comparisons and the reconstruction counit.
+
+`genericPointWedgeIdentityCoordinateReverseSpan_glue_eq_outerComparisons`
+performs the first transport: at the chosen overlap representative the middle
+coordinate glue disappears, leaving exactly the inverse left and forward
+right outer comparison components.  The remaining step is to identify this
+outer composite with the reconstruction counit coordinate before closing B6.
