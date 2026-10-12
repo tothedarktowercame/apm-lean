@@ -18405,25 +18405,47 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :implements-lemma
+   :lemma-constructiontargets-manifoldfundamentalclass-forgetsnakeinput-delta-map,
+   :phase :implementation,
+   :state :open,
+   :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+   :dag-node "TOPOLOGY-ROUTES.md/manifold-fundamental-class/delta-map",
+   :acceptance
+   {:declaration
+    "ConstructionTargets.ManifoldFundamentalClass.forgetSnakeInput_delta_map",
+    :type "exact type in /tmp/fdmap.lean",
+    :fixture "/tmp/fdmap.lean",
+    :fixture-sha256
+    "0d2ef4f56968e11b89948991ff01af3759d6680fa2d4354ea80ef3f18e4c8928",
+    :placeholders ["t00J02 bridge_1" "t98A02 sorry"],
+    :route-step "transported delta equality",
+    :implementation "Promote."},
+   :id :routes-2026-10-12-mfclass-forget-delta-map-r1,
+   :kind :reusable-theorem,
+   :area "manifold-fundamental-class",
+   :depends-on [:routes-2026-10-12-mfclass-forget-delta-apply-r1],
+   :current-residual "Retry localization.",
+   :other-consumers [:t98A02]}
+  {:consumer :t00J02,
+   :implements-lemma
    :lemma-constructiontargets-manifoldfundamentalclass-closedorientedfundamentalclass,
    :evidence
    {:probe
-    {:residual "Promote; prove transported equality.",
+    {:residual "Promote equality; retry closure.",
      :outcome :revise,
      :missing-theorems
-     [{:id :lemma-mfclass-forget-delta-apply,
-       :name
-       "ConstructionTargets.ManifoldFundamentalClass.forgetSnakeDelta_map_apply_of_witness",
+     [{:name
+       "ConstructionTargets.ManifoldFundamentalClass.forgetSnakeInput_delta_map",
        :type
-       "∀ S x3 x2 x1 h2 h1, (forgetIntModules.map S.δ) x3 = (forgetIntModules.map S.v23.τ1) x1",
+       "∀ S : ShortComplex.SnakeInput (ModuleCat ℤ), (forgetSnakeInput S).δ = forgetIntModules.map S.δ",
        :status :proved,
        :consumers [:t00J02 :t98A02],
        :depends-on
-       ["ConstructionTargets.ManifoldFundamentalClass.forgetHomologySequence_delta_naturality"],
+       ["ConstructionTargets.ManifoldFundamentalClass.forgetSnakeDelta_map_apply_of_witness"],
        :area "manifold-fundamental-class"}],
      :prerequisite
      {:consumer :t00J02,
-      :implements-lemma :lemma-mfclass-forget-delta-apply,
+      :implements-lemma :lemma-mfclass-forget-delta-map,
       :phase :implementation,
       :state :open,
       :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
@@ -18431,33 +18453,33 @@
       "TOPOLOGY-ROUTES.md/manifold-fundamental-class/delta-map",
       :acceptance
       {:declaration
-       "ConstructionTargets.ManifoldFundamentalClass.forgetSnakeDelta_map_apply_of_witness",
-       :type "exact type compiled in /tmp/fdapply.lean",
-       :fixture "/tmp/fdapply.lean",
+       "ConstructionTargets.ManifoldFundamentalClass.forgetSnakeInput_delta_map",
+       :type "exact type in /tmp/fdmap.lean",
+       :fixture "/tmp/fdmap.lean",
        :fixture-sha256
-       "ddd7a08b3b8dad08c37037b289af9f9bb9726bcd4fc2faf62b542084f3511eb0",
-       :placeholders ["t00J02 bridge_1" "t98A02 sole sorry"],
-       :route-step "elementwise mapped δ",
+       "0d2ef4f56968e11b89948991ff01af3759d6680fa2d4354ea80ef3f18e4c8928",
+       :placeholders ["t00J02 bridge_1" "t98A02 sorry"],
+       :route-step "transported delta equality",
        :implementation "Promote."},
-      :id :routes-2026-10-12-mfclass-forget-delta-apply-r1,
+      :id :routes-2026-10-12-mfclass-forget-delta-map-r1,
       :kind :reusable-theorem,
       :area "manifold-fundamental-class",
-      :depends-on [:routes-2026-10-12-mfclass-forget-delta-r1],
-      :current-residual "Compare transported δ.",
+      :depends-on [:routes-2026-10-12-mfclass-forget-delta-apply-r1],
+      :current-residual "Retry localization.",
       :other-consumers [:t98A02]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :commands [{:cmd "lake env lean /tmp/fdapply.lean", :exit 0}],
-     :diagnostic-history
-     [{:cmd "lake env lean .scratch_fdmap.lean",
-       :exit 1,
-       :correction "split comparison"}],
+     :commands
+     [{:cmd "lake env lean /tmp/fdmap.lean", :exit 0}
+      {:cmd "sha256sum /tmp/fdmap.lean", :exit 0}
+      {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
+     :diagnostic-history [{:exit 1, :correction "Fixed coercions."}],
      :fixture
-     {:path "/tmp/fdapply.lean",
+     {:path "/tmp/fdmap.lean",
       :sha256
-      "ddd7a08b3b8dad08c37037b289af9f9bb9726bcd4fc2faf62b542084f3511eb0"},
+      "0d2ef4f56968e11b89948991ff01af3759d6680fa2d4354ea80ef3f18e4c8928"},
      :seat "topo-12"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -18588,7 +18610,8 @@
     :routes-2026-10-12-mfclass-homology-pi-square-r1
     :routes-2026-10-12-mfclass-forget-snake-hom-r1
     :routes-2026-10-12-mfclass-forget-delta-r1
-    :routes-2026-10-12-mfclass-forget-delta-apply-r1],
+    :routes-2026-10-12-mfclass-forget-delta-apply-r1
+    :routes-2026-10-12-mfclass-forget-delta-map-r1],
    :current-residual
    "Local-degree counts and wild-ball complement homology remain.",
    :other-consumers [:t98A02]}
@@ -26433,6 +26456,29 @@
    :id :lemma-mfclass-forget-delta-apply,
    :kind :lemma,
    :depends-on [:lemma-mfclass-forget-delta],
+   :other-consumers [:t98A02]}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.ManifoldFundamentalClass.forgetSnakeInput_delta_map",
+    :type
+    "∀ S : ShortComplex.SnakeInput (ModuleCat ℤ), (forgetSnakeInput S).δ = forgetIntModules.map S.δ"},
+   :lemma
+   {:name
+    "ConstructionTargets.ManifoldFundamentalClass.forgetSnakeInput_delta_map",
+    :reported-by
+    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2],
+    :type
+    "∀ S : ShortComplex.SnakeInput (ModuleCat ℤ), (forgetSnakeInput S).δ = forgetIntModules.map S.δ",
+    :area "manifold-fundamental-class",
+    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+   :id
+   :lemma-constructiontargets-manifoldfundamentalclass-forgetsnakeinput-delta-map,
+   :kind :lemma,
+   :depends-on [:lemma-mfclass-forget-delta-apply],
    :other-consumers [:t98A02]}],
  :consumer-baselines {},
  :statuses
