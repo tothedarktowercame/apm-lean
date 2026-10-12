@@ -3228,6 +3228,54 @@ theorem positiveRealPlanarWaypoint_arrival_collision_time_lt_one
   norm_num at hz
   exact rightTubeCorePlanarComplex_ne_zero p.1 p.2.1 hz
 
+/-- Endpoint-fixed support for a transverse detour in the certified final
+quarter collision corridor. -/
+noncomputable def positiveRealPlanarArrivalBump (t : unitInterval) : ℝ :=
+  max 0 (((t : ℝ) - 3 / 4) * (1 - (t : ℝ)))
+
+theorem continuous_positiveRealPlanarArrivalBump :
+    Continuous positiveRealPlanarArrivalBump := by
+  unfold positiveRealPlanarArrivalBump
+  fun_prop
+
+@[simp] theorem positiveRealPlanarArrivalBump_zero :
+    positiveRealPlanarArrivalBump 0 = 0 := by
+  norm_num [positiveRealPlanarArrivalBump]
+
+@[simp] theorem positiveRealPlanarArrivalBump_one :
+    positiveRealPlanarArrivalBump 1 = 0 := by
+  norm_num [positiveRealPlanarArrivalBump]
+
+theorem positiveRealPlanarArrivalBump_pos
+    (t : unitInterval) (hlo : (3 / 4 : ℝ) < (t : ℝ))
+    (hhi : (t : ℝ) < 1) :
+    0 < positiveRealPlanarArrivalBump t := by
+  rw [positiveRealPlanarArrivalBump, max_eq_right]
+  · exact mul_pos (by linarith) (by linarith)
+  · exact le_of_lt (mul_pos (by linarith) (by linarith))
+
+/-- The late transverse bump removes every zero of the uncorrected positive
+real waypoint arrival leg. -/
+theorem positiveRealPlanarArrivalBump_ne_zero_at_arrival_collision
+    (t : unitInterval) (p : RightTubeMinusLeftCore)
+    (ht : ¬ (t : ℝ) ≤ 1 / 2)
+    (hz : (((2 - 2 * (t : ℝ) : ℝ) : ℂ) *
+          positiveRealPlanarWaypointMap p +
+        ((2 * (t : ℝ) - 1 : ℝ) : ℂ) *
+          rightTubeCorePlanarComplex p.1) = 0) :
+    (((2 - 2 * (t : ℝ) : ℝ) : ℂ) *
+          positiveRealPlanarWaypointMap p +
+        ((2 * (t : ℝ) - 1 : ℝ) : ℂ) *
+          rightTubeCorePlanarComplex p.1 +
+        (positiveRealPlanarArrivalBump t : ℂ) * Complex.I) ≠ 0 := by
+  rw [hz, zero_add]
+  apply mul_ne_zero
+  · exact_mod_cast ne_of_gt (positiveRealPlanarArrivalBump_pos t
+      (positiveRealPlanarWaypoint_arrival_collision_time_gt_three_quarters
+        t p ht hz)
+      (positiveRealPlanarWaypoint_arrival_collision_time_lt_one t p hz))
+  · exact Complex.I_ne_zero
+
 end ConstructionTargets.T02A03GeometricTubeDeformation
 
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeNormalComplex_eq_zero_iff
@@ -3333,6 +3381,7 @@ end ConstructionTargets.T02A03GeometricTubeDeformation
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.waypointDependentQuarterCandidate_actual_zero
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.positiveRealPlanarWaypoint_arrival_collision_second_zero
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.positiveRealPlanarWaypoint_arrival_collision_time_gt_three_quarters
+#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.positiveRealPlanarArrivalBump_ne_zero_at_arrival_collision
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_twiceCorrected_departure_zero_coordinates
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_twiceCorrected_departure_zero_normSq
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_twiceCorrected_departure_zero_scalar_bounds
