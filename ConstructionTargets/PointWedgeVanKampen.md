@@ -794,3 +794,9 @@ open-cover factors, in the reversed group order induced by
 substitutes that split beneath the two injected based counits.  Each evaluated
 pre-free-product counit is now an explicit three-factor product: injected
 based counit, mapped coordinate-span counit, and mapped open-cover counit.
+
+`genericPointWedgeMappedCoordinateSpanCounit_glueSquare` specializes the
+glue-naturality equation of the mapped coordinate-span counit at the unique
+point-span overlap object.  This keeps the coordinate-to-point comparison
+isomorphisms explicit and supplies the exact equation in which the two named
+coordinate-span leg factors are related by the mapped reconstructed glue.

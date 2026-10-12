@@ -3093,6 +3093,49 @@ theorem genericPointWedgeMappedPreCoordinateCounits_eq_namedFactors :
       (genericPointWedgeMappedPreCoordinateCounits_eq_openCover_coordinateSpan
         x₀ y₀ M N hM hN hy hx cM cN)
 
+/-- The mapped coordinate-span counit's glue square, specialized at the
+unique point-span overlap object.  This is the equation in which its two
+named leg factors are related by the mapped reconstructed glue. -/
+theorem genericPointWedgeMappedCoordinateSpanCounit_glueSquare :
+    let C := genericPointWedgeTarget x₀ y₀
+    let B := genericPointWedgeCoordinateSpanEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN C
+    let Q := genericPointWedgeCoordinatePointSpanEquivalence x₀ y₀ C
+    let S := freeProductPointSpanEquivalence
+      (genericPointWedgeLeftGroup x₀) (genericPointWedgeRightGroup y₀) C
+    let R := representationSingleObjEquivalence
+      (C := C) (genericPointWedgeLeftGroup x₀)
+        (genericPointWedgeRightGroup y₀)
+    let F := Functor.id (SingleObj (genericPointWedgeFreeProduct x₀ y₀))
+    let Z := Q.inverse.obj (S.inverse.obj (R.inverse.obj F))
+    let τ := Q.functor.map (B.counitIso.hom.app Z)
+    let u := SingleObj.star PUnit
+    (((Q.functor.obj (B.functor.obj (B.inverse.obj Z))).glue.hom ≫
+        Functor.whiskerLeft (pointLeg (genericPointWedgeRightGroup y₀))
+          τ.right).app u =
+      (Functor.whiskerLeft (pointLeg (genericPointWedgeLeftGroup x₀))
+          τ.left ≫
+        (Q.functor.obj Z).glue.hom).app u) := by
+  dsimp only
+  exact NatTrans.congr_app
+    (((genericPointWedgeCoordinatePointSpanEquivalence x₀ y₀
+      (genericPointWedgeTarget x₀ y₀)).functor.map
+        ((genericPointWedgeCoordinateSpanEquivalence
+          x₀ y₀ M N hM hN hy hx cM cN
+            (genericPointWedgeTarget x₀ y₀)).counitIso.hom.app
+              ((genericPointWedgeCoordinatePointSpanEquivalence x₀ y₀
+                (genericPointWedgeTarget x₀ y₀)).inverse.obj
+                ((freeProductPointSpanEquivalence
+                  (genericPointWedgeLeftGroup x₀)
+                  (genericPointWedgeRightGroup y₀)
+                  (genericPointWedgeTarget x₀ y₀)).inverse.obj
+                  ((representationSingleObjEquivalence
+                    (genericPointWedgeLeftGroup x₀)
+                    (genericPointWedgeRightGroup y₀)).inverse.obj
+                    (Functor.id (SingleObj
+                      (genericPointWedgeFreeProduct x₀ y₀)))))))).glue_naturality)
+    (SingleObj.star PUnit)
+
 /-- Both evaluated pre-free-product counit legs now have a named first factor;
 the remaining comparison is exactly between these elements and the earlier
 outer span-transport factors. -/
@@ -4488,6 +4531,7 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeMappedCoordinateSpanRightCounit
 #print axioms genericPointWedgeMappedPreCoordinateCounits_eq_openCover_coordinateSpan
 #print axioms genericPointWedgeMappedPreCoordinateCounits_eq_namedFactors
+#print axioms genericPointWedgeMappedCoordinateSpanCounit_glueSquare
 #print axioms genericPointWedgePreFreeProductCounit_apps_eq_mappedPreCoordinate_injections
 #print axioms genericPointWedgePreFreeProductCounit_apps_eq_injection_coordinate_open
 #print axioms genericPointWedgeCounitElement_eq_mappedRepresentationCounit
