@@ -595,3 +595,9 @@ outer composite with the reconstruction counit coordinate before closing B6.
 propagates that reduction through the open-cover reconstruction: its right
 base conjugator is exactly the same inverse-left/forward-right outer
 composite.  What remains is its direct comparison with the B3 counit element.
+
+`genericPointWedgeCounitElement_eq_representationCounits` exposes that B3
+counit at its last composite boundary.  It is the mapped counit of the
+free-product representation equivalence followed by the final
+representation-to-single-object counit.  The next comparison can therefore
+match those two factors against the outer comparison composite separately.

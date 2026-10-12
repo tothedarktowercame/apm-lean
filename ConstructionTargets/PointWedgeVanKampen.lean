@@ -2120,6 +2120,24 @@ def genericPointWedgeCounitElement : genericPointWedgeFreeProduct x₀ y₀ :=
     x₀ y₀ M N hM hN hy hx cM cN).hom.app
       (SingleObj.star (genericPointWedgeFreeProduct x₀ y₀))
 
+/-- The B3 counit splits at its final representation-to-single-object stage.
+This exposes the remaining comparison as one mapped free-product-representation
+counit followed by the final representation counit. -/
+theorem genericPointWedgeCounitElement_eq_representationCounits :
+    let C := genericPointWedgeTarget x₀ y₀
+    let E := genericPointWedgeFreeProductMappingEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN C
+    let R := representationSingleObjEquivalence
+      (C := C) (genericPointWedgeLeftGroup x₀)
+        (genericPointWedgeRightGroup y₀)
+    let F := Functor.id (SingleObj (genericPointWedgeFreeProduct x₀ y₀))
+    genericPointWedgeCounitElement x₀ y₀ M N hM hN hy hx cM cN =
+      (R.functor.map (E.counitIso.hom.app (R.inverse.obj F))).app
+          (SingleObj.star (genericPointWedgeFreeProduct x₀ y₀)) ≫
+        (R.counitIso.hom.app F).app
+          (SingleObj.star (genericPointWedgeFreeProduct x₀ y₀)) := by
+  rfl
+
 def genericPointWedgeMappedLeft (g : FundamentalGroup X x₀) :
     genericPointWedgeFreeProduct x₀ y₀ :=
   ((genericPointWedgeSingleObjMappingEquivalence
@@ -3383,6 +3401,7 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeSourceCounit_naturality
 #print axioms genericPointWedgeSourceCounit_left
 #print axioms genericPointWedgeSourceCounit_right
+#print axioms genericPointWedgeCounitElement_eq_representationCounits
 #print axioms genericPointWedgeMappedLeft_eq_conj
 #print axioms genericPointWedgeMappedRight_eq_conj
 #print axioms genericPointWedgeCounitNormalization_left
