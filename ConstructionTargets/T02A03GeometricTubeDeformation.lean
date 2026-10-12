@@ -2602,6 +2602,61 @@ theorem doubledCorrection_quarterCandidate_ne_zero :
   norm_num [doubledCorrectedDepartureBump, correctedDepartureBump,
     departureQuarter] at hb
 
+/-- Exact global zero locus for the doubled replacement.  The transverse
+equation is unchanged; only the real equation receives the doubled profile. -/
+theorem rotatedEndpointWaypoint_doubledCorrected_departure_eq_zero_iff
+    (t : unitInterval) (p : RightTubeMinusLeftCore) :
+    (((1 - 2 * (t : ℝ) : ℝ) : ℂ) +
+        ((2 * (t : ℝ) : ℝ) : ℂ) * rotatedEndpointWaypoint p +
+        (((t : ℝ) * (1 - 2 * (t : ℝ)) : ℝ) : ℂ) * Complex.I +
+        (doubledCorrectedDepartureBump t : ℂ)) = 0 ↔
+      1 - 2 * (t : ℝ) +
+          2 * (t : ℝ) * (rightTubeCorePlanarComplex p.1).im +
+          doubledCorrectedDepartureBump t = 0 ∧
+        -2 * (t : ℝ) * (rightTubeCorePlanarComplex p.1).re +
+          (t : ℝ) * (1 - 2 * (t : ℝ)) = 0 := by
+  constructor
+  · intro h
+    constructor
+    · simpa [rotatedEndpointWaypoint, Complex.mul_re, Complex.mul_im]
+        using congrArg Complex.re h
+    · simpa [rotatedEndpointWaypoint, Complex.mul_re, Complex.mul_im]
+        using congrArg Complex.im h
+  · rintro ⟨hre, him⟩
+    apply Complex.ext
+    · simpa [rotatedEndpointWaypoint, Complex.mul_re, Complex.mul_im]
+        using hre
+    · simpa [rotatedEndpointWaypoint, Complex.mul_re, Complex.mul_im]
+        using him
+
+theorem rotatedEndpointWaypoint_doubledCorrected_departure_zero_coordinates
+    (t : unitInterval) (p : RightTubeMinusLeftCore)
+    (hz : (((1 - 2 * (t : ℝ) : ℝ) : ℂ) +
+        ((2 * (t : ℝ) : ℝ) : ℂ) * rotatedEndpointWaypoint p +
+        (((t : ℝ) * (1 - 2 * (t : ℝ)) : ℝ) : ℂ) * Complex.I +
+        (doubledCorrectedDepartureBump t : ℂ)) = 0) :
+    0 < (t : ℝ) ∧
+      (rightTubeCorePlanarComplex p.1).re = (1 - 2 * (t : ℝ)) / 2 ∧
+      (rightTubeCorePlanarComplex p.1).im =
+        -(1 - 2 * (t : ℝ) + doubledCorrectedDepartureBump t) /
+          (2 * (t : ℝ)) := by
+  have heq :=
+    (rotatedEndpointWaypoint_doubledCorrected_departure_eq_zero_iff t p).mp hz
+  have ht0 : 0 ≤ (t : ℝ) := t.2.1
+  have htpos : 0 < (t : ℝ) := by
+    by_contra h
+    have htzero : (t : ℝ) = 0 := le_antisymm (le_of_not_gt h) ht0
+    have hb : doubledCorrectedDepartureBump t = 0 := by
+      unfold doubledCorrectedDepartureBump correctedDepartureBump
+      rw [htzero]
+      norm_num
+    rw [htzero, hb] at heq
+    norm_num at heq
+  refine ⟨htpos, ?_, ?_⟩
+  · nlinarith [heq.2]
+  · field_simp
+    nlinarith [heq.1]
+
 end ConstructionTargets.T02A03GeometricTubeDeformation
 
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeNormalComplex_eq_zero_iff
@@ -2694,6 +2749,8 @@ end ConstructionTargets.T02A03GeometricTubeDeformation
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_twiceCorrected_departure_quarter_zero
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.realDepartureCorrection_quarterCandidate_eq_zero_iff
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.doubledCorrection_quarterCandidate_ne_zero
+#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_doubledCorrected_departure_eq_zero_iff
+#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_doubledCorrected_departure_zero_coordinates
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_twiceCorrected_departure_zero_coordinates
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_twiceCorrected_departure_zero_normSq
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_twiceCorrected_departure_zero_scalar_bounds
