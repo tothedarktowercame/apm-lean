@@ -75553,73 +75553,59 @@
    "The STOP incorrectly marks the center-contraction milestone proved. commit 194ea4781 establishes only ContractibleSpace for the inner open, which chooses an unspecified contraction point; it neither supplies a deformation retraction nor identifies that point with PairingData.center. B4 explicitly requires U P to deformation-retract to P.center. Add this exact center-based deformation retraction to :missing-theorems and prove it in scope; annular side/overlap are not the only residual.",
    :evidence
    {:placeholder-delta 0,
-    :residual "Prove overlap/openCover; then B5/B6.",
-    :outcome :stop,
-    :warnings ["2 imported; 12 preexisting"],
+    :residual "Implement B5/B6.",
+    :outcome :done-unreviewed,
+    :warnings ["preexisting/imported"],
     :missing-theorems
-    [{:name "polygonCenterDeformationRetract",
-      :type "Homotopy id to P.center, fixing center",
+    [{:name "annulusPolarHomeomorph",
+      :type "annulus ≃ₜ Ioo 0 1 × Circle",
       :status :proved,
       :consumers [:t96J02 :t92J05 :t94J04 :t97A01 :t97A03],
-      :depends-on ["innerHomeomorph"],
+      :depends-on [],
       :area "polygon-surface-pi1"}
      {:name "polygonOverlapHomeomorph",
-      :type "overlap ≃ₜ interval×Circle",
-      :status :not-started,
+      :type "quotient overlap ≃ₜ Ioo 0 1 × Circle",
+      :status :proved,
       :consumers [:t96J02 :t92J05 :t94J04 :t97A01 :t97A03],
-      :depends-on ["polygonRadialOpenSets" "polygonAnnularSide"],
+      :depends-on ["polygonAnnularSide"],
       :area "polygon-surface-pi1"}
      {:name "ConstructionTargets.PolygonSurfacePiOne.openCover",
-      :type "two-open cover package",
-      :status :partial,
+      :type
+      "open cover, center contraction, annular image, overlap Homeomorph",
+      :status :proved,
       :consumers [:t96J02 :t92J05 :t94J04 :t97A01 :t97A03],
       :depends-on
       ["polygonCenterDeformationRetract" "polygonOverlapHomeomorph"],
       :area "polygon-surface-pi1"}],
     :statement-hashes
     {:registry "131/0",
-     :module "d20d5c76927e9ce5009d21a817ddf353169aa2b8"},
-    :disposition :stop,
+     :module "cb3f0a0fa7f06bb090c458c1d3aa2f2bb6ddb17d"},
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason
-    "Center deformation fixes P.center; overlap/openCover remain.",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/PolygonSurfacePiOne.lean",
       :exit 0}
      {:cmd "lake build ConstructionTargets.PolygonSurfacePiOne",
       :exit 0}
-     {:cmd "registry check", :exit 0}
-     {:cmd "placeholder scan", :exit 0}
-     {:cmd "#print axioms deformation/fixed", :exit 0}
-     {:cmd "git show --check 03ab9736f", :exit 0}],
+     {:cmd "registry check", :exit 0, :output "131/0"}
+     {:cmd "placeholder scan", :exit 0, :output "0"}
+     {:cmd "#print axioms overlap/openCover", :exit 0}
+     {:cmd "git show --check d96d33cca", :exit 0}],
     :diagnostic-history
-    [{:cmd "radial Homotopy compile",
+    [{:cmd "first build",
       :exit 1,
-      :correction "typed continuity/direct conjugation"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1791846734730-8036-c0988af2",
-     :commands
-     ["git show/diff/hash 03ab9736f"
-      "lake env lean ConstructionTargets/PolygonSurfacePiOne.lean"
-      "lake build ConstructionTargets.PolygonSurfacePiOne"
-      "python3 scripts/statement-registry.py check"
-      "#print axioms deformation/fixed"
-      "placeholder scan"],
-     :finding
-     "PASS on STOP after real progress: commit 03ab9736f adds the exact center deformation. The Homotopy is oriented id at t=0 to constant P.center at t=1, and the companion theorem proves P.center fixed for every t; transport through innerHomeomorph preserves the intended subtype boundary. Overlap Homeomorph and openCover remain explicitly listed. Scope is exact; fixture SHA-256 ec4a2b97...a0f8 and blob d20d5c76...a2b8 match. Fresh Lean/build gates pass, registry is 131/0, placeholders are 0, and both declarations use only propext, Classical.choice, Quot.sound."},
-    :commit "03ab9736f",
+      :correction "moved outer_image field"}],
+    :commit "d96d33cca",
+    :commits ["03ab9736f" "d96d33cca"],
     :changed-paths ["ConstructionTargets/PolygonSurfacePiOne.lean"],
     :fixture
     {:path "ConstructionTargets/PolygonSurfacePiOne.lean",
      :sha256
-     "ec4a2b9713c93f718af346c19cbc6b5a141efc5915537dc00707e60aafafa0f8"},
+     "d6d1d8aca2695c72f2753c90762ffceca4e38e81f3e1ef8b0a42bafa4c8bb46a"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/PolygonSurfacePiOne.lean"],
    :dag-node "ConstructionTargets/PolygonSurfacePiOne.blueprint.md/B4",
    :acceptance
@@ -85895,7 +85881,8 @@
    {:name "polygonOverlapHomeomorph",
     :reported-by [:routes-2026-10-12-polygon-b4-topo2-r1],
     :type "inner/outer overlap homeomorphic to interval×Circle",
-    :area "polygon-surface-pi1"},
+    :area "polygon-surface-pi1",
+    :proved-in :routes-2026-10-12-polygon-b4-topo2-r1},
    :id :lemma-polygonoverlaphomeomorph,
    :kind :lemma,
    :depends-on
@@ -85914,7 +85901,8 @@
     :reported-by [:routes-2026-10-12-polygon-b4-topo2-r1],
     :type
     "two-open polygon cover with contraction, annular side, overlap Homeomorph",
-    :area "polygon-surface-pi1"},
+    :area "polygon-surface-pi1",
+    :proved-in :routes-2026-10-12-polygon-b4-topo2-r1},
    :id :lemma-constructiontargets-polygonsurfacepione-opencover,
    :kind :lemma,
    :depends-on
@@ -86042,4 +86030,21 @@
    :lemma-constructiontargets-polygonsurfacepione-polygonannularside,
    :kind :lemma,
    :depends-on [:lemma-polygonradialopensets],
+   :other-consumers [:t92J05 :t94J04 :t97A01 :t97A03]}
+  {:consumer :t96J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "annulusPolarHomeomorph",
+    :type "annulus ≃ₜ Ioo 0 1 × Circle"},
+   :lemma
+   {:name "annulusPolarHomeomorph",
+    :reported-by [:routes-2026-10-12-polygon-b4-topo2-r1],
+    :type "annulus ≃ₜ Ioo 0 1 × Circle",
+    :area "polygon-surface-pi1",
+    :proved-in :routes-2026-10-12-polygon-b4-topo2-r1},
+   :id :lemma-annuluspolarhomeomorph,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers [:t92J05 :t94J04 :t97A01 :t97A03]}]}
