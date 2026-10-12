@@ -633,6 +633,24 @@ theorem genericPointWedgeIdentityCoordinateRightLegFactor_eq_one :
     genericPointWedgeTrivialSourceFunctorIso]
   convert (genericPointWedgeIdentityPointSpan x₀ y₀).right.map_id _ using 1
 
+omit [PathConnectedSpace Y] in
+/-- The inverse Unit round-trip factor is the identity at the unit-groupoid
+base, using the subsingleton hom-set of `FundamentalGroupoid Unit`. -/
+theorem genericPointWedgeIdentityCoordinateLeftRoundTrip_eq_one :
+    let l := genericPointWedgeCoordinateLeft x₀
+    let eK := genericPointWedgeUnitSingleObjEquivalence
+    let eL := genericPointWedgeSingleObjEquivalence x₀
+    let Q := genericPointWedgeIdentityPointSpan x₀ y₀
+    let z : FundamentalGroupoid Unit := FundamentalGroupoid.mk ()
+    (Functor.isoWhiskerRight
+      (eK.funInvIdAssoc (l ⋙ eL.functor)) Q.left).inv.app z =
+        (1 : genericPointWedgeFreeProduct x₀ y₀) := by
+  have hunit : genericPointWedgeUnitSingleObjEquivalence.unit.app
+      (FundamentalGroupoid.mk ()) = 𝟙 _ := Subsingleton.elim _ _
+  simp [hunit]
+  change (1 : genericPointWedgeFreeProduct x₀ y₀) = 1
+  rfl
+
 /-- The penultimate inverse stage of B3, now expressed as the literal
 pseudococone on the two open pieces. -/
 def genericPointWedgeIdentityPseudoCocone :
@@ -1981,6 +1999,7 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeIdentityCoordinateRightComparison_app
 #print axioms genericPointWedgeIdentityCoordinateLeftLegFactor_eq_one
 #print axioms genericPointWedgeIdentityCoordinateRightLegFactor_eq_one
+#print axioms genericPointWedgeIdentityCoordinateLeftRoundTrip_eq_one
 #print axioms genericPointWedgeIdentityGlobalRightRestriction_map
 #print axioms genericPointWedgeIdentityGlobalRightBase_map
 #print axioms genericPointWedgeIdentityRepresentation_inl

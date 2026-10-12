@@ -301,3 +301,9 @@ the literal lifts remain.
 calculation for the right-leg hom factor.  Both concrete leg comparisons are
 therefore units; the two Unit-equivalence round-trip components, the original
 outer comparisons, and the literal lifts remain.
+
+`genericPointWedgeIdentityCoordinateLeftRoundTrip_eq_one` evaluates the
+inverse Unit-equivalence round-trip factor.  The proof uses subsingleton
+elimination only in `FundamentalGroupoid Unit`, before functorial transport;
+it does not normalize an arbitrary equivalence.  The forward Unit round-trip,
+outer comparisons, and literal lifts remain.
