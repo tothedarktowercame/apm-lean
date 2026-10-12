@@ -73913,92 +73913,47 @@
    "reopened: a lemma this row reported missing is now banked",
    :stop-count 0,
    :evidence
-   {:residual
-    "Repair the interface type so the induced morphism and its component identifications are observable; only then can production connecting naturality consume it without inventing that the arbitrary Nonempty witness is the induced map.",
-    :outcome :stop,
-    :boundary
-    {:kind :representation,
-     :missing
-     "A specified ShortComplex.Hom together with equations identifying its τ₁, τ₂, and τ₃ components with the chain maps induced by f on the intersection, biproduct of pieces, and union."},
-    :disposition :stop,
-    :author "topo-8",
-    :reason
-    "representation boundary: the frozen type Nonempty (shortComplex U V ⟶ shortComplex U' V') does not encode that the morphism is induced by f, uses the range restrictions, or has the requested intersection, biproduct, and union components. It is inhabited by the zero morphism for arbitrary U, V, U', and V', without f or either MapsTo hypothesis. Therefore compilation of the frozen declaration cannot validate the acceptance claim, and implementing the zero inhabitant would be a forbidden facade.",
+   {:placeholder-delta 0,
+    :residual
+    "Prove intersection/union component compatibility with production homology isomorphisms, then conjugate connecting naturality.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:registry "131/0",
+     :module "a094bc448e0117018a8b013557228a173216c3cd",
+     :main "e2caa0a5eaa30a65713a7a22910aeac5467a033b",
+     :other-main "383deab447ad620ad02f626d6fc614f2ba7139a0"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-6",
     :commands
     [{:cmd
-      "lake env lean /tmp/production_cover_short_complex_map_contract.lean",
-      :exit 0,
-      :output
-      "Compiled coverPreservingShortComplexMap_contract_vacuous and the frozen declaration using the zero morphism; both have axioms [propext, Classical.choice, Quot.sound]."}
-     {:cmd
-      "sha256sum /tmp/production_cover_short_complex_map_contract.lean",
-      :exit 0,
-      :output
-      "9b867a9a9525e8055e66ba1c1d52a73e2a5665f436382b24289aa0f3bafe7164  /tmp/production_cover_short_complex_map_contract.lean"}
+      "lake build ConstructionTargets.ProductionOpenCoverMayerVietoris",
+      :exit 0}
      {:cmd "python3 scripts/statement-registry.py check",
       :exit 0,
-      :output "131 registered statements match, 0 do not"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1791664474742-2925-e848bf12",
-     :commands
-     ["git blame -L 66520,66572 -- holes/labs/topology-contract/worklist2.edn"
-      "git show --format=fuller --stat 89adf4295 && git diff-tree --no-commit-id --name-status -r 89adf4295 && git show --check --oneline 89adf4295"
-      "sha256sum /tmp/production_cover_short_complex_map_contract.lean"
-      "lake env lean /tmp/production_cover_short_complex_map_contract.lean"
-      "python3 scripts/statement-registry.py check --rev 89adf4295"
-      "python3 scripts/statement-registry.py fingerprint --rev 89adf4295 t97A04; python3 scripts/statement-registry.py fingerprint --rev 89adf4295 t96J06"
-      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn"],
-     :finding
-     "PASS: independently reproduced the recorded STOP/refutation. Commit 89adf4295 changes only worklist2.edn; the scoped module blob is identical before, at, and after that commit. Fixture SHA-256 is exactly 9b867a9a9525e8055e66ba1c1d52a73e2a5665f436382b24289aa0f3bafe7164 and compiles placeholder-free with only propext, Classical.choice, and Quot.sound. Its source-to-target ShortComplex.Hom is inhabited by zero while f, hU, and hV are unused; the frozen Nonempty type exposes no intersection, biproduct-of-pieces, or union component equations and therefore cannot certify the requested induced morphism. Registry is 131/0; worklist validates; comment-stripped consumer counts remain two sorries each; frozen fingerprints are t97A04 ca1b2cb3c6594276811618321d5c0604c2f38fc4594a6b21ae161a711a923a34 and t96J06 4b16fe5a91cccac45b603d2bb0f33e4433e092a5c4d26b6f6e854e676fbc4569."},
-    :probe
-    {:residual
-     "Prove τ₁ and τ₃ compatibility with the production comparison isomorphisms, then conjugate connecting naturality.",
-     :outcome :go,
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :commands
-     [{:cmd "lake env lean /tmp/check2.lean", :exit 0}
-      {:cmd "sha256sum /tmp/check2.lean", :exit 0}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/check2.lean || true)\"",
-       :exit 0}
-      {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
-     :diagnostic-history
-     [{:cmd "lake env lean /tmp/check2.lean",
-       :exit 1,
-       :finding
-       "Initial categorical normalization left four biproduct component goals; explicit extensionality normalization closed them."}],
-     :fixture
-     {:path "/tmp/check2.lean",
-      :sha256
-      "f179120627a20c46070134a0b2ec26d15b3e636396273791b0147ed8c4a90bb0"},
-     :finding
-     "Compiled an actual morphism induced by the ambient simplicial map: τ₁ restricts it to the infimum, τ₂ maps both pieces, and τ₃ restricts it to the supremum. Both signed ShortComplex squares compile; f and both MapsTo proofs determine the construction.",
-     :implementation
-     {:scope
-      ["ConstructionTargets/ProductionOpenCoverMayerVietoris.lean"],
-      :declarations
-      ["subcomplexMap"
-       "subcomplexMap_comp_ι"
-       "subcomplexMap_naturality"
-       "inducedShortComplexMap"
-       "coverPreservingShortComplexMap"],
-      :acceptance
-      {:declaration
-       "ConstructionTargets.ProductionOpenCoverMayerVietoris.coverPreservingShortComplexMap",
-       :type
-       "forall {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y] (U V : Set X) (U' V' : Set Y) (f : C(X,Y)), Set.MapsTo f U U' -> Set.MapsTo f V V' -> Nonempty (shortComplex U V ⟶ shortComplex U' V')"}},
-     :seat "topo-8"},
+      :output "131/0"}
+     {:cmd "comment-stripped placeholder scan", :exit 0, :output "0"}
+     {:cmd "git show --check HEAD", :exit 0}],
+    :commit "9a9725177",
+    :changed-paths
+    ["ConstructionTargets/ProductionOpenCoverMayerVietoris.lean"],
+    :declaration
+    "ConstructionTargets.ProductionOpenCoverMayerVietoris.coverPreservingShortComplexMap",
     :fixture
-    {:path "/tmp/production_cover_short_complex_map_contract.lean",
+    {:path "ConstructionTargets/ProductionOpenCoverMayerVietoris.lean",
      :sha256
-     "9b867a9a9525e8055e66ba1c1d52a73e2a5665f436382b24289aa0f3bafe7164"},
+     "5c093e14fa942277fcfd68a307fa841831eb03f97d39e8285e042fa73616d31c"},
     :finding
-    "The compiled stronger theorem has no continuous map and no cover-preservation assumptions: forall U V U' V', Nonempty (shortComplex U V ⟶ shortComplex U' V'), proved by ⟨0⟩. Hence the frozen proposition erases precisely the data and commutative-square evidence required by the route's next naturality step.",
-    :seat "topo-8"},
+    "Constructed the f-induced morphism: intersection, biproduct, and union components are explicit; both ShortComplex squares compile. The weak Nonempty theorem is derived from it, not zero.",
+    :declarations
+    ["subcomplexMap"
+     "subcomplexMap_comp_ι"
+     "subcomplexMap_naturality"
+     "inducedShortComplexMap"
+     "coverPreservingShortComplexMap"],
+    :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/ProductionOpenCoverMayerVietoris.lean"],
    :dag-node
