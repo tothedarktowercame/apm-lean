@@ -127,6 +127,13 @@ The fixed representative has chart-coordinate domain, so the remaining
 pointwise statement must precompose it with the fixed source chart rather
 than identify functions with different domains.
 
+`continuousAt_coordinate_fderivWithin_comp_extChartAt` performs that domain
+bridge: the fixed representative's derivative, evaluated after the fixed
+source chart, is continuous at `x`.  This uses the exact image-filter identity
+for the extended chart, so the model-with-corners range restriction is
+preserved.  It remains to prove that this precomposed family agrees pointwise
+near `x` with the transported manifold derivative.
+
 ### B3. Regular points are open
 
 lean: `t97A07Closure.isOpen_regularPoints` : under the t97A07 manifold

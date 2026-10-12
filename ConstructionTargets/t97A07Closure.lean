@@ -343,6 +343,30 @@ theorem continuousAt_inTangentCoordinates_mfderiv_and_self
   exact ⟨continuousAt_inTangentCoordinates_mfderiv f hf x,
     inTangentCoordinates_mfderiv_self_eq_mfderiv f x⟩
 
+/-- Precomposing the derivative of the fixed-chart representative with the
+fixed source chart gives an operator-valued function on the manifold that is
+continuous at the base point.  This is the domain bridge needed before its
+pointwise comparison with the transported manifold derivative. -/
+theorem continuousAt_coordinate_fderivWithin_comp_extChartAt
+    {m n : ℕ} {X : Type*} [TopologicalSpace X]
+    [ChartedSpace (EuclideanModel m) X]
+    [IsManifold 𝓘(ℝ, EuclideanModel m) ∞ X]
+    (f : X → EuclideanModel n)
+    (hf : ContMDiff 𝓘(ℝ, EuclideanModel m) 𝓘(ℝ, EuclideanModel n) ∞ f)
+    (x : X) :
+    ContinuousAt
+      (fun y ↦ fderivWithin ℝ
+        (extChartAt 𝓘(ℝ, EuclideanModel n) (f x) ∘ f ∘
+          (extChartAt 𝓘(ℝ, EuclideanModel m) x).symm)
+        (Set.range 𝓘(ℝ, EuclideanModel m))
+        (extChartAt 𝓘(ℝ, EuclideanModel m) x y)) x := by
+  have h := continuousWithinAt_coordinate_fderivWithin f hf x
+  rw [ContinuousWithinAt] at h
+  rw [ContinuousAt]
+  apply h.comp
+  rw [← map_extChartAt_nhds (I := 𝓘(ℝ, EuclideanModel m)) x]
+  exact Filter.tendsto_map
+
 end t97A07Closure
 
 #print axioms t97A07Closure.isOpen_setOf_surjective_clm
@@ -359,3 +383,4 @@ end t97A07Closure
 #print axioms t97A07Closure.coordinate_fderivWithin_eq_chart_factors_self
 #print axioms t97A07Closure.exists_nhds_chart_factor_agreement
 #print axioms t97A07Closure.continuousAt_inTangentCoordinates_mfderiv_and_self
+#print axioms t97A07Closure.continuousAt_coordinate_fderivWithin_comp_extChartAt
