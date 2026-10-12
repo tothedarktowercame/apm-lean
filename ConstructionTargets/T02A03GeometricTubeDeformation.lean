@@ -3182,6 +3182,52 @@ theorem positiveRealPlanarWaypoint_arrival_collision_second_zero
     rightTubeCorePlanarComplex, Complex.mul_re, Complex.mul_im] at hprod
   nlinarith
 
+theorem positiveRealPlanarWaypoint_arrival_collision_coordinates
+    (t : unitInterval) (p : RightTubeMinusLeftCore)
+    (ht : ¬ (t : ℝ) ≤ 1 / 2)
+    (hz : (((2 - 2 * (t : ℝ) : ℝ) : ℂ) *
+          positiveRealPlanarWaypointMap p +
+        ((2 * (t : ℝ) - 1 : ℝ) : ℂ) *
+          rightTubeCorePlanarComplex p.1) = 0) :
+    1 < p.1 0 ∧ p.1 1 = 0 := by
+  have hneg := (coupledAngularArrivalCollision_negative_endpoint
+    positiveRealPlanarWaypointMap positiveRealPlanarWaypoint_re_pos
+      t p ht hz).1
+  constructor
+  · simp [rightTubeCorePlanarComplex] at hneg
+    linarith
+  · exact positiveRealPlanarWaypoint_arrival_collision_second_zero t p ht hz
+
+/-- All remaining collisions occur strictly in the final quarter of the
+arrival leg, leaving room for a localized detour. -/
+theorem positiveRealPlanarWaypoint_arrival_collision_time_gt_three_quarters
+    (t : unitInterval) (p : RightTubeMinusLeftCore)
+    (ht : ¬ (t : ℝ) ≤ 1 / 2)
+    (hz : (((2 - 2 * (t : ℝ) : ℝ) : ℂ) *
+          positiveRealPlanarWaypointMap p +
+        ((2 * (t : ℝ) - 1 : ℝ) : ℂ) *
+          rightTubeCorePlanarComplex p.1) = 0) :
+    (3 / 4 : ℝ) < (t : ℝ) := by
+  obtain ⟨hp0, hp1⟩ :=
+    positiveRealPlanarWaypoint_arrival_collision_coordinates t p ht hz
+  have hre := congrArg Complex.re hz
+  norm_num [positiveRealPlanarWaypointMap, rightTubePlanarComplex,
+    rightTubeCorePlanarComplex, Complex.mul_re, Complex.mul_im] at hre
+  nlinarith
+
+theorem positiveRealPlanarWaypoint_arrival_collision_time_lt_one
+    (t : unitInterval) (p : RightTubeMinusLeftCore)
+    (hz : (((2 - 2 * (t : ℝ) : ℝ) : ℂ) *
+          positiveRealPlanarWaypointMap p +
+        ((2 * (t : ℝ) - 1 : ℝ) : ℂ) *
+          rightTubeCorePlanarComplex p.1) = 0) :
+    (t : ℝ) < 1 := by
+  apply lt_of_le_of_ne t.2.2
+  intro ht
+  rw [ht] at hz
+  norm_num at hz
+  exact rightTubeCorePlanarComplex_ne_zero p.1 p.2.1 hz
+
 end ConstructionTargets.T02A03GeometricTubeDeformation
 
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeNormalComplex_eq_zero_iff
@@ -3286,6 +3332,7 @@ end ConstructionTargets.T02A03GeometricTubeDeformation
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.waypointDependentDeparture_zero_polynomial_bounds
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.waypointDependentQuarterCandidate_actual_zero
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.positiveRealPlanarWaypoint_arrival_collision_second_zero
+#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.positiveRealPlanarWaypoint_arrival_collision_time_gt_three_quarters
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_twiceCorrected_departure_zero_coordinates
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_twiceCorrected_departure_zero_normSq
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_twiceCorrected_departure_zero_scalar_bounds
