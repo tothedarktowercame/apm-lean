@@ -2589,6 +2589,30 @@ theorem genericPointWedgeCoordinateSpanOuterComparison_counitTriangles :
         (genericPointWedgeIdentityCoordinateSpan x₀ y₀).right)
     simpa only [NatTrans.comp_app, Functor.whiskerLeft_app] using h
 
+/-- At the unique coordinate object, the middle counit conjugation has no
+remaining span glue: it is exactly the overlap equivalence's forward and
+inverse round-trip components. -/
+theorem genericPointWedgeCoordinateSpanMiddleCounit_eq_roundTrips :
+    let l' := genericPointWedgeCoordinateLeft x₀
+    let r' := genericPointWedgeCoordinateRight y₀
+    let eK := genericPointWedgeOverlapGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let Q := genericPointWedgeIdentityCoordinateSpan x₀ y₀
+    let u : FundamentalGroupoid Unit := FundamentalGroupoid.mk ()
+    (Functor.whiskerLeft eK.inverse
+        (Functor.isoWhiskerLeft eK.functor Q.glue).hom).app u =
+      (eK.invFunIdAssoc (l' ⋙ Q.left)).hom.app u ≫
+        (eK.invFunIdAssoc (r' ⋙ Q.right)).inv.app u := by
+  have h := congrArg (fun k => k.app (FundamentalGroupoid.mk ()))
+    (middle_counit_conjugation
+      (eK := genericPointWedgeOverlapGroupoidEquivalence
+        x₀ y₀ M N hM hN hy hx cM cN)
+      (Q := genericPointWedgeIdentityCoordinateSpan x₀ y₀))
+  dsimp only at h ⊢
+  simp only [NatTrans.comp_app] at h
+  rw [genericPointWedgeIdentityCoordinateSpan_glue_unitBase_eq_one] at h
+  simpa only [SingleObj.comp_as_mul, mul_one] using h
+
 /-- At the identity point-span object, the remaining coordinate-to-point
 counit is exactly the generic span-transport counit. -/
 theorem genericPointWedgeCoordinatePointCounit_eq_transportCounit :
@@ -4127,6 +4151,7 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeCoordinateSpanWhiskeredReverseGlue_app
 #print axioms genericPointWedgeCoordinateSpanReconstructedGlue_eq_outerComparisons
 #print axioms genericPointWedgeCoordinateSpanOuterComparison_counitTriangles
+#print axioms genericPointWedgeCoordinateSpanMiddleCounit_eq_roundTrips
 #print axioms genericPointWedgeCoordinatePointCounit_eq_transportCounit
 #print axioms genericPointWedgeCoordinatePointCounit_legs
 #print axioms genericPointWedgeCoordinatePointCounit_uniqueObjects

@@ -744,3 +744,10 @@ the generic transport round-trip identities at the unique coordinate object.
 The left comparison chain is the left equivalence counit, while the full
 right comparison/counit chain is the identity; these are the two
 cancellations needed to reduce the reconstructed counit square.
+
+`genericPointWedgeCoordinateSpanMiddleCounit_eq_roundTrips` specializes the
+middle counit conjugation at that same object.  Because the identity
+coordinate-span glue is one, its middle factor is exactly the forward left
+overlap round trip followed by the inverse right overlap round trip.  This
+puts the reconstructed glue between the two triangle equations at their
+unchanged dependent endpoints.
