@@ -465,8 +465,47 @@
   {:consumer :t00A02,
    :implements-lemma
    :lemma-constructiontargets-surfaceclassification-compactsurfacefinitenestedtrianglecover,
+   :evidence
+   {:placeholder-delta
+    {:t00A02 [2 2],
+     :t00A03 [2 2],
+     :t91J05 [3 3],
+     :t92J05 [3 3],
+     :t94J04 [2 2],
+     :t96A01 [1 1],
+     :t97J02 [3 3]},
+    :residual
+    "Refine to a compatible finite simplicial triangulation, prove realization homeomorphic to the surface, then inherit triangulations on finite covers.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :missing-theorems [],
+    :statement-hashes {:check "131/131"},
+    :axioms [propext Classical.choice Quot.sound],
+    :author "Joe Corneli",
+    :commands
+    [{:cmd
+      "lake env lean ConstructionTargets/SurfaceClassification.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.SurfaceClassification",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/surface_classification_finite_nested_cover.lean",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "rg -n '\\b(sorry|admit|axiom)\\b' ConstructionTargets/SurfaceClassification.lean",
+      :exit 1,
+      :expected-exit 1}],
+    :commit "966eeee9b15271adc67ac1f0ec106539dc04a7fa",
+    :changed-paths ["ConstructionTargets/SurfaceClassification.lean"],
+    :fixture
+    {:path "/tmp/surface_classification_finite_nested_cover.lean",
+     :sha256
+     "146359f9b6d66784df548d61fa6ce5fd8fbc113f5184b1b660856e2d3232d894"},
+    :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/SurfaceClassification.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/topo3/surface-classification/finite-nested-coordinate-triangle-cover",
