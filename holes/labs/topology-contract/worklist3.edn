@@ -1280,8 +1280,52 @@
   {:consumer :t00A03,
    :implements-lemma
    :lemma-constructiontargets-surfaceschoenflies-embeddedcirclelocallyflat-of-zerosection-,
+   :evidence
+   {:placeholder-delta {:t00A03 [2 2], :t01J01 [3 3], :t03J02 [2 2]},
+    :residual "Construct planar Schoenflies ambient normal form.",
+    :outcome :done-unreviewed,
+    :warnings ["pre-existing unused hj"],
+    :missing-theorems
+    [{:name
+      "ConstructionTargets.SurfaceSchoenflies.embeddedCircleLocallyFlat_of_zeroSection_normalForm",
+      :type
+      "zero-section ambient/parameter normal form implies EmbeddedCircleLocallyFlat j",
+      :status :proved,
+      :consumers [:t00A03 :t01J01 :t03J02],
+      :depends-on ["circleZeroSection_locallyFlat"],
+      :area "embedded-circle-collar-surface"}],
+    :statement-hashes {:registry "131/131"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author :topo-10,
+    :commands
+    [{:cmd "sha256sum /tmp/surface_schoenflies_normal_form.lean",
+      :exit 0}
+     {:cmd "lake env lean ConstructionTargets/SurfaceSchoenflies.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.SurfaceSchoenflies",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/surface_schoenflies_normal_form_export.lean",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd
+      "git diff --check -- ConstructionTargets/SurfaceSchoenflies.lean",
+      :exit 0}],
+    :diagnostic-history
+    [{:cmd "lake env lean /tmp/surface_schoenflies_normal_form.lean",
+      :exit 1,
+      :correction
+      "expected duplicate after promotion; export check passed"}],
+    :commit "2f307db193b82e9ac3e6d809d7bb04fe9ae637c8",
+    :changed-paths ["ConstructionTargets/SurfaceSchoenflies.lean"],
+    :fixture
+    {:path "/tmp/surface_schoenflies_normal_form.lean",
+     :sha256
+     "b68ce540c635b5528f02bc933fdd6b2be28265a0f1b4e372acc7a59a6d943a84",
+     :mode :post-build-export-check},
+    :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/SurfaceSchoenflies.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/schoenflies/local-flatness",
    :acceptance
@@ -31253,16 +31297,28 @@
    {:name
     "ConstructionTargets.SurfaceSchoenflies.embeddedCircleLocallyFlat_of_zeroSection_normalForm",
     :reported-by
-    [:routes-2026-10-10-surface-schoenflies-collar-topo3-r2],
+    [:routes-2026-10-10-surface-schoenflies-collar-topo3-r2
+     :routes-2026-10-12-surface-normal-form-r1],
     :type "exact type in fixture",
     :area "embedded-circle-collar-surface",
-    :proved-in :routes-2026-10-10-surface-schoenflies-collar-topo3-r2},
+    :proved-in :routes-2026-10-12-surface-normal-form-r1},
    :id
    :lemma-constructiontargets-surfaceschoenflies-embeddedcirclelocallyflat-of-zerosection-,
    :kind :lemma,
    :depends-on
-   [:lemma-constructiontargets-surfaceschoenflies-circlezerosection-locallyflat],
-   :other-consumers [:t01J01 :t03J02]}],
+   [:lemma-constructiontargets-surfaceschoenflies-circlezerosection-locallyflat
+    :lemma-circlezerosection-locallyflat],
+   :other-consumers [:t01J01 :t03J02]}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance {:lemma "circleZeroSection_locallyFlat"},
+   :lemma {:name "circleZeroSection_locallyFlat", :reported-by []},
+   :id :lemma-circlezerosection-locallyflat,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}],
  :consumer-baselines {},
  :statuses
  #{:open
