@@ -113890,6 +113890,17 @@
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder/diff validation", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791843697614-7987-59405026",
+     :commands
+     ["git show/diff-tree bf25d907"
+      "lake build ConstructionTargets.PointWedgeVanKampen"
+      "python3 scripts/statement-registry.py check"
+      "commit hash and placeholder checks"],
+     :finding
+     "PASS program STOP: bf25d907 by topo-2 adds exact endpoint-object lemmas for the outer right counits plus documentation, exactly within scope and new since history. Source bb81fd9e..., documentation 2e5e18d1..., fixture 0bca6ce3..., registry 131/131, and placeholders 0->0 reproduce. The target endpoint unfolds to the fixed right-cover representative; the source unfolds only to eR.inverse applied to the literal y0 object. The counit itself is not normalized, so the representation boundary remains explicit. Fresh build passes with standard axioms. Relating that inverse-image counit to the right-base conjugator, left specialization, point-span work, and B6/B12 remain listed."},
     :commit "bf25d90701e82dd71b419ed2f80685d6d66a01d3",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
@@ -113900,7 +113911,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113921,7 +113932,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: The shared inner right restriction counit cancels, leaving two actual-span maps between the outer endpoint counits.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: The outer right-counit objects are the fixed right-cover base and the inverse-equivalence image of y0.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -114484,7 +114495,11 @@
     {:job 2,
      :commit "4dd54519dedb073f7948cd67420f62a0f5a2aa32",
      :reason
-     "The shared inner right restriction counit cancels, leaving two actual-span maps between the outer endpoint counits."}]}
+     "The shared inner right restriction counit cancels, leaving two actual-span maps between the outer endpoint counits."}
+    {:job 3,
+     :commit "bf25d90701e82dd71b419ed2f80685d6d66a01d3",
+     :reason
+     "The outer right-counit objects are the fixed right-cover base and the inverse-equivalence image of y0."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
