@@ -1405,6 +1405,20 @@ omit [PathConnectedSpace X] [PathConnectedSpace Y] in
       ConnectorSystem.normalForm]]
   exact genericPointWedgeIdentityPointSpan_left x₀ y₀ g
 
+/-- On arbitrary endpoints, the coordinate left functor applies the connector
+normal form before injecting into the free product. -/
+theorem genericPointWedgeIdentityCoordinateSpan_left_map
+    {a b : FundamentalGroupoid X} (f : a ⟶ b) :
+    HEq ((genericPointWedgeIdentityCoordinateSpan x₀ y₀).left.map f)
+      ((Monoid.Coprod.inl ((genericPointWedgeConnectors x₀).normalForm f)) :
+        genericPointWedgeFreeProduct x₀ y₀) := by
+  change HEq ((genericPointWedgeIdentityPointSpan x₀ y₀).left.map
+      ((genericPointWedgeSingleObjEquivalence x₀).functor.map f)) _
+  rw [show (genericPointWedgeSingleObjEquivalence x₀).functor.map f =
+      (genericPointWedgeConnectors x₀).normalForm f by
+    rfl]
+  exact heq_of_eq (genericPointWedgeIdentityPointSpan_left x₀ y₀ _)
+
 @[simp] theorem genericPointWedgeIdentityCoordinateSpan_right
     (g : FundamentalGroup Y y₀) :
     (genericPointWedgeIdentityCoordinateSpan x₀ y₀).right.map
@@ -2352,6 +2366,7 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeIdentityPointSpan_left
 #print axioms genericPointWedgeIdentityPointSpan_right
 #print axioms genericPointWedgeIdentityCoordinateSpan_left
+#print axioms genericPointWedgeIdentityCoordinateSpan_left_map
 #print axioms genericPointWedgeIdentityCoordinateSpan_right
 #print axioms genericPointWedgeIdentityActualSpan_left_map
 #print axioms genericPointWedgeIdentityActualSpan_right_map

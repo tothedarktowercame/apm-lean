@@ -403,3 +403,8 @@ the symmetric source endpoint: the right equivalence follows the actual-right
 map after the same overlap inverse/forward object round trip.  Evaluating the
 two round trips and dependent casts remains before both injection theorems
 apply.
+
+`genericPointWedgeIdentityCoordinateSpan_left_map` computes the left
+coordinate functor on arbitrary endpoints as the coproduct injection of the
+connector normal form.  The result is stated with `HEq`, retaining the
+dependent object fields until the outer left-span component is specialized.
