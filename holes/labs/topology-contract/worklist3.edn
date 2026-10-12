@@ -29999,6 +29999,8 @@
    :other-consumers []}
   {:consumer :t00A02,
    :stop-count 1,
+   :review-finding
+   "Blueprint defect at B5: inserting transverse crossings as vertices does not imply every component of the complement in an inner disk is a polygonal disk. Counterexample: one simple closed polygonal curve strictly inside the disk leaves an annular component between the curve and the disk boundary. B4 gives no cellularity or cutting-arc hypothesis. Repair B5 by adding and proving a cellularization step (for example, add finitely many embedded cutting arcs until every complementary region is a disk), then make B6 use that result. The STOP also commits only the blueprint, not compiled supporting declarations; the existing module build and registry check do not constitute new program progress.",
    :implements-lemma
    :lemma-constructiontargets-surfaceclassification-compactsmoothsurfacefinitetriangulatio,
    :evidence
@@ -30030,12 +30032,18 @@
       :exit 0}
      {:cmd "rg blueprint nodes B1-B14", :exit 0}],
     :continue-from "b1612b5c125b59b3e1bfc0cba81abe8b09d72c6b",
+    :review
+    {:outcome :fail,
+     :seat "codex-11",
+     :job "invoke-1791812771624-7012-8bbc1b30",
+     :finding
+     "Blueprint defect at B5: inserting transverse crossings as vertices does not imply every component of the complement in an inner disk is a polygonal disk. Counterexample: one simple closed polygonal curve strictly inside the disk leaves an annular component between the curve and the disk boundary. B4 gives no cellularity or cutting-arc hypothesis. Repair B5 by adding and proving a cellularization step (for example, add finitely many embedded cutting arcs until every complementary region is a disk), then make B6 use that result. The STOP also commits only the blueprint, not compiled supporting declarations; the existing module build and registry check do not constitute new program progress."},
     :commit "b1612b5c125b59b3e1bfc0cba81abe8b09d72c6b",
     :changed-paths
     ["ConstructionTargets/SurfaceClassification.blueprint.md"],
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :repair,
    :scope
    ["ConstructionTargets/SurfaceClassification.lean"
     "ConstructionTargets/SurfaceClassification.md"
@@ -30057,7 +30065,7 @@
    :id :program-2026-10-12-surface-classification,
    :kind :reusable-theorem,
    :campaign-priority 40,
-   :fail-count 0,
+   :fail-count 1,
    :depends-on [],
    :program true,
    :other-consumers [:t00A03 :t91J05 :t92J05 :t94J04 :t96A01 :t97J02]}
