@@ -418,3 +418,8 @@ specialized without identifying their dependent source objects with a base.
 arbitrary left calculation to the precise `aL.hom` component in the outer
 left-span factor.  Its image is `Coprod.inl` of the connector normal form;
 evaluating that normal form is the remaining left-span calculation.
+
+`genericPointWedgeIdentityOuterRightSpanMap_heq_inr_normalForm` specializes
+the arbitrary right calculation to the precise `aR.inv` component used by the
+outer right-span factor.  Its image is `Coprod.inr` of the connector normal
+form, with the dependent endpoint retained by `HEq`.

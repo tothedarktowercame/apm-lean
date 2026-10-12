@@ -1465,6 +1465,26 @@ theorem genericPointWedgeIdentityOuterLeftSpanMap_heq_inl_normalForm :
           genericPointWedgeFreeProduct x₀ y₀) := by
   exact genericPointWedgeIdentityCoordinateSpan_left_map x₀ y₀ _
 
+/-- The exact outer right-span component maps to the right coproduct injection
+of its connector normal form. -/
+theorem genericPointWedgeIdentityOuterRightSpanMap_heq_inr_normalForm :
+    let eK := genericPointWedgeOverlapGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let aR := genericPointWedgeRightSpanIso
+      x₀ y₀ M N hM hN hy hx cM cN
+    let Q := genericPointWedgeIdentityCoordinateSpan x₀ y₀
+    let z : FundamentalGroupoid (genericPointWedgeOverlapPiece x₀ y₀ M N) :=
+      FundamentalGroupoid.mk
+        ⟨quotientMap x₀ y₀ (.inl x₀),
+          ⟨⟨.inl x₀, by trivial, rfl⟩,
+            ⟨.inr y₀, by trivial,
+              (Quotient.sound (Relation.EqvGen.rel _ _ Rel.base)).symm⟩⟩⟩
+    HEq (Q.right.map (aR.inv.app (eK.functor.obj z)))
+      ((Monoid.Coprod.inr ((genericPointWedgeConnectors y₀).normalForm
+        (aR.inv.app (eK.functor.obj z)))) :
+          genericPointWedgeFreeProduct x₀ y₀) := by
+  exact genericPointWedgeIdentityCoordinateSpan_right_map x₀ y₀ _
+
 theorem genericPointWedgeIdentityActualSpan_left_map
     {a b : FundamentalGroupoid (genericPointWedgeLeftPiece x₀ y₀ M)}
     (f : a ⟶ b) :
@@ -2404,6 +2424,7 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeIdentityCoordinateSpan_right
 #print axioms genericPointWedgeIdentityCoordinateSpan_right_map
 #print axioms genericPointWedgeIdentityOuterLeftSpanMap_heq_inl_normalForm
+#print axioms genericPointWedgeIdentityOuterRightSpanMap_heq_inr_normalForm
 #print axioms genericPointWedgeIdentityActualSpan_left_map
 #print axioms genericPointWedgeIdentityActualSpan_right_map
 #print axioms genericPointWedgeSingleObjPostcomposeIso
