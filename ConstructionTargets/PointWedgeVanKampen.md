@@ -549,3 +549,8 @@ lifted right loop while retaining both dependent endpoints.
 `genericPointWedgeRightLiftedLoop_transport_eq_concrete` carries that
 dependent comparison through the right endpoint conjugation without changing
 the named quotient-aware base-object equality.
+
+`genericPointWedgeRightComposite_baseProof` aligns the composite based-map
+witness with the right inclusion equation.  Using that alignment,
+`genericPointWedgeRightComposite_mapOfEq` proves that the based map induced by
+`rightEquiv.toFun ∘ rightLegLift` fixes every right-summand loop.

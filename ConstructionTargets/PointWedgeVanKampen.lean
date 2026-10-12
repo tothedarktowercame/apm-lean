@@ -2382,6 +2382,39 @@ theorem genericPointWedgeRightLiftedLoop_transport_eq_concrete
     x₀ y₀ M N hM hN hy hx cM cN g)]
   rfl
 
+omit [PathConnectedSpace X] [PathConnectedSpace Y] in
+/-- The basepoint equality used by the right composite based map is the
+pointwise congruence of the composite-map identity. -/
+theorem genericPointWedgeRightComposite_baseProof :
+    congrArg (fun f : C(Y, Y) => f y₀)
+        (genericPointWedgeRightEquiv_comp_rightLegLift
+          x₀ y₀ M N hM hN hy hx cM cN) =
+      (genericPointWedgePackage
+        x₀ y₀ M N hM hN hy hx cM cN).right_inclusion y₀ := by
+  apply Subsingleton.elim
+
+omit [PathConnectedSpace X] [PathConnectedSpace Y] in
+/-- The based map of the right equivalence-lift composite fixes every loop. -/
+theorem genericPointWedgeRightComposite_mapOfEq
+    (g : FundamentalGroup Y y₀) :
+    FundamentalGroup.mapOfEq
+        ((genericPointWedgePackage
+          x₀ y₀ M N hM hN hy hx cM cN).rightEquiv.toFun.comp
+            (genericPointWedgeRightLegLift x₀ y₀ N))
+        ((genericPointWedgePackage
+          x₀ y₀ M N hM hN hy hx cM cN).right_inclusion y₀) g = g := by
+  rw [← genericPointWedgeRightComposite_baseProof
+    x₀ y₀ M N hM hN hy hx cM cN]
+  simp only [genericPointWedgeRightEquiv_comp_rightLegLift]
+  have mapOfEq_id (h : (ContinuousMap.id Y) y₀ = y₀) :
+      FundamentalGroup.mapOfEq (ContinuousMap.id Y) h g = g := by
+    rw [show h = (rfl : y₀ = y₀) by apply Subsingleton.elim]
+    rcases g with ⟨p⟩
+    simpa [Path.map_id] using
+      (FundamentalGroup.mapOfEq_apply
+        (f := ContinuousMap.id Y) (h := rfl) p)
+  exact mapOfEq_id _
+
 omit [PathConnectedSpace Y] in
 /-- The connector normal form of the mapped lifted left loop is conjugation
 by the explicit equality transport at its common endpoint. -/
@@ -3058,6 +3091,8 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeRightGroupoidEquivalence_functor
 #print axioms genericPointWedgeRightLiftedLoop_map_heq
 #print axioms genericPointWedgeRightLiftedLoop_transport_eq_concrete
+#print axioms genericPointWedgeRightComposite_baseProof
+#print axioms genericPointWedgeRightComposite_mapOfEq
 #print axioms genericPointWedgeLeftLiftedLoop_normalForm_eq_transport
 #print axioms genericPointWedgeLeftComposite_baseProof
 #print axioms genericPointWedgeLeftComposite_mapOfEq
