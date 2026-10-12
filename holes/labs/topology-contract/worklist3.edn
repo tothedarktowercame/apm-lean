@@ -19298,6 +19298,17 @@
      {:cmd "rg forbidden tokens in scoped file",
       :exit 1,
       :expected-exit 1}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791787238563-6517-18ad6bed",
+     :commands
+     ["recorded scope/blob, fixture hash, diff check"
+      "statement registry and placeholder scans"
+      "lake env lean: renamed fixture and module"
+      "lake build ConstructionTargets.ManifoldFundamentalClass"],
+     :finding
+     "PASS: recorded one-file scope and frozen fixture hash match. The coefficient projection square is source cokernel projection then pair map = absolute map then target cokernel projection. Applying the forgetful homological-complex functor and map_comp yields exactly the frozen equation, with correct source/target boundaries. Registry 131/0; source placeholders 0; consumer sorries 1/1; standard axioms only; build 8326 jobs."},
     :commit "789730664fe92b4fc088cbed4626eae2270fb483",
     :changed-paths
     ["ConstructionTargets/ManifoldFundamentalClass.lean"],
@@ -19307,7 +19318,7 @@
      "29a29c9c66faa7fa9b65c951a3e0dd6e80e2d5dae0c1e1a5a62e6ed16e6ee738"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/manifold-fundamental-class/open-disk-model-transport",
@@ -19378,7 +19389,7 @@
       "29a29c9c66faa7fa9b65c951a3e0dd6e80e2d5dae0c1e1a5a62e6ed16e6ee738"},
      :seat "topo-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -27685,7 +27696,7 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -27698,7 +27709,9 @@
     [:routes-2026-10-10-manifold-fundamental-class-topo3-r2],
     :type "exact type in fixture",
     :area "manifold-fundamental-class",
-    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2,
+    :banked-by :routes-2026-10-12-mfclass-forgotten-pair-projection-r1,
+    :banked-commit "789730664fe92b4fc088cbed4626eae2270fb483"},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-coefficientpairmap-forgotten-projec,
    :kind :lemma,
