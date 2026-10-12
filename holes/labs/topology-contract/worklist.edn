@@ -113894,6 +113894,19 @@
     [{:cmd "lean target-glue rfl",
       :exit 1,
       :finding "Round trip retains connector counits."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791832133793-7755-d19c8250",
+     :commands
+     ["git show/diff-tree f58e73a9"
+      "hash/fingerprint/placeholder checks"
+      "lake env lean ConstructionTargets/PointWedgeVanKampen.lean"
+      "lake build ConstructionTargets.PointWedgeVanKampen"
+      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (expected missing milestone)"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS program STOP: f58e73a9 by topo-2 changes exactly two scoped files. Fixture 0bca6ce3..., documentation 6441dd39..., frozen t99J01 fingerprint be7f7cf0..., and registry 131/131 verify; placeholders remain 0->0. The new counit-splice equation has the documented multiplication orientation and follows from coordinate-to-point counit glue naturality without normalizing connector counits; representation boundaries remain explicit. Blueprint B3 now lists its connector-system dependency and route. Foundation Lean/build pass with only propext/choice/Quot.sound. Final ThreeCircles target is still absent, consistently listed among remaining milestones; source-glue/open-cover composition and B6/B12 remain."},
     :commit "f58e73a9c7f3d0cd03bd204061e8e386ae9b80b5",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
@@ -113904,7 +113917,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113925,7 +113938,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Mapped coordinate-span counit glue naturality is specialized at the unique overlap object.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Coordinate-to-point target glue now satisfies the injected connector-counit splice.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -114412,7 +114425,11 @@
     {:job 9,
      :commit "f4203bfa6682494cf60b47c7978440fc6f41c047",
      :reason
-     "Mapped coordinate-span counit glue naturality is specialized at the unique overlap object."}]}
+     "Mapped coordinate-span counit glue naturality is specialized at the unique overlap object."}
+    {:job 1,
+     :commit "f58e73a9c7f3d0cd03bd204061e8e386ae9b80b5",
+     :reason
+     "Coordinate-to-point target glue now satisfies the injected connector-counit splice."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
