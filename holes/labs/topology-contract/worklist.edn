@@ -113850,14 +113850,14 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 4,
+   :stop-count 5,
    :review-finding
    "Blueprint B3 is marked proved but its proof uses the unlisted ConnectedGroupoidSingleObjEquivalence.connectorSingleObjEquivalence (and connector-system representation) instead of only the declared uses; add the actual connector dependency and proof route to B3 uses.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
    :evidence
    {:placeholder-delta {:source-before 0, :source-after 0},
     :residual
-    "Normalize the canonical descent-overlap predecessor glue, substitute three-factor counits, then close B6/B12.",
+    "Evaluate the canonical descent-overlap component at the fixed overlap base, then substitute the three-factor counits and close B6/B12.",
     :outcome :stop,
     :warnings [],
     :missing-theorems
@@ -113871,9 +113871,9 @@
       :area "fundamental-group-wedge-of-circles"}],
     :statement-hashes
     {:source
-     "2892f1cbdfa6ed9d6edc84fe0bac4707b7b1bac803c3994a8831d478a8f99e2f",
+     "91957d197eae33ecb165c78e77422716ada20f3de396502df3d988c0b641c15f",
      :documentation
-     "bc0a72ec23d46cab58126a6b36798340a4429471937b65e1b84b8b2177d1add6",
+     "1657cc42c248db46255d0d000ca7afaca5cc766f9465d0b3d61d57156c710ad2",
      :blueprint
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0",
      :registry "131/131"},
@@ -113881,7 +113881,7 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
     :reason
-    "Both mapped counit glue squares now compose, leaving only the pseudopushout predecessor glue.",
+    "The predecessor is now the mapped canonical overlap of the named reconstructed global functor.",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/PointWedgeVanKampen.lean",
@@ -113890,23 +113890,7 @@
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder/diff validation", :exit 0}],
-    :diagnostic-history
-    [{:cmd "lean predecessor normalization attempts",
-      :exit 130,
-      :finding
-      "Not definitional; residual is canonical descent-overlap component."}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1791833624964-7789-a08761e6",
-     :commands
-     ["git show/diff-tree e3464858"
-      "lake build ConstructionTargets.PointWedgeVanKampen"
-      "python3 scripts/statement-registry.py check"
-      "commit hash and placeholder checks"],
-     :finding
-     "PASS program STOP: e3464858 by topo-2 adds one composed splice theorem plus documentation, exactly within scope and new since history. Source 2892f1cb..., documentation bc0a72ec..., fixture 0bca6ce3..., registry 131/131, and placeholders 0->0 reproduce. Substituting right*predecessor=source*left and reassociating before the prior injected splice proves the displayed equation in the correct multiplication order; all counit factors and the pseudopushout boundary remain explicit. Fresh build passes with standard axioms. This is compiled sorry-free progress; canonical predecessor-glue normalization, three-factor substitution, and B6/B12 remain explicitly listed."},
-    :commit "e3464858a6b60d00c3307e37f761315576c888d1",
+    :commit "aff8c2cb871c3702c79dc1a6b4fea1e41c70b97e",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
      "ConstructionTargets/PointWedgeVanKampen.md"],
@@ -113916,7 +113900,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
