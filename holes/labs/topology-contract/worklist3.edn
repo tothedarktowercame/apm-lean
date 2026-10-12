@@ -18106,6 +18106,17 @@
       "rg -n '\\b(sorry|admit|axiom)\\b' ConstructionTargets/ManifoldFundamentalClass.lean",
       :exit 1,
       :expected-exit 1}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791766757663-6097-70c97b74",
+     :commands
+     ["git scope/diff/hash checks at c6c2f276ac1efd907c34a80818da0444cae79075"
+      "renamed fixture, exact-type check, and module: lake env lean"
+      "statement registry and placeholder scans"
+      "lake build ConstructionTargets.ManifoldFundamentalClass"],
+     :finding
+     "Recorded one-file scope, blob, and frozen fixture hash match. The left route crosses opcycles via mapOpcyclesIso.inv; the right forgets opcyclesToCycles then crosses cycles via mapCyclesIso.inv. Precomposition with the epi forgotten projection reduces to the verified toCycles square. Fixture/check/module compile; registry 131/0; build 8326 jobs; axioms propext, choice, Quot.sound; source placeholders 0; consumer sorries 1/1."},
     :commit "c6c2f276ac1efd907c34a80818da0444cae79075",
     :changed-paths
     ["ConstructionTargets/ManifoldFundamentalClass.lean"],
@@ -18115,7 +18126,7 @@
      "f1482e8f8c2920568eebf2752f693454157f9c290b8b7edd1aa0745d7a147c59"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/manifold-fundamental-class/square12",
    :acceptance
@@ -18187,7 +18198,7 @@
       "f1482e8f8c2920568eebf2752f693454157f9c290b8b7edd1aa0745d7a147c59"},
      :seat "topo-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -25975,7 +25986,7 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -25990,7 +26001,9 @@
     :type
     "∀ {ι} {c : ComplexShape ι} (K : HomologicalComplex (ModuleCat ℤ) c) (i j : ι), ForgottenOpcyclesToCyclesNaturality K i j",
     :area "manifold-fundamental-class",
-    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2,
+    :banked-by :routes-2026-10-12-mfclass-opcycles-to-cycles-r1,
+    :banked-commit "c6c2f276ac1efd907c34a80818da0444cae79075"},
    :id :lemma-mfclass-opcycles-to-cycles-square,
    :kind :lemma,
    :depends-on [:lemma-mfclass-to-cycles-square],
