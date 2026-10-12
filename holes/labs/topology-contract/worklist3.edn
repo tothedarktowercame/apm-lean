@@ -19339,23 +19339,47 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :implements-lemma
+   :lemma-constructiontargets-manifoldfundamentalclass-coefficientabsolutemap-forgotten-na,
+   :phase :implementation,
+   :state :open,
+   :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/manifold-fundamental-class/open-disk-model-transport",
+   :acceptance
+   {:declaration
+    "ConstructionTargets.ManifoldFundamentalClass.coefficientAbsoluteMap_forgotten_naturality",
+    :type "exact type in fixture",
+    :fixture "/tmp/absnat.lean",
+    :fixture-sha256
+    "4adbea29747193d1c270c174800f70c3f0ab6366975ff6c1dd551b68a87b61dc",
+    :placeholders ["t00J02 bridge_1" "t98A02 sorry"],
+    :route-step "forgotten absolute-map comparison"},
+   :id :routes-2026-10-12-mfclass-forgotten-absolute-naturality-r1,
+   :kind :reusable-theorem,
+   :area "manifold-fundamental-class",
+   :depends-on
+   [:routes-2026-10-12-mfclass-forgotten-pair-projection-r1],
+   :current-residual "Relative-chain comparison naturality.",
+   :other-consumers [:t98A02]}
+  {:consumer :t00J02,
+   :implements-lemma
    :lemma-constructiontargets-manifoldfundamentalclass-closedorientedfundamentalclass,
    :evidence
    {:probe
-    {:residual "Promote; prove comparison square.",
+    {:residual "Promote; finish pair comparison square.",
      :outcome :revise,
      :missing-theorems
      [{:name
-       "ConstructionTargets.ManifoldFundamentalClass.coefficientPairMap_forgotten_projection_naturality",
+       "ConstructionTargets.ManifoldFundamentalClass.coefficientAbsoluteMap_forgotten_naturality",
        :type "exact type in fixture",
        :status :proved,
        :consumers [:t00J02 :t98A02],
        :depends-on
-       ["ConstructionTargets.ManifoldFundamentalClass.coefficientSphereNormalizationComparisonAutomorphism_hom_eq_neg_implies_openDisk_model_factors"],
+       ["ConstructionTargets.ManifoldFundamentalClass.coefficientPairMap_forgotten_projection_naturality"],
        :area "manifold-fundamental-class"}],
      :prerequisite
      {:consumer :t00J02,
-      :implements-lemma :lemma-mfclass-forgotten-pair-projection,
+      :implements-lemma :lemma-mfclass-forgotten-absolute-naturality,
       :phase :implementation,
       :state :open,
       :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
@@ -19363,33 +19387,34 @@
       "TOPOLOGY-ROUTES.md/manifold-fundamental-class/open-disk-model-transport",
       :acceptance
       {:declaration
-       "ConstructionTargets.ManifoldFundamentalClass.coefficientPairMap_forgotten_projection_naturality",
+       "ConstructionTargets.ManifoldFundamentalClass.coefficientAbsoluteMap_forgotten_naturality",
        :type "exact type in fixture",
-       :fixture "/tmp/paircomp.lean",
+       :fixture "/tmp/absnat.lean",
        :fixture-sha256
-       "29a29c9c66faa7fa9b65c951a3e0dd6e80e2d5dae0c1e1a5a62e6ed16e6ee738",
+       "4adbea29747193d1c270c174800f70c3f0ab6366975ff6c1dd551b68a87b61dc",
        :placeholders ["t00J02 bridge_1" "t98A02 sorry"],
-       :route-step "forgotten pair projection"},
-      :id :routes-2026-10-12-mfclass-forgotten-pair-projection-r1,
+       :route-step "forgotten absolute-map comparison"},
+      :id :routes-2026-10-12-mfclass-forgotten-absolute-naturality-r1,
       :kind :reusable-theorem,
       :area "manifold-fundamental-class",
-      :depends-on [:routes-2026-10-12-mfclass-open-disk-model-neg-r1],
+      :depends-on
+      [:routes-2026-10-12-mfclass-forgotten-pair-projection-r1],
       :current-residual "Relative-chain comparison naturality.",
       :other-consumers [:t98A02]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
      [{:cmd
-       "lake env lean /tmp/paircomp.lean && sha256sum /tmp/paircomp.lean && python3 scripts/statement-registry.py check",
+       "lake env lean /tmp/absnat.lean && sha256sum /tmp/absnat.lean && python3 scripts/statement-registry.py check",
        :exit 0}],
      :diagnostic-history
-     [{:exit 1, :correction "Use explicit square."}],
+     [{:exit 1, :correction "Split private absolute-map boundary."}],
      :fixture
-     {:path "/tmp/paircomp.lean",
+     {:path "/tmp/absnat.lean",
       :sha256
-      "29a29c9c66faa7fa9b65c951a3e0dd6e80e2d5dae0c1e1a5a62e6ed16e6ee738"},
+      "4adbea29747193d1c270c174800f70c3f0ab6366975ff6c1dd551b68a87b61dc"},
      :seat "topo-12"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -19534,7 +19559,8 @@
     :routes-2026-10-12-mfclass-open-disk-coeff-model-r1
     :routes-2026-10-12-mfclass-open-disk-prod-model-r1
     :routes-2026-10-12-mfclass-open-disk-model-neg-r1
-    :routes-2026-10-12-mfclass-forgotten-pair-projection-r1],
+    :routes-2026-10-12-mfclass-forgotten-pair-projection-r1
+    :routes-2026-10-12-mfclass-forgotten-absolute-naturality-r1],
    :current-residual
    "Local-degree counts and wild-ball complement homology remain.",
    :other-consumers [:t98A02]}
@@ -27717,6 +27743,28 @@
    :kind :lemma,
    :depends-on
    [:lemma-constructiontargets-manifoldfundamentalclass-coefficientsphe-2bdaadf4af6f],
+   :other-consumers [:t98A02]}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.ManifoldFundamentalClass.coefficientAbsoluteMap_forgotten_naturality",
+    :type "exact type in fixture"},
+   :lemma
+   {:name
+    "ConstructionTargets.ManifoldFundamentalClass.coefficientAbsoluteMap_forgotten_naturality",
+    :reported-by
+    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2],
+    :type "exact type in fixture",
+    :area "manifold-fundamental-class",
+    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+   :id
+   :lemma-constructiontargets-manifoldfundamentalclass-coefficientabsolutemap-forgotten-na,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-manifoldfundamentalclass-coefficientpairmap-forgotten-projec],
    :other-consumers [:t98A02]}],
  :consumer-baselines {},
  :statuses
