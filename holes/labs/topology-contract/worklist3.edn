@@ -30626,11 +30626,17 @@
       "git diff --exit-code 4244c6e3e..92a672b41 -- ConstructionTargets/SurfaceClassification.lean",
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
+    :review
+    {:outcome :fail,
+     :seat "codex-11",
+     :job "invoke-1791829405842-7669-407ea530",
+     :finding
+     "Program-row defect: commit 92a672b41 is blueprint-only; SurfaceClassification.lean is unchanged after history commit 4244c6e3e; the row remains implementation/done-unreviewed/program. Retire or supersede this obsolete program row and submit 92a672b41 through a separate blueprint-review row before electing R1-R7; off-route compiled work is forbidden."},
     :commit "92a672b41fa1f7e45df1987a4aca7d2f8460d2e0",
     :changed-paths [],
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :repair,
    :scope
    ["ConstructionTargets/SurfaceClassification.lean"
     "ConstructionTargets/SurfaceClassification.md"
@@ -30654,7 +30660,7 @@
    :id :program-2026-10-12-surface-classification,
    :kind :reusable-theorem,
    :campaign-priority 40,
-   :fail-count 0,
+   :fail-count 1,
    :depends-on [],
    :program true,
    :other-consumers [:t00A03 :t91J05 :t92J05 :t94J04 :t96A01 :t97J02],
