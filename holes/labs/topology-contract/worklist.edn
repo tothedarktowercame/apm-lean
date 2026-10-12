@@ -113850,14 +113850,14 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 4,
+   :stop-count 5,
    :review-finding
    "Blueprint B3 is marked proved but its proof uses the unlisted ConnectedGroupoidSingleObjEquivalence.connectorSingleObjEquivalence (and connector-system representation) instead of only the declared uses; add the actual connector dependency and proof route to B3 uses.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
    :evidence
    {:placeholder-delta {:source-before 0, :source-after 0},
     :residual
-    "Normalize both coordinate-point counit legs; compare mapped pre-coordinate counit with outer factors; close B6/B12.",
+    "Evaluate both congrLeft counits at the unique objects; compare mapped pre-coordinate counit with outer factors; close B6/B12.",
     :outcome :stop,
     :warnings [],
     :missing-theorems
@@ -113871,9 +113871,9 @@
       :area "fundamental-group-wedge-of-circles"}],
     :statement-hashes
     {:source
-     "30e32788764b736db6cd2feabb0d8f4d429391881e3dd32aa6246b5539647586",
+     "5ff80f4980f028916a87848f489d94f5a9f8666e803b98fe05825e48f5a6b339",
      :documentation
-     "0d8cb30cb547074eccad66bda7e178328151e64b3d8002269fd9a7cf69ddcd8d",
+     "b9a3ec1c532e2b60a938b584c63c36650f99628309a3525ca68f783673a8646a",
      :blueprint
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0",
      :registry "131/131"},
@@ -113881,7 +113881,7 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
     :reason
-    "Coordinate-point counit is the explicit generic span-transport counit.",
+    "Both coordinate-point counit legs are explicit single-object congrLeft counits.",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/PointWedgeVanKampen.lean",
@@ -113890,23 +113890,8 @@
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder/diff validation", :exit 0}],
-    :diagnostic-history
-    [{:cmd "lean omitted instances",
-      :exit 1,
-      :finding "Identity span requires path-connected instances."}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1791815280851-7103-0e57d119",
-     :commands
-     ["git show/diff-tree 30dfc1c11"
-      "sha256/placeholder/registry checks"
-      "lake env lean ConstructionTargets/PointWedgeVanKampen.lean"
-      "lake build ConstructionTargets.PointWedgeVanKampen"
-      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (expected absent)"],
-     :finding
-     "PASS: exact two-file scope and frozen hashes match; placeholders 0->0, registry 131/131. Coordinate-point counit at the identity point span is faithfully identified with the explicit generic span-transport counit, with equivalences/isomorphisms in correct positions; standard axioms only. Valid program STOP; normalize its legs, compare outer factors, then B6/B12."},
-    :commit "30dfc1c119cddb2d8ee87496f2301a0ab7b72bed",
+    :diagnostic-history [],
+    :commit "124250e47dd08b3985b93432a5493c04362d6fbc",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
      "ConstructionTargets/PointWedgeVanKampen.md"],
@@ -113916,7 +113901,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
