@@ -116874,13 +116874,13 @@
   {:consumer :t97A07,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 5,
+   :stop-count 6,
    :review-finding
    "Recorded fixture hash mismatch: :fixture.sha256 is eaeed21919599335d4a33b437815c4a9cbb5b72110213b29440d6944cc982182 (the blueprint at older commit 736c2566), but commit 8432f937 changes ConstructionTargets/t97A07Closure.blueprint.md and its exact SHA-256 is 5bb02c342b988406e8bd26aeda1b9e67335a8c1f626d97ec96701cb039ae708f. Re-record the fixture hash for the reviewed commit.",
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
     :residual
-    "Compare the fixed representative after precomposition with the source chart to this transported family pointwise; then B3-B9.",
+    "Prove the precomposed fixed derivative equals the transported mfderiv pointwise near x; then B3-B9.",
     :outcome :stop,
     :warnings [{:kind :existing-placeholder}],
     :missing-theorems
@@ -116892,17 +116892,17 @@
       :area "regular-points-open"}],
     :statement-hashes
     {:source
-     "3020e9ae78e05e05d29c5dc671cafe1e13591b58e7ea665d64e9e6c1c0dc5c83",
+     "fb59520ce139507443c706763cf417be4a246ee974b08ad231bedd00a1fd379d",
      :target
      "f13a687334f894f060c24b9aa390e8de88a2bf5f3d36e1de717af326c84d78f2",
      :blueprint
-     "f1856bca7d3b96c71c928f87a416e56ea453c0cc635eea3dcef2864af39dd3dc",
+     "adbf25891dd5bb2e6a67bcbb218dd4563146cf66804abdcd11975e1cb30998cf",
      :registry "131/131"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
     :reason
-    "Transported derivative continuity and its centre mfderiv anchor are packaged together.",
+    "The fixed-coordinate derivative precomposed with the source chart is now continuous at the base point.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t97A07Closure.lean",
       :exit 0}
@@ -116911,34 +116911,20 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder/diff validation", :exit 0}],
     :diagnostic-history
-    [{:cmd "lean initial theorem",
+    [{:cmd "lean initial Tendsto rewrite",
       :exit 1,
-      :finding "Corrected a malformed model-with-corners glyph."}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1791831595428-7741-de3ff29e",
-     :commands
-     ["git show/diff-tree 0f8bb79"
-      "sha256sum + statement fingerprint"
-      "lake env lean ConstructionTargets/t97A07Closure.lean"
-      "lake build ConstructionTargets.t97A07Closure"
-      "lake env lean problems/t97A07/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"
-      "git grep placeholders parent/commit"],
-     :finding
-     "PASS: commit 0f8bb79 by topo-2 changes exactly two scoped closure files. Blueprint fixture f1856bca... and frozen Main f13a687... match; registry 131/131 and statement fingerprint are unchanged. New theorem correctly packages transported mfderiv continuity with centre equality, preserving tangent-coordinate boundaries and orientation; blueprint addition is true and depends on proved B2 results. Fresh gates compile; axioms are propext/choice/Quot.sound; no new placeholders (frozen source 1->1). This is compiled sorry-free standard-axiom program progress, with the pointwise fixed-representative comparison and B3-B9 explicitly remaining."},
-    :commit "0f8bb79ba478e77e26d74ceeb148df08eac39b65",
+      :finding "Composed image-filter Tendsto directly."}],
+    :commit "4d382ed8d1b8a69afd92feca0400d85db20cde12",
     :changed-paths
     ["ConstructionTargets/t97A07Closure.lean"
      "ConstructionTargets/t97A07Closure.blueprint.md"],
     :fixture
     {:path "ConstructionTargets/t97A07Closure.blueprint.md",
      :sha256
-     "f1856bca7d3b96c71c928f87a416e56ea453c0cc635eea3dcef2864af39dd3dc"},
+     "adbf25891dd5bb2e6a67bcbb218dd4563146cf66804abdcd11975e1cb30998cf"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t97A07/lean/Main.lean"
     "problems/t97A07/status.json"
