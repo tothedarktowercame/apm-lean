@@ -493,7 +493,7 @@
    :other-consumers []}
   {:bounded-exception "Rule-0 single consumer.",
    :consumer :t01A08,
-   :stop-count 1,
+   :stop-count 2,
    :review-finding
    "Frozen fixture mode is missing in both authoritative acceptance copies. SHA e8cd3a6cf79367917bc0c739ad8b5644e58e2ca8212e21edcea9f5af6a6c47d4 matches; module and axiom-export checks pass, but literal fixture compilation exits 1 because modelRange_frontier_addHaar_null is already declared. Add :mode :post-build-export-check to both copies, then resubmit commit e30f8627.",
    :implements-lemma
@@ -501,7 +501,7 @@
    :evidence
    {:placeholder-delta {:t01A08 [1 1]},
     :residual
-    "Add fixture mode to both acceptance copies, then resubmit e30f8627.",
+    "Stop repeated repair; update both acceptance copies, then resubmit e30f8627.",
     :outcome :stop,
     :warnings [],
     :statement-hashes {:registry "131/131"},
@@ -509,7 +509,7 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Both authoritative acceptance copies omit :mode. Supervisor must add :mode :post-build-export-check; e30f8627 builds and matches the frozen fixture digest.",
+    "Third unchanged audit: both authoritative acceptance copies omit :mode. Supervisor must add :mode :post-build-export-check; e30f8627 remains compiled and matches the frozen digest.",
     :commands
     [{:cmd "sha256sum /tmp/t01a08_model_range_boundary_null.lean",
       :exit 0}
@@ -518,12 +518,6 @@
       "git diff --exit-code e30f8627 -- ConstructionTargets/SardGeneralModel.lean",
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1791831623238-7743-0f5c1a1e",
-     :finding
-     "Frozen fixture mode is missing in both authoritative acceptance copies. SHA e8cd3a6cf79367917bc0c739ad8b5644e58e2ca8212e21edcea9f5af6a6c47d4 matches; module and axiom-export checks pass, but literal fixture compilation exits 1 because modelRange_frontier_addHaar_null is already declared. Add :mode :post-build-export-check to both copies, then resubmit commit e30f8627."},
     :commit "e30f8627733147a6b81e20528ebf3e4fcff8f3f2",
     :changed-paths [],
     :fixture
@@ -533,7 +527,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :repair,
+   :state :needs-owner,
    :scope ["ConstructionTargets/SardGeneralModel.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t01A08/boundary",
    :acceptance
