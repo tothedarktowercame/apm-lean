@@ -18276,6 +18276,28 @@
    :current-residual "Apply δ naturality.",
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
+   :implements-lemma :lemma-mfclass-forget-delta,
+   :phase :implementation,
+   :state :open,
+   :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+   :dag-node "TOPOLOGY-ROUTES.md/manifold-fundamental-class/delta",
+   :acceptance
+   {:declaration
+    "ConstructionTargets.ManifoldFundamentalClass.forgetHomologySequence_delta_naturality",
+    :type "exact type compiled in /tmp/fdelta.lean",
+    :fixture "/tmp/fdelta.lean",
+    :fixture-sha256
+    "1854f1aa06e386c635dedf7e0195064c3411b39e29926978c72619173cbc0488",
+    :placeholders ["t00J02 bridge_1" "t98A02 sole sorry"],
+    :route-step "connecting-map naturality",
+    :implementation "Promote."},
+   :id :routes-2026-10-12-mfclass-forget-delta-r1,
+   :kind :reusable-theorem,
+   :area "manifold-fundamental-class",
+   :depends-on [:routes-2026-10-12-mfclass-forget-snake-hom-r1],
+   :current-residual "Return to localization theorem.",
+   :other-consumers [:t98A02]}
+  {:consumer :t00J02,
    :implements-lemma
    :lemma-constructiontargets-manifoldfundamentalclass-closedorientedfundamentalclass,
    :evidence
@@ -18283,49 +18305,48 @@
     {:outcome :revise,
      :seat "topo-12",
      :fixture
-     {:path "/tmp/fsih.lean",
+     {:path "/tmp/fdelta.lean",
       :sha256
-      "6c497fab28f4250132b44b6229bc632c8efee8653280cf72f707f478519dac5e"},
-     :commands [{:cmd "lake env lean /tmp/fsih.lean", :exit 0}],
+      "1854f1aa06e386c635dedf7e0195064c3411b39e29926978c72619173cbc0488"},
+     :commands [{:cmd "lake env lean /tmp/fdelta.lean", :exit 0}],
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :missing-theorems
-     [{:id :lemma-mfclass-forget-snake-hom,
+     [{:id :lemma-mfclass-forget-delta,
        :name
-       "ConstructionTargets.ManifoldFundamentalClass.forgetHomologySequenceSnakeInputHom",
+       "ConstructionTargets.ManifoldFundamentalClass.forgetHomologySequence_delta_naturality",
        :type
-       "∀ K hK hKF i j hij, ForgottenHomologySequenceSnakeInputHom K hK hKF i j hij",
+       "∀ K hK hKF i j hij, ForgottenHomologySequenceDeltaNaturality K hK hKF i j hij",
        :status :proved,
        :consumers [:t00J02 :t98A02],
        :depends-on
-       ["ConstructionTargets.ManifoldFundamentalClass.forgetHomologyπ_naturality"],
+       ["ConstructionTargets.ManifoldFundamentalClass.forgetHomologySequenceSnakeInputHom"],
        :area "manifold-fundamental-class"}],
      :prerequisite
      {:consumer :t00J02,
-      :implements-lemma :lemma-mfclass-forget-snake-hom,
+      :implements-lemma :lemma-mfclass-forget-delta,
       :phase :implementation,
       :state :open,
       :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
-      :dag-node
-      "TOPOLOGY-ROUTES.md/manifold-fundamental-class/snake-hom",
+      :dag-node "TOPOLOGY-ROUTES.md/manifold-fundamental-class/delta",
       :acceptance
       {:declaration
-       "ConstructionTargets.ManifoldFundamentalClass.forgetHomologySequenceSnakeInputHom",
-       :type "exact type compiled in /tmp/fsih.lean",
-       :fixture "/tmp/fsih.lean",
+       "ConstructionTargets.ManifoldFundamentalClass.forgetHomologySequence_delta_naturality",
+       :type "exact type compiled in /tmp/fdelta.lean",
+       :fixture "/tmp/fdelta.lean",
        :fixture-sha256
-       "6c497fab28f4250132b44b6229bc632c8efee8653280cf72f707f478519dac5e",
+       "1854f1aa06e386c635dedf7e0195064c3411b39e29926978c72619173cbc0488",
        :placeholders ["t00J02 bridge_1" "t98A02 sole sorry"],
-       :route-step "assemble SnakeInput.Hom",
+       :route-step "connecting-map naturality",
        :implementation "Promote."},
-      :id :routes-2026-10-12-mfclass-forget-snake-hom-r1,
+      :id :routes-2026-10-12-mfclass-forget-delta-r1,
       :kind :reusable-theorem,
       :area "manifold-fundamental-class",
-      :depends-on [:routes-2026-10-12-mfclass-homology-pi-square-r1],
-      :current-residual "Apply δ naturality.",
+      :depends-on [:routes-2026-10-12-mfclass-forget-snake-hom-r1],
+      :current-residual "Return to localization theorem.",
       :other-consumers [:t98A02]},
-     :residual "Promote Hom; apply δ naturality."}},
+     :residual "Promote δ naturality; retry closure."}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -18454,7 +18475,8 @@
     :routes-2026-10-11-mfclass-to-cycles-r1
     :routes-2026-10-12-mfclass-opcycles-to-cycles-r1
     :routes-2026-10-12-mfclass-homology-pi-square-r1
-    :routes-2026-10-12-mfclass-forget-snake-hom-r1],
+    :routes-2026-10-12-mfclass-forget-snake-hom-r1
+    :routes-2026-10-12-mfclass-forget-delta-r1],
    :current-residual
    "Local-degree counts and wild-ball complement homology remain.",
    :other-consumers [:t98A02]}
@@ -26251,6 +26273,28 @@
    :id :lemma-mfclass-forget-snake-hom,
    :kind :lemma,
    :depends-on [:lemma-mfclass-homology-pi-square],
+   :other-consumers [:t98A02]}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.ManifoldFundamentalClass.forgetHomologySequence_delta_naturality",
+    :type
+    "∀ K hK hKF i j hij, ForgottenHomologySequenceDeltaNaturality K hK hKF i j hij"},
+   :lemma
+   {:name
+    "ConstructionTargets.ManifoldFundamentalClass.forgetHomologySequence_delta_naturality",
+    :reported-by
+    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2],
+    :type
+    "∀ K hK hKF i j hij, ForgottenHomologySequenceDeltaNaturality K hK hKF i j hij",
+    :area "manifold-fundamental-class",
+    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+   :id :lemma-mfclass-forget-delta,
+   :kind :lemma,
+   :depends-on [:lemma-mfclass-forget-snake-hom],
    :other-consumers [:t98A02]}],
  :consumer-baselines {},
  :statuses
