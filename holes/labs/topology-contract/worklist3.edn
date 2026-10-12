@@ -30052,6 +30052,20 @@
       :exit 1,
       :expected-exit 1}],
     :continue-from "146d80700a288d6c8328e169591e21723c5fbb73",
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791815216846-7097-e7e96dca",
+     :commands
+     ["git show/diff-tree 146d807"
+      "lake env lean /tmp/surface_face_bound_check.lean"
+      "lake env lean ConstructionTargets/SurfaceClassification.lean"
+      "lake build ConstructionTargets.SurfaceClassification"
+      "python3 scripts/statement-registry.py check"
+      "git diff 146d807^ 146d807 --check"
+      "rg source/consumer placeholders"],
+     :finding
+     "PASS program STOP: reviewer codex-11. Commit 146d807 is new since reviewed history and adds compiled, sorry-free B4 infrastructure listed in :missing-theorems: BoundaryArcIndex, its exact 3*centers.card count, and finite earlier indices. The representation is faithfully centers-subtype times Fin 3 and makes no premature transversality claim; polygonal maps/general position remain explicit residual. Scope/blob match. Fixture/module/build pass (8245 jobs), registry 131/131, code placeholders 0, standard axioms only; consumer counts unchanged 2/2/3/3/2/1/3."},
     :commit "146d80700a288d6c8328e169591e21723c5fbb73",
     :changed-paths ["ConstructionTargets/SurfaceClassification.lean"],
     :program-history
@@ -30061,7 +30075,7 @@
       :result :B4-index-proved}],
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/SurfaceClassification.lean"
     "ConstructionTargets/SurfaceClassification.md"
@@ -30081,7 +30095,7 @@
     :blueprint
     "ConstructionTargets/SurfaceClassification.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: B3 finite nested closed-disk cover packaged and proved",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: B4 finite induction index proved: three boundary arcs per cover disk",
    :id :program-2026-10-12-surface-classification,
    :kind :reusable-theorem,
    :campaign-priority 40,
@@ -30104,8 +30118,11 @@
      "B1 finished: vertex, edge, and face realization inclusions are continuous"}
     {:job 7,
      :commit "cf9b4a46690621bb821b75d1455b32ff4cad7d44",
+     :reason "B3 finite nested closed-disk cover packaged and proved"}
+    {:job 8,
+     :commit "146d80700a288d6c8328e169591e21723c5fbb73",
      :reason
-     "B3 finite nested closed-disk cover packaged and proved"}]}
+     "B4 finite induction index proved: three boundary arcs per cover disk"}]}
   {:consumer :t00J02,
    :phase :lemma,
    :state :backlog,
@@ -30203,7 +30220,7 @@
    :other-consumers [:t00A03 :t91J05 :t92J05 :t94J04 :t96A01 :t97J02]}
   {:consumer :t00A02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -30217,7 +30234,9 @@
     :type
     "(C : FiniteClosedDiskCover M) : Fintype.card C.BoundaryArcIndex = 3 * C.centers.card",
     :area "surface-classification",
-    :proved-in :program-2026-10-12-surface-classification},
+    :proved-in :program-2026-10-12-surface-classification,
+    :banked-by :program-2026-10-12-surface-classification,
+    :banked-commit "146d80700a288d6c8328e169591e21723c5fbb73"},
    :id
    :lemma-constructiontargets-surfaceclassification-finitecloseddiskcover-boundaryarcindex,
    :kind :lemma,
