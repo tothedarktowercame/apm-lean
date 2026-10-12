@@ -614,3 +614,8 @@ the point-span-to-free-product representation step, and
 remaining mapped counit factors through exactly this boundary.  The next job
 can compute the final point-span counit before comparing the pre-composite
 counit with the open-cover outer comparisons.
+
+`genericPointWedgePointSpanCounit_hom_eq_id` performs that computation at the
+identity representation: the final point-span-to-free-product counit has
+identity underlying target morphism.  Thus the remaining comparison belongs
+entirely to the pre-free-product composite.

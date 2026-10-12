@@ -2181,6 +2181,21 @@ theorem genericPointWedgeRepresentationCounit_app_eq_one :
       (1 : genericPointWedgeFreeProduct x₀ y₀) := by
   rfl
 
+omit [PathConnectedSpace X] [PathConnectedSpace Y] in
+/-- The counit of the final point-span-to-free-product stage is the identity
+on the target of the identity representation. -/
+theorem genericPointWedgePointSpanCounit_hom_eq_id :
+    let C := genericPointWedgeTarget x₀ y₀
+    let Q := freeProductPointSpanEquivalence
+      (genericPointWedgeLeftGroup x₀) (genericPointWedgeRightGroup y₀) C
+    let R := representationSingleObjEquivalence
+      (C := C) (genericPointWedgeLeftGroup x₀)
+        (genericPointWedgeRightGroup y₀)
+    let F := Functor.id (SingleObj (genericPointWedgeFreeProduct x₀ y₀))
+    (Q.counitIso.hom.app (R.inverse.obj F)).hom =
+      𝟙 (R.inverse.obj F).target := by
+  simp
+
 /-- Consequently the full B3 counit element is just the mapped counit of the
 preceding free-product-representation equivalence. -/
 theorem genericPointWedgeCounitElement_eq_mappedRepresentationCounit :
@@ -3465,6 +3480,7 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeSourceCounit_right
 #print axioms genericPointWedgeCounitElement_eq_representationCounits
 #print axioms genericPointWedgeRepresentationCounit_app_eq_one
+#print axioms genericPointWedgePointSpanCounit_hom_eq_id
 #print axioms genericPointWedgeCounitElement_eq_mappedRepresentationCounit
 #print axioms genericPointWedgeMappedLeft_eq_conj
 #print axioms genericPointWedgeMappedRight_eq_conj
