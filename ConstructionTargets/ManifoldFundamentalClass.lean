@@ -2626,6 +2626,43 @@ theorem coefficientOpenDiskConnecting_forgotten_naturality (k : ℕ) :
           (integralOpenDiskCoefficientPairShortExact k)
           (k + 2) (k + 1) rfl)
 
+theorem coefficientOpenDiskConnecting_comparison (k : ℕ) :
+    forgetIntModules.map
+        (CoefficientPairSequence.connecting ℤ
+          (T02A06HemisphereExcision.puncturedOpenDiskSet (k + 2)) (k + 1)) ≫
+      (integralOpenDiskPunctureHomologyComparison k).hom =
+    (integralOpenDiskRelativeHomologyComparison k).hom ≫
+      singularPairConnecting
+        (T02A06HemisphereExcision.puncturedOpenDiskSet (k + 2)) (k + 1) := by
+  rw [(integralOpenDiskComparison_component_homology_maps k).1,
+    (integralOpenDiskComparison_component_homology_maps k).2]
+  let f := forgetIntModules.map
+    (CoefficientPairSequence.connecting ℤ
+      (T02A06HemisphereExcision.puncturedOpenDiskSet (k + 2)) (k + 1))
+  let g := (((CoefficientH0.SingularChains ℤ
+    (TopCat.of (T02A06HemisphereExcision.puncturedOpenDiskSet
+      (k + 2)))).sc (k + 1)).mapHomologyIso forgetIntModules).inv
+  let h := HomologicalComplex.homologyMap
+    (integralOpenDiskPairShortComplexComparison k).τ₁ (k + 1)
+  let r := (((CoefficientRelativeSmall.relativeChains ℤ
+    (T02A06HemisphereExcision.puncturedOpenDiskSet
+      (k + 2))).sc (k + 2)).mapHomologyIso forgetIntModules).inv
+  let d := (integralOpenDiskCoefficientPairShortExact k).δ
+    (k + 2) (k + 1) rfl
+  let m := HomologicalComplex.homologyMap
+    (integralOpenDiskPairShortComplexComparison k).τ₃ (k + 2)
+  let q := singularPairConnecting
+    (T02A06HemisphereExcision.puncturedOpenDiskSet (k + 2)) (k + 1)
+  have hd : d ≫ h = m ≫ q := by
+    simpa only [d, h, m, q] using integralOpenDiskConnecting_naturality_raw k
+  change f ≫ (g ≫ h) = (r ≫ m) ≫ q
+  rw [← Category.assoc f g h]
+  rw [show f ≫ g = r ≫ d by
+    simpa only [f, g, r, d] using
+      coefficientOpenDiskConnecting_forgotten_naturality k]
+  exact (Category.assoc r d h).trans
+    ((congrArg (fun z => r ≫ z) hd).trans (Category.assoc r m q).symm)
+
 end ConstructionTargets.ManifoldFundamentalClass
 
 #print axioms ConstructionTargets.ManifoldFundamentalClass.neighborhoodInclusion_Hsucc_isIso
@@ -2715,6 +2752,7 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.forgetSnakeDelta_map_apply_of_witness
 #print axioms ConstructionTargets.ManifoldFundamentalClass.forgetSnakeInput_delta_map
 #print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientOpenDiskConnecting_forgotten_naturality
+#print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientOpenDiskConnecting_comparison
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_projection
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_generator_of_normalization
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_normalization_of_generator
