@@ -15,9 +15,9 @@
     "files": [
       "lean/Main.lean"
     ],
-    "sorry_count_main": 1,
+    "sorry_count_main": 0,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 1
+    "sorry_count_total": 0
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -29,9 +29,9 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "partial",
+  "classification": "complete",
   "closer_hop": 4,
-  "closer_note": "Stated the two precise remaining contracts in the vocabulary available to the file: the local exterior-derivative calculation proving closedness, and the specialized sphere-period/Stokes obstruction proving non-exactness. Their proofs and the original main proof remain intentionally open.",
+  "closer_note": "Closedness and non-exactness are proved from the solid-angle coordinate formula; the spherical pullback has integral 4*pi, contradicting exactness via Green's theorem.",
   "imported_at": "2026-07-13T17:26:57.948116Z",
   "obstructions": [
     {
@@ -45,7 +45,7 @@
       "frame": "phase-2d-adversarial-migration",
       "at_commit": "a00ea1f",
       "date": "2026-08-19",
-      "resolved": null
+      "resolved": "2026-10-12"
     }
   ]
 }
