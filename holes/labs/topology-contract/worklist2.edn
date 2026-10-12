@@ -75002,7 +75002,7 @@
   {:consumer :t96J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 0,
    :review-finding
    "STOP remainder is incomplete: cdbdc979d proves the six-edge involution/signs, orbit equivalence, generated-relation iff, and quotient Equiv, but defines no torusRP2PairingData and proves no six-edge oneVertex field. Thus the claim that six-edge B2 is complete is false, and the required missing theorem is omitted from :missing-theorems. Add torusRP2PairingData/oneVertex to the remaining milestones or state and prove it in scope.",
    :implements-lemma
@@ -75052,6 +75052,17 @@
       :exit 1,
       :correction
       "factored coordinate equation and finite contradiction"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791837828059-7876-1b6b470e",
+     :commands
+     ["git show 4665f4c77:ConstructionTargets/PolygonSurfacePiOne.lean | lake env lean /dev/stdin"
+      "python3 scripts/statement-registry.py check"
+      "git show --check/hash/diff-tree 4665f4c77"
+      "comment-stripped placeholder scan"],
+     :finding
+     "PASS: exact recorded source compiles; fixture hash and sole changed path match; registry 131/0 and placeholders 0. The coordinate lemma preserves the handle block, and handlePair maps 0↔2 and 1↔3, so handleSign flips exactly for orientable pairs while constant false agrees for crosscaps. This is new compiled progress; uniform oneVertex and PairingData/orbit/quotient packaging remain explicitly listed."},
     :commit "4665f4c77",
     :changed-paths ["ConstructionTargets/PolygonSurfacePiOne.lean"],
     :fixture
@@ -75060,7 +75071,7 @@
      "f0b7353e7dd67f8e405609bac4826a729e2a68b871170a7632d07b5a04064210"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope ["ConstructionTargets/PolygonSurfacePiOne.lean"],
    :dag-node "ConstructionTargets/PolygonSurfacePiOne.blueprint.md/B2",
    :acceptance
@@ -84692,7 +84703,7 @@
    :other-consumers [:t92J05 :t94J04 :t97A03]}
   {:consumer :t96J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "standardSign_orientable_pair",
@@ -84702,7 +84713,9 @@
     :reported-by [:routes-2026-10-12-polygon-b2-completion-topo2-r1],
     :type "paired handle signs differ",
     :area "polygon-surface-pi1",
-    :proved-in :routes-2026-10-12-polygon-b2-completion-topo2-r1},
+    :proved-in :routes-2026-10-12-polygon-b2-completion-topo2-r1,
+    :banked-by :routes-2026-10-12-polygon-b2-completion-topo2-r1,
+    :banked-commit "4665f4c77"},
    :id :lemma-standardsign-orientable-pair,
    :kind :lemma,
    :depends-on [:lemma-standardsign],
