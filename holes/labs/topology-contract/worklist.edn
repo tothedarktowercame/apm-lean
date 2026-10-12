@@ -113850,14 +113850,14 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 4,
+   :stop-count 5,
    :review-finding
    "Blueprint B3 is marked proved but its proof uses the unlisted ConnectedGroupoidSingleObjEquivalence.connectorSingleObjEquivalence (and connector-system representation) instead of only the declared uses; add the actual connector dependency and proof route to B3 uses.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
    :evidence
    {:placeholder-delta {:source-before 0, :source-after 0},
     :residual
-    "Combine the named functor, base-proof, and mapOfEq identities to close the left normal form; then right and B12.",
+    "Transport the HEq through the aligned endpoint conjugation to the proved mapOfEq identity; then right and B12.",
     :outcome :stop,
     :warnings [],
     :missing-theorems
@@ -113871,9 +113871,9 @@
       :area "fundamental-group-wedge-of-circles"}],
     :statement-hashes
     {:source
-     "143e5175201531ded04ec0e1a3892a42c834324069f0cdc48a80228e42fac0a1",
+     "d5021fd732b50dfd6439e31a4a0a5f6a123a830002b5ba7844655e816b7d8071",
      :documentation
-     "413bb2f729b277b56a0acba81777235273de65757371f2b75e3ab192a7d6ed2e",
+     "8640060fcee1a7e107c81173e86ea265d8e17a8c52ea1967c84483cd7fba86cd",
      :blueprint
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0",
      :registry "131/131"},
@@ -113881,7 +113881,7 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
     :reason
-    "The left equivalence forward functor is now explicitly the fundamental-groupoid map induced by leftEquiv.toFun.",
+    "The mapped lifted left loop is now HEq to the concrete induced groupoid map with dependent endpoints preserved.",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/PointWedgeVanKampen.lean",
@@ -113891,23 +113891,11 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder/diff validation", :exit 0}],
     :diagnostic-history
-    [{:cmd "lean direct bridge",
+    [{:cmd "lean dependent functor rewrite",
       :exit 1,
-      :finding "Split opaque functor equality."}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1791801201181-6800-18cec2e8",
-     :commands
-     ["git show/diff-tree 0d13ade1"
-      "sha256/diff/placeholder checks"
-      "statement-registry.py check"
-      "lake env lean ConstructionTargets/PointWedgeVanKampen.lean"
-      "lake build ConstructionTargets.PointWedgeVanKampen"
-      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (expected absent)"],
-     :finding
-     "PASS program STOP: exact 2-file commit adds a compiled sorry-free definitional equality exposing the left equivalence functor as FundamentalGroupoid.map leftEquiv.toFun. The rewrite direction crosses from the opaque equivalence to the concrete map representation needed by mapOfEq, without changing base transport. Fixture/source/doc hashes match; placeholders 0->0; registry 131/131; standard axioms only. Final module remains absent; residual closes left normal form, then right and B12."},
-    :commit "0d13ade10fde6f977237a818fbd00b6e368bd949",
+      :finding
+      "Endpoint proof depends on functor object; retained endpoints with HEq."}],
+    :commit "4eec8d8c20a9f79f799a1be84f812497a442ab67",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
      "ConstructionTargets/PointWedgeVanKampen.md"],
@@ -113917,7 +113905,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
