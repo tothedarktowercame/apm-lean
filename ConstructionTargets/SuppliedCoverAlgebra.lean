@@ -1,4 +1,5 @@
 import ConstructionTargets.CoveringMonodromyCosets
+import Mathlib.GroupTheory.FreeGroup.Basic
 
 /-!
 # Small adapters for supplied covering spaces
@@ -32,7 +33,33 @@ theorem isEmbedding_of_comp_eq
   rw [← h] at hi
   exact Topology.IsEmbedding.of_comp hl hp hi
 
+/-- Transport the subgroup supplied by a covering through an identification
+of the base fundamental group with a finite-rank free group. -/
+noncomputable def coveringFundamentalGroupEquivFreeSubgroup
+    {E B : Type*} [TopologicalSpace E] [TopologicalSpace B]
+    {p : E → B} (cov : IsCoveringMap p) (e : E) (r : ℕ)
+    (base : FundamentalGroup B (p e) ≃* FreeGroup (Fin r)) :
+    FundamentalGroup E e ≃*
+      (ConstructionTargets.coveringInducedFundamentalGroupMap cov e).range.map
+        base.toMonoidHom :=
+  (coveringFundamentalGroupEquivRange cov e).trans
+    (Subgroup.equivMapOfInjective
+      (ConstructionTargets.coveringInducedFundamentalGroupMap cov e).range
+      base.toMonoidHom base.injective)
+
+/-- Transport through the base equivalence preserves the subgroup index. -/
+theorem coveringFreeSubgroup_index
+    {E B : Type*} [TopologicalSpace E] [TopologicalSpace B]
+    {p : E → B} (cov : IsCoveringMap p) (e : E) (r : ℕ)
+    (base : FundamentalGroup B (p e) ≃* FreeGroup (Fin r)) :
+    ((ConstructionTargets.coveringInducedFundamentalGroupMap cov e).range.map
+      base.toMonoidHom).index =
+      (ConstructionTargets.coveringInducedFundamentalGroupMap cov e).range.index := by
+  exact Subgroup.index_map_equiv _ base
+
 end ConstructionTargets.SuppliedCoverAlgebra
 
 #print axioms ConstructionTargets.SuppliedCoverAlgebra.coveringFundamentalGroupEquivRange
 #print axioms ConstructionTargets.SuppliedCoverAlgebra.isEmbedding_of_comp_eq
+#print axioms ConstructionTargets.SuppliedCoverAlgebra.coveringFundamentalGroupEquivFreeSubgroup
+#print axioms ConstructionTargets.SuppliedCoverAlgebra.coveringFreeSubgroup_index

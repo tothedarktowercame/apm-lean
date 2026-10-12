@@ -82,7 +82,7 @@ theorem coveringFreeSubgroup_index
 
 uses: B1, Mathlib `MonoidHom.ofInjective`, `Subgroup.index_map_equiv`
 
-status: planned
+status: proved (current program commit)
 
 Let `H` be the induced range.  Restrict `base.toMonoidHom` to `H`, with
 codomain `H.map base.toMonoidHom`; it is injective because `base` is
