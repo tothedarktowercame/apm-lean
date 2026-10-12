@@ -113895,6 +113895,19 @@
       :exit 1,
       :finding
       "Dependent motive retained the old base proof; split proof alignment."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791799390998-6772-8a5d1fb1",
+     :commands
+     ["git show/diff-tree 79d53753"
+      "sha256/diff/placeholder checks"
+      "statement-registry.py check"
+      "lake env lean ConstructionTargets/PointWedgeVanKampen.lean"
+      "lake build ConstructionTargets.PointWedgeVanKampen"
+      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (expected absent)"],
+     :finding
+     "PASS program STOP: exact 2-file commit adds a compiled sorry-free equality aligning the two proofs of the left composite basepoint equation. Subsingleton.elim is valid proof irrelevance and does not collapse propositionally equal base objects; it supplies the dependent mapOfEq witness alignment. Fixture/source/doc hashes match; placeholders 0->0; registry 131/131; standard axioms only. Final module remains absent; residual finishes left transport, then right and B12."},
     :commit "79d5375355e8dfdd2930d4ca56295048d542c45e",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
@@ -113905,7 +113918,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113926,7 +113939,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: The left lifted-loop connector normal form is the mapped loop conjugated by the explicit base-object equality transports.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: The composite-map identity now supplies the exact basepoint proof required for the dependent mapOfEq reduction.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -114238,7 +114251,11 @@
     {:job 1,
      :commit "a3e279ed4799a6c9b19f93f1baed755eaa33d457",
      :reason
-     "The left lifted-loop connector normal form is the mapped loop conjugated by the explicit base-object equality transports."}]}
+     "The left lifted-loop connector normal form is the mapped loop conjugated by the explicit base-object equality transports."}
+    {:job 2,
+     :commit "79d5375355e8dfdd2930d4ca56295048d542c45e",
+     :reason
+     "The composite-map identity now supplies the exact basepoint proof required for the dependent mapOfEq reduction."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
