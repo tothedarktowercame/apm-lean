@@ -74062,7 +74062,7 @@
    :other-consumers []}
   {:consumer :t96J02,
    :review-finding
-   "Blueprint defect: B7 is false from B1 as written. B1 requires only that paired arcs have equal labels; it does not require Label to classify pairing orbits. Counterexample: use the standard one-vertex square pairing with two arc-pair orbits, but assign both orbits the sole label Unit. All stated B1 label/pairing conditions hold, while the skeleton is a wedge of two circles, not FiniteWedge Unit Circle. Add a bijection between pairing orbits and Label (equivalently every label occurs on exactly one paired pair, with surjectivity), update B1 Lean data/type and B7 proof, and re-review downstream B8-B12.",
+   "Blueprint defect: B7 is false from B1 as written. B1 only requires paired arcs to have equal labels, not that Label classifies pairing orbits. Counterexample: take the standard one-vertex square pairing with two arc-pair orbits and label both orbits by Unit. B1 holds, but the skeleton is a wedge of two circles, not FiniteWedge Unit Circle. Add a bijection between pairing orbits and Label (every label occurs on exactly one paired pair), update B1/B7, and re-review B8-B12.",
    :evidence
    {:placeholder-delta 0,
     :residual "Re-review repaired blueprint; then elect B1.",
@@ -74095,6 +74095,12 @@
     [{:cmd "rg review markers",
       :exit 0,
       :finding "Unquoted backtick invoked shell; reran safely."}],
+    :review
+    {:outcome :fail,
+     :seat "codex-7",
+     :job "invoke-1791780751872-6349-3dbe35a8",
+     :finding
+     "Blueprint defect: B7 is false from B1 as written. B1 only requires paired arcs to have equal labels, not that Label classifies pairing orbits. Counterexample: take the standard one-vertex square pairing with two arc-pair orbits and label both orbits by Unit. B1 holds, but the skeleton is a wedge of two circles, not FiniteWedge Unit Circle. Add a bijection between pairing orbits and Label (every label occurs on exactly one paired pair), update B1/B7, and re-review B8-B12."},
     :commit "87a5a4aa40a59027da33087f2c1e7b6e5edce407",
     :commits
     ["404da6bda716da9d61f88056f35621bb9628bbd8"
@@ -74107,7 +74113,7 @@
      "bf874f2b7a4f00049b76c965ff475d5bef9269a6a22d6e98001cf12383a3bd9e"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :repair,
    :scope ["ConstructionTargets/PolygonSurfacePiOne.blueprint.md"],
    :dag-node "TOPOLOGY-ROUTES.md/polygon-surface-pi1",
    :acceptance
@@ -74118,7 +74124,7 @@
    :id :routes-2026-10-12-polygon-surface-pi1-blueprint-topo2-r1,
    :kind :documentation,
    :area "polygon-surface-pi1",
-   :fail-count 1,
+   :fail-count 2,
    :depends-on [:routes-2026-10-10-checkpoint-topo2-r8],
    :current-residual "Elect its first milestone.",
    :other-consumers [:t92J05 :t94J04 :t97A01 :t97A03]}
