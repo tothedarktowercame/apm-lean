@@ -186,6 +186,39 @@ structure FiniteClosedDiskCover (M : Type*) [TopologicalSpace M] [T2Space M]
     y ∈ triangle (planeChart euclideanPlane_finrank x) x (radius x / 2) ''
       interiorParameters
 
+namespace FiniteClosedDiskCover
+
+/-- The finite index type of boundary arcs to be put in general position:
+three sides for every outer coordinate triangle. -/
+abbrev BoundaryArcIndex {M : Type*} [TopologicalSpace M] [T2Space M]
+    [ChartedSpace EuclideanPlane M] (C : FiniteClosedDiskCover M) :=
+  {x // x ∈ C.centers} × Fin 3
+
+instance {M : Type*} [TopologicalSpace M] [T2Space M]
+    [ChartedSpace EuclideanPlane M] (C : FiniteClosedDiskCover M) :
+    Fintype C.BoundaryArcIndex := inferInstance
+
+/-- There are exactly three scheduled boundary arcs per disk. -/
+theorem boundaryArcIndex_card {M : Type*} [TopologicalSpace M] [T2Space M]
+    [ChartedSpace EuclideanPlane M] (C : FiniteClosedDiskCover M) :
+    Fintype.card C.BoundaryArcIndex = 3 * C.centers.card := by
+  classical
+  simp [BoundaryArcIndex, Nat.mul_comm]
+
+/-- Earlier arcs against which a scheduled arc must be made transverse. -/
+def Earlier {M : Type*} [TopologicalSpace M] [T2Space M]
+    [ChartedSpace EuclideanPlane M] (C : FiniteClosedDiskCover M)
+    [LinearOrder C.BoundaryArcIndex] (a : C.BoundaryArcIndex) :
+    Finset C.BoundaryArcIndex := Finset.univ.filter (· < a)
+
+theorem earlier_finite {M : Type*} [TopologicalSpace M] [T2Space M]
+    [ChartedSpace EuclideanPlane M] (C : FiniteClosedDiskCover M)
+    [LinearOrder C.BoundaryArcIndex] (a : C.BoundaryArcIndex) :
+    Set.Finite (C.Earlier a : Set C.BoundaryArcIndex) :=
+  (C.Earlier a).finite_toSet
+
+end FiniteClosedDiskCover
+
 /-- Compact surfaces admit the finite nested closed-disk cover used by the
 subdivision construction. -/
 theorem compactSmoothSurfaceFiniteClosedDiskCover
