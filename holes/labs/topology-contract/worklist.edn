@@ -113857,20 +113857,20 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 2,
    :review-finding
    "Blueprint B3 is marked proved but its proof uses the unlisted ConnectedGroupoidSingleObjEquivalence.connectorSingleObjEquivalence (and connector-system representation) instead of only the declared uses; add the actual connector dependency and proof route to B3 uses.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
    :evidence
    {:placeholder-delta {:source-before 0, :source-after 0},
-    :residual
-    "Evaluate outer comparisons and literal lifts; then B12.",
+    :residual "Evaluate outer factors and literal lifts; then B12.",
     :outcome :stop,
     :warnings
     [{:kind :concurrent-worktree-change,
-      :path "ConstructionTargets/ManifoldFundamentalClass.lean"}
+      :path "ConstructionTargets/t96A07Closure.lean"}
      {:kind :concurrent-worktree-change,
-      :path "ConstructionTargets/t96A07Closure.lean"}],
+      :path "problems/t96A07/lean/Main.lean"}
+     {:kind :concurrent-worktree-change, :path ".scratch_hpi.lean"}],
     :missing-theorems
     [{:name
       "PointWedgeVanKampen.genericPointWedgeLegCoordinates_vanKampen",
@@ -113882,9 +113882,9 @@
       :area "fundamental-group-wedge-of-circles"}],
     :statement-hashes
     {:source
-     "d18b384234de6270828f30ad46f7015e7c0bda9f5620cfe317b8f0f5c8a31633",
+     "4ae22c0db9d7a5f02a5858d3804f5f0257eb8893dc4159bcca1b2e8f5f58a937",
      :documentation
-     "32d10d47d04dce4f09235e8a9e40e01db048017b677ab92732933037c48355dd",
+     "2fc541ecca638000b6bd94ac04a7ca0f6e91ffcb5e28f9874ad47c5b9a07e669",
      :blueprint
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0",
      :registry "131/131"},
@@ -113892,7 +113892,7 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
     :reason
-    "Forward Unit round-trip is the free-product unit; all inner factors are discharged.",
+    "Outer left comparison expands into its two ordered factors.",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/PointWedgeVanKampen.lean",
@@ -113901,21 +113901,7 @@
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder/diff validation", :exit 0}],
-    :diagnostic-history [],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1791766757746-6098-9a5e567a",
-     :commands
-     ["git show/diff-tree 73919ff9"
-      "sha256/diff/placeholder checks"
-      "statement-registry.py check"
-      "lake env lean ConstructionTargets/PointWedgeVanKampen.lean"
-      "lake build ConstructionTargets.PointWedgeVanKampen"
-      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (expected absent)"],
-     :finding
-     "PASS: new compiled sorry-free B6 progress proves the forward Unit round-trip is the unit via subsingleton elimination in FundamentalGroupoid Unit and functorial simplification. This is specific to unitInv and does not normalize an arbitrary equivalence. Exact two-file scope and frozen hashes match; 0 placeholders; registry 131/131; standard axioms. Outer comparisons, literal lifts, and B12 remain listed; absent final target is a valid program STOP."},
-    :commit "73919ff9b071025c1c0d3bdabe618167d678a212",
+    :commit "f80588cc6de6942d0877f542f6e2ce9b4575a9c5",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
      "ConstructionTargets/PointWedgeVanKampen.md"],
@@ -113925,7 +113911,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
