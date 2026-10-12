@@ -3329,6 +3329,58 @@ theorem coefficientCircleBoundaryGenerator_eq_signedFunction :
   · exact CoefficientSphereEndpoints.kernel_false ℤ 1
   · exact CoefficientSphereEndpoints.kernel_true ℤ 1
 
+theorem boolIntDifference_to_signedFunction :
+    (boolIntDifference ≫
+      (PreservesCoproduct.iso forgetIntModules
+        (fun _ : Bool ↦ ModuleCat.of ℤ ℤ)).inv ≫
+      (forgetIntModules.mapIso
+        (CoefficientSphereEndpoints.boolModuleIso ℤ)).hom).hom (1 : ℤ) =
+      (fun b : Bool ↦ if b then (-1 : ℤ) else 1) := by
+  have hι (b : Bool) :
+      Limits.Sigma.ι (fun _ : Bool ↦ IntGroup) b ≫
+          (PreservesCoproduct.iso forgetIntModules
+            (fun _ : Bool ↦ ModuleCat.of ℤ ℤ)).inv ≫
+          (forgetIntModules.mapIso
+            (CoefficientSphereEndpoints.boolModuleIso ℤ)).hom =
+        forgetIntModules.map
+          (Limits.Sigma.ι (fun _ : Bool ↦ ModuleCat.of ℤ ℤ) b ≫
+            (CoefficientSphereEndpoints.boolModuleIso ℤ).hom) := by
+    change _ ≫ sigmaComparison forgetIntModules _ ≫ forgetIntModules.map _ = _
+    calc
+      _ = forgetIntModules.map
+          (Limits.Sigma.ι (fun _ : Bool ↦ ModuleCat.of ℤ ℤ) b) ≫
+          forgetIntModules.map
+            (CoefficientSphereEndpoints.boolModuleIso ℤ).hom :=
+        Limits.ι_comp_sigmaComparison_assoc forgetIntModules _ b _
+      _ = _ := by rw [← forgetIntModules.map_comp]
+  rw [boolIntDifference, Preadditive.sub_comp]
+  rw [hι false, hι true]
+  funext b
+  change (((Limits.Sigma.ι
+      (fun _ : Bool ↦ ModuleCat.of ℤ ℤ) false ≫
+      (CoefficientSphereEndpoints.boolModuleIso ℤ).hom) -
+    (Limits.Sigma.ι
+      (fun _ : Bool ↦ ModuleCat.of ℤ ℤ) true ≫
+      (CoefficientSphereEndpoints.boolModuleIso ℤ).hom)).hom (1 : ℤ)) b = _
+  change (((CoefficientSphereEndpoints.boolModuleIso ℤ).hom.hom
+      ((Limits.Sigma.ι (fun _ : Bool ↦ ModuleCat.of ℤ ℤ) false).hom (1 : ℤ))) -
+    ((CoefficientSphereEndpoints.boolModuleIso ℤ).hom.hom
+      ((Limits.Sigma.ι (fun _ : Bool ↦ ModuleCat.of ℤ ℤ) true).hom (1 : ℤ)))) b = _
+  dsimp only [CoefficientSphereEndpoints.boolModuleIso, Iso.trans_hom]
+  change ((DirectSum.linearEquivFunOnFintype ℤ Bool (fun _ ↦ ℤ)
+      ((ModuleCat.coprodIsoDirectSum
+        (fun _ : Bool ↦ ModuleCat.of ℤ ℤ)).hom.hom
+        ((Limits.Sigma.ι
+          (fun _ : Bool ↦ ModuleCat.of ℤ ℤ) false).hom (1 : ℤ))) -
+    DirectSum.linearEquivFunOnFintype ℤ Bool (fun _ ↦ ℤ)
+      ((ModuleCat.coprodIsoDirectSum
+        (fun _ : Bool ↦ ModuleCat.of ℤ ℤ)).hom.hom
+        ((Limits.Sigma.ι
+          (fun _ : Bool ↦ ModuleCat.of ℤ ℤ) true).hom (1 : ℤ)))) b = _)
+  rw [ModuleCat.ι_coprodIsoDirectSum_hom_apply,
+    ModuleCat.ι_coprodIsoDirectSum_hom_apply]
+  cases b <;> simp
+
 end ConstructionTargets.ManifoldFundamentalClass
 
 #print axioms ConstructionTargets.ManifoldFundamentalClass.neighborhoodInclusion_Hsucc_isIso
@@ -3449,6 +3501,7 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientCircleCoordinates_eq_id_of_apply_one
 #print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientCircleBoundaryGenerator_signed_coordinates
 #print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientCircleBoundaryGenerator_eq_signedFunction
+#print axioms ConstructionTargets.ManifoldFundamentalClass.boolIntDifference_to_signedFunction
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_projection
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_generator_of_normalization
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_normalization_of_generator
