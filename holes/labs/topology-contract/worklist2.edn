@@ -75002,28 +75002,28 @@
   {:consumer :t96J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "The STOP omits a required remaining theorem: f4306c96a proves only an Equiv between quotient types. B2 freezes standardPairingData_space_homeomorph, and Quotient.congrRight does not preserve or prove the coinduced topologies. Add the nonorientable Homeomorph/topological continuity proof to :missing-theorems and prove it in scope; do not report the plain Equiv as the quotient comparison.",
    :implements-lemma
    :lemma-constructiontargets-polygonsurfacepione-standardpairingdata,
    :evidence
    {:placeholder-delta 0,
-    :residual "Prove converse, oneVertex, package/Homeomorph.",
+    :residual "Prove oneVertex; package data/Homeomorph.",
     :outcome :stop,
     :warnings ["2 imported warnings"],
     :missing-theorems
-    [{:name "orientable_surfaceRel_to_boundaryEqvGen",
-      :type "SurfaceRel implies boundary EqvGen",
+    [{:name "orientable_boundaryRel_to_surfaceEqvGen",
+      :type "boundary to SurfaceRel EqvGen",
       :status :proved,
       :consumers [:t92J05 :t94J04 :t97A03],
       :depends-on [],
       :area "polygon-surface-pi1"}
-     {:name "orientable_boundaryRel_to_surfaceEqvGen",
-      :type "boundary implies SurfaceRel EqvGen",
-      :status :not-started,
+     {:name "orientableStandardSpaceHomeomorph",
+      :type "quotient Homeomorph with Surface true g",
+      :status :proved,
       :consumers [:t92J05 :t94J04 :t97A03],
-      :depends-on [],
+      :depends-on ["orientable_boundaryRel_to_surfaceEqvGen"],
       :area "polygon-surface-pi1"}
      {:name "standardPairingData_oneVertex",
       :type "standard vertices form one class",
@@ -75031,52 +75031,39 @@
       :consumers [:t96J02 :t92J05 :t94J04 :t97A03],
       :depends-on [],
       :area "polygon-surface-pi1"}
-     {:name "standardPairingData_space_homeomorph",
+     {:name "standardPairingData",
       :type "uniform data/Homeomorph",
       :status :partial,
       :consumers [:t96J02 :t92J05 :t94J04 :t97A03],
-      :depends-on
-      ["orientable_boundaryRel_to_surfaceEqvGen"
-       "standardPairingData_oneVertex"],
+      :depends-on ["standardPairingData_oneVertex"],
       :area "polygon-surface-pi1"}],
     :statement-hashes
     {:registry "131/0",
-     :module "365a53e9f2d35dd69b4e66e25690b4335cc8aa92"},
+     :module "6f0792d5346a3b36037d52c8ce9c4be92262c77c"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Forward orientable relation compiles; converse remains.",
+    :reason
+    "Orientable Homeomorph compiles; oneVertex/package remain.",
     :commands
     [{:cmd "lake build ConstructionTargets.PolygonSurfacePiOne",
       :exit 0}
      {:cmd "registry check", :exit 0, :output "131/0"}
      {:cmd "placeholder scan", :exit 0, :output "0"}
-     {:cmd "git show --check 196cdc9b4", :exit 0}],
+     {:cmd "git show --check bff77f4b0", :exit 0}],
     :diagnostic-history
     [{:cmd "first compile",
       :exit 1,
-      :correction "rewrote indices first"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1791840359535-7924-87a7d798",
-     :commands
-     ["git show 196cdc9b4:ConstructionTargets/PolygonSurfacePiOne.lean | lake env lean /dev/stdin"
-      "#print axioms on recorded relation/Homeomorph declarations"
-      "python3 scripts/statement-registry.py check"
-      "git show --check/hash/diff-tree 196cdc9b4"
-      "comment-stripped placeholder scan"],
-     :finding
-     "PASS: exact source compiles; scope and fixture hash match; registry 131/0, placeholders 0, standard axioms only. The two orientable SurfaceRel generators map to boundary generators 4j↔4j+2 and 4j+1↔4j+3 with reversed parameters, matching signs. The prior gap is repaired by a genuine nonorientable Homeomorph. Converse orientable relation, oneVertex, uniform packaging, and Homeomorph are explicitly remaining."},
-    :commit "196cdc9b4",
+      :correction "normalized coordinates"}],
+    :commit "bff77f4b0",
     :changed-paths ["ConstructionTargets/PolygonSurfacePiOne.lean"],
     :fixture
     {:path "ConstructionTargets/PolygonSurfacePiOne.lean",
      :sha256
-     "601de9a5ac82238d611223b54c7248d944c1766b5ed2ee3934a9fb2b9e137351"},
+     "f95761f898ec91838829e69c16dbfd0c34258190b4442536a55a33ce28f3ca55"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/PolygonSurfacePiOne.lean"],
    :dag-node "ConstructionTargets/PolygonSurfacePiOne.blueprint.md/B2",
    :acceptance
@@ -84961,8 +84948,26 @@
    {:name "orientable_boundaryRel_to_surfaceEqvGen",
     :reported-by [:routes-2026-10-12-polygon-b2-completion-topo2-r1],
     :type "boundary implies SurfaceRel EqvGen",
-    :area "polygon-surface-pi1"},
+    :area "polygon-surface-pi1",
+    :proved-in :routes-2026-10-12-polygon-b2-completion-topo2-r1},
    :id :lemma-orientable-boundaryrel-to-surfaceeqvgen,
    :kind :lemma,
    :depends-on [],
+   :other-consumers [:t94J04 :t97A03]}
+  {:consumer :t92J05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "orientableStandardSpaceHomeomorph",
+    :type "quotient Homeomorph with Surface true g"},
+   :lemma
+   {:name "orientableStandardSpaceHomeomorph",
+    :reported-by [:routes-2026-10-12-polygon-b2-completion-topo2-r1],
+    :type "quotient Homeomorph with Surface true g",
+    :area "polygon-surface-pi1",
+    :proved-in :routes-2026-10-12-polygon-b2-completion-topo2-r1},
+   :id :lemma-orientablestandardspacehomeomorph,
+   :kind :lemma,
+   :depends-on [:lemma-orientable-boundaryrel-to-surfaceeqvgen],
    :other-consumers [:t94J04 :t97A03]}]}
