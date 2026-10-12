@@ -2779,6 +2779,50 @@ theorem doubledCorrection_quarterCandidate_actual_zero :
     correctedDepartureBump, doubledCorrectedDepartureQuarterCandidate,
     Complex.mul_re, Complex.mul_im]
 
+/-- Replacement branch after the real-bump counterexamples: increase the
+transverse correction itself, so a zero forces a different real coordinate
+instead of merely translating its imaginary coordinate. -/
+noncomputable def strongTransverseDepartureCorrection
+    (t : unitInterval) : ℂ :=
+  (((4 * (t : ℝ) * (1 - 2 * (t : ℝ))) : ℝ) : ℂ) * Complex.I
+
+theorem continuous_strongTransverseDepartureCorrection :
+    Continuous strongTransverseDepartureCorrection := by
+  unfold strongTransverseDepartureCorrection
+  fun_prop
+
+@[simp] theorem strongTransverseDepartureCorrection_zero :
+    strongTransverseDepartureCorrection 0 = 0 := by
+  norm_num [strongTransverseDepartureCorrection]
+
+theorem strongTransverseDepartureCorrection_half :
+    strongTransverseDepartureCorrection
+      (⟨1 / 2, by constructor <;> norm_num⟩ : unitInterval) = 0 := by
+  norm_num [strongTransverseDepartureCorrection]
+
+theorem rotatedEndpointWaypoint_strongTransverse_departure_eq_zero_iff
+    (t : unitInterval) (p : RightTubeMinusLeftCore) :
+    (((1 - 2 * (t : ℝ) : ℝ) : ℂ) +
+        ((2 * (t : ℝ) : ℝ) : ℂ) * rotatedEndpointWaypoint p +
+        strongTransverseDepartureCorrection t) = 0 ↔
+      1 - 2 * (t : ℝ) +
+          2 * (t : ℝ) * (rightTubeCorePlanarComplex p.1).im = 0 ∧
+        -2 * (t : ℝ) * (rightTubeCorePlanarComplex p.1).re +
+          4 * (t : ℝ) * (1 - 2 * (t : ℝ)) = 0 := by
+  constructor
+  · intro h
+    constructor
+    · simpa [rotatedEndpointWaypoint, strongTransverseDepartureCorrection,
+        Complex.mul_re, Complex.mul_im] using congrArg Complex.re h
+    · simpa [rotatedEndpointWaypoint, strongTransverseDepartureCorrection,
+        Complex.mul_re, Complex.mul_im] using congrArg Complex.im h
+  · rintro ⟨hre, him⟩
+    apply Complex.ext
+    · simpa [rotatedEndpointWaypoint, strongTransverseDepartureCorrection,
+        Complex.mul_re, Complex.mul_im] using hre
+    · simpa [rotatedEndpointWaypoint, strongTransverseDepartureCorrection,
+        Complex.mul_re, Complex.mul_im] using him
+
 end ConstructionTargets.T02A03GeometricTubeDeformation
 
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeNormalComplex_eq_zero_iff
@@ -2875,6 +2919,7 @@ end ConstructionTargets.T02A03GeometricTubeDeformation
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_doubledCorrected_departure_zero_coordinates
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.doubledCorrectedDepartureQuarterCandidate_mem_planarAnnulus
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.doubledCorrection_quarterCandidate_actual_zero
+#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_strongTransverse_departure_eq_zero_iff
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_twiceCorrected_departure_zero_coordinates
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_twiceCorrected_departure_zero_normSq
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_twiceCorrected_departure_zero_scalar_bounds
