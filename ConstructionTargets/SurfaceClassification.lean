@@ -271,6 +271,39 @@ theorem boundaryArc_range_subset_outer {M : Type*} [TopologicalSpace M] [T2Space
   rintro _ ⟨t, rfl⟩
   exact ⟨standardSide a.2 t, rfl⟩
 
+/-- The finite schedule of endpoints that later general-position arcs must
+avoid except where an endpoint is prescribed. -/
+abbrev BoundaryVertexIndex {M : Type*} [TopologicalSpace M] [T2Space M]
+    [ChartedSpace EuclideanPlane M] (C : FiniteClosedDiskCover M) :=
+  C.BoundaryArcIndex × Fin 2
+
+instance {M : Type*} [TopologicalSpace M] [T2Space M]
+    [ChartedSpace EuclideanPlane M] (C : FiniteClosedDiskCover M) :
+    Fintype C.BoundaryVertexIndex := inferInstance
+
+/-- The endpoint in the surface selected by a scheduled arc and one of its
+two standard-simplex vertices. -/
+noncomputable def boundaryVertex {M : Type*} [TopologicalSpace M] [T2Space M]
+    [ChartedSpace EuclideanPlane M] (C : FiniteClosedDiskCover M)
+    (v : C.BoundaryVertexIndex) : M :=
+  C.boundaryArc v.1 (stdSimplex.vertex v.2)
+
+/-- There are six scheduled endpoint occurrences per cover disk.  Distinct
+occurrences may represent the same geometric vertex. -/
+theorem boundaryVertexIndex_card {M : Type*} [TopologicalSpace M] [T2Space M]
+    [ChartedSpace EuclideanPlane M] (C : FiniteClosedDiskCover M) :
+    Fintype.card C.BoundaryVertexIndex = 6 * C.centers.card := by
+  rw [Fintype.card_prod, C.boundaryArcIndex_card]
+  simp only [Fintype.card_fin]
+  omega
+
+/-- The old vertices avoided by the next polygonal perturbation form a finite
+set, even when several scheduled endpoints coincide geometrically. -/
+theorem boundaryVertexSet_finite {M : Type*} [TopologicalSpace M] [T2Space M]
+    [ChartedSpace EuclideanPlane M] (C : FiniteClosedDiskCover M) :
+    Set.Finite (Set.range C.boundaryVertex) :=
+  Set.toFinite _
+
 end FiniteClosedDiskCover
 
 /-- Compact surfaces admit the finite nested closed-disk cover used by the
