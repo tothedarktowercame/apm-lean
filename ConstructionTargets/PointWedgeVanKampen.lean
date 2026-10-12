@@ -546,6 +546,25 @@ theorem genericPointWedgeIdentityOuterLeftSpanFactor_eq_map :
         Q.left.map (aL.hom.app (eK.functor.obj z)) := by
   rfl
 
+/-- The right-span factor is the literal right-span comparison mapped by the
+coordinate representation at the transported overlap object. -/
+theorem genericPointWedgeIdentityOuterRightSpanFactor_eq_map :
+    let eK := genericPointWedgeOverlapGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let aR := genericPointWedgeRightSpanIso
+      x₀ y₀ M N hM hN hy hx cM cN
+    let Q := genericPointWedgeIdentityCoordinateSpan x₀ y₀
+    let z : FundamentalGroupoid (genericPointWedgeOverlapPiece x₀ y₀ M N) :=
+      FundamentalGroupoid.mk
+        ⟨quotientMap x₀ y₀ (.inl x₀),
+          ⟨⟨.inl x₀, by trivial, rfl⟩,
+            ⟨.inr y₀, by trivial,
+              (Quotient.sound (Relation.EqvGen.rel _ _ Rel.base)).symm⟩⟩⟩
+    (Functor.isoWhiskerRight
+      (Functor.isoWhiskerLeft eK.functor aR.symm) Q.right).hom.app z =
+        Q.right.map (aR.inv.app (eK.functor.obj z)) := by
+  rfl
+
 /-- The middle factor in the reverse coordinate glue evaluates at the image
 of the chosen overlap representative under the overlap equivalence. -/
 theorem genericPointWedgeIdentityCoordinateWhiskeredGlue_app :
@@ -2080,6 +2099,7 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeIdentityOuterLeftComparison_app
 #print axioms genericPointWedgeIdentityOuterRightComparison_app
 #print axioms genericPointWedgeIdentityOuterLeftSpanFactor_eq_map
+#print axioms genericPointWedgeIdentityOuterRightSpanFactor_eq_map
 #print axioms genericPointWedgeIdentityCoordinateWhiskeredGlue_app
 #print axioms genericPointWedgeIdentityCoordinateWhiskeredGlue_app_eq_unitBase
 #print axioms genericPointWedgeIdentityCoordinateSpan_glue_unitBase

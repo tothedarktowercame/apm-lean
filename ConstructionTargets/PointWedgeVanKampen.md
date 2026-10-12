@@ -330,3 +330,9 @@ layers from the inverse left-span factor.  The result is exactly the coordinate
 representation applied to the strict left-span comparison at the transported
 overlap object.  That mapped comparison, the other three outer factors, and
 the literal lift identifications remain for B6.
+
+`genericPointWedgeIdentityOuterRightSpanFactor_eq_map` removes the matching
+whiskering layers on the right.  Its hom orientation becomes the coordinate
+right representation applied to the inverse strict right-span comparison.
+The two mapped span comparisons, two overlap round-trips, and literal lifts
+remain for B6.
