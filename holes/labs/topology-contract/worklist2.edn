@@ -75596,6 +75596,19 @@
     [{:cmd "first build",
       :exit 1,
       :correction "moved outer_image field"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791847876264-8044-a8f5818f",
+     :commands
+     ["git show/diff/hash d96d33cca"
+      "lake env lean ConstructionTargets/PolygonSurfacePiOne.lean"
+      "lake build ConstructionTargets.PolygonSurfacePiOne"
+      "python3 scripts/statement-registry.py check"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn"
+      "#print axioms + placeholder scan"],
+     :finding
+     "PASS: commit d96d33cca completes B4 with actual open subsets, openness and cover equality, outer annular quotient image, a PointedContraction to the declared P.center fixing it for all times, overlap equality, and an overlap Homeomorph to Ioo 0 1 × Circle. The polar map orientations and quotient/subtype boundaries are faithful, not a facade. Scope is exact; fixture SHA-256 d6d1d8ac...bb46a and blob cb3f0a0f...b17d match; pinned support sources are unchanged. Fresh Lean/build/worklist gates pass, registry is 131/0, placeholders are 0, and openCover/overlap use only propext, Classical.choice, Quot.sound."},
     :commit "d96d33cca",
     :commits ["03ab9736f" "d96d33cca"],
     :changed-paths ["ConstructionTargets/PolygonSurfacePiOne.lean"],
@@ -75605,7 +75618,7 @@
      "d6d1d8aca2695c72f2753c90762ffceca4e38e81f3e1ef8b0a42bafa4c8bb46a"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/PolygonSurfacePiOne.lean"],
    :dag-node "ConstructionTargets/PolygonSurfacePiOne.blueprint.md/B4",
    :acceptance
@@ -85872,7 +85885,7 @@
    :other-consumers [:t92J05 :t94J04 :t97A01 :t97A03]}
   {:consumer :t96J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "polygonOverlapHomeomorph",
@@ -85882,7 +85895,9 @@
     :reported-by [:routes-2026-10-12-polygon-b4-topo2-r1],
     :type "inner/outer overlap homeomorphic to interval×Circle",
     :area "polygon-surface-pi1",
-    :proved-in :routes-2026-10-12-polygon-b4-topo2-r1},
+    :proved-in :routes-2026-10-12-polygon-b4-topo2-r1,
+    :banked-by :routes-2026-10-12-polygon-b4-topo2-r1,
+    :banked-commit "d96d33cca"},
    :id :lemma-polygonoverlaphomeomorph,
    :kind :lemma,
    :depends-on
@@ -85890,7 +85905,7 @@
    :other-consumers [:t92J05 :t94J04 :t97A01 :t97A03]}
   {:consumer :t96J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "ConstructionTargets.PolygonSurfacePiOne.openCover",
@@ -85902,7 +85917,9 @@
     :type
     "two-open polygon cover with contraction, annular side, overlap Homeomorph",
     :area "polygon-surface-pi1",
-    :proved-in :routes-2026-10-12-polygon-b4-topo2-r1},
+    :proved-in :routes-2026-10-12-polygon-b4-topo2-r1,
+    :banked-by :routes-2026-10-12-polygon-b4-topo2-r1,
+    :banked-commit "d96d33cca"},
    :id :lemma-constructiontargets-polygonsurfacepione-opencover,
    :kind :lemma,
    :depends-on
@@ -86033,7 +86050,7 @@
    :other-consumers [:t92J05 :t94J04 :t97A01 :t97A03]}
   {:consumer :t96J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "annulusPolarHomeomorph",
@@ -86043,7 +86060,9 @@
     :reported-by [:routes-2026-10-12-polygon-b4-topo2-r1],
     :type "annulus ≃ₜ Ioo 0 1 × Circle",
     :area "polygon-surface-pi1",
-    :proved-in :routes-2026-10-12-polygon-b4-topo2-r1},
+    :proved-in :routes-2026-10-12-polygon-b4-topo2-r1,
+    :banked-by :routes-2026-10-12-polygon-b4-topo2-r1,
+    :banked-commit "d96d33cca"},
    :id :lemma-annuluspolarhomeomorph,
    :kind :lemma,
    :depends-on [],
