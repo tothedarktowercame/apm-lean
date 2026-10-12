@@ -75002,7 +75002,7 @@
   {:consumer :t96J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 2,
    :review-finding
    "The STOP omits a required remaining theorem: f4306c96a proves only an Equiv between quotient types. B2 freezes standardPairingData_space_homeomorph, and Quotient.congrRight does not preserve or prove the coinduced topologies. Add the nonorientable Homeomorph/topological continuity proof to :missing-theorems and prove it in scope; do not report the plain Equiv as the quotient comparison.",
    :implements-lemma
@@ -75010,15 +75010,15 @@
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Prove oneVertex/orientable comparison; package standardPairingData.",
+    "Prove oneVertex, package standardPairingData, then orientable Homeomorph.",
     :outcome :stop,
     :warnings ["Two imported linter warnings."],
     :missing-theorems
-    [{:name "nonorientableStandardSpaceEquiv",
-      :type "quotient equivalence with Surface false g",
+    [{:name "nonorientableStandardSpaceHomeomorph",
+      :type "coinduced quotient homeomorphism with Surface false g",
       :status :proved,
       :consumers [:t96J02 :t92J05 :t94J04 :t97A03],
-      :depends-on ["standardPair"],
+      :depends-on ["nonorientable_eqvGen_iff"],
       :area "polygon-surface-pi1"}
      {:name "standardPairingData_oneVertex",
       :type "standard vertices form one class",
@@ -75026,20 +75026,21 @@
       :consumers [:t96J02 :t92J05 :t94J04 :t97A03],
       :depends-on ["standardSign_orientable_pair"],
       :area "polygon-surface-pi1"}
-     {:name "standardPairingData",
-      :type "uniform data; orientable quotient comparison",
+     {:name "standardPairingData_space_homeomorph",
+      :type
+      "uniform standard PairingData and orientable quotient homeomorphism",
       :status :partial,
       :consumers [:t96J02 :t92J05 :t94J04 :t97A03],
       :depends-on ["standardPairingData_oneVertex"],
       :area "polygon-surface-pi1"}],
     :statement-hashes
     {:registry "131/0",
-     :module "5028fbc155ea98fea1f8578225fec07bd4c370d6"},
+     :module "0781babecf319f4f47c9a4037d9889742e0d4af0"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
     :reason
-    "Nonorientable relation and quotient comparison compile; oneVertex and orientable comparison remain.",
+    "Nonorientable quotient Homeomorph now has both continuity proofs; oneVertex and orientable comparison remain.",
     :commands
     [{:cmd "lake build ConstructionTargets.PolygonSurfacePiOne",
       :exit 0}
@@ -75047,26 +75048,16 @@
       :exit 0,
       :output "131/0"}
      {:cmd "placeholder scan", :exit 0, :output "0"}
-     {:cmd "git show --check f4306c96a", :exit 0}],
-    :diagnostic-history
-    [{:cmd "first compile",
-      :exit 1,
-      :correction "normalized Fin coordinates"}],
-    :review
-    {:outcome :fail,
-     :seat "codex-7",
-     :job "invoke-1791839170933-7904-3c2d1426",
-     :finding
-     "The STOP omits a required remaining theorem: f4306c96a proves only an Equiv between quotient types. B2 freezes standardPairingData_space_homeomorph, and Quotient.congrRight does not preserve or prove the coinduced topologies. Add the nonorientable Homeomorph/topological continuity proof to :missing-theorems and prove it in scope; do not report the plain Equiv as the quotient comparison."},
-    :commit "f4306c96a",
+     {:cmd "git show --check c7715f98c", :exit 0}],
+    :commit "c7715f98c",
     :changed-paths ["ConstructionTargets/PolygonSurfacePiOne.lean"],
     :fixture
     {:path "ConstructionTargets/PolygonSurfacePiOne.lean",
      :sha256
-     "8f26657c54775039fac90dfc7aa2e9a0ee7308968ca8be613699c8b10431614e"},
+     "ccb6af9b02bbf8ced1087f597d5207a63b02d8b6c2c63803fc4f792cefe5d83a"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :repair,
+   :state :needs-owner,
    :scope ["ConstructionTargets/PolygonSurfacePiOne.lean"],
    :dag-node "ConstructionTargets/PolygonSurfacePiOne.blueprint.md/B2",
    :acceptance
@@ -84794,4 +84785,49 @@
    :id :lemma-nonorientablestandardspaceequiv,
    :kind :lemma,
    :depends-on [:lemma-standardpair],
+   :other-consumers [:t92J05 :t94J04 :t97A03]}
+  {:consumer :t96J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "nonorientableStandardSpaceHomeomorph",
+    :type "coinduced quotient homeomorphism with Surface false g"},
+   :lemma
+   {:name "nonorientableStandardSpaceHomeomorph",
+    :reported-by [:routes-2026-10-12-polygon-b2-completion-topo2-r1],
+    :type "coinduced quotient homeomorphism with Surface false g",
+    :area "polygon-surface-pi1",
+    :proved-in :routes-2026-10-12-polygon-b2-completion-topo2-r1},
+   :id :lemma-nonorientablestandardspacehomeomorph,
+   :kind :lemma,
+   :depends-on [:lemma-nonorientable-eqvgen-iff],
+   :other-consumers [:t92J05 :t94J04 :t97A03]}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance {:lemma "nonorientable_eqvGen_iff"},
+   :lemma {:name "nonorientable_eqvGen_iff", :reported-by []},
+   :id :lemma-nonorientable-eqvgen-iff,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t96J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "standardPairingData_space_homeomorph",
+    :type
+    "uniform standard PairingData and orientable quotient homeomorphism"},
+   :lemma
+   {:name "standardPairingData_space_homeomorph",
+    :reported-by [:routes-2026-10-12-polygon-b2-completion-topo2-r1],
+    :type
+    "uniform standard PairingData and orientable quotient homeomorphism",
+    :area "polygon-surface-pi1"},
+   :id :lemma-standardpairingdata-space-homeomorph,
+   :kind :lemma,
+   :depends-on [:lemma-standardpairingdata-onevertex],
    :other-consumers [:t92J05 :t94J04 :t97A03]}]}
