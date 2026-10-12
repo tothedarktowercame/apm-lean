@@ -79614,7 +79614,7 @@
   {:consumer :t94A10,
    :stop-count 8,
    :review-finding
-   "B8 cites nonexistent Mathlib theorem MeasureTheory.integral2_divergence_prod_of_hasFDerivWithinAt_off_countable. Revise B8 to use the available integral2_divergence_prod_of_hasFDerivAt_off_countable and explicitly supply its ContinuousOn, pointwise HasFDerivAt, and IntegrableOn hypotheses; then re-review the blueprint.",
+   "Representation-boundary defect in commit 72340f821: exact_sphereParam_identity requires (forall x, DifferentiableAt eta x), including x=0, but frozen apm_t94a10_IsExact supplies differentiability only for punctured x. The theorem therefore cannot discharge B7 from the registered hypothesis although B7 is marked proved. Repair heta to require x != 0 (or only differentiability at sphereParam p) and use sphereParam_ne_zero; then recompile and keep B8-B11 residual.",
    :evidence
    {:placeholder-delta 0,
     :residual "Formalize B8 Green cancellation; then B9-B11.",
@@ -79657,6 +79657,12 @@
     [{:cmd "closure compile",
       :exit 1,
       :finding "Normalized Fin-1 coefficient functions."}],
+    :review
+    {:outcome :fail,
+     :seat "codex-7",
+     :job "invoke-1791772396621-6196-b8752978",
+     :finding
+     "Representation-boundary defect in commit 72340f821: exact_sphereParam_identity requires (forall x, DifferentiableAt eta x), including x=0, but frozen apm_t94a10_IsExact supplies differentiability only for punctured x. The theorem therefore cannot discharge B7 from the registered hypothesis although B7 is marked proved. Repair heta to require x != 0 (or only differentiability at sphereParam p) and use sphereParam_ne_zero; then recompile and keep B8-B11 residual."},
     :commit "72340f821af276dbc706e13462422a425ad2025a",
     :changed-paths ["ConstructionTargets/t94A10Closure.lean"],
     :fixture
@@ -79665,7 +79671,7 @@
      "47e452cc3a16a7fb1736a69baa0336e4948d7256eba94064fa67e3a6584a0797"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :repair,
    :scope
    ["problems/t94A10/lean/Main.lean"
     "problems/t94A10/status.json"
@@ -79685,7 +79691,7 @@
    :id :program-2026-10-11-close-t94a10,
    :kind :final-adapter,
    :campaign-priority 46,
-   :fail-count 1,
+   :fail-count 2,
    :depends-on [],
    :program true,
    :other-consumers [],
