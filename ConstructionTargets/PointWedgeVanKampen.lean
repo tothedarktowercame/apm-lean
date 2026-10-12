@@ -3237,6 +3237,36 @@ theorem genericPointWedgeCoordinateSpanGlobalRestrictionGlue_app :
           (rightComparison r r' eK eR aR S.right).inv.app u := by
   rfl
 
+/-- The middle coordinate-span factor, before either comparison component. -/
+def genericPointWedgeCoordinateSpanGlobalRestrictionMiddle :
+    genericPointWedgeFreeProduct x₀ y₀ :=
+  let C := genericPointWedgeTarget x₀ y₀
+  let E := genericPointWedgeOpenCoverEquivalence
+    x₀ y₀ M N hM hN hy hx cM cN C
+  let P₀ := genericPointWedgePseudoSpanEquivalence x₀ y₀ M N C
+  let S := P₀.functor.obj (E.functor.obj
+    (genericPointWedgeIdentityGlobalFunctor
+      x₀ y₀ M N hM hN hy hx cM cN))
+  let eK := genericPointWedgeOverlapGroupoidEquivalence
+    x₀ y₀ M N hM hN hy hx cM cN
+  (Functor.isoWhiskerLeft eK.inverse S.glue).hom.app
+    (FundamentalGroupoid.mk ())
+
+/-- Evaluation through the inverse overlap equivalence is evaluation at the
+fixed overlap base. -/
+theorem genericPointWedgeCoordinateSpanGlobalRestrictionMiddle_eq_pseudoSpan :
+    genericPointWedgeCoordinateSpanGlobalRestrictionMiddle
+        x₀ y₀ M N hM hN hy hx cM cN =
+      genericPointWedgePseudoSpanGlobalRestrictionGlue
+        x₀ y₀ M N hM hN hy hx cM cN := by
+  rfl
+
+theorem genericPointWedgeCoordinateSpanGlobalRestrictionMiddle_eq_one :
+    genericPointWedgeCoordinateSpanGlobalRestrictionMiddle
+      x₀ y₀ M N hM hN hy hx cM cN = 1 := by
+  rw [genericPointWedgeCoordinateSpanGlobalRestrictionMiddle_eq_pseudoSpan,
+    genericPointWedgePseudoSpanGlobalRestrictionGlue_eq_one]
+
 /-- The mapped coordinate-span counit's glue square, specialized at the
 unique point-span overlap object.  This is the equation in which its two
 named leg factors are related by the mapped reconstructed glue. -/
@@ -4825,6 +4855,9 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgePseudoSpanGlobalRestrictionGlue_eq_one
 #print axioms genericPointWedgeCoordinateSpanGlobalRestrictionGlue
 #print axioms genericPointWedgeCoordinateSpanGlobalRestrictionGlue_app
+#print axioms genericPointWedgeCoordinateSpanGlobalRestrictionMiddle
+#print axioms genericPointWedgeCoordinateSpanGlobalRestrictionMiddle_eq_pseudoSpan
+#print axioms genericPointWedgeCoordinateSpanGlobalRestrictionMiddle_eq_one
 #print axioms genericPointWedgeMappedOpenCoverCounit_namedGlueSquare
 #print axioms genericPointWedgeMappedCoordinateSpanCounit_glueSquare
 #print axioms genericPointWedgeMappedCoordinateSpanSourceGlue

@@ -877,3 +877,10 @@ into the exact ordered composite: the forward left comparison, the raw unit
 glue whiskered through the inverse overlap equivalence, and the inverse right
 comparison.  Thus the next calculations can normalize the middle factor and
 the two comparisons separately without identifying distinct representations.
+
+`genericPointWedgeCoordinateSpanGlobalRestrictionMiddle` names the middle
+factor alone.  The inverse overlap equivalence sends the unique Unit-groupoid
+object definitionally to the chosen overlap base, so its `_eq_pseudoSpan`
+theorem identifies this factor with the previously named pseudo-span glue.
+The `_eq_one` corollary therefore transports the proved raw unit through the
+middle factor while leaving both coordinate comparison components untouched.
