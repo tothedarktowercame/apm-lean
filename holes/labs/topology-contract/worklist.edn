@@ -113895,6 +113895,19 @@
       :exit 1,
       :finding
       "Moved theorem; quotient induction makes path maps literal."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791791397728-6606-2f6ffc84",
+     :commands
+     ["git show/diff-tree 8a6c3d4a"
+      "sha256/diff/placeholder checks"
+      "statement-registry.py check"
+      "lake env lean ConstructionTargets/PointWedgeVanKampen.lean"
+      "lake build ConstructionTargets.PointWedgeVanKampen"
+      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (expected absent)"],
+     :finding
+     "PASS program STOP: exact 2-file commit adds a compiled sorry-free equality from the included left lifted loop to the frozen literal left-leg map. Orientation is useful; quotient induction makes path maps literal without crossing the fixed cover-base boundary incorrectly. Fixture/source/doc hashes match; placeholders 0->0; registry 131/131; standard axioms only. Final module remains absent; residual is symmetric right equality, then B12."},
     :commit "8a6c3d4a8499bad79971bde3a39360bb30e61dca",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
@@ -113905,7 +113918,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113926,7 +113939,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Both summand loops lift to endomorphisms of the fixed cover bases; the right lift retains its quotient basepoint change.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Left lifted-loop inclusion image equals the literal left wedge-leg map.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -114206,7 +114219,11 @@
     {:job 2,
      :commit "d26d5420e569266d9335baafc1336fd7da939d4d",
      :reason
-     "Both summand loops lift to endomorphisms of the fixed cover bases; the right lift retains its quotient basepoint change."}]}
+     "Both summand loops lift to endomorphisms of the fixed cover bases; the right lift retains its quotient basepoint change."}
+    {:job 3,
+     :commit "8a6c3d4a8499bad79971bde3a39360bb30e61dca",
+     :reason
+     "Left lifted-loop inclusion image equals the literal left wedge-leg map."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
