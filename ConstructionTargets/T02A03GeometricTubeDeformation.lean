@@ -3737,6 +3737,45 @@ theorem heightArrivalCorrection_ne_zero_of_planarAxis
     mul_pos (by linarith) (by linarith)
   exact hp2 ((mul_eq_zero.mp h1).resolve_left hcoef.ne')
 
+/-- Endpoint-fixed correction on the entire planar-axis slice.  The shifted
+first coordinate is strictly positive throughout the frozen right tube. -/
+noncomputable def radialArrivalCorrection :
+    C(unitInterval × RightTubeMinusLeftCore, ℂ) :=
+  ⟨fun tp =>
+      ((max 0 (2 * (tp.1 : ℝ) - 1) * (1 - (tp.1 : ℝ)) *
+          (rightTubePlanarComplex tp.2.1).re : ℝ) : ℂ) * Complex.I, by
+    fun_prop⟩
+
+@[simp] theorem radialArrivalCorrection_zero (p : RightTubeMinusLeftCore) :
+    radialArrivalCorrection (0, p) = 0 := by
+  norm_num [radialArrivalCorrection]
+
+@[simp] theorem radialArrivalCorrection_one (p : RightTubeMinusLeftCore) :
+    radialArrivalCorrection (1, p) = 0 := by
+  norm_num [radialArrivalCorrection]
+
+theorem radialArrivalCorrection_ne_zero_of_planarAxis
+    (t : unitInterval) (ht0 : (1 / 2 : ℝ) < (t : ℝ)) (ht1 : (t : ℝ) < 1)
+    (p : RightTubeMinusLeftCore) (hp1 : p.1 1 = 0) :
+    (((2 - 2 * (t : ℝ) : ℝ) : ℂ) * positiveRealPlanarWaypointMap p +
+        ((2 * (t : ℝ) - 1 : ℝ) : ℂ) * rightTubeCorePlanarComplex p.1 +
+        radialArrivalCorrection (t, p)) ≠ 0 := by
+  intro hz
+  have h1 := (complexArrivalCorrection_zero_equations t
+    (radialArrivalCorrection (t, p)) p hz).2
+  have hm : max 0 (2 * (t : ℝ) - 1) = 2 * (t : ℝ) - 1 := by
+    rw [max_eq_right]
+    linarith
+  have hcim : (radialArrivalCorrection (t, p)).im =
+      (2 * (t : ℝ) - 1) * (1 - (t : ℝ)) *
+        (rightTubePlanarComplex p.1).re := by
+    simp [radialArrivalCorrection, Complex.mul_im, hm]
+  rw [hp1, zero_add, hcim] at h1
+  have hcoef : 0 < (2 * (t : ℝ) - 1) * (1 - (t : ℝ)) :=
+    mul_pos (by linarith) (by linarith)
+  have hr := rightTubePlanarComplex_re_pos p.1 p.2.1
+  nlinarith
+
 /-- Polynomial forced-norm identity for the whole corrected arrival leg;
 it avoids division at the exceptional time `t = 3/4`. -/
 theorem complexArrivalCorrection_zero_scaled_normSq
@@ -4116,6 +4155,7 @@ end ConstructionTargets.T02A03GeometricTubeDeformation
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.signedArrivalCorrection_ne_zero_of_second_ne_zero
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.signedArrivalCorrection_eq_zero_iff_second_eq_zero
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.heightArrivalCorrection_ne_zero_of_planarAxis
+#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.radialArrivalCorrection_ne_zero_of_planarAxis
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.complexArrivalCorrection_ne_zero_of_scaled_normSq_outside
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.complexArrivalCorrection_threeQuarters_ne_zero
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.continuous_arrivalTransverseCorrection
