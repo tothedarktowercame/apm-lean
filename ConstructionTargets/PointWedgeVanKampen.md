@@ -470,3 +470,6 @@ literal right representative with `genericPointWedgeRightBase`.
 transport based loops into endomorphisms of the two fixed cover-base objects.
 The right construction retains the quotient representative change explicitly
 through `FundamentalGroup.mapOfEq`.
+
+`genericPointWedgeLeftLiftedLoop_coverInclusion` verifies that including a
+lifted left loop back into the wedge recovers the frozen literal left-leg map.
