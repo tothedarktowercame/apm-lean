@@ -2400,6 +2400,30 @@ theorem genericPointWedgePreFreeProductCounit_left_app_eq_preCoordinate_injectio
   simp only [NatTrans.comp_app]
   congr 1
 
+/-- At the right base object, the final factor in the pre-free-product counit
+is the coproduct injection of the actual right based connector counit. -/
+theorem genericPointWedgePreFreeProductCounit_right_app_eq_preCoordinate_injection :
+    let C := genericPointWedgeTarget x₀ y₀
+    let P := genericPointWedgePreCoordinatePointSpanMappingEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN C
+    let Q := genericPointWedgeCoordinatePointSpanEquivalence x₀ y₀ C
+    let S := freeProductPointSpanEquivalence
+      (genericPointWedgeLeftGroup x₀) (genericPointWedgeRightGroup y₀) C
+    let R := representationSingleObjEquivalence
+      (C := C) (genericPointWedgeLeftGroup x₀)
+        (genericPointWedgeRightGroup y₀)
+    let F := Functor.id (SingleObj (genericPointWedgeFreeProduct x₀ y₀))
+    let Z := S.inverse.obj (R.inverse.obj F)
+    (((P.trans Q).counitIso.hom.app Z).right).app
+        (SingleObj.star (genericPointWedgeRightGroup y₀)) =
+      ((Q.functor.map (P.counitIso.hom.app (Q.inverse.obj Z))).right).app
+          (SingleObj.star (genericPointWedgeRightGroup y₀)) ≫
+        Monoid.Coprod.inr (genericPointWedgeRightBasedCounit y₀) := by
+  dsimp only
+  rw [genericPointWedgePreFreeProductCounit_right_eq_preCoordinate_coordinatePoint]
+  simp only [NatTrans.comp_app]
+  congr 1
+
 /-- Consequently the full B3 counit element is just the mapped counit of the
 preceding free-product-representation equivalence. -/
 theorem genericPointWedgeCounitElement_eq_mappedRepresentationCounit :
@@ -3698,6 +3722,7 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgePreFreeProductCounit_left_eq_preCoordinate_coordinatePoint
 #print axioms genericPointWedgePreFreeProductCounit_right_eq_preCoordinate_coordinatePoint
 #print axioms genericPointWedgePreFreeProductCounit_left_app_eq_preCoordinate_injection
+#print axioms genericPointWedgePreFreeProductCounit_right_app_eq_preCoordinate_injection
 #print axioms genericPointWedgeCounitElement_eq_mappedRepresentationCounit
 #print axioms genericPointWedgeMappedLeft_eq_conj
 #print axioms genericPointWedgeMappedRight_eq_conj

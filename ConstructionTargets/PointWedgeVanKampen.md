@@ -671,3 +671,7 @@ mapped-pre-coordinate then coordinate-point order.
 `genericPointWedgePreFreeProductCounit_left_app_eq_preCoordinate_injection`
 evaluates the left split at its unique source object and replaces the final
 factor by the coproduct injection of the actual left based connector counit.
+
+`genericPointWedgePreFreeProductCounit_right_app_eq_preCoordinate_injection`
+does the symmetric evaluation on the right, retaining the actual right based
+connector counit under `Monoid.Coprod.inr`.
