@@ -446,6 +446,20 @@
      {:cmd "lake build ConstructionTargets.SardGeneralModel", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "rg source placeholders", :exit 1, :expected-exit 1}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791820720372-7323-90001741",
+     :commands
+     ["git show/diff 2c00694f"
+      "sha256sum interior fixture"
+      "git diff --check; blob-current"
+      "rg placeholder counts"
+      "statement-registry.py check"
+      "lake env lean fixture/module"
+      "lake build ConstructionTargets.SardGeneralModel"],
+     :finding
+     "PASS: exact one-file scope; recorded blob current; fixture SHA matches. Interior membership makes Set.range I a neighborhood, so fderivWithin equals fderiv and the surjectivity iff has the correct direction on the identical range representation. Fixture/module/build pass; registry 131/131; source placeholders 0, consumer 1; standard axioms. Boundary nullity remains."},
     :commit "2c00694f68369a8eec8248e2128f2e7d23889743",
     :changed-paths ["ConstructionTargets/SardGeneralModel.lean"],
     :declaration
@@ -456,7 +470,7 @@
      "4974bc8882fd2fde477ebdad676bcbc74c5966dfa56d76f15ff9b7f66c17e548"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/SardGeneralModel.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t01A08/interior",
    :acceptance
@@ -529,7 +543,7 @@
       :other-consumers []},
      :residual "Then boundary nullity."}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["problems/t01A08/lean/Main.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t01A08/closure",
    :acceptance
@@ -915,6 +929,9 @@
   {:owner-park
    "2026-10-12 claude-14: paused for the surface route redesign, ~/notes/closer/routes/surfaces.md",
    :consumer :t00A03,
+   :owner-reopen
+   "reopened: a lemma this row reported missing is now banked",
+   :stop-count 0,
    :implements-lemma
    :lemma-constructiontargets-surfaceschoenflies-embeddedcirclecollar,
    :evidence
@@ -969,7 +986,7 @@
       "225e1e486ac81111c253922678840dfcf8e2a855d149093d07d745cb253f664e"},
      :seat "topo-12"}},
    :phase :probe,
-   :state :needs-owner,
+   :state :open,
    :scope ["ConstructionTargets/SurfaceSchoenflies.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/topo3/schoenflies-2d/embedded-circle-collar",
@@ -984,6 +1001,7 @@
    :id :routes-2026-10-10-surface-schoenflies-collar-topo3-r2,
    :kind :reusable-theorem,
    :area "embedded-circle-collar-surface",
+   :fail-count 0,
    :depends-on
    [:routes-2026-10-10-topo3-seed-checkpoint-1
     :routes-2026-10-11-surface-embedded-circle-closed-range-topo3-r1
@@ -21026,7 +21044,7 @@
   {:consumer :t00J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 2,
+   :stop-count 0,
    :review-finding
    "Frozen fixture metadata mismatch: top-level :acceptance still records SHA aad5a9cda739c1cbcceb1eca8ab8b33395db8a08c9d68941a87c644f4d13586e and omits :mode, but /tmp/closedboundarycoords.lean freshly hashes to 7e72195e1214d7580994264481ae57d0ecf87755d31825ab85cbda5f1220c4b1. Repair the authoritative acceptance map (and duplicated prerequisite acceptance) to that digest with :mode :post-build-export-check, then resubmit.",
    :implements-lemma
@@ -21058,7 +21076,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/manifold-fundamental-class",
    :acceptance
@@ -21073,7 +21091,7 @@
    :id :routes-2026-10-12-mfclass-boundary-coordinates-r1,
    :kind :reusable-theorem,
    :area "manifold-fundamental-class",
-   :fail-count 1,
+   :fail-count 0,
    :depends-on [:routes-2026-10-12-mfclass-closed-generator-bridge-r1],
    :current-residual "Prove Bool H0 comparison.",
    :other-consumers [:t98A02]}
@@ -29037,7 +29055,7 @@
    :other-consumers [:t00A03 :t91J05 :t92J05 :t94J04 :t96A01 :t97J02]}
   {:consumer :t01A08,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -29053,7 +29071,9 @@
     :type
     "∀ {E H} [NormedAddCommGroup E] [NormedSpace ℝ E] [TopologicalSpace H] (I : ModelWithCorners ℝ E H), InteriorDerivativeComparison I",
     :area "sard-convex-domain",
-    :proved-in :routes-2026-10-12-t01a08-interior-r1},
+    :proved-in :routes-2026-10-12-t01a08-interior-r1,
+    :banked-by :routes-2026-10-12-t01a08-interior-r1,
+    :banked-commit "2c00694f68369a8eec8248e2128f2e7d23889743"},
    :id
    :lemma-constructiontargets-sardgeneralmodel-modelrange-interior-surjective-fderivwithin,
    :kind :lemma,
@@ -30140,7 +30160,7 @@
    :consumer :t00A02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 8,
+   :stop-count 0,
    :review-finding
    "Program-row defect: commit ebbfe625 repairs the B5 mathematics, but changes only SurfaceClassification.blueprint.md and commits no new compiled, sorry-free, standard-axiom result since the prior program-history entry; :missing-theorems is empty. The successful 8245-job build merely rebuilds pre-existing SurfaceClassification code and is not a new milestone. Repair by implementing and committing the next listed milestone (B1 FiniteTwoComplex/Realization or another genuine supporting result), compiling it without placeholders, and recording that proved milestone in :missing-theorems.",
    :implements-lemma
@@ -30187,7 +30207,7 @@
     :changed-paths ["ConstructionTargets/SurfaceClassification.lean"],
     :seat :topo-10},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["ConstructionTargets/SurfaceClassification.lean"
     "ConstructionTargets/SurfaceClassification.md"
