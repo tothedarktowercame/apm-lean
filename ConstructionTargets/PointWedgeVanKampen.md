@@ -428,3 +428,7 @@ form, with the dependent endpoint retained by `HEq`.
 left connector normal form into its source connector, comparison component,
 and inverse target connector.  Their order and both dependent endpoints stay
 explicit for the subsequent literal-base specialization.
+
+`genericPointWedgeIdentityOuterRightSpan_normalForm_eq_connectors` gives the
+symmetric expansion for `aR.inv`: source connector, inverse comparison
+component, then inverse target connector.  No dependent endpoint is rewritten.
