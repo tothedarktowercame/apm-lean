@@ -416,6 +416,70 @@ theorem coordinate_fderivWithin_comp_extChartAt_eq_inTangentCoordinates
   rw [← B]
   simp only [mfderivWithin_eq_fderivWithin]
 
+/-- The fixed-coordinate derivative and the transported manifold derivative
+agree eventually at the base point. -/
+theorem eventually_coordinate_fderivWithin_comp_extChartAt_eq_inTangentCoordinates
+    {m n : ℕ} {X : Type*} [TopologicalSpace X]
+    [ChartedSpace (EuclideanModel m) X]
+    [IsManifold 𝓘(ℝ, EuclideanModel m) ∞ X]
+    (f : X → EuclideanModel n)
+    (hf : ContMDiff 𝓘(ℝ, EuclideanModel m) 𝓘(ℝ, EuclideanModel n) ∞ f)
+    (x : X) :
+    (fun y ↦ fderivWithin ℝ
+        (extChartAt 𝓘(ℝ, EuclideanModel n) (f x) ∘ f ∘
+          (extChartAt 𝓘(ℝ, EuclideanModel m) x).symm)
+        (Set.range 𝓘(ℝ, EuclideanModel m))
+        (extChartAt 𝓘(ℝ, EuclideanModel m) x y)) =ᶠ[𝓝 x]
+      inTangentCoordinates 𝓘(ℝ, EuclideanModel m)
+        𝓘(ℝ, EuclideanModel n) (fun z : X ↦ z) f
+        (fun z ↦ mfderiv 𝓘(ℝ, EuclideanModel m)
+          𝓘(ℝ, EuclideanModel n) f z) x := by
+  filter_upwards [eventually_mem_fixed_chart_sources f hf x] with y hy
+  exact coordinate_fderivWithin_comp_extChartAt_eq_inTangentCoordinates
+    f hf x y hy.1 hy.2
+
+/-- B2 interface: in fixed tangent coordinates, both presentations of the
+derivative are continuous, agree near the base point, and the transported
+presentation has value `mfderiv f x` at the base point. -/
+theorem continuousAt_coordinate_mfderiv
+    {m n : ℕ} {X : Type*} [TopologicalSpace X]
+    [ChartedSpace (EuclideanModel m) X]
+    [IsManifold 𝓘(ℝ, EuclideanModel m) ∞ X]
+    (f : X → EuclideanModel n)
+    (hf : ContMDiff 𝓘(ℝ, EuclideanModel m) 𝓘(ℝ, EuclideanModel n) ∞ f)
+    (x : X) :
+    ContinuousAt
+        (fun y ↦ fderivWithin ℝ
+          (extChartAt 𝓘(ℝ, EuclideanModel n) (f x) ∘ f ∘
+            (extChartAt 𝓘(ℝ, EuclideanModel m) x).symm)
+          (Set.range 𝓘(ℝ, EuclideanModel m))
+          (extChartAt 𝓘(ℝ, EuclideanModel m) x y)) x ∧
+      ContinuousAt
+        (inTangentCoordinates 𝓘(ℝ, EuclideanModel m)
+          𝓘(ℝ, EuclideanModel n) (fun z : X ↦ z) f
+          (fun z ↦ mfderiv 𝓘(ℝ, EuclideanModel m)
+            𝓘(ℝ, EuclideanModel n) f z) x) x ∧
+      (fun y ↦ fderivWithin ℝ
+          (extChartAt 𝓘(ℝ, EuclideanModel n) (f x) ∘ f ∘
+            (extChartAt 𝓘(ℝ, EuclideanModel m) x).symm)
+          (Set.range 𝓘(ℝ, EuclideanModel m))
+          (extChartAt 𝓘(ℝ, EuclideanModel m) x y)) =ᶠ[𝓝 x]
+        inTangentCoordinates 𝓘(ℝ, EuclideanModel m)
+          𝓘(ℝ, EuclideanModel n) (fun z : X ↦ z) f
+          (fun z ↦ mfderiv 𝓘(ℝ, EuclideanModel m)
+            𝓘(ℝ, EuclideanModel n) f z) x ∧
+      inTangentCoordinates 𝓘(ℝ, EuclideanModel m)
+          𝓘(ℝ, EuclideanModel n) (fun z : X ↦ z) f
+          (fun z ↦ mfderiv 𝓘(ℝ, EuclideanModel m)
+            𝓘(ℝ, EuclideanModel n) f z) x x =
+        mfderiv 𝓘(ℝ, EuclideanModel m)
+          𝓘(ℝ, EuclideanModel n) f x := by
+  exact ⟨continuousAt_coordinate_fderivWithin_comp_extChartAt f hf x,
+    continuousAt_inTangentCoordinates_mfderiv f hf x,
+    eventually_coordinate_fderivWithin_comp_extChartAt_eq_inTangentCoordinates
+      f hf x,
+    inTangentCoordinates_mfderiv_self_eq_mfderiv f x⟩
+
 end t97A07Closure
 
 #print axioms t97A07Closure.isOpen_setOf_surjective_clm
@@ -434,3 +498,5 @@ end t97A07Closure
 #print axioms t97A07Closure.continuousAt_inTangentCoordinates_mfderiv_and_self
 #print axioms t97A07Closure.continuousAt_coordinate_fderivWithin_comp_extChartAt
 #print axioms t97A07Closure.coordinate_fderivWithin_comp_extChartAt_eq_inTangentCoordinates
+#print axioms t97A07Closure.eventually_coordinate_fderivWithin_comp_extChartAt_eq_inTangentCoordinates
+#print axioms t97A07Closure.continuousAt_coordinate_mfderiv

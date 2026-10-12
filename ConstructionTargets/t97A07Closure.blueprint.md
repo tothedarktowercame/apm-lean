@@ -52,7 +52,7 @@ the coordinate transport of `mfderiv I I' f`.
 uses: Mathlib `contMDiffAt_iff`, `ContDiff.continuous_fderiv`,
 `mfderiv_comp`, and the derivative equivalences of `extChartAt`
 
-status: partial
+status: proved
 
 Compiled progress: `coordinate_fderivWithin_eq_inTangentCoordinates_mfderiv_self`
 now identifies the fixed-coordinate derivative with the transported manifold
@@ -142,6 +142,12 @@ the inverse source-chart derivative; the extended-chart inverse law supplies
 the exact intermediate points.  The remaining B2 step is to package this
 equality with `eventually_mem_fixed_chart_sources` and the two continuity
 theorems into the declared `continuousAt_coordinate_mfderiv` interface.
+
+`eventually_coordinate_fderivWithin_comp_extChartAt_eq_inTangentCoordinates`
+packages the pointwise comparison on the common chart neighbourhood.
+`continuousAt_coordinate_mfderiv` is the completed B2 interface: it records
+continuity of both fixed-coordinate presentations, their eventual equality,
+and the transported family's value `mfderiv f x` at the centre.
 
 ### B3. Regular points are open
 
