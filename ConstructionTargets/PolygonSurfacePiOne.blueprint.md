@@ -20,6 +20,19 @@ Mathlib's `IsQuotientMap`, `IsOpenMap`, `ContinuousMap.Homotopy`,
 `PresentedGroup`, and normal closure/quotient APIs.  No surface-classification
 theorem and no CW-complex API is assumed.
 
+## Certification of the pairing-orbit correction
+
+Certified 2026-10-12 for implementation.  B1 makes
+`PairingOrbit P.pair` the generic generator type and exposes no independent
+label map.  B7 indexes wedge legs by that quotient itself; B8 is polymorphic
+in its finite index type; B9 and B11 instantiate it with the same
+`PairingOrbit P.pair`; and B10 does not mention generator indices.  B12 may
+change indices only through the displayed standard-word equivalences, after
+both inverse laws have been proved.  Consequently B7--B12 cannot identify
+two distinct pairing orbits through an unconstrained label function.  This
+certifies the corrected B1 and B7--B12 interfaces and authorizes B1 as the
+first formalisation milestone.
+
 The Lean file is `ConstructionTargets/PolygonSurfacePiOne.lean`.  All
 quotients below carry the coinduced topology from their displayed disk map.
 
