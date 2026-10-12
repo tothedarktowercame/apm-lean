@@ -66,4 +66,43 @@ theorem embeddedCircle_finite_flat_subcover
   · rintro _ ⟨z, rfl⟩
     exact Set.mem_iUnion.2 ⟨z, (chosenFlatNeighborhood hflat z).mem_target⟩
 
+def EmbeddedCircleFlatNeighborhood.comapHomeomorph
+    {M N : Type} [TopologicalSpace M] [TopologicalSpace N]
+    (e : M ≃ₜ N) (j : C(Circle, M)) (z : Circle)
+    (h : EmbeddedCircleFlatNeighborhood
+      ((⟨e, e.continuous⟩ : C(M, N)).comp j) z) :
+    EmbeddedCircleFlatNeighborhood j z where
+  V := h.V
+  U := e ⁻¹' h.U
+  open_V := h.open_V
+  open_U := e.isOpen_preimage.mpr h.open_U
+  mem_source := h.mem_source
+  mem_target := h.mem_target
+  productChart :=
+    (e.subtype (fun _ => Iff.rfl)).trans h.productChart
+  flatten := by
+    intro w hw
+    obtain ⟨hwU, heq⟩ := h.flatten w hw
+    exact ⟨hwU, heq⟩
+
+theorem embeddedCircleLocallyFlat_homeomorph_iff
+    {M N : Type} [TopologicalSpace M] [TopologicalSpace N]
+    (e : M ≃ₜ N) (j : C(Circle, M)) :
+    EmbeddedCircleLocallyFlat ((⟨e, e.continuous⟩ : C(M, N)).comp j) ↔
+      EmbeddedCircleLocallyFlat j := by
+  constructor
+  · intro h z
+    exact ⟨EmbeddedCircleFlatNeighborhood.comapHomeomorph e j z
+      (Classical.choice (h z))⟩
+  · intro h z
+    let k : C(Circle, N) := (⟨e, e.continuous⟩ : C(M, N)).comp j
+    have hk : (⟨e.symm, e.symm.continuous⟩ : C(N, M)).comp k = j := by
+      ext
+      simp [k]
+    have hj' : EmbeddedCircleFlatNeighborhood
+        ((⟨e.symm, e.symm.continuous⟩ : C(N, M)).comp k) z := by
+      rw [hk]
+      exact Classical.choice (h z)
+    exact ⟨EmbeddedCircleFlatNeighborhood.comapHomeomorph e.symm k z hj'⟩
+
 end ConstructionTargets.SurfaceSchoenflies
