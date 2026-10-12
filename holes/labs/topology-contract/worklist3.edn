@@ -20936,10 +20936,9 @@
    :lemma-constructiontargets-manifoldfundamentalclass-coefficientclosedboundary-coordinat,
    :evidence
    {:placeholder-delta {:t00J02 [1 1], :t98A02 [1 1]},
-    :residual
-    "Apply the comparison in the t00J02 and t98A02 closure adapters.",
+    :residual "Apply comparison in the two closure adapters.",
     :outcome :done-unreviewed,
-    :warnings ["pre-existing unnecessarySimpa lint"],
+    :warnings ["pre-existing lints only"],
     :missing-theorems
     [{:name
       "ConstructionTargets.ManifoldFundamentalClass.coefficientClosedBoundary_coordinate_comparison_of_bool",
@@ -20949,23 +20948,22 @@
       :depends-on ["closed-generator bridge"],
       :area "manifold-fundamental-class"}],
     :statement-hashes {:registry "131/131"},
+    :acceptance
+    {:fixture-sha256
+     "7e72195e1214d7580994264481ae57d0ecf87755d31825ab85cbda5f1220c4b1"},
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "Joe Corneli",
     :commands
-    [{:cmd "lake env lean /tmp/closedboundarycoords.lean", :exit 0}
-     {:cmd "lake build ConstructionTargets.ManifoldFundamentalClass",
+    [{:cmd "lake build ConstructionTargets.ManifoldFundamentalClass",
       :exit 0}
+     {:cmd "lake env lean /tmp/closedboundarycoords.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd
       "git diff --check -- ConstructionTargets/ManifoldFundamentalClass.lean",
       :exit 0}
-     {:cmd "rg source placeholders", :exit 1, :expected-exit 1}],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1791816122043-7126-567d6853",
-     :finding
-     "Frozen acceptance gate fails against the recorded commit once its module is built: lake env lean /tmp/closedboundarycoords.lean reports coefficientClosedBoundary_coordinate_comparison_of_bool has already been declared, because the fixture imports ManifoldFundamentalClass and redeclares the same theorem. The recorded fixture-first success depended on a stale pre-commit .olean and is not reproducible from the compiled commit. Repair the frozen acceptance fixture/registration so it checks the exported declaration without redeclaring it (for example #check plus an example of the exact frozen type), recompute its SHA-256, and rerun fixture after module build. Module/build, registry 131/131, standard axioms, scope/blob, and placeholder counts otherwise pass."},
+     {:cmd
+      "git diff --exit-code f0afa7bd -- ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}],
     :commit "f0afa7bdc4c95a8c87143342ceb8c9ce51cd5612",
     :changed-paths
     ["ConstructionTargets/ManifoldFundamentalClass.lean"],
@@ -20974,10 +20972,11 @@
     :fixture
     {:path "/tmp/closedboundarycoords.lean",
      :sha256
-     "aad5a9cda739c1cbcceb1eca8ab8b33395db8a08c9d68941a87c644f4d13586e"},
+     "7e72195e1214d7580994264481ae57d0ecf87755d31825ab85cbda5f1220c4b1",
+     :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/manifold-fundamental-class",
    :acceptance
