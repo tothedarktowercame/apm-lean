@@ -20001,55 +20001,78 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :implements-lemma
+   :lemma-constructiontargets-manifoldfundamentalclass-coefficientsphe-95a317082c77,
+   :phase :implementation,
+   :state :open,
+   :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+   :dag-node "TOPOLOGY-ROUTES.md/manifold-fundamental-class",
+   :acceptance
+   {:declaration
+    "ConstructionTargets.ManifoldFundamentalClass.coefficientSphereNormalizationComparisonAutomorphism_hom_eq_id_of_degree_eq_one",
+    :type "exact type in fixture",
+    :fixture "/tmp/spheredegreeid.lean",
+    :fixture-sha256
+    "3ce3e43a1ce714bac776db43852065e22c85db1f19393121a3b0f05e64800e0f",
+    :placeholders ["t00J02 bridge_1" "t98A02 sorry"],
+    :route-step "degree-one identity uptake"},
+   :id :routes-2026-10-12-mfclass-sphere-degree-id-r1,
+   :kind :reusable-theorem,
+   :area "manifold-fundamental-class",
+   :depends-on [:routes-2026-10-12-mfclass-sphere-degree-r1],
+   :current-residual "Compute endpoint degree as +1.",
+   :other-consumers [:t98A02]}
+  {:consumer :t00J02,
+   :implements-lemma
    :lemma-constructiontargets-manifoldfundamentalclass-closedorientedfundamentalclass,
    :evidence
    {:probe
-    {:outcome :revise,
-     :seat "topo-12",
-     :fixture
-     {:path "/tmp/spheredegree.lean",
-      :sha256
-      "c57ed58eb138e2b8a1df6f68c510bd4561f22a691874c8ce3b4e85b373faa1e0"},
-     :commands
-     [{:cmd
-       "lake env lean /tmp/spheredegree.lean && sha256sum /tmp/spheredegree.lean && python3 scripts/statement-registry.py check",
-       :exit 0}],
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
+    {:residual "Promote; compute endpoint degree.",
+     :outcome :revise,
      :missing-theorems
      [{:name
-       "ConstructionTargets.ManifoldFundamentalClass.coefficientSphereNormalizationComparisonUnit_eq_degree",
+       "ConstructionTargets.ManifoldFundamentalClass.coefficientSphereNormalizationComparisonAutomorphism_hom_eq_id_of_degree_eq_one",
        :type "exact type in fixture",
        :status :proved,
        :consumers [:t00J02 :t98A02],
        :depends-on
-       ["ConstructionTargets.ManifoldFundamentalClass.coefficientSphereNormalizationComparisonUnit_eq_one_of_nonneg"],
+       ["ConstructionTargets.ManifoldFundamentalClass.coefficientSphereNormalizationComparisonUnit_eq_degree"],
        :area "manifold-fundamental-class"}],
      :prerequisite
      {:consumer :t00J02,
-      :implements-lemma :lemma-mfclass-sphere-degree,
+      :implements-lemma :lemma-mfclass-sphere-degree-id,
       :phase :implementation,
       :state :open,
       :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
       :dag-node "TOPOLOGY-ROUTES.md/manifold-fundamental-class",
       :acceptance
       {:declaration
-       "ConstructionTargets.ManifoldFundamentalClass.coefficientSphereNormalizationComparisonUnit_eq_degree",
+       "ConstructionTargets.ManifoldFundamentalClass.coefficientSphereNormalizationComparisonAutomorphism_hom_eq_id_of_degree_eq_one",
        :type "exact type in fixture",
-       :fixture "/tmp/spheredegree.lean",
+       :fixture "/tmp/spheredegreeid.lean",
        :fixture-sha256
-       "c57ed58eb138e2b8a1df6f68c510bd4561f22a691874c8ce3b4e85b373faa1e0",
+       "3ce3e43a1ce714bac776db43852065e22c85db1f19393121a3b0f05e64800e0f",
        :placeholders ["t00J02 bridge_1" "t98A02 sorry"],
-       :route-step "identify unit with endpoint degree",
-       :implementation "Add degree definition and equality."},
-      :id :routes-2026-10-12-mfclass-sphere-degree-r1,
+       :route-step "degree-one identity uptake"},
+      :id :routes-2026-10-12-mfclass-sphere-degree-id-r1,
       :kind :reusable-theorem,
       :area "manifold-fundamental-class",
-      :depends-on [:routes-2026-10-12-mfclass-sphere-unit-nonneg-r1],
-      :current-residual "Prove endpoint degree nonnegative.",
+      :depends-on [:routes-2026-10-12-mfclass-sphere-degree-r1],
+      :current-residual "Compute endpoint degree as +1.",
       :other-consumers [:t98A02]},
-     :residual "Promote; prove degree nonnegative."}},
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
+     :commands
+     [{:cmd
+       "lake env lean /tmp/spheredegreeid.lean && sha256sum /tmp/spheredegreeid.lean && python3 scripts/statement-registry.py check",
+       :exit 0}],
+     :diagnostic-history
+     [{:exit 1, :correction "Included prior fixture declarations."}],
+     :fixture
+     {:path "/tmp/spheredegreeid.lean",
+      :sha256
+      "3ce3e43a1ce714bac776db43852065e22c85db1f19393121a3b0f05e64800e0f"},
+     :seat "topo-12"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -20204,7 +20227,8 @@
     :routes-2026-10-12-mfclass-od-prod-neg-r1
     :routes-2026-10-12-mfclass-neg-unit-r1
     :routes-2026-10-12-mfclass-sphere-unit-nonneg-r1
-    :routes-2026-10-12-mfclass-sphere-degree-r1],
+    :routes-2026-10-12-mfclass-sphere-degree-r1
+    :routes-2026-10-12-mfclass-sphere-degree-id-r1],
    :current-residual
    "Local-degree counts and wild-ball complement homology remain.",
    :other-consumers [:t98A02]}
@@ -28631,6 +28655,28 @@
    :kind :lemma,
    :depends-on
    [:lemma-constructiontargets-manifoldfundamentalclass-coefficientsphe-23b4d9fefb3c],
+   :other-consumers [:t98A02]}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.ManifoldFundamentalClass.coefficientSphereNormalizationComparisonAutomorphism_hom_eq_id_of_degree_eq_one",
+    :type "exact type in fixture"},
+   :lemma
+   {:name
+    "ConstructionTargets.ManifoldFundamentalClass.coefficientSphereNormalizationComparisonAutomorphism_hom_eq_id_of_degree_eq_one",
+    :reported-by
+    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2],
+    :type "exact type in fixture",
+    :area "manifold-fundamental-class",
+    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+   :id
+   :lemma-constructiontargets-manifoldfundamentalclass-coefficientsphe-95a317082c77,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-manifoldfundamentalclass-coefficientsphe-837dabf7973a],
    :other-consumers [:t98A02]}],
  :consumer-baselines {},
  :statuses
