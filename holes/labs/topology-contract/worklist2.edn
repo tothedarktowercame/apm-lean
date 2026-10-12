@@ -75002,7 +75002,7 @@
   {:consumer :t96J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 0,
    :review-finding
    "The STOP omits a required remaining theorem: f4306c96a proves only an Equiv between quotient types. B2 freezes standardPairingData_space_homeomorph, and Quotient.congrRight does not preserve or prove the coinduced topologies. Add the nonorientable Homeomorph/topological continuity proof to :missing-theorems and prove it in scope; do not report the plain Equiv as the quotient comparison.",
    :implements-lemma
@@ -75056,6 +75056,18 @@
     [{:cmd "first compile",
       :exit 1,
       :correction "rewrote indices first"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791840359535-7924-87a7d798",
+     :commands
+     ["git show 196cdc9b4:ConstructionTargets/PolygonSurfacePiOne.lean | lake env lean /dev/stdin"
+      "#print axioms on recorded relation/Homeomorph declarations"
+      "python3 scripts/statement-registry.py check"
+      "git show --check/hash/diff-tree 196cdc9b4"
+      "comment-stripped placeholder scan"],
+     :finding
+     "PASS: exact source compiles; scope and fixture hash match; registry 131/0, placeholders 0, standard axioms only. The two orientable SurfaceRel generators map to boundary generators 4j↔4j+2 and 4j+1↔4j+3 with reversed parameters, matching signs. The prior gap is repaired by a genuine nonorientable Homeomorph. Converse orientable relation, oneVertex, uniform packaging, and Homeomorph are explicitly remaining."},
     :commit "196cdc9b4",
     :changed-paths ["ConstructionTargets/PolygonSurfacePiOne.lean"],
     :fixture
@@ -75064,7 +75076,7 @@
      "601de9a5ac82238d611223b54c7248d944c1766b5ed2ee3934a9fb2b9e137351"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope ["ConstructionTargets/PolygonSurfacePiOne.lean"],
    :dag-node "ConstructionTargets/PolygonSurfacePiOne.blueprint.md/B2",
    :acceptance
@@ -84921,7 +84933,7 @@
    :other-consumers []}
   {:consumer :t92J05,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "orientable_surfaceRel_to_boundaryEqvGen",
@@ -84931,7 +84943,9 @@
     :reported-by [:routes-2026-10-12-polygon-b2-completion-topo2-r1],
     :type "SurfaceRel implies boundary EqvGen",
     :area "polygon-surface-pi1",
-    :proved-in :routes-2026-10-12-polygon-b2-completion-topo2-r1},
+    :proved-in :routes-2026-10-12-polygon-b2-completion-topo2-r1,
+    :banked-by :routes-2026-10-12-polygon-b2-completion-topo2-r1,
+    :banked-commit "196cdc9b4"},
    :id :lemma-orientable-surfacerel-to-boundaryeqvgen,
    :kind :lemma,
    :depends-on [],
