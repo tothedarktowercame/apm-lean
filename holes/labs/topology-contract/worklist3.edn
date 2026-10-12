@@ -20784,55 +20784,83 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :implements-lemma
+   :lemma-constructiontargets-manifoldfundamentalclass-integralpairconnectingcomparison,
+   :phase :implementation,
+   :state :open,
+   :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+   :dag-node "TOPOLOGY-ROUTES.md/manifold-fundamental-class",
+   :acceptance
+   {:declaration
+    "ConstructionTargets.ManifoldFundamentalClass.integralPairConnectingComparison",
+    :type "exact type in fixture",
+    :fixture "/tmp/closedconnect.lean",
+    :fixture-sha256
+    "0d3a75da51f8dcfb2754ce45c1a6b8b7c787be9cf562ad088c4d9d944575608e",
+    :placeholders ["t00J02 bridge_1" "t98A02 sorry"],
+    :route-step "closed-disk connecting comparison"},
+   :id :routes-2026-10-12-mfclass-closed-connecting-r1,
+   :kind :reusable-theorem,
+   :area "manifold-fundamental-class",
+   :depends-on [:routes-2026-10-12-mfclass-coordinate-detect-r1],
+   :current-residual
+   "Specialize to the closed disk and identify its generator boundary.",
+   :other-consumers [:t98A02]}
+  {:consumer :t00J02,
+   :implements-lemma
    :lemma-constructiontargets-manifoldfundamentalclass-closedorientedfundamentalclass,
    :evidence
    {:probe
-    {:residual "Promote; prove closed-disk connecting comparison.",
+    {:residual
+     "Promote; specialize the comparison and close the circle generator step.",
      :outcome :revise,
      :missing-theorems
      [{:name
-       "ConstructionTargets.ManifoldFundamentalClass.intervalRelativeClass_eq_generator_of_boundary_coordinates",
+       "ConstructionTargets.ManifoldFundamentalClass.integralPairConnectingComparison",
        :type "exact type in fixture",
        :status :proved,
        :consumers [:t00J02 :t98A02],
        :depends-on
-       ["ConstructionTargets.ManifoldFundamentalClass.intervalRelativeClass_eq_generator_of_boundary_eq"],
+       ["ConstructionTargets.ManifoldFundamentalClass.intervalRelativeClass_eq_generator_of_boundary_coordinates"],
        :area "manifold-fundamental-class"}],
      :prerequisite
      {:consumer :t00J02,
-      :implements-lemma :lemma-mfclass-coordinate-detect,
+      :implements-lemma :lemma-mfclass-closed-connecting,
       :phase :implementation,
       :state :open,
       :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
       :dag-node "TOPOLOGY-ROUTES.md/manifold-fundamental-class",
       :acceptance
       {:declaration
-       "ConstructionTargets.ManifoldFundamentalClass.intervalRelativeClass_eq_generator_of_boundary_coordinates",
+       "ConstructionTargets.ManifoldFundamentalClass.integralPairConnectingComparison",
        :type "exact type in fixture",
-       :fixture "/tmp/circlecoorddetect.lean",
+       :fixture "/tmp/closedconnect.lean",
        :fixture-sha256
-       "ab7a9fa4a74174027f8e91c2dca4f9e9a5e4b32c4f852197a3d23926e3a8c104",
+       "0d3a75da51f8dcfb2754ce45c1a6b8b7c787be9cf562ad088c4d9d944575608e",
        :placeholders ["t00J02 bridge_1" "t98A02 sorry"],
-       :route-step "interval signed-coordinate detection"},
-      :id :routes-2026-10-12-mfclass-coordinate-detect-r1,
+       :route-step "closed-disk connecting comparison"},
+      :id :routes-2026-10-12-mfclass-closed-connecting-r1,
       :kind :reusable-theorem,
       :area "manifold-fundamental-class",
-      :depends-on [:routes-2026-10-12-mfclass-boundary-detect-r1],
-      :current-residual "Prove native Bool boundary.",
+      :depends-on [:routes-2026-10-12-mfclass-coordinate-detect-r1],
+      :current-residual
+      "Specialize to the closed disk and identify its generator boundary.",
       :other-consumers [:t98A02]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
      [{:cmd
-       "lake env lean /tmp/circlecoorddetect.lean && sha256sum /tmp/circlecoorddetect.lean && python3 scripts/statement-registry.py check",
+       "lake env lean /tmp/closedconnect.lean && sha256sum /tmp/closedconnect.lean && python3 scripts/statement-registry.py check",
        :exit 0}],
-     :diagnostic-history [{:exit 1, :correction "symm"}],
+     :diagnostic-history
+     [{:exit 1,
+       :correction
+       "Opened comparison namespace; fixed boundary args."}],
      :fixture
-     {:path "/tmp/circlecoorddetect.lean",
+     {:path "/tmp/closedconnect.lean",
       :sha256
-      "ab7a9fa4a74174027f8e91c2dca4f9e9a5e4b32c4f852197a3d23926e3a8c104"},
+      "0d3a75da51f8dcfb2754ce45c1a6b8b7c787be9cf562ad088c4d9d944575608e"},
      :seat "topo-12"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -20999,7 +21027,8 @@
     :routes-2026-10-12-mfclass-circle-vector-r1
     :routes-2026-10-12-mfclass-bool-bridge-r1
     :routes-2026-10-12-mfclass-boundary-detect-r1
-    :routes-2026-10-12-mfclass-coordinate-detect-r1],
+    :routes-2026-10-12-mfclass-coordinate-detect-r1
+    :routes-2026-10-12-mfclass-closed-connecting-r1],
    :current-residual
    "Local-degree counts and wild-ball complement homology remain.",
    :other-consumers [:t98A02]}
@@ -29714,6 +29743,28 @@
    :kind :lemma,
    :depends-on
    [:lemma-constructiontargets-manifoldfundamentalclass-intervalrelativeclass-eq-generator-],
+   :other-consumers [:t98A02]}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.ManifoldFundamentalClass.integralPairConnectingComparison",
+    :type "exact type in fixture"},
+   :lemma
+   {:name
+    "ConstructionTargets.ManifoldFundamentalClass.integralPairConnectingComparison",
+    :reported-by
+    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2],
+    :type "exact type in fixture",
+    :area "manifold-fundamental-class",
+    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+   :id
+   :lemma-constructiontargets-manifoldfundamentalclass-integralpairconnectingcomparison,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-manifoldfundamentalclass-intervalrelativ-afcb97f85ce7],
    :other-consumers [:t98A02]}],
  :consumer-baselines {},
  :statuses
