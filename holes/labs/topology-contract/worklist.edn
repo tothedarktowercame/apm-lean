@@ -113850,14 +113850,14 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 5,
+   :stop-count 6,
    :review-finding
    "Blueprint B3 is marked proved but its proof uses the unlisted ConnectedGroupoidSingleObjEquivalence.connectorSingleObjEquivalence (and connector-system representation) instead of only the declared uses; add the actual connector dependency and proof route to B3 uses.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
    :evidence
    {:placeholder-delta {:source-before 0, :source-after 0},
     :residual
-    "Evaluate both congrLeft counits at the unique objects; compare mapped pre-coordinate counit with outer factors; close B6/B12.",
+    "Compute the two based counit morphisms and match mapped pre-coordinate counit with outer factors; close B6/B12.",
     :outcome :stop,
     :warnings [],
     :missing-theorems
@@ -113871,9 +113871,9 @@
       :area "fundamental-group-wedge-of-circles"}],
     :statement-hashes
     {:source
-     "5ff80f4980f028916a87848f489d94f5a9f8666e803b98fe05825e48f5a6b339",
+     "a14903c34bee8baf0a958c3d4ce6588cdc57a33bce1af63048a83c8ba823b967",
      :documentation
-     "b9a3ec1c532e2b60a938b584c63c36650f99628309a3525ca68f783673a8646a",
+     "9a3c2ebf809522af9f29b08887f489ef7c47cf99671e6054310145675cd3423f",
      :blueprint
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0",
      :registry "131/131"},
@@ -113881,7 +113881,7 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
     :reason
-    "Both coordinate-point counit legs are explicit single-object congrLeft counits.",
+    "Both coordinate-point counit legs are evaluated at their unique source objects.",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/PointWedgeVanKampen.lean",
@@ -113890,20 +113890,11 @@
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder/diff validation", :exit 0}],
-    :diagnostic-history [],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1791816068815-7123-2e0bf22b",
-     :commands
-     ["git show/diff-tree 124250e47"
-      "sha256/placeholder/registry checks"
-      "lake env lean ConstructionTargets/PointWedgeVanKampen.lean"
-      "lake build ConstructionTargets.PointWedgeVanKampen"
-      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (expected absent)"],
-     :finding
-     "PASS: exact two-file scope and frozen hashes match; placeholders 0->0, registry 131/131. Coordinate-point counit legs are correctly projected to left/right congrLeft counits on the identity point-span legs; standard axioms only. Valid program STOP; evaluate unique-object components, compare pre-coordinate counit with outer factors, then B6/B12."},
-    :commit "124250e47dd08b3985b93432a5493c04362d6fbc",
+    :diagnostic-history
+    [{:cmd "lean counit simp",
+      :exit 1,
+      :finding "Used definitional projection instead."}],
+    :commit "feeb79cd641504bb8d9b04fa883e9ecc220227ac",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
      "ConstructionTargets/PointWedgeVanKampen.md"],
@@ -113913,7 +113904,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
