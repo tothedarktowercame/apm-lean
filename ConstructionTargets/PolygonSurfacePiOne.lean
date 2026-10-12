@@ -1452,4 +1452,42 @@ def openCover (P : PairingData) : PolygonOpenCover P where
   overlap_eq := overlapOpen_eq_inter P.Rel (fun {_ _} h => pairingRel_radius P h)
   overlap_homeomorph := polygonOverlapHomeomorph P
 
+theorem quotientMap_isQuotientMap (P : PairingData) :
+    Topology.IsQuotientMap P.quotientMap :=
+  ⟨P.surjective_quotientMap, rfl⟩
+
+theorem quotientMap_prod_unitInterval (P : PairingData) :
+    Topology.IsQuotientMap
+      (Prod.map id P.quotientMap : unitInterval × Disk → unitInterval × P.Space) := by
+  rw [Topology.isQuotientMap_iff]
+  constructor
+  · rintro ⟨t, q⟩
+    obtain ⟨x, rfl⟩ := P.surjective_quotientMap q
+    exact ⟨(t, x), rfl⟩
+  · intro s
+    constructor
+    · intro hs
+      exact hs.preimage (continuous_fst.prodMk
+        (P.continuous_quotientMap.comp continuous_snd))
+    · intro hs
+      rw [isOpen_iff_continuous_mem] at hs ⊢
+      apply (quotientMap_isQuotientMap P).continuous_lift_prod_right
+      simpa only [Prod.map_apply, id_eq, Function.comp_apply] using hs
+
+def PairingData.descendHomotopy {Y : Type*} [TopologicalSpace Y]
+    (P : PairingData) (F : C(unitInterval × Disk, Y))
+    (hF : ∀ (t : unitInterval) {x y : Disk}, Relation.EqvGen P.Rel x y →
+      F (t, x) = F (t, y)) : C(unitInterval × P.Space, Y) where
+  toFun p := Quotient.lift (fun x => F (p.1, x)) (fun x y h => hF p.1 h) p.2
+  continuous_toFun := by
+    apply (quotientMap_prod_unitInterval P).continuous_iff.mpr
+    simpa only [Function.comp_apply, Prod.map_apply, id_eq, Quotient.lift_mk] using
+      F.continuous
+
+@[simp] theorem PairingData.descendHomotopy_quotientMap {Y : Type*}
+    [TopologicalSpace Y] (P : PairingData) (F : C(unitInterval × Disk, Y))
+    (hF : ∀ (t : unitInterval) {x y : Disk}, Relation.EqvGen P.Rel x y →
+      F (t, x) = F (t, y)) (t : unitInterval) (x : Disk) :
+    P.descendHomotopy F hF (t, P.quotientMap x) = F (t, x) := rfl
+
 end ConstructionTargets.PolygonSurfacePiOne
