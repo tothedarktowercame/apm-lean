@@ -74615,8 +74615,43 @@
    :other-consumers []}
   {:consumer :t96J02,
    :implements-lemma :lemma-polygonsurfacepione-pairingdata,
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "B1 complete; implement B2 standard and six-edge instances.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :missing-theorems
+    [{:name "ConstructionTargets.PolygonSurfacePiOne.PairingData",
+      :type
+      "fixed-point-free involutive paired arcs, PairingOrbit generators, signed disk quotient, center, one vertex class",
+      :status :proved,
+      :consumers [:t96J02 :t92J05 :t94J04 :t97A01 :t97A03],
+      :depends-on [],
+      :area "polygon-surface-pi1"}],
+    :statement-hashes
+    {:registry "131/0",
+     :module "256e1cceb733ceef6ea66d63723cd792100c5028"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-6",
+    :commands
+    [{:cmd "lake build ConstructionTargets.PolygonSurfacePiOne",
+      :exit 0}
+     {:cmd "comment-stripped placeholder scan", :exit 0, :output "0"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131/0"}
+     {:cmd "lake env lean /tmp/polygon_b1_axioms.lean", :exit 0}
+     {:cmd "git show --check HEAD", :exit 0}],
+    :commit "13a188f99",
+    :changed-paths ["ConstructionTargets/PolygonSurfacePiOne.lean"],
+    :fixture
+    {:path "ConstructionTargets/PolygonSurfacePiOne.lean",
+     :sha256
+     "92ad608fe336d554ef594598ece07cf280653a09dbd1f6161c73ee9472052cb6"},
+    :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/PolygonSurfacePiOne.lean"],
    :dag-node "ConstructionTargets/PolygonSurfacePiOne.blueprint.md/B1",
    :acceptance
@@ -83926,4 +83961,23 @@
    :id :lemma-iscoveringmap-homeomorph-comp-quotientmk,
    :kind :lemma,
    :depends-on [],
-   :other-consumers [:t00A02]}]}
+   :other-consumers [:t00A02]}
+  {:consumer :t96J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "ConstructionTargets.PolygonSurfacePiOne.PairingData",
+    :type
+    "fixed-point-free involutive paired arcs, PairingOrbit generators, signed disk quotient, center, one vertex class"},
+   :lemma
+   {:name "ConstructionTargets.PolygonSurfacePiOne.PairingData",
+    :reported-by [:routes-2026-10-12-polygon-b1-topo2-r1],
+    :type
+    "fixed-point-free involutive paired arcs, PairingOrbit generators, signed disk quotient, center, one vertex class",
+    :area "polygon-surface-pi1",
+    :proved-in :routes-2026-10-12-polygon-b1-topo2-r1},
+   :id :lemma-constructiontargets-polygonsurfacepione-pairingdata,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t92J05 :t94J04 :t97A01 :t97A03]}]}
