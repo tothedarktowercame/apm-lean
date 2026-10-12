@@ -2700,6 +2700,52 @@ theorem coefficientOpenDiskConnecting_model_naturality (k : ℕ) :
     (coefficientOpenDiskAmbientInclusion (k + 2))
     (coefficientOpenDiskAmbientInclusion_mapsTo (k + 2)) (k + 1)
 
+def coefficientOpenDiskPunctureInclusion (d : ℕ) :
+    C(T02A06HemisphereExcision.puncturedOpenDisk d,
+      PuncturedNormedSpaceRadialEquivalence.PuncturedSpace
+        (CoefficientModelLocal.E d)) where
+  toFun x := ⟨x.1.1, x.2⟩
+  continuous_toFun := by fun_prop
+
+theorem coefficientOpenDisk_subspaceMap_eq (d : ℕ) :
+    SingularExcision.subspaceMap
+        (T02A06HemisphereExcision.puncturedOpenDiskSet d)
+        (CoefficientModelLocal.puncture d)
+        (coefficientOpenDiskAmbientInclusion d)
+        (coefficientOpenDiskAmbientInclusion_mapsTo d) =
+      TopCat.ofHom (coefficientOpenDiskPunctureInclusion d) := by
+  apply ConcreteCategory.hom_ext
+  intro x
+  rfl
+
+theorem coefficientOpenDisk_radial_factorization (d : ℕ) :
+    (PuncturedNormedSpaceRadialEquivalence.radialNormalize
+      (CoefficientModelLocal.E d)).comp
+        (coefficientOpenDiskPunctureInclusion d) =
+      T02A06DiskRadialComparison.radialNormalizeMap d := by
+  ext x : 1
+  rfl
+
+theorem coefficientOpenDiskRadial_homology_factorization (d n : ℕ) :
+    HomologicalComplex.homologyMap
+        (CoefficientRadialPair.subMap ℤ
+          (T02A06HemisphereExcision.puncturedOpenDiskSet d)
+          (CoefficientModelLocal.puncture d)
+          (coefficientOpenDiskAmbientInclusion d)
+          (coefficientOpenDiskAmbientInclusion_mapsTo d)) n ≫
+      (CoefficientRadialPair.F ℤ n).map (TopCat.ofHom
+        (PuncturedNormedSpaceRadialEquivalence.radialNormalize
+          (CoefficientModelLocal.E d))) =
+    (CoefficientRadialPair.F ℤ n).map (TopCat.ofHom
+      (T02A06DiskRadialComparison.radialNormalizeMap d)) := by
+  change (CoefficientRadialPair.F ℤ n).map
+    (SingularExcision.subspaceMap _ _ _ _) ≫ _ = _
+  rw [coefficientOpenDisk_subspaceMap_eq]
+  rw [← (CoefficientRadialPair.F ℤ n).map_comp]
+  exact congrArg
+    (fun f => (CoefficientRadialPair.F ℤ n).map (TopCat.ofHom f))
+    (coefficientOpenDisk_radial_factorization d)
+
 end ConstructionTargets.ManifoldFundamentalClass
 
 #print axioms ConstructionTargets.ManifoldFundamentalClass.neighborhoodInclusion_Hsucc_isIso
@@ -2791,6 +2837,7 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientOpenDiskConnecting_forgotten_naturality
 #print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientOpenDiskConnecting_comparison
 #print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientOpenDiskConnecting_model_naturality
+#print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientOpenDiskRadial_homology_factorization
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_projection
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_generator_of_normalization
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_normalization_of_generator
