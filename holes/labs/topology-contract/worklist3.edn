@@ -30144,11 +30144,25 @@
      {:cmd "lake env lean /tmp/surface_parameter_axioms.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "rg source placeholders", :exit 1, :expected-exit 1}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791819402480-7248-983c8ae4",
+     :commands
+     ["git show/diff b6e5a0fad"
+      "sha256sum two fixtures"
+      "git diff --check; blob-current"
+      "rg Lean placeholders"
+      "statement-registry.py check"
+      "lake env lean parameter/face fixtures and module"
+      "lake build ConstructionTargets.SurfaceClassification"],
+     :finding
+     "PASS program STOP: new compiled milestone after 9ef141c9e proves every nonempty real open interval has a point outside a finite forbidden set; the contradiction orientation is correct. One-file scope; blob current; both fixture hashes recomputed; fixture/module/build pass; registry 131/131; zero Lean placeholders; standard axioms. Chart transfer and endpoint-fixed perturbations remain listed."},
     :commit "b6e5a0fad2b57ff1edf115ed8303e2868c28d75d",
     :changed-paths ["ConstructionTargets/SurfaceClassification.lean"],
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/SurfaceClassification.lean"
     "ConstructionTargets/SurfaceClassification.md"
@@ -30168,7 +30182,7 @@
     :blueprint
     "ConstructionTargets/SurfaceClassification.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: B4 finite perturbation-forbidden set proved; program continues with polygonal perturbation existence",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: B4 finite-avoiding perturbation parameter proved; program continues with endpoint-fixed polygonal perturbations",
    :id :program-2026-10-12-surface-classification,
    :kind :reusable-theorem,
    :campaign-priority 40,
@@ -30215,7 +30229,11 @@
     {:job 4,
      :commit "9ef141c9e5387d47487740ef7880c5894ae55734",
      :reason
-     "B4 finite perturbation-forbidden set proved; program continues with polygonal perturbation existence"}]}
+     "B4 finite perturbation-forbidden set proved; program continues with polygonal perturbation existence"}
+    {:job 5,
+     :commit "b6e5a0fad2b57ff1edf115ed8303e2868c28d75d",
+     :reason
+     "B4 finite-avoiding perturbation parameter proved; program continues with endpoint-fixed polygonal perturbations"}]}
   {:consumer :t00J02,
    :phase :lemma,
    :state :banked,
@@ -30516,7 +30534,7 @@
    :other-consumers [:t00A03 :t91J05 :t92J05 :t94J04 :t96A01 :t97J02]}
   {:consumer :t00A02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -30530,7 +30548,9 @@
     :type
     "{a b : ℝ} (hab : a < b) {forbidden : Set ℝ} (hforbidden : forbidden.Finite) : ∃ t ∈ Set.Ioo a b, t ∉ forbidden",
     :area "surface-classification",
-    :proved-in :program-2026-10-12-surface-classification},
+    :proved-in :program-2026-10-12-surface-classification,
+    :banked-by :program-2026-10-12-surface-classification,
+    :banked-commit "b6e5a0fad2b57ff1edf115ed8303e2868c28d75d"},
    :id
    :lemma-constructiontargets-surfaceclassification-exists-perturbationparameter-avoiding-,
    :kind :lemma,
