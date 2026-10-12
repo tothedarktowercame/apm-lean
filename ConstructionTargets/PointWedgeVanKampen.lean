@@ -4313,6 +4313,36 @@ theorem genericPointWedgeRightEquiv_map_unitInv_rightBase :
       (genericPointWedgeRightBase x₀ y₀ N)).symm
 
 omit [PathConnectedSpace X] in
+/-- The canonical connector normal form with its inverse-unit factor rewritten
+as the equivalence counit.  The chosen source connector stays explicit. -/
+theorem genericPointWedgeRightInverseBaseToRightBase_normalForm_eq_counit :
+    let eR := genericPointWedgeRightGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let h := genericPointWedgeRightEquiv_obj_rightBase
+      x₀ y₀ M N hM hN hy hx cM cN
+    (genericPointWedgeConnectors y₀).normalForm
+        (eR.functor.map (genericPointWedgeRightInverseBaseToRightBase
+          x₀ y₀ M N hM hN hy hx cM cN)) =
+      ((genericPointWedgeConnectors y₀).connector
+        (eR.functor.obj (eR.inverse.obj (FundamentalGroupoid.mk y₀)))).hom ≫
+      eR.functor.map (eR.inverse.map (eqToHom h.symm)) ≫
+      eR.counitIso.hom.app
+        (eR.functor.obj (genericPointWedgeRightBase x₀ y₀ N)) ≫
+      eqToHom h := by
+  dsimp only
+  rw [genericPointWedgeRightInverseBaseToRightBase_normalForm_eq_maps]
+  let eR := genericPointWedgeRightGroupoidEquivalence
+    x₀ y₀ M N hM hN hy hx cM cN
+  let h := genericPointWedgeRightEquiv_obj_rightBase
+    x₀ y₀ M N hM hN hy hx cM cN
+  have hu := genericPointWedgeRightEquiv_map_unitInv_rightBase
+    x₀ y₀ M N hM hN hy hx cM cN
+  exact congrArg (fun k =>
+    ((genericPointWedgeConnectors y₀).connector
+      (eR.functor.obj (eR.inverse.obj (FundamentalGroupoid.mk y₀)))).hom ≫
+    eR.functor.map (eR.inverse.map (eqToHom h.symm)) ≫ k ≫ eqToHom h) hu
+
+omit [PathConnectedSpace X] in
 /-- The connector normal form of the mapped lifted right loop is conjugation
 by the explicit equality transport at its common endpoint. -/
 theorem genericPointWedgeRightLiftedLoop_normalForm_eq_transport
@@ -5384,6 +5414,7 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeRightInverseBaseToRightBase_normalForm
 #print axioms genericPointWedgeRightInverseBaseToRightBase_normalForm_eq_maps
 #print axioms genericPointWedgeRightEquiv_map_unitInv_rightBase
+#print axioms genericPointWedgeRightInverseBaseToRightBase_normalForm_eq_counit
 #print axioms genericPointWedgeMappedOpenCoverCounit_namedGlueSquare
 #print axioms genericPointWedgeMappedCoordinateSpanCounit_glueSquare
 #print axioms genericPointWedgeMappedCoordinateSpanSourceGlue

@@ -979,3 +979,8 @@ explicit; no arbitrary connector or counit is identified with the identity.
 `genericPointWedgeRightEquiv_map_unitInv_rightBase` applies the inverse
 equivalence triangle at the fixed right-cover base: the mapped inverse unit is
 exactly the equivalence counit at the transported base.
+
+`genericPointWedgeRightInverseBaseToRightBase_normalForm_eq_counit` combines
+the expansion and triangle identities.  Its full normal form now contains the
+chosen source connector, mapped inverse equality transport, equivalence
+counit, and target equality transport in their exact order.
