@@ -347,3 +347,9 @@ span comparisons, and the literal lifts remain for B6.
 right calculation.  Both overlap round-trips are now explicit representation
 maps of their `funInvIdAssoc` components.  Evaluating those two component maps,
 the two span-comparison maps, and the literal lifts remains for B6.
+
+`genericPointWedgeIdentityOuterLeftRoundTripComponent_eq_unitMap` expands the
+inverse left component itself.  It is the left target functor applied to the
+overlap equivalence's unit at the explicit representative, not an arbitrary
+identity.  Evaluating that unit map, the right component map, the two span
+maps, and the literal lifts remains for B6.
