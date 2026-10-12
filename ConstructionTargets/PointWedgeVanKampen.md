@@ -486,3 +486,6 @@ symmetric bridge and retains conjugation by the fixed right restriction element.
 `genericPointWedgeLeftEquiv_comp_leftLegLift` proves that the left cover
 equivalence followed by the lifted leg is the identity continuous map.  The
 next morphism comparison must retain transport across its base-object equality.
+
+`genericPointWedgeRightEquiv_comp_rightLegLift` proves the symmetric identity
+of continuous maps; its induced loop comparison retains quotient-base transport.

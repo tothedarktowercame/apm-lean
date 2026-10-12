@@ -2237,6 +2237,18 @@ theorem genericPointWedgeLeftEquiv_comp_leftLegLift :
   exact (genericPointWedgePackage
     x₀ y₀ M N hM hN hy hx cM cN).left_inclusion x
 
+omit [PathConnectedSpace X] [PathConnectedSpace Y] in
+/-- The right cover equivalence followed by the literal right-leg lift is the
+identity continuous map.  Its induced morphism comparison still retains the
+quotient base-object transport. -/
+theorem genericPointWedgeRightEquiv_comp_rightLegLift :
+    (genericPointWedgePackage x₀ y₀ M N hM hN hy hx cM cN).rightEquiv.toFun.comp
+        (genericPointWedgeRightLegLift x₀ y₀ N) =
+      ContinuousMap.id Y := by
+  ext y
+  exact (genericPointWedgePackage
+    x₀ y₀ M N hM hN hy hx cM cN).right_inclusion y
+
 /-- Once B3's two mapped actions are identified with the images of the
 literal topological legs under B5, the normalized equivalence has exactly the
 two coproduct coordinates required by B6. -/
@@ -2736,6 +2748,7 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeInverseIdentity_leftLeg_eq_actualLifted
 #print axioms genericPointWedgeInverseIdentity_rightLeg_eq_actualLifted
 #print axioms genericPointWedgeLeftEquiv_comp_leftLegLift
+#print axioms genericPointWedgeRightEquiv_comp_rightLegLift
 #print axioms genericPointWedgeIdentityActualSpan_left_map
 #print axioms genericPointWedgeIdentityActualSpan_right_map
 #print axioms genericPointWedgeSingleObjPostcomposeIso
