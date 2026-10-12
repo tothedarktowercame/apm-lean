@@ -620,8 +620,42 @@
   {:consumer :t00A03,
    :implements-lemma
    :lemma-constructiontargets-surfaceschoenflies-embeddedcircle-closedrange-and-homeomorph,
+   :evidence
+   {:placeholder-delta {:t00A03 [2 2], :t01J01 [3 3], :t03J02 [2 2]},
+    :residual
+    "Prove chartwise planar local flatness, glue a collar, and use orientability to select an annulus.",
+    :outcome :done-unreviewed,
+    :warnings ["unused hj in closed-range lemma"],
+    :missing-theorems [],
+    :statement-hashes {:check "131/131"},
+    :axioms [propext Classical.choice Quot.sound],
+    :author "Joe Corneli",
+    :commands
+    [{:cmd "lake env lean ConstructionTargets/SurfaceSchoenflies.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.SurfaceSchoenflies",
+      :exit 0}
+     {:cmd "lake env lean /tmp/surface_schoenflies_closed_range.lean",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "rg -n '\\b(sorry|admit|axiom)\\b' ConstructionTargets/SurfaceSchoenflies.lean",
+      :exit 1,
+      :expected-exit 1}],
+    :diagnostic-history
+    [{:cmd "lake env lean ConstructionTargets/SurfaceSchoenflies.lean",
+      :exit 1,
+      :note "Corrected mistyped homeomorph notation."}],
+    :commit "67c293d1b5d843a4e82d5f07eccc55817cc52fe1",
+    :changed-paths ["ConstructionTargets/SurfaceSchoenflies.lean"],
+    :fixture
+    {:path "/tmp/surface_schoenflies_closed_range.lean",
+     :sha256
+     "3c833fa2d9a116d82bcae615720a136db801542fe3e8d6b3815b26ac603cd8c0"},
+    :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/SurfaceSchoenflies.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/topo3/schoenflies-2d/embedded-circle-closed-range",
