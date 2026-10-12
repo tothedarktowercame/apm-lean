@@ -30513,7 +30513,7 @@
    :consumer :t00A02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "Program-row defect: commit 92a672b41 is blueprint-only; SurfaceClassification.lean is unchanged after history commit 4244c6e3e; the row remains implementation/done-unreviewed/program. Retire or supersede this obsolete program row and submit 92a672b41 through a separate blueprint-review row before electing R1-R7; off-route compiled work is forbidden.",
    :implements-lemma
@@ -30528,7 +30528,7 @@
      :t96A01 [1 1],
      :t97J02 [3 3]},
     :residual
-    "Stop obsolete row; independent blueprint review; then elect R1-R7.",
+    "Retire/supersede program; independent blueprint review; then elect R1-R7.",
     :outcome :stop,
     :warnings [],
     :statement-hashes {:registry "131/131"},
@@ -30536,7 +30536,7 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Repeated-stop boundary reached unchanged: 92a672b41 contains only the blueprint and SurfaceClassification.lean has no post-4244c6e3e milestone. Mark this obsolete program stopped; retire/supersede it and review the blueprint independently before electing R1-R7.",
+    "Program remains owner-parked and 92a672b41 remains blueprint-only; SurfaceClassification.lean is unchanged after 4244c6e3e. Supervisor must retire/supersede this row and review the blueprint independently before electing R1-R7. Off-route code is invalid.",
     :commands
     [{:cmd "git diff-tree --no-commit-id --name-only -r 92a672b41",
       :exit 0}
@@ -30544,17 +30544,11 @@
       "git diff --exit-code 4244c6e3e..92a672b41 -- ConstructionTargets/SurfaceClassification.lean",
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1791826444300-7577-3c51be32",
-     :finding
-     "Program-row defect: commit 92a672b41 is blueprint-only; SurfaceClassification.lean is unchanged after history commit 4244c6e3e; the row remains implementation/done-unreviewed/program. Retire or supersede this obsolete program row and submit 92a672b41 through a separate blueprint-review row before electing R1-R7; off-route compiled work is forbidden."},
     :commit "92a672b41fa1f7e45df1987a4aca7d2f8460d2e0",
     :changed-paths [],
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SurfaceClassification.lean"
     "ConstructionTargets/SurfaceClassification.md"
