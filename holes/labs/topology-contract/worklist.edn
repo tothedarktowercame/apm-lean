@@ -113850,14 +113850,14 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "Blueprint B3 is marked proved but its proof uses the unlisted ConnectedGroupoidSingleObjEquivalence.connectorSingleObjEquivalence (and connector-system representation) instead of only the declared uses; add the actual connector dependency and proof route to B3 uses.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
    :evidence
    {:placeholder-delta {:source-before 0, :source-after 0},
     :residual
-    "Relate the quotient-adjusted right lifted loop to this composite mapOfEq; then close right normal form, B6, and B12.",
+    "Prove mapOfEq composition across the quotient base change; then close the right normal form, B6, and B12.",
     :outcome :stop,
     :warnings [],
     :missing-theorems
@@ -113871,9 +113871,9 @@
       :area "fundamental-group-wedge-of-circles"}],
     :statement-hashes
     {:source
-     "68ba82dac0b433222c814164c18f8489b13339951d41b32f408d736ad8866143",
+     "e753747b745ffcc1ec816ee7ee956010802cbf99c9c484429436bc669476c33d",
      :documentation
-     "4658c1cc59db3cfd5d0669291d6d018958bda2bece8f3623016804ffcdaf988f",
+     "ac6d3d1a3a3d62339519da2442b72f8dec3b13410ed0a28c35856145f91fb6e2",
      :blueprint
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0",
      :registry "131/131"},
@@ -113881,7 +113881,7 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
     :reason
-    "The quotient-independent right composite based map now provably fixes every loop with its basepoint witness aligned.",
+    "The explicit right endpoint conjugation is now the based map at the fixed quotient representative.",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/PointWedgeVanKampen.lean",
@@ -113890,8 +113890,12 @@
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder/diff validation", :exit 0}],
-    :diagnostic-history [],
-    :commit "fc37e43ce9393fd340300030e22bd084bb9329a4",
+    :diagnostic-history
+    [{:cmd "lean direct right composition",
+      :exit 1,
+      :finding
+      "Separated the fixed quotient representative base equality."}],
+    :commit "dec696a8e4a0a133a9de894fef1b7b5007a49392",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
      "ConstructionTargets/PointWedgeVanKampen.md"],
@@ -113901,7 +113905,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
