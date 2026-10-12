@@ -1646,6 +1646,15 @@ theorem forgetHomologySequence_delta_naturality
   exact ShortComplex.SnakeInput.naturality_δ
     (forgetHomologySequenceSnakeInputHom K hK hKF i j hij)
 
+theorem forgetSnakeDelta_map_apply_of_witness
+    (S : ShortComplex.SnakeInput (ModuleCat ℤ))
+    (x₃ : S.L₀.X₃) (x₂ : S.L₁.X₂) (x₁ : S.L₂.X₁)
+    (h₂ : S.L₁.g x₂ = S.v₀₁.τ₃ x₃)
+    (h₁ : S.L₂.f x₁ = S.v₁₂.τ₂ x₂) :
+    (forgetIntModules.map S.δ) x₃ =
+      (forgetIntModules.map S.v₂₃.τ₁) x₁ := by
+  exact ShortComplex.SnakeInput.δ_apply' S x₃ x₂ x₁ h₂ h₁
+
 /-- The corrected relative-homology comparison intertwines the coefficient
 absolute-to-relative map with the production relative projection. -/
 theorem integralRelativeHomologyComparisonWithTransport_projection
@@ -2641,6 +2650,7 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.forgetHomologyπ_naturality
 #print axioms ConstructionTargets.ManifoldFundamentalClass.forgetHomologySequenceSnakeInputHom
 #print axioms ConstructionTargets.ManifoldFundamentalClass.forgetHomologySequence_delta_naturality
+#print axioms ConstructionTargets.ManifoldFundamentalClass.forgetSnakeDelta_map_apply_of_witness
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_projection
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_generator_of_normalization
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_normalization_of_generator
