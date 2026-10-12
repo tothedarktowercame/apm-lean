@@ -113891,6 +113891,19 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder/diff validation", :exit 0}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791797995237-6753-097d1ef9",
+     :commands
+     ["git show/diff-tree a3e279ed"
+      "sha256/diff/placeholder checks"
+      "statement-registry.py check"
+      "lake env lean ConstructionTargets/PointWedgeVanKampen.lean"
+      "lake build ConstructionTargets.PointWedgeVanKampen"
+      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (expected absent)"],
+     :finding
+     "PASS program STOP: exact 2-file commit adds the compiled sorry-free left connector normal form eqToHom(h.symm) >> mapped-loop >> eqToHom(h). Directions match the named object equality and connector; transports remain explicit across propositionally equal objects. Fixture/source/doc hashes match; placeholders 0->0; registry 131/131; standard axioms only. Final module remains absent; residual reduces the mapped loop, then symmetric right and B12."},
     :commit "a3e279ed4799a6c9b19f93f1baed755eaa33d457",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
@@ -113901,7 +113914,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113922,7 +113935,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: The left cover equivalence sends the fixed lifted-leg base object to the literal base object by a named propositional equality.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: The left lifted-loop connector normal form is the mapped loop conjugated by the explicit base-object equality transports.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -114230,7 +114243,11 @@
     {:job 9,
      :commit "8ccea3736734cc16e83fd1fd99f3929bb6e17fa6",
      :reason
-     "The left cover equivalence sends the fixed lifted-leg base object to the literal base object by a named propositional equality."}]}
+     "The left cover equivalence sends the fixed lifted-leg base object to the literal base object by a named propositional equality."}
+    {:job 1,
+     :commit "a3e279ed4799a6c9b19f93f1baed755eaa33d457",
+     :reason
+     "The left lifted-loop connector normal form is the mapped loop conjugated by the explicit base-object equality transports."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
