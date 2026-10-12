@@ -75002,7 +75002,7 @@
   {:consumer :t96J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 2,
+   :stop-count 0,
    :review-finding
    "The STOP omits a required remaining theorem: f4306c96a proves only an Equiv between quotient types. B2 freezes standardPairingData_space_homeomorph, and Quotient.congrRight does not preserve or prove the coinduced topologies. Add the nonorientable Homeomorph/topological continuity proof to :missing-theorems and prove it in scope; do not report the plain Equiv as the quotient comparison.",
    :implements-lemma
@@ -75057,7 +75057,7 @@
      "ccb6af9b02bbf8ced1087f597d5207a63b02d8b6c2c63803fc4f792cefe5d83a"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope ["ConstructionTargets/PolygonSurfacePiOne.lean"],
    :dag-node "ConstructionTargets/PolygonSurfacePiOne.blueprint.md/B2",
    :acceptance
@@ -75070,7 +75070,7 @@
    :id :routes-2026-10-12-polygon-b2-completion-topo2-r1,
    :kind :reusable-theorem,
    :area "polygon-surface-pi1",
-   :fail-count 1,
+   :fail-count 0,
    :depends-on
    [:routes-2026-10-12-polygon-b1-topo2-r1
     :routes-2026-10-12-checkpoint-topo2-r13],
@@ -75204,6 +75204,18 @@
       :output "131/0"}
      {:cmd "placeholder scan", :exit 0, :output "0"}
      {:cmd "git show --check d6bd0cc3b", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791840101736-7916-b3e71b7f",
+     :commands
+     ["git show d6bd0cc3b:ConstructionTargets/PolygonSurfacePiOne.lean | lake env lean /dev/stdin"
+      "#print axioms torusRP2PairingData_oneVertex on recorded source"
+      "python3 scripts/statement-registry.py check"
+      "git show --check/hash/diff-tree d6bd0cc3b"
+      "comment-stripped placeholder scan"],
+     :finding
+     "PASS: exact recorded fixture compiles; sole changed path and SHA-256 match; registry 131/0, placeholders 0, and axioms are propext/Classical.choice/Quot.sound. torusRP2PairingData has the exact six-edge PairingData type and its oneVertex field is exposed without changing relation orientation or representation. The bounded six-edge acceptance is fully discharged; uniform B2 is correctly outside this row."},
     :commit "d6bd0cc3b",
     :changed-paths ["ConstructionTargets/PolygonSurfacePiOne.lean"],
     :fixture
@@ -75212,7 +75224,7 @@
      "310a9e549187c825f6b8e43e9bf251d53a31aa021ae67a404fd7843c1325de0f"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/PolygonSurfacePiOne.lean"],
    :dag-node "ConstructionTargets/PolygonSurfacePiOne.blueprint.md/B2",
    :acceptance
@@ -75240,7 +75252,7 @@
      :infrastructure-packets
      :review-outcomes]},
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance {:strategy "Rerun after six-edge B2."},
@@ -84811,7 +84823,7 @@
    :other-consumers [:t92J05 :t94J04 :t97A03]}
   {:consumer :t96J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "nonorientableStandardSpaceEquiv",
@@ -84821,14 +84833,16 @@
     :reported-by [:routes-2026-10-12-polygon-b2-completion-topo2-r1],
     :type "quotient equivalence with Surface false g",
     :area "polygon-surface-pi1",
-    :proved-in :routes-2026-10-12-polygon-b2-completion-topo2-r1},
+    :proved-in :routes-2026-10-12-polygon-b2-completion-topo2-r1,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/PolygonSurfacePiOne.lean"]},
    :id :lemma-nonorientablestandardspaceequiv,
    :kind :lemma,
    :depends-on [:lemma-standardpair],
    :other-consumers [:t92J05 :t94J04 :t97A03]}
   {:consumer :t96J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "nonorientableStandardSpaceHomeomorph",
@@ -84838,17 +84852,23 @@
     :reported-by [:routes-2026-10-12-polygon-b2-completion-topo2-r1],
     :type "coinduced quotient homeomorphism with Surface false g",
     :area "polygon-surface-pi1",
-    :proved-in :routes-2026-10-12-polygon-b2-completion-topo2-r1},
+    :proved-in :routes-2026-10-12-polygon-b2-completion-topo2-r1,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/PolygonSurfacePiOne.lean"]},
    :id :lemma-nonorientablestandardspacehomeomorph,
    :kind :lemma,
    :depends-on [:lemma-nonorientable-eqvgen-iff],
    :other-consumers [:t92J05 :t94J04 :t97A03]}
   {:consumer :portfolio,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance {:lemma "nonorientable_eqvGen_iff"},
-   :lemma {:name "nonorientable_eqvGen_iff", :reported-by []},
+   :lemma
+   {:name "nonorientable_eqvGen_iff",
+    :reported-by [],
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/PolygonSurfacePiOne.lean"]},
    :id :lemma-nonorientable-eqvgen-iff,
    :kind :lemma,
    :depends-on [],
@@ -84873,7 +84893,7 @@
    :other-consumers [:t92J05 :t94J04 :t97A03]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "torusRP2PairingData_oneVertex",
@@ -84883,7 +84903,9 @@
     :reported-by [:routes-2026-10-12-polygon-b2-six-edge-topo2-r1],
     :type "named generated-relation one-vertex certificate",
     :area "polygon-surface-pi1",
-    :proved-in :routes-2026-10-12-polygon-b2-six-edge-topo2-r1},
+    :proved-in :routes-2026-10-12-polygon-b2-six-edge-topo2-r1,
+    :banked-by :routes-2026-10-12-polygon-b2-six-edge-topo2-r1,
+    :banked-commit "d6bd0cc3b"},
    :id :lemma-torusrp2pairingdata-onevertex,
    :kind :lemma,
    :depends-on [:lemma-torusrp2pairingdata],
