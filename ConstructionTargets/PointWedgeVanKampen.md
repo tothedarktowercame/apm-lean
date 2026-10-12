@@ -423,3 +423,8 @@ evaluating that normal form is the remaining left-span calculation.
 the arbitrary right calculation to the precise `aR.inv` component used by the
 outer right-span factor.  Its image is `Coprod.inr` of the connector normal
 form, with the dependent endpoint retained by `HEq`.
+
+`genericPointWedgeIdentityOuterLeftSpan_normalForm_eq_connectors` expands the
+left connector normal form into its source connector, comparison component,
+and inverse target connector.  Their order and both dependent endpoints stay
+explicit for the subsequent literal-base specialization.

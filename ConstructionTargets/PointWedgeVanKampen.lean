@@ -1485,6 +1485,33 @@ theorem genericPointWedgeIdentityOuterRightSpanMap_heq_inr_normalForm :
           genericPointWedgeFreeProduct x₀ y₀) := by
   exact genericPointWedgeIdentityCoordinateSpan_right_map x₀ y₀ _
 
+omit [PathConnectedSpace Y] in
+/-- Expand the left outer component's connector normal form into its three
+ordered factors, without rewriting either dependent endpoint. -/
+theorem genericPointWedgeIdentityOuterLeftSpan_normalForm_eq_connectors :
+    let eK := genericPointWedgeOverlapGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let aL := genericPointWedgeLeftSpanIso
+      x₀ y₀ M N hM hN hy hx cM cN
+    let z : FundamentalGroupoid (genericPointWedgeOverlapPiece x₀ y₀ M N) :=
+      FundamentalGroupoid.mk
+        ⟨quotientMap x₀ y₀ (.inl x₀),
+          ⟨⟨.inl x₀, by trivial, rfl⟩,
+            ⟨.inr y₀, by trivial,
+              (Quotient.sound (Relation.EqvGen.rel _ _ Rel.base)).symm⟩⟩⟩
+    (genericPointWedgeConnectors x₀).normalForm
+        (aL.hom.app (eK.functor.obj z)) =
+      ((genericPointWedgeConnectors x₀).connector
+          ((eK.inverse ⋙ genericPointWedgeActualLeft x₀ y₀ M N ⋙
+            (genericPointWedgeLeftGroupoidEquivalence
+              x₀ y₀ M N hM hN hy hx cM cN).functor).obj
+                (eK.functor.obj z))).hom ≫
+        aL.hom.app (eK.functor.obj z) ≫
+        ((genericPointWedgeConnectors x₀).connector
+          ((genericPointWedgeCoordinateLeft x₀).obj
+            (eK.functor.obj z))).inv := by
+  rfl
+
 theorem genericPointWedgeIdentityActualSpan_left_map
     {a b : FundamentalGroupoid (genericPointWedgeLeftPiece x₀ y₀ M)}
     (f : a ⟶ b) :
@@ -2425,6 +2452,7 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeIdentityCoordinateSpan_right_map
 #print axioms genericPointWedgeIdentityOuterLeftSpanMap_heq_inl_normalForm
 #print axioms genericPointWedgeIdentityOuterRightSpanMap_heq_inr_normalForm
+#print axioms genericPointWedgeIdentityOuterLeftSpan_normalForm_eq_connectors
 #print axioms genericPointWedgeIdentityActualSpan_left_map
 #print axioms genericPointWedgeIdentityActualSpan_right_map
 #print axioms genericPointWedgeSingleObjPostcomposeIso
