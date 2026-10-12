@@ -109,6 +109,18 @@ theorem sphereFirstPoint_tangent_range :
 theorem crossTermSphereMap_eq_ambient_comp :
     crossTermSphereMap = sphereMapAmbient ∘ ((↑) : Sphere 2 → E 3) := rfl
 
+/-- Chain-rule form of the sphere derivative at an arbitrary point. -/
+theorem crossTermSphereMap_mfderiv (p : Sphere 2) :
+    mfderiv (𝓡 2) (𝓡 3) crossTermSphereMap p =
+      (sphereMapAmbientDerivative p.val).comp
+        (mfderiv (𝓡 2) 𝓘(ℝ, E 3) ((↑) : Sphere 2 → E 3) p) := by
+  rw [crossTermSphereMap_eq_ambient_comp,
+    mfderiv_comp p
+      (sphereMapAmbient_hasFDerivAt p.val).differentiableAt.mdifferentiableAt
+      ((contMDiff_coe_sphere p).mdifferentiableAt one_ne_zero),
+    mfderiv_eq_fderiv, (sphereMapAmbient_hasFDerivAt p.val).fderiv]
+  rfl
+
 /-- Chain-rule form of the sphere derivative at the first coordinate point. -/
 theorem crossTermSphereMap_mfderiv_firstPoint :
     mfderiv (𝓡 2) (𝓡 3) crossTermSphereMap sphereFirstPoint =
@@ -372,6 +384,47 @@ theorem sphereMap_vertical_tangent_of_third_eq_zero
     field_simp
     ring
 
+/-- At every incident level strictly between zero and one half, the vertical
+coordinate on the range of the sphere derivative is surjective. -/
+theorem crossTermSphereMap_vertical_surjective
+    (p : Sphere 2) (z : ℝ) (q : E 2)
+    (hinc : crossTermSphereMap p = horizontalPlane z q)
+    (hz : 0 < z) (hzhalf : z < 1 / 2) :
+    Function.Surjective
+      (fun y : LinearMap.range
+          (mfderiv (𝓡 2) (𝓡 3) crossTermSphereMap p).toLinearMap =>
+        (NormedSpace.fromTangentSpace (𝕜 := ℝ) (crossTermSphereMap p) y.1) 2) := by
+  obtain ⟨hprod, -, hp1⟩ :=
+    crossTerm_horizontalPlane_incident_coordinates p z q hinc hz
+  obtain ⟨v, hv, hvert⟩ :
+      ∃ v : E 3, v ∈ (ℝ ∙ (p.val : E 3))ᗮ ∧
+        sphereMapAmbientDerivative p.val v 2 = 1 := by
+    by_cases hp2 : p.val 2 = 0
+    · exact sphereMap_vertical_tangent_of_third_eq_zero p z hprod hz hzhalf hp2
+    · exact sphereMap_vertical_tangent_of_third_ne_zero p hp1 hp2
+  have hvrange : v ∈ LinearMap.range
+      (mfderiv (𝓡 2) 𝓘(ℝ, E 3) ((↑) : Sphere 2 → E 3) p).toLinearMap := by
+    rw [range_mfderiv_coe_sphere]
+    exact hv
+  rcases hvrange with ⟨u, hu⟩
+  change NormedSpace.fromTangentSpace (𝕜 := ℝ) p.val
+    (mfderiv (𝓡 2) 𝓘(ℝ, E 3) ((↑) : Sphere 2 → E 3) p u) = v at hu
+  have huvert :
+      (NormedSpace.fromTangentSpace (𝕜 := ℝ) (crossTermSphereMap p)
+        (mfderiv (𝓡 2) (𝓡 3) crossTermSphereMap p u)) 2 = 1 := by
+    rw [crossTermSphereMap_mfderiv]
+    change sphereMapAmbientDerivative p.val
+      (NormedSpace.fromTangentSpace (𝕜 := ℝ) p.val
+        (mfderiv (𝓡 2) 𝓘(ℝ, E 3) ((↑) : Sphere 2 → E 3) p u)) 2 = 1
+    rw [hu]
+    exact hvert
+  intro r
+  refine ⟨⟨r • mfderiv (𝓡 2) (𝓡 3) crossTermSphereMap p u, ?_⟩, ?_⟩
+  · exact ⟨r • u, by simp⟩
+  · change (NormedSpace.fromTangentSpace (𝕜 := ℝ) (crossTermSphereMap p)
+      (r • mfderiv (𝓡 2) (𝓡 3) crossTermSphereMap p u)) 2 = r
+    rw [map_smul, PiLp.smul_apply, huvert, smul_eq_mul, mul_one]
+
 /-- At the first coordinate point the ambient derivative swaps the two free
 tangent coordinates and has zero first coordinate. -/
 theorem sphereMapAmbientDerivative_firstAxis (v : E 3) :
@@ -392,5 +445,6 @@ theorem sphereMapAmbientDerivative_firstAxis (v : E 3) :
 #print axioms crossTerm_horizontalPlane_incident_coordinates
 #print axioms sphereMap_vertical_tangent_of_third_ne_zero
 #print axioms sphereMap_vertical_tangent_of_third_eq_zero
+#print axioms crossTermSphereMap_vertical_surjective
 
 end ConstructionTargets.T96A07Closure

@@ -105,6 +105,19 @@ theorem sphereMap_plane_incident_coordinates
       T96A07.plane, horizontalPlane] using hinc
   · exact hz
 
+theorem sphereMap_vertical_surjective
+    (p : Sphere 2) (z : ℝ) (q : E 2)
+    (hinc : T96A07.sphereMap p = T96A07.plane z q)
+    (hz : 0 < z) (hzhalf : z < 1 / 2) :
+    Function.Surjective
+      (fun y : LinearMap.range
+          (mfderiv (𝓡 2) (𝓡 3) T96A07.sphereMap p).toLinearMap =>
+        (NormedSpace.fromTangentSpace (𝕜 := ℝ) (T96A07.sphereMap p) y.1) 2) := by
+  simpa [T96A07.sphereMap, crossTermSphereMap] using
+    crossTermSphereMap_vertical_surjective p z q
+      (by simpa [T96A07.sphereMap, crossTermSphereMap,
+        T96A07.plane, horizontalPlane] using hinc) hz hzhalf
+
 #print axioms sphereMap_antipodal
 #print axioms sphereMap_contMDiff
 #print axioms descendedSphereMap
@@ -113,6 +126,7 @@ theorem sphereMap_plane_incident_coordinates
 #print axioms descended_not_transverse_axis
 #print axioms plane_fderiv_range
 #print axioms sphereMap_plane_incident_coordinates
+#print axioms sphereMap_vertical_surjective
 
 end ConstructionTargets.T96A07Closure
 
