@@ -113895,6 +113895,17 @@
       :exit 130,
       :finding
       "Not definitional; residual is canonical descent-overlap component."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791833624964-7789-a08761e6",
+     :commands
+     ["git show/diff-tree e3464858"
+      "lake build ConstructionTargets.PointWedgeVanKampen"
+      "python3 scripts/statement-registry.py check"
+      "commit hash and placeholder checks"],
+     :finding
+     "PASS program STOP: e3464858 by topo-2 adds one composed splice theorem plus documentation, exactly within scope and new since history. Source 2892f1cb..., documentation bc0a72ec..., fixture 0bca6ce3..., registry 131/131, and placeholders 0->0 reproduce. Substituting right*predecessor=source*left and reassociating before the prior injected splice proves the displayed equation in the correct multiplication order; all counit factors and the pseudopushout boundary remain explicit. Fresh build passes with standard axioms. This is compiled sorry-free progress; canonical predecessor-glue normalization, three-factor substitution, and B6/B12 remain explicitly listed."},
     :commit "e3464858a6b60d00c3307e37f761315576c888d1",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
@@ -113905,7 +113916,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113926,7 +113937,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: The mapped open-cover counit square now isolates its predecessor pseudopushout glue.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Both mapped counit glue squares now compose, leaving only the pseudopushout predecessor glue.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -114425,7 +114436,11 @@
     {:job 3,
      :commit "fb717ffb3f22a9c589ee55a0235fa142f8fcdc59",
      :reason
-     "The mapped open-cover counit square now isolates its predecessor pseudopushout glue."}]}
+     "The mapped open-cover counit square now isolates its predecessor pseudopushout glue."}
+    {:job 4,
+     :commit "e3464858a6b60d00c3307e37f761315576c888d1",
+     :reason
+     "Both mapped counit glue squares now compose, leaving only the pseudopushout predecessor glue."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
