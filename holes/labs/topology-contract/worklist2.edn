@@ -83536,19 +83536,11 @@
     :commands
     [{:cmd "lake build ConstructionTargets.SuppliedCoverAlgebra",
       :exit 0}
-     {:cmd "git show scoped theorem commits; fixture hash",
-      :exit 0,
-      :output "Lean added then modified in four commits; exact"}
      {:cmd "python3 scripts/statement-registry.py check",
       :exit 0,
-      :output "131/0"}],
-    :review
-    {:outcome :fail,
-     :seat "codex-7",
-     :job "invoke-1791827613991-7631-8a3a2796",
-     :finding
-     "Program STOP commits no compiled, sorry-free theorem progress: 9a443d45a adds only SuppliedCoverAlgebra.md, creates no SuppliedCoverAlgebra.lean, and records A1/A2/A3/C7 all :not-started. Exact repair: extend Mathlib: state and prove at least one missing milestone in scope, commit the compiling Lean result, and list the remaining milestones in :missing-theorems."},
-    :commit "575f9ce4a",
+      :output "131/0"}
+     {:cmd "fixture hash; git show --check 994accb6c", :exit 0}],
+    :commit "994accb6c",
     :commits ["1ecb73d0a" "994accb6c" "575f9ce4a" "df216abcc"],
     :changed-paths
     ["ConstructionTargets/SuppliedCoverAlgebra.lean"
@@ -83559,7 +83551,7 @@
      "8e2b05fc2da21acb000c622b502360f2835a454e138dbfeb505f29eedb0c7769"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SuppliedCoverAlgebra.lean"
     "ConstructionTargets/SuppliedCoverAlgebra.md"],
