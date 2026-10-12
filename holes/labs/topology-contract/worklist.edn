@@ -113850,14 +113850,14 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 7,
+   :stop-count 8,
    :review-finding
    "Recorded fixture hash mismatch: :fixture.sha256 is 0bca6ce32c019fc3053c7f813c26917169cf817375b44d5e722b864b61a526450c1, but ConstructionTargets/PointWedgeVanKampen.blueprint.md at recorded commit c9b3af27 has exact SHA-256 0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0. Re-record the fixture hash for the reviewed commit.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
    :evidence
    {:placeholder-delta {:source-before 0, :source-after 0},
     :residual
-    "Normalize the source connector and equivalence triangle; then left counits, point-span, B6/B12.",
+    "Rewrite with the counit and relate the chosen source connector by naturality; then left counits, point-span, B6/B12.",
     :outcome :stop,
     :warnings [],
     :missing-theorems
@@ -113871,9 +113871,9 @@
       :area "fundamental-group-wedge-of-circles"}],
     :statement-hashes
     {:source
-     "49103b2fcf07aeb7f14b7eee894a2d2a9f8640646cc014da60b181de81121795",
+     "3e327128f788f55f409ef02907580d7b0fe78d367a97d06e3a7b7c9db5d0872c",
      :documentation
-     "78c3c3f299e0bd02829b11d855e0422e9d88cbb78a43090d2c7492853cc7f1bb",
+     "42a8ca3cd1d968ce5407af703c49e3e1448993dfc2385f3364e1e9b8d4518fbd",
      :blueprint
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0",
      :registry "131/131"},
@@ -113881,7 +113881,7 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
     :reason
-    "Expanded middle equivalence maps and normalized the target connector.",
+    "Mapped inverse unit identified with the equivalence counit by the triangle law.",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/PointWedgeVanKampen.lean",
@@ -113891,23 +113891,14 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder/diff validation", :exit 0}],
     :diagnostic-history
-    [{:cmd
+    [{:cmd "lean simp triangle",
+      :exit 1,
+      :finding "Used counit_app_functor."}
+     {:cmd
       "lake build ConstructionTargets.ThreeCirclesFundamentalGroup",
       :exit 1,
       :finding "Module awaits B12."}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1791845964611-8031-5cf69156",
-     :commands
-     ["lake env lean <commit-archive>/ConstructionTargets/PointWedgeVanKampen.lean"
-      "lake build ConstructionTargets.PointWedgeVanKampen"
-      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (expected exit 1: residual module absent)"
-      "python3 scripts/statement-registry.py check"
-      "git-show sha256/placeholders/scope"],
-     :finding
-     "PASS program STOP. Commit 7ad8faf0 adds compiled, sorry-free progress beyond prior history and changes only scoped Lean/MD files. Exact source/doc/fixture hashes match evidence (fixture 0bca6ce3...b8c8b0); registry 131/131; sorry/admit 0->0. The theorem expands q into functor.map(inverse.map(eqToHom h.symm)) followed by functor.map(unitIso.inv), preserves categorical order, and replaces only the target connector inverse with eqToHom h; the source connector stays explicit, so no invalid identity normalization crosses the equivalence boundary. Axioms are only propext, Classical.choice, Quot.sound. The absent final module is an explicitly recorded residual; the partial milestone and remaining steps are listed."},
-    :commit "7ad8faf07c3ac9a4f01e4f7c30c560d37986ea72",
+    :commit "093dd888be0f4e87b95e35ade1e2f73bc62dcf08",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
      "ConstructionTargets/PointWedgeVanKampen.md"],
@@ -113917,7 +113908,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
