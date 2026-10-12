@@ -116696,18 +116696,15 @@
   {:consumer :t97A07,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "Recorded fixture hash mismatch: :fixture.sha256 is eaeed21919599335d4a33b437815c4a9cbb5b72110213b29440d6944cc982182 (the blueprint at older commit 736c2566), but commit 8432f937 changes ConstructionTargets/t97A07Closure.blueprint.md and its exact SHA-256 is 5bb02c342b988406e8bd26aeda1b9e67335a8c1f626d97ec96701cb039ae708f. Re-record the fixture hash for the reviewed commit.",
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
     :residual
-    "Prove fixed fderivWithin equals transported mfderiv on this neighbourhood; then B3-B9.",
+    "Extend the centre equality to the fixed-chart neighbourhood; then B3-B9.",
     :outcome :stop,
-    :warnings
-    [{:kind :existing-placeholder}
-     {:kind :concurrent-worktree-change,
-      :path "ConstructionTargets/ManifoldFundamentalClass.lean"}],
+    :warnings [{:kind :existing-placeholder}],
     :missing-theorems
     [{:name "t97A07Closure.continuousAt_coordinate_mfderiv",
       :type "Chart derivative continuity and mfderiv equality",
@@ -116717,17 +116714,17 @@
       :area "regular-points-open"}],
     :statement-hashes
     {:source
-     "4b486f7e68f15d3185c5dd207be9bce63f2066fa1936dc38055e2f3f3c04c937",
+     "337ead74776f99b88f2ea391098913ba91b20f6d9deaed914e9f5bc9e89d59ff",
      :target
      "f13a687334f894f060c24b9aa390e8de88a2bf5f3d36e1de717af326c84d78f2",
      :blueprint
-     "05207f62ebcd722eb3fff3648d5d536cf568426c0da1be1d94d8f64121873eec",
+     "443096727728cdf866c846c37b5440ac01aa7cb0d5ff31093ae77182b5da9868",
      :registry "131/131"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
     :reason
-    "One neighbourhood keeps source points and images in the fixed charts.",
+    "The fixed-coordinate derivative now equals the transported mfderiv at the common chart centre.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t97A07Closure.lean",
       :exit 0}
@@ -116735,21 +116732,18 @@
      {:cmd "lake env lean problems/t97A07/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder/diff validation", :exit 0}],
-    :diagnostic-history
-    [{:cmd "lean initial compile",
-      :exit 1,
-      :finding "Opened Topology scope."}],
-    :commit "e77c6706b6cb0fa8ab27647176e768fd6b99df13",
+    :diagnostic-history [],
+    :commit "4e3e0e768300f2f23a7298a20532b93448d457cb",
     :changed-paths
     ["ConstructionTargets/t97A07Closure.lean"
      "ConstructionTargets/t97A07Closure.blueprint.md"],
     :fixture
     {:path "ConstructionTargets/t97A07Closure.blueprint.md",
      :sha256
-     "05207f62ebcd722eb3fff3648d5d536cf568426c0da1be1d94d8f64121873eec"},
+     "443096727728cdf866c846c37b5440ac01aa7cb0d5ff31093ae77182b5da9868"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t97A07/lean/Main.lean"
     "problems/t97A07/status.json"
