@@ -18963,6 +18963,17 @@
      {:cmd "rg forbidden tokens in scoped file",
       :exit 1,
       :expected-exit 1}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791781685326-6388-d221057e",
+     :commands
+     ["recorded scope/blob, fixture hash, diff check"
+      "statement registry and placeholder scans"
+      "lake env lean: renamed fixture and module"
+      "lake build ConstructionTargets.ManifoldFundamentalClass"],
+     :finding
+     "PASS: recorded one-file scope and frozen fixture hash match. This is the singular-homology comparison naturality square for radial normalization: forgotten coefficient map then sphere comparison = punctured-disk comparison then integral map. Unfolding the packaged source comparison preserves direction and objects. Registry 131/0; source placeholders 0; consumer sorries 1/1; standard axioms only; build 8326 jobs."},
     :commit "7bf955c6468a7b36ed3a5adb5b509cdf152e35aa",
     :changed-paths
     ["ConstructionTargets/ManifoldFundamentalClass.lean"],
@@ -18972,7 +18983,7 @@
      "c547fd0e96a39186eb3bc85af32637e9fb08b35086ad3f361d9c3d598611ebb9"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/manifold-fundamental-class/open-disk-radial",
@@ -19043,7 +19054,7 @@
       :other-consumers [:t98A02]},
      :residual "Promote; compose factors."}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -27225,7 +27236,7 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -27238,7 +27249,9 @@
     [:routes-2026-10-10-manifold-fundamental-class-topo3-r2],
     :type "exact type in fixture",
     :area "manifold-fundamental-class",
-    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2,
+    :banked-by :routes-2026-10-12-mfclass-radial-naturality-r1,
+    :banked-commit "7bf955c6468a7b36ed3a5adb5b509cdf152e35aa"},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-coefficientopendiskradial-forgotten,
    :kind :lemma,
