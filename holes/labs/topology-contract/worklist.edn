@@ -113890,6 +113890,18 @@
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder/diff validation", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791826389621-7571-cd2f09a2",
+     :commands
+     ["git show/diff-tree d1531c53b"
+      "sha256 + placeholder + registry checks"
+      "lake env lean ConstructionTargets/PointWedgeVanKampen.lean"
+      "lake build ConstructionTargets.PointWedgeVanKampen"
+      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (expected absent)"],
+     :finding
+     "Scope is exactly Lean+MD; source/doc/blueprint hashes match; placeholders 0->0; registry 131/131. The typed nested substitution correctly splices the left counit triangle and right cancellation across both overlap round trips: the full comparison chain followed by right counit equals left counit, with dependent endpoints preserved and no arbitrary counit normalization. It compiles sorry-free with only propext, Classical.choice, Quot.sound. This is new progress; residual is identifying reconstructed glue with this chain and cancelling based counits, then B6/B12. Final target remains absent as declared."},
     :commit "d1531c53bae7e952017d5a46cec5d12db815440b",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
@@ -113900,7 +113912,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113921,7 +113933,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: The identity coordinate-span middle counit is exactly the two overlap round-trip components.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: The two specialized counit triangles now splice across the overlap round trips.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -114381,7 +114393,11 @@
     {:job 2,
      :commit "35bc2162755f86d218613a9439ab6b6abc47bae0",
      :reason
-     "The identity coordinate-span middle counit is exactly the two overlap round-trip components."}]}
+     "The identity coordinate-span middle counit is exactly the two overlap round-trip components."}
+    {:job 3,
+     :commit "d1531c53bae7e952017d5a46cec5d12db815440b",
+     :reason
+     "The two specialized counit triangles now splice across the overlap round trips."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
