@@ -20720,6 +20720,28 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :implements-lemma
+   :lemma-constructiontargets-manifoldfundamentalclass-intervalrelativ-afcb97f85ce7,
+   :phase :implementation,
+   :state :open,
+   :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+   :dag-node "TOPOLOGY-ROUTES.md/manifold-fundamental-class",
+   :acceptance
+   {:declaration
+    "ConstructionTargets.ManifoldFundamentalClass.intervalRelativeClass_eq_generator_of_boundary_coordinates",
+    :type "exact type in fixture",
+    :fixture "/tmp/circlecoorddetect.lean",
+    :fixture-sha256
+    "ab7a9fa4a74174027f8e91c2dca4f9e9a5e4b32c4f852197a3d23926e3a8c104",
+    :placeholders ["t00J02 bridge_1" "t98A02 sorry"],
+    :route-step "interval signed-coordinate detection"},
+   :id :routes-2026-10-12-mfclass-coordinate-detect-r1,
+   :kind :reusable-theorem,
+   :area "manifold-fundamental-class",
+   :depends-on [:routes-2026-10-12-mfclass-boundary-detect-r1],
+   :current-residual "Prove native Bool boundary.",
+   :other-consumers [:t98A02]}
+  {:consumer :t00J02,
+   :implements-lemma
    :lemma-constructiontargets-manifoldfundamentalclass-closedorientedfundamentalclass,
    :evidence
    {:probe
@@ -20727,50 +20749,48 @@
      :outcome :revise,
      :missing-theorems
      [{:name
-       "ConstructionTargets.ManifoldFundamentalClass.intervalRelativeClass_eq_generator_of_boundary_eq",
+       "ConstructionTargets.ManifoldFundamentalClass.intervalRelativeClass_eq_generator_of_boundary_coordinates",
        :type "exact type in fixture",
        :status :proved,
        :consumers [:t00J02 :t98A02],
        :depends-on
-       ["ConstructionTargets.ManifoldFundamentalClass.boolIntDifference_to_signedFunction"],
+       ["ConstructionTargets.ManifoldFundamentalClass.intervalRelativeClass_eq_generator_of_boundary_eq"],
        :area "manifold-fundamental-class"}],
      :prerequisite
      {:consumer :t00J02,
-      :implements-lemma :lemma-mfclass-boundary-detect,
+      :implements-lemma :lemma-mfclass-coordinate-detect,
       :phase :implementation,
       :state :open,
       :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
       :dag-node "TOPOLOGY-ROUTES.md/manifold-fundamental-class",
       :acceptance
       {:declaration
-       "ConstructionTargets.ManifoldFundamentalClass.intervalRelativeClass_eq_generator_of_boundary_eq",
+       "ConstructionTargets.ManifoldFundamentalClass.intervalRelativeClass_eq_generator_of_boundary_coordinates",
        :type "exact type in fixture",
-       :fixture "/tmp/circleboundarydetect.lean",
+       :fixture "/tmp/circlecoorddetect.lean",
        :fixture-sha256
-       "125abe76dc8730b15ea11bf2b596ece703ad4544a0914a60a996520aef5bdb68",
+       "ab7a9fa4a74174027f8e91c2dca4f9e9a5e4b32c4f852197a3d23926e3a8c104",
        :placeholders ["t00J02 bridge_1" "t98A02 sorry"],
-       :route-step "interval generator boundary detection"},
-      :id :routes-2026-10-12-mfclass-boundary-detect-r1,
+       :route-step "interval signed-coordinate detection"},
+      :id :routes-2026-10-12-mfclass-coordinate-detect-r1,
       :kind :reusable-theorem,
       :area "manifold-fundamental-class",
-      :depends-on [:routes-2026-10-12-mfclass-bool-bridge-r1],
-      :current-residual
-      "Show transported coefficient class has native signed boundary.",
+      :depends-on [:routes-2026-10-12-mfclass-boundary-detect-r1],
+      :current-residual "Prove native Bool boundary.",
       :other-consumers [:t98A02]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
      [{:cmd
-       "lake env lean /tmp/circleboundarydetect.lean && sha256sum /tmp/circleboundarydetect.lean && python3 scripts/statement-registry.py check",
+       "lake env lean /tmp/circlecoorddetect.lean && sha256sum /tmp/circlecoorddetect.lean && python3 scripts/statement-registry.py check",
        :exit 0}],
-     :diagnostic-history
-     [{:exit 1, :correction "Used AddCommGrp mono characterization."}],
+     :diagnostic-history [{:exit 1, :correction "symm"}],
      :fixture
-     {:path "/tmp/circleboundarydetect.lean",
+     {:path "/tmp/circlecoorddetect.lean",
       :sha256
-      "125abe76dc8730b15ea11bf2b596ece703ad4544a0914a60a996520aef5bdb68"},
+      "ab7a9fa4a74174027f8e91c2dca4f9e9a5e4b32c4f852197a3d23926e3a8c104"},
      :seat "topo-12"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -20936,7 +20956,8 @@
     :routes-2026-10-12-mfclass-circle-sign-r1
     :routes-2026-10-12-mfclass-circle-vector-r1
     :routes-2026-10-12-mfclass-bool-bridge-r1
-    :routes-2026-10-12-mfclass-boundary-detect-r1],
+    :routes-2026-10-12-mfclass-boundary-detect-r1
+    :routes-2026-10-12-mfclass-coordinate-detect-r1],
    :current-residual
    "Local-degree counts and wild-ball complement homology remain.",
    :other-consumers [:t98A02]}
@@ -29627,6 +29648,28 @@
    :kind :lemma,
    :depends-on
    [:lemma-constructiontargets-manifoldfundamentalclass-boolintdifference-to-signedfunction],
+   :other-consumers [:t98A02]}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.ManifoldFundamentalClass.intervalRelativeClass_eq_generator_of_boundary_coordinates",
+    :type "exact type in fixture"},
+   :lemma
+   {:name
+    "ConstructionTargets.ManifoldFundamentalClass.intervalRelativeClass_eq_generator_of_boundary_coordinates",
+    :reported-by
+    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2],
+    :type "exact type in fixture",
+    :area "manifold-fundamental-class",
+    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+   :id
+   :lemma-constructiontargets-manifoldfundamentalclass-intervalrelativ-afcb97f85ce7,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-manifoldfundamentalclass-intervalrelativeclass-eq-generator-],
    :other-consumers [:t98A02]}],
  :consumer-baselines {},
  :statuses
