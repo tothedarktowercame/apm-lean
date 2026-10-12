@@ -3385,6 +3385,63 @@ theorem boolIntDifference_to_signedFunction :
     ModuleCat.ι_coprodIsoDirectSum_hom_apply]
   cases b <;> simp
 
+theorem coefficientClosedBoundary_coordinate_comparison_of_bool
+    (hbool :
+      (singularHomologyComparison (TopCat.of Bool) 0).hom ≫
+        (directDiscreteH0Iso AddCommGrpCat (AddCommGrpCat.of ℤ) Bool).hom ≫
+        (PreservesCoproduct.iso forgetIntModules
+          (fun _ : Bool ↦ ModuleCat.of ℤ ℤ)).inv =
+      forgetIntModules.map
+        (directDiscreteH0Iso (ModuleCat ℤ) (ModuleCat.of ℤ ℤ) Bool).hom) :
+    (singularHomologyComparison
+        (TopCat.of CoefficientSphereEndpoints.boundary) 0).hom ≫
+      ((AlgebraicTopology.singularHomologyFunctor AddCommGrpCat 0).obj
+        (AddCommGrpCat.of ℤ)).map
+          (TopCat.isoOfHomeo
+            T02A06SphereOne.closedDiskOneBoundaryHomeomorphIntervalBoundary).hom ≫
+      intervalBoundaryH0Iso.hom ≫
+      (PreservesCoproduct.iso forgetIntModules
+        (fun _ : Bool ↦ ModuleCat.of ℤ ℤ)).inv ≫
+      (forgetIntModules.mapIso
+        (CoefficientSphereEndpoints.boolModuleIso ℤ)).hom =
+    forgetIntModules.map (CoefficientSphereEndpoints.boundaryIso ℤ).hom := by
+  unfold intervalBoundaryH0Iso CoefficientSphereEndpoints.boundaryIso
+    CoefficientSphereEndpoints.boundarySigmaIso
+  simp only [Iso.trans_hom, Functor.map_comp]
+  let f : TopCat.of CoefficientSphereEndpoints.boundary ⟶ TopCat.of Bool :=
+    (TopCat.isoOfHomeo
+    CoefficientSphereEndpoints.boundaryHomeo).hom
+  let g : TopCat.of CoefficientSphereEndpoints.boundary ⟶
+      TopCat.of intervalBoundary :=
+    (TopCat.isoOfHomeo
+      T02A06SphereOne.closedDiskOneBoundaryHomeomorphIntervalBoundary).hom
+  let h : TopCat.of intervalBoundary ⟶ TopCat.of Bool :=
+    (TopCat.isoOfHomeo boolHomeomorphIntervalBoundary.symm).hom
+  let H := (AlgebraicTopology.singularHomologyFunctor AddCommGrpCat 0).obj
+    (AddCommGrpCat.of ℤ)
+  have hf :
+      g ≫ h = f := by
+    ext x
+    rfl
+  change (singularHomologyComparison
+      (TopCat.of CoefficientSphereEndpoints.boundary) 0).hom ≫
+    H.map g ≫ H.map h ≫
+    (directDiscreteH0Iso AddCommGrpCat (AddCommGrpCat.of ℤ) Bool).hom ≫
+    (PreservesCoproduct.iso forgetIntModules
+      (fun _ : Bool ↦ ModuleCat.of ℤ ℤ)).inv ≫
+    (forgetIntModules.mapIso
+      (CoefficientSphereEndpoints.boolModuleIso ℤ)).hom = _
+  slice_lhs 2 3 => rw [← H.map_comp, hf]
+  slice_lhs 1 2 => rw [← singularHomologyComparison_naturality f 0]
+  slice_lhs 2 4 => rw [hbool]
+  change forgetIntModules.map ((CoefficientSphereEndpoints.F ℤ).map f) ≫
+      forgetIntModules.map
+        (directDiscreteH0Iso (ModuleCat ℤ) (ModuleCat.of ℤ ℤ) Bool).hom ≫
+      forgetIntModules.map (CoefficientSphereEndpoints.boolModuleIso ℤ).hom = _
+  rw [← forgetIntModules.map_comp, ← forgetIntModules.map_comp]
+  rw [forgetIntModules.map_comp, forgetIntModules.map_comp]
+  exact (Category.assoc _ _ _).symm
+
 theorem intervalRelativeClass_eq_generator_of_boundary_eq
     (z : (RelativeSingularChains intervalBoundary).homology 1)
     (hboundary :
