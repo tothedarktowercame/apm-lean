@@ -3502,6 +3502,30 @@ theorem genericPointWedgeCoordinateSpanGlobalRestrictionRightUnitFactor_eq_map :
           eR.unitIso.symm).inv.app u) := by
   rfl
 
+/-- The reconstructed right restriction keeps its endpoint counit
+conjugation when applied to the inverse unit component. -/
+theorem genericPointWedgeCoordinateSpanGlobalRestrictionRightUnitFactor_eq_actual :
+    let r := genericPointWedgeActualRight x₀ y₀ M N
+    let eK := genericPointWedgeOverlapGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let eR := genericPointWedgeRightGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let u : FundamentalGroupoid Unit := FundamentalGroupoid.mk ()
+    let f := ((Functor.isoWhiskerLeft (eK.inverse ⋙ r)
+      eR.unitIso.symm).inv.app u)
+    genericPointWedgeCoordinateSpanGlobalRestrictionRightUnitFactor
+        x₀ y₀ M N hM hN hy hx cM cN =
+      (genericPointWedgeIdentityGlobalRightRestrictionElement
+          x₀ y₀ M N hM hN hy hx cM cN
+            ((eK.inverse ⋙ r ⋙ eR.functor ⋙ eR.inverse).obj u))⁻¹ *
+        (genericPointWedgeIdentityActualSpan
+          x₀ y₀ M N hM hN hy hx cM cN).right.map f *
+        genericPointWedgeIdentityGlobalRightRestrictionElement
+          x₀ y₀ M N hM hN hy hx cM cN ((eK.inverse ⋙ r).obj u) := by
+  rw [genericPointWedgeCoordinateSpanGlobalRestrictionRightUnitFactor_eq_map]
+  exact genericPointWedgeIdentityGlobalRightRestriction_map
+    x₀ y₀ M N hM hN hy hx cM cN _
+
 /-- The forward strict-span component of the inverse global right comparison. -/
 def genericPointWedgeCoordinateSpanGlobalRestrictionRightStrictFactor :
     genericPointWedgeFreeProduct x₀ y₀ :=
@@ -5141,6 +5165,7 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeCoordinateSpanGlobalRestrictionRightComparison_app
 #print axioms genericPointWedgeCoordinateSpanGlobalRestrictionRightUnitFactor
 #print axioms genericPointWedgeCoordinateSpanGlobalRestrictionRightUnitFactor_eq_map
+#print axioms genericPointWedgeCoordinateSpanGlobalRestrictionRightUnitFactor_eq_actual
 #print axioms genericPointWedgeCoordinateSpanGlobalRestrictionRightStrictFactor
 #print axioms genericPointWedgeCoordinateSpanGlobalRestrictionRightStrictFactor_eq_map
 #print axioms genericPointWedgeMappedOpenCoverCounit_namedGlueSquare

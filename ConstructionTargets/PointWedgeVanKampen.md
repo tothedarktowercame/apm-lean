@@ -926,3 +926,9 @@ The right comparison's two components are now named separately by
 `_eq_map` theorems expose, respectively, the reconstructed right restriction
 map of the unit component and the inverse-right restriction map of the
 forward strict comparison.
+
+`genericPointWedgeCoordinateSpanGlobalRestrictionRightUnitFactor_eq_actual`
+now applies the proved right-restriction formula to the first factor.  Its
+result retains both endpoint counit components around the literal actual-span
+map, so the remaining cancellation cannot silently identify the reconstructed
+and supplied right-piece representations.
