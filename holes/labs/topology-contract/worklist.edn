@@ -113890,6 +113890,17 @@
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder/diff validation", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791836371663-7845-b7fdf674",
+     :commands
+     ["git show/diff-tree b4bff57e"
+      "lake build ConstructionTargets.PointWedgeVanKampen"
+      "python3 scripts/statement-registry.py check"
+      "commit hash and placeholder checks"],
+     :finding
+     "PASS program STOP: b4bff57e by topo-2 adds the coordinate-span global glue, its explicit three-factor expansion, and documentation, exactly within scope and new since history. Source b80c6520..., documentation 66a55682..., fixture 0bca6ce3..., registry 131/131, and placeholders 0->0 reproduce. The expansion has the required orientation: left comparison hom, overlap-whiskered glue, then right comparison inv; it exposes rather than erases the nontrivial representation changes. Fresh build passes with standard axioms. This is compiled sorry-free progress; normalizing the middle unit and comparison factors, point-span transport, and B6/B12 remain explicitly listed."},
     :commit "b4bff57e1a66812551619efa139ad39ccf6c445b",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
@@ -113900,7 +113911,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113921,7 +113932,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: The pseudococone-to-span transport preserves the raw unit glue definitionally.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Coordinate-span global glue is now an explicit ordered three-factor transport.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -114440,7 +114451,11 @@
     {:job 8,
      :commit "1d987ee965903165a98d9274d096b5e4040a528f",
      :reason
-     "The pseudococone-to-span transport preserves the raw unit glue definitionally."}]}
+     "The pseudococone-to-span transport preserves the raw unit glue definitionally."}
+    {:job 9,
+     :commit "b4bff57e1a66812551619efa139ad39ccf6c445b",
+     :reason
+     "Coordinate-span global glue is now an explicit ordered three-factor transport."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
