@@ -353,3 +353,8 @@ inverse left component itself.  It is the left target functor applied to the
 overlap equivalence's unit at the explicit representative, not an arbitrary
 identity.  Evaluating that unit map, the right component map, the two span
 maps, and the literal lifts remains for B6.
+
+`genericPointWedgeIdentityOuterRightRoundTripComponent_eq_unitInvMap` gives
+the forward right analogue: the right target functor maps the overlap
+equivalence's `unitInv` component.  The exact unit and inverse-unit maps, the
+two span maps, and the literal lifts remain for B6.
