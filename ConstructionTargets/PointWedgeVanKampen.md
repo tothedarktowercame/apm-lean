@@ -686,6 +686,12 @@ underlying group multiplication, categorical composition reverses the written
 morphism order: each injected based counit multiplies its named mapped
 pre-coordinate factor on the left.
 
+`genericPointWedgeMappedPreCoordinateCounits_eq_openCover_coordinateSpan`
+maps the pre-coordinate counit split through the coordinate-to-point
+equivalence and evaluates both legs.  Each named factor is now explicitly
+the mapped open-cover counit followed by the mapped coordinate-span counit at
+the free-product objects used by the injection formulas.
+
 `genericPointWedgePreCoordinateSpanMappingEquivalence` names the preceding
 composite at the actual cover-span boundary, and the accompanying equality
 factors the pre-coordinate point-span equivalence through the fixed-coordinate

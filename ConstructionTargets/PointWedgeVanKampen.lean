@@ -2954,6 +2954,51 @@ def genericPointWedgeMappedPreCoordinateRightCounit :
   ((Q.functor.map (P.counitIso.hom.app (Q.inverse.obj Z))).right).app
     (SingleObj.star (genericPointWedgeRightGroup y₀))
 
+/-- Mapping the pre-coordinate counit split through the coordinate-to-point
+equivalence exposes the mapped open-cover and coordinate-span factors on both
+free-product legs. -/
+theorem genericPointWedgeMappedPreCoordinateCounits_eq_openCover_coordinateSpan :
+    let C := genericPointWedgeTarget x₀ y₀
+    let A := genericPointWedgePreCoordinateSpanMappingEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN C
+    let B := genericPointWedgeCoordinateSpanEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN C
+    let Q := genericPointWedgeCoordinatePointSpanEquivalence x₀ y₀ C
+    let S := freeProductPointSpanEquivalence
+      (genericPointWedgeLeftGroup x₀) (genericPointWedgeRightGroup y₀) C
+    let R := representationSingleObjEquivalence
+      (C := C) (genericPointWedgeLeftGroup x₀)
+        (genericPointWedgeRightGroup y₀)
+    let F := Functor.id (SingleObj (genericPointWedgeFreeProduct x₀ y₀))
+    let Z := Q.inverse.obj (S.inverse.obj (R.inverse.obj F))
+    (genericPointWedgeMappedPreCoordinateLeftCounit
+          x₀ y₀ M N hM hN hy hx cM cN =
+        ((Q.functor.map
+          (B.functor.map (A.counitIso.hom.app (B.inverse.obj Z)))).left).app
+            (SingleObj.star (genericPointWedgeLeftGroup x₀)) ≫
+        ((Q.functor.map (B.counitIso.hom.app Z)).left).app
+            (SingleObj.star (genericPointWedgeLeftGroup x₀))) ∧
+      (genericPointWedgeMappedPreCoordinateRightCounit
+          x₀ y₀ M N hM hN hy hx cM cN =
+        ((Q.functor.map
+          (B.functor.map (A.counitIso.hom.app (B.inverse.obj Z)))).right).app
+            (SingleObj.star (genericPointWedgeRightGroup y₀)) ≫
+        ((Q.functor.map (B.counitIso.hom.app Z)).right).app
+            (SingleObj.star (genericPointWedgeRightGroup y₀))) := by
+  have h := genericPointWedgePreCoordinatePointCounit_eq_preCoordinateSpan_coordinateSpan
+    x₀ y₀ M N hM hN hy hx cM cN
+  dsimp only at h ⊢
+  have hMap := congrArg
+    (genericPointWedgeCoordinatePointSpanEquivalence x₀ y₀
+      (genericPointWedgeTarget x₀ y₀)).functor.map h
+  constructor
+  · exact congrArg
+      (fun k => k.left.app
+        (SingleObj.star (genericPointWedgeLeftGroup x₀))) hMap
+  · exact congrArg
+      (fun k => k.right.app
+        (SingleObj.star (genericPointWedgeRightGroup y₀))) hMap
+
 /-- Both evaluated pre-free-product counit legs now have a named first factor;
 the remaining comparison is exactly between these elements and the earlier
 outer span-transport factors. -/
@@ -4306,6 +4351,7 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgePreFreeProductCounit_right_app_eq_preCoordinate_injection
 #print axioms genericPointWedgeMappedPreCoordinateLeftCounit
 #print axioms genericPointWedgeMappedPreCoordinateRightCounit
+#print axioms genericPointWedgeMappedPreCoordinateCounits_eq_openCover_coordinateSpan
 #print axioms genericPointWedgePreFreeProductCounit_apps_eq_mappedPreCoordinate_injections
 #print axioms genericPointWedgeCounitElement_eq_mappedRepresentationCounit
 #print axioms genericPointWedgeMappedLeft_eq_conj
