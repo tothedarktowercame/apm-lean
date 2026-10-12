@@ -2122,6 +2122,32 @@ theorem rotatedEndpointWaypoint_corrected_departure_zero_time_lt_three_eighths
       _ ≤ (1 / 16 : ℝ) * 2 := mul_le_mul_of_nonneg_right hs_sq (by norm_num)
   nlinarith [hp.1, sq_nonneg ((t : ℝ) - 3 / 8)]
 
+/-- Continuous scalar support for a second correction, confined to the only
+time window in which the first correction can vanish. -/
+noncomputable def correctedDepartureBump (t : unitInterval) : ℝ :=
+  max 0 (((t : ℝ) - 1 / 8) * (3 / 8 - (t : ℝ)))
+
+theorem continuous_correctedDepartureBump :
+    Continuous correctedDepartureBump := by
+  unfold correctedDepartureBump
+  fun_prop
+
+theorem correctedDepartureBump_pos
+    (t : unitInterval) (hlo : (1 / 8 : ℝ) < (t : ℝ))
+    (hhi : (t : ℝ) < (3 / 8 : ℝ)) :
+    0 < correctedDepartureBump t := by
+  rw [correctedDepartureBump, max_eq_right]
+  · exact mul_pos (by linarith) (by linarith)
+  · exact le_of_lt (mul_pos (by linarith) (by linarith))
+
+@[simp] theorem correctedDepartureBump_zero :
+    correctedDepartureBump 0 = 0 := by
+  norm_num [correctedDepartureBump]
+
+@[simp] theorem correctedDepartureBump_one :
+    correctedDepartureBump 1 = 0 := by
+  norm_num [correctedDepartureBump]
+
 end ConstructionTargets.T02A03GeometricTubeDeformation
 
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeNormalComplex_eq_zero_iff
@@ -2204,3 +2230,5 @@ end ConstructionTargets.T02A03GeometricTubeDeformation
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_corrected_departure_zero_polynomial_bounds
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_corrected_departure_zero_time_gt_eighth
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_corrected_departure_zero_time_lt_three_eighths
+#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.continuous_correctedDepartureBump
+#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.correctedDepartureBump_pos
