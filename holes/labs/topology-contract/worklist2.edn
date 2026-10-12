@@ -74061,8 +74061,55 @@
    "Refill from the corrected H2-aware DAG and cross-loop area ranking.",
    :other-consumers []}
   {:consumer :t96J02,
+   :evidence
+   {:blueprint
+    {:nodes
+     ["B1 pairing data/quotient"
+      "B2 consumer instances"
+      "B3 interior embedding"
+      "B4 open cover"
+      "B5 product quotient descent"
+      "B6 puncture retract"
+      "B7 signed skeleton wedge"
+      "B8 finite-wedge pi1 coordinates"
+      "B9 boundary word"
+      "B10 normal-closure van Kampen"
+      "B11 polygon presentation"
+      "B12 standard surfaces"],
+     :first-milestone "PolygonSurfacePiOne.PairingData"},
+    :placeholder-delta 0,
+    :residual "Blueprint written; review it, then elect B1.",
+    :outcome :done-unreviewed,
+    :warnings
+    ["Unrelated dirty ManifoldFundamentalClass.lean preserved."],
+    :missing-theorems
+    [{:name "PolygonSurfacePiOne.PairingData",
+      :type
+      "finite signed one-vertex polygon pairing and quotient interface",
+      :status :not-started,
+      :consumers [:t96J02],
+      :other-consumers [:t92J05 :t94J04 :t97A01 :t97A03],
+      :depends-on [],
+      :area "polygon-surface-pi1"}],
+    :statement-hashes
+    {:registry "131/0",
+     :blueprint "f86058aafda796db316d676ce0974b69ad64cee1"},
+    :axioms [],
+    :author "topo-6",
+    :commands
+    [{:cmd "blueprint exists; 12 B-nodes", :exit 0}
+     {:cmd "registry check", :exit 0, :output "131/0"}
+     {:cmd "git show --check 404da6bda", :exit 0}],
+    :commit "404da6bda716da9d61f88056f35621bb9628bbd8",
+    :changed-paths
+    ["ConstructionTargets/PolygonSurfacePiOne.blueprint.md"],
+    :fixture
+    {:path "ConstructionTargets/PolygonSurfacePiOne.blueprint.md",
+     :sha256
+     "8f8a432517c86515a8dceb53c211aa028933d0fc0a886e9dea6f4c87f3066675"},
+    :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/PolygonSurfacePiOne.blueprint.md"],
    :dag-node "TOPOLOGY-ROUTES.md/polygon-surface-pi1",
    :acceptance
@@ -82127,6 +82174,25 @@
     :banked-by :declaration-found,
     :found-in ["ConstructionTargets/t94A10Closure.lean"]},
    :id :lemma-integral-sin-rectangle,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t96J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "PolygonSurfacePiOne.PairingData",
+    :type
+    "finite signed one-vertex polygon pairing and quotient interface"},
+   :lemma
+   {:name "PolygonSurfacePiOne.PairingData",
+    :reported-by
+    [:routes-2026-10-12-polygon-surface-pi1-blueprint-topo2-r1],
+    :type
+    "finite signed one-vertex polygon pairing and quotient interface",
+    :area "polygon-surface-pi1"},
+   :id :lemma-polygonsurfacepione-pairingdata,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}]}
