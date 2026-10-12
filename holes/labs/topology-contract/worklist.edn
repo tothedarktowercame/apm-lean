@@ -113850,14 +113850,14 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 2,
    :review-finding
    "Blueprint B3 is marked proved but its proof uses the unlisted ConnectedGroupoidSingleObjEquivalence.connectorSingleObjEquivalence (and connector-system representation) instead of only the declared uses; add the actual connector dependency and proof route to B3 uses.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
    :evidence
    {:placeholder-delta {:source-before 0, :source-after 0},
     :residual
-    "Combine the triangles with reconstructed glue to identify the based counits; close B6/B12.",
+    "Splice the middle round trips with both counit triangles; close B6/B12.",
     :outcome :stop,
     :warnings [],
     :missing-theorems
@@ -113871,9 +113871,9 @@
       :area "fundamental-group-wedge-of-circles"}],
     :statement-hashes
     {:source
-     "8bba1febab27c832490171b6b3b07d5ee322cc60234d4d20b262fc80bc159ecb",
+     "73e1503cfc87161e96914cbbc89999f5ad28118245ca29f400312a46be3bf956",
      :documentation
-     "1bff6342110285481562280ad2b6542863817be20cbea2be984d6bf14c3920b4",
+     "05342df495aa1fa8ad0d09eaae747c8527a652e899e93f28bc35544175386cbf",
      :blueprint
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0",
      :registry "131/131"},
@@ -113881,7 +113881,7 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
     :reason
-    "Both outer-comparison counit triangles are specialized at the unique coordinate object.",
+    "The identity coordinate-span middle counit is exactly the two overlap round-trip components.",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/PointWedgeVanKampen.lean",
@@ -113891,23 +113891,11 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder/diff validation", :exit 0}],
     :diagnostic-history
-    [{:cmd "lean initial triangle statement",
+    [{:cmd "lean initial middle rewrite",
       :exit 1,
       :finding
-      "Used natural-transformation whiskering, not iso whiskering."}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1791825346164-7515-9ca49972",
-     :commands
-     ["git show/diff-tree 85540588d"
-      "sha256 + placeholder + registry checks"
-      "lake env lean ConstructionTargets/PointWedgeVanKampen.lean"
-      "lake build ConstructionTargets.PointWedgeVanKampen"
-      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (expected absent)"],
-     :finding
-     "Scope is exactly Lean+MD; source/doc/blueprint hashes match; placeholders 0->0; registry 131/131. The theorem correctly specializes the left counit triangle and right counit cancellation at the unique coordinate object. Natural-transformation whiskering and inverse directions match the outer-comparison chains: left yields the left counit; right followed by right counit yields identity. It compiles sorry-free with only propext, Classical.choice, Quot.sound. This is new progress; residual is combining these triangles with reconstructed glue, then B6/B12. Final target remains absent as declared."},
-    :commit "85540588d",
+      "Expanded natural-transformation application before rewriting glue."}],
+    :commit "35bc2162755f86d218613a9439ab6b6abc47bae0",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
      "ConstructionTargets/PointWedgeVanKampen.md"],
@@ -113917,7 +113905,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
