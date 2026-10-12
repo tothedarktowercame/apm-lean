@@ -413,3 +413,8 @@ dependent object fields until the outer left-span component is specialized.
 counterpart: arbitrary right-coordinate morphisms are `HEq` to `Coprod.inr`
 of their connector normal forms.  Both outer span components can now be
 specialized without identifying their dependent source objects with a base.
+
+`genericPointWedgeIdentityOuterLeftSpanMap_heq_inl_normalForm` specializes the
+arbitrary left calculation to the precise `aL.hom` component in the outer
+left-span factor.  Its image is `Coprod.inl` of the connector normal form;
+evaluating that normal form is the remaining left-span calculation.
