@@ -2997,6 +2997,14 @@ theorem coefficientAbsoluteMap_forgotten_naturality
   simpa [CoefficientRadialPair.absoluteMap, absoluteSingularMap] using
     (singularChainsComparison_naturality (TopCat.ofHom f))
 
+theorem absoluteSingularMap_relativeProjection_naturality
+    {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    (A : Set X) (B : Set Y) (f : C(X, Y)) (hf : Set.MapsTo f A B) :
+    absoluteSingularMap f ≫ relativeSingularProjection B =
+      relativeSingularProjection A ≫ relativeSingularMap A B f hf := by
+  simpa [absoluteSingularMap] using
+    (relativeSingularMap_projection_naturality A B f hf)
+
 end ConstructionTargets.ManifoldFundamentalClass
 
 #print axioms ConstructionTargets.ManifoldFundamentalClass.neighborhoodInclusion_Hsucc_isIso
@@ -3099,6 +3107,7 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientSphereNormalizationComparisonAutomorphism_hom_eq_neg_implies_openDisk_model_factors
 #print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientPairMap_forgotten_projection_naturality
 #print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientAbsoluteMap_forgotten_naturality
+#print axioms ConstructionTargets.ManifoldFundamentalClass.absoluteSingularMap_relativeProjection_naturality
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_projection
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_generator_of_normalization
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_normalization_of_generator
