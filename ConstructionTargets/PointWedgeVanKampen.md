@@ -637,3 +637,8 @@ this exact boundary.
 instantiates that counit split at the point-span object underlying the identity
 representation.  The remaining counit is now the mapped pre-coordinate
 component followed by the coordinate-to-point component, in that order.
+
+`genericPointWedgeCoordinatePointCounit_eq_transportCounit` identifies that
+last coordinate-to-point component, at the identity point-span object, with
+the explicit counit from the generic span-transport construction.  Its two
+legs can now be normalized using the underlying single-object equivalences.
