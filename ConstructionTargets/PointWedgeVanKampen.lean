@@ -2330,6 +2330,17 @@ theorem genericPointWedgeLeftComposite_mapOfEq
         (f := ContinuousMap.id X) (h := rfl) p)
   exact mapOfEq_id _
 
+omit [PathConnectedSpace X] [PathConnectedSpace Y] in
+/-- The functor underlying the left groupoid equivalence is literally the
+fundamental-groupoid map of the cover homotopy equivalence. -/
+theorem genericPointWedgeLeftGroupoidEquivalence_functor :
+    (genericPointWedgeLeftGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN).functor =
+      FundamentalGroupoid.map
+        (genericPointWedgePackage
+          x₀ y₀ M N hM hN hy hx cM cN).leftEquiv.toFun := by
+  rfl
+
 /-- Once B3's two mapped actions are identified with the images of the
 literal topological legs under B5, the normalized equivalence has exactly the
 two coproduct coordinates required by B6. -/
@@ -2835,6 +2846,7 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeLeftLiftedLoop_normalForm_eq_transport
 #print axioms genericPointWedgeLeftComposite_baseProof
 #print axioms genericPointWedgeLeftComposite_mapOfEq
+#print axioms genericPointWedgeLeftGroupoidEquivalence_functor
 #print axioms genericPointWedgeIdentityActualSpan_left_map
 #print axioms genericPointWedgeIdentityActualSpan_right_map
 #print axioms genericPointWedgeSingleObjPostcomposeIso

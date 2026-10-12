@@ -510,3 +510,8 @@ identity.  This supplies the dependent proof alignment needed by `mapOfEq`.
 `genericPointWedgeLeftComposite_mapOfEq` uses that alignment before eliminating
 the composite-map identity, proving that its induced based map fixes every
 left-summand loop.
+
+`genericPointWedgeLeftGroupoidEquivalence_functor` exposes the equivalence's
+underlying functor as the fundamental-groupoid map induced by the left cover
+homotopy equivalence.  This removes the opaque equivalence constructor from
+the remaining dependent comparison.
