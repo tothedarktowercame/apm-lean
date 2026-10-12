@@ -109,14 +109,31 @@ polygonal arcs, one at a time, fixing already chosen vertices.  At each step
 avoid the finite set of old vertices and transverse crossings.  Prove that
 intersections are finite and consist of endpoints or transverse crossings.
 
-### B5. Planar subdivision in every chart
-lean: `surfaceFiniteDiskCover_planarSubdivision`
-uses: B4, Jordan--Schoenflies for polygonal arcs
-status: planned
+### B5. Cellularize the planar subdivision in every chart
+lean: `surfaceFiniteDiskCover_cellularSubdivision`
+uses: B3, B4, Jordan--Schoenflies for polygonal arcs
+status: revised (the first version incorrectly inferred cellularity from
+transversality; a closed polygonal curve inside a disk leaves an annulus)
 
-Insert every crossing as a vertex and split every arc there.  Each component
-of the complement in an inner coordinate disk is a polygonal disk.  The proof
-uses the outer-disk containment from B3 to keep closures within one chart.
+First insert every transverse crossing from B4 as a vertex and split every
+arc there.  This produces a finite embedded polygonal graph, but its
+complement need not consist of disks.  For every connected complementary
+region, regard its closure in the outer coordinate disk as a compact planar
+surface with finitely many polygonal boundary components.  If it has more
+than one boundary component, choose two components and a polygonal embedded
+arc in the region joining them.  The arc's interior avoids the existing
+finite graph; add its endpoints as vertices and add the arc as an edge.
+
+Cutting along such an arc joins two boundary components and decreases
+`boundaryComponentCount - 1` by one.  Sum this natural-number measure over
+the finitely many complementary regions.  Induction terminates and introduces
+no new non-disk region.  At measure zero every connected region has one
+boundary component; polygonal Jordan--Schoenflies identifies its closure with
+a closed disk.  Record, for every final region, that its frontier is a finite
+cyclic edge path and that its closure is a disk.  The outer-disk containment
+from B3 keeps every chosen arc and every use of Schoenflies inside a single
+chart.  In particular, the nested-polygon counterexample is repaired by an
+arc joining its inner and outer boundary components.
 
 ### B6. Triangulate the polygonal cells
 lean: `surfaceFiniteDiskCover_cellTriangulation`
@@ -125,7 +142,8 @@ status: planned
 
 Triangulate each polygonal disk by induction on its number of boundary edges.
 Choose a diagonal lying in the disk, split into smaller polygons, and prove
-compatibility on shared boundary arcs because those arcs were fixed in B4.
+compatibility on shared boundary arcs because the complete cellular graph,
+including B5's cutting arcs, is fixed before any region is triangulated.
 
 ### B7. Assemble the finite complex
 lean: `surfaceFiniteDiskCover_finiteTwoComplex`
