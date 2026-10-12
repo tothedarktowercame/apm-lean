@@ -74974,9 +74974,20 @@
       :current-residual "Elect B3/B4.",
       :other-consumers []}],
     :author "topo-8",
-    :disposition :replan},
+    :disposition :replan,
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791835384927-7818-e0e46234",
+     :commands
+     ["bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn"
+      "bb holes/labs/topology-contract/build_step.bb priorities holes/labs/topology-contract/worklist2.edn"
+      "python3 scripts/statement-registry.py check"
+      "EDN B2 evidence, measures, and replacement audit"],
+     :finding
+     "PASS: strategy row has empty scope and no commit/fixture. B2 remains partial after its failed review, with one compiled progress packet, zero placeholder change, and one FAIL accurately counted. The replacement keeps the same B2 theorem in scope to finish oneVertex, orbit, relation, and quotient proofs; r14 waits on it. Worklist 967 OK; registry 131/0; priorities reproduce SemilocallySimplyConnected 6 and B2 5."}},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance {:strategy "Rerun priorities after B2 review."},
@@ -74992,7 +75003,7 @@
    :implements-lemma
    :lemma-constructiontargets-polygonsurfacepione-standardpairingdata,
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/PolygonSurfacePiOne.lean"],
    :dag-node "ConstructionTargets/PolygonSurfacePiOne.blueprint.md/B2",
    :acceptance
