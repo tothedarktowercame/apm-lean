@@ -79653,6 +79653,19 @@
       :exit 1,
       :finding
       "Used CAM constant-evaluation derivative API and ContinuousOn integrability."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791776171421-6264-fbc3bff3",
+     :commands
+     ["git scope/blob/SHA/ancestry checks"
+      "lake build ConstructionTargets.t94A10Closure"
+      "lake env lean ConstructionTargets/t94A10Closure.lean"
+      "lake env lean problems/t94A10/lean/Main.lean"
+      "statement-registry check/fingerprint"
+      "commit placeholder counts"],
+     :finding
+     "PASS: commit 5cfb9498b completes B8 from the frozen punctured primitive: pullback coefficients are differentiable, curl integrability follows from B7 equality to sin, and the Green core applies with correct orientation. Compiled sorry-free standard-axiom progress; scope/fixture/blobs match, registry 131/0, fingerprint d1822221, placeholders closure/Main 0/1. STOP lists B9 sine integral, then B10-B11."},
     :commit "5cfb9498b6bd75ce3c5694b8578bf509422463f5",
     :changed-paths ["ConstructionTargets/t94A10Closure.lean"],
     :fixture
@@ -79661,7 +79674,7 @@
      "eb4ea14c8612d66d387d9cf79775f2686c30e22282a9d37d793c380beba0d138"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t94A10/lean/Main.lean"
     "problems/t94A10/status.json"
@@ -79677,7 +79690,7 @@
     ["lake env lean problems/t94A10/lean/Main.lean"
      "python3 scripts/statement-registry.py check"]},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: :program-progress-committed",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: :program-milestone-complete",
    :id :program-2026-10-11-close-t94a10,
    :kind :final-adapter,
    :campaign-priority 46,
@@ -79705,7 +79718,10 @@
      :reason :program-progress-committed}
     {:job 2,
      :commit "6648481f44a7bc156a8aa237df827f45a213e6a3",
-     :reason :program-progress-committed}]}
+     :reason :program-progress-committed}
+    {:job 3,
+     :commit "5cfb9498b6bd75ce3c5694b8578bf509422463f5",
+     :reason :program-milestone-complete}]}
   {:consumer :t97A04,
    :phase :lemma,
    :state :banked,
@@ -81798,7 +81814,7 @@
    :other-consumers []}
   {:consumer :t94A10,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -81810,7 +81826,9 @@
     :reported-by [:program-2026-10-11-close-t94a10],
     :type "B8 Green cancellation with explicit hypotheses",
     :area "periodic-stokes-square",
-    :proved-in :program-2026-10-11-close-t94a10},
+    :proved-in :program-2026-10-11-close-t94a10,
+    :banked-by :program-2026-10-11-close-t94a10,
+    :banked-commit "5cfb9498b6bd75ce3c5694b8578bf509422463f5"},
    :id
    :lemma-constructiontargets-t94a10closure-sphericalrectangle-curl-integral-zero,
    :kind :lemma,
