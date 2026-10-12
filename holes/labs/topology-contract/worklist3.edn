@@ -18171,6 +18171,17 @@
       "rg -n '\\b(sorry|admit|axiom)\\b' ConstructionTargets/ManifoldFundamentalClass.lean",
       :exit 1,
       :expected-exit 1}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791767822881-6122-33f44aea",
+     :commands
+     ["git scope/diff/hash checks at ee3f4676d4ba6524f005e4fa1bcf9a8b9b2e8f93"
+      "renamed fixture, exact-type check, and module: lake env lean"
+      "statement registry and placeholder scans"
+      "lake build ConstructionTargets.ManifoldFundamentalClass"],
+     :finding
+     "Recorded one-file scope, blob, and frozen fixture hash match. The left route crosses cycles via mapCyclesIso.inv then projects in the forgotten complex; the right forgets homologyπ then crosses via mapHomologyIso.inv. LeftHomologyData identities prove the frozen orientation. Fixture/check/module compile; registry 131/0; build 8326 jobs; axioms propext, choice, Quot.sound; source placeholders 0; consumer sorries 1/1."},
     :commit "ee3f4676d4ba6524f005e4fa1bcf9a8b9b2e8f93",
     :changed-paths
     ["ConstructionTargets/ManifoldFundamentalClass.lean"],
@@ -18180,7 +18191,7 @@
      "01119503afb43700710690428f2f0431433d1f148c2354df61944dcbfa72f6ae"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/manifold-fundamental-class/square23",
    :acceptance
@@ -18252,7 +18263,7 @@
       "01119503afb43700710690428f2f0431433d1f148c2354df61944dcbfa72f6ae"},
      :seat "topo-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -26132,7 +26143,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -26147,7 +26158,9 @@
     :type
     "∀ {ι} {c : ComplexShape ι} (K : HomologicalComplex (ModuleCat ℤ) c) (j : ι), ForgottenHomologyπNaturality K j",
     :area "manifold-fundamental-class",
-    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2,
+    :banked-by :routes-2026-10-12-mfclass-homology-pi-square-r1,
+    :banked-commit "ee3f4676d4ba6524f005e4fa1bcf9a8b9b2e8f93"},
    :id :lemma-mfclass-homology-pi-square,
    :kind :lemma,
    :depends-on [:lemma-mfclass-opcycles-to-cycles-square],
