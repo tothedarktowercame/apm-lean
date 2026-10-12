@@ -20525,55 +20525,78 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :implements-lemma
+   :lemma-constructiontargets-manifoldfundamentalclass-coefficientcirc-bef8833f7083,
+   :phase :implementation,
+   :state :open,
+   :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+   :dag-node "TOPOLOGY-ROUTES.md/manifold-fundamental-class",
+   :acceptance
+   {:declaration
+    "ConstructionTargets.ManifoldFundamentalClass.coefficientCircleBoundaryGenerator_eq_signedFunction",
+    :type "exact type in fixture",
+    :fixture "/tmp/circlecoeffvector.lean",
+    :fixture-sha256
+    "c3f70e08267a1a6ecc83a53759e4330d9a94db28439ad12d735068061f599cac",
+    :placeholders ["t00J02 bridge_1" "t98A02 sorry"],
+    :route-step "explicit coefficient signed boundary vector"},
+   :id :routes-2026-10-12-mfclass-circle-vector-r1,
+   :kind :reusable-theorem,
+   :area "manifold-fundamental-class",
+   :depends-on [:routes-2026-10-12-mfclass-circle-sign-r1],
+   :current-residual
+   "Compare signed Bool function with native coproduct difference.",
+   :other-consumers [:t98A02]}
+  {:consumer :t00J02,
+   :implements-lemma
    :lemma-constructiontargets-manifoldfundamentalclass-closedorientedfundamentalclass,
    :evidence
    {:probe
     {:outcome :revise,
      :seat "topo-12",
      :fixture
-     {:path "/tmp/circlecoeffsign.lean",
+     {:path "/tmp/circlecoeffvector.lean",
       :sha256
-      "a22f5608e60e1565287b82b922bb3570a6401cb4af2fb9788fb8157953f02751"},
+      "c3f70e08267a1a6ecc83a53759e4330d9a94db28439ad12d735068061f599cac"},
      :commands
      [{:cmd
-       "lake env lean /tmp/circlecoeffsign.lean && sha256sum /tmp/circlecoeffsign.lean && python3 scripts/statement-registry.py check",
+       "lake env lean /tmp/circlecoeffvector.lean && sha256sum /tmp/circlecoeffvector.lean && python3 scripts/statement-registry.py check",
        :exit 0}],
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :missing-theorems
      [{:name
-       "ConstructionTargets.ManifoldFundamentalClass.coefficientCircleBoundaryGenerator_signed_coordinates",
+       "ConstructionTargets.ManifoldFundamentalClass.coefficientCircleBoundaryGenerator_eq_signedFunction",
        :type "exact type in fixture",
        :status :proved,
        :consumers [:t00J02 :t98A02],
        :depends-on
-       ["ConstructionTargets.ManifoldFundamentalClass.coefficientCircleCoordinates_eq_id_of_apply_one"],
+       ["ConstructionTargets.ManifoldFundamentalClass.coefficientCircleBoundaryGenerator_signed_coordinates"],
        :area "manifold-fundamental-class"}],
      :prerequisite
      {:consumer :t00J02,
-      :implements-lemma :lemma-mfclass-circle-sign,
+      :implements-lemma :lemma-mfclass-circle-vector,
       :phase :implementation,
       :state :open,
       :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
       :dag-node "TOPOLOGY-ROUTES.md/manifold-fundamental-class",
       :acceptance
       {:declaration
-       "ConstructionTargets.ManifoldFundamentalClass.coefficientCircleBoundaryGenerator_signed_coordinates",
+       "ConstructionTargets.ManifoldFundamentalClass.coefficientCircleBoundaryGenerator_eq_signedFunction",
        :type "exact type in fixture",
-       :fixture "/tmp/circlecoeffsign.lean",
+       :fixture "/tmp/circlecoeffvector.lean",
        :fixture-sha256
-       "a22f5608e60e1565287b82b922bb3570a6401cb4af2fb9788fb8157953f02751",
+       "c3f70e08267a1a6ecc83a53759e4330d9a94db28439ad12d735068061f599cac",
        :placeholders ["t00J02 bridge_1" "t98A02 sorry"],
-       :route-step "coefficient circle signed boundary"},
-      :id :routes-2026-10-12-mfclass-circle-sign-r1,
+       :route-step "explicit coefficient signed boundary vector"},
+      :id :routes-2026-10-12-mfclass-circle-vector-r1,
       :kind :reusable-theorem,
       :area "manifold-fundamental-class",
-      :depends-on [:routes-2026-10-12-mfclass-circle-one-r1],
+      :depends-on [:routes-2026-10-12-mfclass-circle-sign-r1],
       :current-residual
-      "Compare coefficient boundary transport with native interval boundary difference.",
+      "Compare signed Bool function with native coproduct difference.",
       :other-consumers [:t98A02]},
-     :residual "Promote; align signed boundary transports."}},
+     :residual "Promote; align Bool function and coproduct models."}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -20736,7 +20759,8 @@
     :routes-2026-10-12-mfclass-circle-iso-r1
     :routes-2026-10-12-mfclass-circle-coords-r1
     :routes-2026-10-12-mfclass-circle-one-r1
-    :routes-2026-10-12-mfclass-circle-sign-r1],
+    :routes-2026-10-12-mfclass-circle-sign-r1
+    :routes-2026-10-12-mfclass-circle-vector-r1],
    :current-residual
    "Local-degree counts and wild-ball complement homology remain.",
    :other-consumers [:t98A02]}
@@ -29355,6 +29379,28 @@
    :kind :lemma,
    :depends-on
    [:lemma-constructiontargets-manifoldfundamentalclass-coefficientcirclecoordinates-eq-id-],
+   :other-consumers [:t98A02]}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.ManifoldFundamentalClass.coefficientCircleBoundaryGenerator_eq_signedFunction",
+    :type "exact type in fixture"},
+   :lemma
+   {:name
+    "ConstructionTargets.ManifoldFundamentalClass.coefficientCircleBoundaryGenerator_eq_signedFunction",
+    :reported-by
+    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2],
+    :type "exact type in fixture",
+    :area "manifold-fundamental-class",
+    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+   :id
+   :lemma-constructiontargets-manifoldfundamentalclass-coefficientcirc-bef8833f7083,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-manifoldfundamentalclass-coefficientcircleboundarygenerator-],
    :other-consumers [:t98A02]}],
  :consumer-baselines {},
  :statuses
