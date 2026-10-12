@@ -570,3 +570,10 @@ right actual-cover actions now reduce to `Monoid.Coprod.inl` and
 `Monoid.Coprod.inr` in
 `genericPointWedgeIdentityActualSpan_left_lifted` and
 `genericPointWedgeIdentityActualSpan_right_lifted`.
+
+`genericPointWedgeInverseIdentity_leftLeg_eq_inl` and
+`genericPointWedgeInverseIdentity_rightLeg_eq_conj_inr` propagate those
+calculations through the explicit B3 inverse.  Consequently the reconstructed
+B4 source functor is literal on the left leg and is conjugated on the right
+by exactly `genericPointWedgeIdentityGlobalRightBaseElement`.  B6 now only
+requires comparison of that restriction element with the counit coordinate.

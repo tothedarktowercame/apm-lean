@@ -2712,6 +2712,53 @@ theorem genericPointWedgeIdentityActualSpan_right_lifted
         (genericPointWedgeRightLiftedLoop x₀ y₀ N g)))]
   rw [genericPointWedgeRightLiftedLoop_normalForm]
 
+/-- The reconstructed inverse-of-identity functor sends the literal left leg
+to the literal left coproduct injection. -/
+theorem genericPointWedgeInverseIdentity_leftLeg_eq_inl
+    (g : FundamentalGroup X x₀) :
+    (genericPointWedgeInverseIdentityFunctor
+      x₀ y₀ M N hM hN hy hx cM cN).map
+        (genericPointWedgeLeftLegMap x₀ y₀ g) = Monoid.Coprod.inl g := by
+  rw [genericPointWedgeInverseIdentity_leftLeg_eq_actualLifted,
+    genericPointWedgeIdentityActualSpan_left_lifted]
+
+/-- The reconstructed inverse-of-identity functor sends the literal right leg
+to the right injection conjugated by the fixed restriction element. -/
+theorem genericPointWedgeInverseIdentity_rightLeg_eq_conj_inr
+    (g : FundamentalGroup Y y₀) :
+    (genericPointWedgeInverseIdentityFunctor
+      x₀ y₀ M N hM hN hy hx cM cN).map
+        (genericPointWedgeRightLegMap x₀ y₀ g) =
+      (genericPointWedgeIdentityGlobalRightBaseElement
+        x₀ y₀ M N hM hN hy hx cM cN)⁻¹ * Monoid.Coprod.inr g *
+      genericPointWedgeIdentityGlobalRightBaseElement
+        x₀ y₀ M N hM hN hy hx cM cN := by
+  rw [genericPointWedgeInverseIdentity_rightLeg_eq_actualLifted,
+    genericPointWedgeIdentityActualSpan_right_lifted]
+
+/-- The reconstructed B4 source functor is literal on the left injection. -/
+theorem genericPointWedgeSourceFunctor_leftLeg_eq_inl
+    (g : FundamentalGroup X x₀) :
+    (genericPointWedgeSourceEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN).functor.map
+        (genericPointWedgeLeftLegMap x₀ y₀ g) = Monoid.Coprod.inl g := by
+  rw [genericPointWedgeSourceFunctor_map_eq_inverseIdentity,
+    genericPointWedgeInverseIdentity_leftLeg_eq_inl]
+
+/-- The reconstructed B4 source functor has exactly the right restriction
+conjugation on the literal right injection. -/
+theorem genericPointWedgeSourceFunctor_rightLeg_eq_conj_inr
+    (g : FundamentalGroup Y y₀) :
+    (genericPointWedgeSourceEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN).functor.map
+        (genericPointWedgeRightLegMap x₀ y₀ g) =
+      (genericPointWedgeIdentityGlobalRightBaseElement
+        x₀ y₀ M N hM hN hy hx cM cN)⁻¹ * Monoid.Coprod.inr g *
+      genericPointWedgeIdentityGlobalRightBaseElement
+        x₀ y₀ M N hM hN hy hx cM cN := by
+  rw [genericPointWedgeSourceFunctor_map_eq_inverseIdentity,
+    genericPointWedgeInverseIdentity_rightLeg_eq_conj_inr]
+
 /-- Once B3's two mapped actions are identified with the images of the
 literal topological legs under B5, the normalized equivalence has exactly the
 two coproduct coordinates required by B6. -/
@@ -3237,6 +3284,10 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeLeftLiftedLoop_normalForm
 #print axioms genericPointWedgeIdentityActualSpan_left_lifted
 #print axioms genericPointWedgeIdentityActualSpan_right_lifted
+#print axioms genericPointWedgeInverseIdentity_leftLeg_eq_inl
+#print axioms genericPointWedgeInverseIdentity_rightLeg_eq_conj_inr
+#print axioms genericPointWedgeSourceFunctor_leftLeg_eq_inl
+#print axioms genericPointWedgeSourceFunctor_rightLeg_eq_conj_inr
 #print axioms genericPointWedgeIdentityActualSpan_left_map
 #print axioms genericPointWedgeIdentityActualSpan_right_map
 #print axioms genericPointWedgeSingleObjPostcomposeIso
