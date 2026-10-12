@@ -74813,9 +74813,20 @@
       :current-residual "Elect B3/B4 or route residual.",
       :other-consumers []}],
     :author "topo-8",
-    :disposition :replan},
+    :disposition :replan,
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791833899395-7794-4a024f8b",
+     :commands
+     ["bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn"
+      "bb holes/labs/topology-contract/build_step.bb priorities holes/labs/topology-contract/worklist2.edn"
+      "python3 scripts/statement-registry.py check"
+      "EDN dependency, measure, and replacement audit"],
+     :finding
+     "PASS: strategy row correctly has empty scope and no commit/fixture. B1 is repaired, independently reviewed PASS, and banked; placeholder delta 0, one theorem packet, and one PASS are accurate. Priorities retain SemilocallySimplyConnected ready/6 and polygon pi1 ready/5; advancing the certified polygon programme to B2 and blocking r13 is consistent. Worklist 964 OK; registry 131/0."}},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance {:strategy "Rerun priorities after B1 review."},
@@ -74829,7 +74840,7 @@
    :other-consumers []}
   {:consumer :t96J02,
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/PolygonSurfacePiOne.lean"],
    :dag-node "ConstructionTargets/PolygonSurfacePiOne.blueprint.md/B2",
    :acceptance
