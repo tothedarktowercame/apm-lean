@@ -113850,14 +113850,14 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 3,
+   :stop-count 4,
    :review-finding
    "Blueprint B3 is marked proved but its proof uses the unlisted ConnectedGroupoidSingleObjEquivalence.connectorSingleObjEquivalence (and connector-system representation) instead of only the declared uses; add the actual connector dependency and proof route to B3 uses.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
    :evidence
    {:placeholder-delta {:source-before 0, :source-after 0},
     :residual
-    "Evaluate the actual-span inverse comparison map, then normalize the left unit and right comparison; point-span transport, counits, B6/B12 remain.",
+    "Normalize this left-equivalence round trip and the right comparison; then point-span transport, counits, B6/B12.",
     :outcome :stop,
     :warnings [],
     :missing-theorems
@@ -113871,9 +113871,9 @@
       :area "fundamental-group-wedge-of-circles"}],
     :statement-hashes
     {:source
-     "d80402c5ba7b95ac2cf9827f18f4e5bf9448ead23c0ae2ff798eade79d0db0e9",
+     "68626f971b287eb7d4186ee68987db4e3eecea0e81fc80b5616240f79ad02b9e",
      :documentation
-     "24cf93dc28a985030266ede5016ec2b25aa99ebf6a16294e164b01f91ef8130d",
+     "c1cdaa8f06f2b43fa0eebee5bcded5e2b33546dc012b8befea66eba84eadd94f",
      :blueprint
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0",
      :registry "131/131"},
@@ -113881,7 +113881,7 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
     :reason
-    "The reconstructed left strict factor is identified with the literal actual-span map.",
+    "The actual-span inverse comparison map is the left coproduct injection of its explicit connector normal form.",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/PointWedgeVanKampen.lean",
@@ -113890,18 +113890,7 @@
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder/diff validation", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1791838490944-7892-bfcafdba",
-     :commands
-     ["git show/diff-tree 17d0c2b6"
-      "lake build ConstructionTargets.PointWedgeVanKampen"
-      "python3 scripts/statement-registry.py check"
-      "commit hash and placeholder checks"],
-     :finding
-     "PASS program STOP: 17d0c2b6 by topo-2 adds the strict-factor identification with the literal actual-span map plus documentation, exactly within scope and new since history. Source d80402c5..., documentation 24cf93dc..., fixture 0bca6ce3..., registry 131/131, and placeholders 0->0 reproduce. It first uses the reviewed whisker-to-map formula, then the literal global-left-restriction map theorem; the inverse strict-span morphism and its direction are unchanged across the representation boundary. Fresh build passes with standard axioms. Evaluating that actual-span map, normalizing the unit/right factors, point-span transport, counits, and B6/B12 remain explicitly listed."},
-    :commit "17d0c2b652008083bd237bb4d5e502b5cef68d8c",
+    :commit "d43ab056fc44e6503deab63b8ffabbb597c9ead6",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
      "ConstructionTargets/PointWedgeVanKampen.md"],
@@ -113911,7 +113900,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
