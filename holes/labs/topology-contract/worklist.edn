@@ -113894,6 +113894,18 @@
     [{:cmd "lean omitted instances",
       :exit 1,
       :finding "Identity span requires path-connected instances."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791815280851-7103-0e57d119",
+     :commands
+     ["git show/diff-tree 30dfc1c11"
+      "sha256/placeholder/registry checks"
+      "lake env lean ConstructionTargets/PointWedgeVanKampen.lean"
+      "lake build ConstructionTargets.PointWedgeVanKampen"
+      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (expected absent)"],
+     :finding
+     "PASS: exact two-file scope and frozen hashes match; placeholders 0->0, registry 131/131. Coordinate-point counit at the identity point span is faithfully identified with the explicit generic span-transport counit, with equivalences/isomorphisms in correct positions; standard axioms only. Valid program STOP; normalize its legs, compare outer factors, then B6/B12."},
     :commit "30dfc1c119cddb2d8ee87496f2301a0ab7b72bed",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
@@ -113904,7 +113916,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113925,7 +113937,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Pre-free-product counit splits into mapped pre-coordinate and coordinate-point components.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Coordinate-point counit is the explicit generic span-transport counit.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -114317,7 +114329,11 @@
     {:job 3,
      :commit "413cbf067e6bde747f68b2f04e0314d85fdcdadd",
      :reason
-     "Pre-free-product counit splits into mapped pre-coordinate and coordinate-point components."}]}
+     "Pre-free-product counit splits into mapped pre-coordinate and coordinate-point components."}
+    {:job 4,
+     :commit "30dfc1c119cddb2d8ee87496f2301a0ab7b72bed",
+     :reason
+     "Coordinate-point counit is the explicit generic span-transport counit."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
