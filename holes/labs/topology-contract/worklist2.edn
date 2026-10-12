@@ -83297,10 +83297,51 @@
    :depends-on [],
    :other-consumers []}
   {:consumer :t94J04,
-   :stop-count 0,
+   :stop-count 1,
    :implements-lemma :lemma-subgroup-cover-correspondence,
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Blueprint B1-B13 awaits independent review; after PASS implement B1, then the path-class quotient and charts.",
+    :outcome :stop,
+    :warnings [],
+    :missing-theorems
+    [{:name
+      "ConstructionTargets.CoveringSubgroupCorrespondence.SemilocallySimplyConnected",
+      :type "local triviality of small based loops",
+      :status :not-started,
+      :consumers [:t94J04 :t96A01 :t99J01 :t97A03 :t00A02 :t93J03],
+      :depends-on [],
+      :area "covering-subgroup-correspondence"}
+     {:name
+      "ConstructionTargets.CoveringSubgroupCorrespondence.connectedCover",
+      :type "connected finite-index subgroup cover",
+      :status :not-started,
+      :consumers [:t94J04 :t96A01 :t99J01 :t97A03 :t00A02 :t93J03],
+      :depends-on ["blueprint B1-B11"],
+      :area "covering-subgroup-correspondence"}],
+    :statement-hashes {:registry "131/0"},
+    :disposition :stop,
+    :axioms [],
+    :author "topo-6",
+    :reason :blueprint-written,
+    :commands
+    [{:cmd "Mathlib/repo API scan", :exit 0}
+     {:cmd "blueprint node/field scan", :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "registry check", :exit 0, :output "131/0"}
+     {:cmd "git show --check", :exit 0}],
+    :commit "f4540e43a652d69f2bfd9f82298d9203f6640c3a",
+    :changed-paths
+    ["ConstructionTargets/CoveringSubgroupCorrespondence.blueprint.md"],
+    :fixture
+    {:path
+     "ConstructionTargets/CoveringSubgroupCorrespondence.blueprint.md",
+     :sha256
+     "8b1657f8139d732165d1e4166c3c4a8d5a09695fb19e28a13753eec0132b1256"},
+    :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CoveringSubgroupCorrespondence.lean"
     "ConstructionTargets/CoveringSubgroupCorrespondence.md"
@@ -83338,13 +83379,14 @@
    :lemma
    {:name
     "ConstructionTargets.CoveringSubgroupCorrespondence.connectedCover",
-    :reported-by [:owner],
+    :reported-by
+    [:owner :program-2026-10-12-covering-subgroup-correspondence],
     :type
     "Realize a (finite-index) subgroup of pi1 as the fundamental group of a connected cover with index-many sheets",
     :area "covering-subgroup-correspondence"},
    :id :lemma-subgroup-cover-correspondence,
    :kind :lemma,
-   :depends-on [],
+   :depends-on [:lemma-blueprint-b1-b11],
    :other-consumers [:t96A01 :t99J01 :t97A03 :t00A02 :t93J03]}
   {:consumer :portfolio,
    :phase :lemma,
@@ -83358,6 +83400,36 @@
     :found-in
     ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"]},
    :id :lemma-arrivalcorrection-nonvanishing-cover,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t94J04,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.CoveringSubgroupCorrespondence.SemilocallySimplyConnected",
+    :type "local triviality of small based loops"},
+   :lemma
+   {:name
+    "ConstructionTargets.CoveringSubgroupCorrespondence.SemilocallySimplyConnected",
+    :reported-by
+    [:program-2026-10-12-covering-subgroup-correspondence],
+    :type "local triviality of small based loops",
+    :area "covering-subgroup-correspondence"},
+   :id
+   :lemma-constructiontargets-coveringsubgroupcorrespondence-semilocallysimplyconnected,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t96A01 :t99J01 :t97A03 :t00A02 :t93J03]}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance {:lemma "blueprint B1-B11"},
+   :lemma {:name "blueprint B1-B11", :reported-by []},
+   :id :lemma-blueprint-b1-b11,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}]}
