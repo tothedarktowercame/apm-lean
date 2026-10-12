@@ -446,4 +446,32 @@ def standardPairingDataOfOneVertex (o : Bool) (g : ℕ) (hg : 0 < g)
     (o : Bool) (g : ℕ) (hg : 0 < g) (hvertex) :
     (standardPairingDataOfOneVertex o g hg hvertex).pair = standardPair o g := rfl
 
+/-- Generator labels for the two arcs in each orientable handle. -/
+def handleOrbitLabel (i : Fin 4) : Bool := ![false, true, false, true] i
+
+def orientableOrbitLabel (g : ℕ) (i : Fin (4 * g)) : Fin g × Bool :=
+  ((orientableCoord g i).1, handleOrbitLabel (orientableCoord g i).2)
+
+def nonorientableOrbitLabel (g : ℕ) (i : Fin (2 * g)) : Fin g :=
+  (nonorientableCoord g i).1
+
+theorem nonorientableCoord_pair (g : ℕ) (i : Fin (2 * g)) :
+    nonorientableCoord g (nonorientablePair g i) =
+      ((nonorientableCoord g i).1, crosscapPair (nonorientableCoord g i).2) := by
+  simp only [nonorientablePair, Equiv.trans_apply, Equiv.apply_symm_apply,
+    Equiv.prodCongr_apply]
+  cases nonorientableCoord g i
+  rfl
+
+theorem orientableOrbitLabel_pair (g : ℕ) (i : Fin (4 * g)) :
+    orientableOrbitLabel g (orientablePair g i) = orientableOrbitLabel g i := by
+  rw [orientableOrbitLabel, orientableOrbitLabel, orientableCoord_pair]
+  generalize hb : (orientableCoord g i).2 = b
+  fin_cases b <;> rfl
+
+theorem nonorientableOrbitLabel_pair (g : ℕ) (i : Fin (2 * g)) :
+    nonorientableOrbitLabel g (nonorientablePair g i) =
+      nonorientableOrbitLabel g i := by
+  simp [nonorientableOrbitLabel, nonorientableCoord_pair]
+
 end ConstructionTargets.PolygonSurfacePiOne
