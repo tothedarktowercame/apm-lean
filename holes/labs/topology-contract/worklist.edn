@@ -113857,14 +113857,14 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 7,
+   :stop-count 8,
    :review-finding
    "Blueprint B3 is marked proved but its proof uses the unlisted ConnectedGroupoidSingleObjEquivalence.connectorSingleObjEquivalence (and connector-system representation) instead of only the declared uses; add the actual connector dependency and proof route to B3 uses.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
    :evidence
    {:placeholder-delta {:source-before 0, :source-after 0},
     :residual
-    "Evaluate both nested sources/casts, inclusion images, literal lifts; then B12.",
+    "Specialize left HEq; prove right arbitrary map; evaluate normal forms, inclusion images, literal lifts; then B12.",
     :outcome :stop,
     :warnings [],
     :missing-theorems
@@ -113878,9 +113878,9 @@
       :area "fundamental-group-wedge-of-circles"}],
     :statement-hashes
     {:source
-     "f6c0471c98db27f4ce04f6c9aabf51c096d271c4e040f4e67b1b2c6f60b10182",
+     "f54911280df1b89ce33ac4387d5203662210a03e879b00f7bee16aac87809743",
      :documentation
-     "bae66ec730d9f6d19f3d2ca96dde984ea6d0794c9a780f9979d0655991bcc39c",
+     "0009de194bac9fd4c27e076f212971b5e896153d2c1b3db5f3ed9da212de1f56",
      :blueprint
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0",
      :registry "131/131"},
@@ -113888,7 +113888,7 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
     :reason
-    "Right span source retains the overlap inverse/forward object round trip.",
+    "Arbitrary left coordinate maps are coproduct injections of connector normal forms via HEq.",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/PointWedgeVanKampen.lean",
@@ -113897,21 +113897,12 @@
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder/diff validation", :exit 0}],
-    :diagnostic-history [],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1791778390995-6305-3e053ccd",
-     :commands
-     ["git show/diff-tree e95abdb36"
-      "sha256/diff/placeholder checks"
-      "statement-registry.py check"
-      "lake env lean ConstructionTargets/PointWedgeVanKampen.lean"
-      "lake build ConstructionTargets.PointWedgeVanKampen"
-      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (expected absent)"],
-     :finding
-     "Exact scoped commit and frozen fixture 0bca6c...8c8b0 verified. New rfl lemma faithfully expands the right composite object action while retaining the overlap inverse/forward round trip; it does not falsely identify the dependent source with y0. Source is sorry-free; hashes and 131/131 registry reproduce; Lean/build pass; only standard axioms. Valid program STOP with compiled progress and residual naming both nested sources/casts, inclusion images, literal lifts, then B12; final target is absent as reported."},
-    :commit "e95abdb366dce64fd99a0697b52daf89b2a6f418",
+    :diagnostic-history
+    [{:cmd "lean dependent-equality attempts",
+      :exit 1,
+      :finding
+      "Corrected equality to HEq with connector normal form."}],
+    :commit "02b86dc5ff7c0da102a271ce1c6009d937db8297",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
      "ConstructionTargets/PointWedgeVanKampen.md"],
@@ -113921,7 +113912,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
