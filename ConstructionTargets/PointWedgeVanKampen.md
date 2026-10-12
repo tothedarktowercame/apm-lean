@@ -358,3 +358,10 @@ maps, and the literal lifts remains for B6.
 the forward right analogue: the right target functor maps the overlap
 equivalence's `unitInv` component.  The exact unit and inverse-unit maps, the
 two span maps, and the literal lifts remain for B6.
+
+`genericPointWedgeIdentityOuterLeftUnit_targetMap_eq_nestedMap` exposes the
+exact left unit image as the left equivalence functor applied after the
+actual-left functor.  In particular it records the remaining pointed map
+without asserting that the equivalence unit is an identity.  Evaluating this
+nested map, the inverse-unit map, both span maps, and the literal lifts remains
+for B6.
