@@ -73865,6 +73865,17 @@
       :output "131/0"}
      {:cmd "comment-stripped placeholder scan", :exit 0, :output "0"}
      {:cmd "git show --check HEAD", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791822773240-7411-8150e3b3",
+     :commands
+     ["git show/diff-tree/show --check e91aad6fa820d64a0192387606929cc3303a2ccc"
+      "fixture SHA and blob/placeholder recount"
+      "lake env lean ConstructionTargets/ProductionOpenCoverMayerVietoris.lean"
+      "python3 scripts/statement-registry.py check --rev e91aad6fa820d64a0192387606929cc3303a2ccc"],
+     :finding
+     "PASS: exact scope and fixture SHA-256 0f9f9810bfc8fc9c89b17d6c61bb481f4cf8694cae4cc98d5f094a4673acf037 match. The committed module compiles with 0 placeholders, registry 131/0, and standard axioms. Orientation is correct: image_le_iff reduces the source supremum image bound; sup_le splits it; hP/hQ compose with le_sup_left/right, then image_le_iff restores each branch. Module/t97A04/t96J06 blobs are 75959ac3/e2caa0a5/383deab4; placeholders 0/0/2."},
     :commit "e91aad6fa",
     :changed-paths
     ["ConstructionTargets/ProductionOpenCoverMayerVietoris.lean"],
@@ -73876,7 +73887,7 @@
      "0f9f9810bfc8fc9c89b17d6c61bb481f4cf8694cae4cc98d5f094a4673acf037"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/ProductionOpenCoverMayerVietoris.lean"],
    :dag-node
@@ -73996,7 +74007,7 @@
     "The compiled stronger theorem has no continuous map and no cover-preservation assumptions: forall U V U' V', Nonempty (shortComplex U V ⟶ shortComplex U' V'), proved by ⟨0⟩. Hence the frozen proposition erases precisely the data and commutative-square evidence required by the route's next naturality step.",
     :seat "topo-8"},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope
    ["ConstructionTargets/ProductionOpenCoverMayerVietoris.lean"],
    :dag-node
@@ -83408,7 +83419,9 @@
    :depends-on [],
    :other-consumers []}
   {:consumer :t99J01,
-   :stop-count 3,
+   :owner-reopen
+   "reopened: a lemma this row reported missing is now banked",
+   :stop-count 0,
    :review-finding
    "Program STOP commits no compiled, sorry-free theorem progress: 9a443d45a adds only SuppliedCoverAlgebra.md, creates no SuppliedCoverAlgebra.lean, and records A1/A2/A3/C7 all :not-started. Exact repair: extend Mathlib: state and prove at least one missing milestone in scope, commit the compiling Lean result, and list the remaining milestones in :missing-theorems.",
    :evidence
@@ -83475,7 +83488,7 @@
      "2d4c1b913f0dcc56a3b3fc9a70d3ebf8a7f21bc4f338fea36bcfe7575f9d2c43"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["ConstructionTargets/SuppliedCoverAlgebra.lean"
     "ConstructionTargets/SuppliedCoverAlgebra.md"],
@@ -83494,13 +83507,13 @@
    :id :program-2026-10-12-supplied-cover-algebra,
    :kind :reusable-theorem,
    :campaign-priority 40,
-   :fail-count 4,
+   :fail-count 0,
    :depends-on [],
    :program true,
    :other-consumers [:t97A03 :t93J03 :t00A02]}
   {:consumer :t99J01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "coveringFundamentalGroupEquivRange",
@@ -83510,14 +83523,16 @@
     :reported-by [:program-2026-10-12-supplied-cover-algebra],
     :type "pi1 total equiv induced range",
     :area "covering-subgroup-correspondence",
-    :proved-in :program-2026-10-12-supplied-cover-algebra},
+    :proved-in :program-2026-10-12-supplied-cover-algebra,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/SuppliedCoverAlgebra.lean"]},
    :id :lemma-coveringfundamentalgroupequivrange,
    :kind :lemma,
    :depends-on [],
    :other-consumers [:t97A03]}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "isEmbedding_of_comp_eq",
@@ -83527,14 +83542,16 @@
     :reported-by [:program-2026-10-12-supplied-cover-algebra],
     :type "embedding from embedded composite",
     :area "covering-subgroup-correspondence",
-    :proved-in :program-2026-10-12-supplied-cover-algebra},
+    :proved-in :program-2026-10-12-supplied-cover-algebra,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/SuppliedCoverAlgebra.lean"]},
    :id :lemma-isembedding-of-comp-eq,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}
   {:consumer :t99J01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "coveringFundamentalGroupEquivFreeSubgroup",
@@ -83544,14 +83561,16 @@
     :reported-by [:program-2026-10-12-supplied-cover-algebra],
     :type "pi1 total equiv mapped free subgroup with index",
     :area "covering-subgroup-correspondence",
-    :proved-in :program-2026-10-12-supplied-cover-algebra},
+    :proved-in :program-2026-10-12-supplied-cover-algebra,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/SuppliedCoverAlgebra.lean"]},
    :id :lemma-coveringfundamentalgroupequivfreesubgroup,
    :kind :lemma,
    :depends-on [:lemma-coveringfundamentalgroupequivrange],
    :other-consumers [:t97A03]}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "isCoveringMap_homeomorph_comp_quotientMk",
@@ -83561,7 +83580,9 @@
     :reported-by [:program-2026-10-12-supplied-cover-algebra],
     :type "orbit quotient covering transported by homeomorphism",
     :area "covering-subgroup-correspondence",
-    :proved-in :program-2026-10-12-supplied-cover-algebra},
+    :proved-in :program-2026-10-12-supplied-cover-algebra,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/SuppliedCoverAlgebra.lean"]},
    :id :lemma-iscoveringmap-homeomorph-comp-quotientmk,
    :kind :lemma,
    :depends-on [],
