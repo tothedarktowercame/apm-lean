@@ -30099,7 +30099,7 @@
   {:consumer :t00A02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 7,
+   :stop-count 8,
    :review-finding
    "Program-row defect: commit ebbfe625 repairs the B5 mathematics, but changes only SurfaceClassification.blueprint.md and commits no new compiled, sorry-free, standard-axiom result since the prior program-history entry; :missing-theorems is empty. The successful 8245-job build merely rebuilds pre-existing SurfaceClassification code and is not a new milestone. Repair by implementing and committing the next listed milestone (B1 FiniteTwoComplex/Realization or another genuine supporting result), compiling it without placeholders, and recording that proved milestone in :missing-theorems.",
    :implements-lemma
@@ -30114,56 +30114,39 @@
      :t96A01 [1 1],
      :t97J02 [3 3]},
     :residual
-    "B4: prove path continuity/chart containment, then finite transverse crossings.",
+    "B4: prove chart containment for sufficiently small bends, then finite transverse crossings.",
     :outcome :stop,
     :warnings [],
     :missing-theorems
     [{:name
-      "ConstructionTargets.SurfaceClassification.exists_twoSegmentPath_bend_avoiding_finite",
+      "ConstructionTargets.SurfaceClassification.continuous_twoSegmentPath",
       :type
-      "(start finish base direction : EuclideanPlane) (hdirection : direction ≠ 0) {a b : ℝ} (hab : a < b) {forbidden : Set EuclideanPlane} (hforbidden : forbidden.Finite) : ∃ t ∈ Set.Ioo a b, base + t • direction ∉ forbidden ∧ twoSegmentPath start (base + t • direction) finish 0 = start ∧ twoSegmentPath start (base + t • direction) finish (1/2) = base + t • direction ∧ twoSegmentPath start (base + t • direction) finish 1 = finish",
+      "(start bend finish : EuclideanPlane) : Continuous (twoSegmentPath start bend finish)",
       :status :proved,
       :consumers
       [:t00A02 :t00A03 :t91J05 :t92J05 :t94J04 :t96A01 :t97J02],
       :depends-on
-      ["ConstructionTargets.SurfaceClassification.exists_affinePerturbation_avoiding_finite"],
+      ["ConstructionTargets.SurfaceClassification.exists_twoSegmentPath_bend_avoiding_finite"],
       :area "surface-classification"}],
     :statement-hashes {:registry "131/131"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
-    :reason "B4 endpoint-fixed polygonal path constructed",
+    :reason "B4 two-segment perturbation continuity proved",
     :commands
-    [{:cmd "lake build ConstructionTargets.SurfaceClassification",
+    [{:cmd
+      "lake env lean ConstructionTargets/SurfaceClassification.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.SurfaceClassification",
       :exit 0}
      {:cmd "lake env lean /tmp/surface_parameter_axioms.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "rg source placeholders", :exit 1, :expected-exit 1}],
-    :diagnostic-history
-    [{:cmd
-      "lake env lean ConstructionTargets/SurfaceClassification.lean (2 attempts)",
-      :exit 1,
-      :stage "numeric midpoint normalization; fixed"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1791819890909-7282-731cacdf",
-     :commands
-     ["git show/diff 754add487"
-      "sha256sum fixtures"
-      "git diff --check; blob-current"
-      "rg Lean placeholders"
-      "statement-registry.py check"
-      "#print axioms two-segment theorem"
-      "lake env lean fixtures/module"
-      "lake build ConstructionTargets.SurfaceClassification"],
-     :finding
-     "PASS program STOP: new compiled milestone after 70ab591fd defines the two-segment affine path and proves an avoiding bend with exact start/midpoint/finish values. One-file scope; blob current; fixture hashes recomputed; fixtures/module/build pass; registry 131/131; zero Lean placeholders; standard axioms. Continuity, chart containment, and transversality remain listed."},
-    :commit "754add4876b7ca30784a885d5b4d92c645e87b80",
+    :commit "4244c6e3e1737b3b867f576275c8a301785a3df6",
     :changed-paths ["ConstructionTargets/SurfaceClassification.lean"],
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SurfaceClassification.lean"
     "ConstructionTargets/SurfaceClassification.md"
@@ -30614,6 +30597,29 @@
    :kind :lemma,
    :depends-on
    [:lemma-constructiontargets-surfaceclassification-exists-affineperturbation-avoiding-fin],
+   :other-consumers [:t00A03 :t91J05 :t92J05 :t94J04 :t96A01 :t97J02]}
+  {:consumer :t00A02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.SurfaceClassification.continuous_twoSegmentPath",
+    :type
+    "(start bend finish : EuclideanPlane) : Continuous (twoSegmentPath start bend finish)"},
+   :lemma
+   {:name
+    "ConstructionTargets.SurfaceClassification.continuous_twoSegmentPath",
+    :reported-by [:program-2026-10-12-surface-classification],
+    :type
+    "(start bend finish : EuclideanPlane) : Continuous (twoSegmentPath start bend finish)",
+    :area "surface-classification",
+    :proved-in :program-2026-10-12-surface-classification},
+   :id
+   :lemma-constructiontargets-surfaceclassification-continuous-twosegmentpath,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-surfaceclassification-exists-twosegmentpath-bend-avoiding-fi],
    :other-consumers
    [:t00A03 :t91J05 :t92J05 :t94J04 :t96A01 :t97J02]}],
  :consumer-baselines {},
