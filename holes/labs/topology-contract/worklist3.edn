@@ -18406,8 +18406,39 @@
   {:consumer :t00J02,
    :implements-lemma
    :lemma-constructiontargets-manifoldfundamentalclass-forgetsnakeinput-delta-map,
+   :evidence
+   {:placeholder-delta {:t00J02 [1 1], :t98A02 [1 1]},
+    :residual "Retry the localization theorem.",
+    :outcome :done-unreviewed,
+    :warnings ["9 pre-existing unnecessarySimpa warnings"],
+    :missing-theorems [],
+    :statement-hashes {:check "131/131"},
+    :axioms [propext Classical.choice Quot.sound],
+    :author "Joe Corneli",
+    :commands
+    [{:cmd "sha256sum /tmp/fdmap.lean", :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.ManifoldFundamentalClass",
+      :exit 0}
+     {:cmd "lake env lean /tmp/fdmap_check.lean", :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "rg -n '\\b(sorry|admit|axiom)\\b' ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 1,
+      :expected-exit 1}],
+    :commit "3e5e2875b1bc18eb6530456e963f85f4bcb7031f",
+    :changed-paths
+    ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+    :fixture
+    {:path "/tmp/fdmap.lean",
+     :sha256
+     "0d2ef4f56968e11b89948991ff01af3759d6680fa2d4354ea80ef3f18e4c8928"},
+    :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/manifold-fundamental-class/delta-map",
    :acceptance
