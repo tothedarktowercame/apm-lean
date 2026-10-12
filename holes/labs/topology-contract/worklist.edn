@@ -116906,13 +116906,13 @@
   {:consumer :t97A07,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 6,
+   :stop-count 7,
    :review-finding
    "Recorded fixture hash mismatch: :fixture.sha256 is eaeed21919599335d4a33b437815c4a9cbb5b72110213b29440d6944cc982182 (the blueprint at older commit 736c2566), but commit 8432f937 changes ConstructionTargets/t97A07Closure.blueprint.md and its exact SHA-256 is 5bb02c342b988406e8bd26aeda1b9e67335a8c1f626d97ec96701cb039ae708f. Re-record the fixture hash for the reviewed commit.",
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
     :residual
-    "Prove the precomposed fixed derivative equals the transported mfderiv pointwise near x; then B3-B9.",
+    "Package eventual equality and the B2 interface; then B3-B9.",
     :outcome :stop,
     :warnings [{:kind :existing-placeholder}],
     :missing-theorems
@@ -116924,17 +116924,17 @@
       :area "regular-points-open"}],
     :statement-hashes
     {:source
-     "fb59520ce139507443c706763cf417be4a246ee974b08ad231bedd00a1fd379d",
+     "95a788ba0660bfcd6216df5f7bd30cd6f8b885fb93dd2630645d1d6e0b84c920",
      :target
      "f13a687334f894f060c24b9aa390e8de88a2bf5f3d36e1de717af326c84d78f2",
      :blueprint
-     "adbf25891dd5bb2e6a67bcbb218dd4563146cf66804abdcd11975e1cb30998cf",
+     "8339887881c1cad79eb545f459f2189b5e3be1bb2993a1781be6bc63661c177a",
      :registry "131/131"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
     :reason
-    "The fixed-coordinate derivative precomposed with the source chart is now continuous at the base point.",
+    "The fixed-chart derivative equals the transported mfderiv pointwise on the common chart neighbourhood.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t97A07Closure.lean",
       :exit 0}
@@ -116943,32 +116943,21 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder/diff validation", :exit 0}],
     :diagnostic-history
-    [{:cmd "lean initial Tendsto rewrite",
+    [{:cmd "lean chain-rule elaboration",
       :exit 1,
-      :finding "Composed image-filter Tendsto directly."}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1791837161332-7862-27d0e09c",
-     :commands
-     ["git show/diff-tree 4d382ed8"
-      "lake env lean ConstructionTargets/t97A07Closure.lean"
-      "lake env lean problems/t97A07/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"
-      "commit hash and placeholder checks"],
-     :finding
-     "PASS program STOP: 4d382ed8 by topo-2 adds the precomposed fixed-chart derivative continuity theorem and its B2 blueprint record, exactly within scope and new since history. Source fb59520c..., fixture adbf2589..., frozen Main f13a6873..., registry 131/131, and scoped placeholders 1->1 reproduce. The proof composes continuity within the model range with extChartAt and uses the exact chart image-filter identity; it preserves the range restriction and bridges domains without identifying varying tangent fibers. Fresh closure and frozen Main elaboration pass with standard axioms. Pointwise agreement near x and B3-B9 remain explicitly listed."},
-    :commit "4d382ed8d1b8a69afd92feca0400d85db20cde12",
+      :finding
+      "Supplied extended-chart endpoints and model unique differential explicitly."}],
+    :commit "387bfd4a0aa97c0e9e2e5aaceeac729569ee4811",
     :changed-paths
     ["ConstructionTargets/t97A07Closure.lean"
      "ConstructionTargets/t97A07Closure.blueprint.md"],
     :fixture
     {:path "ConstructionTargets/t97A07Closure.blueprint.md",
      :sha256
-     "adbf25891dd5bb2e6a67bcbb218dd4563146cf66804abdcd11975e1cb30998cf"},
+     "8339887881c1cad79eb545f459f2189b5e3be1bb2993a1781be6bc63661c177a"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t97A07/lean/Main.lean"
     "problems/t97A07/status.json"
