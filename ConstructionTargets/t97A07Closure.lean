@@ -198,6 +198,27 @@ theorem inTangentCoordinates_mfderiv_self_eq_mfderiv
     mfderiv_chartAt_symm_self_eq_id]
   exact ContinuousLinearMap.comp_id _
 
+/-- At the common chart centre, the fixed-coordinate derivative and the
+transported manifold derivative are the same continuous linear map. -/
+theorem coordinate_fderivWithin_eq_inTangentCoordinates_mfderiv_self
+    {m n : ℕ} {X : Type*} [TopologicalSpace X]
+    [ChartedSpace (EuclideanModel m) X]
+    [IsManifold 𝓘(ℝ, EuclideanModel m) ∞ X]
+    (f : X → EuclideanModel n)
+    (hf : ContMDiff 𝓘(ℝ, EuclideanModel m) 𝓘(ℝ, EuclideanModel n) ∞ f)
+    (x : X) :
+    fderivWithin ℝ
+        (extChartAt 𝓘(ℝ, EuclideanModel n) (f x) ∘ f ∘
+          (extChartAt 𝓘(ℝ, EuclideanModel m) x).symm)
+        (Set.range 𝓘(ℝ, EuclideanModel m))
+        (extChartAt 𝓘(ℝ, EuclideanModel m) x x) =
+      inTangentCoordinates 𝓘(ℝ, EuclideanModel m)
+        𝓘(ℝ, EuclideanModel n) (fun z : X ↦ z) f
+        (fun z ↦ mfderiv 𝓘(ℝ, EuclideanModel m)
+          𝓘(ℝ, EuclideanModel n) f z) x x := by
+  rw [coordinate_fderivWithin_eq_mfderiv f hf x,
+    inTangentCoordinates_mfderiv_self_eq_mfderiv]
+
 end t97A07Closure
 
 #print axioms t97A07Closure.isOpen_setOf_surjective_clm
@@ -209,3 +230,4 @@ end t97A07Closure
 #print axioms t97A07Closure.inTangentCoordinates_mfderiv_self_eq_sourceChartFactor
 #print axioms t97A07Closure.mfderiv_chartAt_symm_self_eq_id
 #print axioms t97A07Closure.inTangentCoordinates_mfderiv_self_eq_mfderiv
+#print axioms t97A07Closure.coordinate_fderivWithin_eq_inTangentCoordinates_mfderiv_self

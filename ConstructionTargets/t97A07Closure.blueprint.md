@@ -54,6 +54,11 @@ uses: Mathlib `contMDiffAt_iff`, `ContDiff.continuous_fderiv`,
 
 status: partial
 
+Compiled progress: `coordinate_fderivWithin_eq_inTangentCoordinates_mfderiv_self`
+now identifies the fixed-coordinate derivative with the transported manifold
+derivative at their common chart centre.  It remains to extend this equality
+to a neighbourhood contained in the fixed source and target charts.
+
 Use `hf.contMDiffAt` and unfold `contMDiffAt_iff` in the fixed source and
 target charts at `x`.  The resulting representative is smooth and therefore
 has continuous first derivative near the chart centre.  On a smaller chart
