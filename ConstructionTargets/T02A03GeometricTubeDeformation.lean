@@ -3730,6 +3730,35 @@ theorem arrivalTransverseCorrection_eq_zero_of_le_half
   · norm_num
   · linarith
 
+/-- Exact zero locus of the supported transverse arrival correction.  This
+is the interface used by the remaining local interval exclusions. -/
+theorem arrivalTransverseCorrection_eq_zero_iff
+    (t : unitInterval) (p : RightTubeMinusLeftCore) :
+    (((2 - 2 * (t : ℝ) : ℝ) : ℂ) * positiveRealPlanarWaypointMap p +
+        ((2 * (t : ℝ) - 1 : ℝ) : ℂ) *
+          rightTubeCorePlanarComplex p.1 +
+        arrivalTransverseCorrection t) = 0 ↔
+      (3 - 4 * (t : ℝ)) * p.1 0 + 1 = 0 ∧
+        p.1 1 + 24 * max 0 (2 * (t : ℝ) - 1) *
+          (1 - (t : ℝ)) = 0 := by
+  constructor
+  · intro hz
+    obtain ⟨h0, h1⟩ := complexArrivalCorrection_zero_equations t
+      (arrivalTransverseCorrection t) p hz
+    norm_num [arrivalTransverseCorrection, Complex.mul_re, Complex.mul_im]
+      at h0 h1
+    exact ⟨h0, h1⟩
+  · rintro ⟨h0, h1⟩
+    apply Complex.ext
+    · norm_num [positiveRealPlanarWaypointMap, rightTubePlanarComplex,
+        rightTubeCorePlanarComplex, arrivalTransverseCorrection,
+        Complex.mul_re, Complex.mul_im]
+      linarith
+    · norm_num [positiveRealPlanarWaypointMap, rightTubePlanarComplex,
+        rightTubeCorePlanarComplex, arrivalTransverseCorrection,
+        Complex.mul_re, Complex.mul_im]
+      linarith
+
 /-- The supported transverse correction is automatically safe on the
 exceptional `t = 3/4` slice because its real part is zero, not the forced
 value `-1`. -/
@@ -3861,6 +3890,7 @@ end ConstructionTargets.T02A03GeometricTubeDeformation
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.complexArrivalCorrection_ne_zero_of_scaled_normSq_outside
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.complexArrivalCorrection_threeQuarters_ne_zero
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.continuous_arrivalTransverseCorrection
+#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.arrivalTransverseCorrection_eq_zero_iff
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.arrivalTransverseCorrection_threeQuarters_ne_zero
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_twiceCorrected_departure_zero_coordinates
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_twiceCorrected_departure_zero_normSq
