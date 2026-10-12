@@ -823,3 +823,11 @@ the intermediate target glue and proves that the injected right counit,
 right coordinate factor, and source glue equal the injected left counit and
 left coordinate factor.  The remaining B6 calculation is isolated to the
 source glue and the two mapped open-cover factors.
+
+`genericPointWedgeMappedOpenCoverSourceGlue` names the predecessor glue in
+the open-cover counit square.  The theorem
+`genericPointWedgeMappedOpenCoverCounit_namedGlueSquare` expresses that
+square in multiplication order: right open-cover factor times predecessor
+glue equals coordinate-span source glue times left open-cover factor.  Thus
+the remaining open-cover calculation is exactly the normalization of this
+one pseudopushout round-trip glue.

@@ -3093,6 +3093,25 @@ theorem genericPointWedgeMappedPreCoordinateCounits_eq_namedFactors :
       (genericPointWedgeMappedPreCoordinateCounits_eq_openCover_coordinateSpan
         x₀ y₀ M N hM hN hy hx cM cN)
 
+/-- The source glue in the mapped open-cover counit square, before its counit
+lands in the reconstructed actual span. -/
+def genericPointWedgeMappedOpenCoverSourceGlue :
+    genericPointWedgeFreeProduct x₀ y₀ :=
+  let C := genericPointWedgeTarget x₀ y₀
+  let A := genericPointWedgePreCoordinateSpanMappingEquivalence
+    x₀ y₀ M N hM hN hy hx cM cN C
+  let B := genericPointWedgeCoordinateSpanEquivalence
+    x₀ y₀ M N hM hN hy hx cM cN C
+  let Q := genericPointWedgeCoordinatePointSpanEquivalence x₀ y₀ C
+  let S := freeProductPointSpanEquivalence
+    (genericPointWedgeLeftGroup x₀) (genericPointWedgeRightGroup y₀) C
+  let R := representationSingleObjEquivalence
+    (C := C) (genericPointWedgeLeftGroup x₀) (genericPointWedgeRightGroup y₀)
+  let F := Functor.id (SingleObj (genericPointWedgeFreeProduct x₀ y₀))
+  let Z := B.inverse.obj (Q.inverse.obj (S.inverse.obj (R.inverse.obj F)))
+  (Q.functor.obj (B.functor.obj (A.functor.obj (A.inverse.obj Z)))).glue.hom.app
+    (SingleObj.star PUnit)
+
 /-- The mapped coordinate-span counit's glue square, specialized at the
 unique point-span overlap object.  This is the equation in which its two
 named leg factors are related by the mapped reconstructed glue. -/
@@ -3151,6 +3170,40 @@ def genericPointWedgeMappedCoordinateSpanSourceGlue :
   let Z := Q.inverse.obj (S.inverse.obj (R.inverse.obj F))
   (Q.functor.obj (B.functor.obj (B.inverse.obj Z))).glue.hom.app
     (SingleObj.star PUnit)
+
+/-- The mapped open-cover counit's glue square, in target-group
+multiplication order.  It isolates the one earlier source glue still to be
+computed. -/
+theorem genericPointWedgeMappedOpenCoverCounit_namedGlueSquare :
+    genericPointWedgeMappedOpenCoverRightCounit
+          x₀ y₀ M N hM hN hy hx cM cN *
+        genericPointWedgeMappedOpenCoverSourceGlue
+          x₀ y₀ M N hM hN hy hx cM cN =
+      genericPointWedgeMappedCoordinateSpanSourceGlue
+          x₀ y₀ M N hM hN hy hx cM cN *
+        genericPointWedgeMappedOpenCoverLeftCounit
+          x₀ y₀ M N hM hN hy hx cM cN := by
+  let C := genericPointWedgeTarget x₀ y₀
+  let A := genericPointWedgePreCoordinateSpanMappingEquivalence
+    x₀ y₀ M N hM hN hy hx cM cN C
+  let B := genericPointWedgeCoordinateSpanEquivalence
+    x₀ y₀ M N hM hN hy hx cM cN C
+  let Q := genericPointWedgeCoordinatePointSpanEquivalence x₀ y₀ C
+  let S := freeProductPointSpanEquivalence
+    (genericPointWedgeLeftGroup x₀) (genericPointWedgeRightGroup y₀) C
+  let R := representationSingleObjEquivalence
+    (C := C) (genericPointWedgeLeftGroup x₀) (genericPointWedgeRightGroup y₀)
+  let F := Functor.id (SingleObj (genericPointWedgeFreeProduct x₀ y₀))
+  let Z := B.inverse.obj (Q.inverse.obj (S.inverse.obj (R.inverse.obj F)))
+  let τ := Q.functor.map (B.functor.map (A.counitIso.hom.app Z))
+  have h := NatTrans.congr_app τ.glue_naturality (SingleObj.star PUnit)
+  dsimp only [τ, Z, F, R, S, Q, B, A, C] at h
+  simpa only [genericPointWedgeMappedOpenCoverRightCounit,
+    genericPointWedgeMappedOpenCoverSourceGlue,
+    genericPointWedgeMappedCoordinateSpanSourceGlue,
+    genericPointWedgeMappedOpenCoverLeftCounit,
+    Functor.comp_obj, NatTrans.comp_app, Functor.whiskerLeft_app,
+    SingleObj.comp_as_mul] using h
 
 /-- The target glue in the mapped coordinate-span counit square. -/
 def genericPointWedgeMappedCoordinateSpanTargetGlue :
@@ -4618,6 +4671,8 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeMappedCoordinateSpanRightCounit
 #print axioms genericPointWedgeMappedPreCoordinateCounits_eq_openCover_coordinateSpan
 #print axioms genericPointWedgeMappedPreCoordinateCounits_eq_namedFactors
+#print axioms genericPointWedgeMappedOpenCoverSourceGlue
+#print axioms genericPointWedgeMappedOpenCoverCounit_namedGlueSquare
 #print axioms genericPointWedgeMappedCoordinateSpanCounit_glueSquare
 #print axioms genericPointWedgeMappedCoordinateSpanSourceGlue
 #print axioms genericPointWedgeMappedCoordinateSpanTargetGlue
