@@ -113850,14 +113850,14 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 2,
    :review-finding
    "Recorded fixture hash mismatch: :fixture.sha256 is 0bca6ce32c019fc3053c7f813c26917169cf817375b44d5e722b864b61a526450c1, but ConstructionTargets/PointWedgeVanKampen.blueprint.md at recorded commit c9b3af27 has exact SHA-256 0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0. Re-record the fixture hash for the reviewed commit.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
    :evidence
    {:placeholder-delta {:source-before 0, :source-after 0},
     :residual
-    "Specialize left counits and cancel four right endpoint counits; then point-span, remaining counits, B6/B12.",
+    "Specialize left counits and identify the two outer right counits; then point-span, remaining counits, B6/B12.",
     :outcome :stop,
     :warnings [],
     :missing-theorems
@@ -113871,9 +113871,9 @@
       :area "fundamental-group-wedge-of-circles"}],
     :statement-hashes
     {:source
-     "bd4ade4e7f6ce1f2b0d827971b0c5204dc990df2595ea88b3c992e350b311c40",
+     "ef311864850fe1a691ef3b19dbef2218598ad6b0f9dc0e2ba9c442088ebf6c35",
      :documentation
-     "259100530a20d0dc36cbb772ec437faf23799893a1b2eeff0320a1f6a7edd82c",
+     "c59386e7d4a7544748dd045eac56d94773ec6f9077b18aaf5facf1b46a0bf1ab",
      :blueprint
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0",
      :registry "131/131"},
@@ -113881,7 +113881,7 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
     :reason
-    "Right comparison recombined as strict*unit, the group order for categorical unit-then-strict.",
+    "The shared inner right restriction counit cancels, leaving two actual-span maps between the outer endpoint counits.",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/PointWedgeVanKampen.lean",
@@ -113890,22 +113890,7 @@
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder/diff validation", :exit 0}],
-    :diagnostic-history
-    [{:cmd "lean right-factor order",
-      :exit 1,
-      :finding "SingleObj.comp_as_mul gives strict*unit."}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1791842958008-7970-1a317e15",
-     :commands
-     ["git show/diff-tree b866bbd4"
-      "lake build ConstructionTargets.PointWedgeVanKampen"
-      "python3 scripts/statement-registry.py check"
-      "commit hash and placeholder checks"],
-     :finding
-     "PASS program STOP: b866bbd4 by topo-2 adds the exact right-comparison factorization plus documentation, exactly within scope and new since history. Source bd4ade4e..., documentation 25910053..., fixture 0bca6ce3..., registry 131/131, and placeholders 0->0 reproduce. The categorical composite is unit then strict, while SingleObj.comp_as_mul reverses it to strict*unit in group multiplication; the theorem records that correct order and leaves all endpoint counits explicit. Fresh build passes with standard axioms. Left-counit specialization, four right-counit cancellations, point-span transport, remaining counits, and B6/B12 remain explicitly listed."},
-    :commit "b866bbd44a2a7ca59472da0acbc75739c1d2b75e",
+    :commit "4dd54519dedb073f7948cd67420f62a0f5a2aa32",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
      "ConstructionTargets/PointWedgeVanKampen.md"],
@@ -113915,7 +113900,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
