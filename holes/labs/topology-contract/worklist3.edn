@@ -19364,6 +19364,17 @@
      {:cmd "rg forbidden tokens in scoped file",
       :exit 1,
       :expected-exit 1}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791788958483-6550-ea3dde28",
+     :commands
+     ["recorded scope/blob, fixture hash, diff check"
+      "statement registry and placeholder scans"
+      "lake env lean: renamed fixture and module"
+      "lake build ConstructionTargets.ManifoldFundamentalClass"],
+     :finding
+     "PASS: recorded one-file scope and frozen fixture hash match. Unfolding the two absolute maps gives singular-chain comparison naturality: forgotten coefficient postcomposition then comparison at Y = comparison at X then integral postcomposition. Source, target, and covariance match exactly. Registry 131/0; source placeholders 0; consumer sorries 1/1; standard axioms only; build 8326 jobs."},
     :commit "e0cd4978261e9fd7f3617b040cc67a87942421a7",
     :changed-paths
     ["ConstructionTargets/ManifoldFundamentalClass.lean"],
@@ -19373,7 +19384,7 @@
      "4adbea29747193d1c270c174800f70c3f0ab6366975ff6c1dd551b68a87b61dc"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/manifold-fundamental-class/open-disk-model-transport",
@@ -19446,7 +19457,7 @@
       "4adbea29747193d1c270c174800f70c3f0ab6366975ff6c1dd551b68a87b61dc"},
      :seat "topo-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -27778,7 +27789,7 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -27791,7 +27802,10 @@
     [:routes-2026-10-10-manifold-fundamental-class-topo3-r2],
     :type "exact type in fixture",
     :area "manifold-fundamental-class",
-    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2,
+    :banked-by
+    :routes-2026-10-12-mfclass-forgotten-absolute-naturality-r1,
+    :banked-commit "e0cd4978261e9fd7f3617b040cc67a87942421a7"},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-coefficientabsolutemap-forgotten-na,
    :kind :lemma,
