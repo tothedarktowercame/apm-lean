@@ -113850,14 +113850,14 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 7,
+   :stop-count 8,
    :review-finding
    "Blueprint B3 is marked proved but its proof uses the unlisted ConnectedGroupoidSingleObjEquivalence.connectorSingleObjEquivalence (and connector-system representation) instead of only the declared uses; add the actual connector dependency and proof route to B3 uses.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
    :evidence
    {:placeholder-delta {:source-before 0, :source-after 0},
     :residual
-    "Match these counits with the outer composite; then close B6 and B12.",
+    "Match the mapped representation counit with the outer composite; then close B6 and B12.",
     :outcome :stop,
     :warnings [],
     :missing-theorems
@@ -113871,9 +113871,9 @@
       :area "fundamental-group-wedge-of-circles"}],
     :statement-hashes
     {:source
-     "2a4ec3de2ed8bf0ae1b653651e07aeaddcebb9c92a877fd0461f5048be59c041",
+     "54ddfabf09bcc1238a48c8247c151c09d38bc9e0db9cece7f3c48ab46f075eb6",
      :documentation
-     "3470ee8e9534f38efc8dc586d7c84bd7f9387fabaf20c0581b0f973e9a1cf41e",
+     "74230ab15d09e1bdc59d3b760ecf055e9875e7674bfa984a7f4390ae69cb8f0a",
      :blueprint
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0",
      :registry "131/131"},
@@ -113881,7 +113881,7 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
     :reason
-    "B3 counit split into mapped representation and final single-object counits.",
+    "Final representation counit is the unit; B3 counit is now only the mapped preceding counit.",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/PointWedgeVanKampen.lean",
@@ -113891,24 +113891,13 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder/diff validation", :exit 0}],
     :diagnostic-history
-    [{:cmd "lean direct equality",
+    [{:cmd "lean omit placement",
       :exit 1,
-      :finding "Not definitional."}
-     {:cmd "lean counit simp", :exit 1, :finding "Six factors."}
-     {:cmd "lean split type", :exit 1, :finding "Used Functor.id."}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1791811623465-6980-1c2d69d1",
-     :commands
-     ["git show/diff-tree 7051031fd"
-      "sha256/placeholder/registry checks"
-      "lake env lean ConstructionTargets/PointWedgeVanKampen.lean"
-      "lake build ConstructionTargets.PointWedgeVanKampen"
-      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (expected absent)"],
-     :finding
-     "PASS: exact two-file scope and frozen hashes match; placeholders 0->0, registry 131/131. B3 counit is faithfully split at the actual representation boundary into mapped representation and final single-object counits; standard axioms only. Valid program STOP with compiled progress; match these factors to the outer composite, then B6/B12."},
-    :commit "7051031fd8d6d900536ff7d3217cb962d565f6b7",
+      :finding "Moved omit before doc."}
+     {:cmd "lean counit composition",
+      :exit 1,
+      :finding "Used one_mul orientation."}],
+    :commit "d0bd5a442ddaef5a3d6aaafc42b11047601c3bcb",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
      "ConstructionTargets/PointWedgeVanKampen.md"],
@@ -113918,7 +113907,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
