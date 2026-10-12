@@ -113850,14 +113850,14 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 7,
+   :stop-count 8,
    :review-finding
    "Recorded fixture hash mismatch: :fixture.sha256 is 0bca6ce32c019fc3053c7f813c26917169cf817375b44d5e722b864b61a526450c1, but ConstructionTargets/PointWedgeVanKampen.blueprint.md at recorded commit c9b3af27 has exact SHA-256 0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0. Re-record the fixture hash for the reviewed commit.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
    :evidence
    {:placeholder-delta {:source-before 0, :source-after 0},
     :residual
-    "Normalize right factors and specialize left counits; then point-span, counits, B6/B12.",
+    "Identify the right reconstructed restriction and strict map; specialize left counits; then point-span, counits, B6/B12.",
     :outcome :stop,
     :warnings [],
     :missing-theorems
@@ -113871,16 +113871,17 @@
       :area "fundamental-group-wedge-of-circles"}],
     :statement-hashes
     {:source
-     "bc4aa658f156d46fa204e6584cd00b049c2fd2527795e6bd762e2fc2997ef77d",
+     "d2ee554e42cb729736abd95f8136f68611176906c5918912bb1dc7f6adeebc28",
      :documentation
-     "ce56045a8d1ce76d58d5f955a033b3528f9a2f421c974730a9881539ff2d057d",
+     "ce57be181e1927b651ca1dad7ba7024db6ca0025444c513791fa34e00a039e9d",
      :blueprint
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0",
      :registry "131/131"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
-    :reason "Receipt repaired with the exact reviewed blueprint hash.",
+    :reason
+    "Both ordered right-comparison factors now expose their exact functor maps.",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/PointWedgeVanKampen.lean",
@@ -113889,24 +113890,7 @@
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder/diff validation", :exit 0}],
-    :diagnostic-history
-    [{:cmd
-      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup",
-      :exit 1,
-      :finding
-      "Final module does not yet exist; program remains partial."}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1791840544570-7928-1ada1f22",
-     :commands
-     ["git diff c9b3af27^ c9b3af27"
-      "sha256 committed blueprint"
-      "lake build ConstructionTargets.PointWedgeVanKampen"
-      "python3 scripts/statement-registry.py check"],
-     :finding
-     "PASS program STOP after receipt repair: c9b3af27 by topo-2 changes exactly the two scoped files. Source bc4aa658..., documentation ce56045a..., corrected fixture 0bca6ce3..., registry 131/131, and placeholders 0->0 reproduce. The new inverse right-comparison expansion has the correct reversed order: inverse right-equivalence unit first, then the forward strict-span comparison; both representation changes remain explicit. Fresh build passes with standard axioms. Right-factor normalization, left-counit specialization, point-span transport, remaining counits, and B6/B12 remain explicitly listed."},
-    :commit "c9b3af27ed1f34654ec4d2574adf3a8c21c7e4a8",
+    :commit "be492215e0d889e0b20ce43a72368600e49badc7",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
      "ConstructionTargets/PointWedgeVanKampen.md"],
@@ -113916,7 +113900,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
