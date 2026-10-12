@@ -2341,6 +2341,20 @@ theorem genericPointWedgeLeftGroupoidEquivalence_functor :
           x₀ y₀ M N hM hN hy hx cM cN).leftEquiv.toFun := by
   rfl
 
+omit [PathConnectedSpace X] [PathConnectedSpace Y] in
+/-- The equivalence map of the lifted loop is heterogeneously equal to the
+concrete fundamental-groupoid map, retaining its dependent endpoints. -/
+theorem genericPointWedgeLeftLiftedLoop_map_heq
+    (g : FundamentalGroup X x₀) :
+    HEq ((genericPointWedgeLeftGroupoidEquivalence
+          x₀ y₀ M N hM hN hy hx cM cN).functor.map
+            (genericPointWedgeLeftLiftedLoop x₀ y₀ M g))
+      ((FundamentalGroupoid.map
+        (genericPointWedgePackage
+          x₀ y₀ M N hM hN hy hx cM cN).leftEquiv.toFun).map
+            (genericPointWedgeLeftLiftedLoop x₀ y₀ M g)) := by
+  rfl
+
 /-- Once B3's two mapped actions are identified with the images of the
 literal topological legs under B5, the normalized equivalence has exactly the
 two coproduct coordinates required by B6. -/
@@ -2847,6 +2861,7 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeLeftComposite_baseProof
 #print axioms genericPointWedgeLeftComposite_mapOfEq
 #print axioms genericPointWedgeLeftGroupoidEquivalence_functor
+#print axioms genericPointWedgeLeftLiftedLoop_map_heq
 #print axioms genericPointWedgeIdentityActualSpan_left_map
 #print axioms genericPointWedgeIdentityActualSpan_right_map
 #print axioms genericPointWedgeSingleObjPostcomposeIso

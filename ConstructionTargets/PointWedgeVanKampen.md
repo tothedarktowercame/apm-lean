@@ -515,3 +515,7 @@ left-summand loop.
 underlying functor as the fundamental-groupoid map induced by the left cover
 homotopy equivalence.  This removes the opaque equivalence constructor from
 the remaining dependent comparison.
+
+`genericPointWedgeLeftLiftedLoop_map_heq` specializes the forward-functor
+identity to the lifted loop while preserving both dependent endpoints via
+`HEq`.  This is the form needed inside the transported-arrow comparison.
