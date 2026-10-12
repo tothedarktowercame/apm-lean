@@ -113850,14 +113850,14 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 3,
+   :stop-count 4,
    :review-finding
    "Blueprint B3 is marked proved but its proof uses the unlisted ConnectedGroupoidSingleObjEquivalence.connectorSingleObjEquivalence (and connector-system representation) instead of only the declared uses; add the actual connector dependency and proof route to B3 uses.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
    :evidence
    {:placeholder-delta {:source-before 0, :source-after 0},
     :residual
-    "Project the coordinate-span counit legs and identify them with expanded outer comparisons; close B6/B12.",
+    "Evaluate both coordinate-span counit legs at their base objects and match expanded outer comparisons; close B6/B12.",
     :outcome :stop,
     :warnings [],
     :missing-theorems
@@ -113871,9 +113871,9 @@
       :area "fundamental-group-wedge-of-circles"}],
     :statement-hashes
     {:source
-     "c71af8897f48912fe2f81c5a8cc4e6bc6682255cdd957b5693ef4a3e04c143aa",
+     "9df0b140ace8d98470fa799f7aa63caf496bb5a94ca8fd669ef36bf41008b7b9",
      :documentation
-     "d2cd05244998dde449e933a696c8e9e6e9f4182a94b4ce328cb25fdbc1a96974",
+     "e5bb3854fd9d63cbd7cc8b2461fab8027c1bf3b0ac85cf3e020a0114707fb06b",
      :blueprint
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0",
      :registry "131/131"},
@@ -113881,7 +113881,7 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
     :reason
-    "Pre-coordinate counit splits into mapped open-cover counit then coordinate-span counit.",
+    "Coordinate-span counit split is projected to both transported cover legs.",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/PointWedgeVanKampen.lean",
@@ -113890,19 +113890,7 @@
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder/diff validation", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1791821219873-7342-72be779b",
-     :commands
-     ["git show/diff-tree b6e0a2db1"
-      "sha256 + placeholder + registry checks"
-      "lake env lean ConstructionTargets/PointWedgeVanKampen.lean"
-      "lake build ConstructionTargets.PointWedgeVanKampen"
-      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (expected absent)"],
-     :finding
-     "Scope is exactly Lean+MD; source/doc/blueprint hashes match; placeholders 0->0; registry 131/131. The new equivalence faithfully names the actual-cover-span endpoint before coordinate transport, and the counit theorem splits at that representation boundary in the correct mapped-earlier-counit then coordinate-span-counit order. It compiles sorry-free with only propext, Classical.choice, Quot.sound. This is new progress; residual is projecting coordinate-span counit legs, matching outer comparisons, then B6/B12. Final target remains absent as declared."},
-    :commit "b6e0a2db1314799528a20601a0525fa8e29f2739",
+    :commit "399282d5205a6cffe006ca6235faa64383926d55",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
      "ConstructionTargets/PointWedgeVanKampen.md"],
@@ -113912,7 +113900,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
