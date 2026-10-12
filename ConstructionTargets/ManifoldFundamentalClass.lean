@@ -1587,6 +1587,43 @@ theorem forgetHomologyπ_naturality {ι : Type} {c : ComplexShape ι}
   simpa only [Category.assoc] using congrArg
     (fun q => q ≫ ((K.sc j).homologyData.left.map forgetIntModules).homologyIso.inv) hcore
 
+abbrev ForgottenHomologySequenceSnakeInputHom
+    {ι : Type} {c : ComplexShape ι}
+    (K : ShortComplex (HomologicalComplex (ModuleCat ℤ) c))
+    (hK : K.ShortExact)
+    (hKF : (K.map (forgetIntModules.mapHomologicalComplex c)).ShortExact)
+    (i j : ι) (hij : c.Rel i j) :=
+  ShortComplex.SnakeInput.Hom
+    (forgetSnakeInput (HomologicalComplex.HomologySequence.snakeInput hK i j hij))
+    (HomologicalComplex.HomologySequence.snakeInput hKF i j hij)
+
+noncomputable def forgetHomologySequenceSnakeInputHom
+    {ι : Type} {c : ComplexShape ι}
+    (K : ShortComplex (HomologicalComplex (ModuleCat ℤ) c))
+    (hK : K.ShortExact)
+    (hKF : (K.map (forgetIntModules.mapHomologicalComplex c)).ShortExact)
+    (i j : ι) (hij : c.Rel i j) :
+    ForgottenHomologySequenceSnakeInputHom K hK hKF i j hij where
+  f₀ := forgetHomologyRowHom K i
+  f₁ := forgetOpcyclesRowHom K i
+  f₂ := forgetCyclesRowHom K j
+  f₃ := forgetTerminalHomologyRowHom K j
+  comm₀₁ := by
+    apply ShortComplex.hom_ext
+    · exact forgetHomologyι_naturality K.X₁ i
+    · exact forgetHomologyι_naturality K.X₂ i
+    · exact forgetHomologyι_naturality K.X₃ i
+  comm₁₂ := by
+    apply ShortComplex.hom_ext
+    · exact forgetOpcyclesToCycles_naturality K.X₁ i j
+    · exact forgetOpcyclesToCycles_naturality K.X₂ i j
+    · exact forgetOpcyclesToCycles_naturality K.X₃ i j
+  comm₂₃ := by
+    apply ShortComplex.hom_ext
+    · exact forgetHomologyπ_naturality K.X₁ j
+    · exact forgetHomologyπ_naturality K.X₂ j
+    · exact forgetHomologyπ_naturality K.X₃ j
+
 /-- The corrected relative-homology comparison intertwines the coefficient
 absolute-to-relative map with the production relative projection. -/
 theorem integralRelativeHomologyComparisonWithTransport_projection
@@ -2580,6 +2617,7 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.forgetToCycles_naturality
 #print axioms ConstructionTargets.ManifoldFundamentalClass.forgetOpcyclesToCycles_naturality
 #print axioms ConstructionTargets.ManifoldFundamentalClass.forgetHomologyπ_naturality
+#print axioms ConstructionTargets.ManifoldFundamentalClass.forgetHomologySequenceSnakeInputHom
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_projection
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_generator_of_normalization
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_normalization_of_generator
