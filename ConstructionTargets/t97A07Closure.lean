@@ -149,6 +149,38 @@ theorem inTangentCoordinates_mfderiv_self_eq_sourceChartFactor
   · exact mem_chart_source (EuclideanModel m) x
   · exact mem_chart_source (EuclideanModel n) (f x)
 
+/-- At the chart centre of a Euclidean-model manifold, the derivative of the
+inverse source chart is the identity on the model vector space. -/
+theorem mfderiv_chartAt_symm_self_eq_id
+    {m : ℕ} {X : Type*} [TopologicalSpace X]
+    [ChartedSpace (EuclideanModel m) X]
+    [IsManifold 𝓘(ℝ, EuclideanModel m) ∞ X]
+    (x : X) :
+    mfderiv 𝓘(ℝ, EuclideanModel m) 𝓘(ℝ, EuclideanModel m)
+        (chartAt (EuclideanModel m) x).symm
+        ((chartAt (EuclideanModel m) x) x) =
+      ContinuousLinearMap.id ℝ (EuclideanModel m) := by
+  simpa using
+    (mfderivWithin_range_extChartAt_symm
+      (I := 𝓘(ℝ, EuclideanModel m)) (x := x))
+
+/-- Consequently, the fixed tangent-coordinate family agrees with the
+original manifold derivative at its centre. -/
+theorem inTangentCoordinates_mfderiv_self_eq_mfderiv
+    {m n : ℕ} {X : Type*} [TopologicalSpace X]
+    [ChartedSpace (EuclideanModel m) X]
+    [IsManifold 𝓘(ℝ, EuclideanModel m) ∞ X]
+    (f : X → EuclideanModel n) (x : X) :
+    inTangentCoordinates 𝓘(ℝ, EuclideanModel m)
+        𝓘(ℝ, EuclideanModel n) (fun z : X ↦ z) f
+        (fun z ↦ mfderiv 𝓘(ℝ, EuclideanModel m)
+          𝓘(ℝ, EuclideanModel n) f z) x x =
+      mfderiv 𝓘(ℝ, EuclideanModel m)
+        𝓘(ℝ, EuclideanModel n) f x := by
+  rw [inTangentCoordinates_mfderiv_self_eq_sourceChartFactor,
+    mfderiv_chartAt_symm_self_eq_id]
+  exact ContinuousLinearMap.comp_id _
+
 end t97A07Closure
 
 #print axioms t97A07Closure.isOpen_setOf_surjective_clm
@@ -157,3 +189,5 @@ end t97A07Closure
 #print axioms t97A07Closure.inTangentCoordinates_mfderiv_eq_chart_factors
 #print axioms t97A07Closure.continuousAt_inTangentCoordinates_mfderiv
 #print axioms t97A07Closure.inTangentCoordinates_mfderiv_self_eq_sourceChartFactor
+#print axioms t97A07Closure.mfderiv_chartAt_symm_self_eq_id
+#print axioms t97A07Closure.inTangentCoordinates_mfderiv_self_eq_mfderiv

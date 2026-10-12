@@ -87,6 +87,14 @@ remaining expression is `mfderiv f x` followed by the inverse source-chart
 derivative.  Normalizing this last chart factor is now the exact centre-level
 boundary before the smaller-neighbourhood equality.
 
+`mfderiv_chartAt_symm_self_eq_id` normalizes that source-chart factor: for
+the Euclidean model with corners, the inverse chart derivative at the chart
+centre is the identity.
+The corollary `inTangentCoordinates_mfderiv_self_eq_mfderiv` therefore
+identifies the transported family with `mfderiv f x` at the centre.  The
+remaining B2 step is the equality with the fixed-coordinate derivative on a
+smaller chart neighbourhood.
+
 ### B3. Regular points are open
 
 lean: `t97A07Closure.isOpen_regularPoints` : under the t97A07 manifold
