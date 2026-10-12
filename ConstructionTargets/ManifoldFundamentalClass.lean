@@ -3190,6 +3190,24 @@ theorem coefficientSphereNormalizationComparisonUnit_eq_one_of_nonneg
   · exact hu
   · omega
 
+noncomputable def coefficientSphereNormalizationComparisonDegree (k : ℕ) : ℤ :=
+  let one : forgetIntModules.obj (ModuleCat.of ℤ ℤ) := by
+    change ℤ
+    exact 1
+  (SphereHomology.sphereTopHomologyIsoInt (k + 1) (by omega)).hom.hom
+    ((singularHomologyComparison
+      (TopCat.of (T02A06.euclideanUnitSphere (k + 2))) (k + 1)).hom.hom
+      ((forgetIntModules.mapIso
+        (CoefficientSphereAntipodal.normalization ℤ k)).inv.hom one))
+
+theorem coefficientSphereNormalizationComparisonUnit_eq_degree (k : ℕ) :
+    (coefficientSphereNormalizationComparisonUnit k : ℤ) =
+      coefficientSphereNormalizationComparisonDegree k := by
+  rw [← coefficientSphereNormalizationComparisonAutomorphism_apply_one]
+  unfold coefficientSphereNormalizationComparisonDegree
+    coefficientSphereNormalizationComparisonAutomorphism
+  rfl
+
 end ConstructionTargets.ManifoldFundamentalClass
 
 #print axioms ConstructionTargets.ManifoldFundamentalClass.neighborhoodInclusion_Hsucc_isIso
@@ -3300,6 +3318,7 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientSphereNormalizationComparisonAutomorphism_hom_eq_neg_implies_openDisk_production_factors
 #print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientSphereNormalizationComparison_hom_eq_neg_implies_unit_eq_neg_one
 #print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientSphereNormalizationComparisonUnit_eq_one_of_nonneg
+#print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientSphereNormalizationComparisonUnit_eq_degree
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_projection
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_generator_of_normalization
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_normalization_of_generator
