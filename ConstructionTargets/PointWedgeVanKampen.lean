@@ -3606,6 +3606,38 @@ theorem genericPointWedgeCoordinateSpanGlobalRestrictionRightComparison_eq_facto
       (genericPointWedgeCoordinateSpanGlobalRestrictionRightComparison_app
         x₀ y₀ M N hM hN hy hx cM cN)
 
+/-- Recombining the two right factors cancels their common reconstructed
+restriction counit.  Only the two outer endpoint counits remain around the
+two literal actual-span maps. -/
+theorem genericPointWedgeCoordinateSpanGlobalRestrictionRightComparison_eq_actual :
+    let r := genericPointWedgeActualRight x₀ y₀ M N
+    let r' := genericPointWedgeCoordinateRight y₀
+    let eK := genericPointWedgeOverlapGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let eR := genericPointWedgeRightGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let aR := genericPointWedgeRightSpanIso
+      x₀ y₀ M N hM hN hy hx cM cN
+    let u : FundamentalGroupoid Unit := FundamentalGroupoid.mk ()
+    let f := eR.inverse.map (aR.hom.app u)
+    let g := ((Functor.isoWhiskerLeft (eK.inverse ⋙ r)
+      eR.unitIso.symm).inv.app u)
+    genericPointWedgeCoordinateSpanGlobalRestrictionRightComparison
+        x₀ y₀ M N hM hN hy hx cM cN =
+      (genericPointWedgeIdentityGlobalRightRestrictionElement
+          x₀ y₀ M N hM hN hy hx cM cN
+            ((r' ⋙ eR.inverse).obj u))⁻¹ *
+        (genericPointWedgeIdentityActualSpan
+          x₀ y₀ M N hM hN hy hx cM cN).right.map f *
+        (genericPointWedgeIdentityActualSpan
+          x₀ y₀ M N hM hN hy hx cM cN).right.map g *
+        genericPointWedgeIdentityGlobalRightRestrictionElement
+          x₀ y₀ M N hM hN hy hx cM cN ((eK.inverse ⋙ r).obj u) := by
+  rw [genericPointWedgeCoordinateSpanGlobalRestrictionRightComparison_eq_factors,
+    genericPointWedgeCoordinateSpanGlobalRestrictionRightStrictFactor_eq_actual,
+    genericPointWedgeCoordinateSpanGlobalRestrictionRightUnitFactor_eq_actual]
+  simp only [mul_assoc, mul_inv_cancel_left]
+
 /-- The mapped coordinate-span counit's glue square, specialized at the
 unique point-span overlap object.  This is the equation in which its two
 named leg factors are related by the mapped reconstructed glue. -/
@@ -5213,6 +5245,7 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeCoordinateSpanGlobalRestrictionRightStrictFactor_eq_map
 #print axioms genericPointWedgeCoordinateSpanGlobalRestrictionRightStrictFactor_eq_actual
 #print axioms genericPointWedgeCoordinateSpanGlobalRestrictionRightComparison_eq_factors
+#print axioms genericPointWedgeCoordinateSpanGlobalRestrictionRightComparison_eq_actual
 #print axioms genericPointWedgeMappedOpenCoverCounit_namedGlueSquare
 #print axioms genericPointWedgeMappedCoordinateSpanCounit_glueSquare
 #print axioms genericPointWedgeMappedCoordinateSpanSourceGlue

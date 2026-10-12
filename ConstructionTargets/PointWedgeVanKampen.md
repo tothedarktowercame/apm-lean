@@ -945,3 +945,8 @@ recombines the two named right factors in exact single-object group order
 the four endpoint counit components visible, providing the exact expression
 for the next cancellation rather than simplifying across representation
 changes implicitly.
+
+`genericPointWedgeCoordinateSpanGlobalRestrictionRightComparison_eq_actual`
+then cancels the shared inner restriction counit between those two factors.
+The comparison is reduced to two literal actual-span maps bracketed by only
+the two outer endpoint counits; both representation changes remain explicit.
