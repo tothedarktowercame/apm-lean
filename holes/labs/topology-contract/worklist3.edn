@@ -20785,8 +20785,44 @@
   {:consumer :t00J02,
    :implements-lemma
    :lemma-constructiontargets-manifoldfundamentalclass-integralpairconnectingcomparison,
+   :evidence
+   {:placeholder-delta {:t00J02 [1 1], :t98A02 [1 1]},
+    :residual
+    "Specialize to closed disk and identify generator boundary.",
+    :outcome :done-unreviewed,
+    :warnings ["9 pre-existing unnecessarySimpa warnings"],
+    :missing-theorems
+    [{:name "integralCoefficientPairShortExact",
+      :type
+      "∀ {X} [TopologicalSpace X] (A : Set X), ((CoefficientPairSequence.sequence ℤ A).map (forgetIntModules.mapHomologicalComplex (ComplexShape.down ℕ))).ShortExact",
+      :status :proved,
+      :consumers [:t00J02 :t98A02],
+      :depends-on [],
+      :area "manifold-fundamental-class"}],
+    :statement-hashes {:registry "131/131"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli",
+    :commands
+    [{:cmd "sha256sum /tmp/closedconnect.lean", :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd "lake env lean /tmp/closedconnect.lean", :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd
+      "git diff --check -- ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd "rg forbidden scoped file", :exit 1, :expected-exit 1}],
+    :commit "1d553ba3b0c75b0e005cbb2963a73cf16b97c06a",
+    :changed-paths
+    ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+    :fixture
+    {:path "/tmp/closedconnect.lean",
+     :sha256
+     "0d3a75da51f8dcfb2754ce45c1a6b8b7c787be9cf562ad088c4d9d944575608e"},
+    :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/manifold-fundamental-class",
    :acceptance
@@ -29765,6 +29801,25 @@
    :kind :lemma,
    :depends-on
    [:lemma-constructiontargets-manifoldfundamentalclass-intervalrelativ-afcb97f85ce7],
+   :other-consumers [:t98A02]}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "integralCoefficientPairShortExact",
+    :type
+    "∀ {X} [TopologicalSpace X] (A : Set X), ((CoefficientPairSequence.sequence ℤ A).map (forgetIntModules.mapHomologicalComplex (ComplexShape.down ℕ))).ShortExact"},
+   :lemma
+   {:name "integralCoefficientPairShortExact",
+    :reported-by [:routes-2026-10-12-mfclass-closed-connecting-r1],
+    :type
+    "∀ {X} [TopologicalSpace X] (A : Set X), ((CoefficientPairSequence.sequence ℤ A).map (forgetIntModules.mapHomologicalComplex (ComplexShape.down ℕ))).ShortExact",
+    :area "manifold-fundamental-class",
+    :proved-in :routes-2026-10-12-mfclass-closed-connecting-r1},
+   :id :lemma-integralcoefficientpairshortexact,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers [:t98A02]}],
  :consumer-baselines {},
  :statuses
