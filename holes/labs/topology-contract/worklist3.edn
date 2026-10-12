@@ -20932,7 +20932,7 @@
   {:consumer :t00J02,
    :stop-count 1,
    :review-finding
-   "Frozen fixture hash mismatch remains. The supervisor added a nested :evidence :acceptance with hash 7e72195e1214d7580994264481ae57d0ecf87755d31825ab85cbda5f1220c4b1, but the row top-level authoritative :acceptance :fixture-sha256 still equals aad5a9cda739c1cbcceb1eca8ab8b33395db8a08c9d68941a87c644f4d13586e. Two conflicting acceptance maps do not repair the frozen interface. Exact repair: replace the top-level row :acceptance hash with 7e72195e... and add :mode :post-build-export-check there; do not add another evidence-local acceptance map. The current fixture itself compiles, registry is 131/131, source blob matches f0afa7bd, and axioms are standard-only.",
+   "Frozen fixture hash mismatch persists: the row top-level :acceptance still records aad5a9cda739c1cbcceb1eca8ab8b33395db8a08c9d68941a87c644f4d13586e and lacks :mode, while /tmp/closedboundarycoords.lean hashes to 7e72195e1214d7580994264481ae57d0ecf87755d31825ab85cbda5f1220c4b1. Evidence-local metadata does not override the row acceptance map. Exact supervisor repair: edit the top-level :acceptance in worklist3.edn, replacing the hash with 7e72195e... and adding :mode :post-build-export-check; also update the duplicated prerequisite acceptance or regenerate it from the authoritative row. Then resubmit. Current fixture compilation, source commit, standard axioms, registry and placeholders were already verified.",
    :implements-lemma
    :lemma-constructiontargets-manifoldfundamentalclass-coefficientclosedboundary-coordinat,
    :evidence
@@ -20952,6 +20952,12 @@
       :exit 0}
      {:cmd "sha256sum /tmp/closedboundarycoords.lean", :exit 0}
      {:cmd "lake env lean /tmp/closedboundarycoords.lean", :exit 0}],
+    :review
+    {:outcome :fail,
+     :seat "codex-11",
+     :job "invoke-1791817015224-7163-e26c27a4",
+     :finding
+     "Frozen fixture hash mismatch persists: the row top-level :acceptance still records aad5a9cda739c1cbcceb1eca8ab8b33395db8a08c9d68941a87c644f4d13586e and lacks :mode, while /tmp/closedboundarycoords.lean hashes to 7e72195e1214d7580994264481ae57d0ecf87755d31825ab85cbda5f1220c4b1. Evidence-local metadata does not override the row acceptance map. Exact supervisor repair: edit the top-level :acceptance in worklist3.edn, replacing the hash with 7e72195e... and adding :mode :post-build-export-check; also update the duplicated prerequisite acceptance or regenerate it from the authoritative row. Then resubmit. Current fixture compilation, source commit, standard axioms, registry and placeholders were already verified."},
     :commit "f0afa7bdc4c95a8c87143342ceb8c9ce51cd5612",
     :changed-paths [],
     :fixture
@@ -20961,7 +20967,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :needs-owner,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/manifold-fundamental-class",
    :acceptance
@@ -20976,7 +20982,7 @@
    :id :routes-2026-10-12-mfclass-boundary-coordinates-r1,
    :kind :reusable-theorem,
    :area "manifold-fundamental-class",
-   :fail-count 3,
+   :fail-count 4,
    :depends-on [:routes-2026-10-12-mfclass-closed-generator-bridge-r1],
    :current-residual "Prove Bool H0 comparison.",
    :other-consumers [:t98A02]}
