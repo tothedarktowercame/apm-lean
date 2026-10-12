@@ -113897,6 +113897,17 @@
      {:cmd "lean omit placement",
       :exit 1,
       :finding "Moved omit before doc."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791839804027-7910-2b51e033",
+     :commands
+     ["git show/diff-tree ccb19862"
+      "lake build ConstructionTargets.PointWedgeVanKampen"
+      "python3 scripts/statement-registry.py check"
+      "commit hash and placeholder checks"],
+     :finding
+     "PASS program STOP: ccb19862 by topo-2 adds the exact left round-trip counit-naturality equation plus documentation, exactly within scope and new since history. Source ba1a4ac6..., documentation 8afb08e7..., fixture 0bca6ce3..., registry 131/131, and placeholders 0->0 reproduce. The equation has naturality orientation F.map(f)*counit(target)=counit(source)*f; it retains both counit components and the inverse strict-span morphism rather than treating any as identity. Fresh build passes with standard axioms. Specializing left counits, normalizing the right comparison, then point-span transport, remaining counits, and B6/B12 remain explicitly listed."},
     :commit "ccb19862149781e5d177caa693e7e94e2e55b1f8",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
@@ -113907,7 +113918,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113928,7 +113939,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: The actual-span inverse comparison map is the left coproduct injection of its explicit connector normal form.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: The left round trip now has its exact counit-naturality equation.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -114467,7 +114478,11 @@
     {:job 4,
      :commit "d43ab056fc44e6503deab63b8ffabbb597c9ead6",
      :reason
-     "The actual-span inverse comparison map is the left coproduct injection of its explicit connector normal form."}]}
+     "The actual-span inverse comparison map is the left coproduct injection of its explicit connector normal form."}
+    {:job 5,
+     :commit "ccb19862149781e5d177caa693e7e94e2e55b1f8",
+     :reason
+     "The left round trip now has its exact counit-naturality equation."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
