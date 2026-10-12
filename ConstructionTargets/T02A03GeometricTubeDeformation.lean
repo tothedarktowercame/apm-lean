@@ -2340,6 +2340,47 @@ theorem rotatedEndpointWaypoint_twiceCorrected_departure_zero_time_bounds
     exact (correctedDepartureBump_ne_zero_at_corrected_zero
       t p ht hfirst) hz
 
+/-- On every possible twice-corrected zero, the bump contribution reduces to
+an explicit quadratic polynomial. -/
+theorem rotatedEndpointWaypoint_twiceCorrected_departure_zero_bump_polynomial
+    (t : unitInterval) (p : RightTubeMinusLeftCore)
+    (ht : (t : ℝ) ≤ 1 / 2)
+    (hz : (((1 - 2 * (t : ℝ) : ℝ) : ℂ) +
+        ((2 * (t : ℝ) : ℝ) : ℂ) * rotatedEndpointWaypoint p +
+        (((t : ℝ) * (1 - 2 * (t : ℝ)) : ℝ) : ℂ) * Complex.I +
+        (correctedDepartureBump t : ℂ)) = 0) :
+    1 - 2 * (t : ℝ) + correctedDepartureBump t =
+      61 / 64 - (3 / 2) * (t : ℝ) - (t : ℝ) ^ 2 := by
+  have hb :=
+    correctedDepartureBump_eq_of_mem_support t
+      (rotatedEndpointWaypoint_twiceCorrected_departure_zero_time_bounds
+        t p ht hz).1
+      (rotatedEndpointWaypoint_twiceCorrected_departure_zero_time_bounds
+        t p ht hz).2
+  rw [hb]
+  ring
+
+/-- Fully polynomial annulus constraints after expanding the localized bump. -/
+theorem rotatedEndpointWaypoint_twiceCorrected_departure_zero_explicit_bounds
+    (t : unitInterval) (p : RightTubeMinusLeftCore)
+    (ht : (t : ℝ) ≤ 1 / 2)
+    (hz : (((1 - 2 * (t : ℝ) : ℝ) : ℂ) +
+        ((2 * (t : ℝ) : ℝ) : ℂ) * rotatedEndpointWaypoint p +
+        (((t : ℝ) * (1 - 2 * (t : ℝ)) : ℝ) : ℂ) * Complex.I +
+        (correctedDepartureBump t : ℂ)) = 0) :
+    9 * (t : ℝ) ^ 2 ≤
+        4 * (1 - 2 * (t : ℝ)) ^ 2 * (t : ℝ) ^ 2 +
+          4 * (61 / 64 - (3 / 2) * (t : ℝ) - (t : ℝ) ^ 2) ^ 2 ∧
+      4 * (1 - 2 * (t : ℝ)) ^ 2 * (t : ℝ) ^ 2 +
+          4 * (61 / 64 - (3 / 2) * (t : ℝ) - (t : ℝ) ^ 2) ^ 2 ≤
+        25 * (t : ℝ) ^ 2 := by
+  have hb :=
+    rotatedEndpointWaypoint_twiceCorrected_departure_zero_polynomial_bounds
+      t p hz
+  rw [rotatedEndpointWaypoint_twiceCorrected_departure_zero_bump_polynomial
+    t p ht hz] at hb
+  exact hb
+
 end ConstructionTargets.T02A03GeometricTubeDeformation
 
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeNormalComplex_eq_zero_iff
@@ -2434,3 +2475,5 @@ end ConstructionTargets.T02A03GeometricTubeDeformation
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_twiceCorrected_departure_zero_scalar_bounds
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_twiceCorrected_departure_zero_polynomial_bounds
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_twiceCorrected_departure_zero_time_bounds
+#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_twiceCorrected_departure_zero_bump_polynomial
+#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_twiceCorrected_departure_zero_explicit_bounds
