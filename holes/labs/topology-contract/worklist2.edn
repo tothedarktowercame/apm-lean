@@ -72787,40 +72787,38 @@
    "single-consumer explicit ambient deformation with frozen tube and deletion invariants",
    :consumer :t02A03,
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "topo-8",
-     :fixture
-     {:path
-      "/tmp/t02a03_rotated_waypoint_departure_zero_support_pos_probe.lean",
-      :sha256
-      "9befe9616628116ccf3315ae5d46fcfb4aacffc26c2da368414d4d8a59d519e9"},
-     :commands
-     [{:cmd
-       "lake env lean /tmp/t02a03_rotated_waypoint_departure_zero_support_pos_probe.lean",
-       :exit 0}
-      {:cmd
-       "sha256sum /tmp/t02a03_rotated_waypoint_departure_zero_support_pos_probe.lean",
-       :exit 0}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_rotated_waypoint_departure_zero_support_pos_probe.lean || true)\"",
-       :exit 0}
-      {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
-     :warnings [],
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :implementation
-     {:scope
-      ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
-      :declaration
-      "ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_departure_zero_support_pos",
-      :type
-      "∀ (t : unitInterval) (p : RightTubeMinusLeftCore), (t:ℝ) ≤ 1/2 → (((1-2*(t:ℝ):ℝ):ℂ)+((2*(t:ℝ):ℝ):ℂ)*rotatedEndpointWaypoint p)=0 → 0 < (t:ℝ)*(1-2*(t:ℝ))"},
-     :residual
-     "Construct the endpoint-fixed transverse correction and prove it creates no new zeros."}},
+   {:placeholder-delta 0,
+    :residual
+    "Construct endpoint-fixed transverse correction and prove no new zeros; then lift H and package the retraction homotopy.",
+    :outcome :done-unreviewed,
+    :warnings ["Main: 1 placeholder." "Style lint only."],
+    :statement-hashes
+    {:registry "131/0",
+     :module "6e522f44f5184afca4837f43748b7588ba2586dc",
+     :main "0cdf95eb76a04229a0d53fb09b654d44fd3c551c"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-6",
+    :commands
+    [{:cmd "module compile", :exit 0}
+     {:cmd "Main compile", :exit 0}
+     {:cmd "registry check", :exit 0}
+     {:cmd "module no-sorry", :exit 1, :expected-exit 1}
+     {:cmd "placeholder count", :exit 0, :output "1"}
+     {:cmd "git show --check b07bee059", :exit 0}],
+    :commit "b07bee0598963958c70dac3591cfbbb186e61356",
+    :changed-paths
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+    :declaration
+    "ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_departure_zero_support_pos",
+    :fixture
+    {:path "ConstructionTargets/T02A03GeometricTubeDeformation.lean",
+     :sha256
+     "7747d8618057eaec7b4fac98b8be67f141c57c03cea6bf0f5f42ed839f121387"},
+    :seat "topo-6"},
    :phase :implementation,
    :type
    "∀ (t : unitInterval) (p : RightTubeMinusLeftCore), (t:ℝ) ≤ 1/2 → (((1-2*(t:ℝ):ℝ):ℂ)+((2*(t:ℝ):ℝ):ℂ)*rotatedEndpointWaypoint p)=0 → 0 < (t:ℝ)*(1-2*(t:ℝ))",
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/safe-right-tube-meridian-deformation",
