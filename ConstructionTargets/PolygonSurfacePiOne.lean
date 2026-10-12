@@ -1057,4 +1057,59 @@ theorem boundary_subset_outerDisk
   simp [outerDisk, hz]
   norm_num
 
+theorem quotientMap_preimage_image_innerDisk (P : PairingData) :
+    P.quotientMap ⁻¹' (P.quotientMap '' innerDisk) = innerDisk := by
+  ext x
+  constructor
+  · rintro ⟨y, hy, hxy⟩
+    rcases eq_or_boundary_of_eqvGen P (Quotient.exact hxy) with h | ⟨hyb, _⟩
+    · simpa [h] using hy
+    · exfalso
+      dsimp [innerDisk] at hy
+      linarith
+  · intro hx
+    exact ⟨x, hx, rfl⟩
+
+theorem quotientMap_preimage_image_outerDisk (P : PairingData) :
+    P.quotientMap ⁻¹' (P.quotientMap '' outerDisk) = outerDisk := by
+  ext x
+  constructor
+  · rintro ⟨y, hy, hxy⟩
+    rcases eq_or_boundary_of_eqvGen P (Quotient.exact hxy) with h | ⟨_, hx⟩
+    · simpa [h] using hy
+    · exact boundary_subset_outerDisk hx
+  · intro hx
+    exact ⟨x, hx, rfl⟩
+
+structure PolygonRadialOpenSets (P : PairingData) where
+  inner : Set P.Space
+  outer : Set P.Space
+  inner_open : IsOpen inner
+  outer_open : IsOpen outer
+  cover : inner ∪ outer = Set.univ
+
+def polygonRadialOpenSets (P : PairingData) : PolygonRadialOpenSets P where
+  inner := P.quotientMap '' innerDisk
+  outer := P.quotientMap '' outerDisk
+  inner_open := by
+    rw [isOpen_coinduced]
+    change IsOpen (P.quotientMap ⁻¹' (P.quotientMap '' innerDisk))
+    rw [quotientMap_preimage_image_innerDisk]
+    exact innerDisk_isOpen
+  outer_open := by
+    rw [isOpen_coinduced]
+    change IsOpen (P.quotientMap ⁻¹' (P.quotientMap '' outerDisk))
+    rw [quotientMap_preimage_image_outerDisk]
+    exact outerDisk_isOpen
+  cover := by
+    apply Set.eq_univ_of_forall
+    intro q
+    obtain ⟨x, rfl⟩ := P.surjective_quotientMap q
+    have hx : x ∈ innerDisk ∪ outerDisk := by
+      rw [innerDisk_union_outerDisk]
+      trivial
+    rcases hx with hx | hx
+    · exact Or.inl ⟨x, hx, rfl⟩
+    · exact Or.inr ⟨x, hx, rfl⟩
+
 end ConstructionTargets.PolygonSurfacePiOne
