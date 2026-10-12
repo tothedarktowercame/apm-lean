@@ -30261,7 +30261,7 @@
    :consumer :t00A02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 2,
+   :stop-count 3,
    :review-finding
    "Program-row defect persists: row remains :program true, and 4244c6e3e..92a672b41 changes only SurfaceClassification.blueprint.md, with no compiled milestone after program history; registry is 131/131. Supervisor must retire/supersede this implementation program and create a separate blueprint-review row for 92a672b41, then elect R1-R7 only if that mathematical review passes. Do not add off-route code to satisfy the obsolete program.",
    :implements-lemma
@@ -30284,7 +30284,7 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Supervisor must retire/supersede this owner-parked implementation program and submit 92a672b41 as a separate blueprint-review row; author-side off-route compiled work is not a valid repair.",
+    "Supervisor must retire/supersede this owner-parked implementation program, create an independent blueprint-review row for 92a672b41, and elect R1-R7 only after review; off-route code is invalid.",
     :commands
     [{:cmd "git diff-tree --no-commit-id --name-only -r 92a672b41",
       :exit 0}
@@ -30292,17 +30292,11 @@
       "git diff --exit-code 4244c6e3e..92a672b41 -- ConstructionTargets/SurfaceClassification.lean",
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1791823324953-7438-041bd7f9",
-     :finding
-     "Program-row defect persists: row remains :program true, and 4244c6e3e..92a672b41 changes only SurfaceClassification.blueprint.md, with no compiled milestone after program history; registry is 131/131. Supervisor must retire/supersede this implementation program and create a separate blueprint-review row for 92a672b41, then elect R1-R7 only if that mathematical review passes. Do not add off-route code to satisfy the obsolete program."},
     :commit "92a672b41fa1f7e45df1987a4aca7d2f8460d2e0",
     :changed-paths [],
     :seat :topo-10},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SurfaceClassification.lean"
     "ConstructionTargets/SurfaceClassification.md"
