@@ -79657,6 +79657,19 @@
       :exit 1,
       :finding
       "Exposed determinant application before coordinate normalization."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791768807423-6137-12f46983",
+     :commands
+     ["git show/check/diff 2e890e314..9950771b4"
+      "verify scoped blobs, fixture SHA, ancestry"
+      "lake build ConstructionTargets.t94A10Closure"
+      "lake env lean closure and t94A10 Main"
+      "statement-registry check/fingerprint"
+      "placeholder and axiom checks"],
+     :finding
+     "PASS: 9950771b499e811ca922c1509ed06d8cf71d111a adds compiled, sorry-free B1 progress after blueprint commit 2e890e314; its sole changed path is scoped. Closure/blueprint blobs d7050d4a/808e174f and fixture de8376a4 match. Contracting the standard row-determinant volume form with x and scaling by norm^-3 expands with the frozen signs and square-root denominator; the origin value is irrelevant on the punctured domain. Lean gates pass with standard axioms only; registry 131/0, frozen hash d1822221 unchanged, closure/Main placeholders 0/2. STOP lists B2 then B3-B11."},
     :commit "9950771b4",
     :changed-paths ["ConstructionTargets/t94A10Closure.lean"],
     :fixture
@@ -79665,7 +79678,7 @@
      "de8376a421dd5d6c5af7ba7e5b1041dde8605f8718413b74a0e9cf2d1158b47e"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t94A10/lean/Main.lean"
     "problems/t94A10/status.json"
@@ -79681,7 +79694,7 @@
     ["lake env lean problems/t94A10/lean/Main.lean"
      "python3 scripts/statement-registry.py check"]},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: :blueprint-revised",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: :program-milestone-complete",
    :id :program-2026-10-11-close-t94a10,
    :kind :final-adapter,
    :campaign-priority 46,
@@ -79692,7 +79705,10 @@
    :program-history
    [{:job 2,
      :commit "2e890e314aa6f3a9d846fc01cb336afd0664f039",
-     :reason :blueprint-revised}]}
+     :reason :blueprint-revised}
+    {:job 3,
+     :commit "9950771b4",
+     :reason :program-milestone-complete}]}
   {:consumer :t97A04,
    :phase :lemma,
    :state :banked,
@@ -81276,7 +81292,7 @@
    :other-consumers []}
   {:consumer :t94A10,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "ConstructionTargets.T94A10Closure.solidAngleAmbient",
@@ -81286,7 +81302,9 @@
     :reported-by [:program-2026-10-11-close-t94a10],
     :type "determinant radial ambient two-form",
     :area "periodic-stokes-square",
-    :proved-in :program-2026-10-11-close-t94a10},
+    :proved-in :program-2026-10-11-close-t94a10,
+    :banked-by :program-2026-10-11-close-t94a10,
+    :banked-commit "9950771b4"},
    :id :lemma-constructiontargets-t94a10closure-solidangleambient,
    :kind :lemma,
    :depends-on [],
