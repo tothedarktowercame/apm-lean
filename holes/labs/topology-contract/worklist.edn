@@ -113850,14 +113850,14 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 2,
+   :stop-count 3,
    :review-finding
    "Blueprint B3 is marked proved but its proof uses the unlisted ConnectedGroupoidSingleObjEquivalence.connectorSingleObjEquivalence (and connector-system representation) instead of only the declared uses; add the actual connector dependency and proof route to B3 uses.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
    :evidence
    {:placeholder-delta {:source-before 0, :source-after 0},
     :residual
-    "Identify the two named mapped pre-coordinate factors with the expanded outer comparisons; close B6/B12.",
+    "Project the coordinate-span counit legs and identify them with expanded outer comparisons; close B6/B12.",
     :outcome :stop,
     :warnings [],
     :missing-theorems
@@ -113871,9 +113871,9 @@
       :area "fundamental-group-wedge-of-circles"}],
     :statement-hashes
     {:source
-     "c1b62345daa32ad0bf7cff619c779dcedf6b16be0a46b0282a7ee0b7fa340979",
+     "c71af8897f48912fe2f81c5a8cc4e6bc6682255cdd957b5693ef4a3e04c143aa",
      :documentation
-     "bf6ff643c91441662223e50ff9dab1951dab33fe003f147a0c4be510bdc4e961",
+     "d2cd05244998dde449e933a696c8e9e6e9f4182a94b4ce328cb25fdbc1a96974",
      :blueprint
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0",
      :registry "131/131"},
@@ -113881,7 +113881,7 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
     :reason
-    "Both mapped pre-coordinate counits are named; evaluated legs are injected counit times mapped factor in exact group order.",
+    "Pre-coordinate counit splits into mapped open-cover counit then coordinate-span counit.",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/PointWedgeVanKampen.lean",
@@ -113890,24 +113890,7 @@
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder/diff validation", :exit 0}],
-    :diagnostic-history
-    [{:cmd "lean named factors",
-      :exit 1,
-      :finding
-      "Corrected SingleObj composition to reversed multiplication order."}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1791820536071-7311-63e10e13",
-     :commands
-     ["git show/diff-tree df57e0a8f"
-      "sha256 + placeholder + registry checks"
-      "lake env lean ConstructionTargets/PointWedgeVanKampen.lean"
-      "lake build ConstructionTargets.PointWedgeVanKampen"
-      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (expected absent)"],
-     :finding
-     "Scope is exactly Lean+MD; source/doc/blueprint hashes match; placeholders 0->0; registry 131/131. Both mapped pre-coordinate factors are genuine free-product elements. The paired theorem correctly converts categorical mapped>>injected composition into injected*mapped multiplication via SingleObj.comp_as_mul, with left/right injections and boundaries preserved. It compiles sorry-free with only propext, Classical.choice, Quot.sound. This is new progress; residual names comparison with expanded outer factors then B6/B12. Final target remains absent as declared."},
-    :commit "df57e0a8ff4f72cbae31976fc4e48255a2d7ddd6",
+    :commit "b6e0a2db1314799528a20601a0525fa8e29f2739",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
      "ConstructionTargets/PointWedgeVanKampen.md"],
@@ -113917,7 +113900,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
