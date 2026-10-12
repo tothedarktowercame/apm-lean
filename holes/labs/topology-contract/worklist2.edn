@@ -76235,8 +76235,61 @@
    :current-residual "Elect B6.",
    :other-consumers []}
   {:consumer :t96J02,
+   :evidence
+   {:placeholder-delta 0,
+    :residual "Implement B7.",
+    :outcome :done-unreviewed,
+    :warnings
+    ["12 preexisting module linter warnings; imported warnings"],
+    :missing-theorems
+    [{:name "PairingData.skeleton",
+      :type "quotient image of the norm-one disk boundary",
+      :status :proved,
+      :consumers [:t96J02 :t92J05 :t94J04 :t97A01 :t97A03],
+      :depends-on [],
+      :area "polygon-surface-pi1"}
+     {:name
+      "ConstructionTargets.PolygonSurfacePiOne.punctureDeformationRetract",
+      :type
+      "strong deformation retraction of outerOpen P.Rel onto P.outerBoundarySkeleton, identified with P.skeleton",
+      :status :proved,
+      :consumers [:t96J02 :t92J05 :t94J04 :t97A01 :t97A03],
+      :depends-on ["PairingData.descendHomotopy"],
+      :area "polygon-surface-pi1"}],
+    :statement-hashes
+    {:registry "131/0",
+     :module "b4f434f42fdde693deade0270821f35a2bf82735"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-6",
+    :commands
+    [{:cmd
+      "lake env lean ConstructionTargets/PolygonSurfacePiOne.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.PolygonSurfacePiOne",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131/0"}
+     {:cmd "comment-stripped sorry/admit/axiom scan",
+      :exit 0,
+      :output "0/0/0"}
+     {:cmd
+      "#print axioms punctureDeformationRetract/mem_outerBoundarySkeleton_iff",
+      :exit 0}
+     {:cmd "git diff --check; git show --check 75b0677c9", :exit 0}],
+    :diagnostic-history
+    [{:cmd "first compile",
+      :exit 1,
+      :correction "normalized boundary radius inequality"}],
+    :commit "75b0677c9",
+    :changed-paths ["ConstructionTargets/PolygonSurfacePiOne.lean"],
+    :fixture
+    {:path "ConstructionTargets/PolygonSurfacePiOne.lean",
+     :sha256
+     "0f280f00962c666a7d61ba17262b472d983696752269ec1cb1168122a8a421bc"},
+    :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/PolygonSurfacePiOne.lean"],
    :dag-node "ConstructionTargets/PolygonSurfacePiOne.blueprint.md/B6",
    :acceptance
@@ -86394,4 +86447,43 @@
    :kind :lemma,
    :depends-on
    [:lemma-constructiontargets-polygonsurfacepione-quotientmap-prod-unitinterval],
+   :other-consumers [:t92J05 :t94J04 :t97A01 :t97A03]}
+  {:consumer :t96J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "PairingData.skeleton",
+    :type "quotient image of the norm-one disk boundary"},
+   :lemma
+   {:name "PairingData.skeleton",
+    :reported-by [:routes-2026-10-12-polygon-b6-topo2-r1],
+    :type "quotient image of the norm-one disk boundary",
+    :area "polygon-surface-pi1",
+    :proved-in :routes-2026-10-12-polygon-b6-topo2-r1},
+   :id :lemma-pairingdata-skeleton,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t92J05 :t94J04 :t97A01 :t97A03]}
+  {:consumer :t96J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.PolygonSurfacePiOne.punctureDeformationRetract",
+    :type
+    "strong deformation retraction of outerOpen P.Rel onto P.outerBoundarySkeleton, identified with P.skeleton"},
+   :lemma
+   {:name
+    "ConstructionTargets.PolygonSurfacePiOne.punctureDeformationRetract",
+    :reported-by [:routes-2026-10-12-polygon-b6-topo2-r1],
+    :type
+    "strong deformation retraction of outerOpen P.Rel onto P.outerBoundarySkeleton, identified with P.skeleton",
+    :area "polygon-surface-pi1",
+    :proved-in :routes-2026-10-12-polygon-b6-topo2-r1},
+   :id
+   :lemma-constructiontargets-polygonsurfacepione-puncturedeformationretract,
+   :kind :lemma,
+   :depends-on [:lemma-pairingdata-descendhomotopy],
    :other-consumers [:t92J05 :t94J04 :t97A01 :t97A03]}]}
