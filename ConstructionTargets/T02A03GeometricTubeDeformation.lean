@@ -3635,6 +3635,47 @@ theorem pointDependentArrivalCorrection_ne_zero_of_im_sign
   have hc : c.im = 0 := by linarith
   exact hne.elim (fun h => h hp) (fun h => h hc)
 
+/-- Continuous endpoint-fixed correction for the nonzero-height branch.  Its
+imaginary component is a nonnegative scalar multiple of the ambient second
+coordinate, so it satisfies the signed nonvanishing certificate. -/
+noncomputable def signedArrivalCorrection :
+    C(unitInterval × RightTubeMinusLeftCore, ℂ) :=
+  ⟨fun tp =>
+      ((max 0 (2 * (tp.1 : ℝ) - 1) * (1 - (tp.1 : ℝ)) * tp.2.1 1 : ℝ) : ℂ) *
+        Complex.I, by
+    fun_prop⟩
+
+@[simp] theorem signedArrivalCorrection_zero
+    (p : RightTubeMinusLeftCore) :
+    signedArrivalCorrection (0, p) = 0 := by
+  norm_num [signedArrivalCorrection]
+
+@[simp] theorem signedArrivalCorrection_one
+    (p : RightTubeMinusLeftCore) :
+    signedArrivalCorrection (1, p) = 0 := by
+  norm_num [signedArrivalCorrection]
+
+theorem signedArrivalCorrection_ne_zero_of_second_ne_zero
+    (t : unitInterval) (p : RightTubeMinusLeftCore) (hp : p.1 1 ≠ 0) :
+    (((2 - 2 * (t : ℝ) : ℝ) : ℂ) * positiveRealPlanarWaypointMap p +
+        ((2 * (t : ℝ) - 1 : ℝ) : ℂ) *
+          rightTubeCorePlanarComplex p.1 +
+        signedArrivalCorrection (t, p)) ≠ 0 := by
+  apply pointDependentArrivalCorrection_ne_zero_of_im_sign t
+    (signedArrivalCorrection (t, p)) p
+  · have hm : 0 ≤ max 0 (2 * (t : ℝ) - 1) := le_max_left _ _
+    have ht : 0 ≤ 1 - (t : ℝ) := by linarith [t.2.2]
+    have hcim : (signedArrivalCorrection (t, p)).im =
+        max 0 (2 * (t : ℝ) - 1) * (1 - (t : ℝ)) * p.1 1 := by
+      simp [signedArrivalCorrection, Complex.mul_im]
+    rw [hcim]
+    calc
+      0 ≤ (max 0 (2 * (t : ℝ) - 1) * (1 - (t : ℝ))) *
+          (p.1 1) ^ 2 := mul_nonneg (mul_nonneg hm ht) (sq_nonneg _)
+      _ = p.1 1 *
+          (max 0 (2 * (t : ℝ) - 1) * (1 - (t : ℝ)) * p.1 1) := by ring
+  · exact Or.inl hp
+
 /-- Polynomial forced-norm identity for the whole corrected arrival leg;
 it avoids division at the exceptional time `t = 3/4`. -/
 theorem complexArrivalCorrection_zero_scaled_normSq
@@ -4011,6 +4052,7 @@ end ConstructionTargets.T02A03GeometricTubeDeformation
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.complexArrivalCorrection_sevenEighths_ne_zero_of_normSq_outside
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.complexArrivalCorrection_zero_scaled_normSq
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.pointDependentArrivalCorrection_ne_zero_of_im_sign
+#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.signedArrivalCorrection_ne_zero_of_second_ne_zero
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.complexArrivalCorrection_ne_zero_of_scaled_normSq_outside
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.complexArrivalCorrection_threeQuarters_ne_zero
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.continuous_arrivalTransverseCorrection
