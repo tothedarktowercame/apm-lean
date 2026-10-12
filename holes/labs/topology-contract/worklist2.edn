@@ -79658,6 +79658,19 @@
     [{:cmd "closure compile",
       :exit 1,
       :finding "Corrected product derivatives."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791771791155-6186-2bdbfdc2",
+     :commands
+     ["git scope/blob/SHA/ancestry checks"
+      "lake build ConstructionTargets.t94A10Closure"
+      "lake env lean ConstructionTargets/t94A10Closure.lean"
+      "lake env lean problems/t94A10/lean/Main.lean"
+      "statement-registry check/fingerprint"
+      "commit placeholder counts"],
+     :finding
+     "PASS: topo-6 commit a3f4e9be adds compiled sorry-free progress after 0f4ab1a: smooth sphere parametrization, full derivative evaluations, and correctly oriented pullback latitude/longitude coefficients. Sole changed path is scoped; fixture/blobs match; standard axioms only; registry 131/0, fingerprint d1822221, placeholders closure/Main 0/1. STOP explicitly leaves B7 partial then B8-B11; existing B8 blueprint repair remains outstanding."},
     :commit "a3f4e9be9fb888a87c8de2819484f58561bc9e26",
     :changed-paths ["ConstructionTargets/t94A10Closure.lean"],
     :fixture
@@ -79666,7 +79679,7 @@
      "44da7c483df881fa617dc7f8605b0ae0b38267af6a80f5f59a702d3e43ab39e7"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t94A10/lean/Main.lean"
     "problems/t94A10/status.json"
@@ -79682,7 +79695,7 @@
     ["lake env lean problems/t94A10/lean/Main.lean"
      "python3 scripts/statement-registry.py check"]},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: :program-milestone-complete",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: :program-progress-committed",
    :id :program-2026-10-11-close-t94a10,
    :kind :final-adapter,
    :campaign-priority 46,
@@ -79701,7 +79714,10 @@
      :reason :program-milestone-complete}
     {:job 6,
      :commit "0f4ab1a5170d4ff38120c231e7de5ca0c94f47f3",
-     :reason :program-milestone-complete}]}
+     :reason :program-milestone-complete}
+    {:job 7,
+     :commit "a3f4e9be9fb888a87c8de2819484f58561bc9e26",
+     :reason :program-progress-committed}]}
   {:consumer :t97A04,
    :phase :lemma,
    :state :banked,
@@ -81767,7 +81783,7 @@
    :other-consumers []}
   {:consumer :t94A10,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -81779,7 +81795,9 @@
     :reported-by [:program-2026-10-11-close-t94a10],
     :type "sphere basis derivatives and pullback coefficients",
     :area "periodic-stokes-square",
-    :proved-in :program-2026-10-11-close-t94a10},
+    :proved-in :program-2026-10-11-close-t94a10,
+    :banked-by :program-2026-10-11-close-t94a10,
+    :banked-commit "a3f4e9be9fb888a87c8de2819484f58561bc9e26"},
    :id
    :lemma-constructiontargets-t94a10closure-spherepullbacklongcoeff-eq,
    :kind :lemma,
