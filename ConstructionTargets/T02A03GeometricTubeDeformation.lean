@@ -3276,6 +3276,50 @@ theorem positiveRealPlanarArrivalBump_ne_zero_at_arrival_collision
       (positiveRealPlanarWaypoint_arrival_collision_time_lt_one t p hz))
   · exact Complex.I_ne_zero
 
+/-- Exact zero locus after applying the late transverse arrival bump. -/
+theorem positiveRealPlanarArrival_corrected_eq_zero_iff
+    (t : unitInterval) (p : RightTubeMinusLeftCore) :
+    (((2 - 2 * (t : ℝ) : ℝ) : ℂ) *
+          positiveRealPlanarWaypointMap p +
+        ((2 * (t : ℝ) - 1 : ℝ) : ℂ) *
+          rightTubeCorePlanarComplex p.1 +
+        (positiveRealPlanarArrivalBump t : ℂ) * Complex.I) = 0 ↔
+      (2 - 2 * (t : ℝ)) * (p.1 0 + 1) +
+          (2 * (t : ℝ) - 1) * (1 - p.1 0) = 0 ∧
+        p.1 1 + positiveRealPlanarArrivalBump t = 0 := by
+  constructor
+  · intro h
+    constructor
+    · simpa [positiveRealPlanarWaypointMap, rightTubePlanarComplex,
+        rightTubeCorePlanarComplex, Complex.mul_re, Complex.mul_im]
+        using congrArg Complex.re h
+    · have him := congrArg Complex.im h
+      simp only [positiveRealPlanarWaypointMap, rightTubePlanarComplex,
+        rightTubeCorePlanarComplex, Complex.mul_re, Complex.mul_im]
+        at him
+      norm_num at him
+      linarith
+  · rintro ⟨hre, him⟩
+    apply Complex.ext
+    · simpa [positiveRealPlanarWaypointMap, rightTubePlanarComplex,
+        rightTubeCorePlanarComplex, Complex.mul_re, Complex.mul_im] using hre
+    · simp only [positiveRealPlanarWaypointMap, rightTubePlanarComplex,
+        rightTubeCorePlanarComplex, Complex.mul_re, Complex.mul_im]
+      norm_num
+      linarith
+
+def arrivalSevenEighths : unitInterval :=
+  ⟨7 / 8, by constructor <;> norm_num⟩
+
+/-- At `t = 7/8` the corrected equations select an explicit nearby point,
+showing what must be excluded before claiming global nonvanishing. -/
+theorem positiveRealPlanarArrival_sevenEighths_scalar_equations :
+    (2 - 2 * (arrivalSevenEighths : ℝ)) * ((2 : ℝ) + 1) +
+          (2 * (arrivalSevenEighths : ℝ) - 1) * (1 - (2 : ℝ)) = 0 ∧
+      (-1 / 64 : ℝ) +
+          positiveRealPlanarArrivalBump arrivalSevenEighths = 0 := by
+  norm_num [arrivalSevenEighths, positiveRealPlanarArrivalBump]
+
 end ConstructionTargets.T02A03GeometricTubeDeformation
 
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeNormalComplex_eq_zero_iff
@@ -3382,6 +3426,7 @@ end ConstructionTargets.T02A03GeometricTubeDeformation
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.positiveRealPlanarWaypoint_arrival_collision_second_zero
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.positiveRealPlanarWaypoint_arrival_collision_time_gt_three_quarters
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.positiveRealPlanarArrivalBump_ne_zero_at_arrival_collision
+#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.positiveRealPlanarArrival_corrected_eq_zero_iff
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_twiceCorrected_departure_zero_coordinates
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_twiceCorrected_departure_zero_normSq
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_twiceCorrected_departure_zero_scalar_bounds
