@@ -90,12 +90,19 @@ theorem descended_not_transverse_axis
   apply hspan
   exact htransverse x y (by simpa [T96A07.axis, zAxis] using hxy)
 
+theorem plane_fderiv_range (z : ℝ) (p : E 2) :
+    LinearMap.range (fderiv ℝ (T96A07.plane z) p).toLinearMap =
+      xyCoordinatePlane := by
+  simpa [T96A07.plane, horizontalPlane] using
+    horizontalPlane_fderiv_range z p
+
 #print axioms sphereMap_antipodal
 #print axioms sphereMap_contMDiff
 #print axioms descendedSphereMap
 #print axioms sphereMap_mfderiv_e0_range
 #print axioms descended_mfderiv_range_at_e0
 #print axioms descended_not_transverse_axis
+#print axioms plane_fderiv_range
 
 end ConstructionTargets.T96A07Closure
 

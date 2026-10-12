@@ -263,6 +263,52 @@ theorem descendedCrossTermMap_notTransverse_zAxis
       exact Submodule.mem_top
     simpa [yzCoordinatePlane, sphereFirstAxis] using hfirst
 
+/-- The horizontal affine plane at height `z`. -/
+def horizontalPlane (z : ℝ) (p : E 2) : E 3 :=
+  WithLp.toLp 2 ![p 0, p 1, z]
+
+/-- The constant derivative of a horizontal affine plane. -/
+def horizontalPlaneDerivative : E 2 →L[ℝ] E 3 :=
+  (PiLp.continuousLinearEquiv 2 ℝ (fun _ : Fin 3 => ℝ)).symm.toContinuousLinearMap.comp
+    (ContinuousLinearMap.pi fun i =>
+      match i with
+      | 0 => PiLp.proj 2 (fun _ : Fin 2 => ℝ) 0
+      | 1 => PiLp.proj 2 (fun _ : Fin 2 => ℝ) 1
+      | 2 => 0)
+
+theorem horizontalPlane_hasFDerivAt (z : ℝ) (p : E 2) :
+    HasFDerivAt (horizontalPlane z) horizontalPlaneDerivative p := by
+  apply (PiLp.hasFDerivAt_toLp 2 _).comp p
+  apply hasFDerivAt_pi.mpr
+  intro i
+  fin_cases i
+  · simpa using PiLp.hasFDerivAt_apply 2 p 0
+  · simpa using PiLp.hasFDerivAt_apply 2 p 1
+  · simpa using hasFDerivAt_const z p
+
+/-- The coordinate plane with vanishing third coordinate. -/
+def xyCoordinatePlane : Submodule ℝ (E 3) :=
+  LinearMap.ker (PiLp.proj 2 (fun _ : Fin 3 => ℝ) 2).toLinearMap
+
+/-- Every horizontal affine plane has the horizontal coordinate plane as its
+derivative range. -/
+theorem horizontalPlane_fderiv_range (z : ℝ) (p : E 2) :
+    LinearMap.range (fderiv ℝ (horizontalPlane z) p).toLinearMap =
+      xyCoordinatePlane := by
+  rw [(horizontalPlane_hasFDerivAt z p).fderiv]
+  ext y
+  change E 3 at y
+  constructor
+  · rintro ⟨v, rfl⟩
+    change (horizontalPlaneDerivative v) 2 = 0
+    simp [horizontalPlaneDerivative]
+  · intro hy
+    have hy2 : y 2 = 0 := hy
+    let v : E 2 := WithLp.toLp 2 ![y 0, y 1]
+    refine ⟨v, ?_⟩
+    ext i
+    fin_cases i <;> simp [v, horizontalPlaneDerivative, hy2]
+
 /-- At the first coordinate point the ambient derivative swaps the two free
 tangent coordinates and has zero first coordinate. -/
 theorem sphereMapAmbientDerivative_firstAxis (v : E 3) :
@@ -279,5 +325,6 @@ theorem sphereMapAmbientDerivative_firstAxis (v : E 3) :
 #print axioms sphereProjection_mfderiv_surjective
 #print axioms descendedCrossTermMap_mfderiv_range_at_e0
 #print axioms descendedCrossTermMap_notTransverse_zAxis
+#print axioms horizontalPlane_fderiv_range
 
 end ConstructionTargets.T96A07Closure
