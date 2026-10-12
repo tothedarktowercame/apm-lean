@@ -721,3 +721,10 @@ unit value of the identity coordinate glue to that square.  The left
 cover-to-summand counit is therefore exactly the reconstructed transport glue
 followed by the right counit; the remaining step is to rewrite that
 reconstructed glue by its expanded outer-comparison normal form.
+
+`genericPointWedgeCoordinateSpanReconstructedGlue_app` expands that remaining
+reconstructed glue at the unit coordinate into exactly three ordered factors:
+the forward left comparison, the reverse-span glue whiskered through the
+overlap inverse, and the inverse forward right comparison.  The middle factor
+now exposes the reverse-span glue whose chosen representative was previously
+reduced to the outer comparisons.

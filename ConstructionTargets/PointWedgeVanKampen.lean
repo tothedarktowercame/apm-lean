@@ -2443,6 +2443,33 @@ theorem genericPointWedgeCoordinateSpanCounit_left_eq_glue_right :
   rw [genericPointWedgeIdentityCoordinateSpan_glue_unitBase_eq_one] at h
   simpa only [SingleObj.comp_as_mul, mul_one] using h
 
+/-- The reconstructed coordinate glue is the forward left comparison, the
+whiskered reverse-span glue, and the inverse forward right comparison, in
+that order. -/
+theorem genericPointWedgeCoordinateSpanReconstructedGlue_app :
+    let l := genericPointWedgeActualLeft x₀ y₀ M N
+    let r := genericPointWedgeActualRight x₀ y₀ M N
+    let l' := genericPointWedgeCoordinateLeft x₀
+    let r' := genericPointWedgeCoordinateRight y₀
+    let eK := genericPointWedgeOverlapGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let eL := genericPointWedgeLeftGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let eR := genericPointWedgeRightGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let aL := genericPointWedgeLeftSpanIso
+      x₀ y₀ M N hM hN hy hx cM cN
+    let aR := genericPointWedgeRightSpanIso
+      x₀ y₀ M N hM hN hy hx cM cN
+    let Q := genericPointWedgeIdentityCoordinateSpan x₀ y₀
+    let P := reverseTransportObj l r l' r' eK eL eR aL aR Q
+    let u : FundamentalGroupoid Unit := FundamentalGroupoid.mk ()
+    (transportObj l r l' r' eK eL eR aL aR P).glue.hom.app u =
+      (leftComparison l l' eK eL aL P.left).hom.app u ≫
+        (Functor.isoWhiskerLeft eK.inverse P.glue).hom.app u ≫
+          (rightComparison r r' eK eR aR P.right).inv.app u := by
+  rfl
+
 /-- At the identity point-span object, the remaining coordinate-to-point
 counit is exactly the generic span-transport counit. -/
 theorem genericPointWedgeCoordinatePointCounit_eq_transportCounit :
@@ -3977,6 +4004,7 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeCoordinateSpanCounit_baseObjects
 #print axioms genericPointWedgeCoordinateSpanCounit_glueSquare_unitBase
 #print axioms genericPointWedgeCoordinateSpanCounit_left_eq_glue_right
+#print axioms genericPointWedgeCoordinateSpanReconstructedGlue_app
 #print axioms genericPointWedgeCoordinatePointCounit_eq_transportCounit
 #print axioms genericPointWedgeCoordinatePointCounit_legs
 #print axioms genericPointWedgeCoordinatePointCounit_uniqueObjects
