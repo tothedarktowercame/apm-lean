@@ -113857,16 +113857,20 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "Blueprint B3 is marked proved but its proof uses the unlisted ConnectedGroupoidSingleObjEquivalence.connectorSingleObjEquivalence (and connector-system representation) instead of only the declared uses; add the actual connector dependency and proof route to B3 uses.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
    :evidence
    {:placeholder-delta {:source-before 0, :source-after 0},
     :residual
-    "Evaluate forward Unit round-trip, then outer comparisons/literal lifts and B12.",
+    "Evaluate outer comparisons and literal lifts; then B12.",
     :outcome :stop,
-    :warnings [{:kind :upstream-lint}],
+    :warnings
+    [{:kind :concurrent-worktree-change,
+      :path "ConstructionTargets/ManifoldFundamentalClass.lean"}
+     {:kind :concurrent-worktree-change,
+      :path "ConstructionTargets/t96A07Closure.lean"}],
     :missing-theorems
     [{:name
       "PointWedgeVanKampen.genericPointWedgeLegCoordinates_vanKampen",
@@ -113878,16 +113882,17 @@
       :area "fundamental-group-wedge-of-circles"}],
     :statement-hashes
     {:source
-     "94b1412be6fdbaa483a493e7bf921fe365fa907cdd474bbf249f6991b3e1c321",
+     "d18b384234de6270828f30ad46f7015e7c0bda9f5620cfe317b8f0f5c8a31633",
      :documentation
-     "8bcfa31e394fd0fe5fc2e32c5eb0cdbb8a20dedd6b7bab6f1ff883c3e25f5b5c",
+     "32d10d47d04dce4f09235e8a9e40e01db048017b677ab92732933037c48355dd",
      :blueprint
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0",
      :registry "131/131"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
-    :reason "Inverse Unit round-trip is the free-product unit.",
+    :reason
+    "Forward Unit round-trip is the free-product unit; all inner factors are discharged.",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/PointWedgeVanKampen.lean",
@@ -113896,12 +113901,8 @@
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder/diff validation", :exit 0}],
-    :diagnostic-history
-    [{:cmd "lean", :exit 1, :finding "Exposed mapped unit."}
-     {:cmd "lean", :exit 1, :finding "Unfold before rewrite."}
-     {:cmd "lean", :exit 1, :finding "Used full simp."}
-     {:cmd "lean", :exit 1, :finding "Coerced categorical unit."}],
-    :commit "7825efdd20d24276e7e60d942979515f48f2d7c4",
+    :diagnostic-history [],
+    :commit "73919ff9b071025c1c0d3bdabe618167d678a212",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
      "ConstructionTargets/PointWedgeVanKampen.md"],
@@ -113911,7 +113912,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
