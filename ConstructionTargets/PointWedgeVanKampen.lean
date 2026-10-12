@@ -584,6 +584,25 @@ theorem genericPointWedgeIdentityCoordinateLeftComparison_app :
           (Functor.isoWhiskerLeft eK.functor aL.symm) Q.left).inv.app z := by
   rfl
 
+omit [PathConnectedSpace X] in
+/-- The right connector comparison at the unit base, expanded into the
+right-leg comparison followed by the Unit-equivalence round-trip component.
+Neither component is normalized away. -/
+theorem genericPointWedgeIdentityCoordinateRightComparison_app :
+    let r := genericPointWedgeCoordinateRight y₀
+    let r' := pointLeg (FundamentalGroup Y y₀)
+    let eK := genericPointWedgeUnitSingleObjEquivalence
+    let eR := genericPointWedgeSingleObjEquivalence y₀
+    let aR := genericPointWedgeCoordinateRightPointIso y₀
+    let Q := genericPointWedgeIdentityPointSpan x₀ y₀
+    let z : FundamentalGroupoid Unit := FundamentalGroupoid.mk ()
+    (reverseRightComparison r r' eK eR aR Q.right).hom.app z =
+      (Functor.isoWhiskerRight
+          (Functor.isoWhiskerLeft eK.functor aR.symm) Q.right).hom.app z ≫
+        (Functor.isoWhiskerRight
+          (eK.funInvIdAssoc (r ⋙ eR.functor)) Q.right).hom.app z := by
+  rfl
+
 /-- The penultimate inverse stage of B3, now expressed as the literal
 pseudococone on the two open pieces. -/
 def genericPointWedgeIdentityPseudoCocone :
@@ -1929,6 +1948,7 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeIdentityPointSpan_whiskeredGlue_eq_one
 #print axioms genericPointWedgeIdentityCoordinateSpan_glue_unitBase_eq_comparisons
 #print axioms genericPointWedgeIdentityCoordinateLeftComparison_app
+#print axioms genericPointWedgeIdentityCoordinateRightComparison_app
 #print axioms genericPointWedgeIdentityGlobalRightRestriction_map
 #print axioms genericPointWedgeIdentityGlobalRightBase_map
 #print axioms genericPointWedgeIdentityRepresentation_inl

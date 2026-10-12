@@ -284,3 +284,9 @@ those components without imposing a false normalization.  Its categorical
 order is the inverse Unit-equivalence round-trip component followed by the
 inverse left-leg comparison.  Evaluating these two explicit factors, the
 right connector comparison, and the two original outer comparisons remains.
+
+The symmetric component is now expanded by
+`genericPointWedgeIdentityCoordinateRightComparison_app`.  In its actual hom
+direction it is the right-leg comparison followed by the Unit-equivalence
+round-trip component.  Thus all four inner connector-stage factors are
+explicit; their evaluation and the two original outer comparisons remain.
