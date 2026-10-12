@@ -113891,6 +113891,18 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder/diff validation", :exit 0}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791806928235-6907-21f43b06",
+     :commands
+     ["git show/diff-tree b9ba104ea"
+      "sha256/placeholder/registry checks"
+      "lake env lean ConstructionTargets/PointWedgeVanKampen.lean"
+      "lake build ConstructionTargets.PointWedgeVanKampen"
+      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (expected absent)"],
+     :finding
+     "PASS: exact two-file scope and frozen hashes match; placeholders 0->0, registry 131/131. Quotient-aware mapOfEq composition closes the right normal form with correct endpoint orientation; actual-span lifted actions faithfully become Coprod.inl/inr across HEq boundaries. Standard axioms only. Valid program STOP; source-coordinate reconciliation, B6, and B12 remain."},
     :commit "b9ba104ea5a2f8d1c4385e5ff6186891d04fff72",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
@@ -113901,7 +113913,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113922,7 +113934,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: The explicit right endpoint conjugation is now the based map at the fixed quotient representative.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: The quotient-aware composition closes the right normal form; both actual cover actions are literal coproduct injections.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -114270,7 +114282,11 @@
     {:job 1,
      :commit "dec696a8e4a0a133a9de894fef1b7b5007a49392",
      :reason
-     "The explicit right endpoint conjugation is now the based map at the fixed quotient representative."}]}
+     "The explicit right endpoint conjugation is now the based map at the fixed quotient representative."}
+    {:job 2,
+     :commit "b9ba104ea5a2f8d1c4385e5ff6186891d04fff72",
+     :reason
+     "The quotient-aware composition closes the right normal form; both actual cover actions are literal coproduct injections."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
