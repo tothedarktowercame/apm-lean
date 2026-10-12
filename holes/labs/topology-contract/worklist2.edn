@@ -75548,34 +75548,28 @@
   {:consumer :t96J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "The STOP incorrectly marks the center-contraction milestone proved. commit 194ea4781 establishes only ContractibleSpace for the inner open, which chooses an unspecified contraction point; it neither supplies a deformation retraction nor identifies that point with PairingData.center. B4 explicitly requires U P to deformation-retract to P.center. Add this exact center-based deformation retraction to :missing-theorems and prove it in scope; annular side/overlap are not the only residual.",
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Prove center deformation retract, annular side, overlap; then B5/B6.",
+    "Prove exact center deformation and overlap; then B5/B6.",
     :outcome :stop,
     :warnings ["12 preexisting linter warnings"],
     :missing-theorems
     [{:name "polygonCenterDeformationRetract",
       :type
-      "explicit deformation retraction of the inner quotient open to the point P.center",
+      "explicit Homotopy from identity on the inner quotient open to constant P.center, fixing P.center",
       :status :not-started,
       :consumers [:t96J02 :t92J05 :t94J04 :t97A01 :t97A03],
       :depends-on ["innerHomeomorph"],
-      :area "polygon-surface-pi1"}
-     {:name "polygonAnnularSide",
-      :type "outer quotient open represented by the annular side",
-      :status :not-started,
-      :consumers [:t96J02 :t92J05 :t94J04 :t97A01 :t97A03],
-      :depends-on ["polygonRadialOpenSets"],
       :area "polygon-surface-pi1"}
      {:name "polygonOverlapHomeomorph",
       :type "inner/outer overlap homeomorphic to interval×Circle",
       :status :not-started,
       :consumers [:t96J02 :t92J05 :t94J04 :t97A01 :t97A03],
-      :depends-on ["polygonRadialOpenSets"],
+      :depends-on ["polygonRadialOpenSets" "polygonAnnularSide"],
       :area "polygon-surface-pi1"}
      {:name "ConstructionTargets.PolygonSurfacePiOne.openCover",
       :type
@@ -75583,37 +75577,34 @@
       :status :partial,
       :consumers [:t96J02 :t92J05 :t94J04 :t97A01 :t97A03],
       :depends-on
-      ["polygonCenterDeformationRetract"
-       "polygonAnnularSide"
-       "polygonOverlapHomeomorph"],
+      ["polygonCenterDeformationRetract" "polygonOverlapHomeomorph"],
       :area "polygon-surface-pi1"}],
     :statement-hashes
     {:registry "131/0",
-     :module "5627aeed080623fbff4b75fbf18ef2c2801fe243"},
+     :module "74f76224e6608e6be31f7ee07f80be3bb276bfe8"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
     :reason
-    "Exact center-based deformation retraction remains: ContractibleSpace does not identify its chosen point with P.center. An attempted explicit radial Homotopy exposed unresolved complex-scalar continuity/norm normalization and was removed; scoped source remains compiled.",
+    "Exact center deformation remains. The attempted star-convex ball Homotopy exposed unresolved elaboration of the chosen zero point and was removed; the scoped source compiles unchanged.",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/PolygonSurfacePiOne.lean",
-      :exit 0}
-     {:cmd "git status --short", :exit 0, :output ""}],
+      :exit 0}],
     :diagnostic-history
-    [{:cmd "explicit radial Homotopy compile",
+    [{:cmd "star-convex radial Homotopy build",
       :exit 1,
       :correction
-      "removed unfinished declaration; exact theorem retained as residual"}],
-    :commit "194ea4781",
+      "removed unfinished declarations; retained exact residual"}],
+    :commit "0e69eda9a",
     :changed-paths [],
     :fixture
     {:path "ConstructionTargets/PolygonSurfacePiOne.lean",
      :sha256
-     "3b0d12baa5be1bb60015947120e7e79ae424ca8c8c4ef6edc6e41d8057390a95"},
+     "c504bbc5e46e0c5565ec2690cc884c2ced3084763b091e264bdcde548fb74ed8"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/PolygonSurfacePiOne.lean"],
    :dag-node "ConstructionTargets/PolygonSurfacePiOne.blueprint.md/B4",
    :acceptance
@@ -85892,7 +85883,8 @@
     :area "polygon-surface-pi1"},
    :id :lemma-polygonoverlaphomeomorph,
    :kind :lemma,
-   :depends-on [:lemma-polygonradialopensets],
+   :depends-on
+   [:lemma-polygonradialopensets :lemma-polygonannularside],
    :other-consumers [:t92J05 :t94J04 :t97A01 :t97A03]}
   {:consumer :t96J02,
    :phase :lemma,
