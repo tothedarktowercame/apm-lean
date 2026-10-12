@@ -367,6 +367,55 @@ theorem continuousAt_coordinate_fderivWithin_comp_extChartAt
   rw [← map_extChartAt_nhds (I := 𝓘(ℝ, EuclideanModel m)) x]
   exact Filter.tendsto_map
 
+/-- On the common fixed-chart neighbourhood, differentiating the fixed
+representative at the source-chart image gives exactly the transported
+manifold derivative. -/
+theorem coordinate_fderivWithin_comp_extChartAt_eq_inTangentCoordinates
+    {m n : ℕ} {X : Type*} [TopologicalSpace X]
+    [ChartedSpace (EuclideanModel m) X]
+    [IsManifold 𝓘(ℝ, EuclideanModel m) ∞ X]
+    (f : X → EuclideanModel n)
+    (hf : ContMDiff 𝓘(ℝ, EuclideanModel m) 𝓘(ℝ, EuclideanModel n) ∞ f)
+    (x y : X)
+    (hx : y ∈ (chartAt (EuclideanModel m) x).source)
+    (hy : f y ∈ (chartAt (EuclideanModel n) (f x)).source) :
+    fderivWithin ℝ
+        (extChartAt 𝓘(ℝ, EuclideanModel n) (f x) ∘ f ∘
+          (extChartAt 𝓘(ℝ, EuclideanModel m) x).symm)
+        (Set.range 𝓘(ℝ, EuclideanModel m))
+        (extChartAt 𝓘(ℝ, EuclideanModel m) x y) =
+      inTangentCoordinates 𝓘(ℝ, EuclideanModel m)
+        𝓘(ℝ, EuclideanModel n) (fun z : X ↦ z) f
+        (fun z ↦ mfderiv 𝓘(ℝ, EuclideanModel m)
+          𝓘(ℝ, EuclideanModel n) f z) x y := by
+  rw [inTangentCoordinates_eq_mfderiv_comp hx hy]
+  have hxe : y ∈ (extChartAt 𝓘(ℝ, EuclideanModel m) x).source := by
+    simpa only [extChartAt_source] using hx
+  have hz := (extChartAt 𝓘(ℝ, EuclideanModel m) x).map_source hxe
+  have hU : UniqueMDiffWithinAt 𝓘(ℝ, EuclideanModel m)
+      (Set.range 𝓘(ℝ, EuclideanModel m))
+      (extChartAt 𝓘(ℝ, EuclideanModel m) x y) :=
+    𝓘(ℝ, EuclideanModel m).uniqueMDiffOn _ (Set.mem_range_self _)
+  have hinv := mdifferentiableWithinAt_extChartAt_symm hz
+  have hfy := (hf y).mdifferentiableAt (by simp)
+  have A := mfderiv_comp_mfderivWithin_of_eq hfy hinv hU
+    ((extChartAt 𝓘(ℝ, EuclideanModel m) x).left_inv hxe)
+  rw [← A]
+  have hcomp : MDifferentiableWithinAt 𝓘(ℝ, EuclideanModel m)
+      𝓘(ℝ, EuclideanModel n)
+      (f ∘ (extChartAt 𝓘(ℝ, EuclideanModel m) x).symm)
+      (Set.range 𝓘(ℝ, EuclideanModel m))
+      (extChartAt 𝓘(ℝ, EuclideanModel m) x y) :=
+    MDifferentiableAt.comp_mdifferentiableWithinAt_of_eq
+      (extChartAt 𝓘(ℝ, EuclideanModel m) x y) hfy hinv
+      ((extChartAt 𝓘(ℝ, EuclideanModel m) x).left_inv hxe)
+  have B := mfderiv_comp_mfderivWithin_of_eq
+    (mdifferentiableAt_extChartAt hy) hcomp hU (by
+      simp only [Function.comp_apply,
+        (extChartAt 𝓘(ℝ, EuclideanModel m) x).left_inv hxe])
+  rw [← B]
+  simp only [mfderivWithin_eq_fderivWithin]
+
 end t97A07Closure
 
 #print axioms t97A07Closure.isOpen_setOf_surjective_clm
@@ -384,3 +433,4 @@ end t97A07Closure
 #print axioms t97A07Closure.exists_nhds_chart_factor_agreement
 #print axioms t97A07Closure.continuousAt_inTangentCoordinates_mfderiv_and_self
 #print axioms t97A07Closure.continuousAt_coordinate_fderivWithin_comp_extChartAt
+#print axioms t97A07Closure.coordinate_fderivWithin_comp_extChartAt_eq_inTangentCoordinates

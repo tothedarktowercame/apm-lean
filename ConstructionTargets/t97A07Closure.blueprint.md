@@ -134,6 +134,15 @@ for the extended chart, so the model-with-corners range restriction is
 preserved.  It remains to prove that this precomposed family agrees pointwise
 near `x` with the transported manifold derivative.
 
+`coordinate_fderivWithin_comp_extChartAt_eq_inTangentCoordinates` proves that
+pointwise agreement whenever the point and its image lie in the two fixed
+chart sources.  Two applications of the manifold chain rule reduce the fixed
+representative derivative to the target-chart derivative, `mfderiv f y`, and
+the inverse source-chart derivative; the extended-chart inverse law supplies
+the exact intermediate points.  The remaining B2 step is to package this
+equality with `eventually_mem_fixed_chart_sources` and the two continuity
+theorems into the declared `continuousAt_coordinate_mfderiv` interface.
+
 ### B3. Regular points are open
 
 lean: `t97A07Closure.isOpen_regularPoints` : under the t97A07 manifold
