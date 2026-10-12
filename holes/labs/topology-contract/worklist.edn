@@ -113894,6 +113894,18 @@
     [{:cmd "lean counit simp",
       :exit 1,
       :finding "Used definitional projection instead."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791816528782-7139-771e5257",
+     :commands
+     ["git show/diff-tree feeb79cd6"
+      "sha256 + placeholders + registry"
+      "lake env lean ConstructionTargets/PointWedgeVanKampen.lean"
+      "lake build ConstructionTargets.PointWedgeVanKampen"
+      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (expected absent)"],
+     :finding
+     "Recorded scope is exactly Lean+MD; source/doc/fixture hashes match; placeholders 0->0; registry 131/131. New unique-object counit evaluation has correct left/right orientations and crosses the coordinate/point boundary via the identity-span functors; it compiles sorry-free with standard axioms only. This is genuine progress toward computing both based counit morphisms; residual remains matching the mapped pre-coordinate counit with outer factors and closing B6/B12. Final ThreeCircles target remains absent as declared."},
     :commit "feeb79cd641504bb8d9b04fa883e9ecc220227ac",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
@@ -113904,7 +113916,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113925,7 +113937,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Both coordinate-point counit legs are explicit single-object congrLeft counits.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Both coordinate-point counit legs are evaluated at their unique source objects.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -114325,7 +114337,11 @@
     {:job 5,
      :commit "124250e47dd08b3985b93432a5493c04362d6fbc",
      :reason
-     "Both coordinate-point counit legs are explicit single-object congrLeft counits."}]}
+     "Both coordinate-point counit legs are explicit single-object congrLeft counits."}
+    {:job 6,
+     :commit "feeb79cd641504bb8d9b04fa883e9ecc220227ac",
+     :reason
+     "Both coordinate-point counit legs are evaluated at their unique source objects."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
