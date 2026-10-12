@@ -534,6 +534,22 @@ theorem rightTubeCoreInputNormalRadiusBound
   have hsqrt := Real.sqrt_le_sqrt hinside
   simpa [pow_two] using hsqrt.trans hd
 
+/-- Points of the right tube have planar core coordinate in the closed
+quarter-thick annulus about the unit circle. -/
+theorem rightTubeCorePlanarNormBounds
+    (p : apm_t02a03_E3) (hp : p ∈ apm_t02a03_rightTube) :
+    (3 / 4 : ℝ) ≤ ‖rightTubeCorePlanarComplex p‖ ∧
+      ‖rightTubeCorePlanarComplex p‖ ≤ (5 / 4 : ℝ) := by
+  have hn := rightTubeCoreInputNormalRadiusBound p hp
+  have hre :
+      |(rightTubeCoreNormalComplex p).re| ≤
+        ‖rightTubeCoreNormalComplex p‖ :=
+    RCLike.abs_re_le_norm (rightTubeCoreNormalComplex p)
+  have habs : |1 - ‖rightTubeCorePlanarComplex p‖| ≤ (1 / 4 : ℝ) := by
+    simpa [rightTubeCoreNormalComplex] using hre.trans hn
+  rw [abs_le] at habs
+  constructor <;> linarith
+
 theorem rightTubeCoreInterpolatedNormalRadiusBound
     (m : C(RightTubeMinusLeftCore, Circle))
     (tp : unitInterval × RightTubeMinusLeftCore) :
@@ -2030,6 +2046,7 @@ end ConstructionTargets.T02A03GeometricTubeDeformation
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.norm_rightTubeCoreNormalComplex_circleMeridian
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeCore_radial_error_le
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeCoreInputNormalRadiusBound
+#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeCorePlanarNormBounds
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeCoreInterpolatedNormalRadiusBound
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.normalizedRightCorePlanar_circleMeridian
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightCorePolarReconstruction_circleMeridian
