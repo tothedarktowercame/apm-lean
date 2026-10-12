@@ -113895,6 +113895,18 @@
       :exit 1,
       :finding
       "Expanded the four inner factors instead of assuming definitional equality."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791809286929-6933-4cc51d3a",
+     :commands
+     ["git show/diff-tree 3cfdfdc2b"
+      "sha256/placeholder/registry checks"
+      "lake env lean ConstructionTargets/PointWedgeVanKampen.lean"
+      "lake build ConstructionTargets.PointWedgeVanKampen"
+      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (expected absent)"],
+     :finding
+     "PASS: exact two-file scope and frozen hashes match; placeholders 0->0, registry 131/131. Unit-base coordinate glue is proved equal to one by expanding and cancelling all four connector factors, with correct categorical-to-group representation and standard axioms only. Valid program STOP; outer comparisons/counit transport, B6, and B12 remain."},
     :commit "3cfdfdc2b6150d3b0b471f2fddd57a7f2d9255ca",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
@@ -113905,7 +113917,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113926,7 +113938,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: The reconstructed source functor is literal on the left leg and has one explicit restriction conjugator on the right.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: All four inner connector factors cancel, so the coordinate-span glue at the Unit base is exactly one.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -114282,7 +114294,11 @@
     {:job 3,
      :commit "07240e5a3062a6d1758610732aa7d141e4bfa5e9",
      :reason
-     "The reconstructed source functor is literal on the left leg and has one explicit restriction conjugator on the right."}]}
+     "The reconstructed source functor is literal on the left leg and has one explicit restriction conjugator on the right."}
+    {:job 4,
+     :commit "3cfdfdc2b6150d3b0b471f2fddd57a7f2d9255ca",
+     :reason
+     "All four inner connector factors cancel, so the coordinate-span glue at the Unit base is exactly one."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
