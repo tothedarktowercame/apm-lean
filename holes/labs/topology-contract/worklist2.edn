@@ -72788,13 +72788,13 @@
    :consumer :t02A03,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "Commit b07bee059 does not implement the row acceptance theorem. It adds only rotatedEndpointWaypoint_departure_zero_support_pos; safeRightTubeMeridianDeformation is absent, although the row is marked done-unreviewed rather than a STOP with missing-theorems. Exact repair: extend Mathlib in scope by state/proving the required continuous ambient H with both endpoints, pointwise rightTube membership, and leftCore avoidance (or record a legitimate STOP after committed progress with remaining theorem listed).",
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Signed branch covers p1!=0; height branch covers p1=0,p2!=0. Glue the p1=p2=0 detour, then package path and H.",
+    "Arrival zero locus is covered by signed and positive-radial branches. Glue them continuously, then package the path and certified H.",
     :outcome :stop,
     :warnings
     ["Main: 1 placeholder; lint."
@@ -72805,7 +72805,7 @@
       :type "endpoint-fixed nonzero path",
       :status :partial,
       :consumers [:t02A03],
-      :depends-on ["heightArrivalCorrection_ne_zero_of_planarAxis"],
+      :depends-on ["radialArrivalCorrection_ne_zero_of_planarAxis"],
       :area "explicit-r3-tube-deformation-retraction"}
      {:name
       "ConstructionTargets.T02A03GeometricTubeDeformation.safeRightTubeMeridianDeformation",
@@ -72816,7 +72816,7 @@
       :area "explicit-r3-tube-deformation-retraction"}],
     :statement-hashes
     {:registry "131/0",
-     :module "5017065a98423d81834858b069a69ca9c6ae9cd7",
+     :module "9252038ae8f55cf0d237cc1bcc9b70f275b6a488",
      :main "ce9da0dbb4300e81e5a5f31c95d0a0f8344c4325"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
@@ -72829,34 +72829,18 @@
      {:cmd "module no-sorry", :exit 1, :expected-exit 1}
      {:cmd "placeholders", :exit 0, :output "1"}
      {:cmd "git show --check", :exit 0}],
-    :diagnostic-history
-    [{:cmd "initial Main gates",
-      :exit 1,
-      :finding "Corrected problem path."}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1791811364918-6973-ad9cfa8f",
-     :commands
-     ["git show/diff-tree/show --check 2a9c5d5d69e2f19806b70df780c4643a14cbe29e"
-      "sha256sum fixture; blob and placeholder recount"
-      "lake env lean exact committed module"
-      "python3 scripts/statement-registry.py check"
-      "compare parent/prior milestone"],
-     :finding
-     "PASS: program STOP commits new compiled, sorry-free progress beyond the prior milestone: the endpoint-fixed transverse correction is proved nonzero at every old departure zero. Exact scope and fixture hash match; module/Main blobs are 0629f3f5/ce9da0db with placeholder counts 0/1; registry 131/0; axioms standard. The no-new-zero corrected path and safe ambient deformation remain explicitly listed."},
-    :commit "8405c57539fbc641abf53f77879bec600102cfe2",
+    :commit "8e08b0ae8f6a2402dd7aa2fefdbeb6948a840183",
     :changed-paths
     ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
     :fixture
     {:path "ConstructionTargets/T02A03GeometricTubeDeformation.lean",
      :sha256
-     "ea034968f9a079e915e182b4bb6fafa586a2dec7921b35c064fc6446c7ae39a4"},
+     "2b0cfe9b0aa8684104beceb25b5a0bad2adccf2d8ad23f2eb1b15d19a32f8ea2"},
     :seat "topo-6"},
    :phase :implementation,
    :type
    "∀ (t : unitInterval) (p : RightTubeMinusLeftCore), (t:ℝ) ≤ 1/2 → (((1-2*(t:ℝ):ℝ):ℂ)+((2*(t:ℝ):ℝ):ℂ)*rotatedEndpointWaypoint p)=0 → 0 < (t:ℝ)*(1-2*(t:ℝ))",
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/safe-right-tube-meridian-deformation",
@@ -82172,7 +82156,8 @@
     :lemma-pointdependentarrivalcorrection-ne-zero-of-im-sign
     :lemma-signedarrivalcorrection-ne-zero-of-second-ne-zero
     :lemma-signedarrivalcorrection-eq-zero-iff-second-eq-zero
-    :lemma-heightarrivalcorrection-ne-zero-of-planaraxis],
+    :lemma-heightarrivalcorrection-ne-zero-of-planaraxis
+    :lemma-radialarrivalcorrection-ne-zero-of-planaraxis],
    :other-consumers []}
   {:consumer :portfolio,
    :phase :lemma,
@@ -83279,6 +83264,19 @@
     :found-in
     ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"]},
    :id :lemma-heightarrivalcorrection-ne-zero-of-planaraxis,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "radialArrivalCorrection_ne_zero_of_planarAxis"},
+   :lemma
+   {:name "radialArrivalCorrection_ne_zero_of_planarAxis",
+    :reported-by []},
+   :id :lemma-radialarrivalcorrection-ne-zero-of-planaraxis,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}]}
