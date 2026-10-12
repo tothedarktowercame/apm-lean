@@ -91,6 +91,9 @@ the source point and its image lie in the fixed source and target charts; on
 this neighbourhood `inTangentCoordinates_mfderiv_eq_chart_factors` applies
 uniformly.  The remaining equality proof can therefore work under these two
 explicit membership hypotheses.
+`eventually_inTangentCoordinates_mfderiv_eq_chart_factors` packages that
+uniform application as one eventual equality, so the next step can compare
+the fixed representative directly with this three-factor expression.
 `inTangentCoordinates_mfderiv_self_eq_sourceChartFactor` evaluates the
 transported family at its centre through the target-chart identity: the
 remaining expression is `mfderiv f x` followed by the inverse source-chart

@@ -144,6 +144,32 @@ theorem eventually_mem_fixed_chart_sources
       (chart_source_mem_nhds (EuclideanModel n) (f x))] with y hy hfy
   exact ⟨hy, hfy⟩
 
+/-- On one neighbourhood of the base point, the transported derivative has
+the explicit fixed-chart factorization at every point. -/
+theorem eventually_inTangentCoordinates_mfderiv_eq_chart_factors
+    {m n : ℕ} {X : Type*} [TopologicalSpace X]
+    [ChartedSpace (EuclideanModel m) X]
+    [IsManifold 𝓘(ℝ, EuclideanModel m) ∞ X]
+    (f : X → EuclideanModel n)
+    (hf : ContMDiff 𝓘(ℝ, EuclideanModel m) 𝓘(ℝ, EuclideanModel n) ∞ f)
+    (x : X) :
+    ∀ᶠ y in 𝓝 x,
+      inTangentCoordinates 𝓘(ℝ, EuclideanModel m)
+          𝓘(ℝ, EuclideanModel n) (fun z : X ↦ z) f
+          (fun z ↦ mfderiv 𝓘(ℝ, EuclideanModel m)
+            𝓘(ℝ, EuclideanModel n) f z) x y =
+        (mfderiv 𝓘(ℝ, EuclideanModel n) 𝓘(ℝ, EuclideanModel n)
+            (extChartAt 𝓘(ℝ, EuclideanModel n) (f x)) (f y)) ∘L
+          (mfderiv 𝓘(ℝ, EuclideanModel m)
+            𝓘(ℝ, EuclideanModel n) f y) ∘L
+            (mfderivWithin (I := 𝓘(ℝ, EuclideanModel m))
+              (I' := 𝓘(ℝ, EuclideanModel m))
+              (extChartAt 𝓘(ℝ, EuclideanModel m) x).symm
+              (Set.range 𝓘(ℝ, EuclideanModel m))
+              (extChartAt 𝓘(ℝ, EuclideanModel m) x y)) := by
+  filter_upwards [eventually_mem_fixed_chart_sources f hf x] with y hy
+  exact inTangentCoordinates_mfderiv_eq_chart_factors f x y hy.1 hy.2
+
 /-- At its base point, the transported derivative reduces to the manifold
 derivative followed by the inverse source-chart derivative. -/
 theorem inTangentCoordinates_mfderiv_self_eq_sourceChartFactor
@@ -227,6 +253,7 @@ end t97A07Closure
 #print axioms t97A07Closure.inTangentCoordinates_mfderiv_eq_chart_factors
 #print axioms t97A07Closure.continuousAt_inTangentCoordinates_mfderiv
 #print axioms t97A07Closure.eventually_mem_fixed_chart_sources
+#print axioms t97A07Closure.eventually_inTangentCoordinates_mfderiv_eq_chart_factors
 #print axioms t97A07Closure.inTangentCoordinates_mfderiv_self_eq_sourceChartFactor
 #print axioms t97A07Closure.mfderiv_chartAt_symm_self_eq_id
 #print axioms t97A07Closure.inTangentCoordinates_mfderiv_self_eq_mfderiv
