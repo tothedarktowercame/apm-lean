@@ -118,6 +118,15 @@ theorem sphereMap_vertical_surjective
       (by simpa [T96A07.sphereMap, crossTermSphereMap,
         T96A07.plane, horizontalPlane] using hinc) hz hzhalf
 
+theorem sphereMap_transverse_plane (z : ℝ) (hz : 0 < z) (hzhalf : z < 1 / 2) :
+    T96A07.Transverse T96A07.sphereMap (T96A07.plane z) := by
+  intro p q hinc
+  simpa [T96A07.sphereMap, crossTermSphereMap,
+    T96A07.plane, horizontalPlane] using
+    crossTermSphereMap_transverse_horizontalPlane z hz hzhalf p q
+      (by simpa [T96A07.sphereMap, crossTermSphereMap,
+        T96A07.plane, horizontalPlane] using hinc)
+
 #print axioms sphereMap_antipodal
 #print axioms sphereMap_contMDiff
 #print axioms descendedSphereMap
@@ -127,6 +136,7 @@ theorem sphereMap_vertical_surjective
 #print axioms plane_fderiv_range
 #print axioms sphereMap_plane_incident_coordinates
 #print axioms sphereMap_vertical_surjective
+#print axioms sphereMap_transverse_plane
 
 end ConstructionTargets.T96A07Closure
 

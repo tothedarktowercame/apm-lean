@@ -425,6 +425,40 @@ theorem crossTermSphereMap_vertical_surjective
       (r • mfderiv (𝓡 2) (𝓡 3) crossTermSphereMap p u)) 2 = r
     rw [map_smul, PiLp.smul_apply, huvert, smul_eq_mul, mul_one]
 
+/-- At levels strictly between zero and one half, the sphere map and the
+horizontal affine plane have derivative ranges spanning the target. -/
+theorem crossTermSphereMap_transverse_horizontalPlane
+    (z : ℝ) (hz : 0 < z) (hzhalf : z < 1 / 2) (p : Sphere 2) (q : E 2)
+    (hinc : crossTermSphereMap p = horizontalPlane z q) :
+    LinearMap.range
+          (mfderiv (𝓡 2) (𝓡 3) crossTermSphereMap p).toLinearMap ⊔
+        LinearMap.range (fderiv ℝ (horizontalPlane z) q).toLinearMap = ⊤ := by
+  rw [eq_top_iff]
+  intro y
+  intro _
+  obtain ⟨a, ha⟩ :=
+    crossTermSphereMap_vertical_surjective p z q hinc hz hzhalf
+      ((NormedSpace.fromTangentSpace (𝕜 := ℝ) (crossTermSphereMap p) y) 2)
+  let b : E 3 := NormedSpace.fromTangentSpace (𝕜 := ℝ)
+      (crossTermSphereMap p) y -
+    NormedSpace.fromTangentSpace (𝕜 := ℝ) (crossTermSphereMap p) a.1
+  have hb2 : b 2 = 0 := by simp [b, ha]
+  have hb : b ∈ LinearMap.range
+      (fderiv ℝ (horizontalPlane z) q).toLinearMap := by
+    rw [horizontalPlane_fderiv_range]
+    exact hb2
+  rcases hb with ⟨v, hv⟩
+  change fderiv ℝ (horizontalPlane z) q v = b at hv
+  apply Submodule.mem_sup.mpr
+  refine ⟨a.1, a.2, fderiv ℝ (horizontalPlane z) q v, ⟨v, rfl⟩, ?_⟩
+  apply (NormedSpace.fromTangentSpace (𝕜 := ℝ)
+    (crossTermSphereMap p)).injective
+  change NormedSpace.fromTangentSpace (𝕜 := ℝ) (crossTermSphereMap p) a.1 +
+      fderiv ℝ (horizontalPlane z) q v =
+    NormedSpace.fromTangentSpace (𝕜 := ℝ) (crossTermSphereMap p) y
+  rw [hv]
+  simp [b]
+
 /-- At the first coordinate point the ambient derivative swaps the two free
 tangent coordinates and has zero first coordinate. -/
 theorem sphereMapAmbientDerivative_firstAxis (v : E 3) :
@@ -446,5 +480,6 @@ theorem sphereMapAmbientDerivative_firstAxis (v : E 3) :
 #print axioms sphereMap_vertical_tangent_of_third_ne_zero
 #print axioms sphereMap_vertical_tangent_of_third_eq_zero
 #print axioms crossTermSphereMap_vertical_surjective
+#print axioms crossTermSphereMap_transverse_horizontalPlane
 
 end ConstructionTargets.T96A07Closure
