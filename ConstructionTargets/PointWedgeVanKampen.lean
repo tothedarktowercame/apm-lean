@@ -3409,6 +3409,56 @@ theorem genericPointWedgeCoordinateSpanGlobalRestrictionLeftRoundTrip_counit :
   exact (genericPointWedgeLeftGroupoidEquivalence
     x₀ y₀ M N hM hN hy hx cM cN).counitIso.hom.naturality _
 
+/-- The inverse right comparison introduced by coordinate-span transport,
+isolated before recombining it with the middle and left factors. -/
+def genericPointWedgeCoordinateSpanGlobalRestrictionRightComparison :
+    genericPointWedgeFreeProduct x₀ y₀ :=
+  let C := genericPointWedgeTarget x₀ y₀
+  let E := genericPointWedgeOpenCoverEquivalence
+    x₀ y₀ M N hM hN hy hx cM cN C
+  let P₀ := genericPointWedgePseudoSpanEquivalence x₀ y₀ M N C
+  let S := P₀.functor.obj (E.functor.obj
+    (genericPointWedgeIdentityGlobalFunctor
+      x₀ y₀ M N hM hN hy hx cM cN))
+  let r := genericPointWedgeActualRight x₀ y₀ M N
+  let r' := genericPointWedgeCoordinateRight y₀
+  let eK := genericPointWedgeOverlapGroupoidEquivalence
+    x₀ y₀ M N hM hN hy hx cM cN
+  let eR := genericPointWedgeRightGroupoidEquivalence
+    x₀ y₀ M N hM hN hy hx cM cN
+  let aR := genericPointWedgeRightSpanIso
+    x₀ y₀ M N hM hN hy hx cM cN
+  (rightComparison r r' eK eR aR S.right).inv.app
+    (FundamentalGroupoid.mk ())
+
+/-- The inverse right comparison is the inverse right-equivalence unit factor
+followed by the forward strict-span comparison, in its actual composition
+order. -/
+theorem genericPointWedgeCoordinateSpanGlobalRestrictionRightComparison_app :
+    let C := genericPointWedgeTarget x₀ y₀
+    let E := genericPointWedgeOpenCoverEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN C
+    let P₀ := genericPointWedgePseudoSpanEquivalence x₀ y₀ M N C
+    let S := P₀.functor.obj (E.functor.obj
+      (genericPointWedgeIdentityGlobalFunctor
+        x₀ y₀ M N hM hN hy hx cM cN))
+    let r := genericPointWedgeActualRight x₀ y₀ M N
+    let eK := genericPointWedgeOverlapGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let eR := genericPointWedgeRightGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let aR := genericPointWedgeRightSpanIso
+      x₀ y₀ M N hM hN hy hx cM cN
+    let u : FundamentalGroupoid Unit := FundamentalGroupoid.mk ()
+    genericPointWedgeCoordinateSpanGlobalRestrictionRightComparison
+        x₀ y₀ M N hM hN hy hx cM cN =
+      (Functor.isoWhiskerRight
+        (Functor.isoWhiskerLeft (eK.inverse ⋙ r) eR.unitIso.symm)
+          S.right).inv.app u ≫
+        (Functor.isoWhiskerRight aR.symm
+          (eR.inverse ⋙ S.right)).inv.app u := by
+  rfl
+
 /-- The mapped coordinate-span counit's glue square, specialized at the
 unique point-span overlap object.  This is the equation in which its two
 named leg factors are related by the mapped reconstructed glue. -/
@@ -5007,6 +5057,8 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeCoordinateSpanGlobalRestrictionLeftStrictFactor_eq_actual
 #print axioms genericPointWedgeCoordinateSpanGlobalRestrictionLeftStrictFactor_heq_inl
 #print axioms genericPointWedgeCoordinateSpanGlobalRestrictionLeftRoundTrip_counit
+#print axioms genericPointWedgeCoordinateSpanGlobalRestrictionRightComparison
+#print axioms genericPointWedgeCoordinateSpanGlobalRestrictionRightComparison_app
 #print axioms genericPointWedgeMappedOpenCoverCounit_namedGlueSquare
 #print axioms genericPointWedgeMappedCoordinateSpanCounit_glueSquare
 #print axioms genericPointWedgeMappedCoordinateSpanSourceGlue

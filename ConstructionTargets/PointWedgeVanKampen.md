@@ -913,3 +913,9 @@ records that normalization boundary as the exact counit-naturality equation.
 The inverse/forward image followed by the counit at the transported target is
 the source counit followed by the original inverse strict-span comparison;
 no component is assumed to be an identity.
+
+`genericPointWedgeCoordinateSpanGlobalRestrictionRightComparison` isolates
+the inverse right comparison from the global glue.  Its `_app` theorem expands
+the inverse composite in the required order: the inverse right-equivalence
+unit factor first, followed by the forward strict-span comparison.  Both
+representation changes remain explicit for separate normalization.
