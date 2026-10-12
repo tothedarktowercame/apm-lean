@@ -461,3 +461,7 @@ inclusion on the same representative: its image is exactly
 `genericPointWedgeLeftLegLift` is the continuous lift of the literal left
 wedge inclusion into the left cover member.  Its basepoint is definitionally
 the previously fixed `genericPointWedgeLeftBase` representative.
+
+`genericPointWedgeRightLegLift` is the symmetric continuous lift into the
+right cover member.  At `y₀`, the wedge quotient relation identifies its
+literal right representative with `genericPointWedgeRightBase`.

@@ -1661,6 +1661,24 @@ theorem genericPointWedgeLeftLegLift_base :
       genericPointWedgeLeftBase x₀ y₀ M := by
   rfl
 
+/-- The literal right wedge leg, lifted to the right member of the open cover. -/
+def genericPointWedgeRightLegLift :
+    C(Y, genericPointWedgeRightPiece x₀ y₀ N) where
+  toFun y :=
+    ⟨quotientMap x₀ y₀ (.inr y), ⟨.inr y, by trivial, rfl⟩⟩
+  continuous_toFun :=
+    ((continuous_quotientMap x₀ y₀).comp continuous_inr).subtype_mk _
+
+omit [PathConnectedSpace X] [PathConnectedSpace Y] in
+/-- The lifted right leg at `y₀` is the fixed right cover base object; this is
+the first place the quotient relation identifies the two wedge representatives. -/
+theorem genericPointWedgeRightLegLift_base :
+    FundamentalGroupoid.mk (genericPointWedgeRightLegLift x₀ y₀ N y₀) =
+      genericPointWedgeRightBase x₀ y₀ N := by
+  apply congrArg FundamentalGroupoid.mk
+  apply Subtype.ext
+  exact (Quotient.sound (Relation.EqvGen.rel _ _ Rel.base)).symm
+
 theorem genericPointWedgeIdentityActualSpan_left_map
     {a b : FundamentalGroupoid (genericPointWedgeLeftPiece x₀ y₀ M)}
     (f : a ⟶ b) :
@@ -2610,6 +2628,7 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeOverlapToLeft_obj_overlapBase
 #print axioms genericPointWedgeOverlapToRight_obj_overlapBase
 #print axioms genericPointWedgeLeftLegLift_base
+#print axioms genericPointWedgeRightLegLift_base
 #print axioms genericPointWedgeIdentityActualSpan_left_map
 #print axioms genericPointWedgeIdentityActualSpan_right_map
 #print axioms genericPointWedgeSingleObjPostcomposeIso
