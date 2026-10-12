@@ -79646,6 +79646,19 @@
       :exit 1,
       :finding
       "Corrected Fin-1 zero-vector evaluation via map_coord_zero."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791775095527-6244-95f1d328",
+     :commands
+     ["git scope/blob/SHA/ancestry checks"
+      "lake build ConstructionTargets.t94A10Closure"
+      "lake env lean ConstructionTargets/t94A10Closure.lean"
+      "lake env lean problems/t94A10/lean/Main.lean"
+      "statement-registry check/fingerprint"
+      "commit placeholder counts"],
+     :finding
+     "PASS: commit 14241ba58 fixes both punctured representation boundaries in B7 and adds correct longitude-periodic and polar-zero boundary identities. It is compiled, sorry-free, standard-axiom progress; scope/fixture/blobs match, registry 131/0 and fingerprint d1822221 reproduce, closure/Main placeholders 0/1. STOP lists B8 Green hypotheses/integrability and B9-B11 as remaining."},
     :commit "14241ba580bf7b21a4a855d177a75df7a718ff87",
     :changed-paths ["ConstructionTargets/t94A10Closure.lean"],
     :fixture
@@ -79654,7 +79667,7 @@
      "9133e0adb1d76a3e02ab7f78ede215c87a8ffc864a33f6d729d8c8ebbb0b84df"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t94A10/lean/Main.lean"
     "problems/t94A10/status.json"
@@ -79692,6 +79705,9 @@
      :reason :program-milestone-complete}
     {:job 7,
      :commit "a3f4e9be9fb888a87c8de2819484f58561bc9e26",
+     :reason :program-progress-committed}
+    {:job 1,
+     :commit "14241ba580bf7b21a4a855d177a75df7a718ff87",
      :reason :program-progress-committed}]}
   {:consumer :t97A04,
    :phase :lemma,
@@ -81737,7 +81753,7 @@
    :other-consumers []}
   {:consumer :t94A10,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -81749,7 +81765,9 @@
     :reported-by [:program-2026-10-11-close-t94a10],
     :type "B7 pullback curl identity",
     :area "periodic-stokes-square",
-    :proved-in :program-2026-10-11-close-t94a10},
+    :proved-in :program-2026-10-11-close-t94a10,
+    :banked-by :program-2026-10-11-close-t94a10,
+    :banked-commit "14241ba580bf7b21a4a855d177a75df7a718ff87"},
    :id
    :lemma-constructiontargets-t94a10closure-exact-sphereparam-identity,
    :kind :lemma,
