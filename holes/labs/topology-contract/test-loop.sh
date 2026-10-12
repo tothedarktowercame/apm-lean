@@ -57,6 +57,28 @@ bb "$HERE/build_step.bb" apply-result "$stopped" edge "$HERE/fixtures/pass-recei
 bb "$HERE/worklist_check.bb" "$stopped"
 rm -f "$stopped"
 
+# A PASS on a STOP says the stop was honest, not that the row delivered
+# (2026-10-12: 190 such rows read as :done, unblocked their dependents, and
+# banked 10 lemmas that were never declared). The row becomes :stopped, its
+# dependent stays blocked, and the lemma it was elected for stays backlog.
+stopdep="$(mktemp)"
+bb -e '(let [d (clojure.edn/read-string (slurp (first *command-line-args*)))
+             e (first (:items d))
+             lem {:id :lemma-l :kind :lemma :state :backlog :phase :lemma :scope [] :depends-on []
+                  :consumer (:consumer e) :other-consumers [] :acceptance {:lemma "l"}
+                  :lemma {:name "l" :reported-by []}}
+             after (-> e (assoc :id :after :kind :final-adapter :state :blocked :depends-on [:edge])
+                       (dissoc :implements-lemma))]
+         (spit (second *command-line-args*)
+               (pr-str (assoc d :items [(assoc e :implements-lemma :lemma-l) lem after]))))' \
+  "$HERE/fixtures/transition-ledger.edn" "$stopdep"
+bb "$HERE/worklist_check.bb" "$stopdep"
+bb "$HERE/build_step.bb" apply-result "$stopdep" edge "$HERE/fixtures/stop-receipt.edn"
+bb "$HERE/build_step.bb" apply-result "$stopdep" edge "$HERE/fixtures/pass-receipt.edn"
+[ "$(bb -e '(let [d (clojure.edn/read-string (slurp (first *command-line-args*))) s (into {} (map (juxt :id :state) (:items d)))] (print (s :edge) (s :lemma-l) (s :after)))' "$stopdep")" = ":stopped :backlog :blocked" ]
+bb "$HERE/worklist_check.bb" "$stopdep"
+rm -f "$stopdep"
+
 # The 2026-09-30 cycle: author stops, review fails the stop, author stops
 # again. The second stop must park the row for the owner: not reviewable, not
 # schedulable.

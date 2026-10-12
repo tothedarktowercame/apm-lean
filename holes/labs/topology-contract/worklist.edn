@@ -177,7 +177,7 @@
      "02e107f6706de85fa13220b4a892fedaa018fee0d76b8f6ded93725f8f398b71"},
     :seat :codex-6},
    :phase :implementation,
-   :state :done,
+   :state :stopped,
    :scope
    ["ConstructionTargets/TwoOpenFundamentalGroupFreeProduct.lean"
     "ConstructionTargets/TwoOpenFundamentalGroupFreeProduct.md"],
@@ -255,7 +255,7 @@
      "typechecks only the desired proposition; supplies no inhabitant"},
     :seat :codex-12},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node "TWO-OPEN VAN KAMPEN / t00A01",
    :acceptance
@@ -330,7 +330,7 @@
      "816da19a1c97211a18347b8b99f107ba06b1a65e7bf76afc6abddef305ee90d9"},
     :seat :codex-6},
    :phase :implementation,
-   :state :done,
+   :state :stopped,
    :scope
    ["ConstructionTargets/PuncturedClosedManifoldTopHomology.lean"
     "ConstructionTargets/PuncturedClosedManifoldTopHomology.md"],
@@ -418,7 +418,7 @@
      "816da19a1c97211a18347b8b99f107ba06b1a65e7bf76afc6abddef305ee90d9"},
     :seat :codex-6},
    :phase :implementation,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node "SPHERE ORIENTATION/HOMOLOGY NATURALITY",
    :acceptance
@@ -769,7 +769,7 @@
      "a circle c : C(Circle,D) whose radial composite is homotopic to ContinuousMap.id Circle"},
     :seat :codex-12},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node "PLANAR SEPARATION / a97J08 [UPTAKE/API-GAP]",
    :acceptance
@@ -872,7 +872,7 @@
      "actual torus self-homeomorphisms preserving the cover and moving any equal-fiber pair"},
     :seat :codex-12},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node "COVERING CONSTRUCTORS / t98A01 [LOCAL-GO]",
    :acceptance
@@ -969,7 +969,7 @@
      "∀ x, Nonempty (FundamentalGroup RP2 x ≃* Multiplicative (ZMod 2))"},
     :seat :codex-12},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node "ANTIPODAL QUOTIENT FUNDAMENTAL GROUP / t92J05 [API-GAP]",
    :acceptance
@@ -1199,7 +1199,7 @@
     "If the frozen statement is corrected to positive-dimensional spheres or reduced homology in degree zero, positive-dimensional orientation is already banked and the remaining reusable mathematical edge is the north-versus-south suspension/excision sign comparison.",
     :seat :codex-12},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node "SPHERE ORIENTATION NATURALITY / t94J08 [API-GAP]",
    :acceptance
@@ -1421,7 +1421,7 @@
      "integral of x ↦ x.1 0 ^ 2 equals Real.pi ^ 2 / 2"},
     :seat :codex-12},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node
    "HAUSDORFF SPHERE NORMALIZATION / SPHERE-BALL MOMENTS [API-GAP → LOCAL-GO]",
@@ -1640,7 +1640,7 @@
      "d3bf3abd0ba5fb80655451d53b4fc8d6294182f6b13215864c5c1fef7c8ead70"},
     :seat :codex-12},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node "LOCAL-DIFFEOMORPH CONVERSE / t99J04 [API-GAP]",
    :acceptance
@@ -1872,7 +1872,7 @@
      "cb4b3febfb442738ba3129d5715db9db5af755ffec47ec1f4aa1a8fdd77169fa"},
     :seat :codex-12},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node "ACTION/QUOTIENT TRANSPORT / t01A04 [LOCAL-GO]",
    :acceptance
@@ -7380,7 +7380,7 @@
      :finding
      "PASS: reviewer codex-1 differs from STOP author codex-17. This is a read-only scheduling result with empty scope, hence no implementation fixture or changed-file hash exists to reproduce. The recorded boundary is exact: SardImplicitFunctionResidualFlatness yields only HasFDerivAt with derivative zero at one kernel-coordinate basepoint, whereas SardMultivariableTaylorCoveringNullity requires iteratedFDeriv vanishing for every order 1 through k at every point of the compact locus. First-order pointwise flatness cannot imply the required higher jets—a smooth quadratic already has zero first derivative and nonzero second derivative at the origin. Producing and decomposing the higher-jet strata is the rank/source-dimension induction itself, so the reported incompatible derivative-order seam satisfies the row's STOP condition without weakening hypotheses. Both inspected modules compile with standard axioms only; frozen t93A04 remains unchanged with one theorem and one placeholder."}},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RANK AND SOURCE-DIMENSION INDUCTION",
@@ -46614,7 +46614,7 @@
     :mathematical-refutation false,
     :seat :codex-6},
    :phase :implementation,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
@@ -47171,7 +47171,7 @@
      "acf44fd8f8e717bfca21968c0f470d0b6fac20b7f6b047a831073b4ac9403dc0"},
     :seat :codex-12},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node "SARD THEOREM / strict-dimension sphere consumer",
    :acceptance
@@ -47254,7 +47254,7 @@
      "337089245a258341fccc0f5a6729d70b4c56828e259294907088841da59d6816"},
     :seat :codex-12},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node "SARD THEOREM",
    :acceptance
@@ -47515,7 +47515,7 @@
      "4dc9083f137e9aa188261ec6ffd6053074be575c6738a0bd2f5d5a5bdc3817cd"},
     :seat :codex-12},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node "VAN KAMPEN / generic quotient and gluing PI1",
    :acceptance
@@ -47921,7 +47921,7 @@
      "cf8274d84ac694b38ab0fb2bf9321d5dac51d2fa0d51f99cf955d3f624654212"},
     :seat :codex-12},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node "SPHERE ORIENTATION / concrete degree maps",
    :acceptance
@@ -48322,7 +48322,7 @@
      "b92f1aeb148e8b5084fc179c41872210200b5007b75caa935c28b679e5e3fa45"},
     :seat :codex-12},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node "PLANAR SEPARATION / bounded complement component",
    :acceptance
@@ -49636,7 +49636,7 @@
       "3ef7160a886ef9fd31477c0b97e6bc6bd553fbff01ee77a452428c7723a941f1"}},
     :seat :codex-12},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node "STOKES AND MOMENTS / Hausdorff sphere coordinate moment",
    :acceptance
@@ -50041,7 +50041,7 @@
       "f3333bcced046c07422c4c8ac1fc54a9f7fabecde11cbe6a33f655bce42c0c65"}},
     :seat :codex-12},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node "SPHERE ORIENTATION / antipodal homology action",
    :acceptance
@@ -50745,7 +50745,7 @@
       "4bb42c37d7529fbcadbb21b1e1f06dac0294dcc59bacbedb613110a72decf40b"}},
     :seat :codex-12},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node
    "SPHERE ORIENTATION / repaired positive-dimensional antipodal action",
@@ -51145,7 +51145,7 @@
       "f9924df8d776874fbb7dfe9039056707c3ed7768333d4f099aaac5f24763b294"}},
     :seat :codex-12},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node "STOKES AND MOMENTS / intrinsic sphere normalization",
    :acceptance
@@ -51531,7 +51531,7 @@
      :placeholder-delta 0},
     :seat :codex-12},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node "STOKES AND MOMENTS / frozen outward flux",
    :acceptance
@@ -51897,7 +51897,7 @@
      :placeholder-delta 0},
     :seat :codex-12},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node "COVERINGS / fivefold torus and surface classification",
    :acceptance
@@ -52255,7 +52255,7 @@
      :proved-prefix-preserved true},
     :seat :codex-12},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node "COVERINGS / rational torus Euler characteristic",
    :acceptance
@@ -52614,7 +52614,7 @@
      :verified true},
     :seat "codex-12"},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node "SURFACE CLASSIFICATION / invariant Hopf surface",
    :acceptance
@@ -52964,7 +52964,7 @@
      :verified true},
     :seat "codex-12"},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node "SPHERE ORIENTATION / arbitrary integer induced degree",
    :acceptance
@@ -53311,7 +53311,7 @@
      :verified true},
     :seat "codex-12"},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node "TWO-OPEN VAN KAMPEN / connected-sum free product",
    :acceptance
@@ -53655,7 +53655,7 @@
      :verified true},
     :seat "codex-12"},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node "COVERINGS / literal wedge graph realization",
    :acceptance
@@ -54917,7 +54917,7 @@
     "e01ccfe6008fe27aabcead609ae507d379880610efd547f780a96177771708e7",
     :seat "codex-12"},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD / general-model projected regular value",
@@ -55370,7 +55370,7 @@
     "Compiled existential counterexample preserves all frozen definitions and the original smooth-order expression. Every circle point has norm 1, so any inhabited radial level has radius 1. An explicit homeomorphism identifies that level with the circle. The requested dimension-zero ChartedSpace would make the level, hence the circle, discrete. Connectedness would then identify the distinct points single 0 1 and single 0 (-1), a contradiction. Sard cannot supply an attained regular radius here.",
     :seat "codex-12"},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node
    "REGULAR-PREIMAGE/SUBMERSION / frozen nonempty radial level",
@@ -55824,7 +55824,7 @@
     "Compiled the actual frozen positive-dimensional ModuleCat integral orientation, equality of the frozen antipodal map with SphereAntipodalHomology.sphereAntipodal, and involutivity of its actual induced homology map. All frozen definitions and existing helper proofs in the diagnostic prefix are byte-identical. Inspected the later production-pair, nested-subspace, range-cokernel and cover-small projection comparisons, not merely their historical predecessors. CoverSmallRelativeProjectionComparison supplies the projection equation, but identifying rightPairToAmbientRelative with the applicable relativeExcisionMap at Z=V complement and transporting through its positive-degree homology inverse remains. That comparison must connect MayerVietorisConnectingSwap.connecting_swap to the actual spherePositiveHomologyShift, yielding the negative antipodal recurrence, including the degree-one endpoint through the reduced zero-sphere difference. RelativePairNaturality supplies pair-map naturality; coefficient small-path chains do not supply this signed sphere-shift comparison. No complete frozen closure fixture was obtained.",
     :seat "codex-12"},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node "SPHERE ORIENTATION / signed antipodal action",
    :acceptance
@@ -56828,7 +56828,7 @@
     "Target neighborhood shrinking compiles under exactly RegularSpace Y. Two independent obligations prevent frozen closure. First, the banked manifold Sard and local-nullity aggregation require SecondCountableTopology X, absent from frozen Main. The diagnostic proves that an arbitrarily indexed family of smooth constant real maps has individually null critical-value sets whose union is the entire real target; individual chart nullity therefore cannot justify arbitrary-union avoidance. This is an obstruction to that inference, not a realized counterexample to the frozen theorem. Second, ManifoldRegularFiberGlobalAtlas supplies equality-fiber charts with a Euclidean model, whereas the literal conclusion requires half-space charts on the inherited-topology closed preimage. A regular-sublevel boundary-chart construction and compatibility with interior charts remain absent from the inspected producers. Equality-fiber smooth inclusion alone does not supply them.",
     :seat "codex-12"},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node
    "REGULAR-PREIMAGE/SUBMERSION / closed neighborhood manifold with boundary",
@@ -57243,7 +57243,7 @@
     "The diagnostic preserves all frozen definitions and existing lemmas and proves the literal axis-preimage identity: the translated image lies on the z-axis exactly when its first-two-coordinate projection equals the negative parameter. Frozen slice smoothness and derivative translation invariance compile with standard axioms. The available manifold Sard theorem requires a finite-dimensional complete real inner-product self-model source. Frozen Main supplies an arbitrary normed E and ModelWithCorners I, with no finite-dimensionality, completeness, inner-product or boundarylessness assumptions. Second countability of X does not supply those missing model hypotheses. Even a finite-dimensional specialization would still require justified smoothness and criticality transport on the actual model range; an open self-model chart domain cannot be assumed.",
     :seat "codex-12"},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD / literal almost-everywhere normal translation",
@@ -57764,7 +57764,7 @@
     "Recompiled the existing placeholder-free diagnostic preserving the frozen definitions and proved prefix exactly. It constructs the actual integral H2 orientation, proves degree one for identity and closes the corresponding literal oriented-intersection case. CoefficientSingularPrism.subdivisionHomotopy compares subdivision with identity; it computes no sphere self-map action. T02A06SphereShift.spherePositiveHomologyShift constructs an isomorphism through projection, inverse excision, coordinate and radial comparisons. Its existence alone does not establish naturality for a suspended power map. CoverSmallRelativeProjectionComparison identifies actual relative projection arrows but supplies no all-integer degree equation.",
     :seat "codex-12"},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node "SPHERE ORIENTATION / all-integer induced degree",
    :acceptance
@@ -58177,7 +58177,7 @@
      :placeholder-after 1},
     :seat "codex-12"},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node "COVERINGS / fivefold torus and surface classification",
    :acceptance
@@ -58501,7 +58501,7 @@
      :placeholder-after 1},
     :seat "codex-12"},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node
    "POINCARE/THOM COMPARISON / frozen oriented preimage duality",
@@ -58747,7 +58747,7 @@
       :job "invoke-1789007534862-17671-a9f7ab23"}],
     :seat "codex-12"},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node "TRANSVERSE-PULLBACK / vector-target fiber product",
    :acceptance
@@ -59043,7 +59043,7 @@
     "Compiled the literal frozen integral as minus one half of IntrinsicSphereSecondMoments.mass 3, reusing the banked intrinsic density moment. Frozen definitions and the proved prefix are preserved. The missing numerical assertion is mass 3 = 2*pi^2. Mathlib defines hausdorffMeasure d using diameter powers without a dimensional prefactor; its polar-coordinate API instead constructs volume.toSphere. No identification of these measures or numerical intrinsic mass theorem was found in the audited canonical and Mathlib sources. Consequently the usual sphere-area value cannot be substituted without proving the normalization comparison. This is an exact measure boundary and a normalization concern, not a compiled refutation.",
     :seat "codex-12"},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node
    "MANIFOLD INTEGRATION / literal projective density integral",
@@ -59701,7 +59701,7 @@
       "57d828da3d4614490d7fa564a9bf7586b667c1496c93ef40cc69fb95d2530a43"}],
     :seat "codex-12"},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node
    "TWO-OPEN VAN KAMPEN / frozen connected-sum fundamental group",
@@ -60414,7 +60414,7 @@
     "Two independent constructions remain. Correction to the preceding strategy receipt: apm_t94J09_homeomorphOfDiskMaps is conditional, not a constructed homeomorphism between the frozen quotients. It requires continuous disk maps p,q, compatibility with both generating relations, and both quotient-level inverse identities. Those witnesses remain absent. Separately, current integral and coefficient-general excision, pair sequences, relative-map naturality and radial comparisons do not compute the attaching map for this polygon quotient. The finite vertex-count and Euler certificates do not establish its actual cellular structure or singular homology.",
     :seat "codex-12"},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node
    "SURFACE HOMOLOGY / frozen nonorientable genus-six polygon",
@@ -60502,7 +60502,7 @@
     "The audited APIs do not construct a finite triangulation or polygon presentation from these manifold hypotheses. Mathlib's CW definitions require attachment data; they do not produce it for an arbitrary compact surface. Banked square triangulation and solid-torus collar constructions concern specific spaces. Surfaces supplies the target quotients, continuous surjective quotient maps and arithmetic formulas, but no polygon normalization or classification homeomorphism. The t99J03 uniqueness adapter assumes the existence dichotomy and Euler invariance, so it cannot establish the requested existence theorem.",
     :seat "codex-12"},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node
    "SURFACE CUTTING/CLASSIFICATION / compact surface polygon presentation",
@@ -61450,7 +61450,7 @@
     "The frozen nonzero-field and local-diffeomorphism surjectivity helpers are proved. Mathlib also supplies compact-Hausdorff local-homeomorphism covering machinery. The audited homology APIs do not supply the two remaining Euler conclusions: the uniform rational singular-homology calculation for Fin n → Circle, and a finite-cover comparison for the literal truncated alternating finrank sum. The complete integral boundary-torus table is banked, but it is neither a rational arbitrary-dimensional torus table nor an Euler multiplicativity theorem.",
     :seat "codex-12"},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node
    "MANIFOLD EULER CHARACTERISTIC / frozen torus local diffeomorphism",
@@ -61537,7 +61537,7 @@
     "The missing construction is a finite family of embedded triangles covering the given surface, with intersections identified exactly along compatible faces. This must produce a finite dimension-two complex and a continuous bijective realization map to the original surface. No complete fixture or new compiled geometric prerequisite was obtained. This is an infrastructure boundary, not a mathematical refutation or campaign termination.",
     :seat "codex-12"},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node
    "SURFACE CUTTING/CLASSIFICATION / finite triangulation construction",
@@ -62016,7 +62016,7 @@
     "5ae2524e052530a80e46ffdb0504329f22f5babf9e6d4e9a6ffcfc472e4d16a1",
     :seat "codex-12"},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node "SPHERE DEGREE / arbitrary integer degree frozen closure",
    :acceptance
@@ -63177,7 +63177,7 @@
      :placeholder-after 1},
     :seat "codex-12"},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node "MANIFOLD SARD / frozen regular affine line",
    :acceptance
@@ -63257,7 +63257,7 @@
       :job "invoke-1789025310202-18140-681b0c9e"}],
     :seat "codex-12"},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node
    "SURFACE TRIANGULATION / compatible embedded face refinement",
@@ -63664,7 +63664,7 @@
      :placeholder-after 2},
     :seat "codex-12"},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node "MANIFOLD INTEGRATION / frozen sphere flux",
    :acceptance
@@ -64090,7 +64090,7 @@
     "The precise missing construction is an endpoint-preserving adjustment of the finite triangle-boundary arc family that preserves embeddings, chart containment and interior coverage while proving finite intersections, including control near shared endpoints. CompactSurfaceTriangleCover proves the original embeddings and coverage but no inter-boundary position condition. IncidenceParameterProjection and ManifoldTargetIncidenceTangent require range-sum transversality as a hypothesis; they do not construct the required perturbation. Mathlib's Bordism perturbation discussion is documentation, not a relative perturbation theorem. EndpointPreservingFinEmbeddingDecomposition concerns finite order embeddings, not geometric arcs. No complete fixture or new compiled geometric prerequisite was obtained.",
     :seat "codex-12"},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node
    "SURFACE TRIANGULATION / embedded arcs in finite position",
@@ -64352,7 +64352,7 @@
      :placeholder-after 2},
     :seat "codex-12"},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node "VAN KAMPEN / frozen connected-sum open-union adapter",
    :acceptance
@@ -65061,7 +65061,7 @@
      :placeholder-after 1},
     :seat "codex-12"},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node "COVER-DEGREE / frozen rational Euler closure",
    :acceptance
@@ -66347,7 +66347,7 @@
      :placeholder-after 2},
     :seat "codex-12"},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node "VAN KAMPEN / frozen null-circle torus gluing",
    :acceptance
@@ -67004,7 +67004,7 @@
      :placeholder-after 1},
     :seat "codex-12"},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node "COVERING CLASSIFICATION / frozen fivefold surface cover",
    :acceptance
@@ -69512,7 +69512,7 @@
     "Compiler-checked supportConnecting_eq_zero for arbitrary topological X, subsets K and L, commutative-ring coefficients and every natural degree. The dependency source hash is 494601c742dbce3412b811fce3c578ce2d9f1ab068e7c44b525aeffdca9902b7. The working tree contains only two unrelated pre-existing untracked documentation files.",
     :seat "codex-12"},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node
    "MANIFOLD FUNDAMENTAL CLASS / compact-support relative Mayer-Vietoris",
@@ -70037,7 +70037,7 @@
      "2f28fac68a70ed22e43078a4957957bac9f3cdaa5fcc63d55d432e3a1695ce44"},
     :seat "codex-12"},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node "SURFACE TRIANGULATION / frozen contained-arc uptake",
    :acceptance
@@ -70639,7 +70639,7 @@
     "No files were changed. Actual dependency SHA256 is fa77b7018a16c83ea8e03f5994a30b8b02ca18eab3867178fe2b91ce2f5410d5; the row must be corrected to that exact value before this duplicate implementation packet can be admitted.",
     :seat "codex-6"},
    :phase :implementation,
-   :state :done,
+   :state :stopped,
    :scope
    ["ConstructionTargets/CoefficientUnionToProductionRelativeComparison.lean"],
    :dag-node
@@ -71151,7 +71151,7 @@
     "The correctly oriented nested pair is the pair with ambient L complement and subspace complement of K union L, represented by excisedSubspace (K complement) L. CoefficientExcision therefore demands L subset interior (K complement). The compiled singleton counterexample proves compactness alone cannot discharge that premise, and exchanging K and L does not repair the route.",
     :seat "codex-12"},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node
    "MANIFOLD FUNDAMENTAL CLASS / genuine coefficient relative Mayer-Vietoris chain sequence",
@@ -72427,7 +72427,7 @@
     "The exact section equality is sound, but its relative interior domain removes the four endpoint pairs. Ordinary Sard for the incidence projection would at most give a discrete interior fiber. The missing endpoint-neighborhood control is logically necessary before compactness can turn that discrete fiber into a finite set. The banked statement that the excluded boundary set has four points cannot rule out an infinite interior sequence converging to one of those points.",
     :seat "codex-12"},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node
    "SURFACE TRIANGULATION / relative endpoint-preserving chartwise arc perturbation",
@@ -72928,7 +72928,7 @@
      "58a2e8144d472806a294d08dcbc54dae6717969a5264426a42a275e438fc7fed"},
     :seat "codex-12"},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node
    "COVERING CLASSIFICATION / frozen five-torsion cardinality uptake",
@@ -77246,7 +77246,7 @@
      "Scheduling STOP for two independent prerequisites; not a mathematical refutation."},
     :seat "topo-4"},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t94A07",
    :acceptance
@@ -77512,7 +77512,7 @@
      "Scheduling STOP for multiple independent prerequisites; not a mathematical refutation."},
     :seat "topo-4"},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t99J06",
    :acceptance
@@ -77776,7 +77776,7 @@
      "Scheduling STOP for three independent prerequisites; not a mathematical refutation."},
     :seat "topo-4"},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t97A07",
    :acceptance
@@ -78068,7 +78068,7 @@
      "549bdba880150e9e0a02c166f19e682671fce507cb167615d4533b19db90d34d"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done,
+   :state :stopped,
    :scope ["problems/t02A05/lean/Main.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t02A05/bridge_1",
    :acceptance
@@ -78147,7 +78147,7 @@
      "1e8a3eeade4742ff39516783f4f80b29eae5ce63400b36fc4f54a4fc748f1d2e"},
     :seat "topo-4"},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t02A05",
    :acceptance
@@ -78439,7 +78439,7 @@
      "2322748e2464f61e6be97c30a2d13730d751776a2341b7184bc8fb5bb09fd0da"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done,
+   :state :stopped,
    :scope ["problems/t01A01/lean/Main.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t01A01/bridge_1",
    :acceptance
@@ -78524,7 +78524,7 @@
      "2322748e2464f61e6be97c30a2d13730d751776a2341b7184bc8fb5bb09fd0da"},
     :seat "topo-4"},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t01A01",
    :acceptance
@@ -78799,7 +78799,7 @@
      "c75c08f4960a7a26ddb2fcb87b696248dbff4547cde5826ea684de6186c1706c"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done,
+   :state :stopped,
    :scope ["problems/t94A10/lean/Main.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t94A10/closedness",
    :acceptance
@@ -78875,7 +78875,7 @@
      "c75c08f4960a7a26ddb2fcb87b696248dbff4547cde5826ea684de6186c1706c"},
     :seat "topo-4"},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t94A10",
    :acceptance
@@ -79146,7 +79146,7 @@
      "e1592fa3174d7482a65353c26493e523fe269d0a9594084e38a3fbbc956f9dd7"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done,
+   :state :stopped,
    :scope ["problems/t92J08/lean/Main.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t92J08/uniform-local-time",
    :acceptance
@@ -79222,7 +79222,7 @@
      "e1592fa3174d7482a65353c26493e523fe269d0a9594084e38a3fbbc956f9dd7"},
     :seat "topo-4"},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t92J08",
    :acceptance
@@ -79491,7 +79491,7 @@
      "f3b42c4af0b0a43714825c432891ae99f6459d7407390f3679df91fbf56a846a"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done,
+   :state :stopped,
    :scope ["problems/t95J02/lean/Main.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t95J02/vertical-H1-kernel",
    :acceptance
@@ -79573,7 +79573,7 @@
      "f3b42c4af0b0a43714825c432891ae99f6459d7407390f3679df91fbf56a846a"},
     :seat "topo-4"},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t95J02",
    :acceptance
@@ -79868,7 +79868,7 @@
      "5aa47dd88cee1602b0dbe77d0d3089ad02554d3181a29218f6ee6bf6cf61c61c"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done,
+   :state :stopped,
    :scope ["problems/t91J06/lean/Main.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t91J06/compatible-stage-coordinates",
    :acceptance
@@ -79955,7 +79955,7 @@
      "5aa47dd88cee1602b0dbe77d0d3089ad02554d3181a29218f6ee6bf6cf61c61c"},
     :seat "topo-4"},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t91J06",
    :acceptance
@@ -80245,7 +80245,7 @@
      "42816741b4cc4bdb68359d47b85a4b5d64ac1b1698d9b08f20e2c1019b7c82c6"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done,
+   :state :stopped,
    :scope ["problems/t99J04/lean/Main.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t99J04/manifold-local-inverse-function",
@@ -80325,7 +80325,7 @@
      "42816741b4cc4bdb68359d47b85a4b5d64ac1b1698d9b08f20e2c1019b7c82c6"},
     :seat "topo-4"},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t99J04",
    :acceptance
@@ -80772,7 +80772,7 @@
      "cf5dcb2d2e73f5a8bd5fd6d43f8e910ac835991dd4d5f3c733acb526ab7a778d"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done,
+   :state :stopped,
    :scope ["problems/t98A06/lean/Main.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t98A06/local-smooth-submersion-lift",
    :acceptance
@@ -80868,7 +80868,7 @@
      "cf5dcb2d2e73f5a8bd5fd6d43f8e910ac835991dd4d5f3c733acb526ab7a778d"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done,
+   :state :stopped,
    :scope ["problems/t98A06/lean/Main.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t98A06/local-smooth-submersion-lift",
    :acceptance
@@ -80968,7 +80968,7 @@
     "Owner-approved materially different reroute or a new theorem/API supplying the fixed-coordinate smooth mfderiv family.",
     :seat "topo-2"},
    :phase :implementation,
-   :state :done,
+   :state :stopped,
    :scope ["problems/t98A06/lean/Main.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t98A06/local-smooth-submersion-lift",
    :acceptance
@@ -81098,7 +81098,7 @@
      :status :missing},
     :seat "topo-1"},
    :phase :implementation,
-   :state :done,
+   :state :stopped,
    :scope ["problems/t98J01/lean/Main.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t98J01/circle-reflection-obstruction",
    :acceptance
@@ -81179,7 +81179,7 @@
      :status :missing},
     :seat "topo-4"},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t98J01/part-b",
    :acceptance
@@ -81265,7 +81265,7 @@
      :status :missing},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done,
+   :state :stopped,
    :scope ["problems/t98J02/lean/Main.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t98J02/disconnected-trivial-cover",
    :acceptance
@@ -81351,7 +81351,7 @@
      :status :missing},
     :seat "topo-4"},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t98J02/counterexamples",
    :acceptance
@@ -81740,7 +81740,7 @@
      :role :boundary-check},
     :seat "topo-4"},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/shared/polygon-quotient-hausdorff",
    :acceptance
@@ -82107,7 +82107,7 @@
      :status :self-axiomatized},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done,
+   :state :stopped,
    :scope ["ConstructionTargets/T99J05AffineLocalDiagonal.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t99J05/affine-charts-local-diagonal/package",
@@ -82203,7 +82203,7 @@
      :status :self-axiomatized},
     :seat "topo-4"},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t99J05/affine-charts-local-diagonal",
    :acceptance
@@ -82288,7 +82288,7 @@
      "PASS as STOP: reviewer codex-3 differs from author topo-4. Commit f2607051 changes only the worklist and records empty probe scope; no fixture or theorem implementation is claimed. Fresh broad searches reproduce the absence of both sequential prerequisites: pinned Mathlib and ConstructionTargets provide no generic theorem giving a Hausdorff coinduced quotient from a closed equivalence graph on a compact Hausdorff source, and no theorem making Relation.EqvGen closed from closed generator graphs. All three consumers compile unchanged with exactly one sorry and no admit or axiom declarations; frozen fingerprints reproduce as t94J09 52b4778c4932a4b38c30b3bf2a7c9943c32f675f19f63ae1d119aa378dde0a75, tunk01 5362677d8a8f8dfcae54d23788ab8d3558ea3b78992e8b9e9c8f0b956fc636fe, and t91A02 e6b708786cf6a21dc5bd30b3d560b260aa4f2bb70519e89f1e06f46d935e41bb. Registry is 131/131 and all 682 rows validate. The orientation and representation boundary are correct: first prove the generic compact closed-relation quotient separation theorem; then classify each concrete EqvGen closure into singleton interior classes, paired edge-interior classes, and finite endpoint vertex classes before expressing its graph as a finite closed union. Cut-and-paste, polygon descent, Euler data, and homology remain downstream."},
     :seat "topo-4"},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/shared/polygon-quotient-compact-closed-relation",
@@ -82367,7 +82367,7 @@
      "PASS as STOP: reviewer codex-3 differs from author topo-4. Commit 3193393a changes only the worklist and records empty probe scope; no fixture or theorem implementation is claimed. Fresh inspection confirms that sphere homology shifts, antipodal actions, coefficient transfer projection, and production Mayer-Vietoris machinery are banked, but the required representation bridges are absent: no normalized sphere-to-coinduced-RP3 covering identification, no rational invariant-subspace equivalence computing base homology, and no arbitrary-CPn affine-cover deformation retractions or projective homology induction. Both consumers compile unchanged with exactly one sorry and no admit or axiom declarations; frozen fingerprints reproduce as t96A06 937efb042dcf5949706d95c5d4266acfe20a12308284ff85af707d5413c43aad and t99J05 cf42ee31318a9e37fde5e4e923ca60cbe51d483ebd813588efc9492359e37db6. Registry is 131/131 and all 682 rows validate. The orientation and boundary are correct: p-star composed with transfer equals sheet count, but this alone neither identifies base homology with antipodal invariants nor proves finite-dimensionality and vanishing. RP3 covering identification plus transfer computation and CPn cover/retraction plus Mayer-Vietoris induction are distinct missing foundations; degree four, Lefschetz, local indices, and Euler characteristic remain downstream."},
     :seat "topo-4"},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/shared/rational-projective-homology",
    :acceptance
@@ -83198,7 +83198,7 @@
      :status :self-axiomatized},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done,
+   :state :stopped,
    :scope
    ["ConstructionTargets/FinitePolygonEqvGenClassification.lean"
     "problems/t94J09/lean/Main.lean"
@@ -83327,7 +83327,7 @@
      :status :self-axiomatized},
     :seat "topo-4"},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/shared/finite-polygon-eqvgen-classification",
@@ -83419,7 +83419,7 @@
      :status :self-axiomatized},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done,
+   :state :stopped,
    :scope
    ["ConstructionTargets/CoefficientProductionOpenCoverMayerVietoris.lean"],
    :dag-node
@@ -83515,7 +83515,7 @@
      :status :self-axiomatized},
     :seat "topo-4"},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/shared/coefficient-production-open-cover-mv",
@@ -83829,7 +83829,7 @@
      :status :self-axiomatized},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done,
+   :state :stopped,
    :scope ["ConstructionTargets/RealProjectiveSphereCovering.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t96A06/sphere-projective-covering-comparison/package",
@@ -83952,7 +83952,7 @@
      :status :self-axiomatized},
     :seat "topo-4"},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t96A06/sphere-projective-covering-comparison",
@@ -84210,7 +84210,7 @@
      "a094a62ebc6d8fcfb5a8424ea572ba27e2c4afc5ba05915c15e42014ce5b5cd9"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done,
+   :state :stopped,
    :scope ["problems/t91J06/lean/Main.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t91J06/reroute-clamp-ramp",
    :acceptance
@@ -84295,7 +84295,7 @@
      "6716c5a81e6d054ee67481ba689331017dc7e48a8ea6ad3ffd7ad36ba05d26cf"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done,
+   :state :stopped,
    :scope ["problems/t95J02/lean/Main.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t95J02/reroute-separating-map",
    :acceptance
@@ -84363,7 +84363,7 @@
     :changed-paths [],
     :seat "topo-2"},
    :phase :implementation,
-   :state :done,
+   :state :stopped,
    :scope ["problems/t99J04/lean/Main.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t99J04/reroute-direct-partial-diffeomorph",
@@ -84698,7 +84698,7 @@
      :status :self-axiomatized},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done,
+   :state :stopped,
    :scope
    ["ConstructionTargets/FiniteCircleWedgeFundamentalGroup.lean"],
    :dag-node
@@ -84786,7 +84786,7 @@
      :status :self-axiomatized},
     :seat "topo-4"},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/shared/finite-circle-wedge-fundamental-group",
@@ -84870,7 +84870,7 @@
      :status :self-axiomatized},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done,
+   :state :stopped,
    :scope ["ConstructionTargets/PointWedgeCoveringGluing.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/shared/point-wedge-covering-gluing/quotient-local-triviality",
@@ -84956,7 +84956,7 @@
      :status :self-axiomatized},
     :seat "topo-4"},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/shared/point-wedge-covering-gluing",
    :acceptance
@@ -85038,7 +85038,7 @@
      :status :self-axiomatized},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done,
+   :state :stopped,
    :scope
    ["ConstructionTargets/FiniteCircleWedgeIntegralHomology.lean"],
    :dag-node
@@ -85126,7 +85126,7 @@
      :status :self-axiomatized},
     :seat "topo-4"},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/shared/finite-circle-wedge-integral-homology",
@@ -85720,7 +85720,7 @@
      "e1ae729edff3b7991142ce2739d2861caea321529d02b5409a34db42a3792464"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done,
+   :state :stopped,
    :scope
    ["ConstructionTargets/GenericPointWedgeFundamentalGroupCoordinates.lean"],
    :dag-node
@@ -85823,7 +85823,7 @@
      "e1ae729edff3b7991142ce2739d2861caea321529d02b5409a34db42a3792464"},
     :seat "topo-4"},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/shared/generic-point-wedge-pi1-inclusion-coordinates",
@@ -85913,7 +85913,7 @@
      "8b85b579989bd59f53eff5991aaa36965b937bb9f0e87e5b88be3c93f989e2cf"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done,
+   :state :stopped,
    :scope
    ["ConstructionTargets/GenericPointWedgeMayerVietorisCoordinates.lean"],
    :dag-node
@@ -86112,7 +86112,7 @@
      "5e989e6755c635999cb1623d41cd8c907d1f7c7d2a6f2f5ee6dec2042813b3f9"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done,
+   :state :stopped,
    :scope
    ["ConstructionTargets/PointWedgeQuotientSheetLocalHomeomorph.lean"],
    :dag-node
@@ -86211,7 +86211,7 @@
      "5e989e6755c635999cb1623d41cd8c907d1f7c7d2a6f2f5ee6dec2042813b3f9"},
     :seat "topo-4"},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/shared/point-wedge-covering-gluing/quotient-sheets",
@@ -87800,8 +87800,8 @@
    :other-consumers []}
   {:consumer :t99J01,
    :owner-reopen
-   "codex-71 2026-10-11: IsCoveringMap.restrictPathComponent is banked (ConstructionTargets/RestrictPathComponent.lean:57); remaining: componentCover_isKSheeted, componentInclusion_pi1_bijective",
-   :stop-count 1,
+   "reopened: a lemma this row reported missing is now banked",
+   :stop-count 0,
    :review-finding
    "design the supporting signatures and discharge the frozen axiom type",
    :evidence
@@ -87895,7 +87895,7 @@
      "3931266497ef83433fbbf4d01f17aa1c9a301ab3a69c52ca38aea6f20bcd3b63"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done,
+   :state :open,
    :scope
    ["ConstructionTargets/T99J01PathComponentCoverRestriction.lean"],
    :dag-node
@@ -95850,7 +95850,7 @@
     "The demanded edge-compatible disk-square coordinate map cannot exist. The frozen disk parameterization has edgePoint 4 0 at t=1 equal to edgePoint 4 1 at t=0 because consecutive circular arcs share an endpoint. The banked prescribed square parameterization sends those arguments to squareEdge 0 at t=1 = (0,1) and squareEdge 1 at t=0 = (1,0), which are distinct. Therefore no function from the frozen disk to the square, hence no homeomorphism, can satisfy the required four edge formulas. The aabb disk presentation and the chosen opposite-side square presentation require a nontrivial polygon-presentation change, not direct edgewise carrier coordinates.",
     :seat "topo-4"},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t93J03/klein-deck-action/square-boundary-orbit-eqvgen",
@@ -104280,7 +104280,7 @@
      :status :self-axiomatized},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done,
+   :state :stopped,
    :scope
    ["ConstructionTargets/KleinDiskClosedSquareRelationCompatibleCarrier.lean"],
    :dag-node
@@ -104407,7 +104407,7 @@
      :status :self-axiomatized},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done,
+   :state :stopped,
    :scope
    ["ConstructionTargets/KleinCompatibleCarrierComponentBridge.lean"],
    :dag-node
@@ -104533,7 +104533,7 @@
      :status :self-axiomatized},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done,
+   :state :stopped,
    :scope
    ["ConstructionTargets/KleinCompatibleCarrierComponentBridge.lean"],
    :dag-node
@@ -104897,7 +104897,7 @@
      "20f5ed4324eaf3882bbdafb16140c7a5b35d8fdd7b9250bc92669b9ce93bd256"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done,
+   :state :stopped,
    :scope
    ["ConstructionTargets/TwoOpenFreeProductGroupEquivalenceCoordinates.lean"],
    :dag-node
@@ -105003,7 +105003,7 @@
      "f3ee994819b11d5319fe333efe352a86f019f015f03d7c8c461e324348acfe3f"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done,
+   :state :stopped,
    :scope
    ["ConstructionTargets/GenericTargetNaturalSourceReconstructionLegCoordinates.lean"],
    :dag-node
@@ -105116,7 +105116,7 @@
      "13c097b29888d2db43e201ac92d14b61d74774487750973007081cadcdc27ffd"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done,
+   :state :stopped,
    :scope
    ["ConstructionTargets/TwoOpenFreeProductMappingInverseIdentityLegCoordinates.lean"],
    :dag-node
@@ -105234,7 +105234,7 @@
      "c5badebac45156c1b08d838291ab02e5ca04b4385d6f143451bb8b75f64c38a5"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done,
+   :state :stopped,
    :scope
    ["ConstructionTargets/TwoOpenFreeProductMappingCounitComponentIdentity.lean"],
    :dag-node
@@ -105341,7 +105341,7 @@
      :status :self-axiomatized},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :blocked,
    :scope
    ["ConstructionTargets/TwoOpenFreeProductMappingCompositeCounitIdentity.lean"],
    :dag-node
@@ -105869,7 +105869,7 @@
      :status :self-axiomatized},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done,
+   :state :stopped,
    :scope ["ConstructionTargets/KleinOrbitQuotientHomeomorph.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t93J03/klein-orbit-quotient-homeomorph",
@@ -105993,7 +105993,7 @@
      :status :self-axiomatized},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done,
+   :state :stopped,
    :scope
    ["ConstructionTargets/KleinClosedSquareOrbitInverseContinuity.lean"],
    :dag-node
@@ -106432,7 +106432,7 @@
      :status :self-axiomatized},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done,
+   :state :stopped,
    :scope
    ["ConstructionTargets/ConnectorSingleObjectCounitBaseIdentity.lean"],
    :dag-node
@@ -106548,7 +106548,7 @@
      "473138e897d3663a3afd075c36a571eb01c5e271c31f142d1a29768d0d0f5b98"},
     :seat "topo-4"},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/shared/connector-single-object-counit-base-identity",
@@ -107740,7 +107740,7 @@
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :banked,
+   :state :backlog,
    :scope [],
    :acceptance
    {:lemma "kleinOrbitQuotient_homeomorph",
@@ -107756,8 +107756,8 @@
     :type
     "theorem is absent: after defining kleinPlaneAction from PresentedGroup.toGroup and orbitSetoid by existence of a group element, one still must prove theorem kleinOrbitQuotient_homeomorph : Quotient orbitSetoid ≃ₜ ConstructionTargets.StatementSurfaceModels.KleinBottle, with orbitSetoid x y ↔ ∃ g : T93J03.PresentedKleinGroup, kleinPlaneAction g x = y. This theorem entails a complete classification of every orbit intersection with the closed square, all edge and corner identifications, equivalence with the disk-boundary EqvGen relation used by Surface false 2, and continuity of both quotient maps",
     :area "deck-group-fundamental-group",
-    :banked-by :routes-2026-10-11-klein-orbit-quotient-homeomorph-102,
-    :banked-commit "29ead8ffdf682408855cd12480e2a89868bb472b"},
+    :unbanked-from
+    :routes-2026-10-11-klein-orbit-quotient-homeomorph-102},
    :id :lemma-kleinorbitquotient-homeomorph,
    :kind :lemma,
    :depends-on
@@ -108060,7 +108060,7 @@
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :banked,
+   :state :backlog,
    :scope [],
    :acceptance
    {:lemma "kleinSquareBoundaryOrbitEqvGen",
@@ -108073,7 +108073,7 @@
      :routes-2026-10-10-klein-square-boundary-orbit-eqvgen-28],
     :type
     "On the closed square, identify the plane-action orbit relation exactly with the aabb disk-boundary EqvGen relation defining ConstructionTargets.StatementSurfaceModels.KleinBottle.",
-    :banked-by
+    :unbanked-from
     :routes-2026-10-10-klein-square-boundary-orbit-eqvgen-28},
    :id :lemma-kleinsquareboundaryorbiteqvgen,
    :kind :lemma,
@@ -112535,7 +112535,7 @@
    :other-consumers [:t98A02]}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :banked,
+   :state :backlog,
    :scope [],
    :acceptance
    {:lemma "kleinDiskClosedSquareCompatibleCarrierPackage",
@@ -112549,9 +112549,8 @@
     :type
     "There exists a homeomorphism h from ConstructionTargets.Surfaces.Disk to the subtype of points p : Real × Real satisfying InSquare p such that, for every disk points x y, Relation.EqvGen (SurfaceRel false 2) x y if and only if Relation.EqvGen ClosedSquareRel (h x) (h y).",
     :area "polygon-quotient-identification",
-    :banked-by
-    :routes-2026-10-11-klein-disk-closed-square-relation-compatible-carrier-101,
-    :banked-commit "a16770b4024f719fc3feee3dfae01bb79e50a395"},
+    :unbanked-from
+    :routes-2026-10-11-klein-disk-closed-square-relation-compatible-carrier-101},
    :id :lemma-kleindiskclosedsquarecompatiblecarrierpackage,
    :kind :lemma,
    :depends-on
@@ -112606,7 +112605,7 @@
    :other-consumers [:t01A03 :t92J06 :t97A01 :t97A03]}
   {:consumer :t99J01,
    :phase :lemma,
-   :state :banked,
+   :state :backlog,
    :scope [],
    :acceptance
    {:lemma
@@ -112622,9 +112621,8 @@
     :type
     "For the TwoOpenFreeProductMapping mapping family, the reconstructed source equivalence maps the left and right cover-piece inclusion morphisms at the overlap basepoint to Monoid.Coprod.inl and Monoid.Coprod.inr respectively.",
     :area "fundamental-group-wedge-of-circles",
-    :banked-by
-    :routes-2026-10-11-source-equivalence-leg-coordinates-88,
-    :banked-commit "03d45f02ab8b12cae8a8799fce9a7d77864ca446"},
+    :unbanked-from
+    :routes-2026-10-11-source-equivalence-leg-coordinates-88},
    :id
    :lemma-generictargetnaturalsourcereconstruction-sourceequivalence-leg-coordinates,
    :kind :lemma,
@@ -112632,7 +112630,7 @@
    :other-consumers [:t01A03 :t92J06 :t97A01 :t97A03]}
   {:consumer :t99J01,
    :phase :lemma,
-   :state :banked,
+   :state :backlog,
    :scope [],
    :acceptance
    {:lemma
@@ -112648,9 +112646,8 @@
     :type
     "For F := (mapping FreeProductTarget hU hV hcover w).inverse.obj (Functor.id FreeProductTarget), F.map sends the morphisms induced by the left and right cover inclusions at w to Monoid.Coprod.inl and Monoid.Coprod.inr respectively.",
     :area "fundamental-group-wedge-of-circles",
-    :banked-by
-    :routes-2026-10-11-mapping-inverse-identity-leg-coordinates-89,
-    :banked-commit "4a9bd0d4587469f7f13c7634c2c6d47e762520d0"},
+    :unbanked-from
+    :routes-2026-10-11-mapping-inverse-identity-leg-coordinates-89},
    :id
    :lemma-twoopenfreeproductmapping-mapping-inverse-identity-leg-coordinates,
    :kind :lemma,
@@ -112658,7 +112655,7 @@
    :other-consumers [:t01A03 :t92J06 :t97A01 :t97A03]}
   {:consumer :t99J01,
    :phase :lemma,
-   :state :banked,
+   :state :backlog,
    :scope [],
    :acceptance
    {:lemma
@@ -112674,9 +112671,8 @@
     :type
     "For the mapping equivalence at FreeProductTarget, the hom component at SingleObj.star of the counit isomorphism from mapping.functor.obj (mapping.inverse.obj (Functor.id FreeProductTarget)) to Functor.id FreeProductTarget is the identity morphism.",
     :area "fundamental-group-wedge-of-circles",
-    :banked-by
-    :routes-2026-10-11-inverse-identity-counit-component-identity-90,
-    :banked-commit "87173d833b30aa453665a2c6c7841603034559a4"},
+    :unbanked-from
+    :routes-2026-10-11-inverse-identity-counit-component-identity-90},
    :id
    :lemma-twoopenfreeproductmapping-inverseidentitycounit-component-identity,
    :kind :lemma,
@@ -112729,7 +112725,7 @@
    :other-consumers [:t01A03 :t92J06 :t97A01 :t97A03]}
   {:consumer :t99J01,
    :phase :lemma,
-   :state :banked,
+   :state :backlog,
    :scope [],
    :acceptance
    {:lemma
@@ -112746,9 +112742,8 @@
     :type
     "For every connector system used by TwoOpenPointSpanComparison, the counit of connectorSingleObjEquivalence at the identity target functor has identity component at SingleObj.star.",
     :area "fundamental-group-wedge-of-circles",
-    :banked-by
-    :routes-2026-10-11-connector-single-object-counit-base-identity-105,
-    :banked-commit "0b57754390072b29734bc3c22a5cdd2489a566da"},
+    :unbanked-from
+    :routes-2026-10-11-connector-single-object-counit-base-identity-105},
    :id
    :lemma-connectedgroupoidsingleobjequivalence-connectorsingleobjequivalence-counit-base-,
    :kind :lemma,
@@ -113212,7 +113207,7 @@
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :banked,
+   :state :backlog,
    :scope [],
    :acceptance
    {:lemma "compatibleCarrierHomeomorphInducesCyclicComponentEquiv",
@@ -113227,9 +113222,8 @@
     :type
     "Any Disk-to-ClosedSquare homeomorphism preserving and reflecting the two EqvGen relations induces a cyclic-order preserving or reversing equivalence of the four boundary components that conjugates diskPaired to squarePaired",
     :area "polygon-quotient-identification",
-    :banked-by
-    :routes-2026-10-11-compatible-carrier-component-bridge-103,
-    :banked-commit "f9e03983a39d748797647e330e0ef7bdd68599d6"},
+    :unbanked-from
+    :routes-2026-10-11-compatible-carrier-component-bridge-103},
    :id :lemma-compatiblecarrierhomeomorphinducescycliccomponentequiv,
    :kind :lemma,
    :depends-on
@@ -113256,7 +113250,7 @@
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :banked,
+   :state :backlog,
    :scope [],
    :acceptance
    {:lemma "closedSquareOrbitQuotientEquiv_continuous_symm",
@@ -113271,9 +113265,8 @@
     :type
     "Continuous (closedSquareOrbitQuotientEquiv.symm : PlaneOrbitQuotient → ClosedSquareOrbitQuotient) for the coinduced quotient topologies",
     :area "deck-group-fundamental-group",
-    :banked-by
-    :routes-2026-10-11-klein-closed-square-orbit-inverse-continuity-104,
-    :banked-commit "42b893185"},
+    :unbanked-from
+    :routes-2026-10-11-klein-closed-square-orbit-inverse-continuity-104},
    :id :lemma-closedsquareorbitquotientequiv-continuous-symm,
    :kind :lemma,
    :depends-on
@@ -113473,7 +113466,7 @@
    :other-consumers [:t92J06 :t97A01 :t97A03 :t99J01]}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :banked,
+   :state :backlog,
    :scope [],
    :acceptance
    {:lemma "compatibleCarrierHomeomorphInducesBoundaryCycleEquiv",
@@ -113487,9 +113480,8 @@
     :type
     "Every homeomorphism h : Disk ≃ₜ ClosedSquare that preserves and reflects EqvGen (SurfaceRel false 2) and EqvGen ClosedSquareRel induces e : Fin 4 ≃ Fin 4 preserving diskAdjacent and squareAdjacent.",
     :area "polygon-quotient-identification",
-    :banked-by
-    :routes-2026-10-11-compatible-carrier-boundary-cycle-equiv-107,
-    :banked-commit "48f1ba0e73cd8833c7390ac5feaf9fc500e2c925"},
+    :unbanked-from
+    :routes-2026-10-11-compatible-carrier-boundary-cycle-equiv-107},
    :id :lemma-compatiblecarrierhomeomorphinducesboundarycycleequiv,
    :kind :lemma,
    :depends-on
@@ -113857,7 +113849,7 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 10,
+   :stop-count 0,
    :review-finding
    "Blueprint B3 is marked proved but its proof uses the unlisted ConnectedGroupoidSingleObjEquivalence.connectorSingleObjEquivalence (and connector-system representation) instead of only the declared uses; add the actual connector dependency and proof route to B3 uses.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
@@ -113908,7 +113900,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"

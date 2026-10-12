@@ -1415,7 +1415,7 @@
     :mathematical-refutation false,
     :seat "codex-13"},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node
    "CIRCLE/SPHERE INVARIANTS: homological circle-lifting criterion; t97A02",
@@ -2655,7 +2655,7 @@
      "IntegrableOn (fun q : EuclideanSpace ℝ (Fin 2) => ((q 0)^2 - (q 1)^2) / Real.sqrt (1 - (q 0)^2 - (q 1)^2)) (Metric.closedBall 0 1)"],
     :seat "codex-13"},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node
    "Stokes and moments; explicit differential-form and radial-integral consumer t96J08",
@@ -3859,7 +3859,7 @@
     :diagnostic-placeholders 0,
     :seat "codex-13"},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node
    "STOKES AND MOMENTS: exact outward sphere flux and minimizing centers",
@@ -4314,7 +4314,7 @@
     :diagnostic-placeholders 0,
     :seat "codex-13"},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node
    "COVERING-BASIC and PRODUCT HOMOLOGY: torus local-diffeomorphism Euler consumer",
@@ -4399,7 +4399,7 @@
     "Compiled the exact equivalence between the requested measure equality and ConeLaw: for every measurable sphere subset A, intrinsic d A = c * ((d+1) * volume (Ioo 0 1 • Subtype.val '' A)). Neither ConeLaw nor its normalization constant is proved. The diagnostic proves radial-measure finiteness, its total-mass formula, and radial integrability of the flux and coordinate-square polynomials. Integral conversions compile only conditional on the missing comparison; these are diagnostic consequences, not an implementation prerequisite or GO packet. The pinned Hausdorff definition uses diameter powers; ambient Haar uniqueness and radial polar coordinates do not supply the intrinsic sphere comparison. No numerical discrepancy with either frozen consumer has been proved.",
     :seat "codex-13"},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node
    "MANIFOLD INTEGRATION: literal sphere Hausdorff measure versus radial-cone measure",
@@ -4795,7 +4795,7 @@
     "c711febdaded1c3790e4a572a2fc191442244836dabb8d350fadbde2484a93ed",
     :seat "codex-13"},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node
    "Queue D: exact embedded-four-ball connected-sum homology consumer",
@@ -5502,7 +5502,7 @@
     "63ea50fe8435ba22b20b6db4d53e553ad0c27e9a31de96b8a1212019cc1c9402",
     :seat "codex-13"},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node
    "Closed gluing and surface invariants: literal polygon quotient consumer",
@@ -6075,7 +6075,7 @@
     "482fc0478fe2b5c3252076b3a3e91f28ea9d9d81f7e5d3d3ada78ed5167a0d06",
     :seat "codex-13"},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node
    "Surface classification: exact invariant Hopf-surface consumer",
@@ -6516,7 +6516,7 @@
     "51f5c94da12b4d5e1eb1f7ada0fd397cbbfccdfb223a6ae6287978da86605750",
     :seat "codex-13"},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node
    "COVER-DEGREE: exact finite-cover fundamental-class consumer",
@@ -6873,7 +6873,7 @@
     "Infrastructure STOP, not mathematical refutation. Two successive reviewed packets construct smooth local slices and fixed-model parameterizations while leaving the named frozen smooth-submanifold bridge unchanged. The recorded two-packet stop rule applies. These results do not yet construct an atlas or prove overlap compatibility, and their ambient derivative-range equation is not an mfderiv equation for a constructed manifold inclusion.",
     :seat "codex-13"},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node
    "REGULAR-PREIMAGE: smooth atlas on the literal regular fiber",
@@ -7163,7 +7163,7 @@
     "85f64495f251de4b505d8981f77b947a8775ab71b685dd580dbc98e13abd82fa",
     :seat "codex-13"},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node "COVERING-BASIC: literal wedge graph-cover consumer",
    :acceptance
@@ -7584,7 +7584,7 @@
     "03f9c56fbb9d5b417dc16298c6b81d10876a4463f9c7e5a8479615706584c217",
     :seat "codex-13"},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node
    "Queue A and surface invariants: exact three-counterexample consumer",
@@ -8184,7 +8184,7 @@
     "1e98306fb2201eb5c390bebab3f74348cb03b3306cd2e44b0df13d8f2d01f8b2",
     :seat "codex-13"},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node
    "REGULAR-PREIMAGE: exact normal-translation transversality consumer",
@@ -8417,7 +8417,7 @@
     "Reviewed S0 coefficients do not complete the positive-dimensional table. The production sphere shift uses AddCommGrpCat integer relative chains, pair connecting maps and excision; its current declarations do not accept ModuleCat R coefficients. Separately, positive-sphere H0, circle H1 and higher-sphere H1 vanishing use integer vertex-class endpoints. No coefficient-general replacement or proved change-of-coefficients comparison was established. This is missing infrastructure, not refutation.",
     :seat "codex-13"},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node
    "CIRCLE/SPHERE INVARIANTS: literal sphere homology with explicit coefficients",
@@ -8717,7 +8717,7 @@
     "7ae7fd891041611e289a84b18eeec7c22e2464255e3e909f31ced868b41bc2f6",
     :seat "codex-13"},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node
    "Surface classification: exact literal polygon-family consumer",
@@ -9162,7 +9162,7 @@
     "e01ccfe6008fe27aabcead609ae507d379880610efd547f780a96177771708e7",
     :seat "codex-13"},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD: exact affine-line regular-value consumer",
@@ -9615,7 +9615,7 @@
     "3d0fa97de254e35aec83f46ae213d8c066c78281a7f102230377d3927c811a48",
     :seat "codex-13"},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node
    "REGULAR-PREIMAGE: exact radial-level consumer and constant-radius audit",
@@ -10052,7 +10052,7 @@
      :placeholder-after 1},
     :seat "codex-13"},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node
    "REGULAR-PREIMAGE: exact closed-neighborhood manifold-with-boundary consumer",
@@ -10156,7 +10156,7 @@
     "The actual inclusion-induced relative chain map over an arbitrary commutative ring compiles, using the reviewed image-quotient construction and proving its projection square. The remaining comparison is not supplied by existing integral exports: SingularSubdivision uses integral chains, while SingularExcision exports positive-degree relative excision with an additional IsClosed U hypothesis. Required work includes the coefficient-general small-chain homology comparison, its relative quotient comparison including degree zero, and the comparison for potentially nonclosed U under closure U contained in interior A. This is missing infrastructure, not a mathematical refutation.",
     :seat "codex-13"},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node
    "SINGULAR-SUBDIVISION/EXCISION: actual relative homology with explicit ring coefficients",
@@ -10473,7 +10473,7 @@
      :placeholder-after 1},
     :seat "codex-13"},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node
    "INTERSECTION: exact punctured genus-two product-torus consumer",
@@ -11056,7 +11056,7 @@
     :mathematical-refutation false,
     :seat "codex-13"},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node
    "INTERSECTION: exact projective-product nonbounding consumer",
@@ -11415,7 +11415,7 @@
     :mathematical-refutation false,
     :seat "codex-13"},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node
    "SINGULAR-SUBDIVISION: explicit-coefficient barycentric chain endomorphism",
@@ -11716,7 +11716,7 @@
     :mathematical-refutation false,
     :seat "codex-13"},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node
    "SURFACE CUTTING: exact maximal-curve pants-decomposition consumer",
@@ -12149,7 +12149,7 @@
     :mathematical-refutation false,
     :seat "codex-13"},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node
    "SURFACE CLASSIFICATION: exact fourteen-edge polygon consumer",
@@ -13106,7 +13106,7 @@
     :mathematical-refutation false,
     :seat "codex-13"},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node
    "SPEC-DEFECT / REGULAR-PREIMAGE: nonconstant-radius repair and complete literal radial-level consumer",
@@ -13855,7 +13855,7 @@
     :mathematical-refutation false,
     :seat "codex-13"},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node
    "SPEC-DEFECT / COVER-DEGREE: connected finite-cover fundamental-class consumer",
@@ -25748,7 +25748,7 @@
     "The scratch fixture /tmp/CoefficientChartBallTransport.lean was replaced during this invocation by a different, actively changing chart-ball transport construction. My initially compiled version defined pair, restricted, connecting, normalization and chartMap; the replacement defines ballMap, coordinate, relative_square and lifted_normalization. A subsequent edit failed because the original declaration anchor had disappeared. Continuing would risk duplicate concurrent work and overwriting another proof. The writer's identity and reservation were not established by the ledger inspection. This is an execution/ownership boundary, not a mathematical refutation.",
     :seat "codex-13"},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node
    "LOCAL ORIENTATION: local constancy of actual chart transition units",
@@ -26138,7 +26138,7 @@
     "The compiled audit establishes an exact applicability boundary. Mathlib's Jacobian image-measure theorem uses f:E→E, derivatives E→L E and an additive Haar measure on E. The requested graph maps Euclidean dimension d into d+1 and requires d-dimensional Hausdorff image measure. The audit proves the dimension gap and absence of a linear equivalence between these ambient spaces, including d=2 and d=3. This rules out direct same-space Jacobian transport, not the requested theorem. Existing sphere-cap results provide subtype measure identification and Lipschitz finiteness, not the graph-density equality. No complete graph-area fixture or complete new geometric prerequisite was obtained.",
     :seat "codex-13"},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node
    "MANIFOLD INTEGRATION: actual Euclidean graph Hausdorff-area comparison",
@@ -30839,7 +30839,7 @@
     "STOP: the requested coefficient-one equalities between raw hausdorffMeasure d and volume on EuclideanSpace are false under the active diameter-power convention. Mathlib defines μHE[d] as addHaarScalarFactor volume μH[d] • μH[d] specifically so that μHE[d] equals volume. Its documented intended scalar is the Euclidean-unit-ball volume divided by the sup-metric unit-ball volume, giving π/4 in dimension two and π/6 in dimension three, rather than one. The theorem computing that scalar, MeasureTheory.Measure.addHaarScalarFactor_hausdorffMeasure_eq, is presently proof_wanted. The placeholder-free fixture proves the available μHE equalities and their exact set-measure and restricted-lintegral rewrites for dimensions two and three. Rewriting the reviewed raw-Hausdorff cap formulas directly to volume without the reciprocal scalar would suppress a nontrivial normalization factor and violate the row invariant.",
     :seat "codex-13"},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node
    "MANIFOLD INTEGRATION: exact Euclidean Hausdorff-to-volume normalization in dimensions two and three",
@@ -31225,7 +31225,7 @@
     "STOP at an exact independent library boundary. The reviewed prerequisite supplies all four required ball volumes: π and 4π/3 for the L2 Euclidean unit balls, and 4 and 8 for the finite-function sup-metric unit balls. To obtain π/4 and π/6, one must identify addHaarScalarFactor volume μH with the quotient of those volumes. The sole matching Mathlib declaration, MeasureTheory.Measure.addHaarScalarFactor_hausdorffMeasure_eq, is marked proof_wanted. Haar uniqueness proves only that volume equals an unspecified scalar multiple of raw Hausdorff measure; it does not compute that scalar. No alternative theorem evaluates raw Hausdorff measure of an L2 Euclidean ball. Therefore the raw equalities μH[2] = (4/π) • volume and μH[3] = (6/π) • volume, and their restricted-lintegral consequences, cannot be proved from the current bank without implementing the missing scalar characterization. Assuming it, replacing μH by μHE, or cancelling an unspecified ENNReal scalar would violate the row invariants. This STOP reports an unavailable construction, not a refutation of the corrected normalization formulas.",
     :seat "codex-13"},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node
    "MANIFOLD INTEGRATION: corrected raw Euclidean Hausdorff normalization in dimensions two and three",
@@ -31525,7 +31525,7 @@
     "The authoritative dependency receipt supplies a complete fixture at SHA256 9f4adeca79ba7746204a10eb5a8fb1e2b5582618879d98d5f6d3579e9bf2997f, and that fixture compiles both required raw Hausdorff-nullity theorems with standard-only axioms. However, it declares namespace LowerDimensionalSphereNullity, while this implementation row requires exact fixture promotion under ConstructionTargets.LowerDimensionalSphereNullity. The unqualified theorem exists and the required qualified theorem is unknown. Renaming or wrapping the fixture would violate exact promotion. Repair the fixture namespace and recorded SHA256, or consistently revise the acceptance namespace and exact-promotion requirement. This is a specification boundary, not a mathematical refutation.",
     :seat "codex-14"},
    :phase :implementation,
-   :state :done,
+   :state :stopped,
    :scope
    ["ConstructionTargets/LowerDimensionalSphereNullity.lean"
     "ConstructionTargets/LowerDimensionalSphereNullity.md"],
@@ -31611,7 +31611,7 @@
     "The reviewed fixture exists, matches SHA256 2d57af29396b64df733918bd4143ded4ec7885d68c02f2249ab2d52d80413e40, and compiles the append-zero linear isometric embedding and both coordinate formulas with standard-only axioms. It declares namespace SphereEquatorEmbedding, while the implementation row requires exact promotion under ConstructionTargets.SphereEquatorEmbedding. A direct audit confirms SphereEquatorEmbedding.appendZero exists and ConstructionTargets.SphereEquatorEmbedding.appendZero is unknown. Renaming or wrapping would change the exact fixture. Repair the fixture namespace and recorded digest, or consistently revise the acceptance namespace and exact-promotion requirement. This is a specification boundary, not a mathematical refutation.",
     :seat "codex-14"},
    :phase :implementation,
-   :state :done,
+   :state :stopped,
    :scope
    ["ConstructionTargets/SphereEquatorEmbedding.lean"
     "ConstructionTargets/SphereEquatorEmbedding.md"],
@@ -31705,7 +31705,7 @@
     "The fixture matches SHA256 41b5affc82871ddb64935e292e521c6879020ae9dbe3a0466128251f18f8036a and compiles the image and ambient-nullity mathematics with standard-only axioms, but it does so by repeating appendZero and its coordinate theorems because the two required canonical prerequisite modules do not exist. The probe diagnostic history explicitly records this composition. The implementation acceptance instead requires importing ConstructionTargets.LowerDimensionalSphereNullity and ConstructionTargets.SphereEquatorEmbedding and extracting only the new declarations. Both prerequisites ended in reviewed namespace-conflict STOPs and remain absent. The combined fixture also declares the unqualified namespace SphereEquatorImageNullity rather than ConstructionTargets.SphereEquatorImageNullity. Promoting it would therefore repeat prerequisite declarations, violate the required import boundary, and miss the required namespace. Repair and promote both prerequisite fixtures first, then produce a namespace-correct fixture containing only the seven new declarations. This is a representation and dependency boundary, not a mathematical refutation.",
     :seat "codex-14"},
    :phase :implementation,
-   :state :done,
+   :state :stopped,
    :scope
    ["ConstructionTargets/SphereEquatorImageNullity.lean"
     "ConstructionTargets/SphereEquatorImageNullity.md"],
@@ -31805,7 +31805,7 @@
     "The reviewed fixture matches SHA256 347846695ecaca6f5698ca59508ad4bc1f73607954bb9d383322da315c18d746 and compiles the generic subtype Hausdorff-measure equality, nullity transport, and both Euclidean examples with standard-only axioms. It declares namespace HausdorffSubtypeNullity, while this implementation row requires exact fixture promotion under ConstructionTargets.HausdorffSubtypeNullity. The compiled declarations therefore have the wrong qualified names. Renaming or wrapping would change the exact fixture. Repair the fixture namespace and recorded digest, or consistently revise the acceptance namespace and exact-promotion requirement. This is a specification boundary, not a mathematical refutation.",
     :seat "codex-14"},
    :phase :implementation,
-   :state :done,
+   :state :stopped,
    :scope
    ["ConstructionTargets/HausdorffSubtypeNullity.lean"
     "ConstructionTargets/HausdorffSubtypeNullity.md"],
@@ -31891,7 +31891,7 @@
     "The reviewed fixture matches SHA256 491f30b9213d04597a1d8e483ab0457d0033e2c102c2fa5512b49f0c30918a01 and independently compiles all three measurability results, all three pairwise-disjointness results, the exact sphere union, and the d=2 and d=3 examples with standard-only axioms. It imports the banked SphereCapEuclideanImage module and does not require the stopped nullity modules for these set-theoretic results. However, it declares namespace SphereCapEquatorPartition, while exact promotion requires ConstructionTargets.SphereCapEquatorPartition. Renaming or wrapping would change the exact fixture. Repair the fixture namespace and recorded digest, or consistently revise the acceptance namespace and exact-promotion requirement. This is a specification boundary, not a mathematical refutation.",
     :seat "codex-14"},
    :phase :implementation,
-   :state :done,
+   :state :stopped,
    :scope
    ["ConstructionTargets/SphereCapEquatorPartition.lean"
     "ConstructionTargets/SphereCapEquatorPartition.md"],
@@ -31986,7 +31986,7 @@
     "The recorded fixture matches SHA256 658162d3a85f5c8416d2f978801caf74349cba0af1a4548375e47fb72cbb16c8 and compiles both generic Borel-instance coherence theorems with standard-only axioms. Exact promotion cannot satisfy the row for two independent reasons. First, the fixture declares namespace HausdorffBorelInstanceCoherence rather than ConstructionTargets.HausdorffBorelInstanceCoherence. Second, the acceptance gate requires compiled examples using WithLp.measurableSpace and ConstructionTargets.LinearGraphMeasure.domainMeasurable on EuclideanSpace real (Fin 2) and Fin 3, but the exact fixture contains no examples and references neither instance. Renaming the namespace or adding those examples would change the exact fixture. Supply a corrected complete fixture with a new pinned digest, or consistently revise the namespace, exact-promotion requirement, and example gate. This is a specification boundary, not a mathematical refutation.",
     :seat "codex-14"},
    :phase :implementation,
-   :state :done,
+   :state :stopped,
    :scope
    ["ConstructionTargets/HausdorffBorelInstanceCoherence.lean"
     "ConstructionTargets/HausdorffBorelInstanceCoherence.md"],
@@ -32101,7 +32101,7 @@
    :consumer-residual
    "Resolve the preserved addHaarScalarFactor normalization boundary, then combine the reviewed cap-area formulas with equator nullity and evaluate the coordinate moments required by t95J05, t02A05, t01J06 and t94A10.",
    :phase :implementation,
-   :state :done,
+   :state :stopped,
    :scope
    ["ConstructionTargets/SphereEquatorHausdorffNullity.lean"
     "ConstructionTargets/SphereEquatorHausdorffNullity.md"],
@@ -33976,7 +33976,7 @@
     "The actual transfer identities were audited in both integer and coefficient-general forms. They control the base summand inside source homology but place no constraint on additional source summands; finite-dimensionality assumptions alone do not repair this logical gap. Euler multiplicativity needs alternating chain-level rank data or an equivalent trace theorem, neither of which is banked. The three consumer instances therefore cannot be compiled from the current covering-transfer API without inventing the missing finite-type comparison. No fixture, canonical source, consumer file or ledger was edited.",
     :seat "codex-13"},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node
    "COVERING CLASSIFICATION: rational Euler characteristic under finite-sheet coverings",
@@ -34373,7 +34373,7 @@
     "The production singular chains are coproducts over continuous standard simplices with alternating face differentials. Existing tensor-complex modules manipulate abstract chain complexes after a tensor comparison is supplied; they do not construct the geometric map into chains on a product. Existing subdivision machinery realizes affine simplices and proves face compatibility for subdivision, but it contains no product-prism shuffle enumeration or signed cancellation theorem. Integer and ZMod 2 instances therefore fail at the same earlier representation boundary. No fixture, canonical source, consumer file or ledger was edited.",
     :seat "codex-13"},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node
    "PRODUCT HOMOLOGY: bounded singular cross-product chain interface",
@@ -35109,7 +35109,7 @@
     "The unsigned maximal-path and inversion-parity prerequisites are now canonical, but the requested signed singular-simplex triangulation still crosses an exact unimplemented representation boundary. Mathlib's ProdStdSimplex describes Δ[p] ⊗ Δ[q] inside simplicial sets and exposes its nondegenerate lattice paths and simplicial faces. ConstructionTargets.SingularSubdivision realizes an ordered vertex family only as a continuous affine map from a topological standard simplex into one topological standard simplex. Neither Mathlib nor ConstructionTargets supplies a comparison from a maximal simplicial-set product path to a continuous affine simplex in stdSimplex ℝ (Fin (p+1)) × stdSimplex ℝ (Fin (q+1)), nor a theorem identifying deleted lattice-path vertices with the production singular-chain boundary faces. Without that comparison, the oriented interior-face cancellation and surviving Leibniz faces cannot be stated in the actual singular-chain representation. This is a missing representation theorem, not a refutation of the signed-shuffle construction.",
     :seat "codex-13"},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node
    "PRODUCT HOMOLOGY: bounded signed-shuffle triangulation of products of standard simplices",
@@ -36531,7 +36531,7 @@
     "The banked endpoint and local-step theorems expose a maximal path as a Boolean word, but neither ConstructionTargets nor Mathlib supplies the inverse representation needed by this row. SSet.prodStdSimplex.objEquiv.invFun accepts an order homomorphism into the product simplex, not a Boolean word. Defining the adjacent corner swap therefore first requires constructing cumulative horizontal and vertical coordinates from a word of length p+q with exactly p true and q false letters, proving their bounds and monotonicity, proving maximal nondegeneracy and the coordinate-sum identity, and proving inverse laws with stepWord. Without that equivalence, swapping unlike consecutive letters cannot produce a canonical MaximalPath, so deleted-face equality, involutivity, opposite shuffle signs and bounded cancellation cannot yet be stated over the production representations. This is an exact representation boundary, not a mathematical refutation.",
     :seat "codex-13"},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node
    "PRODUCT HOMOLOGY: bounded oriented cancellation of product-simplex shuffle faces",
@@ -37310,7 +37310,7 @@
     "The balanced-word representation and terminal totals compile, but the next required theorem cannot be stated from the exported prefix-count interface. ProductSimplexWordPrefixCounts defines wordPrefix as a private declaration and exports only horizontalCount_add_verticalCount plus pointwise bounds by the prefix index. It exports no monotonicity theorem for horizontalCount or verticalCount. The public equations do not imply monotonicity: arbitrary pairs of natural-valued functions can satisfy h(i)+v(i)=i and the two pointwise bounds while h decreases. Consequently a downstream module cannot prove that each cumulative horizontal count is at most the balanced terminal total p, or that each vertical count is at most q. Those bounds are required to construct Fin (p+1) and Fin (q+1) coordinates for prodStdSimplex.objEquiv.invFun. Reimplementing the hidden prefix Finset downstream would duplicate the representation and violate the no-workaround rule. This is an exact exported-representation boundary, not a mathematical refutation.",
     :seat "codex-13"},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node
    "PRODUCT HOMOLOGY: balanced Boolean words as canonical maximal product-simplex paths",
@@ -38550,7 +38550,7 @@
     "The corrected declaration-specific search confirms that neither ConstructionTargets nor Mathlib exports horizontalCount or verticalCount successor-recurrence theorems, and no reconstructedPath/stepWord inverse theorem exists. Recovering stepWord at index i requires four exact one-step equations: horizontalCount increases by one for true and stays fixed for false, while verticalCount stays fixed for true and increases by one for false. The private wordPrefix implementation prevents proving these downstream without duplicating its representation. The banked reconstructed path still builds successfully, both ledgers validate, and the worktree is clean. This is an exported combinatorial boundary, not a mathematical refutation.",
     :seat "codex-14"},
    :phase :implementation,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node
    "PRODUCT HOMOLOGY: cumulative balanced words as canonical maximal product-simplex paths",
@@ -39031,7 +39031,7 @@
     "Exact recomputation repairs all four evidence hashes. The retained placeholder-free fixture and its SHA256 reproduce, it compiles with standard-only axioms, both ledgers validate with the canonical source restored, and the repository is clean. Promotion remains blocked because the completed checkpoint60 row pins the mutable canonical ProductSimplexWordPrefixCounts.lean file at its former hash; the required extension changes that hash and makes worklist2 validation fail. This is a ledger-representation conflict, not a mathematical refutation.",
     :seat "codex-14"},
    :phase :implementation,
-   :state :done,
+   :state :stopped,
    :scope
    ["ConstructionTargets/ProductSimplexWordPrefixCounts.lean"
     "ConstructionTargets/ProductSimplexWordPrefixCounts.md"],
@@ -39474,7 +39474,7 @@
     "The review correction is mathematically and mechanically correct: the existing schema accepts checkpoint60 when its fixture path is changed to a separate regular file containing the exact e1da7ae4 predecessor bytes, and the same validator rejects that transitioned ledger after those predecessor bytes are altered. The 7db40149 successor remains independently hashed. Completing the requested repository transition, however, requires adding a uniquely named evidence file and editing worklist2 checkpoint60 before changing the canonical module. This implementation row has an empty scope, while the controlling instructions require modifications to remain inside scope and forbid this seat from editing the ledger because the supervisor applies ledger transitions. No repository file can therefore be committed by this row without violating exact scope or the ledger-ownership rule. This is a scheduling/specification conflict in the author packet; no topology result or closure is claimed.",
     :seat "codex-14"},
    :phase :implementation,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node
    "LEDGER REPRESENTATION: immutable predecessor evidence and additive canonical-module successor",
@@ -40471,7 +40471,7 @@
     "The mandatory pre-edit gate fails: checkpoint60's live evidence.fixture.path is still ConstructionTargets/ProductSimplexWordPrefixCounts.lean, not holes/labs/topology-contract/evidence/product-simplex-word-prefix-counts/ProductSimplexWordPrefixCounts-checkpoint60-e1da7ae4.lean. The immutable artifact exists with the required e1da7ae4 SHA256, and the reviewed successor fixture exists with the required 7db40149 SHA256, but the prior supervisor transition was merely recorded inside checkpoint64 evidence rather than applied to checkpoint60. Both ledgers currently validate only because the canonical module still contains the predecessor bytes. Editing the canonical source now would recreate the checkpoint60 fixture mismatch. The row explicitly forbids beginning before the live transition and this seat may not edit the ledger, so no source edit or commit was made.",
     :seat "codex-14"},
    :phase :implementation,
-   :state :done,
+   :state :stopped,
    :scope
    ["ConstructionTargets/ProductSimplexWordPrefixCounts.lean"
     "ConstructionTargets/ProductSimplexWordPrefixCounts.md"],
@@ -42988,7 +42988,7 @@
     "The complete placeholder-free additive fixture compiles and proves both requested terminal-count characterizations with standard-only axioms. Promotion is currently incompatible with the mandatory ledger gate: completed row oriented-checkpoint67-product-simplex-prefix-successor-recurrences-promotion-1 records ConstructionTargets/ProductSimplexWordPrefixCounts.lean itself as fixture path with SHA256 7db4014988e03d13d1cf86f03755053ea25da6953044192cc260f8d3e39bfe08. Replacing that source with the reviewed additive fixture deterministically makes worklist2 validation fail with checkpoint67 fixture hash mismatch. The canonical source was restored byte-for-byte, both live ledgers validate, and the worktree is clean. This is a ledger-evidence representation boundary, not a mathematical refutation.",
     :seat "codex-14"},
    :phase :implementation,
-   :state :done,
+   :state :stopped,
    :scope
    ["ConstructionTargets/ProductSimplexWordPrefixCounts.lean"
     "ConstructionTargets/ProductSimplexWordPrefixCounts.md"],
@@ -43091,7 +43091,7 @@
     "Planning-only/blocked at a reviewed representation boundary. The required terminal-count prerequisite compiles, but it is not banked: checkpoint67 records ConstructionTargets/ProductSimplexWordPrefixCounts.lean itself with SHA256 7db4014988e03d13d1cf86f03755053ea25da6953044192cc260f8d3e39bfe08, while the additive terminal-count fixture has SHA256 f2d795b7b39602eb881503a501bef7e30cf25773b4cea4c4bda245b6dbc430ac. The reviewed implementation attempt established that promoting those bytes makes mandatory ledger validation fail. Therefore balance preservation, BalancedWord and MaximalPath swap packaging, involutivity and the common deleted-face equation cannot soundly use the prerequisite yet. Proceeding would bypass the fixture-hash invariant.",
     :seat "codex-13"},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node
    "PRODUCT HOMOLOGY: adjacent balanced-word corner swaps and common deleted faces",
@@ -43675,7 +43675,7 @@
     "The immutable checkpoint67 artifact is banked, byte-identical and correctly hashed, but the existing atomic completion-transition cannot represent checkpoint67's evidence. build_step.bb requires the preserve map to contain exactly :sha256, :supporting-path, :supporting-sha256, :placeholder-count, :commit and :review-outcome and compares every value at fixed paths. Checkpoint67 has :reviewed-source and :reviewed-source-sha256 instead of :supporting-path and :supporting-sha256. The field audit reports both required supporting fields absent and both reviewed-source fields present. Any transition under the current schema therefore fails the mandatory preserved-value check; inventing supporting values or omitting checks would weaken the invariant.",
     :seat "codex-13"},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node
    "LEDGER REPRESENTATION: immutable checkpoint67 recurrence artifact transition",
@@ -44123,7 +44123,7 @@
     "A complete focused implementation was exercised before restoration. It retained checkpoint60 as the default preserve schema, added checkpoint67's reviewed-source, predecessor and statement-hash schema, required exact label sets, rejected unknown schemas, omitted labels, extra labels and every mismatched value, passed clj-kondo and check-parens, and passed 81 test assertions. The mandatory worklist2 gate deterministically rejected the source change because completed row oriented-checkpoint66-atomic-supervisor-fixture-path-transition-1 records holes/labs/topology-contract/build_step.bb as its mutable fixture path at the prior hash. The two scoped files were restored; both ledgers now validate, the original 55 test assertions pass, and the worktree is clean. This is an exact ledger-evidence representation boundary, not a mathematical refutation.",
     :seat "codex-14"},
    :phase :implementation,
-   :state :done,
+   :state :stopped,
    :scope
    ["holes/labs/topology-contract/build_step.bb"
     "holes/labs/topology-contract/test_gate_receipts.bb"],
@@ -44223,7 +44223,7 @@
     "Planning-only/blocked at a reviewed ledger-evidence boundary. The dependency implementation completed the evidence-shape-aware validator and passed 81 assertions, clj-kondo and check-parens, but mandatory worklist2 validation rejected its source change because completed row oriented-checkpoint66-atomic-supervisor-fixture-path-transition-1 records the mutable holes/labs/topology-contract/build_step.bb path with SHA256 ca2e9a9488cdf1d976f13864ddcabff7dfcb9ae0d56b2c77aa3593eed454120b. No immutable checkpoint66 build_step artifact exists. The implementation was restored; the canonical hashes reproduce, the original 55 assertions pass, and both ledgers validate. Reapplying the schema patch now would invalidate completed evidence.",
     :seat "codex-13"},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node
    "LEDGER REPRESENTATION: evidence-shape-aware atomic fixture-path transitions",
@@ -53700,7 +53700,7 @@
      :status :missing},
     :seat "topo-1"},
    :phase :implementation,
-   :state :done,
+   :state :stopped,
    :scope ["ConstructionTargets/ProductionConnectingNaturality.lean"],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -53760,7 +53760,7 @@
      :status :absent},
     :seat "topo-8"},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -53817,7 +53817,7 @@
      :required-declaration "productionConnecting_naturality"},
     :seat "topo-8"},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -53903,7 +53903,7 @@
      "848e7873cf58812ff9bee17976218344925a66e16eba2359a04e39def24f703f"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -53995,7 +53995,7 @@
      "848e7873cf58812ff9bee17976218344925a66e16eba2359a04e39def24f703f"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -54256,7 +54256,7 @@
     :fixture {:status :absent, :required-theorem "apm_t96a07"},
     :seat "topo-8"},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -54316,7 +54316,7 @@
      :status :interface-only},
     :seat "topo-8"},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -54492,7 +54492,7 @@
     {:status :impossible, :refuted-clause "the quotient map is open"},
     :seat "topo-8"},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -54552,7 +54552,7 @@
      :status :interface-only},
     :seat "topo-8"},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -55260,7 +55260,7 @@
     "The refutation imports the banked affine chart and proves the correct homogeneous-to-ratio normalization independently. Assuming the elected chartInverse_iff field at z=(0,I) yields the homogeneous equation for chartInverse of pairToCoordinates z. The correct normalization plus coordinates_chartInverse reduces this to 1+I^2+I^2=0, contradicted by Complex.I_sq. Thus the failure is the exact coordinate-insertion representation, not topology, continuity, or the frozen consumer statement.",
     :seat "topo-8"},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t94A08/smooth-conic-local-charts/projective-affine-identification/normalization",
@@ -55337,7 +55337,7 @@
     "The refutation needs no disputed normalization theorem. Both zPlus=(I,0) and zMinus=(-I,0) inhabit the normalized affine conic because I squared is -1. The contract's symm_eq sends both through the identical chartInverse coordinate function, since every admissible coordinate index is nonzero and hence takes the constant second branch 0. Injectivity of the inverse of a homeomorphism would force zPlus=zMinus; imaginary parts give 1=-1. This isolates the defect to the printed representation orientation formula, not the frozen t94A08 statement or projective topology.",
     :seat "topo-8"},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t94A08/smooth-conic-local-charts/projective-affine-identification",
@@ -55425,7 +55425,7 @@
     "Fresh compilation confirms both facts needed to distinguish the boundary: the local-chart witness interface is well-typed and placeholder-free, while the mandatory projective-affine dependency has no inhabitant. The contradiction uses only the printed symm_eq orientation and homeomorphism injectivity, so it cannot be repaired downstream by choosing different neighborhoods or composing the affine parametrization differently.",
     :seat "topo-8"},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t94A08/smooth-conic-local-charts",
    :acceptance
@@ -55498,7 +55498,7 @@
     "Fresh verification reproduces the no-inhabitant theorem for the depended-on comparison, confirms the frozen consumer still has exactly one comment-stripped placeholder, and confirms all 131 registered statements are unchanged. The affine projective charts and affine-conic parametrization remain valid; only the incorrectly oriented pair-to-coordinate insertion blocks the positive local-chart witness and hence this closure adapter. The independent nodal-cross route step remains unattempted.",
     :seat "topo-8"},
    :phase :probe,
-   :state :done,
+   :state :stopped,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t94A08",
    :acceptance
@@ -56798,7 +56798,7 @@
      :status :missing},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done,
+   :state :stopped,
    :scope ["ConstructionTargets/TorusPiOneWindingCoordinates.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A04/torus-pi1-winding-coordinates/frozen-homeomorphism-pi1-mk",
@@ -56877,7 +56877,7 @@
      "b1d752a65e5684506b9266b696e51e602f164788f118dc2e621ddaf93d6e1005"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done,
+   :state :stopped,
    :scope ["ConstructionTargets/TorusPiOneWindingCoordinates.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A04/torus-pi1-winding-coordinates/frozen-native-coordinate-mk",
@@ -72786,7 +72786,9 @@
   {:bounded-exception
    "single-consumer explicit ambient deformation with frozen tube and deletion invariants",
    :consumer :t02A03,
-   :stop-count 1,
+   :owner-reopen
+   "reopened: a lemma this row reported missing is now banked",
+   :stop-count 0,
    :review-finding
    "Commit b07bee059 does not implement the row acceptance theorem. It adds only rotatedEndpointWaypoint_departure_zero_support_pos; safeRightTubeMeridianDeformation is absent, although the row is marked done-unreviewed rather than a STOP with missing-theorems. Exact repair: extend Mathlib in scope by state/proving the required continuous ambient H with both endpoints, pointwise rightTube membership, and leftCore avoidance (or record a legitimate STOP after committed progress with remaining theorem listed).",
    :evidence
@@ -72854,7 +72856,7 @@
    :phase :implementation,
    :type
    "∀ (t : unitInterval) (p : RightTubeMinusLeftCore), (t:ℝ) ≤ 1/2 → (((1-2*(t:ℝ):ℝ):ℂ)+((2*(t:ℝ):ℝ):ℂ)*rotatedEndpointWaypoint p)=0 → 0 < (t:ℝ)*(1-2*(t:ℝ))",
-   :state :done,
+   :state :open,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/safe-right-tube-meridian-deformation",
@@ -72874,7 +72876,7 @@
    :area "explicit-r3-tube-deformation-retraction",
    :declaration
    "ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_departure_zero_support_pos",
-   :fail-count 1,
+   :fail-count 0,
    :depends-on
    [:routes-2026-10-10-t02a03-right-tube-meridian-coordinate-topo2-r1
     :routes-2026-10-10-t02a03-right-tube-planar-coordinate-nonzero-topo2-r1
@@ -73788,7 +73790,9 @@
    "Instantiate the range map for intersection and both pieces, induce the union component, and assemble coverPreservingShortComplexMap with its two commutative squares.",
    :other-consumers [:t96J06]}
   {:consumer :t97A04,
-   :stop-count 1,
+   :owner-reopen
+   "reopened: a lemma this row reported missing is now banked",
+   :stop-count 0,
    :evidence
    {:residual
     "Repair the interface type so the induced morphism and its component identifications are observable; only then can production connecting naturality consume it without inventing that the arbitrary Nonempty witness is the induced map.",
@@ -73837,7 +73841,7 @@
     "The compiled stronger theorem has no continuous map and no cover-preservation assumptions: forall U V U' V', Nonempty (shortComplex U V ⟶ shortComplex U' V'), proved by ⟨0⟩. Hence the frozen proposition erases precisely the data and commutative-square evidence required by the route's next naturality step.",
     :seat "topo-8"},
    :phase :probe,
-   :state :done,
+   :state :open,
    :scope
    ["ConstructionTargets/ProductionOpenCoverMayerVietoris.lean"],
    :dag-node
@@ -73858,6 +73862,7 @@
    :routes-2026-10-10-cover-preserving-short-complex-map-two-consumers-topo2-r1,
    :kind :reusable-theorem,
    :area "mv-connecting-naturality",
+   :fail-count 0,
    :depends-on
    [:routes-2026-10-10-subcomplex-mv-connecting-naturality-two-consumers-topo2-r1
     :routes-2026-10-10-ambient-subspace-range-map-two-consumers-topo2-r1],
@@ -73867,7 +73872,7 @@
   {:consumer :t97A04,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 0,
    :review-finding
    "extend Mathlib: state and prove the missing theorem in scope",
    :implements-lemma
@@ -73935,7 +73940,7 @@
     "Fresh compilation confirms the scoped production naturality theorem and frozen fixture remain valid. Constructing the actual induced morphism requires τ₁ = ambientIntersectionRangeChainsIso.inv ≫ chains.map(coverRangeMap on U∩V) ≫ ambientIntersectionRangeChainsIso.hom, τ₂ = biprod.map of the two member range maps, and τ₃ = the source subcomplexChains_isPushout desc into the target union. The remaining proof obligations are precisely the two intersection/member squares and the two pushout leg equations.",
     :seat "topo-6"},
    :phase :implementation,
-   :state :done,
+   :state :blocked,
    :scope
    ["ConstructionTargets/ProductionOpenCoverMayerVietoris.lean"],
    :dag-node

@@ -33,7 +33,9 @@
       ;; waits on one must run, exactly as for :needs-owner. On 2026-10-11
       ;; topo1 paused at 04:31 with 74 backlog lemmas: its checkpoint waited
       ;; on a row blocked on an unelected lemma.
-      (or (= :needs-owner (:state item))
+      ;; A reviewed STOP (:stopped) delivered nothing, and nothing will
+      ;; until a checkpoint elects the work it named, so it counts too.
+      (or (#{:needs-owner :stopped} (:state item))
           (and (= :lemma (:kind item)) (= :backlog (:state item)))
           (and (= :blocked (:state item))
                (some #(owner-blocked? idx % (conj seen dependency))
@@ -578,7 +580,7 @@
 (defn reopen-for-banked [items]
   (let [banked-reporters (set (mapcat #(get-in % [:lemma :reported-by])
                                       (filter #(and (= :lemma (:kind %)) (= :banked (:state %))) items)))]
-    (mapv #(if (and (= :needs-owner (:state %)) (banked-reporters (:id %))
+    (mapv #(if (and (#{:needs-owner :stopped} (:state %)) (banked-reporters (:id %))
                     (not= :strategy-checkpoint (:kind %)))
              ;; :blocked, so unblock-ready opens it only once its own
              ;; dependencies are satisfied
@@ -592,7 +594,8 @@
    author reported it proved in this row."
   [items id]
   (let [row (some #(when (= id (:id %)) %) items)
-        target (:implements-lemma row)
+        ;; a stopped row did not prove the lemma it was elected for
+        target (when-not (= :stopped (:state row)) (:implements-lemma row))
         commit (or (get-in row [:evidence :commit]) (last (get-in row [:evidence :commits])))]
     (reopen-for-banked
      (mapv #(if (and (= :lemma (:kind %)) (= :backlog (:state %))
@@ -965,6 +968,16 @@
                                                          (and (:program %)
                                                               (= :stop (get-in % [:evidence :outcome])))
                                                          :open
+                                                         ;; A PASS on a STOP says the stop was honest,
+                                                         ;; not that the row delivered. As :done it
+                                                         ;; unblocked dependents and banked the lemma it
+                                                         ;; was meant to prove (2026-10-12: 190 rows, 8
+                                                         ;; lemmas banked with no declaration anywhere;
+                                                         ;; t00J07 waited on a hemisphere trivialization
+                                                         ;; that was only ever a Prop). :stopped satisfies
+                                                         ;; no dependency and banks nothing.
+                                                         (= :stop (get-in % [:evidence :outcome]))
+                                                         :stopped
                                                          :else :done))
                                                 (cond-> (and (:program %) (= :stop (get-in % [:evidence :outcome])))
                                                   (-> (update :program-history (fnil conj [])
@@ -1096,9 +1109,7 @@
                                ;; missing (t96A07, 2026-10-11: its STOP named three
                                ;; packets that never entered the DAG).
                                stopped (->> items
-                                            (filter #(and (#{:final-adapter :consumer-closure} (:kind %))
-                                                          (= :stop (get-in % [:evidence :outcome]))
-                                                          (not= :superseded (:state %))
+                                            (filter #(and (= :stopped (:state %))
                                                           (= p (problem-of (:consumer %)))))
                                             (map :id) vec)]]
                    (prn {:problem p :placeholders (placeholder-count p)

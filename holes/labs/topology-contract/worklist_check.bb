@@ -23,7 +23,9 @@
       ;; waits on one must run, exactly as for :needs-owner. On 2026-10-11
       ;; topo1 paused at 04:31 with 74 backlog lemmas: its checkpoint waited
       ;; on a row blocked on an unelected lemma.
-      (or (= :needs-owner (:state item))
+      ;; A reviewed STOP (:stopped) delivered nothing, and nothing will
+      ;; until a checkpoint elects the work it named, so it counts too.
+      (or (#{:needs-owner :stopped} (:state item))
           (and (= :lemma (:kind item)) (= :backlog (:state item)))
           (and (= :blocked (:state item))
                (some #(owner-blocked? % (conj seen dependency))
@@ -56,7 +58,8 @@
     (when-not (contains? i k) (die (:id i) "lacks" k)))
   ;; :backlog/:banked and :lemma belong to the lemma DAG, defined in code
   ;; (build_step.bb), so every ledger accepts them without a data migration.
-  (when-not ((into (:statuses w) #{:backlog :banked}) (:state i)) (die (:id i) "unknown state" (:state i)))
+  ;; :stopped (a reviewed STOP) is likewise defined in code.
+  (when-not ((into (:statuses w) #{:backlog :banked :stopped}) (:state i)) (die (:id i) "unknown state" (:state i)))
   (when-not ((conj (:edge-kinds w) :lemma) (:kind i)) (die (:id i) "unknown kind" (:kind i)))
   (when-not (= (count (:depends-on i)) (count (set (:depends-on i))))
     (die (:id i) "contains duplicate dependencies"))
@@ -170,6 +173,11 @@
               :else (die (:id i) "fixture hash mismatch or file absent" p)))))
       (when (some #(not= (get % :expected-exit 0) (:exit %)) (:commands e))
         (die (:id i) "records an unexpected gate exit"))))
+  (when (and (= :done (:state i)) (= :stop (get-in i [:evidence :outcome])))
+    (die (:id i) "done although its receipt is a STOP (a reviewed STOP is :stopped)"))
+  (when (= :stopped (:state i))
+    (when-not (= :stop (get-in i [:evidence :outcome])) (die (:id i) "stopped without a STOP receipt"))
+    (when-not (= :pass (get-in i [:evidence :review :outcome])) (die (:id i) "stopped without PASS review")))
   (when (= :done (:state i))
     (when-not (= :pass (get-in i [:evidence :review :outcome])) (die (:id i) "done without PASS review"))
     (when (= (get-in i [:evidence :author]) (get-in i [:evidence :review :seat]))
