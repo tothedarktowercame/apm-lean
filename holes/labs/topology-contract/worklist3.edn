@@ -797,8 +797,46 @@
    :other-consumers [:t01J01 :t03J02]}
   {:consumer :t00A03,
    :implements-lemma :lemma-schoenflies-finite-cover,
+   :evidence
+   {:placeholder-delta {:t00A03 [2 2], :t01J01 [3 3], :t03J02 [2 2]},
+    :residual
+    "Use finite chart reduction; prove local flatness and gluing.",
+    :outcome :done-unreviewed,
+    :warnings ["pre-existing unused hj"],
+    :missing-theorems
+    [{:name
+      "ConstructionTargets.SurfaceSchoenflies.embeddedCircle_finite_open_subcover",
+      :type
+      "∀ {M} [TopologicalSpace M] (j : C(Circle,M)), EmbeddedCircleFiniteOpenSubcover j",
+      :status :proved,
+      :consumers [:t00A03 :t01J01 :t03J02],
+      :depends-on ["embeddedCircle_isClosed_range"],
+      :area "embedded-circle-collar-surface"}],
+    :statement-hashes {:registry "131/131"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli",
+    :commands
+    [{:cmd "lake env lean ConstructionTargets/SurfaceSchoenflies.lean",
+      :exit 0}
+     {:cmd "lake env lean /tmp/surface_schoenflies_finite_cover.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.SurfaceSchoenflies",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd
+      "git diff --check -- ConstructionTargets/SurfaceSchoenflies.lean",
+      :exit 0}],
+    :commit "5826e19a339ddaffddd8abeed28c3bbfbd7d7a61",
+    :changed-paths ["ConstructionTargets/SurfaceSchoenflies.lean"],
+    :declaration
+    "ConstructionTargets.SurfaceSchoenflies.embeddedCircle_finite_open_subcover",
+    :fixture
+    {:path "/tmp/surface_schoenflies_finite_cover.lean",
+     :sha256
+     "225e1e486ac81111c253922678840dfcf8e2a855d149093d07d745cb253f664e"},
+    :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/SurfaceSchoenflies.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/schoenflies/finite",
    :acceptance
@@ -28905,15 +28943,17 @@
    {:name
     "ConstructionTargets.SurfaceSchoenflies.embeddedCircle_finite_open_subcover",
     :reported-by
-    [:routes-2026-10-10-surface-schoenflies-collar-topo3-r2],
+    [:routes-2026-10-10-surface-schoenflies-collar-topo3-r2
+     :routes-2026-10-12-surface-finite-cover-r1],
     :type
     "∀ {M} [TopologicalSpace M] (j : C(Circle,M)), EmbeddedCircleFiniteOpenSubcover j",
     :area "embedded-circle-collar-surface",
-    :proved-in :routes-2026-10-10-surface-schoenflies-collar-topo3-r2},
+    :proved-in :routes-2026-10-12-surface-finite-cover-r1},
    :id :lemma-schoenflies-finite-cover,
    :kind :lemma,
    :depends-on
-   [:lemma-constructiontargets-surfaceschoenflies-embeddedcircle-closedrange-and-homeomorph],
+   [:lemma-constructiontargets-surfaceschoenflies-embeddedcircle-closedrange-and-homeomorph
+    :lemma-embeddedcircle-isclosed-range],
    :other-consumers [:t01J01 :t03J02]}
   {:consumer :t00A02,
    :phase :lemma,
@@ -30324,6 +30364,16 @@
    :acceptance {:lemma "closed-generator bridge"},
    :lemma {:name "closed-generator bridge", :reported-by []},
    :id :lemma-closed-generator-bridge,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance {:lemma "embeddedCircle_isClosed_range"},
+   :lemma {:name "embeddedCircle_isClosed_range", :reported-by []},
+   :id :lemma-embeddedcircle-isclosed-range,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}],
