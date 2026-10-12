@@ -18300,6 +18300,17 @@
       "rg -n '\\b(sorry|admit|axiom)\\b' ConstructionTargets/ManifoldFundamentalClass.lean",
       :exit 1,
       :expected-exit 1}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791769680940-6156-5c1b3f38",
+     :commands
+     ["recorded scope/blob, fixture hash, diff check"
+      "statement registry and placeholder scans"
+      "lake env lean: renamed fixture, exact-type check, module"
+      "lake build ConstructionTargets.ManifoldFundamentalClass"],
+     :finding
+     "PASS: one-file recorded scope and frozen fixture hash match. SnakeInput.naturality_δ on the assembled hom gives source δ then terminal comparison = initial comparison then target δ, exactly the frozen orientation. Registry 131/0; source placeholders 0; consumer sorries 1/1; standard axioms only; build completed (8326 jobs)."},
     :commit "01fb00b046a768a5d3db66502396bcc6166cbd11",
     :changed-paths
     ["ConstructionTargets/ManifoldFundamentalClass.lean"],
@@ -18309,7 +18320,7 @@
      "1854f1aa06e386c635dedf7e0195064c3411b39e29926978c72619173cbc0488"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/manifold-fundamental-class/delta",
    :acceptance
@@ -18377,7 +18388,7 @@
       :other-consumers [:t98A02]},
      :residual "Promote δ naturality; retry closure."}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -26307,7 +26318,7 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -26322,7 +26333,9 @@
     :type
     "∀ K hK hKF i j hij, ForgottenHomologySequenceDeltaNaturality K hK hKF i j hij",
     :area "manifold-fundamental-class",
-    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2,
+    :banked-by :routes-2026-10-12-mfclass-forget-delta-r1,
+    :banked-commit "01fb00b046a768a5d3db66502396bcc6166cbd11"},
    :id :lemma-mfclass-forget-delta,
    :kind :lemma,
    :depends-on [:lemma-mfclass-forget-snake-hom],
