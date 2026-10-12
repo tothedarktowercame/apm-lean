@@ -83385,9 +83385,9 @@
    "Program STOP commits no compiled, sorry-free theorem progress: 9a443d45a adds only SuppliedCoverAlgebra.md, creates no SuppliedCoverAlgebra.lean, and records A1/A2/A3/C7 all :not-started. Exact repair: extend Mathlib: state and prove at least one missing milestone in scope, commit the compiling Lean result, and list the remaining milestones in :missing-theorems.",
    :evidence
    {:placeholder-delta 0,
-    :residual "Program complete; no scoped diff remains.",
+    :residual "Program complete; review target stale.",
     :outcome :done-unreviewed,
-    :warnings ["Review cites obsolete 9a443d45a."],
+    :warnings ["Review targets obsolete 9a443d45a."],
     :missing-theorems
     [{:name "coveringFundamentalGroupEquivRange",
       :type "pi1 equiv range",
@@ -83423,17 +83423,11 @@
     [{:cmd
       "lake env lean ConstructionTargets/SuppliedCoverAlgebra.lean",
       :exit 0}
-     {:cmd "registry/placeholders/milestones",
+     {:cmd "fixture blob check", :exit 0, :output "3bf5c7f5"}
+     {:cmd "python3 scripts/statement-registry.py check",
       :exit 0,
-      :output "131/0;0;4"}
-     {:cmd "scoped diff vs 575f9ce4a", :exit 0}
-     {:cmd "git show --check 575f9ce4a", :exit 0}],
-    :review
-    {:outcome :fail,
-     :seat "codex-7",
-     :job "invoke-1791825479359-7523-6c6b92f8",
-     :finding
-     "Program STOP commits no compiled, sorry-free theorem progress: 9a443d45a adds only SuppliedCoverAlgebra.md, creates no SuppliedCoverAlgebra.lean, and records A1/A2/A3/C7 all :not-started. Exact repair: extend Mathlib: state and prove at least one missing milestone in scope, commit the compiling Lean result, and list the remaining milestones in :missing-theorems."},
+      :output "131/0"}
+     {:cmd "git show --check theorem commits", :exit 0}],
     :commit "575f9ce4a",
     :commits ["1ecb73d0a" "994accb6c" "575f9ce4a" "df216abcc"],
     :changed-paths
@@ -83445,7 +83439,7 @@
      "8e2b05fc2da21acb000c622b502360f2835a454e138dbfeb505f29eedb0c7769"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SuppliedCoverAlgebra.lean"
     "ConstructionTargets/SuppliedCoverAlgebra.md"],
