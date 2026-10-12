@@ -30343,7 +30343,7 @@
    :consumer :t00A02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 2,
+   :stop-count 3,
    :review-finding
    "Program-row defect persists after fresh audit: exact commit 92a672b41 contains only SurfaceClassification.blueprint.md; SurfaceClassification.lean is unchanged after history commit 4244c6e3e; row remains :phase :implementation/:state :done-unreviewed/:program true; registry is 131/131. Supervisor must retire/supersede it and create a separate blueprint-review row before electing R1-R7. Off-route author code is invalid.",
    :implements-lemma
@@ -30374,17 +30374,11 @@
       "git diff --exit-code 4244c6e3e..92a672b41 -- ConstructionTargets/SurfaceClassification.lean",
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1791824934161-7495-a8ac0742",
-     :finding
-     "Program-row defect persists after fresh audit: exact commit 92a672b41 contains only SurfaceClassification.blueprint.md; SurfaceClassification.lean is unchanged after history commit 4244c6e3e; row remains :phase :implementation/:state :done-unreviewed/:program true; registry is 131/131. Supervisor must retire/supersede it and create a separate blueprint-review row before electing R1-R7. Off-route author code is invalid."},
     :commit "92a672b41fa1f7e45df1987a4aca7d2f8460d2e0",
     :changed-paths [],
     :seat :topo-10},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SurfaceClassification.lean"
     "ConstructionTargets/SurfaceClassification.md"
