@@ -79612,35 +79612,34 @@
      :commit "68d614508",
      :reason :program-milestone-complete}]}
   {:consumer :t94A10,
-   :stop-count 8,
+   :stop-count 9,
    :review-finding
    "Representation-boundary defect in commit 72340f821: exact_sphereParam_identity requires (forall x, DifferentiableAt eta x), including x=0, but frozen apm_t94a10_IsExact supplies differentiability only for punctured x. The theorem therefore cannot discharge B7 from the registered hypothesis although B7 is marked proved. Repair heta to require x != 0 (or only differentiability at sphereParam p) and use sphereParam_ne_zero; then recompile and keep B8-B11 residual.",
    :evidence
    {:placeholder-delta 0,
     :residual "Formalize B8 Green cancellation; then B9-B11.",
     :outcome :stop,
-    :warnings ["Main: 1 placeholder."],
+    :warnings
+    ["Main: 1 placeholder." "Unrelated dirty files preserved."],
     :missing-theorems
     [{:name
       "ConstructionTargets.T94A10Closure.exact_sphereParam_identity",
-      :type "B7 pullback curl equals sin latitude",
+      :type "B7 punctured exactness pullback curl identity",
       :status :proved,
       :consumers [:t94A10],
       :depends-on
-      ["ConstructionTargets.T94A10Closure.spherePullbackLongCoeff_eq"
-       "ConstructionTargets.T94A10Closure.solidAngle_pullback_sphereParam"],
+      ["spherePullbackLongCoeff_eq" "solidAngle_pullback_sphereParam"],
       :area "periodic-stokes-square"}
      {:name
       "ConstructionTargets.T94A10Closure.sphericalRectangle_curl_integral_zero",
-      :type "B8 Green cancellation with explicit hypotheses",
+      :type "B8 Green cancellation",
       :status :not-started,
       :consumers [:t94A10],
-      :depends-on
-      ["ConstructionTargets.T94A10Closure.exact_sphereParam_identity"],
+      :depends-on ["exact_sphereParam_identity"],
       :area "periodic-stokes-square"}],
     :statement-hashes
     {:registry "131/0",
-     :closure "3b8f6fc77da4beed1bd3074db07f0e359659b8c1",
+     :closure "af3dece91dc5a3ee7cbb57d735b7e99a0474c1fd",
      :blueprint "808e174fd0529d3c85b60b506988b0a55526c8e0"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
@@ -79652,26 +79651,16 @@
      {:cmd "registry check", :exit 0}
      {:cmd "closure no-sorry", :exit 1, :expected-exit 1}
      {:cmd "placeholder count", :exit 0, :output "1"}
-     {:cmd "git show --check 72340f821", :exit 0}],
-    :diagnostic-history
-    [{:cmd "closure compile",
-      :exit 1,
-      :finding "Normalized Fin-1 coefficient functions."}],
-    :review
-    {:outcome :fail,
-     :seat "codex-7",
-     :job "invoke-1791772396621-6196-b8752978",
-     :finding
-     "Representation-boundary defect in commit 72340f821: exact_sphereParam_identity requires (forall x, DifferentiableAt eta x), including x=0, but frozen apm_t94a10_IsExact supplies differentiability only for punctured x. The theorem therefore cannot discharge B7 from the registered hypothesis although B7 is marked proved. Repair heta to require x != 0 (or only differentiability at sphereParam p) and use sphereParam_ne_zero; then recompile and keep B8-B11 residual."},
-    :commit "72340f821af276dbc706e13462422a425ad2025a",
+     {:cmd "git show --check e7ba5fee3", :exit 0}],
+    :commit "e7ba5fee30e3d361e8323b44544aea7fa72ac6c9",
     :changed-paths ["ConstructionTargets/t94A10Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t94A10Closure.lean",
      :sha256
-     "47e452cc3a16a7fb1736a69baa0336e4948d7256eba94064fa67e3a6584a0797"},
+     "a6b81220ba8b3e9fcfea357e0b66383a2863105bde9c8cb37c3a6db5de417c20"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope
    ["problems/t94A10/lean/Main.lean"
     "problems/t94A10/status.json"
@@ -81772,7 +81761,9 @@
    :kind :lemma,
    :depends-on
    [:lemma-constructiontargets-t94a10closure-solidangle-pullback-sphereparam
-    :lemma-constructiontargets-t94a10closure-spherepullbacklongcoeff-eq],
+    :lemma-constructiontargets-t94a10closure-spherepullbacklongcoeff-eq
+    :lemma-spherepullbacklongcoeff-eq
+    :lemma-solidangle-pullback-sphereparam],
    :other-consumers []}
   {:consumer :t94A10,
    :phase :lemma,
@@ -81814,5 +81805,36 @@
    :lemma-constructiontargets-t94a10closure-sphericalrectangle-curl-integral-zero,
    :kind :lemma,
    :depends-on
-   [:lemma-constructiontargets-t94a10closure-exact-sphereparam-identity],
+   [:lemma-constructiontargets-t94a10closure-exact-sphereparam-identity
+    :lemma-exact-sphereparam-identity],
+   :other-consumers []}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance {:lemma "spherePullbackLongCoeff_eq"},
+   :lemma {:name "spherePullbackLongCoeff_eq", :reported-by []},
+   :id :lemma-spherepullbacklongcoeff-eq,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance {:lemma "solidAngle_pullback_sphereParam"},
+   :lemma {:name "solidAngle_pullback_sphereParam", :reported-by []},
+   :id :lemma-solidangle-pullback-sphereparam,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance {:lemma "exact_sphereParam_identity"},
+   :lemma {:name "exact_sphereParam_identity", :reported-by []},
+   :id :lemma-exact-sphereparam-identity,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers []}]}
