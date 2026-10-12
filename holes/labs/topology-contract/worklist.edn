@@ -113850,14 +113850,14 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 9,
+   :stop-count 10,
    :review-finding
    "Blueprint B3 is marked proved but its proof uses the unlisted ConnectedGroupoidSingleObjEquivalence.connectorSingleObjEquivalence (and connector-system representation) instead of only the declared uses; add the actual connector dependency and proof route to B3 uses.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
    :evidence
    {:placeholder-delta {:source-before 0, :source-after 0},
     :residual
-    "Reduce both glues in the mapped square to the reconstructed splice, then cancel named open-cover and injected counits; close B6/B12.",
+    "Compute the named source/target glues from reconstructed splice and coordinate-to-point round trip; cancel open-cover/injected counits; close B6/B12.",
     :outcome :stop,
     :warnings [],
     :missing-theorems
@@ -113871,9 +113871,9 @@
       :area "fundamental-group-wedge-of-circles"}],
     :statement-hashes
     {:source
-     "96fabffb7c937ad44a8959c7d8e068f321e338d8daff8d7be6170c86c3eefae9",
+     "014d696f8e341338904303be2646b4bc545845687c50aea7d3b5d7353ce835ea",
      :documentation
-     "b1df02d99bfce07d89a17999d722c980d79781f680ac0534abeb02f2f56aae66",
+     "f3309bb86506aba1394641bc8ac1bcb960f49597a12432ab8a9c485ace010f95",
      :blueprint
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0",
      :registry "131/131"},
@@ -113881,7 +113881,7 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
     :reason
-    "Mapped coordinate-span counit glue naturality is specialized at the unique overlap object.",
+    "Named both mapped glues and expressed the coordinate-span square in group order.",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/PointWedgeVanKampen.lean",
@@ -113890,24 +113890,7 @@
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder/diff validation", :exit 0}],
-    :diagnostic-history
-    [{:cmd "lean implicit mapped square",
-      :exit 1,
-      :finding
-      "Functor map and counit object required explicit endpoints."}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1791830715155-7719-316bea26",
-     :commands
-     ["git show/diff-tree f4203bfa6"
-      "sha256 + placeholder + registry checks"
-      "lake env lean ConstructionTargets/PointWedgeVanKampen.lean"
-      "lake build ConstructionTargets.PointWedgeVanKampen"
-      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (expected absent)"],
-     :finding
-     "Scope is exactly Lean+MD; source/doc/blueprint hashes match; placeholders 0->0; registry 131/131. The theorem is precisely mapped coordinate-span counit glue_naturality at the unique point-span overlap object: source glue then right leg = left leg then target glue. Coordinate-to-point comparison isomorphisms and endpoints remain explicit. It compiles with only propext, Classical.choice, Quot.sound. This is new progress; residual is reducing both glues to the reconstructed splice and cancelling named open-cover/injected counits, then B6/B12. Final target remains absent as declared."},
-    :commit "f4203bfa6682494cf60b47c7978440fc6f41c047",
+    :commit "e8c978a96076fe543d05b9b223cd893bf945a8b7",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
      "ConstructionTargets/PointWedgeVanKampen.md"],
@@ -113917,7 +113900,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :needs-owner,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
