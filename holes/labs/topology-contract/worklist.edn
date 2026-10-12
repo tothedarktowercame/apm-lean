@@ -113894,6 +113894,18 @@
     [{:cmd "lean right transported HEq",
       :exit 1,
       :finding "Closed residual proof-alignment goal by rfl."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791804727908-6864-d02a7ae2",
+     :commands
+     ["git show/diff-tree f18410635"
+      "sha256/placeholder/registry checks"
+      "lake env lean ConstructionTargets/PointWedgeVanKampen.lean"
+      "lake build ConstructionTargets.PointWedgeVanKampen"
+      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (expected absent)"],
+     :finding
+     "PASS: exact two-file scope and frozen hashes match; placeholders 0->0, registry 131/131. Right functor/map HEq and endpoint-conjugation transport preserve dependent endpoints and orientation; standard axioms only. Valid program STOP with compiled progress; quotient-aware mapOfEq identity, right normal form, B6 legs, and B12 remain."},
     :commit "f1841063501d81d83b78c471a544d28b21d91380",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
@@ -113904,7 +113916,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113925,7 +113937,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: The right base equality, connector, and lifted-loop transport normal form now compile with the quotient representative change explicit.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: The right lifted-loop map and its endpoint conjugation now use the concrete fundamental-groupoid map with dependent endpoints preserved.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -114265,7 +114277,11 @@
     {:job 8,
      :commit "2fd5dce65313ab1b79d96c6ec1d98d7caa2c3852",
      :reason
-     "The right base equality, connector, and lifted-loop transport normal form now compile with the quotient representative change explicit."}]}
+     "The right base equality, connector, and lifted-loop transport normal form now compile with the quotient representative change explicit."}
+    {:job 9,
+     :commit "f1841063501d81d83b78c471a544d28b21d91380",
+     :reason
+     "The right lifted-loop map and its endpoint conjugation now use the concrete fundamental-groupoid map with dependent endpoints preserved."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
