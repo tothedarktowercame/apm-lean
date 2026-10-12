@@ -3018,6 +3018,43 @@ theorem coefficientRelativeProjection_forgotten_epi
   change Epi (forgetIntModules.map (p.f n))
   infer_instance
 
+theorem integralRelativeChainsComparisonWithTransport_pairMap_naturality
+    {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    (A : Set X) (B : Set Y) (f : C(X, Y)) (hf : Set.MapsTo f A B) :
+    (forgetIntModules.mapHomologicalComplex (ComplexShape.down ℕ)).map
+          (CoefficientRadialPair.pairMap ℤ A B f hf) ≫
+        (integralRelativeChainsComparisonWithTransport B).hom =
+      (integralRelativeChainsComparisonWithTransport A).hom ≫
+        relativeSingularMap A B f hf := by
+  let p := cokernel.π (CoefficientRelativeSmall.subspaceMap ℤ A)
+  haveI : Epi p := inferInstance
+  haveI : Epi ((forgetIntModules.mapHomologicalComplex
+      (ComplexShape.down ℕ)).map p) :=
+    coefficientRelativeProjection_forgotten_epi A
+  have hpair := coefficientPairMap_forgotten_projection_naturality A B f hf
+  have hpB := integralRelativeChainsComparisonWithTransport_projection B
+  have habs := coefficientAbsoluteMap_forgotten_naturality f
+  have hrel := absoluteSingularMap_relativeProjection_naturality A B f hf
+  have hpA := integralRelativeChainsComparisonWithTransport_projection A
+  apply (cancel_epi ((forgetIntModules.mapHomologicalComplex
+    (ComplexShape.down ℕ)).map p)).1
+  exact
+    ((Category.assoc _ _ _).symm.trans
+      ((congrArg (fun q => q ≫
+        (integralRelativeChainsComparisonWithTransport B).hom) hpair).trans
+      ((Category.assoc _ _ _).trans
+      ((congrArg (fun q =>
+        (forgetIntModules.mapHomologicalComplex (ComplexShape.down ℕ)).map
+          (CoefficientRadialPair.absoluteMap ℤ f) ≫ q) hpB).trans
+      ((Category.assoc _ _ _).symm.trans
+      ((congrArg (fun q => q ≫ relativeSingularProjection B) habs).trans
+      ((Category.assoc _ _ _).trans
+      ((congrArg (fun q =>
+        (singularChainsComparison (TopCat.of X)).hom ≫ q) hrel).trans
+      ((Category.assoc _ _ _).symm.trans
+      ((congrArg (fun q => q ≫ relativeSingularMap A B f hf) hpA.symm).trans
+        (Category.assoc _ _ _)))))))))))
+
 end ConstructionTargets.ManifoldFundamentalClass
 
 #print axioms ConstructionTargets.ManifoldFundamentalClass.neighborhoodInclusion_Hsucc_isIso
@@ -3122,6 +3159,7 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientAbsoluteMap_forgotten_naturality
 #print axioms ConstructionTargets.ManifoldFundamentalClass.absoluteSingularMap_relativeProjection_naturality
 #print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientRelativeProjection_forgotten_epi
+#print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeChainsComparisonWithTransport_pairMap_naturality
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_projection
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_generator_of_normalization
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_normalization_of_generator
