@@ -113894,6 +113894,18 @@
     [{:cmd "lean direct outer rewrite",
       :exit 1,
       :finding "Unfolded the named overlap base."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791810740564-6963-95ca812d",
+     :commands
+     ["git show/diff-tree a450e10c2"
+      "sha256/placeholder/registry checks"
+      "lake env lean ConstructionTargets/PointWedgeVanKampen.lean"
+      "lake build ConstructionTargets.PointWedgeVanKampen"
+      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (expected absent)"],
+     :finding
+     "PASS: exact two-file scope and frozen hashes match; placeholders 0->0, registry 131/131. Global right-base conjugator is correctly transported to the inverse-left/forward-right outer composite at the named overlap representative; standard axioms only. Valid program STOP; compare with B3 counit, then close B6/B12."},
     :commit "a450e10c20202e41efb2ef2d05445d5400e6cf6b",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
@@ -113904,7 +113916,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113925,7 +113937,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Unit glue transported through the overlap equivalence, leaving the two outer comparisons.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: The reconstruction right-base conjugator is now exactly the inverse-left/forward-right outer comparison composite.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -114289,7 +114301,11 @@
     {:job 5,
      :commit "fb8f1a369ca41e1fc4dfe820f8362570c397e539",
      :reason
-     "Unit glue transported through the overlap equivalence, leaving the two outer comparisons."}]}
+     "Unit glue transported through the overlap equivalence, leaving the two outer comparisons."}
+    {:job 6,
+     :commit "a450e10c20202e41efb2ef2d05445d5400e6cf6b",
+     :reason
+     "The reconstruction right-base conjugator is now exactly the inverse-left/forward-right outer comparison composite."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
