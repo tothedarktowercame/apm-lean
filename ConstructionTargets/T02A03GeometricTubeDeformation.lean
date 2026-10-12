@@ -2140,6 +2140,18 @@ theorem correctedDepartureBump_pos
   · exact mul_pos (by linarith) (by linarith)
   · exact le_of_lt (mul_pos (by linarith) (by linarith))
 
+theorem correctedDepartureBump_eq_zero_of_le
+    (t : unitInterval) (ht : (t : ℝ) ≤ 1 / 8) :
+    correctedDepartureBump t = 0 := by
+  rw [correctedDepartureBump, max_eq_left]
+  exact mul_nonpos_of_nonpos_of_nonneg (by linarith) (by linarith [t.2.1])
+
+theorem correctedDepartureBump_eq_zero_of_ge
+    (t : unitInterval) (ht : 3 / 8 ≤ (t : ℝ)) :
+    correctedDepartureBump t = 0 := by
+  rw [correctedDepartureBump, max_eq_left]
+  exact mul_nonpos_of_nonneg_of_nonpos (by linarith) (by linarith)
+
 @[simp] theorem correctedDepartureBump_zero :
     correctedDepartureBump 0 = 0 := by
   norm_num [correctedDepartureBump]
@@ -2232,3 +2244,5 @@ end ConstructionTargets.T02A03GeometricTubeDeformation
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_corrected_departure_zero_time_lt_three_eighths
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.continuous_correctedDepartureBump
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.correctedDepartureBump_pos
+#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.correctedDepartureBump_eq_zero_of_le
+#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.correctedDepartureBump_eq_zero_of_ge
