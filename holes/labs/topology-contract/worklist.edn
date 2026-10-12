@@ -113894,6 +113894,17 @@
     [{:cmd "lean full mapped-glue normalization",
       :exit 1,
       :finding "Outer transports hide the raw component."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791834919571-7811-1e16317f",
+     :commands
+     ["git show/diff-tree 0f80d137"
+      "lake build ConstructionTargets.PointWedgeVanKampen"
+      "python3 scripts/statement-registry.py check"
+      "commit hash and placeholder checks"],
+     :finding
+     "PASS program STOP: 0f80d137 by topo-2 adds the raw overlap-glue definition plus documentation, exactly within scope and new since history. Source fd592589..., documentation 2c6ca702..., fixture 0bca6ce3..., registry 131/131, and placeholders 0->0 reproduce. The definition evaluates the reconstructed global pseudococone at the fixed overlap base before pseudo-span, coordinate-span, and point-span transport, so it preserves the categorical boundary and assumes no cross-representation equality. Fresh build passes with standard axioms. This is compiled sorry-free progress; raw evaluation, three transport lemmas, counit substitution, and B6/B12 remain explicitly listed."},
     :commit "0f80d13767beb28cd81839f639693399e7a6943e",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
@@ -113904,7 +113915,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113925,7 +113936,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: The predecessor is now the mapped canonical overlap of the named reconstructed global functor.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Named the raw descent-overlap component before three span transports.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -114432,7 +114443,11 @@
     {:job 5,
      :commit "aff8c2cb871c3702c79dc1a6b4fea1e41c70b97e",
      :reason
-     "The predecessor is now the mapped canonical overlap of the named reconstructed global functor."}]}
+     "The predecessor is now the mapped canonical overlap of the named reconstructed global functor."}
+    {:job 6,
+     :commit "0f80d13767beb28cd81839f639693399e7a6943e",
+     :reason
+     "Named the raw descent-overlap component before three span transports."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
