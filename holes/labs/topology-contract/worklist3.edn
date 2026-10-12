@@ -30160,7 +30160,7 @@
    :consumer :t00A02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 4,
+   :stop-count 5,
    :review-finding
    "Program-row defect persists: commit 92a672b41 changes only SurfaceClassification.blueprint.md and adds no compiled milestone after history commit 4244c6e3e; registry remains 131/131. Exact repair is supervisor-owned: retire/supersede this obsolete implementation program, then submit 92a672b41 as an independent blueprint-review row and elect R1-R7 only after that review. Do not require the parked author to add off-route compiled work.",
    :implements-lemma
@@ -30175,7 +30175,7 @@
      :t96A01 [1 1],
      :t97J02 [3 3]},
     :residual
-    "Retire program; review replacement blueprint separately; elect R1-R7 only after review.",
+    "Retire/supersede program; review blueprint separately; elect R1-R7 after review.",
     :outcome :stop,
     :warnings [],
     :statement-hashes {:registry "131/131"},
@@ -30183,25 +30183,20 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Supervisor transition required: retire this obsolete triangulation program and submit commit 92a672b41 as an independent blueprint-review row. Adding compiled work here would violate the owner park and reviewed surfaces.md route; the replacement blueprint cannot be reviewed as program progress.",
+    "Supervisor must retire/supersede this parked implementation program and submit 92a672b41 as an independent blueprint-review row; no author-side compiled repair is valid.",
     :commands
-    [{:cmd "git diff-tree --name-only 92a672b41", :exit 0}
-     {:cmd "git diff-tree --name-only 4244c6e3e", :exit 0}
+    [{:cmd "git show --format=%H\\ %P --no-patch 92a672b41", :exit 0}
+     {:cmd "git diff-tree --no-commit-id --name-only -r 92a672b41",
+      :exit 0}
      {:cmd
-      "git diff --check 4244c6e3e..92a672b41 -- ConstructionTargets/SurfaceClassification.blueprint.md",
+      "git diff --exit-code 4244c6e3e..92a672b41 -- ConstructionTargets/SurfaceClassification.lean",
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1791821703655-7366-f334edcb",
-     :finding
-     "Program-row defect persists: commit 92a672b41 changes only SurfaceClassification.blueprint.md and adds no compiled milestone after history commit 4244c6e3e; registry remains 131/131. Exact repair is supervisor-owned: retire/supersede this obsolete implementation program, then submit 92a672b41 as an independent blueprint-review row and elect R1-R7 only after that review. Do not require the parked author to add off-route compiled work."},
     :commit "92a672b41fa1f7e45df1987a4aca7d2f8460d2e0",
     :changed-paths [],
     :seat :topo-10},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SurfaceClassification.lean"
     "ConstructionTargets/SurfaceClassification.md"
