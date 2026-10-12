@@ -324,3 +324,9 @@ literal lift identifications remains before completing B6.
 outer-right expansion.  In the hom direction its right-span comparison comes
 first and the overlap-equivalence round-trip follows.  All four outer factors
 are now explicit; their evaluation and the literal lifts remain for B6.
+
+`genericPointWedgeIdentityOuterLeftSpanFactor_eq_map` removes both whiskering
+layers from the inverse left-span factor.  The result is exactly the coordinate
+representation applied to the strict left-span comparison at the transported
+overlap object.  That mapped comparison, the other three outer factors, and
+the literal lift identifications remain for B6.
