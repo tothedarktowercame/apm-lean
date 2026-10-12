@@ -21345,7 +21345,7 @@
    :other-consumers []}
   {:consumer :t00A02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -21358,7 +21358,9 @@
     :reported-by [:routes-2026-10-10-topo3-seed-checkpoint-1],
     :type
     "Compact connected smooth two-manifolds used by these consumers admit finite triangulations, inherited by finite covers.",
-    :area "surface-classification"},
+    :area "surface-classification",
+    :banked-by :program-2026-10-12-surface-classification,
+    :banked-commit "122a2d685ccb62c21e2214cb4eef7c9a788467db"},
    :id
    :lemma-constructiontargets-surfaceclassification-compactsmoothsurfacefinitetriangulatio,
    :kind :lemma,
@@ -28880,7 +28882,7 @@
    :other-consumers [:t01J01 :t03J02]}
   {:consumer :t00A02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -28894,7 +28896,9 @@
      :program-2026-10-12-surface-classification],
     :type "∀ K : FiniteTwoComplex, FiniteTwoComplex.FaceBound K",
     :area "surface-classification",
-    :proved-in :program-2026-10-12-surface-classification},
+    :proved-in :program-2026-10-12-surface-classification,
+    :banked-by :program-2026-10-12-surface-classification,
+    :banked-commit "122a2d685ccb62c21e2214cb4eef7c9a788467db"},
    :id
    :lemma-constructiontargets-surfaceclassification-finitetwocomplex-face-card-le-three,
    :kind :lemma,
@@ -30045,6 +30049,20 @@
       :exit 1,
       :expected-exit 1}],
     :continue-from "122a2d685ccb62c21e2214cb4eef7c9a788467db",
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791813564077-7046-2655fff1",
+     :commands
+     ["git show/diff-tree 122a2d68"
+      "lake env lean /tmp/surface_face_bound_check.lean"
+      "lake env lean ConstructionTargets/SurfaceClassification.lean"
+      "lake build ConstructionTargets.SurfaceClassification"
+      "python3 scripts/statement-registry.py check"
+      "git diff 122a2d68^ 122a2d68 --check"
+      "rg source/consumer placeholders"],
+     :finding
+     "PASS program STOP: reviewer codex-11. Since prior history, commit 122a2d68 adds compiled FiniteTwoComplex plus the proved face_card_le_three milestone and lists it in :missing-theorems; realization remains explicit residual. The structure matches blueprint B1 fields, and FaceBound follows faithfully from boundaryEdges as the image of Fin 3. Recorded scope is exactly SurfaceClassification.lean and blob is current. Fixture/module compile; 8245-job build and registry 131/131 pass; source placeholders 0; axioms propext, Classical.choice, Quot.sound; consumer counts unchanged 2/2/3/3/2/1/3."},
     :commit "122a2d685ccb62c21e2214cb4eef7c9a788467db",
     :changed-paths ["ConstructionTargets/SurfaceClassification.lean"],
     :program-history
@@ -30054,7 +30072,7 @@
       :result :face-bound-proved}],
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/SurfaceClassification.lean"
     "ConstructionTargets/SurfaceClassification.md"
@@ -30073,13 +30091,20 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint
     "ConstructionTargets/SurfaceClassification.blueprint.md"},
+   :continue-from
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: face-bound milestone proved; program continues at B1 realization",
    :id :program-2026-10-12-surface-classification,
    :kind :reusable-theorem,
    :campaign-priority 40,
    :fail-count 3,
    :depends-on [],
    :program true,
-   :other-consumers [:t00A03 :t91J05 :t92J05 :t94J04 :t96A01 :t97J02]}
+   :other-consumers [:t00A03 :t91J05 :t92J05 :t94J04 :t96A01 :t97J02],
+   :program-history
+   [{:job 4,
+     :commit "122a2d685ccb62c21e2214cb4eef7c9a788467db",
+     :reason
+     "face-bound milestone proved; program continues at B1 realization"}]}
   {:consumer :t00J02,
    :phase :lemma,
    :state :backlog,
