@@ -81,6 +81,11 @@ transported derivative varies continuously at the base point, using Mathlib's
 without treating derivatives in distinct tangent fibers as one operator-valued
 function; the fixed-representative equality remains to connect the two B2
 formulations.
+`eventually_mem_fixed_chart_sources` supplies one neighbourhood on which both
+the source point and its image lie in the fixed source and target charts; on
+this neighbourhood `inTangentCoordinates_mfderiv_eq_chart_factors` applies
+uniformly.  The remaining equality proof can therefore work under these two
+explicit membership hypotheses.
 `inTangentCoordinates_mfderiv_self_eq_sourceChartFactor` evaluates the
 transported family at its centre through the target-chart identity: the
 remaining expression is `mfderiv f x` followed by the inverse source-chart

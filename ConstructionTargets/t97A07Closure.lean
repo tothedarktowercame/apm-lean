@@ -31,7 +31,7 @@ theorem isOpen_setOf_surjective_clm [FiniteDimensional ℝ E] [FiniteDimensional
   simpa only [← ContinuousLinearMap.comp_apply, ← Units.val_mul] using
     congrArg (fun A : F →L[ℝ] F ↦ A y) (u.mul_inv)
 
-open scoped Manifold ContDiff
+open scoped Manifold ContDiff Topology
 
 abbrev EuclideanModel (n : ℕ) := EuclideanSpace ℝ (Fin n)
 
@@ -127,6 +127,23 @@ theorem continuousAt_inTangentCoordinates_mfderiv
           𝓘(ℝ, EuclideanModel n) f z) x) x := by
   exact (hf.contMDiffAt.mfderiv_const (m := 0) (by simp)).continuousAt
 
+/-- Near a fixed base point, both the source point and its image remain in
+the fixed charts used by the tangent-coordinate derivative. -/
+theorem eventually_mem_fixed_chart_sources
+    {m n : ℕ} {X : Type*} [TopologicalSpace X]
+    [ChartedSpace (EuclideanModel m) X]
+    [IsManifold 𝓘(ℝ, EuclideanModel m) ∞ X]
+    (f : X → EuclideanModel n)
+    (hf : ContMDiff 𝓘(ℝ, EuclideanModel m) 𝓘(ℝ, EuclideanModel n) ∞ f)
+    (x : X) :
+    ∀ᶠ y in 𝓝 x,
+      y ∈ (chartAt (EuclideanModel m) x).source ∧
+        f y ∈ (chartAt (EuclideanModel n) (f x)).source := by
+  filter_upwards [chart_source_mem_nhds (EuclideanModel m) x,
+    hf.continuous.continuousAt.preimage_mem_nhds
+      (chart_source_mem_nhds (EuclideanModel n) (f x))] with y hy hfy
+  exact ⟨hy, hfy⟩
+
 /-- At its base point, the transported derivative reduces to the manifold
 derivative followed by the inverse source-chart derivative. -/
 theorem inTangentCoordinates_mfderiv_self_eq_sourceChartFactor
@@ -188,6 +205,7 @@ end t97A07Closure
 #print axioms t97A07Closure.coordinate_fderivWithin_eq_mfderiv
 #print axioms t97A07Closure.inTangentCoordinates_mfderiv_eq_chart_factors
 #print axioms t97A07Closure.continuousAt_inTangentCoordinates_mfderiv
+#print axioms t97A07Closure.eventually_mem_fixed_chart_sources
 #print axioms t97A07Closure.inTangentCoordinates_mfderiv_self_eq_sourceChartFactor
 #print axioms t97A07Closure.mfderiv_chartAt_symm_self_eq_id
 #print axioms t97A07Closure.inTangentCoordinates_mfderiv_self_eq_mfderiv
