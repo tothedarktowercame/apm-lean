@@ -3703,6 +3703,48 @@ theorem complexArrivalCorrection_threeQuarters_ne_zero
       rw [show p.1 1 = -c.im by linarith, abs_neg]
     linarith
 
+/-- An endpoint-fixed transverse correction supported on the arrival half.
+Its coefficient is deliberately kept symbolic in the later zero-locus
+analysis; the present definition records the continuous correction that the
+piecewise leg certificates must cover. -/
+noncomputable def arrivalTransverseCorrection (t : unitInterval) : ℂ :=
+  ((24 * max 0 (2 * (t : ℝ) - 1) * (1 - (t : ℝ)) : ℝ) : ℂ) * Complex.I
+
+theorem continuous_arrivalTransverseCorrection :
+    Continuous arrivalTransverseCorrection := by
+  unfold arrivalTransverseCorrection
+  fun_prop
+
+@[simp] theorem arrivalTransverseCorrection_zero :
+    arrivalTransverseCorrection 0 = 0 := by
+  norm_num [arrivalTransverseCorrection]
+
+@[simp] theorem arrivalTransverseCorrection_one :
+    arrivalTransverseCorrection 1 = 0 := by
+  norm_num [arrivalTransverseCorrection]
+
+theorem arrivalTransverseCorrection_eq_zero_of_le_half
+    (t : unitInterval) (ht : (t : ℝ) ≤ 1 / 2) :
+    arrivalTransverseCorrection t = 0 := by
+  rw [arrivalTransverseCorrection, max_eq_left]
+  · norm_num
+  · linarith
+
+/-- The supported transverse correction is automatically safe on the
+exceptional `t = 3/4` slice because its real part is zero, not the forced
+value `-1`. -/
+theorem arrivalTransverseCorrection_threeQuarters_ne_zero
+    (p : RightTubeMinusLeftCore) :
+    (((2 - 2 * (arrivalThreeQuarters : ℝ) : ℝ) : ℂ) *
+          positiveRealPlanarWaypointMap p +
+        ((2 * (arrivalThreeQuarters : ℝ) - 1 : ℝ) : ℂ) *
+          rightTubeCorePlanarComplex p.1 +
+        arrivalTransverseCorrection arrivalThreeQuarters) ≠ 0 := by
+  apply complexArrivalCorrection_threeQuarters_ne_zero
+  left
+  norm_num [arrivalTransverseCorrection, arrivalThreeQuarters,
+    Complex.mul_re, Complex.mul_im]
+
 end ConstructionTargets.T02A03GeometricTubeDeformation
 
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeNormalComplex_eq_zero_iff
@@ -3818,6 +3860,8 @@ end ConstructionTargets.T02A03GeometricTubeDeformation
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.complexArrivalCorrection_zero_scaled_normSq
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.complexArrivalCorrection_ne_zero_of_scaled_normSq_outside
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.complexArrivalCorrection_threeQuarters_ne_zero
+#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.continuous_arrivalTransverseCorrection
+#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.arrivalTransverseCorrection_threeQuarters_ne_zero
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_twiceCorrected_departure_zero_coordinates
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_twiceCorrected_departure_zero_normSq
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_twiceCorrected_departure_zero_scalar_bounds
