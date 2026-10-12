@@ -245,6 +245,35 @@ theorem coordinate_fderivWithin_eq_inTangentCoordinates_mfderiv_self
   rw [coordinate_fderivWithin_eq_mfderiv f hf x,
     inTangentCoordinates_mfderiv_self_eq_mfderiv]
 
+/-- At the common centre, the fixed-coordinate derivative is the same
+three-factor chart expression used uniformly for nearby transported
+derivatives. -/
+theorem coordinate_fderivWithin_eq_chart_factors_self
+    {m n : ℕ} {X : Type*} [TopologicalSpace X]
+    [ChartedSpace (EuclideanModel m) X]
+    [IsManifold 𝓘(ℝ, EuclideanModel m) ∞ X]
+    (f : X → EuclideanModel n)
+    (hf : ContMDiff 𝓘(ℝ, EuclideanModel m) 𝓘(ℝ, EuclideanModel n) ∞ f)
+    (x : X) :
+    fderivWithin ℝ
+        (extChartAt 𝓘(ℝ, EuclideanModel n) (f x) ∘ f ∘
+          (extChartAt 𝓘(ℝ, EuclideanModel m) x).symm)
+        (Set.range 𝓘(ℝ, EuclideanModel m))
+        (extChartAt 𝓘(ℝ, EuclideanModel m) x x) =
+      (mfderiv 𝓘(ℝ, EuclideanModel n) 𝓘(ℝ, EuclideanModel n)
+          (extChartAt 𝓘(ℝ, EuclideanModel n) (f x)) (f x)) ∘L
+        (mfderiv 𝓘(ℝ, EuclideanModel m)
+          𝓘(ℝ, EuclideanModel n) f x) ∘L
+          (mfderivWithin (I := 𝓘(ℝ, EuclideanModel m))
+            (I' := 𝓘(ℝ, EuclideanModel m))
+            (extChartAt 𝓘(ℝ, EuclideanModel m) x).symm
+            (Set.range 𝓘(ℝ, EuclideanModel m))
+            (extChartAt 𝓘(ℝ, EuclideanModel m) x x)) := by
+  rw [coordinate_fderivWithin_eq_inTangentCoordinates_mfderiv_self f hf x]
+  exact inTangentCoordinates_mfderiv_eq_chart_factors f x x
+    (mem_chart_source (EuclideanModel m) x)
+    (mem_chart_source (EuclideanModel n) (f x))
+
 end t97A07Closure
 
 #print axioms t97A07Closure.isOpen_setOf_surjective_clm
@@ -258,3 +287,4 @@ end t97A07Closure
 #print axioms t97A07Closure.mfderiv_chartAt_symm_self_eq_id
 #print axioms t97A07Closure.inTangentCoordinates_mfderiv_self_eq_mfderiv
 #print axioms t97A07Closure.coordinate_fderivWithin_eq_inTangentCoordinates_mfderiv_self
+#print axioms t97A07Closure.coordinate_fderivWithin_eq_chart_factors_self

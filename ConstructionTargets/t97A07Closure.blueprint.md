@@ -108,6 +108,11 @@ identifies the transported family with `mfderiv f x` at the centre.  The
 remaining B2 step is the equality with the fixed-coordinate derivative on a
 smaller chart neighbourhood.
 
+`coordinate_fderivWithin_eq_chart_factors_self` identifies the fixed
+coordinate derivative at the centre with the same explicit three-factor
+formula used by the nearby transported family.  It remains to extend this
+identification to a smaller common chart neighbourhood.
+
 ### B3. Regular points are open
 
 lean: `t97A07Closure.isOpen_regularPoints` : under the t97A07 manifold
