@@ -66,6 +66,26 @@ openness on the positive-dimensional summands is tested simplex by simplex. -/
 
 instance (K : FiniteTwoComplex) : TopologicalSpace K.RawCell := K.rawCellTopology
 
+theorem continuous_rawVertex (K : FiniteTwoComplex) :
+    Continuous[(⊥ : TopologicalSpace K.vertex), K.rawCellTopology] RawCell.vertex := by
+  letI : TopologicalSpace K.vertex := ⊥
+  letI : DiscreteTopology K.vertex := ⟨rfl⟩
+  rw [continuous_generateFrom_iff]
+  intro U hU
+  exact isOpen_discrete _
+
+theorem continuous_rawEdge (K : FiniteTwoComplex) (e : K.edge) :
+    Continuous (RawCell.edge e) := by
+  rw [continuous_generateFrom_iff]
+  intro U hU
+  exact hU.1 e
+
+theorem continuous_rawFace (K : FiniteTwoComplex) (f : K.face) :
+    Continuous (RawCell.face f) := by
+  rw [continuous_generateFrom_iff]
+  intro U hU
+  exact hU.2 f
+
 /-- The elementary attaching pairs: edge endpoints attach to vertices and
 each face edge attaches to the edge named by `faceEdge`. -/
 inductive Gluing (K : FiniteTwoComplex) : K.RawCell → K.RawCell → Prop
@@ -94,6 +114,21 @@ def realizationQuotient (K : FiniteTwoComplex) : K.RawCell → K.Realization :=
 theorem realizationQuotient_isQuotientMap (K : FiniteTwoComplex) :
     IsQuotientMap K.realizationQuotient := by
   exact isQuotientMap_quotient_mk'
+
+theorem continuous_realizationVertex (K : FiniteTwoComplex) :
+    Continuous[(⊥ : TopologicalSpace K.vertex), inferInstance]
+      (fun v => K.realizationQuotient (.vertex v)) := by
+  letI : TopologicalSpace K.vertex := ⊥
+  letI : DiscreteTopology K.vertex := ⟨rfl⟩
+  exact K.realizationQuotient_isQuotientMap.continuous.comp K.continuous_rawVertex
+
+theorem continuous_realizationEdge (K : FiniteTwoComplex) (e : K.edge) :
+    Continuous (fun x => K.realizationQuotient (.edge e x)) :=
+  K.realizationQuotient_isQuotientMap.continuous.comp (K.continuous_rawEdge e)
+
+theorem continuous_realizationFace (K : FiniteTwoComplex) (f : K.face) :
+    Continuous (fun x => K.realizationQuotient (.face f x)) :=
+  K.realizationQuotient_isQuotientMap.continuous.comp (K.continuous_rawFace f)
 
 @[simp] theorem realizationQuotient_edge_vertex (K : FiniteTwoComplex)
     (e : K.edge) (i : Fin 2) :
