@@ -69,8 +69,12 @@ fixed-chart representative's `fderivWithin` at the chart centre.
 `coordinate_fderivWithin_eq_mfderiv` identifies its value at that centre
 exactly with `mfderiv`; this follows from Mathlib's definition after proving
 manifold differentiability, and does not identify tangent fibers at distinct
-points.  Remaining in B2 is the nearby chart-transport equality with
-`mfderiv`.
+points.  `inTangentCoordinates_mfderiv_eq_chart_factors` now gives the nearby
+chart-transport equality explicitly: in the common source and target charts,
+the coordinate form of `mfderiv f y` is the target chart derivative composed
+with `mfderiv f y` and the inverse source chart derivative.  Remaining in B2
+is to identify this transported map with the fixed representative's
+`fderivWithin` on a common smaller chart neighbourhood.
 
 ### B3. Regular points are open
 

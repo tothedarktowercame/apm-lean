@@ -83,8 +83,36 @@ theorem coordinate_fderivWithin_eq_mfderiv
   rw [mfderiv]
   simp only [hd, if_pos, writtenInExtChartAt]
 
+/-- At a nearby point lying in the fixed source and target charts, the
+manifold derivative written in the tangent coordinates based at `x` is the
+literal composite of the target chart derivative, `mfderiv f y`, and the
+inverse source chart derivative.  This is the chart-transition equality
+component of blueprint B2; no tangent fibers at distinct points are
+identified directly. -/
+theorem inTangentCoordinates_mfderiv_eq_chart_factors
+    {m n : ℕ} {X : Type*} [TopologicalSpace X]
+    [ChartedSpace (EuclideanModel m) X]
+    [IsManifold 𝓘(ℝ, EuclideanModel m) ∞ X]
+    (f : X → EuclideanModel n) (x y : X)
+    (hx : y ∈ (chartAt (EuclideanModel m) x).source)
+    (hy : f y ∈ (chartAt (EuclideanModel n) (f x)).source) :
+    inTangentCoordinates 𝓘(ℝ, EuclideanModel m)
+        𝓘(ℝ, EuclideanModel n) (fun z : X ↦ z) f
+        (fun z ↦ mfderiv 𝓘(ℝ, EuclideanModel m)
+          𝓘(ℝ, EuclideanModel n) f z) x y =
+      (mfderiv 𝓘(ℝ, EuclideanModel n) 𝓘(ℝ, EuclideanModel n)
+          (extChartAt 𝓘(ℝ, EuclideanModel n) (f x)) (f y)) ∘L
+        (mfderiv 𝓘(ℝ, EuclideanModel m) 𝓘(ℝ, EuclideanModel n) f y) ∘L
+          (mfderivWithin (I := 𝓘(ℝ, EuclideanModel m))
+            (I' := 𝓘(ℝ, EuclideanModel m))
+            (extChartAt 𝓘(ℝ, EuclideanModel m) x).symm
+            (Set.range 𝓘(ℝ, EuclideanModel m))
+            (extChartAt 𝓘(ℝ, EuclideanModel m) x y)) := by
+  exact inTangentCoordinates_eq_mfderiv_comp hx hy
+
 end t97A07Closure
 
 #print axioms t97A07Closure.isOpen_setOf_surjective_clm
 #print axioms t97A07Closure.continuousWithinAt_coordinate_fderivWithin
 #print axioms t97A07Closure.coordinate_fderivWithin_eq_mfderiv
+#print axioms t97A07Closure.inTangentCoordinates_mfderiv_eq_chart_factors
