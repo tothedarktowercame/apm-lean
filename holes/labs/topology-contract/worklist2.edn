@@ -75002,62 +75002,69 @@
   {:consumer :t96J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "The STOP omits a required remaining theorem: f4306c96a proves only an Equiv between quotient types. B2 freezes standardPairingData_space_homeomorph, and Quotient.congrRight does not preserve or prove the coinduced topologies. Add the nonorientable Homeomorph/topological continuity proof to :missing-theorems and prove it in scope; do not report the plain Equiv as the quotient comparison.",
    :implements-lemma
    :lemma-constructiontargets-polygonsurfacepione-standardpairingdata,
    :evidence
    {:placeholder-delta 0,
-    :residual
-    "Prove oneVertex, package standardPairingData, then orientable Homeomorph.",
+    :residual "Prove converse, oneVertex, package/Homeomorph.",
     :outcome :stop,
-    :warnings ["Two imported linter warnings."],
+    :warnings ["2 imported warnings"],
     :missing-theorems
-    [{:name "nonorientableStandardSpaceHomeomorph",
-      :type "coinduced quotient homeomorphism with Surface false g",
+    [{:name "orientable_surfaceRel_to_boundaryEqvGen",
+      :type "SurfaceRel implies boundary EqvGen",
       :status :proved,
-      :consumers [:t96J02 :t92J05 :t94J04 :t97A03],
-      :depends-on ["nonorientable_eqvGen_iff"],
+      :consumers [:t92J05 :t94J04 :t97A03],
+      :depends-on [],
+      :area "polygon-surface-pi1"}
+     {:name "orientable_boundaryRel_to_surfaceEqvGen",
+      :type "boundary implies SurfaceRel EqvGen",
+      :status :not-started,
+      :consumers [:t92J05 :t94J04 :t97A03],
+      :depends-on [],
       :area "polygon-surface-pi1"}
      {:name "standardPairingData_oneVertex",
       :type "standard vertices form one class",
       :status :not-started,
       :consumers [:t96J02 :t92J05 :t94J04 :t97A03],
-      :depends-on ["standardSign_orientable_pair"],
+      :depends-on [],
       :area "polygon-surface-pi1"}
      {:name "standardPairingData_space_homeomorph",
-      :type
-      "uniform standard PairingData and orientable quotient homeomorphism",
+      :type "uniform data/Homeomorph",
       :status :partial,
       :consumers [:t96J02 :t92J05 :t94J04 :t97A03],
-      :depends-on ["standardPairingData_oneVertex"],
+      :depends-on
+      ["orientable_boundaryRel_to_surfaceEqvGen"
+       "standardPairingData_oneVertex"],
       :area "polygon-surface-pi1"}],
     :statement-hashes
     {:registry "131/0",
-     :module "0781babecf319f4f47c9a4037d9889742e0d4af0"},
+     :module "365a53e9f2d35dd69b4e66e25690b4335cc8aa92"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason
-    "Nonorientable quotient Homeomorph now has both continuity proofs; oneVertex and orientable comparison remain.",
+    :reason "Forward orientable relation compiles; converse remains.",
     :commands
     [{:cmd "lake build ConstructionTargets.PolygonSurfacePiOne",
       :exit 0}
-     {:cmd "python3 scripts/statement-registry.py check",
-      :exit 0,
-      :output "131/0"}
+     {:cmd "registry check", :exit 0, :output "131/0"}
      {:cmd "placeholder scan", :exit 0, :output "0"}
-     {:cmd "git show --check c7715f98c", :exit 0}],
-    :commit "c7715f98c",
+     {:cmd "git show --check 196cdc9b4", :exit 0}],
+    :diagnostic-history
+    [{:cmd "first compile",
+      :exit 1,
+      :correction "rewrote indices first"}],
+    :commit "196cdc9b4",
     :changed-paths ["ConstructionTargets/PolygonSurfacePiOne.lean"],
     :fixture
     {:path "ConstructionTargets/PolygonSurfacePiOne.lean",
      :sha256
-     "ccb6af9b02bbf8ced1087f597d5207a63b02d8b6c2c63803fc4f792cefe5d83a"},
+     "601de9a5ac82238d611223b54c7248d944c1766b5ed2ee3934a9fb2b9e137351"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/PolygonSurfacePiOne.lean"],
    :dag-node "ConstructionTargets/PolygonSurfacePiOne.blueprint.md/B2",
    :acceptance
@@ -84889,7 +84896,9 @@
     :area "polygon-surface-pi1"},
    :id :lemma-standardpairingdata-space-homeomorph,
    :kind :lemma,
-   :depends-on [:lemma-standardpairingdata-onevertex],
+   :depends-on
+   [:lemma-standardpairingdata-onevertex
+    :lemma-orientable-boundaryrel-to-surfaceeqvgen],
    :other-consumers [:t92J05 :t94J04 :t97A03]}
   {:consumer :t97A01,
    :phase :lemma,
@@ -84909,4 +84918,37 @@
    :id :lemma-torusrp2pairingdata-onevertex,
    :kind :lemma,
    :depends-on [:lemma-torusrp2pairingdata],
-   :other-consumers []}]}
+   :other-consumers []}
+  {:consumer :t92J05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "orientable_surfaceRel_to_boundaryEqvGen",
+    :type "SurfaceRel implies boundary EqvGen"},
+   :lemma
+   {:name "orientable_surfaceRel_to_boundaryEqvGen",
+    :reported-by [:routes-2026-10-12-polygon-b2-completion-topo2-r1],
+    :type "SurfaceRel implies boundary EqvGen",
+    :area "polygon-surface-pi1",
+    :proved-in :routes-2026-10-12-polygon-b2-completion-topo2-r1},
+   :id :lemma-orientable-surfacerel-to-boundaryeqvgen,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t94J04 :t97A03]}
+  {:consumer :t92J05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "orientable_boundaryRel_to_surfaceEqvGen",
+    :type "boundary implies SurfaceRel EqvGen"},
+   :lemma
+   {:name "orientable_boundaryRel_to_surfaceEqvGen",
+    :reported-by [:routes-2026-10-12-polygon-b2-completion-topo2-r1],
+    :type "boundary implies SurfaceRel EqvGen",
+    :area "polygon-surface-pi1"},
+   :id :lemma-orientable-boundaryrel-to-surfaceeqvgen,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t94J04 :t97A03]}]}
