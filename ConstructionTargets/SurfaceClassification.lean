@@ -217,6 +217,36 @@ theorem earlier_finite {M : Type*} [TopologicalSpace M] [T2Space M]
     Set.Finite (C.Earlier a : Set C.BoundaryArcIndex) :=
   (C.Earlier a).finite_toSet
 
+/-- The `i`th closed side of a standard triangle. -/
+noncomputable def standardSide (i : Fin 3) :
+    stdSimplex ℝ (Fin 2) → stdSimplex ℝ (Fin 3) :=
+  stdSimplex.map (Fin.succAbove i)
+
+theorem standardSide_continuous (i : Fin 3) : Continuous (standardSide i) :=
+  stdSimplex.continuous_map (Fin.succAbove i)
+
+/-- The polygonal boundary arc selected by a cover center and a side index. -/
+noncomputable def boundaryArc {M : Type*} [TopologicalSpace M] [T2Space M]
+    [ChartedSpace EuclideanPlane M] (C : FiniteClosedDiskCover M)
+    (a : C.BoundaryArcIndex) : stdSimplex ℝ (Fin 2) → M :=
+  triangle (planeChart euclideanPlane_finrank a.1.1) a.1.1 (C.radius a.1.1) ∘
+    standardSide a.2
+
+theorem boundaryArc_continuous {M : Type*} [TopologicalSpace M] [T2Space M]
+    [ChartedSpace EuclideanPlane M] (C : FiniteClosedDiskCover M)
+    (a : C.BoundaryArcIndex) : Continuous (C.boundaryArc a) := by
+  exact (C.outer_good a.1.1 a.1.2).2.2.1.continuous.comp
+    (standardSide_continuous a.2)
+
+theorem boundaryArc_range_subset_outer {M : Type*} [TopologicalSpace M] [T2Space M]
+    [ChartedSpace EuclideanPlane M] (C : FiniteClosedDiskCover M)
+    (a : C.BoundaryArcIndex) :
+    Set.range (C.boundaryArc a) ⊆
+      Set.range (triangle (planeChart euclideanPlane_finrank a.1.1) a.1.1
+        (C.radius a.1.1)) := by
+  rintro _ ⟨t, rfl⟩
+  exact ⟨standardSide a.2 t, rfl⟩
+
 end FiniteClosedDiskCover
 
 /-- Compact surfaces admit the finite nested closed-disk cover used by the
