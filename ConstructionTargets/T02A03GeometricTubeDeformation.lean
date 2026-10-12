@@ -3582,6 +3582,25 @@ theorem complexArrivalCorrection_sevenEighths_zero_normSq
   rw [h0, h1]
   ring
 
+/-- A complex correction whose forced coordinate lies outside the squared
+right-tube annulus cannot create a zero on the diagnostic arrival slice. -/
+theorem complexArrivalCorrection_sevenEighths_ne_zero_of_normSq_outside
+    (c : ℂ)
+    (hc : (-1 - 2 * c.re) ^ 2 + c.im ^ 2 < (9 / 16 : ℝ) ∨
+      (25 / 16 : ℝ) < (-1 - 2 * c.re) ^ 2 + c.im ^ 2)
+    (p : RightTubeMinusLeftCore) :
+    (((2 - 2 * (arrivalSevenEighths : ℝ) : ℝ) : ℂ) *
+          positiveRealPlanarWaypointMap p +
+        ((2 * (arrivalSevenEighths : ℝ) - 1 : ℝ) : ℂ) *
+          rightTubeCorePlanarComplex p.1 + c) ≠ 0 := by
+  intro hz
+  have heq := complexArrivalCorrection_sevenEighths_zero_normSq c p hz
+  have hb := rightTubeCorePlanarNormBounds p.1 p.2.1
+  have hs : ‖rightTubeCorePlanarComplex p.1‖ ^ 2 =
+      Complex.normSq (rightTubeCorePlanarComplex p.1) := Complex.sq_norm _
+  have hn : 0 ≤ ‖rightTubeCorePlanarComplex p.1‖ := norm_nonneg _
+  rcases hc with hc | hc <;> nlinarith
+
 end ConstructionTargets.T02A03GeometricTubeDeformation
 
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeNormalComplex_eq_zero_iff
@@ -3693,6 +3712,7 @@ end ConstructionTargets.T02A03GeometricTubeDeformation
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.scalarArrivalCorrection_sevenEighths_mem_planarAnnulus
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.scalarArrivalCorrection_sevenEighths_actual_zero
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.complexArrivalCorrection_sevenEighths_zero_normSq
+#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.complexArrivalCorrection_sevenEighths_ne_zero_of_normSq_outside
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_twiceCorrected_departure_zero_coordinates
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_twiceCorrected_departure_zero_normSq
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_twiceCorrected_departure_zero_scalar_bounds
