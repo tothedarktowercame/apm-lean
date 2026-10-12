@@ -72784,7 +72784,7 @@
    "Construct a continuous transverse correction using the positive support factor and prove the corrected departure creates no new zeros; then combine it with the banked safe arrival leg and downstream adapters.",
    :other-consumers []}
   {:owner-park
-   "2026-10-12 claude-14 (Joe: blueprints that match the real need and available tooling, not textbook formalization). Paused for a route redesign: ~/notes/closer/routes/<foundation>.md. Resume or replace once the reviewed blueprint is in.",
+   "Superseded: its target is false. The left core crosses the right 1/4-tube in a proper arc (cos t >= 55/64), so RightTubeMinusLeftCore is not homotopy equivalent to a circle; ~/notes/closer/routes/t02a03.md. t02A03 waits on a statement-geometry decision (Joe).",
    :bounded-exception
    "single-consumer explicit ambient deformation with frozen tube and deletion invariants",
    :consumer :t02A03,
@@ -72837,7 +72837,7 @@
    :phase :implementation,
    :type
    "∀ (t : unitInterval) (p : RightTubeMinusLeftCore), (t:ℝ) ≤ 1/2 → (((1-2*(t:ℝ):ℝ):ℂ)+((2*(t:ℝ):ℝ):ℂ)*rotatedEndpointWaypoint p)=0 → 0 < (t:ℝ)*(1-2*(t:ℝ))",
-   :state :needs-owner,
+   :state :superseded,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/safe-right-tube-meridian-deformation",
@@ -75808,8 +75808,7 @@
    :lemma-constructiontargets-t02a03geometrictubecover-righttubeminusleftcoremeridianhomot,
    :kind :lemma,
    :depends-on
-   [:lemma-constructiontargets-t02a03geometrictubecover-apm-t02a03-rightcorebasedattachment
-    :lemma-constructiontargets-t02a03geometrictubedeformation-saferighttubemeridiandeformat],
+   [:lemma-constructiontargets-t02a03geometrictubecover-apm-t02a03-rightcorebasedattachment],
    :other-consumers []}
   {:consumer :t02A03,
    :phase :lemma,
@@ -76210,33 +76209,6 @@
    :kind :lemma,
    :depends-on
    [:lemma-constructiontargets-t02a03geometrictubedeformation-righttubemeridiancoordinate],
-   :other-consumers []}
-  {:consumer :t02A03,
-   :phase :lemma,
-   :state :backlog,
-   :scope [],
-   :acceptance
-   {:lemma
-    "ConstructionTargets.T02A03GeometricTubeDeformation.safeRightTubeMeridianDeformation",
-    :type
-    "exists (forward : C(RightTubeMinusLeftCore, Circle)) (H : C(unitInterval × RightTubeMinusLeftCore, apm_t02a03_E3)), (forall p, H (0,p) = apm_t02a03_circleMeridian (forward p)) and (forall p, H (1,p) = p.1) and (forall tp, H tp ∈ apm_t02a03_rightTube) and (forall tp, H tp ∉ Set.range apm_t02a03_leftCore)"},
-   :lemma
-   {:name
-    "ConstructionTargets.T02A03GeometricTubeDeformation.safeRightTubeMeridianDeformation",
-    :reported-by
-    [:routes-2026-10-10-t02a03-right-tube-meridian-retraction-homotopy-topo2-r1
-     :owner
-     :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1],
-    :type
-    "exists (forward : C(RightTubeMinusLeftCore, Circle)) (H : C(unitInterval × RightTubeMinusLeftCore, apm_t02a03_E3)), (forall p, H (0,p) = apm_t02a03_circleMeridian (forward p)) and (forall p, H (1,p) = p.1) and (forall tp, H tp ∈ apm_t02a03_rightTube) and (forall tp, H tp ∉ Set.range apm_t02a03_leftCore)",
-    :area "explicit-r3-tube-deformation-retraction"},
-   :id
-   :lemma-constructiontargets-t02a03geometrictubedeformation-saferighttubemeridiandeformat,
-   :kind :lemma,
-   :depends-on
-   [:lemma-constructiontargets-t02a03geometrictubedeformation-righttubemeridiancoordinate
-    :lemma-correctedrotatedendpointwaypointpath
-    :lemma-constructiontargets-t02a03geometrictubedeformation-correctedrotatedendpointwaypo],
    :other-consumers []}
   {:consumer :t02A03,
    :phase :lemma,
@@ -78812,8 +78784,7 @@
    :lemma-constructiontargets-t02a03geometrictubedeformation-geometricyhomotopyequivgeneri,
    :kind :lemma,
    :depends-on
-   [:lemma-constructiontargets-t02a03geometrictubecover-righttubeminusleftcoremeridianhomot
-    :lemma-constructiontargets-t02a03geometrictubecover-righttubeminusleftcorehomotopyequiv],
+   [:lemma-constructiontargets-t02a03geometrictubecover-righttubeminusleftcoremeridianhomot],
    :other-consumers []}
   {:consumer :t02A03,
    :phase :lemma,
@@ -82113,88 +82084,6 @@
    :kind :lemma,
    :depends-on [],
    :other-consumers []}
-  {:consumer :t02A03,
-   :phase :lemma,
-   :state :backlog,
-   :scope [],
-   :acceptance
-   {:lemma
-    "ConstructionTargets.T02A03GeometricTubeDeformation.correctedRotatedEndpointWaypointPath",
-    :type
-    "continuous endpoint-fixed correction of the rotated waypoint path with no zeros"},
-   :lemma
-   {:name
-    "ConstructionTargets.T02A03GeometricTubeDeformation.correctedRotatedEndpointWaypointPath",
-    :reported-by
-    [:routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1
-     :owner],
-    :type
-    "continuous endpoint-fixed correction of the rotated waypoint path with no zeros",
-    :area "explicit-r3-tube-deformation-retraction"},
-   :id
-   :lemma-constructiontargets-t02a03geometrictubedeformation-correctedrotatedendpointwaypo,
-   :kind :lemma,
-   :depends-on
-   [:lemma-rotatedendpointwaypoint-departure-zero-support-pos
-    :lemma-rotatedendpointwaypoint-transverse-correction-ne-zero-at-departure-zero
-    :lemma-rotatedendpointwaypoint-corrected-departure-eq-zero-iff
-    :lemma-rotatedendpointwaypoint-corrected-departure-zero-coordinates
-    :lemma-rotatedendpointwaypoint-corrected-departure-zero-normsq
-    :lemma-righttubecoreplanarnormbounds
-    :lemma-rotatedendpointwaypoint-corrected-departure-zero-scalar-bounds
-    :lemma-rotatedendpointwaypoint-corrected-departure-zero-polynomial-bounds
-    :lemma-rotatedendpointwaypoint-corrected-departure-zero-time-gt-eighth
-    :lemma-corrected-departure-zero-time-gt-eighth
-    :lemma-corrected-departure-zero-time-lt-three-eighths
-    :lemma-continuous-correcteddeparturebump
-    :lemma-correcteddeparturebump-pos
-    :lemma-correcteddeparturebump-eq-zero-of-le
-    :lemma-correcteddeparturebump-eq-zero-of-ge
-    :lemma-correcteddeparturebump-ne-zero-at-corrected-zero
-    :lemma-rotatedendpointwaypoint-twicecorrected-departure-zero-coordinates
-    :lemma-rotatedendpointwaypoint-twicecorrected-departure-zero-scalar-bounds
-    :lemma-rotatedendpointwaypoint-twicecorrected-departure-zero-polynomial-bounds
-    :lemma-rotatedendpointwaypoint-twicecorrected-departure-zero-time-bounds
-    :lemma-rotatedendpointwaypoint-twicecorrected-departure-zero-explicit-bounds
-    :lemma-twicecorrecteddepartureexplicitbounds-consistent-at-quarter
-    :lemma-twicecorrecteddeparturequartercandidate-scalarequations
-    :lemma-twicecorrecteddeparturequartercandidate-radialdefect-lt
-    :lemma-righttubecoreplanarcomplex-quartercandidatepoint
-    :lemma-rotatedendpointwaypoint-twicecorrected-departure-quarter-zero
-    :lemma-realdeparturecorrection-quartercandidate-eq-zero-iff
-    :lemma-doubledcorrection-quartercandidate-ne-zero
-    :lemma-rotatedendpointwaypoint-doubledcorrected-departure-zero-coordinates
-    :lemma-doubledcorrecteddeparturequartercandidate-mem-planarannulus
-    :lemma-doubledcorrection-quartercandidate-actual-zero
-    :lemma-rotatedendpointwaypoint-strongtransverse-departure-eq-zero-iff
-    :lemma-strongtransversethirdcandidate-mem-planarannulus
-    :lemma-strongtransversethirdcandidate-actual-zero
-    :lemma-waypointdependentdeparture-factorization
-    :lemma-waypointdependentdeparture-zero-normsq
-    :lemma-waypointdependentdeparture-zero-polynomial-bounds
-    :lemma-waypointdependentquartercandidate-actual-zero
-    :lemma-positiverealplanarwaypoint-arrival-collision-second-zero
-    :lemma-positiverealplanarwaypoint-arrival-collision-time-gt-three-quarters
-    :lemma-positiverealplanararrivalbump-ne-zero-at-arrival-collision
-    :lemma-positiverealplanararrival-seveneighths-scalar-equations
-    :lemma-positiverealplanararrival-corrected-actual-zero
-    :lemma-scalararrivalcorrection-seveneighths-mem-planarannulus
-    :lemma-scalararrivalcorrection-seveneighths-actual-zero
-    :lemma-complexarrivalcorrection-seveneighths-zero-normsq
-    :lemma-complexarrivalcorrection-seveneighths-ne-zero-of-normsq-outside
-    :lemma-complexarrivalcorrection-zero-scaled-normsq
-    :lemma-complexarrivalcorrection-ne-zero-of-scaled-normsq-outside
-    :lemma-complexarrivalcorrection-threequarters-ne-zero
-    :lemma-arrivaltransversecorrection-threequarters-ne-zero
-    :lemma-arrivaltransversecorrection-eq-zero-iff
-    :lemma-arrivaltransversecorrection-actual-zero
-    :lemma-pointdependentarrivalcorrection-ne-zero-of-im-sign
-    :lemma-signedarrivalcorrection-ne-zero-of-second-ne-zero
-    :lemma-signedarrivalcorrection-eq-zero-iff-second-eq-zero
-    :lemma-heightarrivalcorrection-ne-zero-of-planaraxis
-    :lemma-radialarrivalcorrection-ne-zero-of-planaraxis
-    :lemma-arrivalcorrection-nonvanishing-cover],
-   :other-consumers []}
   {:consumer :portfolio,
    :phase :lemma,
    :state :banked,
@@ -82349,28 +82238,6 @@
    :id :lemma-polygonsurfacepione-pairingdata,
    :kind :lemma,
    :depends-on [],
-   :other-consumers []}
-  {:consumer :t02A03,
-   :phase :lemma,
-   :state :backlog,
-   :scope [],
-   :acceptance
-   {:lemma
-    "ConstructionTargets.T02A03GeometricTubeCover.rightTubeMinusLeftCoreHomotopyEquivCircle",
-    :type
-    "Nonempty (ContinuousMap.HomotopyEquiv RightTubeMinusLeftCore Circle)  (size: 80-160 lines / 1-3 days)"},
-   :lemma
-   {:name
-    "ConstructionTargets.T02A03GeometricTubeCover.rightTubeMinusLeftCoreHomotopyEquivCircle",
-    :reported-by [:owner],
-    :type
-    "Nonempty (ContinuousMap.HomotopyEquiv RightTubeMinusLeftCore Circle)  (size: 80-160 lines / 1-3 days)",
-    :area "surface-curve-collar"},
-   :id
-   :lemma-constructiontargets-t02a03geometrictubecover-righttubeminusleftcorehomotopyequiv,
-   :kind :lemma,
-   :depends-on
-   [:lemma-constructiontargets-t02a03geometrictubedeformation-saferighttubemeridiandeformat],
    :other-consumers []}
   {:consumer :portfolio,
    :phase :lemma,
@@ -83320,7 +83187,7 @@
    :depends-on [],
    :other-consumers []}
   {:owner-park
-   "2026-10-12 claude-14 (Joe: blueprints that match the real need and available tooling, not textbook formalization). Paused for a route redesign: ~/notes/closer/routes/<foundation>.md. Resume or replace once the reviewed blueprint is in.",
+   "Superseded by the reviewed route ~/notes/closer/routes/covering.md: the general subgroup-cover construction is not on the route for t99J01 t97A03 t00A02 t93J03; only t94J04/t96A01 need it, behind surface classification.",
    :consumer :t94J04,
    :stop-count 4,
    :review-finding
@@ -83373,7 +83240,7 @@
      "8695a29caca5ca7b0232db9dcb5a8dff1ebdac78a8f25cdd3af94dd2b2ffe833"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :needs-owner,
+   :state :superseded,
    :scope
    ["ConstructionTargets/CoveringSubgroupCorrespondence.lean"
     "ConstructionTargets/CoveringSubgroupCorrespondence.md"
@@ -83393,6 +83260,7 @@
     :blueprint
     "ConstructionTargets/CoveringSubgroupCorrespondence.blueprint.md"},
    :id :program-2026-10-12-covering-subgroup-correspondence,
+   :superseded-by :program-2026-10-12-supplied-cover-algebra,
    :kind :reusable-theorem,
    :campaign-priority 40,
    :fail-count 4,
@@ -83464,4 +83332,30 @@
    :id :lemma-blueprint-b1-b11,
    :kind :lemma,
    :depends-on [],
-   :other-consumers []}]}
+   :other-consumers []}
+  {:consumer :t99J01,
+   :stop-count 0,
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SuppliedCoverAlgebra.lean"
+    "ConstructionTargets/SuppliedCoverAlgebra.md"],
+   :dag-node
+   "~/notes/closer/routes/covering.md, blueprint A1-A3 and C7",
+   :acceptance
+   {:implementation
+    "FOUNDATION PROGRAM (owner, 2026-10-12, reviewed route ~/notes/closer/routes/covering.md sections A and C7). Small adapters over existing pieces; reuse ConstructionTargets/CoveringMonodromyCosets.lean (coveringInducedFundamentalGroupMap, _injective) and pinned Mathlib Topology/Homotopy/Lifting.lean and Topology/Covering/Quotient.lean; do not build a general subgroup-cover construction. Milestones, each banked by :missing-theorems :status :proved: (A1) coveringFundamentalGroupEquivRange : FundamentalGroup E e ≃* (coveringInducedFundamentalGroupMap cov e).range, 20-35 lines; (A2) isEmbedding_of_comp_eq from Topology.IsEmbedding.of_comp, 8-15 lines; (A3) coveringFundamentalGroupEquivFreeSubgroup with index preservation, 45-80 lines; (C7) isCoveringMap_homeomorph_comp_quotientMk for free properly discontinuous actions transported along a homeomorphism of the orbit quotient, 15-25 lines. About 100-180 lines in all.",
+    :declaration "coveringFundamentalGroupEquivFreeSubgroup",
+    :type
+    "As in ~/notes/closer/routes/covering.md A3; the author fixes exact hypotheses, every hypothesis used",
+    :axioms :standard-only,
+    :commands
+    ["lake build ConstructionTargets.SuppliedCoverAlgebra"
+     "python3 scripts/statement-registry.py check"]},
+   :id :program-2026-10-12-supplied-cover-algebra,
+   :kind :reusable-theorem,
+   :campaign-priority 40,
+   :fail-count 0,
+   :depends-on [],
+   :program true,
+   :other-consumers [:t97A03 :t93J03 :t00A02]}]}

@@ -118350,12 +118350,12 @@
    :acceptance
    {:lemma "t93J03_coveringLift_of_subgroup_le",
     :type
-    "Lifting criterion: (FundamentalGroup.mapOfEq (inclusion X) hx).range ≤ Subgroup.zpowers generatorA → ∃ lift : C(X, C), p.comp lift = inclusion X (based)  (size: 250-500 lines / 2-4 days)"},
+    "Apply Mathlib IsCoveringMap.existsUnique_continuousMap_lifts_of_range_le (Topology/Homotopy/Lifting.lean:439) to the zpowers generatorA cylinder cover; no hand-built homotopies  (size: 30-80 lines / hours)"},
    :lemma
    {:name "t93J03_coveringLift_of_subgroup_le",
     :reported-by [:owner],
     :type
-    "Lifting criterion: (FundamentalGroup.mapOfEq (inclusion X) hx).range ≤ Subgroup.zpowers generatorA → ∃ lift : C(X, C), p.comp lift = inclusion X (based)  (size: 250-500 lines / 2-4 days)",
+    "Apply Mathlib IsCoveringMap.existsUnique_continuousMap_lifts_of_range_le (Topology/Homotopy/Lifting.lean:439) to the zpowers generatorA cylinder cover; no hand-built homotopies  (size: 30-80 lines / hours)",
     :area "covering-subgroup-correspondence"},
    :id :lemma-t93j03-coveringlift-of-subgroup-le,
    :kind :lemma,
@@ -118368,12 +118368,12 @@
    :acceptance
    {:lemma "t93J03_lift_isEmbedding_assembly",
     :type
-    "Topology.IsEmbedding of the lift (covering projection + subtype inclusion), composed with the cylinder embedding; assemble apm_t93j03  (size: 80-160 lines / 6-12 hours)"},
+    "Embedding of the lift by Topology.IsEmbedding.of_comp with Subtype.val, then compose with the cylinder embedding and assemble apm_t93j03  (size: 40-100 lines / hours)"},
    :lemma
    {:name "t93J03_lift_isEmbedding_assembly",
     :reported-by [:owner],
     :type
-    "Topology.IsEmbedding of the lift (covering projection + subtype inclusion), composed with the cylinder embedding; assemble apm_t93j03  (size: 80-160 lines / 6-12 hours)",
+    "Embedding of the lift by Topology.IsEmbedding.of_comp with Subtype.val, then compose with the cylinder embedding and assemble apm_t93j03  (size: 40-100 lines / hours)",
     :area "covering-subgroup-correspondence"},
    :id :lemma-t93j03-lift-isembedding-assembly,
    :kind :lemma,
