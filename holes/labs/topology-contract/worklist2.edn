@@ -75548,32 +75548,29 @@
   {:consumer :t96J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "The STOP incorrectly marks the center-contraction milestone proved. commit 194ea4781 establishes only ContractibleSpace for the inner open, which chooses an unspecified contraction point; it neither supplies a deformation retraction nor identifies that point with PairingData.center. B4 explicitly requires U P to deformation-retract to P.center. Add this exact center-based deformation retraction to :missing-theorems and prove it in scope; annular side/overlap are not the only residual.",
    :evidence
    {:placeholder-delta 0,
-    :residual
-    "Prove exact center deformation and overlap; then B5/B6.",
+    :residual "Prove overlap/openCover; then B5/B6.",
     :outcome :stop,
-    :warnings ["12 preexisting linter warnings"],
+    :warnings ["2 imported; 12 preexisting"],
     :missing-theorems
     [{:name "polygonCenterDeformationRetract",
-      :type
-      "explicit Homotopy from identity on the inner quotient open to constant P.center, fixing P.center",
-      :status :not-started,
+      :type "Homotopy id to P.center, fixing center",
+      :status :proved,
       :consumers [:t96J02 :t92J05 :t94J04 :t97A01 :t97A03],
       :depends-on ["innerHomeomorph"],
       :area "polygon-surface-pi1"}
      {:name "polygonOverlapHomeomorph",
-      :type "inner/outer overlap homeomorphic to interval×Circle",
+      :type "overlap ≃ₜ interval×Circle",
       :status :not-started,
       :consumers [:t96J02 :t92J05 :t94J04 :t97A01 :t97A03],
       :depends-on ["polygonRadialOpenSets" "polygonAnnularSide"],
       :area "polygon-surface-pi1"}
      {:name "ConstructionTargets.PolygonSurfacePiOne.openCover",
-      :type
-      "two-open cover with exact center deformation retract, annular side, overlap Homeomorph",
+      :type "two-open cover package",
       :status :partial,
       :consumers [:t96J02 :t92J05 :t94J04 :t97A01 :t97A03],
       :depends-on
@@ -75581,42 +75578,35 @@
       :area "polygon-surface-pi1"}],
     :statement-hashes
     {:registry "131/0",
-     :module "74f76224e6608e6be31f7ee07f80be3bb276bfe8"},
+     :module "d20d5c76927e9ce5009d21a817ddf353169aa2b8"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
     :reason
-    "Exact center deformation remains. The attempted star-convex ball Homotopy exposed unresolved elaboration of the chosen zero point and was removed; the scoped source compiles unchanged.",
+    "Center deformation fixes P.center; overlap/openCover remain.",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/PolygonSurfacePiOne.lean",
-      :exit 0}],
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.PolygonSurfacePiOne",
+      :exit 0}
+     {:cmd "registry check", :exit 0}
+     {:cmd "placeholder scan", :exit 0}
+     {:cmd "#print axioms deformation/fixed", :exit 0}
+     {:cmd "git show --check 03ab9736f", :exit 0}],
     :diagnostic-history
-    [{:cmd "star-convex radial Homotopy build",
+    [{:cmd "radial Homotopy compile",
       :exit 1,
-      :correction
-      "removed unfinished declarations; retained exact residual"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1791845901940-8028-a1f0222c",
-     :commands
-     ["git show/diff/hash 0e69eda9a"
-      "lake env lean ConstructionTargets/PolygonSurfacePiOne.lean"
-      "python3 scripts/statement-registry.py check"
-      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn"
-      "placeholder scan"],
-     :finding
-     "PASS on STOP after real progress: commit 0e69eda9a adds the compiled annular-side result since the prior failed STOP, and the revised residual now correctly lists the exact Homotopy to P.center fixing P.center plus the overlap Homeomorph and partial openCover. It no longer treats ContractibleSpace as the required center deformation retract. Scope is exact; fixture SHA-256 c504bbc5...ed8 and module blob 74f76224...be3 match. Fresh Lean/worklist gates pass, registry is 131/0, and sorry/admit/axiom counts are 0. Remaining theorem orientations and representation boundaries match B4."},
-    :commit "0e69eda9a",
-    :changed-paths [],
+      :correction "typed continuity/direct conjugation"}],
+    :commit "03ab9736f",
+    :changed-paths ["ConstructionTargets/PolygonSurfacePiOne.lean"],
     :fixture
     {:path "ConstructionTargets/PolygonSurfacePiOne.lean",
      :sha256
-     "c504bbc5e46e0c5565ec2690cc884c2ced3084763b091e264bdcde548fb74ed8"},
+     "ec4a2b9713c93f718af346c19cbc6b5a141efc5915537dc00707e60aafafa0f8"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/PolygonSurfacePiOne.lean"],
    :dag-node "ConstructionTargets/PolygonSurfacePiOne.blueprint.md/B4",
    :acceptance
@@ -86009,7 +85999,8 @@
     :reported-by [:routes-2026-10-12-polygon-b4-topo2-r1],
     :type
     "explicit deformation retraction of the inner quotient open to the point P.center",
-    :area "polygon-surface-pi1"},
+    :area "polygon-surface-pi1",
+    :proved-in :routes-2026-10-12-polygon-b4-topo2-r1},
    :id :lemma-polygoncenterdeformationretract,
    :kind :lemma,
    :depends-on [:lemma-innerhomeomorph],
