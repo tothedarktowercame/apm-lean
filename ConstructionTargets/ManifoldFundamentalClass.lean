@@ -2746,6 +2746,30 @@ theorem coefficientOpenDiskRadial_homology_factorization (d n : ℕ) :
     (fun f => (CoefficientRadialPair.F ℤ n).map (TopCat.ofHom f))
     (coefficientOpenDisk_radial_factorization d)
 
+noncomputable def coefficientSphereNormalizationComparisonAutomorphism (k : ℕ) :
+    AddCommGrpCat.of ℤ ≅ AddCommGrpCat.of ℤ :=
+  (forgetIntModules.mapIso
+      (CoefficientSphereAntipodal.normalization ℤ k)).symm ≪≫
+    IntegralSingularHomologyComparison.singularHomologyComparison
+      (TopCat.of (T02A06.euclideanUnitSphere (k + 2))) (k + 1) ≪≫
+    SphereHomology.sphereTopHomologyIsoInt (k + 1) (by omega)
+
+theorem coefficientSphereNormalization_comparison (k : ℕ) :
+    forgetIntModules.map (CoefficientSphereAntipodal.normalization ℤ k).hom ≫
+        (coefficientSphereNormalizationComparisonAutomorphism k).hom =
+      (IntegralSingularHomologyComparison.singularHomologyComparison
+        (TopCat.of (T02A06.euclideanUnitSphere (k + 2))) (k + 1)).hom ≫
+        (SphereHomology.sphereTopHomologyIsoInt (k + 1) (by omega)).hom := by
+  rw [coefficientSphereNormalizationComparisonAutomorphism]
+  simp only [Iso.trans_hom, Iso.symm_hom]
+  simpa only [Category.assoc] using
+    (forgetIntModules.mapIso
+      (CoefficientSphereAntipodal.normalization ℤ k)).hom_inv_id_assoc
+        ((IntegralSingularHomologyComparison.singularHomologyComparison
+          (TopCat.of (T02A06.euclideanUnitSphere (k + 2))) (k + 1)).hom ≫
+          (SphereHomology.sphereTopHomologyIsoInt
+            (k + 1) (by omega)).hom)
+
 end ConstructionTargets.ManifoldFundamentalClass
 
 #print axioms ConstructionTargets.ManifoldFundamentalClass.neighborhoodInclusion_Hsucc_isIso
@@ -2838,6 +2862,7 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientOpenDiskConnecting_comparison
 #print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientOpenDiskConnecting_model_naturality
 #print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientOpenDiskRadial_homology_factorization
+#print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientSphereNormalization_comparison
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_projection
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_generator_of_normalization
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_normalization_of_generator
