@@ -2160,6 +2160,27 @@ theorem correctedDepartureBump_eq_zero_of_ge
     correctedDepartureBump 1 = 0 := by
   norm_num [correctedDepartureBump]
 
+/-- The localized real bump removes every zero of the first corrected
+departure leg.  A separate zero-locus argument is still required to show it
+creates no new zeros. -/
+theorem correctedDepartureBump_ne_zero_at_corrected_zero
+    (t : unitInterval) (p : RightTubeMinusLeftCore)
+    (ht : (t : ℝ) ≤ 1 / 2)
+    (hz : (((1 - 2 * (t : ℝ) : ℝ) : ℂ) +
+        ((2 * (t : ℝ) : ℝ) : ℂ) * rotatedEndpointWaypoint p +
+        (((t : ℝ) * (1 - 2 * (t : ℝ)) : ℝ) : ℂ) * Complex.I) = 0) :
+    (((1 - 2 * (t : ℝ) : ℝ) : ℂ) +
+        ((2 * (t : ℝ) : ℝ) : ℂ) * rotatedEndpointWaypoint p +
+        (((t : ℝ) * (1 - 2 * (t : ℝ)) : ℝ) : ℂ) * Complex.I +
+        (correctedDepartureBump t : ℂ)) ≠ 0 := by
+  have hlo :=
+    rotatedEndpointWaypoint_corrected_departure_zero_time_gt_eighth t p hz
+  have hhi :=
+    rotatedEndpointWaypoint_corrected_departure_zero_time_lt_three_eighths
+      t p ht hz
+  rw [hz, zero_add]
+  exact_mod_cast ne_of_gt (correctedDepartureBump_pos t hlo hhi)
+
 end ConstructionTargets.T02A03GeometricTubeDeformation
 
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeNormalComplex_eq_zero_iff
@@ -2246,3 +2267,4 @@ end ConstructionTargets.T02A03GeometricTubeDeformation
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.correctedDepartureBump_pos
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.correctedDepartureBump_eq_zero_of_le
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.correctedDepartureBump_eq_zero_of_ge
+#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.correctedDepartureBump_ne_zero_at_corrected_zero
