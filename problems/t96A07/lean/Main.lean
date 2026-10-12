@@ -132,6 +132,14 @@ theorem sphereMap_level_attained (z : ℝ) (hz : 0 < z) (hzhalf : z < 1 / 2) :
   simpa [T96A07.sphereMap, crossTermSphereMap] using
     crossTermSphereMap_level_attained z hz hzhalf
 
+theorem horizontal_levels_infinite :
+    {z : ℝ | T96A07.Transverse T96A07.sphereMap (T96A07.plane z) ∧
+      ∃ p : Sphere 2, T96A07.sphereMap p 2 = z}.Infinite := by
+  apply (Set.Ioo_infinite (show (0 : ℝ) < 1 / 2 by norm_num)).mono
+  intro z hz
+  exact ⟨sphereMap_transverse_plane z hz.1 hz.2,
+    sphereMap_level_attained z hz.1 hz.2⟩
+
 #print axioms sphereMap_antipodal
 #print axioms sphereMap_contMDiff
 #print axioms descendedSphereMap
@@ -143,6 +151,7 @@ theorem sphereMap_level_attained (z : ℝ) (hz : 0 < z) (hzhalf : z < 1 / 2) :
 #print axioms sphereMap_vertical_surjective
 #print axioms sphereMap_transverse_plane
 #print axioms sphereMap_level_attained
+#print axioms horizontal_levels_infinite
 
 end ConstructionTargets.T96A07Closure
 
@@ -156,4 +165,13 @@ theorem apm_t96a07 :
       ¬ T96A07.Transverse f T96A07.axis ∧
       {z : ℝ | T96A07.Transverse T96A07.sphereMap (T96A07.plane z) ∧
         ∃ p : Sphere 2, T96A07.sphereMap p 2 = z}.Infinite := by
-  sorry
+  refine ⟨rpSmoothAtlas, ?_⟩
+  letI := rpSmoothAtlas.charts
+  letI := rpSmoothAtlas.smooth
+  obtain ⟨f, hfac, hf⟩ :=
+    ConstructionTargets.T96A07Closure.descendedSphereMap
+  exact ⟨f, hfac, hf,
+    ConstructionTargets.T96A07Closure.descended_not_transverse_axis f hfac hf,
+    ConstructionTargets.T96A07Closure.horizontal_levels_infinite⟩
+
+#print axioms apm_t96a07
