@@ -113897,6 +113897,17 @@
      {:cmd "lean equivalence order",
       :exit 1,
       :finding "Corrected functor/inverse order."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791841547339-7948-f11ea81e",
+     :commands
+     ["git show/diff-tree d300fecf"
+      "lake build ConstructionTargets.PointWedgeVanKampen"
+      "python3 scripts/statement-registry.py check"
+      "commit hash and placeholder checks"],
+     :finding
+     "PASS program STOP: d300fecf by topo-2 adds the right-unit restriction conjugation theorem plus documentation, exactly within scope and new since history. Source c5b65aba..., documentation 411f6384..., fixture 0bca6ce3..., registry 131/131, and placeholders 0->0 reproduce. Applying the existing right-restriction map formula preserves the correct conjugation order: inverse source endpoint counit, literal actual-span map, target endpoint counit. Both endpoint objects and the functor/inverse order remain explicit. Fresh build passes with standard axioms. Identifying the right strict map, specializing left counits, point-span transport, remaining counits, and B6/B12 remain listed."},
     :commit "d300fecf5a5f64e46339ce5a5db8f47837df247e",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
@@ -113907,7 +113918,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113928,7 +113939,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Both ordered right-comparison factors now expose their exact functor maps.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: The inverse right-unit factor is the literal actual-span map with both endpoint restriction counits explicit.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -114479,7 +114490,11 @@
     {:job 8,
      :commit "be492215e0d889e0b20ce43a72368600e49badc7",
      :reason
-     "Both ordered right-comparison factors now expose their exact functor maps."}]}
+     "Both ordered right-comparison factors now expose their exact functor maps."}
+    {:job 9,
+     :commit "d300fecf5a5f64e46339ce5a5db8f47837df247e",
+     :reason
+     "The inverse right-unit factor is the literal actual-span map with both endpoint restriction counits explicit."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
