@@ -491,59 +491,80 @@
    [:routes-2026-10-11-t01a08-model-range-geometry-topo3-r1],
    :current-residual "Boundary nullity.",
    :other-consumers []}
+  {:bounded-exception "Rule-0 single consumer.",
+   :consumer :t01A08,
+   :implements-lemma
+   :lemma-constructiontargets-sardgeneralmodel-modelrange-frontier-addhaar-null,
+   :phase :implementation,
+   :state :open,
+   :scope ["ConstructionTargets/SardGeneralModel.lean"],
+   :dag-node "TOPOLOGY-ROUTES.md/t01A08/boundary",
+   :acceptance
+   {:declaration
+    "ConstructionTargets.SardGeneralModel.modelRange_frontier_addHaar_null",
+    :type "exact type in fixture",
+    :fixture "/tmp/t01a08_model_range_boundary_null.lean",
+    :fixture-sha256
+    "e8cd3a6cf79367917bc0c739ad8b5644e58e2ca8212e21edcea9f5af6a6c47d4",
+    :placeholder "t01A08 sole sorry",
+    :route-step "model-range boundary nullity"},
+   :id :routes-2026-10-12-t01a08-boundary-null-r1,
+   :kind :reusable-theorem,
+   :area "sard-convex-domain",
+   :depends-on [:routes-2026-10-12-t01a08-interior-r1],
+   :current-residual
+   "Boundary critical-image nullity; source nullity alone does not imply image nullity.",
+   :other-consumers []}
   {:consumer :t01A08,
    :evidence
    {:probe
     {:outcome :revise,
      :seat "topo-12",
      :fixture
-     {:path "/tmp/t01a08_model_range_interior_derivative.lean",
+     {:path "/tmp/t01a08_model_range_boundary_null.lean",
       :sha256
-      "4974bc8882fd2fde477ebdad676bcbc74c5966dfa56d76f15ff9b7f66c17e548"},
+      "e8cd3a6cf79367917bc0c739ad8b5644e58e2ca8212e21edcea9f5af6a6c47d4"},
      :commands
      [{:cmd
-       "lake env lean /tmp/t01a08_model_range_interior_derivative.lean",
+       "lake env lean /tmp/t01a08_model_range_boundary_null.lean && sha256sum /tmp/t01a08_model_range_boundary_null.lean && python3 scripts/statement-registry.py check",
        :exit 0}],
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :missing-theorems
      [{:name
-       "ConstructionTargets.SardGeneralModel.modelRange_interior_surjective_fderivWithin_iff",
-       :type
-       "∀ {E H} [NormedAddCommGroup E] [NormedSpace ℝ E] [TopologicalSpace H] (I : ModelWithCorners ℝ E H), InteriorDerivativeComparison I",
+       "ConstructionTargets.SardGeneralModel.modelRange_frontier_addHaar_null",
+       :type "exact type in fixture",
        :status :proved,
        :consumers [:t01A08],
        :depends-on
-       ["ConstructionTargets.SardGeneralModel.modelRange_geometry"],
+       ["ConstructionTargets.SardGeneralModel.modelRange_interior_surjective_fderivWithin_iff"],
        :area "sard-convex-domain"}],
      :prerequisite
      {:bounded-exception "Rule-0 single consumer.",
       :consumer :t01A08,
-      :implements-lemma :lemma-t01a08-interior-derivative,
+      :implements-lemma :lemma-t01a08-boundary-null,
       :phase :implementation,
       :state :open,
       :scope ["ConstructionTargets/SardGeneralModel.lean"],
-      :dag-node "TOPOLOGY-ROUTES.md/t01A08/interior",
+      :dag-node "TOPOLOGY-ROUTES.md/t01A08/boundary",
       :acceptance
       {:declaration
-       "ConstructionTargets.SardGeneralModel.modelRange_interior_surjective_fderivWithin_iff",
-       :type
-       "∀ {E H} [NormedAddCommGroup E] [NormedSpace ℝ E] [TopologicalSpace H] (I : ModelWithCorners ℝ E H), InteriorDerivativeComparison I",
-       :fixture "/tmp/t01a08_model_range_interior_derivative.lean",
+       "ConstructionTargets.SardGeneralModel.modelRange_frontier_addHaar_null",
+       :type "exact type in fixture",
+       :fixture "/tmp/t01a08_model_range_boundary_null.lean",
        :fixture-sha256
-       "4974bc8882fd2fde477ebdad676bcbc74c5966dfa56d76f15ff9b7f66c17e548",
+       "e8cd3a6cf79367917bc0c739ad8b5644e58e2ca8212e21edcea9f5af6a6c47d4",
        :placeholder "t01A08 sole sorry",
-       :route-step "interior derivative comparison",
-       :implementation "Promote."},
-      :id :routes-2026-10-12-t01a08-interior-r1,
+       :route-step "model-range boundary nullity"},
+      :id :routes-2026-10-12-t01a08-boundary-null-r1,
       :kind :reusable-theorem,
       :area "sard-convex-domain",
-      :depends-on
-      [:routes-2026-10-11-t01a08-model-range-geometry-topo3-r1],
-      :current-residual "Boundary nullity.",
+      :depends-on [:routes-2026-10-12-t01a08-interior-r1],
+      :current-residual
+      "Boundary critical-image nullity; source nullity alone does not imply image nullity.",
       :other-consumers []},
-     :residual "Then boundary nullity."}},
+     :residual "Promote; extend Sard to the convex model boundary."}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope ["problems/t01A08/lean/Main.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t01A08/closure",
    :acceptance
@@ -561,7 +582,8 @@
    [:routes-2026-10-10-topo3-seed-checkpoint-1
     :routes-2026-10-10-t01a08-linear-target-transport-topo3-r1
     :routes-2026-10-11-t01a08-model-range-geometry-topo3-r1
-    :routes-2026-10-12-t01a08-interior-r1],
+    :routes-2026-10-12-t01a08-interior-r1
+    :routes-2026-10-12-t01a08-boundary-null-r1],
    :current-residual
    "Expected residual is either direct closure or one exact compiled prerequisite: target-coordinate transport, then convex corners Sard.",
    :other-consumers []}
@@ -30682,8 +30704,28 @@
    :kind :lemma,
    :depends-on
    [:lemma-constructiontargets-surfaceclassification-exists-twosegmentpath-bend-avoiding-fi],
-   :other-consumers
-   [:t00A03 :t91J05 :t92J05 :t94J04 :t96A01 :t97J02]}],
+   :other-consumers [:t00A03 :t91J05 :t92J05 :t94J04 :t96A01 :t97J02]}
+  {:consumer :t01A08,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.SardGeneralModel.modelRange_frontier_addHaar_null",
+    :type "exact type in fixture"},
+   :lemma
+   {:name
+    "ConstructionTargets.SardGeneralModel.modelRange_frontier_addHaar_null",
+    :reported-by [:routes-2026-10-10-t01a08-closure-probe-topo3-r2],
+    :type "exact type in fixture",
+    :area "sard-convex-domain",
+    :proved-in :routes-2026-10-10-t01a08-closure-probe-topo3-r2},
+   :id
+   :lemma-constructiontargets-sardgeneralmodel-modelrange-frontier-addhaar-null,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-sardgeneralmodel-modelrange-interior-surjective-fderivwithin],
+   :other-consumers []}],
  :consumer-baselines {},
  :statuses
  #{:open
