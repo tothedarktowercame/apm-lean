@@ -22,6 +22,7 @@ open ConstructionTargets.CoefficientNeighborhoodLocal
 open ConstructionTargets.CoefficientOverlapPair
 open ConstructionTargets.CoefficientTransitionLocalConstancy
 open ConstructionTargets.IntegralSingularHomologyComparison
+open ConstructionTargets.OneDiskLocalOrientation
 
 variable {X : Type} [TopologicalSpace X]
 
@@ -3392,6 +3393,19 @@ theorem intervalRelativeClass_eq_generator_of_boundary_eq
   exact ((AddCommGrpCat.mono_iff_injective
     (singularPairConnecting intervalBoundary 0)).mp inferInstance) hboundary
 
+theorem intervalRelativeClass_eq_generator_of_boundary_coordinates
+    (z : (RelativeSingularChains intervalBoundary).homology 1)
+    (hcoordinates :
+      intervalBoundaryH0Iso.hom.hom
+        ((singularPairConnecting intervalBoundary 0).hom z) =
+      boolIntDifference.hom (1 : ℤ)) :
+    z = intervalBoundaryRelativeH1Generator := by
+  apply (AddCommGrpCat.mono_iff_injective
+    (singularPairConnecting intervalBoundary 0)).mp inferInstance
+  apply (AddCommGrpCat.mono_iff_injective intervalBoundaryH0Iso.hom).mp inferInstance
+  rw [hcoordinates]
+  exact (ConcreteCategory.congr_hom intervalGenerator_boundary_coordinates (1 : ℤ)).symm
+
 end ConstructionTargets.ManifoldFundamentalClass
 
 #print axioms ConstructionTargets.ManifoldFundamentalClass.neighborhoodInclusion_Hsucc_isIso
@@ -3514,6 +3528,7 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientCircleBoundaryGenerator_eq_signedFunction
 #print axioms ConstructionTargets.ManifoldFundamentalClass.boolIntDifference_to_signedFunction
 #print axioms ConstructionTargets.ManifoldFundamentalClass.intervalRelativeClass_eq_generator_of_boundary_eq
+#print axioms ConstructionTargets.ManifoldFundamentalClass.intervalRelativeClass_eq_generator_of_boundary_coordinates
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_projection
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_generator_of_normalization
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_normalization_of_generator
