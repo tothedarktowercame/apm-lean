@@ -79529,6 +79529,19 @@
     [{:cmd "compile",
       :exit 1,
       :finding "Explicit tangent equivalence; rebuilt olean."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791766843177-6100-d2cf6330",
+     :commands
+     ["git show/check/diff b5adc850b..f8d51a9d6"
+      "verify scoped blobs, fixture SHA, ancestry"
+      "lake build ConstructionTargets.t96A07Closure"
+      "lake env lean closure and t96A07 Main"
+      "statement-registry check/fingerprint"
+      "placeholder and axiom checks"],
+     :finding
+     "PASS: f8d51a9d6f4a97f45f1b48381cef12a4f364f0c9 adds compiled, sorry-free B9 completion after b5adc850b; both changed paths are scoped. Closure/blueprint blobs 6c2e150c/69b59fb6 and fixture a33585df match. The proof pulls the ambient tangent witness through the sphere inclusion, applies the correctly oriented chain rule, obtains vertical value one in the derivative range, and scales to all reals; the Main adapter preserves the frozen representation. Lean gates pass with standard axioms only; registry 131/0, frozen hash 2ba67b04 unchanged, closure/Main placeholders 0/1. STOP lists B10 then B11-B13."},
     :commit "f8d51a9d6",
     :changed-paths
     ["ConstructionTargets/t96A07Closure.lean"
@@ -79539,7 +79552,7 @@
      "a33585df4049dedae96866058b87e83f099a3a80b889076e48fb0423ad2e4eda"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t96A07/lean/Main.lean"
     "problems/t96A07/status.json"
@@ -79555,7 +79568,7 @@
     ["lake env lean problems/t96A07/lean/Main.lean"
      "python3 scripts/statement-registry.py check"]},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: :program-progress-committed",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: :program-milestone-complete",
    :id :program-2026-10-11-close-t96a07,
    :kind :final-adapter,
    :campaign-priority 45,
@@ -79595,7 +79608,10 @@
      :reason :program-progress-committed}
     {:job 5,
      :commit "b5adc850b073d3ef0a5bfd745d6b19d7afeeb5ff",
-     :reason :program-progress-committed}]}
+     :reason :program-progress-committed}
+    {:job 6,
+     :commit "f8d51a9d6",
+     :reason :program-milestone-complete}]}
   {:consumer :t94A10,
    :stop-count 2,
    :review-finding
@@ -81348,7 +81364,7 @@
    :other-consumers []}
   {:consumer :t96A07,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -81362,7 +81378,9 @@
     :type
     "B9 vertical component surjective at incident levels 0<z<1/2",
     :area "projective-smooth-descent",
-    :proved-in :program-2026-10-11-close-t96a07},
+    :proved-in :program-2026-10-11-close-t96a07,
+    :banked-by :program-2026-10-11-close-t96a07,
+    :banked-commit "f8d51a9d6"},
    :id
    :lemma-constructiontargets-t96a07closure-spheremap-vertical-surjective,
    :kind :lemma,
@@ -81445,24 +81463,28 @@
    :other-consumers []}
   {:consumer :portfolio,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance {:lemma "sphereMap_vertical_tangent_of_third_ne_zero"},
    :lemma
    {:name "sphereMap_vertical_tangent_of_third_ne_zero",
-    :reported-by []},
+    :reported-by [],
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A07Closure.lean"]},
    :id :lemma-spheremap-vertical-tangent-of-third-ne-zero,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}
   {:consumer :portfolio,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance {:lemma "sphereMap_vertical_tangent_of_third_eq_zero"},
    :lemma
    {:name "sphereMap_vertical_tangent_of_third_eq_zero",
-    :reported-by []},
+    :reported-by [],
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A07Closure.lean"]},
    :id :lemma-spheremap-vertical-tangent-of-third-eq-zero,
    :kind :lemma,
    :depends-on [],
