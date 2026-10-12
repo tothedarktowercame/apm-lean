@@ -502,6 +502,31 @@ theorem genericPointWedgeIdentityOuterLeftComparison_app :
           (Functor.isoWhiskerLeft eK.functor aL.symm) Q.left).inv.app z := by
   rfl
 
+/-- The outer right comparison is its right-span factor followed by the
+overlap-equivalence round-trip at the chosen overlap representative. -/
+theorem genericPointWedgeIdentityOuterRightComparison_app :
+    let r := genericPointWedgeActualRight x₀ y₀ M N
+    let r' := genericPointWedgeCoordinateRight y₀
+    let eK := genericPointWedgeOverlapGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let eR := genericPointWedgeRightGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let aR := genericPointWedgeRightSpanIso
+      x₀ y₀ M N hM hN hy hx cM cN
+    let Q := genericPointWedgeIdentityCoordinateSpan x₀ y₀
+    let z : FundamentalGroupoid (genericPointWedgeOverlapPiece x₀ y₀ M N) :=
+      FundamentalGroupoid.mk
+        ⟨quotientMap x₀ y₀ (.inl x₀),
+          ⟨⟨.inl x₀, by trivial, rfl⟩,
+            ⟨.inr y₀, by trivial,
+              (Quotient.sound (Relation.EqvGen.rel _ _ Rel.base)).symm⟩⟩⟩
+    (reverseRightComparison r r' eK eR aR Q.right).hom.app z =
+      (Functor.isoWhiskerRight
+        (Functor.isoWhiskerLeft eK.functor aR.symm) Q.right).hom.app z ≫
+        (Functor.isoWhiskerRight
+          (eK.funInvIdAssoc (r ⋙ eR.functor)) Q.right).hom.app z := by
+  rfl
+
 /-- The middle factor in the reverse coordinate glue evaluates at the image
 of the chosen overlap representative under the overlap equivalence. -/
 theorem genericPointWedgeIdentityCoordinateWhiskeredGlue_app :
@@ -2034,6 +2059,7 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeIdentityGlobalRightBaseElement_eq_coordinateReverseGlue
 #print axioms genericPointWedgeIdentityCoordinateReverseSpan_glue_app
 #print axioms genericPointWedgeIdentityOuterLeftComparison_app
+#print axioms genericPointWedgeIdentityOuterRightComparison_app
 #print axioms genericPointWedgeIdentityCoordinateWhiskeredGlue_app
 #print axioms genericPointWedgeIdentityCoordinateWhiskeredGlue_app_eq_unitBase
 #print axioms genericPointWedgeIdentityCoordinateSpan_glue_unitBase

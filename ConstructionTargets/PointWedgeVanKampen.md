@@ -319,3 +319,8 @@ outer left comparison at the explicit overlap representative.  Its order is
 the inverse overlap-equivalence round-trip followed by the inverse left-span
 comparison.  Evaluating these factors, the outer right comparison, and the
 literal lift identifications remains before completing B6.
+
+`genericPointWedgeIdentityOuterRightComparison_app` gives the corresponding
+outer-right expansion.  In the hom direction its right-span comparison comes
+first and the overlap-equivalence round-trip follows.  All four outer factors
+are now explicit; their evaluation and the literal lifts remain for B6.
