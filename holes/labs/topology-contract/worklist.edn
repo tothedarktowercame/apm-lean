@@ -113895,6 +113895,19 @@
       :exit 1,
       :finding
       "Connector conjugation remained; split out the base transport."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791795644884-6689-34ca2c42",
+     :commands
+     ["git show/diff-tree 8ccea373"
+      "sha256/diff/placeholder checks"
+      "statement-registry.py check"
+      "lake env lean ConstructionTargets/PointWedgeVanKampen.lean"
+      "lake build ConstructionTargets.PointWedgeVanKampen"
+      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (expected absent)"],
+     :finding
+     "PASS program STOP: exact 2-file commit adds the compiled sorry-free propositional equality sending the fixed left cover base through the groupoid equivalence to mk x0. It uses FundamentalGroupoid.ext and preserves the object-transport boundary needed by connector normalization. Fixture/source/doc hashes match; placeholders 0->0; registry 131/131; standard axioms only. Final module remains absent; residual is left connector form, symmetric right, then B12."},
     :commit "8ccea3736734cc16e83fd1fd99f3929bb6e17fa6",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
@@ -113905,7 +113918,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113926,7 +113939,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Right cover equivalence composed with the lifted right wedge leg is the identity continuous map.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: The left cover equivalence sends the fixed lifted-leg base object to the literal base object by a named propositional equality.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -114230,7 +114243,11 @@
     {:job 8,
      :commit "e58eeba476f9e620aa6e81cb061e7237e6945d37",
      :reason
-     "Right cover equivalence composed with the lifted right wedge leg is the identity continuous map."}]}
+     "Right cover equivalence composed with the lifted right wedge leg is the identity continuous map."}
+    {:job 9,
+     :commit "8ccea3736734cc16e83fd1fd99f3929bb6e17fa6",
+     :reason
+     "The left cover equivalence sends the fixed lifted-leg base object to the literal base object by a named propositional equality."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
