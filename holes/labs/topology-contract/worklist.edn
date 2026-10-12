@@ -113850,14 +113850,14 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "Blueprint B3 is marked proved but its proof uses the unlisted ConnectedGroupoidSingleObjEquivalence.connectorSingleObjEquivalence (and connector-system representation) instead of only the declared uses; add the actual connector dependency and proof route to B3 uses.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
    :evidence
    {:placeholder-delta {:source-before 0, :source-after 0},
     :residual
-    "Evaluate the right projected factor; match mapped pre-coordinate counits with outer factors; close B6/B12.",
+    "Match both mapped pre-coordinate counits with the outer factors; close B6/B12.",
     :outcome :stop,
     :warnings [],
     :missing-theorems
@@ -113871,9 +113871,9 @@
       :area "fundamental-group-wedge-of-circles"}],
     :statement-hashes
     {:source
-     "82e8beac11e15c107a0944d1f7c6157583c1e841aa367453f2896f6ae0e553cd",
+     "842a461a8b2d31d1b439ae3bc2820628e3a651d138e2e69f88f4e3c6c76394b3",
      :documentation
-     "67236a5a7863d5d59940b9a7959a5183fe900735011b9371a1d90531e6a28286",
+     "7dd2fc090481774b81cf7314476f9f887a1cc6a77761dec652f8f4235caf6d35",
      :blueprint
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0",
      :registry "131/131"},
@@ -113881,7 +113881,7 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
     :reason
-    "Left projected counit evaluates to mapped pre-coordinate factor followed by the injected actual based counit.",
+    "Right projected counit evaluates to mapped pre-coordinate factor followed by the injected actual based counit.",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/PointWedgeVanKampen.lean",
@@ -113890,11 +113890,8 @@
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder/diff validation", :exit 0}],
-    :diagnostic-history
-    [{:cmd "lean direct rewrite",
-      :exit 1,
-      :finding "Reduced lets and exposed NatTrans.comp_app."}],
-    :commit "e818122fba85ece53a0816391f092d9c046f19fe",
+    :diagnostic-history [],
+    :commit "da9ef2fa883c0c0fd7ab15a0c49c7da7d17ab50e",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
      "ConstructionTargets/PointWedgeVanKampen.md"],
@@ -113904,7 +113901,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
