@@ -72788,13 +72788,13 @@
    :consumer :t02A03,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "Commit b07bee059 does not implement the row acceptance theorem. It adds only rotatedEndpointWaypoint_departure_zero_support_pos; safeRightTubeMeridianDeformation is absent, although the row is marked done-unreviewed rather than a STOP with missing-theorems. Exact repair: extend Mathlib in scope by state/proving the required continuous ambient H with both endpoints, pointwise rightTube membership, and leftCore avoidance (or record a legitimate STOP after committed progress with remaining theorem listed).",
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Global scaled normSq identity now covers every arrival time without dividing by 4t-3; build piecewise correction with outside-annulus bounds, then package path and H.",
+    "Global polynomial certificate compiled; define endpoint-fixed correction legs and prove inequalities, then package path and H.",
     :outcome :stop,
     :warnings ["Main: 1 placeholder; style lint only."],
     :missing-theorems
@@ -72803,7 +72803,8 @@
       :type "endpoint-fixed nonzero path",
       :status :partial,
       :consumers [:t02A03],
-      :depends-on ["complexArrivalCorrection_zero_scaled_normSq"],
+      :depends-on
+      ["complexArrivalCorrection_ne_zero_of_scaled_normSq_outside"],
       :area "explicit-r3-tube-deformation-retraction"}
      {:name
       "ConstructionTargets.T02A03GeometricTubeDeformation.safeRightTubeMeridianDeformation",
@@ -72814,7 +72815,7 @@
       :area "explicit-r3-tube-deformation-retraction"}],
     :statement-hashes
     {:registry "131/0",
-     :module "bcb51d1afa89f61ba2edfd6f48018415e71fb8fc",
+     :module "82db84432c73f19cfd08a26224a78d398c138ea4",
      :main "ce9da0dbb4300e81e5a5f31c95d0a0f8344c4325"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
@@ -72830,31 +72831,19 @@
     :diagnostic-history
     [{:cmd "module compile",
       :exit 1,
-      :finding "Factored forced coordinates before ring."}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1791805331113-6880-64b9afb3",
-     :commands
-     ["git show/diff-tree/show --check 2a9c5d5d69e2f19806b70df780c4643a14cbe29e"
-      "sha256sum fixture; blob and placeholder recount"
-      "lake env lean exact committed module"
-      "python3 scripts/statement-registry.py check"
-      "compare parent/prior milestone"],
-     :finding
-     "PASS: program STOP commits new compiled, sorry-free progress beyond the prior milestone: the endpoint-fixed transverse correction is proved nonzero at every old departure zero. Exact scope and fixture hash match; module/Main blobs are 0629f3f5/ce9da0db with placeholder counts 0/1; registry 131/0; axioms standard. The no-new-zero corrected path and safe ambient deformation remain explicitly listed."},
-    :commit "49c7300739310ef43c77b3a197acaf89d30d25a9",
+      :finding "Scaled bounds before arithmetic."}],
+    :commit "8276e15510e852802cd3e09037c608794da4061f",
     :changed-paths
     ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
     :fixture
     {:path "ConstructionTargets/T02A03GeometricTubeDeformation.lean",
      :sha256
-     "5832c5c652a0832c3f465f533e04bd3332f7585225237c9f030065e861ad945c"},
+     "5e3532c08f8d1c2f0893dc523e1a840edb9842fb8ca63838d86e2b63cb9356f0"},
     :seat "topo-6"},
    :phase :implementation,
    :type
    "∀ (t : unitInterval) (p : RightTubeMinusLeftCore), (t:ℝ) ≤ 1/2 → (((1-2*(t:ℝ):ℝ):ℂ)+((2*(t:ℝ):ℝ):ℂ)*rotatedEndpointWaypoint p)=0 → 0 < (t:ℝ)*(1-2*(t:ℝ))",
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/safe-right-tube-meridian-deformation",
@@ -82161,7 +82150,8 @@
     :lemma-scalararrivalcorrection-seveneighths-actual-zero
     :lemma-complexarrivalcorrection-seveneighths-zero-normsq
     :lemma-complexarrivalcorrection-seveneighths-ne-zero-of-normsq-outside
-    :lemma-complexarrivalcorrection-zero-scaled-normsq],
+    :lemma-complexarrivalcorrection-zero-scaled-normsq
+    :lemma-complexarrivalcorrection-ne-zero-of-scaled-normsq-outside],
    :other-consumers []}
   {:consumer :portfolio,
    :phase :lemma,
@@ -83124,6 +83114,21 @@
     :found-in
     ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"]},
    :id :lemma-complexarrivalcorrection-zero-scaled-normsq,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "complexArrivalCorrection_ne_zero_of_scaled_normSq_outside"},
+   :lemma
+   {:name "complexArrivalCorrection_ne_zero_of_scaled_normSq_outside",
+    :reported-by []},
+   :id
+   :lemma-complexarrivalcorrection-ne-zero-of-scaled-normsq-outside,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}]}
