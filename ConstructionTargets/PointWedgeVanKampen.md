@@ -375,3 +375,8 @@ two span maps, and the literal lifts remain for B6.
 inner left stage to the fundamental-groupoid map induced by the literal
 overlap-to-left inclusion.  Evaluating that inclusion image, the right nested
 map, both span maps, and the literal lifts remains for B6.
+
+`genericPointWedgeIdentityOuterRightUnitInv_actualMap_eq_inclusionMap` unfolds
+the symmetric inner right stage to the fundamental-groupoid map induced by
+the literal overlap-to-right inclusion.  Evaluating both inclusion images,
+the two span maps, and the literal lifts remains for B6.
