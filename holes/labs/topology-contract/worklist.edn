@@ -113850,14 +113850,14 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "Blueprint B3 is marked proved but its proof uses the unlisted ConnectedGroupoidSingleObjEquivalence.connectorSingleObjEquivalence (and connector-system representation) instead of only the declared uses; add the actual connector dependency and proof route to B3 uses.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
    :evidence
    {:placeholder-delta {:source-before 0, :source-after 0},
     :residual
-    "Specialize right HEq; evaluate both normal forms, inclusion images, literal lifts; then B12.",
+    "Evaluate both normal forms, inclusion images, literal lifts; then B12.",
     :outcome :stop,
     :warnings [],
     :missing-theorems
@@ -113871,9 +113871,9 @@
       :area "fundamental-group-wedge-of-circles"}],
     :statement-hashes
     {:source
-     "6c62a0d22e59fb56c61220fbfda4162c34cabfdfeebbd1608ed055baac7cb9c0",
+     "a6d5287104554bb744ba6fef681f0e8224e043164769ffd68a273f2d6968c16e",
      :documentation
-     "14799389c6459e4d33b43932009cef9e25e644081163ec5c386a5d40cb07fc49",
+     "3ca32bc945356cda6ade4ea148da2428313bc14ff0fee29674ecc8ed955c08e3",
      :blueprint
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0",
      :registry "131/131"},
@@ -113881,7 +113881,7 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
     :reason
-    "Outer left-span map is Coprod.inl of its connector normal form via HEq.",
+    "Outer right-span map is Coprod.inr of its connector normal form via HEq.",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/PointWedgeVanKampen.lean",
@@ -113891,7 +113891,7 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder/diff validation", :exit 0}],
     :diagnostic-history [],
-    :commit "b075734c3e887ee5438d95e551560a7c031125e1",
+    :commit "9f89ff089eb13206d9e3ad0fbb993df312dd4d27",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
      "ConstructionTargets/PointWedgeVanKampen.md"],
@@ -113901,7 +113901,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
