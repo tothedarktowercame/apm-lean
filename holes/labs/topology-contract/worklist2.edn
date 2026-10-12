@@ -75000,23 +75000,24 @@
    :current-residual "Elect B3/B4 or route residual.",
    :other-consumers []}
   {:consumer :t96J02,
-   :stop-count 1,
+   :stop-count 2,
    :review-finding
    "STOP remainder is incomplete: cdbdc979d proves the six-edge involution/signs, orbit equivalence, generated-relation iff, and quotient Equiv, but defines no torusRP2PairingData and proves no six-edge oneVertex field. Thus the claim that six-edge B2 is complete is false, and the required missing theorem is omitted from :missing-theorems. Add torusRP2PairingData/oneVertex to the remaining milestones or state and prove it in scope.",
    :implements-lemma
    :lemma-constructiontargets-polygonsurfacepione-standardpairingdata,
    :evidence
    {:placeholder-delta 0,
-    :residual "Construct uniform standard PairingData; B3/B4 follow.",
+    :residual "Construct uniform standardPairingData; then B3/B4.",
     :outcome :stop,
-    :warnings [],
+    :warnings
+    ["Two pre-existing unnecessarySimpa warnings in imported PolygonBoundaryCircleSource."],
     :missing-theorems
-    [{:name "torusRP2OrbitEquiv/torusRP2SpaceEquiv",
+    [{:name "torusRP2PairingData",
       :type
-      "three pairing orbits and exact generated-relation quotient comparison",
+      "six-edge PairingData with all vertices in one generated class",
       :status :proved,
       :consumers [:t97A01],
-      :depends-on [],
+      :depends-on ["torusRP2_eqvGen_iff"],
       :area "polygon-surface-pi1"}
      {:name
       "ConstructionTargets.PolygonSurfacePiOne.standardPairingData",
@@ -75028,12 +75029,12 @@
       :area "polygon-surface-pi1"}],
     :statement-hashes
     {:registry "131/0",
-     :module "eb151c7a2df628b4d38db5884984e5076905bf05"},
+     :module "5bac10a157b539f5321fc804de167d1a7572b57c"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
     :reason
-    "Six-edge B2 is complete; the uniform orientable/nonorientable standardPairingData family and its one-vertex proof remain.",
+    "Six-edge B2 now includes torusRP2PairingData and its proved oneVertex field; uniform standardPairingData remains.",
     :commands
     [{:cmd "lake build ConstructionTargets.PolygonSurfacePiOne",
       :exit 0}
@@ -75041,26 +75042,21 @@
       :exit 0,
       :output "131/0"}
      {:cmd "comment-stripped placeholder scan", :exit 0, :output "0"}
-     {:cmd "git show --check cdbdc979d", :exit 0}],
+     {:cmd "git show --check a6ec41bed", :exit 0}],
     :diagnostic-history
-    [{:cmd "first relation proof compile",
+    [{:cmd "first oneVertex compile",
       :exit 1,
-      :correction "proved equality after EqvGen, then rebuilt"}],
-    :review
-    {:outcome :fail,
-     :seat "codex-7",
-     :job "invoke-1791835862128-7832-f1fd9d93",
-     :finding
-     "STOP remainder is incomplete: cdbdc979d proves the six-edge involution/signs, orbit equivalence, generated-relation iff, and quotient Equiv, but defines no torusRP2PairingData and proves no six-edge oneVertex field. Thus the claim that six-edge B2 is complete is false, and the required missing theorem is omitted from :missing-theorems. Add torusRP2PairingData/oneVertex to the remaining milestones or state and prove it in scope."},
-    :commit "cdbdc979d",
+      :correction
+      "oriented endpoint equalities and explicit EqvGen.trans"}],
+    :commit "a6ec41bed",
     :changed-paths ["ConstructionTargets/PolygonSurfacePiOne.lean"],
     :fixture
     {:path "ConstructionTargets/PolygonSurfacePiOne.lean",
      :sha256
-     "7a7a3c547231baeac6094346b83d4b2e939ec5890f0b28291a5b54c04b425340"},
+     "565354eda084c50a96c1af9f0d3595a2bba133ceae21f602f0668b2b1b872fed"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :repair,
+   :state :needs-owner,
    :scope ["ConstructionTargets/PolygonSurfacePiOne.lean"],
    :dag-node "ConstructionTargets/PolygonSurfacePiOne.blueprint.md/B2",
    :acceptance
@@ -75089,7 +75085,7 @@
      :infrastructure-packets
      :review-outcomes]},
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance {:strategy "Rerun after B2."},
@@ -84438,6 +84434,35 @@
     :area "polygon-surface-pi1",
     :proved-in :routes-2026-10-12-polygon-b2-completion-topo2-r1},
    :id :lemma-torusrp2orbitequiv-torusrp2spaceequiv,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "torusRP2PairingData",
+    :type
+    "six-edge PairingData with all vertices in one generated class"},
+   :lemma
+   {:name "torusRP2PairingData",
+    :reported-by [:routes-2026-10-12-polygon-b2-completion-topo2-r1],
+    :type
+    "six-edge PairingData with all vertices in one generated class",
+    :area "polygon-surface-pi1",
+    :proved-in :routes-2026-10-12-polygon-b2-completion-topo2-r1},
+   :id :lemma-torusrp2pairingdata,
+   :kind :lemma,
+   :depends-on [:lemma-torusrp2-eqvgen-iff],
+   :other-consumers []}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance {:lemma "torusRP2_eqvGen_iff"},
+   :lemma {:name "torusRP2_eqvGen_iff", :reported-by []},
+   :id :lemma-torusrp2-eqvgen-iff,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}]}
