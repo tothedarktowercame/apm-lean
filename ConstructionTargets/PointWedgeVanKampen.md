@@ -386,3 +386,8 @@ target endpoint of the left-span comparison at the transported overlap
 representative with the literal object `FundamentalGroupoid.mk x₀`.  The
 source endpoint and resulting endomorphism cast must still be evaluated before
 the coordinate-span injection theorem applies.
+
+`genericPointWedgeIdentityOuterRightSpanComponent_target` gives the symmetric
+endpoint calculation: the right-span comparison targets the literal object
+`FundamentalGroupoid.mk y₀`.  Both source endpoints and their endomorphism
+casts remain before the coordinate-span injection theorems apply.
