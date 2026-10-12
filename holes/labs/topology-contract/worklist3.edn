@@ -1109,6 +1109,30 @@
    :current-residual
    "Prove planar arc local flatness; apply chart transport.",
    :other-consumers [:t01J01 :t03J02]}
+  {:consumer :t00A03,
+   :implements-lemma
+   :lemma-constructiontargets-surfaceschoenflies-embeddedcirclelocallyflat-reparam-iff,
+   :phase :implementation,
+   :state :open,
+   :scope ["ConstructionTargets/SurfaceSchoenflies.lean"],
+   :dag-node "TOPOLOGY-ROUTES.md/schoenflies/local-flatness",
+   :acceptance
+   {:declaration
+    "ConstructionTargets.SurfaceSchoenflies.embeddedCircleLocallyFlat_reparam_iff",
+    :type "exact type in fixture",
+    :fixture "/tmp/surface_schoenflies_flat_reparam.lean",
+    :fixture-sha256
+    "94b4e865baf2b5cf071050171dd61e2e6c02dd584d806653ebad229f82892f28",
+    :placeholders
+    ["t00A03 bridge_1" "t01J01 bridges" "t03J02 bridge_1"],
+    :route-step
+    "local-flatness invariance under circle reparameterization"},
+   :id :routes-2026-10-12-surface-flat-reparam-r1,
+   :kind :reusable-theorem,
+   :area "embedded-circle-collar-surface",
+   :depends-on [:routes-2026-10-12-surface-flat-transport-r1],
+   :current-residual "Prove planar embedded-arc local flatness.",
+   :other-consumers [:t01J01 :t03J02]}
   {:owner-park
    "2026-10-12 claude-14: paused for the surface route redesign, ~/notes/closer/routes/surfaces.md",
    :consumer :t00A03,
@@ -1122,51 +1146,51 @@
     {:outcome :revise,
      :seat "topo-12",
      :fixture
-     {:path "/tmp/surface_schoenflies_flat_transport.lean",
+     {:path "/tmp/surface_schoenflies_flat_reparam.lean",
       :sha256
-      "b586bc82dd559d42cb4b5d7c3f3c6db9b6158e680d5754aa769966d790c76e5a"},
+      "94b4e865baf2b5cf071050171dd61e2e6c02dd584d806653ebad229f82892f28"},
      :commands
      [{:cmd
-       "lake env lean /tmp/surface_schoenflies_flat_transport.lean && sha256sum /tmp/surface_schoenflies_flat_transport.lean && python3 scripts/statement-registry.py check",
+       "lake env lean /tmp/surface_schoenflies_flat_reparam.lean && sha256sum /tmp/surface_schoenflies_flat_reparam.lean && python3 scripts/statement-registry.py check",
        :exit 0}],
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :missing-theorems
      [{:name
-       "ConstructionTargets.SurfaceSchoenflies.embeddedCircleLocallyFlat_homeomorph_iff",
+       "ConstructionTargets.SurfaceSchoenflies.embeddedCircleLocallyFlat_reparam_iff",
        :type "exact type in fixture",
        :status :proved,
        :consumers [:t00A03 :t01J01 :t03J02],
        :depends-on
-       ["ConstructionTargets.SurfaceSchoenflies.embeddedCircle_finite_flat_subcover"],
+       ["ConstructionTargets.SurfaceSchoenflies.embeddedCircleLocallyFlat_homeomorph_iff"],
        :area "embedded-circle-collar-surface"}],
      :prerequisite
      {:consumer :t00A03,
-      :implements-lemma :lemma-schoenflies-flat-transport,
+      :implements-lemma :lemma-schoenflies-flat-reparam,
       :phase :implementation,
       :state :open,
       :scope ["ConstructionTargets/SurfaceSchoenflies.lean"],
       :dag-node "TOPOLOGY-ROUTES.md/schoenflies/local-flatness",
       :acceptance
       {:declaration
-       "ConstructionTargets.SurfaceSchoenflies.embeddedCircleLocallyFlat_homeomorph_iff",
+       "ConstructionTargets.SurfaceSchoenflies.embeddedCircleLocallyFlat_reparam_iff",
        :type "exact type in fixture",
-       :fixture "/tmp/surface_schoenflies_flat_transport.lean",
+       :fixture "/tmp/surface_schoenflies_flat_reparam.lean",
        :fixture-sha256
-       "b586bc82dd559d42cb4b5d7c3f3c6db9b6158e680d5754aa769966d790c76e5a",
+       "94b4e865baf2b5cf071050171dd61e2e6c02dd584d806653ebad229f82892f28",
        :placeholders
        ["t00A03 bridge_1" "t01J01 bridges" "t03J02 bridge_1"],
-       :route-step "local-flatness transport through surface charts"},
-      :id :routes-2026-10-12-surface-flat-transport-r1,
+       :route-step
+       "local-flatness invariance under circle reparameterization"},
+      :id :routes-2026-10-12-surface-flat-reparam-r1,
       :kind :reusable-theorem,
       :area "embedded-circle-collar-surface",
-      :depends-on [:routes-2026-10-12-surface-finite-flat-r1],
-      :current-residual
-      "Prove planar arc local flatness; apply chart transport.",
+      :depends-on [:routes-2026-10-12-surface-flat-transport-r1],
+      :current-residual "Prove planar embedded-arc local flatness.",
       :other-consumers [:t01J01 :t03J02]},
      :residual
-     "Promote chart transport; planar Schoenflies remains."}},
+     "Promote reparameterization; planar Schoenflies remains."}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope ["ConstructionTargets/SurfaceSchoenflies.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/topo3/schoenflies-2d/embedded-circle-collar",
@@ -1187,7 +1211,8 @@
     :routes-2026-10-11-surface-embedded-circle-closed-range-topo3-r1
     :routes-2026-10-12-surface-finite-cover-r1
     :routes-2026-10-12-surface-finite-flat-r1
-    :routes-2026-10-12-surface-flat-transport-r1],
+    :routes-2026-10-12-surface-flat-transport-r1
+    :routes-2026-10-12-surface-flat-reparam-r1],
    :current-residual
    "Surface cutting, intersection separation, van Kampen and classification remain.",
    :other-consumers [:t01J01 :t03J02]}
@@ -30965,7 +30990,29 @@
    :id :lemma-embeddedcircle-finite-flat-subcover,
    :kind :lemma,
    :depends-on [],
-   :other-consumers []}],
+   :other-consumers []}
+  {:consumer :t00A03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.SurfaceSchoenflies.embeddedCircleLocallyFlat_reparam_iff",
+    :type "exact type in fixture"},
+   :lemma
+   {:name
+    "ConstructionTargets.SurfaceSchoenflies.embeddedCircleLocallyFlat_reparam_iff",
+    :reported-by
+    [:routes-2026-10-10-surface-schoenflies-collar-topo3-r2],
+    :type "exact type in fixture",
+    :area "embedded-circle-collar-surface",
+    :proved-in :routes-2026-10-10-surface-schoenflies-collar-topo3-r2},
+   :id
+   :lemma-constructiontargets-surfaceschoenflies-embeddedcirclelocallyflat-reparam-iff,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-surfaceschoenflies-embeddedcirclelocallyflat-homeomorph-iff],
+   :other-consumers [:t01J01 :t03J02]}],
  :consumer-baselines {},
  :statuses
  #{:open
