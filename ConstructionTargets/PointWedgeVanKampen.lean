@@ -2304,6 +2304,34 @@ theorem genericPointWedgeCoordinatePointCounit_uniqueObjects :
           (SingleObj.star (genericPointWedgeRightGroup y₀))) := by
   exact ⟨rfl, rfl⟩
 
+/-- The based counit element chosen by the left connector equivalence. -/
+def genericPointWedgeLeftBasedCounit : genericPointWedgeLeftGroup x₀ :=
+  (genericPointWedgeSingleObjEquivalence x₀).counit.app
+    (SingleObj.star (genericPointWedgeLeftGroup x₀))
+
+/-- The based counit element chosen by the right connector equivalence. -/
+def genericPointWedgeRightBasedCounit : genericPointWedgeRightGroup y₀ :=
+  (genericPointWedgeSingleObjEquivalence y₀).counit.app
+    (SingleObj.star (genericPointWedgeRightGroup y₀))
+
+/-- The coordinate-to-point counit contributes the coproduct injections of
+the two actual based counit elements; no identity normalization is assumed. -/
+theorem genericPointWedgeCoordinatePointCounit_uniqueObjects_eq_injections :
+    let C := SingleObj (genericPointWedgeFreeProduct x₀ y₀)
+    let Q := genericPointWedgeIdentityPointSpan x₀ y₀
+    let E := genericPointWedgeCoordinatePointSpanEquivalence x₀ y₀ C
+    ((E.counitIso.hom.app Q).left).app
+          (SingleObj.star (genericPointWedgeLeftGroup x₀)) =
+        Monoid.Coprod.inl (genericPointWedgeLeftBasedCounit x₀) ∧
+      ((E.counitIso.hom.app Q).right).app
+          (SingleObj.star (genericPointWedgeRightGroup y₀)) =
+        Monoid.Coprod.inr (genericPointWedgeRightBasedCounit y₀) := by
+  simp only
+  rw [(genericPointWedgeCoordinatePointCounit_uniqueObjects x₀ y₀).1,
+    (genericPointWedgeCoordinatePointCounit_uniqueObjects x₀ y₀).2]
+  exact ⟨genericPointWedgeIdentityPointSpan_left x₀ y₀ _,
+    genericPointWedgeIdentityPointSpan_right x₀ y₀ _⟩
+
 /-- Consequently the full B3 counit element is just the mapped counit of the
 preceding free-product-representation equivalence. -/
 theorem genericPointWedgeCounitElement_eq_mappedRepresentationCounit :
@@ -3596,6 +3624,9 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeCoordinatePointCounit_eq_transportCounit
 #print axioms genericPointWedgeCoordinatePointCounit_legs
 #print axioms genericPointWedgeCoordinatePointCounit_uniqueObjects
+#print axioms genericPointWedgeLeftBasedCounit
+#print axioms genericPointWedgeRightBasedCounit
+#print axioms genericPointWedgeCoordinatePointCounit_uniqueObjects_eq_injections
 #print axioms genericPointWedgeCounitElement_eq_mappedRepresentationCounit
 #print axioms genericPointWedgeMappedLeft_eq_conj
 #print axioms genericPointWedgeMappedRight_eq_conj

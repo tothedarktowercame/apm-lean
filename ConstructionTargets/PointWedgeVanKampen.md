@@ -651,3 +651,10 @@ single-object equivalences, evaluated on the two identity point-span legs.
 natural transformations at their unique source objects.  Each contribution is
 the relevant identity point-span functor applied to the based equivalence's
 counit component.
+
+`genericPointWedgeLeftBasedCounit` and
+`genericPointWedgeRightBasedCounit` retain the actual counit elements chosen
+by the connector equivalences.  The theorem
+`genericPointWedgeCoordinatePointCounit_uniqueObjects_eq_injections` shows
+that the coordinate-to-point counit contributes their coproduct injections;
+it deliberately makes no false identity normalization.
