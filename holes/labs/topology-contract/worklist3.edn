@@ -30149,11 +30149,26 @@
       :exit 1,
       :stage
       "pair subtype lacked computable Fintype; corrected with Fintype.ofFinite"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791818212978-7205-beeb3df3",
+     :commands
+     ["git show/diff 19fc3b645"
+      "sha256sum surface_face_bound_check"
+      "git diff --check; blob-current"
+      "rg Lean placeholders"
+      "statement-registry.py check"
+      "#print axioms crossing theorem"
+      "lake env lean fixture/module"
+      "lake build ConstructionTargets.SurfaceClassification"],
+     :finding
+     "PASS program STOP: new compiled milestone after 447325043 defines the finite distinct ordered arc-pair index and proves the global crossing union finite from pairwise finiteness. One-file scope; blob current; fixture/module/build pass; registry 131/131; zero Lean placeholders; standard axioms. Remaining pairwise geometry is listed."},
     :commit "19fc3b645533dfa39100618ae0077f0462367d76",
     :changed-paths ["ConstructionTargets/SurfaceClassification.lean"],
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/SurfaceClassification.lean"
     "ConstructionTargets/SurfaceClassification.md"
@@ -30173,7 +30188,7 @@
     :blueprint
     "ConstructionTargets/SurfaceClassification.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: B4 finite endpoint schedule proved; program continues with transverse-crossing refinement",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: B4 finite arc-pair reduction proved; program continues with pairwise geometry",
    :id :program-2026-10-12-surface-classification,
    :kind :reusable-theorem,
    :campaign-priority 40,
@@ -30208,7 +30223,11 @@
     {:job 1,
      :commit "447325043907c2db55b77e4c7a12036d73f064e0",
      :reason
-     "B4 finite endpoint schedule proved; program continues with transverse-crossing refinement"}]}
+     "B4 finite endpoint schedule proved; program continues with transverse-crossing refinement"}
+    {:job 2,
+     :commit "19fc3b645533dfa39100618ae0077f0462367d76",
+     :reason
+     "B4 finite arc-pair reduction proved; program continues with pairwise geometry"}]}
   {:consumer :t00J02,
    :phase :lemma,
    :state :banked,
@@ -30434,7 +30453,7 @@
    :other-consumers [:t00A03 :t91J05 :t92J05 :t94J04 :t96A01 :t97J02]}
   {:consumer :t00A02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -30448,7 +30467,9 @@
     :type
     "(C : FiniteClosedDiskCover M) (h : ∀ p : C.BoundaryArcPairIndex, Set.Finite (C.boundaryArcIntersection p)) : Set.Finite C.boundaryCrossingSet",
     :area "surface-classification",
-    :proved-in :program-2026-10-12-surface-classification},
+    :proved-in :program-2026-10-12-surface-classification,
+    :banked-by :program-2026-10-12-surface-classification,
+    :banked-commit "19fc3b645533dfa39100618ae0077f0462367d76"},
    :id
    :lemma-constructiontargets-surfaceclassification-finitecloseddiskcover-boundarycrossing,
    :kind :lemma,
