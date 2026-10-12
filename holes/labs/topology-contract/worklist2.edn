@@ -79485,34 +79485,34 @@
   {:consumer :t96A07,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 6,
+   :stop-count 7,
    :evidence
    {:placeholder-delta 0,
-    :residual
-    "Formalize B10 horizontal-level transversality; then B11-B13.",
+    :residual "Formalize B11 level attainment; then B12-B13.",
     :outcome :stop,
-    :warnings ["Main: 1 placeholder." "Style lint only."],
+    :warnings
+    ["Main: 1 placeholder."
+     "Style lint only."
+     "Unrelated .scratch_hpi.lean preserved."],
     :missing-theorems
     [{:name
-      "ConstructionTargets.T96A07Closure.sphereMap_vertical_surjective",
-      :type "B9 vertical derivative surjectivity",
+      "ConstructionTargets.T96A07Closure.sphereMap_transverse_plane",
+      :type "B10 horizontal-level transversality",
       :status :proved,
       :consumers [:t96A07],
       :depends-on
-      ["sphereMap_vertical_tangent_of_third_ne_zero"
-       "sphereMap_vertical_tangent_of_third_eq_zero"],
+      ["plane_fderiv_range" "sphereMap_vertical_surjective"],
       :area "projective-smooth-descent"}
      {:name
-      "ConstructionTargets.T96A07Closure.sphereMap_transverse_plane",
-      :type "B10 horizontal-level transversality",
+      "ConstructionTargets.T96A07Closure.sphereMap_level_attained",
+      :type "B11 every 0<z<1/2 is attained",
       :status :not-started,
       :consumers [:t96A07],
-      :depends-on
-      ["plane_fderiv_range" "sphereMap_vertical_surjective"],
+      :depends-on [],
       :area "projective-smooth-descent"}],
     :statement-hashes
     {:registry "131/0",
-     :closure "6c2e150c7713902aa9cb5664a6ba928a859f729e",
+     :closure "cddae76104354d52972b1bf303b736f59cf83312",
      :blueprint "69b59fb622dd62fc82a1fe100b353eaabc2c948d"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
@@ -79524,35 +79524,23 @@
      {:cmd "registry check", :exit 0}
      {:cmd "closure no-sorry", :exit 1, :expected-exit 1}
      {:cmd "placeholder count", :exit 0, :output "1"}
-     {:cmd "git show --check f8d51a9d6", :exit 0}],
+     {:cmd "git show --check 81f5ee4e1", :exit 0}],
     :diagnostic-history
-    [{:cmd "compile",
+    [{:cmd "closure compile",
       :exit 1,
-      :finding "Explicit tangent equivalence; rebuilt olean."}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1791766843177-6100-d2cf6330",
-     :commands
-     ["git show/check/diff b5adc850b..f8d51a9d6"
-      "verify scoped blobs, fixture SHA, ancestry"
-      "lake build ConstructionTargets.t96A07Closure"
-      "lake env lean closure and t96A07 Main"
-      "statement-registry check/fingerprint"
-      "placeholder and axiom checks"],
-     :finding
-     "PASS: f8d51a9d6f4a97f45f1b48381cef12a4f364f0c9 adds compiled, sorry-free B9 completion after b5adc850b; both changed paths are scoped. Closure/blueprint blobs 6c2e150c/69b59fb6 and fixture a33585df match. The proof pulls the ambient tangent witness through the sphere inclusion, applies the correctly oriented chain rule, obtains vertical value one in the derivative range, and scales to all reals; the Main adapter preserves the frozen representation. Lean gates pass with standard axioms only; registry 131/0, frozen hash 2ba67b04 unchanged, closure/Main placeholders 0/1. STOP lists B10 then B11-B13."},
-    :commit "f8d51a9d6",
+      :finding
+      "Corrected eq_top membership and tangent equality orientation."}],
+    :commit "81f5ee4e1",
     :changed-paths
     ["ConstructionTargets/t96A07Closure.lean"
      "problems/t96A07/lean/Main.lean"],
     :fixture
     {:path "ConstructionTargets/t96A07Closure.lean",
      :sha256
-     "a33585df4049dedae96866058b87e83f099a3a80b889076e48fb0423ad2e4eda"},
+     "fd3ae7226b81350f048873fbd8da7703514ea7e11445b29a834ab07cc59ee714"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t96A07/lean/Main.lean"
     "problems/t96A07/status.json"
@@ -81502,7 +81490,8 @@
     "ConstructionTargets.T96A07Closure.sphereMap_transverse_plane",
     :reported-by [:program-2026-10-11-close-t96a07],
     :type "B10 horizontal-level transversality",
-    :area "projective-smooth-descent"},
+    :area "projective-smooth-descent",
+    :proved-in :program-2026-10-11-close-t96a07},
    :id
    :lemma-constructiontargets-t96a07closure-spheremap-transverse-plane,
    :kind :lemma,
@@ -81526,6 +81515,24 @@
    :acceptance {:lemma "sphereMap_vertical_surjective"},
    :lemma {:name "sphereMap_vertical_surjective", :reported-by []},
    :id :lemma-spheremap-vertical-surjective,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t96A07,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.T96A07Closure.sphereMap_level_attained",
+    :type "B11 every 0<z<1/2 is attained"},
+   :lemma
+   {:name "ConstructionTargets.T96A07Closure.sphereMap_level_attained",
+    :reported-by [:program-2026-10-11-close-t96a07],
+    :type "B11 every 0<z<1/2 is attained",
+    :area "projective-smooth-descent"},
+   :id
+   :lemma-constructiontargets-t96a07closure-spheremap-level-attained,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}]}
