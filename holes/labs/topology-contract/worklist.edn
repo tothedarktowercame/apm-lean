@@ -113850,14 +113850,14 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "Recorded fixture hash mismatch: :fixture.sha256 is 0bca6ce32c019fc3053c7f813c26917169cf817375b44d5e722b864b61a526450c1, but ConstructionTargets/PointWedgeVanKampen.blueprint.md at recorded commit c9b3af27 has exact SHA-256 0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0. Re-record the fixture hash for the reviewed commit.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
    :evidence
    {:placeholder-delta {:source-before 0, :source-after 0},
     :residual
-    "Relate the chosen source connector to the counit at y0; then left counits, point-span, B6/B12.",
+    "Use normal form in right comparison; then left counits, point-span, B6/B12.",
     :outcome :stop,
     :warnings [],
     :missing-theorems
@@ -113871,16 +113871,17 @@
       :area "fundamental-group-wedge-of-circles"}],
     :statement-hashes
     {:source
-     "513c87752a9d0003984af82abf111f55dc06914c8ef7550a609988d3e7e46e6a",
+     "f7e42a5eaa36570b67813ebeb8e4961f397bd52c1eb27a621c65920d7a8cea0d",
      :documentation
-     "9a4d1a35028b765d94a346d0d9e0b3cc6559558ee5041da8cf0ce8c56c001942",
+     "619ed2669e169fd56a2d78e4eb6d1c430aaac9ac0d2b489279564eca4670bcb2",
      :blueprint
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0",
      :registry "131/131"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
-    :reason "Naturality leaves the source connector times counit.",
+    :reason
+    "Source connector times right counit is its connector normal form.",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/PointWedgeVanKampen.lean",
@@ -113890,14 +113891,14 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder/diff validation", :exit 0}],
     :diagnostic-history
-    [{:cmd "lean naturality simplification",
+    [{:cmd "lean connector simp",
       :exit 1,
-      :finding "Added eqToHom cancellation lemmas."}
+      :finding "Exposed functor objects."}
      {:cmd
       "lake build ConstructionTargets.ThreeCirclesFundamentalGroup",
       :exit 1,
-      :finding "Module awaits B12."}],
-    :commit "f14c48b65f9308c2b00cdb0f5d8939bbc54b532a",
+      :finding "Awaits B12."}],
+    :commit "151c0bcc006f1a9b1dd76883d7426a1dd2a0c8a6",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
      "ConstructionTargets/PointWedgeVanKampen.md"],
@@ -113907,7 +113908,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
