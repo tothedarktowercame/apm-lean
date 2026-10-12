@@ -441,3 +441,7 @@ dependent object type needed by the surrounding composite.
 `genericPointWedgeIdentityOuterRightSpan_sourceConnector_heq_refl` identifies
 the source connector for `aR.inv` with the reflexive connector at
 `FundamentalGroupoid.mk y₀`, while preserving its dependent object index.
+
+`genericPointWedgeIdentityOuterLeftSpan_sourceConnector_eq_based` exposes the
+other left connector as the chosen based connector at the fully transported
+overlap object.  It is not normalized before that object round trip is known.
