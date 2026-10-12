@@ -113894,6 +113894,19 @@
     [{:cmd "lean transported HEq congrArg",
       :exit 1,
       :finding "Rewrote arrow and endpoint proof separately."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791802342144-6826-1c6d0557",
+     :commands
+     ["git show/diff-tree af25e368"
+      "sha256/diff/placeholder checks"
+      "statement-registry.py check"
+      "lake env lean ConstructionTargets/PointWedgeVanKampen.lean"
+      "lake build ConstructionTargets.PointWedgeVanKampen"
+      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (expected absent)"],
+     :finding
+     "PASS program STOP: exact 2-file commit transports the lifted-left HEq through both endpoint conjugations, producing a compiled sorry-free equality of literal-base endomorphisms. Inverse/forward eqToHom directions and dependent endpoint proof alignment are correct; no object equality is treated definitionally. Fixture/source/doc hashes match; placeholders 0->0; registry 131/131; standard axioms only. Final module remains absent; residual folds into mapOfEq, then right and B12."},
     :commit "af25e368329bd03c59534ee335b5529f637fe776",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
@@ -113904,7 +113917,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113925,7 +113938,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: The mapped lifted left loop is now HEq to the concrete induced groupoid map with dependent endpoints preserved.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: The lifted-left HEq now transports through both endpoint conjugations to an equality of endomorphisms.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -114253,7 +114266,11 @@
     {:job 5,
      :commit "4eec8d8c20a9f79f799a1be84f812497a442ab67",
      :reason
-     "The mapped lifted left loop is now HEq to the concrete induced groupoid map with dependent endpoints preserved."}]}
+     "The mapped lifted left loop is now HEq to the concrete induced groupoid map with dependent endpoints preserved."}
+    {:job 6,
+     :commit "af25e368329bd03c59534ee335b5529f637fe776",
+     :reason
+     "The lifted-left HEq now transports through both endpoint conjugations to an equality of endomorphisms."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
