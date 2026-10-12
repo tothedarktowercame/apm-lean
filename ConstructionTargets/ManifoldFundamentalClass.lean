@@ -4,6 +4,7 @@ import ConstructionTargets.CoefficientTransitionLocalConstancy
 import ConstructionTargets.CoefficientDistinguishedNormalization
 import ConstructionTargets.IntegralSingularHomologyComparison
 import ConstructionTargets.HigherChartLocalGenerator
+import Mathlib.Algebra.Homology.HomologicalComplexLimits
 
 open CategoryTheory CategoryTheory.Limits
 noncomputable section
@@ -3005,6 +3006,18 @@ theorem absoluteSingularMap_relativeProjection_naturality
   simpa [absoluteSingularMap] using
     (relativeSingularMap_projection_naturality A B f hf)
 
+theorem coefficientRelativeProjection_forgotten_epi
+    {X : Type} [TopologicalSpace X] (A : Set X) :
+    Epi ((forgetIntModules.mapHomologicalComplex (ComplexShape.down ℕ)).map
+      (cokernel.π (CoefficientRelativeSmall.subspaceMap ℤ A))) := by
+  let p := cokernel.π (CoefficientRelativeSmall.subspaceMap ℤ A)
+  haveI : Epi p := inferInstance
+  apply HomologicalComplex.epi_of_epi_f
+  intro n
+  haveI : Epi (p.f n) := inferInstance
+  change Epi (forgetIntModules.map (p.f n))
+  infer_instance
+
 end ConstructionTargets.ManifoldFundamentalClass
 
 #print axioms ConstructionTargets.ManifoldFundamentalClass.neighborhoodInclusion_Hsucc_isIso
@@ -3108,6 +3121,7 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientPairMap_forgotten_projection_naturality
 #print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientAbsoluteMap_forgotten_naturality
 #print axioms ConstructionTargets.ManifoldFundamentalClass.absoluteSingularMap_relativeProjection_naturality
+#print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientRelativeProjection_forgotten_epi
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_projection
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_generator_of_normalization
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_normalization_of_generator
