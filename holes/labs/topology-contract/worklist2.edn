@@ -83299,7 +83299,7 @@
   {:consumer :t94J04,
    :stop-count 2,
    :review-finding
-   "Blueprint defect: B10 is false with B3 orientation. B3 identifies loop representatives g,h when g*h⁻¹ ∈ H, which classifies left cosets H*g, not right cosets g*H. Counterexample in S3: let H=⟨(12)⟩, h=(123), g=(12)h. Then g*h⁻¹=(12)∈H, so B3 identifies g,h, but gH≠hH because h⁻¹(12)h∉H. Thus the claimed map to right cosets is not well-defined (and the displayed quotient type also does not faithfully encode arbitrary nonnormal cosets). Repair B10 to use left-coset quotient data, or reverse B3 consistently to classify right cosets, then propagate B5/B8/B10-B12 and re-review.",
+   "Blueprint defect: B10 is false with B3 orientation. B3 identifies loop representatives g,h when g*h⁻¹ ∈ H, which classifies left cosets H*g, not right cosets g*H. Counterexample in S3: let H=⟨(12)⟩, h=(123), g=(12)h. Then g*h⁻¹=(12)∈H, so B3 identifies g,h, but gH≠hH because h⁻¹(12)h∉H. Thus the claimed map to right cosets is not well-defined, and the displayed quotient type does not faithfully encode arbitrary nonnormal cosets. Repair B10 to use left-coset quotient data, or reverse B3 consistently to classify right cosets, then propagate B5/B8/B10-B12 and re-review.",
    :implements-lemma :lemma-subgroup-cover-correspondence,
    :evidence
    {:placeholder-delta 0,
@@ -83333,6 +83333,12 @@
      {:cmd "git diff --check", :exit 0}
      {:cmd "registry check", :exit 0, :output "131/0"}
      {:cmd "git show --check", :exit 0}],
+    :review
+    {:outcome :fail,
+     :seat "codex-7",
+     :job "invoke-1791813301116-7033-b61e0a70",
+     :finding
+     "Blueprint defect: B10 is false with B3 orientation. B3 identifies loop representatives g,h when g*h⁻¹ ∈ H, which classifies left cosets H*g, not right cosets g*H. Counterexample in S3: let H=⟨(12)⟩, h=(123), g=(12)h. Then g*h⁻¹=(12)∈H, so B3 identifies g,h, but gH≠hH because h⁻¹(12)h∉H. Thus the claimed map to right cosets is not well-defined, and the displayed quotient type does not faithfully encode arbitrary nonnormal cosets. Repair B10 to use left-coset quotient data, or reverse B3 consistently to classify right cosets, then propagate B5/B8/B10-B12 and re-review."},
     :commit "b817b117f620f3bee9824712f1b270771eb259ee",
     :changed-paths
     ["ConstructionTargets/CoveringSubgroupCorrespondence.blueprint.md"],
@@ -83343,7 +83349,7 @@
      "17b1e849eda978644ecc467fc8a2c0be27aa35e189ca8e4d21cb5990e39c40df"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :repair,
    :scope
    ["ConstructionTargets/CoveringSubgroupCorrespondence.lean"
     "ConstructionTargets/CoveringSubgroupCorrespondence.md"
@@ -83365,7 +83371,7 @@
    :id :program-2026-10-12-covering-subgroup-correspondence,
    :kind :reusable-theorem,
    :campaign-priority 40,
-   :fail-count 1,
+   :fail-count 2,
    :depends-on [],
    :program true,
    :other-consumers [:t96A01 :t99J01 :t97A03 :t00A02 :t93J03]}
