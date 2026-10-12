@@ -808,3 +808,11 @@ point-span glues in that square.  The theorem
 square entirely in target-group multiplication order: right leg times source
 glue equals target glue times left leg.  The remaining reduction is now
 exactly the computation of these two named glues.
+
+`genericPointWedgeMappedCoordinateSpanTargetGlue_counitSplice` computes the
+target glue up to the two connector counits that must remain explicit: the
+right injected based counit followed by the target glue is the left injected
+based counit.  This is the coordinate-to-point counit's glue-naturality
+equation at the identity point span, so it introduces no counit-identity
+normalization.  The source-glue reconstruction and the open-cover factors
+remain to be combined with this splice.

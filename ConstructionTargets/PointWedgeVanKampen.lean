@@ -3165,6 +3165,29 @@ def genericPointWedgeMappedCoordinateSpanTargetGlue :
   let Z := Q.inverse.obj (S.inverse.obj (R.inverse.obj F))
   (Q.functor.obj Z).glue.hom.app (SingleObj.star PUnit)
 
+/-- The target glue is controlled by the coordinate-to-point counit: after
+the right injected based counit it becomes the left injected based counit.
+No normalization of either connector counit is assumed. -/
+theorem genericPointWedgeMappedCoordinateSpanTargetGlue_counitSplice :
+    Monoid.Coprod.inr (genericPointWedgeRightBasedCounit y₀) *
+        genericPointWedgeMappedCoordinateSpanTargetGlue x₀ y₀ =
+      Monoid.Coprod.inl (genericPointWedgeLeftBasedCounit x₀) := by
+  let C := genericPointWedgeTarget x₀ y₀
+  let E := genericPointWedgeCoordinatePointSpanEquivalence x₀ y₀ C
+  let S := freeProductPointSpanEquivalence
+    (genericPointWedgeLeftGroup x₀) (genericPointWedgeRightGroup y₀) C
+  let R := representationSingleObjEquivalence
+    (C := C) (genericPointWedgeLeftGroup x₀) (genericPointWedgeRightGroup y₀)
+  let F := Functor.id (SingleObj (genericPointWedgeFreeProduct x₀ y₀))
+  let Z := S.inverse.obj (R.inverse.obj F)
+  have h := NatTrans.congr_app ((E.counitIso.hom.app Z).glue_naturality)
+    (SingleObj.star PUnit)
+  dsimp only [E, Z, S, R, F, C] at h
+  simpa only [genericPointWedgeMappedCoordinateSpanTargetGlue,
+    genericPointWedgeLeftBasedCounit, genericPointWedgeRightBasedCounit,
+    Functor.comp_obj, NatTrans.comp_app, Functor.whiskerLeft_app,
+    SingleObj.comp_as_mul] using h
+
 /-- The mapped glue square in target-group multiplication order, with both
 glues and both coordinate-span leg factors named. -/
 theorem genericPointWedgeMappedCoordinateSpanCounit_namedGlueSquare :
@@ -4581,6 +4604,7 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeMappedCoordinateSpanCounit_glueSquare
 #print axioms genericPointWedgeMappedCoordinateSpanSourceGlue
 #print axioms genericPointWedgeMappedCoordinateSpanTargetGlue
+#print axioms genericPointWedgeMappedCoordinateSpanTargetGlue_counitSplice
 #print axioms genericPointWedgeMappedCoordinateSpanCounit_namedGlueSquare
 #print axioms genericPointWedgePreFreeProductCounit_apps_eq_mappedPreCoordinate_injections
 #print axioms genericPointWedgePreFreeProductCounit_apps_eq_injection_coordinate_open
