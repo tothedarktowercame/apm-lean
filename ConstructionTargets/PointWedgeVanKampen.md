@@ -590,3 +590,8 @@ performs the first transport: at the chosen overlap representative the middle
 coordinate glue disappears, leaving exactly the inverse left and forward
 right outer comparison components.  The remaining step is to identify this
 outer composite with the reconstruction counit coordinate before closing B6.
+
+`genericPointWedgeIdentityGlobalRightBaseElement_eq_outerComparisons` now
+propagates that reduction through the open-cover reconstruction: its right
+base conjugator is exactly the same inverse-left/forward-right outer
+composite.  What remains is its direct comparison with the B3 counit element.

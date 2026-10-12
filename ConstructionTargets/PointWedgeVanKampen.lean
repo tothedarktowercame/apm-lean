@@ -1364,6 +1364,35 @@ theorem genericPointWedgeIdentityGlobalRightBaseElement_eq_coordinateReverseGlue
   rw [genericPointWedgeIdentityGlobalRightBaseElement_eq_actualGlue]
   rfl
 
+/-- The right reconstruction conjugator is the outer comparison composite:
+the inner coordinate glue has already cancelled at the unique Unit object. -/
+theorem genericPointWedgeIdentityGlobalRightBaseElement_eq_outerComparisons :
+    let l := genericPointWedgeActualLeft x₀ y₀ M N
+    let r := genericPointWedgeActualRight x₀ y₀ M N
+    let l' := genericPointWedgeCoordinateLeft x₀
+    let r' := genericPointWedgeCoordinateRight y₀
+    let eK := genericPointWedgeOverlapGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let eL := genericPointWedgeLeftGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let eR := genericPointWedgeRightGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let aL := genericPointWedgeLeftSpanIso
+      x₀ y₀ M N hM hN hy hx cM cN
+    let aR := genericPointWedgeRightSpanIso
+      x₀ y₀ M N hM hN hy hx cM cN
+    let Q := genericPointWedgeIdentityCoordinateSpan x₀ y₀
+    let z := genericPointWedgeOverlapBase x₀ y₀ M N
+    genericPointWedgeIdentityGlobalRightBaseElement
+        x₀ y₀ M N hM hN hy hx cM cN =
+      (reverseLeftComparison l l' eK eL aL Q.left).inv.app z ≫
+        (reverseRightComparison r r' eK eR aR Q.right).hom.app z := by
+  dsimp only
+  rw [genericPointWedgeIdentityGlobalRightBaseElement_eq_coordinateReverseGlue]
+  simpa [genericPointWedgeOverlapBase] using
+    (genericPointWedgeIdentityCoordinateReverseSpan_glue_eq_outerComparisons
+      x₀ y₀ M N hM hN hy hx cM cN)
+
 /-- Naturality solved for the reconstructed right-piece map.  The two
 endpoint restriction components are deliberately visible. -/
 theorem genericPointWedgeIdentityGlobalRightRestriction_map
@@ -3251,6 +3280,7 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeIdentityGlobalRightBaseElement_eq_glue
 #print axioms genericPointWedgeIdentityGlobalRightBaseElement_eq_actualGlue
 #print axioms genericPointWedgeIdentityGlobalRightBaseElement_eq_coordinateReverseGlue
+#print axioms genericPointWedgeIdentityGlobalRightBaseElement_eq_outerComparisons
 #print axioms genericPointWedgeIdentityCoordinateReverseSpan_glue_app
 #print axioms genericPointWedgeIdentityOuterLeftComparison_app
 #print axioms genericPointWedgeIdentityOuterRightComparison_app
