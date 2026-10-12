@@ -2,6 +2,7 @@ import ConstructionTargets.SardGenuineSmoothManifoldVector
 import Mathlib.Analysis.InnerProductSpace.PiL2
 
 open scoped ContDiff Manifold
+open Set
 
 noncomputable section
 
@@ -26,6 +27,16 @@ theorem linearTargetTransport
     simpa using hx
   · intro h
     exact targetEquiv.surjective.comp h
+
+theorem modelRange_geometry
+    {E H : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [TopologicalSpace H] (I : ModelWithCorners ℝ E H) :
+    Convex ℝ (Set.range I) ∧
+      IsClosed (Set.range I) ∧
+      (interior (Set.range I)).Nonempty ∧
+      Set.range I = closure (interior (Set.range I)) := by
+  exact ⟨I.convex_range, I.isClosed_range, I.nonempty_interior,
+    I.range_eq_closure_interior⟩
 
 end ConstructionTargets.SardGeneralModel
 
