@@ -1359,6 +1359,8 @@
    "Construct the planar Schoenflies ambient normal form.",
    :other-consumers [:t01J01 :t03J02]}
   {:consumer :t00A03,
+   :review-finding
+   "Frozen fixture mode is missing in both authoritative acceptance copies. The SHA c3408c2332b5c1e255f2dee616ebf826e01594ddec4c0aa27b604bbb077ffe6b matches and the module builds, but literal fixture compilation exits 1 because circleZeroSection_isEmbedding is already declared. Add :mode :post-build-export-check to both acceptance copies, then resubmit commit d29e0f66.",
    :implements-lemma
    :lemma-constructiontargets-surfaceschoenflies-circlezerosection-isembedding,
    :evidence
@@ -1385,6 +1387,12 @@
       :exit 1,
       :reason
       "Post-build fixture redeclares implemented theorem; module build succeeded."}],
+    :review
+    {:outcome :fail,
+     :seat "codex-11",
+     :job "invoke-1791830795714-7723-dc94460f",
+     :finding
+     "Frozen fixture mode is missing in both authoritative acceptance copies. The SHA c3408c2332b5c1e255f2dee616ebf826e01594ddec4c0aa27b604bbb077ffe6b matches and the module builds, but literal fixture compilation exits 1 because circleZeroSection_isEmbedding is already declared. Add :mode :post-build-export-check to both acceptance copies, then resubmit commit d29e0f66."},
     :commit "d29e0f66e8f45a22d5714a70fb5809ddcf99a852",
     :changed-paths ["ConstructionTargets/SurfaceSchoenflies.lean"],
     :fixture
@@ -1393,7 +1401,7 @@
      "c3408c2332b5c1e255f2dee616ebf826e01594ddec4c0aa27b604bbb077ffe6b",
      :mode :post-build-export-check}},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :repair,
    :scope ["ConstructionTargets/SurfaceSchoenflies.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/schoenflies/planar-normal-form",
    :acceptance
@@ -1409,6 +1417,7 @@
    :id :routes-2026-10-12-surface-zero-embedding-r1,
    :kind :reusable-theorem,
    :area "embedded-circle-collar-surface",
+   :fail-count 1,
    :depends-on [:routes-2026-10-12-surface-normal-form-r1],
    :current-residual
    "Construct ambient equivalence to the zero section.",
