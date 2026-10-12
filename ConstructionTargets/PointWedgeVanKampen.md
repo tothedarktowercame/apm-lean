@@ -890,3 +890,9 @@ the forward left comparison.  Its `_app` theorem expands it, in the actual
 composition order, into the inverse strict-span comparison followed by the
 left-equivalence unit factor.  These two components remain explicit for the
 next normalization step.
+
+`genericPointWedgeCoordinateSpanGlobalRestrictionLeftStrictFactor` isolates
+the first of those components.  Its `_eq_map` theorem evaluates the whisker:
+the factor is exactly the reconstructed left restriction applied to the
+inverse strict-span comparison.  This exposes the map that must next be
+identified through the already proved literal left-restriction equation.

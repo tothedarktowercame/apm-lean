@@ -3315,6 +3315,44 @@ theorem genericPointWedgeCoordinateSpanGlobalRestrictionLeftComparison_app :
           S.left).hom.app u := by
   rfl
 
+/-- The strict-span part of the forward left comparison, before the
+left-equivalence unit component. -/
+def genericPointWedgeCoordinateSpanGlobalRestrictionLeftStrictFactor :
+    genericPointWedgeFreeProduct x₀ y₀ :=
+  let C := genericPointWedgeTarget x₀ y₀
+  let E := genericPointWedgeOpenCoverEquivalence
+    x₀ y₀ M N hM hN hy hx cM cN C
+  let P₀ := genericPointWedgePseudoSpanEquivalence x₀ y₀ M N C
+  let S := P₀.functor.obj (E.functor.obj
+    (genericPointWedgeIdentityGlobalFunctor
+      x₀ y₀ M N hM hN hy hx cM cN))
+  let eL := genericPointWedgeLeftGroupoidEquivalence
+    x₀ y₀ M N hM hN hy hx cM cN
+  let aL := genericPointWedgeLeftSpanIso
+    x₀ y₀ M N hM hN hy hx cM cN
+  (Functor.isoWhiskerRight aL.symm (eL.inverse ⋙ S.left)).hom.app
+    (FundamentalGroupoid.mk ())
+
+/-- Whiskering the inverse strict-span comparison is exactly its image under
+the reconstructed left restriction functor. -/
+theorem genericPointWedgeCoordinateSpanGlobalRestrictionLeftStrictFactor_eq_map :
+    let C := genericPointWedgeTarget x₀ y₀
+    let E := genericPointWedgeOpenCoverEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN C
+    let P₀ := genericPointWedgePseudoSpanEquivalence x₀ y₀ M N C
+    let S := P₀.functor.obj (E.functor.obj
+      (genericPointWedgeIdentityGlobalFunctor
+        x₀ y₀ M N hM hN hy hx cM cN))
+    let eL := genericPointWedgeLeftGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let aL := genericPointWedgeLeftSpanIso
+      x₀ y₀ M N hM hN hy hx cM cN
+    let u : FundamentalGroupoid Unit := FundamentalGroupoid.mk ()
+    genericPointWedgeCoordinateSpanGlobalRestrictionLeftStrictFactor
+        x₀ y₀ M N hM hN hy hx cM cN =
+      (eL.inverse ⋙ S.left).map (aL.inv.app u) := by
+  rfl
+
 /-- The mapped coordinate-span counit's glue square, specialized at the
 unique point-span overlap object.  This is the equation in which its two
 named leg factors are related by the mapped reconstructed glue. -/
@@ -4908,6 +4946,8 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeCoordinateSpanGlobalRestrictionMiddle_eq_one
 #print axioms genericPointWedgeCoordinateSpanGlobalRestrictionLeftComparison
 #print axioms genericPointWedgeCoordinateSpanGlobalRestrictionLeftComparison_app
+#print axioms genericPointWedgeCoordinateSpanGlobalRestrictionLeftStrictFactor
+#print axioms genericPointWedgeCoordinateSpanGlobalRestrictionLeftStrictFactor_eq_map
 #print axioms genericPointWedgeMappedOpenCoverCounit_namedGlueSquare
 #print axioms genericPointWedgeMappedCoordinateSpanCounit_glueSquare
 #print axioms genericPointWedgeMappedCoordinateSpanSourceGlue
