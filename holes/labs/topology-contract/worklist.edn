@@ -113890,6 +113890,17 @@
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder/diff validation", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791833960901-7797-4796b369",
+     :commands
+     ["git show/diff-tree aff8c2cb"
+      "lake build ConstructionTargets.PointWedgeVanKampen"
+      "python3 scripts/statement-registry.py check"
+      "commit hash and placeholder checks"],
+     :finding
+     "PASS program STOP: aff8c2cb by topo-2 adds a named global-restriction glue, its definitional identification with the predecessor, and documentation, exactly within scope and new since history. Source 91957d19..., documentation 1657cc42..., fixture 0bca6ce3..., registry 131/131, and placeholders 0->0 reproduce. Unfolding both sides follows the same open-cover, pseudo-span, coordinate-span, and point-span composite, so rfl is faithful rather than a cross-representation assumption; direction is predecessor=global restriction. Fresh build passes with standard axioms. This is compiled sorry-free progress; evaluating the canonical overlap component, substituting counit factors, and B6/B12 remain explicitly listed."},
     :commit "aff8c2cb871c3702c79dc1a6b4fea1e41c70b97e",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
@@ -113900,7 +113911,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113921,7 +113932,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Both mapped counit glue squares now compose, leaving only the pseudopushout predecessor glue.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: The predecessor is now the mapped canonical overlap of the named reconstructed global functor.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -114424,7 +114435,11 @@
     {:job 4,
      :commit "e3464858a6b60d00c3307e37f761315576c888d1",
      :reason
-     "Both mapped counit glue squares now compose, leaving only the pseudopushout predecessor glue."}]}
+     "Both mapped counit glue squares now compose, leaving only the pseudopushout predecessor glue."}
+    {:job 5,
+     :commit "aff8c2cb871c3702c79dc1a6b4fea1e41c70b97e",
+     :reason
+     "The predecessor is now the mapped canonical overlap of the named reconstructed global functor."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
