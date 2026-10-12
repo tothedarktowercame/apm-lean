@@ -11,6 +11,9 @@ open CompactSurfaceTriangleCover SurfaceNestedTriangleCover
 
 abbrev EuclideanPlane := EuclideanSpace ℝ (Fin 2)
 
+theorem euclideanPlane_finrank : Module.finrank ℝ EuclideanPlane = 2 := by
+  simp [EuclideanPlane]
+
 /-- A finite semisimplicial complex truncated in dimensions zero through two.
 The compatibility field records the two vertices of each boundary edge of a
 face; injectivity excludes degenerate triangular faces. -/
@@ -160,5 +163,53 @@ theorem compactSurfaceFiniteNestedTriangleCover
         y ∈ triangle (planeChart hd x) x (r x / 2) '' interiorParameters) := by
   dsimp only
   exact finite_nested (E := EuclideanPlane) (M := M) (by simp [EuclideanPlane])
+
+/-- A finite family of nested coordinate triangles.  Each outer and inner
+triangle is a closed embedded disk, the inner disks cover the surface, and
+each inner disk lies in the coordinate interior of its outer disk. -/
+structure FiniteClosedDiskCover (M : Type*) [TopologicalSpace M] [T2Space M]
+    [ChartedSpace EuclideanPlane M] where
+  centers : Finset M
+  radius : M → ℝ
+  outer_good : ∀ x ∈ centers,
+    Good (planeChart euclideanPlane_finrank x) x (radius x)
+  inner_good : ∀ x ∈ centers,
+    Good (planeChart euclideanPlane_finrank x) x (radius x / 2)
+  nested : ∀ x ∈ centers,
+    Set.range (triangle (planeChart euclideanPlane_finrank x) x (radius x / 2)) ⊆
+      triangle (planeChart euclideanPlane_finrank x) x (radius x) '' interiorParameters
+  original_target : ∀ x ∈ centers,
+    Set.range ((planeEquiv euclideanPlane_finrank).symm ∘
+      scaled (planeChart euclideanPlane_finrank x x) (radius x)) ⊆
+      (chartAt EuclideanPlane x).target
+  inner_covers : ∀ y : M, ∃ x ∈ centers,
+    y ∈ triangle (planeChart euclideanPlane_finrank x) x (radius x / 2) ''
+      interiorParameters
+
+/-- Compact surfaces admit the finite nested closed-disk cover used by the
+subdivision construction. -/
+theorem compactSmoothSurfaceFiniteClosedDiskCover
+    {M : Type*} [TopologicalSpace M] [T2Space M]
+    [ChartedSpace EuclideanPlane M] [CompactSpace M] :
+    Nonempty (FiniteClosedDiskCover M) := by
+  obtain ⟨s, r, hdata, hcover⟩ := compactSurfaceFiniteNestedTriangleCover (M := M)
+  refine ⟨{
+    centers := s
+    radius := r
+    outer_good := ?_
+    inner_good := ?_
+    nested := ?_
+    original_target := ?_
+    inner_covers := ?_ }⟩
+  · intro x hx
+    exact (hdata x hx).1
+  · intro x hx
+    exact (hdata x hx).2.1
+  · intro x hx
+    exact (hdata x hx).2.2.1
+  · intro x hx
+    exact (hdata x hx).2.2.2
+  · intro y
+    exact hcover y
 
 end ConstructionTargets.SurfaceClassification
