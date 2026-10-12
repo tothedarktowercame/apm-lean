@@ -3055,6 +3055,52 @@ theorem integralRelativeChainsComparisonWithTransport_pairMap_naturality
       ((congrArg (fun q => q ≫ relativeSingularMap A B f hf) hpA.symm).trans
         (Category.assoc _ _ _)))))))))))
 
+theorem integralRelativeHomologyComparisonWithTransport_pairMap_naturality
+    {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    (A : Set X) (B : Set Y) (f : C(X, Y)) (hf : Set.MapsTo f A B)
+    (n : ℕ) :
+    forgetIntModules.map (HomologicalComplex.homologyMap
+          (CoefficientRadialPair.pairMap ℤ A B f hf) n) ≫
+        (integralRelativeHomologyComparisonWithTransport B n).hom =
+      (integralRelativeHomologyComparisonWithTransport A n).hom ≫
+        HomologicalComplex.homologyMap (relativeSingularMap A B f hf) n := by
+  let φ := CoefficientRadialPair.pairMap ℤ A B f hf
+  let ψ := (HomologicalComplex.shortComplexFunctor (ModuleCat ℤ)
+    (ComplexShape.down ℕ) n).map φ
+  have hpres := ShortComplex.mapHomologyIso_inv_naturality ψ forgetIntModules
+  have hpres' :
+      forgetIntModules.map (HomologicalComplex.homologyMap φ n) ≫
+          (((CoefficientRelativeSmall.relativeChains ℤ B).sc n).mapHomologyIso
+            forgetIntModules).inv =
+        (((CoefficientRelativeSmall.relativeChains ℤ A).sc n).mapHomologyIso
+            forgetIntModules).inv ≫
+          HomologicalComplex.homologyMap
+            ((forgetIntModules.mapHomologicalComplex (ComplexShape.down ℕ)).map φ) n := by
+    change forgetIntModules.map (ShortComplex.homologyMap ψ) ≫ _ = _
+    exact hpres
+  have hchain := congrArg (fun q => HomologicalComplex.homologyMap q n)
+    (integralRelativeChainsComparisonWithTransport_pairMap_naturality A B f hf)
+  have hchain' :
+      HomologicalComplex.homologyMap
+          ((forgetIntModules.mapHomologicalComplex (ComplexShape.down ℕ)).map φ) n ≫
+        HomologicalComplex.homologyMap
+          (integralRelativeChainsComparisonWithTransport B).hom n =
+      HomologicalComplex.homologyMap
+          (integralRelativeChainsComparisonWithTransport A).hom n ≫
+        HomologicalComplex.homologyMap (relativeSingularMap A B f hf) n := by
+    simpa only [φ, HomologicalComplex.homologyMap_comp] using hchain
+  rw [integralRelativeHomologyComparisonWithTransport_hom,
+    integralRelativeHomologyComparisonWithTransport_hom]
+  exact
+    ((Category.assoc _ _ _).symm.trans
+      ((congrArg (fun q => q ≫ HomologicalComplex.homologyMap
+        (integralRelativeChainsComparisonWithTransport B).hom n) hpres').trans
+      ((Category.assoc _ _ _).trans
+      ((congrArg (fun q =>
+        (((CoefficientRelativeSmall.relativeChains ℤ A).sc n).mapHomologyIso
+          forgetIntModules).inv ≫ q) hchain').trans
+        (Category.assoc _ _ _).symm))))
+
 end ConstructionTargets.ManifoldFundamentalClass
 
 #print axioms ConstructionTargets.ManifoldFundamentalClass.neighborhoodInclusion_Hsucc_isIso
@@ -3160,6 +3206,7 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.absoluteSingularMap_relativeProjection_naturality
 #print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientRelativeProjection_forgotten_epi
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeChainsComparisonWithTransport_pairMap_naturality
+#print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_pairMap_naturality
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_projection
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_generator_of_normalization
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_normalization_of_generator
