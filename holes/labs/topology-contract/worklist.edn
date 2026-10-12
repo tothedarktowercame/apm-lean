@@ -113895,6 +113895,18 @@
       :exit 1,
       :finding
       "SingleObj multiplication reverses categorical composition."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791830095362-7699-d8c9623b",
+     :commands
+     ["git show/diff-tree eb8cfc229"
+      "sha256 + placeholder + registry checks"
+      "lake env lean ConstructionTargets/PointWedgeVanKampen.lean"
+      "lake build ConstructionTargets.PointWedgeVanKampen"
+      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (expected absent)"],
+     :finding
+     "Scope is exactly Lean+MD; source/doc/blueprint hashes match; placeholders 0->0; registry 131/131. The named coordinate-span factors use the matching free-product evaluations. Theorems correctly reverse categorical composition under SingleObj.comp_as_mul, yielding injected based * mapped coordinate-span * mapped open-cover on both legs, with correct injections and boundaries. They compile with only propext, Classical.choice, Quot.sound. This is new progress; residual is relating coordinate factors via the mapped splice and cancelling open-cover/injected counits, then B6/B12. Final target remains absent as declared."},
     :commit "eb8cfc229c60ac7cf0009374641ca9b4fba222fc",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
@@ -113905,7 +113917,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113926,7 +113938,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Named both mapped open-cover counit factors.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Both pre-free-product counit legs are named three-factor products.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -114405,7 +114417,11 @@
      "Both mapped pre-coordinate counits are split into mapped open-cover and coordinate-span factors."}
     {:job 7,
      :commit "38cd422b89093cf3ba3345d4b05d681c866fab86",
-     :reason "Named both mapped open-cover counit factors."}]}
+     :reason "Named both mapped open-cover counit factors."}
+    {:job 8,
+     :commit "eb8cfc229c60ac7cf0009374641ca9b4fba222fc",
+     :reason
+     "Both pre-free-product counit legs are named three-factor products."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
