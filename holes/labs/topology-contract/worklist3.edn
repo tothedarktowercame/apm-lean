@@ -18830,6 +18830,17 @@
      {:cmd "rg forbidden tokens in scoped file",
       :exit 1,
       :expected-exit 1}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791778852064-6315-9e8583c3",
+     :commands
+     ["recorded scope/blob, fixture hash, diff check"
+      "statement registry and placeholder scans"
+      "lake env lean: renamed fixture declarations and module"
+      "lake build ConstructionTargets.ManifoldFundamentalClass"],
+     :finding
+     "PASS: recorded one-file scope and frozen fixture hash match. Transport to a Z-module identifies the endpoint automorphism at 1 with an integer unit; every such unit is ±1, and integer-hom extensionality yields hom=id or hom=-id. The negative branch has the correct evaluation and orientation. Registry 131/0; source placeholders 0; consumer sorries 1/1; standard axioms only; build 8326 jobs."},
     :commit "e51b34d15d827aa65b3a66296a0dd60b69080814",
     :changed-paths
     ["ConstructionTargets/ManifoldFundamentalClass.lean"],
@@ -18839,7 +18850,7 @@
      "c154c9a92ea476b9d3c1ba14a419e7f0c6686bfe153d15ef8fced327fa9495a0"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/manifold-fundamental-class/model-sphere-sign",
@@ -18913,7 +18924,7 @@
       "c154c9a92ea476b9d3c1ba14a419e7f0c6686bfe153d15ef8fced327fa9495a0"},
      :seat "topo-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -27045,7 +27056,7 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -27058,7 +27069,9 @@
     [:routes-2026-10-10-manifold-fundamental-class-topo3-r2],
     :type "exact type in fixture",
     :area "manifold-fundamental-class",
-    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2,
+    :banked-by :routes-2026-10-12-mfclass-sphere-endpoint-sign-r1,
+    :banked-commit "e51b34d15d827aa65b3a66296a0dd60b69080814"},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-coefficientspherenormalizationcompa,
    :kind :lemma,
