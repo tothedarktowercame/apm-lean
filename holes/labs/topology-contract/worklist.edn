@@ -113902,6 +113902,19 @@
       :exit 1,
       :finding
       "Corrected equality to HEq with connector normal form."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791779928651-6327-f448077c",
+     :commands
+     ["git show/diff-tree 02b86dc5f"
+      "sha256/diff/placeholder checks"
+      "statement-registry.py check"
+      "lake env lean ConstructionTargets/PointWedgeVanKampen.lean"
+      "lake build ConstructionTargets.PointWedgeVanKampen"
+      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (expected absent)"],
+     :finding
+     "Exact scoped commit and frozen fixture 0bca6c...8c8b0 verified. New theorem correctly uses HEq for arbitrary dependent endpoints and computes the left coordinate map as Coprod.inl of the connector normal form; map order and representation boundary are faithful. Source is sorry-free; hashes and 131/131 registry reproduce; Lean/build pass; only standard axioms. Valid program STOP with compiled progress and residual naming left specialization, right arbitrary map, normal forms, inclusion images, literal lifts, then B12; final target is absent as reported."},
     :commit "02b86dc5ff7c0da102a271ce1c6009d937db8297",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
@@ -113912,7 +113925,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113933,7 +113946,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Right span source retains the overlap inverse/forward object round trip.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Arbitrary left coordinate maps are coproduct injections of connector normal forms via HEq.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -114161,7 +114174,11 @@
     {:job 7,
      :commit "e95abdb366dce64fd99a0697b52daf89b2a6f418",
      :reason
-     "Right span source retains the overlap inverse/forward object round trip."}]}
+     "Right span source retains the overlap inverse/forward object round trip."}
+    {:job 8,
+     :commit "02b86dc5ff7c0da102a271ce1c6009d937db8297",
+     :reason
+     "Arbitrary left coordinate maps are coproduct injections of connector normal forms via HEq."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
