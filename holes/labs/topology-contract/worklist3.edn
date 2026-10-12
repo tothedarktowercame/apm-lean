@@ -19496,6 +19496,17 @@
      {:cmd "rg forbidden tokens in scoped file",
       :exit 1,
       :expected-exit 1}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791790785617-6590-ba64aac4",
+     :commands
+     ["recorded scope/blob, fixture hash, diff check"
+      "statement registry and placeholder scans"
+      "lake env lean: renamed fixture and module"
+      "lake build ConstructionTargets.ManifoldFundamentalClass"],
+     :finding
+     "PASS: recorded one-file scope and frozen fixture hash match. The coefficient relative projection is a cokernel projection, hence degreewise epi; every component remains epi under forgetIntModules, and HomologicalComplex.epi_of_epi_f reconstructs the forgotten chain-map epi. No faithfulness-only inference is used. Registry 131/0; source placeholders 0; consumer sorries 1/1; standard axioms only; build 8326 jobs."},
     :commit "05bcd5f2c6d5ff144213122938e899cb7e51c352",
     :changed-paths
     ["ConstructionTargets/ManifoldFundamentalClass.lean"],
@@ -19505,7 +19516,7 @@
      "0ff069a0fed67294893924d979362182c958b903c6fb3eed651252692299e358"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/manifold-fundamental-class/open-disk-model-transport",
@@ -19578,7 +19589,7 @@
       "0ff069a0fed67294893924d979362182c958b903c6fb3eed651252692299e358"},
      :seat "topo-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -27962,7 +27973,7 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -27975,7 +27986,9 @@
     [:routes-2026-10-10-manifold-fundamental-class-topo3-r2],
     :type "exact type in fixture",
     :area "manifold-fundamental-class",
-    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2,
+    :banked-by :routes-2026-10-12-mfclass-forgotten-projection-epi-r1,
+    :banked-commit "05bcd5f2c6d5ff144213122938e899cb7e51c352"},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-coefficientrelativeprojection-forgo,
    :kind :lemma,
