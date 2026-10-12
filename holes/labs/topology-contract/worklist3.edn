@@ -20988,7 +20988,7 @@
    "reopened: a lemma this row reported missing is now banked",
    :stop-count 1,
    :review-finding
-   "Frozen fixture hash mismatch persists: the row top-level :acceptance still records aad5a9cda739c1cbcceb1eca8ab8b33395db8a08c9d68941a87c644f4d13586e and lacks :mode, while /tmp/closedboundarycoords.lean hashes to 7e72195e1214d7580994264481ae57d0ecf87755d31825ab85cbda5f1220c4b1. Evidence-local metadata does not override the row acceptance map. Exact supervisor repair: edit the top-level :acceptance in worklist3.edn, replacing the hash with 7e72195e... and adding :mode :post-build-export-check; also update the duplicated prerequisite acceptance or regenerate it from the authoritative row. Then resubmit. Current fixture compilation, source commit, standard axioms, registry and placeholders were already verified.",
+   "Frozen fixture metadata mismatch: top-level :acceptance still records SHA aad5a9cda739c1cbcceb1eca8ab8b33395db8a08c9d68941a87c644f4d13586e and omits :mode, but /tmp/closedboundarycoords.lean freshly hashes to 7e72195e1214d7580994264481ae57d0ecf87755d31825ab85cbda5f1220c4b1. Repair the authoritative acceptance map (and duplicated prerequisite acceptance) to that digest with :mode :post-build-export-check, then resubmit.",
    :implements-lemma
    :lemma-constructiontargets-manifoldfundamentalclass-coefficientclosedboundary-coordinat,
    :evidence
@@ -21012,6 +21012,12 @@
       :exit 0}
      {:cmd "lake env lean /tmp/closedboundarycoords.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
+    :review
+    {:outcome :fail,
+     :seat "codex-11",
+     :job "invoke-1791820524193-7309-cfbc066b",
+     :finding
+     "Frozen fixture metadata mismatch: top-level :acceptance still records SHA aad5a9cda739c1cbcceb1eca8ab8b33395db8a08c9d68941a87c644f4d13586e and omits :mode, but /tmp/closedboundarycoords.lean freshly hashes to 7e72195e1214d7580994264481ae57d0ecf87755d31825ab85cbda5f1220c4b1. Repair the authoritative acceptance map (and duplicated prerequisite acceptance) to that digest with :mode :post-build-export-check, then resubmit."},
     :commit "f0afa7bdc4c95a8c87143342ceb8c9ce51cd5612",
     :changed-paths [],
     :fixture
@@ -21021,7 +21027,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :repair,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/manifold-fundamental-class",
    :acceptance
@@ -21036,7 +21042,7 @@
    :id :routes-2026-10-12-mfclass-boundary-coordinates-r1,
    :kind :reusable-theorem,
    :area "manifold-fundamental-class",
-   :fail-count 0,
+   :fail-count 1,
    :depends-on [:routes-2026-10-12-mfclass-closed-generator-bridge-r1],
    :current-residual "Prove Bool H0 comparison.",
    :other-consumers [:t98A02]}
