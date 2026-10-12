@@ -2140,6 +2140,14 @@ theorem correctedDepartureBump_pos
   · exact mul_pos (by linarith) (by linarith)
   · exact le_of_lt (mul_pos (by linarith) (by linarith))
 
+theorem correctedDepartureBump_eq_of_mem_support
+    (t : unitInterval) (hlo : (1 / 8 : ℝ) < (t : ℝ))
+    (hhi : (t : ℝ) < (3 / 8 : ℝ)) :
+    correctedDepartureBump t =
+      ((t : ℝ) - 1 / 8) * (3 / 8 - (t : ℝ)) := by
+  rw [correctedDepartureBump, max_eq_right]
+  exact le_of_lt (mul_pos (by linarith) (by linarith))
+
 theorem correctedDepartureBump_eq_zero_of_le
     (t : unitInterval) (ht : (t : ℝ) ≤ 1 / 8) :
     correctedDepartureBump t = 0 := by
@@ -2300,6 +2308,38 @@ theorem rotatedEndpointWaypoint_twiceCorrected_departure_zero_polynomial_bounds
   field_simp [htne] at hb ⊢
   constructor <;> nlinarith [hb.1, hb.2]
 
+/-- Any twice-corrected zero on the departure half lies strictly inside the
+support of the localized bump. -/
+theorem rotatedEndpointWaypoint_twiceCorrected_departure_zero_time_bounds
+    (t : unitInterval) (p : RightTubeMinusLeftCore)
+    (ht : (t : ℝ) ≤ 1 / 2)
+    (hz : (((1 - 2 * (t : ℝ) : ℝ) : ℂ) +
+        ((2 * (t : ℝ) : ℝ) : ℂ) * rotatedEndpointWaypoint p +
+        (((t : ℝ) * (1 - 2 * (t : ℝ)) : ℝ) : ℂ) * Complex.I +
+        (correctedDepartureBump t : ℂ)) = 0) :
+    (1 / 8 : ℝ) < (t : ℝ) ∧ (t : ℝ) < 3 / 8 := by
+  constructor
+  · by_contra h
+    have hle : (t : ℝ) ≤ 1 / 8 := le_of_not_gt h
+    have hb := correctedDepartureBump_eq_zero_of_le t hle
+    have hfirst :
+        (((1 - 2 * (t : ℝ) : ℝ) : ℂ) +
+          ((2 * (t : ℝ) : ℝ) : ℂ) * rotatedEndpointWaypoint p +
+          (((t : ℝ) * (1 - 2 * (t : ℝ)) : ℝ) : ℂ) * Complex.I) = 0 := by
+      simpa [hb] using hz
+    exact (correctedDepartureBump_ne_zero_at_corrected_zero
+      t p ht hfirst) hz
+  · by_contra h
+    have hge : 3 / 8 ≤ (t : ℝ) := le_of_not_gt h
+    have hb := correctedDepartureBump_eq_zero_of_ge t hge
+    have hfirst :
+        (((1 - 2 * (t : ℝ) : ℝ) : ℂ) +
+          ((2 * (t : ℝ) : ℝ) : ℂ) * rotatedEndpointWaypoint p +
+          (((t : ℝ) * (1 - 2 * (t : ℝ)) : ℝ) : ℂ) * Complex.I) = 0 := by
+      simpa [hb] using hz
+    exact (correctedDepartureBump_ne_zero_at_corrected_zero
+      t p ht hfirst) hz
+
 end ConstructionTargets.T02A03GeometricTubeDeformation
 
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeNormalComplex_eq_zero_iff
@@ -2384,6 +2424,7 @@ end ConstructionTargets.T02A03GeometricTubeDeformation
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_corrected_departure_zero_time_lt_three_eighths
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.continuous_correctedDepartureBump
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.correctedDepartureBump_pos
+#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.correctedDepartureBump_eq_of_mem_support
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.correctedDepartureBump_eq_zero_of_le
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.correctedDepartureBump_eq_zero_of_ge
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.correctedDepartureBump_ne_zero_at_corrected_zero
@@ -2392,3 +2433,4 @@ end ConstructionTargets.T02A03GeometricTubeDeformation
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_twiceCorrected_departure_zero_normSq
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_twiceCorrected_departure_zero_scalar_bounds
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_twiceCorrected_departure_zero_polynomial_bounds
+#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_twiceCorrected_departure_zero_time_bounds
