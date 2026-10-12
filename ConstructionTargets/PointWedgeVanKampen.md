@@ -685,3 +685,12 @@ these named elements to the already-expanded outer span factors.  In the
 underlying group multiplication, categorical composition reverses the written
 morphism order: each injected based counit multiplies its named mapped
 pre-coordinate factor on the left.
+
+`genericPointWedgePreCoordinateSpanMappingEquivalence` names the preceding
+composite at the actual cover-span boundary, and the accompanying equality
+factors the pre-coordinate point-span equivalence through the fixed-coordinate
+span transport.  The theorem
+`genericPointWedgePreCoordinatePointCounit_eq_preCoordinateSpan_coordinateSpan`
+then splits its counit into the mapped open-cover counit followed by the
+coordinate-span counit.  The latter is exactly the component whose identity
+glue has already been expanded into the two outer comparisons.

@@ -348,6 +348,21 @@ abbrev genericPointWedgeFreeProduct :=
   Monoid.Coprod (genericPointWedgeLeftGroup x₀)
     (genericPointWedgeRightGroup y₀)
 
+/-- The B3 mapping equivalence before transporting the actual cover span to
+the fixed coordinate span. -/
+def genericPointWedgePreCoordinateSpanMappingEquivalence
+    (C : Type) [Category C] :
+    (FundamentalGroupoid (Wedge x₀ y₀) ⥤ C) ≌
+      SpanPseudoCocone
+        (genericPointWedgeActualLeft x₀ y₀ M N)
+        (genericPointWedgeActualRight x₀ y₀ M N) C :=
+  (twoOpenFundamentalGroupoidPseudopushoutEquivalence
+      (C := C)
+      (genericPointWedgePackage x₀ y₀ M N hM hN hy hx cM cN).leftOpen_isOpen
+      (genericPointWedgePackage x₀ y₀ M N hM hN hy hx cM cN).rightOpen_isOpen
+      (genericPointWedgePackage x₀ y₀ M N hM hN hy hx cM cN).union_eq_univ).trans
+    (genericPointWedgePseudoSpanEquivalence x₀ y₀ M N C)
+
 /-- The B3 mapping equivalence before the final point-span representation is
 converted into a free-product representation. -/
 def genericPointWedgePreCoordinatePointSpanMappingEquivalence
@@ -364,6 +379,17 @@ def genericPointWedgePreCoordinatePointSpanMappingEquivalence
     (genericPointWedgePseudoSpanEquivalence x₀ y₀ M N C)).trans
     (genericPointWedgeCoordinateSpanEquivalence
       x₀ y₀ M N hM hN hy hx cM cN C)
+
+omit [PathConnectedSpace X] [PathConnectedSpace Y] in
+theorem genericPointWedgePreCoordinatePointSpanMappingEquivalence_eq_preCoordinateSpan_trans
+    (C : Type) [Category C] :
+    genericPointWedgePreCoordinatePointSpanMappingEquivalence
+        x₀ y₀ M N hM hN hy hx cM cN C =
+      (genericPointWedgePreCoordinateSpanMappingEquivalence
+        x₀ y₀ M N hM hN hy hx cM cN C).trans
+          (genericPointWedgeCoordinateSpanEquivalence
+            x₀ y₀ M N hM hN hy hx cM cN C) := by
+  rfl
 
 def genericPointWedgePreFreeProductMappingEquivalence
     (C : Type) [Category C] :
@@ -2258,6 +2284,27 @@ theorem genericPointWedgePreFreeProductCounit_eq_preCoordinate_coordinatePoint :
         Q.counitIso.hom.app (S.inverse.obj (R.inverse.obj F)) := by
   simp
 
+/-- The pre-coordinate point-span counit splits at the preceding transport
+from the actual cover span to the fixed coordinate span. -/
+theorem genericPointWedgePreCoordinatePointCounit_eq_preCoordinateSpan_coordinateSpan :
+    let C := genericPointWedgeTarget x₀ y₀
+    let A := genericPointWedgePreCoordinateSpanMappingEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN C
+    let B := genericPointWedgeCoordinateSpanEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN C
+    let Q := genericPointWedgeCoordinatePointSpanEquivalence x₀ y₀ C
+    let S := freeProductPointSpanEquivalence
+      (genericPointWedgeLeftGroup x₀) (genericPointWedgeRightGroup y₀) C
+    let R := representationSingleObjEquivalence
+      (C := C) (genericPointWedgeLeftGroup x₀)
+        (genericPointWedgeRightGroup y₀)
+    let F := Functor.id (SingleObj (genericPointWedgeFreeProduct x₀ y₀))
+    let Z := Q.inverse.obj (S.inverse.obj (R.inverse.obj F))
+    ((A.trans B).counitIso.hom.app Z) =
+      B.functor.map (A.counitIso.hom.app (B.inverse.obj Z)) ≫
+        B.counitIso.hom.app Z := by
+  simp
+
 /-- At the identity point-span object, the remaining coordinate-to-point
 counit is exactly the generic span-transport counit. -/
 theorem genericPointWedgeCoordinatePointCounit_eq_transportCounit :
@@ -3784,6 +3831,9 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgePointSpanCounit_hom_eq_id
 #print axioms genericPointWedgeFreeProductCounit_eq_pre_pointSpan
 #print axioms genericPointWedgePreFreeProductCounit_eq_preCoordinate_coordinatePoint
+#print axioms genericPointWedgePreCoordinateSpanMappingEquivalence
+#print axioms genericPointWedgePreCoordinatePointSpanMappingEquivalence_eq_preCoordinateSpan_trans
+#print axioms genericPointWedgePreCoordinatePointCounit_eq_preCoordinateSpan_coordinateSpan
 #print axioms genericPointWedgeCoordinatePointCounit_eq_transportCounit
 #print axioms genericPointWedgeCoordinatePointCounit_legs
 #print axioms genericPointWedgeCoordinatePointCounit_uniqueObjects
