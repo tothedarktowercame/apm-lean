@@ -79523,6 +79523,19 @@
      {:cmd "registry check", :exit 0}
      {:cmd "placeholder count", :exit 0, :output "1"}
      {:cmd "git show --check 2abba69f4", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791765012789-6054-ab095d71",
+     :commands
+     ["git show/check/diff a532a6ecc..2abba69f4"
+      "verify scoped blobs, fixture SHA, ancestry"
+      "lake build ConstructionTargets.t96A07Closure"
+      "lake env lean closure and t96A07 Main"
+      "statement-registry check/fingerprint"
+      "placeholder and axiom checks"],
+     :finding
+     "PASS: 2abba69f4db141226dd225a772db8b0cbb4e00a4 adds compiled, sorry-free B8 progress after a532a6ecc; both changed paths are scoped. Closure/blueprint blobs dc2f445f/69b59fb6 and fixture e2e632c8 match. The affine-plane derivative maps (u,v) to (u,v,0); the two range inclusions prove exactly the xy plane, and the Main adapter faithfully unfolds frozen T96A07.plane. Lean gates pass with standard axioms only; registry 131/0, frozen hash 2ba67b04 unchanged, closure/Main placeholders 0/1. STOP records B9 then B10-B13."},
     :commit "2abba69f4db141226dd225a772db8b0cbb4e00a4",
     :changed-paths
     ["ConstructionTargets/t96A07Closure.lean"
@@ -79533,7 +79546,7 @@
      "e2e632c831e95306602ec7e79110c8e4ac8dfd63ef5c7d0a77830e129c109a48"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t96A07/lean/Main.lean"
     "problems/t96A07/status.json"
@@ -79577,6 +79590,9 @@
     {:job 9, :commit "1ac8a7376", :reason :program-progress-committed}
     {:job 1,
      :commit "a532a6ecc7bc66ca70db91731d4affedb40f423f",
+     :reason :program-milestone-complete}
+    {:job 2,
+     :commit "2abba69f4db141226dd225a772db8b0cbb4e00a4",
      :reason :program-milestone-complete}]}
   {:consumer :t94A10,
    :stop-count 2,
@@ -81311,7 +81327,7 @@
    :other-consumers []}
   {:consumer :t96A07,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "ConstructionTargets.T96A07Closure.plane_fderiv_range",
@@ -81321,7 +81337,9 @@
     :reported-by [:program-2026-10-11-close-t96a07],
     :type "B8 horizontal-plane derivative range",
     :area "projective-smooth-descent",
-    :proved-in :program-2026-10-11-close-t96a07},
+    :proved-in :program-2026-10-11-close-t96a07,
+    :banked-by :program-2026-10-11-close-t96a07,
+    :banked-commit "2abba69f4db141226dd225a772db8b0cbb4e00a4"},
    :id :lemma-constructiontargets-t96a07closure-plane-fderiv-range,
    :kind :lemma,
    :depends-on [],
