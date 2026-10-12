@@ -18236,6 +18236,17 @@
       "rg -n '\\b(sorry|admit|axiom)\\b' ConstructionTargets/ManifoldFundamentalClass.lean",
       :exit 1,
       :expected-exit 1}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791768850781-6140-eee6c455",
+     :commands
+     ["git scope/diff/hash checks at 0a2e1b7f404fb94b5c11bd5cb218afbac542e828"
+      "renamed fixture, exact-type check, and module: lake env lean"
+      "statement registry and placeholder scans"
+      "lake build ConstructionTargets.ManifoldFundamentalClass"],
+     :finding
+     "Recorded one-file scope, blob, and frozen fixture hash match. Rows are homology(i), opcycles(i), cycles(j), homology(j); squares 01/12/23 are proved componentwise for X1/X2/X3 with the verified comparison lemmas. Connecting-map naturality is not claimed. Fixture/check/module compile; registry 131/0; build 8326 jobs; axioms propext, choice, Quot.sound; source placeholders 0; consumer sorries 1/1."},
     :commit "0a2e1b7f404fb94b5c11bd5cb218afbac542e828",
     :changed-paths
     ["ConstructionTargets/ManifoldFundamentalClass.lean"],
@@ -18245,7 +18256,7 @@
      "6c497fab28f4250132b44b6229bc632c8efee8653280cf72f707f478519dac5e"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/manifold-fundamental-class/snake-hom",
    :acceptance
@@ -18314,7 +18325,7 @@
       :other-consumers [:t98A02]},
      :residual "Promote Hom; apply δ naturality."}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -26219,7 +26230,7 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -26234,7 +26245,9 @@
     :type
     "∀ K hK hKF i j hij, ForgottenHomologySequenceSnakeInputHom K hK hKF i j hij",
     :area "manifold-fundamental-class",
-    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2,
+    :banked-by :routes-2026-10-12-mfclass-forget-snake-hom-r1,
+    :banked-commit "0a2e1b7f404fb94b5c11bd5cb218afbac542e828"},
    :id :lemma-mfclass-forget-snake-hom,
    :kind :lemma,
    :depends-on [:lemma-mfclass-homology-pi-square],
