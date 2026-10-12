@@ -3406,6 +3406,80 @@ theorem intervalRelativeClass_eq_generator_of_boundary_coordinates
   rw [hcoordinates]
   exact (ConcreteCategory.congr_hom intervalGenerator_boundary_coordinates (1 : ℤ)).symm
 
+noncomputable def integralPairShortComplexComparison
+    {X : Type} [TopologicalSpace X] (A : Set X) :
+    (CoefficientPairSequence.sequence ℤ A).map
+        (forgetIntModules.mapHomologicalComplex (ComplexShape.down ℕ)) ⟶
+      singularPairShortComplex A where
+  τ₁ := (singularChainsComparison (TopCat.of A)).hom
+  τ₂ := (singularChainsComparison (TopCat.of X)).hom
+  τ₃ := (integralRelativeChainsComparisonWithTransport A).hom
+  comm₁₂ := by
+    simpa only [CoefficientPairSequence.sequence,
+      CoefficientCokernelComparison.cokernelShortComplex,
+      CoefficientPairSequence.inclusion,
+      coefficientSubspaceMap_eq_integralSubtypeChainMap] using
+      (integralSingularChainsComparison_subtype_naturality A).symm
+  comm₂₃ := by
+    simpa only [CoefficientPairSequence.sequence,
+      CoefficientCokernelComparison.cokernelShortComplex] using
+      (integralRelativeChainsComparisonWithTransport_projection A).symm
+
+theorem integralCoefficientPairShortExact
+    {X : Type} [TopologicalSpace X] (A : Set X) :
+    ((CoefficientPairSequence.sequence ℤ A).map
+      (forgetIntModules.mapHomologicalComplex
+        (ComplexShape.down ℕ))).ShortExact := by
+  apply HomologicalComplex.shortExact_of_degreewise_shortExact
+  intro i
+  let h := CoefficientPairSequence.shortExact ℤ A
+  letI := h.mono_f
+  letI := h.epi_g
+  exact (h.map
+    (HomologicalComplex.eval (ModuleCat ℤ) (ComplexShape.down ℕ) i)).map_of_exact
+      forgetIntModules
+
+theorem integralPairConnectingComparison
+    {X : Type} [TopologicalSpace X] (A : Set X) (n : ℕ) :
+    forgetIntModules.map
+        (CoefficientPairSequence.connecting ℤ A n) ≫
+      (singularHomologyComparison (TopCat.of A) n).hom =
+    (integralRelativeHomologyComparisonWithTransport A (n + 1)).hom ≫
+      singularPairConnecting A n := by
+  let hF := integralCoefficientPairShortExact A
+  let T := integralPairShortComplexComparison A
+  let d := hF.δ (n + 1) n rfl
+  let h := HomologicalComplex.homologyMap T.τ₁ n
+  let m := HomologicalComplex.homologyMap T.τ₃ (n + 1)
+  let q := singularPairConnecting A n
+  have hd : d ≫ h = m ≫ q := by
+    exact HomologicalComplex.HomologySequence.δ_naturality T hF
+      (singularPairShortComplex_shortExact A) (n + 1) n rfl
+  let S := HomologicalComplex.HomologySequence.snakeInput
+    (CoefficientPairSequence.shortExact ℤ A) (n + 1) n rfl
+  let g := (((CoefficientH0.SingularChains ℤ (TopCat.of A)).sc n).mapHomologyIso
+    forgetIntModules).inv
+  let r := (((CoefficientRelativeSmall.relativeChains ℤ A).sc (n + 1)).mapHomologyIso
+    forgetIntModules).inv
+  have hfg : forgetIntModules.map (CoefficientPairSequence.connecting ℤ A n) ≫ g =
+      r ≫ d := by
+    change forgetIntModules.map S.δ ≫ g = r ≫ d
+    calc
+      forgetIntModules.map S.δ ≫ g = (forgetSnakeInput S).δ ≫ g :=
+        congrArg (fun z => z ≫ g) (forgetSnakeInput_delta_map S).symm
+      _ = _ := by
+        simpa only [S, g, r, d] using
+          (forgetHomologySequence_delta_naturality
+            (CoefficientPairSequence.sequence ℤ A)
+            (CoefficientPairSequence.shortExact ℤ A) hF
+            (n + 1) n rfl)
+  change forgetIntModules.map (CoefficientPairSequence.connecting ℤ A n) ≫
+      (g ≫ h) = (r ≫ m) ≫ q
+  rw [← Category.assoc]
+  rw [hfg]
+  exact (Category.assoc r d h).trans
+    ((congrArg (fun z => r ≫ z) hd).trans (Category.assoc r m q).symm)
+
 end ConstructionTargets.ManifoldFundamentalClass
 
 #print axioms ConstructionTargets.ManifoldFundamentalClass.neighborhoodInclusion_Hsucc_isIso
@@ -3529,6 +3603,7 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.boolIntDifference_to_signedFunction
 #print axioms ConstructionTargets.ManifoldFundamentalClass.intervalRelativeClass_eq_generator_of_boundary_eq
 #print axioms ConstructionTargets.ManifoldFundamentalClass.intervalRelativeClass_eq_generator_of_boundary_coordinates
+#print axioms ConstructionTargets.ManifoldFundamentalClass.integralPairConnectingComparison
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_projection
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_generator_of_normalization
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_normalization_of_generator
