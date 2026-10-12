@@ -28,9 +28,13 @@ quotients below carry the coinduced topology from their displayed disk map.
 lean: `PolygonSurfacePiOne.PairingData`,
 `PairingData.Rel`, `PairingData.Space`, `PairingData.quotientMap`, and
 `PairingData.center` : a finite cyclic list of oriented boundary arcs, a
-finite generator type `Label`, a signed label on each arc, a fixed-point-free
-pairing matching equal labels, and a proof that the endpoint relation has one
-vertex class; its quotient relation identifies paired arc parameters in the
+finite generator type `Label`, a fixed-point-free involution `pair` on the
+arcs, and a signed label on each arc.  The data includes
+`label_surjective : Function.Surjective label` and
+`label_eq_iff_pair : label i = label j ↔ j = i ∨ j = pair i`; hence
+`Label` is exactly the type of pairing orbits, rather than an arbitrary set
+of annotations.  It also includes a proof that the endpoint relation has one
+vertex class.  The quotient relation identifies paired arc parameters in the
 direction prescribed by the signs.
 
 uses: `Surfaces.Disk`, `Surfaces.edgePoint`, `Relation.EqvGen`
@@ -38,8 +42,13 @@ uses: `Surfaces.Disk`, `Surfaces.edgePoint`, `Relation.EqvGen`
 status: planned
 
 Use `Fin edgeCount` for arcs and `Fin edgeCount` for polygon vertices.  Store
-the inverse pairing and sign compatibility as fields rather than deriving
-them later.  Define `Rel` only on boundary points and define `Space` with
+`pair : Equiv.Perm (Fin edgeCount)`, `pair_pair : pair (pair i) = i`,
+`pair_ne : pair i ≠ i`, the two label fields above, and sign compatibility
+as fields rather than deriving them later.  Together `label_surjective` and
+`label_eq_iff_pair` give a bijection from the quotient of arcs by the pairing
+orbit relation to `Label`: surjectivity supplies an arc for every circle,
+while the iff says that no label merges two different paired pairs.  Define
+`Rel` only on boundary points and define `Space` with
 `Relation.EqvGen.setoid`.  Record continuity and surjectivity of the quotient
 map.  The one-vertex hypothesis is used only by B7; retaining it explicitly
 prevents the false conclusion that every pairing skeleton is a wedge with
@@ -57,7 +66,10 @@ status: planned
 
 For the orientable word label arcs by `Fin g × Bool` with signs
 `a,b,a⁻¹,b⁻¹`; for the nonorientable word label by `Fin g` with signs
-`a,a`.  Prove equality of the generated relations on the round disk, then use
+`a,a`.  In each instance prove `label_surjective` and
+`label_eq_iff_pair`; for the six-edge word these amount to the three fibres
+`{a,a⁻¹}`, `{b,b⁻¹}`, and `{c,c}`.  Prove equality of the generated
+relations on the round disk, then use
 `Homeomorph.refl` on representatives to obtain the quotient homeomorphism.
 For `t97A01`, instantiate the word `a b a⁻¹ b⁻¹ c c` and prove the six
 vertex identifications listed in its audit.  The consumer supplies its local
@@ -139,11 +151,16 @@ uses: B1 and its one-vertex hypothesis, finite point-wedge quotient APIs
 
 status: planned
 
-Cut the boundary circle at all vertices.  Each paired pair of closed arcs
+Cut the boundary circle at all vertices.  Each `pair`-orbit of closed arcs
 becomes one circle; the one-vertex proof identifies all endpoints with the
-wedge point.  Construct inverse quotient lifts and prove both composites on
-arc representatives.  The signed coordinate equations are part of the
-theorem because B9 cannot recover the boundary word from an unspecified
+wedge point.  Index that circle by the orbit's label.  Surjectivity of
+`label` proves that every `FiniteWedge P.Label` leg occurs, and
+`label_eq_iff_pair` proves that two orbit circles cannot be collapsed onto
+one leg.  Use these two facts when constructing the inverse quotient lifts
+and proving both composites on arc representatives.  Thus the square
+counterexample with two pairing orbits both labelled `Unit` cannot inhabit
+`PairingData`.  The signed coordinate equations are part of the theorem
+because B9 cannot recover the boundary word from an unspecified
 homeomorphism.
 
 ### B8. Fundamental group of the finite circle wedge with coordinates
@@ -177,8 +194,11 @@ Split the overlap circle loop at the finitely many arc endpoints.  Homotope
 each radial segment through B6 to the matching boundary arc.  Apply B7's
 signed coordinate equations and `FundamentalGroup.map` functoriality; path
 concatenation becomes multiplication in cyclic arc order.  Negative signs
-give inverses by reversal.  Basepoint changes are along the displayed radial
-path and are retained explicitly.
+give inverses by reversal.  Repeated occurrences of a generator are equal
+exactly when their arcs form the unique pair certified by
+`label_eq_iff_pair`; no additional generator identification is introduced.
+Basepoint changes are along the displayed radial path and are retained
+explicitly.
 
 ### B10. Van Kampen with one simply connected piece
 
@@ -238,15 +258,25 @@ boundary words.  For the Klein bottle, record the literal word
 `of 0 * of 0 * of 1 * of 1`; this is the interface used by the already
 banked `KleinPresentedGroupCoordinateModel` chain.
 
+Downstream review after strengthening B1: B8 is a theorem about an arbitrary
+finite indexing type and does not inspect polygon arcs.  B9 uses B7's leg
+coordinate for each arc; `label_eq_iff_pair` now proves that its only repeated
+generators are the intended paired occurrences.  B10 is independent of the
+label representation.  B11 substitutes the B7--B9 equivalences, so the free
+group has exactly one generator per pairing orbit.  Finally, each B12
+instance proves the B1 fibre condition before simplifying its word.  Thus no
+node B8--B12 infers orbit classification from equality of labels alone.
+
 ## Fixtures and acceptance gates
 
 Each node gets a standalone import fixture under build scratch that states
 its full public type and compiles without `sorry`.  B3, B5, B7, B9, and B10
 also get negative representation tests: an interior equivalence chain cannot
 reach the boundary; a representative-dependent homotopy does not descend;
-a pairing with two vertex classes is not accepted; reversing an arc produces
-an inverse generator; and omitting normal closure does not typecheck as the
-target quotient.  The program gates are:
+a pairing with two vertex classes is not accepted; two distinct pairing
+orbits cannot share one label (the review's square/`Unit` counterexample);
+reversing an arc produces an inverse generator; and omitting normal closure
+does not typecheck as the target quotient.  The program gates are:
 
 1. `lake build ConstructionTargets.PolygonSurfacePiOne`;
 2. `lake env lean ConstructionTargets/PolygonSurfacePiOne.lean`;
