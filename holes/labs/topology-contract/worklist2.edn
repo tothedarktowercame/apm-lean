@@ -75002,7 +75002,7 @@
   {:consumer :t96J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 0,
    :review-finding
    "STOP remainder is incomplete: cdbdc979d proves the six-edge involution/signs, orbit equivalence, generated-relation iff, and quotient Equiv, but defines no torusRP2PairingData and proves no six-edge oneVertex field. Thus the claim that six-edge B2 is complete is false, and the required missing theorem is omitted from :missing-theorems. Add torusRP2PairingData/oneVertex to the remaining milestones or state and prove it in scope.",
    :implements-lemma
@@ -75050,6 +75050,17 @@
       :output "131/0"}
      {:cmd "comment-stripped placeholder scan", :exit 0, :output "0"}
      {:cmd "git show --check c985d40ba", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791838435439-7890-0e7c385a",
+     :commands
+     ["git show c985d40ba:ConstructionTargets/PolygonSurfacePiOne.lean | lake env lean /dev/stdin"
+      "python3 scripts/statement-registry.py check"
+      "git show --check/hash/diff-tree c985d40ba"
+      "comment-stripped placeholder scan"],
+     :finding
+     "PASS: exact recorded source compiles; sole changed path and fixture hash match; registry 131/0 and placeholders 0. Orbit labels respect the representation: handlePair 0↔2 and 1↔3 preserves the Bool generator label, while crosscapPair preserves the Fin g block coordinate. This is new compiled progress toward the promised orbit equivalences; oneVertex and construction of those equivalences/quotient comparisons remain explicitly listed."},
     :commit "c985d40ba",
     :changed-paths ["ConstructionTargets/PolygonSurfacePiOne.lean"],
     :fixture
@@ -75058,7 +75069,7 @@
      "a3d92ec0744f6f9b6a6e8daa00a5f8e1af1852e7fd51daaccd0f35e8ef5f8ebf"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope ["ConstructionTargets/PolygonSurfacePiOne.lean"],
    :dag-node "ConstructionTargets/PolygonSurfacePiOne.blueprint.md/B2",
    :acceptance
@@ -84731,7 +84742,7 @@
    :other-consumers [:t92J05 :t94J04 :t97A03]}
   {:consumer :t96J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "standardOrbitLabel_pair",
@@ -84743,7 +84754,9 @@
     :type
     "canonical standard generator labels are invariant under pairing",
     :area "polygon-surface-pi1",
-    :proved-in :routes-2026-10-12-polygon-b2-completion-topo2-r1},
+    :proved-in :routes-2026-10-12-polygon-b2-completion-topo2-r1,
+    :banked-by :routes-2026-10-12-polygon-b2-completion-topo2-r1,
+    :banked-commit "c985d40ba"},
    :id :lemma-standardorbitlabel-pair,
    :kind :lemma,
    :depends-on [:lemma-standardpair],
