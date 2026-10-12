@@ -75009,68 +75009,62 @@
    :lemma-constructiontargets-polygonsurfacepione-standardpairingdata,
    :evidence
    {:placeholder-delta 0,
-    :residual "Prove orientable oneVertex; define uniform selectors.",
-    :outcome :stop,
-    :warnings ["2 imported warnings"],
+    :residual "B3/B4.",
+    :outcome :done-unreviewed,
+    :warnings
+    ["2 imported unnecessarySimpa; 12 local unnecessarySeqFocus"],
     :missing-theorems
-    [{:name
-      "nonorientable_standard_oneVertex/nonorientableStandardPairingData",
-      :type "nonorientable oneVertex and PairingData",
+    [{:name "orientable_standard_oneVertex",
+      :type "all orientable standard vertices form one class",
       :status :proved,
-      :consumers [:t96J02 :t92J05 :t94J04 :t97A03],
-      :depends-on ["nonorientable_eqvGen_iff"],
-      :area "polygon-surface-pi1"}
-     {:name "orientable_standard_oneVertex",
-      :type "orientable standard vertices form one class",
-      :status :not-started,
       :consumers [:t92J05 :t94J04 :t97A03],
       :depends-on [],
       :area "polygon-surface-pi1"}
      {:name "standardPairingData",
-      :type "uniform data/Homeomorph",
-      :status :partial,
+      :type "uniform standard PairingData",
+      :status :proved,
       :consumers [:t96J02 :t92J05 :t94J04 :t97A03],
       :depends-on ["orientable_standard_oneVertex"],
+      :area "polygon-surface-pi1"}
+     {:name "standardPairingData_space_homeomorph",
+      :type "uniform quotient Homeomorph to Surface",
+      :status :proved,
+      :consumers [:t96J02 :t92J05 :t94J04 :t97A03],
+      :depends-on ["standardPairingData"],
       :area "polygon-surface-pi1"}],
     :statement-hashes
     {:registry "131/0",
-     :module "8acaa080d0a1fd9af8a06ba5f9019b7b5bde811a"},
-    :disposition :stop,
+     :module "0a217d45bf614730372e509eaed46c9939afb940"},
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason
-    "Nonorientable oneVertex/data compile; orientable case remains.",
     :commands
-    [{:cmd "lake build ConstructionTargets.PolygonSurfacePiOne",
+    [{:cmd
+      "lake env lean ConstructionTargets/PolygonSurfacePiOne.lean",
       :exit 0}
-     {:cmd "registry check", :exit 0, :output "131/0"}
-     {:cmd "placeholder scan", :exit 0, :output "0"}
-     {:cmd "git show --check 726154657", :exit 0}],
+     {:cmd "lake build ConstructionTargets.PolygonSurfacePiOne",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131/0"}
+     {:cmd "comment-stripped placeholder scan", :exit 0, :output "0"}
+     {:cmd
+      "#print axioms orientable_standard_oneVertex/standardPairingData_space_homeomorph",
+      :exit 0}
+     {:cmd "git show --check dc5733b05", :exit 0}],
     :diagnostic-history
-    [{:cmd "first compile",
+    [{:cmd "initial endpoint proofs",
       :exit 1,
-      :correction "explicit Fin coordinates"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1791841111206-7938-b5bad86a",
-     :commands
-     ["git show 726154657:ConstructionTargets/PolygonSurfacePiOne.lean | lake env lean /dev/stdin"
-      "#print axioms on recorded oneVertex/data declarations"
-      "python3 scripts/statement-registry.py check"
-      "git show --check/hash/diff-tree 726154657"
-      "comment-stripped placeholder scan"],
-     :finding
-     "PASS: exact source compiles; scope/hash match; registry 131/0, placeholders 0, standard axioms only. At t=0 each nonorientable pair joins even/odd vertices; at t=1 it joins odd to the next even vertex. The induction reaches vertex 0, then nonorientable_eqvGen_iff transfers the result to the exact boundary relation used by PairingData. This is substantive progress; orientable oneVertex and uniform selectors remain explicitly listed."},
-    :commit "726154657",
+      :correction "normalized Icc endpoints"}],
+    :commit "dc5733b05",
+    :commits ["726154657" "dc5733b05"],
     :changed-paths ["ConstructionTargets/PolygonSurfacePiOne.lean"],
     :fixture
     {:path "ConstructionTargets/PolygonSurfacePiOne.lean",
      :sha256
-     "d079f1f2237591e934df75567fd79c6ebe66a38c17a3c66eb24d6ca77b40b149"},
+     "ab615ed1a9e6a24c1d6b09a6c4b082dadb10c9eb46bd268c8fe954ce81db94bc"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/PolygonSurfacePiOne.lean"],
    :dag-node "ConstructionTargets/PolygonSurfacePiOne.blueprint.md/B2",
    :acceptance
@@ -84708,7 +84702,8 @@
     :reported-by [:routes-2026-10-12-polygon-b2-completion-topo2-r1],
     :type
     "uniform PairingData with oneVertex, orbit and quotient comparisons",
-    :area "polygon-surface-pi1"},
+    :area "polygon-surface-pi1",
+    :proved-in :routes-2026-10-12-polygon-b2-completion-topo2-r1},
    :id :lemma-standardpairingdata,
    :kind :lemma,
    :depends-on
@@ -84900,12 +84895,14 @@
     :reported-by [:routes-2026-10-12-polygon-b2-completion-topo2-r1],
     :type
     "uniform standard PairingData and orientable quotient homeomorphism",
-    :area "polygon-surface-pi1"},
+    :area "polygon-surface-pi1",
+    :proved-in :routes-2026-10-12-polygon-b2-completion-topo2-r1},
    :id :lemma-standardpairingdata-space-homeomorph,
    :kind :lemma,
    :depends-on
    [:lemma-standardpairingdata-onevertex
-    :lemma-orientable-boundaryrel-to-surfaceeqvgen],
+    :lemma-orientable-boundaryrel-to-surfaceeqvgen
+    :lemma-standardpairingdata],
    :other-consumers [:t92J05 :t94J04 :t97A03]}
   {:consumer :t97A01,
    :phase :lemma,
@@ -85016,7 +85013,8 @@
    {:name "orientable_standard_oneVertex",
     :reported-by [:routes-2026-10-12-polygon-b2-completion-topo2-r1],
     :type "orientable standard vertices form one class",
-    :area "polygon-surface-pi1"},
+    :area "polygon-surface-pi1",
+    :proved-in :routes-2026-10-12-polygon-b2-completion-topo2-r1},
    :id :lemma-orientable-standard-onevertex,
    :kind :lemma,
    :depends-on [],
