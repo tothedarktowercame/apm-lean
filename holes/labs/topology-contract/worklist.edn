@@ -113850,14 +113850,14 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 4,
+   :stop-count 5,
    :review-finding
    "Blueprint B3 is marked proved but its proof uses the unlisted ConnectedGroupoidSingleObjEquivalence.connectorSingleObjEquivalence (and connector-system representation) instead of only the declared uses; add the actual connector dependency and proof route to B3 uses.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
    :evidence
    {:placeholder-delta {:source-before 0, :source-after 0},
     :residual
-    "Transport the unit glue through the outer overlap comparisons and reconstruction counit; then close B6 and B12.",
+    "Identify the outer composite with the reconstruction counit; then close B6 and B12.",
     :outcome :stop,
     :warnings [],
     :missing-theorems
@@ -113871,9 +113871,9 @@
       :area "fundamental-group-wedge-of-circles"}],
     :statement-hashes
     {:source
-     "e3029916ff2d0f5abcf6c97afd63df225cb8cf0293be96cf96bc3dbecb3a0895",
+     "488f93daaf367cab38e40d6464cd7aaed66cc79fa9e7fc76092ea5d7597b926b",
      :documentation
-     "8972d9be17101fe6010b939a6d2738f28f6387223189f271c2019eac112f26ab",
+     "ef482c0beb0c35982cc082dd626b6f034eba4de3abc9f614d015df7918986b4b",
      :blueprint
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0",
      :registry "131/131"},
@@ -113881,7 +113881,7 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
     :reason
-    "All four inner connector factors cancel, so the coordinate-span glue at the Unit base is exactly one.",
+    "Unit glue transported through the overlap equivalence, leaving the two outer comparisons.",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/PointWedgeVanKampen.lean",
@@ -113891,23 +113891,13 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder/diff validation", :exit 0}],
     :diagnostic-history
-    [{:cmd "lean direct conjugator equality",
+    [{:cmd "lean overlap-base name",
       :exit 1,
-      :finding
-      "Expanded the four inner factors instead of assuming definitional equality."}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1791809286929-6933-4cc51d3a",
-     :commands
-     ["git show/diff-tree 3cfdfdc2b"
-      "sha256/placeholder/registry checks"
-      "lake env lean ConstructionTargets/PointWedgeVanKampen.lean"
-      "lake build ConstructionTargets.PointWedgeVanKampen"
-      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (expected absent)"],
-     :finding
-     "PASS: exact two-file scope and frozen hashes match; placeholders 0->0, registry 131/131. Unit-base coordinate glue is proved equal to one by expanding and cancelling all four connector factors, with correct categorical-to-group representation and standard axioms only. Valid program STOP; outer comparisons/counit transport, B6, and B12 remain."},
-    :commit "3cfdfdc2b6150d3b0b471f2fddd57a7f2d9255ca",
+      :finding "Expanded base."}
+     {:cmd "lean rewrite before lets",
+      :exit 1,
+      :finding "Reduced lets."}],
+    :commit "fb8f1a369ca41e1fc4dfe820f8362570c397e539",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
      "ConstructionTargets/PointWedgeVanKampen.md"],
@@ -113917,7 +113907,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
