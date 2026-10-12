@@ -75002,7 +75002,7 @@
   {:consumer :t96J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 0,
    :review-finding
    "STOP remainder is incomplete: cdbdc979d proves the six-edge involution/signs, orbit equivalence, generated-relation iff, and quotient Equiv, but defines no torusRP2PairingData and proves no six-edge oneVertex field. Thus the claim that six-edge B2 is complete is false, and the required missing theorem is omitted from :missing-theorems. Add torusRP2PairingData/oneVertex to the remaining milestones or state and prove it in scope.",
    :implements-lemma
@@ -75054,6 +75054,17 @@
     [{:cmd "first compile",
       :exit 1,
       :correction "fixed relation orientation/coordinates"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791838837314-7898-ece12155",
+     :commands
+     ["git show 1865af745:ConstructionTargets/PolygonSurfacePiOne.lean | lake env lean /dev/stdin"
+      "python3 scripts/statement-registry.py check"
+      "git show --check/hash/diff-tree 1865af745"
+      "comment-stripped placeholder scan"],
+     :finding
+     "PASS: exact recorded source compiles; sole changed path and fixture hash match; registry 131/0 and placeholders 0. Both orbit maps descend via the proved pair-invariant labels and supply explicit representatives; their left inverses handle every Fin 4/Fin 2 coordinate and their right inverses reduce definitionally. This is substantive compiled progress; oneVertex, final data, and quotient comparison remain explicitly listed."},
     :commit "1865af745",
     :changed-paths ["ConstructionTargets/PolygonSurfacePiOne.lean"],
     :fixture
@@ -75062,7 +75073,7 @@
      "be9ebb87f78a0dc68327100d3f9d8347e32074f9c4aab5a4dbddb5d93042f0c2"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope ["ConstructionTargets/PolygonSurfacePiOne.lean"],
    :dag-node "ConstructionTargets/PolygonSurfacePiOne.blueprint.md/B2",
    :acceptance
@@ -84757,7 +84768,7 @@
    :other-consumers [:t92J05 :t94J04 :t97A03]}
   {:consumer :t96J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "orientableOrbitEquiv/nonorientableOrbitEquiv",
@@ -84767,7 +84778,9 @@
     :reported-by [:routes-2026-10-12-polygon-b2-completion-topo2-r1],
     :type "standard pairing-orbit equivalences",
     :area "polygon-surface-pi1",
-    :proved-in :routes-2026-10-12-polygon-b2-completion-topo2-r1},
+    :proved-in :routes-2026-10-12-polygon-b2-completion-topo2-r1,
+    :banked-by :routes-2026-10-12-polygon-b2-completion-topo2-r1,
+    :banked-commit "1865af745"},
    :id :lemma-orientableorbitequiv-nonorientableorbitequiv,
    :kind :lemma,
    :depends-on [:lemma-standardorbitlabel-pair],
