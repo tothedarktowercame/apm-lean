@@ -3142,6 +3142,46 @@ theorem waypointDependentQuarterCandidate_actual_zero :
     norm_num [departureQuarter, waypointDependentQuarterCandidate,
       Complex.mul_re, Complex.mul_im]
 
+/-- A non-collinear replacement waypoint based at the opposite planar
+centre.  Its real part stays positive throughout the right tube. -/
+noncomputable def positiveRealPlanarWaypointMap :
+    C(RightTubeMinusLeftCore, ℂ) :=
+  ⟨fun p => rightTubePlanarComplex p.1,
+    continuous_rightTubePlanarComplex.comp continuous_subtype_val⟩
+
+theorem positiveRealPlanarWaypoint_re_pos (p : RightTubeMinusLeftCore) :
+    0 < (positiveRealPlanarWaypointMap p).re := by
+  exact rightTubePlanarComplex_re_pos p.1 p.2.1
+
+theorem positiveRealPlanarWaypoint_departure_ne_zero
+    (t : unitInterval) (p : RightTubeMinusLeftCore)
+    (ht : (t : ℝ) ≤ 1 / 2) :
+    (((1 - 2 * (t : ℝ) : ℝ) : ℂ) +
+        ((2 * (t : ℝ) : ℝ) : ℂ) *
+          positiveRealPlanarWaypointMap p) ≠ 0 :=
+  coupledAngularDepartureLeg_ne_zero_of_waypoint_re_pos
+    positiveRealPlanarWaypointMap positiveRealPlanarWaypoint_re_pos t p ht
+
+/-- If the arrival leg for the positive-real planar waypoint collides after
+the midpoint, then the ambient point lies on the second-coordinate axis. -/
+theorem positiveRealPlanarWaypoint_arrival_collision_second_zero
+    (t : unitInterval) (p : RightTubeMinusLeftCore)
+    (ht : ¬ (t : ℝ) ≤ 1 / 2)
+    (hz : (((2 - 2 * (t : ℝ) : ℝ) : ℂ) *
+          positiveRealPlanarWaypointMap p +
+        ((2 * (t : ℝ) - 1 : ℝ) : ℂ) *
+          rightTubeCorePlanarComplex p.1) = 0) :
+    p.1 1 = 0 := by
+  obtain ⟨hneg, hcross⟩ := coupledAngularArrivalCollision_negative_endpoint
+    positiveRealPlanarWaypointMap positiveRealPlanarWaypoint_re_pos t p ht hz
+  have hp0 : 1 < p.1 0 := by
+    simp [rightTubeCorePlanarComplex] at hneg
+    linarith
+  have hprod := hcross
+  simp [positiveRealPlanarWaypointMap, rightTubePlanarComplex,
+    rightTubeCorePlanarComplex, Complex.mul_re, Complex.mul_im] at hprod
+  nlinarith
+
 end ConstructionTargets.T02A03GeometricTubeDeformation
 
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeNormalComplex_eq_zero_iff
@@ -3245,6 +3285,7 @@ end ConstructionTargets.T02A03GeometricTubeDeformation
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.waypointDependentDeparture_zero_normSq
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.waypointDependentDeparture_zero_polynomial_bounds
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.waypointDependentQuarterCandidate_actual_zero
+#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.positiveRealPlanarWaypoint_arrival_collision_second_zero
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_twiceCorrected_departure_zero_coordinates
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_twiceCorrected_departure_zero_normSq
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_twiceCorrected_departure_zero_scalar_bounds
