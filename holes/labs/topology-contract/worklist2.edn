@@ -75293,8 +75293,66 @@
      :typed-residual-change
      :infrastructure-packets
      :review-outcomes]},
+   :evidence
+   {:outcome :replan,
+    :seat "topo-8",
+    :commands
+    [{:cmd
+      "bb holes/labs/topology-contract/build_step.bb priorities holes/labs/topology-contract/worklist2.edn",
+      :exit 0}],
+    :finding
+    {:measures
+     {:placeholder-delta 0,
+      :typed-residual-change "B2 banked; B3 ready",
+      :infrastructure-packets 1,
+      :review-outcomes {:pass 1}},
+     :top "SLSC 6; polygon 5",
+     :routes "five advance to B3"},
+    :replacement-items
+    [{:consumer :t96J02,
+      :phase :implementation,
+      :state :open,
+      :scope ["ConstructionTargets/PolygonSurfacePiOne.lean"],
+      :dag-node
+      "ConstructionTargets/PolygonSurfacePiOne.blueprint.md/B3",
+      :acceptance
+      {:declaration
+       "ConstructionTargets.PolygonSurfacePiOne.interiorOpenEmbedding",
+       :type "interior restriction open embedding; range open",
+       :blueprint
+       "ConstructionTargets/PolygonSurfacePiOne.blueprint.md",
+       :placeholder "five π₁ routes",
+       :route-step "B3 interior open embedding"},
+      :id :routes-2026-10-12-polygon-b3-topo2-r1,
+      :kind :reusable-theorem,
+      :area "polygon-surface-pi1",
+      :depends-on [:routes-2026-10-12-polygon-b2-completion-topo2-r1],
+      :current-residual "B4.",
+      :other-consumers [:t92J05 :t94J04 :t97A01 :t97A03]}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 1,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :phase :strategy,
+      :state :blocked,
+      :scope [],
+      :dag-node "TOPOLOGY-ROUTES.md",
+      :acceptance {:strategy "Rerun after B3."},
+      :id :routes-2026-10-12-checkpoint-topo2-r16,
+      :kind :strategy-checkpoint,
+      :area "portfolio",
+      :depends-on [:routes-2026-10-12-polygon-b3-topo2-r1],
+      :current-residual "Elect B4.",
+      :other-consumers []}],
+    :author "topo-8",
+    :disposition :replan},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance {:strategy "Rerun after six-edge B2."},
@@ -75305,6 +75363,48 @@
    [:routes-2026-10-12-polygon-b2-six-edge-topo2-r1
     :routes-2026-10-12-checkpoint-topo2-r14],
    :current-residual "Elect uniform B2.",
+   :other-consumers []}
+  {:consumer :t96J02,
+   :phase :implementation,
+   :state :blocked,
+   :scope ["ConstructionTargets/PolygonSurfacePiOne.lean"],
+   :dag-node "ConstructionTargets/PolygonSurfacePiOne.blueprint.md/B3",
+   :acceptance
+   {:declaration
+    "ConstructionTargets.PolygonSurfacePiOne.interiorOpenEmbedding",
+    :type "interior restriction open embedding; range open",
+    :blueprint "ConstructionTargets/PolygonSurfacePiOne.blueprint.md",
+    :placeholder "five π₁ routes",
+    :route-step "B3 interior open embedding"},
+   :id :routes-2026-10-12-polygon-b3-topo2-r1,
+   :kind :reusable-theorem,
+   :area "polygon-surface-pi1",
+   :depends-on
+   [:routes-2026-10-12-polygon-b2-completion-topo2-r1
+    :routes-2026-10-12-checkpoint-topo2-r15],
+   :current-residual "B4.",
+   :other-consumers [:t92J05 :t94J04 :t97A01 :t97A03]}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 1,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md",
+   :acceptance {:strategy "Rerun after B3."},
+   :id :routes-2026-10-12-checkpoint-topo2-r16,
+   :kind :strategy-checkpoint,
+   :area "portfolio",
+   :depends-on
+   [:routes-2026-10-12-polygon-b3-topo2-r1
+    :routes-2026-10-12-checkpoint-topo2-r15],
+   :current-residual "Elect B4.",
    :other-consumers []}
   {:consumer :t94A08,
    :phase :probe,
