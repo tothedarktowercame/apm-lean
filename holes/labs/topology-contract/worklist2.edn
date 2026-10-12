@@ -74614,6 +74614,8 @@
    :current-residual "Elect B1 on PASS; route any defect otherwise.",
    :other-consumers []}
   {:consumer :t96J02,
+   :review-finding
+   "PairingData is missing the required positive edge-count hypothesis. At edgeCount = 0, pair_ne and oneVertex are vacuous, so B1 constructs valid data whose boundary skeleton is a circle, while PairingOrbit is empty and B7 would require it homeomorphic to the empty-index finite wedge (a point). Add 0 < edgeCount (or Nonempty (Fin edgeCount)) to PairingData and thread it through the interface.",
    :implements-lemma :lemma-polygonsurfacepione-pairingdata,
    :evidence
    {:placeholder-delta 0,
@@ -74643,6 +74645,12 @@
       :output "131/0"}
      {:cmd "lake env lean /tmp/polygon_b1_axioms.lean", :exit 0}
      {:cmd "git show --check HEAD", :exit 0}],
+    :review
+    {:outcome :fail,
+     :seat "codex-7",
+     :job "invoke-1791832682859-7767-563cc913",
+     :finding
+     "PairingData is missing the required positive edge-count hypothesis. At edgeCount = 0, pair_ne and oneVertex are vacuous, so B1 constructs valid data whose boundary skeleton is a circle, while PairingOrbit is empty and B7 would require it homeomorphic to the empty-index finite wedge (a point). Add 0 < edgeCount (or Nonempty (Fin edgeCount)) to PairingData and thread it through the interface."},
     :commit "13a188f99",
     :changed-paths ["ConstructionTargets/PolygonSurfacePiOne.lean"],
     :fixture
@@ -74651,7 +74659,7 @@
      "92ad608fe336d554ef594598ece07cf280653a09dbd1f6161c73ee9472052cb6"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :repair,
    :scope ["ConstructionTargets/PolygonSurfacePiOne.lean"],
    :dag-node "ConstructionTargets/PolygonSurfacePiOne.blueprint.md/B1",
    :acceptance
@@ -74664,6 +74672,7 @@
    :id :routes-2026-10-12-polygon-b1-topo2-r1,
    :kind :reusable-theorem,
    :area "polygon-surface-pi1",
+   :fail-count 1,
    :depends-on [:routes-2026-10-12-checkpoint-topo2-r11],
    :current-residual "Implement B2 instances.",
    :other-consumers [:t92J05 :t94J04 :t97A01 :t97A03]}
