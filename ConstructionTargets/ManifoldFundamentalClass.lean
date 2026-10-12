@@ -4,6 +4,7 @@ import ConstructionTargets.CoefficientTransitionLocalConstancy
 import ConstructionTargets.CoefficientDistinguishedNormalization
 import ConstructionTargets.IntegralSingularHomologyComparison
 import ConstructionTargets.HigherChartLocalGenerator
+import ConstructionTargets.OneDiskLocalOrientation
 import Mathlib.Algebra.Homology.HomologicalComplexLimits
 
 open CategoryTheory CategoryTheory.Limits
@@ -3381,6 +3382,16 @@ theorem boolIntDifference_to_signedFunction :
     ModuleCat.ι_coprodIsoDirectSum_hom_apply]
   cases b <;> simp
 
+theorem intervalRelativeClass_eq_generator_of_boundary_eq
+    (z : (RelativeSingularChains intervalBoundary).homology 1)
+    (hboundary :
+      (singularPairConnecting intervalBoundary 0).hom z =
+        (singularPairConnecting intervalBoundary 0).hom
+          intervalBoundaryRelativeH1Generator) :
+    z = intervalBoundaryRelativeH1Generator := by
+  exact ((AddCommGrpCat.mono_iff_injective
+    (singularPairConnecting intervalBoundary 0)).mp inferInstance) hboundary
+
 end ConstructionTargets.ManifoldFundamentalClass
 
 #print axioms ConstructionTargets.ManifoldFundamentalClass.neighborhoodInclusion_Hsucc_isIso
@@ -3502,6 +3513,7 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientCircleBoundaryGenerator_signed_coordinates
 #print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientCircleBoundaryGenerator_eq_signedFunction
 #print axioms ConstructionTargets.ManifoldFundamentalClass.boolIntDifference_to_signedFunction
+#print axioms ConstructionTargets.ManifoldFundamentalClass.intervalRelativeClass_eq_generator_of_boundary_eq
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_projection
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_generator_of_normalization
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_normalization_of_generator
