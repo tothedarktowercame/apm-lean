@@ -83345,15 +83345,14 @@
    :depends-on [],
    :other-consumers []}
   {:consumer :t99J01,
-   :stop-count 2,
+   :stop-count 3,
    :review-finding
    "Program STOP commits no compiled, sorry-free theorem progress: 9a443d45a adds only SuppliedCoverAlgebra.md, creates no SuppliedCoverAlgebra.lean, and records A1/A2/A3/C7 all :not-started. Exact repair: extend Mathlib: state and prove at least one missing milestone in scope, commit the compiling Lean result, and list the remaining milestones in :missing-theorems.",
    :evidence
    {:placeholder-delta 0,
-    :residual
-    "Continue B3 equivalence/index, then B4 orbit-cover transport.",
+    :residual "B1-B3 compiled; implement B4 orbit-cover transport.",
     :outcome :stop,
-    :warnings [],
+    :warnings ["Unrelated PointWedgeVanKampen edit preserved."],
     :missing-theorems
     [{:name "coveringFundamentalGroupEquivRange",
       :type "pi1 equiv range",
@@ -83369,19 +83368,19 @@
       :area "covering-subgroup-correspondence"}
      {:name "coveringFundamentalGroupEquivFreeSubgroup",
       :type "pi1 equiv mapped subgroup; index",
-      :status :not-started,
+      :status :proved,
       :consumers [:t99J01 :t97A03],
       :depends-on ["coveringFundamentalGroupEquivRange"],
       :area "covering-subgroup-correspondence"}
      {:name "isCoveringMap_homeomorph_comp_quotientMk",
-      :type "orbit cover target transport",
+      :type "orbit cover transport",
       :status :not-started,
       :consumers [:t93J03 :t00A02],
       :depends-on [],
       :area "covering-subgroup-correspondence"}],
     :statement-hashes
     {:registry "131/0",
-     :module "8056daa220b2cc01795ecbdaef797f8fd66359f4",
+     :module "696828cf2f7258a58907ea89fe41c4bdd26fee20",
      :main "21d5ee491d63501c124f113474ddedee9223d81b"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
@@ -83390,30 +83389,24 @@
     :commands
     [{:cmd "lake build ConstructionTargets.SuppliedCoverAlgebra",
       :exit 0}
-     {:cmd "statement registry", :exit 0, :output "131/0"}
-     {:cmd "placeholder scan", :exit 0, :output "0"}
+     {:cmd "registry", :exit 0, :output "131/0"}
+     {:cmd "placeholders", :exit 0, :output "0"}
      {:cmd "git checks", :exit 0}],
     :diagnostic-history
-    [{:cmd "initial lean",
+    [{:cmd "initial B3 lean",
       :exit 1,
-      :note "Removed redundant import."}],
-    :review
-    {:outcome :fail,
-     :seat "codex-7",
-     :job "invoke-1791821300142-7348-e2943d93",
-     :finding
-     "Program STOP commits no compiled, sorry-free theorem progress: 9a443d45a adds only SuppliedCoverAlgebra.md, creates no SuppliedCoverAlgebra.lean, and records A1/A2/A3/C7 all :not-started. Exact repair: extend Mathlib: state and prove at least one missing milestone in scope, commit the compiling Lean result, and list the remaining milestones in :missing-theorems."},
-    :commit "df216abcc",
+      :note "Fixed import and call syntax."}],
+    :commit "1ecb73d0a",
     :changed-paths
     ["ConstructionTargets/SuppliedCoverAlgebra.lean"
      "ConstructionTargets/SuppliedCoverAlgebra.md"],
     :fixture
     {:path "ConstructionTargets/SuppliedCoverAlgebra.lean",
      :sha256
-     "320c05cb749b5f66495c72c40a5796492d0c23ae98b73ac4838befcdbaa9e110"},
+     "5adbc66ae6ff1a332efee3ca6f127819087f34213c4e5933a1854e28e5472917"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SuppliedCoverAlgebra.lean"
     "ConstructionTargets/SuppliedCoverAlgebra.md"],
@@ -83481,7 +83474,8 @@
    {:name "coveringFundamentalGroupEquivFreeSubgroup",
     :reported-by [:program-2026-10-12-supplied-cover-algebra],
     :type "pi1 total equiv mapped free subgroup with index",
-    :area "covering-subgroup-correspondence"},
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-12-supplied-cover-algebra},
    :id :lemma-coveringfundamentalgroupequivfreesubgroup,
    :kind :lemma,
    :depends-on [:lemma-coveringfundamentalgroupequivrange],
