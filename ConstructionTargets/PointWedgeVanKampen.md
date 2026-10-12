@@ -907,3 +907,9 @@ then evaluates that actual-span map using the arbitrary-endpoint coordinate
 formula.  The result is the left coproduct injection of the connector normal
 form after the left-equivalence inverse/forward round trip; the dependent
 endpoints remain explicit for the next unit normalization.
+
+`genericPointWedgeCoordinateSpanGlobalRestrictionLeftRoundTrip_counit`
+records that normalization boundary as the exact counit-naturality equation.
+The inverse/forward image followed by the counit at the transported target is
+the source counit followed by the original inverse strict-span comparison;
+no component is assumed to be an identity.

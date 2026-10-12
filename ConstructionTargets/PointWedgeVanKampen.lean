@@ -3388,6 +3388,27 @@ theorem genericPointWedgeCoordinateSpanGlobalRestrictionLeftStrictFactor_heq_inl
     genericPointWedgeIdentityActualSpan_left_map]
   exact genericPointWedgeIdentityCoordinateSpan_left_map x₀ y₀ _
 
+omit [PathConnectedSpace X] [PathConnectedSpace Y] in
+/-- Naturality of the left-equivalence counit gives the exact conjugacy
+equation for the inverse strict-span comparison after its inverse/forward
+round trip. -/
+theorem genericPointWedgeCoordinateSpanGlobalRestrictionLeftRoundTrip_counit :
+    let eK := genericPointWedgeOverlapGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let eL := genericPointWedgeLeftGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let aL := genericPointWedgeLeftSpanIso
+      x₀ y₀ M N hM hN hy hx cM cN
+    let l := genericPointWedgeActualLeft x₀ y₀ M N
+    let l' := genericPointWedgeCoordinateLeft x₀
+    let u : FundamentalGroupoid Unit := FundamentalGroupoid.mk ()
+    eL.functor.map (eL.inverse.map (aL.inv.app u)) ≫
+        eL.counitIso.hom.app ((eK.inverse ⋙ l ⋙ eL.functor).obj u) =
+      eL.counitIso.hom.app (l'.obj u) ≫ aL.inv.app u := by
+  dsimp only
+  exact (genericPointWedgeLeftGroupoidEquivalence
+    x₀ y₀ M N hM hN hy hx cM cN).counitIso.hom.naturality _
+
 /-- The mapped coordinate-span counit's glue square, specialized at the
 unique point-span overlap object.  This is the equation in which its two
 named leg factors are related by the mapped reconstructed glue. -/
@@ -4985,6 +5006,7 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeCoordinateSpanGlobalRestrictionLeftStrictFactor_eq_map
 #print axioms genericPointWedgeCoordinateSpanGlobalRestrictionLeftStrictFactor_eq_actual
 #print axioms genericPointWedgeCoordinateSpanGlobalRestrictionLeftStrictFactor_heq_inl
+#print axioms genericPointWedgeCoordinateSpanGlobalRestrictionLeftRoundTrip_counit
 #print axioms genericPointWedgeMappedOpenCoverCounit_namedGlueSquare
 #print axioms genericPointWedgeMappedCoordinateSpanCounit_glueSquare
 #print axioms genericPointWedgeMappedCoordinateSpanSourceGlue
