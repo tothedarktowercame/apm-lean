@@ -113896,6 +113896,18 @@
      {:cmd "lean mul form",
       :exit 1,
       :finding "Dependent composition needed."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791829477731-7675-f49e6480",
+     :commands
+     ["git show/diff-tree 38cd422b8"
+      "sha256 + placeholder + registry checks"
+      "lake env lean ConstructionTargets/PointWedgeVanKampen.lean"
+      "lake build ConstructionTargets.PointWedgeVanKampen"
+      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (expected absent)"],
+     :finding
+     "Scope is exactly Lean+MD; source/doc/blueprint hashes match; placeholders 0->0; registry 131/131. The two new compiled definitions name the exact mapped open-cover counit elements from the proved split, using the same coordinate-span/point maps and matching free-product evaluations; they do not confuse transport with raw evaluation. They use only propext, Classical.choice, Quot.sound. This is concrete program progress enabling the next cancellation statement; residual is combining mapped splice with open-cover and injected counits, then B6/B12. Final target remains absent as declared."},
     :commit "38cd422b89093cf3ba3345d4b05d681c866fab86",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
@@ -113906,7 +113918,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113927,7 +113939,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Both mapped pre-coordinate counits are split into mapped open-cover and coordinate-span factors.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Named both mapped open-cover counit factors.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -114403,7 +114415,10 @@
     {:job 6,
      :commit "dbabd7decdc16a66fbaed195de606579728212bd",
      :reason
-     "Both mapped pre-coordinate counits are split into mapped open-cover and coordinate-span factors."}]}
+     "Both mapped pre-coordinate counits are split into mapped open-cover and coordinate-span factors."}
+    {:job 7,
+     :commit "38cd422b89093cf3ba3345d4b05d681c866fab86",
+     :reason "Named both mapped open-cover counit factors."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
