@@ -75415,6 +75415,18 @@
      {:cmd "second compile",
       :exit 1,
       :correction "fixed image orientation"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791842882766-7966-63e66979",
+     :commands
+     ["git show 366851883:ConstructionTargets/PolygonSurfacePiOne.lean | lake env lean /dev/stdin"
+      "#print axioms interiorOpenEmbedding/interior_isOpen"
+      "python3 scripts/statement-registry.py check"
+      "git show --check/hash/diff-tree 366851883"
+      "comment-stripped placeholder scan"],
+     :finding
+     "PASS: exact source compiles; sole path and fixture hash match; registry 131/0, placeholders 0, standard axioms only. Induction on EqvGen proves every nontrivial identification has both endpoints on norm-one boundary, so the interior restriction is injective. Its image-preimage equality and the coinduced topology prove the open-map condition; the range is therefore open. The proof respects the DiskInterior subtype and quotient representation boundaries. B3 is discharged."},
     :commit "366851883",
     :changed-paths ["ConstructionTargets/PolygonSurfacePiOne.lean"],
     :fixture
@@ -75423,7 +75435,7 @@
      "e7b3e4146df3a272304ed32bd665fb30acdf095099c95a0d3234fec1d5424f0b"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/PolygonSurfacePiOne.lean"],
    :dag-node "ConstructionTargets/PolygonSurfacePiOne.blueprint.md/B3",
    :acceptance
@@ -75451,7 +75463,7 @@
      :infrastructure-packets
      :review-outcomes]},
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance {:strategy "Rerun after B3."},
@@ -85280,7 +85292,7 @@
    :other-consumers [:t92J05 :t94J04 :t97A03]}
   {:consumer :t96J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -85292,7 +85304,9 @@
     :reported-by [:routes-2026-10-12-polygon-b3-topo2-r1],
     :type "Topology.IsOpenEmbedding P.interiorMap; IsOpen P.interior",
     :area "polygon-surface-pi1",
-    :proved-in :routes-2026-10-12-polygon-b3-topo2-r1},
+    :proved-in :routes-2026-10-12-polygon-b3-topo2-r1,
+    :banked-by :routes-2026-10-12-polygon-b3-topo2-r1,
+    :banked-commit "366851883"},
    :id
    :lemma-constructiontargets-polygonsurfacepione-interioropenembedding,
    :kind :lemma,
