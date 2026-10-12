@@ -18700,6 +18700,17 @@
       "lake env lean ConstructionTargets/ManifoldFundamentalClass.lean",
       :exit 1,
       :note "qualified radial F; rerun passed"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791776947901-6275-89b347fb",
+     :commands
+     ["recorded scope/blob, fixture hash, diff check"
+      "statement registry and placeholder scans"
+      "lake env lean: renamed fixture declarations and module"
+      "lake build ConstructionTargets.ManifoldFundamentalClass"],
+     :finding
+     "PASS: recorded one-file scope and frozen fixture hash match. The punctured-disk inclusion is the induced nonzero subtype map; composing it with model radial normalization is definitionally the disk radial map. Functoriality yields inclusion homology then radial homology = disk radial homology in the frozen direction. Registry 131/0; source placeholders 0; consumer sorries 1/1; standard axioms only; build 8326 jobs."},
     :commit "ea09a9ef100947f047e4698c34007b5248848278",
     :changed-paths
     ["ConstructionTargets/ManifoldFundamentalClass.lean"],
@@ -18709,7 +18720,7 @@
      "bf0a01a1e24fc05a64c2775dfdebdf4882d348302a2f403f8b114acb22790c3b"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/manifold-fundamental-class/model-radial",
@@ -18781,7 +18792,7 @@
       "bf0a01a1e24fc05a64c2775dfdebdf4882d348302a2f403f8b114acb22790c3b"},
      :seat "topo-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -26862,7 +26873,7 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -26875,7 +26886,9 @@
     [:routes-2026-10-10-manifold-fundamental-class-topo3-r2],
     :type "exact type in /tmp/odrad.lean",
     :area "manifold-fundamental-class",
-    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2,
+    :banked-by :routes-2026-10-12-mfclass-odrad-r1,
+    :banked-commit "ea09a9ef100947f047e4698c34007b5248848278"},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-coefficientopendiskradial-homology-,
    :kind :lemma,
