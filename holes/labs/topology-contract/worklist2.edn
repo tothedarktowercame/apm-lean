@@ -79485,30 +79485,31 @@
   {:consumer :t96A07,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 2,
    :evidence
    {:placeholder-delta 0,
-    :residual "Formalize B8 plane derivative range; then B9-B13.",
+    :residual "Formalize B9 vertical surjectivity; then B10-B13.",
     :outcome :stop,
     :warnings ["Main: 1 placeholder." "Style lint only."],
     :missing-theorems
-    [{:name
-      "ConstructionTargets.T96A07Closure.descended_not_transverse_axis",
-      :type "B7 descended map is not transverse to z-axis",
+    [{:name "ConstructionTargets.T96A07Closure.plane_fderiv_range",
+      :type "B8 horizontal-plane derivative range",
       :status :proved,
       :consumers [:t96A07],
-      :depends-on
-      ["ConstructionTargets.T96A07Closure.descended_mfderiv_range_at_e0"],
+      :depends-on [],
       :area "projective-smooth-descent"}
-     {:name "ConstructionTargets.T96A07Closure.plane_fderiv_range",
-      :type "B8 horizontal-plane derivative range",
+     {:name
+      "ConstructionTargets.T96A07Closure.sphereMap_vertical_surjective",
+      :type
+      "B9 vertical component surjective at incident levels 0<z<1/2",
       :status :not-started,
       :consumers [:t96A07],
-      :depends-on [],
+      :depends-on
+      ["ConstructionTargets.T96A07Closure.sphereMapAmbient_fderiv"],
       :area "projective-smooth-descent"}],
     :statement-hashes
     {:registry "131/0",
-     :closure "46b6c6e1cec41cddc2ba5c93f38044fca24ee25f",
+     :closure "dc2f445f0d627383a28e2762fcc64632efc6490b",
      :blueprint "69b59fb622dd62fc82a1fe100b353eaabc2c948d"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
@@ -79521,31 +79522,18 @@
      {:cmd "Main compile", :exit 0}
      {:cmd "registry check", :exit 0}
      {:cmd "placeholder count", :exit 0, :output "1"}
-     {:cmd "git show --check a532a6ecc", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1791764343345-6040-8e987b78",
-     :commands
-     ["git show/check/diff 1ac8a737..a532a6ecc"
-      "verify scoped blobs, fixture SHA, history ancestry"
-      "lake build ConstructionTargets.t96A07Closure"
-      "lake env lean closure and t96A07 Main"
-      "statement-registry check/fingerprint"
-      "placeholder and axiom checks"],
-     :finding
-     "PASS: a532a6ecc7bc66ca70db91731d4affedb40f423f adds compiled, sorry-free B6-B7 progress after 1ac8a737; both changed paths are scoped. Closure/blueprint blobs 46b6c6e1/69b59fb6 and fixture 6a654df3 match. The quotient derivative is used in the correct composition orientation, and the incident e0/0 witness confines descended and axis derivative ranges to the proper yz plane before adapting to frozen Transverse. Lean gates pass with standard axioms only; registry 131/0, frozen hash 2ba67b04 unchanged, closure/Main placeholders 0/1. STOP records B8 then B9-B13."},
-    :commit "a532a6ecc7bc66ca70db91731d4affedb40f423f",
+     {:cmd "git show --check 2abba69f4", :exit 0}],
+    :commit "2abba69f4db141226dd225a772db8b0cbb4e00a4",
     :changed-paths
     ["ConstructionTargets/t96A07Closure.lean"
      "problems/t96A07/lean/Main.lean"],
     :fixture
     {:path "ConstructionTargets/t96A07Closure.lean",
      :sha256
-     "6a654df32ea74f1fd44493efc2950c2d69a176ce151558efe7a9acdb569ccaa2"},
+     "e2e632c831e95306602ec7e79110c8e4ac8dfd63ef5c7d0a77830e129c109a48"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t96A07/lean/Main.lean"
     "problems/t96A07/status.json"
@@ -81332,8 +81320,31 @@
    {:name "ConstructionTargets.T96A07Closure.plane_fderiv_range",
     :reported-by [:program-2026-10-11-close-t96a07],
     :type "B8 horizontal-plane derivative range",
-    :area "projective-smooth-descent"},
+    :area "projective-smooth-descent",
+    :proved-in :program-2026-10-11-close-t96a07},
    :id :lemma-constructiontargets-t96a07closure-plane-fderiv-range,
    :kind :lemma,
    :depends-on [],
+   :other-consumers []}
+  {:consumer :t96A07,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.T96A07Closure.sphereMap_vertical_surjective",
+    :type
+    "B9 vertical component surjective at incident levels 0<z<1/2"},
+   :lemma
+   {:name
+    "ConstructionTargets.T96A07Closure.sphereMap_vertical_surjective",
+    :reported-by [:program-2026-10-11-close-t96a07],
+    :type
+    "B9 vertical component surjective at incident levels 0<z<1/2",
+    :area "projective-smooth-descent"},
+   :id
+   :lemma-constructiontargets-t96a07closure-spheremap-vertical-surjective,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-t96a07closure-spheremapambient-fderiv],
    :other-consumers []}]}
