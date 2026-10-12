@@ -384,6 +384,32 @@ theorem spherePullbackLongCoeff_pi
   rw [spherePullbackLongCoeff_eq, sphereParamLong_pi]
   exact (eta (sphereParam (Real.pi, t))).map_coord_zero 0 (by simp)
 
+/-- Differentiability of the pulled-back one-form follows from
+differentiability of the ambient primitive on punctured space. -/
+theorem differentiableAt_spherePullbackOneForm
+    (eta : E3 → E3 [⋀^Fin 1]→L[ℝ] ℝ)
+    (heta : ∀ x, x ≠ 0 → DifferentiableAt ℝ eta x) (p : ℝ × ℝ) :
+    DifferentiableAt ℝ (spherePullbackOneForm eta) p := by
+  have hs2 : ContDiff ℝ (1 + 1) sphereParam := sphereParam_contDiff.of_le (by simp)
+  have hdf : Differentiable ℝ (fderiv ℝ sphereParam) :=
+    ((contDiff_succ_iff_fderiv.mp hs2).2.2).differentiable (by norm_num)
+  exact DifferentiableAt.continuousAlternatingMapCompContinuousLinearMap
+    ((heta _ (sphereParam_ne_zero p)).comp p (sphereParam_differentiable p)) (hdf p)
+
+theorem differentiableAt_spherePullbackLatCoeff
+    (eta : E3 → E3 [⋀^Fin 1]→L[ℝ] ℝ)
+    (heta : ∀ x, x ≠ 0 → DifferentiableAt ℝ eta x) (p : ℝ × ℝ) :
+    DifferentiableAt ℝ (spherePullbackLatCoeff eta) p := by
+  unfold spherePullbackLatCoeff
+  exact (differentiableAt_spherePullbackOneForm eta heta p).continuousAlternatingMap_apply_const _
+
+theorem differentiableAt_spherePullbackLongCoeff
+    (eta : E3 → E3 [⋀^Fin 1]→L[ℝ] ℝ)
+    (heta : ∀ x, x ≠ 0 → DifferentiableAt ℝ eta x) (p : ℝ × ℝ) :
+    DifferentiableAt ℝ (spherePullbackLongCoeff eta) p := by
+  unfold spherePullbackLongCoeff
+  exact (differentiableAt_spherePullbackOneForm eta heta p).continuousAlternatingMap_apply_const _
+
 /-- Green cancellation for the pullback of an ambient one-form over the
 spherical rectangle.  The hypotheses are exactly the analytic premises of
 Mathlib's rectangle divergence theorem; the geometric boundary terms cancel
@@ -423,6 +449,36 @@ theorem sphericalRectangle_green_boundary_zero
     spherePullbackLongCoeff_zero, spherePullbackLongCoeff_pi,
     sub_eq_add_neg] using hgreen
 
+/-- The curl of a punctured-space primitive has zero integral over the
+spherical rectangle. -/
+theorem sphericalRectangle_curl_integral_zero
+    (eta : E3 → E3 [⋀^Fin 1]→L[ℝ] ℝ)
+    (omega : E3 → E3 [⋀^Fin 2]→L[ℝ] ℝ)
+    (heta : ∀ x, x ≠ 0 → DifferentiableAt ℝ eta x)
+    (hexact : ∀ x, x ≠ 0 → extDeriv eta x = omega x)
+    (homega : ∀ x, x ≠ 0 → omega x = solidAngleAmbient x) :
+    (∫ s in 0..Real.pi, ∫ t in 0..2 * Real.pi,
+      fderiv ℝ (spherePullbackLongCoeff eta) (s, t) (1, 0) -
+        fderiv ℝ (spherePullbackLatCoeff eta) (s, t) (0, 1)) = 0 := by
+  have hLongDiff : Differentiable ℝ (spherePullbackLongCoeff eta) :=
+    fun p => differentiableAt_spherePullbackLongCoeff eta heta p
+  have hLatDiff : Differentiable ℝ (spherePullbackLatCoeff eta) :=
+    fun p => differentiableAt_spherePullbackLatCoeff eta heta p
+  have hSin : MeasureTheory.IntegrableOn (fun p : ℝ × ℝ => Real.sin p.1)
+      (Set.uIcc 0 Real.pi ×ˢ Set.uIcc 0 (2 * Real.pi)) :=
+    ((Real.continuous_sin.comp continuous_fst).continuousOn.integrableOn_compact
+      (isCompact_uIcc.prod isCompact_uIcc))
+  have hCurl : MeasureTheory.IntegrableOn (fun p : ℝ × ℝ =>
+      fderiv ℝ (spherePullbackLongCoeff eta) p (1, 0) -
+        fderiv ℝ (spherePullbackLatCoeff eta) p (0, 1))
+      (Set.uIcc 0 Real.pi ×ˢ Set.uIcc 0 (2 * Real.pi)) :=
+    hSin.congr_fun (fun p _ => (exact_sphereParam_identity eta omega heta hexact homega p).symm)
+      (measurableSet_uIcc.prod measurableSet_uIcc)
+  exact sphericalRectangle_green_boundary_zero eta
+    hLongDiff.continuous.continuousOn hLatDiff.continuous.continuousOn
+    (fun p _ => (hLongDiff p).hasFDerivAt)
+    (fun p _ => (hLatDiff p).hasFDerivAt) hCurl
+
 #print axioms solidAngleAmbient_apply
 #print axioms norm_cube_eq_coordinate_denominator
 #print axioms solidAngleAmbient_apply_coordinate
@@ -435,5 +491,6 @@ theorem sphericalRectangle_green_boundary_zero
 #print axioms solidAngle_pullback_sphereParam
 #print axioms exact_sphereParam_identity
 #print axioms sphericalRectangle_green_boundary_zero
+#print axioms sphericalRectangle_curl_integral_zero
 
 end ConstructionTargets.T94A10Closure
