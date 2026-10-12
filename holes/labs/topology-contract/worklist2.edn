@@ -79530,6 +79530,19 @@
       :exit 1,
       :finding
       "Corrected eq_top membership and tangent equality orientation."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791767297854-6110-675ab62d",
+     :commands
+     ["git show/check/diff f8d51a9d6..81f5ee4e1"
+      "verify scoped blobs, fixture SHA, ancestry"
+      "lake build ConstructionTargets.t96A07Closure"
+      "lake env lean closure and t96A07 Main"
+      "statement-registry check/fingerprint"
+      "placeholder and axiom checks"],
+     :finding
+     "PASS: 81f5ee4e1e7b28bd29b02702d26a18f1c84b720d adds compiled, sorry-free B10 completion after f8d51a9d6; both changed paths are scoped. Closure/blueprint blobs cddae761/69b59fb6 and fixture fd3ae722 match. Matching an arbitrary target vertical coordinate with the sphere derivative leaves an xy-plane remainder supplied by the affine plane, so the range supremum is top; the Main adapter has the frozen Transverse orientation. Lean gates pass with standard axioms only; registry 131/0, frozen hash 2ba67b04 unchanged, closure/Main placeholders 0/1. STOP lists B11 then B12-B13."},
     :commit "81f5ee4e1",
     :changed-paths
     ["ConstructionTargets/t96A07Closure.lean"
@@ -79540,7 +79553,7 @@
      "fd3ae7226b81350f048873fbd8da7703514ea7e11445b29a834ab07cc59ee714"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t96A07/lean/Main.lean"
     "problems/t96A07/status.json"
@@ -79597,8 +79610,9 @@
     {:job 5,
      :commit "b5adc850b073d3ef0a5bfd745d6b19d7afeeb5ff",
      :reason :program-progress-committed}
-    {:job 6,
-     :commit "f8d51a9d6",
+    {:job 6, :commit "f8d51a9d6", :reason :program-milestone-complete}
+    {:job 7,
+     :commit "81f5ee4e1",
      :reason :program-milestone-complete}]}
   {:consumer :t94A10,
    :stop-count 2,
@@ -81479,7 +81493,7 @@
    :other-consumers []}
   {:consumer :t96A07,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -81491,7 +81505,9 @@
     :reported-by [:program-2026-10-11-close-t96a07],
     :type "B10 horizontal-level transversality",
     :area "projective-smooth-descent",
-    :proved-in :program-2026-10-11-close-t96a07},
+    :proved-in :program-2026-10-11-close-t96a07,
+    :banked-by :program-2026-10-11-close-t96a07,
+    :banked-commit "81f5ee4e1"},
    :id
    :lemma-constructiontargets-t96a07closure-spheremap-transverse-plane,
    :kind :lemma,
