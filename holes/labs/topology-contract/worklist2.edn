@@ -75549,6 +75549,8 @@
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
    :stop-count 1,
+   :review-finding
+   "The STOP incorrectly marks the center-contraction milestone proved. commit 194ea4781 establishes only ContractibleSpace for the inner open, which chooses an unspecified contraction point; it neither supplies a deformation retraction nor identifies that point with PairingData.center. B4 explicitly requires U P to deformation-retract to P.center. Add this exact center-based deformation retraction to :missing-theorems and prove it in scope; annular side/overlap are not the only residual.",
    :evidence
    {:placeholder-delta 0,
     :residual "Finish annular side/overlap; then B5/B6.",
@@ -75607,6 +75609,12 @@
     [{:cmd "continuity proof compile",
       :exit 1,
       :correction "used functorial continuity for nested subtypes"}],
+    :review
+    {:outcome :fail,
+     :seat "codex-7",
+     :job "invoke-1791844562090-8006-eb9e91d7",
+     :finding
+     "The STOP incorrectly marks the center-contraction milestone proved. commit 194ea4781 establishes only ContractibleSpace for the inner open, which chooses an unspecified contraction point; it neither supplies a deformation retraction nor identifies that point with PairingData.center. B4 explicitly requires U P to deformation-retract to P.center. Add this exact center-based deformation retraction to :missing-theorems and prove it in scope; annular side/overlap are not the only residual."},
     :commit "194ea4781",
     :changed-paths ["ConstructionTargets/PolygonSurfacePiOne.lean"],
     :fixture
@@ -75615,7 +75623,7 @@
      "3b0d12baa5be1bb60015947120e7e79ae424ca8c8c4ef6edc6e41d8057390a95"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :repair,
    :scope ["ConstructionTargets/PolygonSurfacePiOne.lean"],
    :dag-node "ConstructionTargets/PolygonSurfacePiOne.blueprint.md/B4",
    :acceptance
@@ -75628,7 +75636,7 @@
    :id :routes-2026-10-12-polygon-b4-topo2-r1,
    :kind :reusable-theorem,
    :area "polygon-surface-pi1",
-   :fail-count 0,
+   :fail-count 1,
    :depends-on
    [:routes-2026-10-12-polygon-b3-topo2-r1
     :routes-2026-10-12-checkpoint-topo2-r16],
