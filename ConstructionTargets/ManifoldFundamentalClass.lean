@@ -3319,6 +3319,16 @@ theorem coefficientCircleBoundaryGenerator_signed_coordinates :
   · exact CoefficientSphereEndpoints.kernel_false ℤ 1
   · exact CoefficientSphereEndpoints.kernel_true ℤ 1
 
+theorem coefficientCircleBoundaryGenerator_eq_signedFunction :
+    (CoefficientSphereEndpoints.boundaryIso ℤ).hom.hom
+      ((kernel.ι (CoefficientSphereEndpoints.inclusion ℤ)).hom
+        ((CoefficientSphereEndpoints.boundaryKernelIso ℤ).inv.hom (1 : ℤ))) =
+      (fun b : Bool ↦ if b then (-1 : ℤ) else 1) := by
+  funext b
+  cases b
+  · exact CoefficientSphereEndpoints.kernel_false ℤ 1
+  · exact CoefficientSphereEndpoints.kernel_true ℤ 1
+
 end ConstructionTargets.ManifoldFundamentalClass
 
 #print axioms ConstructionTargets.ManifoldFundamentalClass.neighborhoodInclusion_Hsucc_isIso
@@ -3438,6 +3448,7 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientCircleComparisonIso_hom_eq_of_coordinates
 #print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientCircleCoordinates_eq_id_of_apply_one
 #print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientCircleBoundaryGenerator_signed_coordinates
+#print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientCircleBoundaryGenerator_eq_signedFunction
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_projection
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_generator_of_normalization
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_normalization_of_generator
