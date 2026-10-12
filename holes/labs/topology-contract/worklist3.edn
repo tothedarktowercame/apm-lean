@@ -30143,11 +30143,26 @@
      {:cmd "lake env lean /tmp/surface_face_bound_check.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "rg source placeholders", :exit 1, :expected-exit 1}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791819112222-7231-7926faff",
+     :commands
+     ["git show/diff 9ef141c9e"
+      "sha256sum surface_face_bound_check"
+      "git diff --check; blob-current"
+      "rg Lean placeholders"
+      "statement-registry.py check"
+      "#print axioms forbidden-set theorem"
+      "lake env lean fixture/module"
+      "lake build ConstructionTargets.SurfaceClassification"],
+     :finding
+     "PASS program STOP: new compiled milestone after 9dbbade0d defines the perturbation forbidden set as endpoint images union crossings and proves it finite from pairwise finite intersections. One-file scope; blob current; fixture/module/build pass; registry 131/131; zero Lean placeholders; standard axioms. Perturbation existence/transversality remain listed."},
     :commit "9ef141c9e5387d47487740ef7880c5894ae55734",
     :changed-paths ["ConstructionTargets/SurfaceClassification.lean"],
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/SurfaceClassification.lean"
     "ConstructionTargets/SurfaceClassification.md"
@@ -30167,7 +30182,7 @@
     :blueprint
     "ConstructionTargets/SurfaceClassification.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: B4 global/pairwise crossing-finiteness equivalence proved; program continues with geometric perturbation",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: B4 finite perturbation-forbidden set proved; program continues with polygonal perturbation existence",
    :id :program-2026-10-12-surface-classification,
    :kind :reusable-theorem,
    :campaign-priority 40,
@@ -30210,7 +30225,11 @@
     {:job 3,
      :commit "9dbbade0d23a8e1890f56df6e21fe307d288d4d2",
      :reason
-     "B4 global/pairwise crossing-finiteness equivalence proved; program continues with geometric perturbation"}]}
+     "B4 global/pairwise crossing-finiteness equivalence proved; program continues with geometric perturbation"}
+    {:job 4,
+     :commit "9ef141c9e5387d47487740ef7880c5894ae55734",
+     :reason
+     "B4 finite perturbation-forbidden set proved; program continues with polygonal perturbation existence"}]}
   {:consumer :t00J02,
    :phase :lemma,
    :state :banked,
@@ -30486,7 +30505,7 @@
    :other-consumers [:t00A03 :t91J05 :t92J05 :t94J04 :t96A01 :t97J02]}
   {:consumer :t00A02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -30500,7 +30519,9 @@
     :type
     "(C : FiniteClosedDiskCover M) (h : ∀ p : C.BoundaryArcPairIndex, Set.Finite (C.boundaryArcIntersection p)) : Set.Finite C.boundaryForbiddenSet",
     :area "surface-classification",
-    :proved-in :program-2026-10-12-surface-classification},
+    :proved-in :program-2026-10-12-surface-classification,
+    :banked-by :program-2026-10-12-surface-classification,
+    :banked-commit "9ef141c9e5387d47487740ef7880c5894ae55734"},
    :id
    :lemma-constructiontargets-surfaceclassification-finitecloseddiskcover-boundaryforbidde,
    :kind :lemma,
