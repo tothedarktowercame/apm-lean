@@ -22,7 +22,8 @@ theorem and no CW-complex API is assumed.
 
 ## Certification of the pairing-orbit correction
 
-Certified 2026-10-12 for implementation.  B1 makes
+Certified 2026-10-12 for implementation.  B1 requires a positive number of
+arcs and makes
 `PairingOrbit P.pair` the generic generator type and exposes no independent
 label map.  B7 indexes wedge legs by that quotient itself; B8 is polymorphic
 in its finite index type; B9 and B11 instantiate it with the same
@@ -41,7 +42,7 @@ quotients below carry the coinduced topology from their displayed disk map.
 lean: `PolygonSurfacePiOne.PairingData`,
 `PolygonSurfacePiOne.PairingOrbit`,
 `PairingData.Rel`, `PairingData.Space`, `PairingData.quotientMap`, and
-`PairingData.center` : a finite cyclic list of oriented boundary arcs, a
+`PairingData.center` : a nonempty finite cyclic list of oriented boundary arcs, a
 fixed-point-free involution `pair` on the arcs, and a sign on each arc.
 Define `PairingOrbit pair` as the quotient of arcs by
 `i ∼ j ↔ j = i ∨ j = pair i`.  This quotient type itself is the generic
@@ -54,7 +55,8 @@ uses: `Surfaces.Disk`, `Surfaces.edgePoint`, `Relation.EqvGen`
 
 status: planned
 
-Use `Fin edgeCount` for arcs and `Fin edgeCount` for polygon vertices.  Store
+Use `Fin edgeCount` for arcs and `Fin edgeCount` for polygon vertices, with
+`edgeCount_pos : 0 < edgeCount`.  Store
 `pair : Equiv.Perm (Fin edgeCount)`, `pair_pair : pair (pair i) = i`,
 `pair_ne : pair i ≠ i` and sign compatibility as fields rather than deriving
 them later.  First prove that `j = i ∨ j = pair i` is a setoid using
