@@ -113857,14 +113857,14 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "Blueprint B3 is marked proved but its proof uses the unlisted ConnectedGroupoidSingleObjEquivalence.connectorSingleObjEquivalence (and connector-system representation) instead of only the declared uses; add the actual connector dependency and proof route to B3 uses.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
    :evidence
    {:placeholder-delta {:source-before 0, :source-after 0},
     :residual
-    "Evaluate nested left unit map, right unitInv map, two span maps, literal lifts; then B12.",
+    "Evaluate two nested unit maps, two span maps, and literal lifts; then B12.",
     :outcome :stop,
     :warnings [],
     :missing-theorems
@@ -113878,9 +113878,9 @@
       :area "fundamental-group-wedge-of-circles"}],
     :statement-hashes
     {:source
-     "576b6818fec6f1633456c2f11990cb7a5d09a6916c886ea0ea255cf2cf33bdf5",
+     "38839a061573484c981822ee0325a80e65ab3edcf9c618fc9345b7cacbe16392",
      :documentation
-     "a9396992b2fd6f73e1a804913f46c27bb9e0ba952362e0d2478e15fe900ca9a4",
+     "3d7d95c0fabf8aa09402542189b34bd791bb7bc7a99d2eda57cb5a1c9d85bfb0",
      :blueprint
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0",
      :registry "131/131"},
@@ -113888,7 +113888,7 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
     :reason
-    "Left overlap-unit target map expands into two nested functor maps.",
+    "Right overlap-unitInv target map expands into two nested functor maps.",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/PointWedgeVanKampen.lean",
@@ -113897,14 +113897,8 @@
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder/diff validation", :exit 0}],
-    :diagnostic-history
-    [{:cmd "lean identity attempt",
-      :exit 1,
-      :finding "Exact nested map remained."}
-     {:cmd "symlink precheck",
-      :exit 1,
-      :finding "Canonical checkout; frame rule inapplicable."}],
-    :commit "ce2bdc71a95f1277893fcfb1030a2d0c4f90d057",
+    :diagnostic-history [],
+    :commit "037c37caa8838f424f1f9b654d71d3f5a815a554",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
      "ConstructionTargets/PointWedgeVanKampen.md"],
@@ -113914,7 +113908,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
