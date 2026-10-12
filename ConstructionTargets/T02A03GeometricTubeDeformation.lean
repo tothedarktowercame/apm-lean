@@ -2067,6 +2067,34 @@ theorem rotatedEndpointWaypoint_corrected_departure_zero_polynomial_bounds
   field_simp [htne] at hb ⊢
   constructor <;> nlinarith [hb.1, hb.2]
 
+/-- The annulus bound excludes corrected departure zeros near the initial
+endpoint. -/
+theorem rotatedEndpointWaypoint_corrected_departure_zero_time_gt_eighth
+    (t : unitInterval) (p : RightTubeMinusLeftCore)
+    (hz : (((1 - 2 * (t : ℝ) : ℝ) : ℂ) +
+        ((2 * (t : ℝ) : ℝ) : ℂ) * rotatedEndpointWaypoint p +
+        (((t : ℝ) * (1 - 2 * (t : ℝ)) : ℝ) : ℂ) * Complex.I) = 0) :
+    (1 / 8 : ℝ) < (t : ℝ) := by
+  have hc :=
+    rotatedEndpointWaypoint_corrected_departure_zero_coordinates t p hz
+  have hb := rightTubeCorePlanarNormBounds p.1 p.2.1
+  have himabs :
+      |(rightTubeCorePlanarComplex p.1).im| ≤ (5 / 4 : ℝ) :=
+    (RCLike.abs_im_le_norm (rightTubeCorePlanarComplex p.1)).trans hb.2
+  have himlo := (abs_le.mp himabs).1
+  have himhi := (abs_le.mp himabs).2
+  by_contra h
+  have htupper : (t : ℝ) ≤ 1 / 8 := le_of_not_gt h
+  have hmullo : 0 ≤ (t : ℝ) *
+      ((rightTubeCorePlanarComplex p.1).im + 5 / 4) :=
+    mul_nonneg (le_of_lt hc.1) (by linarith)
+  have hmulhi : 0 ≤ (t : ℝ) *
+      (5 / 4 - (rightTubeCorePlanarComplex p.1).im) :=
+    mul_nonneg (le_of_lt hc.1) (by linarith)
+  have heq :=
+    (rotatedEndpointWaypoint_corrected_departure_eq_zero_iff t p).mp hz
+  nlinarith [hmullo, hmulhi]
+
 end ConstructionTargets.T02A03GeometricTubeDeformation
 
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeNormalComplex_eq_zero_iff
@@ -2147,3 +2175,4 @@ end ConstructionTargets.T02A03GeometricTubeDeformation
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_corrected_departure_zero_normSq
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_corrected_departure_zero_scalar_bounds
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_corrected_departure_zero_polynomial_bounds
+#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_corrected_departure_zero_time_gt_eighth
