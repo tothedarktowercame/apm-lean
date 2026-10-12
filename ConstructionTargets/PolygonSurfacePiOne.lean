@@ -421,4 +421,29 @@ theorem standardSign_pair_eq_iff (o : Bool) (g : ℕ)
   · simp only [Bool.true_eq_false, iff_false]
     exact standardSign_orientable_pair g i
 
+/-- Package the algebraic standard-polygon data once the geometric
+one-vertex calculation has been supplied. -/
+def standardPairingDataOfOneVertex (o : Bool) (g : ℕ) (hg : 0 < g)
+    (hvertex : ∀ i j : Fin (standardEdgeCount o g),
+      Relation.EqvGen
+        (boundaryRel (standardEdgeCount o g) (standardPair o g) (standardSign o g))
+        (polygonVertex (standardEdgeCount o g) i)
+        (polygonVertex (standardEdgeCount o g) j)) : PairingData where
+  edgeCount := standardEdgeCount o g
+  edgeCount_pos := standardEdgeCount_pos o g hg
+  pair := standardPair o g
+  pair_pair := standardPair_involutive o g
+  pair_ne := standardPair_ne o g
+  sign := standardSign o g
+  oneVertex := hvertex
+
+@[simp] theorem standardPairingDataOfOneVertex_edgeCount
+    (o : Bool) (g : ℕ) (hg : 0 < g) (hvertex) :
+    (standardPairingDataOfOneVertex o g hg hvertex).edgeCount =
+      standardEdgeCount o g := rfl
+
+@[simp] theorem standardPairingDataOfOneVertex_pair
+    (o : Bool) (g : ℕ) (hg : 0 < g) (hvertex) :
+    (standardPairingDataOfOneVertex o g hg hvertex).pair = standardPair o g := rfl
+
 end ConstructionTargets.PolygonSurfacePiOne
