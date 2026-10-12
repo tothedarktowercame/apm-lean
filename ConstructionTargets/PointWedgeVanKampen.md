@@ -336,3 +336,9 @@ whiskering layers on the right.  Its hom orientation becomes the coordinate
 right representation applied to the inverse strict right-span comparison.
 The two mapped span comparisons, two overlap round-trips, and literal lifts
 remain for B6.
+
+`genericPointWedgeIdentityOuterLeftRoundTrip_eq_map` similarly removes the
+postcomposition whiskering from the inverse left overlap round-trip.  It is
+now the left coordinate representation applied to the explicit inverse
+`funInvIdAssoc` component.  Its evaluation, the right round-trip, both mapped
+span comparisons, and the literal lifts remain for B6.
