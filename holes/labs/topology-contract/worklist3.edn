@@ -18673,8 +18673,43 @@
   {:consumer :t00J02,
    :implements-lemma
    :lemma-constructiontargets-manifoldfundamentalclass-coefficientopendiskradial-homology-,
+   :evidence
+   {:placeholder-delta {:t00J02 [1 1], :t98A02 [1 1]},
+    :residual "Compare sphere normalizations.",
+    :outcome :done-unreviewed,
+    :warnings ["9 pre-existing unnecessarySimpa"],
+    :missing-theorems [],
+    :statement-hashes {:registry "131/131"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli",
+    :commands
+    [{:cmd "sha256sum /tmp/odrad.lean", :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.ManifoldFundamentalClass",
+      :exit 0}
+     {:cmd "lake env lean /tmp/odrad_check.lean", :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "rg forbidden tokens in scoped file",
+      :exit 1,
+      :expected-exit 1}],
+    :diagnostic-history
+    [{:cmd
+      "lake env lean ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 1,
+      :note "qualified radial F; rerun passed"}],
+    :commit "ea09a9ef100947f047e4698c34007b5248848278",
+    :changed-paths
+    ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+    :fixture
+    {:path "/tmp/odrad.lean",
+     :sha256
+     "bf0a01a1e24fc05a64c2775dfdebdf4882d348302a2f403f8b114acb22790c3b"},
+    :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/manifold-fundamental-class/model-radial",
