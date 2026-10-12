@@ -2138,6 +2138,37 @@ theorem genericPointWedgeCounitElement_eq_representationCounits :
           (SingleObj.star (genericPointWedgeFreeProduct x₀ y₀)) := by
   rfl
 
+omit [PathConnectedSpace X] [PathConnectedSpace Y] in
+/-- The final representation-to-single-object counit contributes the unit at
+the unique target object. -/
+theorem genericPointWedgeRepresentationCounit_app_eq_one :
+    let C := genericPointWedgeTarget x₀ y₀
+    let R := representationSingleObjEquivalence
+      (C := C) (genericPointWedgeLeftGroup x₀)
+        (genericPointWedgeRightGroup y₀)
+    let F := Functor.id (SingleObj (genericPointWedgeFreeProduct x₀ y₀))
+    (R.counitIso.hom.app F).app
+        (SingleObj.star (genericPointWedgeFreeProduct x₀ y₀)) =
+      (1 : genericPointWedgeFreeProduct x₀ y₀) := by
+  rfl
+
+/-- Consequently the full B3 counit element is just the mapped counit of the
+preceding free-product-representation equivalence. -/
+theorem genericPointWedgeCounitElement_eq_mappedRepresentationCounit :
+    let C := genericPointWedgeTarget x₀ y₀
+    let E := genericPointWedgeFreeProductMappingEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN C
+    let R := representationSingleObjEquivalence
+      (C := C) (genericPointWedgeLeftGroup x₀)
+        (genericPointWedgeRightGroup y₀)
+    let F := Functor.id (SingleObj (genericPointWedgeFreeProduct x₀ y₀))
+    genericPointWedgeCounitElement x₀ y₀ M N hM hN hy hx cM cN =
+      (R.functor.map (E.counitIso.hom.app (R.inverse.obj F))).app
+        (SingleObj.star (genericPointWedgeFreeProduct x₀ y₀)) := by
+  rw [genericPointWedgeCounitElement_eq_representationCounits,
+    genericPointWedgeRepresentationCounit_app_eq_one]
+  simp only [SingleObj.comp_as_mul, one_mul]
+
 def genericPointWedgeMappedLeft (g : FundamentalGroup X x₀) :
     genericPointWedgeFreeProduct x₀ y₀ :=
   ((genericPointWedgeSingleObjMappingEquivalence
@@ -3402,6 +3433,8 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeSourceCounit_left
 #print axioms genericPointWedgeSourceCounit_right
 #print axioms genericPointWedgeCounitElement_eq_representationCounits
+#print axioms genericPointWedgeRepresentationCounit_app_eq_one
+#print axioms genericPointWedgeCounitElement_eq_mappedRepresentationCounit
 #print axioms genericPointWedgeMappedLeft_eq_conj
 #print axioms genericPointWedgeMappedRight_eq_conj
 #print axioms genericPointWedgeCounitNormalization_left

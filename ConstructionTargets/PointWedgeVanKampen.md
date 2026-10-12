@@ -601,3 +601,9 @@ counit at its last composite boundary.  It is the mapped counit of the
 free-product representation equivalence followed by the final
 representation-to-single-object counit.  The next comparison can therefore
 match those two factors against the outer comparison composite separately.
+
+The final factor is now discharged:
+`genericPointWedgeRepresentationCounit_app_eq_one` computes it as `1`, and
+`genericPointWedgeCounitElement_eq_mappedRepresentationCounit` removes it
+from the full B3 counit.  Only the mapped free-product-representation counit
+remains to be identified with the outer comparison composite.
