@@ -113896,6 +113896,18 @@
       :finding "Not definitional."}
      {:cmd "lean counit simp", :exit 1, :finding "Six factors."}
      {:cmd "lean split type", :exit 1, :finding "Used Functor.id."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791811623465-6980-1c2d69d1",
+     :commands
+     ["git show/diff-tree 7051031fd"
+      "sha256/placeholder/registry checks"
+      "lake env lean ConstructionTargets/PointWedgeVanKampen.lean"
+      "lake build ConstructionTargets.PointWedgeVanKampen"
+      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (expected absent)"],
+     :finding
+     "PASS: exact two-file scope and frozen hashes match; placeholders 0->0, registry 131/131. B3 counit is faithfully split at the actual representation boundary into mapped representation and final single-object counits; standard axioms only. Valid program STOP with compiled progress; match these factors to the outer composite, then B6/B12."},
     :commit "7051031fd8d6d900536ff7d3217cb962d565f6b7",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
@@ -113906,7 +113918,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113927,7 +113939,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: The reconstruction right-base conjugator is now exactly the inverse-left/forward-right outer comparison composite.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: B3 counit split into mapped representation and final single-object counits.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -114295,7 +114307,11 @@
     {:job 6,
      :commit "a450e10c20202e41efb2ef2d05445d5400e6cf6b",
      :reason
-     "The reconstruction right-base conjugator is now exactly the inverse-left/forward-right outer comparison composite."}]}
+     "The reconstruction right-base conjugator is now exactly the inverse-left/forward-right outer comparison composite."}
+    {:job 7,
+     :commit "7051031fd8d6d900536ff7d3217cb962d565f6b7",
+     :reason
+     "B3 counit split into mapped representation and final single-object counits."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
