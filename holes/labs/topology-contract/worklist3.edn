@@ -20677,6 +20677,19 @@
       "git diff --check -- ConstructionTargets/ManifoldFundamentalClass.lean",
       :exit 0}
      {:cmd "rg forbidden scoped file", :exit 1, :expected-exit 1}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791807820182-6919-3b1c4a13",
+     :commands
+     ["git show/diff-tree 3c9f42fa4"
+      "sha256sum /tmp/circleboundarydetect.lean"
+      "lake env lean /tmp/circleboundarydetect.lean"
+      "lake env lean ConstructionTargets/ManifoldFundamentalClass.lean"
+      "python3 scripts/statement-registry.py check"
+      "git diff --check; rg placeholder/forbidden counts"],
+     :finding
+     "PASS: 3c9f42fa4 changes only the scoped module and its blob is current; fixture SHA-256 matches. Frozen type and module compile. The interval pair connecting morphism is mono, hence injective; applying it to the stated boundary equality correctly identifies z with the native relative generator. Registry 131/131; standard axioms only; no scoped placeholders. Counts unchanged: t00J02 bridge_1=1, sorry=1; t98A02 sorry=1."},
     :commit "3c9f42fa41c6dff308665386fe2e4e8af65ceb27",
     :changed-paths
     ["ConstructionTargets/ManifoldFundamentalClass.lean"],
@@ -20686,7 +20699,7 @@
      "125abe76dc8730b15ea11bf2b596ece703ad4544a0914a60a996520aef5bdb68"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/manifold-fundamental-class",
    :acceptance
@@ -20757,7 +20770,7 @@
       "125abe76dc8730b15ea11bf2b596ece703ad4544a0914a60a996520aef5bdb68"},
      :seat "topo-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -29593,7 +29606,7 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -29606,7 +29619,9 @@
     [:routes-2026-10-10-manifold-fundamental-class-topo3-r2],
     :type "exact type in fixture",
     :area "manifold-fundamental-class",
-    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2,
+    :banked-by :routes-2026-10-12-mfclass-boundary-detect-r1,
+    :banked-commit "3c9f42fa41c6dff308665386fe2e4e8af65ceb27"},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-intervalrelativeclass-eq-generator-,
    :kind :lemma,
