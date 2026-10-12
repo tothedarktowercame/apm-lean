@@ -113902,6 +113902,19 @@
       :exit 1,
       :finding
       "Identity rewrites exposed a mapped cast; retained exact map."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791768810970-6138-1b12b0f0",
+     :commands
+     ["git show/diff-tree a08019178"
+      "sha256/diff/placeholder checks"
+      "statement-registry.py check"
+      "lake env lean ConstructionTargets/PointWedgeVanKampen.lean"
+      "lake build ConstructionTargets.PointWedgeVanKampen"
+      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (expected absent)"],
+     :finding
+     "Recorded commit has exact scoped paths and frozen fixture 0bca6c...8c8b0. New rfl lemma faithfully unwraps inverse/left whiskering to Q.left.map of aL.hom at the transported object; no orientation or representation overclaim. Source is sorry-free; hashes and 131/131 registry reproduce; Lean/build pass; axioms are propext, Classical.choice, Quot.sound. Valid program STOP: compiled new milestone, residual lists mapped left comparison, three outer factors, literal lifts, then B12; final target is absent as reported."},
     :commit "a0801917809ac5e5a34c89a1d73c6e2fe7eb675d",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
@@ -113912,7 +113925,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113933,7 +113946,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Outer right comparison expands into its two ordered factors.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Outer left-span factor is the mapped strict span comparison.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -114109,7 +114122,11 @@
     {:job 3,
      :commit "73e94c5cb38e66ff2170a8cbe2da0d0a32bb689e",
      :reason
-     "Outer right comparison expands into its two ordered factors."}]}
+     "Outer right comparison expands into its two ordered factors."}
+    {:job 4,
+     :commit "a0801917809ac5e5a34c89a1d73c6e2fe7eb675d",
+     :reason
+     "Outer left-span factor is the mapped strict span comparison."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
