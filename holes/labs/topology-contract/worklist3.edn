@@ -30099,7 +30099,7 @@
   {:consumer :t00A02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 2,
+   :stop-count 3,
    :review-finding
    "Program-row defect: commit ebbfe625 repairs the B5 mathematics, but changes only SurfaceClassification.blueprint.md and commits no new compiled, sorry-free, standard-axiom result since the prior program-history entry; :missing-theorems is empty. The successful 8245-job build merely rebuilds pre-existing SurfaceClassification code and is not a new milestone. Repair by implementing and committing the next listed milestone (B1 FiniteTwoComplex/Realization or another genuine supporting result), compiling it without placeholders, and recording that proved milestone in :missing-theorems.",
    :implements-lemma
@@ -30114,26 +30114,26 @@
      :t96A01 [1 1],
      :t97J02 [3 3]},
     :residual
-    "B4: prove pairwise finite intersections and classify endpoints versus transverse crossings.",
+    "B4: construct perturbed polygonal arcs with finite pair intersections and transverse non-endpoint crossings.",
     :outcome :stop,
     :warnings [],
     :missing-theorems
     [{:name
-      "ConstructionTargets.SurfaceClassification.FiniteClosedDiskCover.boundaryCrossingSet_finite_of_pairwise",
+      "ConstructionTargets.SurfaceClassification.FiniteClosedDiskCover.boundaryCrossingSet_finite_iff_pairwise",
       :type
-      "(C : FiniteClosedDiskCover M) (h : ∀ p : C.BoundaryArcPairIndex, Set.Finite (C.boundaryArcIntersection p)) : Set.Finite C.boundaryCrossingSet",
+      "(C : FiniteClosedDiskCover M) : Set.Finite C.boundaryCrossingSet ↔ ∀ p : C.BoundaryArcPairIndex, Set.Finite (C.boundaryArcIntersection p)",
       :status :proved,
       :consumers
       [:t00A02 :t00A03 :t91J05 :t92J05 :t94J04 :t96A01 :t97J02],
       :depends-on
-      ["ConstructionTargets.SurfaceClassification.FiniteClosedDiskCover.boundaryVertexSet_finite"],
+      ["ConstructionTargets.SurfaceClassification.FiniteClosedDiskCover.boundaryCrossingSet_finite_of_pairwise"],
       :area "surface-classification"}],
     :statement-hashes {:registry "131/131"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "B4 finite arc-pair reduction proved; program continues with pairwise geometry",
+    "B4 global/pairwise crossing-finiteness equivalence proved; program continues with geometric perturbation",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/SurfaceClassification.lean",
@@ -30143,32 +30143,11 @@
      {:cmd "lake env lean /tmp/surface_face_bound_check.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "rg source placeholders", :exit 1, :expected-exit 1}],
-    :diagnostic-history
-    [{:cmd
-      "lake env lean ConstructionTargets/SurfaceClassification.lean",
-      :exit 1,
-      :stage
-      "pair subtype lacked computable Fintype; corrected with Fintype.ofFinite"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1791818212978-7205-beeb3df3",
-     :commands
-     ["git show/diff 19fc3b645"
-      "sha256sum surface_face_bound_check"
-      "git diff --check; blob-current"
-      "rg Lean placeholders"
-      "statement-registry.py check"
-      "#print axioms crossing theorem"
-      "lake env lean fixture/module"
-      "lake build ConstructionTargets.SurfaceClassification"],
-     :finding
-     "PASS program STOP: new compiled milestone after 447325043 defines the finite distinct ordered arc-pair index and proves the global crossing union finite from pairwise finiteness. One-file scope; blob current; fixture/module/build pass; registry 131/131; zero Lean placeholders; standard axioms. Remaining pairwise geometry is listed."},
-    :commit "19fc3b645533dfa39100618ae0077f0462367d76",
+    :commit "9dbbade0d23a8e1890f56df6e21fe307d288d4d2",
     :changed-paths ["ConstructionTargets/SurfaceClassification.lean"],
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SurfaceClassification.lean"
     "ConstructionTargets/SurfaceClassification.md"
@@ -30475,6 +30454,29 @@
    :kind :lemma,
    :depends-on
    [:lemma-constructiontargets-surfaceclassification-finitecloseddiskcover-boundaryvertexse],
+   :other-consumers [:t00A03 :t91J05 :t92J05 :t94J04 :t96A01 :t97J02]}
+  {:consumer :t00A02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.SurfaceClassification.FiniteClosedDiskCover.boundaryCrossingSet_finite_iff_pairwise",
+    :type
+    "(C : FiniteClosedDiskCover M) : Set.Finite C.boundaryCrossingSet ↔ ∀ p : C.BoundaryArcPairIndex, Set.Finite (C.boundaryArcIntersection p)"},
+   :lemma
+   {:name
+    "ConstructionTargets.SurfaceClassification.FiniteClosedDiskCover.boundaryCrossingSet_finite_iff_pairwise",
+    :reported-by [:program-2026-10-12-surface-classification],
+    :type
+    "(C : FiniteClosedDiskCover M) : Set.Finite C.boundaryCrossingSet ↔ ∀ p : C.BoundaryArcPairIndex, Set.Finite (C.boundaryArcIntersection p)",
+    :area "surface-classification",
+    :proved-in :program-2026-10-12-surface-classification},
+   :id
+   :lemma-constructiontargets-surfaceclassification-finitecloseddiskco-78a8e5f0af16,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-surfaceclassification-finitecloseddiskcover-boundarycrossing],
    :other-consumers
    [:t00A03 :t91J05 :t92J05 :t94J04 :t96A01 :t97J02]}],
  :consumer-baselines {},
