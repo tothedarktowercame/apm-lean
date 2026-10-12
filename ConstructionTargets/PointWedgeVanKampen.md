@@ -984,3 +984,8 @@ exactly the equivalence counit at the transported base.
 the expansion and triangle identities.  Its full normal form now contains the
 chosen source connector, mapped inverse equality transport, equivalence
 counit, and target equality transport in their exact order.
+
+`genericPointWedgeRightInverseBaseToRightBase_normalForm_eq_sourceCounit`
+then applies counit naturality to the named base-object equality.  Its inverse
+and forward equality transports cancel, leaving exactly the chosen source
+connector followed by the counit at the literal `y₀` object.
