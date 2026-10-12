@@ -30051,6 +30051,20 @@
       :exit 1,
       :expected-exit 1}],
     :continue-from "71ea2effc4113df058cb54d167c553fb3d6ea42f",
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791814178114-7064-606cb183",
+     :commands
+     ["git show/diff-tree 71ea2eff"
+      "lake env lean /tmp/surface_face_bound_check.lean"
+      "lake env lean ConstructionTargets/SurfaceClassification.lean"
+      "lake build ConstructionTargets.SurfaceClassification"
+      "python3 scripts/statement-registry.py check"
+      "git diff 71ea2eff^ 71ea2eff --check"
+      "rg source/consumer placeholders"],
+     :finding
+     "PASS program STOP: reviewer codex-11. Commit 71ea2eff is new since reviewed history and adds compiled, sorry-free B1 progress: RawCell, coproduct topology, attaching relation, equivalence-generated Realization, quotient map, and attaching equations; realizationQuotient_isQuotientMap is listed as proved, with inclusion continuity left explicit. Fin 2/Fin 3 simplex dimensions and face-map direction match the blueprint. Scope/blob match. Fixture/module/build pass (8245 jobs), registry 131/131, source placeholders 0, standard axioms only; consumer counts unchanged 2/2/3/3/2/1/3."},
     :commit "71ea2effc4113df058cb54d167c553fb3d6ea42f",
     :changed-paths ["ConstructionTargets/SurfaceClassification.lean"],
     :program-history
@@ -30060,7 +30074,7 @@
       :result :realization-quotient-proved}],
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/SurfaceClassification.lean"
     "ConstructionTargets/SurfaceClassification.md"
@@ -30080,7 +30094,7 @@
     :blueprint
     "ConstructionTargets/SurfaceClassification.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: face-bound milestone proved; program continues at B1 realization",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: realization quotient and attaching equations compiled; B1 continuity lemmas remain",
    :id :program-2026-10-12-surface-classification,
    :kind :reusable-theorem,
    :campaign-priority 40,
@@ -30092,7 +30106,11 @@
    [{:job 4,
      :commit "122a2d685ccb62c21e2214cb4eef7c9a788467db",
      :reason
-     "face-bound milestone proved; program continues at B1 realization"}]}
+     "face-bound milestone proved; program continues at B1 realization"}
+    {:job 5,
+     :commit "71ea2effc4113df058cb54d167c553fb3d6ea42f",
+     :reason
+     "realization quotient and attaching equations compiled; B1 continuity lemmas remain"}]}
   {:consumer :t00J02,
    :phase :lemma,
    :state :backlog,
@@ -30117,7 +30135,7 @@
    :other-consumers [:t98A02]}
   {:consumer :t00A02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -30131,7 +30149,9 @@
     :type
     "(K : FiniteTwoComplex) : IsQuotientMap K.realizationQuotient",
     :area "surface-classification",
-    :proved-in :program-2026-10-12-surface-classification},
+    :proved-in :program-2026-10-12-surface-classification,
+    :banked-by :program-2026-10-12-surface-classification,
+    :banked-commit "71ea2effc4113df058cb54d167c553fb3d6ea42f"},
    :id
    :lemma-constructiontargets-surfaceclassification-finitetwocomplex-realizationquotient-i,
    :kind :lemma,
