@@ -2335,6 +2335,41 @@ theorem genericPointWedgePreCoordinatePointCounit_legs_eq_preCoordinateSpan_coor
       (genericPointWedgePreCoordinatePointCounit_eq_preCoordinateSpan_coordinateSpan
         x₀ y₀ M N hM hN hy hx cM cN)
 
+/-- The coordinate-span counit legs are the counits of the left and right
+cover-to-summand groupoid equivalences. -/
+theorem genericPointWedgeCoordinateSpanCounit_legs :
+    let C := genericPointWedgeTarget x₀ y₀
+    let Q := genericPointWedgeIdentityCoordinateSpan x₀ y₀
+    let E := genericPointWedgeCoordinateSpanEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN C
+    (E.counitIso.hom.app Q).left =
+        ((genericPointWedgeLeftGroupoidEquivalence
+          x₀ y₀ M N hM hN hy hx cM cN).congrLeft).counitIso.hom.app Q.left ∧
+      (E.counitIso.hom.app Q).right =
+        ((genericPointWedgeRightGroupoidEquivalence
+          x₀ y₀ M N hM hN hy hx cM cN).congrLeft).counitIso.hom.app Q.right := by
+  exact ⟨rfl, rfl⟩
+
+/-- Evaluating the coordinate-span counit legs at the two summand base
+objects gives the identity coordinate-span maps of the underlying groupoid
+equivalence counits. -/
+theorem genericPointWedgeCoordinateSpanCounit_baseObjects :
+    let C := genericPointWedgeTarget x₀ y₀
+    let Q := genericPointWedgeIdentityCoordinateSpan x₀ y₀
+    let E := genericPointWedgeCoordinateSpanEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN C
+    ((E.counitIso.hom.app Q).left).app
+          (FundamentalGroupoid.mk x₀) =
+        Q.left.map ((genericPointWedgeLeftGroupoidEquivalence
+          x₀ y₀ M N hM hN hy hx cM cN).counit.app
+            (FundamentalGroupoid.mk x₀)) ∧
+      ((E.counitIso.hom.app Q).right).app
+          (FundamentalGroupoid.mk y₀) =
+        Q.right.map ((genericPointWedgeRightGroupoidEquivalence
+          x₀ y₀ M N hM hN hy hx cM cN).counit.app
+            (FundamentalGroupoid.mk y₀)) := by
+  exact ⟨rfl, rfl⟩
+
 /-- At the identity point-span object, the remaining coordinate-to-point
 counit is exactly the generic span-transport counit. -/
 theorem genericPointWedgeCoordinatePointCounit_eq_transportCounit :
@@ -3865,6 +3900,8 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgePreCoordinatePointSpanMappingEquivalence_eq_preCoordinateSpan_trans
 #print axioms genericPointWedgePreCoordinatePointCounit_eq_preCoordinateSpan_coordinateSpan
 #print axioms genericPointWedgePreCoordinatePointCounit_legs_eq_preCoordinateSpan_coordinateSpan
+#print axioms genericPointWedgeCoordinateSpanCounit_legs
+#print axioms genericPointWedgeCoordinateSpanCounit_baseObjects
 #print axioms genericPointWedgeCoordinatePointCounit_eq_transportCounit
 #print axioms genericPointWedgeCoordinatePointCounit_legs
 #print axioms genericPointWedgeCoordinatePointCounit_uniqueObjects

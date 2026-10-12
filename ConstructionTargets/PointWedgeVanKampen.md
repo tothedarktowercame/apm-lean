@@ -700,3 +700,10 @@ projects this split to both literal span legs.  Each equation now displays the
 mapped earlier counit followed by the corresponding coordinate-span counit
 leg, providing the two precise components to compare with the expanded outer
 left and right factors.
+
+`genericPointWedgeCoordinateSpanCounit_legs` identifies those final two legs
+definitionally with the counits of the cover-to-summand fundamental-groupoid
+equivalences.  `genericPointWedgeCoordinateSpanCounit_baseObjects` evaluates
+both at the literal summand base objects: each is the corresponding identity
+coordinate-span functor applied to that groupoid-equivalence counit.  The next
+comparison can therefore work with two concrete mapped base-object morphisms.
