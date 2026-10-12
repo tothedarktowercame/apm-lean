@@ -79644,6 +79644,19 @@
     [{:cmd "Main compile",
       :exit 1,
       :finding "Replaced invalid apply-at with direct refinement."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791777666551-6289-c1e21ed7",
+     :commands
+     ["git commit/scope/blob/SHA checks"
+      "lake build ConstructionTargets.t94A10Closure"
+      "lake env lean ConstructionTargets/t94A10Closure.lean"
+      "lake env lean problems/t94A10/lean/Main.lean"
+      "statement-registry check/fingerprint"
+      "commit placeholder/status checks"],
+     :finding
+     "PASS: recorded tree at 583ecc2d1 fully closes t94A10. The B10 bridge faithfully converts frozen subtype hypotheses to punctured ambient ones, derives curl integral 0 versus 4*pi, and Main combines closedness/non-exactness with correct orientation. Fixture/blobs match; recorded commit changes only scoped Main; closure and Main compile with standard axioms, registry 131/0, fingerprint d1822221, placeholders 0/0, status complete."},
     :commit "583ecc2d18dc22d7a4124ec99bf464694617e29e",
     :commits
     ["22738f83dacebb365c2fa6ddd9c0777d6c4907f2"
@@ -79658,7 +79671,7 @@
      "03b61d033c74ea8edd6760e7f47f20b1487c591b6adabdc958c6ad6f074641e0"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["problems/t94A10/lean/Main.lean"
     "problems/t94A10/status.json"
@@ -81975,7 +81988,7 @@
    :other-consumers []}
   {:consumer :t94A10,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -81987,7 +82000,9 @@
     :reported-by [:program-2026-10-11-close-t94a10],
     :type "B10 frozen non-exactness adapter",
     :area "periodic-stokes-square",
-    :proved-in :program-2026-10-11-close-t94a10},
+    :proved-in :program-2026-10-11-close-t94a10,
+    :banked-by :program-2026-10-11-close-t94a10,
+    :banked-commit "583ecc2d18dc22d7a4124ec99bf464694617e29e"},
    :id
    :lemma-constructiontargets-t94a10closure-bridge-solidangle-not-exact,
    :kind :lemma,
