@@ -1361,8 +1361,39 @@
   {:consumer :t00A03,
    :implements-lemma
    :lemma-constructiontargets-surfaceschoenflies-circlezerosection-isembedding,
+   :evidence
+   {:placeholder-delta {:t00A03 [2 2], :t01J01 [3 3], :t03J02 [2 2]},
+    :residual
+    "Consumers still need ambient zero-section normal form adapters.",
+    :outcome :done-unreviewed,
+    :warnings
+    ["Acceptance omitted fixture mode; fixture is a post-build export check."],
+    :statement-hashes {:registry "131/131"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author :topo-10,
+    :commands
+    [{:cmd "sha256sum /tmp/surface_schoenflies_zero_embedding.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.SurfaceSchoenflies",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd "git diff-tree --no-commit-id --name-only -r HEAD",
+      :exit 0}],
+    :diagnostic-history
+    [{:cmd
+      "lake env lean /tmp/surface_schoenflies_zero_embedding.lean",
+      :exit 1,
+      :reason
+      "Post-build fixture redeclares implemented theorem; module build succeeded."}],
+    :commit "d29e0f66e8f45a22d5714a70fb5809ddcf99a852",
+    :changed-paths ["ConstructionTargets/SurfaceSchoenflies.lean"],
+    :fixture
+    {:path "/tmp/surface_schoenflies_zero_embedding.lean",
+     :sha256
+     "c3408c2332b5c1e255f2dee616ebf826e01594ddec4c0aa27b604bbb077ffe6b",
+     :mode :post-build-export-check}},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/SurfaceSchoenflies.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/schoenflies/planar-normal-form",
    :acceptance
