@@ -3173,6 +3173,14 @@ theorem coefficientSphereNormalizationComparisonAutomorphism_hom_eq_neg_implies_
   rw [← Category.assoc, ← Category.assoc, ← hn']
   simpa only [Category.assoc, Iso.hom_inv_id_assoc] using h
 
+theorem coefficientSphereNormalizationComparison_hom_eq_neg_implies_unit_eq_neg_one
+    (k : ℕ)
+    (hneg : (coefficientSphereNormalizationComparisonAutomorphism k).hom = -𝟙 _) :
+    (coefficientSphereNormalizationComparisonUnit k : ℤ) = -1 := by
+  have h := ConcreteCategory.congr_hom hneg (1 : ℤ)
+  rw [coefficientSphereNormalizationComparisonAutomorphism_apply_one] at h
+  exact h
+
 end ConstructionTargets.ManifoldFundamentalClass
 
 #print axioms ConstructionTargets.ManifoldFundamentalClass.neighborhoodInclusion_Hsucc_isIso
@@ -3281,6 +3289,7 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_pairMap_naturality
 #print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientOpenDiskRelativeHomologyComparison_naturality
 #print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientSphereNormalizationComparisonAutomorphism_hom_eq_neg_implies_openDisk_production_factors
+#print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientSphereNormalizationComparison_hom_eq_neg_implies_unit_eq_neg_one
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_projection
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_generator_of_normalization
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_normalization_of_generator
