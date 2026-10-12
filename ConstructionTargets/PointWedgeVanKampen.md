@@ -970,3 +970,8 @@ statement preserves the dependent endpoints across this representation step.
 `genericPointWedgeRightInverseBaseToRightBase_normalForm` expands that normal
 form in exact categorical order: source connector, mapped canonical morphism,
 then inverse target connector.
+
+`genericPointWedgeRightInverseBaseToRightBase_normalForm_eq_maps` expands the
+middle morphism into the two equivalence-functor maps and normalizes the target
+connector to its named equality transport.  The source connector remains
+explicit; no arbitrary connector or counit is identified with the identity.

@@ -4276,6 +4276,29 @@ theorem genericPointWedgeRightEquiv_rightBase_connector :
     x₀ y₀ M N hM hN hy hx cM cN)]
 
 omit [PathConnectedSpace X] in
+/-- Expanding the canonical morphism through the equivalence functor and
+normalizing its target connector leaves the source connector explicit. -/
+theorem genericPointWedgeRightInverseBaseToRightBase_normalForm_eq_maps :
+    let eR := genericPointWedgeRightGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let h := genericPointWedgeRightEquiv_obj_rightBase
+      x₀ y₀ M N hM hN hy hx cM cN
+    (genericPointWedgeConnectors y₀).normalForm
+        (eR.functor.map (genericPointWedgeRightInverseBaseToRightBase
+          x₀ y₀ M N hM hN hy hx cM cN)) =
+      ((genericPointWedgeConnectors y₀).connector
+        (eR.functor.obj (eR.inverse.obj (FundamentalGroupoid.mk y₀)))).hom ≫
+      eR.functor.map (eR.inverse.map (eqToHom h.symm)) ≫
+      eR.functor.map
+        (eR.unitIso.inv.app (genericPointWedgeRightBase x₀ y₀ N)) ≫
+      eqToHom h := by
+  simp only [ConnectorSystem.normalForm,
+    genericPointWedgeRightInverseBaseToRightBase, Functor.map_comp,
+    genericPointWedgeConnectors, Category.assoc]
+  rw [genericPointWedgeRightEquiv_rightBase_connector]
+  rfl
+
+omit [PathConnectedSpace X] in
 /-- The connector normal form of the mapped lifted right loop is conjugation
 by the explicit equality transport at its common endpoint. -/
 theorem genericPointWedgeRightLiftedLoop_normalForm_eq_transport
@@ -5345,6 +5368,7 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeCoordinateSpanGlobalRestrictionRightComparison_targetObj
 #print axioms genericPointWedgeCoordinateSpanGlobalRestrictionRightComparison_sourceObj
 #print axioms genericPointWedgeRightInverseBaseToRightBase_normalForm
+#print axioms genericPointWedgeRightInverseBaseToRightBase_normalForm_eq_maps
 #print axioms genericPointWedgeMappedOpenCoverCounit_namedGlueSquare
 #print axioms genericPointWedgeMappedCoordinateSpanCounit_glueSquare
 #print axioms genericPointWedgeMappedCoordinateSpanSourceGlue
