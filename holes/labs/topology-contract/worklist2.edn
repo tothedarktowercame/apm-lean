@@ -75600,6 +75600,18 @@
      {:cmd "placeholder scan", :exit 0, :output "0"}
      {:cmd "#print axioms innerDisk_union_outerDisk", :exit 0}
      {:cmd "git show --check a311044f8", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791843403200-7980-3986fe2c",
+     :commands
+     ["git show a311044f8:ConstructionTargets/PolygonSurfacePiOne.lean | lake env lean /dev/stdin"
+      "#print axioms innerDisk_union_outerDisk"
+      "python3 scripts/statement-registry.py check"
+      "git show --check/hash/diff-tree a311044f8"
+      "comment-stripped placeholder scan"],
+     :finding
+     "PASS: exact source compiles; sole path/hash match; registry 131/0, placeholders 0, standard axioms only. The radius <2/3 and radius >1/3 sets are genuinely open and cover the disk; the inner set lies in the quotient-injective interior and every norm-one boundary point lies in the outer set. This is real compiled B4 input, not a replacement for quotient geometry. Saturated quotient opens, center contraction, annular side, overlap Homeomorph, and final openCover are all explicitly listed as remaining."},
     :commit "a311044f8",
     :changed-paths ["ConstructionTargets/PolygonSurfacePiOne.lean"],
     :fixture
@@ -75608,7 +75620,7 @@
      "29e2766d63e2bc928cb28d011202832eabf816d9aaf540b37b040590ac4788e9"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :stopped,
    :scope ["ConstructionTargets/PolygonSurfacePiOne.lean"],
    :dag-node "ConstructionTargets/PolygonSurfacePiOne.blueprint.md/B4",
    :acceptance
@@ -75636,7 +75648,7 @@
      :infrastructure-packets
      :review-outcomes]},
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance {:strategy "Rerun after B4."},
@@ -85505,10 +85517,14 @@
    :other-consumers [:t92J05 :t94J04 :t97A01 :t97A03]}
   {:consumer :portfolio,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance {:lemma "innerDisk_union_outerDisk"},
-   :lemma {:name "innerDisk_union_outerDisk", :reported-by []},
+   :lemma
+   {:name "innerDisk_union_outerDisk",
+    :reported-by [],
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/PolygonSurfacePiOne.lean"]},
    :id :lemma-innerdisk-union-outerdisk,
    :kind :lemma,
    :depends-on [],
