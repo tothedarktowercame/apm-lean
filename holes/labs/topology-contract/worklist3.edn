@@ -20417,6 +20417,19 @@
       "git diff --check -- ConstructionTargets/ManifoldFundamentalClass.lean",
       :exit 0}
      {:cmd "rg forbidden scoped file", :exit 1, :expected-exit 1}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791803816232-6846-1b417f7f",
+     :commands
+     ["git show/diff-tree b71237ce4"
+      "sha256sum /tmp/circlecoordone.lean"
+      "lake env lean /tmp/circlecoordone.lean"
+      "lake env lean ConstructionTargets/ManifoldFundamentalClass.lean"
+      "python3 scripts/statement-registry.py check"
+      "git diff --check; rg placeholder/forbidden counts"],
+     :finding
+     "PASS: b71237ce4 changes only the scoped module and its blob is current; fixture SHA-256 matches. Frozen type and module compile. The coordinate composite is an additive endomorphism of Z, hence is determined by its value on 1; standard extensionality uses the explicit hone hypothesis correctly. Registry 131/131; standard axioms only; no scoped placeholders. Counts unchanged: t00J02 bridge_1=1, sorry=1; t98A02 sorry=1."},
     :commit "b71237ce445439cec6c15beb47eae37ff7079590",
     :changed-paths
     ["ConstructionTargets/ManifoldFundamentalClass.lean"],
@@ -20426,7 +20439,7 @@
      "7f56adf0f60f4bd2b962d5d1335fc3fef1c5de37ed43ebaba05e2c6c07fccaac"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/manifold-fundamental-class",
    :acceptance
@@ -20495,7 +20508,7 @@
       :other-consumers [:t98A02]},
      :residual "Promote; compute the circle generator sign."}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -29231,7 +29244,7 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -29244,7 +29257,9 @@
     [:routes-2026-10-10-manifold-fundamental-class-topo3-r2],
     :type "exact type in fixture",
     :area "manifold-fundamental-class",
-    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2,
+    :banked-by :routes-2026-10-12-mfclass-circle-one-r1,
+    :banked-commit "b71237ce445439cec6c15beb47eae37ff7079590"},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-coefficientcirclecoordinates-eq-id-,
    :kind :lemma,
