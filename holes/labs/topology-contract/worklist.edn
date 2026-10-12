@@ -113850,14 +113850,14 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 8,
+   :stop-count 9,
    :review-finding
    "Recorded fixture hash mismatch: :fixture.sha256 is 0bca6ce32c019fc3053c7f813c26917169cf817375b44d5e722b864b61a526450c1, but ConstructionTargets/PointWedgeVanKampen.blueprint.md at recorded commit c9b3af27 has exact SHA-256 0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0. Re-record the fixture hash for the reviewed commit.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
    :evidence
    {:placeholder-delta {:source-before 0, :source-after 0},
     :residual
-    "Identify the right reconstructed restriction and strict map; specialize left counits; then point-span, counits, B6/B12.",
+    "Identify the right strict map and specialize left counits; then point-span, counits, B6/B12.",
     :outcome :stop,
     :warnings [],
     :missing-theorems
@@ -113871,9 +113871,9 @@
       :area "fundamental-group-wedge-of-circles"}],
     :statement-hashes
     {:source
-     "d2ee554e42cb729736abd95f8136f68611176906c5918912bb1dc7f6adeebc28",
+     "c5b65abac5b3a32650d17349a78668dc3f19cd12bcb317a9943b79ec237f6b39",
      :documentation
-     "ce57be181e1927b651ca1dad7ba7024db6ca0025444c513791fa34e00a039e9d",
+     "411f638488aa4f473cf915469971c6874c95e2432abe5f8003c02b10cdddedd3",
      :blueprint
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0",
      :registry "131/131"},
@@ -113881,7 +113881,7 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
     :reason
-    "Both ordered right-comparison factors now expose their exact functor maps.",
+    "The inverse right-unit factor is the literal actual-span map with both endpoint restriction counits explicit.",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/PointWedgeVanKampen.lean",
@@ -113890,18 +113890,14 @@
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder/diff validation", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1791841046160-7936-51317970",
-     :commands
-     ["git show/diff-tree be492215"
-      "lake build ConstructionTargets.PointWedgeVanKampen"
-      "python3 scripts/statement-registry.py check"
-      "commit hash and placeholder checks"],
-     :finding
-     "PASS program STOP: be492215 by topo-2 adds separately named right unit/strict factors, their exact functor-map formulas, and documentation, exactly within scope and new since history. Source d2ee554e..., documentation ce57be18..., fixture 0bca6ce3..., registry 131/131, and placeholders 0->0 reproduce. The inverse composite remains ordered as inverse unit then forward strict comparison; the map formulas correctly expose S.right.map(unit inverse) and (eR.inverse then S.right).map(aR.hom), without collapsing representation changes. Fresh build passes with standard axioms. Identifying the reconstructed right restriction and strict map, left-counit specialization, point-span transport, counits, and B6/B12 remain listed."},
-    :commit "be492215e0d889e0b20ce43a72368600e49badc7",
+    :diagnostic-history
+    [{:cmd "lean endpoint projections",
+      :exit 1,
+      :finding "Used explicit endpoint objects."}
+     {:cmd "lean equivalence order",
+      :exit 1,
+      :finding "Corrected functor/inverse order."}],
+    :commit "d300fecf5a5f64e46339ce5a5db8f47837df247e",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
      "ConstructionTargets/PointWedgeVanKampen.md"],
@@ -113911,7 +113907,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
