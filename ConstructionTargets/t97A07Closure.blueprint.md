@@ -81,6 +81,11 @@ transported derivative varies continuously at the base point, using Mathlib's
 without treating derivatives in distinct tangent fibers as one operator-valued
 function; the fixed-representative equality remains to connect the two B2
 formulations.
+`inTangentCoordinates_mfderiv_self_eq_sourceChartFactor` evaluates the
+transported family at its centre through the target-chart identity: the
+remaining expression is `mfderiv f x` followed by the inverse source-chart
+derivative.  Normalizing this last chart factor is now the exact centre-level
+boundary before the smaller-neighbourhood equality.
 
 ### B3. Regular points are open
 

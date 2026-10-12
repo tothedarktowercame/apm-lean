@@ -127,6 +127,28 @@ theorem continuousAt_inTangentCoordinates_mfderiv
           𝓘(ℝ, EuclideanModel n) f z) x) x := by
   exact (hf.contMDiffAt.mfderiv_const (m := 0) (by simp)).continuousAt
 
+/-- At its base point, the transported derivative reduces to the manifold
+derivative followed by the inverse source-chart derivative. -/
+theorem inTangentCoordinates_mfderiv_self_eq_sourceChartFactor
+    {m n : ℕ} {X : Type*} [TopologicalSpace X]
+    [ChartedSpace (EuclideanModel m) X]
+    [IsManifold 𝓘(ℝ, EuclideanModel m) ∞ X]
+    (f : X → EuclideanModel n) (x : X) :
+    inTangentCoordinates 𝓘(ℝ, EuclideanModel m)
+        𝓘(ℝ, EuclideanModel n) (fun z : X ↦ z) f
+        (fun z ↦ mfderiv 𝓘(ℝ, EuclideanModel m)
+          𝓘(ℝ, EuclideanModel n) f z) x x =
+      (mfderiv 𝓘(ℝ, EuclideanModel m)
+          𝓘(ℝ, EuclideanModel n) f x) ∘L
+        (mfderiv 𝓘(ℝ, EuclideanModel m)
+          𝓘(ℝ, EuclideanModel m)
+          (chartAt (EuclideanModel m) x).symm
+          ((chartAt (EuclideanModel m) x) x)) := by
+  rw [inTangentCoordinates_eq_mfderiv_comp]
+  · simp
+  · exact mem_chart_source (EuclideanModel m) x
+  · exact mem_chart_source (EuclideanModel n) (f x)
+
 end t97A07Closure
 
 #print axioms t97A07Closure.isOpen_setOf_surjective_clm
@@ -134,3 +156,4 @@ end t97A07Closure
 #print axioms t97A07Closure.coordinate_fderivWithin_eq_mfderiv
 #print axioms t97A07Closure.inTangentCoordinates_mfderiv_eq_chart_factors
 #print axioms t97A07Closure.continuousAt_inTangentCoordinates_mfderiv
+#print axioms t97A07Closure.inTangentCoordinates_mfderiv_self_eq_sourceChartFactor
