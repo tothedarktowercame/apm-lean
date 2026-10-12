@@ -3047,6 +3047,101 @@ theorem waypointDependentDeparture_zero_polynomial_bounds
   have hhi := mul_nonneg hd (sub_nonneg.mpr hb2.2)
   constructor <;> nlinarith
 
+/-- The rational planar coordinate forced at `t = 1/4` is strictly inside
+the right-tube annulus. -/
+noncomputable def waypointDependentQuarterCandidate : ℂ :=
+  ((-4 / 17 : ℝ) : ℂ) + ((-16 / 17 : ℝ) : ℂ) * Complex.I
+
+theorem waypointDependentQuarterCandidate_mem_planarAnnulus :
+    (9 / 16 : ℝ) < Complex.normSq waypointDependentQuarterCandidate ∧
+      Complex.normSq waypointDependentQuarterCandidate < (25 / 16 : ℝ) := by
+  norm_num [waypointDependentQuarterCandidate, Complex.normSq_apply,
+    Complex.mul_re, Complex.mul_im]
+
+theorem waypointDependentQuarterCandidate_ne_zero :
+    waypointDependentQuarterCandidate ≠ 0 := by
+  intro h
+  have hre := congrArg Complex.re h
+  norm_num [waypointDependentQuarterCandidate, Complex.mul_re,
+    Complex.mul_im] at hre
+
+noncomputable def waypointDependentQuarterCandidateCircle : Circle :=
+  ⟨NormedSpace.normalize waypointDependentQuarterCandidate,
+    mem_sphere_zero_iff_norm.mpr
+      (NormedSpace.norm_normalize waypointDependentQuarterCandidate_ne_zero)⟩
+
+noncomputable def waypointDependentQuarterCandidateNormal : ℂ :=
+  ((1 - ‖waypointDependentQuarterCandidate‖ : ℝ) : ℂ)
+
+noncomputable def waypointDependentQuarterCandidatePoint : apm_t02a03_E3 :=
+  rightTubeCorePolarReconstruction waypointDependentQuarterCandidateCircle
+    waypointDependentQuarterCandidateNormal
+
+theorem waypointDependentQuarterCandidate_norm_bounds :
+    (3 / 4 : ℝ) < ‖waypointDependentQuarterCandidate‖ ∧
+      ‖waypointDependentQuarterCandidate‖ < (5 / 4 : ℝ) := by
+  have hb := waypointDependentQuarterCandidate_mem_planarAnnulus
+  have hs : ‖waypointDependentQuarterCandidate‖ ^ 2 =
+      Complex.normSq waypointDependentQuarterCandidate := Complex.sq_norm _
+  have hn : 0 ≤ ‖waypointDependentQuarterCandidate‖ := norm_nonneg _
+  constructor <;> nlinarith
+
+theorem waypointDependentQuarterCandidatePoint_mem_rightTube :
+    waypointDependentQuarterCandidatePoint ∈ apm_t02a03_rightTube := by
+  apply reconstructionMemRightTube_rightTubeCorePolar
+  unfold waypointDependentQuarterCandidateNormal
+  rw [Complex.norm_real, Real.norm_eq_abs, abs_le]
+  have hb := waypointDependentQuarterCandidate_norm_bounds
+  constructor <;> linarith
+
+theorem rightTubeCorePlanarComplex_waypointDependentQuarterCandidatePoint :
+    rightTubeCorePlanarComplex waypointDependentQuarterCandidatePoint =
+      waypointDependentQuarterCandidate := by
+  have hs := NormedSpace.norm_smul_normalize waypointDependentQuarterCandidate
+  rw [show rightTubeCorePlanarComplex waypointDependentQuarterCandidatePoint =
+      (‖waypointDependentQuarterCandidate‖ : ℝ) •
+        NormedSpace.normalize waypointDependentQuarterCandidate by
+    apply Complex.ext <;>
+      simp [waypointDependentQuarterCandidatePoint,
+        waypointDependentQuarterCandidateNormal,
+        waypointDependentQuarterCandidateCircle, rightTubeCorePlanarComplex,
+        rightTubeCorePolarReconstruction]]
+  exact hs
+
+theorem waypointDependentQuarterCandidatePoint_not_mem_leftCore :
+    waypointDependentQuarterCandidatePoint ∉ Set.range apm_t02a03_leftCore := by
+  intro hmem
+  obtain ⟨s, hs⟩ := hmem
+  have hp := congrArg Complex.re
+    rightTubeCorePlanarComplex_waypointDependentQuarterCandidatePoint
+  have hx := congrArg (fun q : apm_t02a03_E3 => q 0) hs
+  have hcos := Real.cos_le_one s
+  norm_num [rightTubeCorePlanarComplex, waypointDependentQuarterCandidate,
+    Complex.mul_re, Complex.mul_im] at hp
+  simp [apm_t02a03_leftCore] at hx
+  linarith
+
+noncomputable def waypointDependentQuarterCandidateSubtype :
+    RightTubeMinusLeftCore :=
+  ⟨waypointDependentQuarterCandidatePoint,
+    waypointDependentQuarterCandidatePoint_mem_rightTube,
+    waypointDependentQuarterCandidatePoint_not_mem_leftCore⟩
+
+theorem waypointDependentQuarterCandidate_actual_zero :
+    (((1 - 2 * (departureQuarter : ℝ) : ℝ) : ℂ) +
+        ((2 * (departureQuarter : ℝ) : ℝ) : ℂ) *
+          rotatedEndpointWaypoint waypointDependentQuarterCandidateSubtype +
+        waypointDependentDepartureCorrection
+          (departureQuarter, waypointDependentQuarterCandidateSubtype)) = 0 := by
+  unfold waypointDependentDepartureCorrection rotatedEndpointWaypoint
+  rw [show rightTubeCorePlanarComplex
+      waypointDependentQuarterCandidateSubtype.1 =
+        waypointDependentQuarterCandidate by
+    exact rightTubeCorePlanarComplex_waypointDependentQuarterCandidatePoint]
+  apply Complex.ext <;>
+    norm_num [departureQuarter, waypointDependentQuarterCandidate,
+      Complex.mul_re, Complex.mul_im]
+
 end ConstructionTargets.T02A03GeometricTubeDeformation
 
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeNormalComplex_eq_zero_iff
@@ -3149,6 +3244,7 @@ end ConstructionTargets.T02A03GeometricTubeDeformation
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.waypointDependentDeparture_factorization
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.waypointDependentDeparture_zero_normSq
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.waypointDependentDeparture_zero_polynomial_bounds
+#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.waypointDependentQuarterCandidate_actual_zero
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_twiceCorrected_departure_zero_coordinates
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_twiceCorrected_departure_zero_normSq
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_twiceCorrected_departure_zero_scalar_bounds
