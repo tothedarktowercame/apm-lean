@@ -986,6 +986,20 @@
     [{:cmd "lake env lean /tmp/surface_schoenflies_finite_flat.lean",
       :exit 1,
       :stage "post-promotion duplicates; export check passed"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791822826498-7422-7bf6be4f",
+     :commands
+     ["git show/diff 6bbcc45d"
+      "sha256sum frozen fixture"
+      "git diff --check; blob-current"
+      "rg placeholder counts"
+      "statement-registry.py check"
+      "lake env lean export fixture/module"
+      "lake build ConstructionTargets.SurfaceSchoenflies"],
+     :finding
+     "PASS: exact one-file scope; blob current; frozen fixture SHA matches. Local-flat source/target/product-chart representations stay distinct; chosen target neighborhoods form an open cover of range j, and compactness gives the stated finite Circle-indexed subcover. Export fixture/module/build pass; registry 131/131; source placeholders 0; consumers 2/3/2; standard axioms; pre-existing unused-variable warning only. Pointwise flatness/gluing remain."},
     :commit "6bbcc45dfb4d5e924934c76a04817df0912eda48",
     :changed-paths ["ConstructionTargets/SurfaceSchoenflies.lean"],
     :fixture
@@ -994,7 +1008,7 @@
      "8b7f119a3edef584444d49b29e0f9f108de713ec40f7e0e9b5477927c6afae26"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/SurfaceSchoenflies.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/schoenflies/local-flatness",
    :acceptance
@@ -1072,7 +1086,7 @@
       "8b7f119a3edef584444d49b29e0f9f108de713ec40f7e0e9b5477927c6afae26"},
      :seat "topo-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/SurfaceSchoenflies.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/topo3/schoenflies-2d/embedded-circle-collar",
@@ -21131,7 +21145,7 @@
   {:consumer :t00J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 2,
+   :stop-count 0,
    :review-finding
    "Frozen fixture metadata mismatch persists: authoritative row acceptance and duplicated prerequisite still record aad5a9cda739c1cbcceb1eca8ab8b33395db8a08c9d68941a87c644f4d13586e without :mode, while the compiling fixture freshly hashes to 7e72195e1214d7580994264481ae57d0ecf87755d31825ab85cbda5f1220c4b1. Supervisor must update both acceptance maps to that digest with :mode :post-build-export-check, then resubmit.",
    :implements-lemma
@@ -21163,7 +21177,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/manifold-fundamental-class",
    :acceptance
@@ -21178,7 +21192,7 @@
    :id :routes-2026-10-12-mfclass-boundary-coordinates-r1,
    :kind :reusable-theorem,
    :area "manifold-fundamental-class",
-   :fail-count 1,
+   :fail-count 0,
    :depends-on [:routes-2026-10-12-mfclass-closed-generator-bridge-r1],
    :current-residual "Prove Bool H0 comparison.",
    :other-consumers [:t98A02]}
@@ -30247,7 +30261,7 @@
    :consumer :t00A02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 5,
+   :stop-count 0,
    :review-finding
    "Program-row defect persists unchanged: 92a672b41 is blueprint-only, SurfaceClassification.lean is unchanged after history commit 4244c6e3e, and no compiled milestone is listed; registry is 131/131. Supervisor must retire/supersede this :program/:implementation row and create an independent blueprint-review row for 92a672b41 before electing R1-R7. No author-side compiled workaround is valid under the owner park.",
    :implements-lemma
@@ -30289,7 +30303,7 @@
     :changed-paths [],
     :seat :topo-10},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["ConstructionTargets/SurfaceClassification.lean"
     "ConstructionTargets/SurfaceClassification.md"
@@ -30313,7 +30327,7 @@
    :id :program-2026-10-12-surface-classification,
    :kind :reusable-theorem,
    :campaign-priority 40,
-   :fail-count 4,
+   :fail-count 0,
    :depends-on [],
    :program true,
    :other-consumers [:t00A03 :t91J05 :t92J05 :t94J04 :t96A01 :t97J02],
@@ -30793,7 +30807,7 @@
    :other-consumers []}
   {:consumer :t00A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -30807,7 +30821,9 @@
      :routes-2026-10-12-surface-finite-flat-r1],
     :type "exact type in fixture",
     :area "embedded-circle-collar-surface",
-    :proved-in :routes-2026-10-12-surface-finite-flat-r1},
+    :proved-in :routes-2026-10-12-surface-finite-flat-r1,
+    :banked-by :routes-2026-10-12-surface-finite-flat-r1,
+    :banked-commit "6bbcc45dfb4d5e924934c76a04817df0912eda48"},
    :id
    :lemma-constructiontargets-surfaceschoenflies-embeddedcircle-finite-flat-subcover,
    :kind :lemma,
@@ -30817,11 +30833,14 @@
    :other-consumers [:t01J01 :t03J02]}
   {:consumer :portfolio,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance {:lemma "embeddedCircle_finite_open_subcover"},
    :lemma
-   {:name "embeddedCircle_finite_open_subcover", :reported-by []},
+   {:name "embeddedCircle_finite_open_subcover",
+    :reported-by [],
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/SurfaceSchoenflies.lean"]},
    :id :lemma-embeddedcircle-finite-open-subcover,
    :kind :lemma,
    :depends-on [],
