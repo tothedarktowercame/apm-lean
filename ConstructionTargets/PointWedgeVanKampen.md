@@ -775,3 +775,9 @@ identification to the specialized splice.  The reconstructed glue followed
 by the right coordinate-span counit is therefore the left coordinate-span
 counit, now proved through the explicit outer-comparison route needed for the
 pre-coordinate factors.
+
+`genericPointWedgeMappedOpenCoverLeftCounit` and
+`genericPointWedgeMappedOpenCoverRightCounit` isolate the two mapped
+open-cover counit factors produced by the pre-coordinate split.  The final
+cancellation can now state its common factors without repeating the nested
+span-equivalence maps and their dependent evaluation objects.
