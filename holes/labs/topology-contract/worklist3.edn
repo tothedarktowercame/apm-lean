@@ -30160,7 +30160,7 @@
    :consumer :t00A02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "Program-row defect: commit ebbfe625 repairs the B5 mathematics, but changes only SurfaceClassification.blueprint.md and commits no new compiled, sorry-free, standard-axiom result since the prior program-history entry; :missing-theorems is empty. The successful 8245-job build merely rebuilds pre-existing SurfaceClassification code and is not a new milestone. Repair by implementing and committing the next listed milestone (B1 FiniteTwoComplex/Realization or another genuine supporting result), compiling it without placeholders, and recording that proved milestone in :missing-theorems.",
    :implements-lemma
@@ -30175,39 +30175,32 @@
      :t96A01 [1 1],
      :t97J02 [3 3]},
     :residual
-    "B4: prove chart containment for sufficiently small bends, then finite transverse crossings.",
+    "Replace the blueprint/program from reviewed surfaces.md; do not continue B4.",
     :outcome :stop,
     :warnings [],
-    :missing-theorems
-    [{:name
-      "ConstructionTargets.SurfaceClassification.continuous_twoSegmentPath",
-      :type
-      "(start bend finish : EuclideanPlane) : Continuous (twoSegmentPath start bend finish)",
-      :status :proved,
-      :consumers
-      [:t00A02 :t00A03 :t91J05 :t92J05 :t94J04 :t96A01 :t97J02],
-      :depends-on
-      ["ConstructionTargets.SurfaceClassification.exists_twoSegmentPath_bend_avoiding_finite"],
-      :area "surface-classification"}],
     :statement-hashes {:registry "131/131"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
-    :reason "B4 two-segment perturbation continuity proved",
+    :reason
+    "Owner park remains binding: reviewed routes/surfaces.md says to drop triangulation-first SurfaceClassification and use classification/homeomorphism plus cover/cutting interfaces. SurfaceClassification.blueprint.md has not been replaced by that reviewed design; continuing B4 would follow the rejected route.",
     :commands
     [{:cmd
+      "test -f /home/joe/notes/closer/routes/surface-classification.md",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "sed/rg /home/joe/notes/closer/routes/surfaces.md", :exit 0}
+     {:cmd
+      "git diff --exit-code 4244c6e3e -- ConstructionTargets/SurfaceClassification.lean",
+      :exit 0}
+     {:cmd
       "lake env lean ConstructionTargets/SurfaceClassification.lean",
-      :exit 0}
-     {:cmd "lake build ConstructionTargets.SurfaceClassification",
-      :exit 0}
-     {:cmd "lake env lean /tmp/surface_parameter_axioms.lean", :exit 0}
-     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-     {:cmd "rg source placeholders", :exit 1, :expected-exit 1}],
+      :exit 0}],
     :commit "4244c6e3e1737b3b867f576275c8a301785a3df6",
-    :changed-paths ["ConstructionTargets/SurfaceClassification.lean"],
+    :changed-paths [],
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SurfaceClassification.lean"
     "ConstructionTargets/SurfaceClassification.md"
