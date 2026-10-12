@@ -357,6 +357,23 @@ theorem boundaryCrossingSet_finite_iff_pairwise {M : Type*}
     exact h.subset (C.boundaryArcIntersection_subset_boundaryCrossingSet p)
   · exact C.boundaryCrossingSet_finite_of_pairwise
 
+/-- The forbidden set for the next polygonal perturbation: all scheduled old
+vertices together with all crossings already present in the finite family. -/
+def boundaryForbiddenSet {M : Type*} [TopologicalSpace M] [T2Space M]
+    [ChartedSpace EuclideanPlane M] (C : FiniteClosedDiskCover M) : Set M :=
+  Set.range C.boundaryVertex ∪ C.boundaryCrossingSet
+
+/-- Pairwise finite intersections make the complete forbidden set finite,
+which is the finiteness input used when choosing the next perturbation. -/
+theorem boundaryForbiddenSet_finite_of_pairwise {M : Type*}
+    [TopologicalSpace M] [T2Space M] [ChartedSpace EuclideanPlane M]
+    (C : FiniteClosedDiskCover M)
+    (hfinite : ∀ p : C.BoundaryArcPairIndex,
+      Set.Finite (C.boundaryArcIntersection p)) :
+    Set.Finite C.boundaryForbiddenSet := by
+  exact C.boundaryVertexSet_finite.union
+    (C.boundaryCrossingSet_finite_of_pairwise hfinite)
+
 end FiniteClosedDiskCover
 
 /-- Compact surfaces admit the finite nested closed-disk cover used by the
