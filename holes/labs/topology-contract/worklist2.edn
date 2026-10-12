@@ -72788,13 +72788,13 @@
    :consumer :t02A03,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "Commit b07bee059 does not implement the row acceptance theorem. It adds only rotatedEndpointWaypoint_departure_zero_support_pos; safeRightTubeMeridianDeformation is absent, although the row is marked done-unreviewed rather than a STOP with missing-theorems. Exact repair: extend Mathlib in scope by state/proving the required continuous ambient H with both endpoints, pointwise rightTube membership, and leftCore avoidance (or record a legitimate STOP after committed progress with remaining theorem listed).",
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Localize correction to (1/8,3/8); prove nonzero; certify H.",
+    "Choose complex bump direction; prove second correction nonzero; certify H.",
     :outcome :stop,
     :warnings ["Main: 1 placeholder." "Style lint only."],
     :missing-theorems
@@ -72804,8 +72804,8 @@
       :status :partial,
       :consumers [:t02A03],
       :depends-on
-      ["corrected_departure_zero_time_gt_eighth"
-       "corrected_departure_zero_time_lt_three_eighths"],
+      ["continuous_correctedDepartureBump"
+       "correctedDepartureBump_pos"],
       :area "explicit-r3-tube-deformation-retraction"}
      {:name
       "ConstructionTargets.T02A03GeometricTubeDeformation.safeRightTubeMeridianDeformation",
@@ -72816,7 +72816,7 @@
       :area "explicit-r3-tube-deformation-retraction"}],
     :statement-hashes
     {:registry "131/0",
-     :module "3c20ae2117388e25a0accfc844f33350357cf243",
+     :module "2d16882c239a96bf8d3760f8c2d3a7b6a86e485e",
      :main "ce9da0dbb4300e81e5a5f31c95d0a0f8344c4325"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
@@ -72829,34 +72829,18 @@
      {:cmd "module no-sorry", :exit 1, :expected-exit 1}
      {:cmd "placeholders", :exit 0, :output "1"}
      {:cmd "git show --check", :exit 0}],
-    :diagnostic-history
-    [{:cmd "module compile",
-      :exit 1,
-      :finding "Added half-time premise; fixed product bound."}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1791787019113-6509-dc33b6e6",
-     :commands
-     ["git show/diff-tree/show --check 2a9c5d5d69e2f19806b70df780c4643a14cbe29e"
-      "sha256sum fixture; blob and placeholder recount"
-      "lake env lean exact committed module"
-      "python3 scripts/statement-registry.py check"
-      "compare parent/prior milestone"],
-     :finding
-     "PASS: program STOP commits new compiled, sorry-free progress beyond the prior milestone: the endpoint-fixed transverse correction is proved nonzero at every old departure zero. Exact scope and fixture hash match; module/Main blobs are 0629f3f5/ce9da0db with placeholder counts 0/1; registry 131/0; axioms standard. The no-new-zero corrected path and safe ambient deformation remain explicitly listed."},
-    :commit "fbb2a9161f83693163fad5bf47d06c5e2d7bff4d",
+    :commit "e47dce1fe1653bac2a23d869538aba3938228b54",
     :changed-paths
     ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
     :fixture
     {:path "ConstructionTargets/T02A03GeometricTubeDeformation.lean",
      :sha256
-     "55a797d904067d53554eed50b007fb558dc938f78840a1c1153cba7c624498fa"},
+     "0e86e509c1f5250e5f81d9864ce24d26c8ac36259479e2f4dd3367bac076adf9"},
     :seat "topo-6"},
    :phase :implementation,
    :type
    "∀ (t : unitInterval) (p : RightTubeMinusLeftCore), (t:ℝ) ≤ 1/2 → (((1-2*(t:ℝ):ℝ):ℂ)+((2*(t:ℝ):ℝ):ℂ)*rotatedEndpointWaypoint p)=0 → 0 < (t:ℝ)*(1-2*(t:ℝ))",
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/safe-right-tube-meridian-deformation",
@@ -82126,7 +82110,9 @@
     :lemma-rotatedendpointwaypoint-corrected-departure-zero-polynomial-bounds
     :lemma-rotatedendpointwaypoint-corrected-departure-zero-time-gt-eighth
     :lemma-corrected-departure-zero-time-gt-eighth
-    :lemma-corrected-departure-zero-time-lt-three-eighths],
+    :lemma-corrected-departure-zero-time-lt-three-eighths
+    :lemma-continuous-correcteddeparturebump
+    :lemma-correcteddeparturebump-pos],
    :other-consumers []}
   {:consumer :portfolio,
    :phase :lemma,
@@ -82468,6 +82454,26 @@
    {:name "corrected_departure_zero_time_lt_three_eighths",
     :reported-by []},
    :id :lemma-corrected-departure-zero-time-lt-three-eighths,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance {:lemma "continuous_correctedDepartureBump"},
+   :lemma {:name "continuous_correctedDepartureBump", :reported-by []},
+   :id :lemma-continuous-correcteddeparturebump,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance {:lemma "correctedDepartureBump_pos"},
+   :lemma {:name "correctedDepartureBump_pos", :reported-by []},
+   :id :lemma-correcteddeparturebump-pos,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}]}
