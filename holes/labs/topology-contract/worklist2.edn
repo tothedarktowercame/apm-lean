@@ -79527,6 +79527,19 @@
      {:cmd "registry check", :exit 0}
      {:cmd "placeholder count", :exit 0, :output "1"}
      {:cmd "git show --check 52919bc16", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791765283578-6061-5b545a21",
+     :commands
+     ["git show/check/diff 2abba69f4..52919bc16"
+      "verify scoped blobs, fixture SHA, ancestry"
+      "lake build ConstructionTargets.t96A07Closure"
+      "lake env lean closure and t96A07 Main"
+      "statement-registry check/fingerprint"
+      "placeholder and axiom checks"],
+     :finding
+     "PASS: 52919bc163666e19eb0266a57b9a555af49e3dc7 adds compiled, sorry-free B9 support after 2abba69f4; both changed paths are scoped. Closure/blueprint blobs 4d809a36/69b59fb6 and fixture 14ae0446 match. Taking coordinate 2 of incidence faithfully yields p0*p1=z, and z>0 correctly proves both factors nonzero; the Main adapter preserves frozen sphereMap/plane representations. Lean gates pass with standard axioms only; registry 131/0, frozen hash 2ba67b04 unchanged, closure/Main placeholders 0/1. STOP lists the remaining tangent-vector cases, then B10-B13."},
     :commit "52919bc163666e19eb0266a57b9a555af49e3dc7",
     :changed-paths
     ["ConstructionTargets/t96A07Closure.lean"
@@ -79537,7 +79550,7 @@
      "14ae0446be043617153dfd2f7595f93cbbe6c064e594c4270b5fcf3d61e8425a"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t96A07/lean/Main.lean"
     "problems/t96A07/status.json"
@@ -79553,7 +79566,7 @@
     ["lake env lean problems/t96A07/lean/Main.lean"
      "python3 scripts/statement-registry.py check"]},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: :program-milestone-complete",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: :program-progress-committed",
    :id :program-2026-10-11-close-t96a07,
    :kind :final-adapter,
    :campaign-priority 45,
@@ -79584,7 +79597,10 @@
      :reason :program-milestone-complete}
     {:job 2,
      :commit "2abba69f4db141226dd225a772db8b0cbb4e00a4",
-     :reason :program-milestone-complete}]}
+     :reason :program-milestone-complete}
+    {:job 3,
+     :commit "52919bc163666e19eb0266a57b9a555af49e3dc7",
+     :reason :program-progress-committed}]}
   {:consumer :t94A10,
    :stop-count 2,
    :review-finding
@@ -81360,7 +81376,7 @@
    :other-consumers []}
   {:consumer :t96A07,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -81372,7 +81388,9 @@
     :reported-by [:program-2026-10-11-close-t96a07],
     :type "positive incidence gives p0*p1=z and nonzero factors",
     :area "projective-smooth-descent",
-    :proved-in :program-2026-10-11-close-t96a07},
+    :proved-in :program-2026-10-11-close-t96a07,
+    :banked-by :program-2026-10-11-close-t96a07,
+    :banked-commit "52919bc163666e19eb0266a57b9a555af49e3dc7"},
    :id
    :lemma-constructiontargets-t96a07closure-crossterm-horizontalplane-incident-coordinates,
    :kind :lemma,
