@@ -535,4 +535,79 @@ def nonorientableOrbitEquiv (g : ℕ) :
     intro a
     simp [nonorientableOrbitLabel]
 
+theorem nonorientablePair_even (g j : ℕ) (hj : j < g) :
+    nonorientablePair g ⟨2 * j, by omega⟩ =
+      (⟨2 * j + 1, by omega⟩ : Fin (2 * g)) := by
+  apply Fin.ext
+  simp [nonorientablePair, nonorientableCoord, crosscapPair, Fin.modNat]
+  omega
+
+theorem nonorientablePair_odd (g j : ℕ) (hj : j < g) :
+    nonorientablePair g ⟨2 * j + 1, by omega⟩ =
+      (⟨2 * j, by omega⟩ : Fin (2 * g)) := by
+  apply Fin.ext
+  simp [nonorientablePair, nonorientableCoord, crosscapPair, Fin.modNat]
+  omega
+
+theorem nonorientable_surfaceRel_to_boundaryEqvGen {g : ℕ} {x y : Disk}
+    (h : SurfaceRel false g x y) :
+    Relation.EqvGen (boundaryRel (2 * g) (standardPair false g)
+      (standardSign false g)) x y := by
+  simp only [SurfaceRel, Bool.false_eq_true, if_false] at h
+  rcases h with ⟨j, hj, t, rfl, rfl⟩
+  apply Relation.EqvGen.rel _ _
+  refine ⟨⟨2 * j, by omega⟩, t, rfl, ?_⟩
+  simp [pairedParameter, standardPair, standardSign,
+    nonorientablePair_even g j hj]
+
+theorem nonorientable_boundaryRel_to_surfaceEqvGen {g : ℕ} {x y : Disk}
+    (h : boundaryRel (2 * g) (standardPair false g)
+      (standardSign false g) x y) :
+    Relation.EqvGen (SurfaceRel false g) x y := by
+  rcases h with ⟨i, t, rfl, rfl⟩
+  generalize hc : nonorientableCoord g i = c
+  rcases c with ⟨a, b⟩
+  have hi : i = (nonorientableCoord g).symm (a, b) := by
+    apply (nonorientableCoord g).injective
+    simpa using hc
+  subst i
+  fin_cases b
+  · apply Relation.EqvGen.rel _ _
+    simp only [SurfaceRel, Bool.false_eq_true, if_false]
+    refine ⟨a, a.isLt, t, ?_⟩
+    simp [standardPair, standardSign, pairedParameter, nonorientablePair,
+      nonorientableCoord, crosscapPair, Nat.add_comm]
+  · apply Relation.EqvGen.symm _ _
+    apply Relation.EqvGen.rel _ _
+    simp only [SurfaceRel, Bool.false_eq_true, if_false]
+    refine ⟨a, a.isLt, t, ?_⟩
+    simp [standardPair, standardSign, pairedParameter, nonorientablePair,
+      nonorientableCoord, crosscapPair, Nat.add_comm]
+
+theorem nonorientable_eqvGen_iff (g : ℕ) (x y : Disk) :
+    Relation.EqvGen (boundaryRel (2 * g) (standardPair false g)
+      (standardSign false g)) x y ↔
+    Relation.EqvGen (SurfaceRel false g) x y := by
+  constructor
+  · intro h
+    induction h with
+    | rel x y h => exact nonorientable_boundaryRel_to_surfaceEqvGen h
+    | refl x => exact .refl x
+    | symm x y _ ih => exact .symm x y ih
+    | trans x y z _ _ ih₁ ih₂ => exact .trans x y z ih₁ ih₂
+  · intro h
+    induction h with
+    | rel x y h => exact nonorientable_surfaceRel_to_boundaryEqvGen h
+    | refl x => exact .refl x
+    | symm x y _ ih => exact .symm x y ih
+    | trans x y z _ _ ih₁ ih₂ => exact .trans x y z ih₁ ih₂
+
+/-- The exact quotient comparison for the standard nonorientable polygon. -/
+def nonorientableStandardSpaceEquiv (g : ℕ) :
+    Quotient (Relation.EqvGen.setoid
+      (boundaryRel (2 * g) (standardPair false g) (standardSign false g))) ≃
+      Surface false g := by
+  apply Quotient.congrRight
+  exact nonorientable_eqvGen_iff g
+
 end ConstructionTargets.PolygonSurfacePiOne
