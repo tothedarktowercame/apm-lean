@@ -304,6 +304,38 @@ theorem boundaryVertexSet_finite {M : Type*} [TopologicalSpace M] [T2Space M]
     Set.Finite (Set.range C.boundaryVertex) :=
   Set.toFinite _
 
+/-- The finite schedule of ordered pairs of distinct boundary arcs whose
+intersections must be controlled in the general-position induction. -/
+abbrev BoundaryArcPairIndex {M : Type*} [TopologicalSpace M] [T2Space M]
+    [ChartedSpace EuclideanPlane M] (C : FiniteClosedDiskCover M) :=
+  {p : C.BoundaryArcIndex × C.BoundaryArcIndex // p.1 ≠ p.2}
+
+noncomputable instance {M : Type*} [TopologicalSpace M] [T2Space M]
+    [ChartedSpace EuclideanPlane M] (C : FiniteClosedDiskCover M) :
+    Fintype C.BoundaryArcPairIndex := Fintype.ofFinite _
+
+/-- The geometric intersection attached to one scheduled pair of distinct
+boundary arcs. -/
+def boundaryArcIntersection {M : Type*} [TopologicalSpace M] [T2Space M]
+    [ChartedSpace EuclideanPlane M] (C : FiniteClosedDiskCover M)
+    (p : C.BoundaryArcPairIndex) : Set M :=
+  Set.range (C.boundaryArc p.1.1) ∩ Set.range (C.boundaryArc p.1.2)
+
+/-- All crossings of distinct scheduled boundary arcs. -/
+def boundaryCrossingSet {M : Type*} [TopologicalSpace M] [T2Space M]
+    [ChartedSpace EuclideanPlane M] (C : FiniteClosedDiskCover M) : Set M :=
+  ⋃ p : C.BoundaryArcPairIndex, C.boundaryArcIntersection p
+
+/-- Because the arc-pair schedule is finite, pairwise finiteness is exactly
+the remaining finiteness obligation for the global crossing set. -/
+theorem boundaryCrossingSet_finite_of_pairwise {M : Type*}
+    [TopologicalSpace M] [T2Space M] [ChartedSpace EuclideanPlane M]
+    (C : FiniteClosedDiskCover M)
+    (hfinite : ∀ p : C.BoundaryArcPairIndex,
+      Set.Finite (C.boundaryArcIntersection p)) :
+    Set.Finite C.boundaryCrossingSet := by
+  exact Set.finite_iUnion hfinite
+
 end FiniteClosedDiskCover
 
 /-- Compact surfaces admit the finite nested closed-disk cover used by the
