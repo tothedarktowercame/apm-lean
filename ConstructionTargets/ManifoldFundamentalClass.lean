@@ -2848,6 +2848,65 @@ theorem coefficientOpenDiskRadial_forgotten_naturality (k : ℕ) :
       (TopCat.ofHom
         (T02A06DiskRadialComparison.radialNormalizeMap (k + 2))) (k + 1)
 
+noncomputable def coefficientOpenDiskNormalizationComposite (k : ℕ) :=
+  forgetIntModules.map
+      (CoefficientPairSequence.connecting ℤ
+        (T02A06HemisphereExcision.puncturedOpenDiskSet (k + 2)) (k + 1)) ≫
+    forgetIntModules.map
+      ((CoefficientRadialPair.F ℤ (k + 1)).map
+        (TopCat.ofHom
+          (T02A06DiskRadialComparison.radialNormalizeMap (k + 2)))) ≫
+    forgetIntModules.map
+      (CoefficientSphereAntipodal.normalization ℤ k).hom
+
+noncomputable def productionOpenDiskNormalizationComposite (k : ℕ) :=
+  (integralOpenDiskRelativeHomologyComparison k).hom ≫
+    singularPairConnecting
+      (T02A06HemisphereExcision.puncturedOpenDiskSet (k + 2)) (k + 1) ≫
+    ((AlgebraicTopology.singularHomologyFunctor AddCommGrpCat (k + 1)).obj
+      (AddCommGrpCat.of ℤ)).map
+        (TopCat.ofHom
+          (T02A06DiskRadialComparison.radialNormalizeMap (k + 2))) ≫
+    (SphereHomology.sphereTopHomologyIsoInt (k + 1) (by omega)).hom
+
+theorem coefficientSphereNormalizationComparisonAutomorphism_hom_eq_neg_implies_openDisk
+    (k : ℕ)
+    (hneg :
+      (coefficientSphereNormalizationComparisonAutomorphism k).hom = -𝟙 _) :
+    productionOpenDiskNormalizationComposite k =
+      coefficientOpenDiskNormalizationComposite k ≫ (-𝟙 _) := by
+  have hc := coefficientOpenDiskConnecting_comparison k
+  have hr := coefficientOpenDiskRadial_forgotten_naturality k
+  have hs :=
+    coefficientSphereNormalizationComparisonAutomorphism_hom_eq_neg_implies_endpoints
+      k hneg
+  unfold productionOpenDiskNormalizationComposite
+    coefficientOpenDiskNormalizationComposite
+  have h1 := congrArg (fun q => q ≫
+      ((AlgebraicTopology.singularHomologyFunctor AddCommGrpCat (k + 1)).obj
+        (AddCommGrpCat.of ℤ)).map
+          (TopCat.ofHom
+            (T02A06DiskRadialComparison.radialNormalizeMap (k + 2))) ≫
+      (SphereHomology.sphereTopHomologyIsoInt
+        (k + 1) (by omega)).hom) hc.symm
+  have h2 := congrArg (fun q =>
+      forgetIntModules.map
+          (CoefficientPairSequence.connecting ℤ
+            (T02A06HemisphereExcision.puncturedOpenDiskSet (k + 2)) (k + 1)) ≫
+        q ≫
+        (SphereHomology.sphereTopHomologyIsoInt
+          (k + 1) (by omega)).hom) hr.symm
+  have h3 := congrArg (fun q =>
+      forgetIntModules.map
+          (CoefficientPairSequence.connecting ℤ
+            (T02A06HemisphereExcision.puncturedOpenDiskSet (k + 2)) (k + 1)) ≫
+        forgetIntModules.map
+          ((CoefficientRadialPair.F ℤ (k + 1)).map
+            (TopCat.ofHom
+              (T02A06DiskRadialComparison.radialNormalizeMap (k + 2)))) ≫ q) hs
+  simp only [Category.assoc] at h1 h2 h3 ⊢
+  simpa only [Functor.mapIso_hom] using h1.trans (h2.trans h3)
+
 end ConstructionTargets.ManifoldFundamentalClass
 
 #print axioms ConstructionTargets.ManifoldFundamentalClass.neighborhoodInclusion_Hsucc_isIso
@@ -2944,6 +3003,7 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientSphereNormalizationComparisonAutomorphism_hom_eq_id_or_neg
 #print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientSphereNormalizationComparisonAutomorphism_hom_eq_neg_implies_endpoints
 #print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientOpenDiskRadial_forgotten_naturality
+#print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientSphereNormalizationComparisonAutomorphism_hom_eq_neg_implies_openDisk
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_projection
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_generator_of_normalization
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_normalization_of_generator
