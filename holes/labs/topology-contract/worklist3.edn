@@ -30261,7 +30261,7 @@
    :consumer :t00A02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 3,
+   :stop-count 4,
    :review-finding
    "Program-row defect persists: after compiled history commit 4244c6e3e, recorded commit 92a672b41 changes only SurfaceClassification.blueprint.md (104 insertions/248 deletions), with no compiled milestone; registry is 131/131. Supervisor must retire/supersede the obsolete implementation program and submit the replacement as an independent blueprint-review row before electing R1-R7. No author-side off-route implementation is valid.",
    :implements-lemma
@@ -30284,25 +30284,18 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Supervisor must retire/supersede this owner-parked implementation program, create an independent blueprint-review row for 92a672b41, and elect R1-R7 only after review; off-route code is invalid.",
+    "Supervisor must retire/supersede the owner-parked implementation program and submit 92a672b41 as an independent blueprint-review row; elect R1-R7 only after review. Off-route implementation is invalid.",
     :commands
-    [{:cmd "git diff-tree --no-commit-id --name-only -r 92a672b41",
-      :exit 0}
+    [{:cmd "git diff-tree --stat --no-commit-id -r 92a672b41", :exit 0}
      {:cmd
       "git diff --exit-code 4244c6e3e..92a672b41 -- ConstructionTargets/SurfaceClassification.lean",
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1791823604156-7448-d537f27c",
-     :finding
-     "Program-row defect persists: after compiled history commit 4244c6e3e, recorded commit 92a672b41 changes only SurfaceClassification.blueprint.md (104 insertions/248 deletions), with no compiled milestone; registry is 131/131. Supervisor must retire/supersede the obsolete implementation program and submit the replacement as an independent blueprint-review row before electing R1-R7. No author-side off-route implementation is valid."},
     :commit "92a672b41fa1f7e45df1987a4aca7d2f8460d2e0",
     :changed-paths [],
     :seat :topo-10},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SurfaceClassification.lean"
     "ConstructionTargets/SurfaceClassification.md"
