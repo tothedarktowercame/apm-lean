@@ -113850,14 +113850,14 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 4,
+   :stop-count 5,
    :review-finding
    "Blueprint B3 is marked proved but its proof uses the unlisted ConnectedGroupoidSingleObjEquivalence.connectorSingleObjEquivalence (and connector-system representation) instead of only the declared uses; add the actual connector dependency and proof route to B3 uses.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
    :evidence
    {:placeholder-delta {:source-before 0, :source-after 0},
     :residual
-    "Connect both inclusion-image equalities to the B3 inverse-identity functor maps; then B12.",
+    "Prove the symmetric right B3-to-actual-span bridge, then identify both actual-span actions with mapped legs; then B12.",
     :outcome :stop,
     :warnings [],
     :missing-theorems
@@ -113871,9 +113871,9 @@
       :area "fundamental-group-wedge-of-circles"}],
     :statement-hashes
     {:source
-     "b9f0a947ee33257828af40bffba924416e4a6fc7cf999dbde678341f58238ebb",
+     "b66040df10a6396e8a67a9e8dfeb89c44969f6b1ee9acf38cb36d4ab8339bb5e",
      :documentation
-     "703caa9d5ce27cd88476aad20804674b54e9f530574c16f5886543fcc15365af",
+     "d131574a9550694f58d10a17d4b5e46ef5d5ee6df2a92ce4a485fa694213c086",
      :blueprint
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0",
      :registry "131/131"},
@@ -113881,7 +113881,7 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
     :reason
-    "Right lifted-loop inclusion image equals the literal right wedge-leg map with its quotient basepoint change.",
+    "B3 inverse-identity action on the left literal leg is the actual-span action on its lifted cover loop.",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/PointWedgeVanKampen.lean",
@@ -113890,24 +113890,8 @@
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder/diff validation", :exit 0}],
-    :diagnostic-history
-    [{:cmd "lean direct quotient reduction",
-      :exit 1,
-      :finding "Exposed both mapOfEq path casts; then rfl."}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1791791966469-6616-a13fbfc3",
-     :commands
-     ["git show/diff-tree 0cecb3c9"
-      "sha256/diff/placeholder checks"
-      "statement-registry.py check"
-      "lake env lean ConstructionTargets/PointWedgeVanKampen.lean"
-      "lake build ConstructionTargets.PointWedgeVanKampen"
-      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (expected absent)"],
-     :finding
-     "PASS program STOP: exact 2-file commit adds the compiled sorry-free right inclusion-image equality in the useful direction. It explicitly rewrites both mapOfEq casts, preserving the quotient basepoint change before literal path reduction. Fixture/source/doc hashes match; placeholders 0->0; registry 131/131; standard axioms only. Final module remains absent; residual connects both inclusion images to B3 inverse-identity maps, then B12."},
-    :commit "0cecb3c97a6f6fddbcad1ea9719183b41767206c",
+    :diagnostic-history [],
+    :commit "5adad4e55edb9a246e189db24d2f205b6290113d",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
      "ConstructionTargets/PointWedgeVanKampen.md"],
@@ -113917,7 +113901,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
