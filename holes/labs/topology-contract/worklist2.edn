@@ -83297,14 +83297,14 @@
    :depends-on [],
    :other-consumers []}
   {:consumer :t94J04,
-   :stop-count 2,
+   :stop-count 3,
    :review-finding
    "Blueprint defect: B10 is false with B3 orientation. B3 identifies loop representatives g,h when g*h⁻¹ ∈ H, which classifies left cosets H*g, not right cosets g*H. Counterexample in S3: let H=⟨(12)⟩, h=(123), g=(12)h. Then g*h⁻¹=(12)∈H, so B3 identifies g,h, but gH≠hH because h⁻¹(12)h∉H. Thus the claimed map to right cosets is not well-defined, and the displayed quotient type does not faithfully encode arbitrary nonnormal cosets. Repair B10 to use left-coset quotient data, or reverse B3 consistently to classify right cosets, then propagate B5/B8/B10-B12 and re-review.",
    :implements-lemma :lemma-subgroup-cover-correspondence,
    :evidence
    {:placeholder-delta 0,
     :residual
-    "B3/B5/B8/B10-B12 consistently use rightRel classes H*g; B11 uses the Mathlib inversion equivalence for index. Re-review blueprint, then implement B1.",
+    "B10 now targets actual coset sets H*g; B11 maps H*g to the standard quotient class of inverse(g) only for counting. Re-review, then implement B1.",
     :outcome :stop,
     :warnings [],
     :missing-theorems
@@ -83328,28 +83328,21 @@
     :author "topo-6",
     :reason :blueprint-repaired,
     :commands
-    [{:cmd "coset API/orientation scan", :exit 0}
-     {:cmd "blueprint node/field scan", :exit 0}
+    [{:cmd "explicit coset orientation scan", :exit 0}
      {:cmd "git diff --check", :exit 0}
      {:cmd "registry check", :exit 0, :output "131/0"}
      {:cmd "git show --check", :exit 0}],
-    :review
-    {:outcome :fail,
-     :seat "codex-7",
-     :job "invoke-1791813301116-7033-b61e0a70",
-     :finding
-     "Blueprint defect: B10 is false with B3 orientation. B3 identifies loop representatives g,h when g*h⁻¹ ∈ H, which classifies left cosets H*g, not right cosets g*H. Counterexample in S3: let H=⟨(12)⟩, h=(123), g=(12)h. Then g*h⁻¹=(12)∈H, so B3 identifies g,h, but gH≠hH because h⁻¹(12)h∉H. Thus the claimed map to right cosets is not well-defined, and the displayed quotient type does not faithfully encode arbitrary nonnormal cosets. Repair B10 to use left-coset quotient data, or reverse B3 consistently to classify right cosets, then propagate B5/B8/B10-B12 and re-review."},
-    :commit "b817b117f620f3bee9824712f1b270771eb259ee",
+    :commit "b28a4da1c6cd4783a366069ade20b2cd97336d90",
     :changed-paths
     ["ConstructionTargets/CoveringSubgroupCorrespondence.blueprint.md"],
     :fixture
     {:path
      "ConstructionTargets/CoveringSubgroupCorrespondence.blueprint.md",
      :sha256
-     "17b1e849eda978644ecc467fc8a2c0be27aa35e189ca8e4d21cb5990e39c40df"},
+     "d2ad1ac4ba220db379fe062a11db9cb3713ebb7ea1505a457eae65a4db7d729e"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CoveringSubgroupCorrespondence.lean"
     "ConstructionTargets/CoveringSubgroupCorrespondence.md"
