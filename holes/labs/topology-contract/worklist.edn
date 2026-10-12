@@ -113850,14 +113850,14 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 8,
+   :stop-count 9,
    :review-finding
    "Blueprint B3 is marked proved but its proof uses the unlisted ConnectedGroupoidSingleObjEquivalence.connectorSingleObjEquivalence (and connector-system representation) instead of only the declared uses; add the actual connector dependency and proof route to B3 uses.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
    :evidence
    {:placeholder-delta {:source-before 0, :source-after 0},
     :residual
-    "Evaluate coordinate-span comparison factors, then point-span transport; substitute counits; close B6/B12.",
+    "Normalize the whiskered raw unit and both coordinate comparison factors; then point-span transport and B6/B12.",
     :outcome :stop,
     :warnings [],
     :missing-theorems
@@ -113871,9 +113871,9 @@
       :area "fundamental-group-wedge-of-circles"}],
     :statement-hashes
     {:source
-     "e6a7df49e22e5dbd3defd52e7144f2194a15fd2459b4d66876246f2fdf8b3ce0",
+     "b80c6520c5b869a3c7f813c26917169cf817375b44d5e722b864b61a526450c1",
      :documentation
-     "e9d2fa99e7175f9da08ac3f554682fdddd4896f51ac34dcfdcd76de395c245c4",
+     "66a5568280251e84b9b559dd5fa5774d6e836247501cb4f6c9cbc432b3c50a1e",
      :blueprint
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0",
      :registry "131/131"},
@@ -113881,7 +113881,7 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
     :reason
-    "The pseudococone-to-span transport preserves the raw unit glue definitionally.",
+    "Coordinate-span global glue is now an explicit ordered three-factor transport.",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/PointWedgeVanKampen.lean",
@@ -113890,18 +113890,7 @@
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder/diff validation", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1791835924091-7834-f5fafd59",
-     :commands
-     ["git show/diff-tree 1d987ee9"
-      "lake build ConstructionTargets.PointWedgeVanKampen"
-      "python3 scripts/statement-registry.py check"
-      "commit hash and placeholder checks"],
-     :finding
-     "PASS program STOP: 1d987ee9 by topo-2 adds the pseudo-span transported glue, its definitional equality to the raw glue, the unit corollary, and documentation, exactly within scope and new since history. Source e6a7df49..., documentation e9d2fa99..., fixture 0bca6ce3..., registry 131/131, and placeholders 0->0 reproduce. The first pseudococone-to-span transport retains the glue literally, so the equality direction transported=raw is faithful and the unit corollary follows from the reviewed raw evaluation; no comparison factors are erased. Fresh build passes with standard axioms. Coordinate-span comparisons, point-span transport, counit substitution, and B6/B12 remain explicitly listed."},
-    :commit "1d987ee965903165a98d9274d096b5e4040a528f",
+    :commit "b4bff57e1a66812551619efa139ad39ccf6c445b",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
      "ConstructionTargets/PointWedgeVanKampen.md"],
@@ -113911,7 +113900,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
