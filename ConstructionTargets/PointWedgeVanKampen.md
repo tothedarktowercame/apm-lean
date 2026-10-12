@@ -625,3 +625,10 @@ the named composite with its exact orientation: the pre-free-product counit
 is mapped through the point-span equivalence and then followed by the final
 point-span counit.  Together with the identity computation above, this leaves
 only the mapped pre-free-product component to compare with the outer factors.
+
+`genericPointWedgePreCoordinatePointSpanMappingEquivalence` now names the
+earlier composite ending at the coordinate span, and
+`genericPointWedgePreFreeProductMappingEquivalence_eq_preCoordinate_trans`
+factors the remaining pre-free-product equivalence through the final
+coordinate-to-point-span stage.  Its counit can therefore be split next at
+this exact boundary.

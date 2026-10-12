@@ -350,6 +350,21 @@ abbrev genericPointWedgeFreeProduct :=
 
 /-- The B3 mapping equivalence before the final point-span representation is
 converted into a free-product representation. -/
+def genericPointWedgePreCoordinatePointSpanMappingEquivalence
+    (C : Type) [Category C] :
+    (FundamentalGroupoid (Wedge x₀ y₀) ⥤ C) ≌
+      SpanPseudoCocone
+        (genericPointWedgeCoordinateLeft x₀)
+        (genericPointWedgeCoordinateRight y₀) C :=
+  ((twoOpenFundamentalGroupoidPseudopushoutEquivalence
+      (C := C)
+      (genericPointWedgePackage x₀ y₀ M N hM hN hy hx cM cN).leftOpen_isOpen
+      (genericPointWedgePackage x₀ y₀ M N hM hN hy hx cM cN).rightOpen_isOpen
+      (genericPointWedgePackage x₀ y₀ M N hM hN hy hx cM cN).union_eq_univ).trans
+    (genericPointWedgePseudoSpanEquivalence x₀ y₀ M N C)).trans
+    (genericPointWedgeCoordinateSpanEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN C)
+
 def genericPointWedgePreFreeProductMappingEquivalence
     (C : Type) [Category C] :
     (FundamentalGroupoid (Wedge x₀ y₀) ⥤ C) ≌
@@ -365,6 +380,15 @@ def genericPointWedgePreFreeProductMappingEquivalence
     (genericPointWedgeCoordinateSpanEquivalence
       x₀ y₀ M N hM hN hy hx cM cN C)).trans
     (genericPointWedgeCoordinatePointSpanEquivalence x₀ y₀ C)
+
+theorem genericPointWedgePreFreeProductMappingEquivalence_eq_preCoordinate_trans
+    (C : Type) [Category C] :
+    genericPointWedgePreFreeProductMappingEquivalence
+        x₀ y₀ M N hM hN hy hx cM cN C =
+      (genericPointWedgePreCoordinatePointSpanMappingEquivalence
+        x₀ y₀ M N hM hN hy hx cM cN C).trans
+          (genericPointWedgeCoordinatePointSpanEquivalence x₀ y₀ C) := by
+  rfl
 
 def genericPointWedgeFreeProductMappingEquivalence
     (C : Type) [Category C] :
@@ -3371,7 +3395,9 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeCoordinatePointSpanEquivalence
 #print axioms genericPointWedgeCoordinatePointSpanPostcomposeIso
 #print axioms genericPointWedgeSingleObjMappingEquivalence
+#print axioms genericPointWedgePreCoordinatePointSpanMappingEquivalence
 #print axioms genericPointWedgePreFreeProductMappingEquivalence
+#print axioms genericPointWedgePreFreeProductMappingEquivalence_eq_preCoordinate_trans
 #print axioms genericPointWedgeFreeProductMappingEquivalence_eq_pre_trans
 #print axioms genericPointWedgeIdentityRepresentation
 #print axioms genericPointWedgeIdentityPointSpan
