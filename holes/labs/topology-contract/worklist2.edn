@@ -75002,23 +75002,24 @@
   {:consumer :t96J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "STOP remainder is incomplete: cdbdc979d proves the six-edge involution/signs, orbit equivalence, generated-relation iff, and quotient Equiv, but defines no torusRP2PairingData and proves no six-edge oneVertex field. Thus the claim that six-edge B2 is complete is false, and the required missing theorem is omitted from :missing-theorems. Add torusRP2PairingData/oneVertex to the remaining milestones or state and prove it in scope.",
    :implements-lemma
    :lemma-constructiontargets-polygonsurfacepione-standardpairingdata,
    :evidence
    {:placeholder-delta 0,
-    :residual "Prove oneVertex, then define standardPairingData.",
+    :residual
+    "Prove oneVertex and turn invariant labels into orbit/quotient equivalences.",
     :outcome :stop,
     :warnings ["Two imported linter warnings."],
     :missing-theorems
-    [{:name "standardPairingDataOfOneVertex",
+    [{:name "standardOrbitLabel_pair",
       :type
-      "packages edge count, pair, signs and oneVertex into PairingData",
+      "canonical standard generator labels are invariant under pairing",
       :status :proved,
       :consumers [:t96J02 :t92J05 :t94J04 :t97A03],
-      :depends-on ["standardSign_orientable_pair"],
+      :depends-on ["standardPair"],
       :area "polygon-surface-pi1"}
      {:name "standardPairingData_oneVertex",
       :type "all standard polygon vertices lie in one generated class",
@@ -75030,44 +75031,34 @@
       :type "uniform data with orbit/quotient comparisons",
       :status :partial,
       :consumers [:t96J02 :t92J05 :t94J04 :t97A03],
-      :depends-on ["standardPairingData_oneVertex"],
+      :depends-on
+      ["standardPairingData_oneVertex" "standardOrbitLabel_pair"],
       :area "polygon-surface-pi1"}],
     :statement-hashes
     {:registry "131/0",
-     :module "3bc3e29e29c1508f815426fc11a8c30618fde6db"},
+     :module "759954232ad1da2d6c410b558d102eb883727c79"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
     :reason
-    "Uniform packaging from oneVertex is proved; the vertex calculation and orbit/quotient comparisons remain.",
+    "Canonical orientable/crosscap orbit labels and pair invariance compile; uniform oneVertex and orbit/quotient equivalences remain.",
     :commands
     [{:cmd "lake build ConstructionTargets.PolygonSurfacePiOne",
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check",
       :exit 0,
       :output "131/0"}
-     {:cmd "placeholder scan", :exit 0, :output "0"}
-     {:cmd "git show --check d96bd5106", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1791838091281-7882-1a8d35ca",
-     :commands
-     ["git show d96bd5106:ConstructionTargets/PolygonSurfacePiOne.lean | lake env lean /dev/stdin"
-      "python3 scripts/statement-registry.py check"
-      "git show --check/hash/diff-tree d96bd5106"
-      "comment-stripped placeholder scan"],
-     :finding
-     "PASS: exact recorded source compiles; sole changed path and fixture hash match; registry 131/0 and placeholders 0. The constructor preserves the representation boundary: hvertex has exactly PairingData.oneVertex over standard edge count, pair, sign, and polygon vertices, and no hypothesis is weakened. This is compiled packaging progress; the substantive uniform oneVertex proof and orbit/quotient comparisons remain explicitly listed."},
-    :commit "d96bd5106",
+     {:cmd "comment-stripped placeholder scan", :exit 0, :output "0"}
+     {:cmd "git show --check c985d40ba", :exit 0}],
+    :commit "c985d40ba",
     :changed-paths ["ConstructionTargets/PolygonSurfacePiOne.lean"],
     :fixture
     {:path "ConstructionTargets/PolygonSurfacePiOne.lean",
      :sha256
-     "329b983926e50cd0bf5ec0cbfbbff2ff7304ec4aeb66a835fc8994b737f1c493"},
+     "a3d92ec0744f6f9b6a6e8daa00a5f8e1af1852e7fd51daaccd0f35e8ef5f8ebf"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/PolygonSurfacePiOne.lean"],
    :dag-node "ConstructionTargets/PolygonSurfacePiOne.blueprint.md/B2",
    :acceptance
@@ -84659,7 +84650,8 @@
    :depends-on
    [:lemma-standardpair
     :lemma-standardpairingdata-onevertex
-    :lemma-standardsign-orientable-pair],
+    :lemma-standardsign-orientable-pair
+    :lemma-standardorbitlabel-pair],
    :other-consumers [:t92J05 :t94J04 :t97A03]}
   {:consumer :t96J02,
    :phase :lemma,
@@ -84736,4 +84728,23 @@
    :id :lemma-standardpairingdataofonevertex,
    :kind :lemma,
    :depends-on [:lemma-standardsign-orientable-pair],
+   :other-consumers [:t92J05 :t94J04 :t97A03]}
+  {:consumer :t96J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "standardOrbitLabel_pair",
+    :type
+    "canonical standard generator labels are invariant under pairing"},
+   :lemma
+   {:name "standardOrbitLabel_pair",
+    :reported-by [:routes-2026-10-12-polygon-b2-completion-topo2-r1],
+    :type
+    "canonical standard generator labels are invariant under pairing",
+    :area "polygon-surface-pi1",
+    :proved-in :routes-2026-10-12-polygon-b2-completion-topo2-r1},
+   :id :lemma-standardorbitlabel-pair,
+   :kind :lemma,
+   :depends-on [:lemma-standardpair],
    :other-consumers [:t92J05 :t94J04 :t97A03]}]}
