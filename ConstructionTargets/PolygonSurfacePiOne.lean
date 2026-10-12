@@ -956,4 +956,71 @@ def standardPairingData_space_homeomorph (o : Bool) (g : ℕ) (hg : 0 < g) :
   | false => nonorientableStandardSpaceHomeomorph g
   | true => orientableStandardSpaceHomeomorph g
 
+/-! ### Interior of a polygon quotient -/
+
+abbrev DiskInterior := {z : Disk // ‖(z : ℂ)‖ < 1}
+
+theorem norm_edgePoint (n e : ℕ) (t : Set.Icc (0 : ℝ) 1) :
+    ‖((edgePoint n e t : Disk) : ℂ)‖ = 1 := by
+  simp [edgePoint, Complex.norm_exp]
+
+theorem eq_or_boundary_of_eqvGen (P : PairingData) {x y : Disk}
+    (h : Relation.EqvGen P.Rel x y) :
+    x = y ∨ (‖(x : ℂ)‖ = 1 ∧ ‖(y : ℂ)‖ = 1) := by
+  induction h with
+  | rel x y h =>
+      rcases h with ⟨i, t, rfl, rfl⟩
+      exact Or.inr ⟨norm_edgePoint _ _ _, norm_edgePoint _ _ _⟩
+  | refl x => exact Or.inl rfl
+  | symm x y _ ih =>
+      rcases ih with h | ⟨hx, hy⟩
+      · exact Or.inl h.symm
+      · exact Or.inr ⟨hy, hx⟩
+  | trans x y z _ _ ih₁ ih₂ =>
+      rcases ih₁ with hxy | ⟨hx, hy⟩
+      · subst y; exact ih₂
+      · rcases ih₂ with hyz | ⟨_, hz⟩
+        · subst z; exact Or.inr ⟨hx, hy⟩
+        · exact Or.inr ⟨hx, hz⟩
+
+def PairingData.interiorMap (P : PairingData) : DiskInterior → P.Space :=
+  fun z => P.quotientMap z.1
+
+def PairingData.interior (P : PairingData) : Set P.Space :=
+  Set.range P.interiorMap
+
+theorem interiorMap_injective (P : PairingData) :
+    Function.Injective P.interiorMap := by
+  intro x y h
+  have he := eq_or_boundary_of_eqvGen P (Quotient.exact h)
+  rcases he with he | ⟨hx, _⟩
+  · exact Subtype.ext he
+  · exact False.elim (by linarith [x.property])
+
+theorem interiorOpenEmbedding (P : PairingData) :
+    Topology.IsOpenEmbedding P.interiorMap := by
+  rw [Topology.isOpenEmbedding_iff_continuous_injective_isOpenMap]
+  refine ⟨P.continuous_quotientMap.comp continuous_subtype_val,
+    interiorMap_injective P, ?_⟩
+  intro s hs
+  rw [isOpen_coinduced]
+  have hopen : IsOpen (Subtype.val '' s : Set Disk) :=
+    hs.trans (isOpen_lt (continuous_norm.comp continuous_subtype_val) continuous_const)
+  have heq : P.quotientMap ⁻¹' (P.interiorMap '' s) = Subtype.val '' s := by
+    ext x
+    constructor
+    · rintro ⟨z, hz, hzx⟩
+      have he := eq_or_boundary_of_eqvGen P (Quotient.exact hzx.symm)
+      rcases he with he | ⟨_, hx⟩
+      · exact ⟨z, hz, he.symm⟩
+      · exact False.elim (by linarith [z.property])
+    · rintro ⟨z, hz, rfl⟩
+      exact ⟨z, hz, rfl⟩
+  change IsOpen (P.quotientMap ⁻¹' (P.interiorMap '' s))
+  rw [heq]
+  exact hopen
+
+theorem interior_isOpen (P : PairingData) : IsOpen P.interior :=
+  (interiorOpenEmbedding P).isOpen_range
+
 end ConstructionTargets.PolygonSurfacePiOne
