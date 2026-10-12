@@ -74839,8 +74839,47 @@
    :current-residual "Elect B2 or route B1 residual.",
    :other-consumers []}
   {:consumer :t96J02,
+   :stop-count 1,
+   :evidence
+   {:placeholder-delta 0,
+    :residual "Implement B2 instances.",
+    :outcome :stop,
+    :warnings ["No scoped change committed."],
+    :missing-theorems
+    [{:name
+      "ConstructionTargets.PolygonSurfacePiOne.standardPairingData",
+      :type
+      "standard and six-edge PairingData with orbit and quotient comparisons",
+      :status :not-started,
+      :consumers [:t96J02 :t92J05 :t94J04 :t97A01 :t97A03],
+      :depends-on
+      ["ConstructionTargets.PolygonSurfacePiOne.PairingData"],
+      :area "polygon-surface-pi1"}],
+    :statement-hashes {:registry "131/0"},
+    :disposition :stop,
+    :axioms [],
+    :author "topo-6",
+    :reason
+    "B2 is not completed: compiled B1 exists, but standard PairingData requires explicit general Fin(4g)/Fin(2g) involutions, one-vertex EqvGen proofs, orbit equivalences, and generated-relation equality; no false boundary was established this invocation.",
+    :commands
+    [{:cmd "lake build ConstructionTargets.PolygonSurfacePiOne",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131/0"}],
+    :diagnostic-history
+    [{:cmd "inspect from /home/joe/code",
+      :exit 2,
+      :correction "reran in /home/joe/code/apm-lean"}],
+    :commit "e949a5129",
+    :changed-paths [],
+    :fixture
+    {:path "ConstructionTargets/PolygonSurfacePiOne.lean",
+     :sha256
+     "8d3f275fb1a1f6717a934377659932acaa40e2c09d75b9775f3378e6267cc7d2"},
+    :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/PolygonSurfacePiOne.lean"],
    :dag-node "ConstructionTargets/PolygonSurfacePiOne.blueprint.md/B2",
    :acceptance
@@ -84177,4 +84216,26 @@
    :id :lemma-constructiontargets-polygonsurfacepione-pairingdata,
    :kind :lemma,
    :depends-on [],
+   :other-consumers [:t92J05 :t94J04 :t97A01 :t97A03]}
+  {:consumer :t96J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.PolygonSurfacePiOne.standardPairingData",
+    :type
+    "standard and six-edge PairingData with orbit and quotient comparisons"},
+   :lemma
+   {:name
+    "ConstructionTargets.PolygonSurfacePiOne.standardPairingData",
+    :reported-by [:routes-2026-10-12-polygon-b2-topo2-r1],
+    :type
+    "standard and six-edge PairingData with orbit and quotient comparisons",
+    :area "polygon-surface-pi1"},
+   :id
+   :lemma-constructiontargets-polygonsurfacepione-standardpairingdata,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-polygonsurfacepione-pairingdata],
    :other-consumers [:t92J05 :t94J04 :t97A01 :t97A03]}]}
