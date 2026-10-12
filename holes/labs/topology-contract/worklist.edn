@@ -113850,14 +113850,14 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 9,
+   :stop-count 10,
    :review-finding
    "Blueprint B3 is marked proved but its proof uses the unlisted ConnectedGroupoidSingleObjEquivalence.connectorSingleObjEquivalence (and connector-system representation) instead of only the declared uses; add the actual connector dependency and proof route to B3 uses.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
    :evidence
    {:placeholder-delta {:source-before 0, :source-after 0},
     :residual
-    "Substitute the outer-comparison normal form into reconstructed glue; close B6/B12.",
+    "Cancel reconstruction comparisons against outer factors; close B6/B12.",
     :outcome :stop,
     :warnings [],
     :missing-theorems
@@ -113871,9 +113871,9 @@
       :area "fundamental-group-wedge-of-circles"}],
     :statement-hashes
     {:source
-     "3513171b106e28cf6c5ff0f68cafdf62aa0445d31f016308bdb36438913ca63b",
+     "2daf170c1a6aeefeeb59fbbb115d3de016f5229c0423669bb70ee4448b6369db",
      :documentation
-     "34038e3d6d557762c735efe2607f0901dacdea638716f5310e2b006413ae1588",
+     "8fdc48a8f0719709479cb4afab66c1e7f989327ffb97e9306aa9f256b1e70ff0",
      :blueprint
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0",
      :registry "131/131"},
@@ -113881,7 +113881,7 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
     :reason
-    "Whiskered reverse-span glue evaluates definitionally at the fixed overlap representative.",
+    "Reconstructed middle glue is the ordered outer-comparison composite.",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/PointWedgeVanKampen.lean",
@@ -113890,19 +113890,12 @@
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder/diff validation", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1791824146410-7473-9f05f267",
-     :commands
-     ["git show/diff-tree 517d2e05d"
-      "sha256 + placeholder + registry checks"
-      "lake env lean ConstructionTargets/PointWedgeVanKampen.lean"
-      "lake build ConstructionTargets.PointWedgeVanKampen"
-      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (expected absent)"],
-     :finding
-     "Scope is exactly Lean+MD; source/doc/blueprint hashes match; placeholders 0->0; registry 131/131. The theorem definitionally evaluates the inverse-whiskered middle glue at the explicit overlap representative selected by eK.inverse. Both sides remain components of the same reverse-span glue, with no representation-boundary substitution. It compiles sorry-free with only propext, Classical.choice, Quot.sound. This is new progress; residual is substituting the existing outer-comparison normal form, then B6/B12. Final target remains absent as declared."},
-    :commit "517d2e05d",
+    :diagnostic-history
+    [{:cmd "lean four-factor substitution",
+      :exit 1,
+      :finding
+      "Dependent endpoint proofs block reassociation; restated exact middle boundary."}],
+    :commit "dd7c368a5",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
      "ConstructionTargets/PointWedgeVanKampen.md"],
@@ -113912,7 +113905,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :needs-owner,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
