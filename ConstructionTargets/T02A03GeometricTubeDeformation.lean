@@ -1996,6 +1996,23 @@ theorem rotatedEndpointWaypoint_corrected_departure_zero_coordinates
   · field_simp
     nlinarith [heq.1]
 
+/-- The scalar norm constraint forced by a zero of the corrected departure
+leg.  Together with `rightTubeCoreInputNormalRadiusBound`, this reduces the
+remaining exclusion question to a one-variable estimate. -/
+theorem rotatedEndpointWaypoint_corrected_departure_zero_normSq
+    (t : unitInterval) (p : RightTubeMinusLeftCore)
+    (hz : (((1 - 2 * (t : ℝ) : ℝ) : ℂ) +
+        ((2 * (t : ℝ) : ℝ) : ℂ) * rotatedEndpointWaypoint p +
+        (((t : ℝ) * (1 - 2 * (t : ℝ)) : ℝ) : ℂ) * Complex.I) = 0) :
+    Complex.normSq (rightTubeCorePlanarComplex p.1) =
+      (1 - 2 * (t : ℝ)) ^ 2 / 4 +
+        (1 - 2 * (t : ℝ)) ^ 2 / (4 * (t : ℝ) ^ 2) := by
+  obtain ⟨ht, hre, him⟩ :=
+    rotatedEndpointWaypoint_corrected_departure_zero_coordinates t p hz
+  rw [Complex.normSq_apply, hre, him]
+  field_simp
+  ring
+
 end ConstructionTargets.T02A03GeometricTubeDeformation
 
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeNormalComplex_eq_zero_iff
@@ -2072,3 +2089,4 @@ end ConstructionTargets.T02A03GeometricTubeDeformation
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_transverse_correction_ne_zero_at_departure_zero
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_corrected_departure_eq_zero_iff
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_corrected_departure_zero_coordinates
+#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_corrected_departure_zero_normSq
