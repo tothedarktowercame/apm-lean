@@ -479,6 +479,16 @@ theorem sphericalRectangle_curl_integral_zero
     (fun p _ => (hLongDiff p).hasFDerivAt)
     (fun p _ => (hLatDiff p).hasFDerivAt) hCurl
 
+/-- The spherical area coefficient integrates to `4π` on the latitude-
+longitude rectangle. -/
+theorem integral_sin_rectangle :
+    (∫ s in 0..Real.pi, ∫ _t in 0..2 * Real.pi, Real.sin s) =
+      4 * Real.pi := by
+  simp only [intervalIntegral.integral_const, smul_eq_mul]
+  rw [intervalIntegral.integral_const_mul, integral_sin]
+  simp
+  ring
+
 #print axioms solidAngleAmbient_apply
 #print axioms norm_cube_eq_coordinate_denominator
 #print axioms solidAngleAmbient_apply_coordinate
@@ -492,5 +502,6 @@ theorem sphericalRectangle_curl_integral_zero
 #print axioms exact_sphereParam_identity
 #print axioms sphericalRectangle_green_boundary_zero
 #print axioms sphericalRectangle_curl_integral_zero
+#print axioms integral_sin_rectangle
 
 end ConstructionTargets.T94A10Closure
