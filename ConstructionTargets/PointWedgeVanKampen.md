@@ -498,3 +498,7 @@ x₀`; the connector calculation can now use that equality explicitly.
 at that transported object as the `eqToIso` of the named equality, so the
 remaining normal form contains explicit transport rather than a conditional
 connector choice.
+
+`genericPointWedgeLeftLiftedLoop_normalForm_eq_transport` expands the mapped
+lifted left loop's connector normal form as conjugation by the two explicit
+`eqToHom` transports associated to the named base-object equality.

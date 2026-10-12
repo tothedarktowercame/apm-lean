@@ -2277,6 +2277,26 @@ theorem genericPointWedgeLeftEquiv_leftBase_connector :
   rw [dif_pos (genericPointWedgeLeftEquiv_obj_leftBase
     x₀ y₀ M N hM hN hy hx cM cN)]
 
+omit [PathConnectedSpace Y] in
+/-- The connector normal form of the mapped lifted left loop is conjugation
+by the explicit equality transport at its common endpoint. -/
+theorem genericPointWedgeLeftLiftedLoop_normalForm_eq_transport
+    (g : FundamentalGroup X x₀) :
+    (genericPointWedgeConnectors x₀).normalForm
+        ((genericPointWedgeLeftGroupoidEquivalence
+          x₀ y₀ M N hM hN hy hx cM cN).functor.map
+            (genericPointWedgeLeftLiftedLoop x₀ y₀ M g)) =
+      eqToHom (genericPointWedgeLeftEquiv_obj_leftBase
+        x₀ y₀ M N hM hN hy hx cM cN).symm ≫
+        (genericPointWedgeLeftGroupoidEquivalence
+          x₀ y₀ M N hM hN hy hx cM cN).functor.map
+            (genericPointWedgeLeftLiftedLoop x₀ y₀ M g) ≫
+      eqToHom (genericPointWedgeLeftEquiv_obj_leftBase
+        x₀ y₀ M N hM hN hy hx cM cN) := by
+  simp only [ConnectorSystem.normalForm, genericPointWedgeConnectors]
+  rw [genericPointWedgeLeftEquiv_leftBase_connector]
+  rfl
+
 /-- Once B3's two mapped actions are identified with the images of the
 literal topological legs under B5, the normalized equivalence has exactly the
 two coproduct coordinates required by B6. -/
@@ -2779,6 +2799,7 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeRightEquiv_comp_rightLegLift
 #print axioms genericPointWedgeLeftEquiv_obj_leftBase
 #print axioms genericPointWedgeLeftEquiv_leftBase_connector
+#print axioms genericPointWedgeLeftLiftedLoop_normalForm_eq_transport
 #print axioms genericPointWedgeIdentityActualSpan_left_map
 #print axioms genericPointWedgeIdentityActualSpan_right_map
 #print axioms genericPointWedgeSingleObjPostcomposeIso
