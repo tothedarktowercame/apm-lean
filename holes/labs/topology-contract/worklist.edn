@@ -113890,6 +113890,17 @@
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder/diff validation", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791844616220-8008-aaca3e3e",
+     :commands
+     ["lake env lean <commit-archive>/ConstructionTargets/PointWedgeVanKampen.lean"
+      "lake build ConstructionTargets.PointWedgeVanKampen"
+      "python3 scripts/statement-registry.py check"
+      "git-show sha256/placeholders/scope"],
+     :finding
+     "PASS program STOP. Commit 36c30c50 adds compiled progress after prior history and changes only scoped Lean/MD files. Exact source/doc/fixture hashes match evidence (fixture 0bca6ce3...b8c8b0); registry 131/131; sorry/admit 0->0. The theorem correctly rewrites actualSpan.right.map q through the coordinate right-map and concludes HEq to inr(normalForm(eR.functor.map q)); HEq faithfully preserves dependent endpoints across that representation boundary. Axioms are only propext, Classical.choice, Quot.sound. The residual and partial milestone are explicitly listed."},
     :commit "36c30c5097c8fdf98305876125a0e388b7d2e06f",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
@@ -113900,7 +113911,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113921,7 +113932,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: A canonical inverse-image-to-right-base morphism now relates the source endpoint counit to the fixed conjugator by naturality.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: The canonical inverse-image-to-base morphism maps to the right coproduct injection of its connector normal form.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -114492,7 +114503,11 @@
     {:job 4,
      :commit "1c1a8e0826a9399eb983a01a3c67d0f6188d7f7f",
      :reason
-     "A canonical inverse-image-to-right-base morphism now relates the source endpoint counit to the fixed conjugator by naturality."}]}
+     "A canonical inverse-image-to-right-base morphism now relates the source endpoint counit to the fixed conjugator by naturality."}
+    {:job 5,
+     :commit "36c30c5097c8fdf98305876125a0e388b7d2e06f",
+     :reason
+     "The canonical inverse-image-to-base morphism maps to the right coproduct injection of its connector normal form."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
