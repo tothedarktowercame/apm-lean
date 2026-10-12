@@ -550,97 +550,95 @@
    :other-consumers [:t00A03 :t91J05 :t92J05 :t94J04 :t96A01 :t97J02]}
   {:consumer :t00A02,
    :implements-lemma
+   :lemma-constructiontargets-surfaceclassification-finitetwocomplex-face-card-le-three,
+   :phase :implementation,
+   :state :open,
+   :scope ["ConstructionTargets/SurfaceClassification.lean"],
+   :dag-node "TOPOLOGY-ROUTES.md/surface/finite-complex",
+   :acceptance
+   {:declaration
+    "ConstructionTargets.SurfaceClassification.FiniteTwoComplex.face_card_le_three",
+    :type "∀ K : FiniteTwoComplex, FiniteTwoComplex.FaceBound K",
+    :fixture "/tmp/surface_finite_two_complex.lean",
+    :fixture-sha256
+    "0a7692c13df003ebf51b96a62d0a69e00386d6e719861ebe679b66472a38e121",
+    :placeholders
+    ["t00A02 bridge"
+     "t00A03 bridges"
+     "t91J05 bridge_1"
+     "t92J05 genusTwo"
+     "t94J04 bridge"
+     "t96A01 sorry"
+     "t97J02 bridge"],
+    :route-step "finite 2-complex representation",
+    :implementation "Promote."},
+   :id :routes-2026-10-12-surface-finite-complex-r1,
+   :kind :reusable-theorem,
+   :area "surface-classification",
+   :depends-on
+   [:routes-2026-10-11-surface-finite-nested-triangle-cover-topo3-r1],
+   :current-residual "Construct complex and realization.",
+   :other-consumers [:t00A03 :t91J05 :t92J05 :t94J04 :t96A01 :t97J02]}
+  {:consumer :t00A02,
+   :implements-lemma
    :lemma-constructiontargets-surfaceclassification-compactsmoothsurfacefinitetriangulatio,
    :evidence
    {:probe
-    {:residual
-     "Construct compatible finite triangulation data from the finite nested coordinate-triangle cover; inherited triangulations on finite covers and classification remain.",
-     :outcome :revise,
-     :warnings [],
+    {:outcome :revise,
+     :seat "topo-12",
+     :fixture
+     {:path "/tmp/surface_finite_two_complex.lean",
+      :sha256
+      "0a7692c13df003ebf51b96a62d0a69e00386d6e719861ebe679b66472a38e121"},
+     :commands
+     [{:cmd "lake env lean /tmp/surface_finite_two_complex.lean",
+       :exit 0}],
+     :axioms ["propext" "Quot.sound"],
      :missing-theorems
-     [{:id
-       :lemma-constructiontargets-surfaceclassification-compactsurfacefinitenestedtrianglecover,
-       :name
-       "ConstructionTargets.SurfaceClassification.compactSurfaceFiniteNestedTriangleCover",
-       :type
-       "forall {M : Type*} [TopologicalSpace M] [T2Space M] [ChartedSpace (EuclideanSpace Real (Fin 2)) M] [CompactSpace M], let hd : Module.finrank Real (EuclideanSpace Real (Fin 2)) = 2 := by simp; exists (s : Finset M) (r : M -> Real), (forall x in s, SurfaceNestedTriangleCover.Good (CompactSurfaceTriangleCover.planeChart hd x) x (r x) and SurfaceNestedTriangleCover.Good (CompactSurfaceTriangleCover.planeChart hd x) x (r x / 2) and Set.range (SurfaceNestedTriangleCover.triangle (CompactSurfaceTriangleCover.planeChart hd x) x (r x / 2)) subset SurfaceNestedTriangleCover.triangle (CompactSurfaceTriangleCover.planeChart hd x) x (r x) '' StandardTriangleEmbedding.interiorParameters) and (forall y : M, exists x in s, y in SurfaceNestedTriangleCover.triangle (CompactSurfaceTriangleCover.planeChart hd x) x (r x / 2) '' StandardTriangleEmbedding.interiorParameters)",
+     [{:name
+       "ConstructionTargets.SurfaceClassification.FiniteTwoComplex.face_card_le_three",
+       :type "∀ K : FiniteTwoComplex, FiniteTwoComplex.FaceBound K",
        :status :proved,
        :consumers
        [:t00A02 :t00A03 :t91J05 :t92J05 :t94J04 :t96A01 :t97J02],
        :depends-on
-       ["ConstructionTargets.SurfaceNestedTriangleCover.finite_nested"],
+       ["ConstructionTargets.SurfaceClassification.compactSurfaceFiniteNestedTriangleCover"],
        :area "surface-classification"}],
      :prerequisite
      {:consumer :t00A02,
-      :implements-lemma
-      :lemma-constructiontargets-surfaceclassification-compactsurfacefinitenestedtrianglecover,
+      :implements-lemma :lemma-surface-finite-two-complex-dimension,
       :phase :implementation,
       :state :open,
       :scope ["ConstructionTargets/SurfaceClassification.lean"],
-      :dag-node
-      "TOPOLOGY-ROUTES.md/topo3/surface-classification/finite-nested-coordinate-triangle-cover",
+      :dag-node "TOPOLOGY-ROUTES.md/surface/finite-complex",
       :acceptance
-      {:implementation
-       "Promote the compiled Euclidean-plane specialization of SurfaceNestedTriangleCover.finite_nested. It must produce a finite cover by inner coordinate triangles, nested in compact embedded outer coordinate triangles, for compact Hausdorff surfaces modeled on EuclideanSpace Real (Fin 2). Preserve the explicit Good, nesting, and original-chart-target conclusions. Do not call this a triangulation and do not assert compatible face intersections, a simplicial complex, a realization homeomorphism, inherited cover triangulations, or classification.",
-       :declaration
-       "ConstructionTargets.SurfaceClassification.compactSurfaceFiniteNestedTriangleCover",
-       :type
-       "the exact type compiled in /tmp/surface_classification_finite_nested_cover.lean",
-       :fixture "/tmp/surface_classification_finite_nested_cover.lean",
+      {:declaration
+       "ConstructionTargets.SurfaceClassification.FiniteTwoComplex.face_card_le_three",
+       :type "∀ K : FiniteTwoComplex, FiniteTwoComplex.FaceBound K",
+       :fixture "/tmp/surface_finite_two_complex.lean",
        :fixture-sha256
-       "146359f9b6d66784df548d61fa6ce5fd8fbc113f5184b1b660856e2d3232d894",
+       "0a7692c13df003ebf51b96a62d0a69e00386d6e719861ebe679b66472a38e121",
        :placeholders
-       ["t00A02 bridge_global_cover_classification"
-        "t00A03 bridges 1/2"
+       ["t00A02 bridge"
+        "t00A03 bridges"
         "t91J05 bridge_1"
-        "t92J05 genusTwo bridge"
-        "t94J04 equal-index bridge"
-        "t96A01 sole sorry"
-        "t97J02 classify bridge"],
-       :route-step
-       "specialize the banked finite nested coordinate-triangle cover to the consumers' Euclidean-plane surface model before constructing compatible triangulations"},
-      :id
-      :routes-2026-10-11-surface-finite-nested-triangle-cover-topo3-r1,
+        "t92J05 genusTwo"
+        "t94J04 bridge"
+        "t96A01 sorry"
+        "t97J02 bridge"],
+       :route-step "finite 2-complex representation",
+       :implementation "Promote."},
+      :id :routes-2026-10-12-surface-finite-complex-r1,
       :kind :reusable-theorem,
       :area "surface-classification",
-      :depends-on [:routes-2026-10-10-surface-triangulation-topo3-r2],
-      :current-residual
-      "Refine the finite nested coordinate-triangle cover to a compatible finite simplicial triangulation, prove its realization is homeomorphic to the surface, and then construct inherited triangulations on finite covers.",
+      :depends-on
+      [:routes-2026-10-11-surface-finite-nested-triangle-cover-topo3-r1],
+      :current-residual "Construct complex and realization.",
       :other-consumers
       [:t00A03 :t91J05 :t92J05 :t94J04 :t96A01 :t97J02]},
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :commands
-     [{:cmd
-       "lake build ConstructionTargets.SurfaceNestedTriangleCover && lake env lean /tmp/surface_classification_finite_nested_cover.lean",
-       :exit 0,
-       :output
-       "dependency and compactSurfaceFiniteNestedTriangleCover compiled"}
-      {:cmd
-       "sha256sum /tmp/surface_classification_finite_nested_cover.lean",
-       :exit 0,
-       :output
-       "146359f9b6d66784df548d61fa6ce5fd8fbc113f5184b1b660856e2d3232d894  /tmp/surface_classification_finite_nested_cover.lean"}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/surface_classification_finite_nested_cover.lean || true)\"",
-       :exit 0}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "131 registered statements match, 0 do not"}],
-     :diagnostic-history
-     [{:cmd
-       "lake env lean /tmp/surface_classification_finite_nested_cover.lean",
-       :exit 1,
-       :finding
-       "The source dependency had not yet been built in this checkout; after verifying the canonical .lake/packages location, building ConstructionTargets.SurfaceNestedTriangleCover made the same fixture compile."}],
-     :fixture
-     {:path "/tmp/surface_classification_finite_nested_cover.lean",
-      :sha256
-      "146359f9b6d66784df548d61fa6ce5fd8fbc113f5184b1b660856e2d3232d894"},
-     :finding
-     "The existing reviewed results provide finite covers by compact embedded chart triangles and, more strongly, finite inner triangles nested in outer chart triangles. They do not supply compatible intersections along common faces, an abstract finite simplicial complex, or a homeomorphism from its realization, so treating them as the requested triangulation would be a facade. The compiled prerequisite specializes the genuine nested-cover theorem to EuclideanSpace Real (Fin 2), exactly the smooth-surface model used by the route, while retaining all geometric conclusions. The next theorem must perform the overlap refinement and gluing needed for an actual finite triangulation.",
-     :seat "topo-12"}},
+     :residual "Then construct complex."}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope ["ConstructionTargets/SurfaceClassification.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/topo3/surface-classification/triangulation-first-milestone",
@@ -663,7 +661,8 @@
    :area "surface-classification",
    :depends-on
    [:routes-2026-10-10-topo3-seed-checkpoint-1
-    :routes-2026-10-11-surface-finite-nested-triangle-cover-topo3-r1],
+    :routes-2026-10-11-surface-finite-nested-triangle-cover-topo3-r1
+    :routes-2026-10-12-surface-finite-complex-r1],
    :current-residual
    "Normal-form reduction, orientability and Euler-characteristic recognition remain.",
    :other-consumers [:t00A03 :t91J05 :t92J05 :t94J04 :t96A01 :t97J02]}
@@ -25936,7 +25935,29 @@
    :kind :lemma,
    :depends-on
    [:lemma-constructiontargets-surfaceschoenflies-embeddedcircle-closedrange-and-homeomorph],
-   :other-consumers [:t01J01 :t03J02]}],
+   :other-consumers [:t01J01 :t03J02]}
+  {:consumer :t00A02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.SurfaceClassification.FiniteTwoComplex.face_card_le_three",
+    :type "∀ K : FiniteTwoComplex, FiniteTwoComplex.FaceBound K"},
+   :lemma
+   {:name
+    "ConstructionTargets.SurfaceClassification.FiniteTwoComplex.face_card_le_three",
+    :reported-by [:routes-2026-10-10-surface-triangulation-topo3-r2],
+    :type "∀ K : FiniteTwoComplex, FiniteTwoComplex.FaceBound K",
+    :area "surface-classification",
+    :proved-in :routes-2026-10-10-surface-triangulation-topo3-r2},
+   :id
+   :lemma-constructiontargets-surfaceclassification-finitetwocomplex-face-card-le-three,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-surfaceclassification-compactsurfacefinitenestedtrianglecover],
+   :other-consumers
+   [:t00A03 :t91J05 :t92J05 :t94J04 :t96A01 :t97J02]}],
  :consumer-baselines {},
  :statuses
  #{:open
