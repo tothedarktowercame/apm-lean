@@ -763,3 +763,9 @@ identifies the reconstructed transport glue with that same fully typed chain.
 It combines the generic reverse-glue factorization with the unit middle
 conjugation, so the splice theorem now applies to the actual reconstructed
 glue without changing representatives.
+
+`genericPointWedgeCoordinateSpanReconstructedGlue_counitSplice` applies that
+identification to the specialized splice.  The reconstructed glue followed
+by the right coordinate-span counit is therefore the left coordinate-span
+counit, now proved through the explicit outer-comparison route needed for the
+pre-coordinate factors.

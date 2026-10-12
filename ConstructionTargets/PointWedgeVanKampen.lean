@@ -2721,6 +2721,37 @@ theorem genericPointWedgeCoordinateSpanReconstructedGlue_eq_counitSpliceChain :
   rw [hW] at hG
   exact hG
 
+/-- Applying the specialized splice to the reconstructed glue identifies its
+right counit composite with the left counit component. -/
+theorem genericPointWedgeCoordinateSpanReconstructedGlue_counitSplice :
+    let l := genericPointWedgeActualLeft x₀ y₀ M N
+    let r := genericPointWedgeActualRight x₀ y₀ M N
+    let l' := genericPointWedgeCoordinateLeft x₀
+    let r' := genericPointWedgeCoordinateRight y₀
+    let eK := genericPointWedgeOverlapGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let eL := genericPointWedgeLeftGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let eR := genericPointWedgeRightGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let aL := genericPointWedgeLeftSpanIso
+      x₀ y₀ M N hM hN hy hx cM cN
+    let aR := genericPointWedgeRightSpanIso
+      x₀ y₀ M N hM hN hy hx cM cN
+    let Q := genericPointWedgeIdentityCoordinateSpan x₀ y₀
+    let P := reverseTransportObj l r l' r' eK eL eR aL aR Q
+    let u : FundamentalGroupoid Unit := FundamentalGroupoid.mk ()
+    (transportObj l r l' r' eK eL eR aL aR P).glue.hom.app u ≫
+        ((eR.congrLeft).counitIso.hom.app Q.right).app (r'.obj u) =
+      ((eL.congrLeft).counitIso.hom.app Q.left).app (l'.obj u) := by
+  have hG := genericPointWedgeCoordinateSpanReconstructedGlue_eq_counitSpliceChain
+    x₀ y₀ M N hM hN hy hx cM cN
+  have hS := genericPointWedgeCoordinateSpanOuterComparison_counitSplice
+    x₀ y₀ M N hM hN hy hx cM cN
+  dsimp only at hG hS ⊢
+  rw [hG]
+  exact hS
+
 /-- At the identity point-span object, the remaining coordinate-to-point
 counit is exactly the generic span-transport counit. -/
 theorem genericPointWedgeCoordinatePointCounit_eq_transportCounit :
@@ -4262,6 +4293,7 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeCoordinateSpanMiddleCounit_eq_roundTrips
 #print axioms genericPointWedgeCoordinateSpanOuterComparison_counitSplice
 #print axioms genericPointWedgeCoordinateSpanReconstructedGlue_eq_counitSpliceChain
+#print axioms genericPointWedgeCoordinateSpanReconstructedGlue_counitSplice
 #print axioms genericPointWedgeCoordinatePointCounit_eq_transportCounit
 #print axioms genericPointWedgeCoordinatePointCounit_legs
 #print axioms genericPointWedgeCoordinatePointCounit_uniqueObjects
