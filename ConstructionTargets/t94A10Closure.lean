@@ -309,6 +309,59 @@ theorem solidAngle_pullback_sphereParam
   rw [homega _ (sphereParam_ne_zero p)]
   exact solidAngleAmbient_sphereParam p
 
+/-- Pulling an exact ambient two-form back to the spherical rectangle gives
+the oriented curl identity for its two scalar coefficient functions. -/
+theorem exact_sphereParam_identity
+    (eta : E3 → E3 [⋀^Fin 1]→L[ℝ] ℝ)
+    (omega : E3 → E3 [⋀^Fin 2]→L[ℝ] ℝ)
+    (heta : ∀ x, DifferentiableAt ℝ eta x)
+    (hexact : ∀ x, extDeriv eta x = omega x)
+    (homega : ∀ x, x ≠ 0 → omega x = solidAngleAmbient x)
+    (p : ℝ × ℝ) :
+    fderiv ℝ (spherePullbackLongCoeff eta) p (1, 0) -
+        fderiv ℝ (spherePullbackLatCoeff eta) p (0, 1) = Real.sin p.1 := by
+  have hs2 : ContDiff ℝ (1 + 1) sphereParam := sphereParam_contDiff.of_le (by simp)
+  have hdf : Differentiable ℝ (fderiv ℝ sphereParam) :=
+    ((contDiff_succ_iff_fderiv.mp hs2).2.2).differentiable (by norm_num)
+  have hpullDiff : DifferentiableAt ℝ (spherePullbackOneForm eta) p :=
+    DifferentiableAt.continuousAlternatingMapCompContinuousLinearMap
+      ((heta _).comp p (sphereParam_differentiable p)) (hdf p)
+  have hpull := extDeriv_pullback (x := p) (r := ⊤) (heta _)
+    sphereParam_contDiff.contDiffAt (by simp)
+  have heval := congrArg (fun a => a ![(1, 0), (0, 1)]) hpull
+  change (extDeriv (spherePullbackOneForm eta) p) ![(1, 0), (0, 1)] = _ at heval
+  rw [extDeriv_apply hpullDiff] at heval
+  rw [hexact, homega _ (sphereParam_ne_zero p)] at heval
+  simp [Fin.sum_univ_two, spherePullbackOneForm] at heval
+  have hlongfun :
+      (fun x => (eta (sphereParam x)) (⇑(fderiv ℝ sphereParam x) ∘ ![(0, 1)])) =
+        spherePullbackLongCoeff eta := rfl
+  have hlatfun :
+      (fun x => (eta (sphereParam x))
+        (⇑(fderiv ℝ sphereParam x) ∘ Fin.removeNth 1 ![(1, 0), (0, 1)])) =
+        spherePullbackLatCoeff eta := by
+    funext x
+    simp only [spherePullbackLatCoeff, spherePullbackOneForm,
+      ContinuousAlternatingMap.compContinuousLinearMap_apply]
+    congr 1
+    funext i
+    fin_cases i
+    rfl
+  have hbasis :
+      (⇑(fderiv ℝ sphereParam p) ∘ ![(1, 0), (0, 1)]) =
+        ![fderiv ℝ sphereParam p (1, 0), fderiv ℝ sphereParam p (0, 1)] := by
+    funext i
+    fin_cases i <;> rfl
+  rw [hlongfun, hlatfun, hbasis] at heval
+  change
+    fderiv ℝ (spherePullbackLongCoeff eta) p (1, 0) +
+        -fderiv ℝ (spherePullbackLatCoeff eta) p (0, 1) =
+      solidAngleAmbient (sphereParam p)
+        ![fderiv ℝ sphereParam p (1, 0), fderiv ℝ sphereParam p (0, 1)] at heval
+  rcases p with ⟨s, t⟩
+  rw [fderiv_sphereParam_lat, fderiv_sphereParam_long] at heval
+  simpa [solidAngleAmbient_sphereParam] using heval
+
 #print axioms solidAngleAmbient_apply
 #print axioms norm_cube_eq_coordinate_denominator
 #print axioms solidAngleAmbient_apply_coordinate
@@ -319,5 +372,6 @@ theorem solidAngle_pullback_sphereParam
 #print axioms sphereParam_add_two_pi
 #print axioms solidAngleAmbient_sphereParam
 #print axioms solidAngle_pullback_sphereParam
+#print axioms exact_sphereParam_identity
 
 end ConstructionTargets.T94A10Closure
