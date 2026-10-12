@@ -300,4 +300,19 @@ def torusRP2PairingData : PairingData where
     apply (torusRP2_eqvGen_iff _ _).mpr
     exact .trans _ _ _ (torusRP2_all_vertices i) (torusRP2_all_vertices j).symm
 
+/-! ### Uniform standard-surface data -/
+
+/-- The canonical polygon has four arcs per orientable handle and two arcs
+per nonorientable crosscap. -/
+def standardEdgeCount (o : Bool) (g : ℕ) : ℕ :=
+  if o then 4 * g else 2 * g
+
+theorem standardEdgeCount_pos (o : Bool) (g : ℕ) (hg : 0 < g) :
+    0 < standardEdgeCount o g := by
+  cases o <;> simp [standardEdgeCount] <;> omega
+
+theorem standardEdgeCount_ne_zero (o : Bool) (g : ℕ) (hg : 0 < g) :
+    standardEdgeCount o g ≠ 0 :=
+  Nat.ne_of_gt (standardEdgeCount_pos o g hg)
+
 end ConstructionTargets.PolygonSurfacePiOne
