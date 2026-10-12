@@ -79485,69 +79485,61 @@
   {:consumer :t96A07,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 5,
+   :stop-count 6,
    :evidence
    {:placeholder-delta 0,
-    :residual "Assemble B9 from tangent cases; then B10-B13.",
+    :residual
+    "Formalize B10 horizontal-level transversality; then B11-B13.",
     :outcome :stop,
-    :warnings ["Main: 1 placeholder."],
+    :warnings ["Main: 1 placeholder." "Style lint only."],
     :missing-theorems
     [{:name
-      "ConstructionTargets.T96A07Closure.sphereMap_vertical_tangent_of_third_eq_zero",
-      :type "equatorial tangent with vertical derivative one",
+      "ConstructionTargets.T96A07Closure.sphereMap_vertical_surjective",
+      :type "B9 vertical derivative surjectivity",
       :status :proved,
       :consumers [:t96A07],
-      :depends-on [],
+      :depends-on
+      ["sphereMap_vertical_tangent_of_third_ne_zero"
+       "sphereMap_vertical_tangent_of_third_eq_zero"],
       :area "projective-smooth-descent"}
      {:name
-      "ConstructionTargets.T96A07Closure.sphereMap_vertical_surjective",
-      :type "B9 sphere derivative vertical surjectivity",
-      :status :partial,
+      "ConstructionTargets.T96A07Closure.sphereMap_transverse_plane",
+      :type "B10 horizontal-level transversality",
+      :status :not-started,
       :consumers [:t96A07],
       :depends-on
-      ["ConstructionTargets.T96A07Closure.sphereMap_vertical_tangent_of_third_ne_zero"
-       "ConstructionTargets.T96A07Closure.sphereMap_vertical_tangent_of_third_eq_zero"],
+      ["plane_fderiv_range" "sphereMap_vertical_surjective"],
       :area "projective-smooth-descent"}],
     :statement-hashes
     {:registry "131/0",
-     :closure "3833ef31b7a793ebec378de794d8be564b898e29",
+     :closure "6c2e150c7713902aa9cb5664a6ba928a859f729e",
      :blueprint "69b59fb622dd62fc82a1fe100b353eaabc2c948d"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason :program-progress-committed,
+    :reason :program-milestone-complete,
     :commands
-    [{:cmd "lake build closure", :exit 0}
-     {:cmd "closure compile", :exit 0}
-     {:cmd "closure no-sorry", :exit 1, :expected-exit 1}
+    [{:cmd "closure build/compile", :exit 0}
      {:cmd "Main compile", :exit 0}
      {:cmd "registry check", :exit 0}
+     {:cmd "closure no-sorry", :exit 1, :expected-exit 1}
      {:cmd "placeholder count", :exit 0, :output "1"}
-     {:cmd "git show --check b5adc850b", :exit 0}],
+     {:cmd "git show --check f8d51a9d6", :exit 0}],
     :diagnostic-history
-    [{:cmd "compile", :exit 1, :finding "Normalized norm square."}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1791766248828-6088-e008513d",
-     :commands
-     ["git show/check/diff 7e8ef8563..b5adc850b"
-      "verify scoped blobs, fixture SHA, ancestry"
-      "lake build ConstructionTargets.t96A07Closure"
-      "lake env lean closure and t96A07 Main"
-      "statement-registry check/fingerprint"
-      "placeholder and axiom checks"],
-     :finding
-     "PASS: b5adc850b073d3ef0a5bfd745d6b19d7afeeb5ff adds compiled, sorry-free B9 progress after 7e8ef8563; its sole changed path is scoped. Closure/blueprint blobs 3833ef31/69b59fb6 and fixture baa2b187 match. In the p2=0 branch, unit norm and 0<z<1/2 exclude equal coordinate squares; the resulting nonzero denominator gives an orthogonal tangent whose vertical derivative is one. Lean gates pass with standard axioms only; registry 131/0, frozen hash 2ba67b04 unchanged, closure/Main placeholders 0/1. STOP lists B9 assembly, then B10-B13."},
-    :commit "b5adc850b073d3ef0a5bfd745d6b19d7afeeb5ff",
-    :changed-paths ["ConstructionTargets/t96A07Closure.lean"],
+    [{:cmd "compile",
+      :exit 1,
+      :finding "Explicit tangent equivalence; rebuilt olean."}],
+    :commit "f8d51a9d6",
+    :changed-paths
+    ["ConstructionTargets/t96A07Closure.lean"
+     "problems/t96A07/lean/Main.lean"],
     :fixture
     {:path "ConstructionTargets/t96A07Closure.lean",
      :sha256
-     "baa2b187ff5bb95a30162cc7960fb0ddd9ae0699f25e7fc1c5ff6789b2784ac7"},
+     "a33585df4049dedae96866058b87e83f099a3a80b889076e48fb0423ad2e4eda"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t96A07/lean/Main.lean"
     "problems/t96A07/status.json"
@@ -81369,7 +81361,8 @@
     :reported-by [:program-2026-10-11-close-t96a07],
     :type
     "B9 vertical component surjective at incident levels 0<z<1/2",
-    :area "projective-smooth-descent"},
+    :area "projective-smooth-descent",
+    :proved-in :program-2026-10-11-close-t96a07},
    :id
    :lemma-constructiontargets-t96a07closure-spheremap-vertical-surjective,
    :kind :lemma,
@@ -81377,7 +81370,9 @@
    [:lemma-constructiontargets-t96a07closure-spheremapambient-fderiv
     :lemma-constructiontargets-t96a07closure-crossterm-horizontalplane-incident-coordinates
     :lemma-constructiontargets-t96a07closure-spheremap-vertical-tangent-of-third-ne-zero
-    :lemma-constructiontargets-t96a07closure-spheremap-vertical-tangent-of-third-eq-zero],
+    :lemma-constructiontargets-t96a07closure-spheremap-vertical-tangent-of-third-eq-zero
+    :lemma-spheremap-vertical-tangent-of-third-ne-zero
+    :lemma-spheremap-vertical-tangent-of-third-eq-zero],
    :other-consumers []}
   {:consumer :t96A07,
    :phase :lemma,
@@ -81445,6 +81440,70 @@
     :banked-commit "b5adc850b073d3ef0a5bfd745d6b19d7afeeb5ff"},
    :id
    :lemma-constructiontargets-t96a07closure-spheremap-vertical-tangent-of-third-eq-zero,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance {:lemma "sphereMap_vertical_tangent_of_third_ne_zero"},
+   :lemma
+   {:name "sphereMap_vertical_tangent_of_third_ne_zero",
+    :reported-by []},
+   :id :lemma-spheremap-vertical-tangent-of-third-ne-zero,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance {:lemma "sphereMap_vertical_tangent_of_third_eq_zero"},
+   :lemma
+   {:name "sphereMap_vertical_tangent_of_third_eq_zero",
+    :reported-by []},
+   :id :lemma-spheremap-vertical-tangent-of-third-eq-zero,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t96A07,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.T96A07Closure.sphereMap_transverse_plane",
+    :type "B10 horizontal-level transversality"},
+   :lemma
+   {:name
+    "ConstructionTargets.T96A07Closure.sphereMap_transverse_plane",
+    :reported-by [:program-2026-10-11-close-t96a07],
+    :type "B10 horizontal-level transversality",
+    :area "projective-smooth-descent"},
+   :id
+   :lemma-constructiontargets-t96a07closure-spheremap-transverse-plane,
+   :kind :lemma,
+   :depends-on
+   [:lemma-plane-fderiv-range :lemma-spheremap-vertical-surjective],
+   :other-consumers []}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance {:lemma "plane_fderiv_range"},
+   :lemma {:name "plane_fderiv_range", :reported-by []},
+   :id :lemma-plane-fderiv-range,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance {:lemma "sphereMap_vertical_surjective"},
+   :lemma {:name "sphereMap_vertical_surjective", :reported-by []},
+   :id :lemma-spheremap-vertical-surjective,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}]}
