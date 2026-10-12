@@ -113850,14 +113850,14 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "Blueprint B3 is marked proved but its proof uses the unlisted ConnectedGroupoidSingleObjEquivalence.connectorSingleObjEquivalence (and connector-system representation) instead of only the declared uses; add the actual connector dependency and proof route to B3 uses.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
    :evidence
    {:placeholder-delta {:source-before 0, :source-after 0},
     :residual
-    "Normalize both coordinate comparison factors; then point-span transport, counit substitution, and B6/B12.",
+    "Normalize the left strict-span and unit factors, then the right comparison; point-span transport, counits, B6/B12 remain.",
     :outcome :stop,
     :warnings [],
     :missing-theorems
@@ -113871,9 +113871,9 @@
       :area "fundamental-group-wedge-of-circles"}],
     :statement-hashes
     {:source
-     "6365d99fba09d4880ee2aca2e93e0ad3b85a1dd3b9956df9417fee6b20522bd3",
+     "ceda2d68cceb07cebf3284fa62dcd22b96c6a987353be5610d7e7ddc17491682",
      :documentation
-     "b5d6dc24e27ccb73187d84594d44b342dfbc9237df9da41b7d911449872bf4a3",
+     "f786fddcf58dadaf759fba9747844f47b85a27b352636ad540128f6159a0813d",
      :blueprint
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0",
      :registry "131/131"},
@@ -113881,7 +113881,7 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
     :reason
-    "The whiskered coordinate-span middle factor is the previously proved unit glue.",
+    "The coordinate-span forward left comparison is isolated and expanded into its two ordered factors.",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/PointWedgeVanKampen.lean",
@@ -113890,7 +113890,7 @@
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder/diff validation", :exit 0}],
-    :commit "7acb8ed58ddcc3722b098f46c7944700ab12d301",
+    :commit "bdda6927989d58fcb6a65ffdc374e8d08cdcf9d8",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
      "ConstructionTargets/PointWedgeVanKampen.md"],
@@ -113900,7 +113900,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
