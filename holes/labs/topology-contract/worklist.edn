@@ -113850,14 +113850,14 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 7,
+   :stop-count 8,
    :review-finding
    "Blueprint B3 is marked proved but its proof uses the unlisted ConnectedGroupoidSingleObjEquivalence.connectorSingleObjEquivalence (and connector-system representation) instead of only the declared uses; add the actual connector dependency and proof route to B3 uses.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
    :evidence
    {:placeholder-delta {:source-before 0, :source-after 0},
     :residual
-    "Prove the symmetric right lifted-loop normal form, then discharge B6 leg equations and B12.",
+    "Identify the transported right loop with the composite based-map identity; then discharge B6 legs and B12.",
     :outcome :stop,
     :warnings [],
     :missing-theorems
@@ -113871,9 +113871,9 @@
       :area "fundamental-group-wedge-of-circles"}],
     :statement-hashes
     {:source
-     "90a3533a5acff3fd53755cb54c3f4909de24c033064fda9c40b9c055b0d5a6ed",
+     "c4bd8e938e8b387a9742eec202d098ffc008b9cb875142676c80aab402006ae7",
      :documentation
-     "7e2507a819d17473e1d55ff9c23633a41ab14ef23fa791cf79ddc05b7022985e",
+     "3faa3c47393219d605259884135af8af36b7548eef59b5dd909a0424f77db9c4",
      :blueprint
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0",
      :registry "131/131"},
@@ -113881,7 +113881,7 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
     :reason
-    "The full connector normal form of the mapped lifted left loop now equals the original loop.",
+    "The right base equality, connector, and lifted-loop transport normal form now compile with the quotient representative change explicit.",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/PointWedgeVanKampen.lean",
@@ -113891,22 +113891,10 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder/diff validation", :exit 0}],
     :diagnostic-history
-    [{:cmd "lean direct mapOfEq composition",
+    [{:cmd "lean direct right-base equality",
       :exit 1,
-      :finding "Used path representative and both mapOfEq formulas."}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1791803517526-6836-c62878f1",
-     :commands
-     ["git show/diff-tree aae02a4e"
-      "sha256/placeholder/registry checks"
-      "lake env lean ConstructionTargets/PointWedgeVanKampen.lean"
-      "lake build ConstructionTargets.PointWedgeVanKampen"
-      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (expected absent)"],
-     :finding
-     "PASS: exact two-file scope and frozen hashes match; 0 placeholders, registry 131/131. Left mapped-lift connector normal form is proved in the required orientation across dependent endpoint transports; both new theorems use only standard axioms. Valid program STOP: compiled progress; right normal form, B6 legs, and B12 remain."},
-    :commit "aae02a4ef17e939a372ef65061ab752f2c196a67",
+      :finding "Inserted explicit quotient subtype equality."}],
+    :commit "2fd5dce65313ab1b79d96c6ec1d98d7caa2c3852",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
      "ConstructionTargets/PointWedgeVanKampen.md"],
@@ -113916,7 +113904,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
