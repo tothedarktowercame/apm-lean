@@ -75000,7 +75000,9 @@
    :current-residual "Elect B3/B4 or route residual.",
    :other-consumers []}
   {:consumer :t96J02,
-   :stop-count 2,
+   :owner-reopen
+   "reopened: a lemma this row reported missing is now banked",
+   :stop-count 0,
    :review-finding
    "STOP remainder is incomplete: cdbdc979d proves the six-edge involution/signs, orbit equivalence, generated-relation iff, and quotient Equiv, but defines no torusRP2PairingData and proves no six-edge oneVertex field. Thus the claim that six-edge B2 is complete is false, and the required missing theorem is omitted from :missing-theorems. Add torusRP2PairingData/oneVertex to the remaining milestones or state and prove it in scope.",
    :implements-lemma
@@ -75056,7 +75058,7 @@
      "565354eda084c50a96c1af9f0d3595a2bba133ceae21f602f0668b2b1b872fed"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope ["ConstructionTargets/PolygonSurfacePiOne.lean"],
    :dag-node "ConstructionTargets/PolygonSurfacePiOne.blueprint.md/B2",
    :acceptance
@@ -75069,7 +75071,7 @@
    :id :routes-2026-10-12-polygon-b2-completion-topo2-r1,
    :kind :reusable-theorem,
    :area "polygon-surface-pi1",
-   :fail-count 1,
+   :fail-count 0,
    :depends-on
    [:routes-2026-10-12-polygon-b1-topo2-r1
     :routes-2026-10-12-checkpoint-topo2-r13],
@@ -75144,9 +75146,20 @@
       :current-residual "Elect uniform B2.",
       :other-consumers []}],
     :author "topo-8",
-    :disposition :replan},
+    :disposition :replan,
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791836457213-7850-90ceb5fc",
+     :commands
+     ["bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn"
+      "bb holes/labs/topology-contract/build_step.bb priorities holes/labs/topology-contract/worklist2.edn"
+      "python3 scripts/statement-registry.py check"
+      "EDN B2 repair, measure, and replacement audit"],
+     :finding
+     "PASS: checkpoint has empty scope and no commit/fixture. The repaired parent now compiles torusRP2PairingData, but its latest independent outcome remains FAIL and uniform B2 is partial; zero placeholder delta, one packet, and one FAIL are accurate. The bounded six-edge row isolates review/banking of the proved oneVertex instance, while r15 defers uniform B2. Worklist 972 OK; registry 131/0; priorities reproduce SLSC 6 and B2 5."}},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance {:strategy "Rerun after B2."},
@@ -75162,7 +75175,7 @@
    :consumer :t97A01,
    :implements-lemma :lemma-torusrp2pairingdata,
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/PolygonSurfacePiOne.lean"],
    :dag-node "ConstructionTargets/PolygonSurfacePiOne.blueprint.md/B2",
    :acceptance
@@ -84544,7 +84557,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "torusRP2PairingData",
@@ -84556,17 +84569,23 @@
     :type
     "six-edge PairingData with all vertices in one generated class",
     :area "polygon-surface-pi1",
-    :proved-in :routes-2026-10-12-polygon-b2-completion-topo2-r1},
+    :proved-in :routes-2026-10-12-polygon-b2-completion-topo2-r1,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/PolygonSurfacePiOne.lean"]},
    :id :lemma-torusrp2pairingdata,
    :kind :lemma,
    :depends-on [:lemma-torusrp2-eqvgen-iff],
    :other-consumers []}
   {:consumer :portfolio,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance {:lemma "torusRP2_eqvGen_iff"},
-   :lemma {:name "torusRP2_eqvGen_iff", :reported-by []},
+   :lemma
+   {:name "torusRP2_eqvGen_iff",
+    :reported-by [],
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/PolygonSurfacePiOne.lean"]},
    :id :lemma-torusrp2-eqvgen-iff,
    :kind :lemma,
    :depends-on [],
