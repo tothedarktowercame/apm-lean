@@ -113857,18 +113857,16 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 2,
+   :stop-count 3,
    :review-finding
    "Blueprint B3 is marked proved but its proof uses the unlisted ConnectedGroupoidSingleObjEquivalence.connectorSingleObjEquivalence (and connector-system representation) instead of only the declared uses; add the actual connector dependency and proof route to B3 uses.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
    :evidence
    {:placeholder-delta {:source-before 0, :source-after 0},
     :residual
-    "Evaluate left inclusion image, right nested unitInv map, two span maps, literal lifts; then B12.",
+    "Evaluate both literal inclusion images, two span maps, and literal lifts; then B12.",
     :outcome :stop,
-    :warnings
-    [{:kind :concurrent-worktree-change,
-      :path ".scratch_odincl.lean"}],
+    :warnings [],
     :missing-theorems
     [{:name
       "PointWedgeVanKampen.genericPointWedgeLegCoordinates_vanKampen",
@@ -113880,9 +113878,9 @@
       :area "fundamental-group-wedge-of-circles"}],
     :statement-hashes
     {:source
-     "e02917e8e69775806178ce2b962b4fb6733615270ceac819dea349a4c6abdd81",
+     "7f8f1426fd7808ba00470a72ce12e5b9822e6c0032f7884b52a4282a7ad22d57",
      :documentation
-     "3b820b02ff8103322f9cc4888a1c48fcb7b0860fd4793c53e636e6e2961a4b50",
+     "a56e0145dfad6b595c3bec0e7e16a7799ef166f20cdb278aabaad24079dcbc2b",
      :blueprint
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0",
      :registry "131/131"},
@@ -113890,7 +113888,7 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
     :reason
-    "Inner left unit map is the literal overlap-to-left groupoid map.",
+    "Inner right unitInv map is the literal overlap-to-right groupoid map.",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/PointWedgeVanKampen.lean",
@@ -113900,20 +113898,7 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder/diff validation", :exit 0}],
     :diagnostic-history [],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1791775183195-6248-d1343ac3",
-     :commands
-     ["git show/diff-tree 06f086eaa"
-      "sha256/diff/placeholder checks"
-      "statement-registry.py check"
-      "lake env lean ConstructionTargets/PointWedgeVanKampen.lean"
-      "lake build ConstructionTargets.PointWedgeVanKampen"
-      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (expected absent)"],
-     :finding
-     "Exact scoped commit and frozen fixture 0bca6c...8c8b0 verified. New rfl lemma faithfully unfolds actual-left to FundamentalGroupoid.map overlapToLeft while preserving eK.unit.app z; inclusion direction and representation boundary are correct. Source is sorry-free; hashes and 131/131 registry reproduce; Lean/build pass; only standard axioms. Valid program STOP with compiled progress and residual listing left inclusion image, right nested unitInv map, two span maps, literal lifts, then B12; final target is absent as reported."},
-    :commit "06f086eaa1552a034fb1395db4d92d22977a6b7e",
+    :commit "c2d23b0c695c125b849d2418fd573cb007a9d45e",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
      "ConstructionTargets/PointWedgeVanKampen.md"],
@@ -113923,7 +113908,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
