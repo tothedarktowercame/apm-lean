@@ -30152,11 +30152,25 @@
       "lake env lean ConstructionTargets/SurfaceClassification.lean",
       :exit 1,
       :stage "Fin cardinal not reduced; corrected"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791817878320-7191-9dba2762",
+     :commands
+     ["git show/diff 447325043"
+      "sha256sum surface_face_bound_check"
+      "git diff --check; blob-current"
+      "statement-registry.py check"
+      "lake env lean fixture/module"
+      "lake build ConstructionTargets.SurfaceClassification"
+      "#print axioms boundaryVertex theorems"],
+     :finding
+     "PASS program STOP: commit adds compiled endpoint schedule, card=6*centers.card, and finite boundaryVertex range beyond prior history; missing-theorems records the proved milestone and names transverse-crossing refinement next. Exact one-file scope, blob current, fixture/module/build pass, registry 131/131, added code placeholder-free, standard axioms only."},
     :commit "447325043907c2db55b77e4c7a12036d73f064e0",
     :changed-paths ["ConstructionTargets/SurfaceClassification.lean"],
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/SurfaceClassification.lean"
     "ConstructionTargets/SurfaceClassification.md"
@@ -30176,7 +30190,7 @@
     :blueprint
     "ConstructionTargets/SurfaceClassification.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: B4 scheduled boundary arcs defined and proved continuous",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: B4 finite endpoint schedule proved; program continues with transverse-crossing refinement",
    :id :program-2026-10-12-surface-classification,
    :kind :reusable-theorem,
    :campaign-priority 40,
@@ -30207,7 +30221,11 @@
     {:job 9,
      :commit "3aacc9772be1727b2f61eaf66b295a9edde87950",
      :reason
-     "B4 scheduled boundary arcs defined and proved continuous"}]}
+     "B4 scheduled boundary arcs defined and proved continuous"}
+    {:job 1,
+     :commit "447325043907c2db55b77e4c7a12036d73f064e0",
+     :reason
+     "B4 finite endpoint schedule proved; program continues with transverse-crossing refinement"}]}
   {:consumer :t00J02,
    :phase :lemma,
    :state :banked,
@@ -30359,7 +30377,7 @@
    :other-consumers [:t00A03 :t91J05 :t92J05 :t94J04 :t96A01 :t97J02]}
   {:consumer :t00A02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -30373,7 +30391,9 @@
     :type
     "(C : FiniteClosedDiskCover M) (a : C.BoundaryArcIndex) : Function.Injective (C.boundaryArc a)",
     :area "surface-classification",
-    :proved-in :program-2026-10-12-surface-classification},
+    :proved-in :program-2026-10-12-surface-classification,
+    :banked-by :program-2026-10-12-surface-classification,
+    :banked-commit "447325043907c2db55b77e4c7a12036d73f064e0"},
    :id
    :lemma-constructiontargets-surfaceclassification-finitecloseddiskcover-boundaryarc-inje,
    :kind :lemma,
@@ -30406,7 +30426,7 @@
    :other-consumers []}
   {:consumer :t00A02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -30420,7 +30440,9 @@
     :type
     "(C : FiniteClosedDiskCover M) : Set.Finite (Set.range C.boundaryVertex)",
     :area "surface-classification",
-    :proved-in :program-2026-10-12-surface-classification},
+    :proved-in :program-2026-10-12-surface-classification,
+    :banked-by :program-2026-10-12-surface-classification,
+    :banked-commit "447325043907c2db55b77e4c7a12036d73f064e0"},
    :id
    :lemma-constructiontargets-surfaceclassification-finitecloseddiskcover-boundaryvertexse,
    :kind :lemma,
