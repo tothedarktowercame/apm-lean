@@ -30000,7 +30000,7 @@
   {:consumer :t00A02,
    :stop-count 3,
    :review-finding
-   "Blueprint defect remains at B5: the closure of a complementary region of an arbitrary finite embedded polygonal graph need not be a compact planar surface with polygonal boundary components. A cut vertex or transverse figure-eight vertex gives a pinched frontier, so boundaryComponentCount and the claimed decrement are not defined from B3/B4. Repair by first proving a regular-neighborhood/rotation-system or planar-face theorem that supplies genuine boundary cycles and disk-with-holes regions, then perform and prove the cutting-arc induction. Also, this program STOP again commits only blueprint text and no new compiled, sorry-free supporting declaration since program-history; the successful pre-existing module build is not new program progress.",
+   "Program-row defect: commit ebbfe625 repairs the B5 mathematics, but changes only SurfaceClassification.blueprint.md and commits no new compiled, sorry-free, standard-axiom result since the prior program-history entry; :missing-theorems is empty. The successful 8245-job build merely rebuilds pre-existing SurfaceClassification code and is not a new milestone. Repair by implementing and committing the next listed milestone (B1 FiniteTwoComplex/Realization or another genuine supporting result), compiling it without placeholders, and recording that proved milestone in :missing-theorems.",
    :implements-lemma
    :lemma-constructiontargets-surfaceclassification-compactsmoothsurfacefinitetriangulatio,
    :evidence
@@ -30031,6 +30031,12 @@
       :exit 0}
      {:cmd "rg B5a/B5b regular-neighborhood witnesses", :exit 0}],
     :continue-from "ebbfe625544f2e488b629af5301e2695f12c5223",
+    :review
+    {:outcome :fail,
+     :seat "codex-11",
+     :job "invoke-1791813302865-7034-ca9171c0",
+     :finding
+     "Program-row defect: commit ebbfe625 repairs the B5 mathematics, but changes only SurfaceClassification.blueprint.md and commits no new compiled, sorry-free, standard-axiom result since the prior program-history entry; :missing-theorems is empty. The successful 8245-job build merely rebuilds pre-existing SurfaceClassification code and is not a new milestone. Repair by implementing and committing the next listed milestone (B1 FiniteTwoComplex/Realization or another genuine supporting result), compiling it without placeholders, and recording that proved milestone in :missing-theorems."},
     :commit "ebbfe625544f2e488b629af5301e2695f12c5223",
     :changed-paths
     ["ConstructionTargets/SurfaceClassification.blueprint.md"],
@@ -30043,7 +30049,7 @@
       :result :blueprint-repaired}],
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :repair,
    :scope
    ["ConstructionTargets/SurfaceClassification.lean"
     "ConstructionTargets/SurfaceClassification.md"
@@ -30065,7 +30071,7 @@
    :id :program-2026-10-12-surface-classification,
    :kind :reusable-theorem,
    :campaign-priority 40,
-   :fail-count 2,
+   :fail-count 3,
    :depends-on [],
    :program true,
    :other-consumers [:t00A03 :t91J05 :t92J05 :t94J04 :t96A01 :t97J02]}
