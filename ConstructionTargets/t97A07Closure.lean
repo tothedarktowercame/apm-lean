@@ -110,9 +110,27 @@ theorem inTangentCoordinates_mfderiv_eq_chart_factors
             (extChartAt 𝓘(ℝ, EuclideanModel m) x y)) := by
   exact inTangentCoordinates_eq_mfderiv_comp hx hy
 
+/-- In fixed tangent coordinates based at `x`, the manifold derivative of a
+smooth map varies continuously at `x`.  This packages the coordinate
+transport needed before applying openness of surjective linear maps. -/
+theorem continuousAt_inTangentCoordinates_mfderiv
+    {m n : ℕ} {X : Type*} [TopologicalSpace X]
+    [ChartedSpace (EuclideanModel m) X]
+    [IsManifold 𝓘(ℝ, EuclideanModel m) ∞ X]
+    (f : X → EuclideanModel n)
+    (hf : ContMDiff 𝓘(ℝ, EuclideanModel m) 𝓘(ℝ, EuclideanModel n) ∞ f)
+    (x : X) :
+    ContinuousAt
+      (inTangentCoordinates 𝓘(ℝ, EuclideanModel m)
+        𝓘(ℝ, EuclideanModel n) (fun z : X ↦ z) f
+        (fun z ↦ mfderiv 𝓘(ℝ, EuclideanModel m)
+          𝓘(ℝ, EuclideanModel n) f z) x) x := by
+  exact (hf.contMDiffAt.mfderiv_const (m := 0) (by simp)).continuousAt
+
 end t97A07Closure
 
 #print axioms t97A07Closure.isOpen_setOf_surjective_clm
 #print axioms t97A07Closure.continuousWithinAt_coordinate_fderivWithin
 #print axioms t97A07Closure.coordinate_fderivWithin_eq_mfderiv
 #print axioms t97A07Closure.inTangentCoordinates_mfderiv_eq_chart_factors
+#print axioms t97A07Closure.continuousAt_inTangentCoordinates_mfderiv

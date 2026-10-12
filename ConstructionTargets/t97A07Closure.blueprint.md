@@ -75,6 +75,12 @@ the coordinate form of `mfderiv f y` is the target chart derivative composed
 with `mfderiv f y` and the inverse source chart derivative.  Remaining in B2
 is to identify this transported map with the fixed representative's
 `fderivWithin` on a common smaller chart neighbourhood.
+`continuousAt_inTangentCoordinates_mfderiv` also records directly that this
+transported derivative varies continuously at the base point, using Mathlib's
+`ContMDiffAt.mfderiv_const`.  Thus B3 may use the transported formulation
+without treating derivatives in distinct tangent fibers as one operator-valued
+function; the fixed-representative equality remains to connect the two B2
+formulations.
 
 ### B3. Regular points are open
 
