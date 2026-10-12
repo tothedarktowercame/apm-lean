@@ -75002,7 +75002,7 @@
   {:consumer :t96J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 0,
    :review-finding
    "The STOP omits a required remaining theorem: f4306c96a proves only an Equiv between quotient types. B2 freezes standardPairingData_space_homeomorph, and Quotient.congrRight does not preserve or prove the coinduced topologies. Add the nonorientable Homeomorph/topological continuity proof to :missing-theorems and prove it in scope; do not report the plain Equiv as the quotient comparison.",
    :implements-lemma
@@ -75050,6 +75050,18 @@
     [{:cmd "first compile",
       :exit 1,
       :correction "explicit Fin coordinates"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791841111206-7938-b5bad86a",
+     :commands
+     ["git show 726154657:ConstructionTargets/PolygonSurfacePiOne.lean | lake env lean /dev/stdin"
+      "#print axioms on recorded oneVertex/data declarations"
+      "python3 scripts/statement-registry.py check"
+      "git show --check/hash/diff-tree 726154657"
+      "comment-stripped placeholder scan"],
+     :finding
+     "PASS: exact source compiles; scope/hash match; registry 131/0, placeholders 0, standard axioms only. At t=0 each nonorientable pair joins even/odd vertices; at t=1 it joins odd to the next even vertex. The induction reaches vertex 0, then nonorientable_eqvGen_iff transfers the result to the exact boundary relation used by PairingData. This is substantive progress; orientable oneVertex and uniform selectors remain explicitly listed."},
     :commit "726154657",
     :changed-paths ["ConstructionTargets/PolygonSurfacePiOne.lean"],
     :fixture
@@ -75058,7 +75070,7 @@
      "d079f1f2237591e934df75567fd79c6ebe66a38c17a3c66eb24d6ca77b40b149"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope ["ConstructionTargets/PolygonSurfacePiOne.lean"],
    :dag-node "ConstructionTargets/PolygonSurfacePiOne.blueprint.md/B2",
    :acceptance
@@ -84973,7 +84985,7 @@
    :other-consumers [:t94J04 :t97A03]}
   {:consumer :t96J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -84985,7 +84997,9 @@
     :reported-by [:routes-2026-10-12-polygon-b2-completion-topo2-r1],
     :type "nonorientable oneVertex and PairingData",
     :area "polygon-surface-pi1",
-    :proved-in :routes-2026-10-12-polygon-b2-completion-topo2-r1},
+    :proved-in :routes-2026-10-12-polygon-b2-completion-topo2-r1,
+    :banked-by :routes-2026-10-12-polygon-b2-completion-topo2-r1,
+    :banked-commit "726154657"},
    :id
    :lemma-nonorientable-standard-onevertex-nonorientablestandardpairingdata,
    :kind :lemma,
