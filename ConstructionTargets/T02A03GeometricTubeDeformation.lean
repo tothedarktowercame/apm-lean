@@ -2047,6 +2047,26 @@ theorem rotatedEndpointWaypoint_corrected_departure_zero_scalar_bounds
   rw [← heq, ← Complex.sq_norm]
   constructor <;> nlinarith
 
+/-- Denominator-free polynomial constraints on every possible zero time of
+the corrected departure leg. -/
+theorem rotatedEndpointWaypoint_corrected_departure_zero_polynomial_bounds
+    (t : unitInterval) (p : RightTubeMinusLeftCore)
+    (hz : (((1 - 2 * (t : ℝ) : ℝ) : ℂ) +
+        ((2 * (t : ℝ) : ℝ) : ℂ) * rotatedEndpointWaypoint p +
+        (((t : ℝ) * (1 - 2 * (t : ℝ)) : ℝ) : ℂ) * Complex.I) = 0) :
+    9 * (t : ℝ) ^ 2 ≤
+        4 * (1 - 2 * (t : ℝ)) ^ 2 * (t : ℝ) ^ 2 +
+          4 * (1 - 2 * (t : ℝ)) ^ 2 ∧
+      4 * (1 - 2 * (t : ℝ)) ^ 2 * (t : ℝ) ^ 2 +
+          4 * (1 - 2 * (t : ℝ)) ^ 2 ≤ 25 * (t : ℝ) ^ 2 := by
+  have ht :=
+    (rotatedEndpointWaypoint_corrected_departure_zero_coordinates t p hz).1
+  have hb :=
+    rotatedEndpointWaypoint_corrected_departure_zero_scalar_bounds t p hz
+  have htne : (t : ℝ) ≠ 0 := ne_of_gt ht
+  field_simp [htne] at hb ⊢
+  constructor <;> nlinarith [hb.1, hb.2]
+
 end ConstructionTargets.T02A03GeometricTubeDeformation
 
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeNormalComplex_eq_zero_iff
@@ -2126,3 +2146,4 @@ end ConstructionTargets.T02A03GeometricTubeDeformation
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_corrected_departure_zero_coordinates
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_corrected_departure_zero_normSq
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_corrected_departure_zero_scalar_bounds
+#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_corrected_departure_zero_polynomial_bounds
