@@ -437,3 +437,7 @@ component, then inverse target connector.  No dependent endpoint is rewritten.
 the left expansion's terminal connector with the reflexive connector at
 `FundamentalGroupoid.mk x₀`.  The heterogeneous statement preserves the
 dependent object type needed by the surrounding composite.
+
+`genericPointWedgeIdentityOuterRightSpan_sourceConnector_heq_refl` identifies
+the source connector for `aR.inv` with the reflexive connector at
+`FundamentalGroupoid.mk y₀`, while preserving its dependent object index.

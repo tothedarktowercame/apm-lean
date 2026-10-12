@@ -1560,6 +1560,26 @@ theorem genericPointWedgeIdentityOuterLeftSpan_targetConnector_heq_refl :
     x₀ y₀ M N hM hN hy hx cM cN]
   exact heq_of_eq (genericPointWedgeBasedConnector_base x₀)
 
+omit [PathConnectedSpace X] in
+/-- The source connector for the right outer inverse component is reflexive
+at the literal right base object, again retaining its dependent object type. -/
+theorem genericPointWedgeIdentityOuterRightSpan_sourceConnector_heq_refl :
+    let eK := genericPointWedgeOverlapGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let z : FundamentalGroupoid (genericPointWedgeOverlapPiece x₀ y₀ M N) :=
+      FundamentalGroupoid.mk
+        ⟨quotientMap x₀ y₀ (.inl x₀),
+          ⟨⟨.inl x₀, by trivial, rfl⟩,
+            ⟨.inr y₀, by trivial,
+              (Quotient.sound (Relation.EqvGen.rel _ _ Rel.base)).symm⟩⟩⟩
+    HEq ((genericPointWedgeConnectors y₀).connector
+        ((genericPointWedgeCoordinateRight y₀).obj (eK.functor.obj z)))
+      (Iso.refl (FundamentalGroupoid.mk y₀)) := by
+  dsimp only
+  rw [genericPointWedgeIdentityOuterRightSpanComponent_target
+    x₀ y₀ M N hM hN hy hx cM cN]
+  exact heq_of_eq (genericPointWedgeBasedConnector_base y₀)
+
 theorem genericPointWedgeIdentityActualSpan_left_map
     {a b : FundamentalGroupoid (genericPointWedgeLeftPiece x₀ y₀ M)}
     (f : a ⟶ b) :
@@ -2503,6 +2523,7 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeIdentityOuterLeftSpan_normalForm_eq_connectors
 #print axioms genericPointWedgeIdentityOuterRightSpan_normalForm_eq_connectors
 #print axioms genericPointWedgeIdentityOuterLeftSpan_targetConnector_heq_refl
+#print axioms genericPointWedgeIdentityOuterRightSpan_sourceConnector_heq_refl
 #print axioms genericPointWedgeIdentityActualSpan_left_map
 #print axioms genericPointWedgeIdentityActualSpan_right_map
 #print axioms genericPointWedgeSingleObjPostcomposeIso
