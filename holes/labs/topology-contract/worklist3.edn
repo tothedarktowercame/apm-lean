@@ -28889,10 +28889,12 @@
    :lemma
    {:name
     "ConstructionTargets.SurfaceClassification.FiniteTwoComplex.face_card_le_three",
-    :reported-by [:routes-2026-10-10-surface-triangulation-topo3-r2],
+    :reported-by
+    [:routes-2026-10-10-surface-triangulation-topo3-r2
+     :program-2026-10-12-surface-classification],
     :type "∀ K : FiniteTwoComplex, FiniteTwoComplex.FaceBound K",
     :area "surface-classification",
-    :proved-in :routes-2026-10-10-surface-triangulation-topo3-r2},
+    :proved-in :program-2026-10-12-surface-classification},
    :id
    :lemma-constructiontargets-surfaceclassification-finitetwocomplex-face-card-le-three,
    :kind :lemma,
@@ -29998,7 +30000,7 @@
    :depends-on [],
    :other-consumers []}
   {:consumer :t00A02,
-   :stop-count 3,
+   :stop-count 4,
    :review-finding
    "Program-row defect: commit ebbfe625 repairs the B5 mathematics, but changes only SurfaceClassification.blueprint.md and commits no new compiled, sorry-free, standard-axiom result since the prior program-history entry; :missing-theorems is empty. The successful 8245-job build merely rebuilds pre-existing SurfaceClassification code and is not a new milestone. Repair by implementing and committing the next listed milestone (B1 FiniteTwoComplex/Realization or another genuine supporting result), compiling it without placeholders, and recording that proved milestone in :missing-theorems.",
    :implements-lemma
@@ -30012,44 +30014,47 @@
      :t94J04 [2 2],
      :t96A01 [1 1],
      :t97J02 [3 3]},
-    :residual "Rereview B5a/B5b; then implement B1.",
+    :residual "Implement B1 FiniteTwoComplex.Realization.",
     :outcome :stop,
     :warnings [],
-    :missing-theorems [],
+    :missing-theorems
+    [{:name
+      "ConstructionTargets.SurfaceClassification.FiniteTwoComplex.face_card_le_three",
+      :type "(K : FiniteTwoComplex) : K.FaceBound",
+      :status :proved,
+      :consumers
+      [:t00A02 :t00A03 :t91J05 :t92J05 :t94J04 :t96A01 :t97J02],
+      :depends-on [],
+      :area "surface-classification"}],
     :statement-hashes {:registry "131/131"},
     :disposition :stop,
-    :axioms [],
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "blueprint B5 split into regular-neighborhood faces and cutting-arc cellularization; rereview required",
+    "face-bound milestone proved; program continues at B1 realization",
     :commands
     [{:cmd "lake build ConstructionTargets.SurfaceClassification",
       :exit 0}
+     {:cmd "lake env lean /tmp/surface_face_bound_check.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd
-      "git diff --check -- ConstructionTargets/SurfaceClassification.blueprint.md",
+      "git diff --check -- ConstructionTargets/SurfaceClassification.lean",
       :exit 0}
-     {:cmd "rg B5a/B5b regular-neighborhood witnesses", :exit 0}],
-    :continue-from "ebbfe625544f2e488b629af5301e2695f12c5223",
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1791813302865-7034-ca9171c0",
-     :finding
-     "Program-row defect: commit ebbfe625 repairs the B5 mathematics, but changes only SurfaceClassification.blueprint.md and commits no new compiled, sorry-free, standard-axiom result since the prior program-history entry; :missing-theorems is empty. The successful 8245-job build merely rebuilds pre-existing SurfaceClassification code and is not a new milestone. Repair by implementing and committing the next listed milestone (B1 FiniteTwoComplex/Realization or another genuine supporting result), compiling it without placeholders, and recording that proved milestone in :missing-theorems."},
-    :commit "ebbfe625544f2e488b629af5301e2695f12c5223",
-    :changed-paths
-    ["ConstructionTargets/SurfaceClassification.blueprint.md"],
+     {:cmd
+      "rg -n sorry-or-axiom ConstructionTargets/SurfaceClassification.lean",
+      :exit 1,
+      :expected-exit 1}],
+    :continue-from "122a2d685ccb62c21e2214cb4eef7c9a788467db",
+    :commit "122a2d685ccb62c21e2214cb4eef7c9a788467db",
+    :changed-paths ["ConstructionTargets/SurfaceClassification.lean"],
     :program-history
-    [{:commit "b1612b5c125b59b3e1bfc0cba81abe8b09d72c6b",
-      :result :review-fail}
-     {:commit "a2fbe2a2e3b5c286b967f76f110629b6284c5852",
-      :result :review-fail}
-     {:commit "ebbfe625544f2e488b629af5301e2695f12c5223",
-      :result :blueprint-repaired}],
+    [{:commit "ebbfe625544f2e488b629af5301e2695f12c5223",
+      :result :blueprint-repaired}
+     {:commit "122a2d685ccb62c21e2214cb4eef7c9a788467db",
+      :result :face-bound-proved}],
     :seat :topo-10},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SurfaceClassification.lean"
     "ConstructionTargets/SurfaceClassification.md"
