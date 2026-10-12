@@ -383,12 +383,42 @@ theorem standardPair_ne (o : Bool) (g : ℕ)
 
 /-- Standard crosscap pairs preserve the edge parameter; standard handle
 pairs reverse it. -/
+def handleSign (i : Fin 4) : Bool := ![false, false, true, true] i
+
 def standardSign (o : Bool) (g : ℕ) : Fin (standardEdgeCount o g) → Bool :=
   match o with
   | false => fun _ => false
-  | true => fun i => ((orientableCoord g i).2.1 < 2)
+  | true => fun i => handleSign ((orientableCoord g i).2)
 
 @[simp] theorem standardSign_nonorientable (g : ℕ) (i : Fin (2 * g)) :
     standardSign false g i = false := rfl
+
+theorem orientableCoord_pair (g : ℕ) (i : Fin (4 * g)) :
+    orientableCoord g (orientablePair g i) =
+      ((orientableCoord g i).1, handlePair (orientableCoord g i).2) := by
+  simp only [orientablePair, Equiv.trans_apply, Equiv.apply_symm_apply,
+    Equiv.prodCongr_apply]
+  cases orientableCoord g i
+  rfl
+
+theorem standardSign_orientable_pair (g : ℕ) (i : Fin (4 * g)) :
+    standardSign true g (standardPair true g i) ≠ standardSign true g i := by
+  simp only [standardSign, standardPair]
+  have hs : handleSign ((orientableCoord g (orientablePair g i)).2) =
+      handleSign (handlePair ((orientableCoord g i).2)) :=
+    congrArg handleSign (congrArg Prod.snd (orientableCoord_pair g i))
+  intro h
+  have hbad : handleSign (handlePair ((orientableCoord g i).2)) =
+      handleSign ((orientableCoord g i).2) := hs.symm.trans h
+  generalize hb : (orientableCoord g i).2 = b at hbad
+  fin_cases b <;> contradiction
+
+theorem standardSign_pair_eq_iff (o : Bool) (g : ℕ)
+    (i : Fin (standardEdgeCount o g)) :
+    standardSign o g (standardPair o g i) = standardSign o g i ↔ o = false := by
+  cases o
+  · simp
+  · simp only [Bool.true_eq_false, iff_false]
+    exact standardSign_orientable_pair g i
 
 end ConstructionTargets.PolygonSurfacePiOne
