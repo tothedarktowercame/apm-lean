@@ -323,14 +323,18 @@ def handlePair : Equiv.Perm (Fin 4) where
 
 def crosscapPair : Equiv.Perm (Fin 2) := Equiv.swap 0 1
 
+def orientableCoord (g : ℕ) : Fin (4 * g) ≃ Fin g × Fin 4 :=
+  (finCongr (Nat.mul_comm 4 g)).trans finProdFinEquiv.symm
+
+def nonorientableCoord (g : ℕ) : Fin (2 * g) ≃ Fin g × Fin 2 :=
+  (finCongr (Nat.mul_comm 2 g)).trans finProdFinEquiv.symm
+
 def orientablePair (g : ℕ) : Equiv.Perm (Fin (4 * g)) :=
-  let e : Fin (4 * g) ≃ Fin g × Fin 4 :=
-    (finCongr (Nat.mul_comm 4 g)).trans finProdFinEquiv.symm
+  let e := orientableCoord g
   e.trans ((Equiv.refl (Fin g)).prodCongr handlePair) |>.trans e.symm
 
 def nonorientablePair (g : ℕ) : Equiv.Perm (Fin (2 * g)) :=
-  let e : Fin (2 * g) ≃ Fin g × Fin 2 :=
-    (finCongr (Nat.mul_comm 2 g)).trans finProdFinEquiv.symm
+  let e := nonorientableCoord g
   e.trans ((Equiv.refl (Fin g)).prodCongr crosscapPair) |>.trans e.symm
 
 /-- The standard fixed-point-free arc pairing, blockwise on each handle or
@@ -368,15 +372,23 @@ theorem standardPair_ne (o : Bool) (g : ℕ)
   cases o
   · change nonorientablePair g i ≠ i
     intro h
-    let e : Fin (2 * g) ≃ Fin g × Fin 2 :=
-      (finCongr (Nat.mul_comm 2 g)).trans finProdFinEquiv.symm
+    let e := nonorientableCoord g
     have := congrArg (fun x => (e x).2) h
     exact crosscapPair_ne (e i).2 (by simpa [nonorientablePair, e] using this)
   · change orientablePair g i ≠ i
     intro h
-    let e : Fin (4 * g) ≃ Fin g × Fin 4 :=
-      (finCongr (Nat.mul_comm 4 g)).trans finProdFinEquiv.symm
+    let e := orientableCoord g
     have := congrArg (fun x => (e x).2) h
     exact handlePair_ne (e i).2 (by simpa [orientablePair, e] using this)
+
+/-- Standard crosscap pairs preserve the edge parameter; standard handle
+pairs reverse it. -/
+def standardSign (o : Bool) (g : ℕ) : Fin (standardEdgeCount o g) → Bool :=
+  match o with
+  | false => fun _ => false
+  | true => fun i => ((orientableCoord g i).2.1 < 2)
+
+@[simp] theorem standardSign_nonorientable (g : ℕ) (i : Fin (2 * g)) :
+    standardSign false g i = false := rfl
 
 end ConstructionTargets.PolygonSurfacePiOne
