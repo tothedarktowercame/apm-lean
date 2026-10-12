@@ -831,3 +831,10 @@ square in multiplication order: right open-cover factor times predecessor
 glue equals coordinate-span source glue times left open-cover factor.  Thus
 the remaining open-cover calculation is exactly the normalization of this
 one pseudopushout round-trip glue.
+
+`genericPointWedgeMappedCounits_predecessorSplice` composes the open-cover
+square with the injected coordinate-span splice.  Both coordinate and
+open-cover counit factors now occur in exactly the three-factor order used by
+the pre-free-product counit formulas; the only extra factor is the named
+pseudopushout predecessor glue.  Its normalization is therefore the sole
+remaining equality before those two counit applications coincide.
