@@ -75000,10 +75000,59 @@
    :current-residual "Elect B3/B4 or route residual.",
    :other-consumers []}
   {:consumer :t96J02,
+   :stop-count 1,
    :implements-lemma
    :lemma-constructiontargets-polygonsurfacepione-standardpairingdata,
+   :evidence
+   {:placeholder-delta 0,
+    :residual "Construct uniform standard PairingData; B3/B4 follow.",
+    :outcome :stop,
+    :warnings [],
+    :missing-theorems
+    [{:name "torusRP2OrbitEquiv/torusRP2SpaceEquiv",
+      :type
+      "three pairing orbits and exact generated-relation quotient comparison",
+      :status :proved,
+      :consumers [:t97A01],
+      :depends-on [],
+      :area "polygon-surface-pi1"}
+     {:name
+      "ConstructionTargets.PolygonSurfacePiOne.standardPairingData",
+      :type
+      "uniform standard-surface PairingData and quotient comparison",
+      :status :partial,
+      :consumers [:t96J02 :t92J05 :t94J04 :t97A03],
+      :depends-on [],
+      :area "polygon-surface-pi1"}],
+    :statement-hashes
+    {:registry "131/0",
+     :module "eb151c7a2df628b4d38db5884984e5076905bf05"},
+    :disposition :stop,
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-6",
+    :reason
+    "Six-edge B2 is complete; the uniform orientable/nonorientable standardPairingData family and its one-vertex proof remain.",
+    :commands
+    [{:cmd "lake build ConstructionTargets.PolygonSurfacePiOne",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131/0"}
+     {:cmd "comment-stripped placeholder scan", :exit 0, :output "0"}
+     {:cmd "git show --check cdbdc979d", :exit 0}],
+    :diagnostic-history
+    [{:cmd "first relation proof compile",
+      :exit 1,
+      :correction "proved equality after EqvGen, then rebuilt"}],
+    :commit "cdbdc979d",
+    :changed-paths ["ConstructionTargets/PolygonSurfacePiOne.lean"],
+    :fixture
+    {:path "ConstructionTargets/PolygonSurfacePiOne.lean",
+     :sha256
+     "7a7a3c547231baeac6094346b83d4b2e939ec5890f0b28291a5b54c04b425340"},
+    :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/PolygonSurfacePiOne.lean"],
    :dag-node "ConstructionTargets/PolygonSurfacePiOne.blueprint.md/B2",
    :acceptance
@@ -84352,7 +84401,9 @@
    :lemma
    {:name
     "ConstructionTargets.PolygonSurfacePiOne.standardPairingData",
-    :reported-by [:routes-2026-10-12-polygon-b2-topo2-r1],
+    :reported-by
+    [:routes-2026-10-12-polygon-b2-topo2-r1
+     :routes-2026-10-12-polygon-b2-completion-topo2-r1],
     :type
     "standard and six-edge PairingData with orbit and quotient comparisons",
     :area "polygon-surface-pi1"},
@@ -84361,4 +84412,23 @@
    :kind :lemma,
    :depends-on
    [:lemma-constructiontargets-polygonsurfacepione-pairingdata],
-   :other-consumers [:t92J05 :t94J04 :t97A01 :t97A03]}]}
+   :other-consumers [:t92J05 :t94J04 :t97A01 :t97A03]}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "torusRP2OrbitEquiv/torusRP2SpaceEquiv",
+    :type
+    "three pairing orbits and exact generated-relation quotient comparison"},
+   :lemma
+   {:name "torusRP2OrbitEquiv/torusRP2SpaceEquiv",
+    :reported-by [:routes-2026-10-12-polygon-b2-completion-topo2-r1],
+    :type
+    "three pairing orbits and exact generated-relation quotient comparison",
+    :area "polygon-surface-pi1",
+    :proved-in :routes-2026-10-12-polygon-b2-completion-topo2-r1},
+   :id :lemma-torusrp2orbitequiv-torusrp2spaceequiv,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}]}
