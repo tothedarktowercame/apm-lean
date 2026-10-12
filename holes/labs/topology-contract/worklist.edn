@@ -113850,7 +113850,7 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 10,
+   :stop-count 0,
    :review-finding
    "Blueprint B3 is marked proved but its proof uses the unlisted ConnectedGroupoidSingleObjEquivalence.connectorSingleObjEquivalence (and connector-system representation) instead of only the declared uses; add the actual connector dependency and proof route to B3 uses.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
@@ -113901,7 +113901,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -116658,7 +116658,9 @@
      :reason
      "Program milestone completed. Blueprint node B5 is proved: compactness selects finitely many B4 neighbourhoods, the minimum of their positive local times is positive, and every selected curve restricts to that common interval. Only B6 remains."}]}
   {:consumer :t97A07,
-   :stop-count 10,
+   :owner-reopen
+   "reopened: a lemma this row reported missing is now banked",
+   :stop-count 0,
    :review-finding
    "Recorded fixture hash mismatch: :fixture.sha256 is eaeed21919599335d4a33b437815c4a9cbb5b72110213b29440d6944cc982182 (the blueprint at older commit 736c2566), but commit 8432f937 changes ConstructionTargets/t97A07Closure.blueprint.md and its exact SHA-256 is 5bb02c342b988406e8bd26aeda1b9e67335a8c1f626d97ec96701cb039ae708f. Re-record the fixture hash for the reviewed commit.",
    :evidence
@@ -116711,7 +116713,7 @@
      "05207f62ebcd722eb3fff3648d5d536cf568426c0da1be1d94d8f64121873eec"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["problems/t97A07/lean/Main.lean"
     "problems/t97A07/status.json"
@@ -116731,7 +116733,7 @@
    :id :program-2026-10-11-close-t97a07,
    :kind :final-adapter,
    :campaign-priority 44,
-   :fail-count 1,
+   :fail-count 0,
    :depends-on [],
    :program true,
    :other-consumers [],
@@ -116811,6 +116813,17 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder/diff validation", :exit 0}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791797419646-6739-dfc8342b",
+     :commands
+     ["git show/diff-tree cc04d44a"
+      "sha256/diff/placeholder checks"
+      "statement-registry.py check"
+      "lake env lean problems/t91J06/lean/Main.lean"],
+     :finding
+     "PASS repaired blueprint STOP: B1 now splits on both t and q, uses the orientation of q o t^-1, and assigns affine endpoint pieces correctly in all four cases. B2-B5 are true as stated, use only listed dependencies, preserve subtype/range and weak-topology boundaries, and use hf, hnested, hcover, hweak. Exact 1-file scope; fixture/target hashes match; target placeholders 3->3; registry 131/131; target elaborates. Residual is formalize B1."},
     :commit "cc04d44ab8eaebaaa3e62ff918db6b5c755d1aa1",
     :changed-paths ["ConstructionTargets/t91J06Closure.blueprint.md"],
     :fixture
@@ -116819,7 +116832,7 @@
      "2424bbb21000e8d3a2672f1774f622351b6b89f77002cab4bd36727ffdaf85a7"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t91J06/lean/Main.lean"
     "problems/t91J06/status.json"
@@ -116835,14 +116848,19 @@
     ["lake env lean problems/t91J06/lean/Main.lean"
      "python3 scripts/statement-registry.py check"]},
    :continue-from
-   "NEXT JOB: write the blueprint ConstructionTargets/t91J06Closure.blueprint.md (BLUEPRINTS.md) for the remaining chain in ~/notes/closer/t91j06-report.md, then formalise node by node.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: B1 repaired: endpoint pieces follow the composite orientation.",
    :id :program-2026-10-11-close-t91j06,
    :kind :final-adapter,
    :campaign-priority 47,
    :fail-count 1,
    :depends-on [],
    :program true,
-   :other-consumers []}
+   :other-consumers [],
+   :program-history
+   [{:job 2,
+     :commit "cc04d44ab8eaebaaa3e62ff918db6b5c755d1aa1",
+     :reason
+     "B1 repaired: endpoint pieces follow the composite orientation."}]}
   {:consumer :t94A07,
    :phase :implementation,
    :state :open,
