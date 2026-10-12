@@ -47,7 +47,9 @@ keep track of the priority of lemmas"). The ledger holds rows of kind `:lemma`
    of `TOPOLOGY-DEPENDENCY-DAG.md` that lie on this loop's open problems.
 3. Elect work rows for the top ready lemmas: give each `:implements-lemma
    <lemma id>` (and `:depends-on` the lemma ids it uses). Its PASS banks the
-   lemma and unblocks everything waiting on it. Rule 0 (close nearly-closed
+   lemma and unblocks everything waiting on it. A PASS on a STOP does not:
+   the row becomes `:stopped`, its lemma stays backlog and its dependents stay
+   blocked. Read a `:stopped` row's reason and elect the work it names. Rule 0 (close nearly-closed
    problems first) still comes first.
 
 A `:needs-owner` row or a stop-after-two is NOT a hold on its problem; re-route
