@@ -4244,6 +4244,23 @@ theorem genericPointWedgeRightInverseBaseToRightBase_map_heq_inr :
   exact genericPointWedgeIdentityCoordinateSpan_right_map x₀ y₀ _
 
 omit [PathConnectedSpace X] in
+/-- The connector normal form of the canonical inverse-image-to-base
+morphism is its source connector, mapped morphism, and inverse target
+connector, in that order. -/
+theorem genericPointWedgeRightInverseBaseToRightBase_normalForm :
+    let eR := genericPointWedgeRightGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let q := genericPointWedgeRightInverseBaseToRightBase
+      x₀ y₀ M N hM hN hy hx cM cN
+    (genericPointWedgeConnectors y₀).normalForm (eR.functor.map q) =
+      ((genericPointWedgeConnectors y₀).connector
+        (eR.functor.obj (eR.inverse.obj (FundamentalGroupoid.mk y₀)))).hom ≫
+      eR.functor.map q ≫
+      ((genericPointWedgeConnectors y₀).connector
+        (eR.functor.obj (genericPointWedgeRightBase x₀ y₀ N))).inv := by
+  rfl
+
+omit [PathConnectedSpace X] in
 /-- At the transported right-cover base, the chosen based connector is the
 isomorphism induced by the named base-object equality. -/
 theorem genericPointWedgeRightEquiv_rightBase_connector :
@@ -5327,6 +5344,7 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeCoordinateSpanGlobalRestrictionRightComparison_eq_actual
 #print axioms genericPointWedgeCoordinateSpanGlobalRestrictionRightComparison_targetObj
 #print axioms genericPointWedgeCoordinateSpanGlobalRestrictionRightComparison_sourceObj
+#print axioms genericPointWedgeRightInverseBaseToRightBase_normalForm
 #print axioms genericPointWedgeMappedOpenCoverCounit_namedGlueSquare
 #print axioms genericPointWedgeMappedCoordinateSpanCounit_glueSquare
 #print axioms genericPointWedgeMappedCoordinateSpanSourceGlue

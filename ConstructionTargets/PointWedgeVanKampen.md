@@ -966,3 +966,7 @@ source endpoint counit to the fixed right-base conjugator.
 morphism through the actual-span functor.  Its value is the right coproduct
 injection of the transported morphism's connector normal form; the `HEq`
 statement preserves the dependent endpoints across this representation step.
+
+`genericPointWedgeRightInverseBaseToRightBase_normalForm` expands that normal
+form in exact categorical order: source connector, mapped canonical morphism,
+then inverse target connector.
