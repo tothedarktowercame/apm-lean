@@ -459,6 +459,23 @@ theorem crossTermSphereMap_transverse_horizontalPlane
   rw [hv]
   simp [b]
 
+/-- Every height strictly between zero and one half occurs as the third
+coordinate of the quadratic sphere map. -/
+theorem crossTermSphereMap_level_attained (z : ℝ) (hz : 0 < z)
+    (hzhalf : z < 1 / 2) :
+    ∃ p : Sphere 2, crossTermSphereMap p 2 = z := by
+  have hz0 : 0 ≤ z := hz.le
+  have hrem : 0 ≤ 1 - 2 * z := by linarith
+  let v : E 3 := WithLp.toLp 2 ![Real.sqrt z, Real.sqrt z,
+    Real.sqrt (1 - 2 * z)]
+  have hvnorm : ‖v‖ = 1 := by
+    rw [EuclideanSpace.norm_eq]
+    simp [v, Fin.sum_univ_succ, Real.sq_sqrt hz0, Real.sq_sqrt hrem]
+    ring
+  let p : Sphere 2 := ⟨v, mem_sphere_zero_iff_norm.mpr hvnorm⟩
+  refine ⟨p, ?_⟩
+  simp [p, v, crossTermSphereMap, Real.mul_self_sqrt hz0]
+
 /-- At the first coordinate point the ambient derivative swaps the two free
 tangent coordinates and has zero first coordinate. -/
 theorem sphereMapAmbientDerivative_firstAxis (v : E 3) :
@@ -481,5 +498,6 @@ theorem sphereMapAmbientDerivative_firstAxis (v : E 3) :
 #print axioms sphereMap_vertical_tangent_of_third_eq_zero
 #print axioms crossTermSphereMap_vertical_surjective
 #print axioms crossTermSphereMap_transverse_horizontalPlane
+#print axioms crossTermSphereMap_level_attained
 
 end ConstructionTargets.T96A07Closure
