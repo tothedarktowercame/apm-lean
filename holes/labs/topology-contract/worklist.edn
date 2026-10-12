@@ -113890,6 +113890,17 @@
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder/diff validation", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791839087873-7902-cba413b2",
+     :commands
+     ["git show/diff-tree d43ab056"
+      "lake build ConstructionTargets.PointWedgeVanKampen"
+      "python3 scripts/statement-registry.py check"
+      "commit hash and placeholder checks"],
+     :finding
+     "PASS program STOP: d43ab056 by topo-2 adds the actual-span evaluation of the left strict factor plus documentation, exactly within scope and new since history. Source 68626f97..., documentation c1cdaa8f..., fixture 0bca6ce3..., registry 131/131, and placeholders 0->0 reproduce. The theorem rewrites through the literal actual-span and coordinate-span map results, yielding HEq to the left coproduct injection of the explicit connector normal form. HEq correctly retains dependent endpoints instead of asserting a false cross-representation Eq, and orientation remains inverse then forward. Fresh build passes with standard axioms. Round-trip normalization, right comparison, point-span transport, counits, and B6/B12 remain listed."},
     :commit "d43ab056fc44e6503deab63b8ffabbb597c9ead6",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
@@ -113900,7 +113911,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113921,7 +113932,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: The reconstructed left strict factor is identified with the literal actual-span map.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: The actual-span inverse comparison map is the left coproduct injection of its explicit connector normal form.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -114456,7 +114467,11 @@
     {:job 3,
      :commit "17d0c2b652008083bd237bb4d5e502b5cef68d8c",
      :reason
-     "The reconstructed left strict factor is identified with the literal actual-span map."}]}
+     "The reconstructed left strict factor is identified with the literal actual-span map."}
+    {:job 4,
+     :commit "d43ab056fc44e6503deab63b8ffabbb597c9ead6",
+     :reason
+     "The actual-span inverse comparison map is the left coproduct injection of its explicit connector normal form."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
