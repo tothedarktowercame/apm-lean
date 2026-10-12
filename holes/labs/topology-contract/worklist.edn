@@ -113890,6 +113890,19 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder/diff validation", :exit 0}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791786205979-6493-5d745ef0",
+     :commands
+     ["git show/diff-tree 88d13db7d"
+      "sha256/diff/placeholder checks"
+      "statement-registry.py check"
+      "lake env lean ConstructionTargets/PointWedgeVanKampen.lean"
+      "lake build ConstructionTargets.PointWedgeVanKampen"
+      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (expected absent)"],
+     :finding
+     "PASS program STOP: commit adds compiled sorry-free right-outer target connector equality, correctly oriented connector=chosen based connector at the transported right overlap object. Exact 2-file change; blueprint/source/doc hashes match; placeholders 0->0; registry 131/131; only standard axioms. Final target remains absent; residual identifies inclusion images/literal lifts, then B12."},
     :commit "88d13db7dca168927dd59f8d034d1810c2eec25e",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
@@ -113900,7 +113913,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113921,7 +113934,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Left source connector is the chosen based connector at the transported overlap object.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Right target connector is the chosen based connector at the transported overlap object.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -114181,7 +114194,11 @@
     {:job 6,
      :commit "737251fd6ff1176a077132db3c304bb78d678219",
      :reason
-     "Left source connector is the chosen based connector at the transported overlap object."}]}
+     "Left source connector is the chosen based connector at the transported overlap object."}
+    {:job 7,
+     :commit "88d13db7dca168927dd59f8d034d1810c2eec25e",
+     :reason
+     "Right target connector is the chosen based connector at the transported overlap object."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
