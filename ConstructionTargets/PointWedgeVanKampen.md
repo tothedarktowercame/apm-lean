@@ -479,3 +479,6 @@ comparison while retaining the quotient equality that changes representatives.
 
 `genericPointWedgeInverseIdentity_leftLeg_eq_actualLifted` now feeds the left
 inclusion-image equality through the B3 global-functor restriction formula.
+
+`genericPointWedgeInverseIdentity_rightLeg_eq_actualLifted` supplies the
+symmetric bridge and retains conjugation by the fixed right restriction element.

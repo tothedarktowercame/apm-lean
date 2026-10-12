@@ -2205,6 +2205,26 @@ theorem genericPointWedgeInverseIdentity_leftLeg_eq_actualLifted
     x₀ y₀ M N hM hN hy hx cM cN
       (genericPointWedgeLeftLiftedLoop x₀ y₀ M g)
 
+/-- The B3 inverse-identity functor on the literal right leg is the
+right-restriction conjugate of the actual-span action on its lifted loop. -/
+theorem genericPointWedgeInverseIdentity_rightLeg_eq_actualLifted
+    (g : FundamentalGroup Y y₀) :
+    (genericPointWedgeInverseIdentityFunctor
+        x₀ y₀ M N hM hN hy hx cM cN).map
+          (genericPointWedgeRightLegMap x₀ y₀ g) =
+      (genericPointWedgeIdentityGlobalRightBaseElement
+          x₀ y₀ M N hM hN hy hx cM cN)⁻¹ *
+        (genericPointWedgeIdentityActualSpan
+          x₀ y₀ M N hM hN hy hx cM cN).right.map
+            (genericPointWedgeRightLiftedLoop x₀ y₀ N g) *
+        genericPointWedgeIdentityGlobalRightBaseElement
+          x₀ y₀ M N hM hN hy hx cM cN := by
+  rw [← genericPointWedgeRightLiftedLoop_coverInclusion]
+  rw [genericPointWedgeInverseIdentityFunctor_eq_global]
+  exact genericPointWedgeIdentityGlobalRightBase_map
+    x₀ y₀ M N hM hN hy hx cM cN
+      (genericPointWedgeRightLiftedLoop x₀ y₀ N g)
+
 /-- Once B3's two mapped actions are identified with the images of the
 literal topological legs under B5, the normalized equivalence has exactly the
 two coproduct coordinates required by B6. -/
@@ -2702,6 +2722,7 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeLeftLiftedLoop_coverInclusion
 #print axioms genericPointWedgeRightLiftedLoop_coverInclusion
 #print axioms genericPointWedgeInverseIdentity_leftLeg_eq_actualLifted
+#print axioms genericPointWedgeInverseIdentity_rightLeg_eq_actualLifted
 #print axioms genericPointWedgeIdentityActualSpan_left_map
 #print axioms genericPointWedgeIdentityActualSpan_right_map
 #print axioms genericPointWedgeSingleObjPostcomposeIso
