@@ -290,3 +290,9 @@ The symmetric component is now expanded by
 direction it is the right-leg comparison followed by the Unit-equivalence
 round-trip component.  Thus all four inner connector-stage factors are
 explicit; their evaluation and the two original outer comparisons remain.
+
+`genericPointWedgeIdentityCoordinateLeftLegFactor_eq_one` evaluates the
+inverse left-leg factor to the free-product unit.  This uses the concrete
+subsingleton-source comparison and the identity-map law, without changing the
+Unit-equivalence round-trip.  Three inner factors, the outer comparisons, and
+the literal lifts remain.
