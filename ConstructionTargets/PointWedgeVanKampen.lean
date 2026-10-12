@@ -3353,6 +3353,23 @@ theorem genericPointWedgeCoordinateSpanGlobalRestrictionLeftStrictFactor_eq_map 
       (eL.inverse ⋙ S.left).map (aL.inv.app u) := by
   rfl
 
+/-- The reconstructed left restriction is literal on the inverse strict-span
+comparison, so this factor is the corresponding actual-span map. -/
+theorem genericPointWedgeCoordinateSpanGlobalRestrictionLeftStrictFactor_eq_actual :
+    let eL := genericPointWedgeLeftGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let aL := genericPointWedgeLeftSpanIso
+      x₀ y₀ M N hM hN hy hx cM cN
+    let u : FundamentalGroupoid Unit := FundamentalGroupoid.mk ()
+    genericPointWedgeCoordinateSpanGlobalRestrictionLeftStrictFactor
+        x₀ y₀ M N hM hN hy hx cM cN =
+      (genericPointWedgeIdentityActualSpan
+        x₀ y₀ M N hM hN hy hx cM cN).left.map
+          (eL.inverse.map (aL.inv.app u)) := by
+  rw [genericPointWedgeCoordinateSpanGlobalRestrictionLeftStrictFactor_eq_map]
+  exact genericPointWedgeIdentityGlobalLeftRestriction_map
+    x₀ y₀ M N hM hN hy hx cM cN _
+
 /-- The mapped coordinate-span counit's glue square, specialized at the
 unique point-span overlap object.  This is the equation in which its two
 named leg factors are related by the mapped reconstructed glue. -/
@@ -4948,6 +4965,7 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeCoordinateSpanGlobalRestrictionLeftComparison_app
 #print axioms genericPointWedgeCoordinateSpanGlobalRestrictionLeftStrictFactor
 #print axioms genericPointWedgeCoordinateSpanGlobalRestrictionLeftStrictFactor_eq_map
+#print axioms genericPointWedgeCoordinateSpanGlobalRestrictionLeftStrictFactor_eq_actual
 #print axioms genericPointWedgeMappedOpenCoverCounit_namedGlueSquare
 #print axioms genericPointWedgeMappedCoordinateSpanCounit_glueSquare
 #print axioms genericPointWedgeMappedCoordinateSpanSourceGlue

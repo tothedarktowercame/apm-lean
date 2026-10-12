@@ -896,3 +896,8 @@ the first of those components.  Its `_eq_map` theorem evaluates the whisker:
 the factor is exactly the reconstructed left restriction applied to the
 inverse strict-span comparison.  This exposes the map that must next be
 identified through the already proved literal left-restriction equation.
+
+`genericPointWedgeCoordinateSpanGlobalRestrictionLeftStrictFactor_eq_actual`
+performs that identification at the inverse strict-span comparison itself.
+The reconstructed restriction is replaced by the literal actual-span left
+map, while the morphism and its orientation remain unchanged.
