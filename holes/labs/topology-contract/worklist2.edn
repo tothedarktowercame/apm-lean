@@ -74030,9 +74030,20 @@
       :current-residual "Refill.",
       :other-consumers []}],
     :author "topo-8",
-    :disposition :replan},
+    :disposition :replan,
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791779893032-6324-296e857d",
+     :commands
+     ["build_step.bb priorities worklist2.edn"
+      "worklist_check.bb worklist2.edn"
+      "statement-registry.py check"
+      "EDN dependency state/review audit"],
+     :finding
+     "PASS: corrected strategy checkpoint has no code commit/fixture. Fresh audit reproduces two dependency PASS reviews and one revise whose resulting row state is blocked, hence two banked edges and zero placeholder delta. Ledger validates (887 items), registry is 131/0, and current priorities/AREAS still rank polygonSurface_pi1_presentation first with five consumers. Exactly one work row, its blueprint, is elected; the other replacement is only the required follow-up checkpoint."}},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -74051,7 +74062,7 @@
    :other-consumers []}
   {:consumer :t96J02,
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/PolygonSurfacePiOne.blueprint.md"],
    :dag-node "TOPOLOGY-ROUTES.md/polygon-surface-pi1",
    :acceptance
