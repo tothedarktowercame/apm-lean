@@ -74187,6 +74187,9 @@
    "Refill from the corrected H2-aware DAG and cross-loop area ranking.",
    :other-consumers []}
   {:consumer :t96J02,
+   :owner-reopen
+   "reopened: a lemma this row reported missing is now banked",
+   :stop-count 0,
    :review-finding
    "Blueprint defect: B7 is false from B1 as written. B1 only requires paired arcs to have equal labels, not that Label classifies pairing orbits. Counterexample: take the standard one-vertex square pairing with two arc-pair orbits and label both orbits by Unit. B1 holds, but the skeleton is a wedge of two circles, not FiniteWedge Unit Circle. Add a bijection between pairing orbits and Label (every label occurs on exactly one paired pair), update B1/B7, and re-review B8-B12.",
    :evidence
@@ -74239,7 +74242,7 @@
      "b7bd67e9720fe468134c57d0647cb0ef132d4a561771d2a098106547b61ab389"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope ["ConstructionTargets/PolygonSurfacePiOne.blueprint.md"],
    :dag-node "TOPOLOGY-ROUTES.md/polygon-surface-pi1",
    :acceptance
@@ -74250,7 +74253,7 @@
    :id :routes-2026-10-12-polygon-surface-pi1-blueprint-topo2-r1,
    :kind :documentation,
    :area "polygon-surface-pi1",
-   :fail-count 4,
+   :fail-count 0,
    :depends-on [:routes-2026-10-10-checkpoint-topo2-r8],
    :current-residual "Elect its first milestone.",
    :other-consumers [:t92J05 :t94J04 :t97A01 :t97A03]}
@@ -74643,6 +74646,18 @@
       :exit 0,
       :output "131/0"}
      {:cmd "edgeCount_pos and git show --check HEAD", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791833025249-7774-c5e28ee1",
+     :commands
+     ["lake build ConstructionTargets.PolygonSurfacePiOne"
+      "python3 scripts/statement-registry.py check"
+      "comment-stripped placeholder scan"
+      "Lean edgeCount_pos and #print axioms fixture via /dev/stdin"
+      "git show/diff-tree/check/hash e949a5129"],
+     :finding
+     "PASS: repair commit changes only the scoped module and fixture SHA-256 matches. PairingData now carries edgeCount_pos, excluding the empty-polygon counterexample while preserving the involution, orbit index, signed quotient, center, and one-vertex interfaces. Fresh build passes; placeholders 0; registry 131/0; only propext, Classical.choice, Quot.sound."},
     :commit "e949a5129",
     :commits ["13a188f99" "e949a5129"],
     :changed-paths ["ConstructionTargets/PolygonSurfacePiOne.lean"],
@@ -74652,7 +74667,7 @@
      "8d3f275f0298df761fad9b234b1cbb764e812925a1c078e4d95347aa7b84f885"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/PolygonSurfacePiOne.lean"],
    :dag-node "ConstructionTargets/PolygonSurfacePiOne.blueprint.md/B1",
    :acceptance
@@ -74679,7 +74694,7 @@
      :infrastructure-packets
      :review-outcomes]},
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance {:strategy "Rerun priorities after B1 review."},
@@ -82683,7 +82698,7 @@
    :other-consumers []}
   {:consumer :t96J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "PolygonSurfacePiOne.PairingData",
@@ -82695,7 +82710,9 @@
     [:routes-2026-10-12-polygon-surface-pi1-blueprint-topo2-r1],
     :type
     "finite signed one-vertex polygon pairing and quotient interface",
-    :area "polygon-surface-pi1"},
+    :area "polygon-surface-pi1",
+    :banked-by :routes-2026-10-12-polygon-b1-topo2-r1,
+    :banked-commit "e949a5129"},
    :id :lemma-polygonsurfacepione-pairingdata,
    :kind :lemma,
    :depends-on [],
@@ -83966,7 +83983,7 @@
    :other-consumers [:t00A02]}
   {:consumer :t96J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "ConstructionTargets.PolygonSurfacePiOne.PairingData",
@@ -83978,7 +83995,9 @@
     :type
     "fixed-point-free involutive paired arcs, PairingOrbit generators, signed disk quotient, center, one vertex class",
     :area "polygon-surface-pi1",
-    :proved-in :routes-2026-10-12-polygon-b1-topo2-r1},
+    :proved-in :routes-2026-10-12-polygon-b1-topo2-r1,
+    :banked-by :routes-2026-10-12-polygon-b1-topo2-r1,
+    :banked-commit "e949a5129"},
    :id :lemma-constructiontargets-polygonsurfacepione-pairingdata,
    :kind :lemma,
    :depends-on [],
