@@ -662,6 +662,25 @@ theorem genericPointWedgeIdentityOuterLeftUnit_targetMap_eq_nestedMap :
       eL.functor.map (l.map (eK.unit.app z)) := by
   rfl
 
+omit [PathConnectedSpace X] [PathConnectedSpace Y] in
+/-- The right target image of the inverse overlap unit separates into the
+actual-right map followed by the right equivalence functor map. -/
+theorem genericPointWedgeIdentityOuterRightUnitInv_targetMap_eq_nestedMap :
+    let r := genericPointWedgeActualRight x₀ y₀ M N
+    let eK := genericPointWedgeOverlapGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let eR := genericPointWedgeRightGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let z : FundamentalGroupoid (genericPointWedgeOverlapPiece x₀ y₀ M N) :=
+      FundamentalGroupoid.mk
+        ⟨quotientMap x₀ y₀ (.inl x₀),
+          ⟨⟨.inl x₀, by trivial, rfl⟩,
+            ⟨.inr y₀, by trivial,
+              (Quotient.sound (Relation.EqvGen.rel _ _ Rel.base)).symm⟩⟩⟩
+    (r ⋙ eR.functor).map (eK.unitInv.app z) =
+      eR.functor.map (r.map (eK.unitInv.app z)) := by
+  rfl
+
 /-- The middle factor in the reverse coordinate glue evaluates at the image
 of the chosen overlap representative under the overlap equivalence. -/
 theorem genericPointWedgeIdentityCoordinateWhiskeredGlue_app :
@@ -2202,6 +2221,7 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeIdentityOuterLeftRoundTripComponent_eq_unitMap
 #print axioms genericPointWedgeIdentityOuterRightRoundTripComponent_eq_unitInvMap
 #print axioms genericPointWedgeIdentityOuterLeftUnit_targetMap_eq_nestedMap
+#print axioms genericPointWedgeIdentityOuterRightUnitInv_targetMap_eq_nestedMap
 #print axioms genericPointWedgeIdentityCoordinateWhiskeredGlue_app
 #print axioms genericPointWedgeIdentityCoordinateWhiskeredGlue_app_eq_unitBase
 #print axioms genericPointWedgeIdentityCoordinateSpan_glue_unitBase

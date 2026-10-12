@@ -365,3 +365,8 @@ actual-left functor.  In particular it records the remaining pointed map
 without asserting that the equivalence unit is an identity.  Evaluating this
 nested map, the inverse-unit map, both span maps, and the literal lifts remains
 for B6.
+
+`genericPointWedgeIdentityOuterRightUnitInv_targetMap_eq_nestedMap` gives the
+matching right-hand expansion: the right equivalence functor is applied to the
+actual-right image of the overlap `unitInv`.  Both nested component maps, the
+two span maps, and the literal lifts remain for B6.
