@@ -113850,14 +113850,14 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 3,
+   :stop-count 4,
    :review-finding
    "Blueprint B3 is marked proved but its proof uses the unlisted ConnectedGroupoidSingleObjEquivalence.connectorSingleObjEquivalence (and connector-system representation) instead of only the declared uses; add the actual connector dependency and proof route to B3 uses.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
    :evidence
    {:placeholder-delta {:source-before 0, :source-after 0},
     :residual
-    "Identify the explicit transported functor map with this mapOfEq result; then symmetric right and B12.",
+    "Combine the named functor, base-proof, and mapOfEq identities to close the left normal form; then right and B12.",
     :outcome :stop,
     :warnings [],
     :missing-theorems
@@ -113871,9 +113871,9 @@
       :area "fundamental-group-wedge-of-circles"}],
     :statement-hashes
     {:source
-     "53c76459a7423458e218ebb4172423ce3c6721d79d50e5c5f4e10fb27cf0c6d6",
+     "143e5175201531ded04ec0e1a3892a42c834324069f0cdc48a80228e42fac0a1",
      :documentation
-     "b37df13835169e4634025314f38dae13ece960c74f24ee3bb209163502d24371",
+     "413bb2f729b277b56a0acba81777235273de65757371f2b75e3ab192a7d6ed2e",
      :blueprint
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0",
      :registry "131/131"},
@@ -113881,7 +113881,7 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
     :reason
-    "The based map induced by the left equivalence-lift composite fixes every loop.",
+    "The left equivalence forward functor is now explicitly the fundamental-groupoid map induced by leftEquiv.toFun.",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/PointWedgeVanKampen.lean",
@@ -113891,24 +113891,10 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder/diff validation", :exit 0}],
     :diagnostic-history
-    [{:cmd "lean dependent elimination/map-id attempts",
+    [{:cmd "lean direct bridge",
       :exit 1,
-      :finding
-      "Used aligned witness plus mapOfEq_apply on loop representative."}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1791800552544-6788-4854e2f5",
-     :commands
-     ["git show/diff-tree ef5956bd"
-      "sha256/diff/placeholder checks"
-      "statement-registry.py check"
-      "lake env lean ConstructionTargets/PointWedgeVanKampen.lean"
-      "lake build ConstructionTargets.PointWedgeVanKampen"
-      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (expected absent)"],
-     :finding
-     "PASS program STOP: exact 2-file commit adds a compiled sorry-free proof that the based mapOfEq of leftEquiv.toFun comp leftLegLift fixes every loop. It aligns the dependent witness, normalizes only proof identity, and reduces on a path representative without erasing base transport. Fixture/source/doc hashes match; placeholders 0->0; registry 131/131; standard axioms only. Final module remains absent; residual links the explicit mapped loop, then right and B12."},
-    :commit "ef5956bdc040c7a01241c777d3c1e23514eb6b6a",
+      :finding "Split opaque functor equality."}],
+    :commit "0d13ade10fde6f977237a818fbd00b6e368bd949",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
      "ConstructionTargets/PointWedgeVanKampen.md"],
@@ -113918,7 +113904,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
