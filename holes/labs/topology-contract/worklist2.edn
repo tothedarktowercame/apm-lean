@@ -72788,13 +72788,13 @@
    :consumer :t02A03,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "Commit b07bee059 does not implement the row acceptance theorem. It adds only rotatedEndpointWaypoint_departure_zero_support_pos; safeRightTubeMeridianDeformation is absent, although the row is marked done-unreviewed rather than a STOP with missing-theorems. Exact repair: extend Mathlib in scope by state/proving the required continuous ambient H with both endpoints, pointwise rightTube membership, and leftCore avoidance (or record a legitimate STOP after committed progress with remaining theorem listed).",
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Quarter candidate is annulus-interior and solves scalar zeros; construct geometric witness or replace correction, then certify H.",
+    "Candidate radial defect is <1/4; build polar right-tube witness to refute correction, then replace and certify H.",
     :outcome :stop,
     :warnings ["Main: 1 placeholder." "Style lint only."],
     :missing-theorems
@@ -72804,7 +72804,7 @@
       :status :partial,
       :consumers [:t02A03],
       :depends-on
-      ["twiceCorrectedDepartureQuarterCandidate_scalarEquations"],
+      ["twiceCorrectedDepartureQuarterCandidate_radialDefect_lt"],
       :area "explicit-r3-tube-deformation-retraction"}
      {:name
       "ConstructionTargets.T02A03GeometricTubeDeformation.safeRightTubeMeridianDeformation",
@@ -72815,7 +72815,7 @@
       :area "explicit-r3-tube-deformation-retraction"}],
     :statement-hashes
     {:registry "131/0",
-     :module "04faff83798ae127f8c629756996a854c0720822",
+     :module "1447e5e0ab1092f64d0a391054460a4befaf13cc",
      :main "ce9da0dbb4300e81e5a5f31c95d0a0f8344c4325"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
@@ -72828,30 +72828,18 @@
      {:cmd "module no-sorry", :exit 1, :expected-exit 1}
      {:cmd "placeholders", :exit 0, :output "1"}
      {:cmd "git show --check", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1791792028268-6618-b6e587f7",
-     :commands
-     ["git show/diff-tree/show --check 2a9c5d5d69e2f19806b70df780c4643a14cbe29e"
-      "sha256sum fixture; blob and placeholder recount"
-      "lake env lean exact committed module"
-      "python3 scripts/statement-registry.py check"
-      "compare parent/prior milestone"],
-     :finding
-     "PASS: program STOP commits new compiled, sorry-free progress beyond the prior milestone: the endpoint-fixed transverse correction is proved nonzero at every old departure zero. Exact scope and fixture hash match; module/Main blobs are 0629f3f5/ce9da0db with placeholder counts 0/1; registry 131/0; axioms standard. The no-new-zero corrected path and safe ambient deformation remain explicitly listed."},
-    :commit "62c497b21b94edfc7aec68cc57a6e74c5c88ca4c",
+    :commit "ca181756c47f014c105f753133a5cb9bd80758ca",
     :changed-paths
     ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
     :fixture
     {:path "ConstructionTargets/T02A03GeometricTubeDeformation.lean",
      :sha256
-     "a2bbdfd23b44e70060957671058083f962c201efc2a05d33f274f6b842186dc6"},
+     "d8d5f94e898ad9d968f6fd4eb8e8ef431586bcc8d2e04a34b875a9ab5b4f2280"},
     :seat "topo-6"},
    :phase :implementation,
    :type
    "∀ (t : unitInterval) (p : RightTubeMinusLeftCore), (t:ℝ) ≤ 1/2 → (((1-2*(t:ℝ):ℝ):ℂ)+((2*(t:ℝ):ℝ):ℂ)*rotatedEndpointWaypoint p)=0 → 0 < (t:ℝ)*(1-2*(t:ℝ))",
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/safe-right-tube-meridian-deformation",
@@ -82133,7 +82121,8 @@
     :lemma-rotatedendpointwaypoint-twicecorrected-departure-zero-time-bounds
     :lemma-rotatedendpointwaypoint-twicecorrected-departure-zero-explicit-bounds
     :lemma-twicecorrecteddepartureexplicitbounds-consistent-at-quarter
-    :lemma-twicecorrecteddeparturequartercandidate-scalarequations],
+    :lemma-twicecorrecteddeparturequartercandidate-scalarequations
+    :lemma-twicecorrecteddeparturequartercandidate-radialdefect-lt],
    :other-consumers []}
   {:consumer :portfolio,
    :phase :lemma,
@@ -82681,6 +82670,19 @@
     :found-in
     ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"]},
    :id :lemma-twicecorrecteddeparturequartercandidate-scalarequations,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "twiceCorrectedDepartureQuarterCandidate_radialDefect_lt"},
+   :lemma
+   {:name "twiceCorrectedDepartureQuarterCandidate_radialDefect_lt",
+    :reported-by []},
+   :id :lemma-twicecorrecteddeparturequartercandidate-radialdefect-lt,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}]}
