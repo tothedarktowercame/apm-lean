@@ -2297,6 +2297,17 @@ theorem genericPointWedgeLeftLiftedLoop_normalForm_eq_transport
   rw [genericPointWedgeLeftEquiv_leftBase_connector]
   rfl
 
+omit [PathConnectedSpace X] [PathConnectedSpace Y] in
+/-- The basepoint equality used by the composite based map is the pointwise
+congruence of the composite-map identity. -/
+theorem genericPointWedgeLeftComposite_baseProof :
+    congrArg (fun f : C(X, X) => f x₀)
+        (genericPointWedgeLeftEquiv_comp_leftLegLift
+          x₀ y₀ M N hM hN hy hx cM cN) =
+      (genericPointWedgePackage
+        x₀ y₀ M N hM hN hy hx cM cN).left_inclusion x₀ := by
+  apply Subsingleton.elim
+
 /-- Once B3's two mapped actions are identified with the images of the
 literal topological legs under B5, the normalized equivalence has exactly the
 two coproduct coordinates required by B6. -/
@@ -2800,6 +2811,7 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeLeftEquiv_obj_leftBase
 #print axioms genericPointWedgeLeftEquiv_leftBase_connector
 #print axioms genericPointWedgeLeftLiftedLoop_normalForm_eq_transport
+#print axioms genericPointWedgeLeftComposite_baseProof
 #print axioms genericPointWedgeIdentityActualSpan_left_map
 #print axioms genericPointWedgeIdentityActualSpan_right_map
 #print axioms genericPointWedgeSingleObjPostcomposeIso

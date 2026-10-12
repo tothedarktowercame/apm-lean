@@ -502,3 +502,7 @@ connector choice.
 `genericPointWedgeLeftLiftedLoop_normalForm_eq_transport` expands the mapped
 lifted left loop's connector normal form as conjugation by the two explicit
 `eqToHom` transports associated to the named base-object equality.
+
+`genericPointWedgeLeftComposite_baseProof` identifies the basepoint proof used
+by the composite based map with pointwise congruence of the composite-map
+identity.  This supplies the dependent proof alignment needed by `mapOfEq`.
