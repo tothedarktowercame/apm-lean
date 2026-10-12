@@ -113850,7 +113850,7 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 10,
+   :stop-count 0,
    :review-finding
    "Blueprint B3 is marked proved but its proof uses the unlisted ConnectedGroupoidSingleObjEquivalence.connectorSingleObjEquivalence (and connector-system representation) instead of only the declared uses; add the actual connector dependency and proof route to B3 uses.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
@@ -113904,7 +113904,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -116808,6 +116808,18 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder/diff validation", :exit 0}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791819435509-7252-1bfa3212",
+     :commands
+     ["git show/diff-tree b4a4d0b13"
+      "sha256 + placeholder + registry checks"
+      "lake env lean ConstructionTargets/t97A07Closure.lean"
+      "lake build ConstructionTargets.t97A07Closure"
+      "lake env lean problems/t97A07/lean/Main.lean"],
+     :finding
+     "Scope is exactly closure Lean+blueprint; source/target/fixture hashes match. Reusable source placeholders 0->0; target retains one existing placeholder; registry 131/131. The theorem correctly rewrites the centre fixed-coordinate derivative to tangent coordinates and specializes the existing chart-factor formula at y=x, with correct three-factor order and model boundaries. It compiles with only propext, Classical.choice, Quot.sound. Blueprint change accurately records this proved B2 substep and no node interface changes. This is compiled progress; residual lists neighbourhood extension then B3-B9."},
     :commit "b4a4d0b13cbc795b568bb384ee86952e18530fea",
     :changed-paths
     ["ConstructionTargets/t97A07Closure.lean"
@@ -116818,7 +116830,7 @@
      "66149575a70f1643057c242f9f7d9a7b6d85e1b9ca8d4664f9c95145df493425"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A07/lean/Main.lean"
     "problems/t97A07/status.json"
@@ -116834,7 +116846,7 @@
     ["lake env lean problems/t97A07/lean/Main.lean"
      "python3 scripts/statement-registry.py check"]},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Nearby derivatives uniformly expose the chart-factor formula.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: The fixed-coordinate derivative equals the nearby family chart-factor formula at the common centre.",
    :id :program-2026-10-11-close-t97a07,
    :kind :final-adapter,
    :campaign-priority 44,
@@ -116880,7 +116892,11 @@
     {:job 2,
      :commit "76302b36b2acab6cfee4cbed81e9c647b34c729c",
      :reason
-     "Nearby derivatives uniformly expose the chart-factor formula."}]}
+     "Nearby derivatives uniformly expose the chart-factor formula."}
+    {:job 3,
+     :commit "b4a4d0b13cbc795b568bb384ee86952e18530fea",
+     :reason
+     "The fixed-coordinate derivative equals the nearby family chart-factor formula at the common centre."}]}
   {:consumer :t91J06,
    :stop-count 2,
    :review-finding
