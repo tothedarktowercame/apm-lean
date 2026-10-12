@@ -75896,8 +75896,46 @@
    :other-consumers []}
   {:consumer :t96J02,
    :implements-lemma :lemma-polygonannularside,
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Exact center deformation retract and overlap Homeomorph.",
+    :outcome :done-unreviewed,
+    :warnings ["2 imported; 12 preexisting linter warnings"],
+    :missing-theorems
+    [{:name
+      "ConstructionTargets.PolygonSurfacePiOne.polygonAnnularSide",
+      :type
+      "continuous surjection from OuterDisk to the outer quotient open, with fibers iff Relation.EqvGen P.Rel",
+      :status :proved,
+      :consumers [:t96J02 :t92J05 :t94J04 :t97A01 :t97A03],
+      :depends-on ["polygonRadialOpenSets"],
+      :area "polygon-surface-pi1"}],
+    :statement-hashes
+    {:registry "131/0",
+     :module "74f76224e6608e6be31f7ee07f80be3bb276bfe8"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-6",
+    :commands
+    [{:cmd
+      "lake env lean ConstructionTargets/PolygonSurfacePiOne.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.PolygonSurfacePiOne",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131/0"}
+     {:cmd "placeholder scan", :exit 0, :output "0"}
+     {:cmd "git show --check 0e69eda9a", :exit 0}],
+    :commit "0e69eda9a",
+    :changed-paths ["ConstructionTargets/PolygonSurfacePiOne.lean"],
+    :fixture
+    {:path "ConstructionTargets/PolygonSurfacePiOne.lean",
+     :sha256
+     "c504bbc5e46e0c5565ec2690cc884c2ced3084763b091e264bdcde548fb74ed8"},
+    :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/PolygonSurfacePiOne.lean"],
    :dag-node "ConstructionTargets/PolygonSurfacePiOne.blueprint.md/B4",
    :acceptance
@@ -85956,4 +85994,25 @@
    :id :lemma-polygoncenterdeformationretract,
    :kind :lemma,
    :depends-on [:lemma-innerhomeomorph],
+   :other-consumers [:t92J05 :t94J04 :t97A01 :t97A03]}
+  {:consumer :t96J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.PolygonSurfacePiOne.polygonAnnularSide",
+    :type
+    "continuous surjection from OuterDisk to the outer quotient open, with fibers iff Relation.EqvGen P.Rel"},
+   :lemma
+   {:name "ConstructionTargets.PolygonSurfacePiOne.polygonAnnularSide",
+    :reported-by [:routes-2026-10-12-polygon-b4-annular-side-topo2-r1],
+    :type
+    "continuous surjection from OuterDisk to the outer quotient open, with fibers iff Relation.EqvGen P.Rel",
+    :area "polygon-surface-pi1",
+    :proved-in :routes-2026-10-12-polygon-b4-annular-side-topo2-r1},
+   :id
+   :lemma-constructiontargets-polygonsurfacepione-polygonannularside,
+   :kind :lemma,
+   :depends-on [:lemma-polygonradialopensets],
    :other-consumers [:t92J05 :t94J04 :t97A01 :t97A03]}]}
