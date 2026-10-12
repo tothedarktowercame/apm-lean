@@ -76209,9 +76209,20 @@
       :current-residual "Elect B7.",
       :other-consumers []}],
     :author "topo-8",
-    :disposition :replan},
+    :disposition :replan,
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791848882297-8064-b33236f8",
+     :commands
+     ["bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn"
+      "python3 scripts/statement-registry.py check"
+      "bb holes/labs/topology-contract/build_step.bb priorities holes/labs/topology-contract/worklist2.edn"
+      "EDN dependency/measure audit"],
+     :finding
+     "PASS: strategy row has empty scope, so no commit/fixture applies. B5 is independently PASS and banked with zero placeholders; the recorded zero placeholder delta, one infrastructure packet, and one PASS are coherent. B6 is the blueprint’s next node and its strong deformation-retraction type retains boundary fixation rather than weakening to contractibility. It depends on B5 and routes all five consumers; r21 correctly waits on it. Fresh gates report worklist 1021 OK and registry 131/0; priorities reproduce SLSC unblocking 6 and polygon presentation unblocking 5."}},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance {:strategy "Rerun after B5."},
@@ -76225,7 +76236,7 @@
    :other-consumers []}
   {:consumer :t96J02,
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/PolygonSurfacePiOne.lean"],
    :dag-node "ConstructionTargets/PolygonSurfacePiOne.blueprint.md/B6",
    :acceptance
