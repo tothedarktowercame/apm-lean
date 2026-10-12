@@ -523,3 +523,11 @@ identity to the lifted loop while preserving both dependent endpoints via
 `genericPointWedgeLeftLiftedLoop_transport_eq_concrete` carries that dependent
 comparison through both endpoint transports, yielding an equality of
 endomorphisms at the literal left base object.
+
+`genericPointWedgeLeftLiftedLoop_concrete_eq` identifies the concrete
+endpoint-conjugated map with the based map of the equivalence-lift composite,
+then applies its proved identity action.
+
+`genericPointWedgeLeftLiftedLoop_normalForm` combines the connector expansion,
+dependent transport comparison, and composite-map identity: the full left
+connector normal form is the original left-summand loop.
