@@ -1497,6 +1497,35 @@ theorem forgetICycles_naturality
   simp only [Iso.hom_inv_id_assoc]
   exact ((K.sc i).mapCyclesIso_hom_iCycles forgetIntModules).symm
 
+abbrev ForgottenToCyclesNaturality
+    {ι : Type} {c : ComplexShape ι}
+    (K : HomologicalComplex (ModuleCat ℤ) c) (i j : ι) : Prop :=
+  ((forgetIntModules.mapHomologicalComplex c).obj K).toCycles i j =
+    forgetIntModules.map (K.toCycles i j) ≫
+      ((K.sc j).mapCyclesIso forgetIntModules).inv
+
+/-- The differential factorization through cycles commutes with forgetting
+coefficients. -/
+theorem forgetToCycles_naturality
+    {ι : Type} {c : ComplexShape ι}
+    (K : HomologicalComplex (ModuleCat ℤ) c) (i j : ι) :
+    ForgottenToCyclesNaturality K i j := by
+  dsimp [ForgottenToCyclesNaturality]
+  letI : Mono (((forgetIntModules.mapHomologicalComplex c).obj K).iCycles j) := by
+    infer_instance
+  letI : ((forgetIntModules.mapHomologicalComplex c).obj K).HasHomology j := by infer_instance
+  apply (cancel_mono (((forgetIntModules.mapHomologicalComplex c).obj K).iCycles j)).1
+  refine Eq.trans (Eq.trans ?_ (congrArg (fun q =>
+    forgetIntModules.map (K.toCycles i j) ≫ q)
+      (forgetICycles_naturality K j)).symm) (Category.assoc _ _ _).symm
+  calc
+    _ = ((forgetIntModules.mapHomologicalComplex c).obj K).d i j :=
+      ((forgetIntModules.mapHomologicalComplex c).obj K).toCycles_i i j
+    _ = forgetIntModules.map (K.d i j) := rfl
+    _ = forgetIntModules.map (K.toCycles i j ≫ K.iCycles j) :=
+      congrArg forgetIntModules.map (K.toCycles_i i j).symm
+    _ = _ := forgetIntModules.map_comp _ _
+
 /-- The corrected relative-homology comparison intertwines the coefficient
 absolute-to-relative map with the production relative projection. -/
 theorem integralRelativeHomologyComparisonWithTransport_projection
@@ -2487,6 +2516,7 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.forgetHomologyι_naturality
 #print axioms ConstructionTargets.ManifoldFundamentalClass.forgetPOpcycles_naturality
 #print axioms ConstructionTargets.ManifoldFundamentalClass.forgetICycles_naturality
+#print axioms ConstructionTargets.ManifoldFundamentalClass.forgetToCycles_naturality
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_projection
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_generator_of_normalization
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_normalization_of_generator
