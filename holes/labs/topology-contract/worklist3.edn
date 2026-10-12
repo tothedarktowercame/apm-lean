@@ -20932,8 +20932,44 @@
   {:consumer :t00J02,
    :implements-lemma
    :lemma-constructiontargets-manifoldfundamentalclass-coefficientclosedboundary-coordinat,
+   :evidence
+   {:placeholder-delta {:t00J02 [1 1], :t98A02 [1 1]},
+    :residual
+    "Apply the comparison in the t00J02 and t98A02 closure adapters.",
+    :outcome :done-unreviewed,
+    :warnings ["pre-existing unnecessarySimpa lint"],
+    :missing-theorems
+    [{:name
+      "ConstructionTargets.ManifoldFundamentalClass.coefficientClosedBoundary_coordinate_comparison_of_bool",
+      :type "exact fixture type",
+      :status :proved,
+      :consumers [:t00J02 :t98A02],
+      :depends-on ["closed-generator bridge"],
+      :area "manifold-fundamental-class"}],
+    :statement-hashes {:registry "131/131"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli",
+    :commands
+    [{:cmd "lake env lean /tmp/closedboundarycoords.lean", :exit 0}
+     {:cmd "lake build ConstructionTargets.ManifoldFundamentalClass",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd
+      "git diff --check -- ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd "rg source placeholders", :exit 1, :expected-exit 1}],
+    :commit "f0afa7bdc4c95a8c87143342ceb8c9ce51cd5612",
+    :changed-paths
+    ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+    :declaration
+    "ConstructionTargets.ManifoldFundamentalClass.coefficientClosedBoundary_coordinate_comparison_of_bool",
+    :fixture
+    {:path "/tmp/closedboundarycoords.lean",
+     :sha256
+     "aad5a9cda739c1cbcceb1eca8ab8b33395db8a08c9d68941a87c644f4d13586e"},
+    :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/manifold-fundamental-class",
    :acceptance
@@ -30124,15 +30160,17 @@
    {:name
     "ConstructionTargets.ManifoldFundamentalClass.coefficientClosedBoundary_coordinate_comparison_of_bool",
     :reported-by
-    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2],
+    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2
+     :routes-2026-10-12-mfclass-boundary-coordinates-r1],
     :type "exact type in fixture",
     :area "manifold-fundamental-class",
-    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+    :proved-in :routes-2026-10-12-mfclass-boundary-coordinates-r1},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-coefficientclosedboundary-coordinat,
    :kind :lemma,
    :depends-on
-   [:lemma-constructiontargets-manifoldfundamentalclass-coefficientclosedrelativeclass-eq-i],
+   [:lemma-constructiontargets-manifoldfundamentalclass-coefficientclosedrelativeclass-eq-i
+    :lemma-closed-generator-bridge],
    :other-consumers [:t98A02]}
   {:consumer :t00A02,
    :phase :lemma,
@@ -30279,8 +30317,17 @@
    :kind :lemma,
    :depends-on
    [:lemma-constructiontargets-surfaceclassification-finitecloseddiskcover-boundaryarc-cont],
-   :other-consumers
-   [:t00A03 :t91J05 :t92J05 :t94J04 :t96A01 :t97J02]}],
+   :other-consumers [:t00A03 :t91J05 :t92J05 :t94J04 :t96A01 :t97J02]}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance {:lemma "closed-generator bridge"},
+   :lemma {:name "closed-generator bridge", :reported-by []},
+   :id :lemma-closed-generator-bridge,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}],
  :consumer-baselines {},
  :statuses
  #{:open
