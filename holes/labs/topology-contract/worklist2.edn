@@ -76066,8 +76066,51 @@
    :current-residual "Elect contraction/overlap.",
    :other-consumers []}
   {:consumer :t96J02,
+   :evidence
+   {:placeholder-delta 0,
+    :residual "Implement B6.",
+    :outcome :done-unreviewed,
+    :warnings ["preexisting/imported"],
+    :missing-theorems
+    [{:name
+      "ConstructionTargets.PolygonSurfacePiOne.quotientMap_prod_unitInterval",
+      :type "IsQuotientMap (Prod.map id P.quotientMap)",
+      :status :proved,
+      :consumers [:t96J02 :t92J05 :t94J04 :t97A01 :t97A03],
+      :depends-on [],
+      :area "polygon-surface-pi1"}
+     {:name "PairingData.descendHomotopy",
+      :type
+      "continuous relation-preserving homotopy descent through P.Space",
+      :status :proved,
+      :consumers [:t96J02 :t92J05 :t94J04 :t97A01 :t97A03],
+      :depends-on
+      ["ConstructionTargets.PolygonSurfacePiOne.quotientMap_prod_unitInterval"],
+      :area "polygon-surface-pi1"}],
+    :statement-hashes
+    {:registry "131/0",
+     :module "4a2b94527afceab574d69837e83b961baaf52d9b"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-6",
+    :commands
+    [{:cmd
+      "lake env lean ConstructionTargets/PolygonSurfacePiOne.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.PolygonSurfacePiOne",
+      :exit 0}
+     {:cmd "registry check", :exit 0, :output "131/0"}
+     {:cmd "placeholder scan", :exit 0, :output "0"}
+     {:cmd "#print axioms product/descent", :exit 0}
+     {:cmd "git show --check 3736591d1", :exit 0}],
+    :commit "3736591d1",
+    :changed-paths ["ConstructionTargets/PolygonSurfacePiOne.lean"],
+    :fixture
+    {:path "ConstructionTargets/PolygonSurfacePiOne.lean",
+     :sha256
+     "c826393b3a5045aa5efbb0822d333dc8275ccf71cbdc55ef2bb5b87a797f7aa8"},
+    :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/PolygonSurfacePiOne.lean"],
    :dag-node "ConstructionTargets/PolygonSurfacePiOne.blueprint.md/B5",
    :acceptance
@@ -86181,4 +86224,44 @@
    :id :lemma-annuluspolarhomeomorph,
    :kind :lemma,
    :depends-on [],
+   :other-consumers [:t92J05 :t94J04 :t97A01 :t97A03]}
+  {:consumer :t96J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.PolygonSurfacePiOne.quotientMap_prod_unitInterval",
+    :type "IsQuotientMap (Prod.map id P.quotientMap)"},
+   :lemma
+   {:name
+    "ConstructionTargets.PolygonSurfacePiOne.quotientMap_prod_unitInterval",
+    :reported-by [:routes-2026-10-12-polygon-b5-topo2-r1],
+    :type "IsQuotientMap (Prod.map id P.quotientMap)",
+    :area "polygon-surface-pi1",
+    :proved-in :routes-2026-10-12-polygon-b5-topo2-r1},
+   :id
+   :lemma-constructiontargets-polygonsurfacepione-quotientmap-prod-unitinterval,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t92J05 :t94J04 :t97A01 :t97A03]}
+  {:consumer :t96J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "PairingData.descendHomotopy",
+    :type
+    "continuous relation-preserving homotopy descent through P.Space"},
+   :lemma
+   {:name "PairingData.descendHomotopy",
+    :reported-by [:routes-2026-10-12-polygon-b5-topo2-r1],
+    :type
+    "continuous relation-preserving homotopy descent through P.Space",
+    :area "polygon-surface-pi1",
+    :proved-in :routes-2026-10-12-polygon-b5-topo2-r1},
+   :id :lemma-pairingdata-descendhomotopy,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-polygonsurfacepione-quotientmap-prod-unitinterval],
    :other-consumers [:t92J05 :t94J04 :t97A01 :t97A03]}]}
