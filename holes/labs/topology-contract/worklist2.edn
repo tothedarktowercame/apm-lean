@@ -73771,8 +73771,46 @@
    "Instantiate the range map for intersection and both pieces, induce the union component, and assemble coverPreservingShortComplexMap with its two commutative squares.",
    :other-consumers [:t96J06]}
   {:consumer :t97A04,
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Construct infimum, biproduct, and supremum maps and package both squares.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:registry "131/0",
+     :module "da0af94664dfa5ad88d56748283d2713e40d776d",
+     :main "e2caa0a5eaa30a65713a7a22910aeac5467a033b",
+     :other-main "383deab447ad620ad02f626d6fc614f2ba7139a0"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-6",
+    :commands
+    [{:cmd
+      "lake env lean ConstructionTargets/ProductionOpenCoverMayerVietoris.lean",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131/0"}
+     {:cmd "placeholder counts module,t97A04,t96J06",
+      :exit 0,
+      :output "0,0,2"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git show --check HEAD", :exit 0}],
+    :diagnostic-history
+    [{:cmd "initial lake env lean",
+      :exit 1,
+      :note "Corrected image_monotone argument order."}],
+    :commit "f7e19f199",
+    :changed-paths
+    ["ConstructionTargets/ProductionOpenCoverMayerVietoris.lean"],
+    :declaration
+    "ConstructionTargets.ProductionOpenCoverMayerVietoris.subcomplex_inf_image_le",
+    :fixture
+    {:path "ConstructionTargets/ProductionOpenCoverMayerVietoris.lean",
+     :sha256
+     "0aede8512034672e342fd19c7eb78022e3d4eef108e87ecfef90905e8cdfa890"}},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/ProductionOpenCoverMayerVietoris.lean"],
    :dag-node
