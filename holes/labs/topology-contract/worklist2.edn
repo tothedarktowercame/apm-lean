@@ -75520,9 +75520,20 @@
       :current-residual "Elect B5/B6.",
       :other-consumers []}],
     :author "topo-8",
-    :disposition :replan},
+    :disposition :replan,
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791843017662-7972-4f10967e",
+     :commands
+     ["bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn"
+      "bb holes/labs/topology-contract/build_step.bb priorities holes/labs/topology-contract/worklist2.edn"
+      "python3 scripts/statement-registry.py check"
+      "EDN dependency/measure/replacement audit"],
+     :finding
+     "PASS: strategy row has empty scope and no commit/fixture. B3 is done and independently PASS; zero placeholder change, one theorem packet, and one PASS are accurate. Routing all five polygon consumers to B4 matches the blueprint order, while r17 waits on B4. Worklist validates 999 items; registry is 131/0; priorities reproduce SLSC ready/6 and polygon ready/5. The B4 replacement has the exact two-open-cover, contraction, annular-side, and overlap interface."}},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance {:strategy "Rerun after B3."},
@@ -75536,7 +75547,7 @@
    :other-consumers []}
   {:consumer :t96J02,
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/PolygonSurfacePiOne.lean"],
    :dag-node "ConstructionTargets/PolygonSurfacePiOne.blueprint.md/B4",
    :acceptance
