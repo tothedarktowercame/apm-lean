@@ -3549,6 +3549,39 @@ theorem scalarArrivalCorrection_sevenEighths_actual_zero
       Complex.mul_re, Complex.mul_im]
     linarith [h1]
 
+/-- Exact ambient coordinates forced by an arbitrary complex correction on
+the diagnostic arrival slice. -/
+theorem complexArrivalCorrection_sevenEighths_zero_coordinates
+    (c : ℂ) (p : RightTubeMinusLeftCore)
+    (hz : (((2 - 2 * (arrivalSevenEighths : ℝ) : ℝ) : ℂ) *
+          positiveRealPlanarWaypointMap p +
+        ((2 * (arrivalSevenEighths : ℝ) - 1 : ℝ) : ℂ) *
+          rightTubeCorePlanarComplex p.1 + c) = 0) :
+    p.1 0 = 2 + 2 * c.re ∧ p.1 1 = -c.im := by
+  have hre := congrArg Complex.re hz
+  have him := congrArg Complex.im hz
+  norm_num [arrivalSevenEighths, positiveRealPlanarWaypointMap,
+    rightTubePlanarComplex, rightTubeCorePlanarComplex,
+    Complex.mul_re, Complex.mul_im] at hre him
+  constructor <;> linarith
+
+/-- The corresponding right-core planar coordinate has this exact squared
+norm; avoiding the closed tube annulus is the replacement path's target. -/
+theorem complexArrivalCorrection_sevenEighths_zero_normSq
+    (c : ℂ) (p : RightTubeMinusLeftCore)
+    (hz : (((2 - 2 * (arrivalSevenEighths : ℝ) : ℝ) : ℂ) *
+          positiveRealPlanarWaypointMap p +
+        ((2 * (arrivalSevenEighths : ℝ) - 1 : ℝ) : ℂ) *
+          rightTubeCorePlanarComplex p.1 + c) = 0) :
+    Complex.normSq (rightTubeCorePlanarComplex p.1) =
+      (-1 - 2 * c.re) ^ 2 + c.im ^ 2 := by
+  obtain ⟨h0, h1⟩ :=
+    complexArrivalCorrection_sevenEighths_zero_coordinates c p hz
+  simp [rightTubeCorePlanarComplex, Complex.normSq_apply,
+    Complex.mul_re, Complex.mul_im]
+  rw [h0, h1]
+  ring
+
 end ConstructionTargets.T02A03GeometricTubeDeformation
 
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeNormalComplex_eq_zero_iff
@@ -3659,6 +3692,7 @@ end ConstructionTargets.T02A03GeometricTubeDeformation
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.positiveRealPlanarArrival_corrected_actual_zero
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.scalarArrivalCorrection_sevenEighths_mem_planarAnnulus
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.scalarArrivalCorrection_sevenEighths_actual_zero
+#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.complexArrivalCorrection_sevenEighths_zero_normSq
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_twiceCorrected_departure_zero_coordinates
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_twiceCorrected_departure_zero_normSq
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_twiceCorrected_departure_zero_scalar_bounds
