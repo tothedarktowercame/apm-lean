@@ -30144,11 +30144,26 @@
      {:cmd "lake env lean /tmp/surface_parameter_axioms.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "rg source placeholders", :exit 1, :expected-exit 1}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791819567322-7264-93d43f77",
+     :commands
+     ["git show/diff 70ab591fd"
+      "sha256sum fixtures"
+      "git diff --check; blob-current"
+      "rg Lean placeholders"
+      "statement-registry.py check"
+      "#print axioms affine theorem"
+      "lake env lean fixtures/module"
+      "lake build ConstructionTargets.SurfaceClassification"],
+     :finding
+     "PASS program STOP: new compiled milestone after b6e5a0fad proves a nonconstant affine line has a parameter in any nonempty interval avoiding a finite planar set, via injectivity and finite preimage. One-file scope; blob current; fixture hashes recomputed; fixtures/module/build pass; registry 131/131; zero Lean placeholders; standard axioms. Polygonal construction/transversality remain listed."},
     :commit "70ab591fd4d57d6a727872d4e556386352df42bd",
     :changed-paths ["ConstructionTargets/SurfaceClassification.lean"],
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/SurfaceClassification.lean"
     "ConstructionTargets/SurfaceClassification.md"
@@ -30168,7 +30183,7 @@
     :blueprint
     "ConstructionTargets/SurfaceClassification.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: B4 finite-avoiding perturbation parameter proved; program continues with endpoint-fixed polygonal perturbations",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: B4 affine chart perturbation avoiding finite planar sets proved",
    :id :program-2026-10-12-surface-classification,
    :kind :reusable-theorem,
    :campaign-priority 40,
@@ -30219,7 +30234,11 @@
     {:job 5,
      :commit "b6e5a0fad2b57ff1edf115ed8303e2868c28d75d",
      :reason
-     "B4 finite-avoiding perturbation parameter proved; program continues with endpoint-fixed polygonal perturbations"}]}
+     "B4 finite-avoiding perturbation parameter proved; program continues with endpoint-fixed polygonal perturbations"}
+    {:job 6,
+     :commit "70ab591fd4d57d6a727872d4e556386352df42bd",
+     :reason
+     "B4 affine chart perturbation avoiding finite planar sets proved"}]}
   {:consumer :t00J02,
    :phase :lemma,
    :state :banked,
@@ -30545,7 +30564,7 @@
    :other-consumers [:t00A03 :t91J05 :t92J05 :t94J04 :t96A01 :t97J02]}
   {:consumer :t00A02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -30559,7 +30578,9 @@
     :type
     "(base direction : EuclideanPlane) (hdirection : direction ≠ 0) {a b : ℝ} (hab : a < b) {forbidden : Set EuclideanPlane} (hforbidden : forbidden.Finite) : ∃ t ∈ Set.Ioo a b, base + t • direction ∉ forbidden",
     :area "surface-classification",
-    :proved-in :program-2026-10-12-surface-classification},
+    :proved-in :program-2026-10-12-surface-classification,
+    :banked-by :program-2026-10-12-surface-classification,
+    :banked-commit "70ab591fd4d57d6a727872d4e556386352df42bd"},
    :id
    :lemma-constructiontargets-surfaceclassification-exists-affineperturbation-avoiding-fin,
    :kind :lemma,
