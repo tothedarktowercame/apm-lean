@@ -2029,6 +2029,24 @@ theorem rotatedEndpointWaypoint_corrected_departure_zero_normSq
   field_simp
   ring
 
+/-- Any zero of the corrected departure leg must place its scalar
+norm-square expression inside the right-tube annulus bounds. -/
+theorem rotatedEndpointWaypoint_corrected_departure_zero_scalar_bounds
+    (t : unitInterval) (p : RightTubeMinusLeftCore)
+    (hz : (((1 - 2 * (t : ℝ) : ℝ) : ℂ) +
+        ((2 * (t : ℝ) : ℝ) : ℂ) * rotatedEndpointWaypoint p +
+        (((t : ℝ) * (1 - 2 * (t : ℝ)) : ℝ) : ℂ) * Complex.I) = 0) :
+    (9 / 16 : ℝ) ≤
+        (1 - 2 * (t : ℝ)) ^ 2 / 4 +
+          (1 - 2 * (t : ℝ)) ^ 2 / (4 * (t : ℝ) ^ 2) ∧
+      (1 - 2 * (t : ℝ)) ^ 2 / 4 +
+          (1 - 2 * (t : ℝ)) ^ 2 / (4 * (t : ℝ) ^ 2) ≤ (25 / 16 : ℝ) := by
+  have heq := rotatedEndpointWaypoint_corrected_departure_zero_normSq t p hz
+  have hb := rightTubeCorePlanarNormBounds p.1 p.2.1
+  have hn : 0 ≤ ‖rightTubeCorePlanarComplex p.1‖ := norm_nonneg _
+  rw [← heq, ← Complex.sq_norm]
+  constructor <;> nlinarith
+
 end ConstructionTargets.T02A03GeometricTubeDeformation
 
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeNormalComplex_eq_zero_iff
@@ -2107,3 +2125,4 @@ end ConstructionTargets.T02A03GeometricTubeDeformation
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_corrected_departure_eq_zero_iff
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_corrected_departure_zero_coordinates
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_corrected_departure_zero_normSq
+#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_corrected_departure_zero_scalar_bounds
