@@ -113850,14 +113850,14 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 7,
+   :stop-count 8,
    :review-finding
    "Blueprint B3 is marked proved but its proof uses the unlisted ConnectedGroupoidSingleObjEquivalence.connectorSingleObjEquivalence (and connector-system representation) instead of only the declared uses; add the actual connector dependency and proof route to B3 uses.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
    :evidence
    {:placeholder-delta {:source-before 0, :source-after 0},
     :residual
-    "Rewrite reconstructed transport glue by expanded outer comparisons; close B6/B12.",
+    "Evaluate the whiskered reverse-span glue at its chosen representative, then substitute outer comparisons; close B6/B12.",
     :outcome :stop,
     :warnings [],
     :missing-theorems
@@ -113871,9 +113871,9 @@
       :area "fundamental-group-wedge-of-circles"}],
     :statement-hashes
     {:source
-     "81bc08487cce17344d1efd9a31ddec03336a8e2f88830290ce11f51e91896ad5",
+     "9d8db364f48f309f78974c5c77ffa9c8f67ae09ccdc969f65238733f5694cb7c",
      :documentation
-     "35d66c3c3ea8809075eb484c4adf06b763458a594dddbe8b7777bd72910e9335",
+     "67ba43853489b5f5eb419833926199907049527c2f00d6bd3b1e081e0cc6403f",
      :blueprint
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0",
      :registry "131/131"},
@@ -113881,7 +113881,7 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
     :reason
-    "Unit coordinate glue is eliminated from the counit square.",
+    "Reconstructed coordinate glue is expanded into its three ordered transport factors.",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/PointWedgeVanKampen.lean",
@@ -113890,23 +113890,7 @@
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder/diff validation", :exit 0}],
-    :diagnostic-history
-    [{:cmd "lean direct rewrite",
-      :exit 1,
-      :finding "Reduced let binders before rewriting glue."}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1791823199823-7430-45038920",
-     :commands
-     ["git show/diff-tree 84dbb162c"
-      "sha256 + placeholder + registry checks"
-      "lake env lean ConstructionTargets/PointWedgeVanKampen.lean"
-      "lake build ConstructionTargets.PointWedgeVanKampen"
-      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (expected absent)"],
-     :finding
-     "Scope is exactly Lean+MD; source/doc/blueprint hashes match; placeholders 0->0; registry 131/131. Rewriting the proved unit coordinate glue correctly reduces the square to reconstructed glue followed by right counit = left counit; orientation and coordinate-span category boundaries are preserved. It compiles sorry-free with only propext, Classical.choice, Quot.sound. This is new progress; residual is rewriting reconstructed glue by expanded outer comparisons, then B6/B12. Final target remains absent as declared."},
-    :commit "84dbb162c9f5dcf35286a8a9994f6bfd85dceda9",
+    :commit "20d004b1ee0fe483dbda38809b5c544f7dabcce3",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
      "ConstructionTargets/PointWedgeVanKampen.md"],
@@ -113916,7 +113900,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
