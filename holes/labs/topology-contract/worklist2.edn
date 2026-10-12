@@ -79608,34 +79608,33 @@
   {:consumer :t94A10,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 3,
+   :stop-count 4,
    :review-finding
    "Incomplete representation-boundary repair in commit e7ba5fee3: heta is now punctured, but exact_sphereParam_identity still requires hexact : forall x, extDeriv eta x = omega x, including x=0. Frozen apm_t94a10_IsExact supplies exactness only for punctured x, so the claimed B7 theorem still cannot be instantiated. Change hexact to forall x, x != 0 -> extDeriv eta x = omega x and rewrite with hexact _ (sphereParam_ne_zero p); then recompile, retaining B8-B11 as residual.",
    :evidence
    {:placeholder-delta 0,
-    :residual "Formalize B9 sine rectangle integral; then B10-B11.",
+    :residual "Formalize B10 frozen non-exactness adapter; then B11.",
     :outcome :stop,
     :warnings ["Main: 1 placeholder."],
     :missing-theorems
-    [{:name
-      "ConstructionTargets.T94A10Closure.sphericalRectangle_curl_integral_zero",
-      :type
-      "B8 Green cancellation derived from punctured primitive and B7",
+    [{:name "ConstructionTargets.T94A10Closure.integral_sin_rectangle",
+      :type "B9 spherical coefficient integral equals 4*pi",
       :status :proved,
       :consumers [:t94A10],
-      :depends-on
-      ["sphericalRectangle_green_boundary_zero"
-       "exact_sphereParam_identity"],
+      :depends-on [],
       :area "periodic-stokes-square"}
-     {:name "ConstructionTargets.T94A10Closure.integral_sin_rectangle",
-      :type "B9 spherical coefficient integral equals 4*pi",
+     {:name
+      "ConstructionTargets.T94A10Closure.bridge_solidAngle_not_exact",
+      :type "B10 frozen non-exactness adapter",
       :status :not-started,
       :consumers [:t94A10],
-      :depends-on [],
+      :depends-on
+      ["sphericalRectangle_curl_integral_zero"
+       "integral_sin_rectangle"],
       :area "periodic-stokes-square"}],
     :statement-hashes
     {:registry "131/0",
-     :closure "eabd701002b634e09813bc6cd91dad8b0a4fb900",
+     :closure "326bc3fd2b9a4ae483a7508b009ee450bc686223",
      :blueprint "808e174fd0529d3c85b60b506988b0a55526c8e0"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
@@ -79647,34 +79646,21 @@
      {:cmd "registry check", :exit 0}
      {:cmd "closure no-sorry", :exit 1, :expected-exit 1}
      {:cmd "placeholder count", :exit 0, :output "1"}
-     {:cmd "git show --check 5cfb9498b", :exit 0}],
+     {:cmd "git show --check 22738f83d", :exit 0}],
     :diagnostic-history
     [{:cmd "closure compile",
       :exit 1,
       :finding
-      "Used CAM constant-evaluation derivative API and ContinuousOn integrability."}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1791776171421-6264-fbc3bff3",
-     :commands
-     ["git scope/blob/SHA/ancestry checks"
-      "lake build ConstructionTargets.t94A10Closure"
-      "lake env lean ConstructionTargets/t94A10Closure.lean"
-      "lake env lean problems/t94A10/lean/Main.lean"
-      "statement-registry check/fingerprint"
-      "commit placeholder counts"],
-     :finding
-     "PASS: commit 5cfb9498b completes B8 from the frozen punctured primitive: pullback coefficients are differentiable, curl integrability follows from B7 equality to sin, and the Green core applies with correct orientation. Compiled sorry-free standard-axiom progress; scope/fixture/blobs match, registry 131/0, fingerprint d1822221, placeholders closure/Main 0/1. STOP lists B9 sine integral, then B10-B11."},
-    :commit "5cfb9498b6bd75ce3c5694b8578bf509422463f5",
+      "Used root integral_sin and pulled constant outside integral."}],
+    :commit "22738f83dacebb365c2fa6ddd9c0777d6c4907f2",
     :changed-paths ["ConstructionTargets/t94A10Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t94A10Closure.lean",
      :sha256
-     "eb4ea14c8612d66d387d9cf79775f2686c30e22282a9d37d793c380beba0d138"},
+     "caf673890cb6d8a6821419f488b8d737265c72e4db284a717ca38243ae71237a"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t94A10/lean/Main.lean"
     "problems/t94A10/status.json"
@@ -81978,8 +81964,51 @@
    {:name "ConstructionTargets.T94A10Closure.integral_sin_rectangle",
     :reported-by [:program-2026-10-11-close-t94a10],
     :type "B9 spherical coefficient integral equals 4*pi",
-    :area "periodic-stokes-square"},
+    :area "periodic-stokes-square",
+    :proved-in :program-2026-10-11-close-t94a10},
    :id :lemma-constructiontargets-t94a10closure-integral-sin-rectangle,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t94A10,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.T94A10Closure.bridge_solidAngle_not_exact",
+    :type "B10 frozen non-exactness adapter"},
+   :lemma
+   {:name
+    "ConstructionTargets.T94A10Closure.bridge_solidAngle_not_exact",
+    :reported-by [:program-2026-10-11-close-t94a10],
+    :type "B10 frozen non-exactness adapter",
+    :area "periodic-stokes-square"},
+   :id
+   :lemma-constructiontargets-t94a10closure-bridge-solidangle-not-exact,
+   :kind :lemma,
+   :depends-on
+   [:lemma-sphericalrectangle-curl-integral-zero
+    :lemma-integral-sin-rectangle],
+   :other-consumers []}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance {:lemma "sphericalRectangle_curl_integral_zero"},
+   :lemma
+   {:name "sphericalRectangle_curl_integral_zero", :reported-by []},
+   :id :lemma-sphericalrectangle-curl-integral-zero,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance {:lemma "integral_sin_rectangle"},
+   :lemma {:name "integral_sin_rectangle", :reported-by []},
+   :id :lemma-integral-sin-rectangle,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}]}
