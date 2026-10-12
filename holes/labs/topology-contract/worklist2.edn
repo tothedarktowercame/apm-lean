@@ -74039,6 +74039,17 @@
       :output "131/0"}
      {:cmd "comment-stripped placeholder scan", :exit 0, :output "0"}
      {:cmd "git show --check HEAD", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791825964066-7545-a5b83aee",
+     :commands
+     ["git show/diff-tree/show --check 736949e58275ea624d45b302a506bd2396690f3a"
+      "fixture SHA and blob/placeholder recount"
+      "lake env lean ConstructionTargets/ProductionOpenCoverMayerVietoris.lean"
+      "python3 scripts/statement-registry.py check --rev 736949e58275ea624d45b302a506bd2396690f3a"],
+     :finding
+     "PASS: exact scope and fixture SHA-256 971a257ce8ea687b0bc319bcf657fde16aeed284a2b31f0f48466dd3b6cbb357 match; module compiles with 0 placeholders, registry 131/0, standard axioms. The specialization uses the explicit f-induced ShortComplex.Hom, so hfU/hfV feed its member bounds; its square has source connecting then intersection map equal union map then target connecting, matching productionConnecting_naturality. Module/t97A04/t96J06 blobs cefebc9e/e2caa0a5/383deab4; placeholders 0/0/2."},
     :commit "736949e58",
     :changed-paths
     ["ConstructionTargets/ProductionOpenCoverMayerVietoris.lean"],
@@ -74050,7 +74061,7 @@
      "971a257ce8ea687b0bc319bcf657fde16aeed284a2b31f0f48466dd3b6cbb357"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/ProductionOpenCoverMayerVietoris.lean"],
    :dag-node
@@ -77795,7 +77806,7 @@
    :other-consumers []}
   {:consumer :t97A04,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -77811,7 +77822,10 @@
     "forall {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y] (U V : Set X) (U' V' : Set Y) (f : C(X,Y)) (hU : Set.MapsTo f U U') (hV : Set.MapsTo f V V'), shortComplex U V ⟶ shortComplex U' V'",
     :area "mv-connecting-naturality",
     :proved-in
-    :routes-2026-10-10-production-connecting-naturality-topo2-r1},
+    :routes-2026-10-10-production-connecting-naturality-topo2-r1,
+    :banked-by
+    :routes-2026-10-10-production-connecting-naturality-topo2-r1,
+    :banked-commit "736949e58"},
    :id
    :lemma-constructiontargets-productionopencovermayervietoris-coverpreservinginducedshort,
    :kind :lemma,
@@ -83433,7 +83447,7 @@
      "8e2b05fc2da21acb000c622b502360f2835a454e138dbfeb505f29eedb0c7769"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["ConstructionTargets/SuppliedCoverAlgebra.lean"
     "ConstructionTargets/SuppliedCoverAlgebra.md"],
@@ -83452,7 +83466,7 @@
    :id :program-2026-10-12-supplied-cover-algebra,
    :kind :reusable-theorem,
    :campaign-priority 40,
-   :fail-count 4,
+   :fail-count 0,
    :depends-on [],
    :program true,
    :other-consumers [:t97A03 :t93J03 :t00A02]}
