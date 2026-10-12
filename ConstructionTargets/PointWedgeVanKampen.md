@@ -493,3 +493,8 @@ of continuous maps; its induced loop comparison retains quotient-base transport.
 `genericPointWedgeLeftEquiv_obj_leftBase` names the resulting propositional
 equality from the transported fixed left-cover base to `FundamentalGroupoid.mk
 x₀`; the connector calculation can now use that equality explicitly.
+
+`genericPointWedgeLeftEquiv_leftBase_connector` computes the chosen connector
+at that transported object as the `eqToIso` of the named equality, so the
+remaining normal form contains explicit transport rather than a conditional
+connector choice.

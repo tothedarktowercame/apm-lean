@@ -2262,6 +2262,21 @@ theorem genericPointWedgeLeftEquiv_obj_leftBase :
   exact (genericPointWedgePackage
     x₀ y₀ M N hM hN hy hx cM cN).left_inclusion x₀
 
+omit [PathConnectedSpace Y] in
+/-- At the transported left-cover base, the chosen based connector is exactly
+the isomorphism induced by the named base-object equality. -/
+theorem genericPointWedgeLeftEquiv_leftBase_connector :
+    genericPointWedgeBasedConnector x₀
+        ((genericPointWedgeLeftGroupoidEquivalence
+          x₀ y₀ M N hM hN hy hx cM cN).functor.obj
+            (genericPointWedgeLeftBase x₀ y₀ M)) =
+      eqToIso (genericPointWedgeLeftEquiv_obj_leftBase
+        x₀ y₀ M N hM hN hy hx cM cN).symm := by
+  classical
+  simp only [genericPointWedgeBasedConnector]
+  rw [dif_pos (genericPointWedgeLeftEquiv_obj_leftBase
+    x₀ y₀ M N hM hN hy hx cM cN)]
+
 /-- Once B3's two mapped actions are identified with the images of the
 literal topological legs under B5, the normalized equivalence has exactly the
 two coproduct coordinates required by B6. -/
@@ -2763,6 +2778,7 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeLeftEquiv_comp_leftLegLift
 #print axioms genericPointWedgeRightEquiv_comp_rightLegLift
 #print axioms genericPointWedgeLeftEquiv_obj_leftBase
+#print axioms genericPointWedgeLeftEquiv_leftBase_connector
 #print axioms genericPointWedgeIdentityActualSpan_left_map
 #print axioms genericPointWedgeIdentityActualSpan_right_map
 #print axioms genericPointWedgeSingleObjPostcomposeIso
