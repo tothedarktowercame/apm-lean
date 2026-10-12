@@ -278,3 +278,9 @@ inside this coordinate stage and the two original outer comparisons remain.
 then removes that unit in the correct `SingleObj` multiplication order.  The
 coordinate glue is now exactly the inverse left connector comparison followed
 by the right connector comparison.  Evaluating those two components remains.
+
+`genericPointWedgeIdentityCoordinateLeftComparison_app` expands the first of
+those components without imposing a false normalization.  Its categorical
+order is the inverse Unit-equivalence round-trip component followed by the
+inverse left-leg comparison.  Evaluating these two explicit factors, the
+right connector comparison, and the two original outer comparisons remains.
