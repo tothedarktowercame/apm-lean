@@ -340,8 +340,42 @@
    :consumer :t01A08,
    :implements-lemma
    :lemma-constructiontargets-sardgeneralmodel-modelrange-geometry,
+   :evidence
+   {:placeholder-delta {:t01A08 [1 1]},
+    :residual
+    "Prove fderivWithin critical-image nullity on the closed convex range, transport through charts, then choose outside the null image.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :missing-theorems [],
+    :statement-hashes {:check "131/131"},
+    :axioms [propext Classical.choice Quot.sound],
+    :author "Joe Corneli",
+    :commands
+    [{:cmd "lake env lean ConstructionTargets/SardGeneralModel.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.SardGeneralModel", :exit 0}
+     {:cmd "lake env lean /tmp/t01a08_model_range_geometry_check.lean",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "rg -n '\\b(sorry|admit|axiom)\\b' ConstructionTargets/SardGeneralModel.lean",
+      :exit 1,
+      :expected-exit 1}],
+    :diagnostic-history
+    [{:cmd "lake env lean /tmp/t01a08_model_range_geometry.lean",
+      :exit 1,
+      :note
+      "Post-promotion fixture self-import redeclared theorem; replaced by import-only exact-type check."}],
+    :commit "1604cf5c8b9804018a3a946f2274f38e9b5a07fd",
+    :changed-paths ["ConstructionTargets/SardGeneralModel.lean"],
+    :fixture
+    {:path "/tmp/t01a08_model_range_geometry.lean",
+     :sha256
+     "0aee2f598e8ab90697a79ad256ab386ee7ed80e44d2519c57ac2268f9f4a6ee6"},
+    :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/SardGeneralModel.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t01A08/model-range-convex-domain",
    :acceptance
