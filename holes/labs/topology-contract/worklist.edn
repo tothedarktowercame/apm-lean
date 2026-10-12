@@ -113857,14 +113857,14 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 8,
+   :stop-count 9,
    :review-finding
    "Blueprint B3 is marked proved but its proof uses the unlisted ConnectedGroupoidSingleObjEquivalence.connectorSingleObjEquivalence (and connector-system representation) instead of only the declared uses; add the actual connector dependency and proof route to B3 uses.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
    :evidence
    {:placeholder-delta {:source-before 0, :source-after 0},
     :residual
-    "Specialize left HEq; prove right arbitrary map; evaluate normal forms, inclusion images, literal lifts; then B12.",
+    "Specialize both HEqs; evaluate normal forms, inclusion images, literal lifts; then B12.",
     :outcome :stop,
     :warnings [],
     :missing-theorems
@@ -113878,9 +113878,9 @@
       :area "fundamental-group-wedge-of-circles"}],
     :statement-hashes
     {:source
-     "f54911280df1b89ce33ac4387d5203662210a03e879b00f7bee16aac87809743",
+     "d3b6f17d31ee41ee7e56337e72b0e2d67ca95420c604233d21925a399a587524",
      :documentation
-     "0009de194bac9fd4c27e076f212971b5e896153d2c1b3db5f3ed9da212de1f56",
+     "6b8af9c2549f92e7df42f4f8a9816f56fd94814c986529d1d70a43a892d05c18",
      :blueprint
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0",
      :registry "131/131"},
@@ -113888,7 +113888,7 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
     :reason
-    "Arbitrary left coordinate maps are coproduct injections of connector normal forms via HEq.",
+    "Arbitrary right coordinate maps are coproduct injections of connector normal forms via HEq.",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/PointWedgeVanKampen.lean",
@@ -113897,25 +113897,8 @@
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder/diff validation", :exit 0}],
-    :diagnostic-history
-    [{:cmd "lean dependent-equality attempts",
-      :exit 1,
-      :finding
-      "Corrected equality to HEq with connector normal form."}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1791779928651-6327-f448077c",
-     :commands
-     ["git show/diff-tree 02b86dc5f"
-      "sha256/diff/placeholder checks"
-      "statement-registry.py check"
-      "lake env lean ConstructionTargets/PointWedgeVanKampen.lean"
-      "lake build ConstructionTargets.PointWedgeVanKampen"
-      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (expected absent)"],
-     :finding
-     "Exact scoped commit and frozen fixture 0bca6c...8c8b0 verified. New theorem correctly uses HEq for arbitrary dependent endpoints and computes the left coordinate map as Coprod.inl of the connector normal form; map order and representation boundary are faithful. Source is sorry-free; hashes and 131/131 registry reproduce; Lean/build pass; only standard axioms. Valid program STOP with compiled progress and residual naming left specialization, right arbitrary map, normal forms, inclusion images, literal lifts, then B12; final target is absent as reported."},
-    :commit "02b86dc5ff7c0da102a271ce1c6009d937db8297",
+    :diagnostic-history [],
+    :commit "4c701ebf6c9652968f88cbc1c5fdec4c06dc5676",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
      "ConstructionTargets/PointWedgeVanKampen.md"],
@@ -113925,7 +113908,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
