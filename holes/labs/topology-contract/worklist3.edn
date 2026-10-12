@@ -20288,6 +20288,19 @@
       "rg -n forbidden ConstructionTargets/ManifoldFundamentalClass.lean",
       :exit 1,
       :expected-exit 1}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791801851858-6813-7d20c068",
+     :commands
+     ["git show/diff-tree 029ef249e"
+      "sha256sum /tmp/circlegeniso.lean"
+      "lake env lean /tmp/circlegeniso.lean"
+      "lake env lean ConstructionTargets/ManifoldFundamentalClass.lean"
+      "python3 scripts/statement-registry.py check"
+      "git diff --check; rg placeholder/forbidden counts"],
+     :finding
+     "PASS: 029ef249e changes only the scoped module and its blob is current; fixture SHA-256 matches. Frozen type and module compile. The full circle morphism equality is oriented coefficient-to-native; evaluating it at 1 yields the required generator comparison, while the morphism equality remains explicit. Registry 131/131; standard axioms only; no scoped placeholders. Counts unchanged: t00J02 bridge_1=1, sorry=1; t98A02 sorry=1."},
     :commit "029ef249e63eeccf242ebcfaf50f64c29c9495f3",
     :changed-paths
     ["ConstructionTargets/ManifoldFundamentalClass.lean"],
@@ -20297,7 +20310,7 @@
      "6b285993b432ac8583da870f5b3ab65afb5b9ab4a2e8f6a7356d52efc0641cf1"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/manifold-fundamental-class",
    :acceptance
@@ -20369,7 +20382,7 @@
       "6b285993b432ac8583da870f5b3ab65afb5b9ab4a2e8f6a7356d52efc0641cf1"},
      :seat "topo-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -29055,7 +29068,7 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -29068,7 +29081,9 @@
     [:routes-2026-10-10-manifold-fundamental-class-topo3-r2],
     :type "exact type in fixture",
     :area "manifold-fundamental-class",
-    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2,
+    :banked-by :routes-2026-10-12-mfclass-circle-iso-r1,
+    :banked-commit "029ef249e63eeccf242ebcfaf50f64c29c9495f3"},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-coefficientcirclegeneratorcompariso,
    :kind :lemma,
