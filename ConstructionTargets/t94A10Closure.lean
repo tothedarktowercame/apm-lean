@@ -489,6 +489,20 @@ theorem integral_sin_rectangle :
   simp
   ring
 
+/-- A punctured primitive of the solid-angle form would force its nonzero
+spherical period to vanish. -/
+theorem bridge_solidAngle_not_exact
+    (omega : E3 → E3 [⋀^Fin 2]→L[ℝ] ℝ)
+    (homega : ∀ x, x ≠ 0 → omega x = solidAngleAmbient x) :
+    ¬ ∃ eta : E3 → E3 [⋀^Fin 1]→L[ℝ] ℝ,
+      (∀ x, x ≠ 0 → DifferentiableAt ℝ eta x) ∧
+      ∀ x, x ≠ 0 → extDeriv eta x = omega x := by
+  rintro ⟨eta, heta, hexact⟩
+  have hzero := sphericalRectangle_curl_integral_zero eta omega heta hexact homega
+  simp_rw [exact_sphereParam_identity eta omega heta hexact homega] at hzero
+  rw [integral_sin_rectangle] at hzero
+  nlinarith [Real.pi_pos]
+
 #print axioms solidAngleAmbient_apply
 #print axioms norm_cube_eq_coordinate_denominator
 #print axioms solidAngleAmbient_apply_coordinate
@@ -503,5 +517,6 @@ theorem integral_sin_rectangle :
 #print axioms sphericalRectangle_green_boundary_zero
 #print axioms sphericalRectangle_curl_integral_zero
 #print axioms integral_sin_rectangle
+#print axioms bridge_solidAngle_not_exact
 
 end ConstructionTargets.T94A10Closure

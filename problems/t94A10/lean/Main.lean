@@ -147,7 +147,20 @@ theorem apm_t94A10_bridge_solidAngle_not_exact
     (omega : apm_t94a10_Form 2)
     (homega : apm_t94a10_IsOmega omega) :
     ¬apm_t94a10_IsExact omega := by
-  sorry
+  intro hexact
+  apply ConstructionTargets.T94A10Closure.bridge_solidAngle_not_exact
+    (apm_t94a10_ambientExtension omega) at hexact
+  · exact hexact
+  · intro x hx
+    ext v
+    rw [apm_t94a10_ambientExtension, dif_pos hx, homega ⟨x, hx⟩ v]
+    exact (ConstructionTargets.T94A10Closure.solidAngleAmbient_apply_coordinate x v).symm
+  · rcases hexact with ⟨eta, heta, hdeta⟩
+    refine ⟨apm_t94a10_ambientExtension eta, ?_, ?_⟩
+    · intro x hx
+      exact heta ⟨x, hx⟩
+    · intro x hx
+      rw [hdeta ⟨x, hx⟩, apm_t94a10_ambientExtension, dif_pos hx]
 
 theorem apm_t94a10 (omega : apm_t94a10_Form 2)
     (homega : apm_t94a10_IsOmega omega) :
