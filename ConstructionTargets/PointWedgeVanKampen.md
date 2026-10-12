@@ -816,3 +816,10 @@ based counit.  This is the coordinate-to-point counit's glue-naturality
 equation at the identity point span, so it introduces no counit-identity
 normalization.  The source-glue reconstruction and the open-cover factors
 remain to be combined with this splice.
+
+`genericPointWedgeMappedCoordinateSpanCounit_injectedSplice` composes that
+target-glue equation with the named coordinate-span glue square.  It removes
+the intermediate target glue and proves that the injected right counit,
+right coordinate factor, and source glue equal the injected left counit and
+left coordinate factor.  The remaining B6 calculation is isolated to the
+source glue and the two mapped open-cover factors.

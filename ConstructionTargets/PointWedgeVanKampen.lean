@@ -3206,6 +3206,23 @@ theorem genericPointWedgeMappedCoordinateSpanCounit_namedGlueSquare :
       (genericPointWedgeMappedCoordinateSpanCounit_glueSquare
         x₀ y₀ M N hM hN hy hx cM cN)
 
+/-- Splicing the coordinate-span glue square with the coordinate-to-point
+counit square eliminates the intermediate target glue.  The connector
+counits remain as the two injected outer factors. -/
+theorem genericPointWedgeMappedCoordinateSpanCounit_injectedSplice :
+    Monoid.Coprod.inr (genericPointWedgeRightBasedCounit y₀) *
+          genericPointWedgeMappedCoordinateSpanRightCounit
+            x₀ y₀ M N hM hN hy hx cM cN *
+        genericPointWedgeMappedCoordinateSpanSourceGlue
+          x₀ y₀ M N hM hN hy hx cM cN =
+      Monoid.Coprod.inl (genericPointWedgeLeftBasedCounit x₀) *
+        genericPointWedgeMappedCoordinateSpanLeftCounit
+          x₀ y₀ M N hM hN hy hx cM cN := by
+  rw [mul_assoc,
+    genericPointWedgeMappedCoordinateSpanCounit_namedGlueSquare,
+    ← mul_assoc,
+    genericPointWedgeMappedCoordinateSpanTargetGlue_counitSplice]
+
 /-- Both evaluated pre-free-product counit legs now have a named first factor;
 the remaining comparison is exactly between these elements and the earlier
 outer span-transport factors. -/
@@ -4606,6 +4623,7 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeMappedCoordinateSpanTargetGlue
 #print axioms genericPointWedgeMappedCoordinateSpanTargetGlue_counitSplice
 #print axioms genericPointWedgeMappedCoordinateSpanCounit_namedGlueSquare
+#print axioms genericPointWedgeMappedCoordinateSpanCounit_injectedSplice
 #print axioms genericPointWedgePreFreeProductCounit_apps_eq_mappedPreCoordinate_injections
 #print axioms genericPointWedgePreFreeProductCounit_apps_eq_injection_coordinate_open
 #print axioms genericPointWedgeCounitElement_eq_mappedRepresentationCounit
