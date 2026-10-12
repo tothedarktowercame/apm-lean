@@ -103,13 +103,13 @@ noncomputable def inducedShortComplexMap {S T : SSet}
       · simp [subcomplexMayerVietorisShortComplex, ← Functor.map_comp]
         congr 1)
 
-/-- A cover-preserving continuous map induces the specified morphism of the
-stored Mayer--Vietoris short complexes. -/
-theorem coverPreservingShortComplexMap
+/-- The specified morphism of stored Mayer--Vietoris short complexes induced
+by a cover-preserving continuous map. -/
+noncomputable def coverPreservingInducedShortComplexMap
     {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
     (U V : Set X) (U' V' : Set Y) (f : C(X, Y))
     (hU : Set.MapsTo f U U') (hV : Set.MapsTo f V V') :
-    Nonempty (shortComplex U V ⟶ shortComplex U' V') := by
+    shortComplex U V ⟶ shortComplex U' V' := by
   let F := TopCat.toSSet.map (TopCat.ofHom f)
   have hleft : (leftRange U).image F ≤ leftRange U' := by
     change (SSet.Subcomplex.range (TopCat.toSSet.map
@@ -129,7 +129,16 @@ theorem coverPreservingShortComplexMap
       ← subspaceMap_inclusion V V' f hV, TopCat.toSSet.map_comp,
       SSet.Subcomplex.range_comp]
     exact SSet.Subcomplex.image_le_range _ _
-  exact ⟨inducedShortComplexMap _ _ _ _ F hleft hright⟩
+  exact inducedShortComplexMap _ _ _ _ F hleft hright
+
+/-- A cover-preserving continuous map induces a morphism of the stored
+Mayer--Vietoris short complexes. -/
+theorem coverPreservingShortComplexMap
+    {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    (U V : Set X) (U' V' : Set Y) (f : C(X, Y))
+    (hU : Set.MapsTo f U U') (hV : Set.MapsTo f V V') :
+    Nonempty (shortComplex U V ⟶ shortComplex U' V') :=
+  ⟨coverPreservingInducedShortComplexMap U V U' V' f hU hV⟩
 
 /-- Naturality of the canonical subcomplex Mayer--Vietoris connecting map
 under a morphism of the underlying short complexes. -/
@@ -845,6 +854,25 @@ theorem productionConnecting_naturality
     _ = _ := by
       simp [productionConnecting, productionUnionMap]
 
+/-- Naturality specialized to the short-complex morphism actually induced by
+a continuous map preserving the two named cover members. -/
+theorem productionConnecting_coverPreserving_naturality
+    {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    (U V : Set X) (U' V' : Set Y)
+    (hU : IsOpen U) (hV : IsOpen V) (hcover : U ∪ V = Set.univ)
+    (hU' : IsOpen U') (hV' : IsOpen V') (hcover' : U' ∪ V' = Set.univ)
+    (f : C(X, Y)) (hfU : Set.MapsTo f U U') (hfV : Set.MapsTo f V V')
+    (n : ℕ) :
+    productionConnecting U V hU hV hcover n ≫
+        productionIntersectionMap U V U' V'
+          (coverPreservingInducedShortComplexMap U V U' V' f hfU hfV) n =
+      productionUnionMap U V U' V' hU hV hcover hU' hV' hcover'
+          (coverPreservingInducedShortComplexMap U V U' V' f hfU hfV) (n + 1) ≫
+        productionConnecting U' V' hU' hV' hcover' n := by
+  exact productionConnecting_naturality U V U' V' hU hV hcover
+    hU' hV' hcover'
+    (coverPreservingInducedShortComplexMap U V U' V' f hfU hfV) n
+
 /-- Exactness at the two cover pieces in the production presentation. -/
 theorem productionMayerVietoris_exact_pieces
     {X : Type} [TopologicalSpace X] (U V : Set X)
@@ -1073,3 +1101,4 @@ end ConstructionTargets.ProductionOpenCoverMayerVietoris
 #print axioms ConstructionTargets.ProductionOpenCoverMayerVietoris.productionIntersectionMap
 #print axioms ConstructionTargets.ProductionOpenCoverMayerVietoris.productionUnionMap
 #print axioms ConstructionTargets.ProductionOpenCoverMayerVietoris.productionConnecting_naturality
+#print axioms ConstructionTargets.ProductionOpenCoverMayerVietoris.productionConnecting_coverPreserving_naturality
