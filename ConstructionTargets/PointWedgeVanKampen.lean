@@ -2992,6 +2992,38 @@ def genericPointWedgeMappedOpenCoverRightCounit :
     (A.counitIso.hom.app (B.inverse.obj Z)))).right).app
       (SingleObj.star (genericPointWedgeRightGroup y₀))
 
+/-- The mapped coordinate-span counit factor on the left free-product leg. -/
+def genericPointWedgeMappedCoordinateSpanLeftCounit :
+    genericPointWedgeFreeProduct x₀ y₀ :=
+  let C := genericPointWedgeTarget x₀ y₀
+  let B := genericPointWedgeCoordinateSpanEquivalence
+    x₀ y₀ M N hM hN hy hx cM cN C
+  let Q := genericPointWedgeCoordinatePointSpanEquivalence x₀ y₀ C
+  let S := freeProductPointSpanEquivalence
+    (genericPointWedgeLeftGroup x₀) (genericPointWedgeRightGroup y₀) C
+  let R := representationSingleObjEquivalence
+    (C := C) (genericPointWedgeLeftGroup x₀) (genericPointWedgeRightGroup y₀)
+  let F := Functor.id (SingleObj (genericPointWedgeFreeProduct x₀ y₀))
+  let Z := Q.inverse.obj (S.inverse.obj (R.inverse.obj F))
+  ((Q.functor.map (B.counitIso.hom.app Z)).left).app
+    (SingleObj.star (genericPointWedgeLeftGroup x₀))
+
+/-- The mapped coordinate-span counit factor on the right free-product leg. -/
+def genericPointWedgeMappedCoordinateSpanRightCounit :
+    genericPointWedgeFreeProduct x₀ y₀ :=
+  let C := genericPointWedgeTarget x₀ y₀
+  let B := genericPointWedgeCoordinateSpanEquivalence
+    x₀ y₀ M N hM hN hy hx cM cN C
+  let Q := genericPointWedgeCoordinatePointSpanEquivalence x₀ y₀ C
+  let S := freeProductPointSpanEquivalence
+    (genericPointWedgeLeftGroup x₀) (genericPointWedgeRightGroup y₀) C
+  let R := representationSingleObjEquivalence
+    (C := C) (genericPointWedgeLeftGroup x₀) (genericPointWedgeRightGroup y₀)
+  let F := Functor.id (SingleObj (genericPointWedgeFreeProduct x₀ y₀))
+  let Z := Q.inverse.obj (S.inverse.obj (R.inverse.obj F))
+  ((Q.functor.map (B.counitIso.hom.app Z)).right).app
+    (SingleObj.star (genericPointWedgeRightGroup y₀))
+
 /-- Mapping the pre-coordinate counit split through the coordinate-to-point
 equivalence exposes the mapped open-cover and coordinate-span factors on both
 free-product legs. -/
@@ -3037,6 +3069,30 @@ theorem genericPointWedgeMappedPreCoordinateCounits_eq_openCover_coordinateSpan 
       (fun k => k.right.app
         (SingleObj.star (genericPointWedgeRightGroup y₀))) hMap
 
+/-- In the target group, each mapped pre-coordinate counit is the product of
+its named coordinate-span and open-cover factors (the order induced by
+`SingleObj.comp_as_mul`). -/
+theorem genericPointWedgeMappedPreCoordinateCounits_eq_namedFactors :
+    (genericPointWedgeMappedPreCoordinateLeftCounit
+        x₀ y₀ M N hM hN hy hx cM cN =
+      genericPointWedgeMappedCoordinateSpanLeftCounit
+          x₀ y₀ M N hM hN hy hx cM cN *
+        genericPointWedgeMappedOpenCoverLeftCounit
+          x₀ y₀ M N hM hN hy hx cM cN) ∧
+    (genericPointWedgeMappedPreCoordinateRightCounit
+        x₀ y₀ M N hM hN hy hx cM cN =
+      genericPointWedgeMappedCoordinateSpanRightCounit
+          x₀ y₀ M N hM hN hy hx cM cN *
+        genericPointWedgeMappedOpenCoverRightCounit
+          x₀ y₀ M N hM hN hy hx cM cN) := by
+  simpa only [genericPointWedgeMappedOpenCoverLeftCounit,
+    genericPointWedgeMappedOpenCoverRightCounit,
+    genericPointWedgeMappedCoordinateSpanLeftCounit,
+    genericPointWedgeMappedCoordinateSpanRightCounit,
+    SingleObj.comp_as_mul] using
+      (genericPointWedgeMappedPreCoordinateCounits_eq_openCover_coordinateSpan
+        x₀ y₀ M N hM hN hy hx cM cN)
+
 /-- Both evaluated pre-free-product counit legs now have a named first factor;
 the remaining comparison is exactly between these elements and the earlier
 outer span-transport factors. -/
@@ -3071,6 +3127,43 @@ theorem genericPointWedgePreFreeProductCounit_apps_eq_mappedPreCoordinate_inject
       SingleObj.comp_as_mul] using
       (genericPointWedgePreFreeProductCounit_right_app_eq_preCoordinate_injection
         x₀ y₀ M N hM hN hy hx cM cN)
+
+/-- Substituting the named split beneath the injected based counits exposes
+all three remaining factors on both pre-free-product legs. -/
+theorem genericPointWedgePreFreeProductCounit_apps_eq_injection_coordinate_open :
+    let C := genericPointWedgeTarget x₀ y₀
+    let P := genericPointWedgePreCoordinatePointSpanMappingEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN C
+    let Q := genericPointWedgeCoordinatePointSpanEquivalence x₀ y₀ C
+    let S := freeProductPointSpanEquivalence
+      (genericPointWedgeLeftGroup x₀) (genericPointWedgeRightGroup y₀) C
+    let R := representationSingleObjEquivalence
+      (C := C) (genericPointWedgeLeftGroup x₀)
+        (genericPointWedgeRightGroup y₀)
+    let F := Functor.id (SingleObj (genericPointWedgeFreeProduct x₀ y₀))
+    let Z := S.inverse.obj (R.inverse.obj F)
+    (((P.trans Q).counitIso.hom.app Z).left).app
+          (SingleObj.star (genericPointWedgeLeftGroup x₀)) =
+        Monoid.Coprod.inl (genericPointWedgeLeftBasedCounit x₀) *
+          (genericPointWedgeMappedCoordinateSpanLeftCounit
+              x₀ y₀ M N hM hN hy hx cM cN *
+            genericPointWedgeMappedOpenCoverLeftCounit
+              x₀ y₀ M N hM hN hy hx cM cN) ∧
+      (((P.trans Q).counitIso.hom.app Z).right).app
+          (SingleObj.star (genericPointWedgeRightGroup y₀)) =
+        Monoid.Coprod.inr (genericPointWedgeRightBasedCounit y₀) *
+          (genericPointWedgeMappedCoordinateSpanRightCounit
+              x₀ y₀ M N hM hN hy hx cM cN *
+            genericPointWedgeMappedOpenCoverRightCounit
+              x₀ y₀ M N hM hN hy hx cM cN) := by
+  have hP := genericPointWedgePreFreeProductCounit_apps_eq_mappedPreCoordinate_injections
+    x₀ y₀ M N hM hN hy hx cM cN
+  have hS := genericPointWedgeMappedPreCoordinateCounits_eq_namedFactors
+    x₀ y₀ M N hM hN hy hx cM cN
+  dsimp only at hP ⊢
+  constructor
+  · rw [hP.1, hS.1]
+  · rw [hP.2, hS.2]
 
 /-- Consequently the full B3 counit element is just the mapped counit of the
 preceding free-product-representation equivalence. -/
@@ -4391,8 +4484,12 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeMappedPreCoordinateRightCounit
 #print axioms genericPointWedgeMappedOpenCoverLeftCounit
 #print axioms genericPointWedgeMappedOpenCoverRightCounit
+#print axioms genericPointWedgeMappedCoordinateSpanLeftCounit
+#print axioms genericPointWedgeMappedCoordinateSpanRightCounit
 #print axioms genericPointWedgeMappedPreCoordinateCounits_eq_openCover_coordinateSpan
+#print axioms genericPointWedgeMappedPreCoordinateCounits_eq_namedFactors
 #print axioms genericPointWedgePreFreeProductCounit_apps_eq_mappedPreCoordinate_injections
+#print axioms genericPointWedgePreFreeProductCounit_apps_eq_injection_coordinate_open
 #print axioms genericPointWedgeCounitElement_eq_mappedRepresentationCounit
 #print axioms genericPointWedgeMappedLeft_eq_conj
 #print axioms genericPointWedgeMappedRight_eq_conj

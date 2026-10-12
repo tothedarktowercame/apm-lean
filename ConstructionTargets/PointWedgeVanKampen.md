@@ -781,3 +781,16 @@ pre-coordinate factors.
 open-cover counit factors produced by the pre-coordinate split.  The final
 cancellation can now state its common factors without repeating the nested
 span-equivalence maps and their dependent evaluation objects.
+
+`genericPointWedgeMappedCoordinateSpanLeftCounit` and
+`genericPointWedgeMappedCoordinateSpanRightCounit` similarly name the two
+mapped coordinate-span factors.  The theorem
+`genericPointWedgeMappedPreCoordinateCounits_eq_namedFactors` restates both
+pre-coordinate counits as products of their named coordinate-span and
+open-cover factors, in the reversed group order induced by
+`SingleObj.comp_as_mul` and used by the later injected based counits.
+
+`genericPointWedgePreFreeProductCounit_apps_eq_injection_coordinate_open`
+substitutes that split beneath the two injected based counits.  Each evaluated
+pre-free-product counit is now an explicit three-factor product: injected
+based counit, mapped coordinate-span counit, and mapped open-cover counit.
