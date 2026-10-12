@@ -23,6 +23,8 @@ open ConstructionTargets.CoefficientOverlapPair
 open ConstructionTargets.CoefficientTransitionLocalConstancy
 open ConstructionTargets.IntegralSingularHomologyComparison
 open ConstructionTargets.OneDiskLocalOrientation
+open ConstructionTargets.RelativeSingularConnectingNaturality
+open ConstructionTargets.T02A06SphereOne
 
 variable {X : Type} [TopologicalSpace X]
 
@@ -3480,6 +3482,66 @@ theorem integralPairConnectingComparison
   exact (Category.assoc r d h).trans
     ((congrArg (fun z => r ≫ z) hd).trans (Category.assoc r m q).symm)
 
+theorem intervalDetectorLocal
+    (z : (RelativeSingularChains intervalBoundary).homology 1)
+    (hcoordinates : intervalBoundaryH0Iso.hom.hom
+      ((singularPairConnecting intervalBoundary 0).hom z) =
+      boolIntDifference.hom (1 : ℤ)) :
+    z = intervalBoundaryRelativeH1Generator := by
+  exact intervalRelativeClass_eq_generator_of_boundary_coordinates z hcoordinates
+
+theorem coefficientClosedRelativeClass_eq_intervalGenerator_of_boundary_coordinates
+    (z : (CoefficientRelativeSmall.relativeChains ℤ
+      CoefficientSphereEndpoints.boundary).homology 1)
+    (hcomparison :
+      forgetIntModules.map
+          (CoefficientPairSequence.connecting ℤ
+            CoefficientSphereEndpoints.boundary 0) ≫
+        (singularHomologyComparison
+          (TopCat.of CoefficientSphereEndpoints.boundary) 0).hom =
+      (integralRelativeHomologyComparisonWithTransport
+        CoefficientSphereEndpoints.boundary 1).hom ≫
+        singularPairConnecting CoefficientSphereEndpoints.boundary 0)
+    (hcoordinates :
+      intervalBoundaryH0Iso.hom.hom
+        ((((AlgebraicTopology.singularHomologyFunctor AddCommGrpCat 0).obj
+          (AddCommGrpCat.of ℤ)).map
+            (subspaceMap CoefficientSphereEndpoints.boundary intervalBoundary
+              closedToInterval closedToInterval_mapsTo)).hom
+          ((singularHomologyComparison
+            (TopCat.of CoefficientSphereEndpoints.boundary) 0).hom.hom
+            ((forgetIntModules.map
+              (CoefficientPairSequence.connecting ℤ
+                CoefficientSphereEndpoints.boundary 0)).hom z))) =
+        boolIntDifference.hom (1 : ℤ)) :
+    (closedDiskOneRelativeIsoInterval 1).hom.hom
+      ((integralRelativeHomologyComparisonWithTransport
+        CoefficientSphereEndpoints.boundary 1).hom.hom z) =
+      intervalBoundaryRelativeH1Generator := by
+  apply intervalDetectorLocal
+  rw [← ConcreteCategory.comp_apply]
+  rw [← ConcreteCategory.comp_apply]
+  change intervalBoundaryH0Iso.hom.hom
+    (((integralRelativeHomologyComparisonWithTransport
+      CoefficientSphereEndpoints.boundary 1).hom ≫
+      HomologicalComplex.homologyMap
+        (relativeSingularMap CoefficientSphereEndpoints.boundary intervalBoundary
+          closedToInterval closedToInterval_mapsTo) 1 ≫
+      singularPairConnecting intervalBoundary 0).hom z) = _
+  rw [← singularPairConnecting_naturality
+    CoefficientSphereEndpoints.boundary intervalBoundary
+    closedToInterval closedToInterval_mapsTo 0]
+  change intervalBoundaryH0Iso.hom.hom
+    (((((integralRelativeHomologyComparisonWithTransport
+      CoefficientSphereEndpoints.boundary 1).hom ≫
+        singularPairConnecting CoefficientSphereEndpoints.boundary 0) ≫
+      ((AlgebraicTopology.singularHomologyFunctor AddCommGrpCat 0).obj
+        (AddCommGrpCat.of ℤ)).map
+          (subspaceMap CoefficientSphereEndpoints.boundary intervalBoundary
+            closedToInterval closedToInterval_mapsTo)).hom z)) = _
+  rw [← hcomparison]
+  exact hcoordinates
+
 end ConstructionTargets.ManifoldFundamentalClass
 
 #print axioms ConstructionTargets.ManifoldFundamentalClass.neighborhoodInclusion_Hsucc_isIso
@@ -3604,6 +3666,7 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.intervalRelativeClass_eq_generator_of_boundary_eq
 #print axioms ConstructionTargets.ManifoldFundamentalClass.intervalRelativeClass_eq_generator_of_boundary_coordinates
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralPairConnectingComparison
+#print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientClosedRelativeClass_eq_intervalGenerator_of_boundary_coordinates
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_projection
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_generator_of_normalization
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_normalization_of_generator
