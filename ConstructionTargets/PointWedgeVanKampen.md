@@ -738,3 +738,9 @@ which the existing outer-comparison normal form applies.
 substitutes that normal form at the exact middle-factor boundary of the
 reconstructed coordinate glue.  It identifies the inverse-whiskered factor
 with the two normalized reverse-span outer comparisons in their exact order.
+
+`genericPointWedgeCoordinateSpanOuterComparison_counitTriangles` specializes
+the generic transport round-trip identities at the unique coordinate object.
+The left comparison chain is the left equivalence counit, while the full
+right comparison/counit chain is the identity; these are the two
+cancellations needed to reduce the reconstructed counit square.
