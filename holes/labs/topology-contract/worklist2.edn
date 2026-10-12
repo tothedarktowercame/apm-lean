@@ -74002,69 +74002,55 @@
    :implements-lemma
    :lemma-constructiontargets-productionopencovermayervietoris-productionconnecting-natura,
    :evidence
-   {:residual
-    "Finish the four component equations for coverPreservingInducedShortComplexMap, expose τ₁/τ₂/τ₃ characterization lemmas, and specialize productionConnecting_naturality to that morphism.",
-    :outcome :stop,
+   {:placeholder-delta 0,
+    :residual
+    "Specialize to the torus y-cover, prove connecting injectivity, compute overlap H1, and derive shearY_H2.",
+    :outcome :done-unreviewed,
     :warnings [],
     :missing-theorems
     [{:name
       "ConstructionTargets.ProductionOpenCoverMayerVietoris.coverPreservingInducedShortComplexMap",
-      :type
-      "forall {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y] (U V : Set X) (U' V' : Set Y) (f : C(X,Y)) (hU : Set.MapsTo f U U') (hV : Set.MapsTo f V V'), shortComplex U V ⟶ shortComplex U' V'",
-      :status :partial,
+      :type "cover-preserving induced ShortComplex.Hom",
+      :status :proved,
+      :consumers [:t97A04 :t96J06],
+      :depends-on [],
+      :area "mv-connecting-naturality"}
+     {:name
+      "ConstructionTargets.ProductionOpenCoverMayerVietoris.productionConnecting_naturality",
+      :type "production connecting naturality for induced cover map",
+      :status :proved,
       :consumers [:t97A04 :t96J06],
       :depends-on
-      ["ConstructionTargets.ProductionOpenCoverMayerVietoris.productionConnecting_naturality"],
+      ["ConstructionTargets.ProductionOpenCoverMayerVietoris.coverPreservingInducedShortComplexMap"],
       :area "mv-connecting-naturality"}],
-    :disposition :stop,
-    :axioms [propext Classical.choice Quot.sound],
+    :statement-hashes
+    {:registry "131/0",
+     :module "cefebc9e9192a45348b9e4ba029abbc3a533c7b0",
+     :main "e2caa0a5eaa30a65713a7a22910aeac5467a033b",
+     :other-main "383deab447ad620ad02f626d6fc614f2ba7139a0"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason
-    "The production conjugation theorem remains compiled, but the f-induced short-complex morphism is not yet complete. Its τ₁ component must conjugate the literal intersection range map through ambientIntersectionRangeChainsIso because shortComplex.X₁ is the infimum of the stored ranges; the resulting left/right component equations and the pushout-induced τ₃ equations remain to be proved. No arbitrary Nonempty witness or unproved morphism was committed.",
     :commands
     [{:cmd
       "lake build ConstructionTargets.ProductionOpenCoverMayerVietoris",
-      :exit 0,
-      :output "Build completed successfully (8246 jobs)."}
-     {:cmd
-      "lake env lean ConstructionTargets/ProductionOpenCoverMayerVietoris.lean",
       :exit 0}
-     {:cmd
-      "lake env lean /tmp/production_cover_short_complex_map_contract.lean",
-      :exit 0}
-     {:cmd
-      "sha256sum /tmp/production_cover_short_complex_map_contract.lean",
-      :exit 0,
-      :output
-      "9b867a9a9525e8055e66ba1c1d52a73e2a5665f436382b24289aa0f3bafe7164  /tmp/production_cover_short_complex_map_contract.lean"}
      {:cmd "python3 scripts/statement-registry.py check",
       :exit 0,
-      :output "131 registered statements match, 0 do not"}
-     {:cmd "git status --short", :exit 0, :output ""}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1791696012406-4333-a97d41ba",
-     :commands
-     ["git show/diff-tree/show --check e2a2a31686803c4f371f0d8502ed9a1d50528922"
-      "sha256sum /tmp/production_cover_short_complex_map_contract.lean"
-      "lake env lean ConstructionTargets/ProductionOpenCoverMayerVietoris.lean"
-      "lake env lean /tmp/production_cover_short_complex_map_contract.lean"
-      "python3 scripts/statement-registry.py check and fingerprint t97A04/t96J06 at commit/parent"
-      "python3 placeholder recount for t97A04/t96J06 at commit/parent"
-      "bb worklist_check.bb worklist2.edn"],
-     :finding
-     "PASS: correct STOP after real progress. Topo-6 is independent from codex-7; the banked productionConnecting_naturality commit changes only the scoped module and compiles with exactly propext, Classical.choice, and Quot.sound. Its square is correctly oriented for an arbitrary short-complex morphism. Fresh compilation of the hash-matching fixture confirms that the frozen Nonempty cover-preserving-map interface is vacuous: it admits the zero morphism while leaving f, hU, and hV unused, so it cannot supply the intersection/member and pushout-leg equations needed to specialize naturality. The row attempted the stronger induced morphism, lists it as partial, and states the four remaining component equations rather than claiming completion. Registry is 131/0; both consumer fingerprints and their two placeholders are unchanged at commit and parent; the worklist validates."},
-    :changed-paths [],
+      :output "131/0"}
+     {:cmd "comment-stripped placeholder scan", :exit 0, :output "0"}
+     {:cmd "git show --check HEAD", :exit 0}],
+    :commit "736949e58",
+    :changed-paths
+    ["ConstructionTargets/ProductionOpenCoverMayerVietoris.lean"],
+    :declaration
+    "ConstructionTargets.ProductionOpenCoverMayerVietoris.productionConnecting_coverPreserving_naturality",
     :fixture
-    {:path "/tmp/production_cover_short_complex_map_contract.lean",
+    {:path "ConstructionTargets/ProductionOpenCoverMayerVietoris.lean",
      :sha256
-     "9b867a9a9525e8055e66ba1c1d52a73e2a5665f436382b24289aa0f3bafe7164"},
-    :finding
-    "Fresh compilation confirms the scoped production naturality theorem and frozen fixture remain valid. Constructing the actual induced morphism requires τ₁ = ambientIntersectionRangeChainsIso.inv ≫ chains.map(coverRangeMap on U∩V) ≫ ambientIntersectionRangeChainsIso.hom, τ₂ = biprod.map of the two member range maps, and τ₃ = the source subcomplexChains_isPushout desc into the target union. The remaining proof obligations are precisely the two intersection/member squares and the two pushout leg equations.",
+     "971a257ce8ea687b0bc319bcf657fde16aeed284a2b31f0f48466dd3b6cbb357"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/ProductionOpenCoverMayerVietoris.lean"],
    :dag-node
@@ -77823,7 +77809,9 @@
     [:routes-2026-10-10-production-connecting-naturality-topo2-r1],
     :type
     "forall {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y] (U V : Set X) (U' V' : Set Y) (f : C(X,Y)) (hU : Set.MapsTo f U U') (hV : Set.MapsTo f V V'), shortComplex U V ⟶ shortComplex U' V'",
-    :area "mv-connecting-naturality"},
+    :area "mv-connecting-naturality",
+    :proved-in
+    :routes-2026-10-10-production-connecting-naturality-topo2-r1},
    :id
    :lemma-constructiontargets-productionopencovermayervietoris-coverpreservinginducedshort,
    :kind :lemma,
