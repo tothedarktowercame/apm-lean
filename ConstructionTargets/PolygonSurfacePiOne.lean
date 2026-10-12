@@ -57,6 +57,7 @@ fixed-point-free involution, and `oneVertex` records exactly the hypothesis
 needed later to identify the boundary skeleton with a wedge of circles. -/
 structure PairingData where
   edgeCount : ℕ
+  edgeCount_pos : 0 < edgeCount
   pair : Equiv.Perm (Fin edgeCount)
   pair_pair : ∀ i, pair (pair i) = i
   pair_ne : ∀ i, pair i ≠ i
