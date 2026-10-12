@@ -73843,6 +73843,29 @@
    "Construct infimum, biproduct, and supremum maps and package both squares.",
    :other-consumers [:t96J06]}
   {:consumer :t97A04,
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/ProductionOpenCoverMayerVietoris.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/mayer-vietoris/subcomplex-sup-image-le",
+   :acceptance
+   {:declaration
+    "ConstructionTargets.ProductionOpenCoverMayerVietoris.subcomplex_sup_image_le",
+    :type
+    "forall {S T : SSet} (P Q : S.Subcomplex) (P' Q' : T.Subcomplex) (F : S ⟶ T), P.image F ≤ P' -> Q.image F ≤ Q' -> (P ⊔ Q).image F ≤ P' ⊔ Q'",
+    :placeholder "apm_t97A04_bridge_3 and H2 placeholder in t96J06",
+    :route-step "restrict the ambient map to the short-complex union"},
+   :id
+   :routes-2026-10-12-subcomplex-sup-image-le-two-consumers-topo2-r1,
+   :kind :reusable-theorem,
+   :area "mv-connecting-naturality",
+   :depends-on
+   [:routes-2026-10-12-subcomplex-inf-image-le-two-consumers-topo2-r1],
+   :current-residual
+   "Construct three components and prove both ShortComplex squares.",
+   :other-consumers [:t96J06]}
+  {:consumer :t97A04,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
    :stop-count 0,
@@ -73890,16 +73913,22 @@
     {:outcome :revise,
      :seat "topo-8",
      :fixture
-     {:path "/tmp/check.lean",
+     {:path "/tmp/subcomplex_sup_image_le_probe.lean",
       :sha256
-      "1be1bdf92bcb3195c72f74c6bb679a519f4156e4711b0bb842d9c5479df6dbc1"},
+      "ea61799bf8477d06628a60d5e632c29999b0961e0480a02c0e4186b11d97def9"},
      :commands
-     [{:cmd "lake env lean /tmp/check.lean", :exit 0}
-      {:cmd "sha256sum /tmp/check.lean", :exit 0}
+     [{:cmd "lake env lean /tmp/subcomplex_sup_image_le_probe.lean",
+       :exit 0}
+      {:cmd "sha256sum /tmp/subcomplex_sup_image_le_probe.lean",
+       :exit 0}
       {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
+     :diagnostic-history
+     [{:cmd "lake env lean /tmp/check2.lean",
+       :exit 1,
+       :finding
+       "Full morphism test exposed the supremum-image bound."}],
      :finding
-     "The short complex uses the infimum of the two ranges, not the range of U∩V; the direct component is ill-typed. The compiled image-of-inf bound permits restriction of the ambient map to that object.",
+     "The banked infimum bound supports τ₁; τ₃ also needs the compiled dual bound for the union.",
      :prerequisite
      {:consumer :t97A04,
       :phase :implementation,
@@ -73907,25 +73936,26 @@
       :scope
       ["ConstructionTargets/ProductionOpenCoverMayerVietoris.lean"],
       :dag-node
-      "TOPOLOGY-ROUTES.md/mayer-vietoris/subcomplex-inf-image-le",
+      "TOPOLOGY-ROUTES.md/mayer-vietoris/subcomplex-sup-image-le",
       :acceptance
       {:declaration
-       "ConstructionTargets.ProductionOpenCoverMayerVietoris.subcomplex_inf_image_le",
+       "ConstructionTargets.ProductionOpenCoverMayerVietoris.subcomplex_sup_image_le",
        :type
-       "forall {S T : SSet} (P Q : S.Subcomplex) (P' Q' : T.Subcomplex) (F : S ⟶ T), P.image F ≤ P' -> Q.image F ≤ Q' -> (P ⊓ Q).image F ≤ P' ⊓ Q'",
+       "forall {S T : SSet} (P Q : S.Subcomplex) (P' Q' : T.Subcomplex) (F : S ⟶ T), P.image F ≤ P' -> Q.image F ≤ Q' -> (P ⊔ Q).image F ≤ P' ⊔ Q'",
        :placeholder "apm_t97A04_bridge_3 and H2 placeholder in t96J06",
        :route-step
-       "restrict the ambient simplicial map to the short-complex intersection"},
+       "restrict the ambient map to the short-complex union"},
       :id
-      :routes-2026-10-12-subcomplex-inf-image-le-two-consumers-topo2-r1,
+      :routes-2026-10-12-subcomplex-sup-image-le-two-consumers-topo2-r1,
       :kind :reusable-theorem,
       :area "mv-connecting-naturality",
-      :depends-on [],
+      :depends-on
+      [:routes-2026-10-12-subcomplex-inf-image-le-two-consumers-topo2-r1],
       :current-residual
-      "Construct infimum, biproduct, and supremum maps and package both squares.",
+      "Construct three components and prove both ShortComplex squares.",
       :other-consumers [:t96J06]},
      :residual
-     "Bank the image bound, then compile the specified induced ShortComplex.Hom."},
+     "Bank this bound, then compile the induced ShortComplex.Hom."},
     :fixture
     {:path "/tmp/production_cover_short_complex_map_contract.lean",
      :sha256
@@ -73934,7 +73964,7 @@
     "The compiled stronger theorem has no continuous map and no cover-preservation assumptions: forall U V U' V', Nonempty (shortComplex U V ⟶ shortComplex U' V'), proved by ⟨0⟩. Hence the frozen proposition erases precisely the data and commutative-square evidence required by the route's next naturality step.",
     :seat "topo-8"},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope
    ["ConstructionTargets/ProductionOpenCoverMayerVietoris.lean"],
    :dag-node
@@ -73959,7 +73989,8 @@
    :depends-on
    [:routes-2026-10-10-subcomplex-mv-connecting-naturality-two-consumers-topo2-r1
     :routes-2026-10-10-ambient-subspace-range-map-two-consumers-topo2-r1
-    :routes-2026-10-12-subcomplex-inf-image-le-two-consumers-topo2-r1],
+    :routes-2026-10-12-subcomplex-inf-image-le-two-consumers-topo2-r1
+    :routes-2026-10-12-subcomplex-sup-image-le-two-consumers-topo2-r1],
    :current-residual
    "Prove that the intersection and union components of this morphism commute with booleanIntersectionProductionHomologyIso and booleanUnionProductionHomologyIso, then conjugate subcomplex connecting naturality.",
    :other-consumers [:t96J06]}
