@@ -948,6 +948,30 @@
    [:routes-2026-10-11-surface-embedded-circle-closed-range-topo3-r1],
    :current-residual "Local flatness; gluing.",
    :other-consumers [:t01J01 :t03J02]}
+  {:consumer :t00A03,
+   :implements-lemma
+   :lemma-constructiontargets-surfaceschoenflies-embeddedcircle-finite-flat-subcover,
+   :phase :implementation,
+   :state :open,
+   :scope ["ConstructionTargets/SurfaceSchoenflies.lean"],
+   :dag-node "TOPOLOGY-ROUTES.md/schoenflies/local-flatness",
+   :acceptance
+   {:declaration
+    "ConstructionTargets.SurfaceSchoenflies.embeddedCircle_finite_flat_subcover",
+    :type "exact type in fixture",
+    :fixture "/tmp/surface_schoenflies_finite_flat.lean",
+    :fixture-sha256
+    "8b7f119a3edef584444d49b29e0f9f108de713ec40f7e0e9b5477927c6afae26",
+    :placeholders
+    ["t00A03 bridge_1" "t01J01 bridges" "t03J02 bridge_1"],
+    :route-step "finite local product-chart reduction"},
+   :id :routes-2026-10-12-surface-finite-flat-r1,
+   :kind :reusable-theorem,
+   :area "embedded-circle-collar-surface",
+   :depends-on [:routes-2026-10-12-surface-finite-cover-r1],
+   :current-residual
+   "Prove pointwise planar local flatness; then glue product charts.",
+   :other-consumers [:t01J01 :t03J02]}
   {:owner-park
    "2026-10-12 claude-14: paused for the surface route redesign, ~/notes/closer/routes/surfaces.md",
    :consumer :t00A03,
@@ -958,57 +982,55 @@
    :lemma-constructiontargets-surfaceschoenflies-embeddedcirclecollar,
    :evidence
    {:probe
-    {:residual "Then local flatness.",
+    {:residual
+     "Promote finite flat subcover; planar Schoenflies remains.",
      :outcome :revise,
-     :warnings ["unused hj"],
+     :warnings [],
      :missing-theorems
-     [{:id :lemma-schoenflies-finite-cover,
-       :name
-       "ConstructionTargets.SurfaceSchoenflies.embeddedCircle_finite_open_subcover",
-       :type
-       "∀ {M} [TopologicalSpace M] (j : C(Circle,M)), EmbeddedCircleFiniteOpenSubcover j",
+     [{:name
+       "ConstructionTargets.SurfaceSchoenflies.embeddedCircle_finite_flat_subcover",
+       :type "exact type in fixture",
        :status :proved,
        :consumers [:t00A03 :t01J01 :t03J02],
        :depends-on
-       ["ConstructionTargets.SurfaceSchoenflies.embeddedCircle_closedRange_and_homeomorph"],
+       ["ConstructionTargets.SurfaceSchoenflies.embeddedCircle_finite_open_subcover"],
        :area "embedded-circle-collar-surface"}],
      :prerequisite
      {:consumer :t00A03,
-      :implements-lemma :lemma-schoenflies-finite-cover,
+      :implements-lemma :lemma-schoenflies-finite-flat,
       :phase :implementation,
       :state :open,
       :scope ["ConstructionTargets/SurfaceSchoenflies.lean"],
-      :dag-node "TOPOLOGY-ROUTES.md/schoenflies/finite",
+      :dag-node "TOPOLOGY-ROUTES.md/schoenflies/local-flatness",
       :acceptance
       {:declaration
-       "ConstructionTargets.SurfaceSchoenflies.embeddedCircle_finite_open_subcover",
-       :type
-       "∀ {M} [TopologicalSpace M] (j : C(Circle,M)), EmbeddedCircleFiniteOpenSubcover j",
-       :fixture "/tmp/surface_schoenflies_finite_cover.lean",
+       "ConstructionTargets.SurfaceSchoenflies.embeddedCircle_finite_flat_subcover",
+       :type "exact type in fixture",
+       :fixture "/tmp/surface_schoenflies_finite_flat.lean",
        :fixture-sha256
-       "225e1e486ac81111c253922678840dfcf8e2a855d149093d07d745cb253f664e",
+       "8b7f119a3edef584444d49b29e0f9f108de713ec40f7e0e9b5477927c6afae26",
        :placeholders
        ["t00A03 bridge_1" "t01J01 bridges" "t03J02 bridge_1"],
-       :route-step "finite chart reduction",
-       :implementation "Promote."},
-      :id :routes-2026-10-12-surface-finite-cover-r1,
+       :route-step "finite local product-chart reduction"},
+      :id :routes-2026-10-12-surface-finite-flat-r1,
       :kind :reusable-theorem,
       :area "embedded-circle-collar-surface",
-      :depends-on
-      [:routes-2026-10-11-surface-embedded-circle-closed-range-topo3-r1],
-      :current-residual "Local flatness; gluing.",
+      :depends-on [:routes-2026-10-12-surface-finite-cover-r1],
+      :current-residual
+      "Prove pointwise planar local flatness; then glue product charts.",
       :other-consumers [:t01J01 :t03J02]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
-     [{:cmd "lake env lean /tmp/surface_schoenflies_finite_cover.lean",
+     [{:cmd
+       "lake env lean /tmp/surface_schoenflies_finite_flat.lean && sha256sum /tmp/surface_schoenflies_finite_flat.lean && python3 scripts/statement-registry.py check",
        :exit 0}],
      :fixture
-     {:path "/tmp/surface_schoenflies_finite_cover.lean",
+     {:path "/tmp/surface_schoenflies_finite_flat.lean",
       :sha256
-      "225e1e486ac81111c253922678840dfcf8e2a855d149093d07d745cb253f664e"},
+      "8b7f119a3edef584444d49b29e0f9f108de713ec40f7e0e9b5477927c6afae26"},
      :seat "topo-12"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope ["ConstructionTargets/SurfaceSchoenflies.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/topo3/schoenflies-2d/embedded-circle-collar",
@@ -1027,7 +1049,8 @@
    :depends-on
    [:routes-2026-10-10-topo3-seed-checkpoint-1
     :routes-2026-10-11-surface-embedded-circle-closed-range-topo3-r1
-    :routes-2026-10-12-surface-finite-cover-r1],
+    :routes-2026-10-12-surface-finite-cover-r1
+    :routes-2026-10-12-surface-finite-flat-r1],
    :current-residual
    "Surface cutting, intersection separation, van Kampen and classification remain.",
    :other-consumers [:t01J01 :t03J02]}
@@ -30725,7 +30748,28 @@
    :kind :lemma,
    :depends-on
    [:lemma-constructiontargets-sardgeneralmodel-modelrange-interior-surjective-fderivwithin],
-   :other-consumers []}],
+   :other-consumers []}
+  {:consumer :t00A03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.SurfaceSchoenflies.embeddedCircle_finite_flat_subcover",
+    :type "exact type in fixture"},
+   :lemma
+   {:name
+    "ConstructionTargets.SurfaceSchoenflies.embeddedCircle_finite_flat_subcover",
+    :reported-by
+    [:routes-2026-10-10-surface-schoenflies-collar-topo3-r2],
+    :type "exact type in fixture",
+    :area "embedded-circle-collar-surface",
+    :proved-in :routes-2026-10-10-surface-schoenflies-collar-topo3-r2},
+   :id
+   :lemma-constructiontargets-surfaceschoenflies-embeddedcircle-finite-flat-subcover,
+   :kind :lemma,
+   :depends-on [:lemma-schoenflies-finite-cover],
+   :other-consumers [:t01J01 :t03J02]}],
  :consumer-baselines {},
  :statuses
  #{:open
