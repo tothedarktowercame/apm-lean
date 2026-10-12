@@ -2355,6 +2355,38 @@ theorem genericPointWedgeLeftLiftedLoop_map_heq
             (genericPointWedgeLeftLiftedLoop x₀ y₀ M g)) := by
   rfl
 
+omit [PathConnectedSpace X] [PathConnectedSpace Y] in
+/-- Conjugating the lifted-loop map by its endpoint transport agrees with the
+same conjugation of the concrete induced groupoid map. -/
+theorem genericPointWedgeLeftLiftedLoop_transport_eq_concrete
+    (g : FundamentalGroup X x₀) :
+    eqToHom (genericPointWedgeLeftEquiv_obj_leftBase
+        x₀ y₀ M N hM hN hy hx cM cN).symm ≫
+        (genericPointWedgeLeftGroupoidEquivalence
+          x₀ y₀ M N hM hN hy hx cM cN).functor.map
+            (genericPointWedgeLeftLiftedLoop x₀ y₀ M g) ≫
+      eqToHom (genericPointWedgeLeftEquiv_obj_leftBase
+        x₀ y₀ M N hM hN hy hx cM cN) =
+      eqToHom (congrArg FundamentalGroupoid.mk
+        ((genericPointWedgePackage
+          x₀ y₀ M N hM hN hy hx cM cN).left_inclusion x₀)).symm ≫
+        (FundamentalGroupoid.map
+          (genericPointWedgePackage
+            x₀ y₀ M N hM hN hy hx cM cN).leftEquiv.toFun).map
+              (genericPointWedgeLeftLiftedLoop x₀ y₀ M g) ≫
+      eqToHom (congrArg FundamentalGroupoid.mk
+        ((genericPointWedgePackage
+          x₀ y₀ M N hM hN hy hx cM cN).left_inclusion x₀)) := by
+  rw [eq_of_heq (genericPointWedgeLeftLiftedLoop_map_heq
+    x₀ y₀ M N hM hN hy hx cM cN g)]
+  rw [show genericPointWedgeLeftEquiv_obj_leftBase
+      x₀ y₀ M N hM hN hy hx cM cN =
+        congrArg FundamentalGroupoid.mk
+          ((genericPointWedgePackage
+            x₀ y₀ M N hM hN hy hx cM cN).left_inclusion x₀) by
+    apply Subsingleton.elim]
+  rfl
+
 /-- Once B3's two mapped actions are identified with the images of the
 literal topological legs under B5, the normalized equivalence has exactly the
 two coproduct coordinates required by B6. -/
@@ -2862,6 +2894,7 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeLeftComposite_mapOfEq
 #print axioms genericPointWedgeLeftGroupoidEquivalence_functor
 #print axioms genericPointWedgeLeftLiftedLoop_map_heq
+#print axioms genericPointWedgeLeftLiftedLoop_transport_eq_concrete
 #print axioms genericPointWedgeIdentityActualSpan_left_map
 #print axioms genericPointWedgeIdentityActualSpan_right_map
 #print axioms genericPointWedgeSingleObjPostcomposeIso
