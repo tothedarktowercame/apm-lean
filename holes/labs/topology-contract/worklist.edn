@@ -113891,6 +113891,19 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder/diff validation", :exit 0}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791783830375-6435-cb3e4170",
+     :commands
+     ["git show/diff-tree 14debc39f"
+      "sha256/diff/placeholder checks"
+      "statement-registry.py check"
+      "lake env lean ConstructionTargets/PointWedgeVanKampen.lean"
+      "lake build ConstructionTargets.PointWedgeVanKampen"
+      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (expected absent)"],
+     :finding
+     "Exact scoped commit and frozen fixture 0bca6c...8c8b0 verified. New rfl lemma correctly expands aR.inv normal form as source connector hom, inverse comparison component, then target connector inv; dependent endpoints and factor order remain explicit. Source is sorry-free; hashes and 131/131 registry reproduce; Lean/build pass; only standard axioms. Valid program STOP with compiled progress and residual naming connector factors, inclusion images, literal lifts, then B12; final target is absent as reported."},
     :commit "14debc39f803d552629ecc0f3f53a8367cce78cb",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
@@ -113901,7 +113914,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113922,7 +113935,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Left outer connector normal form is expanded into its three ordered dependent factors.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Right outer connector normal form is expanded into its three ordered dependent factors.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -114166,7 +114179,11 @@
     {:job 2,
      :commit "4c6978bf67c1a52ca6e19cb1b8fd17e53e790e3a",
      :reason
-     "Left outer connector normal form is expanded into its three ordered dependent factors."}]}
+     "Left outer connector normal form is expanded into its three ordered dependent factors."}
+    {:job 3,
+     :commit "14debc39f803d552629ecc0f3f53a8367cce78cb",
+     :reason
+     "Right outer connector normal form is expanded into its three ordered dependent factors."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
