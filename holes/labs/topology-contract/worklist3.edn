@@ -18429,6 +18429,17 @@
       "rg -n '\\b(sorry|admit|axiom)\\b' ConstructionTargets/ManifoldFundamentalClass.lean",
       :exit 1,
       :expected-exit 1}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791771964164-6190-19da9fb2",
+     :commands
+     ["recorded scope/blob, fixture hash, diff check"
+      "statement registry and placeholder scans"
+      "lake env lean: renamed fixture and module"
+      "lake build ConstructionTargets.ManifoldFundamentalClass"],
+     :finding
+     "PASS: recorded one-file scope and frozen fixture hash match. The proof chooses the epi lift, obtains the next lift from exactness, evaluates the forgotten delta via snd_delta, then uses the integral witness equation with the correct reverse orientation. Underlying-element coercions preserve the source/target modules. Registry 131/0; source placeholders 0; consumer sorries 1/1; standard axioms only; build 8326 jobs."},
     :commit "3e5e2875b1bc18eb6530456e963f85f4bcb7031f",
     :changed-paths
     ["ConstructionTargets/ManifoldFundamentalClass.lean"],
@@ -18438,7 +18449,7 @@
      "0d2ef4f56968e11b89948991ff01af3759d6680fa2d4354ea80ef3f18e4c8928"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/manifold-fundamental-class/delta-map",
    :acceptance
@@ -18510,7 +18521,7 @@
       "0d2ef4f56968e11b89948991ff01af3759d6680fa2d4354ea80ef3f18e4c8928"},
      :seat "topo-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -26490,7 +26501,7 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -26505,7 +26516,9 @@
     :type
     "∀ S : ShortComplex.SnakeInput (ModuleCat ℤ), (forgetSnakeInput S).δ = forgetIntModules.map S.δ",
     :area "manifold-fundamental-class",
-    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2,
+    :banked-by :routes-2026-10-12-mfclass-forget-delta-map-r1,
+    :banked-commit "3e5e2875b1bc18eb6530456e963f85f4bcb7031f"},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-forgetsnakeinput-delta-map,
    :kind :lemma,
