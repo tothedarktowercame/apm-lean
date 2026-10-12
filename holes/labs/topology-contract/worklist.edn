@@ -115218,7 +115218,7 @@
     "Compatible homeomorphisms stage f n ≃ₜ Icc (-(n+1)) (n+1)  (size: 120-220 lines / 1-2 days)"},
    :lemma
    {:name "apm_t91J06_bridge_compatible_stage_coordinates",
-    :reported-by [:owner],
+    :reported-by [:owner :program-2026-10-11-close-t91j06],
     :type
     "Compatible homeomorphisms stage f n ≃ₜ Icc (-(n+1)) (n+1)  (size: 120-220 lines / 1-2 days)",
     :area "interval-homeomorph-extension"},
@@ -115226,7 +115226,8 @@
    :kind :lemma,
    :depends-on
    [:lemma-extend-interval-embedding-coordinates
-    :lemma-nestedembeddingtransition-transition],
+    :lemma-nestedembeddingtransition-transition
+    :lemma-t91j06closure-extend-interval-embedding-coordinates],
    :other-consumers []}
   {:consumer :t91J06,
    :phase :lemma,
@@ -116766,8 +116767,58 @@
      :reason
      "Receipt repaired: fixture now records the exact reviewed blueprint hash."}]}
   {:consumer :t91J06,
+   :stop-count 1,
+   :evidence
+   {:placeholder-delta {:source-before 3, :source-after 3},
+    :residual
+    "Review B1-B5, then formalize B1; never consume the old glue helper without hf.",
+    :outcome :stop,
+    :warnings [{:kind :existing-placeholder}],
+    :missing-theorems
+    [{:name "t91J06Closure.extend_interval_embedding_coordinates",
+      :type "Extend prescribed coordinates over nested interval",
+      :status :not-started,
+      :consumers [:t91J06],
+      :depends-on [],
+      :area "nested-interval-exhaustion"}
+     {:name "apm_t91J06_bridge_compatible_stage_coordinates",
+      :type "Compatible recursive stage coordinates",
+      :status :not-started,
+      :consumers [:t91J06],
+      :depends-on
+      ["t91J06Closure.extend_interval_embedding_coordinates"],
+      :area "nested-interval-exhaustion"}
+     {:name "apm_t91J06_bridge_glue_with_embeddings",
+      :type "Glue coordinates using hf",
+      :status :not-started,
+      :consumers [:t91J06],
+      :depends-on ["apm_t91J06_bridge_compatible_stage_coordinates"],
+      :area "nested-interval-exhaustion"}],
+    :statement-hashes
+    {:target
+     "77deaa5c86092187afc0ba92eefe4692bc1991508f81deb6a626c3d106b86625",
+     :blueprint
+     "2a59c25774711b97b297f19f06dc02ece1b2a1e9005c53cada4d10b508bfef6c",
+     :registry "131/131"},
+    :disposition :stop,
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-2",
+    :reason
+    "Blueprint written; independent review precedes formalization.",
+    :commands
+    [{:cmd "lake env lean problems/t91J06/lean/Main.lean", :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd "placeholder/diff validation", :exit 0}],
+    :diagnostic-history [],
+    :commit "b08d55a0b6aaabf59da2d01615bcbfd00b31c2b3",
+    :changed-paths ["ConstructionTargets/t91J06Closure.blueprint.md"],
+    :fixture
+    {:path "ConstructionTargets/t91J06Closure.blueprint.md",
+     :sha256
+     "2a59c25774711b97b297f19f06dc02ece1b2a1e9005c53cada4d10b508bfef6c"},
+    :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t91J06/lean/Main.lean"
     "problems/t91J06/status.json"
@@ -118173,6 +118224,38 @@
    :id :lemma-t93j03-lift-isembedding-assembly,
    :kind :lemma,
    :depends-on [:lemma-t93j03-coveringlift-of-subgroup-le],
+   :other-consumers []}
+  {:consumer :t91J06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t91J06Closure.extend_interval_embedding_coordinates",
+    :type "Extend prescribed coordinates over nested interval"},
+   :lemma
+   {:name "t91J06Closure.extend_interval_embedding_coordinates",
+    :reported-by [:program-2026-10-11-close-t91j06],
+    :type "Extend prescribed coordinates over nested interval",
+    :area "nested-interval-exhaustion"},
+   :id :lemma-t91j06closure-extend-interval-embedding-coordinates,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t91J06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t91J06_bridge_glue_with_embeddings",
+    :type "Glue coordinates using hf"},
+   :lemma
+   {:name "apm_t91J06_bridge_glue_with_embeddings",
+    :reported-by [:program-2026-10-11-close-t91j06],
+    :type "Glue coordinates using hf",
+    :area "nested-interval-exhaustion"},
+   :id :lemma-apm-t91j06-bridge-glue-with-embeddings,
+   :kind :lemma,
+   :depends-on [:lemma-apm-t91j06-bridge-compatible-stage-coordinates],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
