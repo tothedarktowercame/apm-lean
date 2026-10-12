@@ -79608,77 +79608,60 @@
   {:consumer :t94A10,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 2,
+   :stop-count 3,
    :review-finding
    "Incomplete representation-boundary repair in commit e7ba5fee3: heta is now punctured, but exact_sphereParam_identity still requires hexact : forall x, extDeriv eta x = omega x, including x=0. Frozen apm_t94a10_IsExact supplies exactness only for punctured x, so the claimed B7 theorem still cannot be instantiated. Change hexact to forall x, x != 0 -> extDeriv eta x = omega x and rewrite with hexact _ (sphereParam_ne_zero p); then recompile, retaining B8-B11 as residual.",
    :evidence
    {:placeholder-delta 0,
-    :residual
-    "Derive Green premises from punctured primitive and B7; then B9-B11.",
+    :residual "Formalize B9 sine rectangle integral; then B10-B11.",
     :outcome :stop,
-    :warnings
-    ["Main: 1 placeholder." "Unrelated dirty file preserved."],
+    :warnings ["Main: 1 placeholder."],
     :missing-theorems
     [{:name
-      "ConstructionTargets.T94A10Closure.sphericalRectangle_green_boundary_zero",
-      :type
-      "Green cancellation from explicit continuity, HasFDerivAt and integrability premises",
-      :status :proved,
-      :consumers [:t94A10],
-      :depends-on [],
-      :area "periodic-stokes-square"}
-     {:name
       "ConstructionTargets.T94A10Closure.sphericalRectangle_curl_integral_zero",
       :type
-      "B8 deriving Green premises from punctured primitive and B7",
-      :status :partial,
+      "B8 Green cancellation derived from punctured primitive and B7",
+      :status :proved,
       :consumers [:t94A10],
       :depends-on
       ["sphericalRectangle_green_boundary_zero"
        "exact_sphereParam_identity"],
+      :area "periodic-stokes-square"}
+     {:name "ConstructionTargets.T94A10Closure.integral_sin_rectangle",
+      :type "B9 spherical coefficient integral equals 4*pi",
+      :status :not-started,
+      :consumers [:t94A10],
+      :depends-on [],
       :area "periodic-stokes-square"}],
     :statement-hashes
     {:registry "131/0",
-     :closure "461f066e6be2fa729aa6150c6c04f77269227b48",
+     :closure "eabd701002b634e09813bc6cd91dad8b0a4fb900",
      :blueprint "808e174fd0529d3c85b60b506988b0a55526c8e0"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason :program-progress-committed,
+    :reason :program-milestone-complete,
     :commands
     [{:cmd "closure build/compile", :exit 0}
      {:cmd "Main compile", :exit 0}
      {:cmd "registry check", :exit 0}
      {:cmd "closure no-sorry", :exit 1, :expected-exit 1}
      {:cmd "placeholder count", :exit 0, :output "1"}
-     {:cmd "git show --check 6648481f4", :exit 0}],
+     {:cmd "git show --check 5cfb9498b", :exit 0}],
     :diagnostic-history
     [{:cmd "closure compile",
       :exit 1,
       :finding
-      "Qualified Set/MeasureTheory notation; compiled rerun."}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1791775700648-6254-2a559a55",
-     :commands
-     ["git scope/blob/SHA/ancestry checks"
-      "lake build ConstructionTargets.t94A10Closure"
-      "lake env lean ConstructionTargets/t94A10Closure.lean"
-      "lake env lean problems/t94A10/lean/Main.lean"
-      "statement-registry check/fingerprint"
-      "commit placeholder counts"],
-     :finding
-     "PASS: commit 6648481f4 proves the correctly oriented Green boundary core using the available rectangle theorem with explicit continuity, derivative, exceptional-set, and integrability premises. Compiled sorry-free standard-axiom progress; scope/fixture/blobs match, registry 131/0, fingerprint d1822221, placeholders closure/Main 0/1. STOP lists derivation of those premises from B7, then B9-B11."},
-    :commit "6648481f44a7bc156a8aa237df827f45a213e6a3",
+      "Used CAM constant-evaluation derivative API and ContinuousOn integrability."}],
+    :commit "5cfb9498b6bd75ce3c5694b8578bf509422463f5",
     :changed-paths ["ConstructionTargets/t94A10Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t94A10Closure.lean",
      :sha256
-     "b7b7a45ff670ea4eab22f88de1c7983db73a88a2bcee2e724bb0d63e6243dcf3"},
+     "eb4ea14c8612d66d387d9cf79775f2686c30e22282a9d37d793c380beba0d138"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t94A10/lean/Main.lean"
     "problems/t94A10/status.json"
@@ -81826,7 +81809,8 @@
     "ConstructionTargets.T94A10Closure.sphericalRectangle_curl_integral_zero",
     :reported-by [:program-2026-10-11-close-t94a10],
     :type "B8 Green cancellation with explicit hypotheses",
-    :area "periodic-stokes-square"},
+    :area "periodic-stokes-square",
+    :proved-in :program-2026-10-11-close-t94a10},
    :id
    :lemma-constructiontargets-t94a10closure-sphericalrectangle-curl-integral-zero,
    :kind :lemma,
@@ -81962,6 +81946,22 @@
     :banked-by :declaration-found,
     :found-in ["ConstructionTargets/t94A10Closure.lean"]},
    :id :lemma-sphericalrectangle-green-boundary-zero,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t94A10,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "ConstructionTargets.T94A10Closure.integral_sin_rectangle",
+    :type "B9 spherical coefficient integral equals 4*pi"},
+   :lemma
+   {:name "ConstructionTargets.T94A10Closure.integral_sin_rectangle",
+    :reported-by [:program-2026-10-11-close-t94a10],
+    :type "B9 spherical coefficient integral equals 4*pi",
+    :area "periodic-stokes-square"},
+   :id :lemma-constructiontargets-t94a10closure-integral-sin-rectangle,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}]}
