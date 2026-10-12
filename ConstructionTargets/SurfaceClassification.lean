@@ -14,6 +14,15 @@ abbrev EuclideanPlane := EuclideanSpace ℝ (Fin 2)
 theorem euclideanPlane_finrank : Module.finrank ℝ EuclideanPlane = 2 := by
   simp [EuclideanPlane]
 
+/-- A bounded real parameter interval still contains an admissible choice after
+finitely many perturbation parameters have been excluded. -/
+theorem exists_perturbationParameter_avoiding_finite
+    {a b : ℝ} (hab : a < b) {forbidden : Set ℝ} (hforbidden : forbidden.Finite) :
+    ∃ t ∈ Set.Ioo a b, t ∉ forbidden := by
+  rw [← Set.not_subset]
+  intro hsub
+  exact Set.Ioo_infinite hab (hforbidden.subset hsub)
+
 /-- A finite semisimplicial complex truncated in dimensions zero through two.
 The compatibility field records the two vertices of each boundary edge of a
 face; injectivity excludes degenerate triangular faces. -/
