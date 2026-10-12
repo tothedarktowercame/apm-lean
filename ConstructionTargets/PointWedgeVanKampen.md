@@ -540,3 +540,12 @@ its chosen connector as the corresponding `eqToIso`.
 `genericPointWedgeRightLiftedLoop_normalForm_eq_transport` consequently
 expands the mapped right loop's connector normal form into the two explicit
 endpoint transports surrounding the mapped loop.
+
+`genericPointWedgeRightGroupoidEquivalence_functor` exposes the right
+equivalence functor as the concrete fundamental-groupoid map.
+`genericPointWedgeRightLiftedLoop_map_heq` specializes this identity to the
+lifted right loop while retaining both dependent endpoints.
+
+`genericPointWedgeRightLiftedLoop_transport_eq_concrete` carries that
+dependent comparison through the right endpoint conjugation without changing
+the named quotient-aware base-object equality.
