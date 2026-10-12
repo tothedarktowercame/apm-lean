@@ -314,7 +314,7 @@ the oriented curl identity for its two scalar coefficient functions. -/
 theorem exact_sphereParam_identity
     (eta : E3 → E3 [⋀^Fin 1]→L[ℝ] ℝ)
     (omega : E3 → E3 [⋀^Fin 2]→L[ℝ] ℝ)
-    (heta : ∀ x, DifferentiableAt ℝ eta x)
+    (heta : ∀ x, x ≠ 0 → DifferentiableAt ℝ eta x)
     (hexact : ∀ x, extDeriv eta x = omega x)
     (homega : ∀ x, x ≠ 0 → omega x = solidAngleAmbient x)
     (p : ℝ × ℝ) :
@@ -325,8 +325,8 @@ theorem exact_sphereParam_identity
     ((contDiff_succ_iff_fderiv.mp hs2).2.2).differentiable (by norm_num)
   have hpullDiff : DifferentiableAt ℝ (spherePullbackOneForm eta) p :=
     DifferentiableAt.continuousAlternatingMapCompContinuousLinearMap
-      ((heta _).comp p (sphereParam_differentiable p)) (hdf p)
-  have hpull := extDeriv_pullback (x := p) (r := ⊤) (heta _)
+      ((heta _ (sphereParam_ne_zero p)).comp p (sphereParam_differentiable p)) (hdf p)
+  have hpull := extDeriv_pullback (x := p) (r := ⊤) (heta _ (sphereParam_ne_zero p))
     sphereParam_contDiff.contDiffAt (by simp)
   have heval := congrArg (fun a => a ![(1, 0), (0, 1)]) hpull
   change (extDeriv (spherePullbackOneForm eta) p) ![(1, 0), (0, 1)] = _ at heval
