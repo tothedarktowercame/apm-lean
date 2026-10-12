@@ -113850,14 +113850,14 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 5,
+   :stop-count 6,
    :review-finding
    "Blueprint B3 is marked proved but its proof uses the unlisted ConnectedGroupoidSingleObjEquivalence.connectorSingleObjEquivalence (and connector-system representation) instead of only the declared uses; add the actual connector dependency and proof route to B3 uses.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
    :evidence
    {:placeholder-delta {:source-before 0, :source-after 0},
     :residual
-    "Specialize left counits and normalize the right comparison; then point-span, counits, B6/B12.",
+    "Normalize the right unit and strict-span factors; specialize left counits; then point-span, counits, B6/B12.",
     :outcome :stop,
     :warnings [],
     :missing-theorems
@@ -113871,9 +113871,9 @@
       :area "fundamental-group-wedge-of-circles"}],
     :statement-hashes
     {:source
-     "ba1a4ac6a055e8152104703511cb53eaacf46986a3042a7e4f4cc7b7967b202c",
+     "bc4aa658f156d46fa204e6584cd00b049c2fd2527795e6bd762e2fc2997ef77d",
      :documentation
-     "8afb08e7db3a8347e3a58fbc058190564cb82ff5518db555012a0aae292584f5",
+     "ce56045a8d1ce76d58d5f955a033b3528f9a2f421c974730a9881539ff2d057d",
      :blueprint
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0",
      :registry "131/131"},
@@ -113881,7 +113881,7 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
     :reason
-    "The left round trip now has its exact counit-naturality equation.",
+    "The inverse coordinate-span right comparison is isolated and expanded into its two ordered factors.",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/PointWedgeVanKampen.lean",
@@ -113890,35 +113890,17 @@
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder/diff validation", :exit 0}],
-    :diagnostic-history
-    [{:cmd "lean counit projection",
-      :exit 1,
-      :finding "Expanded lets; used explicit equivalence."}
-     {:cmd "lean omit placement",
-      :exit 1,
-      :finding "Moved omit before doc."}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1791839804027-7910-2b51e033",
-     :commands
-     ["git show/diff-tree ccb19862"
-      "lake build ConstructionTargets.PointWedgeVanKampen"
-      "python3 scripts/statement-registry.py check"
-      "commit hash and placeholder checks"],
-     :finding
-     "PASS program STOP: ccb19862 by topo-2 adds the exact left round-trip counit-naturality equation plus documentation, exactly within scope and new since history. Source ba1a4ac6..., documentation 8afb08e7..., fixture 0bca6ce3..., registry 131/131, and placeholders 0->0 reproduce. The equation has naturality orientation F.map(f)*counit(target)=counit(source)*f; it retains both counit components and the inverse strict-span morphism rather than treating any as identity. Fresh build passes with standard axioms. Specializing left counits, normalizing the right comparison, then point-span transport, remaining counits, and B6/B12 remain explicitly listed."},
-    :commit "ccb19862149781e5d177caa693e7e94e2e55b1f8",
+    :commit "c9b3af27ed1f34654ec4d2574adf3a8c21c7e4a8",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
      "ConstructionTargets/PointWedgeVanKampen.md"],
     :fixture
     {:path "ConstructionTargets/PointWedgeVanKampen.blueprint.md",
      :sha256
-     "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
+     "0bca6ce32c019fc3053c7f813c26917169cf817375b44d5e722b864b61a526450c1"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
