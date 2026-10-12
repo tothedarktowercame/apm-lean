@@ -113850,7 +113850,7 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 10,
+   :stop-count 0,
    :review-finding
    "Blueprint B3 is marked proved but its proof uses the unlisted ConnectedGroupoidSingleObjEquivalence.connectorSingleObjEquivalence (and connector-system representation) instead of only the declared uses; add the actual connector dependency and proof route to B3 uses.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
@@ -113900,7 +113900,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -116914,6 +116914,18 @@
     [{:cmd "lean initial Tendsto rewrite",
       :exit 1,
       :finding "Composed image-filter Tendsto directly."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791837161332-7862-27d0e09c",
+     :commands
+     ["git show/diff-tree 4d382ed8"
+      "lake env lean ConstructionTargets/t97A07Closure.lean"
+      "lake env lean problems/t97A07/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "commit hash and placeholder checks"],
+     :finding
+     "PASS program STOP: 4d382ed8 by topo-2 adds the precomposed fixed-chart derivative continuity theorem and its B2 blueprint record, exactly within scope and new since history. Source fb59520c..., fixture adbf2589..., frozen Main f13a6873..., registry 131/131, and scoped placeholders 1->1 reproduce. The proof composes continuity within the model range with extChartAt and uses the exact chart image-filter identity; it preserves the range restriction and bridges domains without identifying varying tangent fibers. Fresh closure and frozen Main elaboration pass with standard axioms. Pointwise agreement near x and B3-B9 remain explicitly listed."},
     :commit "4d382ed8d1b8a69afd92feca0400d85db20cde12",
     :changed-paths
     ["ConstructionTargets/t97A07Closure.lean"
@@ -116924,7 +116936,7 @@
      "adbf25891dd5bb2e6a67bcbb218dd4563146cf66804abdcd11975e1cb30998cf"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A07/lean/Main.lean"
     "problems/t97A07/status.json"
@@ -116940,7 +116952,7 @@
     ["lake env lean problems/t97A07/lean/Main.lean"
      "python3 scripts/statement-registry.py check"]},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Transported derivative continuity and its centre mfderiv anchor are packaged together.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: The fixed-coordinate derivative precomposed with the source chart is now continuous at the base point.",
    :id :program-2026-10-11-close-t97a07,
    :kind :final-adapter,
    :campaign-priority 44,
@@ -116998,7 +117010,11 @@
     {:job 5,
      :commit "0f8bb79ba478e77e26d74ceeb148df08eac39b65",
      :reason
-     "Transported derivative continuity and its centre mfderiv anchor are packaged together."}]}
+     "Transported derivative continuity and its centre mfderiv anchor are packaged together."}
+    {:job 6,
+     :commit "4d382ed8d1b8a69afd92feca0400d85db20cde12",
+     :reason
+     "The fixed-coordinate derivative precomposed with the source chart is now continuous at the base point."}]}
   {:consumer :t91J06,
    :stop-count 2,
    :review-finding
