@@ -17876,8 +17876,46 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :implements-lemma :lemma-mfclass-to-cycles-square,
+   :evidence
+   {:placeholder-delta
+    {:t00J02 0, :t98A02 0, :remaining {:t00J02 1, :t98A02 1}},
+    :residual "Finish row squares 12/23; assemble SnakeInput.Hom.",
+    :outcome :done-unreviewed,
+    :warnings ["pre-existing unnecessarySimpa lints"],
+    :missing-theorems [],
+    :statement-hashes {:status :match, :count 131},
+    :axioms [propext Classical.choice Quot.sound],
+    :author "Joe Corneli",
+    :commands
+    [{:cmd "sha256sum /tmp/tc.lean", :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.ManifoldFundamentalClass",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd
+      "rg -n '\\b(sorry|admit|axiom)\\b' ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git commit -m 'Prove forgotten toCycles naturality'",
+      :exit 0}],
+    :commit "163a0e7f22d71846fa94ddbfb00f9b01cc61c5d6",
+    :changed-paths
+    ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+    :fixture
+    {:path "/tmp/tc.lean",
+     :sha256
+     "645b5a4e043a1a6dad6e650ffaa8adcf7c61145f92e7a1776eea3b3c53e70d43"},
+    :implementation
+    {:scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+     :declaration
+     "ConstructionTargets.ManifoldFundamentalClass.forgetToCycles_naturality"},
+    :row :routes-2026-10-11-mfclass-to-cycles-r1,
+    :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/manifold-fundamental-class/to-cycles",
    :acceptance
