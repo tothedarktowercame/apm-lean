@@ -989,3 +989,8 @@ counit, and target equality transport in their exact order.
 then applies counit naturality to the named base-object equality.  Its inverse
 and forward equality transports cancel, leaving exactly the chosen source
 connector followed by the counit at the literal `y₀` object.
+
+`genericPointWedgeRightSourceConnector_counit_eq_normalForm` identifies that
+remaining product with the connector normal form of the right-equivalence
+counit itself.  The target connector is reflexive at `y₀`; the source
+connector remains the chosen one, with no identity normalization assumed.

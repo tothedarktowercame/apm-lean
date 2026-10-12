@@ -4370,6 +4370,23 @@ theorem genericPointWedgeRightInverseBaseToRightBase_normalForm_eq_sourceCounit 
     Category.comp_id] using hn'
 
 omit [PathConnectedSpace X] in
+/-- The remaining chosen source connector followed by the right-equivalence
+counit is exactly the based connector normal form of that counit. -/
+theorem genericPointWedgeRightSourceConnector_counit_eq_normalForm :
+    let eR := genericPointWedgeRightGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    ((genericPointWedgeConnectors y₀).connector
+        (eR.functor.obj (eR.inverse.obj (FundamentalGroupoid.mk y₀)))).hom ≫
+      eR.counitIso.hom.app (FundamentalGroupoid.mk y₀) =
+    (genericPointWedgeConnectors y₀).normalForm
+      (eR.counitIso.hom.app (FundamentalGroupoid.mk y₀)) := by
+  dsimp only
+  simp only [ConnectorSystem.normalForm, genericPointWedgeConnectors,
+    Functor.comp_obj, Functor.id_obj]
+  rw [genericPointWedgeBasedConnector_base]
+  simp
+
+omit [PathConnectedSpace X] in
 /-- The connector normal form of the mapped lifted right loop is conjugation
 by the explicit equality transport at its common endpoint. -/
 theorem genericPointWedgeRightLiftedLoop_normalForm_eq_transport
@@ -5443,6 +5460,7 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeRightEquiv_map_unitInv_rightBase
 #print axioms genericPointWedgeRightInverseBaseToRightBase_normalForm_eq_counit
 #print axioms genericPointWedgeRightInverseBaseToRightBase_normalForm_eq_sourceCounit
+#print axioms genericPointWedgeRightSourceConnector_counit_eq_normalForm
 #print axioms genericPointWedgeMappedOpenCoverCounit_namedGlueSquare
 #print axioms genericPointWedgeMappedCoordinateSpanCounit_glueSquare
 #print axioms genericPointWedgeMappedCoordinateSpanSourceGlue
