@@ -506,3 +506,7 @@ lifted left loop's connector normal form as conjugation by the two explicit
 `genericPointWedgeLeftComposite_baseProof` identifies the basepoint proof used
 by the composite based map with pointwise congruence of the composite-map
 identity.  This supplies the dependent proof alignment needed by `mapOfEq`.
+
+`genericPointWedgeLeftComposite_mapOfEq` uses that alignment before eliminating
+the composite-map identity, proving that its induced based map fixes every
+left-summand loop.
