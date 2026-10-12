@@ -75927,6 +75927,19 @@
       :output "131/0"}
      {:cmd "placeholder scan", :exit 0, :output "0"}
      {:cmd "git show --check 0e69eda9a", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791845362585-8020-fbc27104",
+     :commands
+     ["git show/diff-tree/hash 0e69eda9a"
+      "lake env lean ConstructionTargets/PolygonSurfacePiOne.lean"
+      "lake build ConstructionTargets.PolygonSurfacePiOne"
+      "python3 scripts/statement-registry.py check"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn"
+      "#print axioms + placeholder scan"],
+     :finding
+     "PASS: recorded commit changes only the scoped module; fixture SHA-256 c504bbc5...ed8 and module blob 74f76224...be3 match evidence. Fresh Lean/build/worklist gates pass; registry is 131/0; sorry/admit/axiom counts are 0. The theorem faithfully packages a continuous surjection OuterDisk -> outer quotient open with fibers exactly Relation.EqvGen P.Rel; orientations and subtype/quotient boundaries are correct. Axioms are propext, Classical.choice, Quot.sound. Residual center deformation retract and overlap remain explicit."},
     :commit "0e69eda9a",
     :changed-paths ["ConstructionTargets/PolygonSurfacePiOne.lean"],
     :fixture
@@ -75935,7 +75948,7 @@
      "c504bbc5e46e0c5565ec2690cc884c2ced3084763b091e264bdcde548fb74ed8"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/PolygonSurfacePiOne.lean"],
    :dag-node "ConstructionTargets/PolygonSurfacePiOne.blueprint.md/B4",
    :acceptance
@@ -75963,7 +75976,7 @@
      :infrastructure-packets
      :review-outcomes]},
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance {:strategy "Rerun after annular side."},
@@ -85963,7 +85976,7 @@
    :other-consumers [:t92J05 :t94J04 :t97A01 :t97A03]}
   {:consumer :t96J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "polygonAnnularSide",
@@ -85972,7 +85985,9 @@
    {:name "polygonAnnularSide",
     :reported-by [:routes-2026-10-12-polygon-b4-topo2-r1],
     :type "outer quotient open represented by the annular side",
-    :area "polygon-surface-pi1"},
+    :area "polygon-surface-pi1",
+    :banked-by :routes-2026-10-12-polygon-b4-annular-side-topo2-r1,
+    :banked-commit "0e69eda9a"},
    :id :lemma-polygonannularside,
    :kind :lemma,
    :depends-on [:lemma-polygonradialopensets],
@@ -85997,7 +86012,7 @@
    :other-consumers [:t92J05 :t94J04 :t97A01 :t97A03]}
   {:consumer :t96J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -86010,7 +86025,9 @@
     :type
     "continuous surjection from OuterDisk to the outer quotient open, with fibers iff Relation.EqvGen P.Rel",
     :area "polygon-surface-pi1",
-    :proved-in :routes-2026-10-12-polygon-b4-annular-side-topo2-r1},
+    :proved-in :routes-2026-10-12-polygon-b4-annular-side-topo2-r1,
+    :banked-by :routes-2026-10-12-polygon-b4-annular-side-topo2-r1,
+    :banked-commit "0e69eda9a"},
    :id
    :lemma-constructiontargets-polygonsurfacepione-polygonannularside,
    :kind :lemma,
