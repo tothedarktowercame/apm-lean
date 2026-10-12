@@ -2596,6 +2596,36 @@ theorem coefficientOpenDiskConnectingTransport_eq (k : ℕ) :
             (TopCat.of (T02A06HemisphereExcision.puncturedOpenDiskSet
               (k + 2)))).sc (k + 1)).mapHomologyIso forgetIntModules).inv := rfl
 
+theorem coefficientOpenDiskConnecting_forgotten_naturality (k : ℕ) :
+    forgetIntModules.map
+        (CoefficientPairSequence.connecting ℤ
+          (T02A06HemisphereExcision.puncturedOpenDiskSet (k + 2)) (k + 1)) ≫
+      (((CoefficientH0.SingularChains ℤ
+        (TopCat.of (T02A06HemisphereExcision.puncturedOpenDiskSet
+          (k + 2)))).sc (k + 1)).mapHomologyIso forgetIntModules).inv =
+    (((CoefficientRelativeSmall.relativeChains ℤ
+        (T02A06HemisphereExcision.puncturedOpenDiskSet
+          (k + 2))).sc (k + 2)).mapHomologyIso forgetIntModules).inv ≫
+      (integralOpenDiskCoefficientPairShortExact k).δ
+        (k + 2) (k + 1) rfl := by
+  rw [← (openDiskSnakeInputs_delta k).1]
+  let S := coefficientOpenDiskSnakeInput k
+  let e := (((CoefficientH0.SingularChains ℤ
+    (TopCat.of (T02A06HemisphereExcision.puncturedOpenDiskSet
+      (k + 2)))).sc (k + 1)).mapHomologyIso forgetIntModules).inv
+  calc
+    forgetIntModules.map S.δ ≫ e = (forgetSnakeInput S).δ ≫ e :=
+      congrArg (fun q => q ≫ e) (forgetSnakeInput_delta_map S).symm
+    _ = _ := by
+      simpa only [S, e, coefficientOpenDiskSnakeInput] using
+        (forgetHomologySequence_delta_naturality
+          (CoefficientPairSequence.sequence ℤ
+            (T02A06HemisphereExcision.puncturedOpenDiskSet (k + 2)))
+          (CoefficientPairSequence.shortExact ℤ
+            (T02A06HemisphereExcision.puncturedOpenDiskSet (k + 2)))
+          (integralOpenDiskCoefficientPairShortExact k)
+          (k + 2) (k + 1) rfl)
+
 end ConstructionTargets.ManifoldFundamentalClass
 
 #print axioms ConstructionTargets.ManifoldFundamentalClass.neighborhoodInclusion_Hsucc_isIso
@@ -2684,6 +2714,7 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.forgetHomologySequence_delta_naturality
 #print axioms ConstructionTargets.ManifoldFundamentalClass.forgetSnakeDelta_map_apply_of_witness
 #print axioms ConstructionTargets.ManifoldFundamentalClass.forgetSnakeInput_delta_map
+#print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientOpenDiskConnecting_forgotten_naturality
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_projection
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_generator_of_normalization
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_normalization_of_generator
