@@ -341,6 +341,37 @@ theorem sphereMap_vertical_tangent_of_third_ne_zero
     ring
   · simp [v, sphereMapAmbientDerivative, hp1]
 
+/-- On the equator, a positive incident level below `1/2` excludes the two
+diagonal critical points and again supplies a tangent vector with vertical
+derivative one. -/
+theorem sphereMap_vertical_tangent_of_third_eq_zero
+    (p : Sphere 2) (z : ℝ) (hprod : p.val 0 * p.val 1 = z)
+    (hz : 0 < z) (hzhalf : z < 1 / 2) (hp2 : p.val 2 = 0) :
+    ∃ v : E 3, v ∈ (ℝ ∙ (p.val : E 3))ᗮ ∧
+      sphereMapAmbientDerivative p.val v 2 = 1 := by
+  have hnorm : ‖(p.val : E 3)‖ = 1 := by
+    simpa [mem_sphere_zero_iff_norm] using p.property
+  have hsumsq : p.val 0 ^ 2 + p.val 1 ^ 2 = 1 := by
+    have hs := congrArg (fun r : ℝ => r ^ 2) hnorm
+    dsimp at hs
+    rw [EuclideanSpace.real_norm_sq_eq] at hs
+    simp [Fin.sum_univ_succ, hp2] at hs
+    nlinarith
+  have hd : p.val 1 ^ 2 - p.val 0 ^ 2 ≠ 0 := by
+    intro hd0
+    have hsquares : p.val 1 ^ 2 = p.val 0 ^ 2 := by linarith
+    nlinarith [sq_nonneg (p.val 0 - p.val 1),
+      sq_nonneg (p.val 0 + p.val 1)]
+  let d : ℝ := p.val 1 ^ 2 - p.val 0 ^ 2
+  let v : E 3 := WithLp.toLp 2 ![p.val 1 / d, -p.val 0 / d, 0]
+  refine ⟨v, ?_, ?_⟩
+  · rw [Submodule.mem_orthogonal_singleton_iff_inner_right]
+    simp [v, PiLp.inner_apply, Fin.sum_univ_succ, real_inner_eq_re_inner]
+    ring
+  · simp [v, d, sphereMapAmbientDerivative]
+    field_simp
+    ring
+
 /-- At the first coordinate point the ambient derivative swaps the two free
 tangent coordinates and has zero first coordinate. -/
 theorem sphereMapAmbientDerivative_firstAxis (v : E 3) :
@@ -360,5 +391,6 @@ theorem sphereMapAmbientDerivative_firstAxis (v : E 3) :
 #print axioms horizontalPlane_fderiv_range
 #print axioms crossTerm_horizontalPlane_incident_coordinates
 #print axioms sphereMap_vertical_tangent_of_third_ne_zero
+#print axioms sphereMap_vertical_tangent_of_third_eq_zero
 
 end ConstructionTargets.T96A07Closure
