@@ -30099,7 +30099,7 @@
   {:consumer :t00A02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 4,
+   :stop-count 5,
    :review-finding
    "Program-row defect: commit ebbfe625 repairs the B5 mathematics, but changes only SurfaceClassification.blueprint.md and commits no new compiled, sorry-free, standard-axiom result since the prior program-history entry; :missing-theorems is empty. The successful 8245-job build merely rebuilds pre-existing SurfaceClassification code and is not a new milestone. Repair by implementing and committing the next listed milestone (B1 FiniteTwoComplex/Realization or another genuine supporting result), compiling it without placeholders, and recording that proved milestone in :missing-theorems.",
    :implements-lemma
@@ -30114,26 +30114,26 @@
      :t96A01 [1 1],
      :t97J02 [3 3]},
     :residual
-    "B4: construct endpoint-fixed polygonal perturbations avoiding the finite forbidden set, then prove transverse crossings.",
+    "B4: transfer the finite forbidden set to chart parameters and construct endpoint-fixed polygonal perturbations; then prove transverse crossings.",
     :outcome :stop,
     :warnings [],
     :missing-theorems
     [{:name
-      "ConstructionTargets.SurfaceClassification.FiniteClosedDiskCover.boundaryForbiddenSet_finite_of_pairwise",
+      "ConstructionTargets.SurfaceClassification.exists_perturbationParameter_avoiding_finite",
       :type
-      "(C : FiniteClosedDiskCover M) (h : ∀ p : C.BoundaryArcPairIndex, Set.Finite (C.boundaryArcIntersection p)) : Set.Finite C.boundaryForbiddenSet",
+      "{a b : ℝ} (hab : a < b) {forbidden : Set ℝ} (hforbidden : forbidden.Finite) : ∃ t ∈ Set.Ioo a b, t ∉ forbidden",
       :status :proved,
       :consumers
       [:t00A02 :t00A03 :t91J05 :t92J05 :t94J04 :t96A01 :t97J02],
       :depends-on
-      ["ConstructionTargets.SurfaceClassification.FiniteClosedDiskCover.boundaryCrossingSet_finite_iff_pairwise"],
+      ["ConstructionTargets.SurfaceClassification.FiniteClosedDiskCover.boundaryForbiddenSet_finite_of_pairwise"],
       :area "surface-classification"}],
     :statement-hashes {:registry "131/131"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "B4 finite perturbation-forbidden set proved; program continues with polygonal perturbation existence",
+    "B4 finite-avoiding perturbation parameter proved; program continues with endpoint-fixed polygonal perturbations",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/SurfaceClassification.lean",
@@ -30141,28 +30141,14 @@
      {:cmd "lake build ConstructionTargets.SurfaceClassification",
       :exit 0}
      {:cmd "lake env lean /tmp/surface_face_bound_check.lean", :exit 0}
+     {:cmd "lake env lean /tmp/surface_parameter_axioms.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "rg source placeholders", :exit 1, :expected-exit 1}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1791819112222-7231-7926faff",
-     :commands
-     ["git show/diff 9ef141c9e"
-      "sha256sum surface_face_bound_check"
-      "git diff --check; blob-current"
-      "rg Lean placeholders"
-      "statement-registry.py check"
-      "#print axioms forbidden-set theorem"
-      "lake env lean fixture/module"
-      "lake build ConstructionTargets.SurfaceClassification"],
-     :finding
-     "PASS program STOP: new compiled milestone after 9dbbade0d defines the perturbation forbidden set as endpoint images union crossings and proves it finite from pairwise finite intersections. One-file scope; blob current; fixture/module/build pass; registry 131/131; zero Lean placeholders; standard axioms. Perturbation existence/transversality remain listed."},
-    :commit "9ef141c9e5387d47487740ef7880c5894ae55734",
+    :commit "b6e5a0fad2b57ff1edf115ed8303e2868c28d75d",
     :changed-paths ["ConstructionTargets/SurfaceClassification.lean"],
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SurfaceClassification.lean"
     "ConstructionTargets/SurfaceClassification.md"
@@ -30527,6 +30513,29 @@
    :kind :lemma,
    :depends-on
    [:lemma-constructiontargets-surfaceclassification-finitecloseddiskco-78a8e5f0af16],
+   :other-consumers [:t00A03 :t91J05 :t92J05 :t94J04 :t96A01 :t97J02]}
+  {:consumer :t00A02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.SurfaceClassification.exists_perturbationParameter_avoiding_finite",
+    :type
+    "{a b : ℝ} (hab : a < b) {forbidden : Set ℝ} (hforbidden : forbidden.Finite) : ∃ t ∈ Set.Ioo a b, t ∉ forbidden"},
+   :lemma
+   {:name
+    "ConstructionTargets.SurfaceClassification.exists_perturbationParameter_avoiding_finite",
+    :reported-by [:program-2026-10-12-surface-classification],
+    :type
+    "{a b : ℝ} (hab : a < b) {forbidden : Set ℝ} (hforbidden : forbidden.Finite) : ∃ t ∈ Set.Ioo a b, t ∉ forbidden",
+    :area "surface-classification",
+    :proved-in :program-2026-10-12-surface-classification},
+   :id
+   :lemma-constructiontargets-surfaceclassification-exists-perturbationparameter-avoiding-,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-surfaceclassification-finitecloseddiskcover-boundaryforbidde],
    :other-consumers
    [:t00A03 :t91J05 :t92J05 :t94J04 :t96A01 :t97J02]}],
  :consumer-baselines {},
