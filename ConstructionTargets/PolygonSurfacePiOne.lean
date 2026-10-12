@@ -300,6 +300,12 @@ def torusRP2PairingData : PairingData where
     apply (torusRP2_eqvGen_iff _ _).mpr
     exact .trans _ _ _ (torusRP2_all_vertices i) (torusRP2_all_vertices j).symm
 
+/-- The named six-edge B2 one-vertex certificate. -/
+theorem torusRP2PairingData_oneVertex (i j : Fin 6) :
+    Relation.EqvGen torusRP2PairingData.Rel
+      (polygonVertex 6 i) (polygonVertex 6 j) :=
+  torusRP2PairingData.oneVertex i j
+
 /-! ### Uniform standard-surface data -/
 
 /-- The canonical polygon has four arcs per orientable handle and two arcs
