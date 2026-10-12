@@ -326,6 +326,21 @@ theorem crossTerm_horizontalPlane_incident_coordinates
     rw [hp1, mul_zero] at hprod'
     linarith
 
+/-- When the third coordinate is nonzero, an explicit tangent vector makes
+the vertical component of the ambient quadratic derivative equal to one. -/
+theorem sphereMap_vertical_tangent_of_third_ne_zero
+    (p : Sphere 2) (hp1 : p.val 1 ≠ 0) (hp2 : p.val 2 ≠ 0) :
+    ∃ v : E 3, v ∈ (ℝ ∙ (p.val : E 3))ᗮ ∧
+      sphereMapAmbientDerivative p.val v 2 = 1 := by
+  let v : E 3 := WithLp.toLp 2
+    ![(p.val 1)⁻¹, 0, -(p.val 0) / (p.val 1 * p.val 2)]
+  refine ⟨v, ?_, ?_⟩
+  · rw [Submodule.mem_orthogonal_singleton_iff_inner_right]
+    simp [v, PiLp.inner_apply, Fin.sum_univ_succ, real_inner_eq_re_inner]
+    field_simp
+    ring
+  · simp [v, sphereMapAmbientDerivative, hp1]
+
 /-- At the first coordinate point the ambient derivative swaps the two free
 tangent coordinates and has zero first coordinate. -/
 theorem sphereMapAmbientDerivative_firstAxis (v : E 3) :
@@ -344,5 +359,6 @@ theorem sphereMapAmbientDerivative_firstAxis (v : E 3) :
 #print axioms descendedCrossTermMap_notTransverse_zAxis
 #print axioms horizontalPlane_fderiv_range
 #print axioms crossTerm_horizontalPlane_incident_coordinates
+#print axioms sphereMap_vertical_tangent_of_third_ne_zero
 
 end ConstructionTargets.T96A07Closure
