@@ -362,6 +362,28 @@ theorem exact_sphereParam_identity
   rw [fderiv_sphereParam_lat, fderiv_sphereParam_long] at heval
   simpa [solidAngleAmbient_sphereParam] using heval
 
+/-- The latitude coefficient agrees on the two longitude edges of the
+spherical rectangle. -/
+theorem spherePullbackLatCoeff_two_pi_eq_zero
+    (eta : E3 → E3 [⋀^Fin 1]→L[ℝ] ℝ) (s : ℝ) :
+    spherePullbackLatCoeff eta (s, 2 * Real.pi) =
+      spherePullbackLatCoeff eta (s, 0) := by
+  simp [spherePullbackLatCoeff_eq, sphereParam, sphereParamLat]
+
+/-- The longitude coefficient vanishes on the north polar edge. -/
+theorem spherePullbackLongCoeff_zero
+    (eta : E3 → E3 [⋀^Fin 1]→L[ℝ] ℝ) (t : ℝ) :
+    spherePullbackLongCoeff eta (0, t) = 0 := by
+  rw [spherePullbackLongCoeff_eq, sphereParamLong_zero]
+  exact (eta (sphereParam (0, t))).map_coord_zero 0 (by simp)
+
+/-- The longitude coefficient vanishes on the south polar edge. -/
+theorem spherePullbackLongCoeff_pi
+    (eta : E3 → E3 [⋀^Fin 1]→L[ℝ] ℝ) (t : ℝ) :
+    spherePullbackLongCoeff eta (Real.pi, t) = 0 := by
+  rw [spherePullbackLongCoeff_eq, sphereParamLong_pi]
+  exact (eta (sphereParam (Real.pi, t))).map_coord_zero 0 (by simp)
+
 #print axioms solidAngleAmbient_apply
 #print axioms norm_cube_eq_coordinate_denominator
 #print axioms solidAngleAmbient_apply_coordinate
