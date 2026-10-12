@@ -72951,45 +72951,31 @@
   {:bounded-exception
    "single-consumer space-side deformation needed to package the HomotopyEquiv",
    :consumer :t02A03,
+   :review-finding
+   "REVISE repeated satisfied prerequisite :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1; route must name a new prerequisite or be rewritten",
    :evidence
    {:probe
     {:outcome :revise,
      :seat "topo-8",
      :fixture
-     {:path "/tmp/t02a03_safe_meridian_deformation_contract.lean",
+     {:path
+      "/tmp/t02a03_right_tube_meridian_retraction_homotopy_probe.lean",
       :sha256
-      "132737f3a80a13805f28e0e9a22faf9bb1d871cbb6e3a8522ada5d88ccdee9d9"},
+      "dacb73590ab5faecc584c1bb777565dc3a0b8e5924aa7bd8e694550b74ac2c23"},
      :commands
      [{:cmd
-       "lake env lean /tmp/t02a03_safe_meridian_deformation_contract.lean",
-       :exit 0,
-       :output "SafeMeridianDeformationExists compiled."}
-      {:cmd
-       "sha256sum /tmp/t02a03_safe_meridian_deformation_contract.lean",
-       :exit 0,
-       :output
-       "132737f3a80a13805f28e0e9a22faf9bb1d871cbb6e3a8522ada5d88ccdee9d9  /tmp/t02a03_safe_meridian_deformation_contract.lean"}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_safe_meridian_deformation_contract.lean || true)\"",
+       "lake env lean /tmp/t02a03_right_tube_meridian_retraction_homotopy_probe.lean",
        :exit 0}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "131 registered statements match, 0 do not"}],
+      {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
+     :axioms
+     ["propext"
+      "Classical.choice"
+      "Quot.sound"
+      "safeRightTubeMeridianDeformationProbe"],
      :finding
-     "The Homotopy wrapper is formal once there is a continuous ambient deformation H with four facts: its zero endpoint is circleMeridian(forward p), its one endpoint is p, every intermediate point remains in rightTube, and every intermediate point avoids the left core. These geometric invariants cannot be obtained from convexity because a closed tube around a circle is nonconvex. Isolating H and its safety proofs prevents the Homotopy constructor from hiding the actual remaining mathematics.",
-     :missing-theorems
-     [{:name
-       "ConstructionTargets.T02A03GeometricTubeDeformation.safeRightTubeMeridianDeformation",
-       :type
-       "exists (forward : C(RightTubeMinusLeftCore, Circle)) (H : C(unitInterval × RightTubeMinusLeftCore, apm_t02a03_E3)), (forall p, H (0,p) = apm_t02a03_circleMeridian (forward p)) and (forall p, H (1,p) = p.1) and (forall tp, H tp ∈ apm_t02a03_rightTube) and (forall tp, H tp ∉ Set.range apm_t02a03_leftCore)",
-       :status :not-started,
-       :consumers [:t02A03],
-       :depends-on
-       ["ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeMeridianCoordinate"],
-       :area "explicit-r3-tube-deformation-retraction"}],
+     "The wrapper compiles; the scoped module still lacks its sole geometric input.",
      :prerequisite
-     {:bounded-exception
-      "single-consumer explicit ambient deformation with frozen tube and deletion invariants",
+     {:bounded-exception "single-consumer ambient deformation",
       :consumer :t02A03,
       :phase :probe,
       :state :open,
@@ -72998,28 +72984,26 @@
       :dag-node
       "TOPOLOGY-ROUTES.md/t02A03/safe-right-tube-meridian-deformation",
       :acceptance
-      {:probe
-       "Compile a continuous ambient deformation H from circleMeridian(rightTubeMeridianCoordinate p) to p. Prove separately that every H(t,p) lies in apm_t02a03_rightTube and outside Set.range apm_t02a03_leftCore. Do not package H as a subtype Homotopy or claim a HomotopyEquiv.",
-       :declaration
+      {:declaration
        "ConstructionTargets.T02A03GeometricTubeDeformation.safeRightTubeMeridianDeformation",
        :type
-       "exists H : C(unitInterval × RightTubeMinusLeftCore, apm_t02a03_E3), endpoint equations and pointwise rightTube membership and leftCore avoidance",
+       "∃ H : C(unitInterval × RightTubeMinusLeftCore, apm_t02a03_E3), (∀p,H (0,p)=apm_t02a03_circleMeridian (rightTubeMeridianCoordinate p)) ∧ (∀p,H (1,p)=p.1) ∧ (∀tp,H tp∈apm_t02a03_rightTube) ∧ (∀tp,H tp∉Set.range apm_t02a03_leftCore)",
+       :probe "Compile H and all four invariants.",
        :placeholder "the sole sorry in apm_t02a03",
        :route-step
-       "construct and certify the ambient deformation underlying the space-side meridian retraction"},
+       "supply the ambient deformation lifted by the Homotopy"},
       :id
       :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1,
       :kind :reusable-theorem,
       :area "explicit-r3-tube-deformation-retraction",
       :depends-on
       [:routes-2026-10-10-t02a03-right-tube-meridian-coordinate-topo2-r1],
-      :current-residual
-      "Lift H to RightTubeMinusLeftCore, package rightTubeMeridianRetractionHomotopy, then use the coordinate equation for the Circle-side constant homotopy.",
+      :current-residual "Lift H to the frozen subtype.",
       :other-consumers []},
      :residual
-     "Lift the banked safe ambient deformation to the frozen subtype and package the requested ContinuousMap.Homotopy."}},
+     "Implement the safe ambient deformation; the compiled wrapper then closes this row."}},
    :phase :probe,
-   :state :open,
+   :state :needs-owner,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/right-tube-meridian-retraction-homotopy",
@@ -73989,7 +73973,7 @@
      :infrastructure-packets
      :review-outcomes]},
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
