@@ -3444,6 +3444,111 @@ theorem scalarArrivalCorrection_sevenEighths_scalar_equations (b : ℝ) :
       (-b : ℝ) + b = 0 := by
   norm_num [arrivalSevenEighths]
 
+noncomputable def scalarArrivalCandidate (b : ℝ) : ℂ :=
+  ((-1 : ℝ) : ℂ) + ((-b : ℝ) : ℂ) * Complex.I
+
+theorem scalarArrivalCandidate_ne_zero (b : ℝ) :
+    scalarArrivalCandidate b ≠ 0 := by
+  intro h
+  have hre := congrArg Complex.re h
+  norm_num [scalarArrivalCandidate, Complex.mul_re, Complex.mul_im] at hre
+
+noncomputable def scalarArrivalCandidateCircle (b : ℝ) : Circle :=
+  ⟨NormedSpace.normalize (scalarArrivalCandidate b),
+    mem_sphere_zero_iff_norm.mpr
+      (NormedSpace.norm_normalize (scalarArrivalCandidate_ne_zero b))⟩
+
+noncomputable def scalarArrivalCandidateNormal (b : ℝ) : ℂ :=
+  ((1 - ‖scalarArrivalCandidate b‖ : ℝ) : ℂ)
+
+noncomputable def scalarArrivalCandidatePoint (b : ℝ) : apm_t02a03_E3 :=
+  rightTubeCorePolarReconstruction (scalarArrivalCandidateCircle b)
+    (scalarArrivalCandidateNormal b)
+
+theorem scalarArrivalCandidate_norm_bounds (b : ℝ) (hb : |b| < 3 / 4) :
+    (3 / 4 : ℝ) < ‖scalarArrivalCandidate b‖ ∧
+      ‖scalarArrivalCandidate b‖ < (5 / 4 : ℝ) := by
+  have ha := scalarArrivalCorrection_sevenEighths_mem_planarAnnulus b hb
+  have hs : ‖scalarArrivalCandidate b‖ ^ 2 =
+      Complex.normSq (scalarArrivalCandidate b) := Complex.sq_norm _
+  have hn : 0 ≤ ‖scalarArrivalCandidate b‖ := norm_nonneg _
+  change (9 / 16 : ℝ) < Complex.normSq (scalarArrivalCandidate b) ∧
+      Complex.normSq (scalarArrivalCandidate b) < 25 / 16 at ha
+  constructor <;> nlinarith
+
+theorem scalarArrivalCandidatePoint_mem_rightTube (b : ℝ)
+    (hb : |b| < 3 / 4) :
+    scalarArrivalCandidatePoint b ∈ apm_t02a03_rightTube := by
+  apply reconstructionMemRightTube_rightTubeCorePolar
+  unfold scalarArrivalCandidateNormal
+  rw [Complex.norm_real, Real.norm_eq_abs, abs_le]
+  have h := scalarArrivalCandidate_norm_bounds b hb
+  constructor <;> linarith
+
+theorem rightTubeCorePlanarComplex_scalarArrivalCandidatePoint (b : ℝ) :
+    rightTubeCorePlanarComplex (scalarArrivalCandidatePoint b) =
+      scalarArrivalCandidate b := by
+  have hs := NormedSpace.norm_smul_normalize (scalarArrivalCandidate b)
+  rw [show rightTubeCorePlanarComplex (scalarArrivalCandidatePoint b) =
+      (‖scalarArrivalCandidate b‖ : ℝ) •
+        NormedSpace.normalize (scalarArrivalCandidate b) by
+    apply Complex.ext <;>
+      simp [scalarArrivalCandidatePoint, scalarArrivalCandidateNormal,
+        scalarArrivalCandidateCircle, rightTubeCorePlanarComplex,
+        rightTubeCorePolarReconstruction]]
+  exact hs
+
+theorem scalarArrivalCandidatePoint_not_mem_leftCore (b : ℝ) :
+    scalarArrivalCandidatePoint b ∉ Set.range apm_t02a03_leftCore := by
+  intro hmem
+  obtain ⟨s, hs⟩ := hmem
+  have hp := congrArg Complex.re
+    (rightTubeCorePlanarComplex_scalarArrivalCandidatePoint b)
+  have hx := congrArg (fun q : apm_t02a03_E3 => q 0) hs
+  have hcos := Real.cos_le_one s
+  norm_num [rightTubeCorePlanarComplex, scalarArrivalCandidate,
+    Complex.mul_re, Complex.mul_im] at hp
+  simp [apm_t02a03_leftCore] at hx
+  linarith
+
+noncomputable def scalarArrivalCandidateSubtype (b : ℝ) (hb : |b| < 3 / 4) :
+    RightTubeMinusLeftCore :=
+  ⟨scalarArrivalCandidatePoint b, scalarArrivalCandidatePoint_mem_rightTube b hb,
+    scalarArrivalCandidatePoint_not_mem_leftCore b⟩
+
+/-- Every small scalar imaginary correction has an actual collision on the
+frozen right-tube complement at the diagnostic slice. -/
+theorem scalarArrivalCorrection_sevenEighths_actual_zero
+    (b : ℝ) (hb : |b| < 3 / 4) :
+    (((2 - 2 * (arrivalSevenEighths : ℝ) : ℝ) : ℂ) *
+          positiveRealPlanarWaypointMap (scalarArrivalCandidateSubtype b hb) +
+        ((2 * (arrivalSevenEighths : ℝ) - 1 : ℝ) : ℂ) *
+          rightTubeCorePlanarComplex (scalarArrivalCandidateSubtype b hb).1 +
+        (b : ℂ) * Complex.I) = 0 := by
+  apply Complex.ext
+  · have hp := congrArg Complex.re
+      (rightTubeCorePlanarComplex_scalarArrivalCandidatePoint b)
+    norm_num [rightTubeCorePlanarComplex, scalarArrivalCandidate,
+      Complex.mul_re, Complex.mul_im] at hp
+    have h0 : (scalarArrivalCandidateSubtype b hb).1 0 = 2 := by
+      change scalarArrivalCandidatePoint b 0 = 2
+      linarith
+    norm_num [arrivalSevenEighths, positiveRealPlanarWaypointMap,
+      rightTubePlanarComplex, rightTubeCorePlanarComplex,
+      Complex.mul_re, Complex.mul_im]
+    linarith [h0]
+  · have hp := congrArg Complex.im
+      (rightTubeCorePlanarComplex_scalarArrivalCandidatePoint b)
+    norm_num [rightTubeCorePlanarComplex, scalarArrivalCandidate,
+      Complex.mul_re, Complex.mul_im] at hp
+    have h1 : (scalarArrivalCandidateSubtype b hb).1 1 = -b := by
+      change scalarArrivalCandidatePoint b 1 = -b
+      exact hp
+    norm_num [arrivalSevenEighths, positiveRealPlanarWaypointMap,
+      rightTubePlanarComplex, rightTubeCorePlanarComplex,
+      Complex.mul_re, Complex.mul_im]
+    linarith [h1]
+
 end ConstructionTargets.T02A03GeometricTubeDeformation
 
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeNormalComplex_eq_zero_iff
@@ -3553,6 +3658,7 @@ end ConstructionTargets.T02A03GeometricTubeDeformation
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.positiveRealPlanarArrival_corrected_eq_zero_iff
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.positiveRealPlanarArrival_corrected_actual_zero
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.scalarArrivalCorrection_sevenEighths_mem_planarAnnulus
+#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.scalarArrivalCorrection_sevenEighths_actual_zero
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_twiceCorrected_departure_zero_coordinates
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_twiceCorrected_departure_zero_normSq
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_twiceCorrected_departure_zero_scalar_bounds
