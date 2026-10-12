@@ -75734,8 +75734,50 @@
    :other-consumers []}
   {:consumer :t96J02,
    :implements-lemma :lemma-polygonradialopensets,
+   :evidence
+   {:placeholder-delta 0,
+    :residual "Contraction/overlap.",
+    :outcome :done-unreviewed,
+    :warnings ["2 imported; 12 preexisting linter warnings"],
+    :missing-theorems
+    [{:name
+      "ConstructionTargets.PolygonSurfacePiOne.polygonRadialOpenSets",
+      :type
+      "PolygonRadialOpenSets P with saturated open inner/outer images and union univ",
+      :status :proved,
+      :consumers [:t96J02 :t92J05 :t94J04 :t97A01 :t97A03],
+      :depends-on
+      ["innerDisk_union_outerDisk" "eq_or_boundary_of_eqvGen"],
+      :area "polygon-surface-pi1"}],
+    :statement-hashes
+    {:registry "131/0",
+     :module "57b198cc08a1c33ba9f0ab41785ae0e7047f1a17"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-6",
+    :commands
+    [{:cmd
+      "lake env lean ConstructionTargets/PolygonSurfacePiOne.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.PolygonSurfacePiOne",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131/0"}
+     {:cmd "placeholder scan", :exit 0, :output "0"}
+     {:cmd "git show --check 53f5fea50", :exit 0}],
+    :diagnostic-history
+    [{:cmd "initial compile",
+      :exit 1,
+      :correction "fixed EqvGen orientation and cover membership"}],
+    :commit "53f5fea50",
+    :changed-paths ["ConstructionTargets/PolygonSurfacePiOne.lean"],
+    :fixture
+    {:path "ConstructionTargets/PolygonSurfacePiOne.lean",
+     :sha256
+     "584bc4b2f6590546a4b25b7f63c8ef2c8658ef9125612535f1c561d0588155c8"},
+    :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/PolygonSurfacePiOne.lean"],
    :dag-node "ConstructionTargets/PolygonSurfacePiOne.blueprint.md/B4",
    :acceptance
@@ -85694,4 +85736,37 @@
    :kind :lemma,
    :depends-on
    [:lemma-polygoncentercontraction :lemma-polygonoverlaphomeomorph],
-   :other-consumers [:t92J05 :t94J04 :t97A01 :t97A03]}]}
+   :other-consumers [:t92J05 :t94J04 :t97A01 :t97A03]}
+  {:consumer :t96J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.PolygonSurfacePiOne.polygonRadialOpenSets",
+    :type
+    "PolygonRadialOpenSets P with saturated open inner/outer images and union univ"},
+   :lemma
+   {:name
+    "ConstructionTargets.PolygonSurfacePiOne.polygonRadialOpenSets",
+    :reported-by [:routes-2026-10-12-polygon-b4-radial-opens-topo2-r1],
+    :type
+    "PolygonRadialOpenSets P with saturated open inner/outer images and union univ",
+    :area "polygon-surface-pi1",
+    :proved-in :routes-2026-10-12-polygon-b4-radial-opens-topo2-r1},
+   :id
+   :lemma-constructiontargets-polygonsurfacepione-polygonradialopensets,
+   :kind :lemma,
+   :depends-on
+   [:lemma-innerdisk-union-outerdisk :lemma-eq-or-boundary-of-eqvgen],
+   :other-consumers [:t92J05 :t94J04 :t97A01 :t97A03]}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance {:lemma "eq_or_boundary_of_eqvGen"},
+   :lemma {:name "eq_or_boundary_of_eqvGen", :reported-by []},
+   :id :lemma-eq-or-boundary-of-eqvgen,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}]}
