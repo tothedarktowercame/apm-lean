@@ -113895,6 +113895,19 @@
       :exit 1,
       :finding
       "Endpoint proof depends on functor object; retained endpoints with HEq."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791801853963-6814-e45f4124",
+     :commands
+     ["git show/diff-tree 4eec8d8c"
+      "sha256/diff/placeholder checks"
+      "statement-registry.py check"
+      "lake env lean ConstructionTargets/PointWedgeVanKampen.lean"
+      "lake build ConstructionTargets.PointWedgeVanKampen"
+      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (expected absent)"],
+     :finding
+     "PASS program STOP: exact 2-file commit adds a compiled sorry-free HEq between the mapped lifted-left loop through the equivalence functor and the concrete FundamentalGroupoid.map. HEq is the correct boundary because arrow types depend on object images; rfl follows the exposed definitional functor equality. Fixture/source/doc hashes match; placeholders 0->0; registry 131/131; standard axioms only. Final module remains absent; residual transports this HEq, then right and B12."},
     :commit "4eec8d8c20a9f79f799a1be84f812497a442ab67",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
@@ -113905,7 +113918,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113926,7 +113939,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: The left equivalence forward functor is now explicitly the fundamental-groupoid map induced by leftEquiv.toFun.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: The mapped lifted left loop is now HEq to the concrete induced groupoid map with dependent endpoints preserved.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -114250,7 +114263,11 @@
     {:job 4,
      :commit "0d13ade10fde6f977237a818fbd00b6e368bd949",
      :reason
-     "The left equivalence forward functor is now explicitly the fundamental-groupoid map induced by leftEquiv.toFun."}]}
+     "The left equivalence forward functor is now explicitly the fundamental-groupoid map induced by leftEquiv.toFun."}
+    {:job 5,
+     :commit "4eec8d8c20a9f79f799a1be84f812497a442ab67",
+     :reason
+     "The mapped lifted left loop is now HEq to the concrete induced groupoid map with dependent endpoints preserved."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
