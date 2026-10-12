@@ -384,6 +384,45 @@ theorem spherePullbackLongCoeff_pi
   rw [spherePullbackLongCoeff_eq, sphereParamLong_pi]
   exact (eta (sphereParam (Real.pi, t))).map_coord_zero 0 (by simp)
 
+/-- Green cancellation for the pullback of an ambient one-form over the
+spherical rectangle.  The hypotheses are exactly the analytic premises of
+Mathlib's rectangle divergence theorem; the geometric boundary terms cancel
+by longitude periodicity and degeneration at the two poles. -/
+theorem sphericalRectangle_green_boundary_zero
+    (eta : E3 → E3 [⋀^Fin 1]→L[ℝ] ℝ)
+    (hLongCont : ContinuousOn (spherePullbackLongCoeff eta)
+      (Set.uIcc 0 Real.pi ×ˢ Set.uIcc 0 (2 * Real.pi)))
+    (hLatCont : ContinuousOn (spherePullbackLatCoeff eta)
+      (Set.uIcc 0 Real.pi ×ˢ Set.uIcc 0 (2 * Real.pi)))
+    (hLongDeriv : ∀ x ∈
+      Set.Ioo (min 0 Real.pi) (max 0 Real.pi) ×ˢ
+        Set.Ioo (min 0 (2 * Real.pi)) (max 0 (2 * Real.pi)) \ ∅,
+      HasFDerivAt (spherePullbackLongCoeff eta)
+        (fderiv ℝ (spherePullbackLongCoeff eta) x) x)
+    (hLatDeriv : ∀ x ∈
+      Set.Ioo (min 0 Real.pi) (max 0 Real.pi) ×ˢ
+        Set.Ioo (min 0 (2 * Real.pi)) (max 0 (2 * Real.pi)) \ ∅,
+      HasFDerivAt (spherePullbackLatCoeff eta)
+        (fderiv ℝ (spherePullbackLatCoeff eta) x) x)
+    (hIntegrable : MeasureTheory.IntegrableOn (fun x =>
+      fderiv ℝ (spherePullbackLongCoeff eta) x (1, 0) -
+        fderiv ℝ (spherePullbackLatCoeff eta) x (0, 1))
+      (Set.uIcc 0 Real.pi ×ˢ Set.uIcc 0 (2 * Real.pi))) :
+    (∫ s in 0..Real.pi, ∫ t in 0..2 * Real.pi,
+      fderiv ℝ (spherePullbackLongCoeff eta) (s, t) (1, 0) -
+        fderiv ℝ (spherePullbackLatCoeff eta) (s, t) (0, 1)) = 0 := by
+  have hgreen := MeasureTheory.integral2_divergence_prod_of_hasFDerivAt_off_countable
+    (spherePullbackLongCoeff eta) (fun x => -spherePullbackLatCoeff eta x)
+    (fun x => fderiv ℝ (spherePullbackLongCoeff eta) x)
+    (fun x => -(fderiv ℝ (spherePullbackLatCoeff eta) x))
+    0 0 Real.pi (2 * Real.pi) ∅ Set.countable_empty
+    hLongCont hLatCont.neg hLongDeriv
+    (fun x hx => (hLatDeriv x hx).neg)
+    (by simpa [sub_eq_add_neg] using hIntegrable)
+  simpa [spherePullbackLatCoeff_two_pi_eq_zero,
+    spherePullbackLongCoeff_zero, spherePullbackLongCoeff_pi,
+    sub_eq_add_neg] using hgreen
+
 #print axioms solidAngleAmbient_apply
 #print axioms norm_cube_eq_coordinate_denominator
 #print axioms solidAngleAmbient_apply_coordinate
@@ -395,5 +434,6 @@ theorem spherePullbackLongCoeff_pi
 #print axioms solidAngleAmbient_sphereParam
 #print axioms solidAngle_pullback_sphereParam
 #print axioms exact_sphereParam_identity
+#print axioms sphericalRectangle_green_boundary_zero
 
 end ConstructionTargets.T94A10Closure
