@@ -30162,7 +30162,7 @@
    "reopened: a lemma this row reported missing is now banked",
    :stop-count 4,
    :review-finding
-   "Program-row defect: commit 92a672b41 changes only SurfaceClassification.blueprint.md, adds no compiled result after program-history commit 4244c6e3e, and records no :missing-theorems milestone. The program rule requires new compiled, sorry-free progress. Retire/replace this program through the supervisor as proposed, or commit and list a compiled supporting theorem; submit the replacement blueprint under an independently reviewable blueprint row.",
+   "Program-row defect persists: commit 92a672b41 changes only SurfaceClassification.blueprint.md and adds no compiled milestone after history commit 4244c6e3e; registry remains 131/131. Exact repair is supervisor-owned: retire/supersede this obsolete implementation program, then submit 92a672b41 as an independent blueprint-review row and elect R1-R7 only after that review. Do not require the parked author to add off-route compiled work.",
    :implements-lemma
    :lemma-constructiontargets-surfaceclassification-compactsmoothsurfacefinitetriangulatio,
    :evidence
@@ -30191,11 +30191,17 @@
       "git diff --check 4244c6e3e..92a672b41 -- ConstructionTargets/SurfaceClassification.blueprint.md",
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
+    :review
+    {:outcome :fail,
+     :seat "codex-11",
+     :job "invoke-1791821703655-7366-f334edcb",
+     :finding
+     "Program-row defect persists: commit 92a672b41 changes only SurfaceClassification.blueprint.md and adds no compiled milestone after history commit 4244c6e3e; registry remains 131/131. Exact repair is supervisor-owned: retire/supersede this obsolete implementation program, then submit 92a672b41 as an independent blueprint-review row and elect R1-R7 only after that review. Do not require the parked author to add off-route compiled work."},
     :commit "92a672b41fa1f7e45df1987a4aca7d2f8460d2e0",
     :changed-paths [],
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :repair,
    :scope
    ["ConstructionTargets/SurfaceClassification.lean"
     "ConstructionTargets/SurfaceClassification.md"
@@ -30219,7 +30225,7 @@
    :id :program-2026-10-12-surface-classification,
    :kind :reusable-theorem,
    :campaign-priority 40,
-   :fail-count 2,
+   :fail-count 3,
    :depends-on [],
    :program true,
    :other-consumers [:t00A03 :t91J05 :t92J05 :t94J04 :t96A01 :t97J02],
