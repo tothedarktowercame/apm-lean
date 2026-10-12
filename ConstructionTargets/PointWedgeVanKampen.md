@@ -694,3 +694,9 @@ span transport.  The theorem
 then splits its counit into the mapped open-cover counit followed by the
 coordinate-span counit.  The latter is exactly the component whose identity
 glue has already been expanded into the two outer comparisons.
+
+`genericPointWedgePreCoordinatePointCounit_legs_eq_preCoordinateSpan_coordinateSpan`
+projects this split to both literal span legs.  Each equation now displays the
+mapped earlier counit followed by the corresponding coordinate-span counit
+leg, providing the two precise components to compare with the expanded outer
+left and right factors.

@@ -2305,6 +2305,36 @@ theorem genericPointWedgePreCoordinatePointCounit_eq_preCoordinateSpan_coordinat
         B.counitIso.hom.app Z := by
   simp
 
+/-- Projecting the preceding counit split exposes the coordinate-span counit
+separately on both transported cover legs. -/
+theorem genericPointWedgePreCoordinatePointCounit_legs_eq_preCoordinateSpan_coordinateSpan :
+    let C := genericPointWedgeTarget x₀ y₀
+    let A := genericPointWedgePreCoordinateSpanMappingEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN C
+    let B := genericPointWedgeCoordinateSpanEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN C
+    let Q := genericPointWedgeCoordinatePointSpanEquivalence x₀ y₀ C
+    let S := freeProductPointSpanEquivalence
+      (genericPointWedgeLeftGroup x₀) (genericPointWedgeRightGroup y₀) C
+    let R := representationSingleObjEquivalence
+      (C := C) (genericPointWedgeLeftGroup x₀)
+        (genericPointWedgeRightGroup y₀)
+    let F := Functor.id (SingleObj (genericPointWedgeFreeProduct x₀ y₀))
+    let Z := Q.inverse.obj (S.inverse.obj (R.inverse.obj F))
+    (((A.trans B).counitIso.hom.app Z).left =
+        (B.functor.map (A.counitIso.hom.app (B.inverse.obj Z))).left ≫
+          (B.counitIso.hom.app Z).left) ∧
+      (((A.trans B).counitIso.hom.app Z).right =
+        (B.functor.map (A.counitIso.hom.app (B.inverse.obj Z))).right ≫
+          (B.counitIso.hom.app Z).right) := by
+  constructor
+  · exact congrArg (fun k => k.left)
+      (genericPointWedgePreCoordinatePointCounit_eq_preCoordinateSpan_coordinateSpan
+        x₀ y₀ M N hM hN hy hx cM cN)
+  · exact congrArg (fun k => k.right)
+      (genericPointWedgePreCoordinatePointCounit_eq_preCoordinateSpan_coordinateSpan
+        x₀ y₀ M N hM hN hy hx cM cN)
+
 /-- At the identity point-span object, the remaining coordinate-to-point
 counit is exactly the generic span-transport counit. -/
 theorem genericPointWedgeCoordinatePointCounit_eq_transportCounit :
@@ -3834,6 +3864,7 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgePreCoordinateSpanMappingEquivalence
 #print axioms genericPointWedgePreCoordinatePointSpanMappingEquivalence_eq_preCoordinateSpan_trans
 #print axioms genericPointWedgePreCoordinatePointCounit_eq_preCoordinateSpan_coordinateSpan
+#print axioms genericPointWedgePreCoordinatePointCounit_legs_eq_preCoordinateSpan_coordinateSpan
 #print axioms genericPointWedgeCoordinatePointCounit_eq_transportCounit
 #print axioms genericPointWedgeCoordinatePointCounit_legs
 #print axioms genericPointWedgeCoordinatePointCounit_uniqueObjects
