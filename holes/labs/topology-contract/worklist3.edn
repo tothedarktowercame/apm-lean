@@ -30162,7 +30162,7 @@
    "reopened: a lemma this row reported missing is now banked",
    :stop-count 3,
    :review-finding
-   "Program-row evidence defect: commit 4244c6e3e adds compiled theorem continuous_twoSegmentPath after history commit 754add487, but the row records :changed-paths [] and no :missing-theorems milestone. Repair by recording ConstructionTargets.SurfaceClassification.continuous_twoSegmentPath with its exact type/status/dependency, correcting changed-paths to SurfaceClassification.lean, and retaining the owner park/residual route redesign.",
+   "Program-row defect: commit 92a672b41 changes only SurfaceClassification.blueprint.md, adds no compiled result after program-history commit 4244c6e3e, and records no :missing-theorems milestone. The program rule requires new compiled, sorry-free progress. Retire/replace this program through the supervisor as proposed, or commit and list a compiled supporting theorem; submit the replacement blueprint under an independently reviewable blueprint row.",
    :implements-lemma
    :lemma-constructiontargets-surfaceclassification-compactsmoothsurfacefinitetriangulatio,
    :evidence
@@ -30190,12 +30190,18 @@
       :exit 0}
      {:cmd "rg blueprint R1-R7 and replacement action", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
+    :review
+    {:outcome :fail,
+     :seat "codex-11",
+     :job "invoke-1791821601235-7356-e6c0ac38",
+     :finding
+     "Program-row defect: commit 92a672b41 changes only SurfaceClassification.blueprint.md, adds no compiled result after program-history commit 4244c6e3e, and records no :missing-theorems milestone. The program rule requires new compiled, sorry-free progress. Retire/replace this program through the supervisor as proposed, or commit and list a compiled supporting theorem; submit the replacement blueprint under an independently reviewable blueprint row."},
     :commit "92a672b41fa1f7e45df1987a4aca7d2f8460d2e0",
     :changed-paths
     ["ConstructionTargets/SurfaceClassification.blueprint.md"],
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :repair,
    :scope
    ["ConstructionTargets/SurfaceClassification.lean"
     "ConstructionTargets/SurfaceClassification.md"
@@ -30219,7 +30225,7 @@
    :id :program-2026-10-12-surface-classification,
    :kind :reusable-theorem,
    :campaign-priority 40,
-   :fail-count 1,
+   :fail-count 2,
    :depends-on [],
    :program true,
    :other-consumers [:t00A03 :t91J05 :t92J05 :t94J04 :t96A01 :t97J02],
