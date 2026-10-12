@@ -113890,6 +113890,17 @@
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder/diff validation", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791841046160-7936-51317970",
+     :commands
+     ["git show/diff-tree be492215"
+      "lake build ConstructionTargets.PointWedgeVanKampen"
+      "python3 scripts/statement-registry.py check"
+      "commit hash and placeholder checks"],
+     :finding
+     "PASS program STOP: be492215 by topo-2 adds separately named right unit/strict factors, their exact functor-map formulas, and documentation, exactly within scope and new since history. Source d2ee554e..., documentation ce57be18..., fixture 0bca6ce3..., registry 131/131, and placeholders 0->0 reproduce. The inverse composite remains ordered as inverse unit then forward strict comparison; the map formulas correctly expose S.right.map(unit inverse) and (eR.inverse then S.right).map(aR.hom), without collapsing representation changes. Fresh build passes with standard axioms. Identifying the reconstructed right restriction and strict map, left-counit specialization, point-span transport, counits, and B6/B12 remain listed."},
     :commit "be492215e0d889e0b20ce43a72368600e49badc7",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
@@ -113900,7 +113911,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113921,7 +113932,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Receipt repaired with the exact reviewed blueprint hash.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Both ordered right-comparison factors now expose their exact functor maps.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -114468,7 +114479,11 @@
     {:job 7,
      :commit "c9b3af27ed1f34654ec4d2574adf3a8c21c7e4a8",
      :reason
-     "Receipt repaired with the exact reviewed blueprint hash."}]}
+     "Receipt repaired with the exact reviewed blueprint hash."}
+    {:job 8,
+     :commit "be492215e0d889e0b20ce43a72368600e49badc7",
+     :reason
+     "Both ordered right-comparison factors now expose their exact functor maps."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
