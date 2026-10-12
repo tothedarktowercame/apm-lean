@@ -2233,6 +2233,51 @@ theorem rotatedEndpointWaypoint_twiceCorrected_departure_zero_coordinates
   refine ⟨htpos, ?_, heq.1⟩
   nlinarith [heq.2]
 
+/-- The norm-square constraint forced by a zero after both corrections. -/
+theorem rotatedEndpointWaypoint_twiceCorrected_departure_zero_normSq
+    (t : unitInterval) (p : RightTubeMinusLeftCore)
+    (hz : (((1 - 2 * (t : ℝ) : ℝ) : ℂ) +
+        ((2 * (t : ℝ) : ℝ) : ℂ) * rotatedEndpointWaypoint p +
+        (((t : ℝ) * (1 - 2 * (t : ℝ)) : ℝ) : ℂ) * Complex.I +
+        (correctedDepartureBump t : ℂ)) = 0) :
+    Complex.normSq (rightTubeCorePlanarComplex p.1) =
+      (1 - 2 * (t : ℝ)) ^ 2 / 4 +
+        (1 - 2 * (t : ℝ) + correctedDepartureBump t) ^ 2 /
+          (4 * (t : ℝ) ^ 2) := by
+  obtain ⟨ht, hre, him⟩ :=
+    rotatedEndpointWaypoint_twiceCorrected_departure_zero_coordinates t p hz
+  have htne : (t : ℝ) ≠ 0 := ne_of_gt ht
+  have him' :
+      (rightTubeCorePlanarComplex p.1).im =
+        -(1 - 2 * (t : ℝ) + correctedDepartureBump t) /
+          (2 * (t : ℝ)) := by
+    field_simp [htne]
+    nlinarith
+  rw [Complex.normSq_apply, hre, him']
+  field_simp [htne]
+  ring
+
+/-- Every twice-corrected zero satisfies the right-tube annulus bounds. -/
+theorem rotatedEndpointWaypoint_twiceCorrected_departure_zero_scalar_bounds
+    (t : unitInterval) (p : RightTubeMinusLeftCore)
+    (hz : (((1 - 2 * (t : ℝ) : ℝ) : ℂ) +
+        ((2 * (t : ℝ) : ℝ) : ℂ) * rotatedEndpointWaypoint p +
+        (((t : ℝ) * (1 - 2 * (t : ℝ)) : ℝ) : ℂ) * Complex.I +
+        (correctedDepartureBump t : ℂ)) = 0) :
+    (9 / 16 : ℝ) ≤
+        (1 - 2 * (t : ℝ)) ^ 2 / 4 +
+          (1 - 2 * (t : ℝ) + correctedDepartureBump t) ^ 2 /
+            (4 * (t : ℝ) ^ 2) ∧
+      (1 - 2 * (t : ℝ)) ^ 2 / 4 +
+          (1 - 2 * (t : ℝ) + correctedDepartureBump t) ^ 2 /
+            (4 * (t : ℝ) ^ 2) ≤ (25 / 16 : ℝ) := by
+  have heq :=
+    rotatedEndpointWaypoint_twiceCorrected_departure_zero_normSq t p hz
+  have hb := rightTubeCorePlanarNormBounds p.1 p.2.1
+  have hn : 0 ≤ ‖rightTubeCorePlanarComplex p.1‖ := norm_nonneg _
+  rw [← heq, ← Complex.sq_norm]
+  constructor <;> nlinarith
+
 end ConstructionTargets.T02A03GeometricTubeDeformation
 
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeNormalComplex_eq_zero_iff
@@ -2322,3 +2367,5 @@ end ConstructionTargets.T02A03GeometricTubeDeformation
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.correctedDepartureBump_ne_zero_at_corrected_zero
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_twiceCorrected_departure_eq_zero_iff
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_twiceCorrected_departure_zero_coordinates
+#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_twiceCorrected_departure_zero_normSq
+#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_twiceCorrected_departure_zero_scalar_bounds
