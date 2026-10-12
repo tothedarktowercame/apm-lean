@@ -113850,7 +113850,7 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 10,
+   :stop-count 0,
    :review-finding
    "Blueprint B3 is marked proved but its proof uses the unlisted ConnectedGroupoidSingleObjEquivalence.connectorSingleObjEquivalence (and connector-system representation) instead of only the declared uses; add the actual connector dependency and proof route to B3 uses.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
@@ -113900,7 +113900,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -116878,6 +116878,20 @@
     [{:cmd "lean initial theorem",
       :exit 1,
       :finding "Corrected a malformed model-with-corners glyph."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791831595428-7741-de3ff29e",
+     :commands
+     ["git show/diff-tree 0f8bb79"
+      "sha256sum + statement fingerprint"
+      "lake env lean ConstructionTargets/t97A07Closure.lean"
+      "lake build ConstructionTargets.t97A07Closure"
+      "lake env lean problems/t97A07/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "git grep placeholders parent/commit"],
+     :finding
+     "PASS: commit 0f8bb79 by topo-2 changes exactly two scoped closure files. Blueprint fixture f1856bca... and frozen Main f13a687... match; registry 131/131 and statement fingerprint are unchanged. New theorem correctly packages transported mfderiv continuity with centre equality, preserving tangent-coordinate boundaries and orientation; blueprint addition is true and depends on proved B2 results. Fresh gates compile; axioms are propext/choice/Quot.sound; no new placeholders (frozen source 1->1). This is compiled sorry-free standard-axiom program progress, with the pointwise fixed-representative comparison and B3-B9 explicitly remaining."},
     :commit "0f8bb79ba478e77e26d74ceeb148df08eac39b65",
     :changed-paths
     ["ConstructionTargets/t97A07Closure.lean"
@@ -116888,7 +116902,7 @@
      "f1856bca7d3b96c71c928f87a416e56ea453c0cc635eea3dcef2864af39dd3dc"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A07/lean/Main.lean"
     "problems/t97A07/status.json"
@@ -116904,7 +116918,7 @@
     ["lake env lean problems/t97A07/lean/Main.lean"
      "python3 scripts/statement-registry.py check"]},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: One neighbourhood now carries both fixed-chart memberships, the transported chart-factor formula, and its centre anchor.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Transported derivative continuity and its centre mfderiv anchor are packaged together.",
    :id :program-2026-10-11-close-t97a07,
    :kind :final-adapter,
    :campaign-priority 44,
@@ -116958,7 +116972,11 @@
     {:job 4,
      :commit "2fdbc0115",
      :reason
-     "One neighbourhood now carries both fixed-chart memberships, the transported chart-factor formula, and its centre anchor."}]}
+     "One neighbourhood now carries both fixed-chart memberships, the transported chart-factor formula, and its centre anchor."}
+    {:job 5,
+     :commit "0f8bb79ba478e77e26d74ceeb148df08eac39b65",
+     :reason
+     "Transported derivative continuity and its centre mfderiv anchor are packaged together."}]}
   {:consumer :t91J06,
    :stop-count 2,
    :review-finding
