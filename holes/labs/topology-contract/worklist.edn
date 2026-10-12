@@ -116735,13 +116735,13 @@
   {:consumer :t97A07,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 2,
    :review-finding
    "Recorded fixture hash mismatch: :fixture.sha256 is eaeed21919599335d4a33b437815c4a9cbb5b72110213b29440d6944cc982182 (the blueprint at older commit 736c2566), but commit 8432f937 changes ConstructionTargets/t97A07Closure.blueprint.md and its exact SHA-256 is 5bb02c342b988406e8bd26aeda1b9e67335a8c1f626d97ec96701cb039ae708f. Re-record the fixture hash for the reviewed commit.",
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
     :residual
-    "Extend the centre equality to the fixed-chart neighbourhood; then B3-B9.",
+    "Identify the fixed derivative with the nearby factorization; then B3-B9.",
     :outcome :stop,
     :warnings [{:kind :existing-placeholder}],
     :missing-theorems
@@ -116753,17 +116753,17 @@
       :area "regular-points-open"}],
     :statement-hashes
     {:source
-     "337ead74776f99b88f2ea391098913ba91b20f6d9deaed914e9f5bc9e89d59ff",
+     "938d2c8a88c9af5bf52bbd28feb91734c0d96924290d7284bc4589799b27cb6d",
      :target
      "f13a687334f894f060c24b9aa390e8de88a2bf5f3d36e1de717af326c84d78f2",
      :blueprint
-     "443096727728cdf866c846c37b5440ac01aa7cb0d5ff31093ae77182b5da9868",
+     "ee1c17940bdeeba587794f23549fe62ec95f34513a8714356f7d9301d2ac0b49",
      :registry "131/131"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
     :reason
-    "The fixed-coordinate derivative now equals the transported mfderiv at the common chart centre.",
+    "Nearby derivatives uniformly expose the chart-factor formula.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t97A07Closure.lean",
       :exit 0}
@@ -116771,31 +116771,23 @@
      {:cmd "lake env lean problems/t97A07/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder/diff validation", :exit 0}],
-    :diagnostic-history [],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1791805534529-6886-b1992fb1",
-     :commands
-     ["git show/diff-tree 4e3e0e768"
-      "sha256/placeholder checks"
-      "statement-registry.py check"
-      "lake env lean ConstructionTargets/t97A07Closure.lean"
-      "lake build ConstructionTargets.t97A07Closure"
-      "lake env lean problems/t97A07/lean/Main.lean"],
-     :finding
-     "PASS: exact two-file scope and fixture/source/target hashes match; placeholders closure 0->0, frozen target 1->1; registry 131/131. Centre equality has faithful orientation and compares only common fixed-coordinate fibers; blueprint dependencies remain sound. Standard axioms only. Valid program STOP: compiled B2 progress; neighbourhood equality and B3-B9 remain."},
-    :commit "4e3e0e768300f2f23a7298a20532b93448d457cb",
+    :diagnostic-history
+    [{:cmd "lean factorization",
+      :exit 1,
+      :finding "Fixed model glyph."}
+     {:cmd "lean rerun 1", :exit 1, :finding "Fixed nhds glyph."}
+     {:cmd "lean rerun 2", :exit 1, :finding "Copied exact glyph."}],
+    :commit "76302b36b2acab6cfee4cbed81e9c647b34c729c",
     :changed-paths
     ["ConstructionTargets/t97A07Closure.lean"
      "ConstructionTargets/t97A07Closure.blueprint.md"],
     :fixture
     {:path "ConstructionTargets/t97A07Closure.blueprint.md",
      :sha256
-     "443096727728cdf866c846c37b5440ac01aa7cb0d5ff31093ae77182b5da9868"},
+     "ee1c17940bdeeba587794f23549fe62ec95f34513a8714356f7d9301d2ac0b49"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t97A07/lean/Main.lean"
     "problems/t97A07/status.json"
