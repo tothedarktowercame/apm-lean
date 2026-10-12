@@ -457,3 +457,7 @@ inclusion on the chosen overlap representative: its image is exactly
 `genericPointWedgeOverlapToRight_obj_overlapBase` computes the literal right
 inclusion on the same representative: its image is exactly
 `genericPointWedgeRightBase`, again before equivalence transport.
+
+`genericPointWedgeLeftLegLift` is the continuous lift of the literal left
+wedge inclusion into the left cover member.  Its basepoint is definitionally
+the previously fixed `genericPointWedgeLeftBase` representative.
