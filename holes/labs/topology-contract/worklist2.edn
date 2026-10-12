@@ -79662,6 +79662,19 @@
       :exit 1,
       :finding
       "Wrapped coordinates in PiLp and factored trig identity."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791771275651-6176-2d60687a",
+     :commands
+     ["git metadata/blob/SHA checks"
+      "lake build ConstructionTargets.t94A10Closure"
+      "lake env lean ConstructionTargets/t94A10Closure.lean"
+      "lake env lean problems/t94A10/lean/Main.lean"
+      "statement-registry check/fingerprint"
+      "placeholder counts"],
+     :finding
+     "PASS: recorded topo-6 commit 0f4ab1a adds compiled, sorry-free B5-B6 progress after 1fda42f; sole changed path is scoped, fixture/blob hashes match, derivatives/periodicity/polar edges and +sin orientation are correct, standard axioms only, registry 131/0 and fingerprint d1822221 reproduce, closure/Main placeholders 0/1; STOP lists B7 then B8-B11."},
     :commit "0f4ab1a5170d4ff38120c231e7de5ca0c94f47f3",
     :changed-paths ["ConstructionTargets/t94A10Closure.lean"],
     :fixture
@@ -79670,7 +79683,7 @@
      "830d088e06155b59ace263438139ffc774850789d95371126f026ec6346e342a"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t94A10/lean/Main.lean"
     "problems/t94A10/status.json"
@@ -79702,6 +79715,9 @@
     {:job 4, :commit "da84484c8", :reason :program-milestone-complete}
     {:job 5,
      :commit "1fda42ff789847280f9a7f54b02d0f5849c6446b",
+     :reason :program-milestone-complete}
+    {:job 6,
+     :commit "0f4ab1a5170d4ff38120c231e7de5ca0c94f47f3",
      :reason :program-milestone-complete}]}
   {:consumer :t97A04,
    :phase :lemma,
@@ -81706,7 +81722,7 @@
    :other-consumers []}
   {:consumer :t94A10,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "ConstructionTargets.T94A10Closure.sphereParam",
@@ -81716,14 +81732,16 @@
     :reported-by [:program-2026-10-11-close-t94a10],
     :type "B5 sphere parameter",
     :area "periodic-stokes-square",
-    :proved-in :program-2026-10-11-close-t94a10},
+    :proved-in :program-2026-10-11-close-t94a10,
+    :banked-by :program-2026-10-11-close-t94a10,
+    :banked-commit "0f4ab1a5170d4ff38120c231e7de5ca0c94f47f3"},
    :id :lemma-constructiontargets-t94a10closure-sphereparam,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}
   {:consumer :t94A10,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -81735,7 +81753,9 @@
     :reported-by [:program-2026-10-11-close-t94a10],
     :type "B6 pullback coefficient is sin latitude",
     :area "periodic-stokes-square",
-    :proved-in :program-2026-10-11-close-t94a10},
+    :proved-in :program-2026-10-11-close-t94a10,
+    :banked-by :program-2026-10-11-close-t94a10,
+    :banked-commit "0f4ab1a5170d4ff38120c231e7de5ca0c94f47f3"},
    :id
    :lemma-constructiontargets-t94a10closure-solidangle-pullback-sphereparam,
    :kind :lemma,
