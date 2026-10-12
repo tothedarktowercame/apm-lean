@@ -18743,8 +18743,38 @@
   {:consumer :t00J02,
    :implements-lemma
    :lemma-constructiontargets-manifoldfundamentalclass-coefficientspherenormalization-comp,
+   :evidence
+   {:placeholder-delta {:t00J02 [1 1], :t98A02 [1 1]},
+    :residual "Determine endpoint automorphism.",
+    :outcome :done-unreviewed,
+    :warnings ["9 pre-existing unnecessarySimpa"],
+    :missing-theorems [],
+    :statement-hashes {:registry "131/131"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli",
+    :commands
+    [{:cmd "sha256sum /tmp/sphereend.lean", :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.ManifoldFundamentalClass",
+      :exit 0}
+     {:cmd "lake env lean /tmp/sphereend_check.lean", :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "rg forbidden tokens in scoped file",
+      :exit 1,
+      :expected-exit 1}],
+    :commit "c32c0a8face0f14fb1dbff4cb21a98e9e069bfec",
+    :changed-paths
+    ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+    :fixture
+    {:path "/tmp/sphereend.lean",
+     :sha256
+     "2f41529ac8ab2ce7948d1ed6668427d1a338f5e75c7a28a935de7397ec806624"},
+    :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/manifold-fundamental-class/model-sphere",
