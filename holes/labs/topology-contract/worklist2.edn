@@ -79612,18 +79612,21 @@
      :commit "68d614508",
      :reason :program-milestone-complete}]}
   {:consumer :t94A10,
-   :stop-count 2,
+   :stop-count 3,
    :review-finding
    "B8 cites nonexistent Mathlib theorem MeasureTheory.integral2_divergence_prod_of_hasFDerivWithinAt_off_countable. Revise B8 to use the available integral2_divergence_prod_of_hasFDerivAt_off_countable and explicitly supply its ContinuousOn, pointwise HasFDerivAt, and IntegrableOn hypotheses; then re-review the blueprint.",
    :evidence
    {:placeholder-delta 0,
-    :residual "Re-review blueprint; then formalize B1-B4 and B5-B11.",
+    :residual
+    "Formalize B2 radial inverse-cube derivative; then B3-B11.",
     :outcome :stop,
-    :warnings ["Main: 2 placeholders."],
+    :warnings
+    ["Main: 2 placeholders." "Unrelated dirty file preserved."],
     :missing-theorems
     [{:name "ConstructionTargets.T94A10Closure.solidAngleAmbient",
-      :type "determinant radial ambient two-form",
-      :status :not-started,
+      :type
+      "determinant radial ambient two-form with frozen coordinate formula",
+      :status :proved,
       :consumers [:t94A10],
       :depends-on [],
       :area "periodic-stokes-square"}
@@ -79633,52 +79636,36 @@
       :status :not-started,
       :consumers [:t94A10],
       :depends-on [],
-      :area "periodic-stokes-square"}
-     {:name
-      "ConstructionTargets.T94A10Closure.solidAngleAmbient_closed",
-      :type "solid-angle extDeriv vanishes off zero",
-      :status :not-started,
-      :consumers [:t94A10],
-      :depends-on
-      ["ConstructionTargets.T94A10Closure.solidAngleAmbient"
-       "ConstructionTargets.T94A10Closure.hasFDerivAt_radialInvCube"],
       :area "periodic-stokes-square"}],
     :statement-hashes
     {:registry "131/0",
+     :closure "d7050d4a7a94ad4c3c2a22c98d50378fabdc2eee",
      :blueprint "808e174fd0529d3c85b60b506988b0a55526c8e0"},
     :disposition :stop,
-    :axioms [],
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason :blueprint-revised,
+    :reason :program-milestone-complete,
     :commands
-    [{:cmd "verify Green theorem API and B8 hypotheses", :exit 0}
+    [{:cmd "closure compile", :exit 0}
      {:cmd "Main compile", :exit 0}
      {:cmd "registry check", :exit 0}
-     {:cmd "blueprint node check", :exit 0}
-     {:cmd "git diff --check", :exit 0}
-     {:cmd "git show --check 2e890e314", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1791763848216-6030-ac6a2ad6",
-     :commands
-     ["git show/check/diff-tree 2e890e314"
-      "verify blueprint blob/SHA and prior ancestry"
-      "check pinned Mathlib Green theorem API"
-      "lake env lean problems/t94A10/lean/Main.lean"
-      "statement-registry check/fingerprint"
-      "count placeholders and blueprint nodes"],
-     :finding
-     "PASS: repair commit 2e890e314aa6f3a9d846fc01cb336afd0664f039 changes only the blueprint; blob 808e174f and fixture f1cea218 match. B1-B11 are mathematically coherent and respect the frozen ambient-form and latitude-longitude representations. B8 now uses the existing HasFDerivAt Green theorem and supplies ContinuousOn, pointwise HasFDerivAt, IntegrableOn, and countability premises; edge orientations yield the stated zero boundary integral. Registry 131/0; frozen hash d1822221 unchanged; Main compiles with its recorded 2 placeholders. Revised STOP lists B1-B11 milestones."},
-    :commit "2e890e314aa6f3a9d846fc01cb336afd0664f039",
-    :changed-paths ["ConstructionTargets/t94A10Closure.blueprint.md"],
+     {:cmd "closure no-sorry", :exit 1, :expected-exit 1}
+     {:cmd "placeholder count", :exit 0, :output "2"}
+     {:cmd "git show --check 9950771b4", :exit 0}],
+    :diagnostic-history
+    [{:cmd "closure compile",
+      :exit 1,
+      :finding
+      "Exposed determinant application before coordinate normalization."}],
+    :commit "9950771b4",
+    :changed-paths ["ConstructionTargets/t94A10Closure.lean"],
     :fixture
-    {:path "ConstructionTargets/t94A10Closure.blueprint.md",
+    {:path "ConstructionTargets/t94A10Closure.lean",
      :sha256
-     "f1cea2186cd7f79d42b118e44e9cc56db23f668545c19d9d50a62317db3353cd"},
+     "de8376a421dd5d6c5af7ba7e5b1041dde8605f8718413b74a0e9cf2d1158b47e"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t94A10/lean/Main.lean"
     "problems/t94A10/status.json"
@@ -81298,7 +81285,8 @@
    {:name "ConstructionTargets.T94A10Closure.solidAngleAmbient",
     :reported-by [:program-2026-10-11-close-t94a10],
     :type "determinant radial ambient two-form",
-    :area "periodic-stokes-square"},
+    :area "periodic-stokes-square",
+    :proved-in :program-2026-10-11-close-t94a10},
    :id :lemma-constructiontargets-t94a10closure-solidangleambient,
    :kind :lemma,
    :depends-on [],
