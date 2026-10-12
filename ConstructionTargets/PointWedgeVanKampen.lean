@@ -2278,6 +2278,61 @@ theorem genericPointWedgeLeftEquiv_leftBase_connector :
   rw [dif_pos (genericPointWedgeLeftEquiv_obj_leftBase
     x₀ y₀ M N hM hN hy hx cM cN)]
 
+omit [PathConnectedSpace X] [PathConnectedSpace Y] in
+/-- The right cover equivalence sends the fixed right-cover representative to
+the literal right base object, including the quotient representative change. -/
+theorem genericPointWedgeRightEquiv_obj_rightBase :
+    (genericPointWedgeRightGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN).functor.obj
+        (genericPointWedgeRightBase x₀ y₀ N) =
+      FundamentalGroupoid.mk y₀ := by
+  apply FundamentalGroupoid.ext
+  have hz : (genericPointWedgeRightBase x₀ y₀ N).as =
+      ⟨quotientMap x₀ y₀ (.inr y₀), ⟨.inr y₀, by trivial, rfl⟩⟩ := by
+    apply Subtype.ext
+    exact Quotient.sound (Relation.EqvGen.rel _ _ Rel.base)
+  change (genericPointWedgePackage
+    x₀ y₀ M N hM hN hy hx cM cN).rightEquiv.toFun
+      (genericPointWedgeRightBase x₀ y₀ N).as = y₀
+  rw [hz]
+  exact (genericPointWedgePackage
+    x₀ y₀ M N hM hN hy hx cM cN).right_inclusion y₀
+
+omit [PathConnectedSpace X] in
+/-- At the transported right-cover base, the chosen based connector is the
+isomorphism induced by the named base-object equality. -/
+theorem genericPointWedgeRightEquiv_rightBase_connector :
+    genericPointWedgeBasedConnector y₀
+        ((genericPointWedgeRightGroupoidEquivalence
+          x₀ y₀ M N hM hN hy hx cM cN).functor.obj
+            (genericPointWedgeRightBase x₀ y₀ N)) =
+      eqToIso (genericPointWedgeRightEquiv_obj_rightBase
+        x₀ y₀ M N hM hN hy hx cM cN).symm := by
+  classical
+  simp only [genericPointWedgeBasedConnector]
+  rw [dif_pos (genericPointWedgeRightEquiv_obj_rightBase
+    x₀ y₀ M N hM hN hy hx cM cN)]
+
+omit [PathConnectedSpace X] in
+/-- The connector normal form of the mapped lifted right loop is conjugation
+by the explicit equality transport at its common endpoint. -/
+theorem genericPointWedgeRightLiftedLoop_normalForm_eq_transport
+    (g : FundamentalGroup Y y₀) :
+    (genericPointWedgeConnectors y₀).normalForm
+        ((genericPointWedgeRightGroupoidEquivalence
+          x₀ y₀ M N hM hN hy hx cM cN).functor.map
+            (genericPointWedgeRightLiftedLoop x₀ y₀ N g)) =
+      eqToHom (genericPointWedgeRightEquiv_obj_rightBase
+        x₀ y₀ M N hM hN hy hx cM cN).symm ≫
+        (genericPointWedgeRightGroupoidEquivalence
+          x₀ y₀ M N hM hN hy hx cM cN).functor.map
+            (genericPointWedgeRightLiftedLoop x₀ y₀ N g) ≫
+      eqToHom (genericPointWedgeRightEquiv_obj_rightBase
+        x₀ y₀ M N hM hN hy hx cM cN) := by
+  simp only [ConnectorSystem.normalForm, genericPointWedgeConnectors]
+  rw [genericPointWedgeRightEquiv_rightBase_connector]
+  rfl
+
 omit [PathConnectedSpace Y] in
 /-- The connector normal form of the mapped lifted left loop is conjugation
 by the explicit equality transport at its common endpoint. -/
@@ -2948,6 +3003,9 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeRightEquiv_comp_rightLegLift
 #print axioms genericPointWedgeLeftEquiv_obj_leftBase
 #print axioms genericPointWedgeLeftEquiv_leftBase_connector
+#print axioms genericPointWedgeRightEquiv_obj_rightBase
+#print axioms genericPointWedgeRightEquiv_rightBase_connector
+#print axioms genericPointWedgeRightLiftedLoop_normalForm_eq_transport
 #print axioms genericPointWedgeLeftLiftedLoop_normalForm_eq_transport
 #print axioms genericPointWedgeLeftComposite_baseProof
 #print axioms genericPointWedgeLeftComposite_mapOfEq

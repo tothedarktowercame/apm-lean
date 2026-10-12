@@ -531,3 +531,12 @@ then applies its proved identity action.
 `genericPointWedgeLeftLiftedLoop_normalForm` combines the connector expansion,
 dependent transport comparison, and composite-map identity: the full left
 connector normal form is the original left-summand loop.
+
+`genericPointWedgeRightEquiv_obj_rightBase` retains the wedge quotient change
+while identifying the transported fixed right-cover base with the literal
+right base object.  `genericPointWedgeRightEquiv_rightBase_connector` computes
+its chosen connector as the corresponding `eqToIso`.
+
+`genericPointWedgeRightLiftedLoop_normalForm_eq_transport` consequently
+expands the mapped right loop's connector normal form into the two explicit
+endpoint transports surrounding the mapped loop.
