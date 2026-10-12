@@ -370,3 +370,8 @@ for B6.
 matching right-hand expansion: the right equivalence functor is applied to the
 actual-right image of the overlap `unitInv`.  Both nested component maps, the
 two span maps, and the literal lifts remain for B6.
+
+`genericPointWedgeIdentityOuterLeftUnit_actualMap_eq_inclusionMap` unfolds the
+inner left stage to the fundamental-groupoid map induced by the literal
+overlap-to-left inclusion.  Evaluating that inclusion image, the right nested
+map, both span maps, and the literal lifts remains for B6.
