@@ -79522,6 +79522,19 @@
      {:cmd "registry check", :exit 0}
      {:cmd "placeholder count", :exit 0, :output "1"}
      {:cmd "git show --check a532a6ecc", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791764343345-6040-8e987b78",
+     :commands
+     ["git show/check/diff 1ac8a737..a532a6ecc"
+      "verify scoped blobs, fixture SHA, history ancestry"
+      "lake build ConstructionTargets.t96A07Closure"
+      "lake env lean closure and t96A07 Main"
+      "statement-registry check/fingerprint"
+      "placeholder and axiom checks"],
+     :finding
+     "PASS: a532a6ecc7bc66ca70db91731d4affedb40f423f adds compiled, sorry-free B6-B7 progress after 1ac8a737; both changed paths are scoped. Closure/blueprint blobs 46b6c6e1/69b59fb6 and fixture 6a654df3 match. The quotient derivative is used in the correct composition orientation, and the incident e0/0 witness confines descended and axis derivative ranges to the proper yz plane before adapting to frozen Transverse. Lean gates pass with standard axioms only; registry 131/0, frozen hash 2ba67b04 unchanged, closure/Main placeholders 0/1. STOP records B8 then B9-B13."},
     :commit "a532a6ecc7bc66ca70db91731d4affedb40f423f",
     :changed-paths
     ["ConstructionTargets/t96A07Closure.lean"
@@ -79532,7 +79545,7 @@
      "6a654df32ea74f1fd44493efc2950c2d69a176ce151558efe7a9acdb569ccaa2"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t96A07/lean/Main.lean"
     "problems/t96A07/status.json"
@@ -79548,7 +79561,7 @@
     ["lake env lean problems/t96A07/lean/Main.lean"
      "python3 scripts/statement-registry.py check"]},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: :program-progress-committed",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: :program-milestone-complete",
    :id :program-2026-10-11-close-t96a07,
    :kind :final-adapter,
    :campaign-priority 45,
@@ -79573,9 +79586,10 @@
     {:job 6, :commit "47c44c303", :reason :program-progress-committed}
     {:job 7, :commit "fac75be59", :reason :program-progress-committed}
     {:job 8, :commit "a8575f32c", :reason :program-milestone-complete}
-    {:job 9,
-     :commit "1ac8a7376",
-     :reason :program-progress-committed}]}
+    {:job 9, :commit "1ac8a7376", :reason :program-progress-committed}
+    {:job 1,
+     :commit "a532a6ecc7bc66ca70db91731d4affedb40f423f",
+     :reason :program-milestone-complete}]}
   {:consumer :t94A10,
    :stop-count 2,
    :review-finding
@@ -81180,7 +81194,7 @@
    :other-consumers []}
   {:consumer :t96A07,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -81194,7 +81208,9 @@
     :type
     "descended map derivative range at projection e0 equals yz-plane",
     :area "projective-smooth-descent",
-    :proved-in :program-2026-10-11-close-t96a07},
+    :proved-in :program-2026-10-11-close-t96a07,
+    :banked-by :program-2026-10-11-close-t96a07,
+    :banked-commit "a532a6ecc7bc66ca70db91731d4affedb40f423f"},
    :id
    :lemma-constructiontargets-t96a07closure-descended-mfderiv-range-at-e0,
    :kind :lemma,
@@ -81229,7 +81245,7 @@
    :other-consumers []}
   {:consumer :t96A07,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -81241,7 +81257,9 @@
     :reported-by [:program-2026-10-11-close-t96a07],
     :type "B7 nontransversality to z-axis",
     :area "projective-smooth-descent",
-    :proved-in :program-2026-10-11-close-t96a07},
+    :proved-in :program-2026-10-11-close-t96a07,
+    :banked-by :program-2026-10-11-close-t96a07,
+    :banked-commit "a532a6ecc7bc66ca70db91731d4affedb40f423f"},
    :id
    :lemma-constructiontargets-t96a07closure-descended-not-transverse-axis,
    :kind :lemma,
