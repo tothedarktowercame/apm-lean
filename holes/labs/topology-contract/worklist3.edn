@@ -19561,6 +19561,20 @@
      {:cmd "rg forbidden tokens in scoped file",
       :exit 1,
       :expected-exit 1}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791791852014-6613-2621b868",
+     :commands
+     ["git show/diff-tree b6b645b00"
+      "sha256sum /tmp/pairnat2.lean"
+      "lake env lean /tmp/pairnat2.lean"
+      "lake env lean ConstructionTargets/ManifoldFundamentalClass.lean"
+      "lake build ConstructionTargets.ManifoldFundamentalClass"
+      "python3 scripts/statement-registry.py check"
+      "rg placeholder/forbidden-token counts"],
+     :finding
+     "PASS: b6b645b00 changes only the scoped module; fixture SHA-256 matches. Frozen type compiles; epi cancellation and all comparison-map orientations are correct. Registry 131/131; standard axioms only; no scoped placeholders. Consumer counts unchanged: t00J02 bridge_1=1 and sorry=1; t98A02 sorry=1."},
     :commit "b6b645b00b7b1edbec5fd5f94e88140a5157fb30",
     :changed-paths
     ["ConstructionTargets/ManifoldFundamentalClass.lean"],
@@ -19570,7 +19584,7 @@
      "8982744ff3e4aac16bb1447df371f08b4f55873f2f9aa1f325bc980c6ff5245c"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/manifold-fundamental-class/open-disk-model-transport",
@@ -19643,7 +19657,7 @@
       "8982744ff3e4aac16bb1447df371f08b4f55873f2f9aa1f325bc980c6ff5245c"},
      :seat "topo-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -28052,7 +28066,7 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -28065,7 +28079,10 @@
     [:routes-2026-10-10-manifold-fundamental-class-topo3-r2],
     :type "exact type in fixture",
     :area "manifold-fundamental-class",
-    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2,
+    :banked-by
+    :routes-2026-10-12-mfclass-relative-chain-pair-naturality-r1,
+    :banked-commit "b6b645b00b7b1edbec5fd5f94e88140a5157fb30"},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-integralrelativ-66e5425987b8,
    :kind :lemma,
