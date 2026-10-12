@@ -116624,18 +116624,13 @@
      :reason
      "Program milestone completed. Blueprint node B5 is proved: compactness selects finitely many B4 neighbourhoods, the minimum of their positive local times is positive, and every selected curve restricts to that common interval. Only B6 remains."}]}
   {:consumer :t97A07,
-   :stop-count 7,
+   :stop-count 8,
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
     :residual
-    "Normalize inverse source-chart derivative; prove smaller-neighbourhood equality; then B3-B9.",
+    "Prove smaller-neighbourhood equality between fixed derivative and transported mfderiv; then B3-B9.",
     :outcome :stop,
-    :warnings
-    [{:kind :existing-placeholder}
-     {:kind :concurrent-worktree-change,
-      :paths
-      ["ConstructionTargets/ManifoldFundamentalClass.lean"
-       "holes/labs/topology-contract"]}],
+    :warnings [{:kind :existing-placeholder}],
     :missing-theorems
     [{:name "t97A07Closure.continuousAt_coordinate_mfderiv",
       :type "Chart derivative continuity and mfderiv equality",
@@ -116645,17 +116640,17 @@
       :area "regular-points-open"}],
     :statement-hashes
     {:source
-     "ab82e7840b43164cf1c8a30506fc8dedd0bb9ebf6867a92afde1eafefb71e4ca",
+     "45d7f4b6ac356d9f8ba98e505414c5db1f2128cecfc0250dd4a113db977f61c4",
      :target
      "f13a687334f894f060c24b9aa390e8de88a2bf5f3d36e1de717af326c84d78f2",
      :blueprint
-     "676d254685b2064e775ed67cdab376d607b903255078010a7d5f8f7a7053967c",
+     "5bb02c342b988406e8bd26aeda1b9e67335a8c1f626d97ec96701cb039ae708f",
      :registry "131/131"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
     :reason
-    "B2 centre transport is mfderiv followed by the inverse source-chart derivative.",
+    "The inverse source-chart derivative is identity, so centre transport equals mfderiv.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t97A07Closure.lean",
       :exit 0}
@@ -116664,23 +116659,10 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder/diff validation", :exit 0}],
     :diagnostic-history
-    [{:cmd "lean direct-centre attempt",
+    [{:cmd "lean corollary rewrite",
       :exit 1,
-      :finding "Inverse source-chart derivative remains."}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1791781683198-6387-af209ece",
-     :commands
-     ["git show/diff-tree 0519a5827"
-      "fixture/commit sha256 and placeholder checks"
-      "statement-registry.py check"
-      "lake env lean ConstructionTargets/t97A07Closure.lean"
-      "lake build ConstructionTargets.t97A07Closure"
-      "lake env lean problems/t97A07/lean/Main.lean"],
-     :finding
-     "Exact scope and recorded fixture eaeed2...82182 verified; blueprint edit is a faithful B2 progress note and changes no node statement/uses. New theorem correctly simplifies the Euclidean target-chart factor at x, leaving mfderiv f x composed with the inverse source-chart derivative; it does not over-normalize the source factor. Reusable source has 0 placeholders; target retains 1 existing sorry; hashes and 131/131 registry reproduce; all gates pass; only standard axioms. Valid program STOP with compiled progress and residual naming source-factor normalization, smaller-neighborhood equality, then B3-B9."},
-    :commit "0519a5827e016d0892e4dd9c01814b8e46cdef4c",
+      :finding "Used ContinuousLinearMap.comp_id directly."}],
+    :commit "8432f93741bee955f9d48c4a6fbeaf612af55d81",
     :changed-paths
     ["ConstructionTargets/t97A07Closure.lean"
      "ConstructionTargets/t97A07Closure.blueprint.md"],
@@ -116690,7 +116672,7 @@
      "eaeed21919599335d4a33b437815c4a9cbb5b72110213b29440d6944cc982182"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t97A07/lean/Main.lean"
     "problems/t97A07/status.json"
