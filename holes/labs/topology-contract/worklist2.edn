@@ -79583,6 +79583,8 @@
      :reason :program-progress-committed}]}
   {:consumer :t94A10,
    :stop-count 1,
+   :review-finding
+   "B8 cites nonexistent Mathlib theorem MeasureTheory.integral2_divergence_prod_of_hasFDerivWithinAt_off_countable. Revise B8 to use the available integral2_divergence_prod_of_hasFDerivAt_off_countable and explicitly supply its ContinuousOn, pointwise HasFDerivAt, and IntegrableOn hypotheses; then re-review the blueprint.",
    :evidence
    {:placeholder-delta 0,
     :residual "Formalize B1-B4; then B5-B11.",
@@ -79630,6 +79632,12 @@
       :exit 1,
       :finding
       "Canonical authority is not a frame; symlink rule inapplicable."}],
+    :review
+    {:outcome :fail,
+     :seat "codex-7",
+     :job "invoke-1791763334921-6021-3f243fec",
+     :finding
+     "B8 cites nonexistent Mathlib theorem MeasureTheory.integral2_divergence_prod_of_hasFDerivWithinAt_off_countable. Revise B8 to use the available integral2_divergence_prod_of_hasFDerivAt_off_countable and explicitly supply its ContinuousOn, pointwise HasFDerivAt, and IntegrableOn hypotheses; then re-review the blueprint."},
     :commit "94c8f5c63c4c72026a506d1b7bbdf8addd48f5e4",
     :changed-paths ["ConstructionTargets/t94A10Closure.blueprint.md"],
     :fixture
@@ -79638,7 +79646,7 @@
      "583bff9e8bec3437e623c82dbbaeadb1e1cb7bf6f9efd26227de5750e3d01c88"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :repair,
    :scope
    ["problems/t94A10/lean/Main.lean"
     "problems/t94A10/status.json"
@@ -79658,6 +79666,7 @@
    :id :program-2026-10-11-close-t94a10,
    :kind :final-adapter,
    :campaign-priority 46,
+   :fail-count 1,
    :depends-on [],
    :program true,
    :other-consumers []}
