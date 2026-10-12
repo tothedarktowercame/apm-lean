@@ -2931,6 +2931,45 @@ theorem strongTransverseThirdCandidate_actual_zero :
   norm_num [departureThird, strongTransverseThirdCandidate,
     Complex.mul_re, Complex.mul_im]
 
+/-- A genuinely endpoint-dependent correction: its direction is perpendicular
+to the rotated waypoint.  Unlike the rejected scalar corrections, a zero now
+constrains the norm of the waypoint through a nonreal coefficient. -/
+noncomputable def waypointDependentDepartureCorrection
+    (tp : unitInterval × RightTubeMinusLeftCore) : ℂ :=
+  (((tp.1 : ℝ) * (1 - 2 * (tp.1 : ℝ)) : ℝ) : ℂ) *
+    Complex.I * rotatedEndpointWaypoint tp.2
+
+theorem continuous_waypointDependentDepartureCorrection :
+    Continuous waypointDependentDepartureCorrection := by
+  unfold waypointDependentDepartureCorrection
+  have hs : Continuous (fun tp : unitInterval × RightTubeMinusLeftCore =>
+      (tp.1 : ℝ) * (1 - 2 * (tp.1 : ℝ))) := by fun_prop
+  exact ((Complex.continuous_ofReal.comp hs).mul continuous_const).mul
+    (rotatedEndpointWaypointMap.continuous.comp continuous_snd)
+
+@[simp] theorem waypointDependentDepartureCorrection_zero
+    (p : RightTubeMinusLeftCore) :
+    waypointDependentDepartureCorrection (0, p) = 0 := by
+  norm_num [waypointDependentDepartureCorrection]
+
+theorem waypointDependentDepartureCorrection_half
+    (p : RightTubeMinusLeftCore) :
+    waypointDependentDepartureCorrection
+      ((⟨1 / 2, by constructor <;> norm_num⟩ : unitInterval), p) = 0 := by
+  norm_num [waypointDependentDepartureCorrection]
+
+theorem waypointDependentDeparture_factorization
+    (t : unitInterval) (p : RightTubeMinusLeftCore) :
+    (((1 - 2 * (t : ℝ) : ℝ) : ℂ) +
+        ((2 * (t : ℝ) : ℝ) : ℂ) * rotatedEndpointWaypoint p +
+        waypointDependentDepartureCorrection (t, p)) =
+      ((1 - 2 * (t : ℝ) : ℝ) : ℂ) +
+        (((2 * (t : ℝ) : ℝ) : ℂ) +
+          (((t : ℝ) * (1 - 2 * (t : ℝ)) : ℝ) : ℂ) * Complex.I) *
+            rotatedEndpointWaypoint p := by
+  unfold waypointDependentDepartureCorrection
+  ring
+
 end ConstructionTargets.T02A03GeometricTubeDeformation
 
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeNormalComplex_eq_zero_iff
@@ -3030,6 +3069,7 @@ end ConstructionTargets.T02A03GeometricTubeDeformation
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_strongTransverse_departure_eq_zero_iff
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.strongTransverseThirdCandidate_mem_planarAnnulus
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.strongTransverseThirdCandidate_actual_zero
+#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.waypointDependentDeparture_factorization
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_twiceCorrected_departure_zero_coordinates
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_twiceCorrected_departure_zero_normSq
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_twiceCorrected_departure_zero_scalar_bounds
