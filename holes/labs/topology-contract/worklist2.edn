@@ -75002,7 +75002,7 @@
   {:consumer :t96J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 0,
    :review-finding
    "STOP remainder is incomplete: cdbdc979d proves the six-edge involution/signs, orbit equivalence, generated-relation iff, and quotient Equiv, but defines no torusRP2PairingData and proves no six-edge oneVertex field. Thus the claim that six-edge B2 is complete is false, and the required missing theorem is omitted from :missing-theorems. Add torusRP2PairingData/oneVertex to the remaining milestones or state and prove it in scope.",
    :implements-lemma
@@ -75050,6 +75050,17 @@
       :output "131/0"}
      {:cmd "comment-stripped placeholder scan", :exit 0, :output "0"}
      {:cmd "git show --check 473f0437e", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791836898276-7858-af434dbd",
+     :commands
+     ["git show a6ec41bed:ConstructionTargets/PolygonSurfacePiOne.lean | lake env lean /dev/stdin"
+      "git diff-tree/show --check/hash a6ec41bed"
+      "python3 scripts/statement-registry.py check"
+      "comment-stripped placeholder and #print axioms checks"],
+     :finding
+     "PASS: recorded topo-6 commit changes only the scoped module; fixture SHA-256 matches. Exact recorded source compiles sorry-free with standard axioms. It proves the six-edge vertex-class chain and constructs torusRP2PairingData with positive count, involution, signs, and oneVertex. This is genuine STOP progress; missing-theorems correctly leaves uniform standardPairingData partial. Registry 131/0."},
     :commit "473f0437e",
     :changed-paths ["ConstructionTargets/PolygonSurfacePiOne.lean"],
     :fixture
@@ -75058,7 +75069,7 @@
      "64116d2d92ef90978405b2241e409fe8efe9c02a609d754f12a1483e441299de"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope ["ConstructionTargets/PolygonSurfacePiOne.lean"],
    :dag-node "ConstructionTargets/PolygonSurfacePiOne.blueprint.md/B2",
    :acceptance
@@ -84538,7 +84549,7 @@
    :other-consumers [:t92J05 :t94J04 :t97A01 :t97A03]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "torusRP2OrbitEquiv/torusRP2SpaceEquiv",
@@ -84550,7 +84561,9 @@
     :type
     "three pairing orbits and exact generated-relation quotient comparison",
     :area "polygon-surface-pi1",
-    :proved-in :routes-2026-10-12-polygon-b2-completion-topo2-r1},
+    :proved-in :routes-2026-10-12-polygon-b2-completion-topo2-r1,
+    :banked-by :routes-2026-10-12-polygon-b2-completion-topo2-r1,
+    :banked-commit "473f0437e"},
    :id :lemma-torusrp2orbitequiv-torusrp2spaceequiv,
    :kind :lemma,
    :depends-on [],
@@ -84592,7 +84605,7 @@
    :other-consumers []}
   {:consumer :t96J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "standardEdgeCount_pos",
@@ -84602,7 +84615,9 @@
     :reported-by [:routes-2026-10-12-polygon-b2-completion-topo2-r1],
     :type "0<g -> 0 < (if o then 4*g else 2*g)",
     :area "polygon-surface-pi1",
-    :proved-in :routes-2026-10-12-polygon-b2-completion-topo2-r1},
+    :proved-in :routes-2026-10-12-polygon-b2-completion-topo2-r1,
+    :banked-by :routes-2026-10-12-polygon-b2-completion-topo2-r1,
+    :banked-commit "473f0437e"},
    :id :lemma-standardedgecount-pos,
    :kind :lemma,
    :depends-on [],
