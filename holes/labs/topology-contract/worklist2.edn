@@ -75001,6 +75001,8 @@
    :other-consumers []}
   {:consumer :t96J02,
    :stop-count 1,
+   :review-finding
+   "STOP remainder is incomplete: cdbdc979d proves the six-edge involution/signs, orbit equivalence, generated-relation iff, and quotient Equiv, but defines no torusRP2PairingData and proves no six-edge oneVertex field. Thus the claim that six-edge B2 is complete is false, and the required missing theorem is omitted from :missing-theorems. Add torusRP2PairingData/oneVertex to the remaining milestones or state and prove it in scope.",
    :implements-lemma
    :lemma-constructiontargets-polygonsurfacepione-standardpairingdata,
    :evidence
@@ -75044,6 +75046,12 @@
     [{:cmd "first relation proof compile",
       :exit 1,
       :correction "proved equality after EqvGen, then rebuilt"}],
+    :review
+    {:outcome :fail,
+     :seat "codex-7",
+     :job "invoke-1791835862128-7832-f1fd9d93",
+     :finding
+     "STOP remainder is incomplete: cdbdc979d proves the six-edge involution/signs, orbit equivalence, generated-relation iff, and quotient Equiv, but defines no torusRP2PairingData and proves no six-edge oneVertex field. Thus the claim that six-edge B2 is complete is false, and the required missing theorem is omitted from :missing-theorems. Add torusRP2PairingData/oneVertex to the remaining milestones or state and prove it in scope."},
     :commit "cdbdc979d",
     :changed-paths ["ConstructionTargets/PolygonSurfacePiOne.lean"],
     :fixture
@@ -75052,7 +75060,7 @@
      "7a7a3c547231baeac6094346b83d4b2e939ec5890f0b28291a5b54c04b425340"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :repair,
    :scope ["ConstructionTargets/PolygonSurfacePiOne.lean"],
    :dag-node "ConstructionTargets/PolygonSurfacePiOne.blueprint.md/B2",
    :acceptance
@@ -75065,6 +75073,7 @@
    :id :routes-2026-10-12-polygon-b2-completion-topo2-r1,
    :kind :reusable-theorem,
    :area "polygon-surface-pi1",
+   :fail-count 1,
    :depends-on
    [:routes-2026-10-12-polygon-b1-topo2-r1
     :routes-2026-10-12-checkpoint-topo2-r13],
