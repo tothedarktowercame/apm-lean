@@ -79612,21 +79612,15 @@
    :review-finding
    "Incomplete representation-boundary repair in commit e7ba5fee3: heta is now punctured, but exact_sphereParam_identity still requires hexact : forall x, extDeriv eta x = omega x, including x=0. Frozen apm_t94a10_IsExact supplies exactness only for punctured x, so the claimed B7 theorem still cannot be instantiated. Change hexact to forall x, x != 0 -> extDeriv eta x = omega x and rewrite with hexact _ (sphereParam_ne_zero p); then recompile, retaining B8-B11 as residual.",
    :evidence
-   {:placeholder-delta 0,
-    :residual "Formalize B10 frozen non-exactness adapter; then B11.",
-    :outcome :stop,
-    :warnings ["Main: 1 placeholder."],
+   {:placeholder-delta -1,
+    :residual "None; t94A10 compiles with zero placeholders.",
+    :outcome :done-unreviewed,
+    :warnings ["Unrelated dirty file preserved."],
     :missing-theorems
-    [{:name "ConstructionTargets.T94A10Closure.integral_sin_rectangle",
-      :type "B9 spherical coefficient integral equals 4*pi",
-      :status :proved,
-      :consumers [:t94A10],
-      :depends-on [],
-      :area "periodic-stokes-square"}
-     {:name
+    [{:name
       "ConstructionTargets.T94A10Closure.bridge_solidAngle_not_exact",
-      :type "B10 frozen non-exactness adapter",
-      :status :not-started,
+      :type "B10 non-exactness adapter",
+      :status :proved,
       :consumers [:t94A10],
       :depends-on
       ["sphericalRectangle_curl_integral_zero"
@@ -79634,46 +79628,37 @@
       :area "periodic-stokes-square"}],
     :statement-hashes
     {:registry "131/0",
-     :closure "326bc3fd2b9a4ae483a7508b009ee450bc686223",
-     :blueprint "808e174fd0529d3c85b60b506988b0a55526c8e0"},
-    :disposition :stop,
+     :closure "e0c9c978f50fe7ff167f3311c63592c2af0c5452",
+     :blueprint "808e174fd0529d3c85b60b506988b0a55526c8e0",
+     :main "37f6b674c25bd52d5ff8a79d1ec97e56329663c5"},
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason :program-milestone-complete,
     :commands
     [{:cmd "closure build/compile", :exit 0}
      {:cmd "Main compile", :exit 0}
      {:cmd "registry check", :exit 0}
      {:cmd "closure no-sorry", :exit 1, :expected-exit 1}
-     {:cmd "placeholder count", :exit 0, :output "1"}
-     {:cmd "git show --check 22738f83d", :exit 0}],
+     {:cmd "Main placeholder count", :exit 0, :output "0"}
+     {:cmd "git show --check 583ecc2d1", :exit 0}],
     :diagnostic-history
-    [{:cmd "closure compile",
+    [{:cmd "Main compile",
       :exit 1,
-      :finding
-      "Used root integral_sin and pulled constant outside integral."}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1791777123107-6278-7687504e",
-     :commands
-     ["git scope/blob/SHA/ancestry checks"
-      "lake build ConstructionTargets.t94A10Closure"
-      "lake env lean ConstructionTargets/t94A10Closure.lean"
-      "lake env lean problems/t94A10/lean/Main.lean"
-      "statement-registry check/fingerprint"
-      "commit placeholder counts"],
-     :finding
-     "PASS: commit 22738f83d proves B9 with the correct positively oriented rectangle: longitude length 2*pi times integral_0^pi sin = 4*pi. Compiled sorry-free standard-axiom progress; scope/fixture/blobs match, registry 131/0, fingerprint d1822221, placeholders closure/Main 0/1. STOP lists the frozen non-exactness adapter B10, then B11."},
-    :commit "22738f83dacebb365c2fa6ddd9c0777d6c4907f2",
-    :changed-paths ["ConstructionTargets/t94A10Closure.lean"],
+      :finding "Replaced invalid apply-at with direct refinement."}],
+    :commit "583ecc2d18dc22d7a4124ec99bf464694617e29e",
+    :commits
+    ["22738f83dacebb365c2fa6ddd9c0777d6c4907f2"
+     "583ecc2d18dc22d7a4124ec99bf464694617e29e"],
+    :changed-paths
+    ["ConstructionTargets/t94A10Closure.lean"
+     "problems/t94A10/lean/Main.lean"
+     "problems/t94A10/status.json"],
     :fixture
     {:path "ConstructionTargets/t94A10Closure.lean",
      :sha256
-     "caf673890cb6d8a6821419f488b8d737265c72e4db284a717ca38243ae71237a"},
+     "03b61d033c74ea8edd6760e7f47f20b1487c591b6adabdc958c6ad6f074641e0"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t94A10/lean/Main.lean"
     "problems/t94A10/status.json"
@@ -82001,7 +81986,8 @@
     "ConstructionTargets.T94A10Closure.bridge_solidAngle_not_exact",
     :reported-by [:program-2026-10-11-close-t94a10],
     :type "B10 frozen non-exactness adapter",
-    :area "periodic-stokes-square"},
+    :area "periodic-stokes-square",
+    :proved-in :program-2026-10-11-close-t94a10},
    :id
    :lemma-constructiontargets-t94a10closure-bridge-solidangle-not-exact,
    :kind :lemma,
