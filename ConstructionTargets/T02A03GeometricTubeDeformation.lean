@@ -2570,6 +2570,38 @@ theorem realDepartureCorrection_quarterCandidate_eq_zero_iff
       norm_num [departureQuarter, twiceCorrectedDepartureQuarterCandidate,
         Complex.mul_re, Complex.mul_im, hx]
 
+/-- A replacement profile that preserves the localized support and endpoint
+values but avoids the compiled quarter-time collision of the unit bump. -/
+noncomputable def doubledCorrectedDepartureBump (t : unitInterval) : ℝ :=
+  2 * correctedDepartureBump t
+
+theorem continuous_doubledCorrectedDepartureBump :
+    Continuous doubledCorrectedDepartureBump := by
+  unfold doubledCorrectedDepartureBump
+  exact continuous_const.mul continuous_correctedDepartureBump
+
+@[simp] theorem doubledCorrectedDepartureBump_zero :
+    doubledCorrectedDepartureBump 0 = 0 := by
+  simp [doubledCorrectedDepartureBump]
+
+@[simp] theorem doubledCorrectedDepartureBump_one :
+    doubledCorrectedDepartureBump 1 = 0 := by
+  simp [doubledCorrectedDepartureBump]
+
+theorem doubledCorrection_quarterCandidate_ne_zero :
+    (((1 - 2 * (departureQuarter : ℝ) : ℝ) : ℂ) +
+        ((2 * (departureQuarter : ℝ) : ℝ) : ℂ) *
+          rotatedEndpointWaypoint
+            twiceCorrectedDepartureQuarterCandidateSubtype +
+        (((departureQuarter : ℝ) * (1 - 2 * (departureQuarter : ℝ)) : ℝ) : ℂ) *
+          Complex.I +
+        (doubledCorrectedDepartureBump departureQuarter : ℂ)) ≠ 0 := by
+  intro hz
+  have hb := (realDepartureCorrection_quarterCandidate_eq_zero_iff
+    doubledCorrectedDepartureBump).mp hz
+  norm_num [doubledCorrectedDepartureBump, correctedDepartureBump,
+    departureQuarter] at hb
+
 end ConstructionTargets.T02A03GeometricTubeDeformation
 
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeNormalComplex_eq_zero_iff
@@ -2661,6 +2693,7 @@ end ConstructionTargets.T02A03GeometricTubeDeformation
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_twiceCorrected_departure_eq_zero_iff
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_twiceCorrected_departure_quarter_zero
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.realDepartureCorrection_quarterCandidate_eq_zero_iff
+#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.doubledCorrection_quarterCandidate_ne_zero
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_twiceCorrected_departure_zero_coordinates
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_twiceCorrected_departure_zero_normSq
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_twiceCorrected_departure_zero_scalar_bounds
