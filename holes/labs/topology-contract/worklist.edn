@@ -113850,7 +113850,7 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 10,
+   :stop-count 0,
    :review-finding
    "Blueprint B3 is marked proved but its proof uses the unlisted ConnectedGroupoidSingleObjEquivalence.connectorSingleObjEquivalence (and connector-system representation) instead of only the declared uses; add the actual connector dependency and proof route to B3 uses.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
@@ -113901,7 +113901,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -116733,6 +116733,19 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder/diff validation", :exit 0}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791805534529-6886-b1992fb1",
+     :commands
+     ["git show/diff-tree 4e3e0e768"
+      "sha256/placeholder checks"
+      "statement-registry.py check"
+      "lake env lean ConstructionTargets/t97A07Closure.lean"
+      "lake build ConstructionTargets.t97A07Closure"
+      "lake env lean problems/t97A07/lean/Main.lean"],
+     :finding
+     "PASS: exact two-file scope and fixture/source/target hashes match; placeholders closure 0->0, frozen target 1->1; registry 131/131. Centre equality has faithful orientation and compares only common fixed-coordinate fibers; blueprint dependencies remain sound. Standard axioms only. Valid program STOP: compiled B2 progress; neighbourhood equality and B3-B9 remain."},
     :commit "4e3e0e768300f2f23a7298a20532b93448d457cb",
     :changed-paths
     ["ConstructionTargets/t97A07Closure.lean"
@@ -116743,7 +116756,7 @@
      "443096727728cdf866c846c37b5440ac01aa7cb0d5ff31093ae77182b5da9868"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A07/lean/Main.lean"
     "problems/t97A07/status.json"
@@ -116759,7 +116772,7 @@
     ["lake env lean problems/t97A07/lean/Main.lean"
      "python3 scripts/statement-registry.py check"]},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Receipt repaired: fixture now records the exact reviewed blueprint hash.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: The fixed-coordinate derivative now equals the transported mfderiv at the common chart centre.",
    :id :program-2026-10-11-close-t97a07,
    :kind :final-adapter,
    :campaign-priority 44,
@@ -116797,7 +116810,11 @@
     {:job 9,
      :commit "8432f93741bee955f9d48c4a6fbeaf612af55d81",
      :reason
-     "Receipt repaired: fixture now records the exact reviewed blueprint hash."}]}
+     "Receipt repaired: fixture now records the exact reviewed blueprint hash."}
+    {:job 1,
+     :commit "4e3e0e768300f2f23a7298a20532b93448d457cb",
+     :reason
+     "The fixed-coordinate derivative now equals the transported mfderiv at the common chart centre."}]}
   {:consumer :t91J06,
    :stop-count 2,
    :review-finding
