@@ -113890,6 +113890,18 @@
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder/diff validation", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791827960681-7649-e54a2e62",
+     :commands
+     ["git show/diff-tree dbabd7dec"
+      "sha256 + placeholder + registry checks"
+      "lake env lean ConstructionTargets/PointWedgeVanKampen.lean"
+      "lake build ConstructionTargets.PointWedgeVanKampen"
+      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (expected absent)"],
+     :finding
+     "Scope is exactly Lean+MD; source/doc/blueprint hashes match; placeholders 0->0; registry 131/131. Mapping the established pre-coordinate counit split through the coordinate-to-point equivalence, then projecting/evaluating both legs, correctly expresses each named free-product factor as mapped open-cover counit followed by mapped coordinate-span counit. Functorial order and left/right boundaries are preserved. It compiles with only propext, Classical.choice, Quot.sound. This is new progress; residual is mapping the reconstructed span equation and cancelling open-cover/injected counits, then B6/B12. Final target remains absent as declared."},
     :commit "dbabd7decdc16a66fbaed195de606579728212bd",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
@@ -113900,7 +113912,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113921,7 +113933,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: The explicit splice now identifies reconstructed glue followed by the right counit with the left counit.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Both mapped pre-coordinate counits are split into mapped open-cover and coordinate-span factors.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -114393,7 +114405,11 @@
     {:job 5,
      :commit "af4ca4030234c8b464e5b7c48ddc2afa015d18cb",
      :reason
-     "The explicit splice now identifies reconstructed glue followed by the right counit with the left counit."}]}
+     "The explicit splice now identifies reconstructed glue followed by the right counit with the left counit."}
+    {:job 6,
+     :commit "dbabd7decdc16a66fbaed195de606579728212bd",
+     :reason
+     "Both mapped pre-coordinate counits are split into mapped open-cover and coordinate-span factors."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
