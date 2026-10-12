@@ -79652,6 +79652,19 @@
       :exit 1,
       :finding
       "Used root integral_sin and pulled constant outside integral."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791777123107-6278-7687504e",
+     :commands
+     ["git scope/blob/SHA/ancestry checks"
+      "lake build ConstructionTargets.t94A10Closure"
+      "lake env lean ConstructionTargets/t94A10Closure.lean"
+      "lake env lean problems/t94A10/lean/Main.lean"
+      "statement-registry check/fingerprint"
+      "commit placeholder counts"],
+     :finding
+     "PASS: commit 22738f83d proves B9 with the correct positively oriented rectangle: longitude length 2*pi times integral_0^pi sin = 4*pi. Compiled sorry-free standard-axiom progress; scope/fixture/blobs match, registry 131/0, fingerprint d1822221, placeholders closure/Main 0/1. STOP lists the frozen non-exactness adapter B10, then B11."},
     :commit "22738f83dacebb365c2fa6ddd9c0777d6c4907f2",
     :changed-paths ["ConstructionTargets/t94A10Closure.lean"],
     :fixture
@@ -79660,7 +79673,7 @@
      "caf673890cb6d8a6821419f488b8d737265c72e4db284a717ca38243ae71237a"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t94A10/lean/Main.lean"
     "problems/t94A10/status.json"
@@ -79707,6 +79720,9 @@
      :reason :program-progress-committed}
     {:job 3,
      :commit "5cfb9498b6bd75ce3c5694b8578bf509422463f5",
+     :reason :program-milestone-complete}
+    {:job 4,
+     :commit "22738f83dacebb365c2fa6ddd9c0777d6c4907f2",
      :reason :program-milestone-complete}]}
   {:consumer :t97A04,
    :phase :lemma,
@@ -81955,7 +81971,7 @@
    :other-consumers []}
   {:consumer :t94A10,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "ConstructionTargets.T94A10Closure.integral_sin_rectangle",
@@ -81965,7 +81981,9 @@
     :reported-by [:program-2026-10-11-close-t94a10],
     :type "B9 spherical coefficient integral equals 4*pi",
     :area "periodic-stokes-square",
-    :proved-in :program-2026-10-11-close-t94a10},
+    :proved-in :program-2026-10-11-close-t94a10,
+    :banked-by :program-2026-10-11-close-t94a10,
+    :banked-commit "22738f83dacebb365c2fa6ddd9c0777d6c4907f2"},
    :id :lemma-constructiontargets-t94a10closure-integral-sin-rectangle,
    :kind :lemma,
    :depends-on [],
@@ -81993,21 +82011,28 @@
    :other-consumers []}
   {:consumer :portfolio,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance {:lemma "sphericalRectangle_curl_integral_zero"},
    :lemma
-   {:name "sphericalRectangle_curl_integral_zero", :reported-by []},
+   {:name "sphericalRectangle_curl_integral_zero",
+    :reported-by [],
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t94A10Closure.lean"]},
    :id :lemma-sphericalrectangle-curl-integral-zero,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}
   {:consumer :portfolio,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance {:lemma "integral_sin_rectangle"},
-   :lemma {:name "integral_sin_rectangle", :reported-by []},
+   :lemma
+   {:name "integral_sin_rectangle",
+    :reported-by [],
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t94A10Closure.lean"]},
    :id :lemma-integral-sin-rectangle,
    :kind :lemma,
    :depends-on [],
