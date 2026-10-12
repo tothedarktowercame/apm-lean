@@ -202,6 +202,67 @@ theorem descendedCrossTermMap_mfderiv_range_at_e0
   exact LinearMap.range_eq_top_of_surjective _
     (sphereProjection_mfderiv_surjective sphereFirstPoint)
 
+/-- The coordinate parametrization of the third axis. -/
+def zAxis (t : ℝ) : E 3 := WithLp.toLp 2 ![0, 0, t]
+
+/-- The constant derivative of the third-axis parametrization. -/
+def zAxisDerivative : ℝ →L[ℝ] E 3 :=
+  (PiLp.continuousLinearEquiv 2 ℝ (fun _ : Fin 3 => ℝ)).symm.toContinuousLinearMap.comp
+    (ContinuousLinearMap.pi fun i =>
+      match i with
+      | 0 => 0
+      | 1 => 0
+      | 2 => ContinuousLinearMap.id ℝ ℝ)
+
+theorem zAxis_hasFDerivAt (t : ℝ) :
+    HasFDerivAt zAxis zAxisDerivative t := by
+  apply (PiLp.hasFDerivAt_toLp 2 _).comp t
+  apply hasFDerivAt_pi.mpr
+  intro i
+  fin_cases i
+  · simpa using hasFDerivAt_const (0 : ℝ) t
+  · simpa using hasFDerivAt_const (0 : ℝ) t
+  · simpa using hasFDerivAt_id t
+
+theorem zAxis_fderiv_range_le_yz (t : ℝ) :
+    LinearMap.range (fderiv ℝ zAxis t).toLinearMap ≤ yzCoordinatePlane := by
+  rw [(zAxis_hasFDerivAt t).fderiv]
+  rintro y ⟨v, rfl⟩
+  change (zAxisDerivative v) 0 = 0
+  simp [zAxisDerivative]
+
+/-- At the projected first coordinate point, a smooth descent of the
+cross-term map fails the derivative spanning condition with the third axis. -/
+theorem descendedCrossTermMap_notTransverse_zAxis
+    (f : Space ℝ 2 → E 3)
+    (hfac : ∀ p : Sphere 2, f (sphereProjection 2 p) = crossTermSphereMap p) :
+    letI := rpSmoothAtlas.charts
+    letI := rpSmoothAtlas.smooth
+    ContMDiff (𝓡 2) (𝓡 3) ∞ f →
+    ∃ x y, f x = zAxis y ∧
+      LinearMap.range (mfderiv (𝓡 2) (𝓡 3) f x).toLinearMap ⊔
+        LinearMap.range (fderiv ℝ zAxis y).toLinearMap ≠ ⊤ := by
+  letI := rpSmoothAtlas.charts
+  letI := rpSmoothAtlas.smooth
+  intro hf
+  refine ⟨sphereProjection 2 sphereFirstPoint, 0, ?_, ?_⟩
+  · rw [hfac sphereFirstPoint]
+    ext i
+    fin_cases i <;> simp [crossTermSphereMap, sphereFirstPoint, sphereFirstAxis, zAxis]
+  · have hrange := descendedCrossTermMap_mfderiv_range_at_e0 f hfac hf
+    have hle :
+        LinearMap.range
+              (mfderiv (𝓡 2) (𝓡 3) f
+                (sphereProjection 2 sphereFirstPoint)).toLinearMap ⊔
+            LinearMap.range (fderiv ℝ zAxis 0).toLinearMap ≤ yzCoordinatePlane :=
+      sup_le (hrange.le.trans le_rfl) (zAxis_fderiv_range_le_yz 0)
+    intro htop
+    have hfirst : sphereFirstAxis ∈ yzCoordinatePlane := by
+      apply hle
+      rw [htop]
+      exact Submodule.mem_top
+    simpa [yzCoordinatePlane, sphereFirstAxis] using hfirst
+
 /-- At the first coordinate point the ambient derivative swaps the two free
 tangent coordinates and has zero first coordinate. -/
 theorem sphereMapAmbientDerivative_firstAxis (v : E 3) :
@@ -217,5 +278,6 @@ theorem sphereMapAmbientDerivative_firstAxis (v : E 3) :
 #print axioms sphereMapAmbientDerivative_firstAxis
 #print axioms sphereProjection_mfderiv_surjective
 #print axioms descendedCrossTermMap_mfderiv_range_at_e0
+#print axioms descendedCrossTermMap_notTransverse_zAxis
 
 end ConstructionTargets.T96A07Closure

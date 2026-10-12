@@ -74,11 +74,28 @@ theorem descended_mfderiv_range_at_e0
   simpa [T96A07.sphereMap, crossTermSphereMap] using
     descendedCrossTermMap_mfderiv_range_at_e0 f hfac
 
+theorem descended_not_transverse_axis
+    (f : Space ℝ 2 → E 3)
+    (hfac : ∀ p : Sphere 2, f (sphereProjection 2 p) = T96A07.sphereMap p) :
+    letI := rpSmoothAtlas.charts
+    letI := rpSmoothAtlas.smooth
+    ContMDiff (𝓡 2) (𝓡 3) ∞ f →
+    ¬ T96A07.Transverse f T96A07.axis := by
+  letI := rpSmoothAtlas.charts
+  letI := rpSmoothAtlas.smooth
+  intro hf htransverse
+  have hbad := descendedCrossTermMap_notTransverse_zAxis f
+    (by simpa [T96A07.sphereMap, crossTermSphereMap] using hfac) hf
+  rcases hbad with ⟨x, y, hxy, hspan⟩
+  apply hspan
+  exact htransverse x y (by simpa [T96A07.axis, zAxis] using hxy)
+
 #print axioms sphereMap_antipodal
 #print axioms sphereMap_contMDiff
 #print axioms descendedSphereMap
 #print axioms sphereMap_mfderiv_e0_range
 #print axioms descended_mfderiv_range_at_e0
+#print axioms descended_not_transverse_axis
 
 end ConstructionTargets.T96A07Closure
 
