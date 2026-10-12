@@ -113850,14 +113850,14 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "Recorded fixture hash mismatch: :fixture.sha256 is 0bca6ce32c019fc3053c7f813c26917169cf817375b44d5e722b864b61a526450c1, but ConstructionTargets/PointWedgeVanKampen.blueprint.md at recorded commit c9b3af27 has exact SHA-256 0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0. Re-record the fixture hash for the reviewed commit.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
    :evidence
    {:placeholder-delta {:source-before 0, :source-after 0},
     :residual
-    "Specialize left counits and combine right factors; then point-span, remaining counits, B6/B12.",
+    "Specialize left counits and cancel four right endpoint counits; then point-span, remaining counits, B6/B12.",
     :outcome :stop,
     :warnings [],
     :missing-theorems
@@ -113871,9 +113871,9 @@
       :area "fundamental-group-wedge-of-circles"}],
     :statement-hashes
     {:source
-     "795f231a258861f41faa7a72899b660f36b0a002656379e4e43009e7419641c0",
+     "bd4ade4e7f6ce1f2b0d827971b0c5204dc990df2595ea88b3c992e350b311c40",
      :documentation
-     "7d4263529d2d3663cdbc7c02b64de1201af3580a76e983cab955c5635f6ef45f",
+     "259100530a20d0dc36cbb772ec437faf23799893a1b2eeff0320a1f6a7edd82c",
      :blueprint
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0",
      :registry "131/131"},
@@ -113881,7 +113881,7 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
     :reason
-    "The right strict factor is the literal actual-span map with coordinate-target and transported-source counits explicit.",
+    "Right comparison recombined as strict*unit, the group order for categorical unit-then-strict.",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/PointWedgeVanKampen.lean",
@@ -113890,7 +113890,11 @@
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder/diff validation", :exit 0}],
-    :commit "0a2eb39f4e03344cb6e113e88e2870d3e06a833f",
+    :diagnostic-history
+    [{:cmd "lean right-factor order",
+      :exit 1,
+      :finding "SingleObj.comp_as_mul gives strict*unit."}],
+    :commit "b866bbd44a2a7ca59472da0acbc75739c1d2b75e",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
      "ConstructionTargets/PointWedgeVanKampen.md"],
@@ -113900,7 +113904,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
