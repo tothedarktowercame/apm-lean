@@ -113897,6 +113897,18 @@
      {:cmd "lean counit composition",
       :exit 1,
       :finding "Used one_mul orientation."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791812209489-6993-770ca837",
+     :commands
+     ["git show/diff-tree d0bd5a442"
+      "sha256/placeholder/registry checks"
+      "lake env lean ConstructionTargets/PointWedgeVanKampen.lean"
+      "lake build ConstructionTargets.PointWedgeVanKampen"
+      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (expected absent)"],
+     :finding
+     "PASS: exact two-file scope and frozen hashes match; placeholders 0->0, registry 131/131. Final representation counit is correctly computed as one, reducing the B3 counit to the mapped preceding counit with correct composition orientation; standard axioms only. Valid program STOP; match mapped counit with outer composite, then B6/B12."},
     :commit "d0bd5a442ddaef5a3d6aaafc42b11047601c3bcb",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
@@ -113907,7 +113919,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113928,7 +113940,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: B3 counit split into mapped representation and final single-object counits.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Final representation counit is the unit; B3 counit is now only the mapped preceding counit.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -114300,7 +114312,11 @@
     {:job 7,
      :commit "7051031fd8d6d900536ff7d3217cb962d565f6b7",
      :reason
-     "B3 counit split into mapped representation and final single-object counits."}]}
+     "B3 counit split into mapped representation and final single-object counits."}
+    {:job 8,
+     :commit "d0bd5a442ddaef5a3d6aaafc42b11047601c3bcb",
+     :reason
+     "Final representation counit is the unit; B3 counit is now only the mapped preceding counit."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
