@@ -19030,6 +19030,17 @@
      {:cmd "rg forbidden tokens in scoped file",
       :exit 1,
       :expected-exit 1}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791782751024-6413-36a5e6fd",
+     :commands
+     ["recorded scope/blob, fixture hash, diff check"
+      "statement registry and placeholder scans"
+      "lake env lean: renamed fixture declarations and module"
+      "lake build ConstructionTargets.ManifoldFundamentalClass"],
+     :finding
+     "PASS: recorded one-file scope and frozen fixture hash match. The production composite is rewritten by the packaged connecting square, radial naturality, and the negative sphere endpoint equation, in that order, yielding the coefficient connecting/radial/sphere composite followed by -id. Types and associations match exactly. Registry 131/0; source placeholders 0; consumer sorries 1/1; standard axioms only; build 8326 jobs."},
     :commit "d8d1f7e3afb56723d56beb4063e26443329d6ec4",
     :changed-paths
     ["ConstructionTargets/ManifoldFundamentalClass.lean"],
@@ -19039,7 +19050,7 @@
      "dcb44254e924ff43208d07fb7a905aaa41b9d05f20a58556a3e70c56ed93c8c9"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/manifold-fundamental-class/open-disk-sign",
@@ -19114,7 +19125,7 @@
       "dcb44254e924ff43208d07fb7a905aaa41b9d05f20a58556a3e70c56ed93c8c9"},
      :seat "topo-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -27321,7 +27332,7 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -27334,7 +27345,9 @@
     [:routes-2026-10-10-manifold-fundamental-class-topo3-r2],
     :type "exact type in fixture",
     :area "manifold-fundamental-class",
-    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2,
+    :banked-by :routes-2026-10-12-mfclass-open-disk-neg-r1,
+    :banked-commit "d8d1f7e3afb56723d56beb4063e26443329d6ec4"},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-coefficientsphe-47fdf19d170a,
    :kind :lemma,
