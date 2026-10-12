@@ -955,3 +955,9 @@ The companion `targetObj` and `sourceObj` lemmas identify those remaining
 endpoints without normalizing their counits: the target is the fixed right
 cover representative, while the source is the inverse right-equivalence image
 of the literal basepoint `y₀`.
+
+`genericPointWedgeRightInverseBaseToRightBase` supplies the canonical morphism
+from that inverse image to the fixed representative, using the base-object
+equality followed by the equivalence unit.  Its `counit` theorem specializes
+restriction naturality along exactly this morphism, relating the remaining
+source endpoint counit to the fixed right-base conjugator.

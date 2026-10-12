@@ -4189,6 +4189,43 @@ theorem genericPointWedgeRightEquiv_obj_rightBase :
   exact (genericPointWedgePackage
     x₀ y₀ M N hM hN hy hx cM cN).right_inclusion y₀
 
+/-- The canonical morphism from the inverse-equivalence image of the literal
+right basepoint to the fixed right-cover representative. -/
+def genericPointWedgeRightInverseBaseToRightBase :
+    let eR := genericPointWedgeRightGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    eR.inverse.obj (FundamentalGroupoid.mk y₀) ⟶
+      genericPointWedgeRightBase x₀ y₀ N :=
+  let eR := genericPointWedgeRightGroupoidEquivalence
+    x₀ y₀ M N hM hN hy hx cM cN
+  eR.inverse.map (eqToHom (genericPointWedgeRightEquiv_obj_rightBase
+      x₀ y₀ M N hM hN hy hx cM cN).symm) ≫
+    eR.unitIso.inv.app (genericPointWedgeRightBase x₀ y₀ N)
+
+/-- Naturality along the canonical inverse-image-to-base morphism relates the
+remaining source endpoint counit to the fixed right-base conjugator. -/
+theorem genericPointWedgeRightInverseBaseToRightBase_counit :
+    let q := genericPointWedgeRightInverseBaseToRightBase
+      x₀ y₀ M N hM hN hy hx cM cN
+    (genericPointWedgeIdentityGlobalFunctor
+        x₀ y₀ M N hM hN hy hx cM cN).map
+          ((FundamentalGroupoid.map
+            (TwoOpenDescentRestriction.coverPieceInclusion
+              (U := genericLeftOpen x₀ y₀ M)
+              (V := genericRightOpen x₀ y₀ N) false)).map q) ≫
+      genericPointWedgeIdentityGlobalRightBaseElement
+        x₀ y₀ M N hM hN hy hx cM cN =
+    genericPointWedgeIdentityGlobalRightRestrictionElement
+        x₀ y₀ M N hM hN hy hx cM cN
+          ((genericPointWedgeRightGroupoidEquivalence
+            x₀ y₀ M N hM hN hy hx cM cN).inverse.obj
+              (FundamentalGroupoid.mk y₀)) ≫
+      (genericPointWedgeIdentityActualSpan
+        x₀ y₀ M N hM hN hy hx cM cN).right.map q := by
+  dsimp only
+  exact genericPointWedgeIdentityGlobalRightRestriction_naturality
+    x₀ y₀ M N hM hN hy hx cM cN _
+
 omit [PathConnectedSpace X] in
 /-- At the transported right-cover base, the chosen based connector is the
 isomorphism induced by the named base-object equality. -/
@@ -5160,6 +5197,8 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeLeftEquiv_obj_leftBase
 #print axioms genericPointWedgeLeftEquiv_leftBase_connector
 #print axioms genericPointWedgeRightEquiv_obj_rightBase
+#print axioms genericPointWedgeRightInverseBaseToRightBase
+#print axioms genericPointWedgeRightInverseBaseToRightBase_counit
 #print axioms genericPointWedgeRightEquiv_rightBase_connector
 #print axioms genericPointWedgeRightLiftedLoop_normalForm_eq_transport
 #print axioms genericPointWedgeRightGroupoidEquivalence_functor
