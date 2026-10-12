@@ -296,3 +296,8 @@ inverse left-leg factor to the free-product unit.  This uses the concrete
 subsingleton-source comparison and the identity-map law, without changing the
 Unit-equivalence round-trip.  Three inner factors, the outer comparisons, and
 the literal lifts remain.
+
+`genericPointWedgeIdentityCoordinateRightLegFactor_eq_one` gives the matching
+calculation for the right-leg hom factor.  Both concrete leg comparisons are
+therefore units; the two Unit-equivalence round-trip components, the original
+outer comparisons, and the literal lifts remain.

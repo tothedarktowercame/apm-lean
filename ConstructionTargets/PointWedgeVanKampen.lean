@@ -618,6 +618,21 @@ theorem genericPointWedgeIdentityCoordinateLeftLegFactor_eq_one :
     genericPointWedgeTrivialSourceFunctorIso]
   convert (genericPointWedgeIdentityPointSpan x₀ y₀).left.map_id _ using 1
 
+omit [PathConnectedSpace X] in
+/-- The right-leg factor is the identity at the unique unit-groupoid base:
+its source comparison was constructed from subsingleton object equality. -/
+theorem genericPointWedgeIdentityCoordinateRightLegFactor_eq_one :
+    let eK := genericPointWedgeUnitSingleObjEquivalence
+    let aR := genericPointWedgeCoordinateRightPointIso y₀
+    let Q := genericPointWedgeIdentityPointSpan x₀ y₀
+    let z : FundamentalGroupoid Unit := FundamentalGroupoid.mk ()
+    (Functor.isoWhiskerRight
+      (Functor.isoWhiskerLeft eK.functor aR.symm) Q.right).hom.app z =
+        (1 : genericPointWedgeFreeProduct x₀ y₀) := by
+  simp [genericPointWedgeCoordinateRightPointIso,
+    genericPointWedgeTrivialSourceFunctorIso]
+  convert (genericPointWedgeIdentityPointSpan x₀ y₀).right.map_id _ using 1
+
 /-- The penultimate inverse stage of B3, now expressed as the literal
 pseudococone on the two open pieces. -/
 def genericPointWedgeIdentityPseudoCocone :
@@ -1965,6 +1980,7 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeIdentityCoordinateLeftComparison_app
 #print axioms genericPointWedgeIdentityCoordinateRightComparison_app
 #print axioms genericPointWedgeIdentityCoordinateLeftLegFactor_eq_one
+#print axioms genericPointWedgeIdentityCoordinateRightLegFactor_eq_one
 #print axioms genericPointWedgeIdentityGlobalRightRestriction_map
 #print axioms genericPointWedgeIdentityGlobalRightBase_map
 #print axioms genericPointWedgeIdentityRepresentation_inl
