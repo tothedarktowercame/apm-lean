@@ -72790,7 +72790,7 @@
    :consumer :t02A03,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "Commit b07bee059 does not implement the row acceptance theorem. It adds only rotatedEndpointWaypoint_departure_zero_support_pos; safeRightTubeMeridianDeformation is absent, although the row is marked done-unreviewed rather than a STOP with missing-theorems. Exact repair: extend Mathlib in scope by state/proving the required continuous ambient H with both endpoints, pointwise rightTube membership, and leftCore avoidance (or record a legitimate STOP after committed progress with remaining theorem listed).",
    :evidence
@@ -72827,18 +72827,6 @@
     [{:cmd "fixture hash/blob check", :exit 0}
      {:cmd "registry check", :exit 0, :output "131/0"}
      {:cmd "git show --check", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1791816071282-7124-d698d4bd",
-     :commands
-     ["git diff-tree/show --check 2a9c5d5d69e2f19806b70df780c4643a14cbe29e"
-      "blob and placeholder recount"
-      "python3 scripts/statement-registry.py check"
-      "lake env lean exact committed module"
-      "compare prior program milestone"],
-     :finding
-     "PASS: program STOP adds compiled, sorry-free progress beyond the prior milestone: the endpoint-fixed transverse correction is nonzero at every old departure zero. Scope/fixture match; module/Main blobs 0629f3f5/ce9da0db; placeholders 0/1; registry 131/0; standard axioms. Remaining no-new-zero path and ambient deformation are listed."},
     :commit "f029a4dd6717f27256e026c40869e6eb0cdb7a73",
     :changed-paths [],
     :fixture
@@ -72849,7 +72837,7 @@
    :phase :implementation,
    :type
    "∀ (t : unitInterval) (p : RightTubeMinusLeftCore), (t:ℝ) ≤ 1/2 → (((1-2*(t:ℝ):ℝ):ℂ)+((2*(t:ℝ):ℝ):ℂ)*rotatedEndpointWaypoint p)=0 → 0 < (t:ℝ)*(1-2*(t:ℝ))",
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/safe-right-tube-meridian-deformation",
