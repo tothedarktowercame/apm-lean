@@ -391,3 +391,9 @@ the coordinate-span injection theorem applies.
 endpoint calculation: the right-span comparison targets the literal object
 `FundamentalGroupoid.mk y₀`.  Both source endpoints and their endomorphism
 casts remain before the coordinate-span injection theorems apply.
+
+`genericPointWedgeIdentityOuterLeftSpanComponent_source_eq_nestedObj` exposes
+the left-span source endpoint without collapsing it to the base object: it is
+the left equivalence applied after the actual-left map to the overlap
+equivalence's inverse/forward round trip.  Evaluating that round trip and its
+endomorphism cast remains before the left injection theorem applies.

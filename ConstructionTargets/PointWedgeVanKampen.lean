@@ -734,6 +734,25 @@ theorem genericPointWedgeIdentityOuterLeftSpanComponent_target :
   rfl
 
 omit [PathConnectedSpace X] [PathConnectedSpace Y] in
+/-- The source endpoint of the left-span comparison retains the overlap
+equivalence round trip before the actual-left and left-equivalence maps. -/
+theorem genericPointWedgeIdentityOuterLeftSpanComponent_source_eq_nestedObj :
+    let eK := genericPointWedgeOverlapGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let eL := genericPointWedgeLeftGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let l := genericPointWedgeActualLeft x₀ y₀ M N
+    let z : FundamentalGroupoid (genericPointWedgeOverlapPiece x₀ y₀ M N) :=
+      FundamentalGroupoid.mk
+        ⟨quotientMap x₀ y₀ (.inl x₀),
+          ⟨⟨.inl x₀, by trivial, rfl⟩,
+            ⟨.inr y₀, by trivial,
+              (Quotient.sound (Relation.EqvGen.rel _ _ Rel.base)).symm⟩⟩⟩
+    (eK.inverse ⋙ l ⋙ eL.functor).obj (eK.functor.obj z) =
+      eL.functor.obj (l.obj (eK.inverse.obj (eK.functor.obj z))) := by
+  rfl
+
+omit [PathConnectedSpace X] [PathConnectedSpace Y] in
 /-- The target endpoint of the right-span comparison at the transported
 overlap representative is the literal right base object. -/
 theorem genericPointWedgeIdentityOuterRightSpanComponent_target :
@@ -2293,6 +2312,7 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeIdentityOuterLeftUnit_actualMap_eq_inclusionMap
 #print axioms genericPointWedgeIdentityOuterRightUnitInv_actualMap_eq_inclusionMap
 #print axioms genericPointWedgeIdentityOuterLeftSpanComponent_target
+#print axioms genericPointWedgeIdentityOuterLeftSpanComponent_source_eq_nestedObj
 #print axioms genericPointWedgeIdentityOuterRightSpanComponent_target
 #print axioms genericPointWedgeIdentityCoordinateWhiskeredGlue_app
 #print axioms genericPointWedgeIdentityCoordinateWhiskeredGlue_app_eq_unitBase
