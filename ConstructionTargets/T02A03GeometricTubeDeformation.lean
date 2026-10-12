@@ -1845,6 +1845,20 @@ noncomputable def rotatedEndpointWaypoint
     (p : RightTubeMinusLeftCore) : ℂ :=
   -Complex.I * rightTubeCorePlanarComplex p.1
 
+/-- The rotated endpoint waypoint as a continuous family.  This is the
+waypoint input needed by `nonvanishingComplexPath_of_waypoint` once its
+departure leg has been corrected away from zero. -/
+noncomputable def rotatedEndpointWaypointMap :
+    C(RightTubeMinusLeftCore, ℂ) :=
+  ⟨rotatedEndpointWaypoint, by
+    apply Continuous.mul continuous_const
+    unfold rightTubeCorePlanarComplex
+    fun_prop⟩
+
+@[simp] theorem rotatedEndpointWaypointMap_apply
+    (p : RightTubeMinusLeftCore) :
+    rotatedEndpointWaypointMap p = rotatedEndpointWaypoint p := rfl
+
 theorem rotatedEndpointWaypoint_departure_eq_zero_iff
     (t : unitInterval) (p : RightTubeMinusLeftCore) :
     (((1 - 2 * (t : ℝ) : ℝ) : ℂ) +
