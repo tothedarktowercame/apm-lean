@@ -113894,6 +113894,18 @@
     [{:cmd "lean counit split rfl",
       :exit 1,
       :finding "Coherence maps require simp."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791814818866-7083-132a3c6d",
+     :commands
+     ["git show/diff-tree 413cbf067"
+      "sha256/placeholder/registry checks"
+      "lake env lean ConstructionTargets/PointWedgeVanKampen.lean"
+      "lake build ConstructionTargets.PointWedgeVanKampen"
+      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (expected absent)"],
+     :finding
+     "PASS: exact two-file scope and frozen hashes match; placeholders 0->0, registry 131/131. Pre-free-product counit splits at the coordinate-point boundary with mapped pre-coordinate counit followed by coordinate-point counit in the correct order; standard axioms only. Valid program STOP; compute latter, compare outer factors, then B6/B12."},
     :commit "413cbf067e6bde747f68b2f04e0314d85fdcdadd",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
@@ -113904,7 +113916,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113925,7 +113937,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: The pre-free-product equivalence now factors through a named pre-coordinate composite.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Pre-free-product counit splits into mapped pre-coordinate and coordinate-point components.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -114313,7 +114325,11 @@
     {:job 2,
      :commit "57644bfcff1373a23435fab4f99e2b227834e75d",
      :reason
-     "The pre-free-product equivalence now factors through a named pre-coordinate composite."}]}
+     "The pre-free-product equivalence now factors through a named pre-coordinate composite."}
+    {:job 3,
+     :commit "413cbf067e6bde747f68b2f04e0314d85fdcdadd",
+     :reason
+     "Pre-free-product counit splits into mapped pre-coordinate and coordinate-point components."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
