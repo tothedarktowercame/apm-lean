@@ -113850,14 +113850,14 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 6,
+   :stop-count 7,
    :review-finding
    "Blueprint B3 is marked proved but its proof uses the unlisted ConnectedGroupoidSingleObjEquivalence.connectorSingleObjEquivalence (and connector-system representation) instead of only the declared uses; add the actual connector dependency and proof route to B3 uses.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
    :evidence
    {:placeholder-delta {:source-before 0, :source-after 0},
     :residual
-    "Compare this outer composite directly with the B3 counit element; then close B6 and B12.",
+    "Match these counits with the outer composite; then close B6 and B12.",
     :outcome :stop,
     :warnings [],
     :missing-theorems
@@ -113871,9 +113871,9 @@
       :area "fundamental-group-wedge-of-circles"}],
     :statement-hashes
     {:source
-     "3b1a2a0ecd01754069eabd2131d4ccf3d619f441ec054329c3c55dc5b08d784b",
+     "2a4ec3de2ed8bf0ae1b653651e07aeaddcebb9c92a877fd0461f5048be59c041",
      :documentation
-     "9ccc485ddc7f15ecbe79fb0e609d12c40ae9c92b1dc6bec22835a4f65cf1fbbe",
+     "3470ee8e9534f38efc8dc586d7c84bd7f9387fabaf20c0581b0f973e9a1cf41e",
      :blueprint
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0",
      :registry "131/131"},
@@ -113881,7 +113881,7 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
     :reason
-    "The reconstruction right-base conjugator is now exactly the inverse-left/forward-right outer comparison composite.",
+    "B3 counit split into mapped representation and final single-object counits.",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/PointWedgeVanKampen.lean",
@@ -113891,22 +113891,12 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder/diff validation", :exit 0}],
     :diagnostic-history
-    [{:cmd "lean direct outer rewrite",
+    [{:cmd "lean direct equality",
       :exit 1,
-      :finding "Unfolded the named overlap base."}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1791810740564-6963-95ca812d",
-     :commands
-     ["git show/diff-tree a450e10c2"
-      "sha256/placeholder/registry checks"
-      "lake env lean ConstructionTargets/PointWedgeVanKampen.lean"
-      "lake build ConstructionTargets.PointWedgeVanKampen"
-      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (expected absent)"],
-     :finding
-     "PASS: exact two-file scope and frozen hashes match; placeholders 0->0, registry 131/131. Global right-base conjugator is correctly transported to the inverse-left/forward-right outer composite at the named overlap representative; standard axioms only. Valid program STOP; compare with B3 counit, then close B6/B12."},
-    :commit "a450e10c20202e41efb2ef2d05445d5400e6cf6b",
+      :finding "Not definitional."}
+     {:cmd "lean counit simp", :exit 1, :finding "Six factors."}
+     {:cmd "lean split type", :exit 1, :finding "Used Functor.id."}],
+    :commit "7051031fd8d6d900536ff7d3217cb962d565f6b7",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
      "ConstructionTargets/PointWedgeVanKampen.md"],
@@ -113916,7 +113906,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
