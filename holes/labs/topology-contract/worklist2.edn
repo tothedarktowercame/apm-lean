@@ -72788,13 +72788,13 @@
    :consumer :t02A03,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "Commit b07bee059 does not implement the row acceptance theorem. It adds only rotatedEndpointWaypoint_departure_zero_support_pos; safeRightTubeMeridianDeformation is absent, although the row is marked done-unreviewed rather than a STOP with missing-theorems. Exact repair: extend Mathlib in scope by state/proving the required continuous ambient H with both endpoints, pointwise rightTube membership, and leftCore avoidance (or record a legitimate STOP after committed progress with remaining theorem listed).",
    :evidence
    {:placeholder-delta 0,
     :residual
-    "At t=7/8 corrected equations select p0=2,p1=-1/64; realize/exclude it or replace bump, then package path and H.",
+    "Actual zero at t=7/8 refutes scalar bump; build non-collinear detour, then package path and H.",
     :outcome :stop,
     :warnings ["Main: 1 placeholder; style lint only."],
     :missing-theorems
@@ -72803,8 +72803,7 @@
       :type "endpoint-fixed nonzero path",
       :status :partial,
       :consumers [:t02A03],
-      :depends-on
-      ["positiveRealPlanarArrival_sevenEighths_scalar_equations"],
+      :depends-on ["positiveRealPlanarArrival_corrected_actual_zero"],
       :area "explicit-r3-tube-deformation-retraction"}
      {:name
       "ConstructionTargets.T02A03GeometricTubeDeformation.safeRightTubeMeridianDeformation",
@@ -72815,7 +72814,7 @@
       :area "explicit-r3-tube-deformation-retraction"}],
     :statement-hashes
     {:registry "131/0",
-     :module "d03d3e71a0619d1379fd6410855143556b2f9ea7",
+     :module "b33a5b1f1fb2c78f960ef1fcfb05c9f443424070",
      :main "ce9da0dbb4300e81e5a5f31c95d0a0f8344c4325"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
@@ -72831,31 +72830,22 @@
     :diagnostic-history
     [{:cmd "module compile",
       :exit 1,
-      :finding "Normalized imaginary coefficient."}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1791801340694-6805-fcf8c49d",
-     :commands
-     ["git show/diff-tree/show --check 2a9c5d5d69e2f19806b70df780c4643a14cbe29e"
-      "sha256sum fixture; blob and placeholder recount"
-      "lake env lean exact committed module"
-      "python3 scripts/statement-registry.py check"
-      "compare parent/prior milestone"],
-     :finding
-     "PASS: program STOP commits new compiled, sorry-free progress beyond the prior milestone: the endpoint-fixed transverse correction is proved nonzero at every old departure zero. Exact scope and fixture hash match; module/Main blobs are 0629f3f5/ce9da0db with placeholder counts 0/1; registry 131/0; axioms standard. The no-new-zero corrected path and safe ambient deformation remain explicitly listed."},
-    :commit "3ea22d515f546d4fea37f0364365848e98068a5f",
+      :finding "Kept candidate norm folded."}
+     {:cmd "module compile",
+      :exit 1,
+      :finding "Normalized negative fraction."}],
+    :commit "d38d98558f25658e92d1e26dde3a0d07618125c1",
     :changed-paths
     ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
     :fixture
     {:path "ConstructionTargets/T02A03GeometricTubeDeformation.lean",
      :sha256
-     "5191974a41083df384daf92be976de729b77b7b02f42ea30295302c1b63c479e"},
+     "476fb7e797fbaeef7bec1ab82401c986a93e662aec24917ce380f5cf219007cc"},
     :seat "topo-6"},
    :phase :implementation,
    :type
    "∀ (t : unitInterval) (p : RightTubeMinusLeftCore), (t:ℝ) ≤ 1/2 → (((1-2*(t:ℝ):ℝ):ℂ)+((2*(t:ℝ):ℝ):ℂ)*rotatedEndpointWaypoint p)=0 → 0 < (t:ℝ)*(1-2*(t:ℝ))",
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/safe-right-tube-meridian-deformation",
@@ -82156,7 +82146,8 @@
     :lemma-positiverealplanarwaypoint-arrival-collision-second-zero
     :lemma-positiverealplanarwaypoint-arrival-collision-time-gt-three-quarters
     :lemma-positiverealplanararrivalbump-ne-zero-at-arrival-collision
-    :lemma-positiverealplanararrival-seveneighths-scalar-equations],
+    :lemma-positiverealplanararrival-seveneighths-scalar-equations
+    :lemma-positiverealplanararrival-corrected-actual-zero],
    :other-consumers []}
   {:consumer :portfolio,
    :phase :lemma,
@@ -83021,6 +83012,19 @@
     :found-in
     ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"]},
    :id :lemma-positiverealplanararrival-seveneighths-scalar-equations,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "positiveRealPlanarArrival_corrected_actual_zero"},
+   :lemma
+   {:name "positiveRealPlanarArrival_corrected_actual_zero",
+    :reported-by []},
+   :id :lemma-positiverealplanararrival-corrected-actual-zero,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}]}
