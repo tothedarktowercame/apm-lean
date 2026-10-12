@@ -113850,14 +113850,14 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 8,
+   :stop-count 9,
    :review-finding
    "Blueprint B3 is marked proved but its proof uses the unlisted ConnectedGroupoidSingleObjEquivalence.connectorSingleObjEquivalence (and connector-system representation) instead of only the declared uses; add the actual connector dependency and proof route to B3 uses.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
    :evidence
    {:placeholder-delta {:source-before 0, :source-after 0},
     :residual
-    "Relate the named coordinate-span factors via the mapped splice, then cancel open-cover and injected counits; close B6/B12.",
+    "Reduce both glues in the mapped square to the reconstructed splice, then cancel named open-cover and injected counits; close B6/B12.",
     :outcome :stop,
     :warnings [],
     :missing-theorems
@@ -113871,9 +113871,9 @@
       :area "fundamental-group-wedge-of-circles"}],
     :statement-hashes
     {:source
-     "b703771e4a916552194baa80b081d6e6c87042abc6c3e025af8402fc8d1f06a3",
+     "96fabffb7c937ad44a8959c7d8e068f321e338d8daff8d7be6170c86c3eefae9",
      :documentation
-     "756ae421682af447c8763bfb26c8e7e18f179a862b3619d4195a52efbed0896e",
+     "b1df02d99bfce07d89a17999d722c980d79781f680ac0534abeb02f2f56aae66",
      :blueprint
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0",
      :registry "131/131"},
@@ -113881,7 +113881,7 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
     :reason
-    "Both pre-free-product counit legs are named three-factor products.",
+    "Mapped coordinate-span counit glue naturality is specialized at the unique overlap object.",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/PointWedgeVanKampen.lean",
@@ -113891,23 +113891,11 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder/diff validation", :exit 0}],
     :diagnostic-history
-    [{:cmd "lean initial named-factor order",
+    [{:cmd "lean implicit mapped square",
       :exit 1,
       :finding
-      "SingleObj multiplication reverses categorical composition."}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1791830095362-7699-d8c9623b",
-     :commands
-     ["git show/diff-tree eb8cfc229"
-      "sha256 + placeholder + registry checks"
-      "lake env lean ConstructionTargets/PointWedgeVanKampen.lean"
-      "lake build ConstructionTargets.PointWedgeVanKampen"
-      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (expected absent)"],
-     :finding
-     "Scope is exactly Lean+MD; source/doc/blueprint hashes match; placeholders 0->0; registry 131/131. The named coordinate-span factors use the matching free-product evaluations. Theorems correctly reverse categorical composition under SingleObj.comp_as_mul, yielding injected based * mapped coordinate-span * mapped open-cover on both legs, with correct injections and boundaries. They compile with only propext, Classical.choice, Quot.sound. This is new progress; residual is relating coordinate factors via the mapped splice and cancelling open-cover/injected counits, then B6/B12. Final target remains absent as declared."},
-    :commit "eb8cfc229c60ac7cf0009374641ca9b4fba222fc",
+      "Functor map and counit object required explicit endpoints."}],
+    :commit "f4203bfa6682494cf60b47c7978440fc6f41c047",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
      "ConstructionTargets/PointWedgeVanKampen.md"],
@@ -113917,7 +113905,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
