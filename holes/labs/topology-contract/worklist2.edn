@@ -75548,7 +75548,7 @@
   {:consumer :t96J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 0,
    :evidence
    {:placeholder-delta 0,
     :residual "Finish B4; then B5/B6.",
@@ -75605,6 +75605,18 @@
       :exit 1,
       :correction
       "exposed radial membership and transported range equality"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791844277845-8000-78266b11",
+     :commands
+     ["git show 6dabd76d2:ConstructionTargets/PolygonSurfacePiOne.lean | lake env lean /dev/stdin"
+      "#print axioms innerHomeomorph"
+      "python3 scripts/statement-registry.py check"
+      "git show --check/hash/diff-tree 6dabd76d2"
+      "comment-stripped placeholder scan"],
+     :finding
+     "PASS: exact source compiles; sole path/hash match; registry 131/0, placeholders 0, standard axioms only. innerMap is injective because no norm-<2/3 representative is boundary-equivalent; its open-map proof uses the exact preimage equality. The resulting Homeomorph targets the subtype of the proved quotient inner open via range equality, so it preserves the quotient representation rather than introducing a facade. This is real progress; contraction, annular side, overlap Homeomorph, and final cover remain explicitly listed."},
     :commit "6dabd76d2",
     :changed-paths ["ConstructionTargets/PolygonSurfacePiOne.lean"],
     :fixture
@@ -75613,7 +75625,7 @@
      "e91fb9f3d18acc91a3b9841b6136075f1a4f60ed8aade64fc2e570d30ef70d35"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope ["ConstructionTargets/PolygonSurfacePiOne.lean"],
    :dag-node "ConstructionTargets/PolygonSurfacePiOne.blueprint.md/B4",
    :acceptance
@@ -85786,7 +85798,7 @@
    :other-consumers []}
   {:consumer :t96J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "innerHomeomorph",
@@ -85796,7 +85808,9 @@
     :reported-by [:routes-2026-10-12-polygon-b4-topo2-r1],
     :type "InnerDisk ≃ₜ quotient inner open",
     :area "polygon-surface-pi1",
-    :proved-in :routes-2026-10-12-polygon-b4-topo2-r1},
+    :proved-in :routes-2026-10-12-polygon-b4-topo2-r1,
+    :banked-by :routes-2026-10-12-polygon-b4-topo2-r1,
+    :banked-commit "6dabd76d2"},
    :id :lemma-innerhomeomorph,
    :kind :lemma,
    :depends-on [:lemma-polygonradialopensets],
