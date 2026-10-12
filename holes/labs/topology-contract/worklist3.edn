@@ -18499,6 +18499,17 @@
       "lake env lean ConstructionTargets/ManifoldFundamentalClass.lean",
       :exit 1,
       :note "Moved theorem below open-disk prerequisites."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791773410535-6208-bb81e532",
+     :commands
+     ["recorded scope/blob, fixture hash, diff check"
+      "statement registry and placeholder scans"
+      "lake env lean: renamed fixture and module"
+      "lake build ConstructionTargets.ManifoldFundamentalClass"],
+     :finding
+     "PASS: recorded one-file scope and frozen fixture hash match. The proof rewrites the coefficient connecting morphism to snake δ, transports it via the verified forgetful δ equality, then applies snake naturality. Relative comparison is on the source and absolute comparison on the target, exactly as frozen. Registry 131/0; source placeholders 0; consumer sorries 1/1; standard axioms only; build 8326 jobs."},
     :commit "dfd859b421e67f2257b2bfe75e3a8cdb5f08cb35",
     :changed-paths
     ["ConstructionTargets/ManifoldFundamentalClass.lean"],
@@ -18508,7 +18519,7 @@
      "9e380932bd80dafcc554dde2a577f285cc7830b11da9abbc6fbce4be71fd4d1b"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/manifold-fundamental-class/open-disk",
    :acceptance
@@ -18580,7 +18591,7 @@
       "9e380932bd80dafcc554dde2a577f285cc7830b11da9abbc6fbce4be71fd4d1b"},
      :seat "topo-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -26586,7 +26597,7 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -26599,7 +26610,9 @@
     [:routes-2026-10-10-manifold-fundamental-class-topo3-r2],
     :type "exact type in /tmp/cnat.lean",
     :area "manifold-fundamental-class",
-    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2,
+    :banked-by :routes-2026-10-12-mfclass-open-disk-connecting-r1,
+    :banked-commit "dfd859b421e67f2257b2bfe75e3a8cdb5f08cb35"},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-coefficientopendiskconnecting-forgo,
    :kind :lemma,
