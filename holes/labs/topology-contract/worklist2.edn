@@ -74434,9 +74434,20 @@
       "Elect B1 on PASS; route any defect otherwise.",
       :other-consumers []}],
     :author "topo-8",
-    :disposition :replan},
+    :disposition :replan,
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791828169463-7663-5d051c6f",
+     :commands
+     ["bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn"
+      "bb holes/labs/topology-contract/build_step.bb priorities holes/labs/topology-contract/worklist2.edn"
+      "python3 scripts/statement-registry.py check"
+      "EDN dependency-state/replacement audit"],
+     :finding
+     "PASS: strategy checkpoint has no code commit or fixture. Its rereview dependency is blocked, inherited the failed blueprint needs-owner state, and has no review run; therefore placeholder delta 0, infrastructure packets 0, review outcome not-run 1, and zero banked edges are accurate. Ledger validates at 959 items and registry is 131/0. The checkpoint correctly routes one fresh blueprint certification plus its follow-up checkpoint rather than electing B1 before certification."}},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance {:strategy "Rerun priorities after blueprint review."},
@@ -74450,7 +74461,7 @@
    :other-consumers []}
   {:consumer :t96J02,
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/PolygonSurfacePiOne.blueprint.md"],
    :dag-node "TOPOLOGY-ROUTES.md/polygon-surface-pi1",
    :acceptance
@@ -83659,7 +83670,7 @@
      "8e2b05fc2da21acb000c622b502360f2835a454e138dbfeb505f29eedb0c7769"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["ConstructionTargets/SuppliedCoverAlgebra.lean"
     "ConstructionTargets/SuppliedCoverAlgebra.md"],
@@ -83678,7 +83689,7 @@
    :id :program-2026-10-12-supplied-cover-algebra,
    :kind :reusable-theorem,
    :campaign-priority 40,
-   :fail-count 4,
+   :fail-count 0,
    :depends-on [],
    :program true,
    :other-consumers [:t97A03 :t93J03 :t00A02]}
