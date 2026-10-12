@@ -19097,6 +19097,17 @@
      {:cmd "rg forbidden tokens in scoped file",
       :exit 1,
       :expected-exit 1}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791783606507-6431-46ef5a05",
+     :commands
+     ["recorded scope/blob, fixture hash, diff check"
+      "statement registry and placeholder scans"
+      "lake env lean: renamed fixture and module"
+      "lake build ConstructionTargets.ManifoldFundamentalClass"],
+     :finding
+     "PASS: recorded one-file scope and frozen fixture hash match. Radial factorization replaces the disk radial map by puncture inclusion then model radial normalization; connecting naturality then replaces disk connecting plus inclusion by ambient pair map plus model connecting. The remaining factors are exactly the model composite, with correct direction and objects. Registry 131/0; source placeholders 0; consumer sorries 1/1; standard axioms only; build 8326 jobs."},
     :commit "8b29ab365590443b5963d7a8f36134efcc731505",
     :changed-paths
     ["ConstructionTargets/ManifoldFundamentalClass.lean"],
@@ -19106,7 +19117,7 @@
      "5a46ed66454f936c0ae93cdcc873a3ba33f0c8c198ea8cc2db8c860755043f70"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/manifold-fundamental-class/open-disk-model",
@@ -19178,7 +19189,7 @@
       "5a46ed66454f936c0ae93cdcc873a3ba33f0c8c198ea8cc2db8c860755043f70"},
      :seat "topo-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -27410,7 +27421,7 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -27423,7 +27434,9 @@
     [:routes-2026-10-10-manifold-fundamental-class-topo3-r2],
     :type "exact type in fixture",
     :area "manifold-fundamental-class",
-    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2,
+    :banked-by :routes-2026-10-12-mfclass-open-disk-coeff-model-r1,
+    :banked-commit "8b29ab365590443b5963d7a8f36134efcc731505"},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-coefficientopendisknormalizationcom,
    :kind :lemma,
