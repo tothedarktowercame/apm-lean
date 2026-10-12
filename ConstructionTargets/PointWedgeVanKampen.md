@@ -632,3 +632,8 @@ earlier composite ending at the coordinate span, and
 factors the remaining pre-free-product equivalence through the final
 coordinate-to-point-span stage.  Its counit can therefore be split next at
 this exact boundary.
+
+`genericPointWedgePreFreeProductCounit_eq_preCoordinate_coordinatePoint`
+instantiates that counit split at the point-span object underlying the identity
+representation.  The remaining counit is now the mapped pre-coordinate
+component followed by the coordinate-to-point component, in that order.
