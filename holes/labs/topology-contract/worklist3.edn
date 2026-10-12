@@ -20986,7 +20986,7 @@
   {:consumer :t00J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 2,
    :review-finding
    "Frozen fixture metadata mismatch: top-level :acceptance still records SHA aad5a9cda739c1cbcceb1eca8ab8b33395db8a08c9d68941a87c644f4d13586e and omits :mode, but /tmp/closedboundarycoords.lean freshly hashes to 7e72195e1214d7580994264481ae57d0ecf87755d31825ab85cbda5f1220c4b1. Repair the authoritative acceptance map (and duplicated prerequisite acceptance) to that digest with :mode :post-build-export-check, then resubmit.",
    :implements-lemma
@@ -20994,30 +20994,21 @@
    :evidence
    {:placeholder-delta {:t00J02 [1 1], :t98A02 [1 1]},
     :residual
-    "After authoritative acceptance repair, resubmit commit f0afa7bd.",
+    "Supervisor acceptance-map repair; then resubmit f0afa7bd.",
     :outcome :stop,
-    :warnings ["pre-existing lints"],
+    :warnings [],
     :statement-hashes {:registry "131/131"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Supervisor must replace top-level acceptance fixture hash aad5a9cda739c1cbcceb1eca8ab8b33395db8a08c9d68941a87c644f4d13586e with 7e72195e1214d7580994264481ae57d0ecf87755d31825ab85cbda5f1220c4b1 and add :mode :post-build-export-check; evidence-local metadata cannot repair the frozen row.",
+    "Authoritative top-level acceptance still has stale hash aad5a9cda739c1cbcceb1eca8ab8b33395db8a08c9d68941a87c644f4d13586e. Supervisor must replace it with 7e72195e1214d7580994264481ae57d0ecf87755d31825ab85cbda5f1220c4b1, add :mode :post-build-export-check, and update duplicated prerequisite acceptance.",
     :commands
     [{:cmd "sha256sum /tmp/closedboundarycoords.lean", :exit 0}
      {:cmd
       "git diff --exit-code f0afa7bd -- ConstructionTargets/ManifoldFundamentalClass.lean",
       :exit 0}
-     {:cmd "lake build ConstructionTargets.ManifoldFundamentalClass",
-      :exit 0}
-     {:cmd "lake env lean /tmp/closedboundarycoords.lean", :exit 0}
-     {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1791820524193-7309-cfbc066b",
-     :finding
-     "Frozen fixture metadata mismatch: top-level :acceptance still records SHA aad5a9cda739c1cbcceb1eca8ab8b33395db8a08c9d68941a87c644f4d13586e and omits :mode, but /tmp/closedboundarycoords.lean freshly hashes to 7e72195e1214d7580994264481ae57d0ecf87755d31825ab85cbda5f1220c4b1. Repair the authoritative acceptance map (and duplicated prerequisite acceptance) to that digest with :mode :post-build-export-check, then resubmit."},
+     {:cmd "lake env lean /tmp/closedboundarycoords.lean", :exit 0}],
     :commit "f0afa7bdc4c95a8c87143342ceb8c9ce51cd5612",
     :changed-paths [],
     :fixture
@@ -21027,7 +21018,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :repair,
+   :state :needs-owner,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/manifold-fundamental-class",
    :acceptance
