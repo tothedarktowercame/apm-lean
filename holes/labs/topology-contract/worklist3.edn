@@ -367,6 +367,17 @@
       :exit 1,
       :note
       "Post-promotion fixture self-import redeclared theorem; replaced by import-only exact-type check."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791766027705-6080-c2f527ac",
+     :commands
+     ["git scope/diff/hash checks at 1604cf5c8b9804018a3a946f2274f38e9b5a07fd"
+      "renamed fixture, exact-type check, and module: lake env lean"
+      "statement registry and placeholder scans"
+      "lake build ConstructionTargets.SardGeneralModel"],
+     :finding
+     "Recorded one-file scope, blob, and frozen fixture hash match. The theorem packages the four ModelWithCorners laws on the identical concrete range: convex, closed, nonempty interior, and range equals closure of interior. It asserts no Sard/nullity/regular-value result. Fixture, exact-type check, and module compile; registry 131/0; build 8444 jobs; axioms propext, choice, Quot.sound; source placeholders 0; consumer sorry 1."},
     :commit "1604cf5c8b9804018a3a946f2274f38e9b5a07fd",
     :changed-paths ["ConstructionTargets/SardGeneralModel.lean"],
     :fixture
@@ -375,7 +386,7 @@
      "0aee2f598e8ab90697a79ad256ab386ee7ed80e44d2519c57ac2268f9f4a6ee6"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/SardGeneralModel.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t01A08/model-range-convex-domain",
    :acceptance
@@ -475,7 +486,7 @@
      "The reviewed target equivalence removes the frozen codomain norm mismatch, but the consumer still cannot use the banked boundaryless Sard theorem: at corner points mfderiv is represented by a derivative within Set.range I, whereas the banked analytic chain uses ambient derivatives on open domains. Mathlib does guarantee the exact source geometry needed for the corners route. The fixture compiles the reusable conjunction that every ModelWithCorners range is closed and convex, has nonempty interior, and is the closure of that interior. This confirms the convex-domain route without pretending that the missing within-derivative Sard theorem already exists.",
      :seat "topo-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["problems/t01A08/lean/Main.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t01A08/closure",
    :acceptance
@@ -20130,7 +20141,7 @@
    :other-consumers []}
   {:consumer :t01A08,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "ConstructionTargets.SardGeneralModel.modelRange_geometry",
@@ -20142,7 +20153,9 @@
     :type
     "forall {E H : Type*} [NormedAddCommGroup E] [NormedSpace Real E] [TopologicalSpace H] (I : ModelWithCorners Real E H), Convex Real (Set.range I) and IsClosed (Set.range I) and (interior (Set.range I)).Nonempty and Set.range I = closure (interior (Set.range I))",
     :area "sard-convex-domain",
-    :proved-in :routes-2026-10-10-t01a08-closure-probe-topo3-r2},
+    :proved-in :routes-2026-10-10-t01a08-closure-probe-topo3-r2,
+    :banked-by :routes-2026-10-11-t01a08-model-range-geometry-topo3-r1,
+    :banked-commit "1604cf5c8b9804018a3a946f2274f38e9b5a07fd"},
    :id :lemma-constructiontargets-sardgeneralmodel-modelrange-geometry,
    :kind :lemma,
    :depends-on [:lemma-sard-linear-target-transport],
