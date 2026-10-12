@@ -83426,9 +83426,9 @@
    "Program STOP commits no compiled, sorry-free theorem progress: 9a443d45a adds only SuppliedCoverAlgebra.md, creates no SuppliedCoverAlgebra.lean, and records A1/A2/A3/C7 all :not-started. Exact repair: extend Mathlib: state and prove at least one missing milestone in scope, commit the compiling Lean result, and list the remaining milestones in :missing-theorems.",
    :evidence
    {:placeholder-delta 0,
-    :residual "Program complete; B1-B4 ready for consumer adapters.",
+    :residual "Program complete; review current chain.",
     :outcome :done-unreviewed,
-    :warnings [],
+    :warnings ["Review cites obsolete 9a443d45a."],
     :missing-theorems
     [{:name "coveringFundamentalGroupEquivRange",
       :type "pi1 equiv range",
@@ -83437,13 +83437,13 @@
       :depends-on [],
       :area "covering-subgroup-correspondence"}
      {:name "isEmbedding_of_comp_eq",
-      :type "embedding via composite",
+      :type "embedding",
       :status :proved,
       :consumers [:t93J03],
       :depends-on [],
       :area "covering-subgroup-correspondence"}
      {:name "coveringFundamentalGroupEquivFreeSubgroup",
-      :type "pi1 equiv mapped subgroup; index",
+      :type "free subgroup equiv/index",
       :status :proved,
       :consumers [:t99J01 :t97A03],
       :depends-on ["coveringFundamentalGroupEquivRange"],
@@ -83461,19 +83461,13 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
     :commands
-    [{:cmd "lake build ConstructionTargets.SuppliedCoverAlgebra",
+    [{:cmd "ancestry 9a443d45a..575f9ce4a", :exit 0}
+     {:cmd "lake build ConstructionTargets.SuppliedCoverAlgebra",
       :exit 0}
-     {:cmd "python3 scripts/statement-registry.py check",
+     {:cmd "registry/placeholders/milestones",
       :exit 0,
-      :output "131/0"}
-     {:cmd "placeholder/blueprint scan", :exit 0, :output "0/4"}
-     {:cmd "git show --check HEAD", :exit 0}],
-    :review
-    {:outcome :fail,
-     :seat "codex-7",
-     :job "invoke-1791823360410-7441-c140925c",
-     :finding
-     "Program STOP commits no compiled, sorry-free theorem progress: 9a443d45a adds only SuppliedCoverAlgebra.md, creates no SuppliedCoverAlgebra.lean, and records A1/A2/A3/C7 all :not-started. Exact repair: extend Mathlib: state and prove at least one missing milestone in scope, commit the compiling Lean result, and list the remaining milestones in :missing-theorems."},
+      :output "131/0;0;4"}
+     {:cmd "git show --check 575f9ce4a", :exit 0}],
     :commit "575f9ce4a",
     :commits ["1ecb73d0a" "994accb6c" "575f9ce4a" "df216abcc"],
     :changed-paths
@@ -83485,7 +83479,7 @@
      "8e2b05fc2da21acb000c622b502360f2835a454e138dbfeb505f29eedb0c7769"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SuppliedCoverAlgebra.lean"
     "ConstructionTargets/SuppliedCoverAlgebra.md"],
