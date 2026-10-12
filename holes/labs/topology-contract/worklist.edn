@@ -113894,6 +113894,17 @@
     [{:cmd "lean right-factor order",
       :exit 1,
       :finding "SingleObj.comp_as_mul gives strict*unit."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791842958008-7970-1a317e15",
+     :commands
+     ["git show/diff-tree b866bbd4"
+      "lake build ConstructionTargets.PointWedgeVanKampen"
+      "python3 scripts/statement-registry.py check"
+      "commit hash and placeholder checks"],
+     :finding
+     "PASS program STOP: b866bbd4 by topo-2 adds the exact right-comparison factorization plus documentation, exactly within scope and new since history. Source bd4ade4e..., documentation 25910053..., fixture 0bca6ce3..., registry 131/131, and placeholders 0->0 reproduce. The categorical composite is unit then strict, while SingleObj.comp_as_mul reverses it to strict*unit in group multiplication; the theorem records that correct order and leaves all endpoint counits explicit. Fresh build passes with standard axioms. Left-counit specialization, four right-counit cancellations, point-span transport, remaining counits, and B6/B12 remain explicitly listed."},
     :commit "b866bbd44a2a7ca59472da0acbc75739c1d2b75e",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
@@ -113904,7 +113915,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113925,7 +113936,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: The inverse right-unit factor is the literal actual-span map with both endpoint restriction counits explicit.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Right comparison recombined as strict*unit, the group order for categorical unit-then-strict.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -114480,7 +114491,11 @@
     {:job 9,
      :commit "d300fecf5a5f64e46339ce5a5db8f47837df247e",
      :reason
-     "The inverse right-unit factor is the literal actual-span map with both endpoint restriction counits explicit."}]}
+     "The inverse right-unit factor is the literal actual-span map with both endpoint restriction counits explicit."}
+    {:job 1,
+     :commit "b866bbd44a2a7ca59472da0acbc75739c1d2b75e",
+     :reason
+     "Right comparison recombined as strict*unit, the group order for categorical unit-then-strict."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
