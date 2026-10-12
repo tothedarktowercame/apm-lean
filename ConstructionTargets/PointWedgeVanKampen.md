@@ -663,3 +663,7 @@ it deliberately makes no false identity normalization.
 projects the pre-free-product counit split to the left natural transformation:
 the mapped pre-coordinate leg is followed, in order, by the coordinate-point
 counit leg whose unique-object value was computed above.
+
+`genericPointWedgePreFreeProductCounit_right_eq_preCoordinate_coordinatePoint`
+projects the same split to the right natural transformation, in the same
+mapped-pre-coordinate then coordinate-point order.
