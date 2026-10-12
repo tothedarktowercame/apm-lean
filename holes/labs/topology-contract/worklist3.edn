@@ -30004,7 +30004,7 @@
    :depends-on [],
    :other-consumers []}
   {:consumer :t00A02,
-   :stop-count 5,
+   :stop-count 6,
    :review-finding
    "Program-row defect: commit ebbfe625 repairs the B5 mathematics, but changes only SurfaceClassification.blueprint.md and commits no new compiled, sorry-free, standard-axiom result since the prior program-history entry; :missing-theorems is empty. The successful 8245-job build merely rebuilds pre-existing SurfaceClassification code and is not a new milestone. Repair by implementing and committing the next listed milestone (B1 FiniteTwoComplex/Realization or another genuine supporting result), compiling it without placeholders, and recording that proved milestone in :missing-theorems.",
    :implements-lemma
@@ -30019,25 +30019,26 @@
      :t96A01 [1 1],
      :t97J02 [3 3]},
     :residual
-    "Finish B1 by proving continuity of raw simplex inclusions.",
+    "Implement B3 compactSmoothSurfaceFiniteClosedDiskCover.",
     :outcome :stop,
     :warnings [],
     :missing-theorems
     [{:name
-      "ConstructionTargets.SurfaceClassification.FiniteTwoComplex.realizationQuotient_isQuotientMap",
+      "ConstructionTargets.SurfaceClassification.FiniteTwoComplex.continuous_realizationFace",
       :type
-      "(K : FiniteTwoComplex) : IsQuotientMap K.realizationQuotient",
+      "(K : FiniteTwoComplex) (f : K.face) : Continuous (fun x => K.realizationQuotient (.face f x))",
       :status :proved,
       :consumers
       [:t00A02 :t00A03 :t91J05 :t92J05 :t94J04 :t96A01 :t97J02],
-      :depends-on [],
+      :depends-on
+      ["ConstructionTargets.SurfaceClassification.FiniteTwoComplex.realizationQuotient_isQuotientMap"],
       :area "surface-classification"}],
     :statement-hashes {:registry "131/131"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "realization quotient and attaching equations compiled; B1 continuity lemmas remain",
+    "B1 finished: vertex, edge, and face realization inclusions are continuous",
     :commands
     [{:cmd "lake build ConstructionTargets.SurfaceClassification",
       :exit 0}
@@ -30050,31 +30051,17 @@
       "rg -n sorry-or-axiom ConstructionTargets/SurfaceClassification.lean",
       :exit 1,
       :expected-exit 1}],
-    :continue-from "71ea2effc4113df058cb54d167c553fb3d6ea42f",
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1791814178114-7064-606cb183",
-     :commands
-     ["git show/diff-tree 71ea2eff"
-      "lake env lean /tmp/surface_face_bound_check.lean"
-      "lake env lean ConstructionTargets/SurfaceClassification.lean"
-      "lake build ConstructionTargets.SurfaceClassification"
-      "python3 scripts/statement-registry.py check"
-      "git diff 71ea2eff^ 71ea2eff --check"
-      "rg source/consumer placeholders"],
-     :finding
-     "PASS program STOP: reviewer codex-11. Commit 71ea2eff is new since reviewed history and adds compiled, sorry-free B1 progress: RawCell, coproduct topology, attaching relation, equivalence-generated Realization, quotient map, and attaching equations; realizationQuotient_isQuotientMap is listed as proved, with inclusion continuity left explicit. Fin 2/Fin 3 simplex dimensions and face-map direction match the blueprint. Scope/blob match. Fixture/module/build pass (8245 jobs), registry 131/131, source placeholders 0, standard axioms only; consumer counts unchanged 2/2/3/3/2/1/3."},
-    :commit "71ea2effc4113df058cb54d167c553fb3d6ea42f",
+    :continue-from "b80e84501343b62612a0c058dea4e1c6fd7ac3ae",
+    :commit "b80e84501343b62612a0c058dea4e1c6fd7ac3ae",
     :changed-paths ["ConstructionTargets/SurfaceClassification.lean"],
     :program-history
-    [{:commit "122a2d685ccb62c21e2214cb4eef7c9a788467db",
-      :result :face-bound-proved}
-     {:commit "71ea2effc4113df058cb54d167c553fb3d6ea42f",
-      :result :realization-quotient-proved}],
+    [{:commit "71ea2effc4113df058cb54d167c553fb3d6ea42f",
+      :result :realization-quotient-proved}
+     {:commit "b80e84501343b62612a0c058dea4e1c6fd7ac3ae",
+      :result :B1-complete}],
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SurfaceClassification.lean"
     "ConstructionTargets/SurfaceClassification.md"
@@ -30156,6 +30143,29 @@
    :lemma-constructiontargets-surfaceclassification-finitetwocomplex-realizationquotient-i,
    :kind :lemma,
    :depends-on [],
+   :other-consumers [:t00A03 :t91J05 :t92J05 :t94J04 :t96A01 :t97J02]}
+  {:consumer :t00A02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.SurfaceClassification.FiniteTwoComplex.continuous_realizationFace",
+    :type
+    "(K : FiniteTwoComplex) (f : K.face) : Continuous (fun x => K.realizationQuotient (.face f x))"},
+   :lemma
+   {:name
+    "ConstructionTargets.SurfaceClassification.FiniteTwoComplex.continuous_realizationFace",
+    :reported-by [:program-2026-10-12-surface-classification],
+    :type
+    "(K : FiniteTwoComplex) (f : K.face) : Continuous (fun x => K.realizationQuotient (.face f x))",
+    :area "surface-classification",
+    :proved-in :program-2026-10-12-surface-classification},
+   :id
+   :lemma-constructiontargets-surfaceclassification-finitetwocomplex-continuous-realizatio,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-surfaceclassification-finitetwocomplex-realizationquotient-i],
    :other-consumers
    [:t00A03 :t91J05 :t92J05 :t94J04 :t96A01 :t97J02]}],
  :consumer-baselines {},
