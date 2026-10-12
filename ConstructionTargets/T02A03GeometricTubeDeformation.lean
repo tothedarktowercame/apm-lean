@@ -2657,6 +2657,27 @@ theorem rotatedEndpointWaypoint_doubledCorrected_departure_zero_coordinates
   · field_simp
     nlinarith [heq.1]
 
+/-- At quarter time the doubled correction forces planar coordinate
+`1/4 - 17/16 I`; it still lies strictly inside the frozen right-tube annulus.
+Thus doubling removes the old collision but does not yield an annulus
+contradiction. -/
+theorem doubledCorrectedDepartureQuarterCandidate_mem_planarAnnulus :
+    (9 / 16 : ℝ) <
+        Complex.normSq
+          (((1 / 4 : ℝ) : ℂ) + ((-17 / 16 : ℝ) : ℂ) * Complex.I) ∧
+      Complex.normSq
+          (((1 / 4 : ℝ) : ℂ) + ((-17 / 16 : ℝ) : ℂ) * Complex.I) <
+        (25 / 16 : ℝ) := by
+  norm_num [Complex.normSq_apply, Complex.mul_re, Complex.mul_im]
+
+theorem doubledCorrectedDepartureQuarterCandidate_scalarEquations :
+    1 - 2 * (1 / 4 : ℝ) +
+          2 * (1 / 4 : ℝ) * (-17 / 16 : ℝ) +
+          2 * ((1 / 4 : ℝ) - 1 / 8) * (3 / 8 - (1 / 4 : ℝ)) = 0 ∧
+      -2 * (1 / 4 : ℝ) * (1 / 4 : ℝ) +
+          (1 / 4 : ℝ) * (1 - 2 * (1 / 4 : ℝ)) = 0 := by
+  norm_num
+
 end ConstructionTargets.T02A03GeometricTubeDeformation
 
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeNormalComplex_eq_zero_iff
@@ -2751,6 +2772,7 @@ end ConstructionTargets.T02A03GeometricTubeDeformation
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.doubledCorrection_quarterCandidate_ne_zero
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_doubledCorrected_departure_eq_zero_iff
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_doubledCorrected_departure_zero_coordinates
+#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.doubledCorrectedDepartureQuarterCandidate_mem_planarAnnulus
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_twiceCorrected_departure_zero_coordinates
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_twiceCorrected_departure_zero_normSq
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_twiceCorrected_departure_zero_scalar_bounds
