@@ -37,6 +37,19 @@ theorem subcomplex_inf_image_le
   · exact (SSet.Subcomplex.image_monotone F inf_le_left).trans hP
   · exact (SSet.Subcomplex.image_monotone F inf_le_right).trans hQ
 
+/-- The image of a union lies in the union of any two subcomplexes that
+bound the images of its factors. -/
+theorem subcomplex_sup_image_le
+    {S T : SSet} (P Q : S.Subcomplex) (P' Q' : T.Subcomplex)
+    (F : S ⟶ T) (hP : P.image F ≤ P') (hQ : Q.image F ≤ Q') :
+    (P ⊔ Q).image F ≤ P' ⊔ Q' := by
+  rw [SSet.Subcomplex.image_le_iff]
+  apply sup_le
+  · rw [← SSet.Subcomplex.image_le_iff]
+    exact hP.trans le_sup_left
+  · rw [← SSet.Subcomplex.image_le_iff]
+    exact hQ.trans le_sup_right
+
 /-- Naturality of the canonical subcomplex Mayer--Vietoris connecting map
 under a morphism of the underlying short complexes. -/
 theorem subcomplexMayerVietorisConnecting_naturality
@@ -947,6 +960,7 @@ theorem subcomplexMayerVietoris_exact_transport
 end ConstructionTargets.ProductionOpenCoverMayerVietoris
 
 #print axioms ConstructionTargets.ProductionOpenCoverMayerVietoris.subcomplex_inf_image_le
+#print axioms ConstructionTargets.ProductionOpenCoverMayerVietoris.subcomplex_sup_image_le
 #print axioms ConstructionTargets.ProductionOpenCoverMayerVietoris.transportShortComplex_exact
 #print axioms ConstructionTargets.ProductionOpenCoverMayerVietoris.coverSmall_homologyMap_isIso
 #print axioms ConstructionTargets.ProductionOpenCoverMayerVietoris.subcomplexMayerVietoris_exact_transport
