@@ -79612,32 +79612,39 @@
      :commit "68d614508",
      :reason :program-milestone-complete}]}
   {:consumer :t94A10,
-   :stop-count 4,
+   :stop-count 5,
    :review-finding
    "B8 cites nonexistent Mathlib theorem MeasureTheory.integral2_divergence_prod_of_hasFDerivWithinAt_off_countable. Revise B8 to use the available integral2_divergence_prod_of_hasFDerivAt_off_countable and explicitly supply its ContinuousOn, pointwise HasFDerivAt, and IntegrableOn hypotheses; then re-review the blueprint.",
    :evidence
-   {:placeholder-delta 0,
-    :residual "Formalize B3 ambient closedness; then B4-B11.",
+   {:placeholder-delta -1,
+    :residual "Formalize B5; then B6-B11.",
     :outcome :stop,
-    :warnings ["Main: 2 placeholders."],
+    :warnings ["Main: 1 placeholder."],
     :missing-theorems
     [{:name
-      "ConstructionTargets.T94A10Closure.hasFDerivAt_radialInvCube",
-      :type "derivative is -3 norm^-5 times inner product off zero",
+      "ConstructionTargets.T94A10Closure.solidAngleAmbient_closed",
+      :type "B3 closedness off zero",
       :status :proved,
       :consumers [:t94A10],
-      :depends-on [],
+      :depends-on ["solidAngleAmbient" "hasFDerivAt_radialInvCube"],
       :area "periodic-stokes-square"}
      {:name
-      "ConstructionTargets.T94A10Closure.solidAngleAmbient_closed",
-      :type "solid-angle extDeriv vanishes off zero",
+      "ConstructionTargets.T94A10Closure.bridge_solidAngle_closed",
+      :type "B4 frozen adapter",
+      :status :proved,
+      :consumers [:t94A10],
+      :depends-on
+      ["ConstructionTargets.T94A10Closure.solidAngleAmbient_closed"],
+      :area "periodic-stokes-square"}
+     {:name "ConstructionTargets.T94A10Closure.sphereParam",
+      :type "B5 sphere parameter",
       :status :not-started,
       :consumers [:t94A10],
-      :depends-on ["solidAngleAmbient" "hasFDerivAt_radialInvCube"],
+      :depends-on [],
       :area "periodic-stokes-square"}],
     :statement-hashes
     {:registry "131/0",
-     :closure "96c1b05e6857a77c7d58a02e573722c0467668ef",
+     :closure "57a7b3318e7c4948156a0dc6de1d64d73da2c38b",
      :blueprint "808e174fd0529d3c85b60b506988b0a55526c8e0"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
@@ -79648,35 +79655,23 @@
      {:cmd "Main compile", :exit 0}
      {:cmd "registry check", :exit 0}
      {:cmd "closure no-sorry", :exit 1, :expected-exit 1}
-     {:cmd "placeholder count", :exit 0, :output "2"}
-     {:cmd "git show --check da84484c8", :exit 0}],
+     {:cmd "placeholder count", :exit 0, :output "1"}
+     {:cmd "git show --check 1fda42ff7", :exit 0}],
     :diagnostic-history
     [{:cmd "closure compile",
       :exit 1,
-      :finding
-      "Normalized nested scalar actions using nonzero norm."}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1791769304892-6149-603f06f3",
-     :commands
-     ["git show/check/diff 9950771b4..da84484c8"
-      "verify scoped blobs, fixture SHA, ancestry"
-      "lake build ConstructionTargets.t94A10Closure"
-      "lake env lean closure and t94A10 Main"
-      "statement-registry check/fingerprint"
-      "placeholder and axiom checks"],
-     :finding
-     "PASS: da84484c81ca09fca690abd6ee87a1b2beb44644 adds compiled, sorry-free B2 progress after 9950771b4; its sole changed path is scoped. Closure/blueprint blobs 96c1b05e/808e174f and fixture 0776e72d match. Differentiating norm-square, square root, cube, and inverse under x!=0 normalizes to the correctly oriented derivative -3*norm(x)^-5*inner(x,u). Lean gates pass with standard axioms only; registry 131/0, frozen hash d1822221 unchanged, closure/Main placeholders 0/2. STOP lists B3 then B4-B11."},
-    :commit "da84484c8",
-    :changed-paths ["ConstructionTargets/t94A10Closure.lean"],
+      :finding "Normalized determinant sum."}],
+    :commit "1fda42ff789847280f9a7f54b02d0f5849c6446b",
+    :changed-paths
+    ["ConstructionTargets/t94A10Closure.lean"
+     "problems/t94A10/lean/Main.lean"],
     :fixture
     {:path "ConstructionTargets/t94A10Closure.lean",
      :sha256
-     "0776e72dddde7a91f0b1cba48d8c0d9b7dd5054295b2111df46974d3182ba330"},
+     "d1de7e343f52ada86980069ec7aa97a245dad8e5da58c0b1c4372a7407a30564"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t94A10/lean/Main.lean"
     "problems/t94A10/status.json"
@@ -81342,7 +81337,8 @@
    {:name "ConstructionTargets.T94A10Closure.solidAngleAmbient_closed",
     :reported-by [:program-2026-10-11-close-t94a10],
     :type "solid-angle extDeriv vanishes off zero",
-    :area "periodic-stokes-square"},
+    :area "periodic-stokes-square",
+    :proved-in :program-2026-10-11-close-t94a10},
    :id
    :lemma-constructiontargets-t94a10closure-solidangleambient-closed,
    :kind :lemma,
@@ -81681,6 +81677,42 @@
     :banked-by :declaration-found,
     :found-in ["ConstructionTargets/t94A10Closure.lean"]},
    :id :lemma-hasfderivat-radialinvcube,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t94A10,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.T94A10Closure.bridge_solidAngle_closed",
+    :type "B4 frozen adapter"},
+   :lemma
+   {:name "ConstructionTargets.T94A10Closure.bridge_solidAngle_closed",
+    :reported-by [:program-2026-10-11-close-t94a10],
+    :type "B4 frozen adapter",
+    :area "periodic-stokes-square",
+    :proved-in :program-2026-10-11-close-t94a10},
+   :id
+   :lemma-constructiontargets-t94a10closure-bridge-solidangle-closed,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-t94a10closure-solidangleambient-closed],
+   :other-consumers []}
+  {:consumer :t94A10,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "ConstructionTargets.T94A10Closure.sphereParam",
+    :type "B5 sphere parameter"},
+   :lemma
+   {:name "ConstructionTargets.T94A10Closure.sphereParam",
+    :reported-by [:program-2026-10-11-close-t94a10],
+    :type "B5 sphere parameter",
+    :area "periodic-stokes-square"},
+   :id :lemma-constructiontargets-t94a10closure-sphereparam,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}]}
