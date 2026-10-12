@@ -113897,6 +113897,18 @@
      {:cmd "lean rewrite before lets",
       :exit 1,
       :finding "Reduced lets."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791810096616-6951-3cb67f79",
+     :commands
+     ["git show/diff-tree fb8f1a369"
+      "sha256/placeholder/registry checks"
+      "lake env lean ConstructionTargets/PointWedgeVanKampen.lean"
+      "lake build ConstructionTargets.PointWedgeVanKampen"
+      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (expected absent)"],
+     :finding
+     "PASS: exact two-file scope and frozen hashes match; placeholders 0->0, registry 131/131. Unit glue is transported at the explicit quotient overlap representative, leaving reverse-left inverse then forward-right comparison with correct orientation and boundary. Standard axioms only. Valid program STOP; identify outer composite with reconstruction counit, then B6/B12."},
     :commit "fb8f1a369ca41e1fc4dfe820f8362570c397e539",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
@@ -113907,7 +113919,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113928,7 +113940,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: All four inner connector factors cancel, so the coordinate-span glue at the Unit base is exactly one.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Unit glue transported through the overlap equivalence, leaving the two outer comparisons.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -114288,7 +114300,11 @@
     {:job 4,
      :commit "3cfdfdc2b6150d3b0b471f2fddd57a7f2d9255ca",
      :reason
-     "All four inner connector factors cancel, so the coordinate-span glue at the Unit base is exactly one."}]}
+     "All four inner connector factors cancel, so the coordinate-span glue at the Unit base is exactly one."}
+    {:job 5,
+     :commit "fb8f1a369ca41e1fc4dfe820f8362570c397e539",
+     :reason
+     "Unit glue transported through the overlap equivalence, leaving the two outer comparisons."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
