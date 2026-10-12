@@ -113894,6 +113894,18 @@
     [{:cmd "lean counit rfl probe",
       :exit 1,
       :finding "Counit element is not definitionally one."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791807937410-6921-071457b4",
+     :commands
+     ["git show/diff-tree 07240e5a3"
+      "sha256/placeholder/registry checks"
+      "lake env lean ConstructionTargets/PointWedgeVanKampen.lean"
+      "lake build ConstructionTargets.PointWedgeVanKampen"
+      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (expected absent)"],
+     :finding
+     "PASS: exact two-file scope and frozen hashes match; placeholders 0->0, registry 131/131. Reconstructed source is literal on the left and retains correctly oriented restriction conjugation on the right; no false counit normalization or representation bypass. Standard axioms only. Valid program STOP; compare restriction element with counit coordinate, then B6/B12."},
     :commit "07240e5a3062a6d1758610732aa7d141e4bfa5e9",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
@@ -113904,7 +113916,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113925,7 +113937,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: The quotient-aware composition closes the right normal form; both actual cover actions are literal coproduct injections.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: The reconstructed source functor is literal on the left leg and has one explicit restriction conjugator on the right.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -114277,7 +114289,11 @@
     {:job 2,
      :commit "b9ba104ea5a2f8d1c4385e5ff6186891d04fff72",
      :reason
-     "The quotient-aware composition closes the right normal form; both actual cover actions are literal coproduct injections."}]}
+     "The quotient-aware composition closes the right normal form; both actual cover actions are literal coproduct injections."}
+    {:job 3,
+     :commit "07240e5a3062a6d1758610732aa7d141e4bfa5e9",
+     :reason
+     "The reconstructed source functor is literal on the left leg and has one explicit restriction conjugator on the right."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
