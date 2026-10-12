@@ -577,3 +577,10 @@ calculations through the explicit B3 inverse.  Consequently the reconstructed
 B4 source functor is literal on the left leg and is conjugated on the right
 by exactly `genericPointWedgeIdentityGlobalRightBaseElement`.  B6 now only
 requires comparison of that restriction element with the counit coordinate.
+
+`genericPointWedgeIdentityCoordinateSpan_glue_unitBase_eq_one` completes the
+inner coordinate calculation: after expanding both connector comparisons,
+their two leg factors and two Unit round-trip factors are all identities, so
+the coordinate-span glue at the unique Unit object is exactly `1`.  The
+remaining conjugator comparison must transport this unit through the outer
+overlap-to-cover comparisons and the reconstruction counit.

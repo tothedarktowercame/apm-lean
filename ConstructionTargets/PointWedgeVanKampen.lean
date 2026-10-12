@@ -980,6 +980,21 @@ theorem genericPointWedgeIdentityCoordinateRightRoundTrip_eq_one :
   change (1 : genericPointWedgeFreeProduct x₀ y₀) = 1
   rfl
 
+/-- All four connector-transport factors at the unit base cancel, so the
+coordinate-span glue there is the unit of the free product. -/
+theorem genericPointWedgeIdentityCoordinateSpan_glue_unitBase_eq_one :
+    (genericPointWedgeIdentityCoordinateSpan x₀ y₀).glue.hom.app
+        (FundamentalGroupoid.mk ()) =
+      (1 : genericPointWedgeFreeProduct x₀ y₀) := by
+  rw [genericPointWedgeIdentityCoordinateSpan_glue_unitBase_eq_comparisons,
+    genericPointWedgeIdentityCoordinateLeftComparison_app,
+    genericPointWedgeIdentityCoordinateRightComparison_app]
+  rw [genericPointWedgeIdentityCoordinateLeftRoundTrip_eq_one,
+    genericPointWedgeIdentityCoordinateLeftLegFactor_eq_one,
+    genericPointWedgeIdentityCoordinateRightLegFactor_eq_one,
+    genericPointWedgeIdentityCoordinateRightRoundTrip_eq_one]
+  simp only [SingleObj.comp_as_mul, one_mul]
+
 /-- The penultimate inverse stage of B3, now expressed as the literal
 pseudococone on the two open pieces. -/
 def genericPointWedgeIdentityPseudoCocone :
@@ -3229,6 +3244,7 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeIdentityCoordinateRightLegFactor_eq_one
 #print axioms genericPointWedgeIdentityCoordinateLeftRoundTrip_eq_one
 #print axioms genericPointWedgeIdentityCoordinateRightRoundTrip_eq_one
+#print axioms genericPointWedgeIdentityCoordinateSpan_glue_unitBase_eq_one
 #print axioms genericPointWedgeIdentityGlobalRightRestriction_map
 #print axioms genericPointWedgeIdentityGlobalRightBase_map
 #print axioms genericPointWedgeIdentityRepresentation_inl
