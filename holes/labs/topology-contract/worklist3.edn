@@ -18630,6 +18630,17 @@
       "lake env lean ConstructionTargets/ManifoldFundamentalClass.lean",
       :exit 1,
       :note "qualified subMap/pairMap; rerun passed"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791775830184-6257-3ce03e0b",
+     :commands
+     ["recorded scope/blob, fixture hash, diff check"
+      "statement registry and placeholder scans"
+      "lake env lean: renamed fixture declarations and module"
+      "lake build ConstructionTargets.ManifoldFundamentalClass"],
+     :finding
+     "PASS: recorded one-file scope and frozen fixture hash match. The subtype-value inclusion sends the punctured disk to the nonzero model puncture definitionally. Pair naturality has disk connecting then puncture submap = ambient pair map then model connecting, exactly the frozen orientation and objects. Registry 131/0; source placeholders 0; consumer sorries 1/1; standard axioms only; build 8326 jobs."},
     :commit "7cf94024ec790322a1851f507f7ee716266fc619",
     :changed-paths
     ["ConstructionTargets/ManifoldFundamentalClass.lean"],
@@ -18639,7 +18650,7 @@
      "bc9428aa8dd0ade82924d0230e6babdfd3515f83e9b81b82081fb04625494f2d"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/manifold-fundamental-class/model-inclusion",
@@ -18712,7 +18723,7 @@
       "bc9428aa8dd0ade82924d0230e6babdfd3515f83e9b81b82081fb04625494f2d"},
      :seat "topo-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -26768,7 +26779,7 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -26781,7 +26792,9 @@
     [:routes-2026-10-10-manifold-fundamental-class-topo3-r2],
     :type "exact type in /tmp/odincl.lean",
     :area "manifold-fundamental-class",
-    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2,
+    :banked-by :routes-2026-10-12-mfclass-odincl-r1,
+    :banked-commit "7cf94024ec790322a1851f507f7ee716266fc619"},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-coefficientopendiskconnecting-model,
    :kind :lemma,
