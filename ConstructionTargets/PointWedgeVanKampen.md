@@ -846,3 +846,10 @@ pseudococone.  The theorem
 is definitionally the previously named predecessor.  The remaining unit
 calculation is therefore localized to the canonical descent-overlap
 component of that global restriction.
+
+`genericPointWedgeGlobalRestrictionOverlapGlue` now names that canonical
+descent-overlap component at the fixed overlap base before the pseudo-span,
+coordinate-span, and point-span transports.  This separates the remaining
+calculation into evaluation of the raw open-cover component and preservation
+of that value by the three named transports; no cross-representation
+normalization is assumed.

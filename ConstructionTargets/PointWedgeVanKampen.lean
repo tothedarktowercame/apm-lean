@@ -3137,6 +3137,18 @@ theorem genericPointWedgeMappedOpenCoverSourceGlue_eq_globalRestriction :
         x₀ y₀ M N hM hN hy hx cM cN := by
   rfl
 
+/-- The canonical overlap component before the three subsequent span
+transports. -/
+def genericPointWedgeGlobalRestrictionOverlapGlue :
+    genericPointWedgeFreeProduct x₀ y₀ :=
+  let C := genericPointWedgeTarget x₀ y₀
+  let E := genericPointWedgeOpenCoverEquivalence
+    x₀ y₀ M N hM hN hy hx cM cN C
+  let F := genericPointWedgeIdentityGlobalFunctor
+    x₀ y₀ M N hM hN hy hx cM cN
+  (E.functor.obj F).glue.hom.app
+    (genericPointWedgeOverlapBase x₀ y₀ M N)
+
 /-- The mapped coordinate-span counit's glue square, specialized at the
 unique point-span overlap object.  This is the equation in which its two
 named leg factors are related by the mapped reconstructed glue. -/
@@ -4718,6 +4730,7 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeMappedOpenCoverSourceGlue
 #print axioms genericPointWedgeMappedGlobalRestrictionGlue
 #print axioms genericPointWedgeMappedOpenCoverSourceGlue_eq_globalRestriction
+#print axioms genericPointWedgeGlobalRestrictionOverlapGlue
 #print axioms genericPointWedgeMappedOpenCoverCounit_namedGlueSquare
 #print axioms genericPointWedgeMappedCoordinateSpanCounit_glueSquare
 #print axioms genericPointWedgeMappedCoordinateSpanSourceGlue
