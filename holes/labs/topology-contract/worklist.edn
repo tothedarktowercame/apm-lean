@@ -113850,14 +113850,14 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 4,
+   :stop-count 5,
    :review-finding
    "Recorded fixture hash mismatch: :fixture.sha256 is 0bca6ce32c019fc3053c7f813c26917169cf817375b44d5e722b864b61a526450c1, but ConstructionTargets/PointWedgeVanKampen.blueprint.md at recorded commit c9b3af27 has exact SHA-256 0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0. Re-record the fixture hash for the reviewed commit.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
    :evidence
    {:placeholder-delta {:source-before 0, :source-after 0},
     :residual
-    "Evaluate the canonical morphism through the actual-span map; specialize left counits; then point-span, B6/B12.",
+    "Normalize the canonical connector form and specialize left counits; then point-span, remaining counits, B6/B12.",
     :outcome :stop,
     :warnings [],
     :missing-theorems
@@ -113871,9 +113871,9 @@
       :area "fundamental-group-wedge-of-circles"}],
     :statement-hashes
     {:source
-     "caa0f244f904c2e2767ad27220274e1307731715dbc05fad79c52c122a85b463",
+     "3da5e7f213eb9d4d5b9d62c28239c42970e8b39fc6a90d5937c81491d42e39c2",
      :documentation
-     "1a5a0db13517ba9c3e7618552bf2f8cc2f45b6c33bc6a717bc7060ee47753439",
+     "1a93ccc2d6a1d2a61d6e621b35069d09741893db609a7a85122274ad883c4360",
      :blueprint
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0",
      :registry "131/131"},
@@ -113881,7 +113881,7 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
     :reason
-    "A canonical inverse-image-to-right-base morphism now relates the source endpoint counit to the fixed conjugator by naturality.",
+    "The canonical inverse-image-to-base morphism maps to the right coproduct injection of its connector normal form.",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/PointWedgeVanKampen.lean",
@@ -113890,22 +113890,7 @@
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder/diff validation", :exit 0}],
-    :diagnostic-history
-    [{:cmd "lean implicit endpoint",
-      :exit 1,
-      :finding "Specified inverse-image object."}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1791844097509-7996-de7a3714",
-     :commands
-     ["lake env lean <archive>/ConstructionTargets/PointWedgeVanKampen.lean"
-      "lake build ConstructionTargets.PointWedgeVanKampen"
-      "python3 scripts/statement-registry.py check"
-      "git-show sha256/placeholders/scope"],
-     :finding
-     "PASS program STOP. Commit 1c1a8e08 changes only the scoped Lean/MD files; archived committed source compiles. Fixture hash matches 0bca6ce3...b8c8b0; source/doc hashes match recorded; registry 131/131; sorry/admit 0->0; new q has correct inverse-image->right-base orientation (inverse.map of mk-y0 to eR(rightBase), then unitIso.inv), and counit equality is restriction naturality across the cover-inclusion representation boundary. New declarations use only propext, Classical.choice, Quot.sound. Concrete progress is committed; residual and milestone are listed."},
-    :commit "1c1a8e0826a9399eb983a01a3c67d0f6188d7f7f",
+    :commit "36c30c5097c8fdf98305876125a0e388b7d2e06f",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
      "ConstructionTargets/PointWedgeVanKampen.md"],
@@ -113915,7 +113900,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
