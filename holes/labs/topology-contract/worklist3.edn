@@ -647,6 +647,17 @@
     [{:cmd "lake env lean ConstructionTargets/SurfaceSchoenflies.lean",
       :exit 1,
       :note "Corrected mistyped homeomorph notation."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791764833749-6047-077b9e66",
+     :commands
+     ["git scope/diff/hash checks at 67c293d1b5d843a4e82d5f07eccc55817cc52fe1"
+      "renamed fixture and module: lake env lean"
+      "statement registry and placeholder scans"
+      "lake build ConstructionTargets.SurfaceSchoenflies"],
+     :finding
+     "Recorded new-file scope, blob, and frozen fixture hash match. Continuous image of compact Circle is compact and therefore closed in a Hausdorff target; IsEmbedding.toHomeomorph targets exactly Set.range j. No collar, local-flatness, sidedness, or orientation claim. Fixture/module compile; registry 131/0; build 8254 jobs; axioms propext, choice, Quot.sound; source placeholders 0; consumer sorries 2/3/2. Expected unused hj warning only."},
     :commit "67c293d1b5d843a4e82d5f07eccc55817cc52fe1",
     :changed-paths ["ConstructionTargets/SurfaceSchoenflies.lean"],
     :fixture
@@ -655,7 +666,7 @@
      "3c833fa2d9a116d82bcae615720a136db801542fe3e8d6b3815b26ac603cd8c0"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/SurfaceSchoenflies.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/topo3/schoenflies-2d/embedded-circle-closed-range",
@@ -773,7 +784,7 @@
      "The target SurfaceSchoenflies module is absent. The route audit and a fresh repository search find no Jordan curve, planar Schoenflies, or embedded-circle collar theorem in ConstructionTargets or the available Mathlib build. The fixture establishes the first necessary point-set package without assuming tameness: compactness of Circle makes the continuous image closed in every Hausdorff target, and Topology.IsEmbedding supplies the genuine homeomorphism from Circle onto that closed range. This fixes the embedded subspace to which local planar Schoenflies charts must be applied. It does not assert local flatness, two-sidedness, orientability, or an annular neighborhood.",
      :seat "topo-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/SurfaceSchoenflies.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/topo3/schoenflies-2d/embedded-circle-collar",
@@ -19948,7 +19959,7 @@
    :other-consumers [:t98A02]}
   {:consumer :t00A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -19963,7 +19974,10 @@
     :type
     "forall {M : Type} [TopologicalSpace M] [T2Space M] (j : C(Circle,M)), Topology.IsEmbedding j -> IsClosed (Set.range j) ∧ Nonempty (Circle ≃ₜ Set.range j)",
     :area "embedded-circle-collar-surface",
-    :proved-in :routes-2026-10-10-surface-schoenflies-collar-topo3-r2},
+    :proved-in :routes-2026-10-10-surface-schoenflies-collar-topo3-r2,
+    :banked-by
+    :routes-2026-10-11-surface-embedded-circle-closed-range-topo3-r1,
+    :banked-commit "67c293d1b5d843a4e82d5f07eccc55817cc52fe1"},
    :id
    :lemma-constructiontargets-surfaceschoenflies-embeddedcircle-closedrange-and-homeomorph,
    :kind :lemma,
