@@ -30143,11 +30143,26 @@
      {:cmd "lake env lean /tmp/surface_face_bound_check.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "rg source placeholders", :exit 1, :expected-exit 1}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791818376907-7216-10c7560a",
+     :commands
+     ["git show/diff 9dbbade0d"
+      "sha256sum surface_face_bound_check"
+      "git diff --check; blob-current"
+      "rg Lean placeholders"
+      "statement-registry.py check"
+      "#print axioms finiteness iff"
+      "lake env lean fixture/module"
+      "lake build ConstructionTargets.SurfaceClassification"],
+     :finding
+     "PASS program STOP: new compiled milestone after 19fc3b645 proves global crossing-set finiteness iff every scheduled pair intersection is finite, with both subset and finite-union directions correct. One-file scope; blob current; fixture/module/build pass; registry 131/131; zero Lean placeholders; standard axioms. Geometric perturbation remains listed."},
     :commit "9dbbade0d23a8e1890f56df6e21fe307d288d4d2",
     :changed-paths ["ConstructionTargets/SurfaceClassification.lean"],
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/SurfaceClassification.lean"
     "ConstructionTargets/SurfaceClassification.md"
@@ -30167,7 +30182,7 @@
     :blueprint
     "ConstructionTargets/SurfaceClassification.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: B4 finite arc-pair reduction proved; program continues with pairwise geometry",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: B4 global/pairwise crossing-finiteness equivalence proved; program continues with geometric perturbation",
    :id :program-2026-10-12-surface-classification,
    :kind :reusable-theorem,
    :campaign-priority 40,
@@ -30206,7 +30221,11 @@
     {:job 2,
      :commit "19fc3b645533dfa39100618ae0077f0462367d76",
      :reason
-     "B4 finite arc-pair reduction proved; program continues with pairwise geometry"}]}
+     "B4 finite arc-pair reduction proved; program continues with pairwise geometry"}
+    {:job 3,
+     :commit "9dbbade0d23a8e1890f56df6e21fe307d288d4d2",
+     :reason
+     "B4 global/pairwise crossing-finiteness equivalence proved; program continues with geometric perturbation"}]}
   {:consumer :t00J02,
    :phase :lemma,
    :state :banked,
@@ -30457,7 +30476,7 @@
    :other-consumers [:t00A03 :t91J05 :t92J05 :t94J04 :t96A01 :t97J02]}
   {:consumer :t00A02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -30471,7 +30490,9 @@
     :type
     "(C : FiniteClosedDiskCover M) : Set.Finite C.boundaryCrossingSet ↔ ∀ p : C.BoundaryArcPairIndex, Set.Finite (C.boundaryArcIntersection p)",
     :area "surface-classification",
-    :proved-in :program-2026-10-12-surface-classification},
+    :proved-in :program-2026-10-12-surface-classification,
+    :banked-by :program-2026-10-12-surface-classification,
+    :banked-commit "9dbbade0d23a8e1890f56df6e21fe307d288d4d2"},
    :id
    :lemma-constructiontargets-surfaceclassification-finitecloseddiskco-78a8e5f0af16,
    :kind :lemma,
