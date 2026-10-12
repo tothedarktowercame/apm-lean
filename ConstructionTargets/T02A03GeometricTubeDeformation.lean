@@ -3601,6 +3601,51 @@ theorem complexArrivalCorrection_sevenEighths_ne_zero_of_normSq_outside
   have hn : 0 ≤ ‖rightTubeCorePlanarComplex p.1‖ := norm_nonneg _
   rcases hc with hc | hc <;> nlinarith
 
+/-- Linear zero equations for an arbitrary complex correction along the
+whole positive-real-waypoint arrival leg. -/
+theorem complexArrivalCorrection_zero_equations
+    (t : unitInterval) (c : ℂ) (p : RightTubeMinusLeftCore)
+    (hz : (((2 - 2 * (t : ℝ) : ℝ) : ℂ) *
+          positiveRealPlanarWaypointMap p +
+        ((2 * (t : ℝ) - 1 : ℝ) : ℂ) *
+          rightTubeCorePlanarComplex p.1 + c) = 0) :
+    (3 - 4 * (t : ℝ)) * p.1 0 + 1 + c.re = 0 ∧
+      p.1 1 + c.im = 0 := by
+  have hre := congrArg Complex.re hz
+  have him := congrArg Complex.im hz
+  norm_num [positiveRealPlanarWaypointMap, rightTubePlanarComplex,
+    rightTubeCorePlanarComplex, Complex.mul_re, Complex.mul_im] at hre him
+  constructor <;> linarith
+
+/-- Polynomial forced-norm identity for the whole corrected arrival leg;
+it avoids division at the exceptional time `t = 3/4`. -/
+theorem complexArrivalCorrection_zero_scaled_normSq
+    (t : unitInterval) (c : ℂ) (p : RightTubeMinusLeftCore)
+    (hz : (((2 - 2 * (t : ℝ) : ℝ) : ℂ) *
+          positiveRealPlanarWaypointMap p +
+        ((2 * (t : ℝ) - 1 : ℝ) : ℂ) *
+          rightTubeCorePlanarComplex p.1 + c) = 0) :
+    (4 * (t : ℝ) - 3) ^ 2 *
+        Complex.normSq (rightTubeCorePlanarComplex p.1) =
+      ((4 * (t : ℝ) - 3) - (1 + c.re)) ^ 2 +
+        ((4 * (t : ℝ) - 3) * c.im) ^ 2 := by
+  obtain ⟨h0, h1⟩ := complexArrivalCorrection_zero_equations t c p hz
+  have hr : (4 * (t : ℝ) - 3) * (1 - p.1 0) =
+      (4 * (t : ℝ) - 3) - (1 + c.re) := by
+    linarith
+  have hi : (4 * (t : ℝ) - 3) * p.1 1 =
+      -((4 * (t : ℝ) - 3) * c.im) := by
+    rw [show p.1 1 = -c.im by linarith]
+    ring
+  simp [rightTubeCorePlanarComplex, Complex.normSq_apply,
+    Complex.mul_re, Complex.mul_im]
+  rw [show (4 * (t : ℝ) - 3) ^ 2 *
+      ((1 - p.1 0) * (1 - p.1 0) + p.1 1 * p.1 1) =
+      ((4 * (t : ℝ) - 3) * (1 - p.1 0)) ^ 2 +
+        ((4 * (t : ℝ) - 3) * p.1 1) ^ 2 by ring]
+  rw [hr, hi]
+  ring
+
 end ConstructionTargets.T02A03GeometricTubeDeformation
 
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeNormalComplex_eq_zero_iff
@@ -3713,6 +3758,7 @@ end ConstructionTargets.T02A03GeometricTubeDeformation
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.scalarArrivalCorrection_sevenEighths_actual_zero
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.complexArrivalCorrection_sevenEighths_zero_normSq
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.complexArrivalCorrection_sevenEighths_ne_zero_of_normSq_outside
+#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.complexArrivalCorrection_zero_scaled_normSq
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_twiceCorrected_departure_zero_coordinates
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_twiceCorrected_departure_zero_normSq
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_twiceCorrected_departure_zero_scalar_bounds
