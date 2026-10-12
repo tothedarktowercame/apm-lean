@@ -683,4 +683,80 @@ theorem orientable_surfaceRel_to_boundaryEqvGen {g : ℕ} {x y : Disk}
     simp [standardSign, pairedParameter, orientableCoord, handleSign,
       orientablePair_one g j hj, reverseIcc, Fin.modNat]
 
+theorem orientable_boundaryRel_to_surfaceEqvGen {g : ℕ} {x y : Disk}
+    (h : boundaryRel (4 * g) (standardPair true g)
+      (standardSign true g) x y) :
+    Relation.EqvGen (SurfaceRel true g) x y := by
+  rcases h with ⟨i, t, rfl, rfl⟩
+  generalize hc : orientableCoord g i = c
+  rcases c with ⟨a, b⟩
+  have hi : i = (orientableCoord g).symm (a, b) := by
+    apply (orientableCoord g).injective
+    simpa using hc
+  subst i
+  fin_cases b
+  · apply Relation.EqvGen.rel _ _
+    simp only [SurfaceRel, if_true]
+    refine ⟨a, a.isLt, t, Or.inl ?_⟩
+    simp [standardPair, standardSign, pairedParameter, orientablePair,
+      orientableCoord, handlePair, handleSign, reverseIcc, Nat.add_comm]
+  · apply Relation.EqvGen.rel _ _
+    simp only [SurfaceRel, if_true]
+    refine ⟨a, a.isLt, t, Or.inr ?_⟩
+    simp [standardPair, standardSign, pairedParameter, orientablePair,
+      orientableCoord, handlePair, handleSign, reverseIcc, Nat.add_comm]
+  · apply Relation.EqvGen.symm _ _
+    apply Relation.EqvGen.rel _ _
+    simp only [SurfaceRel, if_true]
+    refine ⟨a, a.isLt, reverseIcc t, Or.inl ?_⟩
+    simp [standardPair, standardSign, pairedParameter, orientablePair,
+      orientableCoord, handlePair, handleSign, reverseIcc, Nat.add_comm]
+  · apply Relation.EqvGen.symm _ _
+    apply Relation.EqvGen.rel _ _
+    simp only [SurfaceRel, if_true]
+    refine ⟨a, a.isLt, reverseIcc t, Or.inr ?_⟩
+    simp [standardPair, standardSign, pairedParameter, orientablePair,
+      orientableCoord, handlePair, handleSign, reverseIcc, Nat.add_comm]
+
+theorem orientable_eqvGen_iff (g : ℕ) (x y : Disk) :
+    Relation.EqvGen (boundaryRel (4 * g) (standardPair true g)
+      (standardSign true g)) x y ↔
+    Relation.EqvGen (SurfaceRel true g) x y := by
+  constructor
+  · intro h
+    induction h with
+    | rel x y h => exact orientable_boundaryRel_to_surfaceEqvGen h
+    | refl x => exact .refl x
+    | symm x y _ ih => exact .symm x y ih
+    | trans x y z _ _ ih₁ ih₂ => exact .trans x y z ih₁ ih₂
+  · intro h
+    induction h with
+    | rel x y h => exact orientable_surfaceRel_to_boundaryEqvGen h
+    | refl x => exact .refl x
+    | symm x y _ ih => exact .symm x y ih
+    | trans x y z _ _ ih₁ ih₂ => exact .trans x y z ih₁ ih₂
+
+def orientableStandardSpaceEquiv (g : ℕ) :
+    Quotient (Relation.EqvGen.setoid
+      (boundaryRel (4 * g) (standardPair true g) (standardSign true g))) ≃
+      Surface true g := by
+  apply Quotient.congrRight
+  exact orientable_eqvGen_iff g
+
+def orientableStandardSpaceHomeomorph (g : ℕ) :
+    Quotient (Relation.EqvGen.setoid
+      (boundaryRel (4 * g) (standardPair true g) (standardSign true g))) ≃ₜ
+      Surface true g where
+  toEquiv := orientableStandardSpaceEquiv g
+  continuous_toFun := by
+    apply Continuous.quotient_lift
+    exact continuous_coinduced_rng
+  continuous_invFun := by
+    apply Continuous.quotient_lift
+    exact continuous_quotient_mk'
+
+@[simp] theorem orientableStandardSpaceHomeomorph_mk (g : ℕ) (x : Disk) :
+    orientableStandardSpaceHomeomorph g (Quotient.mk _ x) =
+      surfaceQuotient true g x := rfl
+
 end ConstructionTargets.PolygonSurfacePiOne
