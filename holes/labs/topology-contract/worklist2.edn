@@ -79487,72 +79487,56 @@
    "reopened: a lemma this row reported missing is now banked",
    :stop-count 8,
    :evidence
-   {:placeholder-delta 0,
-    :residual "Formalize B12 infinite level set; then B13 adapter.",
-    :outcome :stop,
-    :warnings
-    ["Main: 1 placeholder."
-     "Style lint only."
-     "Unrelated dirty files preserved."],
+   {:placeholder-delta -1,
+    :residual "none; frozen theorem compiles without placeholders.",
+    :outcome :done-unreviewed,
+    :warnings ["Style lint only."],
     :missing-theorems
     [{:name
-      "ConstructionTargets.T96A07Closure.sphereMap_level_attained",
-      :type "B11 every 0<z<1/2 is attained",
-      :status :proved,
-      :consumers [:t96A07],
-      :depends-on [],
-      :area "projective-smooth-descent"}
-     {:name
       "ConstructionTargets.T96A07Closure.horizontal_levels_infinite",
       :type "B12 transverse attained levels are infinite",
-      :status :not-started,
+      :status :proved,
       :consumers [:t96A07],
       :depends-on
       ["sphereMap_transverse_plane" "sphereMap_level_attained"],
+      :area "projective-smooth-descent"}
+     {:name "apm_t96a07",
+      :type "registered frozen closure theorem",
+      :status :proved,
+      :consumers [:t96A07],
+      :depends-on
+      ["descendedSphereMap"
+       "descended_not_transverse_axis"
+       "horizontal_levels_infinite"],
       :area "projective-smooth-descent"}],
     :statement-hashes
     {:registry "131/0",
      :closure "dd81b62e3ff62195478894c8eb52298b56d8edba",
-     :blueprint "69b59fb622dd62fc82a1fe100b353eaabc2c948d"},
-    :disposition :stop,
+     :blueprint "69b59fb622dd62fc82a1fe100b353eaabc2c948d",
+     :main "540d859f7da91d6079e6199eb3e711eef0d47a4e"},
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason :program-milestone-complete,
     :commands
-    [{:cmd "closure build/compile", :exit 0}
-     {:cmd "Main compile", :exit 0}
+    [{:cmd "lake build ConstructionTargets.t96A07Closure", :exit 0}
+     {:cmd "lake env lean problems/t96A07/lean/Main.lean", :exit 0}
      {:cmd "registry check", :exit 0}
      {:cmd "closure no-sorry", :exit 1, :expected-exit 1}
-     {:cmd "placeholder count", :exit 0, :output "1"}
-     {:cmd "git show --check 68d614508", :exit 0}],
+     {:cmd "Main placeholder count", :exit 0, :output "0"}
+     {:cmd "git show --check 85c18b84a", :exit 0}],
     :diagnostic-history
-    [{:cmd "closure compile",
+    [{:cmd "Main compile",
       :exit 1,
-      :finding "Closed normalized square-sum with ring."}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1791767792269-6120-3b5e58e6",
-     :commands
-     ["git show/check/diff 81f5ee4e1..68d614508"
-      "verify scoped blobs, fixture SHA, ancestry"
-      "lake build ConstructionTargets.t96A07Closure"
-      "lake env lean closure and t96A07 Main"
-      "statement-registry check/fingerprint"
-      "placeholder and axiom checks"],
-     :finding
-     "PASS: 68d614508afd5d9504ca53bf5a5829b3d8f28831 adds compiled, sorry-free B11 completion after 81f5ee4e1; both changed paths are scoped. Closure/blueprint blobs dd81b62e/69b59fb6 and fixture 121ebddc match. For 0<z<1/2, (sqrt z,sqrt z,sqrt(1-2z)) has unit norm and its quadratic image has third coordinate z; the Main adapter faithfully uses frozen sphereMap. Lean gates pass with standard axioms only; registry 131/0, frozen hash 2ba67b04 unchanged, closure/Main placeholders 0/1. STOP lists B12 then B13."},
-    :commit "68d614508",
-    :changed-paths
-    ["ConstructionTargets/t96A07Closure.lean"
-     "problems/t96A07/lean/Main.lean"],
+      :finding "Qualified closure declarations; rerun passed."}],
+    :commit "85c18b84a",
+    :commits ["68d614508" "85c18b84a"],
+    :changed-paths ["problems/t96A07/lean/Main.lean"],
     :fixture
     {:path "ConstructionTargets/t96A07Closure.lean",
      :sha256
      "121ebddc4f5bca5d8761a04403f6fdb0e763febd9dbdf558434d5879c2f836d5"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t96A07/lean/Main.lean"
     "problems/t96A07/status.json"
@@ -81568,7 +81552,8 @@
     "ConstructionTargets.T96A07Closure.horizontal_levels_infinite",
     :reported-by [:program-2026-10-11-close-t96a07],
     :type "B12 transverse attained levels are infinite",
-    :area "projective-smooth-descent"},
+    :area "projective-smooth-descent",
+    :proved-in :program-2026-10-11-close-t96a07},
    :id
    :lemma-constructiontargets-t96a07closure-horizontal-levels-infinite,
    :kind :lemma,
@@ -81592,6 +81577,55 @@
    :acceptance {:lemma "sphereMap_level_attained"},
    :lemma {:name "sphereMap_level_attained", :reported-by []},
    :id :lemma-spheremap-level-attained,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t96A07,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t96a07", :type "registered frozen closure theorem"},
+   :lemma
+   {:name "apm_t96a07",
+    :reported-by [:program-2026-10-11-close-t96a07],
+    :type "registered frozen closure theorem",
+    :area "projective-smooth-descent",
+    :proved-in :program-2026-10-11-close-t96a07},
+   :id :lemma-apm-t96a07,
+   :kind :lemma,
+   :depends-on
+   [:lemma-descendedspheremap
+    :lemma-descended-not-transverse-axis
+    :lemma-horizontal-levels-infinite],
+   :other-consumers []}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance {:lemma "descendedSphereMap"},
+   :lemma {:name "descendedSphereMap", :reported-by []},
+   :id :lemma-descendedspheremap,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance {:lemma "descended_not_transverse_axis"},
+   :lemma {:name "descended_not_transverse_axis", :reported-by []},
+   :id :lemma-descended-not-transverse-axis,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance {:lemma "horizontal_levels_infinite"},
+   :lemma {:name "horizontal_levels_infinite", :reported-by []},
+   :id :lemma-horizontal-levels-infinite,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}]}
