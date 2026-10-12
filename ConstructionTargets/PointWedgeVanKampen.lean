@@ -3459,6 +3459,86 @@ theorem genericPointWedgeCoordinateSpanGlobalRestrictionRightComparison_app :
           (eR.inverse ⋙ S.right)).inv.app u := by
   rfl
 
+/-- The inverse right-equivalence unit component of the global right
+comparison, before the strict-span component. -/
+def genericPointWedgeCoordinateSpanGlobalRestrictionRightUnitFactor :
+    genericPointWedgeFreeProduct x₀ y₀ :=
+  let C := genericPointWedgeTarget x₀ y₀
+  let E := genericPointWedgeOpenCoverEquivalence
+    x₀ y₀ M N hM hN hy hx cM cN C
+  let P₀ := genericPointWedgePseudoSpanEquivalence x₀ y₀ M N C
+  let S := P₀.functor.obj (E.functor.obj
+    (genericPointWedgeIdentityGlobalFunctor
+      x₀ y₀ M N hM hN hy hx cM cN))
+  let r := genericPointWedgeActualRight x₀ y₀ M N
+  let eK := genericPointWedgeOverlapGroupoidEquivalence
+    x₀ y₀ M N hM hN hy hx cM cN
+  let eR := genericPointWedgeRightGroupoidEquivalence
+    x₀ y₀ M N hM hN hy hx cM cN
+  (Functor.isoWhiskerRight
+    (Functor.isoWhiskerLeft (eK.inverse ⋙ r) eR.unitIso.symm)
+      S.right).inv.app (FundamentalGroupoid.mk ())
+
+/-- The right unit factor is the reconstructed right restriction applied to
+the corresponding right-equivalence unit component. -/
+theorem genericPointWedgeCoordinateSpanGlobalRestrictionRightUnitFactor_eq_map :
+    let C := genericPointWedgeTarget x₀ y₀
+    let E := genericPointWedgeOpenCoverEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN C
+    let P₀ := genericPointWedgePseudoSpanEquivalence x₀ y₀ M N C
+    let S := P₀.functor.obj (E.functor.obj
+      (genericPointWedgeIdentityGlobalFunctor
+        x₀ y₀ M N hM hN hy hx cM cN))
+    let r := genericPointWedgeActualRight x₀ y₀ M N
+    let eK := genericPointWedgeOverlapGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let eR := genericPointWedgeRightGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let u : FundamentalGroupoid Unit := FundamentalGroupoid.mk ()
+    genericPointWedgeCoordinateSpanGlobalRestrictionRightUnitFactor
+        x₀ y₀ M N hM hN hy hx cM cN =
+      S.right.map
+        ((Functor.isoWhiskerLeft (eK.inverse ⋙ r)
+          eR.unitIso.symm).inv.app u) := by
+  rfl
+
+/-- The forward strict-span component of the inverse global right comparison. -/
+def genericPointWedgeCoordinateSpanGlobalRestrictionRightStrictFactor :
+    genericPointWedgeFreeProduct x₀ y₀ :=
+  let C := genericPointWedgeTarget x₀ y₀
+  let E := genericPointWedgeOpenCoverEquivalence
+    x₀ y₀ M N hM hN hy hx cM cN C
+  let P₀ := genericPointWedgePseudoSpanEquivalence x₀ y₀ M N C
+  let S := P₀.functor.obj (E.functor.obj
+    (genericPointWedgeIdentityGlobalFunctor
+      x₀ y₀ M N hM hN hy hx cM cN))
+  let eR := genericPointWedgeRightGroupoidEquivalence
+    x₀ y₀ M N hM hN hy hx cM cN
+  let aR := genericPointWedgeRightSpanIso
+    x₀ y₀ M N hM hN hy hx cM cN
+  (Functor.isoWhiskerRight aR.symm
+    (eR.inverse ⋙ S.right)).inv.app (FundamentalGroupoid.mk ())
+
+/-- The forward strict-span factor is the inverse-right restriction applied
+to the forward strict comparison. -/
+theorem genericPointWedgeCoordinateSpanGlobalRestrictionRightStrictFactor_eq_map :
+    let C := genericPointWedgeTarget x₀ y₀
+    let E := genericPointWedgeOpenCoverEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN C
+    let P₀ := genericPointWedgePseudoSpanEquivalence x₀ y₀ M N C
+    let S := P₀.functor.obj (E.functor.obj
+      (genericPointWedgeIdentityGlobalFunctor
+        x₀ y₀ M N hM hN hy hx cM cN))
+    let eR := genericPointWedgeRightGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let aR := genericPointWedgeRightSpanIso
+      x₀ y₀ M N hM hN hy hx cM cN
+    let u : FundamentalGroupoid Unit := FundamentalGroupoid.mk ()
+    genericPointWedgeCoordinateSpanGlobalRestrictionRightStrictFactor
+        x₀ y₀ M N hM hN hy hx cM cN =
+      (eR.inverse ⋙ S.right).map (aR.hom.app u) := by
+  rfl
+
 /-- The mapped coordinate-span counit's glue square, specialized at the
 unique point-span overlap object.  This is the equation in which its two
 named leg factors are related by the mapped reconstructed glue. -/
@@ -5059,6 +5139,10 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeCoordinateSpanGlobalRestrictionLeftRoundTrip_counit
 #print axioms genericPointWedgeCoordinateSpanGlobalRestrictionRightComparison
 #print axioms genericPointWedgeCoordinateSpanGlobalRestrictionRightComparison_app
+#print axioms genericPointWedgeCoordinateSpanGlobalRestrictionRightUnitFactor
+#print axioms genericPointWedgeCoordinateSpanGlobalRestrictionRightUnitFactor_eq_map
+#print axioms genericPointWedgeCoordinateSpanGlobalRestrictionRightStrictFactor
+#print axioms genericPointWedgeCoordinateSpanGlobalRestrictionRightStrictFactor_eq_map
 #print axioms genericPointWedgeMappedOpenCoverCounit_namedGlueSquare
 #print axioms genericPointWedgeMappedCoordinateSpanCounit_glueSquare
 #print axioms genericPointWedgeMappedCoordinateSpanSourceGlue

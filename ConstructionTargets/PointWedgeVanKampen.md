@@ -919,3 +919,10 @@ the inverse right comparison from the global glue.  Its `_app` theorem expands
 the inverse composite in the required order: the inverse right-equivalence
 unit factor first, followed by the forward strict-span comparison.  Both
 representation changes remain explicit for separate normalization.
+
+The right comparison's two components are now named separately by
+`genericPointWedgeCoordinateSpanGlobalRestrictionRightUnitFactor` and
+`genericPointWedgeCoordinateSpanGlobalRestrictionRightStrictFactor`.  Their
+`_eq_map` theorems expose, respectively, the reconstructed right restriction
+map of the unit component and the inverse-right restriction map of the
+forward strict comparison.
