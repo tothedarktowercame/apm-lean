@@ -74391,6 +74391,17 @@
       :exit 0,
       :output "131/0"}
      {:cmd "git show --check 84acd7f18", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791833533919-7785-44be278c",
+     :commands
+     ["git show 84acd7f18:ConstructionTargets/PolygonSurfacePiOne.blueprint.md"
+      "git diff-tree/show --check/hash 84acd7f18"
+      "python3 scripts/statement-registry.py check"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn"],
+     :finding
+     "PASS: rereview commit is topo-6-authored, changes only the blueprint, and matches fixture SHA-256. Positive edge count removes the empty-polygon case; PairingOrbit remains the exact generator index through B7/B9/B11, B8/B10 are representation-neutral, and B12 uses proved equivalences. All B1-B12 statements and listed dependencies are coherent. Ledger 962 OK; registry 131/0."},
     :commit "84acd7f18",
     :commits ["84acd7f18" "c6adb224b" "1f54f90d8"],
     :changed-paths
@@ -74403,7 +74414,7 @@
     "PASS-ready rereview: B1 has positive edge count and no Label; B7/B9/B11 use PairingOrbit; B8/B10 are index-independent; B12 reindexes only by proved equivalences.",
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/PolygonSurfacePiOne.blueprint.md"],
    :dag-node "TOPOLOGY-ROUTES.md/polygon-surface-pi1",
    :acceptance
