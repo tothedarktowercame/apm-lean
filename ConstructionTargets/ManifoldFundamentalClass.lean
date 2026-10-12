@@ -2770,6 +2770,47 @@ theorem coefficientSphereNormalization_comparison (k : ℕ) :
           (SphereHomology.sphereTopHomologyIsoInt
             (k + 1) (by omega)).hom)
 
+noncomputable def coefficientSphereNormalizationComparisonUnit (k : ℕ) : ℤˣ :=
+  CoefficientChartTransitionUnit.isoUnit ℤ
+    (moduleIsoOfUnderlyingIso
+      (coefficientSphereNormalizationComparisonAutomorphism k))
+
+theorem coefficientSphereNormalizationComparisonAutomorphism_apply_one (k : ℕ) :
+    (coefficientSphereNormalizationComparisonAutomorphism k).hom.hom 1 =
+      (coefficientSphereNormalizationComparisonUnit k : ℤ) := by
+  let e := coefficientSphereNormalizationComparisonAutomorphism k
+  let em : ModuleCat.of ℤ ℤ ≅ ModuleCat.of ℤ ℤ := moduleIsoOfUnderlyingIso e
+  have hmap : forgetIntModules.map em.hom = e.hom := by
+    dsimp [em, moduleIsoOfUnderlyingIso]
+    exact forgetIntModules.map_preimage
+      (X := ModuleCat.of ℤ ℤ) (Y := ModuleCat.of ℤ ℤ) e.hom
+  have happ := ConcreteCategory.congr_hom hmap (1 : ℤ)
+  calc
+    e.hom.hom 1 = em.hom.hom 1 := happ.symm
+    _ = (CoefficientChartTransitionUnit.isoUnit ℤ em : ℤ) * 1 :=
+      CoefficientChartTransitionUnit.isoUnit_action ℤ _ 1
+    _ = _ := by
+      simp [coefficientSphereNormalizationComparisonUnit, e, em]
+
+theorem coefficientSphereNormalizationComparisonAutomorphism_hom_eq_id_or_neg
+    (k : ℕ) :
+    (coefficientSphereNormalizationComparisonAutomorphism k).hom = 𝟙 _ ∨
+      (coefficientSphereNormalizationComparisonAutomorphism k).hom = -𝟙 _ := by
+  have hu : (coefficientSphereNormalizationComparisonUnit k : ℤ) = 1 ∨
+      (coefficientSphereNormalizationComparisonUnit k : ℤ) = -1 :=
+    Int.isUnit_eq_one_or (coefficientSphereNormalizationComparisonUnit k).isUnit
+  rcases hu with hu | hu
+  · left
+    apply AddCommGrpCat.hom_ext
+    apply AddMonoidHom.ext_int
+    change (coefficientSphereNormalizationComparisonAutomorphism k).hom.hom 1 = 1
+    rw [coefficientSphereNormalizationComparisonAutomorphism_apply_one, hu]
+  · right
+    apply AddCommGrpCat.hom_ext
+    apply AddMonoidHom.ext_int
+    change (coefficientSphereNormalizationComparisonAutomorphism k).hom.hom 1 = -1
+    rw [coefficientSphereNormalizationComparisonAutomorphism_apply_one, hu]
+
 end ConstructionTargets.ManifoldFundamentalClass
 
 #print axioms ConstructionTargets.ManifoldFundamentalClass.neighborhoodInclusion_Hsucc_isIso
@@ -2863,6 +2904,7 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientOpenDiskConnecting_model_naturality
 #print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientOpenDiskRadial_homology_factorization
 #print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientSphereNormalization_comparison
+#print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientSphereNormalizationComparisonAutomorphism_hom_eq_id_or_neg
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_projection
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_generator_of_normalization
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_normalization_of_generator
