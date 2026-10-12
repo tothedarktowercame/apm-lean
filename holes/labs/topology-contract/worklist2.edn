@@ -76388,9 +76388,20 @@
       :current-residual "Elect B8/B9.",
       :other-consumers []}],
     :author "topo-8",
-    :disposition :replan},
+    :disposition :replan,
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791849503217-8076-70745b35",
+     :commands
+     ["bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn"
+      "python3 scripts/statement-registry.py check"
+      "bb holes/labs/topology-contract/build_step.bb priorities holes/labs/topology-contract/worklist2.edn"
+      "EDN dependency/measure audit"],
+     :finding
+     "PASS: strategy row has empty scope, so no commit/fixture applies. B6 is independently PASS and banked placeholder-free; zero placeholder delta, one infrastructure packet, and one PASS are coherent. B7 is the exact next blueprint node: a homeomorphism from the boundary skeleton to the PairingOrbit-indexed circle wedge plus signed arc equations, not merely a rank/count facade. It depends on B6, retains all five consumers, and r22 waits on it before electing B8/B9. Fresh gates report worklist 1025 OK and registry 131/0; priorities reproduce SLSC unblocking 6 and polygon presentation unblocking 5."}},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance {:strategy "Rerun after B6."},
@@ -76404,7 +76415,7 @@
    :other-consumers []}
   {:consumer :t96J02,
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/PolygonSurfacePiOne.lean"],
    :dag-node "ConstructionTargets/PolygonSurfacePiOne.blueprint.md/B7",
    :acceptance
