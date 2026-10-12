@@ -27,6 +27,16 @@ private abbrev ssetChains :=
   (AlgebraicTopology.SSet.singularChainComplexFunctor AddCommGrpCat).obj
     (AddCommGrpCat.of ℤ)
 
+/-- The image of an intersection lies in the intersection of any two
+subcomplexes that bound the images of its factors. -/
+theorem subcomplex_inf_image_le
+    {S T : SSet} (P Q : S.Subcomplex) (P' Q' : T.Subcomplex)
+    (F : S ⟶ T) (hP : P.image F ≤ P') (hQ : Q.image F ≤ Q') :
+    (P ⊓ Q).image F ≤ P' ⊓ Q' := by
+  refine le_inf ?_ ?_
+  · exact (SSet.Subcomplex.image_monotone F inf_le_left).trans hP
+  · exact (SSet.Subcomplex.image_monotone F inf_le_right).trans hQ
+
 /-- Naturality of the canonical subcomplex Mayer--Vietoris connecting map
 under a morphism of the underlying short complexes. -/
 theorem subcomplexMayerVietorisConnecting_naturality
@@ -936,6 +946,7 @@ theorem subcomplexMayerVietoris_exact_transport
 
 end ConstructionTargets.ProductionOpenCoverMayerVietoris
 
+#print axioms ConstructionTargets.ProductionOpenCoverMayerVietoris.subcomplex_inf_image_le
 #print axioms ConstructionTargets.ProductionOpenCoverMayerVietoris.transportShortComplex_exact
 #print axioms ConstructionTargets.ProductionOpenCoverMayerVietoris.coverSmall_homologyMap_isIso
 #print axioms ConstructionTargets.ProductionOpenCoverMayerVietoris.subcomplexMayerVietoris_exact_transport
