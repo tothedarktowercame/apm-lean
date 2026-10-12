@@ -18807,60 +18807,83 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :implements-lemma
+   :lemma-constructiontargets-manifoldfundamentalclass-coefficientspherenormalizationcompa,
+   :phase :implementation,
+   :state :open,
+   :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/manifold-fundamental-class/model-sphere-sign",
+   :acceptance
+   {:declaration
+    "ConstructionTargets.ManifoldFundamentalClass.coefficientSphereNormalizationComparisonAutomorphism_hom_eq_id_or_neg",
+    :type "exact type in fixture",
+    :fixture "/tmp/endpointsign.lean",
+    :fixture-sha256
+    "c154c9a92ea476b9d3c1ba14a419e7f0c6686bfe153d15ef8fced327fa9495a0",
+    :placeholders ["t00J02 bridge_1" "t98A02 sorry"],
+    :route-step "classify endpoint sign",
+    :implementation "Promote."},
+   :id :routes-2026-10-12-mfclass-sphere-endpoint-sign-r1,
+   :kind :reusable-theorem,
+   :area "manifold-fundamental-class",
+   :depends-on
+   [:routes-2026-10-12-mfclass-sphere-normalization-comparison-r1],
+   :current-residual "Exclude negative endpoint.",
+   :other-consumers [:t98A02]}
+  {:consumer :t00J02,
+   :implements-lemma
    :lemma-constructiontargets-manifoldfundamentalclass-closedorientedfundamentalclass,
    :evidence
    {:probe
-    {:residual "Promote; determine endpoint automorphism.",
+    {:residual "Promote; exclude negative endpoint.",
      :outcome :revise,
      :missing-theorems
      [{:name
-       "ConstructionTargets.ManifoldFundamentalClass.coefficientSphereNormalization_comparison",
+       "ConstructionTargets.ManifoldFundamentalClass.coefficientSphereNormalizationComparisonAutomorphism_hom_eq_id_or_neg",
        :type "exact type in fixture",
        :status :proved,
        :consumers [:t00J02 :t98A02],
        :depends-on
-       ["ConstructionTargets.ManifoldFundamentalClass.coefficientOpenDiskRadial_homology_factorization"],
+       ["ConstructionTargets.ManifoldFundamentalClass.coefficientSphereNormalization_comparison"],
        :area "manifold-fundamental-class"}],
      :prerequisite
      {:consumer :t00J02,
-      :implements-lemma :lemma-mfclass-sphere-normalization-comparison,
+      :implements-lemma :lemma-mfclass-sphere-endpoint-sign,
       :phase :implementation,
       :state :open,
       :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
       :dag-node
-      "TOPOLOGY-ROUTES.md/manifold-fundamental-class/model-sphere",
+      "TOPOLOGY-ROUTES.md/manifold-fundamental-class/model-sphere-sign",
       :acceptance
       {:declaration
-       "ConstructionTargets.ManifoldFundamentalClass.coefficientSphereNormalization_comparison",
+       "ConstructionTargets.ManifoldFundamentalClass.coefficientSphereNormalizationComparisonAutomorphism_hom_eq_id_or_neg",
        :type "exact type in fixture",
-       :fixture "/tmp/sphereend.lean",
+       :fixture "/tmp/endpointsign.lean",
        :fixture-sha256
-       "2f41529ac8ab2ce7948d1ed6668427d1a338f5e75c7a28a935de7397ec806624",
+       "c154c9a92ea476b9d3c1ba14a419e7f0c6686bfe153d15ef8fced327fa9495a0",
        :placeholders ["t00J02 bridge_1" "t98A02 sorry"],
-       :route-step "sphere endpoint comparison",
+       :route-step "classify endpoint sign",
        :implementation "Promote."},
-      :id
-      :routes-2026-10-12-mfclass-sphere-normalization-comparison-r1,
+      :id :routes-2026-10-12-mfclass-sphere-endpoint-sign-r1,
       :kind :reusable-theorem,
       :area "manifold-fundamental-class",
-      :depends-on [:routes-2026-10-12-mfclass-odrad-r1],
-      :current-residual "Determine endpoint automorphism.",
+      :depends-on
+      [:routes-2026-10-12-mfclass-sphere-normalization-comparison-r1],
+      :current-residual "Exclude negative endpoint.",
       :other-consumers [:t98A02]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
      [{:cmd
-       "lake env lean /tmp/sphereend.lean && sha256sum /tmp/sphereend.lean && python3 scripts/statement-registry.py check",
+       "lake env lean /tmp/endpointsign.lean && sha256sum /tmp/endpointsign.lean && python3 scripts/statement-registry.py check",
        :exit 0}],
-     :diagnostic-history
-     [{:exit 1, :correction "Expose mapped inverse."}
-      {:exit 1, :correction "Use hom_inv_id_assoc."}],
+     :diagnostic-history [{:exit 1, :correction "Opened namespace."}],
      :fixture
-     {:path "/tmp/sphereend.lean",
+     {:path "/tmp/endpointsign.lean",
       :sha256
-      "2f41529ac8ab2ce7948d1ed6668427d1a338f5e75c7a28a935de7397ec806624"},
+      "c154c9a92ea476b9d3c1ba14a419e7f0c6686bfe153d15ef8fced327fa9495a0"},
      :seat "topo-12"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -18997,7 +19020,8 @@
     :routes-2026-10-12-mfclass-packconn-r1
     :routes-2026-10-12-mfclass-odincl-r1
     :routes-2026-10-12-mfclass-odrad-r1
-    :routes-2026-10-12-mfclass-sphere-normalization-comparison-r1],
+    :routes-2026-10-12-mfclass-sphere-normalization-comparison-r1
+    :routes-2026-10-12-mfclass-sphere-endpoint-sign-r1],
    :current-residual
    "Local-degree counts and wild-ball complement homology remain.",
    :other-consumers [:t98A02]}
@@ -26988,6 +27012,28 @@
    :kind :lemma,
    :depends-on
    [:lemma-constructiontargets-manifoldfundamentalclass-coefficientopendiskradial-homology-],
+   :other-consumers [:t98A02]}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.ManifoldFundamentalClass.coefficientSphereNormalizationComparisonAutomorphism_hom_eq_id_or_neg",
+    :type "exact type in fixture"},
+   :lemma
+   {:name
+    "ConstructionTargets.ManifoldFundamentalClass.coefficientSphereNormalizationComparisonAutomorphism_hom_eq_id_or_neg",
+    :reported-by
+    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2],
+    :type "exact type in fixture",
+    :area "manifold-fundamental-class",
+    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+   :id
+   :lemma-constructiontargets-manifoldfundamentalclass-coefficientspherenormalizationcompa,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-manifoldfundamentalclass-coefficientspherenormalization-comp],
    :other-consumers [:t98A02]}],
  :consumer-baselines {},
  :statuses
