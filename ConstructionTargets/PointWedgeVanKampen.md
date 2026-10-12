@@ -465,3 +465,8 @@ the previously fixed `genericPointWedgeLeftBase` representative.
 `genericPointWedgeRightLegLift` is the symmetric continuous lift into the
 right cover member.  At `y₀`, the wedge quotient relation identifies its
 literal right representative with `genericPointWedgeRightBase`.
+
+`genericPointWedgeLeftLiftedLoop` and `genericPointWedgeRightLiftedLoop`
+transport based loops into endomorphisms of the two fixed cover-base objects.
+The right construction retains the quotient representative change explicitly
+through `FundamentalGroup.mapOfEq`.

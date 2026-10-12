@@ -1679,6 +1679,23 @@ theorem genericPointWedgeRightLegLift_base :
   apply Subtype.ext
   exact (Quotient.sound (Relation.EqvGen.rel _ _ Rel.base)).symm
 
+/-- A based loop in the left summand, lifted as an endomorphism of the fixed
+left-cover base object. -/
+def genericPointWedgeLeftLiftedLoop
+    (g : FundamentalGroup X x₀) :
+    End (genericPointWedgeLeftBase x₀ y₀ M) :=
+  FundamentalGroup.map (genericPointWedgeLeftLegLift x₀ y₀ M) x₀ g
+
+/-- A based loop in the right summand, lifted to the fixed right-cover base;
+`mapOfEq` records precisely the quotient equality between representatives. -/
+def genericPointWedgeRightLiftedLoop
+    (g : FundamentalGroup Y y₀) :
+    End (genericPointWedgeRightBase x₀ y₀ N) :=
+  FundamentalGroup.mapOfEq (genericPointWedgeRightLegLift x₀ y₀ N)
+    (by
+      apply Subtype.ext
+      exact (Quotient.sound (Relation.EqvGen.rel _ _ Rel.base)).symm) g
+
 theorem genericPointWedgeIdentityActualSpan_left_map
     {a b : FundamentalGroupoid (genericPointWedgeLeftPiece x₀ y₀ M)}
     (f : a ⟶ b) :
@@ -2629,6 +2646,8 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeOverlapToRight_obj_overlapBase
 #print axioms genericPointWedgeLeftLegLift_base
 #print axioms genericPointWedgeRightLegLift_base
+#print axioms genericPointWedgeLeftLiftedLoop
+#print axioms genericPointWedgeRightLiftedLoop
 #print axioms genericPointWedgeIdentityActualSpan_left_map
 #print axioms genericPointWedgeIdentityActualSpan_right_map
 #print axioms genericPointWedgeSingleObjPostcomposeIso
