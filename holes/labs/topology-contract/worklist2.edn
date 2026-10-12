@@ -74361,8 +74361,49 @@
    :current-residual "Refill.",
    :other-consumers []}
   {:consumer :t96J02,
+   :evidence
+   {:placeholder-delta 0,
+    :residual "B1 compiled; elect B2 instances.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :missing-theorems
+    [{:name "PolygonSurfacePiOne.PairingData",
+      :type
+      "positive edge count; fixed-point-free paired arcs; PairingOrbit generators; one vertex class",
+      :status :proved,
+      :consumers [:t96J02 :t92J05 :t94J04 :t97A01 :t97A03],
+      :depends-on [],
+      :area "polygon-surface-pi1"}],
+    :statement-hashes
+    {:registry "131/0",
+     :blueprint
+     "973a1d17f60c0aea0a5e2a9b24b7fb24951971e887502b3a2c47d81def7032fd"},
+    :axioms [],
+    :author "topo-6",
+    :commands
+    [{:cmd "B1/B7-B12 blueprint interface scan",
+      :exit 0,
+      :output "positive; PairingOrbit; no label map"}
+     {:cmd
+      "lake env lean ConstructionTargets/PolygonSurfacePiOne.lean",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131/0"}
+     {:cmd "git show --check 84acd7f18", :exit 0}],
+    :commit "84acd7f18",
+    :commits ["84acd7f18" "c6adb224b" "1f54f90d8"],
+    :changed-paths
+    ["ConstructionTargets/PolygonSurfacePiOne.blueprint.md"],
+    :fixture
+    {:path "ConstructionTargets/PolygonSurfacePiOne.blueprint.md",
+     :sha256
+     "973a1d17f60c0aea0a5e2a9b24b7fb24951971e887502b3a2c47d81def7032fd"},
+    :finding
+    "PASS-ready rereview: B1 has positive edge count and no Label; B7/B9/B11 use PairingOrbit; B8/B10 are index-independent; B12 reindexes only by proved equivalences.",
+    :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/PolygonSurfacePiOne.blueprint.md"],
    :dag-node "TOPOLOGY-ROUTES.md/polygon-surface-pi1",
    :acceptance
@@ -82717,7 +82758,8 @@
    :lemma
    {:name "PolygonSurfacePiOne.PairingData",
     :reported-by
-    [:routes-2026-10-12-polygon-surface-pi1-blueprint-topo2-r1],
+    [:routes-2026-10-12-polygon-surface-pi1-blueprint-topo2-r1
+     :routes-2026-10-12-polygon-surface-pi1-blueprint-rereview-topo2-r1],
     :type
     "finite signed one-vertex polygon pairing and quotient interface",
     :area "polygon-surface-pi1",
