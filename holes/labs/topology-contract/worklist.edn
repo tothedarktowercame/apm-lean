@@ -113857,7 +113857,7 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 10,
+   :stop-count 0,
    :review-finding
    "Blueprint B3 is marked proved but its proof uses the unlisted ConnectedGroupoidSingleObjEquivalence.connectorSingleObjEquivalence (and connector-system representation) instead of only the declared uses; add the actual connector dependency and proof route to B3 uses.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
@@ -113914,7 +113914,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -116601,6 +116601,19 @@
       :exit 1,
       :finding
       "Corrected model notation; used ContMDiffAt.mfderiv_const directly."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791774068971-6226-855a3765",
+     :commands
+     ["git show/diff-tree 45e8ce1a2"
+      "parent/commit sha256 and placeholder checks"
+      "statement-registry.py check"
+      "lake env lean ConstructionTargets/t97A07Closure.lean"
+      "lake build ConstructionTargets.t97A07Closure"
+      "lake env lean problems/t97A07/lean/Main.lean"],
+     :finding
+     "Exact scope verified. Parent blueprint matches recorded fixture eaeed2...82182; committed progress-note hash is 53d716...413f9 and changes no node statement/uses. New theorem validly obtains continuity of transported mfderiv from ContMDiffAt.mfderiv_const without identifying varying tangent fibers. Reusable source has 0 placeholders; target retains 1 pre-existing sorry; hashes and 131/131 registry reproduce; all gates pass; only standard axioms. Valid program STOP with compiled progress and residual naming fixed-chart identification, then B3-B9."},
     :commit "45e8ce1a29afb4bab56cf35be59df84ca5b27d32",
     :changed-paths
     ["ConstructionTargets/t97A07Closure.lean"
@@ -116611,7 +116624,7 @@
      "eaeed21919599335d4a33b437815c4a9cbb5b72110213b29440d6944cc982182"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A07/lean/Main.lean"
     "problems/t97A07/status.json"
@@ -116627,7 +116640,7 @@
     ["lake env lean problems/t97A07/lean/Main.lean"
      "python3 scripts/statement-registry.py check"]},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: B2 nearby mfderiv is expressed through fixed chart-transition factors.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: B2 transported mfderiv is continuous at the fixed base point.",
    :id :program-2026-10-11-close-t97a07,
    :kind :final-adapter,
    :campaign-priority 44,
@@ -116652,7 +116665,11 @@
     {:job 5,
      :commit "736c25666597f19ccd3540096d4a392c05e41410",
      :reason
-     "B2 nearby mfderiv is expressed through fixed chart-transition factors."}]}
+     "B2 nearby mfderiv is expressed through fixed chart-transition factors."}
+    {:job 6,
+     :commit "45e8ce1a29afb4bab56cf35be59df84ca5b27d32",
+     :reason
+     "B2 transported mfderiv is continuous at the fixed base point."}]}
   {:consumer :t91J06,
    :phase :implementation,
    :state :open,
