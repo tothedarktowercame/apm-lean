@@ -30343,7 +30343,7 @@
    :consumer :t00A02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "Program-row defect persists: exact commit 92a672b41 contains only SurfaceClassification.blueprint.md, while the row remains :phase :implementation, :state :done-unreviewed, :program true; no compiled milestone follows program history. Registry is 131/131. Supervisor must retire/supersede this row and create an independent blueprint-review row for the replacement before electing R1-R7; off-route author code is not a repair.",
    :implements-lemma
@@ -30368,22 +30368,17 @@
     :reason
     "Supervisor must retire/supersede the owner-parked implementation program and submit 92a672b41 as an independent blueprint-review row; elect R1-R7 only after review. Off-route implementation is invalid.",
     :commands
-    [{:cmd "git diff-tree --stat --no-commit-id -r 92a672b41", :exit 0}
+    [{:cmd "git diff-tree --no-commit-id --name-only -r 92a672b41",
+      :exit 0}
      {:cmd
       "git diff --exit-code 4244c6e3e..92a672b41 -- ConstructionTargets/SurfaceClassification.lean",
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1791823686716-7455-9134ef5a",
-     :finding
-     "Program-row defect persists: exact commit 92a672b41 contains only SurfaceClassification.blueprint.md, while the row remains :phase :implementation, :state :done-unreviewed, :program true; no compiled milestone follows program history. Registry is 131/131. Supervisor must retire/supersede this row and create an independent blueprint-review row for the replacement before electing R1-R7; off-route author code is not a repair."},
     :commit "92a672b41fa1f7e45df1987a4aca7d2f8460d2e0",
     :changed-paths [],
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SurfaceClassification.lean"
     "ConstructionTargets/SurfaceClassification.md"
