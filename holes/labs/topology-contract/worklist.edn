@@ -113850,14 +113850,14 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 4,
+   :stop-count 5,
    :review-finding
    "Blueprint B3 is marked proved but its proof uses the unlisted ConnectedGroupoidSingleObjEquivalence.connectorSingleObjEquivalence (and connector-system representation) instead of only the declared uses; add the actual connector dependency and proof route to B3 uses.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
    :evidence
    {:placeholder-delta {:source-before 0, :source-after 0},
     :residual
-    "Apply the splice through the pre-coordinate counit factors and cancel both injected based counits; close B6/B12.",
+    "Map the coordinate-span counit equation into the pre-coordinate free-product factors and cancel both injected based counits; close B6/B12.",
     :outcome :stop,
     :warnings [],
     :missing-theorems
@@ -113871,9 +113871,9 @@
       :area "fundamental-group-wedge-of-circles"}],
     :statement-hashes
     {:source
-     "9a5b4e52b080a2b26dff4358f66420ebc10c31dfb8d11479fd42def26aac3947",
+     "c21701380cc7ceaa5b96ecad9cc80573675725a229819a4fa694dfa3be2bdbe8",
      :documentation
-     "a3a8ceeb1a6aa51ce2dfc87adcad956f370e92fedcd88373151a44855f781f6e",
+     "3b6eff271b6eb738531f78970520833aec811acb3cfe7f884777f5a90643c98b",
      :blueprint
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0",
      :registry "131/131"},
@@ -113881,7 +113881,7 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
     :reason
-    "Reconstructed coordinate glue is now the exact outer-comparison counit-splice chain.",
+    "The explicit splice now identifies reconstructed glue followed by the right counit with the left counit.",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/PointWedgeVanKampen.lean",
@@ -113890,24 +113890,7 @@
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder/diff validation", :exit 0}],
-    :diagnostic-history
-    [{:cmd "lean direct nested rewrites",
-      :exit 1,
-      :finding
-      "Normalized both iso whiskerings before component substitution."}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1791827077189-7599-976278f4",
-     :commands
-     ["git show/diff-tree 434251b84"
-      "sha256 + placeholder + registry checks"
-      "lake env lean ConstructionTargets/PointWedgeVanKampen.lean"
-      "lake build ConstructionTargets.PointWedgeVanKampen"
-      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (expected absent)"],
-     :finding
-     "Scope is exactly Lean+MD; source/doc/blueprint hashes match; placeholders 0->0; registry 131/131. After normalizing iso whiskering, the theorem correctly combines reconstructed-glue expansion, reverse-glue factorization, and middle round trips to obtain exactly the typed counit-splice chain, without changing representatives or endpoints. It compiles sorry-free with only propext, Classical.choice, Quot.sound. This is new progress; residual is applying the splice through pre-coordinate factors and cancelling injected based counits, then B6/B12. Final target remains absent as declared."},
-    :commit "434251b8489c6b1be872efe6274aaf208afd1ae0",
+    :commit "af4ca4030234c8b464e5b7c48ddc2afa015d18cb",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
      "ConstructionTargets/PointWedgeVanKampen.md"],
@@ -113917,7 +113900,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
