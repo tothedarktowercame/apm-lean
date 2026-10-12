@@ -29998,7 +29998,7 @@
    :depends-on [],
    :other-consumers []}
   {:consumer :t00A02,
-   :stop-count 2,
+   :stop-count 3,
    :review-finding
    "Blueprint defect remains at B5: the closure of a complementary region of an arbitrary finite embedded polygonal graph need not be a compact planar surface with polygonal boundary components. A cut vertex or transverse figure-eight vertex gives a pinched frontier, so boundaryComponentCount and the claimed decrement are not defined from B3/B4. Repair by first proving a regular-neighborhood/rotation-system or planar-face theorem that supplies genuine boundary cycles and disk-with-holes regions, then perform and prove the cutting-arc induction. Also, this program STOP again commits only blueprint text and no new compiled, sorry-free supporting declaration since program-history; the successful pre-existing module build is not new program progress.",
    :implements-lemma
@@ -30012,7 +30012,7 @@
      :t94J04 [2 2],
      :t96A01 [1 1],
      :t97J02 [3 3]},
-    :residual "Rereview B5 cellularization; then implement B1.",
+    :residual "Rereview B5a/B5b; then implement B1.",
     :outcome :stop,
     :warnings [],
     :missing-theorems [],
@@ -30020,7 +30020,8 @@
     :disposition :stop,
     :axioms [],
     :author :topo-10,
-    :reason "blueprint repaired; independent rereview required",
+    :reason
+    "blueprint B5 split into regular-neighborhood faces and cutting-arc cellularization; rereview required",
     :commands
     [{:cmd "lake build ConstructionTargets.SurfaceClassification",
       :exit 0}
@@ -30028,25 +30029,21 @@
      {:cmd
       "git diff --check -- ConstructionTargets/SurfaceClassification.blueprint.md",
       :exit 0}
-     {:cmd "rg cellularization witnesses and B6 dependency", :exit 0}],
-    :continue-from "a2fbe2a2e3b5c286b967f76f110629b6284c5852",
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1791813071833-7025-d9f4f850",
-     :finding
-     "Blueprint defect remains at B5: the closure of a complementary region of an arbitrary finite embedded polygonal graph need not be a compact planar surface with polygonal boundary components. A cut vertex or transverse figure-eight vertex gives a pinched frontier, so boundaryComponentCount and the claimed decrement are not defined from B3/B4. Repair by first proving a regular-neighborhood/rotation-system or planar-face theorem that supplies genuine boundary cycles and disk-with-holes regions, then perform and prove the cutting-arc induction. Also, this program STOP again commits only blueprint text and no new compiled, sorry-free supporting declaration since program-history; the successful pre-existing module build is not new program progress."},
-    :commit "a2fbe2a2e3b5c286b967f76f110629b6284c5852",
+     {:cmd "rg B5a/B5b regular-neighborhood witnesses", :exit 0}],
+    :continue-from "ebbfe625544f2e488b629af5301e2695f12c5223",
+    :commit "ebbfe625544f2e488b629af5301e2695f12c5223",
     :changed-paths
     ["ConstructionTargets/SurfaceClassification.blueprint.md"],
     :program-history
     [{:commit "b1612b5c125b59b3e1bfc0cba81abe8b09d72c6b",
       :result :review-fail}
      {:commit "a2fbe2a2e3b5c286b967f76f110629b6284c5852",
+      :result :review-fail}
+     {:commit "ebbfe625544f2e488b629af5301e2695f12c5223",
       :result :blueprint-repaired}],
     :seat :topo-10},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SurfaceClassification.lean"
     "ConstructionTargets/SurfaceClassification.md"
