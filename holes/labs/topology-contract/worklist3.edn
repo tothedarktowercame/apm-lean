@@ -19871,8 +19871,38 @@
   {:consumer :t00J02,
    :implements-lemma
    :lemma-constructiontargets-manifoldfundamentalclass-coefficientsphe-23b4d9fefb3c,
+   :evidence
+   {:placeholder-delta {:t00J02 [1 1], :t98A02 [1 1]},
+    :residual "Prove unit nonnegative by local degree.",
+    :outcome :done-unreviewed,
+    :warnings ["9 pre-existing unnecessarySimpa warnings"],
+    :missing-theorems [],
+    :statement-hashes {:registry "131/131"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli",
+    :commands
+    [{:cmd "sha256sum /tmp/sphereunitnonneg.lean", :exit 0}
+     {:cmd "lake env lean /tmp/sphereunitnonneg.lean", :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd
+      "git diff --check -- ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd "rg forbidden tokens in scoped file",
+      :exit 1,
+      :expected-exit 1}],
+    :commit "2e8d74856877f454d701b00cfe3b8076e9c62b33",
+    :changed-paths
+    ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+    :fixture
+    {:path "/tmp/sphereunitnonneg.lean",
+     :sha256
+     "425f1f799d9e578bac0ea2ee576b20b8b8e453782acc8040dfd77522505e9d1a"},
+    :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/manifold-fundamental-class",
    :acceptance
