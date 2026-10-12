@@ -408,3 +408,8 @@ apply.
 coordinate functor on arbitrary endpoints as the coproduct injection of the
 connector normal form.  The result is stated with `HEq`, retaining the
 dependent object fields until the outer left-span component is specialized.
+
+`genericPointWedgeIdentityCoordinateSpan_right_map` is the right-hand
+counterpart: arbitrary right-coordinate morphisms are `HEq` to `Coprod.inr`
+of their connector normal forms.  Both outer span components can now be
+specialized without identifying their dependent source objects with a base.
