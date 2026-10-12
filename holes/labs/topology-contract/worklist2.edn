@@ -72788,36 +72788,36 @@
    :consumer :t02A03,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "Commit b07bee059 does not implement the row acceptance theorem. It adds only rotatedEndpointWaypoint_departure_zero_support_pos; safeRightTubeMeridianDeformation is absent, although the row is marked done-unreviewed rather than a STOP with missing-theorems. Exact repair: extend Mathlib in scope by state/proving the required continuous ambient H with both endpoints, pointwise rightTube membership, and leftCore avoidance (or record a legitimate STOP after committed progress with remaining theorem listed).",
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Signed correction certificate covers nonzero height; construct continuous same-sign branch, glue to banked zero-height detour, then package path and H.",
+    "Signed correction covers p₁≠0; glue to banked p₁=0 detour, then package path and H.",
     :outcome :stop,
     :warnings
-    ["Main: 1 placeholder; style lint only."
-     "Unrelated PointWedgeVanKampen edit preserved."],
+    ["Main: 1 placeholder; lint."
+     "Unrelated ManifoldFundamentalClass edit."],
     :missing-theorems
     [{:name
       "ConstructionTargets.T02A03GeometricTubeDeformation.correctedRotatedEndpointWaypointPath",
-      :type "point-dependent endpoint-fixed nonzero path",
+      :type "endpoint-fixed nonzero path",
       :status :partial,
       :consumers [:t02A03],
       :depends-on
-      ["pointDependentArrivalCorrection_ne_zero_of_im_sign"],
+      ["signedArrivalCorrection_ne_zero_of_second_ne_zero"],
       :area "explicit-r3-tube-deformation-retraction"}
      {:name
       "ConstructionTargets.T02A03GeometricTubeDeformation.safeRightTubeMeridianDeformation",
-      :type "ambient H with certificates",
+      :type "ambient H",
       :status :partial,
       :consumers [:t02A03],
       :depends-on ["correctedRotatedEndpointWaypointPath"],
       :area "explicit-r3-tube-deformation-retraction"}],
     :statement-hashes
     {:registry "131/0",
-     :module "475774c4e32f10b69adb193a9dc09aa6de808d2d",
+     :module "4253e4fa1cb0392e5c434b1d85c25830cf45f596",
      :main "ce9da0dbb4300e81e5a5f31c95d0a0f8344c4325"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
@@ -72830,30 +72830,23 @@
      {:cmd "module no-sorry", :exit 1, :expected-exit 1}
      {:cmd "placeholders", :exit 0, :output "1"}
      {:cmd "git show --check", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1791809774190-6944-7fe31be7",
-     :commands
-     ["git show/diff-tree/show --check 2a9c5d5d69e2f19806b70df780c4643a14cbe29e"
-      "sha256sum fixture; blob and placeholder recount"
-      "lake env lean exact committed module"
-      "python3 scripts/statement-registry.py check"
-      "compare parent/prior milestone"],
-     :finding
-     "PASS: program STOP commits new compiled, sorry-free progress beyond the prior milestone: the endpoint-fixed transverse correction is proved nonzero at every old departure zero. Exact scope and fixture hash match; module/Main blobs are 0629f3f5/ce9da0db with placeholder counts 0/1; registry 131/0; axioms standard. The no-new-zero corrected path and safe ambient deformation remain explicitly listed."},
-    :commit "3f49f45d44bd13f2aea623b3bb69f36bd0bf0e22",
+    :diagnostic-history
+    [{:cmd "module compile", :exit 1, :finding "Factored square."}
+     {:cmd "module compile",
+      :exit 1,
+      :finding "Exposed imaginary part."}],
+    :commit "acabe9c54d98ea581acc8b6c366da1a90fcf2d33",
     :changed-paths
     ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
     :fixture
     {:path "ConstructionTargets/T02A03GeometricTubeDeformation.lean",
      :sha256
-     "6076ccb2e3ea6bbf79f781b1b36d869beedee84d938ca94c487a92026aac374c"},
+     "7875809abced4d6329498276070751ad7d9f7bc153f4c93671fc448b75cd1acc"},
     :seat "topo-6"},
    :phase :implementation,
    :type
    "∀ (t : unitInterval) (p : RightTubeMinusLeftCore), (t:ℝ) ≤ 1/2 → (((1-2*(t:ℝ):ℝ):ℂ)+((2*(t:ℝ):ℝ):ℂ)*rotatedEndpointWaypoint p)=0 → 0 < (t:ℝ)*(1-2*(t:ℝ))",
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/safe-right-tube-meridian-deformation",
@@ -82166,7 +82159,8 @@
     :lemma-arrivaltransversecorrection-threequarters-ne-zero
     :lemma-arrivaltransversecorrection-eq-zero-iff
     :lemma-arrivaltransversecorrection-actual-zero
-    :lemma-pointdependentarrivalcorrection-ne-zero-of-im-sign],
+    :lemma-pointdependentarrivalcorrection-ne-zero-of-im-sign
+    :lemma-signedarrivalcorrection-ne-zero-of-second-ne-zero],
    :other-consumers []}
   {:consumer :portfolio,
    :phase :lemma,
@@ -83225,6 +83219,19 @@
     :found-in
     ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"]},
    :id :lemma-pointdependentarrivalcorrection-ne-zero-of-im-sign,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "signedArrivalCorrection_ne_zero_of_second_ne_zero"},
+   :lemma
+   {:name "signedArrivalCorrection_ne_zero_of_second_ne_zero",
+    :reported-by []},
+   :id :lemma-signedarrivalcorrection-ne-zero-of-second-ne-zero,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}]}
