@@ -113895,6 +113895,19 @@
       :exit 1,
       :finding
       "Used aligned witness plus mapOfEq_apply on loop representative."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791800552544-6788-4854e2f5",
+     :commands
+     ["git show/diff-tree ef5956bd"
+      "sha256/diff/placeholder checks"
+      "statement-registry.py check"
+      "lake env lean ConstructionTargets/PointWedgeVanKampen.lean"
+      "lake build ConstructionTargets.PointWedgeVanKampen"
+      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (expected absent)"],
+     :finding
+     "PASS program STOP: exact 2-file commit adds a compiled sorry-free proof that the based mapOfEq of leftEquiv.toFun comp leftLegLift fixes every loop. It aligns the dependent witness, normalizes only proof identity, and reduces on a path representative without erasing base transport. Fixture/source/doc hashes match; placeholders 0->0; registry 131/131; standard axioms only. Final module remains absent; residual links the explicit mapped loop, then right and B12."},
     :commit "ef5956bdc040c7a01241c777d3c1e23514eb6b6a",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
@@ -113905,7 +113918,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113926,7 +113939,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: The composite-map identity now supplies the exact basepoint proof required for the dependent mapOfEq reduction.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: The based map induced by the left equivalence-lift composite fixes every loop.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -114242,7 +114255,11 @@
     {:job 2,
      :commit "79d5375355e8dfdd2930d4ca56295048d542c45e",
      :reason
-     "The composite-map identity now supplies the exact basepoint proof required for the dependent mapOfEq reduction."}]}
+     "The composite-map identity now supplies the exact basepoint proof required for the dependent mapOfEq reduction."}
+    {:job 3,
+     :commit "ef5956bdc040c7a01241c777d3c1e23514eb6b6a",
+     :reason
+     "The based map induced by the left equivalence-lift composite fixes every loop."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
