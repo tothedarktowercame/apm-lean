@@ -72790,17 +72790,16 @@
    :consumer :t02A03,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "Commit b07bee059 does not implement the row acceptance theorem. It adds only rotatedEndpointWaypoint_departure_zero_support_pos; safeRightTubeMeridianDeformation is absent, although the row is marked done-unreviewed rather than a STOP with missing-theorems. Exact repair: extend Mathlib in scope by state/proving the required continuous ambient H with both endpoints, pointwise rightTube membership, and leftCore avoidance (or record a legitimate STOP after committed progress with remaining theorem listed).",
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Parked until covering-subgroup program ends; then resume continuous two-leg gluing from f029a4dd6.",
+    "Parked until covering-subgroup program ends; resume continuous two-leg gluing from f029a4dd6.",
     :outcome :stop,
     :warnings
-    ["Owner parked row behind covering-subgroup program."
-     "Unrelated SurfaceClassification edit preserved."],
+    ["Owner park remains active behind covering-subgroup program."],
     :missing-theorems
     [{:name
       "ConstructionTargets.T02A03GeometricTubeDeformation.correctedRotatedEndpointWaypointPath",
@@ -72826,24 +72825,9 @@
     :reason :owner-park,
     :commands
     [{:cmd "fixture hash/blob check", :exit 0}
-     {:cmd "module compile", :exit 0}
-     {:cmd "Main compile", :exit 0}
      {:cmd "registry check", :exit 0, :output "131/0"}
      {:cmd "module no-sorry", :exit 1, :expected-exit 1}
-     {:cmd "placeholders", :exit 0, :output "1"}
      {:cmd "git show --check", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1791813956986-7059-ef215595",
-     :commands
-     ["git show/diff-tree/show --check 2a9c5d5d69e2f19806b70df780c4643a14cbe29e"
-      "sha256sum fixture; blob and placeholder recount"
-      "lake env lean exact committed module"
-      "python3 scripts/statement-registry.py check"
-      "compare parent/prior milestone"],
-     :finding
-     "PASS: program STOP commits new compiled, sorry-free progress beyond the prior milestone: the endpoint-fixed transverse correction is proved nonzero at every old departure zero. Exact scope and fixture hash match; module/Main blobs are 0629f3f5/ce9da0db with placeholder counts 0/1; registry 131/0; axioms standard. The no-new-zero corrected path and safe ambient deformation remain explicitly listed."},
     :commit "f029a4dd6717f27256e026c40869e6eb0cdb7a73",
     :changed-paths [],
     :fixture
@@ -72854,7 +72838,7 @@
    :phase :implementation,
    :type
    "∀ (t : unitInterval) (p : RightTubeMinusLeftCore), (t:ℝ) ≤ 1/2 → (((1-2*(t:ℝ):ℝ):ℂ)+((2*(t:ℝ):ℝ):ℂ)*rotatedEndpointWaypoint p)=0 → 0 < (t:ℝ)*(1-2*(t:ℝ))",
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/safe-right-tube-meridian-deformation",
