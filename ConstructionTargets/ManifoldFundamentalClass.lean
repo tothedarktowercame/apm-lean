@@ -2986,6 +2986,17 @@ theorem coefficientPairMap_forgotten_projection_naturality
       (ComplexShape.down ℕ)).map q)
     (CoefficientRadialPair.projection ℤ A B f hf)
 
+theorem coefficientAbsoluteMap_forgotten_naturality
+    {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    (f : C(X, Y)) :
+    (forgetIntModules.mapHomologicalComplex (ComplexShape.down ℕ)).map
+          (CoefficientRadialPair.absoluteMap ℤ f) ≫
+        (singularChainsComparison (TopCat.of Y)).hom =
+      (singularChainsComparison (TopCat.of X)).hom ≫
+        absoluteSingularMap f := by
+  simpa [CoefficientRadialPair.absoluteMap, absoluteSingularMap] using
+    (singularChainsComparison_naturality (TopCat.ofHom f))
+
 end ConstructionTargets.ManifoldFundamentalClass
 
 #print axioms ConstructionTargets.ManifoldFundamentalClass.neighborhoodInclusion_Hsucc_isIso
@@ -3087,6 +3098,7 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.productionOpenDiskNormalizationComposite_eq_model
 #print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientSphereNormalizationComparisonAutomorphism_hom_eq_neg_implies_openDisk_model_factors
 #print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientPairMap_forgotten_projection_naturality
+#print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientAbsoluteMap_forgotten_naturality
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_projection
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_generator_of_normalization
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_normalization_of_generator
