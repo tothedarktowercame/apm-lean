@@ -1655,6 +1655,38 @@ theorem forgetSnakeDelta_map_apply_of_witness
       (forgetIntModules.map S.v₂₃.τ₁) x₁ := by
   exact ShortComplex.SnakeInput.δ_apply' S x₃ x₂ x₁ h₂ h₁
 
+theorem forgetSnakeInput_delta_map
+    (S : ShortComplex.SnakeInput (ModuleCat ℤ)) :
+    (forgetSnakeInput S).δ = forgetIntModules.map S.δ := by
+  ext x₃
+  obtain ⟨x₂, h₂⟩ :=
+    (ModuleCat.epi_iff_surjective S.L₁.g).mp inferInstance (S.v₀₁.τ₃ x₃)
+  have hz : S.L₂.g (S.v₁₂.τ₂ x₂) = 0 := by
+    rw [← ConcreteCategory.comp_apply, S.v₁₂.comm₂₃]
+    rw [ConcreteCategory.comp_apply, h₂]
+    rw [← ConcreteCategory.comp_apply, S.w₀₂_τ₃]
+    rfl
+  obtain ⟨x₁, h₁⟩ :=
+    (S.L₂.moduleCat_exact_iff.mp S.L₂_exact) (S.v₁₂.τ₂ x₂) hz
+  have ht : (forgetSnakeInput S).δ x₃ =
+      (forgetSnakeInput S).v₂₃.τ₁ x₁ := by
+    let D := forgetSnakeInput S
+    have eq := CategoryTheory.congr_fun (D.snd_δ)
+      (Limits.Concrete.pullbackMk D.L₁.g D.v₀₁.τ₃ x₂ x₃ h₂)
+    have eq₁ := Concrete.pullbackMk_fst D.L₁.g D.v₀₁.τ₃ x₂ x₃ h₂
+    have eq₂ := Concrete.pullbackMk_snd D.L₁.g D.v₀₁.τ₃ x₂ x₃ h₂
+    simp only [ConcreteCategory.comp_apply] at eq
+    rw [eq₂] at eq
+    refine eq.trans (CategoryTheory.congr_arg (D.v₂₃.τ₁) ?_)
+    apply (AddCommGrpCat.mono_iff_injective D.L₂.f).1 inferInstance
+    change (D.φ₁ ≫ D.L₂.f) (Limits.Concrete.pullbackMk
+      D.L₁.g D.v₀₁.τ₃ x₂ x₃ h₂) = D.L₂.f x₁
+    rw [ShortComplex.SnakeInput.φ₁_L₂_f]
+    dsimp [ShortComplex.SnakeInput.φ₂]
+    exact (CategoryTheory.congr_arg D.v₁₂.τ₂ eq₁).trans h₁.symm
+  exact ht.trans
+    (forgetSnakeDelta_map_apply_of_witness S x₃ x₂ x₁ h₂ h₁).symm
+
 /-- The corrected relative-homology comparison intertwines the coefficient
 absolute-to-relative map with the production relative projection. -/
 theorem integralRelativeHomologyComparisonWithTransport_projection
@@ -2651,6 +2683,7 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.forgetHomologySequenceSnakeInputHom
 #print axioms ConstructionTargets.ManifoldFundamentalClass.forgetHomologySequence_delta_naturality
 #print axioms ConstructionTargets.ManifoldFundamentalClass.forgetSnakeDelta_map_apply_of_witness
+#print axioms ConstructionTargets.ManifoldFundamentalClass.forgetSnakeInput_delta_map
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_projection
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_generator_of_normalization
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_normalization_of_generator
