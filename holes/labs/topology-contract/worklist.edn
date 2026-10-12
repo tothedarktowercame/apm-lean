@@ -113850,14 +113850,14 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 7,
+   :stop-count 8,
    :review-finding
    "Blueprint B3 is marked proved but its proof uses the unlisted ConnectedGroupoidSingleObjEquivalence.connectorSingleObjEquivalence (and connector-system representation) instead of only the declared uses; add the actual connector dependency and proof route to B3 uses.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
    :evidence
    {:placeholder-delta {:source-before 0, :source-after 0},
     :residual
-    "Match the mapped pre-coordinate counit and these two injected counits with the outer factors; close B6/B12.",
+    "Evaluate the projected left factor with its injected counit; project right; match pre-coordinate counit with outer factors; close B6/B12.",
     :outcome :stop,
     :warnings [],
     :missing-theorems
@@ -113871,9 +113871,9 @@
       :area "fundamental-group-wedge-of-circles"}],
     :statement-hashes
     {:source
-     "c6d133253b3ceecdc379a6607c268599a6046b3fb6692ff6546055fd412d4c5a",
+     "0494f39cfcab905b7d19fdbdbb9279b3d9c83c26c33c2704f3800f37cc924458",
      :documentation
-     "09f555c61e39da553fcd3b5e28ac54be92b77a0ea22fb94f9c60637413e1a78b",
+     "cad19fbf692424638fb899f6579074f32c9f226309e5802b5494e032070ef900",
      :blueprint
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0",
      :registry "131/131"},
@@ -113881,7 +113881,7 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
     :reason
-    "Coordinate-point counit is the coproduct injections of the actual based connector counits.",
+    "Left pre-free-product counit factors as mapped pre-coordinate then coordinate-point legs.",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/PointWedgeVanKampen.lean",
@@ -113891,22 +113891,10 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder/diff validation", :exit 0}],
     :diagnostic-history
-    [{:cmd "lean direct rewrite",
+    [{:cmd "lean direct component rewrite",
       :exit 1,
-      :finding "Reduced let binders first."}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1791817136264-7170-04a3f056",
-     :commands
-     ["git show/diff-tree 6af6946d9"
-      "sha256 + placeholder + registry checks"
-      "lake env lean ConstructionTargets/PointWedgeVanKampen.lean"
-      "lake build ConstructionTargets.PointWedgeVanKampen"
-      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (expected absent)"],
-     :finding
-     "Scope is exactly Lean+MD; recorded source/doc/blueprint hashes match; placeholders 0->0; registry 131/131. The theorem correctly maps the actual left/right connector counits through the identity point-span to Coprod.inl/inr, preserving orientation and avoiding false identity normalization. It compiles sorry-free with only propext, Classical.choice, Quot.sound. This is new progress beyond the prior unique-object evaluation; residual is matching these injected counits and the mapped pre-coordinate counit with outer factors, then B6/B12. Final target remains absent as declared."},
-    :commit "6af6946d96c7e50874ea27dd4ef0daeabb89e306",
+      :finding "Projected span composition first."}],
+    :commit "43db81b6b781697306ba02f8677190330d7a789e",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
      "ConstructionTargets/PointWedgeVanKampen.md"],
@@ -113916,7 +113904,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
