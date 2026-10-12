@@ -75002,74 +75002,64 @@
   {:consumer :t96J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "STOP remainder is incomplete: cdbdc979d proves the six-edge involution/signs, orbit equivalence, generated-relation iff, and quotient Equiv, but defines no torusRP2PairingData and proves no six-edge oneVertex field. Thus the claim that six-edge B2 is complete is false, and the required missing theorem is omitted from :missing-theorems. Add torusRP2PairingData/oneVertex to the remaining milestones or state and prove it in scope.",
    :implements-lemma
    :lemma-constructiontargets-polygonsurfacepione-standardpairingdata,
    :evidence
    {:placeholder-delta 0,
-    :residual
-    "Prove uniform oneVertex then package standardPairingData.",
+    :residual "Prove sign interaction and oneVertex.",
     :outcome :stop,
-    :warnings
-    ["Imported PolygonBoundaryCircleSource emits two unnecessarySimpa warnings."],
+    :warnings ["Two imported linter warnings."],
     :missing-theorems
-    [{:name "standardPair",
-      :type
-      "fixed-point-free involution on Fin (if o then 4*g else 2*g)",
+    [{:name "standardSign",
+      :type "uniform standard signs",
       :status :proved,
-      :consumers [:t96J02 :t92J05 :t94J04 :t97A03],
-      :depends-on ["standardEdgeCount_pos"],
-      :area "polygon-surface-pi1"}
-     {:name "standardPairingData_oneVertex",
-      :type
-      "standard signs put every polygon vertex in one generated class",
-      :status :not-started,
       :consumers [:t96J02 :t92J05 :t94J04 :t97A03],
       :depends-on ["standardPair"],
       :area "polygon-surface-pi1"}
-     {:name "standardPairingData",
-      :type "uniform PairingData with orbit and quotient comparisons",
+     {:name "standardSign_orientable_pair",
+      :type "paired handle signs differ",
       :status :partial,
       :consumers [:t96J02 :t92J05 :t94J04 :t97A03],
-      :depends-on ["standardPairingData_oneVertex"],
+      :depends-on ["standardSign"],
+      :area "polygon-surface-pi1"}
+     {:name "standardPairingData",
+      :type "uniform data, oneVertex, orbit/quotient comparisons",
+      :status :partial,
+      :consumers [:t96J02 :t92J05 :t94J04 :t97A03],
+      :depends-on ["standardSign_orientable_pair"],
       :area "polygon-surface-pi1"}],
     :statement-hashes
     {:registry "131/0",
-     :module "c7ff304dfc61ea7b737192099f041deb132dd139"},
+     :module "32ed71b04d40a4e67413f96ed5ddfdc43ed90240"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
     :reason
-    "Uniform fixed-point-free involution is proved; standardPairingData still needs signs, oneVertex, orbit equivalence and quotient comparison.",
+    "standardSign compiles; sign interaction, oneVertex and final packaging remain.",
     :commands
     [{:cmd "lake build ConstructionTargets.PolygonSurfacePiOne",
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check",
       :exit 0,
       :output "131/0"}
-     {:cmd "comment-stripped placeholder scan", :exit 0, :output "0"}
-     {:cmd "git show --check fb08e2265", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1791837178715-7864-0bac71d8",
-     :commands
-     ["git show fb08e2265:ConstructionTargets/PolygonSurfacePiOne.lean | lake env lean /dev/stdin"
-      "python3 scripts/statement-registry.py check"
-      "git show --check/hash fb08e2265"],
-     :finding
-     "Recorded commit is scoped to the fixture and its SHA-256 matches; exact source compiles. Registry is 131/0. The new blockwise orientable/crosscap pairing has the required involutive and fixed-point-free orientations. This is genuine compiled, sorry-free progress beyond the six-edge milestone; oneVertex and final PairingData/orbit/quotient packaging remain explicitly listed."},
-    :commit "fb08e2265",
+     {:cmd "placeholder scan", :exit 0, :output "0"}
+     {:cmd "git show --check 1cd264d1d", :exit 0}],
+    :diagnostic-history
+    [{:cmd "sign interaction proof",
+      :exit 1,
+      :correction "removed unfinished proof"}],
+    :commit "1cd264d1d",
     :changed-paths ["ConstructionTargets/PolygonSurfacePiOne.lean"],
     :fixture
     {:path "ConstructionTargets/PolygonSurfacePiOne.lean",
      :sha256
-     "99d2f380bcb70910c32f042c1ff569727ed1b0cbf9314cb5661764ecd539c78e"},
+     "bff2f8bd07a40b1af239f880c6dc049a169dcac77ddc6813d84d492cac90d91e"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/PolygonSurfacePiOne.lean"],
    :dag-node "ConstructionTargets/PolygonSurfacePiOne.blueprint.md/B2",
    :acceptance
@@ -84659,7 +84649,9 @@
    :id :lemma-standardpairingdata,
    :kind :lemma,
    :depends-on
-   [:lemma-standardpair :lemma-standardpairingdata-onevertex],
+   [:lemma-standardpair
+    :lemma-standardpairingdata-onevertex
+    :lemma-standardsign-orientable-pair],
    :other-consumers [:t92J05 :t94J04 :t97A03]}
   {:consumer :t96J02,
    :phase :lemma,
@@ -84678,4 +84670,35 @@
    :id :lemma-standardpairingdata-onevertex,
    :kind :lemma,
    :depends-on [:lemma-standardpair],
+   :other-consumers [:t92J05 :t94J04 :t97A03]}
+  {:consumer :t96J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance {:lemma "standardSign", :type "uniform standard signs"},
+   :lemma
+   {:name "standardSign",
+    :reported-by [:routes-2026-10-12-polygon-b2-completion-topo2-r1],
+    :type "uniform standard signs",
+    :area "polygon-surface-pi1",
+    :proved-in :routes-2026-10-12-polygon-b2-completion-topo2-r1},
+   :id :lemma-standardsign,
+   :kind :lemma,
+   :depends-on [:lemma-standardpair],
+   :other-consumers [:t92J05 :t94J04 :t97A03]}
+  {:consumer :t96J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "standardSign_orientable_pair",
+    :type "paired handle signs differ"},
+   :lemma
+   {:name "standardSign_orientable_pair",
+    :reported-by [:routes-2026-10-12-polygon-b2-completion-topo2-r1],
+    :type "paired handle signs differ",
+    :area "polygon-surface-pi1"},
+   :id :lemma-standardsign-orientable-pair,
+   :kind :lemma,
+   :depends-on [:lemma-standardsign],
    :other-consumers [:t92J05 :t94J04 :t97A03]}]}
