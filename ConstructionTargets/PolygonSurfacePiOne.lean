@@ -137,4 +137,103 @@ theorem torusRP2Pair_ne (i : Fin 6) : torusRP2Pair i ≠ i := by
 /-- Signs which reverse the first two paired arcs and preserve the last. -/
 def torusRP2Sign (i : Fin 6) : Bool := i.1 < 2
 
+theorem torusRP2_boundaryRel_to_eqvGen {x y : Disk}
+    (h : boundaryRel 6 torusRP2Pair torusRP2Sign x y) :
+    Relation.EqvGen PolygonTorusCrosscapRelation.TorusCrosscapRel x y := by
+  rcases h with ⟨i, t, rfl, rfl⟩
+  fin_cases i
+  · simpa [pairedParameter, torusRP2Sign,
+      PolygonTorusCrosscapRelation.reverse, reverseIcc] using
+      Relation.EqvGen.rel _ _ (PolygonTorusCrosscapRelation.TorusCrosscapRel.a t)
+  · simpa [pairedParameter, torusRP2Sign,
+      PolygonTorusCrosscapRelation.reverse, reverseIcc] using
+      Relation.EqvGen.rel _ _ (PolygonTorusCrosscapRelation.TorusCrosscapRel.b t)
+  · simpa [pairedParameter, torusRP2Sign,
+      PolygonTorusCrosscapRelation.reverse, reverseIcc] using
+      Relation.EqvGen.symm _ _ (Relation.EqvGen.rel _ _
+        (PolygonTorusCrosscapRelation.TorusCrosscapRel.a (reverseIcc t)))
+  · simpa [pairedParameter, torusRP2Sign,
+      PolygonTorusCrosscapRelation.reverse, reverseIcc] using
+      Relation.EqvGen.symm _ _ (Relation.EqvGen.rel _ _
+        (PolygonTorusCrosscapRelation.TorusCrosscapRel.b (reverseIcc t)))
+  · simpa [pairedParameter, torusRP2Sign] using
+      Relation.EqvGen.rel _ _ (PolygonTorusCrosscapRelation.TorusCrosscapRel.c t)
+  · simpa [pairedParameter, torusRP2Sign] using
+      Relation.EqvGen.symm _ _ (Relation.EqvGen.rel _ _
+        (PolygonTorusCrosscapRelation.TorusCrosscapRel.c t))
+
+theorem torusRP2_rel_to_boundaryEqvGen {x y : Disk}
+    (h : PolygonTorusCrosscapRelation.TorusCrosscapRel x y) :
+    Relation.EqvGen (boundaryRel 6 torusRP2Pair torusRP2Sign) x y := by
+  cases h with
+  | a t =>
+      exact Relation.EqvGen.rel _ _ ⟨0, t, rfl, by
+        simp [pairedParameter, torusRP2Sign, torusRP2PairIndex,
+          PolygonTorusCrosscapRelation.reverse, reverseIcc]⟩
+  | b t =>
+      exact Relation.EqvGen.rel _ _ ⟨1, t, rfl, by
+        simp [pairedParameter, torusRP2Sign, torusRP2PairIndex,
+          PolygonTorusCrosscapRelation.reverse, reverseIcc]⟩
+  | c t =>
+      exact Relation.EqvGen.rel _ _ ⟨4, t, rfl, by
+        simp [pairedParameter, torusRP2Sign, torusRP2PairIndex]⟩
+
+theorem torusRP2_eqvGen_iff (x y : Disk) :
+    Relation.EqvGen (boundaryRel 6 torusRP2Pair torusRP2Sign) x y ↔
+      Relation.EqvGen PolygonTorusCrosscapRelation.TorusCrosscapRel x y := by
+  constructor
+  · intro h
+    induction h with
+    | rel x y h => exact torusRP2_boundaryRel_to_eqvGen h
+    | refl x => exact .refl x
+    | symm x y _ ih => exact .symm x y ih
+    | trans x y z _ _ ih₁ ih₂ => exact .trans x y z ih₁ ih₂
+  · intro h
+    induction h with
+    | rel x y h => exact torusRP2_rel_to_boundaryEqvGen h
+    | refl x => exact .refl x
+    | symm x y _ ih => exact .symm x y ih
+    | trans x y z _ _ ih₁ ih₂ => exact .trans x y z ih₁ ih₂
+
+/-- Names the three paired-arc orbits by `a`, `b`, and `c`. -/
+def torusRP2OrbitLabel (i : Fin 6) : Fin 3 := ![0, 1, 0, 1, 2, 2] i
+
+def torusRP2OrbitEquiv : PairingOrbit torusRP2Pair ≃ Fin 3 where
+  toFun := Quotient.lift torusRP2OrbitLabel (by
+    intro a b h
+    induction h with
+    | rel a b h =>
+        rcases h with ⟨rfl⟩
+        fin_cases a <;> rfl
+    | refl a => rfl
+    | symm a b _ ih => exact ih.symm
+    | trans a b c _ _ ih₁ ih₂ => exact ih₁.trans ih₂)
+  invFun := fun j => Quotient.mk _ (![0, 1, 4] j : Fin 6)
+  left_inv := by
+    intro q
+    refine Quotient.inductionOn q ?_
+    intro i
+    fin_cases i
+    · rfl
+    · rfl
+    · exact Quotient.sound (Relation.EqvGen.rel _ _ rfl)
+    · exact Quotient.sound (Relation.EqvGen.rel _ _ rfl)
+    · rfl
+    · exact Quotient.sound (Relation.EqvGen.rel _ _ rfl)
+  right_inv := by
+    intro j
+    fin_cases j <;> rfl
+
+abbrev TorusRP2Space :=
+  Quotient (Relation.EqvGen.setoid
+    (boundaryRel 6 torusRP2Pair torusRP2Sign))
+
+/-- Equality of generated relations yields the exact quotient comparison
+used by the six-edge consumer. -/
+def torusRP2SpaceEquiv :
+    TorusRP2Space ≃ PolygonTorusCrosscapRelation.TorusCrosscapQuotient := by
+  apply Quotient.congrRight
+  intro x y
+  exact torusRP2_eqvGen_iff x y
+
 end ConstructionTargets.PolygonSurfacePiOne
