@@ -20936,7 +20936,7 @@
    :lemma-constructiontargets-manifoldfundamentalclass-coefficientclosedboundary-coordinat,
    :evidence
    {:placeholder-delta {:t00J02 [1 1], :t98A02 [1 1]},
-    :residual "Apply comparison in the two closure adapters.",
+    :residual "Apply comparison in both closure adapters.",
     :outcome :done-unreviewed,
     :warnings ["pre-existing lints only"],
     :missing-theorems
@@ -20949,32 +20949,29 @@
       :area "manifold-fundamental-class"}],
     :statement-hashes {:registry "131/131"},
     :acceptance
-    {:fixture-sha256
-     "7e72195e1214d7580994264481ae57d0ecf87755d31825ab85cbda5f1220c4b1"},
+    {:declaration
+     "ConstructionTargets.ManifoldFundamentalClass.coefficientClosedBoundary_coordinate_comparison_of_bool",
+     :type "exact type in fixture",
+     :fixture "/tmp/closedboundarycoords.lean",
+     :fixture-sha256
+     "7e72195e1214d7580994264481ae57d0ecf87755d31825ab85cbda5f1220c4b1",
+     :mode :post-build-export-check,
+     :placeholders ["t00J02 bridge_1" "t98A02 sorry"],
+     :route-step "closed-boundary coordinates"},
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "Joe Corneli",
     :commands
     [{:cmd "lake build ConstructionTargets.ManifoldFundamentalClass",
       :exit 0}
+     {:cmd "sha256sum /tmp/closedboundarycoords.lean", :exit 0}
      {:cmd "lake env lean /tmp/closedboundarycoords.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd
-      "git diff --check -- ConstructionTargets/ManifoldFundamentalClass.lean",
-      :exit 0}
-     {:cmd
       "git diff --exit-code f0afa7bd -- ConstructionTargets/ManifoldFundamentalClass.lean",
       :exit 0}],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1791816535905-7142-ade81787",
-     :finding
-     "Frozen fixture hash mismatch: /tmp/closedboundarycoords.lean now hashes to 7e72195e1214d7580994264481ae57d0ecf87755d31825ab85cbda5f1220c4b1, matching :evidence, but the row authoritative :acceptance :fixture-sha256 remains aad5a9cda739c1cbcceb1eca8ab8b33395db8a08c9d68941a87c644f4d13586e. Exact frozen-scope review cannot PASS two conflicting hashes. Supervisor repair: update the row acceptance hash to the post-build export-check fixture hash (and preserve mode :post-build-export-check), then resubmit. The repaired fixture does compile after module build, checks the exact theorem type, and reports only propext, Classical.choice, Quot.sound; source commit/blob, build, registry 131/131, and placeholders otherwise pass."},
     :commit "f0afa7bdc4c95a8c87143342ceb8c9ce51cd5612",
     :changed-paths
     ["ConstructionTargets/ManifoldFundamentalClass.lean"],
-    :declaration
-    "ConstructionTargets.ManifoldFundamentalClass.coefficientClosedBoundary_coordinate_comparison_of_bool",
     :fixture
     {:path "/tmp/closedboundarycoords.lean",
      :sha256
@@ -20982,7 +20979,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/manifold-fundamental-class",
    :acceptance
