@@ -19696,6 +19696,19 @@
      {:cmd "rg forbidden tokens in scoped file",
       :exit 1,
       :expected-exit 1}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791794148540-6655-994ce7e2",
+     :commands
+     ["git show/diff-tree a52f335c6"
+      "sha256sum /tmp/odpairhomnat.lean"
+      "lake env lean /tmp/odpairhomnat.lean"
+      "lake env lean ConstructionTargets/ManifoldFundamentalClass.lean"
+      "python3 scripts/statement-registry.py check"
+      "git diff --check; rg placeholder/forbidden counts"],
+     :finding
+     "PASS: a52f335c6 changes only the scoped module and its blob is current; fixture SHA-256 matches. Frozen type and module compile. The theorem faithfully specializes pair-map homology naturality to the punctured open-disk inclusion at degree k+2; the sole rewrite is the definitional source comparison equality. Registry 131/131; standard axioms only; no scoped placeholders. Counts unchanged: t00J02 bridge_1=1, sorry=1; t98A02 sorry=1."},
     :commit "a52f335c6c603c4bdae0354ff151500bf3b9608c",
     :changed-paths
     ["ConstructionTargets/ManifoldFundamentalClass.lean"],
@@ -19705,7 +19718,7 @@
      "667b536e53f7929733d2e13e7cf4668249ff92126ba66301d3bca13753a220bc"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/manifold-fundamental-class/model-transport",
@@ -19778,7 +19791,7 @@
       "667b536e53f7929733d2e13e7cf4668249ff92126ba66301d3bca13753a220bc"},
      :seat "topo-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -28239,7 +28252,7 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -28252,7 +28265,9 @@
     [:routes-2026-10-10-manifold-fundamental-class-topo3-r2],
     :type "exact type in fixture",
     :area "manifold-fundamental-class",
-    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2,
+    :banked-by :routes-2026-10-12-mfclass-od-homnat-r1,
+    :banked-commit "a52f335c6c603c4bdae0354ff151500bf3b9608c"},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-coefficientopendiskrelativehomology,
    :kind :lemma,
