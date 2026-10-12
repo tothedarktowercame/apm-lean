@@ -26,14 +26,17 @@ quotients below carry the coinduced topology from their displayed disk map.
 ### B1. Finite polygon-pairing data and quotient
 
 lean: `PolygonSurfacePiOne.PairingData`,
+`PolygonSurfacePiOne.PairingOrbit`,
 `PairingData.Rel`, `PairingData.Space`, `PairingData.quotientMap`, and
 `PairingData.center` : a finite cyclic list of oriented boundary arcs, a
 finite generator type `Label`, a fixed-point-free involution `pair` on the
-arcs, and a signed label on each arc.  The data includes
-`label_surjective : Function.Surjective label` and
-`label_eq_iff_pair : label i = label j ↔ j = i ∨ j = pair i`; hence
-`Label` is exactly the type of pairing orbits, rather than an arbitrary set
-of annotations.  It also includes a proof that the endpoint relation has one
+arcs, and a sign on each arc.  Define `PairingOrbit pair` as the quotient of
+arcs by `i ∼ j ↔ j = i ∨ j = pair i`.  The data contains the explicit
+field
+`orbitLabelEquiv : PairingOrbit pair ≃ Label`; the arc label is defined as
+`orbitLabelEquiv (Quotient.mk _ i)`.  Thus `Label` is by construction exactly
+the type of pairing orbits, rather than an arbitrary set of annotations.  It
+also includes a proof that the endpoint relation has one
 vertex class.  The quotient relation identifies paired arc parameters in the
 direction prescribed by the signs.
 
@@ -43,11 +46,13 @@ status: planned
 
 Use `Fin edgeCount` for arcs and `Fin edgeCount` for polygon vertices.  Store
 `pair : Equiv.Perm (Fin edgeCount)`, `pair_pair : pair (pair i) = i`,
-`pair_ne : pair i ≠ i`, the two label fields above, and sign compatibility
-as fields rather than deriving them later.  Together `label_surjective` and
-`label_eq_iff_pair` give a bijection from the quotient of arcs by the pairing
-orbit relation to `Label`: surjectivity supplies an arc for every circle,
-while the iff says that no label merges two different paired pairs.  Define
+`pair_ne : pair i ≠ i`, `orbitLabelEquiv`, and sign compatibility as fields
+rather than deriving them later.  First prove that `j = i ∨ j = pair i` is a
+setoid using `pair_pair`; only then form `PairingOrbit`.  The equivalence's
+surjectivity supplies an arc orbit for every circle, while its injectivity
+says that no label merges two different paired pairs.  Derive
+`label_surjective` and `label_eq_iff_pair` as lemmas, not structure fields, for
+later word simplification.  Define
 `Rel` only on boundary points and define `Space` with
 `Relation.EqvGen.setoid`.  Record continuity and surjectivity of the quotient
 map.  The one-vertex hypothesis is used only by B7; retaining it explicitly
@@ -66,9 +71,10 @@ status: planned
 
 For the orientable word label arcs by `Fin g × Bool` with signs
 `a,b,a⁻¹,b⁻¹`; for the nonorientable word label by `Fin g` with signs
-`a,a`.  In each instance prove `label_surjective` and
-`label_eq_iff_pair`; for the six-edge word these amount to the three fibres
-`{a,a⁻¹}`, `{b,b⁻¹}`, and `{c,c}`.  Prove equality of the generated
+`a,a`.  In each instance construct `orbitLabelEquiv` and prove its two inverse
+laws; for the six-edge word it sends the three arc-pair orbits to `a`, `b`,
+and `c`.  The derived label fibres are `{a,a⁻¹}`, `{b,b⁻¹}`, and
+`{c,c}`.  Prove equality of the generated
 relations on the round disk, then use
 `Homeomorph.refl` on representatives to obtain the quotient homeomorphism.
 For `t97A01`, instantiate the word `a b a⁻¹ b⁻¹ c c` and prove the six
@@ -153,11 +159,13 @@ status: planned
 
 Cut the boundary circle at all vertices.  Each `pair`-orbit of closed arcs
 becomes one circle; the one-vertex proof identifies all endpoints with the
-wedge point.  Index that circle by the orbit's label.  Surjectivity of
-`label` proves that every `FiniteWedge P.Label` leg occurs, and
-`label_eq_iff_pair` proves that two orbit circles cannot be collapsed onto
-one leg.  Use these two facts when constructing the inverse quotient lifts
-and proving both composites on arc representatives.  Thus the square
+wedge point.  First construct the homeomorphism to
+`FiniteWedge (PairingOrbit P.pair) Circle`, with one leg literally for each
+orbit.  Reindex its legs along `P.orbitLabelEquiv` to obtain the stated
+`FiniteWedge P.Label Circle`.  The inverse equivalence proves both that every
+label leg occurs and that distinct orbit circles cannot collapse onto one
+leg.  Use the equivalence's left and right inverse laws when proving the two
+homeomorphism composites on arc representatives.  Thus the square
 counterexample with two pairing orbits both labelled `Unit` cannot inhabit
 `PairingData`.  The signed coordinate equations are part of the theorem
 because B9 cannot recover the boundary word from an unspecified
@@ -260,12 +268,14 @@ banked `KleinPresentedGroupCoordinateModel` chain.
 
 Downstream review after strengthening B1: B8 is a theorem about an arbitrary
 finite indexing type and does not inspect polygon arcs.  B9 uses B7's leg
-coordinate for each arc; `label_eq_iff_pair` now proves that its only repeated
-generators are the intended paired occurrences.  B10 is independent of the
-label representation.  B11 substitutes the B7--B9 equivalences, so the free
-group has exactly one generator per pairing orbit.  Finally, each B12
-instance proves the B1 fibre condition before simplifying its word.  Thus no
-node B8--B12 infers orbit classification from equality of labels alone.
+coordinate for each arc; its generator is obtained by applying
+`orbitLabelEquiv` to the arc orbit, so its only repeated generators are the
+intended paired occurrences.  B10 is independent of the label
+representation.  B11 substitutes the B7--B9 equivalences, so the free group
+has literally one generator per pairing orbit, reindexed by an equivalence.
+Finally, each B12 instance constructs and proves the two inverse laws of its
+orbit equivalence before simplifying its word.  Thus no node B8--B12 infers
+orbit classification from equality of labels.
 
 ## Fixtures and acceptance gates
 
@@ -273,8 +283,8 @@ Each node gets a standalone import fixture under build scratch that states
 its full public type and compiles without `sorry`.  B3, B5, B7, B9, and B10
 also get negative representation tests: an interior equivalence chain cannot
 reach the boundary; a representative-dependent homotopy does not descend;
-a pairing with two vertex classes is not accepted; two distinct pairing
-orbits cannot share one label (the review's square/`Unit` counterexample);
+a pairing with two vertex classes is not accepted; a proposed equivalence
+from the two orbits of the review's square to `Unit` fails its inverse law;
 reversing an arc produces an inverse generator; and omitting normal closure
 does not typecheck as the target quotient.  The program gates are:
 
