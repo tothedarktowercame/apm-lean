@@ -932,3 +932,9 @@ now applies the proved right-restriction formula to the first factor.  Its
 result retains both endpoint counit components around the literal actual-span
 map, so the remaining cancellation cannot silently identify the reconstructed
 and supplied right-piece representations.
+
+`genericPointWedgeCoordinateSpanGlobalRestrictionRightStrictFactor_eq_actual`
+does the corresponding calculation for the second factor.  After the forward
+strict comparison is mapped through the inverse right equivalence, the
+reconstructed restriction is again the literal actual-span map conjugated by
+its coordinate-target and transported-source counit components.
