@@ -1232,4 +1232,108 @@ def polygonAnnularSide (P : PairingData) : PolygonAnnularSide P where
   surjective_map := surjective_outerMap P
   fiber := outerMap_eq_iff P
 
+def innerBallZero : Metric.ball (0 : ℂ) ((2 : ℝ) / 3) :=
+  ⟨0, by rw [Metric.mem_ball, dist_zero_right]; norm_num⟩
+
+def innerBallRadialHomotopy :
+    (ContinuousMap.id (Metric.ball (0 : ℂ) ((2 : ℝ) / 3))).Homotopy
+      (ContinuousMap.const _ innerBallZero) := by
+  let hs := (convex_ball (0 : ℂ) ((2 : ℝ) / 3)).starConvex innerBallZero.property
+  apply ContinuousMap.Homotopy.mk
+    { toFun := fun p =>
+        ⟨p.1.1 • (0 : ℂ) + (1 - p.1.1) • (p.2 : ℂ),
+          hs p.2.2 p.1.2.1 (sub_nonneg.mpr p.1.2.2) (add_sub_cancel _ _)⟩
+      continuous_toFun := by
+        apply Continuous.subtype_mk
+        have ht : Continuous (fun p : unitInterval × Metric.ball (0 : ℂ) ((2 : ℝ) / 3) =>
+            (p.1 : ℝ)) := continuous_subtype_val.comp continuous_fst
+        have hz : Continuous (fun p : unitInterval × Metric.ball (0 : ℂ) ((2 : ℝ) / 3) =>
+            (p.2 : ℂ)) := continuous_subtype_val.comp continuous_snd
+        have hone : Continuous (fun _ : unitInterval × Metric.ball (0 : ℂ) ((2 : ℝ) / 3) =>
+            (1 : ℝ)) := continuous_const
+        simpa only [smul_zero, zero_add, Complex.real_smul, mul_zero, Function.comp_apply] using
+          (Complex.continuous_ofReal.comp (hone.sub ht)).mul hz }
+  · intro x
+    ext
+    simp
+  · intro x
+    ext
+    simp [innerBallZero]
+
+def innerDiskRadialHomotopy :
+    (ContinuousMap.id InnerDisk).Homotopy
+      (ContinuousMap.const _ (innerDiskHomeomorphBall.symm innerBallZero)) := by
+  let e := innerDiskHomeomorphBall
+  apply ContinuousMap.Homotopy.mk
+    { toFun := fun p => e.symm (innerBallRadialHomotopy (p.1, e p.2))
+      continuous_toFun := e.symm.continuous.comp (innerBallRadialHomotopy.continuous.comp
+        (continuous_fst.prodMk (e.continuous.comp continuous_snd))) }
+  · intro x
+    change e.symm (innerBallRadialHomotopy (0, e x)) = x
+    have h := innerBallRadialHomotopy.map_zero_left (e x)
+    change innerBallRadialHomotopy (0, e x) = e x at h
+    exact (congrArg e.symm h).trans (e.symm_apply_apply x)
+  · intro x
+    change e.symm (innerBallRadialHomotopy (1, e x)) = _
+    have h := innerBallRadialHomotopy.map_one_left (e x)
+    change innerBallRadialHomotopy (1, e x) = _ at h
+    exact congrArg e.symm h
+
+theorem innerBallRadialHomotopy_fixed (t : unitInterval) :
+    innerBallRadialHomotopy (t, innerBallZero) = innerBallZero := by
+  ext
+  change (t : ℝ) • (0 : ℂ) + (1 - (t : ℝ)) • 0 = 0
+  simp
+
+theorem innerDiskRadialHomotopy_fixed (t : unitInterval) :
+    innerDiskRadialHomotopy
+        (t, innerDiskHomeomorphBall.symm innerBallZero) =
+      innerDiskHomeomorphBall.symm innerBallZero := by
+  apply innerDiskHomeomorphBall.injective
+  simp only [innerDiskRadialHomotopy, Homeomorph.apply_symm_apply]
+  exact innerBallRadialHomotopy_fixed t
+
+def polygonCenterDeformationRetract (P : PairingData) :
+    (ContinuousMap.id {q // q ∈ (polygonRadialOpenSets P).inner}).Homotopy
+      (ContinuousMap.const _ ⟨P.center, ⟨⟨0, by simp [Disk, Metric.mem_closedBall]⟩,
+        by simp [innerDisk], rfl⟩⟩) := by
+  let e := innerHomeomorph P
+  apply ContinuousMap.Homotopy.mk
+    { toFun := fun p => e (innerDiskRadialHomotopy (p.1, e.symm p.2))
+      continuous_toFun := e.continuous.comp (innerDiskRadialHomotopy.continuous.comp
+        (continuous_fst.prodMk (e.symm.continuous.comp continuous_snd))) }
+  · intro x
+    simp [e]
+  · intro x
+    change e (innerDiskRadialHomotopy (1, e.symm x)) = _
+    have h := innerDiskRadialHomotopy.map_one_left (e.symm x)
+    change innerDiskRadialHomotopy (1, e.symm x) = _ at h
+    rw [h]
+    ext
+    rfl
+
+theorem polygonCenterDeformationRetract_fixed (P : PairingData) (t : unitInterval) :
+    polygonCenterDeformationRetract P
+        (t, ⟨P.center, ⟨⟨0, by simp [Disk, Metric.mem_closedBall]⟩,
+          by simp [innerDisk], rfl⟩⟩) =
+      ⟨P.center, ⟨⟨0, by simp [Disk, Metric.mem_closedBall]⟩,
+        by simp [innerDisk], rfl⟩⟩ := by
+  let e := innerHomeomorph P
+  let z := innerDiskHomeomorphBall.symm innerBallZero
+  have he : e z = ⟨P.center, ⟨⟨0, by simp [Disk, Metric.mem_closedBall]⟩,
+      by simp [innerDisk], rfl⟩⟩ := by
+    ext
+    rfl
+  simp only [polygonCenterDeformationRetract]
+  change e (innerDiskRadialHomotopy
+    (t, e.symm ⟨P.center, ⟨⟨0, by simp [Disk, Metric.mem_closedBall]⟩,
+      by simp [innerDisk], rfl⟩⟩)) =
+    ⟨P.center, ⟨⟨0, by simp [Disk, Metric.mem_closedBall]⟩,
+      by simp [innerDisk], rfl⟩⟩
+  have hsymm : e.symm ⟨P.center, ⟨⟨0, by simp [Disk, Metric.mem_closedBall]⟩,
+      by simp [innerDisk], rfl⟩⟩ = z := by
+    rw [← he, e.symm_apply_apply]
+  rw [hsymm, ← he]
+  exact congrArg e (innerDiskRadialHomotopy_fixed t)
+
 end ConstructionTargets.PolygonSurfacePiOne
