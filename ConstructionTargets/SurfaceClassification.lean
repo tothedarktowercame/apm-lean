@@ -23,6 +23,22 @@ theorem exists_perturbationParameter_avoiding_finite
   intro hsub
   exact Set.Ioo_infinite hab (hforbidden.subset hsub)
 
+/-- Moving a point along any nonconstant affine line supplies a perturbation
+inside a prescribed parameter interval while avoiding a finite planar set. -/
+theorem exists_affinePerturbation_avoiding_finite
+    (base direction : EuclideanPlane) (hdirection : direction ≠ 0)
+    {a b : ℝ} (hab : a < b) {forbidden : Set EuclideanPlane}
+    (hforbidden : forbidden.Finite) :
+    ∃ t ∈ Set.Ioo a b, base + t • direction ∉ forbidden := by
+  have hinjective : Function.Injective (fun t : ℝ => base + t • direction) := by
+    intro x y hxy
+    apply smul_left_injective ℝ hdirection
+    exact add_left_cancel hxy
+  have hpreimage : ((fun t : ℝ => base + t • direction) ⁻¹' forbidden).Finite :=
+    hforbidden.preimage hinjective.injOn
+  simpa only [Set.mem_preimage] using
+    exists_perturbationParameter_avoiding_finite hab hpreimage
+
 /-- A finite semisimplicial complex truncated in dimensions zero through two.
 The compatibility field records the two vertices of each boundary edge of a
 face; injectivity excludes degenerate triangular faces. -/
