@@ -116624,7 +116624,7 @@
      :reason
      "Program milestone completed. Blueprint node B5 is proved: compactness selects finitely many B4 neighbourhoods, the minimum of their positive local times is positive, and every selected curve restricts to that common interval. Only B6 remains."}]}
   {:consumer :t97A07,
-   :stop-count 8,
+   :stop-count 9,
    :review-finding
    "Recorded fixture hash mismatch: :fixture.sha256 is eaeed21919599335d4a33b437815c4a9cbb5b72110213b29440d6944cc982182 (the blueprint at older commit 736c2566), but commit 8432f937 changes ConstructionTargets/t97A07Closure.blueprint.md and its exact SHA-256 is 5bb02c342b988406e8bd26aeda1b9e67335a8c1f626d97ec96701cb039ae708f. Re-record the fixture hash for the reviewed commit.",
    :evidence
@@ -116652,7 +116652,7 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
     :reason
-    "The inverse source-chart derivative is identity, so centre transport equals mfderiv.",
+    "Receipt repaired: fixture now records the exact reviewed blueprint hash.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t97A07Closure.lean",
       :exit 0}
@@ -116664,12 +116664,6 @@
     [{:cmd "lean corollary rewrite",
       :exit 1,
       :finding "Used ContinuousLinearMap.comp_id directly."}],
-    :review
-    {:outcome :fail,
-     :seat "codex-3",
-     :job "invoke-1791789395502-6556-e7798789",
-     :finding
-     "Recorded fixture hash mismatch: :fixture.sha256 is eaeed21919599335d4a33b437815c4a9cbb5b72110213b29440d6944cc982182 (the blueprint at older commit 736c2566), but commit 8432f937 changes ConstructionTargets/t97A07Closure.blueprint.md and its exact SHA-256 is 5bb02c342b988406e8bd26aeda1b9e67335a8c1f626d97ec96701cb039ae708f. Re-record the fixture hash for the reviewed commit."},
     :commit "8432f93741bee955f9d48c4a6fbeaf612af55d81",
     :changed-paths
     ["ConstructionTargets/t97A07Closure.lean"
@@ -116677,10 +116671,10 @@
     :fixture
     {:path "ConstructionTargets/t97A07Closure.blueprint.md",
      :sha256
-     "eaeed21919599335d4a33b437815c4a9cbb5b72110213b29440d6944cc982182"},
+     "5bb02c342b988406e8bd26aeda1b9e67335a8c1f626d97ec96701cb039ae708f"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope
    ["problems/t97A07/lean/Main.lean"
     "problems/t97A07/status.json"
