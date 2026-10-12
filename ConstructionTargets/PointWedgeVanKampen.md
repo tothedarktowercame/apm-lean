@@ -489,3 +489,7 @@ next morphism comparison must retain transport across its base-object equality.
 
 `genericPointWedgeRightEquiv_comp_rightLegLift` proves the symmetric identity
 of continuous maps; its induced loop comparison retains quotient-base transport.
+
+`genericPointWedgeLeftEquiv_obj_leftBase` names the resulting propositional
+equality from the transported fixed left-cover base to `FundamentalGroupoid.mk
+x₀`; the connector calculation can now use that equality explicitly.

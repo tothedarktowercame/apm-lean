@@ -2249,6 +2249,19 @@ theorem genericPointWedgeRightEquiv_comp_rightLegLift :
   exact (genericPointWedgePackage
     x₀ y₀ M N hM hN hy hx cM cN).right_inclusion y
 
+omit [PathConnectedSpace X] [PathConnectedSpace Y] in
+/-- The left cover equivalence sends the fixed lifted-leg base object to the
+literal base object.  This is propositional rather than definitional and is
+the transport used by the connector normal-form calculation. -/
+theorem genericPointWedgeLeftEquiv_obj_leftBase :
+    (genericPointWedgeLeftGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN).functor.obj
+        (genericPointWedgeLeftBase x₀ y₀ M) =
+      FundamentalGroupoid.mk x₀ := by
+  apply FundamentalGroupoid.ext
+  exact (genericPointWedgePackage
+    x₀ y₀ M N hM hN hy hx cM cN).left_inclusion x₀
+
 /-- Once B3's two mapped actions are identified with the images of the
 literal topological legs under B5, the normalized equivalence has exactly the
 two coproduct coordinates required by B6. -/
@@ -2749,6 +2762,7 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeInverseIdentity_rightLeg_eq_actualLifted
 #print axioms genericPointWedgeLeftEquiv_comp_leftLegLift
 #print axioms genericPointWedgeRightEquiv_comp_rightLegLift
+#print axioms genericPointWedgeLeftEquiv_obj_leftBase
 #print axioms genericPointWedgeIdentityActualSpan_left_map
 #print axioms genericPointWedgeIdentityActualSpan_right_map
 #print axioms genericPointWedgeSingleObjPostcomposeIso
