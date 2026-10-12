@@ -75548,7 +75548,7 @@
   {:consumer :t96J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 2,
+   :stop-count 0,
    :review-finding
    "The STOP incorrectly marks the center-contraction milestone proved. commit 194ea4781 establishes only ContractibleSpace for the inner open, which chooses an unspecified contraction point; it neither supplies a deformation retraction nor identifies that point with PairingData.center. B4 explicitly requires U P to deformation-retract to P.center. Add this exact center-based deformation retraction to :missing-theorems and prove it in scope; annular side/overlap are not the only residual.",
    :evidence
@@ -75613,7 +75613,7 @@
      "3b0d12baa5be1bb60015947120e7e79ae424ca8c8c4ef6edc6e41d8057390a95"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope ["ConstructionTargets/PolygonSurfacePiOne.lean"],
    :dag-node "ConstructionTargets/PolygonSurfacePiOne.blueprint.md/B4",
    :acceptance
@@ -75626,7 +75626,7 @@
    :id :routes-2026-10-12-polygon-b4-topo2-r1,
    :kind :reusable-theorem,
    :area "polygon-surface-pi1",
-   :fail-count 1,
+   :fail-count 0,
    :depends-on
    [:routes-2026-10-12-polygon-b3-topo2-r1
     :routes-2026-10-12-checkpoint-topo2-r16],
@@ -75870,9 +75870,19 @@
       :current-residual "Elect contraction/overlap.",
       :other-consumers []}],
     :author "topo-8",
-    :disposition :replan},
+    :disposition :replan,
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791844885821-8016-8b25a7af",
+     :commands
+     ["bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn"
+      "bb holes/labs/topology-contract/build_step.bb priorities holes/labs/topology-contract/worklist2.edn"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "Strategy checkpoint PASS: scope is empty, so no commit/fixture applies. Dependencies and measures are coherent; fresh gates report worklist 1013 OK and registry 131/0. Replacement advances annular-side only while retaining contraction/overlap; current priorities still expose annular side, center contraction, exact center deformation retract, and overlap (each unblocks 5), so it does not mistake weak ContractibleSpace progress for the required center-point deformation retraction."}},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance {:strategy "Rerun after radial opens."},
@@ -75887,7 +75897,7 @@
   {:consumer :t96J02,
    :implements-lemma :lemma-polygonannularside,
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/PolygonSurfacePiOne.lean"],
    :dag-node "ConstructionTargets/PolygonSurfacePiOne.blueprint.md/B4",
    :acceptance
@@ -85800,7 +85810,7 @@
    :other-consumers []}
   {:consumer :t96J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "polygonCenterContraction",
@@ -85810,7 +85820,9 @@
     :reported-by [:routes-2026-10-12-polygon-b4-topo2-r1],
     :type "inner quotient open contracts to P.center",
     :area "polygon-surface-pi1",
-    :proved-in :routes-2026-10-12-polygon-b4-topo2-r1},
+    :proved-in :routes-2026-10-12-polygon-b4-topo2-r1,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/PolygonSurfacePiOne.lean"]},
    :id :lemma-polygoncentercontraction,
    :kind :lemma,
    :depends-on [:lemma-polygonradialopensets :lemma-innerhomeomorph],
