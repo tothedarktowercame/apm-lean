@@ -158,6 +158,11 @@ def circleZeroSection : C(Circle, Circle × ℝ) where
   toFun z := (z, 0)
   continuous_toFun := continuous_id.prodMk continuous_const
 
+theorem circleZeroSection_isEmbedding :
+    Topology.IsEmbedding circleZeroSection := by
+  exact (show Function.LeftInverse Prod.fst circleZeroSection from fun _ => rfl).isEmbedding
+    continuous_fst circleZeroSection.continuous
+
 def circleZeroSectionFlatNeighborhood (z : Circle) :
     EmbeddedCircleFlatNeighborhood circleZeroSection z where
   V := Set.univ
