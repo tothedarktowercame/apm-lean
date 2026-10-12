@@ -1,8 +1,9 @@
 import ConstructionTargets.SardGenuineSmoothManifoldVector
+import Mathlib.Analysis.Convex.Measure
 import Mathlib.Analysis.InnerProductSpace.PiL2
 
 open scoped ContDiff Manifold
-open Set
+open Set MeasureTheory
 
 noncomputable section
 
@@ -37,6 +38,14 @@ theorem modelRange_geometry
       Set.range I = closure (interior (Set.range I)) := by
   exact ⟨I.convex_range, I.isClosed_range, I.nonempty_interior,
     I.range_eq_closure_interior⟩
+
+theorem modelRange_frontier_addHaar_null
+    {E H : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
+    [TopologicalSpace H] (I : ModelWithCorners ℝ E H)
+    (μ : Measure E) [μ.IsAddHaarMeasure] :
+    μ (frontier (Set.range I)) = 0 := by
+  exact I.convex_range.addHaar_frontier μ
 
 /-- On the interior of a model-with-corners range, the within derivative is
 the unrestricted derivative, so their surjectivity conditions agree. -/
