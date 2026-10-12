@@ -2415,6 +2415,48 @@ theorem genericPointWedgeRightComposite_mapOfEq
         (f := ContinuousMap.id Y) (h := rfl) p)
   exact mapOfEq_id _
 
+omit [PathConnectedSpace X] [PathConnectedSpace Y] in
+/-- The right-cover equivalence sends the chosen fixed representative to the
+literal base point before passage to the fundamental groupoid. -/
+theorem genericPointWedgeRightEquiv_rightBase_as :
+    (genericPointWedgePackage
+      x₀ y₀ M N hM hN hy hx cM cN).rightEquiv.toFun
+        (genericPointWedgeRightBase x₀ y₀ N).as = y₀ := by
+  have hz : (genericPointWedgeRightBase x₀ y₀ N).as =
+      ⟨quotientMap x₀ y₀ (.inr y₀), ⟨.inr y₀, by trivial, rfl⟩⟩ := by
+    apply Subtype.ext
+    exact Quotient.sound (Relation.EqvGen.rel _ _ Rel.base)
+  rw [hz]
+  exact (genericPointWedgePackage
+    x₀ y₀ M N hM hN hy hx cM cN).right_inclusion y₀
+
+omit [PathConnectedSpace X] [PathConnectedSpace Y] in
+/-- The concrete endpoint conjugation is exactly the based map of the right
+cover equivalence at the fixed quotient representative. -/
+theorem genericPointWedgeRightLiftedLoop_concrete_eq_mapOfEq
+    (g : FundamentalGroup Y y₀) :
+    eqToHom (genericPointWedgeRightEquiv_obj_rightBase
+        x₀ y₀ M N hM hN hy hx cM cN).symm ≫
+        (FundamentalGroupoid.map
+          (genericPointWedgePackage
+            x₀ y₀ M N hM hN hy hx cM cN).rightEquiv.toFun).map
+              (genericPointWedgeRightLiftedLoop x₀ y₀ N g) ≫
+      eqToHom (genericPointWedgeRightEquiv_obj_rightBase
+        x₀ y₀ M N hM hN hy hx cM cN) =
+      FundamentalGroup.mapOfEq
+        (genericPointWedgePackage
+          x₀ y₀ M N hM hN hy hx cM cN).rightEquiv.toFun
+        (genericPointWedgeRightEquiv_rightBase_as
+          x₀ y₀ M N hM hN hy hx cM cN)
+        (genericPointWedgeRightLiftedLoop x₀ y₀ N g) := by
+  rw [show genericPointWedgeRightEquiv_obj_rightBase
+      x₀ y₀ M N hM hN hy hx cM cN =
+        congrArg FundamentalGroupoid.mk
+          (genericPointWedgeRightEquiv_rightBase_as
+            x₀ y₀ M N hM hN hy hx cM cN) by
+    apply Subsingleton.elim]
+  rfl
+
 omit [PathConnectedSpace Y] in
 /-- The connector normal form of the mapped lifted left loop is conjugation
 by the explicit equality transport at its common endpoint. -/
@@ -3093,6 +3135,8 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeRightLiftedLoop_transport_eq_concrete
 #print axioms genericPointWedgeRightComposite_baseProof
 #print axioms genericPointWedgeRightComposite_mapOfEq
+#print axioms genericPointWedgeRightEquiv_rightBase_as
+#print axioms genericPointWedgeRightLiftedLoop_concrete_eq_mapOfEq
 #print axioms genericPointWedgeLeftLiftedLoop_normalForm_eq_transport
 #print axioms genericPointWedgeLeftComposite_baseProof
 #print axioms genericPointWedgeLeftComposite_mapOfEq

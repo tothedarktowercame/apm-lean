@@ -554,3 +554,10 @@ the named quotient-aware base-object equality.
 witness with the right inclusion equation.  Using that alignment,
 `genericPointWedgeRightComposite_mapOfEq` proves that the based map induced by
 `rightEquiv.toFun ∘ rightLegLift` fixes every right-summand loop.
+
+`genericPointWedgeRightEquiv_rightBase_as` names the underlying equality at
+the fixed right-cover representative.  After aligning its groupoid image,
+`genericPointWedgeRightLiftedLoop_concrete_eq_mapOfEq` identifies the explicit
+endpoint conjugation with `FundamentalGroup.mapOfEq` for the right cover
+equivalence.  The remaining comparison is the composition law across the
+quotient-adjusted lifted loop.
