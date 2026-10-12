@@ -17,9 +17,9 @@ Mathlib supplies `IsCoveringMap.liftPath`, `liftHomotopyRel`, `monodromy`,
 We use the classical based-path construction.  A point of the total space is
 an equivalence class of paths starting at `x`; two paths are equivalent when
 their endpoints agree and their concatenation with the reverse path represents
-an element of `H`.  This representation makes the fibre the cosets `H * g`
-(the quotient by Mathlib's `QuotientGroup.rightRel H`).  No universal-cover
-object or choice of deck action is assumed.
+an element of `H`.  The fibre is represented explicitly by the coset sets
+`H * g`, rather than by ambiguous quotient notation.  No normality or deck
+action is assumed.
 
 ### B1. Semilocally simply connected predicate
 
@@ -61,9 +61,8 @@ Relate `⟨y,α⟩` and `⟨z,β⟩` iff `y=z` and the based loop obtained from
 `α.trans β.symm` (after transporting the endpoint equality) belongs to `H`.
 Reflexivity uses `H.one_mem`; symmetry uses `H.inv_mem`; transitivity uses
 `H.mul_mem`.  With loop classes `g=[α]` and `h=[β]`, this says
-`g * h⁻¹ ∈ H`, equivalently `QuotientGroup.rightRel H g h` (use
-`rightRel_apply` and `H.inv_mem`).  Thus the classes are `H * g`, not the
-standard quotient notation `G ⁄ H`, which uses `leftRel`.
+`g * h⁻¹ ∈ H`, exactly the equality criterion for the coset sets `H * g`
+and `H * h`.  This statement remains valid for nonnormal `H`.
 
 ### B4. Total space, projection, and basepoint
 
@@ -92,9 +91,8 @@ status: planned
 Choose paths inside `U` from its centre to each point and append them to a
 representative path.  B2 proves independence of the internal path choice;
 B3 proves independence of the representative.  The inverse truncates the
-local segment.  The sheet label is a B3 class, hence has the `H * g`
-orientation fixed above.  Prove the two inverse equations before introducing
-topology.
+local segment.  The sheet label is the corresponding coset set `H * g`.
+Prove the two inverse equations before introducing topology.
 
 ### B6. Quotient topology and covering charts
 
@@ -150,32 +148,31 @@ Corestrict the induced homomorphism to `H`; B8 supplies bijectivity, then use
 
 lean: `subgroupCover_fiberEquivCosets :
 (subgroupCoverMap x H ⁻¹' {x}) ≃
-  Quotient (QuotientGroup.rightRel H)`
+  Set.range (fun g : FundamentalGroup X x => (H : Set _) * {g})`
 
 uses: B3, B4
 
 status: planned
 
-Send a loop class `g` in the fibre to its `rightRel` class, representing
-`H * g`.  B3 is precisely equality in this quotient, so well-definedness,
-injectivity, and surjectivity are direct.  In particular this node does **not**
-target `FundamentalGroup X x ⁄ H`, whose underlying setoid is `leftRel` and
-would be wrong for nonnormal `H`.
+Send a loop class `g` in the fibre to the coset set `H * g`.  Equality of
+these sets is equivalent to `g*h⁻¹ ∈ H`, precisely B3, so well-definedness,
+injectivity, and surjectivity are direct.  No quotient convention or normality
+assumption is hidden in the type.
 
 ### B11. Finite fibre cardinality
 
 lean: `subgroupCover_fiber_card [H.FiniteIndex] :
 Nat.card (subgroupCoverMap x H ⁻¹' {x}) = H.index`
 
-uses: B10, Mathlib
-`QuotientGroup.quotientRightRelEquivQuotientLeftRel`, `Subgroup.index_eq_card`
+uses: B10, the inversion equivalence from the explicit `H * g` coset set to
+Mathlib's quotient, `Subgroup.index_eq_card`
 
 status: planned
 
-Transport `Nat.card` across B10, then across
-`quotientRightRelEquivQuotientLeftRel H` to Mathlib's standard quotient
-`G ⁄ H`.  The `FiniteIndex` hypothesis is used only here, to identify that
-finite cardinal with `H.index`; no normality is assumed.
+Construct the equivalence from the explicit coset-set range to Mathlib's
+standard quotient by sending `H * g` to the quotient class of `g⁻¹`; the
+inverse orientation makes the equality criteria agree.  Then transport
+`Nat.card` and use `Subgroup.index_eq_card`.  `FiniteIndex` is used only here.
 
 ### B12. Connected finite-index cover
 
@@ -192,7 +189,7 @@ uses: B4, B6, B7, B9, B11
 
 status: planned
 
-Take the explicit path-class cover with its `rightRel`/`H * g` fibre.  Path
+Take the explicit path-class cover with its explicit `H * g` fibre.  Path
 connectedness constructs the classes and proves connectedness; local path
 connectedness and `hsl` produce
 the charts; finite index counts the fibre.  Thus every final hypothesis is
