@@ -113894,6 +113894,18 @@
     [{:cmd "lean direct rewrite",
       :exit 1,
       :finding "Reduced let binders first."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791817136264-7170-04a3f056",
+     :commands
+     ["git show/diff-tree 6af6946d9"
+      "sha256 + placeholder + registry checks"
+      "lake env lean ConstructionTargets/PointWedgeVanKampen.lean"
+      "lake build ConstructionTargets.PointWedgeVanKampen"
+      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (expected absent)"],
+     :finding
+     "Scope is exactly Lean+MD; recorded source/doc/blueprint hashes match; placeholders 0->0; registry 131/131. The theorem correctly maps the actual left/right connector counits through the identity point-span to Coprod.inl/inr, preserving orientation and avoiding false identity normalization. It compiles sorry-free with only propext, Classical.choice, Quot.sound. This is new progress beyond the prior unique-object evaluation; residual is matching these injected counits and the mapped pre-coordinate counit with outer factors, then B6/B12. Final target remains absent as declared."},
     :commit "6af6946d96c7e50874ea27dd4ef0daeabb89e306",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
@@ -113904,7 +113916,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113925,7 +113937,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Both coordinate-point counit legs are evaluated at their unique source objects.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Coordinate-point counit is the coproduct injections of the actual based connector counits.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -114329,7 +114341,11 @@
     {:job 6,
      :commit "feeb79cd641504bb8d9b04fa883e9ecc220227ac",
      :reason
-     "Both coordinate-point counit legs are evaluated at their unique source objects."}]}
+     "Both coordinate-point counit legs are evaluated at their unique source objects."}
+    {:job 7,
+     :commit "6af6946d96c7e50874ea27dd4ef0daeabb89e306",
+     :reason
+     "Coordinate-point counit is the coproduct injections of the actual based connector counits."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
