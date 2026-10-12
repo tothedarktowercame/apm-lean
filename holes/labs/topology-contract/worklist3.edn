@@ -415,8 +415,48 @@
    :consumer :t01A08,
    :implements-lemma
    :lemma-constructiontargets-sardgeneralmodel-modelrange-interior-surjective-fderivwithin,
+   :evidence
+   {:placeholder-delta {:t01A08 [1 1]},
+    :residual
+    "Apply the comparison in t01A08; boundary nullity remains.",
+    :outcome :done-unreviewed,
+    :warnings ["pre-existing build lints"],
+    :missing-theorems
+    [{:name
+      "ConstructionTargets.SardGeneralModel.modelRange_interior_surjective_fderivWithin_iff",
+      :type
+      "∀ {E H} [NormedAddCommGroup E] [NormedSpace ℝ E] [TopologicalSpace H] (I : ModelWithCorners ℝ E H), InteriorDerivativeComparison I",
+      :status :proved,
+      :consumers [:t01A08],
+      :depends-on
+      ["ConstructionTargets.SardGeneralModel.modelRange_geometry"],
+      :area "sard-convex-domain"}],
+    :statement-hashes {:registry "131/131"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author :topo-10,
+    :commands
+    [{:cmd
+      "sha256sum /tmp/t01a08_model_range_interior_derivative.lean",
+      :exit 0}
+     {:cmd "lake env lean ConstructionTargets/SardGeneralModel.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/t01a08_model_range_interior_derivative.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.SardGeneralModel", :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd "rg source placeholders", :exit 1, :expected-exit 1}],
+    :commit "2c00694f68369a8eec8248e2128f2e7d23889743",
+    :changed-paths ["ConstructionTargets/SardGeneralModel.lean"],
+    :declaration
+    "ConstructionTargets.SardGeneralModel.modelRange_interior_surjective_fderivWithin_iff",
+    :fixture
+    {:path "/tmp/t01a08_model_range_interior_derivative.lean",
+     :sha256
+     "4974bc8882fd2fde477ebdad676bcbc74c5966dfa56d76f15ff9b7f66c17e548"},
+    :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/SardGeneralModel.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t01A08/interior",
    :acceptance
@@ -29007,11 +29047,13 @@
    :lemma
    {:name
     "ConstructionTargets.SardGeneralModel.modelRange_interior_surjective_fderivWithin_iff",
-    :reported-by [:routes-2026-10-10-t01a08-closure-probe-topo3-r2],
+    :reported-by
+    [:routes-2026-10-10-t01a08-closure-probe-topo3-r2
+     :routes-2026-10-12-t01a08-interior-r1],
     :type
     "∀ {E H} [NormedAddCommGroup E] [NormedSpace ℝ E] [TopologicalSpace H] (I : ModelWithCorners ℝ E H), InteriorDerivativeComparison I",
     :area "sard-convex-domain",
-    :proved-in :routes-2026-10-10-t01a08-closure-probe-topo3-r2},
+    :proved-in :routes-2026-10-12-t01a08-interior-r1},
    :id
    :lemma-constructiontargets-sardgeneralmodel-modelrange-interior-surjective-fderivwithin,
    :kind :lemma,
