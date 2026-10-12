@@ -109,41 +109,65 @@ polygonal arcs, one at a time, fixing already chosen vertices.  At each step
 avoid the finite set of old vertices and transverse crossings.  Prove that
 intersections are finite and consist of endpoints or transverse crossings.
 
-### B5. Cellularize the planar subdivision in every chart
-lean: `surfaceFiniteDiskCover_cellularSubdivision`
+### B5a. Regular neighborhoods and planar faces
+lean: `surfaceFiniteDiskCover_regularNeighborhoodFaces`
 uses: B3, B4, Jordan--Schoenflies for polygonal arcs
-status: revised (the first version incorrectly inferred cellularity from
-transversality; a closed polygonal curve inside a disk leaves an annulus)
+status: revised (transversality alone neither gives cellularity nor makes
+closures of graph-complement components into surfaces at cut vertices)
 
 First insert every transverse crossing from B4 as a vertex and split every
-arc there.  This produces a finite embedded polygonal graph, but its
-complement need not consist of disks.  For every connected complementary
-region, regard its closure in the outer coordinate disk as a compact planar
-surface with finitely many polygonal boundary components.  If it has more
-than one boundary component, choose two components and a polygonal embedded
-arc in the region joining them.  The arc's interior avoids the existing
-finite graph; add its endpoints as vertices and add the arc as an edge.
+arc there.  This produces a finite embedded polygonal graph `G`, whose raw
+complement may have pinched frontiers at cut vertices.  Do not use closures
+of those raw components.  Instead choose pairwise disjoint closed polygonal
+vertex disks and, following the cyclic order of incident half-edges in the
+oriented coordinate disk, pairwise disjoint closed rectangular edge bands.
+Their union `N(G)` is a compact regular neighborhood.  Prove explicitly that
+each component of `N(G)` is a compact surface with boundary, retracts onto the
+corresponding component of `G`, and has boundary a finite disjoint union of
+polygonal cycles determined by the rotation system.
+
+Remove the interior of `N(G)` from the closed outer coordinate disk.  A local
+chart proof at vertex-disk arcs, edge-band sides, and the outer boundary shows
+that every connected component of the remainder is now a genuine compact
+planar surface with finitely many disjoint polygonal boundary cycles.  This is
+the planar-face theorem used below; in particular it covers cut vertices and
+the transverse figure-eight without assigning a boundary-component count to
+a pinched raw frontier.
+
+### B5b. Cellularize the regular-neighborhood faces
+lean: `surfaceFiniteDiskCover_cellularSubdivision`
+uses: B5a, Jordan--Schoenflies for polygonal arcs
+status: revised
+
+For each planar face supplied by B5a, if it has more than one boundary cycle,
+choose two cycles and a polygonal embedded arc in the face joining them.  The
+arc's interior avoids `N(G)` and all earlier cutting arcs; add endpoint
+vertices and the arc to the subdivision.
 
 Cutting along such an arc joins two boundary components and decreases
 `boundaryComponentCount - 1` by one.  Sum this natural-number measure over
-the finitely many complementary regions.  Induction terminates and introduces
-no new non-disk region.  At measure zero every connected region has one
-boundary component; polygonal Jordan--Schoenflies identifies its closure with
-a closed disk.  Record, for every final region, that its frontier is a finite
-cyclic edge path and that its closure is a disk.  The outer-disk containment
-from B3 keeps every chosen arc and every use of Schoenflies inside a single
-chart.  In particular, the nested-polygon counterexample is repaired by an
-arc joining its inner and outer boundary components.
+the finitely many B5a faces.  Prove by cutting a compact surface along a
+properly embedded arc that the result remains a compact planar surface and
+that this measure decreases by exactly one.  Induction terminates.  At measure
+zero every connected face has one polygonal boundary cycle; polygonal
+Jordan--Schoenflies identifies it with a closed disk.  The vertex disks and
+edge bands of `N(G)` already have finite disk subdivisions; subdivide them
+compatibly at all cutting-arc endpoints.  Thus every final cell is a disk and
+every frontier is a finite cyclic edge path.  The outer-disk containment from
+B3 keeps the construction inside one chart.  The nested-polygon example is
+cut across its annular B5a face, while the figure-eight is first unpinched by
+its vertex disk.
 
 ### B6. Triangulate the polygonal cells
 lean: `surfaceFiniteDiskCover_cellTriangulation`
-uses: B5
+uses: B5b
 status: planned
 
 Triangulate each polygonal disk by induction on its number of boundary edges.
 Choose a diagonal lying in the disk, split into smaller polygons, and prove
 compatibility on shared boundary arcs because the complete cellular graph,
-including B5's cutting arcs, is fixed before any region is triangulated.
+including B5b's cutting arcs and B5a's regular-neighborhood subdivision, is
+fixed before any region is triangulated.
 
 ### B7. Assemble the finite complex
 lean: `surfaceFiniteDiskCover_finiteTwoComplex`
