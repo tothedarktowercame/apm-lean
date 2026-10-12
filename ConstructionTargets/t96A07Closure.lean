@@ -309,6 +309,23 @@ theorem horizontalPlane_fderiv_range (z : ℝ) (p : E 2) :
     ext i
     fin_cases i <;> simp [v, horizontalPlaneDerivative, hy2]
 
+/-- Incidence with a positive horizontal level identifies the product of the
+first two sphere coordinates and forces each factor to be nonzero. -/
+theorem crossTerm_horizontalPlane_incident_coordinates
+    (p : Sphere 2) (z : ℝ) (q : E 2)
+    (hinc : crossTermSphereMap p = horizontalPlane z q) (hz : 0 < z) :
+    p.val 0 * p.val 1 = z ∧ p.val 0 ≠ 0 ∧ p.val 1 ≠ 0 := by
+  have hprod := congrArg (fun x : E 3 => x 2) hinc
+  have hprod' : p.val 0 * p.val 1 = z := by
+    simpa [crossTermSphereMap, horizontalPlane] using hprod
+  refine ⟨hprod', ?_, ?_⟩
+  · intro hp0
+    rw [hp0, zero_mul] at hprod'
+    linarith
+  · intro hp1
+    rw [hp1, mul_zero] at hprod'
+    linarith
+
 /-- At the first coordinate point the ambient derivative swaps the two free
 tangent coordinates and has zero first coordinate. -/
 theorem sphereMapAmbientDerivative_firstAxis (v : E 3) :
@@ -326,5 +343,6 @@ theorem sphereMapAmbientDerivative_firstAxis (v : E 3) :
 #print axioms descendedCrossTermMap_mfderiv_range_at_e0
 #print axioms descendedCrossTermMap_notTransverse_zAxis
 #print axioms horizontalPlane_fderiv_range
+#print axioms crossTerm_horizontalPlane_incident_coordinates
 
 end ConstructionTargets.T96A07Closure

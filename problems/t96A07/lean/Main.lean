@@ -96,6 +96,15 @@ theorem plane_fderiv_range (z : ℝ) (p : E 2) :
   simpa [T96A07.plane, horizontalPlane] using
     horizontalPlane_fderiv_range z p
 
+theorem sphereMap_plane_incident_coordinates
+    (p : Sphere 2) (z : ℝ) (q : E 2)
+    (hinc : T96A07.sphereMap p = T96A07.plane z q) (hz : 0 < z) :
+    p.val 0 * p.val 1 = z ∧ p.val 0 ≠ 0 ∧ p.val 1 ≠ 0 := by
+  apply crossTerm_horizontalPlane_incident_coordinates p z q
+  · simpa [T96A07.sphereMap, crossTermSphereMap,
+      T96A07.plane, horizontalPlane] using hinc
+  · exact hz
+
 #print axioms sphereMap_antipodal
 #print axioms sphereMap_contMDiff
 #print axioms descendedSphereMap
@@ -103,6 +112,7 @@ theorem plane_fderiv_range (z : ℝ) (p : E 2) :
 #print axioms descended_mfderiv_range_at_e0
 #print axioms descended_not_transverse_axis
 #print axioms plane_fderiv_range
+#print axioms sphereMap_plane_incident_coordinates
 
 end ConstructionTargets.T96A07Closure
 
