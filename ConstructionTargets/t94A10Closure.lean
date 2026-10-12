@@ -151,6 +151,17 @@ theorem sphereParam_differentiable : Differentiable ℝ sphereParam := by
     (PiLp.continuousLinearEquiv 2 ℝ (fun _ : Fin 3 => ℝ)).symm.differentiable.comp
       hg
 
+theorem sphereParam_contDiff : ContDiff ℝ ⊤ sphereParam := by
+  have hg : ContDiff ℝ ⊤ (fun p : ℝ × ℝ =>
+      ![Real.sin p.1 * Real.cos p.2,
+        Real.sin p.1 * Real.sin p.2,
+        Real.cos p.1]) := by
+    rw [contDiff_pi]
+    intro i
+    fin_cases i <;> simp <;> fun_prop
+  simpa [sphereParam] using
+    (PiLp.continuousLinearEquiv 2 ℝ (fun _ : Fin 3 => ℝ)).symm.contDiff.comp hg
+
 theorem hasDerivAt_sphereParam_lat (s t : ℝ) :
     HasDerivAt (fun u => sphereParam (u, t)) (sphereParamLat (s, t)) s := by
   have hg : HasDerivAt (fun u : ℝ =>
@@ -180,6 +191,62 @@ theorem hasDerivAt_sphereParam_long (s t : ℝ) :
   simpa [sphereParam, sphereParamLong] using
     ((PiLp.continuousLinearEquiv 2 ℝ (fun _ : Fin 3 => ℝ)).symm.hasFDerivAt.comp t
       hg.hasFDerivAt).hasDerivAt
+
+theorem fderiv_sphereParam_lat (s t : ℝ) :
+    fderiv ℝ sphereParam (s, t) (1, 0) = sphereParamLat (s, t) := by
+  have hp : HasFDerivAt (fun u : ℝ => (u, t))
+      ((1 : ℝ →L[ℝ] ℝ).prod (0 : ℝ →L[ℝ] ℝ)) s :=
+    (hasFDerivAt_id s).prodMk (hasFDerivAt_const t s)
+  have hc := (sphereParam_differentiable (s, t)).hasFDerivAt.comp s hp
+  have hu := hc.unique (hasDerivAt_sphereParam_lat s t).hasFDerivAt
+  have := congrArg (fun L => L 1) hu
+  simpa using this
+
+theorem fderiv_sphereParam_long (s t : ℝ) :
+    fderiv ℝ sphereParam (s, t) (0, 1) = sphereParamLong (s, t) := by
+  have hp : HasFDerivAt (fun u : ℝ => (s, u))
+      ((0 : ℝ →L[ℝ] ℝ).prod (1 : ℝ →L[ℝ] ℝ)) t :=
+    (hasFDerivAt_const s t).prodMk (hasFDerivAt_id t)
+  have hc := (sphereParam_differentiable (s, t)).hasFDerivAt.comp t hp
+  have hu := hc.unique (hasDerivAt_sphereParam_long s t).hasFDerivAt
+  have := congrArg (fun L => L 1) hu
+  simpa using this
+
+/-- Pullback of an ambient one-form along the spherical rectangle. -/
+def spherePullbackOneForm
+    (eta : E3 → E3 [⋀^Fin 1]→L[ℝ] ℝ) (p : ℝ × ℝ) :
+    (ℝ × ℝ) [⋀^Fin 1]→L[ℝ] ℝ :=
+  (eta (sphereParam p)).compContinuousLinearMap (fderiv ℝ sphereParam p)
+
+def spherePullbackLatCoeff
+    (eta : E3 → E3 [⋀^Fin 1]→L[ℝ] ℝ) (p : ℝ × ℝ) : ℝ :=
+  spherePullbackOneForm eta p ![(1, 0)]
+
+def spherePullbackLongCoeff
+    (eta : E3 → E3 [⋀^Fin 1]→L[ℝ] ℝ) (p : ℝ × ℝ) : ℝ :=
+  spherePullbackOneForm eta p ![(0, 1)]
+
+theorem spherePullbackLatCoeff_eq
+    (eta : E3 → E3 [⋀^Fin 1]→L[ℝ] ℝ) (p : ℝ × ℝ) :
+    spherePullbackLatCoeff eta p = eta (sphereParam p) ![sphereParamLat p] := by
+  rcases p with ⟨s, t⟩
+  simp only [spherePullbackLatCoeff, spherePullbackOneForm,
+    ContinuousAlternatingMap.compContinuousLinearMap_apply]
+  congr 1
+  funext i
+  fin_cases i
+  exact fderiv_sphereParam_lat s t
+
+theorem spherePullbackLongCoeff_eq
+    (eta : E3 → E3 [⋀^Fin 1]→L[ℝ] ℝ) (p : ℝ × ℝ) :
+    spherePullbackLongCoeff eta p = eta (sphereParam p) ![sphereParamLong p] := by
+  rcases p with ⟨s, t⟩
+  simp only [spherePullbackLongCoeff, spherePullbackOneForm,
+    ContinuousAlternatingMap.compContinuousLinearMap_apply]
+  congr 1
+  funext i
+  fin_cases i
+  exact fderiv_sphereParam_long s t
 
 theorem sphereParam_norm (p : ℝ × ℝ) : ‖sphereParam p‖ = 1 := by
   rw [EuclideanSpace.norm_eq]
