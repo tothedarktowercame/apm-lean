@@ -1,6 +1,8 @@
 import ConstructionTargets.Surfaces
 import ConstructionTargets.PolygonTorusCrosscapRelation
 import ConstructionTargets.PolygonBoundaryVertexClasses
+import ConstructionTargets.PolygonAnnulusRadialMaps
+import ConstructionTargets.PolygonInnerOpenPointedContraction
 
 /-!
 # Polygon surface fundamental groups
@@ -1335,5 +1337,119 @@ theorem polygonCenterDeformationRetract_fixed (P : PairingData) (t : unitInterva
     rw [← he, e.symm_apply_apply]
   rw [hsymm, ← he]
   exact congrArg e (innerDiskRadialHomotopy_fixed t)
+
+open ConstructionTargets.PolygonRadialOpenCover
+open ConstructionTargets.PolygonAnnularOverlapHomeomorph
+open ConstructionTargets.PolygonAnnulusRadialMaps
+
+def annulusPolarHomeomorph :
+    Annulus ≃ₜ Set.Ioo (0 : ℝ) 1 × Circle where
+  toFun x :=
+    (⟨2 * (radius x.1 - 1 / 4), by
+      have hxI : ‖(x.1.1 : ℂ)‖ < 3 / 4 := x.2.1
+      have hxO : 1 / 4 < ‖(x.1.1 : ℂ)‖ := x.2.2
+      constructor <;> dsimp [radius] <;> linarith⟩,
+      radialNormalizeMap x)
+  invFun p :=
+    ⟨⟨(((1 / 4 + p.1.1 / 2 : ℝ) : ℂ) * (p.2.1 : ℂ)), by
+      rw [Metric.mem_closedBall, dist_zero_right, norm_mul, Circle.norm_coe]
+      simp only [Complex.norm_real, Real.norm_eq_abs]
+      rw [abs_of_pos (by linarith [p.1.2.1])]
+      linarith [p.1.2.2]⟩, by
+        constructor
+        · change ‖((1 / 4 + p.1.1 / 2 : ℝ) : ℂ) * (p.2.1 : ℂ)‖ < 3 / 4
+          rw [norm_mul, Circle.norm_coe, mul_one, Complex.norm_real, Real.norm_eq_abs,
+            abs_of_pos (by linarith [p.1.2.1])]
+          linarith [p.1.2.2]
+        · change 1 / 4 < ‖((1 / 4 + p.1.1 / 2 : ℝ) : ℂ) * (p.2.1 : ℂ)‖
+          rw [norm_mul, Circle.norm_coe, mul_one, Complex.norm_real, Real.norm_eq_abs,
+            abs_of_pos (by linarith [p.1.2.1])]
+          linarith [p.1.2.1]⟩
+  left_inv x := by
+    apply Subtype.ext
+    apply Subtype.ext
+    dsimp [radius, radialNormalizeMap]
+    have hx : ‖(x.1.1 : ℂ)‖ ≠ 0 := by
+      intro h
+      have := x.2.2
+      change 1 / 4 < ‖(x.1.1 : ℂ)‖ at this
+      linarith
+    rw [show 1 / 4 + 2 * (‖(x.1.1 : ℂ)‖ - 1 / 4) / 2 = ‖(x.1.1 : ℂ)‖ by ring]
+    push_cast
+    rw [← mul_assoc]
+    simp [hx]
+  right_inv p := by
+    apply Prod.ext
+    · apply Subtype.ext
+      change 2 * (‖((1 / 4 + p.1.1 / 2 : ℝ) : ℂ) * (p.2.1 : ℂ)‖ - 1 / 4) = p.1.1
+      rw [norm_mul, Circle.norm_coe, mul_one, Complex.norm_real, Real.norm_eq_abs,
+        abs_of_pos (by linarith [p.1.2.1])]
+      ring
+    · apply Subtype.ext
+      change ((‖((1 / 4 + p.1.1 / 2 : ℝ) : ℂ) * (p.2.1 : ℂ)‖⁻¹ : ℝ) : ℂ) *
+          (((1 / 4 + p.1.1 / 2 : ℝ) : ℂ) * p.2.1) = p.2.1
+      rw [norm_mul, Circle.norm_coe, mul_one, Complex.norm_real, Real.norm_eq_abs,
+        abs_of_pos (by linarith [p.1.2.1])]
+      push_cast
+      rw [← mul_assoc]
+      rw [inv_mul_cancel₀]
+      simp
+      intro h
+      have hr := congrArg Complex.re h
+      norm_num at hr
+      linarith [p.1.2.1]
+  continuous_toFun := by
+    apply Continuous.prodMk
+    · apply Continuous.subtype_mk
+      exact continuous_const.mul
+        ((continuous_radius.comp continuous_subtype_val).sub continuous_const)
+    · exact radialNormalizeMap.continuous
+  continuous_invFun := by fun_prop
+
+theorem pairingRel_radius (P : PairingData) {x y : Disk} (h : P.Rel x y) :
+    radius x = radius y := by
+  rcases h with ⟨i, t, rfl, rfl⟩
+  simp [radius, norm_edgePoint]
+
+theorem pairingRel_boundary (P : PairingData) {x y : Disk} (h : P.Rel x y) :
+    radius x = 1 ∧ radius y = 1 := by
+  rcases h with ⟨i, t, rfl, rfl⟩
+  simp [radius, norm_edgePoint]
+
+def polygonOverlapHomeomorph (P : PairingData) :
+    overlapOpen P.Rel ≃ₜ Set.Ioo (0 : ℝ) 1 × Circle :=
+  (overlapHomeomorph P.Rel (fun {_ _} h => pairingRel_radius P h)
+    (fun {_ _} h => pairingRel_boundary P h)).symm.trans
+    annulusPolarHomeomorph
+
+structure PolygonOpenCover (P : PairingData) where
+  inner : Set P.Space
+  outer : Set P.Space
+  inner_open : IsOpen inner
+  outer_open : IsOpen outer
+  outer_image : outer = quotientMap P.Rel '' outerSource
+  cover : inner ∪ outer = Set.univ
+  center : {q // q ∈ inner}
+  center_eq : center.1 = P.center
+  contraction : ConstructionTargets.PointedPuncturedCircleContraction.PointedContraction
+    {q // q ∈ inner} center
+  overlap_eq : overlapOpen P.Rel = inner ∩ outer
+  overlap_homeomorph : overlapOpen P.Rel ≃ₜ Set.Ioo (0 : ℝ) 1 × Circle
+
+def openCover (P : PairingData) : PolygonOpenCover P where
+  inner := innerOpen P.Rel
+  outer := outerOpen P.Rel
+  inner_open := innerOpen_isOpen P.Rel (fun {_ _} h => pairingRel_radius P h)
+  outer_open := outerOpen_isOpen P.Rel (fun {_ _} h => pairingRel_radius P h)
+  outer_image := rfl
+  cover := innerOpen_union_outerOpen P.Rel
+  center := ConstructionTargets.PolygonInnerOpenPointedContraction.innerBase P.Rel
+  center_eq := rfl
+  contraction :=
+    ConstructionTargets.PolygonInnerOpenPointedContraction.innerOpenPointedContraction
+      P.Rel (fun {_ _} h => pairingRel_radius P h)
+        (fun {_ _} h => pairingRel_boundary P h)
+  overlap_eq := overlapOpen_eq_inter P.Rel (fun {_ _} h => pairingRel_radius P h)
+  overlap_homeomorph := polygonOverlapHomeomorph P
 
 end ConstructionTargets.PolygonSurfacePiOne
