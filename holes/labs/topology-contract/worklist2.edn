@@ -72788,13 +72788,13 @@
    :consumer :t02A03,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "Commit b07bee059 does not implement the row acceptance theorem. It adds only rotatedEndpointWaypoint_departure_zero_support_pos; safeRightTubeMeridianDeformation is absent, although the row is marked done-unreviewed rather than a STOP with missing-theorems. Exact repair: extend Mathlib in scope by state/proving the required continuous ambient H with both endpoints, pointwise rightTube membership, and leftCore avoidance (or record a legitimate STOP after committed progress with remaining theorem listed).",
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Compare exact norm equation with tube/deletion bounds; exclude zeros or replace correction, then package path and H.",
+    "Polynomial bounds are consistent; construct a collision or strengthen correction, then package nonzero path and H.",
     :outcome :stop,
     :warnings ["Main: 1 placeholder." "Style lint only."],
     :missing-theorems
@@ -72803,7 +72803,8 @@
       :type "endpoint-fixed nonzero path",
       :status :partial,
       :consumers [:t02A03],
-      :depends-on ["waypointDependentDeparture_zero_normSq"],
+      :depends-on
+      ["waypointDependentDeparture_zero_polynomial_bounds"],
       :area "explicit-r3-tube-deformation-retraction"}
      {:name
       "ConstructionTargets.T02A03GeometricTubeDeformation.safeRightTubeMeridianDeformation",
@@ -72814,7 +72815,7 @@
       :area "explicit-r3-tube-deformation-retraction"}],
     :statement-hashes
     {:registry "131/0",
-     :module "abb36c58e5c39656c1f9256cc5d420e0ed63d704",
+     :module "af6bc08c0aafe9d04a239423b1a478a3574da8b0",
      :main "ce9da0dbb4300e81e5a5f31c95d0a0f8344c4325"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
@@ -72826,35 +72827,23 @@
      {:cmd "registry check", :exit 0, :output "131/0"}
      {:cmd "module no-sorry", :exit 1, :expected-exit 1}
      {:cmd "placeholders", :exit 0, :output "1"}
-     {:cmd "git show --check 02f5f401b", :exit 0}],
+     {:cmd "git show --check c65ea5242", :exit 0}],
     :diagnostic-history
     [{:cmd "module compile",
       :exit 1,
-      :finding "Normalized real-part association."}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1791797714640-6747-04bb9b14",
-     :commands
-     ["git show/diff-tree/show --check 2a9c5d5d69e2f19806b70df780c4643a14cbe29e"
-      "sha256sum fixture; blob and placeholder recount"
-      "lake env lean exact committed module"
-      "python3 scripts/statement-registry.py check"
-      "compare parent/prior milestone"],
-     :finding
-     "PASS: program STOP commits new compiled, sorry-free progress beyond the prior milestone: the endpoint-fixed transverse correction is proved nonzero at every old departure zero. Exact scope and fixture hash match; module/Main blobs are 0629f3f5/ce9da0db with placeholder counts 0/1; registry 131/0; axioms standard. The no-new-zero corrected path and safe ambient deformation remain explicitly listed."},
-    :commit "02f5f401b7783e29ac9ec5490bb0d23b96016458",
+      :finding "Fixed norm orientation and product-bound proof."}],
+    :commit "c65ea5242f391154c32c5c601b27c04ea3e17548",
     :changed-paths
     ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
     :fixture
     {:path "ConstructionTargets/T02A03GeometricTubeDeformation.lean",
      :sha256
-     "6d741e7fd0681230e99c74d1f0199f28ecbcfa0ee8424d1b8a274fe093d93816"},
+     "a54a712665736d1a76ce8d8aa5a6583f0361930de28eb30df7f8a901d7e36336"},
     :seat "topo-6"},
    :phase :implementation,
    :type
    "∀ (t : unitInterval) (p : RightTubeMinusLeftCore), (t:ℝ) ≤ 1/2 → (((1-2*(t:ℝ):ℝ):ℂ)+((2*(t:ℝ):ℝ):ℂ)*rotatedEndpointWaypoint p)=0 → 0 < (t:ℝ)*(1-2*(t:ℝ))",
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/safe-right-tube-meridian-deformation",
@@ -82149,7 +82138,8 @@
     :lemma-strongtransversethirdcandidate-mem-planarannulus
     :lemma-strongtransversethirdcandidate-actual-zero
     :lemma-waypointdependentdeparture-factorization
-    :lemma-waypointdependentdeparture-zero-normsq],
+    :lemma-waypointdependentdeparture-zero-normsq
+    :lemma-waypointdependentdeparture-zero-polynomial-bounds],
    :other-consumers []}
   {:consumer :portfolio,
    :phase :lemma,
@@ -82913,6 +82903,19 @@
     :found-in
     ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"]},
    :id :lemma-waypointdependentdeparture-zero-normsq,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "waypointDependentDeparture_zero_polynomial_bounds"},
+   :lemma
+   {:name "waypointDependentDeparture_zero_polynomial_bounds",
+    :reported-by []},
+   :id :lemma-waypointdependentdeparture-zero-polynomial-bounds,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}]}
