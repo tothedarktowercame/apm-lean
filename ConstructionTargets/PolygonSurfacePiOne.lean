@@ -1112,4 +1112,56 @@ def polygonRadialOpenSets (P : PairingData) : PolygonRadialOpenSets P where
     · exact Or.inl ⟨x, hx, rfl⟩
     · exact Or.inr ⟨x, hx, rfl⟩
 
+abbrev InnerDisk := {z : Disk // z ∈ innerDisk}
+
+def PairingData.innerMap (P : PairingData) : InnerDisk → P.Space :=
+  fun z => P.quotientMap z.1
+
+theorem innerMap_injective (P : PairingData) : Function.Injective P.innerMap := by
+  intro x y h
+  rcases eq_or_boundary_of_eqvGen P (Quotient.exact h) with hxy | ⟨hx, _⟩
+  · exact Subtype.ext hxy
+  · exfalso
+    have hx' := x.property
+    change ‖(x.1 : ℂ)‖ < (2 : ℝ) / 3 at hx'
+    linarith
+
+theorem innerOpenEmbedding (P : PairingData) :
+    Topology.IsOpenEmbedding P.innerMap := by
+  rw [Topology.isOpenEmbedding_iff_continuous_injective_isOpenMap]
+  refine ⟨P.continuous_quotientMap.comp continuous_subtype_val,
+    innerMap_injective P, ?_⟩
+  intro s hs
+  rw [isOpen_coinduced]
+  have hopen : IsOpen (Subtype.val '' s : Set Disk) := hs.trans innerDisk_isOpen
+  have heq : P.quotientMap ⁻¹' (P.innerMap '' s) = Subtype.val '' s := by
+    ext x
+    constructor
+    · rintro ⟨z, hz, hzx⟩
+      rcases eq_or_boundary_of_eqvGen P (Quotient.exact hzx.symm) with h | ⟨_, hx⟩
+      · exact ⟨z, hz, h.symm⟩
+      · exfalso
+        have hz' := z.property
+        change ‖(z.1 : ℂ)‖ < (2 : ℝ) / 3 at hz'
+        linarith
+    · rintro ⟨z, hz, rfl⟩
+      exact ⟨z, hz, rfl⟩
+  change IsOpen (P.quotientMap ⁻¹' (P.innerMap '' s))
+  rw [heq]
+  exact hopen
+
+theorem innerMap_range (P : PairingData) :
+    Set.range P.innerMap = (polygonRadialOpenSets P).inner := by
+  ext q
+  constructor
+  · rintro ⟨z, rfl⟩
+    exact ⟨z.1, z.2, rfl⟩
+  · rintro ⟨z, hz, rfl⟩
+    exact ⟨⟨z, hz⟩, rfl⟩
+
+def innerHomeomorph (P : PairingData) :
+    InnerDisk ≃ₜ {q // q ∈ (polygonRadialOpenSets P).inner} := by
+  exact (innerOpenEmbedding P).isEmbedding.toHomeomorph.trans
+    (Homeomorph.setCongr (innerMap_range P))
+
 end ConstructionTargets.PolygonSurfacePiOne
