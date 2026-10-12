@@ -73790,6 +73790,29 @@
    "Instantiate the range map for intersection and both pieces, induce the union component, and assemble coverPreservingShortComplexMap with its two commutative squares.",
    :other-consumers [:t96J06]}
   {:consumer :t97A04,
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/ProductionOpenCoverMayerVietoris.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/mayer-vietoris/subcomplex-inf-image-le",
+   :acceptance
+   {:declaration
+    "ConstructionTargets.ProductionOpenCoverMayerVietoris.subcomplex_inf_image_le",
+    :type
+    "forall {S T : SSet} (P Q : S.Subcomplex) (P' Q' : T.Subcomplex) (F : S ⟶ T), P.image F ≤ P' -> Q.image F ≤ Q' -> (P ⊓ Q).image F ≤ P' ⊓ Q'",
+    :placeholder "apm_t97A04_bridge_3 and H2 placeholder in t96J06",
+    :route-step
+    "restrict the ambient simplicial map to the short-complex intersection"},
+   :id
+   :routes-2026-10-12-subcomplex-inf-image-le-two-consumers-topo2-r1,
+   :kind :reusable-theorem,
+   :area "mv-connecting-naturality",
+   :depends-on [],
+   :current-residual
+   "Construct infimum, biproduct, and supremum maps and package both squares.",
+   :other-consumers [:t96J06]}
+  {:consumer :t97A04,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
    :stop-count 0,
@@ -73833,6 +73856,46 @@
       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn"],
      :finding
      "PASS: independently reproduced the recorded STOP/refutation. Commit 89adf4295 changes only worklist2.edn; the scoped module blob is identical before, at, and after that commit. Fixture SHA-256 is exactly 9b867a9a9525e8055e66ba1c1d52a73e2a5665f436382b24289aa0f3bafe7164 and compiles placeholder-free with only propext, Classical.choice, and Quot.sound. Its source-to-target ShortComplex.Hom is inhabited by zero while f, hU, and hV are unused; the frozen Nonempty type exposes no intersection, biproduct-of-pieces, or union component equations and therefore cannot certify the requested induced morphism. Registry is 131/0; worklist validates; comment-stripped consumer counts remain two sorries each; frozen fingerprints are t97A04 ca1b2cb3c6594276811618321d5c0604c2f38fc4594a6b21ae161a711a923a34 and t96J06 4b16fe5a91cccac45b603d2bb0f33e4433e092a5c4d26b6f6e854e676fbc4569."},
+    :probe
+    {:outcome :revise,
+     :seat "topo-8",
+     :fixture
+     {:path "/tmp/check.lean",
+      :sha256
+      "1be1bdf92bcb3195c72f74c6bb679a519f4156e4711b0bb842d9c5479df6dbc1"},
+     :commands
+     [{:cmd "lake env lean /tmp/check.lean", :exit 0}
+      {:cmd "sha256sum /tmp/check.lean", :exit 0}
+      {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
+     :finding
+     "The short complex uses the infimum of the two ranges, not the range of U∩V; the direct component is ill-typed. The compiled image-of-inf bound permits restriction of the ambient map to that object.",
+     :prerequisite
+     {:consumer :t97A04,
+      :phase :implementation,
+      :state :open,
+      :scope
+      ["ConstructionTargets/ProductionOpenCoverMayerVietoris.lean"],
+      :dag-node
+      "TOPOLOGY-ROUTES.md/mayer-vietoris/subcomplex-inf-image-le",
+      :acceptance
+      {:declaration
+       "ConstructionTargets.ProductionOpenCoverMayerVietoris.subcomplex_inf_image_le",
+       :type
+       "forall {S T : SSet} (P Q : S.Subcomplex) (P' Q' : T.Subcomplex) (F : S ⟶ T), P.image F ≤ P' -> Q.image F ≤ Q' -> (P ⊓ Q).image F ≤ P' ⊓ Q'",
+       :placeholder "apm_t97A04_bridge_3 and H2 placeholder in t96J06",
+       :route-step
+       "restrict the ambient simplicial map to the short-complex intersection"},
+      :id
+      :routes-2026-10-12-subcomplex-inf-image-le-two-consumers-topo2-r1,
+      :kind :reusable-theorem,
+      :area "mv-connecting-naturality",
+      :depends-on [],
+      :current-residual
+      "Construct infimum, biproduct, and supremum maps and package both squares.",
+      :other-consumers [:t96J06]},
+     :residual
+     "Bank the image bound, then compile the specified induced ShortComplex.Hom."},
     :fixture
     {:path "/tmp/production_cover_short_complex_map_contract.lean",
      :sha256
@@ -73841,7 +73904,7 @@
     "The compiled stronger theorem has no continuous map and no cover-preservation assumptions: forall U V U' V', Nonempty (shortComplex U V ⟶ shortComplex U' V'), proved by ⟨0⟩. Hence the frozen proposition erases precisely the data and commutative-square evidence required by the route's next naturality step.",
     :seat "topo-8"},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope
    ["ConstructionTargets/ProductionOpenCoverMayerVietoris.lean"],
    :dag-node
@@ -73865,7 +73928,8 @@
    :fail-count 0,
    :depends-on
    [:routes-2026-10-10-subcomplex-mv-connecting-naturality-two-consumers-topo2-r1
-    :routes-2026-10-10-ambient-subspace-range-map-two-consumers-topo2-r1],
+    :routes-2026-10-10-ambient-subspace-range-map-two-consumers-topo2-r1
+    :routes-2026-10-12-subcomplex-inf-image-le-two-consumers-topo2-r1],
    :current-residual
    "Prove that the intersection and union components of this morphism commute with booleanIntersectionProductionHomologyIso and booleanUnionProductionHomologyIso, then conjugate subcomplex connecting naturality.",
    :other-consumers [:t96J06]}
