@@ -3646,6 +3646,35 @@ theorem complexArrivalCorrection_zero_scaled_normSq
   rw [hr, hi]
   ring
 
+/-- Global nonvanishing certificate for a corrected arrival leg, expressed
+without division so it also applies at `t = 3/4`. -/
+theorem complexArrivalCorrection_ne_zero_of_scaled_normSq_outside
+    (t : unitInterval) (c : ℂ)
+    (hc : ((4 * (t : ℝ) - 3) - (1 + c.re)) ^ 2 +
+          ((4 * (t : ℝ) - 3) * c.im) ^ 2 <
+          (9 / 16 : ℝ) * (4 * (t : ℝ) - 3) ^ 2 ∨
+      (25 / 16 : ℝ) * (4 * (t : ℝ) - 3) ^ 2 <
+        ((4 * (t : ℝ) - 3) - (1 + c.re)) ^ 2 +
+          ((4 * (t : ℝ) - 3) * c.im) ^ 2)
+    (p : RightTubeMinusLeftCore) :
+    (((2 - 2 * (t : ℝ) : ℝ) : ℂ) * positiveRealPlanarWaypointMap p +
+        ((2 * (t : ℝ) - 1 : ℝ) : ℂ) *
+          rightTubeCorePlanarComplex p.1 + c) ≠ 0 := by
+  intro hz
+  have heq := complexArrivalCorrection_zero_scaled_normSq t c p hz
+  have hb := rightTubeCorePlanarNormBounds p.1 p.2.1
+  have hs : ‖rightTubeCorePlanarComplex p.1‖ ^ 2 =
+      Complex.normSq (rightTubeCorePlanarComplex p.1) := Complex.sq_norm _
+  have hn : 0 ≤ ‖rightTubeCorePlanarComplex p.1‖ := norm_nonneg _
+  have ht : 0 ≤ (4 * (t : ℝ) - 3) ^ 2 := sq_nonneg _
+  have hlo : (9 / 16 : ℝ) ≤
+      Complex.normSq (rightTubeCorePlanarComplex p.1) := by nlinarith
+  have hhi : Complex.normSq (rightTubeCorePlanarComplex p.1) ≤
+      (25 / 16 : ℝ) := by nlinarith
+  have hslo := mul_le_mul_of_nonneg_left hlo ht
+  have hshi := mul_le_mul_of_nonneg_left hhi ht
+  rcases hc with hc | hc <;> nlinarith
+
 end ConstructionTargets.T02A03GeometricTubeDeformation
 
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeNormalComplex_eq_zero_iff
@@ -3759,6 +3788,7 @@ end ConstructionTargets.T02A03GeometricTubeDeformation
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.complexArrivalCorrection_sevenEighths_zero_normSq
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.complexArrivalCorrection_sevenEighths_ne_zero_of_normSq_outside
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.complexArrivalCorrection_zero_scaled_normSq
+#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.complexArrivalCorrection_ne_zero_of_scaled_normSq_outside
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_twiceCorrected_departure_zero_coordinates
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_twiceCorrected_departure_zero_normSq
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_twiceCorrected_departure_zero_scalar_bounds
