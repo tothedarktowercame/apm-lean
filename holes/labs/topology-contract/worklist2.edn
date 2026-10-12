@@ -74839,7 +74839,9 @@
    :current-residual "Elect B2 or route B1 residual.",
    :other-consumers []}
   {:consumer :t96J02,
-   :stop-count 2,
+   :owner-reopen
+   "reopened: a lemma this row reported missing is now banked",
+   :stop-count 0,
    :review-finding
    "Deterministic defect: the STOP commits no B2 progress; e949a5129 is the already-reviewed B1 repair, contains no standardPairingData or six-edge/orbit/quotient comparison, and its actual SHA-256 is 8d3f275f0298df761fad9b234b1cbb764e812925a1c078e4d95347aa7b84f885, not the recorded fixture hash. Extend Mathlib: state and prove the missing theorem in scope.",
    :evidence
@@ -74886,7 +74888,7 @@
      "c079c9d965537cd9a0c270a763e2b4bedccd298d468ad95a02f83e66fc9fbe11"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope ["ConstructionTargets/PolygonSurfacePiOne.lean"],
    :dag-node "ConstructionTargets/PolygonSurfacePiOne.blueprint.md/B2",
    :acceptance
@@ -74900,7 +74902,7 @@
    :id :routes-2026-10-12-polygon-b2-topo2-r1,
    :kind :reusable-theorem,
    :area "polygon-surface-pi1",
-   :fail-count 1,
+   :fail-count 0,
    :depends-on
    [:routes-2026-10-12-polygon-b1-topo2-r1
     :routes-2026-10-12-checkpoint-topo2-r12],
@@ -75055,6 +75057,18 @@
     [{:cmd "initial endpoint proofs",
       :exit 1,
       :correction "normalized Icc endpoints"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791841465650-7944-18e6c520",
+     :commands
+     ["git show dc5733b05:ConstructionTargets/PolygonSurfacePiOne.lean | lake env lean /dev/stdin"
+      "#print axioms on three frozen declarations"
+      "python3 scripts/statement-registry.py check"
+      "git show --check/hash/diff-tree dc5733b05"
+      "comment-stripped placeholder scan"],
+     :finding
+     "PASS: exact recorded source compiles; sole path and SHA-256 match; registry 131/0, placeholders 0, standard axioms only. The orientable endpoint lemmas join all four coordinates and consecutive handle blocks; the induction proves oneVertex in SurfaceRel then transfers through the exact EqvGen iff. standardPairingData selects the proved data in both Bool branches, and standardPairingData_space_homeomorph selects genuine quotient Homeomorphs. B2 is discharged."},
     :commit "dc5733b05",
     :commits ["726154657" "dc5733b05"],
     :changed-paths ["ConstructionTargets/PolygonSurfacePiOne.lean"],
@@ -75064,7 +75078,7 @@
      "ab615ed1a9e6a24c1d6b09a6c4b082dadb10c9eb46bd268c8fe954ce81db94bc"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/PolygonSurfacePiOne.lean"],
    :dag-node "ConstructionTargets/PolygonSurfacePiOne.blueprint.md/B2",
    :acceptance
@@ -84570,7 +84584,7 @@
    :other-consumers [:t92J05 :t94J04 :t97A01 :t97A03]}
   {:consumer :t96J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -84585,7 +84599,9 @@
      :routes-2026-10-12-polygon-b2-completion-topo2-r1],
     :type
     "standard and six-edge PairingData with orbit and quotient comparisons",
-    :area "polygon-surface-pi1"},
+    :area "polygon-surface-pi1",
+    :banked-by :routes-2026-10-12-polygon-b2-completion-topo2-r1,
+    :banked-commit "dc5733b05"},
    :id
    :lemma-constructiontargets-polygonsurfacepione-standardpairingdata,
    :kind :lemma,
@@ -84691,7 +84707,7 @@
    :other-consumers [:t92J05 :t94J04 :t97A03]}
   {:consumer :t96J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "standardPairingData",
@@ -84703,7 +84719,9 @@
     :type
     "uniform PairingData with oneVertex, orbit and quotient comparisons",
     :area "polygon-surface-pi1",
-    :proved-in :routes-2026-10-12-polygon-b2-completion-topo2-r1},
+    :proved-in :routes-2026-10-12-polygon-b2-completion-topo2-r1,
+    :banked-by :routes-2026-10-12-polygon-b2-completion-topo2-r1,
+    :banked-commit "dc5733b05"},
    :id :lemma-standardpairingdata,
    :kind :lemma,
    :depends-on
@@ -84884,7 +84902,7 @@
    :other-consumers []}
   {:consumer :t96J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "standardPairingData_space_homeomorph",
@@ -84896,7 +84914,9 @@
     :type
     "uniform standard PairingData and orientable quotient homeomorphism",
     :area "polygon-surface-pi1",
-    :proved-in :routes-2026-10-12-polygon-b2-completion-topo2-r1},
+    :proved-in :routes-2026-10-12-polygon-b2-completion-topo2-r1,
+    :banked-by :routes-2026-10-12-polygon-b2-completion-topo2-r1,
+    :banked-commit "dc5733b05"},
    :id :lemma-standardpairingdata-space-homeomorph,
    :kind :lemma,
    :depends-on
@@ -85004,7 +85024,7 @@
    :other-consumers [:t92J05 :t94J04 :t97A03]}
   {:consumer :t92J05,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "orientable_standard_oneVertex",
@@ -85014,7 +85034,9 @@
     :reported-by [:routes-2026-10-12-polygon-b2-completion-topo2-r1],
     :type "orientable standard vertices form one class",
     :area "polygon-surface-pi1",
-    :proved-in :routes-2026-10-12-polygon-b2-completion-topo2-r1},
+    :proved-in :routes-2026-10-12-polygon-b2-completion-topo2-r1,
+    :banked-by :routes-2026-10-12-polygon-b2-completion-topo2-r1,
+    :banked-commit "dc5733b05"},
    :id :lemma-orientable-standard-onevertex,
    :kind :lemma,
    :depends-on [],
