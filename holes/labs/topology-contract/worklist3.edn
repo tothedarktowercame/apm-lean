@@ -30004,7 +30004,7 @@
    :depends-on [],
    :other-consumers []}
   {:consumer :t00A02,
-   :stop-count 8,
+   :stop-count 9,
    :review-finding
    "Program-row defect: commit ebbfe625 repairs the B5 mathematics, but changes only SurfaceClassification.blueprint.md and commits no new compiled, sorry-free, standard-axiom result since the prior program-history entry; :missing-theorems is empty. The successful 8245-job build merely rebuilds pre-existing SurfaceClassification code and is not a new milestone. Repair by implementing and committing the next listed milestone (B1 FiniteTwoComplex/Realization or another genuine supporting result), compiling it without placeholders, and recording that proved milestone in :missing-theorems.",
    :implements-lemma
@@ -30019,26 +30019,25 @@
      :t96A01 [1 1],
      :t97J02 [3 3]},
     :residual
-    "B4: define polygonal boundary maps and prove finite general position.",
+    "B4: polygonal approximation and finite transverse-crossing theorem.",
     :outcome :stop,
     :warnings [],
     :missing-theorems
     [{:name
-      "ConstructionTargets.SurfaceClassification.FiniteClosedDiskCover.boundaryArcIndex_card",
+      "ConstructionTargets.SurfaceClassification.FiniteClosedDiskCover.boundaryArc_continuous",
       :type
-      "(C : FiniteClosedDiskCover M) : Fintype.card C.BoundaryArcIndex = 3 * C.centers.card",
+      "(C : FiniteClosedDiskCover M) (a : C.BoundaryArcIndex) : Continuous (C.boundaryArc a)",
       :status :proved,
       :consumers
       [:t00A02 :t00A03 :t91J05 :t92J05 :t94J04 :t96A01 :t97J02],
       :depends-on
-      ["ConstructionTargets.SurfaceClassification.compactSmoothSurfaceFiniteClosedDiskCover"],
+      ["ConstructionTargets.SurfaceClassification.FiniteClosedDiskCover.boundaryArcIndex_card"],
       :area "surface-classification"}],
     :statement-hashes {:registry "131/131"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
-    :reason
-    "B4 finite induction index proved: three boundary arcs per cover disk",
+    :reason "B4 scheduled boundary arcs defined and proved continuous",
     :commands
     [{:cmd "lake build ConstructionTargets.SurfaceClassification",
       :exit 0}
@@ -30051,31 +30050,17 @@
       "rg -n sorry-or-axiom ConstructionTargets/SurfaceClassification.lean",
       :exit 1,
       :expected-exit 1}],
-    :continue-from "146d80700a288d6c8328e169591e21723c5fbb73",
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1791815216846-7097-e7e96dca",
-     :commands
-     ["git show/diff-tree 146d807"
-      "lake env lean /tmp/surface_face_bound_check.lean"
-      "lake env lean ConstructionTargets/SurfaceClassification.lean"
-      "lake build ConstructionTargets.SurfaceClassification"
-      "python3 scripts/statement-registry.py check"
-      "git diff 146d807^ 146d807 --check"
-      "rg source/consumer placeholders"],
-     :finding
-     "PASS program STOP: reviewer codex-11. Commit 146d807 is new since reviewed history and adds compiled, sorry-free B4 infrastructure listed in :missing-theorems: BoundaryArcIndex, its exact 3*centers.card count, and finite earlier indices. The representation is faithfully centers-subtype times Fin 3 and makes no premature transversality claim; polygonal maps/general position remain explicit residual. Scope/blob match. Fixture/module/build pass (8245 jobs), registry 131/131, code placeholders 0, standard axioms only; consumer counts unchanged 2/2/3/3/2/1/3."},
-    :commit "146d80700a288d6c8328e169591e21723c5fbb73",
+    :continue-from "3aacc9772be1727b2f61eaf66b295a9edde87950",
+    :commit "3aacc9772be1727b2f61eaf66b295a9edde87950",
     :changed-paths ["ConstructionTargets/SurfaceClassification.lean"],
     :program-history
-    [{:commit "cf9b4a46690621bb821b75d1455b32ff4cad7d44",
-      :result :B3-proved}
-     {:commit "146d80700a288d6c8328e169591e21723c5fbb73",
-      :result :B4-index-proved}],
+    [{:commit "146d80700a288d6c8328e169591e21723c5fbb73",
+      :result :B4-index-proved}
+     {:commit "3aacc9772be1727b2f61eaf66b295a9edde87950",
+      :result :B4-arcs-proved}],
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SurfaceClassification.lean"
     "ConstructionTargets/SurfaceClassification.md"
@@ -30242,6 +30227,29 @@
    :kind :lemma,
    :depends-on
    [:lemma-constructiontargets-surfaceclassification-compactsmoothsurfacefinitecloseddiskco],
+   :other-consumers [:t00A03 :t91J05 :t92J05 :t94J04 :t96A01 :t97J02]}
+  {:consumer :t00A02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.SurfaceClassification.FiniteClosedDiskCover.boundaryArc_continuous",
+    :type
+    "(C : FiniteClosedDiskCover M) (a : C.BoundaryArcIndex) : Continuous (C.boundaryArc a)"},
+   :lemma
+   {:name
+    "ConstructionTargets.SurfaceClassification.FiniteClosedDiskCover.boundaryArc_continuous",
+    :reported-by [:program-2026-10-12-surface-classification],
+    :type
+    "(C : FiniteClosedDiskCover M) (a : C.BoundaryArcIndex) : Continuous (C.boundaryArc a)",
+    :area "surface-classification",
+    :proved-in :program-2026-10-12-surface-classification},
+   :id
+   :lemma-constructiontargets-surfaceclassification-finitecloseddiskcover-boundaryarc-cont,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-surfaceclassification-finitecloseddiskcover-boundaryarcindex],
    :other-consumers
    [:t00A03 :t91J05 :t92J05 :t94J04 :t96A01 :t97J02]}],
  :consumer-baselines {},
