@@ -113898,6 +113898,19 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder/diff validation", :exit 0}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791764276807-6038-1cfc81cc",
+     :commands
+     ["git show/diff-tree d7259ce0"
+      "sha256/diff/placeholder checks"
+      "statement-registry.py check"
+      "lake env lean ConstructionTargets/PointWedgeVanKampen.lean"
+      "lake build ConstructionTargets.PointWedgeVanKampen"
+      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (expected absent)"],
+     :finding
+     "PASS: new compiled sorry-free B6 progress definitionally expands the right connector hom as the right-leg factor followed by the Unit round-trip, correctly asymmetric with the inverse-oriented left expansion. Neither factor is normalized away. Exact two-file scope and frozen hashes match; 0 placeholders; registry 131/131; standard axioms. Four inner factors, outer comparisons, literal lifts, and B12 remain listed; absent final target is a valid program STOP."},
     :commit "d7259ce0356a2064593cf3c3210f6bab59ff01d5",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
@@ -113908,7 +113921,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113929,7 +113942,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Left comparison expands to the Unit round-trip then inverse leg factor; neither is normalized.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Right comparison expands to the right-leg factor then Unit round-trip; neither is normalized.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -114083,7 +114096,11 @@
     {:job 6,
      :commit "e05114334de7a1eb639eda3ee214c522df7e88bc",
      :reason
-     "Left comparison expands to the Unit round-trip then inverse leg factor; neither is normalized."}]}
+     "Left comparison expands to the Unit round-trip then inverse leg factor; neither is normalized."}
+    {:job 7,
+     :commit "d7259ce0356a2064593cf3c3210f6bab59ff01d5",
+     :reason
+     "Right comparison expands to the right-leg factor then Unit round-trip; neither is normalized."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
