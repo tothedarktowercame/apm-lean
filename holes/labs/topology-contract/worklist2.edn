@@ -75980,8 +75980,69 @@
      :typed-residual-change
      :infrastructure-packets
      :review-outcomes]},
+   :evidence
+   {:outcome :replan,
+    :seat "topo-8",
+    :commands
+    [{:cmd
+      "bb holes/labs/topology-contract/build_step.bb priorities holes/labs/topology-contract/worklist2.edn",
+      :exit 0}],
+    :finding
+    {:measures
+     {:placeholder-delta 0,
+      :typed-residual-change
+      "annular side passed; B4 now banked; B5 ready",
+      :infrastructure-packets 1,
+      :review-outcomes {:pass 1}},
+     :top "SLSC 6; polygon presentation 5",
+     :routes "five polygon routes advance to B5"},
+    :replacement-items
+    [{:consumer :t96J02,
+      :phase :implementation,
+      :state :open,
+      :scope ["ConstructionTargets/PolygonSurfacePiOne.lean"],
+      :dag-node
+      "ConstructionTargets/PolygonSurfacePiOne.blueprint.md/B5",
+      :acceptance
+      {:declaration
+       "ConstructionTargets.PolygonSurfacePiOne.quotientMap_prod_unitInterval",
+       :type
+       "product quotient theorem and relation-preserving homotopy descent",
+       :blueprint
+       "ConstructionTargets/PolygonSurfacePiOne.blueprint.md",
+       :placeholder "five π₁ routes",
+       :route-step "B5 homotopy descent"},
+      :id :routes-2026-10-12-polygon-b5-topo2-r1,
+      :kind :reusable-theorem,
+      :area "polygon-surface-pi1",
+      :depends-on
+      [:routes-2026-10-12-polygon-b4-annular-side-topo2-r1],
+      :current-residual "Implement B6.",
+      :other-consumers [:t92J05 :t94J04 :t97A01 :t97A03]}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 1,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :phase :strategy,
+      :state :blocked,
+      :scope [],
+      :dag-node "TOPOLOGY-ROUTES.md",
+      :acceptance {:strategy "Rerun after B5."},
+      :id :routes-2026-10-12-checkpoint-topo2-r20,
+      :kind :strategy-checkpoint,
+      :area "portfolio",
+      :depends-on [:routes-2026-10-12-polygon-b5-topo2-r1],
+      :current-residual "Elect B6.",
+      :other-consumers []}],
+    :author "topo-8",
+    :disposition :replan},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance {:strategy "Rerun after annular side."},
@@ -75992,6 +76053,49 @@
    [:routes-2026-10-12-polygon-b4-annular-side-topo2-r1
     :routes-2026-10-12-checkpoint-topo2-r18],
    :current-residual "Elect contraction/overlap.",
+   :other-consumers []}
+  {:consumer :t96J02,
+   :phase :implementation,
+   :state :blocked,
+   :scope ["ConstructionTargets/PolygonSurfacePiOne.lean"],
+   :dag-node "ConstructionTargets/PolygonSurfacePiOne.blueprint.md/B5",
+   :acceptance
+   {:declaration
+    "ConstructionTargets.PolygonSurfacePiOne.quotientMap_prod_unitInterval",
+    :type
+    "product quotient theorem and relation-preserving homotopy descent",
+    :blueprint "ConstructionTargets/PolygonSurfacePiOne.blueprint.md",
+    :placeholder "five π₁ routes",
+    :route-step "B5 homotopy descent"},
+   :id :routes-2026-10-12-polygon-b5-topo2-r1,
+   :kind :reusable-theorem,
+   :area "polygon-surface-pi1",
+   :depends-on
+   [:routes-2026-10-12-polygon-b4-annular-side-topo2-r1
+    :routes-2026-10-12-checkpoint-topo2-r19],
+   :current-residual "Implement B6.",
+   :other-consumers [:t92J05 :t94J04 :t97A01 :t97A03]}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 1,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md",
+   :acceptance {:strategy "Rerun after B5."},
+   :id :routes-2026-10-12-checkpoint-topo2-r20,
+   :kind :strategy-checkpoint,
+   :area "portfolio",
+   :depends-on
+   [:routes-2026-10-12-polygon-b5-topo2-r1
+    :routes-2026-10-12-checkpoint-topo2-r19],
+   :current-residual "Elect B6.",
    :other-consumers []}
   {:consumer :t94A08,
    :phase :probe,
