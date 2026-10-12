@@ -79661,6 +79661,19 @@
     [{:cmd "closure compile",
       :exit 1,
       :finding "Normalized determinant sum."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791770343568-6162-c3f0ebd0",
+     :commands
+     ["git show/check/diff da84484c8..1fda42ff7"
+      "verify scoped blobs, fixture SHA, ancestry"
+      "lake build ConstructionTargets.t94A10Closure"
+      "lake env lean closure and t94A10 Main"
+      "statement-registry check/fingerprint"
+      "placeholder and axiom checks"],
+     :finding
+     "PASS: 1fda42ff789847280f9a7f54b02d0f5849c6446b adds compiled, sorry-free B3-B4 completion after da84484c8; both changed paths are scoped. Closure/blueprint/Main blobs 57a7b331/808e174f/d1744a8b and fixture d1de7e34 match. The product derivative and alternating determinant terms cancel to extDeriv=0 off zero; eventual equality on a neighborhood avoiding zero correctly transfers differentiability and extDeriv to the frozen arbitrary extension. Lean gates pass with standard axioms only; registry 131/0, frozen hash d1822221 unchanged, closure/Main placeholders 0/1. STOP lists B5 then B6-B11."},
     :commit "1fda42ff789847280f9a7f54b02d0f5849c6446b",
     :changed-paths
     ["ConstructionTargets/t94A10Closure.lean"
@@ -79671,7 +79684,7 @@
      "d1de7e343f52ada86980069ec7aa97a245dad8e5da58c0b1c4372a7407a30564"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t94A10/lean/Main.lean"
     "problems/t94A10/status.json"
@@ -79700,8 +79713,9 @@
      :commit "2e890e314aa6f3a9d846fc01cb336afd0664f039",
      :reason :blueprint-revised}
     {:job 3, :commit "9950771b4", :reason :program-milestone-complete}
-    {:job 4,
-     :commit "da84484c8",
+    {:job 4, :commit "da84484c8", :reason :program-milestone-complete}
+    {:job 5,
+     :commit "1fda42ff789847280f9a7f54b02d0f5849c6446b",
      :reason :program-milestone-complete}]}
   {:consumer :t97A04,
    :phase :lemma,
@@ -81327,7 +81341,7 @@
    :other-consumers []}
   {:consumer :t94A10,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -81338,7 +81352,9 @@
     :reported-by [:program-2026-10-11-close-t94a10],
     :type "solid-angle extDeriv vanishes off zero",
     :area "periodic-stokes-square",
-    :proved-in :program-2026-10-11-close-t94a10},
+    :proved-in :program-2026-10-11-close-t94a10,
+    :banked-by :program-2026-10-11-close-t94a10,
+    :banked-commit "1fda42ff789847280f9a7f54b02d0f5849c6446b"},
    :id
    :lemma-constructiontargets-t94a10closure-solidangleambient-closed,
    :kind :lemma,
@@ -81682,7 +81698,7 @@
    :other-consumers []}
   {:consumer :t94A10,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -81693,7 +81709,9 @@
     :reported-by [:program-2026-10-11-close-t94a10],
     :type "B4 frozen adapter",
     :area "periodic-stokes-square",
-    :proved-in :program-2026-10-11-close-t94a10},
+    :proved-in :program-2026-10-11-close-t94a10,
+    :banked-by :program-2026-10-11-close-t94a10,
+    :banked-commit "1fda42ff789847280f9a7f54b02d0f5849c6446b"},
    :id
    :lemma-constructiontargets-t94a10closure-bridge-solidangle-closed,
    :kind :lemma,
