@@ -21,21 +21,26 @@ with `Set.range t ⊆ {x | x.1 ∈ Set.Ioo 0 1}`, and a homeomorphism
 `Q : I ≃ₜ Set.Icc (-(n + 2 : ℝ)) (n + 2 : ℝ)` satisfying
 `∀ x, (Q (t x) : ℝ) = (q x : ℝ)`.
 
-uses: Mathlib `Continuous.strictMono_of_inj_boundedOrder`, its antitone
-counterpart, endpoint extrema for monotone maps, affine homeomorphisms of
-closed intervals, and the pasting lemma for two closed endpoint intervals
+uses: Mathlib `Continuous.strictMono_of_inj_boundedOrder` and its antitone
+counterpart, applied separately to `t` and to the underlying map of `q`;
+endpoint extrema for monotone maps, affine homeomorphisms of closed intervals,
+and the pasting lemma for two closed endpoint intervals
 
 status: planned
 
-Split on whether `t` is strictly monotone or strictly antitone.  Its endpoint
-images are distinct interior points and bound `range t`.  On that middle
-interval prescribe `q ∘ t⁻¹`; on the two complementary endpoint intervals use
-the unique affine maps to the two complementary target intervals.  In the
-antitone case swap the target endpoints.  The three formulas agree at both
-seams.  Prove continuity by closed-set pasting, strict monotonicity (or strict
-antitonicity) piecewise and across seams, and surjectivity by the intermediate
-value theorem.  Package the continuous bijection as a homeomorphism using
-compactness of `I` and the Hausdorff target.
+Classify both `t` and the underlying real-valued map of `q` as strictly
+monotone or strictly antitone.  The endpoint images of `t` are distinct
+interior points and bound `range t`.  On that middle interval prescribe
+`q ∘ t⁻¹`.  Its orientation is increasing exactly when `q` and `t` have the
+same orientation, and decreasing exactly when their orientations differ.
+Assign the two outer affine pieces according to this *composite* orientation:
+in the increasing cases join the left endpoint to `-(n+1)` and `n+1` to the
+right endpoint; in the decreasing cases join the left endpoint to `n+1` and
+`-(n+1)` to the right endpoint.  Thus all four `(orientation t, orientation
+q)` cases agree at both seams.  Prove continuity by closed-set pasting,
+strict monotonicity or strict antitonicity piecewise and across seams, and
+surjectivity by the intermediate value theorem.  Package the continuous
+bijection as a homeomorphism using compactness of `I` and the Hausdorff target.
 
 ### B2. Canonical coordinates on one embedded stage
 
