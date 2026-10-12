@@ -113890,6 +113890,18 @@
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder/diff validation", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791823664313-7453-8f9f340f",
+     :commands
+     ["git show/diff-tree 20d004b1e"
+      "sha256 + placeholder + registry checks"
+      "lake env lean ConstructionTargets/PointWedgeVanKampen.lean"
+      "lake build ConstructionTargets.PointWedgeVanKampen"
+      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (expected absent)"],
+     :finding
+     "Scope is exactly Lean+MD; source/doc/blueprint hashes match; placeholders 0->0; registry 131/131. The theorem faithfully unfolds reconstructed transport glue at the unit coordinate into forward left comparison, inverse-overlap-whiskered reverse glue, then inverse right comparison. Order, inverses, and coordinate-span morphism boundaries match transportObj. It compiles sorry-free with only propext, Classical.choice, Quot.sound. This is new usable progress; residual is evaluating the middle glue at its representative, substituting outer comparisons, then B6/B12. Final target remains absent as declared."},
     :commit "20d004b1ee0fe483dbda38809b5c544f7dabcce3",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
@@ -113900,7 +113912,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113921,7 +113933,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Unit coordinate glue is eliminated from the counit square.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Reconstructed coordinate glue is expanded into its three ordered transport factors.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -114365,7 +114377,11 @@
     {:job 7,
      :commit "84dbb162c9f5dcf35286a8a9994f6bfd85dceda9",
      :reason
-     "Unit coordinate glue is eliminated from the counit square."}]}
+     "Unit coordinate glue is eliminated from the counit square."}
+    {:job 8,
+     :commit "20d004b1ee0fe483dbda38809b5c544f7dabcce3",
+     :reason
+     "Reconstructed coordinate glue is expanded into its three ordered transport factors."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
