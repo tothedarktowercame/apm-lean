@@ -20813,6 +20813,20 @@
       "git diff --check -- ConstructionTargets/ManifoldFundamentalClass.lean",
       :exit 0}
      {:cmd "rg forbidden scoped file", :exit 1, :expected-exit 1}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791810423730-6958-072309be",
+     :commands
+     ["git show/diff-tree 1d553ba3"
+      "sha256sum /tmp/closedconnect.lean"
+      "lake env lean /tmp/closedconnect.lean"
+      "lake env lean ConstructionTargets/ManifoldFundamentalClass.lean"
+      "python3 scripts/statement-registry.py check"
+      "git diff 1d553ba3^ 1d553ba3 --check"
+      "rg placeholder counts"],
+     :finding
+     "PASS: reviewer codex-11. Commit scope is exactly ManifoldFundamentalClass.lean; recorded blob is current; fixture SHA matches. Fixture and module compile with 9 pre-existing warnings; theorem uses only propext, Classical.choice, Quot.sound. The forgotten coefficient connecting map and concrete pair connecting map are related in the correct direction through the absolute/relative comparison isomorphisms; the supporting short-exact theorem is compiled and standard-axiom. Registry 131/131; scoped forbidden count 0; counts unchanged: t00 bridge=1/sorry=1, t98 sorry=1."},
     :commit "1d553ba3b0c75b0e005cbb2963a73cf16b97c06a",
     :changed-paths
     ["ConstructionTargets/ManifoldFundamentalClass.lean"],
@@ -20822,7 +20836,7 @@
      "0d3a75da51f8dcfb2754ce45c1a6b8b7c787be9cf562ad088c4d9d944575608e"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/manifold-fundamental-class",
    :acceptance
@@ -20896,7 +20910,7 @@
       "0d3a75da51f8dcfb2754ce45c1a6b8b7c787be9cf562ad088c4d9d944575608e"},
      :seat "topo-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -29782,7 +29796,7 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -29795,7 +29809,9 @@
     [:routes-2026-10-10-manifold-fundamental-class-topo3-r2],
     :type "exact type in fixture",
     :area "manifold-fundamental-class",
-    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2,
+    :banked-by :routes-2026-10-12-mfclass-closed-connecting-r1,
+    :banked-commit "1d553ba3b0c75b0e005cbb2963a73cf16b97c06a"},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-integralpairconnectingcomparison,
    :kind :lemma,
@@ -29804,7 +29820,7 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "integralCoefficientPairShortExact",
@@ -29816,7 +29832,9 @@
     :type
     "∀ {X} [TopologicalSpace X] (A : Set X), ((CoefficientPairSequence.sequence ℤ A).map (forgetIntModules.mapHomologicalComplex (ComplexShape.down ℕ))).ShortExact",
     :area "manifold-fundamental-class",
-    :proved-in :routes-2026-10-12-mfclass-closed-connecting-r1},
+    :proved-in :routes-2026-10-12-mfclass-closed-connecting-r1,
+    :banked-by :routes-2026-10-12-mfclass-closed-connecting-r1,
+    :banked-commit "1d553ba3b0c75b0e005cbb2963a73cf16b97c06a"},
    :id :lemma-integralcoefficientpairshortexact,
    :kind :lemma,
    :depends-on [],
