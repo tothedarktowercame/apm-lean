@@ -274,6 +274,50 @@ theorem coordinate_fderivWithin_eq_chart_factors_self
     (mem_chart_source (EuclideanModel m) x)
     (mem_chart_source (EuclideanModel n) (f x))
 
+/-- A single neighbourhood supports both fixed chart memberships and the
+nearby chart-factor formula, while the fixed-coordinate derivative anchors
+that family at the centre. -/
+theorem exists_nhds_chart_factor_agreement
+    {m n : ℕ} {X : Type*} [TopologicalSpace X]
+    [ChartedSpace (EuclideanModel m) X]
+    [IsManifold 𝓘(ℝ, EuclideanModel m) ∞ X]
+    (f : X → EuclideanModel n)
+    (hf : ContMDiff 𝓘(ℝ, EuclideanModel m) 𝓘(ℝ, EuclideanModel n) ∞ f)
+    (x : X) :
+    ∃ U ∈ 𝓝 x, (∀ y ∈ U,
+        y ∈ (chartAt (EuclideanModel m) x).source ∧
+        f y ∈ (chartAt (EuclideanModel n) (f x)).source ∧
+        inTangentCoordinates 𝓘(ℝ, EuclideanModel m)
+            𝓘(ℝ, EuclideanModel n) (fun z : X ↦ z) f
+            (fun z ↦ mfderiv 𝓘(ℝ, EuclideanModel m)
+              𝓘(ℝ, EuclideanModel n) f z) x y =
+          (mfderiv 𝓘(ℝ, EuclideanModel n) 𝓘(ℝ, EuclideanModel n)
+              (extChartAt 𝓘(ℝ, EuclideanModel n) (f x)) (f y)) ∘L
+            (mfderiv 𝓘(ℝ, EuclideanModel m)
+              𝓘(ℝ, EuclideanModel n) f y) ∘L
+              (mfderivWithin (I := 𝓘(ℝ, EuclideanModel m))
+                (I' := 𝓘(ℝ, EuclideanModel m))
+                (extChartAt 𝓘(ℝ, EuclideanModel m) x).symm
+                (Set.range 𝓘(ℝ, EuclideanModel m))
+                (extChartAt 𝓘(ℝ, EuclideanModel m) x y))) ∧
+      fderivWithin ℝ
+          (extChartAt 𝓘(ℝ, EuclideanModel n) (f x) ∘ f ∘
+            (extChartAt 𝓘(ℝ, EuclideanModel m) x).symm)
+          (Set.range 𝓘(ℝ, EuclideanModel m))
+          (extChartAt 𝓘(ℝ, EuclideanModel m) x x) =
+        inTangentCoordinates 𝓘(ℝ, EuclideanModel m)
+          𝓘(ℝ, EuclideanModel n) (fun z : X ↦ z) f
+          (fun z ↦ mfderiv 𝓘(ℝ, EuclideanModel m)
+            𝓘(ℝ, EuclideanModel n) f z) x x := by
+  let U := {y | y ∈ (chartAt (EuclideanModel m) x).source ∧
+    f y ∈ (chartAt (EuclideanModel n) (f x)).source}
+  have hU : U ∈ 𝓝 x := eventually_mem_fixed_chart_sources f hf x
+  refine ⟨U, hU, ?_,
+    coordinate_fderivWithin_eq_inTangentCoordinates_mfderiv_self f hf x⟩
+  intro y hy
+  exact ⟨hy.1, hy.2,
+    inTangentCoordinates_mfderiv_eq_chart_factors f x y hy.1 hy.2⟩
+
 end t97A07Closure
 
 #print axioms t97A07Closure.isOpen_setOf_surjective_clm
@@ -288,3 +332,4 @@ end t97A07Closure
 #print axioms t97A07Closure.inTangentCoordinates_mfderiv_self_eq_mfderiv
 #print axioms t97A07Closure.coordinate_fderivWithin_eq_inTangentCoordinates_mfderiv_self
 #print axioms t97A07Closure.coordinate_fderivWithin_eq_chart_factors_self
+#print axioms t97A07Closure.exists_nhds_chart_factor_agreement

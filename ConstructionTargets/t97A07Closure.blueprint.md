@@ -113,6 +113,13 @@ coordinate derivative at the centre with the same explicit three-factor
 formula used by the nearby transported family.  It remains to extend this
 identification to a smaller common chart neighbourhood.
 
+`exists_nhds_chart_factor_agreement` now chooses one neighbourhood on which
+both fixed chart memberships and the transported three-factor formula hold,
+and records the fixed-coordinate equality at its centre in the same packet.
+The remaining B2 step is the pointwise identification of the fixed
+representative derivative with that transported family throughout this
+neighbourhood.
+
 ### B3. Regular points are open
 
 lean: `t97A07Closure.isOpen_regularPoints` : under the t97A07 manifold
