@@ -2404,6 +2404,29 @@ theorem twiceCorrectedDepartureQuarterCandidate_mem_planarAnnulus :
         (25 / 16 : ℝ) := by
   norm_num [Complex.normSq_apply, Complex.mul_re, Complex.mul_im]
 
+theorem twiceCorrectedDepartureQuarterCandidate_norm_bounds :
+    (3 / 4 : ℝ) <
+        ‖(((1 / 4 : ℝ) : ℂ) + ((-33 / 32 : ℝ) : ℂ) * Complex.I)‖ ∧
+      ‖(((1 / 4 : ℝ) : ℂ) + ((-33 / 32 : ℝ) : ℂ) * Complex.I)‖ <
+        (5 / 4 : ℝ) := by
+  let z : ℂ :=
+    ((1 / 4 : ℝ) : ℂ) + ((-33 / 32 : ℝ) : ℂ) * Complex.I
+  have hb := twiceCorrectedDepartureQuarterCandidate_mem_planarAnnulus
+  have hs : ‖z‖ ^ 2 = Complex.normSq z := Complex.sq_norm z
+  have hn : 0 ≤ ‖z‖ := norm_nonneg z
+  change (3 / 4 : ℝ) < ‖z‖ ∧ ‖z‖ < (5 / 4 : ℝ)
+  change (9 / 16 : ℝ) < Complex.normSq z ∧
+      Complex.normSq z < (25 / 16 : ℝ) at hb
+  constructor <;> nlinarith
+
+theorem twiceCorrectedDepartureQuarterCandidate_radialDefect_lt :
+    ‖(((1 -
+        ‖(((1 / 4 : ℝ) : ℂ) + ((-33 / 32 : ℝ) : ℂ) * Complex.I)‖ : ℝ) :
+          ℂ))‖ < (1 / 4 : ℝ) := by
+  have hb := twiceCorrectedDepartureQuarterCandidate_norm_bounds
+  rw [Complex.norm_real, Real.norm_eq_abs, abs_lt]
+  constructor <;> linarith
+
 /-- At quarter time the explicit bump equation forces imaginary coordinate
 `-33/32`, so the annulus-admissible candidate satisfies both scalar zero
 equations. -/
@@ -2513,4 +2536,6 @@ end ConstructionTargets.T02A03GeometricTubeDeformation
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_twiceCorrected_departure_zero_explicit_bounds
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.twiceCorrectedDepartureExplicitBounds_consistent_at_quarter
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.twiceCorrectedDepartureQuarterCandidate_mem_planarAnnulus
+#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.twiceCorrectedDepartureQuarterCandidate_norm_bounds
+#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.twiceCorrectedDepartureQuarterCandidate_radialDefect_lt
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.twiceCorrectedDepartureQuarterCandidate_scalarEquations
