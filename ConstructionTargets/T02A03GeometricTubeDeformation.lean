@@ -1946,6 +1946,32 @@ theorem rotatedEndpointWaypoint_transverse_correction_ne_zero_at_departure_zero
   have hpos := rotatedEndpointWaypoint_departure_zero_support_pos t p ht hz
   exact (ne_of_gt hpos) him
 
+/-- Exact zero locus after adding the endpoint-fixed transverse correction.
+This is the remaining quantitative target for ruling out newly created
+zeros using the right-tube coordinate bounds. -/
+theorem rotatedEndpointWaypoint_corrected_departure_eq_zero_iff
+    (t : unitInterval) (p : RightTubeMinusLeftCore) :
+    (((1 - 2 * (t : ℝ) : ℝ) : ℂ) +
+        ((2 * (t : ℝ) : ℝ) : ℂ) * rotatedEndpointWaypoint p +
+        (((t : ℝ) * (1 - 2 * (t : ℝ)) : ℝ) : ℂ) * Complex.I) = 0 ↔
+      1 - 2 * (t : ℝ) +
+          2 * (t : ℝ) * (rightTubeCorePlanarComplex p.1).im = 0 ∧
+        -2 * (t : ℝ) * (rightTubeCorePlanarComplex p.1).re +
+          (t : ℝ) * (1 - 2 * (t : ℝ)) = 0 := by
+  constructor
+  · intro h
+    constructor
+    · simpa [rotatedEndpointWaypoint, Complex.mul_re, Complex.mul_im]
+        using congrArg Complex.re h
+    · simpa [rotatedEndpointWaypoint, Complex.mul_re, Complex.mul_im]
+        using congrArg Complex.im h
+  · rintro ⟨hre, him⟩
+    apply Complex.ext
+    · simpa [rotatedEndpointWaypoint, Complex.mul_re, Complex.mul_im]
+        using hre
+    · simpa [rotatedEndpointWaypoint, Complex.mul_re, Complex.mul_im]
+        using him
+
 end ConstructionTargets.T02A03GeometricTubeDeformation
 
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeNormalComplex_eq_zero_iff
@@ -2020,3 +2046,4 @@ end ConstructionTargets.T02A03GeometricTubeDeformation
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_departure_zero_time_lt_half
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_departure_zero_support_pos
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_transverse_correction_ne_zero_at_departure_zero
+#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_corrected_departure_eq_zero_iff
