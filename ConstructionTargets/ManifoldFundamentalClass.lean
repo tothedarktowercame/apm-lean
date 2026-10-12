@@ -3181,6 +3181,15 @@ theorem coefficientSphereNormalizationComparison_hom_eq_neg_implies_unit_eq_neg_
   rw [coefficientSphereNormalizationComparisonAutomorphism_apply_one] at h
   exact h
 
+theorem coefficientSphereNormalizationComparisonUnit_eq_one_of_nonneg
+    (k : ℕ)
+    (h : 0 ≤ (coefficientSphereNormalizationComparisonUnit k : ℤ)) :
+    (coefficientSphereNormalizationComparisonUnit k : ℤ) = 1 := by
+  rcases Int.isUnit_eq_one_or
+      (coefficientSphereNormalizationComparisonUnit k).isUnit with hu | hu
+  · exact hu
+  · omega
+
 end ConstructionTargets.ManifoldFundamentalClass
 
 #print axioms ConstructionTargets.ManifoldFundamentalClass.neighborhoodInclusion_Hsucc_isIso
@@ -3290,6 +3299,7 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientOpenDiskRelativeHomologyComparison_naturality
 #print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientSphereNormalizationComparisonAutomorphism_hom_eq_neg_implies_openDisk_production_factors
 #print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientSphereNormalizationComparison_hom_eq_neg_implies_unit_eq_neg_one
+#print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientSphereNormalizationComparisonUnit_eq_one_of_nonneg
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_projection
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_generator_of_normalization
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_normalization_of_generator
