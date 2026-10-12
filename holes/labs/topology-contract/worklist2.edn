@@ -74840,6 +74840,8 @@
    :other-consumers []}
   {:consumer :t96J02,
    :stop-count 1,
+   :review-finding
+   "Deterministic defect: the STOP commits no B2 progress; e949a5129 is the already-reviewed B1 repair, contains no standardPairingData or six-edge/orbit/quotient comparison, and its actual SHA-256 is 8d3f275f0298df761fad9b234b1cbb764e812925a1c078e4d95347aa7b84f885, not the recorded fixture hash. Extend Mathlib: state and prove the missing theorem in scope.",
    :evidence
    {:placeholder-delta 0,
     :residual "Implement B2 instances.",
@@ -74871,6 +74873,12 @@
     [{:cmd "inspect from /home/joe/code",
       :exit 2,
       :correction "reran in /home/joe/code/apm-lean"}],
+    :review
+    {:outcome :fail,
+     :seat "codex-7",
+     :job "invoke-1791834665843-7806-500d00ee",
+     :finding
+     "Deterministic defect: the STOP commits no B2 progress; e949a5129 is the already-reviewed B1 repair, contains no standardPairingData or six-edge/orbit/quotient comparison, and its actual SHA-256 is 8d3f275f0298df761fad9b234b1cbb764e812925a1c078e4d95347aa7b84f885, not the recorded fixture hash. Extend Mathlib: state and prove the missing theorem in scope."},
     :commit "e949a5129",
     :changed-paths [],
     :fixture
@@ -74879,7 +74887,7 @@
      "8d3f275fb1a1f6717a934377659932acaa40e2c09d75b9775f3378e6267cc7d2"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :repair,
    :scope ["ConstructionTargets/PolygonSurfacePiOne.lean"],
    :dag-node "ConstructionTargets/PolygonSurfacePiOne.blueprint.md/B2",
    :acceptance
@@ -74893,6 +74901,7 @@
    :id :routes-2026-10-12-polygon-b2-topo2-r1,
    :kind :reusable-theorem,
    :area "polygon-surface-pi1",
+   :fail-count 1,
    :depends-on
    [:routes-2026-10-12-polygon-b1-topo2-r1
     :routes-2026-10-12-checkpoint-topo2-r12],
