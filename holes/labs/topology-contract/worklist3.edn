@@ -1385,6 +1385,12 @@
       "git diff --exit-code d29e0f66 -- ConstructionTargets/SurfaceSchoenflies.lean",
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
+    :review
+    {:outcome :fail,
+     :seat "codex-11",
+     :job "invoke-1791830916396-7727-9a2e1e4c",
+     :finding
+     "Frozen fixture mode is missing in both authoritative acceptance copies. The SHA c3408c2332b5c1e255f2dee616ebf826e01594ddec4c0aa27b604bbb077ffe6b matches and the module builds, but literal fixture compilation exits 1 because circleZeroSection_isEmbedding is already declared. Add :mode :post-build-export-check to both acceptance copies, then resubmit commit d29e0f66."},
     :commit "d29e0f66e8f45a22d5714a70fb5809ddcf99a852",
     :changed-paths [],
     :fixture
@@ -1394,7 +1400,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :repair,
    :scope ["ConstructionTargets/SurfaceSchoenflies.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/schoenflies/planar-normal-form",
    :acceptance
@@ -1410,7 +1416,7 @@
    :id :routes-2026-10-12-surface-zero-embedding-r1,
    :kind :reusable-theorem,
    :area "embedded-circle-collar-surface",
-   :fail-count 1,
+   :fail-count 2,
    :depends-on [:routes-2026-10-12-surface-normal-form-r1],
    :current-residual
    "Construct ambient equivalence to the zero section.",
