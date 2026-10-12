@@ -116657,15 +116657,18 @@
      :reason
      "Program milestone completed. Blueprint node B5 is proved: compactness selects finitely many B4 neighbourhoods, the minimum of their positive local times is positive, and every selected curve restricts to that common interval. Only B6 remains."}]}
   {:consumer :t97A07,
-   :stop-count 9,
+   :stop-count 10,
    :review-finding
    "Recorded fixture hash mismatch: :fixture.sha256 is eaeed21919599335d4a33b437815c4a9cbb5b72110213b29440d6944cc982182 (the blueprint at older commit 736c2566), but commit 8432f937 changes ConstructionTargets/t97A07Closure.blueprint.md and its exact SHA-256 is 5bb02c342b988406e8bd26aeda1b9e67335a8c1f626d97ec96701cb039ae708f. Re-record the fixture hash for the reviewed commit.",
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
     :residual
-    "Prove smaller-neighbourhood equality between fixed derivative and transported mfderiv; then B3-B9.",
+    "Prove fixed fderivWithin equals transported mfderiv on this neighbourhood; then B3-B9.",
     :outcome :stop,
-    :warnings [{:kind :existing-placeholder}],
+    :warnings
+    [{:kind :existing-placeholder}
+     {:kind :concurrent-worktree-change,
+      :path "ConstructionTargets/ManifoldFundamentalClass.lean"}],
     :missing-theorems
     [{:name "t97A07Closure.continuousAt_coordinate_mfderiv",
       :type "Chart derivative continuity and mfderiv equality",
@@ -116675,17 +116678,17 @@
       :area "regular-points-open"}],
     :statement-hashes
     {:source
-     "45d7f4b6ac356d9f8ba98e505414c5db1f2128cecfc0250dd4a113db977f61c4",
+     "4b486f7e68f15d3185c5dd207be9bce63f2066fa1936dc38055e2f3f3c04c937",
      :target
      "f13a687334f894f060c24b9aa390e8de88a2bf5f3d36e1de717af326c84d78f2",
      :blueprint
-     "5bb02c342b988406e8bd26aeda1b9e67335a8c1f626d97ec96701cb039ae708f",
+     "05207f62ebcd722eb3fff3648d5d536cf568426c0da1be1d94d8f64121873eec",
      :registry "131/131"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
     :reason
-    "Receipt repaired: fixture now records the exact reviewed blueprint hash.",
+    "One neighbourhood keeps source points and images in the fixed charts.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t97A07Closure.lean",
       :exit 0}
@@ -116694,33 +116697,20 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder/diff validation", :exit 0}],
     :diagnostic-history
-    [{:cmd "lean corollary rewrite",
+    [{:cmd "lean initial compile",
       :exit 1,
-      :finding "Used ContinuousLinearMap.comp_id directly."}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1791789942398-6568-2832e50e",
-     :commands
-     ["git show/diff-tree 8432f937"
-      "sha256/diff/placeholder checks"
-      "statement-registry.py check"
-      "lake env lean ConstructionTargets/t97A07Closure.lean"
-      "lake env lean problems/t97A07/lean/Main.lean"
-      "lake build ConstructionTargets.t97A07Closure"],
-     :finding
-     "PASS program STOP after fixture repair: exact 2-file commit adds compiled sorry-free centre normalization (inverse source-chart mfderiv=id, hence transported derivative=mfderiv) with useful orientation and faithful B2 blueprint text. Fixture/source/target hashes match; target placeholders remain 1->1, closure 0; registry 131/131; standard axioms only. Residual names smaller-neighbourhood equality, then B3-B9."},
-    :commit "8432f93741bee955f9d48c4a6fbeaf612af55d81",
+      :finding "Opened Topology scope."}],
+    :commit "e77c6706b6cb0fa8ab27647176e768fd6b99df13",
     :changed-paths
     ["ConstructionTargets/t97A07Closure.lean"
      "ConstructionTargets/t97A07Closure.blueprint.md"],
     :fixture
     {:path "ConstructionTargets/t97A07Closure.blueprint.md",
      :sha256
-     "5bb02c342b988406e8bd26aeda1b9e67335a8c1f626d97ec96701cb039ae708f"},
+     "05207f62ebcd722eb3fff3648d5d536cf568426c0da1be1d94d8f64121873eec"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :needs-owner,
    :scope
    ["problems/t97A07/lean/Main.lean"
     "problems/t97A07/status.json"
