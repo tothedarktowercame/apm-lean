@@ -17,9 +17,9 @@ Mathlib supplies `IsCoveringMap.liftPath`, `liftHomotopyRel`, `monodromy`,
 We use the classical based-path construction.  A point of the total space is
 an equivalence class of paths starting at `x`; two paths are equivalent when
 their endpoints agree and their concatenation with the reverse path represents
-an element of `H`.  The fibre is represented explicitly by the coset sets
-`H * g`, rather than by ambiguous quotient notation.  No normality or deck
-action is assumed.
+an element of `H`.  The fibre uses a custom setoid whose relation is written
+verbatim as `g * h⁻¹ ∈ H`; left/right coset terminology is not part of the
+interface.  No normality or deck action is assumed.
 
 ### B1. Semilocally simply connected predicate
 
@@ -50,7 +50,9 @@ connectedness.
 
 ### B3. Based-path relation
 
-lean: `subgroupPathSetoid (x : X) (H : Subgroup (FundamentalGroup X x)) :
+lean: `subgroupCosetSetoid (H : Subgroup G) : Setoid G`, with
+`subgroupCosetSetoid H g h ↔ g * h⁻¹ ∈ H`; and
+`subgroupPathSetoid (x : X) (H : Subgroup (FundamentalGroup X x)) :
 Setoid {y : X // Path x y}`
 
 uses: Mathlib path concatenation, reversal, and homotopy quotient laws
@@ -60,9 +62,9 @@ status: planned
 Relate `⟨y,α⟩` and `⟨z,β⟩` iff `y=z` and the based loop obtained from
 `α.trans β.symm` (after transporting the endpoint equality) belongs to `H`.
 Reflexivity uses `H.one_mem`; symmetry uses `H.inv_mem`; transitivity uses
-`H.mul_mem`.  With loop classes `g=[α]` and `h=[β]`, this says
-`g * h⁻¹ ∈ H`, exactly the equality criterion for the coset sets `H * g`
-and `H * h`.  This statement remains valid for nonnormal `H`.
+`H.mul_mem`.  With loop classes `g=[α]` and `h=[β]`, this is definitionally
+`subgroupCosetSetoid H g h`.  Thus B3 and B10 use literally the same relation,
+including for nonnormal `H`.
 
 ### B4. Total space, projection, and basepoint
 
@@ -91,8 +93,8 @@ status: planned
 Choose paths inside `U` from its centre to each point and append them to a
 representative path.  B2 proves independence of the internal path choice;
 B3 proves independence of the representative.  The inverse truncates the
-local segment.  The sheet label is the corresponding coset set `H * g`.
-Prove the two inverse equations before introducing topology.
+local segment.  The sheet label is a class of `subgroupCosetSetoid H`.  Prove
+the two inverse equations before introducing topology.
 
 ### B6. Quotient topology and covering charts
 
@@ -148,31 +150,32 @@ Corestrict the induced homomorphism to `H`; B8 supplies bijectivity, then use
 
 lean: `subgroupCover_fiberEquivCosets :
 (subgroupCoverMap x H ⁻¹' {x}) ≃
-  Set.range (fun g : FundamentalGroup X x => (H : Set _) * {g})`
+  Quotient (subgroupCosetSetoid H)`
 
 uses: B3, B4
 
 status: planned
 
-Send a loop class `g` in the fibre to the coset set `H * g`.  Equality of
-these sets is equivalent to `g*h⁻¹ ∈ H`, precisely B3, so well-definedness,
-injectivity, and surjectivity are direct.  No quotient convention or normality
-assumption is hidden in the type.
+Send a loop class `g` in the fibre to `Quotient.mk (subgroupCosetSetoid H) g`.
+B3 uses that identical setoid, so well-definedness, injectivity, and
+surjectivity are direct.  No library quotient convention or normality
+assumption occurs in this node.
 
 ### B11. Finite fibre cardinality
 
 lean: `subgroupCover_fiber_card [H.FiniteIndex] :
 Nat.card (subgroupCoverMap x H ⁻¹' {x}) = H.index`
 
-uses: B10, the inversion equivalence from the explicit `H * g` coset set to
-Mathlib's quotient, `Subgroup.index_eq_card`
+uses: B10, `QuotientGroup.quotientRightRelEquivQuotientLeftRel`,
+`Subgroup.index_eq_card`
 
 status: planned
 
-Construct the equivalence from the explicit coset-set range to Mathlib's
-standard quotient by sending `H * g` to the quotient class of `g⁻¹`; the
-inverse orientation makes the equality criteria agree.  Then transport
-`Nat.card` and use `Subgroup.index_eq_card`.  `FiniteIndex` is used only here.
+First identify `subgroupCosetSetoid H` with Mathlib's `rightRel H`: its
+criterion `h*g⁻¹ ∈ H` differs from ours by inversion, and `H.inv_mem`
+proves equivalence.  Then use Mathlib's inversion equivalence from `rightRel`
+to the standard `leftRel` quotient, transport `Nat.card`, and apply
+`Subgroup.index_eq_card`.  `FiniteIndex` is used only here.
 
 ### B12. Connected finite-index cover
 
@@ -189,7 +192,7 @@ uses: B4, B6, B7, B9, B11
 
 status: planned
 
-Take the explicit path-class cover with its explicit `H * g` fibre.  Path
+Take the explicit path-class cover with its `subgroupCosetSetoid H` fibre.  Path
 connectedness constructs the classes and proves connectedness; local path
 connectedness and `hsl` produce
 the charts; finite index counts the fibre.  Thus every final hypothesis is
