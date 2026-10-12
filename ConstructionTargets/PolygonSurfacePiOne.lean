@@ -474,4 +474,65 @@ theorem nonorientableOrbitLabel_pair (g : ℕ) (i : Fin (2 * g)) :
       nonorientableOrbitLabel g i := by
   simp [nonorientableOrbitLabel, nonorientableCoord_pair]
 
+/-- The paired-arc orbits in the standard orientable word are the two
+generators in each handle. -/
+def orientableOrbitEquiv (g : ℕ) :
+    PairingOrbit (orientablePair g) ≃ Fin g × Bool where
+  toFun := Quotient.lift (orientableOrbitLabel g) (by
+    intro a b h
+    induction h with
+    | rel a b h => rcases h with ⟨rfl⟩; exact (orientableOrbitLabel_pair g a).symm
+    | refl a => rfl
+    | symm a b _ ih => exact ih.symm
+    | trans a b c _ _ ih₁ ih₂ => exact ih₁.trans ih₂)
+  invFun := fun p => Quotient.mk _ ((orientableCoord g).symm
+    (p.1, if p.2 then 1 else 0))
+  left_inv := by
+    intro q
+    refine Quotient.inductionOn q ?_
+    intro i
+    generalize hc : orientableCoord g i = c
+    rcases c with ⟨a, b⟩
+    have hi : i = (orientableCoord g).symm (a, b) := by
+      apply (orientableCoord g).injective
+      simpa using hc
+    subst i
+    fin_cases b <;> simp [orientableOrbitLabel, handleOrbitLabel]
+    · apply Quotient.sound
+      exact Relation.EqvGen.rel _ _ (by simp [orientablePair, handlePair])
+    · apply Quotient.sound
+      exact Relation.EqvGen.rel _ _ (by simp [orientablePair, handlePair])
+  right_inv := by
+    rintro ⟨a, b⟩
+    cases b <;> simp [orientableOrbitLabel, handleOrbitLabel]
+
+/-- The paired-arc orbits in the standard nonorientable word are the
+crosscaps. -/
+def nonorientableOrbitEquiv (g : ℕ) :
+    PairingOrbit (nonorientablePair g) ≃ Fin g where
+  toFun := Quotient.lift (nonorientableOrbitLabel g) (by
+    intro a b h
+    induction h with
+    | rel a b h => rcases h with ⟨rfl⟩; exact (nonorientableOrbitLabel_pair g a).symm
+    | refl a => rfl
+    | symm a b _ ih => exact ih.symm
+    | trans a b c _ _ ih₁ ih₂ => exact ih₁.trans ih₂)
+  invFun := fun a => Quotient.mk _ ((nonorientableCoord g).symm (a, 0))
+  left_inv := by
+    intro q
+    refine Quotient.inductionOn q ?_
+    intro i
+    generalize hc : nonorientableCoord g i = c
+    rcases c with ⟨a, b⟩
+    have hi : i = (nonorientableCoord g).symm (a, b) := by
+      apply (nonorientableCoord g).injective
+      simpa using hc
+    subst i
+    fin_cases b <;> simp [nonorientableOrbitLabel]
+    apply Quotient.sound
+    exact Relation.EqvGen.rel _ _ (by simp [nonorientablePair, crosscapPair])
+  right_inv := by
+    intro a
+    simp [nonorientableOrbitLabel]
+
 end ConstructionTargets.PolygonSurfacePiOne
