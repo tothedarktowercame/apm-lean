@@ -29998,7 +29998,7 @@
    :depends-on [],
    :other-consumers []}
   {:consumer :t00A02,
-   :stop-count 1,
+   :stop-count 2,
    :review-finding
    "Blueprint defect at B5: inserting transverse crossings as vertices does not imply every component of the complement in an inner disk is a polygonal disk. Counterexample: one simple closed polygonal curve strictly inside the disk leaves an annular component between the curve and the disk boundary. B4 gives no cellularity or cutting-arc hypothesis. Repair B5 by adding and proving a cellularization step (for example, add finitely many embedded cutting arcs until every complementary region is a disk), then make B6 use that result. The STOP also commits only the blueprint, not compiled supporting declarations; the existing module build and registry check do not constitute new program progress.",
    :implements-lemma
@@ -30012,8 +30012,7 @@
      :t94J04 [2 2],
      :t96A01 [1 1],
      :t97J02 [3 3]},
-    :residual
-    "Review blueprint; then implement B1 FiniteTwoComplex and realization.",
+    :residual "Rereview B5 cellularization; then implement B1.",
     :outcome :stop,
     :warnings [],
     :missing-theorems [],
@@ -30021,8 +30020,7 @@
     :disposition :stop,
     :axioms [],
     :author :topo-10,
-    :reason
-    "blueprint written; independent review required before formalization",
+    :reason "blueprint repaired; independent rereview required",
     :commands
     [{:cmd "lake build ConstructionTargets.SurfaceClassification",
       :exit 0}
@@ -30030,20 +30028,19 @@
      {:cmd
       "git diff --check -- ConstructionTargets/SurfaceClassification.blueprint.md",
       :exit 0}
-     {:cmd "rg blueprint nodes B1-B14", :exit 0}],
-    :continue-from "b1612b5c125b59b3e1bfc0cba81abe8b09d72c6b",
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1791812771624-7012-8bbc1b30",
-     :finding
-     "Blueprint defect at B5: inserting transverse crossings as vertices does not imply every component of the complement in an inner disk is a polygonal disk. Counterexample: one simple closed polygonal curve strictly inside the disk leaves an annular component between the curve and the disk boundary. B4 gives no cellularity or cutting-arc hypothesis. Repair B5 by adding and proving a cellularization step (for example, add finitely many embedded cutting arcs until every complementary region is a disk), then make B6 use that result. The STOP also commits only the blueprint, not compiled supporting declarations; the existing module build and registry check do not constitute new program progress."},
-    :commit "b1612b5c125b59b3e1bfc0cba81abe8b09d72c6b",
+     {:cmd "rg cellularization witnesses and B6 dependency", :exit 0}],
+    :continue-from "a2fbe2a2e3b5c286b967f76f110629b6284c5852",
+    :commit "a2fbe2a2e3b5c286b967f76f110629b6284c5852",
     :changed-paths
     ["ConstructionTargets/SurfaceClassification.blueprint.md"],
+    :program-history
+    [{:commit "b1612b5c125b59b3e1bfc0cba81abe8b09d72c6b",
+      :result :review-fail}
+     {:commit "a2fbe2a2e3b5c286b967f76f110629b6284c5852",
+      :result :blueprint-repaired}],
     :seat :topo-10},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SurfaceClassification.lean"
     "ConstructionTargets/SurfaceClassification.md"
