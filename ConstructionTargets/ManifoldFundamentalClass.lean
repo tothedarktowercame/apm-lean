@@ -2969,6 +2969,23 @@ theorem coefficientSphereNormalizationComparisonAutomorphism_hom_eq_neg_implies_
     coefficientOpenDiskNormalizationComposite_eq_model] at h
   simpa only [Category.assoc] using h
 
+theorem coefficientPairMap_forgotten_projection_naturality
+    {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    (A : Set X) (B : Set Y) (f : C(X, Y)) (hf : Set.MapsTo f A B) :
+    (forgetIntModules.mapHomologicalComplex (ComplexShape.down ℕ)).map
+          (cokernel.π (CoefficientRelativeSmall.subspaceMap ℤ A)) ≫
+        (forgetIntModules.mapHomologicalComplex (ComplexShape.down ℕ)).map
+          (CoefficientRadialPair.pairMap ℤ A B f hf) =
+      (forgetIntModules.mapHomologicalComplex (ComplexShape.down ℕ)).map
+          (CoefficientRadialPair.absoluteMap ℤ f) ≫
+        (forgetIntModules.mapHomologicalComplex (ComplexShape.down ℕ)).map
+          (cokernel.π (CoefficientRelativeSmall.subspaceMap ℤ B)) := by
+  rw [← Functor.map_comp, ← Functor.map_comp]
+  exact congrArg
+    (fun q => (forgetIntModules.mapHomologicalComplex
+      (ComplexShape.down ℕ)).map q)
+    (CoefficientRadialPair.projection ℤ A B f hf)
+
 end ConstructionTargets.ManifoldFundamentalClass
 
 #print axioms ConstructionTargets.ManifoldFundamentalClass.neighborhoodInclusion_Hsucc_isIso
@@ -3069,6 +3086,7 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientOpenDiskNormalizationComposite_eq_model
 #print axioms ConstructionTargets.ManifoldFundamentalClass.productionOpenDiskNormalizationComposite_eq_model
 #print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientSphereNormalizationComparisonAutomorphism_hom_eq_neg_implies_openDisk_model_factors
+#print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientPairMap_forgotten_projection_naturality
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_projection
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_generator_of_normalization
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_normalization_of_generator
