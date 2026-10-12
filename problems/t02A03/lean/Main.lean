@@ -8,6 +8,7 @@ import ConstructionTargets.PointWedgeQuotient
 import ConstructionTargets.GenericTargetNaturalSourceReconstruction
 import ConstructionTargets.TorusCircleWedgeMayerVietoris
 import ConstructionTargets.BoundaryTorusHurewiczIsomorphism
+import ConstructionTargets.T02A03ClosedPuncturedDiskTorus
 
 open CategoryTheory
 
@@ -348,4 +349,6 @@ theorem apm_t02a03 :
       Limits.IsZero
         (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) n).obj
           (ModuleCat.of ℤ ℤ)).obj (TopCat.of apm_t02a03_Y))) := by
-  sorry
+  refine ⟨?_, ?_, apm_t02A03_bridge_1, apm_t02A03_bridge_2⟩
+  · exact ConstructionTargets.T02A03ClosedPuncturedDiskTorus.t02a03_closed_punctured_disk_torus
+  · sorry
