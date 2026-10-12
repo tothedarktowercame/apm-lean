@@ -73843,8 +73843,40 @@
    "Construct infimum, biproduct, and supremum maps and package both squares.",
    :other-consumers [:t96J06]}
   {:consumer :t97A04,
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Construct three short-complex components and prove both squares.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:registry "131/0",
+     :module "75959ac3f329fcf983cadd0b4b10dd6f525dd747",
+     :main "e2caa0a5eaa30a65713a7a22910aeac5467a033b",
+     :other-main "383deab447ad620ad02f626d6fc614f2ba7139a0"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-6",
+    :commands
+    [{:cmd
+      "lake build ConstructionTargets.ProductionOpenCoverMayerVietoris",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131/0"}
+     {:cmd "comment-stripped placeholder scan", :exit 0, :output "0"}
+     {:cmd "git show --check HEAD", :exit 0}],
+    :commit "e91aad6fa",
+    :changed-paths
+    ["ConstructionTargets/ProductionOpenCoverMayerVietoris.lean"],
+    :declaration
+    "ConstructionTargets.ProductionOpenCoverMayerVietoris.subcomplex_sup_image_le",
+    :fixture
+    {:path "ConstructionTargets/ProductionOpenCoverMayerVietoris.lean",
+     :sha256
+     "0f9f9810bfc8fc9c89b17d6c61bb481f4cf8694cae4cc98d5f094a4673acf037"},
+    :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/ProductionOpenCoverMayerVietoris.lean"],
    :dag-node
