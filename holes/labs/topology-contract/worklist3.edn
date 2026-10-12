@@ -20353,6 +20353,19 @@
       "git diff --check -- ConstructionTargets/ManifoldFundamentalClass.lean",
       :exit 0}
      {:cmd "rg forbidden scoped file", :exit 1, :expected-exit 1}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791803350936-6833-029390a1",
+     :commands
+     ["git show/diff-tree 5f79c90d0"
+      "sha256sum /tmp/circleisocoords.lean"
+      "lake env lean /tmp/circleisocoords.lean"
+      "lake env lean ConstructionTargets/ManifoldFundamentalClass.lean"
+      "python3 scripts/statement-registry.py check"
+      "git diff --check; rg placeholder/forbidden counts"],
+     :finding
+     "PASS: 5f79c90d0 changes only the scoped module and its blob is current; fixture SHA-256 matches. Frozen type and module compile. Postcomposition by the native sphere iso is cancellable; the hypothesis gives the left composite=id and inv_hom_id gives the right composite=id, with correct orientation. Registry 131/131; standard axioms only; no scoped placeholders. Counts unchanged: t00J02 bridge_1=1, sorry=1; t98A02 sorry=1."},
     :commit "5f79c90d02692cb88a8c9fb37507f08b3cbc5547",
     :changed-paths
     ["ConstructionTargets/ManifoldFundamentalClass.lean"],
@@ -20362,7 +20375,7 @@
      "6cf55d0bda1004f817aaf4a07932dbf1491ec2f8b8b505fac604c9f016192646"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/manifold-fundamental-class",
    :acceptance
@@ -20433,7 +20446,7 @@
       "6cf55d0bda1004f817aaf4a07932dbf1491ec2f8b8b505fac604c9f016192646"},
      :seat "topo-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -29144,7 +29157,7 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -29157,7 +29170,9 @@
     [:routes-2026-10-10-manifold-fundamental-class-topo3-r2],
     :type "exact type in fixture",
     :area "manifold-fundamental-class",
-    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2,
+    :banked-by :routes-2026-10-12-mfclass-circle-coords-r1,
+    :banked-commit "5f79c90d02692cb88a8c9fb37507f08b3cbc5547"},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-coefficientcirclecomparisoniso-hom-,
    :kind :lemma,
