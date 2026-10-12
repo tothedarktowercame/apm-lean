@@ -307,3 +307,9 @@ inverse Unit-equivalence round-trip factor.  The proof uses subsingleton
 elimination only in `FundamentalGroupoid Unit`, before functorial transport;
 it does not normalize an arbitrary equivalence.  The forward Unit round-trip,
 outer comparisons, and literal lifts remain.
+
+`genericPointWedgeIdentityCoordinateRightRoundTrip_eq_one` supplies the
+forward-oriented calculation using the particular `unitInv` component of the
+Unit equivalence.  Consequently all four inner connector-stage factors are
+units.  Only the two outer cover-to-coordinate comparisons and the literal
+lift identifications remain before completing B6.
