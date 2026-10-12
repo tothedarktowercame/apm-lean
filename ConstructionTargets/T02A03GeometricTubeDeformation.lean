@@ -2006,7 +2006,7 @@ theorem rotatedEndpointWaypoint_corrected_departure_zero_coordinates
     by_contra h
     have htzero : (t : ℝ) = 0 := le_antisymm (le_of_not_gt h) ht0
     rw [htzero] at heq
-    norm_num at heq
+    norm_num [correctedDepartureBump] at heq
   refine ⟨htpos, ?_, ?_⟩
   · nlinarith [heq.2]
   · field_simp
@@ -2181,6 +2181,58 @@ theorem correctedDepartureBump_ne_zero_at_corrected_zero
   rw [hz, zero_add]
   exact_mod_cast ne_of_gt (correctedDepartureBump_pos t hlo hhi)
 
+/-- Exact zero locus after both endpoint-fixed corrections.  The localized
+real bump changes only the real-coordinate equation; the transverse
+imaginary-coordinate equation is unchanged. -/
+theorem rotatedEndpointWaypoint_twiceCorrected_departure_eq_zero_iff
+    (t : unitInterval) (p : RightTubeMinusLeftCore) :
+    (((1 - 2 * (t : ℝ) : ℝ) : ℂ) +
+        ((2 * (t : ℝ) : ℝ) : ℂ) * rotatedEndpointWaypoint p +
+        (((t : ℝ) * (1 - 2 * (t : ℝ)) : ℝ) : ℂ) * Complex.I +
+        (correctedDepartureBump t : ℂ)) = 0 ↔
+      1 - 2 * (t : ℝ) +
+          2 * (t : ℝ) * (rightTubeCorePlanarComplex p.1).im +
+          correctedDepartureBump t = 0 ∧
+        -2 * (t : ℝ) * (rightTubeCorePlanarComplex p.1).re +
+          (t : ℝ) * (1 - 2 * (t : ℝ)) = 0 := by
+  constructor
+  · intro h
+    constructor
+    · simpa [rotatedEndpointWaypoint, Complex.mul_re, Complex.mul_im]
+        using congrArg Complex.re h
+    · simpa [rotatedEndpointWaypoint, Complex.mul_re, Complex.mul_im]
+        using congrArg Complex.im h
+  · rintro ⟨hre, him⟩
+    apply Complex.ext
+    · simpa [rotatedEndpointWaypoint, Complex.mul_re, Complex.mul_im]
+        using hre
+    · simpa [rotatedEndpointWaypoint, Complex.mul_re, Complex.mul_im]
+        using him
+
+/-- A zero after both corrections still occurs at positive time and forces
+the unchanged transverse-coordinate equation. -/
+theorem rotatedEndpointWaypoint_twiceCorrected_departure_zero_coordinates
+    (t : unitInterval) (p : RightTubeMinusLeftCore)
+    (hz : (((1 - 2 * (t : ℝ) : ℝ) : ℂ) +
+        ((2 * (t : ℝ) : ℝ) : ℂ) * rotatedEndpointWaypoint p +
+        (((t : ℝ) * (1 - 2 * (t : ℝ)) : ℝ) : ℂ) * Complex.I +
+        (correctedDepartureBump t : ℂ)) = 0) :
+    0 < (t : ℝ) ∧
+      (rightTubeCorePlanarComplex p.1).re = (1 - 2 * (t : ℝ)) / 2 ∧
+      1 - 2 * (t : ℝ) +
+          2 * (t : ℝ) * (rightTubeCorePlanarComplex p.1).im +
+          correctedDepartureBump t = 0 := by
+  have heq :=
+    (rotatedEndpointWaypoint_twiceCorrected_departure_eq_zero_iff t p).mp hz
+  have ht0 : 0 ≤ (t : ℝ) := t.2.1
+  have htpos : 0 < (t : ℝ) := by
+    by_contra h
+    have htzero : (t : ℝ) = 0 := le_antisymm (le_of_not_gt h) ht0
+    rw [htzero] at heq
+    norm_num at heq
+  refine ⟨htpos, ?_, heq.1⟩
+  nlinarith [heq.2]
+
 end ConstructionTargets.T02A03GeometricTubeDeformation
 
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeNormalComplex_eq_zero_iff
@@ -2268,3 +2320,5 @@ end ConstructionTargets.T02A03GeometricTubeDeformation
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.correctedDepartureBump_eq_zero_of_le
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.correctedDepartureBump_eq_zero_of_ge
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.correctedDepartureBump_ne_zero_at_corrected_zero
+#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_twiceCorrected_departure_eq_zero_iff
+#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_twiceCorrected_departure_zero_coordinates
