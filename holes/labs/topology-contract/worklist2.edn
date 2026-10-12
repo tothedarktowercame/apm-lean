@@ -74460,8 +74460,40 @@
    :current-residual "Elect B1 on PASS; otherwise route the defect.",
    :other-consumers []}
   {:consumer :t96J02,
+   :evidence
+   {:placeholder-delta 0,
+    :residual "On PASS elect B1 PairingData.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:registry "131/0",
+     :blueprint
+     "fb49df35c7f783a018afc3d214a540c6ed5105d0e856f577cdf066832ae77aa6"},
+    :axioms [],
+    :author "topo-6",
+    :commands
+    [{:cmd
+      "git diff --check -- ConstructionTargets/PolygonSurfacePiOne.blueprint.md",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131/0"}
+     {:cmd "certification/interface scan",
+      :exit 0,
+      :output "B1,B7-B12 certified"}
+     {:cmd "git show --check HEAD", :exit 0}],
+    :commit "1f54f90d8",
+    :changed-paths
+    ["ConstructionTargets/PolygonSurfacePiOne.blueprint.md"],
+    :fixture
+    {:path "ConstructionTargets/PolygonSurfacePiOne.blueprint.md",
+     :sha256
+     "fb49df35c7f783a018afc3d214a540c6ed5105d0e856f577cdf066832ae77aa6"},
+    :finding
+    "Certified: B1 uses PairingOrbit as the generator type; B7/B9/B11 retain that index, B8/B10 are representation-independent, and B12 reindexes only by equivalences with both inverse laws.",
+    :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/PolygonSurfacePiOne.blueprint.md"],
    :dag-node "TOPOLOGY-ROUTES.md/polygon-surface-pi1",
    :acceptance
