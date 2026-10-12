@@ -79614,7 +79614,7 @@
   {:consumer :t94A10,
    :stop-count 9,
    :review-finding
-   "Representation-boundary defect in commit 72340f821: exact_sphereParam_identity requires (forall x, DifferentiableAt eta x), including x=0, but frozen apm_t94a10_IsExact supplies differentiability only for punctured x. The theorem therefore cannot discharge B7 from the registered hypothesis although B7 is marked proved. Repair heta to require x != 0 (or only differentiability at sphereParam p) and use sphereParam_ne_zero; then recompile and keep B8-B11 residual.",
+   "Incomplete representation-boundary repair in commit e7ba5fee3: heta is now punctured, but exact_sphereParam_identity still requires hexact : forall x, extDeriv eta x = omega x, including x=0. Frozen apm_t94a10_IsExact supplies exactness only for punctured x, so the claimed B7 theorem still cannot be instantiated. Change hexact to forall x, x != 0 -> extDeriv eta x = omega x and rewrite with hexact _ (sphereParam_ne_zero p); then recompile, retaining B8-B11 as residual.",
    :evidence
    {:placeholder-delta 0,
     :residual "Formalize B8 Green cancellation; then B9-B11.",
@@ -79652,6 +79652,12 @@
      {:cmd "closure no-sorry", :exit 1, :expected-exit 1}
      {:cmd "placeholder count", :exit 0, :output "1"}
      {:cmd "git show --check e7ba5fee3", :exit 0}],
+    :review
+    {:outcome :fail,
+     :seat "codex-7",
+     :job "invoke-1791773355432-6206-ec10b764",
+     :finding
+     "Incomplete representation-boundary repair in commit e7ba5fee3: heta is now punctured, but exact_sphereParam_identity still requires hexact : forall x, extDeriv eta x = omega x, including x=0. Frozen apm_t94a10_IsExact supplies exactness only for punctured x, so the claimed B7 theorem still cannot be instantiated. Change hexact to forall x, x != 0 -> extDeriv eta x = omega x and rewrite with hexact _ (sphereParam_ne_zero p); then recompile, retaining B8-B11 as residual."},
     :commit "e7ba5fee30e3d361e8323b44544aea7fa72ac6c9",
     :changed-paths ["ConstructionTargets/t94A10Closure.lean"],
     :fixture
@@ -79660,7 +79666,7 @@
      "a6b81220ba8b3e9fcfea357e0b66383a2863105bde9c8cb37c3a6db5de417c20"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :repair,
    :scope
    ["problems/t94A10/lean/Main.lean"
     "problems/t94A10/status.json"
@@ -79680,7 +79686,7 @@
    :id :program-2026-10-11-close-t94a10,
    :kind :final-adapter,
    :campaign-priority 46,
-   :fail-count 2,
+   :fail-count 3,
    :depends-on [],
    :program true,
    :other-consumers [],
