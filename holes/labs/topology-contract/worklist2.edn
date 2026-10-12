@@ -74061,6 +74061,8 @@
    "Refill from the corrected H2-aware DAG and cross-loop area ranking.",
    :other-consumers []}
   {:consumer :t96J02,
+   :review-finding
+   "Blueprint defect: B7 is false from B1 as written. B1 requires only that paired arcs have equal labels; it does not require Label to classify pairing orbits. Counterexample: use the standard one-vertex square pairing with two arc-pair orbits, but assign both orbits the sole label Unit. All stated B1 label/pairing conditions hold, while the skeleton is a wedge of two circles, not FiniteWedge Unit Circle. Add a bijection between pairing orbits and Label (equivalently every label occurs on exactly one paired pair, with surjectivity), update B1 Lean data/type and B7 proof, and re-review downstream B8-B12.",
    :evidence
    {:blueprint
     {:nodes
@@ -74100,6 +74102,12 @@
     [{:cmd "blueprint exists; 12 B-nodes", :exit 0}
      {:cmd "registry check", :exit 0, :output "131/0"}
      {:cmd "git show --check 404da6bda", :exit 0}],
+    :review
+    {:outcome :fail,
+     :seat "codex-7",
+     :job "invoke-1791780422454-6338-cc088ee1",
+     :finding
+     "Blueprint defect: B7 is false from B1 as written. B1 requires only that paired arcs have equal labels; it does not require Label to classify pairing orbits. Counterexample: use the standard one-vertex square pairing with two arc-pair orbits, but assign both orbits the sole label Unit. All stated B1 label/pairing conditions hold, while the skeleton is a wedge of two circles, not FiniteWedge Unit Circle. Add a bijection between pairing orbits and Label (equivalently every label occurs on exactly one paired pair, with surjectivity), update B1 Lean data/type and B7 proof, and re-review downstream B8-B12."},
     :commit "404da6bda716da9d61f88056f35621bb9628bbd8",
     :changed-paths
     ["ConstructionTargets/PolygonSurfacePiOne.blueprint.md"],
@@ -74109,7 +74117,7 @@
      "8f8a432517c86515a8dceb53c211aa028933d0fc0a886e9dea6f4c87f3066675"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :repair,
    :scope ["ConstructionTargets/PolygonSurfacePiOne.blueprint.md"],
    :dag-node "TOPOLOGY-ROUTES.md/polygon-surface-pi1",
    :acceptance
@@ -74120,6 +74128,7 @@
    :id :routes-2026-10-12-polygon-surface-pi1-blueprint-topo2-r1,
    :kind :documentation,
    :area "polygon-surface-pi1",
+   :fail-count 1,
    :depends-on [:routes-2026-10-10-checkpoint-topo2-r8],
    :current-residual "Elect its first milestone.",
    :other-consumers [:t92J05 :t94J04 :t97A01 :t97A03]}
