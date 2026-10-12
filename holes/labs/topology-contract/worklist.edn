@@ -113850,14 +113850,14 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 5,
+   :stop-count 6,
    :review-finding
    "Blueprint B3 is marked proved but its proof uses the unlisted ConnectedGroupoidSingleObjEquivalence.connectorSingleObjEquivalence (and connector-system representation) instead of only the declared uses; add the actual connector dependency and proof route to B3 uses.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
    :evidence
    {:placeholder-delta {:source-before 0, :source-after 0},
     :residual
-    "Identify the two mapped base-object counits with expanded outer comparisons; close B6/B12.",
+    "Rewrite the unit-base square by the outer-comparison and unit-glue lemmas; close B6/B12.",
     :outcome :stop,
     :warnings [],
     :missing-theorems
@@ -113871,9 +113871,9 @@
       :area "fundamental-group-wedge-of-circles"}],
     :statement-hashes
     {:source
-     "e3dd22a360b05f3514fb9856c2342c39880eabbaa6e61b463ddb40804b827265",
+     "d8325938533f222e60d19fd28ee1adfeb7bb8c6f73922cdebc8ee3106f60e31b",
      :documentation
-     "337af3b2b45351990cc8f6b7cebae88801776d83b078573cde2ee57391be75c5",
+     "ff2916d60690079e34c829852dad058996897e494c1820b23f5bff7aa17f0367",
      :blueprint
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0",
      :registry "131/131"},
@@ -113881,7 +113881,7 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
     :reason
-    "Both coordinate-span counit legs are evaluated at the literal summand bases.",
+    "Unit-base glue naturality relates both base counits to the outer-comparison glue.",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/PointWedgeVanKampen.lean",
@@ -113890,24 +113890,7 @@
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder/diff validation", :exit 0}],
-    :diagnostic-history
-    [{:cmd "lean base evaluation",
-      :exit 1,
-      :finding
-      "Restored displaced right projection; used FundamentalGroupoid base objects."}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1791822203073-7391-ff74b41b",
-     :commands
-     ["git show/diff-tree 549e731a1"
-      "sha256 + placeholder + registry checks"
-      "lake env lean ConstructionTargets/PointWedgeVanKampen.lean"
-      "lake build ConstructionTargets.PointWedgeVanKampen"
-      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (expected absent)"],
-     :finding
-     "Scope is exactly Lean+MD; source/doc/blueprint hashes match; placeholders 0->0; registry 131/131. The two coordinate-span counit legs are correctly identified with the matching cover-to-summand equivalence counits and evaluated at FundamentalGroupoid.mk x0/y0; results remain mapped groupoid morphisms in their identity-span legs, with no invalid group coercion. They compile sorry-free with only propext, Classical.choice, Quot.sound. This is new progress; residual is matching mapped base counits with outer comparisons, then B6/B12. Final target remains absent as declared."},
-    :commit "549e731a19e2c2512bd485f9a4f2e9b74913ac33",
+    :commit "b3fc929b8db7408ba7e6df0925bdd7cfe5c81608",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
      "ConstructionTargets/PointWedgeVanKampen.md"],
@@ -113917,7 +113900,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
