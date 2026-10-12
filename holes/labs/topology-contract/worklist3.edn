@@ -19407,8 +19407,40 @@
   {:consumer :t00J02,
    :implements-lemma
    :lemma-constructiontargets-manifoldfundamentalclass-absolutesingularmap-relativeproject,
+   :evidence
+   {:placeholder-delta {:t00J02 [1 1], :t98A02 [1 1]},
+    :residual "Relative-chain comparison naturality.",
+    :outcome :done-unreviewed,
+    :warnings ["9 pre-existing unnecessarySimpa warnings"],
+    :missing-theorems [],
+    :statement-hashes {:registry "131/131"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli",
+    :commands
+    [{:cmd "sha256sum /tmp/pubrel.lean", :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.ManifoldFundamentalClass",
+      :exit 0}
+     {:cmd "lake env lean /tmp/pubrel_check.lean", :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd
+      "git diff --check -- ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd "rg forbidden tokens in scoped file",
+      :exit 1,
+      :expected-exit 1}],
+    :commit "b6db4957d111fa0e6886dbe1ee6bebc19955281c",
+    :changed-paths
+    ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+    :fixture
+    {:path "/tmp/pubrel.lean",
+     :sha256
+     "ab1cfc5e4be33e916d0a0bd19c4fd2455029ee9d35238d8ffce46f2e3ebd8b73"},
+    :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/manifold-fundamental-class/open-disk-model-transport",
