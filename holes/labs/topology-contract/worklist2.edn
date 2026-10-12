@@ -75548,7 +75548,7 @@
   {:consumer :t96J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 0,
    :review-finding
    "The STOP incorrectly marks the center-contraction milestone proved. commit 194ea4781 establishes only ContractibleSpace for the inner open, which chooses an unspecified contraction point; it neither supplies a deformation retraction nor identifies that point with PairingData.center. B4 explicitly requires U P to deformation-retract to P.center. Add this exact center-based deformation retraction to :missing-theorems and prove it in scope; annular side/overlap are not the only residual.",
    :evidence
@@ -75598,6 +75598,19 @@
     [{:cmd "radial Homotopy compile",
       :exit 1,
       :correction "typed continuity/direct conjugation"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791846734730-8036-c0988af2",
+     :commands
+     ["git show/diff/hash 03ab9736f"
+      "lake env lean ConstructionTargets/PolygonSurfacePiOne.lean"
+      "lake build ConstructionTargets.PolygonSurfacePiOne"
+      "python3 scripts/statement-registry.py check"
+      "#print axioms deformation/fixed"
+      "placeholder scan"],
+     :finding
+     "PASS on STOP after real progress: commit 03ab9736f adds the exact center deformation. The Homotopy is oriented id at t=0 to constant P.center at t=1, and the companion theorem proves P.center fixed for every t; transport through innerHomeomorph preserves the intended subtype boundary. Overlap Homeomorph and openCover remain explicitly listed. Scope is exact; fixture SHA-256 ec4a2b97...a0f8 and blob d20d5c76...a2b8 match. Fresh Lean/build gates pass, registry is 131/0, placeholders are 0, and both declarations use only propext, Classical.choice, Quot.sound."},
     :commit "03ab9736f",
     :changed-paths ["ConstructionTargets/PolygonSurfacePiOne.lean"],
     :fixture
@@ -75606,7 +75619,7 @@
      "ec4a2b9713c93f718af346c19cbc6b5a141efc5915537dc00707e60aafafa0f8"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope ["ConstructionTargets/PolygonSurfacePiOne.lean"],
    :dag-node "ConstructionTargets/PolygonSurfacePiOne.blueprint.md/B4",
    :acceptance
@@ -85988,7 +86001,7 @@
    :other-consumers [:t92J05 :t94J04 :t97A01 :t97A03]}
   {:consumer :t96J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "polygonCenterDeformationRetract",
@@ -86000,7 +86013,9 @@
     :type
     "explicit deformation retraction of the inner quotient open to the point P.center",
     :area "polygon-surface-pi1",
-    :proved-in :routes-2026-10-12-polygon-b4-topo2-r1},
+    :proved-in :routes-2026-10-12-polygon-b4-topo2-r1,
+    :banked-by :routes-2026-10-12-polygon-b4-topo2-r1,
+    :banked-commit "03ab9736f"},
    :id :lemma-polygoncenterdeformationretract,
    :kind :lemma,
    :depends-on [:lemma-innerhomeomorph],
