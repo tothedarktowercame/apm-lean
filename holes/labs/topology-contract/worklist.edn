@@ -113890,6 +113890,17 @@
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder/diff validation", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791837762006-7874-1a0fc3d7",
+     :commands
+     ["git show/diff-tree bdda6927"
+      "lake build ConstructionTargets.PointWedgeVanKampen"
+      "python3 scripts/statement-registry.py check"
+      "commit hash and placeholder checks"],
+     :finding
+     "PASS program STOP: bdda6927 by topo-2 adds the isolated coordinate-span left comparison, its ordered expansion, and documentation, exactly within scope and new since history. Source ceda2d68..., documentation f786fddc..., fixture 0bca6ce3..., registry 131/131, and placeholders 0->0 reproduce. The expansion preserves leftComparison orientation: inverse strict-span comparison first, then the left-equivalence unit factor; both representation changes stay explicit. Fresh build passes with standard axioms. This is compiled sorry-free progress; normalizing these left factors and the right comparison, then point-span transport, counits, and B6/B12 remain explicitly listed."},
     :commit "bdda6927989d58fcb6a65ffdc374e8d08cdcf9d8",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
@@ -113900,7 +113911,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113921,7 +113932,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Coordinate-span global glue is now an explicit ordered three-factor transport.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: The coordinate-span forward left comparison is isolated and expanded into its two ordered factors.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -114444,7 +114455,11 @@
     {:job 9,
      :commit "b4bff57e1a66812551619efa139ad39ccf6c445b",
      :reason
-     "Coordinate-span global glue is now an explicit ordered three-factor transport."}]}
+     "Coordinate-span global glue is now an explicit ordered three-factor transport."}
+    {:job 1,
+     :commit "bdda6927989d58fcb6a65ffdc374e8d08cdcf9d8",
+     :reason
+     "The coordinate-span forward left comparison is isolated and expanded into its two ordered factors."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
