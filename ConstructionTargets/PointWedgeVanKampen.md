@@ -607,3 +607,10 @@ The final factor is now discharged:
 `genericPointWedgeCounitElement_eq_mappedRepresentationCounit` removes it
 from the full B3 counit.  Only the mapped free-product-representation counit
 remains to be identified with the outer comparison composite.
+
+`genericPointWedgePreFreeProductMappingEquivalence` names the composite before
+the point-span-to-free-product representation step, and
+`genericPointWedgeFreeProductMappingEquivalence_eq_pre_trans` proves that the
+remaining mapped counit factors through exactly this boundary.  The next job
+can compute the final point-span counit before comparing the pre-composite
+counit with the open-cover outer comparisons.
