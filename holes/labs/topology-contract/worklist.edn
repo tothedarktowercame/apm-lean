@@ -113857,18 +113857,16 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 4,
+   :stop-count 5,
    :review-finding
    "Blueprint B3 is marked proved but its proof uses the unlisted ConnectedGroupoidSingleObjEquivalence.connectorSingleObjEquivalence (and connector-system representation) instead of only the declared uses; add the actual connector dependency and proof route to B3 uses.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
    :evidence
    {:placeholder-delta {:source-before 0, :source-after 0},
     :residual
-    "Identify left span source/cast, right span map, two inclusion images, literal lifts; then B12.",
+    "Identify both span sources/casts, two inclusion images, literal lifts; then B12.",
     :outcome :stop,
-    :warnings
-    [{:kind :concurrent-worktree-change,
-      :path "ConstructionTargets/ManifoldFundamentalClass.lean"}],
+    :warnings [],
     :missing-theorems
     [{:name
       "PointWedgeVanKampen.genericPointWedgeLegCoordinates_vanKampen",
@@ -113880,9 +113878,9 @@
       :area "fundamental-group-wedge-of-circles"}],
     :statement-hashes
     {:source
-     "b8536e98114d7aeaa3455baff892716eaea53e5dcf41bc07c657c6a12421caa8",
+     "0366804a72d02dee8d1c132512d39d8f102372d0e214bb45366a196e8e66efc9",
      :documentation
-     "df6002fda4622b4e18dfc0b29198d83df04a7334424f08fc9698de486a7d5b42",
+     "de42bbd9b37510581b1f4f3d08999058afaafd46e7feb51286cd46eb89ce5c48",
      :blueprint
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0",
      :registry "131/131"},
@@ -113890,7 +113888,7 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
     :reason
-    "Left span component target is the literal left base object.",
+    "Right span component target is the literal right base object.",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/PointWedgeVanKampen.lean",
@@ -113899,25 +113897,8 @@
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder/diff validation", :exit 0}],
-    :diagnostic-history
-    [{:cmd "lean direct injection attempt",
-      :exit 1,
-      :finding
-      "Source endpoint retained; endomorphism cast required."}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1791776743679-6271-5a0d3e67",
-     :commands
-     ["git show/diff-tree cc4036ce8"
-      "sha256/diff/placeholder checks"
-      "statement-registry.py check"
-      "lake env lean ConstructionTargets/PointWedgeVanKampen.lean"
-      "lake build ConstructionTargets.PointWedgeVanKampen"
-      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (expected absent)"],
-     :finding
-     "Exact scoped commit and frozen fixture 0bca6c...8c8b0 verified. New rfl lemma correctly identifies only the left-span component target as FundamentalGroupoid.mk x0; it leaves the source and required endomorphism cast explicit, respecting the representation boundary. Source is sorry-free; hashes and 131/131 registry reproduce; Lean/build pass; only standard axioms. Valid program STOP with compiled progress and residual naming left source/cast, right span map, inclusion images, literal lifts, then B12; final target is absent as reported."},
-    :commit "cc4036ce8d18545f4185c7b645d9090b3bf80134",
+    :diagnostic-history [],
+    :commit "ea61ae8bf487bfb7033c7a5d81c2895b7e8cee86",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
      "ConstructionTargets/PointWedgeVanKampen.md"],
@@ -113927,7 +113908,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
