@@ -79657,6 +79657,19 @@
       :exit 1,
       :finding
       "Qualified Set/MeasureTheory notation; compiled rerun."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791775700648-6254-2a559a55",
+     :commands
+     ["git scope/blob/SHA/ancestry checks"
+      "lake build ConstructionTargets.t94A10Closure"
+      "lake env lean ConstructionTargets/t94A10Closure.lean"
+      "lake env lean problems/t94A10/lean/Main.lean"
+      "statement-registry check/fingerprint"
+      "commit placeholder counts"],
+     :finding
+     "PASS: commit 6648481f4 proves the correctly oriented Green boundary core using the available rectangle theorem with explicit continuity, derivative, exceptional-set, and integrability premises. Compiled sorry-free standard-axiom progress; scope/fixture/blobs match, registry 131/0, fingerprint d1822221, placeholders closure/Main 0/1. STOP lists derivation of those premises from B7, then B9-B11."},
     :commit "6648481f44a7bc156a8aa237df827f45a213e6a3",
     :changed-paths ["ConstructionTargets/t94A10Closure.lean"],
     :fixture
@@ -79665,7 +79678,7 @@
      "b7b7a45ff670ea4eab22f88de1c7983db73a88a2bcee2e724bb0d63e6243dcf3"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t94A10/lean/Main.lean"
     "problems/t94A10/status.json"
@@ -79706,6 +79719,9 @@
      :reason :program-progress-committed}
     {:job 1,
      :commit "14241ba580bf7b21a4a855d177a75df7a718ff87",
+     :reason :program-progress-committed}
+    {:job 2,
+     :commit "6648481f44a7bc156a8aa237df827f45a213e6a3",
      :reason :program-progress-committed}]}
   {:consumer :t97A04,
    :phase :lemma,
@@ -81913,7 +81929,7 @@
    :other-consumers []}
   {:consumer :t94A10,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -81927,7 +81943,9 @@
     :type
     "Green cancellation from explicit continuity, HasFDerivAt and integrability premises",
     :area "periodic-stokes-square",
-    :proved-in :program-2026-10-11-close-t94a10},
+    :proved-in :program-2026-10-11-close-t94a10,
+    :banked-by :program-2026-10-11-close-t94a10,
+    :banked-commit "6648481f44a7bc156a8aa237df827f45a213e6a3"},
    :id
    :lemma-constructiontargets-t94a10closure-sphericalrectangle-green-boundary-zero,
    :kind :lemma,
@@ -81935,11 +81953,14 @@
    :other-consumers []}
   {:consumer :portfolio,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance {:lemma "sphericalRectangle_green_boundary_zero"},
    :lemma
-   {:name "sphericalRectangle_green_boundary_zero", :reported-by []},
+   {:name "sphericalRectangle_green_boundary_zero",
+    :reported-by [],
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t94A10Closure.lean"]},
    :id :lemma-sphericalrectangle-green-boundary-zero,
    :kind :lemma,
    :depends-on [],
