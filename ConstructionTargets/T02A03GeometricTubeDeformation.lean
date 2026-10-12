@@ -2427,6 +2427,56 @@ theorem twiceCorrectedDepartureQuarterCandidate_radialDefect_lt :
   rw [Complex.norm_real, Real.norm_eq_abs, abs_lt]
   constructor <;> linarith
 
+noncomputable def twiceCorrectedDepartureQuarterCandidate : ℂ :=
+  ((1 / 4 : ℝ) : ℂ) + ((-33 / 32 : ℝ) : ℂ) * Complex.I
+
+theorem twiceCorrectedDepartureQuarterCandidate_ne_zero :
+    twiceCorrectedDepartureQuarterCandidate ≠ 0 := by
+  intro h
+  have hre := congrArg Complex.re h
+  norm_num [twiceCorrectedDepartureQuarterCandidate, Complex.mul_re,
+    Complex.mul_im] at hre
+
+noncomputable def twiceCorrectedDepartureQuarterCandidateCircle : Circle :=
+  ⟨NormedSpace.normalize twiceCorrectedDepartureQuarterCandidate,
+    mem_sphere_zero_iff_norm.mpr
+      (NormedSpace.norm_normalize
+        twiceCorrectedDepartureQuarterCandidate_ne_zero)⟩
+
+noncomputable def twiceCorrectedDepartureQuarterCandidateNormal : ℂ :=
+  ((1 - ‖twiceCorrectedDepartureQuarterCandidate‖ : ℝ) : ℂ)
+
+noncomputable def twiceCorrectedDepartureQuarterCandidatePoint :
+    apm_t02a03_E3 :=
+  rightTubeCorePolarReconstruction
+    twiceCorrectedDepartureQuarterCandidateCircle
+    twiceCorrectedDepartureQuarterCandidateNormal
+
+theorem twiceCorrectedDepartureQuarterCandidatePoint_mem_rightTube :
+    twiceCorrectedDepartureQuarterCandidatePoint ∈ apm_t02a03_rightTube := by
+  apply reconstructionMemRightTube_rightTubeCorePolar
+  exact le_of_lt (by
+    simpa [twiceCorrectedDepartureQuarterCandidateNormal,
+      twiceCorrectedDepartureQuarterCandidate] using
+        twiceCorrectedDepartureQuarterCandidate_radialDefect_lt)
+
+theorem rightTubeCorePlanarComplex_quarterCandidatePoint :
+    rightTubeCorePlanarComplex twiceCorrectedDepartureQuarterCandidatePoint =
+      twiceCorrectedDepartureQuarterCandidate := by
+  have hs := NormedSpace.norm_smul_normalize
+    twiceCorrectedDepartureQuarterCandidate
+  have hre := congrArg Complex.re hs
+  have him := congrArg Complex.im hs
+  apply Complex.ext
+  · simpa [twiceCorrectedDepartureQuarterCandidatePoint,
+      twiceCorrectedDepartureQuarterCandidateNormal,
+      twiceCorrectedDepartureQuarterCandidateCircle,
+      rightTubeCorePlanarComplex, rightTubeCorePolarReconstruction] using hre
+  · simpa [twiceCorrectedDepartureQuarterCandidatePoint,
+      twiceCorrectedDepartureQuarterCandidateNormal,
+      twiceCorrectedDepartureQuarterCandidateCircle,
+      rightTubeCorePlanarComplex, rightTubeCorePolarReconstruction] using him
+
 /-- At quarter time the explicit bump equation forces imaginary coordinate
 `-33/32`, so the annulus-admissible candidate satisfies both scalar zero
 equations. -/
@@ -2538,4 +2588,6 @@ end ConstructionTargets.T02A03GeometricTubeDeformation
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.twiceCorrectedDepartureQuarterCandidate_mem_planarAnnulus
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.twiceCorrectedDepartureQuarterCandidate_norm_bounds
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.twiceCorrectedDepartureQuarterCandidate_radialDefect_lt
+#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.twiceCorrectedDepartureQuarterCandidatePoint_mem_rightTube
+#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeCorePlanarComplex_quarterCandidatePoint
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.twiceCorrectedDepartureQuarterCandidate_scalarEquations
