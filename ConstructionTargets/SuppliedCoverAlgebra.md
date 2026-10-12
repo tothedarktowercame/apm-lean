@@ -29,7 +29,7 @@ noncomputable def coveringFundamentalGroupEquivRange
 uses: `ConstructionTargets.coveringInducedFundamentalGroupMap_injective`,
 Mathlib `MonoidHom.ofInjective`
 
-status: planned
+status: proved (current program commit)
 
 Apply `MonoidHom.ofInjective` to the induced fundamental-group homomorphism
 and its existing injectivity theorem.  The resulting codomain is definitionally
@@ -50,7 +50,7 @@ theorem isEmbedding_of_comp_eq
 
 uses: Mathlib `Topology.IsEmbedding.of_comp`
 
-status: planned
+status: proved (current program commit)
 
 Rewrite `hi` along `h` to obtain `IsEmbedding (p ∘ l)`.  Apply
 `Topology.IsEmbedding.of_comp hp hl` to that fact.  Thus `hl`, `hp`, `hi`,
