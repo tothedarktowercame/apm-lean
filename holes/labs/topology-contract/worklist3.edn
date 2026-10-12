@@ -1359,7 +1359,7 @@
    "Construct the planar Schoenflies ambient normal form.",
    :other-consumers [:t01J01 :t03J02]}
   {:consumer :t00A03,
-   :stop-count 1,
+   :stop-count 2,
    :review-finding
    "Frozen fixture mode is missing in both authoritative acceptance copies. The SHA c3408c2332b5c1e255f2dee616ebf826e01594ddec4c0aa27b604bbb077ffe6b matches and the module builds, but literal fixture compilation exits 1 because circleZeroSection_isEmbedding is already declared. Add :mode :post-build-export-check to both acceptance copies, then resubmit commit d29e0f66.",
    :implements-lemma
@@ -1367,7 +1367,7 @@
    :evidence
    {:placeholder-delta {:t00A03 [2 2], :t01J01 [3 3], :t03J02 [2 2]},
     :residual
-    "Add fixture mode to both acceptance copies, then resubmit d29e0f66.",
+    "Stop repeated repair; update both acceptance copies, then resubmit d29e0f66.",
     :outcome :stop,
     :warnings [],
     :statement-hashes {:registry "131/131"},
@@ -1375,7 +1375,7 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Both authoritative acceptance copies omit :mode. Supervisor must add :mode :post-build-export-check; the scoped theorem at d29e0f66 builds and matches the frozen fixture digest.",
+    "Third unchanged audit: both authoritative acceptance copies omit :mode. Supervisor must add :mode :post-build-export-check; d29e0f66 remains compiled and matches the frozen digest.",
     :commands
     [{:cmd "sha256sum /tmp/surface_schoenflies_zero_embedding.lean",
       :exit 0}
@@ -1385,12 +1385,6 @@
       "git diff --exit-code d29e0f66 -- ConstructionTargets/SurfaceSchoenflies.lean",
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1791830916396-7727-9a2e1e4c",
-     :finding
-     "Frozen fixture mode is missing in both authoritative acceptance copies. The SHA c3408c2332b5c1e255f2dee616ebf826e01594ddec4c0aa27b604bbb077ffe6b matches and the module builds, but literal fixture compilation exits 1 because circleZeroSection_isEmbedding is already declared. Add :mode :post-build-export-check to both acceptance copies, then resubmit commit d29e0f66."},
     :commit "d29e0f66e8f45a22d5714a70fb5809ddcf99a852",
     :changed-paths [],
     :fixture
@@ -1400,7 +1394,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :repair,
+   :state :needs-owner,
    :scope ["ConstructionTargets/SurfaceSchoenflies.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/schoenflies/planar-normal-form",
    :acceptance
