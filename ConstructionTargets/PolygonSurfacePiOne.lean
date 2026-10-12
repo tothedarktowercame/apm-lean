@@ -1,4 +1,5 @@
 import ConstructionTargets.Surfaces
+import ConstructionTargets.PolygonTorusCrosscapRelation
 
 /-!
 # Polygon surface fundamental groups
@@ -108,5 +109,32 @@ def orbit (P : PairingData) (i : Fin P.edgeCount) : PairingOrbit P.pair :=
   exact Relation.EqvGen.rel (P.pair i) i (P.pair_pair i).symm
 
 end PairingData
+
+/-! ### The six-edge `T² # ℝP²` pairing -/
+
+/-- The arc involution for the word `a b a⁻¹ b⁻¹ c c`. -/
+def torusRP2PairIndex (i : Fin 6) : Fin 6 :=
+  ![2, 3, 0, 1, 5, 4] i
+
+theorem torusRP2PairIndex_involutive : Function.Involutive torusRP2PairIndex := by
+  intro i
+  fin_cases i <;> rfl
+
+/-- The fixed-point-free permutation of the six arcs in the torus-crosscap
+word. -/
+def torusRP2Pair : Equiv.Perm (Fin 6) :=
+  { toFun := torusRP2PairIndex
+    invFun := torusRP2PairIndex
+    left_inv := torusRP2PairIndex_involutive
+    right_inv := torusRP2PairIndex_involutive }
+
+@[simp] theorem torusRP2Pair_apply (i : Fin 6) :
+    torusRP2Pair i = torusRP2PairIndex i := rfl
+
+theorem torusRP2Pair_ne (i : Fin 6) : torusRP2Pair i ≠ i := by
+  fin_cases i <;> decide
+
+/-- Signs which reverse the first two paired arcs and preserve the last. -/
+def torusRP2Sign (i : Fin 6) : Bool := i.1 < 2
 
 end ConstructionTargets.PolygonSurfacePiOne
