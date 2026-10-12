@@ -113850,14 +113850,14 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 3,
+   :stop-count 4,
    :review-finding
    "Blueprint B3 is marked proved but its proof uses the unlisted ConnectedGroupoidSingleObjEquivalence.connectorSingleObjEquivalence (and connector-system representation) instead of only the declared uses; add the actual connector dependency and proof route to B3 uses.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
    :evidence
    {:placeholder-delta {:source-before 0, :source-after 0},
     :residual
-    "Normalize the named pseudopushout predecessor glue, combine both splice squares, then close B6/B12.",
+    "Normalize the canonical descent-overlap predecessor glue, substitute three-factor counits, then close B6/B12.",
     :outcome :stop,
     :warnings [],
     :missing-theorems
@@ -113871,9 +113871,9 @@
       :area "fundamental-group-wedge-of-circles"}],
     :statement-hashes
     {:source
-     "da343d433647807d00f78db69d54e1125c0d2c1577770364b88ed1fc923fc551",
+     "2892f1cbdfa6ed9d6edc84fe0bac4707b7b1bac803c3994a8831d478a8f99e2f",
      :documentation
-     "072b64fe84a191d764ff8cb1995b65acb9678d3a19b908deaa7f516cc2417166",
+     "bc0a72ec23d46cab58126a6b36798340a4429471937b65e1b84b8b2177d1add6",
      :blueprint
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0",
      :registry "131/131"},
@@ -113881,7 +113881,7 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
     :reason
-    "The mapped open-cover counit square now isolates its predecessor pseudopushout glue.",
+    "Both mapped counit glue squares now compose, leaving only the pseudopushout predecessor glue.",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/PointWedgeVanKampen.lean",
@@ -113890,18 +113890,12 @@
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder/diff validation", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1791833028207-7775-aac836db",
-     :commands
-     ["git show/diff-tree fb717ffb"
-      "lake env lean ConstructionTargets/PointWedgeVanKampen.lean"
-      "python3 scripts/statement-registry.py check"
-      "commit hash and placeholder checks"],
-     :finding
-     "PASS program STOP: fb717ffb by topo-2 adds a named pseudopushout source glue, its counit square, and documentation, exactly within scope and new since history. Source da343d43..., documentation 072b64fe..., fixture 0bca6ce3..., registry 131/131, and placeholders 0->0 reproduce. The theorem is mapped counit glue naturality at the unique overlap object, with right*source=target*left matching SingleObj multiplication; categorical representation boundaries and connector counits remain explicit. Fresh Lean passes with only propext/choice/Quot.sound. This is compiled sorry-free progress; predecessor-glue normalization, splice composition, and B6/B12 remain explicitly listed."},
-    :commit "fb717ffb3f22a9c589ee55a0235fa142f8fcdc59",
+    :diagnostic-history
+    [{:cmd "lean predecessor normalization attempts",
+      :exit 130,
+      :finding
+      "Not definitional; residual is canonical descent-overlap component."}],
+    :commit "e3464858a6b60d00c3307e37f761315576c888d1",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
      "ConstructionTargets/PointWedgeVanKampen.md"],
@@ -113911,7 +113905,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
