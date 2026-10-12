@@ -2941,6 +2941,13 @@ theorem coefficientOpenDiskNormalizationComposite_eq_model (k : ℕ) :
         (CoefficientSphereAntipodal.normalization ℤ k).hom) hc
   exact h1.trans h2
 
+theorem productionOpenDiskNormalizationComposite_eq_model (k : ℕ) :
+    productionOpenDiskNormalizationComposite k =
+      (integralOpenDiskRelativeHomologyComparison k).hom ≫
+        (HigherModelLocalHomology.localIsoInt k).hom := by
+  unfold productionOpenDiskNormalizationComposite
+  rw [HigherModelLocalHomology.comparison]
+
 end ConstructionTargets.ManifoldFundamentalClass
 
 #print axioms ConstructionTargets.ManifoldFundamentalClass.neighborhoodInclusion_Hsucc_isIso
@@ -3039,6 +3046,7 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientOpenDiskRadial_forgotten_naturality
 #print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientSphereNormalizationComparisonAutomorphism_hom_eq_neg_implies_openDisk
 #print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientOpenDiskNormalizationComposite_eq_model
+#print axioms ConstructionTargets.ManifoldFundamentalClass.productionOpenDiskNormalizationComposite_eq_model
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_projection
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_generator_of_normalization
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_normalization_of_generator
