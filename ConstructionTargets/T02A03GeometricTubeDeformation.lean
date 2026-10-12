@@ -3776,6 +3776,22 @@ theorem radialArrivalCorrection_ne_zero_of_planarAxis
   have hr := rightTubePlanarComplex_re_pos p.1 p.2.1
   nlinarith
 
+/-- The two endpoint-fixed arrival corrections cover every point on the
+interior arrival leg.  This isolates the remaining construction problem as
+continuous gluing of the two certified legs. -/
+theorem arrivalCorrection_nonvanishing_cover
+    (t : unitInterval) (ht0 : (1 / 2 : ℝ) < (t : ℝ)) (ht1 : (t : ℝ) < 1)
+    (p : RightTubeMinusLeftCore) :
+    (((2 - 2 * (t : ℝ) : ℝ) : ℂ) * positiveRealPlanarWaypointMap p +
+          ((2 * (t : ℝ) - 1 : ℝ) : ℂ) * rightTubeCorePlanarComplex p.1 +
+          signedArrivalCorrection (t, p)) ≠ 0 ∨
+      (((2 - 2 * (t : ℝ) : ℝ) : ℂ) * positiveRealPlanarWaypointMap p +
+          ((2 * (t : ℝ) - 1 : ℝ) : ℂ) * rightTubeCorePlanarComplex p.1 +
+          radialArrivalCorrection (t, p)) ≠ 0 := by
+  by_cases hp : p.1 1 = 0
+  · exact Or.inr (radialArrivalCorrection_ne_zero_of_planarAxis t ht0 ht1 p hp)
+  · exact Or.inl (signedArrivalCorrection_ne_zero_of_second_ne_zero t p hp)
+
 /-- Polynomial forced-norm identity for the whole corrected arrival leg;
 it avoids division at the exceptional time `t = 3/4`. -/
 theorem complexArrivalCorrection_zero_scaled_normSq
@@ -4156,6 +4172,7 @@ end ConstructionTargets.T02A03GeometricTubeDeformation
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.signedArrivalCorrection_eq_zero_iff_second_eq_zero
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.heightArrivalCorrection_ne_zero_of_planarAxis
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.radialArrivalCorrection_ne_zero_of_planarAxis
+#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.arrivalCorrection_nonvanishing_cover
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.complexArrivalCorrection_ne_zero_of_scaled_normSq_outside
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.complexArrivalCorrection_threeQuarters_ne_zero
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.continuous_arrivalTransverseCorrection
