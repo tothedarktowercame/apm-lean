@@ -610,4 +610,22 @@ def nonorientableStandardSpaceEquiv (g : ℕ) :
   apply Quotient.congrRight
   exact nonorientable_eqvGen_iff g
 
+/-- The quotient comparison is a homeomorphism for the coinduced quotient
+topologies, not merely an equivalence of the underlying quotient types. -/
+def nonorientableStandardSpaceHomeomorph (g : ℕ) :
+    Quotient (Relation.EqvGen.setoid
+      (boundaryRel (2 * g) (standardPair false g) (standardSign false g))) ≃ₜ
+      Surface false g where
+  toEquiv := nonorientableStandardSpaceEquiv g
+  continuous_toFun := by
+    apply Continuous.quotient_lift
+    exact continuous_coinduced_rng
+  continuous_invFun := by
+    apply Continuous.quotient_lift
+    exact continuous_quotient_mk'
+
+@[simp] theorem nonorientableStandardSpaceHomeomorph_mk (g : ℕ) (x : Disk) :
+    nonorientableStandardSpaceHomeomorph g (Quotient.mk _ x) =
+      surfaceQuotient false g x := rfl
+
 end ConstructionTargets.PolygonSurfacePiOne
