@@ -18561,6 +18561,17 @@
      {:cmd "lake env lean /tmp/packconn_check.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "git diff --check", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791774577698-6233-6c3df9a3",
+     :commands
+     ["recorded scope/blob, fixture hash, diff check"
+      "statement registry and placeholder scans"
+      "lake env lean: renamed fixture and module"
+      "lake build ConstructionTargets.ManifoldFundamentalClass"],
+     :finding
+     "PASS: recorded one-file scope and frozen fixture hash match. Expanding the packaged comparisons gives f≫g≫h=r≫m≫q; the proof substitutes f≫g=r≫d from forgotten connecting naturality and d≫h=m≫q from raw naturality, with correct reassociation and no reversed iso. Registry 131/0; source placeholders 0; consumer sorries 1/1; standard axioms only; build 8326 jobs."},
     :commit "c8e2386955a73ce54c3358adc86332fdd31a6d54",
     :changed-paths
     ["ConstructionTargets/ManifoldFundamentalClass.lean"],
@@ -18570,7 +18581,7 @@
      "a36bb2bbf3539d7fe91a49a43ad672b18e1033747feac609f81bb59a6922bd5d"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/manifold-fundamental-class/open-disk",
    :acceptance
@@ -18642,7 +18653,7 @@
       "a36bb2bbf3539d7fe91a49a43ad672b18e1033747feac609f81bb59a6922bd5d"},
      :seat "topo-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -26673,7 +26684,7 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -26686,7 +26697,9 @@
     [:routes-2026-10-10-manifold-fundamental-class-topo3-r2],
     :type "exact type in /tmp/packconn.lean",
     :area "manifold-fundamental-class",
-    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2,
+    :banked-by :routes-2026-10-12-mfclass-packconn-r1,
+    :banked-commit "c8e2386955a73ce54c3358adc86332fdd31a6d54"},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-coefficientopendiskconnecting-compa,
    :kind :lemma,
