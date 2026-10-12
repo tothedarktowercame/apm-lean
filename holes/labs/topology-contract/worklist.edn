@@ -113850,7 +113850,7 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 10,
+   :stop-count 0,
    :review-finding
    "Blueprint B3 is marked proved but its proof uses the unlisted ConnectedGroupoidSingleObjEquivalence.connectorSingleObjEquivalence (and connector-system representation) instead of only the declared uses; add the actual connector dependency and proof route to B3 uses.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
@@ -113904,7 +113904,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -116664,6 +116664,19 @@
     [{:cmd "lean corollary rewrite",
       :exit 1,
       :finding "Used ContinuousLinearMap.comp_id directly."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791789942398-6568-2832e50e",
+     :commands
+     ["git show/diff-tree 8432f937"
+      "sha256/diff/placeholder checks"
+      "statement-registry.py check"
+      "lake env lean ConstructionTargets/t97A07Closure.lean"
+      "lake env lean problems/t97A07/lean/Main.lean"
+      "lake build ConstructionTargets.t97A07Closure"],
+     :finding
+     "PASS program STOP after fixture repair: exact 2-file commit adds compiled sorry-free centre normalization (inverse source-chart mfderiv=id, hence transported derivative=mfderiv) with useful orientation and faithful B2 blueprint text. Fixture/source/target hashes match; target placeholders remain 1->1, closure 0; registry 131/131; standard axioms only. Residual names smaller-neighbourhood equality, then B3-B9."},
     :commit "8432f93741bee955f9d48c4a6fbeaf612af55d81",
     :changed-paths
     ["ConstructionTargets/t97A07Closure.lean"
@@ -116674,7 +116687,7 @@
      "5bb02c342b988406e8bd26aeda1b9e67335a8c1f626d97ec96701cb039ae708f"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A07/lean/Main.lean"
     "problems/t97A07/status.json"
@@ -116690,7 +116703,7 @@
     ["lake env lean problems/t97A07/lean/Main.lean"
      "python3 scripts/statement-registry.py check"]},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: B2 centre transport is mfderiv followed by the inverse source-chart derivative.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Receipt repaired: fixture now records the exact reviewed blueprint hash.",
    :id :program-2026-10-11-close-t97a07,
    :kind :final-adapter,
    :campaign-priority 44,
@@ -116724,7 +116737,11 @@
     {:job 7,
      :commit "0519a5827e016d0892e4dd9c01814b8e46cdef4c",
      :reason
-     "B2 centre transport is mfderiv followed by the inverse source-chart derivative."}]}
+     "B2 centre transport is mfderiv followed by the inverse source-chart derivative."}
+    {:job 9,
+     :commit "8432f93741bee955f9d48c4a6fbeaf612af55d81",
+     :reason
+     "Receipt repaired: fixture now records the exact reviewed blueprint hash."}]}
   {:consumer :t91J06,
    :phase :implementation,
    :state :open,
