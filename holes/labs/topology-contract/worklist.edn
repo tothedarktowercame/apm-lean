@@ -113898,6 +113898,19 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder/diff validation", :exit 0}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791770698220-6168-1ae4832e",
+     :commands
+     ["git show/diff-tree 8c3e0377c"
+      "sha256/diff/placeholder checks"
+      "statement-registry.py check"
+      "lake env lean ConstructionTargets/PointWedgeVanKampen.lean"
+      "lake build ConstructionTargets.PointWedgeVanKampen"
+      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (expected absent)"],
+     :finding
+     "Exact scoped commit and frozen fixture 0bca6c...8c8b0 verified. New rfl lemma faithfully removes postcomposition whiskering while retaining the inverse funInvIdAssoc component under Q.left.map; it makes no false identity claim. Source is sorry-free; hashes and 131/131 registry reproduce; Lean/build pass; only standard axioms. Valid program STOP with new compiled progress and residual listing left component evaluation, right round-trip, two span maps, literal lifts, then B12; final target is absent as reported."},
     :commit "8c3e0377c36632475761cb7c935ecb6994bcd0a7",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
@@ -113908,7 +113921,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113929,7 +113942,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Outer right-span factor is the mapped inverse strict comparison.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Inverse outer-left round-trip is its explicit component map.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -114113,7 +114126,11 @@
     {:job 5,
      :commit "66eeea5039f1fd0cb367a349e7c47145854a7c7a",
      :reason
-     "Outer right-span factor is the mapped inverse strict comparison."}]}
+     "Outer right-span factor is the mapped inverse strict comparison."}
+    {:job 6,
+     :commit "8c3e0377c36632475761cb7c935ecb6994bcd0a7",
+     :reason
+     "Inverse outer-left round-trip is its explicit component map."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
