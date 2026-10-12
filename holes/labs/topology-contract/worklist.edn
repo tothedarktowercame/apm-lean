@@ -116521,13 +116521,16 @@
      :reason
      "Program milestone completed. Blueprint node B5 is proved: compactness selects finitely many B4 neighbourhoods, the minimum of their positive local times is positive, and every selected curve restricts to that common interval. Only B6 remains."}]}
   {:consumer :t97A07,
-   :stop-count 4,
+   :stop-count 5,
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
     :residual
-    "Prove nearby chart-transition mfderiv equality; then B3-B9.",
+    "Identify fixed representative fderivWithin with transported mfderiv on a smaller chart neighborhood; then B3-B9.",
     :outcome :stop,
-    :warnings [{:kind :existing-placeholder}],
+    :warnings
+    [{:kind :existing-placeholder}
+     {:kind :concurrent-worktree-change,
+      :path "ConstructionTargets/t96A07Closure.lean"}],
     :missing-theorems
     [{:name "t97A07Closure.continuousAt_coordinate_mfderiv",
       :type "Chart derivative continuity and mfderiv equality",
@@ -116539,15 +116542,15 @@
     {:source
      "f13a687334f894f060c24b9aa390e8de88a2bf5f3d36e1de717af326c84d78f2",
      :target
-     "431b6da8141e8a202d2eddca735c6a1f409aafeac9801468e7394348d58c8589",
+     "20209602b027c03c985e8e607dbd58e3c0a7a8a9f5db6dc10f26f2b5fc7e6371",
      :blueprint
-     "5422728000d61d5c16d5d19b5d0236e3bc8ac440b307994163c40de15eddb6a8",
+     "eaeed21919599335d4a33b437815c4a9cbb5b72110213b29440d6944cc982182",
      :registry "131/131"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
     :reason
-    "B2 centre coordinate derivative now equals mfderiv definitionally after smoothness supplies differentiability.",
+    "B2 nearby mfderiv is expressed through fixed chart-transition factors.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t97A07Closure.lean",
       :exit 0}
@@ -116556,33 +116559,23 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder/diff validation", :exit 0}],
     :diagnostic-history
-    [{:cmd "lake env lean ConstructionTargets/t97A07Closure.lean",
+    [{:cmd "lean",
       :exit 1,
-      :finding "Corrected syntax and differentiability degree."}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1791759639128-5952-13386690",
-     :commands
-     ["git show/diff-tree 563c5cf0"
-      "sha256/diff/placeholder checks"
-      "statement-registry.py check"
-      "lake env lean ConstructionTargets/t97A07Closure.lean"
-      "lake build ConstructionTargets.t97A07Closure"
-      "lake env lean problems/t97A07/lean/Main.lean"],
-     :finding
-     "PASS: new compiled sorry-free B2 progress proves the center fixed-chart fderivWithin equals mfderiv after smoothness supplies MDifferentiableAt; types stay in Euclidean model fibers and no distinct tangent fibers are identified. Exact two-file scope and frozen hashes match; reusable source has 0 placeholders; target retains its listed 1 existing sorry; registry 131/131; standard axioms. Nearby chart-transition equality and B3-B9 remain listed, so this is a valid program STOP."},
-    :commit "563c5cf0a2d89c943ca8bf2dedff96864f5096bc",
+      :finding "Corrected mfderivWithin argument order."}
+     {:cmd "lean",
+      :exit 1,
+      :finding "Made model parameters explicit."}],
+    :commit "736c25666597f19ccd3540096d4a392c05e41410",
     :changed-paths
     ["ConstructionTargets/t97A07Closure.lean"
      "ConstructionTargets/t97A07Closure.blueprint.md"],
     :fixture
     {:path "ConstructionTargets/t97A07Closure.blueprint.md",
      :sha256
-     "5422728000d61d5c16d5d19b5d0236e3bc8ac440b307994163c40de15eddb6a8"},
+     "eaeed21919599335d4a33b437815c4a9cbb5b72110213b29440d6944cc982182"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t97A07/lean/Main.lean"
     "problems/t97A07/status.json"
