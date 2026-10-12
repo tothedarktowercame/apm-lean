@@ -646,3 +646,8 @@ legs can now be normalized using the underlying single-object equivalences.
 `genericPointWedgeCoordinatePointCounit_legs` performs that projection: the
 left and right components are exactly the `congrLeft` counits of the based
 single-object equivalences, evaluated on the two identity point-span legs.
+
+`genericPointWedgeCoordinatePointCounit_uniqueObjects` evaluates these two
+natural transformations at their unique source objects.  Each contribution is
+the relevant identity point-span functor applied to the based equivalence's
+counit component.
