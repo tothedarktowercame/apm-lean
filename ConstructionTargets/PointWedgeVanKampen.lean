@@ -4226,6 +4226,23 @@ theorem genericPointWedgeRightInverseBaseToRightBase_counit :
   exact genericPointWedgeIdentityGlobalRightRestriction_naturality
     x₀ y₀ M N hM hN hy hx cM cN _
 
+/-- The actual-span image of the canonical inverse-image-to-base morphism is
+the right coproduct injection of its connector normal form.  `HEq` retains
+the dependent source and target objects across the coordinate transport. -/
+theorem genericPointWedgeRightInverseBaseToRightBase_map_heq_inr :
+    let eR := genericPointWedgeRightGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let q := genericPointWedgeRightInverseBaseToRightBase
+      x₀ y₀ M N hM hN hy hx cM cN
+    HEq
+      ((genericPointWedgeIdentityActualSpan
+        x₀ y₀ M N hM hN hy hx cM cN).right.map q)
+      ((Monoid.Coprod.inr ((genericPointWedgeConnectors y₀).normalForm
+        (eR.functor.map q))) : genericPointWedgeFreeProduct x₀ y₀) := by
+  dsimp only
+  rw [genericPointWedgeIdentityActualSpan_right_map]
+  exact genericPointWedgeIdentityCoordinateSpan_right_map x₀ y₀ _
+
 omit [PathConnectedSpace X] in
 /-- At the transported right-cover base, the chosen based connector is the
 isomorphism induced by the named base-object equality. -/
@@ -5199,6 +5216,7 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeRightEquiv_obj_rightBase
 #print axioms genericPointWedgeRightInverseBaseToRightBase
 #print axioms genericPointWedgeRightInverseBaseToRightBase_counit
+#print axioms genericPointWedgeRightInverseBaseToRightBase_map_heq_inr
 #print axioms genericPointWedgeRightEquiv_rightBase_connector
 #print axioms genericPointWedgeRightLiftedLoop_normalForm_eq_transport
 #print axioms genericPointWedgeRightGroupoidEquivalence_functor

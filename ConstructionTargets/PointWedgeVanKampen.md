@@ -961,3 +961,8 @@ from that inverse image to the fixed representative, using the base-object
 equality followed by the equivalence unit.  Its `counit` theorem specializes
 restriction naturality along exactly this morphism, relating the remaining
 source endpoint counit to the fixed right-base conjugator.
+
+`genericPointWedgeRightInverseBaseToRightBase_map_heq_inr` evaluates the same
+morphism through the actual-span functor.  Its value is the right coproduct
+injection of the transported morphism's connector normal form; the `HEq`
+statement preserves the dependent endpoints across this representation step.
