@@ -2006,7 +2006,7 @@ theorem rotatedEndpointWaypoint_corrected_departure_zero_coordinates
     by_contra h
     have htzero : (t : ℝ) = 0 := le_antisymm (le_of_not_gt h) ht0
     rw [htzero] at heq
-    norm_num [correctedDepartureBump] at heq
+    norm_num at heq
   refine ⟨htpos, ?_, ?_⟩
   · nlinarith [heq.2]
   · field_simp
@@ -2236,7 +2236,9 @@ theorem rotatedEndpointWaypoint_twiceCorrected_departure_zero_coordinates
   have htpos : 0 < (t : ℝ) := by
     by_contra h
     have htzero : (t : ℝ) = 0 := le_antisymm (le_of_not_gt h) ht0
-    rw [htzero] at heq
+    have hb : correctedDepartureBump t = 0 :=
+      correctedDepartureBump_eq_zero_of_le t (by linarith)
+    rw [htzero, hb] at heq
     norm_num at heq
   refine ⟨htpos, ?_, heq.1⟩
   nlinarith [heq.2]
@@ -2465,17 +2467,16 @@ theorem rightTubeCorePlanarComplex_quarterCandidatePoint :
       twiceCorrectedDepartureQuarterCandidate := by
   have hs := NormedSpace.norm_smul_normalize
     twiceCorrectedDepartureQuarterCandidate
-  have hre := congrArg Complex.re hs
-  have him := congrArg Complex.im hs
-  apply Complex.ext
-  · simpa [twiceCorrectedDepartureQuarterCandidatePoint,
-      twiceCorrectedDepartureQuarterCandidateNormal,
-      twiceCorrectedDepartureQuarterCandidateCircle,
-      rightTubeCorePlanarComplex, rightTubeCorePolarReconstruction] using hre
-  · simpa [twiceCorrectedDepartureQuarterCandidatePoint,
-      twiceCorrectedDepartureQuarterCandidateNormal,
-      twiceCorrectedDepartureQuarterCandidateCircle,
-      rightTubeCorePlanarComplex, rightTubeCorePolarReconstruction] using him
+  rw [show rightTubeCorePlanarComplex
+      twiceCorrectedDepartureQuarterCandidatePoint =
+      (‖twiceCorrectedDepartureQuarterCandidate‖ : ℝ) •
+        NormedSpace.normalize twiceCorrectedDepartureQuarterCandidate by
+    apply Complex.ext <;>
+      simp [twiceCorrectedDepartureQuarterCandidatePoint,
+        twiceCorrectedDepartureQuarterCandidateNormal,
+        twiceCorrectedDepartureQuarterCandidateCircle,
+        rightTubeCorePlanarComplex, rightTubeCorePolarReconstruction]]
+  exact hs
 
 /-- At quarter time the explicit bump equation forces imaginary coordinate
 `-33/32`, so the annulus-admissible candidate satisfies both scalar zero
@@ -2487,6 +2488,50 @@ theorem twiceCorrectedDepartureQuarterCandidate_scalarEquations :
       -2 * (1 / 4 : ℝ) * (1 / 4 : ℝ) +
           (1 / 4 : ℝ) * (1 - 2 * (1 / 4 : ℝ)) = 0 := by
   norm_num
+
+/-- The reconstructed quarter candidate has positive first coordinate, whereas
+every point of the deleted left core has first coordinate at most zero. -/
+theorem twiceCorrectedDepartureQuarterCandidatePoint_not_mem_leftCore :
+    twiceCorrectedDepartureQuarterCandidatePoint ∉
+      Set.range apm_t02a03_leftCore := by
+  intro hmem
+  obtain ⟨s, hs⟩ := hmem
+  have hplanar := congrArg Complex.re
+    rightTubeCorePlanarComplex_quarterCandidatePoint
+  have hx := congrArg (fun q : apm_t02a03_E3 => q 0) hs
+  have hcos := Real.cos_le_one s
+  norm_num [rightTubeCorePlanarComplex,
+    twiceCorrectedDepartureQuarterCandidate, Complex.mul_re,
+    Complex.mul_im] at hplanar
+  simp [apm_t02a03_leftCore] at hx
+  linarith
+
+noncomputable def twiceCorrectedDepartureQuarterCandidateSubtype :
+    RightTubeMinusLeftCore :=
+  ⟨twiceCorrectedDepartureQuarterCandidatePoint,
+    twiceCorrectedDepartureQuarterCandidatePoint_mem_rightTube,
+    twiceCorrectedDepartureQuarterCandidatePoint_not_mem_leftCore⟩
+
+def departureQuarter : unitInterval := ⟨1 / 4, by constructor <;> norm_num⟩
+
+/-- The localized second correction creates a genuine zero at quarter time on
+the frozen right-tube complement.  Thus this correction must be replaced. -/
+theorem rotatedEndpointWaypoint_twiceCorrected_departure_quarter_zero :
+    (((1 - 2 * (departureQuarter : ℝ) : ℝ) : ℂ) +
+        ((2 * (departureQuarter : ℝ) : ℝ) : ℂ) *
+          rotatedEndpointWaypoint
+            twiceCorrectedDepartureQuarterCandidateSubtype +
+        (((departureQuarter : ℝ) * (1 - 2 * (departureQuarter : ℝ)) : ℝ) : ℂ) *
+          Complex.I +
+        (correctedDepartureBump departureQuarter : ℂ)) = 0 := by
+  apply (rotatedEndpointWaypoint_twiceCorrected_departure_eq_zero_iff
+    departureQuarter twiceCorrectedDepartureQuarterCandidateSubtype).2
+  rw [show rightTubeCorePlanarComplex
+      twiceCorrectedDepartureQuarterCandidateSubtype.1 =
+      twiceCorrectedDepartureQuarterCandidate by
+    exact rightTubeCorePlanarComplex_quarterCandidatePoint]
+  norm_num [departureQuarter, correctedDepartureBump,
+    twiceCorrectedDepartureQuarterCandidate, Complex.mul_re, Complex.mul_im]
 
 end ConstructionTargets.T02A03GeometricTubeDeformation
 
@@ -2577,6 +2622,7 @@ end ConstructionTargets.T02A03GeometricTubeDeformation
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.correctedDepartureBump_eq_zero_of_ge
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.correctedDepartureBump_ne_zero_at_corrected_zero
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_twiceCorrected_departure_eq_zero_iff
+#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_twiceCorrected_departure_quarter_zero
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_twiceCorrected_departure_zero_coordinates
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_twiceCorrected_departure_zero_normSq
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_twiceCorrected_departure_zero_scalar_bounds
