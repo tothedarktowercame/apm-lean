@@ -3370,6 +3370,24 @@ theorem genericPointWedgeCoordinateSpanGlobalRestrictionLeftStrictFactor_eq_actu
   exact genericPointWedgeIdentityGlobalLeftRestriction_map
     x₀ y₀ M N hM hN hy hx cM cN _
 
+/-- The literal actual-span map is the left coproduct injection of the
+connector normal form obtained after the left equivalence round trip. -/
+theorem genericPointWedgeCoordinateSpanGlobalRestrictionLeftStrictFactor_heq_inl :
+    let eL := genericPointWedgeLeftGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let aL := genericPointWedgeLeftSpanIso
+      x₀ y₀ M N hM hN hy hx cM cN
+    let u : FundamentalGroupoid Unit := FundamentalGroupoid.mk ()
+    HEq
+      (genericPointWedgeCoordinateSpanGlobalRestrictionLeftStrictFactor
+        x₀ y₀ M N hM hN hy hx cM cN)
+      ((Monoid.Coprod.inl ((genericPointWedgeConnectors x₀).normalForm
+        (eL.functor.map (eL.inverse.map (aL.inv.app u))))) :
+          genericPointWedgeFreeProduct x₀ y₀) := by
+  rw [genericPointWedgeCoordinateSpanGlobalRestrictionLeftStrictFactor_eq_actual,
+    genericPointWedgeIdentityActualSpan_left_map]
+  exact genericPointWedgeIdentityCoordinateSpan_left_map x₀ y₀ _
+
 /-- The mapped coordinate-span counit's glue square, specialized at the
 unique point-span overlap object.  This is the equation in which its two
 named leg factors are related by the mapped reconstructed glue. -/
@@ -4966,6 +4984,7 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeCoordinateSpanGlobalRestrictionLeftStrictFactor
 #print axioms genericPointWedgeCoordinateSpanGlobalRestrictionLeftStrictFactor_eq_map
 #print axioms genericPointWedgeCoordinateSpanGlobalRestrictionLeftStrictFactor_eq_actual
+#print axioms genericPointWedgeCoordinateSpanGlobalRestrictionLeftStrictFactor_heq_inl
 #print axioms genericPointWedgeMappedOpenCoverCounit_namedGlueSquare
 #print axioms genericPointWedgeMappedCoordinateSpanCounit_glueSquare
 #print axioms genericPointWedgeMappedCoordinateSpanSourceGlue

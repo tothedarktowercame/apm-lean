@@ -901,3 +901,9 @@ identified through the already proved literal left-restriction equation.
 performs that identification at the inverse strict-span comparison itself.
 The reconstructed restriction is replaced by the literal actual-span left
 map, while the morphism and its orientation remain unchanged.
+
+`genericPointWedgeCoordinateSpanGlobalRestrictionLeftStrictFactor_heq_inl`
+then evaluates that actual-span map using the arbitrary-endpoint coordinate
+formula.  The result is the left coproduct injection of the connector normal
+form after the left-equivalence inverse/forward round trip; the dependent
+endpoints remain explicit for the next unit normalization.
