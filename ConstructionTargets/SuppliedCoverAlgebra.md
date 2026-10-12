@@ -5,6 +5,9 @@ This foundation follows `~/notes/closer/routes/covering.md`, section A
 route`).  Its consumers are `t99J01`, `t97A03`, `t93J03`, and `t00A02`.
 It deliberately does not construct a cover from an arbitrary subgroup.
 
+All four nodes are implemented in `ConstructionTargets/SuppliedCoverAlgebra.lean`:
+B1--B2 in `df216abcc`, B3 in `1ecb73d0a`, and B4 in `994accb6c`.
+
 The Lean file will be `ConstructionTargets/SuppliedCoverAlgebra.lean`.
 The construction imports `ConstructionTargets/CoveringMonodromyCosets.lean`,
 Mathlib `Topology.Homotopy.Lifting`, `Topology.Covering.Quotient`,

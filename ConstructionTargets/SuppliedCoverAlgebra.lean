@@ -7,6 +7,10 @@ import Mathlib.Topology.Covering.Quotient
 
 This file contains only the algebra and topology adapters used by already
 supplied covers.  It does not construct a covering from a subgroup.
+
+It implements all four blueprint nodes: the induced-range equivalence,
+embedding cancellation, free-subgroup transport with index preservation, and
+orbit-cover transport along a homeomorphism.
 -/
 
 noncomputable section
