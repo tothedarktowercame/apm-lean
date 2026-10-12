@@ -79485,35 +79485,34 @@
   {:consumer :t96A07,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 3,
+   :stop-count 4,
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Build B9 tangent vectors in p2=0/nonzero cases; then B10-B13.",
+    "Prove B9 p2=0 tangent case and assemble surjectivity; then B10-B13.",
     :outcome :stop,
-    :warnings
-    ["Main: 1 placeholder." "Unrelated dirty files preserved."],
+    :warnings ["Main: 1 placeholder." "Style lint only."],
     :missing-theorems
     [{:name
-      "ConstructionTargets.T96A07Closure.crossTerm_horizontalPlane_incident_coordinates",
-      :type "positive incidence gives p0*p1=z and nonzero factors",
+      "ConstructionTargets.T96A07Closure.sphereMap_vertical_tangent_of_third_ne_zero",
+      :type
+      "explicit tangent with vertical derivative one when p2 nonzero",
       :status :proved,
       :consumers [:t96A07],
-      :depends-on [],
+      :depends-on
+      ["ConstructionTargets.T96A07Closure.crossTerm_horizontalPlane_incident_coordinates"],
       :area "projective-smooth-descent"}
      {:name
       "ConstructionTargets.T96A07Closure.sphereMap_vertical_surjective",
-      :type
-      "B9 vertical derivative component surjective via p2=0/nonzero tangent cases",
+      :type "B9 vertical derivative surjective; p2=0 branch remains",
       :status :partial,
       :consumers [:t96A07],
       :depends-on
-      ["ConstructionTargets.T96A07Closure.crossTerm_horizontalPlane_incident_coordinates"
-       "ConstructionTargets.T96A07Closure.sphereMapAmbient_fderiv"],
+      ["ConstructionTargets.T96A07Closure.sphereMap_vertical_tangent_of_third_ne_zero"],
       :area "projective-smooth-descent"}],
     :statement-hashes
     {:registry "131/0",
-     :closure "4d809a3625d1a2bd9c3a963ff5dae4fb287ce87c",
+     :closure "f2c97eea5f72d4860afe2ad109251db6cbc92c84",
      :blueprint "69b59fb622dd62fc82a1fe100b353eaabc2c948d"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
@@ -79526,31 +79525,20 @@
      {:cmd "Main compile", :exit 0}
      {:cmd "registry check", :exit 0}
      {:cmd "placeholder count", :exit 0, :output "1"}
-     {:cmd "git show --check 52919bc16", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1791765283578-6061-5b545a21",
-     :commands
-     ["git show/check/diff 2abba69f4..52919bc16"
-      "verify scoped blobs, fixture SHA, ancestry"
-      "lake build ConstructionTargets.t96A07Closure"
-      "lake env lean closure and t96A07 Main"
-      "statement-registry check/fingerprint"
-      "placeholder and axiom checks"],
-     :finding
-     "PASS: 52919bc163666e19eb0266a57b9a555af49e3dc7 adds compiled, sorry-free B9 support after 2abba69f4; both changed paths are scoped. Closure/blueprint blobs 4d809a36/69b59fb6 and fixture 14ae0446 match. Taking coordinate 2 of incidence faithfully yields p0*p1=z, and z>0 correctly proves both factors nonzero; the Main adapter preserves frozen sphereMap/plane representations. Lean gates pass with standard axioms only; registry 131/0, frozen hash 2ba67b04 unchanged, closure/Main placeholders 0/1. STOP lists the remaining tangent-vector cases, then B10-B13."},
-    :commit "52919bc163666e19eb0266a57b9a555af49e3dc7",
-    :changed-paths
-    ["ConstructionTargets/t96A07Closure.lean"
-     "problems/t96A07/lean/Main.lean"],
+     {:cmd "git show --check 7e8ef8563", :exit 0}],
+    :diagnostic-history
+    [{:cmd "closure compile",
+      :exit 1,
+      :finding "Expanded scalar real inner product."}],
+    :commit "7e8ef85635e80065ef690437f799d78f5ff1dcba",
+    :changed-paths ["ConstructionTargets/t96A07Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t96A07Closure.lean",
      :sha256
-     "14ae0446be043617153dfd2f7595f93cbbe6c064e594c4270b5fcf3d61e8425a"},
+     "a94c27e207b70d42878e65d3685decfd5aa471a59f9c34af8295be13aa8f7a38"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t96A07/lean/Main.lean"
     "problems/t96A07/status.json"
@@ -81372,7 +81360,8 @@
    :kind :lemma,
    :depends-on
    [:lemma-constructiontargets-t96a07closure-spheremapambient-fderiv
-    :lemma-constructiontargets-t96a07closure-crossterm-horizontalplane-incident-coordinates],
+    :lemma-constructiontargets-t96a07closure-crossterm-horizontalplane-incident-coordinates
+    :lemma-constructiontargets-t96a07closure-spheremap-vertical-tangent-of-third-ne-zero],
    :other-consumers []}
   {:consumer :t96A07,
    :phase :lemma,
@@ -81395,4 +81384,27 @@
    :lemma-constructiontargets-t96a07closure-crossterm-horizontalplane-incident-coordinates,
    :kind :lemma,
    :depends-on [],
+   :other-consumers []}
+  {:consumer :t96A07,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.T96A07Closure.sphereMap_vertical_tangent_of_third_ne_zero",
+    :type
+    "explicit tangent with vertical derivative one when p2 nonzero"},
+   :lemma
+   {:name
+    "ConstructionTargets.T96A07Closure.sphereMap_vertical_tangent_of_third_ne_zero",
+    :reported-by [:program-2026-10-11-close-t96a07],
+    :type
+    "explicit tangent with vertical derivative one when p2 nonzero",
+    :area "projective-smooth-descent",
+    :proved-in :program-2026-10-11-close-t96a07},
+   :id
+   :lemma-constructiontargets-t96a07closure-spheremap-vertical-tangent-of-third-ne-zero,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-t96a07closure-crossterm-horizontalplane-incident-coordinates],
    :other-consumers []}]}
