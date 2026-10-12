@@ -75546,8 +75546,69 @@
    :current-residual "Elect B4.",
    :other-consumers []}
   {:consumer :t96J02,
+   :stop-count 1,
+   :evidence
+   {:placeholder-delta 0,
+    :residual "Finish B4 quotient geometry; then B5/B6.",
+    :outcome :stop,
+    :warnings ["2 imported; 12 preexisting linter warnings"],
+    :missing-theorems
+    [{:name "polygonRadialOpenSets",
+      :type
+      "saturated inner/outer open subsets of P.Space covering univ",
+      :status :partial,
+      :consumers [:t96J02 :t92J05 :t94J04 :t97A01 :t97A03],
+      :depends-on ["innerDisk_union_outerDisk"],
+      :area "polygon-surface-pi1"}
+     {:name "polygonCenterContraction",
+      :type "inner quotient open contracts to P.center",
+      :status :not-started,
+      :consumers [:t96J02 :t92J05 :t94J04 :t97A01 :t97A03],
+      :depends-on ["polygonRadialOpenSets"],
+      :area "polygon-surface-pi1"}
+     {:name "polygonOverlapHomeomorph",
+      :type "inner/outer overlap homeomorphic to interval×Circle",
+      :status :not-started,
+      :consumers [:t96J02 :t92J05 :t94J04 :t97A01 :t97A03],
+      :depends-on ["polygonRadialOpenSets"],
+      :area "polygon-surface-pi1"}
+     {:name "ConstructionTargets.PolygonSurfacePiOne.openCover",
+      :type
+      "two-open polygon cover with contraction, annular side, overlap Homeomorph",
+      :status :partial,
+      :consumers [:t96J02 :t92J05 :t94J04 :t97A01 :t97A03],
+      :depends-on
+      ["polygonCenterContraction" "polygonOverlapHomeomorph"],
+      :area "polygon-surface-pi1"}],
+    :statement-hashes
+    {:registry "131/0",
+     :module "6217e1133ce1040440e35738d1982964c6383d80"},
+    :disposition :stop,
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-6",
+    :reason
+    "Radial open disk cover compiles; quotient saturation, contractions, and overlap Homeomorph remain.",
+    :commands
+    [{:cmd
+      "lake env lean ConstructionTargets/PolygonSurfacePiOne.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.PolygonSurfacePiOne",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131/0"}
+     {:cmd "placeholder scan", :exit 0, :output "0"}
+     {:cmd "#print axioms innerDisk_union_outerDisk", :exit 0}
+     {:cmd "git show --check a311044f8", :exit 0}],
+    :commit "a311044f8",
+    :changed-paths ["ConstructionTargets/PolygonSurfacePiOne.lean"],
+    :fixture
+    {:path "ConstructionTargets/PolygonSurfacePiOne.lean",
+     :sha256
+     "29e2766d63e2bc928cb28d011202832eabf816d9aaf540b37b040590ac4788e9"},
+    :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/PolygonSurfacePiOne.lean"],
    :dag-node "ConstructionTargets/PolygonSurfacePiOne.blueprint.md/B4",
    :acceptance
@@ -85423,4 +85484,83 @@
    :lemma-constructiontargets-polygonsurfacepione-interioropenembedding,
    :kind :lemma,
    :depends-on [:lemma-pairingdata],
+   :other-consumers [:t92J05 :t94J04 :t97A01 :t97A03]}
+  {:consumer :t96J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "polygonRadialOpenSets",
+    :type
+    "saturated inner/outer open subsets of P.Space covering univ"},
+   :lemma
+   {:name "polygonRadialOpenSets",
+    :reported-by [:routes-2026-10-12-polygon-b4-topo2-r1],
+    :type
+    "saturated inner/outer open subsets of P.Space covering univ",
+    :area "polygon-surface-pi1"},
+   :id :lemma-polygonradialopensets,
+   :kind :lemma,
+   :depends-on [:lemma-innerdisk-union-outerdisk],
+   :other-consumers [:t92J05 :t94J04 :t97A01 :t97A03]}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance {:lemma "innerDisk_union_outerDisk"},
+   :lemma {:name "innerDisk_union_outerDisk", :reported-by []},
+   :id :lemma-innerdisk-union-outerdisk,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t96J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "polygonCenterContraction",
+    :type "inner quotient open contracts to P.center"},
+   :lemma
+   {:name "polygonCenterContraction",
+    :reported-by [:routes-2026-10-12-polygon-b4-topo2-r1],
+    :type "inner quotient open contracts to P.center",
+    :area "polygon-surface-pi1"},
+   :id :lemma-polygoncentercontraction,
+   :kind :lemma,
+   :depends-on [:lemma-polygonradialopensets],
+   :other-consumers [:t92J05 :t94J04 :t97A01 :t97A03]}
+  {:consumer :t96J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "polygonOverlapHomeomorph",
+    :type "inner/outer overlap homeomorphic to interval×Circle"},
+   :lemma
+   {:name "polygonOverlapHomeomorph",
+    :reported-by [:routes-2026-10-12-polygon-b4-topo2-r1],
+    :type "inner/outer overlap homeomorphic to interval×Circle",
+    :area "polygon-surface-pi1"},
+   :id :lemma-polygonoverlaphomeomorph,
+   :kind :lemma,
+   :depends-on [:lemma-polygonradialopensets],
+   :other-consumers [:t92J05 :t94J04 :t97A01 :t97A03]}
+  {:consumer :t96J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "ConstructionTargets.PolygonSurfacePiOne.openCover",
+    :type
+    "two-open polygon cover with contraction, annular side, overlap Homeomorph"},
+   :lemma
+   {:name "ConstructionTargets.PolygonSurfacePiOne.openCover",
+    :reported-by [:routes-2026-10-12-polygon-b4-topo2-r1],
+    :type
+    "two-open polygon cover with contraction, annular side, overlap Homeomorph",
+    :area "polygon-surface-pi1"},
+   :id :lemma-constructiontargets-polygonsurfacepione-opencover,
+   :kind :lemma,
+   :depends-on
+   [:lemma-polygoncentercontraction :lemma-polygonoverlaphomeomorph],
    :other-consumers [:t92J05 :t94J04 :t97A01 :t97A03]}]}
