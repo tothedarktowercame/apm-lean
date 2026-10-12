@@ -113890,6 +113890,17 @@
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder/diff validation", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791833028207-7775-aac836db",
+     :commands
+     ["git show/diff-tree fb717ffb"
+      "lake env lean ConstructionTargets/PointWedgeVanKampen.lean"
+      "python3 scripts/statement-registry.py check"
+      "commit hash and placeholder checks"],
+     :finding
+     "PASS program STOP: fb717ffb by topo-2 adds a named pseudopushout source glue, its counit square, and documentation, exactly within scope and new since history. Source da343d43..., documentation 072b64fe..., fixture 0bca6ce3..., registry 131/131, and placeholders 0->0 reproduce. The theorem is mapped counit glue naturality at the unique overlap object, with right*source=target*left matching SingleObj multiplication; categorical representation boundaries and connector counits remain explicit. Fresh Lean passes with only propext/choice/Quot.sound. This is compiled sorry-free progress; predecessor-glue normalization, splice composition, and B6/B12 remain explicitly listed."},
     :commit "fb717ffb3f22a9c589ee55a0235fa142f8fcdc59",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
@@ -113900,7 +113911,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113921,7 +113932,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: The target-glue splice and coordinate-span square now compose into one injected-counit equation.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: The mapped open-cover counit square now isolates its predecessor pseudopushout glue.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -114416,7 +114427,11 @@
     {:job 2,
      :commit "67cf94a2fc7c6cdc653f8173323b0e4c5d3152de",
      :reason
-     "The target-glue splice and coordinate-span square now compose into one injected-counit equation."}]}
+     "The target-glue splice and coordinate-span square now compose into one injected-counit equation."}
+    {:job 3,
+     :commit "fb717ffb3f22a9c589ee55a0235fa142f8fcdc59",
+     :reason
+     "The mapped open-cover counit square now isolates its predecessor pseudopushout glue."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
