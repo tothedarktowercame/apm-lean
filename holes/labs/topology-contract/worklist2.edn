@@ -72788,7 +72788,7 @@
    :consumer :t02A03,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 0,
    :review-finding
    "Commit b07bee059 does not implement the row acceptance theorem. It adds only rotatedEndpointWaypoint_departure_zero_support_pos; safeRightTubeMeridianDeformation is absent, although the row is marked done-unreviewed rather than a STOP with missing-theorems. Exact repair: extend Mathlib in scope by state/proving the required continuous ambient H with both endpoints, pointwise rightTube membership, and leftCore avoidance (or record a legitimate STOP after committed progress with remaining theorem listed).",
    :evidence
@@ -72832,6 +72832,18 @@
     [{:cmd "module compile",
       :exit 1,
       :finding "Corrected complex imaginary-coordinate proof."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791782707737-6410-2e210b52",
+     :commands
+     ["git show/diff-tree/show --check 2a9c5d5d69e2f19806b70df780c4643a14cbe29e"
+      "sha256sum fixture; git blob/hash and placeholder recount"
+      "lake env lean exact recorded module"
+      "python3 scripts/statement-registry.py check"
+      "compare prior milestone b07bee059"],
+     :finding
+     "PASS: program STOP commits new compiled, sorry-free progress since b07bee059: a theorem proving the endpoint-fixed transverse correction is nonzero at every old departure zero. Scope and fixture hash match; module/Main blobs are 0629f3f5/ce9da0db with placeholder counts 0/1; registry 131/0; axioms standard. Remaining corrected no-new-zero path and safe ambient deformation are explicitly listed."},
     :commit "2a9c5d5d69e2f19806b70df780c4643a14cbe29e",
     :changed-paths
     ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
@@ -72843,7 +72855,7 @@
    :phase :implementation,
    :type
    "∀ (t : unitInterval) (p : RightTubeMinusLeftCore), (t:ℝ) ≤ 1/2 → (((1-2*(t:ℝ):ℝ):ℂ)+((2*(t:ℝ):ℝ):ℂ)*rotatedEndpointWaypoint p)=0 → 0 < (t:ℝ)*(1-2*(t:ℝ))",
-   :state :done-unreviewed,
+   :state :open,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/safe-right-tube-meridian-deformation",
@@ -82285,7 +82297,7 @@
    :other-consumers []}
   {:consumer :portfolio,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -82293,7 +82305,10 @@
    :lemma
    {:name
     "rotatedEndpointWaypoint_transverse_correction_ne_zero_at_departure_zero",
-    :reported-by []},
+    :reported-by [],
+    :banked-by :declaration-found,
+    :found-in
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"]},
    :id
    :lemma-rotatedendpointwaypoint-transverse-correction-ne-zero-at-departure-zero,
    :kind :lemma,
