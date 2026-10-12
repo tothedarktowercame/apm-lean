@@ -3676,6 +3676,29 @@ theorem signedArrivalCorrection_ne_zero_of_second_ne_zero
           (max 0 (2 * (t : ℝ) - 1) * (1 - (t : ℝ)) * p.1 1) := by ring
   · exact Or.inl hp
 
+/-- On the interior of the arrival half, the signed correction vanishes
+exactly on the ambient second-coordinate slice.  This is distinct from the
+third-coordinate zero-height slice handled by `zeroHeightCoreNormalDetour`. -/
+theorem signedArrivalCorrection_eq_zero_iff_second_eq_zero
+    (t : unitInterval) (ht0 : (1 / 2 : ℝ) < (t : ℝ))
+    (ht1 : (t : ℝ) < 1) (p : RightTubeMinusLeftCore) :
+    signedArrivalCorrection (t, p) = 0 ↔ p.1 1 = 0 := by
+  have hm : max 0 (2 * (t : ℝ) - 1) = 2 * (t : ℝ) - 1 := by
+    rw [max_eq_right]
+    linarith
+  constructor
+  · intro hz
+    have him := congrArg Complex.im hz
+    simp [signedArrivalCorrection, Complex.mul_im, hm] at him
+    have ha : 0 < 2 * (t : ℝ) - 1 := by linarith
+    have hb : 0 < 1 - (t : ℝ) := by linarith
+    rcases him with (ha0 | hb0) | hp
+    · exact (ne_of_gt ha ha0).elim
+    · exact (ne_of_gt hb hb0).elim
+    · exact hp
+  · intro hp
+    simp [signedArrivalCorrection, hp]
+
 /-- Polynomial forced-norm identity for the whole corrected arrival leg;
 it avoids division at the exceptional time `t = 3/4`. -/
 theorem complexArrivalCorrection_zero_scaled_normSq
@@ -4053,6 +4076,7 @@ end ConstructionTargets.T02A03GeometricTubeDeformation
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.complexArrivalCorrection_zero_scaled_normSq
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.pointDependentArrivalCorrection_ne_zero_of_im_sign
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.signedArrivalCorrection_ne_zero_of_second_ne_zero
+#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.signedArrivalCorrection_eq_zero_iff_second_eq_zero
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.complexArrivalCorrection_ne_zero_of_scaled_normSq_outside
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.complexArrivalCorrection_threeQuarters_ne_zero
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.continuous_arrivalTransverseCorrection
