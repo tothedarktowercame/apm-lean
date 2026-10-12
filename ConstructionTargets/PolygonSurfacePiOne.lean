@@ -634,4 +634,53 @@ def nonorientableStandardSpaceHomeomorph (g : ℕ) :
     nonorientableStandardSpaceHomeomorph g (Quotient.mk _ x) =
       surfaceQuotient false g x := rfl
 
+theorem orientablePair_zero (g j : ℕ) (hj : j < g) :
+    orientablePair g ⟨4 * j, by omega⟩ =
+      (⟨4 * j + 2, by omega⟩ : Fin (4 * g)) := by
+  apply Fin.ext
+  simp [orientablePair, orientableCoord, handlePair, Fin.modNat]
+  omega
+
+theorem orientablePair_one (g j : ℕ) (hj : j < g) :
+    orientablePair g ⟨4 * j + 1, by omega⟩ =
+      (⟨4 * j + 3, by omega⟩ : Fin (4 * g)) := by
+  apply Fin.ext
+  simp [orientablePair, orientableCoord, handlePair, Fin.modNat]
+  omega
+
+theorem orientablePair_two (g j : ℕ) (hj : j < g) :
+    orientablePair g ⟨4 * j + 2, by omega⟩ =
+      (⟨4 * j, by omega⟩ : Fin (4 * g)) := by
+  apply Fin.ext
+  simp [orientablePair, orientableCoord, handlePair, Fin.modNat]
+  omega
+
+theorem orientablePair_three (g j : ℕ) (hj : j < g) :
+    orientablePair g ⟨4 * j + 3, by omega⟩ =
+      (⟨4 * j + 1, by omega⟩ : Fin (4 * g)) := by
+  apply Fin.ext
+  simp [orientablePair, orientableCoord, handlePair, Fin.modNat]
+  omega
+
+theorem orientable_surfaceRel_to_boundaryEqvGen {g : ℕ} {x y : Disk}
+    (h : SurfaceRel true g x y) :
+    Relation.EqvGen (boundaryRel (4 * g) (standardPair true g)
+      (standardSign true g)) x y := by
+  simp only [SurfaceRel, if_true] at h
+  rcases h with ⟨j, hj, t, h | h⟩
+  · rcases h with ⟨rfl, rfl⟩
+    apply Relation.EqvGen.rel _ _
+    refine ⟨⟨4 * j, by omega⟩, t, rfl, ?_⟩
+    simp only [standardPair]
+    rw [orientablePair_zero g j hj]
+    simp [standardSign, pairedParameter, orientableCoord, handleSign,
+      orientablePair_zero g j hj, reverseIcc, Fin.modNat]
+  · rcases h with ⟨rfl, rfl⟩
+    apply Relation.EqvGen.rel _ _
+    refine ⟨⟨4 * j + 1, by omega⟩, t, rfl, ?_⟩
+    simp only [standardPair]
+    rw [orientablePair_one g j hj]
+    simp [standardSign, pairedParameter, orientableCoord, handleSign,
+      orientablePair_one g j hj, reverseIcc, Fin.modNat]
+
 end ConstructionTargets.PolygonSurfacePiOne
