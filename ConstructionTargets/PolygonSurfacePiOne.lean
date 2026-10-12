@@ -1196,4 +1196,40 @@ theorem polygonCenterContraction (P : PairingData) :
   rw [← (innerHomeomorph P).contractibleSpace_iff]
   exact innerDisk_contractible
 
+abbrev OuterDisk := {z : Disk // z ∈ outerDisk}
+
+def PairingData.outerMap (P : PairingData) :
+    OuterDisk → {q // q ∈ (polygonRadialOpenSets P).outer} := fun z =>
+  ⟨P.quotientMap z.1, ⟨z.1, z.2, rfl⟩⟩
+
+theorem continuous_outerMap (P : PairingData) : Continuous P.outerMap := by
+  exact (P.continuous_quotientMap.comp continuous_subtype_val).subtype_mk _
+
+theorem surjective_outerMap (P : PairingData) :
+    Function.Surjective P.outerMap := by
+  rintro ⟨q, hq⟩
+  rcases hq with ⟨z, hz, rfl⟩
+  exact ⟨⟨z, hz⟩, rfl⟩
+
+theorem outerMap_eq_iff (P : PairingData) (x y : OuterDisk) :
+    P.outerMap x = P.outerMap y ↔ Relation.EqvGen P.Rel x.1 y.1 := by
+  constructor
+  · intro h
+    exact Quotient.exact (congrArg Subtype.val h)
+  · intro h
+    apply Subtype.ext
+    exact Quotient.sound h
+
+structure PolygonAnnularSide (P : PairingData) where
+  map : OuterDisk → {q // q ∈ (polygonRadialOpenSets P).outer}
+  continuous_map : Continuous map
+  surjective_map : Function.Surjective map
+  fiber : ∀ x y, map x = map y ↔ Relation.EqvGen P.Rel x.1 y.1
+
+def polygonAnnularSide (P : PairingData) : PolygonAnnularSide P where
+  map := P.outerMap
+  continuous_map := continuous_outerMap P
+  surjective_map := surjective_outerMap P
+  fiber := outerMap_eq_iff P
+
 end ConstructionTargets.PolygonSurfacePiOne
