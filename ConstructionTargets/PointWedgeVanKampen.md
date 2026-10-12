@@ -445,3 +445,7 @@ the source connector for `aR.inv` with the reflexive connector at
 `genericPointWedgeIdentityOuterLeftSpan_sourceConnector_eq_based` exposes the
 other left connector as the chosen based connector at the fully transported
 overlap object.  It is not normalized before that object round trip is known.
+
+`genericPointWedgeIdentityOuterRightSpan_targetConnector_eq_based` gives the
+symmetric identification for the target of `aR.inv`: the chosen based
+connector at the fully transported right overlap object remains explicit.

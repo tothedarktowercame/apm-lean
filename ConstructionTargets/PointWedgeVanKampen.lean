@@ -1604,6 +1604,30 @@ theorem genericPointWedgeIdentityOuterLeftSpan_sourceConnector_eq_based :
               (eK.functor.obj z)) := by
   rfl
 
+omit [PathConnectedSpace X] in
+/-- The remaining target connector for the right outer inverse component is
+exactly the chosen based connector at the transported overlap object. -/
+theorem genericPointWedgeIdentityOuterRightSpan_targetConnector_eq_based :
+    let eK := genericPointWedgeOverlapGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let z : FundamentalGroupoid (genericPointWedgeOverlapPiece x₀ y₀ M N) :=
+      FundamentalGroupoid.mk
+        ⟨quotientMap x₀ y₀ (.inl x₀),
+          ⟨⟨.inl x₀, by trivial, rfl⟩,
+            ⟨.inr y₀, by trivial,
+              (Quotient.sound (Relation.EqvGen.rel _ _ Rel.base)).symm⟩⟩⟩
+    (genericPointWedgeConnectors y₀).connector
+        ((eK.inverse ⋙ genericPointWedgeActualRight x₀ y₀ M N ⋙
+          (genericPointWedgeRightGroupoidEquivalence
+            x₀ y₀ M N hM hN hy hx cM cN).functor).obj
+              (eK.functor.obj z)) =
+      genericPointWedgeBasedConnector y₀
+        ((eK.inverse ⋙ genericPointWedgeActualRight x₀ y₀ M N ⋙
+          (genericPointWedgeRightGroupoidEquivalence
+            x₀ y₀ M N hM hN hy hx cM cN).functor).obj
+              (eK.functor.obj z)) := by
+  rfl
+
 theorem genericPointWedgeIdentityActualSpan_left_map
     {a b : FundamentalGroupoid (genericPointWedgeLeftPiece x₀ y₀ M)}
     (f : a ⟶ b) :
@@ -2549,6 +2573,7 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeIdentityOuterLeftSpan_targetConnector_heq_refl
 #print axioms genericPointWedgeIdentityOuterRightSpan_sourceConnector_heq_refl
 #print axioms genericPointWedgeIdentityOuterLeftSpan_sourceConnector_eq_based
+#print axioms genericPointWedgeIdentityOuterRightSpan_targetConnector_eq_based
 #print axioms genericPointWedgeIdentityActualSpan_left_map
 #print axioms genericPointWedgeIdentityActualSpan_right_map
 #print axioms genericPointWedgeSingleObjPostcomposeIso
