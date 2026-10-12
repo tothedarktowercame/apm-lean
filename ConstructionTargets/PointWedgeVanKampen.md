@@ -861,3 +861,12 @@ eliminating that equality proof, the component is literally the group unit.
 The remaining calculation is now only to record how the pseudo-span,
 coordinate-span, and point-span functors carry this unit to the previously
 named mapped predecessor.
+
+`genericPointWedgePseudoSpanGlobalRestrictionGlue` names the component after
+the first of those transports.  The pseudococone-to-span equivalence retains
+the two legs and glue definitionally, so
+`genericPointWedgePseudoSpanGlobalRestrictionGlue_eq_raw` is literal equality;
+combining it with the raw evaluation proves
+`genericPointWedgePseudoSpanGlobalRestrictionGlue_eq_one`.  The remaining
+coordinate-span transport is nontrivial because it inserts its left and right
+comparison factors.
