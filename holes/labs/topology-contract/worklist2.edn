@@ -73972,6 +73972,8 @@
      :typed-residual-change
      :infrastructure-packets
      :review-outcomes]},
+   :review-finding
+   "Checkpoint evidence miscounts its three dependency reviews. RP2 descent records PASS and production naturality records PASS-on-STOP, but t02A03 right-tube circle equivalence remains :blocked with probe :outcome :revise and no review PASS. Thus :review-outcomes {:pass 3} and typed-residual-change \"3 edges banked\" are false. Recompute the required measures as two passes plus one revise/blocked edge (and the corresponding banked-edge count), then retain the priority-supported single polygonSurface_pi1 blueprint election.",
    :evidence
    {:outcome :replan,
     :seat "topo-8",
@@ -74028,9 +74030,15 @@
       :current-residual "Refill.",
       :other-consumers []}],
     :author "topo-8",
-    :disposition :replan},
+    :disposition :replan,
+    :review
+    {:outcome :fail,
+     :seat "codex-7",
+     :job "invoke-1791778418402-6307-5b5ca20f",
+     :finding
+     "Checkpoint evidence miscounts its three dependency reviews. RP2 descent records PASS and production naturality records PASS-on-STOP, but t02A03 right-tube circle equivalence remains :blocked with probe :outcome :revise and no review PASS. Thus :review-outcomes {:pass 3} and typed-residual-change \"3 edges banked\" are false. Recompute the required measures as two passes plus one revise/blocked edge (and the corresponding banked-edge count), then retain the priority-supported single polygonSurface_pi1 blueprint election."}},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :repair,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -74049,7 +74057,7 @@
    :other-consumers []}
   {:consumer :t96J02,
    :phase :implementation,
-   :state :blocked,
+   :state :superseded,
    :scope ["ConstructionTargets/PolygonSurfacePiOne.blueprint.md"],
    :dag-node "TOPOLOGY-ROUTES.md/polygon-surface-pi1",
    :acceptance
@@ -74073,7 +74081,7 @@
      :infrastructure-packets
      :review-outcomes]},
    :phase :strategy,
-   :state :blocked,
+   :state :superseded,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance {:strategy "Rerun priorities after blueprint review."},
