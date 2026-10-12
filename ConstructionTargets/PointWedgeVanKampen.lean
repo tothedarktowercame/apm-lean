@@ -1637,6 +1637,15 @@ theorem genericPointWedgeOverlapToLeft_obj_overlapBase :
       genericPointWedgeLeftBase x₀ y₀ M := by
   rfl
 
+omit [PathConnectedSpace X] [PathConnectedSpace Y] in
+/-- The literal overlap-to-right inclusion sends the chosen overlap base
+object to the chosen right cover base object. -/
+theorem genericPointWedgeOverlapToRight_obj_overlapBase :
+    (FundamentalGroupoid.map (overlapToRight x₀ y₀ M N)).obj
+        (genericPointWedgeOverlapBase x₀ y₀ M N) =
+      genericPointWedgeRightBase x₀ y₀ N := by
+  rfl
+
 theorem genericPointWedgeIdentityActualSpan_left_map
     {a b : FundamentalGroupoid (genericPointWedgeLeftPiece x₀ y₀ M)}
     (f : a ⟶ b) :
@@ -2584,6 +2593,7 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeIdentityOuterLeftSpan_sourceConnector_eq_based
 #print axioms genericPointWedgeIdentityOuterRightSpan_targetConnector_eq_based
 #print axioms genericPointWedgeOverlapToLeft_obj_overlapBase
+#print axioms genericPointWedgeOverlapToRight_obj_overlapBase
 #print axioms genericPointWedgeIdentityActualSpan_left_map
 #print axioms genericPointWedgeIdentityActualSpan_right_map
 #print axioms genericPointWedgeSingleObjPostcomposeIso

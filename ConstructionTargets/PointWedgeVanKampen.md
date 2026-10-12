@@ -453,3 +453,7 @@ connector at the fully transported right overlap object remains explicit.
 `genericPointWedgeOverlapToLeft_obj_overlapBase` computes the literal left
 inclusion on the chosen overlap representative: its image is exactly
 `genericPointWedgeLeftBase` before any equivalence transport is applied.
+
+`genericPointWedgeOverlapToRight_obj_overlapBase` computes the literal right
+inclusion on the same representative: its image is exactly
+`genericPointWedgeRightBase`, again before equivalence transport.
