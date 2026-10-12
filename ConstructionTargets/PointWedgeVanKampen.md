@@ -751,3 +751,9 @@ coordinate-span glue is one, its middle factor is exactly the forward left
 overlap round trip followed by the inverse right overlap round trip.  This
 puts the reconstructed glue between the two triangle equations at their
 unchanged dependent endpoints.
+
+`genericPointWedgeCoordinateSpanOuterComparison_counitSplice` applies the
+typed nested reassociation lemma to those two triangles.  The full left
+comparison, overlap round-trip, right comparison, and right counit chain is
+therefore the left counit, with no endpoint casts or normalization of an
+arbitrary equivalence counit.
