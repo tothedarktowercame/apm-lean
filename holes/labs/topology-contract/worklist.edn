@@ -113894,6 +113894,19 @@
     [{:cmd "lean direct bridge",
       :exit 1,
       :finding "Split opaque functor equality."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791801201181-6800-18cec2e8",
+     :commands
+     ["git show/diff-tree 0d13ade1"
+      "sha256/diff/placeholder checks"
+      "statement-registry.py check"
+      "lake env lean ConstructionTargets/PointWedgeVanKampen.lean"
+      "lake build ConstructionTargets.PointWedgeVanKampen"
+      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (expected absent)"],
+     :finding
+     "PASS program STOP: exact 2-file commit adds a compiled sorry-free definitional equality exposing the left equivalence functor as FundamentalGroupoid.map leftEquiv.toFun. The rewrite direction crosses from the opaque equivalence to the concrete map representation needed by mapOfEq, without changing base transport. Fixture/source/doc hashes match; placeholders 0->0; registry 131/131; standard axioms only. Final module remains absent; residual closes left normal form, then right and B12."},
     :commit "0d13ade10fde6f977237a818fbd00b6e368bd949",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
@@ -113904,7 +113917,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113925,7 +113938,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: The based map induced by the left equivalence-lift composite fixes every loop.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: The left equivalence forward functor is now explicitly the fundamental-groupoid map induced by leftEquiv.toFun.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -114245,7 +114258,11 @@
     {:job 3,
      :commit "ef5956bdc040c7a01241c777d3c1e23514eb6b6a",
      :reason
-     "The based map induced by the left equivalence-lift composite fixes every loop."}]}
+     "The based map induced by the left equivalence-lift composite fixes every loop."}
+    {:job 4,
+     :commit "0d13ade10fde6f977237a818fbd00b6e368bd949",
+     :reason
+     "The left equivalence forward functor is now explicitly the fundamental-groupoid map induced by leftEquiv.toFun."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
