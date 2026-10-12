@@ -3011,6 +3011,42 @@ theorem waypointDependentDeparture_zero_normSq
       (t : ℝ) * (1 - 2 * (t : ℝ)) *
         (rotatedEndpointWaypoint p).re)]
 
+/-- Denominator-free annulus constraints on a zero of the
+waypoint-dependent departure leg. -/
+theorem waypointDependentDeparture_zero_polynomial_bounds
+    (t : unitInterval) (p : RightTubeMinusLeftCore)
+    (hz : (((1 - 2 * (t : ℝ) : ℝ) : ℂ) +
+        ((2 * (t : ℝ) : ℝ) : ℂ) * rotatedEndpointWaypoint p +
+        waypointDependentDepartureCorrection (t, p)) = 0) :
+    9 * ((2 * (t : ℝ)) ^ 2 +
+          ((t : ℝ) * (1 - 2 * (t : ℝ))) ^ 2) ≤
+        16 * (1 - 2 * (t : ℝ)) ^ 2 ∧
+      16 * (1 - 2 * (t : ℝ)) ^ 2 ≤
+        25 * ((2 * (t : ℝ)) ^ 2 +
+          ((t : ℝ) * (1 - 2 * (t : ℝ))) ^ 2) := by
+  have heq := waypointDependentDeparture_zero_normSq t p hz
+  have hb := rightTubeCorePlanarNormBounds p.1 p.2.1
+  have hw : ‖rotatedEndpointWaypoint p‖ =
+      ‖rightTubeCorePlanarComplex p.1‖ := by
+    simp [rotatedEndpointWaypoint, norm_mul]
+  have hn : 0 ≤ ‖rightTubeCorePlanarComplex p.1‖ := norm_nonneg _
+  have hs : Complex.normSq (rotatedEndpointWaypoint p) =
+      ‖rightTubeCorePlanarComplex p.1‖ ^ 2 := by
+    calc
+      Complex.normSq (rotatedEndpointWaypoint p) =
+          ‖rotatedEndpointWaypoint p‖ ^ 2 := (Complex.sq_norm _).symm
+      _ = ‖rightTubeCorePlanarComplex p.1‖ ^ 2 := by rw [hw]
+  rw [hs] at heq
+  have hb2 : (9 / 16 : ℝ) ≤ ‖rightTubeCorePlanarComplex p.1‖ ^ 2 ∧
+      ‖rightTubeCorePlanarComplex p.1‖ ^ 2 ≤ (25 / 16 : ℝ) := by
+    constructor <;> nlinarith
+  have hd : 0 ≤ (2 * (t : ℝ)) ^ 2 +
+      ((t : ℝ) * (1 - 2 * (t : ℝ))) ^ 2 :=
+    add_nonneg (sq_nonneg _) (sq_nonneg _)
+  have hlo := mul_nonneg hd (sub_nonneg.mpr hb2.1)
+  have hhi := mul_nonneg hd (sub_nonneg.mpr hb2.2)
+  constructor <;> nlinarith
+
 end ConstructionTargets.T02A03GeometricTubeDeformation
 
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeNormalComplex_eq_zero_iff
@@ -3112,6 +3148,7 @@ end ConstructionTargets.T02A03GeometricTubeDeformation
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.strongTransverseThirdCandidate_actual_zero
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.waypointDependentDeparture_factorization
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.waypointDependentDeparture_zero_normSq
+#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.waypointDependentDeparture_zero_polynomial_bounds
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_twiceCorrected_departure_zero_coordinates
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_twiceCorrected_departure_zero_normSq
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_twiceCorrected_departure_zero_scalar_bounds
