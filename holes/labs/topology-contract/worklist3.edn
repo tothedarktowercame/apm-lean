@@ -36113,72 +36113,63 @@
    [:lemma-constructiontargets-sardconvexdomain-eq-whitneydyadicindexof-of-mem-cube-of-gene],
    :other-consumers []}
   {:consumer :t93J03,
-   :stop-count 2,
+   :stop-count 3,
    :review-finding
    "Program STOP commits nothing new since the prior reviewed attempt: it reuses commit 512a220f, and git history shows no later scoped commit. The unresolved SemilocallySimplyConnected hypothesis-coverage conflict is unchanged. Obtain the required owner specification decision or commit a new compiled milestone before resubmitting.",
    :evidence
    {:placeholder-delta {:t93J03 [1 1]},
     :residual
-    "Build literal plane-orbit pi1 at its canonical point, apply adapter; then C2/Main.",
+    "Prove proper discontinuity and orbit-quotient homeomorphism; then C1 transport, C2/Main.",
     :outcome :stop,
-    :warnings
-    ["SemilocallySimplyConnected X owner-approved unused-mandated"],
+    :warnings ["owner-approved unused SLSC hypothesis"],
     :missing-theorems
-    [{:name "fundamentalGroupEquiv_every_basepoint",
-      :type
-      "one-basepoint pi1 equivalence transports to every basepoint",
+    [{:name "kleinPlaneContinuousConstSMul",
+      :type "continuous affine action",
       :status :proved,
       :consumers [:t93J03],
       :depends-on [],
       :area "covering-subgroup-correspondence"}
-     {:name "t93J03_kleinBottle_pi1_every_basepoint",
-      :type "pi1 Klein bottle equivalence at every point",
-      :status :partial,
+     {:name "kleinPlaneOrbit_pi1_at_origin",
+      :type "proper discontinuity gives orbit pi1 equiv",
+      :status :proved,
       :consumers [:t93J03],
       :depends-on [],
       :area "covering-subgroup-correspondence"}
-     {:name "t93J03_cyclicCover_zpowers_generatorA",
-      :type "planar cyclic cover realizing generatorA",
+     {:name "t93J03_kleinPlane_properlyDiscontinuous",
+      :type "proper discontinuity of affine action",
       :status :not-started,
       :consumers [:t93J03],
-      :depends-on ["t93J03_kleinBottle_pi1_every_basepoint"],
+      :depends-on [],
       :area "covering-subgroup-correspondence"}],
-    :statement-hashes {:registry "150/150"},
+    :statement-hashes {:registry "166/166"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Committed compiled C1 basepoint transport; orbit computation remains; not refuted.",
+    "Committed affine-action continuity and canonical-orbit pi1 application; geometry remains.",
     :commands
-    [{:cmd "lake build ConstructionTargets.t93J03Closure", :exit 0}
-     {:cmd "lake env lean /tmp/t93j03_basepoint_adapter_check.lean",
+    [{:cmd
+      "lake build ConstructionTargets.t93J03Closure; lean fixture",
       :exit 0}
-     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd "statement registry; placeholder; diff checks", :exit 0}
      {:cmd "rg forbidden closure", :exit 1, :expected-exit 1}
-     {:cmd "git commit; git show --check", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1791924772577-10474-219d1fb5",
-     :commands
-     ["git show/diff e702e81c; scope and orientation review"
-      "lake build/lean ConstructionTargets.t93J03Closure"
-      "sha256sum + lake env lean basepoint fixture"
-      "statement-registry check; placeholder recount"],
-     :finding
-     "PASS. Since program-history 30d10c96, commit e702e81c adds a compiled, sorry-free C1 adapter transporting a canonical-basepoint fundamental-group equivalence to every point of a path-connected space. The equivalence orientation is correct: pi1(Y,y) -> pi1(Y,y0) -> G. The literal plane-orbit computation, then C2/Main, remain listed. Fixture hash matches; standard axioms only; registry 165/165; forbidden count 0->0. SemilocallySimplyConnected X is unused, mandated by problem.md."},
-    :commit "e702e81c79467b9272cae4e4b156d1e4765f5a28",
+     {:cmd "git commit; show --check", :exit 0}],
+    :diagnostic-history
+    [{:cmd "lean closure",
+      :exit 1,
+      :correction "qualified deck theorem"}],
+    :commit "a55cadcd9d6ac70ebcb215ccd5bbec22bee9c238",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
      "ConstructionTargets/t93J03Closure.blueprint.md"],
     :fixture
-    {:path "/tmp/t93j03_basepoint_adapter_check.lean",
+    {:path "/tmp/t93j03_orbit_pi1_adapter_check.lean",
      :sha256
-     "74ae84827a61c23719536a152b9c1d846d7f90ae3400d2e6ff99670e83b48eac",
+     "26f686f47ae69c910b2ddd58121533a612c9f0d917db1d0690818378877f9a5b",
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -37203,6 +37194,56 @@
    :fail-count 0,
    :depends-on [],
    :program true,
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "kleinPlaneContinuousConstSMul",
+    :type "continuous affine action"},
+   :lemma
+   {:name "kleinPlaneContinuousConstSMul",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type "continuous affine action",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03},
+   :id :lemma-kleinplanecontinuousconstsmul,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "kleinPlaneOrbit_pi1_at_origin",
+    :type "proper discontinuity gives orbit pi1 equiv"},
+   :lemma
+   {:name "kleinPlaneOrbit_pi1_at_origin",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type "proper discontinuity gives orbit pi1 equiv",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03},
+   :id :lemma-kleinplaneorbit-pi1-at-origin,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t93J03_kleinPlane_properlyDiscontinuous",
+    :type "proper discontinuity of affine action"},
+   :lemma
+   {:name "t93J03_kleinPlane_properlyDiscontinuous",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type "proper discontinuity of affine action",
+    :area "covering-subgroup-correspondence"},
+   :id :lemma-t93j03-kleinplane-properlydiscontinuous,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
