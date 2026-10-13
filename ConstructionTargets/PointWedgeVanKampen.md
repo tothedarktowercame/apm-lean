@@ -1333,3 +1333,6 @@ round-trip component.
 `genericPointWedgeOuterRight_middleComponent_endpoints` now gives both exact
 endpoint equalities in the orientation of that comparison.  It remains to
 identify the two middle morphisms after transport along these equalities.
+`genericPointWedgeOuterRight_transportInvRoundTrip` performs that transport
+and lands in exactly the hom-set of the inverse-span component.  The residual
+comparison is now a homogeneous equality between those two morphisms.

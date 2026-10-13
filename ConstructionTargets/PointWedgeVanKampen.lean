@@ -6671,6 +6671,30 @@ theorem genericPointWedgeOuterRight_middleComponent_endpoints :
   · exact (genericPointWedgeOuterRightRoundTrip_component_source
       x₀ y₀ M N hM hN hy hx cM cN).symm
 
+/-- The inverse unshifted round-trip component, transported along the two
+named endpoint equalities into the exact hom-set of the inverse-span
+component. -/
+noncomputable def genericPointWedgeOuterRight_transportInvRoundTrip :
+    let r := genericPointWedgeActualRight x₀ y₀ M N
+    let eK := genericPointWedgeOverlapGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let eR := genericPointWedgeRightGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let z := genericPointWedgeOverlapBase x₀ y₀ M N
+    (genericPointWedgeCoordinateRight y₀).obj (eK.functor.obj z) ⟶
+      (eK.inverse ⋙ r ⋙ eR.functor).obj (eK.functor.obj z) := by
+  let r := genericPointWedgeActualRight x₀ y₀ M N
+  let eK := genericPointWedgeOverlapGroupoidEquivalence
+    x₀ y₀ M N hM hN hy hx cM cN
+  let eR := genericPointWedgeRightGroupoidEquivalence
+    x₀ y₀ M N hM hN hy hx cM cN
+  let z := genericPointWedgeOverlapBase x₀ y₀ M N
+  have h := genericPointWedgeOuterRight_middleComponent_endpoints
+    x₀ y₀ M N hM hN hy hx cM cN
+  exact eqToHom h.1 ≫
+    inv ((eK.funInvIdAssoc (r ⋙ eR.functor)).hom.app z) ≫
+      eqToHom h.2.symm
+
 /-- An `inl` factorization of the right-base conjugator forces its canonical
 right projection to be trivial. -/
 theorem genericPointWedgeRightBase_inl_implies_rightProjection_eq_one
@@ -7415,6 +7439,7 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeOuterRightRoundTrip_inv_normalForm_eq_connectors
 #print axioms genericPointWedgeOuterRight_leadingConnectors_heq
 #print axioms genericPointWedgeOuterRight_middleComponent_endpoints
+#print axioms genericPointWedgeOuterRight_transportInvRoundTrip
 #print axioms genericPointWedgeRightBase_inl_implies_rightProjection_eq_one
 #print axioms genericPointWedgeLegCoordinates_of_mapped
 #print axioms genericPointWedgeLegCoordinates_iff_mapped
