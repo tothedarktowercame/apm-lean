@@ -712,7 +712,67 @@ lemma apm_t96A08_chart_radial_primitive_transfer
         omegaCoord (a + t • (v - a)) (v - a)
       HasFDerivWithinAt G (omegaCoord a) (W ∩ Set.range (I : E → E)) a) :
     apm_t96A08_HasLocalRadialPrimitives I omega := by
-  sorry
+  intro x
+  rcases hcharts x with
+    ⟨U, W, hUopen, hxU, hWopen, hWconv, hxW, hWtarget, hU⟩
+  rcases hcoord x W hWtarget with
+    ⟨omegaCoord, homegaCoord, homegaCoord_x, hcoord_formula⟩
+  let a : E := extChartAt I x x
+  let G : E → ℝ := fun v ↦ ∫ t : ℝ in (0 : ℝ)..1,
+    omegaCoord (a + t • (v - a)) (v - a)
+  have ha : a ∈ W ∩ Set.range (I : E → E) := by
+    refine ⟨hxW, ?_⟩
+    exact extChartAt_target_subset_range x
+      ((extChartAt I x).map_source (mem_extChartAt_source x))
+  have hG := heuclid W a omegaCoord hWopen hWconv ha homegaCoord
+  change HasFDerivWithinAt G (omegaCoord a)
+    (W ∩ Set.range (I : E → E)) a at hG
+  let g : M → ℝ := fun y ↦ G (extChartAt I x y)
+  have hchart_image : U ⊆ (extChartAt I x) ⁻¹' (W ∩ Set.range (I : E → E)) := by
+    intro y hy
+    rw [hU] at hy
+    refine ⟨hy.2, ?_⟩
+    exact extChartAt_target_subset_range x ((extChartAt I x).map_source hy.1)
+  have hchart := hasMFDerivAt_extChartAt (I := I) (x := x) (y := x)
+    (mem_chart_source E x)
+  have hchart' := hchart.mdifferentiableAt.hasMFDerivAt
+  have hg0 := hG.hasMFDerivWithinAt.comp x hchart'.hasMFDerivWithinAt hchart_image
+  have hg1 := hg0.hasMFDerivAt (hUopen.mem_nhds hxU)
+  have hcancel : (omegaCoord a).comp
+      (mfderiv I 𝓘(ℝ, E) (extChartAt I x) x) = omega x := by
+    rw [homegaCoord_x]
+    have hc := mfderivWithin_extChartAt_symm_comp_mfderiv_extChartAt'
+      (I := I) (x := x) (y := x) (mem_extChartAt_source x)
+    simpa only [ContinuousLinearMap.comp_assoc, ContinuousLinearMap.comp_id] using
+      congrArg (fun L ↦ (omega x).comp L) hc
+  have hg : HasMFDerivAt I 𝓘(ℝ, ℝ) g x (omega x) := by
+    simpa only [g] using hg1.congr_mfderiv hcancel
+  refine ⟨U, hUopen, hxU, g, hg, ?_⟩
+  intro z hz
+  rcases hpaths x U W hU hxW hWconv hWtarget z hz with
+    ⟨delta, hdelta, hd0, hd1, hdsource, hdchart⟩
+  refine ⟨delta, hdelta, hd0, hd1, ?_⟩
+  have hsmooth : ContMDiffOn (modelWithCornersSelf ℝ ℝ) I
+      (⊤ : WithTop ℕ∞) delta (Set.Icc (0 : ℝ) 1) := by
+    let q : ℝ → E := fun t ↦ extChartAt I x x +
+      t • (extChartAt I x z - extChartAt I x x)
+    have hq : ContMDiff (modelWithCornersSelf ℝ ℝ)
+        (modelWithCornersSelf ℝ E) (⊤ : WithTop ℕ∞) q := by
+      exact contMDiff_const.add (contMDiff_id.smul contMDiff_const)
+    have hqt : Set.Icc (0 : ℝ) 1 ⊆ q ⁻¹' (extChartAt I x).target := by
+      intro t ht
+      change q t ∈ (extChartAt I x).target
+      rw [show q t = extChartAt I x (delta t) by exact (hdchart t ht).symm]
+      exact (extChartAt I x).map_source (hdsource t ht)
+    have hc := (contMDiffOn_extChartAt_symm x).comp hq.contMDiffOn hqt
+    apply hc.congr
+    intro t ht
+    change delta t = (extChartAt I x).symm (q t)
+    rw [show q t = extChartAt I x (delta t) by exact (hdchart t ht).symm]
+    exact ((extChartAt I x).left_inv (hdsource t ht)).symm
+  rw [hcoord_formula z delta hdsource hsmooth hdchart]
+  change G (extChartAt I x z) - G (extChartAt I x x) = _
+  simp [G, a]
 -- END SEAT AREA
 
 theorem apm_t96A08_chart_radial_primitive
