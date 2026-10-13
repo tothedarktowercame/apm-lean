@@ -23031,6 +23031,12 @@
       :exit 1,
       :correction
       "post-build fixture is stale and redeclares convexWithinJet"}],
+    :review
+    {:outcome :fail,
+     :seat "codex-11",
+     :job "invoke-1791891355448-9565-a4e9900b",
+     :finding
+     "extend Mathlib: state and prove the missing theorem in scope"},
     :commit nil,
     :changed-paths [],
     :fixture
@@ -23040,7 +23046,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :repair,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain.blueprint/B1/smooth-symmetry",
    :acceptance
@@ -23056,7 +23062,7 @@
    :id :r-a08-sard-smooth-jet-symmetry-1,
    :kind :reusable-theorem,
    :area "sard-convex-domain",
-   :fail-count 0,
+   :fail-count 1,
    :depends-on [:r-topo3-cp8],
    :current-residual
    "Then B1 continuity and canonical zero/one jets compile.",
