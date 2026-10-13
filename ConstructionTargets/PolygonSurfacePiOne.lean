@@ -1697,4 +1697,47 @@ noncomputable def PairingData.skeletonArcQuotientEquivRange (P : PairingData) :
     apply Subtype.ext
     exact Classical.choose_spec z.2
 
+def PairingData.signedWedgeArcMap (P : PairingData) :
+    P.SkeletonArcSource → PointWedgeQuotient.FiniteWedge (PairingOrbit P.pair) :=
+  fun a => P.signedWedgeArc a.1 a.2
+
+def PairingData.SignedWedgeArcRel (P : PairingData)
+    (a b : P.SkeletonArcSource) : Prop :=
+  P.signedWedgeArcMap a = P.signedWedgeArcMap b
+
+abbrev PairingData.SignedWedgeArcQuotient (P : PairingData) :=
+  Quotient (Relation.EqvGen.setoid P.SignedWedgeArcRel)
+
+/-- The exact target-side analogue of `skeletonArcQuotientEquivRange`. -/
+noncomputable def PairingData.signedWedgeArcQuotientEquivRange (P : PairingData) :
+    P.SignedWedgeArcQuotient ≃ Set.range P.signedWedgeArcMap where
+  toFun := Quotient.lift
+    (fun a => ⟨P.signedWedgeArcMap a, a, rfl⟩)
+    (by
+      intro a b h
+      apply Subtype.ext
+      induction h with
+      | rel a b h => exact h
+      | refl a => rfl
+      | symm a b _ ih => exact ih.symm
+      | trans a b c _ _ ih₁ ih₂ => exact ih₁.trans ih₂)
+  invFun := fun z => Quotient.mk _ (Classical.choose z.2)
+  left_inv := by
+    rintro ⟨a⟩
+    apply Quotient.sound
+    apply Relation.EqvGen.rel
+    exact Classical.choose_spec
+      ((⟨P.signedWedgeArcMap a, a, rfl⟩ : Set.range P.signedWedgeArcMap).2)
+  right_inv := by
+    intro z
+    apply Subtype.ext
+    exact Classical.choose_spec z.2
+
+/-- The remaining algebraic boundary of B7: equality of these two kernels
+is precisely what makes the representative correspondence descend to a
+bijection, before the topology is upgraded to a homeomorphism. -/
+def PairingData.SkeletonWedgeKernelAgreement (P : PairingData) : Prop :=
+  ∀ a b : P.SkeletonArcSource,
+    P.SkeletonArcRel a b ↔ P.SignedWedgeArcRel a b
+
 end ConstructionTargets.PolygonSurfacePiOne
