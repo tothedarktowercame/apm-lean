@@ -2342,13 +2342,59 @@ theorem apm_a97j08_exists_simple_cycle {V : Type*} [DecidableEq V]
     (fun hin ↦ apm_a97j08_exists_simple_cycle_aux_outgoing E hbal hin)
 
 -- (C3b) Peeling off simple cycles decomposes a balanced edge set (given C3a).
+lemma apm_a97j08_cycle_decomposition_aux_edges_nodup {V : Type*} [DecidableEq V]
+    {c : List V} (hc : c.Nodup) : (apm_a97j08_cycleEdges c).Nodup := by
+  apply List.Nodup.of_map Prod.fst
+  have hmap : (apm_a97j08_cycleEdges c).map Prod.fst = c := by
+    apply List.map_fst_zip
+    simp [apm_a97j08_cycleEdges]
+  rwa [hmap]
+
+lemma apm_a97j08_cycle_decomposition_aux_cycle_sum_toFinset
+    {V : Type*} [DecidableEq V] (f : V × V → ℝ) {c : List V} (hc : c.Nodup) :
+    ∑ e ∈ (apm_a97j08_cycleEdges c).toFinset, f e = apm_a97j08_cycleSum f c := by
+  rw [apm_a97j08_cycleSum]
+  exact List.sum_toFinset f (apm_a97j08_cycle_decomposition_aux_edges_nodup hc)
+
+lemma apm_a97j08_cycle_decomposition_aux_sdiff_balanced
+    {V : Type*} [DecidableEq V] (E : Finset (V × V))
+    (hbal : apm_a97j08_Balanced E) {c : List V} (hc0 : c ≠ []) (hc : c.Nodup)
+    (hsub : ∀ e ∈ apm_a97j08_cycleEdges c, e ∈ E) :
+    apm_a97j08_Balanced (E \ (apm_a97j08_cycleEdges c).toFinset) := by
+  sorry
+
 theorem apm_a97j08_cycle_decomposition {V : Type*} [DecidableEq V]
     (hC3a : ∀ E : Finset (V × V), apm_a97j08_Balanced E → E.Nonempty →
       ∃ c : List V, c ≠ [] ∧ c.Nodup ∧ ∀ e ∈ apm_a97j08_cycleEdges c, e ∈ E)
     (E : Finset (V × V)) (hbal : apm_a97j08_Balanced E) :
     ∃ cs : List (List V), (∀ c ∈ cs, c ≠ [] ∧ ∀ e ∈ apm_a97j08_cycleEdges c, e ∈ E) ∧
       ∀ f : V × V → ℝ, ∑ e ∈ E, f e = (cs.map (apm_a97j08_cycleSum f)).sum := by
-  sorry
+  classical
+  induction hn : E.card using Nat.strong_induction_on generalizing E with
+  | _ n ih =>
+    rcases E.eq_empty_or_nonempty with rfl | hne
+    · exact ⟨[], by simp, fun f => by simp⟩
+    obtain ⟨c, hc0, hc, hsub⟩ := hC3a E hbal hne
+    set C := (apm_a97j08_cycleEdges c).toFinset with hCdef
+    have hCE : C ⊆ E := fun e he => hsub e (List.mem_toFinset.mp he)
+    have hCpos : 0 < C.card := by
+      rw [hCdef, List.toFinset_card_of_nodup (apm_a97j08_cycle_decomposition_aux_edges_nodup hc),
+        apm_a97j08_cycleEdges, List.length_zip, List.length_rotate, min_self]
+      exact List.length_pos_of_ne_nil hc0
+    have hlt : (E \ C).card < n := by
+      have hEC := Finset.card_le_card hCE
+      rw [Finset.card_sdiff_of_subset hCE, ← hn]; omega
+    obtain ⟨cs, hcs, hsum⟩ := ih _ hlt (E \ C)
+      (apm_a97j08_cycle_decomposition_aux_sdiff_balanced E hbal hc0 hc hsub) rfl
+    refine ⟨c :: cs, ?_, fun f => ?_⟩
+    · intro c' hc'
+      rcases List.mem_cons.mp hc' with rfl | hc'
+      · exact ⟨hc0, hsub⟩
+      · obtain ⟨h1, h2⟩ := hcs c' hc'
+        exact ⟨h1, fun e he => (Finset.mem_sdiff.mp (h2 e he)).1⟩
+    · rw [← Finset.sum_sdiff hCE, hsum f,
+        apm_a97j08_cycle_decomposition_aux_cycle_sum_toFinset f hc, List.map_cons,
+        List.sum_cons, add_comm]
 
 -- (E1) Boundary edges of the grid region lie in `D`.
 lemma apm_a97j08_boundaryEdge_segment_subset_aux_edge_witness
