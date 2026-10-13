@@ -792,6 +792,54 @@ theorem apm_m95A03_exists_homogeneous_minimizer
   exact apm_m95A03_isMinOn_of_solves a b 0 0 p₀ hab hp₀ p q f u
     hp hq hf hp_lower hq_nonneg hu
 
+lemma apm_m95A03_minimizers_eqOn_aux_midpoint_mem
+    (a b : ℝ) (u v : ℝ → ℝ)
+    (hu : u ∈ apm_m95A03_admissible a b 0 0)
+    (hv : v ∈ apm_m95A03_admissible a b 0 0) :
+    (fun x => (u x + v x) / 2) ∈ apm_m95A03_admissible a b 0 0 := by
+  rcases hu with ⟨hu, hua, hub⟩
+  rcases hv with ⟨hv, hva, hvb⟩
+  refine ⟨hu.add hv |>.div_const 2, ?_, ?_⟩
+  · simp [hua, hva]
+  · simp [hub, hvb]
+
+lemma apm_m95A03_minimizers_eqOn_aux_deriv_sub
+    (u v : ℝ → ℝ) (hu : ContDiff ℝ 1 u) (hv : ContDiff ℝ 1 v) (x : ℝ) :
+    deriv (u - v) x = deriv u x - deriv v x := by
+  exact deriv_sub (hu.differentiable (by norm_num) x)
+    (hv.differentiable (by norm_num) x)
+
+lemma apm_m95A03_minimizers_eqOn_aux_deriv_midpoint
+    (u v : ℝ → ℝ) (hu : ContDiff ℝ 1 u) (hv : ContDiff ℝ 1 v) (x : ℝ) :
+    deriv (fun t => (u t + v t) / 2) x = (deriv u x + deriv v x) / 2 := by
+  simpa only [Pi.add_apply] using
+    (((hu.differentiable (by norm_num) x).hasDerivAt.add
+      (hv.differentiable (by norm_num) x).hasDerivAt).div_const 2).deriv
+
+/-- Midpoint identity: `E((u+v)/2) = (E u + E v)/2 − Q(u − v)/4`; with both minimal this
+forces `Q(u − v) ≤ 0`. -/
+lemma apm_m95A03_minimizers_eqOn_aux_quadratic_le
+    (a b : ℝ) (hab : a < b) (p q f u v : ℝ → ℝ) (hp : ContDiff ℝ 1 p)
+    (hq : Continuous q) (hf : Continuous f)
+    (huadm : u ∈ apm_m95A03_admissible a b 0 0)
+    (humin : IsMinOn (apm_m95A03_energy a b p q f)
+      (apm_m95A03_admissible a b 0 0) u)
+    (hvadm : v ∈ apm_m95A03_admissible a b 0 0)
+    (hvmin : IsMinOn (apm_m95A03_energy a b p q f)
+      (apm_m95A03_admissible a b 0 0) v) :
+    (∫ t in a..b, p t * (deriv (u - v) t) ^ 2 + q t * ((u - v) t) ^ 2) ≤ 0 := by
+  sorry
+
+/-- A `C¹` function vanishing at `a` whose weighted Dirichlet energy is `≤ 0` vanishes on
+`[a, b]`. -/
+lemma apm_m95A03_minimizers_eqOn_aux_zero_of_le
+    (a b p₀ : ℝ) (hab : a < b) (hp₀ : 0 < p₀) (p q w : ℝ → ℝ) (hp : Continuous p)
+    (hq : Continuous q) (hp_lower : ∀ t ∈ Set.Icc a b, p₀ ≤ p t)
+    (hq_nonneg : ∀ t ∈ Set.Icc a b, 0 ≤ q t) (hw : ContDiff ℝ 1 w) (hwa : w a = 0)
+    (hle : (∫ t in a..b, p t * (deriv w t) ^ 2 + q t * (w t) ^ 2) ≤ 0) :
+    ∀ t ∈ Set.Icc a b, w t = 0 := by
+  sorry
+
 theorem apm_m95A03_minimizers_eqOn
     (a b p₀ : ℝ) (hab : a < b) (hp₀ : 0 < p₀)
     (p q f u v : ℝ → ℝ) (hp : ContDiff ℝ 1 p)
@@ -805,7 +853,13 @@ theorem apm_m95A03_minimizers_eqOn
     (hvmin : IsMinOn (apm_m95A03_energy a b p q f)
       (apm_m95A03_admissible a b 0 0) v) :
     Set.EqOn v u (Set.Icc a b) := by
-  sorry
+  have hle := apm_m95A03_minimizers_eqOn_aux_quadratic_le a b hab p q f u v hp hq hf huadm humin hvadm hvmin
+  have hz := apm_m95A03_minimizers_eqOn_aux_zero_of_le a b p₀ hab hp₀ p q (u - v) hp.continuous hq hp_lower
+    hq_nonneg (huadm.1.sub hvadm.1) (by simp [huadm.2.1, hvadm.2.1]) hle
+  intro t ht
+  have := hz t ht
+  simp only [Pi.sub_apply, sub_eq_zero] at this
+  exact this.symm
 
 theorem apm_m95a03
     (a b α β p₀ : ℝ) (hab : a < b) (hp₀ : 0 < p₀)
