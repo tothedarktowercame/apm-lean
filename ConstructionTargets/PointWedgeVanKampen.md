@@ -1000,3 +1000,10 @@ that result into the actual-span coordinate calculation.  The canonical
 right comparison morphism now maps directly to the right coproduct injection
 of the equivalence counit's based normal form, with dependent endpoints kept
 by `HEq`.
+
+`genericPointWedgeRightBaseToInverseBase` names the reverse composite that
+actually occurs in the full right comparison: the equivalence unit followed
+by the inverse image of the strict-span comparison.  The theorem
+`genericPointWedgeRightComparison_actualMaps_eq_reverseCanonical` combines
+the two adjacent actual-span maps into the functor image of this single
+reverse morphism, before comparing it with the inverse canonical map.

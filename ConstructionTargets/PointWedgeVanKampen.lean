@@ -4422,6 +4422,54 @@ theorem genericPointWedgeRightInverseBaseToRightBase_map_heq_inr_counit :
   exact hmap.trans (congrArg (fun k : genericPointWedgeRightGroup y₀ =>
     (Monoid.Coprod.inr k : genericPointWedgeFreeProduct x₀ y₀)) hnormal').heq
 
+/-- The reverse canonical morphism occurring in the full right comparison:
+first cross the equivalence unit, then map the strict-span comparison back. -/
+def genericPointWedgeRightBaseToInverseBase :
+    let r := genericPointWedgeActualRight x₀ y₀ M N
+    let eK := genericPointWedgeOverlapGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let eR := genericPointWedgeRightGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let u : FundamentalGroupoid Unit := FundamentalGroupoid.mk ()
+    ((eK.inverse ⋙ r).obj u) ⟶
+      eR.inverse.obj (genericPointWedgeCoordinateRight y₀ |>.obj u) :=
+  let r := genericPointWedgeActualRight x₀ y₀ M N
+  let eK := genericPointWedgeOverlapGroupoidEquivalence
+    x₀ y₀ M N hM hN hy hx cM cN
+  let eR := genericPointWedgeRightGroupoidEquivalence
+    x₀ y₀ M N hM hN hy hx cM cN
+  let aR := genericPointWedgeRightSpanIso
+    x₀ y₀ M N hM hN hy hx cM cN
+  let u : FundamentalGroupoid Unit := FundamentalGroupoid.mk ()
+  ((Functor.isoWhiskerLeft (eK.inverse ⋙ r)
+    eR.unitIso.symm).inv.app u) ≫ eR.inverse.map (aR.hom.app u)
+
+/-- In categorical order, the two adjacent actual-span maps in the full
+right comparison combine as the image of the reverse canonical morphism. -/
+theorem genericPointWedgeRightComparison_actualMaps_eq_reverseCanonical :
+    let r := genericPointWedgeActualRight x₀ y₀ M N
+    let eK := genericPointWedgeOverlapGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let eR := genericPointWedgeRightGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let aR := genericPointWedgeRightSpanIso
+      x₀ y₀ M N hM hN hy hx cM cN
+    let u : FundamentalGroupoid Unit := FundamentalGroupoid.mk ()
+    let f := eR.inverse.map (aR.hom.app u)
+    let g := ((Functor.isoWhiskerLeft (eK.inverse ⋙ r)
+      eR.unitIso.symm).inv.app u)
+    (genericPointWedgeIdentityActualSpan
+        x₀ y₀ M N hM hN hy hx cM cN).right.map g ≫
+      (genericPointWedgeIdentityActualSpan
+        x₀ y₀ M N hM hN hy hx cM cN).right.map f =
+      (genericPointWedgeIdentityActualSpan
+        x₀ y₀ M N hM hN hy hx cM cN).right.map
+          (genericPointWedgeRightBaseToInverseBase
+            x₀ y₀ M N hM hN hy hx cM cN) := by
+  dsimp only [genericPointWedgeRightBaseToInverseBase]
+  exact (genericPointWedgeIdentityActualSpan
+    x₀ y₀ M N hM hN hy hx cM cN).right.map_comp _ _ |>.symm
+
 omit [PathConnectedSpace X] in
 /-- The connector normal form of the mapped lifted right loop is conjugation
 by the explicit equality transport at its common endpoint. -/
@@ -5498,6 +5546,8 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeRightInverseBaseToRightBase_normalForm_eq_sourceCounit
 #print axioms genericPointWedgeRightSourceConnector_counit_eq_normalForm
 #print axioms genericPointWedgeRightInverseBaseToRightBase_map_heq_inr_counit
+#print axioms genericPointWedgeRightBaseToInverseBase
+#print axioms genericPointWedgeRightComparison_actualMaps_eq_reverseCanonical
 #print axioms genericPointWedgeMappedOpenCoverCounit_namedGlueSquare
 #print axioms genericPointWedgeMappedCoordinateSpanCounit_glueSquare
 #print axioms genericPointWedgeMappedCoordinateSpanSourceGlue
