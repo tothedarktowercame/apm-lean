@@ -908,7 +908,51 @@ lemma apm_m98J02_regular_convolution_is_C2_aux_represents_aux_fubini_aux_integra
     Integrable (fun p : apm_m98J02_E × apm_m98J02_E ↦
       k p.2 * f (p.1 - p.2) * φ p.1)
         (MeasureTheory.volume.prod MeasureTheory.volume) := by
-  sorry
+  let K : Set apm_m98J02_E :=
+    (fun q : apm_m98J02_E × apm_m98J02_E ↦ q.1 - q.2) ''
+      (tsupport (φ : apm_m98J02_E → ℝ) ×ˢ tsupport f)
+  have hK : IsCompact K :=
+    (φ.hasCompactSupport.prod hfc).image (continuous_fst.sub continuous_snd)
+  have hkK : Integrable (K.indicator k) MeasureTheory.volume :=
+    (hk.integrableOn_isCompact hK).integrable_indicator hK.measurableSet
+  have hf_int : Integrable f MeasureTheory.volume :=
+    hf.integrable_of_hasCompactSupport hfc
+  have hprod : Integrable (fun p : apm_m98J02_E × apm_m98J02_E ↦
+      K.indicator k p.2 * f p.1)
+      (MeasureTheory.volume.prod MeasureTheory.volume) := by
+    simpa only [mul_comm] using hf_int.mul_prod hkK
+  obtain ⟨C, hC⟩ :=
+    φ.contDiff.continuous.bounded_above_of_compact_support φ.hasCompactSupport
+  have hbounded : ∀ p : apm_m98J02_E × apm_m98J02_E,
+      ‖φ (p.1 + p.2)‖ ≤ C := fun p ↦ hC (p.1 + p.2)
+  have hprodφ : Integrable (fun p : apm_m98J02_E × apm_m98J02_E ↦
+      (K.indicator k p.2 * f p.1) * φ (p.1 + p.2))
+      (MeasureTheory.volume.prod MeasureTheory.volume) :=
+    hprod.mul_bdd
+      (φ.contDiff.continuous.comp
+        (continuous_fst.add continuous_snd)).aestronglyMeasurable
+      (Filter.Eventually.of_forall hbounded)
+  have hfirst : Integrable (fun p : apm_m98J02_E × apm_m98J02_E ↦
+      k p.2 * f p.1 * φ (p.1 + p.2))
+      (MeasureTheory.volume.prod MeasureTheory.volume) := by
+    apply hprodφ.congr
+    filter_upwards [] with p
+    by_cases ht : p.2 ∈ K
+    · simp [Set.indicator_of_mem ht]
+    · have hz : f p.1 = 0 ∨ φ (p.1 + p.2) = 0 := by
+        by_contra hn
+        push_neg at hn
+        apply ht
+        refine ⟨(p.1 + p.2, p.1), ⟨subset_tsupport _ hn.2, subset_tsupport _ hn.1⟩, ?_⟩
+        simp
+      rcases hz with hz | hz
+      · simp [hz]
+      · simp [hz]
+  refine ⟨hfirst, ?_⟩
+  have hcomp :=
+    (measurePreserving_sub_prod MeasureTheory.volume MeasureTheory.volume).integrable_comp_of_integrable
+      hfirst
+  simpa [Function.comp_def, sub_add_cancel] using hcomp
 
 lemma apm_m98J02_regular_convolution_is_C2_aux_represents_aux_fubini
     (f k : apm_m98J02_E → ℝ) (hf : Continuous f) (hfc : HasCompactSupport f)
