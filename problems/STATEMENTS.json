@@ -66,25 +66,6 @@
    "rev": "573847ac4",
    "approved_at": "2026-10-13T04:19:30Z"
   },
-  "m93J05": {
-   "decls": [
-    "apm_m93j05"
-   ],
-   "sha256": "c77c52e3906a52fafdcfcf81bd788e1da8b07d11024f4ed2b8e33e1ecea48dd2",
-   "defs": [
-    "apm_m93j05_J",
-    "apm_m93j05_cosCoeff",
-    "apm_m93j05_sinCoeff",
-    "apm_m93j05_trunc"
-   ],
-   "grade": "faithful",
-   "grader": "claude-14 outside graders (read-only Claude subagents, 2026-10-13)",
-   "evidence": "holes/labs/statement-registry/blueprint-batch-1-grades.md",
-   "prelim_defect": null,
-   "rev": "573847ac4",
-   "approved_at": "2026-10-13T04:19:30Z",
-   "refingerprinted": "2026-10-13: header() now skips let/have := inside statements; full statement unchanged since rev (claude-14)"
-  },
   "m95A03": {
    "decls": [
     "apm_m95a03"
@@ -171,7 +152,7 @@
    "decls": [
     "apm_m98j02"
    ],
-   "sha256": "c146a9ac6d56322a9942ff272eb6412f25e10138b0a32aba0312236a1fb0284a",
+   "sha256": "980ae7d661c3082a68350f237e0a3f6811be7d6dca24c0b7d82932e72cd7cf65",
    "defs": [
     "apm_m98J02_Dist",
     "apm_m98J02_E",
@@ -184,11 +165,11 @@
     "apm_m98J02_solvesT"
    ],
    "grade": "narrower",
-   "grader": "claude-14 outside graders (read-only Claude subagents, 2026-10-13)",
-   "evidence": "holes/labs/statement-registry/blueprint-batch-1-grades.md",
+   "grader": "claude-14 outside grader (read-only Claude subagent, 2026-10-13, re-grade)",
+   "evidence": "holes/labs/statement-registry/lemma-round-1-grades.md",
    "prelim_defect": "holes/labs/statement-registry/blueprint-batch-1-grades.md",
-   "rev": "573847ac4",
-   "approved_at": "2026-10-13T04:19:30Z"
+   "rev": "f4fdb7d3b",
+   "approved_at": "2026-10-13T05:32:51Z"
   },
   "m98J05": {
    "decls": [
@@ -206,6 +187,24 @@
    "prelim_defect": null,
    "rev": "53eeb619a",
    "approved_at": "2026-10-13T05:20:21Z"
+  },
+  "m99A01": {
+   "decls": [
+    "apm_m99a01"
+   ],
+   "sha256": "df49a4b67e0644ba498b9979878d050d0ca4b0a6ae33dbcbf182d193165a7f74",
+   "defs": [
+    "apm_m99A01_admissible",
+    "apm_m99A01_extremal",
+    "apm_m99A01_functional",
+    "apm_m99A01_stationary"
+   ],
+   "grade": "faithful",
+   "grader": "claude-14 outside grader (read-only Claude subagent, 2026-10-13, batch 2)",
+   "evidence": "holes/labs/statement-registry/grading-batch-2.md",
+   "prelim_defect": null,
+   "rev": "cc153cc91",
+   "approved_at": "2026-10-13T06:09:19Z"
   },
   "m99A02": {
    "decls": [
@@ -1987,6 +1986,21 @@
    "rev": "6802e9ad",
    "approved_at": "2026-09-28T00:23:53Z"
   },
+  "t96A05": {
+   "decls": [
+    "apm_t96a05"
+   ],
+   "sha256": "79a994d9664adbe80ab497ca5a32de710d0ef843f07a790b0f720af65afeba00",
+   "defs": [
+    "PuncturedPlane"
+   ],
+   "grade": "faithful",
+   "grader": "claude-14 outside grader (read-only Claude subagent, 2026-10-13, batch 2)",
+   "evidence": "holes/labs/statement-registry/grading-batch-2.md",
+   "prelim_defect": null,
+   "rev": "cc153cc91",
+   "approved_at": "2026-10-13T06:09:19Z"
+  },
   "t96A06": {
    "decls": [
     "apm_t96a06"
@@ -2980,6 +2994,31 @@
    "reason": "regrade faithful -> stronger (wild embeddings allowed; still true); re-admitted",
    "evidence": "holes/labs/statement-registry/doubt-grades.md",
    "revoked_at": "2026-09-28T20:02:26Z"
+  },
+  {
+   "id": "m93J05",
+   "entry": {
+    "decls": [
+     "apm_m93j05"
+    ],
+    "sha256": "c77c52e3906a52fafdcfcf81bd788e1da8b07d11024f4ed2b8e33e1ecea48dd2",
+    "defs": [
+     "apm_m93j05_J",
+     "apm_m93j05_cosCoeff",
+     "apm_m93j05_sinCoeff",
+     "apm_m93j05_trunc"
+    ],
+    "grade": "faithful",
+    "grader": "claude-14 outside graders (read-only Claude subagents, 2026-10-13)",
+    "evidence": "holes/labs/statement-registry/blueprint-batch-1-grades.md",
+    "prelim_defect": null,
+    "rev": "573847ac4",
+    "approved_at": "2026-10-13T04:19:30Z",
+    "refingerprinted": "2026-10-13: header() now skips let/have := inside statements; full statement unchanged since rev (claude-14)"
+   },
+   "reason": "registered part (c) was backwards (false); corrected cee82c175; re-admit after (e) strengthened and re-graded",
+   "evidence": "holes/labs/statement-registry/grading-batch-2.md",
+   "revoked_at": "2026-10-13T06:09:29Z"
   }
  ]
 }

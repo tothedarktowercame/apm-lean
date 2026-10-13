@@ -23,13 +23,20 @@ Since the definition above already supplies part (a), that tautology is
 replaced by the substantive closure of compactly supported distributions
 under addition.
 
+Revised 2026-10-13: in `apm_m98J02_isConvolution` the cutoff `χ` must equal one
+on an open neighbourhood of `K`, not merely at the points of `K`. With the pointwise
+condition, a distribution of positive order (for example `δ₀'`, with `K = {0}`) sees
+the derivatives of `χ` at `K`, so the defining pairing depended on the cutoff and
+the definition did not determine the convolution (found by a lemma seat, round 2).
+
 ## Encoding questions
 
 Mathlib currently provides `Distribution` but not the general convolution of
 a compactly supported distribution with an arbitrary distribution, nor
 general distributional partial derivatives. Consequently these are encoded
 by their defining test-function identities. `apm_m98J02_isConvolution` uses a
-test-function cutoff equal to one on a compact support of the first factor;
+test-function cutoff equal to one on an open neighbourhood of a compact support of
+the first factor;
 `apm_m98J02_solvesT` uses the formal adjoint
 `2∂ₓ² + ∂ᵧ + 3∂ₓ∂ᵧ` on test functions. No function-level surrogate
 replaces the distributions.
@@ -64,7 +71,7 @@ def apm_m98J02_isConvolution
       IsCompact K ∧
       (∀ η : apm_m98J02_Test,
         Disjoint (tsupport (η : apm_m98J02_E → ℝ)) K → u η = 0) ∧
-      (∀ x ∈ K, χ x = 1) ∧
+      (∃ U : Set apm_m98J02_E, IsOpen U ∧ K ⊆ U ∧ ∀ x ∈ U, χ x = 1) ∧
       (∀ x : apm_m98J02_E,
         ∃ τ : apm_m98J02_Test,
           (∀ y : apm_m98J02_E, τ y = φ (x + y)) ∧ Ψ x = χ x * v τ) ∧
@@ -174,25 +181,21 @@ def apm_m98J02_translateTest (x : apm_m98J02_E)
 
 /-- Why this unblocks the cutoff step in `apm_m98j02`: every compact subset
 of the Euclidean plane admits a compactly supported smooth function that is
-identically one on that subset. -/
+identically one on an open neighbourhood of that subset. -/
 theorem apm_m98J02_bridge_1
     (K : Set apm_m98J02_E) (hK : IsCompact K) :
-    ∃ χ : apm_m98J02_Test, ∀ x ∈ K, χ x = 1 := by
+    ∃ χ : apm_m98J02_Test, ∃ U : Set apm_m98J02_E, IsOpen U ∧ K ⊆ U ∧ ∀ x ∈ U, χ x = 1 := by
   rcases (Metric.isBounded_iff_subset_ball (0 : apm_m98J02_E)).mp hK.isBounded with
     ⟨r, hr⟩
   let b : ContDiffBump (0 : apm_m98J02_E) :=
     ⟨|r| + 1, |r| + 2, by positivity, by linarith⟩
   let χ : apm_m98J02_Test := TestFunction.mk b b.contDiff
     b.hasCompactSupport (by simp)
-  refine ⟨χ, ?_⟩
+  refine ⟨χ, Metric.ball 0 (|r| + 1), Metric.isOpen_ball,
+    hr.trans (Metric.ball_subset_ball (by linarith [le_abs_self r])), ?_⟩
   intro x hx
   change b x = 1
-  apply b.one_of_mem_closedBall
-  rw [Metric.mem_closedBall, dist_zero_right]
-  have hxr := hr hx
-  rw [Metric.mem_ball, dist_zero_right] at hxr
-  dsimp [b]
-  linarith [le_abs_self r]
+  exact b.one_of_mem_closedBall (Metric.ball_subset_closedBall hx)
 
 noncomputable def apm_m98J02_integralAgainstBCF
     (q : apm_m98J02_E → ℝ) (hq : Continuous q)
@@ -420,6 +423,15 @@ noncomputable def apm_m98J02_formalAdjointTest
     apm_m98J02_partialTest_coe]
 
 /-- Shared cutoff-independence fact for a compactly supported distribution. -/
+noncomputable def apm_m98J02_cutoff_independence_aux_mul
+    (f g : apm_m98J02_Test) : apm_m98J02_Test :=
+  TestFunction.mk (fun x ↦ f x * g x) (f.contDiff.mul g.contDiff)
+    f.hasCompactSupport.mul_right (by simp)
+
+@[simp] lemma apm_m98J02_cutoff_independence_aux_mul_apply
+    (f g : apm_m98J02_Test) (x : apm_m98J02_E) :
+    apm_m98J02_cutoff_independence_aux_mul f g x = f x * g x := rfl
+
 theorem apm_m98J02_cutoff_independence
     (u : apm_m98J02_Dist) (F : apm_m98J02_E → ℝ)
     (K₁ K₂ : Set apm_m98J02_E) (χ₁ χ₂ Ψ₁ Ψ₂ : apm_m98J02_Test)
@@ -428,10 +440,176 @@ theorem apm_m98J02_cutoff_independence
       Disjoint (tsupport (η : apm_m98J02_E → ℝ)) K₁ → u η = 0)
     (hu₂ : ∀ η : apm_m98J02_Test,
       Disjoint (tsupport (η : apm_m98J02_E → ℝ)) K₂ → u η = 0)
-    (hχ₁ : ∀ x ∈ K₁, χ₁ x = 1) (hχ₂ : ∀ x ∈ K₂, χ₂ x = 1)
+    (hχ₁ : (∃ U : Set apm_m98J02_E, IsOpen U ∧ K₁ ⊆ U ∧ ∀ x ∈ U, χ₁ x = 1))
+    (hχ₂ : (∃ U : Set apm_m98J02_E, IsOpen U ∧ K₂ ⊆ U ∧ ∀ x ∈ U, χ₂ x = 1))
     (hΨ₁ : ∀ x, Ψ₁ x = χ₁ x * F x)
     (hΨ₂ : ∀ x, Ψ₂ x = χ₂ x * F x) :
     u Ψ₁ = u Ψ₂ := by
+  obtain ⟨U₁, hU₁, hK₁U, hχ₁U⟩ := hχ₁
+  obtain ⟨U₂, hU₂, hK₂U, hχ₂U⟩ := hχ₂
+  let η₁ : apm_m98J02_Test :=
+    Ψ₁ - apm_m98J02_cutoff_independence_aux_mul χ₂ Ψ₁
+  let η₂ : apm_m98J02_Test :=
+    apm_m98J02_cutoff_independence_aux_mul χ₁ Ψ₂ - Ψ₂
+  have hd₁ : Disjoint (tsupport (η₁ : apm_m98J02_E → ℝ)) K₂ := by
+    rw [Set.disjoint_left]
+    intro a ha haK
+    have haU := hK₂U haK
+    rw [tsupport] at ha
+    obtain ⟨b, hbU, hb⟩ := mem_closure_iff.mp ha U₂ hU₂ haU
+    exact hb (by simp [η₁, hχ₂U b hbU])
+  have hd₂ : Disjoint (tsupport (η₂ : apm_m98J02_E → ℝ)) K₁ := by
+    rw [Set.disjoint_left]
+    intro a ha haK
+    have haU := hK₁U haK
+    rw [tsupport] at ha
+    obtain ⟨b, hbU, hb⟩ := mem_closure_iff.mp ha U₁ hU₁ haU
+    exact hb (by simp [η₂, hχ₁U b hbU])
+  have hsum : Ψ₁ - Ψ₂ = η₁ + η₂ := by
+    ext a
+    change Ψ₁ a - Ψ₂ a =
+      (Ψ₁ a - χ₂ a * Ψ₁ a) + (χ₁ a * Ψ₂ a - Ψ₂ a)
+    rw [hΨ₁ a, hΨ₂ a]
+    ring
+  have hz : u (Ψ₁ - Ψ₂) = 0 := by
+    rw [hsum]
+    simp [hu₂ η₁ hd₁, hu₁ η₂ hd₂]
+  exact sub_eq_zero.mp (by simpa using hz)
+
+lemma apm_m98J02_translated_pairing_calculus_aux_partial_translate
+    (i : Fin 2) (φ : apm_m98J02_Test) (y x : apm_m98J02_E) :
+    apm_m98J02_partial i (fun z : apm_m98J02_E => φ (z + y)) x =
+      apm_m98J02_partial i φ (x + y) := by
+  unfold apm_m98J02_partial
+  have hφ : DifferentiableAt ℝ (φ : apm_m98J02_E → ℝ) (x + y) :=
+    (φ.contDiff.differentiable (by simp)).differentiableAt
+  have hadd : HasFDerivAt (fun z : apm_m98J02_E => z + y)
+      (1 : apm_m98J02_E →L[ℝ] apm_m98J02_E) x :=
+    hasFDerivAt_id x |>.add_const y
+  have hc : HasFDerivAt (fun z : apm_m98J02_E => φ (z + y))
+      ((fderiv ℝ (φ : apm_m98J02_E → ℝ) (x + y)).comp
+        (1 : apm_m98J02_E →L[ℝ] apm_m98J02_E)) x := by
+    simpa only [Function.comp_apply] using hφ.hasFDerivAt.comp x hadd
+  rw [hc.fderiv]
+  simp
+
+lemma apm_m98J02_translated_pairing_calculus_aux_partial_translateTest
+    (i : Fin 2) (φ : apm_m98J02_Test) (y x : apm_m98J02_E) :
+    apm_m98J02_partial i
+        (fun z : apm_m98J02_E => apm_m98J02_translateTest z φ y) x =
+      apm_m98J02_translateTest x (apm_m98J02_partialTest i φ) y := by
+  exact apm_m98J02_translated_pairing_calculus_aux_partial_translate i φ y x
+
+/-! ### Split of `apm_m98J02_translated_pairing_calculus` (claude-14, 2026-10-13, after a partial
+round-2 attempt that banked the two helpers above). (a) and (b) are facts about translation in the
+test-function (LF) topology, via one fixed compact support stage near each `x`; (c) is the
+calculus for a continuous linear `v`, given (a) and (b) as hypotheses. All three run in parallel.
+m98A04 needs the same two facts on `ℝⁿ` (its `translateReflectStageLocal` lemmas). -/
+
+lemma apm_m98J02_translateTest_continuous_aux_local_support
+    (ψ : apm_m98J02_Test) (x₀ : apm_m98J02_E) :
+    ∃ K : Set apm_m98J02_E, IsCompact K ∧
+      ∃ U ∈ nhds x₀, ∀ x ∈ U,
+        tsupport (apm_m98J02_translateTest x ψ : apm_m98J02_E → ℝ) ⊆ K := by
+  let B : Set apm_m98J02_E := Metric.closedBall x₀ 1
+  let S : Set apm_m98J02_E := tsupport (ψ : apm_m98J02_E → ℝ)
+  let K : Set apm_m98J02_E :=
+    (fun p : apm_m98J02_E × apm_m98J02_E => p.2 - p.1) '' (B ×ˢ S)
+  have hK : IsCompact K := by
+    have hB : IsCompact B := by
+      dsimp [B]
+      exact isCompact_closedBall x₀ 1
+    have hS : IsCompact S := ψ.hasCompactSupport
+    exact (hB.prod hS).image (by fun_prop)
+  refine ⟨K, hK, Metric.ball x₀ 1, Metric.ball_mem_nhds x₀ zero_lt_one, ?_⟩
+  intro x hx y hy
+  have hxB : x ∈ B := Metric.ball_subset_closedBall hx
+  have hsupport : x + y ∈ S := by
+    have he := tsupport_comp_eq_preimage (ψ : apm_m98J02_E → ℝ)
+      (Homeomorph.addLeft x)
+    have hy' : y ∈ tsupport ((ψ : apm_m98J02_E → ℝ) ∘ Homeomorph.addLeft x) := by
+      exact hy
+    rw [he] at hy'
+    exact hy'
+  refine ⟨(x, x + y), ⟨hxB, hsupport⟩, ?_⟩
+  simp
+
+/-- (a) Translation is continuous into the test-function space. -/
+theorem apm_m98J02_translateTest_continuous (ψ : apm_m98J02_Test) :
+    Continuous (fun x : apm_m98J02_E ↦ apm_m98J02_translateTest x ψ) := by
+  sorry
+
+lemma apm_m98J02_translateTest_difference_quotient_aux_pointwise
+    (ψ : apm_m98J02_Test) (i : Fin 2) (x y : apm_m98J02_E) :
+    Filter.Tendsto (fun h : ℝ ↦ h⁻¹ *
+        (apm_m98J02_translateTest (x + h • EuclideanSpace.single i 1) ψ y -
+          apm_m98J02_translateTest x ψ y))
+      (nhdsWithin (0 : ℝ) ({0} : Set ℝ)ᶜ)
+      (nhds (apm_m98J02_translateTest x (apm_m98J02_partialTest i ψ) y)) := by
+  let e : apm_m98J02_E := EuclideanSpace.single i 1
+  let F : ℝ → ℝ := fun h ↦ ψ (x + h • e + y)
+  have hψ : DifferentiableAt ℝ (ψ : apm_m98J02_E → ℝ) (x + y) :=
+    (ψ.contDiff.differentiable (by simp)).differentiableAt
+  have hline : HasDerivAt (fun h : ℝ ↦ x + h • e + y)
+      ((1 : ℝ) • e) 0 := by
+    simpa [add_comm] using
+      (((hasDerivAt_id (𝕜 := ℝ) (x := 0)).smul_const e).const_add x |>.add_const y)
+  have hF : HasDerivAt F (apm_m98J02_partial i ψ (x + y)) 0 := by
+    have hψ0 : DifferentiableAt ℝ (ψ : apm_m98J02_E → ℝ)
+        (x + (0 : ℝ) • e + y) := by
+      simpa using hψ
+    have hc := hψ0.hasFDerivAt.comp 0 hline.hasFDerivAt
+    simpa [F, e, apm_m98J02_partial] using hc.hasDerivAt
+  simpa [F, e, apm_m98J02_translateTest_apply,
+    apm_m98J02_partialTest_apply, apm_m98J02_partial, div_eq_inv_mul,
+    mul_comm] using hF.tendsto_slope_zero
+
+/-- (b) Difference quotients of translation converge in the test-function space. -/
+lemma apm_m98J02_translateTest_difference_quotient_aux_fixed_stage
+    (ψ : apm_m98J02_Test) (i : Fin 2) (x : apm_m98J02_E) :
+    ∃ K : Compacts apm_m98J02_E,
+      (∀ h : ℝ, |h| ≤ 1 →
+        Function.support (apm_m98J02_translateTest
+          (x + h • EuclideanSpace.single i 1) ψ : apm_m98J02_E → ℝ) ⊆ K) ∧
+      Function.support (apm_m98J02_translateTest x
+        (apm_m98J02_partialTest i ψ) : apm_m98J02_E → ℝ) ⊆ K := by
+  sorry
+
+lemma apm_m98J02_translateTest_difference_quotient_aux_stage_convergence
+    (ψ : apm_m98J02_Test) (i : Fin 2) (x : apm_m98J02_E) :
+    Filter.Tendsto (fun h : ℝ ↦ h⁻¹ •
+        (apm_m98J02_translateTest (x + h • EuclideanSpace.single i 1) ψ -
+          apm_m98J02_translateTest x ψ))
+      (nhdsWithin (0 : ℝ) ({0} : Set ℝ)ᶜ)
+      (nhds (apm_m98J02_translateTest x (apm_m98J02_partialTest i ψ))) := by
+  sorry
+
+theorem apm_m98J02_translateTest_difference_quotient (ψ : apm_m98J02_Test) (i : Fin 2)
+    (x : apm_m98J02_E) :
+    Filter.Tendsto (fun h : ℝ ↦ h⁻¹ • (apm_m98J02_translateTest (x + h • EuclideanSpace.single i 1) ψ - apm_m98J02_translateTest x ψ))
+      (nhdsWithin (0 : ℝ) ({0} : Set ℝ)ᶜ) (nhds (apm_m98J02_translateTest x (apm_m98J02_partialTest i ψ))) := by
+  exact apm_m98J02_translateTest_difference_quotient_aux_stage_convergence ψ i x
+
+/-- (c) Calculus of `x ↦ v (τₓ φ)` from (a), (b): partials by continuity of `v`, then continuous
+partials in `ℝ²` give `C¹`, and once more give `C²`. -/
+theorem apm_m98J02_translated_pairing_calculus_of_facts
+    (hcont : ∀ ψ : apm_m98J02_Test, Continuous (fun x : apm_m98J02_E ↦ apm_m98J02_translateTest x ψ))
+    (hdq : ∀ (ψ : apm_m98J02_Test) (i : Fin 2) (x : apm_m98J02_E),
+      Filter.Tendsto (fun h : ℝ ↦ h⁻¹ • (apm_m98J02_translateTest (x + h • EuclideanSpace.single i 1) ψ - apm_m98J02_translateTest x ψ))
+        (nhdsWithin (0 : ℝ) ({0} : Set ℝ)ᶜ) (nhds (apm_m98J02_translateTest x (apm_m98J02_partialTest i ψ))))
+    (v : apm_m98J02_Dist) (φ : apm_m98J02_Test) :
+    ContDiff ℝ 2 (fun x : apm_m98J02_E =>
+      v (apm_m98J02_translateTest x φ)) ∧
+    (∀ i x,
+      apm_m98J02_partial i
+          (fun z : apm_m98J02_E => v (apm_m98J02_translateTest z φ)) x =
+        v (apm_m98J02_translateTest x (apm_m98J02_partialTest i φ))) ∧
+    (∀ i j x,
+      apm_m98J02_partial i
+          (apm_m98J02_partial j
+            (fun z : apm_m98J02_E => v (apm_m98J02_translateTest z φ))) x =
+        v (apm_m98J02_translateTest x
+          (apm_m98J02_partialTest i (apm_m98J02_partialTest j φ)))) := by
   sorry
 
 /-- Shared translation calculus needed by construction, differentiation of
@@ -450,7 +628,8 @@ theorem apm_m98J02_translated_pairing_calculus
             (fun z : apm_m98J02_E => v (apm_m98J02_translateTest z φ))) x =
         v (apm_m98J02_translateTest x
           (apm_m98J02_partialTest i (apm_m98J02_partialTest j φ)))) := by
-  sorry
+  exact apm_m98J02_translated_pairing_calculus_of_facts
+    apm_m98J02_translateTest_continuous apm_m98J02_translateTest_difference_quotient v φ
 
 /-- The cutoff-based predicate defines at most one distribution.  This rules
 out choosing a smoother witness when the fixed fundamental solution is bad. -/

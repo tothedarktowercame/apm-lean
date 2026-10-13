@@ -22,13 +22,20 @@ Since the definition above already supplies part (a), that tautology is
 replaced by the substantive closure of compactly supported distributions
 under addition.
 
+Revised 2026-10-13: in `apm_m98J02_isConvolution` the cutoff `χ` must equal one
+on an open neighbourhood of `K`, not merely at the points of `K`. With the pointwise
+condition, a distribution of positive order (for example `δ₀'`, with `K = {0}`) sees
+the derivatives of `χ` at `K`, so the defining pairing depended on the cutoff and
+the definition did not determine the convolution (found by a lemma seat, round 2).
+
 ## Encoding questions
 
 Mathlib currently provides `Distribution` but not the general convolution of
 a compactly supported distribution with an arbitrary distribution, nor
 general distributional partial derivatives. Consequently these are encoded
 by their defining test-function identities. `apm_m98J02_isConvolution` uses a
-test-function cutoff equal to one on a compact support of the first factor;
+test-function cutoff equal to one on an open neighbourhood of a compact support of
+the first factor;
 `apm_m98J02_solvesT` uses the formal adjoint
 `2∂ₓ² + ∂ᵧ + 3∂ₓ∂ᵧ` on test functions. No function-level surrogate
 replaces the distributions.
@@ -63,7 +70,7 @@ def apm_m98J02_isConvolution
       IsCompact K ∧
       (∀ η : apm_m98J02_Test,
         Disjoint (tsupport (η : apm_m98J02_E → ℝ)) K → u η = 0) ∧
-      (∀ x ∈ K, χ x = 1) ∧
+      (∃ U : Set apm_m98J02_E, IsOpen U ∧ K ⊆ U ∧ ∀ x ∈ U, χ x = 1) ∧
       (∀ x : apm_m98J02_E,
         ∃ τ : apm_m98J02_Test,
           (∀ y : apm_m98J02_E, τ y = φ (x + y)) ∧ Ψ x = χ x * v τ) ∧
@@ -173,10 +180,10 @@ def apm_m98J02_translateTest (x : apm_m98J02_E)
 
 /-- Why this unblocks the cutoff step in `apm_m98j02`: every compact subset
 of the Euclidean plane admits a compactly supported smooth function that is
-identically one on that subset. -/
+identically one on an open neighbourhood of that subset. -/
 theorem apm_m98J02_bridge_1
     (K : Set apm_m98J02_E) (hK : IsCompact K) :
-    ∃ χ : apm_m98J02_Test, ∀ x ∈ K, χ x = 1 := by
+    ∃ χ : apm_m98J02_Test, ∃ U : Set apm_m98J02_E, IsOpen U ∧ K ⊆ U ∧ ∀ x ∈ U, χ x = 1 := by
   sorry
 
 /-- Why this unblocks the convolution step in `apm_m98j02`: this packages the

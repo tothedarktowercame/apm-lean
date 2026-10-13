@@ -88,11 +88,81 @@ lemma entire_coeffs_tendsto_zero (g : ℂ → ℂ) (hg : Differentiable ℂ g) :
   exact tendsto_zero_iff_norm_tendsto_zero.mpr
     (squeeze_zero (fun n => norm_nonneg _) h_est h_tendsto)
 
+/-! ## Definition of the missing source hypothesis -/
+
 /-- `f` has a simple pole at `1` and no other singular part: off `1` it is a
 nonzero scalar multiple of `(z - 1)⁻¹` plus an entire function. -/
 def apm_a96A06_HasSimplePoleAtOne (f : ℂ → ℂ) : Prop :=
   ∃ c : ℂ, ∃ g : ℂ → ℂ, c ≠ 0 ∧ Differentiable ℂ g ∧
     ∀ z : ℂ, z ≠ 1 → f z = c / (z - 1) + g z
+
+/-! ## Remaining bridges -/
+
+theorem apm_a96A06_pole_coefficient_eq_neg_one
+    {f g : ℂ → ℂ} {c : ℂ}
+    (hg : Differentiable ℂ g)
+    (hrep : ∀ z : ℂ, z ≠ 1 → f z = c / (z - 1) + g z)
+    (hf_int : ∮ z in C(0, 2), f z = -(2 * Real.pi * I)) :
+    c = -1 := by
+  have hone : (1 : ℂ) ∈ ball 0 2 := by
+    simp [mem_ball]
+  have hnot : (1 : ℂ) ∉ sphere 0 |(2 : ℝ)| := by
+    simp [mem_sphere]
+  have hinv : CircleIntegrable (fun z : ℂ ↦ (z - 1)⁻¹) 0 2 := by
+    rw [circleIntegrable_sub_inv_iff]
+    exact Or.inr hnot
+  have hgint : CircleIntegrable g 0 2 :=
+    hg.continuous.continuousOn.circleIntegrable'
+  have hcongr : (∮ z in C(0, 2), f z) =
+      ∮ z in C(0, 2), c * (z - 1)⁻¹ + g z := by
+    apply circleIntegral.integral_congr (by norm_num)
+    intro z hz
+    rw [hrep z]
+    · simp [div_eq_mul_inv]
+    · intro h
+      subst z
+      simpa [mem_sphere] using hz
+  have hgzero : (∮ z in C(0, 2), g z) = 0 := by
+    exact hg.diffContOnCl.circleIntegral_eq_zero (by norm_num)
+  have hpole : (∮ z in C(0, 2), (z - 1)⁻¹) = 2 * Real.pi * I :=
+    circleIntegral.integral_sub_inv_of_mem_ball hone
+  have hcinv : CircleIntegrable (fun z : ℂ ↦ c * (z - 1)⁻¹) 0 2 := by
+    exact CircleIntegrable.const_smul (a := c) hinv
+  rw [hcongr, circleIntegral.integral_add hcinv hgint,
+    circleIntegral.integral_const_mul, hpole, hgzero, add_zero] at hf_int
+  have hfac : (2 * (Real.pi : ℂ) * I) ≠ 0 := by
+    exact mul_ne_zero (mul_ne_zero (by norm_num) (by exact_mod_cast Real.pi_ne_zero)) I_ne_zero
+  apply (mul_right_cancel₀ hfac)
+  simpa [mul_assoc] using hf_int
+
+theorem apm_a96A06_coeffs_tendsto_of_representation
+    {f g : ℂ → ℂ} {c : ℂ}
+    (hg : Differentiable ℂ g) (hc : c = -1)
+    (hrep : ∀ z : ℂ, z ≠ 1 → f z = c / (z - 1) + g z) :
+    Tendsto (fun n => iteratedDeriv n f 0 / (n.factorial : ℂ))
+      atTop (𝓝 1) := by
+  subst c
+  have hlocal : f =ᶠ[𝓝 0] fun z : ℂ ↦ (1 - z)⁻¹ + g z := by
+    filter_upwards [eventually_ne_nhds (show (0 : ℂ) ≠ 1 by norm_num)] with z hz
+    rw [hrep z hz]
+    congr 1
+    field_simp [sub_ne_zero.mpr hz, sub_ne_zero.mpr hz.symm]
+    ring
+  have hcoeff (n : ℕ) :
+      iteratedDeriv n f 0 / (n.factorial : ℂ) =
+        1 + iteratedDeriv n g 0 / (n.factorial : ℂ) := by
+    rw [hlocal.iteratedDeriv_eq n]
+    have hgeom : ContDiffAt ℂ n (fun z : ℂ ↦ (1 - z)⁻¹) 0 := by
+      exact (contDiffAt_const.sub contDiffAt_id).inv (by norm_num)
+    have hg' : ContDiffAt ℂ n g 0 := hg.contDiff.contDiffAt
+    change iteratedDeriv n ((fun z : ℂ ↦ (1 - z)⁻¹) + g) 0 /
+      (n.factorial : ℂ) = _
+    rw [iteratedDeriv_add hgeom hg', add_div, geom_taylor_coeff]
+  have ht : Tendsto
+      (fun n : ℕ ↦ (1 : ℂ) + iteratedDeriv n g 0 / (n.factorial : ℂ))
+      atTop (𝓝 ((1 : ℂ) + 0)) :=
+    tendsto_const_nhds.add (entire_coeffs_tendsto_zero g hg)
+  simpa only [hcoeff, add_zero] using ht
 
 /-- **Main theorem**: f^(n)(0)/n! → 1.
 
@@ -109,6 +179,10 @@ theorem apm_a96a06
     (hf_int : ∮ z in C(0, 2), f z = -(2 * Real.pi * I)) :
     Tendsto (fun n => iteratedDeriv n f 0 / (n.factorial : ℂ))
       atTop (𝓝 1) := by
-  sorry
+  obtain ⟨c, g, hc0, hg, hrep⟩ := hf_pole
+  have hc : c = -1 :=
+    apm_a96A06_pole_coefficient_eq_neg_one hg hrep hf_int
+  exact apm_a96A06_coeffs_tendsto_of_representation hg hc hrep
 
+#print axioms apm_a96a06
 end

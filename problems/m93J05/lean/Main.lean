@@ -17,6 +17,11 @@ open MeasureTheory Filter
    domain and `ENNReal.toReal` turns an infinite norm into the junk value zero,
    so the asserted derivative can fail to exist.
 
+Revised 2026-10-13: part (c)'s lower semicontinuity was encoded backwards, as
+`(∀ᶠ n, r ≤ J (s n)) → r ≤ J f`, which says `liminf J(sₙ) ≤ J f` and is false for
+weakly convergent sequences (sₙ = sin (2π (N+n) x) ⇀ 0, J(sₙ) ≥ c > 0 = J 0 with g = 0).
+It now reads `(∃ᶠ n, J (s n) ≤ r) → J f ≤ r`, i.e. `J f ≤ liminf J(sₙ)`.
+
 ## Encoding note
 
 Functions are represented by measurable representatives on `[0,1]`; all
@@ -60,8 +65,8 @@ theorem apm_m93j05 :
         (∀ h, MemLp h (ENNReal.ofReal q) μ →
           Tendsto (fun n => ∫ x, s n x * h x ∂μ) atTop
             (nhds (∫ x, f x * h x ∂μ))) →
-        ∀ r, (∀ᶠ n in atTop, r ≤ apm_m93j05_J N p g (s n)) →
-          r ≤ apm_m93j05_J N p g f) ∧
+        ∀ r, (∃ᶠ n in atTop, apm_m93j05_J N p g (s n) ≤ r) →
+          apm_m93j05_J N p g f ≤ r) ∧
       (∃ f₀, MemLp f₀ (ENNReal.ofReal p) μ ∧
         ∀ f, MemLp f (ENNReal.ofReal p) μ →
           apm_m93j05_J N p g f₀ ≤ apm_m93j05_J N p g f) ∧

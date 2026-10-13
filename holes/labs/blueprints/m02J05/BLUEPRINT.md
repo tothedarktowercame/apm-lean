@@ -52,61 +52,85 @@ zero, is nonnegative and monotone on the nonnegative half-line, and that zero
 belongs to `K_A` and `L_A`. The three bridge statements developed by the solve
 loop have been transported to the repaired ambient type.
 
-## Remaining lemmas
+## Parallel lemma split
 
-### `apm_m02J05_bridge_convex_and_submodule`
+### `apm_m02J05_young_shape`
 
-**Statement.** Under the hypotheses on `α`, `K_A` is convex and `L_A` is the
-underlying set of a real submodule of the repaired function space.
+**Statement.** The Young primitive is convex and monotone on `[0,∞)`.
+**Sketch.** Its derivative is `α`; integrate the monotonicity inequality for
+secant slopes. Monotonicity also follows from nonnegativity of `α` (the
+pointwise version is already compiled). **Estimate:** 60--110 lines.
+**Dependencies:** compiled scalar lemmas only. **Truth check:** for `α=id`,
+the primitive is `t²/2`; at `t=0` both properties include the endpoint.
 
-**Proof sketch.** First show the primitive `A(t)=∫₀ᵗα` is convex on
-`[0,∞)` because its derivative `α` is monotone. Combine convexity with the
-already proved monotonicity of `A` and
-`|r u+(1-r)v| ≤ r|u|+(1-r)|v|` to prove convexity of `K_A`. Prove solidity
-under scalars of absolute value at most one. For `u,v∈L_A`, shrink their two
-witness scalars to a common positive scalar and apply convexity at weight
-`1/2`; scalar closure follows by rescaling the witness. Package the resulting
-zero/add/smul closure as a `Submodule`.
+### `apm_m02J05_bridge_convex_and_submodule_of_young_shape`
 
-**Estimate.** 180--280 lines.
+**Statement.** Given the preceding shape fact explicitly, `K_A` is convex
+and `L_A` is the carrier of a submodule. **Sketch.** Combine convexity and
+monotonicity with the pointwise absolute-value inequality. Put two rescaling
+witnesses over a common denominator to prove addition closure; scalar closure
+is direct. **Estimate:** 90--140 lines. **Dependencies:** `hshape` is an
+explicit hypothesis, so this seat is independent. **Truth check:** zero and
+scalar-zero are already compiled; for `α=id` this is the usual `L²` class.
 
-**Dependencies.** Definitions and the already proved Young-zero,
-Young-nonnegative, and Young-monotone lemmas. It does not depend on another
-remaining bridge.
+### `apm_m02J05_lux_sublevel_attained`
 
-**Truth check.** For `α=id`, `A(t)=t²/2`, so `K_A` is the ordinary square-
-integrable modular class and the construction reduces to the standard vector
-space argument. The zero and scalar-zero cases were separately checked in
-Lean.
+**Statement.** For `u∈L_A`, the positive modular sublevel is nonempty and
+bounded below, its infimum is nonnegative, and for `u≠0` the infimum belongs
+to the sublevel. **Sketch.** Enlarge the denominator from an integrable
+rescaling witness; use dominated convergence for nonemptiness and Fatou for
+closure at a positive infimum. The nonzero condition is necessary: for
+`u=0`, the sublevel is all positive reals and its infimum zero is not a
+member. **Estimate:** 100--150 lines. **Dependencies:** definitions only.
+**Truth check:** this zero-function endpoint explains the precise statement;
+for a nonzero constant and `α=id`, the sublevel is a closed ray with positive
+left endpoint.
 
-### `apm_m02J05_bridge_luxemburg_laws`
+### `apm_m02J05_lux_definite`
 
-**Statement.** On `L_A`, the repaired Luxemburg functional is nonnegative,
-definite, absolutely homogeneous, and subadditive.
+**Statement.** On `L_A`, `lux u=0 ↔ u=0`. **Sketch.** Coercivity of the
+Young primitive excludes arbitrarily small denominators whenever `|u|` is
+bounded below on a positive-measure set; the converse computes the zero
+sublevel. **Estimate:** 70--120 lines. **Dependencies:** standalone scalar
+hypotheses. **Truth check:** the repaired quotient makes every function
+supported outside `[0,1]` literally zero, while a nonzero constant has
+positive gauge.
 
-**Proof sketch.** Study the sublevel set in the `sInf` definition. It is
-nonempty for each `u∈L_A`: use the integrable rescaling witness as a dominator
-and send the denominator to infinity. It is bounded below by zero and upward
-closed. Fatou's lemma gives closure/attainment at a positive infimum.
-Definiteness uses coercivity of `A`: if `u` is nonzero in the restricted
-`AEEqFun`, then `|u|≥ε` on a restricted-measure set of positive measure, which
-excludes all sufficiently small denominators. Homogeneity follows by scaling
-the sublevel set. For the triangle inequality, normalize by
-`lux u + lux v`, use convexity of `A`, and integrate the resulting convex
-combination.
+### `apm_m02J05_lux_homogeneous`
 
-**Estimate.** 260--320 lines.
+**Statement.** `lux (c • u)=|c| lux u`. **Sketch.** For `c≠0`, identify the
+two sublevel sets by multiplication by `|c|` and transport their infima; treat
+`c=0` directly. **Estimate:** 50--100 lines. **Dependencies:** standalone.
+**Truth check:** `c=0`, negative `c`, and `u=0` all reduce to absolute-value
+identities.
 
-**Dependencies.** Definitions and the scalar Young-function facts. Its proof
-may reuse the convexity argument from the first bridge once merged, but its
-statement is standalone and a seat can prove it directly.
+### `apm_m02J05_lux_triangle_of_facts`
 
-**Truth check.** The former outside-support counterexample becomes zero in the
-repaired quotient. For a nonzero constant `u=k` and `α=id`, the sublevel set
-can be computed explicitly and has a strictly positive infimum proportional
-to `|k|`; scaling and triangle laws reduce to those of absolute value.
+**Statement.** Given Young convexity/monotonicity and the attained-sublevel
+fact explicitly, the Luxemburg gauge satisfies the triangle inequality.
+**Sketch.** Handle either zero norm separately. Otherwise normalize by the
+sum of the norms, apply convexity to the pointwise weighted average, and use
+the two attained modular bounds. **Estimate:** 70--120 lines.
+**Dependencies:** `hshape` and `hsublevel` are explicit hypotheses, so this
+seat can run in parallel with both suppliers. **Truth check:** if either
+function is zero the claim is equality; for constants and `α=id` it is the
+ordinary triangle inequality.
 
-### `apm_m02J05_bridge_complementary_young_holder`
+The original structural and Luxemburg bridges are now proved assembly
+theorems. The Luxemburg bridge projects nonnegativity from the sublevel lemma
+and combines the other three laws; it has no `sorry`.
+
+### `apm_m02J05_inverse_partner_lux_facts`
+
+**Statement.** The inverse-function hypotheses imply the sublevel/attainment
+and definiteness facts for the complementary function `β`. **Sketch.** Derive
+strict monotonicity, zero value, and divergence of `β` from the two inverse
+identities, then apply the focused sublevel and definiteness arguments.
+**Estimate:** 60--110 lines. **Dependencies:** standalone paired hypotheses.
+**Truth check:** for `α=β=id` this is the checked quadratic case; the inverse
+laws exclude a flat or bounded complementary function.
+
+### `apm_m02J05_bridge_complementary_young_holder_of_lux_facts`
 
 **Statement.** For inverse nonnegative functions `α,β`, their integral
 primitives satisfy pointwise Young's inequality, and functions in the two
@@ -120,12 +144,10 @@ Monotonicity then treats separately `t≤α(s)` and `α(s)≤t`, yielding
 Luxemburg sublevels to bound the two modular integrals by one. Treat either
 zero-norm case using definiteness. Finally use `u*v ≤ |u|*|v|`.
 
-**Estimate.** 220--300 lines.
+**Estimate.** 120--150 lines after the Luxemburg work has been separated.
 
-**Dependencies.** Definitions and the inverse hypotheses. The Hölder half
-uses the norm-sublevel/definiteness facts represented by the second bridge
-when assembling a final proof, but the theorem statement itself is
-self-contained and can be developed independently.
+**Dependencies.** The sublevel and definiteness results for both functions
+are explicit hypotheses, so this seat is independent of their suppliers.
 
 **Truth check.** With `α=β=id`, Young's inequality becomes
 `st≤s²/2+t²/2`. With either function zero, both sides of Hölder are zero. For
@@ -134,24 +156,21 @@ measure-one interval.
 
 ## Dependency layers
 
-- **Layer 1 (parallel seats):** all three bridge lemmas. They have standalone
-  statements from the definitions and scalar assumptions. The second and
-  third seats may reproduce small convexity/attainment facts locally; after
-  merging, they can instead call the first/second bridge where convenient.
-- **Layer 2:** main theorem assembly. It projects the nonnegativity of `α` from
-  the paired hypothesis, invokes all three bridges, and concatenates their
-  conclusions. This assembly is already proved without `sorry`.
+- **Layer 1 (parallel, eight seats):** Young shape, convex/submodule from an
+  explicit shape hypothesis, sublevel/attainment, definiteness, homogeneity,
+  triangle from explicit shape/sublevel hypotheses, inverse-partner Luxemburg
+  facts, and complementary Young--Hölder from explicit Luxemburg facts.
+- **Layer 2 (proved):** the original three bridges.
+- **Layer 3 (proved):** the registered main theorem assembly.
 
 ## Confidence and doubt
 
 The repair is exact and the compiled refutation confirms the original defect.
-I am convinced all three repaired bridge statements are true. The Luxemburg
-bridge is at the upper edge of one session (estimated up to about 320 lines)
-because Mathlib has no packaged Orlicz/Luxemburg theory; the fragile portion
-will be `sInf` nonemptiness and definiteness on `AEEqFun`. Splitting it further
-would expose several technical sublevel-set predicates in the public
-definitions block, so the current boundary is the cleanest mathematical
-interface despite that size risk.
+I am convinced all eight statements are true. The most delicate seat remains
+sublevel attainment because it combines `sInf`, Fatou, and `AEEqFun`, but its
+scope is now isolated and estimated within one session. The explicit
+`u≠0` guard is essential and avoids a false attainment claim at the zero
+function.
 
 ## Compile gates and axioms
 
@@ -169,5 +188,5 @@ Output of `#print axioms apm_m02j05` in the blueprint:
 'apm_m02j05' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
 ```
 
-The blueprint main theorem has no `sorry`; `sorryAx` enters only through the
-three named bridge lemmas.
+The blueprint main theorem has no `sorry`; `sorryAx` enters through exactly
+the eight Layer 1 lemmas.

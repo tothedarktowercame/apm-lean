@@ -1,156 +1,84 @@
-# Blueprint for m98A04
+# Re-split blueprint for m98A04
 
 ## Triage
 
-Verdict: **true and faithful**.
+The registered theorem remains true and byte-identical. The previous two admitted lemmas were split by conclusion, but both required the same hard LF-topology argument: reflected translations and their difference quotients stay in one compact-support stage and converge there. That shared work is now isolated.
 
-The Lean statement uses Mathlib's actual LF-topological `TestFunction` and
-`Distribution` spaces.  Lists of coordinates encode repeated partial
-derivatives.  It asserts both convolution derivative identities, smoothness,
-and the periodic computation `sin * cos = π sin`.  The malformed middle term
-in the printed source (`∂ᵅ * φ`, with its distribution missing) is interpreted
-as `(Dᵅ T) * φ`, exactly as required by the standard identity and the informal
-solution.
+All previously compiled definitions and proofs remain. The two old public bridge lemmas are retained, but are now proved from four new admitted lemmas; they contain no `sorry` themselves.
 
-I tried the relevant degeneracies:
+## Local fixed-stage definitions
 
-* For `n = 0`, Euclidean space is a singleton.  Translation pairings are
-  constant, `List (Fin 0)` has only the empty list, and the cached proof
-  compiles this branch completely.
-* For the zero distribution, every convolution and every distributional
-  partial is zero; `apm_m98a04_translation_analytic_zero` verifies this.
-* For the empty multiindex, the distributional derivative is `T` itself;
-  both the direct base lemma and the general constructed derivative compile.
-* A zero test function produces the zero smooth function with all derivative
-  identities intact.
-* At `x = 0`, the periodic formula reduces to the integral of
-  `sin y * cos y`, which is zero, agreeing with `π sin 0`.
+For `φ` and a base point `x₀`, `apm_m98a04_translateReflectStageLocal` takes values in the single Fréchet space supported in `translationCompact φ x₀`. It agrees with `y ↦ φ(x-y)` on the closed unit ball and uses zero outside; this fallback is irrelevant in a neighborhood of `x₀`.
 
-No counterexample is recorded in the canonical solve-loop files.  The
-statement is not relying on a finite-dimensional replacement of the test
-function topology: the cached construction explicitly passes through one
-fixed compact-support stage near each translation parameter.
+`apm_m98a04_directionalTF v φ` is the finite coordinate sum representing `Dφ(v)`. `apm_m98a04_translationStageToTest` is the continuous inclusion of the fixed stage into the LF test-function space.
 
-## Reused completed work
+## New lemmas
 
-The best cached attempt was copied through all of its compiled results.  In
-particular it already contains:
+### `apm_m98a04_translateReflectStageLocal_continuousAt`
 
-* bundled reflected translations and bundled iterated test-function
-  derivatives;
-* the continuous-linear construction and specification of arbitrary
-  distributional partials;
-* every reflection sign and the algebraic identity moving derivatives
-  between `T` and `φ`;
-* a common compact-support stage for translations in a unit neighborhood;
-* factorization of a distribution through that stage;
-* global Lipschitz bounds and uniform quadratic Taylor remainders for every
-  iterated Fréchet derivative;
-* the complete dimension-zero bridge, final multiindex assembly, and periodic
-  integral computation.
+**Statement.** The local reflected-translation map is continuous at its base point as a map into one fixed compact-support stage.
 
-Thus only two scalar analytic consequences of the stage estimates remain.
+**Proof sketch.** On a smaller ball the zero fallback disappears. Every spatial derivative is a reflected translate of the corresponding derivative of `φ`. Uniform continuity on the compact enlarged support gives convergence for each stage seminorm; use the stage topology's seminorm characterization.
 
-## Remaining lemmas
+**Estimate:** 50–90 lines. **Dependencies:** only compiled stage definitions and translation estimates.
 
-### `apm_m98a04_translation_pairing_contDiff_of_pos_dim`
+**Checks:** for `φ=0` the map is locally constant zero. In dimension zero the parameter space is a singleton. Pointwise, translation by `x→x₀` plainly converges to the base translate.
 
-**Statement in words.** In every positive dimension, pairing a distribution
-with the reflected translates of any test function is a smooth scalar
-function of the translation parameter.
+### `apm_m98a04_translateReflectStageLocal_difference_quotient`
 
-**Why true.** Fix a parameter `x₀`.  On its closed unit ball, use
-`apm_m98a04_translateReflectStage` so every translate has support in
-`apm_m98a04_translationCompact φ x₀`.  For each derivative order, rewrite the
-spatial iterated derivative of the stage-valued Taylor remainder using
-reflection and translation of `iteratedFDeriv`.  The compiled lemma
-`apm_m98a04_iteratedFDeriv_quadratic_remainder` bounds it uniformly by
-`Cᵢ ‖h‖²`.  Convert this uniform estimate to every stage seminorm using
-`ContDiffMapSupportedIn.seminorm_top_le_iff`; after division by `‖h‖`, the
-remainder tends to zero.  This proves the stage-valued derivative formula.
-Iterate it at every finite order and compose with the fixed-stage continuous
-linear map from
-`apm_m98a04_distribution_translateReflect_factor_stage`.  Since `x₀` was
-arbitrary, the scalar pairing is `ContDiff ℝ ∞` globally.
+**Statement.** After inclusion from that one fixed stage into test functions, the punctured directional difference quotient converges to the reflected translate of `Dφ(v)`.
 
-The key named API `ContDiffMapSupportedIn.seminorm_top_le_iff` was checked in
-the pinned Mathlib source; every other cited project lemma occurs earlier in
-the compiling blueprint.
+**Proof sketch.** Apply the already compiled uniform quadratic Taylor remainder to every iterated spatial derivative. Reflection preserves the relevant sup norms. Divide the `O(|h|²‖v‖²)` remainder by `|h|`; each fixed-stage seminorm tends to zero. The inclusion into the LF space is continuous.
 
-**Expected size.** 220–300 lines.
+**Estimate:** 80–130 lines. **Dependencies:** compiled quadratic-remainder and fixed-stage estimates only; independent of the continuity lemma.
 
-**Dependencies.** Definitions and proved lemmas only.  It does not depend on
-the other admitted lemma.
+**Checks:** for `v=0` every quotient and the target are zero. For `φ=0` the result is trivial. For one-dimensional evaluation, it is the ordinary difference quotient for `φ(x-y)` with the positive parameter derivative sign.
 
-**Truth check.** For `T = 0` the function is constant, matching the separately
-compiled zero-distribution lemma.  In dimension one with `T` equal to point
-evaluation at zero, the function is `x ↦ φ x`, which is smooth.  The quadratic
-bound gives remainder `O(‖h‖²)` in every seminorm, hence the required
-`o(‖h‖)` after division.
+### `apm_m98a04_translation_pairing_fderiv_of_stage_dq`
 
-### `apm_m98a04_translation_pairing_fderiv_single_of_pos_dim`
+**Statement.** Given the difference-quotient conclusion explicitly as a hypothesis, evaluation by a distribution has the expected coordinate Fréchet derivative.
 
-**Statement in words.** In positive dimension, the derivative of the scalar
-translation pairing in coordinate `i` equals the pairing with the bundled
-`i`th derivative of the test function.
+**Proof sketch.** Compose the supplied convergence with the continuous distribution. Specialize `v` to `EuclideanSpace.single i 1`; the finite directional test function simplifies to `partialListTF [i] φ`. Convert directional difference quotients to the scalar `fderiv` equality.
 
-**Why true.** Again work locally in the fixed support stage.  For the
-first-order remainder, apply the already compiled quadratic Taylor estimate
-at every iterated spatial derivative order, transport it through reflected
-translation, and use
-`ContDiffMapSupportedIn.seminorm_top_le_iff` to obtain convergence in the
-stage topology.  Compose the resulting stage-valued `HasFDerivAt` statement
-with the continuous restriction of `T`.  Evaluate its derivative on
-`EuclideanSpace.single i 1`, then identify the resulting test function with
-`apm_m98a04_partialListTF [i] φ` using the existing `fderivCLM` application
-and translation lemmas.
+**Estimate:** 30–60 lines. **Dependencies:** the stage-DQ fact is an explicit hypothesis, so this seat can run in parallel with the DQ seat.
 
-**Expected size.** 160–240 lines.
+**Checks:** for the zero distribution both sides vanish. For Dirac evaluation at zero, this is the usual coordinate derivative of `φ(x)`.
 
-**Dependencies.** Definitions and proved lemmas only.  It is independent of
-the smoothness lemma, so the two seats can work simultaneously.
+### `apm_m98a04_translation_pairing_contDiff_of_stage_facts`
 
-**Truth check.** For point evaluation at zero, the formula becomes the usual
-coordinate derivative identity for `φ`.  For `T = 0` both sides are zero.  The
-sign is positive because differentiation is with respect to the translation
-parameter `x`; the negative reflection sign occurs only when differentiating
-in the test variable `y`, and the earlier compiled reflection lemmas confirm
-this distinction.
+**Statement.** Given fixed-stage continuity and difference-quotient conclusions for every test function, the scalar translation pairing is `C∞`.
 
-## Assembly and dependency layers
+**Proof sketch.** Distribution evaluation preserves the supplied continuity and directional limits. The derivative is the finite coordinate-linear map obtained from translated first derivatives. Iterate the same argument on every `partialListTF indices φ`; induction on derivative order yields `ContDiff ℝ k` for every finite `k`, hence `ContDiff ℝ ∞`.
 
-* **Layer 1 (parallel):**
-  `apm_m98a04_translation_pairing_contDiff_of_pos_dim` and
-  `apm_m98a04_translation_pairing_fderiv_single_of_pos_dim`.
-* **Layer 2 (already proved, no seat needed):**
-  `apm_m98a04_translation_analytic_bridge` dispatches the zero-dimensional
-  case and supplies the two Layer 1 facts to
-  `apm_m98a04_translation_bridge_of_first_derivative`.
-* **Layer 3 (already proved, no seat needed):**
-  construction of the witnesses for the theorem and the periodic integral.
+**Estimate:** 80–140 lines. **Dependencies:** both topology facts are explicit hypotheses, so this seat is independently provable before either lands.
+
+**Checks:** the zero distribution gives a constant smooth function. In dimension zero all derivatives are vacuous. For Dirac evaluation the result reduces to the compiled smoothness of `φ`.
+
+## Assembly
+
+The old lemmas are now proved as follows:
+
+- `translation_pairing_fderiv_single_of_pos_dim` applies the derivative-extraction lemma to the new DQ theorem.
+- `translation_pairing_contDiff_of_pos_dim` applies the smoothness-extraction lemma to the new continuity and DQ theorems.
+
+The dimension-zero bridge, analytic bridge, convolution construction, periodic computation, and main theorem remain proved.
+
+## Dependency layers
+
+- **Layer 1, fully parallel:** all four new lemmas. The two consumer lemmas receive shared facts as explicit hypotheses.
+- **Layer 2, proved assembly:** the two old positive-dimensional lemmas.
+- **Layer 3, proved assembly:** analytic bridge and main theorem.
 
 ## Compilation and axioms
 
-Compiled with:
-
-```text
-systemd-run --user --scope -q -p MemoryMax=12G lake env lean holes/labs/blueprints/m98A04/Blueprint.lean
-```
-
-The final output of `#print axioms apm_m98a04` was:
+Compiled with the prescribed command. Output:
 
 ```text
 'apm_m98a04' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
 ```
 
-The only `sorry` warnings are the two Layer 1 lemmas.  The analytic bridge and
-main theorem contain no direct `sorry`.
+There are exactly four `sorry` warnings, one for each new lemma. The old lemmas and main theorem contain no direct `sorry`.
 
-## Residual uncertainty
+## Doubt
 
-Both lemmas are mathematically standard and I am convinced their statements
-are true.  The main implementation risk is ergonomic rather than logical:
-rewriting full iterated Fréchet derivatives of the reflected remainder into
-the exact form expected by the fixed-stage seminorm API may consume most of a
-session.  The cached quantitative estimates were designed precisely for that
-conversion and leave no missing analytic bound.
+The statements are true. The only substantial engineering risk is expressing convergence simultaneously in every seminorm of `ContDiffMapSupportedIn`; the cached quadratic estimates already provide the required bounds.

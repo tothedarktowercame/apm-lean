@@ -1789,17 +1789,108 @@ lemma apm_a97j08_not_nullhomotopic_of_radial_homotopy
   apm_a97j08_not_nullhomotopic_of_circle_homotopyLeftInverse c
     (apm_a97j08_radialMap D z hz) hdegree
 
-/-- The exact missing planar separation theorem: a bounded complementary
-component produces a noncontractible circle in the domain subtype.  A
-degree-one circle detected by `apm_a97j08_radialMap` is one concrete way to
-supply this weakest sufficient certificate. -/
+def apm_a97j08_GridInput
+    (D : Set ℂ) (z : ℂ) (R δ : ℝ) (A B : Set ℂ) : Prop :=
+    0 < R ∧ 0 < δ ∧ z ∈ A ∧
+    IsCompact A ∧ IsCompact B ∧
+    connectedComponentIn Dᶜ z ⊆ A ∧
+    Dᶜ ∩ Metric.closedBall 0 R = A ∪ B ∧
+    Disjoint A B ∧
+    ∀ a ∈ A, ∀ b ∈ B, δ ≤ dist a b
+
+def apm_a97j08_ClopenSeparationFact
+    (D : Set ℂ) (z : ℂ) : Prop :=
+  ∃ R δ : ℝ, ∃ A B : Set ℂ, apm_a97j08_GridInput D z R δ A B
+
+def apm_a97j08_gridSquare (shift : ℂ) (δ : ℝ) (q : ℤ × ℤ) : Set ℂ :=
+  {w | shift.re + q.1 * δ ≤ w.re ∧ w.re ≤ shift.re + (q.1 + 1) * δ ∧
+    shift.im + q.2 * δ ≤ w.im ∧ w.im ≤ shift.im + (q.2 + 1) * δ}
+
+def apm_a97j08_IsGridRegion
+    (A B : Set ℂ) (R δ : ℝ) (z : ℂ) (U : Set ℂ) : Prop :=
+  ∃ shift : ℂ, ∃ Q : Finset (ℤ × ℤ),
+    U = ⋃ q ∈ Q, apm_a97j08_gridSquare shift δ q ∧
+    z ∈ interior U ∧ A ⊆ interior U ∧ Disjoint U B ∧
+    U ⊆ Metric.closedBall 0 R ∧
+    z.re ∉ {x | ∃ k : ℤ, x = shift.re + k * δ} ∧
+    z.im ∉ {y | ∃ k : ℤ, y = shift.im + k * δ}
+
+structure apm_a97j08_GridCycleFamily
+    (D : Set ℂ) (z : ℂ) (U : Set ℂ) where
+  n : ℕ
+  loops : Fin n → C(Circle, ℂ)
+  winding : Fin n → ℤ
+  boundary_eq : frontier U = ⋃ i, Set.range (loops i)
+  loop_simple : ∀ i, Set.InjOn (loops i) Set.univ
+  winding_sound : ∀ (hz : z ∈ Dᶜ) (i : Fin n)
+      (hmem : ∀ u : Circle, loops i u ∈ D), winding i ≠ 0 →
+    ¬ ContinuousMap.Nullhomotopic
+      ((apm_a97j08_radialMap D z hz).comp
+        ⟨fun u ↦ ⟨loops i u, hmem u⟩,
+          (loops i).continuous.subtype_mk hmem⟩)
+
+def apm_a97j08_IsOrientedGridBoundary
+    {D : Set ℂ} {z : ℂ} {U : Set ℂ}
+    (C : apm_a97j08_GridCycleFamily D z U) : Prop :=
+  ∑ i, C.winding i = 1
+
+theorem apm_a97j08_clopen_separation_of_bounded_component
+    (D : Set ℂ) (hD_open : IsOpen D)
+    {z : ℂ} (hz : z ∈ Dᶜ)
+    (hzbounded : Bornology.IsBounded (connectedComponentIn Dᶜ z)) :
+    apm_a97j08_ClopenSeparationFact D z := by
+  sorry
+
+theorem apm_a97j08_grid_region_construction
+    (D : Set ℂ) {z : ℂ}
+    (hsep : apm_a97j08_ClopenSeparationFact D z) :
+    ∃ R δ : ℝ, ∃ A B : Set ℂ, ∃ U : Set ℂ,
+      apm_a97j08_GridInput D z R δ A B ∧
+      apm_a97j08_IsGridRegion A B R δ z U := by
+  sorry
+
+theorem apm_a97j08_grid_boundary_cycle_decomposition
+    (D : Set ℂ) {z : ℂ} {R δ : ℝ} {A B U : Set ℂ}
+    (hinput : apm_a97j08_GridInput D z R δ A B)
+    (hregion : apm_a97j08_IsGridRegion A B R δ z U) :
+    ∃ C : apm_a97j08_GridCycleFamily D z U,
+      (∀ i, ∀ u : Circle, C.loops i u ∈ D) ∧
+      apm_a97j08_IsOrientedGridBoundary C := by
+  sorry
+
+theorem apm_a97j08_grid_boundary_winding_sum
+    (D : Set ℂ) {z : ℂ} {R δ : ℝ} {A B U : Set ℂ}
+    (hinput : apm_a97j08_GridInput D z R δ A B)
+    (hregion : apm_a97j08_IsGridRegion A B R δ z U)
+    (C : apm_a97j08_GridCycleFamily D z U)
+    (horiented : apm_a97j08_IsOrientedGridBoundary C) :
+    ∑ i, C.winding i = 1 := by
+  sorry
+
+theorem apm_a97j08_noncontractible_circle_of_cycle_winding
+    (D : Set ℂ) {z : ℂ} (hz : z ∈ Dᶜ) {U : Set ℂ}
+    (C : apm_a97j08_GridCycleFamily D z U)
+    (hboundary : ∀ i, ∀ u : Circle, C.loops i u ∈ D)
+    (hsum : ∑ i, C.winding i = 1) :
+    ∃ cD : C(Circle, D), ¬ ContinuousMap.Nullhomotopic cD := by
+  sorry
+
+/-- A bounded complementary component produces a noncontractible circle in
+the domain subtype, assembled from compact separation and the grid cycle. -/
 lemma apm_a97j08_exists_noncontractible_circle_of_bounded_compl_component
     (D : Set ℂ) (hD_open : IsOpen D)
     {z : ℂ} (hz : z ∈ Dᶜ)
     (hzbounded : Bornology.IsBounded (connectedComponentIn Dᶜ z)) :
     ∃ c : C(Circle, D),
       ¬ ContinuousMap.Nullhomotopic c := by
-  sorry
+  have hsep := apm_a97j08_clopen_separation_of_bounded_component
+    D hD_open hz hzbounded
+  obtain ⟨R, δ, A, B, U, hinput, hregion⟩ :=
+    apm_a97j08_grid_region_construction D hsep
+  obtain ⟨C, hboundary, horiented⟩ :=
+    apm_a97j08_grid_boundary_cycle_decomposition D hinput hregion
+  exact apm_a97j08_noncontractible_circle_of_cycle_winding D hz C hboundary
+    (apm_a97j08_grid_boundary_winding_sum D hinput hregion C horiented)
 
 /-- The genuinely planar obstruction missing from Mathlib: a bounded
 component of the complement of an open plane domain produces a loop in the

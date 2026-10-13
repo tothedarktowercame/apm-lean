@@ -27,13 +27,39 @@ theorem apm_m96A02_banach_fixed_point
     ∃ xstar : M, T xstar = xstar ∧
       (∀ x, Tendsto (fun n : ℕ => (T^[n]) x) atTop (nhds xstar)) ∧
       ∀ y, T y = y → y = xstar := by
-  sorry
+  obtain ⟨k, hk0, hk1, hk⟩ := hT
+  let K : NNReal := ⟨k, hk0⟩
+  have hK : ContractingWith K T := by
+    refine ⟨?_, ?_⟩
+    · exact_mod_cast hk1
+    · apply LipschitzWith.of_dist_le_mul
+      intro x y
+      simpa [K] using hk x y
+  let xstar : M := ContractingWith.fixedPoint T hK
+  refine ⟨xstar, ?_, ?_, ?_⟩
+  · exact hK.fixedPoint_isFixedPt
+  · intro x
+    exact hK.tendsto_iterate_fixedPoint x
+  · intro y hy
+    exact hK.fixedPoint_unique hy
 
 theorem apm_m96A02_iterate_contraction_fixed_point
     (M : Type*) [MetricSpace M] [CompleteSpace M] [Nonempty M] (T : M → M)
     (hT : ∃ N : ℕ, 1 ≤ N ∧ apm_m96a02_IsContraction (T^[N])) :
     ∃! x : M, T x = x := by
-  sorry
+  obtain ⟨N, hN, k, hk0, hk1, hk⟩ := hT
+  let K : NNReal := ⟨k, hk0⟩
+  have hK : ContractingWith K (T^[N]) := by
+    refine ⟨?_, ?_⟩
+    · exact_mod_cast hk1
+    · apply LipschitzWith.of_dist_le_mul
+      intro x y
+      simpa [K] using hk x y
+  let xstar : M := ContractingWith.fixedPoint (T^[N]) hK
+  refine ⟨xstar, ?_, ?_⟩
+  · exact hK.isFixedPt_fixedPoint_iterate
+  · intro y hy
+    exact hK.fixedPoint_unique (Function.IsFixedPt.iterate hy N)
 
 theorem apm_m96A02_lipschitz_ode
     (f : ℝ → ℝ) (u₀ : ℝ)
