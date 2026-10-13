@@ -1359,3 +1359,5 @@ compose it with the two named transports without an inferred identity object.
 `genericPointWedgeOuterRight_sourceTransport` and
 `genericPointWedgeOuterRight_targetTransport` package those two endpoint
 coercions in their exact hom-sets.  All three comparator factors are now typed.
+`genericPointWedgeOuterRight_typedTransportComposite` composes those transports
+with the packaged inverse round-trip component in the required order.
