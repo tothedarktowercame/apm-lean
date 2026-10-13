@@ -319,7 +319,29 @@ lemma tft_stage_continuousAt_of_structure_maps
 -- BEGIN SEAT AREA
 lemma tft_stage_continuousAt (ψ : TFT E F) (x₀ : E) :
     ContinuousAt (tftTranslateStageLocal ψ x₀) x₀ := by
-  sorry
+  apply tft_stage_continuousAt_of_structure_maps ψ x₀
+  intro i
+  let f : E → (E [×i]→L[ℝ] F) := iteratedFDeriv ℝ i (ψ : E → F)
+  have hf : Continuous f :=
+    ψ.contDiff.continuous_iteratedFDeriv (by exact_mod_cast le_top)
+  have hfc : HasCompactSupport f := ψ.hasCompactSupport.iteratedFDeriv i
+  have hc : ContinuousAt (fun x : E =>
+      tftBCFOfCompactSupport (fun y => f (x + y))
+        (hf.comp (continuous_const.add continuous_id))
+        (hfc.comp_homeomorph (Homeomorph.addLeft x))) x₀ :=
+    (tft_translate_bcf_continuous f hf hfc).continuousAt
+  apply hc.congr_of_eventuallyEq
+  filter_upwards [Metric.closedBall_mem_nhds x₀ (by norm_num : (0 : ℝ) < 1)] with x hx
+  apply BoundedContinuousFunction.ext
+  intro y
+  have heq : (tftTranslateStageLocal ψ x₀ x : E → F) =
+      fun z ↦ ψ (x + z) := by
+    funext z
+    exact tftTranslateStageLocal_apply ψ x₀ x hx z
+  rw [Function.comp_apply, ContDiffMapSupportedIn.structureMapCLM_top_apply]
+  change iteratedFDeriv ℝ i (tftTranslateStageLocal ψ x₀ x : E → F) y = _
+  rw [heq, iteratedFDeriv_comp_add_left]
+  rfl
 -- END SEAT AREA
 
 /-- S2: convergence in a fixed stage, reduced to convergence under every
