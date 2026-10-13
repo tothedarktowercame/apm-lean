@@ -2187,6 +2187,45 @@ theorem edgePoint_eq_imp_exists_int_turn (n : ℕ) (hn : 0 < n)
   field_simp at him
   nlinarith
 
+/-- Two closed polygon-edge coordinates coincide only literally or at the
+two representatives of the global cyclic endpoint. -/
+theorem edgePoint_eq_imp_coordinate_cases (n : ℕ) (hn : 0 < n)
+    (i j : Fin n) (t u : Set.Icc (0 : ℝ) 1)
+    (h : edgePoint n i t = edgePoint n j u) :
+    ((i : ℝ) + t = (j : ℝ) + u) ∨
+      (((i : ℝ) + t = 0) ∧ ((j : ℝ) + u = n)) ∨
+      (((i : ℝ) + t = n) ∧ ((j : ℝ) + u = 0)) := by
+  obtain ⟨k, hk⟩ := edgePoint_eq_imp_exists_int_turn n hn i j t u h
+  have hi0 : (0 : ℝ) ≤ i := by positivity
+  have hj0 : (0 : ℝ) ≤ j := by positivity
+  have hin : (i : ℝ) + t ≤ n := by
+    have hi : (i : ℕ) < n := i.isLt
+    have hiR : (i : ℝ) + 1 ≤ n := by
+      exact_mod_cast (show (i : ℕ) + 1 ≤ n by omega)
+    linarith [t.2.2]
+  have hjn : (j : ℝ) + u ≤ n := by
+    have hj : (j : ℕ) < n := j.isLt
+    have hjR : (j : ℝ) + 1 ≤ n := by
+      exact_mod_cast (show (j : ℕ) + 1 ≤ n by omega)
+    linarith [u.2.2]
+  have hn' : (0 : ℝ) < n := by exact_mod_cast hn
+  have hkloR : (-1 : ℝ) ≤ k := by
+    nlinarith [t.2.1, u.2.1]
+  have hkhiR : (k : ℝ) ≤ 1 := by
+    nlinarith [t.2.1, u.2.1]
+  have hklo : (-1 : ℤ) ≤ k := by exact_mod_cast hkloR
+  have hkhi : k ≤ (1 : ℤ) := by exact_mod_cast hkhiR
+  rcases (show k = -1 ∨ k = 0 ∨ k = 1 by omega) with rfl | rfl | rfl
+  · right; left
+    norm_num at hk
+    constructor <;> nlinarith [t.2.1, u.2.1]
+  · left
+    norm_num at hk ⊢
+    exact hk
+  · right; right
+    norm_num at hk
+    constructor <;> nlinarith [t.2.1, u.2.1]
+
 /-- The standard polygon arcs cover its entire boundary circle. -/
 theorem edgePoint_surjective_boundary (n : ℕ) (hn : 0 < n) (x : Disk)
     (hx : ‖(x : ℂ)‖ = 1) :
