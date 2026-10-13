@@ -36113,40 +36113,42 @@
    [:lemma-constructiontargets-sardconvexdomain-eq-whitneydyadicindexof-of-mem-cube-of-gene],
    :other-consumers []}
   {:consumer :t93J03,
-   :stop-count 3,
+   :stop-count 4,
    :review-finding
    "Program STOP commits nothing new since the prior reviewed attempt: it reuses commit 512a220f, and git history shows no later scoped commit. The unresolved SemilocallySimplyConnected hypothesis-coverage conflict is unchanged. Obtain the required owner specification decision or commit a new compiled milestone before resubmitting.",
    :evidence
    {:placeholder-delta {:t93J03 [1 1]},
     :residual
-    "Prove proper discontinuity and orbit-quotient homeomorphism; then C1 transport, C2/Main.",
+    "Bound coordinates from compact projections, assemble proper discontinuity; then orbit homeomorphism, C1/C2/Main.",
     :outcome :stop,
     :warnings ["owner-approved unused SLSC hypothesis"],
     :missing-theorems
-    [{:name "kleinPlaneContinuousConstSMul",
-      :type "continuous affine action",
+    [{:name "coordinate_equations_of_smul_eq",
+      :type "orbit equality determines integer coordinates",
       :status :proved,
       :consumers [:t93J03],
       :depends-on [],
       :area "covering-subgroup-correspondence"}
-     {:name "kleinPlaneOrbit_pi1_at_origin",
-      :type "proper discontinuity gives orbit pi1 equiv",
+     {:name "finite_of_coordinatePair_mem",
+      :type "finite coordinate ranges give finite group set",
       :status :proved,
       :consumers [:t93J03],
       :depends-on [],
       :area "covering-subgroup-correspondence"}
      {:name "t93J03_kleinPlane_properlyDiscontinuous",
       :type "proper discontinuity of affine action",
-      :status :not-started,
+      :status :partial,
       :consumers [:t93J03],
-      :depends-on [],
+      :depends-on
+      ["coordinate_equations_of_smul_eq"
+       "finite_of_coordinatePair_mem"],
       :area "covering-subgroup-correspondence"}],
     :statement-hashes {:registry "166/166"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Committed affine-action continuity and canonical-orbit pi1 application; geometry remains.",
+    "Committed algebraic half of proper discontinuity; compact bounds remain.",
     :commands
     [{:cmd
       "lake build ConstructionTargets.t93J03Closure; lean fixture",
@@ -36154,33 +36156,18 @@
      {:cmd "statement registry; placeholder; diff checks", :exit 0}
      {:cmd "rg forbidden closure", :exit 1, :expected-exit 1}
      {:cmd "git commit; show --check", :exit 0}],
-    :diagnostic-history
-    [{:cmd "lean closure",
-      :exit 1,
-      :correction "qualified deck theorem"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1791925256580-10498-fd4b5941",
-     :commands
-     ["git show/diff a55cadcd; scope and representation review"
-      "lake build/lean ConstructionTargets.t93J03Closure"
-      "sha256sum + lake env lean orbit fixture"
-      "statement-registry check; placeholder recount"],
-     :finding
-     "PASS. Since program-history e702e81c, commit a55cadcd adds the compiled continuous-action instance and correctly applies the banked deck-group theorem to the literal affine orbit quotient at [(0,0)], conditional only on the still-unproved proper-discontinuity instance. It does not conflate that orbit quotient with the frozen polygon model; proper discontinuity and the explicit homeomorphism, then C2/Main, remain listed. Fixture hash matches; standard axioms only; registry 166/166; forbidden count 0->0. SemilocallySimplyConnected X is unused, mandated by problem.md."},
-    :commit "a55cadcd9d6ac70ebcb215ccd5bbec22bee9c238",
+    :commit "2f56a1d96c44a4f260d57f1ccac7cdc8b4a9e577",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
      "ConstructionTargets/t93J03Closure.blueprint.md"],
     :fixture
-    {:path "/tmp/t93j03_orbit_pi1_adapter_check.lean",
+    {:path "/tmp/t93j03_proper_action_algebra_check.lean",
      :sha256
-     "26f686f47ae69c910b2ddd58121533a612c9f0d917db1d0690818378877f9a5b",
+     "d06d27a1559b1b4be44235a26cc7aca48c623a7725841fe9682b37525d4f3a38",
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -37261,6 +37248,42 @@
     :type "proper discontinuity of affine action",
     :area "covering-subgroup-correspondence"},
    :id :lemma-t93j03-kleinplane-properlydiscontinuous,
+   :kind :lemma,
+   :depends-on
+   [:lemma-coordinate-equations-of-smul-eq
+    :lemma-finite-of-coordinatepair-mem],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "coordinate_equations_of_smul_eq",
+    :type "orbit equality determines integer coordinates"},
+   :lemma
+   {:name "coordinate_equations_of_smul_eq",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type "orbit equality determines integer coordinates",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03},
+   :id :lemma-coordinate-equations-of-smul-eq,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "finite_of_coordinatePair_mem",
+    :type "finite coordinate ranges give finite group set"},
+   :lemma
+   {:name "finite_of_coordinatePair_mem",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type "finite coordinate ranges give finite group set",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03},
+   :id :lemma-finite-of-coordinatepair-mem,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}],
