@@ -656,7 +656,72 @@ lemma apm_t98a03_one_manifold_punctured_obstruction
     (hman : let _ := charts
       IsManifold (𝓘(ℝ, EuclideanSpace ℝ (Fin 1))) 0 X) :
     ∀ p : X, ¬ apm_t98a03_HasPuncturedPreconnectedBasis p := by
-  sorry
+  letI := charts
+  intro p hp
+  let e := extChartAt (𝓘(ℝ, EuclideanSpace ℝ (Fin 1))) p
+  have hp_source : p ∈ e.source := mem_extChartAt_source p
+  obtain ⟨V, hVopen, hpV, hVsub, hVconn⟩ :=
+    hp e.source (isOpen_extChartAt_source (I := 𝓘(ℝ,
+      EuclideanSpace ℝ (Fin 1))) p) hp_source
+  have hVsource : V ⊆ e.source := hVsub
+  have himage_open : IsOpen (e '' V) := by
+    rw [e.image_eq_target_inter_inv_preimage hVsource]
+    exact (continuousOn_extChartAt_symm (I := 𝓘(ℝ,
+      EuclideanSpace ℝ (Fin 1))) p).isOpen_inter_preimage
+        (isOpen_extChartAt_target (I := 𝓘(ℝ,
+          EuclideanSpace ℝ (Fin 1))) p) hVopen
+  have hep : e p ∈ e '' V := ⟨p, hpV, rfl⟩
+  obtain ⟨ε, hε, hball⟩ := Metric.isOpen_iff.1 himage_open (e p) hep
+  let v : EuclideanSpace ℝ (Fin 1) := EuclideanSpace.single 0 1
+  let a := e p - (ε / 2) • v
+  let b := e p + (ε / 2) • v
+  have ha_ball : a ∈ Metric.ball (e p) ε := by
+    rw [Metric.mem_ball, dist_eq_norm]
+    simp [a, v, norm_smul, abs_of_pos hε]
+    linarith
+  have hb_ball : b ∈ Metric.ball (e p) ε := by
+    rw [Metric.mem_ball, dist_eq_norm]
+    simp [b, v, norm_smul, abs_of_pos hε]
+    linarith
+  obtain ⟨xa, hxaV, hxa⟩ := hball ha_ball
+  obtain ⟨xb, hxbV, hxb⟩ := hball hb_ball
+  have hxa_ne : xa ≠ p := by
+    intro h
+    subst xa
+    have h : a = e p := hxa.symm
+    have h' := congrArg (fun z : EuclideanSpace ℝ (Fin 1) => z 0) h
+    simp [a, v, hε.ne'] at h'
+  have hxb_ne : xb ≠ p := by
+    intro h
+    subst xb
+    have h : b = e p := hxb.symm
+    have h' := congrArg (fun z : EuclideanSpace ℝ (Fin 1) => z 0) h
+    simp [b, v, hε.ne'] at h'
+  let f : X → ℝ := fun x => EuclideanSpace.proj 0 (e x)
+  have hfcont : ContinuousOn f (V \ {p}) :=
+    (EuclideanSpace.proj 0).continuous.continuousOn.comp
+      ((continuousOn_extChartAt (I := 𝓘(ℝ,
+        EuclideanSpace ℝ (Fin 1))) p).mono (diff_subset.trans hVsource))
+      (fun _ _ => Set.mem_univ _)
+  have himage_conn : IsPreconnected (f '' (V \ {p})) :=
+    hVconn.image f hfcont
+  have ha_mem : a 0 ∈ f '' (V \ {p}) :=
+    ⟨xa, ⟨hxaV, by simpa using hxa_ne⟩, by simp [f, hxa]⟩
+  have hb_mem : b 0 ∈ f '' (V \ {p}) :=
+    ⟨xb, ⟨hxbV, by simpa using hxb_ne⟩, by simp [f, hxb]⟩
+  have hbetween : e p 0 ∈ Set.Icc (a 0) (b 0) := by
+    simp [a, b, v]
+    exact (div_nonneg hε.le (by norm_num))
+  have hep_image : e p 0 ∈ f '' (V \ {p}) :=
+    himage_conn.Icc_subset ha_mem hb_mem hbetween
+  rcases hep_image with ⟨x, ⟨hxV, hxp⟩, hxe⟩
+  have hxsource : x ∈ e.source := hVsource hxV
+  have hcoord : e x = e p := by
+    ext i
+    fin_cases i
+    exact hxe
+  have hx : x = p := e.injOn hxsource hp_source hcoord
+  exact hxp (by simpa [hx])
 
 /-- LIBRARY: the wedge point separates two punctured surface neighborhoods. -/
 theorem apm_t98a03_wedge_not_manifold
