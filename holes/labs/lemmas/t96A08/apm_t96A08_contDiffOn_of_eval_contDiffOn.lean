@@ -1080,7 +1080,41 @@ theorem apm_t96A08_contDiffOn_of_eval_contDiffOn
     (S : Set E) (L : E → (E →L[ℝ] ℝ)) (hS : UniqueDiffOn ℝ S)
     (hL : ContDiffOn ℝ (⊤ : WithTop ℕ∞) (fun p : E × E ↦ L p.1 p.2) (S ×ˢ Set.univ)) :
     ContDiffOn ℝ (⊤ : WithTop ℕ∞) L S := by
-  sorry
+  let F : E × E → ℝ := fun p ↦ L p.1 p.2
+  let T : Set (E × E) := S ×ˢ Set.univ
+  have hT : UniqueDiffOn ℝ T := hS.prod uniqueDiffOn_univ
+  let D : E × E → ((E × E) →L[ℝ] ℝ) := fderivWithin ℝ F T
+  have hD : ContDiffOn ℝ (⊤ : WithTop ℕ∞) D T := by
+    exact hL.fderivWithin hT (by simp)
+  let j : E → E × E := fun y ↦ (y, 0)
+  let ι : E →L[ℝ] E × E := ContinuousLinearMap.inr ℝ E E
+  have hj : ContDiffOn ℝ (⊤ : WithTop ℕ∞) j S := by
+    fun_prop
+  have hjT : Set.MapsTo j S T := by
+    intro y hy
+    exact ⟨hy, Set.mem_univ 0⟩
+  have hsmooth : ContDiffOn ℝ (⊤ : WithTop ℕ∞)
+      (fun y ↦ (D (j y)).comp ι) S := by
+    exact (hD.comp hj hjT).clm_comp contDiffOn_const
+  apply hsmooth.congr
+  intro y hy
+  have hFD : HasFDerivWithinAt F (D (j y)) T (j y) :=
+    ((hL.differentiableOn (by simp)) (j y) ⟨hy, Set.mem_univ 0⟩).hasFDerivWithinAt
+  have hji : HasFDerivAt (fun v : E ↦ (y, v)) ι 0 := by
+    simpa [ι] using (ι.hasFDerivAt.const_add (y, (0 : E)))
+  have hmap : Set.MapsTo (fun v : E ↦ (y, v)) Set.univ T := by
+    intro v hv
+    exact ⟨hy, Set.mem_univ v⟩
+  have hc := hFD.comp 0 hji.hasFDerivWithinAt hmap
+  have hc' : HasFDerivWithinAt (fun v : E ↦ L y v)
+      ((D (j y)).comp ι) Set.univ 0 := by
+    simpa [F, j] using hc
+  have hlin : HasFDerivWithinAt (fun v : E ↦ L y v) (L y) Set.univ 0 :=
+    (L y).hasFDerivAt.hasFDerivWithinAt
+  exact (hlin.fderivWithin
+    (uniqueDiffOn_univ.uniqueDiffWithinAt (Set.mem_univ 0))).symm.trans
+      (hc'.fderivWithin
+        (uniqueDiffOn_univ.uniqueDiffWithinAt (Set.mem_univ 0)))
 -- END SEAT AREA
 
 /-- Seat: in the chart at `x`, `f ∘ φ.symm` has within-derivative
