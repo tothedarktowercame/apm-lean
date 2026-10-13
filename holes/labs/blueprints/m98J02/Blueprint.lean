@@ -476,6 +476,70 @@ theorem apm_m98J02_cutoff_independence
     simp [hu₂ η₁ hd₁, hu₁ η₂ hd₂]
   exact sub_eq_zero.mp (by simpa using hz)
 
+lemma apm_m98J02_translated_pairing_calculus_aux_partial_translate
+    (i : Fin 2) (φ : apm_m98J02_Test) (y x : apm_m98J02_E) :
+    apm_m98J02_partial i (fun z : apm_m98J02_E => φ (z + y)) x =
+      apm_m98J02_partial i φ (x + y) := by
+  unfold apm_m98J02_partial
+  have hφ : DifferentiableAt ℝ (φ : apm_m98J02_E → ℝ) (x + y) :=
+    (φ.contDiff.differentiable (by simp)).differentiableAt
+  have hadd : HasFDerivAt (fun z : apm_m98J02_E => z + y)
+      (1 : apm_m98J02_E →L[ℝ] apm_m98J02_E) x :=
+    hasFDerivAt_id x |>.add_const y
+  have hc : HasFDerivAt (fun z : apm_m98J02_E => φ (z + y))
+      ((fderiv ℝ (φ : apm_m98J02_E → ℝ) (x + y)).comp
+        (1 : apm_m98J02_E →L[ℝ] apm_m98J02_E)) x := by
+    simpa only [Function.comp_apply] using hφ.hasFDerivAt.comp x hadd
+  rw [hc.fderiv]
+  simp
+
+lemma apm_m98J02_translated_pairing_calculus_aux_partial_translateTest
+    (i : Fin 2) (φ : apm_m98J02_Test) (y x : apm_m98J02_E) :
+    apm_m98J02_partial i
+        (fun z : apm_m98J02_E => apm_m98J02_translateTest z φ y) x =
+      apm_m98J02_translateTest x (apm_m98J02_partialTest i φ) y := by
+  exact apm_m98J02_translated_pairing_calculus_aux_partial_translate i φ y x
+
+/-! ### Split of `apm_m98J02_translated_pairing_calculus` (claude-14, 2026-10-13, after a partial
+round-2 attempt that banked the two helpers above). (a) and (b) are facts about translation in the
+test-function (LF) topology, via one fixed compact support stage near each `x`; (c) is the
+calculus for a continuous linear `v`, given (a) and (b) as hypotheses. All three run in parallel.
+m98A04 needs the same two facts on `ℝⁿ` (its `translateReflectStageLocal` lemmas). -/
+
+/-- (a) Translation is continuous into the test-function space. -/
+theorem apm_m98J02_translateTest_continuous (ψ : apm_m98J02_Test) :
+    Continuous (fun x : apm_m98J02_E ↦ apm_m98J02_translateTest x ψ) := by
+  sorry
+
+/-- (b) Difference quotients of translation converge in the test-function space. -/
+theorem apm_m98J02_translateTest_difference_quotient (ψ : apm_m98J02_Test) (i : Fin 2)
+    (x : apm_m98J02_E) :
+    Filter.Tendsto (fun h : ℝ ↦ h⁻¹ • (apm_m98J02_translateTest (x + h • EuclideanSpace.single i 1) ψ - apm_m98J02_translateTest x ψ))
+      (nhdsWithin (0 : ℝ) ({0} : Set ℝ)ᶜ) (nhds (apm_m98J02_translateTest x (apm_m98J02_partialTest i ψ))) := by
+  sorry
+
+/-- (c) Calculus of `x ↦ v (τₓ φ)` from (a), (b): partials by continuity of `v`, then continuous
+partials in `ℝ²` give `C¹`, and once more give `C²`. -/
+theorem apm_m98J02_translated_pairing_calculus_of_facts
+    (hcont : ∀ ψ : apm_m98J02_Test, Continuous (fun x : apm_m98J02_E ↦ apm_m98J02_translateTest x ψ))
+    (hdq : ∀ (ψ : apm_m98J02_Test) (i : Fin 2) (x : apm_m98J02_E),
+      Filter.Tendsto (fun h : ℝ ↦ h⁻¹ • (apm_m98J02_translateTest (x + h • EuclideanSpace.single i 1) ψ - apm_m98J02_translateTest x ψ))
+        (nhdsWithin (0 : ℝ) ({0} : Set ℝ)ᶜ) (nhds (apm_m98J02_translateTest x (apm_m98J02_partialTest i ψ))))
+    (v : apm_m98J02_Dist) (φ : apm_m98J02_Test) :
+    ContDiff ℝ 2 (fun x : apm_m98J02_E =>
+      v (apm_m98J02_translateTest x φ)) ∧
+    (∀ i x,
+      apm_m98J02_partial i
+          (fun z : apm_m98J02_E => v (apm_m98J02_translateTest z φ)) x =
+        v (apm_m98J02_translateTest x (apm_m98J02_partialTest i φ))) ∧
+    (∀ i j x,
+      apm_m98J02_partial i
+          (apm_m98J02_partial j
+            (fun z : apm_m98J02_E => v (apm_m98J02_translateTest z φ))) x =
+        v (apm_m98J02_translateTest x
+          (apm_m98J02_partialTest i (apm_m98J02_partialTest j φ)))) := by
+  sorry
+
 /-- Shared translation calculus needed by construction, differentiation of
 convolution, and the PDE identity. -/
 theorem apm_m98J02_translated_pairing_calculus
@@ -492,7 +556,8 @@ theorem apm_m98J02_translated_pairing_calculus
             (fun z : apm_m98J02_E => v (apm_m98J02_translateTest z φ))) x =
         v (apm_m98J02_translateTest x
           (apm_m98J02_partialTest i (apm_m98J02_partialTest j φ)))) := by
-  sorry
+  exact apm_m98J02_translated_pairing_calculus_of_facts
+    apm_m98J02_translateTest_continuous apm_m98J02_translateTest_difference_quotient v φ
 
 /-- The cutoff-based predicate defines at most one distribution.  This rules
 out choosing a smoother witness when the fixed fundamental solution is bad. -/
