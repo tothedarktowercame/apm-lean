@@ -355,7 +355,60 @@ lemma apm_b96a01_part_d_nonabelian_aux_reductions_aux_of_integral
         (apmReduction n p m h).comp (ρ m) = ρ (m - 1)) ∧
       (∀ g : G, (∀ m, 1 ≤ m → ρ m g = 1) → g = 1) ∧
       ∃ ρp : G →* Matrix.GeneralLinearGroup n (ZMod p), ∀ g, ρp g = 1 ↔ ρ 1 g = 1 := by
-  sorry
+  let ρ : ∀ m : ℕ, G →* Matrix.GeneralLinearGroup n (ZMod (p ^ m)) :=
+    fun m => (Matrix.GeneralLinearGroup.map (Int.castRingHom (ZMod (p ^ m)))).comp A
+  refine ⟨ρ, ?_, ?_, ?_⟩
+  · intro m h hm
+    ext g i j
+    simp [ρ, apmReduction, Matrix.GeneralLinearGroup.map_apply, ZMod.castHom_apply]
+  · intro g hg
+    apply hA
+    apply Matrix.GeneralLinearGroup.ext
+    intro i j
+    let e : ℤ := (A g : Matrix n n ℤ) i j - (1 : Matrix n n ℤ) i j
+    have hediv : ∀ m, 1 ≤ m → (p ^ m : ℤ) ∣ e := by
+      intro m hm
+      have hgm := congrArg
+        (fun z : Matrix.GeneralLinearGroup n (ZMod (p ^ m)) =>
+          z i j - (1 : Matrix n n (ZMod (p ^ m))) i j) (hg m hm)
+      have he0 : (e : ZMod (p ^ m)) = 0 := by
+        by_cases hij : i = j
+        · subst j
+          simpa [ρ, e, Matrix.GeneralLinearGroup.map_apply, Matrix.one_apply] using hgm
+        · simpa [ρ, e, Matrix.GeneralLinearGroup.map_apply, Matrix.one_apply, hij] using hgm
+      exact (ZMod.intCast_zmod_eq_zero_iff_dvd e (p ^ m)).mp he0
+    have he : e = 0 := by
+      by_contra he0
+      let m := e.natAbs + 1
+      have hm1 : 1 ≤ m := by simp [m]
+      have hd := hediv m hm1
+      have hltm : e.natAbs < m := by simp [m]
+      have hmpow : m < p ^ m := Nat.lt_pow_self hp.one_lt
+      have hpowe : e.natAbs < p ^ m := hltm.trans hmpow
+      have habsdiv : p ^ m ∣ e.natAbs := by
+        simpa using Int.natAbs_dvd_natAbs.mpr hd
+      exact Nat.not_le_of_lt hpowe (Nat.le_of_dvd (Int.natAbs_pos.mpr he0) habsdiv)
+    rw [map_one]
+    exact sub_eq_zero.mp he
+  · let e : ZMod (p ^ 1) ≃+* ZMod p := ZMod.ringEquivCongr (pow_one p)
+    let ρp : G →* Matrix.GeneralLinearGroup n (ZMod p) :=
+      (Matrix.GeneralLinearGroup.map e.toRingHom).comp (ρ 1)
+    refine ⟨ρp, fun g => ?_⟩
+    constructor <;> intro h
+    · have hh := congrArg (Matrix.GeneralLinearGroup.map e.symm.toRingHom) h
+      have hinv (z : Matrix.GeneralLinearGroup n (ZMod (p ^ 1))) :
+          Matrix.GeneralLinearGroup.map e.symm.toRingHom
+            (Matrix.GeneralLinearGroup.map e.toRingHom z) = z := by
+        ext i j
+        simp [Matrix.GeneralLinearGroup.map_apply]
+      dsimp [ρp] at hh
+      change Matrix.GeneralLinearGroup.map e.symm.toRingHom
+          (Matrix.GeneralLinearGroup.map e.toRingHom ((ρ 1) g)) =
+        Matrix.GeneralLinearGroup.map e.symm.toRingHom 1 at hh
+      rw [hinv] at hh
+      simpa using hh
+    · have hh := congrArg (Matrix.GeneralLinearGroup.map e.toRingHom) h
+      simpa [ρp] using hh
 -- END SEAT AREA
 
 lemma apm_b96a01_part_d_nonabelian_aux_reductions
