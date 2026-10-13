@@ -2016,6 +2016,21 @@ theorem PairingData.skeletonArc_eq_of_signedWedgeArc_eq (P : PairingData)
         (Or.inr h1) (Or.inl h0)
   · exact P.skeletonArc_eq_of_signedParameter_endpoints i j t u hend.1 hend.2
 
+/-- Equality in the actual skeleton is exactly generated polygon-boundary
+equivalence of the corresponding concrete edge points. -/
+theorem PairingData.skeletonArc_eq_iff_eqvGen (P : PairingData)
+    (i j : Fin P.edgeCount) (t u : Set.Icc (0 : ℝ) 1) :
+    P.skeletonArc i t = P.skeletonArc j u ↔
+      Relation.EqvGen P.Rel
+        (edgePoint P.edgeCount i t) (edgePoint P.edgeCount j u) := by
+  constructor
+  · intro h
+    have hq := congrArg Subtype.val h
+    exact Quotient.exact hq
+  · intro h
+    apply Subtype.ext
+    exact Quotient.sound h
+
 /-- The representative-level correspondence which the B7 homeomorphism
 must induce: paired source arcs and paired signed wedge coordinates agree. -/
 theorem PairingData.skeletonArc_signed_coordinate (P : PairingData)
