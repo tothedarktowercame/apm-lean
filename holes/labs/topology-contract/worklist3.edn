@@ -36113,55 +36113,62 @@
    [:lemma-constructiontargets-sardconvexdomain-eq-whitneydyadicindexof-of-mem-cube-of-gene],
    :other-consumers []}
   {:consumer :t93J03,
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "Program STOP commits nothing new since the prior reviewed attempt: it reuses commit 512a220f, and git history shows no later scoped commit. The unresolved SemilocallySimplyConnected hypothesis-coverage conflict is unchanged. Obtain the required owner specification decision or commit a new compiled milestone before resubmitting.",
    :evidence
    {:placeholder-delta {:t93J03 [1 1]},
     :residual
-    "Owner resolution of frozen hypothesis gate; then orbit quotient, C1, C2, Main.",
+    "Build literal orbit quotient/C1, then cyclic cover C2 and Main.",
     :outcome :stop,
-    :warnings ["reference has expected sorryAx only in C1/C2"],
+    :warnings
+    ["SemilocallySimplyConnected: owner-approved unused-mandated"],
     :missing-theorems
-    [{:name "t93J03_kleinBottle_pi1_every_basepoint",
-      :type "forall k, FundamentalGroup k equiv PresentedKleinGroup",
+    [{:name "coveringLift_of_subgroup_le",
+      :type "cover subgroup inclusion gives lift",
+      :status :proved,
+      :consumers [:t93J03],
+      :depends-on [],
+      :area "covering-subgroup-correspondence"}
+     {:name "lift_isEmbedding_assembly",
+      :type "cover embedding plus lift embeds X",
+      :status :proved,
+      :consumers [:t93J03],
+      :depends-on [],
+      :area "covering-subgroup-correspondence"}
+     {:name "t93J03_kleinBottle_pi1_every_basepoint",
+      :type "pi1 Klein bottle equiv presentation",
       :status :not-started,
       :consumers [:t93J03],
       :depends-on [],
       :area "covering-subgroup-correspondence"}
      {:name "t93J03_cyclicCover_zpowers_generatorA",
-      :type
-      "cylinder cover with planar embedding and induced subgroup comap e <a>",
+      :type "planar cover realizes zpowers a",
       :status :not-started,
       :consumers [:t93J03],
       :depends-on ["t93J03_kleinBottle_pi1_every_basepoint"],
       :area "covering-subgroup-correspondence"}],
     :statement-hashes {:registry "150/150"},
     :disposition :stop,
-    :axioms [],
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Blocked after three reviewed attempts by an external specification decision: the frozen SemilocallySimplyConnected X hypothesis is semantically redundant, while hypothesis coverage requires genuine use. Fresh checks confirm C3 uses only the subgroup lifting criterion, C4 only lift/embedding data, and C5 binds the hypothesis anonymously. No valid scoped repair exists; owner must waive/revise the gate or revise the frozen statement.",
+    "Recorded owner waiver and committed generic cover lifting plus embedding assembly. C1 orbit quotient and C2 cyclic cover remain; not refuted.",
     :commands
-    [{:cmd "hash; lake env lean reference; registry", :exit 0}
-     {:cmd "reference dependency and blueprint blocker scans", :exit 0}
-     {:cmd "git show --check 512a220f", :exit 0}],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1791920729694-10300-5c9ad645",
-     :finding
-     "Program STOP commits nothing new since the prior reviewed attempt: it reuses commit 512a220f, and git history shows no later scoped commit. The unresolved SemilocallySimplyConnected hypothesis-coverage conflict is unchanged. Obtain the required owner specification decision or commit a new compiled milestone before resubmitting."},
-    :commit "512a220f610893826b53df094fdc793cb0028bc6",
-    :changed-paths ["ConstructionTargets/t93J03Closure.blueprint.md"],
+    [{:cmd "build; registry; fixture; diff; commit", :exit 0}
+     {:cmd "rg forbidden closure", :exit 1, :expected-exit 1}],
+    :commit "30d10c9666c11bb3dc9377857cfec5751b8a3054",
+    :changed-paths
+    ["ConstructionTargets/t93J03Closure.lean"
+     "ConstructionTargets/t93J03Closure.blueprint.md"],
     :fixture
-    {:path "ConstructionTargets/t93J03Closure.blueprint.md",
+    {:path "/tmp/t93j03_generic_assembly_check.lean",
      :sha256
-     "a5fef39e89c45d1b88204dedb67f2933690f27eb7636831e36b0068bc36c7e89",
-     :mode :blueprint},
+     "e034d96f16d254cd02817351ca46d3de3907780e17ef5f79459d6f37125b66d2",
+     :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -36797,6 +36804,40 @@
     "descended RP3 quadratic has Lefschetz -3 and is not homotopic to id",
     :area "rational-homology-lefschetz"},
    :id :lemma-t96a06-polynomialdescent-invariants,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "coveringLift_of_subgroup_le",
+    :type "cover subgroup inclusion gives lift"},
+   :lemma
+   {:name "coveringLift_of_subgroup_le",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type "cover subgroup inclusion gives lift",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03},
+   :id :lemma-coveringlift-of-subgroup-le,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "lift_isEmbedding_assembly",
+    :type "cover embedding plus lift embeds X"},
+   :lemma
+   {:name "lift_isEmbedding_assembly",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type "cover embedding plus lift embeds X",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03},
+   :id :lemma-lift-isembedding-assembly,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}],
