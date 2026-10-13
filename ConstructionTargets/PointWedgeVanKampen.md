@@ -1250,3 +1250,5 @@ the remaining B6 step is the typed cancellation of the resulting six factors,
 then factoring the right-base conjugator through `inl`.
 The source connector of the overlap round-trip factor is now identified,
 with dependent endpoints retained, as the reflexive connector at `y₀`.
+Its target connector is now identified with the same chosen based connector
+that terminates the inverse-span normal form.
