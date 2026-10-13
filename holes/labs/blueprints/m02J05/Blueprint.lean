@@ -1076,6 +1076,46 @@ theorem apm_m02J05_bridge_luxemburg_laws
 identity for inverse functions into pointwise Young's inequality and the
 resulting normalized Orlicz--Hölder estimate. It supplies the final two
 conjuncts of the frozen theorem. -/
+lemma apm_m02J05_inverse_partner_lux_facts_aux_zero
+    (α β : ℝ → ℝ) (hαzero : α 0 = 0)
+    (hβα : ∀ t, 0 ≤ t → β (α t) = t) : β 0 = 0 := by
+  simpa [hαzero] using hβα 0 le_rfl
+
+lemma apm_m02J05_inverse_partner_lux_facts_aux_strictMono
+    (α β : ℝ → ℝ) (hαmono : StrictMonoOn α (Ici 0))
+    (hβnonneg : ∀ t, 0 ≤ t → 0 ≤ β t)
+    (hαβ : ∀ t, 0 ≤ t → α (β t) = t) :
+    StrictMonoOn β (Ici 0) := by
+  intro s hs t ht hst
+  have hβs : β s ∈ Ici (0 : ℝ) := hβnonneg s hs
+  have hβt : β t ∈ Ici (0 : ℝ) := hβnonneg t ht
+  by_contra hn
+  have hle : β t ≤ β s := le_of_not_gt hn
+  have ha := hαmono.monotoneOn hβt hβs hle
+  rw [hαβ t ht, hαβ s hs] at ha
+  exact (not_le_of_gt hst) ha
+
+lemma apm_m02J05_inverse_partner_lux_facts_aux_atTop
+    (α β : ℝ → ℝ) (hαmono : StrictMonoOn α (Ici 0))
+    (hαnonneg : ∀ t, 0 ≤ t → 0 ≤ α t)
+    (hβnonneg : ∀ t, 0 ≤ t → 0 ≤ β t)
+    (hβα : ∀ t, 0 ≤ t → β (α t) = t)
+    (hαβ : ∀ t, 0 ≤ t → α (β t) = t) :
+    Tendsto β atTop atTop := by
+  have hm := (apm_m02J05_inverse_partner_lux_facts_aux_strictMono
+    α β hαmono hβnonneg hαβ).monotoneOn
+  rw [tendsto_atTop_atTop]
+  intro b
+  let r : ℝ := max b 0
+  refine ⟨α r, ?_⟩
+  intro x hx
+  have hr : 0 ≤ r := le_max_right _ _
+  have har : 0 ≤ α r := hαnonneg r hr
+  calc
+    b ≤ r := le_max_left _ _
+    _ = β (α r) := (hβα r hr).symm
+    _ ≤ β x := hm har (har.trans hx) hx
+
 theorem apm_m02J05_inverse_partner_lux_facts
     (α β : ℝ → ℝ)
     (hαc : ContinuousOn α (Ici 0))
@@ -1092,7 +1132,15 @@ theorem apm_m02J05_inverse_partner_lux_facts
       0 ≤ apm_m02J05_lux β u ∧
       (u ≠ 0 → apm_m02J05_lux β u ∈ apm_m02J05_luxSublevel β u)) ∧
     (∀ u ∈ apm_m02J05_L β, apm_m02J05_lux β u = 0 ↔ u = 0) := by
-  sorry
+  have hβnonneg : ∀ t, 0 ≤ t → 0 ≤ β t := fun t ht ↦ (hnonneg t ht).2
+  have hαnonneg : ∀ t, 0 ≤ t → 0 ≤ α t := fun t ht ↦ (hnonneg t ht).1
+  have hβzero := apm_m02J05_inverse_partner_lux_facts_aux_zero α β hαzero hβα
+  have hβmono := apm_m02J05_inverse_partner_lux_facts_aux_strictMono
+    α β hαmono hβnonneg hαβ
+  have hβinfty := apm_m02J05_inverse_partner_lux_facts_aux_atTop
+    α β hαmono hαnonneg hβnonneg hβα hαβ
+  exact ⟨apm_m02J05_lux_sublevel_attained β hβc hβmono hβzero hβinfty hβnonneg,
+    apm_m02J05_lux_definite β hβc hβmono hβzero hβinfty hβnonneg⟩
 
 lemma apm_m02J05_bridge_complementary_young_holder_of_lux_facts_aux_beta_zero
     (α β : ℝ → ℝ) (hαzero : α 0 = 0)
