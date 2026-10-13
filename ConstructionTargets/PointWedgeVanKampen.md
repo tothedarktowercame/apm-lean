@@ -1132,6 +1132,11 @@ parallel expansion for the counit factor.  Its inverse/forward-equivalence
 source connector, counit component, and coordinate-target connector remain
 in order; in particular the counit is not replaced by an identity.
 
+`genericPointWedgeCoordinateSpanGlobalRestrictionLeftComparison_heq_expandedFactors`
+substitutes both expansions into the free-product comparison.  The strict
+three-factor injection remains left of the counit three-factor injection in
+single-object multiplication order, and the dependent boundary remains HEq.
+
 `genericPointWedgeCoordinateSpanGlobalRestrictionLeftRoundTrip_counit_map`
 applies the coordinate-span left functor to the left-equivalence counit
 naturality square.  Both ordered composites are now equal inside the
