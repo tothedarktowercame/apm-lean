@@ -118,7 +118,103 @@ theorem apm_t95j06_component_free_circle_action
     ∀ x : F,
       apm_t95j06_HasFreeContinuousCircleAction
         {y : F // y ∈ connectedComponent x} := by
-  sorry
+  intro x
+  let actF : Circle × F → F := fun gy =>
+    ⟨H (gy.2.1, Complex.arg (gy.1 : ℂ)),
+      hF_invariant gy.2.1 gy.2.2 _⟩
+  have hactF_cont : Continuous actF := by
+    apply continuous_induced_rng.2
+    apply continuous_induced_rng.2
+    rw [continuous_iff_continuousAt]
+    intro gy
+    apply Continuous.continuousAt
+    have : Continuous (fun gy : Circle × F =>
+        (gy.1 : ℂ) • gy.2.1.1) := by fun_prop
+    rw [show ((fun q : apm_t95j06_S5 => q.1) ∘ Subtype.val ∘ actF) = (fun gy : Circle × F =>
+        (gy.1 : ℂ) • gy.2.1.1) by
+      funext gy
+      simp only [Function.comp_apply, actF]
+      rw [hH]
+      rw [show
+        Complex.exp (Complex.I * (Complex.arg (gy.1 : ℂ) : ℂ)) = (gy.1 : ℂ) by
+          rw [show Complex.I * (Complex.arg (gy.1 : ℂ) : ℂ) =
+              (Complex.arg (gy.1 : ℂ) : ℂ) * Complex.I by ring,
+            ← Circle.coe_exp, Circle.exp_arg]]]
+    exact this
+  have horbit (g : Circle) : actF (g, x) ∈ connectedComponent x := by
+    let f : ℝ → F := fun t => ⟨H (x.1, t), hF_invariant x.1 x.2 t⟩
+    have hfcont : Continuous f := by
+      apply continuous_induced_rng.2
+      apply continuous_induced_rng.2
+      rw [continuous_iff_continuousAt]
+      intro t
+      apply Continuous.continuousAt
+      have : Continuous (fun t : ℝ =>
+          Complex.exp (Complex.I * (t : ℂ)) • x.1.1) := by fun_prop
+      rw [show ((fun q : apm_t95j06_S5 => q.1) ∘ Subtype.val ∘ f) = (fun t : ℝ =>
+          Complex.exp (Complex.I * (t : ℂ)) • x.1.1) by
+        funext t
+        exact hH (x.1, t)]
+      exact this
+    have himg : IsConnected (Set.range f) :=
+      isConnected_range hfcont
+    apply himg.subset_connectedComponent
+      (show x ∈ Set.range f from ⟨0, Subtype.ext (apm_t95j06_flow_zero H hH x.1)⟩)
+    refine ⟨Complex.arg (g : ℂ), ?_⟩
+    rfl
+  let act : Circle × {y : F // y ∈ connectedComponent x} →
+      {y : F // y ∈ connectedComponent x} := fun gy => by
+    refine ⟨actF (gy.1, gy.2.1), ?_⟩
+    have hc := (isConnected_connectedComponent (x := x)).image
+      (fun y : F => actF (gy.1, y))
+      (hactF_cont.comp (continuous_const.prodMk continuous_id)).continuousOn
+    have hm := hc.subset_connectedComponent
+      (show actF (gy.1, x) ∈ (fun y : F => actF (gy.1, y)) '' connectedComponent x from
+        ⟨x, mem_connectedComponent, rfl⟩)
+      ⟨gy.2.1, gy.2.2, rfl⟩
+    rw [← connectedComponent_eq (horbit gy.1)] at hm
+    exact hm
+  refine ⟨act, ?_, ?_, ?_, ?_⟩
+  · apply continuous_induced_rng.2
+    exact hactF_cont.comp (continuous_fst.prodMk (continuous_subtype_val.comp continuous_snd))
+  · intro y
+    apply Subtype.ext
+    apply Subtype.ext
+    apply Subtype.ext
+    simp [act, actF, apm_t95j06_flow_zero H hH]
+  · intro g h y
+    apply Subtype.ext
+    apply Subtype.ext
+    apply Subtype.ext
+    simp only [act, actF]
+    rw [hH, hH, hH]
+    have hexp (k : Circle) :
+        Complex.exp (Complex.I * (Complex.arg (k : ℂ) : ℂ)) = (k : ℂ) := by
+      rw [show Complex.I * (Complex.arg (k : ℂ) : ℂ) =
+          (Complex.arg (k : ℂ) : ℂ) * Complex.I by ring,
+        ← Circle.coe_exp, Circle.exp_arg]
+    rw [hexp, hexp, hexp]
+    simp [mul_smul]
+  · intro g y hgy
+    have hv : y.1.1.1 ≠ 0 := by
+      intro hz
+      have hs := y.1.1.2
+      rw [Metric.mem_sphere, dist_zero_right, hz, norm_zero] at hs
+      norm_num at hs
+    have hs : (g : ℂ) • y.1.1.1 = y.1.1.1 := by
+      have := congrArg (fun q => q.1.1.1) hgy
+      change (H (y.1.1, Complex.arg (g : ℂ))).1 = y.1.1.1 at this
+      rw [hH] at this
+      simpa only [hH, show
+          Complex.exp (Complex.I * (Complex.arg (g : ℂ) : ℂ)) = (g : ℂ) by
+            rw [show Complex.I * (Complex.arg (g : ℂ) : ℂ) =
+                (Complex.arg (g : ℂ) : ℂ) * Complex.I by ring,
+              ← Circle.coe_exp, Circle.exp_arg]] using this
+    apply Circle.coe_injective
+    apply sub_eq_zero.mp
+    rw [← smul_eq_zero_iff_left hv]
+    change ((g : ℂ) - 1) • y.1.1.1 = 0
+    rw [sub_smul, hs, one_smul, sub_self]
 -- END SEAT AREA
 
 /-- LIBRARY: a compact orientable topological surface with a free continuous
