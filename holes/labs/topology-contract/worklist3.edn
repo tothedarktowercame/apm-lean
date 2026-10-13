@@ -21568,7 +21568,7 @@
   {:consumer :t00J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 2,
+   :stop-count 0,
    :review-finding
    "Frozen fixture metadata is invalid in both authoritative acceptance copies: each records SHA aad5a9cda739c1cbcceb1eca8ab8b33395db8a08c9d68941a87c644f4d13586e and omits :mode, while the compiling fixture hashes to 7e72195e1214d7580994264481ae57d0ecf87755d31825ab85cbda5f1220c4b1. Update both copies to that digest with :mode :post-build-export-check, correct evidence :changed-paths to [\"ConstructionTargets/ManifoldFundamentalClass.lean\"], then resubmit f0afa7bd.",
    :implements-lemma
@@ -21599,7 +21599,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/manifold-fundamental-class",
    :acceptance
@@ -21614,7 +21614,7 @@
    :id :routes-2026-10-12-mfclass-boundary-coordinates-r1,
    :kind :reusable-theorem,
    :area "manifold-fundamental-class",
-   :fail-count 1,
+   :fail-count 0,
    :depends-on [:routes-2026-10-12-mfclass-closed-generator-bridge-r1],
    :current-residual "Prove Bool H0 comparison.",
    :other-consumers [:t98A02]}
@@ -23717,7 +23717,7 @@
    :consumer :t01A08,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 2,
+   :stop-count 0,
    :review-finding
    "Recorded commit is invalid: f032efae9d1501f7ddfe93c66668f88f24ed37f4 is absent locally and origin rejects it as not our ref. The intended scoped commit appears to be f032efae9b89fb527a72ea9192f3c89f09f82615. Repair the row to record the exact existing full SHA, then rerun independent review.",
    :implements-lemma
@@ -23766,7 +23766,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain/B1/symmetry",
    :acceptance
@@ -23784,7 +23784,7 @@
    :id :r-a08-symmetry-slots-1,
    :kind :reusable-theorem,
    :area "sard-convex-domain",
-   :fail-count 1,
+   :fail-count 0,
    :depends-on [:r-topo3-cp12],
    :current-residual "Then B1.",
    :other-consumers []}
@@ -23858,9 +23858,19 @@
       :current-residual "Elect no leading swap before PASS.",
       :other-consumers []}],
     :author "topo-12",
-    :disposition :replan},
+    :disposition :replan,
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791879530602-9097-c1d0f771",
+     :commands
+     ["git show/diff 9dfc7d890; scope/diff checks"
+      "bb build_step.bb priorities worklist3.edn"
+      "inspect repaired dependency and replacement gates"],
+     :finding
+     "PASS: scope-empty checkpoint correctly responds to the failed predecessor. It records the existing full SHA, preserves frozen type/hash/mode, elects only a receipt-repair item, and forbids the leading-swap successor before independent PASS. Fresh priorities reproduce t01A08 as 1 placeholder, 10 banked, 4 backlog."}},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance {:strategy "Review symmetry; rerank."},
@@ -23873,7 +23883,7 @@
   {:bounded-exception "Receipt repair only; no mathematics.",
    :consumer :t01A08,
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "SardConvexDomain/B1/symmetry",
    :acceptance
@@ -33785,7 +33795,7 @@
    :other-consumers []}
   {:consumer :t01A08,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "iteratedFDerivWithin_domDomCongr_decomposeFin_symm_zero",
@@ -33795,7 +33805,9 @@
     :reported-by [:r-a08-symmetry-slots-1],
     :type "lower symmetry lifts to next tail slots",
     :area "sard-convex-domain",
-    :proved-in :r-a08-symmetry-slots-1},
+    :proved-in :r-a08-symmetry-slots-1,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/SardConvexDomain.lean"]},
    :id :lemma-iteratedfderivwithin-domdomcongr-decomposefin-symm-zero,
    :kind :lemma,
    :depends-on
