@@ -87774,6 +87774,18 @@
       :exit 1,
       :correction
       "normalized product norms and complex branch equations"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791925197664-10496-673184c2",
+     :commands
+     ["scope/SHA256 checks at d59e0345d"
+      "recorded blob | lake env lean /dev/stdin"
+      "comment-stripped placeholder scan (0)"
+      "#print axioms witness theorem"
+      "statement-registry.py check (166/0)"],
+     :finding
+     "Valid program STOP with new compiled progress beyond history commit 02f7d5989. The theorem constructs nonzero exclusive points (r,I*r) and (r,-I*r) in every open neighborhood of zero, with branch orientations correct. Exact one-file scope/hash match; placeholders 0; axioms propext, Classical.choice, Quot.sound. Remaining milestone is chart transport plus the punctured-plane contradiction."},
     :commit "d59e0345d",
     :changed-paths ["ConstructionTargets/t94A08Closure.lean"],
     :fixture
@@ -87782,7 +87794,7 @@
      "fcd457df55b8ae7e714c99376afdc6c36ae2b352c82b789186f6e6d6859e5c2e"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t94A08/lean/Main.lean"
     "problems/t94A08/status.json"
@@ -87800,7 +87812,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t94A08Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked non-preconnectedness of the punctured sigma2 zeroth-chart slice.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked explicit nonzero witnesses on both affine branches inside every open neighborhood of the crossing.",
    :id :program-2026-10-13-close-t94a08,
    :kind :final-adapter,
    :campaign-priority 30,
@@ -87844,7 +87856,11 @@
     {:job 9,
      :commit "02f7d5989",
      :reason
-     "Banked non-preconnectedness of the punctured sigma2 zeroth-chart slice."}]}
+     "Banked non-preconnectedness of the punctured sigma2 zeroth-chart slice."}
+    {:job 1,
+     :commit "d59e0345d",
+     :reason
+     "Banked explicit nonzero witnesses on both affine branches inside every open neighborhood of the crossing."}]}
   {:consumer :t97A01,
    :stop-count 1,
    :evidence
@@ -88235,7 +88251,7 @@
    :other-consumers []}
   {:consumer :t94A08,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -88249,7 +88265,9 @@
     :type
     "subsets of the punctured affine cross meeting both exclusive branches are not preconnected",
     :area "projective-affine-chart-homeomorph",
-    :proved-in :program-2026-10-13-close-t94a08},
+    :proved-in :program-2026-10-13-close-t94a08,
+    :banked-by :program-2026-10-13-close-t94a08,
+    :banked-commit "d59e0345d"},
    :id
    :lemma-apm-t94a08-cross-subset-not-ispreconnected-of-branch-witnesses,
    :kind :lemma,
@@ -88402,7 +88420,7 @@
    :other-consumers []}
   {:consumer :t94A08,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "apm_t94a08_open_mem_zero_has_affine_branch_witnesses",
@@ -88414,7 +88432,9 @@
     :type
     "every open neighborhood of zero contains nonzero exclusive points on both affine branches",
     :area "projective-affine-chart-homeomorph",
-    :proved-in :program-2026-10-13-close-t94a08},
+    :proved-in :program-2026-10-13-close-t94a08,
+    :banked-by :program-2026-10-13-close-t94a08,
+    :banked-commit "d59e0345d"},
    :id :lemma-apm-t94a08-open-mem-zero-has-affine-branch-witnesses,
    :kind :lemma,
    :depends-on [],
