@@ -24430,7 +24430,7 @@
    :consumer :t01A08,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 0,
    :review-finding
    "extend Mathlib: state and prove the missing theorem in scope",
    :implements-lemma :lemma-closedset-whitneycubecover,
@@ -24473,6 +24473,17 @@
       :exit 1,
       :correction
       "fixed distance orientation and zpow normalization"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791908998573-9990-b662fd59",
+     :commands
+     ["git show/diff 10df004; scope/scaling checks"
+      "sha256sum + lake env lean frozen fixture"
+      "lake build ConstructionTargets.SardConvexDomain"
+      "statement registry check; forbidden-count scan"],
+     :finding
+     "PASS. Recorded topo-10 commit 10df004 changes only the scoped Lean file and correctly transports incident scale-k centers into closedBall(0,1/2). The stratum upper bound gives dist(c,x)<2^(k+1)/4; the exact normalization law and zpow algebra reduce this to <1/2, with zero-center and distance orientations correct. Fixture hash cda59318... matches; build/fixture pass; registry 150/150; forbidden placeholders stay 0; only standard axioms. Valid compiled B3 progress; STOP leaves normalized separation/fixed packing, stratum sum, and assembly."},
     :commit "10df00408c00b9f9da395c1e82e05313d95ea971",
     :changed-paths ["ConstructionTargets/SardConvexDomain.lean"],
     :fixture
@@ -24482,7 +24493,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain.blueprint/B3",
    :acceptance
@@ -35572,7 +35583,7 @@
    :other-consumers []}
   {:consumer :t01A08,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -35584,7 +35595,9 @@
     :reported-by [:r-a08-sard-b3-whitney-cubes-1],
     :type "incident centers normalize into closedBall 0 (1/2)",
     :area "sard-convex-domain",
-    :proved-in :r-a08-sard-b3-whitney-cubes-1},
+    :proved-in :r-a08-sard-b3-whitney-cubes-1,
+    :banked-by :r-a08-sard-b3-whitney-cubes-1,
+    :banked-commit "10df00408c00b9f9da395c1e82e05313d95ea971"},
    :id
    :lemma-constructiontargets-sardconvexdomain-whitneynormalize-mem-closedball-half,
    :kind :lemma,
