@@ -1224,3 +1224,10 @@ same partial conjugation by the inverse left element.
 that automorphism. `genericPointWedgePartiallyNormalized_legCoordinates`
 proves both B6 equations from one explicit residual: the fixed right-base
 conjugator is `inl a` for some left loop `a`.
+
+`genericPointWedgeFreeProductRightProjection` exposes a necessary test for
+that residual: it kills `inl` and is the identity on `inr`.
+`genericPointWedgeRightBase_inl_implies_rightProjection_eq_one` proves that
+the proposed factorization forces the right projection of the fixed
+conjugator to be the unit. The next job must compute this projection from the
+outer-comparison formula rather than assuming the right contribution away.

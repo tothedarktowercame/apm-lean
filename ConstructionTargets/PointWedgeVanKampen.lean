@@ -6060,6 +6060,38 @@ theorem genericPointWedgePartiallyNormalized_legCoordinates
       genericPointWedgeConjugateRightByLeft_inr]
     simp [mul_assoc]
 
+/-- The canonical projection of the free product onto its right factor. -/
+def genericPointWedgeFreeProductRightProjection :
+    genericPointWedgeFreeProduct x₀ y₀ →*
+      genericPointWedgeRightGroup y₀ :=
+  Monoid.Coprod.lift 1 (MonoidHom.id _)
+
+omit [PathConnectedSpace X] [PathConnectedSpace Y] in
+@[simp] theorem genericPointWedgeFreeProductRightProjection_inl
+    (g : genericPointWedgeLeftGroup x₀) :
+    genericPointWedgeFreeProductRightProjection x₀ y₀
+        (Monoid.Coprod.inl g) = 1 := by
+  rfl
+
+omit [PathConnectedSpace X] [PathConnectedSpace Y] in
+@[simp] theorem genericPointWedgeFreeProductRightProjection_inr
+    (g : genericPointWedgeRightGroup y₀) :
+    genericPointWedgeFreeProductRightProjection x₀ y₀
+        (Monoid.Coprod.inr g) = g := by
+  rfl
+
+/-- An `inl` factorization of the right-base conjugator forces its canonical
+right projection to be trivial. -/
+theorem genericPointWedgeRightBase_inl_implies_rightProjection_eq_one
+    (a : FundamentalGroup X x₀)
+    (ha : genericPointWedgeIdentityGlobalRightBaseElement
+        x₀ y₀ M N hM hN hy hx cM cN = Monoid.Coprod.inl a) :
+    genericPointWedgeFreeProductRightProjection x₀ y₀
+        (genericPointWedgeIdentityGlobalRightBaseElement
+          x₀ y₀ M N hM hN hy hx cM cN) = 1 := by
+  rw [ha]
+  exact genericPointWedgeFreeProductRightProjection_inl x₀ y₀ a
+
 /-- Once B3's two mapped actions are identified with the images of the
 literal topological legs under B5, the normalized equivalence has exactly the
 two coproduct coordinates required by B6. -/
@@ -6764,6 +6796,8 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeSourceMappedLeft_counitSquare
 #print axioms genericPointWedgePartiallyNormalizedFundamentalGroupEquiv
 #print axioms genericPointWedgePartiallyNormalized_legCoordinates
+#print axioms genericPointWedgeFreeProductRightProjection
+#print axioms genericPointWedgeRightBase_inl_implies_rightProjection_eq_one
 #print axioms genericPointWedgeLegCoordinates_of_mapped
 #print axioms genericPointWedgeLegCoordinates_iff_mapped
 #print axioms genericPointWedgeLegCoordinates_iff_sourceFunctor
