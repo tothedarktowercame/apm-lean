@@ -1138,10 +1138,14 @@ three-factor injection remains left of the counit three-factor injection in
 single-object multiplication order, and the dependent boundary remains HEq.
 
 `genericPointWedgeLeftRoundTrip_counit_normalForms` applies the connector
-normal form to the exact left-equivalence counit naturality square.  Using
-it relates the two typed composites at the fixed base while preserving every
-endpoint object; no connector or
-counit is normalized independently.
+normal form to the exact left-equivalence counit naturality square.  It
+relates the two typed composites at the fixed base while preserving every
+endpoint object; no connector or counit is normalized independently.
+
+`genericPointWedgeLeftRoundTrip_counit_connectorSquare` unfolds those normal
+forms.  The common dependent source and target connectors are explicit on
+both sides, while naturality replaces the middle round-trip/counit pair by
+the target counit followed by the inverse span component.
 
 `genericPointWedgeCoordinateSpanGlobalRestrictionLeftRoundTrip_counit_map`
 applies the coordinate-span left functor to the left-equivalence counit
