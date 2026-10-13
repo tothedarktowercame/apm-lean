@@ -2993,7 +2993,19 @@ lemma apm_a97j08_boundaryEdge_segment_subset_aux_open_unique {δ : ℝ} (hδ : 0
     (hw : shift.re + q'.1 * δ < w.re ∧ w.re < shift.re + (q'.1 + 1) * δ ∧
         shift.im + q'.2 * δ < w.im ∧ w.im < shift.im + (q'.2 + 1) * δ)
     (hq : w ∈ apm_a97j08_gridSquare shift δ q) : q = q' := by
-  sorry
+  rcases hw with ⟨hxlo, hxhi, hylo, hyhi⟩
+  rcases hq with ⟨hqxlo, hqxhi, hqylo, hqyhi⟩
+  have hx₁ : (q'.1 : ℝ) < (q.1 : ℝ) + 1 := by nlinarith
+  have hx₂ : (q.1 : ℝ) < (q'.1 : ℝ) + 1 := by nlinarith
+  have hx₁' : q'.1 < q.1 + 1 := by exact_mod_cast hx₁
+  have hx₂' : q.1 < q'.1 + 1 := by exact_mod_cast hx₂
+  have hx : q.1 = q'.1 := by omega
+  have hy₁ : (q'.2 : ℝ) < (q.2 : ℝ) + 1 := by nlinarith
+  have hy₂ : (q.2 : ℝ) < (q'.2 : ℝ) + 1 := by nlinarith
+  have hy₁' : q'.2 < q.2 + 1 := by exact_mod_cast hy₁
+  have hy₂' : q.2 < q'.2 + 1 := by exact_mod_cast hy₂
+  have hy : q.2 = q'.2 := by omega
+  exact Prod.ext hx hy
 
 lemma apm_a97j08_boundaryEdge_segment_subset_aux_not_interior
     {δ : ℝ} (hδ : 0 < δ) (shift : ℂ) (Q : Finset (ℤ × ℤ))
