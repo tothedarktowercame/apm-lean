@@ -238,6 +238,85 @@ intrinsic measure used by `unitFlux_moment`, and the resulting flux moment.
 The normalization conclusion is an explicit hypothesis so this lemma can be
 proved independently of the mass lemma. -/
 -- BEGIN SEAT AREA
+def apm_t02a05_radialFlux_integral_aux_translateSphere
+    (c : apm_t02a05_E3) :
+    Metric.sphere (0 : apm_t02a05_E3) 1 ≃ᵢ Metric.sphere c 1 where
+  toFun z := ⟨c + z.1, by
+    rw [Metric.mem_sphere, dist_eq_norm]
+    simpa [add_sub_cancel_left] using z.2⟩
+  invFun q := ⟨q.1 - c, by
+    change dist (q.1 - c) 0 = 1
+    rw [dist_eq_norm, sub_zero]
+    have hq : dist q.1 c = 1 := q.2
+    simpa [dist_eq_norm] using hq⟩
+  left_inv z := by ext; simp
+  right_inv q := by ext; simp
+  isometry_toFun := by
+    intro a b
+    rw [edist_dist, edist_dist]
+    apply congrArg ENNReal.ofReal
+    change dist (c + a.1) (c + b.1) = dist a.1 b.1
+    exact dist_add_left c a.1 b.1
+
+lemma apm_t02a05_radialFlux_integral_aux_transport
+    (c : apm_t02a05_E3) :
+    (∫ q : Metric.sphere c 1, apm_t02a05_radialFlux c q ∂μHE[2]) =
+      ∫ z : Metric.sphere (0 : apm_t02a05_E3) 1,
+        (z.1 0 * (z.1 0 + c 0 - 1) ^ 3 +
+         z.1 1 * (z.1 1 + c 1 - 2) ^ 3 +
+         z.1 2 * (z.1 2 + c 2 - 3)) ∂μHE[2] := by
+  let e := apm_t02a05_radialFlux_integral_aux_translateSphere c
+  have hmp := e.measurePreserving_euclideanHausdorffMeasure 2
+  rw [← hmp.integral_comp e.toHomeomorph.measurableEmbedding]
+  apply integral_congr_ae
+  filter_upwards [] with z
+  change apm_t02a05_radialFlux c (c + z.1) = _
+  simp [apm_t02a05_radialFlux]
+  ring
+
+section
+attribute [-instance] ConstructionTargets.LinearGraphMeasure.domainMeasurable
+attribute [-instance] ConstructionTargets.LinearGraphMeasure.domainBorel
+lemma apm_t02a05_radialFlux_integral_aux_inst :
+    ConstructionTargets.LinearGraphMeasure.domainMeasurable 3 =
+      (inferInstance : MeasurableSpace (EuclideanSpace ℝ (Fin 3))) := by
+  unfold ConstructionTargets.LinearGraphMeasure.domainMeasurable
+  exact BorelSpace.measurable_eq.symm
+end
+
+lemma apm_t02a05_radialFlux_integral_aux_centeredMoment
+    (hmass :
+      (μHE[2] (Set.univ : Set (Metric.sphere (0 : apm_t02a05_E3) 1))).toReal =
+        4 * Real.pi)
+    (c : apm_t02a05_E3) :
+    (∫ z : Metric.sphere (0 : apm_t02a05_E3) 1,
+        (z.1 0 * (z.1 0 + c 0 - 1) ^ 3 +
+         z.1 1 * (z.1 1 + c 1 - 2) ^ 3 +
+         z.1 2 * (z.1 2 + c 2 - 3)) ∂μHE[2]) =
+      44 * Real.pi / 15 +
+        4 * Real.pi * ((c 0 - 1) ^ 2 + (c 1 - 2) ^ 2) := by
+  have hmom := ConstructionTargets.IntrinsicSphereFourthMoments.unitFlux_moment c
+  rw [MeasureTheory.Measure.euclideanHausdorffMeasure_def, integral_smul_nnreal_measure]
+  rw [MeasureTheory.Measure.euclideanHausdorffMeasure_def, Measure.smul_apply,
+    ENNReal.toReal_smul] at hmass
+  simp only [Nat.cast_ofNat] at hmass ⊢
+  have hI : (∫ z : Metric.sphere (0 : apm_t02a05_E3) 1,
+        (z.1 0 * (z.1 0 + c 0 - 1) ^ 3 +
+         z.1 1 * (z.1 1 + c 1 - 2) ^ 3 +
+         z.1 2 * (z.1 2 + c 2 - 3)) ∂μH[2]) =
+      (μH[2] (Set.univ : Set (Metric.sphere (0 : apm_t02a05_E3) 1))).toReal *
+        (11 / 15 + (c 0 - 1) ^ 2 + (c 1 - 2) ^ 2) := by
+    have hinst := apm_t02a05_radialFlux_integral_aux_inst
+    convert hmom using 3
+    all_goals first
+      | exact hinst
+      | (unfold ConstructionTargets.IntrinsicSphereSecondMoments.mass
+         simp only [MeasureTheory.Measure.hausdorffMeasure_apply, Nat.cast_ofNat])
+  rw [hI]
+  rw [NNReal.smul_def, smul_eq_mul] at hmass ⊢
+  erw [← mul_assoc, hmass]
+  ring
+
 theorem apm_t02a05_radialFlux_integral
     (hmass :
       (μHE[2] (Set.univ : Set (Metric.sphere (0 : apm_t02a05_E3) 1))).toReal =
@@ -246,7 +325,8 @@ theorem apm_t02a05_radialFlux_integral
     (∫ q : Metric.sphere c 1, apm_t02a05_radialFlux c q ∂μHE[2]) =
       44 * Real.pi / 15 +
         4 * Real.pi * ((c 0 - 1) ^ 2 + (c 1 - 2) ^ 2) := by
-  sorry
+  rw [apm_t02a05_radialFlux_integral_aux_transport]
+  exact apm_t02a05_radialFlux_integral_aux_centeredMoment hmass c
 -- END SEAT AREA
 
 /-- The geometric bridge is assembly only. -/
