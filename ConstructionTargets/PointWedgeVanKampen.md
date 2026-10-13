@@ -1147,6 +1147,11 @@ forms.  The common dependent source and target connectors are explicit on
 both sides, while naturality replaces the middle round-trip/counit pair by
 the target counit followed by the inverse span component.
 
+`genericPointWedgeLeftRoundTrip_counit_connectorSquare_inl` transports this
+exact equality through the left coproduct injection.  It therefore lives in
+the representation used by the expanded B6 comparison, without converting
+the dependent connector equation into an untyped cancellation.
+
 `genericPointWedgeCoordinateSpanGlobalRestrictionLeftRoundTrip_counit_map`
 applies the coordinate-span left functor to the left-equivalence counit
 naturality square.  Both ordered composites are now equal inside the
