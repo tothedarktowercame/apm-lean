@@ -2658,6 +2658,59 @@ lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_forward_aux
     have := hy x (Ioo_subset_Icc_self hx)
     convert this using 1 <;> ring
 
+lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_forward_aux_rigidity_aux_pointwise_aux_EL
+    (hWirtinger : apm_m98A06_WirtingerFact)
+    (hFTC : apm_m98A06_WeakFTCFact) (y dy : ℝ → ℝ)
+    (h : apm_m98a06_InH10Pi y dy)
+    (hnorm : ∫ x, (y x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)) = 1)
+    (hdnorm : ∫ x, (dy x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)) = 1)
+    (hprim : ∀ x ∈ Icc (0 : ℝ) Real.pi,
+      y x = ∫ t in (0 : ℝ)..x, dy t) :
+    ∀ φ : ℝ → ℝ, ContDiff ℝ ∞ φ → HasCompactSupport φ →
+      Function.support φ ⊆ Ioo (0 : ℝ) Real.pi →
+      (∫ x, dy x * deriv φ x ∂(volume.restrict (Ioo (0 : ℝ) Real.pi))) =
+        ∫ x, y x * φ x ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)) := by
+  sorry
+
+lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_forward_aux_rigidity_aux_pointwise_aux_representation
+    (hFTC : apm_m98A06_WeakFTCFact) (y dy : ℝ → ℝ)
+    (h : apm_m98a06_InH10Pi y dy)
+    (hEL : ∀ φ : ℝ → ℝ, ContDiff ℝ ∞ φ → HasCompactSupport φ →
+      Function.support φ ⊆ Ioo (0 : ℝ) Real.pi →
+      (∫ x, dy x * deriv φ x ∂(volume.restrict (Ioo (0 : ℝ) Real.pi))) =
+        ∫ x, y x * φ x ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)))
+    (hprim : ∀ x ∈ Icc (0 : ℝ) Real.pi,
+      y x = ∫ t in (0 : ℝ)..x, dy t) :
+    ∃ c : ℝ, ∀ x ∈ Icc (0 : ℝ) Real.pi, y x = c * Real.sin x := by
+  sorry
+
+lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_forward_aux_rigidity_aux_pointwise_aux_normalize
+    (y : ℝ → ℝ)
+    (hnorm : ∫ x, (y x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)) = 1)
+    (c : ℝ) (hy : ∀ x ∈ Icc (0 : ℝ) Real.pi, y x = c * Real.sin x) :
+    c = Real.sqrt (2 / Real.pi) ∨ c = -Real.sqrt (2 / Real.pi) := by
+  have hae : (fun x => (y x) ^ 2) =ᵐ[volume.restrict (Ioo (0 : ℝ) Real.pi)]
+      fun x => (c * Real.sin x) ^ 2 := by
+    filter_upwards [MeasureTheory.ae_restrict_mem measurableSet_Ioo] with x hx
+    rw [hy x (Ioo_subset_Icc_self hx)]
+  rw [MeasureTheory.integral_congr_ae hae] at hnorm
+  have hi : (∫ x in (0 : ℝ)..Real.pi, (c * Real.sin x) ^ 2) = 1 := by
+    rw [intervalIntegral.integral_of_le Real.pi_pos.le]
+    rw [Measure.restrict_congr_set Ioo_ae_eq_Ioc.symm]
+    exact hnorm
+  have hc2 : c ^ 2 = 2 / Real.pi := by
+    rw [show (fun x : ℝ => (c * Real.sin x) ^ 2) =
+        fun x => c ^ 2 * Real.sin x ^ 2 by funext x; ring,
+      intervalIntegral.integral_const_mul, integral_sin_sq] at hi
+    simp only [Real.sin_zero, Real.cos_zero, zero_mul, Real.sin_pi,
+      Real.cos_pi, sub_zero, zero_add] at hi
+    apply (mul_right_cancel₀ Real.pi_ne_zero)
+    field_simp [Real.pi_ne_zero]
+    nlinarith
+  have hs : (Real.sqrt (2 / Real.pi)) ^ 2 = 2 / Real.pi :=
+    Real.sq_sqrt (by positivity)
+  exact eq_or_eq_neg_of_sq_eq_sq c _ (hc2.trans hs.symm)
+
 lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_forward_aux_rigidity_aux_pointwise
     (hWirtinger : apm_m98A06_WirtingerFact)
     (hFTC : apm_m98A06_WeakFTCFact) (y dy : ℝ → ℝ)
@@ -2668,7 +2721,15 @@ lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_forward_aux
       y x = ∫ t in (0 : ℝ)..x, dy t) :
     ∃ c : ℝ, (∀ x ∈ Icc (0 : ℝ) Real.pi, y x = c * Real.sin x) ∧
       (c = Real.sqrt (2 / Real.pi) ∨ c = -Real.sqrt (2 / Real.pi)) := by
-  sorry
+  have hEL :=
+    apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_forward_aux_rigidity_aux_pointwise_aux_EL
+      hWirtinger hFTC y dy h hnorm hdnorm hprim
+  obtain ⟨c, hc⟩ :=
+    apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_forward_aux_rigidity_aux_pointwise_aux_representation
+      hFTC y dy h hEL hprim
+  exact ⟨c, hc,
+    apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_forward_aux_rigidity_aux_pointwise_aux_normalize
+      y hnorm c hc⟩
 
 lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_forward_aux_rigidity
     (hWirtinger : apm_m98A06_WirtingerFact)
