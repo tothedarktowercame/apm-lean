@@ -124,7 +124,8 @@ theorem t97A07_regular_image_interior (m n : ℕ) {X : Type*}
     (f : X → E n) (hf : ContMDiff 𝓘(ℝ, E m) 𝓘(ℝ, E n) ∞ f) (x : X)
     (hx : Function.Surjective (mfderiv 𝓘(ℝ, E m) 𝓘(ℝ, E n) f x)) :
     f x ∈ interior (Set.range f) := by
-  sorry
+  rw [mem_interior_iff_mem_nhds]
+  exact t97A07Closure.range_mem_nhds_of_regular f hf x hx
 
 /-- If the target has dimension at least two and the map is nonconstant, its
 set of critical values is infinite. -/
