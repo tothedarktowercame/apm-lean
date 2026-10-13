@@ -114,7 +114,7 @@ theorem apm_t99J04_bridge_local_inverse_function_aux_chart
     rw [contMDiffAt_iff] at hf
     simpa [g, a, writtenInExtChartAt] using hf.2
   have hderiv : fderiv ℝ g a = mfderiv (𝓘(ℝ, E)) (𝓘(ℝ, E')) f x := by
-    have hm := (hf.mdifferentiableAt (by simp)).mfderiv
+    have hm := (hf.mdifferentiableAt (x := x) (by simp)).mfderiv
     simpa [g, a] using hm.symm
   have hb' : Function.Bijective (fderiv ℝ g a) := hderiv.symm ▸ hbij
   let e : E ≃L[ℝ] E' := ContinuousLinearEquiv.ofBijective (fderiv ℝ g a)
@@ -224,7 +224,102 @@ theorem apm_t99J04_bridge_local_inverse_function
     (hbij : Function.Bijective
       (mfderiv (𝓘(ℝ, E)) (𝓘(ℝ, E')) f x)) :
     IsLocalDiffeomorphAt (𝓘(ℝ, E)) (𝓘(ℝ, E')) (⊤ : ℕ∞) f x := by
-  sorry
+  let cx := apm_t99J04_bridge_local_inverse_function_aux_extChart (E := E) x
+  let cy := apm_t99J04_bridge_local_inverse_function_aux_extChart (E := E') (f x)
+  let a : E := cx x
+  let g : E → E' := writtenInExtChartAt (𝓘(ℝ, E)) (𝓘(ℝ, E')) x f
+  let U : Set E := cx.target ∩ cx.symm ⁻¹' (f ⁻¹' cy.source)
+  have hU : IsOpen U := by
+    exact cx.continuousOn_invFun.isOpen_inter_preimage cx.open_target
+      (hf.continuous.isOpen_preimage _ cy.open_source)
+  have ha : a ∈ U := by
+    constructor
+    · exact cx.map_source (mem_extChartAt_source x)
+    · change f (cx.symm (cx x)) ∈ cy.source
+      rw [cx.left_inv (mem_extChartAt_source x)]
+      exact mem_extChartAt_source (f x)
+  have hg : ContDiffOn ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) g U := by
+    simpa [g, U, cx, cy, apm_t99J04_bridge_local_inverse_function_aux_extChart,
+      writtenInExtChartAt] using (contMDiff_iff.mp hf).2 x (f x)
+  have hderiv : fderiv ℝ g a = mfderiv (𝓘(ℝ, E)) (𝓘(ℝ, E')) f x := by
+    have hfa : ContMDiffAt (𝓘(ℝ, E)) (𝓘(ℝ, E')) (⊤ : ℕ∞) f x :=
+      hf.contMDiffAt
+    have hm := (hfa.mdifferentiableAt (by simp)).mfderiv
+    simpa [g, a, cx, apm_t99J04_bridge_local_inverse_function_aux_extChart] using hm.symm
+  obtain ⟨e, hae, heU, heq, he, hei⟩ :=
+    heuclid U a hU ha g hg (hderiv.symm ▸ hbij)
+  let qh : OpenPartialHomeomorph X Y := cx.trans (e.trans cy.symm)
+  let q : PartialDiffeomorph (𝓘(ℝ, E)) (𝓘(ℝ, E')) X Y (⊤ : ℕ∞) := {
+    toPartialEquiv := qh.toPartialEquiv
+    open_source := qh.open_source
+    open_target := qh.open_target
+    contMDiffOn_toFun := by
+      change ContMDiffOn (𝓘(ℝ, E)) (𝓘(ℝ, E')) (⊤ : ℕ∞)
+        (cy.symm ∘ e ∘ cx) qh.source
+      have hsx : qh.source ⊆ cx.source := by
+        intro z hz
+        rw [OpenPartialHomeomorph.trans_source] at hz
+        exact hz.1
+      have hse : Set.MapsTo cx qh.source e.source := by
+        intro z hz
+        rw [OpenPartialHomeomorph.trans_source,
+          OpenPartialHomeomorph.trans_source] at hz
+        exact hz.2.1
+      have hsy : Set.MapsTo (e ∘ cx) qh.source cy.target := by
+        intro z hz
+        rw [OpenPartialHomeomorph.trans_source,
+          OpenPartialHomeomorph.trans_source] at hz
+        exact hz.2.2
+      exact (contMDiffOn_extChartAt_symm (f x)).comp
+        (he.contMDiffOn.comp (contMDiffOn_extChartAt.mono (by
+          simpa [cx, apm_t99J04_bridge_local_inverse_function_aux_extChart] using hsx)) hse) hsy
+    contMDiffOn_invFun := by
+      change ContMDiffOn (𝓘(ℝ, E')) (𝓘(ℝ, E)) (⊤ : ℕ∞)
+        (cx.symm ∘ e.symm ∘ cy) qh.target
+      have hsy : qh.target ⊆ cy.source := by
+        intro z hz
+        rw [OpenPartialHomeomorph.trans_target,
+          OpenPartialHomeomorph.trans_target] at hz
+        exact hz.1.1
+      have hse : Set.MapsTo cy qh.target e.target := by
+        intro z hz
+        rw [OpenPartialHomeomorph.trans_target,
+          OpenPartialHomeomorph.trans_target] at hz
+        exact hz.1.2
+      have hsx : Set.MapsTo (e.symm ∘ cy) qh.target cx.target := by
+        intro z hz
+        rw [OpenPartialHomeomorph.trans_target] at hz
+        exact hz.2
+      exact (contMDiffOn_extChartAt_symm x).comp
+        (hei.contMDiffOn.comp (contMDiffOn_extChartAt.mono (by
+          simpa [cy, apm_t99J04_bridge_local_inverse_function_aux_extChart] using hsy)) hse) hsx
+  }
+  refine ⟨q, ?_, ?_⟩
+  · change x ∈ qh.source
+    rw [OpenPartialHomeomorph.trans_source,
+      OpenPartialHomeomorph.trans_source]
+    refine ⟨mem_extChartAt_source x, ?_, ?_⟩
+    · simpa [a, cx] using hae
+    · change e (cx x) ∈ cy.target
+      rw [heq _ (by simpa [a, cx] using hae)]
+      exact writtenInExtChartAt_mapsTo ha
+  · intro z hz
+    change f z = qh z
+    rw [OpenPartialHomeomorph.trans_apply, OpenPartialHomeomorph.trans_apply]
+    have hcz : cx z ∈ e.source := by
+      rw [OpenPartialHomeomorph.trans_source,
+        OpenPartialHomeomorph.trans_source] at hz
+      exact hz.2.1
+    rw [heq _ hcz]
+    change f z = cy.symm (g (cx z))
+    have hzsrc : z ∈ cx.source := by
+      rw [OpenPartialHomeomorph.trans_source] at hz
+      exact hz.1
+    have hcoord : g (cx z) = cy (f z) := by
+      change cy (f (cx.symm (cx z))) = cy (f z)
+      rw [cx.left_inv hzsrc]
+    rw [hcoord, cy.left_inv]
+    simpa [cx.left_inv hzsrc] using (heU hcz).2
 
 theorem apm_t99J04_coordinateMap_contMDiff
     (n : ℕ) (X : Type) [TopologicalSpace X]
