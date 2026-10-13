@@ -1998,7 +1998,20 @@ lemma apm_a97j08_grid_region_construction_aux_mem_square (s : ℂ) {ε : ℝ} (h
 lemma apm_a97j08_grid_region_construction_aux_square_dist (s : ℂ) {ε : ℝ} (hε : 0 < ε)
     (q : ℤ × ℤ) {u w : ℂ} (hu : u ∈ apm_a97j08_gridSquare s ε q)
     (hw : w ∈ apm_a97j08_gridSquare s ε q) : dist u w ≤ 2 * ε := by
-  sorry
+  rcases hu with ⟨hu₁, hu₂, hu₃, hu₄⟩
+  rcases hw with ⟨hw₁, hw₂, hw₃, hw₄⟩
+  have hre : |u.re - w.re| ≤ ε := by
+    rw [abs_le]
+    constructor <;> norm_num at hu₂ hw₂ hu₄ hw₄ ⊢ <;> linarith
+  have him : |u.im - w.im| ≤ ε := by
+    rw [abs_le]
+    constructor <;> norm_num at hu₂ hw₂ hu₄ hw₄ ⊢ <;> linarith
+  calc
+    dist u w = ‖u - w‖ := dist_eq_norm u w
+    _ ≤ |(u - w).re| + |(u - w).im| := Complex.norm_le_abs_re_add_abs_im _
+    _ ≤ 2 * ε := by
+      rw [Complex.sub_re, Complex.sub_im]
+      linarith
 -- END SEAT AREA
 
 -- (P3) Only finitely many lattice squares meet a bounded set.
