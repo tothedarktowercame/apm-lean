@@ -117126,7 +117126,7 @@
    "reopened: a lemma this row reported missing is now banked",
    :stop-count 3,
    :review-finding
-   "Recorded fixture hash mismatch: :fixture.sha256 is eaeed21919599335d4a33b437815c4a9cbb5b72110213b29440d6944cc982182 (the blueprint at older commit 736c2566), but commit 8432f937 changes ConstructionTargets/t97A07Closure.blueprint.md and its exact SHA-256 is 5bb02c342b988406e8bd26aeda1b9e67335a8c1f626d97ec96701cb039ae708f. Re-record the fixture hash for the reviewed commit.",
+   "Blueprint dependency defect at f00781ca: B5 declares only Mathlib dependencies, but fderiv_coordinate_comp_extChartAt_symm_apply proves its key chain-rule identity by invoking coordinate_fderivWithin_eq_mfderiv, a B2 result. This violates the requirement that each node use only its uses: nodes and hypotheses. Exact repair: add B2 to B5 uses: (and retain the existing Mathlib dependencies), or replace that invocation with an in-node proof using only the currently listed dependencies. Archived Closure and Main compile; hashes match, placeholders stay 0/1, registry 149/149, and axioms are otherwise standard.",
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
     :residual "B6 critical-value nonempty, then B7-B9 closure.",
@@ -117165,6 +117165,12 @@
       :exit 1,
       :finding
       "Added tangent identification and explicit Euclidean projection."}],
+    :review
+    {:outcome :fail,
+     :seat "codex-3",
+     :job "invoke-1791897662002-9711-47d3fd3b",
+     :finding
+     "Blueprint dependency defect at f00781ca: B5 declares only Mathlib dependencies, but fderiv_coordinate_comp_extChartAt_symm_apply proves its key chain-rule identity by invoking coordinate_fderivWithin_eq_mfderiv, a B2 result. This violates the requirement that each node use only its uses: nodes and hypotheses. Exact repair: add B2 to B5 uses: (and retain the existing Mathlib dependencies), or replace that invocation with an in-node proof using only the currently listed dependencies. Archived Closure and Main compile; hashes match, placeholders stay 0/1, registry 149/149, and axioms are otherwise standard."},
     :commit "f00781caf7f8dbfd38976f197da93613545c95ef",
     :changed-paths
     ["ConstructionTargets/t97A07Closure.lean"
@@ -117175,7 +117181,7 @@
      "b00add1b7d70cbbafff2b9c935bb63470f3f235fa7706bd773d23ace8f0e53bc"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :repair,
    :scope
    ["problems/t97A07/lean/Main.lean"
     "problems/t97A07/status.json"
@@ -117195,7 +117201,7 @@
    :id :program-2026-10-11-close-t97a07,
    :kind :final-adapter,
    :campaign-priority 44,
-   :fail-count 0,
+   :fail-count 1,
    :depends-on [],
    :program true,
    :other-consumers [],
