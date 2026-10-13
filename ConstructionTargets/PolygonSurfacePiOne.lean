@@ -1740,4 +1740,32 @@ def PairingData.SkeletonWedgeKernelAgreement (P : PairingData) : Prop :=
   ∀ a b : P.SkeletonArcSource,
     P.SkeletonArcRel a b ↔ P.SignedWedgeArcRel a b
 
+theorem surjective_circleArc : Function.Surjective circleArc := by
+  intro z
+  obtain ⟨q, hq⟩ :=
+    ConstructionTargets.IntervalEndpointQuotientCircle.endpointQuotientHomeomorphCircle.surjective z
+  rcases q with ⟨t⟩
+  let t' : Set.Icc (0 : ℝ) 1 := ⟨t.1, by simpa using t.2⟩
+  exact ⟨t', by
+    simpa [circleArc, t'] using hq⟩
+
+/-- Every point of the indexed wedge has an actual signed polygon-arc
+representative. -/
+theorem PairingData.surjective_signedWedgeArcMap (P : PairingData) :
+    Function.Surjective P.signedWedgeArcMap := by
+  intro q
+  refine Quotient.inductionOn q ?_
+  rintro ⟨l, z⟩
+  refine Quotient.inductionOn l ?_
+  intro i
+  obtain ⟨t, rfl⟩ := surjective_circleArc z
+  by_cases hs : P.sign i = true
+  · exact ⟨(i, t), by simp [PairingData.signedWedgeArcMap,
+      PairingData.signedWedgeArc, hs, PairingData.orbit,
+      PointWedgeQuotient.wedgeCircle]⟩
+  · have hs' : P.sign i = false := Bool.eq_false_of_not_eq_true hs
+    exact ⟨(i, reverseIcc t), by simp [PairingData.signedWedgeArcMap,
+      PairingData.signedWedgeArc, hs', PairingData.orbit,
+      PointWedgeQuotient.wedgeCircle]⟩
+
 end ConstructionTargets.PolygonSurfacePiOne
