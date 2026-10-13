@@ -113902,6 +113902,17 @@
       "lake build ConstructionTargets.ThreeCirclesFundamentalGroup",
       :exit 1,
       :finding "B12 absent."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791927575313-10586-3efd2f5b",
+     :commands
+     ["git show/diff-tree 6dbbfa8f9"
+      "git archive 6dbbfa8f9; lake env lean archived PointWedgeVanKampen.lean"
+      "lake build ConstructionTargets.PointWedgeVanKampen"
+      "sha256sum; placeholder delta; statement-registry.py check"],
+     :finding
+     "Recorded scope is target+note; source/doc/fixture hashes match 569c0b6b/327daeb7/0bca6ce3. Archived and target builds pass; placeholders 0->0, registry 166/166, standard axioms only. The package faithfully combines the existing equality from the transported object to the literal right base with the connector HEq to Iso.refl at that base; both concern the same dependent endpoint and have the needed directions. New compiled progress is present; eliminate connector transports, then projection/B6/B12."},
     :commit "6dbbfa8f9c705168cf59c2c719ecf87dac8628d5",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
@@ -113912,7 +113923,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113933,7 +113944,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Target connector inverse equals the named based inverse.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Source endpoint equality and reflexive connector HEq packaged.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -114786,7 +114797,11 @@
     {:job 6,
      :commit "0e69a86dd349aa817c529ea9714a188ebf923ef2",
      :reason
-     "Target connector inverse equals the named based inverse."}]}
+     "Target connector inverse equals the named based inverse."}
+    {:job 7,
+     :commit "6dbbfa8f9c705168cf59c2c719ecf87dac8628d5",
+     :reason
+     "Source endpoint equality and reflexive connector HEq packaged."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
