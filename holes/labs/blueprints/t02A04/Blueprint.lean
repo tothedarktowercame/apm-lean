@@ -85,12 +85,36 @@ theorem apm_t02A04_rational_homology :
       ∀ k : ℕ, 0 < k → CategoryTheory.Limits.IsZero (apm_t02A04_HQ k) := by
   sorry
 
-/-- Convert the supplied rational homology calculation into Lefschetz number one. -/
+lemma apm_t02A04_lefschetz_number_aux_trace_H0
+    [FiniteDimensional ℚ (apm_t02A04_HQ 0)]
+    (e : apm_t02A04_HQ 0 ≅ ModuleCat.of ℚ ℚ)
+    (f : C(apm_t02a04_X, apm_t02a04_X)) :
+    LinearMap.trace ℚ (apm_t02A04_HQ 0) (induced f 0).hom = 1 := by
+  sorry
+
 theorem apm_t02A04_lefschetz_number
     (hH : Nonempty (apm_t02A04_HQ 0 ≅ ModuleCat.of ℚ ℚ) ∧
       ∀ k : ℕ, 0 < k → CategoryTheory.Limits.IsZero (apm_t02A04_HQ k)) :
     ∀ f : C(apm_t02a04_X, apm_t02a04_X), HasLefschetzNumber f 1 := by
-  sorry
+  intro f
+  obtain ⟨e⟩ := hH.1
+  letI : FiniteDimensional ℚ (apm_t02A04_HQ 0) :=
+    Module.Finite.equiv e.toLinearEquiv.symm
+  have hfd : ∀ k, FiniteDimensional ℚ (apm_t02A04_HQ k) := by
+    intro k
+    by_cases hk : k = 0
+    · subst k; infer_instance
+    · have hz := hH.2 k (Nat.pos_of_ne_zero hk)
+      letI : Subsingleton (apm_t02A04_HQ k) :=
+        ModuleCat.subsingleton_of_isZero hz
+      exact Module.Finite.of_surjective (0 : ℚ →ₗ[ℚ] apm_t02A04_HQ k)
+        (fun x ↦ ⟨0, Subsingleton.elim _ _⟩)
+  refine ⟨hfd, ⟨0, ?_, ?_⟩⟩
+  · intro k hk
+    exact ModuleCat.subsingleton_of_isZero (hH.2 k hk)
+  · simp only [Nat.zero_add, Finset.sum_range_succ, Finset.sum_range_zero,
+      zero_add, pow_zero, one_mul]
+    exact apm_t02A04_lefschetz_number_aux_trace_H0 e f
 
 /-- **LIBRARY.** Specialized compact-polyhedron Lefschetz implication. -/
 theorem apm_t02A04_fixed_point_of_lefschetz
