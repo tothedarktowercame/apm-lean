@@ -840,7 +840,27 @@ theorem apm_m98J02_isConvolution_unique
     (h₁ : apm_m98J02_isConvolution u v w₁)
     (h₂ : apm_m98J02_isConvolution u v w₂) :
     w₁ = w₂ := by
-  sorry
+  ext φ
+  obtain ⟨K₁, χ₁, Ψ₁, hK₁, hu₁, hχ₁, hΨ₁, hw₁⟩ := h₁ φ
+  obtain ⟨K₂, χ₂, Ψ₂, hK₂, hu₂, hχ₂, hΨ₂, hw₂⟩ := h₂ φ
+  rw [hw₁, hw₂]
+  apply apm_m98J02_cutoff_independence u
+    (fun x => v (apm_m98J02_translateTest x φ)) K₁ K₂ χ₁ χ₂ Ψ₁ Ψ₂
+    hK₁ hK₂ hu₁ hu₂ hχ₁ hχ₂
+  · intro x
+    obtain ⟨τ, hτ, hx⟩ := hΨ₁ x
+    rw [hx]
+    congr 1
+    apply congrArg v
+    ext y
+    exact hτ y
+  · intro x
+    obtain ⟨τ, hτ, hx⟩ := hΨ₂ x
+    rw [hx]
+    congr 1
+    apply congrArg v
+    ext y
+    exact hτ y
 
 /-- Why this unblocks the convolution step in `apm_m98j02`: this packages the
 iterated pairing
