@@ -669,6 +669,35 @@ noncomputable def apm_t96A08_omegaCoord
   fun y ↦ (omega ((extChartAt I x).symm y)).comp
     (mfderivWithin 𝓘(ℝ, E) I (extChartAt I x).symm (Set.range I) y)
 
+/-- Seat: the evaluation `(y, v) ↦ omegaCoord y v` is `C¹` on
+`φ.target ×ˢ univ`: it is `homega_smooth` composed with the inverse of the
+tangent-bundle chart at `x` (`(y, v) ↦ (φ.symm y, D φ.symm y v)`, smooth on the
+chart target, cf. `contMDiffOn_extChartAt_symm`, tangent map of a smooth map). -/
+theorem apm_t96A08_omegaCoord_eval_contDiffOn
+    {E M : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [CompleteSpace E] [TopologicalSpace M]
+    (I : ModelWithCorners ℝ E E) [ChartedSpace E M]
+    [IsManifold I (⊤ : WithTop ℕ∞) M]
+    (omega : ∀ p : M, TangentSpace I p →L[ℝ] ℝ)
+    (homega_smooth : ContMDiff I.tangent 𝓘(ℝ, ℝ) (⊤ : WithTop ℕ∞)
+      (fun v : TangentBundle I M => omega v.1 v.2))
+    (x : M) :
+    ContDiffOn ℝ 1 (fun p : E × E ↦ apm_t96A08_omegaCoord I omega x p.1 p.2)
+      ((extChartAt I x).target ×ˢ Set.univ) := by
+  sorry
+
+/-- Seat (pure analysis): a family of continuous linear functionals whose
+evaluation is jointly `C¹` on `S ×ˢ univ` is operator-norm continuous on `S`:
+`L y` is the second partial derivative, i.e. `fderivWithin` of the evaluation at
+`(y, 0)` composed with `inr`, and `fderivWithin` is continuous by
+`ContDiffOn.continuousOn_fderivWithin` (needs `UniqueDiffOn (S ×ˢ univ)`). -/
+theorem apm_t96A08_continuousOn_of_eval_contDiffOn
+    {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    (S : Set E) (L : E → (E →L[ℝ] ℝ)) (hS : UniqueDiffOn ℝ S)
+    (hL : ContDiffOn ℝ 1 (fun p : E × E ↦ L p.1 p.2) (S ×ˢ Set.univ)) :
+    ContinuousOn L S := by
+  sorry
+
 /-- Seat: the coordinate expression is continuous on `W ∩ range I` inside the
 chart target (`homega_smooth` and smoothness of `(extChartAt I x).symm` within
 `range I`; the tangent-bundle evaluation is continuous). -/
@@ -683,7 +712,10 @@ theorem apm_t96A08_omegaCoord_continuousOn
     (x : M) (W : Set E)
     (hWtarget : W ∩ Set.range (I : E → E) ⊆ (extChartAt I x).target) :
     ContinuousOn (apm_t96A08_omegaCoord I omega x) (W ∩ Set.range (I : E → E)) := by
-  sorry
+  have hS : UniqueDiffOn ℝ (extChartAt I x).target := uniqueDiffOn_extChartAt_target x
+  have hcont := apm_t96A08_continuousOn_of_eval_contDiffOn _ _ hS
+    (apm_t96A08_omegaCoord_eval_contDiffOn I omega homega_smooth x)
+  exact hcont.mono hWtarget
 
 /-- Seat: the value at the centre (`(extChartAt I x).symm (extChartAt I x x) = x`). -/
 theorem apm_t96A08_omegaCoord_centre
