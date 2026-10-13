@@ -141,6 +141,27 @@ theorem iteratedFDerivWithin_domDomCongr_decomposeFin_symm_zero
   have hv := DFunLike.congr_fun hd (Fin.tail v)
   simpa [Function.comp_def, Fin.tail, Equiv.Perm.decomposeFin_symm_apply_succ] using hv
 
+/-- A local symmetry identity for an iterated derivative lifts to the tail slots of the next
+iterated derivative. -/
+theorem iteratedFDerivWithin_domDomCongr_decomposeFin_symm_zero_of_eventuallyEq
+    {E F : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [NormedAddCommGroup F] [NormedSpace ℝ F]
+    {s : Set E} {f : E → F} {x : E} {n : ℕ}
+    (hu : UniqueDiffOn ℝ s) (hxs : x ∈ s) (sigma : Equiv.Perm (Fin n))
+    (hg : Filter.EventuallyEq (nhdsWithin x s)
+      (fun y => (iteratedFDerivWithin ℝ n f s y).domDomCongr sigma)
+      (iteratedFDerivWithin ℝ n f s)) :
+    (iteratedFDerivWithin ℝ (n + 1) f s x).domDomCongr
+        (Equiv.Perm.decomposeFin.symm (0, sigma)) =
+      iteratedFDerivWithin ℝ (n + 1) f s x := by
+  ext v
+  simp only [ContinuousMultilinearMap.domDomCongr_apply,
+    iteratedFDerivWithin_succ_apply_left]
+  have hd := ContinuousMultilinearMap.domDomCongr_fderivWithin_eq_self_of_eventuallyEq
+    (iteratedFDerivWithin ℝ n f s) hu hxs sigma hg (v 0)
+  have hv := DFunLike.congr_fun hd (Fin.tail v)
+  simpa [Function.comp_def, Fin.tail, Equiv.Perm.decomposeFin_symm_apply_succ] using hv
+
 /-- Symmetry of the lower jet's second derivative exchanges the first two slots of the
 corresponding higher iterated derivative. -/
 theorem iteratedFDerivWithin_domDomCongr_swap_zero_one
