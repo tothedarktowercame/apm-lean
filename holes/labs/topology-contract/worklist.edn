@@ -113850,14 +113850,14 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "Recorded fixture hash mismatch: :fixture.sha256 is 0bca6ce32c019fc3053c7f813c26917169cf817375b44d5e722b864b61a526450c1, but ConstructionTargets/PointWedgeVanKampen.blueprint.md at recorded commit c9b3af27 has exact SHA-256 0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0. Re-record the fixture hash for the reviewed commit.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
    :evidence
    {:placeholder-delta {:source-before 0, :source-after 0},
     :residual
-    "Compute the right projection of rightBase from the outer comparisons; if unit, factor through inl, then B6/B12.",
+    "Project the forward right comparison; prove unit, factor through inl, then B6/B12.",
     :outcome :stop,
     :warnings ["existing linter"],
     :missing-theorems
@@ -113871,9 +113871,9 @@
       :area "fundamental-group-wedge-of-circles"}],
     :statement-hashes
     {:source
-     "250a3f1bdc6c13f5a9965bb5caa9bfde41b6be5df5692bf54ae50b76abf7479a",
+     "832770ff2e711fcc6189b92feaf5ae839ad7766438447ec1f6ce4bb1dfd83e07",
      :documentation
-     "89386a58e3fef827ab105a1bfa994d695ae8f85e66b0d651633d96dc9e0cb9d0",
+     "be3928bac4940d69087fc957f71e07d44479543887a35b3a871056ef73a1918b",
      :blueprint
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0",
      :registry "149/149"},
@@ -113881,7 +113881,7 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
     :reason
-    "An inl factorization requires trivial canonical right projection; the outer-comparison projection is not yet computed.",
+    "Left outer comparison projects trivially; rightBase projection is the forward right comparison.",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/PointWedgeVanKampen.lean",
@@ -113891,11 +113891,14 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "diff/hash/placeholders", :exit 0}],
     :diagnostic-history
-    [{:cmd
+    [{:cmd "lean drafts",
+      :exit 1,
+      :finding "Exposed base and multiplication."}
+     {:cmd
       "lake build ConstructionTargets.ThreeCirclesFundamentalGroup",
       :exit 1,
-      :finding "B12 absent"}],
-    :commit "1dabaf035886d47a295c30e16fb48ca7cfe7c11a",
+      :finding "B12 absent."}],
+    :commit "1c51963461c549d07303ba064c2f971dcc462617",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
      "ConstructionTargets/PointWedgeVanKampen.md"],
@@ -113905,7 +113908,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
