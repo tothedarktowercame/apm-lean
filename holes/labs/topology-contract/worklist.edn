@@ -113850,14 +113850,14 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 3,
+   :stop-count 4,
    :review-finding
    "Recorded fixture hash mismatch: :fixture.sha256 is 0bca6ce32c019fc3053c7f813c26917169cf817375b44d5e722b864b61a526450c1, but ConstructionTargets/PointWedgeVanKampen.blueprint.md at recorded commit c9b3af27 has exact SHA-256 0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0. Re-record the fixture hash for the reviewed commit.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
    :evidence
    {:placeholder-delta {:source-before 0, :source-after 0},
     :residual
-    "Prove the exposed transport equation; then projection=1, inl, B6/B12.",
+    "Compare canonical base transport with endpoint transport * inverse mapped unitInv; then projection/inl/B6/B12.",
     :outcome :stop,
     :warnings ["existing linter"],
     :missing-theorems
@@ -113871,9 +113871,9 @@
       :area "fundamental-group-wedge-of-circles"}],
     :statement-hashes
     {:source
-     "329ae4c47b2fab4c765294a328e51ea94acc635a9a9f94836c32de01e7ab545f",
+     "df354ade053c4b62bc5688bd0556d343517f1916a40f517cb7293844831396e6",
      :documentation
-     "c7662b88617c6588729661f8000c0c30eb94ea15851599b5f03d95a6eb3896e1",
+     "574e024912cde81009d136c43f35a7b4e1e3ecfe9cc04cca83ed5d3619ac55e1",
      :blueprint
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0",
      :registry "150/150"},
@@ -113881,7 +113881,7 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
     :reason
-    "Comparator reduced to transport times inverse mapped unitInv.",
+    "Inverse-span component normalized to canonical right-base eqToHom.",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/PointWedgeVanKampen.lean",
@@ -113891,25 +113891,11 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "sha256/diff/placeholders", :exit 0}],
     :diagnostic-history
-    [{:cmd "lean equality draft",
-      :exit 1,
-      :finding "Reduced to transport-vs-unitInv; removed."}
-     {:cmd
+    [{:cmd
       "lake build ConstructionTargets.ThreeCirclesFundamentalGroup",
       :exit 1,
       :finding "B12 absent."}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1791913099560-10132-9ed41b8d",
-     :commands
-     ["git show/diff-tree 25eff1a3a"
-      "git archive 25eff1a3a; lake env lean archived PointWedgeVanKampen.lean"
-      "lake build ConstructionTargets.PointWedgeVanKampen"
-      "sha256sum; placeholder delta; statement-registry.py check"],
-     :finding
-     "Recorded scope is target+note; source/doc/fixture hashes match 329ae4c4/c7662b88/0bca6ce3. Archived and target builds pass; placeholders 0->0, registry 150/150, standard axioms only. Equality is correctly oriented: it retains source transport h.1, rewrites inverse counit as inverse mapped unitInv, and cancels the terminal h.2 transport. This is compiled progress beyond the typed-comparator milestone; transport-vs-unitInv equality, projection/B6/B12 remain."},
-    :commit "25eff1a3a094db98c8bdd6cf6c9a98ca9a30c480",
+    :commit "dd1c02c5e65e2f61917b6da8818b85213ff217f9",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
      "ConstructionTargets/PointWedgeVanKampen.md"],
@@ -113919,7 +113905,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
