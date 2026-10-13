@@ -113850,14 +113850,14 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 8,
+   :stop-count 9,
    :review-finding
    "Recorded fixture hash mismatch: :fixture.sha256 is 0bca6ce32c019fc3053c7f813c26917169cf817375b44d5e722b864b61a526450c1, but ConstructionTargets/PointWedgeVanKampen.blueprint.md at recorded commit c9b3af27 has exact SHA-256 0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0. Re-record the fixture hash for the reviewed commit.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
    :evidence
    {:placeholder-delta {:source-before 0, :source-after 0},
     :residual
-    "Rewrite the expanded left comparison with this injected square; then B6/B12.",
+    "Identify the round-trip predecessor with the actual left action; then B6/B12.",
     :outcome :stop,
     :warnings ["existing linter"],
     :missing-theorems
@@ -113871,9 +113871,9 @@
       :area "fundamental-group-wedge-of-circles"}],
     :statement-hashes
     {:source
-     "362eed89aa95ae202998c7b9e64463aaa417bd4afcca236d62f6233598bc7b98",
+     "c0f8725d47d3eaeb58e14719ba752f304f9d81d4dea1dea7711ed4372c606ccf",
      :documentation
-     "f5b78deb4bdd0906186b869525b26e7883b03f7aab201f4528f77ff09ec57e6a",
+     "d8fb138858d1c999eeb3e096ced710064c776bc52299b634ef55602e4f6e0fcf",
      :blueprint
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0",
      :registry "147/147"},
@@ -113881,7 +113881,7 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
     :reason
-    "Transported the typed left connector square through the coproduct injection used by B6.",
+    "Rewrote the full left comparison by the injected counit square into its typed round-trip predecessor form.",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/PointWedgeVanKampen.lean",
@@ -113891,26 +113891,11 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "diff/hash/placeholders", :exit 0}],
     :diagnostic-history
-    [{:cmd "lean draft",
-      :exit 1,
-      :finding "Added explicit free-product result types."}
-     {:cmd
+    [{:cmd
       "lake build ConstructionTargets.ThreeCirclesFundamentalGroup",
       :exit 1,
       :finding "B12 file absent."}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1791876501340-8929-bd30d2eb",
-     :commands
-     ["git archive b5a4a335; lake env lean <archive>/ConstructionTargets/PointWedgeVanKampen.lean"
-      "lake build ConstructionTargets.PointWedgeVanKampen"
-      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (exit 1: declared B12 residual absent)"
-      "python3 scripts/statement-registry.py check"
-      "git diff-tree/show sha256/git grep placeholders"],
-     :finding
-     "PASS program STOP: b5a4a335 is new after history, changes only scoped Lean/MD files, and commits compiled sorry-free progress. Hashes match source 362eed89, docs f5b78deb, fixture 0bca6ce3; registry 147/147; sorry/admit 0->0; the theorem uses only propext, Classical.choice, Quot.sound. It applies congrArg of the typed left coproduct injection to the exact connector-square equality, preserving every factor and its order. Both source morphisms are already fixed-base endomorphisms before injection, and explicit free-product result types prevent an implicit representation change; no dependent cancellation is introduced. Rewriting B6 with this equality and constructing B12 remain listed."},
-    :commit "b5a4a335b2976b14d963e1e7075cfc25f1100dc8",
+    :commit "29cc465b8c3a1ef469346cee6d4de6b89259b902",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
      "ConstructionTargets/PointWedgeVanKampen.md"],
@@ -113920,7 +113905,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
