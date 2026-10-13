@@ -88,6 +88,9 @@ def superlevel (p : ℂ[X]) : Set ℂ :=
 def sublevel (p : ℂ[X]) : Set ℂ :=
   {z : ℂ | ‖aeval z p‖ < 1}
 
+/-- The finite type of distinct roots used to label sublevel components. -/
+abbrev rootLabels (p : ℂ[X]) := ↥(Polynomial.roots p).toFinset
+
 lemma isClosed_lemniscate : IsClosed (lemniscate p) := by
   exact isClosed_eq p.differentiable_aeval.continuous.norm
     (continuous_const : Continuous (fun _ : ℂ => (1 : ℝ)))
@@ -483,8 +486,75 @@ proof of the earlier `Nat.card` statement (`af63c04b`) injects the components in
 the distinct roots of `p` plus one superlevel marker, which is the route for
 `ENat.card` as well.
 -/
+theorem exists_component_label_injection (hp : 0 < p.natDegree) :
+    ∃ label : ConnectedComponents ↥((lemniscate p)ᶜ) → rootLabels p ⊕ Unit,
+      Function.Injective label := by
+  classical
+  let rep : ConnectedComponents ↥((lemniscate p)ᶜ) →
+      ↥((lemniscate p)ᶜ) := fun c =>
+    Classical.choose (ConnectedComponents.surjective_coe c)
+  have hrep (c : ConnectedComponents ↥((lemniscate p)ᶜ)) :
+      (rep c : ConnectedComponents ↥((lemniscate p)ᶜ)) = c :=
+    Classical.choose_spec (ConnectedComponents.surjective_coe c)
+  have hp0 : p ≠ 0 := by
+    intro hpzero
+    subst p
+    simp at hp
+  have hroot (c : ConnectedComponents ↥((lemniscate p)ᶜ))
+      (hnot : ¬ componentSet (rep c) ⊆ superlevel p) :
+      ∃ r : rootLabels p, (r : ℂ) ∈ componentSet (rep c) := by
+    have hsub : componentSet (rep c) ⊆ sublevel p :=
+      (componentSet_subset_superlevel_or_sublevel (p := p) (rep c)).resolve_left hnot
+    obtain ⟨z, hzcomp, hzroot⟩ :=
+      exists_root_in_componentSet_of_subset_sublevel (p := p) hp (rep c) hsub
+    have hzmem : z ∈ (Polynomial.roots p).toFinset := by
+      rw [Multiset.mem_toFinset, mem_roots_iff_aeval_eq_zero hp0]
+      exact hzroot
+    exact ⟨⟨z, hzmem⟩, hzcomp⟩
+  let label : ConnectedComponents ↥((lemniscate p)ᶜ) → rootLabels p ⊕ Unit :=
+    fun c => if h : componentSet (rep c) ⊆ superlevel p then
+      Sum.inr ()
+    else
+      Sum.inl (Classical.choose (hroot c h))
+  refine ⟨label, ?_⟩
+  intro a b hab
+  by_cases ha : componentSet (rep a) ⊆ superlevel p
+  · by_cases hb : componentSet (rep b) ⊆ superlevel p
+    · exact (hrep a).symm.trans <|
+        (component_eq_of_subset_superlevel (p := p) hp ha hb).trans (hrep b)
+    · simp only [label, dif_pos ha, dif_neg hb] at hab
+      exact (Sum.inr_ne_inl hab).elim
+  · by_cases hb : componentSet (rep b) ⊆ superlevel p
+    · simp only [label, dif_neg ha, dif_pos hb] at hab
+      exact (Sum.inl_ne_inr hab).elim
+    · have hchosen_a :
+          ((Classical.choose (hroot a ha) : rootLabels p) : ℂ) ∈
+            componentSet (rep a) := Classical.choose_spec (hroot a ha)
+      have hchosen_b :
+          ((Classical.choose (hroot b hb) : rootLabels p) : ℂ) ∈
+            componentSet (rep b) := Classical.choose_spec (hroot b hb)
+      have heq : Classical.choose (hroot a ha) =
+          Classical.choose (hroot b hb) := by
+        simpa only [label, dif_neg ha, dif_neg hb, Sum.inl.injEq] using hab
+      have hcomponents :
+          (rep a : ConnectedComponents ↥((lemniscate p)ᶜ)) = rep b := by
+        apply componentSet_eq_of_common_point (p := p) hchosen_a
+        simpa [heq] using hchosen_b
+      exact (hrep a).symm.trans (hcomponents.trans (hrep b))
+
 theorem connectedComponents_complement_lemniscate_le (hp : 0 < p.natDegree) :
     ENat.card (ConnectedComponents ↥((lemniscate p)ᶜ)) ≤ p.natDegree + 1 := by
-  sorry
+  obtain ⟨label, hlabel⟩ := exists_component_label_injection (p := p) hp
+  calc
+    ENat.card (ConnectedComponents ↥((lemniscate p)ᶜ)) ≤
+        ENat.card (rootLabels p ⊕ PUnit) :=
+      ENat.card_le_card_of_injective hlabel
+    _ = (Polynomial.roots p).toFinset.card + 1 := by
+      rw [ENat.card_eq_coe_fintype_card]
+      simp [rootLabels]
+    _ ≤ p.natDegree + 1 := by
+      exact_mod_cast Nat.add_le_add_right (card_roots_le_degree (p := p) hp) 1
+
+#print axioms connectedComponents_complement_lemniscate_le
 
 end ApmCanaries.A00J04
