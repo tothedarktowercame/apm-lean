@@ -113898,6 +113898,17 @@
       "lake build ConstructionTargets.ThreeCirclesFundamentalGroup",
       :exit 1,
       :finding "B12 absent."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791895414509-9659-f28d3fdf",
+     :commands
+     ["git show/diff c8e374ff^..c8e374ff"
+      "git archive c8e374ff; lake env lean archived PointWedgeVanKampen.lean"
+      "sha256/diff-tree/placeholder checks; statement-registry.py check"
+      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (expected absent)"],
+     :finding
+     "Reviewer codex-3. PASS program STOP: c8e374ff adds two compiled, sorry-free supporting theorems after c62c3bd6. The naturality square has the correct inv-transformation orientation, and the coordinate-side unitInv image is legitimately identity because the intermediate FundamentalGroupoid Unit hom is subsingleton; dependent endpoints stay intact. Scope is Lean+MD only; source/doc/fixture hashes match ledger (ba366aa7/1cbd763b/0bca6ce3), placeholders 0, registry 149/149, axioms standard only. Residual: reduce the transported side by the eK triangle, then projection=1, inl, B6/B12; B12 remains absent."},
     :commit "c8e374ff521df243a02e2fde5b8440ac827b8608",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
@@ -113908,7 +113919,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113929,7 +113940,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Component target is the literal right base.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Naturality square banked; coordinate unitInv map is identity.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -114685,7 +114696,11 @@
      :reason "Round-trip component source endpoint exposed."}
     {:job 7,
      :commit "c62c3bd675449785201293ac0d5f71e9d97559ee",
-     :reason "Component target is the literal right base."}]}
+     :reason "Component target is the literal right base."}
+    {:job 8,
+     :commit "c8e374ff521df243a02e2fde5b8440ac827b8608",
+     :reason
+     "Naturality square banked; coordinate unitInv map is identity."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
