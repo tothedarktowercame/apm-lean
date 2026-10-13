@@ -872,4 +872,25 @@ theorem exists_whitneyStratumNet_dist_le_of_not_mem
   obtain ⟨c, hc, hxc⟩ := exists_mem_whitneyStratumNet_dist_le s hxk
   exact ⟨k, c, hc, hxk, hxc⟩
 
+/-- Distinct centers in one chosen stratum net are separated by `2^k/8` in
+the real-valued metric. -/
+theorem whitneyStratumNet_pairwise_dist
+    {E : Type*} [PseudoMetricSpace E] (s : Set E) (k : ℤ) :
+    (whitneyStratumNet s k).Pairwise fun x y =>
+      (2 : ℝ) ^ k / 8 ≤ dist x y := by
+  intro x hx y hy hxy
+  have hsep := (whitneyStratumNet_spec s k).2.1 hx hy hxy
+  exact le_of_lt (by simpa [whitneyStratumRadius, edist_dist] using hsep)
+
+/-- At a fixed dyadic scale, only finitely many selected centers lie in a
+compact metric region. -/
+theorem finite_inter_whitneyStratumNet_of_isCompact
+    {E : Type*} [MetricSpace E] (s : Set E) (k : ℤ) {K : Set E}
+    (hK : IsCompact K) : (whitneyStratumNet s k ∩ K).Finite := by
+  apply finite_of_subset_compact_of_pairwise_dist
+    (t := whitneyStratumNet s k ∩ K) (ε := (2 : ℝ) ^ k / 8)
+    hK Set.inter_subset_right (by positivity)
+  intro x hx y hy hxy
+  exact whitneyStratumNet_pairwise_dist s k hx.1 hy.1 hxy
+
 end ConstructionTargets.SardConvexDomain
