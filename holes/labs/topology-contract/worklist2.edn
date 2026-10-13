@@ -81672,7 +81672,8 @@
    [:lemma-nodal-punctured-neighborhood-disconnected
     :lemma-apm-t94a08-affinebranches-inter
     :lemma-apm-t94a08-puncturedaffinecross-not-ispreconnected
-    :lemma-apm-t94a08-puncturedaffinecross-homeomorph-image-not-ispreconnected],
+    :lemma-apm-t94a08-puncturedaffinecross-homeomorph-image-not-ispreconnected
+    :lemma-apm-t94a08-sigma2-zerochart-mem-iff],
    :other-consumers []}
   {:consumer :t94A10,
    :phase :lemma,
@@ -87724,63 +87725,54 @@
    :depends-on [],
    :other-consumers []}
   {:consumer :t94A08,
-   :stop-count 5,
+   :stop-count 6,
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Identify the punctured projective sigma2 chart slice with the affine cross, then derive the Euclidean contradiction.",
-    :stop-count 5,
+    "Restrict the chart equivalence to the punctured sigma2 slice, then contradict connected punctured Euclidean discs.",
+    :stop-count 6,
     :outcome :stop,
     :warnings ["preexisting Lean lints"],
     :missing-theorems
-    [{:name
-      "apm_t94a08_puncturedAffineCross_homeomorph_image_not_isPreconnected",
+    [{:name "apm_t94a08_sigma2_zeroChart_mem_iff",
       :type
-      "∀ e : (ℂ×ℂ) ≃ₜ X, ¬ IsPreconnected (e '' apm_t94a08_puncturedAffineCross)",
+      "rep p 0 != 0 -> (p in sigma2 iff zero-chart coordinates p lie in the affine branch union)",
       :status :proved,
       :consumers [:t94A08],
-      :depends-on
-      ["apm_t94a08_puncturedAffineCross_not_isPreconnected"],
+      :depends-on [],
       :area "projective-affine-chart-homeomorph"}
      {:name "apm_t94a08_nodal_not_manifold_at",
-      :type
-      "¬ apm_t94a08_IsRealTwoManifoldAt apm_t94a08_sigma2 apm_t94a08_node",
+      :type "not IsRealTwoManifoldAt sigma2 node",
       :status :partial,
       :consumers [:t94A08],
       :depends-on
-      ["apm_t94a08_puncturedAffineCross_homeomorph_image_not_isPreconnected"],
+      ["apm_t94a08_sigma2_zeroChart_mem_iff"
+       "apm_t94a08_puncturedAffineCross_homeomorph_image_not_isPreconnected"],
       :area "projective-affine-chart-homeomorph"}],
     :statement-hashes {:registry "150/0"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
     :reason
-    "Banked homeomorphism transport of the punctured-cross obstruction; identify the projective chart slice next.",
+    "Banked exact zeroth-chart membership identification for sigma2; punctured-slice topology remains.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t94A08Closure.lean",
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-     {:cmd "git show --check 544437f31", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1791921183264-10320-3a3eb96b",
-     :commands
-     ["git show/diff-tree/SHA256 8a1cfb44a"
-      "git show --check 8a1cfb44a"
-      "statement-registry.py check (150/0)"
-      "blueprint dependency review"],
-     :finding
-     "Valid program STOP with a new blueprint milestone. Exact one-file scope and fixture SHA match. B1 and B2 are true, use sufficient stated dependencies, faithfully match the Lean predicates, and are both used by assembly. Registry 150/0; no defect. Next milestones: prove the two named LIBRARY results."},
-    :commit "544437f31",
+     {:cmd "git show --check 1a39ba8e2", :exit 0}],
+    :diagnostic-history
+    [{:cmd "initial compile",
+      :exit 1,
+      :correction "normalized field-simp zero products"}],
+    :commit "1a39ba8e2",
     :changed-paths ["ConstructionTargets/t94A08Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t94A08Closure.lean",
      :sha256
-     "b2c338679dbdff90d8fd804f02da51902f1ca9a62780601ec4a9a6fe40425ef0"},
+     "7087e954c039019e6d25d42a87418c30c0e39e34c05d7b8df25438661440b172"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t94A08/lean/Main.lean"
     "problems/t94A08/status.json"
@@ -88028,4 +88020,23 @@
    :kind :lemma,
    :depends-on
    [:lemma-apm-t94a08-puncturedaffinecross-not-ispreconnected],
+   :other-consumers []}
+  {:consumer :t94A08,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t94a08_sigma2_zeroChart_mem_iff",
+    :type
+    "rep p 0 != 0 -> (p in sigma2 iff zero-chart coordinates p lie in the affine branch union)"},
+   :lemma
+   {:name "apm_t94a08_sigma2_zeroChart_mem_iff",
+    :reported-by [:program-2026-10-13-close-t94a08],
+    :type
+    "rep p 0 != 0 -> (p in sigma2 iff zero-chart coordinates p lie in the affine branch union)",
+    :area "projective-affine-chart-homeomorph",
+    :proved-in :program-2026-10-13-close-t94a08},
+   :id :lemma-apm-t94a08-sigma2-zerochart-mem-iff,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers []}]}
