@@ -24430,24 +24430,24 @@
    :consumer :t01A08,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "extend Mathlib: state and prove the missing theorem in scope",
    :implements-lemma :lemma-closedset-whitneycubecover,
    :evidence
    {:placeholder-delta {:t01A08 [1 1]},
     :residual
-    "Normalize packing for a uniform cardinal bound; assemble B3; then B4-B7, B9.",
+    "Normalize packing, sum adjacent strata, assemble B3; then B4-B7, B9.",
     :outcome :stop,
     :warnings ["existing unnecessarySimpa:454"],
     :missing-theorems
     [{:name
-      "ConstructionTargets.SardConvexDomain.finite_whitneyStratumNet_mem_quarter_ball",
-      :type "fixed-stratum quarter-ball incidence is finite",
+      "ConstructionTargets.SardConvexDomain.encard_whitneyStratumNet_mem_quarter_ball_le_packingNumber",
+      :type "stratum incidence encard≤packingNumber at its scale",
       :status :proved,
       :consumers [:t01A08],
       :depends-on
-      ["ConstructionTargets.SardConvexDomain.finite_inter_whitneyStratumNet_of_isCompact"],
+      ["ConstructionTargets.SardConvexDomain.whitneyStratumNet_spec"],
       :area "sard-convex-domain"}
      {:name
       "ConstructionTargets.SardConvexDomain.closedSet_whitneyCubeCover_proper",
@@ -24455,7 +24455,7 @@
       :status :partial,
       :consumers [:t01A08],
       :depends-on
-      ["ConstructionTargets.SardConvexDomain.finite_whitneyStratumNet_mem_quarter_ball"
+      ["ConstructionTargets.SardConvexDomain.encard_whitneyStratumNet_mem_quarter_ball_le_packingNumber"
        "ConstructionTargets.SardConvexDomain.whitneyStratum_indices_le_add_one_of_mem_quarter_balls"],
       :area "sard-convex-domain"}],
     :statement-hashes {:registry "150/150"},
@@ -24463,36 +24463,25 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Committed per-stratum incidence finiteness: centers whose quarter-balls contain x lie in a compact scale-sized ball. Uniform normalized cardinality and assembly remain; not refuted.",
+    "Committed quantitative incidence bound by the packing number of the scale-sized ball. Normalize this bound, sum three adjacent strata, and assemble; not refuted.",
     :commands
     [{:cmd "lake build ConstructionTargets.SardConvexDomain", :exit 0}
      {:cmd "fixture; registry; scans; diff", :exit 0}
      {:cmd "git commit", :exit 0}],
     :diagnostic-history
-    [{:cmd "initial build",
+    [{:cmd "exploratory builds",
       :exit 1,
       :correction "fixed closed-ball distance orientation"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1791905742163-9951-ef74e745",
-     :commands
-     ["git show/diff fa37751; scope/orientation checks"
-      "sha256sum + lake env lean frozen fixture"
-      "lake build ConstructionTargets.SardConvexDomain"
-      "statement registry check; forbidden-count scan"],
-     :finding
-     "PASS. Recorded topo-10 commit fa37751 changes only the scoped Lean file and correctly proves fixed-stratum incidence finiteness. A contributing center lies in the stratum net and, by the stratum upper infDist bound, inside compact closedBall(x,2^(k+1)/4); the distance orientation is corrected explicitly. ProperSpace is the needed compactness boundary. Fixture hash 7401a97b... matches; build/fixture pass; registry 150/150; forbidden placeholders stay 0; only standard axioms. Valid compiled B3 progress; STOP leaves uniform normalized cardinality and assembly."},
-    :commit "fa37751a3c770179acc1d4c5cf86fdbc6f3f6e5a",
+    :commit "2ba0ec1732ec7a146c52d421bfa6d1fa8d36d543",
     :changed-paths ["ConstructionTargets/SardConvexDomain.lean"],
     :fixture
-    {:path "/tmp/t01a08_b3_stratum_incidence_check.lean",
+    {:path "/tmp/t01a08_b3_packing_number_check.lean",
      :sha256
-     "7401a97b432e6ed6bfb114f3517b501822dea5b6b39930c87319a4838470395f",
+     "a1dac993e46c45f2c188507197123266d77890489fef8ffbbd080cce50690a5d",
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain.blueprint/B3",
    :acceptance
@@ -35158,7 +35147,8 @@
     :lemma-constructiontargets-sardconvexdomain-finite-inter-whitneystratumnet-of-iscompact
     :lemma-constructiontargets-sardconvexdomain-infdist-center-comparable-of-mem-quarter-ba
     :lemma-constructiontargets-sardconvexdomain-whitneystratum-indices-le-add-one-of-mem-qu
-    :lemma-constructiontargets-sardconvexdomain-finite-whitneystratumnet-mem-quarter-ball],
+    :lemma-constructiontargets-sardconvexdomain-finite-whitneystratumnet-mem-quarter-ball
+    :lemma-constructiontargets-sardconvexdomain-encard-whitneystratumnet-mem-quarter-ball-l],
    :other-consumers []}
   {:consumer :t01A08,
    :phase :lemma,
@@ -35532,6 +35522,27 @@
    :kind :lemma,
    :depends-on
    [:lemma-constructiontargets-sardconvexdomain-finite-inter-whitneystratumnet-of-iscompact],
+   :other-consumers []}
+  {:consumer :t01A08,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.SardConvexDomain.encard_whitneyStratumNet_mem_quarter_ball_le_packingNumber",
+    :type "stratum incidence encard≤packingNumber at its scale"},
+   :lemma
+   {:name
+    "ConstructionTargets.SardConvexDomain.encard_whitneyStratumNet_mem_quarter_ball_le_packingNumber",
+    :reported-by [:r-a08-sard-b3-whitney-cubes-1],
+    :type "stratum incidence encard≤packingNumber at its scale",
+    :area "sard-convex-domain",
+    :proved-in :r-a08-sard-b3-whitney-cubes-1},
+   :id
+   :lemma-constructiontargets-sardconvexdomain-encard-whitneystratumnet-mem-quarter-ball-l,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-sardconvexdomain-whitneystratumnet-spec],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
