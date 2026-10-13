@@ -87772,6 +87772,18 @@
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "git show --check 3aca8b939", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791926668184-10549-e996cfb8",
+     :commands
+     ["scope/SHA256 checks at d59e0345d"
+      "recorded blob | lake env lean /dev/stdin"
+      "comment-stripped placeholder scan (0)"
+      "#print axioms witness theorem"
+      "statement-registry.py check (166/0)"],
+     :finding
+     "Valid program STOP with new compiled progress beyond history commit 02f7d5989. The theorem constructs nonzero exclusive points (r,I*r) and (r,-I*r) in every open neighborhood of zero, with branch orientations correct. Exact scope/hash match; placeholders 0; only standard axioms. Remaining milestone: chart transport and punctured-plane contradiction."},
     :commit "3aca8b939",
     :changed-paths ["ConstructionTargets/t94A08Closure.lean"],
     :fixture
@@ -87780,7 +87792,7 @@
      "f8b3abd5104eb858e2c551b3e351ff4cc27e68f27fe05e64a0958f579e7cf09f"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t94A08/lean/Main.lean"
     "problems/t94A08/status.json"
@@ -87798,7 +87810,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t94A08Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked the affine image obstruction for every open projective neighborhood of the node.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked non-preconnectedness of every punctured local sigma2 slice.",
    :id :program-2026-10-13-close-t94a08,
    :kind :final-adapter,
    :campaign-priority 30,
@@ -87854,7 +87866,11 @@
     {:job 3,
      :commit "e0af1bd17",
      :reason
-     "Banked the affine image obstruction for every open projective neighborhood of the node."}]}
+     "Banked the affine image obstruction for every open projective neighborhood of the node."}
+    {:job 4,
+     :commit "3aca8b939",
+     :reason
+     "Banked non-preconnectedness of every punctured local sigma2 slice."}]}
   {:consumer :t97A01,
    :stop-count 1,
    :evidence
@@ -88486,7 +88502,7 @@
    :other-consumers []}
   {:consumer :t94A08,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "apm_t94a08_puncturedSigma2ZeroChartIn_not_isPreconnected",
@@ -88498,7 +88514,9 @@
     :type
     "IsOpen U -> node in U -> not IsPreconnected (puncturedSigma2ZeroChartIn U)",
     :area "projective-affine-chart-homeomorph",
-    :proved-in :program-2026-10-13-close-t94a08},
+    :proved-in :program-2026-10-13-close-t94a08,
+    :banked-by :program-2026-10-13-close-t94a08,
+    :banked-commit "3aca8b939"},
    :id :lemma-apm-t94a08-puncturedsigma2zerochartin-not-ispreconnected,
    :kind :lemma,
    :depends-on
