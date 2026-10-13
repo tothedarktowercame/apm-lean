@@ -113898,6 +113898,17 @@
       "lake build ConstructionTargets.ThreeCirclesFundamentalGroup",
       :exit 1,
       :finding "B12 absent."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791907662107-9967-6e594483",
+     :commands
+     ["git show/diff 2e28f3e1^..2e28f3e1"
+      "git archive 2e28f3e1; lake env lean archived PointWedgeVanKampen.lean"
+      "sha256/diff-tree/placeholder checks; statement-registry.py check"
+      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (expected absent)"],
+     :finding
+     "Reviewer codex-3. PASS program STOP: 2e28f3e1 adds a compiled, sorry-free exact criterion after 379c0dfd. In the correct vertex-group instance it applies mul_eq_one_iff_eq_inv to the ordered inverse-span and unshifted round-trip normal forms, so both implication directions and representation are faithful. Scope is Lean+MD only; hashes match ledger (588a27a5/36e122ab/0bca6ce3), placeholders 0, registry 150/150, axioms standard only. Residual: prove inverse-span NF equals inverse unshifted round-trip NF, then projection=1, inl, B6/B12; B12 absent."},
     :commit "2e28f3e152eeb2232628dd57c54669f86375e72b",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
@@ -113908,7 +113919,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113929,7 +113940,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Right-base projection identified with chosen-base normal-form product.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Projection=1 iff the exact inverse normal-form comparison.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -114717,7 +114728,11 @@
     {:job 7,
      :commit "379c0dfd105ac978c5d8a4a314fadbaef8cc3ac9",
      :reason
-     "Right-base projection identified with chosen-base normal-form product."}]}
+     "Right-base projection identified with chosen-base normal-form product."}
+    {:job 8,
+     :commit "2e28f3e152eeb2232628dd57c54669f86375e72b",
+     :reason
+     "Projection=1 iff the exact inverse normal-form comparison."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
