@@ -1366,3 +1366,5 @@ that factorwise composite with the earlier transported comparator without
 normalizing the mapped equivalence component.
 `genericPointWedgeOuterRight_typedTransportComposite_eq_map` then exposes it
 as the canonical endpoint transport followed by inverse mapped `unitInv`.
+`genericPointWedgeOuterRight_typedTransportComposite_comp_map_unitInv` cancels
+that inverse against the mapped `unitInv`, leaving the named source transport.

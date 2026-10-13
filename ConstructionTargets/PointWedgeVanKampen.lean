@@ -6856,6 +6856,22 @@ theorem genericPointWedgeOuterRight_typedTransportComposite_eq_map :
   rw [genericPointWedgeOuterRight_typedTransportComposite_eq_transport,
     genericPointWedgeOuterRight_transportInvRoundTrip_eq_map]
 
+/-- The typed comparator cancels against the mapped `unitInv` that it exposes. -/
+theorem genericPointWedgeOuterRight_typedTransportComposite_comp_map_unitInv :
+    let r := genericPointWedgeActualRight x₀ y₀ M N
+    let eK := genericPointWedgeOverlapGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let eR := genericPointWedgeRightGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let z := genericPointWedgeOverlapBase x₀ y₀ M N
+    genericPointWedgeOuterRight_typedTransportComposite
+        x₀ y₀ M N hM hN hy hx cM cN ≫
+        (r ⋙ eR.functor).map (eK.unitInv.app z) =
+      genericPointWedgeOuterRight_sourceTransport
+        x₀ y₀ M N hM hN hy hx cM cN := by
+  rw [genericPointWedgeOuterRight_typedTransportComposite_eq_map]
+  simp [genericPointWedgeOuterRight_sourceTransport]
+
 /-- An `inl` factorization of the right-base conjugator forces its canonical
 right projection to be trivial. -/
 theorem genericPointWedgeRightBase_inl_implies_rightProjection_eq_one
