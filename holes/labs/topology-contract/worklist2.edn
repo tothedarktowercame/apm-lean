@@ -87943,6 +87943,18 @@
     [{:cmd "initial B5 compile",
       :exit 1,
       :correction "qualified open-cover API and fixed iso notation"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791935436514-10938-7840e477",
+     :commands
+     ["scope/SHA256 checks at f28078582"
+      "recorded blob | lake env lean /dev/stdin"
+      "comment-stripped placeholder scan (0)"
+      "#print axioms innerOverlapHomology"
+      "statement-registry.py check (166/0)"],
+     :finding
+     "Valid program STOP with new compiled B5 progress beyond history commit 8aa7f457d. InnerPiece is the radial inner subtype and contracts to Unit; OverlapPiece is the exact cover intersection and its explicit equivalence is oriented overlap-to-Circle. The transported H0/H1 isomorphisms and higher-degree vanishing have the required directions. Exact one-file scope/hash match; placeholders 0; only standard axioms. Remaining milestones: B4 and B6-B10."},
     :commit "f28078582",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
@@ -87951,7 +87963,7 @@
      "5b4032799aac0135ac02b6d237f5043c31a77dcd93e8e2a57b23b5dc52bc677b"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -87971,7 +87983,7 @@
     :blueprint
     "ConstructionTargets/PolygonSurfaceHomology.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked B1-B3 homology notation, signed degrees, and boundary kernel/cokernel.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked B5 inner-piece and annular-overlap integral homology.",
    :id :program-2026-10-13-polygon-surface-homology,
    :kind :reusable-theorem,
    :campaign-priority 31,
@@ -87987,7 +87999,11 @@
     {:job 2,
      :commit "8aa7f457d",
      :reason
-     "Banked B1-B3 homology notation, signed degrees, and boundary kernel/cokernel."}]}
+     "Banked B1-B3 homology notation, signed degrees, and boundary kernel/cokernel."}
+    {:job 3,
+     :commit "f28078582",
+     :reason
+     "Banked B5 inner-piece and annular-overlap integral homology."}]}
   {:consumer :t97A01,
    :stop-count 0,
    :phase :implementation,
@@ -88731,7 +88747,7 @@
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "innerOverlapHomology",
@@ -88741,7 +88757,9 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "inner H0≅ℤ, Hk=0(k>0); overlap H0,H1≅ℤ, Hk=0(k>1)",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :program-2026-10-13-polygon-surface-homology,
+    :banked-commit "f28078582"},
    :id :lemma-inneroverlaphomology,
    :kind :lemma,
    :depends-on [],
