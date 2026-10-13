@@ -1509,4 +1509,26 @@ theorem whitneyDyadicScale_pos
     0 < whitneyDyadicScale q := by
   exact zpow_pos (by norm_num) _
 
+/-- The dyadic index obtained by flooring every basis coordinate at generation
+`k`. -/
+noncomputable def whitneyDyadicIndexOf
+    {E : Type*} [AddCommGroup E] [Module ℝ E]
+    [Module.Free ℝ E] [Module.Finite ℝ E] (k : ℤ) (x : E) :
+    WhitneyDyadicIndex E :=
+  (k, fun j => ⌊(Module.finBasis ℝ E).repr x j / (2 : ℝ) ^ k⌋)
+
+/-- At every generation, the floor-coordinate cube contains the given point. -/
+theorem mem_whitneyDyadicCube_indexOf
+    {E : Type*} [AddCommGroup E] [Module ℝ E]
+    [Module.Free ℝ E] [Module.Finite ℝ E] (k : ℤ) (x : E) :
+    x ∈ whitneyDyadicCube (whitneyDyadicIndexOf k x) := by
+  intro j
+  have hk : 0 < (2 : ℝ) ^ k := zpow_pos (by norm_num) _
+  constructor
+  · exact (le_div_iff₀ hk).mp (Int.floor_le _)
+  · apply (div_lt_iff₀ hk).mp
+    convert Int.lt_floor_add_one
+      ((Module.finBasis ℝ E).repr x j / (2 : ℝ) ^ k) using 1 <;>
+      simp [whitneyDyadicIndexOf]
+
 end ConstructionTargets.SardConvexDomain
