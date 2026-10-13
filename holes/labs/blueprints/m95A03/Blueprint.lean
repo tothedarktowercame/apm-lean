@@ -241,7 +241,7 @@ theorem apm_m95A03_solves_of_isMinOn
   linarith
 
 theorem apm_m95A03_homogenization
-    (a b α β : ℝ) (hab : a < b) (p q f u : ℝ → ℝ) :
+    (a b α β : ℝ) (hab : a < b) (p q f u : ℝ → ℝ) (hp : ContDiff ℝ 1 p) :
     let w := apm_m95A03_boundaryLift a b α β
     apm_m95A03_solves a b α β p q f u ↔
       apm_m95A03_solves a b 0 0 p q
@@ -309,7 +309,7 @@ theorem apm_m95a03
     · exact apm_m95A03_solves_of_isMinOn a b α β p₀ hab hp₀ p q f u
         hp hq hf hp_lower hq_nonneg hu2 hua hub
   constructor
-  · exact apm_m95A03_homogenization a b α β hab p q f
+  · exact fun u => apm_m95A03_homogenization a b α β hab p q f u hp
   · obtain ⟨u, hu2, huadm, humin⟩ :=
       apm_m95A03_exists_homogeneous_minimizer a b p₀ hab hp₀ p q f
         hp hq hf hp_lower hq_nonneg
