@@ -171,12 +171,243 @@ private def apm_t94a08_sigma1_isRealTwoManifold_aux_affineConicReal :
     apm_t94a08_sigma1_isRealTwoManifold_aux_cstarReal
 
 -- BEGIN SEAT AREA
+private theorem apm_t94a08_sigma1_isRealTwoManifold_aux_chartSlice_aux_zero :
+    Nonempty
+      (↑({p : apm_t94a08_CP2 | Projectivization.rep p (0 : Fin 3) ≠ 0} ∩
+          apm_t94a08_sigma1) ≃ₜ
+        T94A08AffineSmoothConicParam.AffineConic) := by
+  open ConstructionTargets.ComplexProjectiveChartTargets in
+      let a : Fin 3 := 0
+      let j : {j : Fin 3 // j ≠ a} := ⟨1, by decide⟩
+      let k : {j : Fin 3 // j ≠ a} := ⟨2, by decide⟩
+      let f : ↑({p : apm_t94a08_CP2 | Projectivization.rep p a ≠ 0} ∩
+          apm_t94a08_sigma1) → T94A08AffineSmoothConicParam.AffineConic :=
+        fun p ↦ ⟨(coordinates a p.1 j, coordinates a p.1 k), by
+          have ha : Projectivization.rep p.1 a ≠ 0 := p.2.1
+          have hq : apm_t94a08_quadratic1 (Projectivization.rep p.1) = 0 := p.2.2
+          unfold apm_t94a08_quadratic1 at hq
+          dsimp [coordinates, a, j, k]
+          rw [div_pow, div_pow]
+          calc
+            1 + Projectivization.rep p.1 1 ^ 2 / Projectivization.rep p.1 0 ^ 2 +
+                Projectivization.rep p.1 2 ^ 2 / Projectivization.rep p.1 0 ^ 2 =
+                (Projectivization.rep p.1 0 ^ 2 + Projectivization.rep p.1 1 ^ 2 +
+                  Projectivization.rep p.1 2 ^ 2) / Projectivization.rep p.1 0 ^ 2 := by
+                    rw [← div_self (pow_ne_zero 2 ha)]
+                    ring
+            _ = 0 := by rw [hq]; simp⟩
+      let g : T94A08AffineSmoothConicParam.AffineConic →
+          ↑({p : apm_t94a08_CP2 | Projectivization.rep p a ≠ 0} ∩
+            apm_t94a08_sigma1) := fun z ↦
+        ⟨chartInverse a (fun q ↦ if q.1 = 1 then z.1.1 else z.1.2), by
+          constructor
+          · exact ConstructionTargets.T94A08ProjectiveConic.chartInverse_mem_affineSource _ _
+          · rw [apm_t94a08_sigma1, mem_setOf_eq, apm_t94a08_quadratic1]
+            let v : Fin 3 → ℂ := fun q ↦ if h : q = a then 1 else
+              (fun q : {q : Fin 3 // q ≠ a} ↦ if q.1 = 1 then z.1.1 else z.1.2) ⟨q, h⟩
+            have hv : v ≠ 0 := by
+              intro h
+              have := congrFun h a
+              simpa [v, a] using this
+            obtain ⟨c, hc⟩ := Projectivization.exists_smul_eq_mk_rep ℂ v hv
+            change apm_t94a08_quadratic1
+              (Projectivization.rep (Projectivization.mk ℂ v hv)) = 0
+            rw [← hc]
+            dsimp [apm_t94a08_quadratic1, v, a]
+            have hz := z.2
+            simp only [Pi.smul_apply, Units.smul_def, smul_eq_mul]
+            ring_nf at hz ⊢
+            linear_combination c.1 ^ 2 * hz⟩
+      refine ⟨Homeomorph.mk (Equiv.mk f g ?_ ?_) ?_ ?_⟩
+      · intro p
+        apply Subtype.ext
+        dsimp [f, g]
+        have heq : (fun q : {q : Fin 3 // q ≠ a} =>
+            if q.1 = 1 then coordinates a p.1 j else coordinates a p.1 k) =
+            coordinates a p.1 := by
+          funext q
+          fin_cases q <;> simp [a, j, k]
+        rw [heq, ConstructionTargets.T94A08ProjectiveConic.chartInverse_coordinates]
+        exact p.2.1
+      · intro z
+        apply Subtype.ext
+        apply Prod.ext <;>
+          simp [f, g, j, k,
+            ConstructionTargets.T94A08ProjectiveConic.coordinates_chartInverse]
+      · apply Continuous.subtype_mk
+        apply Continuous.prodMk
+        · exact (continuous_apply j).comp
+            ((ConstructionTargets.T94A08ProjectiveConic.continuous_coordinates a).comp_continuous
+              continuous_subtype_val (fun p ↦ p.2.1))
+        · exact (continuous_apply k).comp
+            ((ConstructionTargets.T94A08ProjectiveConic.continuous_coordinates a).comp_continuous
+              continuous_subtype_val (fun p ↦ p.2.1))
+      · apply Continuous.subtype_mk
+        exact (ConstructionTargets.T94A08ProjectiveConic.continuous_chartInverse a).comp
+          (continuous_pi fun q ↦ by
+            fin_cases q <;> simp [a] <;> fun_prop)
+
+private theorem apm_t94a08_sigma1_isRealTwoManifold_aux_chartSlice_aux_one :
+    Nonempty
+      (↑({p : apm_t94a08_CP2 | Projectivization.rep p (1 : Fin 3) ≠ 0} ∩
+          apm_t94a08_sigma1) ≃ₜ
+        T94A08AffineSmoothConicParam.AffineConic) := by
+  open ConstructionTargets.ComplexProjectiveChartTargets in
+      let a : Fin 3 := 1
+      let j : {j : Fin 3 // j ≠ a} := ⟨0, by decide⟩
+      let k : {j : Fin 3 // j ≠ a} := ⟨2, by decide⟩
+      let f : ↑({p : apm_t94a08_CP2 | Projectivization.rep p a ≠ 0} ∩
+          apm_t94a08_sigma1) → T94A08AffineSmoothConicParam.AffineConic :=
+        fun p ↦ ⟨(coordinates a p.1 j, coordinates a p.1 k), by
+          have ha : Projectivization.rep p.1 a ≠ 0 := p.2.1
+          have hq : apm_t94a08_quadratic1 (Projectivization.rep p.1) = 0 := p.2.2
+          unfold apm_t94a08_quadratic1 at hq
+          dsimp [coordinates, a, j, k]
+          rw [div_pow, div_pow]
+          calc
+            1 + Projectivization.rep p.1 0 ^ 2 / Projectivization.rep p.1 1 ^ 2 +
+                Projectivization.rep p.1 2 ^ 2 / Projectivization.rep p.1 1 ^ 2 =
+                (Projectivization.rep p.1 0 ^ 2 + Projectivization.rep p.1 1 ^ 2 +
+                  Projectivization.rep p.1 2 ^ 2) / Projectivization.rep p.1 1 ^ 2 := by
+                    rw [← div_self (pow_ne_zero 2 ha)]
+                    ring
+            _ = 0 := by rw [hq]; simp⟩
+      let g : T94A08AffineSmoothConicParam.AffineConic →
+          ↑({p : apm_t94a08_CP2 | Projectivization.rep p a ≠ 0} ∩
+            apm_t94a08_sigma1) := fun z ↦
+        ⟨chartInverse a (fun q ↦ if q.1 = 0 then z.1.1 else z.1.2), by
+          constructor
+          · exact ConstructionTargets.T94A08ProjectiveConic.chartInverse_mem_affineSource _ _
+          · rw [apm_t94a08_sigma1, mem_setOf_eq, apm_t94a08_quadratic1]
+            let v : Fin 3 → ℂ := fun q ↦ if h : q = a then 1 else
+              (fun q : {q : Fin 3 // q ≠ a} ↦ if q.1 = 0 then z.1.1 else z.1.2) ⟨q, h⟩
+            have hv : v ≠ 0 := by
+              intro h
+              have := congrFun h a
+              simpa [v, a] using this
+            obtain ⟨c, hc⟩ := Projectivization.exists_smul_eq_mk_rep ℂ v hv
+            change apm_t94a08_quadratic1
+              (Projectivization.rep (Projectivization.mk ℂ v hv)) = 0
+            rw [← hc]
+            dsimp [apm_t94a08_quadratic1, v, a]
+            have hz := z.2
+            simp only [Pi.smul_apply, Units.smul_def, smul_eq_mul]
+            ring_nf at hz ⊢
+            linear_combination c.1 ^ 2 * hz⟩
+      refine ⟨Homeomorph.mk (Equiv.mk f g ?_ ?_) ?_ ?_⟩
+      · intro p
+        apply Subtype.ext
+        dsimp [f, g]
+        have heq : (fun q : {q : Fin 3 // q ≠ a} =>
+            if q.1 = 0 then coordinates a p.1 j else coordinates a p.1 k) =
+            coordinates a p.1 := by
+          funext q
+          fin_cases q <;> simp [a, j, k]
+        rw [heq, ConstructionTargets.T94A08ProjectiveConic.chartInverse_coordinates]
+        exact p.2.1
+      · intro z
+        apply Subtype.ext
+        apply Prod.ext <;>
+          simp [f, g, j, k,
+            ConstructionTargets.T94A08ProjectiveConic.coordinates_chartInverse]
+      · apply Continuous.subtype_mk
+        apply Continuous.prodMk
+        · exact (continuous_apply j).comp
+            ((ConstructionTargets.T94A08ProjectiveConic.continuous_coordinates a).comp_continuous
+              continuous_subtype_val (fun p ↦ p.2.1))
+        · exact (continuous_apply k).comp
+            ((ConstructionTargets.T94A08ProjectiveConic.continuous_coordinates a).comp_continuous
+              continuous_subtype_val (fun p ↦ p.2.1))
+      · apply Continuous.subtype_mk
+        exact (ConstructionTargets.T94A08ProjectiveConic.continuous_chartInverse a).comp
+          (continuous_pi fun q ↦ by
+            fin_cases q <;> simp [a] <;> fun_prop)
+
+private theorem apm_t94a08_sigma1_isRealTwoManifold_aux_chartSlice_aux_two :
+    Nonempty
+      (↑({p : apm_t94a08_CP2 | Projectivization.rep p (2 : Fin 3) ≠ 0} ∩
+          apm_t94a08_sigma1) ≃ₜ
+        T94A08AffineSmoothConicParam.AffineConic) := by
+  open ConstructionTargets.ComplexProjectiveChartTargets in
+      let a : Fin 3 := 2
+      let j : {j : Fin 3 // j ≠ a} := ⟨0, by decide⟩
+      let k : {j : Fin 3 // j ≠ a} := ⟨1, by decide⟩
+      let f : ↑({p : apm_t94a08_CP2 | Projectivization.rep p a ≠ 0} ∩
+          apm_t94a08_sigma1) → T94A08AffineSmoothConicParam.AffineConic :=
+        fun p ↦ ⟨(coordinates a p.1 j, coordinates a p.1 k), by
+          have ha : Projectivization.rep p.1 a ≠ 0 := p.2.1
+          have hq : apm_t94a08_quadratic1 (Projectivization.rep p.1) = 0 := p.2.2
+          unfold apm_t94a08_quadratic1 at hq
+          dsimp [coordinates, a, j, k]
+          rw [div_pow, div_pow]
+          calc
+            1 + Projectivization.rep p.1 0 ^ 2 / Projectivization.rep p.1 2 ^ 2 +
+                Projectivization.rep p.1 1 ^ 2 / Projectivization.rep p.1 2 ^ 2 =
+                (Projectivization.rep p.1 0 ^ 2 + Projectivization.rep p.1 1 ^ 2 +
+                  Projectivization.rep p.1 2 ^ 2) / Projectivization.rep p.1 2 ^ 2 := by
+                    rw [← div_self (pow_ne_zero 2 ha)]
+                    ring
+            _ = 0 := by rw [hq]; simp⟩
+      let g : T94A08AffineSmoothConicParam.AffineConic →
+          ↑({p : apm_t94a08_CP2 | Projectivization.rep p a ≠ 0} ∩
+            apm_t94a08_sigma1) := fun z ↦
+        ⟨chartInverse a (fun q ↦ if q.1 = 0 then z.1.1 else z.1.2), by
+          constructor
+          · exact ConstructionTargets.T94A08ProjectiveConic.chartInverse_mem_affineSource _ _
+          · rw [apm_t94a08_sigma1, mem_setOf_eq, apm_t94a08_quadratic1]
+            let v : Fin 3 → ℂ := fun q ↦ if h : q = a then 1 else
+              (fun q : {q : Fin 3 // q ≠ a} ↦ if q.1 = 0 then z.1.1 else z.1.2) ⟨q, h⟩
+            have hv : v ≠ 0 := by
+              intro h
+              have := congrFun h a
+              simpa [v, a] using this
+            obtain ⟨c, hc⟩ := Projectivization.exists_smul_eq_mk_rep ℂ v hv
+            change apm_t94a08_quadratic1
+              (Projectivization.rep (Projectivization.mk ℂ v hv)) = 0
+            rw [← hc]
+            dsimp [apm_t94a08_quadratic1, v, a]
+            have hz := z.2
+            simp only [Pi.smul_apply, Units.smul_def, smul_eq_mul]
+            ring_nf at hz ⊢
+            linear_combination c.1 ^ 2 * hz⟩
+      refine ⟨Homeomorph.mk (Equiv.mk f g ?_ ?_) ?_ ?_⟩
+      · intro p
+        apply Subtype.ext
+        dsimp [f, g]
+        have heq : (fun q : {q : Fin 3 // q ≠ a} =>
+            if q.1 = 0 then coordinates a p.1 j else coordinates a p.1 k) =
+            coordinates a p.1 := by
+          funext q
+          fin_cases q <;> simp [a, j, k]
+        rw [heq, ConstructionTargets.T94A08ProjectiveConic.chartInverse_coordinates]
+        exact p.2.1
+      · intro z
+        apply Subtype.ext
+        apply Prod.ext <;>
+          simp [f, g, j, k,
+            ConstructionTargets.T94A08ProjectiveConic.coordinates_chartInverse]
+      · apply Continuous.subtype_mk
+        apply Continuous.prodMk
+        · exact (continuous_apply j).comp
+            ((ConstructionTargets.T94A08ProjectiveConic.continuous_coordinates a).comp_continuous
+              continuous_subtype_val (fun p ↦ p.2.1))
+        · exact (continuous_apply k).comp
+            ((ConstructionTargets.T94A08ProjectiveConic.continuous_coordinates a).comp_continuous
+              continuous_subtype_val (fun p ↦ p.2.1))
+      · apply Continuous.subtype_mk
+        exact (ConstructionTargets.T94A08ProjectiveConic.continuous_chartInverse a).comp
+          (continuous_pi fun q ↦ by
+            fin_cases q <;> simp [a] <;> fun_prop)
+
 theorem apm_t94a08_sigma1_isRealTwoManifold_aux_chartSlice (i : Fin 3) :
     Nonempty
       (↑({p : apm_t94a08_CP2 | Projectivization.rep p i ≠ 0} ∩
           apm_t94a08_sigma1) ≃ₜ
         T94A08AffineSmoothConicParam.AffineConic) := by
-  sorry
+  fin_cases i
+  · exact apm_t94a08_sigma1_isRealTwoManifold_aux_chartSlice_aux_zero
+  · exact apm_t94a08_sigma1_isRealTwoManifold_aux_chartSlice_aux_one
+  · exact apm_t94a08_sigma1_isRealTwoManifold_aux_chartSlice_aux_two
 -- END SEAT AREA
 
 theorem apm_t94a08_sigma1_isRealTwoManifold :
