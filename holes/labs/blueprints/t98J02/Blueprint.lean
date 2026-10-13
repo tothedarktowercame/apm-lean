@@ -54,7 +54,22 @@ of either surface construction. -/
 theorem t98J02_separatesSet_not_preconnected
     {X : Type} [TopologicalSpace X] {s U V : Set X}
     (h : SeparatesSet s U V) : ¬ IsPreconnected s := by
-  sorry
+  rintro hs
+  obtain ⟨hU, hV, hcover, hdisj, hU_ne, hV_ne⟩ := h
+  have hcover' : s ⊆ (s ∩ U) ∪ (s ∩ V) := by
+    intro x hxs
+    rcases hcover hxs with hxU | hxV
+    · exact Or.inl ⟨hxs, hxU⟩
+    · exact Or.inr ⟨hxs, hxV⟩
+  have hU_ne' : (s ∩ (s ∩ U)).Nonempty := by
+    rcases hU_ne with ⟨x, hxs, hxU⟩
+    exact ⟨x, hxs, hxs, hxU⟩
+  have hV_ne' : (s ∩ (s ∩ V)).Nonempty := by
+    rcases hV_ne with ⟨x, hxs, hxV⟩
+    exact ⟨x, hxs, hxs, hxV⟩
+  rcases hs (s ∩ U) (s ∩ V) hU hV hcover' hU_ne' hV_ne' with
+    ⟨x, _, hxU, hxV⟩
+  exact Set.disjoint_left.1 hdisj hxU hxV
 
 /-- LIBRARY: explicit connected double-cover model of a genus-two surface.
 Path-connectedness of the lifted complement is recorded as the model's useful
