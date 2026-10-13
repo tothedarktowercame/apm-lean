@@ -446,7 +446,35 @@ theorem apm_m98A06_stationary_nonresonant_classification_of_duBoisReymond
     ∀ a : ℝ, 0 < a → (∀ k : ℤ, a ≠ k * Real.pi) →
       ∀ y : ℝ → ℝ, apm_m98a06_IsStationary a 0 1 y ↔
         ∀ x ∈ Icc (0 : ℝ) a, y x = Real.sin x / Real.sin a := by
-  sorry
+  intro a ha hnon y
+  have hsin : Real.sin a ≠ 0 :=
+    apm_m98a06_sin_ne_zero_of_nonresonant hnon
+  constructor
+  · intro hy
+    obtain ⟨hadm, A, B, hrep⟩ := (hDBR a 0 1 ha y).mp hy
+    have hzero := hrep 0 ⟨le_rfl, ha.le⟩
+    have hA : A = 0 := by
+      rw [hadm.2.1] at hzero
+      simpa using hzero.symm
+    have hend := hrep a ⟨ha.le, le_rfl⟩
+    have hB : B = 1 / Real.sin a := by
+      rw [hadm.2.2, hA] at hend
+      simp only [zero_mul, zero_add] at hend
+      apply (eq_div_iff hsin).2
+      exact hend.symm
+    intro x hx
+    rw [hrep x hx, hA, hB]
+    ring
+  · intro hy
+    apply (hDBR a 0 1 ha y).mpr
+    have hc := apm_m98a06_nonresonant_candidate_admissible hsin
+    have hadm : apm_m98a06_Admissible a 0 1 y := by
+      refine ⟨hc.1.congr (fun x hx => hy x hx), ?_, ?_⟩
+      · simpa using hy 0 ⟨le_rfl, ha.le⟩
+      · simpa [hsin] using hy a ⟨ha.le, le_rfl⟩
+    refine ⟨hadm, ⟨0, 1 / Real.sin a, fun x hx => ?_⟩⟩
+    rw [hy x hx]
+    ring
 -- END SEAT AREA
 
 theorem apm_m98A06_resonant_no_global_extrema_of_sine_computations
