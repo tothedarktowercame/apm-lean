@@ -113853,14 +113853,14 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 9,
+   :stop-count 10,
    :review-finding
    "Recorded fixture hash mismatch: :fixture.sha256 is 0bca6ce32c019fc3053c7f813c26917169cf817375b44d5e722b864b61a526450c1, but ConstructionTargets/PointWedgeVanKampen.blueprint.md at recorded commit c9b3af27 has exact SHA-256 0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0. Re-record the fixture hash for the reviewed commit.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
    :evidence
    {:placeholder-delta {:source-before 0, :source-after 0},
     :residual
-    "Compose the three typed factors and cancel; then projection/inl/B6/B12.",
+    "Prove typed composite cancellation; then projection/inl/B6/B12.",
     :outcome :stop,
     :warnings ["existing linter"],
     :missing-theorems
@@ -113874,16 +113874,16 @@
       :area "fundamental-group-wedge-of-circles"}],
     :statement-hashes
     {:source
-     "0f1328f0d4e988ed92136df122dcc1a9e3a6c74ea7b22dae165385309b3f528d",
+     "80d9d0d9e136a2084dc14fbff4784e51b826826720f764aabda7162a7c2c8da8",
      :documentation
-     "ba7d6e20a57d06cfec5c09e2ec104b6e3f61d33865054a17dbb713f13ad9ea38",
+     "a92666c0752923db1fe835600dc6cc92117ae6dd61d2926c43ed2331afa18b76",
      :blueprint
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0",
      :registry "150/150"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
-    :reason "Both endpoint transports packaged in exact hom-sets.",
+    :reason "Three typed comparator factors composed in order.",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/PointWedgeVanKampen.lean",
@@ -113893,22 +113893,14 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "sha256/diff/placeholders", :exit 0}],
     :diagnostic-history
-    [{:cmd
+    [{:cmd "direct composite equality draft",
+      :exit 1,
+      :finding "Reduced to mapped unitInv cancellation; removed."}
+     {:cmd
       "lake build ConstructionTargets.ThreeCirclesFundamentalGroup",
       :exit 1,
       :finding "B12 file absent."}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1791919833012-10284-f5104e15",
-     :commands
-     ["git show/diff-tree 03ff58979"
-      "git archive 03ff58979; lake env lean archived PointWedgeVanKampen.lean"
-      "lake build ConstructionTargets.PointWedgeVanKampen"
-      "sha256sum; placeholder delta; statement-registry.py check"],
-     :finding
-     "Recorded scope is target+note; source/doc/fixture hashes match 0f1328f0/ba7d6e20/0bca6ce3. Archived and target builds pass; placeholders 0->0, registry 150/150, standard axioms only. Source transport uses the symmetric right-base equality and target transport the named round-trip source equality, each in its explicit hom-set; with the prior typed inverse component this removes inferred-object ambiguity. New compiled progress is present; compose/cancel factors, projection/B6/B12 remain."},
-    :commit "03ff58979de86abe0f122eb94c5a67d10d9be638",
+    :commit "35e8a7a62fa92f7d31e1a3ab5df9dff91b43a32d",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
      "ConstructionTargets/PointWedgeVanKampen.md"],
@@ -113918,7 +113910,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :needs-owner,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
