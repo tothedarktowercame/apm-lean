@@ -1302,7 +1302,105 @@ theorem apm_t96j07_local_number_axis3
     apm_t96j07_HasLocalLefschetzNumber f
         (Projectivization.mk ℝ (apm_t96j07_axis 3) (by
           intro h; have := congrFun h 3; simp [apm_t96j07_axis] at this)) 1 := by
-  sorry
+  obtain ⟨chart, hsource, htarget, hcoord, hinv⟩ := hgen 3
+  let a : Fin 3 → ℝ := ![(1 : ℝ) / 4, 1 / 2, 3 / 4]
+  have haw : ∀ j, a j =
+      ((Fin.succAbove (3 : Fin 4) j).val + 1 : ℝ) / 4 := by
+    intro j
+    fin_cases j <;> norm_num [a, Fin.succAbove, Fin.lt_iff_val_lt_val]
+  have ha : ∀ j, 1 - a j ≠ 0 := by
+    intro j
+    fin_cases j <;> norm_num [a]
+  obtain ⟨link, hlink, orientation, horientation⟩ := hdegree a ha
+  have haction : ∀ y : apm_t96j07_E3,
+      f (chart.symm y) ∈ chart.source ∧
+      chart (f (chart.symm y)) =
+        WithLp.toLp 2 (fun j => a j * WithLp.ofLp y j) := by
+    intro y
+    obtain ⟨hv, hy⟩ := hinv y
+    let v : apm_t96j07_V := Fin.insertNth 3 1 (WithLp.ofLp y)
+    have hv3 : v 3 ≠ 0 := by simp [v]
+    have hAv3 : apm_t96j07_A v 3 ≠ 0 := by
+      norm_num [apm_t96j07_A, v]
+    rw [hy, hformula v hv]
+    constructor
+    · rw [hsource]
+      obtain ⟨u, hu⟩ := Projectivization.exists_smul_eq_mk_rep ℝ
+        (apm_t96j07_A v) (apm_t96j07_A_ne_zero hv)
+      rw [← hu]
+      exact mul_ne_zero (Units.ne_zero u) hAv3
+    · rw [hcoord _ _ hAv3]
+      apply WithLp.ofLp_injective 2
+      funext j
+      rw [WithLp.ofLp_toLp]
+      have hs : v ((3 : Fin 4).succAbove j) = WithLp.ofLp y j := by
+        fin_cases j <;> rfl
+      simp only [apm_t96j07_A, hs]
+      rw [show v 3 = 1 by simp [v], haw]
+      fin_cases j <;> norm_num [Fin.succAbove, Fin.lt_def] <;> ring
+  refine ⟨chart, ?_, ?_, 1, by norm_num, ?_, ?_, ?_, link, ?_, orientation, ?_⟩
+  · rw [hsource]
+    obtain ⟨u, hu⟩ := Projectivization.exists_smul_eq_mk_rep ℝ
+      (apm_t96j07_axis 3) (by
+        intro h
+        have hh := congrFun h 3
+        simp [apm_t96j07_axis] at hh)
+    rw [← hu]
+    exact mul_ne_zero (Units.ne_zero u) (by simp [apm_t96j07_axis])
+  · rw [hcoord (apm_t96j07_axis 3) (by
+        intro h
+        have hh := congrFun h 3
+        simp [apm_t96j07_axis] at hh) (by simp [apm_t96j07_axis])]
+    apply WithLp.ofLp_injective 2
+    funext j
+    simp [apm_t96j07_axis]
+  · rw [htarget]
+    exact Set.subset_univ _
+  · intro y hy
+    exact (haction y).1
+  · intro y hy heq
+    rw [(haction y).2] at heq
+    apply WithLp.ofLp_injective 2
+    funext j
+    have hj := congrArg (fun w : apm_t96j07_E3 => WithLp.ofLp w j) heq
+    simp only [WithLp.ofLp_toLp] at hj
+    fin_cases j
+    · norm_num [a] at hj
+      simpa using (show WithLp.ofLp y 0 = 0 by linarith [hj])
+    · norm_num [a] at hj
+      simpa using (show WithLp.ofLp y 1 = 0 by linarith [hj])
+    · norm_num [a] at hj
+      change (3 / 4 : ℝ) * WithLp.ofLp y 2 = WithLp.ofLp y 2 at hj
+      change WithLp.ofLp y 2 = 0
+      linarith [hj]
+  · intro x
+    have hs : chart.symm x.1 ∈ chart.source := chart.map_target (by
+      rw [htarget]
+      exact Set.mem_univ _)
+    have hact := haction x.1
+    refine ⟨by simpa only [one_smul] using hs,
+      by simpa only [one_smul] using hact.1, ?_⟩
+    have hdisp : (1 : ℝ) • x.1 - chart (f (chart.symm ((1 : ℝ) • x.1))) =
+        WithLp.toLp 2 (fun j => (1 - a j) * x.1 j) := by
+      simp only [one_smul]
+      rw [hact.2]
+      apply WithLp.ofLp_injective 2
+      funext j
+      change WithLp.ofLp x.1 j - a j * WithLp.ofLp x.1 j =
+          (1 - a j) * WithLp.ofLp x.1 j
+      ring
+    obtain ⟨hne, heq⟩ := hlink x
+    refine ⟨by rw [hdisp]; exact hne, ?_⟩
+    rw [heq]
+    apply Subtype.ext
+    simp only [Subtype.coe_mk]
+    rw [hdisp]
+  · intro z
+    rw [horientation]
+    have hprod : (∏ j, (1 - a j)) = (3 / 32 : ℝ) := by
+      norm_num [a, Fin.prod_univ_succ]
+    rw [hprod]
+    norm_num
 
 /-- Compute the four intrinsic local indices.  This is only the sorry-free
 assembly of the generic degree calculation and four independent chart leaves. -/
