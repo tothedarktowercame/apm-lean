@@ -36992,7 +36992,7 @@
   {:consumer :t95J05,
    :stop-count 0,
    :phase :implementation,
-   :state :open,
+   :state :superseded,
    :scope
    ["problems/t95J05/lean/Main.lean"
     "problems/t95J05/status.json"
@@ -37009,9 +37009,12 @@
     ["lake env lean problems/t95J05/lean/Main.lean"
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t95J05Closure.blueprint.md"},
+   :superseded-note
+   "t95J05 closed by the blueprint/lemma rounds, lemmas commit af154e824 (claude-14 2026-10-13)",
    :continue-from
    "NEXT JOB: copy holes/labs/blueprints/t95J05/BLUEPRINT.md's plan into ConstructionTargets/t95J05Closure.blueprint.md, move the blueprint's proved lemmas into place, then build the LIBRARY obligations one milestone per job.",
    :id :program-2026-10-13-close-t95j05,
+   :superseded-by :blueprint-t95J05,
    :kind :final-adapter,
    :campaign-priority 33,
    :fail-count 0,
@@ -37227,7 +37230,7 @@
   {:consumer :t96A08,
    :stop-count 0,
    :phase :implementation,
-   :state :open,
+   :state :superseded,
    :scope
    ["problems/t96A08/lean/Main.lean"
     "problems/t96A08/status.json"
@@ -37244,9 +37247,12 @@
     ["lake env lean problems/t96A08/lean/Main.lean"
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t96A08Closure.blueprint.md"},
+   :superseded-note
+   "t96A08 closed by the blueprint/lemma rounds, lemmas commit bcfbc7281 (claude-14 2026-10-13)",
    :continue-from
    "NEXT JOB: copy holes/labs/blueprints/t96A08/BLUEPRINT.md's plan into ConstructionTargets/t96A08Closure.blueprint.md, move the blueprint's proved lemmas into place, then build the LIBRARY obligations one milestone per job.",
    :id :program-2026-10-13-close-t96a08,
+   :superseded-by :blueprint-t96A08,
    :kind :final-adapter,
    :campaign-priority 48,
    :fail-count 0,

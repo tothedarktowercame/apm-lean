@@ -119052,7 +119052,7 @@
   {:consumer :t01A01,
    :stop-count 0,
    :phase :implementation,
-   :state :open,
+   :state :superseded,
    :scope
    ["problems/t01A01/lean/Main.lean"
     "problems/t01A01/status.json"
@@ -119069,9 +119069,12 @@
     ["lake env lean problems/t01A01/lean/Main.lean"
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t01A01Closure.blueprint.md"},
+   :superseded-note
+   "t01A01 closed by the blueprint/lemma rounds, lemmas commit da60cd8ea (claude-14 2026-10-13)",
    :continue-from
    "NEXT JOB: copy holes/labs/blueprints/t01A01/BLUEPRINT.md's plan into ConstructionTargets/t01A01Closure.blueprint.md, move the blueprint's proved lemmas into place, then build the LIBRARY obligations one milestone per job.",
    :id :program-2026-10-13-close-t01a01,
+   :superseded-by :blueprint-t01A01,
    :kind :final-adapter,
    :campaign-priority 52,
    :fail-count 0,
