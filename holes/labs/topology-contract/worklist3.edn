@@ -23724,54 +23724,47 @@
    :lemma-contdiffwithinat-domdomcongr-iteratedfderivwithin-of-infty,
    :evidence
    {:placeholder-delta {:t01A08 [1 1]},
-    :residual
-    "Formalize finite-order induction at interior points using the eventual interior-smooth neighborhood; derive shifted swaps; extend to x; apply adjacent closure; B1.",
-    :outcome :stop,
-    :warnings [],
+    :residual "B1.",
+    :outcome :done-unreviewed,
+    :warnings ["unnecessarySimpa linter"],
     :missing-theorems
     [{:name
-      "ContDiffWithinAt.eventually_mem_interior_contDiffWithinAt_of_nat",
+      "ContDiffWithinAt.domDomCongr_iteratedFDerivWithin_of_nat_of_mem_interior",
       :type
-      "finite smoothness at an interior point persists eventually inside the interior",
+      "finite C-n at an interior point implies n-jet permutation invariance",
       :status :proved,
       :consumers [:t01A08],
       :depends-on [],
       :area "sard-convex-domain"}
      {:name
       "ContDiffWithinAt.domDomCongr_iteratedFDerivWithin_of_infty",
-      :type "C-infinity within implies permutation invariance",
-      :status :partial,
+      :type
+      "C-infinity within plus dense interior implies all-order permutation invariance",
+      :status :proved,
       :consumers [:t01A08],
       :depends-on
-      ["ContDiffWithinAt.eventually_mem_interior_contDiffWithinAt_of_nat"
-       "iteratedFDerivWithin_domDomCongr_adjacent_succ_of_eventuallyEq"],
+      ["ContDiffWithinAt.domDomCongr_iteratedFDerivWithin_of_nat_of_mem_interior"],
       :area "sard-convex-domain"}],
     :statement-hashes {:registry "149/149"},
-    :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
-    :reason
-    "At an interior point, finite C-k now persists eventually within the interior; apply the induction hypothesis there to obtain lower swaps.",
     :commands
     [{:cmd
-      "lake build scoped module; lean helper/fixture; hash/registry/commit checks",
+      "lake build scoped module; lake env lean post-build export fixture; hash/registry/commit checks",
       :exit 0}],
     :diagnostic-history
-    [{:cmd "interior-eventually draft",
+    [{:cmd "finite induction drafts",
       :exit 1,
-      :correction "used mem_nhdsWithin_of_mem_nhds; compiled"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1791885301012-9375-8fd6418f",
-     :commands
-     ["git show/diff 6a0af2be; scope and commit checks"
-      "lake build ConstructionTargets.SardConvexDomain"
-      "lake env lean fixture and CheckSardInteriorSmooth.lean"
-      "sha256sum fixture; statement-registry check; placeholder recount"],
-     :finding
-     "Valid STOP after compiled progress. The scoped theorem correctly intersects finite-smoothness eventuality with the open interior neighborhood, yielding the stated nhdsWithin conjunction with the right set and derivative order. Build/export pass; fixture hash matches; standard axioms only; registry 149/149; sorry/admit 0->0. Finite-order symmetry induction, shifted swaps, and final adjacent-swap assembly remain explicitly listed."},
-    :commit "6a0af2be8f704106a7e34bb8198a9b135a499cff",
+      :correction "normalized ENat order; compiled"}
+     {:cmd "literal frozen fixture",
+      :exit 1,
+      :correction
+      "post-build mode uses export fixture because axiom name is now declared"}],
+    :commit "dda6f0ecae4d95f4d9a6126959920f33e4e0ab3c",
+    :commits
+    ["6a0af2be8f704106a7e34bb8198a9b135a499cff"
+     "dda6f0ecae4d95f4d9a6126959920f33e4e0ab3c"
+     "29a47e5549239cd24d9e77262bb337cc2dadf34a"],
     :changed-paths ["ConstructionTargets/SardConvexDomain.lean"],
     :fixture
     {:path "/tmp/t01a08_smooth_symmetry_membership_probe.lean",
@@ -23780,7 +23773,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain/B1/symmetry",
    :acceptance
@@ -33730,7 +33723,8 @@
      :r-a08-symmetry-slots-1],
     :type
     "ContDiffWithinAt R infinity f s x -> UniqueDiffOn R s -> x in s -> forall n sigma, domDomCongr sigma (iteratedFDerivWithin R n f s x) = iteratedFDerivWithin R n f s x",
-    :area "sard-convex-domain"},
+    :area "sard-convex-domain",
+    :proved-in :r-a08-symmetry-slots-1},
    :id
    :lemma-contdiffwithinat-domdomcongr-iteratedfderivwithin-of-infty,
    :kind :lemma,
@@ -33755,7 +33749,8 @@
     :lemma-iteratedfderivwithin-domdomcongr-adjacent-succ
     :lemma-iteratedfderivwithin-domdomcongr-adjacent-succ-of-eventuallyeq
     :lemma-iteratedfderivwithin-domdomcongr-eventuallyeq-of-mem
-    :lemma-contdiffwithinat-eventually-mem-interior-contdiffwithinat-of-nat],
+    :lemma-contdiffwithinat-eventually-mem-interior-contdiffwithinat-of-nat
+    :lemma-contdiffwithinat-domdomcongr-iteratedfderivwithin-of-nat-of-mem-interior],
    :other-consumers []}
   {:consumer :t01A08,
    :phase :lemma,
@@ -34222,6 +34217,28 @@
     :banked-commit "6a0af2be8f704106a7e34bb8198a9b135a499cff"},
    :id
    :lemma-contdiffwithinat-eventually-mem-interior-contdiffwithinat-of-nat,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t01A08,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ContDiffWithinAt.domDomCongr_iteratedFDerivWithin_of_nat_of_mem_interior",
+    :type
+    "finite C-n at an interior point implies n-jet permutation invariance"},
+   :lemma
+   {:name
+    "ContDiffWithinAt.domDomCongr_iteratedFDerivWithin_of_nat_of_mem_interior",
+    :reported-by [:r-a08-symmetry-slots-1],
+    :type
+    "finite C-n at an interior point implies n-jet permutation invariance",
+    :area "sard-convex-domain",
+    :proved-in :r-a08-symmetry-slots-1},
+   :id
+   :lemma-contdiffwithinat-domdomcongr-iteratedfderivwithin-of-nat-of-mem-interior,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}],
