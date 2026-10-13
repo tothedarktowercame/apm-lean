@@ -672,7 +672,25 @@ lemma apm_t94a08_union_closed_punctured_not_preconnected {X : Type*}
     (hA : IsClosed A) (hB : IsClosed B) (hAB : A ∩ B ⊆ {p})
     (hUA : ((U ∩ A) \ {p}).Nonempty) (hUB : ((U ∩ B) \ {p}).Nonempty) :
     ¬ IsPreconnected ((U ∩ (A ∪ B)) \ {p}) := by
-  sorry
+  intro hpre
+  let S := (U ∩ (A ∪ B)) \ {p}
+  have hcover : S ⊆ A ∪ B := by
+    intro x hx
+    exact hx.1.2
+  have hdisj : S ∩ (A ∩ B) = ∅ := by
+    apply Set.not_nonempty_iff_eq_empty.mp
+    rintro ⟨x, hxS, hxAB⟩
+    exact hxS.2 (hAB hxAB)
+  rcases (isPreconnected_iff_subset_of_disjoint_closed.mp hpre
+    A B hA hB hcover hdisj) with hsub | hsub
+  · rcases hUB with ⟨x, ⟨⟨hxU, hxB⟩, hxp⟩⟩
+    have hxS : x ∈ S := ⟨⟨hxU, Or.inr hxB⟩, hxp⟩
+    have hxA := hsub hxS
+    exact hxp (hAB ⟨hxA, hxB⟩)
+  · rcases hUA with ⟨x, ⟨⟨hxU, hxA⟩, hxp⟩⟩
+    have hxS : x ∈ S := ⟨⟨hxU, Or.inl hxA⟩, hxp⟩
+    have hxB := hsub hxS
+    exact hxp (hAB ⟨hxA, hxB⟩)
 -- END SEAT AREA
 
 /-- The node has no connected punctured neighbourhood in the nodal conic
