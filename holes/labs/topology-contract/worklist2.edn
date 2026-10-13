@@ -76774,7 +76774,7 @@
   {:consumer :t96J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 0,
    :evidence
    {:terminal true,
     :placeholder-delta 0,
@@ -76798,6 +76798,17 @@
       :exit 0}
      {:cmd "statement-registry check", :exit 0}
      {:cmd "git show --check 8ff5cb54a", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791916966838-10210-80ecfa7a",
+     :commands
+     ["recorded blob scope/SHA/blob checks at 34d5fe3e4"
+      "git show blob | lake env lean /dev/stdin"
+      "placeholder scan (0)"
+      "statement-registry.py check (131/0)"],
+     :finding
+     "Valid STOP with compiled refutation. Exact one-file scope and frozen hashes match; recorded blob compiles; placeholders 0; registry 131/0. Frozen B8 permits L=Empty, but FiniteWedge Empty is a quotient of Empty x Circle and has no point; the commit proves it is not Nonempty. Repair: require Nonempty L or adjoin a basepoint before B8/B9."},
     :commit "8ff5cb54a",
     :counterexample
     "PointWedgeQuotient.finiteWedge_empty_not_nonempty",
@@ -76811,7 +76822,7 @@
     "One-hundred-ninth repeated STOP; scheduler reset outer stop-count despite reviewed terminal evidence and no missing lemmas.",
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope ["ConstructionTargets/PolygonSurfacePiOne.lean"],
    :dag-node "ConstructionTargets/PolygonSurfacePiOne.blueprint.md/B8",
    :acceptance
