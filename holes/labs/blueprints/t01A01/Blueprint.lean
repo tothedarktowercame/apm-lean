@@ -63,9 +63,204 @@ noncomputable def apm_t01A01_q0 : apm_t01A01_RP2 :=
 `[0 : 0 : 1]` (an invertible linear map of `ℝ³` sending a representative of `q`
 to `e₃` induces a homeomorphism of `RP²`, `ProjectiveQuotientDescent`; restrict
 it to the complements). -/
+noncomputable def apm_t01A01_puncture_transitive_aux_A
+    (w : Fin 3 → ℝ) (hw : w 2 ≠ 0) (x : Fin 3 → ℝ) : Fin 3 → ℝ :=
+  fun j => if j = 2 then x 2 / w 2 else x j - (x 2 / w 2) * w j
+
+noncomputable def apm_t01A01_puncture_transitive_aux_B
+    (w : Fin 3 → ℝ) (x : Fin 3 → ℝ) : Fin 3 → ℝ :=
+  fun j => if j = 2 then x 2 * w 2 else x j + x 2 * w j
+
+lemma apm_t01A01_puncture_transitive_aux_AB
+    (w : Fin 3 → ℝ) (hw : w 2 ≠ 0) (x : Fin 3 → ℝ) :
+    apm_t01A01_puncture_transitive_aux_A w hw
+      (apm_t01A01_puncture_transitive_aux_B w x) = x := by
+  funext j
+  fin_cases j <;> simp [apm_t01A01_puncture_transitive_aux_A,
+    apm_t01A01_puncture_transitive_aux_B, hw]
+
+lemma apm_t01A01_puncture_transitive_aux_BA
+    (w : Fin 3 → ℝ) (hw : w 2 ≠ 0) (x : Fin 3 → ℝ) :
+    apm_t01A01_puncture_transitive_aux_B w
+      (apm_t01A01_puncture_transitive_aux_A w hw x) = x := by
+  funext j
+  fin_cases j <;> simp [apm_t01A01_puncture_transitive_aux_A,
+    apm_t01A01_puncture_transitive_aux_B, hw]
+
+lemma apm_t01A01_puncture_transitive_aux_A_smul
+    (w : Fin 3 → ℝ) (hw : w 2 ≠ 0) (t : ℝ) (x : Fin 3 → ℝ) :
+    apm_t01A01_puncture_transitive_aux_A w hw (t • x) =
+      t • apm_t01A01_puncture_transitive_aux_A w hw x := by
+  funext j
+  by_cases h : j = 2
+  · simp only [apm_t01A01_puncture_transitive_aux_A, h, if_true,
+      Pi.smul_apply, smul_eq_mul]
+    ring
+  · simp only [apm_t01A01_puncture_transitive_aux_A, h, if_false,
+      Pi.smul_apply, smul_eq_mul]
+    ring
+
+lemma apm_t01A01_puncture_transitive_aux_B_smul
+    (w : Fin 3 → ℝ) (t : ℝ) (x : Fin 3 → ℝ) :
+    apm_t01A01_puncture_transitive_aux_B w (t • x) =
+      t • apm_t01A01_puncture_transitive_aux_B w x := by
+  funext j
+  by_cases h : j = 2
+  · simp only [apm_t01A01_puncture_transitive_aux_B, h, if_true,
+      Pi.smul_apply, smul_eq_mul]
+    ring
+  · simp only [apm_t01A01_puncture_transitive_aux_B, h, if_false,
+      Pi.smul_apply, smul_eq_mul]
+    ring
+
+lemma apm_t01A01_puncture_transitive_aux_contA
+    (w : Fin 3 → ℝ) (hw : w 2 ≠ 0) :
+    Continuous (apm_t01A01_puncture_transitive_aux_A w hw) := by
+  apply continuous_pi
+  intro j
+  by_cases h : j = 2
+  · simp only [apm_t01A01_puncture_transitive_aux_A, h, if_pos]
+    fun_prop
+  · change Continuous (fun a : Fin 3 → ℝ => if j = 2 then a 2 / w 2
+        else a j - a 2 / w 2 * w j)
+    simp only [if_neg h]
+    fun_prop
+
+lemma apm_t01A01_puncture_transitive_aux_contB (w : Fin 3 → ℝ) :
+    Continuous (apm_t01A01_puncture_transitive_aux_B w) := by
+  apply continuous_pi
+  intro j
+  by_cases h : j = 2
+  · simp only [apm_t01A01_puncture_transitive_aux_B, h, if_pos]
+    fun_prop
+  · change Continuous (fun a : Fin 3 → ℝ => if j = 2 then a 2 * w 2
+        else a j + a 2 * w j)
+    simp only [if_neg h]
+    fun_prop
+
 theorem apm_t01A01_puncture_transitive (q : apm_t01A01_RP2) :
     Nonempty ({y : apm_t01A01_RP2 // y ≠ q} ≃ₜ {y : apm_t01A01_RP2 // y ≠ apm_t01A01_q0}) := by
-  sorry
+  let v := Projectivization.rep q
+  have hv : v ≠ 0 := Projectivization.rep_nonzero q
+  obtain ⟨i, hi⟩ : ∃ i, v i ≠ 0 := by
+    simpa [funext_iff] using hv
+  let s : Fin 3 ≃ Fin 3 := Equiv.swap i 2
+  let w : Fin 3 → ℝ := fun j => v (s j)
+  have hw : w 2 ≠ 0 := by simpa [w, s] using hi
+  let A : (Fin 3 → ℝ) → (Fin 3 → ℝ) := fun x =>
+    apm_t01A01_puncture_transitive_aux_A w hw (fun j => x (s j))
+  let B : (Fin 3 → ℝ) → (Fin 3 → ℝ) := fun x j =>
+    apm_t01A01_puncture_transitive_aux_B w x (s j)
+  have hBA (x : Fin 3 → ℝ) : B (A x) = x := by
+    funext j
+    have h := congrFun (apm_t01A01_puncture_transitive_aux_BA w hw
+      (fun k => x (s k))) (s j)
+    simpa [A, B, s] using h
+  have hAB (x : Fin 3 → ℝ) : A (B x) = x := by
+    have h := apm_t01A01_puncture_transitive_aux_AB w hw x
+    simpa [A, B, s] using h
+  have hAs (t : ℝ) (x : Fin 3 → ℝ) : A (t • x) = t • A x := by
+    simpa [A] using apm_t01A01_puncture_transitive_aux_A_smul w hw t
+      (fun j => x (s j))
+  have hBs (t : ℝ) (x : Fin 3 → ℝ) : B (t • x) = t • B x := by
+    funext j
+    exact congrFun (apm_t01A01_puncture_transitive_aux_B_smul w t x) (s j)
+  have hcA : Continuous A := by
+    apply (apm_t01A01_puncture_transitive_aux_contA w hw).comp
+    fun_prop
+  have hcB : Continuous B := by
+    apply continuous_pi
+    intro j
+    exact continuous_apply (s j) |>.comp
+      (apm_t01A01_puncture_transitive_aux_contB w)
+  have hAv : A v = (![0, 0, 1] : Fin 3 → ℝ) := by
+    funext j
+    fin_cases j <;> simp [A, w, s, apm_t01A01_puncture_transitive_aux_A, hi]
+  have hA0 (x : Fin 3 → ℝ) (hx : x ≠ 0) : A x ≠ 0 := by
+    intro h
+    apply hx
+    rw [← hBA x, h]
+    simpa using hBs 0 x
+  have hB0 (x : Fin 3 → ℝ) (hx : x ≠ 0) : B x ≠ 0 := by
+    intro h
+    apply hx
+    rw [← hAB x, h]
+    simpa using hAs 0 x
+  let fa : {x : Fin 3 → ℝ // x ≠ 0} → apm_t01A01_RP2 := fun x =>
+    Projectivization.mk ℝ (A x.1) (hA0 x.1 x.2)
+  let fb : {x : Fin 3 → ℝ // x ≠ 0} → apm_t01A01_RP2 := fun x =>
+    Projectivization.mk ℝ (B x.1) (hB0 x.1 x.2)
+  have hca : Continuous fa := by
+    change Continuous (ConstructionTargets.ProjectiveSpaceTopology.quotientMap ℝ 2 ∘
+      fun x : {x : Fin 3 → ℝ // x ≠ 0} => ⟨A x.1, hA0 x.1 x.2⟩)
+    apply (ConstructionTargets.ProjectiveSpaceTopology.continuous_quotientMap ℝ 2).comp
+    exact hcA.comp continuous_subtype_val |>.subtype_mk _
+  have hcb : Continuous fb := by
+    change Continuous (ConstructionTargets.ProjectiveSpaceTopology.quotientMap ℝ 2 ∘
+      fun x : {x : Fin 3 → ℝ // x ≠ 0} => ⟨B x.1, hB0 x.1 x.2⟩)
+    apply (ConstructionTargets.ProjectiveSpaceTopology.continuous_quotientMap ℝ 2).comp
+    exact hcB.comp continuous_subtype_val |>.subtype_mk _
+  obtain ⟨F, hF⟩ := ConstructionTargets.ProjectiveQuotientDescent.projectiveHomogeneousMapDescent
+    ℝ fa hca (by
+      intro a b t hab
+      apply (Projectivization.mk_eq_mk_iff ℝ _ _ _ _).mpr
+      by_cases ht : t = 0
+      · subst t; exfalso; exact a.2 (by simpa using hab)
+      · refine ⟨Units.mk0 t ht, ?_⟩
+        have hh := congrArg A hab
+        rw [hAs] at hh
+        simpa [fa] using hh.symm)
+  obtain ⟨G, hG⟩ := ConstructionTargets.ProjectiveQuotientDescent.projectiveHomogeneousMapDescent
+    ℝ fb hcb (by
+      intro a b t hab
+      apply (Projectivization.mk_eq_mk_iff ℝ _ _ _ _).mpr
+      by_cases ht : t = 0
+      · subst t; exfalso; exact a.2 (by simpa using hab)
+      · refine ⟨Units.mk0 t ht, ?_⟩
+        have hh := congrArg B hab
+        rw [hBs] at hh
+        simpa [fb] using hh.symm)
+  have hFG : Function.LeftInverse G F := by
+    intro x
+    induction x using Projectivization.ind with
+    | _ x hx =>
+      change G (F (ConstructionTargets.ProjectiveSpaceTopology.quotientMap ℝ 2 ⟨x, hx⟩)) = _
+      rw [hF ⟨x, hx⟩]
+      change G (ConstructionTargets.ProjectiveSpaceTopology.quotientMap ℝ 2
+        ⟨A x, hA0 x hx⟩) = _
+      rw [hG ⟨A x, hA0 x hx⟩]
+      apply (Projectivization.mk_eq_mk_iff ℝ _ _ _ _).mpr
+      exact ⟨1, by simpa using (hBA x).symm⟩
+  have hGF : Function.RightInverse G F := by
+    intro x
+    induction x using Projectivization.ind with
+    | _ x hx =>
+      change F (G (ConstructionTargets.ProjectiveSpaceTopology.quotientMap ℝ 2 ⟨x, hx⟩)) = _
+      rw [hG ⟨x, hx⟩]
+      change F (ConstructionTargets.ProjectiveSpaceTopology.quotientMap ℝ 2
+        ⟨B x, hB0 x hx⟩) = _
+      rw [hF ⟨B x, hB0 x hx⟩]
+      apply (Projectivization.mk_eq_mk_iff ℝ _ _ _ _).mpr
+      exact ⟨1, by simpa using (hAB x).symm⟩
+  have hFq : F q = apm_t01A01_q0 := by
+    rw [show q = Projectivization.mk ℝ v hv from (Projectivization.mk_rep q).symm]
+    change F (ConstructionTargets.ProjectiveSpaceTopology.quotientMap ℝ 2 ⟨v, hv⟩) = _
+    rw [hF ⟨v, hv⟩]
+    apply (Projectivization.mk_eq_mk_iff ℝ _ _ _ _).mpr
+    exact ⟨1, by simpa [fa, apm_t01A01_q0] using hAv.symm⟩
+  let e : apm_t01A01_RP2 ≃ₜ apm_t01A01_RP2 :=
+    { toFun := F, invFun := G, left_inv := hFG, right_inv := hGF,
+      continuous_toFun := F.continuous, continuous_invFun := G.continuous }
+  refine ⟨{
+    toFun := fun y => ⟨e y.1, fun h => y.2 (e.injective (h.trans hFq.symm))⟩
+    invFun := fun y => ⟨e.symm y.1, fun h => y.2 (calc
+      y.1 = e (e.symm y.1) := (e.apply_symm_apply y.1).symm
+      _ = e q := congrArg e h
+      _ = apm_t01A01_q0 := hFq)⟩
+    left_inv := fun y => Subtype.ext (e.left_inv y.1)
+    right_inv := fun y => Subtype.ext (e.right_inv y.1)
+    continuous_toFun := e.continuous.comp continuous_subtype_val |>.subtype_mk _
+    continuous_invFun := e.symm.continuous.comp continuous_subtype_val |>.subtype_mk _ }⟩
 
 /-- Seat: the retraction `[x : y : z] ↦ [x : y]` is well defined and continuous
 off `[0 : 0 : 1]` (quotient descent from `{v | (v 0, v 1) ≠ 0}`). -/
