@@ -24424,6 +24424,8 @@
   {:bounded-exception "Rule0; named by stopped B7.",
    :consumer :t01A08,
    :stop-count 1,
+   :review-finding
+   "extend Mathlib: state and prove the missing theorem in scope",
    :implements-lemma :lemma-closedset-whitneycubecover,
    :evidence
    {:outcome :stop,
@@ -24441,9 +24443,15 @@
     :residual
     "First specify and review the B3 cube/enlargement/cover record and exact closedSet_whitneyCubeCover type; then probe its construction.",
     :author "topo-12",
-    :disposition :stop},
-   :phase :probe,
-   :state :done-unreviewed,
+    :disposition :stop,
+    :review
+    {:outcome :fail,
+     :seat "codex-11",
+     :job "invoke-1791895470558-9662-5111b2e8",
+     :finding
+     "extend Mathlib: state and prove the missing theorem in scope"}},
+   :phase :implementation,
+   :state :repair,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain.blueprint/B3",
    :acceptance
@@ -24458,6 +24466,7 @@
    :id :r-a08-sard-b3-whitney-cubes-1,
    :kind :reusable-theorem,
    :area "sard-convex-domain",
+   :fail-count 1,
    :depends-on [:r-topo3-cp15],
    :current-residual "B4-B6, finite-dimensional B7, B9.",
    :other-consumers []}
