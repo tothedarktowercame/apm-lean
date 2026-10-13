@@ -1075,3 +1075,10 @@ mapped cancellation needed by the group calculation.  Substituting the
 base-transport identification into the normalized right counit square then
 gives `genericPointWedgeRightComparison_mul_globalBaseTransport_eq_one`: the
 full right comparison cancels the global image of that transport.
+
+`genericPointWedgeCoordinateSpanGlobalRestrictionLeftUnitFactor` isolates the
+left-equivalence unit component from the forward left comparison.
+`genericPointWedgeCoordinateSpanGlobalRestrictionLeftComparison_eq_factors`
+records the exact single-object multiplication order: the unit factor
+multiplies the strict-span factor.  The existing left counit naturality can
+now be applied to these two named factors without unfolding the comparison.

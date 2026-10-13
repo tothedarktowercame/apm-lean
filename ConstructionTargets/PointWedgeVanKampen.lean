@@ -3440,6 +3440,38 @@ theorem genericPointWedgeCoordinateSpanGlobalRestrictionLeftStrictFactor_heq_inl
     genericPointWedgeIdentityActualSpan_left_map]
   exact genericPointWedgeIdentityCoordinateSpan_left_map x₀ y₀ _
 
+/-- The left-equivalence unit component occurring after the strict-span
+factor in the forward left comparison. -/
+def genericPointWedgeCoordinateSpanGlobalRestrictionLeftUnitFactor :
+    genericPointWedgeFreeProduct x₀ y₀ :=
+  let C := genericPointWedgeTarget x₀ y₀
+  let E := genericPointWedgeOpenCoverEquivalence
+    x₀ y₀ M N hM hN hy hx cM cN C
+  let P₀ := genericPointWedgePseudoSpanEquivalence x₀ y₀ M N C
+  let S := P₀.functor.obj (E.functor.obj
+    (genericPointWedgeIdentityGlobalFunctor
+      x₀ y₀ M N hM hN hy hx cM cN))
+  let l := genericPointWedgeActualLeft x₀ y₀ M N
+  let eK := genericPointWedgeOverlapGroupoidEquivalence
+    x₀ y₀ M N hM hN hy hx cM cN
+  let eL := genericPointWedgeLeftGroupoidEquivalence
+    x₀ y₀ M N hM hN hy hx cM cN
+  (Functor.isoWhiskerRight
+    (Functor.isoWhiskerLeft (eK.inverse ⋙ l) eL.unitIso.symm)
+    S.left).hom.app (FundamentalGroupoid.mk ())
+
+/-- In the single-object free-product target, categorical composition reverses
+to multiplication: the unit factor multiplies the strict-span factor. -/
+theorem genericPointWedgeCoordinateSpanGlobalRestrictionLeftComparison_eq_factors :
+    genericPointWedgeCoordinateSpanGlobalRestrictionLeftComparison
+        x₀ y₀ M N hM hN hy hx cM cN =
+      genericPointWedgeCoordinateSpanGlobalRestrictionLeftUnitFactor
+          x₀ y₀ M N hM hN hy hx cM cN *
+        genericPointWedgeCoordinateSpanGlobalRestrictionLeftStrictFactor
+          x₀ y₀ M N hM hN hy hx cM cN := by
+  rw [genericPointWedgeCoordinateSpanGlobalRestrictionLeftComparison_app]
+  rfl
+
 omit [PathConnectedSpace X] [PathConnectedSpace Y] in
 /-- Naturality of the left-equivalence counit gives the exact conjugacy
 equation for the inverse strict-span comparison after its inverse/forward
@@ -5874,6 +5906,8 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeCoordinateSpanGlobalRestrictionLeftStrictFactor_eq_map
 #print axioms genericPointWedgeCoordinateSpanGlobalRestrictionLeftStrictFactor_eq_actual
 #print axioms genericPointWedgeCoordinateSpanGlobalRestrictionLeftStrictFactor_heq_inl
+#print axioms genericPointWedgeCoordinateSpanGlobalRestrictionLeftUnitFactor
+#print axioms genericPointWedgeCoordinateSpanGlobalRestrictionLeftComparison_eq_factors
 #print axioms genericPointWedgeCoordinateSpanGlobalRestrictionLeftRoundTrip_counit
 #print axioms genericPointWedgeCoordinateSpanGlobalRestrictionRightComparison
 #print axioms genericPointWedgeCoordinateSpanGlobalRestrictionRightComparison_app
