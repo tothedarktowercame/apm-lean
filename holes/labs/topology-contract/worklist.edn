@@ -113895,6 +113895,18 @@
       "lake build ConstructionTargets.ThreeCirclesFundamentalGroup",
       :exit 1,
       :finding "B12 file absent."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791877136791-8965-93a090e5",
+     :commands
+     ["git diff/show 29cc465^..29cc465"
+      "git archive 29cc465; lake env lean archived PointWedgeVanKampen.lean"
+      "lake build ConstructionTargets.PointWedgeVanKampen"
+      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (expected absent)"
+      "statement-registry check; sha256; placeholder/diff-tree checks"],
+     :finding
+     "PASS program STOP: recorded commit adds a compiled, sorry-free HEq rewrite of the full left comparison to the typed round-trip predecessor. Orientation is correct (uses injected connector square symm); representation boundary stays HEq. Scope is only Lean+notes; frozen hashes match source c0f8725d, notes d8fb1388, blueprint 0bca6ce3; placeholders 0->0; registry 147/147; standard axioms only. New milestone follows prior history; residual is predecessor-to-actual-left, then B6/B12; ThreeCircles target remains absent as listed."},
     :commit "29cc465b8c3a1ef469346cee6d4de6b89259b902",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
@@ -113905,7 +113917,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113926,7 +113938,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Transported the typed left connector square through the coproduct injection used by B6.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Rewrote the full left comparison by the injected counit square into its typed round-trip predecessor form.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -114618,7 +114630,11 @@
     {:job 8,
      :commit "b5a4a335b2976b14d963e1e7075cfc25f1100dc8",
      :reason
-     "Transported the typed left connector square through the coproduct injection used by B6."}]}
+     "Transported the typed left connector square through the coproduct injection used by B6."}
+    {:job 9,
+     :commit "29cc465b8c3a1ef469346cee6d4de6b89259b902",
+     :reason
+     "Rewrote the full left comparison by the injected counit square into its typed round-trip predecessor form."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
