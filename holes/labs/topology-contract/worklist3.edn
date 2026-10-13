@@ -21568,7 +21568,7 @@
   {:consumer :t00J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 2,
+   :stop-count 0,
    :review-finding
    "Frozen fixture metadata remains invalid: both authoritative acceptance copies record aad5a9cda739c1cbcceb1eca8ab8b33395db8a08c9d68941a87c644f4d13586e and omit :mode, while the compiling fixture hashes to 7e72195e1214d7580994264481ae57d0ecf87755d31825ab85cbda5f1220c4b1. Update both copies to that digest with :mode :post-build-export-check, then resubmit f0afa7bd.",
    :implements-lemma
@@ -21599,7 +21599,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/manifold-fundamental-class",
    :acceptance
@@ -21614,7 +21614,7 @@
    :id :routes-2026-10-12-mfclass-boundary-coordinates-r1,
    :kind :reusable-theorem,
    :area "manifold-fundamental-class",
-   :fail-count 3,
+   :fail-count 0,
    :depends-on [:routes-2026-10-12-mfclass-closed-generator-bridge-r1],
    :current-residual "Prove Bool H0 comparison.",
    :other-consumers [:t98A02]}
@@ -22997,7 +22997,7 @@
    :consumer :t01A08,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 2,
+   :stop-count 0,
    :review-finding
    "extend Mathlib: state and prove the missing theorem in scope",
    :evidence
@@ -23036,7 +23036,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain.blueprint/B1/smooth-symmetry",
    :acceptance
@@ -23052,7 +23052,7 @@
    :id :r-a08-sard-smooth-jet-symmetry-1,
    :kind :reusable-theorem,
    :area "sard-convex-domain",
-   :fail-count 1,
+   :fail-count 0,
    :depends-on [:r-topo3-cp8],
    :current-residual
    "Then B1 continuity and canonical zero/one jets compile.",
@@ -23906,6 +23906,17 @@
      {:cmd "lake env lean symmetry export check; registry check",
       :exit 0}
      {:cmd "verify empty audit commit and clean worktree", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791889295105-9493-a74cc549",
+     :commands
+     ["git cat-file/diff 9c4e1f43 and f032efae; scope checks"
+      "sha256sum CheckSardFinalSymmetry.lean"
+      "lake env lean CheckSardFinalSymmetry.lean"
+      "statement-registry check; placeholder recount"],
+     :finding
+     "PASS. The receipt-only audit commit is empty as declared; corrected target f032efae9b89fb527a72ea9192f3c89f09f82615 exists and changes only SardConvexDomain. Its compiled theorem lifts lower-jet symmetry through the tail slots with the required decomposeFin.symm orientation and representation. Checker hash matches; standard axioms only; registry 149/149; sorry/admit 0->0. Independent PASS may replace the predecessor receipt; no leading-swap scheduling is authorized by this row."},
     :commit "9c4e1f43f3b877b3db2b897430f4aad66157c341",
     :changed-paths [],
     :repair-target :r-a08-symmetry-slots-1,
@@ -23916,7 +23927,7 @@
      :mode :post-build-export-check},
     :corrected-commit "f032efae9b89fb527a72ea9192f3c89f09f82615"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node "SardConvexDomain/B1/symmetry",
    :acceptance
@@ -23942,7 +23953,7 @@
      :infrastructure-packets
      :review-outcomes]},
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
