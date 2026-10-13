@@ -108,6 +108,21 @@ theorem ContDiffWithinAt.isSymmSndFDerivWithinAt_iteratedFDerivWithin_of_infty
   · exact hxs
   · exact WithTop.coe_le_coe.mpr le_top
 
+/-- The Schwarz step for the `n`-th lower jet only consumes `n + 2` derivatives. -/
+theorem ContDiffWithinAt.isSymmSndFDerivWithinAt_iteratedFDerivWithin_of_nat
+    {E F : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [NormedAddCommGroup F] [NormedSpace ℝ F]
+    {s : Set E} {f : E → F} {x : E} {n : ℕ}
+    (hf : ContDiffWithinAt ℝ (n + 2) f s x) (hu : UniqueDiffOn ℝ s)
+    (hxs : x ∈ s) (hxi : x ∈ closure (interior s)) :
+    IsSymmSndFDerivWithinAt ℝ (iteratedFDerivWithin ℝ n f s) s x := by
+  apply (hf.iteratedFDerivWithin_right hu (m := 2) (i := n) ?_ hxs).isSymmSndFDerivWithinAt
+  · rw [minSmoothness_of_isRCLikeNormedField]
+  · exact hu
+  · exact hxi
+  · exact hxs
+  · exact le_of_eq (add_comm (2 : WithTop ENat) (n : WithTop ENat))
+
 /-- An iterated-derivative permutation identity valid on the interior extends to a boundary
 point where the map is smooth within the set and the interior is dense. -/
 theorem ContDiffWithinAt.domDomCongr_iteratedFDerivWithin_of_eqOn_interior
