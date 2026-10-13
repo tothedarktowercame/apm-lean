@@ -1031,6 +1031,23 @@ lemma apm_m98A06_wirtinger_aux_core_aux_picone_limit_aux_gap_aux_truncated
     convert (hdc.sub (hηc.mul hquotc)).pow 2 using 1 <;> ext x <;> dsimp [G] <;> ring
   · exact hDint
 
+lemma apm_m98A06_wirtinger_aux_core_aux_picone_limit_aux_gap_aux_lhs_integrable
+    (L : ℝ) (hL : 0 < L) (η : ℝ → ℝ)
+    (hη : apm_m98a06_Admissible L 0 0 η) :
+    IntervalIntegrable (fun x ↦
+      (derivWithin η (Icc 0 L) x) ^ 2 - (Real.pi / L) ^ 2 * η x ^ 2)
+      volume 0 L := by
+  have hr := apm_m98A06_wirtinger_aux_regular hL hη
+  exact hr.2.2.2.sub (hr.2.2.1.const_mul ((Real.pi / L) ^ 2))
+
+lemma apm_m98A06_wirtinger_aux_core_aux_picone_limit_aux_gap_aux_gap_integrable
+    (L : ℝ) (hL : 0 < L) (η : ℝ → ℝ)
+    (hη : apm_m98a06_Admissible L 0 0 η) :
+    IntervalIntegrable (fun x ↦ (derivWithin η (Icc 0 L) x -
+      η x * ((Real.pi / L) * Real.cos (Real.pi * x / L)) /
+        Real.sin (Real.pi * x / L)) ^ 2) volume 0 L := by
+  sorry
+
 lemma apm_m98A06_wirtinger_aux_core_aux_picone_limit_aux_gap
     (L : ℝ) (hL : 0 < L) (η : ℝ → ℝ)
     (hη : apm_m98a06_Admissible L 0 0 η) :
