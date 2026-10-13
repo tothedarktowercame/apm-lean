@@ -541,4 +541,41 @@ theorem ContDiffOn.convexWithinJet
         rw [hs.closure_interior_eq_closure_of_nonempty_interior hsi]
         exact subset_closure hx) σ
 
+/-- The geometric data consumed by the partition-of-unity stage of the Whitney
+extension construction.  The sets called `cube` are kept abstract here: the
+construction theorem is responsible for producing them with all the metric,
+covering, and overlap properties recorded below. -/
+structure WhitneyCubeCover
+    {E : Type*} [PseudoMetricSpace E] (s : Set E) where
+  ι : Type*
+  countable_index : Countable ι
+  cube : ι → Set E
+  enlargement : ι → Set E
+  center : ι → E
+  anchor : ι → E
+  scale : ι → ℝ
+  scale_pos : ∀ i, 0 < scale i
+  anchor_mem : ∀ i, anchor i ∈ s
+  anchor_nearest : ∀ i, Metric.infDist (center i) s = dist (center i) (anchor i)
+  cube_subset_compl : ∀ i, cube i ⊆ sᶜ
+  cube_subset_enlargement : ∀ i, cube i ⊆ enlargement i
+  ball_subset_cube : ∀ i, Metric.ball (center i) (scale i / 4) ⊆ cube i
+  cube_subset_closedBall : ∀ i, cube i ⊆ Metric.closedBall (center i) (scale i)
+  cover_compl : sᶜ ⊆ ⋃ i, cube i
+  locallyFinite_enlargement : LocallyFinite enlargement
+  scale_le_infDist : ∀ i, scale i ≤ Metric.infDist (center i) s
+  infDist_le_scale : ∀ i, Metric.infDist (center i) s ≤ 8 * scale i
+  overlapBound : ℕ
+  overlap_finite : ∀ x, {i | x ∈ enlargement i}.Finite
+  overlap_card_le : ∀ x, {i | x ∈ enlargement i}.ncard ≤ overlapBound
+
+/-- A closed nonempty subset of a finite-dimensional real normed space has a
+chosen nearest point to every point.  This supplies the anchors in a Whitney
+cube cover independently of the dyadic maximal-cover construction. -/
+theorem exists_nearestPoint_of_isClosed
+    {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [FiniteDimensional ℝ E] {s : Set E} (hs : IsClosed s) (hne : s.Nonempty)
+    (x : E) : ∃ a ∈ s, Metric.infDist x s = dist x a :=
+  hs.exists_infDist_eq_dist hne x
+
 end ConstructionTargets.SardConvexDomain
