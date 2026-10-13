@@ -307,7 +307,79 @@ lemma apm_t96A08_chart_radial_primitive_radial_paths
       ∀ t ∈ Set.Icc (0 : ℝ) 1,
         extChartAt I x (delta t) = extChartAt I x x +
           t • (extChartAt I x z - extChartAt I x x) := by
-  sorry
+  intro z hzU
+  have hxsource : x ∈ (extChartAt I x).source := by simp
+  have hzsource : z ∈ (extChartAt I x).source := by
+    rw [hU] at hzU
+    exact hzU.1
+  have hzW : extChartAt I x z ∈ W := by
+    rw [hU] at hzU
+    exact hzU.2
+  have hxr : extChartAt I x x ∈ Set.range (I : E → E) :=
+    (extChartAt_target_subset_range x) (PartialEquiv.map_source _ hxsource)
+  have hzr : extChartAt I x z ∈ Set.range (I : E → E) :=
+    (extChartAt_target_subset_range x) (PartialEquiv.map_source _ hzsource)
+  let eta : ℝ → E := fun t ↦
+    extChartAt I x x + t • (extChartAt I x z - extChartAt I x x)
+  have heta_mem : ∀ t ∈ Set.Icc (0 : ℝ) 1,
+      eta t ∈ W ∩ Set.range (I : E → E) := by
+    intro t ht
+    constructor
+    · exact hWconv.add_smul_sub_mem hxW hzW ht
+    · exact I.convex_range.add_smul_sub_mem hxr hzr ht
+  have heta_target : ∀ t ∈ Set.Icc (0 : ℝ) 1,
+      eta t ∈ (extChartAt I x).target := fun t ht ↦ hWtarget (heta_mem t ht)
+  let q : ℝ → E := fun t ↦ eta (Set.projIcc 0 1 zero_le_one t)
+  have hq_target : ∀ t, q t ∈ (extChartAt I x).target := by
+    intro t
+    exact heta_target _ (Set.projIcc 0 1 zero_le_one t).property
+  let delta : ℝ → M := fun t ↦ (extChartAt I x).symm (q t)
+  have heta_cont : Continuous eta := by
+    fun_prop
+  have hq_cont : Continuous q :=
+    heta_cont.comp (continuous_subtype_val.comp continuous_projIcc)
+  have hdelta_cont : Continuous delta := by
+    exact (contMDiffOn_extChartAt_symm (I := I) (n := (⊤ : WithTop ℕ∞)) x).continuousOn.comp_continuous
+      hq_cont hq_target
+  have heta_smooth : ContMDiff (modelWithCornersSelf ℝ ℝ)
+      (modelWithCornersSelf ℝ E) (⊤ : WithTop ℕ∞) eta := by
+    rw [contMDiff_iff_contDiff]
+    fun_prop
+  have hdelta_smooth : ContMDiffOn (modelWithCornersSelf ℝ ℝ) I
+      (⊤ : WithTop ℕ∞) delta
+      (Set.Icc (0 : ℝ) 1) := by
+    have hg := (contMDiffOn_extChartAt_symm (I := I) (n := (⊤ : WithTop ℕ∞)) x).comp
+      heta_smooth.contMDiffOn (fun t ht ↦ heta_target t ht)
+    apply hg.congr
+    intro t ht
+    simp [delta, q, Set.projIcc_of_mem zero_le_one ht]
+  refine ⟨delta, ⟨hdelta_cont, 1, fun i ↦ (i.val : ℝ), ?_, ?_, ?_, ?_⟩,
+    ?_, ?_, ?_, ?_⟩
+  · intro i j hij
+    exact Nat.cast_lt.mpr hij
+  · norm_num
+  · norm_num
+  · intro i
+    simpa using hdelta_smooth
+  · have hp : (Set.projIcc 0 1 zero_le_one (0 : ℝ) : ℝ) = 0 :=
+      congrArg Subtype.val (Set.projIcc_of_mem zero_le_one ⟨le_rfl, zero_le_one⟩)
+    simpa only [delta, q, hp, eta, zero_smul, add_zero] using
+      (extChartAt I x).left_inv hxsource
+  · have hp : (Set.projIcc 0 1 zero_le_one (1 : ℝ) : ℝ) = 1 :=
+      congrArg Subtype.val (Set.projIcc_of_mem zero_le_one ⟨zero_le_one, le_rfl⟩)
+    have he : eta 1 = extChartAt I x z := by
+      simp only [eta, one_smul]
+      abel
+    simpa only [delta, q, hp, he] using
+      (extChartAt I x).left_inv hzsource
+  · intro t ht
+    have := hq_target t
+    simpa [delta] using PartialEquiv.map_target (extChartAt I x) this
+  · intro t ht
+    have hp : (Set.projIcc 0 1 zero_le_one t : ℝ) = t :=
+      congrArg Subtype.val (Set.projIcc_of_mem zero_le_one ht)
+    simpa only [delta, q, hp, eta] using
+      (extChartAt I x).right_inv (heta_target t ht)
 
 /-- Pulling the one-form and the radial path into the extended chart gives
 the ordinary coordinate interval integral. -/
