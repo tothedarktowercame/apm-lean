@@ -243,10 +243,116 @@ lemma apm_t97J05_regular_aux_deriv_apply (q h : apm_t97J05_R3) :
 /-- The displayed derivative is invertible under precisely the two nonvanishing
 conditions available on the fiber (the determinant is `q 2 * exp (q 0) * sin (q 1)`).  The conditions are explicit hypotheses so
 this seat is independent of the fiber-equation seats. -/
+lemma apm_t97J05_regular_aux_deriv_bijective_aux_formula
+    (q h : apm_t97J05_R3) :
+    fderiv ℝ apm_t97J05_regular_aux_H q h =
+      WithLp.toLp 2
+        ![Real.exp (q 0) * Real.cos (q 1) * h 0 -
+            Real.exp (q 0) * Real.sin (q 1) * h 1,
+          q 2 * h 0 + q 0 * h 2, h 2] := by
+  let g : apm_t97J05_R3 → (Fin 3 → ℝ) := fun x =>
+    ![Real.exp (x 0) * Real.cos (x 1), x 0 * x 2, x 2]
+  have hg : DifferentiableAt ℝ g q := by
+    apply differentiableAt_pi.mpr
+    intro i
+    fin_cases i <;> dsimp [g] <;> fun_prop
+  have hc := (PiLp.hasFDerivAt_toLp (𝕜 := ℝ) 2 (g q)).comp q hg.hasFDerivAt
+  have hdj (j : Fin 3) :
+      DifferentiableAt ℝ (fun x : apm_t97J05_R3 => x j) q := by
+    exact (PiLp.proj 2 (fun _ : Fin 3 => ℝ) j).differentiableAt
+  have hj (j : Fin 3) :
+      fderiv ℝ (fun x : apm_t97J05_R3 => x j) q h = h j := by
+    let P : apm_t97J05_R3 →L[ℝ] ℝ := PiLp.proj 2 (fun _ : Fin 3 => ℝ) j
+    have hd := P.hasFDerivAt (x := q)
+    exact congrArg (fun L : apm_t97J05_R3 →L[ℝ] ℝ => L h) hd.fderiv
+  have hgv :
+      fderiv ℝ g q h =
+        ![Real.exp (q 0) * Real.cos (q 1) * h 0 -
+            Real.exp (q 0) * Real.sin (q 1) * h 1,
+          q 2 * h 0 + q 0 * h 2, h 2] := by
+    rw [fderiv_pi]
+    · ext i
+      fin_cases i
+      · dsimp [g]
+        rw [fderiv_fun_mul]
+        · rw [fderiv_exp, fderiv_cos]
+          simp only [ContinuousLinearMap.add_apply, ContinuousLinearMap.smul_apply,
+            smul_eq_mul]
+          rw [hj, hj]
+          ring
+          all_goals exact hdj _
+        · exact (hdj 0).exp
+        · exact (hdj 1).cos
+      · dsimp [g]
+        rw [fderiv_fun_mul]
+        · simp only [ContinuousLinearMap.add_apply, ContinuousLinearMap.smul_apply,
+            smul_eq_mul]
+          rw [hj, hj]
+          ring
+        all_goals exact hdj _
+      · dsimp [g]
+        rw [hj]
+    · intro i
+      fin_cases i <;> dsimp [g] <;> fun_prop
+  change fderiv ℝ (WithLp.toLp 2 ∘ g) q h = _
+  rw [hc.fderiv]
+  change WithLp.toLp 2 (fderiv ℝ g q h) = _
+  rw [hgv]
+
 lemma apm_t97J05_regular_aux_deriv_bijective (q : apm_t97J05_R3)
     (hz : q 2 ≠ 0) (hs : Real.sin (q 1) ≠ 0) :
     Function.Bijective (fderiv ℝ apm_t97J05_regular_aux_H q) := by
-  sorry
+  have he : Real.exp (q 0) ≠ 0 := Real.exp_ne_zero _
+  constructor
+  · intro h k ehk
+    have e0 := congrArg (fun x : apm_t97J05_R3 => x 0) ehk
+    have e1 := congrArg (fun x : apm_t97J05_R3 => x 1) ehk
+    have e2 := congrArg (fun x : apm_t97J05_R3 => x 2) ehk
+    rw [apm_t97J05_regular_aux_deriv_bijective_aux_formula,
+      apm_t97J05_regular_aux_deriv_bijective_aux_formula] at e0 e1 e2
+    simp at e0 e1 e2
+    have hh2 : h 2 = k 2 := e2
+    have hh0 : h 0 = k 0 := by
+      apply (mul_left_cancel₀ hz)
+      calc
+        q 2 * h 0 = (q 2 * h 0 + q 0 * h 2) - q 0 * h 2 := by ring
+        _ = (q 2 * k 0 + q 0 * k 2) - q 0 * k 2 := by rw [e1, hh2]
+        _ = q 2 * k 0 := by ring
+    have hh1 : h 1 = k 1 := by
+      have e0' := e0
+      rw [hh0] at e0'
+      apply (mul_left_cancel₀ (mul_ne_zero he hs))
+      calc
+        Real.exp (q 0) * Real.sin (q 1) * h 1 =
+            Real.exp (q 0) * Real.cos (q 1) * h 0 -
+              (Real.exp (q 0) * Real.cos (q 1) * h 0 -
+                Real.exp (q 0) * Real.sin (q 1) * h 1) := by ring
+        _ = Real.exp (q 0) * Real.cos (q 1) * k 0 -
+              (Real.exp (q 0) * Real.cos (q 1) * k 0 -
+                Real.exp (q 0) * Real.sin (q 1) * k 1) := by rw [hh0, e0']
+        _ = Real.exp (q 0) * Real.sin (q 1) * k 1 := by ring
+    ext i
+    fin_cases i
+    · exact hh0
+    · exact hh1
+    · exact hh2
+  · intro y
+    let h : apm_t97J05_R3 := WithLp.toLp 2
+      ![(y 1 - q 0 * y 2) / q 2,
+        (Real.exp (q 0) * Real.cos (q 1) * ((y 1 - q 0 * y 2) / q 2) - y 0) /
+          (Real.exp (q 0) * Real.sin (q 1)),
+        y 2]
+    refine ⟨h, ?_⟩
+    rw [apm_t97J05_regular_aux_deriv_bijective_aux_formula]
+    ext i
+    fin_cases i
+    · simp [h]
+      field_simp [he, hs]
+      ring
+    · simp [h]
+      field_simp [hz]
+      ring
+    · simp [h]
 
 /-- An inverse-function chart around an arbitrary point where the completed
 map has bijective derivative.  Bijectivity is passed explicitly to keep this
