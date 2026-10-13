@@ -76416,7 +76416,7 @@
   {:consumer :t96J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 0,
    :review-finding
    "Deterministic topology defect in commit ee79eaeb2: it changes the index topology for FiniteWedge from ⊥ to ⊤ while claiming this makes it discrete. Mathlib/Topology/Order.lean states exactly the opposite: ⊥ is discrete and ⊤ is indiscrete. Consequently L × Circle is not the coproduct/disjoint-union source of indexed circle legs, and the coinduced quotient is not the B7 finite-wedge topology; future skeletonHomeomorphWedge would target the wrong space. Repair by restoring TopologicalSpace L := ⊥ in both the FiniteWedge instance and continuous_wedgeCircle proof, then rerun Lean/build and retain coverage, quotient-topology, wedge-relation, and signed-equation residuals. Recorded scope is otherwise exact and fixture SHA-256 386d0e41...ae305 matches.",
    :evidence
@@ -76466,6 +76466,17 @@
     [{:cmd "first compile",
       :exit 1,
       :correction "unfolded quotient setoid"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791860374144-8279-d63c4dd8",
+     :commands
+     ["git scope/SHA/blob checks at 34fa7c1df"
+      "lake env lean ConstructionTargets/PolygonSurfacePiOne.lean"
+      "statement-registry.py check"
+      "placeholder/orientation scans; #print axioms"],
+     :finding
+     "PASS: exact recorded scope and fixture/blob hashes match. The compiled theorem proves target coverage through both endpoint and orbit quotient representations; true sign keeps t, false sign chooses reverseIcc t and the signed map reverses it back. Registry 131/0, placeholders 0, standard axioms only. STOP therefore records real progress and explicitly leaves source coverage, kernel agreement, quotient topology, final homeomorphism, B8/B9."},
     :commit "c578b28c7",
     :changed-paths ["ConstructionTargets/PolygonSurfacePiOne.lean"],
     :fixture
@@ -76474,7 +76485,7 @@
      "e7626acf6c8a2406039733100dfebefe36c2c8fb629a5be1426528941be1e1bf"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope ["ConstructionTargets/PolygonSurfacePiOne.lean"],
    :dag-node "ConstructionTargets/PolygonSurfacePiOne.blueprint.md/B7",
    :acceptance
@@ -87141,7 +87152,7 @@
    :other-consumers [:t92J05 :t94J04 :t97A01 :t97A03]}
   {:consumer :t96J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "PairingData.signedWedgeArc_eq_iff",
@@ -87151,7 +87162,9 @@
     :reported-by [:routes-2026-10-12-polygon-b7-topo2-r1],
     :type "exact target kernel criterion",
     :area "polygon-surface-pi1",
-    :proved-in :routes-2026-10-12-polygon-b7-topo2-r1},
+    :proved-in :routes-2026-10-12-polygon-b7-topo2-r1,
+    :banked-by :routes-2026-10-12-polygon-b7-topo2-r1,
+    :banked-commit "c578b28c7"},
    :id :lemma-pairingdata-signedwedgearc-eq-iff,
    :kind :lemma,
    :depends-on [],
