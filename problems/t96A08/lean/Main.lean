@@ -1,37 +1,20 @@
 import Mathlib
 
-/-!
-# APM t96A08
-
-## Statement repairs
-
-* The source writes `f : M → M`, although `f(p)` is a real-valued integral.
-  The codomain is repaired to `ℝ`.
-* The source implicitly assumes that every point can be joined to the chosen
-  base point.  This is made explicit by `hreachable`; without it the displayed
-  definition of `f` is not available on every connected component.
-
-## Encoding questions
-
-Mathlib has no bundled piecewise-smooth manifold path or manifold one-form
-line integral.  A path is therefore represented by a map `ℝ → M` which is
-continuous and smooth away from a finite set, and its line integral is defined
-concretely by integrating the one-form applied to its manifold derivative over
-`[0,1]`.  Smoothness of the one-form means smoothness of its evaluation map on
-the tangent bundle.
--/
-
 noncomputable section
 
 open scoped Manifold
 
+/-- A textbook piecewise-smooth path: it is smooth up to the endpoints on
+each member of a finite ordered subdivision of `[0,1]`. -/
 def apm_t96a08_IsPiecewiseSmoothPath
     {E M : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
     [TopologicalSpace M] (I : ModelWithCorners ℝ E E) [ChartedSpace E M]
     (γ : ℝ → M) : Prop :=
   Continuous γ ∧
-    ∃ breaks : Finset ℝ, ∀ t ∈ Set.Icc (0 : ℝ) 1, t ∉ breaks →
-      ContMDiffAt 𝓘(ℝ, ℝ) I (⊤ : WithTop ℕ∞) γ t
+    ∃ (n : ℕ) (cuts : Fin (n + 1) → ℝ),
+      StrictMono cuts ∧ cuts 0 = 0 ∧ cuts (Fin.last n) = 1 ∧
+      ∀ i : Fin n, ContMDiffOn 𝓘(ℝ, ℝ) I (⊤ : WithTop ℕ∞) γ
+        (Set.Icc (cuts i.castSucc) (cuts i.succ))
 
 def apm_t96a08_LineIntegral
     {E M : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
@@ -39,83 +22,6 @@ def apm_t96a08_LineIntegral
     (ω : ∀ p : M, TangentSpace I p →L[ℝ] ℝ) (γ : ℝ → M) : ℝ :=
   ∫ t : ℝ in (0 : ℝ)..1,
     ω (γ t) ((mfderiv 𝓘(ℝ, ℝ) I γ t) 1)
-
-/-- Constant paths are admissible in the concrete piecewise-smooth encoding. -/
-lemma apm_t96a08_isPiecewiseSmoothPath_const
-    {E M : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
-    [TopologicalSpace M] (I : ModelWithCorners ℝ E E) [ChartedSpace E M]
-    (p : M) :
-    apm_t96a08_IsPiecewiseSmoothPath I (fun _ : ℝ ↦ p) := by
-  refine ⟨continuous_const, ∅, ?_⟩
-  intro t ht hnot
-  exact contMDiffAt_const
-
-/-- The concrete line integral of a constant path vanishes. -/
-lemma apm_t96a08_lineIntegral_const
-    {E M : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
-    [TopologicalSpace M] (I : ModelWithCorners ℝ E E) [ChartedSpace E M]
-    (ω : ∀ p : M, TangentSpace I p →L[ℝ] ℝ) (p : M) :
-    apm_t96a08_LineIntegral I ω (fun _ : ℝ ↦ p) = 0 := by
-  simp [apm_t96a08_LineIntegral]
-
-/-- Any function satisfying the path-integral specification is normalized to
-zero at the chosen base point. -/
-lemma apm_t96a08_potential_base_eq_zero
-    {E M : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
-    [TopologicalSpace M] (I : ModelWithCorners ℝ E E) [ChartedSpace E M]
-    (ω : ∀ p : M, TangentSpace I p →L[ℝ] ℝ) (base : M) (f : M → ℝ)
-    (hf : ∀ p : M, ∀ γ : ℝ → M,
-      apm_t96a08_IsPiecewiseSmoothPath I γ → γ 0 = base → γ 1 = p →
-      f p = apm_t96a08_LineIntegral I ω γ) :
-    f base = 0 := by
-  rw [hf base (fun _ : ℝ ↦ base)
-    (apm_t96a08_isPiecewiseSmoothPath_const I base) rfl rfl]
-  exact apm_t96a08_lineIntegral_const I ω base
-
-/-- Path independence also makes a potential satisfying the line-integral
-specification unique; this isolates all global choice bookkeeping from the
-remaining local regularity argument. -/
-lemma apm_t96a08_potential_unique
-    {E M : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
-    [TopologicalSpace M] (I : ModelWithCorners ℝ E E) [ChartedSpace E M]
-    (ω : ∀ p : M, TangentSpace I p →L[ℝ] ℝ) (base : M)
-    (hreachable : ∀ p : M, ∃ γ : ℝ → M,
-      apm_t96a08_IsPiecewiseSmoothPath I γ ∧ γ 0 = base ∧ γ 1 = p)
-    (f g : M → ℝ)
-    (hf : ∀ p : M, ∀ γ : ℝ → M,
-      apm_t96a08_IsPiecewiseSmoothPath I γ → γ 0 = base → γ 1 = p →
-      f p = apm_t96a08_LineIntegral I ω γ)
-    (hg : ∀ p : M, ∀ γ : ℝ → M,
-      apm_t96a08_IsPiecewiseSmoothPath I γ → γ 0 = base → γ 1 = p →
-      g p = apm_t96a08_LineIntegral I ω γ) :
-    f = g := by
-  funext p
-  obtain ⟨γ, hγ, hγ0, hγ1⟩ := hreachable p
-  exact (hf p γ hγ hγ0 hγ1).trans (hg p γ hγ hγ0 hγ1).symm
-
-/-- Why this unblocks `apm_t96a08`: this is the missing local
-chart-linear extension calculation.  It says that a potential represented by
-the concrete path integral from a reachable base point is smooth and that its
-manifold derivative is the original smooth one-form. -/
-theorem apm_t96A08_bridge_1
-    {E M : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
-    [CompleteSpace E] [TopologicalSpace M]
-    (I : ModelWithCorners ℝ E E) [ChartedSpace E M]
-    [IsManifold I (⊤ : WithTop ℕ∞) M]
-    (omega : ∀ p : M, TangentSpace I p →L[ℝ] ℝ) (base : M)
-    (homega_smooth : ContMDiff I.tangent 𝓘(ℝ, ℝ) (⊤ : WithTop ℕ∞)
-      (fun v : TangentBundle I M => omega v.1 v.2))
-    (hreachable : ∀ p : M, ∃ gamma : ℝ → M,
-      apm_t96a08_IsPiecewiseSmoothPath I gamma ∧
-        gamma 0 = base ∧ gamma 1 = p)
-    (f : M → ℝ)
-    (hf : ∀ p : M, ∀ gamma : ℝ → M,
-      apm_t96a08_IsPiecewiseSmoothPath I gamma →
-      gamma 0 = base → gamma 1 = p →
-      f p = apm_t96a08_LineIntegral I omega gamma) :
-    ContMDiff I 𝓘(ℝ, ℝ) (⊤ : WithTop ℕ∞) f ∧
-      ∀ p : M, mfderiv I 𝓘(ℝ, ℝ) f p = omega p := by
-  sorry
 
 theorem apm_t96a08
     {E M : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
@@ -138,48 +44,4 @@ theorem apm_t96a08
         f p = apm_t96a08_LineIntegral I ω γ) ∧
       ContMDiff I 𝓘(ℝ, ℝ) (⊤ : WithTop ℕ∞) f ∧
       ∀ p : M, mfderiv I 𝓘(ℝ, ℝ) f p = ω p := by
-  classical
-  choose γ hγ using hreachable
-  refine ⟨fun p ↦ apm_t96a08_LineIntegral I ω (γ p), ?_, ?_⟩
-  · intro p δ hδ hδ0 hδ1
-    exact hindependent (γ p) δ (hγ p).1 hδ
-      (by rw [(hγ p).2.1, hδ0]) (by rw [(hγ p).2.2, hδ1])
-  · /-
-    CLOSER HOP 2 boundary. The potential is constructed by classical
-    choice from `hreachable`, and its defining value for every admissible path
-    is proved from `hindependent`; well-definedness and endpoint bookkeeping
-    are compiled outside this `sorry`.
-
-    Going beyond hop 1, constant paths are now proved admissible, their
-    concrete line integral is computed as zero, and
-    `apm_t96a08_potential_base_eq_zero` derives the canonical normalization
-    `f base = 0` for any function satisfying the path-integral specification.
-    Inspection of `t00J04` also found its useful chart-linear `mfderiv` lemma,
-    but that lemma only prescribes a differential at one point and does not
-    identify the endpoint-dependent integral used here.
-
-    The remaining bridge is local calculus for the concrete line integral.
-    One must append a short chart-linear path to the chosen base path, prove
-    the concatenation piecewise smooth, split and reparameterize its integral,
-    and differentiate the short-segment integral with respect to its endpoint.
-    This must yield both `ContMDiff` and the exact `mfderiv = ω` equality.
-    Renewed searches of `LEMMA-INDEX.md`, `ConstructionTargets/`, line-integral
-    siblings, Mathlib's manifold derivative, interval-integral, path
-    concatenation, tangent-bundle, and differential-form sources, and git
-    history found no manifold one-form fundamental theorem or compatible
-    piecewise-smooth concatenation API. The frozen statement is unchanged.
-
-    CLOSER HOP 3 (2026-08-08): the remaining global logical obligation is now
-    compiled as `apm_t96a08_potential_unique`. Any two functions satisfying
-    the frozen path-integral specification agree pointwise by choosing one
-    reachable path, so the constructed potential is not merely well-defined
-    and normalized but canonical. Searches then focused on Mathlib's
-    `ContMDiff.piecewise_Iic` path machinery and Riemannian path-energy code.
-    Those APIs splice manifold maps continuously, but their parametrizations
-    and regularity predicates do not match this ambient-real, finite-break
-    encoding, and they supply no line-integral reparametrization theorem.
-    Thus no global choice, endpoint, normalization, or uniqueness work remains;
-    the sole bridge is still the local chart-linear extension calculation
-    proving smoothness and `mfderiv = ω`. The frozen statement is unchanged.
-    -/
-    sorry
+  sorry

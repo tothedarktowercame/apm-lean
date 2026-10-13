@@ -1,51 +1,73 @@
-import Mathlib.GroupTheory.PresentedGroup
-import Mathlib.LinearAlgebra.FreeModule.Finite.Matrix
+import Mathlib
 
-/-! # APM t99A01: attaching cells of degrees 2, 4, and 5
+/-! # APM t99A01: degree-two, degree-four, and degree-five cell attachments -/
 
-## Statement repairs
+open CategoryTheory
 
-Mathlib does not currently provide a CW-cell attachment construction together
-with van Kampen and cellular-homology comparison theorems.  Accordingly, the
-topological comparison step is NOT encoded.  The theorem records the two
-algebraic calculations produced by those comparison theorems: the one-generator
-presentations for the fundamental groups and the kernels of the cellular
-boundary matrices.  `H₀ = ℤ`, the cokernel calculations for `H₁`, and vanishing
-of higher cellular groups are omitted rather than represented by placeholders.
-
-## Encoding questions
-
-The single generator is indexed by `Unit`.  The cellular boundary maps are
-written explicitly on `Fin 1`, `Fin 2`, and `Fin 3` tuples of integers.
--/
+noncomputable section
 
 namespace APMT99A01
 
-def rels (ds : Set ℕ) : Set (FreeGroup Unit) :=
-  {w | ∃ d ∈ ds, w = (FreeGroup.of () : FreeGroup Unit) ^ d}
+abbrev Disk := Metric.closedBall (0 : ℂ) 1
 
-def boundaryX : (Fin 1 → ℤ) →+ ℤ where
-  toFun v := 2 * v 0
-  map_zero' := by simp
-  map_add' := by intro x y; simp [mul_add]
+def circleInDisk (z : Circle) : Disk :=
+  ⟨z, by simpa [Metric.mem_closedBall, dist_zero_right] using z.property.le⟩
 
-def boundaryY : (Fin 2 → ℤ) →+ ℤ where
-  toFun v := 2 * v 0 + 4 * v 1
-  map_zero' := by simp
-  map_add' := by intro x y; simp [mul_add, add_assoc, add_left_comm]
+/-- The generating identifications for attaching one disk for each entry of
+`degree` to the common circle. -/
+inductive AttachRel {r : ℕ} (degree : Fin r → ℕ) :
+    Sum Circle (Fin r × Disk) → Sum Circle (Fin r × Disk) → Prop
+  | boundary (i : Fin r) (z : Circle) :
+      AttachRel degree (Sum.inl (z ^ degree i))
+        (Sum.inr (i, circleInDisk z))
 
-def boundaryZ : (Fin 3 → ℤ) →+ ℤ where
-  toFun v := 2 * v 0 + 4 * v 1 + 5 * v 2
-  map_zero' := by simp
-  map_add' := by intro x y; simp [mul_add, add_assoc, add_left_comm]
+/-- A circle with `r` two-cells attached by the indicated degree maps. -/
+def AttachSpace {r : ℕ} (degree : Fin r → ℕ) :=
+  Quotient (Relation.EqvGen.setoid (AttachRel degree))
+
+noncomputable instance {r : ℕ} (degree : Fin r → ℕ) :
+    TopologicalSpace (AttachSpace degree) :=
+  TopologicalSpace.coinduced (fun x ↦ Quotient.mk _ x) inferInstance
+
+def degreeX : Fin 1 → ℕ := ![2]
+def degreeY : Fin 2 → ℕ := ![2, 4]
+def degreeZ : Fin 3 → ℕ := ![2, 4, 5]
+
+abbrev X := AttachSpace degreeX
+abbrev Y := AttachSpace degreeY
+abbrev Z := AttachSpace degreeZ
+
+def basepoint {r : ℕ} (degree : Fin r → ℕ) : AttachSpace degree :=
+  Quotient.mk _ (Sum.inl (1 : Circle))
+
+abbrev H (k : ℕ) (W : Type) [TopologicalSpace W] :=
+  (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) k).obj
+    (ModuleCat.of ℤ ℤ)).obj (TopCat.of W))
 
 end APMT99A01
 
 theorem apm_t99a01 :
-    Nonempty (PresentedGroup (APMT99A01.rels {2}) ≃* Multiplicative (ZMod 2)) ∧
-    Nonempty (PresentedGroup (APMT99A01.rels {2, 4}) ≃* Multiplicative (ZMod 2)) ∧
-    Subsingleton (PresentedGroup (APMT99A01.rels {2, 4, 5})) ∧
-    Nonempty (AddMonoidHom.ker APMT99A01.boundaryX ≃+ (Fin 0 → ℤ)) ∧
-    Nonempty (AddMonoidHom.ker APMT99A01.boundaryY ≃+ ℤ) ∧
-    Nonempty (AddMonoidHom.ker APMT99A01.boundaryZ ≃+ (Fin 2 → ℤ)) := by
+    Nonempty (FundamentalGroup APMT99A01.X
+      (APMT99A01.basepoint APMT99A01.degreeX) ≃*
+        Multiplicative (ZMod 2)) ∧
+    Nonempty (FundamentalGroup APMT99A01.Y
+      (APMT99A01.basepoint APMT99A01.degreeY) ≃*
+        Multiplicative (ZMod 2)) ∧
+    Subsingleton (FundamentalGroup APMT99A01.Z
+      (APMT99A01.basepoint APMT99A01.degreeZ)) ∧
+    Nonempty (APMT99A01.H 0 APMT99A01.X ≅ ModuleCat.of ℤ ℤ) ∧
+    Nonempty (APMT99A01.H 1 APMT99A01.X ≅ ModuleCat.of ℤ (ZMod 2)) ∧
+    Limits.IsZero (APMT99A01.H 2 APMT99A01.X) ∧
+    Nonempty (APMT99A01.H 0 APMT99A01.Y ≅ ModuleCat.of ℤ ℤ) ∧
+    Nonempty (APMT99A01.H 1 APMT99A01.Y ≅ ModuleCat.of ℤ (ZMod 2)) ∧
+    Nonempty (APMT99A01.H 2 APMT99A01.Y ≅ ModuleCat.of ℤ ℤ) ∧
+    Nonempty (APMT99A01.H 0 APMT99A01.Z ≅ ModuleCat.of ℤ ℤ) ∧
+    Limits.IsZero (APMT99A01.H 1 APMT99A01.Z) ∧
+    Nonempty (APMT99A01.H 2 APMT99A01.Z ≅
+      ModuleCat.of ℤ (Fin 2 → ℤ)) ∧
+    (∀ k : ℕ, 3 ≤ k →
+      Limits.IsZero (APMT99A01.H k APMT99A01.X) ∧
+      Limits.IsZero (APMT99A01.H k APMT99A01.Y) ∧
+      Limits.IsZero (APMT99A01.H k APMT99A01.Z)) := by
   sorry
+
