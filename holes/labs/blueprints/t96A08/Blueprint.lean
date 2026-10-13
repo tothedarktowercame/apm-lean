@@ -73,7 +73,144 @@ theorem apm_t96A08_concat_piecewiseSmooth
     (hdelta : apm_t96a08_IsPiecewiseSmoothPath I delta)
     (hend : gamma 1 = delta 0) :
     apm_t96a08_IsPiecewiseSmoothPath I (apm_t96A08_concat gamma delta) := by
-  sorry
+  rcases hgamma with ⟨hγc, nγ, cγ, hγmono, hγzero, hγone, hγsmooth⟩
+  rcases hdelta with ⟨hδc, nδ, cδ, hδmono, hδzero, hδone, hδsmooth⟩
+  have hnγ : 0 < nγ := by
+    by_contra h
+    have hn : nγ = 0 := by omega
+    subst nγ
+    have he : (0 : Fin 1) = Fin.last 0 := Subsingleton.elim _ _
+    rw [he] at hγzero
+    linarith
+  have hnδ : 0 < nδ := by
+    by_contra h
+    have hn : nδ = 0 := by omega
+    subst nδ
+    have he : (0 : Fin 1) = Fin.last 0 := Subsingleton.elim _ _
+    rw [he] at hδzero
+    linarith
+  let cuts : Fin (nγ + nδ + 1) → ℝ := fun i ↦
+    if h : i.val ≤ nγ then cγ ⟨i.val, by omega⟩ / 2
+    else (1 + cδ ⟨i.val - nγ, by omega⟩) / 2
+  have hcont : Continuous (apm_t96A08_concat gamma delta) := by
+    apply Continuous.if_le
+    · exact hγc.comp (continuous_const.mul continuous_id)
+    · exact hδc.comp ((continuous_const.mul continuous_id).sub continuous_const)
+    · exact continuous_id
+    · exact continuous_const
+    · intro t ht
+      have ht' : t = (1 / 2 : ℝ) := by linarith
+      subst t
+      simpa [hend]
+  refine ⟨hcont, nγ + nδ, cuts, ?_, ?_, ?_, ?_⟩
+  · intro i j hij
+    by_cases hi : i.val ≤ nγ
+    · by_cases hj : j.val ≤ nγ
+      · simp only [cuts, dif_pos hi, dif_pos hj]
+        exact (div_lt_div_iff_of_pos_right (by norm_num : (0 : ℝ) < 2)).2
+          (hγmono hij)
+      · simp only [cuts, dif_pos hi, dif_neg hj]
+        have hleft : cγ ⟨i.val, by omega⟩ ≤ 1 := by
+          rw [← hγone]
+          apply hγmono.monotone
+          simpa using hi
+        have hright : 0 < cδ ⟨j.val - nγ, by omega⟩ := by
+          rw [← hδzero]
+          apply hδmono
+          change 0 < j.val - nγ
+          omega
+        linarith
+    · have hj : ¬j.val ≤ nγ := by omega
+      simp only [cuts, dif_neg hi, dif_neg hj]
+      have hv : i.val - nγ < j.val - nγ := by omega
+      have hc : cδ ⟨i.val - nγ, by omega⟩ < cδ ⟨j.val - nγ, by omega⟩ :=
+        hδmono hv
+      linarith
+  · simp [cuts, hγzero]
+  · have he : (⟨nδ, by omega⟩ : Fin (nδ + 1)) = Fin.last nδ := by ext; simp
+    simp [cuts, hnδ.ne', he, hδone]
+  · intro i
+    by_cases hi : i.val < nγ
+    · have hics : (i.castSucc : Fin (nγ + nδ + 1)).val ≤ nγ := by simp; omega
+      have his : (i.succ : Fin (nγ + nδ + 1)).val ≤ nγ := by simp; omega
+      change i.val ≤ nγ at hics
+      change i.val + 1 ≤ nγ at his
+      have heq : Set.Icc (cuts i.castSucc) (cuts i.succ) ⊆
+          (fun t : ℝ ↦ 2 * t) ⁻¹' Set.Icc (cγ ⟨i.val, by omega⟩)
+            (cγ ⟨i.val + 1, by omega⟩) := by
+        intro t ht
+        simp only [Set.mem_preimage, Set.mem_Icc] at ht ⊢
+        rw [show cuts i.castSucc = cγ ⟨i.val, by omega⟩ / 2 by simp [cuts, hics],
+          show cuts i.succ = cγ ⟨i.val + 1, by omega⟩ / 2 by simp [cuts, his]] at ht
+        constructor <;> linarith
+      have haff : ContMDiff 𝓘(ℝ, ℝ) 𝓘(ℝ, ℝ) (⊤ : WithTop ℕ∞)
+          (fun t : ℝ ↦ 2 * t) := by
+        exact contMDiff_const.mul contMDiff_id
+      have hc := (hγsmooth ⟨i.val, hi⟩).comp haff.contMDiffOn heq
+      apply hc.congr
+      intro t ht
+      have htle : t ≤ (2 : ℝ)⁻¹ := by
+        have := ht.2
+        rw [show cuts i.succ = cγ ⟨i.val + 1, by omega⟩ / 2 by simp [cuts, his]] at this
+        have hcγ : cγ ⟨i.val + 1, by omega⟩ ≤ 1 := by
+          rw [← hγone]
+          apply hγmono.monotone
+          change i.val + 1 ≤ nγ
+          omega
+        norm_num at this ⊢
+        linarith
+      have hp : t ≤ (1 / 2 : ℝ) := by norm_num [one_div] at htle ⊢; exact htle
+      simp only [apm_t96A08_concat, if_pos hp, Function.comp_apply]
+    · have his : ¬(i.succ : Fin (nγ + nδ + 1)).val ≤ nγ := by simp; omega
+      change ¬i.val + 1 ≤ nγ at his
+      have hil : i.val < nγ + nδ := i.isLt
+      let k : Fin nδ := ⟨i.val - nγ, by omega⟩
+      have hcutleft : cuts i.castSucc = (1 + cδ ⟨i.val - nγ, by omega⟩) / 2 := by
+        by_cases he : i.val ≤ nγ
+        · have hie : i.val = nγ := by omega
+          have hefin : (⟨nγ, by omega⟩ : Fin (nγ + 1)) = Fin.last nγ := by ext; simp
+          simp [cuts, he, hie, hefin, hγone, hδzero]
+        · simp [cuts, he]
+      have heq : Set.Icc (cuts i.castSucc) (cuts i.succ) ⊆
+          (fun t : ℝ ↦ 2 * t - 1) ⁻¹' Set.Icc (cδ k.castSucc) (cδ k.succ) := by
+        intro t ht
+        simp only [Set.mem_preimage, Set.mem_Icc] at ht ⊢
+        rw [hcutleft,
+          show cuts i.succ = (1 + cδ ⟨i.val + 1 - nγ, by omega⟩) / 2 by
+              simp [cuts, his]] at ht
+        change cδ ⟨i.val - nγ, by omega⟩ ≤ 2 * t - 1 ∧
+          2 * t - 1 ≤ cδ ⟨i.val - nγ + 1, by omega⟩
+        have he : i.val + 1 - nγ = i.val - nγ + 1 := by omega
+        simp [he] at ht
+        constructor <;> linarith
+      have haff : ContMDiff 𝓘(ℝ, ℝ) 𝓘(ℝ, ℝ) (⊤ : WithTop ℕ∞)
+          (fun t : ℝ ↦ 2 * t - 1) := by
+        exact (contMDiff_const.mul contMDiff_id).sub contMDiff_const
+      have hc := (hδsmooth k).comp haff.contMDiffOn heq
+      apply hc.congr
+      intro t ht
+      by_cases hp : t ≤ (1 / 2 : ℝ)
+      · have hlow := ht.1
+        rw [hcutleft] at hlow
+        have hcδ : 0 ≤ cδ ⟨i.val - nγ, by omega⟩ := by
+          rw [← hδzero]
+          apply hδmono.monotone
+          change 0 ≤ i.val - nγ
+          omega
+        have hcz : cδ ⟨i.val - nγ, by omega⟩ = 0 := by linarith
+        let z : Fin nδ := ⟨0, hnδ⟩
+        have hidx : (⟨i.val - nγ, by omega⟩ : Fin (nδ + 1)) = 0 := by
+          apply hδmono.injective
+          simpa [hδzero] using hcz
+        have kval : i.val - nγ = 0 := by
+          simpa using congrArg Fin.val hidx
+        have hkzero : k = z := by
+          apply Fin.ext
+          simp [k, z, kval]
+        have htval : t = 1 / 2 := by linarith
+        subst t
+        norm_num [apm_t96A08_concat, hend]
+      · simp only [apm_t96A08_concat, if_neg hp, Function.comp_apply]
 
 /-- Seat: the line integral is additive under concatenation.  On `(0, 1/2)` the
 manifold chain rule gives `mfderiv (concat) t 1 = 2 • mfderiv gamma (2 t) 1`
