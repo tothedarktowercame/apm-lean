@@ -270,7 +270,7 @@ hypotheses, if `hf : ContMDiff I I' ∞ f` and
 uses: B2, Mathlib `HasStrictFDerivAt.map_nhds_eq_of_surj`, chart inverse laws,
 and the derivative equivalences of `extChartAt`
 
-status: planned
+status: proved
 
 In the fixed charts of B2, smoothness supplies a strict derivative at the
 chart centre.  The coordinate derivative is surjective because it is
@@ -281,6 +281,11 @@ target neighbourhood back through the target chart.  The chart inverse laws
 show every resulting target point is literally `f y` for some `y`, yielding
 `range f ∈ 𝒩 (f x)` rather than only a neighbourhood statement about
 the chart representative.
+
+The compiled proof applies the strict-derivative surjection theorem to the
+fixed-chart representative, then maps the source extended-chart target.
+The chart inverse law identifies every value in that image with a literal
+value of `f`, so the full range belongs to the neighbourhood filter.
 
 ### B8. Finitely many critical values force constancy in target dimension above one
 

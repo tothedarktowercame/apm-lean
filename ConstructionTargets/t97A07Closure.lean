@@ -693,6 +693,49 @@ theorem exists_not_surjective_mfderiv_of_pos
     hc.continuousOn
   exact ⟨x, not_surjective_mfderiv_of_isMaxOn_coordinate f hf i x hx⟩
 
+/-- Blueprint B7: a regular point maps onto a neighbourhood of its image. -/
+theorem range_mem_nhds_of_regular
+    {m n : ℕ} {X : Type*} [TopologicalSpace X]
+    [ChartedSpace (EuclideanModel m) X]
+    [IsManifold 𝓘(ℝ, EuclideanModel m) ∞ X]
+    (f : X → EuclideanModel n)
+    (hf : ContMDiff 𝓘(ℝ, EuclideanModel m)
+      𝓘(ℝ, EuclideanModel n) ∞ f)
+    (x : X)
+    (hx : Function.Surjective
+      (mfderiv 𝓘(ℝ, EuclideanModel m)
+        𝓘(ℝ, EuclideanModel n) f x)) :
+    Set.range f ∈ 𝓝 (f x) := by
+  let e := extChartAt 𝓘(ℝ, EuclideanModel m) x
+  let g := writtenInExtChartAt 𝓘(ℝ, EuclideanModel m)
+    𝓘(ℝ, EuclideanModel n) x f
+  let a := e x
+  have hg : ContDiffAt ℝ ∞ g a := by
+    have h := (contMDiffAt_iff.mp (hf x)).2
+    simpa [g, a] using h
+  have hd : fderiv ℝ g a = mfderiv 𝓘(ℝ, EuclideanModel m)
+      𝓘(ℝ, EuclideanModel n) f x := by
+    have h := coordinate_fderivWithin_eq_mfderiv f hf x
+    simpa [g, a] using h
+  have hsurj : Function.Surjective (fderiv ℝ g a) := by
+    rw [hd]
+    exact hx
+  have hmap : Filter.map g (𝓝 a) = 𝓝 (g a) :=
+    (hg.hasStrictFDerivAt (by simp)).map_nhds_eq_of_surj
+      (LinearMap.range_eq_top.mpr hsurj)
+  have het : e.target ∈ 𝓝 a := by
+    simpa [a, e] using
+      (extChartAt_target_mem_nhds (I := 𝓘(ℝ, EuclideanModel m)) x)
+  have himage : g '' e.target ∈ 𝓝 (g a) := by
+    rw [← hmap]
+    exact Filter.image_mem_map het
+  have hga : g a = f x := by simp [g, a, e]
+  rw [hga] at himage
+  refine Filter.mem_of_superset himage ?_
+  rintro y ⟨z, hz, rfl⟩
+  refine ⟨e.symm z, ?_⟩
+  simp [g, e]
+
 end t97A07Closure
 
 #print axioms t97A07Closure.isOpen_setOf_surjective_clm
@@ -722,3 +765,4 @@ end t97A07Closure
 #print axioms t97A07Closure.fderiv_coordinate_comp_extChartAt_symm_apply
 #print axioms t97A07Closure.not_surjective_mfderiv_of_isMaxOn_coordinate
 #print axioms t97A07Closure.exists_not_surjective_mfderiv_of_pos
+#print axioms t97A07Closure.range_mem_nhds_of_regular
