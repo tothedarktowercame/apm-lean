@@ -463,7 +463,41 @@ lemma apm_t98a03_wedge_branches_accumulate_aux_torus
     (U : Set (apm_t98a03_X t₀ r₀)) (hU : IsOpen U)
     (hpU : apm_t98a03_basepoint t₀ r₀ ∈ U) :
     ∃ t ≠ t₀, Quotient.mk _ (Sum.inl t) ∈ U := by
-  sorry
+  let q : Sum apm_t98a03_Torus apm_t98a03_RP2 → apm_t98a03_X t₀ r₀ :=
+    fun z ↦ Quotient.mk _ z
+  let V : Set apm_t98a03_Torus := Sum.inl ⁻¹' (q ⁻¹' U)
+  have hq : IsOpen (q ⁻¹' U) := by
+    exact hU
+  have hV : IsOpen V := hq.preimage continuous_inl
+  have ht₀V : t₀ ∈ V := by
+    exact hpU
+  let f : ℝ → apm_t98a03_Torus :=
+    fun s ↦ (t₀.1 * Circle.exp s, t₀.2)
+  have hf : Continuous f := by
+    exact (continuous_const.mul Circle.exp.continuous).prodMk continuous_const
+  have hW : IsOpen (f ⁻¹' V) := hV.preimage hf
+  have hzero : (0 : ℝ) ∈ f ⁻¹' V := by
+    simpa [f] using ht₀V
+  obtain ⟨ε, hε, hεW⟩ := Metric.isOpen_iff.1 hW 0 hzero
+  let s : ℝ := min (ε / 2) (Real.pi / 2)
+  have hspos : 0 < s := lt_min (half_pos hε) (half_pos Real.pi_pos)
+  have hsε : s < ε :=
+    lt_of_le_of_lt (min_le_left _ _) (half_lt_self hε)
+  have hspi : s < Real.pi :=
+    lt_of_le_of_lt (min_le_right _ _) (half_lt_self Real.pi_pos)
+  have hfsV : f s ∈ V := by
+    apply hεW
+    simpa [Real.dist_eq, abs_of_pos hspos] using hsε
+  refine ⟨f s, ?_, hfsV⟩
+  intro heq
+  have heq₁ : t₀.1 * Circle.exp s = t₀.1 := congrArg Prod.fst heq
+  have hexp : Circle.exp s = 1 := by
+    apply mul_left_cancel (a := t₀.1)
+    simpa using heq₁
+  have him := congrArg (fun z : Circle ↦ (z : ℂ).im) hexp
+  have hsin : Real.sin s = 0 := by
+    simpa [Circle.coe_exp, Complex.exp_mul_I] using him
+  exact (Real.sin_pos_of_pos_of_lt_pi hspos hspi).ne' hsin
 
 lemma apm_t98a03_wedge_branches_accumulate_aux_rp2
     (t₀ : apm_t98a03_Torus) (r₀ : apm_t98a03_RP2)
