@@ -11,11 +11,10 @@ structure inconsistent. Weak derivatives are now elements of Mathlib's `L²`
 space, which quotients functions by almost-everywhere equality. Thus changing a
 derivative on a singleton no longer creates a distinct representative.
 
-Part (d) says that `uₙ` itself converges weakly, but the suggested boundedness
-argument guarantees only a weakly convergent subsequence. We state that precise
-conclusion, as does the supplied solution. Uniqueness can subsequently
-upgrade it to convergence of the full sequence, but that is not needed for
-part (e).
+Part (d) is stated faithfully for the full Galerkin sequence.  Galerkin
+orthogonality identifies `uₙ` with the orthogonal projection of the unique
+weak solution onto `V n`; nestedness and density then give norm convergence,
+and hence weak convergence, of the entire sequence.
 
 ## Encoding questions
 
@@ -229,13 +228,23 @@ theorem apm_m99J06_weak_iff_strong
       apm_m99J06_strongSolution M f u := by
   sorry
 
+/-- Shared Riesz-representation bridge for both the ambient weak problem and
+finite-dimensional Galerkin problems. -/
+theorem apm_m99J06_riesz_on_complete_submodule
+    {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℝ H]
+    [CompleteSpace H] (M : apm_m99J06_H01Model H)
+    (f : ℝ → ℝ) (hf : MemLp f 2 apm_m99J06_intervalMeasure)
+    (V : Submodule ℝ H) [CompleteSpace V] :
+    ∃! u : V, apm_m99J06_galerkinEquation M f V u := by
+  sorry
+
 theorem apm_m99J06_galerkin_exists_unique
     {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℝ H]
     [CompleteSpace H] (M : apm_m99J06_H01Model H)
     (f : ℝ → ℝ) (hf : MemLp f 2 apm_m99J06_intervalMeasure)
     (V : Submodule ℝ H) [FiniteDimensional ℝ V] :
     ∃! u : V, apm_m99J06_galerkinEquation M f V u := by
-  sorry
+  exact apm_m99J06_riesz_on_complete_submodule M f hf V
 
 theorem apm_m99J06_galerkin_norm_le
     {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℝ H]
@@ -246,22 +255,44 @@ theorem apm_m99J06_galerkin_norm_le
     ‖(u : H)‖ ≤ (eLpNorm f 2 apm_m99J06_intervalMeasure).toReal := by
   sorry
 
-theorem apm_m99J06_weak_subsequence_solves
+theorem apm_m99J06_weakSolution_exists_unique
     {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℝ H]
     [CompleteSpace H] (M : apm_m99J06_H01Model H)
-    (f : ℝ → ℝ) (hf : MemLp f 2 apm_m99J06_intervalMeasure)
-    (V : ℕ → Submodule ℝ H)
+    (f : ℝ → ℝ) (hf : MemLp f 2 apm_m99J06_intervalMeasure) :
+    ∃! u : H, apm_m99J06_weakSolution M f u := by
+  letI : IsClosed ((⊤ : Submodule ℝ H) : Set H) := isClosed_univ
+  obtain ⟨u, hu, huniq⟩ :=
+    apm_m99J06_riesz_on_complete_submodule M f hf (⊤ : Submodule ℝ H)
+  refine ⟨u, ?_, ?_⟩
+  · intro v
+    exact hu ⟨v, trivial⟩
+  · intro w hw
+    have hsub : (⟨w, trivial⟩ : (⊤ : Submodule ℝ H)) = u := by
+      apply huniq
+      intro v
+      exact hw v
+    exact congrArg Subtype.val hsub
+
+theorem apm_m99J06_galerkin_eq_starProjection
+    {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℝ H]
+    [CompleteSpace H] (M : apm_m99J06_H01Model H)
+    (f : ℝ → ℝ) (V : Submodule ℝ H) [FiniteDimensional ℝ V]
+    (u : H) (hu : apm_m99J06_weakSolution M f u)
+    (uV : V) (huV : apm_m99J06_galerkinEquation M f V uV) :
+    (uV : H) = V.starProjection u := by
+  sorry
+
+theorem apm_m99J06_starProjection_convergence
+    {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℝ H]
+    [CompleteSpace H]
+    (V : ℕ → Submodule ℝ H) [∀ n, FiniteDimensional ℝ (V n)]
     (hnested : ∀ n : ℕ, V n ≤ V (n + 1))
     (hdense : Dense (⋃ n : ℕ, (V n : Set H)))
     (uSeq : ∀ n : ℕ, V n)
-    (heq : ∀ n, apm_m99J06_galerkinEquation M f (V n) (uSeq n))
-    (hbound : ∀ n,
-      ‖(uSeq n : H)‖ ≤ (eLpNorm f 2 apm_m99J06_intervalMeasure).toReal) :
-    ∃ k : ℕ → ℕ, StrictMono k ∧
-      ∃ u : H,
-        Tendsto (fun j ↦ toWeakSpace ℝ H (uSeq (k j) : H)) atTop
-          (nhds (toWeakSpace ℝ H u)) ∧
-        apm_m99J06_weakSolution M f u := by
+    (u : H) (hproj : ∀ n, (uSeq n : H) = (V n).starProjection u) :
+    Tendsto (fun n ↦ (uSeq n : H)) atTop (nhds u) ∧
+      Tendsto (fun n ↦ toWeakSpace ℝ H (uSeq n : H)) atTop
+        (nhds (toWeakSpace ℝ H u)) := by
   sorry
 
 theorem apm_m99j06
@@ -279,11 +310,10 @@ theorem apm_m99j06
         ∀ uSeq : ∀ n : ℕ, V n,
           (∀ n, apm_m99J06_galerkinEquation M f (V n) (uSeq n)) →
           (∀ n, ‖(uSeq n : H)‖ ≤ (eLpNorm f 2 apm_m99J06_intervalMeasure).toReal) ∧
-          ∃ k : ℕ → ℕ, StrictMono k ∧
-            ∃ u : H,
-              Tendsto (fun j ↦ toWeakSpace ℝ H (uSeq (k j) : H)) atTop
-                (nhds (toWeakSpace ℝ H u)) ∧
-              apm_m99J06_weakSolution M f u) := by
+          ∃ u : H,
+            Tendsto (fun n ↦ toWeakSpace ℝ H (uSeq n : H)) atTop
+              (nhds (toWeakSpace ℝ H u)) ∧
+            apm_m99J06_weakSolution M f u) := by
   refine ⟨apm_m99J06_weak_iff_strong M f hf, ?_⟩
   intro V hfinite hnested hdense
   letI (n : ℕ) : FiniteDimensional ℝ (V n) := hfinite n
@@ -292,7 +322,11 @@ theorem apm_m99j06
   have hbound : ∀ n,
       ‖(uSeq n : H)‖ ≤ (eLpNorm f 2 apm_m99J06_intervalMeasure).toReal :=
     fun n ↦ apm_m99J06_galerkin_norm_le M f hf (V n) (uSeq n) (heq n)
-  exact ⟨hbound,
-    apm_m99J06_weak_subsequence_solves M f hf V hnested hdense uSeq heq hbound⟩
+  obtain ⟨u, hu, _⟩ := apm_m99J06_weakSolution_exists_unique M f hf
+  have hproj : ∀ n, (uSeq n : H) = (V n).starProjection u := fun n ↦
+    apm_m99J06_galerkin_eq_starProjection M f (V n) u hu (uSeq n) (heq n)
+  have hconv :=
+    apm_m99J06_starProjection_convergence V hnested hdense uSeq u hproj
+  exact ⟨hbound, u, hconv.2, hu⟩
 
 #print axioms apm_m99j06

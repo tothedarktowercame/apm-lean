@@ -1,174 +1,69 @@
 # Blueprint for m99J06
 
-## Triage
+## Triage and repair
 
-Verdict: **true and faithful after the documented model repairs**.
+**Verdict: the canonical statement is unfaithful.** Since commit `dec7377d8`, part (d) asserts only convergence of a subsequence, whereas `problem.md` asks that the full Galerkin sequence converge weakly. The stronger statement is true.
 
-The current model stores weak derivatives in Mathlib's `L²` quotient, avoiding
-the inconsistency of treating almost-everywhere equal derivative
-representatives as distinct.  It also states weak convergence only for a
-subsequence, which is exactly what the boundedness argument in the supplied
-solution proves.
+Let `u` be the unique weak solution furnished by Riesz representation. Galerkin orthogonality and discrete uniqueness give
 
-I checked the principal degeneracies:
+```text
+(uSeq n : H) = (V n).starProjection u.
+```
 
-* If `H` is trivial, the model can exist only when its realization axiom is
-  compatible with a trivial `H¹₀`; the theorem's conclusions then reduce
-  correctly.
-* For `f = 0`, every Galerkin solution is zero by the compiled uniqueness
-  argument, the norm bound is exact, and the constant zero subsequence solves
-  the weak problem.
-* For `V n = {0}`, finite-dimensional existence is still valid, though such a
-  family cannot satisfy the density hypothesis unless `H` is trivial.
-* Repeated subspaces are allowed by `V n ≤ V(n+1)` and do not affect the
-  eventual-membership argument.
-* Altering a derivative representative on a singleton does not alter its `Lp`
-  element, so the repaired model does not distinguish null-set changes.
+The adjacent inclusions imply `Monotone V`, while density of `⋃ n, V n` implies that the topological closure of `⨆ n, V n` is `⊤`. Mathlib's checked theorem `Submodule.starProjection_tendsto_self` therefore gives convergence to `u` in norm. Composing with the continuous identity into `toWeakSpace` gives full-sequence weak convergence. No compactness or subsequence argument is needed.
 
-No solve-loop counterexample was recorded.
+`RevisedMain.lean` changes only part (d): the subsequence and `StrictMono` quantifiers disappear, leaving `∃u`, weak convergence of `uSeq n`, and the weak-solution property. The existing `L²`-quotient repair for weak derivatives remains necessary and unchanged.
+
+Degenerate checks: if `H` is trivial, all projections and solutions are zero. If `f=0`, uniqueness makes the full sequence constantly zero. Repeated nested subspaces are harmless; density forces eventual approximation even if some stages repeat. Zero subspaces cannot form a dense family unless `H` is trivial.
 
 ## Reused completed work
 
-The cached attempt is preserved through compiled proofs that `H¹₀` pairs are
-closed under zero, addition, and scalar multiplication; the model maps
-preserve zero and addition; inner-product component products are integrable;
-represented fields determine the Hilbert element uniquely; realizations are
-unique; and Galerkin solutions are unique.
+The file retains compiled proofs for the `H¹₀` model's zero/additive/scalar closure, integrability of inner-product components, uniqueness of represented elements, and uniqueness of Galerkin solutions. The wrappers deriving finite-dimensional existence and ambient weak-solution existence from the shared Riesz lemma are also proved without `sorry`.
 
 ## Remaining lemmas
 
 ### `apm_m99J06_weak_iff_strong`
 
-**Statement in words.** In the repaired one-dimensional `H¹₀` model, the weak
-variational equation is equivalent to existence of an `L²` second derivative
-satisfying `u-u''=f` almost everywhere.
+The weak variational equation is equivalent to an `L²` second derivative satisfying `u-u''=f` almost everywhere. Strong-to-weak is integration by parts using absolute continuity and zero traces. Weak-to-strong tests against compactly supported smooth functions and applies the one-dimensional characterization of weak derivatives by absolutely continuous representatives. **Estimate:** 230–300 lines. **Dependencies:** compiled model algebra. **Check:** `f=u=0`; for smooth endpoint-zero functions, ordinary integration by parts gives the encoded sign.
 
-**Why true.** For strong-to-weak, select the `L²` representatives of `u'` and
-`u''`, integrate by parts using absolute continuity of both `u` and `u'`, and
-use the zero endpoint trace of the test element.  Match the resulting
-integrals with `M.inner_eq`.
+### `apm_m99J06_riesz_on_complete_submodule`
 
-For weak-to-strong, test first against realizations of compactly supported
-smooth functions.  The weak equation identifies the distributional derivative
-of the chosen representative of `u'` with `u-f ∈ L²`.  Apply the
-one-dimensional fundamental theorem/absolute-continuity characterization to
-obtain an absolutely continuous representative of `u'` with derivative
-`u-f`; this supplies the witnesses in `apm_m99J06_strongSolution`.
+For any complete submodule `V`, the forcing functional has a unique Riesz representative satisfying the Galerkin equation. Use the compiled additivity/scalar infrastructure to bundle
 
-**Expected size:** 230–330 lines.
+```text
+v ↦ ∫ f * M.val v
+```
 
-**Dependencies:** definitions and proved model algebra only.
-
-**Truth check:** for `f=0,u=0` both predicates hold.  For a smooth endpoint-zero
-function, ordinary integration by parts gives exactly the signs
-`∫u'v' = -∫u''v`, hence `u-u''=f`.
-
-### `apm_m99J06_galerkin_exists_unique`
-
-**Statement in words.** Every finite-dimensional Galerkin subspace has a
-unique discrete solution.
-
-**Why true.** First finish the cached scalar-multiplication analogue of
-`apm_m99J06_model_add`, so `M.val` and `M.weakDeriv` behave linearly.  Hölder's
-inequality and `M.inner_eq` show
-
-`v ↦ ∫ f * M.val v`
-
-is a bounded real-linear functional on `V`, with norm at most `‖f‖₂`.
-Finite-dimensional subspaces are complete; apply the real Hilbert-space Riesz
-representation theorem to obtain `u : V` satisfying the equation.  Uniqueness
-is exactly the already proved `apm_m99J06_galerkin_unique`.
-
-Mathlib's Hilbert duality is implemented in
-`Analysis.InnerProductSpace.Dual` (`toDualMap` is surjective), and the cached
-proof outline already verified this route.
-
-**Expected size:** 150–240 lines.
-
-**Dependencies:** definitions and proved cached lemmas only.
-
-**Truth check:** on a one-dimensional space spanned by a unit vector `e`, the
-solution is the scalar `ℓ(e)e`; on the zero subspace it is uniquely zero.
+as a continuous linear functional, bounded by Hölder and the `M.inner_eq` energy norm, then apply real Hilbert-space Riesz representation. This single shared lemma supplies both the finite-dimensional Galerkin solutions and the ambient weak solution (`V=⊤`), avoiding duplicate functional construction. **Estimate:** 150–240 lines. **Dependencies:** compiled model algebra and component integrability. **Check:** on a one-dimensional subspace it produces `ℓ(e)e`; on the zero subspace it produces zero.
 
 ### `apm_m99J06_galerkin_norm_le`
 
-**Statement in words.** Every discrete solution has Hilbert norm at most the
-`L²` norm of `f`.
+Every discrete solution satisfies `‖uₙ‖≤‖f‖₂`. Test with itself, apply Hölder, and use `M.inner_eq` to bound the `L²` norm of its value component by its Hilbert norm; divide in the nonzero case. **Estimate:** 70–130 lines. **Dependencies:** compiled integrability lemmas only. **Check:** the zero solution is immediate; equality is possible when the derivative energy vanishes.
 
-**Why true.** Test the Galerkin equation with `u` itself:
+### `apm_m99J06_galerkin_eq_starProjection`
 
-`‖u‖² = ∫ f * M.val u`.
+If `u` is the ambient weak solution and `uV` solves the Galerkin equation in finite-dimensional `V`, then its ambient value equals `V.starProjection u`. For every `v∈V`, subtract the weak and Galerkin equations to obtain `⟪u-uV,v⟫=0`; use the characterization of orthogonal projection. **Estimate:** 50–90 lines. **Dependencies:** no unfinished analytic lemma; only the two equation hypotheses and Mathlib projection API. **Check:** for `V=⊥`, both sides are zero; if `u∈V`, both sides are `u`.
 
-Hölder bounds the right side by `‖f‖₂ ‖M.val u‖₂`; `M.inner_eq` and
-nonnegativity of the weak-derivative energy give
-`‖M.val u‖₂ ≤ ‖u‖`.  Divide when `u ≠ 0`, with a separate trivial zero case,
-and convert `eLpNorm` to the norm using its finiteness from `hf`.
+### `apm_m99J06_starProjection_convergence`
 
-**Expected size:** 70–130 lines.
-
-**Dependencies:** definitions and compiled inner-component integrability only;
-independent of Galerkin existence.
-
-**Truth check:** equality can occur when the derivative component vanishes;
-for the zero solution both sides are nonnegative and the bound is immediate.
-
-### `apm_m99J06_weak_subsequence_solves`
-
-**Statement in words.** A uniformly bounded sequence of nested Galerkin
-solutions has a weakly convergent subsequence whose limit solves the full weak
-problem.
-
-**Why true.** A bounded sequence in a Hilbert space has a weakly convergent
-subsequence (Eberlein–Šmulian; for this sequence one may work in the separable
-closed span and diagonalize scalar coordinates).  Express convergence via
-`toWeakSpace ℝ H`.
-
-For `v ∈ V m`, strict monotonicity of the subsequence index makes `k j ≥ m`
-eventually; nestedness transports `v` into `V(k j)`.  The Galerkin equation
-then gives `⟪u_{k j},v⟫ = ∫f·M.val v`.  Weak convergence passes the fixed inner
-product to the limit.  Thus the equation holds on `⋃m V m`; both sides are
-continuous linear functionals, so density extends it to every `v : H`.
-
-**Expected size:** 180–280 lines.
-
-**Dependencies:** it takes the norm bound as an explicit hypothesis, so its
-statement stands alone.  In the main theorem it is used after the previous
-lemma supplies that hypothesis.
-
-**Truth check:** a constant Galerkin sequence admits the identity subsequence
-and converges to its own value.  If a test vector lies in `V m`, nestedness
-ensures it is available at every later discrete stage.
+For nested finite-dimensional subspaces with dense union, any sequence equal to the corresponding projections of `u` converges to `u` both in norm and weakly. Derive `Monotone V` by induction from `hnested`, convert `hdense` to `⊤ ≤ (⨆n,V n).topologicalClosure`, and apply the checked theorem `Submodule.starProjection_tendsto_self`. Norm convergence implies weak convergence through the continuous map `toWeakSpaceCLM`. **Estimate:** 70–120 lines. **Dependencies:** projection identity is supplied as an explicit hypothesis, so this seat is independent of the preceding proof. **Check:** a constant family `V n=⊤` gives the constant sequence `u`; repeated stages do not affect the monotone-limit theorem.
 
 ## Dependency layers
 
-* **Layer 1 (parallel):** weak/strong equivalence, Galerkin existence and
-  uniqueness, and the Galerkin norm bound.
-* **Layer 2:** weak subsequence and limit identification, using the bound as
-  an explicit input.  Its proof can be developed in parallel, but final use
-  waits for the bound lemma.
-* **Layer 3 (already proved):** `apm_m99j06` assembles all four results.
+- **Layer 1, parallel:** weak/strong equivalence, shared Riesz bridge, Galerkin norm bound, projection characterization, and abstract projection convergence.
+- **Layer 2, already proved wrappers:** finite-dimensional existence and ambient weak-solution existence use the shared Riesz bridge.
+- **Layer 3, already proved assembly:** identify every `uSeq n` with the projection of the one weak solution, apply full-sequence convergence, and return its weak limit. The main theorem has no direct `sorry`.
 
 ## Compilation and axioms
 
-Compiled with:
-
-```text
-systemd-run --user --scope -q -p MemoryMax=12G lake env lean holes/labs/blueprints/m99J06/Blueprint.lean
-```
-
-The final output was:
+Both `RevisedMain.lean` and `Blueprint.lean` compile under the prescribed memory scope. The final output is:
 
 ```text
 'apm_m99j06' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
 ```
 
-The four warnings are exactly the four stated lemmas.  The main theorem has no
-direct `sorry`.
+The five warnings correspond exactly to the five remaining lemmas above.
 
 ## Doubt
 
-All statements are standard and appear true.  The main library uncertainty is
-whether the pinned Mathlib exposes weak sequential compactness of Hilbert
-balls in a directly usable theorem.  If not, the subsequence seat will need a
-local diagonal argument in the separable closed span.  The weak/strong bridge
-may similarly need local one-dimensional absolute-continuity infrastructure.
+No mathematical doubt remains about full-sequence convergence. The largest formal task is still the custom Sobolev weak/strong bridge; the projection route itself is directly supported by current Mathlib.
