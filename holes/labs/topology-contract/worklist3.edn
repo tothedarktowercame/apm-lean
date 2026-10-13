@@ -23004,20 +23004,20 @@
    :consumer :t01A08,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "extend Mathlib: state and prove the missing theorem in scope",
    :evidence
    {:placeholder-delta {:t01A08 [1 1]},
     :residual
-    "Stop-after-two: retire weaker row and continue from banked convexWithinJet/B1.",
+    "Retire the weaker frozen row; continue from banked convexWithinJet/B1.",
     :missing-hypothesis "x ∈ closure (interior s)",
     :outcome :stop,
     :warnings [],
     :missing-theorems
     [{:name
       "ContDiffWithinAt.domDomCongr_iteratedFDerivWithin_of_infty",
-      :type "frozen conclusion plus hxi",
+      :type "frozen conclusion plus hxi : x ∈ closure (interior s)",
       :status :proved,
       :consumers [:t01A08],
       :depends-on [],
@@ -23027,12 +23027,14 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Second unchanged hypothesis boundary. The banked standard-axiom theorem has arguments hf, hu, hx, hxi; the frozen axiom has only hf, hu, hx. UniqueDiffOn and membership do not imply closure of the interior. Extending the scoped library cannot remove an unprovable premise; convexWithinJet succeeds only because convexity and nonempty interior derive hxi.",
+    "Fresh signature audit confirms the scoped C-infinity Schwarz theorem requires hxi : x ∈ closure (interior s), while the frozen interface supplies only hf, UniqueDiffOn, and x ∈ s. UniqueDiffOn controls derivative uniqueness, not interior density. The banked convexWithinJet derives hxi from convexity plus nonempty interior; those hypotheses are absent here. Thus the banked lemma cannot discharge the frozen axiom without strengthening its type.",
     :commands
     [{:cmd
-      "hash fixture; lake env lean corrected theorem; compare exact signatures",
+      "lake env lean /tmp/t01a08_smooth_symmetry_boundary_check.lean",
       :exit 0}
-     {:cmd "statement-registry check", :exit 0}],
+     {:cmd
+      "sha256sum frozen fixture and boundary check; statement-registry check; git status",
+      :exit 0}],
     :commit nil,
     :changed-paths [],
     :fixture
@@ -23042,7 +23044,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain.blueprint/B1/smooth-symmetry",
    :acceptance
