@@ -338,7 +338,63 @@ dense subset of the parameter circle. -/
 theorem apm_t02A07_good_parameters_dense :
     Dense {parameter : apm_t02a07_parameterCircle |
       parameter.1 0 ^ 2 ≠ (1 : ℝ) / 2} := by
-  sorry
+  let A : Set ℝ := {r | r ^ 2 = (1 : ℝ) / 2}
+  have hsqrt : (Real.sqrt ((1 : ℝ) / 2)) ^ 2 = (1 : ℝ) / 2 := by
+    rw [Real.sq_sqrt]
+    norm_num
+  have hAfin : A.Finite := by
+    apply Set.Finite.subset ((Set.finite_singleton
+      (Real.sqrt ((1 : ℝ) / 2))).union (Set.finite_singleton (-Real.sqrt ((1 : ℝ) / 2))))
+    intro r hr
+    change r ^ 2 = (1 : ℝ) / 2 at hr
+    rw [← hsqrt] at hr
+    rcases (sq_eq_sq_iff_eq_or_eq_neg).mp hr with h | h
+    · simp [h]
+    · simp [h]
+  let B : Set apm_t02a07_parameterCircle :=
+    {p | p.1 0 ^ 2 = (1 : ℝ) / 2}
+  have hBfin : B.Finite := by
+    let e : apm_t02a07_parameterCircle → ℝ × ℝ := fun p ↦ (p.1 0, p.1 1)
+    have heB : e '' B ⊆ A ×ˢ A := by
+      rintro z ⟨p, hp, rfl⟩
+      have hnorm : p.1 0 ^ 2 + p.1 1 ^ 2 = 1 := by
+        have h := EuclideanSpace.real_norm_sq_eq p.1
+        have hpnorm : ‖p.1‖ = 1 := by
+          simpa [Metric.mem_sphere, dist_zero_right] using p.2
+        simpa [Fin.sum_univ_succ, hpnorm] using h.symm
+      constructor
+      · exact hp
+      · change p.1 1 ^ 2 = (1 : ℝ) / 2
+        change p.1 0 ^ 2 = (1 : ℝ) / 2 at hp
+        nlinarith
+    apply Set.Finite.of_finite_image ((hAfin.prod hAfin).subset heB)
+    intro p hp q hq heq
+    apply Subtype.ext
+    apply WithLp.ofLp_injective
+    funext i
+    fin_cases i
+    · exact congrArg Prod.fst heq
+    · exact congrArg Prod.snd heq
+  letI : ConnectedSpace apm_t02a07_parameterCircle :=
+    Subtype.connectedSpace (isConnected_sphere
+      (Module.one_lt_rank_of_one_lt_finrank (by
+        rw [finrank_euclideanSpace_fin]
+        norm_num)) (0 : apm_t02a07_E2) (by norm_num))
+  let u : apm_t02a07_E2 := WithLp.toLp 2 ![(1 : ℝ), 0]
+  let v : apm_t02a07_E2 := WithLp.toLp 2 ![(-1 : ℝ), 0]
+  have hu : u ∈ Metric.sphere (0 : apm_t02a07_E2) 1 := by
+    simp [u, Metric.mem_sphere, dist_zero_right, EuclideanSpace.norm_eq]
+  have hv : v ∈ Metric.sphere (0 : apm_t02a07_E2) 1 := by
+    simp [v, Metric.mem_sphere, dist_zero_right, EuclideanSpace.norm_eq]
+  letI : Nontrivial apm_t02a07_parameterCircle :=
+    ⟨⟨⟨u, hu⟩, ⟨v, hv⟩, by
+      intro h
+      have h := congrArg Subtype.val h
+      have := congrFun (congrArg WithLp.ofLp h) 0
+      norm_num [u, v] at this⟩⟩
+  change Dense (Bᶜ)
+  rw [Set.compl_eq_univ_diff]
+  exact dense_univ.diff_finite hBfin
 -- END SEAT AREA
 
 /-- Why this unblocks the density conjunct of `apm_t02a07`: this is the
