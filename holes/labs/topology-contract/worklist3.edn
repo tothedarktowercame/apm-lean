@@ -23717,7 +23717,7 @@
    :consumer :t01A08,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 0,
    :review-finding
    "Recorded commit is invalid: f032efae9d1501f7ddfe93c66668f88f24ed37f4 is absent locally and origin rejects it as not our ref. The intended scoped commit appears to be f032efae9b89fb527a72ea9192f3c89f09f82615. Repair the row to record the exact existing full SHA, then rerun independent review.",
    :implements-lemma
@@ -23763,6 +23763,17 @@
       :exit 1,
       :correction
       "opened ContDiff scope and corrected continuity composition; compiled"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791881686023-9195-4d2c7741",
+     :commands
+     ["git show/diff df32e84b; scope and recorded-tree checks"
+      "lake build ConstructionTargets.SardConvexDomain"
+      "lake env lean fixture and /tmp/CheckSardJetDense.lean"
+      "sha256sum fixture; statement-registry check; placeholder recount"],
+     :finding
+     "PASS: valid STOP after real progress. One-file commit correctly extends an interior jet-permutation identity to the dense boundary point: C∞ supplies jet continuity, domDomCongr is composed through its continuous linear isometry, and the equality orientation matches the frozen goal. Build/export pass; fixture hash matches; standard axioms only; registry 147/147; sorry/admit 0->0. Localizing interior induction and assembling swaps remain listed."},
     :commit "df32e84b7f517f7a001d6d8a29db1a124ac8057f",
     :changed-paths ["ConstructionTargets/SardConvexDomain.lean"],
     :fixture
@@ -23772,7 +23783,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain/B1/symmetry",
    :acceptance
@@ -33913,7 +33924,7 @@
    :other-consumers []}
   {:consumer :t01A08,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -33925,7 +33936,9 @@
     :reported-by [:r-a08-symmetry-slots-1],
     :type "interior jet symmetry extends to dense boundary point",
     :area "sard-convex-domain",
-    :proved-in :r-a08-symmetry-slots-1},
+    :proved-in :r-a08-symmetry-slots-1,
+    :banked-by :r-a08-symmetry-slots-1,
+    :banked-commit "df32e84b7f517f7a001d6d8a29db1a124ac8057f"},
    :id
    :lemma-contdiffwithinat-domdomcongr-iteratedfderivwithin-of-eqon-interior,
    :kind :lemma,
