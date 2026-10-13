@@ -22997,12 +22997,13 @@
    :consumer :t01A08,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 2,
    :review-finding
    "extend Mathlib: state and prove the missing theorem in scope",
    :evidence
    {:placeholder-delta {:t01A08 [1 1]},
-    :residual "Correct fixture with hxi; convex B1 supplies it.",
+    :residual
+    "Stop-after-two: reroute fixture correction; convex B1 supplies hxi.",
     :missing-hypothesis "x ∈ closure (interior s)",
     :outcome :stop,
     :warnings [],
@@ -23019,18 +23020,12 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "The frozen fixture still omits hxi : x∈closure(interior s), while the banked real C∞ theorem requires it. Exact signature comparison confirms hf, hu, hx alone do not match the proved theorem; the premise-free within-set result is analytic ω, not smooth ∞. The frozen type needs hxi.",
+    "Second repair confirms the frozen C∞ type lacks hxi : x∈closure(interior s). Real within-set Schwarz requires hxi already at order 2; only analytic ω admits the premise-free theorem. UniqueDiffOn plus x∈s does not supply hxi, so extending the library cannot prove this frozen statement without adding the missing hypothesis.",
     :commands
-    [{:cmd "hash fixture; compare exact frozen and banked signatures",
+    [{:cmd "hash fixture; locate Mathlib ω/C∞ Schwarz declarations",
       :exit 0}
      {:cmd "lake env lean corrected theorem check; registry check",
       :exit 0}],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1791889436354-9503-450093b7",
-     :finding
-     "extend Mathlib: state and prove the missing theorem in scope"},
     :commit nil,
     :changed-paths [],
     :fixture
@@ -23040,7 +23035,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :repair,
+   :state :needs-owner,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain.blueprint/B1/smooth-symmetry",
    :acceptance
