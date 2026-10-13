@@ -76416,7 +76416,7 @@
   {:consumer :t96J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 0,
    :review-finding
    "Deterministic topology defect in commit ee79eaeb2: it changes the index topology for FiniteWedge from ⊥ to ⊤ while claiming this makes it discrete. Mathlib/Topology/Order.lean states exactly the opposite: ⊥ is discrete and ⊤ is indiscrete. Consequently L × Circle is not the coproduct/disjoint-union source of indexed circle legs, and the coinduced quotient is not the B7 finite-wedge topology; future skeletonHomeomorphWedge would target the wrong space. Repair by restoring TopologicalSpace L := ⊥ in both the FiniteWedge instance and continuous_wedgeCircle proof, then rerun Lean/build and retain coverage, quotient-topology, wedge-relation, and signed-equation residuals. Recorded scope is otherwise exact and fixture SHA-256 386d0e41...ae305 matches.",
    :evidence
@@ -76466,6 +76466,17 @@
     [{:cmd "first compile",
       :exit 1,
       :correction "normalized before taking imaginary parts"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791865935622-8428-c164845a",
+     :commands
+     ["git scope/SHA/blob checks at 34fa7c1df"
+      "git show 34fa7c1df:... | lake env lean /dev/stdin"
+      "statement-registry.py check (142/0 current)"
+      "placeholder/orientation scans; #print axioms"],
+     :finding
+     "PASS: exact recorded one-file scope and frozen fixture/blob hashes match; the recorded blob compiles. Nested quotient induction covers each indexed-wedge point; positive sign preserves t, while negative sign uses reverseIcc t and the signed map reverses back. Placeholders 0, standard axioms only, current registry 142/0. STOP records substantive progress and lists source coverage, kernel agreement, quotient topology, final homeomorphism and B8/B9 remaining."},
     :commit "2d9a17dd5",
     :changed-paths ["ConstructionTargets/PolygonSurfacePiOne.lean"],
     :fixture
@@ -76474,7 +76485,7 @@
      "974a9023dad6697f006c2233947ab9205aca6f063b32cf1c085665abb07ac98b"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope ["ConstructionTargets/PolygonSurfacePiOne.lean"],
    :dag-node "ConstructionTargets/PolygonSurfacePiOne.blueprint.md/B7",
    :acceptance
@@ -87302,7 +87313,7 @@
    :other-consumers []}
   {:consumer :t96J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "edgePoint_eq_imp_exists_int_turn",
@@ -87312,7 +87323,9 @@
     :reported-by [:routes-2026-10-12-polygon-b7-topo2-r1],
     :type "edge equality gives integer turn",
     :area "polygon-surface-pi1",
-    :proved-in :routes-2026-10-12-polygon-b7-topo2-r1},
+    :proved-in :routes-2026-10-12-polygon-b7-topo2-r1,
+    :banked-by :routes-2026-10-12-polygon-b7-topo2-r1,
+    :banked-commit "2d9a17dd5"},
    :id :lemma-edgepoint-eq-imp-exists-int-turn,
    :kind :lemma,
    :depends-on [],
