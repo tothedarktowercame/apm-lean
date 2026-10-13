@@ -179,7 +179,10 @@ def apm_t97J05_regular_aux_H (q : apm_t97J05_R3) : apm_t97J05_R3 :=
 
 lemma apm_t97J05_regular_aux_smooth :
     ContDiff ℝ ∞ apm_t97J05_regular_aux_H := by
-  sorry
+  unfold apm_t97J05_regular_aux_H
+  rw [contDiff_piLp]
+  intro i
+  fin_cases i <;> simp <;> fun_prop
 
 /-- The derivative formula for the completed map at an arbitrary point. -/
 lemma apm_t97J05_regular_aux_deriv_apply (q h : apm_t97J05_R3) :
