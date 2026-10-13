@@ -1018,3 +1018,13 @@ intermediate representation with the earlier base-transport normal form.
 categorical inverse into the inverse strict-span comparison followed by the
 forward equivalence unit.  This fixes the exact factor order needed to compare
 it with the normalized base-transport morphism.
+
+`genericPointWedgeRightInverseBaseToRightBaseFromSpan_map_eq_inv` carries this
+relation through the actual-span functor.  In the free-product representation,
+the mapped forward morphism is exactly the inverse of the mapped reverse
+comparison, which is the form needed for cancellation in the full right
+comparison.
+
+`genericPointWedgeRightReverse_forward_map_comp` records that cancellation
+categorically in the actual free-product representation: mapped reverse
+followed by mapped forward is the identity morphism.

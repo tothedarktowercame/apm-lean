@@ -4541,6 +4541,36 @@ theorem genericPointWedgeRightBaseToInverseBase_comp_fromSpan :
         x₀ y₀ M N hM hN hy hx cM cN = 𝟙 _ := by
   apply IsIso.hom_inv_id
 
+/-- Mapping the span-coordinate forward morphism into the actual free-product
+representation gives the inverse of the mapped reverse comparison. -/
+theorem genericPointWedgeRightInverseBaseToRightBaseFromSpan_map_eq_inv :
+    (genericPointWedgeIdentityActualSpan
+        x₀ y₀ M N hM hN hy hx cM cN).right.map
+      (genericPointWedgeRightInverseBaseToRightBaseFromSpan
+        x₀ y₀ M N hM hN hy hx cM cN) =
+    inv ((genericPointWedgeIdentityActualSpan
+        x₀ y₀ M N hM hN hy hx cM cN).right.map
+      (genericPointWedgeRightBaseToInverseBase
+        x₀ y₀ M N hM hN hy hx cM cN)) := by
+  exact (genericPointWedgeIdentityActualSpan
+    x₀ y₀ M N hM hN hy hx cM cN).right.map_inv _
+
+/-- The mapped reverse comparison and its span-coordinate forward morphism
+cancel categorically in the actual free-product representation. -/
+theorem genericPointWedgeRightReverse_forward_map_comp :
+    (genericPointWedgeIdentityActualSpan
+        x₀ y₀ M N hM hN hy hx cM cN).right.map
+      (genericPointWedgeRightBaseToInverseBase
+        x₀ y₀ M N hM hN hy hx cM cN) ≫
+    (genericPointWedgeIdentityActualSpan
+        x₀ y₀ M N hM hN hy hx cM cN).right.map
+      (genericPointWedgeRightInverseBaseToRightBaseFromSpan
+        x₀ y₀ M N hM hN hy hx cM cN) = 𝟙 _ := by
+  rw [← Functor.map_comp,
+    genericPointWedgeRightBaseToInverseBase_comp_fromSpan]
+  exact (genericPointWedgeIdentityActualSpan
+    x₀ y₀ M N hM hN hy hx cM cN).right.map_id _
+
 omit [PathConnectedSpace X] in
 /-- The connector normal form of the mapped lifted right loop is conjugation
 by the explicit equality transport at its common endpoint. -/
@@ -5621,6 +5651,8 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeRightComparison_actualMaps_eq_reverseCanonical
 #print axioms genericPointWedgeRightInverseBaseToRightBaseFromSpan
 #print axioms genericPointWedgeRightInverseBaseToRightBaseFromSpan_eq_maps
+#print axioms genericPointWedgeRightInverseBaseToRightBaseFromSpan_map_eq_inv
+#print axioms genericPointWedgeRightReverse_forward_map_comp
 #print axioms genericPointWedgeMappedOpenCoverCounit_namedGlueSquare
 #print axioms genericPointWedgeMappedCoordinateSpanCounit_glueSquare
 #print axioms genericPointWedgeMappedCoordinateSpanSourceGlue
