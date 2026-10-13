@@ -3,6 +3,7 @@ import ConstructionTargets.PolygonTorusCrosscapRelation
 import ConstructionTargets.PolygonBoundaryVertexClasses
 import ConstructionTargets.PolygonAnnulusRadialMaps
 import ConstructionTargets.PolygonInnerOpenPointedContraction
+import ConstructionTargets.CompactClosedEquivalenceQuotient
 
 /-!
 # Polygon surface fundamental groups
@@ -1577,6 +1578,48 @@ theorem wedgeCircle_base_eq {L : Type*} (l k : L) :
   apply Quotient.sound
   exact Relation.EqvGen.rel _ _ (Or.inr ⟨rfl, rfl⟩)
 
+theorem finiteWedgeRel_trans {L : Type*} {x y z : L × Circle}
+    (hxy : FiniteWedgeRel L x y) (hyz : FiniteWedgeRel L y z) :
+    FiniteWedgeRel L x z := by
+  rcases hxy with rfl | ⟨hx, hy⟩
+  · exact hyz
+  rcases hyz with rfl | ⟨hy', hz⟩
+  · exact Or.inr ⟨hx, hy⟩
+  exact Or.inr ⟨hx, hz⟩
+
+theorem eqvGen_finiteWedgeRel_iff {L : Type*} {x y : L × Circle} :
+    Relation.EqvGen (FiniteWedgeRel L) x y ↔ FiniteWedgeRel L x y := by
+  apply Equivalence.eqvGen_iff
+  refine ⟨fun x => Or.inl rfl, ?_, ?_⟩
+  · intro x y h
+    rcases h with h | ⟨hx, hy⟩
+    · exact Or.inl h.symm
+    · exact Or.inr ⟨hy, hx⟩
+  · intro x y z
+    exact finiteWedgeRel_trans
+
+/-- A finite wedge of circles is Hausdorff: its only nontrivial equivalence
+class is the finite set of circle basepoints, hence the relation is closed. -/
+@[implicit_reducible] noncomputable def finiteWedgeT2
+    (L : Type*) [Finite L] : T2Space (FiniteWedge L) := by
+  letI : TopologicalSpace L := ⊥
+  letI : DiscreteTopology L := ⟨rfl⟩
+  apply compact_closed_equivalence_quotient_t2
+  change IsClosed {p : (L × Circle) × (L × Circle) |
+    Relation.EqvGen (FiniteWedgeRel L) p.1 p.2}
+  have hdiag : IsClosed {p : (L × Circle) × (L × Circle) | p.1 = p.2} :=
+    isClosed_eq continuous_fst continuous_snd
+  have hbase : IsClosed {p : (L × Circle) × (L × Circle) |
+      (p.1.2 : ℂ) = 1 ∧ (p.2.2 : ℂ) = 1} := by
+    exact (isClosed_eq (continuous_subtype_val.comp (continuous_snd.comp continuous_fst))
+      continuous_const).inter
+      (isClosed_eq (continuous_subtype_val.comp (continuous_snd.comp continuous_snd))
+        continuous_const)
+  convert hdiag.union hbase using 1
+  ext p
+  simp only [Set.mem_setOf_eq, Set.mem_union]
+  exact eqvGen_finiteWedgeRel_iff
+
 end PointWedgeQuotient
 
 open PointWedgeQuotient
@@ -1912,6 +1955,23 @@ theorem PairingData.continuous_skeletonArcMap (P : PairingData) :
   change Continuous fun t : Set.Icc (0 : ℝ) 1 =>
     Complex.exp (Complex.I * (2 * Real.pi * ((i : ℝ) + t.1) / P.edgeCount))
   fun_prop
+
+/-- The signed family of interval arcs presents the finite wedge as a
+quotient.  Compactness of the finite interval family and Hausdorffness of the
+closed basepoint quotient turn continuity and coverage into the quotient-map
+property needed for B7 descent. -/
+theorem PairingData.signedWedgeArcMap_isQuotientMap (P : PairingData) :
+    Topology.IsQuotientMap P.signedWedgeArcMap := by
+  letI : Finite (PairingOrbit P.pair) :=
+    Finite.of_surjective
+      (fun i => Quotient.mk (Relation.EqvGen.setoid
+        (fun i j : Fin P.edgeCount => j = P.pair i)) i)
+      Quotient.mk_surjective
+  letI : T2Space
+      (PointWedgeQuotient.FiniteWedge (PairingOrbit P.pair)) :=
+    PointWedgeQuotient.finiteWedgeT2 _
+  exact IsQuotientMap.of_surjective_continuous
+    P.surjective_signedWedgeArcMap P.continuous_signedWedgeArcMap
 
 /-- Exact topological descent for B7: once the common source presents both
 spaces as quotient maps and their kernels agree, the signed equivalence is a
