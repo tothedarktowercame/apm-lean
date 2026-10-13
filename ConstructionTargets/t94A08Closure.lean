@@ -729,6 +729,7 @@ lemma apm_t94a08_open_mem_zero_has_affine_branch_witnesses
       rw [← mul_assoc, Complex.I_mul_I]
       simpa using hr
     · simpa [Prod.ext_iff] using hr
+
   · refine ⟨(r, -Complex.I * r), hminusV, ?_, ?_, ?_⟩
     · change r - Complex.I * (-Complex.I * r) = 0
       ring_nf
@@ -739,3 +740,16 @@ lemma apm_t94a08_open_mem_zero_has_affine_branch_witnesses
       rw [pow_two, Complex.I_mul_I]
       simpa using hr
     · simpa [Prod.ext_iff] using hr
+
+lemma apm_t94a08_open_inter_puncturedAffineCross_not_isPreconnected
+    (V : Set (ℂ × ℂ)) (hV : IsOpen V) (h0 : (0, 0) ∈ V) :
+    ¬ IsPreconnected (V ∩ apm_t94a08_puncturedAffineCross) := by
+  obtain ⟨⟨zp, hpV, hpPlus, hpNotMinus, hp0⟩,
+      ⟨zm, hmV, hmMinus, hmNotPlus, hm0⟩⟩ :=
+    apm_t94a08_open_mem_zero_has_affine_branch_witnesses V hV h0
+  apply apm_t94a08_cross_subset_not_isPreconnected_of_branch_witnesses
+  · exact inter_subset_right
+  · refine ⟨zp, ⟨hpV, ?_⟩, hpPlus, hpNotMinus⟩
+    exact ⟨Or.inl hpPlus, by simpa using hp0⟩
+  · refine ⟨zm, ⟨hmV, ?_⟩, hmMinus, hmNotPlus⟩
+    exact ⟨Or.inr hmMinus, by simpa using hm0⟩
