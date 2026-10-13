@@ -748,7 +748,39 @@ lemma apm_m99J06_galerkin_norm_le_aux_holder
     (hval : (eLpNorm (M.val (u : H)) 2 apm_m99J06_intervalMeasure).toReal ≤
       ‖(u : H)‖) :
     ‖(u : H)‖ ≤ (eLpNorm f 2 apm_m99J06_intervalMeasure).toReal := by
-  sorry
+  let hg := (M.represents (u : H)).2.1
+  let F : apm_m99J06_L2 := hf.toLp f
+  let G : apm_m99J06_L2 := hg.toLp (M.val (u : H))
+  have hinner : inner ℝ F G =
+      ∫ x, f x * M.val (u : H) x ∂apm_m99J06_intervalMeasure := by
+    rw [MeasureTheory.L2.inner_def]
+    apply integral_congr_ae
+    filter_upwards [MemLp.coeFn_toLp hf, MemLp.coeFn_toLp hg] with x hfx hgx
+    simp [F, G, hfx, hgx, real_inner_eq_re_inner, RCLike.inner_apply]
+    ring
+  have henergy : ‖(u : H)‖ ^ 2 =
+      ∫ x, f x * M.val (u : H) x ∂apm_m99J06_intervalMeasure := by
+    have he := hu u
+    rw [inner_self_eq_norm_sq_to_K] at he
+    simpa using he
+  have hFG : ‖F‖ * ‖G‖ =
+      (eLpNorm f 2 apm_m99J06_intervalMeasure).toReal *
+        (eLpNorm (M.val (u : H)) 2 apm_m99J06_intervalMeasure).toReal := by
+    simp [F, G, Lp.norm_toLp]
+  have hsq : ‖(u : H)‖ ^ 2 ≤
+      (eLpNorm f 2 apm_m99J06_intervalMeasure).toReal * ‖(u : H)‖ := by
+    calc
+      ‖(u : H)‖ ^ 2 = inner ℝ F G := henergy.trans hinner.symm
+      _ ≤ ‖inner ℝ F G‖ := le_abs_self _
+      _ ≤ ‖F‖ * ‖G‖ := norm_inner_le_norm _ _
+      _ = (eLpNorm f 2 apm_m99J06_intervalMeasure).toReal *
+          (eLpNorm (M.val (u : H)) 2 apm_m99J06_intervalMeasure).toReal := hFG
+      _ ≤ (eLpNorm f 2 apm_m99J06_intervalMeasure).toReal * ‖(u : H)‖ :=
+        mul_le_mul_of_nonneg_left hval ENNReal.toReal_nonneg
+  by_cases hu0 : ‖(u : H)‖ = 0
+  · simp [hu0]
+  · have hupos : 0 < ‖(u : H)‖ := lt_of_le_of_ne (norm_nonneg _) (Ne.symm hu0)
+    nlinarith
 -- END SEAT AREA
 
 theorem apm_m99J06_galerkin_norm_le
