@@ -21568,7 +21568,7 @@
   {:consumer :t00J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 2,
+   :stop-count 0,
    :review-finding
    "Frozen fixture metadata remains invalid: both authoritative acceptance copies record aad5a9cda739c1cbcceb1eca8ab8b33395db8a08c9d68941a87c644f4d13586e and omit :mode, while the compiling fixture hashes to 7e72195e1214d7580994264481ae57d0ecf87755d31825ab85cbda5f1220c4b1. Update both copies to that digest with :mode :post-build-export-check, then resubmit f0afa7bd.",
    :implements-lemma
@@ -21609,7 +21609,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/manifold-fundamental-class",
    :acceptance
@@ -21624,7 +21624,7 @@
    :id :routes-2026-10-12-mfclass-boundary-coordinates-r1,
    :kind :reusable-theorem,
    :area "manifold-fundamental-class",
-   :fail-count 1,
+   :fail-count 0,
    :depends-on [:routes-2026-10-12-mfclass-closed-generator-bridge-r1],
    :current-residual "Prove Bool H0 comparison.",
    :other-consumers [:t98A02]}
@@ -23007,7 +23007,7 @@
    :consumer :t01A08,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 2,
+   :stop-count 0,
    :review-finding
    "extend Mathlib: state and prove the missing theorem in scope",
    :evidence
@@ -23047,7 +23047,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain.blueprint/B1/smooth-symmetry",
    :acceptance
@@ -23063,7 +23063,7 @@
    :id :r-a08-sard-smooth-jet-symmetry-1,
    :kind :reusable-theorem,
    :area "sard-convex-domain",
-   :fail-count 1,
+   :fail-count 0,
    :depends-on [:r-topo3-cp8],
    :current-residual
    "Then B1 continuity and canonical zero/one jets compile.",
@@ -24428,7 +24428,9 @@
    :other-consumers []}
   {:bounded-exception "Rule0; named by stopped B7.",
    :consumer :t01A08,
-   :stop-count 2,
+   :owner-reopen
+   "reopened: a lemma this row reported missing is now banked",
+   :stop-count 0,
    :review-finding
    "extend Mathlib: state and prove the missing theorem in scope",
    :implements-lemma :lemma-closedset-whitneycubecover,
@@ -24476,7 +24478,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain.blueprint/B3",
    :acceptance
@@ -24491,7 +24493,7 @@
    :id :r-a08-sard-b3-whitney-cubes-1,
    :kind :reusable-theorem,
    :area "sard-convex-domain",
-   :fail-count 1,
+   :fail-count 0,
    :depends-on [:r-topo3-cp15],
    :current-residual "B4-B6, finite-dimensional B7, B9.",
    :other-consumers []}
@@ -24561,9 +24563,19 @@
       :current-residual "Elect B3 construction after PASS.",
       :other-consumers []}],
     :author "topo-12",
-    :disposition :replan},
+    :disposition :replan,
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791897596936-9708-5a86a4d1",
+     :commands
+     ["git show/diff 9bacc0d9; scope and diff checks"
+      "inspect B3 milestone evidence and replacement dependencies"
+      "bb build_step.bb priorities worklist3.edn"],
+     :finding
+     "PASS. Strategy commit 9bacc0d9 changes only worklist3.edn and correctly distinguishes compiled progress from completion: B3 remains incomplete, while the proved WhitneyCubeCover certificate is routed to a dedicated export-review row before closedSet_whitneyCubeCover may proceed. The residual retains construction, B4-B6, finite-dimensional B7, B9, and adapter; no missing theorem is banked without review. Recorded measures are Δ0 and A08 1 placeholder/31 banked/4 backlog."}},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance {:strategy "Review B3 probe; rerank."},
@@ -24578,7 +24590,7 @@
    :implements-lemma
    :lemma-constructiontargets-sardconvexdomain-whitneycubecover,
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain.blueprint/B3/representation",
    :acceptance
@@ -34957,7 +34969,7 @@
    :other-consumers []}
   {:consumer :t01A08,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "ConstructionTargets.SardConvexDomain.WhitneyCubeCover",
@@ -34969,7 +34981,9 @@
     :type
     "certificate: countable complement cover, enlargements, anchors, metric bounds, local finiteness, bounded overlap",
     :area "sard-convex-domain",
-    :proved-in :r-a08-sard-b3-whitney-cubes-1},
+    :proved-in :r-a08-sard-b3-whitney-cubes-1,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/SardConvexDomain.lean"]},
    :id :lemma-constructiontargets-sardconvexdomain-whitneycubecover,
    :kind :lemma,
    :depends-on [],
