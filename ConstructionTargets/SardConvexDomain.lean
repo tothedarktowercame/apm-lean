@@ -829,4 +829,25 @@ theorem compl_subset_iUnion_whitneyScaleStratum
   apply Set.mem_iUnion.2
   exact ⟨k, hxn, hklo, hkhi⟩
 
+/-- The separation radius used for the maximal net on scale stratum `k`. -/
+def whitneyStratumRadius (k : ℤ) : NNReal :=
+  ⟨(2 : ℝ) ^ k / 8, by positivity⟩
+
+/-- A chosen maximal separated net on each dyadic distance stratum. -/
+noncomputable def whitneyStratumNet
+    {E : Type*} [PseudoMetricSpace E] (s : Set E) (k : ℤ) : Set E :=
+  (exists_maximalSeparated_cover (whitneyStratumRadius k)
+    (whitneyScaleStratum s k)).choose
+
+/-- The chosen stratum net lies in its stratum, is separated at radius
+`2^k/8`, and covers the stratum at that radius. -/
+theorem whitneyStratumNet_spec
+    {E : Type*} [PseudoMetricSpace E] (s : Set E) (k : ℤ) :
+    whitneyStratumNet s k ⊆ whitneyScaleStratum s k ∧
+      Metric.IsSeparated (whitneyStratumRadius k) (whitneyStratumNet s k) ∧
+      Metric.IsCover (whitneyStratumRadius k) (whitneyScaleStratum s k)
+        (whitneyStratumNet s k) :=
+  (exists_maximalSeparated_cover (whitneyStratumRadius k)
+    (whitneyScaleStratum s k)).choose_spec
+
 end ConstructionTargets.SardConvexDomain
