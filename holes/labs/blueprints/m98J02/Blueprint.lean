@@ -592,6 +592,94 @@ theorem apm_m98J02_translateTest_difference_quotient (ψ : apm_m98J02_Test) (i :
 
 /-- (c) Calculus of `x ↦ v (τₓ φ)` from (a), (b): partials by continuity of `v`, then continuous
 partials in `ℝ²` give `C¹`, and once more give `C²`. -/
+lemma apm_m98J02_translated_pairing_calculus_of_facts_aux_slope
+    (hdq : ∀ (ψ : apm_m98J02_Test) (i : Fin 2) (x : apm_m98J02_E),
+      Filter.Tendsto (fun h : ℝ ↦ h⁻¹ • (apm_m98J02_translateTest
+        (x + h • EuclideanSpace.single i 1) ψ - apm_m98J02_translateTest x ψ))
+        (nhdsWithin (0 : ℝ) ({0} : Set ℝ)ᶜ)
+        (nhds (apm_m98J02_translateTest x (apm_m98J02_partialTest i ψ))))
+    (v : apm_m98J02_Dist) (ψ : apm_m98J02_Test) (i : Fin 2)
+    (x : apm_m98J02_E) :
+    Filter.Tendsto (fun h : ℝ ↦ h⁻¹ *
+        (v (apm_m98J02_translateTest (x + h • EuclideanSpace.single i 1) ψ) -
+          v (apm_m98J02_translateTest x ψ)))
+      (nhdsWithin (0 : ℝ) ({0} : Set ℝ)ᶜ)
+      (nhds (v (apm_m98J02_translateTest x (apm_m98J02_partialTest i ψ)))) := by
+  have hv := v.continuous.continuousAt.tendsto.comp (hdq ψ i x)
+  change Filter.Tendsto (fun h : ℝ => v (h⁻¹ •
+      (apm_m98J02_translateTest (x + h • EuclideanSpace.single i 1) ψ -
+        apm_m98J02_translateTest x ψ))) _ _ at hv
+  simpa only [map_sub, map_smul, smul_eq_mul] using hv
+
+lemma apm_m98J02_translated_pairing_calculus_of_facts_aux_continuous
+    (hcont : ∀ ψ : apm_m98J02_Test,
+      Continuous (fun x : apm_m98J02_E ↦ apm_m98J02_translateTest x ψ))
+    (v : apm_m98J02_Dist) (ψ : apm_m98J02_Test) :
+    Continuous (fun x : apm_m98J02_E => v (apm_m98J02_translateTest x ψ)) := by
+  exact v.continuous.comp (hcont ψ)
+
+/-- Continuous partial derivatives (as one-sided-free coordinate slope limits)
+give a Fréchet derivative: the classical C¹ criterion on `ℝ²`. -/
+lemma apm_m98J02_translated_pairing_calculus_of_facts_aux_hasFDerivAt
+    (F : apm_m98J02_E → ℝ) (G : Fin 2 → apm_m98J02_E → ℝ)
+    (hG : ∀ i, Continuous (G i))
+    (hF : ∀ i x, Filter.Tendsto (fun h : ℝ ↦ h⁻¹ * (F (x + h • EuclideanSpace.single i 1) - F x))
+      (nhdsWithin (0 : ℝ) ({0} : Set ℝ)ᶜ) (nhds (G i x)))
+    (x : apm_m98J02_E) :
+    HasFDerivAt F (∑ i, G i x • (EuclideanSpace.proj i : apm_m98J02_E →L[ℝ] ℝ)) x := by
+  sorry
+
+lemma apm_m98J02_translated_pairing_calculus_of_facts_aux_hasFDerivAt_pairing
+    (hcont : ∀ ψ : apm_m98J02_Test,
+      Continuous (fun x : apm_m98J02_E ↦ apm_m98J02_translateTest x ψ))
+    (hdq : ∀ (ψ : apm_m98J02_Test) (i : Fin 2) (x : apm_m98J02_E),
+      Filter.Tendsto (fun h : ℝ ↦ h⁻¹ • (apm_m98J02_translateTest
+        (x + h • EuclideanSpace.single i 1) ψ - apm_m98J02_translateTest x ψ))
+        (nhdsWithin (0 : ℝ) ({0} : Set ℝ)ᶜ)
+        (nhds (apm_m98J02_translateTest x (apm_m98J02_partialTest i ψ))))
+    (v : apm_m98J02_Dist) (ψ : apm_m98J02_Test) (x : apm_m98J02_E) :
+    HasFDerivAt (fun z : apm_m98J02_E => v (apm_m98J02_translateTest z ψ))
+      (∑ i, v (apm_m98J02_translateTest x (apm_m98J02_partialTest i ψ)) •
+        (EuclideanSpace.proj i : apm_m98J02_E →L[ℝ] ℝ)) x :=
+  apm_m98J02_translated_pairing_calculus_of_facts_aux_hasFDerivAt _
+    (fun i z => v (apm_m98J02_translateTest z (apm_m98J02_partialTest i ψ)))
+    (fun i => apm_m98J02_translated_pairing_calculus_of_facts_aux_continuous hcont v _)
+    (fun i z => apm_m98J02_translated_pairing_calculus_of_facts_aux_slope hdq v ψ i z) x
+
+lemma apm_m98J02_translated_pairing_calculus_of_facts_aux_contDiff_one
+    (hcont : ∀ ψ : apm_m98J02_Test,
+      Continuous (fun x : apm_m98J02_E ↦ apm_m98J02_translateTest x ψ))
+    (hdq : ∀ (ψ : apm_m98J02_Test) (i : Fin 2) (x : apm_m98J02_E),
+      Filter.Tendsto (fun h : ℝ ↦ h⁻¹ • (apm_m98J02_translateTest
+        (x + h • EuclideanSpace.single i 1) ψ - apm_m98J02_translateTest x ψ))
+        (nhdsWithin (0 : ℝ) ({0} : Set ℝ)ᶜ)
+        (nhds (apm_m98J02_translateTest x (apm_m98J02_partialTest i ψ))))
+    (v : apm_m98J02_Dist) (ψ : apm_m98J02_Test) :
+    ContDiff ℝ 1 (fun z : apm_m98J02_E => v (apm_m98J02_translateTest z ψ)) := by
+  rw [show (1 : WithTop ℕ∞) = ((0 : ℕ) : WithTop ℕ∞) + 1 by norm_num, contDiff_succ_iff_hasFDerivAt]
+  refine ⟨fun x => ∑ i, v (apm_m98J02_translateTest x (apm_m98J02_partialTest i ψ)) •
+      (EuclideanSpace.proj i : apm_m98J02_E →L[ℝ] ℝ), ?_,
+    fun x => apm_m98J02_translated_pairing_calculus_of_facts_aux_hasFDerivAt_pairing hcont hdq v ψ x⟩
+  rw [Nat.cast_zero]
+  refine contDiff_zero.2 (continuous_finset_sum _ fun i _ => ?_)
+  exact (apm_m98J02_translated_pairing_calculus_of_facts_aux_continuous hcont v _).smul continuous_const
+
+lemma apm_m98J02_translated_pairing_calculus_of_facts_aux_partial
+    (hcont : ∀ ψ : apm_m98J02_Test,
+      Continuous (fun x : apm_m98J02_E ↦ apm_m98J02_translateTest x ψ))
+    (hdq : ∀ (ψ : apm_m98J02_Test) (i : Fin 2) (x : apm_m98J02_E),
+      Filter.Tendsto (fun h : ℝ ↦ h⁻¹ • (apm_m98J02_translateTest
+        (x + h • EuclideanSpace.single i 1) ψ - apm_m98J02_translateTest x ψ))
+        (nhdsWithin (0 : ℝ) ({0} : Set ℝ)ᶜ)
+        (nhds (apm_m98J02_translateTest x (apm_m98J02_partialTest i ψ))))
+    (v : apm_m98J02_Dist) (ψ : apm_m98J02_Test) (i : Fin 2) :
+    apm_m98J02_partial i (fun z : apm_m98J02_E => v (apm_m98J02_translateTest z ψ)) =
+      fun x => v (apm_m98J02_translateTest x (apm_m98J02_partialTest i ψ)) := by
+  funext x
+  unfold apm_m98J02_partial
+  rw [(apm_m98J02_translated_pairing_calculus_of_facts_aux_hasFDerivAt_pairing hcont hdq v ψ x).fderiv]
+  fin_cases i <;> simp [Fin.sum_univ_two]
+
 theorem apm_m98J02_translated_pairing_calculus_of_facts
     (hcont : ∀ ψ : apm_m98J02_Test, Continuous (fun x : apm_m98J02_E ↦ apm_m98J02_translateTest x ψ))
     (hdq : ∀ (ψ : apm_m98J02_Test) (i : Fin 2) (x : apm_m98J02_E),
@@ -610,7 +698,15 @@ theorem apm_m98J02_translated_pairing_calculus_of_facts
             (fun z : apm_m98J02_E => v (apm_m98J02_translateTest z φ))) x =
         v (apm_m98J02_translateTest x
           (apm_m98J02_partialTest i (apm_m98J02_partialTest j φ)))) := by
-  sorry
+  refine ⟨?_, fun i x => by rw [apm_m98J02_translated_pairing_calculus_of_facts_aux_partial hcont hdq], fun i j x => by
+    rw [apm_m98J02_translated_pairing_calculus_of_facts_aux_partial hcont hdq, apm_m98J02_translated_pairing_calculus_of_facts_aux_partial hcont hdq]⟩
+  rw [show (2 : WithTop ℕ∞) = ((1 : ℕ) : WithTop ℕ∞) + 1 by norm_num, contDiff_succ_iff_hasFDerivAt]
+  refine ⟨fun x => ∑ i, v (apm_m98J02_translateTest x (apm_m98J02_partialTest i φ)) •
+      (EuclideanSpace.proj i : apm_m98J02_E →L[ℝ] ℝ), ?_,
+    fun x => apm_m98J02_translated_pairing_calculus_of_facts_aux_hasFDerivAt_pairing hcont hdq v φ x⟩
+  rw [Nat.cast_one]
+  refine ContDiff.sum fun i _ => ?_
+  exact (apm_m98J02_translated_pairing_calculus_of_facts_aux_contDiff_one hcont hdq v _).smul contDiff_const
 
 /-- Shared translation calculus needed by construction, differentiation of
 convolution, and the PDE identity. -/
