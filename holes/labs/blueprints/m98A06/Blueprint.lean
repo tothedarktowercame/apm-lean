@@ -949,7 +949,87 @@ lemma apm_m98A06_wirtinger_aux_core_aux_picone_limit_aux_gap_aux_truncated
           Real.sin (Real.pi * (L - δ) / L) -
       η δ ^ 2 * ((Real.pi / L) * Real.cos (Real.pi * δ / L)) /
         Real.sin (Real.pi * δ / L) := by
-  sorry
+  let B : ℝ → ℝ := fun x ↦ η x ^ 2 *
+    ((Real.pi / L) * Real.cos (Real.pi * x / L)) /
+      Real.sin (Real.pi * x / L)
+  let G : ℝ → ℝ := fun x ↦
+    (derivWithin η (Icc 0 L) x -
+      η x * ((Real.pi / L) * Real.cos (Real.pi * x / L)) /
+        Real.sin (Real.pi * x / L)) ^ 2
+  let D : ℝ → ℝ := fun x ↦
+    2 * η x * derivWithin η (Icc 0 L) x *
+        ((Real.pi / L) * Real.cos (Real.pi * x / L)) /
+          Real.sin (Real.pi * x / L) -
+      η x ^ 2 * ((Real.pi / L) ^ 2 *
+          Real.sin (Real.pi * x / L) ^ 2 +
+        ((Real.pi / L) * Real.cos (Real.pi * x / L)) ^ 2) /
+          Real.sin (Real.pi * x / L) ^ 2
+  have hsub : Icc δ (L - δ) ⊆ Ioo (0 : ℝ) L := by
+    intro x hx
+    exact ⟨hδ.trans_le hx.1, hx.2.trans_lt (sub_lt_self L hδ)⟩
+  have hsne : ∀ x ∈ Icc δ (L - δ), Real.sin (Real.pi * x / L) ≠ 0 :=
+    fun x hx ↦ (apm_m98A06_wirtinger_aux_core_aux_sine_pos L x hL (hsub hx)).ne'
+  have hηc : ContinuousOn η (Icc δ (L - δ)) :=
+    hη.1.continuousOn.mono (fun x hx ↦ ⟨(hsub hx).1.le, (hsub hx).2.le⟩)
+  have hdc : ContinuousOn (derivWithin η (Icc 0 L)) (Icc δ (L - δ)) :=
+    (apm_m98A06_wirtinger_aux_regular hL hη).2.1.mono
+      (fun x hx ↦ ⟨(hsub hx).1.le, (hsub hx).2.le⟩)
+  have hsinc : ContinuousOn (fun x : ℝ ↦ Real.sin (Real.pi * x / L))
+      (Icc δ (L - δ)) := by fun_prop
+  have hcosc : ContinuousOn (fun x : ℝ ↦
+      (Real.pi / L) * Real.cos (Real.pi * x / L)) (Icc δ (L - δ)) := by fun_prop
+  have hquotc : ContinuousOn (fun x : ℝ ↦
+      ((Real.pi / L) * Real.cos (Real.pi * x / L)) /
+        Real.sin (Real.pi * x / L)) (Icc δ (L - δ)) :=
+    hcosc.div hsinc hsne
+  have hBcont : ContinuousOn B (Icc δ (L - δ)) := by
+    convert (hηc.pow 2).mul hquotc using 1 <;> ext x <;> dsimp [B] <;> ring
+  have hDcont : ContinuousOn D (Icc δ (L - δ)) := by
+    convert (((hηc.mul hdc).const_mul 2).mul hquotc).sub
+      ((hηc.pow 2).mul
+        (((((hsinc.pow 2).const_mul ((Real.pi / L) ^ 2)).add (hcosc.pow 2)).div
+          (hsinc.pow 2) (fun x hx ↦ pow_ne_zero 2 (hsne x hx))))) using 1 <;>
+      ext x <;> dsimp [D] <;> ring
+  have hDint : IntervalIntegrable D volume δ (L - δ) :=
+    hDcont.intervalIntegrable_of_Icc hδL.le
+  have hFTC : (∫ x in δ..L - δ, D x) = B (L - δ) - B δ := by
+    apply intervalIntegral.integral_eq_sub_of_hasDerivAt_of_le hδL.le hBcont
+    · intro x hx
+      have hdif : DifferentiableAt ℝ B x := by
+        have hηdiff := (hη.1.differentiableOn (by norm_num) x
+          ⟨(hsub ⟨hx.1.le, hx.2.le⟩).1.le,
+            (hsub ⟨hx.1.le, hx.2.le⟩).2.le⟩).differentiableAt
+              (Icc_mem_nhds (hsub ⟨hx.1.le, hx.2.le⟩).1
+                (hsub ⟨hx.1.le, hx.2.le⟩).2)
+        dsimp [B]
+        fun_prop (disch := exact (apm_m98A06_wirtinger_aux_core_aux_sine_pos
+          L x hL (hsub ⟨hx.1.le, hx.2.le⟩)).ne')
+      apply hdif.hasDerivAt.congr_deriv
+      exact apm_m98A06_wirtinger_aux_core_aux_picone_limit_aux_gap_aux_deriv_boundary
+        L hL η hη x (hsub ⟨hx.1.le, hx.2.le⟩)
+    · exact hDint
+  have hpoint : ∀ x ∈ Icc δ (L - δ),
+      derivWithin η (Icc 0 L) x ^ 2 - (Real.pi / L) ^ 2 * η x ^ 2 =
+        G x + D x := by
+    intro x hx
+    have hs := hsne x hx
+    rw [apm_m98A06_wirtinger_aux_core_aux_picone_identity
+      (Real.pi / L) (η x) (derivWithin η (Icc 0 L) x)
+      (Real.sin (Real.pi * x / L))
+      ((Real.pi / L) * Real.cos (Real.pi * x / L)) hs]
+    dsimp [G, D]
+    have ht := Real.sin_sq_add_cos_sq (Real.pi * x / L)
+    field_simp [hs]
+    nlinarith
+  rw [intervalIntegral.integral_congr (fun x hx ↦ hpoint x (by
+    simpa [uIcc_of_le hδL.le] using hx))]
+  rw [intervalIntegral.integral_add]
+  · rw [hFTC]
+    dsimp [G, B]
+    ring
+  · apply ContinuousOn.intervalIntegrable_of_Icc hδL.le
+    convert (hdc.sub (hηc.mul hquotc)).pow 2 using 1 <;> ext x <;> dsimp [G] <;> ring
+  · exact hDint
 
 lemma apm_m98A06_wirtinger_aux_core_aux_picone_limit_aux_gap
     (L : ℝ) (hL : 0 < L) (η : ℝ → ℝ)
