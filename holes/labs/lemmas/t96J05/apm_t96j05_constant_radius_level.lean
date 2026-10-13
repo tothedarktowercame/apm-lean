@@ -44,7 +44,32 @@ theorem apm_t96j05_constant_radius_level
     Nonempty X →
       Nonempty (apm_t96j05_radialLevel X r) ∧
       apm_t96j05_IsEmbeddedSmoothRadialLevel (m := m) X r := by
-  sorry
+  intro hne
+  rcases hX with ⟨charts, hman, hinc⟩
+  letI : ChartedSpace (apm_t96j05_E m) X := charts
+  letI : IsManifold (apm_t96j05_I m) ∞ X := hman
+  let U : TopologicalSpace.Opens X :=
+    ⟨{x : X | ‖x.1‖ = r}, by
+      have hu : {x : X | ‖x.1‖ = r} = Set.univ := by
+        ext x
+        simp [hall x]
+      rw [hu]
+      exact isOpen_univ⟩
+  letI : ChartedSpace (apm_t96j05_E m) U := inferInstance
+  have hlevel : Nonempty (apm_t96j05_radialLevel X r) := by
+    rcases hne with ⟨x⟩
+    exact ⟨⟨x, hall x⟩⟩
+  let chartsU : ChartedSpace (apm_t96j05_E m)
+      (apm_t96j05_radialLevel X r) := by
+    change ChartedSpace (apm_t96j05_E m) U
+    infer_instance
+  refine ⟨hlevel, m, le_rfl, ?_⟩
+  refine ⟨chartsU, ?_, ?_⟩
+  · change IsManifold (apm_t96j05_I m) ∞ U
+    infer_instance
+  change ContMDiff (apm_t96j05_I m) (apm_t96j05_I n) ∞
+    ((fun x : X ↦ x.1) ∘ (fun x : U ↦ x.1))
+  exact hinc.comp contMDiff_subtype_val
 -- END SEAT AREA
 
 /-- LIBRARY (manifold Sard plus connected-image selection).  For a smooth
