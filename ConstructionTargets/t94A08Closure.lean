@@ -591,3 +591,57 @@ def apm_t94a08_zeroChartHomeomorph :
       exact (ConstructionTargets.T94A08ProjectiveConic.continuous_chartInverse a).comp
         (continuous_pi fun q ↦ by
           fin_cases q <;> simp [a] <;> fun_prop))
+
+lemma apm_t94a08_node_mem_zeroChart :
+    Projectivization.rep apm_t94a08_node (0 : Fin 3) ≠ 0 := by
+  obtain ⟨c, hc⟩ := Projectivization.exists_smul_eq_mk_rep
+    (K := ℂ) (Pi.single 0 1 : apm_t94a08_C3) apm_t94a08_e0_ne_zero
+  change Projectivization.rep
+      (Projectivization.mk ℂ (Pi.single 0 1) apm_t94a08_e0_ne_zero) 0 ≠ 0
+  rw [← hc]
+  simpa [Pi.smul_apply, Units.smul_def] using c.ne_zero
+
+lemma apm_t94a08_zeroChartHomeomorph_node :
+    apm_t94a08_zeroChartHomeomorph
+      ⟨apm_t94a08_node, apm_t94a08_node_mem_zeroChart⟩ = (0, 0) := by
+  obtain ⟨c, hc⟩ := Projectivization.exists_smul_eq_mk_rep
+    (K := ℂ) (Pi.single 0 1 : apm_t94a08_C3) apm_t94a08_e0_ne_zero
+  apply Prod.ext <;>
+    change Projectivization.rep apm_t94a08_node _ /
+      Projectivization.rep apm_t94a08_node 0 = 0 <;>
+    rw [show apm_t94a08_node =
+      Projectivization.mk ℂ (Pi.single 0 1) apm_t94a08_e0_ne_zero by rfl, ← hc] <;>
+    simp
+
+def apm_t94a08_puncturedSigma2ZeroChart :
+    Set ↑{p : apm_t94a08_CP2 | Projectivization.rep p (0 : Fin 3) ≠ 0} :=
+  {p | p.1 ∈ apm_t94a08_sigma2 ∧ p.1 ≠ apm_t94a08_node}
+
+def apm_t94a08_puncturedSigma2ZeroChartHomeomorph :
+    ↑apm_t94a08_puncturedSigma2ZeroChart ≃ₜ ↑apm_t94a08_puncturedAffineCross :=
+  apm_t94a08_zeroChartHomeomorph.subtype (fun p ↦ by
+    rw [apm_t94a08_puncturedSigma2ZeroChart,
+      apm_t94a08_puncturedAffineCross]
+    have hmem := apm_t94a08_sigma2_zeroChart_mem_iff p.1 p.2
+    dsimp only at hmem
+    change (p.1 ∈ apm_t94a08_sigma2 ∧ p.1 ≠ apm_t94a08_node) ↔
+      (apm_t94a08_zeroChartHomeomorph p ∈
+          apm_t94a08_affineBranchPlus ∪ apm_t94a08_affineBranchMinus ∧
+        apm_t94a08_zeroChartHomeomorph p ∉ {(0, 0)})
+    rw [hmem]
+    constructor <;> rintro ⟨hcross, hne⟩ <;> refine ⟨hcross, ?_⟩
+    · intro himem
+      have himage : apm_t94a08_zeroChartHomeomorph p = (0, 0) := by
+        simpa using himem
+      apply hne
+      have hp : p = ⟨apm_t94a08_node, apm_t94a08_node_mem_zeroChart⟩ :=
+        apm_t94a08_zeroChartHomeomorph.injective
+          (himage.trans apm_t94a08_zeroChartHomeomorph_node.symm)
+      exact congrArg Subtype.val hp
+    · intro hpnode
+      apply hne
+      rw [Set.mem_singleton_iff]
+      have hp : p = ⟨apm_t94a08_node, apm_t94a08_node_mem_zeroChart⟩ :=
+        Subtype.ext hpnode
+      rw [hp]
+      exact apm_t94a08_zeroChartHomeomorph_node)
