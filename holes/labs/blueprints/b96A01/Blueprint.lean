@@ -371,6 +371,57 @@ theorem apm_b96a01_part_d_nonabelian :
     have hb : b = 1 := hsep b (fun m hm => by rw [hall m hm]; rfl)
     rw [ha, hb]
 
+/-- A finite commutative simple group has prime order. -/
+lemma apm_b96a01_part_d_abelian_aux_representation_aux_prime_card
+    {G : Type*} [Group G] [Finite G] [IsSimpleGroup G] (hcomm : ∀ a b : G, a * b = b * a) :
+    (Nat.card G).Prime := by
+  sorry
+
+/-- An element of prime order `ℓ` in `GLₙ(ℚ)` forces `ℓ - 1 ≤ n`: its minimal polynomial
+divides `X^ℓ - 1 = (X - 1) Φ_ℓ`, is not `X - 1`, and `Φ_ℓ` is irreducible over `ℚ` of degree
+`ℓ - 1`. -/
+lemma apm_b96a01_part_d_abelian_aux_representation_aux_dim_bound
+    (n : Type*) [Fintype n] [DecidableEq n] (ℓ : ℕ) (hℓ : ℓ.Prime)
+    (g : Matrix.GeneralLinearGroup n ℚ) (hg : orderOf g = ℓ) :
+    ℓ - 1 ≤ Fintype.card n := by
+  sorry
+
+/-- `GLₙ(F_p)` has an element of every prime order `ℓ` with `ℓ - 1 ≤ n`, except
+`n = 1, p = 2` (a unipotent Jordan block if `ℓ = p`, a companion matrix of a factor of
+`Φ_ℓ` over `F_p` padded by the identity otherwise). -/
+lemma apm_b96a01_part_d_abelian_aux_representation_aux_element
+    (n : Type*) [Fintype n] [DecidableEq n] (p : ℕ) (hp : p.Prime)
+    (hex : ¬(Fintype.card n = 1 ∧ p = 2)) (ℓ : ℕ) (hℓ : ℓ.Prime)
+    (hdim : ℓ - 1 ≤ Fintype.card n) :
+    ∃ x : Matrix.GeneralLinearGroup n (ZMod p), orderOf x = ℓ := by
+  sorry
+
+/-- A group of prime order embeds wherever there is an element of that order. -/
+lemma apm_b96a01_part_d_abelian_aux_representation_aux_embed
+    {G H : Type*} [Group G] [Group H] [Finite G] (hG : (Nat.card G).Prime)
+    (x : H) (hx : orderOf x = Nat.card G) :
+    ∃ ρ : G →* H, Function.Injective ρ := by
+  sorry
+
+lemma apm_b96a01_part_d_abelian_aux_representation
+    (n : Type*) [Fintype n] [DecidableEq n]
+    (G : Subgroup (Matrix.GeneralLinearGroup n ℚ))
+    (hG : Finite G) (hs : IsSimpleGroup G)
+    (hcomm : ∀ a b : G, a * b = b * a)
+    (p : ℕ) (hp : p.Prime)
+    (hex : ¬(Fintype.card n = 1 ∧ p = 2)) :
+    ∃ ρ : G →* Matrix.GeneralLinearGroup n (ZMod p),
+      Function.Injective ρ := by
+  letI : Finite G := hG
+  have hℓ := apm_b96a01_part_d_abelian_aux_representation_aux_prime_card hcomm
+  haveI : Fact (Nat.card G).Prime := ⟨hℓ⟩
+  obtain ⟨g, hg⟩ := exists_prime_orderOf_dvd_card' (G := G) (Nat.card G) dvd_rfl
+  have hg' : orderOf (g : Matrix.GeneralLinearGroup n ℚ) = Nat.card G := by
+    rw [Subgroup.orderOf_coe, hg]
+  have hdim := apm_b96a01_part_d_abelian_aux_representation_aux_dim_bound n (Nat.card G) hℓ _ hg'
+  obtain ⟨x, hx⟩ := apm_b96a01_part_d_abelian_aux_representation_aux_element n p hp hex (Nat.card G) hℓ hdim
+  exact apm_b96a01_part_d_abelian_aux_representation_aux_embed hℓ x hx
+
 theorem apm_b96a01_part_d_abelian :
     ∀ (n : Type*) [Fintype n] [DecidableEq n]
       (G : Subgroup (Matrix.GeneralLinearGroup n ℚ)),
@@ -378,7 +429,8 @@ theorem apm_b96a01_part_d_abelian :
       ∀ p : ℕ, p.Prime → ¬(Fintype.card n = 1 ∧ p = 2) →
         ∃ ρ : G →* Matrix.GeneralLinearGroup n (ZMod p),
           Function.Injective ρ := by
-  sorry
+  intro n _ _ G hG hs hcomm p hp hex
+  exact apm_b96a01_part_d_abelian_aux_representation n G hG hs hcomm p hp hex
 
 theorem apm_b96a01_part_d :
     ∀ (n : Type*) [Fintype n] [DecidableEq n]
