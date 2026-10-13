@@ -6695,6 +6695,21 @@ noncomputable def genericPointWedgeOuterRight_transportInvRoundTrip :
     inv ((eK.funInvIdAssoc (r ⋙ eR.functor)).hom.app z) ≫
       eqToHom h.2.symm
 
+theorem genericPointWedgeOuterRight_transportInvRoundTrip_eq_map :
+    let r := genericPointWedgeActualRight x₀ y₀ M N
+    let eK := genericPointWedgeOverlapGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let eR := genericPointWedgeRightGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let z := genericPointWedgeOverlapBase x₀ y₀ M N
+    let h := genericPointWedgeOuterRight_middleComponent_endpoints
+      x₀ y₀ M N hM hN hy hx cM cN
+    genericPointWedgeOuterRight_transportInvRoundTrip
+        x₀ y₀ M N hM hN hy hx cM cN =
+      eqToHom h.1 ≫ inv ((r ⋙ eR.functor).map (eK.unitInv.app z)) := by
+  unfold genericPointWedgeOuterRight_transportInvRoundTrip
+  simp
+
 /-- An `inl` factorization of the right-base conjugator forces its canonical
 right projection to be trivial. -/
 theorem genericPointWedgeRightBase_inl_implies_rightProjection_eq_one
@@ -7440,6 +7455,7 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeOuterRight_leadingConnectors_heq
 #print axioms genericPointWedgeOuterRight_middleComponent_endpoints
 #print axioms genericPointWedgeOuterRight_transportInvRoundTrip
+#print axioms genericPointWedgeOuterRight_transportInvRoundTrip_eq_map
 #print axioms genericPointWedgeRightBase_inl_implies_rightProjection_eq_one
 #print axioms genericPointWedgeLegCoordinates_of_mapped
 #print axioms genericPointWedgeLegCoordinates_iff_mapped

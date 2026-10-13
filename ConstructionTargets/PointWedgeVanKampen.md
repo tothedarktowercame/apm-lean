@@ -1336,3 +1336,7 @@ identify the two middle morphisms after transport along these equalities.
 `genericPointWedgeOuterRight_transportInvRoundTrip` performs that transport
 and lands in exactly the hom-set of the inverse-span component.  The residual
 comparison is now a homogeneous equality between those two morphisms.
+`genericPointWedgeOuterRight_transportInvRoundTrip_eq_map` removes the final
+target transport and expands the inverse round-trip as the inverse of the
+mapped overlap `unitInv`.  The residual homogeneous equality is therefore
+the inverse-span equality transport versus that explicit two-factor map.
