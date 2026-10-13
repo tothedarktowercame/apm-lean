@@ -2249,7 +2249,46 @@ theorem apm_a97j08_edgeAngle_swap {z shift : ℂ} {δ : ℝ} (hδ : 0 < δ)
       apm_a97j08_angleStep z q p = -apm_a97j08_angleStep z p q)
     (q : ℤ × ℤ) (e : (ℤ × ℤ) × (ℤ × ℤ)) (he : e ∈ apm_a97j08_squareEdges q) :
     apm_a97j08_edgeAngle z shift δ e.swap = -apm_a97j08_edgeAngle z shift δ e := by
-  sorry
+  have horizontal (a b : ℤ × ℤ) (hab : a.2 = b.2) :
+      z ∉ segment ℝ (apm_a97j08_gridVertex shift δ a)
+        (apm_a97j08_gridVertex shift δ b) := by
+    intro hzseg
+    have hzseg' : z ∈ (fun t : ℝ ↦ (1 - t) • apm_a97j08_gridVertex shift δ a +
+        t • apm_a97j08_gridVertex shift δ b) '' Set.Icc 0 1 := by
+      exact (segment_eq_image ℝ (apm_a97j08_gridVertex shift δ a)
+        (apm_a97j08_gridVertex shift δ b) ▸ hzseg)
+    obtain ⟨t, ht, hzt⟩ := hzseg'
+    apply him
+    refine ⟨a.2, ?_⟩
+    rw [← hzt]
+    simp only [AffineMap.lineMap_apply, apm_a97j08_gridVertex, Complex.add_im,
+      Complex.ofReal_im, Complex.mul_im, Complex.I_im, Complex.I_re,
+      Complex.ofReal_re, Complex.smul_im, smul_eq_mul]
+    rw [hab]
+    ring
+  have vertical (a b : ℤ × ℤ) (hab : a.1 = b.1) :
+      z ∉ segment ℝ (apm_a97j08_gridVertex shift δ a)
+        (apm_a97j08_gridVertex shift δ b) := by
+    intro hzseg
+    have hzseg' : z ∈ (fun t : ℝ ↦ (1 - t) • apm_a97j08_gridVertex shift δ a +
+        t • apm_a97j08_gridVertex shift δ b) '' Set.Icc 0 1 := by
+      exact (segment_eq_image ℝ (apm_a97j08_gridVertex shift δ a)
+        (apm_a97j08_gridVertex shift δ b) ▸ hzseg)
+    obtain ⟨t, ht, hzt⟩ := hzseg'
+    apply hre
+    refine ⟨a.1, ?_⟩
+    rw [← hzt]
+    simp only [AffineMap.lineMap_apply, apm_a97j08_gridVertex, Complex.add_re,
+      Complex.ofReal_re, Complex.mul_re, Complex.I_im, Complex.I_re,
+      Complex.ofReal_im, Complex.smul_re, smul_eq_mul]
+    rw [hab]
+    ring
+  simp only [apm_a97j08_squareEdges, Finset.mem_insert, Finset.mem_singleton] at he
+  rcases he with rfl | rfl | rfl | rfl
+  · exact hA1 (horizontal _ _ rfl)
+  · exact hA1 (vertical _ _ rfl)
+  · exact hA1 (horizontal _ _ rfl)
+  · exact hA1 (vertical _ _ rfl)
 -- END SEAT AREA
 
 -- (C1) Interior edges cancel: summing an antisymmetric edge function over the
