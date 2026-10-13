@@ -1542,4 +1542,54 @@ def punctureDeformationRetract (P : PairingData) :
     (fun {_ _} h => pairingRel_radius P h)
     (fun {_ _} h => pairingRel_boundary P h)
 
+/-! ### B7: the orbit-indexed finite circle wedge -/
+
+namespace PointWedgeQuotient
+
+/-- The relation on an indexed family of circles which identifies all of
+their basepoints.  Keeping the index in the source is essential: the polygon
+word is recovered by evaluating its arcs in these individual circle legs. -/
+def FiniteWedgeRel (L : Type*) (x y : L × Circle) : Prop :=
+  x = y ∨ ((x.2 : ℂ) = 1 ∧ (y.2 : ℂ) = 1)
+
+/-- The wedge of a family of circles, as the quotient which identifies
+exactly their basepoints. -/
+def FiniteWedge (L : Type*) :=
+  Quotient (Relation.EqvGen.setoid (FiniteWedgeRel L))
+
+noncomputable instance (L : Type*) : TopologicalSpace (FiniteWedge L) :=
+  letI : TopologicalSpace L := ⊥
+  TopologicalSpace.coinduced
+    (fun x : L × Circle => Quotient.mk (Relation.EqvGen.setoid (FiniteWedgeRel L)) x)
+    inferInstance
+
+/-- The circle leg carrying the given wedge index. -/
+def wedgeCircle {L : Type*} (l : L) (z : Circle) : FiniteWedge L :=
+  Quotient.mk _ (l, z)
+
+theorem continuous_wedgeCircle {L : Type*} (l : L) :
+    Continuous (wedgeCircle l) := by
+  letI : TopologicalSpace L := ⊥
+  exact continuous_coinduced_rng.comp (continuous_const.prodMk continuous_id)
+
+theorem wedgeCircle_base_eq {L : Type*} (l k : L) :
+    wedgeCircle l (1 : Circle) = wedgeCircle k (1 : Circle) := by
+  apply Quotient.sound
+  exact Relation.EqvGen.rel _ _ (Or.inr ⟨rfl, rfl⟩)
+
+end PointWedgeQuotient
+
+open PointWedgeQuotient
+
+/-- The positively oriented coordinate of polygon arc `i` in its canonical
+orbit-indexed circle leg. -/
+def PairingData.positiveWedgeArc (P : PairingData) (i : Fin P.edgeCount)
+    (z : Circle) : PointWedgeQuotient.FiniteWedge (PairingOrbit P.pair) :=
+  wedgeCircle (P.orbit i) z
+
+@[simp] theorem PairingData.positiveWedgeArc_pair (P : PairingData)
+    (i : Fin P.edgeCount) (z : Circle) :
+    P.positiveWedgeArc (P.pair i) z = P.positiveWedgeArc i z := by
+  simp [PairingData.positiveWedgeArc]
+
 end ConstructionTargets.PolygonSurfacePiOne
