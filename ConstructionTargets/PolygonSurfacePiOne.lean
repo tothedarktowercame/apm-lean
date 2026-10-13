@@ -1785,6 +1785,44 @@ theorem PairingData.signedParameter_pair (P : PairingData)
       simp [PairingData.signedParameter, pairedParameter, hs, hi,
         reverseIcc_reverseIcc]
 
+theorem PairingData.signedParameter_eq_zero_iff (P : PairingData)
+    (i : Fin P.edgeCount) (t : Set.Icc (0 : ℝ) 1) :
+    P.signedParameter i t = ⟨0, by norm_num⟩ ↔
+      t = if P.sign i then ⟨0, by norm_num⟩ else ⟨1, by norm_num⟩ := by
+  cases hs : P.sign i
+  · simp only [PairingData.signedParameter, hs, Bool.false_eq_true,
+      ↓reduceIte]
+    constructor
+    · intro h
+      apply Subtype.ext
+      have h' := congrArg Subtype.val h
+      dsimp [reverseIcc] at h'
+      linarith
+    · intro h
+      subst t
+      apply Subtype.ext
+      norm_num [reverseIcc]
+  · simp [PairingData.signedParameter, hs]
+
+theorem PairingData.signedParameter_eq_one_iff (P : PairingData)
+    (i : Fin P.edgeCount) (t : Set.Icc (0 : ℝ) 1) :
+    P.signedParameter i t = ⟨1, by norm_num⟩ ↔
+      t = if P.sign i then ⟨1, by norm_num⟩ else ⟨0, by norm_num⟩ := by
+  cases hs : P.sign i
+  · simp only [PairingData.signedParameter, hs, Bool.false_eq_true,
+      ↓reduceIte]
+    constructor
+    · intro h
+      apply Subtype.ext
+      have h' := congrArg Subtype.val h
+      dsimp [reverseIcc] at h'
+      linarith
+    · intro h
+      subst t
+      apply Subtype.ext
+      norm_num [reverseIcc]
+  · simp [PairingData.signedParameter, hs]
+
 /-- The arc coordinate selected by the sign of an oriented polygon edge.
 Negative edges use the inverse traversal. -/
 def PairingData.signedWedgeArc (P : PairingData) (i : Fin P.edgeCount)
@@ -1892,6 +1930,15 @@ theorem PairingData.skeletonArc_eq_of_signedParameter_eq (P : PairingData)
       exact hparam.symm
     rw [hu]
     exact (P.skeletonArc_pair i t).symm
+
+/-- The chosen zero endpoints of all polygon arcs represent the unique
+vertex of a one-vertex polygon pairing. -/
+theorem PairingData.skeletonArc_zero_eq (P : PairingData)
+    (i j : Fin P.edgeCount) :
+    P.skeletonArc i ⟨0, by norm_num⟩ = P.skeletonArc j ⟨0, by norm_num⟩ := by
+  apply Subtype.ext
+  apply Quotient.sound
+  exact P.oneVertex i j
 
 /-- The representative-level correspondence which the B7 homeomorphism
 must induce: paired source arcs and paired signed wedge coordinates agree. -/
