@@ -788,6 +788,52 @@ lemma apm_m93j05_trunc_parseval_aux_norm_sq (N : ℕ) (f : ℝ → ℝ) :
   rw [hx₁]
   simp [g, pow_two]
 
+lemma apm_m93j05_trunc_parseval_aux_mean (a b : ℝ) (j : ℕ) (hj : 1 ≤ j) :
+    (∫ x in Set.Icc (0 : ℝ) 1,
+      (a * Real.cos (j * 2 * Real.pi * x) +
+       b * Real.sin (j * 2 * Real.pi * x))) = 0 := by
+  rw [MeasureTheory.integral_add]
+  · rw [MeasureTheory.integral_const_mul, MeasureTheory.integral_const_mul,
+      apm_m93j05_fourier_projection_aux_cos_mean_zero j (by omega),
+      apm_m93j05_fourier_projection_aux_sin_mean_zero j]
+    ring
+  · exact (continuous_const.mul (Real.continuous_cos.comp
+      (continuous_const.mul continuous_id))).integrableOn_Icc
+  · exact (continuous_const.mul (Real.continuous_sin.comp
+      (continuous_const.mul continuous_id))).integrableOn_Icc
+
+lemma apm_m93j05_trunc_parseval_aux_inner (a b c d : ℝ) (j k : ℕ)
+    (hj : 1 ≤ j) (hk : 1 ≤ k) :
+    (∫ x in Set.Icc (0 : ℝ) 1,
+      (a * Real.cos (j * 2 * Real.pi * x) + b * Real.sin (j * 2 * Real.pi * x)) *
+      (c * Real.cos (k * 2 * Real.pi * x) + d * Real.sin (k * 2 * Real.pi * x))) =
+      if j = k then (a * c + b * d) / 2 else 0 := by
+  have hcont : ∀ (r s : ℕ), Continuous (fun x : ℝ =>
+      Real.cos (r * 2 * Real.pi * x) * Real.sin (s * 2 * Real.pi * x)) := by
+    intro r s
+    exact (Real.continuous_cos.comp (continuous_const.mul continuous_id)).mul
+      (Real.continuous_sin.comp (continuous_const.mul continuous_id))
+  have hcc := (apm_m93j05_trig_orthogonality j k hj hk).1
+  have hss := (apm_m93j05_trig_orthogonality j k hj hk).2.1
+  have hcs := (apm_m93j05_trig_orthogonality j k hj hk).2.2
+  have hsc : (∫ x in Set.Icc (0 : ℝ) 1,
+      Real.sin (j * 2 * Real.pi * x) * Real.cos (k * 2 * Real.pi * x)) = 0 := by
+    simpa [mul_comm] using (apm_m93j05_trig_orthogonality k j hk hj).2.2
+  rw [show (fun x : ℝ =>
+      (a * Real.cos (j * 2 * Real.pi * x) + b * Real.sin (j * 2 * Real.pi * x)) *
+      (c * Real.cos (k * 2 * Real.pi * x) + d * Real.sin (k * 2 * Real.pi * x))) =
+      fun x => a*c*(Real.cos (j*2*Real.pi*x)*Real.cos (k*2*Real.pi*x)) +
+        a*d*(Real.cos (j*2*Real.pi*x)*Real.sin (k*2*Real.pi*x)) +
+        b*c*(Real.sin (j*2*Real.pi*x)*Real.cos (k*2*Real.pi*x)) +
+        b*d*(Real.sin (j*2*Real.pi*x)*Real.sin (k*2*Real.pi*x)) by
+        funext x; ring]
+  rw [MeasureTheory.integral_add, MeasureTheory.integral_add,
+    MeasureTheory.integral_add] <;>
+    try exact (by fun_prop : Continuous _).continuousOn.integrableOn_Icc
+  simp_rw [MeasureTheory.integral_const_mul]
+  rw [hcc, hcs, hsc, hss]
+  split_ifs with h <;> ring
+
 /-- Parseval for the truncation: `∫₀¹ (m + Σ aⱼ cos + bⱼ sin)² = m² + Σ (aⱼ² + bⱼ²)/2`
 (from `apm_m93j05_trig_orthogonality` and the mean-zero helpers). -/
 theorem apm_m93j05_trunc_parseval (N : ℕ) (f : ℝ → ℝ) :
