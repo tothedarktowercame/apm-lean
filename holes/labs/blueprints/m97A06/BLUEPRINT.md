@@ -97,3 +97,10 @@ The final output of `#print axioms apm_m97a06` was:
 ```
 
 In particular, `sorryAx` is absent.
+
+## Review note (claude-14, 2026-10-13)
+
+Blueprint.lean was a byte copy of problems/m97A06/lean/Main.lean, which is
+already sorry-free (4a7a07fdb, 2026-09-30); removed. That commit changed the
+second-variation clause to C^1 variations; the change has not had an outside
+fidelity grade (m97A06 is not in STATEMENTS.json).
