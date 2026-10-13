@@ -370,8 +370,64 @@ theorem apm_m98A06_wirtinger : apm_m98A06_WirtingerFact := by
   intro L hL η hη
   exact apm_m98A06_wirtinger_aux_core L hL η hη
 
-theorem apm_m98A06_weak_FTC : apm_m98A06_WeakFTCFact := by
+lemma apm_m98A06_weak_FTC_aux_integrable
+    (f : ℝ → ℝ) (hf : MemLp f 2 (volume.restrict (Ioo (0 : ℝ) Real.pi))) :
+    Integrable f (volume.restrict (Ioo (0 : ℝ) Real.pi)) := by
+  exact hf.integrable (by norm_num)
+
+/-- The remaining one-dimensional Sobolev representation step: a continuous
+representative with an integrable distributional derivative is its indefinite
+integral, after fixing its value at the left endpoint. -/
+-- The primitive of an integrable function has it as weak derivative on (0, π)
+-- (Fubini / integration by parts for absolutely continuous functions).
+lemma apm_m98A06_weak_FTC_aux_representation_aux_primitive
+    (du : ℝ → ℝ) (hdu : Integrable du (volume.restrict (Ioo (0 : ℝ) Real.pi))) :
+    apm_m98a06_IsWeakDerivativeOn (Ioo 0 Real.pi) (fun x => ∫ t in (0 : ℝ)..x, du t) du := by
   sorry
+
+-- Du Bois-Reymond in one variable: continuous on [0, π] with zero weak derivative on
+-- (0, π) implies constant there.
+-- Weak derivatives subtract (for functions continuous on [0, π]).
+lemma apm_m98A06_weak_FTC_aux_representation_aux_sub
+    (u v du : ℝ → ℝ) (hu : ContinuousOn u (Icc (0 : ℝ) Real.pi))
+    (hv : ContinuousOn v (Icc (0 : ℝ) Real.pi))
+    (hdu : Integrable du (volume.restrict (Ioo (0 : ℝ) Real.pi)))
+    (hwu : apm_m98a06_IsWeakDerivativeOn (Ioo 0 Real.pi) u du)
+    (hwv : apm_m98a06_IsWeakDerivativeOn (Ioo 0 Real.pi) v du) :
+    apm_m98a06_IsWeakDerivativeOn (Ioo 0 Real.pi) (fun x => u x - v x) 0 := by
+  sorry
+
+lemma apm_m98A06_weak_FTC_aux_representation_aux_const
+    (w : ℝ → ℝ) (hw : ContinuousOn w (Icc (0 : ℝ) Real.pi))
+    (hweak : apm_m98a06_IsWeakDerivativeOn (Ioo 0 Real.pi) w 0) :
+    ∀ x ∈ Icc (0 : ℝ) Real.pi, w x = w 0 := by
+  sorry
+
+lemma apm_m98A06_weak_FTC_aux_representation
+    (u du : ℝ → ℝ)
+    (hu : ContinuousOn u (Icc (0 : ℝ) Real.pi))
+    (hu0 : u 0 = 0)
+    (hdu : Integrable du (volume.restrict (Ioo (0 : ℝ) Real.pi)))
+    (hweak : apm_m98a06_IsWeakDerivativeOn (Ioo 0 Real.pi) u du) :
+    ∀ x ∈ Icc (0 : ℝ) Real.pi, u x = ∫ t in (0 : ℝ)..x, du t := by
+  set V : ℝ → ℝ := fun x => ∫ t in (0 : ℝ)..x, du t with hV
+  have hVw := apm_m98A06_weak_FTC_aux_representation_aux_primitive du hdu
+  have hVc : ContinuousOn V (Icc (0 : ℝ) Real.pi) := by
+    have hi : IntegrableOn du (Set.uIcc 0 Real.pi) := by
+      rw [Set.uIcc_of_le Real.pi_pos.le, integrableOn_Icc_iff_integrableOn_Ioo]; exact hdu
+    have := intervalIntegral.continuousOn_primitive_interval hi
+    rwa [Set.uIcc_of_le Real.pi_pos.le] at this
+  have hdiff := apm_m98A06_weak_FTC_aux_representation_aux_sub u V du hu hVc hdu hweak hVw
+  have hc := apm_m98A06_weak_FTC_aux_representation_aux_const (fun x => u x - V x) (hu.sub hVc) hdiff
+  intro x hx
+  have := hc x hx
+  simp only [hV, intervalIntegral.integral_same, hu0, sub_zero] at this
+  linarith
+
+theorem apm_m98A06_weak_FTC : apm_m98A06_WeakFTCFact := by
+  intro u du h
+  exact apm_m98A06_weak_FTC_aux_representation u du h.1 h.2.1
+    (apm_m98A06_weak_FTC_aux_integrable du h.2.2.2.2.1) h.2.2.2.2.2
 
 theorem apm_m98A06_sine_computations : apm_m98A06_SineComputationsFact := by
   sorry
