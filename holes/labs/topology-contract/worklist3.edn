@@ -21568,7 +21568,7 @@
   {:consumer :t00J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 2,
    :review-finding
    "Frozen fixture metadata remains invalid: both authoritative acceptance copies record aad5a9cda739c1cbcceb1eca8ab8b33395db8a08c9d68941a87c644f4d13586e and omit :mode, while the compiling fixture hashes to 7e72195e1214d7580994264481ae57d0ecf87755d31825ab85cbda5f1220c4b1. Update both copies to that digest with :mode :post-build-export-check, then resubmit f0afa7bd.",
    :implements-lemma
@@ -21576,7 +21576,7 @@
    :evidence
    {:placeholder-delta {:t00J02 [1 1], :t98A02 [1 1]},
     :residual
-    "Supervisor: replace row acceptance digest with fixture digest and add post-build mode; implementation is f0afa7bd.",
+    "Stop-after-two: reroute to supervisor metadata repair, setting both copies to the recorded fixture digest and post-build mode.",
     :outcome :stop,
     :warnings [],
     :statement-hashes {:registry "149/149"},
@@ -21584,19 +21584,11 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Requested repair is ledger metadata outside :scope. apply-result!'s done-unreviewed branch replaces only :evidence and never row :acceptance; the prior corrected map therefore nested under evidence while authoritative acceptance stayed stale. Editing the ledger is expressly forbidden. Supervisor must update both acceptance copies.",
+    "Repeated metadata boundary: apply-result! stores receipts only under :evidence and cannot modify authoritative row :acceptance. The allowed scope contains only ManifoldFundamentalClass.lean, and direct ledger edits are forbidden. Therefore this seat cannot update either stale acceptance copy; reopening the completed theorem cannot repair the ledger.",
     :commands
-    [{:cmd "inspect build_step apply-result! metadata transition",
-      :exit 0}
-     {:cmd
-      "sha256sum fixture; lake env lean fixture; diff-tree commit",
+    [{:cmd "inspect apply-result! done-unreviewed transition", :exit 0}
+     {:cmd "sha256sum fixture; lake env lean fixture; registry check",
       :exit 0}],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1791889102825-9481-8d76e148",
-     :finding
-     "Frozen fixture metadata remains invalid: both authoritative acceptance copies record aad5a9cda739c1cbcceb1eca8ab8b33395db8a08c9d68941a87c644f4d13586e and omit :mode, while the compiling fixture hashes to 7e72195e1214d7580994264481ae57d0ecf87755d31825ab85cbda5f1220c4b1. Update both copies to that digest with :mode :post-build-export-check, then resubmit f0afa7bd."},
     :commit "f0afa7bdc4c95a8c87143342ceb8c9ce51cd5612",
     :changed-paths
     ["ConstructionTargets/ManifoldFundamentalClass.lean"],
@@ -21607,7 +21599,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :repair,
+   :state :needs-owner,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/manifold-fundamental-class",
    :acceptance
