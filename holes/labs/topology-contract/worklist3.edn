@@ -22997,13 +22997,13 @@
    :consumer :t01A08,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "extend Mathlib: state and prove the missing theorem in scope",
    :evidence
    {:placeholder-delta {:t01A08 [1 1]},
     :residual
-    "Reroute after two STOPs: correct fixture with closure-interior membership, which convex B1 supplies.",
+    "Correct the fixture with hxi; convex B1 proves hxi from convexity and nonempty interior.",
     :missing-hypothesis "x ∈ closure (interior s)",
     :outcome :stop,
     :warnings [],
@@ -23020,11 +23020,11 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Repeated boundary: the frozen C∞ interface omits x∈closure(interior s). Real within-set Schwarz requires it already at order 2; only analytic order ω has the premise-free theorem. UniqueDiffOn and x∈s imply neither. No scoped implementation can discharge this frozen type without an invalid axiom.",
+    "Exact fixture/source comparison confirms the frozen axiom omits hxi while the proved C∞ theorem requires hxi : x∈closure(interior s). UniqueDiffOn and hx do not supply it; premise-free symmetry is available only at analytic order ω. Discharging this type would require a nonstandard axiom.",
     :commands
-    [{:cmd "hash fixture; locate Mathlib ω/C∞ theorem types", :exit 0}
-     {:cmd
-      "lake env lean corrected theorem check; registry; scoped diff",
+    [{:cmd "hash and compare exact fixture/source theorem types",
+      :exit 0}
+     {:cmd "lake env lean corrected theorem check; registry check",
       :exit 0}],
     :commit nil,
     :changed-paths [],
@@ -23035,7 +23035,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain.blueprint/B1/smooth-symmetry",
    :acceptance
