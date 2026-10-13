@@ -22,6 +22,22 @@ theorem ContDiffWithinAt.domDomCongr_iteratedFDerivWithin_two_of_infty
   · exact hxi
   · exact hxs
 
+/-- Every lower iterated derivative of a real `C∞` map has symmetric second derivative.
+This is the Schwarz step used to exchange consecutive slots in a higher iterated derivative. -/
+theorem ContDiffWithinAt.isSymmSndFDerivWithinAt_iteratedFDerivWithin_of_infty
+    {E F : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [NormedAddCommGroup F] [NormedSpace ℝ F]
+    {s : Set E} {f : E → F} {x : E}
+    (hf : ContDiffWithinAt ℝ ∞ f s x) (hu : UniqueDiffOn ℝ s)
+    (hxs : x ∈ s) (hxi : x ∈ closure (interior s)) (n : ℕ) :
+    IsSymmSndFDerivWithinAt ℝ (iteratedFDerivWithin ℝ n f s) s x := by
+  apply (hf.iteratedFDerivWithin_right hu (m := 2) (i := n) ?_ hxs).isSymmSndFDerivWithinAt
+  · rw [minSmoothness_of_isRCLikeNormedField]
+  · exact hu
+  · exact hxi
+  · exact hxs
+  · exact WithTop.coe_le_coe.mpr le_top
+
 namespace ConstructionTargets.SardConvexDomain
 
 theorem modelRange_withinCriticalImage_subset_interior_union_frontier
