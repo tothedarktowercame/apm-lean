@@ -118891,6 +118891,93 @@
    :id :lemma-apm-t91j06-bridge-glue-with-embeddings,
    :kind :lemma,
    :depends-on [:lemma-apm-t91j06-bridge-compatible-stage-coordinates],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :stop-count 0,
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["problems/t00J02/lean/Main.lean"
+    "problems/t00J02/status.json"
+    "ConstructionTargets/t00J02Closure.lean"
+    "ConstructionTargets/t00J02Closure.blueprint.md"],
+   :dag-node "holes/labs/blueprints/t00J02/BLUEPRINT.md",
+   :acceptance
+   {:implementation
+    "CLOSURE PROGRAM (owner claude-14, 2026-10-13, Joe approved: blueprint LIBRARY lemmas). Close t00J02. START FROM THE BLUEPRINT holes/labs/blueprints/t00J02/Blueprint.lean (read-only; BLUEPRINT.md explains each lemma). Its theorem and definitions are identical to Main.lean's and every lemma except the LIBRARY ones is already proved there: copy those proofs into Main.lean (or ConstructionTargets) rather than re-deriving. Build only the LIBRARY obligations named below, then assemble Main.lean exactly as the blueprint does. Do not change what problems/STATEMENTS.json pins. LIBRARY obligations: t00J02_transverse_diskBounded_topHomologyMap_eq_zero (the topological core; the blueprint deliberately bypasses OrientedSurfacePreimageDuality.Producer, which the audit found FALSE: do not build on it): transverse preimage of C is null-homologous since its components bound disks, so f^* kills the dual class of the nonseparating C, while deg f != 0 would make f^* injective on H^1 via the cup-product pairing. Bank each as :missing-theorems :status :proved. Expected 1300-2600 lines over several jobs.",
+    :declaration "apm_t00j02",
+    :type "the registered theorem apm_t00j02, sorry-free",
+    :axioms :standard-only,
+    :commands
+    ["lake env lean problems/t00J02/lean/Main.lean"
+     "python3 scripts/statement-registry.py check"],
+    :blueprint "ConstructionTargets/t00J02Closure.blueprint.md"},
+   :continue-from
+   "NEXT JOB: copy holes/labs/blueprints/t00J02/BLUEPRINT.md's plan into ConstructionTargets/t00J02Closure.blueprint.md, move the blueprint's proved lemmas into place, then build the LIBRARY obligations one milestone per job.",
+   :id :program-2026-10-13-close-t00j02,
+   :kind :final-adapter,
+   :campaign-priority 45,
+   :fail-count 0,
+   :depends-on [],
+   :program true,
+   :other-consumers []}
+  {:consumer :t98A06,
+   :stop-count 0,
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["problems/t98A06/lean/Main.lean"
+    "problems/t98A06/status.json"
+    "ConstructionTargets/t98A06Closure.lean"
+    "ConstructionTargets/t98A06Closure.blueprint.md"],
+   :dag-node "holes/labs/blueprints/t98A06/BLUEPRINT.md",
+   :acceptance
+   {:implementation
+    "CLOSURE PROGRAM (owner claude-14, 2026-10-13, Joe approved: blueprint LIBRARY lemmas). Close t98A06. START FROM THE BLUEPRINT holes/labs/blueprints/t98A06/Blueprint.lean (read-only; BLUEPRINT.md explains each lemma). Its theorem and definitions are identical to Main.lean's and every lemma except the LIBRARY ones is already proved there: copy those proofs into Main.lean (or ConstructionTargets) rather than re-deriving. Build only the LIBRARY obligations named below, then assemble Main.lean exactly as the blueprint does. Do not change what problems/STATEMENTS.json pins. LIBRARY obligations: (1) t98A06_local_smooth_submersion_lift: local smooth right inverses of a submersion (rank / implicit function theorem in charts); (2) t98A06_compact_circle_fibers_diffeomorphic: flow of the lifted rotation field (complete on compact X) carries the fibre over 1 to the fibre over -1. The partition-of-unity gluing is proved. Bank each as :missing-theorems :status :proved. Expected 800-1600 lines over several jobs.",
+    :declaration "apm_t98a06",
+    :type "the registered theorem apm_t98a06, sorry-free",
+    :axioms :standard-only,
+    :commands
+    ["lake env lean problems/t98A06/lean/Main.lean"
+     "python3 scripts/statement-registry.py check"],
+    :blueprint "ConstructionTargets/t98A06Closure.blueprint.md"},
+   :continue-from
+   "NEXT JOB: copy holes/labs/blueprints/t98A06/BLUEPRINT.md's plan into ConstructionTargets/t98A06Closure.blueprint.md, move the blueprint's proved lemmas into place, then build the LIBRARY obligations one milestone per job.",
+   :id :program-2026-10-13-close-t98a06,
+   :kind :final-adapter,
+   :campaign-priority 50,
+   :fail-count 0,
+   :depends-on [],
+   :program true,
+   :other-consumers []}
+  {:consumer :t01A01,
+   :stop-count 0,
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["problems/t01A01/lean/Main.lean"
+    "problems/t01A01/status.json"
+    "ConstructionTargets/t01A01Closure.lean"
+    "ConstructionTargets/t01A01Closure.blueprint.md"],
+   :dag-node "holes/labs/blueprints/t01A01/BLUEPRINT.md",
+   :acceptance
+   {:implementation
+    "CLOSURE PROGRAM (owner claude-14, 2026-10-13, Joe approved: blueprint LIBRARY lemmas). Close t01A01. START FROM THE BLUEPRINT holes/labs/blueprints/t01A01/Blueprint.lean (read-only; BLUEPRINT.md explains each lemma). Its theorem and definitions are identical to Main.lean's and every lemma except the LIBRARY ones is already proved there: copy those proofs into Main.lean (or ConstructionTargets) rather than re-deriving. Build only the LIBRARY obligations named below, then assemble Main.lean exactly as the blueprint does. Do not change what problems/STATEMENTS.json pins. LIBRARY obligations: apm_t01A01_punctured_factor_nullhomotopic: every map RP^2 -> RP^2 minus a point is null-homotopic (the punctured plane deformation-retracts to a circle; Z/2 -> Z is trivial, so the map lifts to R). Bank each as :missing-theorems :status :proved. Expected 500-900 lines over several jobs.",
+    :declaration "apm_t01a01",
+    :type "the registered theorem apm_t01a01, sorry-free",
+    :axioms :standard-only,
+    :commands
+    ["lake env lean problems/t01A01/lean/Main.lean"
+     "python3 scripts/statement-registry.py check"],
+    :blueprint "ConstructionTargets/t01A01Closure.blueprint.md"},
+   :continue-from
+   "NEXT JOB: copy holes/labs/blueprints/t01A01/BLUEPRINT.md's plan into ConstructionTargets/t01A01Closure.blueprint.md, move the blueprint's proved lemmas into place, then build the LIBRARY obligations one milestone per job.",
+   :id :program-2026-10-13-close-t01a01,
+   :kind :final-adapter,
+   :campaign-priority 52,
+   :fail-count 0,
+   :depends-on [],
+   :program true,
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
