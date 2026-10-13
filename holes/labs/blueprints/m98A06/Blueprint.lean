@@ -453,7 +453,90 @@ lemma apm_m98A06_duBoisReymond_aux_forward_aux_classification_aux_core_aux_first
     (hw : ∀ η : ℝ → ℝ, ContDiffOn ℝ 1 η (Icc 0 a) → η 0 = 0 → η a = 0 →
       ∫ x in (0 : ℝ)..a, g x * derivWithin η (Icc 0 a) x = 0) :
     ∃ m : ℝ, ∀ x ∈ Icc (0 : ℝ) a, g x = m := by
-  sorry
+  let m : ℝ := a⁻¹ * ∫ x in (0 : ℝ)..a, g x
+  let f : ℝ → ℝ := fun x => g x - m
+  have hf : ContinuousOn f (Icc (0 : ℝ) a) := hg.sub continuousOn_const
+  let F : ℝ → ℝ := Set.IccExtend ha.le (fun x : Icc (0 : ℝ) a => f x)
+  have hF : Continuous F := by
+    apply Continuous.Icc_extend'
+    exact continuousOn_iff_continuous_restrict.mp hf
+  have hFeq : ∀ x ∈ Icc (0 : ℝ) a, F x = f x := by
+    intro x hx
+    simp [F, Set.IccExtend, Set.coe_projIcc, min_eq_right hx.2, max_eq_right hx.1]
+  let η : ℝ → ℝ := fun x => ∫ t in (0 : ℝ)..x, F t
+  have hfi : IntervalIntegrable f volume 0 a := by
+    rw [intervalIntegrable_iff_integrableOn_Icc_of_le ha.le]
+    exact hf.integrableOn_Icc
+  have hηder : ∀ x ∈ Icc (0 : ℝ) a,
+      HasDerivWithinAt η (f x) (Icc 0 a) x := by
+    intro x hx
+    have hd := intervalIntegral.integral_hasDerivAt_right
+      (hF.intervalIntegrable (0 : ℝ) x) hF.stronglyMeasurable.stronglyMeasurableAtFilter
+      hF.continuousAt
+    rw [hFeq x hx] at hd
+    exact hd.hasDerivWithinAt
+  have hηdiff : ContDiffOn ℝ 1 η (Icc (0 : ℝ) a) := by
+    rw [show (1 : WithTop ℕ∞) = (0 : WithTop ℕ∞) + 1 by norm_num,
+      contDiffOn_succ_iff_derivWithin (uniqueDiffOn_Icc ha)]
+    refine ⟨fun x hx => (hηder x hx).differentiableWithinAt, by simp, ?_⟩
+    apply contDiffOn_zero.mpr
+    exact hf.congr fun x hx => (hηder x hx).derivWithin
+      ((uniqueDiffOn_Icc ha).uniqueDiffWithinAt hx)
+  have hη0 : η 0 = 0 := by simp [η]
+  have hfint : (∫ x in (0 : ℝ)..a, f x) = 0 := by
+    have hgi : IntervalIntegrable g volume 0 a := by
+      rw [intervalIntegrable_iff_integrableOn_Icc_of_le ha.le]
+      exact hg.integrableOn_Icc
+    rw [show f = fun x => g x - m by rfl,
+      intervalIntegral.integral_sub hgi intervalIntegrable_const]
+    simp only [intervalIntegral.integral_const, smul_eq_mul]
+    dsimp only [m]
+    field_simp
+    <;> ring
+  have hηa : η a = 0 := by
+    calc
+      η a = ∫ x in (0 : ℝ)..a, F x := rfl
+      _ = ∫ x in (0 : ℝ)..a, f x := by
+        apply intervalIntegral.integral_congr
+        intro x hx
+        rw [Set.uIcc_of_le ha.le] at hx
+        exact hFeq x hx
+      _ = 0 := hfint
+  have hgf : (∫ x in (0 : ℝ)..a, g x * f x) = 0 := by
+    calc
+      (∫ x in (0 : ℝ)..a, g x * f x) =
+          ∫ x in (0 : ℝ)..a, g x * derivWithin η (Icc 0 a) x := by
+            apply intervalIntegral.integral_congr
+            intro x hx
+            rw [Set.uIcc_of_le ha.le] at hx
+            change g x * f x = g x * derivWithin η (Icc 0 a) x
+            rw [(hηder x hx).derivWithin
+              ((uniqueDiffOn_Icc ha).uniqueDiffWithinAt hx)]
+      _ = 0 := hw η hηdiff hη0 hηa
+  have hf2i : IntervalIntegrable (fun x => f x ^ 2) volume 0 a := by
+    rw [intervalIntegrable_iff_integrableOn_Icc_of_le ha.le]
+    exact (hf.pow 2).integrableOn_Icc
+  have hmfi : IntervalIntegrable (fun x => m * f x) volume 0 a := hfi.const_mul m
+  have hf2zero : (∫ x in (0 : ℝ)..a, f x ^ 2) = 0 := by
+    have heq : (fun x => g x * f x) = fun x => f x ^ 2 + m * f x := by
+      funext x
+      dsimp [f]
+      ring
+    rw [heq, intervalIntegral.integral_add hf2i hmfi,
+      intervalIntegral.integral_const_mul, hfint, mul_zero, add_zero] at hgf
+    exact hgf
+  have hae : (fun x => f x ^ 2) =ᵐ[volume.restrict (Ioc (0 : ℝ) a)] 0 :=
+    (intervalIntegral.integral_eq_zero_iff_of_le_of_nonneg_ae ha.le
+      (Filter.Eventually.of_forall fun x => sq_nonneg (f x)) hf2i).1 hf2zero
+  have hae' : (fun x => f x ^ 2) =ᵐ[volume.restrict (Icc (0 : ℝ) a)] 0 := by
+    rw [Measure.restrict_congr_set Ioc_ae_eq_Icc.symm]
+    exact hae
+  have hz : ∀ x ∈ Icc (0 : ℝ) a, f x ^ 2 = 0 :=
+    (volume : Measure ℝ).eqOn_Icc_of_ae_eq ha.ne hae' (hf.pow 2) continuousOn_const
+  refine ⟨m, fun x hx => ?_⟩
+  have := sq_eq_zero_iff.mp (hz x hx)
+  dsimp [f] at this
+  linarith
 
 lemma apm_m98A06_duBoisReymond_aux_forward_aux_classification_aux_core_aux_first_integral_aux_core
     (a y₀ ya : ℝ) (ha : 0 < a) (y : ℝ → ℝ)
