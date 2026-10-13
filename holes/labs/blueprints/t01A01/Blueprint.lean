@@ -313,9 +313,39 @@ theorem apm_t01A01_punctured_homotopyEquiv_projectiveLine
 /-- LIBRARY: every map from `RP²` to the projective line is null-homotopic.
 This is the `Z/2 → Z` lifting step, separated from the geometry of the
 punctured target. -/
+noncomputable def apm_t01A01_projectiveLine_map_nullhomotopic_aux_homeomorph_aux_onePointCircle :
+    OnePoint ℝ ≃ₜ Circle := by
+  let e₁ : OnePoint ℝ ≃ₜ
+      Metric.sphere (0 : EuclideanSpace ℝ (Fin 2)) 1 :=
+    onePointEquivSphereOfFinrankEq (by simp)
+  let L : EuclideanSpace ℝ (Fin 2) ≃ₗᵢ[ℝ] ℂ :=
+    Complex.orthonormalBasisOneI.repr.symm
+  let e₂ : Metric.sphere (0 : EuclideanSpace ℝ (Fin 2)) 1 ≃ₜ Circle :=
+    Homeomorph.subtype L.toHomeomorph (by
+      intro x
+      change x ∈ Metric.sphere (0 : EuclideanSpace ℝ (Fin 2)) 1 ↔
+        L x ∈ Metric.sphere (0 : ℂ) 1
+      simp only [Metric.mem_sphere, dist_zero_right, L.norm_map])
+  exact e₁.trans e₂
+
+/-- Seat: `RP¹` is compact (continuous image of the unit circle in `ℝ²`, or of
+`{v | ‖v‖ = 1}` under the quotient map). -/
+theorem apm_t01A01_RP1_compact : CompactSpace apm_t01A01_RP1 := by
+  sorry
+
+/-- Seat: `[x : y] ↦ x / y` (and `[x : 0] ↦ ∞`) is a continuous bijection
+`RP¹ → OnePoint ℝ` (`OnePoint.equivProjectivization` up to `Fin 2 → ℝ ≃ ℝ × ℝ`;
+continuity by quotient descent, checking `OnePoint` neighbourhoods of `∞`). -/
+theorem apm_t01A01_RP1_equiv_onePoint :
+    ∃ e : apm_t01A01_RP1 ≃ OnePoint ℝ, Continuous e := by
+  sorry
+
 lemma apm_t01A01_projectiveLine_map_nullhomotopic_aux_homeomorph :
     Nonempty (apm_t01A01_RP1 ≃ₜ Circle) := by
-  sorry
+  obtain ⟨e, he⟩ := apm_t01A01_RP1_equiv_onePoint
+  haveI := apm_t01A01_RP1_compact
+  exact ⟨he.homeoOfEquivCompactToT2.trans
+    apm_t01A01_projectiveLine_map_nullhomotopic_aux_homeomorph_aux_onePointCircle⟩
 
 /-- Seat: the antipodal quotient `S² → RP²`, `x ↦ [x]`, is a continuous
 surjective quotient map identifying antipodes (`ProjectiveQuotientDescent`). -/
