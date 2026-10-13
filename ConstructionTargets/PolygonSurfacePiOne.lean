@@ -1879,4 +1879,38 @@ theorem PairingData.skeletonWedgeEquivOfKernelAgreement_skeletonArc
   change P.signedWedgeArcMap b = P.signedWedgeArcMap a
   exact (h b a).mp hb
 
+theorem continuous_reverseIcc : Continuous reverseIcc := by
+  apply Continuous.subtype_mk
+  exact continuous_const.sub continuous_subtype_val
+
+theorem continuous_circleArc : Continuous circleArc := by
+  exact AddCircle.continuous_toCircle.comp
+    (continuous_quot_mk.comp continuous_subtype_val)
+
+/-- The signed arc coordinates vary continuously on the discrete family of
+polygon edges. -/
+theorem PairingData.continuous_signedWedgeArcMap (P : PairingData) :
+    Continuous P.signedWedgeArcMap := by
+  rw [continuous_prod_of_discrete_left]
+  intro i
+  cases hs : P.sign i
+  · simpa [PairingData.signedWedgeArcMap, PairingData.signedWedgeArc, hs] using
+      (continuous_wedgeCircle (P.orbit i)).comp
+        (continuous_circleArc.comp continuous_reverseIcc)
+  · simpa [PairingData.signedWedgeArcMap, PairingData.signedWedgeArc, hs] using
+      (continuous_wedgeCircle (P.orbit i)).comp continuous_circleArc
+
+/-- The actual quotient-skeleton parametrization is continuous on the same
+discrete family of polygon arcs. -/
+theorem PairingData.continuous_skeletonArcMap (P : PairingData) :
+    Continuous P.skeletonArcMap := by
+  rw [continuous_prod_of_discrete_left]
+  intro i
+  apply Continuous.subtype_mk
+  apply P.continuous_quotientMap.comp
+  apply Continuous.subtype_mk
+  change Continuous fun t : Set.Icc (0 : ℝ) 1 =>
+    Complex.exp (Complex.I * (2 * Real.pi * ((i : ℝ) + t.1) / P.edgeCount))
+  fun_prop
+
 end ConstructionTargets.PolygonSurfacePiOne
