@@ -2787,6 +2787,15 @@ lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_forward_aux
   sorry
 
 -- BEGIN SEAT AREA
+lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_forward_aux_rigidity_aux_pointwise_aux_representation_aux_regular_aux_finish_aux_calculus_aux_Y
+    (y : ℝ → ℝ) (hy : ContinuousOn y (Icc (0 : ℝ) Real.pi)) :
+    ContinuousOn (fun x => ∫ t in (0 : ℝ)..x, y t) (Icc (0 : ℝ) Real.pi) := by
+  have hi : IntegrableOn y (uIcc (0 : ℝ) Real.pi) := by
+    rw [uIcc_of_le Real.pi_pos.le]
+    exact hy.integrableOn_Icc
+  simpa [uIcc_of_le Real.pi_pos.le] using
+    intervalIntegral.continuousOn_primitive_interval hi
+
 lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_forward_aux_rigidity_aux_pointwise_aux_representation_aux_regular_aux_finish_aux_calculus
     (y : ℝ → ℝ) (hy : ContinuousOn y (Icc (0 : ℝ) Real.pi)) (m : ℝ)
     (heq : ∀ x ∈ Icc (0 : ℝ) Real.pi,
@@ -2794,7 +2803,36 @@ lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_forward_aux
     ContDiffOn ℝ 1 y (Icc (0 : ℝ) Real.pi) ∧
       ∀ x ∈ Icc (0 : ℝ) Real.pi,
         derivWithin y (Icc 0 Real.pi) x + ∫ t in (0 : ℝ)..x, y t = m := by
-  sorry
+  have hπ : (0 : ℝ) ≤ Real.pi := Real.pi_pos.le
+  set Y : ℝ → ℝ := fun x => ∫ t in (0 : ℝ)..x, y t with hYdef
+  have hYc : ContinuousOn Y (Icc (0 : ℝ) Real.pi) := apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_forward_aux_rigidity_aux_pointwise_aux_representation_aux_regular_aux_finish_aux_calculus_aux_Y y hy
+  set g : ℝ → ℝ := fun t => m - Y (Set.projIcc 0 Real.pi hπ t) with hgdef
+  have hgc : Continuous g := continuous_const.sub
+    (hYc.comp_continuous (continuous_subtype_val.comp continuous_projIcc) (fun t => Subtype.prop _))
+  have hgI : ∀ t ∈ Icc (0 : ℝ) Real.pi, g t = m - Y t := fun t ht => by
+    simp [hgdef, Set.projIcc_of_mem hπ ht]
+  set G : ℝ → ℝ := fun x => ∫ t in (0 : ℝ)..x, g t with hGdef
+  have hG : ∀ x, HasDerivAt G (g x) x := fun x =>
+    intervalIntegral.integral_hasDerivAt_right (hgc.intervalIntegrable _ _)
+      hgc.aestronglyMeasurable.stronglyMeasurableAtFilter hgc.continuousAt
+  have hyG : ∀ x ∈ Icc (0 : ℝ) Real.pi, y x = G x := by
+    intro x hx
+    rw [heq x hx]
+    apply intervalIntegral.integral_congr
+    intro t ht
+    rw [Set.uIcc_of_le hx.1] at ht
+    exact (hgI t ⟨ht.1, ht.2.trans hx.2⟩).symm
+  have hGC : ContDiff ℝ 1 G := by
+    rw [contDiff_one_iff_deriv]
+    refine ⟨fun x => (hG x).differentiableAt, ?_⟩
+    have : deriv G = g := funext fun x => (hG x).deriv
+    rw [this]; exact hgc
+  refine ⟨hGC.contDiffOn.congr (fun x hx => hyG x hx), fun x hx => ?_⟩
+  have hd : derivWithin y (Icc 0 Real.pi) x = g x := by
+    rw [derivWithin_congr (fun t ht => hyG t ht) (hyG x hx)]
+    exact (hG x).hasDerivWithinAt.derivWithin (uniqueDiffOn_Icc Real.pi_pos x hx)
+  rw [hd, hgI x hx]
+  simp [hYdef]
 -- END SEAT AREA
 
 lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_forward_aux_rigidity_aux_pointwise_aux_representation_aux_regular_aux_finish
