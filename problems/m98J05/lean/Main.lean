@@ -126,6 +126,71 @@ lemma apm_m98J05_heatSolution_integrable
     exact div_nonpos_of_nonpos_of_nonneg (neg_nonpos.mpr (sq_nonneg _)) (by positivity)
   simpa [mul_comm] using mul_le_mul_of_nonneg_left hk (norm_nonneg (f y))
 
+lemma apm_m98J05_heatKernel_fourier {t : ℝ} (ht : 0 < t) (ξ : ℝ) :
+    apm_m98J05_fourier (fun x => (apm_m98J05_heatKernel t x : ℂ)) ξ =
+      Complex.exp (-(t : ℂ) * (ξ : ℂ) ^ 2) := by
+  let b : ℂ := (1 / (4 * t) : ℝ)
+  have hb : 0 < b.re := by
+    dsimp [b]
+    positivity
+  have hgauss := fourierIntegral_gaussian hb (-(ξ : ℂ))
+  rw [apm_m98J05_fourier]
+  have hint :
+      (fun x : ℝ => (apm_m98J05_heatKernel t x : ℂ) *
+        Complex.exp (-Complex.I * (ξ : ℂ) * (x : ℂ))) =
+      fun x : ℝ => (1 / (2 * Real.sqrt (Real.pi * t)) : ℂ) *
+        (Complex.exp (Complex.I * (-(ξ : ℂ)) * (x : ℂ)) *
+          Complex.exp (-b * (x : ℂ) ^ 2)) := by
+    funext x
+    unfold apm_m98J05_heatKernel
+    push_cast
+    rw [mul_assoc]
+    congr 1
+    rw [mul_comm]
+    congr 1
+    apply congrArg Complex.exp
+    dsimp [b]
+    push_cast
+    field_simp
+    apply congrArg Complex.exp
+    dsimp [b]
+    push_cast
+    field_simp
+  rw [hint]
+  change (∫ x : ℝ, (1 / (2 * Real.sqrt (Real.pi * t)) : ℂ) •
+      (Complex.exp (Complex.I * (-(ξ : ℂ)) * (x : ℂ)) *
+        Complex.exp (-b * (x : ℂ) ^ 2))) = _
+  rw [MeasureTheory.integral_smul, hgauss]
+  have hsqrt : (Real.sqrt (4 * Real.pi * t) : ℂ) =
+      ((Real.pi : ℂ) / b) ^ (1 / 2 : ℂ) := by
+    rw [show (Real.pi : ℂ) / b = (4 * Real.pi * t : ℝ) by
+      dsimp [b]
+      push_cast
+      field_simp]
+    rw [Real.sqrt_eq_rpow, Complex.ofReal_cpow]
+    · norm_num
+    · positivity
+  rw [← hsqrt]
+  push_cast
+  rw [show Real.sqrt (4 * Real.pi * t) =
+      2 * Real.sqrt (Real.pi * t) by
+    rw [show 4 * Real.pi * t = 4 * (Real.pi * t) by ring,
+      Real.sqrt_mul (by norm_num : 0 ≤ (4 : ℝ))]
+    norm_num]
+  have hroot : Real.sqrt (Real.pi * t) ≠ 0 :=
+    ne_of_gt (Real.sqrt_pos.2 (mul_pos Real.pi_pos ht))
+  have hexp : -(-(ξ : ℂ)) ^ 2 / (4 * b) =
+      -(t : ℂ) * (ξ : ℂ) ^ 2 := by
+    dsimp [b]
+    push_cast
+    field_simp
+  rw [hexp]
+  simp only [smul_eq_mul]
+  push_cast
+  field_simp [hroot]
+  rw [div_self]
+  exact_mod_cast hroot
+
 /-- Why this unblocks `apm_m98j05`: the positive unit-mass Gaussians form an
 approximate identity, so convolution with continuous `L¹` data converges at
 each point as time tends to zero from the right. -/
@@ -133,7 +198,376 @@ theorem apm_m98J05_bridge_1
     (f : ℝ → ℂ) (hf_cont : Continuous f) (hf : Integrable f) (x : ℝ) :
     Tendsto (fun t ↦ apm_m98J05_heatSolution f x t)
       (nhdsWithin 0 (Ioi 0)) (nhds (f x)) := by
-  sorry
+  let φ : ℝ → ℝ := fun z ↦
+    (1 / (2 * Real.sqrt Real.pi)) * Real.exp (-(z ^ 2) / 4)
+  have hφ_nonneg : ∀ z, 0 ≤ φ z := by
+    intro z
+    dsimp [φ]
+    positivity
+  have hφ_int : ∫ z : ℝ, φ z = 1 := by
+    simpa [φ, apm_m98J05_heatKernel, mul_assoc] using
+      (apm_m98J05_heatKernel_integral (t := 1) zero_lt_one)
+  have hφ_decay :
+      Tendsto (fun z : ℝ ↦ ‖z‖ ^ Module.finrank ℝ ℝ * φ z)
+        (Bornology.cobounded ℝ) (nhds 0) := by
+    have h := tendsto_rpow_abs_mul_exp_neg_mul_sq_cocompact
+      (a := (1 / 4 : ℝ)) (by norm_num) (1 : ℝ)
+    have h' := h.const_mul (1 / (2 * Real.sqrt Real.pi))
+    rw [mul_zero] at h'
+    rw [Metric.cobounded_eq_cocompact]
+    refine h'.congr' ?_
+    filter_upwards with z
+    simp only [φ, Module.finrank_self, pow_one, Real.norm_eq_abs, Real.rpow_one]
+    ring
+  have H := tendsto_integral_comp_smul_smul_of_integrable' (x₀ := x)
+    hφ_nonneg hφ_int hφ_decay hf hf_cont.continuousAt
+  have hc : Tendsto (fun t : ℝ ↦ (Real.sqrt t)⁻¹)
+      (nhdsWithin 0 (Ioi 0)) atTop := by
+    apply Filter.Tendsto.inv_tendsto_nhdsGT_zero
+    refine tendsto_inf.2 ⟨?_, ?_⟩
+    · simpa using
+        (Real.continuous_sqrt.continuousAt.mono_left inf_le_left :
+          Tendsto Real.sqrt (nhdsWithin 0 (Ioi 0)) (nhds (Real.sqrt 0)))
+    exact tendsto_principal.2 (by
+      filter_upwards [self_mem_nhdsWithin] with t ht
+      exact Real.sqrt_pos.2 ht)
+  have HH := H.comp hc
+  apply HH.congr'
+  filter_upwards [self_mem_nhdsWithin] with t ht
+  have ht0 : 0 < t := ht
+  unfold apm_m98J05_heatSolution
+  apply MeasureTheory.integral_congr_ae
+  filter_upwards with y
+  simp only [Module.finrank_self, pow_one, smul_eq_mul]
+  have hs : Real.sqrt t ≠ 0 := ne_of_gt (Real.sqrt_pos.2 ht0)
+  have hsqrtpi : Real.sqrt (Real.pi * t) = Real.sqrt Real.pi * Real.sqrt t := by
+    rw [Real.sqrt_mul (le_of_lt Real.pi_pos)]
+  have hexp :
+      -(((Real.sqrt t)⁻¹ * (x - y)) ^ 2) / 4 = -(x - y) ^ 2 / (4 * t) := by
+    field_simp [hs]
+    nlinarith [Real.sq_sqrt (le_of_lt ht0)]
+  have hk : (Real.sqrt t)⁻¹ * φ ((Real.sqrt t)⁻¹ * (x - y)) =
+      apm_m98J05_heatKernel t (x - y) := by
+    unfold apm_m98J05_heatKernel
+    dsimp [φ]
+    rw [hexp, hsqrtpi]
+    field_simp [hs]
+  rw [hk]
+  change (apm_m98J05_heatKernel t (x - y) : ℂ) * f y = _
+  rw [mul_comm]
+
+/-! ### Split of `apm_m98J05_bridge_2` (claude-14, 2026-10-13, after a partial round-1 attempt)
+
+Layer 1 (parallel): `apm_m98J05_kernel_hasDerivAt_time`, `apm_m98J05_kernel_hasDerivAt_space`,
+`apm_m98J05_kernelDx_hasDerivAt_space`, `apm_m98J05_kernel_derivs_bounded`.
+Layer 2 (parallel, each by dominated differentiation using Layer 1):
+`apm_m98J05_heatSolution_hasDerivAt_time`, `apm_m98J05_heatSolution_hasDerivAt_space`,
+`apm_m98J05_heatSolution_dx_hasDerivAt_space`.
+The heat equation itself is then assembly (`apm_m98J05_bridge_2`, proved). -/
+
+/-- `∂ₜ G = ∂ₓ² G = G · (x²/(4t²) − 1/(2t))`. -/
+noncomputable def apm_m98J05_kernelDt (t x : ℝ) : ℝ :=
+  apm_m98J05_heatKernel t x * (x ^ 2 / (4 * t ^ 2) - 1 / (2 * t))
+
+/-- `∂ₓ G = −x/(2t) · G`. -/
+noncomputable def apm_m98J05_kernelDx (t x : ℝ) : ℝ :=
+  -(x / (2 * t)) * apm_m98J05_heatKernel t x
+
+theorem apm_m98J05_kernel_hasDerivAt_time {t : ℝ} (ht : 0 < t) (x : ℝ) :
+    HasDerivAt (fun s ↦ apm_m98J05_heatKernel s x) (apm_m98J05_kernelDt t x) t := by
+  unfold apm_m98J05_kernelDt apm_m98J05_heatKernel
+  have hpit : 0 < Real.pi * t := mul_pos Real.pi_pos ht
+  have hsqrt : Real.sqrt (Real.pi * t) ≠ 0 := ne_of_gt (Real.sqrt_pos.2 hpit)
+  have hpi : HasDerivAt (fun s : ℝ ↦ Real.pi * s) Real.pi t := by
+    simpa using (hasDerivAt_id t).const_mul Real.pi
+  have hsqrt' : HasDerivAt (fun s : ℝ ↦ Real.sqrt (Real.pi * s))
+      (1 / (2 * Real.sqrt (Real.pi * t)) * Real.pi) t :=
+    (Real.hasDerivAt_sqrt hpit.ne').comp t hpi
+  have hcoef : HasDerivAt (fun s : ℝ ↦ 1 / (2 * Real.sqrt (Real.pi * s)))
+      ((0 * (2 * Real.sqrt (Real.pi * t)) -
+        1 * (2 * (1 / (2 * Real.sqrt (Real.pi * t)) * Real.pi))) /
+          (2 * Real.sqrt (Real.pi * t)) ^ 2) t :=
+    (hasDerivAt_const t 1).div (hsqrt'.const_mul 2) (by positivity)
+  have hfour : HasDerivAt (fun s : ℝ ↦ 4 * s) 4 t := by
+    simpa using (hasDerivAt_id t).const_mul 4
+  have harg : HasDerivAt (fun s : ℝ ↦ -(x ^ 2) / (4 * s))
+      ((0 * (4 * t) - (-(x ^ 2)) * 4) / (4 * t) ^ 2) t :=
+    (hasDerivAt_const t (-(x ^ 2))).div hfour (by positivity)
+  have h := hcoef.mul ((Real.hasDerivAt_exp _).comp t harg)
+  convert h using 1
+  dsimp only [Function.comp_apply]
+  field_simp [ht.ne', hpit.ne', hsqrt]
+  rw [Real.sq_sqrt hpit.le]
+  ring
+
+theorem apm_m98J05_kernel_hasDerivAt_space {t : ℝ} (ht : 0 < t) (x : ℝ) :
+    HasDerivAt (fun z ↦ apm_m98J05_heatKernel t z) (apm_m98J05_kernelDx t x) x := by
+  have ht0 : 4 * t ≠ 0 := by positivity
+  have he : HasDerivAt (fun z : ℝ ↦ -(z ^ 2) / (4 * t))
+      (-(2 * x) / (4 * t)) x := by
+    convert (((hasDerivAt_id x).pow 2).neg.div_const (4 * t)) using 1 <;> simp [id] <;> ring
+  simp only [apm_m98J05_heatKernel, apm_m98J05_kernelDx]
+  convert (hasDerivAt_const x (1 / (2 * Real.sqrt (Real.pi * t)))).mul he.exp using 1 <;>
+      field_simp [ht0] <;> ring
+
+theorem apm_m98J05_kernelDx_hasDerivAt_space {t : ℝ} (ht : 0 < t) (x : ℝ) :
+    HasDerivAt (fun z ↦ apm_m98J05_kernelDx t z) (apm_m98J05_kernelDt t x) x := by
+  unfold apm_m98J05_kernelDx apm_m98J05_kernelDt apm_m98J05_heatKernel
+  have hlin := ((hasDerivAt_id x).div_const (2 * t)).neg
+  have hexp := ((((hasDerivAt_id x).pow 2).neg.div_const (4 * t)).exp)
+  have hgauss := hexp.const_mul (1 / (2 * Real.sqrt (Real.pi * t)))
+  convert hlin.mul hgauss using 1
+  simp
+  field_simp [ne_of_gt ht]
+  <;> ring
+
+/-- Uniform bounds on a compact time range away from zero. -/
+theorem apm_m98J05_kernel_derivs_bounded {a b : ℝ} (ha : 0 < a) :
+    ∃ C : ℝ, ∀ s ∈ Icc a b, ∀ x : ℝ,
+      |apm_m98J05_kernelDt s x| ≤ C ∧ |apm_m98J05_kernelDx s x| ≤ C := by
+  have hexp (q : ℝ) (hq : 0 ≤ q) : Real.exp (-q) ≤ 1 := by
+    rw [Real.exp_le_one_iff]
+    linarith
+  have hqexp (q : ℝ) (hq : 0 ≤ q) : q * Real.exp (-q) ≤ 1 := by
+    have h := Real.add_one_le_exp q
+    have he : 0 < Real.exp q := Real.exp_pos q
+    rw [Real.exp_neg]
+    rw [← div_eq_mul_inv]
+    apply (div_le_iff₀ he).2
+    nlinarith
+  let C := (1 / (2 * Real.sqrt (Real.pi * a))) * (2 / a + 1)
+  refine ⟨C, ?_⟩
+  intro s hs x
+  have hs0 : 0 < s := lt_of_lt_of_le ha hs.1
+  have hpa : 0 < Real.sqrt (Real.pi * a) :=
+    Real.sqrt_pos.2 (mul_pos Real.pi_pos ha)
+  have hps : 0 < Real.sqrt (Real.pi * s) :=
+    Real.sqrt_pos.2 (mul_pos Real.pi_pos hs0)
+  have hroot : Real.sqrt (Real.pi * a) ≤ Real.sqrt (Real.pi * s) := by
+    exact Real.sqrt_le_sqrt (mul_le_mul_of_nonneg_left hs.1 Real.pi_pos.le)
+  let q := x ^ 2 / (4 * s)
+  have hq : 0 ≤ q := div_nonneg (sq_nonneg x) (by positivity)
+  have he := hexp q hq
+  have hqe := hqexp q hq
+  have hc : 1 / (2 * Real.sqrt (Real.pi * s)) ≤
+      1 / (2 * Real.sqrt (Real.pi * a)) := by
+    gcongr
+  constructor
+  · unfold apm_m98J05_kernelDt
+    rw [abs_mul]
+    have hfactor : |x ^ 2 / (4 * s ^ 2) - 1 / (2 * s)| =
+        |q - 1 / 2| / s := by
+      dsimp [q]
+      have hi : x ^ 2 / (4 * s ^ 2) - 1 / (2 * s) =
+          (x ^ 2 / (4 * s) - 1 / 2) / s := by
+        field_simp
+      rw [hi, abs_div, abs_of_pos hs0]
+    rw [hfactor]
+    have habs : |q - 1 / 2| ≤ q + 1 / 2 := by
+      rw [abs_le]
+      constructor <;> linarith
+    have hprod : (q + 1 / 2) * Real.exp (-q) ≤ 3 / 2 := by
+      nlinarith [mul_nonneg hq (Real.exp_pos (-q)).le]
+    unfold apm_m98J05_heatKernel
+    rw [abs_mul, abs_of_nonneg (by positivity : 0 ≤ 1 / (2 * Real.sqrt (Real.pi * s))),
+      abs_of_pos (Real.exp_pos _)]
+    rw [show -x ^ 2 / (4 * s) = -q by dsimp [q]; ring]
+    change (1 / (2 * Real.sqrt (Real.pi * s))) * Real.exp (-q) *
+      (|q - 1 / 2| / s) ≤ C
+    calc
+      _ = (1 / (2 * Real.sqrt (Real.pi * s))) *
+          (((Real.exp (-q) * |q - 1 / 2|) / s)) := by ring
+      _ ≤ (1 / (2 * Real.sqrt (Real.pi * a))) * ((3 / 2) / a) := by
+        gcongr
+        · calc
+            Real.exp (-q) * |q - 1 / 2| ≤ Real.exp (-q) * (q + 1 / 2) :=
+                mul_le_mul_of_nonneg_left habs (Real.exp_pos _).le
+            _ = (q + 1 / 2) * Real.exp (-q) := by ring
+            _ ≤ 3 / 2 := hprod
+        · exact hs.1
+      _ ≤ C := by
+        dsimp [C]
+        apply mul_le_mul_of_nonneg_left ?_ (by positivity)
+        apply (div_le_iff₀ ha).2
+        field_simp [ne_of_gt ha]
+        nlinarith
+  · unfold apm_m98J05_kernelDx
+    rw [abs_mul, abs_neg]
+    have hx : |x / (2 * s)| ≤ (q + s) / (2 * s) := by
+      rw [abs_div, abs_of_pos (show 0 < 2 * s by positivity)]
+      have hxq : |x| ≤ q + s := by
+        dsimp [q]
+        field_simp
+        nlinarith [sq_nonneg (|x| - 2 * s), sq_abs x]
+      exact (div_le_div_iff₀ (by positivity) (by positivity)).2 (by nlinarith)
+    unfold apm_m98J05_heatKernel
+    rw [abs_mul, abs_of_nonneg (by positivity : 0 ≤ 1 / (2 * Real.sqrt (Real.pi * s))),
+      abs_of_pos (Real.exp_pos _)]
+    rw [show -x ^ 2 / (4 * s) = -q by dsimp [q]; ring]
+    change |x / (2 * s)| *
+      ((1 / (2 * Real.sqrt (Real.pi * s))) * Real.exp (-q)) ≤ C
+    calc
+      _ ≤ ((q + s) / (2 * s)) *
+          ((1 / (2 * Real.sqrt (Real.pi * s))) * Real.exp (-q)) := by
+        gcongr
+      _ = (1 / (2 * Real.sqrt (Real.pi * s))) *
+          ((q * Real.exp (-q)) / (2 * s) + Real.exp (-q) / 2) := by
+        field_simp
+      _ ≤ (1 / (2 * Real.sqrt (Real.pi * a))) * (1 / (2 * a) + 1 / 2) := by
+        have hdiv : q * Real.exp (-q) / (2 * s) ≤ 1 / (2 * a) := by
+          calc
+            _ ≤ 1 / (2 * s) := div_le_div_of_nonneg_right hqe (by positivity)
+            _ ≤ 1 / (2 * a) := by
+              apply div_le_div_of_nonneg_left (by norm_num) (by positivity)
+              nlinarith [hs.1]
+        have hi : q * Real.exp (-q) / (2 * s) + Real.exp (-q) / 2 ≤
+            1 / (2 * a) + 1 / 2 := by
+          gcongr
+        exact mul_le_mul hc hi (by positivity) (by positivity)
+      _ ≤ C := by
+        dsimp [C]
+        apply mul_le_mul_of_nonneg_left ?_ (by positivity)
+        have : 1 / (2 * a) ≤ 2 / a := by
+          field_simp [ne_of_gt ha]
+          norm_num
+        linarith
+
+theorem apm_m98J05_heatSolution_hasDerivAt_time
+    (f : ℝ → ℂ) (hf : Integrable f) (x : ℝ) {t : ℝ} (ht : 0 < t) :
+    HasDerivAt (fun s ↦ apm_m98J05_heatSolution f x s)
+      (∫ y, f y * (apm_m98J05_kernelDt t (x - y) : ℂ)) t := by
+  let a := t / 2
+  let b := 3 * t / 2
+  obtain ⟨C, hC⟩ := apm_m98J05_kernel_derivs_bounded
+    (a := a) (b := b) (by dsimp [a]; linarith)
+  let F : ℝ → ℝ → ℂ := fun s y ↦
+    f y * (apm_m98J05_heatKernel s (x - y) : ℂ)
+  let F' : ℝ → ℝ → ℂ := fun s y ↦
+    f y * (apm_m98J05_kernelDt s (x - y) : ℂ)
+  have hs : Icc a b ∈ 𝓝 t := by
+    apply Icc_mem_nhds
+    · dsimp [a]; linarith
+    · dsimp [b]; linarith
+  have hmeas : ∀ᶠ s in 𝓝 t, AEStronglyMeasurable (F s) volume := by
+    filter_upwards with s
+    exact hf.aestronglyMeasurable.mul
+      ((by unfold apm_m98J05_heatKernel; fun_prop : Continuous fun y : ℝ =>
+        (apm_m98J05_heatKernel s (x - y) : ℂ)).aestronglyMeasurable)
+  have hint : Integrable (F t) volume := by
+    exact apm_m98J05_heatSolution_integrable hf ht x
+  have hderiv_meas : AEStronglyMeasurable (F' t) volume := by
+    exact hf.aestronglyMeasurable.mul
+      ((by unfold apm_m98J05_kernelDt apm_m98J05_heatKernel; fun_prop :
+        Continuous fun y : ℝ =>
+          (apm_m98J05_kernelDt t (x - y) : ℂ)).aestronglyMeasurable)
+  have hbound : ∀ᵐ y ∂volume, ∀ s ∈ Icc a b,
+      ‖F' s y‖ ≤ C * ‖f y‖ := by
+    filter_upwards with y
+    intro s hsab
+    have hk := (hC s hsab (x - y)).1
+    simp only [F', norm_mul, Complex.norm_real, Real.norm_eq_abs]
+    nlinarith [mul_le_mul_of_nonneg_left hk (norm_nonneg (f y))]
+  have hbound_int : Integrable (fun y ↦ C * ‖f y‖) volume := hf.norm.const_mul C
+  have hdiff : ∀ᵐ y ∂volume, ∀ s ∈ Icc a b,
+      HasDerivAt (F · y) (F' s y) s := by
+    filter_upwards with y
+    intro s hsab
+    have hs0 : 0 < s := lt_of_lt_of_le (by dsimp [a]; linarith) hsab.1
+    exact (apm_m98J05_kernel_hasDerivAt_time hs0 (x - y)).ofReal_comp.const_mul (f y)
+  have h := (hasDerivAt_integral_of_dominated_loc_of_deriv_le
+    (F := F) (F' := F') (bound := fun y ↦ C * ‖f y‖)
+    hs hmeas hint hderiv_meas hbound hbound_int hdiff).2
+  simpa [F, F', apm_m98J05_heatSolution] using h
+
+theorem apm_m98J05_heatSolution_hasDerivAt_space
+    (f : ℝ → ℂ) (hf : Integrable f) {t : ℝ} (ht : 0 < t) (z : ℝ) :
+    HasDerivAt (fun w ↦ apm_m98J05_heatSolution f w t)
+      (∫ y, f y * (apm_m98J05_kernelDx t (z - y) : ℂ)) z := by
+  obtain ⟨C, hC⟩ := apm_m98J05_kernel_derivs_bounded (a := t) (b := t) ht
+  have hC0 : 0 ≤ C := by
+    have h := (hC t ⟨le_rfl, le_rfl⟩ 0).2
+    exact (abs_nonneg _).trans h
+  unfold apm_m98J05_heatSolution
+  exact (hasDerivAt_integral_of_dominated_loc_of_deriv_le
+    (F := fun w y ↦ f y * (apm_m98J05_heatKernel t (w - y) : ℂ))
+    (F' := fun w y ↦ f y * (apm_m98J05_kernelDx t (w - y) : ℂ))
+    (bound := fun y ↦ C * ‖f y‖) (s := Set.univ) univ_mem
+    (by
+      filter_upwards with w
+      exact hf.aestronglyMeasurable.mul
+        ((by unfold apm_m98J05_heatKernel; fun_prop : Continuous fun y : ℝ ↦
+          (apm_m98J05_heatKernel t (w - y) : ℂ)).aestronglyMeasurable))
+    (apm_m98J05_heatSolution_integrable hf ht z)
+    (hf.aestronglyMeasurable.mul
+      ((by unfold apm_m98J05_kernelDx apm_m98J05_heatKernel; fun_prop :
+        Continuous fun y : ℝ ↦ (apm_m98J05_kernelDx t (z - y) : ℂ)).aestronglyMeasurable))
+    (by
+      filter_upwards with y
+      intro w hw
+      rw [norm_mul, Complex.norm_real, Real.norm_eq_abs]
+      rw [mul_comm C]
+      exact mul_le_mul_of_nonneg_left (hC t ⟨le_rfl, le_rfl⟩ (w - y)).2
+        (norm_nonneg (f y)))
+    (hf.norm.const_mul C)
+    (by
+      filter_upwards with y
+      intro w hw
+      simpa using ((hasDerivAt_const w (f y)).mul
+        (((apm_m98J05_kernel_hasDerivAt_space ht (w - y)).comp w
+          ((hasDerivAt_id w).sub_const y)).ofReal_comp)))).2
+
+theorem apm_m98J05_heatSolution_dx_hasDerivAt_space
+    (f : ℝ → ℂ) (hf : Integrable f) {t : ℝ} (ht : 0 < t) (z : ℝ) :
+    HasDerivAt (fun w ↦ ∫ y, f y * (apm_m98J05_kernelDx t (w - y) : ℂ))
+      (∫ y, f y * (apm_m98J05_kernelDt t (z - y) : ℂ)) z := by
+  obtain ⟨C, hC⟩ := apm_m98J05_kernel_derivs_bounded (a := t) (b := t) ht
+  have hC0 : 0 ≤ C := by
+    have h := (hC t ⟨le_rfl, le_rfl⟩ 0).1
+    exact (abs_nonneg _).trans h
+  let F : ℝ → ℝ → ℂ := fun w y ↦
+    f y * (apm_m98J05_kernelDx t (w - y) : ℂ)
+  let F' : ℝ → ℝ → ℂ := fun w y ↦
+    f y * (apm_m98J05_kernelDt t (w - y) : ℂ)
+  let B : ℝ → ℝ := fun y ↦ C * ‖f y‖
+  have hdxcont : Continuous (fun u : ℝ ↦ apm_m98J05_kernelDx t u) :=
+    continuous_iff_continuousAt.2 fun u =>
+      (apm_m98J05_kernelDx_hasDerivAt_space ht u).continuousAt
+  have hdtcont : Continuous (fun u : ℝ ↦ apm_m98J05_kernelDt t u) := by
+    unfold apm_m98J05_kernelDt apm_m98J05_heatKernel
+    fun_prop
+  refine (_root_.hasDerivAt_integral_of_dominated_loc_of_deriv_le
+    (F := F) (F' := F') (bound := B) (s := Set.univ)
+    univ_mem ?_ ?_ ?_ ?_ ?_ ?_).2
+  · exact Filter.Eventually.of_forall fun w =>
+      hf.aestronglyMeasurable.mul
+        ((Complex.continuous_ofReal.comp
+          (hdxcont.comp (continuous_const.sub continuous_id))).aestronglyMeasurable)
+  · refine (hf.norm.const_mul C).mono' ?_ ?_
+    · exact hf.aestronglyMeasurable.mul
+        ((Complex.continuous_ofReal.comp
+          (hdxcont.comp (continuous_const.sub continuous_id))).aestronglyMeasurable)
+    · filter_upwards with y
+      simp only [F, norm_mul, Complex.norm_real, Real.norm_eq_abs]
+      have hb := (hC t ⟨le_rfl, le_rfl⟩ (z - y)).2
+      nlinarith [norm_nonneg (f y)]
+  · exact hf.aestronglyMeasurable.mul
+      ((Complex.continuous_ofReal.comp
+        (hdtcont.comp (continuous_const.sub continuous_id))).aestronglyMeasurable)
+  · filter_upwards with y
+    intro w hw
+    simp only [F', B, norm_mul, Complex.norm_real, Real.norm_eq_abs]
+    have hb := (hC t ⟨le_rfl, le_rfl⟩ (w - y)).1
+    nlinarith [norm_nonneg (f y)]
+  · exact hf.norm.const_mul C
+  · filter_upwards with y
+    intro w hw
+    have hk := (apm_m98J05_kernelDx_hasDerivAt_space ht (w - y)).comp w
+      ((hasDerivAt_id w).sub_const y)
+    have hkc : HasDerivAt
+        (fun u : ℝ ↦ (apm_m98J05_kernelDx t (u - y) : ℂ))
+        (apm_m98J05_kernelDt t (w - y) : ℂ) w := by
+      simpa only [Function.comp_apply, id_eq, mul_one] using hk.ofReal_comp
+    simpa [F, F'] using hkc.const_mul (f y)
 
 /-- Why this unblocks `apm_m98j05`: domination by derivatives of a positive-
 time Gaussian justifies differentiating the convolution in both variables;
@@ -143,7 +577,33 @@ theorem apm_m98J05_bridge_2
     HasDerivAt
       (fun s ↦ apm_m98J05_heatSolution f x s)
       (iteratedDeriv 2 (fun z ↦ apm_m98J05_heatSolution f z t) x) t := by
-  sorry
+  have hd : deriv (fun z ↦ apm_m98J05_heatSolution f z t) =
+      fun z ↦ ∫ y, f y * (apm_m98J05_kernelDx t (z - y) : ℂ) := by
+    funext z
+    exact (apm_m98J05_heatSolution_hasDerivAt_space f hf ht z).deriv
+  have h2 : iteratedDeriv 2 (fun z ↦ apm_m98J05_heatSolution f z t) x =
+      ∫ y, f y * (apm_m98J05_kernelDt t (x - y) : ℂ) := by
+    rw [iteratedDeriv_succ, iteratedDeriv_one, hd]
+    exact (apm_m98J05_heatSolution_dx_hasDerivAt_space f hf ht x).deriv
+  rw [h2]
+  exact apm_m98J05_heatSolution_hasDerivAt_time f hf x ht
+
+lemma apm_m98J05_fourier_convolution_integrable_prod
+    (f : ℝ → ℂ) (hf : Integrable f) (ξ t : ℝ) (ht : 0 < t) :
+    Integrable (fun p : ℝ × ℝ =>
+      f p.2 * (apm_m98J05_heatKernel t (p.1 - p.2) : ℂ) *
+        Complex.exp (-Complex.I * (ξ : ℂ) * (p.1 : ℂ)))
+      (volume.prod volume) := by
+  have hk : Integrable (fun x : ℝ =>
+      (apm_m98J05_heatKernel t x : ℂ)) :=
+    (apm_m98J05_heatKernel_integrable ht).ofReal
+  have hbase := hf.convolution_integrand (ContinuousLinearMap.mul ℂ ℂ) hk
+  refine hbase.norm.mono' ?_ ?_
+  · exact hbase.aestronglyMeasurable.mul
+      ((by fun_prop : Continuous fun p : ℝ × ℝ =>
+        Complex.exp (-Complex.I * (ξ : ℂ) * (p.1 : ℂ))).aestronglyMeasurable)
+  · filter_upwards with p
+    simp [Complex.norm_exp]
 
 /-- Why this unblocks `apm_m98j05`: absolute integrability of the two-variable
 integrand permits Fubini, and the exactly normalized Gaussian transform turns
@@ -153,7 +613,62 @@ theorem apm_m98J05_bridge_3
     apm_m98J05_fourier (fun x ↦ apm_m98J05_heatSolution f x t) ξ =
       apm_m98J05_fourier f ξ *
         Complex.exp (-(t : ℂ) * (ξ : ℂ) ^ 2) := by
-  sorry
+  have hprod := apm_m98J05_fourier_convolution_integrable_prod f hf ξ t ht
+  rw [apm_m98J05_fourier]
+  rw [show (fun x : ℝ => apm_m98J05_heatSolution f x t *
+      Complex.exp (-Complex.I * (ξ : ℂ) * (x : ℂ))) =
+    fun x => ∫ y, f y * (apm_m98J05_heatKernel t (x - y) : ℂ) *
+      Complex.exp (-Complex.I * (ξ : ℂ) * (x : ℂ)) by
+    funext x
+    unfold apm_m98J05_heatSolution
+    exact (MeasureTheory.integral_mul_const
+      (Complex.exp (-Complex.I * (ξ : ℂ) * (x : ℂ)))
+      (fun y => f y * (apm_m98J05_heatKernel t (x - y) : ℂ))).symm]
+  rw [MeasureTheory.integral_integral_swap hprod]
+  have hinner (y : ℝ) :
+      (∫ x : ℝ, f y * (apm_m98J05_heatKernel t (x - y) : ℂ) *
+        Complex.exp (-Complex.I * (ξ : ℂ) * (x : ℂ))) =
+      f y * Complex.exp (-Complex.I * (ξ : ℂ) * (y : ℂ)) *
+        Complex.exp (-(t : ℂ) * (ξ : ℂ) ^ 2) := by
+    rw [show (fun x : ℝ => f y * (apm_m98J05_heatKernel t (x - y) : ℂ) *
+        Complex.exp (-Complex.I * (ξ : ℂ) * (x : ℂ))) =
+      fun x => (f y * Complex.exp (-Complex.I * (ξ : ℂ) * (y : ℂ))) *
+        ((apm_m98J05_heatKernel t (x - y) : ℂ) *
+          Complex.exp (-Complex.I * (ξ : ℂ) * ((x - y : ℝ) : ℂ))) by
+      funext x
+      have he : Complex.exp (-Complex.I * (ξ : ℂ) * (x : ℂ)) =
+          Complex.exp (-Complex.I * (ξ : ℂ) * (y : ℂ)) *
+            Complex.exp (-Complex.I * (ξ : ℂ) * ((x - y : ℝ) : ℂ)) := by
+        rw [← Complex.exp_add]
+        congr 1
+        push_cast
+        ring
+      rw [he]
+      ring]
+    let C := f y * Complex.exp (-Complex.I * (ξ : ℂ) * (y : ℂ))
+    let F := fun x : ℝ => (apm_m98J05_heatKernel t (x - y) : ℂ) *
+      Complex.exp (-Complex.I * (ξ : ℂ) * ((x - y : ℝ) : ℂ))
+    calc
+      (∫ x : ℝ, C * F x) = C * ∫ x : ℝ, F x :=
+        MeasureTheory.integral_const_mul C F
+      _ = C * apm_m98J05_fourier
+          (fun x => (apm_m98J05_heatKernel t x : ℂ)) ξ := by
+        congr 1
+        dsimp [F]
+        rw [apm_m98J05_fourier]
+        exact integral_sub_right_eq_self
+          (fun x : ℝ => (apm_m98J05_heatKernel t x : ℂ) *
+            Complex.exp (-Complex.I * (ξ : ℂ) * (x : ℂ))) y (μ := volume)
+      _ = C * Complex.exp (-(t : ℂ) * (ξ : ℂ) ^ 2) := by
+        rw [apm_m98J05_heatKernel_fourier ht ξ]
+  simp_rw [hinner]
+  calc
+    (∫ y : ℝ, (f y * Complex.exp (-Complex.I * (ξ : ℂ) * (y : ℂ))) *
+      Complex.exp (-(t : ℂ) * (ξ : ℂ) ^ 2)) =
+        (∫ y : ℝ, f y * Complex.exp (-Complex.I * (ξ : ℂ) * (y : ℂ))) *
+          Complex.exp (-(t : ℂ) * (ξ : ℂ) ^ 2) :=
+      MeasureTheory.integral_mul_const _ _
+    _ = _ := rfl
 
 theorem apm_m98j05 :
     (∀ (f f' : ℝ → ℂ),
@@ -215,41 +730,21 @@ theorem apm_m98j05 :
         convert ((Complex.hasDerivAt_exp _).comp (t : ℂ) hg).const_mul c using 1 <;>
           ring
       exact hc.comp_ofReal
-    /-
-  PARTIAL boundary (closer hop 2): the first frozen conjunct is now fully
-  compiled. `apm_m98J05_fourier_eq_mathlib` identifies the raw convention with
-  Mathlib's transform at `ξ/(2π)`; `Real.fourier_deriv` then proves the desired
-  derivative multiplier after exact cancellation of the scale. Thus the
-  whole-line complex integration-by-parts bridge has been routed around.
+    dsimp
+    refine ⟨fun x => apm_m98J05_bridge_1 f hf2.continuous hf x,
+      fun x t ht => apm_m98J05_bridge_2 f hf x t ht,
+      fun ξ t ht => apm_m98J05_bridge_3 f hf ξ t ht, ?_⟩
+    intro ξ t ht
+    have heq : (fun s => apm_m98J05_fourier
+        (fun x => apm_m98J05_heatSolution f x s) ξ) =ᶠ[𝓝 t]
+        (fun s => apm_m98J05_fourier f ξ *
+          Complex.exp (-(s : ℂ) * (ξ : ℂ) ^ 2)) := by
+      filter_upwards [eventually_gt_nhds ht] with s hs
+      exact apm_m98J05_bridge_3 f hf ξ s hs
+    have hder :=
+      (hmultiplier_ode (apm_m98J05_fourier f ξ) ξ t).congr_of_eventuallyEq heq
+    rw [apm_m98J05_bridge_3 f hf ξ t ht]
+    exact hder
 
-  The frequency-side scalar ODE for the claimed multiplier is also verified
-  above, and `apm_m98J05_fourier_integrable` proves absolute integrability of
-  every custom Fourier integrand. This hop adapts the Gaussian normalization
-  argument from sibling `a96A04` to the frozen kernel's square-root
-  presentation: `apm_m98J05_heatKernel_integral` proves unit mass for every
-  positive time, and `apm_m98J05_heatKernel_integrable` proves integrability.
 
-  The remaining heat-solution theorem requires
-  the Gaussian transform/convolution theorem with exact normalization,
-  differentiation under the spatial and time improper integrals, and
-  pointwise approximate-identity convergence.
-
-  Mathlib provides `fourier_deriv` for its `2π` convention. Sibling `a01A10`
-  proves the exact complex Gaussian transform from `fourierIntegral_gaussian`;
-  sibling `a96A04` supplies the normalization pattern reused above and also
-  proves spatial differentiation,
-  and an `L²` approximate-identity theorem. `ConstructionTargets.KernelAverage`
-  and `ConstructionTargets.L2Translation` were also inspected. Adapting these
-  results to a complex `L¹` datum, time derivative, and pointwise (rather than
-  `L²`) initial convergence was not completed.
-
-  Closer hop 3 proves `apm_m98J05_heatSolution_integrable`: for every complex
-  integrable datum, positive time, and spatial point, the raw convolution
-  integrand defining `heatSolution` is integrable. The proof uses the uniform
-  Gaussian bound by its prefactor and domination by a constant multiple of
-  `‖f‖`. Thus well-definedness of every displayed heat-solution integral is
-  closed. The remaining work is still the two-variable Fubini/convolution
-  identity, differentiation under the integrals, and pointwise approximate-
-  identity convergence.
-    -/
-    sorry
+#print axioms apm_m98j05
