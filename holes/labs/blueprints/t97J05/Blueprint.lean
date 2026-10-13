@@ -475,7 +475,30 @@ have equal second coordinates (the zeros of `cos` are `π/2 + kπ`). -/
 theorem apm_t97J05_fiber_second_coord_eq {q w : apm_t97J05_R3}
     (hq : q ∈ apm_t97J05_W) (hw : w ∈ apm_t97J05_W)
     (hlt : |w 1 - q 1| < Real.pi) : w 1 = q 1 := by
-  sorry
+  have hq0 : Real.cos (q 1) = 0 := by
+    have h := congrArg (fun u : apm_t97J05_R2 ↦ u 0) hq
+    simpa [apm_t97J05_W, apm_t97J05_f, apm_t97J05_value,
+      Real.exp_ne_zero] using h
+  have hw0 : Real.cos (w 1) = 0 := by
+    have h := congrArg (fun u : apm_t97J05_R2 ↦ u 0) hw
+    simpa [apm_t97J05_W, apm_t97J05_f, apm_t97J05_value,
+      Real.exp_ne_zero] using h
+  obtain ⟨k, hk⟩ := Real.cos_eq_zero_iff.mp hq0
+  obtain ⟨l, hl⟩ := Real.cos_eq_zero_iff.mp hw0
+  have hd : w 1 - q 1 = ((l - k : ℤ) : ℝ) * Real.pi := by
+    rw [hl, hk]
+    push_cast
+    ring
+  have habs : |((l - k : ℤ) : ℝ)| < 1 := by
+    rw [hd] at hlt
+    rw [abs_mul, abs_of_pos Real.pi_pos] at hlt
+    nlinarith [abs_nonneg (((l - k : ℤ) : ℝ)), Real.pi_pos]
+  have hlk : l - k = 0 := by
+    apply Int.abs_lt_one_iff.mp
+    exact_mod_cast habs
+  have hlkeq : l = k := sub_eq_zero.mp hlk
+  subst l
+  rw [hl, hk]
 
 /-- Seat: the x-charts exist.  Chart at `q`: source
 `{w | |w 1 - q 1| < π/2 ∧ 0 < w 0 * q 0}`, map `w ↦ ![w 0]`, target
