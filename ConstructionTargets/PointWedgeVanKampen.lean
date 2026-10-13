@@ -3688,6 +3688,33 @@ theorem genericPointWedgeCoordinateSpanGlobalRestrictionLeftComparison_heq_inl_c
   rw [genericPointWedgeCoordinateSpanGlobalRestrictionLeftComparison_eq_counitTarget]
   exact genericPointWedgeIdentityCoordinateSpan_left_map x₀ y₀ _
 
+/-- The point-span normal form separates the target counit from the strict
+left-span comparison, with categorical composition translated to the
+single-object multiplication order. -/
+theorem genericPointWedgeCoordinateSpanGlobalRestrictionLeftComparison_heq_counit_mul_strict :
+    let eL := genericPointWedgeLeftGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let aL := genericPointWedgeLeftSpanIso
+      x₀ y₀ M N hM hN hy hx cM cN
+    let l' := genericPointWedgeCoordinateLeft x₀
+    let u : FundamentalGroupoid Unit := FundamentalGroupoid.mk ()
+    HEq
+      (genericPointWedgeCoordinateSpanGlobalRestrictionLeftComparison
+        x₀ y₀ M N hM hN hy hx cM cN)
+      (((Monoid.Coprod.inl ((genericPointWedgeConnectors x₀).normalForm
+          (aL.inv.app u))) : genericPointWedgeFreeProduct x₀ y₀) *
+        ((Monoid.Coprod.inl ((genericPointWedgeConnectors x₀).normalForm
+          (eL.counitIso.hom.app (l'.obj u)))) :
+            genericPointWedgeFreeProduct x₀ y₀)) := by
+  have h := genericPointWedgeCoordinateSpanGlobalRestrictionLeftComparison_heq_inl_counitTarget
+    x₀ y₀ M N hM hN hy hx cM cN
+  dsimp only at h ⊢
+  rw [(genericPointWedgeConnectors x₀).normalForm_comp] at h
+  rw [← End.mul_def] at h
+  apply h.trans
+  exact heq_of_eq
+    ((Monoid.Coprod.inl (N := genericPointWedgeRightGroup y₀)).map_mul _ _)
+
 /-- The inverse right comparison introduced by coordinate-span transport,
 isolated before recombining it with the middle and left factors. -/
 def genericPointWedgeCoordinateSpanGlobalRestrictionRightComparison :
@@ -6113,6 +6140,7 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeCoordinateSpanGlobalRestrictionLeftRoundTrip_counit_map
 #print axioms genericPointWedgeCoordinateSpanGlobalRestrictionLeftComparison_eq_counitTarget
 #print axioms genericPointWedgeCoordinateSpanGlobalRestrictionLeftComparison_heq_inl_counitTarget
+#print axioms genericPointWedgeCoordinateSpanGlobalRestrictionLeftComparison_heq_counit_mul_strict
 #print axioms genericPointWedgeCoordinateSpanGlobalRestrictionRightComparison
 #print axioms genericPointWedgeCoordinateSpanGlobalRestrictionRightComparison_app
 #print axioms genericPointWedgeCoordinateSpanGlobalRestrictionRightUnitFactor

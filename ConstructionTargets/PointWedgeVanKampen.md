@@ -1116,6 +1116,12 @@ performs that transport: the complete comparison is the left coproduct
 injection of the connector normal form of the explicit counit/strict-span
 composite.  No identity normalization of the counit is used.
 
+`genericPointWedgeCoordinateSpanGlobalRestrictionLeftComparison_heq_counit_mul_strict`
+then applies `normalForm_comp` and the coproduct injection's multiplication
+law.  It separates the injected target counit from the injected strict-span
+factor, with `End.mul_def` recording the reversal from categorical
+strict-then-counit composition to single-object multiplication.
+
 `genericPointWedgeCoordinateSpanGlobalRestrictionLeftRoundTrip_counit_map`
 applies the coordinate-span left functor to the left-equivalence counit
 naturality square.  Both ordered composites are now equal inside the
