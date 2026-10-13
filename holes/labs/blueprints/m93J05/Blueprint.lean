@@ -724,6 +724,39 @@ theorem apm_m93j05_exists_minimizer
           apm_m93j05_J N p g f₀ ≤ apm_m93j05_J N p g f := by
   sorry
 
+lemma apm_m93j05_stationary_at_minimizer_aux_memLp_path
+    (p t : ℝ) (f h : ℝ → ℝ) (hf : MemLp f (ENNReal.ofReal p)
+      (volume.restrict (Set.Icc (0 : ℝ) 1)))
+    (hh : MemLp h (ENNReal.ofReal p)
+      (volume.restrict (Set.Icc (0 : ℝ) 1))) :
+    MemLp (f + t • h) (ENNReal.ofReal p)
+      (volume.restrict (Set.Icc (0 : ℝ) 1)) := by
+  exact hf.add (hh.const_smul t)
+
+/-! ### Split of `apm_m93j05_stationary_at_minimizer` (claude-14, 2026-10-13, after a partial that
+banked the path-admissibility helper above). (D1) is the analytic core; (D) takes it as a hypothesis;
+the Fermat step is assembled below. -/
+
+/-- (D1) For `p > 1`, `t ↦ ‖a + t b‖ₚᵖ` is differentiable at `0`
+(derivative `p ∫ |a|^(p-2) a b`; dominate the difference quotient by `p (|a|+|b|)^(p-1) |b|`). -/
+theorem apm_m93j05_lp_rpow_differentiableAt (p : ℝ) (hp : 1 < p) :
+    ∀ (a b : ℝ → ℝ), MemLp a (ENNReal.ofReal p) (volume.restrict (Set.Icc (0 : ℝ) 1)) → MemLp b (ENNReal.ofReal p) (volume.restrict (Set.Icc (0 : ℝ) 1)) →
+      DifferentiableAt ℝ (fun t : ℝ ↦ Real.rpow
+        (eLpNorm (fun x ↦ a x + t * b x) (ENNReal.ofReal p) (volume.restrict (Set.Icc (0 : ℝ) 1))).toReal p) 0 := by
+  sorry
+
+/-- (D) The energy is differentiable along every admissible line. Truncation is linear along the
+line (`f₀`, `h` are integrable), the `L²` term is a quadratic polynomial in `t` (finite trigonometric
+sums), the pairing is linear, and the `Lᵖ` term is (D1) applied to `(I − Φ) f₀`, `(I − Φ) h`. -/
+theorem apm_m93j05_J_path_differentiableAt (N : ℕ) (p q : ℝ) (hp : 1 < p) (hq : 1 < q)
+    (hD1 : ∀ (a b : ℝ → ℝ), MemLp a (ENNReal.ofReal p) (volume.restrict (Set.Icc (0 : ℝ) 1)) → MemLp b (ENNReal.ofReal p) (volume.restrict (Set.Icc (0 : ℝ) 1)) →
+      DifferentiableAt ℝ (fun t : ℝ ↦ Real.rpow
+        (eLpNorm (fun x ↦ a x + t * b x) (ENNReal.ofReal p) (volume.restrict (Set.Icc (0 : ℝ) 1))).toReal p) 0)
+    (g f₀ h : ℝ → ℝ) (hg : MemLp g (ENNReal.ofReal q) (volume.restrict (Set.Icc (0 : ℝ) 1)))
+    (hf₀ : MemLp f₀ (ENNReal.ofReal p) (volume.restrict (Set.Icc (0 : ℝ) 1))) (hh : MemLp h (ENNReal.ofReal p) (volume.restrict (Set.Icc (0 : ℝ) 1))) :
+    DifferentiableAt ℝ (fun t : ℝ ↦ apm_m93j05_J N p g (f₀ + t • h)) 0 := by
+  sorry
+
 theorem apm_m93j05_stationary_at_minimizer
     (N : ℕ) (p q : ℝ) (hp : 1 < p) (hq : 1 < q)
     (hpq : 1 / p + 1 / q = 1) :
@@ -735,7 +768,15 @@ theorem apm_m93j05_stationary_at_minimizer
         ∀ h, MemLp h (ENNReal.ofReal p) μ →
           HasDerivAt
             (fun t : ℝ => apm_m93j05_J N p g (f₀ + t • h)) 0 0 := by
-  sorry
+  intro μ g hg f₀ hf₀ hmin h hh
+  have hd := apm_m93j05_J_path_differentiableAt N p q hp hq
+    (apm_m93j05_lp_rpow_differentiableAt p hp) g f₀ h hg hf₀ hh
+  have hloc : IsLocalMin (fun t : ℝ ↦ apm_m93j05_J N p g (f₀ + t • h)) 0 := by
+    refine Filter.Eventually.of_forall (fun t ↦ ?_)
+    simpa using hmin (f₀ + t • h)
+      (apm_m93j05_stationary_at_minimizer_aux_memLp_path p t f₀ h hf₀ hh)
+  have h0 := hloc.hasDerivAt_eq_zero hd.hasDerivAt
+  simpa [h0] using hd.hasDerivAt
 
 theorem apm_m93j05 :
     ∀ (N : ℕ) (p q : ℝ), 1 < p → 1 < q → 1 / p + 1 / q = 1 →
