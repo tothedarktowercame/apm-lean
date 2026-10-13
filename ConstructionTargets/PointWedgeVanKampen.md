@@ -1100,6 +1100,17 @@ then transports that single composite through the literal actual-to-coordinate
 span equality.  The left comparison and the mapped counit square therefore
 now inhabit the same coordinate-span free-product representation.
 
+`genericPointWedgeLeftEquiv_map_restrictionUnit` applies the equivalence
+triangle identity to the inverse unit component in that composite.
+`genericPointWedgeCoordinateSpanGlobalRestrictionLeftComparison_eq_counitSource`
+then expands functoriality and rewrites that component to the counit, putting
+the full comparison in the exact source form of the mapped counit square.
+
+`genericPointWedgeCoordinateSpanGlobalRestrictionLeftComparison_eq_counitTarget`
+applies that square.  The full left comparison is now the mapped target
+counit followed by the strict span comparison, ready for the point-span
+transport stage.
+
 `genericPointWedgeCoordinateSpanGlobalRestrictionLeftRoundTrip_counit_map`
 applies the coordinate-span left functor to the left-equivalence counit
 naturality square.  Both ordered composites are now equal inside the
