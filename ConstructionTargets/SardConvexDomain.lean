@@ -38,6 +38,22 @@ theorem ContDiffWithinAt.isSymmSndFDerivWithinAt_iteratedFDerivWithin_of_infty
   · exact hxs
   · exact WithTop.coe_le_coe.mpr le_top
 
+/-- A continuous multilinear map fixed by every transposition is fixed by every permutation. -/
+theorem ContinuousMultilinearMap.domDomCongr_eq_self_of_swap
+    {R E F ι : Type*} [Semiring R] [TopologicalSpace R]
+    [AddCommMonoid E] [Module R E] [TopologicalSpace E]
+    [AddCommMonoid F] [Module R F] [TopologicalSpace F]
+    [Finite ι] [DecidableEq ι]
+    (m : ContinuousMultilinearMap R (λ _ : ι ↦ E) F)
+    (h : ∀ i j : ι, m.domDomCongr (Equiv.swap i j) = m)
+    (sigma : Equiv.Perm ι) : m.domDomCongr sigma = m := by
+  induction sigma using Equiv.Perm.swap_induction_on with
+  | one => rfl
+  | swap_mul sigma i j _ ih =>
+      ext v
+      change m (v ∘ (Equiv.swap i j * sigma)) = m v
+      exact (DFunLike.congr_fun ih (v ∘ Equiv.swap i j)).trans (DFunLike.congr_fun (h i j) v)
+
 namespace ConstructionTargets.SardConvexDomain
 
 theorem modelRange_withinCriticalImage_subset_interior_union_frontier
