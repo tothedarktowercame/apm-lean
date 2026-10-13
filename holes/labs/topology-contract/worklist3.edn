@@ -21591,6 +21591,12 @@
       "git diff --exit-code f0afa7bd -- ConstructionTargets/ManifoldFundamentalClass.lean",
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
+    :review
+    {:outcome :fail,
+     :seat "codex-11",
+     :job "invoke-1791856893802-8198-49ecc6bc",
+     :finding
+     "Frozen fixture metadata mismatch persists in both authoritative acceptance copies: they record aad5a9cda739c1cbcceb1eca8ab8b33395db8a08c9d68941a87c644f4d13586e and omit :mode, while /tmp/closedboundarycoords.lean freshly compiles and hashes to 7e72195e1214d7580994264481ae57d0ecf87755d31825ab85cbda5f1220c4b1. Update both copies to that digest with :mode :post-build-export-check, then resubmit commit f0afa7bd."},
     :commit "f0afa7bdc4c95a8c87143342ceb8c9ce51cd5612",
     :changed-paths [],
     :fixture
@@ -21600,7 +21606,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :repair,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/manifold-fundamental-class",
    :acceptance
@@ -21615,7 +21621,7 @@
    :id :routes-2026-10-12-mfclass-boundary-coordinates-r1,
    :kind :reusable-theorem,
    :area "manifold-fundamental-class",
-   :fail-count 0,
+   :fail-count 1,
    :depends-on [:routes-2026-10-12-mfclass-closed-generator-bridge-r1],
    :current-residual "Prove Bool H0 comparison.",
    :other-consumers [:t98A02]}
