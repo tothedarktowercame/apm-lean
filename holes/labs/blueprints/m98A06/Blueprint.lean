@@ -1507,7 +1507,43 @@ theorem apm_m98A06_resonant_no_global_extrema_of_sine_computations
         (-1 : ℝ) ^ 2 * apm_m98a06_I (2 * Real.pi) η₃
       nlinarith
 
-theorem apm_m98A06_nonresonant_energy_geometry_of_facts
+lemma apm_m98A06_nonresonant_energy_geometry_of_facts_aux_difference
+    {a : ℝ} {y z : ℝ → ℝ}
+    (hy : apm_m98a06_Admissible a 0 1 y)
+    (hz : apm_m98a06_Admissible a 0 1 z) :
+    apm_m98a06_Admissible a 0 0 (fun x ↦ z x - y x) := by
+  refine ⟨hz.1.sub hy.1, ?_, ?_⟩
+  · change z 0 - y 0 = 0
+    rw [hz.2.1, hy.2.1]
+    norm_num
+  · change z a - y a = 0
+    rw [hz.2.2, hy.2.2]
+    norm_num
+
+lemma apm_m98A06_nonresonant_energy_geometry_of_facts_aux_perturb
+    {a y₀ ya c : ℝ} {y η : ℝ → ℝ}
+    (hy : apm_m98a06_Admissible a y₀ ya y)
+    (hη : apm_m98a06_Admissible a 0 0 η) :
+    apm_m98a06_Admissible a y₀ ya (fun x ↦ y x + c * η x) := by
+  refine ⟨hy.1.add (hη.1.const_smul c), ?_, ?_⟩
+  · simp [hy.2.1, hη.2.1]
+  · simp [hy.2.2, hη.2.2]
+
+lemma apm_m98A06_nonresonant_energy_geometry_of_facts_aux_negative_direction
+    (A q : ℝ) (hq : q < 0) :
+    ∃ c : ℝ, (c = 1 ∨ c = -1) ∧ 2 * c * A + c ^ 2 * q < 0 := by
+  by_cases hA : 0 ≤ A
+  · exact ⟨-1, Or.inr rfl, by nlinarith⟩
+  · exact ⟨1, Or.inl rfl, by nlinarith⟩
+
+lemma apm_m98A06_nonresonant_energy_geometry_of_facts_aux_positive_direction
+    (A q : ℝ) (hq : 0 < q) :
+    ∃ c : ℝ, (c = 1 ∨ c = -1) ∧ 0 < 2 * c * A + c ^ 2 * q := by
+  by_cases hA : 0 ≤ A
+  · exact ⟨1, Or.inl rfl, by nlinarith⟩
+  · exact ⟨-1, Or.inr rfl, by nlinarith⟩
+
+lemma apm_m98A06_nonresonant_energy_geometry_of_facts_aux_energy_geometry
     (hWirtinger : apm_m98A06_WirtingerFact)
     (hSine : apm_m98A06_SineComputationsFact) :
     ∀ a : ℝ, 0 < a → (∀ k : ℤ, a ≠ k * Real.pi) →
@@ -1525,6 +1561,26 @@ theorem apm_m98A06_nonresonant_energy_geometry_of_facts
         ∃ z : ℝ → ℝ, apm_m98a06_Admissible a 0 1 z ∧
           apm_m98a06_I a y < apm_m98a06_I a z) := by
   sorry
+
+theorem apm_m98A06_nonresonant_energy_geometry_of_facts
+    (hWirtinger : apm_m98A06_WirtingerFact)
+    (hSine : apm_m98A06_SineComputationsFact) :
+    ∀ a : ℝ, 0 < a → (∀ k : ℤ, a ≠ k * Real.pi) →
+      (a < Real.pi →
+        (∀ z : ℝ → ℝ, apm_m98a06_Admissible a 0 1 z →
+          apm_m98a06_I a (fun x ↦ Real.sin x / Real.sin a) ≤ apm_m98a06_I a z ∧
+          (apm_m98a06_I a z = apm_m98a06_I a (fun x ↦ Real.sin x / Real.sin a) →
+            ∀ x ∈ Icc (0 : ℝ) a, z x = Real.sin x / Real.sin a)) ∧
+        ∀ y : ℝ → ℝ, apm_m98a06_Admissible a 0 1 y →
+          ∃ z : ℝ → ℝ, apm_m98a06_Admissible a 0 1 z ∧
+            apm_m98a06_I a y < apm_m98a06_I a z) ∧
+      (Real.pi < a → ∀ y : ℝ → ℝ, apm_m98a06_Admissible a 0 1 y →
+        (∃ z : ℝ → ℝ, apm_m98a06_Admissible a 0 1 z ∧
+          apm_m98a06_I a z < apm_m98a06_I a y) ∧
+        ∃ z : ℝ → ℝ, apm_m98a06_Admissible a 0 1 z ∧
+          apm_m98a06_I a y < apm_m98a06_I a z) := by
+  exact apm_m98A06_nonresonant_energy_geometry_of_facts_aux_energy_geometry
+    hWirtinger hSine
 
 theorem apm_m98A06_weak_poincare_and_equality_of_facts
     (hWirtinger : apm_m98A06_WirtingerFact)
