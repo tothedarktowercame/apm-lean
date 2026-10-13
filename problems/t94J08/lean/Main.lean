@@ -262,6 +262,64 @@ def t94J08HasLocalIndexOne (v : ℝ → ℝ) (p r : ℝ) (d : ℤ) : Prop :=
     v (p - r) ≠ 0 ∧ v (p + r) ≠ 0 ∧
     (d : ℝ) = (Real.sign (v (p + r)) - Real.sign (v (p - r))) / 2
 
+/-! ## Low-dimensional endpoint package -/
+
+/-- The two low-dimensional endpoint computations omitted by the ordinary
+top-homology encoding: the transposition acts by `-1` on reduced
+zero-homology, and negating a real vector field negates its endpoint-sign
+local index. -/
+theorem apm_t94j08_low_dimensional :
+    t94J08HasReducedDegreeZero (Equiv.swap (0 : Fin 2) 1) (-1) ∧
+    ∀ (v : ℝ → ℝ) (hv : ContDiff ℝ ∞ v) (p r : ℝ) (d : ℤ),
+      t94J08HasLocalIndexOne v p r d →
+      t94J08HasLocalIndexOne (fun x ↦ -v x) p r (-d) := by
+  constructor
+  · intro a ha
+    change a 0 - a 1 = (-1 : ℤ) * (a 1 - a 0)
+    ring
+  · intro v hv p r d h
+    rcases h with ⟨hp, hr, hiso, hleft, hright, hindex⟩
+    refine ⟨by simp [hp], hr, ?_, by simpa using hleft, by simpa using hright, ?_⟩
+    · intro x hx hxp
+      simpa using hiso x hx hxp
+    · push_cast
+      rw [Real.sign_neg, Real.sign_neg, hindex]
+      ring
+
+/-- The positive-dimensional part, with the exact smoothness parameter used
+by the final statement.  This is already discharged by the construction
+target and the compiled degree-composition argument. -/
+theorem apm_t94j08_positive_dimensional :
+    (∀ n : ℕ, 1 ≤ n →
+      t94J08HasDegree n
+        (t94J08Antipodal : C(T94J08Sphere (n + 1), T94J08Sphere (n + 1)))
+        ((-1 : ℤ) ^ (n + 1))) ∧
+    ∀ (m : ℕ) (hm : 1 ≤ m)
+      (v : T94J08Euclidean (m + 1) → T94J08Euclidean (m + 1))
+      (hv : ContDiff ℝ ∞ v) (p : T94J08Euclidean (m + 1))
+      (hp : t94J08HasIsolatedZero v p)
+      (r : ℝ) (hr : 0 < r)
+      (hlink : ∀ x : T94J08Sphere (m + 1), v (p + r • x.1) ≠ 0)
+      (hlinkNeg : ∀ x : T94J08Sphere (m + 1), (-v (p + r • x.1)) ≠ 0)
+      (d : ℤ),
+      t94J08HasLocalIndex v p r hlink d →
+      t94J08HasLocalIndex (fun x ↦ -v x) p r hlinkNeg
+        ((-1 : ℤ) ^ (m + 1) * d) := by
+  let hantipodal : ∀ n : ℕ, 1 ≤ n →
+      t94J08HasDegree n
+        (t94J08Antipodal : C(T94J08Sphere (n + 1), T94J08Sphere (n + 1)))
+        ((-1 : ℤ) ^ (n + 1)) := apm_t94J08_bridge_1
+  refine ⟨hantipodal, ?_⟩
+  intro m hm v hv p hp r hr hlink hlinkNeg d hindex
+  obtain ⟨link, hlink_eq, hdegree⟩ := hindex
+  let anti : C(T94J08Sphere (m + 1), T94J08Sphere (m + 1)) :=
+    t94J08Antipodal
+  refine ⟨anti.comp link, ?_, (hantipodal m hm).comp hdegree⟩
+  intro x
+  change anti (link x) = t94J08NormalizedLink (fun y ↦ -v y) p r hlinkNeg x
+  rw [t94J08NormalizedLink_neg v p r hlink hlinkNeg x]
+  rw [hlink_eq x]
+
 /-- The antipodal degree formula in every dimension, together with the local
 index formula for negating a vector field in every positive manifold
 dimension.  Dimension zero is represented by the actual two-point sphere and
@@ -286,7 +344,9 @@ theorem apm_t94j08 :
       t94J08HasLocalIndex v p r hlink d →
       t94J08HasLocalIndex (fun x ↦ -v x) p r hlinkNeg
         ((-1 : ℤ) ^ (m + 1) * d) := by
-  sorry
+  obtain ⟨hzero, hone⟩ := apm_t94j08_low_dimensional
+  obtain ⟨hanti, hhigh⟩ := apm_t94j08_positive_dimensional
+  exact ⟨hzero, hanti, hone, hhigh⟩
 
 #print axioms apm_t94j08
 
