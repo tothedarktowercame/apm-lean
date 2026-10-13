@@ -70,12 +70,131 @@ theorem apm_t01A01_puncture_transitive (q : apm_t01A01_RP2) :
 /-- Seat: the retraction `[x : y : z] ↦ [x : y]` is well defined and continuous
 off `[0 : 0 : 1]` (quotient descent from `{v | (v 0, v 1) ≠ 0}`). -/
 -- BEGIN SEAT AREA
+lemma apm_t01A01_retraction_exists_aux_firstTwo_ne_zero
+    (v : Fin 3 → ℝ) (hv : v ≠ 0)
+    (hq : Projectivization.mk ℝ v hv ≠ apm_t01A01_q0) :
+    (![v 0, v 1] : Fin 2 → ℝ) ≠ 0 := by
+  intro h
+  have h0 := congrFun h 0
+  have h1 := congrFun h 1
+  simp at h0 h1
+  have h2 : v 2 ≠ 0 := by
+    intro hz
+    apply hv
+    funext i
+    fin_cases i <;> simp [h0, h1, hz]
+  apply hq
+  apply (Projectivization.mk_eq_mk_iff ℝ v ![0, 0, 1] hv (by
+    intro h
+    have := congrFun h 2
+    simp at this)).mpr
+  refine ⟨Units.mk0 (v 2) h2, ?_⟩
+  funext i
+  fin_cases i <;> simp [h0, h1]
+
 theorem apm_t01A01_retraction_exists :
     ∃ r : C({y : apm_t01A01_RP2 // y ≠ apm_t01A01_q0}, apm_t01A01_RP1),
       ∀ (v : Fin 3 → ℝ) (hv : v ≠ 0) (hq : Projectivization.mk ℝ v hv ≠ apm_t01A01_q0)
         (h2 : (![v 0, v 1] : Fin 2 → ℝ) ≠ 0),
         r ⟨Projectivization.mk ℝ v hv, hq⟩ = Projectivization.mk ℝ ![v 0, v 1] h2 := by
-  sorry
+  let proj (v : Fin 3 → ℝ) : Fin 2 → ℝ := ![v 0, v 1]
+  let fallback : apm_t01A01_RP1 :=
+    Projectivization.mk ℝ ![1, 0] (by intro h; have := congrFun h 0; simp at this)
+  let lift : {v : Fin 3 → ℝ // v ≠ 0} → apm_t01A01_RP1 := fun v ↦
+    if h : proj v.1 ≠ 0 then Projectivization.mk ℝ (proj v.1) h else fallback
+  have horbit : ∀ (a b : {v : Fin 3 → ℝ // v ≠ 0}) (t : ℝ),
+      a = t • (b : Fin 3 → ℝ) → lift a = lift b := by
+    intro a b t hab
+    have ht : t ≠ 0 := by
+      intro ht
+      apply a.2
+      simpa [ht] using hab
+    have hp : proj a.1 = t • proj b.1 := by
+      rw [hab]
+      funext i
+      fin_cases i <;> simp [proj]
+    by_cases hb : proj b.1 ≠ 0
+    · have ha : proj a.1 ≠ 0 := by
+        rw [hp]
+        exact smul_ne_zero ht hb
+      simp only [lift, dif_pos ha, dif_pos hb]
+      apply (Projectivization.mk_eq_mk_iff' ℝ _ _ ha hb).mpr
+      exact ⟨t, hp.symm⟩
+    · have ha : ¬ proj a.1 ≠ 0 := by simpa [hp, hb]
+      simp only [lift]
+      rw [dif_neg ha, dif_neg hb]
+  let rfun : apm_t01A01_RP2 → apm_t01A01_RP1 :=
+    Projectivization.lift lift horbit
+  let U : Set apm_t01A01_RP2 := {y | y ≠ apm_t01A01_q0}
+  let qmap := ConstructionTargets.ProjectiveSpaceTopology.quotientMap ℝ 2
+  have hqbase : Topology.IsQuotientMap qmap :=
+    ⟨ConstructionTargets.ProjectiveSpaceTopology.surjective_quotientMap ℝ 2, rfl⟩
+  have hU : IsOpen U := by
+    apply hqbase.isOpen_preimage.mp
+    have hc : Continuous (fun x : {v : Fin 3 → ℝ // v ≠ 0} ↦ proj x.1) := by
+      apply continuous_pi
+      intro i
+      fin_cases i
+      · change Continuous (fun x : {v : Fin 3 → ℝ // v ≠ 0} ↦ x.1 0)
+        exact (continuous_apply 0).comp continuous_subtype_val
+      · change Continuous (fun x : {v : Fin 3 → ℝ // v ≠ 0} ↦ x.1 1)
+        exact (continuous_apply 1).comp continuous_subtype_val
+    have heq : qmap ⁻¹' U = {x | proj x.1 ≠ 0} := by
+      ext x
+      simp only [Set.mem_preimage, Set.mem_setOf_eq]
+      constructor
+      · exact apm_t01A01_retraction_exists_aux_firstTwo_ne_zero x.1 x.2
+      · intro hp he
+        apply hp
+        have hm := (Projectivization.mk_eq_mk_iff ℝ x.1 ![0, 0, 1] x.2 (by
+          intro h; have := congrFun h 2; simp at this)).mp he
+        obtain ⟨a, ha⟩ := hm
+        funext i
+        fin_cases i
+        · have := congrFun ha 0
+          simpa [proj] using this.symm
+        · have := congrFun ha 1
+          simpa [proj] using this.symm
+    rw [heq]
+    exact (isOpen_compl_singleton.preimage hc)
+  have hqquot : Topology.IsQuotientMap (U.restrictPreimage qmap) :=
+    hqbase.restrictPreimage_isOpen hU
+  have hcomp : Continuous ((fun y : U ↦ rfun y.1) ∘ U.restrictPreimage qmap) := by
+    let raw : {x : {v : Fin 3 → ℝ // v ≠ 0} // qmap x ∈ U} →
+        {w : Fin 2 → ℝ // w ≠ 0} := fun x ↦
+      ⟨proj x.1.1, apm_t01A01_retraction_exists_aux_firstTwo_ne_zero
+        x.1.1 x.1.2 x.2⟩
+    have hraw : Continuous raw := by
+      apply Continuous.subtype_mk
+      apply continuous_pi
+      intro i
+      fin_cases i
+      · change Continuous (fun x : {x : {v : Fin 3 → ℝ // v ≠ 0} // qmap x ∈ U} ↦ x.1.1 0)
+        exact (continuous_apply 0).comp (continuous_subtype_val.comp continuous_subtype_val)
+      · change Continuous (fun x : {x : {v : Fin 3 → ℝ // v ≠ 0} // qmap x ∈ U} ↦ x.1.1 1)
+        exact (continuous_apply 1).comp (continuous_subtype_val.comp continuous_subtype_val)
+    have heq : (fun y : U ↦ rfun y.1) ∘ U.restrictPreimage qmap =
+        ConstructionTargets.ProjectiveSpaceTopology.quotientMap ℝ 1 ∘ raw := by
+      funext x
+      change Projectivization.lift lift horbit (Projectivization.mk ℝ x.1.1 x.1.2) = _
+      rw [Projectivization.lift_mk]
+      have hp := apm_t01A01_retraction_exists_aux_firstTwo_ne_zero
+        x.1.1 x.1.2 x.2
+      simp only [lift]
+      rw [dif_pos hp]
+      rfl
+    rw [heq]
+    exact (ConstructionTargets.ProjectiveSpaceTopology.continuous_quotientMap ℝ 1).comp hraw
+  have hrfun : Continuous (fun y : U ↦ rfun y.1) := by
+    exact hqquot.continuous_iff.mpr hcomp
+  refine ⟨⟨fun y ↦ rfun y.1, hrfun⟩, ?_⟩
+  intro v hv hq h2
+  change rfun (Projectivization.mk ℝ v hv) = _
+  rw [show rfun (Projectivization.mk ℝ v hv) = lift ⟨v, hv⟩ by
+    exact Projectivization.lift_mk lift horbit v hv]
+  have hp : proj v ≠ 0 := h2
+  simp only [lift]
+  rw [dif_pos hp]
 -- END SEAT AREA
 
 /-- Seat: the inclusion `[x : y] ↦ [x : y : 0]` misses `[0 : 0 : 1]` and is continuous. -/
