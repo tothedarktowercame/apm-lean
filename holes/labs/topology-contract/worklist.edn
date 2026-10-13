@@ -117090,13 +117090,13 @@
   {:consumer :t97A07,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 2,
    :review-finding
    "Recorded fixture hash mismatch: :fixture.sha256 is eaeed21919599335d4a33b437815c4a9cbb5b72110213b29440d6944cc982182 (the blueprint at older commit 736c2566), but commit 8432f937 changes ConstructionTargets/t97A07Closure.blueprint.md and its exact SHA-256 is 5bb02c342b988406e8bd26aeda1b9e67335a8c1f626d97ec96701cb039ae708f. Re-record the fixture hash for the reviewed commit.",
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
     :residual
-    "Transfer the maximum to a source chart and prove derivative-coordinate vanishing; then B6-B9.",
+    "Identify the zero scalar chart derivative by the chain rule with the selected coordinate of mfderiv; then B6-B9.",
     :outcome :stop,
     :warnings [{:kind :existing-placeholder}],
     :missing-theorems
@@ -117111,15 +117111,15 @@
     {:source
      "eee255ed8120c697ee30c05d04474bae6dfd228582ddccde03a8b7f450cd4819",
      :target
-     "1f5e34bebe43058e9f2b3ad26cee1c25ebc8a57a1adca28bb0a9c024dbdf2313",
+     "6af022dcd03b6005ee856bf25a81ce76ec0ce72b1a7ab999b5808d57741b1949",
      :blueprint
-     "d99f6f355cf9af60cb412a77500d3d1f9558b3e5ff1d6a9aa730c8a1c05b04b3",
-     :registry "147/147"},
+     "f66b47b494f09592c60e057507ab231d9572fb4f1be0d6796442f298ae5f7b58",
+     :registry "149/149"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
     :reason
-    "B5 partial: coordinate-range vanishing contradicts surjectivity.",
+    "B5 partial: transferred the global coordinate maximum to the fixed source chart and proved its scalar derivative vanishes.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t97A07Closure.lean",
       :exit 0}
@@ -117130,30 +117130,18 @@
     :diagnostic-history
     [{:cmd "lean draft",
       :exit 1,
-      :finding "Exposed PiLp coordinate; corrected."}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1791878293582-9023-2b7211ab",
-     :commands
-     ["git show/diff cb6f4855^..cb6f4855"
-      "git archive cb6f4855; lake env lean archived t97A07Closure.lean"
-      "lake env lean archived problems/t97A07/lean/Main.lean (resource-stalled; terminated)"
-      "python3 scripts/statement-registry.py check"
-      "recorded-tree sha256; diff-tree; placeholder counts"],
-     :finding
-     "PASS program STOP: cb6f4855 is new after history and adds a compiled, sorry-free B5 linear-algebra milestone. The theorem correctly refutes surjectivity by evaluating a preimage of the i-th basis vector; orientation/types are faithful and it uses only standard axioms. Scope is exactly closure Lean+blueprint. Frozen hashes match source eee255ed, closure 1f5e34be, blueprint d99f6f35; source placeholders stay 1->1, closure has 0; registry 147/147. Blueprint statements are unchanged; the new progress note accurately leaves maximum-to-chart derivative vanishing, then B6-B9. Archived consumer recheck stalled in host I/O after closure passed and was terminated; the consumer tree was unchanged."},
-    :commit "cb6f4855c23574d6168462b393e6ecf972eae5cf",
+      :finding "Corrected univ neighbourhood lemma."}],
+    :commit "8f491522a2bf1d5f448cd971b2e560e00d044538",
     :changed-paths
     ["ConstructionTargets/t97A07Closure.lean"
      "ConstructionTargets/t97A07Closure.blueprint.md"],
     :fixture
     {:path "ConstructionTargets/t97A07Closure.blueprint.md",
      :sha256
-     "d99f6f355cf9af60cb412a77500d3d1f9558b3e5ff1d6a9aa730c8a1c05b04b3"},
+     "f66b47b494f09592c60e057507ab231d9572fb4f1be0d6796442f298ae5f7b58"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t97A07/lean/Main.lean"
     "problems/t97A07/status.json"
