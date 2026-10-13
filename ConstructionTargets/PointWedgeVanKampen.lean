@@ -5820,6 +5820,45 @@ theorem genericPointWedgeNormalizedLeftLeg_eq_inl_iff
           Monoid.Coprod.inl g := by
   rw [genericPointWedgeNormalizedFundamentalGroupEquiv_leftLeg]
 
+/-- The fixed-point equation for the normalized left injection is exactly
+commutation with the B3 counit element. -/
+theorem genericPointWedgeCounitNormalization_inl_eq_iff_commute
+    (g : FundamentalGroup X x₀) :
+    genericPointWedgeCounitNormalization
+        x₀ y₀ M N hM hN hy hx cM cN (Monoid.Coprod.inl g) =
+          Monoid.Coprod.inl g ↔
+      genericPointWedgeCounitElement x₀ y₀ M N hM hN hy hx cM cN *
+          Monoid.Coprod.inl g =
+        Monoid.Coprod.inl g *
+          genericPointWedgeCounitElement x₀ y₀ M N hM hN hy hx cM cN := by
+  let c := genericPointWedgeCounitElement
+    x₀ y₀ M N hM hN hy hx cM cN
+  let z : genericPointWedgeFreeProduct x₀ y₀ := Monoid.Coprod.inl g
+  change c * z * c⁻¹ = z ↔ c * z = z * c
+  constructor
+  · intro h
+    calc
+      c * z = (c * z * c⁻¹) * c := by simp [mul_assoc]
+      _ = z * c := congrArg (fun q => q * c) h
+  · intro h
+    calc
+      c * z * c⁻¹ = (z * c) * c⁻¹ := congrArg (fun q => q * c⁻¹) h
+      _ = z := by simp [mul_assoc]
+
+/-- Consequently the B6 left-leg equation is equivalent to the concrete
+counit commutation equation supplied by the remaining comparison square. -/
+theorem genericPointWedgeNormalizedLeftLeg_eq_inl_iff_counit_commute
+    (g : FundamentalGroup X x₀) :
+    genericPointWedgeNormalizedFundamentalGroupEquiv
+        x₀ y₀ M N hM hN hy hx cM cN
+        (genericPointWedgeLeftLegMap x₀ y₀ g) = Monoid.Coprod.inl g ↔
+      genericPointWedgeCounitElement x₀ y₀ M N hM hN hy hx cM cN *
+          Monoid.Coprod.inl g =
+        Monoid.Coprod.inl g *
+          genericPointWedgeCounitElement x₀ y₀ M N hM hN hy hx cM cN := by
+  rw [genericPointWedgeNormalizedLeftLeg_eq_inl_iff,
+    genericPointWedgeCounitNormalization_inl_eq_iff_commute]
+
 /-- The reconstructed B4 source functor has exactly the right restriction
 conjugation on the literal right injection. -/
 theorem genericPointWedgeSourceFunctor_rightLeg_eq_conj_inr
@@ -6526,6 +6565,8 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeSourceFunctor_leftLeg_eq_actualLifted
 #print axioms genericPointWedgeNormalizedFundamentalGroupEquiv_leftLeg
 #print axioms genericPointWedgeNormalizedLeftLeg_eq_inl_iff
+#print axioms genericPointWedgeCounitNormalization_inl_eq_iff_commute
+#print axioms genericPointWedgeNormalizedLeftLeg_eq_inl_iff_counit_commute
 #print axioms genericPointWedgeLegCoordinates_of_mapped
 #print axioms genericPointWedgeLegCoordinates_iff_mapped
 #print axioms genericPointWedgeLegCoordinates_iff_sourceFunctor

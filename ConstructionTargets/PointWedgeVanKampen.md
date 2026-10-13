@@ -1188,3 +1188,11 @@ counit normalization applied to `inl g`.
 left-leg obligation as the corresponding fixed-point equation.  This makes
 the unresolved counit condition explicit and introduces no identity
 normalization of a counit component.
+
+`genericPointWedgeCounitNormalization_inl_eq_iff_commute` unfolds that
+fixed-point equation to the concrete statement that the B3 counit element
+commutes with `inl g`; the two implications preserve the multiplication
+order explicitly.  `genericPointWedgeNormalizedLeftLeg_eq_inl_iff_counit_commute`
+then identifies this commutation statement as precisely the remaining B6
+left-leg equation.  The comparison square must now prove this equality; no
+counit component has been replaced by an identity.
