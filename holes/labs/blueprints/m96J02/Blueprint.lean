@@ -36,7 +36,61 @@ theorem apm_m96j02_ivp_to_volterra
         g t (x t)) :
     ∀ t ∈ Set.Icc (0 : ℝ) T,
       x t = (∫ s in (0 : ℝ)..t, (t - s) * g s (x s)) + α + β * t := by
-  sorry
+  intro t ht
+  rcases hT.eq_or_lt with rfl | hT
+  · simp only [Set.Icc_self, Set.mem_singleton_iff] at ht
+    subst t
+    simp [hx0]
+  let S : Set ℝ := Set.Icc 0 T
+  have hS : UniqueDiffOn ℝ S := uniqueDiffOn_Icc hT
+  have hd : ContDiffOn ℝ 1 (derivWithin x S) S := by
+    exact hx.derivWithin hS (by norm_num)
+  have hxt : 0 ≤ t := ht.1
+  have hsub : Set.Icc 0 t ⊆ S := by
+    intro s hs
+    exact ⟨hs.1, hs.2.trans ht.2⟩
+  have hx_int :
+      (∫ s in (0 : ℝ)..t, derivWithin x S s) = x t - x 0 := by
+    apply intervalIntegral.integral_eq_sub_of_hasDeriv_right_of_le hxt
+      (hx.continuousOn.mono hsub)
+    · intro s hs
+      have hsS : s ∈ S := hsub ⟨hs.1.le, hs.2.le⟩
+      have hh : HasDerivWithinAt x (derivWithin x S s) S s :=
+        ((hx s hsS).differentiableWithinAt (by norm_num)).hasDerivWithinAt
+      exact (hh.hasDerivAt (Icc_mem_nhds hs.1 (hs.2.trans_le ht.2))).hasDerivWithinAt
+    · exact (hd.continuousOn.mono hsub).intervalIntegrable_of_Icc hxt
+  have hforce : ContinuousOn (fun s => g s (x s)) (Set.Icc 0 t) :=
+    (apm_m96j02_continuousOn_comp_graph g hg hx.continuousOn).mono hsub
+  have hv_int : IntervalIntegrable (fun s => g s (x s)) volume 0 t :=
+    hforce.intervalIntegrable_of_Icc hxt
+  have hv_deriv : ∀ s ∈ Set.Icc 0 t,
+      HasDerivWithinAt (derivWithin x S) (g s (x s)) (Set.Icc 0 t) s := by
+    intro s hs
+    have hsS : s ∈ S := hsub hs
+    have hdif := (hd s hsS).differentiableWithinAt (by norm_num)
+    have hh : HasDerivWithinAt (derivWithin x S)
+        (derivWithin (derivWithin x S) S s) S s :=
+      hdif.hasDerivWithinAt
+    rw [hxode s hsS] at hh
+    exact hh.mono hsub
+  have hu_deriv : ∀ s ∈ Set.Icc 0 t,
+      HasDerivWithinAt (fun r : ℝ => t - r) (-1) (Set.Icc 0 t) s := by
+    intro s hs
+    convert (hasDerivAt_const s t).sub (hasDerivAt_id s) |>.hasDerivWithinAt using 1 <;>
+      simp
+  have hu_int : IntervalIntegrable (fun _ : ℝ => (-1 : ℝ)) volume 0 t :=
+    intervalIntegrable_const
+  have hibp := intervalIntegral.integral_mul_deriv_eq_deriv_mul_of_hasDerivWithinAt
+    (a := 0) (b := t) (u := fun r : ℝ => t - r)
+    (v := derivWithin x S) (u' := fun _ => -1)
+    (v' := fun s => g s (x s))
+    (by simpa [Set.uIcc_of_le hxt] using hu_deriv)
+    (by simpa [Set.uIcc_of_le hxt] using hv_deriv) hu_int hv_int
+  simp only [sub_self, zero_mul, sub_zero] at hibp
+  simp only [neg_one_mul, intervalIntegral.integral_neg, sub_neg_eq_add] at hibp
+  change derivWithin x S 0 = β at hxd0
+  rw [hibp, hx_int, hx0, hxd0]
+  ring
 
 /-- The a-priori box estimate and contraction argument for two continuous
 fixed points of the Volterra operator. -/
