@@ -107,7 +107,40 @@ theorem apm_m02J05_young_shape
     (hzero : α 0 = 0)
     (hnonneg : ∀ t, 0 ≤ t → 0 ≤ α t) :
     apm_m02J05_YoungShapeFact α := by
-  sorry
+  have hcont : ContinuousOn (apm_m02J05_young α) (Ici 0) := by
+    intro x hx
+    have hxb : x < x + 1 := by linarith
+    have hi : IntegrableOn α (uIcc (0 : ℝ) (x + 1)) := by
+      rw [uIcc_of_le (hx.trans (le_of_lt hxb))]
+      exact (hc.mono Icc_subset_Ici_self).integrableOn_Icc
+    have hlocal : ContinuousOn (apm_m02J05_young α) (Icc 0 (x + 1)) := by
+      simpa [apm_m02J05_young, uIcc_of_le (hx.trans (le_of_lt hxb))] using
+        (intervalIntegral.continuousOn_primitive_interval hi)
+    apply (hlocal x ⟨hx, hxb.le⟩).mono_of_mem_nhdsWithin (s := Ici 0)
+    refine mem_nhdsWithin_iff_exists_mem_nhds_inter.mpr
+      ⟨Iio (x + 1), Iio_mem_nhds hxb, ?_⟩
+    rintro y ⟨hy, hy0⟩
+    exact ⟨hy0, hy.le⟩
+  have hderiv : ∀ x ∈ Ioi (0 : ℝ),
+      HasDerivAt (apm_m02J05_young α) (α x) x := by
+    intro x hx
+    have hcx : ContinuousAt α x := hc.continuousAt (Ici_mem_nhds hx)
+    have hi : IntervalIntegrable α volume 0 x :=
+      (hc.mono Icc_subset_Ici_self).intervalIntegrable_of_Icc hx.le
+    exact intervalIntegral.integral_hasDerivAt_right hi
+      (ContinuousAt.stronglyMeasurableAtFilter isOpen_Ioi
+        (fun y hy => hc.continuousAt (Ici_mem_nhds hy)) x hx) hcx
+  constructor
+  · apply MonotoneOn.convexOn_of_deriv (convex_Ici 0) hcont
+      (by
+        rw [interior_Ici]
+        intro x hx
+        exact (hderiv x hx).differentiableAt.differentiableWithinAt)
+    rw [interior_Ici]
+    exact (hmono.monotoneOn.mono Ioi_subset_Ici_self).congr
+      (fun x hx => (hderiv x hx).deriv.symm)
+  · intro s hs t ht hst
+    exact apm_m02J05_young_mono hc hnonneg hs hst
 
 /-- Why this unblocks `apm_m02j05`: this packages the missing convexity of
 the modular class and closure of its rescalable hull under the vector-space
