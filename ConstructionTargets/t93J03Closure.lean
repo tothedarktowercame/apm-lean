@@ -456,11 +456,20 @@ def fundamentalGroupEquivOfHomeomorph
       exact e.apply_symm_apply (p t)
   map_mul' := map_mul _
 
+/-- The frozen Klein bottle is path connected because it is the continuous
+surjective image of the convex closed disk under its defining quotient map. -/
+noncomputable instance kleinBottlePathConnectedSpace :
+    PathConnectedSpace KleinBottle := by
+  letI : PathConnectedSpace ConstructionTargets.Surfaces.Disk :=
+    isPathConnected_iff_pathConnectedSpace.mp
+      (Metric.isPathConnected_closedBall (by norm_num : (0 : ℝ) ≤ 1))
+  exact (ConstructionTargets.Surfaces.surjective_surfaceQuotient false 2).pathConnectedSpace
+    (ConstructionTargets.Surfaces.continuous_surfaceQuotient false 2)
+
 /-- Final C1 adapter: a van Kampen computation of the `aabb` presentation at
 one point of the polygon model yields the registered presentation at every
 basepoint of the frozen Klein bottle. -/
 theorem kleinBottle_pi1_every_basepoint_of_polygon_van_kampen
-    [PathConnectedSpace KleinBottle]
     (q₀ : kleinPairingData.Space)
     (h₀ : Nonempty
       (FundamentalGroup kleinPairingData.Space q₀ ≃*
@@ -572,6 +581,7 @@ theorem lift_isEmbedding_assembly
 #print axioms kleinPolygon_attaching_arcs
 #print axioms kleinRelator_generatorChange_eq_one_iff
 #print axioms kleinPolygonPresentedGroupEquiv
+#print axioms kleinBottlePathConnectedSpace
 #print axioms kleinBottle_pi1_every_basepoint_of_polygon_van_kampen
 
 end ConstructionTargets.t93J03Closure

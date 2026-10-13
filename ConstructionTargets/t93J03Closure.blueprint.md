@@ -179,6 +179,9 @@ complete downstream C1 adapter: it transports any one-basepoint `aabb`
 fundamental-group calculation through the polygon homeomorphism, changes to
 the frozen presentation, and then reaches every frozen basepoint.  Thus C1
 now has exactly one remaining input, the topological van Kampen calculation.
+The required frozen path-connectedness instance is also compiled directly
+from the convex closed disk and the continuous surjective surface quotient;
+it is no longer an input to the C1 adapter.
 
 - Layer 1: C1, C3, and C4. C1 and C3 are independent; C4 is already complete.
 - Layer 2: C2 against the explicit C1 equivalence interface.
