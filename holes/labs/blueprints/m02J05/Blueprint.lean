@@ -597,7 +597,17 @@ theorem apm_m02J05_lux_homogeneous
       apm_m02J05_lux α (c • u) = |c| * apm_m02J05_lux α u := by
   exact apm_m02J05_lux_homogeneous_aux_core α hc hmono hzero hinfty hnonneg
 
-theorem apm_m02J05_lux_triangle_of_facts
+lemma apm_m02J05_lux_triangle_of_facts_aux_sum_mem
+    (α : ℝ → ℝ) (hc : ContinuousOn α (Ici 0))
+    (hnonneg : ∀ t, 0 ≤ t → 0 ≤ α t)
+    (hshape : apm_m02J05_YoungShapeFact α)
+    (u v : apm_m02J05_Fun) (hu : u ∈ apm_m02J05_L α)
+    (hv : v ∈ apm_m02J05_L α) :
+    u + v ∈ apm_m02J05_L α := by
+  exact apm_m02J05_bridge_convex_and_submodule_of_young_shape_aux_add
+    α hc hnonneg hshape u v hu hv
+
+lemma apm_m02J05_lux_triangle_of_facts_aux_core
     (α : ℝ → ℝ)
     (hc : ContinuousOn α (Ici 0))
     (hmono : StrictMonoOn α (Ici 0))
@@ -614,6 +624,25 @@ theorem apm_m02J05_lux_triangle_of_facts
       apm_m02J05_lux α (u + v) ≤
         apm_m02J05_lux α u + apm_m02J05_lux α v := by
   sorry
+
+theorem apm_m02J05_lux_triangle_of_facts
+    (α : ℝ → ℝ)
+    (hc : ContinuousOn α (Ici 0))
+    (hmono : StrictMonoOn α (Ici 0))
+    (hzero : α 0 = 0)
+    (hinfty : Tendsto α atTop atTop)
+    (hnonneg : ∀ t, 0 ≤ t → 0 ≤ α t)
+    (hshape : apm_m02J05_YoungShapeFact α)
+    (hsublevel : ∀ u ∈ apm_m02J05_L α,
+      (apm_m02J05_luxSublevel α u).Nonempty ∧
+      BddBelow (apm_m02J05_luxSublevel α u) ∧
+      0 ≤ apm_m02J05_lux α u ∧
+      (u ≠ 0 → apm_m02J05_lux α u ∈ apm_m02J05_luxSublevel α u)) :
+    ∀ u ∈ apm_m02J05_L α, ∀ v ∈ apm_m02J05_L α,
+      apm_m02J05_lux α (u + v) ≤
+        apm_m02J05_lux α u + apm_m02J05_lux α v := by
+  exact apm_m02J05_lux_triangle_of_facts_aux_core
+    α hc hmono hzero hinfty hnonneg hshape hsublevel
 
 theorem apm_m02J05_bridge_convex_and_submodule
     (α : ℝ → ℝ)
