@@ -110,7 +110,212 @@ theorem apm_m93j05_trunc_coeffs (N : ℕ)
     (f : ℝ → ℝ) :
     (∫ x in Set.Icc (0 : ℝ) 1, apm_m93j05_trunc N f x) = ∫ x in Set.Icc (0 : ℝ) 1, f x ∧
     ∀ k ∈ Finset.Icc 1 N, apm_m93j05_cosCoeff (apm_m93j05_trunc N f) k = apm_m93j05_cosCoeff f k ∧ apm_m93j05_sinCoeff (apm_m93j05_trunc N f) k = apm_m93j05_sinCoeff f k := by
-  sorry
+  let S := Finset.Icc 1 N
+  let m := ∫ x in Set.Icc (0 : ℝ) 1, f x
+  have htrig_int : ∀ j ∈ S, IntegrableOn (fun x : ℝ ↦
+      apm_m93j05_cosCoeff f j * Real.cos (j * 2 * Real.pi * x) +
+      apm_m93j05_sinCoeff f j * Real.sin (j * 2 * Real.pi * x)) (Set.Icc 0 1) := by
+    intro j hj
+    exact ((continuous_const.mul (Real.continuous_cos.comp
+      (continuous_const.mul continuous_id))).add
+      (continuous_const.mul (Real.continuous_sin.comp
+        (continuous_const.mul continuous_id)))).integrableOn_Icc
+  have hmean : (∫ x in Set.Icc (0 : ℝ) 1, apm_m93j05_trunc N f x) = m := by
+    unfold apm_m93j05_trunc
+    change (∫ x in Set.Icc (0 : ℝ) 1, m + ∑ j ∈ S,
+      (apm_m93j05_cosCoeff f j * Real.cos (j * 2 * Real.pi * x) +
+       apm_m93j05_sinCoeff f j * Real.sin (j * 2 * Real.pi * x))) = m
+    rw [MeasureTheory.integral_add]
+    · rw [MeasureTheory.integral_const, MeasureTheory.integral_finset_sum S]
+      · have hz : ∑ j ∈ S, (∫ x in Set.Icc (0 : ℝ) 1,
+            (apm_m93j05_cosCoeff f j * Real.cos (j * 2 * Real.pi * x) +
+             apm_m93j05_sinCoeff f j * Real.sin (j * 2 * Real.pi * x))) = 0 := by
+          apply Finset.sum_eq_zero
+          intro j hj
+          have hj1 : 1 ≤ j := (Finset.mem_Icc.mp hj).1
+          rw [MeasureTheory.integral_add]
+          · rw [MeasureTheory.integral_const_mul,
+              MeasureTheory.integral_const_mul,
+              apm_m93j05_fourier_projection_aux_cos_mean_zero j (by omega),
+              apm_m93j05_fourier_projection_aux_sin_mean_zero j]
+            ring
+          · exact (continuous_const.mul (Real.continuous_cos.comp
+              (continuous_const.mul continuous_id))).integrableOn_Icc
+          · exact (continuous_const.mul (Real.continuous_sin.comp
+              (continuous_const.mul continuous_id))).integrableOn_Icc
+        rw [hz, add_zero]
+        norm_num [Measure.real, Measure.restrict_apply_univ, Real.volume_Icc]
+      · intro j hj
+        exact htrig_int j hj
+    · exact integrableOn_const (hs := measure_Icc_lt_top.ne)
+    · exact MeasureTheory.integrable_finset_sum S htrig_int
+  refine ⟨by simpa [m] using hmean, ?_⟩
+  intro k hk
+  have hk1 : 1 ≤ k := (Finset.mem_Icc.mp hk).1
+  have hcos_int : IntegrableOn (fun x : ℝ ↦ Real.cos (k * 2 * Real.pi * x))
+      (Set.Icc 0 1) := by
+    exact (Real.continuous_cos.comp (continuous_const.mul continuous_id)).integrableOn_Icc
+  have hsin_int : IntegrableOn (fun x : ℝ ↦ Real.sin (k * 2 * Real.pi * x))
+      (Set.Icc 0 1) := by
+    exact (Real.continuous_sin.comp (continuous_const.mul continuous_id)).integrableOn_Icc
+  have hcos : apm_m93j05_cosCoeff (apm_m93j05_trunc N f) k =
+      apm_m93j05_cosCoeff f k := by
+    unfold apm_m93j05_cosCoeff apm_m93j05_trunc
+    change 2 * (∫ x in Set.Icc (0 : ℝ) 1,
+      (m + ∑ j ∈ S, (apm_m93j05_cosCoeff f j * Real.cos (j * 2 * Real.pi * x) +
+        apm_m93j05_sinCoeff f j * Real.sin (j * 2 * Real.pi * x))) *
+        Real.cos (k * 2 * Real.pi * x)) = apm_m93j05_cosCoeff f k
+    have hp : (fun x : ℝ ↦
+        (m + ∑ j ∈ S, (apm_m93j05_cosCoeff f j * Real.cos (j * 2 * Real.pi * x) +
+          apm_m93j05_sinCoeff f j * Real.sin (j * 2 * Real.pi * x))) *
+          Real.cos (k * 2 * Real.pi * x)) =
+        fun x ↦ m * Real.cos (k * 2 * Real.pi * x) + ∑ j ∈ S,
+          (apm_m93j05_cosCoeff f j *
+              (Real.cos (j * 2 * Real.pi * x) * Real.cos (k * 2 * Real.pi * x)) +
+           apm_m93j05_sinCoeff f j *
+              (Real.sin (j * 2 * Real.pi * x) * Real.cos (k * 2 * Real.pi * x))) := by
+      funext x
+      rw [add_mul, Finset.sum_mul]
+      apply congrArg (fun z : ℝ ↦ m * Real.cos (k * 2 * Real.pi * x) + z)
+      apply Finset.sum_congr rfl
+      intro j hj
+      ring
+    rw [hp, MeasureTheory.integral_add]
+    · rw [MeasureTheory.integral_const_mul,
+        apm_m93j05_fourier_projection_aux_cos_mean_zero k (by omega),
+        MeasureTheory.integral_finset_sum S]
+      · rw [Finset.sum_eq_single k]
+        · rw [MeasureTheory.integral_add]
+          · rw [MeasureTheory.integral_const_mul, MeasureTheory.integral_const_mul,
+              (hO k k hk1 hk1).1, if_pos rfl]
+            have hcross := (hO k k hk1 hk1).2.2
+            have hcross' : (∫ a in Set.Icc (0 : ℝ) 1,
+                Real.sin (k * 2 * Real.pi * a) * Real.cos (k * 2 * Real.pi * a)) = 0 := by
+              calc
+                _ = ∫ a in Set.Icc (0 : ℝ) 1,
+                    Real.cos (k * 2 * Real.pi * a) * Real.sin (k * 2 * Real.pi * a) := by
+                      apply MeasureTheory.integral_congr_ae
+                      filter_upwards with a
+                      ring
+                _ = 0 := hcross
+            rw [hcross']
+            ring
+          · exact (continuous_const.mul ((Real.continuous_cos.comp
+              (continuous_const.mul continuous_id)).mul (Real.continuous_cos.comp
+                (continuous_const.mul continuous_id)))).integrableOn_Icc
+          · exact (continuous_const.mul ((Real.continuous_sin.comp
+              (continuous_const.mul continuous_id)).mul (Real.continuous_cos.comp
+                (continuous_const.mul continuous_id)))).integrableOn_Icc
+        · intro j hj hjne
+          rw [MeasureTheory.integral_add]
+          · rw [MeasureTheory.integral_const_mul, MeasureTheory.integral_const_mul,
+              (hO j k (Finset.mem_Icc.mp hj).1 hk1).1, if_neg hjne]
+            have hc := (hO k j hk1 (Finset.mem_Icc.mp hj).1).2.2
+            have hc' : (∫ a in Set.Icc (0 : ℝ) 1,
+                Real.sin (j * 2 * Real.pi * a) * Real.cos (k * 2 * Real.pi * a)) = 0 := by
+              calc
+                _ = ∫ a in Set.Icc (0 : ℝ) 1,
+                    Real.cos (k * 2 * Real.pi * a) * Real.sin (j * 2 * Real.pi * a) := by
+                      apply MeasureTheory.integral_congr_ae
+                      filter_upwards with a
+                      ring
+                _ = 0 := hc
+            rw [hc']
+            ring
+          · exact (continuous_const.mul ((Real.continuous_cos.comp
+              (continuous_const.mul continuous_id)).mul (Real.continuous_cos.comp
+                (continuous_const.mul continuous_id)))).integrableOn_Icc
+          · exact (continuous_const.mul ((Real.continuous_sin.comp
+              (continuous_const.mul continuous_id)).mul (Real.continuous_cos.comp
+                (continuous_const.mul continuous_id)))).integrableOn_Icc
+        · intro hkn
+          exact (hkn hk).elim
+      · intro j hj
+        exact ((continuous_const.mul ((Real.continuous_cos.comp
+          (continuous_const.mul continuous_id)).mul (Real.continuous_cos.comp
+            (continuous_const.mul continuous_id)))).add
+          (continuous_const.mul ((Real.continuous_sin.comp
+            (continuous_const.mul continuous_id)).mul (Real.continuous_cos.comp
+              (continuous_const.mul continuous_id))))).integrableOn_Icc
+    · exact (continuous_const.mul (Real.continuous_cos.comp
+        (continuous_const.mul continuous_id))).integrableOn_Icc
+    · apply MeasureTheory.integrable_finset_sum S
+      intro j hj
+      exact ((continuous_const.mul ((Real.continuous_cos.comp
+        (continuous_const.mul continuous_id)).mul (Real.continuous_cos.comp
+          (continuous_const.mul continuous_id)))).add
+        (continuous_const.mul ((Real.continuous_sin.comp
+          (continuous_const.mul continuous_id)).mul (Real.continuous_cos.comp
+            (continuous_const.mul continuous_id))))).integrableOn_Icc
+  have hsin : apm_m93j05_sinCoeff (apm_m93j05_trunc N f) k =
+      apm_m93j05_sinCoeff f k := by
+    unfold apm_m93j05_sinCoeff apm_m93j05_trunc
+    change 2 * (∫ x in Set.Icc (0 : ℝ) 1,
+      (m + ∑ j ∈ S, (apm_m93j05_cosCoeff f j * Real.cos (j * 2 * Real.pi * x) +
+        apm_m93j05_sinCoeff f j * Real.sin (j * 2 * Real.pi * x))) *
+        Real.sin (k * 2 * Real.pi * x)) = apm_m93j05_sinCoeff f k
+    have hp : (fun x : ℝ ↦
+        (m + ∑ j ∈ S, (apm_m93j05_cosCoeff f j * Real.cos (j * 2 * Real.pi * x) +
+          apm_m93j05_sinCoeff f j * Real.sin (j * 2 * Real.pi * x))) *
+          Real.sin (k * 2 * Real.pi * x)) =
+        fun x ↦ m * Real.sin (k * 2 * Real.pi * x) + ∑ j ∈ S,
+          (apm_m93j05_cosCoeff f j *
+              (Real.cos (j * 2 * Real.pi * x) * Real.sin (k * 2 * Real.pi * x)) +
+           apm_m93j05_sinCoeff f j *
+              (Real.sin (j * 2 * Real.pi * x) * Real.sin (k * 2 * Real.pi * x))) := by
+      funext x
+      rw [add_mul, Finset.sum_mul]
+      apply congrArg (fun z : ℝ ↦ m * Real.sin (k * 2 * Real.pi * x) + z)
+      apply Finset.sum_congr rfl
+      intro j hj
+      ring
+    rw [hp, MeasureTheory.integral_add]
+    · rw [MeasureTheory.integral_const_mul,
+        apm_m93j05_fourier_projection_aux_sin_mean_zero k,
+        MeasureTheory.integral_finset_sum S]
+      · rw [Finset.sum_eq_single k]
+        · rw [MeasureTheory.integral_add]
+          · rw [MeasureTheory.integral_const_mul, MeasureTheory.integral_const_mul,
+              (hO k k hk1 hk1).2.2, (hO k k hk1 hk1).2.1, if_pos rfl]
+            ring
+          · exact (continuous_const.mul ((Real.continuous_cos.comp
+              (continuous_const.mul continuous_id)).mul (Real.continuous_sin.comp
+                (continuous_const.mul continuous_id)))).integrableOn_Icc
+          · exact (continuous_const.mul ((Real.continuous_sin.comp
+              (continuous_const.mul continuous_id)).mul (Real.continuous_sin.comp
+                (continuous_const.mul continuous_id)))).integrableOn_Icc
+        · intro j hj hjne
+          rw [MeasureTheory.integral_add]
+          · rw [MeasureTheory.integral_const_mul, MeasureTheory.integral_const_mul,
+              (hO j k (Finset.mem_Icc.mp hj).1 hk1).2.2,
+              (hO j k (Finset.mem_Icc.mp hj).1 hk1).2.1, if_neg hjne]
+            ring
+          · exact (continuous_const.mul ((Real.continuous_cos.comp
+              (continuous_const.mul continuous_id)).mul (Real.continuous_sin.comp
+                (continuous_const.mul continuous_id)))).integrableOn_Icc
+          · exact (continuous_const.mul ((Real.continuous_sin.comp
+              (continuous_const.mul continuous_id)).mul (Real.continuous_sin.comp
+                (continuous_const.mul continuous_id)))).integrableOn_Icc
+        · intro hkn
+          exact (hkn hk).elim
+      · intro j hj
+        exact ((continuous_const.mul ((Real.continuous_cos.comp
+          (continuous_const.mul continuous_id)).mul (Real.continuous_sin.comp
+            (continuous_const.mul continuous_id)))).add
+          (continuous_const.mul ((Real.continuous_sin.comp
+            (continuous_const.mul continuous_id)).mul (Real.continuous_sin.comp
+              (continuous_const.mul continuous_id))))).integrableOn_Icc
+    · exact (continuous_const.mul (Real.continuous_sin.comp
+        (continuous_const.mul continuous_id))).integrableOn_Icc
+    · apply MeasureTheory.integrable_finset_sum S
+      intro j hj
+      exact ((continuous_const.mul ((Real.continuous_cos.comp
+        (continuous_const.mul continuous_id)).mul (Real.continuous_sin.comp
+          (continuous_const.mul continuous_id)))).add
+        (continuous_const.mul ((Real.continuous_sin.comp
+          (continuous_const.mul continuous_id)).mul (Real.continuous_sin.comp
+            (continuous_const.mul continuous_id))))).integrableOn_Icc
+  exact ⟨hcos, hsin⟩
 -- END SEAT AREA
 
 /-- (S) Self-adjointness: both sides equal `m_f m_g + Σ (a_j(f) a_j(g) + b_j(f) b_j(g)) / 2`. -/
