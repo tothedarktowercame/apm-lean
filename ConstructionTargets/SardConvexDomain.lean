@@ -893,4 +893,18 @@ theorem finite_inter_whitneyStratumNet_of_isCompact
   intro x hx y hy hxy
   exact whitneyStratumNet_pairwise_dist s k hx.1 hy.1 hxy
 
+/-- If a point lies in a center's quarter-infDist ball, then the center scale
+and the point scale are comparable with fixed constants. -/
+theorem infDist_center_comparable_of_mem_quarter_ball
+    {E : Type*} [PseudoMetricSpace E] (s : Set E) {c x : E}
+    (hxc : x ∈ Metric.ball c (Metric.infDist c s / 4)) :
+    3 * Metric.infDist c s < 4 * Metric.infDist x s ∧
+      4 * Metric.infDist x s < 5 * Metric.infDist c s := by
+  have hdist : dist x c < Metric.infDist c s / 4 := Metric.mem_ball.1 hxc
+  have hdist' : dist c x < Metric.infDist c s / 4 := by
+    simpa [dist_comm] using hdist
+  have h₁ := Metric.infDist_le_infDist_add_dist (s := s) (x := c) (y := x)
+  have h₂ := Metric.infDist_le_infDist_add_dist (s := s) (x := x) (y := c)
+  constructor <;> linarith
+
 end ConstructionTargets.SardConvexDomain
