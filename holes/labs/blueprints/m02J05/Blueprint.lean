@@ -749,6 +749,64 @@ lemma apm_m02J05_bridge_complementary_young_holder_of_lux_facts_aux_beta_strictM
   rw [hαβ t (mem_Ici.mp ht), hαβ s (mem_Ici.mp hs)] at hale
   exact (not_le.mpr hst) hale
 
+lemma apm_m02J05_bridge_complementary_young_holder_of_lux_facts_aux_beta_atTop
+    (α β : ℝ → ℝ)
+    (hαmono : StrictMonoOn α (Ici 0))
+    (hnonnegα : ∀ t, 0 ≤ t → 0 ≤ α t)
+    (hnonnegβ : ∀ t, 0 ≤ t → 0 ≤ β t)
+    (hβα : ∀ t, 0 ≤ t → β (α t) = t)
+    (hαβ : ∀ t, 0 ≤ t → α (β t) = t) :
+    Tendsto β atTop atTop := by
+  have hβmono : MonotoneOn β (Ici 0) :=
+    (apm_m02J05_bridge_complementary_young_holder_of_lux_facts_aux_beta_strictMono
+      α β hαmono hnonnegβ hαβ).monotoneOn
+  rw [tendsto_atTop_atTop]
+  intro b
+  let r : ℝ := max b 0
+  refine ⟨α r, ?_⟩
+  intro x hx
+  have hr : 0 ≤ r := le_max_right _ _
+  have hαr : 0 ≤ α r := hnonnegα r hr
+  calc
+    b ≤ r := le_max_left _ _
+    _ = β (α r) := (hβα r hr).symm
+    _ ≤ β x := hβmono (mem_Ici.mpr hαr) (mem_Ici.mpr (hαr.trans hx)) hx
+
+lemma apm_m02J05_bridge_complementary_young_holder_of_lux_facts_aux_young
+    (α β : ℝ → ℝ)
+    (hαc : ContinuousOn α (Ici 0))
+    (hαmono : StrictMonoOn α (Ici 0))
+    (hαzero : α 0 = 0)
+    (hαinfty : Tendsto α atTop atTop)
+    (hβc : ContinuousOn β (Ici 0))
+    (hnonneg : ∀ t, 0 ≤ t → 0 ≤ α t ∧ 0 ≤ β t)
+    (hβα : ∀ t, 0 ≤ t → β (α t) = t)
+    (hαβ : ∀ t, 0 ≤ t → α (β t) = t) :
+    ∀ s t : ℝ, 0 ≤ s → 0 ≤ t →
+      s * t ≤ apm_m02J05_young α s + apm_m02J05_young β t := by
+  sorry
+
+lemma apm_m02J05_bridge_complementary_young_holder_of_lux_facts_aux_holder
+    (α β : ℝ → ℝ)
+    (hyoung : ∀ s t : ℝ, 0 ≤ s → 0 ≤ t →
+      s * t ≤ apm_m02J05_young α s + apm_m02J05_young β t)
+    (hsubα : ∀ u ∈ apm_m02J05_L α,
+      (apm_m02J05_luxSublevel α u).Nonempty ∧
+      BddBelow (apm_m02J05_luxSublevel α u) ∧
+      0 ≤ apm_m02J05_lux α u ∧
+      (u ≠ 0 → apm_m02J05_lux α u ∈ apm_m02J05_luxSublevel α u))
+    (hsubβ : ∀ u ∈ apm_m02J05_L β,
+      (apm_m02J05_luxSublevel β u).Nonempty ∧
+      BddBelow (apm_m02J05_luxSublevel β u) ∧
+      0 ≤ apm_m02J05_lux β u ∧
+      (u ≠ 0 → apm_m02J05_lux β u ∈ apm_m02J05_luxSublevel β u))
+    (hdefα : ∀ u ∈ apm_m02J05_L α, apm_m02J05_lux α u = 0 ↔ u = 0)
+    (hdefβ : ∀ u ∈ apm_m02J05_L β, apm_m02J05_lux β u = 0 ↔ u = 0) :
+    ∀ u ∈ apm_m02J05_L α, ∀ v ∈ apm_m02J05_L β,
+      ∫ x in Icc (0 : ℝ) 1, u x * v x ∂volume ≤
+        2 * apm_m02J05_lux α u * apm_m02J05_lux β v := by
+  sorry
+
 theorem apm_m02J05_bridge_complementary_young_holder_of_lux_facts
     (α β : ℝ → ℝ)
     (hαc : ContinuousOn α (Ici 0))
@@ -776,7 +834,12 @@ theorem apm_m02J05_bridge_complementary_young_holder_of_lux_facts
       ∀ u ∈ apm_m02J05_L α, ∀ v ∈ apm_m02J05_L β,
         ∫ x in Icc (0 : ℝ) 1, u x * v x ∂volume ≤
           2 * apm_m02J05_lux α u * apm_m02J05_lux β v := by
-  sorry
+  have hyoung :=
+    apm_m02J05_bridge_complementary_young_holder_of_lux_facts_aux_young
+      α β hαc hαmono hαzero hαinfty hβc hnonneg hβα hαβ
+  exact ⟨hyoung,
+    apm_m02J05_bridge_complementary_young_holder_of_lux_facts_aux_holder
+      α β hyoung hsubα hsubβ hdefα hdefβ⟩
 
 theorem apm_m02J05_bridge_complementary_young_holder
     (α β : ℝ → ℝ)
