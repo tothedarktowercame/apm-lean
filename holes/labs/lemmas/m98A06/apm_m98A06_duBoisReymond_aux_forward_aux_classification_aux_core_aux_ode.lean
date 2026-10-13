@@ -355,12 +355,95 @@ lemma apm_m98A06_duBoisReymond_aux_forward_aux_classification_aux_core_aux_first
 
 -- The first integral makes y'' = −y, so y is a trigonometric combination (ODE uniqueness).
 -- BEGIN SEAT AREA
+lemma apm_m98A06_duBoisReymond_aux_forward_aux_classification_aux_core_aux_ode_aux_second
+    (a : ℝ) (ha : 0 < a) (y : ℝ → ℝ) (hy : ContDiffOn ℝ 1 y (Icc 0 a)) (m : ℝ)
+    (hm : ∀ x ∈ Icc (0 : ℝ) a,
+      derivWithin y (Icc 0 a) x + ∫ t in (0 : ℝ)..x, y t = m) :
+    ∀ x ∈ Ioo (0 : ℝ) a,
+      HasDerivAt (derivWithin y (Icc 0 a)) (-y x) x := by
+  intro x hx
+  have hxc : x ∈ Icc (0 : ℝ) a := ⟨hx.1.le, hx.2.le⟩
+  have hcont : ContinuousAt y x :=
+    (hy.continuousOn x hxc).continuousAt (Icc_mem_nhds hx.1 hx.2)
+  have hint : IntervalIntegrable y volume 0 x :=
+    (hy.continuousOn.mono (Icc_subset_Icc_right hx.2.le)).intervalIntegrable_of_Icc hx.1.le
+  have hprim : HasDerivAt (fun u ↦ m - ∫ t in (0 : ℝ)..u, y t) (-y x) x :=
+    (intervalIntegral.integral_hasDerivAt_right hint
+      (ContinuousOn.stronglyMeasurableAtFilter isOpen_Ioo
+        (hy.continuousOn.mono Ioo_subset_Icc_self) x hx) hcont).const_sub m
+  apply hprim.congr_of_eventuallyEq
+  filter_upwards [Icc_mem_nhds hx.1 hx.2] with u hu
+  have := hm u hu
+  linarith
+
+lemma apm_m98A06_duBoisReymond_aux_forward_aux_classification_aux_core_aux_ode_aux_unique
+    (a : ℝ) (ha : 0 < a) (w v : ℝ → ℝ) (hw : ContinuousOn w (Icc 0 a))
+    (hv : ContinuousOn v (Icc 0 a))
+    (hdw : ∀ x ∈ Ioo (0 : ℝ) a, HasDerivAt w (v x) x)
+    (hdv : ∀ x ∈ Ioo (0 : ℝ) a, HasDerivAt v (-w x) x)
+    (hw0 : w 0 = 0) (hv0 : v 0 = 0) :
+    ∀ x ∈ Icc (0 : ℝ) a, w x = 0 := by
+  intro x hx
+  rcases eq_or_lt_of_le hx.1 with hx0 | hx0
+  · rw [← hx0, hw0]
+  have hE : ∀ t ∈ Ioo (0 : ℝ) x, HasDerivAt (fun t => w t ^ 2 + v t ^ 2) 0 t := by
+    intro t ht
+    have ht' : t ∈ Ioo (0 : ℝ) a := ⟨ht.1, ht.2.trans_le hx.2⟩
+    have := ((hdw t ht').pow 2).add ((hdv t ht').pow 2)
+    convert this using 1
+    simp; ring
+  have hEc : ContinuousOn (fun t => w t ^ 2 + v t ^ 2) (Icc 0 x) :=
+    ((hw.mono (Icc_subset_Icc_right hx.2)).pow 2).add ((hv.mono (Icc_subset_Icc_right hx.2)).pow 2)
+  obtain ⟨c, hc, hslope⟩ := exists_hasDerivAt_eq_slope (fun t => w t ^ 2 + v t ^ 2) (fun _ => 0)
+    hx0 hEc hE
+  have hEq : w x ^ 2 + v x ^ 2 = w 0 ^ 2 + v 0 ^ 2 := by
+    have hne : x - 0 ≠ 0 := by linarith
+    field_simp at hslope
+    linarith
+  rw [hw0, hv0] at hEq
+  nlinarith [sq_nonneg (w x), sq_nonneg (v x)]
+
+lemma apm_m98A06_duBoisReymond_aux_forward_aux_classification_aux_core_aux_ode_aux_core
+    (a : ℝ) (ha : 0 < a) (y : ℝ → ℝ) (hy : ContDiffOn ℝ 1 y (Icc 0 a)) (m : ℝ)
+    (hm : ∀ x ∈ Icc (0 : ℝ) a, derivWithin y (Icc 0 a) x + ∫ t in (0 : ℝ)..x, y t = m) :
+    ∃ A B : ℝ, ∀ x ∈ Icc (0 : ℝ) a,
+      y x = A * Real.cos x + B * Real.sin x := by
+  set B := derivWithin y (Icc 0 a) 0 with hB
+  set A := y 0 with hA
+  refine ⟨A, B, fun x hx => ?_⟩
+  have hdy : ∀ t ∈ Ioo (0 : ℝ) a, HasDerivAt y (derivWithin y (Icc 0 a) t) t := by
+    intro t ht
+    have hd := (hy.differentiableOn one_ne_zero t ⟨ht.1.le, ht.2.le⟩).differentiableAt
+      (Icc_mem_nhds ht.1 ht.2)
+    rw [derivWithin_of_mem_nhds (Icc_mem_nhds ht.1 ht.2)]
+    exact hd.hasDerivAt
+  have hcy : ContinuousOn y (Icc 0 a) := hy.continuousOn
+  have hcd : ContinuousOn (derivWithin y (Icc 0 a)) (Icc 0 a) :=
+    hy.continuousOn_derivWithin (uniqueDiffOn_Icc ha) le_rfl
+  have hz := apm_m98A06_duBoisReymond_aux_forward_aux_classification_aux_core_aux_ode_aux_unique a ha
+    (fun t => y t - (A * Real.cos t + B * Real.sin t))
+    (fun t => derivWithin y (Icc 0 a) t - (-A * Real.sin t + B * Real.cos t))
+    (hcy.sub (by fun_prop)) (hcd.sub (by fun_prop))
+    (fun t ht => by
+      have := (hdy t ht).sub (((Real.hasDerivAt_cos t).const_mul A).add
+        ((Real.hasDerivAt_sin t).const_mul B))
+      convert this using 1; ring)
+    (fun t ht => by
+      have := (apm_m98A06_duBoisReymond_aux_forward_aux_classification_aux_core_aux_ode_aux_second a ha y hy m hm t ht).sub
+        (((Real.hasDerivAt_sin t).const_mul (-A)).add ((Real.hasDerivAt_cos t).const_mul B))
+      convert this using 1; ring)
+    (by simp [hA]) (by simp [hB])
+    x hx
+  linarith
+
 lemma apm_m98A06_duBoisReymond_aux_forward_aux_classification_aux_core_aux_ode
     (a : ℝ) (ha : 0 < a) (y : ℝ → ℝ) (hy : ContDiffOn ℝ 1 y (Icc 0 a)) (m : ℝ)
     (hm : ∀ x ∈ Icc (0 : ℝ) a, derivWithin y (Icc 0 a) x + ∫ t in (0 : ℝ)..x, y t = m) :
     ∃ A B : ℝ, ∀ x ∈ Icc (0 : ℝ) a,
       y x = A * Real.cos x + B * Real.sin x := by
-  sorry
+  exact
+    apm_m98A06_duBoisReymond_aux_forward_aux_classification_aux_core_aux_ode_aux_core
+      a ha y hy m hm
 -- END SEAT AREA
 
 lemma apm_m98A06_duBoisReymond_aux_forward_aux_classification_aux_core
