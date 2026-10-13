@@ -3872,6 +3872,39 @@ theorem genericPointWedgeLeftRoundTrip_counit_connectorSquare_inl :
     (genericPointWedgeLeftRoundTrip_counit_connectorSquare
       x₀ y₀ M N hM hN hy hx cM cN)
 
+/-- Rewrite the full left comparison across the injected connector square,
+so its target is the round-trip side of the counit naturality equation. -/
+theorem genericPointWedgeCoordinateSpanGlobalRestrictionLeftComparison_heq_roundTrip :
+    let eK := genericPointWedgeOverlapGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let eL := genericPointWedgeLeftGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let aL := genericPointWedgeLeftSpanIso
+      x₀ y₀ M N hM hN hy hx cM cN
+    let l := genericPointWedgeActualLeft x₀ y₀ M N
+    let l' := genericPointWedgeCoordinateLeft x₀
+    let u : FundamentalGroupoid Unit := FundamentalGroupoid.mk ()
+    HEq
+      (genericPointWedgeCoordinateSpanGlobalRestrictionLeftComparison
+        x₀ y₀ M N hM hN hy hx cM cN)
+      ((Monoid.Coprod.inl (N := genericPointWedgeRightGroup y₀)
+        (((genericPointWedgeConnectors x₀).connector
+            ((eL.inverse ⋙ eL.functor).obj (l'.obj u))).hom ≫
+          eL.functor.map (eL.inverse.map (aL.inv.app u)) ≫
+          eL.counitIso.hom.app ((eK.inverse ⋙ l ⋙ eL.functor).obj u) ≫
+          ((genericPointWedgeConnectors x₀).connector
+            ((eK.inverse ⋙ l ⋙ eL.functor).obj u)).inv) :
+          genericPointWedgeFreeProduct x₀ y₀)) := by
+  have h :=
+    genericPointWedgeCoordinateSpanGlobalRestrictionLeftComparison_heq_inl_counitTarget
+      x₀ y₀ M N hM hN hy hx cM cN
+  have hs := genericPointWedgeLeftRoundTrip_counit_connectorSquare_inl
+    x₀ y₀ M N hM hN hy hx cM cN
+  dsimp only at h hs ⊢
+  apply h.trans
+  exact heq_of_eq (by
+    simpa only [ConnectorSystem.normalForm, Category.assoc] using hs.symm)
+
 /-- The inverse right comparison introduced by coordinate-span transport,
 isolated before recombining it with the middle and left factors. -/
 def genericPointWedgeCoordinateSpanGlobalRestrictionRightComparison :
@@ -6304,6 +6337,7 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeLeftRoundTrip_counit_normalForms
 #print axioms genericPointWedgeLeftRoundTrip_counit_connectorSquare
 #print axioms genericPointWedgeLeftRoundTrip_counit_connectorSquare_inl
+#print axioms genericPointWedgeCoordinateSpanGlobalRestrictionLeftComparison_heq_roundTrip
 #print axioms genericPointWedgeCoordinateSpanGlobalRestrictionRightComparison
 #print axioms genericPointWedgeCoordinateSpanGlobalRestrictionRightComparison_app
 #print axioms genericPointWedgeCoordinateSpanGlobalRestrictionRightUnitFactor

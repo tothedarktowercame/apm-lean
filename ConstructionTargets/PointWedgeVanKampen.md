@@ -1152,6 +1152,12 @@ exact equality through the left coproduct injection.  It therefore lives in
 the representation used by the expanded B6 comparison, without converting
 the dependent connector equation into an untyped cancellation.
 
+`genericPointWedgeCoordinateSpanGlobalRestrictionLeftComparison_heq_roundTrip`
+uses that injected square to rewrite the full left comparison from its
+counit/strict target normal form to the round-trip side.  The result is still
+an `HEq` across the representation boundary and exposes the exact predecessor
+map and source counit needed for the next B6 reduction.
+
 `genericPointWedgeCoordinateSpanGlobalRestrictionLeftRoundTrip_counit_map`
 applies the coordinate-span left functor to the left-equivalence counit
 naturality square.  Both ordered composites are now equal inside the
