@@ -182,7 +182,73 @@ theorem apm_t99J04_bridge_coordinateMap_mfderiv_bijective
     Function.Bijective
       (mfderiv (𝓘(ℝ, apm_t99J04_Euclidean n))
         𝓘(ℝ, apm_t99J04_Euclidean n) (apm_t99J04_coordinateMap f) x) := by
-  sorry
+  letI : FiniteDimensional ℝ
+      (TangentSpace (𝓘(ℝ, apm_t99J04_Euclidean n)) x) := by
+    change FiniteDimensional ℝ (apm_t99J04_Euclidean n)
+    infer_instance
+  let D := mfderiv (𝓘(ℝ, apm_t99J04_Euclidean n))
+    𝓘(ℝ, apm_t99J04_Euclidean n) (apm_t99J04_coordinateMap f) x
+  let e := NormedSpace.fromTangentSpace (𝕜 := ℝ) (apm_t99J04_coordinateMap f x)
+  let A : TangentSpace (𝓘(ℝ, apm_t99J04_Euclidean n)) x →L[ℝ]
+      apm_t99J04_Euclidean n := e.toContinuousLinearMap ∘L D
+  have hcomponent : ∀ i, (PiLp.proj 2 (𝕜 := ℝ) (fun _ : Fin n ↦ ℝ) i) ∘L A =
+      (NormedSpace.fromTangentSpace (f i x)).toContinuousLinearMap ∘L
+        mfderiv (𝓘(ℝ, apm_t99J04_Euclidean n)) 𝓘(ℝ, ℝ) (f i) x := by
+    intro i
+    have hc := mfderiv_comp
+      (I := 𝓘(ℝ, apm_t99J04_Euclidean n))
+      (I' := 𝓘(ℝ, apm_t99J04_Euclidean n)) (I'' := 𝓘(ℝ, ℝ)) x
+      (PiLp.proj 2 (𝕜 := ℝ) (fun _ : Fin n ↦ ℝ) i).mdifferentiableAt
+      (hcoord.mdifferentiableAt (by simp))
+    change mfderiv (𝓘(ℝ, apm_t99J04_Euclidean n)) 𝓘(ℝ, ℝ) (f i) x = _ at hc
+    rw [mfderiv_eq_fderiv,
+      (PiLp.proj 2 (𝕜 := ℝ) (fun _ : Fin n ↦ ℝ) i).fderiv] at hc
+    ext v
+    simpa [A, D, e, ContinuousLinearMap.comp_apply,
+      ContinuousLinearMap.fderiv] using congr($(hc) v).symm
+  have hAfin : Module.finrank ℝ (TangentSpace (𝓘(ℝ, apm_t99J04_Euclidean n)) x) = n := by
+    change Module.finrank ℝ (apm_t99J04_Euclidean n) = n
+    simp [apm_t99J04_Euclidean]
+  have hAbi : Function.Bijective A := by
+    by_cases hn : n = 0
+    · subst n
+      letI : Subsingleton
+          (TangentSpace (𝓘(ℝ, apm_t99J04_Euclidean 0)) x) :=
+        Module.finrank_zero_iff.mp (by simpa using hAfin)
+      have hinj : Function.Injective A := by
+        intro u v huv
+        have hu : u = 0 := Subsingleton.elim _ _
+        have hv : v = 0 := Subsingleton.elim _ _
+        simpa [hu, hv]
+      exact ⟨hinj, (LinearMap.injective_iff_surjective_of_finrank_eq_finrank (by
+        simpa [hAfin, apm_t99J04_Euclidean])).mp hinj⟩
+    · have hpos : 0 < n := Nat.pos_of_ne_zero hn
+      have hcoe : (ContinuousLinearMap.coeLM ℝ :
+          (TangentSpace (𝓘(ℝ, apm_t99J04_Euclidean n)) x →L[ℝ] ℝ) →ₗ[ℝ]
+            Module.Dual ℝ (TangentSpace (𝓘(ℝ, apm_t99J04_Euclidean n)) x)).ker = ⊥ := by
+        rw [LinearMap.ker_eq_bot]
+        intro g h gh
+        apply ContinuousLinearMap.coe_injective
+        exact gh
+      have hli' : LinearIndependent ℝ (fun i : Fin n ↦
+          ((NormedSpace.fromTangentSpace (f i x)).toContinuousLinearMap ∘L
+            mfderiv (𝓘(ℝ, apm_t99J04_Euclidean n)) 𝓘(ℝ, ℝ) (f i) x).toLinearMap) := by
+        simpa [Function.comp_def] using
+          hli.map' (ContinuousLinearMap.coeLM ℝ) hcoe
+      have hcoords := apm_t99J04_dualCoordinates_bijective hpos hAfin
+        (fun i : Fin n ↦
+          ((NormedSpace.fromTangentSpace (f i x)).toContinuousLinearMap ∘L
+            mfderiv (𝓘(ℝ, apm_t99J04_Euclidean n)) 𝓘(ℝ, ℝ) (f i) x).toLinearMap) hli'
+      have hinj : Function.Injective A := by
+        intro u v huv
+        apply hcoords.1
+        funext i
+        have hi := congrArg
+          (fun z ↦ (PiLp.proj 2 (𝕜 := ℝ) (fun _ : Fin n ↦ ℝ) i) z) huv
+        simpa only [← ContinuousLinearMap.comp_apply, hcomponent i] using hi
+      exact ⟨hinj, (LinearMap.injective_iff_surjective_of_finrank_eq_finrank (by
+        simpa [hAfin, apm_t99J04_Euclidean])).mp hinj⟩
+  exact e.bijective.comp hAbi
 
 theorem apm_t99j04 :
     (∀ (n : ℕ) (X : Type) [TopologicalSpace X]
