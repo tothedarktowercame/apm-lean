@@ -981,6 +981,28 @@ lemma apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_support
     v (apm_m98J02_translateTest x φ)) ⊆ tsupport (χ : apm_m98J02_E → ℝ)
   exact tsupport_mul_subset_left
 
+noncomputable def apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_translateCompact
+    (K : TopologicalSpace.Compacts apm_m98J02_E)
+    (χ : apm_m98J02_Test) : TopologicalSpace.Compacts apm_m98J02_E :=
+  ⟨(fun p : apm_m98J02_E × apm_m98J02_E => p.2 - p.1) ''
+      (tsupport (χ : apm_m98J02_E → ℝ) ×ˢ (K : Set apm_m98J02_E)),
+    (χ.hasCompactSupport.prod K.isCompact).image (by fun_prop)⟩
+
+lemma apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_translateSupport
+    (K : TopologicalSpace.Compacts apm_m98J02_E)
+    (χ φ : apm_m98J02_Test)
+    (hφ : tsupport (φ : apm_m98J02_E → ℝ) ⊆ (K : Set apm_m98J02_E))
+    (x : apm_m98J02_E) (hx : x ∈ tsupport (χ : apm_m98J02_E → ℝ)) :
+    tsupport (apm_m98J02_translateTest x φ : apm_m98J02_E → ℝ) ⊆
+      apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_translateCompact K χ := by
+  apply closure_minimal
+  · intro y hy
+    change y ∈ (fun p : apm_m98J02_E × apm_m98J02_E => p.2 - p.1) ''
+      (tsupport (χ : apm_m98J02_E → ℝ) ×ˢ (K : Set apm_m98J02_E))
+    refine ⟨(x, x + y), ⟨hx, hφ (subset_tsupport _ hy)⟩, ?_⟩
+    simp [sub_eq_add_neg]
+  · exact (apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_translateCompact K χ).isCompact.isClosed
+
 lemma apm_m98J02_bridge_2_aux_psi_aux_stage_cont
     (v : apm_m98J02_Dist) (χ : apm_m98J02_Test)
     (hsmooth : ∀ φ : apm_m98J02_Test,
