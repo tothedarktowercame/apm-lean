@@ -76416,39 +76416,40 @@
   {:consumer :t96J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "Deterministic topology defect in commit ee79eaeb2: it changes the index topology for FiniteWedge from ⊥ to ⊤ while claiming this makes it discrete. Mathlib/Topology/Order.lean states exactly the opposite: ⊥ is discrete and ⊤ is indiscrete. Consequently L × Circle is not the coproduct/disjoint-union source of indexed circle legs, and the coinduced quotient is not the B7 finite-wedge topology; future skeletonHomeomorphWedge would target the wrong space. Repair by restoring TopologicalSpace L := ⊥ in both the FiniteWedge instance and continuous_wedgeCircle proof, then rerun Lean/build and retain coverage, quotient-topology, wedge-relation, and signed-equation residuals. Recorded scope is otherwise exact and fixture SHA-256 386d0e41...ae305 matches.",
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Prove kernel agreement, both coverages, topology; then B8/B9.",
+    "Source coverage, kernel agreement, quotient topology, final homeomorphism; then B8/B9.",
     :outcome :stop,
-    :warnings ["preexisting/imported lints"],
+    :warnings
+    ["preexisting/imported lints" "unrelated edits preserved"],
     :missing-theorems
-    [{:name "PairingData.signedWedgeArcQuotientEquivRange",
-      :type "signed-coordinate kernel quotient ≃ actual wedge image",
+    [{:name "PairingData.surjective_signedWedgeArcMap",
+      :type "signed arcs cover indexed wedge",
       :status :proved,
       :consumers [:t96J02 :t92J05 :t94J04 :t97A01 :t97A03],
-      :depends-on ["PairingData.signedWedgeArc_pair"],
+      :depends-on ["PairingData.signedWedgeArcQuotientEquivRange"],
       :area "polygon-surface-pi1"}
      {:name
       "ConstructionTargets.PolygonSurfacePiOne.skeletonHomeomorphWedge",
-      :type "P.skeleton ≃ₜ indexed wedge with signed equations",
+      :type "skeleton ≃ₜ indexed wedge; signed equations",
       :status :partial,
       :consumers [:t96J02 :t92J05 :t94J04 :t97A01 :t97A03],
       :depends-on
       ["PairingData.skeletonArcQuotientEquivRange"
-       "PairingData.signedWedgeArcQuotientEquivRange"],
+       "PairingData.surjective_signedWedgeArcMap"],
       :area "polygon-surface-pi1"}],
     :statement-hashes
     {:registry "131/0",
-     :module "0db55f997be3667a38a0e7a61728c2e72e5986ef"},
+     :module "c616097adb877efc3df0c178839607b2ce5ce270"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
     :reason
-    "The signed target parametrization now has an exact kernel quotient equivalent to its actual wedge image. Source/target kernel agreement, coverage, and topology remain.",
+    "Target coverage proved; source coverage, kernels, topology, homeomorphism and equations remain.",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/PolygonSurfacePiOne.lean",
@@ -76456,29 +76457,22 @@
      {:cmd "lake build ConstructionTargets.PolygonSurfacePiOne",
       :exit 0}
      {:cmd "registry check", :exit 0, :output "131/0"}
-     {:cmd "sorry/admit/axiom scan", :exit 0, :output "0/0/0"}
-     {:cmd "#print axioms signedWedgeArcQuotientEquivRange", :exit 0}
-     {:cmd "git show --check 9dbb44e25", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1791854481405-8147-716fcc15",
-     :commands
-     ["git show/diff/hash 9dbb44e25"
-      "lake env lean ConstructionTargets/PolygonSurfacePiOne.lean"
-      "python3 scripts/statement-registry.py check"
-      "#print axioms + placeholder/discrete-topology scan"],
-     :finding
-     "PASS on STOP after real progress: commit 9dbb44e25 builds the target-side signed-coordinate kernel quotient and its equivalence to the actual wedge image, then states the exact source/target kernel-agreement proposition required before descent. The repaired discrete index topology ⊥ is present at both sites. Kernel agreement, both coverages, quotient topology, final homeomorphism, and signed equations remain explicit residuals, so this set-level result is not presented as B7 completion. Scope is exact; fixture SHA-256 e94ad4d2...ca32 and blob 0db55f99...86ef match. Fresh Lean/registry gates pass (131/0), placeholders are 0, and the new equivalence uses only standard axioms."},
-    :commit "9dbb44e25",
+     {:cmd "placeholder scan", :exit 0, :output "0/0/0"}
+     {:cmd "#print axioms coverage", :exit 0}
+     {:cmd "git show --check 34fa7c1df", :exit 0}],
+    :diagnostic-history
+    [{:cmd "first compile",
+      :exit 1,
+      :correction "coerced interval; unfolded wedgeCircle"}],
+    :commit "34fa7c1df",
     :changed-paths ["ConstructionTargets/PolygonSurfacePiOne.lean"],
     :fixture
     {:path "ConstructionTargets/PolygonSurfacePiOne.lean",
      :sha256
-     "e94ad4d2d397c5074eddde770fd807259257de1dd6162acb5f1f86119092ca32"},
+     "be1aabd5e6372977e6c74746386a4974917b6c306d7df7235c223b093d7b1772"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/PolygonSurfacePiOne.lean"],
    :dag-node "ConstructionTargets/PolygonSurfacePiOne.blueprint.md/B7",
    :acceptance
@@ -86840,7 +86834,8 @@
     :lemma-pairingdata-signedwedgearc-pair
     :lemma-pairingdata-skeletonarc-signed-coordinate
     :lemma-pairingdata-skeletonarcquotientequivrange
-    :lemma-pairingdata-signedwedgearcquotientequivrange],
+    :lemma-pairingdata-signedwedgearcquotientequivrange
+    :lemma-pairingdata-surjective-signedwedgearcmap],
    :other-consumers [:t92J05 :t94J04 :t97A01 :t97A03]}
   {:consumer :t96J02,
    :phase :lemma,
@@ -86919,4 +86914,21 @@
    :id :lemma-pairingdata-signedwedgearcquotientequivrange,
    :kind :lemma,
    :depends-on [:lemma-pairingdata-signedwedgearc-pair],
+   :other-consumers [:t92J05 :t94J04 :t97A01 :t97A03]}
+  {:consumer :t96J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "PairingData.surjective_signedWedgeArcMap",
+    :type "signed arcs cover indexed wedge"},
+   :lemma
+   {:name "PairingData.surjective_signedWedgeArcMap",
+    :reported-by [:routes-2026-10-12-polygon-b7-topo2-r1],
+    :type "signed arcs cover indexed wedge",
+    :area "polygon-surface-pi1",
+    :proved-in :routes-2026-10-12-polygon-b7-topo2-r1},
+   :id :lemma-pairingdata-surjective-signedwedgearcmap,
+   :kind :lemma,
+   :depends-on [:lemma-pairingdata-signedwedgearcquotientequivrange],
    :other-consumers [:t92J05 :t94J04 :t97A01 :t97A03]}]}
