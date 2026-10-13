@@ -113850,7 +113850,7 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 10,
+   :stop-count 0,
    :review-finding
    "Recorded fixture hash mismatch: :fixture.sha256 is 0bca6ce32c019fc3053c7f813c26917169cf817375b44d5e722b864b61a526450c1, but ConstructionTargets/PointWedgeVanKampen.blueprint.md at recorded commit c9b3af27 has exact SHA-256 0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0. Re-record the fixture hash for the reviewed commit.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
@@ -113907,7 +113907,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -117160,6 +117160,16 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "diff/hash/placeholders", :exit 0}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791898018813-9734-8f7c4ece",
+     :commands
+     ["git show/diff 9ce50fe3^..9ce50fe3"
+      "git archive 9ce50fe3; lake env lean archived Closure.lean and Main.lean"
+      "sha256/diff-tree/placeholder checks; statement-registry.py check"],
+     :finding
+     "Reviewer codex-3. PASS repair STOP: 9ce50fe3 exactly repairs the prior blueprint defect by adding B2 to B5 uses; this matches the compiled call to coordinate_fderivWithin_eq_mfderiv and leaves the mathematical statement/proof unchanged. Scope is only the blueprint. Closure and Main compile from the recorded commit; source/target/fixture hashes match ledger (6d7e3202/eee255ed/e3ce1fc1), placeholders remain 0/1, registry 149/149, and new B5 results use standard axioms. B5 is valid progress; residual milestones are B6 critical-value nonemptiness and B7-B9 closure."},
     :commit "9ce50fe3f42b157eb2ad74b657ce9cebee986c5a",
     :changed-paths ["ConstructionTargets/t97A07Closure.blueprint.md"],
     :fixture
@@ -117168,7 +117178,7 @@
      "e3ce1fc10fa1df89b93302b7d64886c307a5f65237a4152929b6341b97a6a9ae"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A07/lean/Main.lean"
     "problems/t97A07/status.json"
@@ -117184,7 +117194,7 @@
     ["lake env lean problems/t97A07/lean/Main.lean"
      "python3 scripts/statement-registry.py check"]},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: B5 partial: transferred the global coordinate maximum to the fixed source chart and proved its scalar derivative vanishes.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Repair complete: B5 now declares its B2 dependency.",
    :id :program-2026-10-11-close-t97a07,
    :kind :final-adapter,
    :campaign-priority 44,
@@ -117265,7 +117275,10 @@
     {:job 2,
      :commit "8f491522a2bf1d5f448cd971b2e560e00d044538",
      :reason
-     "B5 partial: transferred the global coordinate maximum to the fixed source chart and proved its scalar derivative vanishes."}]}
+     "B5 partial: transferred the global coordinate maximum to the fixed source chart and proved its scalar derivative vanishes."}
+    {:job 4,
+     :commit "9ce50fe3f42b157eb2ad74b657ce9cebee986c5a",
+     :reason "Repair complete: B5 now declares its B2 dependency."}]}
   {:consumer :t91J06,
    :stop-count 3,
    :review-finding
@@ -118441,7 +118454,7 @@
    :other-consumers []}
   {:consumer :t97A07,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -118454,7 +118467,9 @@
     :type
     "A maximizer of a target coordinate has nonsurjective manifold derivative",
     :area "regular-points-open",
-    :proved-in :program-2026-10-11-close-t97a07},
+    :proved-in :program-2026-10-11-close-t97a07,
+    :banked-by :program-2026-10-11-close-t97a07,
+    :banked-commit "9ce50fe3f42b157eb2ad74b657ce9cebee986c5a"},
    :id
    :lemma-t97a07closure-not-surjective-mfderiv-of-ismaxon-coordinate,
    :kind :lemma,
