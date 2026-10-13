@@ -164,7 +164,10 @@ def apm_t97J05_local_normal_form_aux_H (q : apm_t97J05_R3) : apm_t97J05_R3 :=
 -- BEGIN SEAT AREA
 lemma apm_t97J05_local_normal_form_aux_smooth :
     ContDiff ℝ ∞ apm_t97J05_local_normal_form_aux_H := by
-  sorry
+  unfold apm_t97J05_local_normal_form_aux_H
+  rw [contDiff_piLp]
+  intro i
+  fin_cases i <;> simp <;> fun_prop
 -- END SEAT AREA
 
 lemma apm_t97J05_local_normal_form_aux_deriv_apply (h : apm_t97J05_R3) :
