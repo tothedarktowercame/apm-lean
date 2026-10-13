@@ -207,6 +207,24 @@
    "rev": "53eeb619a",
    "approved_at": "2026-10-13T05:20:21Z"
   },
+  "m99A01": {
+   "decls": [
+    "apm_m99a01"
+   ],
+   "sha256": "df49a4b67e0644ba498b9979878d050d0ca4b0a6ae33dbcbf182d193165a7f74",
+   "defs": [
+    "apm_m99A01_admissible",
+    "apm_m99A01_extremal",
+    "apm_m99A01_functional",
+    "apm_m99A01_stationary"
+   ],
+   "grade": "faithful",
+   "grader": "claude-14 outside grader (read-only Claude subagent, 2026-10-13, batch 2)",
+   "evidence": "holes/labs/statement-registry/grading-batch-2.md",
+   "prelim_defect": null,
+   "rev": "cc153cc91",
+   "approved_at": "2026-10-13T06:09:19Z"
+  },
   "m99A02": {
    "decls": [
     "apm_m99a02"
@@ -1986,6 +2004,21 @@
    "prelim_defect": null,
    "rev": "6802e9ad",
    "approved_at": "2026-09-28T00:23:53Z"
+  },
+  "t96A05": {
+   "decls": [
+    "apm_t96a05"
+   ],
+   "sha256": "79a994d9664adbe80ab497ca5a32de710d0ef843f07a790b0f720af65afeba00",
+   "defs": [
+    "PuncturedPlane"
+   ],
+   "grade": "faithful",
+   "grader": "claude-14 outside grader (read-only Claude subagent, 2026-10-13, batch 2)",
+   "evidence": "holes/labs/statement-registry/grading-batch-2.md",
+   "prelim_defect": null,
+   "rev": "cc153cc91",
+   "approved_at": "2026-10-13T06:09:19Z"
   },
   "t96A06": {
    "decls": [
