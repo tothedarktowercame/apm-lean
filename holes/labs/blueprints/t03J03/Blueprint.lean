@@ -140,15 +140,86 @@ theorem apm_t03J03_N3_locallyConnected : LocallyConnectedSpace apm_t03J03_N3 := 
   letI : LocPathConnectedSpace apm_t03J03_N3 := hq.locPathConnectedSpace
   infer_instance
 
-/-- Seat (generic): a disconnected two-sheeted covering of a connected, locally
-connected space splits into a clopen set and its complement, each meeting every
-fibre exactly once (the sheet count of a clopen set is locally constant over
-connected evenly covered neighbourhoods; it is 0, 1 or 2, and 0/2 force `U`
-empty/everything). -/
+lemma apm_t03J03_disconnected_two_sheeted_split_aux_clopen
+    {E X : Type} [TopologicalSpace E] [TopologicalSpace X]
+    [ConnectedSpace X] (p : E → X)
+    (h2 : ∀ x : X, Nat.card {e : E // p e = x} = 2)
+    (hE : ¬ IsConnected (Set.univ : Set E)) :
+    ∃ U : Set E, IsClopen U ∧ U.Nonempty ∧ Uᶜ.Nonempty := by
+  haveI : Nonempty E := by
+    let x : X := Classical.arbitrary X
+    have hc : Nat.card {e : E // p e = x} = 2 := h2 x
+    have hs : Nonempty {e : E // p e = x} := by
+      by_contra hn
+      haveI : IsEmpty {e : E // p e = x} := not_nonempty_iff.mp hn
+      simpa using hc
+    exact ⟨hs.some.1⟩
+  have hncs : ¬ ConnectedSpace E := fun h ↦ hE (connectedSpace_iff_univ.mp h)
+  rw [connectedSpace_iff_clopen] at hncs
+  push_neg at hncs
+  obtain ⟨U, hU, hne, hnu⟩ := hncs this
+  refine ⟨U, hU, hne, ?_⟩
+  simpa only [Set.nonempty_compl] using hnu
+
+lemma apm_t03J03_disconnected_two_sheeted_split_aux_unique_of_both
+    {E X : Type} (p : E → X) (U : Set E)
+    (h2 : ∀ x : X, Nat.card {e : E // p e = x} = 2)
+    (hboth : ∀ x, (∃ e, e ∈ U ∧ p e = x) ∧ (∃ e, e ∉ U ∧ p e = x)) :
+    (∀ x, ∃! e, e ∈ U ∧ p e = x) ∧
+      (∀ x, ∃! e, e ∉ U ∧ p e = x) := by
+  have one_side (x : X) (V : Set E)
+      (ha : ∃ e, e ∈ V ∧ p e = x) (hb : ∃ e, e ∉ V ∧ p e = x) :
+      ∃! e, e ∈ V ∧ p e = x := by
+    obtain ⟨a, haV, hap⟩ := ha
+    obtain ⟨b, hbV, hbp⟩ := hb
+    refine ⟨a, ⟨haV, hap⟩, ?_⟩
+    intro c hc
+    have hab : (⟨a, hap⟩ : {e : E // p e = x}) ≠ ⟨b, hbp⟩ := by
+      intro heq
+      have : a = b := congrArg Subtype.val heq
+      exact hbV (this ▸ haV)
+    obtain ⟨u, v, huv, huv_univ⟩ := Nat.card_eq_two_iff.mp (h2 x)
+    have hall : ∀ z : {e : E // p e = x}, z = ⟨a, hap⟩ ∨ z = ⟨b, hbp⟩ := by
+      intro z
+      have hz : z = u ∨ z = v := by
+        have : z ∈ ({u, v} : Set {e : E // p e = x}) := by rw [huv_univ]; trivial
+        simpa only [Set.mem_insert_iff, Set.mem_singleton_iff] using this
+      have ha_pair : (⟨a, hap⟩ : {e : E // p e = x}) = u ∨ ⟨a, hap⟩ = v := by
+        have : (⟨a, hap⟩ : {e : E // p e = x}) ∈ ({u, v} : Set _) := by rw [huv_univ]; trivial
+        simpa only [Set.mem_insert_iff, Set.mem_singleton_iff] using this
+      have hb_pair : (⟨b, hbp⟩ : {e : E // p e = x}) = u ∨ ⟨b, hbp⟩ = v := by
+        have : (⟨b, hbp⟩ : {e : E // p e = x}) ∈ ({u, v} : Set _) := by rw [huv_univ]; trivial
+        simpa only [Set.mem_insert_iff, Set.mem_singleton_iff] using this
+      rcases hz with rfl | rfl <;> rcases ha_pair with ha | ha <;>
+        rcases hb_pair with hb | hb <;> simp_all
+    rcases hall ⟨c, hc.2⟩ with hca | hcb
+    · exact congrArg Subtype.val hca
+    · exfalso
+      have hcb' : c = b := congrArg Subtype.val hcb
+      exact hbV (hcb' ▸ hc.1)
+  constructor
+  · intro x
+    exact one_side x U (hboth x).1 (hboth x).2
+  · intro x
+    apply one_side x Uᶜ (hboth x).2
+    simpa only [Set.mem_compl_iff, not_not] using (hboth x).1
+
+/-- Seat (generic): over a connected, locally connected base, the image of a
+nonempty clopen subset of a covering space is everything (it is open since
+covering maps are open; its complement is open: over a connected evenly covered
+neighbourhood each sheet is connected, so it lies inside or outside the clopen
+set). -/
+theorem apm_t03J03_clopen_image_univ {E X : Type}
+    [TopologicalSpace E] [TopologicalSpace X] [ConnectedSpace X]
+    [LocallyConnectedSpace X] (p : E → X) (hp : IsCoveringMap p)
+    (U : Set E) (hU : IsClopen U) (hne : U.Nonempty) : p '' U = Set.univ := by
+  sorry
+
 theorem apm_t03J03_disconnected_two_sheeted_split {E X : Type}
     [TopologicalSpace E] [TopologicalSpace X] [ConnectedSpace X]
     [LocallyConnectedSpace X] (p : E → X) (hp : IsCoveringMap p)
-    (h2 : ∀ x : X, Nat.card {e : E // p e = x} = 2) (hE : ¬ IsConnected (Set.univ : Set E)) :
+    (h2 : ∀ x : X, Nat.card {e : E // p e = x} = 2) (hE : ¬ IsConnected (Set.univ : Set E))
+    (himage : ∀ U : Set E, IsClopen U → U.Nonempty → p '' U = Set.univ) :
     ∃ U : Set E, IsClopen U ∧ (∀ x, ∃! e, e ∈ U ∧ p e = x) ∧
       (∀ x, ∃! e, e ∉ U ∧ p e = x) := by
   sorry
@@ -239,6 +310,7 @@ theorem apm_t03J03_disconnected_double_cover_trivial :
     (pathConnectedSpace_iff_univ.mpr apm_t03J03_disconnected_double_cover_trivial_aux_base_pathConnected)
   obtain ⟨U, hU, h1, h1'⟩ :=
     @apm_t03J03_disconnected_two_sheeted_split E _ tE _ inferInstance _ p hcov.1 hcov.2 hE
+      (fun U hU hne => @apm_t03J03_clopen_image_univ E _ tE _ inferInstance _ p hcov.1 U hU hne)
   exact @apm_t03J03_trivial_of_split E _ tE _ p hcov.1 U hU h1 h1'
 
 /-- **LIBRARY: the two-sided annulus core has trivial orientation monodromy.** -/
