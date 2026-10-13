@@ -24430,25 +24430,24 @@
    :consumer :t01A08,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "extend Mathlib: state and prove the missing theorem in scope",
    :implements-lemma :lemma-closedset-whitneycubecover,
    :evidence
    {:placeholder-delta {:t01A08 [1 1]},
     :residual
-    "Select scale-stratified centers, uniformly bound overlap, assemble B3; then B4-B7, B9.",
+    "Select scale strata, bound overlap, assemble B3; then B4-B7, B9.",
     :outcome :stop,
     :warnings ["existing unnecessarySimpa:454"],
     :missing-theorems
     [{:name
-      "ConstructionTargets.SardConvexDomain.finite_indices_of_centers_in_compact",
-      :type
-      "injective separated centers in compact set have finite index preimage",
+      "ConstructionTargets.SardConvexDomain.locallyFinite_of_separated_centers_of_subset_closedBall",
+      :type "separated bounded-radius family is locally finite",
       :status :proved,
       :consumers [:t01A08],
       :depends-on
-      ["ConstructionTargets.SardConvexDomain.finite_of_subset_compact_of_pairwise_dist"],
+      ["ConstructionTargets.SardConvexDomain.finite_indices_of_centers_in_compact"],
       :area "sard-convex-domain"}
      {:name
       "ConstructionTargets.SardConvexDomain.closedSet_whitneyCubeCover_proper",
@@ -24456,40 +24455,32 @@
       :status :partial,
       :consumers [:t01A08],
       :depends-on
-      ["ConstructionTargets.SardConvexDomain.compl_subset_iUnion_quarter_infDist_ball"
-       "ConstructionTargets.SardConvexDomain.finite_indices_of_centers_in_compact"],
+      ["ConstructionTargets.SardConvexDomain.locallyFinite_of_separated_centers_of_subset_closedBall"],
       :area "sard-convex-domain"}],
     :statement-hashes {:registry "149/149"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Committed indexed compact packing: injective uniformly separated centers in a compact region have finitely many indices. Scale-stratified maximal selection, a uniform overlap cardinal bound, and certificate assembly remain; not a refutation.",
+    "Committed local finiteness: separated centers and a common radius make the family locally finite in a proper metric space. Scale selection, overlap bound, and assembly remain; not a refutation.",
     :commands
     [{:cmd "lake build ConstructionTargets.SardConvexDomain", :exit 0}
-     {:cmd "lean fixture; registry; forbidden scan; diff", :exit 0}
+     {:cmd "lean fixture; registry; scans; diff", :exit 0}
      {:cmd "git commit scoped file", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1791900128043-9834-fc4b2424",
-     :commands
-     ["git show/diff a1a1f703; scope/diff checks"
-      "sha256sum + lake env lean frozen fixture"
-      "lake build ConstructionTargets.SardConvexDomain"
-      "statement registry check; forbidden-count scan"],
-     :finding
-     "PASS. Recorded topo-10 commit a1a1f703 changes only the scoped Lean file and proves indexed compact-packing finiteness by transferring a finite image back through injectivity. Frozen fixture hash c278aac5... matches; build and fixture pass; registry 149/149; no sorry/admit/axiom delta; only standard axioms. This is compiled B3 progress, and the STOP explicitly lists maximal scale selection, overlap bound, and certificate assembly as remaining."},
-    :commit "a1a1f703ffb22f3b360811ce1e43d26b612e7e61",
+    :diagnostic-history
+    [{:cmd "exploratory builds",
+      :exit 1,
+      :correction "fixed compact-ball and distance orientation"}],
+    :commit "74a379b193857c84b8487561dddac7a4214ed7c1",
     :changed-paths ["ConstructionTargets/SardConvexDomain.lean"],
     :fixture
-    {:path "/tmp/t01a08_b3_indexed_packing_check.lean",
+    {:path "/tmp/t01a08_b3_locally_finite_check.lean",
      :sha256
-     "c278aac527272241088e60fa1ef8fddaa077f79ff6c1e9e4758f65b5186cb284",
+     "db2f5c8b076b8771c22fc326a2776b7b459712c8ad08b48f9b14e1621ce95052",
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain.blueprint/B3",
    :acceptance
@@ -35145,7 +35136,8 @@
     :lemma-constructiontargets-sardconvexdomain-infdist-comparable-of-dist-lt-half
     :lemma-constructiontargets-sardconvexdomain-compl-subset-iunion-quarter-infdist-ball
     :lemma-constructiontargets-sardconvexdomain-finite-of-subset-compact-of-pairwise-dist
-    :lemma-constructiontargets-sardconvexdomain-finite-indices-of-centers-in-compact],
+    :lemma-constructiontargets-sardconvexdomain-finite-indices-of-centers-in-compact
+    :lemma-constructiontargets-sardconvexdomain-locallyfinite-of-separated-centers-of-subse],
    :other-consumers []}
   {:consumer :t01A08,
    :phase :lemma,
@@ -35283,6 +35275,27 @@
    :kind :lemma,
    :depends-on
    [:lemma-constructiontargets-sardconvexdomain-finite-of-subset-compact-of-pairwise-dist],
+   :other-consumers []}
+  {:consumer :t01A08,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.SardConvexDomain.locallyFinite_of_separated_centers_of_subset_closedBall",
+    :type "separated bounded-radius family is locally finite"},
+   :lemma
+   {:name
+    "ConstructionTargets.SardConvexDomain.locallyFinite_of_separated_centers_of_subset_closedBall",
+    :reported-by [:r-a08-sard-b3-whitney-cubes-1],
+    :type "separated bounded-radius family is locally finite",
+    :area "sard-convex-domain",
+    :proved-in :r-a08-sard-b3-whitney-cubes-1},
+   :id
+   :lemma-constructiontargets-sardconvexdomain-locallyfinite-of-separated-centers-of-subse,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-sardconvexdomain-finite-indices-of-centers-in-compact],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
