@@ -251,13 +251,70 @@ lemma apm_t97J05_regular_aux_deriv_bijective (q : apm_t97J05_R3)
 /-- An inverse-function chart around an arbitrary point where the completed
 map has bijective derivative.  Bijectivity is passed explicitly to keep this
 seat parallel to the derivative calculation. -/
+lemma apm_t97J05_regular_aux_local_inverse_aux_smooth :
+    ContDiff ℝ ∞ apm_t97J05_regular_aux_H := by
+  unfold apm_t97J05_regular_aux_H
+  rw [contDiff_piLp]
+  intro i
+  fin_cases i <;> simp <;> fun_prop
+
 lemma apm_t97J05_regular_aux_local_inverse (q : apm_t97J05_R3)
     (hb : Function.Bijective (fderiv ℝ apm_t97J05_regular_aux_H q)) :
     ∃ e : OpenPartialHomeomorph apm_t97J05_R3 apm_t97J05_R3,
       q ∈ e.source ∧ apm_t97J05_regular_aux_H q ∈ e.target ∧
       (e : apm_t97J05_R3 → apm_t97J05_R3) = apm_t97J05_regular_aux_H ∧
       ContDiffOn ℝ ∞ e e.source ∧ ContDiffOn ℝ ∞ e.symm e.target := by
-  sorry
+  let L : apm_t97J05_R3 ≃L[ℝ] apm_t97J05_R3 :=
+    ContinuousLinearEquiv.ofBijective
+      (fderiv ℝ apm_t97J05_regular_aux_H q)
+      (LinearMap.ker_eq_bot.mpr hb.1) (LinearMap.range_eq_top.mpr hb.2)
+  have hH : ContDiffAt ℝ ∞ apm_t97J05_regular_aux_H q :=
+    apm_t97J05_regular_aux_local_inverse_aux_smooth.contDiffAt
+  have hHL : HasFDerivAt apm_t97J05_regular_aux_H
+      (L : apm_t97J05_R3 →L[ℝ] apm_t97J05_R3) q := by
+    apply (hH.differentiableAt (by simp)).hasFDerivAt.congr_fderiv
+    exact ContinuousLinearEquiv.coe_ofBijective _ _ _ |>.symm
+  let e₀ := hH.toOpenPartialHomeomorph apm_t97J05_regular_aux_H hHL (by simp)
+  have hq₀ : q ∈ e₀.source :=
+    hH.mem_toOpenPartialHomeomorph_source hHL (by simp)
+  have he₀ : (e₀ : apm_t97J05_R3 → apm_t97J05_R3) =
+      apm_t97J05_regular_aux_H := rfl
+  let U : Set apm_t97J05_R3 :=
+    {x | IsUnit (fderiv ℝ apm_t97J05_regular_aux_H x)}
+  have hUopen : IsOpen U := by
+    exact Units.isOpen.preimage
+      (apm_t97J05_regular_aux_local_inverse_aux_smooth.continuous_fderiv (by simp))
+  have hqU : q ∈ U :=
+    ContinuousLinearMap.isUnit_iff_bijective.mpr hb
+  let e := e₀.restrOpen U hUopen
+  have hq : q ∈ e.source := ⟨hq₀, hqU⟩
+  refine ⟨e, hq, ?_, ?_, ?_, ?_⟩
+  · rw [← he₀]
+    exact e.map_source hq
+  · simpa [e] using he₀
+  · rw [show (e : apm_t97J05_R3 → apm_t97J05_R3) =
+        apm_t97J05_regular_aux_H by simpa [e] using he₀]
+    exact apm_t97J05_regular_aux_local_inverse_aux_smooth.contDiffOn
+  · intro y hy
+    have hx : e.symm y ∈ U := (e.map_target hy).2
+    have hbx : Function.Bijective
+        (fderiv ℝ apm_t97J05_regular_aux_H (e.symm y)) :=
+      ContinuousLinearMap.isUnit_iff_bijective.mp hx
+    let K : apm_t97J05_R3 ≃L[ℝ] apm_t97J05_R3 :=
+      ContinuousLinearEquiv.ofBijective
+        (fderiv ℝ apm_t97J05_regular_aux_H (e.symm y))
+        (LinearMap.ker_eq_bot.mpr hbx.1) (LinearMap.range_eq_top.mpr hbx.2)
+    apply (e.contDiffAt_symm (f₀' := K) hy ?_ ?_).contDiffWithinAt
+    · have hd :=
+        (apm_t97J05_regular_aux_local_inverse_aux_smooth.differentiable
+          (by simp) (e.symm y)).hasFDerivAt
+      rw [show (e : apm_t97J05_R3 → apm_t97J05_R3) =
+          apm_t97J05_regular_aux_H by simpa [e] using he₀]
+      apply hd.congr_fderiv
+      exact ContinuousLinearEquiv.coe_ofBijective _ _ _ |>.symm
+    · rw [show (e : apm_t97J05_R3 → apm_t97J05_R3) =
+          apm_t97J05_regular_aux_H by simpa [e] using he₀]
+      exact apm_t97J05_regular_aux_local_inverse_aux_smooth.contDiffAt
 
 /-- A local flat model of the fiber.  The local inverse is supplied as a
 hypothesis, so proving this statement requires only unpacking the first two
