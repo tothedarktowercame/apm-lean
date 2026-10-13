@@ -87707,4 +87707,151 @@
    :id :lemma-pointwedgequotient-no-finitewedgepoint,
    :kind :lemma,
    :depends-on [],
+   :other-consumers []}
+  {:consumer :t94A08,
+   :stop-count 0,
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["problems/t94A08/lean/Main.lean"
+    "problems/t94A08/status.json"
+    "ConstructionTargets/t94A08Closure.lean"
+    "ConstructionTargets/t94A08Closure.blueprint.md"],
+   :dag-node "holes/labs/blueprints/t94A08/BLUEPRINT.md",
+   :acceptance
+   {:implementation
+    "CLOSURE PROGRAM (owner claude-14, 2026-10-13, Joe approved: blueprint LIBRARY lemmas). Close t94A08. START FROM THE BLUEPRINT holes/labs/blueprints/t94A08/Blueprint.lean (read-only; BLUEPRINT.md explains each lemma). Its theorem and definitions are identical to Main.lean's and every lemma except the LIBRARY ones is already proved there: copy those proofs into Main.lean (or ConstructionTargets) rather than re-deriving. Build only the LIBRARY obligations named below, then assemble Main.lean exactly as the blueprint does. Do not change what problems/STATEMENTS.json pins. LIBRARY obligations: apm_t94a08_nodal_not_manifold_at: sigma2 (two lines through the node) is not a real 2-manifold at the node; a punctured neighbourhood of the node in sigma2 has at least two (in fact four real) components near the node, while every punctured disc in R^2 is connected (blueprint estimate 300-500 lines). Sigma1 is already proved in the blueprint. Bank each as :missing-theorems :status :proved. Expected 300-500 lines over several jobs.",
+    :declaration "apm_t94a08",
+    :type "the registered theorem apm_t94a08, sorry-free",
+    :axioms :standard-only,
+    :commands
+    ["lake env lean problems/t94A08/lean/Main.lean"
+     "python3 scripts/statement-registry.py check"],
+    :blueprint "ConstructionTargets/t94A08Closure.blueprint.md"},
+   :continue-from
+   "NEXT JOB: copy holes/labs/blueprints/t94A08/BLUEPRINT.md's plan into ConstructionTargets/t94A08Closure.blueprint.md, move the blueprint's proved lemmas into place, then build the LIBRARY obligations one milestone per job.",
+   :id :program-2026-10-13-close-t94a08,
+   :kind :final-adapter,
+   :campaign-priority 30,
+   :fail-count 0,
+   :depends-on [],
+   :program true,
+   :other-consumers []}
+  {:consumer :t97A01,
+   :stop-count 0,
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/PolygonSurfaceHomology.lean"
+    "ConstructionTargets/PolygonSurfaceHomology.md"
+    "ConstructionTargets/PolygonSurfaceHomology.blueprint.md"],
+   :dag-node "~/notes/packets/blueprints/LIBRARY-batch3.md",
+   :acceptance
+   {:implementation
+    "FOUNDATION PROGRAM (owner claude-14, 2026-10-13, Joe approved: blueprint LIBRARY lemmas). Polygon-quotient homology via Mayer-Vietoris on the radial two-open cover (outer piece deformation-retracts to the wedge of edge circles, inner disc contractible, overlap ~ circle); the attaching map's degree vector gives H1 and H2. Reuse PolygonSurfacePiOne (this ledger's polygon-b chain), PolygonRadialOpenCoverPackages, PolygonInnerOpenPointedContraction, PolygonBoundaryThreeCirclesLiteralFormulas. Check Mathlib and the sorry-free ConstructionTargets files before building. Bank milestones as :missing-theorems :status :proved. Expected 800-1600 lines over several jobs.",
+    :declaration
+    "ConstructionTargets.PolygonSurfaceHomology.polygonQuotient_homology",
+    :type
+    "integral singular homology (the repo's H functor as used by the t97A01 and t94J09 blueprints) of a polygon quotient surface: H0 = Z, H1 from the edge-word abelianisation (free part rank, Z/2 torsion when nonorientable), H2 = Z or 0, Hk = 0 for k >= 3; exact form fixed in the blueprint to match both consumers",
+    :axioms :standard-only,
+    :commands
+    ["lake build ConstructionTargets.PolygonSurfaceHomology"
+     "python3 scripts/statement-registry.py check"],
+    :blueprint
+    "ConstructionTargets/PolygonSurfaceHomology.blueprint.md"},
+   :continue-from
+   "NEXT JOB: write ConstructionTargets/PolygonSurfaceHomology.blueprint.md (BLUEPRINTS.md), stating the final declaration in the exact form the consuming blueprints use, then formalise milestone by milestone.",
+   :id :program-2026-10-13-polygon-surface-homology,
+   :kind :reusable-theorem,
+   :campaign-priority 31,
+   :fail-count 0,
+   :depends-on [],
+   :program true,
+   :other-consumers [:t94J09]}
+  {:consumer :t97A01,
+   :stop-count 0,
+   :phase :implementation,
+   :state :blocked,
+   :scope
+   ["problems/t97A01/lean/Main.lean"
+    "problems/t97A01/status.json"
+    "ConstructionTargets/t97A01Closure.lean"
+    "ConstructionTargets/t97A01Closure.blueprint.md"],
+   :dag-node "holes/labs/blueprints/t97A01/BLUEPRINT.md",
+   :acceptance
+   {:implementation
+    "CLOSURE PROGRAM (owner claude-14, 2026-10-13, Joe approved: blueprint LIBRARY lemmas). Close t97A01. START FROM THE BLUEPRINT holes/labs/blueprints/t97A01/Blueprint.lean (read-only; BLUEPRINT.md explains each lemma). Its theorem and definitions are identical to Main.lean's and every lemma except the LIBRARY ones is already proved there: copy those proofs into Main.lean (or ConstructionTargets) rather than re-deriving. Build only the LIBRARY obligations named below, then assemble Main.lean exactly as the blueprint does. Do not change what problems/STATEMENTS.json pins. LIBRARY obligations: (1) apm_t97a01_polygon_singular_homology, from the polygon-surface-homology foundation (depends-on); (2) apm_t97a01_torusRP2_fundamentalGroup, van Kampen for the torus-crosscap polygon (attaching word a b a^-1 b^-1 c c); reuse ConstructionTargets/PolygonSurfacePiOne.lean (this ledger's polygon-b chain, b8 under review) and topo1's point-wedge van Kampen library. Bank each as :missing-theorems :status :proved. Expected 600-1200 lines over several jobs.",
+    :declaration "apm_t97a01",
+    :type "the registered theorem apm_t97a01, sorry-free",
+    :axioms :standard-only,
+    :commands
+    ["lake env lean problems/t97A01/lean/Main.lean"
+     "python3 scripts/statement-registry.py check"],
+    :blueprint "ConstructionTargets/t97A01Closure.blueprint.md"},
+   :continue-from
+   "NEXT JOB: copy holes/labs/blueprints/t97A01/BLUEPRINT.md's plan into ConstructionTargets/t97A01Closure.blueprint.md, move the blueprint's proved lemmas into place, then build the LIBRARY obligations one milestone per job.",
+   :id :program-2026-10-13-close-t97a01,
+   :kind :final-adapter,
+   :campaign-priority 32,
+   :fail-count 0,
+   :depends-on [:program-2026-10-13-polygon-surface-homology],
+   :program true,
+   :other-consumers []}
+  {:consumer :t94J09,
+   :stop-count 0,
+   :phase :implementation,
+   :state :blocked,
+   :scope
+   ["problems/t94J09/lean/Main.lean"
+    "problems/t94J09/status.json"
+    "ConstructionTargets/t94J09Closure.lean"
+    "ConstructionTargets/t94J09Closure.blueprint.md"],
+   :dag-node "holes/labs/blueprints/t94J09/BLUEPRINT.md",
+   :acceptance
+   {:implementation
+    "CLOSURE PROGRAM (owner claude-14, 2026-10-13, Joe approved: blueprint LIBRARY lemmas). Close t94J09. START FROM THE BLUEPRINT holes/labs/blueprints/t94J09/Blueprint.lean (read-only; BLUEPRINT.md explains each lemma). Its theorem and definitions are identical to Main.lean's and every lemma except the LIBRARY ones is already proved there: copy those proofs into Main.lean (or ConstructionTargets) rather than re-deriving. Build only the LIBRARY obligations named below, then assemble Main.lean exactly as the blueprint does. Do not change what problems/STATEMENTS.json pins. LIBRARY obligations: (1) apm_t94J09_polygon_normalization: the polygon surface is homeomorphic to N6 (cut-and-paste normalization or recognition by orientability and Euler characteristic, using the surface-classification work if banked); (2) apm_t94J09_polygon_homology, from the polygon-surface-homology foundation (depends-on). The five counting facts are proved. Bank each as :missing-theorems :status :proved. Expected 600-1500 lines over several jobs.",
+    :declaration "apm_t94j09",
+    :type "the registered theorem apm_t94j09, sorry-free",
+    :axioms :standard-only,
+    :commands
+    ["lake env lean problems/t94J09/lean/Main.lean"
+     "python3 scripts/statement-registry.py check"],
+    :blueprint "ConstructionTargets/t94J09Closure.blueprint.md"},
+   :continue-from
+   "NEXT JOB: copy holes/labs/blueprints/t94J09/BLUEPRINT.md's plan into ConstructionTargets/t94J09Closure.blueprint.md, move the blueprint's proved lemmas into place, then build the LIBRARY obligations one milestone per job.",
+   :id :program-2026-10-13-close-t94j09,
+   :kind :final-adapter,
+   :campaign-priority 33,
+   :fail-count 0,
+   :depends-on [:program-2026-10-13-polygon-surface-homology],
+   :program true,
+   :other-consumers []}
+  {:consumer :t92J06,
+   :stop-count 0,
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["problems/t92J06/lean/Main.lean"
+    "problems/t92J06/status.json"
+    "ConstructionTargets/t92J06Closure.lean"
+    "ConstructionTargets/t92J06Closure.blueprint.md"],
+   :dag-node "holes/labs/blueprints/t92J06/BLUEPRINT.md",
+   :acceptance
+   {:implementation
+    "CLOSURE PROGRAM (owner claude-14, 2026-10-13, Joe approved: blueprint LIBRARY lemmas). Close t92J06. START FROM THE BLUEPRINT holes/labs/blueprints/t92J06/Blueprint.lean (read-only; BLUEPRINT.md explains each lemma). Its theorem and definitions are identical to Main.lean's and every lemma except the LIBRARY ones is already proved there: copy those proofs into Main.lean (or ConstructionTargets) rather than re-deriving. Build only the LIBRARY obligations named below, then assemble Main.lean exactly as the blueprint does. Do not change what problems/STATEMENTS.json pins. LIBRARY obligations: (1) apm_t92J06_exists_simplyConnected_cover: the 4-regular tree as a simply connected cover of the wedge of two circles; (2) apm_t92J06_exists_four_threeSheeted_covers: four 3-sheeted covers, pairwise non-homeomorphic (covers need not be connected: component counts 3, 2, 1 separate three; for the fourth use a graph-homeomorphism invariant such as loop edges at a vertex). Both need a graph-to-covering realization over the quotient wedge. Bank each as :missing-theorems :status :proved. Expected 800-1500 lines over several jobs.",
+    :declaration "apm_t92j06",
+    :type "the registered theorem apm_t92j06, sorry-free",
+    :axioms :standard-only,
+    :commands
+    ["lake env lean problems/t92J06/lean/Main.lean"
+     "python3 scripts/statement-registry.py check"],
+    :blueprint "ConstructionTargets/t92J06Closure.blueprint.md"},
+   :continue-from
+   "NEXT JOB: copy holes/labs/blueprints/t92J06/BLUEPRINT.md's plan into ConstructionTargets/t92J06Closure.blueprint.md, move the blueprint's proved lemmas into place, then build the LIBRARY obligations one milestone per job.",
+   :id :program-2026-10-13-close-t92j06,
+   :kind :final-adapter,
+   :campaign-priority 34,
+   :fail-count 0,
+   :depends-on [],
+   :program true,
    :other-consumers []}]}

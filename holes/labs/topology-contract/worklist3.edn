@@ -36089,6 +36089,153 @@
    :kind :lemma,
    :depends-on
    [:lemma-constructiontargets-sardconvexdomain-eq-whitneydyadicindexof-of-mem-cube-of-gene],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :stop-count 0,
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["problems/t93J03/lean/Main.lean"
+    "problems/t93J03/status.json"
+    "ConstructionTargets/t93J03Closure.lean"
+    "ConstructionTargets/t93J03Closure.blueprint.md"],
+   :dag-node "holes/labs/blueprints/t93J03/BLUEPRINT.md",
+   :acceptance
+   {:implementation
+    "CLOSURE PROGRAM (owner claude-14, 2026-10-13, Joe approved: blueprint LIBRARY lemmas). Close t93J03. START FROM THE BLUEPRINT holes/labs/blueprints/t93J03/Blueprint.lean (read-only; BLUEPRINT.md explains each lemma). Its theorem and definitions are identical to Main.lean's and every lemma except the LIBRARY ones is already proved there: copy those proofs into Main.lean (or ConstructionTargets) rather than re-deriving. Build only the LIBRARY obligations named below, then assemble Main.lean exactly as the blueprint does. Do not change what problems/STATEMENTS.json pins. LIBRARY obligations: (1) t93J03_kleinBottle_pi1_every_basepoint: pi1(Klein bottle) = <a,b | b^-1 a b a> at every basepoint (the plane modulo the deck group: reuse the done deck-group-quotient-pi1 program in this ledger); (2) t93J03_cyclicCover_zpowers_generatorA: the cylinder cover realizing comap e <a>, with a planar embedding. The lifting criterion and embedding assembly are proved. Bank each as :missing-theorems :status :proved. Expected 450-750 lines over several jobs.",
+    :declaration "apm_t93j03",
+    :type "the registered theorem apm_t93j03, sorry-free",
+    :axioms :standard-only,
+    :commands
+    ["lake env lean problems/t93J03/lean/Main.lean"
+     "python3 scripts/statement-registry.py check"],
+    :blueprint "ConstructionTargets/t93J03Closure.blueprint.md"},
+   :continue-from
+   "NEXT JOB: copy holes/labs/blueprints/t93J03/BLUEPRINT.md's plan into ConstructionTargets/t93J03Closure.blueprint.md, move the blueprint's proved lemmas into place, then build the LIBRARY obligations one milestone per job.",
+   :id :program-2026-10-13-close-t93j03,
+   :kind :final-adapter,
+   :campaign-priority 30,
+   :fail-count 0,
+   :depends-on [],
+   :program true,
+   :other-consumers []}
+  {:consumer :t99J05,
+   :stop-count 0,
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["problems/t99J05/lean/Main.lean"
+    "problems/t99J05/status.json"
+    "ConstructionTargets/t99J05Closure.lean"
+    "ConstructionTargets/t99J05Closure.blueprint.md"],
+   :dag-node "holes/labs/blueprints/t99J05/BLUEPRINT.md",
+   :acceptance
+   {:implementation
+    "CLOSURE PROGRAM (owner claude-14, 2026-10-13, Joe approved: blueprint LIBRARY lemmas). Close t99J05. START FROM THE BLUEPRINT holes/labs/blueprints/t99J05/Blueprint.lean (read-only; BLUEPRINT.md explains each lemma). Its theorem and definitions are identical to Main.lean's and every lemma except the LIBRARY ones is already proved there: copy those proofs into Main.lean (or ConstructionTargets) rather than re-deriving. Build only the LIBRARY obligations named below, then assemble Main.lean exactly as the blueprint does. Do not change what problems/STATEMENTS.json pins. LIBRARY obligations: t99J05_lefschetz_euler: for f homotopic to id on CP^n, the Lefschetz number and chi(CP^n) are n+1 (rational homology of CP^n: Q in even degrees 0..2n). Fixed points and local indices are proved. Bank each as :missing-theorems :status :proved. Expected 1500-3500 lines over several jobs.",
+    :declaration "apm_t99j05",
+    :type "the registered theorem apm_t99j05, sorry-free",
+    :axioms :standard-only,
+    :commands
+    ["lake env lean problems/t99J05/lean/Main.lean"
+     "python3 scripts/statement-registry.py check"],
+    :blueprint "ConstructionTargets/t99J05Closure.blueprint.md"},
+   :continue-from
+   "NEXT JOB: copy holes/labs/blueprints/t99J05/BLUEPRINT.md's plan into ConstructionTargets/t99J05Closure.blueprint.md, move the blueprint's proved lemmas into place, then build the LIBRARY obligations one milestone per job.",
+   :id :program-2026-10-13-close-t99j05,
+   :kind :final-adapter,
+   :campaign-priority 31,
+   :fail-count 0,
+   :depends-on [],
+   :program true,
+   :other-consumers []}
+  {:consumer :t98A02,
+   :stop-count 0,
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/CollaredConnectedSumHomology.lean"
+    "ConstructionTargets/CollaredConnectedSumHomology.md"
+    "ConstructionTargets/CollaredConnectedSumHomology.blueprint.md"],
+   :dag-node "~/notes/packets/blueprints/LIBRARY-batch3.md",
+   :acceptance
+   {:implementation
+    "FOUNDATION PROGRAM (owner claude-14, 2026-10-13, Joe approved: blueprint LIBRARY lemmas). Mayer-Vietoris for a collared ball: M = (M minus open ball) union (open collar ball), overlap an open shell ~ S^(n-1) x interval; then for the connected sum along the shell. This closes t98A02 outright (its blueprint has the whole theorem as one lemma) and supplies t00A01's homology lemmas. Check Mathlib and the sorry-free ConstructionTargets files before building. Bank milestones as :missing-theorems :status :proved. Expected 2000-5000 lines over several jobs.",
+    :declaration
+    "ConstructionTargets.CollaredConnectedSumHomology.connectedSum_homology",
+    :type
+    "for closed manifolds of dimension n with collared embedded balls, H_k(X1 # X2) = H_k X1 + H_k X2 for 0 < k < n, H_0 = Z, and H_n, H_{>n} as in the t98A02 blueprint; plus the punctured-manifold facts the t00A01 blueprint needs (homology ball, path-connected); exact forms fixed in the blueprint to match both consumers",
+    :axioms :standard-only,
+    :commands
+    ["lake build ConstructionTargets.CollaredConnectedSumHomology"
+     "python3 scripts/statement-registry.py check"],
+    :blueprint
+    "ConstructionTargets/CollaredConnectedSumHomology.blueprint.md"},
+   :continue-from
+   "NEXT JOB: write ConstructionTargets/CollaredConnectedSumHomology.blueprint.md (BLUEPRINTS.md), stating the final declaration in the exact form the consuming blueprints use, then formalise milestone by milestone.",
+   :id :program-2026-10-13-collared-connected-sum-homology,
+   :kind :reusable-theorem,
+   :campaign-priority 32,
+   :fail-count 0,
+   :depends-on [],
+   :program true,
+   :other-consumers [:t00A01]}
+  {:consumer :t98A02,
+   :stop-count 0,
+   :phase :implementation,
+   :state :blocked,
+   :scope
+   ["problems/t98A02/lean/Main.lean"
+    "problems/t98A02/status.json"
+    "ConstructionTargets/t98A02Closure.lean"
+    "ConstructionTargets/t98A02Closure.blueprint.md"],
+   :dag-node "holes/labs/blueprints/t98A02/BLUEPRINT.md",
+   :acceptance
+   {:implementation
+    "CLOSURE PROGRAM (owner claude-14, 2026-10-13, Joe approved: blueprint LIBRARY lemmas). Close t98A02. START FROM THE BLUEPRINT holes/labs/blueprints/t98A02/Blueprint.lean (read-only; BLUEPRINT.md explains each lemma). Its theorem and definitions are identical to Main.lean's and every lemma except the LIBRARY ones is already proved there: copy those proofs into Main.lean (or ConstructionTargets) rather than re-deriving. Build only the LIBRARY obligations named below, then assemble Main.lean exactly as the blueprint does. Do not change what problems/STATEMENTS.json pins. LIBRARY obligations: t98A02_collaredConnectedSum_homology is the whole theorem: instantiate the collared-connected-sum-homology foundation (depends-on) at dimension 4 with the blueprint's hypotheses. Bank each as :missing-theorems :status :proved. Expected 100-300 lines over several jobs.",
+    :declaration "apm_t98a02",
+    :type "the registered theorem apm_t98a02, sorry-free",
+    :axioms :standard-only,
+    :commands
+    ["lake env lean problems/t98A02/lean/Main.lean"
+     "python3 scripts/statement-registry.py check"],
+    :blueprint "ConstructionTargets/t98A02Closure.blueprint.md"},
+   :continue-from
+   "NEXT JOB: copy holes/labs/blueprints/t98A02/BLUEPRINT.md's plan into ConstructionTargets/t98A02Closure.blueprint.md, move the blueprint's proved lemmas into place, then build the LIBRARY obligations one milestone per job.",
+   :id :program-2026-10-13-close-t98a02,
+   :kind :final-adapter,
+   :campaign-priority 34,
+   :fail-count 0,
+   :depends-on [:program-2026-10-13-collared-connected-sum-homology],
+   :program true,
+   :other-consumers []}
+  {:consumer :t00A01,
+   :stop-count 0,
+   :phase :implementation,
+   :state :blocked,
+   :scope
+   ["problems/t00A01/lean/Main.lean"
+    "problems/t00A01/status.json"
+    "ConstructionTargets/t00A01Closure.lean"
+    "ConstructionTargets/t00A01Closure.blueprint.md"],
+   :dag-node "holes/labs/blueprints/t00A01/BLUEPRINT.md",
+   :acceptance
+   {:implementation
+    "CLOSURE PROGRAM (owner claude-14, 2026-10-13, Joe approved: blueprint LIBRARY lemmas). Close t00A01. START FROM THE BLUEPRINT holes/labs/blueprints/t00A01/Blueprint.lean (read-only; BLUEPRINT.md explains each lemma). Its theorem and definitions are identical to Main.lean's and every lemma except the LIBRARY ones is already proved there: copy those proofs into Main.lean (or ConstructionTargets) rather than re-deriving. Build only the LIBRARY obligations named below, then assemble Main.lean exactly as the blueprint does. Do not change what problems/STATEMENTS.json pins. LIBRARY obligations: the four lemmas of the blueprint, all from the collar hypothesis (statement revised 2026-10-13, graded faithful): punctured path-connected; pi1(punctured) = pi1(M) by van Kampen (shell overlap simply connected, ball contractible); punctured homology ball (from the collared-connected-sum-homology foundation, depends-on); boundary maps continuous and the standard collared cover. Bank each as :missing-theorems :status :proved. Expected 800-1600 lines over several jobs.",
+    :declaration "apm_t00a01",
+    :type "the registered theorem apm_t00a01, sorry-free",
+    :axioms :standard-only,
+    :commands
+    ["lake env lean problems/t00A01/lean/Main.lean"
+     "python3 scripts/statement-registry.py check"],
+    :blueprint "ConstructionTargets/t00A01Closure.blueprint.md"},
+   :continue-from
+   "NEXT JOB: copy holes/labs/blueprints/t00A01/BLUEPRINT.md's plan into ConstructionTargets/t00A01Closure.blueprint.md, move the blueprint's proved lemmas into place, then build the LIBRARY obligations one milestone per job.",
+   :id :program-2026-10-13-close-t00a01,
+   :kind :final-adapter,
+   :campaign-priority 33,
+   :fail-count 0,
+   :depends-on [:program-2026-10-13-collared-connected-sum-homology],
+   :program true,
    :other-consumers []}],
  :consumer-baselines {},
  :statuses

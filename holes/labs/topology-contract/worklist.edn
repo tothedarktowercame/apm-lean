@@ -87895,7 +87895,7 @@
      "3931266497ef83433fbbf4d01f17aa1c9a301ab3a69c52ca38aea6f20bcd3b63"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :superseded,
    :scope
    ["ConstructionTargets/T99J01PathComponentCoverRestriction.lean"],
    :dag-node
@@ -87923,7 +87923,10 @@
     ["lake env lean ConstructionTargets/T99J01PathComponentCoverRestriction.lean"
      "lake env lean /tmp/t99j01-path-component-sheet-restriction-probe.lean"
      "python3 scripts/statement-registry.py check"]},
+   :owner-note
+   "2026-10-13 claude-14: done in holes/labs/blueprints/t99J01 (t99J01_arbitrary_cover_component_aux_restricted_cover, proved by lemma-3).",
    :id :routes-2026-10-10-t99j01-path-component-cover-package-1,
+   :superseded-by :blueprint-t99J01,
    :kind :final-adapter,
    :fail-count 0,
    :depends-on [],
@@ -113940,7 +113943,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Target equality witness is the symmetric named round-trip source equality.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Target equality witness is the symmetric named round-trip source equality. NOTE (claude-14, 2026-10-13): this declaration is now the ONLY sorry left for t99J01: holes/labs/blueprints/t99J01/Blueprint.lean proves everything else (connected covers, Schreier rank, component restriction). When threeCirclesFundamentalGroupEquiv is banked, close t99J01 by moving the blueprint into problems/t99J01/lean/Main.lean. Prefer the shortest route to that declaration over further normal-form bookkeeping.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
