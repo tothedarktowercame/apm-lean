@@ -87778,6 +87778,18 @@
     [{:cmd "initial compile",
       :exit 1,
       :correction "coerced chart image point from target subtype"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791928678946-10632-f0d514e1",
+     :commands
+     ["scope/SHA256 checks at 598a78428"
+      "recorded blob | lake env lean /dev/stdin"
+      "comment-stripped placeholder scan (0)"
+      "#print axioms restricted homeomorph"
+      "statement-registry.py check (166/0)"],
+     :finding
+     "Valid program STOP with new compiled progress beyond history commit 7ef6b184c. The subtype homeomorphism correctly restricts the alleged chart to points mapping into the punctured ball; injectivity proves source-node exclusion iff target-center exclusion. Exact one-file scope/hash match; placeholders 0; only standard axioms. Remaining milestone: flatten the target subtype, identify an ambient-open sigma2 slice, and contradict non-preconnectedness."},
     :commit "598a78428",
     :changed-paths ["ConstructionTargets/t94A08Closure.lean"],
     :fixture
@@ -87786,7 +87798,7 @@
      "d50e1fc92e13529ea178e39efba81e799c5d324e4f778b4018bb9d3e9e2b49f5"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t94A08/lean/Main.lean"
     "problems/t94A08/status.json"
@@ -87804,7 +87816,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t94A08Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked shrinking an alleged manifold chart to a preconnected punctured target ball.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked the alleged chart restricted to its punctured ball source and target.",
    :id :program-2026-10-13-close-t94a08,
    :kind :final-adapter,
    :campaign-priority 30,
@@ -87872,7 +87884,11 @@
     {:job 6,
      :commit "7ef6b184c",
      :reason
-     "Banked shrinking an alleged manifold chart to a preconnected punctured target ball."}]}
+     "Banked shrinking an alleged manifold chart to a preconnected punctured target ball."}
+    {:job 7,
+     :commit "598a78428",
+     :reason
+     "Banked the alleged chart restricted to its punctured ball source and target."}]}
   {:consumer :t97A01,
    :stop-count 1,
    :evidence
@@ -88567,7 +88583,7 @@
    :other-consumers []}
   {:consumer :t94A08,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "apm_t94a08_manifoldChartPuncturedBallHomeomorph",
@@ -88579,7 +88595,9 @@
     :type
     "restricted chart homeomorphism between punctured ball source and nested target",
     :area "projective-affine-chart-homeomorph",
-    :proved-in :program-2026-10-13-close-t94a08},
+    :proved-in :program-2026-10-13-close-t94a08,
+    :banked-by :program-2026-10-13-close-t94a08,
+    :banked-commit "598a78428"},
    :id :lemma-apm-t94a08-manifoldchartpuncturedballhomeomorph,
    :kind :lemma,
    :depends-on
