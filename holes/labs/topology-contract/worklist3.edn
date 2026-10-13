@@ -36115,73 +36115,61 @@
   {:consumer :t93J03,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 4,
+   :stop-count 5,
    :review-finding
    "Program STOP commits nothing new since the prior reviewed attempt: it reuses commit 512a220f, and git history shows no later scoped commit. The unresolved SemilocallySimplyConnected hypothesis-coverage conflict is unchanged. Obtain the required owner specification decision or commit a new compiled milestone before resubmitting.",
    :evidence
    {:placeholder-delta {:t93J03 [1 1]},
-    :residual
-    "Prove van Kampen and path-connectedness; apply C1, then C2/Main.",
+    :residual "Prove polygon van Kampen; apply C1, then C2/Main.",
     :outcome :stop,
     :warnings ["unused SLSC owner-approved"],
     :missing-theorems
-    [{:name "kleinBottle_pi1_every_basepoint_of_polygon_van_kampen",
-      :type "polygon pi1 plus path-connectedness gives frozen C1",
+    [{:name "kleinBottlePathConnectedSpace",
+      :type "PathConnectedSpace KleinBottle",
       :status :proved,
       :consumers [:t93J03],
-      :depends-on ["kleinPolygonPresentedGroupEquiv"],
+      :depends-on [],
+      :area "covering-subgroup-correspondence"}
+     {:name "kleinBottle_pi1_every_basepoint_of_polygon_van_kampen",
+      :type "polygon pi1 gives frozen C1",
+      :status :proved,
+      :consumers [:t93J03],
+      :depends-on ["kleinBottlePathConnectedSpace"],
       :area "covering-subgroup-correspondence"}
      {:name "t93J03_polygon_van_kampen",
       :type "polygon pi1 equals PresentedGroup(aabb)",
       :status :partial,
       :consumers [:t93J03],
       :depends-on ["kleinPolygon_attaching_arcs"],
-      :area "covering-subgroup-correspondence"}
-     {:name "t93J03_kleinBottle_pathConnected",
-      :type "PathConnectedSpace KleinBottle",
-      :status :not-started,
-      :consumers [:t93J03],
-      :depends-on [],
       :area "covering-subgroup-correspondence"}],
     :statement-hashes {:registry "166/166"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Committed C1 polygon adapter; van Kampen and path-connectedness remain.",
+    "Committed frozen Klein path-connectedness and discharged the C1 adapter hypothesis; van Kampen remains.",
     :commands
     [{:cmd "lake build ConstructionTargets.t93J03Closure", :exit 0}
-     {:cmd "lean C1 fixture", :exit 0}
+     {:cmd "lean path fixture", :exit 0}
      {:cmd "registry; placeholder; diff", :exit 0}
      {:cmd "rg forbidden", :exit 1, :expected-exit 1}
      {:cmd "commit; show --check", :exit 0}],
     :diagnostic-history
     [{:cmd "lake build closure",
       :exit 1,
-      :correction "explicit path-connected input"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1791935710102-10956-1c630652",
-     :commands
-     ["git show/diff 663d4133; scope/orientation review"
-      "sha256sum fixture; show --check; placeholder recount"
-      "lake build ConstructionTargets.t93J03Closure; lean fixture"
-      "statement-registry check"],
-     :finding
-     "PASS. Commit 663d4133 adds compiled, sorry-free standard-axiom progress after ca72d69c: it proves the correctly oriented pi1 equivalence induced by a homeomorphism, then transports a one-basepoint polygon aabb computation through the exact KleinBottle homeomorphism and presentation equivalence to every frozen basepoint under explicit path-connectedness. Fixture hash matches; registry 166/166; Main placeholder 1->1. Van Kampen, path-connectedness, C1, C2, and Main remain listed. SemilocallySimplyConnected X is unused, mandated by problem.md."},
-    :commit "663d41336cbfe993f2c9f2f3d73ec185bdff0dd0",
+      :correction "qualified Surfaces names"}],
+    :commit "cb0fb3be9906546a8bd65377dd49fb9b5073ca1a",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
      "ConstructionTargets/t93J03Closure.blueprint.md"],
     :fixture
-    {:path "/tmp/t93j03_c1_adapter_check.lean",
+    {:path "/tmp/t93j03_path_connected_check.lean",
      :sha256
-     "2bfbb25ee1213fec1bdbdf35d5c14584e6c3f9ff965fa4dccd75c2b13c9fbded",
+     "71336951ff2ccce273e23827a14d860d420a0b136c4c7e192e0f79d9a12e79a7",
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -37757,7 +37745,9 @@
     :banked-commit "663d41336cbfe993f2c9f2f3d73ec185bdff0dd0"},
    :id :lemma-kleinbottle-pi1-every-basepoint-of-polygon-van-kampen,
    :kind :lemma,
-   :depends-on [:lemma-kleinpolygonpresentedgroupequiv],
+   :depends-on
+   [:lemma-kleinpolygonpresentedgroupequiv
+    :lemma-kleinbottlepathconnectedspace],
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
@@ -37772,6 +37762,23 @@
     :type "PathConnectedSpace KleinBottle",
     :area "covering-subgroup-correspondence"},
    :id :lemma-t93j03-kleinbottle-pathconnected,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "kleinBottlePathConnectedSpace",
+    :type "PathConnectedSpace KleinBottle"},
+   :lemma
+   {:name "kleinBottlePathConnectedSpace",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type "PathConnectedSpace KleinBottle",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03},
+   :id :lemma-kleinbottlepathconnectedspace,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}],
