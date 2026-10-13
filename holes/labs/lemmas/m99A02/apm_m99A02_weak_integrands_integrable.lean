@@ -416,7 +416,23 @@ theorem apm_m99A02_weak_integrands_integrable (i : Fin 2)
     Integrable (fun x ↦ m99A02Function x * fderiv ℝ φ x (EuclideanSpace.single i 1))
         (volume.restrict m99A02Omega) ∧
       Integrable (fun x ↦ m99A02Derivative i x * φ x) (volume.restrict m99A02Omega) := by
-  sorry
+  let e : m99A02Point := EuclideanSpace.single i 1
+  have hDcont : Continuous (fun x ↦ fderiv ℝ φ x e) := by
+    have hfderiv : Continuous (fderiv ℝ φ) :=
+      hφ.continuous_fderiv (by simp)
+    fun_prop
+  have hDcompact : HasCompactSupport (fun x ↦ fderiv ℝ φ x e) :=
+    hφc.fderiv_apply ℝ e
+  have hDtwo : MemLp (fun x ↦ fderiv ℝ φ x e) 2
+      (volume.restrict m99A02Omega) :=
+    hDcont.memLp_of_hasCompactSupport hDcompact
+  have hφtwo : MemLp φ 2 (volume.restrict m99A02Omega) :=
+    hφ.continuous.memLp_of_hasCompactSupport hφc
+  constructor
+  · simpa only [e, Pi.mul_apply] using
+      apm_m99A02_bridge_1.1.integrable_mul hDtwo
+  · simpa only [Pi.mul_apply] using
+      (apm_m99A02_bridge_1.2 i).integrable_mul hφtwo
 -- END SEAT AREA
 
 /-- Assembly from the pieces: pass from `Ω` to the whole plane (`tsupport φ` lies in
