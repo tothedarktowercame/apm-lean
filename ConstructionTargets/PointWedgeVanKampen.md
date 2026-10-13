@@ -1180,3 +1180,11 @@ leg at the literal actual-span boundary: the reconstructed source action is
 the lifted-cover action, and that action is the left coproduct injection.
 Thus the remaining left-coordinate obligation is confined to the explicit
 counit normalization, not another span or endpoint transport.
+
+`genericPointWedgeNormalizedFundamentalGroupEquiv_leftLeg` carries that chain
+through B5 and shows that the normalized left coordinate is exactly the
+counit normalization applied to `inl g`.
+`genericPointWedgeNormalizedLeftLeg_eq_inl_iff` records the remaining B6
+left-leg obligation as the corresponding fixed-point equation.  This makes
+the unresolved counit condition explicit and introduces no identity
+normalization of a counit component.

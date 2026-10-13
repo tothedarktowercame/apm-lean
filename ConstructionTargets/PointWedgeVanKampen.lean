@@ -5791,6 +5791,35 @@ theorem genericPointWedgeSourceFunctor_leftLeg_eq_actualLifted
   · exact genericPointWedgeIdentityActualSpan_left_lifted
       x₀ y₀ M N hM hN hy hx cM cN g
 
+/-- Passing the literal left-leg computation through B5 leaves exactly the
+explicit counit normalization applied to the left coproduct injection. -/
+theorem genericPointWedgeNormalizedFundamentalGroupEquiv_leftLeg
+    (g : FundamentalGroup X x₀) :
+    genericPointWedgeNormalizedFundamentalGroupEquiv
+        x₀ y₀ M N hM hN hy hx cM cN
+        (genericPointWedgeLeftLegMap x₀ y₀ g) =
+      genericPointWedgeCounitNormalization
+        x₀ y₀ M N hM hN hy hx cM cN (Monoid.Coprod.inl g) := by
+  change genericPointWedgeCounitNormalization
+      x₀ y₀ M N hM hN hy hx cM cN
+        (genericPointWedgeFundamentalGroupEquiv
+          x₀ y₀ M N hM hN hy hx cM cN
+            (genericPointWedgeLeftLegMap x₀ y₀ g)) = _
+  rw [genericPointWedgeFundamentalGroupEquiv_apply,
+    genericPointWedgeSourceFunctor_leftLeg_eq_inl]
+
+/-- The B6 left coordinate is now equivalent to one explicit fixed-point
+equation for the counit conjugation. -/
+theorem genericPointWedgeNormalizedLeftLeg_eq_inl_iff
+    (g : FundamentalGroup X x₀) :
+    genericPointWedgeNormalizedFundamentalGroupEquiv
+        x₀ y₀ M N hM hN hy hx cM cN
+        (genericPointWedgeLeftLegMap x₀ y₀ g) = Monoid.Coprod.inl g ↔
+      genericPointWedgeCounitNormalization
+        x₀ y₀ M N hM hN hy hx cM cN (Monoid.Coprod.inl g) =
+          Monoid.Coprod.inl g := by
+  rw [genericPointWedgeNormalizedFundamentalGroupEquiv_leftLeg]
+
 /-- The reconstructed B4 source functor has exactly the right restriction
 conjugation on the literal right injection. -/
 theorem genericPointWedgeSourceFunctor_rightLeg_eq_conj_inr
@@ -6495,6 +6524,8 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeLeftLegMap
 #print axioms genericPointWedgeRightLegMap
 #print axioms genericPointWedgeSourceFunctor_leftLeg_eq_actualLifted
+#print axioms genericPointWedgeNormalizedFundamentalGroupEquiv_leftLeg
+#print axioms genericPointWedgeNormalizedLeftLeg_eq_inl_iff
 #print axioms genericPointWedgeLegCoordinates_of_mapped
 #print axioms genericPointWedgeLegCoordinates_iff_mapped
 #print axioms genericPointWedgeLegCoordinates_iff_sourceFunctor
