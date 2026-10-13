@@ -185,6 +185,24 @@ theorem apm_t01a03_circleWedge_pi1_noncommutative :
 /-- The torus target has abelian fundamental group, so any map from a wedge
 with two noncommuting loops is noninjective. The source fact is an explicit
 hypothesis so this lemma is independently assignable. -/
+lemma apm_t01a03_typicalWedge_fundamentalGroupMap_not_injective_aux_circle_comm
+    (x : Circle) (p q : FundamentalGroup Circle x) : p * q = q * p := by
+  let e := (FundamentalGroup.fundamentalGroupMulEquivOfPathConnected x (1 : Circle)).trans
+    ConstructionTargets.CircleUniversalCover.circleFundamentalGroupMulEquivInt
+  apply e.injective
+  simp only [map_mul]
+  exact mul_comm _ _
+
+lemma apm_t01a03_typicalWedge_fundamentalGroupMap_not_injective_aux_torus_comm
+    (x : apm_t01a03_Torus) (p q : FundamentalGroup apm_t01a03_Torus x) :
+    p * q = q * p := by
+  apply (ConstructionTargets.FundamentalGroupProduct.fundamentalGroupProdMulEquiv
+    x.1 x.2).injective
+  simp only [map_mul, Prod.mul_def, Prod.ext_iff]
+  exact ⟨
+    apm_t01a03_typicalWedge_fundamentalGroupMap_not_injective_aux_circle_comm _ _ _,
+    apm_t01a03_typicalWedge_fundamentalGroupMap_not_injective_aux_circle_comm _ _ _⟩
+
 theorem apm_t01a03_typicalWedge_fundamentalGroupMap_not_injective
     (hsource : ∃ a b : FundamentalGroup apm_t01a03_Wedge apm_t01a03_wedgeBase,
       a * b ≠ b * a)
@@ -192,7 +210,13 @@ theorem apm_t01a03_typicalWedge_fundamentalGroupMap_not_injective
     (_hwedge : apm_t01a03_IsTypicalWedge wedge) :
     ¬Function.Injective
       (FundamentalGroup.map wedge apm_t01a03_wedgeBase) := by
-  sorry
+  rintro hinj
+  obtain ⟨a, b, hab⟩ := hsource
+  apply hab
+  apply hinj
+  rw [map_mul, map_mul]
+  exact
+    apm_t01a03_typicalWedge_fundamentalGroupMap_not_injective_aux_torus_comm _ _ _
 
 /-- **LIBRARY (surface-curve collar / fundamental class).** An embedded circle
 whose complement is two punctured tori represents zero in integral `H₁`. -/
