@@ -112,6 +112,17 @@ theorem apm_t02a05_sphere_subtype_mass :
         (Set.univ : Set (Metric.sphere (0 : apm_t02a05_E3) 1))) := h.symm
     _ = _ := congrArg (fun s : Set apm_t02a05_E3 ↦ μHE[2] s) himage
 
+lemma apm_t02a05_sphere_mass_eq_two_caps_aux_raw :
+    (μH[(2 : ℕ)] : Measure apm_t02a05_E3) (Metric.sphere 0 1) =
+      (∫⁻ x in ConstructionTargets.SphereCapHeight.domain 2,
+        ENNReal.ofReal (1 / ConstructionTargets.SphereCapHeight.upper 2 x)
+          ∂ConstructionTargets.C1GraphMeasureDecomposition.domainMeasure 2) +
+      (∫⁻ x in ConstructionTargets.SphereCapHeight.domain 2,
+        ENNReal.ofReal (1 / ConstructionTargets.SphereCapHeight.upper 2 x)
+          ∂ConstructionTargets.C1GraphMeasureDecomposition.domainMeasure 2) := by
+  convert ConstructionTargets.SphereCapNullEquatorMeasureAssembly.sphere_two_measure
+    using 1 <;> norm_num
+
 /-- (B) Two caps over the unit disk, with `μHE[2]` on the sphere and Lebesgue measure on the disk:
 `sphere_two_measure` scaled by the `μHE[2]` constant, which maps `μH[2]` on `ℝ²` to `volume`. -/
 theorem apm_t02a05_sphere_mass_eq_two_caps :
