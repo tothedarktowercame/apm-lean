@@ -512,7 +512,45 @@ twice; `g 0 = 0`; use the banked concavity and root lemmas above). -/
 theorem apm_t00j01_angle_positive_roots :
     ∃ x₀ ∈ Set.Ioo 0 (Real.pi / 2), ∀ θ ∈ Set.Icc 0 Real.pi,
       apm_t00j01_foldLift θ = Real.pi ↔ θ = x₀ ∨ θ = Real.pi := by
-  sorry
+  obtain ⟨x₀, hx₀, hroot⟩ :=
+    apm_t00j01_foldFiberCard_pi_aux_angle_count_aux_inner_root
+  refine ⟨x₀, hx₀, ?_⟩
+  intro θ hθ
+  constructor
+  · intro hrootθ
+    by_cases hθx : θ = x₀
+    · exact Or.inl hθx
+    by_cases hθπ : θ = Real.pi
+    · exact Or.inr hθπ
+    exfalso
+    have hxπ : x₀ < Real.pi := by
+      exact lt_trans hx₀.2 (by linarith [Real.pi_pos])
+    have hθπlt : θ < Real.pi := lt_of_le_of_ne hθ.2 hθπ
+    have hconc :=
+      apm_t00j01_foldFiberCard_pi_aux_angle_count_aux_strictConcave
+    have hrootπ : apm_t00j01_foldLift Real.pi = Real.pi := by
+      simp [apm_t00j01_foldLift]
+    rcases lt_or_gt_of_ne hθx with hθxlt | hxθlt
+    · have hxseg : x₀ ∈ openSegment ℝ θ Real.pi := by
+        rw [openSegment_eq_Ioo hθπlt, Set.mem_Ioo]
+        exact ⟨hθxlt, hxπ⟩
+      have hne : θ ≠ Real.pi := hθπ
+      have hlt := hconc.lt_on_openSegment hθ (by
+        exact ⟨Real.pi_pos.le, le_rfl⟩) hne hxseg
+      rw [hrootθ, hrootπ, hroot, min_self] at hlt
+      exact (lt_irrefl Real.pi hlt)
+    · have hθseg : θ ∈ openSegment ℝ x₀ Real.pi := by
+        rw [openSegment_eq_Ioo hxπ, Set.mem_Ioo]
+        exact ⟨hxθlt, hθπlt⟩
+      have hxne : x₀ ≠ Real.pi := ne_of_lt hxπ
+      have hlt := hconc.lt_on_openSegment
+        ⟨hx₀.1.le, hxπ.le⟩ (by exact ⟨Real.pi_pos.le, le_rfl⟩)
+        hxne hθseg
+      rw [hroot, hrootπ, hrootθ, min_self] at hlt
+      exact (lt_irrefl Real.pi hlt)
+  · rintro (rfl | rfl)
+    · exact hroot
+    · simp [apm_t00j01_foldLift]
 
 /-- Seat (assembly from hypotheses): with oddness (banked) and `g ≥ 0` on `[0, π]`
 (`sin ≥ 0` there), the solutions in `(-π, π]` are exactly `x₀, π, -x₀`. -/
