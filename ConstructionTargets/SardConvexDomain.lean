@@ -1109,4 +1109,70 @@ theorem whitneyNetIndex_incident_stratum_eq_or_eq_add_one
     ((whitneyStratumNet_spec s j.1).1 j.2.2) hi hj
   omega
 
+/-- Whitney net indices whose quarter-distance balls contain `x`. -/
+def whitneyNetIncidence
+    {E : Type*} [PseudoMetricSpace E] (s : Set E) (x : E) : Set (WhitneyNetIndex s) :=
+  {i | x ∈ Metric.ball i.center (Metric.infDist i.center s / 4)}
+
+/-- The part of the incidence set at one specified dyadic stratum. -/
+def whitneyNetIncidenceAt
+    {E : Type*} [PseudoMetricSpace E] (s : Set E) (x : E) (k : ℤ) :
+    Set (WhitneyNetIndex s) :=
+  {i | i.1 = k ∧ i ∈ whitneyNetIncidence s x}
+
+/-- The complete incidence family is bounded by three copies of the fixed
+packing number. -/
+theorem encard_whitneyNetIncidence_le_three_fixed_packingNumbers
+    {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    (s : Set E) (x : E) :
+    (whitneyNetIncidence s x).encard ≤
+      Metric.packingNumber ((1 : NNReal) / 8) (Metric.closedBall (0 : E) (1 / 2)) +
+      Metric.packingNumber ((1 : NNReal) / 8) (Metric.closedBall (0 : E) (1 / 2)) +
+      Metric.packingNumber ((1 : NNReal) / 8) (Metric.closedBall (0 : E) (1 / 2)) := by
+  let N := Metric.packingNumber ((1 : NNReal) / 8)
+    (Metric.closedBall (0 : E) (1 / 2))
+  have hfiber (k : ℤ) : (whitneyNetIncidenceAt s x k).encard ≤ N := by
+    let f : WhitneyNetIndex s → E := WhitneyNetIndex.center
+    have hinj : Set.InjOn f (whitneyNetIncidenceAt s x k) := by
+      intro i hi j hj hij
+      have hk : i.1 = j.1 := hi.1.trans hj.1.symm
+      cases i with
+      | mk ik ic =>
+        cases j with
+        | mk jk jc =>
+          dsimp at hk hij ⊢
+          subst jk
+          exact congrArg (Sigma.mk ik) (Subtype.ext hij)
+    rw [← hinj.encard_image]
+    let C : Set E := {c | c ∈ whitneyStratumNet s k ∧
+      x ∈ Metric.ball c (Metric.infDist c s / 4)}
+    have himage : f '' whitneyNetIncidenceAt s x k ⊆ C := by
+      rintro c ⟨i, hi, rfl⟩
+      constructor
+      · change i.2.1 ∈ whitneyStratumNet s k
+        rw [← hi.1]
+        exact i.2.2
+      · exact hi.2
+    exact (Set.encard_mono himage).trans (by
+      simpa [N, C] using
+        encard_whitneyStratumNet_mem_quarter_ball_le_fixed_packingNumber s k x)
+  by_cases hI : (whitneyNetIncidence s x).Nonempty
+  · obtain ⟨i, hi⟩ := hI
+    have hsub : whitneyNetIncidence s x ⊆
+        whitneyNetIncidenceAt s x (i.1 - 1) ∪
+          whitneyNetIncidenceAt s x i.1 ∪
+            whitneyNetIncidenceAt s x (i.1 + 1) := by
+      intro j hj
+      rcases whitneyNetIndex_incident_stratum_eq_or_eq_add_one s x hi hj with h | h | h
+      · exact Or.inl (Or.inl ⟨h, hj⟩)
+      · exact Or.inl (Or.inr ⟨h, hj⟩)
+      · exact Or.inr ⟨h, hj⟩
+    exact (Set.encard_mono hsub).trans <|
+      (Set.encard_union_le _ _).trans <| add_le_add
+        ((Set.encard_union_le _ _).trans
+          (add_le_add (hfiber (i.1 - 1)) (hfiber i.1)))
+        (hfiber (i.1 + 1))
+  · rw [Set.not_nonempty_iff_eq_empty.mp hI]
+    simp
+
 end ConstructionTargets.SardConvexDomain
