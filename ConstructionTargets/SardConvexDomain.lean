@@ -631,4 +631,15 @@ theorem closedSet_whitneyCubeCover_of_proper_case
     exact closedSet_whitneyCubeCover_univ E
   · exact hproper hs hne hsu
 
+/-- Every center in the complement of a closed nonempty finite-dimensional
+set has both the positive Whitney scale and a nearest anchor in the set. -/
+theorem exists_positive_infDist_nearest_of_isClosed
+    {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [FiniteDimensional ℝ E] {s : Set E} (hs : IsClosed s) (hne : s.Nonempty)
+    {x : E} (hx : x ∉ s) :
+    0 < Metric.infDist x s ∧
+      ∃ a ∈ s, Metric.infDist x s = dist x a := by
+  exact ⟨(hs.notMem_iff_infDist_pos hne).1 hx,
+    exists_nearestPoint_of_isClosed hs hne x⟩
+
 end ConstructionTargets.SardConvexDomain
