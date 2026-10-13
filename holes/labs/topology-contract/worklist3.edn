@@ -24208,6 +24208,8 @@
   {:bounded-exception "Rule0; exact B9 prerequisite.",
    :consumer :t01A08,
    :stop-count 1,
+   :review-finding
+   "extend Mathlib: state and prove the missing theorem in scope",
    :evidence
    {:placeholder-delta {:t01A08 [1 1]},
     :residual
@@ -24241,6 +24243,12 @@
     [{:cmd "fixture; registry; raw no-match scan",
       :exit 1,
       :correction "reran no-match scan with explicit success"}],
+    :review
+    {:outcome :fail,
+     :seat "codex-11",
+     :job "invoke-1791893803881-9614-fb9e1699",
+     :finding
+     "extend Mathlib: state and prove the missing theorem in scope"},
     :commit nil,
     :changed-paths [],
     :fixture
@@ -24250,7 +24258,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :repair,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain.blueprint/B7",
    :acceptance
@@ -24268,6 +24276,7 @@
    :id :r-a08-sard-b7-extension-1,
    :kind :reusable-theorem,
    :area "sard-convex-domain",
+   :fail-count 1,
    :depends-on
    [:lemma-constructiontargets-sardconvexdomain-contdiffon-convexwithinjet],
    :current-residual
