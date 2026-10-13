@@ -97,7 +97,19 @@ lemma tft_directional_translate_function_support
     (ψ : TFT E F) (x₀ x v : E) (hx : x ∈ Metric.closedBall x₀ 1) :
     Function.support (fun y => fderiv ℝ (ψ : E → F) (x + y) v) ⊆
       tftTranslationCompact ψ x₀ := by
-  sorry
+  intro y hy
+  have hlin : fderiv ℝ (ψ : E → F) (x + y) ≠ 0 := by
+    intro hzero
+    apply hy
+    dsimp
+    rw [hzero]
+    exact ContinuousLinearMap.zero_apply v
+  have hz : x + y ∈ tsupport (ψ : E → F) :=
+    support_fderiv_subset ℝ hlin
+  change y ∈ (fun p : E × E => p.2 - p.1) ''
+    (Metric.closedBall x₀ 1 ×ˢ tsupport (ψ : E → F))
+  refine ⟨(x, x + y), ⟨hx, hz⟩, ?_⟩
+  simp
 -- END SEAT AREA
 
 /-- The translated directional derivative, bundled in the *same* stage as
