@@ -843,3 +843,43 @@ lemma apm_t94a08_puncturedSigma2ZeroChartIn_not_isPreconnected
     ⟨htarget_univ⟩
   exact apm_t94a08_zeroChartImage_inter_puncturedCross_not_isPreconnected U hU hnode
     (isPreconnected_iff_preconnectedSpace.mpr htarget_space)
+
+lemma apm_t94a08_punctured_euclidean_ball_isPreconnected
+    (c : EuclideanSpace ℝ (Fin 2)) {r : ℝ} (hr : 0 < r) :
+    IsPreconnected (Metric.ball c r \ {c}) := by
+  let e := OpenPartialHomeomorph.univBall c r
+  have hrank : 1 < Module.rank ℝ (EuclideanSpace ℝ (Fin 2)) := by
+    rw [← Module.finrank_eq_rank']
+    norm_num
+  have hpath : IsPathConnected
+      ({0}ᶜ : Set (EuclideanSpace ℝ (Fin 2))) :=
+    isPathConnected_compl_singleton_of_one_lt_rank hrank 0
+  have hcont : ContinuousOn e ({0}ᶜ : Set (EuclideanSpace ℝ (Fin 2))) :=
+    e.continuousOn.mono (by simp [e])
+  have himage : e '' ({0}ᶜ : Set (EuclideanSpace ℝ (Fin 2))) =
+      Metric.ball c r \ {c} := by
+    ext y
+    constructor
+    · rintro ⟨x, hx, rfl⟩
+      have hxsource : x ∈ e.source := by simp [e]
+      constructor
+      · have hetarget : e x ∈ e.target := e.mapsTo hxsource
+        rw [OpenPartialHomeomorph.univBall_target c hr] at hetarget
+        exact hetarget
+      · intro hec
+        have he0 : e x = e 0 := by simpa [e] using hec
+        have hx0 : x = 0 := e.injOn hxsource (by simp [e]) he0
+        exact hx (by simpa [hx0])
+    · rintro ⟨hyball, hyc⟩
+      have hytarget : y ∈ e.target := by
+        simpa [e, OpenPartialHomeomorph.univBall_target c hr] using hyball
+      let x := e.symm y
+      have hxsource : x ∈ e.source := e.map_target hytarget
+      have hexy : e x = y := e.right_inv hytarget
+      refine ⟨x, ?_, hexy⟩
+      intro hx0
+      apply hyc
+      rw [← hexy, show x = 0 by simpa using hx0]
+      simp [e]
+  rw [← himage]
+  exact (hpath.image' hcont).isConnected.isPreconnected
