@@ -87899,48 +87899,61 @@
      :reason
      "Banked preconnectedness of the alleged chart's punctured ball source."}]}
   {:consumer :t97A01,
-   :stop-count 1,
+   :stop-count 2,
    :evidence
    {:placeholder-delta 0,
     :residual
-    "After blueprint review, implement B1-B3 notation, signed attaching degrees, and the boundary linear map; then proceed through radial Mayer-Vietoris.",
-    :stop-count 1,
+    "Implement B4-B7 piece homology and MV arrow, then B8-B10.",
     :outcome :stop,
-    :warnings ["unrelated modified t93J03 closure files preserved"],
-    :missing-theorems [],
-    :statement-hashes {:registry "150/0"},
+    :warnings
+    ["preexisting dependency lints"
+     "unrelated t93J03/t00J02 edits preserved"],
+    :missing-theorems
+    [{:name "attachingDegree",
+      :type "(P : PairingData) → PairingOrbit P.pair → ℤ",
+      :status :proved,
+      :consumers [:t97A01 :t94J09],
+      :depends-on [],
+      :area "polygon-quotient-homology"}
+     {:name "attachingBoundary",
+      :type "(P : PairingData) → ℤ →ₗ[ℤ] (PairingOrbit P.pair → ℤ)",
+      :status :proved,
+      :consumers [:t97A01 :t94J09],
+      :depends-on ["attachingDegree"],
+      :area "polygon-quotient-homology"}
+     {:name "polygonQuotient_homology",
+      :type "H0=ℤ; H1=cokernel; H2=kernel; Hk=0,k≥3",
+      :status :partial,
+      :consumers [:t97A01 :t94J09],
+      :depends-on ["attachingBoundary"],
+      :area "polygon-quotient-homology"}],
+    :statement-hashes {:registry "166/0"},
     :disposition :stop,
-    :axioms [],
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
     :reason
-    "Blueprint written; independent review is required before formalization.",
+    "Banked B1-B3 homology notation, signed degrees, and boundary kernel/cokernel.",
     :commands
-    [{:cmd
-      "git diff --check -- ConstructionTargets/PolygonSurfaceHomology.blueprint.md",
+    [{:cmd "lake build ConstructionTargets.PolygonSurfaceHomology",
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-     {:cmd "git show --check 10593d059", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1791923784016-10436-456af209",
-     :commands
-     ["git show/diff-tree/SHA256 10593d059"
-      "git show --check 10593d059"
-      "statement-registry.py check (150/0)"
-      "PairingData and consumer blueprint comparison"],
-     :finding
-     "Valid program STOP with a new blueprint milestone. Exact one-file scope and fixture SHA match. B1-B10 are true and dependency-closed: positive edge count gives nonempty orbit coordinates; signed degrees match consumers; Mayer-Vietoris yields the stated kernel, cokernel, H0, and higher vanishing. Final Lean type faithfully assembles B8-B9. Registry 150/0; no defect."},
-    :commit "10593d059",
-    :changed-paths
-    ["ConstructionTargets/PolygonSurfaceHomology.blueprint.md"],
+     {:cmd "git show --check 8aa7f457d", :exit 0}],
+    :diagnostic-history
+    [{:cmd "draft compile 1",
+      :exit 1,
+      :correction "explicit quotient equality decisions"}
+     {:cmd "draft compile 2",
+      :exit 1,
+      :correction "factored orbit contribution"}],
+    :commit "8aa7f457d",
+    :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
-    {:path "ConstructionTargets/PolygonSurfaceHomology.blueprint.md",
+    {:path "ConstructionTargets/PolygonSurfaceHomology.lean",
      :sha256
-     "de51001b7d679ce2f9454dea4fa9da90576b732aa48fddc37c9a3757428ced6c"},
+     "2597be52bf1e06a8560e2526eccbcb6de7f1a294be3b2deaa0d6313d28ed2cac"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -88656,4 +88669,54 @@
    :kind :lemma,
    :depends-on
    [:lemma-apm-t94a08-manifoldchart-has-preconnected-punctured-ball],
-   :other-consumers []}]}
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "attachingDegree",
+    :type "(P : PairingData) → PairingOrbit P.pair → ℤ"},
+   :lemma
+   {:name "attachingDegree",
+    :reported-by [:program-2026-10-13-polygon-surface-homology],
+    :type "(P : PairingData) → PairingOrbit P.pair → ℤ",
+    :area "polygon-quotient-homology",
+    :proved-in :program-2026-10-13-polygon-surface-homology},
+   :id :lemma-attachingdegree,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t94J09]}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "attachingBoundary",
+    :type "(P : PairingData) → ℤ →ₗ[ℤ] (PairingOrbit P.pair → ℤ)"},
+   :lemma
+   {:name "attachingBoundary",
+    :reported-by [:program-2026-10-13-polygon-surface-homology],
+    :type "(P : PairingData) → ℤ →ₗ[ℤ] (PairingOrbit P.pair → ℤ)",
+    :area "polygon-quotient-homology",
+    :proved-in :program-2026-10-13-polygon-surface-homology},
+   :id :lemma-attachingboundary,
+   :kind :lemma,
+   :depends-on [:lemma-attachingdegree],
+   :other-consumers [:t94J09]}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "polygonQuotient_homology",
+    :type "H0=ℤ; H1=cokernel; H2=kernel; Hk=0,k≥3"},
+   :lemma
+   {:name "polygonQuotient_homology",
+    :reported-by [:program-2026-10-13-polygon-surface-homology],
+    :type "H0=ℤ; H1=cokernel; H2=kernel; Hk=0,k≥3",
+    :area "polygon-quotient-homology"},
+   :id :lemma-polygonquotient-homology,
+   :kind :lemma,
+   :depends-on [:lemma-attachingboundary],
+   :other-consumers [:t94J09]}]}
