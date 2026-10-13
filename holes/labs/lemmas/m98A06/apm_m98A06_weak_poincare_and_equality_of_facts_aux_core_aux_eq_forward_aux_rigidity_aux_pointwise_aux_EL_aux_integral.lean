@@ -3207,6 +3207,115 @@ lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_forward_aux
       y dy φ h hφ hφc hφs t
 
 -- BEGIN SEAT AREA
+lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_forward_aux_rigidity_aux_pointwise_aux_EL_aux_integral_aux_quadratic
+    (A B : ℝ) (h : ∀ t : ℝ, 0 ≤ A * t ^ 2 + 2 * B * t) : B = 0 := by
+  by_contra hB
+  have hden : 0 < |A| + 1 := by positivity
+  have ht := h (-B / (|A| + 1))
+  have hA : A ≤ |A| := le_abs_self A
+  have hBsq : 0 < B ^ 2 := sq_pos_of_ne_zero hB
+  field_simp [ne_of_gt hden] at ht
+  nlinarith
+
+lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_forward_aux_rigidity_aux_pointwise_aux_EL_aux_integral_aux_smul
+    (c : ℝ) (u du : ℝ → ℝ) (h : apm_m98a06_InH10Pi u du) :
+    apm_m98a06_InH10Pi (fun x => c * u x) (fun x => c * du x) := by
+  refine ⟨continuousOn_const.mul h.1, by simp [h.2.1], by simp [h.2.2.1],
+    h.2.2.2.1.const_smul c, h.2.2.2.2.1.const_smul c, ?_⟩
+  intro φ hφ hφc hφs
+  have hw := h.2.2.2.2.2 φ hφ hφc hφs
+  rw [show (fun x => c * u x * deriv φ x) = fun x => c * (u x * deriv φ x) by
+      funext x; ring,
+    show (fun x => c * du x * φ x) = fun x => c * (du x * φ x) by
+      funext x; ring,
+    integral_const_mul, integral_const_mul, hw]
+  ring
+
+lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_forward_aux_rigidity_aux_pointwise_aux_EL_aux_integral_aux_general
+    (hWirtinger : apm_m98A06_WirtingerFact)
+    (hFTC : apm_m98A06_WeakFTCFact) (u du : ℝ → ℝ)
+    (h : apm_m98a06_InH10Pi u du) :
+    ∫ x, (u x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)) ≤
+      ∫ x, (du x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)) := by
+  set a := ∫ x, (u x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi))
+  have ha : 0 ≤ a := integral_nonneg fun x => sq_nonneg _
+  have hd : 0 ≤ ∫ x, (du x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)) :=
+    integral_nonneg fun x => sq_nonneg _
+  rcases ha.lt_or_eq with ha | ha
+  · set c := 1 / Real.sqrt a
+    have hc2 : c ^ 2 * a = 1 := by
+      simp only [c, div_pow, one_pow, Real.sq_sqrt ha.le]; field_simp
+    have hs := apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_forward_aux_rigidity_aux_pointwise_aux_EL_aux_integral_aux_smul
+      c u du h
+    have hn : ∫ x, (c * u x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)) = 1 := by
+      simp_rw [mul_pow]; rw [integral_const_mul, hc2]
+    have hi := apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_inequality
+      hWirtinger hFTC _ _ hs hn
+    rw [integral_sub (f := fun x => (c * du x) ^ 2) (g := fun x => (c * u x) ^ 2)
+      (h.2.2.2.2.1.const_smul c).integrable_sq
+      (h.2.2.2.1.const_smul c).integrable_sq] at hi
+    simp_rw [mul_pow] at hi
+    rw [integral_const_mul, integral_const_mul] at hi
+    have hc0 : 0 < c ^ 2 := by positivity
+    nlinarith
+  · rw [← ha]; exact hd
+
+lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_forward_aux_rigidity_aux_pointwise_aux_EL_aux_integral_aux_expand
+    (a b : ℝ → ℝ)
+    (ha : MemLp a 2 (volume.restrict (Ioo (0 : ℝ) Real.pi)))
+    (hb : MemLp b 2 (volume.restrict (Ioo (0 : ℝ) Real.pi))) (t : ℝ) :
+    ∫ x, (a x + t * b x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)) =
+      ∫ x, (a x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)) +
+        2 * t * ∫ x, a x * b x ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)) +
+        t ^ 2 * ∫ x, (b x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)) := by
+  have hab : Integrable (fun x => a x * b x) (volume.restrict (Ioo (0 : ℝ) Real.pi)) := by
+    have h3 := (((ha.add hb).integrable_sq.sub ha.integrable_sq).sub hb.integrable_sq).div_const 2
+    refine h3.congr (Filter.Eventually.of_forall fun x => ?_)
+    simp only [Pi.add_apply, Pi.sub_apply]; ring
+  rw [show (fun x => (a x + t * b x) ^ 2) =
+      fun x => ((a x) ^ 2 + (2 * t) * (a x * b x)) + t ^ 2 * (b x) ^ 2 by
+    funext x; ring]
+  rw [integral_add (f := fun x => (a x) ^ 2 + (2 * t) * (a x * b x))
+      (g := fun x => t ^ 2 * (b x) ^ 2)
+      (ha.integrable_sq.add (hab.const_mul _)) (hb.integrable_sq.const_mul _),
+    integral_add (f := fun x => (a x) ^ 2) (g := fun x => (2 * t) * (a x * b x))
+      ha.integrable_sq (hab.const_mul _), integral_const_mul, integral_const_mul]
+
+lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_forward_aux_rigidity_aux_pointwise_aux_EL_aux_integral_aux_core
+    (hWirtinger : apm_m98A06_WirtingerFact)
+    (hFTC : apm_m98A06_WeakFTCFact) (y dy φ : ℝ → ℝ)
+    (h : apm_m98a06_InH10Pi y dy)
+    (hnorm : ∫ x, (y x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)) = 1)
+    (hdnorm : ∫ x, (dy x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)) = 1)
+    (hvar : ∀ t : ℝ, apm_m98a06_InH10Pi
+      (fun x => y x + t * φ x) (fun x => dy x + t * deriv φ x)) :
+    (∫ x, dy x * deriv φ x ∂(volume.restrict (Ioo (0 : ℝ) Real.pi))) =
+      ∫ x, y x * φ x ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)) := by
+  have hφ : MemLp φ 2 (volume.restrict (Ioo (0 : ℝ) Real.pi)) := by
+    have := (hvar 1).2.2.2.1.sub h.2.2.2.1
+    refine this.ae_eq (Filter.Eventually.of_forall fun x => ?_)
+    simp
+  have hdφ : MemLp (deriv φ) 2 (volume.restrict (Ioo (0 : ℝ) Real.pi)) := by
+    have := (hvar 1).2.2.2.2.1.sub h.2.2.2.2.1
+    refine this.ae_eq (Filter.Eventually.of_forall fun x => ?_)
+    simp
+  have key : ∀ t : ℝ, 0 ≤
+      ((∫ x, (deriv φ x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi))) -
+        ∫ x, (φ x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi))) * t ^ 2 +
+      2 * ((∫ x, dy x * deriv φ x ∂(volume.restrict (Ioo (0 : ℝ) Real.pi))) -
+        ∫ x, y x * φ x ∂(volume.restrict (Ioo (0 : ℝ) Real.pi))) * t := by
+    intro t
+    have hg := apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_forward_aux_rigidity_aux_pointwise_aux_EL_aux_integral_aux_general
+      hWirtinger hFTC _ _ (hvar t)
+    rw [apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_forward_aux_rigidity_aux_pointwise_aux_EL_aux_integral_aux_expand
+        y φ h.2.2.2.1 hφ t,
+      apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_forward_aux_rigidity_aux_pointwise_aux_EL_aux_integral_aux_expand
+        dy (deriv φ) h.2.2.2.2.1 hdφ t, hnorm, hdnorm] at hg
+    linarith
+  exact sub_eq_zero.mp
+    (apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_forward_aux_rigidity_aux_pointwise_aux_EL_aux_integral_aux_quadratic
+      _ _ key)
+
 lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_forward_aux_rigidity_aux_pointwise_aux_EL_aux_integral
     (hWirtinger : apm_m98A06_WirtingerFact)
     (hFTC : apm_m98A06_WeakFTCFact) (y dy φ : ℝ → ℝ)
@@ -3217,7 +3326,9 @@ lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_forward_aux
       (fun x => y x + t * φ x) (fun x => dy x + t * deriv φ x)) :
     (∫ x, dy x * deriv φ x ∂(volume.restrict (Ioo (0 : ℝ) Real.pi))) =
       ∫ x, y x * φ x ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)) := by
-  sorry
+  exact
+    apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_forward_aux_rigidity_aux_pointwise_aux_EL_aux_integral_aux_core
+      hWirtinger hFTC y dy φ h hnorm hdnorm hvar
 -- END SEAT AREA
 
 lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_forward_aux_rigidity_aux_pointwise_aux_EL
