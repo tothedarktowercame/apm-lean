@@ -23467,8 +23467,67 @@
      :typed-residual-change
      :infrastructure-packets
      :review-outcomes]},
+   :evidence
+   {:outcome :replan,
+    :seat "topo-12",
+    :commands
+    [{:cmd
+      "bb holes/labs/topology-contract/build_step.bb priorities holes/labs/topology-contract/worklist3.edn",
+      :exit 0}],
+    :finding
+    "Δ0; order-2→all-order; packet 1; STOP/PASS; A08 1/3; rule0 symmetry; rank smooth_compact_surface_classification.",
+    :replacement-items
+    [{:bounded-exception "Rule0.",
+      :consumer :t01A08,
+      :implements-lemma
+      :lemma-contdiffwithinat-domdomcongr-iteratedfderivwithin-of-infty,
+      :phase :implementation,
+      :state :open,
+      :scope ["ConstructionTargets/SardConvexDomain.lean"],
+      :dag-node "SardConvexDomain/B1/symmetry",
+      :acceptance
+      {:declaration
+       "ContDiffWithinAt.domDomCongr_iteratedFDerivWithin_of_infty",
+       :type
+       "C∞ within + UniqueDiffOn + x∈s + x∈closure(interior s) imply all-order permutation invariance",
+       :fixture "/tmp/t01a08_smooth_symmetry_membership_probe.lean",
+       :fixture-sha256
+       "3d255ecbda1647c2051942450c83a9182a2f567af36e1334951c2b86dc094bf9",
+       :mode :post-build-export-check,
+       :placeholder "t01A08 sorry",
+       :route-step
+       "higher-order adjacent swaps and permutation induction"},
+      :continue-from "ac710aaa40bb8c9a74e433dbeee6b4f103945a55",
+      :id :r-a08-symmetry-induction-1,
+      :kind :reusable-theorem,
+      :area "sard-convex-domain",
+      :depends-on [:r-topo3-cp11],
+      :current-residual "Then B1.",
+      :other-consumers []}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 1,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :phase :strategy,
+      :state :open,
+      :scope [],
+      :dag-node "TOPOLOGY-ROUTES.md",
+      :acceptance {:strategy "Review symmetry; rerank."},
+      :id :r-topo3-cp12,
+      :kind :strategy-checkpoint,
+      :area "portfolio",
+      :depends-on [:r-a08-symmetry-induction-1],
+      :current-residual "Return to B1.",
+      :other-consumers []}],
+    :author "topo-12",
+    :disposition :replan},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance {:strategy "Rerank corrected symmetry."},
@@ -23476,6 +23535,53 @@
    :kind :strategy-checkpoint,
    :area "portfolio",
    :depends-on [:r-a08-symmetry-membership-1 :r-topo3-cp10],
+   :current-residual "Return to B1.",
+   :other-consumers []}
+  {:bounded-exception "Rule0.",
+   :consumer :t01A08,
+   :implements-lemma
+   :lemma-contdiffwithinat-domdomcongr-iteratedfderivwithin-of-infty,
+   :phase :implementation,
+   :state :blocked,
+   :scope ["ConstructionTargets/SardConvexDomain.lean"],
+   :dag-node "SardConvexDomain/B1/symmetry",
+   :acceptance
+   {:declaration
+    "ContDiffWithinAt.domDomCongr_iteratedFDerivWithin_of_infty",
+    :type
+    "C∞ within + UniqueDiffOn + x∈s + x∈closure(interior s) imply all-order permutation invariance",
+    :fixture "/tmp/t01a08_smooth_symmetry_membership_probe.lean",
+    :fixture-sha256
+    "3d255ecbda1647c2051942450c83a9182a2f567af36e1334951c2b86dc094bf9",
+    :mode :post-build-export-check,
+    :placeholder "t01A08 sorry",
+    :route-step
+    "higher-order adjacent swaps and permutation induction"},
+   :continue-from "ac710aaa40bb8c9a74e433dbeee6b4f103945a55",
+   :id :r-a08-symmetry-induction-1,
+   :kind :reusable-theorem,
+   :area "sard-convex-domain",
+   :depends-on [:r-topo3-cp11],
+   :current-residual "Then B1.",
+   :other-consumers []}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 1,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md",
+   :acceptance {:strategy "Review symmetry; rerank."},
+   :id :r-topo3-cp12,
+   :kind :strategy-checkpoint,
+   :area "portfolio",
+   :depends-on [:r-a08-symmetry-induction-1 :r-topo3-cp11],
    :current-residual "Return to B1.",
    :other-consumers []}
   {:bounded-exception "Rule0 B1.",
