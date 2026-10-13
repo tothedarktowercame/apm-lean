@@ -22995,7 +22995,9 @@
    :other-consumers []}
   {:bounded-exception "Rule0 B1 prerequisite.",
    :consumer :t01A08,
-   :stop-count 2,
+   :owner-reopen
+   "reopened: a lemma this row reported missing is now banked",
+   :stop-count 0,
    :review-finding
    "extend Mathlib: state and prove the missing theorem in scope. The frozen fixture declares ContDiffWithinAt.domDomCongr_iteratedFDerivWithin_of_infty as an axiom, and #print shows convexWithinJet depends on that nonstandard axiom. The row records commit nil, no changed paths, and status :not-started; compiling an axiomatized facade is not progress toward discharging the frozen interface. Prove adjacent-swap symmetry and permutation induction in ConstructionTargets/SardConvexDomain.lean, then rerun the fixture without its axiom.",
    :evidence
@@ -23032,7 +23034,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain.blueprint/B1/smooth-symmetry",
    :acceptance
@@ -23048,7 +23050,7 @@
    :id :r-a08-sard-smooth-jet-symmetry-1,
    :kind :reusable-theorem,
    :area "sard-convex-domain",
-   :fail-count 1,
+   :fail-count 0,
    :depends-on [:r-topo3-cp8],
    :current-residual
    "Then B1 continuity and canonical zero/one jets compile.",
@@ -23372,7 +23374,9 @@
    :other-consumers []}
   {:bounded-exception "Rule0.",
    :consumer :t01A08,
-   :stop-count 1,
+   :owner-reopen
+   "reopened: a lemma this row reported missing is now banked",
+   :stop-count 0,
    :implements-lemma
    :lemma-contdiffwithinat-domdomcongr-iteratedfderivwithin-of-infty,
    :evidence
@@ -23439,7 +23443,7 @@
    :phase :implementation,
    :type
    "{E F} [real normed spaces] {s f x} → ContDiffWithinAt ℝ ∞ f s x → UniqueDiffOn ℝ s → x∈s → x∈closure(interior s) → ∀ {n} (σ : Equiv.Perm (Fin n)), (iteratedFDerivWithin ℝ n f s x).domDomCongr σ = iteratedFDerivWithin ℝ n f s x",
-   :state :stopped,
+   :state :open,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain/B1/symmetry",
    :acceptance
@@ -23454,6 +23458,7 @@
    :area "sard-convex-domain",
    :declaration
    "ContDiffWithinAt.domDomCongr_iteratedFDerivWithin_of_infty",
+   :fail-count 0,
    :depends-on [:r-topo3-cp10],
    :current-residual "B1 supplies both point hypotheses.",
    :other-consumers [],
@@ -23549,7 +23554,9 @@
    :other-consumers []}
   {:bounded-exception "Rule0.",
    :consumer :t01A08,
-   :stop-count 1,
+   :owner-reopen
+   "reopened: a lemma this row reported missing is now banked",
+   :stop-count 0,
    :implements-lemma
    :lemma-contdiffwithinat-domdomcongr-iteratedfderivwithin-of-infty,
    :evidence
@@ -23604,7 +23611,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :stopped,
+   :state :open,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain/B1/symmetry",
    :acceptance
@@ -23623,6 +23630,7 @@
    :id :r-a08-symmetry-induction-1,
    :kind :reusable-theorem,
    :area "sard-convex-domain",
+   :fail-count 0,
    :depends-on [:r-topo3-cp11],
    :current-residual "Then B1.",
    :other-consumers []}
@@ -23760,6 +23768,17 @@
       :exit 1,
       :correction
       "post-build mode uses export fixture because axiom name is now declared"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791886013537-9389-493784e0",
+     :commands
+     ["git show/diff dda6f0ec; scope and commit checks"
+      "lake build ConstructionTargets.SardConvexDomain"
+      "lake env lean CheckSardFinalSymmetry.lean (post-build export)"
+      "sha256sum fixture; statement-registry check; placeholder recount"],
+     :finding
+     "PASS. The recorded one-file commit proves the frozen all-order symmetry type: finite-order symmetry is established on u∩interior(s), then continuity and x∈closure(u∩interior(s)) extend the correctly oriented domDomCongr identity to x. Build and post-build export pass; fixture hash matches; standard axioms only; registry 149/149; sorry/admit 0->0. The literal fixture redeclares the now-exported axiom, as expected for post-build-export-check mode."},
     :commit "dda6f0ecae4d95f4d9a6126959920f33e4e0ab3c",
     :commits
     ["6a0af2be8f704106a7e34bb8198a9b135a499cff"
@@ -23773,7 +23792,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain/B1/symmetry",
    :acceptance
@@ -33705,7 +33724,7 @@
    :other-consumers []}
   {:consumer :t01A08,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -33724,7 +33743,9 @@
     :type
     "ContDiffWithinAt R infinity f s x -> UniqueDiffOn R s -> x in s -> forall n sigma, domDomCongr sigma (iteratedFDerivWithin R n f s x) = iteratedFDerivWithin R n f s x",
     :area "sard-convex-domain",
-    :proved-in :r-a08-symmetry-slots-1},
+    :proved-in :r-a08-symmetry-slots-1,
+    :banked-by :r-a08-symmetry-slots-1,
+    :banked-commit "dda6f0ecae4d95f4d9a6126959920f33e4e0ab3c"},
    :id
    :lemma-contdiffwithinat-domdomcongr-iteratedfderivwithin-of-infty,
    :kind :lemma,
@@ -34222,7 +34243,7 @@
    :other-consumers []}
   {:consumer :t01A08,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -34236,7 +34257,9 @@
     :type
     "finite C-n at an interior point implies n-jet permutation invariance",
     :area "sard-convex-domain",
-    :proved-in :r-a08-symmetry-slots-1},
+    :proved-in :r-a08-symmetry-slots-1,
+    :banked-by :r-a08-symmetry-slots-1,
+    :banked-commit "dda6f0ecae4d95f4d9a6126959920f33e4e0ab3c"},
    :id
    :lemma-contdiffwithinat-domdomcongr-iteratedfderivwithin-of-nat-of-mem-interior,
    :kind :lemma,
