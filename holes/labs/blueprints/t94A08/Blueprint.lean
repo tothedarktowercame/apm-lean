@@ -453,7 +453,77 @@ lemma apm_t94a08_chart_transport_punctured_neighborhood
       V ⊆ W ∧ IsPreconnected (V \ {(e ⟨p, hpU, hpS⟩ :
         EuclideanSpace ℝ (Fin 2))})) :
     apm_t94a08_HasConnectedPuncturedNeighborhood S p := by
-  sorry
+  obtain ⟨V, hVopen, hxV, hVW, hVconn⟩ := hplane
+  let q : ↑(U ∩ S) := ⟨p, hpU, hpS⟩
+  let A : Set (↑(U ∩ S)) :=
+    e ⁻¹' ((↑) ⁻¹' V)
+  have hAopen : IsOpen A := by
+    exact (hVopen.preimage continuous_subtype_val).preimage e.continuous
+  obtain ⟨O, hOopen, hOA⟩ := isOpen_induced_iff.mp hAopen
+  refine ⟨O ∩ U, hOopen.inter hU, ?_, ?_⟩
+  · constructor
+    · have hqA : q ∈ A := by
+        exact hxV
+      have : p ∈ O := by
+        have := congrArg (fun T : Set (↑(U ∩ S)) => q ∈ T) hOA
+        exact this.mpr hqA
+      exact this
+    · exact hpU
+  · let D : Set (↑V) := {y | (y : EuclideanSpace ℝ (Fin 2)) ≠ e q}
+    let f : ↑V → X := fun y =>
+      (e.symm ⟨(y : EuclideanSpace ℝ (Fin 2)), hVW y.2⟩ : ↑(U ∩ S))
+    have hDconn : IsPreconnected D := by
+      apply Topology.IsInducing.subtypeVal.isPreconnected_image.mp
+      have hval : Subtype.val '' D =
+          V \ {(e q : EuclideanSpace ℝ (Fin 2))} := by
+        ext y
+        simp [D, and_comm]
+      rw [hval]
+      exact hVconn
+    have hfcont : Continuous f := by
+      exact continuous_subtype_val.comp
+        (e.symm.continuous.comp
+          (Continuous.subtype_mk continuous_subtype_val (fun y => hVW y.2)))
+    have himage : f '' D = (((O ∩ U) ∩ S) \ {p}) := by
+      ext z
+      constructor
+      · rintro ⟨y, hyD, rfl⟩
+        have hyA : e.symm ⟨(y : EuclideanSpace ℝ (Fin 2)), hVW y.2⟩ ∈ A := by
+          simp [A]
+        have hyO : (e.symm ⟨(y : EuclideanSpace ℝ (Fin 2)), hVW y.2⟩ :
+            ↑(U ∩ S)).1 ∈ O := by
+          have h := congrArg
+            (fun T : Set (↑(U ∩ S)) =>
+              e.symm ⟨(y : EuclideanSpace ℝ (Fin 2)), hVW y.2⟩ ∈ T) hOA
+          exact h.mpr hyA
+        refine ⟨⟨⟨hyO, (e.symm ⟨y, hVW y.2⟩).2.1⟩,
+          (e.symm ⟨y, hVW y.2⟩).2.2⟩, ?_⟩
+        intro hz
+        have hzq : e.symm ⟨(y : EuclideanSpace ℝ (Fin 2)), hVW y.2⟩ = q := by
+          apply Subtype.ext
+          exact hz
+        apply hyD
+        change (y : EuclideanSpace ℝ (Fin 2)) = e q
+        simpa using congrArg (fun r : ↑(U ∩ S) =>
+          (e r : EuclideanSpace ℝ (Fin 2))) hzq
+      · rintro ⟨⟨⟨hzO, hzU⟩, hzS⟩, hzp⟩
+        let r : ↑(U ∩ S) := ⟨z, hzU, hzS⟩
+        have hrA : r ∈ A := by
+          have h := congrArg (fun T : Set (↑(U ∩ S)) => r ∈ T) hOA
+          exact h.mp hzO
+        have herV : (e r : EuclideanSpace ℝ (Fin 2)) ∈ V := hrA
+        let y : ↑V := ⟨(e r : EuclideanSpace ℝ (Fin 2)), herV⟩
+        refine ⟨y, ?_, ?_⟩
+        · change (y : EuclideanSpace ℝ (Fin 2)) ≠ e q
+          intro heq
+          apply hzp
+          have : r = q := e.injective (Subtype.ext heq)
+          exact congrArg Subtype.val this
+        · change (e.symm ⟨(y : EuclideanSpace ℝ (Fin 2)), hVW y.2⟩ :
+            ↑(U ∩ S)).1 = z
+          simp [y, r]
+    rw [← himage]
+    exact hDconn.image f hfcont.continuousOn
 
 /-- The affine nodal model: two complex coordinate axes crossing at zero. -/
 def apm_t94a08_complexCross : Set (ℂ × ℂ) :=
