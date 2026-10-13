@@ -1164,6 +1164,12 @@ coproduct injection of its connector normal form.  The identification keeps
 the predecessor's dependent endpoints and uses the already proved
 actual-to-coordinate span equality rather than an object normalization.
 
+`genericPointWedgeCoordinateSpanGlobalRestrictionLeftComparison_heq_actualPredecessor`
+factors the round-trip connector normal form using `normalForm_comp`, converts
+the coproduct injection of that composite into multiplication, and substitutes
+the literal actual-span action for the predecessor factor.  The source counit
+remains explicit as the left multiplication factor.
+
 `genericPointWedgeCoordinateSpanGlobalRestrictionLeftRoundTrip_counit_map`
 applies the coordinate-span left functor to the left-equivalence counit
 naturality square.  Both ordered composites are now equal inside the

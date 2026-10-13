@@ -3926,6 +3926,66 @@ theorem genericPointWedgeLeftRoundTripPredecessor_actualAction :
   rw [genericPointWedgeIdentityActualSpan_left_map]
   exact genericPointWedgeIdentityCoordinateSpan_left_map x₀ y₀ _
 
+/-- Substitute the literal actual-span action for the predecessor in the
+full round-trip comparison.  The remaining left factor is precisely the
+source counit in connector normal form. -/
+theorem genericPointWedgeCoordinateSpanGlobalRestrictionLeftComparison_heq_actualPredecessor :
+    let eK := genericPointWedgeOverlapGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let eL := genericPointWedgeLeftGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let aL := genericPointWedgeLeftSpanIso
+      x₀ y₀ M N hM hN hy hx cM cN
+    let l := genericPointWedgeActualLeft x₀ y₀ M N
+    let u : FundamentalGroupoid Unit := FundamentalGroupoid.mk ()
+    HEq
+      (genericPointWedgeCoordinateSpanGlobalRestrictionLeftComparison
+        x₀ y₀ M N hM hN hy hx cM cN)
+      (((Monoid.Coprod.inl (N := genericPointWedgeRightGroup y₀)
+          ((genericPointWedgeConnectors x₀).normalForm
+            (eL.counitIso.hom.app ((eK.inverse ⋙ l ⋙ eL.functor).obj u)))) :
+          genericPointWedgeFreeProduct x₀ y₀) *
+        (genericPointWedgeIdentityActualSpan
+          x₀ y₀ M N hM hN hy hx cM cN).left.map
+            (eL.inverse.map (aL.inv.app u))) := by
+  have h :=
+    genericPointWedgeCoordinateSpanGlobalRestrictionLeftComparison_heq_roundTrip
+      x₀ y₀ M N hM hN hy hx cM cN
+  have hp := genericPointWedgeLeftRoundTripPredecessor_actualAction
+    x₀ y₀ M N hM hN hy hx cM cN
+  dsimp only at h hp ⊢
+  have h' : HEq
+      (genericPointWedgeCoordinateSpanGlobalRestrictionLeftComparison
+        x₀ y₀ M N hM hN hy hx cM cN)
+      ((Monoid.Coprod.inl (N := genericPointWedgeRightGroup y₀)
+        ((genericPointWedgeConnectors x₀).normalForm
+          ((genericPointWedgeLeftGroupoidEquivalence
+              x₀ y₀ M N hM hN hy hx cM cN).functor.map
+              ((genericPointWedgeLeftGroupoidEquivalence
+                x₀ y₀ M N hM hN hy hx cM cN).inverse.map
+                ((genericPointWedgeLeftSpanIso
+                  x₀ y₀ M N hM hN hy hx cM cN).inv.app
+                    (FundamentalGroupoid.mk ()))) ≫
+            (genericPointWedgeLeftGroupoidEquivalence
+              x₀ y₀ M N hM hN hy hx cM cN).counitIso.hom.app
+              (((genericPointWedgeOverlapGroupoidEquivalence
+                  x₀ y₀ M N hM hN hy hx cM cN).inverse ⋙
+                genericPointWedgeActualLeft x₀ y₀ M N ⋙
+                (genericPointWedgeLeftGroupoidEquivalence
+                  x₀ y₀ M N hM hN hy hx cM cN).functor).obj
+                    (FundamentalGroupoid.mk ()))))) :
+        genericPointWedgeFreeProduct x₀ y₀) := by
+    simpa only [ConnectorSystem.normalForm, Category.assoc] using h
+  rw [(genericPointWedgeConnectors x₀).normalForm_comp] at h'
+  rw [← End.mul_def] at h'
+  apply h'.trans
+  apply heq_of_eq
+  exact ((Monoid.Coprod.inl
+    (N := genericPointWedgeRightGroup y₀)).map_mul _ _).trans
+      (by
+        rw [eq_of_heq hp.symm]
+        rfl)
+
 /-- The inverse right comparison introduced by coordinate-span transport,
 isolated before recombining it with the middle and left factors. -/
 def genericPointWedgeCoordinateSpanGlobalRestrictionRightComparison :
@@ -6404,6 +6464,7 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeMappedLeft_eq_conj
 #print axioms genericPointWedgeMappedRight_eq_conj
 #print axioms genericPointWedgeLeftRoundTripPredecessor_actualAction
+#print axioms genericPointWedgeCoordinateSpanGlobalRestrictionLeftComparison_heq_actualPredecessor
 #print axioms genericPointWedgeCounitNormalization_left
 #print axioms genericPointWedgeCounitNormalization_right
 #print axioms genericPointWedgeNormalizedSourceEquivalence
