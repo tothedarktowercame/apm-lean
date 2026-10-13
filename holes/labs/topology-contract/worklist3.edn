@@ -22289,6 +22289,8 @@
      :typed-residual-change
      :infrastructure-packets
      :review-outcomes]},
+   :review-finding
+   "Replan repeats a known deterministic defect: both acceptance copies for replacement r-a08-agg-2 omit :mode :post-build-export-check, although the reviewed aggregate fixture is promoted and literal compilation fails as a duplicate declaration. Add that mode to both copies before re-electing the aggregate row; the fresh priority count itself correctly reports t01A08 as 1 placeholder, 6 banked, 2 backlog.",
    :evidence
    {:outcome :replan,
     :seat "topo-12",
@@ -22346,9 +22348,15 @@
       :current-residual "Elect frontier Sard.",
       :other-consumers []}],
     :author "topo-12",
-    :disposition :replan},
+    :disposition :replan,
+    :review
+    {:outcome :fail,
+     :seat "codex-11",
+     :job "invoke-1791860780407-8294-7bb2f52a",
+     :finding
+     "Replan repeats a known deterministic defect: both acceptance copies for replacement r-a08-agg-2 omit :mode :post-build-export-check, although the reviewed aggregate fixture is promoted and literal compilation fails as a duplicate declaration. Add that mode to both copies before re-electing the aggregate row; the fresh priority count itself correctly reports t01A08 as 1 placeholder, 6 banked, 2 backlog."}},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :repair,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance {:strategy "Rerank after corners Sard."},
@@ -22363,7 +22371,7 @@
    :implements-lemma
    :lemma-constructiontargets-sardconvexdomain-modelrange-withincriticalimage-null-of-inte,
    :phase :implementation,
-   :state :blocked,
+   :state :superseded,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t01A08/corners-sard",
    :acceptance
@@ -22391,7 +22399,7 @@
      :infrastructure-packets
      :review-outcomes]},
    :phase :strategy,
-   :state :blocked,
+   :state :superseded,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance {:strategy "Rerank."},
