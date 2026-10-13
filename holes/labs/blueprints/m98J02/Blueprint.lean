@@ -969,6 +969,18 @@ noncomputable def apm_m98J02_bridge_2_aux_psi_aux_linear
 
 -- Continuity on each fixed-support stage: the seminorm estimate (Leibniz + one uniform stage
 -- of translates on which v is bounded by finitely many seminorms).
+lemma apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_support
+    (v : apm_m98J02_Dist) (χ : apm_m98J02_Test)
+    (hsmooth : ∀ φ : apm_m98J02_Test,
+      ContDiff ℝ ∞ (fun x : apm_m98J02_E =>
+        v (apm_m98J02_translateTest x φ)))
+    (φ : apm_m98J02_Test) :
+    tsupport (apm_m98J02_bridge_2_aux_psi_aux_fun v χ hsmooth φ :
+      apm_m98J02_E → ℝ) ⊆ tsupport (χ : apm_m98J02_E → ℝ) := by
+  change tsupport (fun x => χ x *
+    v (apm_m98J02_translateTest x φ)) ⊆ tsupport (χ : apm_m98J02_E → ℝ)
+  exact tsupport_mul_subset_left
+
 lemma apm_m98J02_bridge_2_aux_psi_aux_stage_cont
     (v : apm_m98J02_Dist) (χ : apm_m98J02_Test)
     (hsmooth : ∀ φ : apm_m98J02_Test,
