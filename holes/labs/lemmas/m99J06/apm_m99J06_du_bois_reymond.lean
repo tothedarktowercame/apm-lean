@@ -237,6 +237,15 @@ theorem apm_m99J06_strong_to_weak
 /-- du Bois-Reymond for the model: if `∫ g w' = ∫ h w` for every `w`, then `g = c − ∫₀ˣ h` a.e.
 Test with `w` realizing `x ↦ ∫₀ˣ (g + G − mean)`, `G x = ∫₀ˣ h`. -/
 -- BEGIN SEAT AREA
+lemma apm_m99J06_du_bois_reymond_aux_memLp_of_continuousOn
+    (f : ℝ → ℝ) (hf : ContinuousOn f (Icc (0 : ℝ) 1)) :
+    MemLp f 2 apm_m99J06_intervalMeasure := by
+  obtain ⟨C, hC⟩ := bddAbove_def.mp
+    (isCompact_Icc.bddAbove_image hf.norm)
+  apply MemLp.of_bound (hf.aestronglyMeasurable measurableSet_Icc) C
+  filter_upwards [ae_restrict_mem measurableSet_Icc] with x hx
+  exact hC ‖f x‖ ⟨x, hx, rfl⟩
+
 theorem apm_m99J06_du_bois_reymond
     {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℝ H]
     (M : apm_m99J06_H01Model H) (g h : ℝ → ℝ)
@@ -244,7 +253,140 @@ theorem apm_m99J06_du_bois_reymond
     (hw : ∀ w : H, ∫ x in Icc (0 : ℝ) 1, g x * M.weakDeriv w x =
       ∫ x in Icc (0 : ℝ) 1, h x * M.val w x) :
     ∃ c : ℝ, ∀ᵐ x ∂apm_m99J06_intervalMeasure, g x = c - ∫ t in (0 : ℝ)..x, h t := by
-  sorry
+  have hhInt : IntervalIntegrable h volume 0 1 := by
+    rw [intervalIntegrable_iff_integrableOn_Icc_of_le (by norm_num)]
+    exact hh.integrable (by norm_num)
+  let G : ℝ → ℝ := fun x ↦ ∫ t in (0 : ℝ)..x, h t
+  have hGac : AbsolutelyContinuousOnInterval G 0 1 := by
+    exact hhInt.absolutelyContinuousOnInterval_intervalIntegral (by simp)
+  have hGmem : MemLp G 2 apm_m99J06_intervalMeasure :=
+    apm_m99J06_du_bois_reymond_aux_memLp_of_continuousOn G (by
+      simpa [uIcc_of_le (by norm_num : (0 : ℝ) ≤ 1)] using hGac.continuousOn)
+  let c : ℝ := ∫ x in (0 : ℝ)..1, g x + G x
+  let q : ℝ → ℝ := fun x ↦ g x + G x - c
+  have hqmem : MemLp q 2 apm_m99J06_intervalMeasure := by
+    exact (hg.add hGmem).sub (memLp_const c)
+  have hqInt : IntervalIntegrable q volume 0 1 := by
+    rw [intervalIntegrable_iff_integrableOn_Icc_of_le (by norm_num)]
+    exact hqmem.integrable (by norm_num)
+  have hqzero : ∫ x in (0 : ℝ)..1, q x = 0 := by
+    rw [show q = fun x ↦ (g x + G x) - c by rfl]
+    rw [intervalIntegral.integral_sub]
+    · simp [c]
+    · rw [intervalIntegrable_iff_integrableOn_Icc_of_le (by norm_num)]
+      exact (hg.add hGmem).integrable (by norm_num)
+    · exact intervalIntegrable_const
+  let W : ℝ → ℝ := fun x ↦ ∫ t in (0 : ℝ)..x, q t
+  have hWac : AbsolutelyContinuousOnInterval W 0 1 :=
+    hqInt.absolutelyContinuousOnInterval_intervalIntegral (by simp)
+  have hWmem : MemLp W 2 apm_m99J06_intervalMeasure :=
+    apm_m99J06_du_bois_reymond_aux_memLp_of_continuousOn W (by
+      simpa [uIcc_of_le (by norm_num : (0 : ℝ) ≤ 1)] using hWac.continuousOn)
+  have hqderiv_vol : ∀ᵐ x ∂volume, x ∈ Icc (0 : ℝ) 1 → HasDerivAt W (q x) x := by
+    filter_upwards [hqInt.ae_hasDerivAt_integral] with x hx
+    intro hxI
+    exact hx (by simpa [uIcc_of_le (by norm_num : (0 : ℝ) ≤ 1)] using hxI)
+      0 (by simp [uIcc_of_le (by norm_num : (0 : ℝ) ≤ 1)])
+  have hqderiv : ∀ᵐ x ∂apm_m99J06_intervalMeasure, HasDerivAt W (q x) x := by
+    filter_upwards [ae_restrict_mem measurableSet_Icc,
+      ae_restrict_of_ae hqderiv_vol] with x hx hd
+    exact hd hx
+  have hWpair : apm_m99J06_isH01Pair W (hqmem.toLp q) := by
+    refine ⟨hWac, hWmem, ⟨q, hqmem, rfl, hqderiv⟩, ?_, ?_⟩
+    · simp [W]
+    · simpa [W] using hqzero
+  obtain ⟨w, hwval, hwderiv⟩ := M.realizes W (hqmem.toLp q) hWpair
+  have heq := hw w
+  rw [hwval, hwderiv] at heq
+  have heq' : (∫ x in Icc (0 : ℝ) 1, g x * q x) =
+      ∫ x in Icc (0 : ℝ) 1, h x * W x := by
+    rw [← heq]
+    apply MeasureTheory.integral_congr_ae
+    filter_upwards [hqmem.coeFn_toLp] with x hx
+    rw [hx]
+  have hGderiv : ∀ᵐ x ∂apm_m99J06_intervalMeasure,
+      HasDerivAt G (h x) x := by
+    have hdvol : ∀ᵐ x ∂volume, x ∈ Icc (0 : ℝ) 1 → HasDerivAt G (h x) x := by
+      filter_upwards [hhInt.ae_hasDerivAt_integral] with x hx
+      intro hxI
+      exact hx (by simpa [uIcc_of_le (by norm_num : (0 : ℝ) ≤ 1)] using hxI)
+        0 (by simp [uIcc_of_le (by norm_num : (0 : ℝ) ≤ 1)])
+    filter_upwards [ae_restrict_mem measurableSet_Icc,
+      ae_restrict_of_ae hdvol] with x hx hd
+    exact hd hx
+  have hibp : (∫ x in Icc (0 : ℝ) 1, h x * W x) =
+      -∫ x in Icc (0 : ℝ) 1, G x * q x := by
+    have hparts := hGac.integral_mul_deriv_eq_deriv_mul hWac
+    have hderG : ∀ᵐ x ∂apm_m99J06_intervalMeasure, deriv G x = h x :=
+      hGderiv.mono fun x hx ↦ hx.deriv
+    have hderW : ∀ᵐ x ∂apm_m99J06_intervalMeasure, deriv W x = q x :=
+      hqderiv.mono fun x hx ↦ hx.deriv
+    rw [show G 0 = 0 by simp [G], show W 0 = 0 by simp [W],
+      show W 1 = 0 by simpa [W] using hqzero] at hparts
+    simp only [mul_zero, sub_zero, zero_mul, zero_sub] at hparts
+    rw [intervalIntegral.integral_of_le (by norm_num),
+      ← integral_Icc_eq_integral_Ioc,
+      intervalIntegral.integral_of_le (by norm_num),
+      ← integral_Icc_eq_integral_Ioc] at hparts
+    have heqW : (fun x ↦ G x * deriv W x) =ᵐ[apm_m99J06_intervalMeasure]
+        fun x ↦ G x * q x := hderW.mono fun x hx ↦ by
+      change G x * deriv W x = G x * q x
+      rw [hx]
+    have heqG : (fun x ↦ deriv G x * W x) =ᵐ[apm_m99J06_intervalMeasure]
+        fun x ↦ h x * W x := hderG.mono fun x hx ↦ by
+      change deriv G x * W x = h x * W x
+      rw [hx]
+    rw [MeasureTheory.integral_congr_ae heqW,
+      MeasureTheory.integral_congr_ae heqG] at hparts
+    linarith [hparts]
+  have hsqzero : ∫ x in Icc (0 : ℝ) 1, q x ^ 2 = 0 := by
+    rw [show (fun x ↦ q x ^ 2) = fun x ↦ (g x + G x - c) * q x by
+      funext x; simp [q]; ring]
+    have hgq := heq'
+    rw [hibp] at hgq
+    have hGq : Integrable (fun x ↦ G x * q x) apm_m99J06_intervalMeasure :=
+      hGmem.integrable_mul hqmem
+    have hgqInt : Integrable (fun x ↦ g x * q x) apm_m99J06_intervalMeasure :=
+      hg.integrable_mul hqmem
+    have halg : (fun x ↦ (g x + G x - c) * q x) =
+        (fun x ↦ g x * q x) + (fun x ↦ G x * q x) - fun x ↦ c * q x := by
+      funext x
+      simp only [Pi.add_apply, Pi.sub_apply]
+      ring
+    rw [halg]
+    change (∫ x, (g x * q x + G x * q x) - c * q x
+      ∂apm_m99J06_intervalMeasure) = 0
+    have hqi : ∫ x in Icc (0 : ℝ) 1, q x = 0 := by
+      rw [integral_Icc_eq_integral_Ioc,
+        ← intervalIntegral.integral_of_le (by norm_num)]
+      exact hqzero
+    calc
+      (∫ x, g x * q x + G x * q x - c * q x
+          ∂apm_m99J06_intervalMeasure) =
+          (∫ x, g x * q x + G x * q x
+            ∂apm_m99J06_intervalMeasure) -
+          ∫ x, c * q x ∂apm_m99J06_intervalMeasure :=
+        MeasureTheory.integral_sub (hgqInt.add hGq)
+          ((hqmem.integrable (by norm_num)).const_mul c)
+      _ = ((∫ x, g x * q x ∂apm_m99J06_intervalMeasure) +
+          ∫ x, G x * q x ∂apm_m99J06_intervalMeasure) -
+          c * ∫ x, q x ∂apm_m99J06_intervalMeasure := by
+        rw [MeasureTheory.integral_add hgqInt hGq,
+          MeasureTheory.integral_const_mul]
+      _ = 0 := by rw [hgq, hqi]; ring
+  refine ⟨c, ?_⟩
+  have hsqae : (fun x ↦ q x ^ 2) =ᵐ[apm_m99J06_intervalMeasure] 0 :=
+    (MeasureTheory.integral_eq_zero_iff_of_nonneg_ae
+      (Filter.Eventually.of_forall fun x ↦ sq_nonneg (q x))
+      (by simpa only [Pi.mul_apply, pow_two] using hqmem.integrable_mul hqmem)).mp
+        (by simpa [pow_two] using hsqzero)
+  have hqae : q =ᵐ[apm_m99J06_intervalMeasure] 0 := by
+    filter_upwards [hsqae] with x hx
+    simp only [Pi.zero_apply] at hx ⊢
+    exact sq_eq_zero_iff.mp hx
+  filter_upwards [hqae] with x hx
+  dsimp [q] at hx
+  linarith
 -- END SEAT AREA
 
 /-- Weak ⇒ strong, given du Bois-Reymond: with `h = f − u`, `u' = c + ∫₀ˣ (u − f)` is an absolutely
