@@ -276,6 +276,108 @@ theorem apm_t96j07_map_fixedPoints :
           exact ⟨Units.mk0 c hc, hA.symm⟩
         exact hf'.trans hAx
 
+lemma apm_t96j07_diagonal_link_degree_aux_interp
+    (u v t : ℝ) (hu : u ≠ 0)
+    (hsign : (0 < u ∧ v = 1) ∨ (u < 0 ∧ v = -1))
+    (ht0 : 0 ≤ t) (ht1 : t ≤ 1) :
+    (1 - t) * u + t * v ≠ 0 := by
+  rcases hsign with h | h
+  · rw [h.2]
+    have hp : 0 < (1 - t) * u + t * 1 := by
+      by_cases ht : t = 1
+      · subst t; norm_num
+      · have : t < 1 := lt_of_le_of_ne ht1 ht
+        have : 0 < (1 - t) * u := mul_pos (sub_pos.mpr this) h.1
+        nlinarith
+    exact ne_of_gt hp
+  · rw [h.2]
+    have hp : (1 - t) * u + t * (-1) < 0 := by
+      by_cases ht : t = 1
+      · subst t; norm_num
+      · have : t < 1 := lt_of_le_of_ne ht1 ht
+        have : (1 - t) * u < 0 := mul_neg_of_pos_of_neg (sub_pos.mpr this) h.1
+        nlinarith
+    exact ne_of_lt hp
+
+lemma apm_t96j07_diagonal_link_degree_aux_vector_ne_zero
+    (b : Fin 3 → ℝ) (hb : ∀ j, b j ≠ 0) (x : apm_t96j07_S2) :
+    WithLp.toLp 2 (fun j ↦ b j * x.1 j) ≠ 0 := by
+  intro h
+  have hx0 : x.1 ≠ 0 := by
+    intro hx
+    have hxnorm : ‖x.1‖ = 1 := by simpa [Metric.mem_sphere] using x.2
+    simp [hx] at hxnorm
+  apply hx0
+  ext j
+  have hj := congrArg (fun y : apm_t96j07_E3 ↦ y j) h
+  change b j * x.1 j = 0 at hj
+  exact (mul_eq_zero.mp hj).resolve_left (hb j)
+
+/-- `link` is the normalised diagonal map `x ↦ D x / ‖D x‖`, `D = diag b`. -/
+def apm_t96j07_IsNormalizedDiagonal (b : Fin 3 → ℝ)
+    (link : C(apm_t96j07_S2, apm_t96j07_S2)) : Prop :=
+  ∀ x, ∃ hne : WithLp.toLp 2 (fun j ↦ b j * x.1 j) ≠ 0,
+    link x = ⟨‖WithLp.toLp 2 (fun j ↦ b j * x.1 j)‖⁻¹ •
+      WithLp.toLp 2 (fun j ↦ b j * x.1 j), by
+        rw [Metric.mem_sphere, dist_zero_right, norm_smul, norm_inv, norm_norm]
+        exact inv_mul_cancel₀ (norm_ne_zero_iff.mpr hne)⟩
+
+/-- Seat: the normalised diagonal map exists (continuous) when all `b j ≠ 0`. -/
+theorem apm_t96j07_exists_normalizedDiagonal (b : Fin 3 → ℝ) (hb : ∀ j, b j ≠ 0) :
+    ∃ link, apm_t96j07_IsNormalizedDiagonal b link := by
+  sorry
+
+/-- Seat: normalised diagonal maps for `b` and for the signs of `b` are homotopic
+(straight line `(1 - t) b + t sign b` has nonzero entries). -/
+theorem apm_t96j07_normalizedDiagonal_homotopic_sign (b : Fin 3 → ℝ)
+    (hb : ∀ j, b j ≠ 0) (l l' : C(apm_t96j07_S2, apm_t96j07_S2))
+    (hl : apm_t96j07_IsNormalizedDiagonal b l)
+    (hl' : apm_t96j07_IsNormalizedDiagonal (fun j ↦ if 0 < b j then 1 else -1) l') :
+    ContinuousMap.Homotopic l l' := by
+  sorry
+
+/-- Seat: a sign-diagonal map (a product of coordinate reflections) acts on
+`H₂(S²; ℤ) ≅ ℤ` by the product of the signs
+(`ConstructionTargets.CoefficientFirstReflection.all_reflections_negative ℤ 2`,
+functoriality; `topIso ℤ 1` for the orientation). -/
+theorem apm_t96j07_signDiagonal_H2 (ε : Fin 3 → ℝ) (hε : ∀ j, ε j = 1 ∨ ε j = -1)
+    (l : C(apm_t96j07_S2, apm_t96j07_S2)) (hl : apm_t96j07_IsNormalizedDiagonal ε l) :
+    ∃ orientation : apm_t96j07_H2S2 ≅ ModuleCat.of ℤ ℤ,
+      ∀ z : apm_t96j07_H2S2,
+        orientation.hom
+            (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 2).obj
+              (ModuleCat.of ℤ ℤ)).map (TopCat.ofHom l) z) =
+          (if 0 < ∏ j, ε j then 1 else -1) * orientation.hom z := by
+  sorry
+
+/-- Seat (assembly from the three leaves above as hypotheses): homotopy
+invariance (`SingularHomologyHomotopy.singularHomology_map_eq_of_homotopic`) and
+`sign (∏ b j) = ∏ sign (b j)`. -/
+theorem apm_t96j07_diagonal_link_degree_of_parts
+    (hex : ∀ b : Fin 3 → ℝ, (∀ j, b j ≠ 0) → ∃ link, apm_t96j07_IsNormalizedDiagonal b link)
+    (hhom : ∀ (b : Fin 3 → ℝ), (∀ j, b j ≠ 0) → ∀ l l' : C(apm_t96j07_S2, apm_t96j07_S2),
+      apm_t96j07_IsNormalizedDiagonal b l →
+      apm_t96j07_IsNormalizedDiagonal (fun j ↦ if 0 < b j then 1 else -1) l' →
+      ContinuousMap.Homotopic l l')
+    (hsign : ∀ (ε : Fin 3 → ℝ), (∀ j, ε j = 1 ∨ ε j = -1) →
+      ∀ l : C(apm_t96j07_S2, apm_t96j07_S2), apm_t96j07_IsNormalizedDiagonal ε l →
+      ∃ orientation : apm_t96j07_H2S2 ≅ ModuleCat.of ℤ ℤ,
+        ∀ z : apm_t96j07_H2S2,
+          orientation.hom
+              (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 2).obj
+                (ModuleCat.of ℤ ℤ)).map (TopCat.ofHom l) z) =
+            (if 0 < ∏ j, ε j then 1 else -1) * orientation.hom z) :
+    ∀ a : Fin 3 → ℝ, (∀ j, 1 - a j ≠ 0) →
+      ∃ link : C(apm_t96j07_S2, apm_t96j07_S2),
+        apm_t96j07_IsNormalizedDiagonal (fun j ↦ 1 - a j) link ∧
+        ∃ orientation : apm_t96j07_H2S2 ≅ ModuleCat.of ℤ ℤ,
+          ∀ z : apm_t96j07_H2S2,
+            orientation.hom
+                (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 2).obj
+                  (ModuleCat.of ℤ ℤ)).map (TopCat.ofHom link) z) =
+              (if 0 < ∏ j, (1 - a j) then 1 else -1) * orientation.hom z := by
+  sorry
+
 /-- The degree calculation used in every affine chart.  An invertible diagonal
 displacement on `R^3`, normalized to the unit sphere, acts on integral top
 homology by the sign of its determinant. -/
@@ -294,7 +396,10 @@ theorem apm_t96j07_diagonal_link_degree :
                 (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 2).obj
                   (ModuleCat.of ℤ ℤ)).map (TopCat.ofHom link) z) =
               (if 0 < ∏ j, (1 - a j) then 1 else -1) * orientation.hom z := by
-  sorry
+  exact apm_t96j07_diagonal_link_degree_of_parts
+    apm_t96j07_exists_normalizedDiagonal
+    apm_t96j07_normalizedDiagonal_homotopic_sign
+    apm_t96j07_signDiagonal_H2
 
 /-- Package the affine chart at the first coordinate axis.  The sphere-degree
 input is explicit so this leaf is independent of its eventual proof. -/
