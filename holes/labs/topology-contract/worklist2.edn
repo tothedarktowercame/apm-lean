@@ -76467,6 +76467,17 @@
     [{:cmd "first relation compile",
       :exit 1,
       :correction "installed wedge T2 instance"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791869287762-8544-195ae1c3",
+     :commands
+     ["git scope/SHA/blob checks at 34fa7c1df"
+      "git show 34fa7c1df:... | lake env lean /dev/stdin"
+      "statement-registry.py check (145/0 current)"
+      "placeholder/orientation scans; #print axioms"],
+     :finding
+     "PASS: exact recorded one-file scope and frozen hashes match; the committed blob compiles. Nested quotient induction reaches every indexed-wedge point; positive sign keeps t, negative sign uses reverseIcc t and the signed map reverses back. Placeholders 0, standard axioms only, current registry 145/0. STOP records substantive progress and lists source coverage, kernel agreement, quotient topology, final homeomorphism and B8/B9 remaining."},
     :commit "9f18c4ca1",
     :commits ["8007c4f1e" "9f18c4ca1"],
     :changed-paths ["ConstructionTargets/PolygonSurfacePiOne.lean"],
@@ -76476,7 +76487,7 @@
      "a5462511c62ca1f6fc72bb8d48ca3461237b123afb807f1e5ba2ad7edff5de70"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/PolygonSurfacePiOne.lean"],
    :dag-node "ConstructionTargets/PolygonSurfacePiOne.blueprint.md/B7",
    :acceptance
@@ -86817,7 +86828,7 @@
    :other-consumers [:t92J05 :t94J04 :t97A01 :t97A03]}
   {:consumer :t96J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -86830,7 +86841,9 @@
     :reported-by [:routes-2026-10-12-polygon-b7-topo2-r1],
     :type
     "P.skeleton ≃ₜ orbit-indexed circle wedge, with signed arc equations",
-    :area "polygon-surface-pi1"},
+    :area "polygon-surface-pi1",
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/PolygonSurfacePiOne.lean"]},
    :id
    :lemma-constructiontargets-polygonsurfacepione-skeletonhomeomorphwedge,
    :kind :lemma,
@@ -87137,7 +87150,7 @@
    :other-consumers [:t92J05 :t94J04 :t97A01 :t97A03]}
   {:consumer :t96J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "PairingData.skeletonArcMap_isQuotientMap",
@@ -87147,7 +87160,9 @@
     :reported-by [:routes-2026-10-12-polygon-b7-topo2-r1],
     :type "source arcs are quotient",
     :area "polygon-surface-pi1",
-    :proved-in :routes-2026-10-12-polygon-b7-topo2-r1},
+    :proved-in :routes-2026-10-12-polygon-b7-topo2-r1,
+    :banked-by :routes-2026-10-12-polygon-b7-topo2-r1,
+    :banked-commit "9f18c4ca1"},
    :id :lemma-pairingdata-skeletonarcmap-isquotientmap,
    :kind :lemma,
    :depends-on [:lemma-pairingdata-eqvgenrel-isclosed],
@@ -87389,7 +87404,7 @@
    :other-consumers []}
   {:consumer :t96J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "PairingData.eqvGenRel_isClosed",
@@ -87399,14 +87414,16 @@
     :reported-by [:routes-2026-10-12-polygon-b7-topo2-r1],
     :type "generated polygon relation closed",
     :area "polygon-surface-pi1",
-    :proved-in :routes-2026-10-12-polygon-b7-topo2-r1},
+    :proved-in :routes-2026-10-12-polygon-b7-topo2-r1,
+    :banked-by :routes-2026-10-12-polygon-b7-topo2-r1,
+    :banked-commit "9f18c4ca1"},
    :id :lemma-pairingdata-eqvgenrel-isclosed,
    :kind :lemma,
    :depends-on [],
    :other-consumers [:t92J05 :t94J04 :t97A01 :t97A03]}
   {:consumer :t96J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "PairingData.skeletonHomeomorphWedge",
@@ -87416,7 +87433,9 @@
     :reported-by [:routes-2026-10-12-polygon-b7-topo2-r1],
     :type "signed skeleton-wedge homeomorphism",
     :area "polygon-surface-pi1",
-    :proved-in :routes-2026-10-12-polygon-b7-topo2-r1},
+    :proved-in :routes-2026-10-12-polygon-b7-topo2-r1,
+    :banked-by :routes-2026-10-12-polygon-b7-topo2-r1,
+    :banked-commit "9f18c4ca1"},
    :id :lemma-pairingdata-skeletonhomeomorphwedge,
    :kind :lemma,
    :depends-on
