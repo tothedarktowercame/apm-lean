@@ -76416,78 +76416,67 @@
   {:consumer :t96J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "Deterministic topology defect in commit ee79eaeb2: it changes the index topology for FiniteWedge from ⊥ to ⊤ while claiming this makes it discrete. Mathlib/Topology/Order.lean states exactly the opposite: ⊥ is discrete and ⊤ is indiscrete. Consequently L × Circle is not the coproduct/disjoint-union source of indexed circle legs, and the coinduced quotient is not the B7 finite-wedge topology; future skeletonHomeomorphWedge would target the wrong space. Repair by restoring TopologicalSpace L := ⊥ in both the FiniteWedge instance and continuous_wedgeCircle proof, then rerun Lean/build and retain coverage, quotient-topology, wedge-relation, and signed-equation residuals. Recorded scope is otherwise exact and fixture SHA-256 386d0e41...ae305 matches.",
    :evidence
    {:placeholder-delta 0,
-    :residual "Prove kernel agreement and quotient maps; then B8/B9.",
+    :residual "Source quotient, kernel agreement; then B8/B9.",
     :outcome :stop,
     :warnings ["preexisting lints"],
     :missing-theorems
-    [{:name "PairingData.SkeletonWedgeKernelAgreement",
-      :type "skeleton kernel iff wedge kernel",
-      :status :not-started,
+    [{:name "PairingData.signedWedgeArcMap_isQuotientMap",
+      :type "signed arcs quotient",
+      :status :proved,
       :consumers [:t96J02 :t92J05 :t94J04 :t97A01 :t97A03],
       :depends-on [],
       :area "polygon-surface-pi1"}
-     {:name "PairingData.arcMaps_isQuotientMap",
-      :type "both arc maps are quotient maps",
+     {:name "PairingData.SkeletonWedgeKernelAgreement",
+      :type "source kernel iff target kernel",
       :status :not-started,
       :consumers [:t96J02 :t92J05 :t94J04 :t97A01 :t97A03],
       :depends-on [],
       :area "polygon-surface-pi1"}
      {:name
       "ConstructionTargets.PolygonSurfacePiOne.skeletonHomeomorphWedge",
-      :type "signed skeleton-wedge homeomorphism",
+      :type "signed homeomorphism",
       :status :partial,
       :consumers [:t96J02 :t92J05 :t94J04 :t97A01 :t97A03],
       :depends-on
       ["PairingData.SkeletonWedgeKernelAgreement"
-       "PairingData.arcMaps_isQuotientMap"],
+       "PairingData.skeletonArcMap_isQuotientMap"],
       :area "polygon-surface-pi1"}],
     :statement-hashes
     {:registry "131/0",
-     :module "dbaf2cec51e08fc3d65bb3466c14f5260a7d2b20"},
+     :module "3d95b84686fd6de101acd8304c2f467e517dec5f"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
     :reason
-    "Homeomorphism descent proved; kernels and quotient maps remain.",
+    "Target quotient proved; source quotient and kernels remain.",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/PolygonSurfacePiOne.lean",
       :exit 0}
      {:cmd "lake build ConstructionTargets.PolygonSurfacePiOne",
       :exit 0}
-     {:cmd "registry check", :exit 0}
+     {:cmd "statement-registry check", :exit 0}
      {:cmd "placeholder scan", :exit 0}
-     {:cmd "#print axioms descent", :exit 0}
-     {:cmd "git show --check 71da1cf41", :exit 0}],
+     {:cmd "#print axioms new results", :exit 0}
+     {:cmd "git show --check 82f7baf0e", :exit 0}],
     :diagnostic-history
-    [{:cmd "first compile",
+    [{:cmd "initial compile",
       :exit 1,
-      :correction "explicit composition equalities"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1791858610218-8239-81d76392",
-     :commands
-     ["git exact scope/SHA/blob checks at 34fa7c1df"
-      "lake env lean ConstructionTargets/PolygonSurfacePiOne.lean"
-      "statement-registry.py check"
-      "placeholder/orientation scans; #print axioms"],
-     :finding
-     "PASS: exact recorded one-file scope and frozen hashes match. The new surjectivity results cross the endpoint quotient and orbit quotient correctly; true sign preserves t, while false sign supplies reverseIcc t to cancel the signed-map reversal. Lean passes, registry 131/0, placeholders 0, standard axioms only. This is real STOP progress, with source coverage, kernel agreement, quotient topology, final homeomorphism and B8/B9 explicitly remaining."},
-    :commit "71da1cf41",
+      :correction "fixed induction/instances"}],
+    :commit "82f7baf0e",
     :changed-paths ["ConstructionTargets/PolygonSurfacePiOne.lean"],
     :fixture
     {:path "ConstructionTargets/PolygonSurfacePiOne.lean",
      :sha256
-     "7feb7c0abe20db3e11660e1f84beacf6b3b09bc9bc19e3c6a4aaa1c37dd60ab2"},
+     "3cb36c8a8c803df0951c405f1c71f7ac35b01d07128a490d7d70cc0577a05028"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/PolygonSurfacePiOne.lean"],
    :dag-node "ConstructionTargets/PolygonSurfacePiOne.blueprint.md/B7",
    :acceptance
@@ -86855,7 +86844,8 @@
     :lemma-pairingdata-surjective-skeletonarcmap
     :lemma-pairingdata-skeletonwedgekernelagreement
     :lemma-pairingdata-continuous-skeletonarcmap
-    :lemma-pairingdata-arcmaps-isquotientmap],
+    :lemma-pairingdata-arcmaps-isquotientmap
+    :lemma-pairingdata-skeletonarcmap-isquotientmap],
    :other-consumers [:t92J05 :t94J04 :t97A01 :t97A03]}
   {:consumer :t96J02,
    :phase :lemma,
@@ -87115,4 +87105,32 @@
    :id :lemma-pairingdata-arcmaps-isquotientmap,
    :kind :lemma,
    :depends-on [],
-   :other-consumers [:t92J05 :t94J04 :t97A01 :t97A03]}]}
+   :other-consumers [:t92J05 :t94J04 :t97A01 :t97A03]}
+  {:consumer :t96J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "PairingData.signedWedgeArcMap_isQuotientMap",
+    :type "signed arcs quotient"},
+   :lemma
+   {:name "PairingData.signedWedgeArcMap_isQuotientMap",
+    :reported-by [:routes-2026-10-12-polygon-b7-topo2-r1],
+    :type "signed arcs quotient",
+    :area "polygon-surface-pi1",
+    :proved-in :routes-2026-10-12-polygon-b7-topo2-r1},
+   :id :lemma-pairingdata-signedwedgearcmap-isquotientmap,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t92J05 :t94J04 :t97A01 :t97A03]}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance {:lemma "PairingData.skeletonArcMap_isQuotientMap"},
+   :lemma
+   {:name "PairingData.skeletonArcMap_isQuotientMap", :reported-by []},
+   :id :lemma-pairingdata-skeletonarcmap-isquotientmap,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}]}
