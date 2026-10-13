@@ -314,6 +314,41 @@ theorem apm_b96a01_part_c :
     abel
   exact congrFun (congrFun hmat i) j
 
+lemma apm_b96a01_part_d_nonabelian_aux_injective_or_trivial
+    {G K : Type*} [Group G] [Group K] [IsSimpleGroup G] (f : G →* K) :
+    Function.Injective f ∨ f = 1 := by
+  rcases (inferInstance : f.ker.Normal).eq_bot_or_eq_top with hker | hker
+  · exact Or.inl ((MonoidHom.ker_eq_bot_iff f).mp hker)
+  · right
+    ext x
+    have hx : x ∈ f.ker := by rw [hker]; trivial
+    simpa using hx
+
+/-- Integral conjugation (part (b)) gives reductions modulo every `p ^ m`, compatible
+under `apmReduction`, jointly faithful, and the first one realised over `ZMod p`. -/
+lemma apm_b96a01_part_d_nonabelian_aux_reductions
+    (n : Type*) [Fintype n] [DecidableEq n]
+    (G : Subgroup (Matrix.GeneralLinearGroup n ℚ)) (hG : Finite G) (p : ℕ) (hp : p.Prime) :
+    ∃ ρ : ∀ m : ℕ, G →* Matrix.GeneralLinearGroup n (ZMod (p ^ m)),
+      (∀ m (h : p ^ (m - 1) ∣ p ^ m), 2 ≤ m →
+        (apmReduction n p m h).comp (ρ m) = ρ (m - 1)) ∧
+      (∀ g : G, (∀ m, 1 ≤ m → ρ m g = 1) → g = 1) ∧
+      ∃ ρp : G →* Matrix.GeneralLinearGroup n (ZMod p), ∀ g, ρp g = 1 ↔ ρ 1 g = 1 := by
+  sorry
+
+/-- The congruence climb: if the reduction modulo `p` is trivial on a nonabelian simple
+group, so is every reduction modulo `p ^ m` (each step lands in the commutative kernel of
+part (c)). -/
+lemma apm_b96a01_part_d_nonabelian_aux_climb
+    {G : Type*} [Group G] [IsSimpleGroup G] (hnc : ¬ ∀ a b : G, a * b = b * a)
+    (n : Type*) [Fintype n] [DecidableEq n] (p : ℕ)
+    (ρ : ∀ m : ℕ, G →* Matrix.GeneralLinearGroup n (ZMod (p ^ m)))
+    (hcompat : ∀ m (h : p ^ (m - 1) ∣ p ^ m), 2 ≤ m →
+      (apmReduction n p m h).comp (ρ m) = ρ (m - 1))
+    (h1 : ρ 1 = 1) :
+    ∀ m, 1 ≤ m → ρ m = 1 := by
+  sorry
+
 theorem apm_b96a01_part_d_nonabelian :
     ∀ (n : Type*) [Fintype n] [DecidableEq n]
       (G : Subgroup (Matrix.GeneralLinearGroup n ℚ)),
@@ -321,7 +356,20 @@ theorem apm_b96a01_part_d_nonabelian :
       ∀ p : ℕ, p.Prime →
         ∃ ρ : G →* Matrix.GeneralLinearGroup n (ZMod p),
           Function.Injective ρ := by
-  sorry
+  intro n _ _ G hG hs hnc p hp
+  obtain ⟨ρ, hcompat, hsep, ρp, hρp⟩ := apm_b96a01_part_d_nonabelian_aux_reductions n G hG p hp
+  rcases apm_b96a01_part_d_nonabelian_aux_injective_or_trivial ρp with hinj | htriv
+  · exact ⟨ρp, hinj⟩
+  · exfalso
+    have h1 : ρ 1 = 1 := by
+      ext1 g
+      exact (hρp g).1 (by rw [htriv]; rfl)
+    have hall := apm_b96a01_part_d_nonabelian_aux_climb hnc n p ρ hcompat h1
+    apply hnc
+    intro a b
+    have ha : a = 1 := hsep a (fun m hm => by rw [hall m hm]; rfl)
+    have hb : b = 1 := hsep b (fun m hm => by rw [hall m hm]; rfl)
+    rw [ha, hb]
 
 theorem apm_b96a01_part_d_abelian :
     ∀ (n : Type*) [Fintype n] [DecidableEq n]
