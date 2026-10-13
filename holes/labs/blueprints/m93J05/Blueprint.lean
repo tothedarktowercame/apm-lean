@@ -714,6 +714,67 @@ lemma apm_m93j05_weak_lowerSemicontinuous_aux_pairing
       (nhds (∫ x, f x * g x ∂μ)) :=
   hweak g hg
 
+lemma apm_m93j05_weak_lowerSemicontinuous_aux_cos_memLp
+    (q : ℝ) (j : ℕ) :
+    MemLp (fun x : ℝ => Real.cos (j * 2 * Real.pi * x)) (ENNReal.ofReal q)
+      (volume.restrict (Set.Icc (0 : ℝ) 1)) := by
+  apply MemLp.of_bound
+  · exact (Real.continuous_cos.comp
+      (continuous_const.mul continuous_id)).aestronglyMeasurable
+  · filter_upwards [] with x
+    simpa only [Real.norm_eq_abs] using Real.abs_cos_le_one (j * 2 * Real.pi * x)
+
+lemma apm_m93j05_weak_lowerSemicontinuous_aux_sin_memLp
+    (q : ℝ) (j : ℕ) :
+    MemLp (fun x : ℝ => Real.sin (j * 2 * Real.pi * x)) (ENNReal.ofReal q)
+      (volume.restrict (Set.Icc (0 : ℝ) 1)) := by
+  apply MemLp.of_bound
+  · exact (Real.continuous_sin.comp
+      (continuous_const.mul continuous_id)).aestronglyMeasurable
+  · filter_upwards [] with x
+    simpa only [Real.norm_eq_abs] using Real.abs_sin_le_one (j * 2 * Real.pi * x)
+
+/-! Split of `apm_m93j05_weak_lowerSemicontinuous` (claude-14, after a second partial that banked the cos/sin `Lq` helpers):
+(L1) truncation energies converge, (L2) weak lower semicontinuity of `‖·‖ₚᵖ` (generic, via the
+norming dual function), (L3) the high-mode parts converge weakly, (L4) combine. Parallel. -/
+
+theorem apm_m93j05_trunc_energy_tendsto (N : ℕ) (p q : ℝ) (hp : 1 < p) (hq : 1 < q) (hpq : 1 / p + 1 / q = 1)
+    (f : ℝ → ℝ) (s : ℕ → ℝ → ℝ) (hf : MemLp f (ENNReal.ofReal p) (volume.restrict (Set.Icc (0 : ℝ) 1)))
+    (hs : ∀ n, MemLp (s n) (ENNReal.ofReal p) (volume.restrict (Set.Icc (0 : ℝ) 1)))
+    (hweak : (∀ h, MemLp h (ENNReal.ofReal q) (volume.restrict (Set.Icc (0 : ℝ) 1)) → Tendsto (fun n ↦ ∫ x, s n x * h x ∂(volume.restrict (Set.Icc (0 : ℝ) 1))) atTop (nhds (∫ x, f x * h x ∂(volume.restrict (Set.Icc (0 : ℝ) 1)))))) :
+    Tendsto (fun n ↦ (eLpNorm (apm_m93j05_trunc N (s n)) 2 (volume.restrict (Set.Icc (0 : ℝ) 1))).toReal ^ 2) atTop
+      (nhds ((eLpNorm (apm_m93j05_trunc N f) 2 (volume.restrict (Set.Icc (0 : ℝ) 1))).toReal ^ 2)) := by
+  sorry
+
+theorem apm_m93j05_lp_rpow_weak_lsc (p q : ℝ) (hp : 1 < p) (hq : 1 < q) (hpq : 1 / p + 1 / q = 1) :
+    ∀ (u : ℝ → ℝ) (w : ℕ → ℝ → ℝ), MemLp u (ENNReal.ofReal p) (volume.restrict (Set.Icc (0 : ℝ) 1)) →
+      (∀ n, MemLp (w n) (ENNReal.ofReal p) (volume.restrict (Set.Icc (0 : ℝ) 1))) →
+      (∀ h, MemLp h (ENNReal.ofReal q) (volume.restrict (Set.Icc (0 : ℝ) 1)) → Tendsto (fun n ↦ ∫ x, w n x * h x ∂(volume.restrict (Set.Icc (0 : ℝ) 1))) atTop (nhds (∫ x, u x * h x ∂(volume.restrict (Set.Icc (0 : ℝ) 1))))) →
+      ∀ r, (∃ᶠ n in atTop, Real.rpow (eLpNorm (w n) (ENNReal.ofReal p) (volume.restrict (Set.Icc (0 : ℝ) 1))).toReal p ≤ r) →
+        Real.rpow (eLpNorm u (ENNReal.ofReal p) (volume.restrict (Set.Icc (0 : ℝ) 1))).toReal p ≤ r := by
+  sorry
+
+theorem apm_m93j05_high_modes_weak_tendsto (N : ℕ) (p q : ℝ) (hp : 1 < p) (hq : 1 < q) (hpq : 1 / p + 1 / q = 1)
+    (f : ℝ → ℝ) (s : ℕ → ℝ → ℝ) (hf : MemLp f (ENNReal.ofReal p) (volume.restrict (Set.Icc (0 : ℝ) 1)))
+    (hs : ∀ n, MemLp (s n) (ENNReal.ofReal p) (volume.restrict (Set.Icc (0 : ℝ) 1)))
+    (hweak : (∀ h, MemLp h (ENNReal.ofReal q) (volume.restrict (Set.Icc (0 : ℝ) 1)) → Tendsto (fun n ↦ ∫ x, s n x * h x ∂(volume.restrict (Set.Icc (0 : ℝ) 1))) atTop (nhds (∫ x, f x * h x ∂(volume.restrict (Set.Icc (0 : ℝ) 1)))))) :
+    (∀ h, MemLp h (ENNReal.ofReal q) (volume.restrict (Set.Icc (0 : ℝ) 1)) → Tendsto (fun n ↦ ∫ x, (s n x - apm_m93j05_trunc N (s n) x) * h x ∂(volume.restrict (Set.Icc (0 : ℝ) 1))) atTop (nhds (∫ x, (f x - apm_m93j05_trunc N f x) * h x ∂(volume.restrict (Set.Icc (0 : ℝ) 1))))) := by
+  sorry
+
+theorem apm_m93j05_weak_lsc_of_parts (N : ℕ) (p q : ℝ) (hp : 1 < p) (hq : 1 < q) (hpq : 1 / p + 1 / q = 1)
+    (f : ℝ → ℝ) (s : ℕ → ℝ → ℝ) (hf : MemLp f (ENNReal.ofReal p) (volume.restrict (Set.Icc (0 : ℝ) 1)))
+    (hs : ∀ n, MemLp (s n) (ENNReal.ofReal p) (volume.restrict (Set.Icc (0 : ℝ) 1)))
+    (hweak : (∀ h, MemLp h (ENNReal.ofReal q) (volume.restrict (Set.Icc (0 : ℝ) 1)) → Tendsto (fun n ↦ ∫ x, s n x * h x ∂(volume.restrict (Set.Icc (0 : ℝ) 1))) atTop (nhds (∫ x, f x * h x ∂(volume.restrict (Set.Icc (0 : ℝ) 1))))))
+    (g : ℝ → ℝ) (hg : MemLp g (ENNReal.ofReal q) (volume.restrict (Set.Icc (0 : ℝ) 1)))
+    (hL1 : Tendsto (fun n ↦ (eLpNorm (apm_m93j05_trunc N (s n)) 2 (volume.restrict (Set.Icc (0 : ℝ) 1))).toReal ^ 2) atTop
+      (nhds ((eLpNorm (apm_m93j05_trunc N f) 2 (volume.restrict (Set.Icc (0 : ℝ) 1))).toReal ^ 2))) (hL2 : ∀ (u : ℝ → ℝ) (w : ℕ → ℝ → ℝ), MemLp u (ENNReal.ofReal p) (volume.restrict (Set.Icc (0 : ℝ) 1)) →
+      (∀ n, MemLp (w n) (ENNReal.ofReal p) (volume.restrict (Set.Icc (0 : ℝ) 1))) →
+      (∀ h, MemLp h (ENNReal.ofReal q) (volume.restrict (Set.Icc (0 : ℝ) 1)) → Tendsto (fun n ↦ ∫ x, w n x * h x ∂(volume.restrict (Set.Icc (0 : ℝ) 1))) atTop (nhds (∫ x, u x * h x ∂(volume.restrict (Set.Icc (0 : ℝ) 1))))) →
+      ∀ r, (∃ᶠ n in atTop, Real.rpow (eLpNorm (w n) (ENNReal.ofReal p) (volume.restrict (Set.Icc (0 : ℝ) 1))).toReal p ≤ r) →
+        Real.rpow (eLpNorm u (ENNReal.ofReal p) (volume.restrict (Set.Icc (0 : ℝ) 1))).toReal p ≤ r) (hL3 : (∀ h, MemLp h (ENNReal.ofReal q) (volume.restrict (Set.Icc (0 : ℝ) 1)) → Tendsto (fun n ↦ ∫ x, (s n x - apm_m93j05_trunc N (s n) x) * h x ∂(volume.restrict (Set.Icc (0 : ℝ) 1))) atTop (nhds (∫ x, (f x - apm_m93j05_trunc N f x) * h x ∂(volume.restrict (Set.Icc (0 : ℝ) 1)))))) :
+    ∀ r, (∃ᶠ n in atTop, apm_m93j05_J N p g (s n) ≤ r) → apm_m93j05_J N p g f ≤ r := by
+  sorry
+
 theorem apm_m93j05_weak_lowerSemicontinuous
     (N : ℕ) (p q : ℝ) (hp : 1 < p) (hq : 1 < q)
     (hpq : 1 / p + 1 / q = 1) :
@@ -727,7 +788,11 @@ theorem apm_m93j05_weak_lowerSemicontinuous
             (nhds (∫ x, f x * h x ∂μ))) →
         ∀ r, (∃ᶠ n in atTop, apm_m93j05_J N p g (s n) ≤ r) →
           apm_m93j05_J N p g f ≤ r := by
-  sorry
+  intro μ g hg f s hf hs hweak
+  exact apm_m93j05_weak_lsc_of_parts N p q hp hq hpq f s hf hs hweak g hg
+    (apm_m93j05_trunc_energy_tendsto N p q hp hq hpq f s hf hs hweak)
+    (apm_m93j05_lp_rpow_weak_lsc p q hp hq hpq)
+    (apm_m93j05_high_modes_weak_tendsto N p q hp hq hpq f s hf hs hweak)
 
 theorem apm_m93j05_exists_minimizer
     (N : ℕ) (p q : ℝ) (hp : 1 < p) (hq : 1 < q)
