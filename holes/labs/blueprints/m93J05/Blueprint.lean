@@ -241,7 +241,28 @@ theorem apm_m93j05_trunc_kernel (N : ℕ)
     apm_m93j05_trunc N f = 0 ↔
       (∫ x in Set.Icc (0 : ℝ) 1, f x = 0 ∧
        ∀ j ∈ Finset.Icc 1 N, apm_m93j05_cosCoeff f j = 0 ∧ apm_m93j05_sinCoeff f j = 0) := by
-  sorry
+  constructor
+  · intro hzero
+    have hdata := hC f
+    constructor
+    · rw [← hdata.1, hzero]
+      simp
+    · intro j hj
+      have hjdata := hdata.2 j hj
+      constructor
+      · rw [← hjdata.1, hzero]
+        simp [apm_m93j05_cosCoeff]
+      · rw [← hjdata.2, hzero]
+        simp [apm_m93j05_sinCoeff]
+  · rintro ⟨hmean, hcoeff⟩
+    funext x
+    simp only [apm_m93j05_trunc, Pi.zero_apply]
+    rw [hmean]
+    simp only [zero_add]
+    apply Finset.sum_eq_zero
+    intro j hj
+    rw [(hcoeff j hj).1, (hcoeff j hj).2]
+    ring
 
 /-- (Sp) Splitting `f = Φ f + (f − Φ f)`. For `Φ (f − Φ f) = 0`: if `f · cos_k` is integrable the
 coefficients subtract; if not, neither is `(f − Φ f) · cos_k`, and both coefficients are `0`. -/
