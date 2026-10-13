@@ -258,9 +258,88 @@ theorem apm_t00j01_klein_product_H3_zero
 
 /-- Every lift of the fiber over `exp π` has nonzero derivative. -/
 -- BEGIN SEAT AREA
+lemma apm_t00j01_foldRegular_pi_aux_cos :
+    Real.cos (2 * Real.pi / 3) = -(1 / 2 : ℝ) := by
+  rw [show 2 * Real.pi / 3 = Real.pi - Real.pi / 3 by ring,
+    Real.cos_pi_sub, Real.cos_pi_div_three]
+
+lemma apm_t00j01_foldRegular_pi_aux_delta_pos :
+    0 < Real.sqrt 3 - Real.pi / 3 := by
+  have hs0 : 0 ≤ Real.sqrt 3 := Real.sqrt_nonneg 3
+  have hs : (Real.sqrt 3) ^ 2 = 3 := by norm_num
+  have hs4 : (4 / 3 : ℝ) < Real.sqrt 3 := by nlinarith
+  have hp4 : Real.pi / 3 < (4 / 3 : ℝ) := by
+    nlinarith [Real.pi_lt_four]
+  linarith
+
+lemma apm_t00j01_foldRegular_pi_aux_delta_lt :
+    Real.sqrt 3 - Real.pi / 3 < 2 * Real.pi := by
+  have hs0 : 0 ≤ Real.sqrt 3 := Real.sqrt_nonneg 3
+  have hs : (Real.sqrt 3) ^ 2 = 3 := by norm_num
+  have hs2 : Real.sqrt 3 < 2 := by nlinarith
+  nlinarith [Real.pi_gt_three]
+
+lemma apm_t00j01_foldRegular_pi_aux_not_multiple (m : ℤ) :
+    Real.sqrt 3 - Real.pi / 3 ≠ (m : ℝ) * (2 * Real.pi) := by
+  intro h
+  have hm0 : (0 : ℝ) < m := by
+    have hd := apm_t00j01_foldRegular_pi_aux_delta_pos
+    rw [h] at hd
+    rcases (mul_pos_iff.mp hd) with hm | hm
+    · exact hm.1
+    · exfalso
+      exact (not_lt_of_ge (by positivity : (0 : ℝ) ≤ 2 * Real.pi)) hm.2
+  have hm1 : (m : ℝ) < 1 := by
+    have hp : 0 < 2 * Real.pi := by positivity
+    have hd := apm_t00j01_foldRegular_pi_aux_delta_lt
+    rw [h] at hd
+    by_contra hm
+    have hm' : (1 : ℝ) ≤ m := le_of_not_gt hm
+    have := mul_le_mul_of_nonneg_right hm' hp.le
+    linarith
+  have hm0z : 0 < m := by exact_mod_cast hm0
+  have hm1z : m < 1 := by exact_mod_cast hm1
+  omega
+
 theorem apm_t00j01_foldRegular_pi :
     apm_t00j01_foldRegular (Circle.exp Real.pi) := by
-  sorry
+  intro θ hfiber hzero
+  have hcos : Real.cos θ = -(1 / 2 : ℝ) := by linarith
+  have hclass := (Real.cos_eq_cos_iff.mp
+    (apm_t00j01_foldRegular_pi_aux_cos.trans hcos.symm))
+  obtain ⟨k, hk | hk⟩ := hclass
+  · have hspecial : Real.sin (2 * Real.pi / 3) = Real.sqrt 3 / 2 := by
+      rw [show 2 * Real.pi / 3 = Real.pi - Real.pi / 3 by ring,
+        Real.sin_pi_sub, Real.sin_pi_div_three]
+    have hsin : Real.sin θ = Real.sqrt 3 / 2 := calc
+      Real.sin θ = Real.sin (2 * Real.pi / 3 + (k : ℝ) * (2 * Real.pi)) := by
+        rw [hk]
+        congr 1 <;> ring
+      _ = Real.sin (2 * Real.pi / 3) := Real.sin_add_int_mul_two_pi _ _
+      _ = Real.sqrt 3 / 2 := hspecial
+    rw [apm_t00j01_fold_exp] at hfiber
+    obtain ⟨n, hn⟩ := Circle.exp_eq_exp.mp hfiber
+    apply apm_t00j01_foldRegular_pi_aux_not_multiple (n - k)
+    dsimp [apm_t00j01_foldLift] at hn
+    rw [hsin, hk] at hn
+    norm_num [Int.cast_sub] at hn ⊢
+    linarith
+  · have hspecial : Real.sin (2 * Real.pi / 3) = Real.sqrt 3 / 2 := by
+      rw [show 2 * Real.pi / 3 = Real.pi - Real.pi / 3 by ring,
+        Real.sin_pi_sub, Real.sin_pi_div_three]
+    have hsin : Real.sin θ = -(Real.sqrt 3 / 2) := calc
+      Real.sin θ = Real.sin ((k : ℝ) * (2 * Real.pi) - 2 * Real.pi / 3) := by
+        rw [hk]
+        congr 1 <;> ring
+      _ = -Real.sin (2 * Real.pi / 3) := Real.sin_int_mul_two_pi_sub _ _
+      _ = -(Real.sqrt 3 / 2) := by rw [hspecial]
+    rw [apm_t00j01_fold_exp] at hfiber
+    obtain ⟨n, hn⟩ := Circle.exp_eq_exp.mp hfiber
+    apply apm_t00j01_foldRegular_pi_aux_not_multiple (k - n - 1)
+    dsimp [apm_t00j01_foldLift] at hn
+    rw [hsin, hk] at hn
+    norm_num [Int.cast_sub] at hn ⊢
+    linarith
 -- END SEAT AREA
 
 /-- Every lift of the fiber over `1` has nonzero derivative. -/
