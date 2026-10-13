@@ -76746,9 +76746,20 @@
       :current-residual "Elect B9.",
       :other-consumers []}],
     :author "topo-8",
-    :disposition :replan},
+    :disposition :replan,
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791869849845-8593-b002097e",
+     :commands
+     ["worklist_check.bb worklist2.edn"
+      "statement-registry.py check"
+      "build_step.bb priorities worklist2.edn"
+      "EDN dependency/measure audit"],
+     :finding
+     "PASS: strategy row has empty scope, so commit/fixture and theorem-boundary checks do not apply. It advances only after reviewed B7 completion, records measures coherently (delta 0, one packet, one PASS), elects B8 for all five polygon consumers, defers B9 until B8, and adds a post-B8 checkpoint. Dependencies keep B8 blocked until this review lands. Fresh gates: worklist 1061 OK, registry 145/0; priorities reproduce SLSC unblocking 6 and polygon work unblocking 5."}},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance {:strategy "Rerun after B7."},
@@ -76762,7 +76773,7 @@
    :other-consumers []}
   {:consumer :t96J02,
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/PolygonSurfacePiOne.lean"],
    :dag-node "ConstructionTargets/PolygonSurfacePiOne.blueprint.md/B8",
    :acceptance
