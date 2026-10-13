@@ -62,6 +62,22 @@ theorem ContDiffWithinAt.exists_mem_nhdsWithin_contDiffWithinAt_closure_interior
   rcases hf.exists_mem_nhdsWithin_contDiffWithinAt_of_infty hxs k with ⟨u, hu, hfu⟩
   exact ⟨u, hu, mem_closure_inter_of_mem_nhdsWithin hxi interior_subset hu, hfu⟩
 
+/-- At an interior point, finite differentiability persists on a relative neighborhood that
+stays inside the interior. -/
+theorem ContDiffWithinAt.eventually_mem_interior_contDiffWithinAt_of_nat
+    {E F : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [NormedAddCommGroup F] [NormedSpace ℝ F]
+    {s : Set E} {f : E → F} {x : E} {k : ℕ}
+    (hf : ContDiffWithinAt ℝ k f s x) (hxi : x ∈ interior s) :
+    ∀ᶠ y in nhdsWithin x s, y ∈ interior s ∧ ContDiffWithinAt ℝ k f s y := by
+  have hxs : x ∈ s := interior_subset hxi
+  have hsmooth : ∀ᶠ y in nhdsWithin x s, ContDiffWithinAt ℝ k f s y := by
+    simpa [insert_eq_of_mem hxs] using hf.eventually (by simp)
+  have hinterior : ∀ᶠ y in nhdsWithin x s, y ∈ interior s :=
+    mem_nhdsWithin_of_mem_nhds (isOpen_interior.mem_nhds hxi)
+  filter_upwards [hinterior, hsmooth] with y hy hfy
+  exact ⟨hy, hfy⟩
+
 /-- Two maps continuous within a set agree at a point in the closure of its interior if they
 agree throughout that interior. -/
 theorem ContinuousWithinAt.eq_of_eqOn_interior_of_mem_closure
