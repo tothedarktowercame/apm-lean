@@ -136,7 +136,21 @@ theorem apm_t97J05_derivative_and_rank :
 
 theorem apm_t97J05_gamma_smooth :
     ContDiffOn ℝ ∞ apm_t97J05_gamma apm_t97J05_parameterDomain := by
-  sorry
+  intro t ht
+  have ht0 : t ≠ 0 := by
+    simp only [apm_t97J05_parameterDomain, mem_Ioo] at ht
+    linarith [ht.1]
+  unfold apm_t97J05_gamma
+  rw [contDiffWithinAt_piLp]
+  intro i
+  fin_cases i <;> simp
+  · exact (contDiffWithinAt_id :
+      ContDiffWithinAt ℝ ∞ (fun x : ℝ => x) apm_t97J05_parameterDomain t)
+  · exact (contDiffWithinAt_const :
+      ContDiffWithinAt ℝ ∞ (fun _ : ℝ => Real.pi / 2) apm_t97J05_parameterDomain t)
+  · simpa only [id_eq] using
+      (contDiffWithinAt_id.inv ht0 :
+        ContDiffWithinAt ℝ ∞ (fun x : ℝ => (id x)⁻¹) apm_t97J05_parameterDomain t)
 
 /-- LIBRARY: the regular-level theorem, including the induced manifold structure
 and the immersion assertion for its subtype inclusion. -/
