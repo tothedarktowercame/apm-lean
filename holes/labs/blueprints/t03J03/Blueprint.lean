@@ -133,7 +133,12 @@ lemma apm_t03J03_disconnected_double_cover_trivial_aux_base_pathConnected :
 /-- Seat: `N₃` is locally connected (a quotient of the closed disc, which is
 locally connected; quotient maps preserve local connectedness). -/
 theorem apm_t03J03_N3_locallyConnected : LocallyConnectedSpace apm_t03J03_N3 := by
-  sorry
+  letI : LocPathConnectedSpace Disk :=
+    (convex_closedBall (0 : ℂ) 1).locPathConnectedSpace
+  have hq : Topology.IsQuotientMap (surfaceQuotient false 3) :=
+    Topology.IsQuotientMap.mk (surjective_surfaceQuotient false 3) rfl
+  letI : LocPathConnectedSpace apm_t03J03_N3 := hq.locPathConnectedSpace
+  infer_instance
 
 /-- Seat (generic): a disconnected two-sheeted covering of a connected, locally
 connected space splits into a clopen set and its complement, each meeting every
