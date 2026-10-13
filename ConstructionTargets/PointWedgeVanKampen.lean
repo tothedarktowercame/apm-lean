@@ -141,6 +141,20 @@ theorem genericPointWedgeRightSpanContinuousMap_eq_const :
     (genericPointWedgeOverlapInclusionSquares
       x₀ y₀ M N hM hN hy hx cM cN).2
 
+/-- Mapping the named right-span continuous-map equality gives the exact
+functor equality used by the right span comparison. -/
+theorem genericPointWedgeRightSpanFunctor_eq_coordinateRight :
+    FundamentalGroupoid.map
+        (((genericPointWedgePackage
+          x₀ y₀ M N hM hN hy hx cM cN).rightEquiv.toFun.comp
+            (overlapToRight x₀ y₀ M N)).comp
+              (genericPointWedgePackage
+                x₀ y₀ M N hM hN hy hx cM cN).intersectionEquiv.invFun) =
+      FundamentalGroupoid.map (ContinuousMap.const Unit y₀) :=
+  congrArg FundamentalGroupoid.map
+    (genericPointWedgeRightSpanContinuousMap_eq_const
+      x₀ y₀ M N hM hN hy hx cM cN)
+
 def genericPointWedgeRightSpanIso :
     (genericPointWedgeOverlapGroupoidEquivalence x₀ y₀ M N hM hN hy hx cM cN).inverse ⋙
         genericPointWedgeActualRight x₀ y₀ M N ⋙
@@ -153,8 +167,8 @@ def genericPointWedgeRightSpanIso :
         (genericPointWedgePackage x₀ y₀ M N hM hN hy hx cM cN).rightEquiv.toFun ≅
       FundamentalGroupoid.map (ContinuousMap.const Unit y₀)
   rw [← FundamentalGroupoid.map_comp, ← FundamentalGroupoid.map_comp]
-  rw [genericPointWedgeRightSpanContinuousMap_eq_const
-    x₀ y₀ M N hM hN hy hx cM cN]
+  exact eqToIso (genericPointWedgeRightSpanFunctor_eq_coordinateRight
+    x₀ y₀ M N hM hN hy hx cM cN)
 
 def genericPointWedgeCoordinateSpanEquivalence
     (C : Type u) [Category C] :

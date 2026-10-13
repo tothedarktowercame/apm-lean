@@ -1049,5 +1049,7 @@ remains separate.
 
 `genericPointWedgeRightSpanContinuousMap_eq_const` names the exact
 continuous-map equality used to construct the right span comparison.  The
-remaining representation step is now the component-level transport induced
-by this equality, rather than an opaque local proof inside the isomorphism.
+theorem `genericPointWedgeRightSpanFunctor_eq_coordinateRight` maps this to the
+exact functor equality, and the comparison is now constructed explicitly as
+its `eqToIso`.  Its remaining component cast is therefore pinned to one named
+equality rather than tactic-generated rewriting.
