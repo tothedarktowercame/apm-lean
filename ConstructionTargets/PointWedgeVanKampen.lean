@@ -155,6 +155,30 @@ theorem genericPointWedgeRightSpanFunctor_eq_coordinateRight :
     (genericPointWedgeRightSpanContinuousMap_eq_const
       x₀ y₀ M N hM hN hy hx cM cN)
 
+/-- The right span comparison before reassociating mapped compositions. -/
+def genericPointWedgeRightSpanMappedIso :
+    FundamentalGroupoid.map
+        (((genericPointWedgePackage
+          x₀ y₀ M N hM hN hy hx cM cN).rightEquiv.toFun.comp
+            (overlapToRight x₀ y₀ M N)).comp
+              (genericPointWedgePackage
+                x₀ y₀ M N hM hN hy hx cM cN).intersectionEquiv.invFun) ≅
+      FundamentalGroupoid.map (ContinuousMap.const Unit y₀) :=
+  eqToIso (genericPointWedgeRightSpanFunctor_eq_coordinateRight
+    x₀ y₀ M N hM hN hy hx cM cN)
+
+/-- The inverse component of the unreassociated comparison is the objectwise
+equality transport induced by its named functor equality. -/
+theorem genericPointWedgeRightSpanMappedIso_inv_app :
+    let h := genericPointWedgeRightSpanFunctor_eq_coordinateRight
+      x₀ y₀ M N hM hN hy hx cM cN
+    (genericPointWedgeRightSpanMappedIso
+      x₀ y₀ M N hM hN hy hx cM cN).inv.app (FundamentalGroupoid.mk ()) =
+      eqToHom (Functor.congr_obj h.symm (FundamentalGroupoid.mk ())) := by
+  dsimp only
+  unfold genericPointWedgeRightSpanMappedIso
+  rw [eqToIso.inv, eqToHom_app]
+
 def genericPointWedgeRightSpanIso :
     (genericPointWedgeOverlapGroupoidEquivalence x₀ y₀ M N hM hN hy hx cM cN).inverse ⋙
         genericPointWedgeActualRight x₀ y₀ M N ⋙
@@ -167,8 +191,8 @@ def genericPointWedgeRightSpanIso :
         (genericPointWedgePackage x₀ y₀ M N hM hN hy hx cM cN).rightEquiv.toFun ≅
       FundamentalGroupoid.map (ContinuousMap.const Unit y₀)
   rw [← FundamentalGroupoid.map_comp, ← FundamentalGroupoid.map_comp]
-  exact eqToIso (genericPointWedgeRightSpanFunctor_eq_coordinateRight
-    x₀ y₀ M N hM hN hy hx cM cN)
+  exact genericPointWedgeRightSpanMappedIso
+    x₀ y₀ M N hM hN hy hx cM cN
 
 def genericPointWedgeCoordinateSpanEquivalence
     (C : Type u) [Category C] :
@@ -4209,6 +4233,29 @@ theorem genericPointWedgeRightEquiv_obj_rightBase :
   exact (genericPointWedgePackage
     x₀ y₀ M N hM hN hy hx cM cN).right_inclusion y₀
 
+omit [PathConnectedSpace X] [PathConnectedSpace Y] in
+/-- At the unique coordinate object, the object equality induced by the named
+right-span functor equality is the fixed right-base equality. -/
+theorem genericPointWedgeRightSpanFunctor_congrObj_eq_rightBase :
+    let h := genericPointWedgeRightSpanFunctor_eq_coordinateRight
+      x₀ y₀ M N hM hN hy hx cM cN
+    Functor.congr_obj h (FundamentalGroupoid.mk ()) =
+      genericPointWedgeRightEquiv_obj_rightBase
+        x₀ y₀ M N hM hN hy hx cM cN := by
+  dsimp only
+  apply Subsingleton.elim
+
+omit [PathConnectedSpace X] [PathConnectedSpace Y] in
+/-- The unreassociated inverse span component is the canonical equality
+transport from the coordinate base to the fixed right-base image. -/
+theorem genericPointWedgeRightSpanMappedIso_inv_app_eq_baseTransport :
+    (genericPointWedgeRightSpanMappedIso
+      x₀ y₀ M N hM hN hy hx cM cN).inv.app (FundamentalGroupoid.mk ()) =
+      eqToHom (genericPointWedgeRightEquiv_obj_rightBase
+        x₀ y₀ M N hM hN hy hx cM cN).symm := by
+  rw [genericPointWedgeRightSpanMappedIso_inv_app]
+  congr 1
+
 /-- The canonical morphism from the inverse-equivalence image of the literal
 right basepoint to the fixed right-cover representative. -/
 def genericPointWedgeRightInverseBaseToRightBase :
@@ -5533,6 +5580,10 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms twoCirclesBaseNeighborhood_contraction
 #print axioms genericPointWedgeCoordinateSpanEquivalence
 #print axioms genericPointWedgeRightSpanContinuousMap_eq_const
+#print axioms genericPointWedgeRightSpanFunctor_eq_coordinateRight
+#print axioms genericPointWedgeRightSpanMappedIso_inv_app
+#print axioms genericPointWedgeRightSpanFunctor_congrObj_eq_rightBase
+#print axioms genericPointWedgeRightSpanMappedIso_inv_app_eq_baseTransport
 #print axioms genericPointWedgeCoordinateSpanPostcomposeIso
 #print axioms genericPointWedgeCoordinatePointSpanEquivalence
 #print axioms genericPointWedgeCoordinatePointSpanPostcomposeIso

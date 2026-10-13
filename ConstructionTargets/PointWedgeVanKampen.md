@@ -1053,3 +1053,10 @@ theorem `genericPointWedgeRightSpanFunctor_eq_coordinateRight` maps this to the
 exact functor equality, and the comparison is now constructed explicitly as
 its `eqToIso`.  Its remaining component cast is therefore pinned to one named
 equality rather than tactic-generated rewriting.
+
+`genericPointWedgeRightSpanMappedIso_inv_app` computes the inverse component
+before reassociation as the `eqToHom` of the functor equality's object
+component.  `genericPointWedgeRightSpanFunctor_congrObj_eq_rightBase` identifies
+that object equality with the fixed right-base equality by proof irrelevance,
+and `genericPointWedgeRightSpanMappedIso_inv_app_eq_baseTransport` gives the
+resulting canonical base transport.  Only the outer reassociation cast remains.
