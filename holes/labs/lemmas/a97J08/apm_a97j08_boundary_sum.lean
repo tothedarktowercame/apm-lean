@@ -2051,12 +2051,78 @@ theorem apm_a97j08_edgeAngle_swap {z shift : ℂ} {δ : ℝ} (hδ : 0 < δ)
 -- (C1) Interior edges cancel: summing an antisymmetric edge function over the
 -- boundary edges equals summing it over all square boundaries.
 -- BEGIN SEAT AREA
+lemma apm_a97j08_boundary_sum_aux_disjoint {q r : ℤ × ℤ} (hqr : q ≠ r) :
+    Disjoint (apm_a97j08_squareEdges q) (apm_a97j08_squareEdges r) := by
+  rw [Finset.disjoint_left]
+  intro e heq her
+  simp only [apm_a97j08_squareEdges, Finset.mem_insert, Finset.mem_singleton] at heq her
+  rcases heq with rfl | rfl | rfl | rfl <;>
+    rcases her with h | h | h | h <;>
+    simp only [Prod.mk.injEq] at h <;>
+    apply hqr <;> ext <;> omega
+
+lemma apm_a97j08_boundary_sum_aux_biUnion (Q : Finset (ℤ × ℤ))
+    (f : (ℤ × ℤ) × (ℤ × ℤ) → ℝ) :
+    ∑ e ∈ apm_a97j08_allEdges Q, f e =
+      ∑ q ∈ Q, ∑ e ∈ apm_a97j08_squareEdges q, f e := by
+  unfold apm_a97j08_allEdges
+  apply Finset.sum_biUnion
+  intro q hq r hr hqr
+  exact apm_a97j08_boundary_sum_aux_disjoint hqr
+
+lemma apm_a97j08_boundary_sum_aux_ne_swap (Q : Finset (ℤ × ℤ))
+    {e : (ℤ × ℤ) × (ℤ × ℤ)} (he : e ∈ apm_a97j08_allEdges Q) :
+    e.swap ≠ e := by
+  rw [apm_a97j08_allEdges, Finset.mem_biUnion] at he
+  obtain ⟨q, hq, he⟩ := he
+  simp only [apm_a97j08_squareEdges, Finset.mem_insert, Finset.mem_singleton] at he
+  rcases he with rfl | rfl | rfl | rfl <;> simp [Prod.ext_iff] <;> omega
+
+lemma apm_a97j08_boundary_sum_aux_interior (Q : Finset (ℤ × ℤ))
+    (f : (ℤ × ℤ) × (ℤ × ℤ) → ℝ)
+    (hf : ∀ e ∈ apm_a97j08_allEdges Q, f e.swap = -f e) :
+    ∑ e ∈ (apm_a97j08_allEdges Q).filter
+      (fun e => e.swap ∈ apm_a97j08_allEdges Q), f e = 0 := by
+  apply Finset.sum_involution (fun e _ => e.swap)
+  · intro e he
+    have heall : e ∈ apm_a97j08_allEdges Q := (Finset.mem_filter.mp he).1
+    rw [hf e heall]
+    ring
+  · intro e he hfe
+    exact apm_a97j08_boundary_sum_aux_ne_swap Q (Finset.mem_filter.mp he).1
+  · intro e he
+    simp
+  · intro e he
+    have h := Finset.mem_filter.mp he
+    exact Finset.mem_filter.mpr ⟨h.2, by simpa using h.1⟩
+
 theorem apm_a97j08_boundary_sum (Q : Finset (ℤ × ℤ))
     (f : (ℤ × ℤ) × (ℤ × ℤ) → ℝ)
     (hf : ∀ e ∈ apm_a97j08_allEdges Q, f e.swap = -f e) :
     ∑ e ∈ apm_a97j08_boundaryEdges Q, f e =
       ∑ q ∈ Q, ∑ e ∈ apm_a97j08_squareEdges q, f e := by
-  sorry
+  rw [← apm_a97j08_boundary_sum_aux_biUnion Q f]
+  have hint := apm_a97j08_boundary_sum_aux_interior Q f hf
+  have hnot : ∑ e ∈ (apm_a97j08_allEdges Q).filter
+      (fun e => ¬ e.swap ∉ apm_a97j08_allEdges Q), f e = 0 := by
+    have heq : (apm_a97j08_allEdges Q).filter
+        (fun e => ¬ e.swap ∉ apm_a97j08_allEdges Q) =
+        (apm_a97j08_allEdges Q).filter
+          (fun e => e.swap ∈ apm_a97j08_allEdges Q) := by
+      ext e
+      simp
+    rw [heq]
+    exact hint
+  unfold apm_a97j08_boundaryEdges
+  calc
+    ∑ e ∈ (apm_a97j08_allEdges Q).filter
+        (fun e => e.swap ∉ apm_a97j08_allEdges Q), f e =
+      (∑ e ∈ (apm_a97j08_allEdges Q).filter
+        (fun e => e.swap ∉ apm_a97j08_allEdges Q), f e) +
+      (∑ e ∈ (apm_a97j08_allEdges Q).filter
+        (fun e => ¬ e.swap ∉ apm_a97j08_allEdges Q), f e) := by rw [hnot, add_zero]
+    _ = ∑ e ∈ apm_a97j08_allEdges Q, f e :=
+      Finset.sum_filter_add_sum_filter_not _ _ _
 -- END SEAT AREA
 
 -- (C2) The boundary edges are balanced (apply C1 to `[e.1 = v] - [e.2 = v]`).
