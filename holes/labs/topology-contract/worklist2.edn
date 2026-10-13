@@ -87782,6 +87782,18 @@
     [{:cmd "initial compile",
       :exit 1,
       :correction "used namespaced subtype inducing theorem"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791928960011-10653-d2bf4523",
+     :commands
+     ["scope/SHA256 checks at 598a78428"
+      "recorded blob | lake env lean /dev/stdin"
+      "comment-stripped placeholder scan (0)"
+      "#print axioms restricted homeomorph"
+      "statement-registry.py check (166/0)"],
+     :finding
+     "Valid program STOP with new compiled progress beyond history commit 7ef6b184c. The subtype homeomorphism correctly restricts the alleged chart to points mapping into the punctured ball; injectivity proves source-node exclusion iff target-center exclusion. Exact one-file scope/hash match; placeholders 0; only standard axioms. Remaining milestone: flatten the target subtype, identify an ambient-open sigma2 slice, and contradict non-preconnectedness."},
     :commit "8112d8e59",
     :changed-paths ["ConstructionTargets/t94A08Closure.lean"],
     :fixture
@@ -87790,7 +87802,7 @@
      "c1651f55984b27a5db41c68b867bd6f2e96e77074f6642e62cef317dae2785be"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t94A08/lean/Main.lean"
     "problems/t94A08/status.json"
@@ -87808,7 +87820,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t94A08Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked the alleged chart restricted to its punctured ball source and target.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked preconnectedness of the alleged chart's punctured ball source.",
    :id :program-2026-10-13-close-t94a08,
    :kind :final-adapter,
    :campaign-priority 30,
@@ -87880,7 +87892,11 @@
     {:job 7,
      :commit "598a78428",
      :reason
-     "Banked the alleged chart restricted to its punctured ball source and target."}]}
+     "Banked the alleged chart restricted to its punctured ball source and target."}
+    {:job 8,
+     :commit "8112d8e59",
+     :reason
+     "Banked preconnectedness of the alleged chart's punctured ball source."}]}
   {:consumer :t97A01,
    :stop-count 1,
    :evidence
@@ -88597,7 +88613,7 @@
    :other-consumers []}
   {:consumer :t94A08,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -88610,7 +88626,9 @@
     :type
     "the punctured source of a contained positive chart ball is preconnected",
     :area "projective-affine-chart-homeomorph",
-    :proved-in :program-2026-10-13-close-t94a08},
+    :proved-in :program-2026-10-13-close-t94a08,
+    :banked-by :program-2026-10-13-close-t94a08,
+    :banked-commit "8112d8e59"},
    :id
    :lemma-apm-t94a08-manifoldchartpuncturedballsource-ispreconnected,
    :kind :lemma,
