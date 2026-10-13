@@ -24430,24 +24430,23 @@
    :consumer :t01A08,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "extend Mathlib: state and prove the missing theorem in scope",
    :implements-lemma :lemma-closedset-whitneycubecover,
    :evidence
    {:placeholder-delta {:t01A08 [1 1]},
     :residual
-    "Normalize packing, sum adjacent strata, assemble B3; then B4-B7, B9.",
+    "Transport to fixed packing bound, sum adjacent strata, assemble B3; then B4-B7, B9.",
     :outcome :stop,
     :warnings ["existing unnecessarySimpa:454"],
     :missing-theorems
     [{:name
-      "ConstructionTargets.SardConvexDomain.encard_whitneyStratumNet_mem_quarter_ball_le_packingNumber",
-      :type "stratum incidence encard≤packingNumber at its scale",
+      "ConstructionTargets.SardConvexDomain.dist_whitneyNormalize",
+      :type "dyadic normalization rescales distance by 2^-k",
       :status :proved,
       :consumers [:t01A08],
-      :depends-on
-      ["ConstructionTargets.SardConvexDomain.whitneyStratumNet_spec"],
+      :depends-on [],
       :area "sard-convex-domain"}
      {:name
       "ConstructionTargets.SardConvexDomain.closedSet_whitneyCubeCover_proper",
@@ -24455,44 +24454,29 @@
       :status :partial,
       :consumers [:t01A08],
       :depends-on
-      ["ConstructionTargets.SardConvexDomain.encard_whitneyStratumNet_mem_quarter_ball_le_packingNumber"
-       "ConstructionTargets.SardConvexDomain.whitneyStratum_indices_le_add_one_of_mem_quarter_balls"],
+      ["ConstructionTargets.SardConvexDomain.dist_whitneyNormalize"
+       "ConstructionTargets.SardConvexDomain.encard_whitneyStratumNet_mem_quarter_ball_le_packingNumber"],
       :area "sard-convex-domain"}],
     :statement-hashes {:registry "150/150"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Committed quantitative incidence bound by the packing number of the scale-sized ball. Normalize this bound, sum three adjacent strata, and assemble; not refuted.",
+    "Committed dyadic normalization and exact distance law dist(Tc,Td)=2^-k dist(c,d). Transporting incidence sets to the fixed packing problem and assembly remain; not refuted.",
     :commands
     [{:cmd "lake build ConstructionTargets.SardConvexDomain", :exit 0}
      {:cmd "fixture; registry; scans; diff", :exit 0}
      {:cmd "git commit", :exit 0}],
-    :diagnostic-history
-    [{:cmd "exploratory builds",
-      :exit 1,
-      :correction "fixed closed-ball distance orientation"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1791907644625-9965-327893b5",
-     :commands
-     ["git show/diff 2ba0ec1; scope/type checks"
-      "sha256sum + lake env lean frozen fixture"
-      "lake build ConstructionTargets.SardConvexDomain"
-      "statement registry check; forbidden-count scan"],
-     :finding
-     "PASS. Recorded topo-10 commit 2ba0ec1 changes only the scoped Lean file and correctly bounds fixed-stratum incidence encard by a packing number. Incidence centers lie in closedBall(x,2^(k+1)/4) with the distance orientation handled, and inherit separation at whitneyStratumRadius k before encard_le_packingNumber. The possibly infinite bound is appropriate before the listed normalization step. Fixture hash a1dac993... matches; build/fixture pass; registry 150/150; forbidden placeholders stay 0; only standard axioms. Valid compiled B3 progress; STOP leaves normalization, adjacent-stratum sum, and assembly."},
-    :commit "2ba0ec1732ec7a146c52d421bfa6d1fa8d36d543",
+    :commit "433c851beddbf8ac6f007371985c77bb24f493b9",
     :changed-paths ["ConstructionTargets/SardConvexDomain.lean"],
     :fixture
-    {:path "/tmp/t01a08_b3_packing_number_check.lean",
+    {:path "/tmp/t01a08_b3_normalization_check.lean",
      :sha256
-     "a1dac993e46c45f2c188507197123266d77890489fef8ffbbd080cce50690a5d",
+     "14b781a83f234014226cb75907a2ec870b29d8b27bfc4a5e049d29dc7c5533b7",
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain.blueprint/B3",
    :acceptance
@@ -35159,7 +35143,8 @@
     :lemma-constructiontargets-sardconvexdomain-infdist-center-comparable-of-mem-quarter-ba
     :lemma-constructiontargets-sardconvexdomain-whitneystratum-indices-le-add-one-of-mem-qu
     :lemma-constructiontargets-sardconvexdomain-finite-whitneystratumnet-mem-quarter-ball
-    :lemma-constructiontargets-sardconvexdomain-encard-whitneystratumnet-mem-quarter-ball-l],
+    :lemma-constructiontargets-sardconvexdomain-encard-whitneystratumnet-mem-quarter-ball-l
+    :lemma-constructiontargets-sardconvexdomain-dist-whitneynormalize],
    :other-consumers []}
   {:consumer :t01A08,
    :phase :lemma,
@@ -35556,6 +35541,25 @@
    :kind :lemma,
    :depends-on
    [:lemma-constructiontargets-sardconvexdomain-whitneystratumnet-spec],
+   :other-consumers []}
+  {:consumer :t01A08,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.SardConvexDomain.dist_whitneyNormalize",
+    :type "dyadic normalization rescales distance by 2^-k"},
+   :lemma
+   {:name "ConstructionTargets.SardConvexDomain.dist_whitneyNormalize",
+    :reported-by [:r-a08-sard-b3-whitney-cubes-1],
+    :type "dyadic normalization rescales distance by 2^-k",
+    :area "sard-convex-domain",
+    :proved-in :r-a08-sard-b3-whitney-cubes-1},
+   :id
+   :lemma-constructiontargets-sardconvexdomain-dist-whitneynormalize,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
