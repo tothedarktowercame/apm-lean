@@ -21568,14 +21568,15 @@
   {:consumer :t00J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "Frozen fixture metadata mismatch persists in both authoritative acceptance copies: they record aad5a9cda739c1cbcceb1eca8ab8b33395db8a08c9d68941a87c644f4d13586e and omit :mode, while /tmp/closedboundarycoords.lean freshly compiles and hashes to 7e72195e1214d7580994264481ae57d0ecf87755d31825ab85cbda5f1220c4b1. Update both copies to that digest with :mode :post-build-export-check, then resubmit commit f0afa7bd.",
    :implements-lemma
    :lemma-constructiontargets-manifoldfundamentalclass-coefficientclosedboundary-coordinat,
    :evidence
    {:placeholder-delta {:t00J02 [1 1], :t98A02 [1 1]},
-    :residual "Repair both acceptance copies, then resubmit f0afa7bd.",
+    :residual
+    "Install verified digest and post-build mode in both copies, then resubmit f0afa7bd.",
     :outcome :stop,
     :warnings [],
     :statement-hashes {:registry "131/131"},
@@ -21583,7 +21584,7 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Second unchanged audit: both authoritative acceptance copies retain stale digest aad5a9cda739c1cbcceb1eca8ab8b33395db8a08c9d68941a87c644f4d13586e and omit :mode. Supervisor must install the verified digest and post-build mode.",
+    "Acceptance still records stale digest aad5a9cda739c1cbcceb1eca8ab8b33395db8a08c9d68941a87c644f4d13586e and omits :mode. Supervisor must update both authoritative copies; f0afa7bd remains compiled.",
     :commands
     [{:cmd "sha256sum /tmp/closedboundarycoords.lean", :exit 0}
      {:cmd "lake env lean /tmp/closedboundarycoords.lean", :exit 0}
@@ -21600,7 +21601,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/manifold-fundamental-class",
    :acceptance
