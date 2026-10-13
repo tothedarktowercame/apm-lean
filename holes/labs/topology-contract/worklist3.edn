@@ -24430,68 +24430,59 @@
    :consumer :t01A08,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "extend Mathlib: state and prove the missing theorem in scope",
    :implements-lemma :lemma-closedset-whitneycubecover,
    :evidence
    {:placeholder-delta {:t01A08 [1 1]},
     :residual
-    "Build maximal dyadic cubes and assemble B3; then B4-B7, B9.",
+    "Prove dyadic partition/nesting, select maximal admissible cubes, assemble B3; then B4-B7, B9.",
     :outcome :stop,
     :warnings
     ["existing unnecessarySimpa:454"
      "existing unnecessarySeqFocus:1199"],
     :missing-theorems
     [{:name
-      "ConstructionTargets.SardConvexDomain.not_locallyFinite_whitneyNetQuarterBalls_of_frontier_nonempty",
+      "ConstructionTargets.SardConvexDomain.countable_whitneyDyadicIndex",
       :type
-      "closed nonempty s, nonempty frontier => quarter-balls not ambient locally finite",
+      "finite-basis integer dyadic indices are countable; cubes and positive scales defined",
       :status :proved,
       :consumers [:t01A08],
-      :depends-on
-      ["ConstructionTargets.SardConvexDomain.compl_subset_iUnion_whitneyNetQuarterBalls"],
+      :depends-on [],
       :area "sard-convex-domain"}
      {:name
       "ConstructionTargets.SardConvexDomain.closedSet_whitneyCubeCover_proper",
       :type "proper closed-set cover using maximal dyadic cubes",
       :status :partial,
       :consumers [:t01A08],
-      :depends-on [],
+      :depends-on
+      ["ConstructionTargets.SardConvexDomain.countable_whitneyDyadicIndex"],
       :area "sard-convex-domain"}],
     :statement-hashes {:registry "150/150"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Compiled obstruction: net quarter-balls covering s^c are not ambient locally finite when frontier s is nonempty. B3 needs maximal dyadic cubes; frozen declaration not refuted.",
+    "Committed the countable integer dyadic index, canonical-basis half-open cubes, and positive dyadic scale. Partition/nesting and maximal admissible-cube selection remain; not refuted.",
     :commands
     [{:cmd "lake build ConstructionTargets.SardConvexDomain", :exit 0}
      {:cmd "fixture; registry; scan; commit diff", :exit 0}
      {:cmd "git commit", :exit 0}],
     :diagnostic-history
-    [{:cmd "build", :exit 1, :correction "used closure_compl"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1791916969866-10211-86a03d7c",
-     :commands
-     ["git show/diff 384fad1; scope/obstruction checks"
-      "sha256sum + lake env lean frozen fixture"
-      "lake build ConstructionTargets.SardConvexDomain"
-      "statement registry check; forbidden-count scan"],
-     :finding
-     "PASS. Recorded topo-10 commit 384fad1 changes only the scoped Lean file and gives a compiled obstruction: if the net quarter-balls were ambient locally finite, closure would commute with their union; a frontier point would lie in one closed quarter-ball and in s, forcing positive dc≤dist(c,x)≤dc/4. Thus this ball construction fails local finiteness, while the frozen cube-cover declaration is not refuted and maximal dyadic cubes remain listed. Fixture hash d74ae9ad... matches; build/fixture pass; registry 150/150; placeholders stay 0; only standard axioms."},
-    :commit "384fad1cbfcc6bef5dd235a3f17f0bba962cbc45",
+    [{:cmd "build",
+      :exit 1,
+      :correction "unfolded index for Countable; used zpow_pos"}],
+    :commit "383a45e3f2ece65a90219e86e678d6e7f659897b",
     :changed-paths ["ConstructionTargets/SardConvexDomain.lean"],
     :fixture
-    {:path "/tmp/t01a08_b3_boundary_obstruction_check.lean",
+    {:path "/tmp/t01a08_b3_dyadic_index_check.lean",
      :sha256
-     "d74ae9ad5823ca793fa854b70b32a4431767461cd5ea82c2b2eb98527c6db1cd",
+     "4f24cce295611a202e0077e7a72982b842f8d98e2ab55788d5ff712cf33900e6",
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain.blueprint/B3",
    :acceptance
@@ -35174,7 +35165,8 @@
     :lemma-constructiontargets-sardconvexdomain-infdist-center-comparable-of-mem-half-ball
     :lemma-constructiontargets-sardconvexdomain-whitneystratum-indices-le-add-two-of-mem-ha
     :lemma-constructiontargets-sardconvexdomain-finite-whitneynethalfincidence
-    :lemma-constructiontargets-sardconvexdomain-finite-whitneynetquarterballs-meeting-nhds-],
+    :lemma-constructiontargets-sardconvexdomain-finite-whitneynetquarterballs-meeting-nhds-
+    :lemma-constructiontargets-sardconvexdomain-countable-whitneydyadicindex],
    :other-consumers []}
   {:consumer :t01A08,
    :phase :lemma,
@@ -35998,6 +35990,28 @@
    :kind :lemma,
    :depends-on
    [:lemma-constructiontargets-sardconvexdomain-compl-subset-iunion-whitneynetquarterballs],
+   :other-consumers []}
+  {:consumer :t01A08,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.SardConvexDomain.countable_whitneyDyadicIndex",
+    :type
+    "finite-basis integer dyadic indices are countable; cubes and positive scales defined"},
+   :lemma
+   {:name
+    "ConstructionTargets.SardConvexDomain.countable_whitneyDyadicIndex",
+    :reported-by [:r-a08-sard-b3-whitney-cubes-1],
+    :type
+    "finite-basis integer dyadic indices are countable; cubes and positive scales defined",
+    :area "sard-convex-domain",
+    :proved-in :r-a08-sard-b3-whitney-cubes-1},
+   :id
+   :lemma-constructiontargets-sardconvexdomain-countable-whitneydyadicindex,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
