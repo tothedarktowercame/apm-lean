@@ -2777,6 +2777,49 @@ lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_inequality_aux
     apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_inequality_aux_approximation_aux_primitive_wirtinger
       hWirtinger g hg hmean
 
+lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_inequality_aux_approximation_aux_limit_aux_error_aux_norm_estimate_aux_delta
+    {ε : ℝ} (hε : 0 < ε) (C : ℝ) :
+    ∃ δ : ℝ, 0 < δ ∧ C * δ < ε := by
+  exact exists_pos_mul_lt hε C
+
+-- Cauchy–Schwarz: y x − ∫₀ˣ g = ∫₀ˣ (dy − g) (y = ∫₀ˣ dy by hFTC), so its square is ≤ x·∫₀ˣ (dy−g)²
+-- ≤ π·∫_(0,π) (dy − g)².
+lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_inequality_aux_approximation_aux_limit_aux_error_aux_norm_estimate_aux_cs
+    (hFTC : apm_m98A06_WeakFTCFact) (y dy : ℝ → ℝ) (h : apm_m98a06_InH10Pi y dy) :
+    ∀ (g : ℝ → ℝ), Continuous g → ∀ x ∈ Icc (0 : ℝ) Real.pi,
+        (y x - ∫ t in (0 : ℝ)..x, g t) ^ 2 ≤
+          Real.pi * ∫ t, (dy t - g t) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)) := by
+  sorry
+
+-- (a + b)² ≤ (1 + η) a² + (1 + 1/η) b² pointwise, integrated (squares of L² functions are
+-- integrable on the finite-measure interval).
+lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_inequality_aux_approximation_aux_limit_aux_error_aux_norm_estimate_aux_split :
+    ∀ (f k : ℝ → ℝ) (η : ℝ), 0 < η →
+        MemLp f 2 (volume.restrict (Ioo (0 : ℝ) Real.pi)) →
+        MemLp k 2 (volume.restrict (Ioo (0 : ℝ) Real.pi)) →
+        (∫ x, (f x + k x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi))) ≤
+          (1 + η) * (∫ x, (f x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi))) +
+          (1 + 1 / η) * ∫ x, (k x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)) := by
+  sorry
+
+lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_inequality_aux_approximation_aux_limit_aux_error_aux_norm_estimate_aux_transfer
+    (hWirtinger : apm_m98A06_WirtingerFact)
+    (hFTC : apm_m98A06_WeakFTCFact) (y dy : ℝ → ℝ)
+    (h : apm_m98a06_InH10Pi y dy)
+    (hcs : ∀ (g : ℝ → ℝ), Continuous g → ∀ x ∈ Icc (0 : ℝ) Real.pi,
+        (y x - ∫ t in (0 : ℝ)..x, g t) ^ 2 ≤
+          Real.pi * ∫ t, (dy t - g t) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)))
+    (hsplit : ∀ (f k : ℝ → ℝ) (η : ℝ), 0 < η →
+        MemLp f 2 (volume.restrict (Ioo (0 : ℝ) Real.pi)) →
+        MemLp k 2 (volume.restrict (Ioo (0 : ℝ) Real.pi)) →
+        (∫ x, (f x + k x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi))) ≤
+          (1 + η) * (∫ x, (f x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi))) +
+          (1 + 1 / η) * ∫ x, (k x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi))) :
+    ∀ ε : ℝ, 0 < ε →
+      (∫ x, (y x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi))) ≤
+        (∫ x, (dy x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi))) + ε := by
+  sorry
+
 lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_inequality_aux_approximation_aux_limit_aux_error_aux_norm_estimate
     (hWirtinger : apm_m98A06_WirtingerFact)
     (hFTC : apm_m98A06_WeakFTCFact) (y dy : ℝ → ℝ)
@@ -2784,7 +2827,9 @@ lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_inequality_aux
     ∀ ε : ℝ, 0 < ε →
       (∫ x, (y x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi))) ≤
         (∫ x, (dy x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi))) + ε := by
-  sorry
+  exact
+    apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_inequality_aux_approximation_aux_limit_aux_error_aux_norm_estimate_aux_transfer
+      hWirtinger hFTC y dy h (apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_inequality_aux_approximation_aux_limit_aux_error_aux_norm_estimate_aux_cs hFTC y dy h) apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_inequality_aux_approximation_aux_limit_aux_error_aux_norm_estimate_aux_split
 
 lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_inequality_aux_approximation_aux_limit_aux_error
     (hWirtinger : apm_m98A06_WirtingerFact)
