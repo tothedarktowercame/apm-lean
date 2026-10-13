@@ -490,7 +490,33 @@ lemma apm_m02J05_lux_definite_aux_nonzero_aux_core_aux_level
     (u : apm_m02J05_Fun) (hu0 : u ≠ 0) :
     ∃ ε : ℝ, 0 < ε ∧
       0 < volume.restrict (Icc (0 : ℝ) 1) {x | ε < |u x|} := by
-  sorry
+  let μ : Measure ℝ := volume.restrict (Icc (0 : ℝ) 1)
+  let s : ℕ → Set ℝ := fun n => {x | (1 : ℝ) / (n + 1) < |u x|}
+  have hs_union : (⋃ n, s n) = {x | u x ≠ 0} := by
+    ext x
+    simp only [mem_iUnion, mem_setOf_eq]
+    constructor
+    · rintro ⟨n, hn⟩ hux
+      dsimp [s] at hn
+      rw [hux, abs_zero] at hn
+      exact (not_lt_of_ge (by positivity)) hn
+    · intro hux
+      have habs : 0 < |u x| := abs_pos.mpr hux
+      obtain ⟨n, hn⟩ := exists_nat_one_div_lt habs
+      exact ⟨n, hn⟩
+  have hμunion : μ (⋃ n, s n) ≠ 0 := by
+    intro hz
+    have hae : ∀ᵐ x ∂μ, u x = 0 := by
+      rw [ae_iff]
+      simpa [hs_union] using hz
+    apply hu0
+    apply AEEqFun.ext
+    filter_upwards [hae, AEEqFun.coeFn_zero (α := ℝ) (β := ℝ) (μ := μ)]
+      with x hx hz0
+    exact hx.trans hz0.symm
+  obtain ⟨n, hn⟩ := exists_measure_pos_of_not_measure_iUnion_null hμunion
+  refine ⟨(1 : ℝ) / (n + 1), by positivity, ?_⟩
+  exact hn
 -- END SEAT AREA
 
 lemma apm_m02J05_lux_definite_aux_nonzero_aux_core_aux_contradiction
