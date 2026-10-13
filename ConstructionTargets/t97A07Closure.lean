@@ -616,6 +616,63 @@ theorem fderiv_coordinate_comp_extChartAt_symm_eq_zero
       (extChartAt 𝓘(ℝ, EuclideanModel m) x x) = 0 :=
   (isLocalMax_coordinate_comp_extChartAt_symm f i x hmax).fderiv_eq_zero
 
+/-- The derivative of a selected coordinate after the inverse source chart is
+the selected coordinate of the manifold derivative. -/
+theorem fderiv_coordinate_comp_extChartAt_symm_apply
+    {m n : ℕ} {X : Type*} [TopologicalSpace X]
+    [ChartedSpace (EuclideanModel m) X]
+    [IsManifold 𝓘(ℝ, EuclideanModel m) ∞ X]
+    (f : X → EuclideanModel n)
+    (hf : ContMDiff 𝓘(ℝ, EuclideanModel m)
+      𝓘(ℝ, EuclideanModel n) ∞ f)
+    (i : Fin n) (x : X) (v : EuclideanModel m) :
+    fderiv ℝ
+      (fun z ↦ f ((extChartAt 𝓘(ℝ, EuclideanModel m) x).symm z) i)
+      (extChartAt 𝓘(ℝ, EuclideanModel m) x x) v =
+      (NormedSpace.fromTangentSpace (f x)
+        (mfderiv 𝓘(ℝ, EuclideanModel m)
+          𝓘(ℝ, EuclideanModel n) f x v)) i := by
+  have hvec := coordinate_fderivWithin_eq_mfderiv f hf x
+  have hd : DifferentiableAt ℝ
+      (fun z ↦ f ((extChartAt 𝓘(ℝ, EuclideanModel m) x).symm z))
+      (extChartAt 𝓘(ℝ, EuclideanModel m) x x) := by
+    have hcoord := (contMDiffAt_iff.mp (hf x)).2
+    rw [← differentiableWithinAt_univ]
+    simpa using hcoord.differentiableWithinAt (by simp)
+  rw [show (fun z ↦ f ((extChartAt 𝓘(ℝ, EuclideanModel m) x).symm z) i) =
+      (EuclideanSpace.proj i : EuclideanModel n → ℝ) ∘
+        (fun z ↦ f ((extChartAt 𝓘(ℝ, EuclideanModel m) x).symm z)) by rfl,
+    fderiv_comp _ (by fun_prop) hd, ContinuousLinearMap.fderiv,
+    ContinuousLinearMap.comp_apply]
+  simpa [NormedSpace.fromTangentSpace, ContinuousLinearMap.fderiv] using
+    congrArg (fun L : EuclideanModel m →L[ℝ]
+        TangentSpace 𝓘(ℝ, EuclideanModel n) (f x) ↦
+      (NormedSpace.fromTangentSpace (f x) (L v)) i) hvec
+
+/-- Blueprint B5: a global maximum of one target coordinate forces the
+manifold derivative to be nonsurjective. -/
+theorem not_surjective_mfderiv_of_isMaxOn_coordinate
+    {m n : ℕ} {X : Type*} [TopologicalSpace X]
+    [ChartedSpace (EuclideanModel m) X]
+    [IsManifold 𝓘(ℝ, EuclideanModel m) ∞ X]
+    (f : X → EuclideanModel n)
+    (hf : ContMDiff 𝓘(ℝ, EuclideanModel m)
+      𝓘(ℝ, EuclideanModel n) ∞ f)
+    (i : Fin n) (x : X)
+    (hmax : IsMaxOn (fun z ↦ f z i) Set.univ x) :
+    ¬ Function.Surjective
+      (mfderiv 𝓘(ℝ, EuclideanModel m)
+        𝓘(ℝ, EuclideanModel n) f x) := by
+  apply not_surjective_of_coordinate_eq_zero _ i
+  intro v
+  change (NormedSpace.fromTangentSpace (f x)
+    (mfderiv 𝓘(ℝ, EuclideanModel m)
+      𝓘(ℝ, EuclideanModel n) f x v)) i = 0
+  rw [← fderiv_coordinate_comp_extChartAt_symm_apply f hf i x v]
+  have hz := congrArg (fun L : EuclideanModel m →L[ℝ] ℝ ↦ L v)
+    (fderiv_coordinate_comp_extChartAt_symm_eq_zero f i x hmax)
+  simpa using hz
+
 end t97A07Closure
 
 #print axioms t97A07Closure.isOpen_setOf_surjective_clm
@@ -642,3 +699,5 @@ end t97A07Closure
 #print axioms t97A07Closure.not_surjective_of_coordinate_eq_zero
 #print axioms t97A07Closure.isLocalMax_coordinate_comp_extChartAt_symm
 #print axioms t97A07Closure.fderiv_coordinate_comp_extChartAt_symm_eq_zero
+#print axioms t97A07Closure.fderiv_coordinate_comp_extChartAt_symm_apply
+#print axioms t97A07Closure.not_surjective_mfderiv_of_isMaxOn_coordinate

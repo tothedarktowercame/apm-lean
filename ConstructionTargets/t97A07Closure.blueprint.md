@@ -212,7 +212,7 @@ manifold, then
 uses: Mathlib `IsLocalMax.fderiv_eq_zero`, `contMDiffAt_iff`, `mfderiv_comp`,
 and the extended-chart derivative equivalences
 
-status: planned
+status: proved
 
 Compiled progress: `not_surjective_of_coordinate_eq_zero` proves the final
 linear-algebra step: a map whose `i`th coordinate vanishes on its entire
@@ -234,6 +234,11 @@ maximum transfer to the fixed extended source chart, and
 `fderiv_coordinate_comp_extChartAt_symm_eq_zero` applies Fermat's theorem at
 the chart centre.  B5 now remains only the chain-rule identification of this
 zero scalar derivative with the selected coordinate of `mfderiv f x`.
+
+`fderiv_coordinate_comp_extChartAt_symm_apply` supplies that chain-rule
+identity through the canonical tangent-space identification, and
+`not_surjective_mfderiv_of_isMaxOn_coordinate` combines it with Fermat and the
+coordinate-range obstruction.  This completes B5.
 
 ### B6. Positive-dimensional targets have a critical value
 
