@@ -592,7 +592,40 @@ integral, after fixing its value at the left endpoint. -/
 lemma apm_m98A06_weak_FTC_aux_representation_aux_primitive
     (du : ℝ → ℝ) (hdu : Integrable du (volume.restrict (Ioo (0 : ℝ) Real.pi))) :
     apm_m98a06_IsWeakDerivativeOn (Ioo 0 Real.pi) (fun x => ∫ t in (0 : ℝ)..x, du t) du := by
-  sorry
+  intro φ hφ hφc hφs
+  have hi : IntervalIntegrable du volume 0 Real.pi := by
+    rw [intervalIntegrable_iff_integrableOn_Icc_of_le Real.pi_pos.le,
+      integrableOn_Icc_iff_integrableOn_Ioo]
+    exact hdu
+  let V : ℝ → ℝ := fun x ↦ ∫ t in (0 : ℝ)..x, du t
+  have hVac : AbsolutelyContinuousOnInterval V 0 Real.pi :=
+    hi.absolutelyContinuousOnInterval_intervalIntegral (by simp)
+  obtain ⟨K, hK⟩ := hφ.contDiffOn.exists_lipschitzOnWith (by simp)
+    (convex_Icc (0 : ℝ) Real.pi) isCompact_Icc
+  have hφac : AbsolutelyContinuousOnInterval φ 0 Real.pi := by
+    have hK' : LipschitzOnWith K φ (uIcc (0 : ℝ) Real.pi) := by
+      simpa [uIcc_of_le Real.pi_pos.le] using hK
+    exact hK'.absolutelyContinuousOnInterval
+  have h0 : φ 0 = 0 := by
+    by_contra hn
+    exact (lt_irrefl 0) (hφs (Function.mem_support.mpr hn)).1
+  have hpi : φ Real.pi = 0 := by
+    by_contra hn
+    exact (lt_irrefl Real.pi) (hφs (Function.mem_support.mpr hn)).2
+  have hibp := hVac.integral_mul_deriv_eq_deriv_mul hφac
+  have hdV : ∀ᵐ x ∂volume, x ∈ uIcc (0 : ℝ) Real.pi → deriv V x = du x := by
+    filter_upwards [hi.ae_hasDerivAt_integral] with x hx hxi
+    exact (hx hxi 0 (by simp)).deriv
+  have hreplace : (∫ x in (0 : ℝ)..Real.pi, deriv V x * φ x) =
+      ∫ x in (0 : ℝ)..Real.pi, du x * φ x := by
+    apply intervalIntegral.integral_congr_ae
+    filter_upwards [hdV] with x hx hxi
+    rw [hx (uIoc_subset_uIcc hxi)]
+  have hibp' : (∫ x in (0 : ℝ)..Real.pi, V x * deriv φ x) =
+      -(∫ x in (0 : ℝ)..Real.pi, du x * φ x) := by
+    simpa [h0, hpi, V, hreplace] using hibp
+  simpa [V, intervalIntegral.integral_of_le Real.pi_pos.le,
+    integral_Ioc_eq_integral_Ioo] using hibp'
 
 -- Du Bois-Reymond in one variable: continuous on [0, π] with zero weak derivative on
 -- (0, π) implies constant there.
