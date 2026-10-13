@@ -90,13 +90,107 @@ theorem t99J01_arbitrary_cover_component_aux_bounds
   · exact ConstructionTargets.T99J01ComponentSheetBounds.componentFiberCard_le hp e
 
 /-- Missing from the advertised component-restriction construction target. -/
+noncomputable instance
+    t99J01_arbitrary_cover_component_aux_restricted_cover_aux_sphereLocPathConnected :
+    LocPathConnectedSpace (ConstructionTargets.SphereHomology.Sphere 1) :=
+  ChartedSpace.locPathConnectedSpace (EuclideanSpace ℝ (Fin 1))
+    (ConstructionTargets.SphereHomology.Sphere 1)
+
+noncomputable instance
+    t99J01_arbitrary_cover_component_aux_restricted_cover_aux_circleLocPathConnected :
+    LocPathConnectedSpace Circle :=
+  Topology.IsQuotientMap.locPathConnectedSpace
+    ConstructionTargets.CircleHomology.circleHomeomorphSphereOne.symm.isQuotientMap
+
+noncomputable instance
+    t99J01_arbitrary_cover_component_aux_restricted_cover_aux_circlePathConnected :
+    PathConnectedSpace Circle :=
+  pathConnectedSpace_iff_univ.mpr (by
+    have h : IsPathConnected
+        (ConstructionTargets.CircleHomology.circleHomeomorphSphereOne ⁻¹'
+          (Set.univ : Set (ConstructionTargets.SphereHomology.Sphere 1))) :=
+      ConstructionTargets.CircleHomology.circleHomeomorphSphereOne.isPathConnected_preimage.mpr
+        isPathConnected_univ
+    simpa using h)
+
+noncomputable instance
+    t99J01_arbitrary_cover_component_aux_restricted_cover_aux_twoCirclesPathConnected :
+    PathConnectedSpace TwoCircles := inferInstance
+
+noncomputable instance
+    t99J01_arbitrary_cover_component_aux_restricted_cover_aux_twoCirclesLocPathConnected :
+    LocPathConnectedSpace TwoCircles :=
+  Topology.IsQuotientMap.locPathConnectedSpace
+    (show Topology.IsQuotientMap
+        (ConstructionTargets.PointWedgeQuotient.quotientMap (1 : Circle) (1 : Circle)) from
+      ⟨ConstructionTargets.PointWedgeQuotient.surjective_quotientMap _ _, rfl⟩)
+
+noncomputable instance
+    t99J01_arbitrary_cover_component_aux_restricted_cover_aux_threeCirclesLocPathConnected :
+    LocPathConnectedSpace ThreeCircles :=
+  Topology.IsQuotientMap.locPathConnectedSpace
+    (show Topology.IsQuotientMap
+        (ConstructionTargets.PointWedgeQuotient.quotientMap twoCirclesPoint (1 : Circle)) from
+      ⟨ConstructionTargets.PointWedgeQuotient.surjective_quotientMap _ _, rfl⟩)
+
+noncomputable instance
+    t99J01_arbitrary_cover_component_aux_restricted_cover_aux_threeCirclesPathConnected :
+    PathConnectedSpace ThreeCircles := inferInstance
+
+def t99J01_arbitrary_cover_component_aux_restricted_cover_aux_fiberEmbedding
+    {E : Type} [TopologicalSpace E] (p : E → ThreeCircles) (e : E)
+    (b : ThreeCircles) :
+    {z : ConstructionTargets.T99J01PathComponentCoverRestriction.t99j01ComponentAt e //
+      ConstructionTargets.T99J01PathComponentCoverRestriction.t99j01ComponentCoverMap p e z = b} ↪
+      {x : E // p x = b} where
+  toFun z := ⟨z.1.1, z.2⟩
+  inj' z w h := by
+    apply Subtype.ext
+    apply Subtype.ext
+    exact congrArg (fun u : {x : E // p x = b} ↦ u.1) h
+
+def t99J01_arbitrary_cover_component_aux_restricted_cover_aux_baseFiberEquiv
+    {E : Type} [TopologicalSpace E] (p : E → ThreeCircles) (e : E) :
+    {z : ConstructionTargets.T99J01PathComponentCoverRestriction.t99j01ComponentAt e //
+      ConstructionTargets.T99J01PathComponentCoverRestriction.t99j01ComponentCoverMap p e z = p e} ≃
+      {x : E // p x = p e ∧ Joined e x} where
+  toFun z := ⟨z.1.1, z.2, z.1.2⟩
+  invFun x := ⟨⟨x.1, x.2.2⟩, x.2.1⟩
+  left_inv z := by rfl
+  right_inv x := by rfl
+
 theorem t99J01_arbitrary_cover_component_aux_restricted_cover
     (E : Type) [TopologicalSpace E] (n : ℕ) (p : E → ThreeCircles)
     (hp : IsKSheetedCover p n) (e : E) :
     IsKSheetedCover
       (ConstructionTargets.T99J01PathComponentCoverRestriction.t99j01ComponentCoverMap p e)
       (T99J01ComponentSheets p e) := by
-  sorry
+  let q :=
+    ConstructionTargets.T99J01PathComponentCoverRestriction.t99j01ComponentCoverMap p e
+  have hq :=
+    ConstructionTargets.RestrictPathComponent.IsCoveringMap.restrictPathComponent
+      hp.isCoveringMap e
+  refine {
+    isCoveringMap := hq.1
+    finite_fiber := ?_
+    card_fiber := ?_ }
+  · intro b
+    letI : Finite {x : E // p x = b} := hp.finite_fiber b
+    exact Finite.of_injective
+      (t99J01_arbitrary_cover_component_aux_restricted_cover_aux_fiberEmbedding p e b)
+      (t99J01_arbitrary_cover_component_aux_restricted_cover_aux_fiberEmbedding p e b).injective
+  · intro b
+    obtain ⟨γ⟩ := PathConnectedSpace.joined (p e) b
+    let γq : Path.Homotopic.Quotient (p e) b := Quotient.mk'' γ
+    let fiberEquiv : (q ⁻¹' {p e}) ≃ (q ⁻¹' {b}) :=
+      Equiv.ofBijective (hq.1.monodromy γq) (hq.1.monodromy_bijective γq)
+    calc
+      Nat.card {z // q z = b} = Nat.card {z // q z = p e} :=
+        (Nat.card_congr fiberEquiv).symm
+      _ = Nat.card {x : E // p x = p e ∧ Joined e x} :=
+        Nat.card_congr
+          (t99J01_arbitrary_cover_component_aux_restricted_cover_aux_baseFiberEquiv p e)
+      _ = T99J01ComponentSheets p e := rfl
 
 /-- Missing from the advertised component-restriction construction target. -/
 private def t99J01_arbitrary_cover_component_aux_pi1_equiv_aux_path
