@@ -23716,56 +23716,50 @@
    :consumer :t01A08,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :implements-lemma
    :lemma-contdiffwithinat-domdomcongr-iteratedfderivwithin-of-infty,
    :evidence
    {:placeholder-delta {:t01A08 [1 1]},
     :residual
-    "Use derivative-preservation plus lower-jet Schwarz to prove adjacent Fin slots; apply adjacent-swap closure; B1.",
+    "Prove leading adjacent swap from Schwarz; combine tail lift and adjacent-swap closure; B1.",
     :outcome :stop,
     :warnings [],
     :missing-theorems
-    [{:name
-      "ContinuousMultilinearMap.domDomCongr_fderivWithin_eq_self",
-      :type
-      "EqOn (fun y => (g y).domDomCongr sigma) g s implies (fderivWithin ℝ g s x v).domDomCongr sigma = fderivWithin ℝ g s x v under UniqueDiffOn and x∈s",
+    [{:name "iteratedFDerivWithin_domDomCongr_decomposeFin_symm_zero",
+      :type "lower symmetry lifts to next tail slots",
       :status :proved,
-      :consumers [:t01A08],
-      :depends-on [],
-      :area "sard-convex-domain"}
-     {:name
-      "ContDiffWithinAt.domDomCongr_iteratedFDerivWithin_of_infty",
-      :type
-      "C∞ within + UniqueDiffOn + x∈s + x∈closure(interior s) imply all-order permutation invariance",
-      :status :partial,
       :consumers [:t01A08],
       :depends-on
       ["ContinuousMultilinearMap.domDomCongr_fderivWithin_eq_self"],
+      :area "sard-convex-domain"}
+     {:name
+      "ContDiffWithinAt.domDomCongr_iteratedFDerivWithin_of_infty",
+      :type "C∞ within implies permutation invariance",
+      :status :partial,
+      :consumers [:t01A08],
+      :depends-on
+      ["iteratedFDerivWithin_domDomCongr_decomposeFin_symm_zero"],
       :area "sard-convex-domain"}],
     :statement-hashes {:registry "147/147"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Proved within derivatives preserve pointwise domDomCongr identities; Fin curry/index step remains.",
+    "Tail-slot lift proved; leading adjacent-slot identity remains.",
     :commands
-    [{:cmd "lake build ConstructionTargets.SardConvexDomain", :exit 0}
+    [{:cmd
+      "lake build ConstructionTargets.SardConvexDomain; lake env lean helper-axiom-check and fixture",
+      :exit 0}
      {:cmd
-      "lake env lean derivative-helper axiom check and fixture; scoped commit check; registry check",
+      "sha256sum fixture; scoped commit/clean-tree checks; statement-registry check",
       :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1791878508797-9030-f3dcbcbe",
-     :commands
-     ["git show/diff 11ad3d83; scope and recorded-tree checks"
-      "lake build ConstructionTargets.SardConvexDomain"
-      "lake env lean fixture and /tmp/CheckSardDerivSymm.lean"
-      "sha256sum fixture; statement-registry check; placeholder recount"],
-     :finding
-     "PASS: valid STOP after real progress. One-file commit proves fderivWithin preserves EqOn domDomCongr identities via the matching linear-isometry action; theorem orientation and representation boundary are correct. Build/export pass; fixture hash matches; helper uses standard axioms; registry 147/147; sorry/admit 0->0. Fin curry/index step is listed as remaining."},
-    :commit "11ad3d83d19e696301551b345cfea6bc6ff1c20c",
+    :diagnostic-history
+    [{:cmd "HEAD^/HEAD diff checks",
+      :exit 1,
+      :correction
+      "concurrent ledger commit; checked f032efae9 directly"}],
+    :commit "f032efae9d1501f7ddfe93c66668f88f24ed37f4",
     :changed-paths ["ConstructionTargets/SardConvexDomain.lean"],
     :fixture
     {:path "/tmp/t01a08_smooth_symmetry_membership_probe.lean",
@@ -23774,7 +23768,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain/B1/symmetry",
    :acceptance
@@ -33571,7 +33565,8 @@
    :depends-on
    [:lemma-continuousmultilinearmap-domdomcongr-eq-self-of-swap
     :lemma-continuousmultilinearmap-domdomcongr-eq-self-of-adjacent-swap
-    :lemma-continuousmultilinearmap-domdomcongr-fderivwithin-eq-self],
+    :lemma-continuousmultilinearmap-domdomcongr-fderivwithin-eq-self
+    :lemma-iteratedfderivwithin-domdomcongr-decomposefin-symm-zero],
    :other-consumers []}
   {:consumer :t01A08,
    :phase :lemma,
@@ -33639,6 +33634,24 @@
    :lemma-continuousmultilinearmap-domdomcongr-fderivwithin-eq-self,
    :kind :lemma,
    :depends-on [],
+   :other-consumers []}
+  {:consumer :t01A08,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "iteratedFDerivWithin_domDomCongr_decomposeFin_symm_zero",
+    :type "lower symmetry lifts to next tail slots"},
+   :lemma
+   {:name "iteratedFDerivWithin_domDomCongr_decomposeFin_symm_zero",
+    :reported-by [:r-a08-symmetry-slots-1],
+    :type "lower symmetry lifts to next tail slots",
+    :area "sard-convex-domain",
+    :proved-in :r-a08-symmetry-slots-1},
+   :id :lemma-iteratedfderivwithin-domdomcongr-decomposefin-symm-zero,
+   :kind :lemma,
+   :depends-on
+   [:lemma-continuousmultilinearmap-domdomcongr-fderivwithin-eq-self],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
