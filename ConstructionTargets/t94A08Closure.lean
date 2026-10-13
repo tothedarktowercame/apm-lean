@@ -516,3 +516,38 @@ lemma apm_t94a08_puncturedAffineCross_homeomorph_image_not_isPreconnected
   intro himage
   exact apm_t94a08_puncturedAffineCross_not_isPreconnected
     (e.isInducing.isPreconnected_image.mp himage)
+
+/-! The zeroth projective chart carries `sigma2` exactly to the affine cross. -/
+
+lemma apm_t94a08_sigma2_zeroChart_mem_iff (p : apm_t94a08_CP2)
+    (hp : Projectivization.rep p (0 : Fin 3) ≠ 0) :
+    let z :=
+      (ConstructionTargets.ComplexProjectiveChartTargets.coordinates (0 : Fin 3) p
+          ⟨1, by decide⟩,
+        ConstructionTargets.ComplexProjectiveChartTargets.coordinates (0 : Fin 3) p
+          ⟨2, by decide⟩)
+    p ∈ apm_t94a08_sigma2 ↔
+      z ∈ apm_t94a08_affineBranchPlus ∪ apm_t94a08_affineBranchMinus := by
+  dsimp only
+  rw [apm_t94a08_sigma2, mem_setOf_eq, apm_t94a08_quadratic2_factor]
+  change _ ↔
+    Projectivization.rep p 1 / Projectivization.rep p 0 +
+          Complex.I * (Projectivization.rep p 2 / Projectivization.rep p 0) = 0 ∨
+      Projectivization.rep p 1 / Projectivization.rep p 0 -
+          Complex.I * (Projectivization.rep p 2 / Projectivization.rep p 0) = 0
+  rw [mul_eq_zero]
+  constructor
+  · rintro (hplus | hminus)
+    · left
+      field_simp
+      simpa using hplus
+    · right
+      field_simp
+      simpa using hminus
+  · rintro (hplus | hminus)
+    · left
+      field_simp [hp] at hplus
+      simpa using hplus
+    · right
+      field_simp [hp] at hminus
+      simpa using hminus
