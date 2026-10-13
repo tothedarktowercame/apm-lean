@@ -752,13 +752,52 @@ lemma apm_m93j05_stationary_at_minimizer_aux_memLp_path
 banked the path-admissibility helper above). (D1) is the analytic core; (D) takes it as a hypothesis;
 the Fermat step is assembled below. -/
 
+lemma apm_m93j05_lp_rpow_differentiableAt_aux_memLp_line
+    (p t : ℝ) (a b : ℝ → ℝ)
+    (ha : MemLp a (ENNReal.ofReal p) (volume.restrict (Set.Icc (0 : ℝ) 1)))
+    (hb : MemLp b (ENNReal.ofReal p) (volume.restrict (Set.Icc (0 : ℝ) 1))) :
+    MemLp (fun x ↦ a x + t * b x) (ENNReal.ofReal p)
+      (volume.restrict (Set.Icc (0 : ℝ) 1)) := by
+  exact ha.add (hb.const_smul t)
+
+/-! Split of `apm_m93j05_lp_rpow_differentiableAt` (claude-14, after a partial that banked `_aux_memLp_line`):
+(D1a) norm power = integral, (D1c) pointwise derivative, (D1b) differentiation under the integral
+given (D1c). All parallel. -/
+
+theorem apm_m93j05_rpow_eLpNorm_eq_integral (p : ℝ) (hp : 0 < p) (u : ℝ → ℝ)
+    (hu : MemLp u (ENNReal.ofReal p) (volume.restrict (Set.Icc (0 : ℝ) 1))) :
+    Real.rpow (eLpNorm u (ENNReal.ofReal p) (volume.restrict (Set.Icc (0 : ℝ) 1))).toReal p = ∫ x, |u x| ^ p ∂(volume.restrict (Set.Icc (0 : ℝ) 1)) := by
+  sorry
+
+theorem apm_m93j05_abs_rpow_line_hasDerivAt (p : ℝ) (hp : 1 < p) (x y s : ℝ) :
+    HasDerivAt (fun r : ℝ ↦ |x + r * y| ^ p)
+      (p * |x + s * y| ^ (p - 2) * (x + s * y) * y) s := by
+  sorry
+
+theorem apm_m93j05_integral_abs_rpow_line_differentiableAt (p : ℝ) (hp : 1 < p)
+    (hD1c : ∀ x y s : ℝ, HasDerivAt (fun r : ℝ ↦ |x + r * y| ^ p)
+      (p * |x + s * y| ^ (p - 2) * (x + s * y) * y) s)
+    (a b : ℝ → ℝ) (ha : MemLp a (ENNReal.ofReal p) (volume.restrict (Set.Icc (0 : ℝ) 1))) (hb : MemLp b (ENNReal.ofReal p) (volume.restrict (Set.Icc (0 : ℝ) 1))) :
+    DifferentiableAt ℝ (fun t : ℝ ↦ ∫ x, |a x + t * b x| ^ p ∂(volume.restrict (Set.Icc (0 : ℝ) 1))) 0 := by
+  sorry
+
 /-- (D1) For `p > 1`, `t ↦ ‖a + t b‖ₚᵖ` is differentiable at `0`
 (derivative `p ∫ |a|^(p-2) a b`; dominate the difference quotient by `p (|a|+|b|)^(p-1) |b|`). -/
 theorem apm_m93j05_lp_rpow_differentiableAt (p : ℝ) (hp : 1 < p) :
     ∀ (a b : ℝ → ℝ), MemLp a (ENNReal.ofReal p) (volume.restrict (Set.Icc (0 : ℝ) 1)) → MemLp b (ENNReal.ofReal p) (volume.restrict (Set.Icc (0 : ℝ) 1)) →
       DifferentiableAt ℝ (fun t : ℝ ↦ Real.rpow
         (eLpNorm (fun x ↦ a x + t * b x) (ENNReal.ofReal p) (volume.restrict (Set.Icc (0 : ℝ) 1))).toReal p) 0 := by
-  sorry
+  intro a b ha hb
+  have hfun : (fun t : ℝ ↦ Real.rpow
+      (eLpNorm (fun x ↦ a x + t * b x) (ENNReal.ofReal p)
+        (volume.restrict (Set.Icc (0 : ℝ) 1))).toReal p) =
+      fun t : ℝ ↦ ∫ x, |a x + t * b x| ^ p ∂(volume.restrict (Set.Icc (0 : ℝ) 1)) := by
+    funext t
+    exact apm_m93j05_rpow_eLpNorm_eq_integral p (by linarith) _
+      (apm_m93j05_lp_rpow_differentiableAt_aux_memLp_line p t a b ha hb)
+  rw [hfun]
+  exact apm_m93j05_integral_abs_rpow_line_differentiableAt p hp
+    (apm_m93j05_abs_rpow_line_hasDerivAt p hp) a b ha hb
 
 /-- (D) The energy is differentiable along every admissible line. Truncation is linear along the
 line (`f₀`, `h` are integrable), the `L²` term is a quadratic polynomial in `t` (finite trigonometric
