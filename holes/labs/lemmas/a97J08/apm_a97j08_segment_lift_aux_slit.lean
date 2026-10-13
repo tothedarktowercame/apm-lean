@@ -2919,7 +2919,61 @@ lemma apm_a97j08_segment_lift_aux_ne_zero {z p q : ℂ}
 lemma apm_a97j08_segment_lift_aux_slit {z p q : ℂ}
     (h : z ∉ segment ℝ p q) (t : unitInterval) :
     (AffineMap.lineMap p q (t : ℝ) - z) / (p - z) ∈ Complex.slitPlane := by
-  sorry
+  obtain ⟨hp, -⟩ := apm_a97j08_segment_lift_aux_endpoints h
+  have hpz : p - z ≠ 0 := sub_ne_zero.mpr hp
+  let m : ℂ := (q - p) / (p - z)
+  have hratio (u : ℝ) :
+      (AffineMap.lineMap p q u - z) / (p - z) = 1 + (u : ℂ) * m := by
+    dsimp [m]
+    rw [AffineMap.lineMap_apply]
+    field_simp
+    simp only [vsub_eq_sub, vadd_eq_add]
+    change (u : ℂ) * (q - p) + p - z = _
+    ring
+  rw [Complex.mem_slitPlane_iff, hratio]
+  by_cases ht : (t : ℝ) = 0
+  · left
+    simp [ht]
+  have htpos : 0 < (t : ℝ) := lt_of_le_of_ne t.property.1 (Ne.symm ht)
+  by_cases hm : m.im = 0
+  · left
+    simp only [Complex.add_re, Complex.one_re, Complex.mul_re, Complex.ofReal_re,
+      Complex.ofReal_im, zero_mul, sub_zero]
+    by_contra hnot
+    have hle : 1 + (t : ℝ) * m.re ≤ 0 := le_of_not_gt hnot
+    have hmneg : m.re < 0 := by nlinarith
+    let s : ℝ := -1 / m.re
+    have hspos : 0 < s := by
+      dsimp [s]
+      exact div_pos_of_neg_of_neg (by norm_num) hmneg
+    have hst : s ≤ (t : ℝ) := by
+      dsimp [s]
+      apply (div_le_iff_of_neg hmneg).2
+      nlinarith
+    have hsone : s ≤ 1 := hst.trans t.property.2
+    let su : unitInterval := ⟨s, hspos.le, hsone⟩
+    have hn := apm_a97j08_segment_lift_aux_ne_zero h su
+    apply hn
+    have hmext : m = (m.re : ℂ) := by
+      apply Complex.ext
+      · simp
+      · simpa [hm]
+    have hzero : (1 : ℂ) + (s : ℂ) * m = 0 := by
+      rw [hmext]
+      apply Complex.ext
+      · simp only [Complex.add_re, Complex.one_re, Complex.mul_re, Complex.ofReal_re,
+          Complex.ofReal_im, zero_mul, sub_zero, Complex.zero_re]
+        dsimp [s]
+        field_simp [ne_of_lt hmneg]
+        norm_num
+      · simp
+    have hzratio := hratio s
+    rw [hzero] at hzratio
+    exact (div_eq_zero_iff.mp hzratio).resolve_right hpz
+  · right
+    simp only [Complex.add_im, Complex.one_im, Complex.mul_im, Complex.ofReal_re,
+      Complex.ofReal_im, zero_mul, zero_add]
+    simpa only [add_zero] using mul_ne_zero (ne_of_gt htpos) hm
 -- END SEAT AREA
 
 lemma apm_a97j08_segment_lift_aux_exp_arg {w : ℂ} (hw : w ≠ 0) :
