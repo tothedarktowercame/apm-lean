@@ -4617,6 +4617,37 @@ theorem genericPointWedgeCoordinateSpanGlobalRestrictionRightComparison_eq_named
     genericPointWedgeCoordinateSpanGlobalRestrictionRightComparison_eq_reverse
       x₀ y₀ M N hM hN hy hx cM cN
 
+/-- The right restriction counit square in the free-product multiplication
+order, with the based counit normal form substituted for the actual-span map. -/
+theorem genericPointWedgeRightBaseTransport_counitSquare_normalForm :
+    let eR := genericPointWedgeRightGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let q := genericPointWedgeRightInverseBaseToRightBase
+      x₀ y₀ M N hM hN hy hx cM cN
+    genericPointWedgeIdentityGlobalRightBaseElement
+        x₀ y₀ M N hM hN hy hx cM cN *
+      (genericPointWedgeIdentityGlobalFunctor
+        x₀ y₀ M N hM hN hy hx cM cN).map
+          ((FundamentalGroupoid.map
+            (TwoOpenDescentRestriction.coverPieceInclusion
+              (U := genericLeftOpen x₀ y₀ M)
+              (V := genericRightOpen x₀ y₀ N) false)).map q) =
+      (Monoid.Coprod.inr ((genericPointWedgeConnectors y₀).normalForm
+        (eR.counitIso.hom.app (FundamentalGroupoid.mk y₀))) :
+          genericPointWedgeFreeProduct x₀ y₀) *
+        genericPointWedgeIdentityGlobalRightRestrictionElement
+          x₀ y₀ M N hM hN hy hx cM cN
+            (eR.inverse.obj (FundamentalGroupoid.mk y₀)) := by
+  dsimp only
+  have h := genericPointWedgeRightInverseBaseToRightBase_counit
+    x₀ y₀ M N hM hN hy hx cM cN
+  simp only [SingleObj.comp_as_mul] at h
+  have ha := genericPointWedgeRightInverseBaseToRightBase_map_heq_inr_counit
+    x₀ y₀ M N hM hN hy hx cM cN
+  have ha' := eq_of_heq ha
+  rw [ha'] at h
+  exact h
+
 omit [PathConnectedSpace X] in
 /-- The connector normal form of the mapped lifted right loop is conjugation
 by the explicit equality transport at its common endpoint. -/
@@ -5701,6 +5732,7 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeRightReverse_forward_map_comp
 #print axioms genericPointWedgeCoordinateSpanGlobalRestrictionRightComparison_eq_reverse
 #print axioms genericPointWedgeCoordinateSpanGlobalRestrictionRightComparison_eq_namedOuter
+#print axioms genericPointWedgeRightBaseTransport_counitSquare_normalForm
 #print axioms genericPointWedgeMappedOpenCoverCounit_namedGlueSquare
 #print axioms genericPointWedgeMappedCoordinateSpanCounit_glueSquare
 #print axioms genericPointWedgeMappedCoordinateSpanSourceGlue

@@ -1039,3 +1039,10 @@ evaluates those endpoint objects.  The comparison is now bracketed by the
 source restriction element at the inverse image of `y₀` and the fixed
 right-base element, exactly the two terms in the existing counit-naturality
 equation.
+
+`genericPointWedgeRightBaseTransport_counitSquare_normalForm` converts that
+naturality equation to the single-object multiplication order and substitutes
+the proved right-coproduct injection of the equivalence counit normal form.
+This records the cancellation equation entirely in the free-product group;
+identifying the span-coordinate forward morphism with this base transport
+remains separate.
