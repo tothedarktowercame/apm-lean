@@ -2010,7 +2010,41 @@ lemma apm_a97j08_polygon_path_lift_aux_glue {z a b c : ℂ}
       (∀ t : unitInterval, Complex.exp ((θ t : ℂ) * Complex.I) =
         ((p₁.trans p₂) t - z) / ((‖(p₁.trans p₂) t - z‖ : ℝ) : ℂ)) ∧
       θ 1 - θ 0 = (θ₁ 1 - θ₁ 0) + (θ₂ 1 - θ₂ 0) := by
-  sorry
+  let δ : ℝ := θ₁ 1 - θ₂ 0
+  have hj : Complex.exp ((θ₁ 1 : ℂ) * Complex.I) =
+      Complex.exp ((θ₂ 0 : ℂ) * Complex.I) := by
+    rw [h₁ 1, h₂ 0]
+    simp
+  have hδ : Complex.exp ((δ : ℂ) * Complex.I) = 1 := by
+    rw [show (δ : ℂ) * Complex.I =
+      (θ₁ 1 : ℂ) * Complex.I - (θ₂ 0 : ℂ) * Complex.I by
+        simp [δ]; ring]
+    rw [Complex.exp_sub, hj]
+    simp
+  let q₁ : Path (θ₁ 0) (θ₁ 1) :=
+    { toContinuousMap := θ₁
+      source' := rfl
+      target' := rfl }
+  let θ₂' : C(unitInterval, ℝ) := θ₂ + ContinuousMap.const _ δ
+  let q₂ : Path (θ₁ 1) (θ₂ 1 + δ) :=
+    { toContinuousMap := θ₂'
+      source' := by simp [θ₂', δ]
+      target' := by simp [θ₂'] }
+  let θ : C(unitInterval, ℝ) := (q₁.trans q₂).toContinuousMap
+  refine ⟨θ, ?_, ?_⟩
+  · intro t
+    rw [show θ t = (q₁.trans q₂) t by rfl, Path.trans_apply,
+      Path.trans_apply]
+    split_ifs with ht
+    · exact h₁ _
+    · change Complex.exp (((θ₂ _ + δ : ℝ) : ℂ) * Complex.I) = _
+      rw [show (((θ₂ _ + δ : ℝ) : ℂ) * Complex.I) =
+        (θ₂ _ : ℂ) * Complex.I + (δ : ℂ) * Complex.I by push_cast; ring,
+        Complex.exp_add, hδ, mul_one]
+      exact h₂ _
+  · change (q₁.trans q₂) 1 - (q₁.trans q₂) 0 = _
+    simp [q₁, q₂, θ₂', δ]
+    ring
 -- END SEAT AREA
 
 -- Open polygonal chains: consecutive segments in `D` give a path in `D` with an
