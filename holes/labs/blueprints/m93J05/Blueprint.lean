@@ -2,6 +2,11 @@ import Mathlib
 
 open MeasureTheory Filter
 
+/-! Revised 2026-10-13: part (c)'s lower semicontinuity was encoded backwards, as
+`(∀ᶠ n, r ≤ J (s n)) → r ≤ J f`, i.e. `liminf J(sₙ) ≤ J f`, false for weakly convergent sequences
+(sₙ = sin (2π (N+n) x) ⇀ 0, J(sₙ) ≥ c > 0 = J 0 with g = 0). It now reads
+`(∃ᶠ n, J (s n) ≤ r) → J f ≤ r`, i.e. `J f ≤ liminf J(sₙ)`. -/
+
 noncomputable def apm_m93j05_cosCoeff (f : ℝ → ℝ) (j : ℕ) : ℝ :=
   2 * ∫ θ in Set.Icc (0 : ℝ) 1, f θ * Real.cos (j * 2 * Real.pi * θ)
 
@@ -699,6 +704,16 @@ theorem apm_m93j05_fourier_projection
     fun f ↦ apm_m93j05_trunc_kernel N hC f,
     fun f ↦ apm_m93j05_trunc_split N hC f⟩
 
+lemma apm_m93j05_weak_lowerSemicontinuous_aux_pairing
+    {q : ℝ} {μ : Measure ℝ} (g f : ℝ → ℝ) (s : ℕ → ℝ → ℝ)
+    (hg : MemLp g (ENNReal.ofReal q) μ)
+    (hweak : ∀ h, MemLp h (ENNReal.ofReal q) μ →
+      Tendsto (fun n => ∫ x, s n x * h x ∂μ) atTop
+        (nhds (∫ x, f x * h x ∂μ))) :
+    Tendsto (fun n => ∫ x, s n x * g x ∂μ) atTop
+      (nhds (∫ x, f x * g x ∂μ)) :=
+  hweak g hg
+
 theorem apm_m93j05_weak_lowerSemicontinuous
     (N : ℕ) (p q : ℝ) (hp : 1 < p) (hq : 1 < q)
     (hpq : 1 / p + 1 / q = 1) :
@@ -710,8 +725,8 @@ theorem apm_m93j05_weak_lowerSemicontinuous
         (∀ h, MemLp h (ENNReal.ofReal q) μ →
           Tendsto (fun n => ∫ x, s n x * h x ∂μ) atTop
             (nhds (∫ x, f x * h x ∂μ))) →
-        ∀ r, (∀ᶠ n in atTop, r ≤ apm_m93j05_J N p g (s n)) →
-          r ≤ apm_m93j05_J N p g f := by
+        ∀ r, (∃ᶠ n in atTop, apm_m93j05_J N p g (s n) ≤ r) →
+          apm_m93j05_J N p g f ≤ r := by
   sorry
 
 theorem apm_m93j05_exists_minimizer
@@ -796,8 +811,8 @@ theorem apm_m93j05 :
         (∀ h, MemLp h (ENNReal.ofReal q) μ →
           Tendsto (fun n => ∫ x, s n x * h x ∂μ) atTop
             (nhds (∫ x, f x * h x ∂μ))) →
-        ∀ r, (∀ᶠ n in atTop, r ≤ apm_m93j05_J N p g (s n)) →
-          r ≤ apm_m93j05_J N p g f) ∧
+        ∀ r, (∃ᶠ n in atTop, apm_m93j05_J N p g (s n) ≤ r) →
+          apm_m93j05_J N p g f ≤ r) ∧
       (∃ f₀, MemLp f₀ (ENNReal.ofReal p) μ ∧
         ∀ f, MemLp f (ENNReal.ofReal p) μ →
           apm_m93j05_J N p g f₀ ≤ apm_m93j05_J N p g f) ∧
