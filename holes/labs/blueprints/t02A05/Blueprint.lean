@@ -90,12 +90,37 @@ theorem apm_t02a05_orientedCoefficient_eq_radialFlux
   dsimp [n]
   ring_nf at hnormsq ⊢
 
+/-! ### Split of `apm_t02a05_euclideanHausdorff_unitSphere_mass` (claude-14, 2026-10-13, after a partial). Mathlib's raw `μH[2]`
+(`SphereCapNullEquatorMeasureAssembly.sphere_two_measure`, `domainMeasure`) differs from `μHE[2]` by
+the dimension-2 scalar, which turns `μH[2]` on `ℝ²` into Lebesgue measure. The three pieces are
+independent. -/
+
+/-- (A) Hausdorff measure of the sphere as a subtype equals that of the subset (isometric embedding). -/
+theorem apm_t02a05_sphere_subtype_mass :
+    (μHE[2] (Set.univ : Set (Metric.sphere (0 : apm_t02a05_E3) 1))) =
+      (μHE[2] (Metric.sphere (0 : apm_t02a05_E3) 1)) := by
+  sorry
+
+/-- (B) Two caps over the unit disk, with `μHE[2]` on the sphere and Lebesgue measure on the disk:
+`sphere_two_measure` scaled by the `μHE[2]` constant, which maps `μH[2]` on `ℝ²` to `volume`. -/
+theorem apm_t02a05_sphere_mass_eq_two_caps :
+    (μHE[2] (Metric.sphere (0 : apm_t02a05_E3) 1)) = 2 * (∫⁻ x in Metric.ball (0 : EuclideanSpace ℝ (Fin 2)) 1, ENNReal.ofReal (1 / Real.sqrt (1 - ‖x‖ ^ 2))) := by
+  sorry
+
+/-- (C) The cap integral against Lebesgue measure: `∫₀^{2π} ∫₀¹ r / √(1 − r²) dr dθ = 2π`. -/
+theorem apm_t02a05_cap_integral :
+    (∫⁻ x in Metric.ball (0 : EuclideanSpace ℝ (Fin 2)) 1, ENNReal.ofReal (1 / Real.sqrt (1 - ‖x‖ ^ 2))) = ENNReal.ofReal (2 * Real.pi) := by
+  sorry
+
 /-- The normalized two-dimensional Hausdorff mass of the Euclidean unit
 sphere in three-space. -/
 theorem apm_t02a05_euclideanHausdorff_unitSphere_mass :
     (μHE[2] (Set.univ : Set (Metric.sphere (0 : apm_t02a05_E3) 1))).toReal =
       4 * Real.pi := by
-  sorry
+  rw [apm_t02a05_sphere_subtype_mass, apm_t02a05_sphere_mass_eq_two_caps,
+    apm_t02a05_cap_integral, ENNReal.toReal_mul, ENNReal.toReal_ofReal (by positivity)]
+  norm_num
+  ring
 
 /-- Translation to the centered sphere, conversion from `μHE[2]` to the raw
 intrinsic measure used by `unitFlux_moment`, and the resulting flux moment.
