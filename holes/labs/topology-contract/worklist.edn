@@ -113850,7 +113850,7 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 10,
+   :stop-count 0,
    :review-finding
    "Recorded fixture hash mismatch: :fixture.sha256 is 0bca6ce32c019fc3053c7f813c26917169cf817375b44d5e722b864b61a526450c1, but ConstructionTargets/PointWedgeVanKampen.blueprint.md at recorded commit c9b3af27 has exact SHA-256 0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0. Re-record the fixture hash for the reviewed commit.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
@@ -113906,7 +113906,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -117019,7 +117019,7 @@
   {:consumer :t97A07,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 10,
+   :stop-count 0,
    :review-finding
    "Recorded fixture hash mismatch: :fixture.sha256 is eaeed21919599335d4a33b437815c4a9cbb5b72110213b29440d6944cc982182 (the blueprint at older commit 736c2566), but commit 8432f937 changes ConstructionTargets/t97A07Closure.blueprint.md and its exact SHA-256 is 5bb02c342b988406e8bd26aeda1b9e67335a8c1f626d97ec96701cb039ae708f. Re-record the fixture hash for the reviewed commit.",
    :evidence
@@ -117068,7 +117068,7 @@
      "5160d488d92cee2ebb18532ea34b0ae74c1f847b8f4b68d8f75cbdf8eab7dadc"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["problems/t97A07/lean/Main.lean"
     "problems/t97A07/status.json"
@@ -117195,6 +117195,18 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "diff/hash/placeholders", :exit 0}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791869807498-8587-bcc51c75",
+     :commands
+     ["git archive 05b937c1; lake env lean <archive>/ConstructionTargets/t91J06Closure.lean"
+      "lake env lean <archive>/problems/t91J06/lean/Main.lean"
+      "lake build ConstructionTargets.t91J06Closure"
+      "python3 scripts/statement-registry.py check"
+      "git diff-tree/show sha256/git grep placeholders"],
+     :finding
+     "PASS program STOP: 05b937c1 is new after history, authored by topo-2, changes only scoped blueprint/Lean files, and commits compiled sorry-free progress. Hashes match target 77deaa5c, construction ddf2271d, fixture 20444d0e; registry 145/145; target placeholders 3->3 and construction has 0; helpers use only standard axioms. The repaired B1 mathematics independently classifies t and q, correctly assigning outer endpoints by the orientation of q composed with the inverse of t; the four-case helper proves exactly those independent alternatives. B2-B5 use the stated nodes/hypotheses, including hf for inverse continuity, and no false old glue helper. Affine pasting B1 and B2-B5 remain explicitly residual."},
     :commit "05b937c1d705187a30bfc02e24cfd9cc0497f0fb",
     :changed-paths
     ["ConstructionTargets/t91J06Closure.lean"
@@ -117205,7 +117217,7 @@
      "20444d0ef11ddf2ff8afe25a2eefd78117fe2c56a090336be32feb65c0eced51"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t91J06/lean/Main.lean"
     "problems/t91J06/status.json"
@@ -117221,7 +117233,7 @@
     ["lake env lean problems/t91J06/lean/Main.lean"
      "python3 scripts/statement-registry.py check"]},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: B1 repaired: endpoint pieces follow the composite orientation.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: B1 partial: independent t/q orientation splits compile.",
    :id :program-2026-10-11-close-t91j06,
    :kind :final-adapter,
    :campaign-priority 47,
@@ -117233,7 +117245,11 @@
    [{:job 2,
      :commit "cc04d44ab8eaebaaa3e62ff918db6b5c755d1aa1",
      :reason
-     "B1 repaired: endpoint pieces follow the composite orientation."}]}
+     "B1 repaired: endpoint pieces follow the composite orientation."}
+    {:job 3,
+     :commit "05b937c1d705187a30bfc02e24cfd9cc0497f0fb",
+     :reason
+     "B1 partial: independent t/q orientation splits compile."}]}
   {:consumer :t94A07,
    :phase :implementation,
    :state :open,
