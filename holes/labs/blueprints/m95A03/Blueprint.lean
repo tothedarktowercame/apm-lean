@@ -200,7 +200,69 @@ lemma apm_m95A03_solves_of_isMinOn_aux_first_variation
       (apm_m95A03_admissible a b α β) u)
     (η : ℝ → ℝ) (hη : ContDiff ℝ 1 η) (hηa : η a = 0) (hηb : η b = 0) :
     (∫ t in a..b, p t * deriv u t * deriv η t + q t * u t * η t + f t * η t) = 0 := by
-  sorry
+  let L := ∫ t in a..b,
+    p t * deriv u t * deriv η t + q t * u t * η t + f t * η t
+  let Q := ∫ t in a..b, p t * (deriv η t) ^ 2 + q t * (η t) ^ 2
+  have hu1 : ContDiff ℝ 1 u := hu2.of_le (by norm_num)
+  have hdu1 : ContDiff ℝ 1 (deriv u) := hu2.deriv'
+  have hdη0 : ContDiff ℝ 0 (deriv η) := hη.deriv'
+  have hdu : Continuous (deriv u) := hdu1.continuous
+  have hdη : Continuous (deriv η) := hdη0.continuous
+  have hU : Continuous (fun t =>
+      p t * deriv u t ^ 2 + q t * u t ^ 2 + 2 * u t * f t) := by
+    fun_prop
+  have hLin : Continuous (fun t =>
+      p t * deriv u t * deriv η t + q t * u t * η t + f t * η t) := by
+    fun_prop
+  have hQuad : Continuous (fun t =>
+      p t * deriv η t ^ 2 + q t * η t ^ 2) := by
+    fun_prop
+  have hderiv (s x : ℝ) :
+      deriv (fun y => u y + s * η y) x = deriv u x + s * deriv η x := by
+    exact ((hu1.differentiable (by norm_num) x).hasDerivAt.add
+      ((hη.differentiable (by norm_num) x).hasDerivAt.const_mul s)).deriv
+  have hexpand (s : ℝ) :
+      apm_m95A03_energy a b p q f (fun x => u x + s * η x) =
+        apm_m95A03_energy a b p q f u + 2 * s * L + s ^ 2 * Q := by
+    unfold apm_m95A03_energy
+    rw [show (∫ t in a..b,
+        p t * deriv (fun x => u x + s * η x) t ^ 2 +
+          q t * (u t + s * η t) ^ 2 + 2 * (u t + s * η t) * f t) =
+        ∫ t in a..b,
+          (p t * deriv u t ^ 2 + q t * u t ^ 2 + 2 * u t * f t) +
+          (2 * s) * (p t * deriv u t * deriv η t +
+            q t * u t * η t + f t * η t) +
+          s ^ 2 * (p t * deriv η t ^ 2 + q t * η t ^ 2) by
+      apply intervalIntegral.integral_congr
+      intro x hx
+      dsimp only
+      rw [hderiv s x]
+      ring]
+    simp only [L, Q]
+    rw [← intervalIntegral.integral_const_mul,
+      ← intervalIntegral.integral_const_mul,
+      ← intervalIntegral.integral_add (hU.intervalIntegrable _ _)
+        ((hLin.const_mul (2 * s)).intervalIntegrable _ _)]
+    convert intervalIntegral.integral_add (μ := MeasureTheory.volume)
+      ((hU.add (hLin.const_mul (2 * s))).intervalIntegrable _ _)
+      ((hQuad.const_mul (s ^ 2)).intervalIntegrable _ _) using 1 <;> rfl
+  have hineq (s : ℝ) : 0 ≤ 2 * s * L + s ^ 2 * Q := by
+    have hv := apm_m95A03_solves_of_isMinOn_aux_perturb_admissible
+      a b α β s u η hu1 hua hub hη hηa hηb
+    have hm := hmin hv
+    change apm_m95A03_energy a b p q f u ≤
+      apm_m95A03_energy a b p q f (fun x => u x + s * η x) at hm
+    rw [hexpand s] at hm
+    linarith
+  by_contra hL
+  let D := |Q| + 1
+  have hD : 0 < D := by dsimp [D]; positivity
+  have hi := hineq (-L / D)
+  have hLsq : 0 < L ^ 2 := sq_pos_of_ne_zero hL
+  have hQ : Q ≤ |Q| := le_abs_self Q
+  dsimp [D] at hi hD
+  field_simp at hi
+  nlinarith
 
 /-- Integration by parts of the weak form against a variation vanishing at both ends. -/
 lemma apm_m95A03_solves_of_isMinOn_aux_ibp
