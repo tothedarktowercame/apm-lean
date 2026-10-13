@@ -23717,6 +23717,8 @@
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
    :stop-count 1,
+   :review-finding
+   "Recorded commit is invalid: f032efae9d1501f7ddfe93c66668f88f24ed37f4 is absent locally and origin rejects it as not our ref. The intended scoped commit appears to be f032efae9b89fb527a72ea9192f3c89f09f82615. Repair the row to record the exact existing full SHA, then rerun independent review.",
    :implements-lemma
    :lemma-contdiffwithinat-domdomcongr-iteratedfderivwithin-of-infty,
    :evidence
@@ -23759,6 +23761,12 @@
       :exit 1,
       :correction
       "concurrent ledger commit; checked f032efae9 directly"}],
+    :review
+    {:outcome :fail,
+     :seat "codex-11",
+     :job "invoke-1791878829860-9049-18772a81",
+     :finding
+     "Recorded commit is invalid: f032efae9d1501f7ddfe93c66668f88f24ed37f4 is absent locally and origin rejects it as not our ref. The intended scoped commit appears to be f032efae9b89fb527a72ea9192f3c89f09f82615. Repair the row to record the exact existing full SHA, then rerun independent review."},
     :commit "f032efae9d1501f7ddfe93c66668f88f24ed37f4",
     :changed-paths ["ConstructionTargets/SardConvexDomain.lean"],
     :fixture
@@ -23768,7 +23776,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :repair,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain/B1/symmetry",
    :acceptance
@@ -23786,7 +23794,7 @@
    :id :r-a08-symmetry-slots-1,
    :kind :reusable-theorem,
    :area "sard-convex-domain",
-   :fail-count 0,
+   :fail-count 1,
    :depends-on [:r-topo3-cp12],
    :current-residual "Then B1.",
    :other-consumers []}
