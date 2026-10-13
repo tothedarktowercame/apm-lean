@@ -39,6 +39,51 @@ theorem t93A06_projection_fibers (x y : Plane) :
     rw [hk i, AddCircle.coe_add]
     simp
 
+lemma t93A06_periodic_form_descent_aux_source_periodic
+    (x : Plane) (k : Fin 2 → ℤ) :
+    sourceForm (fun i ↦ x i + (k i : ℝ)) = sourceForm x := by
+  unfold sourceForm
+  have hs : Real.sin (2 * Real.pi * (x 0 + (k 0 : ℝ))) =
+      Real.sin (2 * Real.pi * x 0) := by
+    rw [show 2 * Real.pi * (x 0 + (k 0 : ℝ)) =
+      2 * Real.pi * x 0 + (k 0 : ℝ) * (2 * Real.pi) by ring]
+    exact Real.sin_add_int_mul_two_pi _ _
+  have hc : Real.cos (2 * Real.pi * (x 1 + (k 1 : ℝ))) =
+      Real.cos (2 * Real.pi * x 1) := by
+    rw [show 2 * Real.pi * (x 1 + (k 1 : ℝ)) =
+      2 * Real.pi * x 1 + (k 1 : ℝ) * (2 * Real.pi) by ring]
+    exact Real.cos_add_int_mul_two_pi _ _
+  rw [hs, hc]
+
+lemma t93A06_periodic_form_descent_aux_projection_surjective :
+    Function.Surjective projection := by
+  intro z
+  choose x hx using fun i ↦ QuotientAddGroup.mk_surjective (z i)
+  refine ⟨x, funext fun i ↦ ?_⟩
+  exact hx i
+
+lemma t93A06_periodic_form_descent_aux_pullback_injective
+    (atlas : SmoothAtlas) :
+    letI := atlas.charts
+    Function.Injective
+      (pullback (k := 2) projection : Form Plane Torus 2 → Form Plane Plane 2) := by
+  letI := atlas.charts
+  intro a b hab
+  funext z
+  obtain ⟨x, rfl⟩ := t93A06_periodic_form_descent_aux_projection_surjective z
+  let L : Plane ≃L[ℝ] Plane :=
+    atlas.quotient_localDiffeomorph.mfderivToContinuousLinearEquiv (by simp) x
+  apply ContinuousAlternatingMap.ext
+  intro v
+  have hpoint := congr_fun hab x
+  have happ := congrArg (fun q ↦ q (fun i ↦ L.symm (v i))) hpoint
+  change a (projection x) (fun i ↦ L (L.symm (v i))) =
+    b (projection x) (fun i ↦ L (L.symm (v i))) at happ
+  have hv : (fun i ↦ L (L.symm (v i))) = v := by
+    funext i
+    exact L.apply_symm_apply (v i)
+  simpa [hv] using happ
+
 /-- A smooth invariant form descends uniquely through the quotient atlas.
 The fibre characterization is supplied as a hypothesis to keep this seat
 independent of the atlas and fibre seats. -/
