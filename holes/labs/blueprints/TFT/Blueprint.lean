@@ -83,7 +83,12 @@ lemma tft_local_fixed_support (ψ : TFT E F) (x₀ : E) :
 lemma tft_local_fixed_function_support (ψ : TFT E F) (x₀ : E) :
     ∀ x ∈ Metric.closedBall x₀ 1,
       Function.support (fun y => ψ (x + y)) ⊆ tftTranslationCompact ψ x₀ := by
-  sorry
+  intro x hx y hy
+  change y ∈ (fun p : E × E ↦ p.2 - p.1) ''
+    (Metric.closedBall x₀ 1 ×ˢ tsupport (ψ : E → F))
+  refine ⟨(x, x + y), ⟨hx, ?_⟩, ?_⟩
+  · exact subset_tsupport _ hy
+  · simp
 
 /-- The nearby translate regarded as an element of one fixed Fréchet stage;
 outside the closed unit ball it is harmlessly set to zero. -/
