@@ -24430,7 +24430,7 @@
    :consumer :t01A08,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 0,
    :review-finding
    "extend Mathlib: state and prove the missing theorem in scope",
    :implements-lemma :lemma-closedset-whitneycubecover,
@@ -24469,6 +24469,17 @@
     [{:cmd "lake build ConstructionTargets.SardConvexDomain", :exit 0}
      {:cmd "lean fixture; registry; scans; diff", :exit 0}
      {:cmd "git commit scoped file", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791903739239-9909-af964158",
+     :commands
+     ["git show/diff a611ed2; scope/witness checks"
+      "sha256sum + lake env lean frozen fixture"
+      "lake build ConstructionTargets.SardConvexDomain"
+      "statement registry check; forbidden-count scan"],
+     :finding
+     "PASS. Recorded topo-10 commit a611ed2 changes only the scoped Lean file and correctly combines stratum coverage with the chosen net: x and c retain the same integer scale k, c belongs to that net, and edist_dist converts IsCover to dist x c≤2^k/8. Fixture hash 5ee072bd... matches; build/fixture pass; registry 150/150; forbidden placeholders stay 0; only standard axioms. Valid compiled B3 progress; STOP explicitly leaves packing, overlap bound, and assembly."},
     :commit "a611ed26f646f33476b59bba37152725b0388879",
     :changed-paths ["ConstructionTargets/SardConvexDomain.lean"],
     :fixture
@@ -24478,7 +24489,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain.blueprint/B3",
    :acceptance
@@ -35399,7 +35410,7 @@
    :other-consumers []}
   {:consumer :t01A08,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -35413,7 +35424,9 @@
     :type
     "each complement point has k and a same-stratum net center within 2^k/8",
     :area "sard-convex-domain",
-    :proved-in :r-a08-sard-b3-whitney-cubes-1},
+    :proved-in :r-a08-sard-b3-whitney-cubes-1,
+    :banked-by :r-a08-sard-b3-whitney-cubes-1,
+    :banked-commit "a611ed26f646f33476b59bba37152725b0388879"},
    :id
    :lemma-constructiontargets-sardconvexdomain-exists-whitneystratumnet-dist-le-of-not-mem,
    :kind :lemma,
