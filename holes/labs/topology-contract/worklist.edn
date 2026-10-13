@@ -113850,14 +113850,14 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 2,
    :review-finding
    "Recorded fixture hash mismatch: :fixture.sha256 is 0bca6ce32c019fc3053c7f813c26917169cf817375b44d5e722b864b61a526450c1, but ConstructionTargets/PointWedgeVanKampen.blueprint.md at recorded commit c9b3af27 has exact SHA-256 0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0. Re-record the fixture hash for the reviewed commit.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
    :evidence
    {:placeholder-delta {:source-before 0, :source-after 0},
     :residual
-    "Transport square by named equality; recurrence, projection=1, inl, B6/B12.",
+    "Transport reduced square by coordinate equality; recurrence, projection=1, inl, B6/B12.",
     :outcome :stop,
     :warnings ["existing linter"],
     :missing-theorems
@@ -113871,16 +113871,17 @@
       :area "fundamental-group-wedge-of-circles"}],
     :statement-hashes
     {:source
-     "7b36af7757e6595fab4c3a86e04c84d0b46228691628224703d8d5333e06b51f",
+     "8651c0deb2a4a4c849ef48dcbcca66d378158ee0090f4c303a769f16662c0695",
      :documentation
-     "b518033abfd14a3c8631ef5312d5badc736dc6c36240486f1364914657146864",
+     "e6606a5df9d9e173d740b9917e71466d4e68b31c02be043e648de99a545abc1f",
      :blueprint
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0",
      :registry "149/149"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
-    :reason "Shifted coordinate-object equality banked.",
+    :reason
+    "Naturality and triangle reductions composed in one typed square.",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/PointWedgeVanKampen.lean",
@@ -113890,26 +113891,14 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "hash/diff/placeholders", :exit 0}],
     :diagnostic-history
-    [{:cmd "lean recurrence draft",
+    [{:cmd "lean direct rewrite",
       :exit 1,
-      :finding
-      "Overlap source not subsingleton; equality follows eK.functor."}
+      :finding "Let-bound square required explicit reduction."}
      {:cmd
       "lake build ConstructionTargets.ThreeCirclesFundamentalGroup",
       :exit 1,
       :finding "B12 absent."}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1791898603941-9754-058ab13a",
-     :commands
-     ["git show/diff e1aed878^..e1aed878"
-      "git archive e1aed878; lake env lean archived PointWedgeVanKampen.lean"
-      "sha256/diff-tree/placeholder checks; statement-registry.py check"
-      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (expected absent)"],
-     :finding
-     "Reviewer codex-3. PASS program STOP: e1aed878 exports the previously local shifted-coordinate-object equality as a compiled, sorry-free supporting theorem and reuses that exact witness for the dependent component HEq. The equality is valid because eK.functor lands in the single-object FundamentalGroupoid Unit; orientation and representation boundary are correct. Scope is Lean+MD only; hashes match ledger (7b36af77/b518033a/0bca6ce3), placeholders 0, registry 149/149, axioms standard only. Residual: transport the square by this equality, close recurrence, then projection=1, inl, B6/B12; B12 absent."},
-    :commit "e1aed8788892e0f8562c095e2982be5d20701ff1",
+    :commit "5c8e375d9bcdf4498db2ee2ecba7589113943882",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
      "ConstructionTargets/PointWedgeVanKampen.md"],
@@ -113919,7 +113908,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
