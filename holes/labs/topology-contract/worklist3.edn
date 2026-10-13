@@ -21568,7 +21568,7 @@
   {:consumer :t00J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 2,
+   :stop-count 0,
    :review-finding
    "Frozen fixture metadata mismatch persists in both authoritative acceptance copies: they record aad5a9cda739c1cbcceb1eca8ab8b33395db8a08c9d68941a87c644f4d13586e and omit :mode, while /tmp/closedboundarycoords.lean freshly compiles and hashes to 7e72195e1214d7580994264481ae57d0ecf87755d31825ab85cbda5f1220c4b1. Update both copies to that digest with :mode :post-build-export-check, then resubmit commit f0afa7bd.",
    :implements-lemma
@@ -21600,7 +21600,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/manifold-fundamental-class",
    :acceptance
@@ -21615,7 +21615,7 @@
    :id :routes-2026-10-12-mfclass-boundary-coordinates-r1,
    :kind :reusable-theorem,
    :area "manifold-fundamental-class",
-   :fail-count 1,
+   :fail-count 0,
    :depends-on [:routes-2026-10-12-mfclass-closed-generator-bridge-r1],
    :current-residual "Prove Bool H0 comparison.",
    :other-consumers [:t98A02]}
@@ -21908,9 +21908,17 @@
       :current-residual "R.",
       :other-consumers []}],
     :author "topo-12",
-    :disposition :replan},
+    :disposition :replan,
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791856429793-8180-409f21d1",
+     :commands
+     ["bb holes/labs/topology-contract/build_step.bb priorities holes/labs/topology-contract/worklist3.edn"],
+     :finding
+     "PASS: scope-empty strategy checkpoint; no fixture or source commit applies. Fresh priorities reproduce t01A08 at one placeholder, four banked, two backlog. The replan elects exactly one closure-directed boundary-nullity row followed by a checkpoint, satisfying the acceptance cap and recording placeholder, residual, infrastructure, and review measures."}},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -21932,7 +21940,7 @@
    :implements-lemma
    :lemma-constructiontargets-sardgeneralmodel-modelrange-frontier-addhaar-null,
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/SardGeneralModel.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t01A08/boundary",
    :acceptance
@@ -31269,7 +31277,7 @@
    :other-consumers [:t00A03 :t91J05 :t92J05 :t94J04 :t96A01 :t97J02]}
   {:consumer :t01A08,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -31281,7 +31289,9 @@
     :reported-by [:routes-2026-10-10-t01a08-closure-probe-topo3-r2],
     :type "exact type in fixture",
     :area "sard-convex-domain",
-    :proved-in :routes-2026-10-10-t01a08-closure-probe-topo3-r2},
+    :proved-in :routes-2026-10-10-t01a08-closure-probe-topo3-r2,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/SardGeneralModel.lean"]},
    :id
    :lemma-constructiontargets-sardgeneralmodel-modelrange-frontier-addhaar-null,
    :kind :lemma,
@@ -31490,7 +31500,7 @@
    :other-consumers []}
   {:consumer :t00A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -31503,7 +31513,9 @@
     [:routes-2026-10-10-surface-schoenflies-collar-topo3-r2],
     :type "exact type in fixture",
     :area "embedded-circle-collar-surface",
-    :proved-in :routes-2026-10-10-surface-schoenflies-collar-topo3-r2},
+    :proved-in :routes-2026-10-10-surface-schoenflies-collar-topo3-r2,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/SurfaceSchoenflies.lean"]},
    :id
    :lemma-constructiontargets-surfaceschoenflies-circlezerosection-isembedding,
    :kind :lemma,
