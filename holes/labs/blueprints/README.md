@@ -14,3 +14,13 @@ conclusion; the split by dependency for each is in ~/notes/packets/blueprints/QU
 
 If a problem is already sorry-free in problems/P/lean/Main.lean, say so in
 BLUEPRINT.md and do not copy the file (m97A06).
+
+Every `sorry` must be the entire body of a top-level `lemma`/`theorem`; no
+definition and no statement may contain `sorry`. A sorry'd definition makes every
+lemma about it unprovable (TFT v1, 2026-10-13), and a seat can only replace a
+whole lemma body.
+
+A predicate used as a lemma's hypothesis must not be defined as that lemma's
+conclusion (a97J08 v2: `IsOrientedGridBoundary := Σ winding = 1`), and data
+fields that stand for a computed quantity (a winding number) must be computed,
+not chosen, or the lemma that uses them proves nothing.
