@@ -102,6 +102,25 @@ theorem ContinuousMultilinearMap.domDomCongr_fderivWithin_eq_self
   rw [LinearIsometryEquiv.comp_fderivWithin (𝕜 := ℝ) L (hu x hxs)] at hd
   exact DFunLike.congr_fun hd v
 
+/-- Symmetry of an iterated derivative lifts to the next derivative on the tail slots. -/
+theorem iteratedFDerivWithin_domDomCongr_decomposeFin_symm_zero
+    {E F : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [NormedAddCommGroup F] [NormedSpace ℝ F]
+    {s : Set E} {f : E → F} {x : E} {n : ℕ}
+    (hu : UniqueDiffOn ℝ s) (hxs : x ∈ s) (sigma : Equiv.Perm (Fin n))
+    (hg : ∀ y ∈ s, (iteratedFDerivWithin ℝ n f s y).domDomCongr sigma =
+      iteratedFDerivWithin ℝ n f s y) :
+    (iteratedFDerivWithin ℝ (n + 1) f s x).domDomCongr
+        (Equiv.Perm.decomposeFin.symm (0, sigma)) =
+      iteratedFDerivWithin ℝ (n + 1) f s x := by
+  ext v
+  simp only [ContinuousMultilinearMap.domDomCongr_apply,
+    iteratedFDerivWithin_succ_apply_left]
+  have hd := ContinuousMultilinearMap.domDomCongr_fderivWithin_eq_self
+    (iteratedFDerivWithin ℝ n f s) hu hxs sigma hg (v 0)
+  have hv := DFunLike.congr_fun hd (Fin.tail v)
+  simpa [Function.comp_def, Fin.tail, Equiv.Perm.decomposeFin_symm_apply_succ] using hv
+
 namespace ConstructionTargets.SardConvexDomain
 
 theorem modelRange_withinCriticalImage_subset_interior_union_frontier
