@@ -666,7 +666,23 @@ theorem apm_m99J06_riesz_of_val_clm
       (L v : ℝ → ℝ) =ᵐ[apm_m99J06_intervalMeasure] M.val v)
     (V : Submodule ℝ H) [CompleteSpace V] :
     ∃! u : V, apm_m99J06_galerkinEquation M f V u := by
-  sorry
+  have hV : CompleteSpace V := inferInstance
+  obtain ⟨L, hL⟩ := hL
+  let ℓ : V →L[ℝ] ℝ :=
+    (innerSL ℝ (hf.toLp f)).comp (L.comp V.subtypeL)
+  let u : V := (@InnerProductSpace.toDual ℝ V _ _ _ hV).symm ℓ
+  have hu : apm_m99J06_galerkinEquation M f V u := by
+    intro v
+    rw [show inner ℝ (u : H) (v : H) = inner ℝ u v by rfl]
+    change inner ℝ ((@InnerProductSpace.toDual ℝ V _ _ _ hV).symm ℓ) v = _
+    rw [@InnerProductSpace.toDual_symm_apply ℝ V _ _ _ hV]
+    change inner ℝ (hf.toLp f) (L (v : H)) = _
+    rw [MeasureTheory.L2.inner_def]
+    apply MeasureTheory.integral_congr_ae
+    filter_upwards [hf.coeFn_toLp, hL (v : H)] with x hfx hvx
+    rw [hfx, hvx, real_inner_eq_re_inner]
+    exact mul_comm _ _
+  exact ⟨u, hu, fun w hw ↦ apm_m99J06_galerkin_unique M f V hw hu⟩
 
 /-- Shared Riesz-representation bridge for both the ambient weak problem and
 finite-dimensional Galerkin problems. -/
