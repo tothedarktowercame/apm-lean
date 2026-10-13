@@ -279,7 +279,13 @@ theorem apm_m98J05_kernel_hasDerivAt_time {t : ℝ} (ht : 0 < t) (x : ℝ) :
 
 theorem apm_m98J05_kernel_hasDerivAt_space {t : ℝ} (ht : 0 < t) (x : ℝ) :
     HasDerivAt (fun z ↦ apm_m98J05_heatKernel t z) (apm_m98J05_kernelDx t x) x := by
-  sorry
+  have ht0 : 4 * t ≠ 0 := by positivity
+  have he : HasDerivAt (fun z : ℝ ↦ -(z ^ 2) / (4 * t))
+      (-(2 * x) / (4 * t)) x := by
+    convert (((hasDerivAt_id x).pow 2).neg.div_const (4 * t)) using 1 <;> simp [id] <;> ring
+  simp only [apm_m98J05_heatKernel, apm_m98J05_kernelDx]
+  convert (hasDerivAt_const x (1 / (2 * Real.sqrt (Real.pi * t)))).mul he.exp using 1 <;>
+      field_simp [ht0] <;> ring
 
 theorem apm_m98J05_kernelDx_hasDerivAt_space {t : ℝ} (ht : 0 < t) (x : ℝ) :
     HasDerivAt (fun z ↦ apm_m98J05_kernelDx t z) (apm_m98J05_kernelDt t x) x := by
