@@ -332,7 +332,69 @@ lemma apm_m98A06_duBoisReymond_aux_reverse :
           (∃ A B : ℝ, ∀ x ∈ Icc (0 : ℝ) a,
             y x = A * Real.cos x + B * Real.sin x) →
         apm_m98a06_IsStationary a y₀ ya y := by
-  sorry
+  intro a y₀ ya ha y h
+  rcases h with ⟨hyadm, A, B, hy⟩
+  refine ⟨hyadm, ?_⟩
+  intro η hη hη0 hηa
+  let g : ℝ → ℝ := fun x => A * Real.cos x + B * Real.sin x
+  let dg : ℝ → ℝ := fun x => -A * Real.sin x + B * Real.cos x
+  have hg : ContDiff ℝ 2 g := (apm_m98A06_duBoisReymond_aux_trig A B).1
+  have hdg : ∀ x, deriv g x = dg x := fun x =>
+    (apm_m98A06_duBoisReymond_aux_trig A B).2 x |>.1
+  have hddg : ∀ x, deriv dg x = -g x := fun x =>
+    (apm_m98A06_duBoisReymond_aux_trig A B).2 x |>.2
+  have hud : UniqueDiffOn ℝ (Icc (0 : ℝ) a) := uniqueDiffOn_Icc ha
+  have hηd : ContinuousOn (derivWithin η (Icc 0 a)) (Icc 0 a) :=
+    hη.continuousOn_derivWithin hud (by norm_num)
+  have hηd' : ContinuousOn (derivWithin η [[0, a]]) [[0, a]] := by
+    simpa [uIcc_of_le ha.le] using hηd
+  have hibp := intervalIntegral.integral_mul_deriv_eq_deriv_mul_of_hasDerivWithinAt
+    (a := (0 : ℝ)) (b := a) (u := dg) (v := η)
+    (u' := fun x => -g x) (v' := derivWithin η [[0, a]])
+    (fun x hx => ((show DifferentiableAt ℝ dg x by fun_prop).hasDerivAt
+      |>.congr_deriv (hddg x)).hasDerivWithinAt)
+    (fun x hx => by
+      rw [uIcc_of_le ha.le] at hx ⊢
+      exact (hη x hx).differentiableWithinAt (by norm_num) |>.hasDerivWithinAt)
+    ((hg.continuous.neg).continuousOn.intervalIntegrable)
+    hηd'.intervalIntegrable
+  have hinter : ∀ x ∈ Ioo (0 : ℝ) a,
+      y x = g x ∧ deriv y x = dg x ∧ deriv η x = derivWithin η [[0, a]] x := by
+    intro x hx
+    have hn : Icc (0 : ℝ) a ∈ nhds x := Icc_mem_nhds hx.1 hx.2
+    have heq : y =ᶠ[nhds x] g :=
+      Filter.eventually_of_mem hn (fun z hz => hy z hz)
+    have hηdiff : DifferentiableAt ℝ η x :=
+      (hη x ⟨hx.1.le, hx.2.le⟩).differentiableWithinAt (by norm_num) |>.differentiableAt hn
+    exact ⟨hy x ⟨hx.1.le, hx.2.le⟩,
+      (Filter.EventuallyEq.deriv_eq heq).trans (hdg x),
+      by simpa [uIcc_of_le ha.le] using
+        (hηdiff.derivWithin (hud x ⟨hx.1.le, hx.2.le⟩)).symm⟩
+  have hcongr :
+      (∫ x in (0 : ℝ)..a, 2 * (deriv y x * deriv η x - y x * η x)) =
+        ∫ x in (0 : ℝ)..a,
+          2 * (dg x * derivWithin η [[0, a]] x - g x * η x) := by
+    apply intervalIntegral.integral_congr_ae
+    filter_upwards [(countable_singleton a).ae_notMem (volume : Measure ℝ)]
+      with x hxa hxI
+    rw [uIoc_of_le ha.le] at hxI
+    have hx : x ∈ Ioo (0 : ℝ) a := ⟨hxI.1, lt_of_le_of_ne hxI.2 (by simpa using hxa)⟩
+    rcases hinter x hx with ⟨hyg, hyd, hηder⟩
+    rw [hyg, hyd, hηder]
+  rw [hcongr]
+  rw [intervalIntegral.integral_const_mul]
+  rw [intervalIntegral.integral_sub]
+  · rw [hibp, hη0, hηa]
+    simp only [mul_zero, sub_self, zero_sub]
+    simp_rw [neg_mul]
+    rw [intervalIntegral.integral_neg]
+    ring
+  · exact (by
+      exact ((show Continuous dg by fun_prop).continuousOn.mul hηd').intervalIntegrable)
+  · exact (by
+      have hηc : ContinuousOn η [[0, a]] := by
+        simpa [uIcc_of_le ha.le] using hη.continuousOn
+      exact hg.continuous.continuousOn.mul hηc |>.intervalIntegrable)
 -- END SEAT AREA
 
 theorem apm_m98A06_duBoisReymond : apm_m98A06_DuBoisReymondFact := by
