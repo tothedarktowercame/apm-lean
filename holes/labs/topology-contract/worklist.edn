@@ -113850,14 +113850,13 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 3,
+   :stop-count 4,
    :review-finding
    "Recorded fixture hash mismatch: :fixture.sha256 is 0bca6ce32c019fc3053c7f813c26917169cf817375b44d5e722b864b61a526450c1, but ConstructionTargets/PointWedgeVanKampen.blueprint.md at recorded commit c9b3af27 has exact SHA-256 0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0. Re-record the fixture hash for the reviewed commit.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
    :evidence
    {:placeholder-delta {:source-before 0, :source-after 0},
-    :residual
-    "Normalize the target-counit connector factor; then B6/B12.",
+    :residual "Combine the two expanded factors; then B6/B12.",
     :outcome :stop,
     :warnings ["existing linter"],
     :missing-theorems
@@ -113871,9 +113870,9 @@
       :area "fundamental-group-wedge-of-circles"}],
     :statement-hashes
     {:source
-     "c1e9a642eab6daf32c2c7cb6086892daf5be78a2b06a9050da9b0022bf2c527b",
+     "559f3b16cc360907b9ab4193eda83e8408b924d109e88fcbeb6319d02e262d61",
      :documentation
-     "cf182319b17e6abbd438354e4ec6a8459ddef0e1afd98ec723d6b7fbb7cc0732",
+     "7be9052bde743f23e5c0b5fb5b5015ad1bf33ad16ecb60100e6f78fe86a37b26",
      :blueprint
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0",
      :registry "146/146"},
@@ -113881,7 +113880,7 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
     :reason
-    "Strict left factor expanded into its endpoint connectors and inverse span component.",
+    "Target counit expanded into its source connector, counit component, and target connector.",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/PointWedgeVanKampen.lean",
@@ -113891,26 +113890,11 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "diff/hash/placeholders", :exit 0}],
     :diagnostic-history
-    [{:cmd "lean draft",
-      :exit 1,
-      :finding "Fixed connector projection and omit placement."}
-     {:cmd
+    [{:cmd
       "lake build ConstructionTargets.ThreeCirclesFundamentalGroup",
       :exit 1,
       :finding "B12 file absent."}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1791872606581-8742-c3fa5b78",
-     :commands
-     ["git archive 2b5f0682; lake env lean <archive>/ConstructionTargets/PointWedgeVanKampen.lean"
-      "lake build ConstructionTargets.PointWedgeVanKampen"
-      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (exit 1: declared B12 residual absent)"
-      "python3 scripts/statement-registry.py check"
-      "git diff-tree/show sha256/git grep placeholders"],
-     :finding
-     "PASS program STOP: 2b5f0682 is new after history, changes only scoped Lean/MD files, and commits compiled sorry-free progress. Hashes match source c1e9a642, docs cf182319, fixture 0bca6ce3; registry 146/146; sorry/admit 0->0; the theorem uses only propext, Classical.choice, Quot.sound. The strict factor expansion is the connector normal form definition with correct endpoints and order: connector at the coordinate source, inverse span component, then inverse connector at the transported target. It deliberately preserves both dependent endpoints rather than identifying either with the base object, so the representation boundary is explicit. Target-counit normalization, B6/B12 and the final module remain listed."},
-    :commit "2b5f068236e8d3a1408809ad555b6249048a19f3",
+    :commit "59b86e857d76f097f801543c43bcf2c29f4088c9",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
      "ConstructionTargets/PointWedgeVanKampen.md"],
@@ -113920,7 +113904,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
