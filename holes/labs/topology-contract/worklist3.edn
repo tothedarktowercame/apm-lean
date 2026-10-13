@@ -36115,26 +36115,29 @@
   {:consumer :t93J03,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 2,
    :review-finding
    "Program STOP commits nothing new since the prior reviewed attempt: it reuses commit 512a220f, and git history shows no later scoped commit. The unresolved SemilocallySimplyConnected hypothesis-coverage conflict is unchanged. Obtain the required owner specification decision or commit a new compiled milestone before resubmitting.",
    :evidence
    {:placeholder-delta {:t93J03 [1 1]},
-    :residual "Van Kampen on a a b b; then C1, C2/Main.",
+    :residual
+    "Prove polygon van Kampen normal-closure quotient; then C1, C2/Main.",
     :outcome :stop,
     :warnings ["unused SLSC owner-approved"],
     :missing-theorems
-    [{:name "kleinPolygon_attaching_arcs",
-      :type "four reversed arcs give a a b b",
+    [{:name "kleinRelator_generatorChange_eq_one_iff",
+      :type "a=x*y,b=y^-1 identifies Klein relator with aabb",
       :status :proved,
       :consumers [:t93J03],
-      :depends-on ["kleinPairingOrbitEquivBool"],
+      :depends-on ["kleinPolygon_attaching_arcs"],
       :area "covering-subgroup-correspondence"}
      {:name "t93J03_polygon_van_kampen",
       :type "polygon pi1 has Klein presentation",
-      :status :not-started,
+      :status :partial,
       :consumers [:t93J03],
-      :depends-on ["kleinPolygon_attaching_arcs"],
+      :depends-on
+      ["kleinPolygon_attaching_arcs"
+       "kleinRelator_generatorChange_eq_one_iff"],
       :area "covering-subgroup-correspondence"}
      {:name "t93J03_kleinBottle_pi1_every_basepoint",
       :type "pi1 equivalence every point",
@@ -36147,40 +36150,25 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Committed exact four-arc attaching-loop computation; van Kampen remains.",
+    "Committed generator change equating aabb with the frozen Klein relator; topological van Kampen quotient remains.",
     :commands
     [{:cmd "lake build ConstructionTargets.t93J03Closure", :exit 0}
-     {:cmd "lake env lean attaching-arcs fixture", :exit 0}
+     {:cmd "lake env lean relator fixture", :exit 0}
      {:cmd "statement-registry check; placeholder; diff", :exit 0}
      {:cmd "rg forbidden closure", :exit 1, :expected-exit 1}
      {:cmd "git commit; show --check", :exit 0}],
-    :diagnostic-history
-    [{:cmd "lake build closure",
-      :exit 1,
-      :correction "explicit Fin witnesses"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1791930986899-10734-0d1e7c01",
-     :commands
-     ["git show/diff 16c5ec32; scope/math review"
-      "sha256sum fixture; show --check; placeholder recount"
-      "lake build ConstructionTargets.t93J03Closure; lean fixture"
-      "statement-registry check"],
-     :finding
-     "PASS. Commit 16c5ec32 adds compiled, sorry-free standard-axiom progress after the polygon-model milestone: for each of the exact four Klein pairing arcs, it computes the established skeleton homeomorphism as the correctly labeled wedge-circle traversal with reversed interval coordinate, matching the all-false signs and aabb attaching word. Fixture hash matches; registry 166/166; Main placeholder 1->1. Polygon van Kampen, C1, C2, and Main remain listed. SemilocallySimplyConnected X is unused, mandated by problem.md."},
-    :commit "16c5ec329b04bb60f39050bed8712ab753a70dca",
+    :commit "3e08de9de0a5d677abbf695732c2eabb8a6fe0a9",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
      "ConstructionTargets/t93J03Closure.blueprint.md"],
     :fixture
-    {:path "/tmp/t93j03_attaching_arcs_check.lean",
+    {:path "/tmp/t93j03_relator_change_check.lean",
      :sha256
-     "f5c1042e144fe6d1788639a78bb1268fbe6e0fed014db58a1ec4ea882c552f2b",
+     "9f247ef4bc704691b0ceefe5b4c7fe68c183a2c058a905ed6a055f6e3b4a5017",
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -37574,7 +37562,8 @@
    :depends-on
    [:lemma-kleinskeletonhomeomorphtwocircles
     :lemma-t93j03-polygon-attaching-word
-    :lemma-kleinpolygon-attaching-arcs],
+    :lemma-kleinpolygon-attaching-arcs
+    :lemma-kleinrelator-generatorchange-eq-one-iff],
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
@@ -37680,6 +37669,23 @@
    :id :lemma-kleinpolygon-attaching-arcs,
    :kind :lemma,
    :depends-on [:lemma-kleinpairingorbitequivbool],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "kleinRelator_generatorChange_eq_one_iff",
+    :type "a=x*y,b=y^-1 identifies Klein relator with aabb"},
+   :lemma
+   {:name "kleinRelator_generatorChange_eq_one_iff",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type "a=x*y,b=y^-1 identifies Klein relator with aabb",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03},
+   :id :lemma-kleinrelator-generatorchange-eq-one-iff,
+   :kind :lemma,
+   :depends-on [:lemma-kleinpolygon-attaching-arcs],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
