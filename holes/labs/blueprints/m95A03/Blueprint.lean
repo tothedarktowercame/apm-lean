@@ -360,7 +360,70 @@ theorem apm_m95A03_homogenization
     apm_m95A03_solves a b α β p q f u ↔
       apm_m95A03_solves a b 0 0 p q
         (apm_m95A03_modifiedRHS p q f w) (u - w) := by
-  sorry
+  dsimp only
+  let w := apm_m95A03_boundaryLift a b α β
+  have hab0 : b - a ≠ 0 := sub_ne_zero.mpr hab.ne'
+  have hw : ContDiff ℝ ⊤ w := by
+    change ContDiff ℝ ⊤ (fun t : ℝ => α + (β - α) * ((t - a) / (b - a)))
+    fun_prop
+  have hwa : w a = α := by
+    simp [w, apm_m95A03_boundaryLift, hab0]
+  have hwb : w b = β := by
+    simp [w, apm_m95A03_boundaryLift, hab0]
+  have hw_succ : ContDiff ℝ (1 + 1) w := hw.of_le le_top
+  have hdw : ContDiff ℝ 1 (deriv w) := hw_succ.deriv'
+  constructor
+  · rintro ⟨hu, hua, hub, heq⟩
+    have hu1 : ContDiff ℝ 1 u := hu.of_le (by norm_num)
+    have hv : ContDiff ℝ 2 (u - w) := hu.sub (hw.of_le le_top)
+    refine ⟨hv, ?_, ?_, ?_⟩
+    · change u a - w a = 0
+      rw [hua, hwa]
+      ring
+    · change u b - w b = 0
+      rw [hub, hwb]
+      ring
+    · intro t ht
+      have hdu (x : ℝ) : deriv (u - w) x = deriv u x - deriv w x := by
+        exact deriv_sub (hu1.differentiable (by norm_num) x) (hw.differentiable (by simp) x)
+      have hflux : (fun x => p x * deriv (u - w) x) =
+          (fun x => p x * deriv u x) - (fun x => p x * deriv w x) := by
+        funext x
+        simp [hdu x, mul_sub]
+      have hpu : Differentiable ℝ (fun x => p x * deriv u x) :=
+        (hp.mul hu.deriv').differentiable (by norm_num)
+      have hpw : Differentiable ℝ (fun x => p x * deriv w x) :=
+        (hp.mul hdw).differentiable (by norm_num)
+      rw [hflux, deriv_sub (hpu t) (hpw t)]
+      simp only [Pi.sub_apply, apm_m95A03_modifiedRHS]
+      linarith [heq t ht]
+  · rintro ⟨hv, hva, hvb, heq⟩
+    have hw2 : ContDiff ℝ 2 w := hw.of_le le_top
+    have hu : ContDiff ℝ 2 u := by
+      have huv : u = (u - w) + w := by ext x; simp
+      rw [huv]
+      exact hv.add hw2
+    refine ⟨hu, ?_, ?_, ?_⟩
+    · change u a - w a = 0 at hva
+      linarith
+    · change u b - w b = 0 at hvb
+      linarith
+    · intro t ht
+      have hu1 : ContDiff ℝ 1 u := hu.of_le (by norm_num)
+      have hdu (x : ℝ) : deriv (u - w) x = deriv u x - deriv w x := by
+        exact deriv_sub (hu1.differentiable (by norm_num) x) (hw.differentiable (by simp) x)
+      have hflux : (fun x => p x * deriv (u - w) x) =
+          (fun x => p x * deriv u x) - (fun x => p x * deriv w x) := by
+        funext x
+        simp [hdu x, mul_sub]
+      have hpu : Differentiable ℝ (fun x => p x * deriv u x) :=
+        (hp.mul hu.deriv').differentiable (by norm_num)
+      have hpw : Differentiable ℝ (fun x => p x * deriv w x) :=
+        (hp.mul hdw).differentiable (by norm_num)
+      have h := heq t ht
+      rw [hflux, deriv_sub (hpu t) (hpw t)] at h
+      simp only [Pi.sub_apply, apm_m95A03_modifiedRHS] at h
+      linarith
 
 theorem apm_m95A03_exists_homogeneous_minimizer
     (a b p₀ : ℝ) (hab : a < b) (hp₀ : 0 < p₀)
