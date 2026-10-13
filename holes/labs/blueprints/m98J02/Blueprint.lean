@@ -23,6 +23,12 @@ Since the definition above already supplies part (a), that tautology is
 replaced by the substantive closure of compactly supported distributions
 under addition.
 
+Revised 2026-10-13: in `apm_m98J02_isConvolution` the cutoff `χ` must equal one
+on an open neighbourhood of `K`, not merely at the points of `K`. With the pointwise
+condition, a distribution of positive order (for example `δ₀'`, with `K = {0}`) sees
+the derivatives of `χ` at `K`, so the defining pairing depended on the cutoff and
+the definition did not determine the convolution (found by a lemma seat, round 2).
+
 ## Encoding questions
 
 Mathlib currently provides `Distribution` but not the general convolution of
@@ -64,7 +70,7 @@ def apm_m98J02_isConvolution
       IsCompact K ∧
       (∀ η : apm_m98J02_Test,
         Disjoint (tsupport (η : apm_m98J02_E → ℝ)) K → u η = 0) ∧
-      (∀ x ∈ K, χ x = 1) ∧
+      (∃ U : Set apm_m98J02_E, IsOpen U ∧ K ⊆ U ∧ ∀ x ∈ U, χ x = 1) ∧
       (∀ x : apm_m98J02_E,
         ∃ τ : apm_m98J02_Test,
           (∀ y : apm_m98J02_E, τ y = φ (x + y)) ∧ Ψ x = χ x * v τ) ∧
@@ -177,22 +183,18 @@ of the Euclidean plane admits a compactly supported smooth function that is
 identically one on that subset. -/
 theorem apm_m98J02_bridge_1
     (K : Set apm_m98J02_E) (hK : IsCompact K) :
-    ∃ χ : apm_m98J02_Test, ∀ x ∈ K, χ x = 1 := by
+    ∃ χ : apm_m98J02_Test, ∃ U : Set apm_m98J02_E, IsOpen U ∧ K ⊆ U ∧ ∀ x ∈ U, χ x = 1 := by
   rcases (Metric.isBounded_iff_subset_ball (0 : apm_m98J02_E)).mp hK.isBounded with
     ⟨r, hr⟩
   let b : ContDiffBump (0 : apm_m98J02_E) :=
     ⟨|r| + 1, |r| + 2, by positivity, by linarith⟩
   let χ : apm_m98J02_Test := TestFunction.mk b b.contDiff
     b.hasCompactSupport (by simp)
-  refine ⟨χ, ?_⟩
+  refine ⟨χ, Metric.ball 0 (|r| + 1), Metric.isOpen_ball,
+    hr.trans (Metric.ball_subset_ball (by linarith [le_abs_self r])), ?_⟩
   intro x hx
   change b x = 1
-  apply b.one_of_mem_closedBall
-  rw [Metric.mem_closedBall, dist_zero_right]
-  have hxr := hr hx
-  rw [Metric.mem_ball, dist_zero_right] at hxr
-  dsimp [b]
-  linarith [le_abs_self r]
+  exact b.one_of_mem_closedBall (Metric.ball_subset_closedBall hx)
 
 noncomputable def apm_m98J02_integralAgainstBCF
     (q : apm_m98J02_E → ℝ) (hq : Continuous q)
@@ -428,7 +430,8 @@ theorem apm_m98J02_cutoff_independence
       Disjoint (tsupport (η : apm_m98J02_E → ℝ)) K₁ → u η = 0)
     (hu₂ : ∀ η : apm_m98J02_Test,
       Disjoint (tsupport (η : apm_m98J02_E → ℝ)) K₂ → u η = 0)
-    (hχ₁ : ∀ x ∈ K₁, χ₁ x = 1) (hχ₂ : ∀ x ∈ K₂, χ₂ x = 1)
+    (hχ₁ : (∃ U : Set apm_m98J02_E, IsOpen U ∧ K₁ ⊆ U ∧ ∀ x ∈ U, χ₁ x = 1))
+    (hχ₂ : (∃ U : Set apm_m98J02_E, IsOpen U ∧ K₂ ⊆ U ∧ ∀ x ∈ U, χ₂ x = 1))
     (hΨ₁ : ∀ x, Ψ₁ x = χ₁ x * F x)
     (hΨ₂ : ∀ x, Ψ₂ x = χ₂ x * F x) :
     u Ψ₁ = u Ψ₂ := by
