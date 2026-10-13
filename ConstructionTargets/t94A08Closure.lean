@@ -947,3 +947,50 @@ def apm_t94a08_manifoldChartPuncturedBallHomeomorph
       apply congrArg Subtype.val
       apply congrArg e
       exact Subtype.ext hnode)
+
+lemma apm_t94a08_manifoldChartPuncturedBallTarget_isPreconnected
+    (U : Set apm_t94a08_CP2) (hnodeU : apm_t94a08_node ∈ U)
+    (W : Set (EuclideanSpace ℝ (Fin 2)))
+    (e : ↑(U ∩ apm_t94a08_sigma2) ≃ₜ ↑W) (r : ℝ) (hr : 0 < r)
+    (hrW : Metric.ball
+      (e ⟨apm_t94a08_node, hnodeU, apm_t94a08_node_mem_sigma2⟩).1 r ⊆ W) :
+    IsPreconnected
+      (apm_t94a08_manifoldChartPuncturedBallTarget U hnodeU W e r) := by
+  rw [← Topology.IsInducing.subtypeVal.isPreconnected_image]
+  have himage : Subtype.val ''
+      apm_t94a08_manifoldChartPuncturedBallTarget U hnodeU W e r =
+      Metric.ball
+          (e ⟨apm_t94a08_node, hnodeU,
+            apm_t94a08_node_mem_sigma2⟩).1 r \
+        {(e ⟨apm_t94a08_node, hnodeU,
+          apm_t94a08_node_mem_sigma2⟩).1} := by
+    ext y
+    constructor
+    · rintro ⟨z, hz, rfl⟩
+      exact hz
+    · intro hy
+      exact ⟨⟨y, hrW hy.1⟩, hy, rfl⟩
+  rw [himage]
+  exact apm_t94a08_punctured_euclidean_ball_isPreconnected _ hr
+
+lemma apm_t94a08_manifoldChartPuncturedBallSource_isPreconnected
+    (U : Set apm_t94a08_CP2) (hnodeU : apm_t94a08_node ∈ U)
+    (W : Set (EuclideanSpace ℝ (Fin 2)))
+    (e : ↑(U ∩ apm_t94a08_sigma2) ≃ₜ ↑W) (r : ℝ) (hr : 0 < r)
+    (hrW : Metric.ball
+      (e ⟨apm_t94a08_node, hnodeU, apm_t94a08_node_mem_sigma2⟩).1 r ⊆ W) :
+    IsPreconnected
+      (apm_t94a08_manifoldChartPuncturedBallSource U hnodeU W e r) := by
+  let h := apm_t94a08_manifoldChartPuncturedBallHomeomorph U hnodeU W e r
+  have htarget :=
+    apm_t94a08_manifoldChartPuncturedBallTarget_isPreconnected
+      U hnodeU W e r hr hrW
+  letI : PreconnectedSpace
+      ↑(apm_t94a08_manifoldChartPuncturedBallTarget U hnodeU W e r) :=
+    isPreconnected_iff_preconnectedSpace.mp htarget
+  have hsource_univ : IsPreconnected
+      (Set.univ : Set
+        ↑(apm_t94a08_manifoldChartPuncturedBallSource U hnodeU W e r)) := by
+    simpa only [Set.image_univ, h.symm.surjective.range_eq] using
+      h.symm.isPreconnected_image.mpr isPreconnected_univ
+  exact isPreconnected_iff_preconnectedSpace.mpr ⟨hsource_univ⟩
