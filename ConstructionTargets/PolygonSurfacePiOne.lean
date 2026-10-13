@@ -1558,7 +1558,7 @@ def FiniteWedge (L : Type*) :=
   Quotient (Relation.EqvGen.setoid (FiniteWedgeRel L))
 
 noncomputable instance (L : Type*) : TopologicalSpace (FiniteWedge L) :=
-  letI : TopologicalSpace L := ⊥
+  letI : TopologicalSpace L := ⊤
   TopologicalSpace.coinduced
     (fun x : L × Circle => Quotient.mk (Relation.EqvGen.setoid (FiniteWedgeRel L)) x)
     inferInstance
@@ -1569,7 +1569,7 @@ def wedgeCircle {L : Type*} (l : L) (z : Circle) : FiniteWedge L :=
 
 theorem continuous_wedgeCircle {L : Type*} (l : L) :
     Continuous (wedgeCircle l) := by
-  letI : TopologicalSpace L := ⊥
+  letI : TopologicalSpace L := ⊤
   exact continuous_coinduced_rng.comp (continuous_const.prodMk continuous_id)
 
 theorem wedgeCircle_base_eq {L : Type*} (l k : L) :
