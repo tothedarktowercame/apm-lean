@@ -1856,12 +1856,96 @@ noncomputable def apm_a97j08_cycleSum {V : Type*} (f : V × V → ℝ) (c : List
 def apm_a97j08_Balanced {V : Type*} [DecidableEq V] (E : Finset (V × V)) : Prop :=
   ∀ v : V, (E.filter fun e => e.1 = v).card = (E.filter fun e => e.2 = v).card
 
+lemma apm_a97j08_clopen_separation_of_bounded_component_aux_radius
+    (D : Set ℂ) {z : ℂ}
+    (hzbounded : Bornology.IsBounded (connectedComponentIn Dᶜ z)) :
+    ∃ R : ℝ, 1 < R ∧
+      connectedComponentIn Dᶜ z ⊆ Metric.ball 0 (R - 1) := by
+  obtain ⟨C, hC⟩ := hzbounded.exists_norm_le
+  let R : ℝ := max C 0 + 2
+  refine ⟨R, by dsimp [R]; linarith [le_max_right C 0], ?_⟩
+  intro x hx
+  rw [Metric.mem_ball, dist_zero_right]
+  have hxC := hC x hx
+  dsimp [R]
+  linarith [le_max_left C 0]
+
+lemma apm_a97j08_clopen_separation_of_bounded_component_aux_truncation
+    (D : Set ℂ) (hD_open : IsOpen D) {z : ℂ} (R : ℝ) (hR : 1 < R)
+    (hKR : connectedComponentIn Dᶜ z ⊆ Metric.ball 0 (R - 1)) :
+    IsCompact (Dᶜ ∩ Metric.closedBall 0 R) ∧
+      connectedComponentIn Dᶜ z ⊆ Dᶜ ∩ Metric.closedBall 0 R ∧
+      Disjoint (connectedComponentIn Dᶜ z)
+        ((Dᶜ ∩ Metric.closedBall 0 R) ∩ Metric.sphere 0 R) := by
+  have hX : IsCompact (Dᶜ ∩ Metric.closedBall 0 R) :=
+    (isCompact_closedBall (0 : ℂ) R).inter_left hD_open.isClosed_compl
+  refine ⟨hX, ?_, ?_⟩
+  · intro x hx
+    refine ⟨connectedComponentIn_subset Dᶜ z hx, ?_⟩
+    have hb := hKR hx
+    rw [Metric.mem_ball] at hb
+    rw [Metric.mem_closedBall]
+    linarith
+  · rw [Set.disjoint_left]
+    intro x hxK hxS
+    have hb := hKR hxK
+    rw [Metric.mem_ball] at hb
+    have hs := hxS.2
+    rw [Metric.mem_sphere] at hs
+    linarith
+
+/-- Compact-Hausdorff quasi-component separation inside a sufficiently large
+closed ball.  The selected clopen neighbourhood contains the full component
+and misses the truncation sphere. -/
+lemma apm_a97j08_clopen_separation_of_bounded_component_aux_clopen
+    (D : Set ℂ) (hD_open : IsOpen D) {z : ℂ} (hz : z ∈ Dᶜ)
+    (hzbounded : Bornology.IsBounded (connectedComponentIn Dᶜ z)) :
+    ∃ R : ℝ, 1 < R ∧ ∃ A B : Set ℂ,
+      IsCompact A ∧ IsCompact B ∧
+      connectedComponentIn Dᶜ z ⊆ A ∧ z ∈ A ∧
+      Dᶜ ∩ Metric.closedBall 0 R = A ∪ B ∧ Disjoint A B ∧
+      A ⊆ Metric.ball 0 R := by
+  sorry
+
+lemma apm_a97j08_clopen_separation_of_bounded_component_aux_margin
+    (D : Set ℂ) {z : ℂ} {R : ℝ} (hR : 1 < R) {A B : Set ℂ}
+    (hA : IsCompact A) (hB : IsCompact B)
+    (hcomp : connectedComponentIn Dᶜ z ⊆ A) (hzA : z ∈ A)
+    (hcover : Dᶜ ∩ Metric.closedBall 0 R = A ∪ B) (hdisj : Disjoint A B)
+    (hball : A ⊆ Metric.ball 0 R) :
+    apm_a97j08_ClopenSeparationFact D z := by
+  -- separation constant between `A` and `B`
+  obtain ⟨δ₁, hδ₁, hsep⟩ : ∃ δ₁ : ℝ, 0 < δ₁ ∧ ∀ a ∈ A, ∀ b ∈ B, δ₁ ≤ dist a b := by
+    rcases (A ×ˢ B).eq_empty_or_nonempty with h | h
+    · refine ⟨1, one_pos, fun a ha b hb => ?_⟩
+      exact absurd (Set.mk_mem_prod ha hb) (h ▸ Set.notMem_empty _)
+    · obtain ⟨p, hp, hmin⟩ := (hA.prod hB).exists_isMinOn h
+        (continuous_dist.continuousOn)
+      refine ⟨dist p.1 p.2, dist_pos.mpr fun hEq => ?_, fun a ha b hb => ?_⟩
+      · exact Set.disjoint_left.mp hdisj hp.1 (hEq ▸ hp.2)
+      · exact hmin (Set.mk_mem_prod ha hb)
+  -- radial margin of `A` inside the open ball
+  obtain ⟨δ₂, hδ₂, hmar⟩ : ∃ δ₂ : ℝ, 0 < δ₂ ∧ ∀ a ∈ A, ‖a‖ < R - δ₂ := by
+    obtain ⟨m, hm, hmax⟩ := hA.exists_isMaxOn ⟨z, hzA⟩ continuous_norm.continuousOn
+    have hmR : ‖m‖ < R := by simpa using hball hm
+    refine ⟨(R - ‖m‖) / 2, by linarith, fun a ha => ?_⟩
+    have := hmax ha
+    simp only [Set.mem_setOf_eq] at this
+    linarith
+  refine ⟨R, min δ₁ δ₂, A, B, by linarith, lt_min hδ₁ hδ₂, hzA, hA, hB, hcomp, hcover,
+    hdisj, fun a ha b hb => (min_le_left _ _).trans (hsep a ha b hb), fun a ha => ?_⟩
+  rw [Metric.mem_ball, dist_zero_right]
+  linarith [hmar a ha, min_le_right δ₁ δ₂]
+
 theorem apm_a97j08_clopen_separation_of_bounded_component
     (D : Set ℂ) (hD_open : IsOpen D)
     {z : ℂ} (hz : z ∈ Dᶜ)
     (hzbounded : Bornology.IsBounded (connectedComponentIn Dᶜ z)) :
     apm_a97j08_ClopenSeparationFact D z := by
-  sorry
+  obtain ⟨R, hR, A, B, hA, hB, hcomp, hzA, hcover, hdisj, hball⟩ :=
+    apm_a97j08_clopen_separation_of_bounded_component_aux_clopen D hD_open hz hzbounded
+  exact apm_a97j08_clopen_separation_of_bounded_component_aux_margin
+    D hR hA hB hcomp hzA hcover hdisj hball
 
 lemma apm_a97j08_grid_region_construction_aux_shrink
     (D : Set ℂ) (z : ℂ) (R δ : ℝ) (A B : Set ℂ)
