@@ -2351,6 +2351,100 @@ theorem apm_a97j08_cycle_decomposition {V : Type*} [DecidableEq V]
   sorry
 
 -- (E1) Boundary edges of the grid region lie in `D`.
+lemma apm_a97j08_boundaryEdge_segment_subset_aux_edge_witness
+    (Q : Finset (ℤ × ℤ)) (e : (ℤ × ℤ) × (ℤ × ℤ))
+    (he : e ∈ apm_a97j08_boundaryEdges Q) :
+    (∃ q ∈ Q, e ∈ apm_a97j08_squareEdges q) ∧
+      e.swap ∉ apm_a97j08_allEdges Q := by
+  rw [apm_a97j08_boundaryEdges, Finset.mem_filter] at he
+  refine ⟨?_, he.2⟩
+  simpa [apm_a97j08_allEdges, Finset.mem_biUnion] using he.1
+
+lemma apm_a97j08_boundaryEdge_segment_subset_aux_segment_in_union
+    {δ : ℝ} (hδ : 0 < δ) (shift : ℂ) (Q : Finset (ℤ × ℤ))
+    (e : (ℤ × ℤ) × (ℤ × ℤ))
+    (he : e ∈ apm_a97j08_boundaryEdges Q) :
+    segment ℝ (apm_a97j08_gridVertex shift δ e.1)
+        (apm_a97j08_gridVertex shift δ e.2) ⊆
+      ⋃ q ∈ Q, apm_a97j08_gridSquare shift δ q := by
+  rcases apm_a97j08_boundaryEdge_segment_subset_aux_edge_witness Q e he with
+    ⟨⟨q, hq, heq⟩, -⟩
+  have hconv : Convex ℝ (apm_a97j08_gridSquare shift δ q) := by
+    intro x hx y hy a b ha hb hab
+    simp only [apm_a97j08_gridSquare, Set.mem_setOf_eq] at hx hy ⊢
+    simp only [Complex.add_re, Complex.smul_re,
+      Complex.add_im, Complex.smul_im, smul_eq_mul]
+    have hrx := mul_le_mul_of_nonneg_left hx.1 ha
+    have hry := mul_le_mul_of_nonneg_left hy.1 hb
+    have hrx' := mul_le_mul_of_nonneg_left hx.2.1 ha
+    have hry' := mul_le_mul_of_nonneg_left hy.2.1 hb
+    have hix := mul_le_mul_of_nonneg_left hx.2.2.1 ha
+    have hiy := mul_le_mul_of_nonneg_left hy.2.2.1 hb
+    have hix' := mul_le_mul_of_nonneg_left hx.2.2.2 ha
+    have hiy' := mul_le_mul_of_nonneg_left hy.2.2.2 hb
+    have hc (c : ℝ) : a * c + b * c = c := by
+      rw [← add_mul, hab, one_mul]
+    constructor
+    · linarith [hc (shift.re + (q.1 : ℝ) * δ)]
+    constructor
+    · linarith [hc (shift.re + ((q.1 : ℝ) + 1) * δ)]
+    constructor
+    · linarith [hc (shift.im + (q.2 : ℝ) * δ)]
+    · linarith [hc (shift.im + ((q.2 : ℝ) + 1) * δ)]
+  have hend : apm_a97j08_gridVertex shift δ e.1 ∈
+        apm_a97j08_gridSquare shift δ q ∧
+      apm_a97j08_gridVertex shift δ e.2 ∈
+        apm_a97j08_gridSquare shift δ q := by
+    simp only [apm_a97j08_squareEdges, Finset.mem_insert, Finset.mem_singleton] at heq
+    rcases heq with rfl | rfl | rfl | rfl <;>
+      simp [apm_a97j08_gridSquare, apm_a97j08_gridVertex] <;>
+      norm_num <;> constructor <;> nlinarith
+  intro w hw
+  simp only [Set.mem_iUnion]
+  exact ⟨q, ⟨hq, hconv.segment_subset hend.1 hend.2 hw⟩⟩
+
+-- (a) Across each square edge lies a neighbouring square whose open interior comes
+-- arbitrarily close to every point of the edge.
+lemma apm_a97j08_boundaryEdge_segment_subset_aux_neighbor {δ : ℝ} (hδ : 0 < δ)
+    (shift : ℂ) (q : ℤ × ℤ) (e : (ℤ × ℤ) × (ℤ × ℤ)) (he : e ∈ apm_a97j08_squareEdges q) :
+    ∃ q' : ℤ × ℤ, e.swap ∈ apm_a97j08_squareEdges q' ∧
+      ∀ w ∈ segment ℝ (apm_a97j08_gridVertex shift δ e.1)
+          (apm_a97j08_gridVertex shift δ e.2), ∀ ε > 0, ∃ w' : ℂ, dist w w' < ε ∧
+        shift.re + q'.1 * δ < w'.re ∧ w'.re < shift.re + (q'.1 + 1) * δ ∧
+        shift.im + q'.2 * δ < w'.im ∧ w'.im < shift.im + (q'.2 + 1) * δ := by
+  sorry
+
+-- (b) A point strictly inside square `q'` lies in no other lattice square.
+lemma apm_a97j08_boundaryEdge_segment_subset_aux_open_unique {δ : ℝ} (hδ : 0 < δ)
+    (shift : ℂ) {q q' : ℤ × ℤ} {w : ℂ}
+    (hw : shift.re + q'.1 * δ < w.re ∧ w.re < shift.re + (q'.1 + 1) * δ ∧
+        shift.im + q'.2 * δ < w.im ∧ w.im < shift.im + (q'.2 + 1) * δ)
+    (hq : w ∈ apm_a97j08_gridSquare shift δ q) : q = q' := by
+  sorry
+
+lemma apm_a97j08_boundaryEdge_segment_subset_aux_not_interior
+    {δ : ℝ} (hδ : 0 < δ) (shift : ℂ) (Q : Finset (ℤ × ℤ))
+    (e : (ℤ × ℤ) × (ℤ × ℤ))
+    (he : e ∈ apm_a97j08_boundaryEdges Q) :
+    Disjoint
+      (segment ℝ (apm_a97j08_gridVertex shift δ e.1)
+        (apm_a97j08_gridVertex shift δ e.2))
+      (interior (⋃ q ∈ Q, apm_a97j08_gridSquare shift δ q)) := by
+  obtain ⟨⟨q, -, heq⟩, hswap⟩ :=
+    apm_a97j08_boundaryEdge_segment_subset_aux_edge_witness Q e he
+  obtain ⟨q', hq', hnear⟩ :=
+    apm_a97j08_boundaryEdge_segment_subset_aux_neighbor hδ shift q e heq
+  have hq'Q : q' ∉ Q := fun h =>
+    hswap (Finset.mem_biUnion.mpr ⟨q', h, hq'⟩)
+  rw [Set.disjoint_left]
+  intro w hw hint
+  obtain ⟨ε, hε, hball⟩ := Metric.isOpen_iff.mp isOpen_interior w hint
+  obtain ⟨w', hww', hw'⟩ := hnear w hw ε hε
+  have hw'U := interior_subset (hball (by rw [Metric.mem_ball, dist_comm]; exact hww'))
+  obtain ⟨q'', hq''Q, hq''⟩ := Set.mem_iUnion₂.mp hw'U
+  have := apm_a97j08_boundaryEdge_segment_subset_aux_open_unique hδ shift hw' hq''
+  exact hq'Q (this ▸ hq''Q)
+
 theorem apm_a97j08_boundaryEdge_segment_subset
     (D : Set ℂ) {z : ℂ} {R δ : ℝ} {A B : Set ℂ}
     (hinput : apm_a97j08_GridInput D z R δ A B)
@@ -2361,7 +2455,27 @@ theorem apm_a97j08_boundaryEdge_segment_subset
     (e : (ℤ × ℤ) × (ℤ × ℤ)) (he : e ∈ apm_a97j08_boundaryEdges Q) :
     segment ℝ (apm_a97j08_gridVertex shift δ e.1)
       (apm_a97j08_gridVertex shift δ e.2) ⊆ D := by
-  sorry
+  rcases hinput with
+    ⟨hR, hδ, hzA, hAc, hBc, hDB, hdecomp, hAB, hsep, hAball⟩
+  have hin := apm_a97j08_boundaryEdge_segment_subset_aux_segment_in_union
+    hδ shift Q e he
+  have hfront := apm_a97j08_boundaryEdge_segment_subset_aux_not_interior
+    hδ shift Q e he
+  intro w hw
+  have hwU : w ∈ ⋃ q ∈ Q, apm_a97j08_gridSquare shift δ q := hin hw
+  have hwR : w ∈ Metric.closedBall (0 : ℂ) R := hU_R hwU
+  have hwnB : w ∉ B := by
+    intro hwB
+    exact Set.disjoint_left.1 hU_B hwU hwB
+  have hwnA : w ∉ A := by
+    intro hwA
+    exact Set.disjoint_left.1 hfront hw (hU_A hwA)
+  by_contra hwD
+  have hwDc : w ∈ Dᶜ := hwD
+  have hwAB : w ∈ A ∪ B := by
+    rw [← hdecomp]
+    exact ⟨hwDc, hwR⟩
+  exact hwAB.elim hwnA hwnB
 
 -- (Z1) Exactly one selected square contains `z`, so the square sums total `2π`.
 theorem apm_a97j08_square_total {z shift : ℂ} {δ : ℝ} (hδ : 0 < δ)
