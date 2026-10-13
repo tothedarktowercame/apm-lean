@@ -1763,6 +1763,28 @@ def PairingData.signedParameter (P : PairingData) (i : Fin P.edgeCount)
     (t : Set.Icc (0 : ℝ) 1) : Set.Icc (0 : ℝ) 1 :=
   if P.sign i then t else reverseIcc t
 
+theorem PairingData.signedParameter_injective (P : PairingData)
+    (i : Fin P.edgeCount) : Function.Injective (P.signedParameter i) := by
+  intro t u h
+  cases hs : P.sign i
+  · simp only [PairingData.signedParameter, hs, Bool.false_eq_true, ↓reduceIte] at h
+    simpa using congrArg reverseIcc h
+  · simpa [PairingData.signedParameter, hs] using h
+
+/-- The paired parameter convention gives exactly the same oriented interval
+coordinate on the paired edge. -/
+theorem PairingData.signedParameter_pair (P : PairingData)
+    (i : Fin P.edgeCount) (t : Set.Icc (0 : ℝ) 1) :
+    P.signedParameter (P.pair i) (pairedParameter P.pair P.sign i t) =
+      P.signedParameter i t := by
+  by_cases h : P.sign i = P.sign (P.pair i)
+  · simp [PairingData.signedParameter, pairedParameter, h]
+  · have hs : P.sign (P.pair i) = !P.sign i := by
+      cases hi : P.sign i <;> cases hp : P.sign (P.pair i) <;> simp_all
+    cases hi : P.sign i <;>
+      simp [PairingData.signedParameter, pairedParameter, hs, hi,
+        reverseIcc_reverseIcc]
+
 /-- The arc coordinate selected by the sign of an oriented polygon edge.
 Negative edges use the inverse traversal. -/
 def PairingData.signedWedgeArc (P : PairingData) (i : Fin P.edgeCount)
@@ -1851,6 +1873,25 @@ theorem PairingData.skeletonArc_pair (P : PairingData)
   apply Subtype.ext
   apply Quotient.sound
   exact Relation.EqvGen.symm _ _ (Relation.EqvGen.rel _ _ ⟨i, t, rfl, rfl⟩)
+
+/-- The non-vertex part of the target kernel already agrees with the actual
+skeleton kernel: equality of oriented parameters on the same or paired edge
+descends through the polygon relation. -/
+theorem PairingData.skeletonArc_eq_of_signedParameter_eq (P : PairingData)
+    (i j : Fin P.edgeCount) (t u : Set.Icc (0 : ℝ) 1)
+    (hij : j = i ∨ j = P.pair i)
+    (hparam : P.signedParameter i t = P.signedParameter j u) :
+    P.skeletonArc i t = P.skeletonArc j u := by
+  rcases hij with hij | hij
+  · subst j
+    exact congrArg (P.skeletonArc i) (P.signedParameter_injective i hparam)
+  · subst j
+    have hu : u = pairedParameter P.pair P.sign i t := by
+      apply P.signedParameter_injective (P.pair i)
+      rw [P.signedParameter_pair]
+      exact hparam.symm
+    rw [hu]
+    exact (P.skeletonArc_pair i t).symm
 
 /-- The representative-level correspondence which the B7 homeomorphism
 must induce: paired source arcs and paired signed wedge coordinates agree. -/
