@@ -209,6 +209,103 @@ theorem apm_m98J05_bridge_2
     HasDerivAt
       (fun s ↦ apm_m98J05_heatSolution f x s)
       (iteratedDeriv 2 (fun z ↦ apm_m98J05_heatSolution f z t) x) t := by
+  /-
+  let K : ℝ → ℝ → ℝ := fun s r ↦
+    (1 / (2 * Real.sqrt (Real.pi * s))) * Real.exp (-(r ^ 2) / (4 * s))
+  let D : ℝ → ℝ → ℝ := fun s r ↦
+    K s r * (-1 / (2 * s) + r ^ 2 / (4 * s ^ 2))
+  have hK : ∀ s r, K s r = apm_m98J05_heatKernel s r := by
+    intro s r; rfl
+  have hder_t (s r : ℝ) (hs : 0 < s) : HasDerivAt (fun q ↦ K q r) (D s r) s := by
+    dsimp [K, D]
+    convert (by fun_prop : HasDerivAt
+      (fun q : ℝ ↦ (1 / (2 * Real.sqrt (Real.pi * q))) *
+        Real.exp (-(r ^ 2) / (4 * q))) _ s) using 1 <;>
+      field_simp [ne_of_gt hs, ne_of_gt Real.pi_pos,
+        ne_of_gt (Real.sqrt_pos.2 (mul_pos Real.pi_pos hs))] <;>
+      ring
+  have hder_x (s r : ℝ) (hs : 0 < s) :
+      HasDerivAt (K s) (K s r * (-r / (2 * s))) r := by
+    dsimp [K]
+    convert (by fun_prop : HasDerivAt
+      (fun q : ℝ ↦ (1 / (2 * Real.sqrt (Real.pi * s))) *
+        Real.exp (-(q ^ 2) / (4 * s))) _ r) using 1 <;>
+      field_simp [ne_of_gt hs] <;> ring
+  have hder_x2 (s r : ℝ) (hs : 0 < s) :
+      HasDerivAt (fun q ↦ K s q * (-q / (2 * s))) (D s r) r := by
+    dsimp [K, D]
+    convert (by fun_prop : HasDerivAt
+      (fun q : ℝ ↦
+        ((1 / (2 * Real.sqrt (Real.pi * s))) * Real.exp (-(q ^ 2) / (4 * s))) *
+          (-q / (2 * s))) _ r) using 1 <;>
+      field_simp [ne_of_gt hs] <;> ring
+  have hbound (s r : ℝ) (hs : s ∈ Set.Icc (t / 2) (3 * t / 2)) :
+      |D s r| ≤ (1 / Real.sqrt (Real.pi * (t / 2))) * (1 / t + 6 / t) := by
+    have hs0 : 0 < s := lt_of_lt_of_le (half_pos ht) hs.1
+    have hst : t / 2 ≤ s := hs.1
+    have hsu : s ≤ 3 * t / 2 := hs.2
+    have hroot : Real.sqrt (Real.pi * (t / 2)) ≤ Real.sqrt (Real.pi * s) := by
+      exact Real.sqrt_le_sqrt (mul_le_mul_of_nonneg_left hst Real.pi_pos.le)
+    have hu : 0 ≤ r ^ 2 / (4 * s) := by positivity
+    have he : (r ^ 2 / (4 * s)) * Real.exp (-(r ^ 2 / (4 * s))) ≤ 1 := by
+      have := Real.mul_exp_neg_le_exp_neg_one (r ^ 2 / (4 * s))
+      exact this.trans (by have := Real.exp_neg_one_lt_one; linarith)
+    dsimp [D, K]
+    rw [abs_mul, abs_of_pos (Real.exp_pos _)]
+    have hc : 0 ≤ 1 / (2 * Real.sqrt (Real.pi * s)) := by positivity
+    have he0 : Real.exp (-(r ^ 2) / (4 * s)) ≤ 1 := by
+      rw [Real.exp_le_one_iff]
+      positivity
+    have ha : |-1 / (2 * s) + r ^ 2 / (4 * s ^ 2)| ≤
+        1 / (2 * s) + r ^ 2 / (4 * s ^ 2) := by
+      rw [abs_le]
+      constructor <;> nlinarith [sq_nonneg r]
+    calc
+      1 / (2 * Real.sqrt (Real.pi * s)) * Real.exp (-(r ^ 2) / (4 * s)) *
+          |-1 / (2 * s) + r ^ 2 / (4 * s ^ 2)|
+          ≤ 1 / (2 * Real.sqrt (Real.pi * s)) *
+            (1 / (2 * s) + (r ^ 2 / (4 * s)) * Real.exp (-(r ^ 2) / (4 * s)) / s) := by
+              gcongr
+              field_simp [ne_of_gt hs0]
+              nlinarith [Real.exp_pos (-(r ^ 2) / (4 * s))]
+      _ ≤ 1 / (2 * Real.sqrt (Real.pi * s)) * (1 / t + 2 / t) := by
+              gcongr
+              · positivity
+              · apply div_le_div_of_nonneg_right he (le_of_lt hs0)
+              all_goals field_simp [ne_of_gt ht, ne_of_gt hs0] at * <;> nlinarith
+      _ ≤ (1 / Real.sqrt (Real.pi * (t / 2))) * (1 / t + 6 / t) := by
+              have hr0 : 0 < Real.sqrt (Real.pi * (t / 2)) := by positivity
+              have hrs : 0 < Real.sqrt (Real.pi * s) := by positivity
+              have hi : 1 / (2 * Real.sqrt (Real.pi * s)) ≤
+                  1 / Real.sqrt (Real.pi * (t / 2)) := by
+                apply (div_le_div_iff₀ (by positivity) hrs).2
+                nlinarith
+              gcongr <;> positivity
+  let C : ℝ := (1 / Real.sqrt (Real.pi * (t / 2))) * (1 / t + 6 / t)
+  have hC : 0 ≤ C := by dsimp [C]; positivity
+  have hDI (a : ℝ) : Integrable (fun y ↦ f y * (D a (x - y) : ℂ)) := by
+    refine (hf.norm.const_mul C).mono' (hf.aestronglyMeasurable.mul (by fun_prop)) ?_
+    filter_upwards with y
+    rw [norm_mul, Complex.norm_real, Real.norm_eq_abs]
+    exact mul_le_mul_of_nonneg_left (hbound t (x-y) (by constructor <;> linarith)) (norm_nonneg _)
+  have htime : HasDerivAt (fun s ↦ apm_m98J05_heatSolution f x s)
+      (∫ y, f y * (D t (x-y) : ℂ)) t := by
+    unfold apm_m98J05_heatSolution
+    exact (hasDerivAt_integral_of_dominated_loc_of_deriv_le
+      (F := fun s y ↦ f y * (K s (x-y) : ℂ))
+      (F' := fun s y ↦ f y * (D s (x-y) : ℂ))
+      (bound := fun y ↦ C * ‖f y‖) (s := Set.Icc (t/2) (3*t/2))
+      (mem_nhds_iff.2 ⟨Set.Ioo (t/2) (3*t/2), isOpen_Ioo, by constructor <;> linarith,
+        Set.Ioo_subset_Icc_self⟩)
+      (by filter_upwards; intro q; fun_prop)
+      (by simpa [hK] using apm_m98J05_heatSolution_integrable hf ht x)
+      (by fun_prop)
+      (by filter_upwards with y; intro q hq; rw [norm_mul, Complex.norm_real,
+          Real.norm_eq_abs]; exact mul_le_mul_of_nonneg_left (hbound q (x-y) hq) (norm_nonneg _))
+      (hf.norm.const_mul C)
+      (by filter_upwards with y; intro q hq; exact (hasDerivAt_const q (f y)).mul
+        ((hder_t q (x-y) (lt_of_lt_of_le (half_pos ht) hq.1)).ofReal))).2
+  -/
   sorry
 -- END SEAT AREA
 

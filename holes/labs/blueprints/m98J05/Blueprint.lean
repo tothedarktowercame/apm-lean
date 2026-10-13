@@ -256,6 +256,59 @@ theorem apm_m98J05_bridge_1
   change (apm_m98J05_heatKernel t (x - y) : ℂ) * f y = _
   rw [mul_comm]
 
+/-! ### Split of `apm_m98J05_bridge_2` (claude-14, 2026-10-13, after a partial round-1 attempt)
+
+Layer 1 (parallel): `apm_m98J05_kernel_hasDerivAt_time`, `apm_m98J05_kernel_hasDerivAt_space`,
+`apm_m98J05_kernelDx_hasDerivAt_space`, `apm_m98J05_kernel_derivs_bounded`.
+Layer 2 (parallel, each by dominated differentiation using Layer 1):
+`apm_m98J05_heatSolution_hasDerivAt_time`, `apm_m98J05_heatSolution_hasDerivAt_space`,
+`apm_m98J05_heatSolution_dx_hasDerivAt_space`.
+The heat equation itself is then assembly (`apm_m98J05_bridge_2`, proved). -/
+
+/-- `∂ₜ G = ∂ₓ² G = G · (x²/(4t²) − 1/(2t))`. -/
+noncomputable def apm_m98J05_kernelDt (t x : ℝ) : ℝ :=
+  apm_m98J05_heatKernel t x * (x ^ 2 / (4 * t ^ 2) - 1 / (2 * t))
+
+/-- `∂ₓ G = −x/(2t) · G`. -/
+noncomputable def apm_m98J05_kernelDx (t x : ℝ) : ℝ :=
+  -(x / (2 * t)) * apm_m98J05_heatKernel t x
+
+theorem apm_m98J05_kernel_hasDerivAt_time {t : ℝ} (ht : 0 < t) (x : ℝ) :
+    HasDerivAt (fun s ↦ apm_m98J05_heatKernel s x) (apm_m98J05_kernelDt t x) t := by
+  sorry
+
+theorem apm_m98J05_kernel_hasDerivAt_space {t : ℝ} (ht : 0 < t) (x : ℝ) :
+    HasDerivAt (fun z ↦ apm_m98J05_heatKernel t z) (apm_m98J05_kernelDx t x) x := by
+  sorry
+
+theorem apm_m98J05_kernelDx_hasDerivAt_space {t : ℝ} (ht : 0 < t) (x : ℝ) :
+    HasDerivAt (fun z ↦ apm_m98J05_kernelDx t z) (apm_m98J05_kernelDt t x) x := by
+  sorry
+
+/-- Uniform bounds on a compact time range away from zero. -/
+theorem apm_m98J05_kernel_derivs_bounded {a b : ℝ} (ha : 0 < a) :
+    ∃ C : ℝ, ∀ s ∈ Icc a b, ∀ x : ℝ,
+      |apm_m98J05_kernelDt s x| ≤ C ∧ |apm_m98J05_kernelDx s x| ≤ C := by
+  sorry
+
+theorem apm_m98J05_heatSolution_hasDerivAt_time
+    (f : ℝ → ℂ) (hf : Integrable f) (x : ℝ) {t : ℝ} (ht : 0 < t) :
+    HasDerivAt (fun s ↦ apm_m98J05_heatSolution f x s)
+      (∫ y, f y * (apm_m98J05_kernelDt t (x - y) : ℂ)) t := by
+  sorry
+
+theorem apm_m98J05_heatSolution_hasDerivAt_space
+    (f : ℝ → ℂ) (hf : Integrable f) {t : ℝ} (ht : 0 < t) (z : ℝ) :
+    HasDerivAt (fun w ↦ apm_m98J05_heatSolution f w t)
+      (∫ y, f y * (apm_m98J05_kernelDx t (z - y) : ℂ)) z := by
+  sorry
+
+theorem apm_m98J05_heatSolution_dx_hasDerivAt_space
+    (f : ℝ → ℂ) (hf : Integrable f) {t : ℝ} (ht : 0 < t) (z : ℝ) :
+    HasDerivAt (fun w ↦ ∫ y, f y * (apm_m98J05_kernelDx t (w - y) : ℂ))
+      (∫ y, f y * (apm_m98J05_kernelDt t (z - y) : ℂ)) z := by
+  sorry
+
 /-- Why this unblocks `apm_m98j05`: domination by derivatives of a positive-
 time Gaussian justifies differentiating the convolution in both variables;
 the kernel identity `∂ₜG = ∂ₓ²G` then gives the classical heat equation. -/
@@ -264,7 +317,16 @@ theorem apm_m98J05_bridge_2
     HasDerivAt
       (fun s ↦ apm_m98J05_heatSolution f x s)
       (iteratedDeriv 2 (fun z ↦ apm_m98J05_heatSolution f z t) x) t := by
-  sorry
+  have hd : deriv (fun z ↦ apm_m98J05_heatSolution f z t) =
+      fun z ↦ ∫ y, f y * (apm_m98J05_kernelDx t (z - y) : ℂ) := by
+    funext z
+    exact (apm_m98J05_heatSolution_hasDerivAt_space f hf ht z).deriv
+  have h2 : iteratedDeriv 2 (fun z ↦ apm_m98J05_heatSolution f z t) x =
+      ∫ y, f y * (apm_m98J05_kernelDt t (x - y) : ℂ) := by
+    rw [iteratedDeriv_succ, iteratedDeriv_one, hd]
+    exact (apm_m98J05_heatSolution_dx_hasDerivAt_space f hf ht x).deriv
+  rw [h2]
+  exact apm_m98J05_heatSolution_hasDerivAt_time f hf x ht
 
 lemma apm_m98J05_fourier_convolution_integrable_prod
     (f : ℝ → ℂ) (hf : Integrable f) (ξ t : ℝ) (ht : 0 < t) :
