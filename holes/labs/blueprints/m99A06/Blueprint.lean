@@ -289,7 +289,26 @@ theorem m99A06_fixedPointLp_mapsTo_closedBall
     Set.MapsTo (m99A06_fixedPointLp ε)
       (Metric.closedBall 0 (1 / 4 : ℝ))
       (Metric.closedBall 0 (1 / 4 : ℝ)) := by
-  sorry
+  intro u hu
+  rw [Metric.mem_closedBall, dist_zero_right] at hu ⊢
+  have hF : 0 ≤ ‖m99A06_forcingLp‖ := norm_nonneg _
+  have hden : 0 < 8 * (‖m99A06_forcingLp‖ + 1) := by positivity
+  have hprod : ε * (8 * (‖m99A06_forcingLp‖ + 1)) < 1 := by
+    exact (lt_div_iff₀ hden).mp (by simpa [one_div] using hsmall)
+  have hforce : ε * ‖m99A06_forcingLp‖ < 1 / 8 := by
+    nlinarith
+  have hu_sq : ‖u‖ ^ 2 ≤ 1 / 16 := by
+    nlinarith [norm_nonneg u]
+  calc
+    ‖m99A06_fixedPointLp ε u‖ ≤
+        ‖ε • m99A06_forcingLp‖ + ‖m99A06_quadraticLp u‖ := by
+      exact norm_sub_le _ _
+    _ = ε * ‖m99A06_forcingLp‖ + ‖m99A06_quadraticLp u‖ := by
+      rw [norm_smul, Real.norm_eq_abs, abs_of_pos hε]
+    _ ≤ ε * ‖m99A06_forcingLp‖ + ‖u‖ ^ 2 := by
+      gcongr
+      exact m99A06_quadraticLp_norm_le u
+    _ ≤ 1 / 4 := by linarith
 
 theorem m99A06_fixedPointLp_contractingOn_closedBall
     {ε : ℝ}
@@ -300,7 +319,34 @@ theorem m99A06_fixedPointLp_contractingOn_closedBall
       (hmap.restrict (m99A06_fixedPointLp ε)
         (Metric.closedBall 0 (1 / 4 : ℝ))
         (Metric.closedBall 0 (1 / 4 : ℝ))) := by
-  sorry
+  refine ⟨by norm_num, LipschitzWith.of_dist_le_mul ?_⟩
+  intro u v
+  have hu : ‖(u : Lp ℝ 1 (volume : Measure ℝ))‖ ≤ 1 / 4 := by
+    simpa [Metric.mem_closedBall, dist_zero_right] using u.property
+  have hv : ‖(v : Lp ℝ 1 (volume : Measure ℝ))‖ ≤ 1 / 4 := by
+    simpa [Metric.mem_closedBall, dist_zero_right] using v.property
+  dsimp only [Set.MapsTo.restrict]
+  rw [Subtype.dist_eq, Subtype.dist_eq, dist_eq_norm, dist_eq_norm]
+  change ‖m99A06_fixedPointLp ε (u : Lp ℝ 1 (volume : Measure ℝ)) -
+      m99A06_fixedPointLp ε (v : Lp ℝ 1 (volume : Measure ℝ))‖ ≤
+        ((3 / 4 : NNReal) : ℝ) *
+          ‖(u : Lp ℝ 1 (volume : Measure ℝ)) -
+            (v : Lp ℝ 1 (volume : Measure ℝ))‖
+  calc
+    ‖m99A06_fixedPointLp ε (u : Lp ℝ 1 (volume : Measure ℝ)) -
+        m99A06_fixedPointLp ε (v : Lp ℝ 1 (volume : Measure ℝ))‖ ≤
+      ‖(u : Lp ℝ 1 (volume : Measure ℝ)) -
+        (v : Lp ℝ 1 (volume : Measure ℝ))‖ *
+        (‖(u : Lp ℝ 1 (volume : Measure ℝ))‖ +
+          ‖(v : Lp ℝ 1 (volume : Measure ℝ))‖) :=
+      m99A06_fixedPointLp_sub_norm_le ε u v
+    _ ≤ ((3 / 4 : NNReal) : ℝ) *
+        ‖(u : Lp ℝ 1 (volume : Measure ℝ)) -
+          (v : Lp ℝ 1 (volume : Measure ℝ))‖ := by
+      norm_num at hu hv ⊢
+      nlinarith [norm_nonneg
+        ((u : Lp ℝ 1 (volume : Measure ℝ)) -
+          (v : Lp ℝ 1 (volume : Measure ℝ)))]
 
 theorem m99A06_fixedPointLp_exists
     {ε : ℝ} (hε : 0 < ε)

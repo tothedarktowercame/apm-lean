@@ -60,6 +60,69 @@ lemma m99A06_convolution_eLpNorm_le {f g : ℝ → ℝ}
     (ConstructionTargets.YoungConvolution.young_convolution_inequality_one
       hf (memLp_one_iff_integrable.mpr hg))
 
+lemma m99A06_convolution_integrable {f g : ℝ → ℝ}
+    (hf : Integrable f volume) (hg : Integrable g volume) :
+    Integrable (fun x : ℝ ↦ ∫ y : ℝ, f (x - y) * g y) volume := by
+  rw [← memLp_one_iff_integrable]
+  simpa [ConstructionTargets.YoungConvolution.convolution] using
+    (ConstructionTargets.YoungConvolution.convolution_memLp
+      (p := (1 : ENNReal)) (by norm_num) (by norm_num) hf
+      (memLp_one_iff_integrable.mpr hg))
+
+lemma m99A06_selfConvolution_sub_ae {f g : ℝ → ℝ}
+    (hf : Integrable f volume) (hg : Integrable g volume) :
+    ∀ᵐ x : ℝ ∂volume,
+      m99A06SelfConvolution f x - m99A06SelfConvolution g x =
+        (∫ y : ℝ, (f - g) (x - y) * f y) +
+        ∫ y : ℝ, g (x - y) * (f - g) y := by
+  have hfg : Integrable (f - g) volume := hf.sub hg
+  have hff := hf.ae_convolution_exists (ContinuousLinearMap.mul ℝ ℝ) hf
+  have hgg := hg.ae_convolution_exists (ContinuousLinearMap.mul ℝ ℝ) hg
+  have h₁ := hf.ae_convolution_exists (ContinuousLinearMap.mul ℝ ℝ) hfg
+  have h₂ := hfg.ae_convolution_exists (ContinuousLinearMap.mul ℝ ℝ) hg
+  filter_upwards [hff, hgg, h₁, h₂] with x hffx hggx h₁x h₂x
+  have hi_ff : Integrable (fun y : ℝ => f (x - y) * f y) := by
+    simpa [mul_comm] using hffx.integrable
+  have hi_gg : Integrable (fun y : ℝ => g (x - y) * g y) := by
+    simpa [mul_comm] using hggx.integrable
+  have hi₁ : Integrable (fun y : ℝ => (f - g) (x - y) * f y) := by
+    simpa [mul_comm] using h₁x.integrable
+  have hi₂ : Integrable (fun y : ℝ => g (x - y) * (f - g) y) := by
+    convert h₂x.integrable using 1
+    funext y
+    dsimp
+    ring
+  unfold m99A06SelfConvolution
+  rw [← integral_sub hi_ff hi_gg, ← integral_add hi₁ hi₂]
+  apply MeasureTheory.integral_congr_ae
+  filter_upwards with y
+  dsimp
+  ring
+
+lemma m99A06_selfConvolution_sub_eLpNorm_le {f g : ℝ → ℝ}
+    (hf : Integrable f volume) (hg : Integrable g volume) :
+    eLpNorm (m99A06SelfConvolution f - m99A06SelfConvolution g) 1 volume ≤
+      eLpNorm (f - g) 1 volume *
+        (eLpNorm f 1 volume + eLpNorm g 1 volume) := by
+  let A : ℝ → ℝ := fun x ↦ ∫ y : ℝ, (f - g) (x - y) * f y
+  let B : ℝ → ℝ := fun x ↦ ∫ y : ℝ, g (x - y) * (f - g) y
+  have hfg : Integrable (f - g) volume := hf.sub hg
+  have hA : Integrable A volume := m99A06_convolution_integrable hfg hf
+  have hB : Integrable B volume := m99A06_convolution_integrable hg hfg
+  calc
+    eLpNorm (m99A06SelfConvolution f - m99A06SelfConvolution g) 1 volume =
+        eLpNorm (A + B) 1 volume := by
+          apply eLpNorm_congr_ae
+          simpa [A, B] using m99A06_selfConvolution_sub_ae hf hg
+    _ ≤ eLpNorm A 1 volume + eLpNorm B 1 volume := by
+          exact eLpNorm_add_le hA.aestronglyMeasurable hB.aestronglyMeasurable (by norm_num)
+    _ ≤ eLpNorm (f - g) 1 volume * eLpNorm f 1 volume +
+          eLpNorm g 1 volume * eLpNorm (f - g) 1 volume :=
+          add_le_add (m99A06_convolution_eLpNorm_le hfg hf)
+            (m99A06_convolution_eLpNorm_le hg hfg)
+    _ = eLpNorm (f - g) 1 volume *
+          (eLpNorm f 1 volume + eLpNorm g 1 volume) := by ring
+
 lemma m99A06_sin_mul_selfConvolution_integrable {f : ℝ → ℝ}
     (hf : Integrable f volume) :
     Integrable (fun x : ℝ => Real.sin x * m99A06SelfConvolution f x) volume := by
@@ -74,6 +137,16 @@ lemma m99A06_sin_mul_eLpNorm_le (p : ENNReal) (g : ℝ → ℝ) :
   filter_upwards with x
   simp only [Real.norm_eq_abs, abs_mul]
   exact mul_le_of_le_one_left (abs_nonneg (g x)) (Real.abs_sin_le_one x)
+
+lemma m99A06_quadratic_difference_eLpNorm_le {f g : ℝ → ℝ}
+    (hf : Integrable f volume) (hg : Integrable g volume) :
+    eLpNorm (fun x : ℝ ↦ Real.sin x *
+      (m99A06SelfConvolution f x - m99A06SelfConvolution g x)) 1 volume ≤
+      eLpNorm (f - g) 1 volume *
+        (eLpNorm f 1 volume + eLpNorm g 1 volume) := by
+  exact (m99A06_sin_mul_eLpNorm_le 1
+    (m99A06SelfConvolution f - m99A06SelfConvolution g)).trans
+      (m99A06_selfConvolution_sub_eLpNorm_le hf hg)
 
 lemma m99A06_quadraticTerm_eLpNorm_le {f : ℝ → ℝ}
     (hf : Integrable f volume) :
@@ -97,11 +170,200 @@ lemma m99A06_fixedPointMap_integrable (ε : ℝ) {f : ℝ → ℝ}
   exact (m99A06_gaussian_integrable.const_mul ε).sub
     (m99A06_sin_mul_selfConvolution_integrable hf)
 
-/-- Why this unblocks `apm_m99a06`: this is the representative-level
-small-data contraction theorem missing from the current `L¹` quotient API.
-It includes well-definedness on a.e. classes, contraction on a closed ball,
-and extraction of an integrable representative satisfying the fixed-point
-equation almost everywhere. -/
+noncomputable def m99A06_quadraticLp
+    (u : Lp ℝ 1 (volume : Measure ℝ)) : Lp ℝ 1 (volume : Measure ℝ) := by
+  let hu : Integrable (u : ℝ → ℝ) := memLp_one_iff_integrable.mp (Lp.memLp u)
+  let hq := m99A06_sin_mul_selfConvolution_integrable hu
+  exact (memLp_one_iff_integrable.mpr hq).toLp
+    (fun x : ℝ ↦ Real.sin x * m99A06SelfConvolution (u : ℝ → ℝ) x)
+
+lemma m99A06_quadraticLp_coe (u : Lp ℝ 1 (volume : Measure ℝ)) :
+    (m99A06_quadraticLp u : ℝ → ℝ) =ᵐ[volume]
+      fun x : ℝ ↦ Real.sin x * m99A06SelfConvolution (u : ℝ → ℝ) x := by
+  unfold m99A06_quadraticLp
+  exact MemLp.coeFn_toLp _
+
+noncomputable def m99A06_forcingLp : Lp ℝ 1 (volume : Measure ℝ) :=
+  (memLp_one_iff_integrable.mpr m99A06_gaussian_integrable).toLp
+    (fun x : ℝ ↦ Real.exp (-|x| ^ 2))
+
+lemma m99A06_forcingLp_coe :
+    (m99A06_forcingLp : ℝ → ℝ) =ᵐ[volume]
+      fun x : ℝ ↦ Real.exp (-|x| ^ 2) := by
+  exact MemLp.coeFn_toLp _
+
+lemma m99A06_quadraticLp_enorm_le (u : Lp ℝ 1 (volume : Measure ℝ)) :
+    ‖m99A06_quadraticLp u‖ₑ ≤ ‖u‖ₑ ^ 2 := by
+  rw [Lp.enorm_def, Lp.enorm_def]
+  rw [eLpNorm_congr_ae (m99A06_quadraticLp_coe u)]
+  exact m99A06_quadraticTerm_eLpNorm_le
+    (memLp_one_iff_integrable.mp (Lp.memLp u))
+
+lemma m99A06_quadraticLp_norm_le (u : Lp ℝ 1 (volume : Measure ℝ)) :
+    ‖m99A06_quadraticLp u‖ ≤ ‖u‖ ^ 2 := by
+  rw [Lp.norm_def, Lp.norm_def, ← ENNReal.toReal_pow]
+  rw [eLpNorm_congr_ae (m99A06_quadraticLp_coe u)]
+  exact ENNReal.toReal_mono
+    (ENNReal.pow_ne_top (Lp.eLpNorm_ne_top u))
+    (m99A06_quadraticTerm_eLpNorm_le
+      (memLp_one_iff_integrable.mp (Lp.memLp u)))
+
+lemma m99A06_quadraticLp_sub_eLpNorm_eq
+    (u v : Lp ℝ 1 (volume : Measure ℝ)) :
+    eLpNorm ((m99A06_quadraticLp u - m99A06_quadraticLp v :
+        Lp ℝ 1 (volume : Measure ℝ)) : ℝ → ℝ) 1 volume =
+      eLpNorm (fun x : ℝ ↦ Real.sin x *
+        (m99A06SelfConvolution (u : ℝ → ℝ) x -
+          m99A06SelfConvolution (v : ℝ → ℝ) x)) 1 volume := by
+  apply eLpNorm_congr_ae
+  filter_upwards [Lp.coeFn_sub (m99A06_quadraticLp u) (m99A06_quadraticLp v),
+    m99A06_quadraticLp_coe u, m99A06_quadraticLp_coe v] with x hsub hu hv
+  rw [hsub]
+  simp only [Pi.sub_apply]
+  rw [hu, hv]
+  ring
+
+lemma m99A06_Lp_sub_eLpNorm_eq (u v : Lp ℝ 1 (volume : Measure ℝ)) :
+    eLpNorm ((u - v : Lp ℝ 1 (volume : Measure ℝ)) : ℝ → ℝ) 1 volume =
+      eLpNorm ((u : ℝ → ℝ) - (v : ℝ → ℝ)) 1 volume :=
+  eLpNorm_congr_ae (Lp.coeFn_sub u v)
+
+lemma m99A06_quadraticLp_sub_norm_le
+    (u v : Lp ℝ 1 (volume : Measure ℝ)) :
+    ‖m99A06_quadraticLp u - m99A06_quadraticLp v‖ ≤
+      ‖u - v‖ * (‖u‖ + ‖v‖) := by
+  have hu : Integrable (u : ℝ → ℝ) :=
+    memLp_one_iff_integrable.mp (Lp.memLp u)
+  have hv : Integrable (v : ℝ → ℝ) :=
+    memLp_one_iff_integrable.mp (Lp.memLp v)
+  have h := m99A06_quadratic_difference_eLpNorm_le hu hv
+  rw [← m99A06_quadraticLp_sub_eLpNorm_eq u v] at h
+  rw [← m99A06_Lp_sub_eLpNorm_eq u v] at h
+  rw [Lp.norm_def, Lp.norm_def, Lp.norm_def, Lp.norm_def]
+  rw [← ENNReal.toReal_add (memLp_one_iff_integrable.mpr hu).eLpNorm_ne_top
+    (memLp_one_iff_integrable.mpr hv).eLpNorm_ne_top,
+    ← ENNReal.toReal_mul]
+  exact ENNReal.toReal_mono
+    (ENNReal.mul_ne_top (Lp.eLpNorm_ne_top (u - v))
+      ((ENNReal.add_ne_top).2
+        ⟨(memLp_one_iff_integrable.mpr hu).eLpNorm_ne_top,
+          (memLp_one_iff_integrable.mpr hv).eLpNorm_ne_top⟩)) h
+
+noncomputable def m99A06_fixedPointLp (ε : ℝ)
+    (u : Lp ℝ 1 (volume : Measure ℝ)) : Lp ℝ 1 (volume : Measure ℝ) :=
+  ε • m99A06_forcingLp - m99A06_quadraticLp u
+
+lemma m99A06_fixedPointLp_sub_norm_le (ε : ℝ)
+    (u v : Lp ℝ 1 (volume : Measure ℝ)) :
+    ‖m99A06_fixedPointLp ε u - m99A06_fixedPointLp ε v‖ ≤
+      ‖u - v‖ * (‖u‖ + ‖v‖) := by
+  have heq : m99A06_fixedPointLp ε u - m99A06_fixedPointLp ε v =
+      -(m99A06_quadraticLp u - m99A06_quadraticLp v) := by
+    unfold m99A06_fixedPointLp
+    abel
+  rw [heq, norm_neg]
+  exact m99A06_quadraticLp_sub_norm_le u v
+
+lemma m99A06_fixedPointLp_coe (ε : ℝ)
+    (u : Lp ℝ 1 (volume : Measure ℝ)) :
+    (m99A06_fixedPointLp ε u : ℝ → ℝ) =ᵐ[volume]
+      fun x : ℝ ↦ ε * Real.exp (-|x| ^ 2) -
+        Real.sin x * m99A06SelfConvolution (u : ℝ → ℝ) x := by
+  unfold m99A06_fixedPointLp
+  filter_upwards [Lp.coeFn_sub (ε • m99A06_forcingLp) (m99A06_quadraticLp u),
+    Lp.coeFn_smul ε m99A06_forcingLp, m99A06_forcingLp_coe,
+    m99A06_quadraticLp_coe u] with x hsub hsmul hforce hquad
+  rw [hsub]
+  simp only [Pi.sub_apply]
+  rw [hsmul]
+  simp only [Pi.smul_apply, smul_eq_mul]
+  rw [hforce, hquad]
+
+/-! The remaining closed-ball argument is split into two independent proof
+obligations.  Both use the fixed radius `1 / 4`; the deliberately conservative
+parameter bound avoids needing the exact Gaussian norm. -/
+
+theorem m99A06_fixedPointLp_mapsTo_closedBall
+    {ε : ℝ} (hε : 0 < ε)
+    (hsmall : ε < 1 / (8 * (‖m99A06_forcingLp‖ + 1))) :
+    Set.MapsTo (m99A06_fixedPointLp ε)
+      (Metric.closedBall 0 (1 / 4 : ℝ))
+      (Metric.closedBall 0 (1 / 4 : ℝ)) := by
+  intro u hu
+  rw [Metric.mem_closedBall, dist_zero_right] at hu ⊢
+  have hF : 0 ≤ ‖m99A06_forcingLp‖ := norm_nonneg _
+  have hden : 0 < 8 * (‖m99A06_forcingLp‖ + 1) := by positivity
+  have hprod : ε * (8 * (‖m99A06_forcingLp‖ + 1)) < 1 := by
+    exact (lt_div_iff₀ hden).mp (by simpa [one_div] using hsmall)
+  have hforce : ε * ‖m99A06_forcingLp‖ < 1 / 8 := by
+    nlinarith
+  have hu_sq : ‖u‖ ^ 2 ≤ 1 / 16 := by
+    nlinarith [norm_nonneg u]
+  calc
+    ‖m99A06_fixedPointLp ε u‖ ≤
+        ‖ε • m99A06_forcingLp‖ + ‖m99A06_quadraticLp u‖ := by
+      exact norm_sub_le _ _
+    _ = ε * ‖m99A06_forcingLp‖ + ‖m99A06_quadraticLp u‖ := by
+      rw [norm_smul, Real.norm_eq_abs, abs_of_pos hε]
+    _ ≤ ε * ‖m99A06_forcingLp‖ + ‖u‖ ^ 2 := by
+      gcongr
+      exact m99A06_quadraticLp_norm_le u
+    _ ≤ 1 / 4 := by linarith
+
+theorem m99A06_fixedPointLp_contractingOn_closedBall
+    {ε : ℝ}
+    (hmap : Set.MapsTo (m99A06_fixedPointLp ε)
+      (Metric.closedBall 0 (1 / 4 : ℝ))
+      (Metric.closedBall 0 (1 / 4 : ℝ))) :
+    ContractingWith (3 / 4 : NNReal)
+      (hmap.restrict (m99A06_fixedPointLp ε)
+        (Metric.closedBall 0 (1 / 4 : ℝ))
+        (Metric.closedBall 0 (1 / 4 : ℝ))) := by
+  refine ⟨by norm_num, LipschitzWith.of_dist_le_mul ?_⟩
+  intro u v
+  have hu : ‖(u : Lp ℝ 1 (volume : Measure ℝ))‖ ≤ 1 / 4 := by
+    simpa [Metric.mem_closedBall, dist_zero_right] using u.property
+  have hv : ‖(v : Lp ℝ 1 (volume : Measure ℝ))‖ ≤ 1 / 4 := by
+    simpa [Metric.mem_closedBall, dist_zero_right] using v.property
+  dsimp only [Set.MapsTo.restrict]
+  rw [Subtype.dist_eq, Subtype.dist_eq, dist_eq_norm, dist_eq_norm]
+  change ‖m99A06_fixedPointLp ε (u : Lp ℝ 1 (volume : Measure ℝ)) -
+      m99A06_fixedPointLp ε (v : Lp ℝ 1 (volume : Measure ℝ))‖ ≤
+        ((3 / 4 : NNReal) : ℝ) *
+          ‖(u : Lp ℝ 1 (volume : Measure ℝ)) -
+            (v : Lp ℝ 1 (volume : Measure ℝ))‖
+  calc
+    ‖m99A06_fixedPointLp ε (u : Lp ℝ 1 (volume : Measure ℝ)) -
+        m99A06_fixedPointLp ε (v : Lp ℝ 1 (volume : Measure ℝ))‖ ≤
+      ‖(u : Lp ℝ 1 (volume : Measure ℝ)) -
+        (v : Lp ℝ 1 (volume : Measure ℝ))‖ *
+        (‖(u : Lp ℝ 1 (volume : Measure ℝ))‖ +
+          ‖(v : Lp ℝ 1 (volume : Measure ℝ))‖) :=
+      m99A06_fixedPointLp_sub_norm_le ε u v
+    _ ≤ ((3 / 4 : NNReal) : ℝ) *
+        ‖(u : Lp ℝ 1 (volume : Measure ℝ)) -
+          (v : Lp ℝ 1 (volume : Measure ℝ))‖ := by
+      norm_num at hu hv ⊢
+      nlinarith [norm_nonneg
+        ((u : Lp ℝ 1 (volume : Measure ℝ)) -
+          (v : Lp ℝ 1 (volume : Measure ℝ)))]
+
+theorem m99A06_fixedPointLp_exists
+    {ε : ℝ} (hε : 0 < ε)
+    (hsmall : ε < 1 / (8 * (‖m99A06_forcingLp‖ + 1))) :
+    ∃ u : Lp ℝ 1 (volume : Measure ℝ), m99A06_fixedPointLp ε u = u := by
+  let s : Set (Lp ℝ 1 (volume : Measure ℝ)) := Metric.closedBall 0 (1 / 4 : ℝ)
+  have hmap : Set.MapsTo (m99A06_fixedPointLp ε) s s :=
+    m99A06_fixedPointLp_mapsTo_closedBall hε hsmall
+  have hcontract : ContractingWith (3 / 4 : NNReal)
+      (hmap.restrict (m99A06_fixedPointLp ε) s s) :=
+    m99A06_fixedPointLp_contractingOn_closedBall hmap
+  have hzero : (0 : Lp ℝ 1 (volume : Measure ℝ)) ∈ s := by
+    simp [s]
+  obtain ⟨u, -, hu, -, -⟩ := hcontract.exists_fixedPoint'
+    Metric.isClosed_closedBall.isComplete hmap hzero (by simp)
+  exact ⟨u, hu⟩
+
 theorem apm_m99A06_bridge_1 :
     ∃ ε₀ : ℝ, 0 < ε₀ ∧ ∀ ε : ℝ,
       0 < ε → ε < ε₀ →
@@ -109,48 +371,27 @@ theorem apm_m99A06_bridge_1 :
           ∀ᵐ x : ℝ ∂volume,
             f x = ε * Real.exp (-|x| ^ 2) -
               Real.sin x * m99A06SelfConvolution f x := by
-  sorry
+  let ε₀ : ℝ := 1 / (8 * (‖m99A06_forcingLp‖ + 1))
+  have hε₀ : 0 < ε₀ := by
+    dsimp [ε₀]
+    positivity
+  refine ⟨ε₀, hε₀, ?_⟩
+  intro ε hε hsmall
+  obtain ⟨u, hu⟩ := m99A06_fixedPointLp_exists hε hsmall
+  refine ⟨(u : ℝ → ℝ), memLp_one_iff_integrable.mp (Lp.memLp u), ?_⟩
+  filter_upwards [m99A06_fixedPointLp_coe ε u] with x hx
+  rw [hu] at hx
+  exact hx
 
 theorem apm_m99a06 :
     ∃ ε₀ : ℝ, 0 < ε₀ ∧ ∀ ε : ℝ,
       0 < ε → ε < ε₀ → ∃ f : ℝ → ℝ, IsM99A06Solution ε f := by
-  have hforcing : Integrable (fun x : ℝ ↦ Real.exp (-|x| ^ 2)) := by
-    exact m99A06_gaussian_integrable
-  /-
-  Boundary (closer hop 2): integrability of the Gaussian forcing and of the sine-multiplied
-  quadratic convolution term, needed to define the fixed-point self-map on
-  `L¹`, is proved above. Closer hop 1 extracts Gaussian integrability into
-  `m99A06_gaussian_integrable` and proves the complete raw self-map
-  integrability statement `m99A06_fixedPointMap_integrable`. This hop
-  specializes the sharp endpoint estimate from
-  `ConstructionTargets.YoungConvolution` to prove
-  `m99A06_selfConvolution_eLpNorm_le`, proves that multiplication by sine is
-  nonexpansive in every `eLpNorm`, and combines them in
-  `m99A06_quadraticTerm_eLpNorm_le`:
-  `‖sin(·) * (f*f)‖₁ ≤ ‖f‖₁²`. Thus the quadratic self-map bound is closed.
+  obtain ⟨ε₀, hε₀, hbridge⟩ := apm_m99A06_bridge_1
+  refine ⟨ε₀, hε₀, ?_⟩
+  intro ε hε hsmall
+  obtain ⟨f, hf, hfix⟩ := hbridge ε hε hsmall
+  refine ⟨f, hf, ?_⟩
+  filter_upwards [hfix] with x hx
+  linarith
 
-  Completing the
-  theorem requires
-  working in the complete `L¹` quotient space, transporting the raw convolution
-  to representatives, proving the two-input quadratic Lipschitz estimate, and
-  applying Banach's fixed-point theorem on a closed ball before
-  selecting a representative satisfying the equation almost everywhere. I
-  searched Mathlib's `L1`, convolution, bounded multiplier, closed-ball, and
-  contraction APIs and used `ConstructionTargets.YoungConvolution.convolution_memLp`;
-  I did not complete the quotient/representative bridge
-  to the frozen raw-function predicate `IsM99A06Solution` in this pass.
-
-  Closer hop 3 compiles the missing genuinely bilinear estimate as
-  `m99A06_convolution_eLpNorm_le`, specializing
-  `young_convolution_inequality_one` to two distinct raw integrable inputs.
-  Consequently the two-input quadratic Lipschitz estimate is reduced to the
-  pointwise polarization identity
-  `f*f - g*g = (f-g)*f + g*(f-g)`, the `eLpNorm` triangle inequality, and
-  representative bookkeeping.  Searches of `LEMMA-INDEX.md`, the closed
-  corpus, Mathlib's `L1` quotient API, construction libraries, and git history
-  found no bundled convolution operation on `L1` that both respects a.e.
-  representatives and exposes the frozen raw integral.  The quotient
-  construction, contraction on a closed ball, and representative extraction
-  therefore remain open.
-  -/
-  sorry
+#print axioms apm_m99a06

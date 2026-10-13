@@ -190,6 +190,58 @@
    "rev": "573847ac4",
    "approved_at": "2026-10-13T04:19:30Z"
   },
+  "m98J05": {
+   "decls": [
+    "apm_m98j05"
+   ],
+   "sha256": "f545d355f6a0688022d0b1f2499fc3bfce80aba458c7a25c83efcc4adce642db",
+   "defs": [
+    "apm_m98J05_fourier",
+    "apm_m98J05_heatKernel",
+    "apm_m98J05_heatSolution"
+   ],
+   "grade": "faithful",
+   "grader": "claude-14 outside grader (read-only Claude subagent, 2026-10-13)",
+   "evidence": "holes/labs/statement-registry/lemma-round-1-grades.md",
+   "prelim_defect": null,
+   "rev": "53eeb619a",
+   "approved_at": "2026-10-13T05:20:21Z"
+  },
+  "m99A02": {
+   "decls": [
+    "apm_m99a02"
+   ],
+   "sha256": "2a624b821f2e56971d9234ffed862d13f0ccb1137e6f8c8e39879e8267818aed",
+   "defs": [
+    "IsM99A02WeakDerivative",
+    "m99A02Derivative",
+    "m99A02Function",
+    "m99A02Omega",
+    "m99A02Point"
+   ],
+   "grade": "faithful",
+   "grader": "claude-14 outside grader (read-only Claude subagent, 2026-10-13)",
+   "evidence": "holes/labs/statement-registry/lemma-round-1-grades.md",
+   "prelim_defect": null,
+   "rev": "53eeb619a",
+   "approved_at": "2026-10-13T05:20:21Z"
+  },
+  "m99A06": {
+   "decls": [
+    "apm_m99a06"
+   ],
+   "sha256": "2a68ac8f15a087eb0117a7d71499522bdf4c93bc913af57fd09763c7a2c17d52",
+   "defs": [
+    "IsM99A06Solution",
+    "m99A06SelfConvolution"
+   ],
+   "grade": "faithful",
+   "grader": "claude-14 outside grader (read-only Claude subagent, 2026-10-13)",
+   "evidence": "holes/labs/statement-registry/lemma-round-1-grades.md",
+   "prelim_defect": null,
+   "rev": "53eeb619a",
+   "approved_at": "2026-10-13T05:20:21Z"
+  },
   "m99J06": {
    "decls": [
     "apm_m99j06"

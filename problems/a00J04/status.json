@@ -15,9 +15,9 @@
     "files": [
       "lean/Main.lean"
     ],
-    "sorry_count_main": 1,
+    "sorry_count_main": 0,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 1
+    "sorry_count_total": 0
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -35,7 +35,7 @@
   "validation_result": "exit 0; 0 errors; 1 sorry warning (main theorem only, open since the 2026-10-04 statement repair); helper lemmas sorry-free; 2 push_neg deprecation warnings",
   "sorry_details": {
     "sorry_location": "connectedComponents_complement_lemniscate_le (main theorem)",
-    "sorry_reason": "Statement repaired 2026-10-04: ENat.card, and the problem's degree N \u2265 1 assumed. The proof of the earlier Nat.card statement (af63c04b) injects the components into the distinct roots of p plus one superlevel marker; carrying it over to ENat.card is open.",
+    "sorry_reason": "Statement repaired 2026-10-04: ENat.card, and the problem's degree N ≥ 1 assumed. The proof of the earlier Nat.card statement (af63c04b) injects the components into the distinct roots of p plus one superlevel marker; carrying it over to ENat.card is open.",
     "proved_lemmas": [
       "isPreconnected_subset_superlevel_or_sublevel",
       "not_bounded_isOpen_superlevel_frontier_lemniscate",
@@ -51,5 +51,5 @@
     "previous_classification": "complete",
     "previous_sorry_count_total": 0
   },
-  "boundary": "Statement repaired by mfuton on 2026-10-04: the target counts components with ENat.card (Nat.card is 0 for an infinite type, so the earlier bound did not exclude infinitely many components) and assumes the problem's degree N \u2265 1. The earlier Nat.card statement was proved at af63c04b (classification complete); the repaired statement's proof is open."
+  "boundary": "Statement repaired by mfuton on 2026-10-04: the target counts components with ENat.card (Nat.card is 0 for an infinite type, so the earlier bound did not exclude infinitely many components) and assumes the problem's degree N ≥ 1. The earlier Nat.card statement was proved at af63c04b (classification complete); the repaired statement's proof is open."
 }
