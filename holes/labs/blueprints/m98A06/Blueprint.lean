@@ -1084,6 +1084,98 @@ lemma apm_m98A06_wirtinger_aux_core_aux_picone_limit_aux_iff_aux_rigidity_aux_po
   rw [Measure.restrict_congr_set Ioo_ae_eq_Ioc] at hm
   exact hm
 
+lemma apm_m98A06_wirtinger_aux_core_aux_picone_limit_aux_iff_aux_rigidity_aux_pointwise_aux_integrable_aux_bound_aux_uniform_aux_deriv_bound
+    (L : ℝ) (hL : 0 < L) (η : ℝ → ℝ)
+    (hη : apm_m98a06_Admissible L 0 0 η) :
+    ∃ M : ℝ, 0 ≤ M ∧ ∀ x ∈ Icc (0 : ℝ) L,
+      ‖derivWithin η (Icc 0 L) x‖ ≤ M := by
+  have hd : ContinuousOn (derivWithin η (Icc 0 L)) (Icc 0 L) :=
+    hη.1.continuousOn_derivWithin (uniqueDiffOn_Icc hL) (by norm_num)
+  obtain ⟨C, hC⟩ := isCompact_Icc.exists_bound_of_continuousOn hd
+  refine ⟨max C 0, le_max_right _ _, fun x hx => ?_⟩
+  exact (hC x hx).trans (le_max_left _ _)
+
+lemma apm_m98A06_wirtinger_aux_core_aux_picone_limit_aux_iff_aux_rigidity_aux_pointwise_aux_integrable_aux_bound_aux_uniform_aux_endpoint
+    (L : ℝ) (hL : 0 < L) (η : ℝ → ℝ)
+    (hη : apm_m98a06_Admissible L 0 0 η)
+    (M : ℝ) (hM : 0 ≤ M)
+    (hd : ∀ x ∈ Icc (0 : ℝ) L, ‖derivWithin η (Icc 0 L) x‖ ≤ M) :
+    ∃ C : ℝ, ∀ x ∈ Ioo (0 : ℝ) L,
+      ‖(derivWithin η (Icc 0 L) x -
+        η x * ((Real.pi / L) * Real.cos (Real.pi * x / L)) /
+          Real.sin (Real.pi * x / L)) ^ 2‖ ≤ C := by
+  refine ⟨(M * (1 + Real.pi / 2)) ^ 2, fun x hx => ?_⟩
+  have hxI : x ∈ Icc (0 : ℝ) L := ⟨hx.1.le, hx.2.le⟩
+  have hx0 : 0 < x := hx.1
+  have hder : ∀ t ∈ Icc (0 : ℝ) L, HasDerivWithinAt η (derivWithin η (Icc 0 L) t) (Icc 0 L) t :=
+    fun t ht => (hη.1.differentiableOn one_ne_zero t ht).hasDerivWithinAt
+  have hmvt := fun a b (ha : a ∈ Icc (0 : ℝ) L) (hb : b ∈ Icc (0 : ℝ) L) =>
+    (convex_Icc (0 : ℝ) L).norm_image_sub_le_of_norm_hasDerivWithin_le hder hd ha hb
+  have h0 : (0 : ℝ) ∈ Icc (0 : ℝ) L := ⟨le_rfl, hL.le⟩
+  have hLm : L ∈ Icc (0 : ℝ) L := ⟨hL.le, le_rfl⟩
+  have hleft : |η x| ≤ M * x := by
+    have := hmvt 0 x h0 hxI
+    rw [hη.2.1, sub_zero, Real.norm_eq_abs, Real.norm_eq_abs, sub_zero, abs_of_pos hx.1] at this
+    exact this
+  have hright : |η x| ≤ M * (L - x) := by
+    have := hmvt x L hxI hLm
+    rw [hη.2.2, zero_sub, norm_neg, Real.norm_eq_abs, Real.norm_eq_abs,
+      abs_of_pos (sub_pos.2 hx.2)] at this
+    exact this
+  have hsinpos : 0 < Real.sin (Real.pi * x / L) := by
+    apply Real.sin_pos_of_pos_of_lt_pi
+    · positivity
+    · rw [div_lt_iff₀ hL]; nlinarith [Real.pi_pos, hx.2]
+  have hkey : |η x| ≤ (M * L / 2) * Real.sin (Real.pi * x / L) := by
+    rcases le_total x (L / 2) with hxh | hxh
+    · have hj := Real.mul_le_sin (x := Real.pi * x / L) (by positivity)
+        (by rw [div_le_iff₀ hL]; nlinarith [Real.pi_pos])
+      have : 2 / Real.pi * (Real.pi * x / L) = 2 * x / L := by
+        field_simp
+      rw [this] at hj
+      calc |η x| ≤ M * x := hleft
+        _ = (M * L / 2) * (2 * x / L) := by field_simp
+        _ ≤ (M * L / 2) * Real.sin (Real.pi * x / L) :=
+            mul_le_mul_of_nonneg_left hj (by positivity)
+    · have hsym : Real.sin (Real.pi * x / L) = Real.sin (Real.pi * (L - x) / L) := by
+        rw [← Real.sin_pi_sub]; congr 1; field_simp
+      have hj := Real.mul_le_sin (x := Real.pi * (L - x) / L)
+        (by have := sub_pos.2 hx.2; positivity)
+        (by rw [div_le_iff₀ hL]; nlinarith [Real.pi_pos])
+      have : 2 / Real.pi * (Real.pi * (L - x) / L) = 2 * (L - x) / L := by
+        field_simp
+      rw [this, ← hsym] at hj
+      calc |η x| ≤ M * (L - x) := hright
+        _ = (M * L / 2) * (2 * (L - x) / L) := by field_simp
+        _ ≤ (M * L / 2) * Real.sin (Real.pi * x / L) :=
+            mul_le_mul_of_nonneg_left hj (by positivity)
+  have hquot : |η x / Real.sin (Real.pi * x / L)| ≤ M * L / 2 := by
+    rw [abs_div, abs_of_pos hsinpos, div_le_iff₀ hsinpos]
+    exact hkey
+  have hdx : |derivWithin η (Icc 0 L) x| ≤ M := by
+    have := hd x hxI; rwa [Real.norm_eq_abs] at this
+  have hgap : |derivWithin η (Icc 0 L) x -
+      η x * ((Real.pi / L) * Real.cos (Real.pi * x / L)) / Real.sin (Real.pi * x / L)| ≤
+      M * (1 + Real.pi / 2) := by
+    have hre : η x * ((Real.pi / L) * Real.cos (Real.pi * x / L)) / Real.sin (Real.pi * x / L) =
+        (η x / Real.sin (Real.pi * x / L)) * ((Real.pi / L) * Real.cos (Real.pi * x / L)) := by
+      ring
+    rw [hre]
+    calc _ ≤ |derivWithin η (Icc 0 L) x| +
+          |(η x / Real.sin (Real.pi * x / L)) * ((Real.pi / L) * Real.cos (Real.pi * x / L))| :=
+          abs_sub _ _
+      _ ≤ M + (M * L / 2) * (Real.pi / L) := by
+          gcongr
+          rw [abs_mul]
+          apply mul_le_mul hquot _ (abs_nonneg _) (by positivity)
+          rw [abs_mul, abs_of_pos (div_pos Real.pi_pos hL)]
+          calc Real.pi / L * |Real.cos (Real.pi * x / L)| ≤ Real.pi / L * 1 :=
+                mul_le_mul_of_nonneg_left (Real.abs_cos_le_one _) (by positivity)
+            _ = Real.pi / L := mul_one _
+      _ = M * (1 + Real.pi / 2) := by field_simp
+  rw [Real.norm_eq_abs, abs_pow]
+  exact pow_le_pow_left₀ (abs_nonneg _) hgap 2
+
 lemma apm_m98A06_wirtinger_aux_core_aux_picone_limit_aux_iff_aux_rigidity_aux_pointwise_aux_integrable_aux_bound_aux_uniform
     (L : ℝ) (hL : 0 < L) (η : ℝ → ℝ)
     (hη : apm_m98a06_Admissible L 0 0 η) :
@@ -1091,7 +1183,20 @@ lemma apm_m98A06_wirtinger_aux_core_aux_picone_limit_aux_iff_aux_rigidity_aux_po
       ‖(derivWithin η (Icc 0 L) x -
         η x * ((Real.pi / L) * Real.cos (Real.pi * x / L)) /
           Real.sin (Real.pi * x / L)) ^ 2‖ ≤ C := by
-  sorry
+  obtain ⟨M, hM, hd⟩ :=
+    apm_m98A06_wirtinger_aux_core_aux_picone_limit_aux_iff_aux_rigidity_aux_pointwise_aux_integrable_aux_bound_aux_uniform_aux_deriv_bound
+      L hL η hη
+  obtain ⟨C, hC⟩ :=
+    apm_m98A06_wirtinger_aux_core_aux_picone_limit_aux_iff_aux_rigidity_aux_pointwise_aux_integrable_aux_bound_aux_uniform_aux_endpoint
+      L hL η hη M hM hd
+  refine ⟨C, ?_⟩
+  filter_upwards [ae_restrict_of_ae
+    ((countable_singleton L).ae_notMem (volume : Measure ℝ)),
+    ae_restrict_mem measurableSet_Ioc]
+    with x hxL hxI
+  have hx : x ∈ Ioo (0 : ℝ) L :=
+    ⟨hxI.1, lt_of_le_of_ne hxI.2 (by simpa using hxL)⟩
+  exact hC x hx
 
 lemma apm_m98A06_wirtinger_aux_core_aux_picone_limit_aux_iff_aux_rigidity_aux_pointwise_aux_integrable_aux_bound
     (L : ℝ) (hL : 0 < L) (η : ℝ → ℝ)
