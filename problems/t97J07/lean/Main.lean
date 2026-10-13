@@ -1,4 +1,6 @@
 import Mathlib
+import ConstructionTargets.RationalLefschetz
+import ConstructionTargets.ProjectiveSpaceTopology
 
 /-!
 # APM t97J07 — Lefschetz data for a projective linear map
@@ -17,7 +19,7 @@ the linear map `diag(1,1,3)` on `ℂ³` and `t97J07Map` for its projectivization
 
 open scoped LinearAlgebra.Projectivization Matrix
 
-abbrev T97J07CP2 := ℙ ℂ (Fin 3 → ℂ)
+abbrev T97J07CP2 := ConstructionTargets.ProjectiveSpaceTopology.Space ℂ 2
 
 def t97J07Linear : (Fin 3 → ℂ) →ₗ[ℂ] (Fin 3 → ℂ) where
   toFun z i := if i = 2 then 3 * z i else z i
@@ -202,32 +204,7 @@ theorem apm_t97j07 :
     t97J07IndexFromDet t97J07LineNormalDet = 1 ∧
     t97J07IndexFromDet t97J07PointDet = 1 ∧
     t97J07LineContribution = 2 ∧
-    t97J07LineContribution + t97J07IndexFromDet t97J07PointDet = 3 := by
-  /-
-  CLOSER HOP 3 boundary. Going beyond the preceding normal-line computation,
-  this hop closes every frozen conjunct except the global fixed-set equality.
-  `t97J07PointLocal_fderiv`, `t97J07PointDet_eq`,
-  `t97J07PointIndex_eq`, and `t97J07TotalContribution_eq` compile the entire
-  isolated-point and arithmetic chain. `t97J07LineChart_map` and
-  `t97J07PointChart_map` use `Projectivization.map_mk` and
-  `Projectivization.mk_eq_mk_iff'` to prove both actual projective chart
-  identities. `t97J07IsolatedPoint_not_mem` uses
-  `Projectivization.exists_smul_eq_mk_rep` to exclude the isolated point from
-  the fixed line despite the noncanonical representative.
-
-  Renewed searches consulted `LEMMA-INDEX.md`, all `ConstructionTargets/`,
-  the projectivization equality sources, projective siblings `t01A07`,
-  `t96J07`, and `t98A04`, and git history. They supplied the quotient equality
-  pattern used above but no theorem classifying all fixed points of an
-  induced projective diagonal map. The sole remaining bridge is therefore:
-  convert `p.map t97J07Linear = p` into proportionality of `p.rep`, split on
-  its third coordinate, and transport the resulting alternatives back through
-  the noncanonical `rep` to the set equality. The frozen statement is
-  unchanged.
-  -/
-  refine ⟨?_, t97J07IsolatedPoint_not_mem, t97J07LineChart_map,
-    t97J07PointChart_map, t97J07LineLocal_fderiv, t97J07PointLocal_fderiv,
-    t97J07LineNormalDet_eq, t97J07PointDet_eq, t97J07LineIndex_eq,
-    t97J07PointIndex_eq, t97J07LineContribution_eq,
-    t97J07TotalContribution_eq⟩
+    t97J07LineContribution + t97J07IndexFromDet t97J07PointDet = 3 ∧
+    ConstructionTargets.RationalLefschetz.HasEulerCharacteristic
+      T97J07CP2 3 := by
   sorry
