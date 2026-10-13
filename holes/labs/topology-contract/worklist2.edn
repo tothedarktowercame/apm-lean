@@ -87776,6 +87776,18 @@
     [{:cmd "initial compile",
       :exit 1,
       :correction "moved theorem after completed witness proof"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791925754340-10513-632d381a",
+     :commands
+     ["scope/SHA256 checks at d59e0345d"
+      "recorded blob | lake env lean /dev/stdin"
+      "comment-stripped placeholder scan (0)"
+      "#print axioms witness theorem"
+      "statement-registry.py check (166/0)"],
+     :finding
+     "Valid program STOP with new compiled progress beyond history commit 02f7d5989. The theorem constructs nonzero exclusive points (r,I*r) and (r,-I*r) in every open neighborhood of zero, with branch orientations correct. Exact scope/hash match; placeholders 0; only standard axioms. Remaining milestone: chart transport and punctured-plane contradiction."},
     :commit "ccb3fad28",
     :changed-paths ["ConstructionTargets/t94A08Closure.lean"],
     :fixture
@@ -87784,7 +87796,7 @@
      "4fb98066d0282a77a949012c462e6a00d3b008ff7d5d32f5d900e44377f2977a"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t94A08/lean/Main.lean"
     "problems/t94A08/status.json"
@@ -87802,7 +87814,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t94A08Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked explicit nonzero witnesses on both affine branches inside every open neighborhood of the crossing.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked non-preconnectedness of every open neighborhood intersected with the punctured affine cross.",
    :id :program-2026-10-13-close-t94a08,
    :kind :final-adapter,
    :campaign-priority 30,
@@ -87850,7 +87862,11 @@
     {:job 1,
      :commit "d59e0345d",
      :reason
-     "Banked explicit nonzero witnesses on both affine branches inside every open neighborhood of the crossing."}]}
+     "Banked explicit nonzero witnesses on both affine branches inside every open neighborhood of the crossing."}
+    {:job 2,
+     :commit "ccb3fad28",
+     :reason
+     "Banked non-preconnectedness of every open neighborhood intersected with the punctured affine cross."}]}
   {:consumer :t97A01,
    :stop-count 1,
    :evidence
@@ -88431,7 +88447,7 @@
    :other-consumers []}
   {:consumer :t94A08,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -88445,7 +88461,9 @@
     :type
     "open V containing zero implies not IsPreconnected (V intersect puncturedAffineCross)",
     :area "projective-affine-chart-homeomorph",
-    :proved-in :program-2026-10-13-close-t94a08},
+    :proved-in :program-2026-10-13-close-t94a08,
+    :banked-by :program-2026-10-13-close-t94a08,
+    :banked-commit "ccb3fad28"},
    :id
    :lemma-apm-t94a08-open-inter-puncturedaffinecross-not-ispreconnected,
    :kind :lemma,
