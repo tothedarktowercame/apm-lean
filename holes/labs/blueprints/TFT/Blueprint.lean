@@ -41,7 +41,7 @@ def tftTranslate (x : E) (ψ : TFT E F) : TFT E F where
 
 lemma tft_directional_contDiff (v : E) (ψ : TFT E F) :
     ContDiff ℝ ∞ (fun y => fderiv ℝ (ψ : E → F) y v) := by
-  sorry
+  exact (contDiff_infty_iff_fderiv.mp ψ.contDiff).2.clm_apply contDiff_const
 
 lemma tft_directional_hasCompactSupport (v : E) (ψ : TFT E F) :
     HasCompactSupport (fun y => fderiv ℝ (ψ : E → F) y v) := by
