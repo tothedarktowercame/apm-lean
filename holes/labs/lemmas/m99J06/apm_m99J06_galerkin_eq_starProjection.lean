@@ -738,7 +738,11 @@ theorem apm_m99J06_galerkin_eq_starProjection
     (u : H) (hu : apm_m99J06_weakSolution M f u)
     (uV : V) (huV : apm_m99J06_galerkinEquation M f V uV) :
     (uV : H) = V.starProjection u := by
-  sorry
+  symm
+  apply Submodule.eq_starProjection_of_mem_of_inner_eq_zero uV.property
+  intro v hv
+  rw [inner_sub_left, sub_eq_zero]
+  exact (hu v).trans (huV ⟨v, hv⟩).symm
 -- END SEAT AREA
 
 theorem apm_m99J06_starProjection_convergence

@@ -47,7 +47,9 @@ DECL_START = re.compile(
     r"(theorem|lemma|def|abbrev|structure|class|inductive|opaque|axiom|instance|example)\b\s*"
     r"([^\s:({\[]*)")
 BLOCK_END = re.compile(r"(?m)^(?:namespace|end|section|open|variable|set_option|#)\b")
-OMEGA = re.compile(r"\b(?:IsManifold|ContMDiff\w*|ContDiff\w*|IsLocalDiffeomorph\w*|MDifferentiable\w*|Diffeomorph)\b[^\n]*?\s⊤(?=[\s)\]])")
+# The gap may not cross a connective or binder: m98A04's `ContDiff ℝ ∞ h ∧ ∀ … Distribution
+# (⊤ : Opens …) ℝ ⊤` was flagged on 2026-10-13 by the later test-function order (⊤ : ℕ∞ = C^∞).
+OMEGA = re.compile(r"\b(?:IsManifold|ContMDiff\w*|ContDiff\w*|IsLocalDiffeomorph\w*|MDifferentiable\w*|Diffeomorph)\b[^\n∧∨→↔,∀∃]*?\s⊤(?=[\s)\]])")
 IDENT = re.compile(r"[A-Za-z_Ͱ-Ͽἀ-῿][A-Za-z0-9_'.Ͱ-Ͽἀ-῿]*")
 
 

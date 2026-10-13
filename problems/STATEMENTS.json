@@ -148,6 +148,23 @@
    "rev": "0c422bb1",
    "approved_at": "2026-09-30T03:53:12Z"
   },
+  "m98A04": {
+   "decls": [
+    "apm_m98a04"
+   ],
+   "sha256": "0dcf81296af4e6cc2e0a2df558eb9fbc311acaee1cbdb31c5612fe87df2b9961",
+   "defs": [
+    "apm_m98a04_IsConvolution",
+    "apm_m98a04_IsDistributionalPartial",
+    "apm_m98a04_partialList"
+   ],
+   "grade": "faithful",
+   "grader": "read-only Claude subagent (claude-14 dispatch), 2026-10-13",
+   "evidence": "holes/labs/statement-registry/grading-batch-3.md",
+   "prelim_defect": null,
+   "rev": "d823e3f5e",
+   "approved_at": "2026-10-13T08:02:28Z"
+  },
   "m98J02": {
    "decls": [
     "apm_m98j02"

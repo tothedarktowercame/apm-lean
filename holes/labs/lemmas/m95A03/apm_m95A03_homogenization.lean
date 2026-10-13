@@ -170,6 +170,57 @@ theorem apm_m95A03_isMinOn_of_solves
   rw [hexpand, hcross, mul_zero, add_zero]
   exact le_add_of_nonneg_right hRint
 
+lemma apm_m95A03_solves_of_isMinOn_aux_residual_continuous
+    (p q f u : ℝ → ℝ) (hp : ContDiff ℝ 1 p)
+    (hq : Continuous q) (hf : Continuous f) (hu2 : ContDiff ℝ 2 u) :
+    Continuous (fun t =>
+      deriv (fun x => p x * deriv u x) t - q t * u t - f t) := by
+  have hdu : ContDiff ℝ 1 (deriv u) := hu2.deriv'
+  have hg : ContDiff ℝ 1 (fun x => p x * deriv u x) := hp.mul hdu
+  have hgd : ContDiff ℝ 0 (deriv (fun x => p x * deriv u x)) := hg.deriv'
+  exact (hgd.continuous.sub (hq.mul hu2.continuous)).sub hf
+
+lemma apm_m95A03_solves_of_isMinOn_aux_perturb_admissible
+    (a b α β s : ℝ) (u η : ℝ → ℝ)
+    (hu : ContDiff ℝ 1 u) (hua : u a = α) (hub : u b = β)
+    (hη : ContDiff ℝ 1 η) (hηa : η a = 0) (hηb : η b = 0) :
+    (fun x => u x + s * η x) ∈ apm_m95A03_admissible a b α β := by
+  refine ⟨hu.add (contDiff_const.mul hη), ?_, ?_⟩
+  · simp [hua, hηa]
+  · simp [hub, hηb]
+
+/-- First variation: minimality against `u + s η` for both signs of `s` kills the
+linear term of the quadratic `s ↦ energy (u + s η)`. -/
+lemma apm_m95A03_solves_of_isMinOn_aux_first_variation
+    (a b α β : ℝ) (hab : a < b)
+    (p q f u : ℝ → ℝ) (hp : ContDiff ℝ 1 p)
+    (hq : Continuous q) (hf : Continuous f)
+    (hu2 : ContDiff ℝ 2 u) (hua : u a = α) (hub : u b = β)
+    (hmin : IsMinOn (apm_m95A03_energy a b p q f)
+      (apm_m95A03_admissible a b α β) u)
+    (η : ℝ → ℝ) (hη : ContDiff ℝ 1 η) (hηa : η a = 0) (hηb : η b = 0) :
+    (∫ t in a..b, p t * deriv u t * deriv η t + q t * u t * η t + f t * η t) = 0 := by
+  sorry
+
+/-- Integration by parts of the weak form against a variation vanishing at both ends. -/
+lemma apm_m95A03_solves_of_isMinOn_aux_ibp
+    (a b : ℝ) (hab : a < b)
+    (p q f u : ℝ → ℝ) (hp : ContDiff ℝ 1 p)
+    (hq : Continuous q) (hf : Continuous f) (hu2 : ContDiff ℝ 2 u)
+    (η : ℝ → ℝ) (hη : ContDiff ℝ 1 η) (hηa : η a = 0) (hηb : η b = 0) :
+    (∫ t in a..b, p t * deriv u t * deriv η t + q t * u t * η t + f t * η t) =
+      -∫ t in a..b, (deriv (fun x => p x * deriv u x) t - q t * u t - f t) * η t := by
+  sorry
+
+/-- Fundamental lemma of the calculus of variations on `[a, b]`, for a continuous
+function tested against `C¹` variations vanishing at both ends. -/
+lemma apm_m95A03_solves_of_isMinOn_aux_fundamental
+    (a b : ℝ) (hab : a < b) (R : ℝ → ℝ) (hR : Continuous R)
+    (h : ∀ η : ℝ → ℝ, ContDiff ℝ 1 η → η a = 0 → η b = 0 →
+      (∫ t in a..b, R t * η t) = 0) :
+    ∀ t ∈ Set.Icc a b, R t = 0 := by
+  sorry
+
 theorem apm_m95A03_solves_of_isMinOn
     (a b α β p₀ : ℝ) (hab : a < b) (hp₀ : 0 < p₀)
     (p q f u : ℝ → ℝ) (hp : ContDiff ℝ 1 p)
@@ -180,16 +231,86 @@ theorem apm_m95A03_solves_of_isMinOn
     (hmin : IsMinOn (apm_m95A03_energy a b p q f)
       (apm_m95A03_admissible a b α β) u) :
     apm_m95A03_solves a b α β p q f u := by
-  sorry
+  refine ⟨hu2, hua, hub, fun t ht => ?_⟩
+  have hR := apm_m95A03_solves_of_isMinOn_aux_residual_continuous p q f u hp hq hf hu2
+  have hzero := apm_m95A03_solves_of_isMinOn_aux_fundamental a b hab _ hR (fun η hη hηa hηb => by
+    have h1 := apm_m95A03_solves_of_isMinOn_aux_first_variation a b α β hab p q f u hp hq hf hu2 hua hub hmin
+      η hη hηa hηb
+    rw [apm_m95A03_solves_of_isMinOn_aux_ibp a b hab p q f u hp hq hf hu2 η hη hηa hηb, neg_eq_zero] at h1
+    exact h1) t ht
+  linarith
 
 -- BEGIN SEAT AREA
 theorem apm_m95A03_homogenization
-    (a b α β : ℝ) (hab : a < b) (p q f u : ℝ → ℝ) :
+    (a b α β : ℝ) (hab : a < b) (p q f u : ℝ → ℝ) (hp : ContDiff ℝ 1 p) :
     let w := apm_m95A03_boundaryLift a b α β
     apm_m95A03_solves a b α β p q f u ↔
       apm_m95A03_solves a b 0 0 p q
         (apm_m95A03_modifiedRHS p q f w) (u - w) := by
-  sorry
+  dsimp only
+  let w := apm_m95A03_boundaryLift a b α β
+  have hab0 : b - a ≠ 0 := sub_ne_zero.mpr hab.ne'
+  have hw : ContDiff ℝ ⊤ w := by
+    change ContDiff ℝ ⊤ (fun t : ℝ => α + (β - α) * ((t - a) / (b - a)))
+    fun_prop
+  have hwa : w a = α := by
+    simp [w, apm_m95A03_boundaryLift, hab0]
+  have hwb : w b = β := by
+    simp [w, apm_m95A03_boundaryLift, hab0]
+  have hw_succ : ContDiff ℝ (1 + 1) w := hw.of_le le_top
+  have hdw : ContDiff ℝ 1 (deriv w) := hw_succ.deriv'
+  constructor
+  · rintro ⟨hu, hua, hub, heq⟩
+    have hu1 : ContDiff ℝ 1 u := hu.of_le (by norm_num)
+    have hv : ContDiff ℝ 2 (u - w) := hu.sub (hw.of_le le_top)
+    refine ⟨hv, ?_, ?_, ?_⟩
+    · change u a - w a = 0
+      rw [hua, hwa]
+      ring
+    · change u b - w b = 0
+      rw [hub, hwb]
+      ring
+    · intro t ht
+      have hdu (x : ℝ) : deriv (u - w) x = deriv u x - deriv w x := by
+        exact deriv_sub (hu1.differentiable (by norm_num) x) (hw.differentiable (by simp) x)
+      have hflux : (fun x => p x * deriv (u - w) x) =
+          (fun x => p x * deriv u x) - (fun x => p x * deriv w x) := by
+        funext x
+        simp [hdu x, mul_sub]
+      have hpu : Differentiable ℝ (fun x => p x * deriv u x) :=
+        (hp.mul hu.deriv').differentiable (by norm_num)
+      have hpw : Differentiable ℝ (fun x => p x * deriv w x) :=
+        (hp.mul hdw).differentiable (by norm_num)
+      rw [hflux, deriv_sub (hpu t) (hpw t)]
+      simp only [Pi.sub_apply, apm_m95A03_modifiedRHS]
+      linarith [heq t ht]
+  · rintro ⟨hv, hva, hvb, heq⟩
+    have hw2 : ContDiff ℝ 2 w := hw.of_le le_top
+    have hu : ContDiff ℝ 2 u := by
+      have huv : u = (u - w) + w := by ext x; simp
+      rw [huv]
+      exact hv.add hw2
+    refine ⟨hu, ?_, ?_, ?_⟩
+    · change u a - w a = 0 at hva
+      linarith
+    · change u b - w b = 0 at hvb
+      linarith
+    · intro t ht
+      have hu1 : ContDiff ℝ 1 u := hu.of_le (by norm_num)
+      have hdu (x : ℝ) : deriv (u - w) x = deriv u x - deriv w x := by
+        exact deriv_sub (hu1.differentiable (by norm_num) x) (hw.differentiable (by simp) x)
+      have hflux : (fun x => p x * deriv (u - w) x) =
+          (fun x => p x * deriv u x) - (fun x => p x * deriv w x) := by
+        funext x
+        simp [hdu x, mul_sub]
+      have hpu : Differentiable ℝ (fun x => p x * deriv u x) :=
+        (hp.mul hu.deriv').differentiable (by norm_num)
+      have hpw : Differentiable ℝ (fun x => p x * deriv w x) :=
+        (hp.mul hdw).differentiable (by norm_num)
+      have h := heq t ht
+      rw [hflux, deriv_sub (hpu t) (hpw t)] at h
+      simp only [Pi.sub_apply, apm_m95A03_modifiedRHS] at h
+      linarith
 -- END SEAT AREA
 
 theorem apm_m95A03_exists_homogeneous_minimizer
@@ -253,7 +374,7 @@ theorem apm_m95a03
     · exact apm_m95A03_solves_of_isMinOn a b α β p₀ hab hp₀ p q f u
         hp hq hf hp_lower hq_nonneg hu2 hua hub
   constructor
-  · exact apm_m95A03_homogenization a b α β hab p q f
+  · exact fun u => apm_m95A03_homogenization a b α β hab p q f u hp
   · obtain ⟨u, hu2, huadm, humin⟩ :=
       apm_m95A03_exists_homogeneous_minimizer a b p₀ hab hp₀ p q f
         hp hq hf hp_lower hq_nonneg

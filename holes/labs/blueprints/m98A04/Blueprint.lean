@@ -1,4 +1,5 @@
 import Mathlib
+import ConstructionTargets.TestFunctionTranslation
 
 /-!
 # APM m98A04
@@ -610,10 +611,119 @@ fixed compact-support stage near its base point. -/
 theorem apm_m98a04_translateReflectStageLocal_continuousAt {n : ℕ}
     (φ : apm_m98a04_TF n) (x₀ : EuclideanSpace ℝ (Fin n)) :
     ContinuousAt (apm_m98a04_translateReflectStageLocal φ x₀) x₀ := by
-  sorry
+  let T := ContinuousLinearMap.pi
+    (ContDiffMapSupportedIn.structureMapCLM ℝ (⊤ : ℕ∞) :
+      ∀ i : ℕ, ContDiffMapSupportedIn (EuclideanSpace ℝ (Fin n)) ℝ ⊤
+        (apm_m98a04_translationCompact φ x₀) →L[ℝ]
+          BoundedContinuousFunction (EuclideanSpace ℝ (Fin n))
+            ((EuclideanSpace ℝ (Fin n)) [×i]→L[ℝ] ℝ))
+  apply (ContDiffMapSupportedIn.isUniformEmbedding_pi_structureMapCLM ℝ).toIsUniformInducing.isInducing.continuousAt_iff.mpr
+  rw [continuousAt_pi]
+  intro i
+  let g : EuclideanSpace ℝ (Fin n) → ℝ := fun z => φ (-z)
+  let f := iteratedFDeriv ℝ i g
+  have hg : ContDiff ℝ (⊤ : ℕ∞) g :=
+    φ.contDiff.comp contDiff_neg
+  have hf : Continuous f :=
+    hg.continuous_iteratedFDeriv (by exact_mod_cast le_top)
+  have hgc : HasCompactSupport g := by
+    exact φ.hasCompactSupport.comp_homeomorph
+      (Homeomorph.neg (EuclideanSpace ℝ (Fin n)))
+  have hfc : HasCompactSupport f := hgc.iteratedFDeriv i
+  have hc : ContinuousAt (fun x : EuclideanSpace ℝ (Fin n) =>
+      ConstructionTargets.TestFunctionTranslation.tftBCFOfCompactSupport
+        (fun y => f (-x + y))
+        (hf.comp (continuous_const.add continuous_id))
+        (hfc.comp_homeomorph (Homeomorph.addLeft (-x)))) x₀ := by
+    have ht := (ConstructionTargets.TestFunctionTranslation.tft_translate_bcf_continuous
+      f hf hfc).continuousAt.comp
+      (continuousAt_neg (x := x₀))
+    simpa only [Function.comp_apply] using ht
+  apply hc.congr_of_eventuallyEq
+  filter_upwards [Metric.closedBall_mem_nhds x₀ zero_lt_one] with x hx
+  apply BoundedContinuousFunction.ext
+  intro y
+  change (ContDiffMapSupportedIn.structureMapCLM ℝ ⊤ i
+      (apm_m98a04_translateReflectStageLocal φ x₀ x)) y = _
+  rw [ContDiffMapSupportedIn.structureMapCLM_top_apply]
+  have heq : (apm_m98a04_translateReflectStageLocal φ x₀ x :
+      EuclideanSpace ℝ (Fin n) → ℝ) = fun z => g (-x + z) := by
+    funext z
+    simp [apm_m98a04_translateReflectStageLocal, hx, g,
+      sub_eq_add_neg, add_comm]
+  rw [heq, iteratedFDeriv_comp_add_left]
+  rfl
 
 /-- Shared topology fact 2: directional difference quotients of reflected
 translations converge in the same fixed compact-support stage. -/
+noncomputable def apm_m98a04_translateReflectStageLocal_difference_quotient_aux_reflect
+    {n : ℕ} (φ : apm_m98a04_TF n) : apm_m98a04_TF n :=
+  TestFunction.mk (fun y => φ (-y))
+    (φ.contDiff.comp contDiff_neg)
+    (φ.hasCompactSupport.comp_homeomorph (Homeomorph.neg _))
+    (by simp)
+
+lemma apm_m98a04_translateReflectStageLocal_difference_quotient_aux_translate
+    {n : ℕ} (φ : apm_m98a04_TF n)
+    (x : EuclideanSpace ℝ (Fin n)) :
+    ConstructionTargets.TestFunctionTranslation.tftTranslate (-x)
+        (apm_m98a04_translateReflectStageLocal_difference_quotient_aux_reflect φ) =
+      apm_m98a04_translateReflect φ x := by
+  apply TestFunction.toTestFunctionClass.coe_injective'
+  funext y
+  simp [ConstructionTargets.TestFunctionTranslation.tftTranslate,
+    apm_m98a04_translateReflectStageLocal_difference_quotient_aux_reflect]
+  congr 1
+  abel
+
+lemma apm_m98a04_translateReflectStageLocal_difference_quotient_aux_local_to_test
+    {n : ℕ} (φ : apm_m98a04_TF n) (x₀ x : EuclideanSpace ℝ (Fin n))
+    (hx : x ∈ Metric.closedBall x₀ (1 : ℝ)) :
+    apm_m98a04_translationStageToTest φ x₀
+        (apm_m98a04_translateReflectStageLocal φ x₀ x) =
+      apm_m98a04_translateReflect φ x := by
+  simp only [apm_m98a04_translateReflectStageLocal, hx, dite_true]
+  exact apm_m98a04_ofSupportedIn_translateReflectStage φ x₀ ⟨x, hx⟩
+
+/-- The limit: differentiating the reflected function in direction `-v` and translating by
+`-x₀` is the reflected translate of the directional derivative `∑ vᵢ ∂ᵢ φ`. -/
+lemma apm_m98a04_translateReflectStageLocal_difference_quotient_aux_limit_eq
+    {n : ℕ} (φ : apm_m98a04_TF n) (x₀ v : EuclideanSpace ℝ (Fin n)) :
+    ConstructionTargets.TestFunctionTranslation.tftTranslate (-x₀)
+        (ConstructionTargets.TestFunctionTranslation.tftDirectional (-v) (apm_m98a04_translateReflectStageLocal_difference_quotient_aux_reflect φ)) =
+      apm_m98a04_translateReflect (apm_m98a04_directionalTF v φ) x₀ := by
+  apply TestFunction.toTestFunctionClass.coe_injective'
+  funext y
+  simp only [ConstructionTargets.TestFunctionTranslation.tftTranslate_apply,
+    ConstructionTargets.TestFunctionTranslation.tftDirectional_apply,
+    apm_m98a04_translateReflect_apply]
+  have hr : ⇑(apm_m98a04_translateReflectStageLocal_difference_quotient_aux_reflect φ) = fun z => φ (-z) := rfl
+  rw [hr]
+  have h1 := (φ.contDiff.differentiable (by simp) (x₀ - y)).hasFDerivAt
+  have h1' : HasFDerivAt (⇑φ) (fderiv ℝ (⇑φ) (x₀ - y)) (-(-x₀ + y)) := by
+    rw [show -(-x₀ + y) = x₀ - y by abel]; exact h1
+  have key := h1'.comp (-x₀ + y) (hasFDerivAt_id (-x₀ + y)).neg
+  rw [show (fun z => φ (-z)) = (⇑φ ∘ Neg.neg) from rfl, key.fderiv]
+  simp only [ContinuousLinearMap.comp_apply, ContinuousLinearMap.neg_apply,
+    ContinuousLinearMap.id_apply, neg_neg]
+  have hv : v = ∑ i, v i • EuclideanSpace.single i (1 : ℝ) := by
+    conv_lhs => rw [← (EuclideanSpace.basisFun (Fin n) ℝ).sum_repr v]
+    simp
+  simp [apm_m98a04_directionalTF, apm_m98a04_partialListTF_apply, apm_m98a04_partialList]
+  have hcoe : ∀ (w : EuclideanSpace ℝ (Fin n)),
+      (∑ x, v x • apm_m98a04_partialListTF [x] φ : apm_m98a04_TF n) w =
+        ∑ x, v x * apm_m98a04_partialListTF [x] φ w := by
+    intro w
+    change (TestFunction.coeFnAddMonoidHom (⊤ : Opens (EuclideanSpace ℝ (Fin n))) ℝ ⊤
+      (∑ x, v x • apm_m98a04_partialListTF [x] φ)) w = _
+    rw [map_sum, Finset.sum_apply]
+    rfl
+  rw [hcoe]
+  simp only [apm_m98a04_partialListTF_apply, apm_m98a04_partialList]
+  conv_lhs => rw [hv]
+  rw [map_sum]
+  simp only [map_smul, smul_eq_mul]
+
 theorem apm_m98a04_translateReflectStageLocal_difference_quotient {n : ℕ}
     (φ : apm_m98a04_TF n) (x₀ v : EuclideanSpace ℝ (Fin n)) :
     Tendsto (fun h : ℝ => apm_m98a04_translationStageToTest φ x₀
@@ -622,10 +732,210 @@ theorem apm_m98a04_translateReflectStageLocal_difference_quotient {n : ℕ}
       (nhdsWithin (0 : ℝ) ({0} : Set ℝ)ᶜ)
       (nhds (apm_m98a04_translateReflect
         (apm_m98a04_directionalTF v φ) x₀)) := by
-  sorry
+  have hlim := ConstructionTargets.TestFunctionTranslation.tftTranslate_difference_quotient
+    (apm_m98a04_translateReflectStageLocal_difference_quotient_aux_reflect φ) (-x₀) (-v)
+  rw [apm_m98a04_translateReflectStageLocal_difference_quotient_aux_limit_eq] at hlim
+  refine hlim.congr' ?_
+  have hc : Tendsto (fun h : ℝ => x₀ + h • v) (nhdsWithin (0 : ℝ) ({0} : Set ℝ)ᶜ) (nhds x₀) := by
+    have : ContinuousAt (fun h : ℝ => x₀ + h • v) 0 := by fun_prop
+    simpa using this.tendsto.mono_left nhdsWithin_le_nhds
+  filter_upwards [hc.eventually (Metric.closedBall_mem_nhds x₀ zero_lt_one)] with h hh
+  rw [map_smul, map_sub, apm_m98a04_translateReflectStageLocal_difference_quotient_aux_local_to_test φ x₀ _ hh,
+    apm_m98a04_translateReflectStageLocal_difference_quotient_aux_local_to_test φ x₀ _ (Metric.mem_closedBall_self zero_le_one),
+    ← apm_m98a04_translateReflectStageLocal_difference_quotient_aux_translate, ← apm_m98a04_translateReflectStageLocal_difference_quotient_aux_translate]
+  congr 3
+  rw [neg_add, smul_neg]
 
 /-- Scalar derivative extraction from an explicitly supplied fixed-stage
 difference-quotient theorem. -/
+lemma apm_m98a04_translation_pairing_fderiv_of_stage_dq_aux_slope {n : ℕ}
+    (T : Distribution (⊤ : Opens (EuclideanSpace ℝ (Fin n))) ℝ ⊤)
+    (φ : apm_m98a04_TF n)
+    (hdq : ∀ (x v : EuclideanSpace ℝ (Fin n)),
+      Tendsto (fun h : ℝ => apm_m98a04_translationStageToTest φ x
+          (h⁻¹ • (apm_m98a04_translateReflectStageLocal φ x (x + h • v) -
+            apm_m98a04_translateReflectStageLocal φ x x)))
+        (nhdsWithin (0 : ℝ) ({0} : Set ℝ)ᶜ)
+        (nhds (apm_m98a04_translateReflect (apm_m98a04_directionalTF v φ) x)))
+    (i : Fin n) (x : EuclideanSpace ℝ (Fin n)) :
+    Tendsto (fun h : ℝ => h⁻¹ *
+        (T (apm_m98a04_translateReflect φ (x + h • EuclideanSpace.single i 1)) -
+          T (apm_m98a04_translateReflect φ x)))
+      (nhdsWithin (0 : ℝ) ({0} : Set ℝ)ᶜ)
+      (nhds (T (apm_m98a04_translateReflect
+        (apm_m98a04_partialListTF [i] φ) x))) := by
+  have ht := T.continuous.continuousAt.tendsto.comp
+    (hdq x (EuclideanSpace.single i 1))
+  change Tendsto (fun h : ℝ => T (apm_m98a04_translationStageToTest φ x
+      (h⁻¹ • (apm_m98a04_translateReflectStageLocal φ x
+        (x + h • EuclideanSpace.single i 1) -
+          apm_m98a04_translateReflectStageLocal φ x x)))) _ _ at ht
+  have hdir : apm_m98a04_directionalTF (EuclideanSpace.single i 1) φ =
+      apm_m98a04_partialListTF [i] φ := by
+    simp [apm_m98a04_directionalTF]
+  rw [hdir] at ht
+  refine ht.congr' ?_
+  have hc : Tendsto (fun h : ℝ => x + h • EuclideanSpace.single i 1)
+      (nhdsWithin (0 : ℝ) ({0} : Set ℝ)ᶜ) (nhds x) := by
+    have : ContinuousAt (fun h : ℝ => x + h • EuclideanSpace.single i 1) 0 := by fun_prop
+    simpa using this.tendsto.mono_left nhdsWithin_le_nhds
+  filter_upwards [hc.eventually (Metric.closedBall_mem_nhds x zero_lt_one)] with h hh
+  rw [map_smul, map_sub,
+    apm_m98a04_translateReflectStageLocal_difference_quotient_aux_local_to_test φ x _ hh,
+    apm_m98a04_translateReflectStageLocal_difference_quotient_aux_local_to_test φ x x
+      (Metric.mem_closedBall_self zero_le_one)]
+  simp [map_smul, map_sub, smul_eq_mul]
+
+/-- Continuity of a translated-reflected pairing, from the shared library. -/
+lemma apm_m98a04_translation_pairing_fderiv_of_stage_dq_aux_continuous {n : ℕ}
+    (T : Distribution (⊤ : Opens (EuclideanSpace ℝ (Fin n))) ℝ ⊤) (ψ : apm_m98a04_TF n) :
+    Continuous (fun x => T (apm_m98a04_translateReflect ψ x)) := by
+  have h : (fun x => apm_m98a04_translateReflect ψ x) = fun x =>
+      ConstructionTargets.TestFunctionTranslation.tftTranslate (-x) (apm_m98a04_translateReflectStageLocal_difference_quotient_aux_reflect ψ) :=
+    funext fun x => (apm_m98a04_translateReflectStageLocal_difference_quotient_aux_translate ψ x).symm
+  rw [show (fun x => T (apm_m98a04_translateReflect ψ x)) =
+      (fun y => T y) ∘ (fun x => apm_m98a04_translateReflect ψ x) from rfl, h]
+  exact T.continuous.comp
+    ((ConstructionTargets.TestFunctionTranslation.tftTranslate_continuous _).comp continuous_neg)
+
+/-- The `C¹` criterion on `ℝⁿ`: continuous coordinate slope limits give a Fréchet
+derivative (n-dimensional version of m98J02's two-dimensional
+`apm_m98J02_translated_pairing_calculus_of_facts_aux_hasFDerivAt`). -/
+lemma apm_m98a04_translation_pairing_fderiv_of_stage_dq_aux_hasFDerivAt_aux_line
+    {n : ℕ} (F : EuclideanSpace ℝ (Fin n) → ℝ)
+    (G : Fin n → EuclideanSpace ℝ (Fin n) → ℝ)
+    (hF : ∀ i x, Tendsto
+      (fun h : ℝ ↦ h⁻¹ * (F (x + h • EuclideanSpace.single i 1) - F x))
+      (nhdsWithin (0 : ℝ) ({0} : Set ℝ)ᶜ) (nhds (G i x)))
+    (i : Fin n) (z : EuclideanSpace ℝ (Fin n)) (t : ℝ) :
+    HasDerivAt (fun s : ℝ => F (z + s • EuclideanSpace.single i 1))
+      (G i (z + t • EuclideanSpace.single i 1)) t := by
+  rw [hasDerivAt_iff_tendsto_slope_zero]
+  convert hF i (z + t • EuclideanSpace.single i 1) using 1
+  funext s
+  congr 3
+  module
+
+lemma apm_m98a04_translation_pairing_fderiv_of_stage_dq_aux_hasFDerivAt_aux_segment
+    {n : ℕ} (F : EuclideanSpace ℝ (Fin n) → ℝ)
+    (G : Fin n → EuclideanSpace ℝ (Fin n) → ℝ)
+    (hF : ∀ i x, Tendsto
+      (fun h : ℝ ↦ h⁻¹ * (F (x + h • EuclideanSpace.single i 1) - F x))
+      (nhdsWithin (0 : ℝ) ({0} : Set ℝ)ᶜ) (nhds (G i x)))
+    (i : Fin n) (p : EuclideanSpace ℝ (Fin n)) (c ε t : ℝ)
+    (hε : ∀ s : ℝ, |s| ≤ |t| →
+      |G i (p + s • EuclideanSpace.single i 1) - c| ≤ ε) :
+    |F (p + t • EuclideanSpace.single i 1) - F p - c * t| ≤ ε * |t| := by
+  have hd : ∀ s ∈ Set.Icc (-|t|) |t|, HasDerivWithinAt
+      (fun s : ℝ => F (p + s • EuclideanSpace.single i 1) - c * s)
+      (G i (p + s • EuclideanSpace.single i 1) - c) (Set.Icc (-|t|) |t|) s := by
+    intro s _
+    have hs :=
+      (apm_m98a04_translation_pairing_fderiv_of_stage_dq_aux_hasFDerivAt_aux_line
+        F G hF i p s).sub ((hasDerivAt_id s).const_mul c)
+    simpa using hs.hasDerivWithinAt
+  have hb : ∀ s ∈ Set.Icc (-|t|) |t|,
+      ‖G i (p + s • EuclideanSpace.single i 1) - c‖ ≤ ε := by
+    intro s hs
+    rw [Real.norm_eq_abs]
+    exact hε s (abs_le.2 hs)
+  have key := (convex_Icc (-|t|) |t|).norm_image_sub_le_of_norm_hasDerivWithin_le
+    hd hb (x := 0) (y := t) (by constructor <;> simp)
+      (by constructor <;> [exact neg_abs_le t; exact le_abs_self t])
+  simp only [Real.norm_eq_abs, sub_zero, zero_smul, add_zero, mul_zero] at key
+  convert key using 2
+  ring
+
+lemma apm_m98a04_translation_pairing_fderiv_of_stage_dq_aux_hasFDerivAt_aux_apply
+    {n : ℕ} (G : Fin n → EuclideanSpace ℝ (Fin n) → ℝ)
+    (x h : EuclideanSpace ℝ (Fin n)) :
+    (∑ i, G i x • (EuclideanSpace.proj i :
+      EuclideanSpace ℝ (Fin n) →L[ℝ] ℝ)) h = ∑ i, G i x * h i := by
+  simp
+
+lemma apm_m98a04_translation_pairing_fderiv_of_stage_dq_aux_hasFDerivAt_aux_coord_le
+    {n : ℕ} (h : EuclideanSpace ℝ (Fin n)) (i : Fin n) :
+    |h i| ≤ ‖h‖ := by
+  simpa using PiLp.norm_apply_le h i
+
+lemma apm_m98a04_translation_pairing_fderiv_of_stage_dq_aux_hasFDerivAt {n : ℕ}
+    (F : EuclideanSpace ℝ (Fin n) → ℝ) (G : Fin n → EuclideanSpace ℝ (Fin n) → ℝ)
+    (hG : ∀ i, Continuous (G i))
+    (hF : ∀ i x, Tendsto (fun h : ℝ ↦ h⁻¹ * (F (x + h • EuclideanSpace.single i 1) - F x))
+      (nhdsWithin (0 : ℝ) ({0} : Set ℝ)ᶜ) (nhds (G i x)))
+    (x : EuclideanSpace ℝ (Fin n)) :
+    HasFDerivAt F (∑ i, G i x • (EuclideanSpace.proj i :
+      EuclideanSpace ℝ (Fin n) →L[ℝ] ℝ)) x := by
+  rw [hasFDerivAt_iff_isLittleO_nhds_zero, Asymptotics.isLittleO_iff]
+  intro ε' hε'
+  set e : Fin n → EuclideanSpace ℝ (Fin n) := fun j => EuclideanSpace.single j 1 with he
+  have hn1 : (0 : ℝ) < n + 1 := by positivity
+  set ε := ε' / (n + 1) with hεdef
+  have hε : 0 < ε := by positivity
+  have hev : ∀ᶠ y in nhds x, ∀ j, |G j y - G j x| ≤ ε := by
+    rw [Filter.eventually_all]
+    intro j
+    filter_upwards [(hG j).continuousAt.eventually (Metric.closedBall_mem_nhds (G j x) hε)]
+      with y hy
+    simpa [Metric.mem_closedBall, Real.dist_eq] using hy
+  obtain ⟨δ, hδ, hball⟩ := Metric.eventually_nhds_iff.1 hev
+  filter_upwards [Metric.ball_mem_nhds (0 : EuclideanSpace ℝ (Fin n))
+    (div_pos hδ hn1)] with h hh
+  rw [Metric.mem_ball, dist_zero_right, lt_div_iff₀ hn1] at hh
+  have hsum : ∑ j, |h j| ≤ n * ‖h‖ := by
+    calc ∑ j, |h j| ≤ ∑ _j : Fin n, ‖h‖ :=
+          Finset.sum_le_sum fun j _ => apm_m98a04_translation_pairing_fderiv_of_stage_dq_aux_hasFDerivAt_aux_coord_le h j
+      _ = n * ‖h‖ := by simp
+  have hsmall : ∑ j, |h j| < δ := by
+    have : (n : ℝ) * ‖h‖ < δ := by nlinarith [norm_nonneg h]
+    linarith
+  have hnorm_e : ∀ j, ‖e j‖ = 1 := fun j => by simp [he]
+  have key : ∀ S : Finset (Fin n),
+      |F (x + ∑ j ∈ S, h j • e j) - F x - ∑ j ∈ S, G j x * h j| ≤ ε * ∑ j ∈ S, |h j| := by
+    intro S
+    induction S using Finset.induction_on with
+    | empty => simp
+    | insert a S ha ih =>
+      rw [Finset.sum_insert ha, Finset.sum_insert ha, Finset.sum_insert ha]
+      set p := x + ∑ j ∈ S, h j • e j with hp
+      have hseg := apm_m98a04_translation_pairing_fderiv_of_stage_dq_aux_hasFDerivAt_aux_segment F G hF a p (G a x) ε (h a) (fun s hs => by
+        have hdist : dist (p + s • EuclideanSpace.single a 1) x < δ := by
+          rw [dist_eq_norm]
+          have h1 : p + s • EuclideanSpace.single a 1 - x =
+              ∑ j ∈ S, h j • e j + s • e a := by
+            simp only [hp, he]; abel
+          rw [h1]
+          calc ‖∑ j ∈ S, h j • e j + s • e a‖
+              ≤ ‖∑ j ∈ S, h j • e j‖ + ‖s • e a‖ := norm_add_le _ _
+            _ ≤ ∑ j ∈ S, ‖h j • e j‖ + ‖s • e a‖ := by gcongr; exact norm_sum_le _ _
+            _ = ∑ j ∈ S, |h j| + |s| := by
+                simp only [norm_smul, hnorm_e, mul_one, Real.norm_eq_abs]
+            _ ≤ ∑ j ∈ S, |h j| + |h a| := by gcongr
+            _ = ∑ j ∈ insert a S, |h j| := by rw [Finset.sum_insert ha, add_comm]
+            _ ≤ ∑ j, |h j| := Finset.sum_le_sum_of_subset_of_nonneg (Finset.subset_univ _)
+                  (fun _ _ _ => abs_nonneg _)
+            _ < δ := hsmall
+        exact hball hdist a)
+      have hx : x + (h a • e a + ∑ j ∈ S, h j • e j) = p + h a • EuclideanSpace.single a 1 := by
+        simp only [hp, he]; abel
+      rw [hx]
+      calc |F (p + h a • EuclideanSpace.single a 1) - F x - (G a x * h a + ∑ j ∈ S, G j x * h j)|
+          = |(F (p + h a • EuclideanSpace.single a 1) - F p - G a x * h a) +
+              (F p - F x - ∑ j ∈ S, G j x * h j)| := by ring_nf
+        _ ≤ ε * |h a| + ε * ∑ j ∈ S, |h j| := (abs_add_le _ _).trans (add_le_add hseg ih)
+        _ = ε * (|h a| + ∑ j ∈ S, |h j|) := by ring
+  have hrecon : ∑ j, h j • e j = h := by
+    conv_rhs => rw [← (EuclideanSpace.basisFun (Fin n) ℝ).sum_repr h]
+    simp [he]
+  have hfull := key Finset.univ
+  rw [hrecon] at hfull
+  rw [apm_m98a04_translation_pairing_fderiv_of_stage_dq_aux_hasFDerivAt_aux_apply, Real.norm_eq_abs]
+  calc |F (x + h) - F x - ∑ i, G i x * h i| ≤ ε * ∑ j, |h j| := hfull
+    _ ≤ ε * (n * ‖h‖) := mul_le_mul_of_nonneg_left hsum hε.le
+    _ ≤ ε' * ‖h‖ := by
+        rw [hεdef, div_mul_eq_mul_div, div_le_iff₀ hn1]
+        nlinarith [norm_nonneg h, hε'.le]
+
 theorem apm_m98a04_translation_pairing_fderiv_of_stage_dq {n : ℕ}
     (T : Distribution (⊤ : Opens (EuclideanSpace ℝ (Fin n))) ℝ ⊤)
     (φ : apm_m98a04_TF n)
@@ -641,10 +951,28 @@ theorem apm_m98a04_translation_pairing_fderiv_of_stage_dq {n : ℕ}
         (EuclideanSpace.single i 1) =
       T (apm_m98a04_translateReflect
         (apm_m98a04_partialListTF [i] φ) x) := by
-  sorry
+  have hd := apm_m98a04_translation_pairing_fderiv_of_stage_dq_aux_hasFDerivAt (fun z => T (apm_m98a04_translateReflect φ z))
+    (fun j z => T (apm_m98a04_translateReflect (apm_m98a04_partialListTF [j] φ) z))
+    (fun j => apm_m98a04_translation_pairing_fderiv_of_stage_dq_aux_continuous T _)
+    (fun j z => apm_m98a04_translation_pairing_fderiv_of_stage_dq_aux_slope T φ hdq j z) x
+  rw [hd.fderiv]
+  simp [EuclideanSpace.single_apply]
 
 /-- Smoothness extraction by induction on derivative order, from supplied
 fixed-stage continuity and difference-quotient facts for every test function. -/
+lemma apm_m98a04_translation_pairing_contDiff_of_stage_facts_aux_continuousAt {n : ℕ}
+    (T : Distribution (⊤ : Opens (EuclideanSpace ℝ (Fin n))) ℝ ⊤)
+    (ψ : apm_m98a04_TF n) (x : EuclideanSpace ℝ (Fin n))
+    (hcont : ContinuousAt (apm_m98a04_translateReflectStageLocal ψ x) x) :
+    ContinuousAt (fun z => T (apm_m98a04_translateReflect ψ z)) x := by
+  have hc : ContinuousAt (fun z => T (apm_m98a04_translationStageToTest ψ x
+      (apm_m98a04_translateReflectStageLocal ψ x z))) x :=
+    T.continuous.continuousAt.comp
+      ((apm_m98a04_translationStageToTest ψ x).continuous.continuousAt.comp hcont)
+  apply hc.congr_of_eventuallyEq
+  filter_upwards [Metric.closedBall_mem_nhds x zero_lt_one] with z hz
+  rw [apm_m98a04_translateReflectStageLocal_difference_quotient_aux_local_to_test ψ x z hz]
+
 theorem apm_m98a04_translation_pairing_contDiff_of_stage_facts {n : ℕ}
     (T : Distribution (⊤ : Opens (EuclideanSpace ℝ (Fin n))) ℝ ⊤)
     (φ : apm_m98a04_TF n)
@@ -658,7 +986,28 @@ theorem apm_m98a04_translation_pairing_contDiff_of_stage_facts {n : ℕ}
         (nhds (apm_m98a04_translateReflect
           (apm_m98a04_directionalTF v ψ) x))) :
     ContDiff ℝ ∞ (fun x => T (apm_m98a04_translateReflect φ x)) := by
-  sorry
+  have hF : ∀ ψ : apm_m98a04_TF n, ∀ x, HasFDerivAt
+      (fun z => T (apm_m98a04_translateReflect ψ z))
+      (∑ i, T (apm_m98a04_translateReflect (apm_m98a04_partialListTF [i] ψ) x) •
+        (EuclideanSpace.proj i : EuclideanSpace ℝ (Fin n) →L[ℝ] ℝ)) x := fun ψ x =>
+    apm_m98a04_translation_pairing_fderiv_of_stage_dq_aux_hasFDerivAt _
+      (fun j z => T (apm_m98a04_translateReflect (apm_m98a04_partialListTF [j] ψ) z))
+      (fun j => apm_m98a04_translation_pairing_fderiv_of_stage_dq_aux_continuous T _)
+      (fun j z => by
+        have hs := apm_m98a04_translation_pairing_fderiv_of_stage_dq_aux_slope T ψ (hdq ψ) j z
+        exact hs) x
+  have hk : ∀ k : ℕ, ∀ ψ : apm_m98a04_TF n,
+      ContDiff ℝ k (fun x => T (apm_m98a04_translateReflect ψ x)) := by
+    intro k
+    induction k with
+    | zero => intro ψ; exact contDiff_zero.2 (apm_m98a04_translation_pairing_fderiv_of_stage_dq_aux_continuous T ψ)
+    | succ k ih =>
+      intro ψ
+      rw [show ((k + 1 : ℕ) : WithTop ℕ∞) = (k : WithTop ℕ∞) + 1 by norm_cast,
+        contDiff_succ_iff_hasFDerivAt]
+      refine ⟨_, ?_, hF ψ⟩
+      exact ContDiff.sum fun i _ => (ih _).smul contDiff_const
+  exact contDiff_infty.2 fun k => hk k φ
 
 theorem apm_m98a04_translation_pairing_contDiff_of_pos_dim {n : ℕ}
     (hn : 0 < n)

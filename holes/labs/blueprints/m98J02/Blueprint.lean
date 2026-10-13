@@ -1,5 +1,6 @@
 import Mathlib
 import Mathlib.MeasureTheory.Measure.OpenPos
+import ConstructionTargets.TestFunctionTranslation
 
 /-!
 # APM m98J02
@@ -537,7 +538,7 @@ lemma apm_m98J02_translateTest_continuous_aux_local_support
 /-- (a) Translation is continuous into the test-function space. -/
 theorem apm_m98J02_translateTest_continuous (ψ : apm_m98J02_Test) :
     Continuous (fun x : apm_m98J02_E ↦ apm_m98J02_translateTest x ψ) := by
-  sorry
+  exact ConstructionTargets.TestFunctionTranslation.tftTranslate_continuous ψ
 
 lemma apm_m98J02_translateTest_difference_quotient_aux_pointwise
     (ψ : apm_m98J02_Test) (i : Fin 2) (x y : apm_m98J02_E) :
@@ -573,7 +574,16 @@ lemma apm_m98J02_translateTest_difference_quotient_aux_fixed_stage
           (x + h • EuclideanSpace.single i 1) ψ : apm_m98J02_E → ℝ) ⊆ K) ∧
       Function.support (apm_m98J02_translateTest x
         (apm_m98J02_partialTest i ψ) : apm_m98J02_E → ℝ) ⊆ K := by
-  sorry
+  refine ⟨ConstructionTargets.TestFunctionTranslation.tftTranslationCompact ψ x,
+    fun h hh => ?_, ?_⟩
+  · have hx : x + h • EuclideanSpace.single i 1 ∈ Metric.closedBall x 1 := by
+      rw [Metric.mem_closedBall, dist_eq_norm, add_sub_cancel_left, norm_smul,
+        EuclideanSpace.norm_single, norm_one, mul_one, Real.norm_eq_abs]
+      exact hh
+    exact (subset_tsupport _).trans
+      (ConstructionTargets.TestFunctionTranslation.tft_local_fixed_support ψ x _ hx)
+  · exact ConstructionTargets.TestFunctionTranslation.tft_directional_translate_function_support
+      ψ x x _ (Metric.mem_closedBall_self zero_le_one)
 
 lemma apm_m98J02_translateTest_difference_quotient_aux_stage_convergence
     (ψ : apm_m98J02_Test) (i : Fin 2) (x : apm_m98J02_E) :
@@ -582,7 +592,8 @@ lemma apm_m98J02_translateTest_difference_quotient_aux_stage_convergence
           apm_m98J02_translateTest x ψ))
       (nhdsWithin (0 : ℝ) ({0} : Set ℝ)ᶜ)
       (nhds (apm_m98J02_translateTest x (apm_m98J02_partialTest i ψ))) := by
-  sorry
+  exact ConstructionTargets.TestFunctionTranslation.tftTranslate_difference_quotient ψ x
+    (EuclideanSpace.single i 1)
 
 theorem apm_m98J02_translateTest_difference_quotient (ψ : apm_m98J02_Test) (i : Fin 2)
     (x : apm_m98J02_E) :
@@ -840,20 +851,1019 @@ theorem apm_m98J02_isConvolution_unique
     (h₁ : apm_m98J02_isConvolution u v w₁)
     (h₂ : apm_m98J02_isConvolution u v w₂) :
     w₁ = w₂ := by
-  sorry
+  ext φ
+  obtain ⟨K₁, χ₁, Ψ₁, hK₁, hu₁, hχ₁, hΨ₁, hw₁⟩ := h₁ φ
+  obtain ⟨K₂, χ₂, Ψ₂, hK₂, hu₂, hχ₂, hΨ₂, hw₂⟩ := h₂ φ
+  rw [hw₁, hw₂]
+  apply apm_m98J02_cutoff_independence u
+    (fun x => v (apm_m98J02_translateTest x φ)) K₁ K₂ χ₁ χ₂ Ψ₁ Ψ₂
+    hK₁ hK₂ hu₁ hu₂ hχ₁ hχ₂
+  · intro x
+    obtain ⟨τ, hτ, hx⟩ := hΨ₁ x
+    rw [hx]
+    congr 1
+    apply congrArg v
+    ext y
+    exact hτ y
+  · intro x
+    obtain ⟨τ, hτ, hx⟩ := hΨ₂ x
+    rw [hx]
+    congr 1
+    apply congrArg v
+    ext y
+    exact hτ y
 
 /-- Why this unblocks the convolution step in `apm_m98j02`: this packages the
 iterated pairing
 `φ ↦ u (x ↦ χ x * v (y ↦ φ (x + y)))` as a continuous linear functional on
 the LF space of test functions.  The conclusion records all cutoff and
 translation identities needed by the concrete convolution definition. -/
+-- The cut-off translated pairing φ ↦ (x ↦ χ x · v (τₓ φ)) is a continuous linear map of
+-- test functions (smoothness from the translated-pairing calculus at every order; continuity on
+-- each fixed-support stage from the continuity of v on the stage of translates).
+-- Every translated pairing is C^∞ (induction on the order with the translated-pairing calculus
+-- and the 2-D C¹ criterion apm_m98J02_translated_pairing_calculus_of_facts_aux_hasFDerivAt).
+lemma apm_m98J02_bridge_2_aux_smooth (v : apm_m98J02_Dist) (φ : apm_m98J02_Test) :
+    ContDiff ℝ ∞ (fun x : apm_m98J02_E => v (apm_m98J02_translateTest x φ)) := by
+  let hcont : ∀ ψ : apm_m98J02_Test,
+      Continuous (fun x : apm_m98J02_E ↦ apm_m98J02_translateTest x ψ) :=
+    apm_m98J02_translateTest_continuous
+  let hdq : ∀ (ψ : apm_m98J02_Test) (i : Fin 2) (x : apm_m98J02_E),
+      Filter.Tendsto (fun h : ℝ ↦ h⁻¹ • (apm_m98J02_translateTest
+        (x + h • EuclideanSpace.single i 1) ψ - apm_m98J02_translateTest x ψ))
+        (nhdsWithin (0 : ℝ) ({0} : Set ℝ)ᶜ)
+        (nhds (apm_m98J02_translateTest x (apm_m98J02_partialTest i ψ))) :=
+    apm_m98J02_translateTest_difference_quotient
+  have hF : ∀ ψ : apm_m98J02_Test, ∀ x, HasFDerivAt
+      (fun z => v (apm_m98J02_translateTest z ψ))
+      (∑ i, v (apm_m98J02_translateTest x (apm_m98J02_partialTest i ψ)) •
+        (EuclideanSpace.proj i : apm_m98J02_E →L[ℝ] ℝ)) x := fun ψ x =>
+    apm_m98J02_translated_pairing_calculus_of_facts_aux_hasFDerivAt_pairing
+      hcont hdq v ψ x
+  have hk : ∀ k : ℕ, ∀ ψ : apm_m98J02_Test,
+      ContDiff ℝ k (fun x => v (apm_m98J02_translateTest x ψ)) := by
+    intro k
+    induction k with
+    | zero =>
+        intro ψ
+        exact contDiff_zero.2
+          (apm_m98J02_translated_pairing_calculus_of_facts_aux_continuous hcont v ψ)
+    | succ k ih =>
+        intro ψ
+        rw [show ((k + 1 : ℕ) : WithTop ℕ∞) = (k : WithTop ℕ∞) + 1 by norm_cast,
+          contDiff_succ_iff_hasFDerivAt]
+        refine ⟨_, ?_, hF ψ⟩
+        exact ContDiff.sum fun i _ => (ih _).smul contDiff_const
+  exact contDiff_infty.2 fun k => hk k φ
+
+noncomputable def apm_m98J02_bridge_2_aux_psi_aux_fun
+    (v : apm_m98J02_Dist) (χ : apm_m98J02_Test)
+    (hsmooth : ∀ φ : apm_m98J02_Test,
+      ContDiff ℝ ∞ (fun x : apm_m98J02_E =>
+        v (apm_m98J02_translateTest x φ)))
+    (φ : apm_m98J02_Test) : apm_m98J02_Test :=
+  TestFunction.mk
+    (fun x => χ x * v (apm_m98J02_translateTest x φ))
+    (χ.contDiff.mul (hsmooth φ))
+    χ.hasCompactSupport.mul_right
+    (by simp)
+
+@[simp] lemma apm_m98J02_bridge_2_aux_psi_aux_fun_apply
+    (v : apm_m98J02_Dist) (χ : apm_m98J02_Test)
+    (hsmooth : ∀ φ : apm_m98J02_Test,
+      ContDiff ℝ ∞ (fun x : apm_m98J02_E =>
+        v (apm_m98J02_translateTest x φ)))
+    (φ : apm_m98J02_Test) (x : apm_m98J02_E) :
+    apm_m98J02_bridge_2_aux_psi_aux_fun v χ hsmooth φ x =
+      χ x * v (apm_m98J02_translateTest x φ) := rfl
+
+noncomputable def apm_m98J02_bridge_2_aux_psi_aux_linear
+    (v : apm_m98J02_Dist) (χ : apm_m98J02_Test)
+    (hsmooth : ∀ φ : apm_m98J02_Test,
+      ContDiff ℝ ∞ (fun x : apm_m98J02_E =>
+        v (apm_m98J02_translateTest x φ))) :
+    apm_m98J02_Test →ₗ[ℝ] apm_m98J02_Test where
+  toFun := apm_m98J02_bridge_2_aux_psi_aux_fun v χ hsmooth
+  map_add' φ ψ := by
+    apply TestFunction.toTestFunctionClass.coe_injective'
+    funext x
+    simp only [apm_m98J02_bridge_2_aux_psi_aux_fun_apply,
+      TestFunction.coe_add, Pi.add_apply]
+    have ht : apm_m98J02_translateTest x (φ + ψ) =
+        apm_m98J02_translateTest x φ + apm_m98J02_translateTest x ψ := by
+      ext y
+      rfl
+    rw [ht, map_add, mul_add]
+  map_smul' c φ := by
+    apply TestFunction.toTestFunctionClass.coe_injective'
+    funext x
+    simp only [apm_m98J02_bridge_2_aux_psi_aux_fun_apply,
+      RingHom.id_apply, TestFunction.coe_smul, Pi.smul_apply, smul_eq_mul]
+    have ht : apm_m98J02_translateTest x (c • φ) =
+        c • apm_m98J02_translateTest x φ := by
+      ext y
+      rfl
+    rw [ht, map_smul]
+    simp [smul_eq_mul]
+    ring
+
+-- Continuity on each fixed-support stage: the seminorm estimate (Leibniz + one uniform stage
+-- of translates on which v is bounded by finitely many seminorms).
+lemma apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_support
+    (v : apm_m98J02_Dist) (χ : apm_m98J02_Test)
+    (hsmooth : ∀ φ : apm_m98J02_Test,
+      ContDiff ℝ ∞ (fun x : apm_m98J02_E =>
+        v (apm_m98J02_translateTest x φ)))
+    (φ : apm_m98J02_Test) :
+    tsupport (apm_m98J02_bridge_2_aux_psi_aux_fun v χ hsmooth φ :
+      apm_m98J02_E → ℝ) ⊆ tsupport (χ : apm_m98J02_E → ℝ) := by
+  change tsupport (fun x => χ x *
+    v (apm_m98J02_translateTest x φ)) ⊆ tsupport (χ : apm_m98J02_E → ℝ)
+  exact tsupport_mul_subset_left
+
+noncomputable def apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_translateCompact
+    (K : TopologicalSpace.Compacts apm_m98J02_E)
+    (χ : apm_m98J02_Test) : TopologicalSpace.Compacts apm_m98J02_E :=
+  ⟨(fun p : apm_m98J02_E × apm_m98J02_E => p.2 - p.1) ''
+      (tsupport (χ : apm_m98J02_E → ℝ) ×ˢ (K : Set apm_m98J02_E)),
+    (χ.hasCompactSupport.prod K.isCompact).image (by fun_prop)⟩
+
+lemma apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_translateSupport
+    (K : TopologicalSpace.Compacts apm_m98J02_E)
+    (χ φ : apm_m98J02_Test)
+    (hφ : tsupport (φ : apm_m98J02_E → ℝ) ⊆ (K : Set apm_m98J02_E))
+    (x : apm_m98J02_E) (hx : x ∈ tsupport (χ : apm_m98J02_E → ℝ)) :
+    tsupport (apm_m98J02_translateTest x φ : apm_m98J02_E → ℝ) ⊆
+      apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_translateCompact K χ := by
+  apply closure_minimal
+  · intro y hy
+    change y ∈ (fun p : apm_m98J02_E × apm_m98J02_E => p.2 - p.1) ''
+      (tsupport (χ : apm_m98J02_E → ℝ) ×ˢ (K : Set apm_m98J02_E))
+    refine ⟨(x, x + y), ⟨hx, hφ (subset_tsupport _ hy)⟩, ?_⟩
+    simp [sub_eq_add_neg]
+  · exact (apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_translateCompact K χ).isCompact.isClosed
+
+lemma apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_v_bound
+    (v : apm_m98J02_Dist) (K : TopologicalSpace.Compacts apm_m98J02_E)
+    (χ : apm_m98J02_Test) :
+    ∃ s : Finset ℕ, ∃ C : NNReal, C ≠ 0 ∧
+      ((v.comp (TestFunction.ofSupportedInCLM ℝ
+        (show (apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_translateCompact K χ :
+          Set apm_m98J02_E) ⊆ (⊤ : Opens apm_m98J02_E) by simp))).toLinearMap.toSeminorm ≤
+        C • s.sup (ContDiffMapSupportedIn.seminorm ℝ apm_m98J02_E ℝ ⊤
+          (apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_translateCompact K χ))) := by
+  let K' := apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_translateCompact K χ
+  let hK' : (K' : Set apm_m98J02_E) ⊆ (⊤ : Opens apm_m98J02_E) := by simp
+  let L := v.comp (TestFunction.ofSupportedInCLM ℝ hK')
+  have hL : Continuous L.toLinearMap.toSeminorm := by
+    simpa [LinearMap.toSeminorm_apply, Real.norm_eq_abs] using L.continuous.norm
+  simpa [K', hK', L] using
+    (Seminorm.bound_of_continuous
+      (ContDiffMapSupportedIn.withSeminorms ℝ apm_m98J02_E ℝ ⊤ K')
+      L.toLinearMap.toSeminorm hL)
+
+noncomputable def apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_partialListTest
+    (is : List (Fin 2)) (φ : apm_m98J02_Test) : apm_m98J02_Test :=
+  is.foldr apm_m98J02_partialTest φ
+
+def apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_partialList
+    (is : List (Fin 2)) (f : apm_m98J02_E → ℝ) : apm_m98J02_E → ℝ :=
+  is.foldr apm_m98J02_partial f
+
+lemma apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_partial_formula
+    (v : apm_m98J02_Dist) (φ : apm_m98J02_Test) (is : List (Fin 2)) :
+    apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_partialList is
+        (fun x : apm_m98J02_E => v (apm_m98J02_translateTest x φ)) =
+      fun x => v (apm_m98J02_translateTest x
+        (apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_partialListTest is φ)) := by
+  induction is with
+  | nil => rfl
+  | cons i is ih =>
+      simp only [apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_partialList,
+        apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_partialListTest,
+        List.foldr_cons]
+      change List.foldr apm_m98J02_partial
+          (fun x : apm_m98J02_E => v (apm_m98J02_translateTest x φ)) is =
+        (fun x => v (apm_m98J02_translateTest x
+          (List.foldr apm_m98J02_partialTest φ is))) at ih
+      rw [ih]
+      funext x
+      exact (apm_m98J02_translated_pairing_calculus v
+        (List.foldr apm_m98J02_partialTest φ is)).2.1 i x
+
+lemma apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_translate_iteratedFDeriv
+    (φ : apm_m98J02_Test) (x y : apm_m98J02_E) (j : ℕ) :
+    iteratedFDeriv ℝ j
+        (apm_m98J02_translateTest x φ : apm_m98J02_E → ℝ) y =
+      iteratedFDeriv ℝ j (φ : apm_m98J02_E → ℝ) (x + y) := by
+  change iteratedFDeriv ℝ j (fun z => (φ : apm_m98J02_E → ℝ) (x + z)) y = _
+  exact iteratedFDeriv_comp_add_left j x y
+
+lemma apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_translate_seminorm
+    (K : TopologicalSpace.Compacts apm_m98J02_E)
+    (hK : (K : Set apm_m98J02_E) ⊆ (⊤ : Opens apm_m98J02_E))
+    (χ : apm_m98J02_Test) (φ : 𝓓_{K}(apm_m98J02_E, ℝ))
+    (x : apm_m98J02_E) (hx : x ∈ tsupport (χ : apm_m98J02_E → ℝ))
+    (j : ℕ) :
+    let K' := apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_translateCompact K χ
+    let τ : 𝓓_{K'}(apm_m98J02_E, ℝ) :=
+      { toFun := fun y => TestFunction.ofSupportedIn hK φ (x + y)
+        contDiff' := (TestFunction.ofSupportedIn hK φ).contDiff.comp
+          (contDiff_const.add contDiff_id)
+        zero_on_compl' := by
+          intro y hy
+          by_contra hne
+          exact hy (apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_translateSupport
+            K χ (TestFunction.ofSupportedIn hK φ) (by
+              change tsupport (φ : apm_m98J02_E → ℝ) ⊆ (K : Set apm_m98J02_E)
+              exact φ.tsupport_subset) x hx
+              (subset_tsupport _ hne)) }
+    ContDiffMapSupportedIn.seminorm ℝ apm_m98J02_E ℝ ⊤ K' j τ ≤
+      ContDiffMapSupportedIn.seminorm ℝ apm_m98J02_E ℝ ⊤ K j φ := by
+  dsimp only
+  have hnonneg : 0 ≤
+      ContDiffMapSupportedIn.seminorm ℝ apm_m98J02_E ℝ ⊤ K j φ := by
+    change 0 ≤ ‖ContDiffMapSupportedIn.structureMapCLM ℝ ⊤ j φ‖
+    positivity
+  apply (ContDiffMapSupportedIn.seminorm_top_le_iff ℝ hnonneg j _).2
+  intro y hy
+  change ‖iteratedFDeriv ℝ j
+    (apm_m98J02_translateTest x (TestFunction.ofSupportedIn hK φ) :
+      apm_m98J02_E → ℝ) y‖ ≤ _
+  rw [apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_translate_iteratedFDeriv]
+  change ‖(ContDiffMapSupportedIn.structureMapCLM ℝ ⊤ j φ) (x + y)‖ ≤ _
+  exact (ContDiffMapSupportedIn.structureMapCLM ℝ ⊤ j φ).norm_coe_le_norm (x + y)
+
+lemma apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_leibniz
+    (v : apm_m98J02_Dist) (χ φ : apm_m98J02_Test)
+    (hsmooth : ∀ ψ : apm_m98J02_Test,
+      ContDiff ℝ ∞ (fun x : apm_m98J02_E =>
+        v (apm_m98J02_translateTest x ψ)))
+    (i : ℕ) (x : apm_m98J02_E) :
+    ‖iteratedFDeriv ℝ i
+        (apm_m98J02_bridge_2_aux_psi_aux_fun v χ hsmooth φ :
+          apm_m98J02_E → ℝ) x‖ ≤
+      ∑ j ∈ Finset.range (i + 1), (i.choose j : ℝ) *
+        ‖iteratedFDeriv ℝ j (χ : apm_m98J02_E → ℝ) x‖ *
+        ‖iteratedFDeriv ℝ (i - j)
+          (fun y : apm_m98J02_E =>
+            v (apm_m98J02_translateTest y φ)) x‖ := by
+  change ‖iteratedFDeriv ℝ i
+      (fun y : apm_m98J02_E => χ y *
+        v (apm_m98J02_translateTest y φ)) x‖ ≤ _
+  exact norm_iteratedFDeriv_mul_le χ.contDiff (hsmooth φ) x (by
+    exact_mod_cast (le_top : (i : ℕ∞) ≤ ⊤))
+
+noncomputable def apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_targetCompact
+    (χ : apm_m98J02_Test) : TopologicalSpace.Compacts apm_m98J02_E :=
+  ⟨tsupport (χ : apm_m98J02_E → ℝ), χ.hasCompactSupport⟩
+
+noncomputable def apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_stageLinear
+    (v : apm_m98J02_Dist) (χ : apm_m98J02_Test)
+    (hsmooth : ∀ φ : apm_m98J02_Test,
+      ContDiff ℝ ∞ (fun x : apm_m98J02_E =>
+        v (apm_m98J02_translateTest x φ)))
+    (K : TopologicalSpace.Compacts apm_m98J02_E)
+    (hK : (K : Set apm_m98J02_E) ⊆ (⊤ : TopologicalSpace.Opens apm_m98J02_E)) :
+    𝓓_{K}(apm_m98J02_E, ℝ) →ₗ[ℝ]
+      ContDiffMapSupportedIn apm_m98J02_E ℝ (⊤ : ℕ∞)
+        (apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_targetCompact χ) where
+  toFun φ :=
+    { toFun := apm_m98J02_bridge_2_aux_psi_aux_fun v χ hsmooth
+        (TestFunction.ofSupportedIn hK φ)
+      contDiff' := (apm_m98J02_bridge_2_aux_psi_aux_fun v χ hsmooth
+        (TestFunction.ofSupportedIn hK φ)).contDiff
+      zero_on_compl' := by
+        intro x hx
+        by_contra hne
+        exact hx (apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_support
+          v χ hsmooth (TestFunction.ofSupportedIn hK φ)
+          (subset_tsupport _ hne)) }
+  map_add' φ ψ := by
+    ext x
+    exact congrFun (congrArg DFunLike.coe
+      ((apm_m98J02_bridge_2_aux_psi_aux_linear v χ hsmooth).map_add
+        (TestFunction.ofSupportedIn hK φ)
+        (TestFunction.ofSupportedIn hK ψ))) x
+  map_smul' c φ := by
+    ext x
+    exact congrFun (congrArg DFunLike.coe
+      ((apm_m98J02_bridge_2_aux_psi_aux_linear v χ hsmooth).map_smul c
+        (TestFunction.ofSupportedIn hK φ))) x
+
+lemma apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_of_stage
+    (v : apm_m98J02_Dist) (χ : apm_m98J02_Test)
+    (hsmooth : ∀ φ : apm_m98J02_Test,
+      ContDiff ℝ ∞ (fun x : apm_m98J02_E =>
+        v (apm_m98J02_translateTest x φ)))
+    (K : TopologicalSpace.Compacts apm_m98J02_E)
+    (hK : (K : Set apm_m98J02_E) ⊆ (⊤ : TopologicalSpace.Opens apm_m98J02_E))
+    (hstage : Continuous
+      (apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_stageLinear
+        v χ hsmooth K hK)) :
+    Continuous (apm_m98J02_bridge_2_aux_psi_aux_linear v χ hsmooth ∘
+      TestFunction.ofSupportedIn hK) := by
+  let Kχ := apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_targetCompact χ
+  have hKχ : (Kχ : Set apm_m98J02_E) ⊆
+      (⊤ : TopologicalSpace.Opens apm_m98J02_E) := by simp
+  have hinc : Continuous
+      (TestFunction.ofSupportedIn hKχ :
+        ContDiffMapSupportedIn apm_m98J02_E ℝ (⊤ : ℕ∞) Kχ →
+          apm_m98J02_Test) := TestFunction.continuous_ofSupportedIn hKχ
+  simpa [Kχ, Function.comp_def,
+    apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_stageLinear] using
+      hinc.comp hstage
+
+lemma apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_norm_coord_one
+    (L : apm_m98J02_E →L[ℝ] ℝ) :
+    ‖L‖ ≤ |L (EuclideanSpace.single 0 1)| +
+      |L (EuclideanSpace.single 1 1)| := by
+  apply L.opNorm_le_bound (by positivity)
+  intro y
+  have hy : y = y 0 • EuclideanSpace.single 0 1 +
+      y 1 • EuclideanSpace.single 1 1 := by
+    ext i
+    fin_cases i <;> simp
+  calc
+    ‖L y‖ = ‖L (y 0 • EuclideanSpace.single 0 1 +
+        y 1 • EuclideanSpace.single 1 1)‖ := by rw [← hy]
+    _ = ‖y 0 • L (EuclideanSpace.single 0 1) +
+        y 1 • L (EuclideanSpace.single 1 1)‖ := by
+          rw [map_add, map_smul, map_smul]
+    _ ≤ ‖y 0 • L (EuclideanSpace.single 0 1)‖ +
+          ‖y 1 • L (EuclideanSpace.single 1 1)‖ := norm_add_le _ _
+    _ = |y 0| * |L (EuclideanSpace.single 0 1)| +
+        |y 1| * |L (EuclideanSpace.single 1 1)| := by
+          simp [norm_smul, Real.norm_eq_abs]
+    _ ≤ ‖y‖ * |L (EuclideanSpace.single 0 1)| +
+        ‖y‖ * |L (EuclideanSpace.single 1 1)| := by
+          gcongr
+          · simpa [Real.norm_eq_abs] using PiLp.norm_apply_le y 0
+          · simpa [Real.norm_eq_abs] using PiLp.norm_apply_le y 1
+    _ = (|L (EuclideanSpace.single 0 1)| +
+        |L (EuclideanSpace.single 1 1)|) * ‖y‖ := by ring
+
+lemma apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_norm_coord_one_general
+    {F : Type*} [NormedAddCommGroup F] [NormedSpace ℝ F]
+    (L : apm_m98J02_E →L[ℝ] F) :
+    ‖L‖ ≤ ‖L (EuclideanSpace.single 0 1)‖ +
+      ‖L (EuclideanSpace.single 1 1)‖ := by
+  apply L.opNorm_le_bound (by positivity)
+  intro y
+  have hy : y = y 0 • EuclideanSpace.single 0 1 +
+      y 1 • EuclideanSpace.single 1 1 := by
+    ext i
+    fin_cases i <;> simp
+  calc
+    ‖L y‖ = ‖L (y 0 • EuclideanSpace.single 0 1 +
+        y 1 • EuclideanSpace.single 1 1)‖ := by rw [← hy]
+    _ = ‖y 0 • L (EuclideanSpace.single 0 1) +
+        y 1 • L (EuclideanSpace.single 1 1)‖ := by
+          rw [map_add, map_smul, map_smul]
+    _ ≤ ‖y 0 • L (EuclideanSpace.single 0 1)‖ +
+          ‖y 1 • L (EuclideanSpace.single 1 1)‖ := norm_add_le _ _
+    _ = |y 0| * ‖L (EuclideanSpace.single 0 1)‖ +
+        |y 1| * ‖L (EuclideanSpace.single 1 1)‖ := by
+          rw [norm_smul, norm_smul, Real.norm_eq_abs, Real.norm_eq_abs]
+    _ ≤ ‖y‖ * ‖L (EuclideanSpace.single 0 1)‖ +
+        ‖y‖ * ‖L (EuclideanSpace.single 1 1)‖ := by
+          gcongr
+          · simpa [Real.norm_eq_abs] using PiLp.norm_apply_le y 0
+          · simpa [Real.norm_eq_abs] using PiLp.norm_apply_le y 1
+    _ = (‖L (EuclideanSpace.single 0 1)‖ +
+        ‖L (EuclideanSpace.single 1 1)‖) * ‖y‖ := by ring
+
+lemma apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_norm_coord
+    {F : Type*} [NormedAddCommGroup F] [NormedSpace ℝ F] :
+    ∀ (k : ℕ) (A : ContinuousMultilinearMap ℝ (fun _ : Fin k => apm_m98J02_E) F),
+      ‖A‖ ≤ ∑ c : Fin k → Fin 2, ‖A (fun i => EuclideanSpace.single (c i) (1 : ℝ))‖ := by
+  intro k
+  induction k with
+  | zero =>
+    intro A
+    refine (Finset.single_le_sum (f := fun c : Fin 0 → Fin 2 =>
+      ‖A (fun i => EuclideanSpace.single (c i) (1 : ℝ))‖) (fun _ _ => norm_nonneg _)
+      (Finset.mem_univ (fun i => i.elim0))).trans' ?_
+    refine A.opNorm_le_bound (norm_nonneg _) fun m => ?_
+    simp only [Finset.univ_eq_empty, Finset.prod_empty, mul_one]
+    rw [Subsingleton.elim m (fun i => EuclideanSpace.single ((fun i : Fin 0 => i.elim0) i) (1 : ℝ))]
+  | succ k ih =>
+    intro A
+    calc ‖A‖ = ‖A.curryLeft‖ := (ContinuousMultilinearMap.curryLeft_norm A).symm
+      _ ≤ ‖A.curryLeft (EuclideanSpace.single 0 1)‖ + ‖A.curryLeft (EuclideanSpace.single 1 1)‖ :=
+          apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_norm_coord_one_general _
+      _ ≤ (∑ c : Fin k → Fin 2,
+            ‖A.curryLeft (EuclideanSpace.single 0 1) (fun i => EuclideanSpace.single (c i) (1 : ℝ))‖) +
+          (∑ c : Fin k → Fin 2,
+            ‖A.curryLeft (EuclideanSpace.single 1 1) (fun i => EuclideanSpace.single (c i) (1 : ℝ))‖) :=
+          add_le_add (ih _) (ih _)
+      _ = ∑ c : Fin (k + 1) → Fin 2, ‖A (fun i => EuclideanSpace.single (c i) (1 : ℝ))‖ := by
+          rw [← Fintype.sum_equiv (Fin.consEquiv fun _ : Fin (k + 1) => Fin 2) _ _ (fun _ => rfl),
+            Fintype.sum_prod_type, Fin.sum_univ_two]
+          congr 1 <;> refine Finset.sum_congr rfl fun c _ => ?_ <;>
+            simp only [ContinuousMultilinearMap.curryLeft_apply, Fin.consEquiv_apply] <;>
+            congr 2 <;> funext i <;> refine Fin.cases ?_ ?_ i <;> simp
+
+lemma apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_partialList_eq_iteratedFDeriv
+    (f : apm_m98J02_E → ℝ) (hf : ContDiff ℝ ∞ f)
+    (is : List (Fin 2)) (x : apm_m98J02_E) :
+    apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_partialList is f x =
+      iteratedFDeriv ℝ is.length f x
+        (fun j => EuclideanSpace.single (is.get j) (1 : ℝ)) := by
+  induction is generalizing f x with
+  | nil =>
+      simp only [apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_partialList,
+        List.foldr_nil, List.length_nil]
+      exact (iteratedFDeriv_zero_apply (𝕜 := ℝ) (f := f) (x := x)
+        (fun j => EuclideanSpace.single ([].get j) (1 : ℝ))).symm
+  | cons i is ih =>
+      simp only [apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_partialList,
+        List.foldr_cons, List.length_cons]
+      have hfun : List.foldr apm_m98J02_partial f is =
+          fun z => iteratedFDeriv ℝ is.length f z
+            (fun j => EuclideanSpace.single (is.get j) (1 : ℝ)) := by
+        funext z
+        exact ih f hf z
+      rw [hfun]
+      change fderiv ℝ (fun z => iteratedFDeriv ℝ is.length f z
+          (fun j => EuclideanSpace.single (is.get j) (1 : ℝ))) x
+          (EuclideanSpace.single i 1) = _
+      rw [fderiv_continuousMultilinear_apply_const_apply]
+      · symm
+        simpa [Fin.tail] using
+          (iteratedFDeriv_succ_apply_left (𝕜 := ℝ) (f := f) (x := x)
+            (m := fun j : Fin (is.length + 1) =>
+              EuclideanSpace.single ((i :: is).get j) (1 : ℝ)))
+      · exact (ContDiff.differentiable_iteratedFDeriv
+          (by exact_mod_cast ENat.coe_lt_top is.length) hf) x
+
+noncomputable def apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_partialStageOne
+    (K : TopologicalSpace.Compacts apm_m98J02_E) (i : Fin 2) :
+    𝓓_{K}(apm_m98J02_E, ℝ) →L[ℝ] 𝓓_{K}(apm_m98J02_E, ℝ) :=
+  ContDiffMapSupportedIn.postcompCLM
+      (ContinuousLinearMap.apply ℝ ℝ (EuclideanSpace.single i 1)) ∘L
+    ContDiffMapSupportedIn.fderivCLM ℝ (⊤ : ℕ∞) (⊤ : ℕ∞)
+
+noncomputable def apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_partialStage
+    (K : TopologicalSpace.Compacts apm_m98J02_E) :
+    List (Fin 2) →
+      (𝓓_{K}(apm_m98J02_E, ℝ) →L[ℝ] 𝓓_{K}(apm_m98J02_E, ℝ))
+  | [] => ContinuousLinearMap.id ℝ _
+  | i :: is =>
+      apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_partialStageOne K i ∘L
+        apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_partialStage K is
+
+lemma apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_partialStage_apply
+    (K : TopologicalSpace.Compacts apm_m98J02_E)
+    (is : List (Fin 2)) (φ : 𝓓_{K}(apm_m98J02_E, ℝ)) (x : apm_m98J02_E) :
+    apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_partialStage K is φ x =
+      apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_partialList is
+        (φ : apm_m98J02_E → ℝ) x := by
+  induction is generalizing x with
+  | nil => rfl
+  | cons i is ih =>
+      simp only [apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_partialStage,
+        ContinuousLinearMap.coe_comp', Function.comp_apply,
+        apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_partialStageOne,
+        ContDiffMapSupportedIn.postcompCLM_apply,
+        ContDiffMapSupportedIn.fderivCLM_apply]
+      rw [if_pos (by simp)]
+      simp only [ContinuousLinearMap.apply_apply]
+      change fderiv ℝ
+          (apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_partialStage K is φ :
+            apm_m98J02_E → ℝ) x (EuclideanSpace.single i 1) = _
+      rw [show (apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_partialStage K is φ :
+          apm_m98J02_E → ℝ) =
+          apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_partialList is φ from
+        funext ih]
+      rfl
+
+lemma apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_partialStage_seminorm
+    (K : TopologicalSpace.Compacts apm_m98J02_E)
+    (is : List (Fin 2)) (φ : 𝓓_{K}(apm_m98J02_E, ℝ)) (j : ℕ) :
+    ContDiffMapSupportedIn.seminorm ℝ apm_m98J02_E ℝ ⊤ K j
+        (apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_partialStage K is φ) ≤
+      ContDiffMapSupportedIn.seminorm ℝ apm_m98J02_E ℝ ⊤ K
+        (j + is.length) φ := by
+  induction is generalizing j φ with
+  | nil => simp [apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_partialStage]
+  | cons i is ih =>
+      let ev : (apm_m98J02_E →L[ℝ] ℝ) →L[ℝ] ℝ :=
+        ContinuousLinearMap.apply ℝ ℝ (EuclideanSpace.single i 1)
+      have hev : ‖ev‖ ≤ 1 := by
+        apply ev.opNorm_le_bound zero_le_one
+        intro L
+        simpa [ev] using L.le_opNorm (EuclideanSpace.single i 1)
+      calc
+        ContDiffMapSupportedIn.seminorm ℝ apm_m98J02_E ℝ ⊤ K j
+            (apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_partialStage K (i :: is) φ)
+            ≤ ‖ev‖ * ContDiffMapSupportedIn.seminorm ℝ apm_m98J02_E
+                (apm_m98J02_E →L[ℝ] ℝ) ⊤ K j
+                (ContDiffMapSupportedIn.fderivLM ℝ ⊤ ⊤
+                  (apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_partialStage K is φ)) := by
+              exact ContDiffMapSupportedIn.seminorm_postcompLM_le ℝ ev _
+        _ ≤ ContDiffMapSupportedIn.seminorm ℝ apm_m98J02_E
+                (apm_m98J02_E →L[ℝ] ℝ) ⊤ K j
+                (ContDiffMapSupportedIn.fderivLM ℝ ⊤ ⊤
+                  (apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_partialStage K is φ)) := by
+              simpa using mul_le_of_le_one_left (apply_nonneg _ _) hev
+        _ = ContDiffMapSupportedIn.seminorm ℝ apm_m98J02_E ℝ ⊤ K (j + 1)
+                (apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_partialStage K is φ) :=
+              ContDiffMapSupportedIn.seminorm_fderivLM_top ℝ _
+        _ ≤ ContDiffMapSupportedIn.seminorm ℝ apm_m98J02_E ℝ ⊤ K
+                ((j + 1) + is.length) φ := ih _ _
+        _ = ContDiffMapSupportedIn.seminorm ℝ apm_m98J02_E ℝ ⊤ K
+                (j + (i :: is).length) φ := by
+              simp [Nat.add_assoc, Nat.add_comm, Nat.add_left_comm]
+
+-- Pointwise bound on derivatives of the pairing over supp χ (norm_coord +
+-- partialList_eq_iteratedFDeriv + partial_formula + v_bound + translate_seminorm +
+-- partialStage_seminorm).
+lemma apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_pointwise_bound_aux_shiftedSup
+    (K : TopologicalSpace.Compacts apm_m98J02_E)
+    (s : Finset ℕ) (is : List (Fin 2))
+    (φ : 𝓓_{K}(apm_m98J02_E, ℝ)) :
+    (s.sup (ContDiffMapSupportedIn.seminorm ℝ apm_m98J02_E ℝ ⊤ K))
+        (apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_partialStage K is φ) ≤
+      ((s.image fun j => j + is.length).sup
+        (ContDiffMapSupportedIn.seminorm ℝ apm_m98J02_E ℝ ⊤ K)) φ := by
+  apply Seminorm.finset_sup_apply_le (apply_nonneg _ _)
+  intro j hj
+  refine (apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_partialStage_seminorm
+    K is φ j).trans ?_
+  exact Seminorm.le_finset_sup_apply
+    (Finset.mem_image.2 ⟨j, hj, rfl⟩)
+
+lemma apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_pointwise_bound_aux_listTest_coe
+    (is : List (Fin 2)) (ψ : apm_m98J02_Test) :
+    (apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_partialListTest is ψ : apm_m98J02_E → ℝ) =
+      apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_partialList is (ψ : apm_m98J02_E → ℝ) := by
+  induction is with
+  | nil => rfl
+  | cons i is ih =>
+      simp only [apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_partialListTest,
+        apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_partialList, List.foldr_cons] at ih ⊢
+      funext x
+      rw [apm_m98J02_partialTest_apply, ← ih]
+
+lemma apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_pointwise_bound_aux_one
+    (v : apm_m98J02_Dist) (χ : apm_m98J02_Test)
+    (K : TopologicalSpace.Compacts apm_m98J02_E)
+    (hK : (K : Set apm_m98J02_E) ⊆ (⊤ : TopologicalSpace.Opens apm_m98J02_E))
+    (s0 : Finset ℕ) (C0 : NNReal)
+    (hv : ((v.comp (TestFunction.ofSupportedInCLM ℝ
+        (show (apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_translateCompact K χ :
+          Set apm_m98J02_E) ⊆ (⊤ : Opens apm_m98J02_E) by simp))).toLinearMap.toSeminorm ≤
+        C0 • s0.sup (ContDiffMapSupportedIn.seminorm ℝ apm_m98J02_E ℝ ⊤
+          (apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_translateCompact K χ))))
+    (is : List (Fin 2)) (φ : 𝓓_{K}(apm_m98J02_E, ℝ)) (x : apm_m98J02_E)
+    (hx : x ∈ tsupport (χ : apm_m98J02_E → ℝ)) :
+    ‖apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_partialList is
+        (fun y : apm_m98J02_E =>
+          v (apm_m98J02_translateTest y (TestFunction.ofSupportedIn hK φ))) x‖ ≤
+      (C0 : ℝ) * ((s0.image fun j => j + is.length).sup
+        (ContDiffMapSupportedIn.seminorm ℝ apm_m98J02_E ℝ ⊤ K)) φ := by
+  set φ' := apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_partialStage K is φ
+  have hτ := fun j => apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_translate_seminorm
+    K hK χ φ' x hx j
+  dsimp only at hτ
+  set K' := apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_translateCompact K χ
+  set τ : 𝓓_{K'}(apm_m98J02_E, ℝ) :=
+      { toFun := fun y => TestFunction.ofSupportedIn hK φ' (x + y)
+        contDiff' := (TestFunction.ofSupportedIn hK φ').contDiff.comp
+          (contDiff_const.add contDiff_id)
+        zero_on_compl' := by
+          intro y hy
+          by_contra hne
+          exact hy (apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_translateSupport
+            K χ (TestFunction.ofSupportedIn hK φ') (by
+              change tsupport (φ' : apm_m98J02_E → ℝ) ⊆ (K : Set apm_m98J02_E)
+              exact φ'.tsupport_subset) x hx
+              (subset_tsupport _ hne)) } with hτdef
+  have heq : apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_partialList is
+        (fun y : apm_m98J02_E =>
+          v (apm_m98J02_translateTest y (TestFunction.ofSupportedIn hK φ))) x =
+      v (TestFunction.ofSupportedInCLM ℝ
+        (show (K' : Set apm_m98J02_E) ⊆ (⊤ : Opens apm_m98J02_E) by simp) τ) := by
+    rw [apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_partial_formula]
+    beta_reduce
+    congr 1
+    refine DFunLike.ext _ _ fun y => ?_
+    simp only [apm_m98J02_translateTest_apply, TestFunction.coe_ofSupportedInCLM]
+    rw [apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_pointwise_bound_aux_listTest_coe]
+    change _ = φ' (x + y)
+    rw [apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_partialStage_apply]
+    rfl
+  rw [heq]
+  have h1 := hv τ
+  simp only [LinearMap.toSeminorm_apply, Seminorm.smul_apply, NNReal.smul_def,
+    smul_eq_mul] at h1
+  refine h1.trans (mul_le_mul_of_nonneg_left ?_ C0.coe_nonneg)
+  refine le_trans ?_ (apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_pointwise_bound_aux_shiftedSup
+    K s0 is φ)
+  apply Seminorm.finset_sup_apply_le (apply_nonneg _ _)
+  intro j hj
+  exact (hτ j).trans (Seminorm.le_finset_sup_apply hj)
+
+lemma apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_pointwise_bound
+    (v : apm_m98J02_Dist) (χ : apm_m98J02_Test)
+    (hsmooth : ∀ φ : apm_m98J02_Test,
+      ContDiff ℝ ∞ (fun x : apm_m98J02_E =>
+        v (apm_m98J02_translateTest x φ)))
+    (K : TopologicalSpace.Compacts apm_m98J02_E)
+    (hK : (K : Set apm_m98J02_E) ⊆ (⊤ : TopologicalSpace.Opens apm_m98J02_E)) :
+    ∀ k : ℕ, ∃ s : Finset ℕ, ∃ C : ℝ, ∀ (φ : 𝓓_{K}(apm_m98J02_E, ℝ)) (x : apm_m98J02_E),
+        x ∈ tsupport (χ : apm_m98J02_E → ℝ) →
+        ‖iteratedFDeriv ℝ k (fun y : apm_m98J02_E =>
+            v (apm_m98J02_translateTest y (TestFunction.ofSupportedIn hK φ))) x‖ ≤
+          C * (s.sup (ContDiffMapSupportedIn.seminorm ℝ apm_m98J02_E ℝ ⊤ K)) φ := by
+  intro k
+  obtain ⟨s0, C0, -, hv⟩ := apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_v_bound v K χ
+  refine ⟨s0.image (fun j => j + k), (Fintype.card (Fin k → Fin 2) : ℝ) * C0, ?_⟩
+  intro φ x hx
+  set P : apm_m98J02_E → ℝ := fun y : apm_m98J02_E =>
+    v (apm_m98J02_translateTest y (TestFunction.ofSupportedIn hK φ)) with hP
+  have hterm : ∀ c : Fin k → Fin 2,
+      ‖iteratedFDeriv ℝ k P x (fun i => EuclideanSpace.single (c i) (1 : ℝ))‖ ≤
+        (C0 : ℝ) * ((s0.image fun j => j + k).sup
+          (ContDiffMapSupportedIn.seminorm ℝ apm_m98J02_E ℝ ⊤ K)) φ := by
+    intro c
+    have gen : ∀ (n : ℕ) (hn : (List.ofFn c).length = n),
+        iteratedFDeriv ℝ n P x
+          (fun j => EuclideanSpace.single ((List.ofFn c).get (Fin.cast hn.symm j)) (1 : ℝ)) =
+        apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_partialList (List.ofFn c) P x := by
+      intro n hn; subst hn
+      exact (apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_partialList_eq_iteratedFDeriv
+        P (hsmooth _) _ x).symm
+    have hc := gen k List.length_ofFn
+    have hfun : (fun j : Fin k => EuclideanSpace.single
+        ((List.ofFn c).get (Fin.cast List.length_ofFn.symm j)) (1 : ℝ)) =
+        fun j => EuclideanSpace.single (c j) (1 : ℝ) := by
+      funext j; simp
+    rw [hfun] at hc
+    rw [hc]
+    have := apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_pointwise_bound_aux_one
+      v χ K hK s0 C0 hv (List.ofFn c) φ x hx
+    simpa only [List.length_ofFn] using this
+  calc ‖iteratedFDeriv ℝ k P x‖
+      ≤ ∑ c : Fin k → Fin 2,
+          ‖iteratedFDeriv ℝ k P x (fun i => EuclideanSpace.single (c i) (1 : ℝ))‖ :=
+        apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_norm_coord k _
+    _ ≤ ∑ _c : Fin k → Fin 2, (C0 : ℝ) * ((s0.image fun j => j + k).sup
+          (ContDiffMapSupportedIn.seminorm ℝ apm_m98J02_E ℝ ⊤ K)) φ :=
+        Finset.sum_le_sum fun c _ => hterm c
+    _ = _ := by
+      rw [Finset.sum_const, Finset.card_univ, nsmul_eq_mul]; ring
+
+-- Target-stage seminorm bound, given the pointwise bound (leibniz + bounds on the
+-- derivatives of χ + ContDiffMapSupportedIn.seminorm_le_iff).
+lemma apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_target_bound
+    (v : apm_m98J02_Dist) (χ : apm_m98J02_Test)
+    (hsmooth : ∀ φ : apm_m98J02_Test,
+      ContDiff ℝ ∞ (fun x : apm_m98J02_E =>
+        v (apm_m98J02_translateTest x φ)))
+    (K : TopologicalSpace.Compacts apm_m98J02_E)
+    (hK : (K : Set apm_m98J02_E) ⊆ (⊤ : TopologicalSpace.Opens apm_m98J02_E))
+    (hpt : ∀ k : ℕ, ∃ s : Finset ℕ, ∃ C : ℝ, ∀ (φ : 𝓓_{K}(apm_m98J02_E, ℝ)) (x : apm_m98J02_E),
+        x ∈ tsupport (χ : apm_m98J02_E → ℝ) →
+        ‖iteratedFDeriv ℝ k (fun y : apm_m98J02_E =>
+            v (apm_m98J02_translateTest y (TestFunction.ofSupportedIn hK φ))) x‖ ≤
+          C * (s.sup (ContDiffMapSupportedIn.seminorm ℝ apm_m98J02_E ℝ ⊤ K)) φ) :
+    ∀ i : ℕ, ∃ s : Finset ℕ, ∃ C : ℝ, ∀ φ : 𝓓_{K}(apm_m98J02_E, ℝ),
+      ContDiffMapSupportedIn.seminorm ℝ apm_m98J02_E ℝ ⊤
+          (apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_targetCompact χ) i (apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_stageLinear v χ hsmooth K hK φ) ≤
+        C * (s.sup (ContDiffMapSupportedIn.seminorm ℝ apm_m98J02_E ℝ ⊤ K)) φ := by
+  classical
+  intro i
+  let ss : ℕ → Finset ℕ := fun k => Classical.choose (hpt k)
+  let cc : ℕ → ℝ := fun k => Classical.choose (Classical.choose_spec (hpt k))
+  have hcc : ∀ k (φ : 𝓓_{K}(apm_m98J02_E, ℝ)) x,
+      x ∈ tsupport (χ : apm_m98J02_E → ℝ) →
+      ‖iteratedFDeriv ℝ k (fun y : apm_m98J02_E =>
+          v (apm_m98J02_translateTest y (TestFunction.ofSupportedIn hK φ))) x‖ ≤
+        cc k * (ss k).sup
+          (ContDiffMapSupportedIn.seminorm ℝ apm_m98J02_E ℝ ⊤ K) φ := by
+    intro k
+    exact Classical.choose_spec (Classical.choose_spec (hpt k))
+  let S := (Finset.range (i + 1)).biUnion (fun j => ss (i - j))
+  let χK : ContDiffMapSupportedIn apm_m98J02_E ℝ ⊤
+      (apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_targetCompact χ) :=
+    { toFun := χ
+      contDiff' := χ.contDiff
+      zero_on_compl' := by
+        intro x hx
+        by_contra hn
+        exact hx (subset_tsupport _ hn) }
+  let a : ℕ → ℝ := fun j =>
+    ContDiffMapSupportedIn.seminorm ℝ apm_m98J02_E ℝ ⊤
+      (apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_targetCompact χ) j χK
+  let C := ∑ j ∈ Finset.range (i + 1),
+    (i.choose j : ℝ) * a j * max (cc (i - j)) 0
+  refine ⟨S, C, ?_⟩
+  intro φ
+  let q := S.sup (ContDiffMapSupportedIn.seminorm ℝ apm_m98J02_E ℝ ⊤ K) φ
+  have hq : 0 ≤ q := by
+    positivity
+  have hC : 0 ≤ C := by
+    dsimp [C]
+    positivity
+  apply (ContDiffMapSupportedIn.seminorm_top_le_iff ℝ (mul_nonneg hC hq) i _).2
+  intro x hx
+  change x ∈ tsupport (χ : apm_m98J02_E → ℝ) at hx
+  refine (apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_leibniz v χ
+    (TestFunction.ofSupportedIn hK φ) hsmooth i x).trans ?_
+  rw [show C * q = ∑ j ∈ Finset.range (i + 1),
+      ((i.choose j : ℝ) * a j * max (cc (i - j)) 0) * q by
+    simp [C, Finset.sum_mul]]
+  apply Finset.sum_le_sum
+  intro j hj
+  simp only [Finset.mem_range] at hj
+  have hchi : ‖iteratedFDeriv ℝ j (χ : apm_m98J02_E → ℝ) x‖ ≤ a j := by
+    simpa [χK, a] using
+      (ContDiffMapSupportedIn.norm_iteratedFDeriv_apply_le_seminorm_top
+        ℝ (f := χK) (x := x))
+  have hsub : ss (i - j) ⊆ S := by
+    exact Finset.subset_biUnion_of_mem (fun j => ss (i - j))
+      (Finset.mem_range.2 hj)
+  have hsup : (ss (i - j)).sup
+      (ContDiffMapSupportedIn.seminorm ℝ apm_m98J02_E ℝ ⊤ K) φ ≤ q := by
+    have hsSem : (ss (i - j)).sup
+        (ContDiffMapSupportedIn.seminorm ℝ apm_m98J02_E ℝ ⊤ K) ≤
+        S.sup (ContDiffMapSupportedIn.seminorm ℝ apm_m98J02_E ℝ ⊤ K) :=
+      Finset.sup_mono hsub
+    exact Seminorm.le_def.mp hsSem φ
+  have hp := hcc (i - j) φ x hx
+  have hp' : ‖iteratedFDeriv ℝ (i - j) (fun y : apm_m98J02_E =>
+      v (apm_m98J02_translateTest y (TestFunction.ofSupportedIn hK φ))) x‖ ≤
+      max (cc (i - j)) 0 * q := by
+    calc
+      _ ≤ cc (i - j) * (ss (i - j)).sup
+          (ContDiffMapSupportedIn.seminorm ℝ apm_m98J02_E ℝ ⊤ K) φ := hp
+      _ ≤ max (cc (i - j)) 0 * q := by
+        calc
+          _ ≤ max (cc (i - j)) 0 * (ss (i - j)).sup
+              (ContDiffMapSupportedIn.seminorm ℝ apm_m98J02_E ℝ ⊤ K) φ := by
+                apply mul_le_mul_of_nonneg_right (le_max_left _ _)
+                positivity
+          _ ≤ max (cc (i - j)) 0 * q :=
+            mul_le_mul_of_nonneg_left hsup (le_max_right _ _)
+  calc
+    (i.choose j : ℝ) * ‖iteratedFDeriv ℝ j (χ : apm_m98J02_E → ℝ) x‖ *
+        ‖iteratedFDeriv ℝ (i - j) (fun y : apm_m98J02_E =>
+          v (apm_m98J02_translateTest y (TestFunction.ofSupportedIn hK φ))) x‖
+      ≤ (i.choose j : ℝ) * a j * (max (cc (i - j)) 0 * q) := by
+        gcongr
+    _ = ((i.choose j : ℝ) * a j * max (cc (i - j)) 0) * q := by ring
+
+lemma apm_m98J02_bridge_2_aux_psi_aux_stage_cont
+    (v : apm_m98J02_Dist) (χ : apm_m98J02_Test)
+    (hsmooth : ∀ φ : apm_m98J02_Test,
+      ContDiff ℝ ∞ (fun x : apm_m98J02_E =>
+        v (apm_m98J02_translateTest x φ)))
+    (K : TopologicalSpace.Compacts apm_m98J02_E)
+    (hK : (K : Set apm_m98J02_E) ⊆ (⊤ : TopologicalSpace.Opens apm_m98J02_E)) :
+    Continuous (apm_m98J02_bridge_2_aux_psi_aux_linear v χ hsmooth ∘ TestFunction.ofSupportedIn hK) := by
+  refine apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_of_stage v χ hsmooth K hK ?_
+  exact (ContDiffMapSupportedIn.withSeminorms ℝ apm_m98J02_E ℝ ⊤ K).continuous_of_isBounded
+    (ContDiffMapSupportedIn.withSeminorms ℝ apm_m98J02_E ℝ ⊤ (apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_targetCompact χ)) _
+    (Seminorm.IsBounded.of_real (apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_target_bound v χ hsmooth K hK
+      (apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_pointwise_bound v χ hsmooth K hK)))
+
+lemma apm_m98J02_bridge_2_aux_psi
+    (v : apm_m98J02_Dist) (χ : apm_m98J02_Test)
+    (hsmooth : ∀ φ : apm_m98J02_Test,
+      ContDiff ℝ ∞ (fun x : apm_m98J02_E => v (apm_m98J02_translateTest x φ))) :
+    ∃ Ψ : apm_m98J02_Test →L[ℝ] apm_m98J02_Test,
+      ∀ φ x, Ψ φ x = χ x * v (apm_m98J02_translateTest x φ) := by
+  refine ⟨⟨apm_m98J02_bridge_2_aux_psi_aux_linear v χ hsmooth,
+    (TestFunction.continuous_iff_continuous_comp _).2
+      (fun K hK => apm_m98J02_bridge_2_aux_psi_aux_stage_cont v χ hsmooth K hK)⟩, fun φ x => ?_⟩
+  rfl
+
 theorem apm_m98J02_bridge_2
     (u v : apm_m98J02_Dist) (K : Set apm_m98J02_E)
     (hK : IsCompact K)
     (huK : ∀ η : apm_m98J02_Test,
       Disjoint (tsupport (η : apm_m98J02_E → ℝ)) K → u η = 0) :
     ∃ w : apm_m98J02_Dist, apm_m98J02_isConvolution u v w := by
-  sorry
+  obtain ⟨χ, U, hU, hKU, hχ⟩ := apm_m98J02_bridge_1 K hK
+  obtain ⟨Ψ, hΨ⟩ := apm_m98J02_bridge_2_aux_psi v χ (apm_m98J02_bridge_2_aux_smooth v)
+  refine ⟨u.comp Ψ, fun φ => ⟨K, χ, Ψ φ, hK, huK, ⟨U, hU, hKU, hχ⟩,
+    fun x => ⟨apm_m98J02_translateTest x φ, fun y => rfl, hΨ φ x⟩, rfl⟩⟩
+
+/-- A regular distribution that vanishes on every test function supported off a compact
+`K` has its (continuous) density vanishing off `K`. -/
+lemma apm_m98J02_convolution_solves_fundamental_aux_support
+    (f : apm_m98J02_E → ℝ) (hf : Continuous f) (hfc : HasCompactSupport f)
+    (K : Set apm_m98J02_E) (hK : IsCompact K)
+    (hvan : ∀ η : apm_m98J02_Test, Disjoint (tsupport (η : apm_m98J02_E → ℝ)) K →
+      apm_m98J02_regularDistribution f hf hfc η = 0) :
+    ∀ x ∉ K, f x = 0 := by
+  intro x hxK
+  by_contra hfx
+  let s : ℝ := if 0 < f x then 1 else -1
+  have hsfx : 0 < s * f x := by
+    dsimp [s]
+    split_ifs with h
+    · simpa using h
+    · have : f x < 0 := lt_of_le_of_ne (le_of_not_gt h) hfx
+      simpa using neg_pos.mpr this
+  let U : Set apm_m98J02_E := Kᶜ ∩ {y | 0 < s * f y}
+  have hUopen : IsOpen U := hK.isClosed.isOpen_compl.inter
+    (isOpen_lt continuous_const (continuous_const.mul hf))
+  have hxU : x ∈ U := ⟨hxK, hsfx⟩
+  obtain ⟨r, hr, hball⟩ := Metric.isOpen_iff.mp hUopen x hxU
+  let b : ContDiffBump x :=
+    ⟨r / 4, r / 2, by positivity, by linarith⟩
+  let η : apm_m98J02_Test := TestFunction.mk b b.contDiff b.hasCompactSupport (by simp)
+  have hbsub : Metric.closedBall x b.rOut ⊆ U := by
+    intro y hy
+    apply hball
+    have : dist y x ≤ r / 2 := by simpa [b] using hy
+    show dist y x < r
+    linarith
+  have hdis : Disjoint (tsupport (η : apm_m98J02_E → ℝ)) K := by
+    rw [Set.disjoint_left]
+    intro y hyb hyK
+    have hybc : y ∈ Metric.closedBall x b.rOut := by
+      rw [← b.tsupport_eq]
+      simpa [η] using hyb
+    have hyU : y ∈ U := hbsub hybc
+    exact hyU.1 hyK
+  have hzero := hvan (s • η) (by
+    apply hdis.mono ?_ le_rfl
+    simpa only [TestFunction.coe_smul, Pi.smul_apply] using
+      (tsupport_smul_subset_right (fun _ : apm_m98J02_E => s) (η : apm_m98J02_E → ℝ)))
+  rw [apm_m98J02_regularDistribution_apply] at hzero
+  have hcont : Continuous (fun y => f y * (s * b y)) :=
+    hf.mul (continuous_const.mul b.continuous)
+  have hcomp : HasCompactSupport (fun y => f y * (s * b y)) :=
+    HasCompactSupport.mul_left (b.hasCompactSupport.smul_left (f := fun _ => s))
+  have hnonneg : 0 ≤ fun y => f y * (s * b y) := by
+    intro y
+    by_cases hy : y ∈ Metric.closedBall x b.rOut
+    · have hypos := (hbsub hy).2
+      calc
+        0 ≤ (s * f y) * b y := mul_nonneg hypos.le (b.nonneg' y)
+        _ = f y * (s * b y) := by ring
+    · have hby : b y = 0 := by
+        by_contra hb0
+        exact hy (by rw [← b.tsupport_eq]; exact subset_tsupport b hb0)
+      simp [hby]
+  have hpos : 0 < ∫ y, f y * (s * b y) :=
+    hcont.integral_pos_of_hasCompactSupport_nonneg_nonzero hcomp hnonneg (x := x) (by
+      have hbx : b x = 1 := b.one_of_mem_closedBall (by simp [b.rIn_pos.le])
+      have hs : s ≠ 0 := by
+        dsimp [s]
+        split <;> norm_num
+      simp [hbx, hfx, hs])
+  have : (∫ y, f y * (s * b y)) = 0 := by
+    simpa [η, mul_assoc, mul_left_comm, mul_comm] using hzero
+  linarith
+
+
+/-- Unwinding the convolution predicate for a regular `u = f`: the cutoff is `1` where `f` is
+nonzero (apm_m98J02_convolution_solves_fundamental_aux_support), so
+`w φ = ∫ f x · w₀ (translate x φ)`. -/
+lemma apm_m98J02_regular_convolution_is_C2_aux_represents_aux_unwind
+    (f : apm_m98J02_E → ℝ) (w₀ w : apm_m98J02_Dist)
+    (hf : ContDiff ℝ 2 f) (hfc : IsCompact (tsupport f))
+    (hconv : apm_m98J02_isConvolution
+      (apm_m98J02_regularDistribution f hf.continuous hfc) w₀ w)
+    (φ : apm_m98J02_Test) :
+    w φ = ∫ x, f x * w₀ (apm_m98J02_translateTest x φ) := by
+  obtain ⟨K, χ, Ψ, hK, hvan, ⟨U, -, hKU, hχ⟩, hΨ, hw⟩ := hconv φ
+  rw [hw, apm_m98J02_regularDistribution_apply]
+  have hfK := apm_m98J02_convolution_solves_fundamental_aux_support
+    f hf.continuous hfc K hK hvan
+  apply MeasureTheory.integral_congr_ae
+  filter_upwards with x
+  obtain ⟨τ, hτ, hΨx⟩ := hΨ x
+  have hτ' : τ = apm_m98J02_translateTest x φ := by
+    ext y
+    exact hτ y
+  rw [hΨx, hτ']
+  by_cases hx : x ∈ K
+  · rw [hχ x (hKU hx), one_mul]
+  · rw [hfK x hx, zero_mul, zero_mul]
+
+/-- Fubini and the change of variables `y = x + z`. -/
+lemma apm_m98J02_regular_convolution_is_C2_aux_represents_aux_fubini_aux_integrable
+    (f k : apm_m98J02_E → ℝ) (hf : Continuous f) (hfc : HasCompactSupport f)
+    (hk : LocallyIntegrable k) (φ : apm_m98J02_Test) :
+    Integrable (fun p : apm_m98J02_E × apm_m98J02_E ↦
+      k p.2 * f p.1 * φ (p.1 + p.2))
+        (MeasureTheory.volume.prod MeasureTheory.volume) ∧
+    Integrable (fun p : apm_m98J02_E × apm_m98J02_E ↦
+      k p.2 * f (p.1 - p.2) * φ p.1)
+        (MeasureTheory.volume.prod MeasureTheory.volume) := by
+  let K : Set apm_m98J02_E :=
+    (fun q : apm_m98J02_E × apm_m98J02_E ↦ q.1 - q.2) ''
+      (tsupport (φ : apm_m98J02_E → ℝ) ×ˢ tsupport f)
+  have hK : IsCompact K :=
+    (φ.hasCompactSupport.prod hfc).image (continuous_fst.sub continuous_snd)
+  have hkK : Integrable (K.indicator k) MeasureTheory.volume :=
+    (hk.integrableOn_isCompact hK).integrable_indicator hK.measurableSet
+  have hf_int : Integrable f MeasureTheory.volume :=
+    hf.integrable_of_hasCompactSupport hfc
+  have hprod : Integrable (fun p : apm_m98J02_E × apm_m98J02_E ↦
+      K.indicator k p.2 * f p.1)
+      (MeasureTheory.volume.prod MeasureTheory.volume) := by
+    simpa only [mul_comm] using hf_int.mul_prod hkK
+  obtain ⟨C, hC⟩ :=
+    φ.contDiff.continuous.bounded_above_of_compact_support φ.hasCompactSupport
+  have hbounded : ∀ p : apm_m98J02_E × apm_m98J02_E,
+      ‖φ (p.1 + p.2)‖ ≤ C := fun p ↦ hC (p.1 + p.2)
+  have hprodφ : Integrable (fun p : apm_m98J02_E × apm_m98J02_E ↦
+      (K.indicator k p.2 * f p.1) * φ (p.1 + p.2))
+      (MeasureTheory.volume.prod MeasureTheory.volume) :=
+    hprod.mul_bdd
+      (φ.contDiff.continuous.comp
+        (continuous_fst.add continuous_snd)).aestronglyMeasurable
+      (Filter.Eventually.of_forall hbounded)
+  have hfirst : Integrable (fun p : apm_m98J02_E × apm_m98J02_E ↦
+      k p.2 * f p.1 * φ (p.1 + p.2))
+      (MeasureTheory.volume.prod MeasureTheory.volume) := by
+    apply hprodφ.congr
+    filter_upwards [] with p
+    by_cases ht : p.2 ∈ K
+    · simp [Set.indicator_of_mem ht]
+    · have hz : f p.1 = 0 ∨ φ (p.1 + p.2) = 0 := by
+        by_contra hn
+        push_neg at hn
+        apply ht
+        refine ⟨(p.1 + p.2, p.1), ⟨subset_tsupport _ hn.2, subset_tsupport _ hn.1⟩, ?_⟩
+        simp
+      rcases hz with hz | hz
+      · simp [hz]
+      · simp [hz]
+  refine ⟨hfirst, ?_⟩
+  have hcomp :=
+    (measurePreserving_sub_prod MeasureTheory.volume MeasureTheory.volume).integrable_comp_of_integrable
+      hfirst
+  simpa [Function.comp_def, sub_add_cancel] using hcomp
+
+lemma apm_m98J02_regular_convolution_is_C2_aux_represents_aux_fubini
+    (f k : apm_m98J02_E → ℝ) (hf : Continuous f) (hfc : HasCompactSupport f)
+    (hk : LocallyIntegrable k) (φ : apm_m98J02_Test) :
+    (∫ x, f x * ∫ z, k z * φ (x + z)) =
+      ∫ y, MeasureTheory.convolution k f (ContinuousLinearMap.mul ℝ ℝ)
+        MeasureTheory.volume y * φ y := by
+  obtain ⟨hI, hJ⟩ :=
+    apm_m98J02_regular_convolution_is_C2_aux_represents_aux_fubini_aux_integrable
+      f k hf hfc hk φ
+  calc
+    (∫ x, f x * ∫ z, k z * φ (x + z)) =
+        ∫ x, ∫ z, k z * f x * φ (x + z) := by
+          apply MeasureTheory.integral_congr_ae
+          filter_upwards with x
+          rw [← MeasureTheory.integral_const_mul]
+          apply MeasureTheory.integral_congr_ae
+          filter_upwards with z
+          ring
+    _ = ∫ z, ∫ x, k z * f x * φ (x + z) :=
+      MeasureTheory.integral_integral_swap hI
+    _ = ∫ z, ∫ y, k z * f (y - z) * φ y := by
+      apply MeasureTheory.integral_congr_ae
+      filter_upwards with z
+      rw [show (fun x ↦ k z * f x * φ (x + z)) =
+          fun x ↦ k z * (f x * φ (x + z)) by funext x; ring,
+        show (fun y ↦ k z * f (y - z) * φ y) =
+          fun y ↦ k z * (f (y - z) * φ y) by funext y; ring]
+      rw [MeasureTheory.integral_const_mul, MeasureTheory.integral_const_mul]
+      congr 1
+      have ht := MeasureTheory.integral_add_right_eq_self
+        (μ := MeasureTheory.volume)
+        (fun y : apm_m98J02_E ↦ f (y - z) * φ y) z
+      simpa only [add_sub_cancel_right] using ht
+    _ = ∫ y, ∫ z, k z * f (y - z) * φ y :=
+      (MeasureTheory.integral_integral_swap hJ).symm
+    _ = ∫ y, MeasureTheory.convolution k f (ContinuousLinearMap.mul ℝ ℝ)
+          MeasureTheory.volume y * φ y := by
+      apply MeasureTheory.integral_congr_ae
+      filter_upwards with y
+      rw [MeasureTheory.convolution_def]
+      simp only [ContinuousLinearMap.mul_apply']
+      rw [MeasureTheory.integral_mul_const]
+
+lemma apm_m98J02_regular_convolution_is_C2_aux_represents
+    (f k : apm_m98J02_E → ℝ) (w₀ w : apm_m98J02_Dist)
+    (hf : ContDiff ℝ 2 f) (hfc : IsCompact (tsupport f))
+    (hk : LocallyIntegrable k)
+    (hw₀rep : apm_m98J02_representsFunction w₀ k)
+    (hconv : apm_m98J02_isConvolution
+      (apm_m98J02_regularDistribution f hf.continuous hfc) w₀ w) :
+    apm_m98J02_representsFunction w
+      (MeasureTheory.convolution k f (ContinuousLinearMap.mul ℝ ℝ)
+        MeasureTheory.volume) := by
+  intro φ
+  rw [apm_m98J02_regular_convolution_is_C2_aux_represents_aux_unwind f w₀ w hf hfc hconv φ]
+  have h : ∀ x, w₀ (apm_m98J02_translateTest x φ) = ∫ z, k z * φ (x + z) := by
+    intro x
+    rw [hw₀rep]
+    rfl
+  simp_rw [h]
+  exact apm_m98J02_regular_convolution_is_C2_aux_represents_aux_fubini f k hf.continuous hfc hk φ
 
 theorem apm_m98J02_regular_convolution_is_C2
     (f k : apm_m98J02_E → ℝ) (w₀ w : apm_m98J02_Dist)
@@ -864,7 +1874,66 @@ theorem apm_m98J02_regular_convolution_is_C2
       (apm_m98J02_regularDistribution f hf.continuous hfc) w₀ w) :
     ∃ g : apm_m98J02_E → ℝ,
       apm_m98J02_representsFunction w g ∧ ContDiff ℝ 2 g := by
-  sorry
+  let g : apm_m98J02_E → ℝ :=
+    MeasureTheory.convolution k f (ContinuousLinearMap.mul ℝ ℝ) MeasureTheory.volume
+  refine ⟨g, apm_m98J02_regular_convolution_is_C2_aux_represents
+    f k w₀ w hf hfc hk hw₀rep hconv, ?_⟩
+  have hfcs : HasCompactSupport f := hfc
+  exact hfcs.contDiff_convolution_right (ContinuousLinearMap.mul ℝ ℝ) hk hf
+
+/-- `T*` commutes with translation, so pairing `w₀` (with `T w₀ = δ₀`) against the
+translated adjoint of `φ` evaluates `φ` at the translation point. -/
+lemma apm_m98J02_convolution_solves_fundamental_aux_pairing_aux_partial
+    (i : Fin 2) (x y : apm_m98J02_E) (φ : apm_m98J02_Test) :
+    apm_m98J02_partial i
+        (apm_m98J02_translateTest x φ : apm_m98J02_E → ℝ) y =
+      apm_m98J02_partial i (φ : apm_m98J02_E → ℝ) (x + y) := by
+  unfold apm_m98J02_partial
+  change (fderiv ℝ (fun z : apm_m98J02_E => φ (x + z)) y) _ = _
+  rw [fderiv_comp_add_left]
+
+lemma apm_m98J02_convolution_solves_fundamental_aux_pairing_aux_adjoint
+    (x y : apm_m98J02_E) (φ : apm_m98J02_Test) :
+    apm_m98J02_formalAdjoint
+        (apm_m98J02_translateTest x φ : apm_m98J02_E → ℝ) y =
+      apm_m98J02_formalAdjoint (φ : apm_m98J02_E → ℝ) (x + y) := by
+  have hp (i : Fin 2) :
+      apm_m98J02_partial i
+          (apm_m98J02_translateTest x φ : apm_m98J02_E → ℝ) =
+        fun z => apm_m98J02_partial i (φ : apm_m98J02_E → ℝ) (x + z) := by
+    funext z
+    exact apm_m98J02_convolution_solves_fundamental_aux_pairing_aux_partial i x z φ
+  unfold apm_m98J02_formalAdjoint
+  rw [hp 0, hp 1]
+  unfold apm_m98J02_partial
+  have hfd (i : Fin 2) :
+      fderiv ℝ (fun z : apm_m98J02_E =>
+          (fderiv ℝ (φ : apm_m98J02_E → ℝ) (x + z))
+            (EuclideanSpace.single i 1)) y =
+        fderiv ℝ (fun z : apm_m98J02_E =>
+          (fderiv ℝ (φ : apm_m98J02_E → ℝ) z)
+            (EuclideanSpace.single i 1)) (x + y) := by
+    exact fderiv_comp_add_left (𝕜 := ℝ)
+      (f := fun z : apm_m98J02_E =>
+        (fderiv ℝ (φ : apm_m98J02_E → ℝ) z)
+          (EuclideanSpace.single i 1)) (x := y) x
+  rw [hfd 0, hfd 1]
+
+lemma apm_m98J02_convolution_solves_fundamental_aux_pairing
+    (w₀ : apm_m98J02_Dist)
+    (hw₀ : apm_m98J02_solvesT w₀ (fun φ ↦ φ 0))
+    (φ : apm_m98J02_Test) (x : apm_m98J02_E) :
+    w₀ (apm_m98J02_translateTest x (apm_m98J02_formalAdjointTest φ)) = φ x := by
+  obtain ⟨ψ, hψ, hwψ⟩ := hw₀ (apm_m98J02_translateTest x φ)
+  have hcomm : apm_m98J02_translateTest x (apm_m98J02_formalAdjointTest φ) = ψ := by
+    ext y
+    rw [hψ y]
+    simp only [apm_m98J02_translateTest_apply,
+      apm_m98J02_formalAdjointTest_apply]
+    exact (apm_m98J02_convolution_solves_fundamental_aux_pairing_aux_adjoint
+      x y φ).symm
+  rw [hcomm, hwψ]
+  simp
 
 theorem apm_m98J02_convolution_solves_fundamental
     (f : apm_m98J02_E → ℝ) (w₀ w : apm_m98J02_Dist)
@@ -873,11 +1942,85 @@ theorem apm_m98J02_convolution_solves_fundamental
     (hconv : apm_m98J02_isConvolution
       (apm_m98J02_regularDistribution f hf.continuous hfc) w₀ w) :
     apm_m98J02_solvesT w (fun φ ↦ ∫ x, f x * φ x) := by
-  sorry
+  intro φ
+  refine ⟨apm_m98J02_formalAdjointTest φ, fun x => by simp, ?_⟩
+  obtain ⟨K, χ, Ψ, hK, hvan, ⟨U, -, hKU, hχ⟩, hΨ, hw⟩ := hconv (apm_m98J02_formalAdjointTest φ)
+  rw [hw]
+  have hfK := apm_m98J02_convolution_solves_fundamental_aux_support f hf.continuous hfc K hK hvan
+  change (∫ x, f x * Ψ x) = ∫ x, f x * φ x
+  congr 1
+  funext x
+  obtain ⟨τ, hτ, hΨx⟩ := hΨ x
+  have hτ' : τ = apm_m98J02_translateTest x (apm_m98J02_formalAdjointTest φ) := by
+    ext y; rw [hτ y]; rfl
+  rw [hΨx, hτ', apm_m98J02_convolution_solves_fundamental_aux_pairing w₀ hw₀ φ x]
+  by_cases hx : x ∈ K
+  · rw [hχ x (hKU hx), one_mul]
+  · rw [hfK x hx, zero_mul, zero_mul]
+
+lemma apm_m98J02_constantDistribution_homogeneous_aux_of_integral_partial_zero
+    (hpartial : ∀ (i : Fin 2) (φ : apm_m98J02_Test),
+      ∫ x, apm_m98J02_partial i (φ : apm_m98J02_E → ℝ) x = 0) :
+    apm_m98J02_solvesT apm_m98J02_constantDistribution (fun _ ↦ 0) := by
+  intro φ
+  refine ⟨apm_m98J02_formalAdjointTest φ, fun x => by simp, ?_⟩
+  rw [apm_m98J02_constantDistribution_apply]
+  simp only [apm_m98J02_formalAdjointTest, TestFunction.coe_add,
+    TestFunction.coe_smul, Pi.add_apply, Pi.smul_apply, smul_eq_mul,
+    Pi.zero_apply, apm_m98J02_partialTest_apply, apm_m98J02_partialTest_coe]
+  change (∫ x, 2 • apm_m98J02_partial 0
+      (apm_m98J02_partial 0 (φ : apm_m98J02_E → ℝ)) x +
+      apm_m98J02_partial 1 (φ : apm_m98J02_E → ℝ) x +
+      3 • apm_m98J02_partial 0
+        (apm_m98J02_partial 1 (φ : apm_m98J02_E → ℝ)) x) = 0
+  have h00 := hpartial 0 (apm_m98J02_partialTest 0 φ)
+  have h01 := hpartial 0 (apm_m98J02_partialTest 1 φ)
+  rw [apm_m98J02_partialTest_coe] at h00 h01
+  have hi00 : Integrable (apm_m98J02_partial 0
+      (apm_m98J02_partial 0 (φ : apm_m98J02_E → ℝ))) :=
+    (apm_m98J02_partialTest 0 (apm_m98J02_partialTest 0 φ)).contDiff.continuous.integrable_of_hasCompactSupport
+      (apm_m98J02_partialTest 0 (apm_m98J02_partialTest 0 φ)).hasCompactSupport
+  have hi1 : Integrable (apm_m98J02_partial 1 (φ : apm_m98J02_E → ℝ)) :=
+    (apm_m98J02_partialTest 1 φ).contDiff.continuous.integrable_of_hasCompactSupport
+      (apm_m98J02_partialTest 1 φ).hasCompactSupport
+  have hi01 : Integrable (apm_m98J02_partial 0
+      (apm_m98J02_partial 1 (φ : apm_m98J02_E → ℝ))) :=
+    (apm_m98J02_partialTest 0 (apm_m98J02_partialTest 1 φ)).contDiff.continuous.integrable_of_hasCompactSupport
+      (apm_m98J02_partialTest 0 (apm_m98J02_partialTest 1 φ)).hasCompactSupport
+  simp only [nsmul_eq_mul]
+  rw [integral_add, integral_add, integral_const_mul, integral_const_mul,
+    h00, hpartial 1 φ, h01]
+  norm_num
+  all_goals
+    first
+    | exact hi00.const_mul _
+    | exact hi1
+    | exact hi01.const_mul _
+    | exact (hi00.const_mul _).add hi1
+
+/-- The integral of a coordinate partial of a test function vanishes (integration by parts
+against the constant `1`). -/
+lemma apm_m98J02_constantDistribution_homogeneous_aux_integral_partial (i : Fin 2) (φ : apm_m98J02_Test) :
+    ∫ x, apm_m98J02_partial i (φ : apm_m98J02_E → ℝ) x = 0 := by
+  have hφ : ContDiff ℝ 1 (φ : apm_m98J02_E → ℝ) := φ.contDiff.of_le (by simp)
+  have hd : Continuous (fun x => fderiv ℝ (φ : apm_m98J02_E → ℝ) x (EuclideanSpace.single i 1)) :=
+    (hφ.continuous_fderiv one_ne_zero).clm_apply continuous_const
+  have hI1 : Integrable (fun x => fderiv ℝ (φ : apm_m98J02_E → ℝ) x (EuclideanSpace.single i 1)) :=
+    hd.integrable_of_hasCompactSupport (φ.hasCompactSupport.fderiv_apply ℝ _)
+  have hI2 : Integrable (φ : apm_m98J02_E → ℝ) :=
+    φ.contDiff.continuous.integrable_of_hasCompactSupport φ.hasCompactSupport
+  have hibp := integral_mul_fderiv_eq_neg_fderiv_mul_of_integrable
+    (μ := (MeasureTheory.volume : MeasureTheory.Measure apm_m98J02_E))
+    (f := fun _ : apm_m98J02_E => (1 : ℝ))
+    (g := (φ : apm_m98J02_E → ℝ)) (v := EuclideanSpace.single i 1)
+    (by simp) (by simpa using hI1) (by simpa using hI2)
+    (fun x _ => differentiableAt_const _)
+    (fun x _ => hφ.differentiable one_ne_zero x)
+  simpa [apm_m98J02_partial] using hibp
 
 theorem apm_m98J02_constantDistribution_homogeneous :
     apm_m98J02_solvesT apm_m98J02_constantDistribution (fun _ ↦ 0) := by
-  sorry
+  exact apm_m98J02_constantDistribution_homogeneous_aux_of_integral_partial_zero apm_m98J02_constantDistribution_homogeneous_aux_integral_partial
 
 theorem apm_m98j02 :
     (∀ u v : apm_m98J02_Dist,

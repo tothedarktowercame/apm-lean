@@ -703,6 +703,84 @@ theorem apm_m99J06_galerkin_exists_unique
     ∃! u : V, apm_m99J06_galerkinEquation M f V u := by
   exact apm_m99J06_riesz_on_complete_submodule M f hf V
 
+lemma apm_m99J06_galerkin_norm_le_aux_val
+    {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℝ H]
+    (M : apm_m99J06_H01Model H) (v : H) :
+    (eLpNorm (M.val v) 2 apm_m99J06_intervalMeasure).toReal ≤ ‖v‖ := by
+  have hv := (M.represents v).2.1
+  have he := hv.eLpNorm_eq_integral_rpow_norm (by norm_num) (by norm_num)
+  have hnorm : (eLpNorm (M.val v) 2 apm_m99J06_intervalMeasure).toReal ^ 2 =
+      ∫ x, (M.val v x) ^ 2 ∂apm_m99J06_intervalMeasure := by
+    rw [he]
+    norm_num [Real.norm_eq_abs] at ⊢
+    have hI : 0 ≤ ∫ x, (M.val v x) ^ 2 ∂apm_m99J06_intervalMeasure :=
+      MeasureTheory.integral_nonneg (fun x ↦ sq_nonneg _)
+    rw [ENNReal.toReal_ofReal (Real.rpow_nonneg hI _)]
+    rw [← Real.sqrt_eq_rpow, Real.sq_sqrt hI]
+  have hderiv_nonneg : 0 ≤ ∫ x, (M.weakDeriv v x) ^ 2
+      ∂apm_m99J06_intervalMeasure :=
+    MeasureTheory.integral_nonneg (fun x ↦ sq_nonneg _)
+  have henergy : ‖v‖ ^ 2 =
+      (∫ x, (M.val v x) ^ 2 ∂apm_m99J06_intervalMeasure) +
+        ∫ x, (M.weakDeriv v x) ^ 2 ∂apm_m99J06_intervalMeasure := by
+    have hi1 : Integrable (fun x => M.val v x * M.val v x)
+        apm_m99J06_intervalMeasure := by
+      simpa only [Pi.mul_apply] using
+        (apm_m99J06_integrable_inner_components M v v).1
+    have hi2 := (apm_m99J06_integrable_inner_components M v v).2
+    have he' := M.inner_eq v v
+    rw [inner_self_eq_norm_sq_to_K] at he'
+    change ‖v‖ ^ 2 = ∫ x, M.val v x * M.val v x +
+      M.weakDeriv v x * M.weakDeriv v x ∂apm_m99J06_intervalMeasure at he'
+    rw [MeasureTheory.integral_add hi1 hi2] at he'
+    simpa [pow_two] using he'
+  apply (sq_le_sq₀ ENNReal.toReal_nonneg (norm_nonneg _)).mp
+  rw [hnorm, henergy]
+  linarith
+
+lemma apm_m99J06_galerkin_norm_le_aux_holder
+    {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℝ H]
+    (M : apm_m99J06_H01Model H)
+    (f : ℝ → ℝ) (hf : MemLp f 2 apm_m99J06_intervalMeasure)
+    (V : Submodule ℝ H) (u : V)
+    (hu : apm_m99J06_galerkinEquation M f V u)
+    (hval : (eLpNorm (M.val (u : H)) 2 apm_m99J06_intervalMeasure).toReal ≤
+      ‖(u : H)‖) :
+    ‖(u : H)‖ ≤ (eLpNorm f 2 apm_m99J06_intervalMeasure).toReal := by
+  let hg := (M.represents (u : H)).2.1
+  let F : apm_m99J06_L2 := hf.toLp f
+  let G : apm_m99J06_L2 := hg.toLp (M.val (u : H))
+  have hinner : inner ℝ F G =
+      ∫ x, f x * M.val (u : H) x ∂apm_m99J06_intervalMeasure := by
+    rw [MeasureTheory.L2.inner_def]
+    apply integral_congr_ae
+    filter_upwards [MemLp.coeFn_toLp hf, MemLp.coeFn_toLp hg] with x hfx hgx
+    simp [F, G, hfx, hgx, real_inner_eq_re_inner, RCLike.inner_apply]
+    ring
+  have henergy : ‖(u : H)‖ ^ 2 =
+      ∫ x, f x * M.val (u : H) x ∂apm_m99J06_intervalMeasure := by
+    have he := hu u
+    rw [inner_self_eq_norm_sq_to_K] at he
+    simpa using he
+  have hFG : ‖F‖ * ‖G‖ =
+      (eLpNorm f 2 apm_m99J06_intervalMeasure).toReal *
+        (eLpNorm (M.val (u : H)) 2 apm_m99J06_intervalMeasure).toReal := by
+    simp [F, G, Lp.norm_toLp]
+  have hsq : ‖(u : H)‖ ^ 2 ≤
+      (eLpNorm f 2 apm_m99J06_intervalMeasure).toReal * ‖(u : H)‖ := by
+    calc
+      ‖(u : H)‖ ^ 2 = inner ℝ F G := henergy.trans hinner.symm
+      _ ≤ ‖inner ℝ F G‖ := le_abs_self _
+      _ ≤ ‖F‖ * ‖G‖ := norm_inner_le_norm _ _
+      _ = (eLpNorm f 2 apm_m99J06_intervalMeasure).toReal *
+          (eLpNorm (M.val (u : H)) 2 apm_m99J06_intervalMeasure).toReal := hFG
+      _ ≤ (eLpNorm f 2 apm_m99J06_intervalMeasure).toReal * ‖(u : H)‖ :=
+        mul_le_mul_of_nonneg_left hval ENNReal.toReal_nonneg
+  by_cases hu0 : ‖(u : H)‖ = 0
+  · simp [hu0]
+  · have hupos : 0 < ‖(u : H)‖ := lt_of_le_of_ne (norm_nonneg _) (Ne.symm hu0)
+    nlinarith
+
 theorem apm_m99J06_galerkin_norm_le
     {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℝ H]
     (M : apm_m99J06_H01Model H)
@@ -710,7 +788,8 @@ theorem apm_m99J06_galerkin_norm_le
     (V : Submodule ℝ H) (u : V)
     (hu : apm_m99J06_galerkinEquation M f V u) :
     ‖(u : H)‖ ≤ (eLpNorm f 2 apm_m99J06_intervalMeasure).toReal := by
-  sorry
+  exact apm_m99J06_galerkin_norm_le_aux_holder M f hf V u hu
+    (apm_m99J06_galerkin_norm_le_aux_val M (u : H))
 
 theorem apm_m99J06_weakSolution_exists_unique
     {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℝ H]
@@ -737,7 +816,11 @@ theorem apm_m99J06_galerkin_eq_starProjection
     (u : H) (hu : apm_m99J06_weakSolution M f u)
     (uV : V) (huV : apm_m99J06_galerkinEquation M f V uV) :
     (uV : H) = V.starProjection u := by
-  sorry
+  symm
+  apply Submodule.eq_starProjection_of_mem_of_inner_eq_zero uV.property
+  intro v hv
+  rw [inner_sub_left, sub_eq_zero]
+  exact (hu v).trans (huV ⟨v, hv⟩).symm
 
 theorem apm_m99J06_starProjection_convergence
     {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℝ H]
@@ -750,7 +833,19 @@ theorem apm_m99J06_starProjection_convergence
     Tendsto (fun n ↦ (uSeq n : H)) atTop (nhds u) ∧
       Tendsto (fun n ↦ toWeakSpace ℝ H (uSeq n : H)) atTop
         (nhds (toWeakSpace ℝ H u)) := by
-  sorry
+  have hmono : Monotone V := monotone_nat_of_le_succ hnested
+  have hclosure : (⨆ n, V n).topologicalClosure = ⊤ := by
+    apply Submodule.dense_iff_topologicalClosure_eq_top.mp
+    apply hdense.mono
+    intro z hz
+    obtain ⟨n, hn⟩ := Set.mem_iUnion.mp hz
+    exact Submodule.mem_iSup_of_mem n hn
+  have hs : Tendsto (fun n => (V n).starProjection u) atTop (nhds u) :=
+    Submodule.starProjection_tendsto_self V hmono u (by rw [hclosure])
+  have hstrong : Tendsto (fun n => (uSeq n : H)) atTop (nhds u) := by
+    simpa only [hproj] using hs
+  refine ⟨hstrong, ?_⟩
+  exact (toWeakSpaceCLM ℝ H).continuous.continuousAt.tendsto.comp hstrong
 
 theorem apm_m99j06
     (H : Type*) [NormedAddCommGroup H] [InnerProductSpace ℝ H]

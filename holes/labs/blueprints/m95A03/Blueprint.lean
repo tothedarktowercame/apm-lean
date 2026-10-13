@@ -170,6 +170,206 @@ theorem apm_m95A03_isMinOn_of_solves
   rw [hexpand, hcross, mul_zero, add_zero]
   exact le_add_of_nonneg_right hRint
 
+lemma apm_m95A03_solves_of_isMinOn_aux_residual_continuous
+    (p q f u : ℝ → ℝ) (hp : ContDiff ℝ 1 p)
+    (hq : Continuous q) (hf : Continuous f) (hu2 : ContDiff ℝ 2 u) :
+    Continuous (fun t =>
+      deriv (fun x => p x * deriv u x) t - q t * u t - f t) := by
+  have hdu : ContDiff ℝ 1 (deriv u) := hu2.deriv'
+  have hg : ContDiff ℝ 1 (fun x => p x * deriv u x) := hp.mul hdu
+  have hgd : ContDiff ℝ 0 (deriv (fun x => p x * deriv u x)) := hg.deriv'
+  exact (hgd.continuous.sub (hq.mul hu2.continuous)).sub hf
+
+lemma apm_m95A03_solves_of_isMinOn_aux_perturb_admissible
+    (a b α β s : ℝ) (u η : ℝ → ℝ)
+    (hu : ContDiff ℝ 1 u) (hua : u a = α) (hub : u b = β)
+    (hη : ContDiff ℝ 1 η) (hηa : η a = 0) (hηb : η b = 0) :
+    (fun x => u x + s * η x) ∈ apm_m95A03_admissible a b α β := by
+  refine ⟨hu.add (contDiff_const.mul hη), ?_, ?_⟩
+  · simp [hua, hηa]
+  · simp [hub, hηb]
+
+/-- First variation: minimality against `u + s η` for both signs of `s` kills the
+linear term of the quadratic `s ↦ energy (u + s η)`. -/
+lemma apm_m95A03_solves_of_isMinOn_aux_first_variation
+    (a b α β : ℝ) (hab : a < b)
+    (p q f u : ℝ → ℝ) (hp : ContDiff ℝ 1 p)
+    (hq : Continuous q) (hf : Continuous f)
+    (hu2 : ContDiff ℝ 2 u) (hua : u a = α) (hub : u b = β)
+    (hmin : IsMinOn (apm_m95A03_energy a b p q f)
+      (apm_m95A03_admissible a b α β) u)
+    (η : ℝ → ℝ) (hη : ContDiff ℝ 1 η) (hηa : η a = 0) (hηb : η b = 0) :
+    (∫ t in a..b, p t * deriv u t * deriv η t + q t * u t * η t + f t * η t) = 0 := by
+  let L := ∫ t in a..b,
+    p t * deriv u t * deriv η t + q t * u t * η t + f t * η t
+  let Q := ∫ t in a..b, p t * (deriv η t) ^ 2 + q t * (η t) ^ 2
+  have hu1 : ContDiff ℝ 1 u := hu2.of_le (by norm_num)
+  have hdu1 : ContDiff ℝ 1 (deriv u) := hu2.deriv'
+  have hdη0 : ContDiff ℝ 0 (deriv η) := hη.deriv'
+  have hdu : Continuous (deriv u) := hdu1.continuous
+  have hdη : Continuous (deriv η) := hdη0.continuous
+  have hU : Continuous (fun t =>
+      p t * deriv u t ^ 2 + q t * u t ^ 2 + 2 * u t * f t) := by
+    fun_prop
+  have hLin : Continuous (fun t =>
+      p t * deriv u t * deriv η t + q t * u t * η t + f t * η t) := by
+    fun_prop
+  have hQuad : Continuous (fun t =>
+      p t * deriv η t ^ 2 + q t * η t ^ 2) := by
+    fun_prop
+  have hderiv (s x : ℝ) :
+      deriv (fun y => u y + s * η y) x = deriv u x + s * deriv η x := by
+    exact ((hu1.differentiable (by norm_num) x).hasDerivAt.add
+      ((hη.differentiable (by norm_num) x).hasDerivAt.const_mul s)).deriv
+  have hexpand (s : ℝ) :
+      apm_m95A03_energy a b p q f (fun x => u x + s * η x) =
+        apm_m95A03_energy a b p q f u + 2 * s * L + s ^ 2 * Q := by
+    unfold apm_m95A03_energy
+    rw [show (∫ t in a..b,
+        p t * deriv (fun x => u x + s * η x) t ^ 2 +
+          q t * (u t + s * η t) ^ 2 + 2 * (u t + s * η t) * f t) =
+        ∫ t in a..b,
+          (p t * deriv u t ^ 2 + q t * u t ^ 2 + 2 * u t * f t) +
+          (2 * s) * (p t * deriv u t * deriv η t +
+            q t * u t * η t + f t * η t) +
+          s ^ 2 * (p t * deriv η t ^ 2 + q t * η t ^ 2) by
+      apply intervalIntegral.integral_congr
+      intro x hx
+      dsimp only
+      rw [hderiv s x]
+      ring]
+    simp only [L, Q]
+    rw [← intervalIntegral.integral_const_mul,
+      ← intervalIntegral.integral_const_mul,
+      ← intervalIntegral.integral_add (hU.intervalIntegrable _ _)
+        ((hLin.const_mul (2 * s)).intervalIntegrable _ _)]
+    convert intervalIntegral.integral_add (μ := MeasureTheory.volume)
+      ((hU.add (hLin.const_mul (2 * s))).intervalIntegrable _ _)
+      ((hQuad.const_mul (s ^ 2)).intervalIntegrable _ _) using 1 <;> rfl
+  have hineq (s : ℝ) : 0 ≤ 2 * s * L + s ^ 2 * Q := by
+    have hv := apm_m95A03_solves_of_isMinOn_aux_perturb_admissible
+      a b α β s u η hu1 hua hub hη hηa hηb
+    have hm := hmin hv
+    change apm_m95A03_energy a b p q f u ≤
+      apm_m95A03_energy a b p q f (fun x => u x + s * η x) at hm
+    rw [hexpand s] at hm
+    linarith
+  by_contra hL
+  let D := |Q| + 1
+  have hD : 0 < D := by dsimp [D]; positivity
+  have hi := hineq (-L / D)
+  have hLsq : 0 < L ^ 2 := sq_pos_of_ne_zero hL
+  have hQ : Q ≤ |Q| := le_abs_self Q
+  dsimp [D] at hi hD
+  field_simp at hi
+  nlinarith
+
+/-- Integration by parts of the weak form against a variation vanishing at both ends. -/
+lemma apm_m95A03_solves_of_isMinOn_aux_ibp
+    (a b : ℝ) (hab : a < b)
+    (p q f u : ℝ → ℝ) (hp : ContDiff ℝ 1 p)
+    (hq : Continuous q) (hf : Continuous f) (hu2 : ContDiff ℝ 2 u)
+    (η : ℝ → ℝ) (hη : ContDiff ℝ 1 η) (hηa : η a = 0) (hηb : η b = 0) :
+    (∫ t in a..b, p t * deriv u t * deriv η t + q t * u t * η t + f t * η t) =
+      -∫ t in a..b, (deriv (fun x => p x * deriv u x) t - q t * u t - f t) * η t := by
+  have hu' : ContDiff ℝ 1 (deriv u) := by
+    simpa using hu2.deriv'
+  have hg : ContDiff ℝ 1 (fun x => p x * deriv u x) := hp.mul hu'
+  have hdg : Continuous (fun x => deriv (fun y => p y * deriv u y) x) :=
+    hg.continuous_deriv_one
+  have hdη : Continuous (deriv η) := hη.continuous_deriv_one
+  have hdg_int : IntervalIntegrable (deriv (fun x => p x * deriv u x))
+      MeasureTheory.volume a b := by
+    simpa only using hdg.intervalIntegrable (a := a) (b := b)
+  have hdη_int : IntervalIntegrable (deriv η) MeasureTheory.volume a b :=
+    hdη.intervalIntegrable (μ := MeasureTheory.volume) (a := a) (b := b)
+  have hibp := intervalIntegral.integral_mul_deriv_eq_deriv_mul
+    (a := a) (b := b)
+    (u := fun x => p x * deriv u x) (v := η)
+    (u' := deriv (fun x => p x * deriv u x)) (v' := deriv η)
+    (fun x _ => (hg.differentiable (by simp) x).hasDerivAt)
+    (fun x _ => (hη.differentiable (by simp) x).hasDerivAt)
+    hdg_int hdη_int
+  have hibp' :
+      (∫ t in a..b, p t * deriv u t * deriv η t) =
+        -∫ t in a..b, deriv (fun x => p x * deriv u x) t * η t := by
+    simpa [hηa, hηb] using hibp
+  have hqu : Continuous (fun t => q t * u t * η t) :=
+    (hq.mul hu2.continuous).mul hη.continuous
+  have hfη : Continuous (fun t => f t * η t) := hf.mul hη.continuous
+  have hgdη : Continuous (fun t => deriv (fun x => p x * deriv u x) t * η t) :=
+    hdg.mul hη.continuous
+  have hA : IntervalIntegrable (fun t => p t * deriv u t * deriv η t)
+      MeasureTheory.volume a b := by
+    simpa only [Pi.mul_apply] using
+      (hg.continuous.mul hdη).intervalIntegrable (a := a) (b := b)
+  have hB : IntervalIntegrable (fun t => q t * u t * η t)
+      MeasureTheory.volume a b := hqu.intervalIntegrable
+        (μ := MeasureTheory.volume) (a := a) (b := b)
+  have hC : IntervalIntegrable (fun t => f t * η t)
+      MeasureTheory.volume a b := hfη.intervalIntegrable
+        (μ := MeasureTheory.volume) (a := a) (b := b)
+  have hD : IntervalIntegrable
+      (fun t => deriv (fun x => p x * deriv u x) t * η t)
+      MeasureTheory.volume a b := hgdη.intervalIntegrable
+        (μ := MeasureTheory.volume) (a := a) (b := b)
+  have hr : (∫ t in a..b,
+      (deriv (fun x => p x * deriv u x) t - q t * u t - f t) * η t) =
+      (∫ t in a..b, deriv (fun x => p x * deriv u x) t * η t) -
+        (∫ t in a..b, q t * u t * η t) - (∫ t in a..b, f t * η t) := by
+    rw [← intervalIntegral.integral_sub hD hB,
+      ← intervalIntegral.integral_sub (hD.sub hB) hC]
+    apply intervalIntegral.integral_congr
+    intro t _
+    ring
+  rw [intervalIntegral.integral_add (hA.add hB) hC,
+    intervalIntegral.integral_add hA hB, hibp', hr]
+  ring
+
+/-- Fundamental lemma of the calculus of variations on `[a, b]`, for a continuous
+function tested against `C¹` variations vanishing at both ends. -/
+lemma apm_m95A03_solves_of_isMinOn_aux_fundamental
+    (a b : ℝ) (hab : a < b) (R : ℝ → ℝ) (hR : Continuous R)
+    (h : ∀ η : ℝ → ℝ, ContDiff ℝ 1 η → η a = 0 → η b = 0 →
+      (∫ t in a..b, R t * η t) = 0) :
+    ∀ t ∈ Set.Icc a b, R t = 0 := by
+  have hloc : MeasureTheory.LocallyIntegrableOn R (Set.Ioo a b) :=
+    (hR.locallyIntegrable (μ := MeasureTheory.MeasureSpace.volume)).locallyIntegrableOn _
+  have hae : ∀ᵐ t ∂MeasureTheory.MeasureSpace.volume,
+      t ∈ Set.Ioo a b → R t = 0 :=
+    isOpen_Ioo.ae_eq_zero_of_integral_contDiff_smul_eq_zero hloc (by
+      intro g hg hgc hgs
+      have hga : g a = 0 := by
+        by_contra hga
+        have ha_supp : a ∈ Function.support g := by simpa [Function.mem_support]
+        have haU := hgs (subset_closure ha_supp)
+        exact (not_lt_of_ge le_rfl) haU.1
+      have hgb : g b = 0 := by
+        by_contra hgb
+        have hb_supp : b ∈ Function.support g := by simpa [Function.mem_support]
+        have hbU := hgs (subset_closure hb_supp)
+        exact (not_lt_of_ge le_rfl) hbU.2
+      have hsupp : Function.support (fun t => R t * g t) ⊆ Set.Ioc a b := by
+        intro t ht
+        have htg : t ∈ Function.support g :=
+          (Function.support_mul R g ▸ ht).2
+        have htU := hgs (subset_closure htg)
+        exact ⟨htU.1, htU.2.le⟩
+      have hz := h g (hg.of_le (by norm_num)) hga hgb
+      rw [intervalIntegral.integral_eq_integral_of_support_subset hsupp] at hz
+      simpa [smul_eq_mul, mul_comm] using hz)
+  have hae' : R =ᵐ[(MeasureTheory.MeasureSpace.volume : MeasureTheory.Measure ℝ).restrict
+      (Set.Ioo a b)] (0 : ℝ → ℝ) := by
+    apply (MeasureTheory.ae_restrict_iff' measurableSet_Ioo).2
+    simpa only [Pi.zero_apply] using hae
+  have hinterior : Set.EqOn R 0 (Set.Ioo a b) :=
+    MeasureTheory.Measure.eqOn_open_of_ae_eq hae' isOpen_Ioo hR.continuousOn
+      continuous_zero.continuousOn
+  have hclosed : Set.EqOn R 0 (Set.Icc a b) := hinterior.of_subset_closure
+    hR.continuousOn continuous_zero.continuousOn Set.Ioo_subset_Icc_self (by
+      rw [closure_Ioo hab.ne])
+  exact hclosed
+
 theorem apm_m95A03_solves_of_isMinOn
     (a b α β p₀ : ℝ) (hab : a < b) (hp₀ : 0 < p₀)
     (p q f u : ℝ → ℝ) (hp : ContDiff ℝ 1 p)
@@ -180,15 +380,826 @@ theorem apm_m95A03_solves_of_isMinOn
     (hmin : IsMinOn (apm_m95A03_energy a b p q f)
       (apm_m95A03_admissible a b α β) u) :
     apm_m95A03_solves a b α β p q f u := by
-  sorry
+  refine ⟨hu2, hua, hub, fun t ht => ?_⟩
+  have hR := apm_m95A03_solves_of_isMinOn_aux_residual_continuous p q f u hp hq hf hu2
+  have hzero := apm_m95A03_solves_of_isMinOn_aux_fundamental a b hab _ hR (fun η hη hηa hηb => by
+    have h1 := apm_m95A03_solves_of_isMinOn_aux_first_variation a b α β hab p q f u hp hq hf hu2 hua hub hmin
+      η hη hηa hηb
+    rw [apm_m95A03_solves_of_isMinOn_aux_ibp a b hab p q f u hp hq hf hu2 η hη hηa hηb, neg_eq_zero] at h1
+    exact h1) t ht
+  linarith
 
 theorem apm_m95A03_homogenization
-    (a b α β : ℝ) (hab : a < b) (p q f u : ℝ → ℝ) :
+    (a b α β : ℝ) (hab : a < b) (p q f u : ℝ → ℝ) (hp : ContDiff ℝ 1 p) :
     let w := apm_m95A03_boundaryLift a b α β
     apm_m95A03_solves a b α β p q f u ↔
       apm_m95A03_solves a b 0 0 p q
         (apm_m95A03_modifiedRHS p q f w) (u - w) := by
-  sorry
+  dsimp only
+  let w := apm_m95A03_boundaryLift a b α β
+  have hab0 : b - a ≠ 0 := sub_ne_zero.mpr hab.ne'
+  have hw : ContDiff ℝ ⊤ w := by
+    change ContDiff ℝ ⊤ (fun t : ℝ => α + (β - α) * ((t - a) / (b - a)))
+    fun_prop
+  have hwa : w a = α := by
+    simp [w, apm_m95A03_boundaryLift, hab0]
+  have hwb : w b = β := by
+    simp [w, apm_m95A03_boundaryLift, hab0]
+  have hw_succ : ContDiff ℝ (1 + 1) w := hw.of_le le_top
+  have hdw : ContDiff ℝ 1 (deriv w) := hw_succ.deriv'
+  constructor
+  · rintro ⟨hu, hua, hub, heq⟩
+    have hu1 : ContDiff ℝ 1 u := hu.of_le (by norm_num)
+    have hv : ContDiff ℝ 2 (u - w) := hu.sub (hw.of_le le_top)
+    refine ⟨hv, ?_, ?_, ?_⟩
+    · change u a - w a = 0
+      rw [hua, hwa]
+      ring
+    · change u b - w b = 0
+      rw [hub, hwb]
+      ring
+    · intro t ht
+      have hdu (x : ℝ) : deriv (u - w) x = deriv u x - deriv w x := by
+        exact deriv_sub (hu1.differentiable (by norm_num) x) (hw.differentiable (by simp) x)
+      have hflux : (fun x => p x * deriv (u - w) x) =
+          (fun x => p x * deriv u x) - (fun x => p x * deriv w x) := by
+        funext x
+        simp [hdu x, mul_sub]
+      have hpu : Differentiable ℝ (fun x => p x * deriv u x) :=
+        (hp.mul hu.deriv').differentiable (by norm_num)
+      have hpw : Differentiable ℝ (fun x => p x * deriv w x) :=
+        (hp.mul hdw).differentiable (by norm_num)
+      rw [hflux, deriv_sub (hpu t) (hpw t)]
+      simp only [Pi.sub_apply, apm_m95A03_modifiedRHS]
+      linarith [heq t ht]
+  · rintro ⟨hv, hva, hvb, heq⟩
+    have hw2 : ContDiff ℝ 2 w := hw.of_le le_top
+    have hu : ContDiff ℝ 2 u := by
+      have huv : u = (u - w) + w := by ext x; simp
+      rw [huv]
+      exact hv.add hw2
+    refine ⟨hu, ?_, ?_, ?_⟩
+    · change u a - w a = 0 at hva
+      linarith
+    · change u b - w b = 0 at hvb
+      linarith
+    · intro t ht
+      have hu1 : ContDiff ℝ 1 u := hu.of_le (by norm_num)
+      have hdu (x : ℝ) : deriv (u - w) x = deriv u x - deriv w x := by
+        exact deriv_sub (hu1.differentiable (by norm_num) x) (hw.differentiable (by simp) x)
+      have hflux : (fun x => p x * deriv (u - w) x) =
+          (fun x => p x * deriv u x) - (fun x => p x * deriv w x) := by
+        funext x
+        simp [hdu x, mul_sub]
+      have hpu : Differentiable ℝ (fun x => p x * deriv u x) :=
+        (hp.mul hu.deriv').differentiable (by norm_num)
+      have hpw : Differentiable ℝ (fun x => p x * deriv w x) :=
+        (hp.mul hdw).differentiable (by norm_num)
+      have h := heq t ht
+      rw [hflux, deriv_sub (hpu t) (hpw t)] at h
+      simp only [Pi.sub_apply, apm_m95A03_modifiedRHS] at h
+      linarith
+
+/-- Initial value problem for the linear equation `(p y')' - q y = g` on `[a, b]`, with a
+global `C²` solution (solve on `[a, b]`, extend past the endpoints by second-order Taylor
+polynomials). -/
+lemma apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_p_pos
+    (a b p₀ : ℝ) (hp₀ : 0 < p₀) (p : ℝ → ℝ)
+    (hp_lower : ∀ t ∈ Set.Icc a b, p₀ ≤ p t) :
+    ∀ t ∈ Set.Icc a b, 0 < p t := by
+  intro t ht
+  exact lt_of_lt_of_le hp₀ (hp_lower t ht)
+
+lemma apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_p_ne
+    (a b p₀ : ℝ) (hp₀ : 0 < p₀) (p : ℝ → ℝ)
+    (hp_lower : ∀ t ∈ Set.Icc a b, p₀ ≤ p t) :
+    ∀ t ∈ Set.Icc a b, p t ≠ 0 := by
+  intro t ht
+  exact (apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_p_pos
+    a b p₀ hp₀ p hp_lower t ht).ne'
+
+lemma apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_inv_continuousOn
+    (a b p₀ : ℝ) (hp₀ : 0 < p₀) (p : ℝ → ℝ) (hp : Continuous p)
+    (hp_lower : ∀ t ∈ Set.Icc a b, p₀ ≤ p t) :
+    ContinuousOn (fun t => (p t)⁻¹) (Set.Icc a b) := by
+  exact hp.continuousOn.inv₀
+    (apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_p_ne
+      a b p₀ hp₀ p hp_lower)
+
+/-- The first-order system `y' = z / p, z' = q y + g` has a solution on `[a, b]` with any
+initial data (linear system with continuous coefficients: Picard iteration / Grönwall). -/
+lemma apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_system_aux_inv
+    (a b : ℝ) (p : ℝ → ℝ) (hp : Continuous p)
+    (hpos : ∀ t ∈ Set.Icc a b, 0 < p t) :
+    ContinuousOn (fun t => (p t)⁻¹) (Set.Icc a b) := by
+  exact hp.continuousOn.inv₀ (fun t ht => (hpos t ht).ne')
+
+/-- Picard iteration for the linear integral system with continuous coefficients on `ℝ`
+(time-dependent analogue of m96A02's scalar argument). -/
+noncomputable def apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_system_aux_ode_aux_integral_aux_picard
+    (a b : ℝ) (hab : a < b) (r q g : ℝ → ℝ) (hr : Continuous r)
+    (hq : Continuous q) (hg : Continuous g) (c₀ d₀ : ℝ)
+    (u : C(Set.Icc a b, ℝ) × C(Set.Icc a b, ℝ)) :
+    C(Set.Icc a b, ℝ) × C(Set.Icc a b, ℝ) :=
+  ({ toFun := fun t => c₀ + ∫ s in a..t.1,
+        u.2 (Set.projIcc a b hab.le s) * r s
+     continuous_toFun := by
+       have hc : Continuous (fun s =>
+           u.2 (Set.projIcc a b hab.le s) * r s) :=
+         (u.2.continuous.comp continuous_projIcc).mul hr
+       exact (continuous_const.add
+         (intervalIntegral.continuous_primitive hc.intervalIntegrable a)).comp
+           continuous_subtype_val },
+   { toFun := fun t => d₀ + ∫ s in a..t.1,
+        (q s * u.1 (Set.projIcc a b hab.le s) + g s)
+     continuous_toFun := by
+       have hc : Continuous (fun s =>
+           q s * u.1 (Set.projIcc a b hab.le s) + g s) :=
+         (hq.mul (u.1.continuous.comp continuous_projIcc)).add hg
+       exact (continuous_const.add
+         (intervalIntegral.continuous_primitive hc.intervalIntegrable a)).comp
+           continuous_subtype_val })
+
+/-- Picard factorial estimate for the 2-component operator (sup metric on each component,
+max on the product): `dist (Tⁿu) (Tⁿv) ≤ (L (b − a))ⁿ / n! · dist u v` with
+`L = max (sup |r|) (sup |q|)` on `[a, b]`. -/
+lemma apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_system_aux_ode_aux_integral_aux_fixed_aux_iterate_bound_aux_coeff
+    (a b : ℝ) (r q : ℝ → ℝ) (hr : Continuous r) (hq : Continuous q) :
+    ∃ L : ℝ, 0 ≤ L ∧ ∀ t ∈ Set.Icc a b, |r t| ≤ L ∧ |q t| ≤ L := by
+  obtain ⟨R, hR⟩ := isCompact_Icc.exists_bound_of_continuousOn hr.continuousOn
+  obtain ⟨Q, hQ⟩ := isCompact_Icc.exists_bound_of_continuousOn hq.continuousOn
+  refine ⟨max 0 (max R Q), le_max_left _ _, fun t ht => ⟨?_, ?_⟩⟩
+  · simpa [Real.norm_eq_abs] using
+      (hR t ht).trans (le_trans (le_max_left R Q) (le_max_right 0 (max R Q)))
+  · simpa [Real.norm_eq_abs] using
+      (hQ t ht).trans (le_trans (le_max_right R Q) (le_max_right 0 (max R Q)))
+
+lemma apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_system_aux_ode_aux_integral_aux_fixed_aux_iterate_bound_aux_pointwise
+    (a b : ℝ) (hab : a < b) (r q g : ℝ → ℝ) (hr : Continuous r)
+    (hq : Continuous q) (hg : Continuous g) (c₀ d₀ : ℝ) :
+    ∃ L : ℝ, 0 ≤ L ∧ ∀ (n : ℕ)
+      (u v : C(Set.Icc a b, ℝ) × C(Set.Icc a b, ℝ)) (t : Set.Icc a b),
+      dist (((apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_system_aux_ode_aux_integral_aux_picard
+        a b hab r q g hr hq hg c₀ d₀)^[n] u).1 t)
+          (((apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_system_aux_ode_aux_integral_aux_picard
+        a b hab r q g hr hq hg c₀ d₀)^[n] v).1 t) ≤
+          (L * (t.1 - a)) ^ n / n.factorial * dist u v ∧
+      dist (((apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_system_aux_ode_aux_integral_aux_picard
+        a b hab r q g hr hq hg c₀ d₀)^[n] u).2 t)
+          (((apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_system_aux_ode_aux_integral_aux_picard
+        a b hab r q g hr hq hg c₀ d₀)^[n] v).2 t) ≤
+          (L * (t.1 - a)) ^ n / n.factorial * dist u v := by
+  obtain ⟨L, hL, hcoeff⟩ :=
+    apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_system_aux_ode_aux_integral_aux_fixed_aux_iterate_bound_aux_coeff
+      a b r q hr hq
+  refine ⟨L, hL, ?_⟩
+  intro n
+  induction n with
+  | zero =>
+      intro u v t
+      simp only [Function.iterate_zero_apply, pow_zero, Nat.factorial_zero,
+        Nat.cast_one, div_one, one_mul]
+      rw [Prod.dist_eq]
+      exact ⟨(ContinuousMap.dist_apply_le_dist t).trans (le_max_left _ _),
+        (ContinuousMap.dist_apply_le_dist t).trans (le_max_right _ _)⟩
+  | succ n ih =>
+      intro u v t
+      let T := apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_system_aux_ode_aux_integral_aux_picard
+        a b hab r q g hr hq hg c₀ d₀
+      have hcalc : ∫ s in a..(t : ℝ),
+          (L * (L * (s - a)) ^ n / n.factorial * dist u v) =
+          (L * ((t : ℝ) - a)) ^ (n + 1) / (n + 1).factorial * dist u v := by
+        simp_rw [show ∀ s : ℝ,
+          L * (L * (s - a)) ^ n / n.factorial * dist u v =
+            (L * L ^ n / n.factorial * dist u v) * (s - a) ^ n by
+              intro s; rw [mul_pow]; ring]
+        rw [intervalIntegral.integral_const_mul,
+          intervalIntegral.integral_comp_sub_right (fun x : ℝ => x ^ n) a,
+          sub_self, integral_pow]
+        simp only [Nat.factorial_succ, Nat.cast_mul, Nat.cast_succ]
+        rw [mul_pow]
+        field_simp
+        ring
+      constructor
+      · rw [Function.iterate_succ_apply', Function.iterate_succ_apply']
+        simp only [T,
+          apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_system_aux_ode_aux_integral_aux_picard,
+          Real.dist_eq, add_sub_add_left_eq_sub]
+        change |(c₀ + ∫ s in a..(t : ℝ), ((T^[n]) u).2
+            (Set.projIcc a b hab.le s) * r s) -
+          (c₀ + ∫ s in a..(t : ℝ), ((T^[n]) v).2
+            (Set.projIcc a b hab.le s) * r s)| ≤ _
+        rw [add_sub_add_left_eq_sub]
+        have hcu : Continuous (fun s : ℝ => ((T^[n]) u).2
+            (Set.projIcc a b hab.le s) * r s) :=
+          (((T^[n]) u).2.continuous.comp continuous_projIcc).mul hr
+        have hcv : Continuous (fun s : ℝ => ((T^[n]) v).2
+            (Set.projIcc a b hab.le s) * r s) :=
+          (((T^[n]) v).2.continuous.comp continuous_projIcc).mul hr
+        rw [← intervalIntegral.integral_sub (hcu.intervalIntegrable _ _)
+          (hcv.intervalIntegrable _ _)]
+        change ‖∫ s in a..(t : ℝ),
+          (((T^[n]) u).2 (Set.projIcc a b hab.le s) * r s -
+           ((T^[n]) v).2 (Set.projIcc a b hab.le s) * r s)‖ ≤ _
+        calc
+          _ ≤ ∫ s in a..(t : ℝ),
+              (L * (L * (s - a)) ^ n / n.factorial * dist u v) := by
+            apply intervalIntegral.norm_integral_le_of_norm_le t.2.1
+            · filter_upwards [] with s hs
+              have hsI : s ∈ Set.Icc a b := ⟨hs.1.le, hs.2.trans t.2.2⟩
+              rw [Set.projIcc_of_mem hab.le hsI, ← sub_mul, Real.norm_eq_abs, abs_mul]
+              have hih := (ih u v ⟨s, hsI⟩).2
+              rw [Real.dist_eq] at hih
+              refine (mul_le_mul hih (hcoeff s hsI).1
+                (abs_nonneg _) (mul_nonneg (div_nonneg (pow_nonneg (mul_nonneg hL
+                  (sub_nonneg.2 hs.1.le)) _) (by positivity)) dist_nonneg)).trans ?_
+              · ring_nf
+                rfl
+            · exact (by fun_prop : Continuous (fun s : ℝ =>
+                L * (L * (s - a)) ^ n / n.factorial * dist u v)).intervalIntegrable _ _
+          _ = _ := hcalc
+      · rw [Function.iterate_succ_apply', Function.iterate_succ_apply']
+        simp only [T,
+          apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_system_aux_ode_aux_integral_aux_picard,
+          Real.dist_eq, add_sub_add_left_eq_sub]
+        change |(d₀ + ∫ s in a..(t : ℝ),
+            (q s * ((T^[n]) u).1 (Set.projIcc a b hab.le s) + g s)) -
+          (d₀ + ∫ s in a..(t : ℝ),
+            (q s * ((T^[n]) v).1 (Set.projIcc a b hab.le s) + g s))| ≤ _
+        rw [add_sub_add_left_eq_sub]
+        have hcu : Continuous (fun s : ℝ =>
+            q s * ((T^[n]) u).1 (Set.projIcc a b hab.le s) + g s) :=
+          (hq.mul (((T^[n]) u).1.continuous.comp continuous_projIcc)).add hg
+        have hcv : Continuous (fun s : ℝ =>
+            q s * ((T^[n]) v).1 (Set.projIcc a b hab.le s) + g s) :=
+          (hq.mul (((T^[n]) v).1.continuous.comp continuous_projIcc)).add hg
+        rw [← intervalIntegral.integral_sub (hcu.intervalIntegrable _ _)
+          (hcv.intervalIntegrable _ _)]
+        change ‖∫ s in a..(t : ℝ),
+          ((q s * ((T^[n]) u).1 (Set.projIcc a b hab.le s) + g s) -
+           (q s * ((T^[n]) v).1 (Set.projIcc a b hab.le s) + g s))‖ ≤ _
+        calc
+          _ ≤ ∫ s in a..(t : ℝ),
+              (L * (L * (s - a)) ^ n / n.factorial * dist u v) := by
+            apply intervalIntegral.norm_integral_le_of_norm_le t.2.1
+            · filter_upwards [] with s hs
+              have hsI : s ∈ Set.Icc a b := ⟨hs.1.le, hs.2.trans t.2.2⟩
+              rw [Set.projIcc_of_mem hab.le hsI, add_sub_add_right_eq_sub, ← mul_sub,
+                Real.norm_eq_abs, abs_mul]
+              have hih := (ih u v ⟨s, hsI⟩).1
+              rw [Real.dist_eq] at hih
+              have hb : 0 ≤ (L * (s - a)) ^ n / n.factorial * dist u v :=
+                (abs_nonneg _).trans hih
+              refine (mul_le_mul (hcoeff s hsI).2 hih
+                (abs_nonneg _) hL).trans ?_
+              · ring_nf
+                rfl
+            · exact (by fun_prop : Continuous (fun s : ℝ =>
+                L * (L * (s - a)) ^ n / n.factorial * dist u v)).intervalIntegrable _ _
+          _ = _ := hcalc
+
+lemma apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_system_aux_ode_aux_integral_aux_fixed_aux_iterate_bound
+    (a b : ℝ) (hab : a < b) (r q g : ℝ → ℝ) (hr : Continuous r)
+    (hq : Continuous q) (hg : Continuous g) (c₀ d₀ : ℝ) :
+    ∃ L : ℝ, 0 ≤ L ∧ ∀ (n : ℕ) (u v : C(Set.Icc a b, ℝ) × C(Set.Icc a b, ℝ)),
+      dist ((apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_system_aux_ode_aux_integral_aux_picard a b hab r q g hr hq hg c₀ d₀)^[n] u)
+          ((apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_system_aux_ode_aux_integral_aux_picard a b hab r q g hr hq hg c₀ d₀)^[n] v) ≤
+        (L * (b - a)) ^ n / n.factorial * dist u v := by
+  obtain ⟨L, hL, hpoint⟩ :=
+    apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_system_aux_ode_aux_integral_aux_fixed_aux_iterate_bound_aux_pointwise
+      a b hab r q g hr hq hg c₀ d₀
+  refine ⟨L, hL, fun n u v => ?_⟩
+  have hbase : 0 ≤ L * (b - a) := mul_nonneg hL (sub_nonneg.2 hab.le)
+  have hfac : 0 < (n.factorial : ℝ) := by positivity
+  have hA : 0 ≤ (L * (b - a)) ^ n / n.factorial * dist u v :=
+    mul_nonneg (div_nonneg (pow_nonneg hbase _) hfac.le) dist_nonneg
+  rw [Prod.dist_eq]
+  apply max_le
+  · apply (ContinuousMap.dist_le hA).2
+    intro t
+    refine (hpoint n u v t).1.trans ?_
+    gcongr
+    exact mul_nonneg hL (sub_nonneg.2 t.2.1)
+    exact t.2.2
+  · apply (ContinuousMap.dist_le hA).2
+    intro t
+    refine (hpoint n u v t).2.trans ?_
+    gcongr
+    exact mul_nonneg hL (sub_nonneg.2 t.2.1)
+    exact t.2.2
+
+lemma apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_system_aux_ode_aux_integral_aux_fixed
+    (a b : ℝ) (hab : a < b) (r q g : ℝ → ℝ) (hr : Continuous r)
+    (hq : Continuous q) (hg : Continuous g) (c₀ d₀ : ℝ) :
+    ∃ u : C(Set.Icc a b, ℝ) × C(Set.Icc a b, ℝ),
+      apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_system_aux_ode_aux_integral_aux_picard
+        a b hab r q g hr hq hg c₀ d₀ u = u := by
+  set T := apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_system_aux_ode_aux_integral_aux_picard a b hab r q g hr hq hg c₀ d₀ with hT
+  obtain ⟨L, hL, hbound⟩ := apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_system_aux_ode_aux_integral_aux_fixed_aux_iterate_bound a b hab r q g hr hq hg c₀ d₀
+  obtain ⟨N, hN⟩ : ∃ N : ℕ, (L * (b - a)) ^ N / N.factorial < 1 := by
+    obtain ⟨M, hM⟩ := Filter.eventually_atTop.1
+      ((FloorSemiring.tendsto_pow_div_factorial_atTop (L * (b - a))).eventually
+        (gt_mem_nhds zero_lt_one))
+    exact ⟨M, hM M le_rfl⟩
+  have hk0 : 0 ≤ (L * (b - a)) ^ N / N.factorial := by
+    have : 0 ≤ L * (b - a) := mul_nonneg hL (sub_nonneg.2 hab.le)
+    positivity
+  let K : NNReal := ⟨_, hk0⟩
+  have hK : ContractingWith K (T^[N]) := by
+    refine ⟨by exact_mod_cast hN, LipschitzWith.of_dist_le_mul fun u v => ?_⟩
+    exact hbound N u v
+  have hfix := ContractingWith.fixedPoint_isFixedPt (f := T^[N]) hK
+  set x := ContractingWith.fixedPoint (T^[N]) hK
+  have hTx : Function.IsFixedPt (T^[N]) (T x) := by
+    unfold Function.IsFixedPt
+    rw [← Function.iterate_succ_apply, Function.iterate_succ_apply']
+    exact congrArg T hfix
+  exact ⟨x, ContractingWith.fixedPoint_unique hK hTx⟩
+
+lemma apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_system_aux_ode_aux_integral
+    (a b : ℝ) (hab : a < b) (r q g : ℝ → ℝ) (hr : Continuous r)
+    (hq : Continuous q) (hg : Continuous g) (c₀ d₀ : ℝ) :
+    ∃ y z : ℝ → ℝ, Continuous y ∧ Continuous z ∧ ∀ t ∈ Set.Icc a b,
+      y t = c₀ + (∫ s in a..t, z s * r s) ∧
+      z t = d₀ + ∫ s in a..t, (q s * y s + g s) := by
+  obtain ⟨u, hu⟩ :=
+    apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_system_aux_ode_aux_integral_aux_fixed
+      a b hab r q g hr hq hg c₀ d₀
+  let y : ℝ → ℝ := fun t => u.1 (Set.projIcc a b hab.le t)
+  let z : ℝ → ℝ := fun t => u.2 (Set.projIcc a b hab.le t)
+  refine ⟨y, z, u.1.continuous.comp continuous_projIcc,
+    u.2.continuous.comp continuous_projIcc, fun t ht => ?_⟩
+  have hproj : Set.projIcc a b hab.le t = (⟨t, ht⟩ : Set.Icc a b) :=
+    Set.projIcc_of_mem hab.le ht
+  have hy := congrArg (fun v : C(Set.Icc a b, ℝ) × C(Set.Icc a b, ℝ) => v.1 ⟨t, ht⟩) hu
+  have hz := congrArg (fun v : C(Set.Icc a b, ℝ) × C(Set.Icc a b, ℝ) => v.2 ⟨t, ht⟩) hu
+  constructor
+  · simpa [y, z, hproj,
+      apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_system_aux_ode_aux_integral_aux_picard]
+      using hy.symm
+  · simpa [y, z, hproj,
+      apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_system_aux_ode_aux_integral_aux_picard]
+      using hz.symm
+
+lemma apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_system_aux_ode
+    (a b : ℝ) (hab : a < b) (p q g : ℝ → ℝ) (hp : Continuous p)
+    (hq : Continuous q) (hg : Continuous g) (hpos : ∀ t ∈ Set.Icc a b, 0 < p t)
+    (c₀ d₀ : ℝ) :
+    ∃ y z : ℝ → ℝ, y a = c₀ ∧ z a = d₀ ∧ ∀ t ∈ Set.Icc a b,
+      HasDerivWithinAt y (z t / p t) (Set.Icc a b) t ∧
+      HasDerivWithinAt z (q t * y t + g t) (Set.Icc a b) t := by
+  set r : ℝ → ℝ := fun s => (p (Set.projIcc a b hab.le s))⁻¹ with hrdef
+  have hproj : ∀ s, (Set.projIcc a b hab.le s : ℝ) ∈ Set.Icc a b := fun s => Subtype.prop _
+  have hr : Continuous r :=
+    (hp.comp (continuous_subtype_val.comp continuous_projIcc)).inv₀
+      (fun s => (hpos _ (hproj s)).ne')
+  have hrt : ∀ t ∈ Set.Icc a b, r t = (p t)⁻¹ := by
+    intro t ht
+    simp [hrdef, Set.projIcc_of_mem hab.le ht]
+  obtain ⟨y, z, hy, hz, hint⟩ := apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_system_aux_ode_aux_integral a b hab r q g hr hq hg c₀ d₀
+  have ha : a ∈ Set.Icc a b := ⟨le_rfl, hab.le⟩
+  refine ⟨y, z, by simpa using (hint a ha).1, by simpa using (hint a ha).2, fun t ht => ⟨?_, ?_⟩⟩
+  · have hF : Continuous (fun s => z s * r s) := hz.mul hr
+    have hd : HasDerivAt (fun t => c₀ + ∫ s in a..t, z s * r s) (z t * r t) t :=
+      (intervalIntegral.integral_hasDerivAt_right (hF.intervalIntegrable _ _)
+        hF.aestronglyMeasurable.stronglyMeasurableAtFilter hF.continuousAt).const_add c₀
+    have := hd.hasDerivWithinAt (s := Set.Icc a b)
+    rw [hrt t ht, ← div_eq_mul_inv] at this
+    exact this.congr (fun u hu => (hint u hu).1) (hint t ht).1
+  · have hF : Continuous (fun s => q s * y s + g s) := (hq.mul hy).add hg
+    have hd : HasDerivAt (fun t => d₀ + ∫ s in a..t, (q s * y s + g s)) (q t * y t + g t) t :=
+      (intervalIntegral.integral_hasDerivAt_right (hF.intervalIntegrable _ _)
+        hF.aestronglyMeasurable.stronglyMeasurableAtFilter hF.continuousAt).const_add d₀
+    exact (hd.hasDerivWithinAt (s := Set.Icc a b)).congr (fun u hu => (hint u hu).2) (hint t ht).2
+
+lemma apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_system
+    (a b : ℝ) (hab : a < b) (p q g : ℝ → ℝ) (hp : ContDiff ℝ 1 p)
+    (hq : Continuous q) (hg : Continuous g) (hpos : ∀ t ∈ Set.Icc a b, 0 < p t)
+    (c₀ d₀ : ℝ) :
+    ∃ y z : ℝ → ℝ, y a = c₀ ∧ z a = d₀ ∧ ∀ t ∈ Set.Icc a b,
+      HasDerivWithinAt y (z t / p t) (Set.Icc a b) t ∧
+      HasDerivWithinAt z (q t * y t + g t) (Set.Icc a b) t := by
+  exact apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_system_aux_ode
+    a b hab p q g hp.continuous hq hg hpos c₀ d₀
+
+/-- A solution of the system on `[a, b]` is the restriction of a global `C²` function `Y`
+with `p Y' = z` there (`y` is `C²` on `[a, b]`; extend past the endpoints by second-order
+Taylor polynomials). -/
+lemma apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_extend_aux_continuous
+    (a b : ℝ) (p q g y z : ℝ → ℝ) (hp : Continuous p)
+    (hq : Continuous q) (hg : Continuous g)
+    (hpos : ∀ t ∈ Set.Icc a b, 0 < p t)
+    (hsys : ∀ t ∈ Set.Icc a b,
+      HasDerivWithinAt y (z t / p t) (Set.Icc a b) t ∧
+      HasDerivWithinAt z (q t * y t + g t) (Set.Icc a b) t) :
+    ContinuousOn y (Set.Icc a b) ∧ ContinuousOn z (Set.Icc a b) ∧
+      ContinuousOn (fun t => z t / p t) (Set.Icc a b) := by
+  have hy : ContinuousOn y (Set.Icc a b) := fun t ht => (hsys t ht).1.continuousWithinAt
+  have hz : ContinuousOn z (Set.Icc a b) := fun t ht => (hsys t ht).2.continuousWithinAt
+  refine ⟨hy, hz, hz.div hp.continuousOn ?_⟩
+  intro t ht
+  exact (hpos t ht).ne'
+
+lemma apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_extend_aux_core_aux_ratio_deriv
+    (a b : ℝ) (p q g y z : ℝ → ℝ) (hp : ContDiff ℝ 1 p)
+    (hpos : ∀ t ∈ Set.Icc a b, 0 < p t)
+    (hsys : ∀ t ∈ Set.Icc a b,
+      HasDerivWithinAt y (z t / p t) (Set.Icc a b) t ∧
+      HasDerivWithinAt z (q t * y t + g t) (Set.Icc a b) t) :
+    ∀ t ∈ Set.Icc a b,
+      HasDerivWithinAt (fun x => z x / p x)
+        (((q t * y t + g t) * p t - z t * deriv p t) / p t ^ 2)
+        (Set.Icc a b) t := by
+  intro t ht
+  have hpder : HasDerivWithinAt p (deriv p t) (Set.Icc a b) t :=
+    ((hp.differentiable (by norm_num)).differentiableAt.hasDerivAt).hasDerivWithinAt
+  convert (hsys t ht).2.div hpder (hpos t ht).ne' using 1 <;> ring
+
+lemma apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_extend_aux_core_aux_second_continuous
+    (a b : ℝ) (p q g y z : ℝ → ℝ) (hp : ContDiff ℝ 1 p)
+    (hq : Continuous q) (hg : Continuous g)
+    (hpos : ∀ t ∈ Set.Icc a b, 0 < p t)
+    (hsys : ∀ t ∈ Set.Icc a b,
+      HasDerivWithinAt y (z t / p t) (Set.Icc a b) t ∧
+      HasDerivWithinAt z (q t * y t + g t) (Set.Icc a b) t) :
+    ContinuousOn (fun t =>
+      ((q t * y t + g t) * p t - z t * deriv p t) / p t ^ 2)
+      (Set.Icc a b) := by
+  have hy : ContinuousOn y (Set.Icc a b) :=
+    fun t ht => (hsys t ht).1.continuousWithinAt
+  have hz : ContinuousOn z (Set.Icc a b) :=
+    fun t ht => (hsys t ht).2.continuousWithinAt
+  have hpcon : ContinuousOn p (Set.Icc a b) := hp.continuous.continuousOn
+  have hdp : ContinuousOn (deriv p) (Set.Icc a b) :=
+    hp.continuous_deriv_one.continuousOn
+  have hn : ∀ t ∈ Set.Icc a b, p t ^ 2 ≠ 0 :=
+    fun t ht => pow_ne_zero 2 (hpos t ht).ne'
+  exact (((hq.continuousOn.mul hy).add hg.continuousOn).mul hpcon).sub
+    (hz.mul hdp) |>.div (hpcon.pow 2) hn
+
+/-- A function with a continuous within-derivative on `[a, b]` is the restriction of a global
+`C¹` function (extend past each endpoint by the tangent line). -/
+def apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_extend_aux_core_aux_C1_extension_aux_R
+    (a b : ℝ) (h h' : ℝ → ℝ) (t : ℝ) : ℝ :=
+  if t < a then h a + h' a * (t - a)
+  else if t ≤ b then h t
+  else h b + h' b * (t - b)
+
+lemma apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_extend_aux_core_aux_C1_extension_aux_eq
+    (a b : ℝ) (h h' : ℝ → ℝ) {t : ℝ} (ht : t ∈ Set.Icc a b) :
+    apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_extend_aux_core_aux_C1_extension_aux_R
+      a b h h' t = h t := by
+  simp [apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_extend_aux_core_aux_C1_extension_aux_R,
+    not_lt.mpr ht.1, ht.2]
+
+open Filter Topology in
+lemma apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_extend_aux_core_aux_C1_extension_aux_deriv_away
+    (a b : ℝ) (hab : a < b) (h h' : ℝ → ℝ)
+    (hd : ∀ t ∈ Set.Icc a b, HasDerivWithinAt h (h' t) (Set.Icc a b) t) :
+    ∀ t, t < a ∨ (a < t ∧ t < b) ∨ b < t →
+      HasDerivAt (apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_extend_aux_core_aux_C1_extension_aux_R a b h h')
+        (if t < a then h' a else if t ≤ b then h' t else h' b) t := by
+  intro t ht
+  rcases ht with hta | htab | hbt
+  · have he : (apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_extend_aux_core_aux_C1_extension_aux_R a b h h') =ᶠ[𝓝 t] (fun x => h a + h' a * (x - a)) :=
+      Filter.eventually_of_mem (Iio_mem_nhds hta) fun x hx => by
+        simp [apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_extend_aux_core_aux_C1_extension_aux_R, show x < a from hx]
+    have hl : HasDerivAt (fun x => h a + h' a * (x - a)) (h' a) t := by
+      convert (hasDerivAt_const t (h a)).add
+        ((hasDerivAt_id t).sub_const a |>.const_mul (h' a)) using 1
+      simp
+    rw [if_pos hta]
+    exact hl.congr_of_eventuallyEq he
+  · have hi := (hd t ⟨htab.1.le, htab.2.le⟩).hasDerivAt (Icc_mem_nhds htab.1 htab.2)
+    have he : (apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_extend_aux_core_aux_C1_extension_aux_R a b h h') =ᶠ[𝓝 t] h :=
+      Filter.eventually_of_mem (Ioo_mem_nhds htab.1 htab.2) fun x hx =>
+        apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_extend_aux_core_aux_C1_extension_aux_eq a b h h' ⟨hx.1.le, hx.2.le⟩
+    rw [if_neg (not_lt.mpr htab.1.le), if_pos htab.2.le]
+    exact hi.congr_of_eventuallyEq he
+  · have he : (apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_extend_aux_core_aux_C1_extension_aux_R a b h h') =ᶠ[𝓝 t] (fun x => h b + h' b * (x - b)) :=
+      Filter.eventually_of_mem (Ioi_mem_nhds hbt) fun x hx => by
+        have hx' : b < x := hx
+        simp [apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_extend_aux_core_aux_C1_extension_aux_R, show ¬ x < a from not_lt.mpr (hab.le.trans hx'.le),
+          show ¬ x ≤ b from not_le.mpr hx']
+    have hl : HasDerivAt (fun x => h b + h' b * (x - b)) (h' b) t := by
+      convert (hasDerivAt_const t (h b)).add
+        ((hasDerivAt_id t).sub_const b |>.const_mul (h' b)) using 1
+      simp
+    rw [if_neg (not_lt.mpr (hab.le.trans hbt.le)), if_neg (not_le.mpr hbt)]
+    exact hl.congr_of_eventuallyEq he
+
+lemma apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_extend_aux_core_aux_C1_extension_aux_finish
+    (a b : ℝ) (hab : a < b) (h h' : ℝ → ℝ)
+    (hd : ∀ t ∈ Set.Icc a b, HasDerivWithinAt h (h' t) (Set.Icc a b) t)
+    (hc : ContinuousOn h' (Set.Icc a b)) :
+    ContDiff ℝ 1
+      (apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_extend_aux_core_aux_C1_extension_aux_R
+        a b h h') := by
+  set R := apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_extend_aux_core_aux_C1_extension_aux_R a b h h' with hRdef
+  set D : ℝ → ℝ := fun t => h' (Set.projIcc a b hab.le t) with hDdef
+  have hDc : Continuous D :=
+    hc.comp_continuous (continuous_subtype_val.comp continuous_projIcc)
+      (fun t => Subtype.prop _)
+  have hDa : ∀ t, t ≤ a → D t = h' a := fun t ht => by
+    simp [hDdef, Set.projIcc_of_le_left hab.le ht]
+  have hDb : ∀ t, b ≤ t → D t = h' b := fun t ht => by
+    simp [hDdef, Set.projIcc_of_right_le hab.le ht]
+  have hDm : ∀ t ∈ Set.Icc a b, D t = h' t := fun t ht => by
+    simp [hDdef, Set.projIcc_of_mem hab.le ht]
+  have hRI : ∀ t ∈ Set.Icc a b, R t = h t := fun t ht => apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_extend_aux_core_aux_C1_extension_aux_eq a b h h' ht
+  -- one-sided derivatives at an endpoint c ∈ {a, b}
+  have hline_left : HasDerivWithinAt R (h' a) (Set.Iic a) a := by
+    have hl : HasDerivAt (fun x => h a + h' a * (x - a)) (h' a) a := by
+      convert (hasDerivAt_const a (h a)).add
+        ((hasDerivAt_id a).sub_const a |>.const_mul (h' a)) using 1
+      simp
+    refine hl.hasDerivWithinAt.congr (fun x hx => ?_) ?_
+    · rcases lt_or_eq_of_le (Set.mem_Iic.1 hx) with hxa | hxa
+      · simp [hRdef, apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_extend_aux_core_aux_C1_extension_aux_R, hxa]
+      · subst hxa; rw [hRI x ⟨le_rfl, hab.le⟩]; simp
+    · rw [hRI a ⟨le_rfl, hab.le⟩]; simp
+  have hin_right : HasDerivWithinAt R (h' a) (Set.Ici a) a := by
+    have := (hd a ⟨le_rfl, hab.le⟩).congr (fun x hx => hRI x hx) (hRI a ⟨le_rfl, hab.le⟩)
+    exact this.mono_of_mem_nhdsWithin (Icc_mem_nhdsGE hab)
+  have hin_left : HasDerivWithinAt R (h' b) (Set.Iic b) b := by
+    have := (hd b ⟨hab.le, le_rfl⟩).congr (fun x hx => hRI x hx) (hRI b ⟨hab.le, le_rfl⟩)
+    exact this.mono_of_mem_nhdsWithin (Icc_mem_nhdsLE hab)
+  have hline_right : HasDerivWithinAt R (h' b) (Set.Ici b) b := by
+    have hl : HasDerivAt (fun x => h b + h' b * (x - b)) (h' b) b := by
+      convert (hasDerivAt_const b (h b)).add
+        ((hasDerivAt_id b).sub_const b |>.const_mul (h' b)) using 1
+      simp
+    refine hl.hasDerivWithinAt.congr (fun x hx => ?_) ?_
+    · rcases lt_or_eq_of_le (Set.mem_Ici.1 hx) with hxb | hxb
+      · simp [hRdef, apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_extend_aux_core_aux_C1_extension_aux_R, (not_lt.mpr (hab.trans hxb).le), (not_le.mpr hxb)]
+      · rw [← hxb, hRI b ⟨hab.le, le_rfl⟩]; simp
+    · rw [hRI b ⟨hab.le, le_rfl⟩]; simp
+  have hall : ∀ t, HasDerivAt R (D t) t := by
+    intro t
+    rcases lt_trichotomy t a with hta | rfl | hta
+    · have := apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_extend_aux_core_aux_C1_extension_aux_deriv_away a b hab h h' hd t (Or.inl hta)
+      rwa [if_pos hta, ← hDa t hta.le] at this
+    · have := (hline_left.union hin_right)
+      rw [Set.Iic_union_Ici, hasDerivWithinAt_univ] at this
+      rwa [← hDa t le_rfl] at this
+    · rcases lt_trichotomy t b with htb | rfl | htb
+      · have := apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_extend_aux_core_aux_C1_extension_aux_deriv_away a b hab h h' hd t (Or.inr (Or.inl ⟨hta, htb⟩))
+        rwa [if_neg (not_lt.mpr hta.le), if_pos htb.le, ← hDm t ⟨hta.le, htb.le⟩] at this
+      · have := (hin_left.union hline_right)
+        rw [Set.Iic_union_Ici, hasDerivWithinAt_univ] at this
+        rwa [← hDb t le_rfl] at this
+      · have := apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_extend_aux_core_aux_C1_extension_aux_deriv_away a b hab h h' hd t (Or.inr (Or.inr htb))
+        rwa [if_neg (not_lt.mpr (hab.trans htb).le), if_neg (not_le.mpr htb), ← hDb t htb.le] at this
+  rw [contDiff_one_iff_deriv]
+  refine ⟨fun t => (hall t).differentiableAt, ?_⟩
+  have : deriv R = D := funext fun t => (hall t).deriv
+  rw [this]; exact hDc
+
+lemma apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_extend_aux_core_aux_C1_extension
+    (a b : ℝ) (hab : a < b) (h h' : ℝ → ℝ)
+    (hd : ∀ t ∈ Set.Icc a b, HasDerivWithinAt h (h' t) (Set.Icc a b) t)
+    (hc : ContinuousOn h' (Set.Icc a b)) :
+    ∃ R : ℝ → ℝ, ContDiff ℝ 1 R ∧ ∀ t ∈ Set.Icc a b, R t = h t := by
+  refine ⟨apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_extend_aux_core_aux_C1_extension_aux_R
+    a b h h', apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_extend_aux_core_aux_C1_extension_aux_finish
+      a b hab h h' hd hc, ?_⟩
+  intro t ht
+  exact apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_extend_aux_core_aux_C1_extension_aux_eq
+    a b h h' ht
+
+lemma apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_extend_aux_core
+    (a b : ℝ) (hab : a < b) (p q g : ℝ → ℝ) (hp : ContDiff ℝ 1 p)
+    (hq : Continuous q) (hg : Continuous g) (hpos : ∀ t ∈ Set.Icc a b, 0 < p t)
+    (y z : ℝ → ℝ) (hsys : ∀ t ∈ Set.Icc a b,
+      HasDerivWithinAt y (z t / p t) (Set.Icc a b) t ∧
+      HasDerivWithinAt z (q t * y t + g t) (Set.Icc a b) t) :
+    ∃ Y : ℝ → ℝ, ContDiff ℝ 2 Y ∧
+      ∀ t ∈ Set.Icc a b, Y t = y t ∧ p t * deriv Y t = z t := by
+  obtain ⟨R, hR, hRh⟩ := apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_extend_aux_core_aux_C1_extension a b hab (fun x => z x / p x) _
+    (apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_extend_aux_core_aux_ratio_deriv a b p q g y z hp hpos hsys)
+    (apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_extend_aux_core_aux_second_continuous a b p q g y z hp hq hg hpos hsys)
+  have hRc : Continuous R := hR.continuous
+  set Y : ℝ → ℝ := fun t => y a + ∫ s in a..t, R s with hYdef
+  have hYd : ∀ t, HasDerivAt Y (R t) t := fun t =>
+    (intervalIntegral.integral_hasDerivAt_right (hRc.intervalIntegrable _ _)
+      hRc.aestronglyMeasurable.stronglyMeasurableAtFilter hRc.continuousAt).const_add _
+  have hderiv : deriv Y = R := funext fun t => (hYd t).deriv
+  have hYeq : ∀ t ∈ Set.Icc a b, Y t = y t := by
+    refine eq_of_has_deriv_right_eq (f' := R) (fun x _ => (hYd x).hasDerivWithinAt)
+      (fun x hx => ?_) (fun x _ => (hYd x).continuousAt.continuousWithinAt)
+      (fun x hx => (hsys x hx).1.continuousWithinAt) (by simp [hYdef])
+    have hx' : x ∈ Set.Icc a b := ⟨hx.1, hx.2.le⟩
+    have := (hsys x hx').1
+    rw [← hRh x hx'] at this
+    exact this.mono_of_mem_nhdsWithin (Icc_mem_nhdsGE_of_mem hx)
+  refine ⟨Y, ?_, fun t ht => ⟨hYeq t ht, ?_⟩⟩
+  · rw [show (2 : WithTop ℕ∞) = 1 + 1 by norm_num, contDiff_succ_iff_deriv]
+    refine ⟨fun t => (hYd t).differentiableAt, by simp, ?_⟩
+    rw [hderiv]; exact hR
+  · rw [hderiv, hRh t ht]
+    field_simp [(hpos t ht).ne']
+
+lemma apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_extend
+    (a b : ℝ) (hab : a < b) (p q g : ℝ → ℝ) (hp : ContDiff ℝ 1 p)
+    (hq : Continuous q) (hg : Continuous g) (hpos : ∀ t ∈ Set.Icc a b, 0 < p t)
+    (y z : ℝ → ℝ) (hsys : ∀ t ∈ Set.Icc a b,
+      HasDerivWithinAt y (z t / p t) (Set.Icc a b) t ∧
+      HasDerivWithinAt z (q t * y t + g t) (Set.Icc a b) t) :
+    ∃ Y : ℝ → ℝ, ContDiff ℝ 2 Y ∧ ∀ t ∈ Set.Icc a b, Y t = y t ∧ p t * deriv Y t = z t := by
+  exact apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_extend_aux_core
+    a b hab p q g hp hq hg hpos y z hsys
+
+/-- The equation on `[a, b]` for a global `C²` function whose flux `p Y'` agrees there with a
+solution `z` of `z' = q Y + g`. -/
+lemma apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_equation
+    (a b : ℝ) (hab : a < b) (p q g : ℝ → ℝ) (hp : ContDiff ℝ 1 p)
+    (Y z : ℝ → ℝ) (hY : ContDiff ℝ 2 Y)
+    (hYz : ∀ t ∈ Set.Icc a b, p t * deriv Y t = z t)
+    (hz : ∀ t ∈ Set.Icc a b, HasDerivWithinAt z (q t * Y t + g t) (Set.Icc a b) t) :
+    ∀ t ∈ Set.Icc a b, deriv (fun x => p x * deriv Y x) t - q t * Y t = g t := by
+  intro t ht
+  let P : ℝ → ℝ := fun x ↦ p x * deriv Y x
+  have hP : ContDiff ℝ 1 P := hp.mul hY.deriv'
+  have hPat : HasDerivAt P (deriv P t) t :=
+    (hP.differentiable (by norm_num) t).hasDerivAt
+  have hzP : HasDerivWithinAt P (q t * Y t + g t) (Set.Icc a b) t :=
+    (hz t ht).congr (fun x hx ↦ hYz x hx) (hYz t ht)
+  have heq := (uniqueDiffOn_Icc hab t ht).eq
+    hPat.hasDerivWithinAt.hasFDerivWithinAt hzP.hasFDerivWithinAt
+  have heq' := congrArg (fun L : ℝ →L[ℝ] ℝ ↦ L 1) heq
+  have : deriv P t = q t * Y t + g t := by simpa using heq'
+  change deriv P t - q t * Y t = g t
+  linarith
+
+lemma apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp
+    (a b p₀ : ℝ) (hab : a < b) (hp₀ : 0 < p₀)
+    (p q : ℝ → ℝ) (hp : ContDiff ℝ 1 p) (hq : Continuous q)
+    (hp_lower : ∀ t ∈ Set.Icc a b, p₀ ≤ p t)
+    (g : ℝ → ℝ) (hg : Continuous g) (c₀ c₁ : ℝ) :
+    ∃ y : ℝ → ℝ, ContDiff ℝ 2 y ∧ y a = c₀ ∧ deriv y a = c₁ ∧
+      ∀ t ∈ Set.Icc a b, deriv (fun x => p x * deriv y x) t - q t * y t = g t := by
+  have hpos : ∀ t ∈ Set.Icc a b, 0 < p t := fun t ht => lt_of_lt_of_le hp₀ (hp_lower t ht)
+  have ha : a ∈ Set.Icc a b := ⟨le_rfl, hab.le⟩
+  obtain ⟨y, z, hya, hza, hsys⟩ :=
+    apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_system a b hab p q g hp hq hg hpos c₀ (p a * c₁)
+  obtain ⟨Y, hY, hYy⟩ := apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_extend a b hab p q g hp hq hg hpos y z hsys
+  refine ⟨Y, hY, by rw [(hYy a ha).1, hya], ?_, ?_⟩
+  · have h1 := (hYy a ha).2
+    rw [hza] at h1
+    exact mul_left_cancel₀ (hpos a ha).ne' h1
+  · refine apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_equation a b hab p q g hp Y z hY (fun t ht => (hYy t ht).2)
+      (fun t ht => ?_)
+    rw [(hYy t ht).1]
+    exact (hsys t ht).2
+
+/-- The homogeneous Dirichlet problem has only the zero solution (energy identity). -/
+lemma apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_homogeneous_unique
+    (a b p₀ : ℝ) (hab : a < b) (hp₀ : 0 < p₀)
+    (p q : ℝ → ℝ) (hp : ContDiff ℝ 1 p) (hq : Continuous q)
+    (hp_lower : ∀ t ∈ Set.Icc a b, p₀ ≤ p t)
+    (hq_nonneg : ∀ t ∈ Set.Icc a b, 0 ≤ q t)
+    (y : ℝ → ℝ) (hy : ContDiff ℝ 2 y) (hya : y a = 0) (hyb : y b = 0)
+    (heq : ∀ t ∈ Set.Icc a b, deriv (fun x => p x * deriv y x) t - q t * y t = 0) :
+    ∀ t ∈ Set.Icc a b, y t = 0 := by
+  let g : ℝ → ℝ := fun x ↦ p x * deriv y x
+  have hy' : ContDiff ℝ 1 (deriv y) := hy.deriv'
+  have hg : ContDiff ℝ 1 g := hp.mul hy'
+  have hdg : Continuous (deriv g) := hg.continuous_deriv_one
+  have hdy : Continuous (deriv y) := hy'.continuous
+  have hibp := intervalIntegral.integral_mul_deriv_eq_deriv_mul
+    (a := a) (b := b) (u := g) (v := y) (u' := deriv g) (v' := deriv y)
+    (fun x _ ↦ (hg.differentiable (by norm_num) x).hasDerivAt)
+    (fun x _ ↦ (hy.differentiable (by norm_num) x).hasDerivAt)
+    (hdg.intervalIntegrable _ _) (hdy.intervalIntegrable _ _)
+  have henergy : (∫ x in a..b,
+      p x * (deriv y x) ^ 2 + q x * (y x) ^ 2) = 0 := by
+    have hibp' : (∫ x in a..b, g x * deriv y x) =
+        -(∫ x in a..b, deriv g x * y x) := by
+      simpa [hya, hyb] using hibp
+    have hcont1 : Continuous (fun x ↦ g x * deriv y x) := hg.continuous.mul hdy
+    have hcont2 : Continuous (fun x ↦ deriv g x * y x) := hdg.mul hy.continuous
+    have hz : (∫ x in a..b, g x * deriv y x + deriv g x * y x) = 0 := by
+      rw [intervalIntegral.integral_add (hcont1.intervalIntegrable a b)
+        (hcont2.intervalIntegrable a b)]
+      linarith
+    rw [← hz]
+    apply intervalIntegral.integral_congr
+    intro x hx
+    have hx' : x ∈ Set.Icc a b := Set.uIcc_of_le hab.le ▸ hx
+    have he := heq x hx'
+    dsimp [g]
+    rw [show deriv (fun z => p z * deriv y z) x = q x * y x by linarith]
+    ring
+  let E : ℝ → ℝ := fun x ↦ p x * (deriv y x) ^ 2 + q x * (y x) ^ 2
+  have hEc : Continuous E := by
+    dsimp [E]
+    fun_prop
+  have hEnonneg : ∀ x ∈ Set.Icc a b, 0 ≤ E x := by
+    intro x hx
+    dsimp [E]
+    have hp_pos : 0 ≤ p x := le_trans hp₀.le (hp_lower x hx)
+    exact add_nonneg (mul_nonneg hp_pos (sq_nonneg _))
+      (mul_nonneg (hq_nonneg x hx) (sq_nonneg _))
+  have hEae : E =ᵐ[MeasureTheory.volume.restrict (Set.Ioc a b)] 0 := by
+    have hnn : 0 ≤ᵐ[MeasureTheory.volume.restrict (Set.Ioc a b)] E := by
+      filter_upwards [MeasureTheory.ae_restrict_mem measurableSet_Ioc] with x hx
+      exact hEnonneg x ⟨hx.1.le, hx.2⟩
+    exact (intervalIntegral.integral_eq_zero_iff_of_le_of_nonneg_ae hab.le hnn
+      (hEc.intervalIntegrable a b)).mp henergy
+  have hEae' : E =ᵐ[MeasureTheory.volume.restrict (Set.Icc a b)] 0 := by
+    rw [← MeasureTheory.restrict_Ioc_eq_restrict_Icc]
+    exact hEae
+  have hEpoint : Set.EqOn E 0 (Set.Icc a b) :=
+    MeasureTheory.Measure.eqOn_Icc_of_ae_eq MeasureTheory.volume hab.ne hEae'
+      hEc.continuousOn continuous_zero.continuousOn
+  have hdyzero : ∀ x ∈ Set.Icc a b, deriv y x = 0 := by
+    intro x hx
+    have hz := hEpoint hx
+    have hp_pos : 0 < p x := lt_of_lt_of_le hp₀ (hp_lower x hx)
+    have hq0 := hq_nonneg x hx
+    dsimp [E] at hz
+    have hfirst : 0 ≤ p x * deriv y x ^ 2 :=
+      mul_nonneg hp_pos.le (sq_nonneg _)
+    have hsecond : 0 ≤ q x * y x ^ 2 := mul_nonneg hq0 (sq_nonneg _)
+    have hzero : p x * deriv y x ^ 2 = 0 := by nlinarith
+    exact sq_eq_zero_iff.mp ((mul_eq_zero.mp hzero).resolve_left (ne_of_gt hp_pos))
+  have hconst : ∀ x ∈ Set.Icc a b, y x = y a := by
+    apply constant_of_has_deriv_right_zero hy.continuous.continuousOn
+    intro x hx
+    have hxa : x ∈ Set.Icc a b := ⟨hx.1, hx.2.le⟩
+    simpa [hdyzero x hxa] using
+      (hy.differentiable (by norm_num) x).hasDerivAt.hasDerivWithinAt
+  intro x hx
+  rw [hconst x hx, hya]
+
+/-- Shooting: a particular solution with `y₀ a = 0` minus a multiple of the homogeneous
+solution with `y₁ a = 0, y₁' a = 1` (which has `y₁ b ≠ 0`). -/
+lemma apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_shooting
+    (a b : ℝ) (hab : a < b) (p q f : ℝ → ℝ) (hp : ContDiff ℝ 1 p)
+    (y₀ y₁ : ℝ → ℝ) (h₀ : ContDiff ℝ 2 y₀) (h₁ : ContDiff ℝ 2 y₁)
+    (h₀a : y₀ a = 0) (h₁a : y₁ a = 0) (h₁b : y₁ b ≠ 0)
+    (e₀ : ∀ t ∈ Set.Icc a b, deriv (fun x => p x * deriv y₀ x) t - q t * y₀ t = f t)
+    (e₁ : ∀ t ∈ Set.Icc a b, deriv (fun x => p x * deriv y₁ x) t - q t * y₁ t = 0) :
+    ∃ u : ℝ → ℝ, apm_m95A03_solves a b 0 0 p q f u := by
+  let c : ℝ := y₀ b / y₁ b
+  let u : ℝ → ℝ := fun x => y₀ x - c * y₁ x
+  have hu : ContDiff ℝ 2 u := by
+    simpa [u, smul_eq_mul] using h₀.sub (h₁.const_smul c)
+  have hua : u a = 0 := by simp [u, c, h₀a, h₁a]
+  have hub : u b = 0 := by
+    simp [u, c]
+    field_simp
+    ring
+  refine ⟨u, hu, hua, hub, ?_⟩
+  intro t ht
+  have hdy (x : ℝ) : deriv u x = deriv y₀ x - c * deriv y₁ x := by
+    have hd := (h₀.differentiable (by norm_num) x).hasDerivAt.sub
+      (HasDerivAt.const_mul c (h₁.differentiable (by norm_num) x).hasDerivAt)
+    simpa [u, Pi.sub_apply] using hd.deriv
+  have hflux : (fun x => p x * deriv u x) =
+      (fun x => p x * deriv y₀ x - c * (p x * deriv y₁ x)) := by
+    funext x
+    simp [hdy, mul_sub]
+    ring
+  have hd₀ : DifferentiableAt ℝ (fun x => p x * deriv y₀ x) t :=
+    (hp.mul h₀.deriv').differentiable (by norm_num) t
+  have hd₁ : DifferentiableAt ℝ (fun x => p x * deriv y₁ x) t :=
+    (hp.mul h₁.deriv').differentiable (by norm_num) t
+  have hdflux : deriv (fun x => p x * deriv y₀ x - c * (p x * deriv y₁ x)) t =
+      deriv (fun x => p x * deriv y₀ x) t -
+        c * deriv (fun x => p x * deriv y₁ x) t := by
+    have hd := hd₀.hasDerivAt.sub (HasDerivAt.const_mul c hd₁.hasDerivAt)
+    simpa [Pi.sub_apply] using hd.deriv
+  rw [hflux, hdflux]
+  dsimp [u]
+  have he₀ := e₀ t ht
+  have he₁ := e₁ t ht
+  linear_combination he₀ - c * he₁
+
+lemma apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves
+    (a b p₀ : ℝ) (hab : a < b) (hp₀ : 0 < p₀)
+    (p q f : ℝ → ℝ) (hp : ContDiff ℝ 1 p)
+    (hq : Continuous q) (hf : Continuous f)
+    (hp_lower : ∀ t ∈ Set.Icc a b, p₀ ≤ p t)
+    (hq_nonneg : ∀ t ∈ Set.Icc a b, 0 ≤ q t) :
+    ∃ u : ℝ → ℝ, apm_m95A03_solves a b 0 0 p q f u := by
+  obtain ⟨y₀, h₀, h₀a, -, e₀⟩ :=
+    apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp a b p₀ hab hp₀ p q hp hq hp_lower f hf 0 0
+  obtain ⟨y₁, h₁, h₁a, h₁a', e₁⟩ :=
+    apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp a b p₀ hab hp₀ p q hp hq hp_lower 0 continuous_const 0 1
+  refine apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_shooting a b hab p q f hp y₀ y₁ h₀ h₁ h₀a h₁a ?_ e₀ e₁
+  intro h₁b
+  have hz := apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_homogeneous_unique a b p₀ hab hp₀ p q hp hq hp_lower hq_nonneg
+    y₁ h₁ h₁a h₁b e₁
+  -- y₁ vanishes on [a, b], so its right derivative at a is 0, contradicting y₁' a = 1.
+  have hd : HasDerivWithinAt y₁ 0 (Set.Icc a b) a := by
+    have : HasDerivWithinAt (fun _ : ℝ => (0 : ℝ)) 0 (Set.Icc a b) a := hasDerivWithinAt_const _ _ _
+    exact this.congr (fun t ht => hz t ht) (hz a ⟨le_rfl, hab.le⟩)
+  have hd' : HasDerivWithinAt y₁ 1 (Set.Icc a b) a := by
+    rw [← h₁a']
+    exact (h₁.differentiable (by norm_num) a).hasDerivAt.hasDerivWithinAt
+  have := ((uniqueDiffOn_Icc hab) a ⟨le_rfl, hab.le⟩).eq_deriv _ hd hd'
+  norm_num at this
 
 theorem apm_m95A03_exists_homogeneous_minimizer
     (a b p₀ : ℝ) (hab : a < b) (hp₀ : 0 < p₀)
@@ -200,11 +1211,176 @@ theorem apm_m95A03_exists_homogeneous_minimizer
       u ∈ apm_m95A03_admissible a b 0 0 ∧
       IsMinOn (apm_m95A03_energy a b p q f)
         (apm_m95A03_admissible a b 0 0) u := by
-  sorry
+  obtain ⟨u, hu⟩ :=
+    apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves
+      a b p₀ hab hp₀ p q f hp hq hf hp_lower hq_nonneg
+  refine ⟨u, hu.1, ⟨hu.1.of_le (by norm_num), hu.2.1, hu.2.2.1⟩, ?_⟩
+  exact apm_m95A03_isMinOn_of_solves a b 0 0 p₀ hab hp₀ p q f u
+    hp hq hf hp_lower hq_nonneg hu
+
+lemma apm_m95A03_minimizers_eqOn_aux_midpoint_mem
+    (a b : ℝ) (u v : ℝ → ℝ)
+    (hu : u ∈ apm_m95A03_admissible a b 0 0)
+    (hv : v ∈ apm_m95A03_admissible a b 0 0) :
+    (fun x => (u x + v x) / 2) ∈ apm_m95A03_admissible a b 0 0 := by
+  rcases hu with ⟨hu, hua, hub⟩
+  rcases hv with ⟨hv, hva, hvb⟩
+  refine ⟨hu.add hv |>.div_const 2, ?_, ?_⟩
+  · simp [hua, hva]
+  · simp [hub, hvb]
+
+lemma apm_m95A03_minimizers_eqOn_aux_deriv_sub
+    (u v : ℝ → ℝ) (hu : ContDiff ℝ 1 u) (hv : ContDiff ℝ 1 v) (x : ℝ) :
+    deriv (u - v) x = deriv u x - deriv v x := by
+  exact deriv_sub (hu.differentiable (by norm_num) x)
+    (hv.differentiable (by norm_num) x)
+
+lemma apm_m95A03_minimizers_eqOn_aux_deriv_midpoint
+    (u v : ℝ → ℝ) (hu : ContDiff ℝ 1 u) (hv : ContDiff ℝ 1 v) (x : ℝ) :
+    deriv (fun t => (u t + v t) / 2) x = (deriv u x + deriv v x) / 2 := by
+  simpa only [Pi.add_apply] using
+    (((hu.differentiable (by norm_num) x).hasDerivAt.add
+      (hv.differentiable (by norm_num) x).hasDerivAt).div_const 2).deriv
+
+/-- Midpoint identity: `E((u+v)/2) = (E u + E v)/2 − Q(u − v)/4`; with both minimal this
+forces `Q(u − v) ≤ 0`. -/
+lemma apm_m95A03_minimizers_eqOn_aux_quadratic_le_aux_algebra
+    (p q f u v du dv : ℝ) :
+    p * ((du + dv) / 2) ^ 2 + q * ((u + v) / 2) ^ 2 +
+        2 * ((u + v) / 2) * f =
+      (p * du ^ 2 + q * u ^ 2 + 2 * u * f) / 2 +
+      (p * dv ^ 2 + q * v ^ 2 + 2 * v * f) / 2 -
+      (p * (du - dv) ^ 2 + q * (u - v) ^ 2) / 4 := by
+  ring
+
+lemma apm_m95A03_minimizers_eqOn_aux_quadratic_le
+    (a b : ℝ) (hab : a < b) (p q f u v : ℝ → ℝ) (hp : ContDiff ℝ 1 p)
+    (hq : Continuous q) (hf : Continuous f)
+    (huadm : u ∈ apm_m95A03_admissible a b 0 0)
+    (humin : IsMinOn (apm_m95A03_energy a b p q f)
+      (apm_m95A03_admissible a b 0 0) u)
+    (hvadm : v ∈ apm_m95A03_admissible a b 0 0)
+    (hvmin : IsMinOn (apm_m95A03_energy a b p q f)
+      (apm_m95A03_admissible a b 0 0) v) :
+    (∫ t in a..b, p t * (deriv (u - v) t) ^ 2 + q t * ((u - v) t) ^ 2) ≤ 0 := by
+  rcases huadm with ⟨hu, hua, hub⟩
+  rcases hvadm with ⟨hv, hva, hvb⟩
+  let m : ℝ → ℝ := fun t => (u t + v t) / 2
+  let Q : ℝ → ℝ := fun t => p t * (deriv (u - v) t) ^ 2 + q t * ((u - v) t) ^ 2
+  let Iu : ℝ → ℝ := fun t => p t * (deriv u t) ^ 2 + q t * (u t) ^ 2 + 2 * u t * f t
+  let Iv : ℝ → ℝ := fun t => p t * (deriv v t) ^ 2 + q t * (v t) ^ 2 + 2 * v t * f t
+  have hdu : Continuous (deriv u) := hu.continuous_deriv_one
+  have hdv : Continuous (deriv v) := hv.continuous_deriv_one
+  have hQ : Continuous Q := by
+    dsimp [Q]
+    rw [show deriv (u - v) = deriv u - deriv v by
+      funext t; exact apm_m95A03_minimizers_eqOn_aux_deriv_sub u v hu hv t]
+    change Continuous (fun t => p t * (deriv u t - deriv v t) ^ 2 + q t * (u t - v t) ^ 2)
+    fun_prop
+  have hIu : Continuous Iu := by dsimp [Iu]; fun_prop
+  have hIv : Continuous Iv := by dsimp [Iv]; fun_prop
+  have hm : m ∈ apm_m95A03_admissible a b 0 0 :=
+    apm_m95A03_minimizers_eqOn_aux_midpoint_mem a b u v ⟨hu, hua, hub⟩ ⟨hv, hva, hvb⟩
+  have hid : apm_m95A03_energy a b p q f m =
+      (apm_m95A03_energy a b p q f u + apm_m95A03_energy a b p q f v) / 2 -
+        (∫ t in a..b, Q t) / 4 := by
+    unfold apm_m95A03_energy
+    change (∫ t in a..b, p t * (deriv m t) ^ 2 + q t * (m t) ^ 2 + 2 * m t * f t) = _
+    rw [show deriv m = fun t => (deriv u t + deriv v t) / 2 by
+      funext t; exact apm_m95A03_minimizers_eqOn_aux_deriv_midpoint u v hu hv t]
+    change (∫ t in a..b, _) = ((∫ t in a..b, Iu t) + (∫ t in a..b, Iv t)) / 2 - (∫ t in a..b, Q t) / 4
+    calc
+      (∫ t in a..b, _) = ∫ t in a..b, Iu t / 2 + Iv t / 2 - Q t / 4 := by
+        apply intervalIntegral.integral_congr
+        intro t _
+        dsimp [m, Iu, Iv, Q]
+        rw [apm_m95A03_minimizers_eqOn_aux_deriv_sub u v hu hv t]
+        exact apm_m95A03_minimizers_eqOn_aux_quadratic_le_aux_algebra
+          (p t) (q t) (f t) (u t) (v t) (deriv u t) (deriv v t)
+      _ = _ := by
+        have hsum : IntervalIntegrable (fun t => Iu t / 2 + Iv t / 2)
+            MeasureTheory.volume a b :=
+          ((hIu.div_const 2).add (hIv.div_const 2)).intervalIntegrable
+            (μ := MeasureTheory.volume) (a := a) (b := b)
+        have hqd : IntervalIntegrable (fun t => Q t / 4)
+            MeasureTheory.volume a b :=
+          (hQ.div_const 4).intervalIntegrable
+            (μ := MeasureTheory.volume) (a := a) (b := b)
+        have hui : IntervalIntegrable (fun t => Iu t / 2)
+            MeasureTheory.volume a b := (hIu.div_const 2).intervalIntegrable
+              (μ := MeasureTheory.volume) (a := a) (b := b)
+        have hvi : IntervalIntegrable (fun t => Iv t / 2)
+            MeasureTheory.volume a b := (hIv.div_const 2).intervalIntegrable
+              (μ := MeasureTheory.volume) (a := a) (b := b)
+        rw [intervalIntegral.integral_sub hsum hqd,
+          intervalIntegral.integral_add hui hvi,
+          intervalIntegral.integral_div, intervalIntegral.integral_div,
+          intervalIntegral.integral_div]
+        ring
+  have hu_le : apm_m95A03_energy a b p q f u ≤ apm_m95A03_energy a b p q f m := humin hm
+  have hv_le : apm_m95A03_energy a b p q f v ≤ apm_m95A03_energy a b p q f m := hvmin hm
+  rw [hid] at hu_le hv_le
+  change (∫ t in a..b, Q t) ≤ 0
+  linarith
+
+/-- A `C¹` function vanishing at `a` whose weighted Dirichlet energy is `≤ 0` vanishes on
+`[a, b]`. -/
+lemma apm_m95A03_minimizers_eqOn_aux_zero_of_le
+    (a b p₀ : ℝ) (hab : a < b) (hp₀ : 0 < p₀) (p q w : ℝ → ℝ) (hp : Continuous p)
+    (hq : Continuous q) (hp_lower : ∀ t ∈ Set.Icc a b, p₀ ≤ p t)
+    (hq_nonneg : ∀ t ∈ Set.Icc a b, 0 ≤ q t) (hw : ContDiff ℝ 1 w) (hwa : w a = 0)
+    (hle : (∫ t in a..b, p t * (deriv w t) ^ 2 + q t * (w t) ^ 2) ≤ 0) :
+    ∀ t ∈ Set.Icc a b, w t = 0 := by
+  let R : ℝ → ℝ := fun t => p t * (deriv w t) ^ 2 + q t * (w t) ^ 2
+  have hdw0 : ContDiff ℝ 0 (deriv w) := hw.deriv'
+  have hdw : Continuous (deriv w) := hdw0.continuous
+  have hRcont : Continuous R := by
+    dsimp [R]
+    fun_prop
+  have hRnonneg : ∀ t ∈ Set.Icc a b, 0 ≤ R t := by
+    intro t ht
+    have hpt : 0 ≤ p t := le_trans hp₀.le (hp_lower t ht)
+    exact add_nonneg (mul_nonneg hpt (sq_nonneg _))
+      (mul_nonneg (hq_nonneg t ht) (sq_nonneg _))
+  have hRzero : ∀ t ∈ Set.Icc a b, R t = 0 := by
+    intro t ht
+    apply le_antisymm
+    · apply not_lt.mp
+      intro hpos
+      have hstrict := intervalIntegral.integral_lt_integral_of_continuousOn_of_le_of_exists_lt
+        hab continuous_zero.continuousOn hRcont.continuousOn
+        (fun x hx => hRnonneg x (Set.Ioc_subset_Icc_self hx))
+        ⟨t, ht, by simpa using hpos⟩
+      have : 0 < ∫ x in a..b, R x := by simpa using hstrict
+      exact (not_lt_of_ge hle) this
+    · exact hRnonneg t ht
+  have hdwzero : ∀ t ∈ Set.Icc a b, deriv w t = 0 := by
+    intro t ht
+    have hp_pos : 0 < p t := lt_of_lt_of_le hp₀ (hp_lower t ht)
+    have hqterm : 0 ≤ q t * (w t) ^ 2 :=
+      mul_nonneg (hq_nonneg t ht) (sq_nonneg _)
+    have hpterm : p t * (deriv w t) ^ 2 = 0 := by
+      have hnonneg : 0 ≤ p t * (deriv w t) ^ 2 :=
+        mul_nonneg hp_pos.le (sq_nonneg _)
+      have hle0 : p t * (deriv w t) ^ 2 ≤ 0 := by
+        dsimp [R] at hRzero
+        linarith [hRzero t ht]
+      exact le_antisymm hle0 hnonneg
+    have : (deriv w t) ^ 2 = 0 := (mul_eq_zero.mp hpterm).resolve_left hp_pos.ne'
+    exact sq_eq_zero_iff.mp this
+  have hconst := constant_of_derivWithin_zero
+    (f := w) (a := a) (b := b) (hw.differentiable (by norm_num)).differentiableOn (by
+      intro t ht
+      rw [(hw.differentiable (by norm_num) t).derivWithin
+        ((uniqueDiffOn_Icc hab) t (Set.Ico_subset_Icc_self ht))]
+      exact hdwzero t (Set.Ico_subset_Icc_self ht))
+  intro t ht
+  rw [hconst t ht, hwa]
 
 theorem apm_m95A03_minimizers_eqOn
     (a b p₀ : ℝ) (hab : a < b) (hp₀ : 0 < p₀)
-    (p q f u v : ℝ → ℝ)
+    (p q f u v : ℝ → ℝ) (hp : ContDiff ℝ 1 p)
+    (hq : Continuous q) (hf : Continuous f)
     (hp_lower : ∀ t ∈ Set.Icc a b, p₀ ≤ p t)
     (hq_nonneg : ∀ t ∈ Set.Icc a b, 0 ≤ q t)
     (huadm : u ∈ apm_m95A03_admissible a b 0 0)
@@ -214,7 +1390,13 @@ theorem apm_m95A03_minimizers_eqOn
     (hvmin : IsMinOn (apm_m95A03_energy a b p q f)
       (apm_m95A03_admissible a b 0 0) v) :
     Set.EqOn v u (Set.Icc a b) := by
-  sorry
+  have hle := apm_m95A03_minimizers_eqOn_aux_quadratic_le a b hab p q f u v hp hq hf huadm humin hvadm hvmin
+  have hz := apm_m95A03_minimizers_eqOn_aux_zero_of_le a b p₀ hab hp₀ p q (u - v) hp.continuous hq hp_lower
+    hq_nonneg (huadm.1.sub hvadm.1) (by simp [huadm.2.1, hvadm.2.1]) hle
+  intro t ht
+  have := hz t ht
+  simp only [Pi.sub_apply, sub_eq_zero] at this
+  exact this.symm
 
 theorem apm_m95a03
     (a b α β p₀ : ℝ) (hab : a < b) (hp₀ : 0 < p₀)
@@ -251,13 +1433,13 @@ theorem apm_m95a03
     · exact apm_m95A03_solves_of_isMinOn a b α β p₀ hab hp₀ p q f u
         hp hq hf hp_lower hq_nonneg hu2 hua hub
   constructor
-  · exact apm_m95A03_homogenization a b α β hab p q f
+  · exact fun u => apm_m95A03_homogenization a b α β hab p q f u hp
   · obtain ⟨u, hu2, huadm, humin⟩ :=
       apm_m95A03_exists_homogeneous_minimizer a b p₀ hab hp₀ p q f
         hp hq hf hp_lower hq_nonneg
     refine ⟨u, hu2, huadm, humin, ?_⟩
     intro v hvadm hvmin
-    exact apm_m95A03_minimizers_eqOn a b p₀ hab hp₀ p q f u v
+    exact apm_m95A03_minimizers_eqOn a b p₀ hab hp₀ p q f u v hp hq hf
       hp_lower hq_nonneg huadm humin hvadm hvmin
 
 #print axioms apm_m95a03
