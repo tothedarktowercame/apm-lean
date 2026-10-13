@@ -22178,6 +22178,12 @@
       "git diff --exit-code f59140ec -- ConstructionTargets/SardConvexDomain.lean",
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
+    :review
+    {:outcome :fail,
+     :seat "codex-11",
+     :job "invoke-1791858940305-8252-f67f0c1a",
+     :finding
+     "Frozen fixture mode is missing in both authoritative acceptance copies. SHA d4041a37e02023ad8ce1b8e98bb7c6cbb338d539dbc89b7f8b484340dd9b13bd matches and the module builds, but literal fixture compilation exits 1 because modelRange_withinCriticalImage_null_of_interior_of_frontier is already declared. Add :mode :post-build-export-check to both copies, then resubmit commit f59140ec."},
     :commit "f59140ec28f828b0e0aac1cae29fd535e56dc21e",
     :changed-paths [],
     :fixture
@@ -22187,7 +22193,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :repair,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t01A08/corners-sard",
    :acceptance
@@ -22202,7 +22208,7 @@
    :id :r-t01a08-corners-null-aggregate-1,
    :kind :reusable-theorem,
    :area "sard-convex-domain",
-   :fail-count 1,
+   :fail-count 2,
    :depends-on [:r-t01a08-corners-split-1],
    :current-residual
    "Prove frontier-image nullity by corner strata; source nullity is insufficient.",
