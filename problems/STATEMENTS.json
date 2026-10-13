@@ -2663,6 +2663,53 @@
    "rev": "56de913a",
    "approved_at": "2026-09-28T00:17:28Z"
   },
+  "t97J04": {
+   "decls": [
+    "apm_t97j04"
+   ],
+   "sha256": "80ec0e4141912f9d31c2acfb2c7ad6fd11318954b672c4317f8c170a6895b100",
+   "defs": [
+    "apm_t97J04_ComplexRel",
+    "apm_t97J04_Disk",
+    "apm_t97J04_H",
+    "apm_t97J04_X",
+    "apm_t97J04_basepoint",
+    "apm_t97J04_edgePoint",
+    "apm_t97J04_piOne",
+    "apm_t97J04_relator"
+   ],
+   "grade": "faithful",
+   "grader": "claude-14 outside grader (read-only Claude subagent, 2026-10-13, repair batch 3)",
+   "evidence": "holes/labs/statement-registry/repair-grades-3.md",
+   "prelim_defect": null,
+   "rev": "f3bc78c57",
+   "approved_at": "2026-10-13T20:52:13Z"
+  },
+  "t97J05": {
+   "decls": [
+    "apm_t97j05"
+   ],
+   "sha256": "e4761b9b29dcb7ab3e15f67c1da797867f95e552d75292e481c6c5ad93fe83cc",
+   "defs": [
+    "apm_t97J05_IsSmoothSubmanifold",
+    "apm_t97J05_R1",
+    "apm_t97J05_R2",
+    "apm_t97J05_R3",
+    "apm_t97J05_W",
+    "apm_t97J05_f",
+    "apm_t97J05_gamma",
+    "apm_t97J05_p",
+    "apm_t97J05_parameterDomain",
+    "apm_t97J05_parameterTarget",
+    "apm_t97J05_value"
+   ],
+   "grade": "faithful",
+   "grader": "claude-14 outside grader (read-only Claude subagent, 2026-10-13, repair batch 3)",
+   "evidence": "holes/labs/statement-registry/repair-grades-3.md",
+   "prelim_defect": null,
+   "rev": "f3bc78c57",
+   "approved_at": "2026-10-13T20:52:13Z"
+  },
   "t97J06": {
    "decls": [
     "apm_t97j06"
@@ -2681,6 +2728,33 @@
    "prelim_defect": null,
    "rev": "83bcd156",
    "approved_at": "2026-09-28T00:31:42Z"
+  },
+  "t97J07": {
+   "decls": [
+    "apm_t97j07"
+   ],
+   "sha256": "5a9be52bb04d920798aad1c84e820886de017dfd7c7bad25ce4007dbfa13f061",
+   "defs": [
+    "T97J07CP2",
+    "t97J07FixedLine",
+    "t97J07IndexFromDet",
+    "t97J07IsolatedPoint",
+    "t97J07LineChart",
+    "t97J07LineContribution",
+    "t97J07LineLocal",
+    "t97J07LineNormalDet",
+    "t97J07Linear",
+    "t97J07Map",
+    "t97J07PointChart",
+    "t97J07PointDet",
+    "t97J07PointLocal"
+   ],
+   "grade": "faithful",
+   "grader": "claude-14 outside grader (read-only Claude subagent, 2026-10-13, repair batch 3)",
+   "evidence": "holes/labs/statement-registry/repair-grades-3.md",
+   "prelim_defect": null,
+   "rev": "f3bc78c57",
+   "approved_at": "2026-10-13T20:52:13Z"
   },
   "t97J08": {
    "decls": [
@@ -2757,6 +2831,31 @@
    "rev": "6802e9ad",
    "approved_at": "2026-09-28T00:23:54Z",
    "refingerprinted": "2026-10-13: header() now skips let/have := inside statements; full statement unchanged since rev (claude-14)"
+  },
+  "t98A04": {
+   "decls": [
+    "apm_t98a04"
+   ],
+   "sha256": "17752dc57ab9fef048c78859e91808b5fe3bf91e34d07477ad9716e6a36fbe86",
+   "defs": [
+    "apm_t98a04_C2",
+    "apm_t98a04_CP1",
+    "apm_t98a04_IsSubmersion",
+    "apm_t98a04_R2",
+    "apm_t98a04_R3",
+    "apm_t98a04_S3",
+    "apm_t98a04_circleOrbit",
+    "apm_t98a04_e0",
+    "apm_t98a04_fiber",
+    "apm_t98a04_hopf",
+    "apm_t98a04_p10"
+   ],
+   "grade": "faithful",
+   "grader": "claude-14 outside grader (read-only Claude subagent, 2026-10-13, repair batch 3)",
+   "evidence": "holes/labs/statement-registry/repair-grades-3.md",
+   "prelim_defect": null,
+   "rev": "f3bc78c57",
+   "approved_at": "2026-10-13T20:52:13Z"
   },
   "t98A05": {
    "decls": [
@@ -2881,6 +2980,32 @@
    "prelim_defect": null,
    "rev": "e095da7f",
    "approved_at": "2026-09-28T00:25:37Z"
+  },
+  "t99A01": {
+   "decls": [
+    "apm_t99a01"
+   ],
+   "sha256": "45c28a776cfda0b90e542a0800799fbaec1a5196cbf3cee16d2424bf68310f03",
+   "defs": [
+    "AttachRel",
+    "AttachSpace",
+    "Disk",
+    "H",
+    "X",
+    "Y",
+    "Z",
+    "basepoint",
+    "circleInDisk",
+    "degreeX",
+    "degreeY",
+    "degreeZ"
+   ],
+   "grade": "faithful",
+   "grader": "claude-14 outside grader (read-only Claude subagent, 2026-10-13, repair batch 3)",
+   "evidence": "holes/labs/statement-registry/repair-grades-3.md",
+   "prelim_defect": null,
+   "rev": "f3bc78c57",
+   "approved_at": "2026-10-13T20:52:13Z"
   },
   "t99J01": {
    "decls": [
