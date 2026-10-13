@@ -1217,7 +1217,90 @@ theorem apm_m93j05_integral_abs_rpow_line_differentiableAt (p : ℝ) (hp : 1 < p
       (p * |x + s * y| ^ (p - 2) * (x + s * y) * y) s)
     (a b : ℝ → ℝ) (ha : MemLp a (ENNReal.ofReal p) (volume.restrict (Set.Icc (0 : ℝ) 1))) (hb : MemLp b (ENNReal.ofReal p) (volume.restrict (Set.Icc (0 : ℝ) 1))) :
     DifferentiableAt ℝ (fun t : ℝ ↦ ∫ x, |a x + t * b x| ^ p ∂(volume.restrict (Set.Icc (0 : ℝ) 1))) 0 := by
-  sorry
+  let μ := volume.restrict (Set.Icc (0 : ℝ) 1)
+  let F : ℝ → ℝ → ℝ := fun t x ↦ |a x + t * b x| ^ p
+  let F' : ℝ → ℝ → ℝ := fun t x ↦
+    p * |a x + t * b x| ^ (p - 2) * (a x + t * b x) * b x
+  let c : ℝ → ℝ := fun x ↦ |a x| + |b x|
+  let q : ENNReal := ENNReal.ofReal (p - 1)
+  have hp0 : 0 < p := by linarith
+  have hq0 : q ≠ 0 := ENNReal.ofReal_ne_zero_iff.mpr (by linarith)
+  have hqtop : q ≠ ⊤ := ENNReal.ofReal_ne_top
+  have hc : MemLp c (ENNReal.ofReal p) μ := by
+    exact ha.norm.add hb.norm
+  have hpow : MemLp (fun x ↦ c x ^ (p - 1))
+      (ENNReal.ofReal p / q) μ := by
+    have heq : (fun x ↦ ‖c x‖ ^ q.toReal) = fun x ↦ c x ^ (p - 1) := by
+      funext x
+      rw [show ‖c x‖ = c x by
+        rw [Real.norm_eq_abs, abs_of_nonneg]
+        exact add_nonneg (abs_nonneg _) (abs_nonneg _)]
+      simp [q, ENNReal.toReal_ofReal (by linarith : 0 ≤ p - 1)]
+    rw [← heq]
+    exact hc.norm_rpow_div q
+  have hr : Real.HolderConjugate (p / (p - 1)) p := by
+    exact (Real.holderConjugate_iff_eq_conjExponent hp).2 rfl |>.symm
+  have hholder : ENNReal.HolderTriple (ENNReal.ofReal p / q) (ENNReal.ofReal p) 1 := by
+    simpa [q, ENNReal.ofReal_div_of_pos (by linarith : 0 < p - 1)] using
+      hr.ennrealOfReal
+  letI := hholder
+  have hprod : Integrable (fun x ↦ c x ^ (p - 1) * |b x|) μ :=
+    hpow.integrable_mul hb.norm
+  have hbound : Integrable (fun x ↦ p * (c x ^ (p - 1) * |b x|)) μ :=
+    hprod.const_mul p
+  have hF0 : Integrable (F 0) μ := by
+    simpa [F, ENNReal.toReal_ofReal hp0.le] using
+      ha.integrable_norm_rpow (ENNReal.ofReal_ne_zero_iff.mpr hp0) ENNReal.ofReal_ne_top
+  have hmeas : ∀ᶠ t in nhds (0 : ℝ), AEStronglyMeasurable (F t) μ := by
+    filter_upwards with t
+    exact (((ha.1.add (hb.1.const_smul t)).norm.aemeasurable.pow_const p).aestronglyMeasurable)
+  have hF'meas : AEStronglyMeasurable (F' 0) μ := by
+    simpa [F', mul_assoc] using (((ha.1.norm.aemeasurable.pow_const (p - 2)).mul
+      ha.1.aemeasurable |>.mul hb.1.aemeasurable).const_mul p).aestronglyMeasurable
+  have hderiv : ∀ᵐ x ∂μ, ∀ t ∈ Set.Icc (-1 : ℝ) 1,
+      HasDerivAt (F · x) (F' t x) t := by
+    filter_upwards with x
+    intro t ht
+    exact hD1c (a x) (b x) t
+  have hle : ∀ᵐ x ∂μ, ∀ t ∈ Set.Icc (-1 : ℝ) 1,
+      ‖F' t x‖ ≤ p * (c x ^ (p - 1) * |b x|) := by
+    filter_upwards with x
+    intro t ht
+    dsimp [F', c]
+    have ht' : |t| ≤ 1 := (abs_le).2 ht
+    have hz : |a x + t * b x| ≤ |a x| + |b x| := by
+      calc
+        _ ≤ |a x| + |t| * |b x| := by simpa [abs_mul] using abs_add_le (a x) (t * b x)
+        _ ≤ _ := by
+          gcongr
+          exact mul_le_of_le_one_left (abs_nonneg _) ht'
+    have hp1 : 0 ≤ p - 1 := by linarith
+    rw [abs_mul, abs_mul, abs_mul, abs_of_pos hp0,
+      abs_of_nonneg (Real.rpow_nonneg (abs_nonneg _) _)]
+    have hid : |a x + t * b x| ^ (p - 2) * |a x + t * b x| =
+        |a x + t * b x| ^ (p - 1) := by
+      by_cases hzero : |a x + t * b x| = 0
+      · rw [hzero, mul_zero, Real.zero_rpow (by linarith)]
+      conv_lhs => rhs; rw [← Real.rpow_one |a x + t * b x|]
+      rw [← Real.rpow_add (lt_of_le_of_ne (abs_nonneg _) (Ne.symm hzero))]
+      congr 1
+      ring
+    calc
+      p * |a x + t * b x| ^ (p - 2) * |a x + t * b x| * |b x| =
+          p * (|a x + t * b x| ^ (p - 2) * |a x + t * b x|) * |b x| := by ring
+      _ = p * |a x + t * b x| ^ (p - 1) * |b x| := by rw [hid]
+      _ ≤ p * (c x ^ (p - 1) * |b x|) := by
+        dsimp [c]
+        rw [mul_assoc]
+        apply mul_le_mul_of_nonneg_left ?_ hp0.le
+        apply mul_le_mul_of_nonneg_right ?_ (abs_nonneg _)
+        exact Real.rpow_le_rpow (abs_nonneg _) hz hp1
+  have hs : Set.Icc (-1 : ℝ) 1 ∈ nhds (0 : ℝ) := by
+    exact mem_nhds_iff.mpr ⟨Set.Ioo (-1) 1, Set.Ioo_subset_Icc_self,
+      isOpen_Ioo, by norm_num⟩
+  exact (hasDerivAt_integral_of_dominated_loc_of_deriv_le
+    (F := F) (F' := F') (bound := fun x ↦ p * (c x ^ (p - 1) * |b x|))
+    hs hmeas hF0 hF'meas hle hbound hderiv).2.differentiableAt
 
 /-- (D1) For `p > 1`, `t ↦ ‖a + t b‖ₚᵖ` is differentiable at `0`
 (derivative `p ∫ |a|^(p-2) a b`; dominate the difference quotient by `p (|a|+|b|)^(p-1) |b|`). -/
