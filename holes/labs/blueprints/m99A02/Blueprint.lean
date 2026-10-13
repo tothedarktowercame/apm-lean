@@ -368,13 +368,86 @@ theorem apm_m99A02_bridge_1 :
   exact Finset.single_le_sum (fun j _ ↦ sq_nonneg (m99A02Derivative j x))
     (Finset.mem_univ i)
 
+/-! ### Split of `apm_m99A02_bridge_2` (claude-14, 2026-10-13, after a partial round-1 attempt)
+
+Route: integrate along lines parallel to `eᵢ` at height `c ≠ 0` in the other coordinate.
+Such lines miss the singularity, so 1-D integration by parts applies; Fubini and the
+null line `c = 0` give the planar identity. Each lemma takes what it needs from the
+others as hypotheses, so all five can be proved at the same time. -/
+
+/-- The other coordinate index in `Fin 2`. -/
+def m99A02Other (i : Fin 2) : Fin 2 := Equiv.swap (0 : Fin 2) 1 i
+
+/-- The line `t ↦ t eᵢ + c eⱼ`, `j ≠ i`. -/
+noncomputable def m99A02Line (i : Fin 2) (c t : ℝ) : m99A02Point :=
+  EuclideanSpace.single i t + EuclideanSpace.single (m99A02Other i) c
+
+/-- Away from the origin and inside the unit disk, `f` is differentiable along
+`eᵢ` with derivative the displayed `m99A02Derivative i`. -/
+theorem apm_m99A02_directional_hasDerivAt (i : Fin 2) (x : m99A02Point)
+    (hx0 : x ≠ 0) (hx1 : ‖x‖ < 1) :
+    HasDerivAt (fun t : ℝ ↦ m99A02Function (x + t • EuclideanSpace.single i 1))
+      (m99A02Derivative i x) 0 := by
+  sorry
+
+/-- One-dimensional integration by parts on a line that misses the origin. -/
+theorem apm_m99A02_line_ibp (i : Fin 2) {c : ℝ} (hc : c ≠ 0)
+    (hdir : ∀ x : m99A02Point, x ≠ 0 → ‖x‖ < 1 →
+      HasDerivAt (fun t : ℝ ↦ m99A02Function (x + t • EuclideanSpace.single i 1))
+        (m99A02Derivative i x) 0)
+    (φ : m99A02Point → ℝ) (hφ : ContDiff ℝ ∞ φ) (hφc : HasCompactSupport φ)
+    (hφΩ : Function.support φ ⊆ m99A02Omega) :
+    (∫ t : ℝ, m99A02Function (m99A02Line i c t) *
+        fderiv ℝ φ (m99A02Line i c t) (EuclideanSpace.single i 1)) =
+      -∫ t : ℝ, m99A02Derivative i (m99A02Line i c t) * φ (m99A02Line i c t) := by
+  sorry
+
+/-- Fubini in the coordinates `(t, c)` of `m99A02Line i c t`. -/
+theorem apm_m99A02_integral_eq_iterated (i : Fin 2) (F : m99A02Point → ℝ)
+    (hF : Integrable F) :
+    (∫ x, F x) = ∫ c : ℝ, ∫ t : ℝ, F (m99A02Line i c t) := by
+  sorry
+
+/-- Both integrands are integrable on `Ω` (use `apm_m99A02_bridge_1`: `L²` on a
+finite-measure set is `L¹`, and `φ`, `Dφ` are bounded). -/
+theorem apm_m99A02_weak_integrands_integrable (i : Fin 2)
+    (φ : m99A02Point → ℝ) (hφ : ContDiff ℝ ∞ φ) (hφc : HasCompactSupport φ) :
+    Integrable (fun x ↦ m99A02Function x * fderiv ℝ φ x (EuclideanSpace.single i 1))
+        (volume.restrict m99A02Omega) ∧
+      Integrable (fun x ↦ m99A02Derivative i x * φ x) (volume.restrict m99A02Omega) := by
+  sorry
+
+/-- Assembly from the pieces: pass from `Ω` to the whole plane (`tsupport φ` lies in
+the closed disk, whose boundary circle is null), apply Fubini, and use the line
+identity for every `c ≠ 0` (the line `c = 0` is a null set of heights). -/
+theorem apm_m99A02_weak_identity_of_pieces (i : Fin 2)
+    (φ : m99A02Point → ℝ) (hφ : ContDiff ℝ ∞ φ) (hφc : HasCompactSupport φ)
+    (hφΩ : Function.support φ ⊆ m99A02Omega)
+    (hline : ∀ c : ℝ, c ≠ 0 →
+      (∫ t : ℝ, m99A02Function (m99A02Line i c t) *
+          fderiv ℝ φ (m99A02Line i c t) (EuclideanSpace.single i 1)) =
+        -∫ t : ℝ, m99A02Derivative i (m99A02Line i c t) * φ (m99A02Line i c t))
+    (hfub : ∀ F : m99A02Point → ℝ, Integrable F →
+      (∫ x, F x) = ∫ c : ℝ, ∫ t : ℝ, F (m99A02Line i c t))
+    (hint : Integrable (fun x ↦ m99A02Function x * fderiv ℝ φ x (EuclideanSpace.single i 1))
+        (volume.restrict m99A02Omega) ∧
+      Integrable (fun x ↦ m99A02Derivative i x * φ x) (volume.restrict m99A02Omega)) :
+    (∫ x in m99A02Omega, m99A02Function x * fderiv ℝ φ x (EuclideanSpace.single i 1)) =
+      -∫ x in m99A02Omega, m99A02Derivative i x * φ x := by
+  sorry
+
 /-- Why this unblocks the weak-derivative clauses of `apm_m99a02`: this is
 the punctured-disk integration-by-parts theorem together with the assertion
 that the inner-circle boundary flux tends to zero at the logarithmic
 singularity. -/
 theorem apm_m99A02_bridge_2 (i : Fin 2) :
     IsM99A02WeakDerivative m99A02Function (m99A02Derivative i) i := by
-  sorry
+  intro φ hφ hφc hφΩ
+  exact apm_m99A02_weak_identity_of_pieces i φ hφ hφc hφΩ
+    (fun c hc ↦ apm_m99A02_line_ibp i hc
+      (fun x hx0 hx1 ↦ apm_m99A02_directional_hasDerivAt i x hx0 hx1) φ hφ hφc hφΩ)
+    (apm_m99A02_integral_eq_iterated i)
+    (apm_m99A02_weak_integrands_integrable i φ hφ hφc)
 
 theorem apm_m99a02 :
     MemLp m99A02Function 2 (volume.restrict m99A02Omega) ∧
