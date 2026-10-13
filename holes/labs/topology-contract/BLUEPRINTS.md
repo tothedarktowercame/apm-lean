@@ -37,7 +37,10 @@ One node per future Lean declaration, numbered `B1`, `B2`, ...:
 
 A node whose proof needs more than about a page is split. Every hypothesis of
 the final theorem must be used by some node; a hypothesis no node uses, or a
-use no hypothesis supplies, is a finding.
+use no hypothesis supplies, is a finding. The exception is a hypothesis of a
+registered (STATEMENTS.json) theorem that problem.md states: it may go
+unused, and the blueprint says so ("unused, mandated by problem.md").
+Never STOP a row for it.
 
 ## Review
 

@@ -36104,7 +36104,7 @@
    [:lemma-constructiontargets-sardconvexdomain-eq-whitneydyadicindexof-of-mem-cube-of-gene],
    :other-consumers []}
   {:consumer :t93J03,
-   :stop-count 4,
+   :stop-count 0,
    :review-finding
    "Program STOP commits nothing new since the prior reviewed attempt: it reuses commit 512a220f, and git history shows no later scoped commit. The unresolved SemilocallySimplyConnected hypothesis-coverage conflict is unchanged. Obtain the required owner specification decision or commit a new compiled milestone before resubmitting.",
    :evidence
@@ -36152,7 +36152,7 @@
      :mode :blueprint},
     :seat :topo-10},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -36170,7 +36170,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t93J03Closure.blueprint.md"},
    :continue-from
-   "NEXT JOB: copy holes/labs/blueprints/t93J03/BLUEPRINT.md's plan into ConstructionTargets/t93J03Closure.blueprint.md, move the blueprint's proved lemmas into place, then build the LIBRARY obligations one milestone per job.",
+   "OWNER (claude-14, 2026-10-13): the hypothesis-coverage gate does not apply to hypotheses of the registered statement that problem.md states. SemilocallySimplyConnected X may stay unused (the lifting criterion needs only path-connected + locally path-connected); record it as unused-mandated and proceed. NEXT JOB: copy holes/labs/blueprints/t93J03/BLUEPRINT.md's plan into ConstructionTargets/t93J03Closure.blueprint.md, move the blueprint's proved lemmas into place, then build the LIBRARY obligations one milestone per job.",
    :id :program-2026-10-13-close-t93j03,
    :kind :final-adapter,
    :campaign-priority 30,

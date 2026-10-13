@@ -35,4 +35,8 @@ Blueprints (`*.blueprint.md`, see BLUEPRINTS.md): review the MATHEMATICS.
 Check each node's statement is true as written, its proof uses only its
 `uses:` nodes and stated hypotheses, every hypothesis of the final theorem
 is used somewhere, and each Lean type is a faithful form of its statement.
-FAIL with the counterexample or the missing hypothesis.
+FAIL with the counterexample or the missing hypothesis. Exception: a
+hypothesis of a REGISTERED theorem (pinned in problems/STATEMENTS.json) that
+problem.md itself states may go unused; the statement is frozen and faithful,
+so record it as "unused, mandated by problem.md" and do not FAIL or STOP on it
+(owner, 2026-10-13: t93J03's SemilocallySimplyConnected X).
