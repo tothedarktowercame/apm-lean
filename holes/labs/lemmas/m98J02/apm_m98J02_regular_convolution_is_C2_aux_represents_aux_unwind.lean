@@ -968,7 +968,20 @@ lemma apm_m98J02_regular_convolution_is_C2_aux_represents_aux_unwind
       (apm_m98J02_regularDistribution f hf.continuous hfc) w₀ w)
     (φ : apm_m98J02_Test) :
     w φ = ∫ x, f x * w₀ (apm_m98J02_translateTest x φ) := by
-  sorry
+  obtain ⟨K, χ, Ψ, hK, hvan, ⟨U, -, hKU, hχ⟩, hΨ, hw⟩ := hconv φ
+  rw [hw, apm_m98J02_regularDistribution_apply]
+  have hfK := apm_m98J02_convolution_solves_fundamental_aux_support
+    f hf.continuous hfc K hK hvan
+  apply MeasureTheory.integral_congr_ae
+  filter_upwards with x
+  obtain ⟨τ, hτ, hΨx⟩ := hΨ x
+  have hτ' : τ = apm_m98J02_translateTest x φ := by
+    ext y
+    exact hτ y
+  rw [hΨx, hτ']
+  by_cases hx : x ∈ K
+  · rw [hχ x (hKU hx), one_mul]
+  · rw [hfK x hx, zero_mul, zero_mul]
 -- END SEAT AREA
 
 /-- Fubini and the change of variables `y = x + z`. -/
