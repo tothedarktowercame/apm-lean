@@ -1270,4 +1270,26 @@ theorem pointFinite_whitneyNetQuarterBalls
   · intro x
     exact (finite_whitneyNetIncidence_and_ncard_le E s x).2
 
+/-- A chosen nearest point of the closed set for each Whitney net center. -/
+noncomputable def whitneyNetAnchor
+    {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [FiniteDimensional ℝ E] {s : Set E} (hs : IsClosed s) (hne : s.Nonempty)
+    (i : WhitneyNetIndex s) : E :=
+  Classical.choose (exists_nearestPoint_of_isClosed hs hne i.center)
+
+/-- The chosen Whitney anchor belongs to the closed set. -/
+theorem whitneyNetAnchor_mem
+    {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [FiniteDimensional ℝ E] {s : Set E} (hs : IsClosed s) (hne : s.Nonempty)
+    (i : WhitneyNetIndex s) : whitneyNetAnchor hs hne i ∈ s :=
+  (Classical.choose_spec (exists_nearestPoint_of_isClosed hs hne i.center)).1
+
+/-- The chosen Whitney anchor realizes the distance to the closed set. -/
+theorem whitneyNetAnchor_nearest
+    {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [FiniteDimensional ℝ E] {s : Set E} (hs : IsClosed s) (hne : s.Nonempty)
+    (i : WhitneyNetIndex s) :
+    Metric.infDist i.center s = dist i.center (whitneyNetAnchor hs hne i) :=
+  (Classical.choose_spec (exists_nearestPoint_of_isClosed hs hne i.center)).2
+
 end ConstructionTargets.SardConvexDomain
