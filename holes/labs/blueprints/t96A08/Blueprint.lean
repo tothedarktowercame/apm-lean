@@ -1295,7 +1295,12 @@ theorem apm_t96A08_chart_hasFDerivWithinAt
     ∀ y ∈ (extChartAt I x).target,
       HasFDerivWithinAt (f ∘ (extChartAt I x).symm)
         (apm_t96A08_omegaCoord I omega x y) (extChartAt I x).target y := by
-  sorry
+  intro y hy
+  have hinv := (mdifferentiableWithinAt_extChartAt_symm hy).hasMFDerivWithinAt
+  have hcomp := HasMFDerivAt.comp_hasMFDerivWithinAt
+    (f := (extChartAt I x).symm) y (hf ((extChartAt I x).symm y)) hinv
+  have htarget := hcomp.mono (extChartAt_target_subset_range x)
+  simpa only [apm_t96A08_omegaCoord] using htarget.hasFDerivWithinAt
 
 /-- Seat (pure analysis): if `g` has within-derivative `L y` at every point of
 a uniquely differentiable `S` and `L` is smooth on `S`, then `g` is smooth on
