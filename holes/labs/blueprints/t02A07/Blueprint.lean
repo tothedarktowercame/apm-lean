@@ -382,6 +382,64 @@ lemma apm_t02A07_transverse_iff_parameter_sq_ne_half_aux_submodule_aux_parameter
   have h := EuclideanSpace.real_norm_sq_eq (parameter : apm_t02a07_E2)
   simpa [Fin.sum_univ_succ, hp] using h.symm
 
+lemma apm_t02A07_transverse_iff_parameter_sq_ne_half_aux_submodule_aux_good_aux_algebra
+    {a b y₀ y₁ y₂ : ℝ}
+    (ha : a ^ 2 + b ^ 2 = 1)
+    (hy : y₀ ^ 2 + y₁ ^ 2 + y₂ ^ 2 = 1)
+    (hlevel : a ^ 2 * y₁ * y₂ = (1 : ℝ) / 4)
+    (hcrit : y₁ ^ 2 + y₂ ^ 2 - 4 * (y₁ * y₂) ^ 2 = 0) :
+    a ^ 2 = (1 : ℝ) / 2 := by
+  have ha2 : 0 ≤ a ^ 2 := sq_nonneg a
+  have hb2 : 0 ≤ b ^ 2 := sq_nonneg b
+  have hy0 : 0 ≤ y₀ ^ 2 := sq_nonneg y₀
+  have hdiff : 0 ≤ (y₁ - y₂) ^ 2 := sq_nonneg (y₁ - y₂)
+  have hprod : 0 < y₁ * y₂ := by
+    by_contra h
+    have : y₁ * y₂ ≤ 0 := le_of_not_gt h
+    nlinarith
+  nlinarith
+
+/-- Both summands lie in the tangent space of `X`. -/
+lemma apm_t02A07_transverse_iff_parameter_sq_ne_half_aux_submodule_aux_good_aux_le
+    (parameter : apm_t02a07_parameterCircle)
+    (hderiv : ∀ (y v : apm_t02a07_E3),
+      fderiv ℝ (apm_t02a07_familyAmbient parameter) y v =
+        (WithLp.toLp 2
+          ![v 0 * parameter.1 0, 0, v 1 * parameter.1 0,
+            v 2 * parameter.1 0] : apm_t02a07_E4))
+    (y : apm_t02a07_S2) (hyZ : apm_t02a07_family parameter y ∈ apm_t02a07_Z) :
+    Submodule.map
+        (fderiv ℝ (apm_t02a07_familyAmbient parameter) y).toLinearMap
+        (apm_t02a07_sphereTangent y) ⊔
+      apm_t02a07_tangentZ (apm_t02a07_family parameter y) ≤
+        apm_t02a07_tangentX (apm_t02a07_family parameter y) := by
+  sorry
+
+/-- Away from `parameter₀² = 1/2`, some tangent direction of the slice moves
+the product constraint to first order (uses `_aux_algebra`). -/
+lemma apm_t02A07_transverse_iff_parameter_sq_ne_half_aux_submodule_aux_good_aux_witness
+    (parameter : apm_t02a07_parameterCircle)
+    (hderiv : ∀ (y v : apm_t02a07_E3),
+      fderiv ℝ (apm_t02a07_familyAmbient parameter) y v =
+        (WithLp.toLp 2
+          ![v 0 * parameter.1 0, 0, v 1 * parameter.1 0,
+            v 2 * parameter.1 0] : apm_t02a07_E4))
+    (hp : parameter.1 0 ^ 2 ≠ (1 : ℝ) / 2)
+    (y : apm_t02a07_S2) (hyZ : apm_t02a07_family parameter y ∈ apm_t02a07_Z) :
+    ∃ v ∈ apm_t02a07_sphereTangent y,
+      fderiv ℝ apm_t02a07_constraints (apm_t02a07_family parameter y)
+        (fderiv ℝ (apm_t02a07_familyAmbient parameter) y v) 1 ≠ 0 := by
+  sorry
+
+/-- One image direction transverse to the product constraint, together with
+`tangentZ`, spans `tangentX`. -/
+lemma apm_t02A07_transverse_iff_parameter_sq_ne_half_aux_submodule_aux_good_aux_ge
+    (x u : apm_t02a07_E4) (hu : u ∈ apm_t02a07_tangentX x)
+    (hne : fderiv ℝ apm_t02a07_constraints x u 1 ≠ 0) :
+    apm_t02a07_tangentX x ≤
+      Submodule.span ℝ {u} ⊔ apm_t02a07_tangentZ x := by
+  sorry
+
 lemma apm_t02A07_transverse_iff_parameter_sq_ne_half_aux_submodule_aux_good
     (parameter : apm_t02a07_parameterCircle)
     (hderiv : ∀ (y v : apm_t02a07_E3),
@@ -391,7 +449,14 @@ lemma apm_t02A07_transverse_iff_parameter_sq_ne_half_aux_submodule_aux_good
             v 2 * parameter.1 0] : apm_t02a07_E4))
     (hp : parameter.1 0 ^ 2 ≠ (1 : ℝ) / 2) :
     apm_t02a07_IsTransverse parameter := by
-  sorry
+  intro y hyZ
+  refine le_antisymm (apm_t02A07_transverse_iff_parameter_sq_ne_half_aux_submodule_aux_good_aux_le parameter hderiv y hyZ) ?_
+  obtain ⟨v, hv, hne⟩ := apm_t02A07_transverse_iff_parameter_sq_ne_half_aux_submodule_aux_good_aux_witness parameter hderiv hp y hyZ
+  have hu := apm_t02A07_transverse_iff_parameter_sq_ne_half_aux_submodule_aux_good_aux_le parameter hderiv y hyZ
+    (Submodule.mem_sup_left (Submodule.mem_map_of_mem hv))
+  refine (apm_t02A07_transverse_iff_parameter_sq_ne_half_aux_submodule_aux_good_aux_ge _ _ hu hne).trans (sup_le_sup_right ?_ _)
+  rw [Submodule.span_le, Set.singleton_subset_iff]
+  exact Submodule.mem_map_of_mem hv
 /-
   intro y hy
   have hlevel := apm_t02A07_transverse_iff_parameter_sq_ne_half_aux_level parameter y hy
