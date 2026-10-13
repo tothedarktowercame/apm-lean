@@ -76640,6 +76640,17 @@
      {:cmd "placeholder scan", :exit 0}
      {:cmd "#print axioms B7", :exit 0}
      {:cmd "git show --check 9f18c4ca1", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791869557554-8562-a39a3e73",
+     :commands
+     ["git scope/SHA/blob checks at 9f18c4ca1"
+      "git show 9f18c4ca1:... | lake env lean /dev/stdin"
+      "statement-registry.py check (145/0)"
+      "placeholder/topology scans; #print axioms B7"],
+     :finding
+     "PASS: exact one-file scope and frozen fixture/module hashes match; the recorded blob compiles with 0 placeholders and standard axioms. The commit proves the EqvGen representation theorem, closed equivalence graph, Hausdorff quotient, skeletonArcMap quotient property, and the actual skeleton homeomorphism. Its arc equation lands in signedWedgeArc, whose negative branch uses reverseIcc; discrete index topology is bottom. B7 is complete and residual is exactly B8/B9."},
     :commit "9f18c4ca1",
     :changed-paths ["ConstructionTargets/PolygonSurfacePiOne.lean"],
     :fixture
@@ -76648,7 +76659,7 @@
      "a5462511c62ca1f6fc72bb8d48ca3461237b123afb807f1e5ba2ad7edff5de70"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/PolygonSurfacePiOne.lean"],
    :dag-node "ConstructionTargets/PolygonSurfacePiOne.blueprint.md/B7",
    :acceptance
@@ -76676,7 +76687,7 @@
      :infrastructure-packets
      :review-outcomes]},
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance {:strategy "Rerun after B7."},
