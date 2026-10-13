@@ -113,7 +113,61 @@ lemma apm_m96A02_lipschitz_ode_aux_exists_aux_integral_solution_aux_fixedPoint_a
     (u v : C(Set.Icc (0 : ℝ) 1, ℝ)) (t : Set.Icc (0 : ℝ) 1) :
     dist ((apm_m96A02_lipschitz_ode_aux_exists_aux_integral_solution_aux_picard f u₀ hK.continuous)^[n] u t) ((apm_m96A02_lipschitz_ode_aux_exists_aux_integral_solution_aux_picard f u₀ hK.continuous)^[n] v t) ≤
       (K : ℝ) ^ n * (t : ℝ) ^ n / n.factorial * dist u v := by
-  sorry
+  induction n generalizing t with
+  | zero =>
+      simpa using ContinuousMap.dist_apply_le_dist (f := u) (g := v) t
+  | succ n ih =>
+      let T := apm_m96A02_lipschitz_ode_aux_exists_aux_integral_solution_aux_picard
+        f u₀ hK.continuous
+      rw [Function.iterate_succ_apply', Function.iterate_succ_apply']
+      simp only [T, apm_m96A02_lipschitz_ode_aux_exists_aux_integral_solution_aux_picard_apply,
+        Real.dist_eq, add_sub_add_left_eq_sub]
+      have hcontu : Continuous (fun s : ℝ =>
+          f (((T^[n]) u) (Set.projIcc 0 1 zero_le_one s))) :=
+        hK.continuous.comp (((T^[n]) u).continuous.comp continuous_projIcc)
+      have hcontv : Continuous (fun s : ℝ =>
+          f (((T^[n]) v) (Set.projIcc 0 1 zero_le_one s))) :=
+        hK.continuous.comp (((T^[n]) v).continuous.comp continuous_projIcc)
+      rw [← intervalIntegral.integral_sub (hcontu.intervalIntegrable 0 t)
+        (hcontv.intervalIntegrable 0 t)]
+      have ht0 : 0 ≤ (t : ℝ) := t.2.1
+      let g : ℝ → ℝ := fun s =>
+        (K : ℝ) * ((K : ℝ) ^ n * s ^ n / n.factorial * dist u v)
+      calc
+        |∫ s in (0 : ℝ)..(t : ℝ),
+            (f (((T^[n]) u) (Set.projIcc 0 1 zero_le_one s)) -
+             f (((T^[n]) v) (Set.projIcc 0 1 zero_le_one s)))| ≤
+            ∫ s in (0 : ℝ)..(t : ℝ), g s := by
+          change ‖∫ s in (0 : ℝ)..(t : ℝ),
+            (f (((T^[n]) u) (Set.projIcc 0 1 zero_le_one s)) -
+             f (((T^[n]) v) (Set.projIcc 0 1 zero_le_one s)))‖ ≤ _
+          apply intervalIntegral.norm_integral_le_of_norm_le ht0
+          · filter_upwards [] with s hs
+            have hs0 : 0 ≤ s := le_of_lt hs.1
+            have hst : s ≤ (t : ℝ) := hs.2
+            have hs1 : s ≤ 1 := hst.trans t.2.2
+            have hp : Set.projIcc 0 1 zero_le_one s =
+                (⟨s, hs0, hs1⟩ : Set.Icc (0 : ℝ) 1) :=
+              Set.projIcc_of_mem zero_le_one ⟨hs0, hs1⟩
+            refine (hK.dist_le_mul _ _).trans ?_
+            rw [Real.dist_eq, hp]
+            exact mul_le_mul_of_nonneg_left (ih ⟨s, hs0, hs1⟩) K.2
+          · dsimp [g]
+            apply Continuous.intervalIntegrable
+            fun_prop
+        _ = (K : ℝ) ^ (n + 1) * (t : ℝ) ^ (n + 1) /
+              (n + 1).factorial * dist u v := by
+          dsimp [g]
+          simp_rw [show ∀ s : ℝ,
+            (K : ℝ) * ((K : ℝ) ^ n * s ^ n / n.factorial * dist u v) =
+              ((K : ℝ) * (K : ℝ) ^ n / n.factorial * dist u v) * s ^ n by
+                intro s; ring]
+          rw [intervalIntegral.integral_const_mul, integral_pow]
+          simp only [Nat.factorial_succ, Nat.cast_mul, Nat.cast_succ]
+          field_simp
+          ring
+        _ = (K : ℝ) ^ n.succ * (t : ℝ) ^ n.succ /
+              n.succ.factorial * dist u v := by rfl
 
 lemma apm_m96A02_lipschitz_ode_aux_exists_aux_integral_solution_aux_fixedPoint
     (f : ℝ → ℝ) (u₀ : ℝ) (K : NNReal) (hK : LipschitzWith K f) :
