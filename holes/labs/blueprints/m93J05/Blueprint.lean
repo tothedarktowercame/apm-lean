@@ -891,7 +891,72 @@ theorem apm_m93j05_weak_lsc_of_parts (N : ℕ) (p q : ℝ) (hp : 1 < p) (hq : 1 
       ∀ r, (∃ᶠ n in atTop, Real.rpow (eLpNorm (w n) (ENNReal.ofReal p) (volume.restrict (Set.Icc (0 : ℝ) 1))).toReal p ≤ r) →
         Real.rpow (eLpNorm u (ENNReal.ofReal p) (volume.restrict (Set.Icc (0 : ℝ) 1))).toReal p ≤ r) (hL3 : (∀ h, MemLp h (ENNReal.ofReal q) (volume.restrict (Set.Icc (0 : ℝ) 1)) → Tendsto (fun n ↦ ∫ x, (s n x - apm_m93j05_trunc N (s n) x) * h x ∂(volume.restrict (Set.Icc (0 : ℝ) 1))) atTop (nhds (∫ x, (f x - apm_m93j05_trunc N f x) * h x ∂(volume.restrict (Set.Icc (0 : ℝ) 1)))))) :
     ∀ r, (∃ᶠ n in atTop, apm_m93j05_J N p g (s n) ≤ r) → apm_m93j05_J N p g f ≤ r := by
-  sorry
+  let μ := volume.restrict (Set.Icc (0 : ℝ) 1)
+  have htrunc : ∀ v : ℝ → ℝ,
+      MemLp (apm_m93j05_trunc N v) (ENNReal.ofReal p) μ := by
+    intro v
+    let C : ℝ := |∫ x in Set.Icc (0 : ℝ) 1, v x| +
+      ∑ j ∈ Finset.Icc 1 N,
+        (|apm_m93j05_cosCoeff v j| + |apm_m93j05_sinCoeff v j|)
+    apply MemLp.of_bound (C := C)
+    · exact (apm_m93j05_trunc_split_aux_continuous N v).aestronglyMeasurable
+    · filter_upwards with x
+      rw [Real.norm_eq_abs]
+      unfold apm_m93j05_trunc
+      calc
+        |_ + _| ≤ |∫ z in Set.Icc (0 : ℝ) 1, v z| +
+              |∑ j ∈ Finset.Icc 1 N,
+                (apm_m93j05_cosCoeff v j * Real.cos (j * 2 * Real.pi * x) +
+                 apm_m93j05_sinCoeff v j * Real.sin (j * 2 * Real.pi * x))| := abs_add_le _ _
+        _ ≤ C := by
+          dsimp [C]
+          apply add_le_add le_rfl
+          calc
+            |∑ j ∈ Finset.Icc 1 N, _| ≤
+                ∑ j ∈ Finset.Icc 1 N,
+                  |apm_m93j05_cosCoeff v j * Real.cos (j * 2 * Real.pi * x) +
+                   apm_m93j05_sinCoeff v j * Real.sin (j * 2 * Real.pi * x)| :=
+              Finset.abs_sum_le_sum_abs _ _
+            _ ≤ ∑ j ∈ Finset.Icc 1 N,
+                (|apm_m93j05_cosCoeff v j| + |apm_m93j05_sinCoeff v j|) := by
+              apply Finset.sum_le_sum
+              intro j hj
+              calc
+                |_ + _| ≤ |_| + |_| := abs_add_le _ _
+                _ ≤ |apm_m93j05_cosCoeff v j| + |apm_m93j05_sinCoeff v j| := by
+                  simp only [abs_mul]
+                  exact add_le_add
+                    (mul_le_of_le_one_right (abs_nonneg _) (Real.abs_cos_le_one _))
+                    (mul_le_of_le_one_right (abs_nonneg _) (Real.abs_sin_le_one _))
+  have huf : MemLp (fun x ↦ f x - apm_m93j05_trunc N f x)
+      (ENNReal.ofReal p) μ := hf.sub (htrunc f)
+  have huw : ∀ n, MemLp (fun x ↦ s n x - apm_m93j05_trunc N (s n) x)
+      (ENNReal.ofReal p) μ := fun n ↦ (hs n).sub (htrunc (s n))
+  have hpair := apm_m93j05_weak_lowerSemicontinuous_aux_pairing g f s hg hweak
+  let A : (ℝ → ℝ) → ℝ := fun v ↦ Real.rpow
+    (eLpNorm (fun x ↦ v x - apm_m93j05_trunc N v x) (ENNReal.ofReal p) μ).toReal p
+  let B : (ℝ → ℝ) → ℝ := fun v ↦
+    (eLpNorm (apm_m93j05_trunc N v) 2 μ).toReal ^ 2
+  let C : (ℝ → ℝ) → ℝ := fun v ↦ ∫ x, v x * g x ∂μ
+  have hBC : Tendsto (fun n ↦ B (s n) + C (s n)) atTop
+      (nhds (B f + C f)) := hL1.add hpair
+  intro r hr
+  apply le_of_forall_pos_le_add
+  intro ε hε
+  have hev : ∀ᶠ n in atTop, B f + C f - ε < B (s n) + C (s n) :=
+    (tendsto_order.1 hBC).1 _ (by linarith)
+  have hfreq := hr.and_eventually hev
+  have hAfreq : ∃ᶠ n in atTop, A (s n) ≤ r - (B f + C f) + ε := by
+    apply hfreq.mono
+    intro n hn
+    dsimp [apm_m93j05_J, A, B, C, μ] at hn ⊢
+    linarith
+  have hAle : A f ≤ r - (B f + C f) + ε :=
+    hL2 (fun x ↦ f x - apm_m93j05_trunc N f x)
+      (fun n x ↦ s n x - apm_m93j05_trunc N (s n) x)
+      huf huw hL3 _ (by simpa [A, μ] using hAfreq)
+  dsimp [apm_m93j05_J, A, B, C, μ] at hAle ⊢
+  linarith
 
 theorem apm_m93j05_weak_lowerSemicontinuous
     (N : ℕ) (p q : ℝ) (hp : 1 < p) (hq : 1 < q)
