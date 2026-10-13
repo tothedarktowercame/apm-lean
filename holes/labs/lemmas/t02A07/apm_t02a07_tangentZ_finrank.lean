@@ -355,7 +355,19 @@ regularity lemmas), so its kernel has dimension `4 − 2 = 2` (rank–nullity). 
 -- BEGIN SEAT AREA
 theorem apm_t02a07_tangentZ_finrank :
     ∀ x ∈ apm_t02a07_Z, Module.finrank ℝ (apm_t02a07_tangentZ x) = 2 := by
-  sorry
+  intro x hx
+  let L := (fderiv ℝ apm_t02a07_constraints x).toLinearMap
+  have hsurj : Function.Surjective L :=
+    apm_t02A07_constraints_fderiv_surjective_aux_rank x
+      (apm_t02A07_bridge_constraint_gradients_independent hx)
+  have hrange : LinearMap.range L = ⊤ := LinearMap.range_eq_top.mpr hsurj
+  have hdim := L.finrank_range_add_finrank_ker
+  rw [hrange, finrank_top] at hdim
+  change Module.finrank ℝ (LinearMap.ker
+    (fderiv ℝ apm_t02a07_constraints x).toLinearMap) = 2
+  change Module.finrank ℝ (LinearMap.ker L) = 2
+  simp only [finrank_euclideanSpace_fin] at hdim
+  omega
 -- END SEAT AREA
 
 theorem apm_t02a07 :
