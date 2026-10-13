@@ -944,12 +944,57 @@ theorem apm_m98J02_regular_convolution_is_C2
 
 /-- `T*` commutes with translation, so pairing `w₀` (with `T w₀ = δ₀`) against the
 translated adjoint of `φ` evaluates `φ` at the translation point. -/
+lemma apm_m98J02_convolution_solves_fundamental_aux_pairing_aux_partial
+    (i : Fin 2) (x y : apm_m98J02_E) (φ : apm_m98J02_Test) :
+    apm_m98J02_partial i
+        (apm_m98J02_translateTest x φ : apm_m98J02_E → ℝ) y =
+      apm_m98J02_partial i (φ : apm_m98J02_E → ℝ) (x + y) := by
+  unfold apm_m98J02_partial
+  change (fderiv ℝ (fun z : apm_m98J02_E => φ (x + z)) y) _ = _
+  rw [fderiv_comp_add_left]
+
+lemma apm_m98J02_convolution_solves_fundamental_aux_pairing_aux_adjoint
+    (x y : apm_m98J02_E) (φ : apm_m98J02_Test) :
+    apm_m98J02_formalAdjoint
+        (apm_m98J02_translateTest x φ : apm_m98J02_E → ℝ) y =
+      apm_m98J02_formalAdjoint (φ : apm_m98J02_E → ℝ) (x + y) := by
+  have hp (i : Fin 2) :
+      apm_m98J02_partial i
+          (apm_m98J02_translateTest x φ : apm_m98J02_E → ℝ) =
+        fun z => apm_m98J02_partial i (φ : apm_m98J02_E → ℝ) (x + z) := by
+    funext z
+    exact apm_m98J02_convolution_solves_fundamental_aux_pairing_aux_partial i x z φ
+  unfold apm_m98J02_formalAdjoint
+  rw [hp 0, hp 1]
+  unfold apm_m98J02_partial
+  have hfd (i : Fin 2) :
+      fderiv ℝ (fun z : apm_m98J02_E =>
+          (fderiv ℝ (φ : apm_m98J02_E → ℝ) (x + z))
+            (EuclideanSpace.single i 1)) y =
+        fderiv ℝ (fun z : apm_m98J02_E =>
+          (fderiv ℝ (φ : apm_m98J02_E → ℝ) z)
+            (EuclideanSpace.single i 1)) (x + y) := by
+    exact fderiv_comp_add_left (𝕜 := ℝ)
+      (f := fun z : apm_m98J02_E =>
+        (fderiv ℝ (φ : apm_m98J02_E → ℝ) z)
+          (EuclideanSpace.single i 1)) (x := y) x
+  rw [hfd 0, hfd 1]
+
 lemma apm_m98J02_convolution_solves_fundamental_aux_pairing
     (w₀ : apm_m98J02_Dist)
     (hw₀ : apm_m98J02_solvesT w₀ (fun φ ↦ φ 0))
     (φ : apm_m98J02_Test) (x : apm_m98J02_E) :
     w₀ (apm_m98J02_translateTest x (apm_m98J02_formalAdjointTest φ)) = φ x := by
-  sorry
+  obtain ⟨ψ, hψ, hwψ⟩ := hw₀ (apm_m98J02_translateTest x φ)
+  have hcomm : apm_m98J02_translateTest x (apm_m98J02_formalAdjointTest φ) = ψ := by
+    ext y
+    rw [hψ y]
+    simp only [apm_m98J02_translateTest_apply,
+      apm_m98J02_formalAdjointTest_apply]
+    exact (apm_m98J02_convolution_solves_fundamental_aux_pairing_aux_adjoint
+      x y φ).symm
+  rw [hcomm, hwψ]
+  simp
 
 /-- A regular distribution that vanishes on every test function supported off a compact
 `K` has its (continuous) density vanishing off `K`. -/
