@@ -460,6 +460,65 @@ theorem apm_m95A03_homogenization
       simp only [Pi.sub_apply, apm_m95A03_modifiedRHS] at h
       linarith
 
+/-- Initial value problem for the linear equation `(p y')' - q y = g` on `[a, b]`, with a
+global `C²` solution (solve on `[a, b]`, extend past the endpoints by second-order Taylor
+polynomials). -/
+lemma apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp
+    (a b p₀ : ℝ) (hab : a < b) (hp₀ : 0 < p₀)
+    (p q : ℝ → ℝ) (hp : ContDiff ℝ 1 p) (hq : Continuous q)
+    (hp_lower : ∀ t ∈ Set.Icc a b, p₀ ≤ p t)
+    (g : ℝ → ℝ) (hg : Continuous g) (c₀ c₁ : ℝ) :
+    ∃ y : ℝ → ℝ, ContDiff ℝ 2 y ∧ y a = c₀ ∧ deriv y a = c₁ ∧
+      ∀ t ∈ Set.Icc a b, deriv (fun x => p x * deriv y x) t - q t * y t = g t := by
+  sorry
+
+/-- The homogeneous Dirichlet problem has only the zero solution (energy identity). -/
+lemma apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_homogeneous_unique
+    (a b p₀ : ℝ) (hab : a < b) (hp₀ : 0 < p₀)
+    (p q : ℝ → ℝ) (hp : ContDiff ℝ 1 p) (hq : Continuous q)
+    (hp_lower : ∀ t ∈ Set.Icc a b, p₀ ≤ p t)
+    (hq_nonneg : ∀ t ∈ Set.Icc a b, 0 ≤ q t)
+    (y : ℝ → ℝ) (hy : ContDiff ℝ 2 y) (hya : y a = 0) (hyb : y b = 0)
+    (heq : ∀ t ∈ Set.Icc a b, deriv (fun x => p x * deriv y x) t - q t * y t = 0) :
+    ∀ t ∈ Set.Icc a b, y t = 0 := by
+  sorry
+
+/-- Shooting: a particular solution with `y₀ a = 0` minus a multiple of the homogeneous
+solution with `y₁ a = 0, y₁' a = 1` (which has `y₁ b ≠ 0`). -/
+lemma apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_shooting
+    (a b : ℝ) (hab : a < b) (p q f : ℝ → ℝ) (hp : ContDiff ℝ 1 p)
+    (y₀ y₁ : ℝ → ℝ) (h₀ : ContDiff ℝ 2 y₀) (h₁ : ContDiff ℝ 2 y₁)
+    (h₀a : y₀ a = 0) (h₁a : y₁ a = 0) (h₁b : y₁ b ≠ 0)
+    (e₀ : ∀ t ∈ Set.Icc a b, deriv (fun x => p x * deriv y₀ x) t - q t * y₀ t = f t)
+    (e₁ : ∀ t ∈ Set.Icc a b, deriv (fun x => p x * deriv y₁ x) t - q t * y₁ t = 0) :
+    ∃ u : ℝ → ℝ, apm_m95A03_solves a b 0 0 p q f u := by
+  sorry
+
+lemma apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves
+    (a b p₀ : ℝ) (hab : a < b) (hp₀ : 0 < p₀)
+    (p q f : ℝ → ℝ) (hp : ContDiff ℝ 1 p)
+    (hq : Continuous q) (hf : Continuous f)
+    (hp_lower : ∀ t ∈ Set.Icc a b, p₀ ≤ p t)
+    (hq_nonneg : ∀ t ∈ Set.Icc a b, 0 ≤ q t) :
+    ∃ u : ℝ → ℝ, apm_m95A03_solves a b 0 0 p q f u := by
+  obtain ⟨y₀, h₀, h₀a, -, e₀⟩ :=
+    apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp a b p₀ hab hp₀ p q hp hq hp_lower f hf 0 0
+  obtain ⟨y₁, h₁, h₁a, h₁a', e₁⟩ :=
+    apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp a b p₀ hab hp₀ p q hp hq hp_lower 0 continuous_const 0 1
+  refine apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_shooting a b hab p q f hp y₀ y₁ h₀ h₁ h₀a h₁a ?_ e₀ e₁
+  intro h₁b
+  have hz := apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_homogeneous_unique a b p₀ hab hp₀ p q hp hq hp_lower hq_nonneg
+    y₁ h₁ h₁a h₁b e₁
+  -- y₁ vanishes on [a, b], so its right derivative at a is 0, contradicting y₁' a = 1.
+  have hd : HasDerivWithinAt y₁ 0 (Set.Icc a b) a := by
+    have : HasDerivWithinAt (fun _ : ℝ => (0 : ℝ)) 0 (Set.Icc a b) a := hasDerivWithinAt_const _ _ _
+    exact this.congr (fun t ht => hz t ht) (hz a ⟨le_rfl, hab.le⟩)
+  have hd' : HasDerivWithinAt y₁ 1 (Set.Icc a b) a := by
+    rw [← h₁a']
+    exact (h₁.differentiable (by norm_num) a).hasDerivAt.hasDerivWithinAt
+  have := ((uniqueDiffOn_Icc hab) a ⟨le_rfl, hab.le⟩).eq_deriv _ hd hd'
+  norm_num at this
+
 theorem apm_m95A03_exists_homogeneous_minimizer
     (a b p₀ : ℝ) (hab : a < b) (hp₀ : 0 < p₀)
     (p q f : ℝ → ℝ) (hp : ContDiff ℝ 1 p)
@@ -470,7 +529,12 @@ theorem apm_m95A03_exists_homogeneous_minimizer
       u ∈ apm_m95A03_admissible a b 0 0 ∧
       IsMinOn (apm_m95A03_energy a b p q f)
         (apm_m95A03_admissible a b 0 0) u := by
-  sorry
+  obtain ⟨u, hu⟩ :=
+    apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves
+      a b p₀ hab hp₀ p q f hp hq hf hp_lower hq_nonneg
+  refine ⟨u, hu.1, ⟨hu.1.of_le (by norm_num), hu.2.1, hu.2.2.1⟩, ?_⟩
+  exact apm_m95A03_isMinOn_of_solves a b 0 0 p₀ hab hp₀ p q f u
+    hp hq hf hp_lower hq_nonneg hu
 
 theorem apm_m95A03_minimizers_eqOn
     (a b p₀ : ℝ) (hab : a < b) (hp₀ : 0 < p₀)
