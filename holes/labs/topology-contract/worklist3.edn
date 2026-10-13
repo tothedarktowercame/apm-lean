@@ -36594,9 +36594,45 @@
    :depends-on [:lemma-cp-zero-subsingleton],
    :other-consumers []}
   {:consumer :t96A06,
-   :stop-count 0,
+   :stop-count 1,
+   :evidence
+   {:placeholder-delta {:t96A06 [1 1]},
+    :residual
+    "Supply/review the missing t96A06 blueprint and reference assembly; then implement its library milestones.",
+    :outcome :stop,
+    :warnings
+    ["a96A06 is unrelated complex analysis, not t96A06 real projective topology"],
+    :missing-theorems
+    [{:name "T96A06_polynomialDescent_invariants",
+      :type
+      "descended RP3 quadratic has Lefschetz -3 and is not homotopic to id",
+      :status :not-started,
+      :consumers [:t96A06],
+      :depends-on [],
+      :area "rational-homology-lefschetz"}],
+    :statement-hashes {:registry "150/150"},
+    :disposition :stop,
+    :axioms [],
+    :author :topo-10,
+    :reason
+    "Required reviewed source is absent: holes/labs/blueprints/t96A06/{BLUEPRINT.md,Blueprint.lean} do not exist. The only a96A06 blueprint proves an unrelated complex simple-pole theorem, so reuse would violate the frozen apm_t96a06 RP3 statement. No scoped implementation or valid blueprint can be derived without inventing the reviewed plan.",
+    :commands
+    [{:cmd
+      "workspace search for t96A06 blueprint/lemma; registry; scope scan",
+      :exit 0}
+     {:cmd "test -e holes/labs/blueprints/t96A06/BLUEPRINT.md",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "placeholder recount", :exit 0}],
+    :commit nil,
+    :changed-paths [],
+    :fixture
+    {:path "holes/labs/blueprints/t96A06/BLUEPRINT.md",
+     :sha256 nil,
+     :mode :missing},
+    :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -36737,6 +36773,24 @@
    :fail-count 0,
    :depends-on [],
    :program true,
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "T96A06_polynomialDescent_invariants",
+    :type
+    "descended RP3 quadratic has Lefschetz -3 and is not homotopic to id"},
+   :lemma
+   {:name "T96A06_polynomialDescent_invariants",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "descended RP3 quadratic has Lefschetz -3 and is not homotopic to id",
+    :area "rational-homology-lefschetz"},
+   :id :lemma-t96a06-polynomialdescent-invariants,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
