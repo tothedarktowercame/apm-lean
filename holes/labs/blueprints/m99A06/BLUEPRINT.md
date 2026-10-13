@@ -112,7 +112,7 @@ predicate from `Main.lean`.  None of these declarations contains `sorry`.
 Compiled with:
 
 ```text
-systemd-run --user --scope -q -p MemoryMax=12G lake env lean holes/labs/solve-loop/blueprints/m99A06/Blueprint.lean
+systemd-run --user --scope -q -p MemoryMax=12G lake env lean holes/labs/blueprints/m99A06/Blueprint.lean
 ```
 
 The final output of `#print axioms apm_m99a06` was:
