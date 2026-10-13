@@ -36156,6 +36156,17 @@
     [{:cmd "lean closure",
       :exit 1,
       :correction "unfolded Multiplicative order"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791925985471-10521-c1c43150",
+     :commands
+     ["git show/diff 42d9d0e; scope and compactness review"
+      "lake build/lean ConstructionTargets.t93J03Closure"
+      "sha256sum + lake env lean compact fixture"
+      "statement-registry check; placeholder recount"],
+     :finding
+     "PASS. Since program-history 2f56a1d, commit 42d9d0e adds compiled, sorry-free compactness progress: continuous images of compact sets bound integer casts above and below, giving finite ZMul coordinates, and the vertical orbit equation is specialized to KxL with the correct q_y-p_y orientation. The signed horizontal bound and proper-discontinuity assembly, then orbit homeomorphism/C1/C2/Main, remain listed. Fixture hash matches; standard axioms only; registry 166/166; forbidden count 0->0. SemilocallySimplyConnected X is unused, mandated by problem.md."},
     :commit "42d9d0e66410d8ed20d89c7bfc11da54a7a3f0f0",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
@@ -36167,7 +36178,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -36185,7 +36196,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t93J03Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed algebraic half of proper discontinuity; compact bounds remain.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed compact and vertical-coordinate finiteness; horizontal bound remains.",
    :id :program-2026-10-13-close-t93j03,
    :kind :final-adapter,
    :campaign-priority 30,
@@ -36209,7 +36220,11 @@
     {:job 4,
      :commit "2f56a1d96c44a4f260d57f1ccac7cdc8b4a9e577",
      :reason
-     "Committed algebraic half of proper discontinuity; compact bounds remain."}]}
+     "Committed algebraic half of proper discontinuity; compact bounds remain."}
+    {:job 5,
+     :commit "42d9d0e66410d8ed20d89c7bfc11da54a7a3f0f0",
+     :reason
+     "Committed compact and vertical-coordinate finiteness; horizontal bound remains."}]}
   {:consumer :t99J05,
    :stop-count 5,
    :evidence
@@ -37298,7 +37313,7 @@
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "finite_zmul_cast_mem_compact_image",
@@ -37308,14 +37323,16 @@
     :reported-by [:program-2026-10-13-close-t93j03],
     :type "integer casts in compact image are finite",
     :area "covering-subgroup-correspondence",
-    :proved-in :program-2026-10-13-close-t93j03},
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "42d9d0e66410d8ed20d89c7bfc11da54a7a3f0f0"},
    :id :lemma-finite-zmul-cast-mem-compact-image,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "finite_vertical_coordinates_of_compact",
@@ -37325,7 +37342,9 @@
     :reported-by [:program-2026-10-13-close-t93j03],
     :type "compact intersection has finite vertical coordinates",
     :area "covering-subgroup-correspondence",
-    :proved-in :program-2026-10-13-close-t93j03},
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "42d9d0e66410d8ed20d89c7bfc11da54a7a3f0f0"},
    :id :lemma-finite-vertical-coordinates-of-compact,
    :kind :lemma,
    :depends-on [],
