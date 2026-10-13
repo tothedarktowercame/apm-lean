@@ -3007,6 +3007,23 @@
    "rev": "f3bc78c57",
    "approved_at": "2026-10-13T20:52:13Z"
   },
+  "t99A03": {
+   "decls": [
+    "apm_t99a03"
+   ],
+   "sha256": "6b0e5d09fbaaf3cde9106337a8520de98da8ddd3fb3d0364ec6d96831a9dfe49",
+   "defs": [
+    "FourProjectivePlanesConnectedSum",
+    "FourProjectivePlanesWedge",
+    "twoWedgePoint"
+   ],
+   "grade": "faithful",
+   "grader": "claude-14 outside grader (read-only Claude subagent, 2026-10-13, repair batch 4)",
+   "evidence": "holes/labs/statement-registry/repair-grades-4.md",
+   "prelim_defect": null,
+   "rev": "389758dfd",
+   "approved_at": "2026-10-13T20:54:57Z"
+  },
   "t99J01": {
    "decls": [
     "apm_t99j01"

@@ -241,6 +241,37 @@ lemma apm_t97J05_local_normal_form_aux_deriv_bij :
     fin_cases i <;> simp [apm_t97J05_local_normal_form_aux_deriv_apply, x] <;>
       field_simp [Real.exp_ne_zero]
 
+lemma apm_t97J05_local_normal_form_aux_Hp :
+    apm_t97J05_local_normal_form_aux_H apm_t97J05_p =
+      WithLp.toLp 2 ![(0 : ℝ), 1, 1] := by
+  ext i
+  fin_cases i <;>
+    simp [apm_t97J05_local_normal_form_aux_H, apm_t97J05_p,
+      Real.cos_pi_div_two]
+
+lemma apm_t97J05_local_normal_form_aux_inverse_at_p :
+    ∃ e : OpenPartialHomeomorph apm_t97J05_R3 apm_t97J05_R3,
+      apm_t97J05_p ∈ e.source ∧
+      apm_t97J05_local_normal_form_aux_H apm_t97J05_p ∈ e.target ∧
+      (e : apm_t97J05_R3 → apm_t97J05_R3) = apm_t97J05_local_normal_form_aux_H ∧
+      ContDiffAt ℝ ∞ e.symm
+        (apm_t97J05_local_normal_form_aux_H apm_t97J05_p) := by
+  let L : apm_t97J05_R3 ≃L[ℝ] apm_t97J05_R3 :=
+    ContinuousLinearEquiv.ofBijective
+      (fderiv ℝ apm_t97J05_local_normal_form_aux_H apm_t97J05_p)
+      (LinearMap.ker_eq_bot.mpr apm_t97J05_local_normal_form_aux_deriv_bij.1)
+      (LinearMap.range_eq_top.mpr apm_t97J05_local_normal_form_aux_deriv_bij.2)
+  have hH : ContDiffAt ℝ ∞ apm_t97J05_local_normal_form_aux_H apm_t97J05_p :=
+    apm_t97J05_local_normal_form_aux_smooth.contDiffAt
+  have hHL : HasFDerivAt apm_t97J05_local_normal_form_aux_H
+      (L : apm_t97J05_R3 →L[ℝ] apm_t97J05_R3) apm_t97J05_p := by
+    apply (hH.differentiableAt (by simp)).hasFDerivAt.congr_fderiv
+    exact ContinuousLinearEquiv.coe_ofBijective _ _ _ |>.symm
+  let e := hH.toOpenPartialHomeomorph apm_t97J05_local_normal_form_aux_H hHL (by simp)
+  refine ⟨e, hH.mem_toOpenPartialHomeomorph_source hHL (by simp),
+    hH.image_mem_toOpenPartialHomeomorph_target hHL (by simp), rfl, ?_⟩
+  simpa [e] using hH.to_localInverse hHL (by simp)
+
 -- BEGIN SEAT AREA
 theorem apm_t97J05_local_normal_form :
     ∃ (φ : OpenPartialHomeomorph apm_t97J05_R3 apm_t97J05_R3)
@@ -253,6 +284,78 @@ theorem apm_t97J05_local_normal_form :
         ψ (apm_t97J05_f (φ q)) = WithLp.toLp 2 ![q 0, q 1] := by
   sorry
 -- END SEAT AREA
+/-
+  let L : apm_t97J05_R3 ≃L[ℝ] apm_t97J05_R3 :=
+    ContinuousLinearEquiv.ofBijective
+      (fderiv ℝ apm_t97J05_local_normal_form_aux_H apm_t97J05_p)
+      (LinearMap.ker_eq_bot.mpr apm_t97J05_local_normal_form_aux_deriv_bij.1)
+      (LinearMap.range_eq_top.mpr apm_t97J05_local_normal_form_aux_deriv_bij.2)
+  have hH : ContDiffAt ℝ ∞ apm_t97J05_local_normal_form_aux_H apm_t97J05_p :=
+    apm_t97J05_local_normal_form_aux_smooth.contDiffAt
+  have hHL : HasFDerivAt apm_t97J05_local_normal_form_aux_H
+      (L : apm_t97J05_R3 →L[ℝ] apm_t97J05_R3) apm_t97J05_p := by
+    apply (hH.differentiableAt (by simp)).hasFDerivAt.congr_fderiv
+    exact ContinuousLinearEquiv.coe_ofBijective _ _ _ |>.symm
+  let e₀ : OpenPartialHomeomorph apm_t97J05_R3 apm_t97J05_R3 :=
+    hH.toOpenPartialHomeomorph apm_t97J05_local_normal_form_aux_H hHL (by simp)
+  let T : apm_t97J05_R3 ≃ₜ apm_t97J05_R3 :=
+    Homeomorph.addLeft (apm_t97J05_local_normal_form_aux_H apm_t97J05_p)
+  let φ₀ : OpenPartialHomeomorph apm_t97J05_R3 apm_t97J05_R3 :=
+    T.transOpenPartialHomeomorph e₀.symm
+  let n : WithTop ℕ∞ := ↑(⊤ : ℕ∞)
+  let φ : OpenPartialHomeomorph apm_t97J05_R3 apm_t97J05_R3 :=
+    φ₀.restrContDiff ℝ n (by simp [n])
+  let ψ : OpenPartialHomeomorph apm_t97J05_R2 apm_t97J05_R2 :=
+    (Homeomorph.addLeft (-apm_t97J05_value)).toOpenPartialHomeomorph
+  refine ⟨φ, ψ, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_⟩
+  · change 0 ∈ (φ₀.restrContDiff ℝ n _).source
+    simp only [OpenPartialHomeomorph.restrContDiff_source]
+    refine ⟨?_, ?_, ?_⟩
+    · rw [Homeomorph.transOpenPartialHomeomorph_source]
+      change apm_t97J05_local_normal_form_aux_H apm_t97J05_p ∈ e₀.target
+      exact hH.image_mem_toOpenPartialHomeomorph_target hHL (by simp)
+    · change ContDiffAt ℝ n φ₀ 0
+      dsimp [φ₀, T]
+      apply (hH.to_localInverse hHL (by simp)).comp_of_eq 0
+        ((contDiffAt_const.add contDiffAt_id).mono (by simp [n]))
+      simp
+    · change ContDiffAt ℝ n φ₀.symm (φ₀ 0)
+      dsimp [φ₀, T]
+      fun_prop
+  · change φ₀ 0 = apm_t97J05_p
+    change e₀.symm (apm_t97J05_local_normal_form_aux_H apm_t97J05_p + 0) = _
+    simpa using e₀.left_inv
+      (hH.mem_toOpenPartialHomeomorph_source hHL (by simp))
+  · simp [ψ]
+  · simp [ψ]
+  · exact OpenPartialHomeomorph.contDiffOn_restrContDiff_source ℝ φ₀ (by simp [n])
+  · exact OpenPartialHomeomorph.contDiffOn_restrContDiff_target ℝ φ₀ (by simp [n])
+  · intro x hx
+    exact ((contDiff_const.add contDiff_id).contDiffWithinAt)
+  · intro x hx
+    exact ((contDiff_const.add contDiff_id).contDiffWithinAt)
+  · intro q hq
+    constructor
+    · simp [ψ]
+    · have hq₀ : q ∈ φ₀.source := by
+        exact (show q ∈ (φ₀.restrContDiff ℝ n _).source from hq).1
+      have hTq : T q ∈ e₀.target := by
+        simpa [φ₀] using hq₀
+      have hinv : e₀ (φ₀ q) = T q := by
+        exact e₀.right_inv hTq
+      have hHq : apm_t97J05_local_normal_form_aux_H (φ q) =
+          apm_t97J05_local_normal_form_aux_H apm_t97J05_p + q := by
+        simpa [φ, φ₀, e₀, T, add_comm] using hinv
+      ext i
+      fin_cases i
+      · have h := congrArg (fun x : apm_t97J05_R3 ↦ x 0) hHq
+        simpa [ψ, apm_t97J05_f, apm_t97J05_value,
+          apm_t97J05_local_normal_form_aux_H, apm_t97J05_p,
+          Real.cos_pi_div_two] using h
+      · have h := congrArg (fun x : apm_t97J05_R3 ↦ x 1) hHq
+        simpa [ψ, apm_t97J05_f, apm_t97J05_value,
+          apm_t97J05_local_normal_form_aux_H, apm_t97J05_p] using h
+-/
 
 theorem apm_t97j05 :
     (∀ h : apm_t97J05_R3,
