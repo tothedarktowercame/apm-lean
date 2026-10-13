@@ -22153,6 +22153,7 @@
    :other-consumers []}
   {:bounded-exception "Rule0 aggregation.",
    :consumer :t01A08,
+   :stop-count 1,
    :review-finding
    "Frozen fixture mode is missing in both authoritative acceptance copies. SHA d4041a37e02023ad8ce1b8e98bb7c6cbb338d539dbc89b7f8b484340dd9b13bd matches and the module builds, but literal fixture compilation exits 1 because modelRange_withinCriticalImage_null_of_interior_of_frontier is already declared. Add :mode :post-build-export-check to both copies, then resubmit commit f59140ec.",
    :implements-lemma
@@ -22160,38 +22161,33 @@
    :evidence
    {:placeholder-delta {:t01A08 [1 1]},
     :residual
-    "Prove frontier-image nullity by corner strata, then instantiate this aggregate theorem.",
-    :outcome :done-unreviewed,
-    :warnings
-    ["Acceptance omitted fixture mode; fixture redeclares the exported theorem."],
+    "Add fixture mode to both acceptance copies, then resubmit f59140ec.",
+    :outcome :stop,
+    :warnings [],
     :statement-hashes {:registry "131/131"},
+    :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
+    :reason
+    "Both authoritative acceptance copies omit :mode. Supervisor must add :mode :post-build-export-check; f59140ec builds and matches the frozen fixture digest.",
     :commands
-    [{:cmd
-      "lake env lean /tmp/t01a08_critical_image_null_aggregate.lean",
-      :exit 0}
-     {:cmd "sha256sum /tmp/t01a08_critical_image_null_aggregate.lean",
+    [{:cmd "sha256sum /tmp/t01a08_critical_image_null_aggregate.lean",
       :exit 0}
      {:cmd "lake build ConstructionTargets.SardConvexDomain", :exit 0}
-     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-     {:cmd "git diff-tree --no-commit-id --name-only -r HEAD",
-      :exit 0}],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1791858684259-8245-5e3fefdb",
-     :finding
-     "Frozen fixture mode is missing in both authoritative acceptance copies. SHA d4041a37e02023ad8ce1b8e98bb7c6cbb338d539dbc89b7f8b484340dd9b13bd matches and the module builds, but literal fixture compilation exits 1 because modelRange_withinCriticalImage_null_of_interior_of_frontier is already declared. Add :mode :post-build-export-check to both copies, then resubmit commit f59140ec."},
+     {:cmd
+      "git diff --exit-code f59140ec -- ConstructionTargets/SardConvexDomain.lean",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
     :commit "f59140ec28f828b0e0aac1cae29fd535e56dc21e",
-    :changed-paths ["ConstructionTargets/SardConvexDomain.lean"],
+    :changed-paths [],
     :fixture
     {:path "/tmp/t01a08_critical_image_null_aggregate.lean",
      :sha256
      "d4041a37e02023ad8ce1b8e98bb7c6cbb338d539dbc89b7f8b484340dd9b13bd",
-     :mode :post-build-export-check}},
+     :mode :post-build-export-check},
+    :seat :topo-10},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t01A08/corners-sard",
    :acceptance
