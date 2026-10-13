@@ -423,6 +423,15 @@ noncomputable def apm_m98J02_formalAdjointTest
     apm_m98J02_partialTest_coe]
 
 /-- Shared cutoff-independence fact for a compactly supported distribution. -/
+noncomputable def apm_m98J02_cutoff_independence_aux_mul
+    (f g : apm_m98J02_Test) : apm_m98J02_Test :=
+  TestFunction.mk (fun x ↦ f x * g x) (f.contDiff.mul g.contDiff)
+    f.hasCompactSupport.mul_right (by simp)
+
+@[simp] lemma apm_m98J02_cutoff_independence_aux_mul_apply
+    (f g : apm_m98J02_Test) (x : apm_m98J02_E) :
+    apm_m98J02_cutoff_independence_aux_mul f g x = f x * g x := rfl
+
 theorem apm_m98J02_cutoff_independence
     (u : apm_m98J02_Dist) (F : apm_m98J02_E → ℝ)
     (K₁ K₂ : Set apm_m98J02_E) (χ₁ χ₂ Ψ₁ Ψ₂ : apm_m98J02_Test)
@@ -436,7 +445,36 @@ theorem apm_m98J02_cutoff_independence
     (hΨ₁ : ∀ x, Ψ₁ x = χ₁ x * F x)
     (hΨ₂ : ∀ x, Ψ₂ x = χ₂ x * F x) :
     u Ψ₁ = u Ψ₂ := by
-  sorry
+  obtain ⟨U₁, hU₁, hK₁U, hχ₁U⟩ := hχ₁
+  obtain ⟨U₂, hU₂, hK₂U, hχ₂U⟩ := hχ₂
+  let η₁ : apm_m98J02_Test :=
+    Ψ₁ - apm_m98J02_cutoff_independence_aux_mul χ₂ Ψ₁
+  let η₂ : apm_m98J02_Test :=
+    apm_m98J02_cutoff_independence_aux_mul χ₁ Ψ₂ - Ψ₂
+  have hd₁ : Disjoint (tsupport (η₁ : apm_m98J02_E → ℝ)) K₂ := by
+    rw [Set.disjoint_left]
+    intro a ha haK
+    have haU := hK₂U haK
+    rw [tsupport] at ha
+    obtain ⟨b, hbU, hb⟩ := mem_closure_iff.mp ha U₂ hU₂ haU
+    exact hb (by simp [η₁, hχ₂U b hbU])
+  have hd₂ : Disjoint (tsupport (η₂ : apm_m98J02_E → ℝ)) K₁ := by
+    rw [Set.disjoint_left]
+    intro a ha haK
+    have haU := hK₁U haK
+    rw [tsupport] at ha
+    obtain ⟨b, hbU, hb⟩ := mem_closure_iff.mp ha U₁ hU₁ haU
+    exact hb (by simp [η₂, hχ₁U b hbU])
+  have hsum : Ψ₁ - Ψ₂ = η₁ + η₂ := by
+    ext a
+    change Ψ₁ a - Ψ₂ a =
+      (Ψ₁ a - χ₂ a * Ψ₁ a) + (χ₁ a * Ψ₂ a - Ψ₂ a)
+    rw [hΨ₁ a, hΨ₂ a]
+    ring
+  have hz : u (Ψ₁ - Ψ₂) = 0 := by
+    rw [hsum]
+    simp [hu₂ η₁ hd₁, hu₁ η₂ hd₂]
+  exact sub_eq_zero.mp (by simpa using hz)
 
 /-- Shared translation calculus needed by construction, differentiation of
 convolution, and the PDE identity. -/
