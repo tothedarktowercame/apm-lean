@@ -586,7 +586,13 @@ lemma apm_b96a01_part_d_abelian_aux_representation_aux_embed
     {G H : Type*} [Group G] [Group H] [Finite G] (hG : (Nat.card G).Prime)
     (x : H) (hx : orderOf x = Nat.card G) :
     ∃ ρ : G →* H, Function.Injective ρ := by
-  sorry
+  letI : Fact (Nat.card G).Prime := ⟨hG⟩
+  let e : G ≃* Subgroup.zpowers x :=
+    mulEquivOfPrimeCardEq (p := Nat.card G) rfl (by
+      rw [Nat.card_zpowers, hx])
+  let ρ : G →* H := (Subgroup.subtype (Subgroup.zpowers x)).comp e.toMonoidHom
+  refine ⟨ρ, ?_⟩
+  exact Subtype.val_injective.comp e.injective
 -- END SEAT AREA
 
 lemma apm_b96a01_part_d_abelian_aux_representation
