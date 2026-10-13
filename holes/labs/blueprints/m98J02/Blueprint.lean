@@ -1003,6 +1003,25 @@ lemma apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_translateSupport
     simp [sub_eq_add_neg]
   · exact (apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_translateCompact K χ).isCompact.isClosed
 
+lemma apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_v_bound
+    (v : apm_m98J02_Dist) (K : TopologicalSpace.Compacts apm_m98J02_E)
+    (χ : apm_m98J02_Test) :
+    ∃ s : Finset ℕ, ∃ C : NNReal, C ≠ 0 ∧
+      ((v.comp (TestFunction.ofSupportedInCLM ℝ
+        (show (apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_translateCompact K χ :
+          Set apm_m98J02_E) ⊆ (⊤ : Opens apm_m98J02_E) by simp))).toLinearMap.toSeminorm ≤
+        C • s.sup (ContDiffMapSupportedIn.seminorm ℝ apm_m98J02_E ℝ ⊤
+          (apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_translateCompact K χ))) := by
+  let K' := apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_translateCompact K χ
+  let hK' : (K' : Set apm_m98J02_E) ⊆ (⊤ : Opens apm_m98J02_E) := by simp
+  let L := v.comp (TestFunction.ofSupportedInCLM ℝ hK')
+  have hL : Continuous L.toLinearMap.toSeminorm := by
+    simpa [LinearMap.toSeminorm_apply, Real.norm_eq_abs] using L.continuous.norm
+  simpa [K', hK', L] using
+    (Seminorm.bound_of_continuous
+      (ContDiffMapSupportedIn.withSeminorms ℝ apm_m98J02_E ℝ ⊤ K')
+      L.toLinearMap.toSeminorm hL)
+
 lemma apm_m98J02_bridge_2_aux_psi_aux_stage_cont
     (v : apm_m98J02_Dist) (χ : apm_m98J02_Test)
     (hsmooth : ∀ φ : apm_m98J02_Test,
