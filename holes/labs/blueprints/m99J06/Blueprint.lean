@@ -466,7 +466,74 @@ theorem apm_m99J06_weak_to_strong
       ∃ c : ℝ, ∀ᵐ x ∂apm_m99J06_intervalMeasure, g x = c - ∫ t in (0 : ℝ)..x, h t)
     (u : H) (hu : apm_m99J06_weakSolution M f u) :
     apm_m99J06_strongSolution M f u := by
-  sorry
+  rcases (M.represents u).2.2.1 with ⟨g, hg, hglp, hgderiv⟩
+  have huLp : MemLp (M.val u) 2 apm_m99J06_intervalMeasure :=
+    (M.represents u).2.1
+  let h : ℝ → ℝ := fun x ↦ f x - M.val u x
+  have hh : MemLp h 2 apm_m99J06_intervalMeasure := by
+    exact hf.sub huLp
+  have htest : ∀ w : H,
+      ∫ x in Icc (0 : ℝ) 1, g x * M.weakDeriv w x =
+        ∫ x in Icc (0 : ℝ) 1, h x * M.val w x := by
+    intro w
+    have hi := M.inner_eq u w
+    rw [hu w] at hi
+    have huv := apm_m99J06_integrable_inner_components M u w
+    have hfv : Integrable (fun x ↦ f x * M.val w x)
+        apm_m99J06_intervalMeasure := hf.integrable_mul (M.represents w).2.1
+    have huv0 : Integrable (fun x ↦ M.val u x * M.val w x)
+        apm_m99J06_intervalMeasure := huv.1
+    rw [← hglp] at hi huv
+    have hdint : Integrable (fun x ↦ (hg.toLp g) x * M.weakDeriv w x)
+        apm_m99J06_intervalMeasure := huv.2
+    rw [MeasureTheory.integral_add huv0 hdint] at hi
+    have hgi : (∫ x, g x * M.weakDeriv w x ∂apm_m99J06_intervalMeasure) =
+        ∫ x, (hg.toLp g) x * M.weakDeriv w x ∂apm_m99J06_intervalMeasure := by
+      apply MeasureTheory.integral_congr_ae
+      filter_upwards [hg.coeFn_toLp] with x hx
+      rw [hx]
+    calc
+      (∫ x in Icc (0 : ℝ) 1, g x * M.weakDeriv w x) =
+          ∫ x in Icc (0 : ℝ) 1, (hg.toLp g) x * M.weakDeriv w x := hgi
+      _ =
+          (∫ x in Icc (0 : ℝ) 1, f x * M.val w x) -
+            ∫ x in Icc (0 : ℝ) 1, M.val u x * M.val w x := by
+        linarith
+      _ = ∫ x in Icc (0 : ℝ) 1, h x * M.val w x := by
+        rw [← MeasureTheory.integral_sub hfv huv0]
+        apply MeasureTheory.integral_congr_ae
+        filter_upwards with x
+        dsimp [h]
+        ring
+  obtain ⟨c, hc⟩ := hDBR g h hg hh htest
+  let G : ℝ → ℝ := fun x ↦ c - ∫ t in (0 : ℝ)..x, h t
+  have hGg : G =ᵐ[apm_m99J06_intervalMeasure] g := by
+    filter_upwards [hc] with x hx
+    exact hx.symm
+  have hG : MemLp G 2 apm_m99J06_intervalMeasure :=
+    hg.ae_eq hGg.symm
+  have hint : IntervalIntegrable h volume 0 1 := by
+    rw [intervalIntegrable_iff_integrableOn_Icc_of_le (by norm_num)]
+    exact hh.integrable (by norm_num)
+  have hGac : AbsolutelyContinuousOnInterval G 0 1 := by
+    have hbase : AbsolutelyContinuousOnInterval
+        (fun x ↦ ∫ t in (0 : ℝ)..x, h t) 0 1 :=
+      hint.absolutelyContinuousOnInterval_intervalIntegral (by simp)
+    rw [absolutelyContinuousOnInterval_iff] at hbase ⊢
+    simpa only [G, Real.dist_eq, sub_sub_sub_cancel_left, abs_neg, abs_sub_comm] using hbase
+  let ddu : ℝ → ℝ := fun x ↦ M.val u x - f x
+  have hddu : MemLp ddu 2 apm_m99J06_intervalMeasure := huLp.sub hf
+  have hGderiv : ∀ᵐ x ∂apm_m99J06_intervalMeasure,
+      HasDerivAt G (ddu x) x := by
+    have hd := hint.ae_hasDerivAt_integral
+    filter_upwards [ae_restrict_mem measurableSet_Icc,
+      ae_restrict_of_ae hd] with x hx hdx
+    have hi := hdx (by simpa using hx) 0 (by simp)
+    simpa [G, ddu, h] using (hasDerivAt_const x c).sub hi
+  refine ⟨G, ddu, hG, hddu, ?_, hGac, hGderiv, ?_⟩
+  · exact (MemLp.toLp_congr hG hg hGg).trans hglp
+  · filter_upwards with x
+    simp [ddu]
 
 theorem apm_m99J06_weak_iff_strong
     {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℝ H]
