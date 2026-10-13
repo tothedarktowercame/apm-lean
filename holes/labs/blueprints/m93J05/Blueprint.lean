@@ -786,13 +786,86 @@ theorem apm_m93j05_trunc_energy_tendsto (N : ℕ) (p q : ℝ) (hp : 1 < p) (hq :
   refine (hm.pow 2).add (tendsto_finset_sum _ fun j _ ↦ ?_)
   exact (((hc j).pow 2).add ((hs j).pow 2)).div_const 2
 
+lemma apm_m93j05_lp_rpow_weak_lsc_aux_norming_memLp
+    {p q : ℝ} (hp : 1 < p) (hpq : 1 / p + 1 / q = 1)
+    {μ : Measure ℝ} {u : ℝ → ℝ} (hu : MemLp u (ENNReal.ofReal p) μ) :
+    MemLp (fun x => u x * ‖u x‖ ^ (p - 2)) (ENNReal.ofReal q) μ := by
+  have hp1 : 0 < p - 1 := by linarith
+  have hq : q = p / (p - 1) := by
+    have hp0 : p ≠ 0 := ne_of_gt (lt_trans (by norm_num) hp)
+    have hq0 : q ≠ 0 := by
+      intro h
+      rw [h, div_zero] at hpq
+      field_simp at hpq
+      linarith
+    field_simp [hp0, hq0] at hpq ⊢
+    nlinarith
+  have hpow : MemLp (fun x => ‖u x‖ ^ (p - 1)) (ENNReal.ofReal q) μ := by
+    convert hu.norm_rpow_div (ENNReal.ofReal (p - 1)) using 1
+    · simp [ENNReal.toReal_ofReal hp1.le]
+    · rw [hq, ENNReal.ofReal_div_of_pos hp1]
+  have hmeas : AEStronglyMeasurable (fun x => u x * ‖u x‖ ^ (p - 2)) μ :=
+    hu.1.mul (hu.1.norm.aemeasurable.pow aemeasurable_const).aestronglyMeasurable
+  apply (memLp_norm_iff hmeas).mp
+  convert hpow using 1
+  funext x
+  by_cases hx : u x = 0
+  · simp [hx, Real.zero_rpow (ne_of_gt hp1)]
+  · rw [norm_mul, Real.norm_rpow_of_nonneg (norm_nonneg _)]
+    simp only [norm_norm]
+    calc
+      ‖u x‖ * ‖u x‖ ^ (p - 2) = ‖u x‖ ^ (1 : ℝ) * ‖u x‖ ^ (p - 2) := by
+        rw [Real.rpow_one]
+      _ = ‖u x‖ ^ ((1 : ℝ) + (p - 2)) :=
+        (Real.rpow_add (norm_pos_iff.mpr hx) _ _).symm
+      _ = ‖u x‖ ^ (p - 1) := by ring_nf
+
+lemma apm_m93j05_lp_rpow_weak_lsc_aux_norming_bounds
+    {p q : ℝ} (hp : 1 < p) (hpq : 1 / p + 1 / q = 1)
+    {μ : Measure ℝ} {u v : ℝ → ℝ}
+    (hu : MemLp u (ENNReal.ofReal p) μ)
+    (hv : MemLp v (ENNReal.ofReal p) μ) :
+    let h := fun x => u x * ‖u x‖ ^ (p - 2)
+    (∫ x, u x * h x ∂μ) =
+        Real.rpow (eLpNorm u (ENNReal.ofReal p) μ).toReal p ∧
+      (∫ x, v x * h x ∂μ) ≤
+        (eLpNorm v (ENNReal.ofReal p) μ).toReal *
+          Real.rpow (eLpNorm u (ENNReal.ofReal p) μ).toReal (p - 1) := by
+  sorry
+
+lemma apm_m93j05_lp_rpow_weak_lsc_aux_limit
+    {p r A : ℝ} (hp : 1 < p) (hA : 0 ≤ A)
+    {B z : ℕ → ℝ} (hB : ∀ n, 0 ≤ B n)
+    (hz : Tendsto z atTop (nhds (Real.rpow A p)))
+    (hzB : ∀ n, z n ≤ B n * Real.rpow A (p - 1))
+    (hfreq : ∃ᶠ n in atTop, Real.rpow (B n) p ≤ r) :
+    Real.rpow A p ≤ r := by
+  sorry
+
 theorem apm_m93j05_lp_rpow_weak_lsc (p q : ℝ) (hp : 1 < p) (hq : 1 < q) (hpq : 1 / p + 1 / q = 1) :
     ∀ (u : ℝ → ℝ) (w : ℕ → ℝ → ℝ), MemLp u (ENNReal.ofReal p) (volume.restrict (Set.Icc (0 : ℝ) 1)) →
       (∀ n, MemLp (w n) (ENNReal.ofReal p) (volume.restrict (Set.Icc (0 : ℝ) 1))) →
       (∀ h, MemLp h (ENNReal.ofReal q) (volume.restrict (Set.Icc (0 : ℝ) 1)) → Tendsto (fun n ↦ ∫ x, w n x * h x ∂(volume.restrict (Set.Icc (0 : ℝ) 1))) atTop (nhds (∫ x, u x * h x ∂(volume.restrict (Set.Icc (0 : ℝ) 1))))) →
       ∀ r, (∃ᶠ n in atTop, Real.rpow (eLpNorm (w n) (ENNReal.ofReal p) (volume.restrict (Set.Icc (0 : ℝ) 1))).toReal p ≤ r) →
         Real.rpow (eLpNorm u (ENNReal.ofReal p) (volume.restrict (Set.Icc (0 : ℝ) 1))).toReal p ≤ r := by
-  sorry
+  intro u w hu hw hweak r hfreq
+  let μ := volume.restrict (Set.Icc (0 : ℝ) 1)
+  let h := fun x => u x * ‖u x‖ ^ (p - 2)
+  let A := (eLpNorm u (ENNReal.ofReal p) μ).toReal
+  let B := fun n => (eLpNorm (w n) (ENNReal.ofReal p) μ).toReal
+  let z := fun n => ∫ x, w n x * h x ∂μ
+  have hh : MemLp h (ENNReal.ofReal q) μ :=
+    apm_m93j05_lp_rpow_weak_lsc_aux_norming_memLp hp hpq hu
+  have hpair := apm_m93j05_lp_rpow_weak_lsc_aux_norming_bounds hp hpq hu hu
+  have hz : Tendsto z atTop (nhds (Real.rpow A p)) := by
+    have ht := hweak h hh
+    rw [hpair.1] at ht
+    simpa [z, A, h, μ] using ht
+  apply apm_m93j05_lp_rpow_weak_lsc_aux_limit hp ENNReal.toReal_nonneg
+    (fun n => ENNReal.toReal_nonneg) hz
+  · intro n
+    exact (apm_m93j05_lp_rpow_weak_lsc_aux_norming_bounds hp hpq hu (hw n)).2
+  · exact hfreq
 
 lemma apm_m93j05_high_modes_weak_tendsto_aux_trunc_continuous
     (N : ℕ) (h : ℝ → ℝ) : Continuous (apm_m93j05_trunc N h) := by
