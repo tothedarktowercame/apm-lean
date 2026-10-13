@@ -22997,7 +22997,7 @@
    :consumer :t01A08,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 2,
+   :stop-count 0,
    :review-finding
    "extend Mathlib: state and prove the missing theorem in scope",
    :evidence
@@ -23036,7 +23036,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain.blueprint/B1/smooth-symmetry",
    :acceptance
@@ -23052,7 +23052,7 @@
    :id :r-a08-sard-smooth-jet-symmetry-1,
    :kind :reusable-theorem,
    :area "sard-convex-domain",
-   :fail-count 1,
+   :fail-count 0,
    :depends-on [:r-topo3-cp8],
    :current-residual
    "Then B1 continuity and canonical zero/one jets compile.",
@@ -23589,6 +23589,17 @@
       :exit 1,
       :correction
       "post-build declaration collides with fixture axiom; axiom-free export check compiled"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791887869382-9418-392b0ae9",
+     :commands
+     ["git show/diff-tree dda6f0ec; scope and diff checks"
+      "lake build ConstructionTargets.SardConvexDomain"
+      "lake env lean CheckSardFinalSymmetry.lean"
+      "sha256sum fixture; statement-registry check; placeholder recount"],
+     :finding
+     "PASS. The recorded one-file commit completes the corrected frozen theorem: it obtains finite smoothness on a relative neighborhood, applies the compiled interior finite-order permutation induction on u∩interior(s), and extends the identically oriented domDomCongr equality to x via the closure witness. Export compiles with standard axioms only; fixture hash matches; registry 149/149; sorry/admit 0->0."},
     :commit "dda6f0ecae4d95f4d9a6126959920f33e4e0ab3c",
     :commits
     ["642eed3d9f26ea9573d69eb00a9060f022fe40b2"
@@ -23600,7 +23611,7 @@
      "3d255ecbda1647c2051942450c83a9182a2f567af36e1334951c2b86dc094bf9",
      :mode :post-build-export-check}},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain/B1/symmetry",
    :acceptance
