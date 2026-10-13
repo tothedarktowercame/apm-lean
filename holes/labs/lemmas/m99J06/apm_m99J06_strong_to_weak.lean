@@ -233,7 +233,73 @@ theorem apm_m99J06_strong_to_weak
     (M : apm_m99J06_H01Model H) (f : ℝ → ℝ) (u : H)
     (hu : apm_m99J06_strongSolution M f u) :
     apm_m99J06_weakSolution M f u := by
-  sorry
+  rcases hu with ⟨du, ddu, hdu, hddu, hduto, hduac, hduderiv, heqn⟩
+  intro v
+  rcases M.represents v with ⟨hvac, hvLp, ⟨dv, hdv, hdvto, hvderiv⟩, hv0, hv1⟩
+  have hdu_deriv : ∀ᵐ x ∂apm_m99J06_intervalMeasure,
+      deriv du x = ddu x := by
+    filter_upwards [hduderiv] with x hx
+    exact hx.deriv
+  have hv_deriv : ∀ᵐ x ∂apm_m99J06_intervalMeasure,
+      deriv (M.val v) x = dv x := by
+    filter_upwards [hvderiv] with x hx
+    exact hx.deriv
+  have hud_coe : ∀ᵐ x ∂apm_m99J06_intervalMeasure,
+      M.weakDeriv u x = du x := by
+    have hcoe := hdu.coeFn_toLp
+    rw [hduto] at hcoe
+    exact hcoe
+  have hvd_coe : ∀ᵐ x ∂apm_m99J06_intervalMeasure,
+      M.weakDeriv v x = dv x := by
+    have hcoe := hdv.coeFn_toLp
+    rw [hdvto] at hcoe
+    exact hcoe
+  have hibp := hduac.integral_mul_deriv_eq_deriv_mul hvac
+  rw [intervalIntegral.integral_of_le zero_le_one,
+    ← MeasureTheory.integral_Icc_eq_integral_Ioc] at hibp
+  rw [intervalIntegral.integral_of_le zero_le_one,
+    ← MeasureTheory.integral_Icc_eq_integral_Ioc] at hibp
+  have hibp' : (∫ x in Icc (0 : ℝ) 1, du x * dv x) =
+      -(∫ x in Icc (0 : ℝ) 1, ddu x * M.val v x) := by
+    calc
+      (∫ x in Icc (0 : ℝ) 1, du x * dv x) =
+          ∫ x in Icc (0 : ℝ) 1, du x * deriv (M.val v) x := by
+            apply MeasureTheory.integral_congr_ae
+            filter_upwards [hv_deriv] with x hx
+            rw [hx]
+      _ = du 1 * M.val v 1 - du 0 * M.val v 0 -
+          ∫ x in Icc (0 : ℝ) 1, deriv du x * M.val v x := hibp
+      _ = -(∫ x in Icc (0 : ℝ) 1, ddu x * M.val v x) := by
+            rw [hv0, hv1]
+            simp only [mul_zero, sub_zero, zero_sub]
+            congr 1
+            apply MeasureTheory.integral_congr_ae
+            filter_upwards [hdu_deriv] with x hx
+            rw [hx]
+  rw [M.inner_eq]
+  have hweak : (∫ x in Icc (0 : ℝ) 1,
+      M.weakDeriv u x * M.weakDeriv v x) =
+      -(∫ x in Icc (0 : ℝ) 1, ddu x * M.val v x) := by
+    rw [← hibp']
+    apply MeasureTheory.integral_congr_ae
+    filter_upwards [hud_coe, hvd_coe] with x hux hvx
+    rw [hux, hvx]
+  have huv := apm_m99J06_integrable_inner_components M u v
+  change (∫ x, (M.val u * M.val v) x +
+      (fun x ↦ M.weakDeriv u x * M.weakDeriv v x) x
+        ∂apm_m99J06_intervalMeasure) = _
+  rw [MeasureTheory.integral_add huv.1 huv.2, hweak]
+  rw [← sub_eq_add_neg]
+  change (∫ x, (M.val u * M.val v) x ∂apm_m99J06_intervalMeasure) -
+      (∫ x, (ddu * M.val v) x ∂apm_m99J06_intervalMeasure) =
+      ∫ x, (f * M.val v) x ∂apm_m99J06_intervalMeasure
+  rw [← MeasureTheory.integral_sub huv.1
+    (hddu.integrable_mul hvLp)]
+  apply MeasureTheory.integral_congr_ae
+  filter_upwards [heqn] with x hx
+  simp only [Pi.mul_apply]
+  rw [← hx]
+  ring
 -- END SEAT AREA
 
 /-- du Bois-Reymond for the model: if `∫ g w' = ∫ h w` for every `w`, then `g = c − ∫₀ˣ h` a.e.
