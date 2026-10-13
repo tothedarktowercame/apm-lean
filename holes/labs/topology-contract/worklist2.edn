@@ -76416,22 +76416,21 @@
   {:consumer :t96J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "Deterministic topology defect in commit ee79eaeb2: it changes the index topology for FiniteWedge from ⊥ to ⊤ while claiming this makes it discrete. Mathlib/Topology/Order.lean states exactly the opposite: ⊥ is discrete and ⊤ is indiscrete. Consequently L × Circle is not the coproduct/disjoint-union source of indexed circle legs, and the coinduced quotient is not the B7 finite-wedge topology; future skeletonHomeomorphWedge would target the wrong space. Repair by restoring TopologicalSpace L := ⊥ in both the FiniteWedge instance and continuous_wedgeCircle proof, then rerun Lean/build and retain coverage, quotient-topology, wedge-relation, and signed-equation residuals. Recorded scope is otherwise exact and fixture SHA-256 386d0e41...ae305 matches.",
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Source coverage, kernel agreement, quotient topology, final homeomorphism; then B8/B9.",
+    "Prove kernel agreement, quotient topology and final signed homeomorphism; then B8/B9.",
     :outcome :stop,
-    :warnings
-    ["preexisting/imported lints" "unrelated edits preserved"],
+    :warnings ["preexisting/imported lints"],
     :missing-theorems
-    [{:name "PairingData.surjective_signedWedgeArcMap",
-      :type "signed arcs cover indexed wedge",
+    [{:name "PairingData.surjective_skeletonArcMap",
+      :type "arcs cover actual skeleton",
       :status :proved,
       :consumers [:t96J02 :t92J05 :t94J04 :t97A01 :t97A03],
-      :depends-on ["PairingData.signedWedgeArcQuotientEquivRange"],
+      :depends-on ["PairingData.skeletonArcQuotientEquivRange"],
       :area "polygon-surface-pi1"}
      {:name
       "ConstructionTargets.PolygonSurfacePiOne.skeletonHomeomorphWedge",
@@ -76439,17 +76438,17 @@
       :status :partial,
       :consumers [:t96J02 :t92J05 :t94J04 :t97A01 :t97A03],
       :depends-on
-      ["PairingData.skeletonArcQuotientEquivRange"
+      ["PairingData.surjective_skeletonArcMap"
        "PairingData.surjective_signedWedgeArcMap"],
       :area "polygon-surface-pi1"}],
     :statement-hashes
     {:registry "131/0",
-     :module "c616097adb877efc3df0c178839607b2ce5ce270"},
+     :module "a848fd52c65a2087adfa533c0906611eaeae8f6b"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
     :reason
-    "Target coverage proved; source coverage, kernels, topology, homeomorphism and equations remain.",
+    "Source coverage proved; kernels, topology, homeomorphism and equations remain.",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/PolygonSurfacePiOne.lean",
@@ -76458,32 +76457,21 @@
       :exit 0}
      {:cmd "registry check", :exit 0, :output "131/0"}
      {:cmd "placeholder scan", :exit 0, :output "0/0/0"}
-     {:cmd "#print axioms coverage", :exit 0}
-     {:cmd "git show --check 34fa7c1df", :exit 0}],
+     {:cmd "#print axioms source coverage", :exit 0}
+     {:cmd "git show --check ce8be025e", :exit 0}],
     :diagnostic-history
     [{:cmd "first compile",
       :exit 1,
-      :correction "coerced interval; unfolded wedgeCircle"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1791856013630-8166-c0f33eec",
-     :commands
-     ["git scope/blob/sha checks at 34fa7c1df"
-      "lake env lean ConstructionTargets/PolygonSurfacePiOne.lean"
-      "statement-registry.py check"
-      "placeholder scan and #print axioms"],
-     :finding
-     "PASS: recorded commit adds real target coverage: circleArc is surjective and signedWedgeArcMap covers every indexed wedge point through orbit representatives, with both sign orientations handled. Exact one-file scope, fixture SHA and blob match; Lean compiles, registry 131/0, placeholders 0, and new results use standard axioms. STOP explicitly retains source coverage, kernel agreement, quotient topology, final homeomorphism, then B8/B9."},
-    :commit "34fa7c1df",
+      :correction "fixed unitSphere and AddCircle coercions"}],
+    :commit "ce8be025e",
     :changed-paths ["ConstructionTargets/PolygonSurfacePiOne.lean"],
     :fixture
     {:path "ConstructionTargets/PolygonSurfacePiOne.lean",
      :sha256
-     "be1aabd5e6372977e6c74746386a4974917b6c306d7df7235c223b093d7b1772"},
+     "ab9f19907d7a1bd3757e4364107cc404315f7a251f59e1fca410e3cd0238fe34"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/PolygonSurfacePiOne.lean"],
    :dag-node "ConstructionTargets/PolygonSurfacePiOne.blueprint.md/B7",
    :acceptance
@@ -86847,7 +86835,8 @@
     :lemma-pairingdata-skeletonarc-signed-coordinate
     :lemma-pairingdata-skeletonarcquotientequivrange
     :lemma-pairingdata-signedwedgearcquotientequivrange
-    :lemma-pairingdata-surjective-signedwedgearcmap],
+    :lemma-pairingdata-surjective-signedwedgearcmap
+    :lemma-pairingdata-surjective-skeletonarcmap],
    :other-consumers [:t92J05 :t94J04 :t97A01 :t97A03]}
   {:consumer :t96J02,
    :phase :lemma,
@@ -87016,4 +87005,21 @@
    [:lemma-t02a03-lefttubeminuscore-homotopyequiv-torus-centred
     :lemma-t02a03-righttube-homotopyequiv-circle
     :lemma-t02a03-tubeoverlap-contractible],
-   :other-consumers []}]}
+   :other-consumers []}
+  {:consumer :t96J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "PairingData.surjective_skeletonArcMap",
+    :type "arcs cover actual skeleton"},
+   :lemma
+   {:name "PairingData.surjective_skeletonArcMap",
+    :reported-by [:routes-2026-10-12-polygon-b7-topo2-r1],
+    :type "arcs cover actual skeleton",
+    :area "polygon-surface-pi1",
+    :proved-in :routes-2026-10-12-polygon-b7-topo2-r1},
+   :id :lemma-pairingdata-surjective-skeletonarcmap,
+   :kind :lemma,
+   :depends-on [:lemma-pairingdata-skeletonarcquotientequivrange],
+   :other-consumers [:t92J05 :t94J04 :t97A01 :t97A03]}]}
