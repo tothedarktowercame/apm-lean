@@ -23004,13 +23004,13 @@
    :consumer :t01A08,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 2,
    :review-finding
    "extend Mathlib: state and prove the missing theorem in scope",
    :evidence
    {:placeholder-delta {:t01A08 [1 1]},
     :residual
-    "Retire the weaker frozen row; continue from banked convexWithinJet/B1.",
+    "Stop-after-two: retire this weaker row; route t01A08 through banked convexWithinJet/B1.",
     :missing-hypothesis "x ∈ closure (interior s)",
     :outcome :stop,
     :warnings [],
@@ -23027,20 +23027,14 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Fresh signature audit confirms the scoped C-infinity Schwarz theorem requires hxi : x ∈ closure (interior s), while the frozen interface supplies only hf, UniqueDiffOn, and x ∈ s. UniqueDiffOn controls derivative uniqueness, not interior density. The banked convexWithinJet derives hxi from convexity plus nonempty interior; those hypotheses are absent here. Thus the banked lemma cannot discharge the frozen axiom without strengthening its type.",
+    "Stop-after-two: the frozen theorem omits hxi : x ∈ closure (interior s). Fresh compilation confirms the standard-axiom C-infinity Schwarz theorem still requires hxi. UniqueDiffOn plus x ∈ s does not supply interior density; convexWithinJet obtains it only from the additional convexity and nonempty-interior hypotheses. The frozen interface therefore is not derivable from the banked lemma and must be retired, not reopened.",
     :commands
     [{:cmd
       "lake env lean /tmp/t01a08_smooth_symmetry_boundary_check.lean",
       :exit 0}
      {:cmd
-      "sha256sum frozen fixture and boundary check; statement-registry check; git status",
+      "hash fixture; inspect exact scoped theorem; registry check; git status",
       :exit 0}],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1791896312657-9683-668614ac",
-     :finding
-     "extend Mathlib: state and prove the missing theorem in scope"},
     :commit nil,
     :changed-paths [],
     :fixture
@@ -23050,7 +23044,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :repair,
+   :state :needs-owner,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain.blueprint/B1/smooth-symmetry",
    :acceptance
