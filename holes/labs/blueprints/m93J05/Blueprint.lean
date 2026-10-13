@@ -767,6 +767,27 @@ lemma apm_m93j05_trunc_energy_tendsto_aux_coeffs
       (hweak (fun x : ℝ => Real.sin (j * 2 * Real.pi * x))
         (apm_m93j05_weak_lowerSemicontinuous_aux_sin_memLp q j)).const_mul 2
 
+lemma apm_m93j05_trunc_parseval_aux_norm_sq (N : ℕ) (f : ℝ → ℝ) :
+    (eLpNorm (apm_m93j05_trunc N f) 2
+      (volume.restrict (Set.Icc (0 : ℝ) 1))).toReal ^ 2 =
+      ∫ x in Set.Icc (0 : ℝ) 1,
+        apm_m93j05_trunc N f x * apm_m93j05_trunc N f x := by
+  let μ := volume.restrict (Set.Icc (0 : ℝ) 1)
+  let g := apm_m93j05_trunc N f
+  have hgcont : Continuous g := apm_m93j05_trunc_split_aux_continuous N f
+  have hg : MemLp g 2 μ := by
+    rw [memLp_two_iff_integrable_sq_norm hgcont.aestronglyMeasurable]
+    exact (hgcont.norm.pow 2).continuousOn.integrableOn_Icc
+  let G : Lp ℝ 2 μ := hg.toLp g
+  rw [← Lp.norm_toLp g hg]
+  rw [← real_inner_self_eq_norm_sq G, MeasureTheory.L2.inner_def]
+  apply integral_congr_ae
+  filter_upwards [hg.coeFn_toLp, hg.coeFn_toLp] with x hx₁ hx₂
+  rw [real_inner_self_eq_norm_sq]
+  simp only [Real.norm_eq_abs, sq_abs]
+  rw [hx₁]
+  simp [g, pow_two]
+
 /-- Parseval for the truncation: `∫₀¹ (m + Σ aⱼ cos + bⱼ sin)² = m² + Σ (aⱼ² + bⱼ²)/2`
 (from `apm_m93j05_trig_orthogonality` and the mean-zero helpers). -/
 theorem apm_m93j05_trunc_parseval (N : ℕ) (f : ℝ → ℝ) :
