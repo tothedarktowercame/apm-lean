@@ -157,7 +157,7 @@ hypotheses and `hf : ContMDiff I I' ∞ f`,
 
 uses: B1, B2
 
-status: planned
+status: proved
 
 At a regular point `x`, use B2 to move every nearby derivative into the
 fixed model spaces.  The chart derivative factors on both sides are
@@ -167,6 +167,14 @@ maps; B2 pulls it back to a neighbourhood of `x`.  Shrink within the common
 chart sources and use invariance of surjectivity under composition with the
 chart equivalences to conclude that every point of this neighbourhood is
 regular.
+
+The compiled proof uses `continuousAt_coordinate_mfderiv` to pull B1's open
+surjective-operator set back to a neighbourhood of each regular point.
+`surjective_mfderiv_of_surjective_inTangentCoordinates` supplies the needed
+pointwise descent: after expanding the transported derivative, injectivity of
+the target chart derivative cancels that factor, while the inverse-source
+factor supplies a preimage.  Intersecting with the common chart-source
+neighbourhood therefore makes every nearby manifold derivative surjective.
 
 ### B4. Compactness of the critical-value set
 

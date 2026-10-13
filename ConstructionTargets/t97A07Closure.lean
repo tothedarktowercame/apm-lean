@@ -480,6 +480,75 @@ theorem continuousAt_coordinate_mfderiv
       f hf x,
     inTangentCoordinates_mfderiv_self_eq_mfderiv f x⟩
 
+/-- Surjectivity of the fixed tangent-coordinate representative forces
+surjectivity of the underlying manifold derivative.  Only injectivity of the
+target chart derivative is needed; the source chart factor supplies a
+preimage candidate. -/
+theorem surjective_mfderiv_of_surjective_inTangentCoordinates
+    {m n : ℕ} {X : Type*} [TopologicalSpace X]
+    [ChartedSpace (EuclideanModel m) X]
+    [IsManifold 𝓘(ℝ, EuclideanModel m) ∞ X]
+    (f : X → EuclideanModel n) (x y : X)
+    (hx : y ∈ (chartAt (EuclideanModel m) x).source)
+    (hy : f y ∈ (chartAt (EuclideanModel n) (f x)).source)
+    (h : Function.Surjective
+      (inTangentCoordinates 𝓘(ℝ, EuclideanModel m)
+        𝓘(ℝ, EuclideanModel n) (fun z : X ↦ z) f
+        (fun z ↦ mfderiv 𝓘(ℝ, EuclideanModel m)
+          𝓘(ℝ, EuclideanModel n) f z) x y)) :
+    Function.Surjective
+      (mfderiv 𝓘(ℝ, EuclideanModel m)
+        𝓘(ℝ, EuclideanModel n) f y) := by
+  let A := mfderiv 𝓘(ℝ, EuclideanModel n) 𝓘(ℝ, EuclideanModel n)
+    (extChartAt 𝓘(ℝ, EuclideanModel n) (f x)) (f y)
+  let B := mfderivWithin (I := 𝓘(ℝ, EuclideanModel m))
+    (I' := 𝓘(ℝ, EuclideanModel m))
+    (extChartAt 𝓘(ℝ, EuclideanModel m) x).symm
+    (Set.range 𝓘(ℝ, EuclideanModel m))
+    (extChartAt 𝓘(ℝ, EuclideanModel m) x y)
+  have hA : Function.Injective A := by
+    dsimp only [A]
+    rw [(hasMFDerivAt_extChartAt hy).mfderiv]
+    exact (mdifferentiable_chart (f x)).mfderiv_injective hy
+  intro v
+  obtain ⟨w, hw⟩ := h (A v)
+  refine ⟨B w, hA ?_⟩
+  rw [inTangentCoordinates_mfderiv_eq_chart_factors f x y hx hy] at hw
+  exact hw
+
+/-- B3: for a smooth map between the Euclidean-model manifolds used by
+`t97A07`, the points where the manifold derivative is surjective form an open
+set. -/
+theorem isOpen_regularPoints
+    {m n : ℕ} {X : Type*} [TopologicalSpace X]
+    [ChartedSpace (EuclideanModel m) X]
+    [IsManifold 𝓘(ℝ, EuclideanModel m) ∞ X]
+    (f : X → EuclideanModel n)
+    (hf : ContMDiff 𝓘(ℝ, EuclideanModel m)
+      𝓘(ℝ, EuclideanModel n) ∞ f) :
+    IsOpen {x | Function.Surjective
+      (mfderiv 𝓘(ℝ, EuclideanModel m)
+        𝓘(ℝ, EuclideanModel n) f x)} := by
+  rw [isOpen_iff_mem_nhds]
+  intro x hx
+  let T := inTangentCoordinates 𝓘(ℝ, EuclideanModel m)
+    𝓘(ℝ, EuclideanModel n) (fun z : X ↦ z) f
+    (fun z ↦ mfderiv 𝓘(ℝ, EuclideanModel m)
+      𝓘(ℝ, EuclideanModel n) f z) x
+  have hB2 := continuousAt_coordinate_mfderiv f hf x
+  have hTx : T x = mfderiv 𝓘(ℝ, EuclideanModel m)
+      𝓘(ℝ, EuclideanModel n) f x := hB2.2.2.2
+  have hopen : IsOpen {L : EuclideanModel m →L[ℝ] EuclideanModel n |
+      Function.Surjective L} := isOpen_setOf_surjective_clm
+  have hTsurj : Function.Surjective (T x) := by
+    rw [hTx]
+    exact hx
+  have hsurj : ∀ᶠ y in 𝓝 x, Function.Surjective (T y) :=
+    hB2.2.1.preimage_mem_nhds (hopen.mem_nhds hTsurj)
+  filter_upwards [hsurj, eventually_mem_fixed_chart_sources f hf x] with y hTy hy
+  exact surjective_mfderiv_of_surjective_inTangentCoordinates
+    f x y hy.1 hy.2 hTy
+
 end t97A07Closure
 
 #print axioms t97A07Closure.isOpen_setOf_surjective_clm
@@ -500,3 +569,5 @@ end t97A07Closure
 #print axioms t97A07Closure.coordinate_fderivWithin_comp_extChartAt_eq_inTangentCoordinates
 #print axioms t97A07Closure.eventually_coordinate_fderivWithin_comp_extChartAt_eq_inTangentCoordinates
 #print axioms t97A07Closure.continuousAt_coordinate_mfderiv
+#print axioms t97A07Closure.surjective_mfderiv_of_surjective_inTangentCoordinates
+#print axioms t97A07Closure.isOpen_regularPoints
