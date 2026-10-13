@@ -1,6 +1,7 @@
 import Mathlib
 import ConstructionTargets.EuclideanHausdorffIntegralTransport
 import ConstructionTargets.IntrinsicSphereSecondMoments
+import ConstructionTargets.SphereCapNullEquatorMeasureAssembly
 
 open MeasureTheory
 noncomputable section

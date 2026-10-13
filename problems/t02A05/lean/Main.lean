@@ -159,8 +159,6 @@ lemma apm_t02a05_sphere_mass_eq_two_caps_aux_cap :
   rfl
 
 section mathlibInstance
-attribute [-instance] ConstructionTargets.LinearGraphMeasure.domainMeasurable
-attribute [-instance] ConstructionTargets.LinearGraphMeasure.domainBorel
 
 /-- Mathlib's normalising constant for `μH[2]` on `ℝ²`. -/
 noncomputable def apm_t02a05_cM : NNReal :=
@@ -247,8 +245,6 @@ lemma apm_t02a05_cap_integral_aux_polar_aux_factor :
   ring
 
 section
-attribute [-instance] ConstructionTargets.LinearGraphMeasure.domainMeasurable
-attribute [-instance] ConstructionTargets.LinearGraphMeasure.domainBorel
 lemma apm_t02a05_cap_integral_aux_polar_aux_inst :
     ConstructionTargets.LinearGraphMeasure.domainMeasurable 2 =
       (inferInstance : MeasurableSpace (EuclideanSpace ℝ (Fin 2))) := by
@@ -428,8 +424,6 @@ lemma apm_t02a05_radialFlux_integral_aux_transport
   ring
 
 section
-attribute [-instance] ConstructionTargets.LinearGraphMeasure.domainMeasurable
-attribute [-instance] ConstructionTargets.LinearGraphMeasure.domainBorel
 lemma apm_t02a05_radialFlux_integral_aux_inst :
     ConstructionTargets.LinearGraphMeasure.domainMeasurable 3 =
       (inferInstance : MeasurableSpace (EuclideanSpace ℝ (Fin 3))) := by
