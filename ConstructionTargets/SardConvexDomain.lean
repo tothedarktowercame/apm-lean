@@ -693,4 +693,29 @@ theorem compl_subset_iUnion_quarter_infDist_ball
   refine ⟨⟨x, hx⟩, Metric.mem_ball_self ?_⟩
   exact div_pos ((hs.notMem_iff_infDist_pos hne).1 hxn) (by norm_num)
 
+/-- A uniformly separated family contained in a compact set is finite.  This
+is the compactness step in the local-finiteness and overlap arguments for a
+maximal Whitney selection. -/
+theorem finite_of_subset_compact_of_pairwise_dist
+    {E : Type*} [MetricSpace E] {K t : Set E} {ε : ℝ}
+    (hK : IsCompact K) (htK : t ⊆ K) (hε : 0 < ε)
+    (ht : t.Pairwise fun x y => ε ≤ dist x y) : t.Finite := by
+  have ht_closed : IsClosed t := Metric.isClosed_of_pairwise_le_dist hε ht
+  have ht_compact : IsCompact t := hK.of_isClosed_subset ht_closed htK
+  apply ht_compact.finite
+  rw [isDiscrete_iff_forall_exists_isOpen]
+  intro x hx
+  refine ⟨Metric.ball x (ε / 2), Metric.isOpen_ball, ?_⟩
+  ext y
+  constructor
+  · intro hy
+    have hyt : y ∈ t := hy.2
+    have hyd : dist y x < ε / 2 := by
+      simpa [dist_comm] using hy.1
+    by_contra hyx
+    have hsep := ht hyt hx hyx
+    linarith
+  · rintro rfl
+    exact ⟨Metric.mem_ball_self (by positivity), hx⟩
+
 end ConstructionTargets.SardConvexDomain
