@@ -119,12 +119,73 @@ theorem apm_t01A01_punctured_homotopyEquiv_projectiveLine
 /-- LIBRARY: every map from `RP²` to the projective line is null-homotopic.
 This is the `Z/2 → Z` lifting step, separated from the geometry of the
 punctured target. -/
+lemma apm_t01A01_projectiveLine_map_nullhomotopic_aux_homeomorph :
+    Nonempty (apm_t01A01_RP1 ≃ₜ Circle) := by
+  sorry
+
+/-- Seat: the antipodal quotient `S² → RP²`, `x ↦ [x]`, is a continuous
+surjective quotient map identifying antipodes (`ProjectiveQuotientDescent`). -/
+theorem apm_t01A01_sphere_quotient :
+    ∃ π : C(Metric.sphere (0 : EuclideanSpace ℝ (Fin 3)) 1, apm_t01A01_RP2),
+      Function.Surjective π ∧ Topology.IsQuotientMap π ∧ (∀ x, π (-x) = π x) ∧
+        ∀ x y, π x = π y → y = x ∨ y = -x := by
+  sorry
+
+/-- Seat: every map `S² → S¹` lifts through `Circle.exp` (`S²` is simply
+connected: `ConstructionTargets.SimplyConnectedOpenCover.simplyConnectedSpace_sphere_of_pole`;
+`Circle.exp` is a covering map, `isCoveringMap_exp`-style; lift by
+`ConstructionTargets.CoveringLiftRestriction` / `IsCoveringMap.exists_lift`). -/
+theorem apm_t01A01_sphere_circle_lift (g : C(Metric.sphere (0 : EuclideanSpace ℝ (Fin 3)) 1, Circle)) :
+    ∃ h : C(Metric.sphere (0 : EuclideanSpace ℝ (Fin 3)) 1, ℝ), ∀ x, Circle.exp (h x) = g x := by
+  sorry
+
+/-- Seat: a map `RP² → S¹` has a real logarithm.  Lift `f ∘ π` to `h`; then
+`h (-x) - h x ∈ 2πℤ` is continuous on the connected sphere, hence a constant
+`c`, and applying it twice gives `c = -c`, so `c = 0`; `h` descends through the
+quotient map `π`. -/
+theorem apm_t01A01_projectivePlane_circle_log
+    (π : C(Metric.sphere (0 : EuclideanSpace ℝ (Fin 3)) 1, apm_t01A01_RP2)) (hπs : Function.Surjective π)
+    (hπq : Topology.IsQuotientMap π) (hπa : ∀ x, π (-x) = π x)
+    (hπf : ∀ x y, π x = π y → y = x ∨ y = -x)
+    (hlift : ∀ g : C(Metric.sphere (0 : EuclideanSpace ℝ (Fin 3)) 1, Circle), ∃ h : C(Metric.sphere (0 : EuclideanSpace ℝ (Fin 3)) 1, ℝ), ∀ x, Circle.exp (h x) = g x)
+    (f : C(apm_t01A01_RP2, Circle)) :
+    ∃ k : C(apm_t01A01_RP2, ℝ), ∀ y, Circle.exp (k y) = f y := by
+  sorry
+
+/-- Seat: a circle-valued map with a real logarithm is homotopic to the
+constant `1` (`H t y = exp ((1 - t) k y)`). -/
+theorem apm_t01A01_circle_nullhomotopic_of_log {X : Type*} [TopologicalSpace X]
+    (f : C(X, Circle)) (k : C(X, ℝ)) (hk : ∀ y, Circle.exp (k y) = f y) :
+    ContinuousMap.Homotopic f (ContinuousMap.const X (1 : Circle)) := by
+  sorry
+
+lemma apm_t01A01_projectiveLine_map_nullhomotopic_aux_circle
+    (f : C(apm_t01A01_RP2, Circle)) :
+    ContinuousMap.Homotopic f
+      (ContinuousMap.const apm_t01A01_RP2 (1 : Circle)) := by
+  obtain ⟨π, hπs, hπq, hπa, hπf⟩ := apm_t01A01_sphere_quotient
+  obtain ⟨k, hk⟩ := apm_t01A01_projectivePlane_circle_log π hπs hπq hπa hπf
+    apm_t01A01_sphere_circle_lift f
+  exact apm_t01A01_circle_nullhomotopic_of_log f k hk
+
 theorem apm_t01A01_projectiveLine_map_nullhomotopic
     (h : C(apm_t01A01_RP2, apm_t01A01_RP1)) :
     ∃ p : apm_t01A01_RP1,
       ContinuousMap.Homotopic h
         (ContinuousMap.const apm_t01A01_RP2 p) := by
-  sorry
+  obtain ⟨e⟩ := apm_t01A01_projectiveLine_map_nullhomotopic_aux_homeomorph
+  let ef : C(apm_t01A01_RP1, Circle) := ⟨e, e.continuous⟩
+  let ei : C(Circle, apm_t01A01_RP1) := ⟨e.symm, e.symm.continuous⟩
+  have hh := apm_t01A01_projectiveLine_map_nullhomotopic_aux_circle
+    (ef.comp h)
+  refine ⟨e.symm 1, ?_⟩
+  have hc := ContinuousMap.Homotopic.comp
+    (ContinuousMap.Homotopic.refl ei) hh
+  have heq : ei.comp (ef.comp h) = h := by
+    ext x
+    exact e.symm_apply_apply (h x)
+  rw [heq] at hc
+  simpa [ei] using hc
 
 /-- LIBRARY: transport a null-homotopy across a target homotopy equivalence.
 The conclusion deliberately takes the null-homotopy as an explicit hypothesis,
