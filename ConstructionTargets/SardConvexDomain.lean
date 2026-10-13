@@ -121,6 +121,34 @@ theorem iteratedFDerivWithin_domDomCongr_decomposeFin_symm_zero
   have hv := DFunLike.congr_fun hd (Fin.tail v)
   simpa [Function.comp_def, Fin.tail, Equiv.Perm.decomposeFin_symm_apply_succ] using hv
 
+/-- Symmetry of the lower jet's second derivative exchanges the first two slots of the
+corresponding higher iterated derivative. -/
+theorem iteratedFDerivWithin_domDomCongr_swap_zero_one
+    {E F : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [NormedAddCommGroup F] [NormedSpace ℝ F]
+    {s : Set E} {f : E → F} {x : E} {n : ℕ}
+    (hu : UniqueDiffOn ℝ s) (hxs : x ∈ s)
+    (h : IsSymmSndFDerivWithinAt ℝ (iteratedFDerivWithin ℝ n f s) s x) :
+    (iteratedFDerivWithin ℝ (n + 2) f s x).domDomCongr
+        (Equiv.swap (0 : Fin (n + 2)) 1) =
+      iteratedFDerivWithin ℝ (n + 2) f s x := by
+  ext v
+  simp only [ContinuousMultilinearMap.domDomCongr_apply,
+    iteratedFDerivWithin_succ_apply_left]
+  rw [iteratedFDerivWithin_succ_eq_comp_left]
+  let L := (continuousMultilinearCurryLeftEquiv ℝ (fun _ : Fin (n + 1) => E) F).symm
+  have hd := LinearIsometryEquiv.comp_fderivWithin (𝕜 := ℝ) L
+    (f := fderivWithin ℝ (iteratedFDerivWithin ℝ n f s) s) (s := s) (x := x) (hu x hxs)
+  change ((fderivWithin ℝ (L ∘ fderivWithin ℝ (iteratedFDerivWithin ℝ n f s) s) s x)
+    (v ((Equiv.swap 0 1) 0))) (Fin.tail fun i => v ((Equiv.swap 0 1) i)) = _
+  rw [hd]
+  change
+    (fderivWithin ℝ (fderivWithin ℝ (iteratedFDerivWithin ℝ n f s) s) s x
+      (v 1) (v 0)) (Fin.tail (Fin.tail v)) =
+    (fderivWithin ℝ (fderivWithin ℝ (iteratedFDerivWithin ℝ n f s) s) s x
+      (v 0) (v 1)) (Fin.tail (Fin.tail v))
+  exact DFunLike.congr_fun (h (v 1) (v 0)) (Fin.tail (Fin.tail v))
+
 namespace ConstructionTargets.SardConvexDomain
 
 theorem modelRange_withinCriticalImage_subset_interior_union_frontier
