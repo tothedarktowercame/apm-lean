@@ -128,6 +128,31 @@ theorem apm_t99J04_bridge_local_inverse_function_aux_chart
 
 /-- LIBRARY: the missing boundaryless finite-dimensional manifold inverse
 function theorem. -/
+def apm_t99J04_bridge_local_inverse_function_aux_extChart
+    {E X : Type} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [TopologicalSpace X] [ChartedSpace E X]
+    (x : X) : OpenPartialHomeomorph X E where
+  toPartialEquiv := extChartAt (𝓘(ℝ, E)) x
+  open_source := isOpen_extChartAt_source x
+  open_target := isOpen_extChartAt_target x
+  continuousOn_toFun := continuousOn_extChartAt x
+  continuousOn_invFun := continuousOn_extChartAt_symm x
+
+/-- Seat (claude-14): normed-space inverse function theorem with a C^∞
+neighbourhood: shrink the `HasStrictFDerivAt.toOpenPartialHomeomorph` source so
+the derivative stays invertible (`isOpen_setOf_isUnit`-style openness of
+invertible maps); the inverse is `ContDiffAt` at every target point
+(`ContDiffAt.to_localInverse`), hence `ContDiffOn` on the open target. -/
+theorem apm_t99J04_euclid_local_inverse
+    {E E' : Type} [NormedAddCommGroup E] [NormedSpace ℝ E] [CompleteSpace E]
+    [NormedAddCommGroup E'] [NormedSpace ℝ E'] [CompleteSpace E']
+    (f : E → E') (U : Set E) (hU : IsOpen U) (a : E) (ha : a ∈ U)
+    (hf : ContDiffOn ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) f U) (hb : Function.Bijective (fderiv ℝ f a)) :
+    ∃ e : OpenPartialHomeomorph E E', a ∈ e.source ∧ e.source ⊆ U ∧
+      (∀ x ∈ e.source, e x = f x) ∧ ContDiffOn ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) e e.source ∧
+      ContDiffOn ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) e.symm e.target := by
+  sorry
+
 -- BEGIN SEAT AREA
 theorem apm_t99J04_bridge_local_inverse_function
     {E E' X Y : Type}
@@ -139,6 +164,11 @@ theorem apm_t99J04_bridge_local_inverse_function
     [IsManifold (𝓘(ℝ, E)) (⊤ : ℕ∞) X]
     [TopologicalSpace Y] [ChartedSpace E' Y]
     [IsManifold (𝓘(ℝ, E')) (⊤ : ℕ∞) Y]
+    (heuclid : ∀ (U : Set E) (a : E), IsOpen U → a ∈ U →
+      ∀ g : E → E', ContDiffOn ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) g U → Function.Bijective (fderiv ℝ g a) →
+      ∃ e : OpenPartialHomeomorph E E', a ∈ e.source ∧ e.source ⊆ U ∧
+        (∀ x ∈ e.source, e x = g x) ∧ ContDiffOn ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) e e.source ∧
+        ContDiffOn ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) e.symm e.target)
     (f : X → Y) (x : X)
     (hf : ContMDiff (𝓘(ℝ, E)) (𝓘(ℝ, E')) (⊤ : ℕ∞) f)
     (hbij : Function.Bijective
@@ -157,7 +187,15 @@ theorem apm_t99J04_coordinateMap_contMDiff
     ContMDiff (𝓘(ℝ, apm_t99J04_Euclidean n))
       𝓘(ℝ, apm_t99J04_Euclidean n) (⊤ : ℕ∞)
       (apm_t99J04_coordinateMap f) := by
-  sorry
+  have hpi : ContMDiff (modelWithCornersSelf ℝ (apm_t99J04_Euclidean n))
+      (modelWithCornersSelf ℝ (Fin n → ℝ)) (⊤ : ℕ∞) (fun p i ↦ f i p) :=
+    contMDiff_pi_space.2 hf
+  have hlp : ContMDiff (modelWithCornersSelf ℝ (Fin n → ℝ))
+      (modelWithCornersSelf ℝ (apm_t99J04_Euclidean n)) (⊤ : ℕ∞)
+      (PiLp.continuousLinearEquiv 2 ℝ (fun _ : Fin n ↦ ℝ)).symm :=
+    ContinuousLinearMap.contMDiff
+      (PiLp.continuousLinearEquiv 2 ℝ (fun _ : Fin n ↦ ℝ)).symm.toContinuousLinearMap
+  exact hlp.comp hpi
 
 theorem apm_t99J04_bridge_coordinateMap_mfderiv_bijective
     (n : ℕ) (X : Type) [TopologicalSpace X]
@@ -176,7 +214,73 @@ theorem apm_t99J04_bridge_coordinateMap_mfderiv_bijective
     Function.Bijective
       (mfderiv (𝓘(ℝ, apm_t99J04_Euclidean n))
         𝓘(ℝ, apm_t99J04_Euclidean n) (apm_t99J04_coordinateMap f) x) := by
-  sorry
+  letI : FiniteDimensional ℝ
+      (TangentSpace (𝓘(ℝ, apm_t99J04_Euclidean n)) x) := by
+    change FiniteDimensional ℝ (apm_t99J04_Euclidean n)
+    infer_instance
+  let D := mfderiv (𝓘(ℝ, apm_t99J04_Euclidean n))
+    𝓘(ℝ, apm_t99J04_Euclidean n) (apm_t99J04_coordinateMap f) x
+  let e := NormedSpace.fromTangentSpace (𝕜 := ℝ) (apm_t99J04_coordinateMap f x)
+  let A : TangentSpace (𝓘(ℝ, apm_t99J04_Euclidean n)) x →L[ℝ]
+      apm_t99J04_Euclidean n := e.toContinuousLinearMap ∘L D
+  have hcomponent : ∀ i, (PiLp.proj 2 (𝕜 := ℝ) (fun _ : Fin n ↦ ℝ) i) ∘L A =
+      (NormedSpace.fromTangentSpace (f i x)).toContinuousLinearMap ∘L
+        mfderiv (𝓘(ℝ, apm_t99J04_Euclidean n)) 𝓘(ℝ, ℝ) (f i) x := by
+    intro i
+    have hc := mfderiv_comp
+      (I := 𝓘(ℝ, apm_t99J04_Euclidean n))
+      (I' := 𝓘(ℝ, apm_t99J04_Euclidean n)) (I'' := 𝓘(ℝ, ℝ)) x
+      (PiLp.proj 2 (𝕜 := ℝ) (fun _ : Fin n ↦ ℝ) i).mdifferentiableAt
+      (hcoord.mdifferentiableAt (by simp))
+    change mfderiv (𝓘(ℝ, apm_t99J04_Euclidean n)) 𝓘(ℝ, ℝ) (f i) x = _ at hc
+    rw [mfderiv_eq_fderiv,
+      (PiLp.proj 2 (𝕜 := ℝ) (fun _ : Fin n ↦ ℝ) i).fderiv] at hc
+    ext v
+    simpa [A, D, e, ContinuousLinearMap.comp_apply,
+      ContinuousLinearMap.fderiv] using congr($(hc) v).symm
+  have hAfin : Module.finrank ℝ (TangentSpace (𝓘(ℝ, apm_t99J04_Euclidean n)) x) = n := by
+    change Module.finrank ℝ (apm_t99J04_Euclidean n) = n
+    simp [apm_t99J04_Euclidean]
+  have hAbi : Function.Bijective A := by
+    by_cases hn : n = 0
+    · subst n
+      letI : Subsingleton
+          (TangentSpace (𝓘(ℝ, apm_t99J04_Euclidean 0)) x) :=
+        Module.finrank_zero_iff.mp (by simpa using hAfin)
+      have hinj : Function.Injective A := by
+        intro u v huv
+        have hu : u = 0 := Subsingleton.elim _ _
+        have hv : v = 0 := Subsingleton.elim _ _
+        simpa [hu, hv]
+      exact ⟨hinj, (LinearMap.injective_iff_surjective_of_finrank_eq_finrank (by
+        simpa [hAfin, apm_t99J04_Euclidean])).mp hinj⟩
+    · have hpos : 0 < n := Nat.pos_of_ne_zero hn
+      have hcoe : (ContinuousLinearMap.coeLM ℝ :
+          (TangentSpace (𝓘(ℝ, apm_t99J04_Euclidean n)) x →L[ℝ] ℝ) →ₗ[ℝ]
+            Module.Dual ℝ (TangentSpace (𝓘(ℝ, apm_t99J04_Euclidean n)) x)).ker = ⊥ := by
+        rw [LinearMap.ker_eq_bot]
+        intro g h gh
+        apply ContinuousLinearMap.coe_injective
+        exact gh
+      have hli' : LinearIndependent ℝ (fun i : Fin n ↦
+          ((NormedSpace.fromTangentSpace (f i x)).toContinuousLinearMap ∘L
+            mfderiv (𝓘(ℝ, apm_t99J04_Euclidean n)) 𝓘(ℝ, ℝ) (f i) x).toLinearMap) := by
+        simpa [Function.comp_def] using
+          hli.map' (ContinuousLinearMap.coeLM ℝ) hcoe
+      have hcoords := apm_t99J04_dualCoordinates_bijective hpos hAfin
+        (fun i : Fin n ↦
+          ((NormedSpace.fromTangentSpace (f i x)).toContinuousLinearMap ∘L
+            mfderiv (𝓘(ℝ, apm_t99J04_Euclidean n)) 𝓘(ℝ, ℝ) (f i) x).toLinearMap) hli'
+      have hinj : Function.Injective A := by
+        intro u v huv
+        apply hcoords.1
+        funext i
+        have hi := congrArg
+          (fun z ↦ (PiLp.proj 2 (𝕜 := ℝ) (fun _ : Fin n ↦ ℝ) i) z) huv
+        simpa only [← ContinuousLinearMap.comp_apply, hcomponent i] using hi
+      exact ⟨hinj, (LinearMap.injective_iff_surjective_of_finrank_eq_finrank (by
+        simpa [hAfin, apm_t99J04_Euclidean])).mp hinj⟩
+  exact e.bijective.comp hAbi
 
 theorem apm_t99j04 :
     (∀ (n : ℕ) (X : Type) [TopologicalSpace X]
@@ -205,10 +309,10 @@ theorem apm_t99j04 :
   constructor
   · intro n X _ _ _ x f hf hli
     have hsmooth := apm_t99J04_coordinateMap_contMDiff n X f hf
-    exact apm_t99J04_bridge_local_inverse_function _ _ hsmooth
+    exact apm_t99J04_bridge_local_inverse_function (fun U a hU ha g hg hb => apm_t99J04_euclid_local_inverse g U hU a ha hg hb) _ _ hsmooth
       (apm_t99J04_bridge_coordinateMap_mfderiv_bijective n X x f hf hsmooth hli)
   · intro E E' _ _ _ _ _ _ _ _ X Y _ _ _ _ _ _ _ _ _ _ _ f hf hbij
     exact apm_t99J04_surjective_of_bijective_mfderiv_of_localIFT f hf hbij
-      (fun x _ hb ↦ apm_t99J04_bridge_local_inverse_function f x hf hb)
+      (fun x _ hb ↦ apm_t99J04_bridge_local_inverse_function (fun U a hU ha g hg hb => apm_t99J04_euclid_local_inverse g U hU a ha hg hb) f x hf hb)
 
 #print axioms apm_t99j04
