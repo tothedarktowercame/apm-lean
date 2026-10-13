@@ -36104,16 +36104,15 @@
    [:lemma-constructiontargets-sardconvexdomain-eq-whitneydyadicindexof-of-mem-cube-of-gene],
    :other-consumers []}
   {:consumer :t93J03,
-   :stop-count 2,
+   :stop-count 3,
    :review-finding
    "Blueprint repair is vacuous: C3 extracts hslsc x and pairs that independent certificate with a lift proved solely by the subgroup criterion; C5 destructures and discards the certificate. Thus SemilocallySimplyConnected still contributes nothing to the final conclusion. Do not pad an intermediate conclusion to simulate use; either give a proof step whose result depends on hslsc, or revise the frozen statement/global hypothesis-coverage requirement through the owning process.",
    :evidence
    {:placeholder-delta {:t93J03 [1 1]},
     :residual
-    "Build literal orbit-quotient homeomorphism, C1 pi1 adapter, C2 cyclic cover, then copy assembly into Main.",
+    "Resolve frozen redundant-hypothesis gate; then build orbit quotient, C1, C2, and Main assembly.",
     :outcome :stop,
-    :warnings
-    ["reference Blueprint.lean has expected sorryAx in C1/C2"],
+    :warnings ["reference has expected sorryAx only in C1/C2"],
     :missing-theorems
     [{:name "t93J03_kleinBottle_pi1_every_basepoint",
       :type "forall k, FundamentalGroup k equiv PresentedKleinGroup",
@@ -36133,34 +36132,22 @@
     :axioms [],
     :author :topo-10,
     :reason
-    "Repaired blueprint: C3 now consumes hslsc at x and returns its open-neighborhood/null-homotopy certificate with the lift; C5 binds and passes hslsc. Library implementation remains; not refuted.",
+    "Exact interface conflict: compiled C1-C4 route proves the embedding without SemilocallySimplyConnected X; C3 uses only path/local-path connectedness and subgroup inclusion, C4 only the lift equation and embeddings. The frozen theorem retains the redundant hypothesis while the global gate requires semantic use. Prior certificate padding was retracted. Owner must approve redundancy or revise the frozen statement/audit rule; mathematics is not refuted.",
     :commands
     [{:cmd "lake env lean holes/labs/blueprints/t93J03/Blueprint.lean",
       :exit 0}
-     {:cmd "statement registry; hslsc route; diff checks", :exit 0}
-     {:cmd "git commit; scoped commit check; placeholder recount",
-      :exit 0}],
-    :diagnostic-history
-    [{:cmd "frame package-link check",
-      :exit 1,
-      :correction
-      "canonical authority checkout; frame-only rule inapplicable"}],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1791919772080-10281-af7405d0",
-     :finding
-     "Blueprint repair is vacuous: C3 extracts hslsc x and pairs that independent certificate with a lift proved solely by the subgroup criterion; C5 destructures and discards the certificate. Thus SemilocallySimplyConnected still contributes nothing to the final conclusion. Do not pad an intermediate conclusion to simulate use; either give a proof step whose result depends on hslsc, or revise the frozen statement/global hypothesis-coverage requirement through the owning process."},
-    :commit "f8d7aa67801441bed344d8966e407079cd4de0b7",
+     {:cmd "registry; defect/retraction scans; diff checks", :exit 0}
+     {:cmd "git commit; scoped commit; placeholder recount", :exit 0}],
+    :commit "512a220f610893826b53df094fdc793cb0028bc6",
     :changed-paths ["ConstructionTargets/t93J03Closure.blueprint.md"],
     :fixture
     {:path "ConstructionTargets/t93J03Closure.blueprint.md",
      :sha256
-     "0eb7bcdc51db1366773a28765e79c1810363a3c938989fc1290bea6f7a029ed1",
+     "a5fef39e89c45d1b88204dedb67f2933690f27eb7636831e36b0068bc36c7e89",
      :mode :blueprint},
     :seat :topo-10},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
