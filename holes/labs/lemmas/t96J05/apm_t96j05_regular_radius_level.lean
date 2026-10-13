@@ -82,7 +82,50 @@ theorem apm_t96j05_regular_radius_level
         (mfderiv (apm_t96j05_I m) 𝓘(ℝ, ℝ)
           (fun y : X => ‖y.1‖ ^ 2) x)) :
     apm_t96j05_IsEmbeddedSmoothRadialLevel (m := m) X r := by
-  sorry
+  let f : X → ℝ := fun x => ‖x.1‖ ^ 2
+  let P : X → Prop := fun x => f x = r ^ 2
+  let Q : X → Prop := fun x => ‖x.1‖ = r
+  have hPQ : P = Q := by
+    funext x
+    exact propext
+      (ConstructionTargets.RadialSquaredFiber.norm_sq_eq_sq_iff hr)
+  let fiberAtlas : ChartedSpace
+      (ConstructionTargets.ManifoldRegularFiberCharts.Model
+        (E := apm_t96j05_E m) (F := ℝ)) (Subtype P) :=
+    ConstructionTargets.ManifoldRegularFiberGlobalAtlas.chartedSpace
+      f (r ^ 2) hsm hreg
+  let radialAtlas : ChartedSpace
+      (ConstructionTargets.ManifoldRegularFiberCharts.Model
+        (E := apm_t96j05_E m) (F := ℝ)) (Subtype Q) :=
+    ConstructionTargets.PredicateSubtypeAtlasTransport.chartedSpace
+      hPQ fiberAtlas
+  refine ⟨Module.finrank ℝ (apm_t96j05_E m) - Module.finrank ℝ ℝ, ?_,
+    radialAtlas, ?_⟩
+  · simp
+  · letI := radialAtlas
+    constructor
+    · apply ConstructionTargets.PredicateSubtypeAtlasTransport.isManifold
+        hPQ fiberAtlas
+      exact ConstructionTargets.ManifoldRegularFiberGlobalAtlas.isManifold
+        f (r ^ 2) hsm hreg
+    · have hfiber :
+          letI := fiberAtlas
+          ContMDiff
+            (apm_t96j05_I
+              (Module.finrank ℝ (apm_t96j05_E m) - Module.finrank ℝ ℝ))
+            (apm_t96j05_I m) ∞
+            (Subtype.val : Subtype P → X) := by
+          exact ConstructionTargets.ManifoldRegularFiberGlobalAtlas.smooth_inclusion
+            f (r ^ 2) hsm hreg
+      have hradial :
+          ContMDiff
+            (apm_t96j05_I
+              (Module.finrank ℝ (apm_t96j05_E m) - Module.finrank ℝ ℝ))
+            (apm_t96j05_I m) ∞
+            (Subtype.val : Subtype Q → X) := by
+        exact ConstructionTargets.PredicateSubtypeAtlasTransport.smooth_inclusion
+          hPQ fiberAtlas hfiber
+      exact hinc.comp hradial
 -- END SEAT AREA
 
 theorem apm_t96j05
