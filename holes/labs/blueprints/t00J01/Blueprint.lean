@@ -358,7 +358,25 @@ theorem apm_t00j01_klein_connected :
 lemma apm_t00j01_klein_local_chart_aux_vertical (p : ℝ × ℝ) (n : ℤ) :
     Relation.EqvGen apm_t00j01_kleinRel p
       ((-1 : ℝ) ^ n * p.1, (n : ℝ) + p.2) := by
-  sorry
+  induction n using Int.induction_on with
+  | zero => simpa using Relation.EqvGen.refl (r := apm_t00j01_kleinRel) p
+  | succ n ih =>
+      have hs := Relation.EqvGen.rel _ _
+        (apm_t00j01_kleinRel.twisted (((-1 : ℝ) ^ (n : ℤ)) * p.1)
+          ((n : ℝ) + p.2))
+      convert Relation.EqvGen.trans _ _ _ ih hs using 1 <;> simp [zpow_add₀] <;> ring
+  | pred n ih =>
+      have hs := (Relation.EqvGen.rel _ _
+        (apm_t00j01_kleinRel.twisted
+          (-(((-1 : ℝ) ^ (-(n : ℤ))) * p.1))
+          ((-(n : ℝ) - 1) + p.2))).symm
+      have hs' : Relation.EqvGen apm_t00j01_kleinRel
+          (((-1 : ℝ) ^ (-((n : ℕ) : ℤ))) * p.1,
+            (((-((n : ℕ) : ℤ) : ℤ) : ℝ)) + p.2)
+          (((-1 : ℝ) ^ (-((n : ℕ) : ℤ) - 1)) * p.1,
+            (((-((n : ℕ) : ℤ) - 1 : ℤ) : ℝ)) + p.2) := by
+        convert hs using 1 <;> simp [zpow_sub₀] <;> ring
+      exact Relation.EqvGen.trans _ _ _ ih hs'
 
 /-- Seat: compose `aux_vertical` with `m` horizontal steps (induction on `m`). -/
 lemma apm_t00j01_klein_local_chart_aux_affine (p : ℝ × ℝ) (m n : ℤ) :
