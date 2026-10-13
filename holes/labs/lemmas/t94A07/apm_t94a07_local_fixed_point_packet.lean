@@ -191,7 +191,50 @@ theorem apm_t94a07_local_fixed_point_packet (R r : ℝ)
           -apm_t94a07_tangentBasisVector i) ∧
       Matrix.det (apm_t94a07_localMatrix p) = 4 ∧
       apm_t94a07_localLefschetzNumber p = 1 := by
-  sorry
+  intro p hp
+  have ht := htangent p hp
+  have htorus_fix :
+      p ∈ apm_t94a07_torus R r ∧ apm_t94a07_halfTurn p = p := by
+    exact (Set.ext_iff.mp (apm_t94a07_fixedSet_eq R r hr hR) p).mpr hp
+  have hderiv : ∀ i : Fin 2,
+      fderiv ℝ apm_t94a07_halfTurn p
+          (apm_t94a07_tangentBasisVector i) =
+        -apm_t94a07_tangentBasisVector i := by
+    intro i
+    exact ConstructionTargets.EuclideanThreeHalfTurnDerivative.fderiv_halfTurn_single_succ p i
+  have hnondeg : ∀ v : apm_t94a07_tangent R r p,
+      apm_t94a07_halfTurn (v : apm_t94a07_E3) = v → v = 0 := by
+    intro v hv
+    have hyz := (apm_t94a07_halfTurn_eq_iff (v : apm_t94a07_E3)).1 hv
+    have hvspan : (v : apm_t94a07_E3) ∈
+        Submodule.span ℝ (Set.range apm_t94a07_tangentBasisVector) := by
+      rw [← ht]
+      exact v.property
+    have hx : (v : apm_t94a07_E3) 0 = 0 := by
+      refine Submodule.span_induction ?_ ?_ ?_ ?_ hvspan
+      · rintro x ⟨i, rfl⟩
+        fin_cases i <;> simp [apm_t94a07_tangentBasisVector]
+      · rfl
+      · intro x y _ _ hx hy
+        simp [hx, hy]
+      · intro a x _ hx
+        simp [hx]
+    apply Subtype.ext
+    apply PiLp.ext
+    intro i
+    fin_cases i <;> simp [hx, hyz.1, hyz.2]
+  have hdet : Matrix.det (apm_t94a07_localMatrix p) = 4 := by
+    classical
+    have hmatrix : apm_t94a07_localMatrix p = 2 • (1 : Matrix (Fin 2) (Fin 2) ℝ) := by
+      ext i j
+      fin_cases i <;> fin_cases j <;>
+        simp only [apm_t94a07_localMatrix]
+      all_goals rw [hderiv]
+      all_goals simp [apm_t94a07_tangentBasisVector] <;> ring
+    rw [hmatrix, Matrix.det_fin_two]
+    simp [Matrix.one_apply] <;> ring
+  refine ⟨⟨htorus_fix.1, htorus_fix.2, hnondeg⟩, ht, hderiv, hdet, ?_⟩
+  simp [apm_t94a07_localLefschetzNumber, hdet]
 -- END SEAT AREA
 
 /-- Seat (claude-14 split): restrict a homotopy to the outer equator
