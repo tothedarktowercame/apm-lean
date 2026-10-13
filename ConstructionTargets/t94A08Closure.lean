@@ -645,3 +645,19 @@ def apm_t94a08_puncturedSigma2ZeroChartHomeomorph :
         Subtype.ext hpnode
       rw [hp]
       exact apm_t94a08_zeroChartHomeomorph_node)
+
+lemma apm_t94a08_puncturedSigma2ZeroChart_not_isPreconnected :
+    ¬ IsPreconnected apm_t94a08_puncturedSigma2ZeroChart := by
+  intro hsource
+  letI : PreconnectedSpace ↑apm_t94a08_puncturedSigma2ZeroChart :=
+    isPreconnected_iff_preconnectedSpace.mp hsource
+  have htarget_univ : IsPreconnected
+      (Set.univ : Set ↑apm_t94a08_puncturedAffineCross) := by
+    simpa only [Set.image_univ,
+      apm_t94a08_puncturedSigma2ZeroChartHomeomorph.surjective.range_eq] using
+      apm_t94a08_puncturedSigma2ZeroChartHomeomorph.isPreconnected_image.mpr
+        isPreconnected_univ
+  have htarget_space : PreconnectedSpace ↑apm_t94a08_puncturedAffineCross :=
+    ⟨htarget_univ⟩
+  exact apm_t94a08_puncturedAffineCross_not_isPreconnected
+    (isPreconnected_iff_preconnectedSpace.mpr htarget_space)
