@@ -36,6 +36,19 @@ theorem mem_closure_inter_of_mem_nhdsWithin
   rw [mem_closure_iff_nhdsWithin_neBot, nhdsWithin_inter_of_mem hut]
   exact mem_closure_iff_nhdsWithin_neBot.mp hx
 
+/-- Infinite differentiability at a point supplies, for each finite order, a relative
+neighborhood on which that finite differentiability holds pointwise. -/
+theorem ContDiffWithinAt.exists_mem_nhdsWithin_contDiffWithinAt_of_infty
+    {E F : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [NormedAddCommGroup F] [NormedSpace ℝ F]
+    {s : Set E} {f : E → F} {x : E}
+    (hf : ContDiffWithinAt ℝ ∞ f s x) (hxs : x ∈ s) (k : ℕ) :
+    ∃ u ∈ nhdsWithin x s, ∀ y ∈ u, ContDiffWithinAt ℝ k f s y := by
+  have hk : ContDiffWithinAt ℝ (k : WithTop ENat) f s x :=
+    hf.of_le (WithTop.coe_le_coe.mpr le_top)
+  have he := hk.eventually (by simp)
+  simpa [insert_eq_of_mem hxs] using he.exists_mem
+
 /-- Two maps continuous within a set agree at a point in the closure of its interior if they
 agree throughout that interior. -/
 theorem ContinuousWithinAt.eq_of_eqOn_interior_of_mem_closure
