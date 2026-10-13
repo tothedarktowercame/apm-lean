@@ -2078,7 +2078,52 @@ theorem apm_a97j08_grid_region_construction
 -- BEGIN SEAT AREA
 theorem apm_a97j08_angleStep_swap {z p q : ℂ} (h : z ∉ segment ℝ p q) :
     apm_a97j08_angleStep z q p = -apm_a97j08_angleStep z p q := by
-  sorry
+  have hp : p - z ≠ 0 := by
+    rw [sub_ne_zero]
+    intro hpz
+    apply h
+    simpa [hpz] using (left_mem_segment ℝ p q)
+  have hq : q - z ≠ 0 := by
+    rw [sub_ne_zero]
+    intro hqz
+    apply h
+    simpa [hqz] using (right_mem_segment ℝ p q)
+  let x : ℂ := (q - z) / (p - z)
+  have hxpi : Complex.arg x ≠ Real.pi := by
+    intro harg
+    rcases Complex.arg_eq_pi_iff.mp harg with ⟨hre, him⟩
+    let s : ℝ := -x.re
+    have hs : 0 < s := by dsimp [s]; linarith
+    have hxeq : x = -(s : ℂ) := by
+      apply Complex.ext
+      · simp [s]
+      · simpa [s] using him
+    have hratio : q - z = -(s : ℂ) * (p - z) := by
+      have := congrArg (fun w : ℂ => w * (p - z)) hxeq
+      simpa [x, hp] using this
+    apply h
+    refine ⟨s / (1 + s), 1 / (1 + s), ?_, ?_, ?_, ?_⟩
+    · positivity
+    · positivity
+    · field_simp
+      <;> ring
+    · apply Complex.ext
+      · have hr := congrArg Complex.re hratio
+        simp [Complex.mul_re] at hr
+        simp only [Complex.add_re, Complex.smul_re, smul_eq_mul]
+        field_simp
+        nlinarith
+      · have hi := congrArg Complex.im hratio
+        simp [Complex.mul_im] at hi
+        simp only [Complex.add_im, Complex.smul_im, smul_eq_mul]
+        field_simp
+        nlinarith
+  change Complex.arg ((p - z) / (q - z)) =
+    -Complex.arg ((q - z) / (p - z))
+  have hinv : (p - z) / (q - z) = x⁻¹ := by
+    dsimp [x]
+    field_simp
+  rw [hinv, Complex.arg_inv, if_neg hxpi]
 -- END SEAT AREA
 
 -- (A2) A grid square missing `z` has total angle step zero.
