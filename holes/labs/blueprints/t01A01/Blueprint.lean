@@ -370,9 +370,35 @@ theorem apm_t01A01_sphere_quotient :
 connected: `ConstructionTargets.SimplyConnectedOpenCover.simplyConnectedSpace_sphere_of_pole`;
 `Circle.exp` is a covering map, `isCoveringMap_exp`-style; lift by
 `ConstructionTargets.CoveringLiftRestriction` / `IsCoveringMap.exists_lift`). -/
+lemma apm_t01A01_sphere_circle_lift_aux_simplyConnected :
+    SimplyConnectedSpace (Metric.sphere (0 : EuclideanSpace ℝ (Fin 3)) 1) := by
+  let v : EuclideanSpace ℝ (Fin 3) := EuclideanSpace.single 0 1
+  have hv : ‖v‖ = 1 := by simp [v]
+  have hv0 : v ≠ 0 := by
+    intro h
+    have h0 := congrArg (fun x : EuclideanSpace ℝ (Fin 3) ↦ x 0) h
+    simpa [v] using h0
+  haveI : Fact (Module.finrank ℝ (EuclideanSpace ℝ (Fin 3)) = 3) :=
+    ⟨by simp [Module.finrank_fin_fun]⟩
+  have hfin : Module.finrank ℝ (Submodule.orthogonal (ℝ ∙ v)) = 2 :=
+    Submodule.finrank_orthogonal_span_singleton hv0
+  apply simplyConnectedSpace_sphere_of_pole v hv
+  rw [← Module.finrank_eq_rank, hfin]
+  norm_num
+
 theorem apm_t01A01_sphere_circle_lift (g : C(Metric.sphere (0 : EuclideanSpace ℝ (Fin 3)) 1, Circle)) :
     ∃ h : C(Metric.sphere (0 : EuclideanSpace ℝ (Fin 3)) 1, ℝ), ∀ x, Circle.exp (h x) = g x := by
-  sorry
+  letI := apm_t01A01_sphere_circle_lift_aux_simplyConnected
+  letI : LocPathConnectedSpace
+      (Metric.sphere (0 : EuclideanSpace ℝ (Fin 3)) 1) :=
+    ChartedSpace.locPathConnectedSpace (EuclideanSpace ℝ (Fin 2)) _
+  let a₀ : Metric.sphere (0 : EuclideanSpace ℝ (Fin 3)) 1 :=
+    ⟨EuclideanSpace.single 0 1, by simp [Metric.mem_sphere]⟩
+  obtain ⟨h, hh, _⟩ :=
+    ConstructionTargets.CircleUniversalCover.circleCover_isCoveringMap.existsUnique_continuousMap_lifts
+      g a₀ (Complex.arg (g a₀)) (by
+        exact Circle.exp_arg (g a₀))
+  exact ⟨h, fun x ↦ congrFun hh.2 x⟩
 
 /-- Seat: a map `RP² → S¹` has a real logarithm.  Lift `f ∘ π` to `h`; then
 `h (-x) - h x ∈ 2πℤ` is continuous on the connected sphere, hence a constant
