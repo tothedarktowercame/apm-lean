@@ -69,6 +69,13 @@ with `ℚ` at each degree `2*i`, `i : Fin (n+1)`. Its accessor lemmas are the
 first banked milestone. The remaining C3 work constructs this structure from
 the filtration and Mayer–Vietoris bridge.
 
+The compiled `ComplexProjectiveRationalHomologyStep` is the exact successor
+interface, and `complexProjectiveRationalHomologyData_of_zero_of_step` proves
+that data for `CP 0` plus this successor produces data for every `CP n`.
+Accordingly the construction now has two independent proof obligations: the
+chain computation for `CP 0`, and the coefficient Mayer–Vietoris successor
+adjoining the cell in degree `2*(n+1)`.
+
 Dependencies already banked:
 
 - `ConstructionTargets.CoefficientSubcomplexMayerVietoris`

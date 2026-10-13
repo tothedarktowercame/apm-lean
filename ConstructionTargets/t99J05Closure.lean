@@ -43,8 +43,28 @@ theorem ComplexProjectiveRationalHomologyData.subsingleton_of_odd
     Subsingleton (Homology (CP n) k) :=
   h.vanishesOdd k hk
 
+/-- The exact successor interface for the projective filtration.  Its proof is
+the Mayer--Vietoris step adjoining the single cell in real dimension
+`2 * (n + 1)`. -/
+def ComplexProjectiveRationalHomologyStep :=
+  ∀ n, ComplexProjectiveRationalHomologyData n →
+    ComplexProjectiveRationalHomologyData (n + 1)
+
+/-- A base computation for `CP 0` and the successor Mayer--Vietoris step
+assemble the rational homology data in every finite projective dimension. -/
+noncomputable def complexProjectiveRationalHomologyData_of_zero_of_step
+    (hzero : ComplexProjectiveRationalHomologyData 0)
+    (hstep : ComplexProjectiveRationalHomologyStep) :
+    ∀ n, ComplexProjectiveRationalHomologyData n := by
+  intro n
+  induction n with
+  | zero => exact hzero
+  | succ n ih =>
+      simpa only [Nat.succ_eq_add_one] using hstep n ih
+
 #print axioms ComplexProjectiveRationalHomologyData.finiteDimensionalAt
 #print axioms ComplexProjectiveRationalHomologyData.subsingleton_of_two_mul_lt
 #print axioms ComplexProjectiveRationalHomologyData.subsingleton_of_odd
+#print axioms complexProjectiveRationalHomologyData_of_zero_of_step
 
 end ConstructionTargets.t99J05Closure
