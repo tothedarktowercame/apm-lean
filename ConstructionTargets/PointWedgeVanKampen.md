@@ -1373,3 +1373,6 @@ the resulting morphism with the chosen-base inverse-span component.
 `genericPointWedgeOuterRight_inverseSpan_normalForm_eq_typedComposite` carries
 that equality through the connector normal form; one dependent connector
 transport cancellation remains before the projection criterion closes.
+`genericPointWedgeOuterRight_typedComposite_normalForm_expanded` exposes the
+remaining source connector, typed comparator, mapped unit inverse, and target
+connector in their exact categorical order.

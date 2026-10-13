@@ -6916,6 +6916,29 @@ theorem genericPointWedgeOuterRight_inverseSpan_normalForm_eq_typedComposite :
     (genericPointWedgeOuterRightSpan_component_eq_typedComposite_comp_map
       x₀ y₀ M N hM hN hy hx cM cN)
 
+/-- The remaining chosen-base normal form exposes its four dependent factors
+in categorical composition order. -/
+theorem genericPointWedgeOuterRight_typedComposite_normalForm_expanded :
+    let r := genericPointWedgeActualRight x₀ y₀ M N
+    let eK := genericPointWedgeOverlapGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let eR := genericPointWedgeRightGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let z := genericPointWedgeOverlapBase x₀ y₀ M N
+    (genericPointWedgeConnectors y₀).normalForm
+        (genericPointWedgeOuterRight_typedTransportComposite
+            x₀ y₀ M N hM hN hy hx cM cN ≫
+          (r ⋙ eR.functor).map (eK.unitInv.app z)) =
+      ((genericPointWedgeConnectors y₀).connector
+          ((genericPointWedgeCoordinateRight y₀).obj
+            (eK.functor.obj z))).hom ≫
+        genericPointWedgeOuterRight_typedTransportComposite
+          x₀ y₀ M N hM hN hy hx cM cN ≫
+        (r ⋙ eR.functor).map (eK.unitInv.app z) ≫
+        ((genericPointWedgeConnectors y₀).connector
+          ((r ⋙ eR.functor).obj z)).inv := by
+  simp [ConnectorSystem.normalForm, Category.assoc]
+
 /-- An `inl` factorization of the right-base conjugator forces its canonical
 right projection to be trivial. -/
 theorem genericPointWedgeRightBase_inl_implies_rightProjection_eq_one
@@ -7674,6 +7697,7 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeOuterRight_typedTransportComposite_eq_map
 #print axioms genericPointWedgeOuterRightSpan_component_eq_typedComposite_comp_map
 #print axioms genericPointWedgeOuterRight_inverseSpan_normalForm_eq_typedComposite
+#print axioms genericPointWedgeOuterRight_typedComposite_normalForm_expanded
 #print axioms genericPointWedgeRightBase_inl_implies_rightProjection_eq_one
 #print axioms genericPointWedgeLegCoordinates_of_mapped
 #print axioms genericPointWedgeLegCoordinates_iff_mapped
