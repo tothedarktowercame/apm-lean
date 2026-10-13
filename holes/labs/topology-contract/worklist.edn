@@ -113895,6 +113895,17 @@
       "lake build ConstructionTargets.ThreeCirclesFundamentalGroup",
       :exit 1,
       :finding "B12 file absent."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791914574078-10193-85c8f50b",
+     :commands
+     ["git show/diff-tree 769c780eb"
+      "git archive 769c780eb; lake env lean archived PointWedgeVanKampen.lean"
+      "lake build ConstructionTargets.PointWedgeVanKampen"
+      "sha256sum; placeholder delta; statement-registry.py check"],
+     :finding
+     "Recorded scope is target+note; source/doc/fixture hashes match e30bf4a2/df2a01e0/0bca6ce3. Archived and target builds pass; placeholders 0->0, registry 150/150, standard axioms only. Endpoint transport has the correct symmetric right-base orientation; congruence reduces it to the same object equality and proof irrelevance handles equality witnesses. This is new compiled progress; cancel the common factor and normalize mapped unitInv, then projection/B6/B12."},
     :commit "769c780eb474ccea1f738a70e8dd7753df3bad47",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
@@ -113905,7 +113916,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113926,7 +113937,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Inverse-span component normalized to canonical right-base eqToHom.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Endpoint transport equals the canonical right-base transport.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -114738,7 +114749,11 @@
     {:job 4,
      :commit "dd1c02c5e65e2f61917b6da8818b85213ff217f9",
      :reason
-     "Inverse-span component normalized to canonical right-base eqToHom."}]}
+     "Inverse-span component normalized to canonical right-base eqToHom."}
+    {:job 5,
+     :commit "769c780eb474ccea1f738a70e8dd7753df3bad47",
+     :reason
+     "Endpoint transport equals the canonical right-base transport."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
