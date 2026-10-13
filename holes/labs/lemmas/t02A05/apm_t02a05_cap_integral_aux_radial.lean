@@ -238,9 +238,37 @@ lemma apm_t02a05_cap_integral_aux_polar :
 
 /-- The radial integral: `∫₀¹ r / √(1 - r²) dr = 1` (antiderivative `-√(1 - r²)`). -/
 -- BEGIN SEAT AREA
+lemma apm_t02a05_cap_integral_aux_radial_hasDeriv
+    (r : ℝ) (hr : r ∈ Set.Ioo (0 : ℝ) 1) :
+    HasDerivAt (fun t : ℝ => -Real.sqrt (1 - t ^ 2))
+      (r / Real.sqrt (1 - r ^ 2)) r := by
+  have hpos : 0 < 1 - r ^ 2 := by nlinarith [hr.1, hr.2]
+  have hs : Real.sqrt (1 - r ^ 2) ≠ 0 := ne_of_gt (Real.sqrt_pos.2 hpos)
+  convert ((Real.hasDerivAt_sqrt hpos.ne').comp r
+    ((hasDerivAt_const r (1 : ℝ)).sub ((hasDerivAt_id r).pow 2))).neg using 1
+  field_simp
+  simp [id] <;> ring
+
 lemma apm_t02a05_cap_integral_aux_radial :
     (∫⁻ r in Set.Ioo (0 : ℝ) 1, ENNReal.ofReal (r / Real.sqrt (1 - r ^ 2))) = 1 := by
-  sorry
+  set g' : ℝ → ℝ := fun r => r / Real.sqrt (1 - r ^ 2) with hg'
+  have hcont : ContinuousOn (fun t : ℝ => -Real.sqrt (1 - t ^ 2)) (Set.Icc 0 1) :=
+    (by fun_prop : Continuous (fun t : ℝ => -Real.sqrt (1 - t ^ 2))).continuousOn
+  have hnn : ∀ x ∈ Set.Ioo (0 : ℝ) 1, 0 ≤ g' x := fun x hx =>
+    div_nonneg hx.1.le (Real.sqrt_nonneg _)
+  have hint : MeasureTheory.IntegrableOn g' (Set.Ioc 0 1) :=
+    intervalIntegral.integrableOn_deriv_of_nonneg hcont
+      apm_t02a05_cap_integral_aux_radial_hasDeriv hnn
+  have hftc : ∫ y in (0 : ℝ)..1, g' y = 1 := by
+    rw [intervalIntegral.integral_eq_sub_of_hasDerivAt_of_le zero_le_one hcont
+      apm_t02a05_cap_integral_aux_radial_hasDeriv
+      ((intervalIntegrable_iff_integrableOn_Ioc_of_le zero_le_one).2 hint)]
+    norm_num
+  rw [intervalIntegral.integral_of_le zero_le_one] at hftc
+  rw [MeasureTheory.setLIntegral_congr MeasureTheory.Ioo_ae_eq_Ioc,
+    ← MeasureTheory.ofReal_integral_eq_lintegral_ofReal hint, hftc, ENNReal.ofReal_one]
+  filter_upwards [MeasureTheory.ae_restrict_mem measurableSet_Ioc] with x hx
+  exact div_nonneg hx.1.le (Real.sqrt_nonneg _)
 -- END SEAT AREA
 
 theorem apm_t02a05_cap_integral :
