@@ -45,29 +45,90 @@ tracked as `ConstructionTargets/PolygonSurfacePiOne.lean` /
 
 ## Lemmas
 
-### `t96J02_kleinBottle_pi1` — LIBRARY
+### `t96J02_kleinPlaneQuotient_pi1_origin`
 
-**Statement.** The fundamental group at the registered basepoint of the
-frozen Klein polygon is isomorphic to the standard presented Klein group.
+**Statement.** At the orbit of `(0,0)`, the fundamental group of the affine
+plane quotient is the acting presented Klein group.
 
-**Why true.** This is the t96J02 specialization of
-`program-2026-10-13-polygon-surface-pi1`: van Kampen gives the two-generator
-presentation with Klein boundary word, and the banked coordinate normal-form
-equivalence identifies that presentation with `PresentedKleinGroup`.
-Alternatively, the sorry-free affine route in `t93J03Closure.lean` combines
-the free properly discontinuous plane action with
-`freeProperlyDiscontinuousQuotient_fundamentalGroupEquiv`; the remaining
-comparison identifies its orbit quotient with the frozen polygon.
+**Proof route / Mathlib names.** Install
+`KleinPlaneOrbitQuotient.kleinPlaneContinuousConstSMul` (or its banked
+equivalent) and the properly-discontinuous instance from master commit
+`9fd7db798`, then apply
+`DeckGroupQuotientFundamentalGroup.freeProperlyDiscontinuousQuotient_fundamentalGroupEquiv`
+with `KleinPlaneAffineAction.eq_one_of_smul_eq`.  Contractibility/simply
+connectedness and local path connectedness of `ℝ × ℝ` are instances.
 
-**Estimate.** 300–600 lines as an adapter if the shared polygon program is
-available; much larger if van Kampen is rebuilt locally, hence LIBRARY.
+**Estimate.** 30–60 lines of instance wiring. **Independent.**
 
-**Dependencies.** None among blueprint lemmas.
+**Truth check.** Freeness says the origin has trivial stabilizer; hence the
+deck theorem returns the acting group itself, not a quotient by a stabilizer.
 
-**Truth check.** The two presented generators act as a unit translation and a
-glide reflection. The banked coordinate equivalence is bijective, and action
-freeness rules out an accidental quotient of the presented group. At the
-chosen basepoint the stabilizer is trivial.
+### `t96J02_kleinPlaneQuotient_pi1_every_basepoint`
+
+**Statement.** Given the origin computation explicitly, the same computation
+holds at every point of the orbit quotient.
+
+**Proof route / Mathlib names.** Establish `PathConnectedSpace` for the
+quotient from the quotient map and the path-connected plane, then use
+`FundamentalGroup.fundamentalGroupMulEquivOfPathConnected`.  The already
+banked generic proof
+`ConstructionTargets.t93J03Closure.fundamentalGroupEquiv_every_basepoint`
+is the exact pattern.
+
+**Estimate.** 30–50 lines. **Independent:** it takes the preceding leaf's
+whole conclusion as `h₀` and does not refer to that theorem.
+
+**Truth check.** The quotient is nonempty (it contains the origin orbit) and
+path connected as a continuous quotient of the plane, so there is no empty
+or disconnected-component edge case.
+
+### `t96J02_kleinPlaneQuotient_homeomorph`
+
+**Statement.** The affine-action orbit quotient is homeomorphic to the
+repository's frozen `KleinBottle` type.
+
+**Proof route / library names.** Compose the identity comparison between the
+Mathlib action-orbit quotient and
+`KleinOrbitQuotientHomeomorph.PlaneOrbitQuotient`, the banked closed-square
+orbit homeomorphism (`KleinClosedSquareOrbitInverseContinuity`), the exact
+edge-relation comparison (`KleinSquareEqvGenCasesIff`), and
+`nonorientableStandardSpaceHomeomorph 2`.  The corresponding components are
+spelled out in `ConstructionTargets/t93J03Closure.lean` as
+`planeOrbitRelHomeomorph`, `closedSquareOrbitHomeomorph`,
+`closedSquareEdgeOrbitHomeomorph`, and `kleinPairingSpaceHomeomorph`.
+
+**Estimate.** 80–150 lines, mostly quotient adapters. **Independent.** This is
+the sole geometric comparison leaf; it contains no fundamental-group result.
+
+**Truth check.** All maps descend the identity on plane/square
+representatives.  Thus boundary vertices and edges are compared using the
+generated relation, including corners, rather than only interior points.
+
+### `t96J02_pi1_every_basepoint_of_homeomorph`
+
+**Statement.** A homeomorphism transports an all-basepoint fundamental-group
+calculation from its source to its target.
+
+**Proof route / Mathlib names.** For `y`, apply `hX (e.symm y)` and compose
+with the group equivalence induced by the continuous maps `e` and `e.symm`.
+Use `FundamentalGroup.map`, `Homeomorph.continuous`,
+`Homeomorph.continuous_symm`, and `FundamentalGroup.map_comp`; package the two
+maps with `MulEquiv.ofBijective`, or use the existing induced equivalence API
+if available in this Mathlib revision.
+
+**Estimate.** 35–70 lines. **Independent:** both geometric conclusions are
+explicit hypotheses.
+
+**Truth check.** No path-connectedness is assumed or needed because the
+source hypothesis covers every basepoint.  The inverse image `e.symm y`
+exists even for disconnected or empty types (the universal target statement
+is vacuous when `Y` is empty).
+
+### `t96J02_kleinBottle_pi1` (assembly, proved)
+
+Choose the quotient/Klein homeomorphism, feed the origin result to the
+all-basepoint adapter, transport that family across the homeomorphism, and
+specialize at `surfacePoint false 2`.  The proof contains no `sorry`.
 
 ### `t96J02_presented_finiteIndex_classify` — LIBRARY
 
@@ -155,19 +216,19 @@ hypotheses. The top and index-two test subgroups retain indices one and two.
 
 ## Dependency layers
 
-- Layer 1, fully parallel: `t96J02_kleinBottle_pi1` (LIBRARY),
+- Layer 1, fully parallel: the four new geometric leaves above,
   `t96J02_presented_finiteIndex_classify` (LIBRARY),
   `t96J02_presented_torus_subgroup`, and
   `t96J02_transport_across_equiv`; `t96J02_presented_self_subgroup` is already
   complete.
-- Layer 2: the main theorem assembly, already complete and sorry-free.
+- Layer 2: `t96J02_kleinBottle_pi1`, a sorry-free assembly.
+- Layer 3: the main theorem assembly, already complete and sorry-free.
 
-There are **five top-level blueprint lemmas**: two LIBRARY tasks, two ordinary
-seat-sized tasks, and one completed lemma. I am convinced all statements are
-true. The only material uncertainty is schedule/size: the geometric π₁
-adapter depends on the shared polygon-surface program, and the subgroup
-normal-form classification is a genuine 400–800-line algebra program rather
-than a normal lemma seat.
+The former 300–600-line geometric LIBRARY boundary is now four leaves of
+30–150 estimated lines.  All four are useful unchanged for t93J03's
+every-basepoint theorem.  The remaining large task is algebraic:
+`t96J02_presented_finiteIndex_classify` is still a genuine 400–800-line
+subgroup normal-form program and is outside this requested split.
 
 ## Compile and axiom gate
 

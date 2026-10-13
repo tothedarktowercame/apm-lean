@@ -2,6 +2,7 @@ import Mathlib
 import ConstructionTargets.StatementSurfaceModels
 import ConstructionTargets.KleinPresentedGroupCoordinateNormalForm
 import ConstructionTargets.DeckGroupQuotientFundamentalGroup
+import ConstructionTargets.KleinOrbitQuotientHomeomorph
 
 /-! # Blueprint for t96J02
 
@@ -17,14 +18,59 @@ abbrev T96J02TorusGroup := Multiplicative (ℤ × ℤ)
 
 abbrev T96J02PresentedGroup := PresentedKleinGroup
 
+noncomputable abbrev T96J02KleinPlaneQuotient :=
+  MulAction.orbitRel.Quotient T96J02PresentedGroup (ℝ × ℝ)
+
+noncomputable abbrev T96J02KleinPlaneOrigin : T96J02KleinPlaneQuotient :=
+  Quotient.mk _ (0, 0)
+
 /-! The definitions above are the complete shared interface used by the
 independent lemma seats. -/
 
-/-- **LIBRARY: `program-2026-10-13-polygon-surface-pi1`.**  The fundamental
-group of the frozen Klein polygon is its standard presented group. -/
+/-- The deck-group calculation at the canonical orbit of the origin. -/
+theorem t96J02_kleinPlaneQuotient_pi1_origin :
+    Nonempty
+      (FundamentalGroup T96J02KleinPlaneQuotient T96J02KleinPlaneOrigin ≃*
+        T96J02PresentedGroup) := by
+  sorry
+
+/-- Move the deck-group calculation to every point of the orbit quotient.
+The origin calculation is an explicit hypothesis so this seat is parallel. -/
+theorem t96J02_kleinPlaneQuotient_pi1_every_basepoint
+    (h₀ : Nonempty
+      (FundamentalGroup T96J02KleinPlaneQuotient T96J02KleinPlaneOrigin ≃*
+        T96J02PresentedGroup)) :
+    ∀ q : T96J02KleinPlaneQuotient,
+      Nonempty
+        (FundamentalGroup T96J02KleinPlaneQuotient q ≃*
+          T96J02PresentedGroup) := by
+  sorry
+
+/-- The explicit affine orbit quotient is the frozen polygon model of the
+Klein bottle.  This is the sole residual quotient-comparison leaf. -/
+theorem t96J02_kleinPlaneQuotient_homeomorph :
+    Nonempty (T96J02KleinPlaneQuotient ≃ₜ KleinBottle) := by
+  sorry
+
+/-- Transport an all-basepoint fundamental-group calculation across a
+homeomorphism.  Both substantive conclusions are hypotheses, so this seat is
+independent of the Klein-specific geometry. -/
+theorem t96J02_pi1_every_basepoint_of_homeomorph
+    {X Y G : Type*} [TopologicalSpace X] [TopologicalSpace Y] [Group G]
+    (e : X ≃ₜ Y)
+    (hX : ∀ x : X, Nonempty (FundamentalGroup X x ≃* G)) :
+    ∀ y : Y, Nonempty (FundamentalGroup Y y ≃* G) := by
+  sorry
+
+/-- The fundamental group of the frozen Klein polygon is its standard
+presented group.  This is now a sorry-free assembly of the four leaves above. -/
 theorem t96J02_kleinBottle_pi1 :
     Nonempty (T96J02Group ≃* T96J02PresentedGroup) := by
-  sorry
+  obtain ⟨e⟩ := t96J02_kleinPlaneQuotient_homeomorph
+  exact t96J02_pi1_every_basepoint_of_homeomorph e
+    (t96J02_kleinPlaneQuotient_pi1_every_basepoint
+      t96J02_kleinPlaneQuotient_pi1_origin)
+    (surfacePoint false 2)
 
 /-- **LIBRARY.** Every finite-index subgroup of the coordinate Klein group is
 either another Klein group or a rank-two free abelian group. -/
