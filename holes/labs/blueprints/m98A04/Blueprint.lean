@@ -611,7 +611,48 @@ fixed compact-support stage near its base point. -/
 theorem apm_m98a04_translateReflectStageLocal_continuousAt {n : ℕ}
     (φ : apm_m98a04_TF n) (x₀ : EuclideanSpace ℝ (Fin n)) :
     ContinuousAt (apm_m98a04_translateReflectStageLocal φ x₀) x₀ := by
-  sorry
+  let T := ContinuousLinearMap.pi
+    (ContDiffMapSupportedIn.structureMapCLM ℝ (⊤ : ℕ∞) :
+      ∀ i : ℕ, ContDiffMapSupportedIn (EuclideanSpace ℝ (Fin n)) ℝ ⊤
+        (apm_m98a04_translationCompact φ x₀) →L[ℝ]
+          BoundedContinuousFunction (EuclideanSpace ℝ (Fin n))
+            ((EuclideanSpace ℝ (Fin n)) [×i]→L[ℝ] ℝ))
+  apply (ContDiffMapSupportedIn.isUniformEmbedding_pi_structureMapCLM ℝ).toIsUniformInducing.isInducing.continuousAt_iff.mpr
+  rw [continuousAt_pi]
+  intro i
+  let g : EuclideanSpace ℝ (Fin n) → ℝ := fun z => φ (-z)
+  let f := iteratedFDeriv ℝ i g
+  have hg : ContDiff ℝ (⊤ : ℕ∞) g :=
+    φ.contDiff.comp contDiff_neg
+  have hf : Continuous f :=
+    hg.continuous_iteratedFDeriv (by exact_mod_cast le_top)
+  have hgc : HasCompactSupport g := by
+    exact φ.hasCompactSupport.comp_homeomorph
+      (Homeomorph.neg (EuclideanSpace ℝ (Fin n)))
+  have hfc : HasCompactSupport f := hgc.iteratedFDeriv i
+  have hc : ContinuousAt (fun x : EuclideanSpace ℝ (Fin n) =>
+      ConstructionTargets.TestFunctionTranslation.tftBCFOfCompactSupport
+        (fun y => f (-x + y))
+        (hf.comp (continuous_const.add continuous_id))
+        (hfc.comp_homeomorph (Homeomorph.addLeft (-x)))) x₀ := by
+    have ht := (ConstructionTargets.TestFunctionTranslation.tft_translate_bcf_continuous
+      f hf hfc).continuousAt.comp
+      (continuousAt_neg (x := x₀))
+    simpa only [Function.comp_apply] using ht
+  apply hc.congr_of_eventuallyEq
+  filter_upwards [Metric.closedBall_mem_nhds x₀ zero_lt_one] with x hx
+  apply BoundedContinuousFunction.ext
+  intro y
+  change (ContDiffMapSupportedIn.structureMapCLM ℝ ⊤ i
+      (apm_m98a04_translateReflectStageLocal φ x₀ x)) y = _
+  rw [ContDiffMapSupportedIn.structureMapCLM_top_apply]
+  have heq : (apm_m98a04_translateReflectStageLocal φ x₀ x :
+      EuclideanSpace ℝ (Fin n) → ℝ) = fun z => g (-x + z) := by
+    funext z
+    simp [apm_m98a04_translateReflectStageLocal, hx, g,
+      sub_eq_add_neg, add_comm]
+  rw [heq, iteratedFDeriv_comp_add_left]
+  rfl
 
 /-- Shared topology fact 2: directional difference quotients of reflected
 translations converge in the same fixed compact-support stage. -/
