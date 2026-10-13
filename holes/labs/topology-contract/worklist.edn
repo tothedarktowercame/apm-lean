@@ -113850,7 +113850,7 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 10,
+   :stop-count 0,
    :review-finding
    "Recorded fixture hash mismatch: :fixture.sha256 is 0bca6ce32c019fc3053c7f813c26917169cf817375b44d5e722b864b61a526450c1, but ConstructionTargets/PointWedgeVanKampen.blueprint.md at recorded commit c9b3af27 has exact SHA-256 0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0. Re-record the fixture hash for the reviewed commit.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
@@ -113907,7 +113907,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -116511,7 +116511,7 @@
    :other-consumers [:t92J07 :t98A06]}
   {:consumer :t97A07,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "isOpen_regularPoints",
@@ -116522,7 +116522,9 @@
     :reported-by [:owner],
     :type
     "IsOpen {x | Function.Surjective (mfderiv 𝓘 𝓘 f x)}  (size: 180-350 lines / 3-7 days)",
-    :area "regular-points-open"},
+    :area "regular-points-open",
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t97A07Closure.lean"]},
    :id :lemma-isopen-regularpoints,
    :kind :lemma,
    :depends-on [:lemma-isopen-setof-surjective-clm],
@@ -117028,6 +117030,18 @@
     [{:cmd "lean chart injectivity application",
       :exit 1,
       :finding "Corrected implicit chart arguments."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791858970945-8254-c9baf4e6",
+     :commands
+     ["lake env lean <commit-archive>/ConstructionTargets/t97A07Closure.lean"
+      "lake build ConstructionTargets.t97A07Closure"
+      "lake env lean problems/t97A07/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "git-show sha256/placeholders/scope"],
+     :finding
+     "PASS program STOP. Commit e816789e adds compiled progress beyond history and changes only scoped closure Lean/blueprint files. Exact source/target/fixture hashes match evidence (fixture 35d66abd...c252b); registry 131/131; sorry/admit remains 1->1, the declared existing Main placeholder. B3 is mathematically correct: if A∘mfderiv∘B is surjective and target-chart derivative A is injective, choosing a preimage of A(v) and cancelling A proves mfderiv surjective; no varying tangent fibers are identified. Continuity from B2 pulls B1's open surjective-operator set back to a neighbourhood, then chart membership enables that descent pointwise. The Lean type faithfully states B3, and the blueprint proof uses B1/B2 as declared. New theorems use only propext, Classical.choice, Quot.sound. Residual B4-B9 milestones are listed."},
     :commit "e816789ea8e370108b53f41ae43ea70a5140a0d4",
     :changed-paths
     ["ConstructionTargets/t97A07Closure.lean"
@@ -117038,7 +117052,7 @@
      "35d66abdfccbc8a67ef8f162a2b174875e37102ceebeb086a353aac3875c252b"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A07/lean/Main.lean"
     "problems/t97A07/status.json"
@@ -117054,7 +117068,7 @@
     ["lake env lean problems/t97A07/lean/Main.lean"
      "python3 scripts/statement-registry.py check"]},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: B2 interface proved: both coordinate families are continuous, eventually equal, and anchored at mfderiv.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: B3 proved: regular points are open.",
    :id :program-2026-10-11-close-t97a07,
    :kind :final-adapter,
    :campaign-priority 44,
@@ -117124,7 +117138,10 @@
     {:job 8,
      :commit "5125176c03b6cd10e63f6124bda1d607e83cf3e1",
      :reason
-     "B2 interface proved: both coordinate families are continuous, eventually equal, and anchored at mfderiv."}]}
+     "B2 interface proved: both coordinate families are continuous, eventually equal, and anchored at mfderiv."}
+    {:job 9,
+     :commit "e816789ea8e370108b53f41ae43ea70a5140a0d4",
+     :reason "B3 proved: regular points are open."}]}
   {:consumer :t91J06,
    :stop-count 2,
    :review-finding
@@ -118261,7 +118278,7 @@
    :other-consumers []}
   {:consumer :t97A07,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t97A07Closure.isOpen_regularPoints",
@@ -118271,7 +118288,9 @@
     :reported-by [:program-2026-10-11-close-t97a07],
     :type "The points where mfderiv is surjective form an open set",
     :area "regular-points-open",
-    :proved-in :program-2026-10-11-close-t97a07},
+    :proved-in :program-2026-10-11-close-t97a07,
+    :banked-by :program-2026-10-11-close-t97a07,
+    :banked-commit "e816789ea8e370108b53f41ae43ea70a5140a0d4"},
    :id :lemma-t97a07closure-isopen-regularpoints,
    :kind :lemma,
    :depends-on
