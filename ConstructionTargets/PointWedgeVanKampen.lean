@@ -6383,6 +6383,31 @@ theorem genericPointWedgeOuterRightSpan_naturality_precedingUnitInv :
   rw [genericPointWedgeOuterRightSpan_transport_map_eq_precedingUnitInv] at hn
   exact hn
 
+omit [PathConnectedSpace X] [PathConnectedSpace Y] in
+/-- The reduced inverse-span square with its coordinate-side map rewritten
+as the explicitly typed identity morphism. -/
+theorem genericPointWedgeOuterRightSpan_naturality_coordinateIdentity :
+    let r := genericPointWedgeActualRight x₀ y₀ M N
+    let eK := genericPointWedgeOverlapGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let eR := genericPointWedgeRightGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let aR := genericPointWedgeRightSpanIso
+      x₀ y₀ M N hM hN hy hx cM cN
+    let z := genericPointWedgeOverlapBase x₀ y₀ M N
+    𝟙 ((genericPointWedgeCoordinateRight y₀).obj
+          (eK.functor.obj ((eK.functor ⋙ eK.inverse).obj z))) ≫
+        aR.inv.app (eK.functor.obj z) =
+      aR.inv.app (eK.functor.obj ((eK.functor ⋙ eK.inverse).obj z)) ≫
+        (r ⋙ eR.functor).map
+          (eK.unitInv.app ((eK.functor ⋙ eK.inverse).obj z)) := by
+  dsimp only
+  have hn := genericPointWedgeOuterRightSpan_naturality_precedingUnitInv
+    x₀ y₀ M N hM hN hy hx cM cN
+  dsimp only at hn
+  rw [genericPointWedgeOuterRightSpan_unitInv_coordinateMap_eq_id] at hn
+  exact hn
+
 /-- An `inl` factorization of the right-base conjugator forces its canonical
 right projection to be trivial. -/
 theorem genericPointWedgeRightBase_inl_implies_rightProjection_eq_one
@@ -7115,6 +7140,7 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeOverlap_shiftedCoordinateObject_eq
 #print axioms genericPointWedgeOuterRightSpan_shiftedComponent_heq
 #print axioms genericPointWedgeOuterRightSpan_naturality_precedingUnitInv
+#print axioms genericPointWedgeOuterRightSpan_naturality_coordinateIdentity
 #print axioms genericPointWedgeRightBase_inl_implies_rightProjection_eq_one
 #print axioms genericPointWedgeLegCoordinates_of_mapped
 #print axioms genericPointWedgeLegCoordinates_iff_mapped

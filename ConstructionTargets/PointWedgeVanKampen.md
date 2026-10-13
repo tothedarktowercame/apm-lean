@@ -1275,5 +1275,8 @@ transport the identity morphism and inverse-span component with the same
 witness.  `genericPointWedgeOuterRightSpan_naturality_precedingUnitInv`
 also composes the naturality and triangle reductions into one typed square:
 its only remaining mapped factor is the preceding overlap `unitInv`.  The
-residual is to transport this square across the coordinate-object equality
-and close the resulting fixed-component recurrence.
+coordinate-side map in that square is now rewritten to its explicitly typed
+identity by `genericPointWedgeOuterRightSpan_naturality_coordinateIdentity`.
+The residual is to transport the identity and inverse-span component together
+across the named coordinate-object equality and close the resulting
+fixed-component recurrence.
