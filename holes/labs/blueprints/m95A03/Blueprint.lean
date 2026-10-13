@@ -496,13 +496,94 @@ lemma apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_syst
 
 /-- Picard iteration for the linear integral system with continuous coefficients on `ℝ`
 (time-dependent analogue of m96A02's scalar argument). -/
+noncomputable def apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_system_aux_ode_aux_integral_aux_picard
+    (a b : ℝ) (hab : a < b) (r q g : ℝ → ℝ) (hr : Continuous r)
+    (hq : Continuous q) (hg : Continuous g) (c₀ d₀ : ℝ)
+    (u : C(Set.Icc a b, ℝ) × C(Set.Icc a b, ℝ)) :
+    C(Set.Icc a b, ℝ) × C(Set.Icc a b, ℝ) :=
+  ({ toFun := fun t => c₀ + ∫ s in a..t.1,
+        u.2 (Set.projIcc a b hab.le s) * r s
+     continuous_toFun := by
+       have hc : Continuous (fun s =>
+           u.2 (Set.projIcc a b hab.le s) * r s) :=
+         (u.2.continuous.comp continuous_projIcc).mul hr
+       exact (continuous_const.add
+         (intervalIntegral.continuous_primitive hc.intervalIntegrable a)).comp
+           continuous_subtype_val },
+   { toFun := fun t => d₀ + ∫ s in a..t.1,
+        (q s * u.1 (Set.projIcc a b hab.le s) + g s)
+     continuous_toFun := by
+       have hc : Continuous (fun s =>
+           q s * u.1 (Set.projIcc a b hab.le s) + g s) :=
+         (hq.mul (u.1.continuous.comp continuous_projIcc)).add hg
+       exact (continuous_const.add
+         (intervalIntegral.continuous_primitive hc.intervalIntegrable a)).comp
+           continuous_subtype_val })
+
+/-- Picard factorial estimate for the 2-component operator (sup metric on each component,
+max on the product): `dist (Tⁿu) (Tⁿv) ≤ (L (b − a))ⁿ / n! · dist u v` with
+`L = max (sup |r|) (sup |q|)` on `[a, b]`. -/
+lemma apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_system_aux_ode_aux_integral_aux_fixed_aux_iterate_bound
+    (a b : ℝ) (hab : a < b) (r q g : ℝ → ℝ) (hr : Continuous r)
+    (hq : Continuous q) (hg : Continuous g) (c₀ d₀ : ℝ) :
+    ∃ L : ℝ, 0 ≤ L ∧ ∀ (n : ℕ) (u v : C(Set.Icc a b, ℝ) × C(Set.Icc a b, ℝ)),
+      dist ((apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_system_aux_ode_aux_integral_aux_picard a b hab r q g hr hq hg c₀ d₀)^[n] u)
+          ((apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_system_aux_ode_aux_integral_aux_picard a b hab r q g hr hq hg c₀ d₀)^[n] v) ≤
+        (L * (b - a)) ^ n / n.factorial * dist u v := by
+  sorry
+
+lemma apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_system_aux_ode_aux_integral_aux_fixed
+    (a b : ℝ) (hab : a < b) (r q g : ℝ → ℝ) (hr : Continuous r)
+    (hq : Continuous q) (hg : Continuous g) (c₀ d₀ : ℝ) :
+    ∃ u : C(Set.Icc a b, ℝ) × C(Set.Icc a b, ℝ),
+      apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_system_aux_ode_aux_integral_aux_picard
+        a b hab r q g hr hq hg c₀ d₀ u = u := by
+  set T := apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_system_aux_ode_aux_integral_aux_picard a b hab r q g hr hq hg c₀ d₀ with hT
+  obtain ⟨L, hL, hbound⟩ := apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_system_aux_ode_aux_integral_aux_fixed_aux_iterate_bound a b hab r q g hr hq hg c₀ d₀
+  obtain ⟨N, hN⟩ : ∃ N : ℕ, (L * (b - a)) ^ N / N.factorial < 1 := by
+    obtain ⟨M, hM⟩ := Filter.eventually_atTop.1
+      ((FloorSemiring.tendsto_pow_div_factorial_atTop (L * (b - a))).eventually
+        (gt_mem_nhds zero_lt_one))
+    exact ⟨M, hM M le_rfl⟩
+  have hk0 : 0 ≤ (L * (b - a)) ^ N / N.factorial := by
+    have : 0 ≤ L * (b - a) := mul_nonneg hL (sub_nonneg.2 hab.le)
+    positivity
+  let K : NNReal := ⟨_, hk0⟩
+  have hK : ContractingWith K (T^[N]) := by
+    refine ⟨by exact_mod_cast hN, LipschitzWith.of_dist_le_mul fun u v => ?_⟩
+    exact hbound N u v
+  have hfix := ContractingWith.fixedPoint_isFixedPt (f := T^[N]) hK
+  set x := ContractingWith.fixedPoint (T^[N]) hK
+  have hTx : Function.IsFixedPt (T^[N]) (T x) := by
+    unfold Function.IsFixedPt
+    rw [← Function.iterate_succ_apply, Function.iterate_succ_apply']
+    exact congrArg T hfix
+  exact ⟨x, ContractingWith.fixedPoint_unique hK hTx⟩
+
 lemma apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_system_aux_ode_aux_integral
     (a b : ℝ) (hab : a < b) (r q g : ℝ → ℝ) (hr : Continuous r)
     (hq : Continuous q) (hg : Continuous g) (c₀ d₀ : ℝ) :
     ∃ y z : ℝ → ℝ, Continuous y ∧ Continuous z ∧ ∀ t ∈ Set.Icc a b,
       y t = c₀ + (∫ s in a..t, z s * r s) ∧
       z t = d₀ + ∫ s in a..t, (q s * y s + g s) := by
-  sorry
+  obtain ⟨u, hu⟩ :=
+    apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_system_aux_ode_aux_integral_aux_fixed
+      a b hab r q g hr hq hg c₀ d₀
+  let y : ℝ → ℝ := fun t => u.1 (Set.projIcc a b hab.le t)
+  let z : ℝ → ℝ := fun t => u.2 (Set.projIcc a b hab.le t)
+  refine ⟨y, z, u.1.continuous.comp continuous_projIcc,
+    u.2.continuous.comp continuous_projIcc, fun t ht => ?_⟩
+  have hproj : Set.projIcc a b hab.le t = (⟨t, ht⟩ : Set.Icc a b) :=
+    Set.projIcc_of_mem hab.le ht
+  have hy := congrArg (fun v : C(Set.Icc a b, ℝ) × C(Set.Icc a b, ℝ) => v.1 ⟨t, ht⟩) hu
+  have hz := congrArg (fun v : C(Set.Icc a b, ℝ) × C(Set.Icc a b, ℝ) => v.2 ⟨t, ht⟩) hu
+  constructor
+  · simpa [y, z, hproj,
+      apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_system_aux_ode_aux_integral_aux_picard]
+      using hy.symm
+  · simpa [y, z, hproj,
+      apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_system_aux_ode_aux_integral_aux_picard]
+      using hz.symm
 
 lemma apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_system_aux_ode
     (a b : ℝ) (hab : a < b) (p q g : ℝ → ℝ) (hp : Continuous p)
