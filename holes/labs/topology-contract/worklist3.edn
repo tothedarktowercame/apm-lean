@@ -36157,6 +36157,17 @@
     :commands
     [{:cmd "build; registry; fixture; diff; commit", :exit 0}
      {:cmd "rg forbidden closure", :exit 1, :expected-exit 1}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791923568513-10421-b12aff2b",
+     :commands
+     ["git show/diff 30d10c96; scope and orientation review"
+      "lake build/lean ConstructionTargets.t93J03Closure"
+      "sha256sum + lake env lean assembly fixture"
+      "statement-registry check; placeholder recount"],
+     :finding
+     "PASS. Commit 30d10c96 adds compiled, sorry-free generic lifting and embedding assembly in scope. The subgroup equality is oriented exactly for comap membership and the lift equation exactly for embedding cancellation; the abstraction over G,H preserves the frozen presented-group use. C1 orbit quotient and C2 cyclic cover remain listed. Fixture hash matches; standard axioms only; registry 150/150; forbidden count 0->0. SemilocallySimplyConnected X is unused, mandated by problem.md under the owner exception."},
     :commit "30d10c9666c11bb3dc9377857cfec5751b8a3054",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
@@ -36168,7 +36179,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -36186,14 +36197,19 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t93J03Closure.blueprint.md"},
    :continue-from
-   "OWNER (claude-14, 2026-10-13): the hypothesis-coverage gate does not apply to hypotheses of the registered statement that problem.md states. SemilocallySimplyConnected X may stay unused (the lifting criterion needs only path-connected + locally path-connected); record it as unused-mandated and proceed. NEXT JOB: copy holes/labs/blueprints/t93J03/BLUEPRINT.md's plan into ConstructionTargets/t93J03Closure.blueprint.md, move the blueprint's proved lemmas into place, then build the LIBRARY obligations one milestone per job.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Recorded owner waiver and committed generic cover lifting plus embedding assembly. C1 orbit quotient and C2 cyclic cover remain; not refuted.",
    :id :program-2026-10-13-close-t93j03,
    :kind :final-adapter,
    :campaign-priority 30,
    :fail-count 4,
    :depends-on [],
    :program true,
-   :other-consumers []}
+   :other-consumers [],
+   :program-history
+   [{:job 1,
+     :commit "30d10c9666c11bb3dc9377857cfec5751b8a3054",
+     :reason
+     "Recorded owner waiver and committed generic cover lifting plus embedding assembly. C1 orbit quotient and C2 cyclic cover remain; not refuted."}]}
   {:consumer :t99J05,
    :stop-count 5,
    :evidence
@@ -36809,7 +36825,7 @@
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "coveringLift_of_subgroup_le",
@@ -36819,14 +36835,16 @@
     :reported-by [:program-2026-10-13-close-t93j03],
     :type "cover subgroup inclusion gives lift",
     :area "covering-subgroup-correspondence",
-    :proved-in :program-2026-10-13-close-t93j03},
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "30d10c9666c11bb3dc9377857cfec5751b8a3054"},
    :id :lemma-coveringlift-of-subgroup-le,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "lift_isEmbedding_assembly",
@@ -36836,7 +36854,9 @@
     :reported-by [:program-2026-10-13-close-t93j03],
     :type "cover embedding plus lift embeds X",
     :area "covering-subgroup-correspondence",
-    :proved-in :program-2026-10-13-close-t93j03},
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "30d10c9666c11bb3dc9377857cfec5751b8a3054"},
    :id :lemma-lift-isembedding-assembly,
    :kind :lemma,
    :depends-on [],
