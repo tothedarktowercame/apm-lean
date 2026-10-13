@@ -87943,6 +87943,18 @@
       :exit 1,
       :correction
       "explicit reverse homotopy; corrected composition and subtype projection"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791935888775-10967-635264c4",
+     :commands
+     ["scope/SHA256 checks at 41bf54103"
+      "recorded blob | lake env lean /dev/stdin"
+      "comment-stripped placeholder scan (0)"
+      "#print axioms signed outer equivalence"
+      "statement-registry.py check (166/0)"],
+     :finding
+     "Valid program STOP with new compiled B4 geometry beyond history commit f28078582. The outer deformation retract lands in the boundary subspace, that subspace is homeomorphic to P.skeleton, and composition with skeletonHomeomorphWedge has the correct outer-to-wedge direction. Its restriction to the skeleton is definitionally the reviewed signed map. Exact one-file scope/hash match; placeholders 0; only standard axioms. Remaining: finite-wedge homology, then B6-B10."},
     :commit "41bf54103",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
@@ -87951,7 +87963,7 @@
      "176116a5e2181a025666c5359916148ff786f05c29578bac1d0b055c2fe31d54"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -87971,7 +87983,7 @@
     :blueprint
     "ConstructionTargets/PolygonSurfaceHomology.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked B5 inner-piece and annular-overlap integral homology.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked signed outer-piece homotopy equivalence, the geometric half of B4.",
    :id :program-2026-10-13-polygon-surface-homology,
    :kind :reusable-theorem,
    :campaign-priority 31,
@@ -87991,7 +88003,11 @@
     {:job 3,
      :commit "f28078582",
      :reason
-     "Banked B5 inner-piece and annular-overlap integral homology."}]}
+     "Banked B5 inner-piece and annular-overlap integral homology."}
+    {:job 4,
+     :commit "41bf54103",
+     :reason
+     "Banked signed outer-piece homotopy equivalence, the geometric half of B4."}]}
   {:consumer :t97A01,
    :stop-count 0,
    :phase :implementation,
@@ -88770,7 +88786,7 @@
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "outerHomotopyEquivWedge",
@@ -88782,7 +88798,9 @@
     :type
     "OuterPiece P ≃ₕ FiniteWedge (PairingOrbit P.pair), signed on boundary",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :program-2026-10-13-polygon-surface-homology,
+    :banked-commit "41bf54103"},
    :id :lemma-outerhomotopyequivwedge,
    :kind :lemma,
    :depends-on [],
