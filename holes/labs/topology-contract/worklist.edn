@@ -113850,13 +113850,14 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 7,
+   :stop-count 9,
    :review-finding
    "Recorded fixture hash mismatch: :fixture.sha256 is 0bca6ce32c019fc3053c7f813c26917169cf817375b44d5e722b864b61a526450c1, but ConstructionTargets/PointWedgeVanKampen.blueprint.md at recorded commit c9b3af27 has exact SHA-256 0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0. Re-record the fixture hash for the reviewed commit.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
    :evidence
    {:placeholder-delta {:source-before 0, :source-after 0},
-    :residual "Apply left counit naturality; then point-span, B6/B12.",
+    :residual
+    "Normalize mapped strict-unit composite with counit square; then point-span, B6/B12.",
     :outcome :stop,
     :warnings ["existing linter"],
     :missing-theorems
@@ -113870,9 +113871,9 @@
       :area "fundamental-group-wedge-of-circles"}],
     :statement-hashes
     {:source
-     "281eb773903d07c1f6d3de25583860bb1651a3f890f9e475b702b3482df76c0c",
+     "128028508526c9f18b766798d0f8c23127b6955df6d9c55d45604132deb23dd3",
      :documentation
-     "b660df0798a08dfa3fc607f4aea199201a64c18fac3dc43d49289aabe0c4f3a7",
+     "7a571c686f5d1bc0b928851242a51bd1b87e14dcbc3dcd9029d9aec7ed82c640",
      :blueprint
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0",
      :registry "142/142"},
@@ -113880,7 +113881,7 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
     :reason
-    "Left comparison is one actual-span map of its ordered composite.",
+    "Full left comparison transported to the coordinate-span image of its ordered composite.",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/PointWedgeVanKampen.lean",
@@ -113890,26 +113891,23 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "diff/hash/placeholders", :exit 0}],
     :diagnostic-history
-    [{:cmd "lean map rewrite",
-      :exit 1,
-      :finding "Let endpoints blocked rewrite; used typed map_comp."}
-     {:cmd
+    [{:cmd
       "lake build ConstructionTargets.ThreeCirclesFundamentalGroup",
       :exit 1,
-      :finding "B12 absent."}],
+      :finding "B12 module absent."}],
     :review
     {:outcome :pass,
      :seat "codex-3",
-     :job "invoke-1791866916677-8449-a868989b",
+     :job "invoke-1791868527140-8517-52955723",
      :commands
-     ["git archive 501a29d4; lake env lean <archive>/ConstructionTargets/PointWedgeVanKampen.lean"
+     ["git archive e54ac11a; lake env lean <archive>/ConstructionTargets/PointWedgeVanKampen.lean"
       "lake build ConstructionTargets.PointWedgeVanKampen"
       "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (exit 1: declared B12 residual absent)"
       "python3 scripts/statement-registry.py check"
       "git diff-tree/show sha256/git grep placeholders"],
      :finding
-     "PASS program STOP: 501a29d4 is new after history, changes only scoped Lean/MD files, and commits compiled sorry-free progress. Hashes match source 281eb773, docs b660df07, fixture 0bca6ce3; registry 142/142; sorry/admit 0->0; the new theorem uses only propext, Classical.choice, Quot.sound. Its orientation is correct: the prior unit-times-strict product corresponds under SingleObj.comp_as_mul to categorical strict-then-unit composition f≫g. Functor.map_comp then combines the two actual-span maps in exactly that order; both source factors and the result remain in the same typed actual-span/free-product representation. Left counit naturality, point-span, B6/B12 and the final module remain explicitly listed."},
-    :commit "501a29d4955e74977bef4bf9e1ed54ee4d078a41",
+     "PASS program STOP: e54ac11a is new after history, changes only scoped Lean/MD files, and commits compiled sorry-free progress. Hashes match source 12802850, docs 7a571c68, fixture 0bca6ce3; registry 142/142; sorry/admit 0->0; the new theorem uses only propext, Classical.choice, Quot.sound. It rewrites the left comparison to the actual-span map of f≫g, then applies the existing actual-to-coordinate span map equality in its stated direction. The coordinate functor maps the same ordered composite; no factor reversal, object coercion, or assumed trivial counit is introduced, and both sides now share the coordinate free-product representation. Counit normalization, point-span, B6/B12 and the final module remain explicitly listed."},
+    :commit "e54ac11ae729e4ccdebf80f954c0765afdc99cba",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
      "ConstructionTargets/PointWedgeVanKampen.md"],
@@ -113940,7 +113938,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Left comparison is one actual-span map of its ordered composite.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Full left comparison transported to the coordinate-span image of its ordered composite.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -114593,7 +114591,14 @@
     {:job 7,
      :commit "501a29d4955e74977bef4bf9e1ed54ee4d078a41",
      :reason
-     "Left comparison is one actual-span map of its ordered composite."}]}
+     "Left comparison is one actual-span map of its ordered composite."}
+    {:job 8,
+     :commit "32e5cb238733ed1713c5f4b77046ec1365ee6852",
+     :reason "Left counit square mapped to the free product."}
+    {:job 9,
+     :commit "e54ac11ae729e4ccdebf80f954c0765afdc99cba",
+     :reason
+     "Full left comparison transported to the coordinate-span image of its ordered composite."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,

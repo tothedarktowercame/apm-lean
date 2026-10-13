@@ -76421,36 +76421,38 @@
    "Deterministic topology defect in commit ee79eaeb2: it changes the index topology for FiniteWedge from ⊥ to ⊤ while claiming this makes it discrete. Mathlib/Topology/Order.lean states exactly the opposite: ⊥ is discrete and ⊤ is indiscrete. Consequently L × Circle is not the coproduct/disjoint-union source of indexed circle legs, and the coinduced quotient is not the B7 finite-wedge topology; future skeletonHomeomorphWedge would target the wrong space. Repair by restoring TopologicalSpace L := ⊥ in both the FiniteWedge instance and continuous_wedgeCircle proof, then rerun Lean/build and retain coverage, quotient-topology, wedge-relation, and signed-equation residuals. Recorded scope is otherwise exact and fixture SHA-256 386d0e41...ae305 matches.",
    :evidence
    {:placeholder-delta 0,
-    :residual "Induct relation; prove quotient/homeomorphism; B8/B9.",
-    :outcome :stop,
-    :warnings ["lints"],
+    :residual "B7 complete with signed equations; implement B8/B9.",
+    :outcome :done-unreviewed,
+    :warnings ["preexisting lints"],
     :missing-theorems
-    [{:name "PairingData.signedWedgeArc_eq_of_edgePoint_eq",
-      :type "same boundary point gives same signed coordinate",
+    [{:name "PairingData.eqvGenRel_isClosed",
+      :type "closed generated relation",
       :status :proved,
       :consumers [:t96J02],
-      :depends-on ["edgePoint_eq_imp_coordinate_cases"],
-      :area "polygon-surface-pi1"}
-     {:name "PairingData.eqvGen_boundaryRel_implies_signedWedgeArc_eq",
-      :type "generated relation preserves signed arcs",
-      :status :partial,
-      :consumers [:t96J02],
-      :depends-on ["PairingData.signedWedgeArc_eq_of_edgePoint_eq"],
+      :depends-on [],
       :area "polygon-surface-pi1"}
      {:name "PairingData.skeletonArcMap_isQuotientMap",
       :type "source quotient",
-      :status :not-started,
+      :status :proved,
       :consumers [:t96J02],
-      :depends-on [],
+      :depends-on ["PairingData.eqvGenRel_isClosed"],
+      :area "polygon-surface-pi1"}
+     {:name "PairingData.skeletonHomeomorphWedge",
+      :type "signed skeleton-wedge homeomorphism",
+      :status :proved,
+      :consumers [:t96J02 :t92J05 :t94J04 :t97A01 :t97A03],
+      :depends-on
+      ["PairingData.SkeletonWedgeKernelAgreement"
+       "PairingData.skeletonArcMap_isQuotientMap"],
       :area "polygon-surface-pi1"}],
     :statement-hashes
     {:registry "142/0",
-     :module "b821556d1d44712fac6a7df0d4fabadeef4244aa"},
-    :disposition :stop,
+     :module "cec6b84b2110a6b7c9197ad1ca3257ad0649366d"},
+    :acceptance
+    {:declaration
+     "ConstructionTargets.PolygonSurfacePiOne.skeletonHomeomorphWedge"},
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason
-    "Boundary-point representatives now have equal signed coordinates; generated-relation induction remains.",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/PolygonSurfacePiOne.lean",
@@ -76459,32 +76461,22 @@
       :exit 0}
      {:cmd "registry check", :exit 0}
      {:cmd "placeholder scan", :exit 0}
-     {:cmd "#print axioms representative invariance", :exit 0}
-     {:cmd "git show --check 4021542f6", :exit 0}],
+     {:cmd "#print axioms B7", :exit 0}
+     {:cmd "git show --check 9f18c4ca1", :exit 0}],
     :diagnostic-history
-    [{:cmd "first compile",
+    [{:cmd "first relation compile",
       :exit 1,
-      :correction "used wrap equations in endpoint arithmetic"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1791866971290-8454-61704cd9",
-     :commands
-     ["git scope/SHA/blob checks at 34fa7c1df"
-      "git show 34fa7c1df:... | lake env lean /dev/stdin"
-      "statement-registry.py check (142/0 current)"
-      "placeholder/orientation scans; #print axioms"],
-     :finding
-     "PASS: exact recorded one-file scope and frozen hashes match; the committed blob compiles. Nested quotient induction reaches every indexed-wedge point; positive sign keeps t, negative sign uses reverseIcc t and the signed map reverses back. Placeholders 0, standard axioms only, current registry 142/0. STOP records real progress and lists source coverage, kernel agreement, quotient topology, final homeomorphism and B8/B9 remaining."},
-    :commit "4021542f6",
+      :correction "installed wedge T2 instance"}],
+    :commit "9f18c4ca1",
+    :commits ["8007c4f1e" "9f18c4ca1"],
     :changed-paths ["ConstructionTargets/PolygonSurfacePiOne.lean"],
     :fixture
     {:path "ConstructionTargets/PolygonSurfacePiOne.lean",
      :sha256
-     "1620c9b819e7fc2484f24cf692a5eb730b8eb5f861f0e76765da42981103c9f1"},
+     "a5462511c62ca1f6fc72bb8d48ca3461237b123afb807f1e5ba2ad7edff5de70"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/PolygonSurfacePiOne.lean"],
    :dag-node "ConstructionTargets/PolygonSurfacePiOne.blueprint.md/B7",
    :acceptance
@@ -87065,7 +87057,7 @@
    :other-consumers [:t92J05 :t94J04 :t97A01 :t97A03]}
   {:consumer :t96J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "PairingData.SkeletonWedgeKernelAgreement",
@@ -87074,7 +87066,10 @@
    {:name "PairingData.SkeletonWedgeKernelAgreement",
     :reported-by [:routes-2026-10-12-polygon-b7-topo2-r1],
     :type "skeleton kernel iff wedge kernel",
-    :area "polygon-surface-pi1"},
+    :area "polygon-surface-pi1",
+    :proved-in :routes-2026-10-12-polygon-b7-topo2-r1,
+    :banked-by :routes-2026-10-12-polygon-b7-topo2-r1,
+    :banked-commit "be60debeb"},
    :id :lemma-pairingdata-skeletonwedgekernelagreement,
    :kind :lemma,
    :depends-on
@@ -87151,10 +87146,11 @@
    {:name "PairingData.skeletonArcMap_isQuotientMap",
     :reported-by [:routes-2026-10-12-polygon-b7-topo2-r1],
     :type "source arcs are quotient",
-    :area "polygon-surface-pi1"},
+    :area "polygon-surface-pi1",
+    :proved-in :routes-2026-10-12-polygon-b7-topo2-r1},
    :id :lemma-pairingdata-skeletonarcmap-isquotientmap,
    :kind :lemma,
-   :depends-on [],
+   :depends-on [:lemma-pairingdata-eqvgenrel-isclosed],
    :other-consumers [:t92J05 :t94J04 :t97A01 :t97A03]}
   {:consumer :t96J02,
    :phase :lemma,
@@ -87294,7 +87290,7 @@
    :other-consumers []}
   {:consumer :t96J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "PairingData.eqvGen_boundaryRel_implies_signedWedgeArc_eq",
@@ -87303,7 +87299,10 @@
    {:name "PairingData.eqvGen_boundaryRel_implies_signedWedgeArc_eq",
     :reported-by [:routes-2026-10-12-polygon-b7-topo2-r1],
     :type "generated relation preserves signed arcs",
-    :area "polygon-surface-pi1"},
+    :area "polygon-surface-pi1",
+    :proved-in :routes-2026-10-12-polygon-b7-topo2-r1,
+    :banked-by :routes-2026-10-12-polygon-b7-topo2-r1,
+    :banked-commit "be60debeb"},
    :id :lemma-pairingdata-eqvgen-boundaryrel-implies-signedwedgearc-eq,
    :kind :lemma,
    :depends-on
@@ -87368,4 +87367,59 @@
    :id :lemma-pairingdata-signedwedgearc-eq-of-edgepoint-eq,
    :kind :lemma,
    :depends-on [:lemma-edgepoint-eq-imp-coordinate-cases],
-   :other-consumers []}]}
+   :other-consumers []}
+  {:consumer :t96J02,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "PairingData.continuous_skeletonWedgeEquiv_symm",
+    :type "inverse continuous; skeleton compact also proved"},
+   :lemma
+   {:name "PairingData.continuous_skeletonWedgeEquiv_symm",
+    :reported-by [:routes-2026-10-12-polygon-b7-topo2-r1],
+    :type "inverse continuous; skeleton compact also proved",
+    :area "polygon-surface-pi1",
+    :proved-in :routes-2026-10-12-polygon-b7-topo2-r1,
+    :banked-by :routes-2026-10-12-polygon-b7-topo2-r1,
+    :banked-commit "8007c4f1e"},
+   :id :lemma-pairingdata-continuous-skeletonwedgeequiv-symm,
+   :kind :lemma,
+   :depends-on [:lemma-pairingdata-skeletonwedgekernelagreement],
+   :other-consumers []}
+  {:consumer :t96J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "PairingData.eqvGenRel_isClosed",
+    :type "generated polygon relation closed"},
+   :lemma
+   {:name "PairingData.eqvGenRel_isClosed",
+    :reported-by [:routes-2026-10-12-polygon-b7-topo2-r1],
+    :type "generated polygon relation closed",
+    :area "polygon-surface-pi1",
+    :proved-in :routes-2026-10-12-polygon-b7-topo2-r1},
+   :id :lemma-pairingdata-eqvgenrel-isclosed,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t92J05 :t94J04 :t97A01 :t97A03]}
+  {:consumer :t96J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "PairingData.skeletonHomeomorphWedge",
+    :type "signed skeleton-wedge homeomorphism"},
+   :lemma
+   {:name "PairingData.skeletonHomeomorphWedge",
+    :reported-by [:routes-2026-10-12-polygon-b7-topo2-r1],
+    :type "signed skeleton-wedge homeomorphism",
+    :area "polygon-surface-pi1",
+    :proved-in :routes-2026-10-12-polygon-b7-topo2-r1},
+   :id :lemma-pairingdata-skeletonhomeomorphwedge,
+   :kind :lemma,
+   :depends-on
+   [:lemma-pairingdata-skeletonwedgekernelagreement
+    :lemma-pairingdata-skeletonarcmap-isquotientmap],
+   :other-consumers [:t92J05 :t94J04 :t97A01 :t97A03]}]}

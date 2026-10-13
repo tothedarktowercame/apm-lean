@@ -3539,6 +3539,29 @@ theorem genericPointWedgeCoordinateSpanGlobalRestrictionLeftComparison_eq_actual
   exact ((genericPointWedgeIdentityActualSpan
     x₀ y₀ M N hM hN hy hx cM cN).left.map_comp _ _).symm
 
+/-- The combined left comparison transported from the literal cover span to
+the coordinate span.  This is the representation in which the mapped counit
+square is stated. -/
+theorem genericPointWedgeCoordinateSpanGlobalRestrictionLeftComparison_eq_coordinateComposite :
+    let l := genericPointWedgeActualLeft x₀ y₀ M N
+    let eK := genericPointWedgeOverlapGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let eL := genericPointWedgeLeftGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let aL := genericPointWedgeLeftSpanIso
+      x₀ y₀ M N hM hN hy hx cM cN
+    let u : FundamentalGroupoid Unit := FundamentalGroupoid.mk ()
+    let f := eL.inverse.map (aL.inv.app u)
+    let g := (Functor.isoWhiskerLeft (eK.inverse ⋙ l)
+      eL.unitIso.symm).hom.app u
+    genericPointWedgeCoordinateSpanGlobalRestrictionLeftComparison
+        x₀ y₀ M N hM hN hy hx cM cN =
+      (genericPointWedgeIdentityCoordinateSpan x₀ y₀).left.map
+        (eL.functor.map (f ≫ g)) := by
+  rw [genericPointWedgeCoordinateSpanGlobalRestrictionLeftComparison_eq_actualComposite]
+  exact genericPointWedgeIdentityActualSpan_left_map
+    x₀ y₀ M N hM hN hy hx cM cN _
+
 omit [PathConnectedSpace X] [PathConnectedSpace Y] in
 /-- Naturality of the left-equivalence counit gives the exact conjugacy
 equation for the inverse strict-span comparison after its inverse/forward
@@ -3559,6 +3582,29 @@ theorem genericPointWedgeCoordinateSpanGlobalRestrictionLeftRoundTrip_counit :
   dsimp only
   exact (genericPointWedgeLeftGroupoidEquivalence
     x₀ y₀ M N hM hN hy hx cM cN).counitIso.hom.naturality _
+
+/-- The left-equivalence counit square after applying the coordinate-span
+left functor, so both sides lie in the free-product representation. -/
+theorem genericPointWedgeCoordinateSpanGlobalRestrictionLeftRoundTrip_counit_map :
+    let eK := genericPointWedgeOverlapGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let eL := genericPointWedgeLeftGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let aL := genericPointWedgeLeftSpanIso
+      x₀ y₀ M N hM hN hy hx cM cN
+    let l := genericPointWedgeActualLeft x₀ y₀ M N
+    let l' := genericPointWedgeCoordinateLeft x₀
+    let u : FundamentalGroupoid Unit := FundamentalGroupoid.mk ()
+    (genericPointWedgeIdentityCoordinateSpan x₀ y₀).left.map
+      (eL.functor.map (eL.inverse.map (aL.inv.app u)) ≫
+        eL.counitIso.hom.app ((eK.inverse ⋙ l ⋙ eL.functor).obj u)) =
+      (genericPointWedgeIdentityCoordinateSpan x₀ y₀).left.map
+          (eL.counitIso.hom.app (l'.obj u) ≫ aL.inv.app u) := by
+  dsimp only
+  exact congrArg
+    (fun q => (genericPointWedgeIdentityCoordinateSpan x₀ y₀).left.map q)
+    (genericPointWedgeCoordinateSpanGlobalRestrictionLeftRoundTrip_counit
+      x₀ y₀ M N hM hN hy hx cM cN)
 
 /-- The inverse right comparison introduced by coordinate-span transport,
 isolated before recombining it with the middle and left factors. -/
@@ -5978,7 +6024,9 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeCoordinateSpanGlobalRestrictionLeftUnitFactor_eq_actual
 #print axioms genericPointWedgeCoordinateSpanGlobalRestrictionLeftComparison_eq_factors
 #print axioms genericPointWedgeCoordinateSpanGlobalRestrictionLeftComparison_eq_actualComposite
+#print axioms genericPointWedgeCoordinateSpanGlobalRestrictionLeftComparison_eq_coordinateComposite
 #print axioms genericPointWedgeCoordinateSpanGlobalRestrictionLeftRoundTrip_counit
+#print axioms genericPointWedgeCoordinateSpanGlobalRestrictionLeftRoundTrip_counit_map
 #print axioms genericPointWedgeCoordinateSpanGlobalRestrictionRightComparison
 #print axioms genericPointWedgeCoordinateSpanGlobalRestrictionRightComparison_app
 #print axioms genericPointWedgeCoordinateSpanGlobalRestrictionRightUnitFactor

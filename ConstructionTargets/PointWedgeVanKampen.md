@@ -1094,3 +1094,13 @@ uses functoriality to recombine those two images.  The full left comparison is
 now the actual-span image of the strict-span inverse followed categorically by
 the left-equivalence unit component, with the single-object multiplication
 reversal discharged explicitly.
+
+`genericPointWedgeCoordinateSpanGlobalRestrictionLeftComparison_eq_coordinateComposite`
+then transports that single composite through the literal actual-to-coordinate
+span equality.  The left comparison and the mapped counit square therefore
+now inhabit the same coordinate-span free-product representation.
+
+`genericPointWedgeCoordinateSpanGlobalRestrictionLeftRoundTrip_counit_map`
+applies the coordinate-span left functor to the left-equivalence counit
+naturality square.  Both ordered composites are now equal inside the
+free-product representation, with neither counit component assumed trivial.
