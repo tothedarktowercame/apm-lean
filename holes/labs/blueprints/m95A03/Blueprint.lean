@@ -549,7 +549,114 @@ lemma apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_syst
           (((apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_system_aux_ode_aux_integral_aux_picard
         a b hab r q g hr hq hg c₀ d₀)^[n] v).2 t) ≤
           (L * (t.1 - a)) ^ n / n.factorial * dist u v := by
-  sorry
+  obtain ⟨L, hL, hcoeff⟩ :=
+    apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_system_aux_ode_aux_integral_aux_fixed_aux_iterate_bound_aux_coeff
+      a b r q hr hq
+  refine ⟨L, hL, ?_⟩
+  intro n
+  induction n with
+  | zero =>
+      intro u v t
+      simp only [Function.iterate_zero_apply, pow_zero, Nat.factorial_zero,
+        Nat.cast_one, div_one, one_mul]
+      rw [Prod.dist_eq]
+      exact ⟨(ContinuousMap.dist_apply_le_dist t).trans (le_max_left _ _),
+        (ContinuousMap.dist_apply_le_dist t).trans (le_max_right _ _)⟩
+  | succ n ih =>
+      intro u v t
+      let T := apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_system_aux_ode_aux_integral_aux_picard
+        a b hab r q g hr hq hg c₀ d₀
+      have hcalc : ∫ s in a..(t : ℝ),
+          (L * (L * (s - a)) ^ n / n.factorial * dist u v) =
+          (L * ((t : ℝ) - a)) ^ (n + 1) / (n + 1).factorial * dist u v := by
+        simp_rw [show ∀ s : ℝ,
+          L * (L * (s - a)) ^ n / n.factorial * dist u v =
+            (L * L ^ n / n.factorial * dist u v) * (s - a) ^ n by
+              intro s; rw [mul_pow]; ring]
+        rw [intervalIntegral.integral_const_mul,
+          intervalIntegral.integral_comp_sub_right (fun x : ℝ => x ^ n) a,
+          sub_self, integral_pow]
+        simp only [Nat.factorial_succ, Nat.cast_mul, Nat.cast_succ]
+        rw [mul_pow]
+        field_simp
+        ring
+      constructor
+      · rw [Function.iterate_succ_apply', Function.iterate_succ_apply']
+        simp only [T,
+          apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_system_aux_ode_aux_integral_aux_picard,
+          Real.dist_eq, add_sub_add_left_eq_sub]
+        change |(c₀ + ∫ s in a..(t : ℝ), ((T^[n]) u).2
+            (Set.projIcc a b hab.le s) * r s) -
+          (c₀ + ∫ s in a..(t : ℝ), ((T^[n]) v).2
+            (Set.projIcc a b hab.le s) * r s)| ≤ _
+        rw [add_sub_add_left_eq_sub]
+        have hcu : Continuous (fun s : ℝ => ((T^[n]) u).2
+            (Set.projIcc a b hab.le s) * r s) :=
+          (((T^[n]) u).2.continuous.comp continuous_projIcc).mul hr
+        have hcv : Continuous (fun s : ℝ => ((T^[n]) v).2
+            (Set.projIcc a b hab.le s) * r s) :=
+          (((T^[n]) v).2.continuous.comp continuous_projIcc).mul hr
+        rw [← intervalIntegral.integral_sub (hcu.intervalIntegrable _ _)
+          (hcv.intervalIntegrable _ _)]
+        change ‖∫ s in a..(t : ℝ),
+          (((T^[n]) u).2 (Set.projIcc a b hab.le s) * r s -
+           ((T^[n]) v).2 (Set.projIcc a b hab.le s) * r s)‖ ≤ _
+        calc
+          _ ≤ ∫ s in a..(t : ℝ),
+              (L * (L * (s - a)) ^ n / n.factorial * dist u v) := by
+            apply intervalIntegral.norm_integral_le_of_norm_le t.2.1
+            · filter_upwards [] with s hs
+              have hsI : s ∈ Set.Icc a b := ⟨hs.1.le, hs.2.trans t.2.2⟩
+              rw [Set.projIcc_of_mem hab.le hsI, ← sub_mul, Real.norm_eq_abs, abs_mul]
+              have hih := (ih u v ⟨s, hsI⟩).2
+              rw [Real.dist_eq] at hih
+              refine (mul_le_mul hih (hcoeff s hsI).1
+                (abs_nonneg _) (mul_nonneg (div_nonneg (pow_nonneg (mul_nonneg hL
+                  (sub_nonneg.2 hs.1.le)) _) (by positivity)) dist_nonneg)).trans ?_
+              · ring_nf
+                rfl
+            · exact (by fun_prop : Continuous (fun s : ℝ =>
+                L * (L * (s - a)) ^ n / n.factorial * dist u v)).intervalIntegrable _ _
+          _ = _ := hcalc
+      · rw [Function.iterate_succ_apply', Function.iterate_succ_apply']
+        simp only [T,
+          apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_system_aux_ode_aux_integral_aux_picard,
+          Real.dist_eq, add_sub_add_left_eq_sub]
+        change |(d₀ + ∫ s in a..(t : ℝ),
+            (q s * ((T^[n]) u).1 (Set.projIcc a b hab.le s) + g s)) -
+          (d₀ + ∫ s in a..(t : ℝ),
+            (q s * ((T^[n]) v).1 (Set.projIcc a b hab.le s) + g s))| ≤ _
+        rw [add_sub_add_left_eq_sub]
+        have hcu : Continuous (fun s : ℝ =>
+            q s * ((T^[n]) u).1 (Set.projIcc a b hab.le s) + g s) :=
+          (hq.mul (((T^[n]) u).1.continuous.comp continuous_projIcc)).add hg
+        have hcv : Continuous (fun s : ℝ =>
+            q s * ((T^[n]) v).1 (Set.projIcc a b hab.le s) + g s) :=
+          (hq.mul (((T^[n]) v).1.continuous.comp continuous_projIcc)).add hg
+        rw [← intervalIntegral.integral_sub (hcu.intervalIntegrable _ _)
+          (hcv.intervalIntegrable _ _)]
+        change ‖∫ s in a..(t : ℝ),
+          ((q s * ((T^[n]) u).1 (Set.projIcc a b hab.le s) + g s) -
+           (q s * ((T^[n]) v).1 (Set.projIcc a b hab.le s) + g s))‖ ≤ _
+        calc
+          _ ≤ ∫ s in a..(t : ℝ),
+              (L * (L * (s - a)) ^ n / n.factorial * dist u v) := by
+            apply intervalIntegral.norm_integral_le_of_norm_le t.2.1
+            · filter_upwards [] with s hs
+              have hsI : s ∈ Set.Icc a b := ⟨hs.1.le, hs.2.trans t.2.2⟩
+              rw [Set.projIcc_of_mem hab.le hsI, add_sub_add_right_eq_sub, ← mul_sub,
+                Real.norm_eq_abs, abs_mul]
+              have hih := (ih u v ⟨s, hsI⟩).1
+              rw [Real.dist_eq] at hih
+              have hb : 0 ≤ (L * (s - a)) ^ n / n.factorial * dist u v :=
+                (abs_nonneg _).trans hih
+              refine (mul_le_mul (hcoeff s hsI).2 hih
+                (abs_nonneg _) hL).trans ?_
+              · ring_nf
+                rfl
+            · exact (by fun_prop : Continuous (fun s : ℝ =>
+                L * (L * (s - a)) ^ n / n.factorial * dist u v)).intervalIntegrable _ _
+          _ = _ := hcalc
 
 lemma apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_system_aux_ode_aux_integral_aux_fixed_aux_iterate_bound
     (a b : ℝ) (hab : a < b) (r q g : ℝ → ℝ) (hr : Continuous r)
