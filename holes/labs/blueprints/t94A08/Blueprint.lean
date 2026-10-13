@@ -426,11 +426,71 @@ theorem apm_t94a08_sigma1_isRealTwoManifold :
   · obtain ⟨e⟩ := apm_t94a08_sigma1_isRealTwoManifold_aux_chartSlice i
     exact ⟨e.trans apm_t94a08_sigma1_isRealTwoManifold_aux_affineConicReal⟩
 
-/-- LIBRARY: the union of the two distinct complex projective lines is not
-locally Euclidean at their common node. -/
+/-- A local connectedness test used to separate a plane point from a node. -/
+def apm_t94a08_HasConnectedPuncturedNeighborhood
+    {X : Type*} [TopologicalSpace X] (S : Set X) (p : X) : Prop :=
+  ∃ U : Set X, IsOpen U ∧ p ∈ U ∧
+    IsPreconnected ((U ∩ S) \ {p})
+
+/-- LIBRARY: a point of an open subset of the real plane has a smaller open
+neighborhood whose puncture is preconnected. -/
+lemma apm_t94a08_plane_punctured_neighborhood
+    (W : Set (EuclideanSpace ℝ (Fin 2))) (hW : IsOpen W) {x} (hx : x ∈ W) :
+    ∃ V : Set (EuclideanSpace ℝ (Fin 2)),
+      IsOpen V ∧ x ∈ V ∧ V ⊆ W ∧ IsPreconnected (V \ {x}) := by
+  sorry
+
+/-- LIBRARY: transport a connected punctured neighborhood through a local
+chart.  The plane-side conclusion is an explicit hypothesis so this lemma is
+independent of `apm_t94a08_plane_punctured_neighborhood`. -/
+lemma apm_t94a08_chart_transport_punctured_neighborhood
+    {X : Type*} [TopologicalSpace X] {S U : Set X} {p : X}
+    {W : Set (EuclideanSpace ℝ (Fin 2))}
+    (hU : IsOpen U) (hpU : p ∈ U) (hpS : p ∈ S)
+    (e : ↥(U ∩ S) ≃ₜ ↥W)
+    (hplane : ∃ V : Set (EuclideanSpace ℝ (Fin 2)),
+      IsOpen V ∧ (e ⟨p, hpU, hpS⟩ : EuclideanSpace ℝ (Fin 2)) ∈ V ∧
+      V ⊆ W ∧ IsPreconnected (V \ {(e ⟨p, hpU, hpS⟩ :
+        EuclideanSpace ℝ (Fin 2))})) :
+    apm_t94a08_HasConnectedPuncturedNeighborhood S p := by
+  sorry
+
+/-- The affine nodal model: two complex coordinate axes crossing at zero. -/
+def apm_t94a08_complexCross : Set (ℂ × ℂ) :=
+  {z | z.1 = 0 ∨ z.2 = 0}
+
+/-- LIBRARY: every ambient-open neighborhood of the origin in the complex
+cross becomes disconnected after deleting the origin. -/
+lemma apm_t94a08_complexCross_punctured_not_preconnected
+    (V : Set (ℂ × ℂ)) (hV : IsOpen V) (h0 : (0, 0) ∈ V) :
+    ¬ IsPreconnected ((V ∩ apm_t94a08_complexCross) \ {(0, 0)}) := by
+  sorry
+
+/-- LIBRARY: the projective affine chart at the node transports the complex
+cross obstruction to `sigma2`.  The obstruction is supplied explicitly so
+this proof is independent of the preceding lemma. -/
+lemma apm_t94a08_node_has_no_connected_punctured_neighborhood
+    (hcross : ∀ V : Set (ℂ × ℂ), IsOpen V → (0, 0) ∈ V →
+      ¬ IsPreconnected ((V ∩ apm_t94a08_complexCross) \ {(0, 0)})) :
+    ¬ apm_t94a08_HasConnectedPuncturedNeighborhood
+      apm_t94a08_sigma2 apm_t94a08_node := by
+  sorry
+
+/-- The union of the two distinct complex projective lines is not locally
+Euclidean at their common node. -/
 theorem apm_t94a08_nodal_not_manifold_at :
     ¬apm_t94a08_IsRealTwoManifoldAt apm_t94a08_sigma2 apm_t94a08_node := by
-  sorry
+  intro hman
+  obtain ⟨U, hU, hpU, W, hW, ⟨e⟩⟩ := hman
+  have hpS : apm_t94a08_node ∈ apm_t94a08_sigma2 :=
+    apm_t94a08_node_mem_sigma2
+  have hplane := apm_t94a08_plane_punctured_neighborhood W hW
+    (show (e ⟨apm_t94a08_node, hpU, hpS⟩ :
+      EuclideanSpace ℝ (Fin 2)) ∈ W from (e ⟨apm_t94a08_node, hpU, hpS⟩).2)
+  have hconnected := apm_t94a08_chart_transport_punctured_neighborhood
+    hU hpU hpS e hplane
+  exact apm_t94a08_node_has_no_connected_punctured_neighborhood
+    apm_t94a08_complexCross_punctured_not_preconnected hconnected
 
 theorem apm_t94a08 :
     apm_t94a08_IsRegularLevelSet
