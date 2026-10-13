@@ -72,10 +72,47 @@ lemma apm_m96A02_lipschitz_ode_aux_lipschitzWith
 
 /-- Existence on `[0, 1]` for a globally Lipschitz right-hand side (Picard iteration on
 `C([0,1])`, e.g. via `apm_m96A02_iterate_contraction_fixed_point`'s factorial estimate). -/
+lemma apm_m96A02_lipschitz_ode_aux_exists_aux_linear_growth
+    (f : ℝ → ℝ) (K : NNReal) (hK : LipschitzWith K f) (x : ℝ) :
+    |f x| ≤ K * |x| + |f 0| := by
+  calc
+    |f x| = |(f x - f 0) + f 0| := by ring_nf
+    _ ≤ |f x - f 0| + |f 0| := abs_add_le _ _
+    _ ≤ K * |x - 0| + |f 0| := by
+      gcongr
+      simpa [Real.dist_eq] using hK.dist_le_mul x 0
+    _ = K * |x| + |f 0| := by simp
+
+/-- Picard iteration: a continuous solution of the integral equation on `[0, 1]`
+(fixed point of `T u t = u₀ + ∫₀ᵗ f (u s) ds` on `C([0,1])`; some iterate is a contraction
+by the `Kⁿ / n!` estimate, so `apm_m96A02_iterate_contraction_fixed_point` applies). -/
+lemma apm_m96A02_lipschitz_ode_aux_exists_aux_integral_solution
+    (f : ℝ → ℝ) (u₀ : ℝ) (K : NNReal) (hK : LipschitzWith K f) :
+    ∃ u : ℝ → ℝ, Continuous u ∧
+      ∀ t ∈ Set.Icc (0 : ℝ) 1, u t = u₀ + ∫ s in (0 : ℝ)..t, f (u s) := by
+  sorry
+
+/-- A continuous solution of the integral equation solves the ODE. -/
+lemma apm_m96A02_lipschitz_ode_aux_exists_aux_of_integral
+    (f : ℝ → ℝ) (u₀ : ℝ) (K : NNReal) (hK : LipschitzWith K f) (u : ℝ → ℝ)
+    (hu : Continuous u)
+    (hint : ∀ t ∈ Set.Icc (0 : ℝ) 1, u t = u₀ + ∫ s in (0 : ℝ)..t, f (u s)) :
+    apm_m96a02_Solves f u₀ u := by
+  have hfu : Continuous (fun s => f (u s)) := hK.continuous.comp hu
+  refine ⟨hu.continuousOn, ?_, fun t ht => ?_⟩
+  · rw [hint 0 ⟨le_rfl, zero_le_one⟩, intervalIntegral.integral_same, add_zero]
+  · have hd : HasDerivAt (fun t => u₀ + ∫ s in (0 : ℝ)..t, f (u s)) (f (u t)) t :=
+      (intervalIntegral.integral_hasDerivAt_right (hfu.intervalIntegrable _ _)
+        hfu.aestronglyMeasurable.stronglyMeasurableAtFilter hfu.continuousAt).const_add u₀
+    refine hd.congr_of_eventuallyEq ?_
+    filter_upwards [Ioo_mem_nhds ht.1 ht.2] with s hs
+    exact hint s ⟨hs.1.le, hs.2.le⟩
+
 lemma apm_m96A02_lipschitz_ode_aux_exists
     (f : ℝ → ℝ) (u₀ : ℝ) (K : NNReal) (hK : LipschitzWith K f) :
     ∃ u : ℝ → ℝ, apm_m96a02_Solves f u₀ u := by
-  sorry
+  obtain ⟨u, hu, hint⟩ := apm_m96A02_lipschitz_ode_aux_exists_aux_integral_solution f u₀ K hK
+  exact ⟨u, apm_m96A02_lipschitz_ode_aux_exists_aux_of_integral f u₀ K hK u hu hint⟩
 
 /-- Uniqueness on `[0, 1]` (Grönwall). -/
 lemma apm_m96A02_lipschitz_ode_aux_unique
