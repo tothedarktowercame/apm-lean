@@ -21568,46 +21568,29 @@
   {:consumer :t00J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "Frozen fixture metadata is invalid: both authoritative acceptance copies record aad5a9cda739c1cbcceb1eca8ab8b33395db8a08c9d68941a87c644f4d13586e and omit :mode, but the compiling fixture hashes to 7e72195e1214d7580994264481ae57d0ecf87755d31825ab85cbda5f1220c4b1. Update both copies to that digest with :mode :post-build-export-check, then resubmit f0afa7bd.",
    :implements-lemma
    :lemma-constructiontargets-manifoldfundamentalclass-coefficientclosedboundary-coordinat,
    :evidence
    {:placeholder-delta {:t00J02 [1 1], :t98A02 [1 1]},
-    :residual "Apply comparison in both consumers.",
-    :outcome :done-unreviewed,
+    :residual
+    "Supervisor: replace row acceptance digest with fixture digest and add post-build mode; implementation is f0afa7bd.",
+    :outcome :stop,
     :warnings [],
-    :missing-theorems
-    [{:name
-      "ConstructionTargets.ManifoldFundamentalClass.coefficientClosedBoundary_coordinate_comparison_of_bool",
-      :type "exact type in fixture",
-      :status :proved,
-      :consumers [:t00J02 :t98A02],
-      :depends-on [],
-      :area "manifold-fundamental-class"}],
     :statement-hashes {:registry "149/149"},
-    :acceptance
-    {:declaration
-     "ConstructionTargets.ManifoldFundamentalClass.coefficientClosedBoundary_coordinate_comparison_of_bool",
-     :type "exact type in fixture",
-     :fixture "/tmp/closedboundarycoords.lean",
-     :fixture-sha256
-     "7e72195e1214d7580994264481ae57d0ecf87755d31825ab85cbda5f1220c4b1",
-     :mode :post-build-export-check,
-     :placeholders ["t00J02 bridge_1" "t98A02 sorry"],
-     :route-step "closed-boundary coordinates"},
+    :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
+    :reason
+    "Requested repair is ledger metadata outside :scope. apply-result!'s done-unreviewed branch replaces only :evidence and never row :acceptance; the prior corrected map therefore nested under evidence while authoritative acceptance stayed stale. Editing the ledger is expressly forbidden. Supervisor must update both acceptance copies.",
     :commands
-    [{:cmd "diff-tree f0afa7bd; sha256sum fixture", :exit 0}
-     {:cmd "lake env lean fixture; registry check", :exit 0}],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1791888730428-9469-6a19a56e",
-     :finding
-     "Frozen fixture metadata is invalid: both authoritative acceptance copies record aad5a9cda739c1cbcceb1eca8ab8b33395db8a08c9d68941a87c644f4d13586e and omit :mode, but the compiling fixture hashes to 7e72195e1214d7580994264481ae57d0ecf87755d31825ab85cbda5f1220c4b1. Update both copies to that digest with :mode :post-build-export-check, then resubmit f0afa7bd."},
+    [{:cmd "inspect build_step apply-result! metadata transition",
+      :exit 0}
+     {:cmd
+      "sha256sum fixture; lake env lean fixture; diff-tree commit",
+      :exit 0}],
     :commit "f0afa7bdc4c95a8c87143342ceb8c9ce51cd5612",
     :changed-paths
     ["ConstructionTargets/ManifoldFundamentalClass.lean"],
@@ -21615,9 +21598,10 @@
     {:path "/tmp/closedboundarycoords.lean",
      :sha256
      "7e72195e1214d7580994264481ae57d0ecf87755d31825ab85cbda5f1220c4b1",
-     :mode :post-build-export-check}},
+     :mode :post-build-export-check},
+    :seat :topo-10},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/manifold-fundamental-class",
    :acceptance
