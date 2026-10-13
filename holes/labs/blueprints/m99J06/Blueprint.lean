@@ -546,6 +546,38 @@ theorem apm_m99J06_weak_iff_strong
       (fun g h hg hh hw ↦ apm_m99J06_du_bois_reymond M g h hg hh hw) u,
     apm_m99J06_strong_to_weak M f u⟩
 
+/-! ### Split of `apm_m99J06_riesz_on_complete_submodule` (claude-14, 2026-10-13, after a partial
+round-2 attempt). The three lemmas are parallel: each takes what it needs as a hypothesis. -/
+
+/-- The model is homogeneous: realize `c • val v` (`apm_m99J06_isH01Pair_smul`) and compare
+inner products against every `z` through `inner_eq`. -/
+theorem apm_m99J06_model_smul {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℝ H]
+    (M : apm_m99J06_H01Model H) (c : ℝ) (v : H) :
+    M.val (c • v) = c • M.val v ∧ M.weakDeriv (c • v) = c • M.weakDeriv v := by
+  sorry
+
+/-- `v ↦ val v` is a bounded linear map into `L²(0,1)`: `‖val v‖₂² ≤ ∫ (val v)² + (v')² = ‖v‖²`. -/
+theorem apm_m99J06_val_clm {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℝ H]
+    (M : apm_m99J06_H01Model H)
+    (hsmul : ∀ (c : ℝ) (v : H), M.val (c • v) = c • M.val v ∧
+      M.weakDeriv (c • v) = c • M.weakDeriv v) :
+    ∃ L : H →L[ℝ] apm_m99J06_L2, ∀ v : H,
+      (L v : ℝ → ℝ) =ᵐ[apm_m99J06_intervalMeasure] M.val v := by
+  sorry
+
+/-- Riesz on a complete submodule, given the bounded map: the forcing functional is
+`v ↦ ⟪hf.toLp f, L v⟫_{L²}`; represent it with `InnerProductSpace.toDual ℝ V`, uniqueness from
+`apm_m99J06_galerkin_unique`. -/
+theorem apm_m99J06_riesz_of_val_clm
+    {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℝ H]
+    [CompleteSpace H] (M : apm_m99J06_H01Model H)
+    (f : ℝ → ℝ) (hf : MemLp f 2 apm_m99J06_intervalMeasure)
+    (hL : ∃ L : H →L[ℝ] apm_m99J06_L2, ∀ v : H,
+      (L v : ℝ → ℝ) =ᵐ[apm_m99J06_intervalMeasure] M.val v)
+    (V : Submodule ℝ H) [CompleteSpace V] :
+    ∃! u : V, apm_m99J06_galerkinEquation M f V u := by
+  sorry
+
 /-- Shared Riesz-representation bridge for both the ambient weak problem and
 finite-dimensional Galerkin problems. -/
 theorem apm_m99J06_riesz_on_complete_submodule
@@ -554,7 +586,8 @@ theorem apm_m99J06_riesz_on_complete_submodule
     (f : ℝ → ℝ) (hf : MemLp f 2 apm_m99J06_intervalMeasure)
     (V : Submodule ℝ H) [CompleteSpace V] :
     ∃! u : V, apm_m99J06_galerkinEquation M f V u := by
-  sorry
+  exact apm_m99J06_riesz_of_val_clm M f hf
+    (apm_m99J06_val_clm M (fun c v ↦ apm_m99J06_model_smul M c v)) V
 
 theorem apm_m99J06_galerkin_exists_unique
     {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℝ H]
