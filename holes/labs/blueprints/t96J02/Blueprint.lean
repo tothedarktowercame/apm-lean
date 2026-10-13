@@ -72,13 +72,94 @@ theorem t96J02_kleinBottle_pi1 :
       t96J02_kleinPlaneQuotient_pi1_origin)
     (surfacePoint false 2)
 
-/-- **LIBRARY.** Every finite-index subgroup of the coordinate Klein group is
-either another Klein group or a rank-two free abelian group. -/
+/-- The element with normal-form coordinates `(m,n)`. -/
+noncomputable def t96J02_presented_coordinate (m n : ℤ) :
+    T96J02PresentedGroup :=
+  KleinPresentedGroupCoordinateNormalForm.coordinateEquiv.symm
+    ⟨Multiplicative.ofAdd m, Multiplicative.ofAdd n⟩
+
+/-- A finite-index subgroup meets the horizontal infinite cyclic subgroup in
+a nonzero cyclic subgroup. -/
+theorem t96J02_presented_finiteIndex_horizontal_step
+    (H : Subgroup T96J02PresentedGroup) (hH : H.FiniteIndex) :
+    ∃ p : ℤ, 0 < p ∧
+      ∀ m : ℤ, t96J02_presented_coordinate m 0 ∈ H ↔ p ∣ m := by
+  sorry
+
+/-- The set of vertical exponents occurring in a finite-index subgroup is a
+nonzero subgroup `qℤ` of `ℤ`.  This leaf is independent of the horizontal one. -/
+theorem t96J02_presented_finiteIndex_vertical_step
+    (H : Subgroup T96J02PresentedGroup) (hH : H.FiniteIndex) :
+    ∃ q : ℤ, 0 < q ∧
+      ∀ n : ℤ,
+        (∃ m : ℤ, t96J02_presented_coordinate m n ∈ H) ↔ q ∣ n := by
+  sorry
+
+/-- Choose a subgroup element above the positive generator of its vertical
+projection.  The projection description is an explicit hypothesis so this
+leaf can be proved in parallel with the preceding leaf. -/
+theorem t96J02_presented_finiteIndex_choose_vertical_lift
+    (H : Subgroup T96J02PresentedGroup) (q : ℤ)
+    (hq : ∀ n : ℤ,
+      (∃ m : ℤ, t96J02_presented_coordinate m n ∈ H) ↔ q ∣ n) :
+    ∃ r : ℤ, t96J02_presented_coordinate r q ∈ H := by
+  sorry
+
+/-- The horizontal generator and a chosen lift of the vertical generator
+generate the whole subgroup.  All structural inputs are hypotheses, keeping
+this leaf independent of the three existence leaves. -/
+theorem t96J02_presented_finiteIndex_generated
+    (H : Subgroup T96J02PresentedGroup) (p q r : ℤ)
+    (hp : ∀ m : ℤ, t96J02_presented_coordinate m 0 ∈ H ↔ p ∣ m)
+    (hq : ∀ n : ℤ,
+      (∃ m : ℤ, t96J02_presented_coordinate m n ∈ H) ↔ q ∣ n)
+    (hr : t96J02_presented_coordinate r q ∈ H) :
+    H = Subgroup.closure
+      ({t96J02_presented_coordinate p 0,
+        t96J02_presented_coordinate r q} : Set T96J02PresentedGroup) := by
+  sorry
+
+/-- If the vertical step is even, the two normal-form generators commute and
+give a rank-two free abelian group. -/
+theorem t96J02_presented_finiteIndex_even_classify
+    (H : Subgroup T96J02PresentedGroup) (p q r : ℤ)
+    (hp : 0 < p) (hq : 0 < q) (heven : Even q)
+    (hgen : H = Subgroup.closure
+      ({t96J02_presented_coordinate p 0,
+        t96J02_presented_coordinate r q} : Set T96J02PresentedGroup)) :
+    Nonempty (H ≃* T96J02TorusGroup) := by
+  sorry
+
+/-- If the vertical step is odd, conjugation by its lift inverts the
+horizontal generator, and normal forms give another Klein group. -/
+theorem t96J02_presented_finiteIndex_odd_classify
+    (H : Subgroup T96J02PresentedGroup) (p q r : ℤ)
+    (hp : 0 < p) (hq : 0 < q) (hodd : Odd q)
+    (hgen : H = Subgroup.closure
+      ({t96J02_presented_coordinate p 0,
+        t96J02_presented_coordinate r q} : Set T96J02PresentedGroup)) :
+    Nonempty (H ≃* T96J02PresentedGroup) := by
+  sorry
+
+/-- Every finite-index subgroup of the coordinate Klein group is either
+another Klein group or a rank-two free abelian group. -/
 theorem t96J02_presented_finiteIndex_classify :
     ∀ H : Subgroup T96J02PresentedGroup, H.FiniteIndex →
       Nonempty (H ≃* T96J02PresentedGroup) ∨
         Nonempty (H ≃* T96J02TorusGroup) := by
-  sorry
+  intro H hH
+  obtain ⟨p, hp, hp_mem⟩ :=
+    t96J02_presented_finiteIndex_horizontal_step H hH
+  obtain ⟨q, hq, hq_mem⟩ :=
+    t96J02_presented_finiteIndex_vertical_step H hH
+  obtain ⟨r, hr⟩ :=
+    t96J02_presented_finiteIndex_choose_vertical_lift H q hq_mem
+  have hgen := t96J02_presented_finiteIndex_generated H p q r hp_mem hq_mem hr
+  rcases Int.even_or_odd q with heven | hodd
+  · exact Or.inr
+      (t96J02_presented_finiteIndex_even_classify H p q r hp hq heven hgen)
+  · exact Or.inl
+      (t96J02_presented_finiteIndex_odd_classify H p q r hp hq hodd hgen)
 
 /-- The whole presented Klein group realizes the Klein-group alternative. -/
 theorem t96J02_presented_self_subgroup :
