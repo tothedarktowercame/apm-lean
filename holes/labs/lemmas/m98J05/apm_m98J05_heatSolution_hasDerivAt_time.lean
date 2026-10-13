@@ -437,7 +437,48 @@ theorem apm_m98J05_heatSolution_hasDerivAt_time
     (f : ℝ → ℂ) (hf : Integrable f) (x : ℝ) {t : ℝ} (ht : 0 < t) :
     HasDerivAt (fun s ↦ apm_m98J05_heatSolution f x s)
       (∫ y, f y * (apm_m98J05_kernelDt t (x - y) : ℂ)) t := by
-  sorry
+  let a := t / 2
+  let b := 3 * t / 2
+  obtain ⟨C, hC⟩ := apm_m98J05_kernel_derivs_bounded
+    (a := a) (b := b) (by dsimp [a]; linarith)
+  let F : ℝ → ℝ → ℂ := fun s y ↦
+    f y * (apm_m98J05_heatKernel s (x - y) : ℂ)
+  let F' : ℝ → ℝ → ℂ := fun s y ↦
+    f y * (apm_m98J05_kernelDt s (x - y) : ℂ)
+  have hs : Icc a b ∈ 𝓝 t := by
+    apply Icc_mem_nhds
+    · dsimp [a]; linarith
+    · dsimp [b]; linarith
+  have hmeas : ∀ᶠ s in 𝓝 t, AEStronglyMeasurable (F s) volume := by
+    filter_upwards with s
+    exact hf.aestronglyMeasurable.mul
+      ((by unfold apm_m98J05_heatKernel; fun_prop : Continuous fun y : ℝ =>
+        (apm_m98J05_heatKernel s (x - y) : ℂ)).aestronglyMeasurable)
+  have hint : Integrable (F t) volume := by
+    exact apm_m98J05_heatSolution_integrable hf ht x
+  have hderiv_meas : AEStronglyMeasurable (F' t) volume := by
+    exact hf.aestronglyMeasurable.mul
+      ((by unfold apm_m98J05_kernelDt apm_m98J05_heatKernel; fun_prop :
+        Continuous fun y : ℝ =>
+          (apm_m98J05_kernelDt t (x - y) : ℂ)).aestronglyMeasurable)
+  have hbound : ∀ᵐ y ∂volume, ∀ s ∈ Icc a b,
+      ‖F' s y‖ ≤ C * ‖f y‖ := by
+    filter_upwards with y
+    intro s hsab
+    have hk := (hC s hsab (x - y)).1
+    simp only [F', norm_mul, Complex.norm_real, Real.norm_eq_abs]
+    nlinarith [mul_le_mul_of_nonneg_left hk (norm_nonneg (f y))]
+  have hbound_int : Integrable (fun y ↦ C * ‖f y‖) volume := hf.norm.const_mul C
+  have hdiff : ∀ᵐ y ∂volume, ∀ s ∈ Icc a b,
+      HasDerivAt (F · y) (F' s y) s := by
+    filter_upwards with y
+    intro s hsab
+    have hs0 : 0 < s := lt_of_lt_of_le (by dsimp [a]; linarith) hsab.1
+    exact (apm_m98J05_kernel_hasDerivAt_time hs0 (x - y)).ofReal_comp.const_mul (f y)
+  have h := (hasDerivAt_integral_of_dominated_loc_of_deriv_le
+    (F := F) (F' := F') (bound := fun y ↦ C * ‖f y‖)
+    hs hmeas hint hderiv_meas hbound hbound_int hdiff).2
+  simpa [F, F', apm_m98J05_heatSolution] using h
 -- END SEAT AREA
 
 theorem apm_m98J05_heatSolution_hasDerivAt_space
