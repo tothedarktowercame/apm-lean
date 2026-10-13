@@ -1422,6 +1422,58 @@ lemma apm_m98A06_weak_FTC_aux_representation_aux_const_aux_interior_aux_distribu
 
 -- The core, given primitives of mean-zero test functions: fundamental lemma on (0, π)
 -- (IsOpen.ae_eq_zero_of_integral_contDiff_smul_eq_zero) and continuity.
+lemma apm_m98A06_weak_FTC_aux_representation_aux_const_aux_interior_aux_distribution_aux_core_aux_given_primitives_aux_normalized_integral
+    (g ψ₀ : ℝ → ℝ) (hg : ContDiff ℝ ∞ g) (hgc : HasCompactSupport g)
+    (hψ : ContDiff ℝ ∞ ψ₀) (hψc : HasCompactSupport ψ₀)
+    (hψone : ∫ x, ψ₀ x = 1) :
+    ∫ x, (g x - (∫ t, g t) * ψ₀ x) = 0 := by
+  have hgi : Integrable g := hg.continuous.integrable_of_hasCompactSupport hgc
+  have hψi : Integrable ψ₀ := hψ.continuous.integrable_of_hasCompactSupport hψc
+  rw [MeasureTheory.integral_sub hgi (hψi.const_mul _),
+    MeasureTheory.integral_const_mul, hψone, mul_one, sub_self]
+
+-- From vanishing tests against w − c on (0, π) to w = c there: the open-set fundamental lemma
+-- (IsOpen.ae_eq_zero_of_integral_contDiff_smul_eq_zero) and continuity of w.
+lemma apm_m98A06_weak_FTC_aux_representation_aux_const_aux_interior_aux_distribution_aux_core_aux_given_primitives_aux_pointwise
+    (w : ℝ → ℝ) (hw : ContinuousOn w (Icc (0 : ℝ) Real.pi))
+    (hwloc : MeasureTheory.LocallyIntegrableOn w (Ioo (0 : ℝ) Real.pi) volume) (c : ℝ)
+    (h : ∀ g : ℝ → ℝ, ContDiff ℝ ∞ g → HasCompactSupport g → tsupport g ⊆ Ioo (0 : ℝ) Real.pi →
+      ∫ x, g x • (w x - c) = 0) :
+    ∀ x ∈ Ioo (0 : ℝ) Real.pi, w x = c := by
+  sorry
+
+-- The test identity: with c := ∫ w ψ₀ (ψ₀ the normalised bump), every test g in (0, π) has
+-- ∫ g (w − c) = 0 (g − (∫ g) ψ₀ has mean zero, so it is φ' for a supported φ; use hweak).
+lemma apm_m98A06_weak_FTC_aux_representation_aux_const_aux_interior_aux_distribution_aux_core_aux_given_primitives_aux_identity
+    (w : ℝ → ℝ)
+    (hwloc : MeasureTheory.LocallyIntegrableOn w (Ioo (0 : ℝ) Real.pi) volume)
+    (hweak : apm_m98a06_IsWeakDerivativeOn (Ioo 0 Real.pi) w 0)
+    (ψ₀ : ℝ → ℝ) (hψ₀ : ContDiff ℝ ∞ ψ₀) (hψ₀c : HasCompactSupport ψ₀)
+    (hψ₀s : tsupport ψ₀ ⊆ Ioo (0 : ℝ) Real.pi) (hψ₀1 : ∫ x, ψ₀ x = 1)
+    (hprim : ∀ ψ : ℝ → ℝ, ContDiff ℝ ∞ ψ → HasCompactSupport ψ →
+      tsupport ψ ⊆ Ioo (0 : ℝ) Real.pi → ∫ x, ψ x = 0 →
+      ∃ φ : ℝ → ℝ, ContDiff ℝ ∞ φ ∧ HasCompactSupport φ ∧
+        Function.support φ ⊆ Ioo (0 : ℝ) Real.pi ∧ deriv φ = ψ) :
+    ∀ g : ℝ → ℝ, ContDiff ℝ ∞ g → HasCompactSupport g → tsupport g ⊆ Ioo (0 : ℝ) Real.pi →
+      ∫ x, g x • (w x - ∫ y, w y * ψ₀ y) = 0 := by
+  sorry
+
+lemma apm_m98A06_weak_FTC_aux_representation_aux_const_aux_interior_aux_distribution_aux_core_aux_given_primitives_aux_core
+    (w : ℝ → ℝ)
+    (hw : ContinuousOn w (Icc (0 : ℝ) Real.pi))
+    (hwloc : MeasureTheory.LocallyIntegrableOn w (Ioo (0 : ℝ) Real.pi) volume)
+    (hweak : apm_m98a06_IsWeakDerivativeOn (Ioo 0 Real.pi) w 0)
+    (hbump : ∃ ψ : ℝ → ℝ, ContDiff ℝ ∞ ψ ∧ HasCompactSupport ψ ∧
+      tsupport ψ ⊆ Ioo (0 : ℝ) Real.pi ∧ ∫ x, ψ x = 1)
+    (hprim : ∀ ψ : ℝ → ℝ, ContDiff ℝ ∞ ψ → HasCompactSupport ψ →
+      tsupport ψ ⊆ Ioo (0 : ℝ) Real.pi → ∫ x, ψ x = 0 →
+      ∃ φ : ℝ → ℝ, ContDiff ℝ ∞ φ ∧ HasCompactSupport φ ∧
+        Function.support φ ⊆ Ioo (0 : ℝ) Real.pi ∧ deriv φ = ψ) :
+    ∃ c : ℝ, ∀ x ∈ Ioo (0 : ℝ) Real.pi, w x = c := by
+  obtain ⟨ψ₀, hψ₀, hψ₀c, hψ₀s, hψ₀1⟩ := hbump
+  exact ⟨_, apm_m98A06_weak_FTC_aux_representation_aux_const_aux_interior_aux_distribution_aux_core_aux_given_primitives_aux_pointwise w hw hwloc _
+    (apm_m98A06_weak_FTC_aux_representation_aux_const_aux_interior_aux_distribution_aux_core_aux_given_primitives_aux_identity w hwloc hweak ψ₀ hψ₀ hψ₀c hψ₀s hψ₀1 hprim)⟩
+
 lemma apm_m98A06_weak_FTC_aux_representation_aux_const_aux_interior_aux_distribution_aux_core_aux_given_primitives
     (w : ℝ → ℝ)
     (hw : ContinuousOn w (Icc (0 : ℝ) Real.pi))
@@ -1434,7 +1486,9 @@ lemma apm_m98A06_weak_FTC_aux_representation_aux_const_aux_interior_aux_distribu
       ∃ φ : ℝ → ℝ, ContDiff ℝ ∞ φ ∧ HasCompactSupport φ ∧
         Function.support φ ⊆ Ioo (0 : ℝ) Real.pi ∧ deriv φ = ψ) :
     ∃ c : ℝ, ∀ x ∈ Ioo (0 : ℝ) Real.pi, w x = c := by
-  sorry
+  exact
+    apm_m98A06_weak_FTC_aux_representation_aux_const_aux_interior_aux_distribution_aux_core_aux_given_primitives_aux_core
+      w hw hwloc hweak hbump hprim
 
 lemma apm_m98A06_weak_FTC_aux_representation_aux_const_aux_interior_aux_distribution_aux_core
     (w : ℝ → ℝ)
