@@ -46,7 +46,7 @@ lemma tft_directional_contDiff (v : E) (ψ : TFT E F) :
 -- BEGIN SEAT AREA
 lemma tft_directional_hasCompactSupport (v : E) (ψ : TFT E F) :
     HasCompactSupport (fun y => fderiv ℝ (ψ : E → F) y v) := by
-  sorry
+  exact ψ.hasCompactSupport.fderiv_apply ℝ v
 -- END SEAT AREA
 
 /-- The directional derivative, bundled again as a test function. -/
