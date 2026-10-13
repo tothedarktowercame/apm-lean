@@ -1122,6 +1122,11 @@ law.  It separates the injected target counit from the injected strict-span
 factor, with `End.mul_def` recording the reversal from categorical
 strict-then-counit composition to single-object multiplication.
 
+`genericPointWedgeLeftStrictFactor_normalForm_eq_connectors` expands the
+strict factor itself into the connector at the literal coordinate base, the
+inverse span component, and the connector at its transported endpoint.  It
+does not identify the transported endpoint with the base object.
+
 `genericPointWedgeCoordinateSpanGlobalRestrictionLeftRoundTrip_counit_map`
 applies the coordinate-span left functor to the left-equivalence counit
 naturality square.  Both ordered composites are now equal inside the
