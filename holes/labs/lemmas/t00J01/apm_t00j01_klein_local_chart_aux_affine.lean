@@ -383,7 +383,10 @@ lemma apm_t00j01_klein_local_chart_aux_vertical (p : ℝ × ℝ) (n : ℤ) :
 lemma apm_t00j01_klein_local_chart_aux_affine (p : ℝ × ℝ) (m n : ℤ) :
     Relation.EqvGen apm_t00j01_kleinRel p
       ((m : ℝ) + (-1 : ℝ) ^ n * p.1, (n : ℝ) + p.2) := by
-  sorry
+  have hv := apm_t00j01_klein_local_chart_aux_vertical p n
+  have hh := apm_t00j01_klein_compact_aux_horizontal
+    (((-1 : ℝ) ^ n * p.1), ((n : ℝ) + p.2)) m
+  exact Relation.EqvGen.trans _ _ _ hv hh
 -- END SEAT AREA
 
 /-- The normal form gives a small evenly-covered rectangle at every point of
