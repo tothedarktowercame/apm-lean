@@ -22009,8 +22009,66 @@
      :typed-residual-change
      :infrastructure-packets
      :review-outcomes]},
+   :evidence
+   {:outcome :replan,
+    :seat "topo-12",
+    :commands
+    [{:cmd
+      "bb holes/labs/topology-contract/build_step.bb priorities holes/labs/topology-contract/worklist3.edn",
+      :exit 0}],
+    :finding
+    {:measures "Δ0;boundary banked;1 PASS;t01A08 5/1",
+     :routes
+     "p/b:2/13 A02;2/6 A03;1/10 J02,98A02;1/1 A08;3/4 01J01;3/8 02A04;2/8 03J02;4/11 03J03;3/7 91J05;3/15 92J05,97J02;2/10 94J04;2/8 95J06;1/12 96A01;1/8 96A02;2/4 96J06;1/11 97A05,97A06",
+     :priority
+     "Rule0 criticalImageNull; global top smooth surface classification."},
+    :replacement-items
+    [{:bounded-exception "Rule0 final prerequisite.",
+      :consumer :t01A08,
+      :implements-lemma :lemma-sard-corners,
+      :phase :probe,
+      :state :open,
+      :scope ["ConstructionTargets/SardConvexDomain.lean"],
+      :dag-node "TOPOLOGY-ROUTES.md/t01A08/corners-sard",
+      :acceptance
+      {:probe
+       "Compile critical-image nullity on the convex model range.",
+       :declaration
+       "ConstructionTargets.SardConvexDomain.criticalImageNull",
+       :type
+       "Sard nullity on the convex model-with-corners domains used by t01A08.",
+       :placeholder "t01A08 sole sorry",
+       :route-step "corners Sard nullity"},
+      :id :r-t01a08-corners-1,
+      :kind :reusable-theorem,
+      :area "sard-convex-domain",
+      :depends-on [:r-t01a08-boundary-2 :r-topo3-checkpoint-2],
+      :current-residual "Then closure.",
+      :other-consumers []}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 1,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :phase :strategy,
+      :state :open,
+      :scope [],
+      :dag-node "TOPOLOGY-ROUTES.md",
+      :acceptance {:strategy "Rerank after corners Sard."},
+      :id :r-topo3-checkpoint-3,
+      :kind :strategy-checkpoint,
+      :area "portfolio",
+      :depends-on [:r-t01a08-corners-1],
+      :current-residual "Elect closure if banked.",
+      :other-consumers []}],
+    :author "topo-12",
+    :disposition :replan},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance {:strategy "Rerank."},
@@ -22021,6 +22079,47 @@
    [:r-t01a08-boundary-2
     :routes-2026-10-10-topo3-seed-checkpoint-2-r2],
    :current-residual "R.",
+   :other-consumers []}
+  {:bounded-exception "Rule0 final prerequisite.",
+   :consumer :t01A08,
+   :implements-lemma :lemma-sard-corners,
+   :phase :probe,
+   :state :blocked,
+   :scope ["ConstructionTargets/SardConvexDomain.lean"],
+   :dag-node "TOPOLOGY-ROUTES.md/t01A08/corners-sard",
+   :acceptance
+   {:probe "Compile critical-image nullity on the convex model range.",
+    :declaration
+    "ConstructionTargets.SardConvexDomain.criticalImageNull",
+    :type
+    "Sard nullity on the convex model-with-corners domains used by t01A08.",
+    :placeholder "t01A08 sole sorry",
+    :route-step "corners Sard nullity"},
+   :id :r-t01a08-corners-1,
+   :kind :reusable-theorem,
+   :area "sard-convex-domain",
+   :depends-on [:r-t01a08-boundary-2 :r-topo3-checkpoint-2],
+   :current-residual "Then closure.",
+   :other-consumers []}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 1,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md",
+   :acceptance {:strategy "Rerank after corners Sard."},
+   :id :r-topo3-checkpoint-3,
+   :kind :strategy-checkpoint,
+   :area "portfolio",
+   :depends-on [:r-t01a08-corners-1 :r-topo3-checkpoint-2],
+   :current-residual "Elect closure if banked.",
    :other-consumers []}
   {:consumer :t00A02,
    :implements-lemma
