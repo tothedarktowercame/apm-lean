@@ -176,7 +176,39 @@ theorem fderiv_parametrization_formula :
 theorem fderiv_parametrization_injective_on_interior
     (hderiv : ∀ p q, fderiv ℝ parametrization p q = parameterDerivative p q) :
     ∀ p ∈ interiorParameters, Function.Injective (fderiv ℝ parametrization p) := by
-  sorry
+  intro p hp q r hqr
+  rw [hderiv p q, hderiv p r] at hqr
+  have h1 : q 1 = r 1 := by
+    have h := congrFun hqr 2
+    simpa [parameterDerivative] using h
+  have hsin : (1 - p 1) * Real.sin (p 0) * q 0 =
+      (1 - p 1) * Real.sin (p 0) * r 0 := by
+    have h := congrFun hqr 0
+    simp only [parameterDerivative, Matrix.cons_val_zero] at h
+    rw [h1] at h
+    linarith
+  have hcos : (1 - p 1) * Real.cos (p 0) * q 0 =
+      (1 - p 1) * Real.cos (p 0) * r 0 := by
+    have h := congrFun hqr 1
+    simp only [parameterDerivative, Matrix.cons_val_one, Matrix.cons_val_zero] at h
+    rw [h1] at h
+    linarith
+  have hradius : 1 - p 1 ≠ 0 := by
+    have := hp.2.2.2
+    linarith
+  have h0 : q 0 = r 0 := by
+    by_cases hs : Real.sin (p 0) = 0
+    · have hc : Real.cos (p 0) ≠ 0 := by
+        intro hc
+        have ht := Real.sin_sq_add_cos_sq (p 0)
+        rw [hs, hc] at ht
+        norm_num at ht
+      exact mul_left_cancel₀ (mul_ne_zero hradius hc) hcos
+    · exact mul_left_cancel₀ (mul_ne_zero hradius hs) hsin
+  funext i
+  fin_cases i
+  · exact h0
+  · exact h1
 -- END SEAT AREA
 
 theorem pullback_coefficients
