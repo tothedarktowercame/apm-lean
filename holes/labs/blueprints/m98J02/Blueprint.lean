@@ -1094,6 +1094,26 @@ lemma apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_translate_seminorm
   change ‖(ContDiffMapSupportedIn.structureMapCLM ℝ ⊤ j φ) (x + y)‖ ≤ _
   exact (ContDiffMapSupportedIn.structureMapCLM ℝ ⊤ j φ).norm_coe_le_norm (x + y)
 
+lemma apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_leibniz
+    (v : apm_m98J02_Dist) (χ φ : apm_m98J02_Test)
+    (hsmooth : ∀ ψ : apm_m98J02_Test,
+      ContDiff ℝ ∞ (fun x : apm_m98J02_E =>
+        v (apm_m98J02_translateTest x ψ)))
+    (i : ℕ) (x : apm_m98J02_E) :
+    ‖iteratedFDeriv ℝ i
+        (apm_m98J02_bridge_2_aux_psi_aux_fun v χ hsmooth φ :
+          apm_m98J02_E → ℝ) x‖ ≤
+      ∑ j ∈ Finset.range (i + 1), (i.choose j : ℝ) *
+        ‖iteratedFDeriv ℝ j (χ : apm_m98J02_E → ℝ) x‖ *
+        ‖iteratedFDeriv ℝ (i - j)
+          (fun y : apm_m98J02_E =>
+            v (apm_m98J02_translateTest y φ)) x‖ := by
+  change ‖iteratedFDeriv ℝ i
+      (fun y : apm_m98J02_E => χ y *
+        v (apm_m98J02_translateTest y φ)) x‖ ≤ _
+  exact norm_iteratedFDeriv_mul_le χ.contDiff (hsmooth φ) x (by
+    exact_mod_cast (le_top : (i : ℕ∞) ≤ ⊤))
+
 lemma apm_m98J02_bridge_2_aux_psi_aux_stage_cont
     (v : apm_m98J02_Dist) (χ : apm_m98J02_Test)
     (hsmooth : ∀ φ : apm_m98J02_Test,
