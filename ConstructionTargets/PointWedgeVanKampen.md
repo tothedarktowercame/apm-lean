@@ -1231,3 +1231,11 @@ that residual: it kills `inl` and is the identity on `inr`.
 the proposed factorization forces the right projection of the fixed
 conjugator to be the unit. The next job must compute this projection from the
 outer-comparison formula rather than assuming the right contribution away.
+
+`genericPointWedgeOuterLeftComparison_rightProjection_eq_one` completes the
+left half of that computation. Both factors of the inverse left outer
+comparison pass through the coordinate-span left functor, so the canonical
+right projection kills them. The remaining projection is entirely the
+forward right outer comparison.
+`genericPointWedgeRightBase_rightProjection_eq_outerRight` records that exact
+reduction for the fixed reconstruction conjugator.
