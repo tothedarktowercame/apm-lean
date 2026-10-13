@@ -6956,6 +6956,23 @@ theorem genericPointWedgeOuterRight_targetConnectorInv_eq_based :
     (genericPointWedgeOuterRightRoundTrip_targetConnector_eq_based
       x₀ y₀ M N hM hN hy hx cM cN)
 
+omit [PathConnectedSpace X] in
+/-- The remaining source connector carries both its exact endpoint equality
+and its reflexive connector comparison in one dependent package. -/
+theorem genericPointWedgeOuterRight_sourceConnector_endpoint_and_heq :
+    let r := genericPointWedgeActualRight x₀ y₀ M N
+    let eR := genericPointWedgeRightGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let z := genericPointWedgeOverlapBase x₀ y₀ M N
+    ((r ⋙ eR.functor).obj z = FundamentalGroupoid.mk y₀) ∧
+      HEq ((genericPointWedgeConnectors y₀).connector
+        ((r ⋙ eR.functor).obj z))
+        (Iso.refl (FundamentalGroupoid.mk y₀)) := by
+  exact ⟨genericPointWedgeOuterRightRoundTrip_component_target
+      x₀ y₀ M N hM hN hy hx cM cN,
+    genericPointWedgeOuterRightRoundTrip_sourceConnector_heq_refl
+      x₀ y₀ M N hM hN hy hx cM cN⟩
+
 /-- An `inl` factorization of the right-base conjugator forces its canonical
 right projection to be trivial. -/
 theorem genericPointWedgeRightBase_inl_implies_rightProjection_eq_one
@@ -7716,6 +7733,7 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeOuterRight_inverseSpan_normalForm_eq_typedComposite
 #print axioms genericPointWedgeOuterRight_typedComposite_normalForm_expanded
 #print axioms genericPointWedgeOuterRight_targetConnectorInv_eq_based
+#print axioms genericPointWedgeOuterRight_sourceConnector_endpoint_and_heq
 #print axioms genericPointWedgeRightBase_inl_implies_rightProjection_eq_one
 #print axioms genericPointWedgeLegCoordinates_of_mapped
 #print axioms genericPointWedgeLegCoordinates_iff_mapped
