@@ -251,6 +251,22 @@ theorem ContinuousMultilinearMap.domDomCongr_fderivWithin_eq_self_of_eventuallyE
   rw [LinearIsometryEquiv.comp_fderivWithin (𝕜 := ℝ) L (hu x hxs)] at hd
   exact DFunLike.congr_fun hd v
 
+/-- A pointwise jet-permutation identity on a relative neighborhood is the corresponding
+eventual equality in `nhdsWithin`. -/
+theorem iteratedFDerivWithin_domDomCongr_eventuallyEq_of_mem
+    {E F : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [NormedAddCommGroup F] [NormedSpace ℝ F]
+    {s u : Set E} {f : E → F} {x : E} {n : ℕ}
+    (hu : u ∈ nhdsWithin x s) (sigma : Equiv.Perm (Fin n))
+    (h : ∀ y ∈ u,
+      (iteratedFDerivWithin ℝ n f s y).domDomCongr sigma =
+        iteratedFDerivWithin ℝ n f s y) :
+    Filter.EventuallyEq (nhdsWithin x s)
+      (fun y => (iteratedFDerivWithin ℝ n f s y).domDomCongr sigma)
+      (iteratedFDerivWithin ℝ n f s) := by
+  filter_upwards [hu] with y hy
+  exact h y hy
+
 /-- Symmetry of an iterated derivative lifts to the next derivative on the tail slots. -/
 theorem iteratedFDerivWithin_domDomCongr_decomposeFin_symm_zero
     {E F : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
