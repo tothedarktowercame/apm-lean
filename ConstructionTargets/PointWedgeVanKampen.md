@@ -1368,3 +1368,5 @@ normalizing the mapped equivalence component.
 as the canonical endpoint transport followed by inverse mapped `unitInv`.
 `genericPointWedgeOuterRight_typedTransportComposite_comp_map_unitInv` cancels
 that inverse against the mapped `unitInv`, leaving the named source transport.
+`genericPointWedgeOuterRightSpan_component_eq_typedComposite_comp_map` identifies
+the resulting morphism with the chosen-base inverse-span component.

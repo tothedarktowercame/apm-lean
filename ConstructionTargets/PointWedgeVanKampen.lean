@@ -6872,6 +6872,29 @@ theorem genericPointWedgeOuterRight_typedTransportComposite_comp_map_unitInv :
   rw [genericPointWedgeOuterRight_typedTransportComposite_eq_map]
   simp [genericPointWedgeOuterRight_sourceTransport]
 
+/-- The cancelled typed comparator is exactly the chosen-base inverse-span
+component needed in the right-projection comparison. -/
+theorem genericPointWedgeOuterRightSpan_component_eq_typedComposite_comp_map :
+    let r := genericPointWedgeActualRight x₀ y₀ M N
+    let eK := genericPointWedgeOverlapGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let eR := genericPointWedgeRightGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let aR := genericPointWedgeRightSpanIso
+      x₀ y₀ M N hM hN hy hx cM cN
+    let z := genericPointWedgeOverlapBase x₀ y₀ M N
+    aR.inv.app (eK.functor.obj z) =
+      genericPointWedgeOuterRight_typedTransportComposite
+          x₀ y₀ M N hM hN hy hx cM cN ≫
+        (r ⋙ eR.functor).map (eK.unitInv.app z) := by
+  calc
+    _ = genericPointWedgeOuterRight_sourceTransport
+          x₀ y₀ M N hM hN hy hx cM cN := by
+      rw [genericPointWedgeOuterRightSpan_component_eq_baseTransport]
+      rfl
+    _ = _ := (genericPointWedgeOuterRight_typedTransportComposite_comp_map_unitInv
+      x₀ y₀ M N hM hN hy hx cM cN).symm
+
 /-- An `inl` factorization of the right-base conjugator forces its canonical
 right projection to be trivial. -/
 theorem genericPointWedgeRightBase_inl_implies_rightProjection_eq_one
@@ -7628,6 +7651,7 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeOuterRight_typedTransportComposite
 #print axioms genericPointWedgeOuterRight_typedTransportComposite_eq_transport
 #print axioms genericPointWedgeOuterRight_typedTransportComposite_eq_map
+#print axioms genericPointWedgeOuterRightSpan_component_eq_typedComposite_comp_map
 #print axioms genericPointWedgeRightBase_inl_implies_rightProjection_eq_one
 #print axioms genericPointWedgeLegCoordinates_of_mapped
 #print axioms genericPointWedgeLegCoordinates_iff_mapped
