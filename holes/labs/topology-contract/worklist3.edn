@@ -21568,7 +21568,7 @@
   {:consumer :t00J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 2,
+   :stop-count 0,
    :review-finding
    "Frozen fixture metadata mismatch persists in both authoritative acceptance copies: they record aad5a9cda739c1cbcceb1eca8ab8b33395db8a08c9d68941a87c644f4d13586e and omit :mode, while /tmp/closedboundarycoords.lean freshly compiles and hashes to 7e72195e1214d7580994264481ae57d0ecf87755d31825ab85cbda5f1220c4b1. Update both copies to that digest with :mode :post-build-export-check, then resubmit commit f0afa7bd.",
    :implements-lemma
@@ -21600,7 +21600,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/manifold-fundamental-class",
    :acceptance
@@ -21615,7 +21615,7 @@
    :id :routes-2026-10-12-mfclass-boundary-coordinates-r1,
    :kind :reusable-theorem,
    :area "manifold-fundamental-class",
-   :fail-count 1,
+   :fail-count 0,
    :depends-on [:routes-2026-10-12-mfclass-closed-generator-bridge-r1],
    :current-residual "Prove Bool H0 comparison.",
    :other-consumers [:t98A02]}
@@ -22066,9 +22066,17 @@
       :current-residual "Elect closure if banked.",
       :other-consumers []}],
     :author "topo-12",
-    :disposition :replan},
+    :disposition :replan,
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791857188935-8210-54117f48",
+     :commands
+     ["bb holes/labs/topology-contract/build_step.bb priorities holes/labs/topology-contract/worklist3.edn"],
+     :finding
+     "PASS: scope-empty strategy checkpoint; no fixture or source commit applies. Fresh priorities reproduce t01A08 at one placeholder, five banked, one backlog. The replan records the required measures and elects exactly one Rule-0 critical-image-nullity probe followed by a checkpoint, satisfying the closure-first cap."}},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance {:strategy "Rerank."},
@@ -22084,7 +22092,7 @@
    :consumer :t01A08,
    :implements-lemma :lemma-sard-corners,
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t01A08/corners-sard",
    :acceptance
