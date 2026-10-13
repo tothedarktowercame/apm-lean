@@ -57,7 +57,38 @@ theorem apm_t02a05_orientedCoefficient_eq_radialFlux
     (c : apm_t02a05_E3) (q : Metric.sphere c 1) :
     apm_t02a05_orientedCoefficient omega c q =
       apm_t02a05_radialFlux c q := by
-  sorry
+  let n : apm_t02a05_E3 := (q : apm_t02a05_E3) - c
+  have hn : ‖n‖ = 1 := by
+    have hq := q.property
+    simpa [Metric.mem_sphere, dist_eq_norm, n] using hq
+  have hproj (i j : Fin 3) :
+      (apm_t02a05_tangentProjection c q i : apm_t02a05_E3) j =
+        (EuclideanSpace.single i 1 : apm_t02a05_E3) j - n i * n j := by
+    change (((Submodule.span ℝ ({n} : Set apm_t02a05_E3)).orthogonal
+      ).orthogonalProjection (EuclideanSpace.single i 1) : apm_t02a05_E3) j = _
+    change (((ℝ ∙ n)ᗮ.starProjection
+      (EuclideanSpace.single i 1 : apm_t02a05_E3)) j) = _
+    rw [Submodule.starProjection_orthogonal_val,
+      Submodule.starProjection_singleton ℝ]
+    rw [hn]
+    simp only [one_pow, Nat.cast_one, div_one, PiLp.sub_apply,
+      PiLp.smul_apply, smul_eq_mul]
+    have hi : inner ℝ n (EuclideanSpace.single i 1) = n i := by
+      simpa using EuclideanSpace.inner_single_right i (1 : ℝ) n
+    rw [hi]
+    norm_num
+  unfold apm_t02a05_orientedCoefficient apm_t02a05_radialFlux
+  rw [homega, homega, homega]
+  simp only [Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.cons_val_two,
+    Matrix.head_cons, Matrix.tail_cons]
+  simp_rw [hproj]
+  simp
+  change n 0 * _ - n 1 * _ + n 2 * _ = _
+  have hnormsq : n 0 ^ 2 + n 1 ^ 2 + n 2 ^ 2 = 1 := by
+    have := congrArg (fun z : ℝ => z ^ 2) hn
+    simpa [EuclideanSpace.norm_sq_eq, Fin.sum_univ_succ, add_assoc] using this
+  dsimp [n]
+  ring_nf at hnormsq ⊢
 
 /-- The normalized two-dimensional Hausdorff mass of the Euclidean unit
 sphere in three-space. -/
