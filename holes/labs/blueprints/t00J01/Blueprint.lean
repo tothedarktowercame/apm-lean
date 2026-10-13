@@ -412,6 +412,17 @@ theorem apm_t00j01_klein_circle_connected
 
 /-- A two-dimensional Klein chart and a one-dimensional circle chart combine,
 after the standard coordinate reassociation, to an open chart in `ℝ³`. -/
+def apm_t00j01_klein_circle_local_chart_aux_realLine :
+    ℝ ≃L[ℝ] EuclideanSpace ℝ (Fin 1) :=
+  ((EuclideanSpace.equiv (Fin 1) ℝ).trans
+    (ContinuousLinearEquiv.funUnique (Fin 1) ℝ ℝ)).symm
+
+def apm_t00j01_klein_circle_local_chart_aux_coordinates :
+    EuclideanSpace ℝ (Fin 2) × ℝ ≃ₜ EuclideanSpace ℝ (Fin 3) :=
+  ((ContinuousLinearEquiv.prodCongr (ContinuousLinearEquiv.refl ℝ _)
+      apm_t00j01_klein_circle_local_chart_aux_realLine).trans
+    (EuclideanSpace.finAddEquivProd (n := 2) (m := 1)).symm).toHomeomorph
+
 theorem apm_t00j01_klein_circle_local_chart
     (_hK : ∀ x : apm_t00j01_Klein,
       ∃ (U : Set apm_t00j01_Klein) (V : Set (EuclideanSpace ℝ (Fin 2))),
@@ -421,7 +432,21 @@ theorem apm_t00j01_klein_circle_local_chart
     ∀ x : apm_t00j01_nonorientable3,
       ∃ (U : Set apm_t00j01_nonorientable3) (V : Set apm_t00j01_E3),
         x ∈ U ∧ IsOpen U ∧ IsOpen V ∧ Nonempty (U ≃ₜ V) := by
-  sorry
+  intro x
+  obtain ⟨UK, VK, hxK, hUK, hVK, eK⟩ := _hK x.1
+  obtain ⟨UC, VC, hxC, hUC, hVC, eC⟩ := _hC x.2
+  let W : Set apm_t00j01_E3 :=
+    apm_t00j01_klein_circle_local_chart_aux_coordinates '' (VK ×ˢ VC)
+  refine ⟨UK ×ˢ UC, W, ⟨hxK, hxC⟩, hUK.prod hUC, ?_, ?_⟩
+  · exact apm_t00j01_klein_circle_local_chart_aux_coordinates.isOpenMap _
+      (hVK.prod hVC)
+  · rcases eK with ⟨eK⟩
+    rcases eC with ⟨eC⟩
+    dsimp [W]
+    exact ⟨(Homeomorph.Set.prod UK UC).trans
+      ((Homeomorph.prodCongr eK eC).trans
+        ((Homeomorph.Set.prod VK VC).symm.trans
+          (apm_t00j01_klein_circle_local_chart_aux_coordinates.image (VK ×ˢ VC))))⟩
 
 /-- The explicit coinduced plane quotient, times the circle, is a compact
 connected topological three-manifold in the concrete sense used by the
