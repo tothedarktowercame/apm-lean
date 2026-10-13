@@ -1768,4 +1768,69 @@ theorem PairingData.surjective_signedWedgeArcMap (P : PairingData) :
       PairingData.signedWedgeArc, hs', PairingData.orbit,
       PointWedgeQuotient.wedgeCircle]⟩
 
+def edgePointCircle (n e : ℕ) (t : Set.Icc (0 : ℝ) 1) : Circle :=
+  ⟨edgePoint n e t, by
+    simpa [Circle, Submonoid.unitSphere] using norm_edgePoint n e t⟩
+
+theorem edgePointCircle_eq_toCircle (n e : ℕ)
+    (t : Set.Icc (0 : ℝ) 1) :
+    edgePointCircle n e t =
+      AddCircle.toCircle (((e : ℝ) + t.1 : AddCircle (n : ℝ))) := by
+  apply Subtype.ext
+  change Complex.exp _ = Complex.exp _
+  congr 1
+  push_cast
+  field_simp
+
+/-- The standard polygon arcs cover its entire boundary circle. -/
+theorem edgePoint_surjective_boundary (n : ℕ) (hn : 0 < n) (x : Disk)
+    (hx : ‖(x : ℂ)‖ = 1) :
+    ∃ (i : Fin n) (t : Set.Icc (0 : ℝ) 1), edgePoint n i t = x := by
+  letI : Fact (0 < (n : ℝ)) := ⟨by exact_mod_cast hn⟩
+  let z : Circle := ⟨x.1, by simpa [Circle, Submonoid.unitSphere] using hx⟩
+  let a : AddCircle (n : ℝ) :=
+    (AddCircle.homeomorphCircle (T := (n : ℝ))
+      (Nat.cast_ne_zero.mpr (Nat.ne_of_gt hn))).symm z
+  let s := AddCircle.equivIco (n : ℝ) 0 a
+  have hs0 : 0 ≤ s.1 := s.2.1
+  have hsn : s.1 < n := by simpa using s.2.2
+  let e := ⌊s.1⌋₊
+  have hen : e < n := (Nat.floor_lt hs0).2 hsn
+  let t : Set.Icc (0 : ℝ) 1 :=
+    ⟨s.1 - e, by
+      constructor
+      · exact sub_nonneg.mpr (Nat.floor_le hs0)
+      · linarith [Nat.lt_floor_add_one s.1]⟩
+  have hsa : (s.1 : AddCircle (n : ℝ)) = a := by
+    apply (AddCircle.equivIco (n : ℝ) 0).injective
+    rw [AddCircle.equivIco_coe_eq]
+  have haz : AddCircle.toCircle a = z := by
+    rw [← AddCircle.homeomorphCircle_apply]
+    exact Homeomorph.apply_symm_apply _ z
+  refine ⟨⟨e, hen⟩, t, ?_⟩
+  apply Subtype.ext
+  have hcircle : edgePointCircle n e t = z := by
+    rw [edgePointCircle_eq_toCircle n e]
+    have het : (e : ℝ) + t.1 = s.1 := by
+      dsimp [t]
+      ring
+    have heq : (((e : ℝ) + t.1 : ℝ) : AddCircle (n : ℝ)) =
+        (s.1 : AddCircle (n : ℝ)) :=
+      congrArg (fun r : ℝ => (r : AddCircle (n : ℝ))) het
+    have heq' : ((e : ℝ) : AddCircle (n : ℝ)) +
+        (t.1 : AddCircle (n : ℝ)) = (s.1 : AddCircle (n : ℝ)) := by
+      simpa using heq
+    rw [heq', hsa]
+    exact haz
+  change ((edgePoint n e t : Disk) : ℂ) = (x : ℂ)
+  exact congrArg (fun w : Circle => (w : ℂ)) hcircle
+
+/-- Every point of the actual quotient skeleton is represented by a polygon
+boundary arc. -/
+theorem PairingData.surjective_skeletonArcMap (P : PairingData) :
+    Function.Surjective P.skeletonArcMap := by
+  rintro ⟨q, x, hx, rfl⟩
+  obtain ⟨i, t, rfl⟩ := edgePoint_surjective_boundary P.edgeCount P.edgeCount_pos x hx
+  exact ⟨(i, t), rfl⟩
+
 end ConstructionTargets.PolygonSurfacePiOne
