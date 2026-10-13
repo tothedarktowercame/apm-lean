@@ -1220,6 +1220,48 @@ lemma apm_m98A06_wirtinger_aux_core_aux_picone_limit_aux_iff_aux_rigidity_aux_po
   exact ⟨hm, HasFiniteIntegral.of_bounded hC⟩
 
 -- BEGIN SEAT AREA
+lemma apm_m98A06_wirtinger_aux_core_aux_picone_limit_aux_gap_aux_shrink
+    (L : ℝ) (hL : 0 < L) (f : ℝ → ℝ)
+    (hf : IntervalIntegrable f volume 0 L) :
+    Filter.Tendsto (fun δ => ∫ x in δ..L - δ, f x)
+      (nhdsWithin 0 (Ioi 0)) (nhds (∫ x in (0 : ℝ)..L, f x)) := by
+  set F : ℝ → ℝ := fun t => ∫ x in (0 : ℝ)..t, f x with hF
+  have hu : Set.uIcc (0 : ℝ) L = Icc 0 L := Set.uIcc_of_le hL.le
+  have hI : IntegrableOn f (Set.uIcc 0 L) := by
+    rw [hu]; exact (intervalIntegrable_iff_integrableOn_Icc_of_le hL.le).1 hf
+  have hFc : ContinuousOn F (Set.uIcc 0 L) := intervalIntegral.continuousOn_primitive_interval hI
+  rw [hu] at hFc
+  have hmem0 : (0 : ℝ) ∈ Icc (0 : ℝ) L := ⟨le_rfl, hL.le⟩
+  have hmemL : L ∈ Icc (0 : ℝ) L := ⟨hL.le, le_rfl⟩
+  -- δ ↦ δ tends to 0 within Icc 0 L, and δ ↦ L − δ tends to L within Icc 0 L
+  have hev : ∀ᶠ δ in nhdsWithin (0 : ℝ) (Ioi 0), δ ∈ Icc (0 : ℝ) L ∧ L - δ ∈ Icc (0 : ℝ) L := by
+    have h1 : ∀ᶠ δ in nhdsWithin (0 : ℝ) (Ioi 0), 0 < δ := self_mem_nhdsWithin
+    have h2 : ∀ᶠ δ in nhdsWithin (0 : ℝ) (Ioi 0), δ < L :=
+      nhdsWithin_le_nhds (Iio_mem_nhds hL)
+    filter_upwards [h1, h2] with δ hδ1 hδ2
+    exact ⟨⟨hδ1.le, hδ2.le⟩, ⟨by linarith, by linarith⟩⟩
+  have hid : Filter.Tendsto (fun δ : ℝ => δ) (nhdsWithin 0 (Ioi 0)) (nhdsWithin 0 (Icc 0 L)) :=
+    tendsto_nhdsWithin_of_tendsto_nhds_of_eventually_within _
+      (Filter.tendsto_id.mono_left nhdsWithin_le_nhds)
+      (hev.mono fun δ h => h.1)
+  have hsub : Filter.Tendsto (fun δ : ℝ => L - δ) (nhdsWithin 0 (Ioi 0)) (nhdsWithin L (Icc 0 L)) := by
+    refine tendsto_nhdsWithin_of_tendsto_nhds_of_eventually_within _ ?_ (hev.mono fun δ h => h.2)
+    have : Filter.Tendsto (fun δ : ℝ => L - δ) (nhds 0) (nhds (L - 0)) :=
+      (continuous_const.sub continuous_id).tendsto 0
+    simpa using this.mono_left nhdsWithin_le_nhds
+  have hA := ((hFc L hmemL).tendsto).comp hsub
+  have hB := ((hFc 0 hmem0).tendsto).comp hid
+  have hlim := hA.sub hB
+  simp only [hF, intervalIntegral.integral_same, sub_zero] at hlim
+  refine hlim.congr' ?_
+  filter_upwards [hev] with δ hδ
+  simp only [Function.comp_apply]
+  have hiL : IntervalIntegrable f volume 0 (L - δ) :=
+    hf.mono_set (Set.uIcc_subset_uIcc (by rw [hu]; exact hmem0) (by rw [hu]; exact hδ.2))
+  have hi0 : IntervalIntegrable f volume 0 δ :=
+    hf.mono_set (Set.uIcc_subset_uIcc (by rw [hu]; exact hmem0) (by rw [hu]; exact hδ.1))
+  rw [intervalIntegral.integral_interval_sub_left hiL hi0]
+
 lemma apm_m98A06_wirtinger_aux_core_aux_picone_limit_aux_gap
     (L : ℝ) (hL : 0 < L) (η : ℝ → ℝ)
     (hη : apm_m98a06_Admissible L 0 0 η) :
@@ -1227,7 +1269,47 @@ lemma apm_m98A06_wirtinger_aux_core_aux_picone_limit_aux_gap
         (Real.pi / L) ^ 2 * (∫ x in (0 : ℝ)..L, (η x) ^ 2) =
       ∫ x in (0 : ℝ)..L, (fun x => (derivWithin η (Icc 0 L) x -
           η x * ((Real.pi / L) * Real.cos (Real.pi * x / L)) / Real.sin (Real.pi * x / L)) ^ 2) x := by
-  sorry
+  let f : ℝ → ℝ := fun x => (derivWithin η (Icc 0 L) x) ^ 2 -
+    (Real.pi / L) ^ 2 * η x ^ 2
+  let g : ℝ → ℝ := fun x => (derivWithin η (Icc 0 L) x -
+    η x * ((Real.pi / L) * Real.cos (Real.pi * x / L)) /
+      Real.sin (Real.pi * x / L)) ^ 2
+  let b₀ : ℝ → ℝ := fun δ => η δ ^ 2 *
+    ((Real.pi / L) * Real.cos (Real.pi * δ / L)) /
+      Real.sin (Real.pi * δ / L)
+  let b₁ : ℝ → ℝ := fun δ => η (L - δ) ^ 2 *
+    ((Real.pi / L) * Real.cos (Real.pi * (L - δ) / L)) /
+      Real.sin (Real.pi * (L - δ) / L)
+  have hf := apm_m98A06_wirtinger_aux_core_aux_picone_limit_aux_gap_aux_lhs_integrable
+    L hL η hη
+  have hg := apm_m98A06_wirtinger_aux_core_aux_picone_limit_aux_iff_aux_rigidity_aux_pointwise_aux_integrable
+    L hL η hη
+  have hflim :=
+    apm_m98A06_wirtinger_aux_core_aux_picone_limit_aux_gap_aux_shrink L hL f hf
+  have hglim :=
+    apm_m98A06_wirtinger_aux_core_aux_picone_limit_aux_gap_aux_shrink L hL g hg
+  have hb := apm_m98A06_wirtinger_aux_core_aux_picone_limit_aux_gap_aux_boundary_limits
+    L hL η hη
+  have hrlim : Filter.Tendsto (fun δ => (∫ x in δ..L - δ, g x) + b₁ δ - b₀ δ)
+      (nhdsWithin 0 (Ioi 0)) (nhds ((∫ x in (0 : ℝ)..L, g x) + 0 - 0)) :=
+    (hglim.add hb.2).sub hb.1
+  have hevent : (fun δ => ∫ x in δ..L - δ, f x) =ᶠ[nhdsWithin 0 (Ioi 0)]
+      (fun δ => (∫ x in δ..L - δ, g x) + b₁ δ - b₀ δ) := by
+    filter_upwards [self_mem_nhdsWithin,
+      Filter.Eventually.filter_mono inf_le_left
+        (Iio_mem_nhds (show (0 : ℝ) < L / 2 by linarith))]
+      with δ hδ hδhalf
+    dsimp [f, g, b₀, b₁]
+    exact apm_m98A06_wirtinger_aux_core_aux_picone_limit_aux_gap_aux_truncated
+      L δ hL hδ (by linarith) η hη
+  have hsame := hrlim.congr' hevent.symm
+  have heq := tendsto_nhds_unique hflim hsame
+  dsimp [f, g] at heq
+  have hr := apm_m98A06_wirtinger_aux_regular hL hη
+  rw [intervalIntegral.integral_sub hr.2.2.2
+    (hr.2.2.1.const_mul ((Real.pi / L) ^ 2)),
+    intervalIntegral.integral_const_mul] at heq
+  simpa only [add_zero, sub_zero] using heq
 -- END SEAT AREA
 
 -- Equality in Wirtinger iff the Picone gap vanishes iff η/sin is constant.
