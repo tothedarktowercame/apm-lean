@@ -389,7 +389,62 @@ theorem apm_m99A02_directional_hasDerivAt (i : Fin 2) (x : m99A02Point)
     (hx0 : x ≠ 0) (hx1 : ‖x‖ < 1) :
     HasDerivAt (fun t : ℝ ↦ m99A02Function (x + t • EuclideanSpace.single i 1))
       (m99A02Derivative i x) 0 := by
-  sorry
+  let e : m99A02Point := EuclideanSpace.single i 1
+  have he : ‖e‖ = 1 := by simp [e]
+  have hv : HasDerivAt (fun t : ℝ ↦ x + t • e) e 0 := by
+    convert (hasDerivAt_const (x := (0 : ℝ)) x).add
+      ((hasDerivAt_id (0 : ℝ)).smul_const e) using 1 <;> simp
+  have hq := hv.hasFDerivAt.norm_sq.hasDerivAt
+  have hq' : HasDerivAt (fun t : ℝ ↦ ‖x + t • e‖ ^ 2) (2 * x i) 0 := by
+    convert hq using 1
+    simp only [zero_smul, add_zero, ContinuousLinearMap.smul_apply,
+      ContinuousLinearMap.comp_apply, ContinuousLinearMap.toSpanSingleton_apply,
+      one_smul, smul_eq_mul]
+    simp only [e, innerSL_apply]
+    simp [PiLp.inner_apply, EuclideanSpace.single_apply]
+    fin_cases i <;> simp <;> erw [RCLike.inner_apply] <;> simp
+  have hnorm : HasDerivAt (fun t : ℝ ↦ ‖x + t • e‖) (x i / ‖x‖) 0 := by
+    have hn2 : ‖x + (0 : ℝ) • e‖ ^ 2 ≠ 0 := by
+      simpa using pow_ne_zero 2 (norm_ne_zero_iff.mpr hx0)
+    have hs := (Real.hasDerivAt_sqrt hn2).comp 0 hq'
+    convert hs using 1
+    · funext t
+      simp [Function.comp_def, Real.sqrt_sq_eq_abs]
+    · simp only [zero_smul, add_zero, Real.sqrt_sq_eq_abs, abs_norm]
+      field_simp [norm_ne_zero_iff.mpr hx0]
+  have hlog : HasDerivAt (fun t : ℝ ↦ -Real.log ‖x + t • e‖)
+      (-(x i) / ‖x‖ ^ 2) 0 := by
+    have hn0 : ‖x + (0 : ℝ) • e‖ ≠ 0 := by
+      simpa using norm_ne_zero_iff.mpr hx0
+    have hlog0 := Real.hasDerivAt_log hn0
+    have hc := hlog0.comp 0 hnorm
+    simp only [zero_smul, add_zero] at hc
+    convert hc.neg using 1
+    field_simp [norm_ne_zero_iff.mpr hx0]
+  have hl : 0 < -Real.log ‖x‖ := neg_pos.mpr
+    (Real.log_neg (norm_pos_iff.mpr hx0) hx1)
+  have hl0 : -Real.log ‖x + (0 : ℝ) • e‖ ≠ 0 := by simpa using hl.ne'
+  have hpow0 := Real.hasDerivAt_rpow_const
+    (p := (1 / 3 : ℝ)) (Or.inl hl0)
+  have hp := hpow0.comp 0 hlog
+  simp only [zero_smul, add_zero] at hp
+  rw [m99A02Derivative, if_neg hx0]
+  change HasDerivAt (fun t : ℝ ↦
+    (if x + t • EuclideanSpace.single i 1 = 0 then 0
+      else (-Real.log ‖x + t • EuclideanSpace.single i 1‖) ^ (1 / 3 : ℝ))) _ 0
+  have hxbase : x + (0 : ℝ) • e ≠ 0 := by simpa using hx0
+  have hev := hv.continuousAt.eventually_ne (y := 0) hxbase
+  have heq : (fun t : ℝ ↦
+      (if x + t • EuclideanSpace.single i 1 = 0 then 0
+        else (-Real.log ‖x + t • EuclideanSpace.single i 1‖) ^ (1 / 3 : ℝ))) =ᶠ[nhds 0]
+      ((fun u : ℝ ↦ u ^ (1 / 3 : ℝ)) ∘ fun t ↦ -Real.log ‖x + t • e‖) := by
+    filter_upwards [hev] with t ht
+    simp [e, ht, Function.comp_def]
+  convert (hp.congr_of_eventuallyEq heq) using 1
+  · field_simp [norm_ne_zero_iff.mpr hx0, hl.ne']
+    rw [show ((1 - 3 : ℝ) / 3) = -(2 / 3 : ℝ) by norm_num,
+      Real.rpow_neg hl.le]
+    field_simp [hl.ne']
 -- END SEAT AREA
 
 /-- One-dimensional integration by parts on a line that misses the origin. -/
