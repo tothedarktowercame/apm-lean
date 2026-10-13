@@ -66,25 +66,6 @@
    "rev": "573847ac4",
    "approved_at": "2026-10-13T04:19:30Z"
   },
-  "m93J05": {
-   "decls": [
-    "apm_m93j05"
-   ],
-   "sha256": "c77c52e3906a52fafdcfcf81bd788e1da8b07d11024f4ed2b8e33e1ecea48dd2",
-   "defs": [
-    "apm_m93j05_J",
-    "apm_m93j05_cosCoeff",
-    "apm_m93j05_sinCoeff",
-    "apm_m93j05_trunc"
-   ],
-   "grade": "faithful",
-   "grader": "claude-14 outside graders (read-only Claude subagents, 2026-10-13)",
-   "evidence": "holes/labs/statement-registry/blueprint-batch-1-grades.md",
-   "prelim_defect": null,
-   "rev": "573847ac4",
-   "approved_at": "2026-10-13T04:19:30Z",
-   "refingerprinted": "2026-10-13: header() now skips let/have := inside statements; full statement unchanged since rev (claude-14)"
-  },
   "m95A03": {
    "decls": [
     "apm_m95a03"
@@ -3013,6 +2994,31 @@
    "reason": "regrade faithful -> stronger (wild embeddings allowed; still true); re-admitted",
    "evidence": "holes/labs/statement-registry/doubt-grades.md",
    "revoked_at": "2026-09-28T20:02:26Z"
+  },
+  {
+   "id": "m93J05",
+   "entry": {
+    "decls": [
+     "apm_m93j05"
+    ],
+    "sha256": "c77c52e3906a52fafdcfcf81bd788e1da8b07d11024f4ed2b8e33e1ecea48dd2",
+    "defs": [
+     "apm_m93j05_J",
+     "apm_m93j05_cosCoeff",
+     "apm_m93j05_sinCoeff",
+     "apm_m93j05_trunc"
+    ],
+    "grade": "faithful",
+    "grader": "claude-14 outside graders (read-only Claude subagents, 2026-10-13)",
+    "evidence": "holes/labs/statement-registry/blueprint-batch-1-grades.md",
+    "prelim_defect": null,
+    "rev": "573847ac4",
+    "approved_at": "2026-10-13T04:19:30Z",
+    "refingerprinted": "2026-10-13: header() now skips let/have := inside statements; full statement unchanged since rev (claude-14)"
+   },
+   "reason": "registered part (c) was backwards (false); corrected cee82c175; re-admit after (e) strengthened and re-graded",
+   "evidence": "holes/labs/statement-registry/grading-batch-2.md",
+   "revoked_at": "2026-10-13T06:09:29Z"
   }
  ]
 }
