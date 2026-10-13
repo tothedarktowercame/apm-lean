@@ -319,10 +319,12 @@
    "decls": [
     "apm_t00a01"
    ],
-   "sha256": "bc9e79814138e89879a9eb4aa58cde049a58993bd7bbb93e2daa4682b21ba35b",
+   "sha256": "608b69e129aa67819da02e81d4dfeee4d85886329fecc3de224b661c59f47032",
    "defs": [
     "apm_t00A01_Disk3",
     "apm_t00A01_H",
+    "apm_t00A01_HasBallCollar",
+    "apm_t00A01_LargeDisk3",
     "apm_t00A01_Model3",
     "apm_t00A01_Sphere2",
     "apm_t00A01_basepoint",
@@ -331,14 +333,15 @@
     "apm_t00A01_connectedSumTopology",
     "apm_t00A01_glueRel",
     "apm_t00A01_isHomology3Sphere",
-    "apm_t00A01_punctured"
+    "apm_t00A01_punctured",
+    "apm_t00A01_unitToLarge"
    ],
    "grade": "faithful",
-   "grader": "claude read-only grader (reopen2)",
-   "evidence": "holes/labs/statement-registry/reopen2-grades-1.md",
+   "grader": "claude-14 outside grader (read-only Claude subagent, 2026-10-13, collar revision; improvement over a stronger statement)",
+   "evidence": "holes/labs/statement-registry/t00A01-revision-grade.md",
    "prelim_defect": null,
-   "rev": "8a56852f",
-   "approved_at": "2026-09-28T19:47:56Z"
+   "rev": "c6a1c657f",
+   "approved_at": "2026-10-13T19:15:27Z"
   },
   "t00A02": {
    "decls": [
