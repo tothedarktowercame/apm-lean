@@ -3735,6 +3735,23 @@ theorem genericPointWedgeLeftStrictFactor_normalForm_eq_connectors :
             ((eK.inverse ⋙ l ⋙ eL.functor).obj u)).inv := by
   rfl
 
+omit [PathConnectedSpace Y] in
+/-- Expand the target-counit factor in the split comparison into its endpoint
+connectors and the counit component, without identifying its source object
+with the coordinate base. -/
+theorem genericPointWedgeLeftTargetCounit_normalForm_eq_connectors :
+    let eL := genericPointWedgeLeftGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let l' := genericPointWedgeCoordinateLeft x₀
+    let u : FundamentalGroupoid Unit := FundamentalGroupoid.mk ()
+    (genericPointWedgeConnectors x₀).normalForm
+        (eL.counitIso.hom.app (l'.obj u)) =
+      ((genericPointWedgeConnectors x₀).connector
+        ((eL.inverse ⋙ eL.functor).obj (l'.obj u))).hom ≫
+        eL.counitIso.hom.app (l'.obj u) ≫
+          ((genericPointWedgeConnectors x₀).connector (l'.obj u)).inv := by
+  rfl
+
 /-- The inverse right comparison introduced by coordinate-span transport,
 isolated before recombining it with the middle and left factors. -/
 def genericPointWedgeCoordinateSpanGlobalRestrictionRightComparison :
@@ -6162,6 +6179,7 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeCoordinateSpanGlobalRestrictionLeftComparison_heq_inl_counitTarget
 #print axioms genericPointWedgeCoordinateSpanGlobalRestrictionLeftComparison_heq_counit_mul_strict
 #print axioms genericPointWedgeLeftStrictFactor_normalForm_eq_connectors
+#print axioms genericPointWedgeLeftTargetCounit_normalForm_eq_connectors
 #print axioms genericPointWedgeCoordinateSpanGlobalRestrictionRightComparison
 #print axioms genericPointWedgeCoordinateSpanGlobalRestrictionRightComparison_app
 #print axioms genericPointWedgeCoordinateSpanGlobalRestrictionRightUnitFactor
