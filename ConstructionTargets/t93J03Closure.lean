@@ -268,6 +268,62 @@ noncomputable def kleinPairingOrbitEquivBool :
     kleinPairingOrbitEquivBool (kleinPairingData.orbit (3 : Fin 4)) = true := by
   rfl
 
+/-- The four oriented boundary arcs of the standard Klein polygon, after
+identifying its skeleton with the orbit-indexed circle wedge.  Thus its
+attaching word is the nonorientable word `a a b b`; every occurrence uses
+the reversed interval coordinate because all four standard signs are false. -/
+theorem kleinPolygon_attaching_arcs (t : Set.Icc (0 : ℝ) 1) :
+    kleinSkeletonHomeomorphTwoCircles (kleinPairingData.skeletonArc
+        ⟨0, by simp [kleinPairingData]⟩ t) =
+        PointWedgeQuotient.wedgeCircle (kleinPairingData.orbit
+          ⟨0, by simp [kleinPairingData]⟩)
+          (circleArc (reverseIcc t)) ∧
+    kleinSkeletonHomeomorphTwoCircles (kleinPairingData.skeletonArc
+        ⟨1, by simp [kleinPairingData]⟩ t) =
+        PointWedgeQuotient.wedgeCircle (kleinPairingData.orbit
+          ⟨1, by simp [kleinPairingData]⟩)
+          (circleArc (reverseIcc t)) ∧
+    kleinSkeletonHomeomorphTwoCircles (kleinPairingData.skeletonArc
+        ⟨2, by simp [kleinPairingData]⟩ t) =
+        PointWedgeQuotient.wedgeCircle (kleinPairingData.orbit
+          ⟨2, by simp [kleinPairingData]⟩)
+          (circleArc (reverseIcc t)) ∧
+    kleinSkeletonHomeomorphTwoCircles (kleinPairingData.skeletonArc
+        ⟨3, by simp [kleinPairingData]⟩ t) =
+        PointWedgeQuotient.wedgeCircle (kleinPairingData.orbit
+          ⟨3, by simp [kleinPairingData]⟩)
+          (circleArc (reverseIcc t)) := by
+  repeat' apply And.intro
+  all_goals
+    rw [kleinSkeletonHomeomorphTwoCircles,
+      PairingData.skeletonHomeomorphWedge_skeletonArc]
+    apply PairingData.signedWedgeArc_of_not_sign
+    rfl
+
+/-- The change of generators from the polygon word `x x y y` to the frozen
+presentation sends `a` to `x*y` and `b` to `y⁻¹`.  Its Klein relator is
+the conjugate by `y` of the polygon attaching relator. -/
+theorem kleinRelator_generatorChange {G : Type*} [Group G] (x y : G) :
+    (y⁻¹)⁻¹ * (x * y) * y⁻¹ * (x * y) =
+      y * (x * x * y * y) * y⁻¹ := by
+  group
+
+/-- Consequently the polygon relation and the registered Klein relation are
+equivalent under that generator change. -/
+theorem kleinRelator_generatorChange_eq_one_iff
+    {G : Type*} [Group G] (x y : G) :
+    (y⁻¹)⁻¹ * (x * y) * y⁻¹ * (x * y) = 1 ↔
+      x * x * y * y = 1 := by
+  rw [kleinRelator_generatorChange]
+  constructor
+  · intro h
+    calc
+      x * x * y * y = y⁻¹ * (y * (x * x * y * y) * y⁻¹) * y := by group
+      _ = 1 := by rw [h]; simp
+  · intro h
+    rw [h]
+    simp
+
 /-- Once proper discontinuity of the explicit affine action is supplied, the
 banked deck-group theorem computes the fundamental group at the canonical
 orbit of the origin. -/
@@ -359,5 +415,7 @@ theorem lift_isEmbedding_assembly
 #print axioms kleinPairingSpaceHomeomorph
 #print axioms kleinSkeletonHomeomorphTwoCircles
 #print axioms kleinPairingOrbitEquivBool
+#print axioms kleinPolygon_attaching_arcs
+#print axioms kleinRelator_generatorChange_eq_one_iff
 
 end ConstructionTargets.t93J03Closure

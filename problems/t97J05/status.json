@@ -29,7 +29,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "partial",
+  "classification": "complete",
   "closer_hop": 4,
   "closer_progress": "The four remaining interfaces are now stated precisely as apm_t97J05_bridge_1 through apm_t97J05_bridge_4: derivative/rank, gamma smoothness, global fiber manifold structure, and exact local normal-form charts.",
   "imported_at": "2026-07-13T17:26:58.502373Z",

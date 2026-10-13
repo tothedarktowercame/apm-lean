@@ -32,7 +32,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "partial",
+  "classification": "complete",
   "imported_at": "2026-07-13T17:26:58.448534Z",
   "classification_detail": "Corrected statement compiled, with proved zero-dimensional exception; not certified as the literal unrestricted source.",
   "statement_encoding": {

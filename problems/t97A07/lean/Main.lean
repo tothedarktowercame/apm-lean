@@ -16,8 +16,7 @@ abbrev E (n : ℕ) := EuclideanSpace ℝ (Fin n)
 
 def criticalValues {m n : ℕ} {X : Type*} [TopologicalSpace X]
     [ChartedSpace (E m) X] (f : X → E n) : Set (E n) :=
-  {y | ∃ x, f x = y ∧ ¬ Function.Surjective
-    (mfderiv 𝓘(ℝ, E m) 𝓘(ℝ, E n) f x)}
+  {y | ∃ x, f x = y ∧ ¬ Function.Surjective (mfderiv 𝓘(ℝ,E m) 𝓘(ℝ,E n) f x)}
 
 theorem criticalValues_zero {m : ℕ} {X : Type*} [TopologicalSpace X]
     [ChartedSpace (E m) X] (f : X → E 0) : criticalValues (m := m) f = ∅ := by

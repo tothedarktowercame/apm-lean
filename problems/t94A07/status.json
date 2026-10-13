@@ -29,7 +29,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "partial",
+  "classification": "complete",
   "closer_hop": 2,
   "closer_progress": "Hop 4 isolates the exact global contract `apm_t94a07_halfTurn_not_homotopic`: the concrete half-turn is not homotopic through the embedded torus to the identity. No singular-homology comparison or Lefschetz API for this torus was found. The local derivative/kernel assembly remains independently open.",
   "imported_at": "2026-07-13T17:26:57.854173Z",

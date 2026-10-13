@@ -19,6 +19,11 @@ Reuse `t96A06Polynomial_nonzero`, `t96A06Polynomial_orbit`, and
 complex coordinates, but the conclusion stays in the frozen real-vector
 quotient.  Copy the already compiled comparison and descent proof from Main.
 
+This is now compiled in `t96A06Closure.lean`: `polynomialDescent` fixes the
+witness, `polynomialDescent_quotientMap` gives its exact representative
+formula, and `exists_polynomialDescent_formula` matches the registered
+existential clause.
+
 ## C2. Rational homology of RP³ — library
 
 Construct data for the literal `Space ℝ 3`:
