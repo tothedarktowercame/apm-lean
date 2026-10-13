@@ -81676,7 +81676,8 @@
     :lemma-apm-t94a08-sigma2-zerochart-mem-iff
     :lemma-apm-t94a08-zerocharthomeomorph
     :lemma-apm-t94a08-puncturedsigma2zerocharthomeomorph
-    :lemma-apm-t94a08-puncturedsigma2zerochart-not-ispreconnected],
+    :lemma-apm-t94a08-puncturedsigma2zerochart-not-ispreconnected
+    :lemma-apm-t94a08-cross-subset-not-ispreconnected-of-branch-witnesses],
    :other-consumers []}
   {:consumer :t94A10,
    :phase :lemma,
@@ -87728,66 +87729,51 @@
    :depends-on [],
    :other-consumers []}
   {:consumer :t94A08,
-   :stop-count 9,
+   :stop-count 10,
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Prove every open zero-chart neighborhood of the node has non-preconnected punctured sigma2 slice; contradict punctured Euclidean neighborhood connectedness.",
-    :stop-count 9,
+    "Show every open neighborhood of zero contains nonzero points on both affine branches; transport the local contradiction to an alleged manifold chart.",
+    :stop-count 10,
     :outcome :stop,
-    :warnings
-    ["preexisting Lean lints"
-     "unrelated modified PointWedgeVanKampen.lean preserved"],
+    :warnings ["preexisting Lean lints"],
     :missing-theorems
-    [{:name "apm_t94a08_puncturedSigma2ZeroChart_not_isPreconnected",
-      :type "not IsPreconnected puncturedSigma2ZeroChart",
+    [{:name
+      "apm_t94a08_cross_subset_not_isPreconnected_of_branch_witnesses",
+      :type
+      "subsets of the punctured affine cross meeting both exclusive branches are not preconnected",
       :status :proved,
       :consumers [:t94A08],
-      :depends-on ["apm_t94a08_puncturedSigma2ZeroChartHomeomorph"],
+      :depends-on ["apm_t94a08_affineBranches_inter"],
       :area "projective-affine-chart-homeomorph"}
      {:name "apm_t94a08_nodal_not_manifold_at",
       :type "not IsRealTwoManifoldAt sigma2 node",
       :status :partial,
       :consumers [:t94A08],
       :depends-on
-      ["apm_t94a08_puncturedSigma2ZeroChart_not_isPreconnected"],
+      ["apm_t94a08_cross_subset_not_isPreconnected_of_branch_witnesses"
+       "apm_t94a08_puncturedSigma2ZeroChartHomeomorph"],
       :area "projective-affine-chart-homeomorph"}],
     :statement-hashes {:registry "150/0"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
     :reason
-    "Banked non-preconnectedness of the punctured sigma2 zeroth-chart slice.",
+    "Banked the local cross criterion: two exclusive branch witnesses force non-preconnectedness.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t94A08Closure.lean",
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-     {:cmd "git show --check 02f7d5989", :exit 0}],
-    :diagnostic-history
-    [{:cmd "compile drafts",
-      :exit 1,
-      :correction
-      "used Homeomorph.isPreconnected_image iff in the forward direction"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1791923428100-10413-a7bdd100",
-     :commands
-     ["git show/diff-tree/SHA256 8a1cfb44a"
-      "git show --check 8a1cfb44a"
-      "statement-registry.py check (150/0)"
-      "blueprint dependency review"],
-     :finding
-     "Valid program STOP with a new blueprint milestone. Exact one-file scope and fixture SHA match. B1 and B2 are true, use sufficient stated dependencies, faithfully match the Lean predicates, and are both used by assembly. Registry 150/0; no defect. Next milestones: prove the two named LIBRARY results."},
-    :commit "02f7d5989",
+     {:cmd "git show --check 5ccd54875", :exit 0}],
+    :commit "5ccd54875",
     :changed-paths ["ConstructionTargets/t94A08Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t94A08Closure.lean",
      :sha256
-     "1b5368285154a563fd8ad15496a1596655f318bb64903e467f32cb6704346ca8"},
+     "c3412ae1def03a56690fcbe4912e238b4aeafb1f38a968707014d1ecb910571a"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :needs-owner,
    :scope
    ["problems/t94A08/lean/Main.lean"
     "problems/t94A08/status.json"
@@ -88193,4 +88179,26 @@
    :id :lemma-apm-t94a08-puncturedsigma2zerochart-not-ispreconnected,
    :kind :lemma,
    :depends-on [:lemma-apm-t94a08-puncturedsigma2zerocharthomeomorph],
+   :other-consumers []}
+  {:consumer :t94A08,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "apm_t94a08_cross_subset_not_isPreconnected_of_branch_witnesses",
+    :type
+    "subsets of the punctured affine cross meeting both exclusive branches are not preconnected"},
+   :lemma
+   {:name
+    "apm_t94a08_cross_subset_not_isPreconnected_of_branch_witnesses",
+    :reported-by [:program-2026-10-13-close-t94a08],
+    :type
+    "subsets of the punctured affine cross meeting both exclusive branches are not preconnected",
+    :area "projective-affine-chart-homeomorph",
+    :proved-in :program-2026-10-13-close-t94a08},
+   :id
+   :lemma-apm-t94a08-cross-subset-not-ispreconnected-of-branch-witnesses,
+   :kind :lemma,
+   :depends-on [:lemma-apm-t94a08-affinebranches-inter],
    :other-consumers []}]}
