@@ -1001,23 +1001,80 @@ lemma apm_m02J05_lux_triangle_of_facts_aux_sum_mem
   exact apm_m02J05_bridge_convex_and_submodule_of_young_shape_aux_add
     α hc hnonneg hshape u v hu hv
 
-lemma apm_m02J05_lux_triangle_of_facts_aux_core
-    (α : ℝ → ℝ)
-    (hc : ContinuousOn α (Ici 0))
-    (hmono : StrictMonoOn α (Ici 0))
-    (hzero : α 0 = 0)
-    (hinfty : Tendsto α atTop atTop)
-    (hnonneg : ∀ t, 0 ≤ t → 0 ≤ α t)
+lemma apm_m02J05_lux_triangle_of_facts_aux_pointwise
+    (α : ℝ → ℝ) (hshape : apm_m02J05_YoungShapeFact α)
+    (a b : ℝ) (ha : 0 < a) (hb : 0 < b) (U V : ℝ) :
+    apm_m02J05_young α (|U + V| / (a + b)) ≤
+      (a / (a + b)) * apm_m02J05_young α (|U| / a) +
+      (b / (a + b)) * apm_m02J05_young α (|V| / b) := by
+  have hp : 0 < 1 / a := one_div_pos.mpr ha
+  have hq : 0 < 1 / b := one_div_pos.mpr hb
+  have hh :=
+    apm_m02J05_bridge_convex_and_submodule_of_young_shape_aux_add_aux_pointwise
+      α hshape (1 / a) (1 / b) hp hq U V
+  have hc : (1 / a) * (1 / b) / (1 / a + 1 / b) = 1 / (a + b) := by
+    field_simp
+    ring
+  have hr : (1 / b) / (1 / a + 1 / b) = a / (a + b) := by
+    field_simp
+    ring
+  have hs : (1 / a) / (1 / a + 1 / b) = b / (a + b) := by
+    field_simp
+    ring
+  rw [hc, hr, hs] at hh
+  convert hh using 1 <;>
+    simp [div_eq_mul_inv, abs_mul, abs_inv, abs_of_pos ha, abs_of_pos hb,
+      abs_of_pos (add_pos ha hb)] <;> ring
+
+lemma apm_m02J05_lux_triangle_of_facts_aux_sublevel_sum
+    (α : ℝ → ℝ) (hc : ContinuousOn α (Ici 0))
     (hshape : apm_m02J05_YoungShapeFact α)
-    (hsublevel : ∀ u ∈ apm_m02J05_L α,
-      (apm_m02J05_luxSublevel α u).Nonempty ∧
-      BddBelow (apm_m02J05_luxSublevel α u) ∧
-      0 ≤ apm_m02J05_lux α u ∧
-      (u ≠ 0 → apm_m02J05_lux α u ∈ apm_m02J05_luxSublevel α u)) :
-    ∀ u ∈ apm_m02J05_L α, ∀ v ∈ apm_m02J05_L α,
-      apm_m02J05_lux α (u + v) ≤
-        apm_m02J05_lux α u + apm_m02J05_lux α v := by
-  sorry
+    (u v : apm_m02J05_Fun) (a b : ℝ)
+    (ha : a ∈ apm_m02J05_luxSublevel α u)
+    (hb : b ∈ apm_m02J05_luxSublevel α v) :
+    a + b ∈ apm_m02J05_luxSublevel α (u + v) := by
+  obtain ⟨ha0, hai, hal⟩ := ha
+  obtain ⟨hb0, hbi, hbl⟩ := hb
+  have hab : 0 < a + b := add_pos ha0 hb0
+  have hYc := apm_m02J05_bridge_convex_and_submodule_of_young_shape_aux_add_aux_continuous α hc
+  have hY0 : apm_m02J05_young α 0 = 0 := by simp [apm_m02J05_young]
+  have hYnn : ∀ t, 0 ≤ t → 0 ≤ apm_m02J05_young α t := fun t ht => by
+    have := hshape.2 (Set.left_mem_Ici) (Set.mem_Ici.2 ht) ht
+    rwa [hY0] at this
+  have hfeq : (fun x => apm_m02J05_young α (|(u + v) x| / (a + b))) =
+      (fun t => apm_m02J05_young α |t|) ∘ (fun x => (u + v) x / (a + b)) := by
+    funext x; simp [abs_div, abs_of_pos hab]
+  have hfm : AEStronglyMeasurable (fun x => apm_m02J05_young α (|(u + v) x| / (a + b)))
+      (volume.restrict (Icc (0 : ℝ) 1)) := by
+    rw [hfeq]
+    exact (hYc.comp (continuous_id.div_const (a + b))).comp_aestronglyMeasurable (AEEqFun.aestronglyMeasurable (u + v))
+  have hdom : Integrable (fun x => (a / (a + b)) * apm_m02J05_young α (|u x| / a) +
+      (b / (a + b)) * apm_m02J05_young α (|v x| / b)) (volume.restrict (Icc (0 : ℝ) 1)) :=
+    (hai.const_mul _).add (hbi.const_mul _)
+  have hpt : ∀ᵐ x ∂(volume.restrict (Icc (0 : ℝ) 1)),
+      apm_m02J05_young α (|(u + v) x| / (a + b)) ≤
+        (a / (a + b)) * apm_m02J05_young α (|u x| / a) +
+        (b / (a + b)) * apm_m02J05_young α (|v x| / b) := by
+    filter_upwards [AEEqFun.coeFn_add u v] with x hx
+    rw [hx, Pi.add_apply]
+    exact apm_m02J05_lux_triangle_of_facts_aux_pointwise α hshape a b ha0 hb0 (u x) (v x)
+  have hfi : Integrable (fun x => apm_m02J05_young α (|(u + v) x| / (a + b)))
+      (volume.restrict (Icc (0 : ℝ) 1)) := by
+    refine hdom.mono' hfm ?_
+    filter_upwards [hpt] with x hx
+    rw [Real.norm_eq_abs, abs_of_nonneg (hYnn _ (div_nonneg (abs_nonneg _) hab.le))]
+    exact hx
+  refine ⟨hab, hfi, ?_⟩
+  calc ∫ x in Icc (0 : ℝ) 1, apm_m02J05_young α (|(u + v) x| / (a + b))
+      ≤ ∫ x in Icc (0 : ℝ) 1, ((a / (a + b)) * apm_m02J05_young α (|u x| / a) +
+          (b / (a + b)) * apm_m02J05_young α (|v x| / b)) := integral_mono_ae hfi hdom hpt
+    _ = (a / (a + b)) * (∫ x in Icc (0 : ℝ) 1, apm_m02J05_young α (|u x| / a)) +
+        (b / (a + b)) * (∫ x in Icc (0 : ℝ) 1, apm_m02J05_young α (|v x| / b)) := by
+        rw [integral_add (hai.const_mul _) (hbi.const_mul _), MeasureTheory.integral_const_mul,
+          MeasureTheory.integral_const_mul]
+    _ ≤ (a / (a + b)) * 1 + (b / (a + b)) * 1 := by
+        gcongr
+    _ = 1 := by field_simp
 
 theorem apm_m02J05_lux_triangle_of_facts
     (α : ℝ → ℝ)
@@ -1035,8 +1092,24 @@ theorem apm_m02J05_lux_triangle_of_facts
     ∀ u ∈ apm_m02J05_L α, ∀ v ∈ apm_m02J05_L α,
       apm_m02J05_lux α (u + v) ≤
         apm_m02J05_lux α u + apm_m02J05_lux α v := by
-  exact apm_m02J05_lux_triangle_of_facts_aux_core
-    α hc hmono hzero hinfty hnonneg hshape hsublevel
+  intro u hu v hv
+  by_cases hu0 : u = 0
+  · subst u
+    have hz := (hsublevel (0 : apm_m02J05_Fun) (apm_m02J05_zero_mem_L α)).2.2.1
+    simpa using hz
+  by_cases hv0 : v = 0
+  · subst v
+    have hz := (hsublevel (0 : apm_m02J05_Fun) (apm_m02J05_zero_mem_L α)).2.2.1
+    simpa using hz
+  let a := apm_m02J05_lux α u
+  let b := apm_m02J05_lux α v
+  have ha := (hsublevel u hu).2.2.2 hu0
+  have hb := (hsublevel v hv).2.2.2 hv0
+  have hab := apm_m02J05_lux_triangle_of_facts_aux_sublevel_sum
+    α hc hshape u v a b ha hb
+  unfold apm_m02J05_lux
+  exact csInf_le (hsublevel (u + v)
+    (apm_m02J05_lux_triangle_of_facts_aux_sum_mem α hc hnonneg hshape u v hu hv)).2.1 hab
 
 theorem apm_m02J05_bridge_convex_and_submodule
     (α : ℝ → ℝ)
