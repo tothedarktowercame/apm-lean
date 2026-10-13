@@ -121,9 +121,79 @@ theorem t93A06_not_exact_of_integral_quarter (atlas : SmoothAtlas)
 /-- Coordinate calculus for the explicit primitive: it is smooth and its
 exterior derivative is the source form. -/
 -- BEGIN SEAT AREA
+lemma t93A06_primitive_calculus_aux_fderiv (w : Fin 1 → Plane) (x u : Plane) :
+    fderiv ℝ (fun y ↦ primitive y w) x u =
+      (Real.sin (2 * Real.pi * x 0) ^ 2 * u 0 * Real.cos (2 * Real.pi * x 1) ^ 2 -
+       (x 0 / 2 - Real.sin (4 * Real.pi * x 0) / (8 * Real.pi)) *
+         (4 * Real.pi * Real.cos (2 * Real.pi * x 1) *
+           Real.sin (2 * Real.pi * x 1) * u 1)) * (w 0 1) := by
+  have h0 := hasFDerivAt_apply (𝕜 := ℝ) (0 : Fin 2) x
+  have h1 := hasFDerivAt_apply (𝕜 := ℝ) (1 : Fin 2) x
+  have hA := (h0.mul_const (1 / 2)).sub
+    (((h0.const_mul (4 * Real.pi)).sin).mul_const (1 / (8 * Real.pi)))
+  have hC := ((h1.const_mul (2 * Real.pi)).cos).pow 2
+  have h := (hA.mul hC).mul_const (w 0 1)
+  have hf := congrArg (fun L : Plane →L[ℝ] ℝ ↦ L u) h.fderiv
+  calc
+    fderiv ℝ (fun y ↦ primitive y w) x u =
+        fderiv ℝ (fun y ↦
+          (y 0 * (1 / 2) - Real.sin (4 * Real.pi * y 0) * (1 / (8 * Real.pi))) *
+            Real.cos (2 * Real.pi * y 1) ^ 2 * (w 0 1)) x u := by
+      apply congrArg (fun f : Plane → ℝ ↦ fderiv ℝ f x u)
+      funext y
+      simp [primitive, div_eq_mul_inv]
+    _ = _ := hf
+    _ = _ := by
+      simp [ContinuousLinearMap.proj_apply]
+      have hs : Real.sin (2 * Real.pi * x 0) ^ 2 =
+          1 - Real.cos (2 * Real.pi * x 0) ^ 2 := by
+        nlinarith [Real.sin_sq_add_cos_sq (2 * Real.pi * x 0)]
+      rw [hs]
+      field_simp [Real.pi_ne_zero]
+      rw [show x 0 * 4 * Real.pi = 2 * (x 0 * 2 * Real.pi) by ring,
+        Real.cos_two_mul]
+      ring
+
 theorem t93A06_primitive_calculus :
     IsSmooth primitive ∧ exteriorDerivative primitive = sourceForm := by
-  sorry
+  constructor
+  · intro e he
+    rw [chartedSpaceSelf_atlas] at he
+    subst e
+    unfold inChart primitive
+    simp
+    convert (show ContDiffOn ℝ ∞ primitive Set.univ by
+      unfold primitive
+      fun_prop) using 1
+  · unfold exteriorDerivative
+    funext x
+    apply ContinuousAlternatingMap.ext
+    intro v
+    simp only [chartAt_self_eq, OpenPartialHomeomorph.refl_apply]
+    have hin : inChart primitive (OpenPartialHomeomorph.refl Plane) = primitive := by
+      funext y
+      apply ContinuousAlternatingMap.ext
+      intro w
+      unfold inChart
+      simp only [OpenPartialHomeomorph.refl_symm, OpenPartialHomeomorph.refl_apply,
+        mfderiv_id]
+      congr 1
+    rw [hin]
+    simp
+    change extDeriv primitive x v = sourceForm x v
+    have hd : Differentiable ℝ primitive := by
+      unfold primitive
+      fun_prop
+    rw [extDeriv_apply (hd x)]
+    simp only [Nat.reduceAdd, Int.reduceNeg, zsmul_eq_mul, Int.cast_pow, Int.cast_neg,
+      Int.cast_one, Fin.sum_univ_two, Fin.isValue, Fin.coe_ofNat_eq_mod, Nat.zero_mod,
+      pow_zero, Fin.removeNth_zero, one_mul, Nat.mod_succ, pow_one, neg_mul]
+    rw [t93A06_primitive_calculus_aux_fderiv,
+      t93A06_primitive_calculus_aux_fderiv]
+    simp [sourceForm, Fin.tail, Fin.removeNth]
+    change _ = _ * Matrix.det v
+    rw [Matrix.det_fin_two]
+    ring
 -- END SEAT AREA
 
 /-- Direct evaluation of the explicit primitive on the four oriented edges of
