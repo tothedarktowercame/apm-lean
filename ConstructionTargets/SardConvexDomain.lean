@@ -786,4 +786,27 @@ theorem infDist_comparable_of_mem_quarter_balls
   rw [dist_comm d c] at h₂
   constructor <;> linarith
 
+/-- Every metric set has a maximal separated subset, and maximality makes it
+a cover at the same radius.  This is the selection principle used on each
+Whitney scale stratum. -/
+theorem exists_maximalSeparated_cover
+    {E : Type*} [PseudoEMetricSpace E] (ε : NNReal) (A : Set E) :
+    ∃ N : Set E, N ⊆ A ∧ Metric.IsSeparated ε N ∧ Metric.IsCover ε A N := by
+  obtain ⟨N, hN⟩ := zorn_subset
+    {N : Set E | N ⊆ A ∧ Metric.IsSeparated ε N} (by
+      intro c hc hchain
+      refine ⟨⋃₀ c, ?_, fun t ht => Set.subset_sUnion_of_mem ht⟩
+      constructor
+      · rintro x ⟨t, htc, hxt⟩
+        exact (hc htc).1 hxt
+      · intro x hx y hy hxy
+        obtain ⟨X, hXc, hxX⟩ := hx
+        obtain ⟨Y, hYc, hyY⟩ := hy
+        rcases eq_or_ne X Y with rfl | hXY
+        · exact (hc hXc).2 hxX hyY hxy
+        · rcases hchain hXc hYc hXY with hXYsub | hYXsub
+          · exact (hc hYc).2 (hXYsub hxX) hyY hxy
+          · exact (hc hXc).2 hxX (hYXsub hyY) hxy)
+  exact ⟨N, hN.prop.1, hN.prop.2, Metric.IsCover.of_maximal_isSeparated hN⟩
+
 end ConstructionTargets.SardConvexDomain
