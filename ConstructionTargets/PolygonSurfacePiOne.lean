@@ -1675,6 +1675,79 @@ def PairingData.positiveWedgeArc (P : PairingData) (i : Fin P.edgeCount)
 def circleArc (t : Set.Icc (0 : ℝ) 1) : Circle :=
   AddCircle.toCircle (t.1 : AddCircle (1 : ℝ))
 
+set_option maxRecDepth 2000 in
+set_option maxHeartbeats 800000 in
+/-- The interval parametrization of the circle is injective away from its
+two identified endpoints. -/
+theorem circleArc_eq_iff (t u : Set.Icc (0 : ℝ) 1) :
+    circleArc t = circleArc u ↔
+      t = u ∨
+      (t = ⟨0, by norm_num⟩ ∧ u = ⟨1, by norm_num⟩) ∨
+      (t = ⟨1, by norm_num⟩ ∧ u = ⟨0, by norm_num⟩) := by
+  change AddCircle.toCircle (t.1 : AddCircle (1 : ℝ)) =
+      AddCircle.toCircle (u.1 : AddCircle (1 : ℝ)) ↔ _
+  rw [(AddCircle.injective_toCircle one_ne_zero).eq_iff]
+  by_cases ht : t.1 = 1
+  · have ht' : t = ⟨1, by norm_num⟩ := Subtype.ext ht
+    rw [ht']
+    by_cases hu : u.1 = 1
+    · have hu' : u = ⟨1, by norm_num⟩ := Subtype.ext hu
+      simp [hu']
+    · have huIco : u.1 ∈ Set.Ico (0 : ℝ) (0 + 1) :=
+        ⟨u.2.1, by simpa only [zero_add] using lt_of_le_of_ne u.2.2 hu⟩
+      have hzIco : (0 : ℝ) ∈ Set.Ico (0 : ℝ) (0 + 1) := by norm_num
+      rw [show ((1 : ℝ) : AddCircle (1 : ℝ)) =
+          ((0 : ℝ) : AddCircle (1 : ℝ)) by
+        simpa using AddCircle.coe_period (1 : ℝ)]
+      rw [AddCircle.coe_eq_coe_iff_of_mem_Ico hzIco huIco]
+      constructor
+      · intro h
+        exact Or.inr (Or.inr ⟨rfl, Subtype.ext h.symm⟩)
+      · rintro (h | ⟨hbad, _⟩ | ⟨_, h⟩)
+        · exact False.elim (hu (congrArg Subtype.val h).symm)
+        · exact False.elim (by norm_num at hbad)
+        · exact (congrArg Subtype.val h).symm
+  · have htIco : t.1 ∈ Set.Ico (0 : ℝ) (0 + 1) :=
+      ⟨t.2.1, by simpa only [zero_add] using lt_of_le_of_ne t.2.2 ht⟩
+    by_cases hu : u.1 = 1
+    · have hu' : u = ⟨1, by norm_num⟩ := Subtype.ext hu
+      rw [hu']
+      rw [show ((1 : ℝ) : AddCircle (1 : ℝ)) =
+          ((0 : ℝ) : AddCircle (1 : ℝ)) by
+        simpa using AddCircle.coe_period (1 : ℝ)]
+      have hzIco : (0 : ℝ) ∈ Set.Ico (0 : ℝ) (0 + 1) := by norm_num
+      rw [AddCircle.coe_eq_coe_iff_of_mem_Ico htIco hzIco]
+      constructor
+      · intro h
+        exact Or.inr (Or.inl ⟨Subtype.ext h, rfl⟩)
+      · rintro (h | ⟨h, _⟩ | ⟨_, hbad⟩)
+        · exact False.elim (ht (congrArg Subtype.val h))
+        · exact congrArg Subtype.val h
+        · exact False.elim (by norm_num at hbad)
+    · have huIco : u.1 ∈ Set.Ico (0 : ℝ) (0 + 1) :=
+        ⟨u.2.1, by simpa only [zero_add] using lt_of_le_of_ne u.2.2 hu⟩
+      rw [AddCircle.coe_eq_coe_iff_of_mem_Ico htIco huIco]
+      constructor
+      · exact fun h => Or.inl (Subtype.ext h)
+      · rintro (h | ⟨h, hu1⟩ | ⟨ht1, h⟩)
+        · exact congrArg Subtype.val h
+        · exact False.elim (hu (congrArg Subtype.val hu1))
+        · exact False.elim (ht (congrArg Subtype.val ht1))
+
+theorem circleArc_eq_one_iff (t : Set.Icc (0 : ℝ) 1) :
+    circleArc t = 1 ↔ t = ⟨0, by norm_num⟩ ∨ t = ⟨1, by norm_num⟩ := by
+  have hzero : circleArc ⟨0, by norm_num⟩ = 1 := by
+    exact AddCircle.toCircle_zero
+  rw [← hzero, circleArc_eq_iff]
+  constructor
+  · rintro (h | ⟨h, _⟩ | ⟨h, _⟩)
+    · exact Or.inl h
+    · exact Or.inl h
+    · exact Or.inr h
+  · rintro (rfl | rfl)
+    · exact Or.inl rfl
+    · exact Or.inr (Or.inr ⟨rfl, rfl⟩)
+
 /-- The arc coordinate selected by the sign of an oriented polygon edge.
 Negative edges use the inverse traversal. -/
 def PairingData.signedWedgeArc (P : PairingData) (i : Fin P.edgeCount)
