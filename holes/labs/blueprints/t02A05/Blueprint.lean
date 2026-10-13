@@ -158,9 +158,65 @@ lemma apm_t02a05_sphere_mass_eq_two_caps_aux_cap :
     apm_t02a05_sphere_mass_eq_two_caps_aux_scaled_domain]
   rfl
 
+section mathlibInstance
+attribute [-instance] ConstructionTargets.LinearGraphMeasure.domainMeasurable
+attribute [-instance] ConstructionTargets.LinearGraphMeasure.domainBorel
+
+/-- Mathlib's normalising constant for `μH[2]` on `ℝ²`. -/
+noncomputable def apm_t02a05_cM : NNReal :=
+  Measure.addHaarScalarFactor (volume : Measure (EuclideanSpace ℝ (Fin 2))) μH[(2 : ℕ)]
+
+/-- Mathlib's `μH[2]` value of the unit square (Mathlib instance). -/
+noncomputable def apm_t02a05_hP : ENNReal :=
+  (μH[(2 : ℕ)] : Measure (EuclideanSpace ℝ (Fin 2)))
+    (parallelepiped (EuclideanSpace.basisFun (Fin 2) ℝ))
+
+lemma apm_t02a05_cM_mul_parallelepiped :
+    (apm_t02a05_cM : ENNReal) * apm_t02a05_hP = 1 := by
+  have h := EuclideanSpace.euclideanHausdorffMeasure_eq_volume 2
+  rw [MeasureTheory.Measure.euclideanHausdorffMeasure_def] at h
+  have := congrArg (fun μ : Measure (EuclideanSpace ℝ (Fin 2)) ↦
+    μ (parallelepiped (EuclideanSpace.basisFun (Fin 2) ℝ))) h
+  simp only [Measure.smul_apply, ENNReal.smul_def, smul_eq_mul] at this
+  erw [(EuclideanSpace.basisFun (Fin 2) ℝ).volume_parallelepiped] at this
+  simpa [apm_t02a05_cM, apm_t02a05_hP] using this
+
+end mathlibInstance
+
+lemma apm_t02a05_muH_parallelepiped_d :
+    (μH[(2 : ℕ)] : Measure (EuclideanSpace ℝ (Fin 2)))
+        (parallelepiped (EuclideanSpace.basisFun (Fin 2) ℝ)) = apm_t02a05_hP := by
+  unfold apm_t02a05_hP
+  simp only [MeasureTheory.Measure.hausdorffMeasure_apply]
+
+lemma apm_t02a05_cD_mul_parallelepiped :
+    (Measure.addHaarScalarFactor (volume : Measure (EuclideanSpace ℝ (Fin 2))) μH[(2 : ℕ)] : ENNReal) *
+      (μH[(2 : ℕ)] : Measure (EuclideanSpace ℝ (Fin 2)))
+        (parallelepiped (EuclideanSpace.basisFun (Fin 2) ℝ)) = 1 := by
+  have h := apm_t02a05_sphere_mass_eq_two_caps_aux_scaled_domain
+  have := congrArg (fun μ : Measure (EuclideanSpace ℝ (Fin 2)) ↦
+    μ (parallelepiped (EuclideanSpace.basisFun (Fin 2) ℝ))) h
+  simp only [Measure.smul_apply, ENNReal.smul_def, smul_eq_mul] at this
+  erw [(EuclideanSpace.basisFun (Fin 2) ℝ).volume_parallelepiped] at this
+  simpa [ConstructionTargets.C1GraphMeasureDecomposition.domainMeasure] using this
+
+lemma apm_t02a05_cM_eq_cD :
+    apm_t02a05_cM =
+      Measure.addHaarScalarFactor (volume : Measure (EuclideanSpace ℝ (Fin 2))) μH[(2 : ℕ)] := by
+  have hm := ENNReal.eq_inv_of_mul_eq_one_left apm_t02a05_cM_mul_parallelepiped
+  have hd := apm_t02a05_cD_mul_parallelepiped
+  rw [apm_t02a05_muH_parallelepiped_d] at hd
+  have hd' := ENNReal.eq_inv_of_mul_eq_one_left hd
+  exact_mod_cast hm.trans hd'.symm
+
 theorem apm_t02a05_sphere_mass_eq_two_caps :
     (μHE[2] (Metric.sphere (0 : apm_t02a05_E3) 1)) = 2 * (∫⁻ x in Metric.ball (0 : EuclideanSpace ℝ (Fin 2)) 1, ENNReal.ofReal (1 / Real.sqrt (1 - ‖x‖ ^ 2))) := by
-  sorry
+  rw [MeasureTheory.Measure.euclideanHausdorffMeasure_def, Measure.smul_apply,
+    apm_t02a05_sphere_mass_eq_two_caps_aux_raw]
+  change apm_t02a05_cM • _ = _
+  rw [apm_t02a05_cM_eq_cD, ← two_mul, ← apm_t02a05_sphere_mass_eq_two_caps_aux_cap,
+    ENNReal.smul_def, ENNReal.smul_def, smul_eq_mul, smul_eq_mul]
+  ring
 
 /-- (C) The cap integral against Lebesgue measure: `∫₀^{2π} ∫₀¹ r / √(1 − r²) dr dθ = 2π`. -/
 theorem apm_t02a05_cap_integral :
