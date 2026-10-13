@@ -161,6 +161,13 @@ connectedness argument is the frozen redundant hypothesis described above.
 
 ## Dependency layers
 
+The polygon route now has a compiled attaching-loop input:
+`kleinPolygon_attaching_arcs` identifies the four boundary arcs, in order,
+with the reversed traversals of the two orbit-indexed circle legs.  Together
+with `kleinPairingOrbitEquivBool`, this is the standard nonorientable word
+`a a b b`.  The remaining C1 step is the van Kampen calculation turning this
+word into the registered Klein-group presentation.
+
 - Layer 1: C1, C3, and C4. C1 and C3 are independent; C4 is already complete.
 - Layer 2: C2 against the explicit C1 equivalence interface.
 - Layer 3: C5, already complete modulo C1 and C2.

@@ -268,6 +268,38 @@ noncomputable def kleinPairingOrbitEquivBool :
     kleinPairingOrbitEquivBool (kleinPairingData.orbit (3 : Fin 4)) = true := by
   rfl
 
+/-- The four oriented boundary arcs of the standard Klein polygon, after
+identifying its skeleton with the orbit-indexed circle wedge.  Thus its
+attaching word is the nonorientable word `a a b b`; every occurrence uses
+the reversed interval coordinate because all four standard signs are false. -/
+theorem kleinPolygon_attaching_arcs (t : Set.Icc (0 : ℝ) 1) :
+    kleinSkeletonHomeomorphTwoCircles (kleinPairingData.skeletonArc
+        ⟨0, by simp [kleinPairingData]⟩ t) =
+        PointWedgeQuotient.wedgeCircle (kleinPairingData.orbit
+          ⟨0, by simp [kleinPairingData]⟩)
+          (circleArc (reverseIcc t)) ∧
+    kleinSkeletonHomeomorphTwoCircles (kleinPairingData.skeletonArc
+        ⟨1, by simp [kleinPairingData]⟩ t) =
+        PointWedgeQuotient.wedgeCircle (kleinPairingData.orbit
+          ⟨1, by simp [kleinPairingData]⟩)
+          (circleArc (reverseIcc t)) ∧
+    kleinSkeletonHomeomorphTwoCircles (kleinPairingData.skeletonArc
+        ⟨2, by simp [kleinPairingData]⟩ t) =
+        PointWedgeQuotient.wedgeCircle (kleinPairingData.orbit
+          ⟨2, by simp [kleinPairingData]⟩)
+          (circleArc (reverseIcc t)) ∧
+    kleinSkeletonHomeomorphTwoCircles (kleinPairingData.skeletonArc
+        ⟨3, by simp [kleinPairingData]⟩ t) =
+        PointWedgeQuotient.wedgeCircle (kleinPairingData.orbit
+          ⟨3, by simp [kleinPairingData]⟩)
+          (circleArc (reverseIcc t)) := by
+  repeat' apply And.intro
+  all_goals
+    rw [kleinSkeletonHomeomorphTwoCircles,
+      PairingData.skeletonHomeomorphWedge_skeletonArc]
+    apply PairingData.signedWedgeArc_of_not_sign
+    rfl
+
 /-- Once proper discontinuity of the explicit affine action is supplied, the
 banked deck-group theorem computes the fundamental group at the canonical
 orbit of the origin. -/
@@ -359,5 +391,6 @@ theorem lift_isEmbedding_assembly
 #print axioms kleinPairingSpaceHomeomorph
 #print axioms kleinSkeletonHomeomorphTwoCircles
 #print axioms kleinPairingOrbitEquivBool
+#print axioms kleinPolygon_attaching_arcs
 
 end ConstructionTargets.t93J03Closure
