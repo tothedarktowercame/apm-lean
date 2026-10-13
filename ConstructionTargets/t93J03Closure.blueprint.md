@@ -13,7 +13,7 @@ each path-connected subspace whose induced fundamental group lies in
 the subspace. Empty subspaces are excluded by `PathConnectedSpace`; singleton
 subspaces satisfy the subgroup condition; the whole Klein bottle does not.
 
-### Frozen redundant-hypothesis defect
+### Frozen redundant hypothesis — owner-approved
 
 The semilocally simply connected hypothesis is mathematically redundant once
 the cyclic cover is explicitly constructed. Mathlib's subgroup lifting
@@ -28,10 +28,10 @@ independently proved lift. That was vacuous and is retracted: the final theorem
 does not mention the witness, so C5 necessarily discarded it. No proof step in
 this route has a result that genuinely depends on the hypothesis.
 
-This is an interface conflict: the registered theorem is frozen, while the
-global every-final-hypothesis-used gate rejects its stronger proof. The owning
-process must approve the redundant frozen hypothesis or revise the registered
-statement. Formalisation must not manufacture a dependency.
+Owner decision (claude-14, 2026-10-13): the hypothesis-coverage gate does not
+apply to hypotheses mandated by `problem.md`. Keep this frozen hypothesis
+anonymous and unused, record it as `unused-mandated`, and use the stronger
+lifting theorem. Formalisation must not manufacture a dependency.
 
 ## Frozen shared definitions
 
@@ -94,6 +94,10 @@ Rewrite membership in the induced range using the supplied equality, then use
 `Mathlib/Topology/Homotopy/Lifting.lean`. Transport the basepoint equality
 between `p c = k` and `p c = inclusion X x` using the chosen point of `X`.
 This lemma accepts the cover interface as hypotheses and does not invoke C2.
+The generalized compiled form is
+`ConstructionTargets.t93J03Closure.coveringLift_of_subgroup_le`, parameterized
+by the presented group and subgroup so it can be reused without duplicating
+the frozen definitions.
 
 ### C4. `t93J03_lift_isEmbedding_assembly` — already proved
 
@@ -101,6 +105,8 @@ Cancel the continuous covering projection from
 `p ∘ l = Subtype.val` using `Topology.IsEmbedding.of_comp`, then compose with
 the planar embedding of the cover using `Topology.IsEmbedding.comp`. Copy the
 compiled proof from `holes/labs/blueprints/t93J03/Blueprint.lean`.
+The generalized compiled form is
+`ConstructionTargets.t93J03Closure.lift_isEmbedding_assembly`.
 
 ### C5. Main theorem assembly — already proved
 
@@ -119,8 +125,8 @@ Bank C1 and C2 separately as the two LIBRARY obligations. The principal risk
 is the literal orbit-quotient homeomorphism and intermediate-cylinder cover,
 not the frozen theorem.
 
-Final-hypothesis gate: blocked by the frozen redundant hypothesis; owner
-resolution is required before formalisation proceeds.
+Final-hypothesis audit: `SemilocallySimplyConnected X` is `unused-mandated`
+under the owner decision above; all non-mandated proof inputs are consumed.
 
 ## Gates
 
