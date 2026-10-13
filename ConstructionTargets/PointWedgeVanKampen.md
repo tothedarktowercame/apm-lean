@@ -1007,3 +1007,9 @@ by the inverse image of the strict-span comparison.  The theorem
 `genericPointWedgeRightComparison_actualMaps_eq_reverseCanonical` combines
 the two adjacent actual-span maps into the functor image of this single
 reverse morphism, before comparing it with the inverse canonical map.
+
+`genericPointWedgeRightInverseBaseToRightBaseFromSpan` takes the canonical
+inverse while retaining that strict-span coordinate expression.  The theorem
+`genericPointWedgeRightBaseToInverseBase_comp_fromSpan` proves that the reverse
+followed by this forward morphism is the identity, without identifying its
+intermediate representation with the earlier base-transport normal form.

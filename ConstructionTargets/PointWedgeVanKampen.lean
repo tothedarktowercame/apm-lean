@@ -4470,6 +4470,30 @@ theorem genericPointWedgeRightComparison_actualMaps_eq_reverseCanonical :
   exact (genericPointWedgeIdentityActualSpan
     x₀ y₀ M N hM hN hy hx cM cN).right.map_comp _ _ |>.symm
 
+/-- The canonical inverse of the reverse morphism occurring in the full right
+comparison, retained in its strict-span coordinate representation. -/
+def genericPointWedgeRightInverseBaseToRightBaseFromSpan :
+    let r := genericPointWedgeActualRight x₀ y₀ M N
+    let eK := genericPointWedgeOverlapGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let eR := genericPointWedgeRightGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let u : FundamentalGroupoid Unit := FundamentalGroupoid.mk ()
+    eR.inverse.obj (genericPointWedgeCoordinateRight y₀ |>.obj u) ⟶
+      (eK.inverse ⋙ r).obj u :=
+  inv (genericPointWedgeRightBaseToInverseBase
+    x₀ y₀ M N hM hN hy hx cM cN)
+
+omit [PathConnectedSpace X] [PathConnectedSpace Y] in
+/-- The span-coordinate forward morphism is a right inverse of the reverse
+canonical morphism. -/
+theorem genericPointWedgeRightBaseToInverseBase_comp_fromSpan :
+    genericPointWedgeRightBaseToInverseBase
+        x₀ y₀ M N hM hN hy hx cM cN ≫
+      genericPointWedgeRightInverseBaseToRightBaseFromSpan
+        x₀ y₀ M N hM hN hy hx cM cN = 𝟙 _ := by
+  apply IsIso.hom_inv_id
+
 omit [PathConnectedSpace X] in
 /-- The connector normal form of the mapped lifted right loop is conjugation
 by the explicit equality transport at its common endpoint. -/
