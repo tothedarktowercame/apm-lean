@@ -169,23 +169,201 @@ theorem apm_t00j01_sphere_identity_bridge :
 /-- Every equivalence in the presented Klein quotient has the expected affine
 normal form.  This is kept separate from topology so the group calculation and
 the local-chart construction can be proved in parallel. -/
+lemma apm_t00j01_kleinRel_normal_form_aux_sign (n : ℤ) :
+    ∃ s : ℤ, (s : ℝ) = (-1 : ℝ) ^ n := by
+  refine ⟨if Even n then 1 else -1, ?_⟩
+  simp [neg_one_zpow_eq_ite]
+
 theorem apm_t00j01_kleinRel_normal_form {p q : ℝ × ℝ}
     (h : Relation.EqvGen apm_t00j01_kleinRel p q) :
     ∃ m n : ℤ,
       q.1 = (m : ℝ) + (-1 : ℝ) ^ n * p.1 ∧
       q.2 = (n : ℝ) + p.2 := by
-  sorry
+  induction h with
+  | rel p q hpq =>
+      cases hpq with
+      | horizontal x y =>
+          exact ⟨1, 0, by norm_num [add_comm], by norm_num⟩
+      | twisted x y =>
+          exact ⟨0, 1, by norm_num, by norm_num [add_comm]⟩
+  | refl p =>
+      exact ⟨0, 0, by norm_num, by norm_num⟩
+  | symm p q hpq ih =>
+      obtain ⟨m, n, h1, h2⟩ := ih
+      obtain ⟨s, hs⟩ := apm_t00j01_kleinRel_normal_form_aux_sign n
+      refine ⟨-(s * m), -n, ?_, ?_⟩
+      · rw [h1]
+        have hn : (-1 : ℝ) ^ (-n) = (-1 : ℝ) ^ n := by
+          rw [neg_one_zpow_eq_ite, neg_one_zpow_eq_ite]
+          have : Even (-n) ↔ Even n := by simp
+          simp [this]
+        push_cast
+        rw [hs]
+        rw [hn]
+        have hsquare : ((-1 : ℝ) ^ n) * ((-1 : ℝ) ^ n) = 1 := by
+          rw [neg_one_zpow_eq_ite]
+          split_ifs <;> norm_num
+        rw [mul_add, ← mul_assoc, hsquare]
+        ring
+      · rw [h2]
+        push_cast
+        ring
+  | trans p q r hpq hqr ihpq ihqr =>
+      obtain ⟨m, n, h1, h2⟩ := ihpq
+      obtain ⟨m', n', h1', h2'⟩ := ihqr
+      obtain ⟨s, hs⟩ := apm_t00j01_kleinRel_normal_form_aux_sign n'
+      refine ⟨m' + s * m, n' + n, ?_, ?_⟩
+      · rw [h1', h1]
+        push_cast
+        rw [hs]
+        rw [zpow_add₀ (by norm_num : (-1 : ℝ) ≠ 0)]
+        ring
+      · rw [h2', h2]
+        push_cast
+        ring
 
 /-- The explicit Klein quotient is compact.  The closed fundamental square
 and its orbit classification are supplied by the imported construction chain. -/
+lemma apm_t00j01_klein_compact_aux_horizontal (p : ℝ × ℝ) (m : ℤ) :
+    Relation.EqvGen apm_t00j01_kleinRel p ((m : ℝ) + p.1, p.2) := by
+  induction m using Int.induction_on with
+  | zero => simpa using Relation.EqvGen.refl (r := apm_t00j01_kleinRel) p
+  | succ m ih =>
+      have hs := Relation.EqvGen.rel _ _
+        (apm_t00j01_kleinRel.horizontal ((m : ℝ) + p.1) p.2)
+      have hs' : Relation.EqvGen apm_t00j01_kleinRel
+          (((((m : ℕ) : ℤ) : ℝ) + p.1), p.2)
+          ((((((m : ℕ) : ℤ) + 1 : ℤ) : ℝ) + p.1), p.2) := by
+        convert hs using 1 <;> norm_num <;> ring
+      exact Relation.EqvGen.trans _ _ _ ih hs'
+  | pred m ih =>
+      have hs := (Relation.EqvGen.rel _ _
+        (apm_t00j01_kleinRel.horizontal (-(m : ℝ) - 1 + p.1) p.2)).symm
+      have hs' : Relation.EqvGen apm_t00j01_kleinRel
+          ((((-((m : ℕ) : ℤ) : ℤ) : ℝ) + p.1), p.2)
+          ((((-((m : ℕ) : ℤ) - 1 : ℤ) : ℝ) + p.1), p.2) := by
+        convert hs using 1 <;> norm_num <;> ring
+      exact Relation.EqvGen.trans _ _ _ ih hs'
+
+lemma apm_t00j01_klein_compact_aux_twisted (p : ℝ × ℝ) (n : ℤ) :
+    Relation.EqvGen apm_t00j01_kleinRel p
+      (((-1 : ℝ) ^ n) * p.1, (n : ℝ) + p.2) := by
+  induction n using Int.induction_on with
+  | zero => simpa using Relation.EqvGen.refl (r := apm_t00j01_kleinRel) p
+  | succ n ih =>
+      have hs := Relation.EqvGen.rel _ _
+        (apm_t00j01_kleinRel.twisted (((-1 : ℝ) ^ (n : ℤ)) * p.1)
+          ((n : ℝ) + p.2))
+      convert Relation.EqvGen.trans _ _ _ ih hs using 1 <;> simp [zpow_add₀] <;> ring
+  | pred n ih =>
+      have hs := (Relation.EqvGen.rel _ _
+        (apm_t00j01_kleinRel.twisted
+          (-(((-1 : ℝ) ^ (-(n : ℤ))) * p.1))
+          ((-(n : ℝ) - 1) + p.2))).symm
+      have hs' : Relation.EqvGen apm_t00j01_kleinRel
+          (((-1 : ℝ) ^ (-((n : ℕ) : ℤ))) * p.1,
+            (((-((n : ℕ) : ℤ) : ℤ) : ℝ)) + p.2)
+          (((-1 : ℝ) ^ (-((n : ℕ) : ℤ) - 1)) * p.1,
+            (((-((n : ℕ) : ℤ) - 1 : ℤ) : ℝ)) + p.2) := by
+        convert hs using 1 <;> simp [zpow_sub₀] <;> ring
+      exact Relation.EqvGen.trans _ _ _ ih hs'
+
+lemma apm_t00j01_klein_compact_aux_orbit (p : ℝ × ℝ)
+    (g : KleinPresentedGroupCoordinateModel.PresentedKleinGroup) :
+    Relation.EqvGen apm_t00j01_kleinRel p (g • p) := by
+  let c := KleinPresentedGroupCoordinateNormalForm.coordinateEquiv g
+  let m : ℤ := Multiplicative.toAdd c.1
+  let n : ℤ := Multiplicative.toAdd c.2
+  have hv := apm_t00j01_klein_compact_aux_twisted p n
+  have hh := apm_t00j01_klein_compact_aux_horizontal
+    (((-1 : ℝ) ^ n * p.1), ((n : ℝ) + p.2)) m
+  have h := Relation.EqvGen.trans _ _ _ hv hh
+  convert h using 1
+  change KleinPlaneAffineAction.coordinateAct c p = _
+  simp only [KleinPlaneAffineAction.coordinateAct]
+  rw [show (((Multiplicative.toAdd
+      (KleinPresentedGroupCoordinateModel.action c.2 (Multiplicative.ofAdd 1)) : ℤ) : ℝ)) =
+      (-1 : ℝ) ^ n by
+    change (((Multiplicative.toAdd
+      ((KleinPresentedGroupCoordinateModel.inversion ^ n)
+        (Multiplicative.ofAdd 1)) : ℤ) : ℝ)) = _
+    induction n using Int.induction_on with
+    | zero => norm_num
+    | succ n ih =>
+        rw [zpow_add_one]
+        simp only [MulAut.mul_apply]
+        rw [show KleinPresentedGroupCoordinateModel.inversion
+              (Multiplicative.ofAdd (1 : ℤ)) =
+              (Multiplicative.ofAdd (1 : ℤ))⁻¹ by rfl, map_inv]
+        rw [show Multiplicative.toAdd
+          (((KleinPresentedGroupCoordinateModel.inversion ^ (n : ℤ))
+            (Multiplicative.ofAdd 1))⁻¹) =
+          - Multiplicative.toAdd
+            ((KleinPresentedGroupCoordinateModel.inversion ^ (n : ℤ))
+              (Multiplicative.ofAdd 1)) by simp]
+        push_cast
+        rw [show (((Multiplicative.toAdd
+          ((KleinPresentedGroupCoordinateModel.inversion ^ (n : ℤ))
+            (Multiplicative.ofAdd 1)) : ℤ) : ℝ)) = (-1 : ℝ) ^ (n : ℤ) from ih]
+        simpa using (zpow_add_one₀ (a := (-1 : ℝ)) (by norm_num) (n : ℤ)).symm
+    | pred n ih =>
+        rw [zpow_sub_one]
+        simp only [MulAut.mul_apply]
+        change (((Multiplicative.toAdd
+          ((KleinPresentedGroupCoordinateModel.inversion ^ (-(n : ℤ)))
+            ((Multiplicative.ofAdd (1 : ℤ))⁻¹)) : ℤ) : ℝ)) = _
+        rw [map_inv]
+        rw [show Multiplicative.toAdd
+          (((KleinPresentedGroupCoordinateModel.inversion ^ (-(n : ℤ)))
+            (Multiplicative.ofAdd 1))⁻¹) =
+          - Multiplicative.toAdd
+            ((KleinPresentedGroupCoordinateModel.inversion ^ (-(n : ℤ)))
+              (Multiplicative.ofAdd 1)) by simp]
+        push_cast
+        rw [ih]
+        simpa using (zpow_sub_one₀ (a := (-1 : ℝ)) (by norm_num) (-(n : ℤ))).symm]
+
 theorem apm_t00j01_klein_compact :
     IsCompact (Set.univ : Set apm_t00j01_Klein) := by
-  sorry
+  let f : ℝ × ℝ → apm_t00j01_Klein :=
+    fun p => Quotient.mk (Relation.EqvGen.setoid apm_t00j01_kleinRel) p
+  have hf : Continuous f := continuous_coinduced_rng
+  have hc :=
+    ConstructionTargets.KleinClosedSquareOrbitInverseContinuity.isCompact_closedSquare_set.image hf
+  have hrange : f '' {p : ℝ × ℝ |
+      KleinPlaneActionSquareOrbitClassification.InSquare p} = Set.univ := by
+    apply Set.eq_univ_of_forall
+    intro y
+    induction y using Quotient.inductionOn with
+    | _ p =>
+        obtain ⟨g, hx0, hx1, hy0, hy1⟩ :=
+          KleinSquareRepresentative.exists_closedSquare_smul p
+        refine ⟨g • p, ⟨hx0, hx1, hy0, hy1⟩, ?_⟩
+        exact Quotient.sound (apm_t00j01_klein_compact_aux_orbit p g).symm
+  rw [hrange] at hc
+  exact hc
 
 /-- The explicit Klein quotient is connected, as a quotient of the connected
 plane (equivalently, as the image of the connected fundamental square). -/
 theorem apm_t00j01_klein_connected :
     IsConnected (Set.univ : Set apm_t00j01_Klein) := by
+  let q : ℝ × ℝ → apm_t00j01_Klein :=
+    fun p => Quotient.mk (Relation.EqvGen.setoid apm_t00j01_kleinRel) p
+  have hq : Continuous q := continuous_coinduced_rng
+  have hsurj : Function.Surjective q := Quotient.mk_surjective
+  rw [← hsurj.range_eq]
+  exact isConnected_range hq
+
+/-- Seat: induction on `n` (twisted generator, and its inverse). -/
+lemma apm_t00j01_klein_local_chart_aux_vertical (p : ℝ × ℝ) (n : ℤ) :
+    Relation.EqvGen apm_t00j01_kleinRel p
+      ((-1 : ℝ) ^ n * p.1, (n : ℝ) + p.2) := by
+  sorry
+
+/-- Seat: compose `aux_vertical` with `m` horizontal steps (induction on `m`). -/
+lemma apm_t00j01_klein_local_chart_aux_affine (p : ℝ × ℝ) (m n : ℤ) :
+    Relation.EqvGen apm_t00j01_kleinRel p
+      ((m : ℝ) + (-1 : ℝ) ^ n * p.1, (n : ℝ) + p.2) := by
   sorry
 
 /-- The normal form gives a small evenly-covered rectangle at every point of
@@ -194,6 +372,8 @@ input is an explicit hypothesis so this seat is independent of the normal-form
 seat. -/
 -- BEGIN SEAT AREA
 theorem apm_t00j01_klein_local_chart
+    (_haff : ∀ (p : ℝ × ℝ) (m n : ℤ), Relation.EqvGen apm_t00j01_kleinRel p
+      ((m : ℝ) + (-1 : ℝ) ^ n * p.1, (n : ℝ) + p.2))
     (_hnf : ∀ {p q : ℝ × ℝ},
       Relation.EqvGen apm_t00j01_kleinRel p q →
         ∃ m n : ℤ,
@@ -209,14 +389,21 @@ theorem apm_t00j01_klein_local_chart
 theorem apm_t00j01_circle_local_chart :
     ∀ z : Circle, ∃ (U : Set Circle) (V : Set ℝ),
       z ∈ U ∧ IsOpen U ∧ IsOpen V ∧ Nonempty (U ≃ₜ V) := by
-  sorry
+  intro z
+  obtain ⟨e, he, hexp⟩ := isLocalHomeomorph_circleExp (Complex.arg z)
+  refine ⟨e.target, e.source, ?_, e.open_target, e.open_source, ?_⟩
+  · rw [← Circle.exp_arg z, hexp]
+    exact e.map_source he
+  · exact ⟨e.symm.toHomeomorphSourceTarget⟩
 
 /-- Compactness of the two factors assembles to compactness of their product.
 The factor facts are hypotheses so all three seats are independent. -/
 theorem apm_t00j01_klein_circle_compact
     (_hK : IsCompact (Set.univ : Set apm_t00j01_Klein)) :
     IsCompact (Set.univ : Set apm_t00j01_nonorientable3) := by
-  sorry
+  letI : CompactSpace apm_t00j01_Klein :=
+    isCompact_univ_iff.mp _hK
+  exact isCompact_univ
 
 /-- Connectedness of the two nonempty factors assembles to connectedness of
 their product. -/
@@ -227,6 +414,17 @@ theorem apm_t00j01_klein_circle_connected
 
 /-- A two-dimensional Klein chart and a one-dimensional circle chart combine,
 after the standard coordinate reassociation, to an open chart in `ℝ³`. -/
+def apm_t00j01_klein_circle_local_chart_aux_realLine :
+    ℝ ≃L[ℝ] EuclideanSpace ℝ (Fin 1) :=
+  ((EuclideanSpace.equiv (Fin 1) ℝ).trans
+    (ContinuousLinearEquiv.funUnique (Fin 1) ℝ ℝ)).symm
+
+def apm_t00j01_klein_circle_local_chart_aux_coordinates :
+    EuclideanSpace ℝ (Fin 2) × ℝ ≃ₜ EuclideanSpace ℝ (Fin 3) :=
+  ((ContinuousLinearEquiv.prodCongr (ContinuousLinearEquiv.refl ℝ _)
+      apm_t00j01_klein_circle_local_chart_aux_realLine).trans
+    (EuclideanSpace.finAddEquivProd (n := 2) (m := 1)).symm).toHomeomorph
+
 theorem apm_t00j01_klein_circle_local_chart
     (_hK : ∀ x : apm_t00j01_Klein,
       ∃ (U : Set apm_t00j01_Klein) (V : Set (EuclideanSpace ℝ (Fin 2))),
@@ -236,7 +434,21 @@ theorem apm_t00j01_klein_circle_local_chart
     ∀ x : apm_t00j01_nonorientable3,
       ∃ (U : Set apm_t00j01_nonorientable3) (V : Set apm_t00j01_E3),
         x ∈ U ∧ IsOpen U ∧ IsOpen V ∧ Nonempty (U ≃ₜ V) := by
-  sorry
+  intro x
+  obtain ⟨UK, VK, hxK, hUK, hVK, eK⟩ := _hK x.1
+  obtain ⟨UC, VC, hxC, hUC, hVC, eC⟩ := _hC x.2
+  let W : Set apm_t00j01_E3 :=
+    apm_t00j01_klein_circle_local_chart_aux_coordinates '' (VK ×ˢ VC)
+  refine ⟨UK ×ˢ UC, W, ⟨hxK, hxC⟩, hUK.prod hUC, ?_, ?_⟩
+  · exact apm_t00j01_klein_circle_local_chart_aux_coordinates.isOpenMap _
+      (hVK.prod hVC)
+  · rcases eK with ⟨eK⟩
+    rcases eC with ⟨eC⟩
+    dsimp [W]
+    exact ⟨(Homeomorph.Set.prod UK UC).trans
+      ((Homeomorph.prodCongr eK eC).trans
+        ((Homeomorph.Set.prod VK VC).symm.trans
+          (apm_t00j01_klein_circle_local_chart_aux_coordinates.image (VK ×ˢ VC))))⟩
 
 /-- The explicit coinduced plane quotient, times the circle, is a compact
 connected topological three-manifold in the concrete sense used by the
@@ -246,7 +458,7 @@ theorem apm_t00j01_klein_quotient_charts :
   refine ⟨apm_t00j01_klein_circle_compact apm_t00j01_klein_compact,
     apm_t00j01_klein_circle_connected apm_t00j01_klein_connected, ?_⟩
   exact apm_t00j01_klein_circle_local_chart
-    (apm_t00j01_klein_local_chart fun {_ _} h =>
+    (apm_t00j01_klein_local_chart apm_t00j01_klein_local_chart_aux_affine fun {_ _} h =>
       apm_t00j01_kleinRel_normal_form h)
     apm_t00j01_circle_local_chart
 
