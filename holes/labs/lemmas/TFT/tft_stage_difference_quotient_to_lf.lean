@@ -318,7 +318,29 @@ lemma tft_stage_continuousAt_of_structure_maps
 /-- S1 with U1 discharged for every iterated derivative of `ψ`. -/
 lemma tft_stage_continuousAt (ψ : TFT E F) (x₀ : E) :
     ContinuousAt (tftTranslateStageLocal ψ x₀) x₀ := by
-  sorry
+  apply tft_stage_continuousAt_of_structure_maps ψ x₀
+  intro i
+  let f : E → (E [×i]→L[ℝ] F) := iteratedFDeriv ℝ i (ψ : E → F)
+  have hf : Continuous f :=
+    ψ.contDiff.continuous_iteratedFDeriv (by exact_mod_cast le_top)
+  have hfc : HasCompactSupport f := ψ.hasCompactSupport.iteratedFDeriv i
+  have hc : ContinuousAt (fun x : E =>
+      tftBCFOfCompactSupport (fun y => f (x + y))
+        (hf.comp (continuous_const.add continuous_id))
+        (hfc.comp_homeomorph (Homeomorph.addLeft x))) x₀ :=
+    (tft_translate_bcf_continuous f hf hfc).continuousAt
+  apply hc.congr_of_eventuallyEq
+  filter_upwards [Metric.closedBall_mem_nhds x₀ (by norm_num : (0 : ℝ) < 1)] with x hx
+  apply BoundedContinuousFunction.ext
+  intro y
+  have heq : (tftTranslateStageLocal ψ x₀ x : E → F) =
+      fun z ↦ ψ (x + z) := by
+    funext z
+    exact tftTranslateStageLocal_apply ψ x₀ x hx z
+  rw [Function.comp_apply, ContDiffMapSupportedIn.structureMapCLM_top_apply]
+  change iteratedFDeriv ℝ i (tftTranslateStageLocal ψ x₀ x : E → F) y = _
+  rw [heq, iteratedFDeriv_comp_add_left]
+  rfl
 
 /-- S2: convergence in a fixed stage, reduced to convergence under every
 structure map. -/
@@ -354,13 +376,124 @@ lemma tft_stage_difference_quotient_of_structure_maps
   exact hU2 i
 
 /-- S2 with U2 discharged for every iterated derivative of `ψ`. -/
+lemma tft_stage_difference_quotient_aux_eventually (x₀ v : E) :
+    ∀ᶠ h : ℝ in nhdsWithin 0 ({0} : Set ℝ)ᶜ,
+      x₀ + h • v ∈ Metric.closedBall x₀ 1 := by
+  have hc0 : ContinuousAt (fun h : ℝ => x₀ + h • v) 0 := by fun_prop
+  have hc : Tendsto (fun h : ℝ => x₀ + h • v)
+      (nhdsWithin 0 ({0} : Set ℝ)ᶜ) (nhds x₀) := by
+    simpa using hc0.mono_left inf_le_left
+  exact hc.eventually (Metric.closedBall_mem_nhds x₀ zero_lt_one)
+
+lemma tft_stage_difference_quotient_aux_contDiff (ψ : TFT E F) (i : ℕ) :
+    ContDiff ℝ 1 (iteratedFDeriv ℝ i (ψ : E → F)) := by
+  exact ψ.contDiff.iteratedFDeriv_right
+    (by exact_mod_cast (show 1 + i ≤ (⊤ : ℕ∞) from le_top))
+
+/-- A directional derivative commutes with the `i`-th derivative of a smooth map
+(symmetry of higher derivatives; Mathlib has it only for analytic maps). -/
+lemma tft_stage_difference_quotient_aux_directional_comm_aux_smooth
+    (g : E → F) (hg : ContDiff ℝ (⊤ : ℕ∞) g) (i : ℕ) :
+    ContDiff ℝ (⊤ : ℕ∞) (iteratedFDeriv ℝ i g) := by
+  exact hg.iteratedFDeriv_right
+    (by exact_mod_cast (show (⊤ : ℕ∞) + i ≤ (⊤ : ℕ∞) from by simp))
+
+lemma tft_stage_difference_quotient_aux_directional_comm
+    (g : E → F) (hg : ContDiff ℝ (⊤ : ℕ∞) g) (i : ℕ) (v y : E) :
+    iteratedFDeriv ℝ i (fun z => fderiv ℝ g z v) y =
+      fderiv ℝ (iteratedFDeriv ℝ i g) y v := by
+  revert y
+  rw [← funext_iff]
+  induction i with
+  | zero =>
+    funext y
+    rw [iteratedFDeriv_zero_eq_comp, iteratedFDeriv_zero_eq_comp]
+    rw [(continuousMultilinearCurryFin0 ℝ E F).symm.comp_fderiv]
+    rfl
+  | succ i ih =>
+    funext y
+    have hGs := tft_stage_difference_quotient_aux_directional_comm_aux_smooth g hg i
+    have hdG : Differentiable ℝ (fderiv ℝ (iteratedFDeriv ℝ i g)) :=
+      (contDiff_infty_iff_fderiv.1 hGs).2.differentiable (by simp)
+    have hL : iteratedFDeriv ℝ (i + 1) (fun z => fderiv ℝ g z v) y =
+        (continuousMultilinearCurryLeftEquiv ℝ (fun _ : Fin (i + 1) => E) F).symm
+          (fderiv ℝ (iteratedFDeriv ℝ i (fun z => fderiv ℝ g z v)) y) := by
+      rw [iteratedFDeriv_succ_eq_comp_left]; rfl
+    have hRR : iteratedFDeriv ℝ (i + 1) g =
+        ⇑(continuousMultilinearCurryLeftEquiv ℝ (fun _ : Fin (i + 1) => E) F).symm ∘
+          fderiv ℝ (iteratedFDeriv ℝ i g) := iteratedFDeriv_succ_eq_comp_left
+    rw [hL, hRR, ih]
+    have hR := ContinuousLinearEquiv.comp_fderiv (𝕜 := ℝ)
+      (continuousMultilinearCurryLeftEquiv ℝ (fun _ : Fin (i + 1) => E) F).symm.toContinuousLinearEquiv
+      (f := fderiv ℝ (iteratedFDeriv ℝ i g)) (x := y)
+    erw [hR, ContinuousLinearMap.comp_apply]
+    refine congrArg (continuousMultilinearCurryLeftEquiv ℝ (fun _ : Fin (i + 1) => E) F).symm ?_
+    have hsymm := (hGs.contDiffAt (x := y)).isSymmSndFDerivAt
+      (by rw [minSmoothness_of_isRCLikeNormedField]; exact WithTop.coe_le_coe.2 le_top)
+    ext w
+    rw [fderiv_clm_apply (hdG y) (differentiableAt_const v)]
+    rw [fderiv_const_apply, ContinuousLinearMap.comp_zero, zero_add,
+      ContinuousLinearMap.flip_apply, hsymm w v]
+
+
+lemma tft_stage_difference_quotient_aux_coe_local (ψ : TFT E F) (x₀ x : E)
+    (hx : x ∈ Metric.closedBall x₀ 1) :
+    ⇑(tftTranslateStageLocal ψ x₀ x) = fun y => ψ (x + y) :=
+  funext (tftTranslateStageLocal_apply ψ x₀ x hx)
+
+lemma tft_stage_difference_quotient_aux_coe_dir (ψ : TFT E F) (x₀ v : E) :
+    ⇑(tftDirectionalTranslateStage ψ x₀ x₀ v) = fun y => fderiv ℝ (ψ : E → F) (x₀ + y) v := by
+  funext y
+  simp [tftDirectionalTranslateStage, Metric.mem_closedBall]
+
 lemma tft_stage_difference_quotient (ψ : TFT E F) (x₀ v : E) :
     Tendsto (fun h : ℝ => h⁻¹ •
         (tftTranslateStageLocal ψ x₀ (x₀ + h • v) -
           tftTranslateStageLocal ψ x₀ x₀))
       (nhdsWithin 0 ({0} : Set ℝ)ᶜ)
       (nhds (tftDirectionalTranslateStage ψ x₀ x₀ v)) := by
-  sorry
+  apply tft_stage_difference_quotient_of_structure_maps
+  intro i
+  have hdiff := tft_stage_difference_quotient_aux_contDiff ψ i
+  have h := tft_translate_bcf_difference_quotient
+    (iteratedFDeriv ℝ i (ψ : E → F)) hdiff
+    (ψ.hasCompactSupport.iteratedFDeriv i) x₀ v
+  have hev := tft_stage_difference_quotient_aux_eventually x₀ v
+  have hx₀ : x₀ ∈ Metric.closedBall x₀ 1 := Metric.mem_closedBall_self zero_le_one
+  have hψ : ContDiff ℝ (⊤ : ℕ∞) (ψ : E → F) := ψ.contDiff
+  rw [show ContDiffMapSupportedIn.structureMapCLM ℝ ⊤ i
+      (tftDirectionalTranslateStage ψ x₀ x₀ v) =
+      tftBCFOfCompactSupport
+        (fun y => fderiv ℝ (iteratedFDeriv ℝ i (ψ : E → F)) (x₀ + y) v)
+        (tft_fderiv_translate_continuous _ hdiff x₀ v)
+        (tft_fderiv_translate_hasCompactSupport _ hdiff
+          (ψ.hasCompactSupport.iteratedFDeriv i) x₀ v) by
+    ext y : 1
+    rw [ContDiffMapSupportedIn.structureMapCLM_top_apply, tft_stage_difference_quotient_aux_coe_dir]
+    change iteratedFDeriv ℝ i (fun y => fderiv ℝ (ψ : E → F) (x₀ + y) v) y =
+      fderiv ℝ (iteratedFDeriv ℝ i (ψ : E → F)) (x₀ + y) v
+    rw [iteratedFDeriv_comp_add_left' i x₀ (f := fun z => fderiv ℝ (ψ : E → F) z v)]
+    exact tft_stage_difference_quotient_aux_directional_comm _ hψ i v (x₀ + y)]
+  refine h.congr' ?_
+  filter_upwards [hev] with h hh
+  ext y : 1
+  rw [ContDiffMapSupportedIn.structureMapCLM_top_apply]
+  change h⁻¹ • (iteratedFDeriv ℝ i (ψ : E → F) (x₀ + h • v + y) - iteratedFDeriv ℝ i (ψ : E → F) (x₀ + y)) = _
+  rw [ContDiffMapSupportedIn.coe_smul, ContDiffMapSupportedIn.coe_sub,
+    tft_stage_difference_quotient_aux_coe_local ψ x₀ _ hh,
+    tft_stage_difference_quotient_aux_coe_local ψ x₀ _ hx₀]
+  have h1 : ContDiff ℝ (⊤ : ℕ∞) (fun y => ψ (x₀ + h • v + y)) :=
+    hψ.comp (contDiff_const.add contDiff_id)
+  have h2 : ContDiff ℝ (⊤ : ℕ∞) (fun y => ψ (x₀ + y)) :=
+    hψ.comp (contDiff_const.add contDiff_id)
+  have hi : ((i : ℕ∞) : WithTop ℕ∞) ≤ ((⊤ : ℕ∞) : WithTop ℕ∞) := by exact_mod_cast le_top
+  set f1 : E → F := fun y => ψ (x₀ + h • v + y) with hf1
+  set f2 : E → F := fun y => ψ (x₀ + y) with hf2
+  have hs : ContDiff ℝ (⊤ : ℕ∞) (f1 - f2) := h1.sub h2
+  rw [iteratedFDeriv_const_smul_apply (hs.of_le hi).contDiffAt,
+    iteratedFDeriv_sub_apply (h1.of_le hi).contDiffAt (h2.of_le hi).contDiffAt, hf1, hf2,
+    iteratedFDeriv_comp_add_left' i (x₀ + h • v) (f := (ψ : E → F)),
+    iteratedFDeriv_comp_add_left' i x₀ (f := (ψ : E → F))]
 
 lemma tft_ofSupportedIn_stage_eq (ψ : TFT E F) (x₀ x : E)
     (hx : x ∈ Metric.closedBall x₀ 1) :
