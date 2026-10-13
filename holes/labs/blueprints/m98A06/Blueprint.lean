@@ -2709,7 +2709,49 @@ lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_reverse_aux
     (hv : apm_m98a06_InH10Pi v dv)
     (huv : u =ᵐ[volume.restrict (Ioo (0 : ℝ) Real.pi)] v) :
     du =ᵐ[volume.restrict (Ioo (0 : ℝ) Real.pi)] dv := by
-  sorry
+  let U : Set ℝ := Ioo (0 : ℝ) Real.pi
+  have hdu : IntegrableOn du U := hu.2.2.2.2.1.integrable (by norm_num)
+  have hdv : IntegrableOn dv U := hv.2.2.2.2.1.integrable (by norm_num)
+  have hloc : LocallyIntegrableOn (fun x => du x - dv x) U volume :=
+    (hdu.sub hdv).locallyIntegrableOn
+  have hz := isOpen_Ioo.ae_eq_zero_of_integral_contDiff_smul_eq_zero hloc
+    (fun φ hφ hφc hφt => by
+      have hφs : Function.support φ ⊆ U :=
+        (subset_tsupport φ).trans hφt
+      have hu' := hu.2.2.2.2.2 φ hφ hφc hφs
+      have hv' := hv.2.2.2.2.2 φ hφ hφc hφs
+      have huv' : (∫ x, u x * deriv φ x ∂(volume.restrict U)) =
+          ∫ x, v x * deriv φ x ∂(volume.restrict U) := by
+        apply integral_congr_ae
+        filter_upwards [huv] with x hx
+        rw [hx]
+      have hdudv : (∫ x, du x * φ x ∂(volume.restrict U)) =
+          ∫ x, dv x * φ x ∂(volume.restrict U) := by linarith
+      have hφdu : IntegrableOn (fun x => du x * φ x) U :=
+        hdu.mul_continuousOn_of_subset hφ.continuous.continuousOn measurableSet_Ioo
+          isCompact_Icc Ioo_subset_Icc_self
+      have hφdv : IntegrableOn (fun x => dv x * φ x) U :=
+        hdv.mul_continuousOn_of_subset hφ.continuous.continuousOn measurableSet_Ioo
+          isCompact_Icc Ioo_subset_Icc_self
+      have hrest : (∫ x, φ x * (du x - dv x) ∂(volume.restrict U)) = 0 := by
+        rw [show (fun x => φ x * (du x - dv x)) =
+            fun x => du x * φ x - dv x * φ x by funext x; ring,
+          integral_sub hφdu hφdv, hdudv, sub_self]
+      change (∫ x, φ x * (du x - dv x) ∂volume) = 0
+      rw [← intervalIntegral.integral_eq_integral_of_support_subset
+        (a := (0 : ℝ)) (b := Real.pi) (μ := volume) (f := fun x => φ x * (du x - dv x))]
+      · rw [intervalIntegral.integral_of_le Real.pi_pos.le,
+          integral_Ioc_eq_integral_Ioo]
+        exact hrest
+      · intro x hx
+        have hxφ : x ∈ Function.support φ := by
+          intro hzero
+          exact hx (by simp [hzero])
+        exact Ioo_subset_Ioc_self (hφt (subset_tsupport _ hxφ)) )
+  change ∀ᵐ x ∂volume.restrict (Ioo (0 : ℝ) Real.pi), du x = dv x
+  rw [ae_restrict_iff' measurableSet_Ioo]
+  filter_upwards [hz] with x hx hmem
+  exact sub_eq_zero.mp (hx hmem)
 
 lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_reverse_aux_smul
     (c : ℝ) (u du : ℝ → ℝ) (h : apm_m98a06_InH10Pi u du) :
