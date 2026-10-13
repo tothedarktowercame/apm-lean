@@ -5,6 +5,19 @@ open Set MeasureTheory
 
 noncomputable section
 
+/-- Two maps continuous within a set agree at a point in the closure of its interior if they
+agree throughout that interior. -/
+theorem ContinuousWithinAt.eq_of_eqOn_interior_of_mem_closure
+    {X Y : Type*} [TopologicalSpace X] [TopologicalSpace Y] [T2Space Y]
+    {s : Set X} {x : X} {f g : X → Y}
+    (hx : x ∈ closure (interior s))
+    (hf : ContinuousWithinAt f s x) (hg : ContinuousWithinAt g s x)
+    (heq : Set.EqOn f g (interior s)) : f x = g x := by
+  have hn : (nhdsWithin x (interior s)).NeBot := mem_closure_iff_clusterPt.mp hx
+  exact tendsto_nhds_unique_of_eventuallyEq
+    (hf.mono interior_subset) (hg.mono interior_subset)
+    (heq.eventuallyEq_of_mem self_mem_nhdsWithin)
+
 theorem ContDiffWithinAt.domDomCongr_iteratedFDerivWithin_two_of_infty
     {E F : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
     [NormedAddCommGroup F] [NormedSpace ℝ F]
