@@ -386,7 +386,7 @@ lemma apm_m02J06_continuous_of_sqrt_modulus
 /-- The second bridge at the interface available in the final theorem: smoothness
 supplies the measurability omitted from the standalone quantitative statement. -/
 lemma apm_m02J06_bridge_2_of_contDiff
-    {φ : ℝ → ℝ} {M : ℝ} (hφsmooth : ContDiff ℝ ⊤ φ)
+    {φ : ℝ → ℝ} {M : ℝ} (hφsmooth : ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) φ)
     (hφbound : ∀ x, |φ x| ≤ M) :
     ∀ ε : ℝ, 0 < ε → ∀ f ∈ apm_m02J06_K, ∀ x y : ℝ,
       |apm_m02J06_convolution f (apm_m02J06_mollifier φ ε) x -
@@ -413,7 +413,7 @@ lemma apm_m02J06_bridge_2_of_contDiff
 estimate. It turns the translation control on `f` and the uniform bound on
 the mollifier into the equicontinuity modulus used by Arzelà--Ascoli. -/
 theorem apm_m02J06_bridge_2
-    {φ : ℝ → ℝ} {M : ℝ} (hφsmooth : ContDiff ℝ ⊤ φ)
+    {φ : ℝ → ℝ} {M : ℝ} (hφsmooth : ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) φ)
     (hφbound : ∀ x, |φ x| ≤ M) :
     ∀ ε : ℝ, 0 < ε → ∀ f ∈ apm_m02J06_K, ∀ x y : ℝ,
       |apm_m02J06_convolution f (apm_m02J06_mollifier φ ε) x -
@@ -959,7 +959,7 @@ theorem apm_m02J06_bridge_3 : IsCompact apm_m02J06_KL1 := by
 
 theorem apm_m02j06 :
     ∀ (φ : ℝ → ℝ) (M : ℝ),
-      ContDiff ℝ ⊤ φ →
+      ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) φ →
       (∀ x, 0 ≤ φ x) →
       ∫ x, φ x ∂volume = 1 →
       (∀ x, 1 ≤ |x| → φ x = 0) →

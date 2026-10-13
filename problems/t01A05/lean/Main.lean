@@ -85,10 +85,10 @@ theorem apm_t01a05 :
       (X Xtilde : Type)
       [TopologicalSpace X] [T2Space X] [CompactSpace X]
       [ChartedSpace (T01A05Euclidean n) X]
-      [IsManifold (T01A05Model n) ⊤ X]
+      [IsManifold (T01A05Model n) ((⊤ : ℕ∞) : WithTop ℕ∞) X]
       [TopologicalSpace Xtilde] [T2Space Xtilde] [CompactSpace Xtilde]
       [ChartedSpace (T01A05Euclidean n) Xtilde]
-      [IsManifold (T01A05Model n) ⊤ Xtilde]
+      [IsManifold (T01A05Model n) ((⊤ : ℕ∞) : WithTop ℕ∞) Xtilde]
       (π : C(Xtilde, X)),
       t01A05IsKSheetedCover k π →
       ∀ o : T01A05Orientation n X,

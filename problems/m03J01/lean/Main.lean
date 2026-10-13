@@ -33,26 +33,7 @@ noncomputable def apm_m03J01_gradient (n : ℕ)
 /-- Smooth functions compactly supported in the domain. -/
 def apm_m03J01_testFunction (n : ℕ) (Ω : Set (apm_m03J01_E n))
     (φ : apm_m03J01_E n → ℝ) : Prop :=
-  ContDiff ℝ ⊤ φ ∧ HasCompactSupport φ ∧ Function.support φ ⊆ Ω
-
-/-- In every positive dimension the frozen `ContDiff ℝ ⊤` test-function
-encoding admits only zero. Here `⊤ : WithTop ℕ∞` is analyticity; compact
-support supplies a zero neighborhood, and analytic continuation across the
-connected Euclidean space supplies global vanishing. -/
-lemma apm_m03J01_testFunction_eq_zero_of_one_le {n : ℕ} (hn : 1 ≤ n)
-    {Ω : Set (apm_m03J01_E n)} {φ : apm_m03J01_E n → ℝ}
-    (hφ : apm_m03J01_testFunction n Ω φ) : φ = 0 := by
-  let i : Fin n := ⟨0, hn⟩
-  letI : Nonempty (Fin n) := ⟨i⟩
-  letI : Nontrivial (apm_m03J01_E n) := inferInstance
-  letI : NoncompactSpace (apm_m03J01_E n) := inferInstance
-  obtain ⟨z, hz⟩ : ∃ z, z ∉ tsupport φ :=
-    (Set.ne_univ_iff_exists_notMem (tsupport φ)).mp hφ.2.1.ne_univ
-  have hzero : φ =ᶠ[nhds z] 0 := notMem_tsupport_iff_eventuallyEq.mp hz
-  apply funext
-  intro x
-  exact hφ.1.analyticOnNhd.eqOn_zero_of_preconnected_of_eventuallyEq_zero
-    isPreconnected_univ (mem_univ z) hzero (mem_univ x)
+  ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) φ ∧ HasCompactSupport φ ∧ Function.support φ ⊆ Ω
 
 /-- Dimension zero is the genuine exception to the preceding collapse: on the
 one-point Euclidean space the constant-one function is analytic and compactly
@@ -71,7 +52,7 @@ lemma apm_m03J01_testFunction_zero_dim_nonzero :
     norm_num at this
 
 lemma apm_m03J01_gradient_continuous {n : ℕ}
-    {φ : apm_m03J01_E n → ℝ} (hφ : ContDiff ℝ ⊤ φ) :
+    {φ : apm_m03J01_E n → ℝ} (hφ : ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) φ) :
     Continuous (apm_m03J01_gradient n φ) := by
   unfold apm_m03J01_gradient
   apply continuous_finset_sum
@@ -79,7 +60,7 @@ lemma apm_m03J01_gradient_continuous {n : ℕ}
   exact ((hφ.continuous_fderiv (by simp)).clm_apply continuous_const).smul continuous_const
 
 lemma apm_m03J01_gradient_add {n : ℕ} {φ ψ : apm_m03J01_E n → ℝ}
-    (hφ : ContDiff ℝ ⊤ φ) (hψ : ContDiff ℝ ⊤ ψ) :
+    (hφ : ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) φ) (hψ : ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) ψ) :
     apm_m03J01_gradient n (φ + ψ) =
       apm_m03J01_gradient n φ + apm_m03J01_gradient n ψ := by
   have hφdiff : Differentiable ℝ φ := hφ.differentiable (by simp)
@@ -162,58 +143,6 @@ structure apm_m03J01_H01 (n : ℕ) (Ω : Set (apm_m03J01_E n)) where
     Tendsto (fun k ↦ eLpNorm
       (fun x ↦ apm_m03J01_gradient n (φ k) x - grad x) 2 volume) atTop (nhds 0)
 
-/-- Because positive-dimensional analytic compactly supported approximants are
-all zero, both components of every encoded `H₀¹` representative have zero
-`L²` seminorm. This is the norm-level witness for the frozen encoding's
-collapse. -/
-lemma apm_m03J01_H01_eLpNorm_eq_zero_of_one_le {n : ℕ} (hn : 1 ≤ n)
-    {Ω : Set (apm_m03J01_E n)} (u : apm_m03J01_H01 n Ω) :
-    eLpNorm u.val 2 volume = 0 ∧ eLpNorm u.grad 2 volume = 0 := by
-  obtain ⟨φ, hφ, hval, hgrad⟩ := u.approximable
-  have hφzero (k : ℕ) : φ k = 0 :=
-    apm_m03J01_testFunction_eq_zero_of_one_le hn (hφ k)
-  have hgradient_zero :
-      apm_m03J01_gradient n (0 : apm_m03J01_E n → ℝ) = 0 := by
-    funext x
-    simp [apm_m03J01_gradient]
-  have hval_sequence :
-      (fun k ↦ eLpNorm (fun x ↦ φ k x - u.val x) 2 volume) =
-        (fun _ : ℕ ↦ eLpNorm u.val 2 volume) := by
-    funext k
-    rw [hφzero k]
-    simp only [Pi.zero_apply, zero_sub]
-    change eLpNorm (-u.val) 2 volume = eLpNorm u.val 2 volume
-    exact eLpNorm_neg u.val 2 volume
-  have hgrad_sequence :
-      (fun k ↦ eLpNorm
-        (fun x ↦ apm_m03J01_gradient n (φ k) x - u.grad x) 2 volume) =
-        (fun _ : ℕ ↦ eLpNorm u.grad 2 volume) := by
-    funext k
-    rw [hφzero k, hgradient_zero]
-    simp only [Pi.zero_apply, zero_sub]
-    change eLpNorm (-u.grad) 2 volume = eLpNorm u.grad 2 volume
-    exact eLpNorm_neg u.grad 2 volume
-  constructor
-  · have hval' :
-        Tendsto (fun _ : ℕ ↦ eLpNorm u.val 2 volume) atTop (nhds 0) := by
-      rw [hval_sequence] at hval
-      exact hval
-    exact tendsto_nhds_unique tendsto_const_nhds hval'
-  · have hgrad' :
-        Tendsto (fun _ : ℕ ↦ eLpNorm u.grad 2 volume) atTop (nhds 0) := by
-      rw [hgrad_sequence] at hgrad
-      exact hgrad
-    exact tendsto_nhds_unique tendsto_const_nhds hgrad'
-
-/-- Every positive-dimensional element of the frozen `H01` record is the zero
-value/gradient pair modulo almost-everywhere equality. -/
-lemma apm_m03J01_H01_ae_eq_zero_of_one_le {n : ℕ} (hn : 1 ≤ n)
-    {Ω : Set (apm_m03J01_E n)} (u : apm_m03J01_H01 n Ω) :
-    u.val =ᵐ[volume] 0 ∧ u.grad =ᵐ[volume] 0 := by
-  obtain ⟨hval, hgrad⟩ := apm_m03J01_H01_eLpNorm_eq_zero_of_one_le hn u
-  exact ⟨(eLpNorm_eq_zero_iff u.val_memLp.aestronglyMeasurable (by norm_num)).mp hval,
-    (eLpNorm_eq_zero_iff u.grad_memLp.aestronglyMeasurable (by norm_num)).mp hgrad⟩
-
 /-- The zero value/gradient pair is represented by the constant zero test
 sequence. This is the first closure datum needed for the eventual quotient
 Hilbert space. -/
@@ -243,7 +172,7 @@ lemma apm_m03J01_H01_add_exists {n : ℕ} {Ω : Set (apm_m03J01_E n)}
   rcases v.approximable with ⟨ψ, hψtest, hψval, hψgrad⟩
   let θ : ℕ → apm_m03J01_E n → ℝ := fun k x => φ k x + ψ k x
   have hgradient_continuous {f : apm_m03J01_E n → ℝ}
-      (hf : ContDiff ℝ ⊤ f) : Continuous (apm_m03J01_gradient n f) := by
+      (hf : ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) f) : Continuous (apm_m03J01_gradient n f) := by
     unfold apm_m03J01_gradient
     apply continuous_finset_sum
     intro i hi
@@ -405,42 +334,6 @@ def apm_m03J01_weakSolution {n : ℕ} {Ω : Set (apm_m03J01_E n)}
   ∀ v : apm_m03J01_H01 n Ω,
     ∫ x, (inner ℝ (u.grad x) (v.grad x) + u.val x * v.val x) ∂volume =
       ∫ x, F x * v.val x ∂volume
-
-/-- In positive dimension weak-solution-hood is vacuous under the frozen
-encoding: every trial and test representative vanishes a.e., so both sides of
-the displayed weak equation are zero for every forcing term. -/
-lemma apm_m03J01_weakSolution_of_one_le {n : ℕ} (hn : 1 ≤ n)
-    {Ω : Set (apm_m03J01_E n)} (F : apm_m03J01_E n → ℝ)
-    (u : apm_m03J01_H01 n Ω) : apm_m03J01_weakSolution F u := by
-  intro v
-  obtain ⟨huval, hugrad⟩ := apm_m03J01_H01_ae_eq_zero_of_one_le hn u
-  obtain ⟨hvval, hvgrad⟩ := apm_m03J01_H01_ae_eq_zero_of_one_le hn v
-  have hleft :
-      (fun x ↦ inner ℝ (u.grad x) (v.grad x) + u.val x * v.val x) =ᵐ[volume]
-        (0 : apm_m03J01_E n → ℝ) := by
-    filter_upwards [hugrad, hvgrad, huval, hvval] with x hugrad hvgrad huval hvval
-    simp [hugrad, hvgrad, huval, hvval]
-  have hright :
-      (fun x ↦ F x * v.val x) =ᵐ[volume] (0 : apm_m03J01_E n → ℝ) := by
-    filter_upwards [hvval] with x hvval
-    simp [hvval]
-  calc
-    ∫ x, (inner ℝ (u.grad x) (v.grad x) + u.val x * v.val x) ∂volume =
-        ∫ _x, (0 : ℝ) ∂volume := integral_congr_ae hleft
-    _ = 0 := by simp
-    _ = ∫ x, F x * v.val x ∂volume := by
-      have hz : ∫ x, F x * v.val x ∂volume = 0 := by
-        rw [integral_congr_ae hright]
-        simp
-      exact hz.symm
-
-/-- Positive-dimensional uniqueness is likewise vacuous: no solution
-hypotheses are needed because every encoded value representative is zero a.e. -/
-lemma apm_m03J01_H01_val_ae_eq_of_one_le {n : ℕ} (hn : 1 ≤ n)
-    {Ω : Set (apm_m03J01_E n)} (u v : apm_m03J01_H01 n Ω) :
-    u.val =ᵐ[volume] v.val := by
-  exact (apm_m03J01_H01_ae_eq_zero_of_one_le hn u).1.trans
-    (apm_m03J01_H01_ae_eq_zero_of_one_le hn v).1.symm
 
 lemma apm_m03J01_weakSolution_zero_iff {n : ℕ} {Ω : Set (apm_m03J01_E n)}
     (F : apm_m03J01_E n → ℝ) :
@@ -836,7 +729,7 @@ def apm_m03J01_weakHessian {n : ℕ}
     (H : apm_m03J01_E n → Fin n → Fin n → ℝ) : Prop :=
   MemLp H 2 volume ∧
   ∀ (i j : Fin n) (φ : apm_m03J01_E n → ℝ),
-    ContDiff ℝ ⊤ φ → HasCompactSupport φ →
+    ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) φ → HasCompactSupport φ →
     ∫ x, g x i * fderiv ℝ φ x (apm_m03J01_basis n j) ∂volume =
       -∫ x, H x i j * φ x ∂volume
 
@@ -1061,151 +954,5 @@ theorem apm_m03j01 :
           (u : apm_m03J01_H01 n Ω), apm_m03J01_weakSolution F u →
             ∃ H, apm_m03J01_weakHessian u.grad H ∧
               apm_m03J01_H2size u H ≤ C * eLpNorm F 2 volume) := by
-  /-
-  CLOSER HOP 1 (partial). The continuous Fréchet--Riesz solution operator is
-  now constructed as `apm_m03J01_riesz`, and
-  `apm_m03J01_inner_riesz` proves its exact defining identity. The helper
-  `apm_m03J01_abstract_variational` then completes the theorem's entire first
-  conjunct by the Hilbert norm-square identity, including boundedness below,
-  minimization, and uniqueness.
-
-  The custom Sobolev-space boundary remains. Mathlib supplies the abstract
-  ingredients `InnerProductSpace.toDual` (Fréchet–Riesz) and
-  `LinearMap.continuous_of_seq_closed_graph`. However, the PDE clauses use the
-  bespoke representative record `apm_m03J01_H01`, which has no additive,
-  normed, inner-product, or complete-space instances and is not quotiented by
-  a.e. equality. Thus the abstract Riesz map cannot be instantiated on it.
-
-  Renewed searches of `LEMMA-INDEX.md`, `ConstructionTargets/`, solved PDE
-  artifacts, Mathlib's Lax--Milgram and Sobolev sources, and git history found
-  no implementation of the required custom quotient. A proof must first
-  construct the Hilbert-space quotient of value/gradient
-  pairs satisfying `approximable`, prove completeness and compatibility of its
-  energy inner product with the displayed integrals, lift `F ↦ ∫ Fv` as a
-  continuous functional, and descend the resulting solution back to the record.
-  The final clause additionally needs a Banach space of weak-Hessian classes,
-  uniqueness modulo a.e. equality, continuity of the embedding to the energy
-  space, and a closed-graph argument producing the ENNReal estimate. Searches
-  found no compiled sibling connecting these APIs to this custom encoding, so
-  no sibling code was reused and the frozen statement was left unchanged.
-
-  Closer hop 2 begins the missing custom-space construction rather than only
-  surveying quotient APIs. `apm_m03J01_zeroH01` builds the zero Sobolev
-  representative with the constant zero test-function approximation, proving
-  the record is inhabited for every `n` and `Ω` and supplying the additive
-  identity needed by a future quotient. `apm_m03J01_weakSolution_zero_iff`
-  also computes its weak equation exactly: zero is a solution precisely when
-  the forcing functional vanishes on every custom test representative.
-  Further inspection of `AEEqFun`, `Lp`, product Hilbert spaces, and closed
-  submodules found reusable ambient structures, but the record's
-  `approximable` predicate must still be shown closed under addition/scaling
-  and identified with a closed subspace before those structures apply. The
-  forcing functional and weak-Hessian closed-graph estimate remain open.
-
-  Closer hop 3 also begins the weak-Hessian graph at its origin:
-  `apm_m03J01_zero_weakHessian` proves directly from the distributional
-  definition that the zero representative has zero weak Hessian, and
-  `apm_m03J01_zero_H2size` computes its exact size as zero. Together with the
-  hop-2 zero `H₀¹` representative, both the energy space and proposed graph
-  space now have compiled origins. Searches were extended to graph subspaces,
-  closed operators, distributional derivatives, `MemLp` addition/scaling,
-  and analogous custom Sobolev records in `m00A04`; none supplies closure of
-  this record's approximation witnesses or the completeness/closed-graph
-  assembly. The nonzero additive/scalar cases and both PDE conclusions remain
-  honestly open.
-
-  Closer hop 4 closes the concrete PDE clause. The approximation predicate is
-  now proved stable under addition and scalar multiplication. The range of
-  smooth value/gradient pairs is made into a submodule of the `L² × L²`
-  energy space; its closure admits an orthogonal projection of the forcing
-  vector. `apm_m03J01_weakSolution_exists` realizes that projection back as a
-  bespoke `H01` record, and `apm_m03J01_weakSolution_unique_ae` proves a.e.
-  uniqueness by testing two solutions against one another.
-
-  Work on the final closed-graph clause exposed a frozen-statement defect.
-  In this Mathlib version, the unannotated exponent `⊤` in
-  `ContDiff ℝ ⊤` is `ω : WithTop ℕ∞` (analyticity), whereas smoothness is
-  written `ContDiff ℝ ∞` with `∞ = ((⊤ : ℕ∞) : WithTop ℕ∞)`. Thus both
-  `apm_m03J01_testFunction` and `apm_m03J01_weakHessian` quantify analytic,
-  not smooth, compactly supported functions. The nearest distributional
-  uniqueness API, `ae_eq_of_integral_contDiff_smul_eq`, requires the latter
-  `∞` exponent; the attempted bridge fails with the exact type mismatch
-  `ContDiff ℝ (↑⊤)` versus `ContDiff ℝ ⊤`. No analytic-test analogue was
-  found. Per the frozen-statement discipline, the statement is unchanged and
-  the final `h_H2_estimate` obligation remains the sole residual rather than
-  exploiting the defect.
-
-  Follow-up diagnosis now makes the upstream consequence executable. For
-  every `1 ≤ n`, `apm_m03J01_testFunction_eq_zero_of_one_le` proves that all
-  analytic compactly supported test functions vanish, and
-  `apm_m03J01_H01_ae_eq_zero_of_one_le` collapses every encoded `H01` value
-  and gradient a.e. Consequently `apm_m03J01_weakSolution_of_one_le` proves
-  every record solves every forcing equation, while
-  `apm_m03J01_H01_val_ae_eq_of_one_le` proves the requested uniqueness with
-  no solution hypotheses. Thus the positive-dimensional concrete conjunct is
-  vacuous under the frozen definitions, not a Dirichlet existence theorem.
-  Dimension zero is genuinely different, as witnessed by the nonzero
-  constant-one test function in
-  `apm_m03J01_testFunction_zero_dim_nonzero`.
-  -/
-  have h_abstract := apm_m03J01_abstract_variational
-  -- For `1 ≤ n`, this existence clause is vacuous under the frozen encoding:
-  -- `apm_m03J01_weakSolution_of_one_le` proves that every `H01` record is a
-  -- weak solution for every forcing term. The construction below is still
-  -- required for the genuine `n = 0` exception and for the quantified theorem.
-  have h_concrete_existence :
-      ∀ (n : ℕ) (Ω : Set (apm_m03J01_E n)),
-        IsOpen Ω → Bornology.IsBounded Ω → Ω.Nonempty →
-        ∀ F : apm_m03J01_E n → ℝ, MemLp F 2 volume →
-          ∃ u : apm_m03J01_H01 n Ω, apm_m03J01_weakSolution F u := by
-    intro n Ω hΩopen hΩbounded hΩnonempty F hF
-    exact apm_m03J01_weakSolution_exists F hF
-  -- For `1 ≤ n`, the uniqueness clause is also vacuous:
-  -- `apm_m03J01_H01_val_ae_eq_of_one_le` proves the displayed a.e. equality
-  -- for any two records, without either weak-solution hypothesis.
-  have h_concrete :
-      ∀ (n : ℕ) (Ω : Set (apm_m03J01_E n)),
-        IsOpen Ω → Bornology.IsBounded Ω → Ω.Nonempty →
-        ∀ F : apm_m03J01_E n → ℝ, MemLp F 2 volume →
-          ∃ u : apm_m03J01_H01 n Ω,
-            apm_m03J01_weakSolution F u ∧
-            ∀ v : apm_m03J01_H01 n Ω,
-              apm_m03J01_weakSolution F v → u.val =ᵐ[volume] v.val := by
-    intro n Ω hΩopen hΩbounded hΩnonempty F hF
-    obtain ⟨u, hu⟩ := h_concrete_existence n Ω hΩopen hΩbounded hΩnonempty F hF
-    exact ⟨u, hu, fun v hv => apm_m03J01_weakSolution_unique_ae F u v hu hv⟩
-  -- VACUITY WARNING. Under the frozen encoding, conjuncts 2 and 3 are
-  -- vacuous for every `1 ≤ n`: `ContDiff ℝ ⊤` means `ContDiff ℝ ω`
-  -- (real-analytic), while the intended test space requires
-  -- `ContDiff ℝ ∞` (smooth). Analytic compactly supported test functions
-  -- vanish, so every encoded `H01` value and gradient vanishes a.e.; the
-  -- estimate below therefore uses the zero Hessian in positive dimension.
-  -- This close is not a Dirichlet regularity theorem. A faithful version of
-  -- the problem requires repairing the test-function encoding first.
-  have h_H2_estimate :
-      ∀ (n : ℕ) (Ω : Set (apm_m03J01_E n)),
-        IsOpen Ω → Bornology.IsBounded Ω → Ω.Nonempty →
-        (∀ (F : apm_m03J01_E n → ℝ) (hF : MemLp F 2 volume)
-          (u : apm_m03J01_H01 n Ω), apm_m03J01_weakSolution F u →
-            ∃ H, apm_m03J01_weakHessian u.grad H) →
-        ∃ C : ENNReal, C < ⊤ ∧
-          ∀ (F : apm_m03J01_E n → ℝ) (hF : MemLp F 2 volume)
-            (u : apm_m03J01_H01 n Ω), apm_m03J01_weakSolution F u →
-              ∃ H, apm_m03J01_weakHessian u.grad H ∧
-                apm_m03J01_H2size u H ≤ C * eLpNorm F 2 volume := by
-    intro n Ω hΩopen hΩbounded hΩnonempty hHessian
-    refine ⟨1, by simp, ?_⟩
-    intro F hF u hu
-    by_cases hn : n = 0
-    · subst n
-      refine ⟨0, apm_m03J01_zero_dim_zero_weakHessian u.grad, ?_⟩
-      have hgrad := apm_m03J01_H01_zero_dim_grad_eq_zero u
-      have hval := apm_m03J01_zero_dim_eLpNorm_val_le F hF u hu
-      simpa [apm_m03J01_H2size, hgrad] using hval
-    · have hnpos : 1 ≤ n := Nat.one_le_iff_ne_zero.mpr hn
-      obtain ⟨hval, hgrad⟩ :=
-        apm_m03J01_H01_eLpNorm_eq_zero_of_one_le hnpos u
-      have hgrad_ae := (apm_m03J01_H01_ae_eq_zero_of_one_le hnpos u).2
-      refine ⟨0, apm_m03J01_zero_weakHessian_of_grad_ae_eq_zero hgrad_ae, ?_⟩
-      simp [apm_m03J01_H2size, hval, hgrad]
-  exact ⟨h_abstract, h_concrete, h_H2_estimate⟩
+  -- REOPENED 2026-10-13: proof relied on analytic (ω) test functions being 0; statement now at ∞, recheck.
+  sorry

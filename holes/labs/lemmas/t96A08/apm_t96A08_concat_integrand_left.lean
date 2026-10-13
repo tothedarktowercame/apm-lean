@@ -262,7 +262,58 @@ theorem apm_t96A08_concat_integrand_left
     omega (apm_t96A08_concat gamma delta t)
         ((mfderiv 𝓘(ℝ, ℝ) I (apm_t96A08_concat gamma delta) t) 1) =
       2 * omega (gamma (2 * t)) ((mfderiv 𝓘(ℝ, ℝ) I gamma (2 * t)) 1) := by
-  sorry
+  have ht12 : t < (1 / 2 : ℝ) := ht.2
+  let s : ℝ → ℝ := fun u ↦ 2 * u
+  have hs : MDifferentiableAt 𝓘(ℝ, ℝ) 𝓘(ℝ, ℝ) s t := by
+    rw [mdifferentiableAt_iff_differentiableAt]
+    fun_prop
+  have hsder : (mfderiv 𝓘(ℝ, ℝ) 𝓘(ℝ, ℝ) s t) 1 =
+      (2 : ℝ) • (1 : TangentSpace 𝓘(ℝ, ℝ) (s t)) := by
+    rw [mfderiv_eq_fderiv]
+    rw [HasFDerivAt.fderiv (hasDerivAt_const_mul (2 : ℝ) (x := t))]
+    apply (NormedSpace.fromTangentSpace (s t)).injective
+    unfold NormedSpace.fromTangentSpace TangentSpace
+    simp [ContinuousLinearMap.toSpanSingleton_apply]
+  have hlocal : apm_t96A08_concat gamma delta =ᶠ[nhds t] gamma ∘ s := by
+    filter_upwards [Ioo_mem_nhds ht.1 ht.2] with u hu
+    simp only [apm_t96A08_concat, Function.comp_apply, s]
+    rw [if_pos]
+    linarith [hu.2]
+  by_cases hgamma : MDifferentiableAt 𝓘(ℝ, ℝ) I gamma (s t)
+  · have hcomp := mfderiv_comp t hgamma hs
+    have hderiv : mfderiv 𝓘(ℝ, ℝ) I (apm_t96A08_concat gamma delta) t =
+        (mfderiv 𝓘(ℝ, ℝ) I gamma (s t)).comp
+          (mfderiv 𝓘(ℝ, ℝ) 𝓘(ℝ, ℝ) s t) := by
+      rw [hlocal.mfderiv_eq]
+      exact hcomp
+    rw [hderiv]
+    change omega (apm_t96A08_concat gamma delta t)
+        ((mfderiv 𝓘(ℝ, ℝ) I gamma (s t))
+          ((mfderiv 𝓘(ℝ, ℝ) 𝓘(ℝ, ℝ) s t) 1)) = _
+    rw [hsder, map_smul]
+    rw [show apm_t96A08_concat gamma delta t = gamma (2 * t) by
+      simp only [apm_t96A08_concat, if_pos (le_of_lt ht12)]]
+    simp [s, map_smul, smul_eq_mul]
+  · have hgzero : mfderiv 𝓘(ℝ, ℝ) I gamma (s t) = 0 :=
+      mfderiv_zero_of_not_mdifferentiableAt hgamma
+    have hconcat : ¬ MDifferentiableAt 𝓘(ℝ, ℝ) I
+        (apm_t96A08_concat gamma delta) t := by
+      intro hc
+      have hc' : MDifferentiableAt 𝓘(ℝ, ℝ) I (gamma ∘ s) t :=
+        hlocal.mdifferentiableAt_iff.mp hc
+      let r : ℝ → ℝ := fun u ↦ u / 2
+      have hr : MDifferentiableAt 𝓘(ℝ, ℝ) 𝓘(ℝ, ℝ) r (s t) := by
+        rw [mdifferentiableAt_iff_differentiableAt]
+        fun_prop
+      have hback := hc'.comp_of_eq (s t) hr (by simp [s, r])
+      have heq : (gamma ∘ s) ∘ r = gamma := by
+        funext u
+        simp [s, r]
+        ring
+      rw [heq] at hback
+      exact hgamma hback
+    rw [mfderiv_zero_of_not_mdifferentiableAt hconcat, hgzero]
+    simp only [ContinuousLinearMap.zero_apply, map_zero, mul_zero]
 -- END SEAT AREA
 
 /-- Seat: on `(1/2, 1)` the concatenation agrees with `delta (2 · - 1)` near `t`. -/

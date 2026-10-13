@@ -2319,17 +2319,17 @@
    "decls": [
     "apm_t96a08"
    ],
-   "sha256": "f5480fd4b32a277206b459285e796fbf96cfd0d52edf7b03bf4d996d02ba8ba6",
+   "sha256": "be45a1dea87a3e223e91c9e3c5ad510706160706ff99790119d18c6eb7376536",
    "defs": [
     "apm_t96a08_IsPiecewiseSmoothPath",
     "apm_t96a08_LineIntegral"
    ],
    "grade": "faithful",
-   "grader": "claude-14 outside grader (read-only Claude subagent, 2026-10-13, repair batch 2; correction)",
-   "evidence": "holes/labs/statement-registry/repair-grades-2.md",
+   "grader": "claude-14 outside grader (read-only Claude subagent, 2026-10-13)",
+   "evidence": "holes/labs/statement-registry/t96A08-smooth-order-grade.md",
    "prelim_defect": null,
-   "rev": "e25b1d373",
-   "approved_at": "2026-10-13T20:44:06Z"
+   "rev": "ad9c9d572",
+   "approved_at": "2026-10-13T22:39:29Z"
   },
   "t96J01": {
    "decls": [

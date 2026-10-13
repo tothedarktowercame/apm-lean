@@ -518,7 +518,9 @@ theorem apm_t96A08_omegaCoord_centre
     apm_t96A08_omegaCoord I omega x (extChartAt I x x) = (omega x).comp
       (mfderivWithin 𝓘(ℝ, E) I (extChartAt I x).symm (Set.range I)
         (extChartAt I x x)) := by
-  sorry
+  simp only [apm_t96A08_omegaCoord]
+  rw [(extChartAt I x).left_inv (mem_extChartAt_source x)]
+  rfl
 -- END SEAT AREA
 
 /-- Seat: along a chart-linear path the line integral is the coordinate

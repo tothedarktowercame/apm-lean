@@ -33,7 +33,7 @@ structure apm_m01J04_H1 (d : ℕ) (Ω : Set (EuclideanSpace ℝ (Fin d))) where
   val_memLp : MemLp val 2 (volume.restrict Ω)
   grad_memLp : MemLp grad 2 (volume.restrict Ω)
   weakGradient : ∀ (φ : EuclideanSpace ℝ (Fin d) → ℝ),
-    ContDiff ℝ ⊤ φ → HasCompactSupport φ → Function.support φ ⊆ Ω →
+    ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) φ → HasCompactSupport φ → Function.support φ ⊆ Ω →
       ∀ i : Fin d,
         (∫ x in Ω, val x * fderiv ℝ φ x (EuclideanSpace.single i 1)) =
           -(∫ x in Ω, grad x i * φ x)
@@ -161,7 +161,7 @@ lemma apm_m01J04_H1dist_smul
 def apm_m01J04_isH1Zero {d : ℕ} {Ω : Set (EuclideanSpace ℝ (Fin d))}
     (h : apm_m01J04_H1 d Ω) : Prop :=
   ∃ approximant : ℕ → apm_m01J04_H1 d Ω,
-    (∀ n, ContDiff ℝ ⊤ (approximant n).val ∧
+    (∀ n, ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) (approximant n).val ∧
       HasCompactSupport (approximant n).val ∧
       Function.support (approximant n).val ⊆ Ω) ∧
     Tendsto (fun n ↦ apm_m01J04_H1dist (approximant n) h) atTop (nhds 0)
@@ -452,7 +452,7 @@ lemma apm_m01J04_divStronglyConverges_pairing
 def apm_m01J04_isTestFunction {d : ℕ}
     (Ω : Set (EuclideanSpace ℝ (Fin d)))
     (φ : EuclideanSpace ℝ (Fin d) → ℝ) : Prop :=
-  ContDiff ℝ ⊤ φ ∧ HasCompactSupport φ ∧ Function.support φ ⊆ Ω
+  ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) φ ∧ HasCompactSupport φ ∧ Function.support φ ⊆ Ω
 
 /-- The localized value has a genuine global `L²` representative, even when
 the ambient domain itself is not assumed measurable.  Its measurable support
@@ -973,7 +973,7 @@ def apm_m01J04_AEDerivativeZeroOnZeroSet {d : ℕ}
 
 lemma apm_m01J04_contDiff_aeDerivativeZeroOnZeroSet
     {d : ℕ} {φ : EuclideanSpace ℝ (Fin d) → ℝ}
-    (hφ : ContDiff ℝ ⊤ φ) :
+    (hφ : ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) φ) :
     apm_m01J04_AEDerivativeZeroOnZeroSet φ := by
   by_cases hd : d = 0
   · subst d
@@ -1131,7 +1131,7 @@ lemma apm_m01J04_isTestFunction_mul_right
     {d : ℕ} {Ω : Set (EuclideanSpace ℝ (Fin d))}
     {φ ψ : EuclideanSpace ℝ (Fin d) → ℝ}
     (hφ : apm_m01J04_isTestFunction Ω φ)
-    (hψdiff : ContDiff ℝ ⊤ ψ) (hψcompact : HasCompactSupport ψ) :
+    (hψdiff : ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) ψ) (hψcompact : HasCompactSupport ψ) :
     apm_m01J04_isTestFunction Ω (fun x ↦ φ x * ψ x) := by
   refine ⟨hφ.1.mul hψdiff, hψcompact.mul_left, ?_⟩
   intro x hx
@@ -1143,7 +1143,7 @@ lemma apm_m01J04_isTestFunction_mul_right
 presentation in `apm_m01J04_H1.weakGradient`. -/
 lemma apm_m01J04_fderiv_mul_apply
     {d : ℕ} {φ ψ : EuclideanSpace ℝ (Fin d) → ℝ}
-    (hφ : ContDiff ℝ ⊤ φ) (hψ : ContDiff ℝ ⊤ ψ)
+    (hφ : ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) φ) (hψ : ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) ψ)
     (x : EuclideanSpace ℝ (Fin d)) (i : Fin d) :
     fderiv ℝ (fun y ↦ φ y * ψ y) x (EuclideanSpace.single i 1) =
       φ x * fderiv ℝ ψ x (EuclideanSpace.single i 1) +
@@ -1258,7 +1258,7 @@ lemma apm_m01J04_weakLeibniz_integrable
     {d : ℕ} {Ω : Set (EuclideanSpace ℝ (Fin d))}
     (φ ψ : EuclideanSpace ℝ (Fin d) → ℝ)
     (hφ : apm_m01J04_isTestFunction Ω φ)
-    (hψdiff : ContDiff ℝ ⊤ ψ) (hψcompact : HasCompactSupport ψ)
+    (hψdiff : ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) ψ) (hψcompact : HasCompactSupport ψ)
     (f : apm_m01J04_H1 d Ω) (i : Fin d) :
     Integrable (fun x ↦ f.val x *
       (φ x * fderiv ℝ ψ x (EuclideanSpace.single i 1)))
@@ -1309,7 +1309,7 @@ lemma apm_m01J04_weakLeibniz
     {d : ℕ} {Ω : Set (EuclideanSpace ℝ (Fin d))}
     (φ ψ : EuclideanSpace ℝ (Fin d) → ℝ)
     (hφ : apm_m01J04_isTestFunction Ω φ)
-    (hψdiff : ContDiff ℝ ⊤ ψ) (hψcompact : HasCompactSupport ψ)
+    (hψdiff : ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) ψ) (hψcompact : HasCompactSupport ψ)
     (f : apm_m01J04_H1 d Ω) (i : Fin d) :
     (∫ x in Ω, (f.val x * φ x) *
       fderiv ℝ ψ x (EuclideanSpace.single i 1)) =
@@ -1356,7 +1356,7 @@ lemma apm_m01J04_test_mul_weakGradient_volume
     {d : ℕ} {Ω : Set (EuclideanSpace ℝ (Fin d))}
     (φ ψ : EuclideanSpace ℝ (Fin d) → ℝ)
     (hφ : apm_m01J04_isTestFunction Ω φ)
-    (hψdiff : ContDiff ℝ ⊤ ψ) (hψcompact : HasCompactSupport ψ)
+    (hψdiff : ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) ψ) (hψcompact : HasCompactSupport ψ)
     (f : apm_m01J04_H1 d Ω) (i : Fin d) :
     (∫ x, (f.val x * φ x) * fderiv ℝ ψ x (EuclideanSpace.single i 1)) =
       -(∫ x, (φ x * f.grad x i + f.val x *
@@ -1427,18 +1427,12 @@ lemma apm_m01J04_globalLocalizedH1_contDiff_convolution
     (hφ : apm_m01J04_isTestFunction Ω φ)
     (f : apm_m01J04_H1 d Ω)
     (κ : EuclideanSpace ℝ (Fin d) → ℝ)
-    (hκcompact : HasCompactSupport κ) (hκsmooth : ContDiff ℝ ⊤ κ) :
+    (hκcompact : HasCompactSupport κ) (hκsmooth : ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) κ) :
     ContDiff ℝ (↑(⊤ : ℕ∞) : WithTop ℕ∞) (MeasureTheory.convolution κ
       (apm_m01J04_globalLocalizedH1 φ hφ f).val
       (ContinuousLinearMap.lsmul ℝ ℝ) volume) := by
-  have hloc : LocallyIntegrable
-      (apm_m01J04_globalLocalizedH1 φ hφ f).val volume := by
-    have hp : MemLp (apm_m01J04_globalLocalizedH1 φ hφ f).val 2 volume := by
-      simpa only [MeasureTheory.Measure.restrict_univ] using
-        (apm_m01J04_globalLocalizedH1 φ hφ f).val_memLp
-    exact hp.locallyIntegrable (by norm_num)
-  exact hκcompact.contDiff_convolution_left (n := (⊤ : ℕ∞))
-    (ContinuousLinearMap.lsmul ℝ ℝ) (hκsmooth.of_le le_top) hloc
+  -- REOPENED 2026-10-13: proof relied on analytic (ω) test functions being 0; statement now at ∞, recheck.
+  sorry
 
 /-- Both fields of the global localization admit independent smooth compactly
 supported `L²` approximants.  The remaining Sobolev-density step is precisely
@@ -1468,25 +1462,6 @@ lemma apm_m01J04_globalLocalizedH1_exists_smooth_fields
   obtain ⟨G, hGcompact, hGsmooth, hG⟩ :=
     hgrad.exist_eLpNorm_sub_le (by norm_num) (by norm_num) hε
   exact ⟨g, G, hgcompact, hgsmooth, hg, hGcompact, hGsmooth, hG⟩
-
-/-- With the frozen use of the outer differentiability order `⊤` (Mathlib's
-`C^ω`, rather than ordinary `C∞`), a compactly supported test function on a
-positive-dimensional Euclidean space is identically zero. -/
-lemma apm_m01J04_isTestFunction_eq_zero_of_pos_dim
-    {d : ℕ} {Ω : Set (EuclideanSpace ℝ (Fin d))}
-    {φ : EuclideanSpace ℝ (Fin d) → ℝ}
-    (hd : d ≠ 0) (hφ : apm_m01J04_isTestFunction Ω φ) : φ = 0 := by
-  haveI : Nonempty (Fin d) := ⟨⟨0, Nat.pos_of_ne_zero hd⟩⟩
-  obtain ⟨z, hz⟩ :=
-    (ne_univ_iff_exists_notMem (tsupport φ)).mp hφ.2.1.isCompact.ne_univ
-  have hzopen : (tsupport φ)ᶜ ∈ nhds z :=
-    hφ.2.1.isClosed.isOpen_compl.mem_nhds (by simpa using hz)
-  have hevent : φ =ᶠ[nhds z] 0 := by
-    filter_upwards [hzopen] with x hx
-    exact Function.notMem_support.mp (fun hxs ↦ hx (subset_closure hxs))
-  exact (hφ.1.analyticOnNhd (s := Set.univ)).eq_of_eventuallyEq
-    (by simpa using (analyticOnNhd_const (𝕜 := ℝ) (E := EuclideanSpace ℝ (Fin d))
-      (F := ℝ) (v := 0) (s := Set.univ))) hevent
 
 /-- Restriction of a globally encoded Sobolev function to an arbitrary set. -/
 noncomputable def apm_m01J04_H1restrict
@@ -1629,7 +1604,7 @@ lemma apm_m01J04_localization_isH1Zero_of_globalApprox
     (hφ : apm_m01J04_isTestFunction Ω φ)
     (f : apm_m01J04_H1 d Ω)
     (a : ℕ → apm_m01J04_H1 d Set.univ)
-    (ha : ∀ n, ContDiff ℝ ⊤ (a n).val ∧ HasCompactSupport (a n).val ∧
+    (ha : ∀ n, ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) (a n).val ∧ HasCompactSupport (a n).val ∧
       Function.support (a n).val ⊆ Ω)
     (hlim : Tendsto (fun n ↦ apm_m01J04_H1dist (a n)
       (apm_m01J04_globalLocalizedH1 φ hφ f)) atTop (nhds 0)) :
@@ -1878,7 +1853,7 @@ lemma apm_m01J04_localization_isH1Zero_of_smoothApprox
     (hφ : apm_m01J04_isTestFunction Ω φ)
     (f : apm_m01J04_H1 d Ω)
     (a : ℕ → apm_m01J04_H1 d Ω)
-    (ha : ∀ n, ContDiff ℝ ⊤ (a n).val)
+    (ha : ∀ n, ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) (a n).val)
     (hlim : Tendsto (fun n ↦ apm_m01J04_H1dist (a n) f)
       atTop (nhds 0)) :
     apm_m01J04_isH1Zero (apm_m01J04_H1mul φ hφ f) := by
@@ -1906,7 +1881,7 @@ lemma apm_m01J04_localization_isH1Zero_of_forall_exists_smooth
     (hφ : apm_m01J04_isTestFunction Ω φ)
     (f : apm_m01J04_H1 d Ω)
     (hdense : ∀ ε : ℝ, 0 < ε → ∃ a : apm_m01J04_H1 d Ω,
-      ContDiff ℝ ⊤ a.val ∧ apm_m01J04_H1dist a f < ε) :
+      ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) a.val ∧ apm_m01J04_H1dist a f < ε) :
     apm_m01J04_isH1Zero (apm_m01J04_H1mul φ hφ f) := by
   let ε : ℕ → ℝ := fun n ↦ 1 / (n + 1 : ℝ)
   have hε (n : ℕ) : 0 < ε n := by
@@ -1914,7 +1889,7 @@ lemma apm_m01J04_localization_isH1Zero_of_forall_exists_smooth
     positivity
   let a : ℕ → apm_m01J04_H1 d Ω := fun n ↦
     Classical.choose (hdense (ε n) (hε n))
-  have ha (n : ℕ) : ContDiff ℝ ⊤ (a n).val :=
+  have ha (n : ℕ) : ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) (a n).val :=
     (Classical.choose_spec (hdense (ε n) (hε n))).1
   have hdist (n : ℕ) : apm_m01J04_H1dist (a n) f ≤ ε n :=
     (Classical.choose_spec (hdense (ε n) (hε n))).2.le
@@ -1936,34 +1911,8 @@ lemma apm_m01J04_localization_isH1Zero
     (hφ : apm_m01J04_isTestFunction Ω φ)
     (f : apm_m01J04_H1 d Ω) :
     apm_m01J04_isH1Zero (apm_m01J04_H1mul φ hφ f) := by
-  let h := apm_m01J04_H1mul φ hφ f
-  refine ⟨fun _ ↦ h, fun n ↦ ⟨?_, ?_, ?_⟩, ?_⟩
-  · by_cases hd : d = 0
-    · subst d
-      have heq : h.val = fun _ ↦ h.val 0 := by
-        funext x
-        rw [Subsingleton.elim x 0]
-      rw [heq]
-      fun_prop
-    · rw [show h.val = fun x ↦ f.val x * φ x from
-          apm_m01J04_H1mul_val φ hφ f]
-      rw [apm_m01J04_isTestFunction_eq_zero_of_pos_dim hd hφ]
-      simp
-      fun_prop
-  · apply hφ.2.1.mono
-    intro x hx
-    contrapose! hx
-    rw [show h.val = fun x ↦ f.val x * φ x from
-      apm_m01J04_H1mul_val φ hφ f]
-    simp [Function.notMem_support.mp hx]
-  · intro x hx
-    exact hφ.2.2 (show x ∈ Function.support φ by
-      contrapose! hx
-      rw [show h.val = fun x ↦ f.val x * φ x from
-        apm_m01J04_H1mul_val φ hφ f]
-      simp [Function.notMem_support.mp hx])
-  · simpa [h, apm_m01J04_H1dist] using
-      (tendsto_const_nhds : Tendsto (fun _ : ℕ ↦ (0 : ℝ)) atTop (nhds 0))
+  -- REOPENED 2026-10-13: proof relied on analytic (ω) test functions being 0; statement now at ∞, recheck.
+  sorry
 
 /-- Why this unblocks `apm_m01j04`: this is the missing bounded multiplier
 and weak Leibniz theorem for the custom `H¹` record. It constructs the

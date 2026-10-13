@@ -30,7 +30,7 @@ theorem apm_m01j05 :
     (∀ (n : ℕ)
         (F : EuclideanSpace ℝ (Fin n) → EuclideanSpace ℝ (Fin n))
         (xStar : EuclideanSpace ℝ (Fin n)),
-      ContDiff ℝ ⊤ F →
+      ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) F →
       F xStar = 0 →
       Function.Bijective (fderiv ℝ F xStar) →
         ∃ ε : ℝ, 0 < ε ∧
@@ -56,19 +56,19 @@ theorem apm_m01j05 :
       (fderiv ℝ F xStar) (LinearMap.ker_eq_bot.mpr hbij.1)
         (LinearMap.range_eq_top.mpr hbij.2)
     have hLeq : (L : E →L[ℝ] E) = fderiv ℝ F xStar := rfl
-    have hInv : ContDiffAt ℝ ⊤ ContinuousLinearMap.inverse
+    have hInv : ContDiffAt ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) ContinuousLinearMap.inverse
         (fderiv ℝ F xStar) := by
       rw [← hLeq]
       exact contDiffAt_map_inverse L
-    have hDf : ContDiff ℝ ⊤ (fderiv ℝ F) :=
+    have hDf : ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) (fderiv ℝ F) :=
       hF.fderiv_right (by simp)
-    have hA : ContDiffAt ℝ ⊤
+    have hA : ContDiffAt ℝ ((⊤ : ℕ∞) : WithTop ℕ∞)
         (fun x => (fderiv ℝ F x).inverse) xStar :=
       hInv.comp xStar hDf.contDiffAt
-    have hprod : ContDiffAt ℝ ⊤
+    have hprod : ContDiffAt ℝ ((⊤ : ℕ∞) : WithTop ℕ∞)
         (fun x => (fderiv ℝ F x).inverse (F x)) xStar :=
       hA.clm_apply hF.contDiffAt
-    have hG : ContDiffAt ℝ ⊤ (apm_m01J05_newtonStep F) xStar := by
+    have hG : ContDiffAt ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) (apm_m01J05_newtonStep F) xStar := by
       simpa [apm_m01J05_newtonStep] using contDiffAt_id.sub hprod
     have hGfix : apm_m01J05_newtonStep F xStar = xStar := by
       simp [apm_m01J05_newtonStep, hFx]

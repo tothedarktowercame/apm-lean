@@ -66,7 +66,54 @@ theorem t98J01_reflectionMap_homotopic_of_reflection
     ContinuousMap.Homotopic
       (ConstructionTargets.CoefficientCoordinateReflections.reflectionMap (d := 2) 0)
       (ContinuousMap.id (T02A06.euclideanUnitSphere 2)) := by
-  sorry
+  let toCircle : T02A06.euclideanUnitSphere 2 → T98J01.S1 := fun x =>
+    ⟨(x.1 0, x.1 1), by
+      have hx : ‖x.1‖ = 1 := by
+        simpa [Metric.mem_sphere, dist_zero_right] using x.2
+      rw [EuclideanSpace.norm_eq, Fin.sum_univ_two] at hx
+      have hs : 0 ≤ ‖x.1 0‖ ^ 2 + ‖x.1 1‖ ^ 2 := by positivity
+      have hh : (Real.sqrt (‖x.1 0‖ ^ 2 + ‖x.1 1‖ ^ 2)) ^ 2 = 1 := by
+        rw [hx]
+        norm_num
+      rw [Real.sq_sqrt hs] at hh
+      simpa [Real.norm_eq_abs, sq_abs] using hh⟩
+  let fromCircle : T98J01.S1 → T02A06.euclideanUnitSphere 2 := fun x =>
+    ⟨WithLp.toLp 2 ![x.1.1, x.1.2], by
+      rw [Metric.mem_sphere, dist_zero_right, EuclideanSpace.norm_eq,
+        Fin.sum_univ_two]
+      simp only [Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.head_cons,
+        Matrix.tail_cons, WithLp.ofLp_toLp]
+      rw [show ‖x.1.1‖ ^ 2 + ‖x.1.2‖ ^ 2 = 1 by
+        simpa [Real.norm_eq_abs, sq_abs] using x.2]
+      norm_num⟩
+  let e : C(T02A06.euclideanUnitSphere 2, T98J01.S1) :=
+    ⟨toCircle, by
+      apply Continuous.subtype_mk
+      dsimp [toCircle]
+      fun_prop⟩
+  let e' : C(T98J01.S1, T02A06.euclideanUnitSphere 2) :=
+    ⟨fromCircle, by
+      apply Continuous.subtype_mk
+      dsimp [fromCircle]
+      apply (PiLp.continuous_toLp 2 _).comp
+      apply continuous_pi
+      intro i
+      fin_cases i <;> simp <;> fun_prop⟩
+  have hinv : e'.comp e = ContinuousMap.id _ := by
+    ext x i
+    fin_cases i <;> rfl
+  have hconj : e'.comp (t98J01_reflectionCM.comp e) =
+      ConstructionTargets.CoefficientCoordinateReflections.reflectionMap 0 := by
+    ext x i
+    fin_cases i <;>
+      simp [e', e, fromCircle, toCircle, t98J01_reflectionCM, T98J01.reflection,
+        ConstructionTargets.CoefficientCoordinateReflections.reflectionMap,
+        ConstructionTargets.CoefficientCoordinateReflections.sphereHomeo,
+        ConstructionTargets.CoefficientCoordinateReflections.reflection_apply]
+  have hh := ContinuousMap.Homotopic.comp
+    (ContinuousMap.Homotopic.refl e')
+    (ContinuousMap.Homotopic.comp hr (ContinuousMap.Homotopic.refl e))
+  simpa only [ContinuousMap.id_comp, hconj, hinv] using hh
 
 /-- Seat: the coordinate reflection acts by `-1` on `H₁(S¹; ℤ) ≅ ℤ`
 (`CoefficientFirstReflection.circle_negative`), the identity by `+1`, and

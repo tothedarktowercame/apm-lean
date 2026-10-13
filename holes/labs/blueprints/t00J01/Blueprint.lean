@@ -257,24 +257,472 @@ theorem apm_t00j01_klein_product_H3_zero
   sorry
 
 /-- Every lift of the fiber over `exp π` has nonzero derivative. -/
+lemma apm_t00j01_foldRegular_pi_aux_cos :
+    Real.cos (2 * Real.pi / 3) = -(1 / 2 : ℝ) := by
+  rw [show 2 * Real.pi / 3 = Real.pi - Real.pi / 3 by ring,
+    Real.cos_pi_sub, Real.cos_pi_div_three]
+
+lemma apm_t00j01_foldRegular_pi_aux_delta_pos :
+    0 < Real.sqrt 3 - Real.pi / 3 := by
+  have hs0 : 0 ≤ Real.sqrt 3 := Real.sqrt_nonneg 3
+  have hs : (Real.sqrt 3) ^ 2 = 3 := by norm_num
+  have hs4 : (4 / 3 : ℝ) < Real.sqrt 3 := by nlinarith
+  have hp4 : Real.pi / 3 < (4 / 3 : ℝ) := by
+    nlinarith [Real.pi_lt_four]
+  linarith
+
+lemma apm_t00j01_foldRegular_pi_aux_delta_lt :
+    Real.sqrt 3 - Real.pi / 3 < 2 * Real.pi := by
+  have hs0 : 0 ≤ Real.sqrt 3 := Real.sqrt_nonneg 3
+  have hs : (Real.sqrt 3) ^ 2 = 3 := by norm_num
+  have hs2 : Real.sqrt 3 < 2 := by nlinarith
+  nlinarith [Real.pi_gt_three]
+
+lemma apm_t00j01_foldRegular_pi_aux_not_multiple (m : ℤ) :
+    Real.sqrt 3 - Real.pi / 3 ≠ (m : ℝ) * (2 * Real.pi) := by
+  intro h
+  have hm0 : (0 : ℝ) < m := by
+    have hd := apm_t00j01_foldRegular_pi_aux_delta_pos
+    rw [h] at hd
+    rcases (mul_pos_iff.mp hd) with hm | hm
+    · exact hm.1
+    · exfalso
+      exact (not_lt_of_ge (by positivity : (0 : ℝ) ≤ 2 * Real.pi)) hm.2
+  have hm1 : (m : ℝ) < 1 := by
+    have hp : 0 < 2 * Real.pi := by positivity
+    have hd := apm_t00j01_foldRegular_pi_aux_delta_lt
+    rw [h] at hd
+    by_contra hm
+    have hm' : (1 : ℝ) ≤ m := le_of_not_gt hm
+    have := mul_le_mul_of_nonneg_right hm' hp.le
+    linarith
+  have hm0z : 0 < m := by exact_mod_cast hm0
+  have hm1z : m < 1 := by exact_mod_cast hm1
+  omega
+
 theorem apm_t00j01_foldRegular_pi :
     apm_t00j01_foldRegular (Circle.exp Real.pi) := by
-  sorry
+  intro θ hfiber hzero
+  have hcos : Real.cos θ = -(1 / 2 : ℝ) := by linarith
+  have hclass := (Real.cos_eq_cos_iff.mp
+    (apm_t00j01_foldRegular_pi_aux_cos.trans hcos.symm))
+  obtain ⟨k, hk | hk⟩ := hclass
+  · have hspecial : Real.sin (2 * Real.pi / 3) = Real.sqrt 3 / 2 := by
+      rw [show 2 * Real.pi / 3 = Real.pi - Real.pi / 3 by ring,
+        Real.sin_pi_sub, Real.sin_pi_div_three]
+    have hsin : Real.sin θ = Real.sqrt 3 / 2 := calc
+      Real.sin θ = Real.sin (2 * Real.pi / 3 + (k : ℝ) * (2 * Real.pi)) := by
+        rw [hk]
+        congr 1 <;> ring
+      _ = Real.sin (2 * Real.pi / 3) := Real.sin_add_int_mul_two_pi _ _
+      _ = Real.sqrt 3 / 2 := hspecial
+    rw [apm_t00j01_fold_exp] at hfiber
+    obtain ⟨n, hn⟩ := Circle.exp_eq_exp.mp hfiber
+    apply apm_t00j01_foldRegular_pi_aux_not_multiple (n - k)
+    dsimp [apm_t00j01_foldLift] at hn
+    rw [hsin, hk] at hn
+    norm_num [Int.cast_sub] at hn ⊢
+    linarith
+  · have hspecial : Real.sin (2 * Real.pi / 3) = Real.sqrt 3 / 2 := by
+      rw [show 2 * Real.pi / 3 = Real.pi - Real.pi / 3 by ring,
+        Real.sin_pi_sub, Real.sin_pi_div_three]
+    have hsin : Real.sin θ = -(Real.sqrt 3 / 2) := calc
+      Real.sin θ = Real.sin ((k : ℝ) * (2 * Real.pi) - 2 * Real.pi / 3) := by
+        rw [hk]
+        congr 1 <;> ring
+      _ = -Real.sin (2 * Real.pi / 3) := Real.sin_int_mul_two_pi_sub _ _
+      _ = -(Real.sqrt 3 / 2) := by rw [hspecial]
+    rw [apm_t00j01_fold_exp] at hfiber
+    obtain ⟨n, hn⟩ := Circle.exp_eq_exp.mp hfiber
+    apply apm_t00j01_foldRegular_pi_aux_not_multiple (k - n - 1)
+    dsimp [apm_t00j01_foldLift] at hn
+    rw [hsin, hk] at hn
+    norm_num [Int.cast_sub] at hn ⊢
+    linarith
 
 /-- Every lift of the fiber over `1` has nonzero derivative. -/
+lemma apm_t00j01_foldRegular_one_aux_int_gap (j : ℤ) :
+    (1 / 3 : ℝ) ≤ |(j : ℝ) - 1 / 3| := by
+  by_cases hj : j ≤ 0
+  · have hj' : (j : ℝ) ≤ 0 := by exact_mod_cast hj
+    rw [abs_of_nonpos (by linarith)]
+    linarith
+  · have hj : 1 ≤ j := by omega
+    have hj' : (1 : ℝ) ≤ (j : ℝ) := by exact_mod_cast hj
+    rw [abs_of_nonneg (by linarith)]
+    linarith
+
+lemma apm_t00j01_foldRegular_one_aux_cos_two_pi_div_three :
+    Real.cos (2 * Real.pi / 3) = (-1 / 2 : ℝ) := by
+  rw [show 2 * Real.pi / 3 = Real.pi - Real.pi / 3 by ring]
+  rw [Real.cos_sub, Real.cos_pi, Real.sin_pi, Real.cos_pi_div_three]
+  ring
+
 theorem apm_t00j01_foldRegular_one :
     apm_t00j01_foldRegular 1 := by
-  sorry
+  intro θ hfold hderiv
+  have hexp : Circle.exp (apm_t00j01_foldLift θ) = Circle.exp 0 := by
+    rw [← apm_t00j01_fold_exp]
+    simpa using hfold
+  obtain ⟨n, hn, -⟩ :=
+    (ConstructionTargets.CircleWindingUniqueness.exp_eq_iff_existsUnique_endpointWinding
+      (apm_t00j01_foldLift θ) 0).mp hexp
+  have hcos : Real.cos θ = (-1 / 2 : ℝ) := by linarith
+  have hclass := (Real.cos_eq_cos_iff).mp
+    (hcos.trans apm_t00j01_foldRegular_one_aux_cos_two_pi_div_three.symm)
+  rcases hclass with ⟨k, hk | hk⟩
+  · let j : ℤ := n + k
+    have heq : Real.sin θ = Real.pi * ((j : ℝ) - 1 / 3) := by
+      unfold ConstructionTargets.CircleWindingUniqueness.IsEndpointWinding at hn
+      simp only [apm_t00j01_foldLift, zero_add] at hn
+      dsimp [j]
+      push_cast
+      nlinarith [hk]
+    have hgap := apm_t00j01_foldRegular_one_aux_int_gap j
+    have hpi : 3 < Real.pi := Real.pi_gt_three
+    have habs : 1 < |Real.sin θ| := by
+      rw [heq, abs_mul]
+      rw [abs_of_pos (by positivity : 0 < Real.pi)]
+      nlinarith
+    exact (not_lt_of_ge (Real.abs_sin_le_one θ)) habs
+  · let j : ℤ := k - n
+    have heq : Real.sin θ = -Real.pi * ((j : ℝ) - 1 / 3) := by
+      unfold ConstructionTargets.CircleWindingUniqueness.IsEndpointWinding at hn
+      simp only [apm_t00j01_foldLift, zero_add] at hn
+      dsimp [j]
+      push_cast
+      nlinarith [hk]
+    have hgap := apm_t00j01_foldRegular_one_aux_int_gap j
+    have hpi : 3 < Real.pi := Real.pi_gt_three
+    have habs : 1 < |Real.sin θ| := by
+      rw [heq, abs_mul]
+      rw [abs_neg, abs_of_pos (by positivity : 0 < Real.pi)]
+      nlinarith
+    exact (not_lt_of_ge (Real.abs_sin_le_one θ)) habs
 
-/-- The triple-covered regular fiber has exactly three circle points. -/
+def apm_t00j01_foldFiberCard_pi_aux_angleEquiv :
+    {z : Circle // apm_t00j01_fold z = Circle.exp Real.pi} ≃
+      {θ : Set.Ioc (-Real.pi) Real.pi //
+        Circle.exp (apm_t00j01_foldLift θ.1) = Circle.exp Real.pi} where
+  toFun z := ⟨⟨Complex.arg z.1, Complex.arg_mem_Ioc z.1⟩, by
+    rw [← apm_t00j01_fold_exp, Circle.exp_arg]
+    exact z.2⟩
+  invFun θ := ⟨Circle.exp θ.1.1, by
+    rw [apm_t00j01_fold_exp]
+    exact θ.2⟩
+  left_inv z := by
+    apply Subtype.ext
+    exact Circle.exp_arg z.1
+  right_inv θ := by
+    apply Subtype.ext
+    apply Subtype.ext
+    exact Circle.arg_exp θ.1.2.1 θ.1.2.2
+
+lemma apm_t00j01_foldFiberCard_pi_aux_reduce_to_angles :
+    Nat.card {z : Circle // apm_t00j01_fold z = Circle.exp Real.pi} =
+      Nat.card {θ : Set.Ioc (-Real.pi) Real.pi //
+        Circle.exp (apm_t00j01_foldLift θ.1) = Circle.exp Real.pi} := by
+  exact Nat.card_congr apm_t00j01_foldFiberCard_pi_aux_angleEquiv
+
+lemma apm_t00j01_foldFiberCard_pi_aux_angle_count_aux_strictConcave :
+    StrictConcaveOn ℝ (Set.Icc 0 Real.pi) apm_t00j01_foldLift := by
+  refine ⟨strictConcaveOn_sin_Icc.1, ?_⟩
+  intro x hx y hy hxy a b ha hb hab
+  have hs := strictConcaveOn_sin_Icc.2 hx hy hxy ha hb hab
+  dsimp [apm_t00j01_foldLift] at hs ⊢
+  nlinarith
+
+lemma apm_t00j01_foldFiberCard_pi_aux_angle_count_aux_odd (x : ℝ) :
+    apm_t00j01_foldLift (-x) = -apm_t00j01_foldLift x := by
+  simp [apm_t00j01_foldLift]
+  ring
+
+lemma apm_t00j01_foldFiberCard_pi_aux_angle_count_aux_inner_root :
+    ∃ x ∈ Set.Ioo 0 (Real.pi / 2), apm_t00j01_foldLift x = Real.pi := by
+  have hcont : ContinuousOn apm_t00j01_foldLift (Set.Icc 0 (Real.pi / 2)) := by
+    exact (continuous_id.add (Real.continuous_sin.const_mul 2)).continuousOn
+  have h0 : apm_t00j01_foldLift 0 < Real.pi := by
+    simp [apm_t00j01_foldLift, Real.pi_pos]
+  have hmid : Real.pi < apm_t00j01_foldLift (Real.pi / 2) := by
+    rw [apm_t00j01_foldLift, Real.sin_pi_div_two]
+    linarith [Real.pi_lt_four]
+  have himage : Real.pi ∈ apm_t00j01_foldLift '' Set.Icc 0 (Real.pi / 2) :=
+    (intermediate_value_Icc (by positivity) hcont) ⟨h0.le, hmid.le⟩
+  rcases himage with ⟨x, hx, hfx⟩
+  refine ⟨x, ⟨?_, ?_⟩, hfx⟩
+  · exact lt_of_not_ge fun h => by
+      have : x = 0 := le_antisymm h hx.1
+      subst x
+      simp [apm_t00j01_foldLift] at hfx
+      exact Real.pi_ne_zero hfx.symm
+  · exact lt_of_le_of_ne hx.2 fun h => by
+      subst x
+      exact hmid.ne' hfx
+
+/-- Seat: on `(-π, π]`, `exp (g θ) = exp π` iff `g θ = π` or `g θ = -π`
+(`|g θ| ≤ π + 2 < 3π`; `Circle.exp_eq_exp` up to `2π ℤ`). -/
+theorem apm_t00j01_angle_classify (θ : ℝ) (hθ : θ ∈ Set.Ioc (-Real.pi) Real.pi) :
+    Circle.exp (apm_t00j01_foldLift θ) = Circle.exp Real.pi ↔
+      apm_t00j01_foldLift θ = Real.pi ∨ apm_t00j01_foldLift θ = -Real.pi := by
+  constructor
+  · intro hexp
+    obtain ⟨n, hn⟩ := Circle.exp_eq_exp.mp hexp
+    have hbound : |apm_t00j01_foldLift θ| < 2 * Real.pi := by
+      rw [apm_t00j01_foldLift]
+      calc
+        |θ + 2 * Real.sin θ| ≤ |θ| + 2 * |Real.sin θ| := by
+          simpa only [abs_mul, abs_of_nonneg (by norm_num : (0 : ℝ) ≤ 2)] using
+            abs_add_le θ (2 * Real.sin θ)
+        _ ≤ Real.pi + 2 := by
+          have ha : |θ| ≤ Real.pi :=
+            (abs_le).2 ⟨by linarith [hθ.1], hθ.2⟩
+          have hs : |Real.sin θ| ≤ 1 :=
+            (abs_le).2 ⟨Real.neg_one_le_sin θ, Real.sin_le_one θ⟩
+          linarith
+        _ < 2 * Real.pi := by linarith [Real.pi_gt_three]
+    have hnlt : n < 1 := by
+      have hu : apm_t00j01_foldLift θ < 2 * Real.pi := (abs_lt.mp hbound).2
+      have hpi : 0 < Real.pi := Real.pi_pos
+      have : (n : ℝ) < 1 := by
+        rw [hn] at hu
+        nlinarith
+      exact_mod_cast this
+    have hnneg : -2 < n := by
+      have hl : -(2 * Real.pi) < apm_t00j01_foldLift θ := (abs_lt.mp hbound).1
+      have hpi : 0 < Real.pi := Real.pi_pos
+      have : (-2 : ℝ) < n := by
+        rw [hn] at hl
+        nlinarith
+      exact_mod_cast this
+    have hn_cases : n = 0 ∨ n = -1 := by omega
+    rcases hn_cases with rfl | rfl
+    · left
+      simpa using hn
+    · right
+      rw [hn]
+      ring
+  · rintro (h | h)
+    · rw [h]
+    · rw [h]
+      exact Circle.exp_eq_exp.mpr ⟨-1, by ring⟩
+
+/-- Seat: on `[0, π]` the equation `g θ = π` has exactly the interior root and
+`θ = π` (strict concavity: a strictly concave function takes a value at most
+twice; `g 0 = 0`; use the banked concavity and root lemmas above). -/
+theorem apm_t00j01_angle_positive_roots :
+    ∃ x₀ ∈ Set.Ioo 0 (Real.pi / 2), ∀ θ ∈ Set.Icc 0 Real.pi,
+      apm_t00j01_foldLift θ = Real.pi ↔ θ = x₀ ∨ θ = Real.pi := by
+  obtain ⟨x₀, hx₀, hroot⟩ :=
+    apm_t00j01_foldFiberCard_pi_aux_angle_count_aux_inner_root
+  refine ⟨x₀, hx₀, ?_⟩
+  intro θ hθ
+  constructor
+  · intro hrootθ
+    by_cases hθx : θ = x₀
+    · exact Or.inl hθx
+    by_cases hθπ : θ = Real.pi
+    · exact Or.inr hθπ
+    exfalso
+    have hxπ : x₀ < Real.pi := by
+      exact lt_trans hx₀.2 (by linarith [Real.pi_pos])
+    have hθπlt : θ < Real.pi := lt_of_le_of_ne hθ.2 hθπ
+    have hconc :=
+      apm_t00j01_foldFiberCard_pi_aux_angle_count_aux_strictConcave
+    have hrootπ : apm_t00j01_foldLift Real.pi = Real.pi := by
+      simp [apm_t00j01_foldLift]
+    rcases lt_or_gt_of_ne hθx with hθxlt | hxθlt
+    · have hxseg : x₀ ∈ openSegment ℝ θ Real.pi := by
+        rw [openSegment_eq_Ioo hθπlt, Set.mem_Ioo]
+        exact ⟨hθxlt, hxπ⟩
+      have hne : θ ≠ Real.pi := hθπ
+      have hlt := hconc.lt_on_openSegment hθ (by
+        exact ⟨Real.pi_pos.le, le_rfl⟩) hne hxseg
+      rw [hrootθ, hrootπ, hroot, min_self] at hlt
+      exact (lt_irrefl Real.pi hlt)
+    · have hθseg : θ ∈ openSegment ℝ x₀ Real.pi := by
+        rw [openSegment_eq_Ioo hxπ, Set.mem_Ioo]
+        exact ⟨hxθlt, hθπlt⟩
+      have hxne : x₀ ≠ Real.pi := ne_of_lt hxπ
+      have hlt := hconc.lt_on_openSegment
+        ⟨hx₀.1.le, hxπ.le⟩ (by exact ⟨Real.pi_pos.le, le_rfl⟩)
+        hxne hθseg
+      rw [hroot, hrootπ, hrootθ, min_self] at hlt
+      exact (lt_irrefl Real.pi hlt)
+  · rintro (rfl | rfl)
+    · exact hroot
+    · simp [apm_t00j01_foldLift]
+
+/-- Seat (assembly from hypotheses): with oddness (banked) and `g ≥ 0` on `[0, π]`
+(`sin ≥ 0` there), the solutions in `(-π, π]` are exactly `x₀, π, -x₀`. -/
+theorem apm_t00j01_angle_count_of_parts
+    (hclass : ∀ θ ∈ Set.Ioc (-Real.pi) Real.pi,
+      Circle.exp (apm_t00j01_foldLift θ) = Circle.exp Real.pi ↔
+        apm_t00j01_foldLift θ = Real.pi ∨ apm_t00j01_foldLift θ = -Real.pi)
+    (hpos : ∃ x₀ ∈ Set.Ioo 0 (Real.pi / 2), ∀ θ ∈ Set.Icc 0 Real.pi,
+      apm_t00j01_foldLift θ = Real.pi ↔ θ = x₀ ∨ θ = Real.pi) :
+    Nat.card {θ : Set.Ioc (-Real.pi) Real.pi //
+      Circle.exp (apm_t00j01_foldLift θ.1) = Circle.exp Real.pi} = 3 := by
+  obtain ⟨x₀, hx₀, hpos⟩ := hpos
+  have hsolutions : ∀ θ ∈ Set.Ioc (-Real.pi) Real.pi,
+      Circle.exp (apm_t00j01_foldLift θ) = Circle.exp Real.pi ↔
+        θ = x₀ ∨ θ = Real.pi ∨ θ = -x₀ := by
+    intro θ hθ
+    rw [hclass θ hθ]
+    constructor
+    · intro hg
+      by_cases hnonneg : 0 ≤ θ
+      · have hsin : 0 ≤ Real.sin θ :=
+          Real.sin_nonneg_of_nonneg_of_le_pi hnonneg hθ.2
+        rcases hg with hg | hg
+        · rcases (hpos θ ⟨hnonneg, hθ.2⟩).mp hg with h | h
+          · exact Or.inl h
+          · exact Or.inr (Or.inl h)
+        · exfalso
+          dsimp [apm_t00j01_foldLift] at hg
+          nlinarith [Real.pi_pos]
+      · have hneg : θ < 0 := lt_of_not_ge hnonneg
+        have hmθ : -θ ∈ Set.Icc (0 : ℝ) Real.pi := by
+          constructor <;> linarith [hθ.1]
+        rcases hg with hg | hg
+        · have hsin : Real.sin θ ≤ 0 := by
+            have := Real.sin_nonneg_of_nonneg_of_le_pi hmθ.1 hmθ.2
+            simpa using this
+          exfalso
+          dsimp [apm_t00j01_foldLift] at hg
+          nlinarith [Real.pi_pos]
+        · have hm : apm_t00j01_foldLift (-θ) = Real.pi := by
+            rw [apm_t00j01_foldFiberCard_pi_aux_angle_count_aux_odd, hg]
+            ring
+          rcases (hpos (-θ) hmθ).mp hm with hm | hm
+          · exact Or.inr (Or.inr (by linarith))
+          · exfalso
+            linarith [hθ.1]
+    · intro h
+      rcases h with h | h | h
+      · subst θ
+        exact Or.inl ((hpos x₀ ⟨hx₀.1.le, le_trans hx₀.2.le
+          (by linarith [Real.pi_pos] : Real.pi / 2 ≤ Real.pi)⟩).2 (Or.inl rfl))
+      · subst θ
+        exact Or.inl ((hpos Real.pi ⟨Real.pi_pos.le, le_rfl⟩).2 (Or.inr rfl))
+      · subst θ
+        exact Or.inr (by
+          rw [apm_t00j01_foldFiberCard_pi_aux_angle_count_aux_odd]
+          have := (hpos x₀ ⟨hx₀.1.le, le_trans hx₀.2.le
+            (by linarith [Real.pi_pos] : Real.pi / 2 ≤ Real.pi)⟩).2 (Or.inl rfl)
+          rw [this])
+  have hmem : ∀ θ : ℝ, θ = x₀ ∨ θ = Real.pi ∨ θ = -x₀ →
+      θ ∈ Set.Ioc (-Real.pi) Real.pi := by
+    intro θ h
+    rcases h with h | h | h
+    · rw [h]
+      constructor <;> linarith [hx₀.1, hx₀.2, Real.pi_pos]
+    · rw [h]
+      exact ⟨by linarith [Real.pi_pos], le_rfl⟩
+    · rw [h]
+      constructor <;> linarith [hx₀.1, hx₀.2, Real.pi_pos]
+  let e : {θ : Set.Ioc (-Real.pi) Real.pi //
+      Circle.exp (apm_t00j01_foldLift θ.1) = Circle.exp Real.pi} ≃
+      {θ : ℝ // θ = x₀ ∨ θ = Real.pi ∨ θ = -x₀} :=
+    { toFun := fun θ => ⟨θ.1, (hsolutions θ.1 θ.1.2).mp θ.2⟩
+      invFun := fun θ => ⟨⟨θ.1, hmem θ.1 θ.2⟩,
+        (hsolutions θ.1 (hmem θ.1 θ.2)).2 θ.2⟩
+      left_inv := fun θ => by apply Subtype.ext; rfl
+      right_inv := fun θ => by apply Subtype.ext; rfl }
+  rw [Nat.card_congr e]
+  have hne₁ : x₀ ≠ Real.pi := by linarith [hx₀.2, Real.pi_pos]
+  have hne₂ : x₀ ≠ -x₀ := by linarith [hx₀.1]
+  have hne₃ : Real.pi ≠ -x₀ := by linarith [hx₀.1, Real.pi_pos]
+  let e' : {θ : ℝ // θ = x₀ ∨ θ = Real.pi ∨ θ = -x₀} ≃ Fin 3 :=
+    { toFun := fun θ => if θ.1 = x₀ then 0 else if θ.1 = Real.pi then 1 else 2
+      invFun := fun i => ⟨![x₀, Real.pi, -x₀] i, by fin_cases i <;> simp⟩
+      left_inv := fun θ => by
+        rcases θ.2 with h | h | h
+        · apply Subtype.ext
+          simp [h]
+        · apply Subtype.ext
+          simp [h, hne₁.symm]
+        · apply Subtype.ext
+          simp [h, hne₂.symm, hne₃.symm]
+      right_inv := fun i => by
+        fin_cases i
+        · simp
+        · simp [hne₁.symm]
+        · simp [hne₂.symm, hne₃.symm] }
+  rw [Nat.card_congr e']
+  simp
+
+lemma apm_t00j01_foldFiberCard_pi_aux_angle_count :
+    Nat.card {θ : Set.Ioc (-Real.pi) Real.pi //
+      Circle.exp (apm_t00j01_foldLift θ.1) = Circle.exp Real.pi} = 3 := by
+  exact apm_t00j01_angle_count_of_parts apm_t00j01_angle_classify
+    apm_t00j01_angle_positive_roots
+
 theorem apm_t00j01_foldFiberCard_pi :
     Nat.card {z : Circle // apm_t00j01_fold z = Circle.exp Real.pi} = 3 := by
-  sorry
+  rw [apm_t00j01_foldFiberCard_pi_aux_reduce_to_angles]
+  exact apm_t00j01_foldFiberCard_pi_aux_angle_count
 
 /-- The other selected regular fiber has exactly one circle point. -/
+lemma apm_t00j01_foldFiberCard_one_aux_angle (z : Circle) :
+    ∃ θ : ℝ, θ ∈ Set.Ioc (-Real.pi) Real.pi ∧ Circle.exp θ = z := by
+  simpa only [Set.mem_univ, and_true] using Circle.surjOn_exp_neg_pi_pi (Set.mem_univ z)
+
+lemma apm_t00j01_foldFiberCard_one_aux_unique (z : Circle)
+    (hz : apm_t00j01_fold z = 1) : z = 1 := by
+  obtain ⟨θ, hθ, rfl⟩ := apm_t00j01_foldFiberCard_one_aux_angle z
+  rw [apm_t00j01_fold_exp] at hz
+  have hexp : Circle.exp (apm_t00j01_foldLift θ) = Circle.exp 0 := by simpa using hz
+  obtain ⟨n, hn⟩ := Circle.exp_eq_exp.mp hexp
+  have hsin_nonneg : 0 ≤ θ → 0 ≤ Real.sin θ := by
+    intro h0
+    exact Real.sin_nonneg_of_nonneg_of_le_pi h0 hθ.2
+  have hsin_nonpos : θ ≤ 0 → Real.sin θ ≤ 0 := by
+    intro h0
+    have hneg : 0 ≤ -θ := neg_nonneg.mpr h0
+    have hle : -θ ≤ Real.pi := by linarith [hθ.1]
+    simpa only [Real.sin_neg, neg_nonneg] using
+      (Real.sin_nonneg_of_nonneg_of_le_pi hneg hle)
+  have hbound : |apm_t00j01_foldLift θ| < 2 * Real.pi := by
+    rw [apm_t00j01_foldLift]
+    calc
+      |θ + 2 * Real.sin θ| ≤ |θ| + 2 * |Real.sin θ| := by
+        simpa only [abs_mul, abs_of_nonneg (by norm_num : (0 : ℝ) ≤ 2)] using
+          abs_add_le θ (2 * Real.sin θ)
+      _ ≤ Real.pi + 2 := by
+        have ha : |θ| ≤ Real.pi := (abs_le).2 ⟨by linarith [hθ.1], hθ.2⟩
+        have hs : |Real.sin θ| ≤ 1 :=
+          (abs_le).2 ⟨Real.neg_one_le_sin θ, Real.sin_le_one θ⟩
+        linarith
+      _ < 2 * Real.pi := by linarith [Real.pi_gt_three]
+  have hn0 : n = 0 := by
+    have hnabs : |(n : ℝ)| < 1 := by
+      rw [apm_t00j01_foldLift] at hn hbound
+      have hpi : 0 < 2 * Real.pi := by positivity
+      rw [hn, zero_add, abs_mul, abs_of_pos hpi] at hbound
+      nlinarith
+    have hnlt : (n : ℝ) < 1 := lt_of_le_of_lt (le_abs_self _) hnabs
+    have hnneglt : (-(n : ℝ)) < 1 := lt_of_le_of_lt (neg_le_abs _) hnabs
+    have hn_lt : n < 1 := by exact_mod_cast hnlt
+    have hn_gt : -1 < n := by exact_mod_cast (show (-1 : ℝ) < n by linarith)
+    omega
+  have hphi : θ + 2 * Real.sin θ = 0 := by
+    simpa [apm_t00j01_foldLift, hn0] using hn
+  have hθ0 : θ = 0 := by
+    rcases le_total θ 0 with hneg | hpos
+    · have hs := hsin_nonpos hneg
+      linarith
+    · have hs := hsin_nonneg hpos
+      linarith
+  simp [hθ0]
+
 theorem apm_t00j01_foldFiberCard_one :
     Nat.card {z : Circle // apm_t00j01_fold z = 1} = 1 := by
-  sorry
+  let x : {z : Circle // apm_t00j01_fold z = 1} :=
+    ⟨1, by simpa using apm_t00j01_fold_zero⟩
+  letI : Unique {z : Circle // apm_t00j01_fold z = 1} := {
+    default := x
+    uniq := fun y => Subtype.ext (apm_t00j01_foldFiberCard_one_aux_unique y y.property) }
+  exact Nat.card_unique
 
 theorem apm_t00j01 :
     (apm_t00j01_isThreeManifold apm_t00j01_nonorientable3 ∧

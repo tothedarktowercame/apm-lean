@@ -120,7 +120,7 @@ lemma apm_t99J03_unique_classification_of_exists_of_euler_invariant
 theorem apm_t99j03 :
     ∀ (X : Type) [TopologicalSpace X] [T2Space X] [CompactSpace X]
       [ConnectedSpace X] [ChartedSpace apm_t99J03_E2 X]
-      [IsManifold (𝓘(ℝ, apm_t99J03_E2)) ⊤ X],
+      [IsManifold (𝓘(ℝ, apm_t99J03_E2)) ((⊤ : ℕ∞) : WithTop ℕ∞) X],
       (∃! g : ℕ,
         Nonempty (X ≃ₜ apm_t99J03_Surface true g) ∧
         apm_t99J03_eulerCharacteristic true g = 2 - 2 * g) ∨
