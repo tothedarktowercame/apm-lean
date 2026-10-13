@@ -24430,25 +24430,24 @@
    :consumer :t01A08,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "extend Mathlib: state and prove the missing theorem in scope",
    :implements-lemma :lemma-closedset-whitneycubecover,
    :evidence
    {:placeholder-delta {:t01A08 [1 1]},
-    :residual
-    "Fixed packing bound; sum adjacent strata; assemble B3; then B4-B7, B9.",
+    :residual "Sum adjacent strata; assemble B3; then B4-B7, B9.",
     :outcome :stop,
     :warnings ["existing unnecessarySimpa:454"],
     :missing-theorems
     [{:name
-      "ConstructionTargets.SardConvexDomain.isSeparated_image_whitneyNormalize_incidence",
-      :type "normalized incidence image is 1/8-separated",
+      "ConstructionTargets.SardConvexDomain.encard_whitneyStratumNet_mem_quarter_ball_le_fixed_packingNumber",
+      :type "incidence encard <= fixed packing number",
       :status :proved,
       :consumers [:t01A08],
       :depends-on
-      ["ConstructionTargets.SardConvexDomain.dist_whitneyNormalize"
-       "ConstructionTargets.SardConvexDomain.whitneyStratumNet_spec"],
+      ["ConstructionTargets.SardConvexDomain.isSeparated_image_whitneyNormalize_incidence"
+       "ConstructionTargets.SardConvexDomain.whitneyNormalize_mem_closedBall_half"],
       :area "sard-convex-domain"}
      {:name
       "ConstructionTargets.SardConvexDomain.closedSet_whitneyCubeCover_proper",
@@ -24456,44 +24455,33 @@
       :status :partial,
       :consumers [:t01A08],
       :depends-on
-      ["ConstructionTargets.SardConvexDomain.isSeparated_image_whitneyNormalize_incidence"
-       "ConstructionTargets.SardConvexDomain.whitneyNormalize_mem_closedBall_half"],
+      ["ConstructionTargets.SardConvexDomain.encard_whitneyStratumNet_mem_quarter_ball_le_fixed_packingNumber"
+       "ConstructionTargets.SardConvexDomain.whitneyStratum_indices_le_add_one_of_mem_quarter_balls"],
       :area "sard-convex-domain"}],
     :statement-hashes {:registry "150/150"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Committed normalized scale-k incidence separation by 1/8. Fixed packing and assembly remain; not refuted.",
+    "Committed incidence bound by the packing number of the fixed half-ball. Stratum sum and assembly remain; not refuted.",
     :commands
     [{:cmd "lake build ConstructionTargets.SardConvexDomain", :exit 0}
      {:cmd "fixture; registry; scans; diff", :exit 0}
      {:cmd "git commit", :exit 0}],
     :diagnostic-history
-    [{:cmd "exploratory builds",
+    [{:cmd "builds",
       :exit 1,
-      :correction "fixed onFun/edist and positivity"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1791909245009-9997-f8ea4749",
-     :commands
-     ["git show/diff 69dea2a; scope/type checks"
-      "sha256sum + lake env lean frozen fixture"
-      "lake build ConstructionTargets.SardConvexDomain"
-      "statement registry check; forbidden-count scan"],
-     :finding
-     "PASS. Recorded topo-10 commit 69dea2a changes only the scoped Lean file and correctly proves the normalized incidence image is 1/8-separated. Distinct images imply distinct centers; stratum separation gives 2^k/8<dist(c,d); positive inverse scaling yields 1/8 after normalization; edist/ofReal conversion is oriented correctly. Fixture hash 777f5648... matches; build/fixture pass; registry 150/150; forbidden placeholders stay 0; only standard axioms. Valid compiled B3 progress; STOP leaves fixed packing, adjacent-stratum summation, and assembly."},
-    :commit "69dea2af4ff324aa69b59e7e2be7e82f3d67a4e9",
+      :correction "used NNReal; proved injectivity"}],
+    :commit "dd54f0780308c38eb8629e0a4aa28faf7703dafa",
     :changed-paths ["ConstructionTargets/SardConvexDomain.lean"],
     :fixture
-    {:path "/tmp/t01a08_b3_normalized_separation_check.lean",
+    {:path "/tmp/t01a08_b3_fixed_packing_check.lean",
      :sha256
-     "777f5648ba601ccbf38bd1656fdd9a562e7736922061df748fcc7dd3f7e5bc20",
+     "2e51a943be8b296ea8378b91bed3e235795c9f932db528dc742ab69210ac4712",
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain.blueprint/B3",
    :acceptance
@@ -35163,7 +35151,8 @@
     :lemma-constructiontargets-sardconvexdomain-encard-whitneystratumnet-mem-quarter-ball-l
     :lemma-constructiontargets-sardconvexdomain-dist-whitneynormalize
     :lemma-constructiontargets-sardconvexdomain-whitneynormalize-mem-closedball-half
-    :lemma-constructiontargets-sardconvexdomain-isseparated-image-whitneynormalize-incidenc],
+    :lemma-constructiontargets-sardconvexdomain-isseparated-image-whitneynormalize-incidenc
+    :lemma-constructiontargets-sardconvexdomain-encard-whitneystratumne-a5bb5ee43d22],
    :other-consumers []}
   {:consumer :t01A08,
    :phase :lemma,
@@ -35628,6 +35617,28 @@
    :depends-on
    [:lemma-constructiontargets-sardconvexdomain-dist-whitneynormalize
     :lemma-constructiontargets-sardconvexdomain-whitneystratumnet-spec],
+   :other-consumers []}
+  {:consumer :t01A08,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.SardConvexDomain.encard_whitneyStratumNet_mem_quarter_ball_le_fixed_packingNumber",
+    :type "incidence encard <= fixed packing number"},
+   :lemma
+   {:name
+    "ConstructionTargets.SardConvexDomain.encard_whitneyStratumNet_mem_quarter_ball_le_fixed_packingNumber",
+    :reported-by [:r-a08-sard-b3-whitney-cubes-1],
+    :type "incidence encard <= fixed packing number",
+    :area "sard-convex-domain",
+    :proved-in :r-a08-sard-b3-whitney-cubes-1},
+   :id
+   :lemma-constructiontargets-sardconvexdomain-encard-whitneystratumne-a5bb5ee43d22,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-sardconvexdomain-isseparated-image-whitneynormalize-incidenc
+    :lemma-constructiontargets-sardconvexdomain-whitneynormalize-mem-closedball-half],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
