@@ -22996,20 +22996,20 @@
    :consumer :t01A08,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "extend Mathlib: state and prove the missing theorem in scope",
    :evidence
    {:placeholder-delta {:t01A08 [1 1]},
     :residual
-    "Stop-after-two: reroute fixture correction; convex B1 supplies hxi.",
+    "Use banked convexWithinJet/B1; do not schedule the weaker frozen symmetry theorem.",
     :missing-hypothesis "x ∈ closure (interior s)",
     :outcome :stop,
     :warnings [],
     :missing-theorems
     [{:name
       "ContDiffWithinAt.domDomCongr_iteratedFDerivWithin_of_infty",
-      :type "frozen conclusion plus x∈closure(interior s)",
+      :type "frozen conclusion plus hxi",
       :status :proved,
       :consumers [:t01A08],
       :depends-on [],
@@ -23019,12 +23019,18 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Second repair confirms the frozen C∞ type lacks hxi : x∈closure(interior s). Real within-set Schwarz requires hxi already at order 2; only analytic ω admits the premise-free theorem. UniqueDiffOn plus x∈s does not supply hxi, so extending the library cannot prove this frozen statement without adding the missing hypothesis.",
+    "Frozen smooth symmetry omits hxi : x∈closure(interior s). The scoped C∞ theorem requires hxi; UniqueDiffOn and x∈s do not provide it. Convex B1 now derives hxi and is already implemented, but that hypothesis is absent from this interface. The raw fixture is also stale: it redeclares the banked B1 theorem.",
     :commands
-    [{:cmd "hash fixture; locate Mathlib ω/C∞ Schwarz declarations",
+    [{:cmd "hash fixture; compare frozen/scoped/Mathlib signatures",
       :exit 0}
-     {:cmd "lake env lean corrected theorem check; registry check",
+     {:cmd
+      "lake env lean corrected hxi signature check; registry check",
       :exit 0}],
+    :diagnostic-history
+    [{:cmd "lake env lean raw fixture",
+      :exit 1,
+      :correction
+      "post-build fixture is stale and redeclares convexWithinJet"}],
     :commit nil,
     :changed-paths [],
     :fixture
@@ -23034,7 +23040,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain.blueprint/B1/smooth-symmetry",
    :acceptance
