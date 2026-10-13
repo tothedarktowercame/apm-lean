@@ -24430,7 +24430,7 @@
    :consumer :t01A08,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 0,
    :review-finding
    "extend Mathlib: state and prove the missing theorem in scope",
    :implements-lemma :lemma-closedset-whitneycubecover,
@@ -24471,6 +24471,17 @@
      {:cmd "git commit", :exit 0}],
     :diagnostic-history
     [{:cmd "build", :exit 1, :correction "used closure_compl"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791916969866-10211-86a03d7c",
+     :commands
+     ["git show/diff 384fad1; scope/obstruction checks"
+      "sha256sum + lake env lean frozen fixture"
+      "lake build ConstructionTargets.SardConvexDomain"
+      "statement registry check; forbidden-count scan"],
+     :finding
+     "PASS. Recorded topo-10 commit 384fad1 changes only the scoped Lean file and gives a compiled obstruction: if the net quarter-balls were ambient locally finite, closure would commute with their union; a frontier point would lie in one closed quarter-ball and in s, forcing positive dc≤dist(c,x)≤dc/4. Thus this ball construction fails local finiteness, while the frozen cube-cover declaration is not refuted and maximal dyadic cubes remain listed. Fixture hash d74ae9ad... matches; build/fixture pass; registry 150/150; placeholders stay 0; only standard axioms."},
     :commit "384fad1cbfcc6bef5dd235a3f17f0bba962cbc45",
     :changed-paths ["ConstructionTargets/SardConvexDomain.lean"],
     :fixture
@@ -24480,7 +24491,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain.blueprint/B3",
    :acceptance
@@ -35965,7 +35976,7 @@
    :other-consumers []}
   {:consumer :t01A08,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -35979,7 +35990,9 @@
     :type
     "closed nonempty s, nonempty frontier => quarter-balls not ambient locally finite",
     :area "sard-convex-domain",
-    :proved-in :r-a08-sard-b3-whitney-cubes-1},
+    :proved-in :r-a08-sard-b3-whitney-cubes-1,
+    :banked-by :r-a08-sard-b3-whitney-cubes-1,
+    :banked-commit "384fad1cbfcc6bef5dd235a3f17f0bba962cbc45"},
    :id
    :lemma-constructiontargets-sardconvexdomain-not-locallyfinite-whitneynetquarterballs-of,
    :kind :lemma,
