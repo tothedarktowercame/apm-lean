@@ -576,6 +576,14 @@ theorem apm_t96j07_local_number_axis0
 
 /-- Package the affine chart at the second coordinate axis. -/
 theorem apm_t96j07_local_number_axis1
+    (hgen :
+  ∀ i : Fin 4, ∃ chart : OpenPartialHomeomorph apm_t96j07_RP3 apm_t96j07_E3,
+      (∀ p, p ∈ chart.source ↔ p.rep i ≠ 0) ∧ chart.target = Set.univ ∧
+      (∀ (x : apm_t96j07_V) (hx : x ≠ 0), x i ≠ 0 →
+        chart (Projectivization.mk ℝ x hx) =
+          WithLp.toLp 2 (fun j => x (i.succAbove j) / x i)) ∧
+      (∀ y : apm_t96j07_E3, ∃ h, chart.symm y =
+        Projectivization.mk ℝ (Fin.insertNth i 1 (WithLp.ofLp y)) h))
     (f : C(apm_t96j07_RP3, apm_t96j07_RP3))
     (hformula : ∀ (x : apm_t96j07_V) (hx : x ≠ 0),
       f (Projectivization.mk ℝ x hx) =
@@ -599,6 +607,14 @@ theorem apm_t96j07_local_number_axis1
 
 /-- Package the affine chart at the third coordinate axis. -/
 theorem apm_t96j07_local_number_axis2
+    (hgen :
+  ∀ i : Fin 4, ∃ chart : OpenPartialHomeomorph apm_t96j07_RP3 apm_t96j07_E3,
+      (∀ p, p ∈ chart.source ↔ p.rep i ≠ 0) ∧ chart.target = Set.univ ∧
+      (∀ (x : apm_t96j07_V) (hx : x ≠ 0), x i ≠ 0 →
+        chart (Projectivization.mk ℝ x hx) =
+          WithLp.toLp 2 (fun j => x (i.succAbove j) / x i)) ∧
+      (∀ y : apm_t96j07_E3, ∃ h, chart.symm y =
+        Projectivization.mk ℝ (Fin.insertNth i 1 (WithLp.ofLp y)) h))
     (f : C(apm_t96j07_RP3, apm_t96j07_RP3))
     (hformula : ∀ (x : apm_t96j07_V) (hx : x ≠ 0),
       f (Projectivization.mk ℝ x hx) =
@@ -622,6 +638,14 @@ theorem apm_t96j07_local_number_axis2
 
 /-- Package the affine chart at the fourth coordinate axis. -/
 theorem apm_t96j07_local_number_axis3
+    (hgen :
+  ∀ i : Fin 4, ∃ chart : OpenPartialHomeomorph apm_t96j07_RP3 apm_t96j07_E3,
+      (∀ p, p ∈ chart.source ↔ p.rep i ≠ 0) ∧ chart.target = Set.univ ∧
+      (∀ (x : apm_t96j07_V) (hx : x ≠ 0), x i ≠ 0 →
+        chart (Projectivization.mk ℝ x hx) =
+          WithLp.toLp 2 (fun j => x (i.succAbove j) / x i)) ∧
+      (∀ y : apm_t96j07_E3, ∃ h, chart.symm y =
+        Projectivization.mk ℝ (Fin.insertNth i 1 (WithLp.ofLp y)) h))
     (f : C(apm_t96j07_RP3, apm_t96j07_RP3))
     (hformula : ∀ (x : apm_t96j07_V) (hx : x ≠ 0),
       f (Projectivization.mk ℝ x hx) =
@@ -663,9 +687,9 @@ theorem apm_t96j07_local_numbers
         (Projectivization.mk ℝ (apm_t96j07_axis 3) (by
           intro h; have := congrFun h 3; simp [apm_t96j07_axis] at this)) 1 := by
   exact ⟨apm_t96j07_local_number_axis0 f hformula apm_t96j07_diagonal_link_degree,
-    apm_t96j07_local_number_axis1 f hformula apm_t96j07_diagonal_link_degree,
-    apm_t96j07_local_number_axis2 f hformula apm_t96j07_diagonal_link_degree,
-    apm_t96j07_local_number_axis3 f hformula apm_t96j07_diagonal_link_degree⟩
+    apm_t96j07_local_number_axis1 apm_t96j07_affine_chart f hformula apm_t96j07_diagonal_link_degree,
+    apm_t96j07_local_number_axis2 apm_t96j07_affine_chart f hformula apm_t96j07_diagonal_link_degree,
+    apm_t96j07_local_number_axis3 apm_t96j07_affine_chart f hformula apm_t96j07_diagonal_link_degree⟩
 
 /-- Compute the rational-homological Lefschetz number.  The action formula is
 supplied directly so this lemma is parallel to map construction. -/
