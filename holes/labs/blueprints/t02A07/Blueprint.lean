@@ -375,6 +375,145 @@ lemma apm_t02A07_transverse_iff_parameter_sq_ne_half_aux_fderiv
   rw [heq, ((L.hasFDerivAt.add_const c).fderiv)]
   rfl
 
+lemma apm_t02A07_transverse_iff_parameter_sq_ne_half_aux_submodule_aux_parameter_sq
+    (parameter : apm_t02a07_parameterCircle) :
+    parameter.1 0 ^ 2 + parameter.1 1 ^ 2 = 1 := by
+  have hp : ‖(parameter : apm_t02a07_E2)‖ = 1 := by simpa using parameter.2
+  have h := EuclideanSpace.real_norm_sq_eq (parameter : apm_t02a07_E2)
+  simpa [Fin.sum_univ_succ, hp] using h.symm
+
+lemma apm_t02A07_transverse_iff_parameter_sq_ne_half_aux_submodule_aux_good
+    (parameter : apm_t02a07_parameterCircle)
+    (hderiv : ∀ (y v : apm_t02a07_E3),
+      fderiv ℝ (apm_t02a07_familyAmbient parameter) y v =
+        (WithLp.toLp 2
+          ![v 0 * parameter.1 0, 0, v 1 * parameter.1 0,
+            v 2 * parameter.1 0] : apm_t02a07_E4))
+    (hp : parameter.1 0 ^ 2 ≠ (1 : ℝ) / 2) :
+    apm_t02a07_IsTransverse parameter := by
+  sorry
+/-
+  intro y hy
+  have hlevel := apm_t02A07_transverse_iff_parameter_sq_ne_half_aux_level parameter y hy
+  have hsphere := apm_t02A07_transverse_iff_parameter_sq_ne_half_aux_sphere y
+  have hparam : parameter.1 0 ^ 2 + parameter.1 1 ^ 2 = 1 := by
+    have hp' : ‖(parameter : apm_t02a07_E2)‖ = 1 := by simpa using parameter.2
+    have hh := EuclideanSpace.real_norm_sq_eq (parameter : apm_t02a07_E2)
+    simpa [Fin.sum_univ_succ, hp'] using hh.symm
+  have ha : parameter.1 0 ≠ 0 := by
+    intro ha
+    rw [ha] at hlevel
+    norm_num at hlevel
+  let u : apm_t02a07_E3 := WithLp.toLp 2
+    ![-(2 * y.1 1 * y.1 2) * y.1 0,
+      y.1 2 - (2 * y.1 1 * y.1 2) * y.1 1,
+      y.1 1 - (2 * y.1 1 * y.1 2) * y.1 2]
+  let q : ℝ := y.1 2 * u 1 + y.1 1 * u 2
+  have hu_inner : inner ℝ (y.1 : apm_t02a07_E3) u = 0 := by
+    simp [u, PiLp.inner_apply, Fin.sum_univ_succ, real_inner_eq_re_inner,
+      RCLike.inner_apply]
+    ring_nf
+    nlinarith
+  have hq : q ≠ 0 := by
+    intro hq0
+    have hq' : y.1 1 ^ 2 + y.1 2 ^ 2 - 4 * (y.1 1 * y.1 2) ^ 2 = 0 := by
+      simp [q, u] at hq0
+      ring_nf at hq0 ⊢
+      exact hq0
+    have hprod : parameter.1 0 ^ 2 * (y.1 1 * y.1 2) = (1 : ℝ) / 4 := by
+      nlinarith [hlevel]
+    have hsum : y.1 1 ^ 2 + y.1 2 ^ 2 ≥ 2 * (y.1 1 * y.1 2) := by
+      nlinarith [sq_nonneg (y.1 1 - y.1 2)]
+    have hprodpos : 0 < y.1 1 * y.1 2 := by
+      have ha2 : 0 < parameter.1 0 ^ 2 := sq_pos_of_ne_zero ha
+      nlinarith
+    have : parameter.1 0 ^ 2 = (1 : ℝ) / 2 := by
+      nlinarith [sq_nonneg (y.1 0), sq_nonneg (y.1 1 - y.1 2),
+        sq_nonneg (parameter.1 1)]
+    exact hp this
+  apply le_antisymm
+  · rw [sup_le_iff]
+    constructor
+    · rintro z ⟨v, hv, rfl⟩
+      rw [apm_t02a07_tangentX,
+        Submodule.mem_orthogonal_singleton_iff_inner_right]
+      change inner ℝ (apm_t02a07_family parameter y)
+        (fderiv ℝ (apm_t02a07_familyAmbient parameter) (y : apm_t02a07_E3) v) = 0
+      rw [hderiv]
+      rw [apm_t02a07_sphereTangent,
+        Submodule.mem_orthogonal_singleton_iff_inner_right] at hv
+      simp [apm_t02a07_family, PiLp.inner_apply, Fin.sum_univ_succ,
+        real_inner_eq_re_inner, RCLike.inner_apply] at hv ⊢
+      nlinarith
+    · intro z hz
+      rw [apm_t02a07_tangentX,
+        Submodule.mem_orthogonal_singleton_iff_inner_right]
+      rw [apm_t02a07_tangentZ, LinearMap.mem_ker] at hz
+      change fderiv ℝ apm_t02a07_constraints
+        (apm_t02a07_family parameter y) z = 0 at hz
+      rw [apm_t02A07_constraints_fderiv_surjective_aux_formula] at hz
+      have hz0 := congrFun (congrArg WithLp.ofLp hz) (0 : Fin 2)
+      simp at hz0
+      exact (mul_eq_zero.mp hz0).resolve_left (mul_ne_zero (by norm_num) (by
+        simpa [apm_t02a07_family] using ha))
+  · intro z hz
+    rw [apm_t02a07_tangentX,
+      Submodule.mem_orthogonal_singleton_iff_inner_right] at hz
+    let r : ℝ :=
+      ((apm_t02a07_family parameter y) 3 * z 2 +
+        (apm_t02a07_family parameter y) 2 * z 3) /
+        (parameter.1 0 ^ 2 * q)
+    have hden : parameter.1 0 ^ 2 * q ≠ 0 := mul_ne_zero (pow_ne_zero 2 ha) hq
+    let v : apm_t02a07_E3 := r • u
+    have hv : v ∈ apm_t02a07_sphereTangent y := by
+      rw [apm_t02a07_sphereTangent,
+        Submodule.mem_orthogonal_singleton_iff_inner_right]
+      simp [v, inner_smul_right, hu_inner]
+    let w := fderiv ℝ (apm_t02a07_familyAmbient parameter) (y : apm_t02a07_E3) v
+    have hwprod :
+        (apm_t02a07_family parameter y) 3 * w 2 +
+          (apm_t02a07_family parameter y) 2 * w 3 =
+        (apm_t02a07_family parameter y) 3 * z 2 +
+          (apm_t02a07_family parameter y) 2 * z 3 := by
+      dsimp [w]
+      rw [hderiv]
+      simp [w, v, r, q, apm_t02a07_family]
+      field_simp
+    have hwinner : inner ℝ (apm_t02a07_family parameter y) w = 0 := by
+      dsimp [w]
+      rw [hderiv]
+      simp [w, v, apm_t02a07_family, PiLp.inner_apply, Fin.sum_univ_succ,
+        real_inner_eq_re_inner, RCLike.inner_apply]
+      nlinarith [hu_inner]
+    rw [Submodule.mem_sup]
+    refine ⟨w, ?_, z - w, ?_, by abel⟩
+    · exact ⟨v, hv, rfl⟩
+    · rw [apm_t02a07_tangentZ, LinearMap.mem_ker,
+        show (fderiv ℝ apm_t02a07_constraints
+          (apm_t02a07_family parameter y)).toLinearMap (z - w) =
+          fderiv ℝ apm_t02a07_constraints
+            (apm_t02a07_family parameter y) (z - w) by rfl,
+        apm_t02A07_constraints_fderiv_surjective_aux_formula]
+      apply PiLp.ext
+      intro i
+      fin_cases i
+      · simp
+        nlinarith
+      · simp
+        nlinarith
+
+-/
+lemma apm_t02A07_transverse_iff_parameter_sq_ne_half_aux_submodule_aux_bad
+    (parameter : apm_t02a07_parameterCircle)
+    (hderiv : ∀ (y v : apm_t02a07_E3),
+      fderiv ℝ (apm_t02a07_familyAmbient parameter) y v =
+        (WithLp.toLp 2
+          ![v 0 * parameter.1 0, 0, v 1 * parameter.1 0,
+            v 2 * parameter.1 0] : apm_t02a07_E4))
+    (htrans : apm_t02a07_IsTransverse parameter) :
+    parameter.1 0 ^ 2 ≠ (1 : ℝ) / 2 := by
+  sorry
+
 lemma apm_t02A07_transverse_iff_parameter_sq_ne_half_aux_submodule
     (parameter : apm_t02a07_parameterCircle)
     (hderiv : ∀ (y v : apm_t02a07_E3),
@@ -384,7 +523,11 @@ lemma apm_t02A07_transverse_iff_parameter_sq_ne_half_aux_submodule
             v 2 * parameter.1 0] : apm_t02a07_E4)) :
     apm_t02a07_IsTransverse parameter ↔
       parameter.1 0 ^ 2 ≠ (1 : ℝ) / 2 := by
-  sorry
+  constructor
+  · exact apm_t02A07_transverse_iff_parameter_sq_ne_half_aux_submodule_aux_bad
+      parameter hderiv
+  · exact apm_t02A07_transverse_iff_parameter_sq_ne_half_aux_submodule_aux_good
+      parameter hderiv
 
 theorem apm_t02A07_transverse_iff_parameter_sq_ne_half
     (parameter : apm_t02a07_parameterCircle) :
