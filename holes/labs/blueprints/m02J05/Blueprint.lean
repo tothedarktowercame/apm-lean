@@ -1008,7 +1008,39 @@ lemma apm_m02J05_bridge_complementary_young_holder_of_lux_facts_aux_beta_atTop
     _ = β (α r) := (hβα r hr).symm
     _ ≤ β x := hβmono (mem_Ici.mpr hαr) (mem_Ici.mpr (hαr.trans hx)) hx
 
-lemma apm_m02J05_bridge_complementary_young_holder_of_lux_facts_aux_young_aux_area
+lemma apm_m02J05_bridge_complementary_young_holder_of_lux_facts_aux_young_aux_area_aux_galois
+    (α β : ℝ → ℝ)
+    (hαmono : StrictMonoOn α (Ici 0))
+    (hnonneg : ∀ t, 0 ≤ t → 0 ≤ α t ∧ 0 ≤ β t)
+    (hαβ : ∀ t, 0 ≤ t → α (β t) = t)
+    {s t : ℝ} (hs : 0 ≤ s) (ht : 0 ≤ t) :
+    β t ≤ s ↔ t ≤ α s := by
+  have hβ0 : 0 ≤ β t := (hnonneg t ht).2
+  constructor
+  · intro h
+    rw [← hαβ t ht]
+    exact hαmono.monotoneOn (mem_Ici.mpr hβ0) (mem_Ici.mpr hs) h
+  · intro h
+    by_contra hn
+    have hsb : s < β t := lt_of_not_ge hn
+    have halt := hαmono (mem_Ici.mpr hs) (mem_Ici.mpr hβ0) hsb
+    rw [hαβ t ht] at halt
+    exact (not_lt_of_ge h) halt
+
+lemma apm_m02J05_bridge_complementary_young_holder_of_lux_facts_aux_young_aux_area_aux_diagonal
+    (α β : ℝ → ℝ)
+    (hαc : ContinuousOn α (Ici 0))
+    (hαmono : StrictMonoOn α (Ici 0))
+    (hαzero : α 0 = 0)
+    (hβc : ContinuousOn β (Ici 0))
+    (hnonneg : ∀ t, 0 ≤ t → 0 ≤ α t ∧ 0 ≤ β t)
+    (hβα : ∀ t, 0 ≤ t → β (α t) = t)
+    (hαβ : ∀ t, 0 ≤ t → α (β t) = t) :
+    ∀ b : ℝ, 0 ≤ b →
+      b * α b ≤ apm_m02J05_young α b + apm_m02J05_young β (α b) := by
+  sorry
+
+lemma apm_m02J05_bridge_complementary_young_holder_of_lux_facts_aux_young_aux_area_aux_finish
     (α β : ℝ → ℝ)
     (hαc : ContinuousOn α (Ici 0))
     (hαmono : StrictMonoOn α (Ici 0))
@@ -1021,6 +1053,22 @@ lemma apm_m02J05_bridge_complementary_young_holder_of_lux_facts_aux_young_aux_ar
     ∀ s t : ℝ, 0 ≤ s → 0 ≤ t →
       s * t ≤ apm_m02J05_young α s + apm_m02J05_young β t := by
   sorry
+
+lemma apm_m02J05_bridge_complementary_young_holder_of_lux_facts_aux_young_aux_area
+    (α β : ℝ → ℝ)
+    (hαc : ContinuousOn α (Ici 0))
+    (hαmono : StrictMonoOn α (Ici 0))
+    (hαzero : α 0 = 0)
+    (hαinfty : Tendsto α atTop atTop)
+    (hβc : ContinuousOn β (Ici 0))
+    (hnonneg : ∀ t, 0 ≤ t → 0 ≤ α t ∧ 0 ≤ β t)
+    (hβα : ∀ t, 0 ≤ t → β (α t) = t)
+    (hαβ : ∀ t, 0 ≤ t → α (β t) = t) :
+    ∀ s t : ℝ, 0 ≤ s → 0 ≤ t →
+      s * t ≤ apm_m02J05_young α s + apm_m02J05_young β t := by
+  exact
+    apm_m02J05_bridge_complementary_young_holder_of_lux_facts_aux_young_aux_area_aux_finish
+      α β hαc hαmono hαzero hαinfty hβc hnonneg hβα hαβ
 
 lemma apm_m02J05_bridge_complementary_young_holder_of_lux_facts_aux_young
     (α β : ℝ → ℝ)
