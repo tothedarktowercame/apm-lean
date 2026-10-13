@@ -22995,12 +22995,81 @@
    :depends-on [:r-a08-sard-hyp-reroute-1 :r-topo3-cp7b],
    :current-residual "Elect B1 after review.",
    :other-consumers []}
+  {:bounded-exception "Rule0 B1 prerequisite.",
+   :consumer :t01A08,
+   :phase :implementation,
+   :state :open,
+   :scope ["ConstructionTargets/SardConvexDomain.lean"],
+   :dag-node "SardConvexDomain.blueprint/B1/smooth-symmetry",
+   :acceptance
+   {:declaration
+    "ContDiffWithinAt.domDomCongr_iteratedFDerivWithin_of_infty",
+    :type
+    "For real normed spaces, ContDiffWithinAt ℝ ∞ f s x, UniqueDiffOn ℝ s, x∈s imply every iteratedFDerivWithin is invariant under every permutation of Fin n.",
+    :fixture "/tmp/t01a08_sard_b1_probe.lean",
+    :fixture-sha256
+    "ea3109560f5021cca443745512695ffed3abc6ebc7e77625ea1cbb71dd3a009c",
+    :placeholder "t01A08 sorry",
+    :route-step "smooth arbitrary-order jet symmetry"},
+   :id :r-a08-sard-smooth-jet-symmetry-1,
+   :kind :reusable-theorem,
+   :area "sard-convex-domain",
+   :depends-on [:r-topo3-cp8],
+   :current-residual
+   "Then B1 continuity and canonical zero/one jets compile.",
+   :other-consumers []}
   {:bounded-exception "Rule0 B1.",
    :consumer :t01A08,
    :implements-lemma
    :lemma-constructiontargets-sardconvexdomain-contdiffon-convexwithinjet,
+   :evidence
+   {:probe
+    {:outcome :revise,
+     :seat "topo-12",
+     :fixture
+     {:path "/tmp/t01a08_sard_b1_probe.lean",
+      :sha256
+      "ea3109560f5021cca443745512695ffed3abc6ebc7e77625ea1cbb71dd3a009c"},
+     :commands
+     [{:cmd
+       "lake env lean /tmp/t01a08_sard_b1_probe.lean && sha256sum /tmp/t01a08_sard_b1_probe.lean && python3 scripts/statement-registry.py check",
+       :exit 0}],
+     :axioms
+     ["propext"
+      "Classical.choice"
+      "Quot.sound"
+      "ContDiffWithinAt.domDomCongr_iteratedFDerivWithin_of_infty"],
+     :diagnostic-history
+     [{:exit 1,
+       :correction "fixed ENat bound and explicit prerequisite call"}],
+     :prerequisite
+     {:bounded-exception "Rule0 B1 prerequisite.",
+      :consumer :t01A08,
+      :phase :implementation,
+      :state :open,
+      :scope ["ConstructionTargets/SardConvexDomain.lean"],
+      :dag-node "SardConvexDomain.blueprint/B1/smooth-symmetry",
+      :acceptance
+      {:declaration
+       "ContDiffWithinAt.domDomCongr_iteratedFDerivWithin_of_infty",
+       :type
+       "For real normed spaces, ContDiffWithinAt ℝ ∞ f s x, UniqueDiffOn ℝ s, x∈s imply every iteratedFDerivWithin is invariant under every permutation of Fin n.",
+       :fixture "/tmp/t01a08_sard_b1_probe.lean",
+       :fixture-sha256
+       "ea3109560f5021cca443745512695ffed3abc6ebc7e77625ea1cbb71dd3a009c",
+       :placeholder "t01A08 sorry",
+       :route-step "smooth arbitrary-order jet symmetry"},
+      :id :r-a08-sard-smooth-jet-symmetry-1,
+      :kind :reusable-theorem,
+      :area "sard-convex-domain",
+      :depends-on [:r-topo3-cp8],
+      :current-residual
+      "Then B1 continuity and canonical zero/one jets compile.",
+      :other-consumers []},
+     :residual
+     "Mathlib has arbitrary-order permutation invariance for analytic ω, not smooth ∞; prove the smooth Schwarz theorem."}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain.blueprint/B1",
    :acceptance
@@ -23014,7 +23083,7 @@
    :id :r-a08-sard-b1-2,
    :kind :reusable-theorem,
    :area "sard-convex-domain",
-   :depends-on [:r-topo3-cp8],
+   :depends-on [:r-topo3-cp8 :r-a08-sard-smooth-jet-symmetry-1],
    :current-residual "B2.",
    :other-consumers []}
   {:consumer :portfolio,
