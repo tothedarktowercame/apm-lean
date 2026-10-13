@@ -6180,6 +6180,31 @@ theorem genericPointWedgeOuterRightRoundTrip_normalForm_eq_connectors :
           ((eK.inverse ⋙ r ⋙ eR.functor).obj (eK.functor.obj z))).inv := by
   rfl
 
+omit [PathConnectedSpace X] in
+/-- The source connector in the overlap round-trip normal form is reflexive:
+the chosen overlap representative maps to the fixed right-cover base, whose
+right-equivalence image is the literal basepoint. -/
+theorem genericPointWedgeOuterRightRoundTrip_sourceConnector_heq_refl :
+    let r := genericPointWedgeActualRight x₀ y₀ M N
+    let eK := genericPointWedgeOverlapGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let eR := genericPointWedgeRightGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let z := genericPointWedgeOverlapBase x₀ y₀ M N
+    HEq ((genericPointWedgeConnectors y₀).connector
+        ((r ⋙ eR.functor).obj z))
+      (Iso.refl (FundamentalGroupoid.mk y₀)) := by
+  dsimp only
+  change HEq ((genericPointWedgeConnectors y₀).connector
+      ((genericPointWedgeRightGroupoidEquivalence
+        x₀ y₀ M N hM hN hy hx cM cN).functor.obj
+          ((FundamentalGroupoid.map (overlapToRight x₀ y₀ M N)).obj
+            (genericPointWedgeOverlapBase x₀ y₀ M N))))
+    (Iso.refl (FundamentalGroupoid.mk y₀))
+  rw [genericPointWedgeOverlapToRight_obj_overlapBase,
+    genericPointWedgeRightEquiv_obj_rightBase]
+  exact heq_of_eq (genericPointWedgeBasedConnector_base y₀)
+
 /-- An `inl` factorization of the right-base conjugator forces its canonical
 right projection to be trivial. -/
 theorem genericPointWedgeRightBase_inl_implies_rightProjection_eq_one
@@ -6901,6 +6926,7 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeRightBase_rightProjection_eq_outerRight
 #print axioms genericPointWedgeOuterRightComparison_rightProjection_eq_normalForms
 #print axioms genericPointWedgeOuterRightRoundTrip_normalForm_eq_connectors
+#print axioms genericPointWedgeOuterRightRoundTrip_sourceConnector_heq_refl
 #print axioms genericPointWedgeRightBase_inl_implies_rightProjection_eq_one
 #print axioms genericPointWedgeLegCoordinates_of_mapped
 #print axioms genericPointWedgeLegCoordinates_iff_mapped
