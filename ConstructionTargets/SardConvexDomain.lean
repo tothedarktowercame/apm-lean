@@ -5,6 +5,23 @@ open Set MeasureTheory
 
 noncomputable section
 
+theorem ContDiffWithinAt.domDomCongr_iteratedFDerivWithin_two_of_infty
+    {E F : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [NormedAddCommGroup F] [NormedSpace ℝ F]
+    {s : Set E} {f : E → F} {x : E}
+    (hf : ContDiffWithinAt ℝ ∞ f s x) (hu : UniqueDiffOn ℝ s)
+    (hxs : x ∈ s) (hxi : x ∈ closure (interior s)) :
+    (iteratedFDerivWithin ℝ 2 f s x).domDomCongr Fin.revPerm =
+      iteratedFDerivWithin ℝ 2 f s x := by
+  rw [← isSymmSndFDerivWithinAt_iff_iteratedFDerivWithin hu hxs]
+  apply hf.isSymmSndFDerivWithinAt
+  · rw [minSmoothness_of_isRCLikeNormedField]
+    exact (show (2 : WithTop ENat) ≤ ((⊤ : ENat) : WithTop ENat) from
+      WithTop.coe_le_coe.mpr le_top)
+  · exact hu
+  · exact hxi
+  · exact hxs
+
 namespace ConstructionTargets.SardConvexDomain
 
 theorem modelRange_withinCriticalImage_subset_interior_union_frontier
