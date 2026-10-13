@@ -125,7 +125,6 @@ lemma apm_t02a05_sphere_mass_eq_two_caps_aux_raw :
 
 /-- (B) Two caps over the unit disk, with `μHE[2]` on the sphere and Lebesgue measure on the disk:
 `sphere_two_measure` scaled by the `μHE[2]` constant, which maps `μH[2]` on `ℝ²` to `volume`. -/
--- BEGIN SEAT AREA
 lemma apm_t02a05_sphere_mass_eq_two_caps_aux_measurable :
     ConstructionTargets.LinearGraphMeasure.domainMeasurable 2 =
       WithLp.measurableSpace 2 (Fin 2 → ℝ) := by
@@ -144,7 +143,8 @@ lemma apm_t02a05_sphere_mass_eq_two_caps_aux_scaled_domain :
           (volume : Measure (EuclideanSpace ℝ (Fin 2))) μH[(2 : ℕ)] •
       ConstructionTargets.C1GraphMeasureDecomposition.domainMeasure 2 =
       volume := by
-  sorry
+  unfold ConstructionTargets.C1GraphMeasureDecomposition.domainMeasure
+  exact (MeasureTheory.Measure.isAddLeftInvariant_eq_smul _ _).symm
 
 lemma apm_t02a05_sphere_mass_eq_two_caps_aux_cap :
     Measure.addHaarScalarFactor
@@ -158,6 +158,7 @@ lemma apm_t02a05_sphere_mass_eq_two_caps_aux_cap :
     apm_t02a05_sphere_mass_eq_two_caps_aux_scaled_domain]
   rfl
 
+-- BEGIN SEAT AREA
 theorem apm_t02a05_sphere_mass_eq_two_caps :
     (μHE[2] (Metric.sphere (0 : apm_t02a05_E3) 1)) = 2 * (∫⁻ x in Metric.ball (0 : EuclideanSpace ℝ (Fin 2)) 1, ENNReal.ofReal (1 / Real.sqrt (1 - ‖x‖ ^ 2))) := by
   sorry
