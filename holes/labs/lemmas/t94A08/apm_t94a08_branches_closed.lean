@@ -591,7 +591,71 @@ their preimage in `C³ ∖ 0` is closed). -/
 -- BEGIN SEAT AREA
 lemma apm_t94a08_branches_closed :
     IsClosed apm_t94a08_sigma2BranchPlus ∧ IsClosed apm_t94a08_sigma2BranchMinus := by
-  sorry
+  constructor
+  · rw [isClosed_coinduced]
+    have hpre :
+        Projectivization.mk' ℂ ⁻¹' apm_t94a08_sigma2BranchPlus =
+          {v : {v : apm_t94a08_C3 // v ≠ 0} |
+            v.1 1 + Complex.I * v.1 2 = 0} := by
+      ext v
+      obtain ⟨a, ha⟩ := Projectivization.exists_smul_eq_mk_rep
+        (K := ℂ) v.1 v.2
+      simp only [Set.mem_preimage, apm_t94a08_sigma2BranchPlus,
+        Set.mem_setOf_eq, Projectivization.mk'_eq_mk]
+      rw [← ha]
+      simp only [Pi.smul_apply, Units.smul_def, smul_eq_mul]
+      constructor
+      · intro h
+        have ha0 : (a : ℂ) ≠ 0 := Units.ne_zero a
+        have : (a : ℂ) * (v.1 1 + Complex.I * v.1 2) = 0 := by
+          calc
+            (a : ℂ) * (v.1 1 + Complex.I * v.1 2) =
+                (a : ℂ) * v.1 1 + Complex.I * ((a : ℂ) * v.1 2) := by ring
+            _ = 0 := h
+        exact (mul_eq_zero.mp this).resolve_left ha0
+      · intro h
+        calc
+          (a : ℂ) * v.1 1 + Complex.I * ((a : ℂ) * v.1 2) =
+              (a : ℂ) * (v.1 1 + Complex.I * v.1 2) := by ring
+          _ = 0 := by rw [h, mul_zero]
+    rw [hpre]
+    exact isClosed_eq
+      (((continuous_apply 1).comp continuous_subtype_val).add
+        ((continuous_const : Continuous fun _ : {v : apm_t94a08_C3 // v ≠ 0} =>
+          Complex.I).mul ((continuous_apply 2).comp continuous_subtype_val)))
+      continuous_const
+  · rw [isClosed_coinduced]
+    have hpre :
+        Projectivization.mk' ℂ ⁻¹' apm_t94a08_sigma2BranchMinus =
+          {v : {v : apm_t94a08_C3 // v ≠ 0} |
+            v.1 1 - Complex.I * v.1 2 = 0} := by
+      ext v
+      obtain ⟨a, ha⟩ := Projectivization.exists_smul_eq_mk_rep
+        (K := ℂ) v.1 v.2
+      simp only [Set.mem_preimage, apm_t94a08_sigma2BranchMinus,
+        Set.mem_setOf_eq, Projectivization.mk'_eq_mk]
+      rw [← ha]
+      simp only [Pi.smul_apply, Units.smul_def, smul_eq_mul]
+      constructor
+      · intro h
+        have ha0 : (a : ℂ) ≠ 0 := Units.ne_zero a
+        have : (a : ℂ) * (v.1 1 - Complex.I * v.1 2) = 0 := by
+          calc
+            (a : ℂ) * (v.1 1 - Complex.I * v.1 2) =
+                (a : ℂ) * v.1 1 - Complex.I * ((a : ℂ) * v.1 2) := by ring
+            _ = 0 := h
+        exact (mul_eq_zero.mp this).resolve_left ha0
+      · intro h
+        calc
+          (a : ℂ) * v.1 1 - Complex.I * ((a : ℂ) * v.1 2) =
+              (a : ℂ) * (v.1 1 - Complex.I * v.1 2) := by ring
+          _ = 0 := by rw [h, mul_zero]
+    rw [hpre]
+    exact isClosed_eq
+      (((continuous_apply 1).comp continuous_subtype_val).sub
+        ((continuous_const : Continuous fun _ : {v : apm_t94a08_C3 // v ≠ 0} =>
+          Complex.I).mul ((continuous_apply 2).comp continuous_subtype_val)))
+      continuous_const
 -- END SEAT AREA
 
 /-- Seat: the branches meet only at the node (`y + i z = 0 = y - i z` forces
