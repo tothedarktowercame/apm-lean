@@ -113850,14 +113850,14 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 6,
+   :stop-count 7,
    :review-finding
    "Recorded fixture hash mismatch: :fixture.sha256 is 0bca6ce32c019fc3053c7f813c26917169cf817375b44d5e722b864b61a526450c1, but ConstructionTargets/PointWedgeVanKampen.blueprint.md at recorded commit c9b3af27 has exact SHA-256 0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0. Re-record the fixture hash for the reviewed commit.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
    :evidence
    {:placeholder-delta {:source-before 0, :source-after 0},
     :residual
-    "Prove the left source-versus-mapped comparison from the typed square; then B6/B12.",
+    "Build a normalization fixing inl while correcting the right leg; then B6/B12.",
     :outcome :stop,
     :warnings ["existing linter"],
     :missing-theorems
@@ -113871,9 +113871,9 @@
       :area "fundamental-group-wedge-of-circles"}],
     :statement-hashes
     {:source
-     "fe187a0fe9da90c275cba8c47e12340f52a7ba8cd7011162f84220b2c204d58a",
+     "45059bd02a169aca6d82c4a26143cb4f27d4683e98ccf96700c934795d4427fd",
      :documentation
-     "279355915b4cd2d5c65cbe2a1bbe09535d8c4c9170a78a321162c360bec88e37",
+     "3e40f435cef3e1266b76fb527590325ad2019cd8158db82a03fa4fd3234f0d2b",
      :blueprint
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0",
      :registry "149/149"},
@@ -113881,7 +113881,7 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
     :reason
-    "Oriented the B6 left residual as the exact B3 source-versus-mapped comparison.",
+    "The typed B3 square proves counit conjugacy, not source=mapped; equality needs commutation, so global conjugation cannot close B6 from naturality.",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/PointWedgeVanKampen.lean",
@@ -113891,22 +113891,14 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "diff/hash/placeholders", :exit 0}],
     :diagnostic-history
-    [{:cmd
+    [{:cmd "lean drafts",
+      :exit 1,
+      :finding "Corrected multiplication elaboration."}
+     {:cmd
       "lake build ConstructionTargets.ThreeCirclesFundamentalGroup",
       :exit 1,
       :finding "B12 absent."}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1791885031315-9363-82656eee",
-     :commands
-     ["git show/diff b7065086^..b7065086"
-      "git archive b7065086; lake env lean archived PointWedgeVanKampen.lean"
-      "statement-registry check; recorded-tree sha256; placeholders; diff-tree"
-      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (expected absent)"],
-     :finding
-     "PASS program STOP: b7065086 is new after history and adds compiled, sorry-free B6 progress. Rewriting the source action to inl g leaves mappedLeft g=inl g iff inl g=mappedLeft g, and eq_comm supplies exactly the displayed source-versus-mapped orientation; composing the prior iff is faithful. Both sides inhabit the free-product target, so no unsafe representation conversion occurs. Scope is Lean+notes; hashes match source fe187a0f, notes 27935591, blueprint 0bca6ce3; placeholders 0->0; registry 149/149; standard axioms only. The typed square comparison, then B6/B12, remains explicit; B12 is absent as listed."},
-    :commit "b70650864738f70045e7db85f23ae52e3dd9d2d4",
+    :commit "953d1212afcbf9e470db9d7cda44dd8d69a887a8",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
      "ConstructionTargets/PointWedgeVanKampen.md"],
@@ -113916,7 +113908,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
