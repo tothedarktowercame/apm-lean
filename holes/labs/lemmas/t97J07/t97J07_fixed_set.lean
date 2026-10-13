@@ -189,7 +189,74 @@ projectivized eigenspaces. -/
 theorem t97J07_fixed_set :
     {p : T97J07CP2 | t97J07Map p = p} =
       t97J07FixedLine ∪ {t97J07IsolatedPoint} := by
-  sorry
+  ext p
+  constructor
+  · intro hp
+    change t97J07Map p = p at hp
+    have hp' :
+        Projectivization.mk ℂ (t97J07Linear p.rep)
+            (by
+              intro h
+              apply p.rep_nonzero
+              funext i
+              have hi := congrFun h i
+              by_cases h2 : i = 2
+              · subst i
+                have hi' : (3 : ℂ) * p.rep 2 = 3 * 0 := by
+                  simpa [t97J07Linear] using hi
+                exact mul_left_cancel₀ (by norm_num : (3 : ℂ) ≠ 0) hi'
+              · simpa [t97J07Linear, h2] using hi) =
+          Projectivization.mk ℂ p.rep p.rep_nonzero := by
+      rw [← Projectivization.mk_rep p] at hp
+      simpa only [t97J07Map, Projectivization.map_mk] using hp
+    obtain ⟨a, ha⟩ :=
+      (Projectivization.mk_eq_mk_iff' ℂ _ _ _ _).1 hp'
+    by_cases h2 : p.rep 2 = 0
+    · exact Or.inl h2
+    · right
+      have ha2 := congrFun ha 2
+      have ae : a = 3 := by
+        simp only [Pi.smul_apply, smul_eq_mul, t97J07Linear, if_pos] at ha2
+        exact mul_right_cancel₀ h2 ha2
+      have h0 : p.rep 0 = 0 := by
+        have ha0 := congrFun ha 0
+        rw [ae] at ha0
+        norm_num [t97J07Linear, show (0 : Fin 3) ≠ 2 by decide] at ha0
+        apply mul_left_cancel₀ (by norm_num : (2 : ℂ) ≠ 0)
+        linear_combination ha0
+      have h1 : p.rep 1 = 0 := by
+        have ha1 := congrFun ha 1
+        rw [ae] at ha1
+        norm_num [t97J07Linear, show (1 : Fin 3) ≠ 2 by decide] at ha1
+        apply mul_left_cancel₀ (by norm_num : (2 : ℂ) ≠ 0)
+        linear_combination ha1
+      change p = t97J07IsolatedPoint
+      rw [← Projectivization.mk_rep p]
+      apply (Projectivization.mk_eq_mk_iff' ℂ _ _ _ _).2
+      refine ⟨p.rep 2, ?_⟩
+      funext i
+      fin_cases i <;> simp [Pi.single_apply, h0, h1]
+  · rintro (hp | hp)
+    · change t97J07Map p = p
+      change p.rep 2 = 0 at hp
+      rw [← Projectivization.mk_rep p]
+      simp only [t97J07Map, Projectivization.map_mk]
+      apply (Projectivization.mk_eq_mk_iff' ℂ _ _ _ _).2
+      refine ⟨1, ?_⟩
+      funext i
+      by_cases hi : i = 2
+      · subst i
+        simp [t97J07Linear, hp]
+      · simp [t97J07Linear, hi]
+    · simp only [Set.mem_singleton_iff] at hp
+      subst p
+      change t97J07Map t97J07IsolatedPoint = t97J07IsolatedPoint
+      simp only [t97J07Map, t97J07IsolatedPoint,
+        Projectivization.map_mk]
+      apply (Projectivization.mk_eq_mk_iff' ℂ _ _ _ _).2
+      refine ⟨3, ?_⟩
+      funext i
+      fin_cases i <;> simp [t97J07Linear, Pi.single_apply]
 -- END SEAT AREA
 
 /-- LIBRARY: the rational singular-homology Euler characteristic of complex
