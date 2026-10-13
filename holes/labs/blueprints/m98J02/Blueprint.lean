@@ -899,13 +899,59 @@ lemma apm_m98J02_regular_convolution_is_C2_aux_represents_aux_unwind
   sorry
 
 /-- Fubini and the change of variables `y = x + z`. -/
+lemma apm_m98J02_regular_convolution_is_C2_aux_represents_aux_fubini_aux_integrable
+    (f k : apm_m98J02_E → ℝ) (hf : Continuous f) (hfc : HasCompactSupport f)
+    (hk : LocallyIntegrable k) (φ : apm_m98J02_Test) :
+    Integrable (fun p : apm_m98J02_E × apm_m98J02_E ↦
+      k p.2 * f p.1 * φ (p.1 + p.2))
+        (MeasureTheory.volume.prod MeasureTheory.volume) ∧
+    Integrable (fun p : apm_m98J02_E × apm_m98J02_E ↦
+      k p.2 * f (p.1 - p.2) * φ p.1)
+        (MeasureTheory.volume.prod MeasureTheory.volume) := by
+  sorry
+
 lemma apm_m98J02_regular_convolution_is_C2_aux_represents_aux_fubini
     (f k : apm_m98J02_E → ℝ) (hf : Continuous f) (hfc : HasCompactSupport f)
     (hk : LocallyIntegrable k) (φ : apm_m98J02_Test) :
     (∫ x, f x * ∫ z, k z * φ (x + z)) =
       ∫ y, MeasureTheory.convolution k f (ContinuousLinearMap.mul ℝ ℝ)
         MeasureTheory.volume y * φ y := by
-  sorry
+  obtain ⟨hI, hJ⟩ :=
+    apm_m98J02_regular_convolution_is_C2_aux_represents_aux_fubini_aux_integrable
+      f k hf hfc hk φ
+  calc
+    (∫ x, f x * ∫ z, k z * φ (x + z)) =
+        ∫ x, ∫ z, k z * f x * φ (x + z) := by
+          apply MeasureTheory.integral_congr_ae
+          filter_upwards with x
+          rw [← MeasureTheory.integral_const_mul]
+          apply MeasureTheory.integral_congr_ae
+          filter_upwards with z
+          ring
+    _ = ∫ z, ∫ x, k z * f x * φ (x + z) :=
+      MeasureTheory.integral_integral_swap hI
+    _ = ∫ z, ∫ y, k z * f (y - z) * φ y := by
+      apply MeasureTheory.integral_congr_ae
+      filter_upwards with z
+      rw [show (fun x ↦ k z * f x * φ (x + z)) =
+          fun x ↦ k z * (f x * φ (x + z)) by funext x; ring,
+        show (fun y ↦ k z * f (y - z) * φ y) =
+          fun y ↦ k z * (f (y - z) * φ y) by funext y; ring]
+      rw [MeasureTheory.integral_const_mul, MeasureTheory.integral_const_mul]
+      congr 1
+      have ht := MeasureTheory.integral_add_right_eq_self
+        (μ := MeasureTheory.volume)
+        (fun y : apm_m98J02_E ↦ f (y - z) * φ y) z
+      simpa only [add_sub_cancel_right] using ht
+    _ = ∫ y, ∫ z, k z * f (y - z) * φ y :=
+      (MeasureTheory.integral_integral_swap hJ).symm
+    _ = ∫ y, MeasureTheory.convolution k f (ContinuousLinearMap.mul ℝ ℝ)
+          MeasureTheory.volume y * φ y := by
+      apply MeasureTheory.integral_congr_ae
+      filter_upwards with y
+      rw [MeasureTheory.convolution_def]
+      simp only [ContinuousLinearMap.mul_apply']
+      rw [MeasureTheory.integral_mul_const]
 
 lemma apm_m98J02_regular_convolution_is_C2_aux_represents
     (f k : apm_m98J02_E → ℝ) (w₀ w : apm_m98J02_Dist)
