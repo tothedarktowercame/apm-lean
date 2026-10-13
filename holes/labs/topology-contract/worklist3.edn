@@ -22997,17 +22997,16 @@
    :consumer :t01A08,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "extend Mathlib: state and prove the missing theorem in scope",
    :evidence
    {:placeholder-delta {:t01A08 [1 1]},
     :residual
-    "Repair fixture/type with closure-interior membership; convex B1 derives it from convexity and nonempty interior.",
-    :missing-hypothesis
-    "x ∈ closure (interior s), or strengthen ContDiffWithinAt ℝ ∞ to ContDiffWithinAt ℝ ω",
+    "Add closure-interior membership to the fixture; convex B1 supplies it.",
+    :missing-hypothesis "x ∈ closure (interior s)",
     :outcome :stop,
-    :warnings ["existing unnecessarySimpa linter"],
+    :warnings [],
     :missing-theorems
     [{:name
       "ContDiffWithinAt.domDomCongr_iteratedFDerivWithin_of_infty",
@@ -23021,11 +23020,13 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Frozen C∞ type lacks x∈closure(interior s). Mathlib's real C∞ Schwarz theorem requires exactly that hypothesis; its theorem without it requires analytic order ω. UniqueDiffOn and x∈s do not imply either premise. Thus the frozen interface needs a hypothesis, not another missing lemma.",
+    "Frozen C∞ interface omits x∈closure(interior s). The real within-set Schwarz theorem requires that premise already at order 2; the premise-free theorem is only for analytic order ω. UniqueDiffOn plus x∈s supplies neither. The interface therefore needs the exact missing hypothesis.",
     :commands
-    [{:cmd "inspect Mathlib C∞/ω symmetry theorem types", :exit 0}
+    [{:cmd
+      "inspect Mathlib ω and C∞ Schwarz theorem types; hash fixture",
+      :exit 0}
      {:cmd
-      "sha256sum fixture; lake build scoped module; lean corrected theorem check; registry; scoped diff",
+      "lake env lean corrected theorem check; registry; scoped diff",
       :exit 0}],
     :commit nil,
     :changed-paths [],
@@ -23036,7 +23037,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain.blueprint/B1/smooth-symmetry",
    :acceptance
