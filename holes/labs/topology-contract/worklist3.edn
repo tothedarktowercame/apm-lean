@@ -24430,25 +24430,23 @@
    :consumer :t01A08,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "extend Mathlib: state and prove the missing theorem in scope",
    :implements-lemma :lemma-closedset-whitneycubecover,
    :evidence
    {:placeholder-delta {:t01A08 [1 1]},
     :residual
-    "Prove cross-scale overlap; assemble B3; then B4-B7, B9.",
+    "Bound contributing strata and overlap cardinality; assemble B3; then B4-B7, B9.",
     :outcome :stop,
     :warnings ["existing unnecessarySimpa:454"],
     :missing-theorems
     [{:name
-      "ConstructionTargets.SardConvexDomain.finite_inter_whitneyStratumNet_of_isCompact",
-      :type "fixed-scale net intersects compact sets finitely",
+      "ConstructionTargets.SardConvexDomain.infDist_center_comparable_of_mem_quarter_ball",
+      :type "quarter-ball membership gives 3*dc<4*dx and 4*dx<5*dc",
       :status :proved,
       :consumers [:t01A08],
-      :depends-on
-      ["ConstructionTargets.SardConvexDomain.whitneyStratumNet_spec"
-       "ConstructionTargets.SardConvexDomain.finite_of_subset_compact_of_pairwise_dist"],
+      :depends-on [],
       :area "sard-convex-domain"}
      {:name
       "ConstructionTargets.SardConvexDomain.closedSet_whitneyCubeCover_proper",
@@ -24456,44 +24454,33 @@
       :status :partial,
       :consumers [:t01A08],
       :depends-on
-      ["ConstructionTargets.SardConvexDomain.finite_inter_whitneyStratumNet_of_isCompact"
-       "ConstructionTargets.SardConvexDomain.infDist_comparable_of_mem_quarter_balls"],
+      ["ConstructionTargets.SardConvexDomain.infDist_center_comparable_of_mem_quarter_ball"
+       "ConstructionTargets.SardConvexDomain.finite_inter_whitneyStratumNet_of_isCompact"],
       :area "sard-convex-domain"}],
     :statement-hashes {:registry "150/150"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Committed fixed-scale packing: 2^k/8-separated net centers have finite intersection with compact sets. Cross-scale overlap and assembly remain; not refuted.",
+    "Committed point-scale comparison: a quarter-ball center scale and the common point infDist satisfy fixed 3/4 and 4/5 inequalities. Stratum bounds, overlap cardinality, and assembly remain; not refuted.",
     :commands
     [{:cmd "lake build ConstructionTargets.SardConvexDomain", :exit 0}
      {:cmd "fixture; registry; scans; diff", :exit 0}
-     {:cmd "git commit", :exit 0}],
+     {:cmd "git commit scoped file", :exit 0}],
     :diagnostic-history
     [{:cmd "initial build",
       :exit 1,
-      :correction "strict-to-weak separation; explicit radius"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1791903923281-9918-b157eb72",
-     :commands
-     ["git show/diff 4211931; scope/orientation checks"
-      "sha256sum + lake env lean frozen fixture"
-      "lake build ConstructionTargets.SardConvexDomain"
-      "statement registry check; forbidden-count scan"],
-     :finding
-     "PASS. Recorded topo-10 commit 4211931 changes only the scoped Lean file and correctly proves fixed-scale compact packing. It converts strict IsSeparated at 2^k/8 to the required weak real-distance bound, then applies compact separated-set finiteness to net∩K via the right-hand subset. Fixture hash 3ca5057d... matches; build/fixture pass; registry 150/150; forbidden placeholders stay 0; only standard axioms. Valid compiled B3 progress; STOP explicitly leaves cross-scale overlap and assembly."},
-    :commit "4211931d31be639dcc191f2c6b77a084d40c852e",
+      :correction "fixed ball-distance orientation"}],
+    :commit "513a8c99ade6a9ee65e77f54b4caf534c69204ff",
     :changed-paths ["ConstructionTargets/SardConvexDomain.lean"],
     :fixture
-    {:path "/tmp/t01a08_b3_stratum_packing_check.lean",
+    {:path "/tmp/t01a08_b3_point_scale_check.lean",
      :sha256
-     "3ca5057dcdfc3c88b675216e127e548841338ff1e6c84f9efbcc5fef356420d1",
+     "263da1a54e3d868a8d3eecc3de7633607213c7d64f7ef6db5a6cb91c257b5380",
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain.blueprint/B3",
    :acceptance
@@ -35156,7 +35143,8 @@
     :lemma-constructiontargets-sardconvexdomain-compl-subset-iunion-whitneyscalestratum
     :lemma-constructiontargets-sardconvexdomain-whitneystratumnet-spec
     :lemma-constructiontargets-sardconvexdomain-exists-whitneystratumnet-dist-le-of-not-mem
-    :lemma-constructiontargets-sardconvexdomain-finite-inter-whitneystratumnet-of-iscompact],
+    :lemma-constructiontargets-sardconvexdomain-finite-inter-whitneystratumnet-of-iscompact
+    :lemma-constructiontargets-sardconvexdomain-infdist-center-comparable-of-mem-quarter-ba],
    :other-consumers []}
   {:consumer :t01A08,
    :phase :lemma,
@@ -35462,6 +35450,26 @@
    :depends-on
    [:lemma-constructiontargets-sardconvexdomain-whitneystratumnet-spec
     :lemma-constructiontargets-sardconvexdomain-finite-of-subset-compact-of-pairwise-dist],
+   :other-consumers []}
+  {:consumer :t01A08,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.SardConvexDomain.infDist_center_comparable_of_mem_quarter_ball",
+    :type "quarter-ball membership gives 3*dc<4*dx and 4*dx<5*dc"},
+   :lemma
+   {:name
+    "ConstructionTargets.SardConvexDomain.infDist_center_comparable_of_mem_quarter_ball",
+    :reported-by [:r-a08-sard-b3-whitney-cubes-1],
+    :type "quarter-ball membership gives 3*dc<4*dx and 4*dx<5*dc",
+    :area "sard-convex-domain",
+    :proved-in :r-a08-sard-b3-whitney-cubes-1},
+   :id
+   :lemma-constructiontargets-sardconvexdomain-infdist-center-comparable-of-mem-quarter-ba,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
