@@ -24430,7 +24430,7 @@
    :consumer :t01A08,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 0,
    :review-finding
    "extend Mathlib: state and prove the missing theorem in scope",
    :implements-lemma :lemma-closedset-whitneycubecover,
@@ -24473,6 +24473,17 @@
     [{:cmd "initial build",
       :exit 1,
       :correction "made complement subtype binder explicit"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791899497276-9799-454b6f90",
+     :commands
+     ["git show/diff 15c88100; scope and cover-orientation review"
+      "lake build ConstructionTargets.SardConvexDomain"
+      "sha256sum and lake env lean t01a08_b3_raw_cover_check"
+      "statement-registry check; forbidden-token recount"],
+     :finding
+     "PASS. Valid STOP after compiled progress. The one-file theorem correctly proves raw adaptive coverage: each x∈sᶜ indexes its own positive quarter-infDist ball and lies in it. It does not overclaim countability or Whitney overlap; locally finite bounded-overlap thinning and certificate assembly remain explicitly partial. Build/export pass; fixture hash matches; standard axioms only; registry 149/149; forbidden count 0->0."},
     :commit "15c88100c55b7c45fd2e1e7a0804033f54ad1ef9",
     :changed-paths ["ConstructionTargets/SardConvexDomain.lean"],
     :fixture
@@ -24482,7 +24493,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain.blueprint/B3",
    :acceptance
@@ -35206,7 +35217,7 @@
    :other-consumers []}
   {:consumer :t01A08,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -35220,7 +35231,9 @@
     :type
     "quarter-infDist balls indexed by complement cover complement",
     :area "sard-convex-domain",
-    :proved-in :r-a08-sard-b3-whitney-cubes-1},
+    :proved-in :r-a08-sard-b3-whitney-cubes-1,
+    :banked-by :r-a08-sard-b3-whitney-cubes-1,
+    :banked-commit "15c88100c55b7c45fd2e1e7a0804033f54ad1ef9"},
    :id
    :lemma-constructiontargets-sardconvexdomain-compl-subset-iunion-quarter-infdist-ball,
    :kind :lemma,
