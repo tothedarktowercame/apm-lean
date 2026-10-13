@@ -23717,7 +23717,7 @@
    :consumer :t01A08,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "Recorded commit is invalid: f032efae9d1501f7ddfe93c66668f88f24ed37f4 is absent locally and origin rejects it as not our ref. The intended scoped commit appears to be f032efae9b89fb527a72ea9192f3c89f09f82615. Repair the row to record the exact existing full SHA, then rerun independent review.",
    :implements-lemma
@@ -23725,17 +23725,19 @@
    :evidence
    {:placeholder-delta {:t01A08 [1 1]},
     :residual
-    "Intersect the finite-smooth relative neighborhood with interior s; induct there; extend lower symmetry; lift tail swaps; combine leading swap and adjacent closure; B1.",
+    "Induct at points of the dense finite-smooth interior neighborhood; extend lower symmetry; derive tail swaps; combine with leading swap and adjacent closure; B1.",
     :outcome :stop,
     :warnings [],
     :missing-theorems
     [{:name
-      "ContDiffWithinAt.domDomCongr_iteratedFDerivWithin_of_eqOn",
+      "ContDiffWithinAt.exists_mem_nhdsWithin_contDiffWithinAt_closure_interior_of_infty",
       :type
-      "smooth jet permutation identity on a smaller set extends to a base point in its closure",
+      "C-infinity supplies a relative C-k neighborhood whose intersection with interior remains dense at x",
       :status :proved,
       :consumers [:t01A08],
-      :depends-on ["ContinuousWithinAt.eq_of_eqOn_of_mem_closure"],
+      :depends-on
+      ["mem_closure_inter_of_mem_nhdsWithin"
+       "ContDiffWithinAt.exists_mem_nhdsWithin_contDiffWithinAt_of_infty"],
       :area "sard-convex-domain"}
      {:name
       "ContDiffWithinAt.domDomCongr_iteratedFDerivWithin_of_infty",
@@ -23743,34 +23745,20 @@
       :status :partial,
       :consumers [:t01A08],
       :depends-on
-      ["ContDiffWithinAt.domDomCongr_iteratedFDerivWithin_of_eqOn"
-       "ContDiffWithinAt.exists_mem_nhdsWithin_contDiffWithinAt_of_infty"],
+      ["ContDiffWithinAt.exists_mem_nhdsWithin_contDiffWithinAt_closure_interior_of_infty"
+       "ContDiffWithinAt.domDomCongr_iteratedFDerivWithin_of_eqOn"],
       :area "sard-convex-domain"}],
     :statement-hashes {:registry "147/147"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Localized jet-permutation identities now extend from any dense smaller set; instantiate on the finite-smooth neighborhood intersection and finish induction.",
+    "Finite-order smoothness and dense-interior closure are now packaged in one relative neighborhood; use it in the swap induction.",
     :commands
     [{:cmd
-      "lake build ConstructionTargets.SardConvexDomain; lake env lean helper and fixture; hash/registry checks",
-      :exit 0}
-     {:cmd
-      "git cat-file/diff-tree/merge-base 2ce3852770c7e30dc3a31afb2c6e9e09a4d0c7b8",
+      "lake build ConstructionTargets.SardConvexDomain; lake env lean helper and fixture; hash/registry/commit checks",
       :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1791883004705-9267-6afd397b",
-     :commands
-     ["git show/diff 2ce38527; scope and recorded-tree checks"
-      "lake build ConstructionTargets.SardConvexDomain"
-      "lake env lean fixture and /tmp/CheckSardLocalJetEq.lean"
-      "sha256sum fixture; statement-registry check; placeholder recount"],
-     :finding
-     "PASS: valid STOP after real progress. One-file commit correctly extends a jet-permutation identity from any t⊆s whose closure contains x: C∞ gives ambient jet continuity, domDomCongr is represented by its continuous linear isometry, and the localized T2 equality lemma applies with the right orientation. Build/export pass; fixture hash matches; standard axioms only; registry 147/147; sorry/admit 0->0. Instantiation on the finite-smooth interior neighborhood and final swap induction remain listed."},
-    :commit "2ce3852770c7e30dc3a31afb2c6e9e09a4d0c7b8",
+    :commit "558f357f96f41fd5de19ef045722952a4a4edf26",
     :changed-paths ["ConstructionTargets/SardConvexDomain.lean"],
     :fixture
     {:path "/tmp/t01a08_smooth_symmetry_membership_probe.lean",
@@ -23779,7 +23767,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain/B1/symmetry",
    :acceptance
@@ -33747,7 +33735,8 @@
     :lemma-mem-closure-inter-of-mem-nhds
     :lemma-mem-closure-inter-of-mem-nhdswithin
     :lemma-contdiffwithinat-exists-mem-nhdswithin-contdiffwithinat-of-infty
-    :lemma-contdiffwithinat-domdomcongr-iteratedfderivwithin-of-eqon],
+    :lemma-contdiffwithinat-domdomcongr-iteratedfderivwithin-of-eqon
+    :lemma-contdiffwithinat-exists-mem-nhdswithin-contdiffwithinat-closure-interior-of-inft],
    :other-consumers []}
   {:consumer :t01A08,
    :phase :lemma,
@@ -34048,6 +34037,30 @@
    :lemma-contdiffwithinat-domdomcongr-iteratedfderivwithin-of-eqon,
    :kind :lemma,
    :depends-on [:lemma-continuouswithinat-eq-of-eqon-of-mem-closure],
+   :other-consumers []}
+  {:consumer :t01A08,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ContDiffWithinAt.exists_mem_nhdsWithin_contDiffWithinAt_closure_interior_of_infty",
+    :type
+    "C-infinity supplies a relative C-k neighborhood whose intersection with interior remains dense at x"},
+   :lemma
+   {:name
+    "ContDiffWithinAt.exists_mem_nhdsWithin_contDiffWithinAt_closure_interior_of_infty",
+    :reported-by [:r-a08-symmetry-slots-1],
+    :type
+    "C-infinity supplies a relative C-k neighborhood whose intersection with interior remains dense at x",
+    :area "sard-convex-domain",
+    :proved-in :r-a08-symmetry-slots-1},
+   :id
+   :lemma-contdiffwithinat-exists-mem-nhdswithin-contdiffwithinat-closure-interior-of-inft,
+   :kind :lemma,
+   :depends-on
+   [:lemma-mem-closure-inter-of-mem-nhdswithin
+    :lemma-contdiffwithinat-exists-mem-nhdswithin-contdiffwithinat-of-infty],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
