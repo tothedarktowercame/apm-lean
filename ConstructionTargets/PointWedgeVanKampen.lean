@@ -6160,6 +6160,26 @@ theorem genericPointWedgeOuterRightComparison_rightProjection_eq_normalForms :
     x₀ y₀ _)]
   rfl
 
+/-- Expand the overlap round-trip factor in the projected forward-right
+comparison into its endpoint connectors and component.  Together with the
+existing expansion of the inverse span factor, this exposes the exact six
+factors whose cancellation remains. -/
+theorem genericPointWedgeOuterRightRoundTrip_normalForm_eq_connectors :
+    let r := genericPointWedgeActualRight x₀ y₀ M N
+    let eK := genericPointWedgeOverlapGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let eR := genericPointWedgeRightGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let z := genericPointWedgeOverlapBase x₀ y₀ M N
+    (genericPointWedgeConnectors y₀).normalForm
+        ((eK.funInvIdAssoc (r ⋙ eR.functor)).hom.app z) =
+      ((genericPointWedgeConnectors y₀).connector
+        ((r ⋙ eR.functor).obj z)).hom ≫
+        (eK.funInvIdAssoc (r ⋙ eR.functor)).hom.app z ≫
+        ((genericPointWedgeConnectors y₀).connector
+          ((eK.inverse ⋙ r ⋙ eR.functor).obj (eK.functor.obj z))).inv := by
+  rfl
+
 /-- An `inl` factorization of the right-base conjugator forces its canonical
 right projection to be trivial. -/
 theorem genericPointWedgeRightBase_inl_implies_rightProjection_eq_one
@@ -6880,6 +6900,7 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeOuterLeftComparison_rightProjection_eq_one
 #print axioms genericPointWedgeRightBase_rightProjection_eq_outerRight
 #print axioms genericPointWedgeOuterRightComparison_rightProjection_eq_normalForms
+#print axioms genericPointWedgeOuterRightRoundTrip_normalForm_eq_connectors
 #print axioms genericPointWedgeRightBase_inl_implies_rightProjection_eq_one
 #print axioms genericPointWedgeLegCoordinates_of_mapped
 #print axioms genericPointWedgeLegCoordinates_iff_mapped

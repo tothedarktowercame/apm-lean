@@ -1244,3 +1244,7 @@ reduction for the fixed reconstruction conjugator.
 the remaining projection as the ordered product of the right span-component
 normal form and the right overlap-round-trip normal form. Proving this product
 is one is now the exact residual needed for an `inl` factorization.
+The forward-right projection's overlap round-trip normal form is now expanded
+into its three endpoint-connector factors.  With the inverse span expansion,
+the remaining B6 step is the typed cancellation of the resulting six factors,
+then factoring the right-base conjugator through `inl`.
