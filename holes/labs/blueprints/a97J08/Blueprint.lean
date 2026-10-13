@@ -2745,7 +2745,55 @@ lemma apm_a97j08_cycle_decomposition_aux_sdiff_balanced
     (hbal : apm_a97j08_Balanced E) {c : List V} (hc0 : c ≠ []) (hc : c.Nodup)
     (hsub : ∀ e ∈ apm_a97j08_cycleEdges c, e ∈ E) :
     apm_a97j08_Balanced (E \ (apm_a97j08_cycleEdges c).toFinset) := by
-  sorry
+  let C := (apm_a97j08_cycleEdges c).toFinset
+  have hCE : C ⊆ E := by
+    intro e he
+    exact hsub e (by simpa [C] using he)
+  have hedge := apm_a97j08_cycle_decomposition_aux_edges_nodup hc
+  have hcycle : apm_a97j08_Balanced C := by
+    intro v
+    have hfst : (apm_a97j08_cycleEdges c).map Prod.fst = c := by
+      apply List.map_fst_zip
+      simp [apm_a97j08_cycleEdges]
+    have hsnd : (apm_a97j08_cycleEdges c).map Prod.snd = c.rotate 1 := by
+      apply List.map_snd_zip
+      simp [apm_a97j08_cycleEdges]
+    have hfilt_fst (l : List (V × V)) :
+        (l.filter fun e => e.1 = v).length =
+          ((l.map Prod.fst).filter fun x => x = v).length := by
+      induction l with
+      | nil => simp
+      | cons e l ih =>
+          by_cases h : e.1 = v <;> simp [h, ih]
+    have hfilt_snd (l : List (V × V)) :
+        (l.filter fun e => e.2 = v).length =
+          ((l.map Prod.snd).filter fun x => x = v).length := by
+      induction l with
+      | nil => simp
+      | cons e l ih =>
+          by_cases h : e.2 = v <;> simp [h, ih]
+    rw [show C.filter (fun e => e.1 = v) =
+        ((apm_a97j08_cycleEdges c).filter fun e => e.1 = v).toFinset by
+          ext e; simp [C],
+      show C.filter (fun e => e.2 = v) =
+        ((apm_a97j08_cycleEdges c).filter fun e => e.2 = v).toFinset by
+          ext e; simp [C],
+      List.toFinset_card_of_nodup (hedge.filter _),
+      List.toFinset_card_of_nodup (hedge.filter _), hfilt_fst, hfilt_snd, hfst, hsnd]
+    exact ((List.rotate_perm c 1).filter fun x => decide (x = v)).length_eq.symm
+  intro v
+  rw [show (E \ C).filter (fun e => e.1 = v) =
+      E.filter (fun e => e.1 = v) \ C.filter (fun e => e.1 = v) by
+        ext e
+        simp only [Finset.mem_filter, Finset.mem_sdiff]
+        aesop,
+    show (E \ C).filter (fun e => e.2 = v) =
+      E.filter (fun e => e.2 = v) \ C.filter (fun e => e.2 = v) by
+        ext e
+        simp only [Finset.mem_filter, Finset.mem_sdiff]
+        aesop,
+    Finset.card_sdiff_of_subset (Finset.filter_subset_filter _ hCE),
+    Finset.card_sdiff_of_subset (Finset.filter_subset_filter _ hCE), hbal v, hcycle v]
 
 theorem apm_a97j08_cycle_decomposition {V : Type*} [DecidableEq V]
     (hC3a : ∀ E : Finset (V × V), apm_a97j08_Balanced E → E.Nonempty →
