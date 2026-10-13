@@ -1324,12 +1324,43 @@ lemma apm_m98A06_weak_FTC_aux_representation_aux_const_aux_interior_aux_distribu
 
 -- A mean-zero test function supported in (0, π) is the derivative of a test function
 -- supported in (0, π) (its primitive from 0).
+lemma apm_m98A06_weak_FTC_aux_representation_aux_const_aux_interior_aux_distribution_aux_primitive_test_aux_smooth
+    (ψ : ℝ → ℝ) (hψ : ContDiff ℝ ∞ ψ) :
+    ∃ φ : ℝ → ℝ, ContDiff ℝ ∞ φ ∧ deriv φ = ψ ∧
+      ∀ x, φ x = ∫ t in (0 : ℝ)..x, ψ t := by
+  let φ : ℝ → ℝ := fun x => ∫ t in (0 : ℝ)..x, ψ t
+  have hd : ∀ x, HasDerivAt φ (ψ x) x := by
+    intro x
+    exact intervalIntegral.integral_hasDerivAt_right
+      (hψ.continuous.intervalIntegrable _ _)
+      hψ.continuous.aestronglyMeasurable.stronglyMeasurableAtFilter
+      hψ.continuous.continuousAt
+  have hderiv : deriv φ = ψ := by
+    funext x
+    exact (hd x).deriv
+  refine ⟨φ, ?_, hderiv, fun x => rfl⟩
+  rw [contDiff_infty_iff_deriv]
+  exact ⟨fun x => (hd x).differentiableAt, hderiv ▸ hψ⟩
+
+lemma apm_m98A06_weak_FTC_aux_representation_aux_const_aux_interior_aux_distribution_aux_primitive_test_aux_support
+    (ψ φ : ℝ → ℝ) (hψ : ContDiff ℝ ∞ ψ) (hψc : HasCompactSupport ψ)
+    (hψs : tsupport ψ ⊆ Ioo (0 : ℝ) Real.pi) (hψ0 : ∫ x, ψ x = 0)
+    (hφ : ∀ x, φ x = ∫ t in (0 : ℝ)..x, ψ t) :
+    HasCompactSupport φ ∧ Function.support φ ⊆ Ioo (0 : ℝ) Real.pi := by
+  sorry
+
 lemma apm_m98A06_weak_FTC_aux_representation_aux_const_aux_interior_aux_distribution_aux_primitive_test
     (ψ : ℝ → ℝ) (hψ : ContDiff ℝ ∞ ψ) (hψc : HasCompactSupport ψ)
     (hψs : tsupport ψ ⊆ Ioo (0 : ℝ) Real.pi) (hψ0 : ∫ x, ψ x = 0) :
     ∃ φ : ℝ → ℝ, ContDiff ℝ ∞ φ ∧ HasCompactSupport φ ∧
       Function.support φ ⊆ Ioo (0 : ℝ) Real.pi ∧ deriv φ = ψ := by
-  sorry
+  obtain ⟨φ, hφdiff, hφderiv, hφ⟩ :=
+    apm_m98A06_weak_FTC_aux_representation_aux_const_aux_interior_aux_distribution_aux_primitive_test_aux_smooth
+      ψ hψ
+  obtain ⟨hφc, hφs⟩ :=
+    apm_m98A06_weak_FTC_aux_representation_aux_const_aux_interior_aux_distribution_aux_primitive_test_aux_support
+      ψ φ hψ hψc hψs hψ0 hφ
+  exact ⟨φ, hφdiff, hφc, hφs, hφderiv⟩
 
 -- The core, given primitives of mean-zero test functions: fundamental lemma on (0, π)
 -- (IsOpen.ae_eq_zero_of_integral_contDiff_smul_eq_zero) and continuity.
