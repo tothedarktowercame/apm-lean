@@ -1413,7 +1413,49 @@ lemma apm_m02J05_bridge_complementary_young_holder_of_lux_facts_aux_young_aux_ar
     (hαβ : ∀ t, 0 ≤ t → α (β t) = t) :
     ∀ s t : ℝ, 0 ≤ s → 0 ≤ t →
       s * t ≤ apm_m02J05_young α s + apm_m02J05_young β t := by
-  sorry
+  intro s t hs ht
+  let b : ℝ := β t
+  have hb : 0 ≤ b := (hnonneg t ht).2
+  have hab : α b = t := hαβ t ht
+  have hdiag : b * t ≤ apm_m02J05_young α b + apm_m02J05_young β t := by
+    simpa [hab] using
+      (apm_m02J05_bridge_complementary_young_holder_of_lux_facts_aux_young_aux_area_aux_diagonal
+        α β hαc hαmono hαzero hβc hnonneg hβα hαβ b hb)
+  have hαint : ∀ {u v : ℝ}, 0 ≤ u → 0 ≤ v → IntervalIntegrable α volume u v := by
+    intro u v hu hv
+    apply ContinuousOn.intervalIntegrable
+    exact hαc.mono fun x hx ↦ by
+      rw [mem_Ici]
+      rcases mem_uIcc.mp hx with hx | hx
+      · exact hu.trans hx.1
+      · exact hv.trans hx.1
+  have htail : (s - b) * t ≤ apm_m02J05_young α s - apm_m02J05_young α b := by
+    rcases le_total b s with hbs | hsb
+    · have hib := hαint (u := 0) (v := b) le_rfl hb
+      have his := hαint (u := b) (v := s) hb hs
+      have hm : ∫ _x in b..s, t ≤ ∫ x in b..s, α x := by
+        apply intervalIntegral.integral_mono_on hbs intervalIntegral.intervalIntegrable_const his
+        intro x hx
+        rw [← hab]
+        exact hαmono.monotoneOn (mem_Ici.mpr hb) (mem_Ici.mpr (hb.trans hx.1)) hx.1
+      have hadd := intervalIntegral.integral_add_adjacent_intervals hib his
+      dsimp [apm_m02J05_young]
+      rw [← hadd]
+      simpa [intervalIntegral.integral_const, mul_comm] using hm
+    · have his := hαint (u := 0) (v := s) le_rfl hs
+      have hib := hαint (u := s) (v := b) hs hb
+      have hm : ∫ x in s..b, α x ≤ ∫ _x in s..b, t := by
+        apply intervalIntegral.integral_mono_on hsb hib intervalIntegral.intervalIntegrable_const
+        intro x hx
+        rw [← hab]
+        exact hαmono.monotoneOn (mem_Ici.mpr (hs.trans hx.1)) (mem_Ici.mpr hb) hx.2
+      have hadd := intervalIntegral.integral_add_adjacent_intervals his hib
+      dsimp [apm_m02J05_young]
+      rw [← hadd]
+      rw [intervalIntegral.integral_const] at hm
+      simp only [smul_eq_mul] at hm
+      linarith
+  linarith
 
 lemma apm_m02J05_bridge_complementary_young_holder_of_lux_facts_aux_young_aux_area
     (α β : ℝ → ℝ)
