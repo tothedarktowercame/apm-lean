@@ -92,7 +92,69 @@ theorem injOn_parametrization_interior :
 -- BEGIN SEAT AREA
 theorem fderiv_parametrization_formula :
     ∀ p q, fderiv ℝ parametrization p q = parameterDerivative p q := by
-  sorry
+  intro p q
+  have h0 := hasFDerivAt_apply (𝕜 := ℝ) (0 : Fin 2) p
+  have h1 := hasFDerivAt_apply (𝕜 := ℝ) (1 : Fin 2) p
+  have hr := (hasFDerivAt_const (x := p) (c := (1 : ℝ))).sub h1
+  have hc := (Real.hasDerivAt_cos (p 0)).comp_hasFDerivAt p h0
+  have hs := (Real.hasDerivAt_sin (p 0)).comp_hasFDerivAt p h0
+  have hx := hr.mul hc
+  have hy := hr.mul hs
+  have hxnorm : HasFDerivAt (fun x : Parameters => (1 - x 1) * Real.cos (x 0))
+      (((1 - p 1) • (-Real.sin (p 0) •
+          (ContinuousLinearMap.proj 0 : Parameters →L[ℝ] ℝ))) +
+        Real.cos (p 0) • (0 -
+          (ContinuousLinearMap.proj 1 : Parameters →L[ℝ] ℝ))) p := by
+    simpa only [Pi.one_apply, Pi.sub_apply, Function.comp_apply] using hx
+  have hx' : HasFDerivAt (fun x : Parameters => (1 - x 1) * Real.cos (x 0))
+      (fderiv ℝ (fun x : Parameters => (1 - x 1) * Real.cos (x 0)) p) p := by
+    rw [hxnorm.fderiv]
+    exact hxnorm
+  have hynorm : HasFDerivAt (fun x : Parameters => (1 - x 1) * Real.sin (x 0))
+      (((1 - p 1) • (Real.cos (p 0) •
+          (ContinuousLinearMap.proj 0 : Parameters →L[ℝ] ℝ))) +
+        Real.sin (p 0) • (0 -
+          (ContinuousLinearMap.proj 1 : Parameters →L[ℝ] ℝ))) p := by
+    simpa only [Pi.one_apply, Pi.sub_apply, Function.comp_apply] using hy
+  have hy' : HasFDerivAt (fun x : Parameters => (1 - x 1) * Real.sin (x 0))
+      (fderiv ℝ (fun x : Parameters => (1 - x 1) * Real.sin (x 0)) p) p := by
+    rw [hynorm.fderiv]
+    exact hynorm
+  have h1' : HasFDerivAt (fun x : Parameters => x 1)
+      (fderiv ℝ (fun x : Parameters => x 1) p) p := by
+    rw [h1.fderiv]
+    exact h1
+  let D : Fin 3 → Parameters →L[ℝ] ℝ :=
+    ![fderiv ℝ (fun x : Parameters => (1 - x 1) * Real.cos (x 0)) p,
+      fderiv ℝ (fun x : Parameters => (1 - x 1) * Real.sin (x 0)) p,
+      fderiv ℝ (fun x : Parameters => x 1) p]
+  have hp : HasFDerivAt parametrization
+      (ContinuousLinearMap.pi D) p := by
+    apply hasFDerivAt_pi.mpr
+    intro i
+    fin_cases i
+    · simpa [D, parametrization] using hx'
+    · simpa [D, parametrization] using hy'
+    · simpa [D, parametrization] using h1'
+  rw [hp.fderiv]
+  funext i
+  fin_cases i
+  · change (D 0) q = parameterDerivative p q 0
+    rw [show D 0 = fderiv ℝ
+      (fun x : Parameters => (1 - x 1) * Real.cos (x 0)) p by rfl]
+    rw [hxnorm.fderiv]
+    simp [parameterDerivative]
+    ring
+  · change (D 1) q = parameterDerivative p q 1
+    rw [show D 1 = fderiv ℝ
+      (fun x : Parameters => (1 - x 1) * Real.sin (x 0)) p by rfl]
+    rw [hynorm.fderiv]
+    simp [parameterDerivative]
+    ring
+  · change (D 2) q = parameterDerivative p q 2
+    rw [show D 2 = fderiv ℝ (fun x : Parameters => x 1) p by rfl]
+    rw [h1.fderiv]
+    simp [parameterDerivative]
 -- END SEAT AREA
 
 theorem fderiv_parametrization_injective_on_interior
