@@ -76416,7 +76416,7 @@
   {:consumer :t96J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 0,
    :review-finding
    "Deterministic topology defect in commit ee79eaeb2: it changes the index topology for FiniteWedge from ⊥ to ⊤ while claiming this makes it discrete. Mathlib/Topology/Order.lean states exactly the opposite: ⊥ is discrete and ⊤ is indiscrete. Consequently L × Circle is not the coproduct/disjoint-union source of indexed circle legs, and the coinduced quotient is not the B7 finite-wedge topology; future skeletonHomeomorphWedge would target the wrong space. Repair by restoring TopologicalSpace L := ⊥ in both the FiniteWedge instance and continuous_wedgeCircle proof, then rerun Lean/build and retain coverage, quotient-topology, wedge-relation, and signed-equation residuals. Recorded scope is otherwise exact and fixture SHA-256 386d0e41...ae305 matches.",
    :evidence
@@ -76468,6 +76468,17 @@
     [{:cmd "first compile",
       :exit 1,
       :correction "explicit composition equalities"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791858610218-8239-81d76392",
+     :commands
+     ["git exact scope/SHA/blob checks at 34fa7c1df"
+      "lake env lean ConstructionTargets/PolygonSurfacePiOne.lean"
+      "statement-registry.py check"
+      "placeholder/orientation scans; #print axioms"],
+     :finding
+     "PASS: exact recorded one-file scope and frozen hashes match. The new surjectivity results cross the endpoint quotient and orbit quotient correctly; true sign preserves t, while false sign supplies reverseIcc t to cancel the signed-map reversal. Lean passes, registry 131/0, placeholders 0, standard axioms only. This is real STOP progress, with source coverage, kernel agreement, quotient topology, final homeomorphism and B8/B9 explicitly remaining."},
     :commit "71da1cf41",
     :changed-paths ["ConstructionTargets/PolygonSurfacePiOne.lean"],
     :fixture
@@ -76476,7 +76487,7 @@
      "7feb7c0abe20db3e11660e1f84beacf6b3b09bc9bc19e3c6a4aaa1c37dd60ab2"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope ["ConstructionTargets/PolygonSurfacePiOne.lean"],
    :dag-node "ConstructionTargets/PolygonSurfacePiOne.blueprint.md/B7",
    :acceptance
