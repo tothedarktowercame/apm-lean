@@ -23717,7 +23717,7 @@
    :consumer :t01A08,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 0,
    :review-finding
    "Recorded commit is invalid: f032efae9d1501f7ddfe93c66668f88f24ed37f4 is absent locally and origin rejects it as not our ref. The intended scoped commit appears to be f032efae9b89fb527a72ea9192f3c89f09f82615. Repair the row to record the exact existing full SHA, then rerun independent review.",
    :implements-lemma
@@ -23758,6 +23758,17 @@
      {:cmd
       "sha256sum fixture; scoped commit check; statement-registry check",
       :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791880360774-9147-c1e28053",
+     :commands
+     ["git show/diff 9d47ef50; scope and recorded-tree checks"
+      "lake build ConstructionTargets.SardConvexDomain"
+      "lake env lean fixture and /tmp/CheckSardLocalTail.lean"
+      "sha256sum fixture; statement-registry check; placeholder recount"],
+     :finding
+     "PASS: valid STOP after real progress. One-file commit correctly lifts an eventual lower-jet permutation identity to the next derivative tail via decomposeFin.symm; the fixed leading coordinate and tail permutation orientations match the representation. Build/export pass; fixture hash matches; standard axioms only; registry 147/147; sorry/admit 0->0. Dense-interior eventual symmetry remains listed."},
     :commit "9d47ef502f1ffd2a1505cc8a6691b739b997435a",
     :changed-paths ["ConstructionTargets/SardConvexDomain.lean"],
     :fixture
@@ -23767,7 +23778,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain/B1/symmetry",
    :acceptance
@@ -33862,7 +33873,7 @@
    :other-consumers []}
   {:consumer :t01A08,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -33874,7 +33885,9 @@
     :reported-by [:r-a08-symmetry-slots-1],
     :type "local lower-jet symmetry lifts to next tail slots",
     :area "sard-convex-domain",
-    :proved-in :r-a08-symmetry-slots-1},
+    :proved-in :r-a08-symmetry-slots-1,
+    :banked-by :r-a08-symmetry-slots-1,
+    :banked-commit "9d47ef502f1ffd2a1505cc8a6691b739b997435a"},
    :id
    :lemma-iteratedfderivwithin-domdomcongr-decomposefin-symm-zero-of-eventuallyeq,
    :kind :lemma,
