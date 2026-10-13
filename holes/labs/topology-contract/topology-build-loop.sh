@@ -146,6 +146,24 @@ job_json() {
   done
   return 1
 }
+# Codex reports an overflowing thread in two wordings (seen 2026-10-13).
+is_context_overflow() {
+  case "$1" in
+    *"exceeds the context window"*|*"ran out of room in the model's context window"*) return 0 ;;
+  esac
+  return 1
+}
+# Clear the seat's session so its next job starts a fresh conversation.
+reset_seat_session() {
+  local seat="$1" body
+  body="$(curl --connect-timeout 5 --max-time 20 -fsS -X POST \
+    -H 'Content-Type: application/json' -d '{}' \
+    "$AGENCY/api/alpha/agents/$seat/reset-session")" || return 1
+  [ "$(jq -r '.ok // false' <<<"$body")" = true ] || return 1
+  log "session reset seat=$seat old-session=$(jq -r '."old-session-id" // ."old_session_id" // "?"' <<<"$body")"
+}
+declare -A CONTEXT_RESETS=()
+CURRENT_SEAT=""
 wait_job() {
   local job="$1" label="$2" state elapsed=0 body term_reason fail_code
   while :; do
@@ -180,6 +198,25 @@ wait_job() {
           local last_text executed
           last_text="$(jq -r '[.job.events[]? | select(.type=="text") | .text] | last // ""' <<<"$body" 2>/dev/null)"
           executed="$(jq -r '.job.execution.executed // false' <<<"$body" 2>/dev/null)"
+          # The seat's conversation thread has outgrown the model's context
+          # window. Every later job on that thread fails the same way, so the
+          # pre-execution resend below would retry forever (2026-10-13: the
+          # three owners topo-1, topo-5 and topo-9 failed 105 jobs in a row,
+          # backing off to 15 min each time). Give the seat a fresh thread and
+          # resend at once. A second overflow on the fresh thread means the
+          # prompt itself is too large; stop for diagnosis.
+          if is_context_overflow "$last_text"; then
+            bb "$HERE/inflight.bb" clear "$INFLIGHT" \
+              || log "could not clear in-flight pointer for terminal job $job"
+            if [ "${CONTEXT_RESETS[$CURRENT_SEAT]:-0}" -ge 1 ]; then
+              die "$label job=$job context window exceeded again on $CURRENT_SEAT after a session reset"
+            fi
+            reset_seat_session "$CURRENT_SEAT" \
+              || die "$label job=$job context window exceeded on $CURRENT_SEAT and the session reset failed"
+            CONTEXT_RESETS[$CURRENT_SEAT]=1
+            log "$label job=$job context window exceeded on $CURRENT_SEAT; session reset, resending"
+            return 76
+          fi
           if grep -q 'TOPOLOGY_RECEIPT_EDN' <<<"$last_text"; then
             LAST_JOB="$job"; mkdir -p "$RUNS/jobs"
             LAST_RESULT="$RUNS/jobs/$job.result.txt"
@@ -283,7 +320,9 @@ dispatch_and_wait() {
     [ -n "$job" ] || die "$label returned no job id: $response"
     bb "$HERE/inflight.bb" write "$INFLIGHT" "$row" "$job" "$seat" "$token" "$(date -u '+%Y-%m-%dT%H:%M:%SZ')" || die "could not persist in-flight job"
     log "$label job=$job"
-    if wait_job "$job" "$label"; then return 0; else wait_rc=$?; fi
+    CURRENT_SEAT="$seat"
+    if wait_job "$job" "$label"; then CONTEXT_RESETS[$seat]=0; return 0; else wait_rc=$?; fi
+    [ "$wait_rc" = 76 ] && continue
     [ "$wait_rc" = 75 ] || return "$wait_rc"
     capacity_waits=$((capacity_waits+1))
     capacity_delay=$((60 * (1 << (capacity_waits < 5 ? capacity_waits - 1 : 4))))
@@ -452,7 +491,17 @@ resume_inflight() {
     log "reclaim($row) job=$job unknown to Agency and no local result; moved in-flight record to $dest, row will be dispatched afresh"
     return 0
   fi
-  wait_job "$job" "reclaim($row)"
+  CURRENT_SEAT="$seat"
+  local reclaim_rc=0
+  wait_job "$job" "reclaim($row)" || reclaim_rc=$?
+  # 75/76: the retained job was refused (or its seat's thread overflowed and
+  # was reset). wait_job has cleared the in-flight pointer, so the row is
+  # dispatched afresh by the normal path; there is no result to apply.
+  if [ "$reclaim_rc" = 75 ] || [ "$reclaim_rc" = 76 ]; then
+    log "reclaim($row) job=$job not applied (rc=$reclaim_rc); row will be dispatched afresh"
+    return 0
+  fi
+  [ "$reclaim_rc" = 0 ] || return "$reclaim_rc"
   apply_job_result "$row" "$token"
 }
 
