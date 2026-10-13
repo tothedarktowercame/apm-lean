@@ -23950,8 +23950,67 @@
      :typed-residual-change
      :infrastructure-packets
      :review-outcomes]},
+   :evidence
+   {:outcome :replan,
+    :seat "topo-12",
+    :commands
+    [{:cmd
+      "bb holes/labs/topology-contract/build_step.bb priorities holes/labs/topology-contract/worklist3.edn",
+      :exit 0}],
+    :finding
+    {:measures
+     "placeholder Δ0; typed residual repair→B1; 1 packet; receipt repair PASS",
+     :routes
+     "A08:1 placeholder,30/2; corrected f032efae reviewed PASS; B1→criticalImageNull→adapter",
+     :top
+     "smooth_compact_surface_classification; rule0 elects A08 B1 first"},
+    :replacement-items
+    [{:bounded-exception "Rule0 B1.",
+      :consumer :t01A08,
+      :implements-lemma
+      :lemma-constructiontargets-sardconvexdomain-contdiffon-convexwithinjet,
+      :phase :probe,
+      :state :open,
+      :scope ["ConstructionTargets/SardConvexDomain.lean"],
+      :dag-node "SardConvexDomain.blueprint/B1",
+      :acceptance
+      {:probe "Compile B1 within jets using reviewed symmetry.",
+       :declaration
+       "ConstructionTargets.SardConvexDomain.ContDiffOn.convexWithinJet",
+       :type "exact B1 type in reviewed blueprint",
+       :blueprint "ConstructionTargets/SardConvexDomain.blueprint.md",
+       :placeholder "t01A08 sorry",
+       :route-step "B1 within jets"},
+      :id :r-a08-sard-b1-3,
+      :kind :reusable-theorem,
+      :area "sard-convex-domain",
+      :depends-on [:r-topo3-cp13c],
+      :current-residual "criticalImageNull then adapter.",
+      :other-consumers []}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 1,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :phase :strategy,
+      :state :open,
+      :scope [],
+      :dag-node "TOPOLOGY-ROUTES.md",
+      :acceptance {:strategy "Review B1 probe; rerank."},
+      :id :r-topo3-cp14b,
+      :kind :strategy-checkpoint,
+      :area "portfolio",
+      :depends-on [:r-a08-sard-b1-3],
+      :current-residual "Next A08 node.",
+      :other-consumers []}],
+    :author "topo-12",
+    :disposition :replan},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -23961,6 +24020,48 @@
    :area "portfolio",
    :depends-on [:r-a08-symmetry-slots-receipt-repair-1 :r-topo3-cp13],
    :current-residual "Elect no leading swap before PASS.",
+   :other-consumers []}
+  {:bounded-exception "Rule0 B1.",
+   :consumer :t01A08,
+   :implements-lemma
+   :lemma-constructiontargets-sardconvexdomain-contdiffon-convexwithinjet,
+   :phase :probe,
+   :state :blocked,
+   :scope ["ConstructionTargets/SardConvexDomain.lean"],
+   :dag-node "SardConvexDomain.blueprint/B1",
+   :acceptance
+   {:probe "Compile B1 within jets using reviewed symmetry.",
+    :declaration
+    "ConstructionTargets.SardConvexDomain.ContDiffOn.convexWithinJet",
+    :type "exact B1 type in reviewed blueprint",
+    :blueprint "ConstructionTargets/SardConvexDomain.blueprint.md",
+    :placeholder "t01A08 sorry",
+    :route-step "B1 within jets"},
+   :id :r-a08-sard-b1-3,
+   :kind :reusable-theorem,
+   :area "sard-convex-domain",
+   :depends-on [:r-topo3-cp13c],
+   :current-residual "criticalImageNull then adapter.",
+   :other-consumers []}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 1,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md",
+   :acceptance {:strategy "Review B1 probe; rerank."},
+   :id :r-topo3-cp14b,
+   :kind :strategy-checkpoint,
+   :area "portfolio",
+   :depends-on [:r-a08-sard-b1-3 :r-topo3-cp13c],
+   :current-residual "Next A08 node.",
    :other-consumers []}
   {:bounded-exception "Rule0.",
    :consumer :t01A08,
