@@ -6825,6 +6825,37 @@ noncomputable def genericPointWedgeOuterRight_typedTransportComposite :
     genericPointWedgeOuterRight_targetTransport
       x₀ y₀ M N hM hN hy hx cM cN
 
+/-- The factorwise typed composite is the earlier transported inverse
+round-trip comparator. -/
+theorem genericPointWedgeOuterRight_typedTransportComposite_eq_transport :
+    genericPointWedgeOuterRight_typedTransportComposite
+        x₀ y₀ M N hM hN hy hx cM cN =
+      genericPointWedgeOuterRight_transportInvRoundTrip
+        x₀ y₀ M N hM hN hy hx cM cN := by
+  unfold genericPointWedgeOuterRight_typedTransportComposite
+    genericPointWedgeOuterRight_sourceTransport
+    genericPointWedgeOuterRight_inverseRoundTripComponent
+    genericPointWedgeOuterRight_targetTransport
+    genericPointWedgeOuterRight_transportInvRoundTrip
+  congr 1
+
+/-- The typed composite exposes exactly the endpoint transport followed by
+the inverse mapped `unitInv`. -/
+theorem genericPointWedgeOuterRight_typedTransportComposite_eq_map :
+    let r := genericPointWedgeActualRight x₀ y₀ M N
+    let eK := genericPointWedgeOverlapGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let eR := genericPointWedgeRightGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let z := genericPointWedgeOverlapBase x₀ y₀ M N
+    let h := genericPointWedgeOuterRight_middleComponent_endpoints
+      x₀ y₀ M N hM hN hy hx cM cN
+    genericPointWedgeOuterRight_typedTransportComposite
+        x₀ y₀ M N hM hN hy hx cM cN =
+      eqToHom h.1 ≫ inv ((r ⋙ eR.functor).map (eK.unitInv.app z)) := by
+  rw [genericPointWedgeOuterRight_typedTransportComposite_eq_transport,
+    genericPointWedgeOuterRight_transportInvRoundTrip_eq_map]
+
 /-- An `inl` factorization of the right-base conjugator forces its canonical
 right projection to be trivial. -/
 theorem genericPointWedgeRightBase_inl_implies_rightProjection_eq_one
@@ -7579,6 +7610,8 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeOuterRight_sourceTransport
 #print axioms genericPointWedgeOuterRight_targetTransport
 #print axioms genericPointWedgeOuterRight_typedTransportComposite
+#print axioms genericPointWedgeOuterRight_typedTransportComposite_eq_transport
+#print axioms genericPointWedgeOuterRight_typedTransportComposite_eq_map
 #print axioms genericPointWedgeRightBase_inl_implies_rightProjection_eq_one
 #print axioms genericPointWedgeLegCoordinates_of_mapped
 #print axioms genericPointWedgeLegCoordinates_iff_mapped

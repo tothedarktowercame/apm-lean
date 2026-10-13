@@ -1361,3 +1361,8 @@ compose it with the two named transports without an inferred identity object.
 coercions in their exact hom-sets.  All three comparator factors are now typed.
 `genericPointWedgeOuterRight_typedTransportComposite` composes those transports
 with the packaged inverse round-trip component in the required order.
+`genericPointWedgeOuterRight_typedTransportComposite_eq_transport` identifies
+that factorwise composite with the earlier transported comparator without
+normalizing the mapped equivalence component.
+`genericPointWedgeOuterRight_typedTransportComposite_eq_map` then exposes it
+as the canonical endpoint transport followed by inverse mapped `unitInv`.
