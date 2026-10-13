@@ -24430,23 +24430,24 @@
    :consumer :t01A08,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "extend Mathlib: state and prove the missing theorem in scope",
    :implements-lemma :lemma-closedset-whitneycubecover,
    :evidence
    {:placeholder-delta {:t01A08 [1 1]},
     :residual
-    "Prove maximal dyadic cover theorem, then B4-B6, finite-dimensional B7, B9.",
+    "Construct proper-set maximal cover; then B4-B6, B7, B9.",
     :outcome :stop,
     :warnings ["existing unnecessarySimpa:454"],
     :missing-theorems
-    [{:name "ConstructionTargets.SardConvexDomain.WhitneyCubeCover",
-      :type
-      "certificate: countable complement cover, enlargements, anchors, metric bounds, local finiteness, bounded overlap",
+    [{:name
+      "ConstructionTargets.SardConvexDomain.closedSet_whitneyCubeCover_univ",
+      :type "Nonempty (WhitneyCubeCover univ)",
       :status :proved,
       :consumers [:t01A08],
-      :depends-on [],
+      :depends-on
+      ["ConstructionTargets.SardConvexDomain.WhitneyCubeCover"],
       :area "sard-convex-domain"}
      {:name
       "ConstructionTargets.SardConvexDomain.closedSet_whitneyCubeCover",
@@ -24455,30 +24456,34 @@
       :status :partial,
       :consumers [:t01A08],
       :depends-on
-      ["ConstructionTargets.SardConvexDomain.WhitneyCubeCover"],
+      ["ConstructionTargets.SardConvexDomain.WhitneyCubeCover"
+       "ConstructionTargets.SardConvexDomain.closedSet_whitneyCubeCover_univ"],
       :area "sard-convex-domain"}],
     :statement-hashes {:registry "149/149"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Committed the reviewed B3 representation and nearest-point milestone. The exact construction theorem remains: choose a countable maximal dyadic cover and prove local finiteness, metric comparability, and bounded overlap; no existing API supplies it.",
+    "Committed B3 empty-complement branch: for s=univ the empty family satisfies the full certificate. The proper-set branch still needs a countable maximal scale-adapted cover with local finiteness and uniform overlap; this is the next construction node, not a refutation.",
     :commands
     [{:cmd "lake build ConstructionTargets.SardConvexDomain", :exit 0}
      {:cmd
-      "lake env lean /tmp/t01a08_b3_milestone_check.lean; registry check; no-placeholder/axiom scan",
-      :exit 0}
-     {:cmd "git diff --check; commit scoped change", :exit 0}],
-    :commit "6ff20638065f666b599cbb132f300dd808b2bea2",
+      "lean fixture; registry; no-sorry/axiom; diff check; commit",
+      :exit 0}],
+    :diagnostic-history
+    [{:cmd "initial build",
+      :exit 1,
+      :correction "fixed universe and empty fibers"}],
+    :commit "c7da603dbc7403e367a05a63ebe80b8be8882d95",
     :changed-paths ["ConstructionTargets/SardConvexDomain.lean"],
     :fixture
-    {:path "/tmp/t01a08_b3_milestone_check.lean",
+    {:path "/tmp/t01a08_b3_univ_branch_check.lean",
      :sha256
-     "86d6076e1f1bb15aeae9ecbc498b2e706dfea6f2d245d3419a888e228bde3340",
+     "5349a08ccfd6f21d71ed72318eebbe5ac242b24c5a7308c1f8d5cab93e09a598",
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain.blueprint/B3",
    :acceptance
@@ -35055,6 +35060,28 @@
     :area "sard-convex-domain"},
    :id
    :lemma-constructiontargets-sardconvexdomain-closedset-whitneycubecover,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-sardconvexdomain-whitneycubecover
+    :lemma-constructiontargets-sardconvexdomain-closedset-whitneycubecover-univ],
+   :other-consumers []}
+  {:consumer :t01A08,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.SardConvexDomain.closedSet_whitneyCubeCover_univ",
+    :type "Nonempty (WhitneyCubeCover univ)"},
+   :lemma
+   {:name
+    "ConstructionTargets.SardConvexDomain.closedSet_whitneyCubeCover_univ",
+    :reported-by [:r-a08-sard-b3-whitney-cubes-1],
+    :type "Nonempty (WhitneyCubeCover univ)",
+    :area "sard-convex-domain",
+    :proved-in :r-a08-sard-b3-whitney-cubes-1},
+   :id
+   :lemma-constructiontargets-sardconvexdomain-closedset-whitneycubecover-univ,
    :kind :lemma,
    :depends-on
    [:lemma-constructiontargets-sardconvexdomain-whitneycubecover],
