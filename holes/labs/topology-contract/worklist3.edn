@@ -23217,7 +23217,7 @@
    :other-consumers []}
   {:bounded-exception "Rule0.",
    :consumer :t01A08,
-   :stop-count 1,
+   :stop-count 2,
    :review-finding
    "extend Mathlib: state and prove the missing theorem in scope. The elected frozen type dropped hx : x ∈ s, although ContDiffWithinAt.isSymmSndFDerivWithinAt and conversion to iteratedFDerivWithin symmetry require it; UniqueDiffOn supplies pointwise uniqueness only at members. Restore hx : x ∈ s in the registered type, then prove adjacent-swap symmetry and permutation induction in SardConvexDomain.lean. Current row has commit nil/no changed paths, and its fixture merely axiomatizes the declaration (nonstandard axiom appears in #print).",
    :implements-lemma
@@ -23225,7 +23225,7 @@
    :evidence
    {:placeholder-delta {:t01A08 [1 1]},
     :residual
-    "Restore x∈s from the prior frozen interface; then prove adjacent swaps and permutation induction.",
+    "Supervisor must restore hx:x∈s in row type and fixture, issue new digest, then rerun implementation.",
     :missing-hypothesis "x ∈ s",
     :outcome :stop,
     :warnings [],
@@ -23234,12 +23234,15 @@
     :axioms [],
     :author :topo-10,
     :reason
-    "Frozen type omits x∈s. The adjacent-swap base theorem ContDiffWithinAt.isSymmSndFDerivWithinAt requires closure-interior membership and x∈s; UniqueDiffOn s gives uniqueness only at members.",
+    "Review orders restoration of hx:x∈s, but both registered type and frozen fixture still omit it. Changing the theorem in scoped Lean would not discharge that interface.",
     :commands
-    [{:cmd
-      "rg -n -A4 finite-smooth-symmetry Mathlib/Analysis/Calculus/FDeriv/Symmetric.lean",
+    [{:cmd "sha256sum /tmp/t01a08_smooth_symmetry_closure_probe.lean",
       :exit 0}
-     {:cmd "sha256sum /tmp/t01a08_smooth_symmetry_closure_probe.lean",
+     {:cmd
+      "rg frozen axiom type /tmp/t01a08_smooth_symmetry_closure_probe.lean",
+      :exit 0}
+     {:cmd
+      "rg finite-smooth base Mathlib/Analysis/Calculus/FDeriv/Symmetric.lean",
       :exit 0}
      {:cmd "lake env lean ConstructionTargets/SardConvexDomain.lean",
       :exit 0}
@@ -23247,12 +23250,6 @@
       "git diff --exit-code -- ConstructionTargets/SardConvexDomain.lean",
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1791873380395-8789-b75a4297",
-     :finding
-     "extend Mathlib: state and prove the missing theorem in scope. The elected frozen type dropped hx : x ∈ s, although ContDiffWithinAt.isSymmSndFDerivWithinAt and conversion to iteratedFDerivWithin symmetry require it; UniqueDiffOn supplies pointwise uniqueness only at members. Restore hx : x ∈ s in the registered type, then prove adjacent-swap symmetry and permutation induction in SardConvexDomain.lean. Current row has commit nil/no changed paths, and its fixture merely axiomatizes the declaration (nonstandard axiom appears in #print)."},
     :commit nil,
     :changed-paths [],
     :fixture
@@ -23264,7 +23261,7 @@
    :phase :implementation,
    :type
    "{E F} [NormedAddCommGroup E] [NormedSpace ℝ E] [NormedAddCommGroup F] [NormedSpace ℝ F] {s} {f} {x} → ContDiffWithinAt ℝ ∞ f s x → UniqueDiffOn ℝ s → x ∈ closure (interior s) → ∀ {n} (σ : Equiv.Perm (Fin n)), (iteratedFDerivWithin ℝ n f s x).domDomCongr σ = iteratedFDerivWithin ℝ n f s x",
-   :state :repair,
+   :state :needs-owner,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain/B1/symmetry",
    :acceptance
@@ -23295,7 +23292,7 @@
      :infrastructure-packets
      :review-outcomes]},
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance {:strategy "Rerank corrected B1 prerequisite."},
