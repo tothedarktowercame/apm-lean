@@ -50,6 +50,12 @@ of the banked deck-group theorem at the orbit of `(0, 0)` are compiled as
 remaining geometric inputs are proper discontinuity and the homeomorphism to
 the frozen polygon quotient.
 
+The proper-discontinuity proof now has its algebraic half compiled:
+`coordinate_equations_of_smul_eq` extracts the two integer coordinate
+equations from an orbit intersection, and `finite_of_coordinatePair_mem`
+turns finite coordinate ranges into finitely many acting elements.  It remains
+to obtain those finite integer ranges from compactness of the two plane sets.
+
 The arbitrary-basepoint tail is compiled as
 `ConstructionTargets.t93J03Closure.fundamentalGroupEquiv_every_basepoint`.
 Thus the orbit computation need only establish the equivalence at its

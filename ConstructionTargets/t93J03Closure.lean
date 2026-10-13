@@ -16,7 +16,35 @@ noncomputable section
 namespace ConstructionTargets.t93J03Closure
 
 open KleinPresentedGroupCoordinateModel
+open KleinPresentedGroupCoordinateNormalForm
 open KleinPlaneAffineAction
+open KleinCoordinateInversionPower
+
+/-- An orbit intersection determines both integer normal-form coordinates by
+the source and target points.  These are the equations used to bound the
+possible deck transformations meeting two compact subsets of the plane. -/
+theorem coordinate_equations_of_smul_eq
+    (g : PresentedKleinGroup) (p q : ℝ × ℝ) (h : g • p = q) :
+    (((Multiplicative.toAdd (coordinateEquiv g).2 : ℤ) : ℝ) = q.2 - p.2) ∧
+      (((Multiplicative.toAdd (coordinateEquiv g).1 : ℤ) : ℝ) =
+        q.1 -
+          ((Multiplicative.toAdd
+            (action (coordinateEquiv g).2 (Multiplicative.ofAdd 1)) : ℤ) : ℝ) * p.1) := by
+  change coordinateAct (coordinateEquiv g) p = q at h
+  constructor
+  · have hy := congrArg Prod.snd h
+    dsimp [coordinateAct] at hy
+    linarith
+  · have hx := congrArg Prod.fst h
+    dsimp [coordinateAct] at hx
+    linarith
+
+/-- Only finitely many presented Klein-group elements have their two normal
+form coordinates in prescribed finite sets. -/
+theorem finite_of_coordinatePair_mem {S T : Set ZMul}
+    (hS : S.Finite) (hT : T.Finite) :
+    {g : PresentedKleinGroup | coordinatePairEquiv g ∈ S ×ˢ T}.Finite :=
+  (hS.prod hT).preimage coordinatePairEquiv.injective.injOn
 
 /-- The literal affine Klein action is continuous in the plane variable. -/
 noncomputable instance kleinPlaneContinuousConstSMul :
@@ -100,5 +128,7 @@ theorem lift_isEmbedding_assembly
 #print axioms fundamentalGroupEquiv_every_basepoint
 #print axioms kleinPlaneContinuousConstSMul
 #print axioms kleinPlaneOrbit_pi1_at_origin
+#print axioms coordinate_equations_of_smul_eq
+#print axioms finite_of_coordinatePair_mem
 
 end ConstructionTargets.t93J03Closure
