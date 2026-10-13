@@ -3,6 +3,7 @@ import ConstructionTargets.StatementSurfaceModels
 import ConstructionTargets.KleinPlaneActionFree
 import ConstructionTargets.KleinPlaneOrbitQuotientTopology
 import ConstructionTargets.DeckGroupQuotientFundamentalGroup
+import ConstructionTargets.KleinClosedSquareOrbitInverseContinuity
 
 /-! # Generic closing lemmas for t93J03
 
@@ -19,6 +20,9 @@ open KleinPresentedGroupCoordinateModel
 open KleinPresentedGroupCoordinateNormalForm
 open KleinPlaneAffineAction
 open KleinCoordinateInversionPower
+open ConstructionTargets.KleinOrbitQuotientHomeomorph
+open ConstructionTargets.KleinClosedSquareOrbitQuotientEquiv
+open ConstructionTargets.KleinClosedSquareOrbitInverseContinuity
 
 /-- An orbit intersection determines both integer normal-form coordinates by
 the source and target points.  These are the equations used to bound the
@@ -129,15 +133,59 @@ theorem finite_klein_actors_of_compact {K L : Set (ℝ × ℝ)}
       (coordinateEquiv g).2 ∈ ({(coordinateEquiv g).2} : Set ZMul)
     exact ⟨⟨⟨p, q⟩, ⟨hp, hq⟩, heq.2.symm⟩, Set.mem_singleton _⟩
 
+/-- The literal affine Klein action is continuous in the plane variable. -/
+noncomputable instance kleinPlaneContinuousConstSMul :
+    ContinuousConstSMul PresentedKleinGroup (ℝ × ℝ) where
+  continuous_const_smul := KleinPlaneOrbitQuotient.continuous_smul
+
 noncomputable instance kleinPlaneProperlyDiscontinuousSMul :
     ProperlyDiscontinuousSMul PresentedKleinGroup (ℝ × ℝ) where
   finite_disjoint_inter_image hK hL :=
     finite_klein_actors_of_compact hK hL
 
-/-- The literal affine Klein action is continuous in the plane variable. -/
-noncomputable instance kleinPlaneContinuousConstSMul :
-    ContinuousConstSMul PresentedKleinGroup (ℝ × ℝ) where
-  continuous_const_smul := KleinPlaneOrbitQuotient.continuous_smul
+theorem sameOrbit_iff_orbitRel (p q : ℝ × ℝ) :
+    KleinSquareEqvGenToCases.SameOrbit p q ↔
+      MulAction.orbitRel PresentedKleinGroup (ℝ × ℝ) p q := by
+  change q ∈ MulAction.orbit PresentedKleinGroup p ↔
+    p ∈ MulAction.orbit PresentedKleinGroup q
+  exact MulAction.mem_orbit_symm
+
+/-- Identity on plane representatives, comparing the banked explicit orbit
+setoid with Mathlib's action-orbit setoid. -/
+noncomputable def planeOrbitRelHomeomorph :
+    PlaneOrbitQuotient ≃ₜ
+      MulAction.orbitRel.Quotient PresentedKleinGroup (ℝ × ℝ) where
+  toFun := Quotient.lift (fun p => Quotient.mk _ p) fun p q h =>
+    Quotient.sound ((sameOrbit_iff_orbitRel p q).mp h)
+  invFun := Quotient.lift (fun p => Quotient.mk _ p) fun p q h =>
+    Quotient.sound ((sameOrbit_iff_orbitRel p q).mpr h)
+  left_inv := by rintro ⟨p⟩; rfl
+  right_inv := by rintro ⟨p⟩; rfl
+  continuous_toFun := by
+    apply Continuous.quotient_lift
+    exact continuous_coinduced_rng
+  continuous_invFun := by
+    apply Continuous.quotient_lift
+    exact continuous_coinduced_rng
+
+noncomputable instance kleinPlaneOrbitT2Space : T2Space PlaneOrbitQuotient := by
+  letI : ContinuousConstSMul PresentedKleinGroup (ℝ × ℝ) :=
+    kleinPlaneContinuousConstSMul
+  letI : ProperlyDiscontinuousSMul PresentedKleinGroup (ℝ × ℝ) :=
+    kleinPlaneProperlyDiscontinuousSMul
+  letI : T2Space
+      (MulAction.orbitRel.Quotient PresentedKleinGroup (ℝ × ℝ)) :=
+    t2Space_of_properlyDiscontinuousSMul_of_t2Space
+      (Γ := PresentedKleinGroup) (T := ℝ × ℝ)
+  exact planeOrbitRelHomeomorph.symm.t2Space
+
+/-- The banked closed-fundamental-square equivalence is a homeomorphism once
+the literal affine action supplies the Hausdorff orbit quotient. -/
+noncomputable def closedSquareOrbitHomeomorph :
+    ClosedSquareOrbitQuotient ≃ₜ PlaneOrbitQuotient where
+  toEquiv := closedSquareOrbitQuotientEquiv
+  continuous_toFun := continuous_closedSquareOrbitQuotientEquiv
+  continuous_invFun := closedSquareOrbitQuotientEquiv_continuous_symm_of_t2
 
 /-- Once proper discontinuity of the explicit affine action is supplied, the
 banked deck-group theorem computes the fundamental group at the canonical
@@ -223,5 +271,7 @@ theorem lift_isEmbedding_assembly
 #print axioms finite_horizontal_coordinates_of_compact
 #print axioms finite_klein_actors_of_compact
 #print axioms kleinPlaneProperlyDiscontinuousSMul
+#print axioms planeOrbitRelHomeomorph
+#print axioms closedSquareOrbitHomeomorph
 
 end ConstructionTargets.t93J03Closure

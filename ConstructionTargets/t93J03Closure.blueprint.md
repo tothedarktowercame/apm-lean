@@ -62,6 +62,9 @@ The fixed-vertical-coordinate horizontal bound is now compiled as
 The finite union and subset argument are now compiled as
 `finite_klein_actors_of_compact`, yielding the literal
 `kleinPlaneProperlyDiscontinuousSMul` instance.
+This Hausdorff consequence upgrades the banked compact continuous bijection
+to the compiled `closedSquareOrbitHomeomorph`.  The remaining comparison is
+from the closed-square edge quotient to the frozen disk-polygon quotient.
 
 The arbitrary-basepoint tail is compiled as
 `ConstructionTargets.t93J03Closure.fundamentalGroupEquiv_every_basepoint`.
