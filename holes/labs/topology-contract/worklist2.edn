@@ -76604,8 +76604,51 @@
   {:consumer :t96J02,
    :implements-lemma
    :lemma-constructiontargets-polygonsurfacepione-skeletonhomeomorphwedge,
+   :evidence
+   {:placeholder-delta 0,
+    :residual "B7 complete; B8/B9.",
+    :implements-lemma
+    :lemma-constructiontargets-polygonsurfacepione-skeletonhomeomorphwedge,
+    :outcome :done-unreviewed,
+    :warnings ["preexisting lints" "worklist temp preserved"],
+    :missing-theorems
+    [{:name "PairingData.skeletonHomeomorphWedge",
+      :type "skeleton homeomorphic to orbit-indexed circle wedge",
+      :status :proved,
+      :consumers [:t96J02 :t92J05 :t94J04 :t97A01 :t97A03],
+      :depends-on
+      ["PairingData.SkeletonWedgeKernelAgreement"
+       "PairingData.skeletonArcMap_isQuotientMap"],
+      :area "polygon-surface-pi1"}],
+    :statement-hashes
+    {:registry "145/0",
+     :module "cec6b84b2110a6b7c9197ad1ca3257ad0649366d"},
+    :acceptance
+    {:declaration
+     "ConstructionTargets.PolygonSurfacePiOne.skeletonHomeomorphWedge",
+     :equation "PairingData.skeletonHomeomorphWedge_skeletonArc",
+     :topology "discrete index uses bottom"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-6",
+    :commands
+    [{:cmd
+      "lake env lean ConstructionTargets/PolygonSurfacePiOne.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.PolygonSurfacePiOne",
+      :exit 0}
+     {:cmd "statement-registry check", :exit 0}
+     {:cmd "placeholder scan", :exit 0}
+     {:cmd "#print axioms B7", :exit 0}
+     {:cmd "git show --check 9f18c4ca1", :exit 0}],
+    :commit "9f18c4ca1",
+    :changed-paths ["ConstructionTargets/PolygonSurfacePiOne.lean"],
+    :fixture
+    {:path "ConstructionTargets/PolygonSurfacePiOne.lean",
+     :sha256
+     "a5462511c62ca1f6fc72bb8d48ca3461237b123afb807f1e5ba2ad7edff5de70"},
+    :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/PolygonSurfacePiOne.lean"],
    :dag-node "ConstructionTargets/PolygonSurfacePiOne.blueprint.md/B7",
    :acceptance
@@ -87430,7 +87473,9 @@
     :type "signed skeleton-wedge homeomorphism"},
    :lemma
    {:name "PairingData.skeletonHomeomorphWedge",
-    :reported-by [:routes-2026-10-12-polygon-b7-topo2-r1],
+    :reported-by
+    [:routes-2026-10-12-polygon-b7-topo2-r1
+     :routes-2026-10-13-polygon-b7-completion-topo2-r1],
     :type "signed skeleton-wedge homeomorphism",
     :area "polygon-surface-pi1",
     :proved-in :routes-2026-10-12-polygon-b7-topo2-r1,
