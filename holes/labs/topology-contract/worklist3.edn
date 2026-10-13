@@ -23717,7 +23717,7 @@
    :consumer :t01A08,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 0,
    :review-finding
    "Recorded commit is invalid: f032efae9d1501f7ddfe93c66668f88f24ed37f4 is absent locally and origin rejects it as not our ref. The intended scoped commit appears to be f032efae9b89fb527a72ea9192f3c89f09f82615. Repair the row to record the exact existing full SHA, then rerun independent review.",
    :implements-lemma
@@ -23763,6 +23763,17 @@
       :exit 1,
       :correction
       "canonical apm-lean checkout is not a frame; ran gates with its package authority"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791882623871-9249-4c65e962",
+     :commands
+     ["git show/diff cb65ff30; scope and recorded-tree checks"
+      "lake build ConstructionTargets.SardConvexDomain"
+      "lake env lean fixture and /tmp/CheckSardSmoothSet.lean"
+      "sha256sum fixture; statement-registry check; placeholder recount"],
+     :finding
+     "PASS: valid STOP after real progress. One-file commit correctly extracts, for each finite k, a relative neighborhood where pointwise C^k-within smoothness holds: C∞ is lowered to k and ContDiffWithinAt.eventually supplies the set; x∈s removes the inserted base point. Build/export pass; fixture hash matches; standard axioms only; registry 147/147; sorry/admit 0->0. Combining this neighborhood with closure localization and the permutation induction remains listed."},
     :commit "cb65ff3000337602c3de8aab28cb628f79b7a4e1",
     :changed-paths ["ConstructionTargets/SardConvexDomain.lean"],
     :fixture
@@ -23772,7 +23783,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain/B1/symmetry",
    :acceptance
@@ -33997,7 +34008,7 @@
    :other-consumers []}
   {:consumer :t01A08,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -34011,7 +34022,9 @@
     :type
     "C-infinity supplies a relative neighborhood of pointwise C-k smoothness for each finite k",
     :area "sard-convex-domain",
-    :proved-in :r-a08-symmetry-slots-1},
+    :proved-in :r-a08-symmetry-slots-1,
+    :banked-by :r-a08-symmetry-slots-1,
+    :banked-commit "cb65ff3000337602c3de8aab28cb628f79b7a4e1"},
    :id
    :lemma-contdiffwithinat-exists-mem-nhdswithin-contdiffwithinat-of-infty,
    :kind :lemma,
