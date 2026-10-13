@@ -463,6 +463,62 @@ theorem apm_m95A03_homogenization
 /-- Initial value problem for the linear equation `(p y')' - q y = g` on `[a, b]`, with a
 global `C²` solution (solve on `[a, b]`, extend past the endpoints by second-order Taylor
 polynomials). -/
+lemma apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_p_pos
+    (a b p₀ : ℝ) (hp₀ : 0 < p₀) (p : ℝ → ℝ)
+    (hp_lower : ∀ t ∈ Set.Icc a b, p₀ ≤ p t) :
+    ∀ t ∈ Set.Icc a b, 0 < p t := by
+  intro t ht
+  exact lt_of_lt_of_le hp₀ (hp_lower t ht)
+
+lemma apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_p_ne
+    (a b p₀ : ℝ) (hp₀ : 0 < p₀) (p : ℝ → ℝ)
+    (hp_lower : ∀ t ∈ Set.Icc a b, p₀ ≤ p t) :
+    ∀ t ∈ Set.Icc a b, p t ≠ 0 := by
+  intro t ht
+  exact (apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_p_pos
+    a b p₀ hp₀ p hp_lower t ht).ne'
+
+lemma apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_inv_continuousOn
+    (a b p₀ : ℝ) (hp₀ : 0 < p₀) (p : ℝ → ℝ) (hp : Continuous p)
+    (hp_lower : ∀ t ∈ Set.Icc a b, p₀ ≤ p t) :
+    ContinuousOn (fun t => (p t)⁻¹) (Set.Icc a b) := by
+  exact hp.continuousOn.inv₀
+    (apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_p_ne
+      a b p₀ hp₀ p hp_lower)
+
+/-- The first-order system `y' = z / p, z' = q y + g` has a solution on `[a, b]` with any
+initial data (linear system with continuous coefficients: Picard iteration / Grönwall). -/
+lemma apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_system
+    (a b : ℝ) (hab : a < b) (p q g : ℝ → ℝ) (hp : ContDiff ℝ 1 p)
+    (hq : Continuous q) (hg : Continuous g) (hpos : ∀ t ∈ Set.Icc a b, 0 < p t)
+    (c₀ d₀ : ℝ) :
+    ∃ y z : ℝ → ℝ, y a = c₀ ∧ z a = d₀ ∧ ∀ t ∈ Set.Icc a b,
+      HasDerivWithinAt y (z t / p t) (Set.Icc a b) t ∧
+      HasDerivWithinAt z (q t * y t + g t) (Set.Icc a b) t := by
+  sorry
+
+/-- A solution of the system on `[a, b]` is the restriction of a global `C²` function `Y`
+with `p Y' = z` there (`y` is `C²` on `[a, b]`; extend past the endpoints by second-order
+Taylor polynomials). -/
+lemma apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_extend
+    (a b : ℝ) (hab : a < b) (p q g : ℝ → ℝ) (hp : ContDiff ℝ 1 p)
+    (hq : Continuous q) (hg : Continuous g) (hpos : ∀ t ∈ Set.Icc a b, 0 < p t)
+    (y z : ℝ → ℝ) (hsys : ∀ t ∈ Set.Icc a b,
+      HasDerivWithinAt y (z t / p t) (Set.Icc a b) t ∧
+      HasDerivWithinAt z (q t * y t + g t) (Set.Icc a b) t) :
+    ∃ Y : ℝ → ℝ, ContDiff ℝ 2 Y ∧ ∀ t ∈ Set.Icc a b, Y t = y t ∧ p t * deriv Y t = z t := by
+  sorry
+
+/-- The equation on `[a, b]` for a global `C²` function whose flux `p Y'` agrees there with a
+solution `z` of `z' = q Y + g`. -/
+lemma apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_equation
+    (a b : ℝ) (hab : a < b) (p q g : ℝ → ℝ) (hp : ContDiff ℝ 1 p)
+    (Y z : ℝ → ℝ) (hY : ContDiff ℝ 2 Y)
+    (hYz : ∀ t ∈ Set.Icc a b, p t * deriv Y t = z t)
+    (hz : ∀ t ∈ Set.Icc a b, HasDerivWithinAt z (q t * Y t + g t) (Set.Icc a b) t) :
+    ∀ t ∈ Set.Icc a b, deriv (fun x => p x * deriv Y x) t - q t * Y t = g t := by
+  sorry
+
 lemma apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp
     (a b p₀ : ℝ) (hab : a < b) (hp₀ : 0 < p₀)
     (p q : ℝ → ℝ) (hp : ContDiff ℝ 1 p) (hq : Continuous q)
@@ -470,7 +526,19 @@ lemma apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp
     (g : ℝ → ℝ) (hg : Continuous g) (c₀ c₁ : ℝ) :
     ∃ y : ℝ → ℝ, ContDiff ℝ 2 y ∧ y a = c₀ ∧ deriv y a = c₁ ∧
       ∀ t ∈ Set.Icc a b, deriv (fun x => p x * deriv y x) t - q t * y t = g t := by
-  sorry
+  have hpos : ∀ t ∈ Set.Icc a b, 0 < p t := fun t ht => lt_of_lt_of_le hp₀ (hp_lower t ht)
+  have ha : a ∈ Set.Icc a b := ⟨le_rfl, hab.le⟩
+  obtain ⟨y, z, hya, hza, hsys⟩ :=
+    apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_system a b hab p q g hp hq hg hpos c₀ (p a * c₁)
+  obtain ⟨Y, hY, hYy⟩ := apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_extend a b hab p q g hp hq hg hpos y z hsys
+  refine ⟨Y, hY, by rw [(hYy a ha).1, hya], ?_, ?_⟩
+  · have h1 := (hYy a ha).2
+    rw [hza] at h1
+    exact mul_left_cancel₀ (hpos a ha).ne' h1
+  · refine apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_equation a b hab p q g hp Y z hY (fun t ht => (hYy t ht).2)
+      (fun t ht => ?_)
+    rw [(hYy t ht).1]
+    exact (hsys t ht).2
 
 /-- The homogeneous Dirichlet problem has only the zero solution (energy identity). -/
 lemma apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_homogeneous_unique
