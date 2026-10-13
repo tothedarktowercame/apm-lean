@@ -482,7 +482,76 @@ lemma apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_homogeneous_
     (y : ℝ → ℝ) (hy : ContDiff ℝ 2 y) (hya : y a = 0) (hyb : y b = 0)
     (heq : ∀ t ∈ Set.Icc a b, deriv (fun x => p x * deriv y x) t - q t * y t = 0) :
     ∀ t ∈ Set.Icc a b, y t = 0 := by
-  sorry
+  let g : ℝ → ℝ := fun x ↦ p x * deriv y x
+  have hy' : ContDiff ℝ 1 (deriv y) := hy.deriv'
+  have hg : ContDiff ℝ 1 g := hp.mul hy'
+  have hdg : Continuous (deriv g) := hg.continuous_deriv_one
+  have hdy : Continuous (deriv y) := hy'.continuous
+  have hibp := intervalIntegral.integral_mul_deriv_eq_deriv_mul
+    (a := a) (b := b) (u := g) (v := y) (u' := deriv g) (v' := deriv y)
+    (fun x _ ↦ (hg.differentiable (by norm_num) x).hasDerivAt)
+    (fun x _ ↦ (hy.differentiable (by norm_num) x).hasDerivAt)
+    (hdg.intervalIntegrable _ _) (hdy.intervalIntegrable _ _)
+  have henergy : (∫ x in a..b,
+      p x * (deriv y x) ^ 2 + q x * (y x) ^ 2) = 0 := by
+    have hibp' : (∫ x in a..b, g x * deriv y x) =
+        -(∫ x in a..b, deriv g x * y x) := by
+      simpa [hya, hyb] using hibp
+    have hcont1 : Continuous (fun x ↦ g x * deriv y x) := hg.continuous.mul hdy
+    have hcont2 : Continuous (fun x ↦ deriv g x * y x) := hdg.mul hy.continuous
+    have hz : (∫ x in a..b, g x * deriv y x + deriv g x * y x) = 0 := by
+      rw [intervalIntegral.integral_add (hcont1.intervalIntegrable a b)
+        (hcont2.intervalIntegrable a b)]
+      linarith
+    rw [← hz]
+    apply intervalIntegral.integral_congr
+    intro x hx
+    have hx' : x ∈ Set.Icc a b := Set.uIcc_of_le hab.le ▸ hx
+    have he := heq x hx'
+    dsimp [g]
+    rw [show deriv (fun z => p z * deriv y z) x = q x * y x by linarith]
+    ring
+  let E : ℝ → ℝ := fun x ↦ p x * (deriv y x) ^ 2 + q x * (y x) ^ 2
+  have hEc : Continuous E := by
+    dsimp [E]
+    fun_prop
+  have hEnonneg : ∀ x ∈ Set.Icc a b, 0 ≤ E x := by
+    intro x hx
+    dsimp [E]
+    have hp_pos : 0 ≤ p x := le_trans hp₀.le (hp_lower x hx)
+    exact add_nonneg (mul_nonneg hp_pos (sq_nonneg _))
+      (mul_nonneg (hq_nonneg x hx) (sq_nonneg _))
+  have hEae : E =ᵐ[MeasureTheory.volume.restrict (Set.Ioc a b)] 0 := by
+    have hnn : 0 ≤ᵐ[MeasureTheory.volume.restrict (Set.Ioc a b)] E := by
+      filter_upwards [MeasureTheory.ae_restrict_mem measurableSet_Ioc] with x hx
+      exact hEnonneg x ⟨hx.1.le, hx.2⟩
+    exact (intervalIntegral.integral_eq_zero_iff_of_le_of_nonneg_ae hab.le hnn
+      (hEc.intervalIntegrable a b)).mp henergy
+  have hEae' : E =ᵐ[MeasureTheory.volume.restrict (Set.Icc a b)] 0 := by
+    rw [← MeasureTheory.restrict_Ioc_eq_restrict_Icc]
+    exact hEae
+  have hEpoint : Set.EqOn E 0 (Set.Icc a b) :=
+    MeasureTheory.Measure.eqOn_Icc_of_ae_eq MeasureTheory.volume hab.ne hEae'
+      hEc.continuousOn continuous_zero.continuousOn
+  have hdyzero : ∀ x ∈ Set.Icc a b, deriv y x = 0 := by
+    intro x hx
+    have hz := hEpoint hx
+    have hp_pos : 0 < p x := lt_of_lt_of_le hp₀ (hp_lower x hx)
+    have hq0 := hq_nonneg x hx
+    dsimp [E] at hz
+    have hfirst : 0 ≤ p x * deriv y x ^ 2 :=
+      mul_nonneg hp_pos.le (sq_nonneg _)
+    have hsecond : 0 ≤ q x * y x ^ 2 := mul_nonneg hq0 (sq_nonneg _)
+    have hzero : p x * deriv y x ^ 2 = 0 := by nlinarith
+    exact sq_eq_zero_iff.mp ((mul_eq_zero.mp hzero).resolve_left (ne_of_gt hp_pos))
+  have hconst : ∀ x ∈ Set.Icc a b, y x = y a := by
+    apply constant_of_has_deriv_right_zero hy.continuous.continuousOn
+    intro x hx
+    have hxa : x ∈ Set.Icc a b := ⟨hx.1, hx.2.le⟩
+    simpa [hdyzero x hxa] using
+      (hy.differentiable (by norm_num) x).hasDerivAt.hasDerivWithinAt
+  intro x hx
+  rw [hconst x hx, hya]
 -- END SEAT AREA
 
 /-- Shooting: a particular solution with `y₀ a = 0` minus a multiple of the homogeneous
