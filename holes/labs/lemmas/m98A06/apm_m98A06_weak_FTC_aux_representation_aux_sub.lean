@@ -638,7 +638,24 @@ lemma apm_m98A06_weak_FTC_aux_representation_aux_sub
     (hwu : apm_m98a06_IsWeakDerivativeOn (Ioo 0 Real.pi) u du)
     (hwv : apm_m98a06_IsWeakDerivativeOn (Ioo 0 Real.pi) v du) :
     apm_m98a06_IsWeakDerivativeOn (Ioo 0 Real.pi) (fun x => u x - v x) 0 := by
-  sorry
+  intro φ hφ hφc hφs
+  have hdφ : Continuous (deriv φ) := hφ.continuous_deriv (by simp)
+  have hui : Integrable (fun x => u x * deriv φ x)
+      (volume.restrict (Ioo (0 : ℝ) Real.pi)) := by
+    change IntegrableOn (fun x => u x * deriv φ x) (Ioo (0 : ℝ) Real.pi)
+    rw [← integrableOn_Icc_iff_integrableOn_Ioo]
+    exact (hu.mul hdφ.continuousOn).integrableOn_Icc
+  have hvi : Integrable (fun x => v x * deriv φ x)
+      (volume.restrict (Ioo (0 : ℝ) Real.pi)) := by
+    change IntegrableOn (fun x => v x * deriv φ x) (Ioo (0 : ℝ) Real.pi)
+    rw [← integrableOn_Icc_iff_integrableOn_Ioo]
+    exact (hv.mul hdφ.continuousOn).integrableOn_Icc
+  have ewu := hwu φ hφ hφc hφs
+  have ewv := hwv φ hφ hφc hφs
+  rw [show (fun x => (u x - v x) * deriv φ x) =
+      fun x => u x * deriv φ x - v x * deriv φ x by funext x; ring,
+    integral_sub hui hvi, ewu, ewv]
+  simp
 -- END SEAT AREA
 
 lemma apm_m98A06_weak_FTC_aux_representation_aux_const
