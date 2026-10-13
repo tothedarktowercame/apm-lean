@@ -113897,6 +113897,17 @@
       "lake build ConstructionTargets.ThreeCirclesFundamentalGroup",
       :exit 1,
       :finding "B12 absent."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791893966678-9624-36a036d2",
+     :commands
+     ["git show/diff c62c3bd6^..c62c3bd6"
+      "git archive c62c3bd6; lake env lean archived PointWedgeVanKampen.lean"
+      "sha256/diff-tree/placeholder checks; statement-registry.py check"
+      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (expected absent)"],
+     :finding
+     "Reviewer codex-3. PASS program STOP: c62c3bd6 adds compiled, sorry-free support after ce325625. It correctly orients the remaining natural-isomorphism component target as the literal right base, rewriting overlapBase through overlapToRight and the right equivalence without crossing representation boundaries. Scope is Lean+MD only; source/doc/fixture hashes match ledger (cceacdea/2b6458c6/0bca6ce3), placeholders remain 0, registry 149/149, axioms standard only. Residual: compare unitInv with inverse-span transport, prove projection=1, factor through inl, then B6/B12; B12 remains absent as listed."},
     :commit "c62c3bd675449785201293ac0d5f71e9d97559ee",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
@@ -113907,7 +113918,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113928,7 +113939,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Round-trip component source endpoint exposed.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Component target is the literal right base.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -114681,7 +114692,10 @@
      :reason "Round-trip target is the inverse-span based connector."}
     {:job 6,
      :commit "ce32562580625ce3f55f1df7d72a5e778948b525",
-     :reason "Round-trip component source endpoint exposed."}]}
+     :reason "Round-trip component source endpoint exposed."}
+    {:job 7,
+     :commit "c62c3bd675449785201293ac0d5f71e9d97559ee",
+     :reason "Component target is the literal right base."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
