@@ -83,6 +83,57 @@ theorem finite_vertical_coordinates_of_compact
   apply finite_zmul_cast_mem_compact_image (hK.prod hL)
   fun_prop
 
+/-- After fixing the vertical normal-form coordinate, compactness permits only
+finitely many horizontal coordinates.  The multiplier is kept in its literal
+`action n 1` form, so no parity surrogate for the affine action is introduced. -/
+theorem finite_horizontal_coordinates_of_compact
+    {K L : Set (ℝ × ℝ)} (hK : IsCompact K) (hL : IsCompact L) (n : ZMul) :
+    {m : ZMul |
+      ((Multiplicative.toAdd m : ℤ) : ℝ) ∈
+        (fun pq : (ℝ × ℝ) × (ℝ × ℝ) =>
+          pq.2.1 -
+            ((Multiplicative.toAdd
+              (action n (Multiplicative.ofAdd 1)) : ℤ) : ℝ) * pq.1.1) ''
+          (K ×ˢ L)}.Finite := by
+  apply finite_zmul_cast_mem_compact_image (hK.prod hL)
+  fun_prop
+
+/-- Compact subsets of the plane meet only finitely many translates under the
+literal affine Klein action. -/
+theorem finite_klein_actors_of_compact {K L : Set (ℝ × ℝ)}
+    (hK : IsCompact K) (hL : IsCompact L) :
+    {g : PresentedKleinGroup | ((g • ·) '' K ∩ L).Nonempty}.Finite := by
+  let V : Set ZMul := {n |
+    ((Multiplicative.toAdd n : ℤ) : ℝ) ∈
+      (fun pq : (ℝ × ℝ) × (ℝ × ℝ) => pq.2.2 - pq.1.2) '' (K ×ˢ L)}
+  let H : ZMul → Set ZMul := fun n => {m |
+    ((Multiplicative.toAdd m : ℤ) : ℝ) ∈
+      (fun pq : (ℝ × ℝ) × (ℝ × ℝ) =>
+        pq.2.1 -
+          ((Multiplicative.toAdd
+            (action n (Multiplicative.ofAdd 1)) : ℤ) : ℝ) * pq.1.1) ''
+        (K ×ˢ L)}
+  have hV : V.Finite := finite_vertical_coordinates_of_compact hK hL
+  have hH : ∀ n, (H n).Finite := fun n =>
+    finite_horizontal_coordinates_of_compact hK hL n
+  have hPairs : (⋃ n ∈ V, H n ×ˢ ({n} : Set ZMul)).Finite :=
+    hV.biUnion fun n _ => (hH n).prod (Set.finite_singleton n)
+  apply (hPairs.preimage coordinatePairEquiv.injective.injOn).subset
+  intro g hg
+  obtain ⟨q, ⟨p, hp, hgp⟩, hq⟩ := hg
+  have heq := coordinate_equations_of_smul_eq g p q hgp
+  apply Set.mem_iUnion₂.mpr
+  refine ⟨(coordinateEquiv g).2, ?_, ?_⟩
+  · exact ⟨⟨p, q⟩, ⟨hp, hq⟩, heq.1.symm⟩
+  · change (coordinateEquiv g).1 ∈ H (coordinateEquiv g).2 ∧
+      (coordinateEquiv g).2 ∈ ({(coordinateEquiv g).2} : Set ZMul)
+    exact ⟨⟨⟨p, q⟩, ⟨hp, hq⟩, heq.2.symm⟩, Set.mem_singleton _⟩
+
+noncomputable instance kleinPlaneProperlyDiscontinuousSMul :
+    ProperlyDiscontinuousSMul PresentedKleinGroup (ℝ × ℝ) where
+  finite_disjoint_inter_image hK hL :=
+    finite_klein_actors_of_compact hK hL
+
 /-- The literal affine Klein action is continuous in the plane variable. -/
 noncomputable instance kleinPlaneContinuousConstSMul :
     ContinuousConstSMul PresentedKleinGroup (ℝ × ℝ) where
@@ -169,5 +220,8 @@ theorem lift_isEmbedding_assembly
 #print axioms finite_of_coordinatePair_mem
 #print axioms finite_zmul_cast_mem_compact_image
 #print axioms finite_vertical_coordinates_of_compact
+#print axioms finite_horizontal_coordinates_of_compact
+#print axioms finite_klein_actors_of_compact
+#print axioms kleinPlaneProperlyDiscontinuousSMul
 
 end ConstructionTargets.t93J03Closure

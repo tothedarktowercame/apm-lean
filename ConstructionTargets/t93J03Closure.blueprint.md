@@ -47,18 +47,21 @@ predicate and do not change the registered theorem or these definitions.
 The literal affine action's `ContinuousConstSMul` instance and the application
 of the banked deck-group theorem at the orbit of `(0, 0)` are compiled as
 `kleinPlaneContinuousConstSMul` and `kleinPlaneOrbit_pi1_at_origin`.  The
-remaining geometric inputs are proper discontinuity and the homeomorphism to
-the frozen polygon quotient.
+remaining geometric input is the homeomorphism to the frozen polygon quotient.
 
 The proper-discontinuity proof now has its algebraic half compiled:
 `coordinate_equations_of_smul_eq` extracts the two integer coordinate
 equations from an orbit intersection, and `finite_of_coordinatePair_mem`
-turns finite coordinate ranges into finitely many acting elements.  It remains
-to obtain those finite integer ranges from compactness of the two plane sets.
+turns finite coordinate ranges into finitely many acting elements.
 The generic compact-image integer lemma and its vertical-coordinate
 specialization are now compiled as `finite_zmul_cast_mem_compact_image` and
-`finite_vertical_coordinates_of_compact`.  The horizontal signed-coordinate
-bound and final instance assembly remain.
+`finite_vertical_coordinates_of_compact`.
+The fixed-vertical-coordinate horizontal bound is now compiled as
+`finite_horizontal_coordinates_of_compact`, retaining the literal multiplier
+`action n 1`.
+The finite union and subset argument are now compiled as
+`finite_klein_actors_of_compact`, yielding the literal
+`kleinPlaneProperlyDiscontinuousSMul` instance.
 
 The arbitrary-basepoint tail is compiled as
 `ConstructionTargets.t93J03Closure.fundamentalGroupEquiv_every_basepoint`.
