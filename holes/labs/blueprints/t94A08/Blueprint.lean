@@ -143,9 +143,57 @@ lemma apm_t94a08_node_mem_both_branches :
 
 /-- LIBRARY: construct local Euclidean charts for the smooth projective conic,
 using the imported projective affine charts and affine-conic parametrization. -/
+private def apm_t94a08_sigma1_isRealTwoManifold_aux_complexReal :
+    ℂ ≃ₜ EuclideanSpace ℝ (Fin 2) :=
+  Complex.equivRealProdCLM.toHomeomorph.trans
+    ((ContinuousLinearEquiv.finTwoArrow ℝ ℝ).symm.trans
+      (EuclideanSpace.equiv (Fin 2) ℝ).symm).toHomeomorph
+
+private def apm_t94a08_sigma1_isRealTwoManifold_aux_W :
+    Set (EuclideanSpace ℝ (Fin 2)) :=
+  {x | (apm_t94a08_sigma1_isRealTwoManifold_aux_complexReal.symm x) ≠ 0}
+
+private lemma apm_t94a08_sigma1_isRealTwoManifold_aux_W_open :
+    IsOpen apm_t94a08_sigma1_isRealTwoManifold_aux_W := by
+  exact isOpen_compl_singleton.preimage
+    apm_t94a08_sigma1_isRealTwoManifold_aux_complexReal.symm.continuous
+
+private def apm_t94a08_sigma1_isRealTwoManifold_aux_cstarReal :
+    T94A08AffineSmoothConicParam.Cstar ≃ₜ
+      ↑apm_t94a08_sigma1_isRealTwoManifold_aux_W :=
+  apm_t94a08_sigma1_isRealTwoManifold_aux_complexReal.subtype (fun z => by
+    rfl)
+
+private def apm_t94a08_sigma1_isRealTwoManifold_aux_affineConicReal :
+    T94A08AffineSmoothConicParam.AffineConic ≃ₜ
+      ↑apm_t94a08_sigma1_isRealTwoManifold_aux_W :=
+  T94A08AffineSmoothConicParam.affineConicHomeomorphCstar.trans
+    apm_t94a08_sigma1_isRealTwoManifold_aux_cstarReal
+
+theorem apm_t94a08_sigma1_isRealTwoManifold_aux_chartSlice (i : Fin 3) :
+    Nonempty
+      (↑({p : apm_t94a08_CP2 | Projectivization.rep p i ≠ 0} ∩
+          apm_t94a08_sigma1) ≃ₜ
+        T94A08AffineSmoothConicParam.AffineConic) := by
+  sorry
+
 theorem apm_t94a08_sigma1_isRealTwoManifold :
     apm_t94a08_IsRealTwoManifold apm_t94a08_sigma1 := by
-  sorry
+  intro p hp
+  have hex : ∃ i : Fin 3, Projectivization.rep p i ≠ 0 := by
+    by_contra h
+    push_neg at h
+    apply Projectivization.rep_nonzero p
+    funext i
+    exact h i
+  obtain ⟨i, hi⟩ := hex
+  let U : Set apm_t94a08_CP2 :=
+    {q | Projectivization.rep q i ≠ 0}
+  refine ⟨U, ?_, hi, apm_t94a08_sigma1_isRealTwoManifold_aux_W,
+    apm_t94a08_sigma1_isRealTwoManifold_aux_W_open, ?_⟩
+  · exact ConstructionTargets.ComplexProjectiveChartTargets.affineSource_isOpen i
+  · obtain ⟨e⟩ := apm_t94a08_sigma1_isRealTwoManifold_aux_chartSlice i
+    exact ⟨e.trans apm_t94a08_sigma1_isRealTwoManifold_aux_affineConicReal⟩
 
 /-- LIBRARY: the union of the two distinct complex projective lines is not
 locally Euclidean at their common node. -/
