@@ -22374,8 +22374,32 @@
    :consumer :t01A08,
    :implements-lemma
    :lemma-constructiontargets-sardconvexdomain-modelrange-withincriticalimage-null-of-inte,
+   :evidence
+   {:placeholder-delta {:t01A08 [1 1]},
+    :residual
+    "Prove frontier-image nullity by corner strata, then instantiate the aggregate theorem.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes {:registry "131/131"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author :topo-10,
+    :commands
+    [{:cmd "sha256sum /tmp/t01a08_critical_image_null_aggregate.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.SardConvexDomain", :exit 0}
+     {:cmd
+      "git diff --exit-code f59140ec -- ConstructionTargets/SardConvexDomain.lean",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
+    :commit "f59140ec28f828b0e0aac1cae29fd535e56dc21e",
+    :changed-paths ["ConstructionTargets/SardConvexDomain.lean"],
+    :fixture
+    {:path "/tmp/t01a08_critical_image_null_aggregate.lean",
+     :sha256
+     "d4041a37e02023ad8ce1b8e98bb7c6cbb338d539dbc89b7f8b484340dd9b13bd",
+     :mode :post-build-export-check}},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t01A08/corners-sard",
    :acceptance
