@@ -718,4 +718,26 @@ theorem finite_of_subset_compact_of_pairwise_dist
   · rintro rfl
     exact ⟨Metric.mem_ball_self (by positivity), hx⟩
 
+/-- Indexed form of compact packing finiteness.  Injectivity transfers the
+finiteness of the center set back to the indices used by a Whitney cover. -/
+theorem finite_indices_of_centers_in_compact
+    {ι E : Type*} [MetricSpace E] {K : Set E} {ε : ℝ}
+    (center : ι → E) (hcenter : Function.Injective center)
+    (hK : IsCompact K) (hε : 0 < ε)
+    (hsep : Pairwise fun i j => ε ≤ dist (center i) (center j)) :
+    {i | center i ∈ K}.Finite := by
+  let I : Set ι := {i | center i ∈ K}
+  have himageK : center '' I ⊆ K := by
+    rintro x ⟨i, hi, rfl⟩
+    exact hi
+  have hpair : (center '' I).Pairwise fun x y => ε ≤ dist x y := by
+    apply Set.Pairwise.image
+    intro i hi j hj hij
+    exact hsep hij
+  have hfinite : (center '' I).Finite :=
+    finite_of_subset_compact_of_pairwise_dist hK himageK hε hpair
+  have hpre : (center ⁻¹' (center '' I)).Finite :=
+    hfinite.preimage hcenter.injOn
+  simpa [I, hcenter.preimage_image] using hpre
+
 end ConstructionTargets.SardConvexDomain
