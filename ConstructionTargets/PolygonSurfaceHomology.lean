@@ -207,6 +207,111 @@ theorem innerOverlapHomology (P : PairingData) :
     ⟨overlapH0IsoInt P⟩, ⟨overlapH1IsoInt P⟩,
       overlapHigherHomology_isZero P⟩
 
+/-! ## The outer piece and its signed orbit-circle wedge -/
+
+/-- The outer member of the radial cover. -/
+abbrev OuterPiece (P : PairingData) :=
+  ConstructionTargets.PolygonRadialOpenCover.outerOpen P.Rel
+
+/-- The boundary skeleton, regarded as a subspace of the outer member. -/
+abbrev OuterBoundaryPiece (P : PairingData) :=
+  {z : OuterPiece P // z ∈ P.outerBoundarySkeleton}
+
+/-- The strong deformation retract already constructed for the punctured
+polygon gives a homotopy equivalence from the outer piece to its boundary
+skeleton. -/
+def outerHomotopyEquivBoundary (P : PairingData) :
+    OuterPiece P ≃ₕ OuterBoundaryPiece P where
+  toFun :=
+    { toFun := fun z =>
+        ⟨(punctureDeformationRetract P).homotopy (1, z),
+          (punctureDeformationRetract P).one_mem z⟩
+      continuous_toFun := by
+        fun_prop }
+  invFun :=
+    { toFun := fun z => z.1
+      continuous_toFun := continuous_subtype_val }
+  left_inv := by
+    let D := punctureDeformationRetract P
+    let H :
+        ContinuousMap.Homotopy (ContinuousMap.id (OuterPiece P))
+          ((ContinuousMap.mk (fun z : OuterBoundaryPiece P => z.1)
+              continuous_subtype_val).comp
+            (ContinuousMap.mk (fun z : OuterPiece P =>
+              ⟨D.homotopy (1, z), D.one_mem z⟩) (by fun_prop))) :=
+      { toFun := fun p => D.homotopy p
+        continuous_toFun := D.homotopy.continuous
+        map_zero_left := D.zero
+        map_one_left := by intro z; rfl }
+    exact ⟨H.symm⟩
+  right_inv := by
+    have hmap :
+        (ContinuousMap.mk
+            (fun z : OuterPiece P =>
+              ⟨(punctureDeformationRetract P).homotopy (1, z),
+                (punctureDeformationRetract P).one_mem z⟩)
+            (by fun_prop)).comp
+          (ContinuousMap.mk (fun z : OuterBoundaryPiece P => z.1)
+            continuous_subtype_val) =
+          ContinuousMap.id (OuterBoundaryPiece P) := by
+      apply ContinuousMap.ext
+      intro z
+      apply Subtype.ext
+      exact (punctureDeformationRetract P).fixed 1 z.1 z.2
+    rw [hmap]
+
+/-- A point of the quotient boundary skeleton lies in the radial outer
+piece. -/
+theorem skeleton_mem_outer (P : PairingData) (z : P.skeleton) :
+    z.1 ∈ ConstructionTargets.PolygonRadialOpenCover.outerOpen P.Rel := by
+  rcases z.2 with ⟨x, hx, hxz⟩
+  refine ⟨x, ?_, hxz⟩
+  change (1 : ℝ) / 4 < ConstructionTargets.PolygonRadialOpenCover.radius x
+  change ‖(x : ℂ)‖ = 1 at hx
+  rw [ConstructionTargets.PolygonRadialOpenCover.radius, hx]
+  norm_num
+
+/-- Forgetting the redundant outer-membership proof identifies the boundary
+subspace of the outer piece with the boundary skeleton in the surface. -/
+def outerBoundaryHomeomorphSkeleton (P : PairingData) :
+    OuterBoundaryPiece P ≃ₜ P.skeleton where
+  toFun z := ⟨z.1.1, (mem_outerBoundarySkeleton_iff P z.1).mp z.2⟩
+  invFun z :=
+    ⟨⟨z.1, skeleton_mem_outer P z⟩,
+      (mem_outerBoundarySkeleton_iff P ⟨z.1, skeleton_mem_outer P z⟩).mpr z.2⟩
+  left_inv z := by ext; rfl
+  right_inv z := by ext; rfl
+  continuous_toFun := by fun_prop
+  continuous_invFun := by fun_prop
+
+/-- The actual radial outer piece has the homotopy type of the finite wedge
+indexed by paired-edge orbits.  The final homeomorphism is the signed one, so
+its restriction to every polygon edge is `PairingData.signedWedgeArc`. -/
+noncomputable def outerHomotopyEquivWedge (P : PairingData) :
+    OuterPiece P ≃ₕ
+      PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge (PairingOrbit P.pair) :=
+  (outerHomotopyEquivBoundary P).trans
+    (outerBoundaryHomeomorphSkeleton P).toHomotopyEquiv |>.trans
+      P.skeletonHomeomorphWedge.toHomotopyEquiv
+
+/-- Include the surface boundary skeleton into the radial outer piece. -/
+def skeletonToOuter (P : PairingData) (z : P.skeleton) : OuterPiece P :=
+  ⟨z.1, skeleton_mem_outer P z⟩
+
+/-- On the boundary skeleton, the outer-piece equivalence is exactly the
+previously fixed signed skeleton-to-wedge homeomorphism. -/
+theorem outerHomotopyEquivWedge_skeleton (P : PairingData) (z : P.skeleton) :
+    outerHomotopyEquivWedge P (skeletonToOuter P z) =
+      P.skeletonHomeomorphWedge z := by
+  change P.skeletonHomeomorphWedge
+    ((outerBoundaryHomeomorphSkeleton P)
+      ((outerHomotopyEquivBoundary P) (skeletonToOuter P z))) = _
+  congr 1
+  apply Subtype.ext
+  exact congrArg (fun w : OuterPiece P => w.1)
+    ((punctureDeformationRetract P).fixed 1 (skeletonToOuter P z)
+      ((mem_outerBoundarySkeleton_iff P (skeletonToOuter P z)).mpr z.2))
+
 end
 
 end ConstructionTargets.PolygonSurfaceHomology
