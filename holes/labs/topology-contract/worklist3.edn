@@ -36179,68 +36179,58 @@
    :program true,
    :other-consumers []}
   {:consumer :t99J05,
-   :stop-count 1,
+   :stop-count 2,
    :evidence
    {:placeholder-delta {:t99J05 [1 1]},
     :residual
-    "Build C3 rational CP^n homology, then C4 trace sums and copy assembly into Main.",
+    "Construct C3 via coefficient Mayer-Vietoris; then C4 traces and Main.",
     :outcome :stop,
-    :warnings
-    ["reference sole expected sorryAx is t99J05_lefschetz_euler"
-     "existing reference lints: unnecessarySimpa, unusedSimpArgs"],
+    :warnings [],
     :missing-theorems
-    [{:name "t99J05_cp_homology",
+    [{:name
+      "ConstructionTargets.t99J05Closure.ComplexProjectiveRationalHomologyData",
       :type
-      "H_k(CP n; Q)=Q in even degrees <=2n and 0 otherwise, with finiteness/vanishing",
-      :status :not-started,
+      "finite rational H_k(CP n), zero odd/above 2n, equiv Q at 2i",
+      :status :proved,
       :consumers [:t99J05],
       :depends-on [],
       :area "rational-homology-lefschetz"}
+     {:name "t99J05_cp_homology",
+      :type "construct the CP n homology data",
+      :status :partial,
+      :consumers [:t99J05],
+      :depends-on
+      ["ConstructionTargets.t99J05Closure.ComplexProjectiveRationalHomologyData"],
+      :area "rational-homology-lefschetz"}
      {:name "t99J05_lefschetz_euler",
-      :type
-      "f homotopic to id on CP n has Lefschetz number and Euler characteristic n+1",
+      :type "Lefschetz and Euler values n+1",
       :status :partial,
       :consumers [:t99J05],
       :depends-on ["t99J05_cp_homology"],
       :area "rational-homology-lefschetz"}],
     :statement-hashes {:registry "150/150"},
     :disposition :stop,
-    :axioms [],
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Blueprint written and committed. It isolates rational CP^n homology as the internal dependency of the sole LIBRARY obligation, reuses compiled fixed-point/local-index/assembly proofs, covers n=0, and records hypothesis use. Implementation continues at C3.",
+    "Committed C3 interface: rational CP^n homology data for finite dimensionality, odd/top vanishing, and one-dimensional even groups. Mayer-Vietoris construction remains; not refuted.",
     :commands
-    [{:cmd "lake env lean holes/labs/blueprints/t99J05/Blueprint.lean",
-      :exit 0}
-     {:cmd "registry; milestone/hypothesis scans; diff checks",
-      :exit 0}
-     {:cmd "git commit; scoped commit; placeholder recount", :exit 0}],
-    :diagnostic-history
-    [{:cmd "git diff scope check",
-      :exit 1,
-      :correction
-      "new file is untracked; checked scoped status then committed"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1791920997879-10309-9207682d",
-     :commands
-     ["git show/diff 05ab28e1; scope and blueprint review"
-      "sha256sum recorded blueprint"
-      "lake env lean t99J05 reference"
-      "statement-registry check; placeholder recount"],
-     :finding
-     "PASS. The one-file blueprint commit has the recorded hash and faithfully uses the literal CP n quotient/charts and rational homology interfaces. C1 fixed points, C2 positive real determinants/local index +1, C3 even-degree CP n homology including n=0, C4 homotopy-invariant trace sum, and C5 assembly are mathematically coherent with their stated dependencies; the sole final input n is used throughout. The reference compiles with only the declared C4 sorryAx; registry is 150/150 and scoped placeholders remain Main 1->1, blueprint 0."},
-    :commit "05ab28e1f45cde90f026ffcf2423cbfce12cbcaf",
-    :changed-paths ["ConstructionTargets/t99J05Closure.blueprint.md"],
+    [{:cmd "lake build ConstructionTargets.t99J05Closure", :exit 0}
+     {:cmd "registry; fixture; scoped diff", :exit 0}
+     {:cmd "rg sorry-or-axiom closure", :exit 1, :expected-exit 1}
+     {:cmd "git commit", :exit 0}],
+    :commit "e766cbfcd2f0abb2e2efd42110f4e3bd14637fda",
+    :changed-paths
+    ["ConstructionTargets/t99J05Closure.lean"
+     "ConstructionTargets/t99J05Closure.blueprint.md"],
     :fixture
-    {:path "ConstructionTargets/t99J05Closure.blueprint.md",
+    {:path "/tmp/t99j05_cp_homology_interface_check.lean",
      :sha256
-     "cb96c465df8b36ab973def3c0044c9e43c8702bbd2b142c7c69ee71661da9a16",
-     :mode :blueprint},
+     "c9ad488ebf7086b3bf0d443e310d38faf48b4d0cd7b52d7a35537760e3235bd3",
+     :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t99J05/lean/Main.lean"
     "problems/t99J05/status.json"
@@ -36412,7 +36402,8 @@
     :area "rational-homology-lefschetz"},
    :id :lemma-t99j05-cp-homology,
    :kind :lemma,
-   :depends-on [],
+   :depends-on
+   [:lemma-constructiontargets-t99j05closure-complexprojectiverationalhomologydata],
    :other-consumers []}
   {:consumer :t99J05,
    :phase :lemma,
@@ -36431,6 +36422,28 @@
    :id :lemma-t99j05-lefschetz-euler,
    :kind :lemma,
    :depends-on [:lemma-t99j05-cp-homology],
+   :other-consumers []}
+  {:consumer :t99J05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.t99J05Closure.ComplexProjectiveRationalHomologyData",
+    :type
+    "finite rational H_k(CP n), zero odd/above 2n, equiv Q at 2i"},
+   :lemma
+   {:name
+    "ConstructionTargets.t99J05Closure.ComplexProjectiveRationalHomologyData",
+    :reported-by [:program-2026-10-13-close-t99j05],
+    :type
+    "finite rational H_k(CP n), zero odd/above 2n, equiv Q at 2i",
+    :area "rational-homology-lefschetz",
+    :proved-in :program-2026-10-13-close-t99j05},
+   :id
+   :lemma-constructiontargets-t99j05closure-complexprojectiverationalhomologydata,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
