@@ -458,6 +458,25 @@ theorem ContDiffWithinAt.domDomCongr_iteratedFDerivWithin_of_nat_of_mem_interior
                 filter_upwards [hev] with y hy
                 exact ih (m + 1) (by omega) hy.2 hy.1 (Equiv.swap j.castSucc j.succ)
 
+/-- Every finite iterated derivative of a real `C∞` map is symmetric at a point accumulated
+by the interior of its unique-differentiability set. -/
+theorem ContDiffWithinAt.domDomCongr_iteratedFDerivWithin_of_infty
+    {E F : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [NormedAddCommGroup F] [NormedSpace ℝ F]
+    {s : Set E} {f : E → F} {x : E}
+    (hf : ContDiffWithinAt ℝ ∞ f s x) (hu : UniqueDiffOn ℝ s)
+    (hxs : x ∈ s) (hxi : x ∈ closure (interior s))
+    {n : ℕ} (sigma : Equiv.Perm (Fin n)) :
+    (iteratedFDerivWithin ℝ n f s x).domDomCongr sigma =
+      iteratedFDerivWithin ℝ n f s x := by
+  rcases hf.exists_mem_nhdsWithin_contDiffWithinAt_closure_interior_of_infty hxs hxi n with
+    ⟨u, hu_mem, hxu, hfu⟩
+  apply hf.domDomCongr_iteratedFDerivWithin_of_eqOn hu hxs hxu
+    (inter_subset_right.trans interior_subset) n sigma
+  intro y hy
+  exact (hfu y hy.1).domDomCongr_iteratedFDerivWithin_of_nat_of_mem_interior
+    hu n hy.2 sigma
+
 namespace ConstructionTargets.SardConvexDomain
 
 theorem modelRange_withinCriticalImage_subset_interior_union_frontier
