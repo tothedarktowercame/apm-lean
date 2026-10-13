@@ -1082,3 +1082,9 @@ left-equivalence unit component from the forward left comparison.
 records the exact single-object multiplication order: the unit factor
 multiplies the strict-span factor.  The existing left counit naturality can
 now be applied to these two named factors without unfolding the comparison.
+
+`genericPointWedgeCoordinateSpanGlobalRestrictionLeftUnitFactor_eq_map` and
+`genericPointWedgeCoordinateSpanGlobalRestrictionLeftUnitFactor_eq_actual`
+identify that unit factor first as a reconstructed restriction map and then
+as the literal actual-span image.  Thus both left comparison factors now live
+in the same actual-span representation used by the counit naturality square.

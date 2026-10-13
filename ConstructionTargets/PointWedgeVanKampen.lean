@@ -3460,6 +3460,47 @@ def genericPointWedgeCoordinateSpanGlobalRestrictionLeftUnitFactor :
     (Functor.isoWhiskerLeft (eK.inverse ⋙ l) eL.unitIso.symm)
     S.left).hom.app (FundamentalGroupoid.mk ())
 
+/-- The left unit factor is the reconstructed left restriction applied to
+the corresponding left-equivalence unit component. -/
+theorem genericPointWedgeCoordinateSpanGlobalRestrictionLeftUnitFactor_eq_map :
+    let C := genericPointWedgeTarget x₀ y₀
+    let E := genericPointWedgeOpenCoverEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN C
+    let P₀ := genericPointWedgePseudoSpanEquivalence x₀ y₀ M N C
+    let S := P₀.functor.obj (E.functor.obj
+      (genericPointWedgeIdentityGlobalFunctor
+        x₀ y₀ M N hM hN hy hx cM cN))
+    let l := genericPointWedgeActualLeft x₀ y₀ M N
+    let eK := genericPointWedgeOverlapGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let eL := genericPointWedgeLeftGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let u : FundamentalGroupoid Unit := FundamentalGroupoid.mk ()
+    genericPointWedgeCoordinateSpanGlobalRestrictionLeftUnitFactor
+        x₀ y₀ M N hM hN hy hx cM cN =
+      S.left.map ((Functor.isoWhiskerLeft (eK.inverse ⋙ l)
+        eL.unitIso.symm).hom.app u) := by
+  rfl
+
+/-- The reconstructed left restriction is literal on the left unit
+component, so the factor is its image under the actual-span functor. -/
+theorem genericPointWedgeCoordinateSpanGlobalRestrictionLeftUnitFactor_eq_actual :
+    let l := genericPointWedgeActualLeft x₀ y₀ M N
+    let eK := genericPointWedgeOverlapGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let eL := genericPointWedgeLeftGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let u : FundamentalGroupoid Unit := FundamentalGroupoid.mk ()
+    let f := (Functor.isoWhiskerLeft (eK.inverse ⋙ l)
+      eL.unitIso.symm).hom.app u
+    genericPointWedgeCoordinateSpanGlobalRestrictionLeftUnitFactor
+        x₀ y₀ M N hM hN hy hx cM cN =
+      (genericPointWedgeIdentityActualSpan
+        x₀ y₀ M N hM hN hy hx cM cN).left.map f := by
+  rw [genericPointWedgeCoordinateSpanGlobalRestrictionLeftUnitFactor_eq_map]
+  exact genericPointWedgeIdentityGlobalLeftRestriction_map
+    x₀ y₀ M N hM hN hy hx cM cN _
+
 /-- In the single-object free-product target, categorical composition reverses
 to multiplication: the unit factor multiplies the strict-span factor. -/
 theorem genericPointWedgeCoordinateSpanGlobalRestrictionLeftComparison_eq_factors :
@@ -5907,6 +5948,8 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeCoordinateSpanGlobalRestrictionLeftStrictFactor_eq_actual
 #print axioms genericPointWedgeCoordinateSpanGlobalRestrictionLeftStrictFactor_heq_inl
 #print axioms genericPointWedgeCoordinateSpanGlobalRestrictionLeftUnitFactor
+#print axioms genericPointWedgeCoordinateSpanGlobalRestrictionLeftUnitFactor_eq_map
+#print axioms genericPointWedgeCoordinateSpanGlobalRestrictionLeftUnitFactor_eq_actual
 #print axioms genericPointWedgeCoordinateSpanGlobalRestrictionLeftComparison_eq_factors
 #print axioms genericPointWedgeCoordinateSpanGlobalRestrictionLeftRoundTrip_counit
 #print axioms genericPointWedgeCoordinateSpanGlobalRestrictionRightComparison
