@@ -50,8 +50,7 @@ def apm_t96A08_HasLocalRadialPrimitives
     (omega : ∀ p : M, TangentSpace I p →L[ℝ] ℝ) : Prop :=
   ∀ x : M, ∃ U : Set M, IsOpen U ∧ x ∈ U ∧
     ∃ g : M → ℝ,
-      ContMDiffOn I 𝓘(ℝ, ℝ) (⊤ : WithTop ℕ∞) g U ∧
-      mfderiv I 𝓘(ℝ, ℝ) g x = omega x ∧
+      HasMFDerivAt I 𝓘(ℝ, ℝ) g x (omega x) ∧
       ∀ z ∈ U, ∃ delta : ℝ → M,
         apm_t96a08_IsPiecewiseSmoothPath I delta ∧
         delta 0 = x ∧ delta 1 = z ∧
@@ -212,12 +211,101 @@ theorem apm_t96A08_concat_piecewiseSmooth
         norm_num [apm_t96A08_concat, hend]
       · simp only [apm_t96A08_concat, if_neg hp, Function.comp_apply]
 
-/-- Seat: the line integral is additive under concatenation.  On `(0, 1/2)` the
-manifold chain rule gives `mfderiv (concat) t 1 = 2 • mfderiv gamma (2 t) 1`
-(similarly on `(1/2, 1)`); the endpoints are null.  Integrability on each closed
-smooth piece comes from `homega_smooth` (continuous integrand, bounded on compact
-pieces); then substitute `s = 2 t` and `s = 2 t - 1`
-(`intervalIntegral.integral_comp_mul_left`, `integral_add_adjacent_intervals`). -/
+lemma apm_t96A08_concat_lineIntegral_aux_left_substitution (f : ℝ → ℝ) :
+    (∫ t : ℝ in (0 : ℝ)..(1 / 2 : ℝ), (2 : ℝ) * f (2 * t)) =
+      ∫ s : ℝ in (0 : ℝ)..1, f s := by
+  rw [intervalIntegral.integral_const_mul]
+  change (2 : ℝ) • (∫ t : ℝ in (0 : ℝ)..(1 / 2 : ℝ), f (2 * t)) = _
+  rw [intervalIntegral.smul_integral_comp_mul_left]
+  norm_num
+
+lemma apm_t96A08_concat_lineIntegral_aux_right_substitution (f : ℝ → ℝ) :
+    (∫ t : ℝ in (1 / 2 : ℝ)..1, (2 : ℝ) * f (2 * t - 1)) =
+      ∫ s : ℝ in (0 : ℝ)..1, f s := by
+  rw [intervalIntegral.integral_const_mul]
+  change (2 : ℝ) • (∫ t : ℝ in (1 / 2 : ℝ)..1, f (2 * t - 1)) = _
+  rw [intervalIntegral.smul_integral_comp_mul_left
+    (f := fun s : ℝ ↦ f (s - 1))]
+  rw [intervalIntegral.integral_comp_sub_right]
+  norm_num
+
+/-- Seat: the line-integral integrand of a repaired piecewise-smooth path is
+interval integrable on `[0, 1]` (on each closed smooth piece the derivative
+within the piece is continuous and agrees with `mfderiv` in the interior; the
+cut points are null; `homega_smooth` makes the integrand continuous there). -/
+theorem apm_t96A08_lineIntegrand_intervalIntegrable
+    {E M : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [CompleteSpace E] [TopologicalSpace M]
+    (I : ModelWithCorners ℝ E E) [ChartedSpace E M]
+    [IsManifold I (⊤ : WithTop ℕ∞) M]
+    (omega : ∀ p : M, TangentSpace I p →L[ℝ] ℝ)
+    (homega_smooth : ContMDiff I.tangent 𝓘(ℝ, ℝ) (⊤ : WithTop ℕ∞)
+      (fun v : TangentBundle I M => omega v.1 v.2))
+    (gamma : ℝ → M) (hgamma : apm_t96a08_IsPiecewiseSmoothPath I gamma) :
+    IntervalIntegrable
+      (fun t : ℝ => omega (gamma t) ((mfderiv 𝓘(ℝ, ℝ) I gamma t) 1))
+      MeasureTheory.volume 0 1 := by
+  sorry
+
+/-- Seat: on `(0, 1/2)` the concatenation agrees with `gamma (2 ·)` near `t`,
+so the chain rule doubles the velocity (both sides vanish where `gamma` is not
+differentiable). -/
+theorem apm_t96A08_concat_integrand_left
+    {E M : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [CompleteSpace E] [TopologicalSpace M]
+    (I : ModelWithCorners ℝ E E) [ChartedSpace E M]
+    [IsManifold I (⊤ : WithTop ℕ∞) M]
+    (omega : ∀ p : M, TangentSpace I p →L[ℝ] ℝ)
+    (gamma delta : ℝ → M) (t : ℝ) (ht : t ∈ Set.Ioo (0 : ℝ) (1 / 2)) :
+    omega (apm_t96A08_concat gamma delta t)
+        ((mfderiv 𝓘(ℝ, ℝ) I (apm_t96A08_concat gamma delta) t) 1) =
+      2 * omega (gamma (2 * t)) ((mfderiv 𝓘(ℝ, ℝ) I gamma (2 * t)) 1) := by
+  sorry
+
+/-- Seat: on `(1/2, 1)` the concatenation agrees with `delta (2 · - 1)` near `t`. -/
+theorem apm_t96A08_concat_integrand_right
+    {E M : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [CompleteSpace E] [TopologicalSpace M]
+    (I : ModelWithCorners ℝ E E) [ChartedSpace E M]
+    [IsManifold I (⊤ : WithTop ℕ∞) M]
+    (omega : ∀ p : M, TangentSpace I p →L[ℝ] ℝ)
+    (gamma delta : ℝ → M) (t : ℝ) (ht : t ∈ Set.Ioo (1 / 2 : ℝ) 1) :
+    omega (apm_t96A08_concat gamma delta t)
+        ((mfderiv 𝓘(ℝ, ℝ) I (apm_t96A08_concat gamma delta) t) 1) =
+      2 * omega (delta (2 * t - 1)) ((mfderiv 𝓘(ℝ, ℝ) I delta (2 * t - 1)) 1) := by
+  sorry
+
+/-- Seat (assembly from explicit hypotheses): split `∫₀¹` at `1/2`, replace the
+integrand a.e. on each half (`intervalIntegral.integral_congr_ae`, endpoints
+null), and apply the two substitution helpers above.  Integrability of each half
+follows from `hγ`, `hδ` through the same a.e. identities. -/
+theorem apm_t96A08_concat_lineIntegral_of_pieces
+    {E M : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [CompleteSpace E] [TopologicalSpace M]
+    (I : ModelWithCorners ℝ E E) [ChartedSpace E M]
+    [IsManifold I (⊤ : WithTop ℕ∞) M]
+    (omega : ∀ p : M, TangentSpace I p →L[ℝ] ℝ)
+    (gamma delta : ℝ → M)
+    (hγ : IntervalIntegrable
+      (fun t : ℝ => omega (gamma t) ((mfderiv 𝓘(ℝ, ℝ) I gamma t) 1))
+      MeasureTheory.volume 0 1)
+    (hδ : IntervalIntegrable
+      (fun t : ℝ => omega (delta t) ((mfderiv 𝓘(ℝ, ℝ) I delta t) 1))
+      MeasureTheory.volume 0 1)
+    (hleft : ∀ t ∈ Set.Ioo (0 : ℝ) (1 / 2),
+      omega (apm_t96A08_concat gamma delta t)
+          ((mfderiv 𝓘(ℝ, ℝ) I (apm_t96A08_concat gamma delta) t) 1) =
+        2 * omega (gamma (2 * t)) ((mfderiv 𝓘(ℝ, ℝ) I gamma (2 * t)) 1))
+    (hright : ∀ t ∈ Set.Ioo (1 / 2 : ℝ) 1,
+      omega (apm_t96A08_concat gamma delta t)
+          ((mfderiv 𝓘(ℝ, ℝ) I (apm_t96A08_concat gamma delta) t) 1) =
+        2 * omega (delta (2 * t - 1)) ((mfderiv 𝓘(ℝ, ℝ) I delta (2 * t - 1)) 1)) :
+    apm_t96a08_LineIntegral I omega (apm_t96A08_concat gamma delta) =
+      apm_t96a08_LineIntegral I omega gamma +
+        apm_t96a08_LineIntegral I omega delta := by
+  sorry
+
+/-- The line integral is additive under concatenation (assembly). -/
 theorem apm_t96A08_concat_lineIntegral
     {E M : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
     [CompleteSpace E] [TopologicalSpace M]
@@ -232,8 +320,12 @@ theorem apm_t96A08_concat_lineIntegral
     (hend : gamma 1 = delta 0) :
     apm_t96a08_LineIntegral I omega (apm_t96A08_concat gamma delta) =
       apm_t96a08_LineIntegral I omega gamma +
-        apm_t96a08_LineIntegral I omega delta := by
-  sorry
+        apm_t96a08_LineIntegral I omega delta :=
+  apm_t96A08_concat_lineIntegral_of_pieces I omega gamma delta
+    (apm_t96A08_lineIntegrand_intervalIntegrable I omega homega_smooth gamma hgamma)
+    (apm_t96A08_lineIntegrand_intervalIntegrable I omega homega_smooth delta hdelta)
+    (fun t ht => apm_t96A08_concat_integrand_left I omega gamma delta t ht)
+    (fun t ht => apm_t96A08_concat_integrand_right I omega gamma delta t ht)
 
 /-- Closed-piecewise-smooth paths can be concatenated, and the integral is
 additive under the standard affine reparameterizations. -/
@@ -289,7 +381,17 @@ lemma apm_t96A08_chart_radial_primitive_chart_neighborhood
       Convex ℝ W ∧ (extChartAt I x x) ∈ W ∧
       W ∩ Set.range (I : E → E) ⊆ (extChartAt I x).target ∧
       U = (extChartAt I x).source ∩ (extChartAt I x) ⁻¹' W := by
-  sorry
+  obtain ⟨r, hr, hrsub⟩ := Metric.mem_nhdsWithin_iff.mp
+    (extChartAt_target_mem_nhdsWithin (I := I) x)
+  let W : Set E := Metric.ball (extChartAt I x x) r
+  let U : Set M :=
+    (extChartAt I x).source ∩ (extChartAt I x) ⁻¹' W
+  refine ⟨U, W, ?_, ?_, Metric.isOpen_ball, convex_ball _ _, ?_, ?_, rfl⟩
+  · exact (continuousOn_extChartAt (I := I) x).isOpen_inter_preimage
+      (isOpen_extChartAt_source (I := I) x) Metric.isOpen_ball
+  · exact ⟨mem_extChartAt_source (I := I) x, Metric.mem_ball_self hr⟩
+  · exact Metric.mem_ball_self hr
+  · exact hrsub
 
 /-- Relative convexity in the chart produces the clamped radial paths.  This
 seat only does chart and endpoint bookkeeping. -/
@@ -307,7 +409,79 @@ lemma apm_t96A08_chart_radial_primitive_radial_paths
       ∀ t ∈ Set.Icc (0 : ℝ) 1,
         extChartAt I x (delta t) = extChartAt I x x +
           t • (extChartAt I x z - extChartAt I x x) := by
-  sorry
+  intro z hzU
+  have hxsource : x ∈ (extChartAt I x).source := by simp
+  have hzsource : z ∈ (extChartAt I x).source := by
+    rw [hU] at hzU
+    exact hzU.1
+  have hzW : extChartAt I x z ∈ W := by
+    rw [hU] at hzU
+    exact hzU.2
+  have hxr : extChartAt I x x ∈ Set.range (I : E → E) :=
+    (extChartAt_target_subset_range x) (PartialEquiv.map_source _ hxsource)
+  have hzr : extChartAt I x z ∈ Set.range (I : E → E) :=
+    (extChartAt_target_subset_range x) (PartialEquiv.map_source _ hzsource)
+  let eta : ℝ → E := fun t ↦
+    extChartAt I x x + t • (extChartAt I x z - extChartAt I x x)
+  have heta_mem : ∀ t ∈ Set.Icc (0 : ℝ) 1,
+      eta t ∈ W ∩ Set.range (I : E → E) := by
+    intro t ht
+    constructor
+    · exact hWconv.add_smul_sub_mem hxW hzW ht
+    · exact I.convex_range.add_smul_sub_mem hxr hzr ht
+  have heta_target : ∀ t ∈ Set.Icc (0 : ℝ) 1,
+      eta t ∈ (extChartAt I x).target := fun t ht ↦ hWtarget (heta_mem t ht)
+  let q : ℝ → E := fun t ↦ eta (Set.projIcc 0 1 zero_le_one t)
+  have hq_target : ∀ t, q t ∈ (extChartAt I x).target := by
+    intro t
+    exact heta_target _ (Set.projIcc 0 1 zero_le_one t).property
+  let delta : ℝ → M := fun t ↦ (extChartAt I x).symm (q t)
+  have heta_cont : Continuous eta := by
+    fun_prop
+  have hq_cont : Continuous q :=
+    heta_cont.comp (continuous_subtype_val.comp continuous_projIcc)
+  have hdelta_cont : Continuous delta := by
+    exact (contMDiffOn_extChartAt_symm (I := I) (n := (⊤ : WithTop ℕ∞)) x).continuousOn.comp_continuous
+      hq_cont hq_target
+  have heta_smooth : ContMDiff (modelWithCornersSelf ℝ ℝ)
+      (modelWithCornersSelf ℝ E) (⊤ : WithTop ℕ∞) eta := by
+    rw [contMDiff_iff_contDiff]
+    fun_prop
+  have hdelta_smooth : ContMDiffOn (modelWithCornersSelf ℝ ℝ) I
+      (⊤ : WithTop ℕ∞) delta
+      (Set.Icc (0 : ℝ) 1) := by
+    have hg := (contMDiffOn_extChartAt_symm (I := I) (n := (⊤ : WithTop ℕ∞)) x).comp
+      heta_smooth.contMDiffOn (fun t ht ↦ heta_target t ht)
+    apply hg.congr
+    intro t ht
+    simp [delta, q, Set.projIcc_of_mem zero_le_one ht]
+  refine ⟨delta, ⟨hdelta_cont, 1, fun i ↦ (i.val : ℝ), ?_, ?_, ?_, ?_⟩,
+    ?_, ?_, ?_, ?_⟩
+  · intro i j hij
+    exact Nat.cast_lt.mpr hij
+  · norm_num
+  · norm_num
+  · intro i
+    simpa using hdelta_smooth
+  · have hp : (Set.projIcc 0 1 zero_le_one (0 : ℝ) : ℝ) = 0 :=
+      congrArg Subtype.val (Set.projIcc_of_mem zero_le_one ⟨le_rfl, zero_le_one⟩)
+    simpa only [delta, q, hp, eta, zero_smul, add_zero] using
+      (extChartAt I x).left_inv hxsource
+  · have hp : (Set.projIcc 0 1 zero_le_one (1 : ℝ) : ℝ) = 1 :=
+      congrArg Subtype.val (Set.projIcc_of_mem zero_le_one ⟨zero_le_one, le_rfl⟩)
+    have he : eta 1 = extChartAt I x z := by
+      simp only [eta, one_smul]
+      abel
+    simpa only [delta, q, hp, he] using
+      (extChartAt I x).left_inv hzsource
+  · intro t ht
+    have := hq_target t
+    simpa [delta] using PartialEquiv.map_target (extChartAt I x) this
+  · intro t ht
+    have hp : (Set.projIcc 0 1 zero_le_one t : ℝ) = t :=
+      congrArg Subtype.val (Set.projIcc_of_mem zero_le_one ht)
+    simpa only [delta, q, hp, eta] using
+      (extChartAt I x).right_inv (heta_target t ht)
 
 /-- Pulling the one-form and the radial path into the extended chart gives
 the ordinary coordinate interval integral. -/
@@ -324,6 +498,9 @@ lemma apm_t96A08_chart_radial_primitive_coordinate_formula
     ∃ omegaCoord : E → (E →L[ℝ] ℝ),
       ContDiffOn ℝ (⊤ : WithTop ℕ∞) omegaCoord
         (W ∩ Set.range (I : E → E)) ∧
+      omegaCoord (extChartAt I x x) = (omega x).comp
+        (mfderivWithin 𝓘(ℝ, E) I (extChartAt I x).symm (Set.range I)
+          (extChartAt I x x)) ∧
       ∀ (z : M) (delta : ℝ → M),
         (∀ t ∈ Set.Icc (0 : ℝ) 1, delta t ∈ (extChartAt I x).source) →
         ContMDiffOn 𝓘(ℝ, ℝ) I (⊤ : WithTop ℕ∞) delta (Set.Icc (0 : ℝ) 1) →
@@ -336,8 +513,10 @@ lemma apm_t96A08_chart_radial_primitive_coordinate_formula
             (extChartAt I x z - extChartAt I x x) := by
   sorry
 
-/-- The parameter-integral calculation in a normed vector space.  Smoothness
-is requested on an ambient convex set, so this lemma has no corners issue. -/
+/-- The parameter-integral calculation in a normed vector space: only the
+derivative AT THE CENTRE is needed (claude-14 restructure: smoothness of the
+potential now comes from `apm_t96A08_contMDiff_of_hasMFDerivAt`).
+`G v = omegaCoord a (v - a) + o(‖v - a‖)` by continuity of `omegaCoord` at `a`. -/
 -- BEGIN SEAT AREA
 lemma apm_t96A08_chart_radial_primitive_euclidean_calculus
     {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E] [CompleteSpace E]
@@ -347,8 +526,7 @@ lemma apm_t96A08_chart_radial_primitive_euclidean_calculus
       (W ∩ Set.range (I : E → E))) :
     let G : E → ℝ := fun v ↦ ∫ t : ℝ in (0 : ℝ)..1,
       omegaCoord (a + t • (v - a)) (v - a)
-    ContDiffOn ℝ (⊤ : WithTop ℕ∞) G (W ∩ Set.range (I : E → E)) ∧
-      fderivWithin ℝ G (W ∩ Set.range (I : E → E)) a = omegaCoord a := by
+    HasFDerivWithinAt G (omegaCoord a) (W ∩ Set.range (I : E → E)) a := by
   sorry
 -- END SEAT AREA
 
@@ -381,6 +559,9 @@ lemma apm_t96A08_chart_radial_primitive_transfer
       ∃ omegaCoord : E → (E →L[ℝ] ℝ),
         ContDiffOn ℝ (⊤ : WithTop ℕ∞) omegaCoord
           (W ∩ Set.range (I : E → E)) ∧
+        omegaCoord (extChartAt I x x) = (omega x).comp
+          (mfderivWithin 𝓘(ℝ, E) I (extChartAt I x).symm (Set.range I)
+            (extChartAt I x x)) ∧
         ∀ (z : M) (delta : ℝ → M),
           (∀ t ∈ Set.Icc (0 : ℝ) 1, delta t ∈ (extChartAt I x).source) →
           ContMDiffOn 𝓘(ℝ, ℝ) I (⊤ : WithTop ℕ∞) delta (Set.Icc (0 : ℝ) 1) →
@@ -396,8 +577,7 @@ lemma apm_t96A08_chart_radial_primitive_transfer
         (W ∩ Set.range (I : E → E)) →
       let G : E → ℝ := fun v ↦ ∫ t : ℝ in (0 : ℝ)..1,
         omegaCoord (a + t • (v - a)) (v - a)
-      ContDiffOn ℝ (⊤ : WithTop ℕ∞) G (W ∩ Set.range (I : E → E)) ∧
-      fderivWithin ℝ G (W ∩ Set.range (I : E → E)) a = omegaCoord a) :
+      HasFDerivWithinAt G (omegaCoord a) (W ∩ Set.range (I : E → E)) a) :
     apm_t96A08_HasLocalRadialPrimitives I omega := by
   sorry
 
@@ -416,8 +596,28 @@ theorem apm_t96A08_chart_radial_primitive
   · exact apm_t96A08_chart_radial_primitive_coordinate_formula I omega homega_smooth
   · exact apm_t96A08_chart_radial_primitive_euclidean_calculus I
 
-/-- Abstract local-to-global step: additive concatenation and local radial
-primitives identify the path-defined potential locally with a smooth one. -/
+/-- Seat (claude-14 restructure): a function whose manifold derivative exists
+everywhere and equals a smooth one-form is smooth.  In the chart at `p`,
+`f ∘ φ.symm` has within-derivative `omegaCoord` on `φ.target ∩ range I`
+(open ∩ convex, so unique differentiability), and `omegaCoord` is smooth there,
+so `contDiffOn_succ_iff_fderivWithin` bootstraps to `C^∞`. -/
+theorem apm_t96A08_contMDiff_of_hasMFDerivAt
+    {E M : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [CompleteSpace E] [TopologicalSpace M]
+    (I : ModelWithCorners ℝ E E) [ChartedSpace E M]
+    [IsManifold I (⊤ : WithTop ℕ∞) M]
+    (omega : ∀ p : M, TangentSpace I p →L[ℝ] ℝ)
+    (homega_smooth : ContMDiff I.tangent 𝓘(ℝ, ℝ) (⊤ : WithTop ℕ∞)
+      (fun v : TangentBundle I M => omega v.1 v.2))
+    (f : M → ℝ) (hf : ∀ p : M, HasMFDerivAt I 𝓘(ℝ, ℝ) f p (omega p)) :
+    ContMDiff I 𝓘(ℝ, ℝ) (⊤ : WithTop ℕ∞) f := by
+  sorry
+
+/-- Seat (claude-14 restructure of the former proved glue): additive
+concatenation and local primitives with the right derivative at their centre
+give `HasMFDerivAt f x (omega x)` at every `x` (`f = g + (f x - g x)` near `x`,
+as in the previous proof, then `HasMFDerivAt.congr_of_eventuallyEq`);
+smoothness comes from `hboot`. -/
 theorem apm_t96A08_potential_of_local_primitives
     {E M : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
     [CompleteSpace E] [TopologicalSpace M]
@@ -426,6 +626,8 @@ theorem apm_t96A08_potential_of_local_primitives
     (omega : ∀ p : M, TangentSpace I p →L[ℝ] ℝ) (base : M)
     (hconcat : apm_t96A08_HasAdditiveConcatenation I omega)
     (hlocal : apm_t96A08_HasLocalRadialPrimitives I omega)
+    (hboot : ∀ f : M → ℝ, (∀ p : M, HasMFDerivAt I 𝓘(ℝ, ℝ) f p (omega p)) →
+      ContMDiff I 𝓘(ℝ, ℝ) (⊤ : WithTop ℕ∞) f)
     (hreachable : ∀ p : M, ∃ gamma : ℝ → M,
       apm_t96a08_IsPiecewiseSmoothPath I gamma ∧
         gamma 0 = base ∧ gamma 1 = p)
@@ -436,11 +638,9 @@ theorem apm_t96A08_potential_of_local_primitives
       f p = apm_t96a08_LineIntegral I omega gamma) :
     ContMDiff I 𝓘(ℝ, ℝ) (⊤ : WithTop ℕ∞) f ∧
       ∀ p : M, mfderiv I 𝓘(ℝ, ℝ) f p = omega p := by
-  have h_at : ∀ x : M,
-      ContMDiffAt I 𝓘(ℝ, ℝ) (⊤ : WithTop ℕ∞) f x ∧
-        mfderiv I 𝓘(ℝ, ℝ) f x = omega x := by
+  have h_at : ∀ x : M, HasMFDerivAt I 𝓘(ℝ, ℝ) f x (omega x) := by
     intro x
-    rcases hlocal x with ⟨U, hU, hxU, g, hg, hgd, hradial⟩
+    rcases hlocal x with ⟨U, hU, hxU, g, hgd, hradial⟩
     rcases hreachable x with ⟨gamma, hgamma, hgamma0, hgamma1⟩
     have heq : ∀ z ∈ U, f z = g z + (f x - g x) := by
       intro z hz
@@ -450,23 +650,16 @@ theorem apm_t96A08_potential_of_local_primitives
       have hfz := hf z eta heta (heta0.trans hgamma0) (heta1.trans hdelta1)
       have hfx := hf x gamma hgamma hgamma0 hgamma1
       linarith
-    have hg_at : ContMDiffAt I 𝓘(ℝ, ℝ) (⊤ : WithTop ℕ∞) g x :=
-      hg.contMDiffAt (hU.mem_nhds hxU)
-    have hq_at : ContMDiffAt I 𝓘(ℝ, ℝ) (⊤ : WithTop ℕ∞)
-        (fun y ↦ g y + (f x - g x)) x :=
-      hg_at.add contMDiffAt_const
     have hfg : Filter.EventuallyEq (nhds x) f (fun y ↦ g y + (f x - g x)) :=
       Filter.mem_of_superset (hU.mem_nhds hxU) (fun z hz ↦ heq z hz)
-    refine ⟨hq_at.congr_of_eventuallyEq hfg, ?_⟩
-    rw [hfg.mfderiv_eq]
-    change mfderiv I 𝓘(ℝ, ℝ) (g + fun _ ↦ f x - g x) x = omega x
-    rw [mfderiv_add (hg_at.mdifferentiableAt (by simp)) mdifferentiableAt_const,
-      mfderiv_const]
-    rw [hgd]
-    ext v
-    change omega x v + 0 = omega x v
-    exact add_zero _
-  exact ⟨fun x ↦ (h_at x).1, fun x ↦ (h_at x).2⟩
+    have hq : HasMFDerivAt I 𝓘(ℝ, ℝ) (fun y ↦ g y + (f x - g x)) x (omega x) := by
+      have h2 := hgd.add (hasMFDerivAt_const (I := I) (I' := 𝓘(ℝ, ℝ)) (f x - g x) x)
+      convert h2 using 1
+      ext v
+      change omega x v = omega x v + 0
+      exact (add_zero _).symm
+    exact hq.congr_of_eventuallyEq hfg
+  exact ⟨hboot f h_at, fun x ↦ (h_at x).mfderiv⟩
 
 /-- The fundamental theorem assembled from the three independent library
 boundaries above. -/
@@ -491,6 +684,7 @@ theorem apm_t96A08_piecewise_lineIntegral_fundamental
   apply apm_t96A08_potential_of_local_primitives I omega base
   · exact apm_t96A08_piecewisePath_concat_additive I omega homega_smooth
   · exact apm_t96A08_chart_radial_primitive I omega homega_smooth
+  · exact apm_t96A08_contMDiff_of_hasMFDerivAt I omega homega_smooth
   · exact hreachable
   · exact hf
 
