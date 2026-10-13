@@ -23804,38 +23804,37 @@
     :seat "topo-12",
     :commands
     [{:cmd
+      "git cat-file -e f032efae9b89fb527a72ea9192f3c89f09f82615^{commit}",
+      :exit 0}
+     {:cmd
       "bb holes/labs/topology-contract/build_step.bb priorities holes/labs/topology-contract/worklist3.edn",
       :exit 0}],
     :finding
-    "Δ0; tail banked→leading swap; 4 packets; STOP/PASS; A08 1/4; rule0 continue; rank smooth_compact_surface_classification.",
+    {:measures
+     "placeholder Δ0; typed residual unchanged; 1 metadata packet; cp13 review FAIL",
+     :routes
+     "A08:1 placeholder, ledger 10/4; symmetry tail receipt unpassed, so no successor may bank/elect",
+     :top
+     "smooth_compact_surface_classification; deferred pending receipt repair"},
     :replacement-items
-    [{:bounded-exception "Rule0.",
+    [{:bounded-exception "Receipt repair only; no mathematics.",
       :consumer :t01A08,
-      :implements-lemma
-      :lemma-contdiffwithinat-domdomcongr-iteratedfderivwithin-of-infty,
       :phase :implementation,
       :state :open,
-      :scope ["ConstructionTargets/SardConvexDomain.lean"],
+      :scope [],
       :dag-node "SardConvexDomain/B1/symmetry",
       :acceptance
-      {:declaration
-       "ContDiffWithinAt.domDomCongr_iteratedFDerivWithin_of_infty",
-       :type
-       "C∞+UniqueDiffOn+x∈s+x∈closure(interior s) imply permutation invariance",
-       :fixture "/tmp/t01a08_smooth_symmetry_membership_probe.lean",
-       :fixture-sha256
-       "3d255ecbda1647c2051942450c83a9182a2f567af36e1334951c2b86dc094bf9",
-       :mode :post-build-export-check,
+      {:repair-target :r-a08-symmetry-slots-1,
+       :commit "f032efae9b89fb527a72ea9192f3c89f09f82615",
+       :review "independent PASS required",
        :placeholder "t01A08 sorry",
-       :route-step "leading swap; combine tail lift"},
-      :continue-from "f032efae9b89fb527a72ea9192f3c89f09f82615",
-      :id :r-a08-symmetry-leading-1,
-      :kind :reusable-theorem,
+       :route-step
+       "correct predecessor receipt SHA; do not bank or schedule leading swap"},
+      :id :r-a08-symmetry-slots-receipt-repair-1,
+      :kind :documentation,
       :area "sard-convex-domain",
-      :depends-on
-      [:r-topo3-cp13
-       :lemma-iteratedfderivwithin-domdomcongr-decomposefin-symm-zero],
-      :current-residual "Then B1.",
+      :depends-on [:r-topo3-cp13],
+      :current-residual "Independent review before leading swap.",
       :other-consumers []}
      {:consumer :portfolio,
       :checkpoint
@@ -23850,23 +23849,18 @@
       :state :open,
       :scope [],
       :dag-node "TOPOLOGY-ROUTES.md",
-      :acceptance {:strategy "Review symmetry; rerank."},
-      :id :r-topo3-cp14,
+      :acceptance
+      {:strategy "Review corrected predecessor receipt; rerank."},
+      :id :r-topo3-cp13c,
       :kind :strategy-checkpoint,
       :area "portfolio",
-      :depends-on [:r-a08-symmetry-leading-1],
-      :current-residual "Return to B1.",
+      :depends-on [:r-a08-symmetry-slots-receipt-repair-1],
+      :current-residual "Elect no leading swap before PASS.",
       :other-consumers []}],
     :author "topo-12",
-    :disposition :replan,
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1791879266611-9082-bd46cee6",
-     :finding
-     "Checkpoint advances from r-a08-symmetry-slots-1 and records STOP/PASS even though that dependency currently has fail-count 1 and no passing review: its recorded commit SHA is invalid. Repair the predecessor SHA to f032efae9b89fb527a72ea9192f3c89f09f82615, obtain independent PASS, then rerun priorities and regenerate cp13; do not bank or schedule the leading-swap row from a failed dependency."}},
+    :disposition :replan},
    :phase :strategy,
-   :state :repair,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance {:strategy "Review symmetry; rerank."},
@@ -23875,6 +23869,46 @@
    :area "portfolio",
    :depends-on [:r-a08-symmetry-slots-1 :r-topo3-cp12],
    :current-residual "Return to B1.",
+   :other-consumers []}
+  {:bounded-exception "Receipt repair only; no mathematics.",
+   :consumer :t01A08,
+   :phase :implementation,
+   :state :blocked,
+   :scope [],
+   :dag-node "SardConvexDomain/B1/symmetry",
+   :acceptance
+   {:repair-target :r-a08-symmetry-slots-1,
+    :commit "f032efae9b89fb527a72ea9192f3c89f09f82615",
+    :review "independent PASS required",
+    :placeholder "t01A08 sorry",
+    :route-step
+    "correct predecessor receipt SHA; do not bank or schedule leading swap"},
+   :id :r-a08-symmetry-slots-receipt-repair-1,
+   :kind :documentation,
+   :area "sard-convex-domain",
+   :depends-on [:r-topo3-cp13],
+   :current-residual "Independent review before leading swap.",
+   :other-consumers []}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 1,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md",
+   :acceptance
+   {:strategy "Review corrected predecessor receipt; rerank."},
+   :id :r-topo3-cp13c,
+   :kind :strategy-checkpoint,
+   :area "portfolio",
+   :depends-on [:r-a08-symmetry-slots-receipt-repair-1 :r-topo3-cp13],
+   :current-residual "Elect no leading swap before PASS.",
    :other-consumers []}
   {:bounded-exception "Rule0.",
    :consumer :t01A08,
