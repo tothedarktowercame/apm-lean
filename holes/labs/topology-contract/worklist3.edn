@@ -23717,7 +23717,7 @@
    :consumer :t01A08,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 0,
    :review-finding
    "Recorded commit is invalid: f032efae9d1501f7ddfe93c66668f88f24ed37f4 is absent locally and origin rejects it as not our ref. The intended scoped commit appears to be f032efae9b89fb527a72ea9192f3c89f09f82615. Repair the row to record the exact existing full SHA, then rerun independent review.",
    :implements-lemma
@@ -23764,6 +23764,17 @@
     [{:cmd "closure-inter draft",
       :exit 1,
       :correction "used nhdsWithin membership theorem; compiled"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791881952121-9214-6ba6c845",
+     :commands
+     ["git show/diff 033eb5b8; scope and recorded-tree checks"
+      "lake build ConstructionTargets.SardConvexDomain"
+      "lake env lean fixture and /tmp/CheckSardLocalClosure.lean"
+      "sha256sum fixture; statement-registry check; placeholder recount"],
+     :finding
+     "PASS: valid STOP after real progress. One-file commit proves both localization tools correctly: T2 uniqueness extends EqOn from any smaller set whose closure contains x, and intersecting that set with a neighborhood preserves closure membership. Hypothesis directions and nhdsWithin representation are correct. Build/export pass; fixture hash matches; standard axioms only; registry 147/147; sorry/admit 0->0. Applying them in the smooth-neighborhood induction remains listed."},
     :commit "033eb5b87896f0eafa050c5a9e329aba11d92bbf",
     :changed-paths ["ConstructionTargets/SardConvexDomain.lean"],
     :fixture
@@ -23773,7 +23784,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain/B1/symmetry",
    :acceptance
@@ -33939,7 +33950,7 @@
    :other-consumers []}
   {:consumer :t01A08,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "ContinuousWithinAt.eq_of_eqOn_of_mem_closure",
@@ -33949,14 +33960,16 @@
     :reported-by [:r-a08-symmetry-slots-1],
     :type "equality extends from smaller-set closure",
     :area "sard-convex-domain",
-    :proved-in :r-a08-symmetry-slots-1},
+    :proved-in :r-a08-symmetry-slots-1,
+    :banked-by :r-a08-symmetry-slots-1,
+    :banked-commit "033eb5b87896f0eafa050c5a9e329aba11d92bbf"},
    :id :lemma-continuouswithinat-eq-of-eqon-of-mem-closure,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}
   {:consumer :t01A08,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "mem_closure_inter_of_mem_nhds",
@@ -33966,7 +33979,9 @@
     :reported-by [:r-a08-symmetry-slots-1],
     :type "closure survives neighborhood intersection",
     :area "sard-convex-domain",
-    :proved-in :r-a08-symmetry-slots-1},
+    :proved-in :r-a08-symmetry-slots-1,
+    :banked-by :r-a08-symmetry-slots-1,
+    :banked-commit "033eb5b87896f0eafa050c5a9e329aba11d92bbf"},
    :id :lemma-mem-closure-inter-of-mem-nhds,
    :kind :lemma,
    :depends-on [],
