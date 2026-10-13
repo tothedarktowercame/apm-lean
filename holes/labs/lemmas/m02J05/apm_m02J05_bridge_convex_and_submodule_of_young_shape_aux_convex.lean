@@ -261,7 +261,37 @@ lemma apm_m02J05_bridge_convex_and_submodule_of_young_shape_aux_convex
     (hnonneg : ∀ t, 0 ≤ t → 0 ≤ α t)
     (hshape : apm_m02J05_YoungShapeFact α) :
     Convex ℝ (apm_m02J05_K α) := by
-  sorry
+  intro u hu v hv a b ha hb hab
+  have hY :=
+    apm_m02J05_bridge_convex_and_submodule_of_young_shape_aux_add_aux_continuous α hc
+  have hYnn : ∀ t, 0 ≤ apm_m02J05_young α |t| := fun t =>
+    intervalIntegral.integral_nonneg (abs_nonneg t) (fun x hx => hnonneg x hx.1)
+  unfold apm_m02J05_K at hu hv ⊢
+  simp only [Set.mem_setOf_eq] at hu hv ⊢
+  have hdom : Integrable (fun x =>
+      a * apm_m02J05_young α |u x| + b * apm_m02J05_young α |v x|)
+      (volume.restrict (Icc (0 : ℝ) 1)) :=
+    (hu.const_mul a).add (hv.const_mul b)
+  refine hdom.mono'
+    (hY.comp_aestronglyMeasurable (a • u + b • v).aestronglyMeasurable) ?_
+  filter_upwards [AEEqFun.coeFn_add (a • u) (b • v),
+    AEEqFun.coeFn_smul a u, AEEqFun.coeFn_smul b v] with x hadd hau hbv
+  simp only [Function.comp_apply, Real.norm_eq_abs]
+  rw [abs_of_nonneg (hYnn _), hadd, Pi.add_apply, hau, hbv, Pi.smul_apply,
+    Pi.smul_apply, smul_eq_mul, smul_eq_mul]
+  have habs : |a * u x + b * v x| ≤ a * |u x| + b * |v x| := by
+    calc
+      |a * u x + b * v x| ≤ |a * u x| + |b * v x| := abs_add_le _ _
+      _ = a * |u x| + b * |v x| := by
+        simp [abs_mul, abs_of_nonneg ha, abs_of_nonneg hb]
+  calc
+    apm_m02J05_young α |a * u x + b * v x| ≤
+        apm_m02J05_young α (a * |u x| + b * |v x|) :=
+      hshape.2 (mem_Ici.mpr (abs_nonneg _))
+        (mem_Ici.mpr <| add_nonneg (mul_nonneg ha (abs_nonneg _))
+          (mul_nonneg hb (abs_nonneg _))) habs
+    _ ≤ a * apm_m02J05_young α |u x| + b * apm_m02J05_young α |v x| :=
+      hshape.1.2 (mem_Ici.mpr (abs_nonneg _)) (mem_Ici.mpr (abs_nonneg _)) ha hb hab
 -- END SEAT AREA
 
 theorem apm_m02J05_bridge_convex_and_submodule_of_young_shape
