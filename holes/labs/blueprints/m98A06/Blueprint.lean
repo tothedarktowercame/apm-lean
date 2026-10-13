@@ -2881,6 +2881,92 @@ lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_forward_aux
   field_simp [ne_of_gt hden] at ht
   nlinarith [sq_nonneg B]
 
+lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_forward_aux_rigidity_aux_pointwise_aux_EL_aux_variation_aux_endpoints
+    (φ : ℝ → ℝ) (hφs : Function.support φ ⊆ Ioo (0 : ℝ) Real.pi) :
+    φ 0 = 0 ∧ φ Real.pi = 0 := by
+  constructor
+  · by_contra hn
+    have hm : (0 : ℝ) ∈ Function.support φ := hn
+    exact (lt_irrefl (0 : ℝ)) (hφs hm).1
+  · by_contra hn
+    have hm : Real.pi ∈ Function.support φ := hn
+    exact (lt_irrefl Real.pi) (hφs hm).2
+
+lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_forward_aux_rigidity_aux_pointwise_aux_EL_aux_variation_aux_memLp
+    (y dy φ : ℝ → ℝ)
+    (h : apm_m98a06_InH10Pi y dy)
+    (hφ : ContDiff ℝ ∞ φ) (hφc : HasCompactSupport φ) (t : ℝ) :
+    MemLp (fun x => y x + t * φ x) 2 (volume.restrict (Ioo 0 Real.pi)) ∧
+      MemLp (fun x => dy x + t * deriv φ x) 2
+        (volume.restrict (Ioo 0 Real.pi)) := by
+  have hp : MemLp φ 2 (volume.restrict (Ioo 0 Real.pi)) :=
+    hφ.continuous.memLp_of_hasCompactSupport hφc
+  have hdp : MemLp (deriv φ) 2 (volume.restrict (Ioo 0 Real.pi)) :=
+    (hφ.continuous_deriv (by simp)).memLp_of_hasCompactSupport hφc.deriv
+  constructor
+  · simpa [Pi.smul_apply] using h.2.2.2.1.add (hp.const_smul t)
+  · simpa [Pi.smul_apply] using h.2.2.2.2.1.add (hdp.const_smul t)
+
+lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_forward_aux_rigidity_aux_pointwise_aux_EL_aux_variation_aux_weak
+    (y dy φ : ℝ → ℝ)
+    (h : apm_m98a06_InH10Pi y dy)
+    (hφ : ContDiff ℝ ∞ φ) (hφc : HasCompactSupport φ)
+    (hφs : Function.support φ ⊆ Ioo (0 : ℝ) Real.pi) (t : ℝ) :
+    apm_m98a06_IsWeakDerivativeOn (Ioo 0 Real.pi)
+      (fun x => y x + t * φ x) (fun x => dy x + t * deriv φ x) := by
+  intro ψ hψ hψc hψs
+  have hyw := h.2.2.2.2.2 ψ hψ hψc hψs
+  have hφd : ∀ x, HasDerivAt φ (deriv φ x) x := fun x =>
+    ((hφ.differentiable (by simp)) x).hasDerivAt
+  have hψd : ∀ x, HasDerivAt ψ (deriv ψ x) x := fun x =>
+    ((hψ.differentiable (by simp)) x).hasDerivAt
+  have hφ'c : Continuous (deriv φ) := hφ.continuous_deriv (by simp)
+  have hψ'c : Continuous (deriv ψ) := hψ.continuous_deriv (by simp)
+  have hint1 : Integrable (fun x => φ x * deriv ψ x) :=
+    (hφ.continuous.mul hψ'c).integrable_of_hasCompactSupport hφc.mul_right
+  have hint2 : Integrable (fun x => deriv φ x * ψ x) :=
+    (hφ'c.mul hψ.continuous).integrable_of_hasCompactSupport hψc.mul_left
+  have hint3 : Integrable (fun x => φ x * ψ x) :=
+    (hφ.continuous.mul hψ.continuous).integrable_of_hasCompactSupport hφc.mul_right
+  have hibp : ∫ x, φ x * deriv ψ x = -∫ x, deriv φ x * ψ x :=
+    integral_mul_deriv_eq_deriv_mul_of_integrable (fun x _ => hφd x) (fun x _ => hψd x)
+      hint1 hint2 hint3
+  have hr1 : ∫ x, φ x * deriv ψ x ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)) =
+      ∫ x, φ x * deriv ψ x :=
+    setIntegral_eq_integral_of_forall_compl_eq_zero (fun x hx => by
+      simp [Function.notMem_support.1 (fun h => hx (hφs h))])
+  have hr2 : ∫ x, deriv φ x * ψ x ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)) =
+      ∫ x, deriv φ x * ψ x :=
+    setIntegral_eq_integral_of_forall_compl_eq_zero (fun x hx => by
+      simp [Function.notMem_support.1 (fun h => hx (hψs h))])
+  have hyi : Integrable y (volume.restrict (Ioo (0 : ℝ) Real.pi)) :=
+    h.2.2.2.1.integrable (by norm_num)
+  have hdyi : Integrable dy (volume.restrict (Ioo (0 : ℝ) Real.pi)) :=
+    h.2.2.2.2.1.integrable (by norm_num)
+  have hbd : ∀ (g : ℝ → ℝ), Continuous g → HasCompactSupport g → ∃ C, ∀ x, ‖g x‖ ≤ C :=
+    fun g hg hgc => (hg.norm.bddAbove_range_of_hasCompactSupport hgc.norm).imp
+      fun C hC x => hC ⟨x, rfl⟩
+  obtain ⟨C1, hC1⟩ := hbd _ hψ'c hψc.deriv
+  obtain ⟨C2, hC2⟩ := hbd _ hψ.continuous hψc
+  have hA : Integrable (fun x => deriv ψ x * y x) (volume.restrict (Ioo (0 : ℝ) Real.pi)) :=
+    hyi.bdd_mul hψ'c.aestronglyMeasurable (Filter.Eventually.of_forall hC1)
+  have hB : Integrable (fun x => ψ x * dy x) (volume.restrict (Ioo (0 : ℝ) Real.pi)) :=
+    hdyi.bdd_mul hψ.continuous.aestronglyMeasurable (Filter.Eventually.of_forall hC2)
+  have e1 : (fun x => (y x + t * φ x) * deriv ψ x) =
+      fun x => deriv ψ x * y x + t * (φ x * deriv ψ x) := by funext x; ring
+  have e2 : (fun x => (dy x + t * deriv φ x) * ψ x) =
+      fun x => ψ x * dy x + t * (deriv φ x * ψ x) := by funext x; ring
+  rw [e1, e2, integral_add hA (hint1.integrableOn.const_mul t),
+    integral_add hB (hint2.integrableOn.const_mul t), integral_const_mul, integral_const_mul,
+    hr1, hr2, hibp]
+  have hyw' : ∫ x, deriv ψ x * y x ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)) =
+      -∫ x, ψ x * dy x ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)) := by
+    have e3 : (fun x => deriv ψ x * y x) = fun x => y x * deriv ψ x := by funext x; ring
+    have e4 : (fun x => ψ x * dy x) = fun x => dy x * ψ x := by funext x; ring
+    rw [e3, e4]; exact hyw
+  rw [hyw']
+  ring
+
 lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_forward_aux_rigidity_aux_pointwise_aux_EL_aux_variation
     (y dy φ : ℝ → ℝ)
     (h : apm_m98a06_InH10Pi y dy)
@@ -2888,7 +2974,16 @@ lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_forward_aux
     (hφs : Function.support φ ⊆ Ioo (0 : ℝ) Real.pi) :
     ∀ t : ℝ, apm_m98a06_InH10Pi
       (fun x => y x + t * φ x) (fun x => dy x + t * deriv φ x) := by
-  sorry
+  intro t
+  rcases apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_forward_aux_rigidity_aux_pointwise_aux_EL_aux_variation_aux_endpoints
+      φ hφs with ⟨hφ0, hφpi⟩
+  rcases apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_forward_aux_rigidity_aux_pointwise_aux_EL_aux_variation_aux_memLp
+      y dy φ h hφ hφc t with ⟨hLp, hdLp⟩
+  refine ⟨h.1.add (hφ.continuous.const_mul t).continuousOn, ?_, ?_, hLp, hdLp, ?_⟩
+  · simp [h.2.1, hφ0]
+  · simp [h.2.2.1, hφpi]
+  · exact apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_forward_aux_rigidity_aux_pointwise_aux_EL_aux_variation_aux_weak
+      y dy φ h hφ hφc hφs t
 
 lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_forward_aux_rigidity_aux_pointwise_aux_EL_aux_integral
     (hWirtinger : apm_m98A06_WirtingerFact)
