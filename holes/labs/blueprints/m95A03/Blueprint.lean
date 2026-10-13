@@ -548,6 +548,31 @@ lemma apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_syst
 /-- A solution of the system on `[a, b]` is the restriction of a global `C²` function `Y`
 with `p Y' = z` there (`y` is `C²` on `[a, b]`; extend past the endpoints by second-order
 Taylor polynomials). -/
+lemma apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_extend_aux_continuous
+    (a b : ℝ) (p q g y z : ℝ → ℝ) (hp : Continuous p)
+    (hq : Continuous q) (hg : Continuous g)
+    (hpos : ∀ t ∈ Set.Icc a b, 0 < p t)
+    (hsys : ∀ t ∈ Set.Icc a b,
+      HasDerivWithinAt y (z t / p t) (Set.Icc a b) t ∧
+      HasDerivWithinAt z (q t * y t + g t) (Set.Icc a b) t) :
+    ContinuousOn y (Set.Icc a b) ∧ ContinuousOn z (Set.Icc a b) ∧
+      ContinuousOn (fun t => z t / p t) (Set.Icc a b) := by
+  have hy : ContinuousOn y (Set.Icc a b) := fun t ht => (hsys t ht).1.continuousWithinAt
+  have hz : ContinuousOn z (Set.Icc a b) := fun t ht => (hsys t ht).2.continuousWithinAt
+  refine ⟨hy, hz, hz.div hp.continuousOn ?_⟩
+  intro t ht
+  exact (hpos t ht).ne'
+
+lemma apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_extend_aux_core
+    (a b : ℝ) (hab : a < b) (p q g : ℝ → ℝ) (hp : ContDiff ℝ 1 p)
+    (hq : Continuous q) (hg : Continuous g) (hpos : ∀ t ∈ Set.Icc a b, 0 < p t)
+    (y z : ℝ → ℝ) (hsys : ∀ t ∈ Set.Icc a b,
+      HasDerivWithinAt y (z t / p t) (Set.Icc a b) t ∧
+      HasDerivWithinAt z (q t * y t + g t) (Set.Icc a b) t) :
+    ∃ Y : ℝ → ℝ, ContDiff ℝ 2 Y ∧
+      ∀ t ∈ Set.Icc a b, Y t = y t ∧ p t * deriv Y t = z t := by
+  sorry
+
 lemma apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_extend
     (a b : ℝ) (hab : a < b) (p q g : ℝ → ℝ) (hp : ContDiff ℝ 1 p)
     (hq : Continuous q) (hg : Continuous g) (hpos : ∀ t ∈ Set.Icc a b, 0 < p t)
@@ -555,7 +580,8 @@ lemma apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_exte
       HasDerivWithinAt y (z t / p t) (Set.Icc a b) t ∧
       HasDerivWithinAt z (q t * y t + g t) (Set.Icc a b) t) :
     ∃ Y : ℝ → ℝ, ContDiff ℝ 2 Y ∧ ∀ t ∈ Set.Icc a b, Y t = y t ∧ p t * deriv Y t = z t := by
-  sorry
+  exact apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_extend_aux_core
+    a b hab p q g hp hq hg hpos y z hsys
 
 /-- The equation on `[a, b]` for a global `C²` function whose flux `p Y'` agrees there with a
 solution `z` of `z' = q Y + g`. -/
