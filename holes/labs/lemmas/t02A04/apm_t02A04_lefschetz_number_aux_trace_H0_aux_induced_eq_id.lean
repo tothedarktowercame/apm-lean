@@ -91,7 +91,29 @@ lemma apm_t02A04_lefschetz_number_aux_trace_H0_aux_induced_eq_id
     (e : apm_t02A04_HQ 0 ≅ ModuleCat.of ℚ ℚ)
     (f : C(apm_t02a04_X, apm_t02a04_X)) :
     (induced f 0).hom = LinearMap.id := by
-  sorry
+  open CategoryTheory ConstructionTargets.CoefficientH0 in
+    letI : FiniteDimensional ℚ (apm_t02A04_HQ 0) :=
+      Module.Finite.equiv e.toLinearEquiv.symm
+    let ε : apm_t02A04_HQ 0 ⟶ ModuleCat.of ℚ ℚ := h0Augmentation ℚ
+    let p : apm_t02a04_X :=
+      apm_t02a04_diskInclusion ⟨0, by simp [apm_t02a04_Disk]⟩
+    have hsurj : Function.Surjective ε := by
+      intro a
+      refine ⟨singularVertexH0Class ℚ p a, ?_⟩
+      exact congrArg (fun g => g a)
+        (singularVertexH0Class_comp_h0Augmentation ℚ p)
+    have hdim : Module.finrank ℚ (apm_t02A04_HQ 0) =
+        Module.finrank ℚ (ModuleCat.of ℚ ℚ) := by
+      simpa using e.toLinearEquiv.finrank_eq
+    have hinj : Function.Injective ε :=
+      (LinearMap.injective_iff_surjective_of_finrank_eq_finrank hdim).2 hsurj
+    letI : CategoryTheory.Mono ε := (ModuleCat.mono_iff_injective ε).2 hinj
+    have hcat : (induced f 0) ≫ ε = (𝟙 _) ≫ ε := by
+      rw [CategoryTheory.Category.id_comp]
+      change HomologicalComplex.homologyMap (singularPostcomposition ℚ f) 0 ≫ ε = ε
+      exact h0Augmentation_naturality ℚ f
+    have h := (CategoryTheory.cancel_mono ε).1 hcat
+    exact congrArg (fun g => g.hom) h
 -- END SEAT AREA
 
 lemma apm_t02A04_lefschetz_number_aux_trace_H0
