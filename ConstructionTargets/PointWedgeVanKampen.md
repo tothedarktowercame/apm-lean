@@ -1174,3 +1174,9 @@ remains explicit as the left multiplication factor.
 applies the coordinate-span left functor to the left-equivalence counit
 naturality square.  Both ordered composites are now equal inside the
 free-product representation, with neither counit component assumed trivial.
+
+`genericPointWedgeSourceFunctor_leftLeg_eq_actualLifted` packages the B6 left
+leg at the literal actual-span boundary: the reconstructed source action is
+the lifted-cover action, and that action is the left coproduct injection.
+Thus the remaining left-coordinate obligation is confined to the explicit
+counit normalization, not another span or endpoint transport.

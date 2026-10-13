@@ -5768,6 +5768,29 @@ theorem genericPointWedgeSourceFunctor_leftLeg_eq_inl
   rw [genericPointWedgeSourceFunctor_map_eq_inverseIdentity,
     genericPointWedgeInverseIdentity_leftLeg_eq_inl]
 
+/-- The left-leg computation used by B6 factors through the literal lifted
+actual-span action.  This packages the predecessor calculation at the exact
+functor boundary: no counit normalization or endpoint identification is
+inserted between the reconstructed source action and the coproduct injection. -/
+theorem genericPointWedgeSourceFunctor_leftLeg_eq_actualLifted
+    (g : FundamentalGroup X x₀) :
+    (genericPointWedgeSourceEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN).functor.map
+        (genericPointWedgeLeftLegMap x₀ y₀ g) =
+      (genericPointWedgeIdentityActualSpan
+        x₀ y₀ M N hM hN hy hx cM cN).left.map
+          (genericPointWedgeLeftLiftedLoop x₀ y₀ M g) ∧
+    (genericPointWedgeIdentityActualSpan
+      x₀ y₀ M N hM hN hy hx cM cN).left.map
+        (genericPointWedgeLeftLiftedLoop x₀ y₀ M g) =
+      Monoid.Coprod.inl g := by
+  constructor
+  · rw [genericPointWedgeSourceFunctor_map_eq_inverseIdentity]
+    exact genericPointWedgeInverseIdentity_leftLeg_eq_actualLifted
+      x₀ y₀ M N hM hN hy hx cM cN g
+  · exact genericPointWedgeIdentityActualSpan_left_lifted
+      x₀ y₀ M N hM hN hy hx cM cN g
+
 /-- The reconstructed B4 source functor has exactly the right restriction
 conjugation on the literal right injection. -/
 theorem genericPointWedgeSourceFunctor_rightLeg_eq_conj_inr
@@ -6471,6 +6494,7 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeNormalizedFundamentalGroupEquiv
 #print axioms genericPointWedgeLeftLegMap
 #print axioms genericPointWedgeRightLegMap
+#print axioms genericPointWedgeSourceFunctor_leftLeg_eq_actualLifted
 #print axioms genericPointWedgeLegCoordinates_of_mapped
 #print axioms genericPointWedgeLegCoordinates_iff_mapped
 #print axioms genericPointWedgeLegCoordinates_iff_sourceFunctor
