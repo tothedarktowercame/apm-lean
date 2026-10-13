@@ -113895,6 +113895,17 @@
       "lake build ConstructionTargets.ThreeCirclesFundamentalGroup",
       :exit 1,
       :finding "B12 absent."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791913759219-10158-204bcecc",
+     :commands
+     ["git show/diff-tree dd1c02c5e"
+      "git archive dd1c02c5e; lake env lean archived PointWedgeVanKampen.lean"
+      "lake build ConstructionTargets.PointWedgeVanKampen"
+      "sha256sum; placeholder delta; statement-registry.py check"],
+     :finding
+     "Recorded scope is target+note; source/doc/fixture hashes match df354ade/574e0249/0bca6ce3. Archived and target builds pass; placeholders 0->0, registry 150/150, standard axioms only. The normalization is faithful: Subsingleton.elim identifies the Unit-groupoid object, then the prior inverse-app theorem yields the canonical right-base eqToHom with the required symmetric orientation. This is new compiled progress; final transport/unitInv equality, projection/B6/B12 remain."},
     :commit "dd1c02c5e65e2f61917b6da8818b85213ff217f9",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
@@ -113905,7 +113916,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113926,7 +113937,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Comparator reduced to transport times inverse mapped unitInv.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Inverse-span component normalized to canonical right-base eqToHom.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -114734,7 +114745,11 @@
     {:job 3,
      :commit "25eff1a3a094db98c8bdd6cf6c9a98ca9a30c480",
      :reason
-     "Comparator reduced to transport times inverse mapped unitInv."}]}
+     "Comparator reduced to transport times inverse mapped unitInv."}
+    {:job 4,
+     :commit "dd1c02c5e65e2f61917b6da8818b85213ff217f9",
+     :reason
+     "Inverse-span component normalized to canonical right-base eqToHom."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
