@@ -24430,7 +24430,7 @@
    :consumer :t01A08,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 0,
    :review-finding
    "extend Mathlib: state and prove the missing theorem in scope",
    :implements-lemma :lemma-closedset-whitneycubecover,
@@ -24470,6 +24470,17 @@
     [{:cmd "lake build ConstructionTargets.SardConvexDomain", :exit 0}
      {:cmd "fixture; registry; scans; scoped diff", :exit 0}
      {:cmd "git commit", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791913347815-10147-81294f6d",
+     :commands
+     ["git show/diff d36006f; scope/scale checks"
+      "sha256sum + lake env lean frozen fixture"
+      "lake build ConstructionTargets.SardConvexDomain"
+      "statement registry check; forbidden-count scan"],
+     :finding
+     "PASS. Recorded topo-10 commit d36006f changes only the scoped Lean file and correctly proves meeting half-infDist balls have dyadic indices within two. A three-step gap forces the larger center scale ≥8·2^l, while the smaller stratum plus both point/center comparisons force it <6·2^l; the reverse direction is symmetric. Fixture hash 65b79915... matches; build/fixture pass; registry 150/150; forbidden placeholders stay 0; only standard axioms. Valid compiled B3 progress; STOP leaves five-fiber half-ball incidence, ambient local finiteness, and assembly."},
     :commit "d36006f547a005798212d373282065f53761443e",
     :changed-paths ["ConstructionTargets/SardConvexDomain.lean"],
     :fixture
@@ -24479,7 +24490,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain.blueprint/B3",
    :acceptance
@@ -35889,7 +35900,7 @@
    :other-consumers []}
   {:consumer :t01A08,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -35901,7 +35912,9 @@
     :reported-by [:r-a08-sard-b3-whitney-cubes-1],
     :type "two incident half-infDist balls have k<=l+2 and l<=k+2",
     :area "sard-convex-domain",
-    :proved-in :r-a08-sard-b3-whitney-cubes-1},
+    :proved-in :r-a08-sard-b3-whitney-cubes-1,
+    :banked-by :r-a08-sard-b3-whitney-cubes-1,
+    :banked-commit "d36006f547a005798212d373282065f53761443e"},
    :id
    :lemma-constructiontargets-sardconvexdomain-whitneystratum-indices-le-add-two-of-mem-ha,
    :kind :lemma,
