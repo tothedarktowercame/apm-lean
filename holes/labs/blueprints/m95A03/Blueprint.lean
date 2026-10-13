@@ -629,7 +629,40 @@ lemma apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_shooting
     (e₀ : ∀ t ∈ Set.Icc a b, deriv (fun x => p x * deriv y₀ x) t - q t * y₀ t = f t)
     (e₁ : ∀ t ∈ Set.Icc a b, deriv (fun x => p x * deriv y₁ x) t - q t * y₁ t = 0) :
     ∃ u : ℝ → ℝ, apm_m95A03_solves a b 0 0 p q f u := by
-  sorry
+  let c : ℝ := y₀ b / y₁ b
+  let u : ℝ → ℝ := fun x => y₀ x - c * y₁ x
+  have hu : ContDiff ℝ 2 u := by
+    simpa [u, smul_eq_mul] using h₀.sub (h₁.const_smul c)
+  have hua : u a = 0 := by simp [u, c, h₀a, h₁a]
+  have hub : u b = 0 := by
+    simp [u, c]
+    field_simp
+    ring
+  refine ⟨u, hu, hua, hub, ?_⟩
+  intro t ht
+  have hdy (x : ℝ) : deriv u x = deriv y₀ x - c * deriv y₁ x := by
+    have hd := (h₀.differentiable (by norm_num) x).hasDerivAt.sub
+      (HasDerivAt.const_mul c (h₁.differentiable (by norm_num) x).hasDerivAt)
+    simpa [u, Pi.sub_apply] using hd.deriv
+  have hflux : (fun x => p x * deriv u x) =
+      (fun x => p x * deriv y₀ x - c * (p x * deriv y₁ x)) := by
+    funext x
+    simp [hdy, mul_sub]
+    ring
+  have hd₀ : DifferentiableAt ℝ (fun x => p x * deriv y₀ x) t :=
+    (hp.mul h₀.deriv').differentiable (by norm_num) t
+  have hd₁ : DifferentiableAt ℝ (fun x => p x * deriv y₁ x) t :=
+    (hp.mul h₁.deriv').differentiable (by norm_num) t
+  have hdflux : deriv (fun x => p x * deriv y₀ x - c * (p x * deriv y₁ x)) t =
+      deriv (fun x => p x * deriv y₀ x) t -
+        c * deriv (fun x => p x * deriv y₁ x) t := by
+    have hd := hd₀.hasDerivAt.sub (HasDerivAt.const_mul c hd₁.hasDerivAt)
+    simpa [Pi.sub_apply] using hd.deriv
+  rw [hflux, hdflux]
+  dsimp [u]
+  have he₀ := e₀ t ht
+  have he₁ := e₁ t ht
+  linear_combination he₀ - c * he₁
 
 lemma apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves
     (a b p₀ : ℝ) (hab : a < b) (hp₀ : 0 < p₀)
