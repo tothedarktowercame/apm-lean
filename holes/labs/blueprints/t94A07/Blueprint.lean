@@ -414,7 +414,28 @@ theorem apm_t94a07_reflectionMap_not_homotopic_id (i : Fin 2) :
     ¬ ContinuousMap.Homotopic
       (ConstructionTargets.CoefficientCoordinateReflections.reflectionMap (d := 2) i)
       (ContinuousMap.id (T02A06.euclideanUnitSphere 2)) := by
-  sorry
+  intro h
+  have hhom :=
+    ConstructionTargets.SingularHomologyHomotopy.singularHomology_map_eq_of_homotopic
+      (ModuleCat ℤ) (ModuleCat.of ℤ ℤ) h 1
+  change
+    (ConstructionTargets.CoefficientCoordinateReflections.H ℤ 1).map
+        (TopCat.ofHom
+          (ConstructionTargets.CoefficientCoordinateReflections.reflectionMap i)) =
+      (ConstructionTargets.CoefficientCoordinateReflections.H ℤ 1).map
+        (TopCat.ofHom (ContinuousMap.id _)) at hhom
+  rw [ConstructionTargets.CoefficientFirstReflection.all_reflections_negative
+        ℤ 1 (by decide) i,
+      TopCat.ofHom_id, CategoryTheory.Functor.map_id] at hhom
+  let e := ConstructionTargets.CoefficientFirstReflection.topIso ℤ 0
+  have he := by
+    open CategoryTheory in
+      exact congrArg (fun f => e.inv ≫ f ≫ e.hom) hhom
+  simp only [CategoryTheory.Preadditive.comp_neg,
+    CategoryTheory.Preadditive.neg_comp, CategoryTheory.Category.comp_id,
+    CategoryTheory.Category.id_comp, CategoryTheory.Iso.inv_hom_id] at he
+  have hone := congrArg (fun f => f.hom (1 : ℤ)) he
+  simp at hone
 
 /-- The half-turn is not homotopic to the identity through maps of the torus. -/
 theorem apm_t94a07_halfTurn_not_homotopic
