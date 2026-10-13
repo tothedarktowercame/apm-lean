@@ -113850,14 +113850,14 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 2,
+   :stop-count 3,
    :review-finding
    "Recorded fixture hash mismatch: :fixture.sha256 is 0bca6ce32c019fc3053c7f813c26917169cf817375b44d5e722b864b61a526450c1, but ConstructionTargets/PointWedgeVanKampen.blueprint.md at recorded commit c9b3af27 has exact SHA-256 0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0. Re-record the fixture hash for the reviewed commit.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
    :evidence
    {:placeholder-delta {:source-before 0, :source-after 0},
     :residual
-    "Prove the two right connector normal forms multiply to one; factor rightBase through inl, then B6/B12.",
+    "Cancel six typed connector factors; prove projection=1, factor through inl, then B6/B12.",
     :outcome :stop,
     :warnings ["existing linter"],
     :missing-theorems
@@ -113871,9 +113871,9 @@
       :area "fundamental-group-wedge-of-circles"}],
     :statement-hashes
     {:source
-     "594aa777d2cea4d7202928e2a3a5a6f6cc610d0329eb9d4c3a20920cc3be5e3c",
+     "ef15ab0e238456cc187da18537a22131bef446e11fadf1d389df70250ca64c05",
      :documentation
-     "a8b82dbd5c1c6e49281820c4028d02482b1ef0ecaf74340a97fefd9c39f554ab",
+     "7eab25efcfab6632b75d990ac75f4354e2bb9ca1ff674a7f1a6aacc2db594969",
      :blueprint
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0",
      :registry "149/149"},
@@ -113881,7 +113881,7 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
     :reason
-    "The forward right projection is the ordered product of two explicit right connector normal forms.",
+    "Round-trip normal form expanded to three connector factors.",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/PointWedgeVanKampen.lean",
@@ -113889,24 +113889,16 @@
      {:cmd "lake build ConstructionTargets.PointWedgeVanKampen",
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-     {:cmd "diff/hash/placeholders", :exit 0}],
+     {:cmd "hash/diff/placeholders", :exit 0}],
     :diagnostic-history
-    [{:cmd
+    [{:cmd "lean draft",
+      :exit 1,
+      :finding "Direct composite ill-typed: arrows share a target."}
+     {:cmd
       "lake build ConstructionTargets.ThreeCirclesFundamentalGroup",
       :exit 1,
       :finding "B12 absent."}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1791889638523-9513-206d410e",
-     :commands
-     ["git show/diff dac71da1^..dac71da1"
-      "git archive dac71da1; lake env lean archived PointWedgeVanKampen.lean"
-      "sha256/diff-tree/placeholder checks; statement-registry.py check"
-      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (expected absent)"],
-     :finding
-     "Reviewer codex-3. PASS program STOP: dac71da1 adds a compiled, sorry-free theorem exposing the forward right comparison projection as the correctly ordered product of its right span and overlap round-trip connector normal forms. Scope is exactly Lean+MD; source/doc/fixture hashes match ledger (594aa777/a8b82dbd/0bca6ce3), target placeholders stay 0, registry 149/149, and axioms are only propext/Classical.choice/Quot.sound. This is new progress after 1c519634; residual is proving the product equals 1, then B6/B12. B12 target remains absent as listed."},
-    :commit "dac71da1e79fac358251d0a1493a2d24c3a74df7",
+    :commit "8e03e312bb7e7267902db01cd6cdc4714499ee3d",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
      "ConstructionTargets/PointWedgeVanKampen.md"],
@@ -113916,7 +113908,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
