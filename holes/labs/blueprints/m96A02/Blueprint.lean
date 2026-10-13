@@ -86,11 +86,85 @@ lemma apm_m96A02_lipschitz_ode_aux_exists_aux_linear_growth
 /-- Picard iteration: a continuous solution of the integral equation on `[0, 1]`
 (fixed point of `T u t = u₀ + ∫₀ᵗ f (u s) ds` on `C([0,1])`; some iterate is a contraction
 by the `Kⁿ / n!` estimate, so `apm_m96A02_iterate_contraction_fixed_point` applies). -/
+noncomputable def apm_m96A02_lipschitz_ode_aux_exists_aux_integral_solution_aux_picard
+    (f : ℝ → ℝ) (u₀ : ℝ) (hfc : Continuous f)
+    (u : C(Set.Icc (0 : ℝ) 1, ℝ)) : C(Set.Icc (0 : ℝ) 1, ℝ) where
+  toFun t := u₀ + ∫ s in (0 : ℝ)..t.1,
+    f (u (Set.projIcc 0 1 zero_le_one s))
+  continuous_toFun := by
+    have hg : Continuous (fun s : ℝ =>
+        f (u (Set.projIcc 0 1 zero_le_one s))) :=
+      hfc.comp (u.continuous.comp continuous_projIcc)
+    exact (continuous_const.add
+      (intervalIntegral.continuous_primitive hg.intervalIntegrable 0)).comp
+        continuous_subtype_val
+
+@[simp] lemma apm_m96A02_lipschitz_ode_aux_exists_aux_integral_solution_aux_picard_apply
+    (f : ℝ → ℝ) (u₀ : ℝ) (hfc : Continuous f)
+    (u : C(Set.Icc (0 : ℝ) 1, ℝ)) (t : Set.Icc (0 : ℝ) 1) :
+    apm_m96A02_lipschitz_ode_aux_exists_aux_integral_solution_aux_picard
+      f u₀ hfc u t =
+      u₀ + ∫ s in (0 : ℝ)..t.1,
+        f (u (Set.projIcc 0 1 zero_le_one s)) := rfl
+
+/-- The Picard factorial estimate: `|Tⁿu t − Tⁿv t| ≤ Kⁿ tⁿ / n! · dist u v`. -/
+lemma apm_m96A02_lipschitz_ode_aux_exists_aux_integral_solution_aux_fixedPoint_aux_iterate_bound
+    (f : ℝ → ℝ) (u₀ : ℝ) (K : NNReal) (hK : LipschitzWith K f) (n : ℕ)
+    (u v : C(Set.Icc (0 : ℝ) 1, ℝ)) (t : Set.Icc (0 : ℝ) 1) :
+    dist ((apm_m96A02_lipschitz_ode_aux_exists_aux_integral_solution_aux_picard f u₀ hK.continuous)^[n] u t) ((apm_m96A02_lipschitz_ode_aux_exists_aux_integral_solution_aux_picard f u₀ hK.continuous)^[n] v t) ≤
+      (K : ℝ) ^ n * (t : ℝ) ^ n / n.factorial * dist u v := by
+  sorry
+
+lemma apm_m96A02_lipschitz_ode_aux_exists_aux_integral_solution_aux_fixedPoint
+    (f : ℝ → ℝ) (u₀ : ℝ) (K : NNReal) (hK : LipschitzWith K f) :
+    ∃ U : C(Set.Icc (0 : ℝ) 1, ℝ),
+      apm_m96A02_lipschitz_ode_aux_exists_aux_integral_solution_aux_picard
+        f u₀ hK.continuous U = U := by
+  set T := apm_m96A02_lipschitz_ode_aux_exists_aux_integral_solution_aux_picard f u₀ hK.continuous with hT
+  obtain ⟨N, hN1, hN⟩ : ∃ N : ℕ, 1 ≤ N ∧ (K : ℝ) ^ N / N.factorial < 1 := by
+    obtain ⟨M, hM⟩ := Filter.eventually_atTop.1
+      ((FloorSemiring.tendsto_pow_div_factorial_atTop (K : ℝ)).eventually
+        (gt_mem_nhds zero_lt_one))
+    exact ⟨M + 1, by omega, hM _ (by omega)⟩
+  have hcontr : apm_m96a02_IsContraction (T^[N]) := by
+    refine ⟨(K : ℝ) ^ N / N.factorial, by positivity, hN, fun u v => ?_⟩
+    refine (ContinuousMap.dist_le (by positivity)).2 fun t => ?_
+    refine (apm_m96A02_lipschitz_ode_aux_exists_aux_integral_solution_aux_fixedPoint_aux_iterate_bound f u₀ K hK N u v t).trans ?_
+    have ht : (t : ℝ) ^ N ≤ 1 := pow_le_one₀ t.2.1 t.2.2
+    have hle : (K : ℝ) ^ N * (t : ℝ) ^ N / N.factorial ≤ (K : ℝ) ^ N / N.factorial := by
+      apply div_le_div_of_nonneg_right _ (by positivity)
+      exact mul_le_of_le_one_right (by positivity) ht
+    exact mul_le_mul_of_nonneg_right hle dist_nonneg
+  obtain ⟨U, hU, -⟩ := apm_m96A02_iterate_contraction_fixed_point _ T ⟨N, hN1, hcontr⟩
+  exact ⟨U, hU⟩
+
+lemma apm_m96A02_lipschitz_ode_aux_exists_aux_integral_solution_aux_extend
+    (f : ℝ → ℝ) (u₀ : ℝ) (hfc : Continuous f)
+    (U : C(Set.Icc (0 : ℝ) 1, ℝ))
+    (hU : apm_m96A02_lipschitz_ode_aux_exists_aux_integral_solution_aux_picard
+      f u₀ hfc U = U) :
+    ∃ u : ℝ → ℝ, Continuous u ∧
+      ∀ t ∈ Set.Icc (0 : ℝ) 1,
+        u t = u₀ + ∫ s in (0 : ℝ)..t, f (u s) := by
+  let u : ℝ → ℝ := fun t => U (Set.projIcc 0 1 zero_le_one t)
+  refine ⟨u, U.continuous.comp continuous_projIcc, ?_⟩
+  intro t ht
+  have hproj : Set.projIcc 0 1 zero_le_one t =
+      (⟨t, ht⟩ : Set.Icc (0 : ℝ) 1) := by
+    exact Set.projIcc_of_mem zero_le_one ht
+  have he := congrArg (fun W : C(Set.Icc (0 : ℝ) 1, ℝ) => W ⟨t, ht⟩) hU
+  simpa [u, hproj,
+    apm_m96A02_lipschitz_ode_aux_exists_aux_integral_solution_aux_picard] using he.symm
+
 lemma apm_m96A02_lipschitz_ode_aux_exists_aux_integral_solution
     (f : ℝ → ℝ) (u₀ : ℝ) (K : NNReal) (hK : LipschitzWith K f) :
     ∃ u : ℝ → ℝ, Continuous u ∧
       ∀ t ∈ Set.Icc (0 : ℝ) 1, u t = u₀ + ∫ s in (0 : ℝ)..t, f (u s) := by
-  sorry
+  obtain ⟨U, hU⟩ :=
+    apm_m96A02_lipschitz_ode_aux_exists_aux_integral_solution_aux_fixedPoint
+      f u₀ K hK
+  exact apm_m96A02_lipschitz_ode_aux_exists_aux_integral_solution_aux_extend
+    f u₀ hK.continuous U hU
 
 /-- A continuous solution of the integral equation solves the ODE. -/
 lemma apm_m96A02_lipschitz_ode_aux_exists_aux_of_integral
