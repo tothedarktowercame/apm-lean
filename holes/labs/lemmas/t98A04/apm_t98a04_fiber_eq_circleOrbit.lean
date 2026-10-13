@@ -76,7 +76,30 @@ theorem apm_t98a04_fiber_eq_circleOrbit
     (p : apm_t98a04_CP1) (z : apm_t98a04_S3)
     (hz : z ∈ apm_t98a04_fiber p) :
     apm_t98a04_fiber p = apm_t98a04_circleOrbit z := by
-  sorry
+  ext w
+  constructor
+  · intro hw
+    have hp : apm_t98a04_hopf w = apm_t98a04_hopf z := by
+      exact hw.trans hz.symm
+    obtain ⟨a, ha⟩ :=
+      (Projectivization.mk_eq_mk_iff' ℂ w.1 z.1
+        (apm_t98a04_sphere_ne_zero w) (apm_t98a04_sphere_ne_zero z)).mp hp
+    have hw_norm : ‖(w.1 : apm_t98a04_C2)‖ = 1 := by
+      simpa [Metric.mem_sphere, dist_eq_norm] using w.2
+    have hz_norm : ‖(z.1 : apm_t98a04_C2)‖ = 1 := by
+      simpa [Metric.mem_sphere, dist_eq_norm] using z.2
+    have ha_norm : ‖a‖ = 1 := by
+      rw [← ha, norm_smul, hz_norm, mul_one] at hw_norm
+      exact hw_norm
+    let u : Circle := ⟨a, by
+      exact mem_sphere_zero_iff_norm.mpr ha_norm⟩
+    exact ⟨u, ha.symm⟩
+  · rintro ⟨u, hu⟩
+    have hp : apm_t98a04_hopf w = apm_t98a04_hopf z := by
+      apply (Projectivization.mk_eq_mk_iff' ℂ w.1 z.1
+        (apm_t98a04_sphere_ne_zero w) (apm_t98a04_sphere_ne_zero z)).mpr
+      exact ⟨(u : ℂ), hu.symm⟩
+    exact hp.trans hz
 -- END SEAT AREA
 
 /-- The fiber over [1:0] is exactly the coordinate circle. -/
