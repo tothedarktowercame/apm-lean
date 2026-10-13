@@ -422,6 +422,29 @@ theorem apm_t96j07_signDiagonal_H2 (ε : Fin 3 → ℝ) (hε : ∀ j, ε j = 1 �
 invariance (`SingularHomologyHomotopy.singularHomology_map_eq_of_homotopic`) and
 `sign (∏ b j) = ∏ sign (b j)`. -/
 -- BEGIN SEAT AREA
+lemma apm_t96j07_diagonal_link_degree_of_parts_aux_sign
+    (b : Fin 3 → ℝ) (hb : ∀ j, b j ≠ 0) :
+    (0 < ∏ j, (if 0 < b j then (1 : ℝ) else -1)) ↔ 0 < ∏ j, b j := by
+  have hneg : ∀ j, ¬ 0 < b j → b j < 0 := by
+    intro j hj
+    exact lt_of_le_of_ne (le_of_not_gt hj) (hb j)
+  by_cases h0 : 0 < b 0 <;> by_cases h1 : 0 < b 1 <;>
+      by_cases h2 : 0 < b 2
+  all_goals simp [Fin.prod_univ_succ, h0, h1, h2]
+  all_goals try have hn0 := hneg 0 h0
+  all_goals try have hn1 := hneg 1 h1
+  all_goals try have hn2 := hneg 2 h2
+  all_goals try positivity
+  all_goals try exact mul_pos_of_neg_of_neg hn1 hn2
+  all_goals try exact mul_pos_of_neg_of_neg hn0 (mul_neg_of_pos_of_neg h1 hn2)
+  all_goals try exact mul_pos_of_neg_of_neg hn0 (mul_neg_of_neg_of_pos hn1 h2)
+  · constructor
+    · norm_num
+    · intro hp
+      have hn : b 0 * (b 1 * b 2) < 0 :=
+        mul_neg_of_neg_of_pos hn0 (mul_pos_of_neg_of_neg hn1 hn2)
+      linarith
+
 theorem apm_t96j07_diagonal_link_degree_of_parts
     (hex : ∀ b : Fin 3 → ℝ, (∀ j, b j ≠ 0) → ∃ link, apm_t96j07_IsNormalizedDiagonal b link)
     (hhom : ∀ (b : Fin 3 → ℝ), (∀ j, b j ≠ 0) → ∀ l l' : C(apm_t96j07_S2, apm_t96j07_S2),
@@ -445,7 +468,39 @@ theorem apm_t96j07_diagonal_link_degree_of_parts
                 (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 2).obj
                   (ModuleCat.of ℤ ℤ)).map (TopCat.ofHom link) z) =
               (if 0 < ∏ j, (1 - a j) then 1 else -1) * orientation.hom z := by
-  sorry
+  intro a ha
+  let b : Fin 3 → ℝ := fun j => 1 - a j
+  obtain ⟨link, hlink⟩ := hex b ha
+  let ε : Fin 3 → ℝ := fun j => if 0 < b j then 1 else -1
+  have hεne : ∀ j, ε j ≠ 0 := by
+    intro j
+    simp only [ε]
+    split_ifs <;> norm_num
+  obtain ⟨signLink, hsignLink⟩ := hex ε hεne
+  have hε : ∀ j, ε j = 1 ∨ ε j = -1 := by
+    intro j
+    simp only [ε]
+    split_ifs <;> simp
+  obtain ⟨orientation, horientation⟩ := hsign ε hε signLink hsignLink
+  obtain ⟨H⟩ := hhom b ha link signLink hlink hsignLink
+  have hmap :=
+    ConstructionTargets.CoefficientContractiblePair.singularHomology_map_eq_of_topCatHomotopy
+      ℤ (ConstructionTargets.SingularHomologyConcrete.continuousMapHomotopyCylinder H)
+      (ConstructionTargets.SingularHomologyConcrete.continuousMapHomotopyCylinder_zero H)
+      (ConstructionTargets.SingularHomologyConcrete.continuousMapHomotopyCylinder_one H) 2
+  refine ⟨link, hlink, orientation, ?_⟩
+  intro z
+  rw [hmap]
+  rw [horientation]
+  have hp := apm_t96j07_diagonal_link_degree_of_parts_aux_sign b ha
+  change (0 < ∏ j, ε j) ↔ 0 < ∏ j, b j at hp
+  have heq : (if 0 < ∏ j, ε j then (1 : ℤ) else -1) =
+      (if 0 < ∏ j, b j then 1 else -1) := by
+    by_cases h : 0 < ∏ j, ε j
+    · simp [h, hp.mp h]
+    · have hn : ¬ 0 < ∏ j, b j := fun hb => h (hp.mpr hb)
+      simp [h, hn]
+  rw [heq]
 -- END SEAT AREA
 
 /-- The degree calculation used in every affine chart.  An invertible diagonal
