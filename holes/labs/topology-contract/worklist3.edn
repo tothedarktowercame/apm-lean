@@ -24430,27 +24430,27 @@
    :consumer :t01A08,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "extend Mathlib: state and prove the missing theorem in scope",
    :implements-lemma :lemma-closedset-whitneycubecover,
    :evidence
    {:placeholder-delta {:t01A08 [1 1]},
     :residual
-    "Local finiteness, anchors, B3 assembly; then B4-B7, B9.",
+    "Prove local finiteness and anchors; assemble B3; then B4-B7, B9.",
     :outcome :stop,
     :warnings
     ["existing unnecessarySimpa:454"
      "existing unnecessarySeqFocus:1199"],
     :missing-theorems
     [{:name
-      "ConstructionTargets.SardConvexDomain.countable_whitneyNetIndex",
+      "ConstructionTargets.SardConvexDomain.pointFinite_whitneyNetQuarterBalls",
       :type
-      "{E} [MetricSpace E] [TopologicalSpace.SeparableSpace E] (s : Set E) : Countable (WhitneyNetIndex s)",
+      "(E) [NormedAddCommGroup E] [NormedSpace R E] [ProperSpace E] (s) : point-finite quarter-balls and ncard <= fixed packing toNat * 3",
       :status :proved,
       :consumers [:t01A08],
       :depends-on
-      ["ConstructionTargets.SardConvexDomain.whitneyStratumNet_spec"],
+      ["ConstructionTargets.SardConvexDomain.finite_whitneyNetIncidence_and_ncard_le"],
       :area "sard-convex-domain"}
      {:name
       "ConstructionTargets.SardConvexDomain.closedSet_whitneyCubeCover_proper",
@@ -24458,44 +24458,29 @@
       :status :partial,
       :consumers [:t01A08],
       :depends-on
-      ["ConstructionTargets.SardConvexDomain.countable_whitneyNetIndex"
-       "ConstructionTargets.SardConvexDomain.finite_whitneyNetIncidence_and_ncard_le"],
+      ["ConstructionTargets.SardConvexDomain.pointFinite_whitneyNetQuarterBalls"
+       "ConstructionTargets.SardConvexDomain.countable_whitneyNetIndex"],
       :area "sard-convex-domain"}],
     :statement-hashes {:registry "150/150"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Committed countability of stratum nets and their integer sigma index. Local finiteness, anchors, and assembly remain; not refuted.",
+    "Committed point-finiteness and uniform ncard bound for indexed quarter-balls. Local finiteness, anchors, and assembly remain; not refuted.",
     :commands
     [{:cmd "lake build ConstructionTargets.SardConvexDomain", :exit 0}
      {:cmd "fixture; registry; scans; scope/diff", :exit 0}
      {:cmd "git commit", :exit 0}],
-    :diagnostic-history
-    [{:cmd "builds",
-      :exit 1,
-      :correction "qualified SeparableSpace; fixed inference"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1791911191673-10060-14869812",
-     :commands
-     ["git show/diff e4808ad; scope/countability checks"
-      "sha256sum + lake env lean frozen fixture"
-      "lake build ConstructionTargets.SardConvexDomain"
-      "statement registry check; forbidden-count scan"],
-     :finding
-     "PASS. Recorded topo-10 commit e4808ad changes only the scoped Lean file and correctly proves countability. At each scale, nonempty open balls of radius 2^k/16 are pairwise disjoint since net centers are >2^k/8 apart; separability makes each net subtype countable, and the integer sigma is countable. Fixture hash 390445d5... matches; build/fixture pass; registry 150/150; forbidden placeholders stay 0; only standard axioms. Valid compiled B3 progress; STOP explicitly leaves local finiteness, anchors, and assembly."},
-    :commit "e4808ad92ce13fe4934e9ec9b53fa54cf2401ff5",
+    :commit "f2798204bb0a59a1049a9e421409539ed62e9467",
     :changed-paths ["ConstructionTargets/SardConvexDomain.lean"],
     :fixture
-    {:path "/tmp/t01a08_b3_countable_index_check.lean",
+    {:path "/tmp/t01a08_b3_pointfinite_check.lean",
      :sha256
-     "390445d53d78f650bcf386ae42d62d3cfb2481213b4ca373c5d88cd0723b05ce",
+     "576e1aa3b180fc7d2cf8251b2c97b7d1d2818c840ada65a0e56ffedaca043476",
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain.blueprint/B3",
    :acceptance
@@ -35171,7 +35156,8 @@
     :lemma-constructiontargets-sardconvexdomain-encard-whitneynetincidence-le-three-fixed-p
     :lemma-constructiontargets-sardconvexdomain-fixed-whitneypackingnumber-ne-top
     :lemma-constructiontargets-sardconvexdomain-finite-whitneynetincidence-and-ncard-le
-    :lemma-constructiontargets-sardconvexdomain-countable-whitneynetindex],
+    :lemma-constructiontargets-sardconvexdomain-countable-whitneynetindex
+    :lemma-constructiontargets-sardconvexdomain-pointfinite-whitneynetquarterballs],
    :other-consumers []}
   {:consumer :t01A08,
    :phase :lemma,
@@ -35780,6 +35766,29 @@
    :kind :lemma,
    :depends-on
    [:lemma-constructiontargets-sardconvexdomain-whitneystratumnet-spec],
+   :other-consumers []}
+  {:consumer :t01A08,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.SardConvexDomain.pointFinite_whitneyNetQuarterBalls",
+    :type
+    "(E) [NormedAddCommGroup E] [NormedSpace R E] [ProperSpace E] (s) : point-finite quarter-balls and ncard <= fixed packing toNat * 3"},
+   :lemma
+   {:name
+    "ConstructionTargets.SardConvexDomain.pointFinite_whitneyNetQuarterBalls",
+    :reported-by [:r-a08-sard-b3-whitney-cubes-1],
+    :type
+    "(E) [NormedAddCommGroup E] [NormedSpace R E] [ProperSpace E] (s) : point-finite quarter-balls and ncard <= fixed packing toNat * 3",
+    :area "sard-convex-domain",
+    :proved-in :r-a08-sard-b3-whitney-cubes-1},
+   :id
+   :lemma-constructiontargets-sardconvexdomain-pointfinite-whitneynetquarterballs,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-sardconvexdomain-finite-whitneynetincidence-and-ncard-le],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
