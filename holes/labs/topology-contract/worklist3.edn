@@ -24430,21 +24430,20 @@
    :consumer :t01A08,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "extend Mathlib: state and prove the missing theorem in scope",
    :implements-lemma :lemma-closedset-whitneycubecover,
    :evidence
    {:placeholder-delta {:t01A08 [1 1]},
     :residual
-    "Thin raw cover locally finitely with bounded overlap; assemble B3; then B4-B7, B9.",
+    "Select centers, bound overlap, assemble B3; then B4-B7, B9.",
     :outcome :stop,
     :warnings ["existing unnecessarySimpa:454"],
     :missing-theorems
     [{:name
-      "ConstructionTargets.SardConvexDomain.compl_subset_iUnion_quarter_infDist_ball",
-      :type
-      "quarter-infDist balls indexed by complement cover complement",
+      "ConstructionTargets.SardConvexDomain.finite_of_subset_compact_of_pairwise_dist",
+      :type "separated subset of compact metric set is finite",
       :status :proved,
       :consumers [:t01A08],
       :depends-on [],
@@ -24456,44 +24455,32 @@
       :consumers [:t01A08],
       :depends-on
       ["ConstructionTargets.SardConvexDomain.compl_subset_iUnion_quarter_infDist_ball"
-       "ConstructionTargets.SardConvexDomain.infDist_comparable_of_dist_lt_half"],
+       "ConstructionTargets.SardConvexDomain.finite_of_subset_compact_of_pairwise_dist"],
       :area "sard-convex-domain"}],
     :statement-hashes {:registry "149/149"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Committed the raw adaptive-ball cover: complement points lie in their own positive quarter-infDist ball. Remaining work is countable locally finite bounded-overlap thinning and certificate assembly; not a refutation.",
+    "Committed compact packing finiteness: a uniformly separated subset of a compact metric set is finite. Selection, uniform overlap bound, and certificate assembly remain; not a refutation.",
     :commands
     [{:cmd "lake build ConstructionTargets.SardConvexDomain", :exit 0}
-     {:cmd "lean fixture; registry; forbidden scan; diff check",
-      :exit 0}
-     {:cmd "commit scoped change", :exit 0}],
+     {:cmd "lean fixture; registry; forbidden scan; diff", :exit 0}
+     {:cmd "git commit scoped file", :exit 0}],
     :diagnostic-history
     [{:cmd "initial build",
       :exit 1,
-      :correction "made complement subtype binder explicit"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1791899497276-9799-454b6f90",
-     :commands
-     ["git show/diff 15c88100; scope and cover-orientation review"
-      "lake build ConstructionTargets.SardConvexDomain"
-      "sha256sum and lake env lean t01a08_b3_raw_cover_check"
-      "statement-registry check; forbidden-token recount"],
-     :finding
-     "PASS. Valid STOP after compiled progress. The one-file theorem correctly proves raw adaptive coverage: each x∈sᶜ indexes its own positive quarter-infDist ball and lies in it. It does not overclaim countability or Whitney overlap; locally finite bounded-overlap thinning and certificate assembly remain explicitly partial. Build/export pass; fixture hash matches; standard axioms only; registry 149/149; forbidden count 0->0."},
-    :commit "15c88100c55b7c45fd2e1e7a0804033f54ad1ef9",
+      :correction "fixed compact API and intersection order"}],
+    :commit "5c1a23bc56f37976b38d589d218038b6dda34570",
     :changed-paths ["ConstructionTargets/SardConvexDomain.lean"],
     :fixture
-    {:path "/tmp/t01a08_b3_raw_cover_check.lean",
+    {:path "/tmp/t01a08_b3_compact_packing_check.lean",
      :sha256
-     "2daa706b404c9b3400e7205003f5742b7b067d9ea78fc57fff0e102207e76ece",
+     "52bce0a345220c53cc5712007d6b50bb0a2785aa6fecbe29534db713748d31cb",
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain.blueprint/B3",
    :acceptance
@@ -35147,7 +35134,8 @@
     :lemma-constructiontargets-sardconvexdomain-exists-positive-infdist-nearest-of-isclosed
     :lemma-constructiontargets-sardconvexdomain-quarter-infdist-ball-data
     :lemma-constructiontargets-sardconvexdomain-infdist-comparable-of-dist-lt-half
-    :lemma-constructiontargets-sardconvexdomain-compl-subset-iunion-quarter-infdist-ball],
+    :lemma-constructiontargets-sardconvexdomain-compl-subset-iunion-quarter-infdist-ball
+    :lemma-constructiontargets-sardconvexdomain-finite-of-subset-compact-of-pairwise-dist],
    :other-consumers []}
   {:consumer :t01A08,
    :phase :lemma,
@@ -35236,6 +35224,26 @@
     :banked-commit "15c88100c55b7c45fd2e1e7a0804033f54ad1ef9"},
    :id
    :lemma-constructiontargets-sardconvexdomain-compl-subset-iunion-quarter-infdist-ball,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t01A08,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.SardConvexDomain.finite_of_subset_compact_of_pairwise_dist",
+    :type "separated subset of compact metric set is finite"},
+   :lemma
+   {:name
+    "ConstructionTargets.SardConvexDomain.finite_of_subset_compact_of_pairwise_dist",
+    :reported-by [:r-a08-sard-b3-whitney-cubes-1],
+    :type "separated subset of compact metric set is finite",
+    :area "sard-convex-domain",
+    :proved-in :r-a08-sard-b3-whitney-cubes-1},
+   :id
+   :lemma-constructiontargets-sardconvexdomain-finite-of-subset-compact-of-pairwise-dist,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}],
