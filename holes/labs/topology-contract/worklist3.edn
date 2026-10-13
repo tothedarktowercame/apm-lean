@@ -36157,6 +36157,17 @@
      {:cmd "statement-registry check; placeholder; diff", :exit 0}
      {:cmd "rg forbidden closure", :exit 1, :expected-exit 1}
      {:cmd "git commit; show --check", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791931172343-10744-bea6b975",
+     :commands
+     ["git show/diff 3e08de9d; scope/algebra review"
+      "sha256sum fixture; show --check; placeholder recount"
+      "lake build ConstructionTargets.t93J03Closure; lean fixture"
+      "statement-registry check"],
+     :finding
+     "PASS. Commit 3e08de9d adds compiled, sorry-free standard-axiom progress after 16c5ec32: under a=x*y and b=y^-1, the exact frozen relator b^-1*a*b*a is proved conjugate to the polygon word x*x*y*y, and equality to one is equivalent in every group. Fixture hash matches; registry 166/166; Main placeholder 1->1. The topological van Kampen quotient, C1, C2, and Main remain listed. SemilocallySimplyConnected X is unused, mandated by problem.md."},
     :commit "3e08de9de0a5d677abbf695732c2eabb8a6fe0a9",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
@@ -36168,7 +36179,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -36186,7 +36197,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t93J03Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed exact four-arc attaching-loop computation; van Kampen remains.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed generator change equating aabb with the frozen Klein relator; topological van Kampen quotient remains.",
    :id :program-2026-10-13-close-t93j03,
    :kind :final-adapter,
    :campaign-priority 30,
@@ -36232,7 +36243,11 @@
     {:job 1,
      :commit "16c5ec329b04bb60f39050bed8712ab753a70dca",
      :reason
-     "Committed exact four-arc attaching-loop computation; van Kampen remains."}]}
+     "Committed exact four-arc attaching-loop computation; van Kampen remains."}
+    {:job 2,
+     :commit "3e08de9de0a5d677abbf695732c2eabb8a6fe0a9",
+     :reason
+     "Committed generator change equating aabb with the frozen Klein relator; topological van Kampen quotient remains."}]}
   {:consumer :t99J05,
    :stop-count 5,
    :evidence
@@ -37672,7 +37687,7 @@
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "kleinRelator_generatorChange_eq_one_iff",
@@ -37682,7 +37697,9 @@
     :reported-by [:program-2026-10-13-close-t93j03],
     :type "a=x*y,b=y^-1 identifies Klein relator with aabb",
     :area "covering-subgroup-correspondence",
-    :proved-in :program-2026-10-13-close-t93j03},
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "3e08de9de0a5d677abbf695732c2eabb8a6fe0a9"},
    :id :lemma-kleinrelator-generatorchange-eq-one-iff,
    :kind :lemma,
    :depends-on [:lemma-kleinpolygon-attaching-arcs],
