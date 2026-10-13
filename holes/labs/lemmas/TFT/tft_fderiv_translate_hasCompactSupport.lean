@@ -177,7 +177,8 @@ lemma tft_fderiv_translate_continuous
 lemma tft_fderiv_translate_hasCompactSupport
     (f : E → F) (hf : ContDiff ℝ 1 f) (hfc : HasCompactSupport f) (x v : E) :
     HasCompactSupport (fun y => fderiv ℝ f (x + y) v) := by
-  sorry
+  simpa [Function.comp_def] using
+    (hfc.fderiv_apply ℝ v).comp_homeomorph (Homeomorph.addLeft x)
 -- END SEAT AREA
 
 /-- U2: the directional difference quotient converges in sup norm. -/
