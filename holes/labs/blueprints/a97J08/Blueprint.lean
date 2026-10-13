@@ -2234,7 +2234,23 @@ lemma apm_a97j08_squareSum_inside_aux_mult {z v₀ v₁ v₂ v₃ : ℂ}
     ∃ k : ℤ, apm_a97j08_angleStep z v₀ v₁ + apm_a97j08_angleStep z v₁ v₂ +
       apm_a97j08_angleStep z v₂ v₃ + apm_a97j08_angleStep z v₃ v₀ =
         k * (2 * Real.pi) := by
-  sorry
+  let S := apm_a97j08_angleStep z v₀ v₁ + apm_a97j08_angleStep z v₁ v₂ +
+    apm_a97j08_angleStep z v₂ v₃ + apm_a97j08_angleStep z v₃ v₀
+  have hn₀ : v₀ - z ≠ 0 := sub_ne_zero.mpr h₀
+  have hn₁ : v₁ - z ≠ 0 := sub_ne_zero.mpr h₁
+  have hn₂ : v₂ - z ≠ 0 := sub_ne_zero.mpr h₂
+  have hn₃ : v₃ - z ≠ 0 := sub_ne_zero.mpr h₃
+  have hS : (S : Real.Angle) = 0 := by
+    simp only [S, apm_a97j08_angleStep, Real.Angle.coe_add]
+    rw [Complex.arg_div_coe_angle hn₁ hn₀,
+      Complex.arg_div_coe_angle hn₂ hn₁,
+      Complex.arg_div_coe_angle hn₃ hn₂,
+      Complex.arg_div_coe_angle hn₀ hn₃]
+    abel
+  obtain ⟨k, hk⟩ := Real.Angle.coe_eq_zero_iff.mp hS
+  refine ⟨k, ?_⟩
+  change S = k * (2 * Real.pi)
+  simpa [zsmul_eq_mul] using hk.symm
 
 lemma apm_a97j08_squareSum_inside_aux_core {z shift : ℂ} {δ : ℝ} (hδ : 0 < δ)
     (q : ℤ × ℤ) (hz : z ∈ interior (apm_a97j08_gridSquare shift δ q)) :
