@@ -128,6 +128,19 @@ def genericPointWedgeLeftSpanIso :
     simpa only [ContinuousMap.comp_assoc] using h
   rw [h']
 
+/-- The continuous map underlying the transported right overlap leg is
+literally the constant map at the right basepoint. -/
+theorem genericPointWedgeRightSpanContinuousMap_eq_const :
+    ((genericPointWedgePackage
+      x₀ y₀ M N hM hN hy hx cM cN).rightEquiv.toFun.comp
+        (overlapToRight x₀ y₀ M N)).comp
+          (genericPointWedgePackage
+            x₀ y₀ M N hM hN hy hx cM cN).intersectionEquiv.invFun =
+      ContinuousMap.const Unit y₀ := by
+  simpa only [ContinuousMap.comp_assoc] using
+    (genericPointWedgeOverlapInclusionSquares
+      x₀ y₀ M N hM hN hy hx cM cN).2
+
 def genericPointWedgeRightSpanIso :
     (genericPointWedgeOverlapGroupoidEquivalence x₀ y₀ M N hM hN hy hx cM cN).inverse ⋙
         genericPointWedgeActualRight x₀ y₀ M N ⋙
@@ -140,15 +153,8 @@ def genericPointWedgeRightSpanIso :
         (genericPointWedgePackage x₀ y₀ M N hM hN hy hx cM cN).rightEquiv.toFun ≅
       FundamentalGroupoid.map (ContinuousMap.const Unit y₀)
   rw [← FundamentalGroupoid.map_comp, ← FundamentalGroupoid.map_comp]
-  have h := (genericPointWedgeOverlapInclusionSquares
-    x₀ y₀ M N hM hN hy hx cM cN).2
-  have h' :
-      ((genericPointWedgePackage x₀ y₀ M N hM hN hy hx cM cN).rightEquiv.toFun.comp
-        (overlapToRight x₀ y₀ M N)).comp
-          (genericPointWedgePackage x₀ y₀ M N hM hN hy hx cM cN).intersectionEquiv.invFun =
-        ContinuousMap.const Unit y₀ := by
-    simpa only [ContinuousMap.comp_assoc] using h
-  rw [h']
+  rw [genericPointWedgeRightSpanContinuousMap_eq_const
+    x₀ y₀ M N hM hN hy hx cM cN]
 
 def genericPointWedgeCoordinateSpanEquivalence
     (C : Type u) [Category C] :
@@ -5512,6 +5518,7 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms circleBaseNeighborhood_contraction
 #print axioms twoCirclesBaseNeighborhood_contraction
 #print axioms genericPointWedgeCoordinateSpanEquivalence
+#print axioms genericPointWedgeRightSpanContinuousMap_eq_const
 #print axioms genericPointWedgeCoordinateSpanPostcomposeIso
 #print axioms genericPointWedgeCoordinatePointSpanEquivalence
 #print axioms genericPointWedgeCoordinatePointSpanPostcomposeIso

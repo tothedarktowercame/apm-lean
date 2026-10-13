@@ -1046,3 +1046,8 @@ the proved right-coproduct injection of the equivalence counit normal form.
 This records the cancellation equation entirely in the free-product group;
 identifying the span-coordinate forward morphism with this base transport
 remains separate.
+
+`genericPointWedgeRightSpanContinuousMap_eq_const` names the exact
+continuous-map equality used to construct the right span comparison.  The
+remaining representation step is now the component-level transport induced
+by this equality, rather than an opaque local proof inside the isomorphism.
