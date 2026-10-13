@@ -1393,6 +1393,7 @@ theorem apm_m93j05_lp_rpow_differentiableAt (p : ℝ) (hp : 1 < p) :
 line (`f₀`, `h` are integrable), the `L²` term is a quadratic polynomial in `t` (finite trigonometric
 sums), the pairing is linear, and the `Lᵖ` term is (D1) applied to `(I − Φ) f₀`, `(I − Φ) h`. -/
 theorem apm_m93j05_J_path_differentiableAt (N : ℕ) (p q : ℝ) (hp : 1 < p) (hq : 1 < q)
+    (hpq : 1 / p + 1 / q = 1)
     (hD1 : ∀ (a b : ℝ → ℝ), MemLp a (ENNReal.ofReal p) (volume.restrict (Set.Icc (0 : ℝ) 1)) → MemLp b (ENNReal.ofReal p) (volume.restrict (Set.Icc (0 : ℝ) 1)) →
       DifferentiableAt ℝ (fun t : ℝ ↦ Real.rpow
         (eLpNorm (fun x ↦ a x + t * b x) (ENNReal.ofReal p) (volume.restrict (Set.Icc (0 : ℝ) 1))).toReal p) 0)
@@ -1413,7 +1414,7 @@ theorem apm_m93j05_stationary_at_minimizer
           HasDerivAt
             (fun t : ℝ => apm_m93j05_J N p g (f₀ + t • h)) 0 0 := by
   intro μ g hg f₀ hf₀ hmin h hh
-  have hd := apm_m93j05_J_path_differentiableAt N p q hp hq
+  have hd := apm_m93j05_J_path_differentiableAt N p q hp hq hpq
     (apm_m93j05_lp_rpow_differentiableAt p hp) g f₀ h hg hf₀ hh
   have hloc : IsLocalMin (fun t : ℝ ↦ apm_m93j05_J N p g (f₀ + t • h)) 0 := by
     refine Filter.Eventually.of_forall (fun t ↦ ?_)
