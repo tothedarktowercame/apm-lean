@@ -846,6 +846,18 @@ lemma apm_m98a04_translation_pairing_fderiv_of_stage_dq_aux_hasFDerivAt_aux_segm
   convert key using 2
   ring
 
+lemma apm_m98a04_translation_pairing_fderiv_of_stage_dq_aux_hasFDerivAt_aux_apply
+    {n : ℕ} (G : Fin n → EuclideanSpace ℝ (Fin n) → ℝ)
+    (x h : EuclideanSpace ℝ (Fin n)) :
+    (∑ i, G i x • (EuclideanSpace.proj i :
+      EuclideanSpace ℝ (Fin n) →L[ℝ] ℝ)) h = ∑ i, G i x * h i := by
+  simp
+
+lemma apm_m98a04_translation_pairing_fderiv_of_stage_dq_aux_hasFDerivAt_aux_coord_le
+    {n : ℕ} (h : EuclideanSpace ℝ (Fin n)) (i : Fin n) :
+    |h i| ≤ ‖h‖ := by
+  simpa using PiLp.norm_apply_le h i
+
 lemma apm_m98a04_translation_pairing_fderiv_of_stage_dq_aux_hasFDerivAt {n : ℕ}
     (F : EuclideanSpace ℝ (Fin n) → ℝ) (G : Fin n → EuclideanSpace ℝ (Fin n) → ℝ)
     (hG : ∀ i, Continuous (G i))
@@ -854,7 +866,75 @@ lemma apm_m98a04_translation_pairing_fderiv_of_stage_dq_aux_hasFDerivAt {n : ℕ
     (x : EuclideanSpace ℝ (Fin n)) :
     HasFDerivAt F (∑ i, G i x • (EuclideanSpace.proj i :
       EuclideanSpace ℝ (Fin n) →L[ℝ] ℝ)) x := by
-  sorry
+  rw [hasFDerivAt_iff_isLittleO_nhds_zero, Asymptotics.isLittleO_iff]
+  intro ε' hε'
+  set e : Fin n → EuclideanSpace ℝ (Fin n) := fun j => EuclideanSpace.single j 1 with he
+  have hn1 : (0 : ℝ) < n + 1 := by positivity
+  set ε := ε' / (n + 1) with hεdef
+  have hε : 0 < ε := by positivity
+  have hev : ∀ᶠ y in nhds x, ∀ j, |G j y - G j x| ≤ ε := by
+    rw [Filter.eventually_all]
+    intro j
+    filter_upwards [(hG j).continuousAt.eventually (Metric.closedBall_mem_nhds (G j x) hε)]
+      with y hy
+    simpa [Metric.mem_closedBall, Real.dist_eq] using hy
+  obtain ⟨δ, hδ, hball⟩ := Metric.eventually_nhds_iff.1 hev
+  filter_upwards [Metric.ball_mem_nhds (0 : EuclideanSpace ℝ (Fin n))
+    (div_pos hδ hn1)] with h hh
+  rw [Metric.mem_ball, dist_zero_right, lt_div_iff₀ hn1] at hh
+  have hsum : ∑ j, |h j| ≤ n * ‖h‖ := by
+    calc ∑ j, |h j| ≤ ∑ _j : Fin n, ‖h‖ :=
+          Finset.sum_le_sum fun j _ => apm_m98a04_translation_pairing_fderiv_of_stage_dq_aux_hasFDerivAt_aux_coord_le h j
+      _ = n * ‖h‖ := by simp
+  have hsmall : ∑ j, |h j| < δ := by
+    have : (n : ℝ) * ‖h‖ < δ := by nlinarith [norm_nonneg h]
+    linarith
+  have hnorm_e : ∀ j, ‖e j‖ = 1 := fun j => by simp [he]
+  have key : ∀ S : Finset (Fin n),
+      |F (x + ∑ j ∈ S, h j • e j) - F x - ∑ j ∈ S, G j x * h j| ≤ ε * ∑ j ∈ S, |h j| := by
+    intro S
+    induction S using Finset.induction_on with
+    | empty => simp
+    | insert a S ha ih =>
+      rw [Finset.sum_insert ha, Finset.sum_insert ha, Finset.sum_insert ha]
+      set p := x + ∑ j ∈ S, h j • e j with hp
+      have hseg := apm_m98a04_translation_pairing_fderiv_of_stage_dq_aux_hasFDerivAt_aux_segment F G hF a p (G a x) ε (h a) (fun s hs => by
+        have hdist : dist (p + s • EuclideanSpace.single a 1) x < δ := by
+          rw [dist_eq_norm]
+          have h1 : p + s • EuclideanSpace.single a 1 - x =
+              ∑ j ∈ S, h j • e j + s • e a := by
+            simp only [hp, he]; abel
+          rw [h1]
+          calc ‖∑ j ∈ S, h j • e j + s • e a‖
+              ≤ ‖∑ j ∈ S, h j • e j‖ + ‖s • e a‖ := norm_add_le _ _
+            _ ≤ ∑ j ∈ S, ‖h j • e j‖ + ‖s • e a‖ := by gcongr; exact norm_sum_le _ _
+            _ = ∑ j ∈ S, |h j| + |s| := by
+                simp only [norm_smul, hnorm_e, mul_one, Real.norm_eq_abs]
+            _ ≤ ∑ j ∈ S, |h j| + |h a| := by gcongr
+            _ = ∑ j ∈ insert a S, |h j| := by rw [Finset.sum_insert ha, add_comm]
+            _ ≤ ∑ j, |h j| := Finset.sum_le_sum_of_subset_of_nonneg (Finset.subset_univ _)
+                  (fun _ _ _ => abs_nonneg _)
+            _ < δ := hsmall
+        exact hball hdist a)
+      have hx : x + (h a • e a + ∑ j ∈ S, h j • e j) = p + h a • EuclideanSpace.single a 1 := by
+        simp only [hp, he]; abel
+      rw [hx]
+      calc |F (p + h a • EuclideanSpace.single a 1) - F x - (G a x * h a + ∑ j ∈ S, G j x * h j)|
+          = |(F (p + h a • EuclideanSpace.single a 1) - F p - G a x * h a) +
+              (F p - F x - ∑ j ∈ S, G j x * h j)| := by ring_nf
+        _ ≤ ε * |h a| + ε * ∑ j ∈ S, |h j| := (abs_add_le _ _).trans (add_le_add hseg ih)
+        _ = ε * (|h a| + ∑ j ∈ S, |h j|) := by ring
+  have hrecon : ∑ j, h j • e j = h := by
+    conv_rhs => rw [← (EuclideanSpace.basisFun (Fin n) ℝ).sum_repr h]
+    simp [he]
+  have hfull := key Finset.univ
+  rw [hrecon] at hfull
+  rw [apm_m98a04_translation_pairing_fderiv_of_stage_dq_aux_hasFDerivAt_aux_apply, Real.norm_eq_abs]
+  calc |F (x + h) - F x - ∑ i, G i x * h i| ≤ ε * ∑ j, |h j| := hfull
+    _ ≤ ε * (n * ‖h‖) := mul_le_mul_of_nonneg_left hsum hε.le
+    _ ≤ ε' * ‖h‖ := by
+        rw [hεdef, div_mul_eq_mul_div, div_le_iff₀ hn1]
+        nlinarith [norm_nonneg h, hε'.le]
 
 theorem apm_m98a04_translation_pairing_fderiv_of_stage_dq {n : ℕ}
     (T : Distribution (⊤ : Opens (EuclideanSpace ℝ (Fin n))) ℝ ⊤)
