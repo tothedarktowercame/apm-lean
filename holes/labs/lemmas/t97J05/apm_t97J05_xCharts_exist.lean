@@ -487,7 +487,135 @@ theorem apm_t97J05_xCharts_exist
     (hsecond : ∀ {q w : apm_t97J05_R3}, q ∈ apm_t97J05_W → w ∈ apm_t97J05_W →
       |w 1 - q 1| < Real.pi → w 1 = q 1) :
     apm_t97J05_HasXCharts := by
-  sorry
+  intro q
+  have hqmul : (q : apm_t97J05_R3) 0 * (q : apm_t97J05_R3) 2 = 1 := by
+    have h := congrArg (fun u : apm_t97J05_R2 ↦ u 1) q.property
+    simpa [apm_t97J05_W, apm_t97J05_f, apm_t97J05_value] using h
+  have hq0 : (q : apm_t97J05_R3) 0 ≠ 0 := by
+    intro h
+    simp [h] at hqmul
+  let source : Set apm_t97J05_W :=
+    {w | |(w : apm_t97J05_R3) 1 - (q : apm_t97J05_R3) 1| < Real.pi / 2 ∧
+      0 < (w : apm_t97J05_R3) 0 * (q : apm_t97J05_R3) 0}
+  let target : Set apm_t97J05_R1 :=
+    {t | 0 < t 0 * (q : apm_t97J05_R3) 0}
+  let toFun : apm_t97J05_W → apm_t97J05_R1 := fun w =>
+    WithLp.toLp 2 ![(w : apm_t97J05_R3) 0]
+  let invFun : apm_t97J05_R1 → apm_t97J05_W := fun t =>
+    if ht : t 0 = 0 then q else
+    ⟨WithLp.toLp 2 ![t 0, (q : apm_t97J05_R3) 1, 1 / t 0], by
+      change apm_t97J05_f (WithLp.toLp 2
+        ![t 0, (q : apm_t97J05_R3) 1, 1 / t 0]) = apm_t97J05_value
+      have hfirst := congrArg (fun u : apm_t97J05_R2 ↦ u 0) q.property
+      have hcos : Real.cos ((q : apm_t97J05_R3) 1) = 0 := by
+        simpa [apm_t97J05_W, apm_t97J05_f, apm_t97J05_value,
+          Real.exp_ne_zero] using hfirst
+      ext i
+      fin_cases i <;> simp [apm_t97J05_f, apm_t97J05_value, hcos, ht]
+      ⟩
+  let c : OpenPartialHomeomorph apm_t97J05_W apm_t97J05_R1 := {
+    toFun := toFun
+    invFun := invFun
+    source := source
+    target := target
+    map_source' := by
+      intro w hw
+      exact hw.2
+    map_target' := by
+      intro t ht
+      have ht0 : t 0 ≠ 0 := fun hz => by
+        change 0 < t 0 * (q : apm_t97J05_R3) 0 at ht
+        rw [hz, zero_mul] at ht
+        exact (lt_irrefl 0 ht)
+      constructor
+      · have heq : ((invFun t : apm_t97J05_W) : apm_t97J05_R3) 1 =
+            (q : apm_t97J05_R3) 1 := by simp [invFun, ht0]
+        simpa [heq, abs_zero] using (half_pos Real.pi_pos)
+      · simpa [invFun, ht0] using ht
+    left_inv' := by
+      intro w hw
+      apply Subtype.ext
+      have hy : (w : apm_t97J05_R3) 1 = (q : apm_t97J05_R3) 1 := by
+        apply hsecond q.property w.property
+        calc
+          |(w : apm_t97J05_R3) 1 - (q : apm_t97J05_R3) 1| < Real.pi / 2 := hw.1
+          _ < Real.pi := by linarith [Real.pi_pos]
+      have hw0 : (w : apm_t97J05_R3) 0 ≠ 0 := fun hz => by
+        have hp := hw.2
+        rw [hz, zero_mul] at hp
+        exact (lt_irrefl 0 hp)
+      have hmul : (w : apm_t97J05_R3) 0 * (w : apm_t97J05_R3) 2 = 1 := by
+        have h := congrArg (fun u : apm_t97J05_R2 ↦ u 1) w.property
+        simpa [apm_t97J05_W, apm_t97J05_f, apm_t97J05_value] using h
+      ext i
+      fin_cases i
+      · simp [toFun, invFun, hw0]
+      · simpa [toFun, invFun, hw0] using hy.symm
+      · simp [toFun, invFun, hw0]
+        field_simp [hw0]
+        simpa [mul_comm] using hmul.symm
+    right_inv' := by
+      intro t ht
+      ext i
+      fin_cases i
+      have ht0 : t 0 ≠ 0 := fun hz => by simp [target, hz] at ht
+      simp [toFun, invFun, ht0]
+    open_source := by
+      apply IsOpen.and
+      · apply isOpen_lt
+        · fun_prop
+        · fun_prop
+      · apply isOpen_lt <;> fun_prop
+    open_target := by
+      apply isOpen_lt <;> fun_prop
+    continuousOn_toFun := by
+      apply Continuous.continuousOn
+      exact (PiLp.continuous_toLp 2 (fun _ : Fin 1 => ℝ)).comp
+        (continuous_pi (fun i => by
+          fin_cases i
+          change Continuous (fun a : apm_t97J05_W => (a : apm_t97J05_R3) 0)
+          fun_prop))
+    continuousOn_invFun := by
+      have hp : ContinuousOn
+          (fun t : apm_t97J05_R1 => WithLp.toLp 2
+            ![t 0, (q : apm_t97J05_R3) 1, 1 / t 0]) target := by
+        intro t ht
+        have ht0 : t 0 ≠ 0 := fun hz => by simp [target, hz] at ht
+        apply (PiLp.continuous_toLp 2 (fun _ : Fin 3 => ℝ)).continuousAt.comp_continuousWithinAt
+        rw [continuousWithinAt_pi]
+        intro i
+        fin_cases i
+        · change ContinuousWithinAt (fun y : apm_t97J05_R1 => y 0) target t
+          fun_prop
+        · exact continuousWithinAt_const
+        · change ContinuousWithinAt (fun y : apm_t97J05_R1 => 1 / y 0) target t
+          exact (continuousAt_const.div₀
+            (PiLp.proj (𝕜 := ℝ) 2 (fun _ : Fin 1 => ℝ) 0).continuous.continuousAt
+            ht0).continuousWithinAt
+      rw [continuousOn_iff_continuous_restrict, continuous_induced_rng]
+      change Continuous (target.restrict
+        (fun x => ((invFun x : apm_t97J05_W) : apm_t97J05_R3)))
+      rw [← continuousOn_iff_continuous_restrict]
+      apply hp.congr
+      intro x hx
+      congr 1
+      simp only
+      show ((invFun x : apm_t97J05_W) : apm_t97J05_R3) = _
+      have hx0 : x 0 ≠ 0 := fun hz => by
+        change 0 < x 0 * (q : apm_t97J05_R3) 0 at hx
+        rw [hz, zero_mul] at hx
+        exact (lt_irrefl 0 hx)
+      simp [invFun, hx0]
+  }
+  refine ⟨c, ?_, ?_, ?_⟩
+  · constructor
+    · simpa [c, source] using (half_pos Real.pi_pos)
+    · exact mul_self_pos.mpr hq0
+  · intro w hw
+    rfl
+  · intro t ht
+    have ht0 : t 0 ≠ 0 := fun hz => by simp [c, target, hz] at ht
+    exact ⟨ht0, by simp [c, invFun, ht0]⟩
 -- END SEAT AREA
 
 /-- Seat: every transition map of the x-atlas is the identity on its source
