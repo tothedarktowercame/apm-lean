@@ -24430,7 +24430,7 @@
    :consumer :t01A08,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 0,
    :review-finding
    "extend Mathlib: state and prove the missing theorem in scope",
    :implements-lemma :lemma-closedset-whitneycubecover,
@@ -24473,6 +24473,17 @@
     [{:cmd "exploratory builds",
       :exit 1,
       :correction "fixed onFun/edist and positivity"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791909245009-9997-f8ea4749",
+     :commands
+     ["git show/diff 69dea2a; scope/type checks"
+      "sha256sum + lake env lean frozen fixture"
+      "lake build ConstructionTargets.SardConvexDomain"
+      "statement registry check; forbidden-count scan"],
+     :finding
+     "PASS. Recorded topo-10 commit 69dea2a changes only the scoped Lean file and correctly proves the normalized incidence image is 1/8-separated. Distinct images imply distinct centers; stratum separation gives 2^k/8<dist(c,d); positive inverse scaling yields 1/8 after normalization; edist/ofReal conversion is oriented correctly. Fixture hash 777f5648... matches; build/fixture pass; registry 150/150; forbidden placeholders stay 0; only standard axioms. Valid compiled B3 progress; STOP leaves fixed packing, adjacent-stratum summation, and assembly."},
     :commit "69dea2af4ff324aa69b59e7e2be7e82f3d67a4e9",
     :changed-paths ["ConstructionTargets/SardConvexDomain.lean"],
     :fixture
@@ -24482,7 +24493,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain.blueprint/B3",
    :acceptance
@@ -35596,7 +35607,7 @@
    :other-consumers []}
   {:consumer :t01A08,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -35608,7 +35619,9 @@
     :reported-by [:r-a08-sard-b3-whitney-cubes-1],
     :type "normalized incidence image is 1/8-separated",
     :area "sard-convex-domain",
-    :proved-in :r-a08-sard-b3-whitney-cubes-1},
+    :proved-in :r-a08-sard-b3-whitney-cubes-1,
+    :banked-by :r-a08-sard-b3-whitney-cubes-1,
+    :banked-commit "69dea2af4ff324aa69b59e7e2be7e82f3d67a4e9"},
    :id
    :lemma-constructiontargets-sardconvexdomain-isseparated-image-whitneynormalize-incidenc,
    :kind :lemma,
