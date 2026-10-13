@@ -22997,34 +22997,34 @@
    :consumer :t01A08,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "extend Mathlib: state and prove the missing theorem in scope. The frozen fixture declares ContDiffWithinAt.domDomCongr_iteratedFDerivWithin_of_infty as an axiom, and #print shows convexWithinJet depends on that nonstandard axiom. The row records commit nil, no changed paths, and status :not-started; compiling an axiomatized facade is not progress toward discharging the frozen interface. Prove adjacent-swap symmetry and permutation induction in ConstructionTargets/SardConvexDomain.lean, then rerun the fixture without its axiom.",
    :evidence
    {:placeholder-delta {:t01A08 [1 1]},
     :residual
-    "Repair frozen interface with closure-interior membership, then prove adjacent-swap induction and permutation invariance.",
-    :missing-hypothesis
-    "x ∈ closure (interior s); B1 can supply this from convexity and nonempty interior.",
+    "Repair the frozen fixture/type by adding closure-interior membership; convex B1 supplies it from convexity and nonempty interior.",
+    :missing-hypothesis "x ∈ closure (interior s)",
     :outcome :stop,
     :warnings [],
-    :statement-hashes {:registry "146/146"},
+    :missing-theorems
+    [{:name
+      "ContDiffWithinAt.domDomCongr_iteratedFDerivWithin_of_infty",
+      :type "same frozen conclusion plus x∈closure(interior s)",
+      :status :proved,
+      :consumers [:t01A08],
+      :depends-on [],
+      :area "sard-convex-domain"}],
+    :statement-hashes {:registry "149/149"},
     :disposition :stop,
-    :axioms [],
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Frozen type lacks x in closure(interior s). Even order-2 real C2 symmetry requires this hypothesis; UniqueDiffOn plus x-in-s is insufficient for the available finite-smooth theorem. The analytic theorem needs C-omega.",
+    "Frozen type omits x∈closure(interior s). UniqueDiffOn ℝ s and x∈s do not supply that density hypothesis; the compiled symmetry theorem requires it, so the requested interface cannot be discharged without changing its type.",
     :commands
     [{:cmd
-      "rg -n finite-smooth-symmetry Mathlib/Analysis/Calculus/FDeriv/Symmetric.lean",
-      :exit 0}
-     {:cmd "sha256sum /tmp/t01a08_sard_b1_probe.lean", :exit 0}
-     {:cmd "lake env lean ConstructionTargets/SardConvexDomain.lean",
-      :exit 0}
-     {:cmd
-      "git diff --exit-code -- ConstructionTargets/SardConvexDomain.lean",
-      :exit 0}
-     {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
+      "rg theorem/hypotheses; sha256sum fixture; lake env lean corrected export check; statement-registry check",
+      :exit 0}],
     :commit nil,
     :changed-paths [],
     :fixture
@@ -23034,7 +23034,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain.blueprint/B1/smooth-symmetry",
    :acceptance
