@@ -419,6 +419,45 @@ theorem ContDiffWithinAt.iteratedFDerivWithin_domDomCongr_swap_zero_one_of_nat
   iteratedFDerivWithin_domDomCongr_swap_zero_one hu hxs
     (hf.isSymmSndFDerivWithinAt_iteratedFDerivWithin_of_nat hu hxs hxi)
 
+/-- At an interior point, finite differentiability through order `n` makes the `n`-th
+iterated derivative invariant under every permutation. -/
+theorem ContDiffWithinAt.domDomCongr_iteratedFDerivWithin_of_nat_of_mem_interior
+    {E F : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [NormedAddCommGroup F] [NormedSpace ℝ F]
+    {s : Set E} {f : E → F} {x : E} (hu : UniqueDiffOn ℝ s) :
+    ∀ n : ℕ, ContDiffWithinAt ℝ n f s x → x ∈ interior s →
+      ∀ sigma : Equiv.Perm (Fin n),
+        (iteratedFDerivWithin ℝ n f s x).domDomCongr sigma =
+          iteratedFDerivWithin ℝ n f s x := by
+  intro n
+  induction n using Nat.strong_induction_on generalizing x with
+  | h n ih =>
+      intro hf hxi sigma
+      cases n with
+      | zero =>
+          ext v
+          congr 1
+      | succ n =>
+          apply ContinuousMultilinearMap.domDomCongr_eq_self_of_adjacent_swap _ _ sigma
+          intro i
+          cases n with
+          | zero => exact Fin.elim0 i
+          | succ m =>
+              refine Fin.cases ?_ (fun j => ?_) i
+              · simpa only [Nat.add_eq, Nat.add_zero, Nat.add_assoc] using
+                  hf.iteratedFDerivWithin_domDomCongr_swap_zero_one_of_nat hu
+                    (interior_subset hxi) (subset_closure hxi)
+              · have hflower : ContDiffWithinAt ℝ (m + 1) f s x :=
+                  hf.of_le (WithTop.coe_le_coe.mpr (by
+                    have hm : ((m + 1 : ℕ) : ENat) ≤ ((m + 2 : ℕ) : ENat) := by
+                      exact_mod_cast Nat.le_succ (m + 1)
+                    simpa using hm))
+                have hev := hflower.eventually_mem_interior_contDiffWithinAt_of_nat hxi
+                apply iteratedFDerivWithin_domDomCongr_adjacent_succ_of_eventuallyEq
+                  hu (interior_subset hxi) j
+                filter_upwards [hev] with y hy
+                exact ih (m + 1) (by omega) hy.2 hy.1 (Equiv.swap j.castSucc j.succ)
+
 namespace ConstructionTargets.SardConvexDomain
 
 theorem modelRange_withinCriticalImage_subset_interior_union_frontier
