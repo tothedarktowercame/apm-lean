@@ -883,3 +883,23 @@ lemma apm_t94a08_punctured_euclidean_ball_isPreconnected
       simp [e]
   rw [← himage]
   exact (hpath.image' hcont).isConnected.isPreconnected
+
+lemma apm_t94a08_manifoldChart_has_preconnected_punctured_ball
+    (U : Set apm_t94a08_CP2) (hnodeU : apm_t94a08_node ∈ U)
+    (W : Set (EuclideanSpace ℝ (Fin 2))) (hW : IsOpen W)
+    (e : ↑(U ∩ apm_t94a08_sigma2) ≃ₜ ↑W) :
+    ∃ r > 0,
+      Metric.ball
+          (e ⟨apm_t94a08_node, hnodeU, apm_t94a08_node_mem_sigma2⟩).1 r ⊆ W ∧
+        IsPreconnected
+          (Metric.ball
+              (e ⟨apm_t94a08_node, hnodeU, apm_t94a08_node_mem_sigma2⟩).1 r \
+            {(e ⟨apm_t94a08_node, hnodeU,
+              apm_t94a08_node_mem_sigma2⟩).1}) := by
+  let c : EuclideanSpace ℝ (Fin 2) :=
+    (e ⟨apm_t94a08_node, hnodeU, apm_t94a08_node_mem_sigma2⟩).1
+  have hc : c ∈ W :=
+    (e ⟨apm_t94a08_node, hnodeU, apm_t94a08_node_mem_sigma2⟩).2
+  obtain ⟨r, hr, hrW⟩ := Metric.isOpen_iff.mp hW c hc
+  refine ⟨r, hr, hrW, ?_⟩
+  exact apm_t94a08_punctured_euclidean_ball_isPreconnected c hr
