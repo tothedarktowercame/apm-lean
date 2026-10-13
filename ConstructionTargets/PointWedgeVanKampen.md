@@ -1301,3 +1301,11 @@ two factors are combined by
 remaining comparison identifies this chosen-base normal form with the
 right-base projection factor, after which the existing `inl` criterion closes
 B6.
+
+`genericPointWedgeRightBase_rightProjection_eq_normalForms` now composes the
+two projection reductions: the right projection of the reconstruction
+conjugator is exactly the chosen-base inverse-span normal form times the
+unshifted round-trip normal form.  The shifted round-trip result does not by
+itself rewrite this unshifted component; that comparison is the next typed
+step toward proving the product is one and factoring the conjugator through
+`inl`.

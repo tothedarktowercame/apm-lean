@@ -6547,6 +6547,28 @@ theorem genericPointWedgeOuterRight_shiftedNormalForms_product_eq_base :
   rw [genericPointWedgeOuterRightSpan_shiftedNormalForm_eq_base,
     genericPointWedgeOuterRightRoundTrip_precedingNormalForm_eq_one, mul_one]
 
+
+/-- The right projection of the reconstruction conjugator is exactly the
+chosen-base product of the two forward-right connector normal forms. -/
+theorem genericPointWedgeRightBase_rightProjection_eq_normalForms :
+    let r := genericPointWedgeActualRight x₀ y₀ M N
+    let eK := genericPointWedgeOverlapGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let eR := genericPointWedgeRightGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let aR := genericPointWedgeRightSpanIso
+      x₀ y₀ M N hM hN hy hx cM cN
+    let z := genericPointWedgeOverlapBase x₀ y₀ M N
+    genericPointWedgeFreeProductRightProjection x₀ y₀
+        (genericPointWedgeIdentityGlobalRightBaseElement
+          x₀ y₀ M N hM hN hy hx cM cN) =
+      (genericPointWedgeConnectors y₀).normalForm
+          (aR.inv.app (eK.functor.obj z)) *
+        (genericPointWedgeConnectors y₀).normalForm
+          ((eK.funInvIdAssoc (r ⋙ eR.functor)).hom.app z) := by
+  rw [genericPointWedgeRightBase_rightProjection_eq_outerRight,
+    genericPointWedgeOuterRightComparison_rightProjection_eq_normalForms]
+
 /-- An `inl` factorization of the right-base conjugator forces its canonical
 right projection to be trivial. -/
 theorem genericPointWedgeRightBase_inl_implies_rightProjection_eq_one
@@ -7286,6 +7308,7 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeOuterRightRoundTrip_precedingNormalForm_eq_one
 #print axioms genericPointWedgeOuterRightSpan_shiftedNormalForm_eq_base
 #print axioms genericPointWedgeOuterRight_shiftedNormalForms_product_eq_base
+#print axioms genericPointWedgeRightBase_rightProjection_eq_normalForms
 #print axioms genericPointWedgeRightBase_inl_implies_rightProjection_eq_one
 #print axioms genericPointWedgeLegCoordinates_of_mapped
 #print axioms genericPointWedgeLegCoordinates_iff_mapped
