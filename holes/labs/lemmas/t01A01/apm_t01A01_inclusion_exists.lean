@@ -78,12 +78,87 @@ theorem apm_t01A01_retraction_exists :
 
 /-- Seat: the inclusion `[x : y] ↦ [x : y : 0]` misses `[0 : 0 : 1]` and is continuous. -/
 -- BEGIN SEAT AREA
+def apm_t01A01_inclusion_exists_aux_embed (w : Fin 2 → ℝ) : Fin 3 → ℝ :=
+  ![w 0, w 1, 0]
+
+lemma apm_t01A01_inclusion_exists_aux_nonzero
+    (w : Fin 2 → ℝ) (hw : w ≠ 0) :
+    apm_t01A01_inclusion_exists_aux_embed w ≠ 0 := by
+  intro h
+  apply hw
+  funext j
+  fin_cases j
+  · exact congrFun h 0
+  · exact congrFun h 1
+
+lemma apm_t01A01_inclusion_exists_aux_ne_q0
+    (w : Fin 2 → ℝ) (hw : w ≠ 0) :
+    Projectivization.mk ℝ (apm_t01A01_inclusion_exists_aux_embed w)
+        (apm_t01A01_inclusion_exists_aux_nonzero w hw) ≠ apm_t01A01_q0 := by
+  intro h
+  obtain ⟨a, ha⟩ := (Projectivization.mk_eq_mk_iff ℝ _ _
+    (apm_t01A01_inclusion_exists_aux_nonzero w hw) _).mp h
+  apply hw
+  funext j
+  fin_cases j
+  · have := congrFun ha 0
+    simpa [apm_t01A01_inclusion_exists_aux_embed] using this.symm
+  · have := congrFun ha 1
+    simpa [apm_t01A01_inclusion_exists_aux_embed] using this.symm
+
 theorem apm_t01A01_inclusion_exists :
     ∃ i : C(apm_t01A01_RP1, {y : apm_t01A01_RP2 // y ≠ apm_t01A01_q0}),
       ∀ (w : Fin 2 → ℝ) (hw : w ≠ 0) (h3 : (![w 0, w 1, 0] : Fin 3 → ℝ) ≠ 0),
         (i (Projectivization.mk ℝ w hw) : apm_t01A01_RP2) =
           Projectivization.mk ℝ ![w 0, w 1, 0] h3 := by
-  sorry
+  let lift : {w : (Fin 2 → ℝ) // w ≠ 0} →
+      {y : apm_t01A01_RP2 // y ≠ apm_t01A01_q0} := fun w =>
+    ⟨Projectivization.mk ℝ (apm_t01A01_inclusion_exists_aux_embed w.1)
+      (apm_t01A01_inclusion_exists_aux_nonzero w.1 w.2),
+      apm_t01A01_inclusion_exists_aux_ne_q0 w.1 w.2⟩
+  have hlift : Continuous lift := by
+    apply Continuous.subtype_mk
+    change Continuous
+      (ConstructionTargets.ProjectiveSpaceTopology.quotientMap ℝ 2 ∘
+        fun w : {w : (Fin 2 → ℝ) // w ≠ 0} =>
+          ⟨apm_t01A01_inclusion_exists_aux_embed w.1,
+            apm_t01A01_inclusion_exists_aux_nonzero w.1 w.2⟩)
+    apply (ConstructionTargets.ProjectiveSpaceTopology.continuous_quotientMap ℝ 2).comp
+    apply Continuous.subtype_mk
+    apply continuous_pi
+    intro j
+    fin_cases j
+    · simpa [apm_t01A01_inclusion_exists_aux_embed] using
+        ((continuous_apply (0 : Fin 2)).comp
+          (continuous_subtype_val : Continuous
+            (fun w : {w : (Fin 2 → ℝ) // w ≠ 0} => w.1)))
+    · simpa [apm_t01A01_inclusion_exists_aux_embed] using
+        ((continuous_apply (1 : Fin 2)).comp
+          (continuous_subtype_val : Continuous
+            (fun w : {w : (Fin 2 → ℝ) // w ≠ 0} => w.1)))
+    · exact continuous_const
+  obtain ⟨i, hi⟩ :=
+    ConstructionTargets.ProjectiveQuotientDescent.projectiveHomogeneousMapDescent
+      ℝ lift hlift (by
+        intro a b t hab
+        apply Subtype.ext
+        apply (Projectivization.mk_eq_mk_iff ℝ _ _
+          (apm_t01A01_inclusion_exists_aux_nonzero a.1 a.2)
+          (apm_t01A01_inclusion_exists_aux_nonzero b.1 b.2)).mpr
+        by_cases ht : t = 0
+        · subst t
+          exfalso
+          apply a.2
+          simpa using hab
+        · refine ⟨Units.mk0 t ht, ?_⟩
+          rw [hab]
+          funext j
+          fin_cases j <;> simp [apm_t01A01_inclusion_exists_aux_embed])
+  refine ⟨i, ?_⟩
+  intro w hw h3
+  have h := congrArg Subtype.val (hi ⟨w, hw⟩)
+  simpa [ConstructionTargets.ProjectiveSpaceTopology.quotientMap,
+    apm_t01A01_inclusion_exists_aux_embed] using h
 -- END SEAT AREA
 
 /-- Seat: for maps with these formulas, `r ∘ i = id` and `i ∘ r ≃ id` via
