@@ -113850,14 +113850,14 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 8,
+   :stop-count 9,
    :review-finding
    "Recorded fixture hash mismatch: :fixture.sha256 is 0bca6ce32c019fc3053c7f813c26917169cf817375b44d5e722b864b61a526450c1, but ConstructionTargets/PointWedgeVanKampen.blueprint.md at recorded commit c9b3af27 has exact SHA-256 0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0. Re-record the fixture hash for the reviewed commit.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
    :evidence
    {:placeholder-delta {:source-before 0, :source-after 0},
     :residual
-    "Reduce transported side by eK triangle; projection=1, inl, B6/B12.",
+    "Close shifted component recurrence at Unit; projection=1, inl, B6/B12.",
     :outcome :stop,
     :warnings ["existing linter"],
     :missing-theorems
@@ -113871,9 +113871,9 @@
       :area "fundamental-group-wedge-of-circles"}],
     :statement-hashes
     {:source
-     "ba366aa765f736930fbf782564e7429e17936299f60b58336237937a3a088de2",
+     "804a4a48ac6781d50de2bf7023703ab3124654e6d3d70c2f047153543c11fd18",
      :documentation
-     "1cbd763b998b380df8b24b2a2cc0c8ae43ed93c9b7d0ce88f3919e13878ee3cf",
+     "c2c9802cb312244369cc4e3cd1c59710504a48013a8d9736acecf7616db627e0",
      :blueprint
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0",
      :registry "149/149"},
@@ -113881,7 +113881,7 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
     :reason
-    "Naturality square banked; coordinate unitInv map is identity.",
+    "eK triangle reduces the transported map to the preceding unitInv component.",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/PointWedgeVanKampen.lean",
@@ -113891,25 +113891,11 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "hash/diff/placeholders", :exit 0}],
     :diagnostic-history
-    [{:cmd "lean draft",
-      :exit 1,
-      :finding "Direct identity ill-typed; used naturality."}
-     {:cmd
+    [{:cmd
       "lake build ConstructionTargets.ThreeCirclesFundamentalGroup",
       :exit 1,
       :finding "B12 absent."}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1791895414509-9659-f28d3fdf",
-     :commands
-     ["git show/diff c8e374ff^..c8e374ff"
-      "git archive c8e374ff; lake env lean archived PointWedgeVanKampen.lean"
-      "sha256/diff-tree/placeholder checks; statement-registry.py check"
-      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (expected absent)"],
-     :finding
-     "Reviewer codex-3. PASS program STOP: c8e374ff adds two compiled, sorry-free supporting theorems after c62c3bd6. The naturality square has the correct inv-transformation orientation, and the coordinate-side unitInv image is legitimately identity because the intermediate FundamentalGroupoid Unit hom is subsingleton; dependent endpoints stay intact. Scope is Lean+MD only; source/doc/fixture hashes match ledger (ba366aa7/1cbd763b/0bca6ce3), placeholders 0, registry 149/149, axioms standard only. Residual: reduce the transported side by the eK triangle, then projection=1, inl, B6/B12; B12 remains absent."},
-    :commit "c8e374ff521df243a02e2fde5b8440ac827b8608",
+    :commit "207489df98f507bf67e9a4834e5248b449a2d9df",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
      "ConstructionTargets/PointWedgeVanKampen.md"],
@@ -113919,7 +113905,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
