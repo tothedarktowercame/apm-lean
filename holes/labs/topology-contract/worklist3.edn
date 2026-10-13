@@ -36686,6 +36686,12 @@
     :commands
     [{:cmd "registry; placeholder; blueprint node scan; diff", :exit 0}
      {:cmd "git commit; show --check", :exit 0}],
+    :review
+    {:outcome :fail,
+     :seat "codex-11",
+     :job "invoke-1791929045249-10664-96ba84a1",
+     :finding
+     "extend Mathlib: state and prove the missing theorem in scope"},
     :commit "dfeb9e51024d9285b2d0620c00c38d6cbbcbfd57",
     :changed-paths ["ConstructionTargets/t96A06Closure.blueprint.md"],
     :fixture
@@ -36695,7 +36701,7 @@
      :mode :blueprint},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :repair,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -36717,7 +36723,7 @@
    :id :program-2026-10-13-close-t96a06,
    :kind :final-adapter,
    :campaign-priority 31,
-   :fail-count 1,
+   :fail-count 2,
    :depends-on [],
    :program true,
    :other-consumers []}
