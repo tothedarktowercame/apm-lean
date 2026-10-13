@@ -23583,6 +23583,17 @@
      {:cmd "HEAD scope check",
       :exit 1,
       :finding "HEAD moved; checked commit"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791876672728-8940-17f21a1d",
+     :commands
+     ["git diff --check 642eed3d^ 642eed3d -- SardConvexDomain.lean"
+      "lake build ConstructionTargets.SardConvexDomain"
+      "lake env lean /tmp/CheckSardSymm.lean"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS: valid STOP after further real progress. 642eed3d changes only the scoped file and adds a compiled, sorry-free lower-jet Schwarz theorem with the corrected membership/closure boundary and only propext/Classical.choice/Quot.sound. Registry 147/147; fixture digest matches; placeholders remain 0. Slot identification and permutation induction are accurately listed as remaining."},
     :commit "642eed3d9f26ea9573d69eb00a9060f022fe40b2",
     :changed-paths ["ConstructionTargets/SardConvexDomain.lean"],
     :fixture
@@ -23592,7 +23603,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :stopped,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain/B1/symmetry",
    :acceptance
@@ -23624,7 +23635,7 @@
      :infrastructure-packets
      :review-outcomes]},
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance {:strategy "Review symmetry; rerank."},
