@@ -1069,3 +1069,9 @@ inverse component, and
 `genericPointWedgeRightInverseBaseToRightBaseFromSpan_eq_baseTransport`
 identifies the complete recovered forward morphism with the canonical
 inverse-image-to-right-base transport.
+
+`genericPointWedgeRightForward_reverse_map_comp` records the opposite-order
+mapped cancellation needed by the group calculation.  Substituting the
+base-transport identification into the normalized right counit square then
+gives `genericPointWedgeRightComparison_mul_globalBaseTransport_eq_one`: the
+full right comparison cancels the global image of that transport.
