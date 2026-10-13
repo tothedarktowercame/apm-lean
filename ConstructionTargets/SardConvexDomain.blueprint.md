@@ -34,9 +34,9 @@ they do not infer anything about an image from source nullity.
 
 ### B1. Within jets on a convex set
 
-lean: `ContDiffOn.convexWithinJet` : from `(interior s).Nonempty` and
-`hf : ContDiffOn ℝ ∞ f s`, produce symmetric continuous multilinear
-maps `J n x` for `x ∈ s`, with
+lean: `ContDiffOn.convexWithinJet` : from `hs : Convex ℝ s`,
+`(interior s).Nonempty`, and `hf : ContDiffOn ℝ ∞ f s`, produce
+symmetric continuous multilinear maps `J n x` for `x ∈ s`, with
 `J 0 x = f x`, `J 1 x = fderivWithin ℝ f s x`, and continuity on `s`
 
 uses: Mathlib iterated within derivatives and uniqueness on a convex set with
@@ -51,9 +51,9 @@ and continuity to the boundary.
 
 ### B2. Whitney compatibility of convex within jets
 
-lean: `ContDiffOn.convexWithinJet_isWhitney` : assuming
-`(interior s).Nonempty`, for every finite order `n`, the jets from B1 satisfy
-the order-`n` Whitney remainder estimates on `s`
+lean: `ContDiffOn.convexWithinJet_isWhitney` : assuming `hs : Convex ℝ s`
+and `(interior s).Nonempty`, for every finite order `n`, the jets from B1
+satisfy the order-`n` Whitney remainder estimates on `s`
 
 uses: B1, Mathlib `Convex.segment_subset`, one-variable Taylor formula with
 integral remainder
@@ -142,8 +142,9 @@ uses: B1, B5, B6, gluing differentiability across a closed set
 
 status: planned
 
-The interior witness supplies `s.Nonempty` for B3.  Take B5's function.  It is
-smooth off `s`; B6 supplies every derivative and
+Pass B7's `Convex ℝ s` hypothesis to B1 and B2; the interior witness
+supplies `s.Nonempty` for B3.  Take B5's function.  It is smooth off `s`; B6
+supplies every derivative and
 its continuity at `s`, so induction on finite order proves global smoothness
 and the displayed jet identities.  The equality and first-derivative identity
 are the order-zero and order-one cases.
@@ -179,7 +180,8 @@ uses: B7, B8,
 
 status: planned
 
-Choose B7's global smooth extension.  Ambient Sard makes its complete critical
+Pass B9's `Convex ℝ s` and nonempty-interior hypotheses to B7, and choose
+the resulting global smooth extension.  Ambient Sard makes its complete critical
 image null; B8 and measure monotonicity give the relative conclusion.  Thus
 the difficult positive-rank argument is reused exactly once from the banked
 ambient theorem, after the extension theorem has put the map in its required
