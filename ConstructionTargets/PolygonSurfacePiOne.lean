@@ -1823,6 +1823,14 @@ theorem PairingData.signedParameter_eq_one_iff (P : PairingData)
       norm_num [reverseIcc]
   · simp [PairingData.signedParameter, hs]
 
+theorem PairingData.signedParameter_endpoint (P : PairingData)
+    (i : Fin P.edgeCount) (t : Set.Icc (0 : ℝ) 1)
+    (ht : t = ⟨0, by norm_num⟩ ∨ t = ⟨1, by norm_num⟩) :
+    P.signedParameter i t = ⟨0, by norm_num⟩ ∨
+      P.signedParameter i t = ⟨1, by norm_num⟩ := by
+  rcases ht with rfl | rfl <;> cases hs : P.sign i <;>
+    simp [PairingData.signedParameter, hs, reverseIcc]
+
 /-- The arc coordinate selected by the sign of an oriented polygon edge.
 Negative edges use the inverse traversal. -/
 def PairingData.signedWedgeArc (P : PairingData) (i : Fin P.edgeCount)
@@ -2225,6 +2233,71 @@ theorem edgePoint_eq_imp_coordinate_cases (n : ℕ) (hn : 0 < n)
   · right; right
     norm_num at hk
     constructor <;> nlinarith [t.2.1, u.2.1]
+
+/-- Equal unscaled local coordinates either use the same edge and parameter,
+or both parameters are polygon endpoints. -/
+theorem edgeCoordinate_eq_imp_same_or_endpoints {n : ℕ}
+    (i j : Fin n) (t u : Set.Icc (0 : ℝ) 1)
+    (h : (i : ℝ) + t = (j : ℝ) + u) :
+    (i = j ∧ t = u) ∨
+      ((t = ⟨0, by norm_num⟩ ∨ t = ⟨1, by norm_num⟩) ∧
+        (u = ⟨0, by norm_num⟩ ∨ u = ⟨1, by norm_num⟩)) := by
+  by_cases hij : i = j
+  · left
+    refine ⟨hij, ?_⟩
+    subst j
+    apply Subtype.ext
+    exact add_left_cancel h
+  · right
+    by_cases hlt : (i : ℕ) < j
+    · have hijR : (i : ℝ) + 1 ≤ j := by exact_mod_cast (show (i : ℕ) + 1 ≤ j by omega)
+      have ht : (t : ℝ) = 1 := by nlinarith [t.2.2, u.2.1]
+      have hu : (u : ℝ) = 0 := by nlinarith [t.2.2, u.2.1]
+      exact ⟨Or.inr (Subtype.ext ht), Or.inl (Subtype.ext hu)⟩
+    · have hji : (j : ℕ) < i := by omega
+      have hjiR : (j : ℝ) + 1 ≤ i := by exact_mod_cast (show (j : ℕ) + 1 ≤ i by omega)
+      have ht : (t : ℝ) = 0 := by nlinarith [t.2.1, u.2.2]
+      have hu : (u : ℝ) = 1 := by nlinarith [t.2.1, u.2.2]
+      exact ⟨Or.inl (Subtype.ext ht), Or.inr (Subtype.ext hu)⟩
+
+/-- Complete geometric classification needed to compare arc
+representatives: equal boundary points are identical parametrizations unless
+both parameters are endpoints. -/
+theorem edgePoint_eq_imp_same_or_endpoints (n : ℕ) (hn : 0 < n)
+    (i j : Fin n) (t u : Set.Icc (0 : ℝ) 1)
+    (h : edgePoint n i t = edgePoint n j u) :
+    (i = j ∧ t = u) ∨
+      ((t = ⟨0, by norm_num⟩ ∨ t = ⟨1, by norm_num⟩) ∧
+        (u = ⟨0, by norm_num⟩ ∨ u = ⟨1, by norm_num⟩)) := by
+  rcases edgePoint_eq_imp_coordinate_cases n hn i j t u h with hcoord | hwrap | hwrap
+  · exact edgeCoordinate_eq_imp_same_or_endpoints i j t u hcoord
+  · right
+    have hi0 : (0 : ℝ) ≤ i := by positivity
+    have ht : (t : ℝ) = 0 := by nlinarith [t.2.1]
+    have hjR : (j : ℝ) + 1 ≤ n := by
+      exact_mod_cast (show (j : ℕ) + 1 ≤ n by omega)
+    have hu : (u : ℝ) = 1 := by nlinarith [u.2.2]
+    exact ⟨Or.inl (Subtype.ext ht), Or.inr (Subtype.ext hu)⟩
+  · right
+    have hiR : (i : ℝ) + 1 ≤ n := by
+      exact_mod_cast (show (i : ℕ) + 1 ≤ n by omega)
+    have ht : (t : ℝ) = 1 := by nlinarith [t.2.2]
+    have hj0 : (0 : ℝ) ≤ j := by positivity
+    have hu : (u : ℝ) = 0 := by nlinarith [u.2.1]
+    exact ⟨Or.inr (Subtype.ext ht), Or.inl (Subtype.ext hu)⟩
+
+/-- Changing the arc representative of a fixed geometric boundary point does
+not change its signed wedge coordinate. -/
+theorem PairingData.signedWedgeArc_eq_of_edgePoint_eq (P : PairingData)
+    (i j : Fin P.edgeCount) (t u : Set.Icc (0 : ℝ) 1)
+    (h : edgePoint P.edgeCount i t = edgePoint P.edgeCount j u) :
+    P.signedWedgeArc i t = P.signedWedgeArc j u := by
+  rcases edgePoint_eq_imp_same_or_endpoints P.edgeCount P.edgeCount_pos i j t u h with
+    ⟨rfl, rfl⟩ | ⟨ht, hu⟩
+  · rfl
+  · rw [P.signedWedgeArc_eq_iff_parameters]
+    exact Or.inr ⟨P.signedParameter_endpoint i t ht,
+      P.signedParameter_endpoint j u hu⟩
 
 /-- The standard polygon arcs cover its entire boundary circle. -/
 theorem edgePoint_surjective_boundary (n : ℕ) (hn : 0 < n) (x : Disk)
