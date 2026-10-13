@@ -110,7 +110,19 @@ theorem apm_t97J04_invariants_of_comparison
     Nonempty (apm_t97J04_H 1 ≅ ModuleCat.of ℤ (Fin 3 → ℤ)) ∧
     Nonempty (apm_t97J04_H 2 ≅ ModuleCat.of ℤ ℤ) ∧
     ∀ k : ℕ, 3 ≤ k → Limits.IsZero (apm_t97J04_H k) := by
-  sorry
+  rcases hπ with ⟨eπ⟩
+  rcases hpres with ⟨epres⟩
+  refine ⟨⟨(eπ.trans
+    ConstructionTargets.GenericTargetNaturalSourceReconstruction.wedgeFundamentalGroupMulEquiv).trans
+      epres⟩, ?_⟩
+  rcases
+      ConstructionTargets.TorusCircleWedgeMayerVietoris.genericWedge_complete_module_homology with
+    ⟨⟨e0⟩, ⟨e1⟩, ⟨e2⟩, higher⟩
+  refine ⟨⟨(Nonempty.some (hH 0)).trans e0⟩,
+    ⟨(Nonempty.some (hH 1)).trans e1⟩,
+    ⟨(Nonempty.some (hH 2)).trans e2⟩, ?_⟩
+  intro k hk
+  exact (higher k hk).of_iso (Nonempty.some (hH k))
 
 theorem apm_t97j04 :
     Nonempty
