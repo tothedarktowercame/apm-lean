@@ -1828,6 +1828,32 @@ theorem apm_m98A06_nonresonant_energy_geometry_of_facts
   exact apm_m98A06_nonresonant_energy_geometry_of_facts_aux_energy_geometry
     hWirtinger hSine
 
+lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_energy_sub_one
+    (y dy : ℝ → ℝ) (h : apm_m98a06_InH10Pi y dy)
+    (hnorm : ∫ x, (y x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)) = 1) :
+    (∫ x, (dy x) ^ 2 - (y x) ^ 2
+      ∂(volume.restrict (Ioo (0 : ℝ) Real.pi))) =
+      (∫ x, (dy x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi))) - 1 := by
+  rw [MeasureTheory.integral_sub h.2.2.2.2.1.integrable_sq h.2.2.2.1.integrable_sq,
+    hnorm]
+
+lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core
+    (hWirtinger : apm_m98A06_WirtingerFact)
+    (hFTC : apm_m98A06_WeakFTCFact)
+    (hSine : apm_m98A06_SineComputationsFact) :
+    (∀ y dy : ℝ → ℝ, apm_m98a06_InH10Pi y dy →
+      ∫ x, (y x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)) = 1 →
+      0 ≤ ∫ x, (dy x) ^ 2 - (y x) ^ 2
+        ∂(volume.restrict (Ioo (0 : ℝ) Real.pi))) ∧
+    (∀ y dy : ℝ → ℝ, apm_m98a06_InH10Pi y dy →
+      ∫ x, (y x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)) = 1 →
+      ((∫ x, (dy x) ^ 2 - (y x) ^ 2
+        ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)) = 0) ↔
+        ∃ s : ℝ, (s = 1 ∨ s = -1) ∧
+          y =ᵐ[volume.restrict (Ioo (0 : ℝ) Real.pi)]
+            fun x ↦ s * Real.sqrt (2 / Real.pi) * Real.sin x)) := by
+  sorry
+
 theorem apm_m98A06_weak_poincare_and_equality_of_facts
     (hWirtinger : apm_m98A06_WirtingerFact)
     (hFTC : apm_m98A06_WeakFTCFact)
@@ -1843,7 +1869,7 @@ theorem apm_m98A06_weak_poincare_and_equality_of_facts
         ∃ s : ℝ, (s = 1 ∨ s = -1) ∧
           y =ᵐ[volume.restrict (Ioo (0 : ℝ) Real.pi)]
             fun x ↦ s * Real.sqrt (2 / Real.pi) * Real.sin x)) := by
-  sorry
+  exact apm_m98A06_weak_poincare_and_equality_of_facts_aux_core hWirtinger hFTC hSine
 
 theorem apm_m98A06_constrained_energy_unbounded_above_of_sine_computations
     (hSine : apm_m98A06_SineComputationsFact) :
