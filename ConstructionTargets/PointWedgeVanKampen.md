@@ -1209,3 +1209,8 @@ using the proved literal action of the reconstructed source functor, yielding
 exactly the source-versus-mapped equality supplied by the typed B3 comparison.
 `genericPointWedgeNormalizedLeftLeg_eq_inl_iff_sourceComparison` carries this
 orientation back to the normalized B6 left coordinate.
+
+`genericPointWedgeSourceMappedLeft_counitSquare` records the actual conclusion
+of the typed B3 square: counit times mapped action equals reconstructed action
+times counit. It does not identify the actions without an additional
+commutation or a corrected normalization construction.

@@ -5926,6 +5926,18 @@ theorem genericPointWedgeNormalizedLeftLeg_eq_inl_iff_sourceComparison
   rw [genericPointWedgeNormalizedLeftLeg_eq_inl_iff_mappedLeft,
     genericPointWedgeMappedLeft_eq_inl_iff_sourceComparison]
 
+/-- The typed B3 counit square relates the reconstructed left action and the
+mapped-left action by conjugacy. In particular, naturality supplies this
+ordered equation, not an equality of the two actions. -/
+theorem genericPointWedgeSourceMappedLeft_counitSquare
+    (g : FundamentalGroup X x₀) :
+    genericPointWedgeCounitElement x₀ y₀ M N hM hN hy hx cM cN *
+        genericPointWedgeMappedLeft x₀ y₀ M N hM hN hy hx cM cN g =
+      Monoid.Coprod.inl g *
+        genericPointWedgeCounitElement x₀ y₀ M N hM hN hy hx cM cN := by
+  simpa only [SingleObj.comp_as_mul] using
+    genericPointWedgeSourceCounit_left x₀ y₀ M N hM hN hy hx cM cN g
+
 /-- The reconstructed B4 source functor has exactly the right restriction
 conjugation on the literal right injection. -/
 theorem genericPointWedgeSourceFunctor_rightLeg_eq_conj_inr
@@ -6638,6 +6650,7 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeNormalizedLeftLeg_eq_inl_iff_mappedLeft
 #print axioms genericPointWedgeMappedLeft_eq_inl_iff_sourceComparison
 #print axioms genericPointWedgeNormalizedLeftLeg_eq_inl_iff_sourceComparison
+#print axioms genericPointWedgeSourceMappedLeft_counitSquare
 #print axioms genericPointWedgeLegCoordinates_of_mapped
 #print axioms genericPointWedgeLegCoordinates_iff_mapped
 #print axioms genericPointWedgeLegCoordinates_iff_sourceFunctor
