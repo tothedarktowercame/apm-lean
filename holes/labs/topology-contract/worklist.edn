@@ -113853,7 +113853,7 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 10,
+   :stop-count 0,
    :review-finding
    "Recorded fixture hash mismatch: :fixture.sha256 is 0bca6ce32c019fc3053c7f813c26917169cf817375b44d5e722b864b61a526450c1, but ConstructionTargets/PointWedgeVanKampen.blueprint.md at recorded commit c9b3af27 has exact SHA-256 0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0. Re-record the fixture hash for the reviewed commit.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
@@ -113910,7 +113910,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -116757,7 +116757,7 @@
    :other-consumers []}
   {:consumer :t97A07,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "range_mem_nhds_of_regular",
@@ -116768,7 +116768,9 @@
     :reported-by [:owner],
     :type
     "Surjective (mfderiv 𝓘 𝓘 f x) → Set.range f ∈ nhds (f x)  (size: 140-280 lines / 3-6 days)",
-    :area "regular-points-open"},
+    :area "regular-points-open",
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t97A07Closure.lean"]},
    :id :lemma-range-mem-nhds-of-regular,
    :kind :lemma,
    :depends-on [],
@@ -117232,6 +117234,17 @@
     [{:cmd "lean B7 draft",
       :exit 1,
       :finding "Used boundaryless ext-chart neighbourhood theorem."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791921063663-10314-0f165156",
+     :commands
+     ["git show/diff-tree a61e96887"
+      "git archive a61e96887; lake env lean archived Closure and Main"
+      "lake build ConstructionTargets.t97A07Closure"
+      "sha256sum; placeholder delta; statement-registry.py check"],
+     :finding
+     "Recorded scope is target+blueprint; target/fixture/Main hashes match 9056de83/d9c0cf3c/f0935022. Archived Closure and Main compile; target uses standard axioms, placeholders remain 1->1, registry 150/150. B7 is true and faithful: surjective fixed-chart derivative maps a source neighbourhood onto a target neighbourhood; restricting to the chart target and its inverse embeds that image in Set.range f. Uses correctly includes B2. New compiled progress beyond B6; B8 and B9 remain."},
     :commit "a61e968871b5862176162d7f0f9b28c3b66b31d5",
     :changed-paths
     ["ConstructionTargets/t97A07Closure.lean"
@@ -117242,7 +117255,7 @@
      "d9c0cf3c78f77b2af3fd51f71900de56e4e5c22f9b8efade5229d82d0a9ccef1"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A07/lean/Main.lean"
     "problems/t97A07/status.json"
@@ -117258,7 +117271,7 @@
     ["lake env lean problems/t97A07/lean/Main.lean"
      "python3 scripts/statement-registry.py check"]},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: B6 positive-dimensional critical-value nonemptiness proved.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: B7 local image openness at regular points proved.",
    :id :program-2026-10-11-close-t97a07,
    :kind :final-adapter,
    :campaign-priority 44,
@@ -117346,7 +117359,10 @@
     {:job 5,
      :commit "9c9877f6232d029f85a2d30ee39db77c36aac553",
      :reason
-     "B6 positive-dimensional critical-value nonemptiness proved."}]}
+     "B6 positive-dimensional critical-value nonemptiness proved."}
+    {:job 6,
+     :commit "a61e968871b5862176162d7f0f9b28c3b66b31d5",
+     :reason "B7 local image openness at regular points proved."}]}
   {:consumer :t91J06,
    :stop-count 3,
    :review-finding
@@ -118567,7 +118583,7 @@
    :other-consumers []}
   {:consumer :t97A07,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t97A07Closure.range_mem_nhds_of_regular",
@@ -118579,7 +118595,9 @@
     :type
     "A point with surjective mfderiv maps onto a neighborhood of its value",
     :area "regular-points-open",
-    :proved-in :program-2026-10-11-close-t97a07},
+    :proved-in :program-2026-10-11-close-t97a07,
+    :banked-by :program-2026-10-11-close-t97a07,
+    :banked-commit "a61e968871b5862176162d7f0f9b28c3b66b31d5"},
    :id :lemma-t97a07closure-range-mem-nhds-of-regular,
    :kind :lemma,
    :depends-on [:lemma-t97a07closure-continuousat-coordinate-mfderiv],
