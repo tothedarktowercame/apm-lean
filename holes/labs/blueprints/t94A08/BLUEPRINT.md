@@ -218,3 +218,11 @@ The final output of `#print axioms apm_t94a08` was:
 The four warnings identifying `sorry` are exactly the four nodal Layer 1
 leaves. The former nodal LIBRARY theorem is now a sorry-free assembly. The
 main theorem and every other declaration are proved without placeholders.
+
+## claude-14 restatement of the node lemma (2026-10-13)
+
+lemma-4 came back PARTIAL (it tried to localise an arbitrary neighbourhood to the z₀ ≠ 0 chart). The node lemma is now
+a sorry-free assembly of a global argument: σ₂ = Branch₊ ∪ Branch₋ (proved), both closed (`branches_closed`), meeting
+only at the node (`branches_inter`), each accumulating at the node (`branches_accumulate`), and the general-topology
+fact `union_closed_punctured_not_preconnected`. No chart is needed; `hcross` is now unused (the cross leaf remains
+in the main assembly's call and is still to be proved; it is easy).

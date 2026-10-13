@@ -585,15 +585,52 @@ lemma apm_t94a08_complexCross_punctured_not_preconnected
     ¬ IsPreconnected ((V ∩ apm_t94a08_complexCross) \ {(0, 0)}) := by
   sorry
 
-/-- LIBRARY: the projective affine chart at the node transports the complex
-cross obstruction to `sigma2`.  The obstruction is supplied explicitly so
-this proof is independent of the preceding lemma. -/
+/-- Seat (claude-14 split): both branches are closed in `CP²` (zero sets of a
+linear form in homogeneous coordinates; closed in the quotient topology because
+their preimage in `C³ ∖ 0` is closed). -/
+lemma apm_t94a08_branches_closed :
+    IsClosed apm_t94a08_sigma2BranchPlus ∧ IsClosed apm_t94a08_sigma2BranchMinus := by
+  sorry
+
+/-- Seat: the branches meet only at the node (`y + i z = 0 = y - i z` forces
+`y = z = 0`, so the point is `[1 : 0 : 0]`). -/
+lemma apm_t94a08_branches_inter :
+    apm_t94a08_sigma2BranchPlus ∩ apm_t94a08_sigma2BranchMinus ⊆
+      {apm_t94a08_node} := by
+  sorry
+
+/-- Seat: every open neighbourhood of the node contains other points of each
+branch: `[1 : t : ∓ i t] → [1 : 0 : 0]` as `t → 0`, and these differ from the
+node for `t ≠ 0`. -/
+lemma apm_t94a08_branches_accumulate (U : Set apm_t94a08_CP2) (hU : IsOpen U)
+    (hnode : apm_t94a08_node ∈ U) :
+    ((U ∩ apm_t94a08_sigma2BranchPlus) \ {apm_t94a08_node}).Nonempty ∧
+      ((U ∩ apm_t94a08_sigma2BranchMinus) \ {apm_t94a08_node}).Nonempty := by
+  sorry
+
+/-- Seat (general topology): if `A, B` are closed, meet at most in `p`, and an
+open-set slice meets both away from `p`, then the punctured slice of `A ∪ B` is
+not preconnected (`isPreconnected_iff_subset_of_disjoint_closed`). -/
+lemma apm_t94a08_union_closed_punctured_not_preconnected {X : Type*}
+    [TopologicalSpace X] {A B U : Set X} {p : X}
+    (hA : IsClosed A) (hB : IsClosed B) (hAB : A ∩ B ⊆ {p})
+    (hUA : ((U ∩ A) \ {p}).Nonempty) (hUB : ((U ∩ B) \ {p}).Nonempty) :
+    ¬ IsPreconnected ((U ∩ (A ∪ B)) \ {p}) := by
+  sorry
+
+/-- The node has no connected punctured neighbourhood in the nodal conic
+(claude-14 restatement: global two-branch argument; `hcross` is no longer used). -/
 lemma apm_t94a08_node_has_no_connected_punctured_neighborhood
     (hcross : ∀ V : Set (ℂ × ℂ), IsOpen V → (0, 0) ∈ V →
       ¬ IsPreconnected ((V ∩ apm_t94a08_complexCross) \ {(0, 0)})) :
     ¬ apm_t94a08_HasConnectedPuncturedNeighborhood
       apm_t94a08_sigma2 apm_t94a08_node := by
-  sorry
+  rintro ⟨U, hU, hnode, hpre⟩
+  rw [apm_t94a08_sigma2_eq_branches] at hpre
+  have hacc := apm_t94a08_branches_accumulate U hU hnode
+  exact apm_t94a08_union_closed_punctured_not_preconnected
+    apm_t94a08_branches_closed.1 apm_t94a08_branches_closed.2
+    apm_t94a08_branches_inter hacc.1 hacc.2 hpre
 
 /-- The union of the two distinct complex projective lines is not locally
 Euclidean at their common node. -/
