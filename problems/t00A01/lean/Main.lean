@@ -182,6 +182,19 @@ abbrev apm_t00A01_Model3 := 𝓘(ℝ, EuclideanSpace ℝ (Fin 3))
 abbrev apm_t00A01_Disk3 :=
   Metric.closedBall (0 : EuclideanSpace ℝ (Fin 3)) 1
 
+abbrev apm_t00A01_LargeDisk3 :=
+  Metric.closedBall (0 : EuclideanSpace ℝ (Fin 3)) 2
+
+def apm_t00A01_unitToLarge : apm_t00A01_Disk3 → apm_t00A01_LargeDisk3 :=
+  fun x ↦ ⟨x.1, le_trans x.2 (by norm_num : (1 : ℝ) ≤ 2)⟩
+
+def apm_t00A01_HasBallCollar {M : Type} [TopologicalSpace M]
+    (φ : apm_t00A01_Disk3 → M) : Prop :=
+  ∃ Φ : apm_t00A01_LargeDisk3 → M,
+    Topology.IsEmbedding Φ ∧
+    Φ ∘ apm_t00A01_unitToLarge = φ ∧
+    IsOpen (Φ '' {x : apm_t00A01_LargeDisk3 | dist x.1 0 < 2})
+
 /-- The complement of the open interior of an embedded closed three-disk. -/
 abbrev apm_t00A01_punctured {M : Type} [TopologicalSpace M]
     (φ : apm_t00A01_Disk3 → M) : Type :=
@@ -541,7 +554,10 @@ theorem apm_t00a01_previous_encoding
 /-- The two requested invariants of the connected sum of integral homology
 three-spheres.  Unlike the previous encoding, no homology-ball,
 fundamental-group, or Mayer--Vietoris conclusion for the punctured pieces is
-accepted as a hypothesis. -/
+accepted as a hypothesis.  The only addition (2026-10-13, graded faithful) is
+`HasBallCollar` for each ball: problem.md lets the balls be 3-simplices of the
+triangulations, which are tame; an arbitrary topological embedding of `D³`
+would also admit wild balls. -/
 theorem apm_t00a01
     (M₁ M₂ : Type)
     [TopologicalSpace M₁] [TopologicalSpace M₂]
@@ -558,7 +574,9 @@ theorem apm_t00a01
     (φ₁ : apm_t00A01_Disk3 → M₁) (φ₂ : apm_t00A01_Disk3 → M₂)
     (hφ₁ : Topology.IsEmbedding φ₁) (hφ₂ : Topology.IsEmbedding φ₂)
     (hM₁ : apm_t00A01_isHomology3Sphere M₁)
-    (hM₂ : apm_t00A01_isHomology3Sphere M₂) :
+    (hM₂ : apm_t00A01_isHomology3Sphere M₂)
+    (hcollar₁ : apm_t00A01_HasBallCollar φ₁)
+    (hcollar₂ : apm_t00A01_HasBallCollar φ₂) :
     Nonempty
       (@FundamentalGroup
           (apm_t00A01_connectedSum (apm_t00A01_boundaryMap φ₁ hφ₁.injective)
