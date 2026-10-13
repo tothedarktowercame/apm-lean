@@ -112,6 +112,42 @@ def orbit (P : PairingData) (i : Fin P.edgeCount) : PairingOrbit P.pair :=
   apply Quotient.sound
   exact Relation.EqvGen.rel (P.pair i) i (P.pair_pair i).symm
 
+/-- An orbit of the fixed-point-free involution contains exactly an edge and
+its paired edge.  This is the finite combinatorial reduction used when the
+source and wedge kernels are compared in B7. -/
+theorem orbit_eq_iff (P : PairingData) (i j : Fin P.edgeCount) :
+    P.orbit i = P.orbit j ↔ j = i ∨ j = P.pair i := by
+  let s : Fin P.edgeCount → Fin P.edgeCount → Prop :=
+    fun i j => j = i ∨ j = P.pair i
+  have hs : Equivalence s := by
+    refine ⟨fun i => Or.inl rfl, ?_, ?_⟩
+    · intro i j hij
+      rcases hij with rfl | hij
+      · exact Or.inl rfl
+      · subst j
+        exact Or.inr (P.pair_pair i).symm
+    · intro i j k hij hjk
+      rcases hij with rfl | hij
+      · exact hjk
+      rcases hjk with rfl | hjk
+      · exact Or.inr hij
+      · subst j
+        rw [P.pair_pair i] at hjk
+        exact Or.inl hjk
+  change Quotient.mk _ i = Quotient.mk _ j ↔ s i j
+  rw [Quotient.eq]
+  constructor
+  · intro h
+    induction h with
+    | rel i j h => exact Or.inr h
+    | refl i => exact Or.inl rfl
+    | symm i j _ ih => exact hs.symm ih
+    | trans i j k _ _ ih₁ ih₂ => exact hs.trans ih₁ ih₂
+  · intro h
+    rcases h with rfl | h
+    · exact Relation.EqvGen.refl _
+    · exact Relation.EqvGen.rel _ _ h
+
 end PairingData
 
 /-! ### The six-edge `T² # ℝP²` pairing -/
@@ -1645,6 +1681,24 @@ def PairingData.signedWedgeArc (P : PairingData) (i : Fin P.edgeCount)
     (t : Set.Icc (0 : ℝ) 1) :
     PointWedgeQuotient.FiniteWedge (PairingOrbit P.pair) :=
   wedgeCircle (P.orbit i) (if P.sign i then circleArc t else circleArc (reverseIcc t))
+
+/-- Exact equality criterion for signed wedge coordinates: either the two
+coordinates agree in the same orbit leg, or both are the common wedge
+basepoint. -/
+theorem PairingData.signedWedgeArc_eq_iff (P : PairingData)
+    (i j : Fin P.edgeCount) (t u : Set.Icc (0 : ℝ) 1) :
+    P.signedWedgeArc i t = P.signedWedgeArc j u ↔
+      ((P.orbit i = P.orbit j) ∧
+        (if P.sign i then circleArc t else circleArc (reverseIcc t)) =
+          (if P.sign j then circleArc u else circleArc (reverseIcc u))) ∨
+      (((if P.sign i then circleArc t else circleArc (reverseIcc t)) : Circle) : ℂ) = 1 ∧
+        (((if P.sign j then circleArc u else circleArc (reverseIcc u)) : Circle) : ℂ) = 1 := by
+  change Quotient.mk _ _ = Quotient.mk _ _ ↔ _
+  rw [Quotient.eq]
+  change Relation.EqvGen (PointWedgeQuotient.FiniteWedgeRel _)
+    (_, _) (_, _) ↔ _
+  rw [PointWedgeQuotient.eqvGen_finiteWedgeRel_iff]
+  simp only [PointWedgeQuotient.FiniteWedgeRel, Prod.mk.injEq]
 
 theorem PairingData.signedWedgeArc_of_sign (P : PairingData)
     (i : Fin P.edgeCount) (t : Set.Icc (0 : ℝ) 1) (h : P.sign i = true) :
