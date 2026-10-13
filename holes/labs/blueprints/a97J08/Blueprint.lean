@@ -2067,10 +2067,77 @@ theorem apm_a97j08_boundary_balanced (Q : Finset (ℤ × ℤ))
   sorry
 
 -- (C3a) A nonempty balanced finite edge set contains a simple directed cycle.
+lemma apm_a97j08_exists_simple_cycle_aux_outgoing {V : Type*} [DecidableEq V]
+    (E : Finset (V × V)) (hbal : apm_a97j08_Balanced E) {v : V}
+    (hin : ∃ u, (u, v) ∈ E) : ∃ w, (v, w) ∈ E := by
+  have hin_ne : (E.filter fun e => e.2 = v).Nonempty := by
+    obtain ⟨u, hu⟩ := hin
+    exact ⟨(u, v), by simp [hu]⟩
+  have hcard : 0 < (E.filter fun e => e.1 = v).card := by
+    rw [hbal v]
+    exact Finset.card_pos.mpr hin_ne
+  obtain ⟨e, he⟩ := Finset.card_pos.mp hcard
+  have heE : e ∈ E := (Finset.mem_filter.mp he).1
+  have hev : e.1 = v := (Finset.mem_filter.mp he).2
+  rcases e with ⟨a, w⟩
+  dsimp at hev ⊢
+  subst a
+  exact ⟨w, heE⟩
+
+-- A self-map of a finite set has a periodic orbit: listed once around, it is
+-- duplicate-free and rotating it by one applies the map.
+lemma apm_a97j08_exists_simple_cycle_aux_periodic {V : Type*} [DecidableEq V]
+    (f : V → V) (S : Finset V) (hS : ∀ x ∈ S, f x ∈ S) {v₀ : V} (hv₀ : v₀ ∈ S) :
+    ∃ c : List V, c ≠ [] ∧ c.Nodup ∧ (∀ x ∈ c, x ∈ S) ∧ c.rotate 1 = c.map f := by
+  sorry
+
+lemma apm_a97j08_exists_simple_cycle_aux_zip_map {V : Type*} (f : V → V) (c : List V) :
+    ∀ e ∈ c.zip (c.map f), e.1 ∈ c ∧ e.2 = f e.1 := by
+  induction c with
+  | nil => simp
+  | cons a l ih =>
+      intro e he
+      simp only [List.map_cons, List.zip_cons_cons, List.mem_cons] at he
+      rcases he with rfl | he
+      · simp
+      · obtain ⟨h1, h2⟩ := ih e he
+        exact ⟨List.mem_cons_of_mem _ h1, h2⟩
+
+lemma apm_a97j08_exists_simple_cycle_aux_finite_orbit {V : Type*} [DecidableEq V]
+    (E : Finset (V × V)) (hne : E.Nonempty)
+    (hout : ∀ {v : V}, (∃ u, (u, v) ∈ E) → ∃ w, (v, w) ∈ E) :
+    ∃ c : List V, c ≠ [] ∧ c.Nodup ∧
+      ∀ e ∈ apm_a97j08_cycleEdges c, e ∈ E := by
+  classical
+  let S : Finset V := E.image Prod.snd
+  have hSin : ∀ x ∈ S, ∃ u, (u, x) ∈ E := by
+    intro x hx
+    obtain ⟨e, he, rfl⟩ := Finset.mem_image.mp hx
+    exact ⟨e.1, by simpa using he⟩
+  let f : V → V := fun x => if h : ∃ u, (u, x) ∈ E then (hout h).choose else x
+  have hfE : ∀ x ∈ S, (x, f x) ∈ E := by
+    intro x hx
+    have h := hSin x hx
+    simp only [f, dif_pos h]
+    exact (hout h).choose_spec
+  have hS : ∀ x ∈ S, f x ∈ S := fun x hx =>
+    Finset.mem_image.mpr ⟨(x, f x), hfE x hx, rfl⟩
+  obtain ⟨e₀, he₀⟩ := hne
+  obtain ⟨c, hc, hnd, hcS, hrot⟩ :=
+    apm_a97j08_exists_simple_cycle_aux_periodic f S hS
+      (Finset.mem_image.mpr ⟨e₀, he₀, rfl⟩)
+  refine ⟨c, hc, hnd, fun e he => ?_⟩
+  rw [apm_a97j08_cycleEdges, hrot] at he
+  obtain ⟨h1, h2⟩ := apm_a97j08_exists_simple_cycle_aux_zip_map f c e he
+  have := hfE e.1 (hcS _ h1)
+  rw [← h2] at this
+  exact this
+
 theorem apm_a97j08_exists_simple_cycle {V : Type*} [DecidableEq V]
     (E : Finset (V × V)) (hbal : apm_a97j08_Balanced E) (hne : E.Nonempty) :
     ∃ c : List V, c ≠ [] ∧ c.Nodup ∧ ∀ e ∈ apm_a97j08_cycleEdges c, e ∈ E := by
-  sorry
+  exact apm_a97j08_exists_simple_cycle_aux_finite_orbit E hne
+    (fun hin ↦ apm_a97j08_exists_simple_cycle_aux_outgoing E hbal hin)
 
 -- (C3b) Peeling off simple cycles decomposes a balanced edge set (given C3a).
 theorem apm_a97j08_cycle_decomposition {V : Type*} [DecidableEq V]
