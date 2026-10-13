@@ -7,22 +7,25 @@ open Filter
 
 ## Statement repairs
 
-None.
+The two abstract metric-space clauses assume `Nonempty M`, as required by
+Banach's theorem. The solution predicate also requires continuity on `[0,1]`,
+so its endpoint value at `1` is not unconstrained.
 -/
 
 def apm_m96a02_IsContraction {M : Type*} [MetricSpace M] (T : M → M) : Prop :=
   ∃ k : ℝ, 0 ≤ k ∧ k < 1 ∧ ∀ x y, dist (T x) (T y) ≤ k * dist x y
 
 def apm_m96a02_Solves (f : ℝ → ℝ) (u₀ : ℝ) (u : ℝ → ℝ) : Prop :=
-  u 0 = u₀ ∧ ∀ t ∈ Set.Ioo (0 : ℝ) 1, HasDerivAt u (f (u t)) t
+  ContinuousOn u (Set.Icc 0 1) ∧ u 0 = u₀ ∧
+    ∀ t ∈ Set.Ioo (0 : ℝ) 1, HasDerivAt u (f (u t)) t
 
 theorem apm_m96a02 :
-    (∀ (M : Type*) [MetricSpace M] [CompleteSpace M] (T : M → M),
+    (∀ (M : Type*) [MetricSpace M] [CompleteSpace M] [Nonempty M] (T : M → M),
       apm_m96a02_IsContraction T →
       ∃ xstar : M, T xstar = xstar ∧
         (∀ x, Tendsto (fun n : ℕ => (T^[n]) x) atTop (nhds xstar)) ∧
         ∀ y, T y = y → y = xstar) ∧
-    (∀ (M : Type*) [MetricSpace M] [CompleteSpace M] (T : M → M),
+    (∀ (M : Type*) [MetricSpace M] [CompleteSpace M] [Nonempty M] (T : M → M),
       (∃ N : ℕ, 1 ≤ N ∧ apm_m96a02_IsContraction (T^[N])) →
       ∃! x : M, T x = x) ∧
     (∀ (f : ℝ → ℝ) (u₀ : ℝ),

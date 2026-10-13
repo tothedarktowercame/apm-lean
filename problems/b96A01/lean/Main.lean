@@ -14,9 +14,11 @@ noncomputable section
    set itself to be contained in a basis, which is false for dependent
    generators such as `{1, 2} ⊂ ℚ`.  We now quantify a finite subset of basis
    indices whose corresponding basis vectors generate `A`.
-2. Part (d) requires `G` to be nonabelian simple. As printed it includes cyclic
-   groups of prime order, for which the claimed injection can fail (for example
-   into `GL₁(𝔽₂)`).
+2. Part (d) as printed fails exactly when `n = 1`, `p = 2` and `G = C₂ = {±1}`:
+   `GL₁(𝔽₂)` is trivial.  That case is excluded, and nothing else.  (Revised
+   2026-10-13; the 2026-08-09 repair, "G nonabelian", also excluded true cases:
+   an abelian simple `C_q ⊂ GL_n(ℚ)` has `n ≥ q - 1` and embeds in
+   `GL_d(𝔽_p)` with `d = ord_q p ≤ n`, or by a unipotent matrix when `q = p`.)
 
 ## Encoding notes
 
@@ -51,8 +53,8 @@ theorem apm_b96a01 :
         b ∈ (apmReduction n p m hdiv).ker → a * b = b * a) ∧
     (∀ (n : Type*) [Fintype n] [DecidableEq n]
       (G : Subgroup (Matrix.GeneralLinearGroup n ℚ)),
-      Finite G → IsSimpleGroup G → ¬(∀ a b : G, a * b = b * a) →
-      ∀ p : ℕ, p.Prime →
+      Finite G → IsSimpleGroup G →
+      ∀ p : ℕ, p.Prime → ¬(Fintype.card n = 1 ∧ p = 2) →
         ∃ ρ : G →* Matrix.GeneralLinearGroup n (ZMod p),
           Function.Injective ρ) := by
   sorry

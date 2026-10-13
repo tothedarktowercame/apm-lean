@@ -11,11 +11,10 @@ structure inconsistent. Weak derivatives are now elements of Mathlib's `L²`
 space, which quotients functions by almost-everywhere equality. Thus changing a
 derivative on a singleton no longer creates a distinct representative.
 
-Part (d) says that `uₙ` itself converges weakly, but the suggested boundedness
-argument guarantees only a weakly convergent subsequence. We state that precise
-conclusion, as does the supplied solution. Uniqueness can subsequently
-upgrade it to convergence of the full sequence, but that is not needed for
-part (e).
+Part (d) is stated faithfully for the full Galerkin sequence.  Galerkin
+orthogonality identifies `uₙ` with the orthogonal projection of the unique
+weak solution onto `V n`; nestedness and density then give norm convergence,
+and hence weak convergence, of the entire sequence.
 
 ## Encoding questions
 
@@ -93,9 +92,8 @@ theorem apm_m99j06
         ∀ uSeq : ∀ n : ℕ, V n,
           (∀ n, apm_m99J06_galerkinEquation M f (V n) (uSeq n)) →
           (∀ n, ‖(uSeq n : H)‖ ≤ (eLpNorm f 2 apm_m99J06_intervalMeasure).toReal) ∧
-          ∃ k : ℕ → ℕ, StrictMono k ∧
-            ∃ u : H,
-              Tendsto (fun j ↦ toWeakSpace ℝ H (uSeq (k j) : H)) atTop
-                (nhds (toWeakSpace ℝ H u)) ∧
-              apm_m99J06_weakSolution M f u) := by
+          ∃ u : H,
+            Tendsto (fun n ↦ toWeakSpace ℝ H (uSeq n : H)) atTop
+              (nhds (toWeakSpace ℝ H u)) ∧
+            apm_m99J06_weakSolution M f u) := by
   sorry

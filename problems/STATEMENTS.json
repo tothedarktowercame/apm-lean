@@ -1,6 +1,159 @@
 {
  "schema": "apm-statement-registry.v1",
  "entries": {
+  "a00J04": {
+   "decls": [
+    "connectedComponents_complement_lemniscate_le"
+   ],
+   "sha256": "e47259ba90461a87791505f763d0867afe5d1ae7f16403193a361b75cca0eb29",
+   "defs": [
+    "lemniscate"
+   ],
+   "grade": "faithful",
+   "grader": "claude-14 outside graders (read-only Claude subagents, 2026-10-13)",
+   "evidence": "holes/labs/statement-registry/blueprint-batch-1-grades.md",
+   "prelim_defect": null,
+   "rev": "573847ac4",
+   "approved_at": "2026-10-13T04:19:30Z"
+  },
+  "a96A06": {
+   "decls": [
+    "apm_a96a06"
+   ],
+   "sha256": "0f19c6b4671437bd7523a21a4ab6a36454a9e4008e1c24fc4520c22aadba52b1",
+   "defs": [
+    "apm_a96A06_HasSimplePoleAtOne"
+   ],
+   "grade": "faithful",
+   "grader": "claude-14 outside graders (read-only Claude subagents, 2026-10-13)",
+   "evidence": "holes/labs/statement-registry/blueprint-batch-1-grades.md",
+   "prelim_defect": null,
+   "rev": "573847ac4",
+   "approved_at": "2026-10-13T04:19:30Z"
+  },
+  "b96A01": {
+   "decls": [
+    "apm_b96a01"
+   ],
+   "sha256": "1b766a42b6fdaef15c8633a2d958f30cb36b783b0df0132697e7c67da75c2eb4",
+   "defs": [
+    "apmIntegralMatrix",
+    "apmReduction"
+   ],
+   "grade": "faithful",
+   "grader": "claude-14 outside graders (read-only Claude subagents, 2026-10-13)",
+   "evidence": "holes/labs/statement-registry/blueprint-batch-1-grades.md",
+   "prelim_defect": null,
+   "rev": "573847ac4",
+   "approved_at": "2026-10-13T04:19:30Z"
+  },
+  "m02J05": {
+   "decls": [
+    "apm_m02j05"
+   ],
+   "sha256": "8b771f9ec128a697979e22dc0e949fdfa54bfefd7c2806d83fae0fff23193c9d",
+   "defs": [
+    "apm_m02J05_Fun",
+    "apm_m02J05_K",
+    "apm_m02J05_L",
+    "apm_m02J05_lux",
+    "apm_m02J05_young"
+   ],
+   "grade": "faithful",
+   "grader": "claude-14 outside graders (read-only Claude subagents, 2026-10-13)",
+   "evidence": "holes/labs/statement-registry/blueprint-batch-1-grades.md",
+   "prelim_defect": null,
+   "rev": "573847ac4",
+   "approved_at": "2026-10-13T04:19:30Z"
+  },
+  "m93J05": {
+   "decls": [
+    "apm_m93j05"
+   ],
+   "sha256": "c77c52e3906a52fafdcfcf81bd788e1da8b07d11024f4ed2b8e33e1ecea48dd2",
+   "defs": [
+    "apm_m93j05_J",
+    "apm_m93j05_cosCoeff",
+    "apm_m93j05_sinCoeff",
+    "apm_m93j05_trunc"
+   ],
+   "grade": "faithful",
+   "grader": "claude-14 outside graders (read-only Claude subagents, 2026-10-13)",
+   "evidence": "holes/labs/statement-registry/blueprint-batch-1-grades.md",
+   "prelim_defect": null,
+   "rev": "573847ac4",
+   "approved_at": "2026-10-13T04:19:30Z",
+   "refingerprinted": "2026-10-13: header() now skips let/have := inside statements; full statement unchanged since rev (claude-14)"
+  },
+  "m95A03": {
+   "decls": [
+    "apm_m95a03"
+   ],
+   "sha256": "1fbcda8c51a554f6f69aef0adf7ce8b1f5ecefa46da17439fd1f30c55fa533fd",
+   "defs": [
+    "apm_m95A03_admissible",
+    "apm_m95A03_boundaryLift",
+    "apm_m95A03_energy",
+    "apm_m95A03_modifiedRHS",
+    "apm_m95A03_solves"
+   ],
+   "grade": "faithful",
+   "grader": "claude-14 outside graders (read-only Claude subagents, 2026-10-13)",
+   "evidence": "holes/labs/statement-registry/blueprint-batch-1-grades.md",
+   "prelim_defect": null,
+   "rev": "573847ac4",
+   "approved_at": "2026-10-13T04:19:30Z"
+  },
+  "m96A02": {
+   "decls": [
+    "apm_m96a02"
+   ],
+   "sha256": "fb7357ebc4194c4cbd80f6a71a45992e5f506c5166eedf475fc1332a4f582ff4",
+   "defs": [
+    "apm_m96a02_IsContraction",
+    "apm_m96a02_Solves"
+   ],
+   "grade": "faithful",
+   "grader": "claude-14 outside graders (read-only Claude subagents, 2026-10-13)",
+   "evidence": "holes/labs/statement-registry/blueprint-batch-1-grades.md",
+   "prelim_defect": null,
+   "rev": "573847ac4",
+   "approved_at": "2026-10-13T04:19:30Z"
+  },
+  "m96J02": {
+   "decls": [
+    "apm_m96j02"
+   ],
+   "sha256": "11b34a369024edb68f8d856fe242cdec1e4bdbae05e7092f83b4ea9d056462e4",
+   "defs": [
+    "apm_m96j02_LocallyLipschitzInSecond"
+   ],
+   "grade": "narrower",
+   "grader": "claude-14 outside graders (read-only Claude subagents, 2026-10-13)",
+   "evidence": "holes/labs/statement-registry/blueprint-batch-1-grades.md",
+   "prelim_defect": "holes/labs/statement-registry/blueprint-batch-1-grades.md",
+   "rev": "573847ac4",
+   "approved_at": "2026-10-13T04:19:30Z"
+  },
+  "m97A06": {
+   "decls": [
+    "apm_m97a06"
+   ],
+   "sha256": "36668556ab888d078a0106bf9274f6c74a3e17093a0bf07c6ee7ddf72a564513",
+   "defs": [
+    "apm_m97a06_EL",
+    "apm_m97a06_I",
+    "apm_m97a06_energy",
+    "apm_m97a06_hessian",
+    "apm_m97a06_stationary"
+   ],
+   "grade": "faithful",
+   "grader": "claude-14 outside graders (read-only Claude subagents, 2026-10-13)",
+   "evidence": "holes/labs/statement-registry/blueprint-batch-1-grades.md",
+   "prelim_defect": null,
+   "rev": "573847ac4",
+   "approved_at": "2026-10-13T04:19:30Z"
+  },
   "m98A02": {
    "decls": [
     "apm_m98a02"
@@ -13,6 +166,50 @@
    "prelim_defect": "problems/m98A02/STATEMENT-REPAIR.md",
    "rev": "0c422bb1",
    "approved_at": "2026-09-30T03:53:12Z"
+  },
+  "m98J02": {
+   "decls": [
+    "apm_m98j02"
+   ],
+   "sha256": "c146a9ac6d56322a9942ff272eb6412f25e10138b0a32aba0312236a1fb0284a",
+   "defs": [
+    "apm_m98J02_Dist",
+    "apm_m98J02_E",
+    "apm_m98J02_Test",
+    "apm_m98J02_formalAdjoint",
+    "apm_m98J02_hasCompactSupport",
+    "apm_m98J02_isConvolution",
+    "apm_m98J02_partial",
+    "apm_m98J02_representsFunction",
+    "apm_m98J02_solvesT"
+   ],
+   "grade": "narrower",
+   "grader": "claude-14 outside graders (read-only Claude subagents, 2026-10-13)",
+   "evidence": "holes/labs/statement-registry/blueprint-batch-1-grades.md",
+   "prelim_defect": "holes/labs/statement-registry/blueprint-batch-1-grades.md",
+   "rev": "573847ac4",
+   "approved_at": "2026-10-13T04:19:30Z"
+  },
+  "m99J06": {
+   "decls": [
+    "apm_m99j06"
+   ],
+   "sha256": "09bd8b1adb418d30024e2938d8095a0d920fc7187332255459e77103a6a68388",
+   "defs": [
+    "apm_m99J06_H01Model",
+    "apm_m99J06_L2",
+    "apm_m99J06_galerkinEquation",
+    "apm_m99J06_intervalMeasure",
+    "apm_m99J06_isH01Pair",
+    "apm_m99J06_strongSolution",
+    "apm_m99J06_weakSolution"
+   ],
+   "grade": "faithful",
+   "grader": "claude-14 outside graders (read-only Claude subagents, 2026-10-13)",
+   "evidence": "holes/labs/statement-registry/blueprint-batch-1-grades.md",
+   "prelim_defect": null,
+   "rev": "573847ac4",
+   "approved_at": "2026-10-13T04:19:30Z"
   },
   "t00A01": {
    "decls": [
@@ -627,16 +824,24 @@
    "decls": [
     "apm_t03j02"
    ],
-   "sha256": "7b981e76116dc8900a91902d5ca7cab17d286b6b6417701f4973db07d81b9708",
+   "sha256": "0d546a9c1544d0f3d4e49235bd468c7bc25a012ad15a82eb599978835b3b5d96",
    "defs": [
-    "apm_t03J02_Torus"
+    "apm_t03J02_H",
+    "apm_t03J02_Torus",
+    "apm_t03J02_basepoint",
+    "apm_t03J02_commutatorRelation",
+    "apm_t03J02_freeProductZ2Z2",
+    "apm_t03J02_generator",
+    "apm_t03J02_glueRel",
+    "apm_t03J02_space"
    ],
    "grade": "faithful",
    "grader": "claude-18 outside grader (read-only Claude agent, 2026-09-28)",
    "evidence": "holes/labs/statement-registry/open-grades-3.md",
    "prelim_defect": null,
    "rev": "4489e960",
-   "approved_at": "2026-09-28T00:25:56Z"
+   "approved_at": "2026-09-28T00:25:56Z",
+   "refingerprinted": "2026-10-13: header() now skips let/have := inside statements; full statement unchanged since rev (claude-14)"
   },
   "t03J03": {
    "decls": [
@@ -1539,14 +1744,15 @@
    "decls": [
     "apm_t94j11"
    ],
-   "sha256": "b10dfaf6c3a33ab92c1527f2a10f0c46808dbf593eadfa540d0faeb4f1650e4f",
+   "sha256": "a9eac902ead1508de9f8b321df00a77a0d9fe0049a3857e46d4fa35a26c3546f",
    "defs": [],
    "grade": "faithful",
    "grader": "claude-18 outside grader (read-only Claude agent, 2026-09-28)",
    "evidence": "holes/labs/statement-registry/open-grades-1.md",
    "prelim_defect": null,
    "rev": "e095da7f",
-   "approved_at": "2026-09-28T00:25:37Z"
+   "approved_at": "2026-09-28T00:25:37Z",
+   "refingerprinted": "2026-10-13: header() now skips let/have := inside statements; full statement unchanged since rev (claude-14)"
   },
   "t95A02": {
    "decls": [
@@ -2138,37 +2344,52 @@
    "decls": [
     "apm_t98a02"
    ],
-   "sha256": "e38948956db4c19aacf6ef61cd39a7dde54da984580a82d29060817e5717a121",
+   "sha256": "44362bd64ee5d731edabbb03f2bad4008f39d86851238d03b8da610122600478",
    "defs": [
     "T98A02CollarBall",
+    "T98A02ConnectedSum",
     "T98A02Disk",
     "T98A02E4",
+    "T98A02GlueRel",
     "T98A02I4",
+    "T98A02Punctured",
+    "T98A02Sphere",
     "t98A02DiskInCollarBall",
-    "t98A02H"
+    "t98A02H",
+    "t98A02SphereInDisk"
    ],
    "grade": "faithful",
    "grader": "claude read-only grader (simplex revision, 2026-10-11)",
    "evidence": "holes/labs/statement-registry/t98A02-simplex-grade.md",
    "prelim_defect": null,
    "rev": "3c6bd81a7",
-   "approved_at": "2026-10-11T14:59:17Z"
+   "approved_at": "2026-10-11T14:59:17Z",
+   "refingerprinted": "2026-10-13: header() now skips let/have := inside statements; full statement unchanged since rev (claude-14)"
   },
   "t98A03": {
    "decls": [
     "apm_t98a03"
    ],
-   "sha256": "f1279ae3f4e61de912809b1821752adedeccacc807ca2fa1dcc4da9eabd044a0",
+   "sha256": "f354373e4a7da8467799c581d7c7dd2e98dd31d6df429c2430e6326ca9d6ac5c",
    "defs": [
+    "apm_t98a03_Cover",
+    "apm_t98a03_IsConnectedThreeFoldCover",
+    "apm_t98a03_IsRegularCover",
+    "apm_t98a03_IsTopologicalManifold",
     "apm_t98a03_RP2",
-    "apm_t98a03_Torus"
+    "apm_t98a03_Torus",
+    "apm_t98a03_X",
+    "apm_t98a03_basepoint",
+    "apm_t98a03_expectedFundamentalGroup",
+    "apm_t98a03_wedgeRel"
    ],
    "grade": "faithful",
    "grader": "claude-18 outside grader (read-only Claude agent, 2026-09-28)",
    "evidence": "holes/labs/statement-registry/open-grades-2.md",
    "prelim_defect": null,
    "rev": "6802e9ad",
-   "approved_at": "2026-09-28T00:23:54Z"
+   "approved_at": "2026-09-28T00:23:54Z",
+   "refingerprinted": "2026-10-13: header() now skips let/have := inside statements; full statement unchanged since rev (claude-14)"
   },
   "t98A05": {
    "decls": [

@@ -94,6 +94,12 @@ def header(body: str) -> str:
         elif ch in ")]}⟩":
             depth -= 1
         elif depth == 0 and body.startswith(":=", i):
+            # A `let x := ...` or `have h := ...` line inside the statement is
+            # not the proof. m93J05's fingerprint stopped at `let μ` and covered
+            # one line of its theorem (2026-10-13).
+            line = body[body.rfind("\n", 0, i) + 1:i]
+            if re.match(r"\s*(let|have)\b", line):
+                continue
             return body[:i]
     return body
 

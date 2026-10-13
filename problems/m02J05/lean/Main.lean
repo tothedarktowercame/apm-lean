@@ -18,17 +18,21 @@ arbitrarily to all of `ℝ`.
 
 open Filter MeasureTheory Set intervalIntegral
 
+/-- Measurable functions on the interval, modulo equality almost everywhere
+for the measure actually used by the modular. -/
+abbrev apm_m02J05_Fun := ℝ →ₘ[volume.restrict (Icc (0 : ℝ) 1)] ℝ
+
 /-- The Young function obtained by integrating `α` from zero. -/
 noncomputable def apm_m02J05_young (α : ℝ → ℝ) (t : ℝ) : ℝ :=
   ∫ s in (0 : ℝ)..t, α s
 
 /-- The convex modular class `K_A`, on `[0,1]`, modulo a.e. equality. -/
-def apm_m02J05_K (α : ℝ → ℝ) : Set (ℝ →ₘ[volume] ℝ) :=
+def apm_m02J05_K (α : ℝ → ℝ) : Set apm_m02J05_Fun :=
   {u | IntegrableOn
     (fun x ↦ apm_m02J05_young α |u x|) (Icc (0 : ℝ) 1) volume}
 
 /-- The Orlicz class consisting of functions with some nonzero rescaling in `K_A`. -/
-def apm_m02J05_L (α : ℝ → ℝ) : Set (ℝ →ₘ[volume] ℝ) :=
+def apm_m02J05_L (α : ℝ → ℝ) : Set apm_m02J05_Fun :=
   {u | ∃ c : ℝ, c ≠ 0 ∧ c • u ∈ apm_m02J05_K α}
 
 /-- The Luxemburg functional associated to `α`.
@@ -41,7 +45,7 @@ the infimum would collapse to `0` for every `u`, and definiteness modulo
 a.e. equality would fail. With the integrability conjunct the set is the
 classical one: nonempty on `apm_m02J05_L α` by monotone convergence, and the
 Luxemburg gauge laws hold. -/
-noncomputable def apm_m02J05_lux (α : ℝ → ℝ) (u : ℝ →ₘ[volume] ℝ) : ℝ :=
+noncomputable def apm_m02J05_lux (α : ℝ → ℝ) (u : apm_m02J05_Fun) : ℝ :=
   sInf {c : ℝ | 0 < c ∧
     IntegrableOn (fun x ↦ apm_m02J05_young α (|u x| / c)) (Icc (0 : ℝ) 1) volume ∧
     ∫ x in Icc (0 : ℝ) 1, apm_m02J05_young α (|u x| / c) ∂volume ≤ 1}
@@ -51,11 +55,17 @@ lemma apm_m02J05_young_zero (α : ℝ → ℝ) :
   simp [apm_m02J05_young]
 
 lemma apm_m02J05_zero_mem_K (α : ℝ → ℝ) :
-    (0 : ℝ →ₘ[volume] ℝ) ∈ apm_m02J05_K α := by
-  simp [apm_m02J05_K, apm_m02J05_young_zero]
+    (0 : apm_m02J05_Fun) ∈ apm_m02J05_K α := by
+  change IntegrableOn (fun x ↦ apm_m02J05_young α |(0 : apm_m02J05_Fun) x|)
+    (Icc (0 : ℝ) 1) volume
+  apply integrableOn_zero.congr
+  filter_upwards [AEEqFun.coeFn_zero (α := ℝ) (β := ℝ)
+    (μ := volume.restrict (Icc (0 : ℝ) 1))] with x hx
+  rw [hx]
+  simp [apm_m02J05_young_zero]
 
 lemma apm_m02J05_zero_mem_L (α : ℝ → ℝ) :
-    (0 : ℝ →ₘ[volume] ℝ) ∈ apm_m02J05_L α := by
+    (0 : apm_m02J05_Fun) ∈ apm_m02J05_L α := by
   refine ⟨1, one_ne_zero, ?_⟩
   simpa using apm_m02J05_zero_mem_K α
 
@@ -93,8 +103,8 @@ theorem apm_m02J05_bridge_convex_and_submodule
     (hinfty : Tendsto α atTop atTop)
     (hnonneg : ∀ t, 0 ≤ t → 0 ≤ α t) :
     Convex ℝ (apm_m02J05_K α) ∧
-      ∃ S : Submodule ℝ (ℝ →ₘ[volume] ℝ),
-        (S : Set (ℝ →ₘ[volume] ℝ)) = apm_m02J05_L α := by
+      ∃ S : Submodule ℝ apm_m02J05_Fun,
+        (S : Set apm_m02J05_Fun) = apm_m02J05_L α := by
   sorry
 
 /-- Why this unblocks `apm_m02j05`: this is the complete `sInf` theory for
@@ -149,8 +159,8 @@ theorem apm_m02j05 :
       (∀ t, 0 ≤ t → β (α t) = t) →
       (∀ t, 0 ≤ t → α (β t) = t) →
       Convex ℝ (apm_m02J05_K α) ∧
-      (∃ S : Submodule ℝ (ℝ →ₘ[volume] ℝ),
-        (S : Set (ℝ →ₘ[volume] ℝ)) = apm_m02J05_L α) ∧
+      (∃ S : Submodule ℝ apm_m02J05_Fun,
+        (S : Set apm_m02J05_Fun) = apm_m02J05_L α) ∧
       ((∀ u ∈ apm_m02J05_L α, 0 ≤ apm_m02J05_lux α u) ∧
         (∀ u ∈ apm_m02J05_L α, apm_m02J05_lux α u = 0 ↔ u = 0) ∧
         (∀ u ∈ apm_m02J05_L α, ∀ c : ℝ,
