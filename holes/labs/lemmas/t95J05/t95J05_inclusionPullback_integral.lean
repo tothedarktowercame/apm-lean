@@ -66,7 +66,34 @@ theorem t95J05_inclusionPullback_integral
       2 * Real.pi ^ 2) :
     (∫ x : t95J05SphereThree, t95J05InclusionPullback x ∂μHE[3]) =
       -2 * Real.pi ^ 2 := by
-  sorry
+  rw [Measure.euclideanHausdorffMeasure_def, integral_smul_nnreal_measure]
+  have hdensity :
+      (fun x : t95J05SphereThree => t95J05InclusionPullback x) =
+        (fun x => x.1 1 ^ 3 * x.1 0 - 4 * x.1 0 ^ 2) := by
+    funext x
+    exact t95J05InclusionPullback_expand x
+  rw [hdensity]
+  have hmoment :
+      (∫ x : t95J05SphereThree, x.1 1 ^ 3 * x.1 0 - 4 * x.1 0 ^ 2
+        ∂Measure.hausdorffMeasure (↑(3 : ℕ))) =
+        -ConstructionTargets.IntrinsicSphereSecondMoments.mass 3 := by
+    simpa only [show 3 + 1 = 4 by omega] using
+      ConstructionTargets.IntrinsicSphereSecondMoments.projective_density_moment
+  rw [hmoment]
+  rw [Measure.euclideanHausdorffMeasure_def, Measure.smul_apply] at hmass
+  change
+    ((↑(Measure.addHaarScalarFactor
+        (volume : Measure (EuclideanSpace ℝ (Fin 3)))
+        (Measure.hausdorffMeasure (↑(3 : ℕ)) :
+          Measure (EuclideanSpace ℝ (Fin 3)))) : ENNReal) *
+      Measure.hausdorffMeasure (↑(3 : ℕ))
+        (Set.univ : Set t95J05SphereThree)).toReal = 2 * Real.pi ^ 2 at hmass
+  rw [ENNReal.toReal_mul] at hmass
+  · unfold ConstructionTargets.IntrinsicSphereSecondMoments.mass
+    simp only [ENNReal.coe_toReal] at hmass
+    rw [NNReal.smul_def, smul_eq_mul, mul_neg]
+    rw [hmass]
+    ring
 -- END SEAT AREA
 
 theorem apm_t95j05 :
