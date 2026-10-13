@@ -794,6 +794,11 @@ theorem apm_m93j05_lp_rpow_weak_lsc (p q : ℝ) (hp : 1 < p) (hq : 1 < q) (hpq :
         Real.rpow (eLpNorm u (ENNReal.ofReal p) (volume.restrict (Set.Icc (0 : ℝ) 1))).toReal p ≤ r := by
   sorry
 
+lemma apm_m93j05_high_modes_weak_tendsto_aux_trunc_continuous
+    (N : ℕ) (h : ℝ → ℝ) : Continuous (apm_m93j05_trunc N h) := by
+  unfold apm_m93j05_trunc
+  fun_prop
+
 theorem apm_m93j05_high_modes_weak_tendsto (N : ℕ) (p q : ℝ) (hp : 1 < p) (hq : 1 < q) (hpq : 1 / p + 1 / q = 1)
     (f : ℝ → ℝ) (s : ℕ → ℝ → ℝ) (hf : MemLp f (ENNReal.ofReal p) (volume.restrict (Set.Icc (0 : ℝ) 1)))
     (hs : ∀ n, MemLp (s n) (ENNReal.ofReal p) (volume.restrict (Set.Icc (0 : ℝ) 1)))
