@@ -886,7 +886,36 @@ translation identities needed by the concrete convolution definition. -/
 -- BEGIN SEAT AREA
 lemma apm_m98J02_bridge_2_aux_smooth (v : apm_m98J02_Dist) (φ : apm_m98J02_Test) :
     ContDiff ℝ ∞ (fun x : apm_m98J02_E => v (apm_m98J02_translateTest x φ)) := by
-  sorry
+  let hcont : ∀ ψ : apm_m98J02_Test,
+      Continuous (fun x : apm_m98J02_E ↦ apm_m98J02_translateTest x ψ) :=
+    apm_m98J02_translateTest_continuous
+  let hdq : ∀ (ψ : apm_m98J02_Test) (i : Fin 2) (x : apm_m98J02_E),
+      Filter.Tendsto (fun h : ℝ ↦ h⁻¹ • (apm_m98J02_translateTest
+        (x + h • EuclideanSpace.single i 1) ψ - apm_m98J02_translateTest x ψ))
+        (nhdsWithin (0 : ℝ) ({0} : Set ℝ)ᶜ)
+        (nhds (apm_m98J02_translateTest x (apm_m98J02_partialTest i ψ))) :=
+    apm_m98J02_translateTest_difference_quotient
+  have hF : ∀ ψ : apm_m98J02_Test, ∀ x, HasFDerivAt
+      (fun z => v (apm_m98J02_translateTest z ψ))
+      (∑ i, v (apm_m98J02_translateTest x (apm_m98J02_partialTest i ψ)) •
+        (EuclideanSpace.proj i : apm_m98J02_E →L[ℝ] ℝ)) x := fun ψ x =>
+    apm_m98J02_translated_pairing_calculus_of_facts_aux_hasFDerivAt_pairing
+      hcont hdq v ψ x
+  have hk : ∀ k : ℕ, ∀ ψ : apm_m98J02_Test,
+      ContDiff ℝ k (fun x => v (apm_m98J02_translateTest x ψ)) := by
+    intro k
+    induction k with
+    | zero =>
+        intro ψ
+        exact contDiff_zero.2
+          (apm_m98J02_translated_pairing_calculus_of_facts_aux_continuous hcont v ψ)
+    | succ k ih =>
+        intro ψ
+        rw [show ((k + 1 : ℕ) : WithTop ℕ∞) = (k : WithTop ℕ∞) + 1 by norm_cast,
+          contDiff_succ_iff_hasFDerivAt]
+        refine ⟨_, ?_, hF ψ⟩
+        exact ContDiff.sum fun i _ => (ih _).smul contDiff_const
+  exact contDiff_infty.2 fun k => hk k φ
 -- END SEAT AREA
 
 lemma apm_m98J02_bridge_2_aux_psi
