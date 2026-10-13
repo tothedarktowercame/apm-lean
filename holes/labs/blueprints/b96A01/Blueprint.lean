@@ -130,7 +130,86 @@ lemma apm_b96a01_part_b_aux_lattice_basis_conjugacy
         (g.1 : Matrix n n ℚ) *ᵥ x ∈ AddSubgroup.closure (s : Set (n → ℚ))) :
     ∃ P : Matrix n n ℚ, IsUnit P ∧
       ∀ g : G, apmIntegralMatrix (P * (g.1 : Matrix n n ℚ) * P⁻¹) := by
-  sorry
+  classical
+  obtain ⟨s, hstd, hstable⟩ := horbit
+  let A : AddSubgroup (n → ℚ) := AddSubgroup.closure (s : Set (n → ℚ))
+  obtain ⟨(ι : Type), b, u, hA⟩ := apm_b96a01_part_a (n → ℚ) A s rfl
+  let S : Submodule ℚ (n → ℚ) := Submodule.span ℚ (b '' (u : Set ι))
+  have hAle : A ≤ S.toAddSubgroup := by
+    rw [hA]
+    apply (AddSubgroup.closure_le _).2
+    intro x hx
+    exact Submodule.subset_span hx
+  have hS : S = ⊤ := by
+    apply top_unique
+    rw [← (Pi.basisFun ℚ n).span_eq]
+    apply Submodule.span_le.2
+    rintro x ⟨j, rfl⟩
+    apply hAle
+    simpa [Pi.basisFun_apply] using hstd j
+  have hu : (u : Set ι) = Set.univ := by
+    ext i
+    simp only [Set.mem_univ, iff_true]
+    have hi : b i ∈ S := by rw [hS]; trivial
+    have hsupp := (b.mem_span_image).1 hi
+    apply hsupp
+    simp
+  have hArange : A = AddSubgroup.closure (Set.range b) := by
+    rw [hA]
+    congr 1
+    rw [hu, Set.image_univ]
+  have hint : ∀ x ∈ A, ∀ i : ι, ∃ z : ℤ, b.repr x i = z := by
+    intro x hx
+    rw [hArange] at hx
+    refine AddSubgroup.closure_induction
+      (p := fun x _ ↦ ∀ i : ι, ∃ z : ℤ, b.repr x i = z) ?_ ?_ ?_ ?_ hx
+    · intro x hx i
+      obtain ⟨j, rfl⟩ := hx
+      by_cases hji : j = i
+      · subst j
+        exact ⟨1, by simp⟩
+      · exact ⟨0, by simp [hji]⟩
+    · intro i
+      exact ⟨0, by simp⟩
+    · intro x y hx hy ihx ihy i
+      obtain ⟨a, ha⟩ := ihx i
+      obtain ⟨c, hc⟩ := ihy i
+      exact ⟨a + c, by simp [ha, hc]⟩
+    · intro x hx ihx i
+      obtain ⟨a, ha⟩ := ihx i
+      exact ⟨-a, by simp [ha]⟩
+  let e : ι ≃ n := b.indexEquiv (Pi.basisFun ℚ n)
+  let bn : Module.Basis n ℚ (n → ℚ) := b.reindex e
+  let std : Module.Basis n ℚ (n → ℚ) := Pi.basisFun ℚ n
+  let P : Matrix n n ℚ := bn.toMatrix std
+  have hPinv : P⁻¹ = std.toMatrix bn := by
+    letI : Invertible P := Module.Basis.invertibleToMatrix bn std
+    apply Matrix.inv_eq_right_inv
+    exact Module.Basis.toMatrix_mul_toMatrix_flip bn std
+  refine ⟨P, ?_, ?_⟩
+  · letI : Invertible P := Module.Basis.invertibleToMatrix bn std
+    exact isUnit_of_invertible P
+  · intro g i j
+    let f : (n → ℚ) →ₗ[ℚ] (n → ℚ) := Matrix.mulVecLin (g.1 : Matrix n n ℚ)
+    have hmat : (g.1 : Matrix n n ℚ) = LinearMap.toMatrix std std f := by
+      ext a c
+      simp [f, std, LinearMap.toMatrix_apply, Matrix.mulVecLin_apply]
+    have hconj : P * (g.1 : Matrix n n ℚ) * P⁻¹ =
+        LinearMap.toMatrix bn bn f := by
+      rw [hmat, hPinv]
+      exact basis_toMatrix_mul_linearMap_toMatrix_mul_basis_toMatrix
+        bn std bn std f
+    rw [hconj]
+    have hbmem : f (bn j) ∈ A := by
+      apply hstable g
+      change bn j ∈ A
+      rw [hArange]
+      apply AddSubgroup.subset_closure
+      exact ⟨e.symm j, by simp [bn, e]⟩
+    obtain ⟨z, hz⟩ := hint (f (bn j)) hbmem (e.symm i)
+    refine ⟨z, ?_⟩
+    rw [LinearMap.toMatrix_apply]
+    simpa [bn, e] using hz
 
 theorem apm_b96a01_part_b :
     ∀ (n : Type*) [Fintype n] [DecidableEq n]
