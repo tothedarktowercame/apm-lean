@@ -267,7 +267,26 @@ lemma apm_t97J05_regular_aux_flattens_fiber
     (he : (e : apm_t97J05_R3 → apm_t97J05_R3) = apm_t97J05_regular_aux_H) :
     ∀ z ∈ e.source,
       z ∈ apm_t97J05_W ↔ e z 0 = 0 ∧ e z 1 = 1 := by
-  sorry
+  intro z hz
+  have hez : e z = apm_t97J05_regular_aux_H z := congrFun he z
+  constructor
+  · intro hW
+    have hf : apm_t97J05_f z = apm_t97J05_value := hW
+    constructor
+    · have h0 := congrArg (fun u : apm_t97J05_R2 ↦ u 0) hf
+      simpa [hez, apm_t97J05_regular_aux_H, apm_t97J05_f,
+        apm_t97J05_value] using h0
+    · have h1 := congrArg (fun u : apm_t97J05_R2 ↦ u 1) hf
+      simpa [hez, apm_t97J05_regular_aux_H, apm_t97J05_f,
+        apm_t97J05_value] using h1
+  · rintro ⟨h0, h1⟩
+    change apm_t97J05_f z = apm_t97J05_value
+    ext i
+    fin_cases i
+    · simpa [hez, apm_t97J05_regular_aux_H, apm_t97J05_f,
+        apm_t97J05_value] using h0
+    · simpa [hez, apm_t97J05_regular_aux_H, apm_t97J05_f,
+        apm_t97J05_value] using h1
 
 /-- LIBRARY: global regular-level/embedded-submanifold assembly.  This is the
 remaining missing Mathlib foundation: compatible subtype charts and the
