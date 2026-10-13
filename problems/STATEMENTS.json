@@ -171,7 +171,7 @@
    "decls": [
     "apm_m98j02"
    ],
-   "sha256": "c146a9ac6d56322a9942ff272eb6412f25e10138b0a32aba0312236a1fb0284a",
+   "sha256": "980ae7d661c3082a68350f237e0a3f6811be7d6dca24c0b7d82932e72cd7cf65",
    "defs": [
     "apm_m98J02_Dist",
     "apm_m98J02_E",
@@ -184,11 +184,11 @@
     "apm_m98J02_solvesT"
    ],
    "grade": "narrower",
-   "grader": "claude-14 outside graders (read-only Claude subagents, 2026-10-13)",
-   "evidence": "holes/labs/statement-registry/blueprint-batch-1-grades.md",
+   "grader": "claude-14 outside grader (read-only Claude subagent, 2026-10-13, re-grade)",
+   "evidence": "holes/labs/statement-registry/lemma-round-1-grades.md",
    "prelim_defect": "holes/labs/statement-registry/blueprint-batch-1-grades.md",
-   "rev": "573847ac4",
-   "approved_at": "2026-10-13T04:19:30Z"
+   "rev": "f4fdb7d3b",
+   "approved_at": "2026-10-13T05:32:51Z"
   },
   "m98J05": {
    "decls": [
