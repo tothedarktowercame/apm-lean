@@ -24430,7 +24430,7 @@
    :consumer :t01A08,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 0,
    :review-finding
    "extend Mathlib: state and prove the missing theorem in scope",
    :implements-lemma :lemma-closedset-whitneycubecover,
@@ -24470,6 +24470,17 @@
      {:cmd
       "lean fixture; registry; no-sorry/axiom; diff check; commit",
       :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791898532594-9750-2ee45915",
+     :commands
+     ["git show/diff 2acdd61b; scope and theorem review"
+      "lake build ConstructionTargets.SardConvexDomain"
+      "sha256sum and lake env lean t01a08_b3_proper_reduction_check"
+      "statement-registry check; forbidden-token recount"],
+     :finding
+     "PASS. Valid STOP after compiled progress. The scoped lemma correctly reduces the general closed nonempty case: s=univ uses the reviewed empty-cover theorem; otherwise closedness, nonemptiness, and s≠univ pass unchanged to the proper-case constructor. The geometric proper-case cover remains explicitly not started. Build/export pass; fixture hash matches; standard axioms only; registry 149/149; sorry/admit/axiom 0->0."},
     :commit "2acdd61b69524c494ba959cb66fa87d37de78e64",
     :changed-paths ["ConstructionTargets/SardConvexDomain.lean"],
     :fixture
@@ -24479,7 +24490,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain.blueprint/B3",
    :acceptance
@@ -35086,7 +35097,7 @@
    :other-consumers []}
   {:consumer :t01A08,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -35100,7 +35111,9 @@
     :type
     "proper-case constructor implies the general closed nonempty cover",
     :area "sard-convex-domain",
-    :proved-in :r-a08-sard-b3-whitney-cubes-1},
+    :proved-in :r-a08-sard-b3-whitney-cubes-1,
+    :banked-by :r-a08-sard-b3-whitney-cubes-1,
+    :banked-commit "2acdd61b69524c494ba959cb66fa87d37de78e64"},
    :id
    :lemma-constructiontargets-sardconvexdomain-closedset-whitneycubecover-of-proper-case,
    :kind :lemma,
