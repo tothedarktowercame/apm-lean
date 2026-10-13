@@ -6021,6 +6021,45 @@ theorem genericPointWedgeSourceFunctor_rightLeg_eq_conj_inr
   rw [genericPointWedgeSourceFunctor_map_eq_inverseIdentity,
     genericPointWedgeInverseIdentity_rightLeg_eq_conj_inr]
 
+/-- Normalize the reconstructed equivalence by conjugating only the right
+free-product factor. -/
+def genericPointWedgePartiallyNormalizedFundamentalGroupEquiv
+    (a : FundamentalGroup X x₀) :
+    FundamentalGroup (Wedge x₀ y₀) (quotientMap x₀ y₀ (.inl x₀)) ≃*
+      genericPointWedgeFreeProduct x₀ y₀ :=
+  (genericPointWedgeFundamentalGroupEquiv
+    x₀ y₀ M N hM hN hy hx cM cN).trans
+      (genericPointWedgeConjugateRightByLeft x₀ y₀ a)
+
+/-- If the right restriction conjugator comes from the left factor, partial
+conjugation gives both literal B6 leg coordinates. -/
+theorem genericPointWedgePartiallyNormalized_legCoordinates
+    (a : FundamentalGroup X x₀)
+    (ha : genericPointWedgeIdentityGlobalRightBaseElement
+        x₀ y₀ M N hM hN hy hx cM cN = Monoid.Coprod.inl a) :
+    (∀ g : FundamentalGroup X x₀,
+      genericPointWedgePartiallyNormalizedFundamentalGroupEquiv
+          x₀ y₀ M N hM hN hy hx cM cN a
+          (genericPointWedgeLeftLegMap x₀ y₀ g) = Monoid.Coprod.inl g) ∧
+    (∀ g : FundamentalGroup Y y₀,
+      genericPointWedgePartiallyNormalizedFundamentalGroupEquiv
+          x₀ y₀ M N hM hN hy hx cM cN a
+          (genericPointWedgeRightLegMap x₀ y₀ g) = Monoid.Coprod.inr g) := by
+  constructor
+  · intro g
+    rw [genericPointWedgePartiallyNormalizedFundamentalGroupEquiv,
+      MulEquiv.trans_apply, genericPointWedgeFundamentalGroupEquiv_apply,
+      genericPointWedgeSourceFunctor_leftLeg_eq_inl,
+      genericPointWedgeConjugateRightByLeft_inl]
+  · intro g
+    rw [genericPointWedgePartiallyNormalizedFundamentalGroupEquiv,
+      MulEquiv.trans_apply, genericPointWedgeFundamentalGroupEquiv_apply,
+      genericPointWedgeSourceFunctor_rightLeg_eq_conj_inr, ha,
+      map_mul, map_mul, map_inv,
+      genericPointWedgeConjugateRightByLeft_inl,
+      genericPointWedgeConjugateRightByLeft_inr]
+    simp [mul_assoc]
+
 /-- Once B3's two mapped actions are identified with the images of the
 literal topological legs under B5, the normalized equivalence has exactly the
 two coproduct coordinates required by B6. -/
@@ -6723,6 +6762,8 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeMappedLeft_eq_inl_iff_sourceComparison
 #print axioms genericPointWedgeNormalizedLeftLeg_eq_inl_iff_sourceComparison
 #print axioms genericPointWedgeSourceMappedLeft_counitSquare
+#print axioms genericPointWedgePartiallyNormalizedFundamentalGroupEquiv
+#print axioms genericPointWedgePartiallyNormalized_legCoordinates
 #print axioms genericPointWedgeLegCoordinates_of_mapped
 #print axioms genericPointWedgeLegCoordinates_iff_mapped
 #print axioms genericPointWedgeLegCoordinates_iff_sourceFunctor

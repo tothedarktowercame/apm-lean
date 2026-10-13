@@ -1219,3 +1219,8 @@ commutation or a corrected normalization construction.
 normalization when the right-base conjugator factors through the left
 injection. It fixes every `inl` and conjugates only `inr`; its inverse is the
 same partial conjugation by the inverse left element.
+
+`genericPointWedgePartiallyNormalizedFundamentalGroupEquiv` composes B5 with
+that automorphism. `genericPointWedgePartiallyNormalized_legCoordinates`
+proves both B6 equations from one explicit residual: the fixed right-base
+conjugator is `inl a` for some left loop `a`.
