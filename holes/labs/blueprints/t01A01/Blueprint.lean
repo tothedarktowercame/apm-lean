@@ -828,9 +828,98 @@ lemma apm_t01A01_RP1_equiv_onePoint_aux_continuous :
 /-- Seat (claude-14): `[v] ↦ v 0 / v 1` (or `∞` when `v 1 = 0`) is continuous:
 it lifts to a continuous map on `{v | v ≠ 0}` (near `v 1 = 0` the ratio is large,
 i.e. near `∞` in `OnePoint ℝ`), then descend through the quotient map. -/
+noncomputable def apm_t01A01_RP1_equiv_onePoint_aux_inverse_continuous_aux_inv
+    (t : ℝ) : OnePoint ℝ :=
+  if t = 0 then OnePoint.infty else (↑(t⁻¹) : OnePoint ℝ)
+
+lemma apm_t01A01_RP1_equiv_onePoint_aux_inverse_continuous_aux_inv_continuous :
+    Continuous apm_t01A01_RP1_equiv_onePoint_aux_inverse_continuous_aux_inv := by
+  rw [continuous_iff_continuousAt]
+  intro t
+  by_cases ht : t = 0
+  · subst t
+    rw [ContinuousAt]
+    simp only [apm_t01A01_RP1_equiv_onePoint_aux_inverse_continuous_aux_inv,
+      if_pos]
+    rw [← nhdsNE_sup_pure]
+    apply Filter.Tendsto.sup
+    · have hinv : Filter.Tendsto (fun x : ℝ => x⁻¹) (nhdsWithin 0 {0}ᶜ)
+          (Filter.coclosedCompact ℝ) := by
+        simpa [Filter.coclosedCompact_eq_cocompact,
+          Metric.cobounded_eq_cocompact] using
+            (Filter.tendsto_inv₀_nhdsNE_zero (α := ℝ))
+      apply (OnePoint.tendsto_coe_infty.comp hinv).congr'
+      filter_upwards [self_mem_nhdsWithin] with x hx
+      have hx' : x ≠ 0 := by simpa using hx
+      simp [apm_t01A01_RP1_equiv_onePoint_aux_inverse_continuous_aux_inv, hx']
+    · simpa [apm_t01A01_RP1_equiv_onePoint_aux_inverse_continuous_aux_inv] using
+        (tendsto_pure_nhds
+          apm_t01A01_RP1_equiv_onePoint_aux_inverse_continuous_aux_inv 0)
+  · have hi : ContinuousAt (fun x : ℝ => (↑(x⁻¹) : OnePoint ℝ)) t :=
+      OnePoint.continuous_coe.continuousAt.comp (continuousAt_inv₀ ht)
+    apply hi.congr_of_eventuallyEq
+    filter_upwards [eventually_ne_nhds ht] with x hx
+    simp [apm_t01A01_RP1_equiv_onePoint_aux_inverse_continuous_aux_inv, hx]
+
 lemma apm_t01A01_RP1_equiv_onePoint_aux_inverse_continuous :
     Continuous apm_t01A01_RP1_equiv_onePoint_aux_equiv.symm := by
-  sorry
+  let q := ConstructionTargets.ProjectiveSpaceTopology.quotientMap ℝ 1
+  have hq : Topology.IsQuotientMap q :=
+    ⟨ConstructionTargets.ProjectiveSpaceTopology.surjective_quotientMap ℝ 1, rfl⟩
+  apply hq.continuous_iff.mpr
+  let raw : {v : Fin 2 → ℝ // v ≠ 0} → OnePoint ℝ := fun v =>
+    if v.1 1 = 0 then OnePoint.infty
+      else (↑((v.1 1)⁻¹ * v.1 0) : OnePoint ℝ)
+  have hraw : Continuous raw := by
+    rw [continuous_iff_continuousAt]
+    intro v
+    by_cases hy : v.1 1 = 0
+    · have hx : v.1 0 ≠ 0 := by
+        intro hx
+        apply v.2
+        funext j
+        fin_cases j <;> assumption
+      let u : {v : Fin 2 → ℝ // v ≠ 0} → ℝ := fun w => w.1 1 / w.1 0
+      have hu : ContinuousAt u v := by
+        exact ((continuous_apply 1).continuousAt.comp continuous_subtype_val.continuousAt).div₀
+          ((continuous_apply 0).continuousAt.comp continuous_subtype_val.continuousAt) hx
+      have hevent : ∀ᶠ w in nhds v, w.1 0 ≠ 0 :=
+        (isOpen_compl_singleton.preimage
+          ((continuous_apply 0).comp continuous_subtype_val)).mem_nhds hx
+      apply apm_t01A01_RP1_equiv_onePoint_aux_inverse_continuous_aux_inv_continuous.continuousAt.comp
+        hu |>.congr_of_eventuallyEq
+      filter_upwards [hevent] with w hw
+      simp only [raw, u]
+      by_cases hwy : w.1 1 = 0
+      · simp [hwy,
+          apm_t01A01_RP1_equiv_onePoint_aux_inverse_continuous_aux_inv]
+      · simp [hwy, hw,
+          apm_t01A01_RP1_equiv_onePoint_aux_inverse_continuous_aux_inv]
+        field_simp
+    · have hc : ContinuousAt
+          (fun w : {v : Fin 2 → ℝ // v ≠ 0} =>
+            (↑((w.1 1)⁻¹ * w.1 0) : OnePoint ℝ)) v := by
+        apply OnePoint.continuous_coe.continuousAt.comp
+        have h1 : ContinuousAt (fun w : {v : Fin 2 → ℝ // v ≠ 0} => w.1 1) v :=
+          (continuous_apply 1).continuousAt.comp continuous_subtype_val.continuousAt
+        have h0 : ContinuousAt (fun w : {v : Fin 2 → ℝ // v ≠ 0} => w.1 0) v :=
+          (continuous_apply 0).continuousAt.comp continuous_subtype_val.continuousAt
+        exact (h1.inv₀ hy).mul h0
+      apply hc.congr_of_eventuallyEq
+      have hevent : ∀ᶠ w in nhds v, w.1 1 ≠ 0 :=
+        (isOpen_compl_singleton.preimage
+          ((continuous_apply 1).comp continuous_subtype_val)).mem_nhds hy
+      filter_upwards [hevent] with w hw
+      simp [raw, hw]
+  have heq : apm_t01A01_RP1_equiv_onePoint_aux_equiv.symm ∘ q = raw := by
+    funext v
+    change (OnePoint.equivProjectivization ℝ).symm
+      (Projectivization.map (LinearEquiv.finTwoArrow ℝ ℝ).toLinearMap
+        (LinearEquiv.finTwoArrow ℝ ℝ).injective
+        (Projectivization.mk ℝ v.1 v.2)) = raw v
+    rw [Projectivization.map_mk]
+    simp [raw, div_eq_inv_mul]
+  exact heq ▸ hraw
 
 theorem apm_t01A01_RP1_equiv_onePoint :
     ∃ e : apm_t01A01_RP1 ≃ OnePoint ℝ, Continuous e := by
