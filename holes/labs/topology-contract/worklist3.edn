@@ -23422,6 +23422,17 @@
       :exit 1,
       :finding
       "Concurrent ledger commit advanced HEAD; reran against authored commit."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791875555217-8884-64463e78",
+     :commands
+     ["git diff --check ac710aaa^ ac710aaa -- SardConvexDomain.lean"
+      "lake env lean ConstructionTargets/SardConvexDomain.lean"
+      "lake env lean /tmp/t01a08_symmetry_base_axioms.lean"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS: valid STOP after real progress. ac710aaa changes only the scoped file and commits a compiled, sorry-free order-two symmetry theorem with corrected membership/closure orientation and only propext/Classical.choice/Quot.sound. Registry 147/147; placeholder count stays 0. The row accurately lists higher-order adjacent swaps and permutation induction as the remaining partial theorem."},
     :commit "ac710aaa40bb8c9a74e433dbeee6b4f103945a55",
     :changed-paths ["ConstructionTargets/SardConvexDomain.lean"],
     :fixture
@@ -23433,7 +23444,7 @@
    :phase :implementation,
    :type
    "{E F} [real normed spaces] {s f x} → ContDiffWithinAt ℝ ∞ f s x → UniqueDiffOn ℝ s → x∈s → x∈closure(interior s) → ∀ {n} (σ : Equiv.Perm (Fin n)), (iteratedFDerivWithin ℝ n f s x).domDomCongr σ = iteratedFDerivWithin ℝ n f s x",
-   :state :done-unreviewed,
+   :state :stopped,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain/B1/symmetry",
    :acceptance
@@ -23463,7 +23474,7 @@
      :infrastructure-packets
      :review-outcomes]},
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance {:strategy "Rerank corrected symmetry."},
