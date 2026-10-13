@@ -644,6 +644,52 @@ lemma apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_exte
   intro t ht
   exact (hpos t ht).ne'
 
+lemma apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_extend_aux_core_aux_ratio_deriv
+    (a b : ℝ) (p q g y z : ℝ → ℝ) (hp : ContDiff ℝ 1 p)
+    (hpos : ∀ t ∈ Set.Icc a b, 0 < p t)
+    (hsys : ∀ t ∈ Set.Icc a b,
+      HasDerivWithinAt y (z t / p t) (Set.Icc a b) t ∧
+      HasDerivWithinAt z (q t * y t + g t) (Set.Icc a b) t) :
+    ∀ t ∈ Set.Icc a b,
+      HasDerivWithinAt (fun x => z x / p x)
+        (((q t * y t + g t) * p t - z t * deriv p t) / p t ^ 2)
+        (Set.Icc a b) t := by
+  intro t ht
+  have hpder : HasDerivWithinAt p (deriv p t) (Set.Icc a b) t :=
+    ((hp.differentiable (by norm_num)).differentiableAt.hasDerivAt).hasDerivWithinAt
+  convert (hsys t ht).2.div hpder (hpos t ht).ne' using 1 <;> ring
+
+lemma apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_extend_aux_core_aux_second_continuous
+    (a b : ℝ) (p q g y z : ℝ → ℝ) (hp : ContDiff ℝ 1 p)
+    (hq : Continuous q) (hg : Continuous g)
+    (hpos : ∀ t ∈ Set.Icc a b, 0 < p t)
+    (hsys : ∀ t ∈ Set.Icc a b,
+      HasDerivWithinAt y (z t / p t) (Set.Icc a b) t ∧
+      HasDerivWithinAt z (q t * y t + g t) (Set.Icc a b) t) :
+    ContinuousOn (fun t =>
+      ((q t * y t + g t) * p t - z t * deriv p t) / p t ^ 2)
+      (Set.Icc a b) := by
+  have hy : ContinuousOn y (Set.Icc a b) :=
+    fun t ht => (hsys t ht).1.continuousWithinAt
+  have hz : ContinuousOn z (Set.Icc a b) :=
+    fun t ht => (hsys t ht).2.continuousWithinAt
+  have hpcon : ContinuousOn p (Set.Icc a b) := hp.continuous.continuousOn
+  have hdp : ContinuousOn (deriv p) (Set.Icc a b) :=
+    hp.continuous_deriv_one.continuousOn
+  have hn : ∀ t ∈ Set.Icc a b, p t ^ 2 ≠ 0 :=
+    fun t ht => pow_ne_zero 2 (hpos t ht).ne'
+  exact (((hq.continuousOn.mul hy).add hg.continuousOn).mul hpcon).sub
+    (hz.mul hdp) |>.div (hpcon.pow 2) hn
+
+/-- A function with a continuous within-derivative on `[a, b]` is the restriction of a global
+`C¹` function (extend past each endpoint by the tangent line). -/
+lemma apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_extend_aux_core_aux_C1_extension
+    (a b : ℝ) (hab : a < b) (h h' : ℝ → ℝ)
+    (hd : ∀ t ∈ Set.Icc a b, HasDerivWithinAt h (h' t) (Set.Icc a b) t)
+    (hc : ContinuousOn h' (Set.Icc a b)) :
+    ∃ R : ℝ → ℝ, ContDiff ℝ 1 R ∧ ∀ t ∈ Set.Icc a b, R t = h t := by
+  sorry
+
 lemma apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_extend_aux_core
     (a b : ℝ) (hab : a < b) (p q g : ℝ → ℝ) (hp : ContDiff ℝ 1 p)
     (hq : Continuous q) (hg : Continuous g) (hpos : ∀ t ∈ Set.Icc a b, 0 < p t)
@@ -652,7 +698,29 @@ lemma apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_exte
       HasDerivWithinAt z (q t * y t + g t) (Set.Icc a b) t) :
     ∃ Y : ℝ → ℝ, ContDiff ℝ 2 Y ∧
       ∀ t ∈ Set.Icc a b, Y t = y t ∧ p t * deriv Y t = z t := by
-  sorry
+  obtain ⟨R, hR, hRh⟩ := apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_extend_aux_core_aux_C1_extension a b hab (fun x => z x / p x) _
+    (apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_extend_aux_core_aux_ratio_deriv a b p q g y z hp hpos hsys)
+    (apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_extend_aux_core_aux_second_continuous a b p q g y z hp hq hg hpos hsys)
+  have hRc : Continuous R := hR.continuous
+  set Y : ℝ → ℝ := fun t => y a + ∫ s in a..t, R s with hYdef
+  have hYd : ∀ t, HasDerivAt Y (R t) t := fun t =>
+    (intervalIntegral.integral_hasDerivAt_right (hRc.intervalIntegrable _ _)
+      hRc.aestronglyMeasurable.stronglyMeasurableAtFilter hRc.continuousAt).const_add _
+  have hderiv : deriv Y = R := funext fun t => (hYd t).deriv
+  have hYeq : ∀ t ∈ Set.Icc a b, Y t = y t := by
+    refine eq_of_has_deriv_right_eq (f' := R) (fun x _ => (hYd x).hasDerivWithinAt)
+      (fun x hx => ?_) (fun x _ => (hYd x).continuousAt.continuousWithinAt)
+      (fun x hx => (hsys x hx).1.continuousWithinAt) (by simp [hYdef])
+    have hx' : x ∈ Set.Icc a b := ⟨hx.1, hx.2.le⟩
+    have := (hsys x hx').1
+    rw [← hRh x hx'] at this
+    exact this.mono_of_mem_nhdsWithin (Icc_mem_nhdsGE_of_mem hx)
+  refine ⟨Y, ?_, fun t ht => ⟨hYeq t ht, ?_⟩⟩
+  · rw [show (2 : WithTop ℕ∞) = 1 + 1 by norm_num, contDiff_succ_iff_deriv]
+    refine ⟨fun t => (hYd t).differentiableAt, by simp, ?_⟩
+    rw [hderiv]; exact hR
+  · rw [hderiv, hRh t ht]
+    field_simp [(hpos t ht).ne']
 
 lemma apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_extend
     (a b : ℝ) (hab : a < b) (p q g : ℝ → ℝ) (hp : ContDiff ℝ 1 p)
