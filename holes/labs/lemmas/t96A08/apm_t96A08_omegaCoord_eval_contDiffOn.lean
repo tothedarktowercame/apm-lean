@@ -685,7 +685,48 @@ theorem apm_t96A08_omegaCoord_eval_contDiffOn
     (x : M) :
     ContDiffOn ℝ 1 (fun p : E × E ↦ apm_t96A08_omegaCoord I omega x p.1 p.2)
       ((extChartAt I x).target ×ˢ Set.univ) := by
-  sorry
+  let e : E × E → TangentBundle (modelWithCornersSelf ℝ E) E :=
+    fun p ↦ ⟨p.1, p.2⟩
+  let T : TangentBundle (modelWithCornersSelf ℝ E) E → TangentBundle I M :=
+    tangentMapWithin (modelWithCornersSelf ℝ E) I (extChartAt I x).symm
+      (extChartAt I x).target
+  have hs : ContMDiffOn (modelWithCornersSelf ℝ E) I (⊤ : WithTop ℕ∞)
+      (extChartAt I x).symm (extChartAt I x).target :=
+    contMDiffOn_extChartAt_symm x
+  have hT : ContMDiffOn (modelWithCornersSelf ℝ E).tangent I.tangent 1 T
+      (Bundle.TotalSpace.proj ⁻¹' (extChartAt I x).target) :=
+    hs.contMDiffOn_tangentMapWithin (by simp)
+      (uniqueDiffOn_extChartAt_target x).uniqueMDiffOn
+  have he : ContMDiff (modelWithCornersSelf ℝ (E × E))
+      (modelWithCornersSelf ℝ E).tangent (⊤ : WithTop ℕ∞) e := by
+    apply contMDiff_iff.2
+    constructor
+    · change Continuous
+        ((tangentBundleModelSpaceHomeomorph (modelWithCornersSelf ℝ E)).symm ∘ id)
+      exact (tangentBundleModelSpaceHomeomorph
+        (modelWithCornersSelf ℝ E)).symm.continuous.comp continuous_id
+    · intro p q
+      apply contDiffOn_id.congr
+      simp only [e, mfld_simps, Prod.mk.injEq]
+  have hc : ContMDiffOn (modelWithCornersSelf ℝ (E × E))
+      (modelWithCornersSelf ℝ ℝ) 1
+      ((fun v : TangentBundle I M ↦ omega v.1 v.2) ∘ T ∘ e)
+      ((extChartAt I x).target ×ˢ Set.univ) := by
+    exact (homega_smooth.of_le (by simp)).comp_contMDiffOn
+      (hT.comp (he.of_le (by simp)).contMDiffOn (fun p hp ↦ hp.1))
+  rw [contMDiffOn_iff_contDiffOn] at hc
+  apply hc.congr
+  intro p hp
+  simp only [Function.comp_apply, T, e, apm_t96A08_omegaCoord,
+    tangentMapWithin_proj, tangentMapWithin_snd]
+  rw [show mfderivWithin (modelWithCornersSelf ℝ E) I (extChartAt I x).symm
+      (Set.range I) p.1 = mfderivWithin (modelWithCornersSelf ℝ E) I
+        (extChartAt I x).symm (extChartAt I x).target p.1 by
+    have hd := (hs p.1 hp.1).mdifferentiableWithinAt (by simp)
+    exact hd.mfderivWithin_mono_of_mem_nhdsWithin
+      (I.uniqueMDiffOn p.1 (extChartAt_target_subset_range x hp.1))
+      (extChartAt_target_mem_nhdsWithin_of_mem hp.1)]
+  rfl
 -- END SEAT AREA
 
 /-- Seat (pure analysis): a family of continuous linear functionals whose
