@@ -1084,6 +1084,37 @@ lemma apm_m02J05_bridge_complementary_young_holder_of_lux_facts_aux_young_aux_ar
     rw [hαβ t ht] at halt
     exact (not_lt_of_ge h) halt
 
+lemma apm_m02J05_bridge_complementary_young_holder_of_lux_facts_aux_young_aux_area_aux_diagonal_aux_integrable
+    (α β : ℝ → ℝ) (hαc : ContinuousOn α (Ici 0))
+    (hβc : ContinuousOn β (Ici 0))
+    (hnonneg : ∀ t, 0 ≤ t → 0 ≤ α t ∧ 0 ≤ β t)
+    {b : ℝ} (hb : 0 ≤ b) :
+    IntervalIntegrable α volume 0 b ∧ IntervalIntegrable β volume 0 (α b) := by
+  constructor
+  · apply ContinuousOn.intervalIntegrable_of_Icc hb
+    exact hαc.mono (Icc_subset_Ici_self)
+  · have hab : 0 ≤ α b := (hnonneg b hb).1
+    apply ContinuousOn.intervalIntegrable_of_Icc hab
+    exact hβc.mono (Icc_subset_Ici_self)
+
+lemma apm_m02J05_bridge_complementary_young_holder_of_lux_facts_aux_young_aux_area_aux_diagonal_aux_zero
+    (α β : ℝ → ℝ) (hαzero : α 0 = 0) :
+    0 * α 0 ≤ apm_m02J05_young α 0 + apm_m02J05_young β (α 0) := by
+  simp [apm_m02J05_young, hαzero]
+
+lemma apm_m02J05_bridge_complementary_young_holder_of_lux_facts_aux_young_aux_area_aux_diagonal_aux_pos
+    (α β : ℝ → ℝ)
+    (hαc : ContinuousOn α (Ici 0))
+    (hαmono : StrictMonoOn α (Ici 0))
+    (hαzero : α 0 = 0)
+    (hβc : ContinuousOn β (Ici 0))
+    (hnonneg : ∀ t, 0 ≤ t → 0 ≤ α t ∧ 0 ≤ β t)
+    (hβα : ∀ t, 0 ≤ t → β (α t) = t)
+    (hαβ : ∀ t, 0 ≤ t → α (β t) = t)
+    {b : ℝ} (hb : 0 < b) :
+    b * α b ≤ apm_m02J05_young α b + apm_m02J05_young β (α b) := by
+  sorry
+
 lemma apm_m02J05_bridge_complementary_young_holder_of_lux_facts_aux_young_aux_area_aux_diagonal
     (α β : ℝ → ℝ)
     (hαc : ContinuousOn α (Ici 0))
@@ -1095,7 +1126,14 @@ lemma apm_m02J05_bridge_complementary_young_holder_of_lux_facts_aux_young_aux_ar
     (hαβ : ∀ t, 0 ≤ t → α (β t) = t) :
     ∀ b : ℝ, 0 ≤ b →
       b * α b ≤ apm_m02J05_young α b + apm_m02J05_young β (α b) := by
-  sorry
+  intro b hb
+  rcases hb.eq_or_lt with rfl | hb
+  · exact
+      apm_m02J05_bridge_complementary_young_holder_of_lux_facts_aux_young_aux_area_aux_diagonal_aux_zero
+        α β hαzero
+  · exact
+      apm_m02J05_bridge_complementary_young_holder_of_lux_facts_aux_young_aux_area_aux_diagonal_aux_pos
+        α β hαc hαmono hαzero hβc hnonneg hβα hαβ hb
 
 lemma apm_m02J05_bridge_complementary_young_holder_of_lux_facts_aux_young_aux_area_aux_finish
     (α β : ℝ → ℝ)
