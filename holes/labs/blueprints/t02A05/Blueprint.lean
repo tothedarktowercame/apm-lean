@@ -143,7 +143,8 @@ lemma apm_t02a05_sphere_mass_eq_two_caps_aux_scaled_domain :
           (volume : Measure (EuclideanSpace ℝ (Fin 2))) μH[(2 : ℕ)] •
       ConstructionTargets.C1GraphMeasureDecomposition.domainMeasure 2 =
       volume := by
-  sorry
+  unfold ConstructionTargets.C1GraphMeasureDecomposition.domainMeasure
+  exact (MeasureTheory.Measure.isAddLeftInvariant_eq_smul _ _).symm
 
 lemma apm_t02a05_sphere_mass_eq_two_caps_aux_cap :
     Measure.addHaarScalarFactor
