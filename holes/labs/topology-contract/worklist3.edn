@@ -22301,8 +22301,8 @@
     :finding
     {:measures "Δ0;split PASS;aggregate REVISE;A08 6/2",
      :routes
-     "p/b:A02 2/13,A03 2/6,J02+98A02 1/10,A08 1/2,1J01 3/4,2A04 3/8,3J02 2/8,3J03 4/11,91J05 3/7,92J05+97J02 3/15,94J04 2/10,95J06 2/8,96A01 1/12,96A02 1/8,96J06 2/4,97A05+6 1/11",
-     :priority "Aggregate first."},
+     "A02:2/13,A03:2/6,J02+98A02:1/10,A08:1/2,1J01:3/4,2A04:3/8,3J02:2/8,3J03:4/11,91J05:3/7,92J05+97J02:3/15,94J04:2/10,95J06:2/8,96A01:1/12,96A02:1/8,96J06:2/4,97A05+6:1/11",
+     :priority "Aggregate."},
     :replacement-items
     [{:bounded-exception "Rule0.",
       :consumer :t01A08,
@@ -22319,9 +22319,10 @@
        :fixture "/tmp/t01a08_critical_image_null_aggregate.lean",
        :fixture-sha256
        "d4041a37e02023ad8ce1b8e98bb7c6cbb338d539dbc89b7f8b484340dd9b13bd",
+       :mode :post-build-export-check,
        :placeholder "t01A08 sorry",
        :route-step "nullity aggregation"},
-      :id :r-a08-agg-2,
+      :id :r-a08-agg-3,
       :kind :reusable-theorem,
       :area "sard-convex-domain",
       :depends-on [:r-t01a08-corners-split-1 :r-topo3-checkpoint-3],
@@ -22341,22 +22342,16 @@
       :scope [],
       :dag-node "TOPOLOGY-ROUTES.md",
       :acceptance {:strategy "Rerank."},
-      :id :r-topo3-cp4,
+      :id :r-topo3-cp4b,
       :kind :strategy-checkpoint,
       :area "portfolio",
-      :depends-on [:r-a08-agg-2],
+      :depends-on [:r-a08-agg-3],
       :current-residual "Elect frontier Sard.",
       :other-consumers []}],
     :author "topo-12",
-    :disposition :replan,
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1791860780407-8294-7bb2f52a",
-     :finding
-     "Replan repeats a known deterministic defect: both acceptance copies for replacement r-a08-agg-2 omit :mode :post-build-export-check, although the reviewed aggregate fixture is promoted and literal compilation fails as a duplicate declaration. Add that mode to both copies before re-electing the aggregate row; the fresh priority count itself correctly reports t01A08 as 1 placeholder, 6 banked, 2 backlog."}},
+    :disposition :replan},
    :phase :strategy,
-   :state :repair,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance {:strategy "Rerank after corners Sard."},
@@ -22365,6 +22360,50 @@
    :area "portfolio",
    :depends-on [:r-t01a08-corners-1 :r-topo3-checkpoint-2],
    :current-residual "Elect closure if banked.",
+   :other-consumers []}
+  {:bounded-exception "Rule0.",
+   :consumer :t01A08,
+   :implements-lemma
+   :lemma-constructiontargets-sardconvexdomain-modelrange-withincriticalimage-null-of-inte,
+   :phase :implementation,
+   :state :blocked,
+   :scope ["ConstructionTargets/SardConvexDomain.lean"],
+   :dag-node "TOPOLOGY-ROUTES.md/t01A08/corners-sard",
+   :acceptance
+   {:declaration
+    "ConstructionTargets.SardConvexDomain.modelRange_withinCriticalImage_null_of_interior_of_frontier",
+    :type "exact type in fixture",
+    :fixture "/tmp/t01a08_critical_image_null_aggregate.lean",
+    :fixture-sha256
+    "d4041a37e02023ad8ce1b8e98bb7c6cbb338d539dbc89b7f8b484340dd9b13bd",
+    :mode :post-build-export-check,
+    :placeholder "t01A08 sorry",
+    :route-step "nullity aggregation"},
+   :id :r-a08-agg-3,
+   :kind :reusable-theorem,
+   :area "sard-convex-domain",
+   :depends-on [:r-t01a08-corners-split-1 :r-topo3-checkpoint-3],
+   :current-residual "Frontier Sard.",
+   :other-consumers []}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 1,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md",
+   :acceptance {:strategy "Rerank."},
+   :id :r-topo3-cp4b,
+   :kind :strategy-checkpoint,
+   :area "portfolio",
+   :depends-on [:r-a08-agg-3 :r-topo3-checkpoint-3],
+   :current-residual "Elect frontier Sard.",
    :other-consumers []}
   {:bounded-exception "Rule0.",
    :consumer :t01A08,
