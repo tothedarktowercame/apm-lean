@@ -1594,6 +1594,20 @@ exactly their basepoints. -/
 def FiniteWedge (L : Type*) :=
   Quotient (Relation.EqvGen.setoid (FiniteWedgeRel L))
 
+/-- With the present quotient representation, the wedge indexed by the empty
+type has no point.  Thus a theorem based at a `wedgePoint` requires
+`[Nonempty L]` (or a different representation with an adjoined basepoint). -/
+theorem finiteWedge_empty_elim
+    (x : FiniteWedge Empty) : False := by
+  refine Quotient.inductionOn x ?_
+  rintro ⟨l, _⟩
+  exact Empty.elim l
+
+theorem finiteWedge_empty_not_nonempty :
+    ¬ Nonempty (FiniteWedge Empty) := by
+  rintro ⟨x⟩
+  exact finiteWedge_empty_elim x
+
 noncomputable instance (L : Type*) : TopologicalSpace (FiniteWedge L) :=
   letI : TopologicalSpace L := ⊥
   TopologicalSpace.coinduced
