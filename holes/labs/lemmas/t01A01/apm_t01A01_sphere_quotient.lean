@@ -130,7 +130,18 @@ theorem apm_t01A01_sphere_quotient :
     ∃ π : C(Metric.sphere (0 : EuclideanSpace ℝ (Fin 3)) 1, apm_t01A01_RP2),
       Function.Surjective π ∧ Topology.IsQuotientMap π ∧ (∀ x, π (-x) = π x) ∧
         ∀ x y, π x = π y → y = x ∨ y = -x := by
-  sorry
+  let π : C(Metric.sphere (0 : EuclideanSpace ℝ (Fin 3)) 1,
+      apm_t01A01_RP2) :=
+    ⟨ConstructionTargets.RealProjectiveSmoothTarget.sphereProjection 2,
+      ConstructionTargets.RealProjectiveSmoothTarget.continuous_sphereProjection⟩
+  refine ⟨π, ?_, ?_, ?_, ?_⟩
+  · exact ConstructionTargets.RealProjectiveSmoothTarget.sphereProjectionQuotientAuthority.surjective
+  · exact ConstructionTargets.RealProjectiveSmoothTarget.sphereProjectionQuotientAuthority
+  · intro x
+    exact ((ConstructionTargets.RealProjectiveSmoothTarget.sphereProjection_eq_iff x (-x)).2
+      (Or.inr rfl)).symm
+  · intro x y hxy
+    exact (ConstructionTargets.RealProjectiveSmoothTarget.sphereProjection_eq_iff x y).1 hxy
 -- END SEAT AREA
 
 /-- Seat: every map `S² → S¹` lifts through `Circle.exp` (`S²` is simply
