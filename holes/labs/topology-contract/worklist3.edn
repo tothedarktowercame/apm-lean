@@ -24430,7 +24430,7 @@
    :consumer :t01A08,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 0,
    :review-finding
    "extend Mathlib: state and prove the missing theorem in scope",
    :implements-lemma :lemma-closedset-whitneycubecover,
@@ -24471,6 +24471,17 @@
     [{:cmd "exploratory builds",
       :exit 1,
       :correction "fixed center and distance orientation"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791898842894-9768-fc9074e1",
+     :commands
+     ["git show/diff 82275f37; scope and metric-orientation review"
+      "lake build ConstructionTargets.SardConvexDomain"
+      "sha256sum and lake env lean t01a08_b3_quarter_ball_check"
+      "statement-registry check; forbidden-token recount"],
+     :finding
+     "PASS. Valid STOP after compiled progress. The scoped theorem proves the per-center Whitney geometry with correct distance orientation: the positive quarter-infDist ball avoids s, lies in the infDist closed ball, and satisfies both certificate scale inequalities. The countable locally finite bounded-overlap selection remains explicitly partial. Build/export pass; fixture hash matches; standard axioms only; registry 149/149; sorry/admit/axiom 0->0."},
     :commit "82275f37919538ec61b9596737a25a2648a4d7da",
     :changed-paths ["ConstructionTargets/SardConvexDomain.lean"],
     :fixture
@@ -24480,7 +24491,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain.blueprint/B3",
    :acceptance
@@ -35158,7 +35169,7 @@
    :other-consumers []}
   {:consumer :t01A08,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -35170,7 +35181,9 @@
     :reported-by [:r-a08-sard-b3-whitney-cubes-1],
     :type "quarter-distance ball bounds",
     :area "sard-convex-domain",
-    :proved-in :r-a08-sard-b3-whitney-cubes-1},
+    :proved-in :r-a08-sard-b3-whitney-cubes-1,
+    :banked-by :r-a08-sard-b3-whitney-cubes-1,
+    :banked-commit "82275f37919538ec61b9596737a25a2648a4d7da"},
    :id
    :lemma-constructiontargets-sardconvexdomain-quarter-infdist-ball-data,
    :kind :lemma,
