@@ -2419,10 +2419,82 @@ lemma apm_a97j08_exists_simple_cycle_aux_outgoing {V : Type*} [DecidableEq V]
 -- A self-map of a finite set has a periodic orbit: listed once around, it is
 -- duplicate-free and rotating it by one applies the map.
 -- BEGIN SEAT AREA
+lemma apm_a97j08_exists_simple_cycle_aux_periodic_aux_rotate
+    {V : Type*} (f : V → V) {p : V} (hp : p ∈ Function.periodicPts f) :
+    let n := Function.minimalPeriod f p
+    let c := (List.range n).map (fun k => f^[k] p)
+    c.rotate 1 = c.map f := by
+  intro n c
+  have hn : 0 < n := Function.minimalPeriod_pos_of_mem_periodicPts hp
+  obtain ⟨m, hm⟩ : ∃ m, n = m + 1 := ⟨n - 1, by omega⟩
+  have hfix : f^[m + 1] p = p := by rw [← hm]; exact Function.iterate_minimalPeriod
+  simp only [c, hm]
+  rw [List.range_succ_eq_map, List.map_cons, List.map_map, Function.iterate_zero, id,
+    List.rotate_cons_succ, List.rotate_zero, List.map_cons, List.map_map]
+  have hl : (fun k => f^[k] p) ∘ Nat.succ = f ∘ fun k => f^[k] p := by
+    funext k; simp [Function.iterate_succ_apply']
+  rw [hl]
+  have e1 : List.map (fun k => f^[k + 1] p) (List.range (m + 1)) =
+      List.map (f ∘ fun k => f^[k] p) (List.range m) ++ [p] := by
+    rw [List.range_succ, List.map_append, List.map_singleton, hfix]
+    congr 1
+    exact List.map_congr_left fun k _ => by simp [Function.iterate_succ_apply']
+  have e2 : List.map (fun k => f^[k + 1] p) (List.range (m + 1)) =
+      f p :: List.map (f ∘ f ∘ fun k => f^[k] p) (List.range m) := by
+    rw [List.range_succ_eq_map, List.map_cons, List.map_map]
+    congr 1
+    exact List.map_congr_left fun k _ => by simp [Function.iterate_succ_apply']
+  exact e1.symm.trans e2
+
 lemma apm_a97j08_exists_simple_cycle_aux_periodic {V : Type*} [DecidableEq V]
     (f : V → V) (S : Finset V) (hS : ∀ x ∈ S, f x ∈ S) {v₀ : V} (hv₀ : v₀ ∈ S) :
     ∃ c : List V, c ≠ [] ∧ c.Nodup ∧ (∀ x ∈ c, x ∈ S) ∧ c.rotate 1 = c.map f := by
-  sorry
+  classical
+  have hit : ∀ n : ℕ, f^[n] v₀ ∈ S := by
+    intro n
+    induction n with
+    | zero => simpa using hv₀
+    | succ n ih =>
+        rw [Function.iterate_succ_apply']
+        exact hS _ ih
+  obtain ⟨i, hi, j, hj, hij, heq⟩ :=
+    Finset.exists_ne_map_eq_of_card_lt_of_maps_to
+      (s := Finset.range (S.card + 1)) (t := S)
+      (f := fun n => f^[n] v₀) (by simp) (by
+        intro n hn
+        exact hit n)
+  have build (i j : ℕ) (hijlt : i < j) (heq : f^[i] v₀ = f^[j] v₀) :
+      ∃ c : List V, c ≠ [] ∧ c.Nodup ∧ (∀ x ∈ c, x ∈ S) ∧
+        c.rotate 1 = c.map f := by
+    let p := f^[i] v₀
+    have hpS : p ∈ S := hit i
+    have hperiod : Function.IsPeriodicPt f (j - i) p := by
+      have hjform : j = i + (j - i) := (Nat.add_sub_of_le hijlt.le).symm
+      change f^[j - i] (f^[i] v₀) = f^[i] v₀
+      rw [← Function.iterate_add_apply, Nat.sub_add_cancel hijlt.le]
+      exact heq.symm
+    have hpos : 0 < j - i := Nat.sub_pos_of_lt hijlt
+    have hpper : p ∈ Function.periodicPts f :=
+      Function.mk_mem_periodicPts hpos hperiod
+    let n := Function.minimalPeriod f p
+    have hn : 0 < n := Function.minimalPeriod_pos_of_mem_periodicPts hpper
+    let c := (List.range n).map (fun k => f^[k] p)
+    refine ⟨c, ?_, ?_, ?_, ?_⟩
+    · simp [c, hn.ne']
+    · dsimp [c]
+      apply List.Nodup.map_on _ List.nodup_range
+      intro a ha b hb hab
+      apply Function.iterate_injOn_Iio_minimalPeriod
+      · simpa using ha
+      · simpa using hb
+      · exact hab
+    · intro x hx
+      rcases List.mem_map.mp hx with ⟨k, hk, rfl⟩
+      simpa [p, Function.iterate_add_apply] using hit (k + i)
+    · exact apm_a97j08_exists_simple_cycle_aux_periodic_aux_rotate f hpper
+  rcases Nat.lt_or_gt_of_ne hij with hijlt | hjilt
+  · exact build i j hijlt heq
+  · exact build j i hjilt heq.symm
 -- END SEAT AREA
 
 lemma apm_a97j08_exists_simple_cycle_aux_zip_map {V : Type*} (f : V → V) (c : List V) :
