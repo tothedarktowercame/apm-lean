@@ -435,7 +435,82 @@ theorem apm_m99A02_weak_identity_of_pieces (i : Fin 2)
       Integrable (fun x ↦ m99A02Derivative i x * φ x) (volume.restrict m99A02Omega)) :
     (∫ x in m99A02Omega, m99A02Function x * fderiv ℝ φ x (EuclideanSpace.single i 1)) =
       -∫ x in m99A02Omega, m99A02Derivative i x * φ x := by
-  sorry
+  let A : m99A02Point → ℝ := fun x ↦
+    m99A02Function x * fderiv ℝ φ x (EuclideanSpace.single i 1)
+  let B : m99A02Point → ℝ := fun x ↦ m99A02Derivative i x * φ x
+  have hzero : ∀ x : m99A02Point, 1 / 2 < ‖x‖ → φ x = 0 ∧
+      fderiv ℝ φ x (EuclideanSpace.single i 1) = 0 := by
+    intro x hx
+    have hxC : x ∈ (Metric.closedBall (0 : m99A02Point) (1 / 2))ᶜ := by
+      simpa [Metric.mem_closedBall, dist_zero_right, not_le] using hx
+    have hevC : ∀ᶠ y in nhds x,
+        y ∈ (Metric.closedBall (0 : m99A02Point) (1 / 2))ᶜ :=
+      (Metric.isClosed_closedBall.isOpen_compl.mem_nhds hxC)
+    have hev : φ =ᶠ[nhds x] (fun _ ↦ 0) := by
+      filter_upwards [hevC] with y hy
+      by_contra hy0
+      have hys : y ∈ Function.support φ := hy0
+      have hyΩ := hφΩ hys
+      have : ‖y‖ < 1 / 2 := by
+        simpa [m99A02Omega, Metric.mem_ball, dist_zero_right] using hyΩ
+      exact hy (by simpa [Metric.mem_closedBall, dist_zero_right] using this.le)
+    constructor
+    · exact hev.self_of_nhds
+    · rw [hev.fderiv_eq]
+      simp
+  have hae : ∀ᵐ x : m99A02Point ∂volume,
+      A x = m99A02Omega.indicator A x ∧ B x = m99A02Omega.indicator B x := by
+    have hs : volume (Metric.sphere (0 : m99A02Point) (1 / 2)) = 0 :=
+      Measure.addHaar_sphere volume 0 (1 / 2)
+    have haeS : ∀ᵐ x : m99A02Point ∂volume,
+        x ∉ Metric.sphere 0 (1 / 2) := by
+      rw [ae_iff]
+      simpa only [not_not, setOf_mem_eq] using hs
+    filter_upwards [haeS] with x hxS
+    by_cases hx : ‖x‖ < 1 / 2
+    · have hxΩ : x ∈ m99A02Omega := by
+        simpa [m99A02Omega, Metric.mem_ball, dist_zero_right] using hx
+      simp [Set.indicator_of_mem hxΩ]
+    · have hne : ‖x‖ ≠ 1 / 2 := by
+        intro heq
+        apply hxS
+        simpa [Metric.mem_sphere, dist_zero_right] using heq
+      have hgt : 1 / 2 < ‖x‖ := lt_of_le_of_ne (le_of_not_gt hx) (Ne.symm hne)
+      have hz := hzero x hgt
+      have hxΩ : x ∉ m99A02Omega := by
+        intro hxmem
+        have hlt : ‖x‖ < 1 / 2 := by
+          simpa [m99A02Omega, Metric.mem_ball, dist_zero_right] using hxmem
+        exact (not_lt_of_ge hgt.le) hlt
+      simp [A, B, Set.indicator, hxΩ, hz.1, hz.2]
+  have hAi : Integrable (m99A02Omega.indicator A) :=
+    IntegrableOn.integrable_indicator hint.1 measurableSet_ball
+  have hBi : Integrable (m99A02Omega.indicator B) :=
+    IntegrableOn.integrable_indicator hint.2 measurableSet_ball
+  have hA : Integrable A := hAi.congr (hae.mono fun _ h ↦ h.1.symm)
+  have hB : Integrable B := hBi.congr (hae.mono fun _ h ↦ h.2.symm)
+  have hline_ae : ∀ᵐ c : ℝ ∂volume,
+      (∫ t : ℝ, A (m99A02Line i c t)) =
+        -∫ t : ℝ, B (m99A02Line i c t) := by
+    filter_upwards [show ∀ᵐ c : ℝ ∂volume, c ≠ 0 by
+      rw [ae_iff]; simp] with c hc
+    exact hline c hc
+  calc
+    (∫ x in m99A02Omega, m99A02Function x *
+        fderiv ℝ φ x (EuclideanSpace.single i 1)) = ∫ x, A x := by
+      change (∫ x in m99A02Omega, A x) = ∫ x, A x
+      rw [← integral_indicator (s := m99A02Omega) measurableSet_ball]
+      exact integral_congr_ae (hae.mono fun _ h ↦ h.1.symm)
+    _ = ∫ c : ℝ, ∫ t : ℝ, A (m99A02Line i c t) := hfub A hA
+    _ = ∫ c : ℝ, -(∫ t : ℝ, B (m99A02Line i c t)) :=
+      integral_congr_ae hline_ae
+    _ = -(∫ c : ℝ, ∫ t : ℝ, B (m99A02Line i c t)) := by rw [integral_neg]
+    _ = -(∫ x, B x) := by rw [hfub B hB]
+    _ = -∫ x in m99A02Omega, m99A02Derivative i x * φ x := by
+      congr 1
+      change (∫ x, B x) = ∫ x in m99A02Omega, B x
+      rw [← integral_indicator (s := m99A02Omega) measurableSet_ball]
+      exact integral_congr_ae (hae.mono fun _ h ↦ h.2)
 -- END SEAT AREA
 
 /-- Why this unblocks the weak-derivative clauses of `apm_m99a02`: this is
