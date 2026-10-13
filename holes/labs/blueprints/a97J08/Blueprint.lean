@@ -2605,13 +2605,84 @@ theorem apm_a97j08_square_total {z shift : ℂ} {δ : ℝ} (hδ : 0 < δ)
 
 -- (L1) The straight segment from `p` to `q` has a continuous angle lift about
 -- `z` whose total change is the angle step.
+lemma apm_a97j08_segment_lift_aux_endpoints {z p q : ℂ}
+    (h : z ∉ segment ℝ p q) : p ≠ z ∧ q ≠ z := by
+  constructor
+  · intro hp
+    apply h
+    rw [← hp]
+    exact left_mem_segment ℝ p q
+  · intro hq
+    apply h
+    rw [← hq]
+    exact right_mem_segment ℝ p q
+
+lemma apm_a97j08_segment_lift_aux_ne_zero {z p q : ℂ}
+    (h : z ∉ segment ℝ p q) (t : unitInterval) :
+    AffineMap.lineMap p q (t : ℝ) - z ≠ 0 := by
+  intro hz
+  have heq : AffineMap.lineMap p q (t : ℝ) = z := sub_eq_zero.mp hz
+  apply h
+  rw [← heq]
+  exact (segment_eq_image_lineMap ℝ p q).symm ▸ ⟨(t : ℝ), t.property, rfl⟩
+
+-- The ratio of the moving point to the starting point, seen from `z`, never
+-- crosses the cut `(-∞, 0]` of the principal argument.
+lemma apm_a97j08_segment_lift_aux_slit {z p q : ℂ}
+    (h : z ∉ segment ℝ p q) (t : unitInterval) :
+    (AffineMap.lineMap p q (t : ℝ) - z) / (p - z) ∈ Complex.slitPlane := by
+  sorry
+
+lemma apm_a97j08_segment_lift_aux_exp_arg {w : ℂ} (hw : w ≠ 0) :
+    Complex.exp ((Complex.arg w : ℂ) * Complex.I) = w / ((‖w‖ : ℝ) : ℂ) := by
+  have hn : ((‖w‖ : ℝ) : ℂ) ≠ 0 := by exact_mod_cast norm_ne_zero_iff.mpr hw
+  rw [eq_div_iff hn, mul_comm]
+  exact Complex.norm_mul_exp_arg_mul_I w
+
+lemma apm_a97j08_segment_lift_aux_core {z p q : ℂ}
+    (h : z ∉ segment ℝ p q) :
+    ∃ θ : C(unitInterval, ℝ),
+      (∀ t : unitInterval, Complex.exp ((θ t : ℂ) * Complex.I) =
+        (AffineMap.lineMap p q (t : ℝ) - z) /
+          ((‖AffineMap.lineMap p q (t : ℝ) - z‖ : ℝ) : ℂ)) ∧
+      θ 1 - θ 0 = apm_a97j08_angleStep z p q := by
+  obtain ⟨hp, hq⟩ := apm_a97j08_segment_lift_aux_endpoints h
+  have hpz : p - z ≠ 0 := sub_ne_zero.mpr hp
+  let r : unitInterval → ℂ := fun t => (AffineMap.lineMap p q (t : ℝ) - z) / (p - z)
+  have hr : Continuous r := by
+    refine Continuous.div_const (Continuous.sub ?_ continuous_const) _
+    exact ((AffineMap.lineMap_continuous (R := ℝ) (p := p) (q := q))).comp
+      continuous_subtype_val
+  have harg : Continuous fun t => Complex.arg (r t) :=
+    continuous_iff_continuousAt.mpr fun t =>
+      (Complex.continuousAt_arg (apm_a97j08_segment_lift_aux_slit h t)).comp
+        (f := r) hr.continuousAt
+  let θ : C(unitInterval, ℝ) :=
+    ⟨fun t => Complex.arg (p - z) + Complex.arg (r t), continuous_const.add harg⟩
+  refine ⟨θ, fun t => ?_, ?_⟩
+  · have hL := apm_a97j08_segment_lift_aux_ne_zero h t
+    have hrt : r t ≠ 0 := div_ne_zero hL hpz
+    change Complex.exp (((Complex.arg (p - z) + Complex.arg (r t) : ℝ) : ℂ) * Complex.I) = _
+    rw [Complex.ofReal_add, add_mul, Complex.exp_add,
+      apm_a97j08_segment_lift_aux_exp_arg hpz, apm_a97j08_segment_lift_aux_exp_arg hrt]
+    simp only [r, norm_div]
+    have h1 : ((‖p - z‖ : ℝ) : ℂ) ≠ 0 := by exact_mod_cast norm_ne_zero_iff.mpr hpz
+    have h2 : ((‖AffineMap.lineMap p q (t : ℝ) - z‖ : ℝ) : ℂ) ≠ 0 := by
+      exact_mod_cast norm_ne_zero_iff.mpr hL
+    push_cast
+    field_simp
+  · change (Complex.arg (p - z) + Complex.arg (r 1)) - (Complex.arg (p - z) + Complex.arg (r 0)) = _
+    simp only [r, Set.Icc.coe_one, Set.Icc.coe_zero, AffineMap.lineMap_apply_one,
+      AffineMap.lineMap_apply_zero, div_self hpz, Complex.arg_one, apm_a97j08_angleStep]
+    ring
+
 theorem apm_a97j08_segment_lift {z p q : ℂ} (h : z ∉ segment ℝ p q) :
     ∃ θ : C(unitInterval, ℝ),
       (∀ t : unitInterval, Complex.exp ((θ t : ℂ) * Complex.I) =
         (AffineMap.lineMap p q (t : ℝ) - z) /
           ((‖AffineMap.lineMap p q (t : ℝ) - z‖ : ℝ) : ℂ)) ∧
       θ 1 - θ 0 = apm_a97j08_angleStep z p q := by
-  sorry
+  exact apm_a97j08_segment_lift_aux_core h
 
 -- (L2) A closed polygon in `D` has a closed path in `D` with an angle lift
 -- whose total change is the sum of the angle steps (given L1).
