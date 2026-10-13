@@ -878,13 +878,33 @@ iterated pairing
 `φ ↦ u (x ↦ χ x * v (y ↦ φ (x + y)))` as a continuous linear functional on
 the LF space of test functions.  The conclusion records all cutoff and
 translation identities needed by the concrete convolution definition. -/
+-- The cut-off translated pairing φ ↦ (x ↦ χ x · v (τₓ φ)) is a continuous linear map of
+-- test functions (smoothness from the translated-pairing calculus at every order; continuity on
+-- each fixed-support stage from the continuity of v on the stage of translates).
+-- Every translated pairing is C^∞ (induction on the order with the translated-pairing calculus
+-- and the 2-D C¹ criterion apm_m98J02_translated_pairing_calculus_of_facts_aux_hasFDerivAt).
+lemma apm_m98J02_bridge_2_aux_smooth (v : apm_m98J02_Dist) (φ : apm_m98J02_Test) :
+    ContDiff ℝ ∞ (fun x : apm_m98J02_E => v (apm_m98J02_translateTest x φ)) := by
+  sorry
+
+lemma apm_m98J02_bridge_2_aux_psi
+    (v : apm_m98J02_Dist) (χ : apm_m98J02_Test)
+    (hsmooth : ∀ φ : apm_m98J02_Test,
+      ContDiff ℝ ∞ (fun x : apm_m98J02_E => v (apm_m98J02_translateTest x φ))) :
+    ∃ Ψ : apm_m98J02_Test →L[ℝ] apm_m98J02_Test,
+      ∀ φ x, Ψ φ x = χ x * v (apm_m98J02_translateTest x φ) := by
+  sorry
+
 theorem apm_m98J02_bridge_2
     (u v : apm_m98J02_Dist) (K : Set apm_m98J02_E)
     (hK : IsCompact K)
     (huK : ∀ η : apm_m98J02_Test,
       Disjoint (tsupport (η : apm_m98J02_E → ℝ)) K → u η = 0) :
     ∃ w : apm_m98J02_Dist, apm_m98J02_isConvolution u v w := by
-  sorry
+  obtain ⟨χ, U, hU, hKU, hχ⟩ := apm_m98J02_bridge_1 K hK
+  obtain ⟨Ψ, hΨ⟩ := apm_m98J02_bridge_2_aux_psi v χ (apm_m98J02_bridge_2_aux_smooth v)
+  refine ⟨u.comp Ψ, fun φ => ⟨K, χ, Ψ φ, hK, huK, ⟨U, hU, hKU, hχ⟩,
+    fun x => ⟨apm_m98J02_translateTest x φ, fun y => rfl, hΨ φ x⟩, rfl⟩⟩
 
 /-- A regular distribution that vanishes on every test function supported off a compact
 `K` has its (continuous) density vanishing off `K`. -/
