@@ -2240,7 +2240,15 @@ lemma apm_a97j08_squareSum_inside_aux_open {z shift : ℂ} {δ : ℝ} (q : ℤ �
     (hz : z ∈ interior (apm_a97j08_gridSquare shift δ q)) :
     shift.re + q.1 * δ < z.re ∧ z.re < shift.re + (q.1 + 1) * δ ∧
       shift.im + q.2 * δ < z.im ∧ z.im < shift.im + (q.2 + 1) * δ := by
-  sorry
+  have hsquare : apm_a97j08_gridSquare shift δ q =
+      Icc (shift.re + q.1 * δ) (shift.re + (q.1 + 1) * δ) ×ℂ
+        Icc (shift.im + q.2 * δ) (shift.im + (q.2 + 1) * δ) := by
+    ext w
+    simp only [apm_a97j08_gridSquare, mem_setOf_eq, Complex.mem_reProdIm, mem_Icc]
+    tauto
+  rw [hsquare, Complex.interior_reProdIm, interior_Icc, interior_Icc] at hz
+  rcases (Complex.mem_reProdIm.mp hz) with ⟨hre, him⟩
+  exact ⟨hre.1, hre.2, him.1, him.2⟩
 
 -- (ii) Strict bounds make every counterclockwise edge turn positively about `z`.
 lemma apm_a97j08_squareSum_inside_aux_cross {z shift : ℂ} {δ : ℝ} (hδ : 0 < δ)
