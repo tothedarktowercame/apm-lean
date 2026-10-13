@@ -796,6 +796,67 @@ lemma apm_m98A06_wirtinger_aux_core_aux_picone_limit_aux_gap
   sorry
 
 -- Equality in Wirtinger iff the Picone gap vanishes iff η/sin is constant.
+lemma apm_m98A06_wirtinger_aux_core_aux_picone_limit_aux_iff_aux_rigidity_aux_pointwise
+    (L : ℝ) (hL : 0 < L) (η : ℝ → ℝ)
+    (hη : apm_m98a06_Admissible L 0 0 η)
+    (hz : (∫ x in (0 : ℝ)..L, (fun x => (derivWithin η (Icc 0 L) x -
+          η x * ((Real.pi / L) * Real.cos (Real.pi * x / L)) /
+            Real.sin (Real.pi * x / L)) ^ 2) x) = 0) :
+    ∀ x ∈ Ioo (0 : ℝ) L,
+      derivWithin η (Icc 0 L) x -
+        η x * ((Real.pi / L) * Real.cos (Real.pi * x / L)) /
+          Real.sin (Real.pi * x / L) = 0 := by
+  sorry
+
+lemma apm_m98A06_wirtinger_aux_core_aux_picone_limit_aux_iff_aux_rigidity_aux_ratio
+    (L : ℝ) (hL : 0 < L) (η : ℝ → ℝ)
+    (hη : apm_m98a06_Admissible L 0 0 η)
+    (hp : ∀ x ∈ Ioo (0 : ℝ) L,
+      derivWithin η (Icc 0 L) x -
+        η x * ((Real.pi / L) * Real.cos (Real.pi * x / L)) /
+          Real.sin (Real.pi * x / L) = 0) :
+    ∃ c : ℝ, ∀ x ∈ Icc (0 : ℝ) L,
+      η x = c * Real.sin (Real.pi * x / L) := by
+  let s : ℝ → ℝ := fun x => Real.sin (Real.pi * x / L)
+  let q : ℝ → ℝ := fun x => η x / s x
+  have hsne : ∀ x ∈ Ioo (0 : ℝ) L, s x ≠ 0 := fun x hx =>
+    ne_of_gt (apm_m98A06_wirtinger_aux_core_aux_sine_pos L x hL hx)
+  have hηdiff : ∀ x ∈ Ioo (0 : ℝ) L, DifferentiableAt ℝ η x := by
+    intro x hx
+    exact (hη.1 x ⟨hx.1.le, hx.2.le⟩).differentiableWithinAt (by norm_num)
+      |>.differentiableAt (Icc_mem_nhds hx.1 hx.2)
+  have hsdiff : Differentiable ℝ s := by
+    dsimp [s]
+    fun_prop
+  have hqdiff : DifferentiableOn ℝ q (Ioo 0 L) := by
+    intro x hx
+    exact ((hηdiff x hx).div (hsdiff x) (hsne x hx)).differentiableWithinAt
+  have hqzero : EqOn (deriv q) 0 (Ioo 0 L) := by
+    intro x hx
+    have hdη : deriv η x = derivWithin η (Icc 0 L) x :=
+      (hηdiff x hx).derivWithin (uniqueDiffOn_Icc hL x ⟨hx.1.le, hx.2.le⟩) |>.symm
+    have hds := (apm_m98A06_wirtinger_aux_core_aux_sine_derivatives L x hL).1
+    have hs := hsne x hx
+    change deriv (η / s) x = 0
+    rw [deriv_div (hηdiff x hx) (hsdiff x), hdη, hds]
+    dsimp [s] at hs ⊢
+    have hp' := hp x hx
+    field_simp [ne_of_gt hL, hs] at hp'
+    field_simp
+    nlinarith
+    all_goals assumption
+  obtain ⟨c, hc⟩ := isOpen_Ioo.exists_is_const_of_deriv_eq_zero
+    (ordConnected_Ioo.isPreconnected) hqdiff hqzero
+  refine ⟨c, fun x hx => ?_⟩
+  rcases eq_or_lt_of_le hx.1 with rfl | hx0
+  · simp [hη.2.1]
+  rcases eq_or_lt_of_le hx.2 with rfl | hxL
+  · simp [hη.2.2, ne_of_gt hx0]
+  · have := hc x ⟨hx0, hxL⟩
+    dsimp [q, s] at this ⊢
+    rw [div_eq_iff (hsne x ⟨hx0, hxL⟩)] at this
+    exact this
+
 lemma apm_m98A06_wirtinger_aux_core_aux_picone_limit_aux_iff_aux_rigidity
     (L : ℝ) (hL : 0 < L) (η : ℝ → ℝ)
     (hη : apm_m98a06_Admissible L 0 0 η)
@@ -804,7 +865,9 @@ lemma apm_m98A06_wirtinger_aux_core_aux_picone_limit_aux_iff_aux_rigidity
             Real.sin (Real.pi * x / L)) ^ 2) x) = 0) :
     ∃ c : ℝ, ∀ x ∈ Icc (0 : ℝ) L,
       η x = c * Real.sin (Real.pi * x / L) := by
-  sorry
+  apply apm_m98A06_wirtinger_aux_core_aux_picone_limit_aux_iff_aux_rigidity_aux_ratio L hL η hη
+  exact apm_m98A06_wirtinger_aux_core_aux_picone_limit_aux_iff_aux_rigidity_aux_pointwise
+    L hL η hη hz
 
 lemma apm_m98A06_wirtinger_aux_core_aux_picone_limit_aux_iff
     (L : ℝ) (hL : 0 < L) (η : ℝ → ℝ)
