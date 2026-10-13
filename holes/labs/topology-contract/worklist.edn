@@ -113898,6 +113898,18 @@
       "lake build ConstructionTargets.ThreeCirclesFundamentalGroup",
       :exit 1,
       :finding "B12 file absent."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791875651666-8890-18b64409",
+     :commands
+     ["git archive 10f7eb93; lake env lean <archive>/ConstructionTargets/PointWedgeVanKampen.lean"
+      "lake build ConstructionTargets.PointWedgeVanKampen"
+      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (exit 1: declared B12 residual absent)"
+      "python3 scripts/statement-registry.py check"
+      "git diff-tree/show sha256/git grep placeholders"],
+     :finding
+     "PASS program STOP: 10f7eb93 is new after history, changes only scoped Lean/MD files, and commits compiled sorry-free progress. Hashes match source 3e5efa3e, docs a116a066, fixture 0bca6ce3; registry 147/147; sorry/admit 0->0; the theorem uses only propext, Classical.choice, Quot.sound. Unfolding normalForm and reassociating preserves the naturality equality: both sides visibly share the same connector from the fixed base to the dependent source and the same inverse connector from the dependent target. Only the typed middle composites differ by the proved counit square; no endpoint cancellation or object equality is introduced. Using this square in B6 and constructing B12 remain listed."},
     :commit "10f7eb9338e2d60450910e42f2220105ca695478",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
@@ -113908,7 +113920,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113929,7 +113941,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Left counit naturality now holds in fixed-base normal forms with dependent endpoints intact.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Expanded the typed left counit naturality equality into a connector square with common dependent endpoints.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -114613,7 +114625,11 @@
     {:job 6,
      :commit "156fa5ee0efd8f3e9484d3556e6601b53364b7ef",
      :reason
-     "Left counit naturality now holds in fixed-base normal forms with dependent endpoints intact."}]}
+     "Left counit naturality now holds in fixed-base normal forms with dependent endpoints intact."}
+    {:job 7,
+     :commit "10f7eb9338e2d60450910e42f2220105ca695478",
+     :reason
+     "Expanded the typed left counit naturality equality into a connector square with common dependent endpoints."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
