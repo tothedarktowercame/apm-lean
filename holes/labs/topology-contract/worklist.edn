@@ -117153,34 +117153,36 @@
   {:consumer :t97A07,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 4,
+   :stop-count 5,
    :review-finding
    "Blueprint dependency defect at f00781ca: B5 declares only Mathlib dependencies, but fderiv_coordinate_comp_extChartAt_symm_apply proves its key chain-rule identity by invoking coordinate_fderivWithin_eq_mfderiv, a B2 result. This violates the requirement that each node use only its uses: nodes and hypotheses. Exact repair: add B2 to B5 uses: (and retain the existing Mathlib dependencies), or replace that invocation with an in-node proof using only the currently listed dependencies. Archived Closure and Main compile; hashes match, placeholders stay 0/1, registry 149/149, and axioms are otherwise standard.",
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
-    :residual "B6 critical-value nonempty, then B7-B9 closure.",
+    :residual
+    "B7 local image openness, B8 infinitude, B9 final adapter.",
     :outcome :stop,
     :warnings [{:kind :existing-placeholder}],
     :missing-theorems
-    [{:name
-      "t97A07Closure.not_surjective_mfderiv_of_isMaxOn_coordinate",
-      :type "Coordinate maximum implies nonsurjective mfderiv",
+    [{:name "t97A07Closure.criticalValues_nonempty_of_pos",
+      :type "0<n implies criticalValues nonempty",
       :status :proved,
       :consumers [:t97A07],
-      :depends-on ["t97A07Closure.isCompact_criticalValues"],
+      :depends-on
+      ["t97A07Closure.not_surjective_mfderiv_of_isMaxOn_coordinate"],
       :area "regular-points-open"}],
     :statement-hashes
     {:source
-     "eee255ed8120c697ee30c05d04474bae6dfd228582ddccde03a8b7f450cd4819",
+     "f0935022a2f3c8b17f0f1f508924639b8547ca8b835f8863d7247c582d497ca4",
      :target
-     "6d7e320233a7f9a1914d5cf5ff94d3a42e339584cde5c4a93995a13e76b41fbd",
+     "2d4ea19068e25e40a4ac340f426ddb00342854117de45a6d272171c3f8ea6a14",
      :blueprint
-     "e3ce1fc10fa1df89b93302b7d64886c307a5f65237a4152929b6341b97a6a9ae",
-     :registry "149/149"},
+     "1c4c3901c0e8e9cc6c3e24b74387b65a173afb6c821dee2e2531cde9f5154858",
+     :registry "150/150"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
-    :reason "Repair complete: B5 now declares its B2 dependency.",
+    :reason
+    "B6 positive-dimensional critical-value nonemptiness proved.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t97A07Closure.lean",
       :exit 0}
@@ -117188,26 +117190,25 @@
      {:cmd "lake env lean problems/t97A07/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "diff/hash/placeholders", :exit 0}],
-    :diagnostic-history [],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1791898018813-9734-8f7c4ece",
-     :commands
-     ["git show/diff 9ce50fe3^..9ce50fe3"
-      "git archive 9ce50fe3; lake env lean archived Closure.lean and Main.lean"
-      "sha256/diff-tree/placeholder checks; statement-registry.py check"],
-     :finding
-     "Reviewer codex-3. PASS repair STOP: 9ce50fe3 exactly repairs the prior blueprint defect by adding B2 to B5 uses; this matches the compiled call to coordinate_fderivWithin_eq_mfderiv and leaves the mathematical statement/proof unchanged. Scope is only the blueprint. Closure and Main compile from the recorded commit; source/target/fixture hashes match ledger (6d7e3202/eee255ed/e3ce1fc1), placeholders remain 0/1, registry 149/149, and new B5 results use standard axioms. B5 is valid progress; residual milestones are B6 critical-value nonemptiness and B7-B9 closure."},
-    :commit "9ce50fe3f42b157eb2ad74b657ce9cebee986c5a",
-    :changed-paths ["ConstructionTargets/t97A07Closure.blueprint.md"],
+    :diagnostic-history
+    [{:cmd "lean B6 draft",
+      :exit 1,
+      :finding "Qualified PiLp coordinate continuity."}
+     {:cmd "lean Main before rebuild",
+      :exit 1,
+      :finding "Stale olean; rebuilt target."}],
+    :commit "9c9877f6232d029f85a2d30ee39db77c36aac553",
+    :changed-paths
+    ["ConstructionTargets/t97A07Closure.lean"
+     "ConstructionTargets/t97A07Closure.blueprint.md"
+     "problems/t97A07/lean/Main.lean"],
     :fixture
     {:path "ConstructionTargets/t97A07Closure.blueprint.md",
      :sha256
-     "e3ce1fc10fa1df89b93302b7d64886c307a5f65237a4152929b6341b97a6a9ae"},
+     "1c4c3901c0e8e9cc6c3e24b74387b65a173afb6c821dee2e2531cde9f5154858"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t97A07/lean/Main.lean"
     "problems/t97A07/status.json"
@@ -118517,7 +118518,8 @@
     :reported-by [:program-2026-10-11-close-t97a07],
     :type
     "A smooth map from a nonempty compact manifold to a positive-dimensional Euclidean space has a critical value",
-    :area "regular-points-open"},
+    :area "regular-points-open",
+    :proved-in :program-2026-10-11-close-t97a07},
    :id :lemma-t97a07closure-criticalvalues-nonempty-of-pos,
    :kind :lemma,
    :depends-on
