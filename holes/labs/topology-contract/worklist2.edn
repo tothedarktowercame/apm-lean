@@ -76774,7 +76774,7 @@
   {:consumer :t96J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :evidence
    {:placeholder-delta 0,
     :residual
@@ -76801,7 +76801,7 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
     :reason
-    "No B8 type repair exists in scope: Fintype permits L=Empty, but FiniteWedge Empty is empty, so the specified wedgePoint cannot exist.",
+    "Frozen B8 remains refuted: Fintype permits L=Empty, while FiniteWedge Empty is empty and therefore has no wedgePoint.",
     :commands
     [{:cmd "lake env lean empty-wedge witness", :exit 0}
      {:cmd "lake build ConstructionTargets.PolygonSurfacePiOne",
@@ -76810,17 +76810,6 @@
      {:cmd "placeholder scan", :exit 0}
      {:cmd "#print axioms no_finiteWedgePoint", :exit 0}
      {:cmd "git show --check 8ff5cb54a", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1791872727139-8753-9277bc38",
-     :commands
-     ["git scope/SHA/blob checks at 34d5fe3e4"
-      "git show 34d5fe3e4:... | lake env lean /dev/stdin"
-      "statement-registry.py check (146/0)"
-      "blueprint/placeholder checks; #print axioms"],
-     :finding
-     "PASS: valid STOP with compiled refutation. Exact one-file scope and frozen hashes match; committed blob compiles, placeholders 0, registry 146/0, standard axioms only. B8 permits L=Empty and asserts a based trivial-group case, while the current FiniteWedge Empty is Quotient of Empty×Circle and has no point; the committed theorem proves its nonemptiness false. Require Nonempty L or change the representation to adjoin a basepoint before B8/B9."},
     :commit "8ff5cb54a",
     :changed-paths ["ConstructionTargets/PolygonSurfacePiOne.lean"],
     :fixture
@@ -76829,7 +76818,7 @@
      "8bb4cf5d53c64717292de2cab25decbc62907fcc988a8052958bc0148f881904"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/PolygonSurfacePiOne.lean"],
    :dag-node "ConstructionTargets/PolygonSurfacePiOne.blueprint.md/B8",
    :acceptance
