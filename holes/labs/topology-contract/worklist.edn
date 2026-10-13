@@ -113850,14 +113850,14 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 3,
+   :stop-count 4,
    :review-finding
    "Recorded fixture hash mismatch: :fixture.sha256 is 0bca6ce32c019fc3053c7f813c26917169cf817375b44d5e722b864b61a526450c1, but ConstructionTargets/PointWedgeVanKampen.blueprint.md at recorded commit c9b3af27 has exact SHA-256 0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0. Re-record the fixture hash for the reviewed commit.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
    :evidence
    {:placeholder-delta {:source-before 0, :source-after 0},
     :residual
-    "Cancel six typed connector factors; prove projection=1, factor through inl, then B6/B12.",
+    "Normalize the shared target connectors and natural-iso component; prove projection=1, factor through inl, then B6/B12.",
     :outcome :stop,
     :warnings ["existing linter"],
     :missing-theorems
@@ -113871,17 +113871,16 @@
       :area "fundamental-group-wedge-of-circles"}],
     :statement-hashes
     {:source
-     "ef15ab0e238456cc187da18537a22131bef446e11fadf1d389df70250ca64c05",
+     "a5a74d58aa625392a02fa3d0c3dfd7b545ba6f583e37029c0c5e3290e57421c3",
      :documentation
-     "7eab25efcfab6632b75d990ac75f4354e2bb9ca1ff674a7f1a6aacc2db594969",
+     "b50904d66bd0ca6a01cd9f0adcf6b60d6f44c7bf7a1a7443ad607068f7a3bf23",
      :blueprint
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0",
      :registry "149/149"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
-    :reason
-    "Round-trip normal form expanded to three connector factors.",
+    :reason "Round-trip source connector proved reflexive at y0.",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/PointWedgeVanKampen.lean",
@@ -113893,23 +113892,13 @@
     :diagnostic-history
     [{:cmd "lean draft",
       :exit 1,
-      :finding "Direct composite ill-typed: arrows share a target."}
+      :finding
+      "Unfolded actual-right functor before rewriting its base object."}
      {:cmd
       "lake build ConstructionTargets.ThreeCirclesFundamentalGroup",
       :exit 1,
       :finding "B12 absent."}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1791890477636-9538-c6af9e65",
-     :commands
-     ["git show/diff 8e03e312^..8e03e312"
-      "git archive 8e03e312; lake env lean archived PointWedgeVanKampen.lean"
-      "sha256/diff-tree/placeholder checks; statement-registry.py check"
-      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (expected absent)"],
-     :finding
-     "Reviewer codex-3. PASS program STOP: 8e03e312 adds new compiled, sorry-free progress after dac71da1. The round-trip normal form is faithfully expanded in definition order as source connector hom, natural-iso component, target connector inv; dependent endpoints remain typed without casts. Scope is exactly Lean+MD; source/doc/fixture hashes match ledger (ef15ab0e/7eab25ef/0bca6ce3), placeholders remain 0, registry is 149/149, and axioms are standard only. Residual is the typed six-factor cancellation, rightBase inl factorization, then B6/B12; B12 remains absent as listed."},
-    :commit "8e03e312bb7e7267902db01cd6cdc4714499ee3d",
+    :commit "206d7a82e30600cc1090303efd5e945d68cb56f4",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
      "ConstructionTargets/PointWedgeVanKampen.md"],
@@ -113919,7 +113908,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
