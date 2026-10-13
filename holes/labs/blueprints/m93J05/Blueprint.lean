@@ -834,6 +834,29 @@ lemma apm_m93j05_trunc_parseval_aux_inner (a b c d : ℝ) (j k : ℕ)
   rw [hcc, hcs, hsc, hss]
   split_ifs with h <;> ring
 
+lemma apm_m93j05_trunc_parseval_aux_expand (N : ℕ) (f : ℝ → ℝ) (x : ℝ) :
+    apm_m93j05_trunc N f x ^ 2 =
+      (∫ y in Set.Icc (0 : ℝ) 1, f y) ^ 2 +
+      2 * (∫ y in Set.Icc (0 : ℝ) 1, f y) *
+        (∑ j ∈ Finset.Icc 1 N,
+          (apm_m93j05_cosCoeff f j * Real.cos (j * 2 * Real.pi * x) +
+           apm_m93j05_sinCoeff f j * Real.sin (j * 2 * Real.pi * x))) +
+      ∑ j ∈ Finset.Icc 1 N, ∑ k ∈ Finset.Icc 1 N,
+        (apm_m93j05_cosCoeff f j * Real.cos (j * 2 * Real.pi * x) +
+         apm_m93j05_sinCoeff f j * Real.sin (j * 2 * Real.pi * x)) *
+        (apm_m93j05_cosCoeff f k * Real.cos (k * 2 * Real.pi * x) +
+         apm_m93j05_sinCoeff f k * Real.sin (k * 2 * Real.pi * x)) := by
+  unfold apm_m93j05_trunc
+  rw [pow_two]
+  have hsum := Finset.sum_mul_sum
+    (s := Finset.Icc 1 N) (t := Finset.Icc 1 N)
+    (f := fun j => apm_m93j05_cosCoeff f j * Real.cos (j * 2 * Real.pi * x) +
+      apm_m93j05_sinCoeff f j * Real.sin (j * 2 * Real.pi * x))
+    (g := fun k => apm_m93j05_cosCoeff f k * Real.cos (k * 2 * Real.pi * x) +
+      apm_m93j05_sinCoeff f k * Real.sin (k * 2 * Real.pi * x))
+  rw [← hsum]
+  ring
+
 /-- Parseval for the truncation: `∫₀¹ (m + Σ aⱼ cos + bⱼ sin)² = m² + Σ (aⱼ² + bⱼ²)/2`
 (from `apm_m93j05_trig_orthogonality` and the mean-zero helpers). -/
 theorem apm_m93j05_trunc_parseval (N : ℕ) (f : ℝ → ℝ) :
