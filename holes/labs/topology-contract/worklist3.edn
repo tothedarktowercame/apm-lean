@@ -22998,6 +22998,8 @@
   {:bounded-exception "Rule0 B1 prerequisite.",
    :consumer :t01A08,
    :stop-count 1,
+   :review-finding
+   "extend Mathlib: state and prove the missing theorem in scope. The frozen fixture declares ContDiffWithinAt.domDomCongr_iteratedFDerivWithin_of_infty as an axiom, and #print shows convexWithinJet depends on that nonstandard axiom. The row records commit nil, no changed paths, and status :not-started; compiling an axiomatized facade is not progress toward discharging the frozen interface. Prove adjacent-swap symmetry and permutation induction in ConstructionTargets/SardConvexDomain.lean, then rerun the fixture without its axiom.",
    :evidence
    {:placeholder-delta {:t01A08 [1 1]},
     :residual
@@ -23033,6 +23035,12 @@
       :exit 1,
       :finding
       "Invalid reuse: hf is C-infinity; library theorem expects C-omega."}],
+    :review
+    {:outcome :fail,
+     :seat "codex-11",
+     :job "invoke-1791871625723-8689-b7fa77ba",
+     :finding
+     "extend Mathlib: state and prove the missing theorem in scope. The frozen fixture declares ContDiffWithinAt.domDomCongr_iteratedFDerivWithin_of_infty as an axiom, and #print shows convexWithinJet depends on that nonstandard axiom. The row records commit nil, no changed paths, and status :not-started; compiling an axiomatized facade is not progress toward discharging the frozen interface. Prove adjacent-swap symmetry and permutation induction in ConstructionTargets/SardConvexDomain.lean, then rerun the fixture without its axiom."},
     :commit nil,
     :changed-paths [],
     :fixture
@@ -23042,7 +23050,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :repair,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain.blueprint/B1/smooth-symmetry",
    :acceptance
@@ -23058,6 +23066,7 @@
    :id :r-a08-sard-smooth-jet-symmetry-1,
    :kind :reusable-theorem,
    :area "sard-convex-domain",
+   :fail-count 1,
    :depends-on [:r-topo3-cp8],
    :current-residual
    "Then B1 continuity and canonical zero/one jets compile.",
