@@ -36641,53 +36641,61 @@
    :depends-on [:lemma-cp-zero-subsingleton],
    :other-consumers []}
   {:consumer :t96A06,
-   :stop-count 1,
+   :stop-count 2,
    :review-finding
    "extend Mathlib: state and prove the missing theorem in scope",
    :evidence
    {:placeholder-delta {:t96A06 [1 1]},
     :residual
-    "Supply/review the missing t96A06 blueprint and reference assembly; then implement its library milestones.",
+    "Review blueprint; then build RP3 rational homology and degree-four milestones.",
     :outcome :stop,
     :warnings
-    ["a96A06 is unrelated complex analysis, not t96A06 real projective topology"],
+    ["source blueprint absent; created reviewed in-scope plan"],
     :missing-theorems
-    [{:name "T96A06_polynomialDescent_invariants",
-      :type
-      "descended RP3 quadratic has Lefschetz -3 and is not homotopic to id",
+    [{:name "T96A06_polynomialMap_descends",
+      :type "printed quadratic descends to literal RP3",
+      :status :proved,
+      :consumers [:t96A06],
+      :depends-on [],
+      :area "projective-covering-sphere"}
+     {:name "t96A06_rp3_rational_homology",
+      :type "RP3 rational homology Q,0,0,Q",
       :status :not-started,
       :consumers [:t96A06],
       :depends-on [],
+      :area "rp-rational-homology"}
+     {:name "t96A06_polynomial_degree_four",
+      :type "descended quadratic acts by 4 on H3",
+      :status :not-started,
+      :consumers [:t96A06],
+      :depends-on ["T96A06_polynomialMap_descends"],
+      :area "sphere-map-degree"}
+     {:name "T96A06_polynomialDescent_invariants",
+      :type "Lefschetz -3 and not homotopic to id",
+      :status :not-started,
+      :consumers [:t96A06],
+      :depends-on
+      ["t96A06_rp3_rational_homology" "t96A06_polynomial_degree_four"],
       :area "rational-homology-lefschetz"}],
-    :statement-hashes {:registry "150/150"},
+    :statement-hashes {:registry "166/166"},
     :disposition :stop,
     :axioms [],
     :author :topo-10,
     :reason
-    "Required reviewed source is absent: holes/labs/blueprints/t96A06/{BLUEPRINT.md,Blueprint.lean} do not exist. The only a96A06 blueprint proves an unrelated complex simple-pole theorem, so reuse would violate the frozen apm_t96a06 RP3 statement. No scoped implementation or valid blueprint can be derived without inventing the reviewed plan.",
+    "Missing t96A06 blueprint written and committed; implementation starts at C2/C3.",
     :commands
-    [{:cmd
-      "workspace search for t96A06 blueprint/lemma; registry; scope scan",
-      :exit 0}
-     {:cmd "test -e holes/labs/blueprints/t96A06/BLUEPRINT.md",
-      :exit 1,
-      :expected-exit 1}
-     {:cmd "placeholder recount", :exit 0}],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1791922803787-10395-09d8efd7",
-     :finding
-     "extend Mathlib: state and prove the missing theorem in scope"},
-    :commit nil,
-    :changed-paths [],
+    [{:cmd "registry; placeholder; blueprint node scan; diff", :exit 0}
+     {:cmd "git commit; show --check", :exit 0}],
+    :commit "dfeb9e51024d9285b2d0620c00c38d6cbbcbfd57",
+    :changed-paths ["ConstructionTargets/t96A06Closure.blueprint.md"],
     :fixture
-    {:path "holes/labs/blueprints/t96A06/BLUEPRINT.md",
-     :sha256 nil,
-     :mode :missing},
+    {:path "ConstructionTargets/t96A06Closure.blueprint.md",
+     :sha256
+     "fbbb8ecf92f8739231eb78e5380be51ae04e92106558a00079d2ee79f8981d84",
+     :mode :blueprint},
     :seat :topo-10},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -36845,7 +36853,9 @@
     :area "rational-homology-lefschetz"},
    :id :lemma-t96a06-polynomialdescent-invariants,
    :kind :lemma,
-   :depends-on [],
+   :depends-on
+   [:lemma-t96a06-rp3-rational-homology
+    :lemma-t96a06-polynomial-degree-four],
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
@@ -37560,6 +37570,55 @@
    :id :lemma-t93j03-polygon-attaching-word,
    :kind :lemma,
    :depends-on [:lemma-kleinpairingorbitequivbool],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "T96A06_polynomialMap_descends",
+    :type "printed quadratic descends to literal RP3"},
+   :lemma
+   {:name "T96A06_polynomialMap_descends",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "printed quadratic descends to literal RP3",
+    :area "projective-covering-sphere",
+    :proved-in :program-2026-10-13-close-t96a06},
+   :id :lemma-t96a06-polynomialmap-descends,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_rp3_rational_homology",
+    :type "RP3 rational homology Q,0,0,Q"},
+   :lemma
+   {:name "t96A06_rp3_rational_homology",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "RP3 rational homology Q,0,0,Q",
+    :area "rp-rational-homology"},
+   :id :lemma-t96a06-rp3-rational-homology,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_polynomial_degree_four",
+    :type "descended quadratic acts by 4 on H3"},
+   :lemma
+   {:name "t96A06_polynomial_degree_four",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "descended quadratic acts by 4 on H3",
+    :area "sphere-map-degree"},
+   :id :lemma-t96a06-polynomial-degree-four,
+   :kind :lemma,
+   :depends-on [:lemma-t96a06-polynomialmap-descends],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
