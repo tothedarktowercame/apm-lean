@@ -809,4 +809,24 @@ theorem exists_maximalSeparated_cover
           · exact (hc hXc).2 hxX (hYXsub hyY) hxy)
   exact ⟨N, hN.prop.1, hN.prop.2, Metric.IsCover.of_maximal_isSeparated hN⟩
 
+/-- Complement points whose distance to the closed set lies in one dyadic
+interval. -/
+def whitneyScaleStratum {E : Type*} [PseudoMetricSpace E]
+    (s : Set E) (k : ℤ) : Set E :=
+  {x | x ∉ s ∧ (2 : ℝ) ^ k ≤ Metric.infDist x s ∧
+    Metric.infDist x s < (2 : ℝ) ^ (k + 1)}
+
+/-- The dyadic distance strata cover the complement of a closed nonempty
+set. -/
+theorem compl_subset_iUnion_whitneyScaleStratum
+    {E : Type*} [PseudoMetricSpace E] {s : Set E}
+    (hs : IsClosed s) (hne : s.Nonempty) :
+    sᶜ ⊆ ⋃ k : ℤ, whitneyScaleStratum s k := by
+  intro x hx
+  have hxn : x ∉ s := hx
+  have hd : 0 < Metric.infDist x s := (hs.notMem_iff_infDist_pos hne).1 hxn
+  obtain ⟨k, hklo, hkhi⟩ := exists_mem_Ico_zpow hd (by norm_num : (1 : ℝ) < 2)
+  apply Set.mem_iUnion.2
+  exact ⟨k, hxn, hklo, hkhi⟩
+
 end ConstructionTargets.SardConvexDomain
