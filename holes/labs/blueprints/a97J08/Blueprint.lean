@@ -2278,7 +2278,17 @@ lemma apm_a97j08_squareSum_inside_aux_cross {z shift : ℂ} {δ : ℝ} (hδ : 0 
     ∀ e ∈ apm_a97j08_squareEdges q,
       0 < ((starRingEnd ℂ) (apm_a97j08_gridVertex shift δ e.1 - z) *
         (apm_a97j08_gridVertex shift δ e.2 - z)).im := by
-  sorry
+  intro e he
+  simp only [apm_a97j08_squareEdges, Finset.mem_insert, Finset.mem_singleton] at he
+  rcases he with rfl | rfl | rfl | rfl <;>
+    simp only [apm_a97j08_gridVertex, map_sub, map_add, map_mul,
+      map_natCast, Complex.star_def, Complex.conj_ofReal, Complex.conj_I,
+      Complex.mul_im, Complex.add_re, Complex.add_im, Complex.sub_re,
+      Complex.sub_im, Complex.ofReal_re, Complex.ofReal_im, Complex.I_re,
+      Complex.I_im, Complex.mul_re, Complex.conj_re, Complex.conj_im,
+      mul_zero, mul_one, add_zero, zero_add, Complex.neg_re,
+      Complex.neg_im, Int.cast_add, Int.cast_one] <;>
+    nlinarith
 
 -- (iii) A positive turn has angle step in `(0, π)`.
 lemma apm_a97j08_squareSum_inside_aux_pos {z p q : ℂ}
