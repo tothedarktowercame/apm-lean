@@ -6733,6 +6733,18 @@ theorem genericPointWedgeOuterRightSpan_component_eq_baseTransport :
   exact genericPointWedgeRightSpanIso_inv_app_eq_baseTransport
     x₀ y₀ M N hM hN hy hx cM cN
 
+omit [PathConnectedSpace X] [PathConnectedSpace Y] in
+/-- The source endpoint transport used in the homogeneous comparator is the
+same canonical right-base transport as the inverse-span component. -/
+theorem genericPointWedgeOuterRight_endpointTransport_eq_baseTransport :
+    let h := genericPointWedgeOuterRight_middleComponent_endpoints
+      x₀ y₀ M N hM hN hy hx cM cN
+    eqToHom h.1 =
+      eqToHom (genericPointWedgeRightEquiv_obj_rightBase
+        x₀ y₀ M N hM hN hy hx cM cN).symm := by
+  dsimp only
+  congr 1
+
 /-- An `inl` factorization of the right-base conjugator forces its canonical
 right projection to be trivial. -/
 theorem genericPointWedgeRightBase_inl_implies_rightProjection_eq_one
@@ -7480,6 +7492,7 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeOuterRight_transportInvRoundTrip
 #print axioms genericPointWedgeOuterRight_transportInvRoundTrip_eq_map
 #print axioms genericPointWedgeOuterRightSpan_component_eq_baseTransport
+#print axioms genericPointWedgeOuterRight_endpointTransport_eq_baseTransport
 #print axioms genericPointWedgeRightBase_inl_implies_rightProjection_eq_one
 #print axioms genericPointWedgeLegCoordinates_of_mapped
 #print axioms genericPointWedgeLegCoordinates_iff_mapped

@@ -1344,3 +1344,6 @@ the inverse-span equality transport versus that explicit two-factor map.
 the inverse-span side itself to the canonical right-base `eqToHom`, using the
 unique object of `FundamentalGroupoid Unit`.  The remaining equation compares
 that canonical transport directly with the explicit endpoint/unitInv product.
+`genericPointWedgeOuterRight_endpointTransport_eq_baseTransport` identifies
+the product's endpoint factor with the same canonical transport.  It remains
+to cancel that common factor and normalize the unshifted mapped `unitInv`.
