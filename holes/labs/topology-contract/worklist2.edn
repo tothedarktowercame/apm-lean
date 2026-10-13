@@ -76772,8 +76772,54 @@
    :current-residual "Elect B8/B9.",
    :other-consumers []}
   {:consumer :t96J02,
+   :stop-count 1,
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Repair B8 hypothesis/representation, then prove finite-wedge van Kampen coordinates and B9.",
+    :outcome :stop,
+    :warnings ["preexisting lints" "unrelated dirty files preserved"],
+    :missing-theorems
+    [{:name "PointWedgeQuotient.finiteWedge_empty_not_nonempty",
+      :type "not Nonempty (FiniteWedge Empty)",
+      :status :proved,
+      :consumers [:t96J02],
+      :depends-on [],
+      :area "polygon-surface-pi1"}
+     {:name "finiteWedgeCircle_pi1",
+      :type
+      "requires [Nonempty L], or an adjoined-basepoint FiniteWedge",
+      :status :not-started,
+      :consumers [:t96J02 :t92J05 :t94J04 :t97A01 :t97A03],
+      :depends-on [],
+      :area "polygon-surface-pi1"}],
+    :statement-hashes
+    {:registry "145/0",
+     :module "fd3345d3ab05b039c8096f3df1154afd595ad12f"},
+    :disposition :stop,
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-6",
+    :reason
+    "Frozen B8 omits Nonempty L. For L=Empty, FiniteWedge L is empty, so wedgePoint and its FundamentalGroup cannot exist.",
+    :commands
+    [{:cmd
+      "lake env lean ConstructionTargets/PolygonSurfacePiOne.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.PolygonSurfacePiOne",
+      :exit 0}
+     {:cmd "statement-registry check", :exit 0}
+     {:cmd "placeholder scan", :exit 0}
+     {:cmd "#print axioms empty-wedge witnesses", :exit 0}
+     {:cmd "git show --check 34d5fe3e4", :exit 0}],
+    :commit "34d5fe3e4",
+    :changed-paths ["ConstructionTargets/PolygonSurfacePiOne.lean"],
+    :fixture
+    {:path "ConstructionTargets/PolygonSurfacePiOne.lean",
+     :sha256
+     "04332bec42f262e2002361a4a60548b59b9efcd13af17a35c5a216142dc5d314"},
+    :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/PolygonSurfacePiOne.lean"],
    :dag-node "ConstructionTargets/PolygonSurfacePiOne.blueprint.md/B8",
    :acceptance
@@ -87612,4 +87658,39 @@
    :depends-on
    [:lemma-pairingdata-skeletonwedgekernelagreement
     :lemma-pairingdata-skeletonarcmap-isquotientmap],
+   :other-consumers [:t92J05 :t94J04 :t97A01 :t97A03]}
+  {:consumer :t96J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "PointWedgeQuotient.finiteWedge_empty_not_nonempty",
+    :type "not Nonempty (FiniteWedge Empty)"},
+   :lemma
+   {:name "PointWedgeQuotient.finiteWedge_empty_not_nonempty",
+    :reported-by [:routes-2026-10-13-polygon-b8-topo2-r1],
+    :type "not Nonempty (FiniteWedge Empty)",
+    :area "polygon-surface-pi1",
+    :proved-in :routes-2026-10-13-polygon-b8-topo2-r1},
+   :id :lemma-pointwedgequotient-finitewedge-empty-not-nonempty,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t96J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "finiteWedgeCircle_pi1",
+    :type
+    "requires [Nonempty L], or an adjoined-basepoint FiniteWedge"},
+   :lemma
+   {:name "finiteWedgeCircle_pi1",
+    :reported-by [:routes-2026-10-13-polygon-b8-topo2-r1],
+    :type
+    "requires [Nonempty L], or an adjoined-basepoint FiniteWedge",
+    :area "polygon-surface-pi1"},
+   :id :lemma-finitewedgecircle-pi1,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers [:t92J05 :t94J04 :t97A01 :t97A03]}]}
