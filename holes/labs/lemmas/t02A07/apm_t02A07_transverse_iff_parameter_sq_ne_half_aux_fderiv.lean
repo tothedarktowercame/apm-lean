@@ -350,7 +350,31 @@ lemma apm_t02A07_transverse_iff_parameter_sq_ne_half_aux_fderiv
       (WithLp.toLp 2
         ![v 0 * parameter.1 0, 0, v 1 * parameter.1 0,
           v 2 * parameter.1 0] : apm_t02a07_E4) := by
-  sorry
+  let L₀ : apm_t02a07_E3 →ₗ[ℝ] apm_t02a07_E4 :=
+    { toFun := fun z => WithLp.toLp 2
+        ![z 0 * parameter.1 0, 0, z 1 * parameter.1 0,
+          z 2 * parameter.1 0]
+      map_add' := by
+        intro a b
+        apply PiLp.ext
+        intro i
+        fin_cases i <;> simp [add_mul]
+      map_smul' := by
+        intro c z
+        apply PiLp.ext
+        intro i
+        fin_cases i <;> simp [mul_assoc] }
+  let L : apm_t02a07_E3 →L[ℝ] apm_t02a07_E4 :=
+    LinearMap.toContinuousLinearMap L₀
+  let c : apm_t02a07_E4 := WithLp.toLp 2
+    ![(0 : ℝ), parameter.1 1, 0, 0]
+  have heq : apm_t02a07_familyAmbient parameter = fun z => L z + c := by
+    funext z
+    apply PiLp.ext
+    intro i
+    fin_cases i <;> simp [apm_t02a07_familyAmbient, L, L₀, c]
+  rw [heq, ((L.hasFDerivAt.add_const c).fderiv)]
+  rfl
 -- END SEAT AREA
 
 lemma apm_t02A07_transverse_iff_parameter_sq_ne_half_aux_submodule
