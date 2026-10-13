@@ -76774,11 +76774,11 @@
   {:consumer :t96J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :evidence
    {:placeholder-delta 0,
     :residual
-    "External specification repair: require Nonempty L or adjoin a basepoint; then prove B8/B9.",
+    "Change B8 to require Nonempty L or use an adjoined-basepoint wedge; then prove B8/B9.",
     :outcome :stop,
     :warnings ["preexisting lints"],
     :missing-theorems [],
@@ -76789,7 +76789,7 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
     :reason
-    "Genuine refutation, not a missing lemma: frozen B8 permits L=Empty, but FiniteWedge Empty is empty, so wedgePoint cannot exist.",
+    "Frozen B8 is mathematically false: L=Empty satisfies its hypotheses, yet FiniteWedge Empty is empty, so its required basepoint cannot be supplied.",
     :commands
     [{:cmd "lake env lean empty-wedge counterexample", :exit 0}
      {:cmd "lake build ConstructionTargets.PolygonSurfacePiOne",
@@ -76798,20 +76798,10 @@
      {:cmd "placeholder scan", :exit 0}
      {:cmd "#print axioms no_finiteWedgePoint", :exit 0}
      {:cmd "git show --check 8ff5cb54a", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1791873765523-8805-6335cdf7",
-     :commands
-     ["git scope/SHA/blob checks at 34d5fe3e4"
-      "git show 34d5fe3e4:... | lake env lean /dev/stdin"
-      "statement-registry.py check (146/0)"
-      "blueprint/placeholder checks; #print axioms"],
-     :finding
-     "PASS: valid STOP with compiled refutation. Exact one-file scope and frozen hashes match; committed blob compiles, placeholders 0, registry 146/0, standard axioms only. Frozen B8 admits L=Empty and claims a based trivial-group case, but current FiniteWedge Empty is Quotient of Empty×Circle and has no point; the commit proves not Nonempty (FiniteWedge Empty). Require Nonempty L or adjoin a basepoint before proving B8/B9."},
     :commit "8ff5cb54a",
     :counterexample
     "PointWedgeQuotient.finiteWedge_empty_not_nonempty",
+    :refutation true,
     :changed-paths ["ConstructionTargets/PolygonSurfacePiOne.lean"],
     :fixture
     {:path "ConstructionTargets/PolygonSurfacePiOne.lean",
@@ -76819,7 +76809,7 @@
      "8bb4cf5d53c64717292de2cab25decbc62907fcc988a8052958bc0148f881904"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/PolygonSurfacePiOne.lean"],
    :dag-node "ConstructionTargets/PolygonSurfacePiOne.blueprint.md/B8",
    :acceptance
