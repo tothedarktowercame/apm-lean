@@ -261,7 +261,9 @@ The factor facts are hypotheses so all three seats are independent. -/
 theorem apm_t00j01_klein_circle_compact
     (_hK : IsCompact (Set.univ : Set apm_t00j01_Klein)) :
     IsCompact (Set.univ : Set apm_t00j01_nonorientable3) := by
-  sorry
+  letI : CompactSpace apm_t00j01_Klein :=
+    isCompact_univ_iff.mp _hK
+  exact isCompact_univ
 -- END SEAT AREA
 
 /-- Connectedness of the two nonempty factors assembles to connectedness of
