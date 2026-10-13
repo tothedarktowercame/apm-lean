@@ -55,6 +55,10 @@ The proper-discontinuity proof now has its algebraic half compiled:
 equations from an orbit intersection, and `finite_of_coordinatePair_mem`
 turns finite coordinate ranges into finitely many acting elements.  It remains
 to obtain those finite integer ranges from compactness of the two plane sets.
+The generic compact-image integer lemma and its vertical-coordinate
+specialization are now compiled as `finite_zmul_cast_mem_compact_image` and
+`finite_vertical_coordinates_of_compact`.  The horizontal signed-coordinate
+bound and final instance assembly remain.
 
 The arbitrary-basepoint tail is compiled as
 `ConstructionTargets.t93J03Closure.fundamentalGroupEquiv_every_basepoint`.

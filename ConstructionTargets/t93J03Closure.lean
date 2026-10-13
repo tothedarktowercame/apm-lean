@@ -46,6 +46,43 @@ theorem finite_of_coordinatePair_mem {S T : Set ZMul}
     {g : PresentedKleinGroup | coordinatePairEquiv g ∈ S ×ˢ T}.Finite :=
   (hS.prod hT).preimage coordinatePairEquiv.injective.injOn
 
+/-- Integer coordinates whose real casts lie in a continuous image of a
+compact set form a finite set. -/
+theorem finite_zmul_cast_mem_compact_image
+    {A : Type*} [TopologicalSpace A] {K : Set A} (hK : IsCompact K)
+    (f : A → ℝ) (hf : Continuous f) :
+    {z : ZMul | ((Multiplicative.toAdd z : ℤ) : ℝ) ∈ f '' K}.Finite := by
+  let S : Set ZMul :=
+    {z | ((Multiplicative.toAdd z : ℤ) : ℝ) ∈ f '' K}
+  have hc : IsCompact (f '' K) := hK.image hf
+  obtain ⟨a, ha⟩ := hc.bddBelow
+  obtain ⟨b, hb⟩ := hc.bddAbove
+  obtain ⟨za : ℤ, hza : (za : ℝ) ≤ a⟩ := exists_int_le a
+  obtain ⟨zb : ℤ, hzb : b ≤ (zb : ℝ)⟩ := exists_int_ge b
+  have hbelow : BddBelow S := by
+    refine ⟨Multiplicative.ofAdd za, ?_⟩
+    intro z hz
+    change za ≤ Multiplicative.toAdd z
+    rw [← Int.cast_le (R := ℝ)]
+    exact hza.trans (ha hz)
+  have habove : BddAbove S := by
+    refine ⟨Multiplicative.ofAdd zb, ?_⟩
+    intro z hz
+    change Multiplicative.toAdd z ≤ zb
+    rw [← Int.cast_le (R := ℝ)]
+    exact (hb hz).trans hzb
+  exact hbelow.finite_of_bddAbove habove
+
+/-- For two compact plane sets, only finitely many vertical integer
+translations can occur in an orbit intersection. -/
+theorem finite_vertical_coordinates_of_compact
+    {K L : Set (ℝ × ℝ)} (hK : IsCompact K) (hL : IsCompact L) :
+    {n : ZMul |
+      ((Multiplicative.toAdd n : ℤ) : ℝ) ∈
+        (fun pq : (ℝ × ℝ) × (ℝ × ℝ) => pq.2.2 - pq.1.2) '' (K ×ˢ L)}.Finite := by
+  apply finite_zmul_cast_mem_compact_image (hK.prod hL)
+  fun_prop
+
 /-- The literal affine Klein action is continuous in the plane variable. -/
 noncomputable instance kleinPlaneContinuousConstSMul :
     ContinuousConstSMul PresentedKleinGroup (ℝ × ℝ) where
@@ -130,5 +167,7 @@ theorem lift_isEmbedding_assembly
 #print axioms kleinPlaneOrbit_pi1_at_origin
 #print axioms coordinate_equations_of_smul_eq
 #print axioms finite_of_coordinatePair_mem
+#print axioms finite_zmul_cast_mem_compact_image
+#print axioms finite_vertical_coordinates_of_compact
 
 end ConstructionTargets.t93J03Closure
