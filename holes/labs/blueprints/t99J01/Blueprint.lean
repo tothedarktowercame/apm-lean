@@ -3,6 +3,11 @@ import ConstructionTargets.StatementSurfaceModels
 import ConstructionTargets.CoveringDegree
 import ConstructionTargets.T99J01PathComponentCoverRestriction
 import ConstructionTargets.T99J01ComponentSheetBounds
+import ConstructionTargets.CyclicThreeCirclesPullbackSheets
+import ConstructionTargets.CyclicThreeCirclesPullbackPathConnected
+import ConstructionTargets.CyclicThreeCirclesPullbackCover
+import ConstructionTargets.FiniteIndexFreeGroupSchreierRank
+import ConstructionTargets.T99J01CoverSubgroupIndex
 
 /-! # t99J01: finite covers of a wedge of three circles
 
