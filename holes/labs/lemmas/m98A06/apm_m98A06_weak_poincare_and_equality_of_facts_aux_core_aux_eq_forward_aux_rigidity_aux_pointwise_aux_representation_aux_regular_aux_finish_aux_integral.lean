@@ -2806,7 +2806,18 @@ lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_forward_aux
       fun x => m - ∫ t in (0 : ℝ)..x, y t) :
     ∀ x ∈ Icc (0 : ℝ) Real.pi,
       y x = ∫ t in (0 : ℝ)..x, (m - ∫ u in (0 : ℝ)..t, y u) := by
-  sorry
+  intro x hx
+  rw [hprim x hx]
+  apply intervalIntegral.integral_congr_ae
+  have haeIoc := hae
+  rw [Measure.restrict_congr_set Ioo_ae_eq_Ioc] at haeIoc
+  have hae' : ∀ᵐ t ∂volume, t ∈ Ioc (0 : ℝ) Real.pi →
+      dy t = m - ∫ u in (0 : ℝ)..t, y u :=
+    (ae_restrict_iff' measurableSet_Ioc).mp haeIoc
+  filter_upwards [hae'] with t ht htx
+  apply ht
+  rw [uIoc_of_le hx.1] at htx
+  exact ⟨htx.1, htx.2.trans hx.2⟩
 -- END SEAT AREA
 
 lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_forward_aux_rigidity_aux_pointwise_aux_representation_aux_regular_aux_finish_aux_calculus_aux_Y
