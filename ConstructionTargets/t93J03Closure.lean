@@ -5,6 +5,7 @@ import ConstructionTargets.KleinPlaneOrbitQuotientTopology
 import ConstructionTargets.DeckGroupQuotientFundamentalGroup
 import ConstructionTargets.KleinClosedSquareOrbitInverseContinuity
 import ConstructionTargets.KleinSquareEqvGenCasesIff
+import ConstructionTargets.PolygonSurfacePiOne
 
 /-! # Generic closing lemmas for t93J03
 
@@ -26,6 +27,7 @@ open ConstructionTargets.KleinClosedSquareOrbitQuotientEquiv
 open ConstructionTargets.KleinClosedSquareOrbitInverseContinuity
 open KleinPlaneActionSquareOrbitClassification
 open KleinSquareBoundaryRelation
+open ConstructionTargets.PolygonSurfacePiOne
 
 /-- An orbit intersection determines both integer normal-form coordinates by
 the source and target points.  These are the equations used to bound the
@@ -226,6 +228,24 @@ noncomputable def closedSquareEdgeOrbitHomeomorph :
     apply Continuous.quotient_lift
     exact continuous_coinduced_rng
 
+/-- The standard four-edge nonorientable pairing specialized to the frozen
+Klein-bottle genus. -/
+noncomputable def kleinPairingData : PairingData :=
+  nonorientableStandardPairingData 2 (by omega)
+
+/-- The standard polygon quotient is exactly the frozen `KleinBottle`, with
+the direction needed to transport its fundamental-group computation. -/
+noncomputable def kleinPairingSpaceHomeomorph :
+    kleinPairingData.Space ≃ₜ KleinBottle :=
+  nonorientableStandardSpaceHomeomorph 2
+
+/-- The boundary skeleton of the frozen Klein polygon is the wedge indexed by
+the two nonorientable edge-pairing orbits. -/
+noncomputable def kleinSkeletonHomeomorphTwoCircles :
+    kleinPairingData.skeleton ≃ₜ
+      PointWedgeQuotient.FiniteWedge (PairingOrbit kleinPairingData.pair) :=
+  kleinPairingData.skeletonHomeomorphWedge
+
 /-- Once proper discontinuity of the explicit affine action is supplied, the
 banked deck-group theorem computes the fundamental group at the canonical
 orbit of the origin. -/
@@ -314,5 +334,7 @@ theorem lift_isEmbedding_assembly
 #print axioms closedSquareOrbitHomeomorph
 #print axioms closedSquare_eqvGen_iff_sameOrbit
 #print axioms closedSquareEdgeOrbitHomeomorph
+#print axioms kleinPairingSpaceHomeomorph
+#print axioms kleinSkeletonHomeomorphTwoCircles
 
 end ConstructionTargets.t93J03Closure

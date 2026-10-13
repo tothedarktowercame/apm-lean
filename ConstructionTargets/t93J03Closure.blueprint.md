@@ -100,6 +100,12 @@ square-edge equivalence is exactly affine-orbit equivalence.  The remaining
 C1 representation step is therefore only the frozen disk quotient to this
 closed-square edge quotient.
 
+Independently, `kleinPairingSpaceHomeomorph` specializes the exact standard
+nonorientable polygon comparison directly to the frozen `KleinBottle`, and
+`kleinSkeletonHomeomorphTwoCircles` identifies its boundary skeleton with the
+two-orbit circle wedge.  These declarations expose the direct van Kampen
+route without requiring a representative-level disk-to-square carrier.
+
 ### C2. `t93J03_cyclicCover_zpowers_generatorA` — LIBRARY
 
 Given the C1 presentation equivalence at `k`, construct a covering
