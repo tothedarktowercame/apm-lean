@@ -21568,7 +21568,7 @@
   {:consumer :t00J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 2,
    :review-finding
    "Frozen fixture metadata remains invalid: both authoritative acceptance copies record aad5a9cda739c1cbcceb1eca8ab8b33395db8a08c9d68941a87c644f4d13586e and omit :mode, while the compiling fixture hashes to 7e72195e1214d7580994264481ae57d0ecf87755d31825ab85cbda5f1220c4b1. Update both copies to that digest with :mode :post-build-export-check, then resubmit f0afa7bd.",
    :implements-lemma
@@ -21576,7 +21576,7 @@
    :evidence
    {:placeholder-delta {:t00J02 [1 1], :t98A02 [1 1]},
     :residual
-    "Supervisor must update both acceptance copies to 7e72195e with post-build mode, then resubmit f0afa7bd.",
+    "Stop-after-two: supervisor must update both acceptance copies to 7e72195e with post-build mode, then resubmit f0afa7bd.",
     :outcome :stop,
     :warnings [],
     :missing-theorems
@@ -21592,17 +21592,10 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Owner-reopen left both authoritative acceptance copies unchanged: they still record aad5a9cd without post-build mode. The actual fixture is 7e72195e and compiles against the theorem at f0afa7bd. Acceptance metadata is outside the sole Lean scope; apply-result! cannot modify it and direct ledger edits are forbidden.",
+    "Second unchanged metadata boundary. The implementation commit exists and the actual 7e72195e fixture compiles, but authoritative acceptance still records aad5a9cd and omits post-build mode. The row scope permits only the Lean module; result application does not rewrite acceptance and ledger edits are forbidden.",
     :commands
-    [{:cmd "hash and lake-check fixture; verify scoped commit",
-      :exit 0}
-     {:cmd "scan authoritative copies; registry check", :exit 0}],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1791894125905-9637-083b7537",
-     :finding
-     "Frozen fixture metadata remains invalid: both authoritative acceptance copies record aad5a9cda739c1cbcceb1eca8ab8b33395db8a08c9d68941a87c644f4d13586e and omit :mode, while the compiling fixture hashes to 7e72195e1214d7580994264481ae57d0ecf87755d31825ab85cbda5f1220c4b1. Update both copies to that digest with :mode :post-build-export-check, then resubmit f0afa7bd."},
+    [{:cmd "hash and lake-check fixture; verify commit", :exit 0}
+     {:cmd "scan stale acceptance digests; registry check", :exit 0}],
     :commit "f0afa7bdc4c95a8c87143342ceb8c9ce51cd5612",
     :changed-paths
     ["ConstructionTargets/ManifoldFundamentalClass.lean"],
@@ -21613,7 +21606,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :repair,
+   :state :needs-owner,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/manifold-fundamental-class",
    :acceptance
