@@ -465,7 +465,47 @@ lemma apm_t00j01_foldFiberCard_pi_aux_angle_count_aux_inner_root :
 theorem apm_t00j01_angle_classify (θ : ℝ) (hθ : θ ∈ Set.Ioc (-Real.pi) Real.pi) :
     Circle.exp (apm_t00j01_foldLift θ) = Circle.exp Real.pi ↔
       apm_t00j01_foldLift θ = Real.pi ∨ apm_t00j01_foldLift θ = -Real.pi := by
-  sorry
+  constructor
+  · intro hexp
+    obtain ⟨n, hn⟩ := Circle.exp_eq_exp.mp hexp
+    have hbound : |apm_t00j01_foldLift θ| < 2 * Real.pi := by
+      rw [apm_t00j01_foldLift]
+      calc
+        |θ + 2 * Real.sin θ| ≤ |θ| + 2 * |Real.sin θ| := by
+          simpa only [abs_mul, abs_of_nonneg (by norm_num : (0 : ℝ) ≤ 2)] using
+            abs_add_le θ (2 * Real.sin θ)
+        _ ≤ Real.pi + 2 := by
+          have ha : |θ| ≤ Real.pi :=
+            (abs_le).2 ⟨by linarith [hθ.1], hθ.2⟩
+          have hs : |Real.sin θ| ≤ 1 :=
+            (abs_le).2 ⟨Real.neg_one_le_sin θ, Real.sin_le_one θ⟩
+          linarith
+        _ < 2 * Real.pi := by linarith [Real.pi_gt_three]
+    have hnlt : n < 1 := by
+      have hu : apm_t00j01_foldLift θ < 2 * Real.pi := (abs_lt.mp hbound).2
+      have hpi : 0 < Real.pi := Real.pi_pos
+      have : (n : ℝ) < 1 := by
+        rw [hn] at hu
+        nlinarith
+      exact_mod_cast this
+    have hnneg : -2 < n := by
+      have hl : -(2 * Real.pi) < apm_t00j01_foldLift θ := (abs_lt.mp hbound).1
+      have hpi : 0 < Real.pi := Real.pi_pos
+      have : (-2 : ℝ) < n := by
+        rw [hn] at hl
+        nlinarith
+      exact_mod_cast this
+    have hn_cases : n = 0 ∨ n = -1 := by omega
+    rcases hn_cases with rfl | rfl
+    · left
+      simpa using hn
+    · right
+      rw [hn]
+      ring
+  · rintro (h | h)
+    · rw [h]
+    · rw [h]
+      exact Circle.exp_eq_exp.mpr ⟨-1, by ring⟩
 -- END SEAT AREA
 
 /-- Seat: on `[0, π]` the equation `g θ = π` has exactly the interior root and
