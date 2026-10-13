@@ -223,7 +223,23 @@ theorem apm_t03J03_disconnected_two_sheeted_split {E X : Type}
     (himage : ∀ U : Set E, IsClopen U → U.Nonempty → p '' U = Set.univ) :
     ∃ U : Set E, IsClopen U ∧ (∀ x, ∃! e, e ∈ U ∧ p e = x) ∧
       (∀ x, ∃! e, e ∉ U ∧ p e = x) := by
-  sorry
+  obtain ⟨U, hU, hUne, hUcne⟩ :=
+    apm_t03J03_disconnected_two_sheeted_split_aux_clopen p h2 hE
+  have hU_image : p '' U = Set.univ := himage U hU hUne
+  have hUc_image : p '' Uᶜ = Set.univ := himage Uᶜ hU.compl hUcne
+  have hboth :
+      ∀ x, (∃ e, e ∈ U ∧ p e = x) ∧ (∃ e, e ∉ U ∧ p e = x) := by
+    intro x
+    constructor
+    · have hx : x ∈ p '' U := by rw [hU_image]; trivial
+      obtain ⟨e, heU, hep⟩ := hx
+      exact ⟨e, heU, hep⟩
+    · have hx : x ∈ p '' Uᶜ := by rw [hUc_image]; trivial
+      obtain ⟨e, heUc, hep⟩ := hx
+      exact ⟨e, heUc, hep⟩
+  obtain ⟨hU_unique, hUc_unique⟩ :=
+    apm_t03J03_disconnected_two_sheeted_split_aux_unique_of_both p U h2 hboth
+  exact ⟨U, hU, hU_unique, hUc_unique⟩
 -- END SEAT AREA
 
 /-- Seat (generic): a split as above makes `p` equivalent to the trivial cover
