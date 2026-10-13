@@ -383,7 +383,31 @@ theorem apm_m98A06_stationary_resonant_classification_of_duBoisReymond
       apm_m98a06_IsStationary (2 * Real.pi) 1 1 y ↔
         ∃ B : ℝ, ∀ x ∈ Icc (0 : ℝ) (2 * Real.pi),
           y x = Real.cos x + B * Real.sin x := by
-  sorry
+  intro y
+  have hpos : 0 < 2 * Real.pi := mul_pos (by norm_num) Real.pi_pos
+  constructor
+  · intro hy
+    obtain ⟨hadm, A, B, hrep⟩ :=
+      (hDBR (2 * Real.pi) 1 1 hpos y).mp hy
+    have hzero : (0 : ℝ) ∈ Icc 0 (2 * Real.pi) := ⟨le_rfl, hpos.le⟩
+    have hA : A = 1 := by
+      have h := hrep 0 hzero
+      rw [hadm.2.1] at h
+      simpa using h.symm
+    refine ⟨B, fun x hx ↦ ?_⟩
+    rw [hrep x hx, hA, one_mul]
+  · rintro ⟨B, hrep⟩
+    apply (hDBR (2 * Real.pi) 1 1 hpos y).mpr
+    have hcd : ContDiffOn ℝ 1
+        (fun x : ℝ ↦ Real.cos x + B * Real.sin x) (Icc 0 (2 * Real.pi)) := by
+      fun_prop
+    have hadm : apm_m98a06_Admissible (2 * Real.pi) 1 1 y := by
+      refine ⟨hcd.congr (fun x hx ↦ hrep x hx), ?_, ?_⟩
+      · simpa using hrep 0 ⟨le_rfl, hpos.le⟩
+      · simpa using hrep (2 * Real.pi) ⟨hpos.le, le_rfl⟩
+    refine ⟨hadm, 1, B, ?_⟩
+    intro x hx
+    simpa using hrep x hx
 -- END SEAT AREA
 
 theorem apm_m98A06_stationary_nonresonant_classification_of_duBoisReymond
