@@ -24430,27 +24430,26 @@
    :consumer :t01A08,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "extend Mathlib: state and prove the missing theorem in scope",
    :implements-lemma :lemma-closedset-whitneycubecover,
    :evidence
    {:placeholder-delta {:t01A08 [1 1]},
-    :residual
-    "Prove ambient local finiteness; assemble B3; then B4-B7, B9.",
+    :residual "Boundary local finiteness and B3; then B4-B7, B9.",
     :outcome :stop,
     :warnings
     ["existing unnecessarySimpa:454"
      "existing unnecessarySeqFocus:1199"],
     :missing-theorems
     [{:name
-      "ConstructionTargets.SardConvexDomain.finite_whitneyNetHalfIncidence",
+      "ConstructionTargets.SardConvexDomain.finite_whitneyNetQuarterBalls_meeting_nhds_of_not_mem",
       :type
-      "[ProperSpace E] (s) (x) : {i | x in ball i.center (infDist i.center s/2)}.Finite",
+      "hs hne hx => exists U in nhds x, finitely many quarter-balls meet U",
       :status :proved,
       :consumers [:t01A08],
       :depends-on
-      ["ConstructionTargets.SardConvexDomain.whitneyStratum_indices_le_add_two_of_mem_half_balls"],
+      ["ConstructionTargets.SardConvexDomain.finite_whitneyNetHalfIncidence"],
       :area "sard-convex-domain"}
      {:name
       "ConstructionTargets.SardConvexDomain.closedSet_whitneyCubeCover_proper",
@@ -24458,44 +24457,32 @@
       :status :partial,
       :consumers [:t01A08],
       :depends-on
-      ["ConstructionTargets.SardConvexDomain.finite_whitneyNetHalfIncidence"
-       "ConstructionTargets.SardConvexDomain.compl_subset_iUnion_whitneyNetQuarterBalls"],
+      ["ConstructionTargets.SardConvexDomain.finite_whitneyNetQuarterBalls_meeting_nhds_of_not_mem"],
       :area "sard-convex-domain"}],
     :statement-hashes {:registry "150/150"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Committed finite half-ball incidence via five compact stratum fibers. Local finiteness and assembly remain; not refuted.",
+    "Committed quarter-ball neighborhood finiteness off s. Boundary local finiteness and B3 remain; not refuted.",
     :commands
     [{:cmd "lake build ConstructionTargets.SardConvexDomain", :exit 0}
-     {:cmd "fixture; registry; scans; diff", :exit 0}
+     {:cmd "fixture; registry; scan; diff", :exit 0}
      {:cmd "git commit", :exit 0}],
     :diagnostic-history
-    [{:cmd "build",
+    [{:cmd "builds",
       :exit 1,
-      :correction "fixed orientation and empty case"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1791913847668-10164-ceb63e3c",
-     :commands
-     ["git show/diff 2737bac; scope/finiteness checks"
-      "sha256sum + lake env lean frozen fixture"
-      "lake build ConstructionTargets.SardConvexDomain"
-      "statement registry check; forbidden-count scan"],
-     :finding
-     "PASS. Recorded topo-10 commit 2737bac changes only the scoped Lean file and correctly proves finite half-ball incidence. Each fixed-scale fiber injects into separated centers in a compact scale-sized ball; one incident index bounds all others to the five integer strata k-2..k+2, whose finite union contains the incidence set; empty incidence is handled. Fixture hash 8090bfa6... matches; build/fixture pass; registry 150/150; forbidden placeholders stay 0; only standard axioms. Valid compiled B3 progress; STOP leaves ambient local finiteness and assembly."},
-    :commit "2737bacf200d2e73dcb945cb7a9e25145fae8414",
+      :correction "used nhds, symmetry, positive infDist"}],
+    :commit "05c3222136eeb54d4a83cf44b47b5ffc27612123",
     :changed-paths ["ConstructionTargets/SardConvexDomain.lean"],
     :fixture
-    {:path "/tmp/t01a08_b3_half_incidence_check.lean",
+    {:path "/tmp/t01a08_b3_complement_local_check.lean",
      :sha256
-     "8090bfa69a16f861cdbd915fab84545a0b87b229213da80da5aa42c91fadeb3f",
+     "1fbe42776409873dd8987474b95c9b4dd22d37e943d32b0b7aa3f1ec988fe7be",
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain.blueprint/B3",
    :acceptance
@@ -35177,7 +35164,8 @@
     :lemma-constructiontargets-sardconvexdomain-compl-subset-iunion-whitneynetquarterballs
     :lemma-constructiontargets-sardconvexdomain-infdist-center-comparable-of-mem-half-ball
     :lemma-constructiontargets-sardconvexdomain-whitneystratum-indices-le-add-two-of-mem-ha
-    :lemma-constructiontargets-sardconvexdomain-finite-whitneynethalfincidence],
+    :lemma-constructiontargets-sardconvexdomain-finite-whitneynethalfincidence
+    :lemma-constructiontargets-sardconvexdomain-finite-whitneynetquarterballs-meeting-nhds-],
    :other-consumers []}
   {:consumer :t01A08,
    :phase :lemma,
@@ -35951,6 +35939,29 @@
    :kind :lemma,
    :depends-on
    [:lemma-constructiontargets-sardconvexdomain-whitneystratum-indices-le-add-two-of-mem-ha],
+   :other-consumers []}
+  {:consumer :t01A08,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.SardConvexDomain.finite_whitneyNetQuarterBalls_meeting_nhds_of_not_mem",
+    :type
+    "hs hne hx => exists U in nhds x, finitely many quarter-balls meet U"},
+   :lemma
+   {:name
+    "ConstructionTargets.SardConvexDomain.finite_whitneyNetQuarterBalls_meeting_nhds_of_not_mem",
+    :reported-by [:r-a08-sard-b3-whitney-cubes-1],
+    :type
+    "hs hne hx => exists U in nhds x, finitely many quarter-balls meet U",
+    :area "sard-convex-domain",
+    :proved-in :r-a08-sard-b3-whitney-cubes-1},
+   :id
+   :lemma-constructiontargets-sardconvexdomain-finite-whitneynetquarterballs-meeting-nhds-,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-sardconvexdomain-finite-whitneynethalfincidence],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
