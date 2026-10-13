@@ -21958,6 +21958,19 @@
       "git diff --exit-code e30f8627 -- ConstructionTargets/SardGeneralModel.lean",
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791856764447-8188-b4d32af7",
+     :commands
+     ["git diff-tree recorded commit"
+      "sha256sum frozen fixture"
+      "lake build ConstructionTargets.SardGeneralModel"
+      "lake env lean axiom export"
+      "statement-registry check"
+      "recorded-source placeholder count"],
+     :finding
+     "PASS: commit e30f8627 has exact one-file scope; frozen SHA e8cd3a6c and post-build-export-check mode match; source placeholders 0; registry 131/131; standard axioms only. The theorem correctly applies convex model-range additive-Haar frontier nullity in the finite-dimensional Borel representation."},
     :commit "e30f8627733147a6b81e20528ebf3e4fcff8f3f2",
     :changed-paths ["ConstructionTargets/SardGeneralModel.lean"],
     :fixture
@@ -21966,7 +21979,7 @@
      "e8cd3a6cf79367917bc0c739ad8b5644e58e2ca8212e21edcea9f5af6a6c47d4",
      :mode :post-build-export-check}},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/SardGeneralModel.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t01A08/boundary",
    :acceptance
@@ -21997,7 +22010,7 @@
      :infrastructure-packets
      :review-outcomes]},
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance {:strategy "Rerank."},
