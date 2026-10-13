@@ -23714,10 +23714,53 @@
    :other-consumers []}
   {:bounded-exception "Rule0.",
    :consumer :t01A08,
+   :stop-count 1,
    :implements-lemma
    :lemma-contdiffwithinat-domdomcongr-iteratedfderivwithin-of-infty,
+   :evidence
+   {:placeholder-delta {:t01A08 [1 1]},
+    :residual
+    "Prove each transposition fixes the higher jet using the lower-jet Schwarz helper; apply permutation closure; B1.",
+    :outcome :stop,
+    :warnings [],
+    :missing-theorems
+    [{:name "ContinuousMultilinearMap.domDomCongr_eq_self_of_swap",
+      :type
+      "[Finite ι] [DecidableEq ι] → (m : ContinuousMultilinearMap R (λ _ : ι ↦ E) F) → (∀ i j, m.domDomCongr (Equiv.swap i j)=m) → ∀ σ : Equiv.Perm ι, m.domDomCongr σ=m",
+      :status :proved,
+      :consumers [:t01A08],
+      :depends-on [],
+      :area "sard-convex-domain"}
+     {:name
+      "ContDiffWithinAt.domDomCongr_iteratedFDerivWithin_of_infty",
+      :type
+      "C∞ within + UniqueDiffOn + x∈s + x∈closure(interior s) imply all-order permutation invariance",
+      :status :partial,
+      :consumers [:t01A08],
+      :depends-on
+      ["ContinuousMultilinearMap.domDomCongr_eq_self_of_swap"],
+      :area "sard-convex-domain"}],
+    :statement-hashes {:registry "147/147"},
+    :disposition :stop,
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author :topo-10,
+    :reason
+    "Permutation closure proved; higher-jet transposition identification remains.",
+    :commands
+    [{:cmd "lake build ConstructionTargets.SardConvexDomain", :exit 0}
+     {:cmd
+      "lake env lean axiom/fixture checks; scoped commit check; registry check",
+      :exit 0}],
+    :commit "7ccfb88e02cd571d70c8d8396c349a41ca5f86cc",
+    :changed-paths ["ConstructionTargets/SardConvexDomain.lean"],
+    :fixture
+    {:path "/tmp/t01a08_smooth_symmetry_membership_probe.lean",
+     :sha256
+     "3d255ecbda1647c2051942450c83a9182a2f567af36e1334951c2b86dc094bf9",
+     :mode :post-build-export-check},
+    :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain/B1/symmetry",
    :acceptance
@@ -33502,12 +33545,33 @@
      :r-topo3-cp9
      :r-topo3-cp10
      :r-a08-symmetry-membership-1
-     :r-a08-symmetry-induction-1],
+     :r-a08-symmetry-induction-1
+     :r-a08-symmetry-slots-1],
     :type
     "ContDiffWithinAt R infinity f s x -> UniqueDiffOn R s -> x in s -> forall n sigma, domDomCongr sigma (iteratedFDerivWithin R n f s x) = iteratedFDerivWithin R n f s x",
     :area "sard-convex-domain"},
    :id
    :lemma-contdiffwithinat-domdomcongr-iteratedfderivwithin-of-infty,
+   :kind :lemma,
+   :depends-on
+   [:lemma-continuousmultilinearmap-domdomcongr-eq-self-of-swap],
+   :other-consumers []}
+  {:consumer :t01A08,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "ContinuousMultilinearMap.domDomCongr_eq_self_of_swap",
+    :type
+    "[Finite ι] [DecidableEq ι] → (m : ContinuousMultilinearMap R (λ _ : ι ↦ E) F) → (∀ i j, m.domDomCongr (Equiv.swap i j)=m) → ∀ σ : Equiv.Perm ι, m.domDomCongr σ=m"},
+   :lemma
+   {:name "ContinuousMultilinearMap.domDomCongr_eq_self_of_swap",
+    :reported-by [:r-a08-symmetry-slots-1],
+    :type
+    "[Finite ι] [DecidableEq ι] → (m : ContinuousMultilinearMap R (λ _ : ι ↦ E) F) → (∀ i j, m.domDomCongr (Equiv.swap i j)=m) → ∀ σ : Equiv.Perm ι, m.domDomCongr σ=m",
+    :area "sard-convex-domain",
+    :proved-in :r-a08-symmetry-slots-1},
+   :id :lemma-continuousmultilinearmap-domdomcongr-eq-self-of-swap,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}],
