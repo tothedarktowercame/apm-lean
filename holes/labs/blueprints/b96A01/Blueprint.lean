@@ -326,6 +326,36 @@ lemma apm_b96a01_part_d_nonabelian_aux_injective_or_trivial
 
 /-- Integral conjugation (part (b)) gives reductions modulo every `p ^ m`, compatible
 under `apmReduction`, jointly faithful, and the first one realised over `ZMod p`. -/
+lemma apm_b96a01_part_d_nonabelian_aux_reductions_aux_integral_inverse
+    (n : Type*) [Fintype n] [DecidableEq n]
+    (G : Subgroup (Matrix.GeneralLinearGroup n ℚ)) (hG : Finite G) :
+    ∃ P : Matrix n n ℚ, IsUnit P ∧
+      ∀ g : G,
+        apmIntegralMatrix (P * (g.1 : Matrix n n ℚ) * P⁻¹) ∧
+        apmIntegralMatrix (P * ((g⁻¹).1 : Matrix n n ℚ) * P⁻¹) := by
+  obtain ⟨P, hPunit, hP⟩ := apm_b96a01_part_b n G hG
+  exact ⟨P, hPunit, fun g => ⟨hP g, hP g⁻¹⟩⟩
+
+/-- A finite subgroup of `GLₙ(ℚ)` embeds into `GLₙ(ℤ)` (conjugate by `P` from part (b);
+the integer lifts of `P g P⁻¹` are unique, so they form a homomorphism). -/
+lemma apm_b96a01_part_d_nonabelian_aux_reductions_aux_integral_hom
+    (n : Type*) [Fintype n] [DecidableEq n]
+    (G : Subgroup (Matrix.GeneralLinearGroup n ℚ)) (hG : Finite G) :
+    ∃ A : G →* Matrix.GeneralLinearGroup n ℤ, Function.Injective A := by
+  sorry
+
+/-- Reductions of an integral representation modulo the powers of `p`. -/
+lemma apm_b96a01_part_d_nonabelian_aux_reductions_aux_of_integral
+    (n : Type*) [Fintype n] [DecidableEq n] {G : Type*} [Group G]
+    (A : G →* Matrix.GeneralLinearGroup n ℤ) (hA : Function.Injective A)
+    (p : ℕ) (hp : p.Prime) :
+    ∃ ρ : ∀ m : ℕ, G →* Matrix.GeneralLinearGroup n (ZMod (p ^ m)),
+      (∀ m (h : p ^ (m - 1) ∣ p ^ m), 2 ≤ m →
+        (apmReduction n p m h).comp (ρ m) = ρ (m - 1)) ∧
+      (∀ g : G, (∀ m, 1 ≤ m → ρ m g = 1) → g = 1) ∧
+      ∃ ρp : G →* Matrix.GeneralLinearGroup n (ZMod p), ∀ g, ρp g = 1 ↔ ρ 1 g = 1 := by
+  sorry
+
 lemma apm_b96a01_part_d_nonabelian_aux_reductions
     (n : Type*) [Fintype n] [DecidableEq n]
     (G : Subgroup (Matrix.GeneralLinearGroup n ℚ)) (hG : Finite G) (p : ℕ) (hp : p.Prime) :
@@ -334,7 +364,8 @@ lemma apm_b96a01_part_d_nonabelian_aux_reductions
         (apmReduction n p m h).comp (ρ m) = ρ (m - 1)) ∧
       (∀ g : G, (∀ m, 1 ≤ m → ρ m g = 1) → g = 1) ∧
       ∃ ρp : G →* Matrix.GeneralLinearGroup n (ZMod p), ∀ g, ρp g = 1 ↔ ρ 1 g = 1 := by
-  sorry
+  obtain ⟨A, hA⟩ := apm_b96a01_part_d_nonabelian_aux_reductions_aux_integral_hom n G hG
+  exact apm_b96a01_part_d_nonabelian_aux_reductions_aux_of_integral n A hA p hp
 
 /-- The congruence climb: if the reduction modulo `p` is trivial on a nonabelian simple
 group, so is every reduction modulo `p ^ m` (each step lands in the commutative kernel of
