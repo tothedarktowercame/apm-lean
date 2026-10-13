@@ -2867,6 +2867,90 @@ lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_inequality_aux
           (1 + 1 / η) * ∫ x, (k x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)) := by
   sorry
 
+lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_inequality_aux_approximation_aux_limit_aux_error_aux_norm_estimate_aux_transfer_aux_continuous_memLp
+    (f : ℝ → ℝ) (hf : Continuous f) :
+    MemLp f 2 (volume.restrict (Ioo (0 : ℝ) Real.pi)) := by
+  rw [memLp_two_iff_integrable_sq hf.aestronglyMeasurable]
+  exact ((hf.pow 2).continuousOn.integrableOn_compact isCompact_Icc).mono_set
+    Ioo_subset_Icc_self
+
+lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_inequality_aux_approximation_aux_limit_aux_error_aux_norm_estimate_aux_transfer_aux_core
+    (hWirtinger : apm_m98A06_WirtingerFact)
+    (hFTC : apm_m98A06_WeakFTCFact) (y dy : ℝ → ℝ)
+    (h : apm_m98a06_InH10Pi y dy)
+    (hcs : ∀ (g : ℝ → ℝ), Continuous g → ∀ x ∈ Icc (0 : ℝ) Real.pi,
+        (y x - ∫ t in (0 : ℝ)..x, g t) ^ 2 ≤
+          Real.pi * ∫ t, (dy t - g t) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)))
+    (hsplit : ∀ (f k : ℝ → ℝ) (η : ℝ), 0 < η →
+        MemLp f 2 (volume.restrict (Ioo (0 : ℝ) Real.pi)) →
+        MemLp k 2 (volume.restrict (Ioo (0 : ℝ) Real.pi)) →
+        (∫ x, (f x + k x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi))) ≤
+          (1 + η) * (∫ x, (f x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi))) +
+          (1 + 1 / η) * ∫ x, (k x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi))) :
+    ∀ ε : ℝ, 0 < ε →
+      (∫ x, (y x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi))) ≤
+        (∫ x, (dy x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi))) + ε := by
+  intro ε hε
+  set μ := volume.restrict (Ioo (0 : ℝ) Real.pi)
+  set B := ∫ x, (dy x) ^ 2 ∂μ
+  have hB : 0 ≤ B := integral_nonneg fun x => sq_nonneg _
+  set η : ℝ := min 1 (ε / (6 * (B + 1)))
+  have hη : 0 < η := lt_min one_pos (by positivity)
+  have hη1 : η ≤ 1 := min_le_left _ _
+  have hηB : (2 * η + η ^ 2) * B ≤ ε / 2 := by
+    have h3 : (2 * η + η ^ 2) * B ≤ 3 * η * B := by
+      apply mul_le_mul_of_nonneg_right _ hB; nlinarith
+    have h4 : η * (6 * (B + 1)) ≤ ε := by
+      have := min_le_right 1 (ε / (6 * (B + 1)))
+      rwa [le_div_iff₀ (by positivity)] at this
+    nlinarith
+  set C : ℝ := (1 + η) * (1 + 1 / η) + (1 + 1 / η) * (Real.pi * Real.pi)
+  have hC : 0 ≤ C := by positivity
+  obtain ⟨δ, hδ, hCδ⟩ :=
+    apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_inequality_aux_approximation_aux_limit_aux_error_aux_norm_estimate_aux_delta
+      (half_pos hε) C
+  obtain ⟨g, hg, hmean, hgL, hE⟩ :=
+    apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_inequality_aux_approximation_aux_limit_aux_error_aux_approximant
+      hFTC y dy h hδ
+  set E := ∫ x, (dy x - g x) ^ 2 ∂μ
+  have hE0 : 0 ≤ E := integral_nonneg fun x => sq_nonneg _
+  set G : ℝ → ℝ := fun x ↦ ∫ t in (0 : ℝ)..x, g t
+  have hGc : Continuous G := intervalIntegral.continuous_primitive (fun a b => hg.intervalIntegrable a b) 0
+  have hGL : MemLp G 2 μ :=
+    apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_inequality_aux_approximation_aux_limit_aux_error_aux_norm_estimate_aux_transfer_aux_continuous_memLp
+      G hGc
+  have hyG : MemLp (fun x => y x - G x) 2 μ := h.2.2.2.1.sub hGL
+  -- step 1: split y = G + (y − G)
+  have s1 := hsplit G (fun x => y x - G x) η hη hGL hyG
+  simp only [add_sub_cancel] at s1
+  -- step 2: primitive Wirtinger
+  have s2 : ∫ x, (G x) ^ 2 ∂μ ≤ ∫ x, (g x) ^ 2 ∂μ :=
+    apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_inequality_aux_approximation_aux_limit_aux_error_aux_primitive
+      hWirtinger g hg hmean
+  -- step 3: pointwise Cauchy–Schwarz, integrated
+  have hvol : μ.real univ = Real.pi := by
+    simp [μ, Measure.real, Real.volume_Ioo, Real.pi_pos.le]
+  have s3 : ∫ x, (y x - G x) ^ 2 ∂μ ≤ Real.pi * (Real.pi * E) := by
+    have : ∫ x, (y x - G x) ^ 2 ∂μ ≤ ∫ _x, Real.pi * E ∂μ := by
+      refine integral_mono_ae hyG.integrable_sq (integrable_const _) ?_
+      refine (ae_restrict_iff' measurableSet_Ioo).mpr (Filter.Eventually.of_forall fun x hx => ?_)
+      exact hcs g hg x (Ioo_subset_Icc_self hx)
+    rwa [integral_const, hvol, smul_eq_mul] at this
+  -- step 4: g = dy + (g − dy)
+  have s4 := hsplit dy (fun x => g x - dy x) η hη h.2.2.2.2.1 (hgL.sub h.2.2.2.2.1)
+  simp only [add_sub_cancel] at s4
+  have hE' : ∫ x, (g x - dy x) ^ 2 ∂μ = E := by
+    congr 1; funext x; ring
+  rw [hE'] at s4
+  -- combine
+  have hCE : C * E ≤ ε / 2 := (mul_le_mul_of_nonneg_left hE hC).trans hCδ.le
+  have hη' : 0 ≤ 1 + 1 / η := by positivity
+  have key : ∫ x, (y x) ^ 2 ∂μ ≤ (1 + η) ^ 2 * B + C * E := by
+    have a := mul_le_mul_of_nonneg_left (s2.trans s4) (by linarith : (0 : ℝ) ≤ 1 + η)
+    have b := mul_le_mul_of_nonneg_left s3 hη'
+    simp only [C]; nlinarith
+  nlinarith
+
 lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_inequality_aux_approximation_aux_limit_aux_error_aux_norm_estimate_aux_transfer
     (hWirtinger : apm_m98A06_WirtingerFact)
     (hFTC : apm_m98A06_WeakFTCFact) (y dy : ℝ → ℝ)
@@ -2883,7 +2967,9 @@ lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_inequality_aux
     ∀ ε : ℝ, 0 < ε →
       (∫ x, (y x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi))) ≤
         (∫ x, (dy x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi))) + ε := by
-  sorry
+  exact
+    apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_inequality_aux_approximation_aux_limit_aux_error_aux_norm_estimate_aux_transfer_aux_core
+      hWirtinger hFTC y dy h hcs hsplit
 
 lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_inequality_aux_approximation_aux_limit_aux_error_aux_norm_estimate
     (hWirtinger : apm_m98A06_WirtingerFact)
