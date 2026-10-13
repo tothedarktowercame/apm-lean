@@ -1833,4 +1833,50 @@ theorem PairingData.surjective_skeletonArcMap (P : PairingData) :
   obtain ⟨i, t, rfl⟩ := edgePoint_surjective_boundary P.edgeCount P.edgeCount_pos x hx
   exact ⟨(i, t), rfl⟩
 
+/-- Once the two exact kernel relations agree, the representative
+correspondence gives a bijection from the actual skeleton to the entire
+indexed wedge. -/
+noncomputable def PairingData.skeletonWedgeEquivOfKernelAgreement
+    (P : PairingData) (h : P.SkeletonWedgeKernelAgreement) :
+    P.skeleton ≃ PointWedgeQuotient.FiniteWedge (PairingOrbit P.pair) where
+  toFun q := P.signedWedgeArcMap (Classical.choose (P.surjective_skeletonArcMap q))
+  invFun w := P.skeletonArcMap (Classical.choose (P.surjective_signedWedgeArcMap w))
+  left_inv := by
+    intro q
+    let a := Classical.choose (P.surjective_skeletonArcMap q)
+    let b := Classical.choose
+      (P.surjective_signedWedgeArcMap (P.signedWedgeArcMap a))
+    have ha : P.skeletonArcMap a = q :=
+      Classical.choose_spec (P.surjective_skeletonArcMap q)
+    have hb : P.signedWedgeArcMap b = P.signedWedgeArcMap a :=
+      Classical.choose_spec
+        (P.surjective_signedWedgeArcMap (P.signedWedgeArcMap a))
+    change P.skeletonArcMap b = q
+    exact ((h b a).mpr hb).trans ha
+  right_inv := by
+    intro w
+    let a := Classical.choose (P.surjective_signedWedgeArcMap w)
+    let b := Classical.choose
+      (P.surjective_skeletonArcMap (P.skeletonArcMap a))
+    have ha : P.signedWedgeArcMap a = w :=
+      Classical.choose_spec (P.surjective_signedWedgeArcMap w)
+    have hb : P.skeletonArcMap b = P.skeletonArcMap a :=
+      Classical.choose_spec
+        (P.surjective_skeletonArcMap (P.skeletonArcMap a))
+    change P.signedWedgeArcMap b = w
+    exact ((h b a).mp hb).trans ha
+
+theorem PairingData.skeletonWedgeEquivOfKernelAgreement_skeletonArc
+    (P : PairingData) (h : P.SkeletonWedgeKernelAgreement)
+    (i : Fin P.edgeCount) (t : Set.Icc (0 : ℝ) 1) :
+    P.skeletonWedgeEquivOfKernelAgreement h (P.skeletonArc i t) =
+      P.signedWedgeArc i t := by
+  let a : P.SkeletonArcSource := (i, t)
+  let b := Classical.choose
+    (P.surjective_skeletonArcMap (P.skeletonArcMap a))
+  have hb : P.skeletonArcMap b = P.skeletonArcMap a :=
+    Classical.choose_spec (P.surjective_skeletonArcMap (P.skeletonArcMap a))
+  change P.signedWedgeArcMap b = P.signedWedgeArcMap a
+  exact (h b a).mp hb
+
 end ConstructionTargets.PolygonSurfacePiOne
