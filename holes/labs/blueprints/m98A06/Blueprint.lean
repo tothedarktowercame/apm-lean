@@ -368,13 +368,84 @@ lemma apm_m98A06_duBoisReymond_aux_forward_aux_classification_aux_core_aux_first
         a y₀ ya ha y hy)
 
 -- Integration by parts: stationarity gives ∫₀ᵃ g η' = 0 for every admissible η.
+lemma apm_m98A06_duBoisReymond_aux_forward_aux_classification_aux_core_aux_first_integral_aux_weak_aux_eta_deriv
+    (a : ℝ) (ha : 0 < a) (η : ℝ → ℝ)
+    (hη : ContDiffOn ℝ 1 η (Icc 0 a)) :
+    ∀ x ∈ Icc (0 : ℝ) a,
+      HasDerivWithinAt η (derivWithin η (Icc 0 a) x) (Icc 0 a) x := by
+  intro x hx
+  exact (hη.differentiableOn_one x hx).hasDerivWithinAt
+
+lemma apm_m98A06_duBoisReymond_aux_forward_aux_classification_aux_core_aux_first_integral_aux_weak_aux_core
+    (a y₀ ya : ℝ) (ha : 0 < a) (y : ℝ → ℝ)
+    (hy : apm_m98a06_IsStationary a y₀ ya y) :
+    ∀ η : ℝ → ℝ, ContDiffOn ℝ 1 η (Icc 0 a) → η 0 = 0 → η a = 0 →
+      ∫ x in (0 : ℝ)..a,
+        (derivWithin y (Icc 0 a) x + ∫ t in (0 : ℝ)..x, y t) *
+          derivWithin η (Icc 0 a) x = 0 := by
+  intro η hη hη0 hηa
+  have hvar := apm_m98A06_duBoisReymond_aux_forward_aux_unscaled_variation a y₀ ya y hy η hη hη0 hηa
+  have hyc : ContinuousOn y (Icc 0 a) := hy.1.1.continuousOn
+  have hFc := apm_m98A06_duBoisReymond_aux_forward_aux_classification_aux_core_aux_first_integral_aux_primitive_continuous
+    a y₀ ya ha y hy
+  have hηc : ContinuousOn η (Icc 0 a) := hη.continuousOn
+  have hη'c : ContinuousOn (derivWithin η (Icc 0 a)) (Icc 0 a) :=
+    hη.continuousOn_derivWithin (uniqueDiffOn_Icc ha) le_rfl
+  have hy'c : ContinuousOn (derivWithin y (Icc 0 a)) (Icc 0 a) :=
+    hy.1.1.continuousOn_derivWithin (uniqueDiffOn_Icc ha) le_rfl
+  have hu : uIcc (0 : ℝ) a = Icc 0 a := uIcc_of_le ha.le
+  have hmin : min (0 : ℝ) a = 0 := min_eq_left ha.le
+  have hmax : max (0 : ℝ) a = a := max_eq_right ha.le
+  have hFd : ∀ x ∈ Ioo (min (0 : ℝ) a) (max 0 a),
+      HasDerivWithinAt (fun x => ∫ t in (0 : ℝ)..x, y t) (y x) (Ioi x) x := by
+    intro x hx
+    rw [hmin, hmax] at hx
+    have hxc : ContinuousAt y x := hyc.continuousAt (Icc_mem_nhds hx.1 hx.2)
+    exact (intervalIntegral.integral_hasDerivAt_right
+      ((hyc.mono (Icc_subset_Icc_right hx.2.le)).intervalIntegrable_of_Icc hx.1.le)
+      (ContinuousOn.stronglyMeasurableAtFilter isOpen_Ioo
+        (hyc.mono Ioo_subset_Icc_self) x hx) hxc).hasDerivWithinAt
+  have hηd : ∀ x ∈ Ioo (min (0 : ℝ) a) (max 0 a),
+      HasDerivWithinAt η (derivWithin η (Icc 0 a) x) (Ioi x) x := by
+    intro x hx
+    rw [hmin, hmax] at hx
+    exact ((hη.differentiableOn_one x (mem_Icc_of_Ioo hx)).hasDerivWithinAt.hasDerivAt
+      (Icc_mem_nhds hx.1 hx.2)).hasDerivWithinAt
+  have hibp := intervalIntegral.integral_mul_deriv_eq_deriv_mul_of_hasDeriv_right
+    (u := fun x => ∫ t in (0 : ℝ)..x, y t) (v := η) (u' := y)
+    (v' := derivWithin η (Icc 0 a)) (by rw [hu]; exact hFc) (by rw [hu]; exact hηc) hFd hηd
+    (hyc.intervalIntegrable_of_Icc ha.le) (hη'c.intervalIntegrable_of_Icc ha.le)
+  simp only [hηa, hη0, mul_zero, sub_zero, intervalIntegral.integral_same, zero_sub] at hibp
+  have hne : ∀ᵐ x ∂(MeasureTheory.volume : MeasureTheory.Measure ℝ), x ≠ a := by
+    rw [MeasureTheory.ae_iff]; simp
+  have hae : ∫ x in (0 : ℝ)..a, (deriv y x * deriv η x - y x * η x) =
+      ∫ x in (0 : ℝ)..a, (derivWithin y (Icc 0 a) x * derivWithin η (Icc 0 a) x - y x * η x) := by
+    apply intervalIntegral.integral_congr_ae
+    filter_upwards [hne] with x hxa hx
+    rw [uIoc_of_le ha.le] at hx
+    have hx' : x ∈ Ioo (0 : ℝ) a := ⟨hx.1, lt_of_le_of_ne hx.2 hxa⟩
+    simp only [derivWithin_of_mem_nhds (Icc_mem_nhds hx'.1 hx'.2)]
+  rw [hae, intervalIntegral.integral_sub
+    (f := fun x => derivWithin y (Icc 0 a) x * derivWithin η (Icc 0 a) x) (g := fun x => y x * η x)
+    ((hy'c.mul hη'c).intervalIntegrable_of_Icc ha.le)
+    ((hyc.mul hηc).intervalIntegrable_of_Icc ha.le)] at hvar
+  simp_rw [add_mul]
+  rw [intervalIntegral.integral_add
+    (f := fun x => derivWithin y (Icc 0 a) x * derivWithin η (Icc 0 a) x)
+    (g := fun x => (∫ t in (0 : ℝ)..x, y t) * derivWithin η (Icc 0 a) x)
+    ((hy'c.mul hη'c).intervalIntegrable_of_Icc ha.le)
+    ((hFc.mul hη'c).intervalIntegrable_of_Icc ha.le), hibp]
+  linarith
+
 lemma apm_m98A06_duBoisReymond_aux_forward_aux_classification_aux_core_aux_first_integral_aux_weak
     (a y₀ ya : ℝ) (ha : 0 < a) (y : ℝ → ℝ)
     (hy : apm_m98a06_IsStationary a y₀ ya y) :
     ∀ η : ℝ → ℝ, ContDiffOn ℝ 1 η (Icc 0 a) → η 0 = 0 → η a = 0 →
       ∫ x in (0 : ℝ)..a,
         (derivWithin y (Icc 0 a) x + ∫ t in (0 : ℝ)..x, y t) * derivWithin η (Icc 0 a) x = 0 := by
-  sorry
+  exact
+    apm_m98A06_duBoisReymond_aux_forward_aux_classification_aux_core_aux_first_integral_aux_weak_aux_core
+      a y₀ ya ha y hy
 
 -- Classical du Bois-Reymond: a continuous g with ∫ g η' = 0 for all admissible η is constant.
 lemma apm_m98A06_duBoisReymond_aux_forward_aux_classification_aux_core_aux_first_integral_aux_dbr
