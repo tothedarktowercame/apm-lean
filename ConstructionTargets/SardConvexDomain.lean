@@ -984,4 +984,22 @@ theorem encard_whitneyStratumNet_mem_quarter_ball_le_packingNumber
     exact (whitneyStratumNet_spec s k).2.1 hc.1 hd.1 hcd
   exact hsep.encard_le_packingNumber hsub
 
+/-- Translate by `-x` and rescale dyadic stratum `k` to unit scale. -/
+def whitneyNormalize
+    {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    (k : ℤ) (x c : E) : E :=
+  ((2 : ℝ) ^ k)⁻¹ • (c - x)
+
+/-- The Whitney normalization rescales all distances by `2⁻ᵏ`. -/
+theorem dist_whitneyNormalize
+    {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    (k : ℤ) (x c d : E) :
+    dist (whitneyNormalize k x c) (whitneyNormalize k x d) =
+      ((2 : ℝ) ^ k)⁻¹ * dist c d := by
+  rw [dist_eq_norm, dist_eq_norm]
+  simp only [whitneyNormalize, ← smul_sub, norm_smul, Real.norm_eq_abs]
+  rw [abs_of_pos (inv_pos.mpr (by positivity))]
+  congr 1
+  abel
+
 end ConstructionTargets.SardConvexDomain
