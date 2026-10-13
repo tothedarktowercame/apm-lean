@@ -2753,7 +2753,31 @@ lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_inequality_aux
     {X Y : ℝ} (hXY : ∀ ε : ℝ, 0 < ε → X ≤ Y + ε) : X ≤ Y := by
   exact le_of_forall_pos_le_add hXY
 
-lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_inequality_aux_approximation_aux_limit_aux_error
+lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_inequality_aux_approximation_aux_limit_aux_error_aux_approximant
+    (hFTC : apm_m98A06_WeakFTCFact) (y dy : ℝ → ℝ)
+    (h : apm_m98a06_InH10Pi y dy) {δ : ℝ} (hδ : 0 < δ) :
+    ∃ g : ℝ → ℝ, Continuous g ∧
+      (∫ t in (0 : ℝ)..Real.pi, g t) = 0 ∧
+      MemLp g 2 (volume.restrict (Ioo (0 : ℝ) Real.pi)) ∧
+      (∫ x, (dy x - g x) ^ 2
+        ∂(volume.restrict (Ioo (0 : ℝ) Real.pi))) ≤ δ := by
+  apply
+    apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_inequality_aux_approximation_aux_density
+      dy h.2.2.2.2.1
+      (apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_inequality_aux_mean_zero
+        hFTC y dy h) hδ
+
+lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_inequality_aux_approximation_aux_limit_aux_error_aux_primitive
+    (hWirtinger : apm_m98A06_WirtingerFact) (g : ℝ → ℝ)
+    (hg : Continuous g) (hmean : ∫ t in (0 : ℝ)..Real.pi, g t = 0) :
+    let G : ℝ → ℝ := fun x ↦ ∫ t in (0 : ℝ)..x, g t
+    (∫ x, (G x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi))) ≤
+      ∫ x, (g x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)) := by
+  exact
+    apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_inequality_aux_approximation_aux_primitive_wirtinger
+      hWirtinger g hg hmean
+
+lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_inequality_aux_approximation_aux_limit_aux_error_aux_norm_estimate
     (hWirtinger : apm_m98A06_WirtingerFact)
     (hFTC : apm_m98A06_WeakFTCFact) (y dy : ℝ → ℝ)
     (h : apm_m98a06_InH10Pi y dy) :
@@ -2761,6 +2785,17 @@ lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_inequality_aux
       (∫ x, (y x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi))) ≤
         (∫ x, (dy x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi))) + ε := by
   sorry
+
+lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_inequality_aux_approximation_aux_limit_aux_error
+    (hWirtinger : apm_m98A06_WirtingerFact)
+    (hFTC : apm_m98A06_WeakFTCFact) (y dy : ℝ → ℝ)
+    (h : apm_m98a06_InH10Pi y dy) :
+    ∀ ε : ℝ, 0 < ε →
+      (∫ x, (y x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi))) ≤
+        (∫ x, (dy x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi))) + ε := by
+  exact
+    apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_inequality_aux_approximation_aux_limit_aux_error_aux_norm_estimate
+      hWirtinger hFTC y dy h
 
 lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_inequality_aux_approximation_aux_limit
     (hWirtinger : apm_m98A06_WirtingerFact)
