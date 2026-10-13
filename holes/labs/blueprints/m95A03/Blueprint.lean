@@ -967,6 +967,15 @@ lemma apm_m95A03_minimizers_eqOn_aux_deriv_midpoint
 
 /-- Midpoint identity: `E((u+v)/2) = (E u + E v)/2 − Q(u − v)/4`; with both minimal this
 forces `Q(u − v) ≤ 0`. -/
+lemma apm_m95A03_minimizers_eqOn_aux_quadratic_le_aux_algebra
+    (p q f u v du dv : ℝ) :
+    p * ((du + dv) / 2) ^ 2 + q * ((u + v) / 2) ^ 2 +
+        2 * ((u + v) / 2) * f =
+      (p * du ^ 2 + q * u ^ 2 + 2 * u * f) / 2 +
+      (p * dv ^ 2 + q * v ^ 2 + 2 * v * f) / 2 -
+      (p * (du - dv) ^ 2 + q * (u - v) ^ 2) / 4 := by
+  ring
+
 lemma apm_m95A03_minimizers_eqOn_aux_quadratic_le
     (a b : ℝ) (hab : a < b) (p q f u v : ℝ → ℝ) (hp : ContDiff ℝ 1 p)
     (hq : Continuous q) (hf : Continuous f)
@@ -977,7 +986,65 @@ lemma apm_m95A03_minimizers_eqOn_aux_quadratic_le
     (hvmin : IsMinOn (apm_m95A03_energy a b p q f)
       (apm_m95A03_admissible a b 0 0) v) :
     (∫ t in a..b, p t * (deriv (u - v) t) ^ 2 + q t * ((u - v) t) ^ 2) ≤ 0 := by
-  sorry
+  rcases huadm with ⟨hu, hua, hub⟩
+  rcases hvadm with ⟨hv, hva, hvb⟩
+  let m : ℝ → ℝ := fun t => (u t + v t) / 2
+  let Q : ℝ → ℝ := fun t => p t * (deriv (u - v) t) ^ 2 + q t * ((u - v) t) ^ 2
+  let Iu : ℝ → ℝ := fun t => p t * (deriv u t) ^ 2 + q t * (u t) ^ 2 + 2 * u t * f t
+  let Iv : ℝ → ℝ := fun t => p t * (deriv v t) ^ 2 + q t * (v t) ^ 2 + 2 * v t * f t
+  have hdu : Continuous (deriv u) := hu.continuous_deriv_one
+  have hdv : Continuous (deriv v) := hv.continuous_deriv_one
+  have hQ : Continuous Q := by
+    dsimp [Q]
+    rw [show deriv (u - v) = deriv u - deriv v by
+      funext t; exact apm_m95A03_minimizers_eqOn_aux_deriv_sub u v hu hv t]
+    change Continuous (fun t => p t * (deriv u t - deriv v t) ^ 2 + q t * (u t - v t) ^ 2)
+    fun_prop
+  have hIu : Continuous Iu := by dsimp [Iu]; fun_prop
+  have hIv : Continuous Iv := by dsimp [Iv]; fun_prop
+  have hm : m ∈ apm_m95A03_admissible a b 0 0 :=
+    apm_m95A03_minimizers_eqOn_aux_midpoint_mem a b u v ⟨hu, hua, hub⟩ ⟨hv, hva, hvb⟩
+  have hid : apm_m95A03_energy a b p q f m =
+      (apm_m95A03_energy a b p q f u + apm_m95A03_energy a b p q f v) / 2 -
+        (∫ t in a..b, Q t) / 4 := by
+    unfold apm_m95A03_energy
+    change (∫ t in a..b, p t * (deriv m t) ^ 2 + q t * (m t) ^ 2 + 2 * m t * f t) = _
+    rw [show deriv m = fun t => (deriv u t + deriv v t) / 2 by
+      funext t; exact apm_m95A03_minimizers_eqOn_aux_deriv_midpoint u v hu hv t]
+    change (∫ t in a..b, _) = ((∫ t in a..b, Iu t) + (∫ t in a..b, Iv t)) / 2 - (∫ t in a..b, Q t) / 4
+    calc
+      (∫ t in a..b, _) = ∫ t in a..b, Iu t / 2 + Iv t / 2 - Q t / 4 := by
+        apply intervalIntegral.integral_congr
+        intro t _
+        dsimp [m, Iu, Iv, Q]
+        rw [apm_m95A03_minimizers_eqOn_aux_deriv_sub u v hu hv t]
+        exact apm_m95A03_minimizers_eqOn_aux_quadratic_le_aux_algebra
+          (p t) (q t) (f t) (u t) (v t) (deriv u t) (deriv v t)
+      _ = _ := by
+        have hsum : IntervalIntegrable (fun t => Iu t / 2 + Iv t / 2)
+            MeasureTheory.volume a b :=
+          ((hIu.div_const 2).add (hIv.div_const 2)).intervalIntegrable
+            (μ := MeasureTheory.volume) (a := a) (b := b)
+        have hqd : IntervalIntegrable (fun t => Q t / 4)
+            MeasureTheory.volume a b :=
+          (hQ.div_const 4).intervalIntegrable
+            (μ := MeasureTheory.volume) (a := a) (b := b)
+        have hui : IntervalIntegrable (fun t => Iu t / 2)
+            MeasureTheory.volume a b := (hIu.div_const 2).intervalIntegrable
+              (μ := MeasureTheory.volume) (a := a) (b := b)
+        have hvi : IntervalIntegrable (fun t => Iv t / 2)
+            MeasureTheory.volume a b := (hIv.div_const 2).intervalIntegrable
+              (μ := MeasureTheory.volume) (a := a) (b := b)
+        rw [intervalIntegral.integral_sub hsum hqd,
+          intervalIntegral.integral_add hui hvi,
+          intervalIntegral.integral_div, intervalIntegral.integral_div,
+          intervalIntegral.integral_div]
+        ring
+  have hu_le : apm_m95A03_energy a b p q f u ≤ apm_m95A03_energy a b p q f m := humin hm
+  have hv_le : apm_m95A03_energy a b p q f v ≤ apm_m95A03_energy a b p q f m := hvmin hm
+  rw [hid] at hu_le hv_le
+  change (∫ t in a..b, Q t) ≤ 0
+  linarith
 
 /-- A `C¹` function vanishing at `a` whose weighted Dirichlet energy is `≤ 0` vanishes on
 `[a, b]`. -/
