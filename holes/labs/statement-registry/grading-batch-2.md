@@ -15,3 +15,11 @@ is liminf J(sₙ) ≤ J f, false under weak convergence (sₙ = sin(2π(N+n)x) �
 confirmed by an outside re-grade). Corrected in cee82c175 to J f ≤ liminf J(sₙ). Re-grade of the corrected
 statement: "faithful-weak" ((e) states only the vanishing first variation). Re-admission after (e) is
 strengthened to the explicit Euler–Lagrange system and re-graded.
+
+## t02A07 re-grade after cc153cc91 (transversality against T_xX; dim Z = 2 stated)
+
+| id | grade | decl | reason | prelim-defect |
+|---|---|---|---|---|
+| t02A07 | faithful | apm_t02a07 | IsTransverse is now the textbook notion (image of T_yS² + T_xZ = T_xX, vacuous off Z); true: λ² < 1/2 misses Z, λ² > 1/2 hits at regular points of y₂y₃, fails exactly at λ² = 1/2 (4 parameters), so dense; (a) regular value + finrank 2 | source typo (x²)² twice, repaired to the unit sphere |
+
+Grader: read-only Claude subagent, 2026-10-13. Stale encoding note fixed in the same commit series.
