@@ -21,7 +21,68 @@ theorem apm_b96a01_part_a :
       A = AddSubgroup.closure (s : Set V) →
         ∃ (ι : Type*) (b : Module.Basis ι ℚ V) (u : Finset ι),
           A = AddSubgroup.closure (b '' (u : Set ι)) := by
-  sorry
+  intro V _ _ _ A s hs
+  let N : Submodule ℤ V := A.toIntSubmodule
+  have hN : N = Submodule.span ℤ (s : Set V) := by
+    simp [N, hs, AddSubgroup.toIntSubmodule_closure]
+  letI : Module.Finite ℤ N := by
+    rw [hN]
+    infer_instance
+  letI : IsAddTorsionFree V := IsAddTorsionFree.of_module_rat V
+  letI : Module.IsTorsionFree ℤ V := by infer_instance
+  letI : Module.IsTorsionFree ℤ N := by infer_instance
+  let nb := Module.basisOfFiniteTypeTorsionFree' (R := ℤ) (M := N)
+  let n := nb.1
+  let bA : Module.Basis (Fin n) ℤ N := nb.2
+  let v : Fin n → V := fun j ↦ (bA j : V)
+  have hvZ : LinearIndependent ℤ v := by
+    exact bA.linearIndependent.map' N.subtype (Submodule.ker_subtype N)
+  have hvQ : LinearIndependent ℚ v := by
+    exact hvZ.localization (Rₛ := ℚ) (nonZeroDivisors ℤ)
+  let hset : LinearIndepOn ℚ id (Set.range v) := hvQ.linearIndepOn_id
+  let t : Set V := hset.extend (Set.subset_univ _)
+  let b0 : Module.Basis t ℚ V := Module.Basis.extend hset
+  have hv_mem : ∀ j, v j ∈ t := by
+    intro j
+    exact hset.subset_extend (Set.subset_univ _) (Set.mem_range_self j)
+  let e : Fin n → t := fun j ↦ ⟨v j, hv_mem j⟩
+  have heinj : Function.Injective e := by
+    intro j k hjk
+    apply hvQ.injective
+    change v j = v k
+    exact congr_arg (fun z : t ↦ (z : V)) hjk
+  let q := Module.finrank ℚ V
+  let I := ULift (Fin q)
+  let eqv : t ≃ I := (b0.indexEquiv (Module.finBasis ℚ V)).trans Equiv.ulift.symm
+  let b : Module.Basis I ℚ V := b0.reindex eqv
+  let e' : Fin n → I := eqv ∘ e
+  have heinj' : Function.Injective e' := eqv.injective.comp heinj
+  let u : Finset I := Finset.univ.map ⟨e', heinj'⟩
+  refine ⟨I, b, u, ?_⟩
+  have hb_e : ∀ j, b (e' j) = v j := by
+    intro j
+    simp [b, e', eqv, b0, Module.Basis.extend_apply_self hset (e j), e]
+  have himage : b '' (u : Set I) = Set.range v := by
+    ext x
+    constructor
+    · rintro ⟨j, hj, rfl⟩
+      simp only [u, Finset.coe_map, Finset.coe_univ, Set.image_univ,
+        Set.mem_range] at hj
+      obtain ⟨k, rfl⟩ := hj
+      exact ⟨k, (hb_e k).symm⟩
+    · rintro ⟨j, rfl⟩
+      refine ⟨e' j, ?_, hb_e j⟩
+      simp [u]
+  rw [himage]
+  rw [← Submodule.span_int_eq_addSubgroupClosure,
+    ← AddSubgroup.toIntSubmodule_toAddSubgroup A]
+  congr 1
+  change N = Submodule.span ℤ (Set.range v)
+  symm
+  convert congrArg (Submodule.map N.subtype) bA.span_eq
+  · rw [Submodule.map_span, ← Set.range_comp]
+    rfl
+  · exact (Submodule.map_subtype_top N).symm
 -- END SEAT AREA
 
 theorem apm_b96a01_part_b :
