@@ -530,7 +530,123 @@ theorem apm_m99A01_eqOn_extremal_of_residual_zero
     (y : ℝ → ℝ) (hy2 : ContDiff ℝ 2 y) (hyadm : y ∈ apm_m99A01_admissible)
     (hres : ∀ t ∈ Set.Ioo 0 (Real.pi / 2), apm_m99A01_residual y t = 0) :
     Set.EqOn y apm_m99A01_extremal (Set.Icc 0 (Real.pi / 2)) := by
-  sorry
+  let h : ℝ → ℝ := fun x ↦ y x - apm_m99A01_extremal x
+  have he2 : ContDiff ℝ 2 apm_m99A01_extremal := by
+    unfold apm_m99A01_extremal
+    fun_prop
+  have hh2 : ContDiff ℝ 2 h := hy2.sub he2
+  have hh1 : ContDiff ℝ 1 h := hh2.of_le (by norm_num)
+  have hdh1 : ContDiff ℝ 1 (deriv h) := hh2.deriv'
+  have hyd1 : ContDiff ℝ 1 (deriv y) := hy2.deriv'
+  have hed1 : ContDiff ℝ 1 (deriv apm_m99A01_extremal) := he2.deriv'
+  have he0 : apm_m99A01_extremal 0 = 0 := by
+    simp [apm_m99A01_extremal]
+  have heb : apm_m99A01_extremal (Real.pi / 2) = 0 := by
+    unfold apm_m99A01_extremal
+    have hc : Real.cosh (Real.pi / 4) ≠ 0 := ne_of_gt (Real.cosh_pos _)
+    rw [show Real.pi / 2 = 2 * (Real.pi / 4) by ring,
+      Real.cosh_two_mul, Real.sinh_two_mul, Real.tanh_eq_sinh_div_cosh]
+    field_simp [hc]
+    nlinarith [Real.cosh_sq_sub_sinh_sq (Real.pi / 4)]
+  have hh0 : h 0 = 0 := by simp [h, hyadm.2.1, he0]
+  have hhb : h (Real.pi / 2) = 0 := by simp [h, hyadm.2.2, heb]
+  have hd2 : ∀ x ∈ Set.uIcc (0 : ℝ) (Real.pi / 2),
+      HasDerivAt (deriv h) (deriv (deriv h) x) x := by
+    intro x hx
+    exact (hdh1.differentiable (by norm_num) x).hasDerivAt
+  have hd1 : ∀ x ∈ Set.uIcc (0 : ℝ) (Real.pi / 2),
+      HasDerivAt h (deriv h x) x := by
+    intro x hx
+    exact (hh1.differentiable (by norm_num) x).hasDerivAt
+  have hddint : IntervalIntegrable (deriv (deriv h)) MeasureTheory.volume
+      0 (Real.pi / 2) :=
+    (hdh1.continuous_deriv (by norm_num)).intervalIntegrable _ _
+  have hdint : IntervalIntegrable (deriv h) MeasureTheory.volume
+      0 (Real.pi / 2) := hdh1.continuous.intervalIntegrable _ _
+  have hibp := intervalIntegral.integral_mul_deriv_eq_deriv_mul
+    hd2 hd1 hddint hdint
+  rw [hh0, hhb] at hibp
+  simp only [mul_zero, sub_self] at hibp
+  have haedd : ∀ᵐ x ∂MeasureTheory.volume.restrict (Set.Ioc (0 : ℝ) (Real.pi / 2)),
+      deriv (deriv h) x = h x := by
+    have hb : ∀ᵐ x : ℝ ∂MeasureTheory.volume, x ≠ Real.pi / 2 := by
+      rw [MeasureTheory.ae_iff]
+      simp
+    rw [MeasureTheory.ae_restrict_iff' measurableSet_Ioc]
+    filter_upwards [hb] with x hxb
+    intro hx
+    have hx' : x ∈ Set.Ioo (0 : ℝ) (Real.pi / 2) :=
+      ⟨hx.1, lt_of_le_of_ne hx.2 hxb⟩
+    have hyr := hres x hx'
+    unfold apm_m99A01_residual at hyr
+    have heq := apm_m99A01_extremal_ode x
+    have hyd : deriv (deriv h) x =
+        deriv (deriv y) x - deriv (deriv apm_m99A01_extremal) x := by
+      have hyD : Differentiable ℝ y := hy2.differentiable (by norm_num)
+      have heD : Differentiable ℝ apm_m99A01_extremal := he2.differentiable (by norm_num)
+      have hdsub : deriv h = fun z ↦ deriv y z - deriv apm_m99A01_extremal z := by
+        funext z
+        exact deriv_sub (hyD z) (heD z)
+      rw [hdsub]
+      exact deriv_sub
+        (hyd1.differentiable (by norm_num) x)
+        (hed1.differentiable (by norm_num) x)
+    rw [hyd]
+    dsimp [h]
+    linarith
+  have hprod : (∫ x in (0 : ℝ)..(Real.pi / 2),
+      deriv (deriv h) x * h x) = ∫ x in (0 : ℝ)..(Real.pi / 2), h x ^ 2 := by
+    rw [intervalIntegral.integral_of_le (by positivity : (0 : ℝ) ≤ Real.pi / 2),
+      intervalIntegral.integral_of_le (by positivity : (0 : ℝ) ≤ Real.pi / 2)]
+    apply MeasureTheory.integral_congr_ae
+    filter_upwards [haedd] with x hx
+    rw [hx]
+    ring
+  have henergy : (∫ x in (0 : ℝ)..(Real.pi / 2),
+      (deriv h x) ^ 2 + h x ^ 2) = 0 := by
+    have hs1 : IntervalIntegrable (fun x ↦ (deriv h x) ^ 2)
+        MeasureTheory.volume 0 (Real.pi / 2) :=
+      (hdh1.continuous.pow 2).intervalIntegrable _ _
+    have hs2 : IntervalIntegrable (fun x ↦ h x ^ 2)
+        MeasureTheory.volume 0 (Real.pi / 2) :=
+      (hh1.continuous.pow 2).intervalIntegrable _ _
+    have hsquareder : (∫ x in (0 : ℝ)..(Real.pi / 2), (deriv h x) ^ 2) =
+        ∫ x in (0 : ℝ)..(Real.pi / 2), deriv h x * deriv h x := by
+      apply intervalIntegral.integral_congr
+      intro x hx
+      ring
+    rw [intervalIntegral.integral_add hs1 hs2, hsquareder, ← hprod]
+    linarith
+  have hqint : IntervalIntegrable (fun x ↦ (deriv h x) ^ 2 + h x ^ 2)
+      MeasureTheory.volume 0 (Real.pi / 2) :=
+    ((hdh1.continuous.pow 2).add (hh1.continuous.pow 2)).intervalIntegrable _ _
+  have hqae : (fun x ↦ (deriv h x) ^ 2 + h x ^ 2) =ᵐ[
+      MeasureTheory.volume.restrict (Set.Ioc (0 : ℝ) (Real.pi / 2))] 0 :=
+    (intervalIntegral.integral_eq_zero_iff_of_le_of_nonneg_ae
+      (by positivity : (0 : ℝ) ≤ Real.pi / 2)
+      (Filter.Eventually.of_forall fun x ↦ by positivity) hqint).mp henergy
+  have hqae' : ∀ᵐ x ∂MeasureTheory.volume,
+      x ∈ Set.Ioo (0 : ℝ) (Real.pi / 2) →
+        (deriv h x) ^ 2 + h x ^ 2 = 0 := by
+    change ∀ᵐ x ∂MeasureTheory.volume.restrict (Set.Ioc (0 : ℝ) (Real.pi / 2)),
+      (deriv h x) ^ 2 + h x ^ 2 = 0 at hqae
+    rw [MeasureTheory.ae_restrict_iff' measurableSet_Ioc] at hqae
+    filter_upwards [hqae] with x hx
+    intro hmem
+    exact hx ⟨hmem.1, hmem.2.le⟩
+  have hqzero := apm_m99A01_eq_zero_on_Ioo_of_ae
+    (fun x ↦ (deriv h x) ^ 2 + h x ^ 2)
+    ((hdh1.continuous.pow 2).add (hh1.continuous.pow 2)).continuousOn hqae'
+  intro x hx
+  rcases eq_or_lt_of_le hx.1 with rfl | hx0
+  · change y 0 = apm_m99A01_extremal 0
+    rw [hyadm.2.1, he0]
+  rcases eq_or_lt_of_le hx.2 with rfl | hxb
+  · change y (Real.pi / 2) = apm_m99A01_extremal (Real.pi / 2)
+    rw [hyadm.2.2, heb]
+  have hz := hqzero x ⟨hx0, hxb⟩
+  have : h x = 0 := by nlinarith [sq_nonneg (deriv h x), sq_nonneg (h x)]
+  exact sub_eq_zero.mp this
 
 theorem apm_m99A01_stationary_of_eqOn_extremal
     (y : ℝ → ℝ) (hy2 : ContDiff ℝ 2 y) (hyadm : y ∈ apm_m99A01_admissible)
