@@ -1012,6 +1012,75 @@ theorem apm_t96A08_chart_radial_primitive
   · exact apm_t96A08_chart_radial_primitive_coordinate_formula I omega homega_smooth
   · exact apm_t96A08_chart_radial_primitive_euclidean_calculus I
 
+/-- Seat: the evaluation `(y, v) ↦ omegaCoord y v` is smooth on
+`φ.target ×ˢ univ` (as `apm_t96A08_omegaCoord_eval_contDiffOn`, all orders). -/
+theorem apm_t96A08_omegaCoord_eval_contDiffOn_top
+    {E M : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [CompleteSpace E] [TopologicalSpace M]
+    (I : ModelWithCorners ℝ E E) [ChartedSpace E M]
+    [IsManifold I (⊤ : WithTop ℕ∞) M]
+    (omega : ∀ p : M, TangentSpace I p →L[ℝ] ℝ)
+    (homega_smooth : ContMDiff I.tangent 𝓘(ℝ, ℝ) (⊤ : WithTop ℕ∞)
+      (fun v : TangentBundle I M => omega v.1 v.2))
+    (x : M) :
+    ContDiffOn ℝ (⊤ : WithTop ℕ∞)
+      (fun p : E × E ↦ apm_t96A08_omegaCoord I omega x p.1 p.2)
+      ((extChartAt I x).target ×ˢ Set.univ) := by
+  sorry
+
+/-- Seat (pure analysis): a family of continuous linear functionals whose
+evaluation is smooth on `S ×ˢ univ` is smooth on `S` (operator norm): `L y` is
+`fderivWithin` of the evaluation at `(y, 0)` composed with `inr`, and
+`fderivWithin` of a smooth map is smooth (`ContDiffOn.fderivWithin`). -/
+theorem apm_t96A08_contDiffOn_of_eval_contDiffOn
+    {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    (S : Set E) (L : E → (E →L[ℝ] ℝ)) (hS : UniqueDiffOn ℝ S)
+    (hL : ContDiffOn ℝ (⊤ : WithTop ℕ∞) (fun p : E × E ↦ L p.1 p.2) (S ×ˢ Set.univ)) :
+    ContDiffOn ℝ (⊤ : WithTop ℕ∞) L S := by
+  sorry
+
+/-- Seat: in the chart at `x`, `f ∘ φ.symm` has within-derivative
+`omegaCoord y` at each `y ∈ φ.target` (chain rule:
+`HasMFDerivAt f p (omega p)` with `p = φ.symm y`, composed with
+`mfderivWithin φ.symm (range I) y`; `HasMFDerivAt.comp_hasMFDerivWithinAt`,
+then `hasMFDerivWithinAt_iff_hasFDerivWithinAt` on the model space). -/
+theorem apm_t96A08_chart_hasFDerivWithinAt
+    {E M : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [CompleteSpace E] [TopologicalSpace M]
+    (I : ModelWithCorners ℝ E E) [ChartedSpace E M]
+    [IsManifold I (⊤ : WithTop ℕ∞) M]
+    (omega : ∀ p : M, TangentSpace I p →L[ℝ] ℝ)
+    (f : M → ℝ) (hf : ∀ p : M, HasMFDerivAt I 𝓘(ℝ, ℝ) f p (omega p)) (x : M) :
+    ∀ y ∈ (extChartAt I x).target,
+      HasFDerivWithinAt (f ∘ (extChartAt I x).symm)
+        (apm_t96A08_omegaCoord I omega x y) (extChartAt I x).target y := by
+  sorry
+
+/-- Seat (pure analysis): if `g` has within-derivative `L y` at every point of
+a uniquely differentiable `S` and `L` is smooth on `S`, then `g` is smooth on
+`S` (`contDiffOn_infty_iff_fderivWithin`, with `fderivWithin g S = L` on `S`). -/
+theorem apm_t96A08_contDiffOn_of_hasFDerivWithinAt
+    {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    (S : Set E) (g : E → ℝ) (L : E → (E →L[ℝ] ℝ)) (hS : UniqueDiffOn ℝ S)
+    (hg : ∀ y ∈ S, HasFDerivWithinAt g (L y) S y)
+    (hL : ContDiffOn ℝ (⊤ : WithTop ℕ∞) L S) :
+    ContDiffOn ℝ (⊤ : WithTop ℕ∞) g S := by
+  sorry
+
+/-- Seat: a real function on `M` that is smooth in every chart
+(`f ∘ (extChartAt I x).symm` smooth on `(extChartAt I x).target`) is smooth
+(`contMDiffAt_iff_target`/`contMDiffOn_extChartAt_symm`, `contMDiff_iff`). -/
+theorem apm_t96A08_contMDiff_of_chart
+    {E M : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [CompleteSpace E] [TopologicalSpace M]
+    (I : ModelWithCorners ℝ E E) [ChartedSpace E M]
+    [IsManifold I (⊤ : WithTop ℕ∞) M]
+    (f : M → ℝ)
+    (hf : ∀ x : M, ContDiffOn ℝ (⊤ : WithTop ℕ∞) (f ∘ (extChartAt I x).symm)
+      (extChartAt I x).target) :
+    ContMDiff I 𝓘(ℝ, ℝ) (⊤ : WithTop ℕ∞) f := by
+  sorry
+
 /-- Seat (claude-14 restructure): a function whose manifold derivative exists
 everywhere and equals a smooth one-form is smooth.  In the chart at `p`,
 `f ∘ φ.symm` has within-derivative `omegaCoord` on `φ.target ∩ range I`
@@ -1027,7 +1096,13 @@ theorem apm_t96A08_contMDiff_of_hasMFDerivAt
       (fun v : TangentBundle I M => omega v.1 v.2))
     (f : M → ℝ) (hf : ∀ p : M, HasMFDerivAt I 𝓘(ℝ, ℝ) f p (omega p)) :
     ContMDiff I 𝓘(ℝ, ℝ) (⊤ : WithTop ℕ∞) f := by
-  sorry
+  apply apm_t96A08_contMDiff_of_chart I f
+  intro x
+  have hS : UniqueDiffOn ℝ (extChartAt I x).target := uniqueDiffOn_extChartAt_target x
+  exact apm_t96A08_contDiffOn_of_hasFDerivWithinAt _ _ _ hS
+    (apm_t96A08_chart_hasFDerivWithinAt I omega f hf x)
+    (apm_t96A08_contDiffOn_of_eval_contDiffOn _ _ hS
+      (apm_t96A08_omegaCoord_eval_contDiffOn_top I omega homega_smooth x))
 
 /-- Seat (claude-14 restructure of the former proved glue): additive
 concatenation and local primitives with the right derivative at their centre
