@@ -1033,3 +1033,9 @@ followed by mapped forward is the identity morphism.
 uses the categorical combination, then converts composition into the reversed
 multiplication order of the single-object target.  The full right comparison
 now has one mapped reverse morphism between its outer restriction counits.
+
+`genericPointWedgeCoordinateSpanGlobalRestrictionRightComparison_eq_namedOuter`
+evaluates those endpoint objects.  The comparison is now bracketed by the
+source restriction element at the inverse image of `y₀` and the fixed
+right-base element, exactly the two terms in the existing counit-naturality
+equation.

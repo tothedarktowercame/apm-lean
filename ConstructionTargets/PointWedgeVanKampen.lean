@@ -4597,6 +4597,26 @@ theorem genericPointWedgeCoordinateSpanGlobalRestrictionRightComparison_eq_rever
   simp only [SingleObj.comp_as_mul, mul_assoc]
   rfl
 
+/-- Evaluating the two outer objects puts the right comparison between the
+named source restriction element and the fixed right-base element. -/
+theorem genericPointWedgeCoordinateSpanGlobalRestrictionRightComparison_eq_namedOuter :
+    let eR := genericPointWedgeRightGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    genericPointWedgeCoordinateSpanGlobalRestrictionRightComparison
+        x₀ y₀ M N hM hN hy hx cM cN =
+      (genericPointWedgeIdentityGlobalRightRestrictionElement
+          x₀ y₀ M N hM hN hy hx cM cN
+            (eR.inverse.obj (FundamentalGroupoid.mk y₀)))⁻¹ *
+        (genericPointWedgeIdentityActualSpan
+          x₀ y₀ M N hM hN hy hx cM cN).right.map
+            (genericPointWedgeRightBaseToInverseBase
+              x₀ y₀ M N hM hN hy hx cM cN) *
+        genericPointWedgeIdentityGlobalRightBaseElement
+          x₀ y₀ M N hM hN hy hx cM cN := by
+  simpa only [genericPointWedgeIdentityGlobalRightBaseElement] using
+    genericPointWedgeCoordinateSpanGlobalRestrictionRightComparison_eq_reverse
+      x₀ y₀ M N hM hN hy hx cM cN
+
 omit [PathConnectedSpace X] in
 /-- The connector normal form of the mapped lifted right loop is conjugation
 by the explicit equality transport at its common endpoint. -/
@@ -5680,6 +5700,7 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeRightInverseBaseToRightBaseFromSpan_map_eq_inv
 #print axioms genericPointWedgeRightReverse_forward_map_comp
 #print axioms genericPointWedgeCoordinateSpanGlobalRestrictionRightComparison_eq_reverse
+#print axioms genericPointWedgeCoordinateSpanGlobalRestrictionRightComparison_eq_namedOuter
 #print axioms genericPointWedgeMappedOpenCoverCounit_namedGlueSquare
 #print axioms genericPointWedgeMappedCoordinateSpanCounit_glueSquare
 #print axioms genericPointWedgeMappedCoordinateSpanSourceGlue
