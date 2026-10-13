@@ -113898,6 +113898,17 @@
       "lake build ConstructionTargets.ThreeCirclesFundamentalGroup",
       :exit 1,
       :finding "B12 file absent."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791903701503-9905-01f621c7",
+     :commands
+     ["git show/diff 8fec4041^..8fec4041"
+      "git archive 8fec4041; lake env lean archived PointWedgeVanKampen.lean"
+      "sha256/diff-tree/placeholder checks; statement-registry.py check"
+      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (expected absent)"],
+     :finding
+     "Reviewer codex-3. PASS program STOP: 8fec4041 adds two compiled, sorry-free transport results after 51177486. Eliminating the named coordinate-object equality preserves the dependent inverse-span normal form; combining it with the proved shifted round-trip unit has the correct factor order and yields the chosen-base inverse-span form. Scope is Lean+MD only; hashes match ledger (c0a54283/4d99c4a5/0bca6ce3), placeholders 0, registry 150/150, axioms standard only. Residual: identify the chosen-base normal form with the projection factor, then projection=1, inl, B6/B12; B12 absent."},
     :commit "8fec4041048a116f66a781387adc31ac353f72e2",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
@@ -113908,7 +113919,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113929,7 +113940,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Shifted round-trip normal form is identity.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Shifted normal-form product transported to chosen coordinate base.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -114709,7 +114720,11 @@
      :reason "Shifted recurrence and mapped identity proved."}
     {:job 5,
      :commit "51177486ba5786906edc01f792df135a699b5e2f",
-     :reason "Shifted round-trip normal form is identity."}]}
+     :reason "Shifted round-trip normal form is identity."}
+    {:job 6,
+     :commit "8fec4041048a116f66a781387adc31ac353f72e2",
+     :reason
+     "Shifted normal-form product transported to chosen coordinate base."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
