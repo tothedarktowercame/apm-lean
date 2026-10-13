@@ -356,9 +356,66 @@ theorem apm_t00j01_foldFiberCard_pi :
   exact apm_t00j01_foldFiberCard_pi_aux_angle_count
 
 /-- The other selected regular fiber has exactly one circle point. -/
+lemma apm_t00j01_foldFiberCard_one_aux_angle (z : Circle) :
+    ∃ θ : ℝ, θ ∈ Set.Ioc (-Real.pi) Real.pi ∧ Circle.exp θ = z := by
+  simpa only [Set.mem_univ, and_true] using Circle.surjOn_exp_neg_pi_pi (Set.mem_univ z)
+
+lemma apm_t00j01_foldFiberCard_one_aux_unique (z : Circle)
+    (hz : apm_t00j01_fold z = 1) : z = 1 := by
+  obtain ⟨θ, hθ, rfl⟩ := apm_t00j01_foldFiberCard_one_aux_angle z
+  rw [apm_t00j01_fold_exp] at hz
+  have hexp : Circle.exp (apm_t00j01_foldLift θ) = Circle.exp 0 := by simpa using hz
+  obtain ⟨n, hn⟩ := Circle.exp_eq_exp.mp hexp
+  have hsin_nonneg : 0 ≤ θ → 0 ≤ Real.sin θ := by
+    intro h0
+    exact Real.sin_nonneg_of_nonneg_of_le_pi h0 hθ.2
+  have hsin_nonpos : θ ≤ 0 → Real.sin θ ≤ 0 := by
+    intro h0
+    have hneg : 0 ≤ -θ := neg_nonneg.mpr h0
+    have hle : -θ ≤ Real.pi := by linarith [hθ.1]
+    simpa only [Real.sin_neg, neg_nonneg] using
+      (Real.sin_nonneg_of_nonneg_of_le_pi hneg hle)
+  have hbound : |apm_t00j01_foldLift θ| < 2 * Real.pi := by
+    rw [apm_t00j01_foldLift]
+    calc
+      |θ + 2 * Real.sin θ| ≤ |θ| + 2 * |Real.sin θ| := by
+        simpa only [abs_mul, abs_of_nonneg (by norm_num : (0 : ℝ) ≤ 2)] using
+          abs_add_le θ (2 * Real.sin θ)
+      _ ≤ Real.pi + 2 := by
+        have ha : |θ| ≤ Real.pi := (abs_le).2 ⟨by linarith [hθ.1], hθ.2⟩
+        have hs : |Real.sin θ| ≤ 1 :=
+          (abs_le).2 ⟨Real.neg_one_le_sin θ, Real.sin_le_one θ⟩
+        linarith
+      _ < 2 * Real.pi := by linarith [Real.pi_gt_three]
+  have hn0 : n = 0 := by
+    have hnabs : |(n : ℝ)| < 1 := by
+      rw [apm_t00j01_foldLift] at hn hbound
+      have hpi : 0 < 2 * Real.pi := by positivity
+      rw [hn, zero_add, abs_mul, abs_of_pos hpi] at hbound
+      nlinarith
+    have hnlt : (n : ℝ) < 1 := lt_of_le_of_lt (le_abs_self _) hnabs
+    have hnneglt : (-(n : ℝ)) < 1 := lt_of_le_of_lt (neg_le_abs _) hnabs
+    have hn_lt : n < 1 := by exact_mod_cast hnlt
+    have hn_gt : -1 < n := by exact_mod_cast (show (-1 : ℝ) < n by linarith)
+    omega
+  have hphi : θ + 2 * Real.sin θ = 0 := by
+    simpa [apm_t00j01_foldLift, hn0] using hn
+  have hθ0 : θ = 0 := by
+    rcases le_total θ 0 with hneg | hpos
+    · have hs := hsin_nonpos hneg
+      linarith
+    · have hs := hsin_nonneg hpos
+      linarith
+  simp [hθ0]
+
 theorem apm_t00j01_foldFiberCard_one :
     Nat.card {z : Circle // apm_t00j01_fold z = 1} = 1 := by
-  sorry
+  let x : {z : Circle // apm_t00j01_fold z = 1} :=
+    ⟨1, by simpa using apm_t00j01_fold_zero⟩
+  letI : Unique {z : Circle // apm_t00j01_fold z = 1} := {
+    default := x
+    uniq := fun y => Subtype.ext (apm_t00j01_foldFiberCard_one_aux_unique y y.property) }
+  exact Nat.card_unique
 
 theorem apm_t00j01 :
     (apm_t00j01_isThreeManifold apm_t00j01_nonorientable3 ∧
