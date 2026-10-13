@@ -36104,9 +36104,51 @@
    [:lemma-constructiontargets-sardconvexdomain-eq-whitneydyadicindexof-of-mem-cube-of-gene],
    :other-consumers []}
   {:consumer :t93J03,
-   :stop-count 0,
+   :stop-count 1,
+   :evidence
+   {:placeholder-delta {:t93J03 [1 1]},
+    :residual
+    "Build literal orbit-quotient homeomorphism, then C1 pi1 adapter; C2 cyclic cover; copy compiled assembly into Main.",
+    :outcome :stop,
+    :warnings
+    ["reference Blueprint.lean retains expected sorryAx in unfinished library lemmas"],
+    :missing-theorems
+    [{:name "t93J03_kleinBottle_pi1_every_basepoint",
+      :type
+      "forall k:KleinBottle, FundamentalGroup k equiv PresentedKleinGroup",
+      :status :not-started,
+      :consumers [:t93J03],
+      :depends-on [],
+      :area "covering-subgroup-correspondence"}
+     {:name "t93J03_cyclicCover_zpowers_generatorA",
+      :type
+      "cylinder cover with planar embedding and induced subgroup comap e <a>",
+      :status :not-started,
+      :consumers [:t93J03],
+      :depends-on ["t93J03_kleinBottle_pi1_every_basepoint"],
+      :area "covering-subgroup-correspondence"}],
+    :statement-hashes {:registry "150/150"},
+    :disposition :stop,
+    :axioms [],
+    :author :topo-10,
+    :reason
+    "Blueprint written and committed. It records the two LIBRARY obligations, proved lifting/embedding assembly, dependency layers, truth checks, and gates; implementation continues with the literal orbit-quotient homeomorphism.",
+    :commands
+    [{:cmd "lake env lean holes/labs/blueprints/t93J03/Blueprint.lean",
+      :exit 0}
+     {:cmd "statement registry; blueprint headings; scoped diff",
+      :exit 0}
+     {:cmd "git commit", :exit 0}],
+    :commit "81cda184c2a072a73b5f073ee163cfff612cd84b",
+    :changed-paths ["ConstructionTargets/t93J03Closure.blueprint.md"],
+    :fixture
+    {:path "ConstructionTargets/t93J03Closure.blueprint.md",
+     :sha256
+     "a1b69533216919b91980135fea578beb4b220d2e9410179680ce4073c0c21bdb",
+     :mode :blueprint},
+    :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -36249,6 +36291,42 @@
    :fail-count 0,
    :depends-on [:program-2026-10-13-collared-connected-sum-homology],
    :program true,
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t93J03_kleinBottle_pi1_every_basepoint",
+    :type
+    "forall k:KleinBottle, FundamentalGroup k equiv PresentedKleinGroup"},
+   :lemma
+   {:name "t93J03_kleinBottle_pi1_every_basepoint",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type
+    "forall k:KleinBottle, FundamentalGroup k equiv PresentedKleinGroup",
+    :area "covering-subgroup-correspondence"},
+   :id :lemma-t93j03-kleinbottle-pi1-every-basepoint,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t93J03_cyclicCover_zpowers_generatorA",
+    :type
+    "cylinder cover with planar embedding and induced subgroup comap e <a>"},
+   :lemma
+   {:name "t93J03_cyclicCover_zpowers_generatorA",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type
+    "cylinder cover with planar embedding and induced subgroup comap e <a>",
+    :area "covering-subgroup-correspondence"},
+   :id :lemma-t93j03-cycliccover-zpowers-generatora,
+   :kind :lemma,
+   :depends-on [:lemma-t93j03-kleinbottle-pi1-every-basepoint],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
