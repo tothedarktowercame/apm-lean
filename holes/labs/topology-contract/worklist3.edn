@@ -24342,8 +24342,66 @@
      :typed-residual-change
      :infrastructure-packets
      :review-outcomes]},
+   :evidence
+   {:outcome :replan,
+    :seat "topo-12",
+    :commands
+    [{:cmd
+      "bb holes/labs/topology-contract/build_step.bb priorities holes/labs/topology-contract/worklist3.edn",
+      :exit 0}],
+    :finding
+    {:measures "Δ0; residual B7→B3; 2 packets; B1 PASS/B7 STOP",
+     :routes
+     "A08:1 placeholder,31/2; B3→B4→B5→B6→finite-dimensional B7→B9→adapter",
+     :top
+     "smooth_compact_surface_classification; rule0 reroutes A08 through B3"},
+    :replacement-items
+    [{:bounded-exception "Rule0; named by stopped B7.",
+      :consumer :t01A08,
+      :implements-lemma :lemma-closedset-whitneycubecover,
+      :phase :probe,
+      :state :open,
+      :scope ["ConstructionTargets/SardConvexDomain.lean"],
+      :dag-node "SardConvexDomain.blueprint/B3",
+      :acceptance
+      {:probe "Compile B3 representation or exactly one prerequisite.",
+       :declaration
+       "ConstructionTargets.SardConvexDomain.closedSet_whitneyCubeCover",
+       :type
+       "finite-dimensional Whitney cube cover with nearest points; B3",
+       :blueprint "ConstructionTargets/SardConvexDomain.blueprint.md",
+       :placeholder "t01A08 sorry",
+       :route-step "B3 Whitney cubes"},
+      :id :r-a08-sard-b3-whitney-cubes-1,
+      :kind :reusable-theorem,
+      :area "sard-convex-domain",
+      :depends-on [:r-topo3-cp15],
+      :current-residual "B4-B6, finite-dimensional B7, B9.",
+      :other-consumers []}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 1,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :phase :strategy,
+      :state :open,
+      :scope [],
+      :dag-node "TOPOLOGY-ROUTES.md",
+      :acceptance {:strategy "Review B3 probe; rerank."},
+      :id :r-topo3-cp16,
+      :kind :strategy-checkpoint,
+      :area "portfolio",
+      :depends-on [:r-a08-sard-b3-whitney-cubes-1],
+      :current-residual "Continue A08 Whitney route.",
+      :other-consumers []}],
+    :author "topo-12",
+    :disposition :replan},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance {:strategy "Review Sard probe; rerank."},
@@ -24352,6 +24410,48 @@
    :area "portfolio",
    :depends-on [:r-a08-sard-critical-image-1 :r-topo3-cp14b],
    :current-residual "Close A08 route.",
+   :other-consumers []}
+  {:bounded-exception "Rule0; named by stopped B7.",
+   :consumer :t01A08,
+   :implements-lemma :lemma-closedset-whitneycubecover,
+   :phase :probe,
+   :state :blocked,
+   :scope ["ConstructionTargets/SardConvexDomain.lean"],
+   :dag-node "SardConvexDomain.blueprint/B3",
+   :acceptance
+   {:probe "Compile B3 representation or exactly one prerequisite.",
+    :declaration
+    "ConstructionTargets.SardConvexDomain.closedSet_whitneyCubeCover",
+    :type
+    "finite-dimensional Whitney cube cover with nearest points; B3",
+    :blueprint "ConstructionTargets/SardConvexDomain.blueprint.md",
+    :placeholder "t01A08 sorry",
+    :route-step "B3 Whitney cubes"},
+   :id :r-a08-sard-b3-whitney-cubes-1,
+   :kind :reusable-theorem,
+   :area "sard-convex-domain",
+   :depends-on [:r-topo3-cp15],
+   :current-residual "B4-B6, finite-dimensional B7, B9.",
+   :other-consumers []}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 1,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md",
+   :acceptance {:strategy "Review B3 probe; rerank."},
+   :id :r-topo3-cp16,
+   :kind :strategy-checkpoint,
+   :area "portfolio",
+   :depends-on [:r-a08-sard-b3-whitney-cubes-1 :r-topo3-cp15],
+   :current-residual "Continue A08 Whitney route.",
    :other-consumers []}
   {:bounded-exception "Rule0.",
    :consumer :t01A08,
