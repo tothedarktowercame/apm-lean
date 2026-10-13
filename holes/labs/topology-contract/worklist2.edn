@@ -76416,18 +76416,20 @@
   {:consumer :t96J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :evidence
    {:placeholder-delta 0,
-    :residual "Prove coverage/topology/wedge relation; then B8/B9.",
+    :residual
+    "Prove arc coverage, quotient topology, and wedge relation; then B8/B9.",
     :outcome :stop,
     :warnings ["preexisting/imported lints"],
     :missing-theorems
-    [{:name "PairingData.skeletonArcQuotientEquivRange",
-      :type "arc kernel quotient ≃ actual skeleton image",
+    [{:name "PointWedgeQuotient.FiniteWedge",
+      :type
+      "quotient of discretely indexed circles at their basepoints",
       :status :proved,
       :consumers [:t96J02 :t92J05 :t94J04 :t97A01 :t97A03],
-      :depends-on ["PairingData.skeletonArc_signed_coordinate"],
+      :depends-on [],
       :area "polygon-surface-pi1"}
      {:name
       "ConstructionTargets.PolygonSurfacePiOne.skeletonHomeomorphWedge",
@@ -76438,12 +76440,12 @@
       :area "polygon-surface-pi1"}],
     :statement-hashes
     {:registry "131/0",
-     :module "8b147d2667db260ad38f7fd5f4c08b47f9e317a4"},
+     :module "af5299cc1476df77930c73dbb7f9a1473655c329"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
     :reason
-    "The arc-kernel quotient equals its actual skeleton image; full coverage, topology, and wedge-relation comparison remain.",
+    "Repaired FiniteWedge: its index now has the discrete topology ⊤, not the indiscrete topology ⊥. Coverage and quotient-homeomorphism proofs remain.",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/PolygonSurfacePiOne.lean",
@@ -76452,32 +76454,19 @@
       :exit 0}
      {:cmd "registry check", :exit 0, :output "131/0"}
      {:cmd "sorry/admit/axiom scan", :exit 0, :output "0/0/0"}
-     {:cmd "#print axioms skeletonArcQuotientEquivRange", :exit 0}
-     {:cmd "git show --check 1a3c1ab78", :exit 0}],
-    :diagnostic-history
-    [{:cmd "first compile",
-      :exit 1,
-      :correction "fixed kernel equality orientation"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1791851842975-8104-61157ea2",
-     :commands
-     ["git show/diff/hash 1a3c1ab78"
-      "lake env lean ConstructionTargets/PolygonSurfacePiOne.lean"
-      "python3 scripts/statement-registry.py check"
-      "#print axioms + placeholder scan"],
-     :finding
-     "PASS on STOP after real progress: commit 1a3c1ab78 defines the boundary-arc parametrization into the actual P.skeleton, its exact kernel relation, and an equivalence from that kernel quotient to the actual image. This is a set-level representation boundary, not the claimed homeomorphism; full arc coverage, quotient topology, comparison with the wedge relation, and signed equations remain explicitly partial. Scope is exact; fixture SHA-256 7e99c185...190bf and blob 8b147d26...317a4 match. Fresh Lean/registry gates pass (131/0), placeholders are 0, and the equivalence uses only propext, Classical.choice, Quot.sound."},
-    :commit "1a3c1ab78",
+     {:cmd
+      "#print axioms continuous_wedgeCircle/skeletonArcQuotientEquivRange",
+      :exit 0}
+     {:cmd "git show --check ee79eaeb2", :exit 0}],
+    :commit "ee79eaeb2",
     :changed-paths ["ConstructionTargets/PolygonSurfacePiOne.lean"],
     :fixture
     {:path "ConstructionTargets/PolygonSurfacePiOne.lean",
      :sha256
-     "7e99c185f1e4e10fb11612c8a09addd3d145d4f62e8d376b69c05248106190bf"},
+     "386d0e41aa8f1cd65c4f4d02675db497aa426c0b9bc5b61c551f7753dd5ae305"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/PolygonSurfacePiOne.lean"],
    :dag-node "ConstructionTargets/PolygonSurfacePiOne.blueprint.md/B7",
    :acceptance
