@@ -24430,7 +24430,7 @@
    :consumer :t01A08,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 0,
    :review-finding
    "extend Mathlib: state and prove the missing theorem in scope",
    :implements-lemma :lemma-closedset-whitneycubecover,
@@ -24472,6 +24472,17 @@
     [{:cmd "initial build",
       :exit 1,
       :correction "used explicit NNReal radius type"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791902740389-9881-7ca509d7",
+     :commands
+     ["git show/diff 8128649; scope/type checks"
+      "sha256sum + lake env lean frozen fixture"
+      "lake build ConstructionTargets.SardConvexDomain"
+      "statement registry check; forbidden-count scan"],
+     :finding
+     "PASS. Recorded topo-10 commit 8128649 changes only the scoped Lean file and proves the maximal-net selection principle: Zorn gives a maximal separated subset N⊆A, then Mathlib maximality yields a same-radius cover. The NNReal/PseudoEMetricSpace boundary matches Metric.IsSeparated and Metric.IsCover. Fixture hash b0ff0aa8... matches; build/fixture pass; registry 150/150; forbidden placeholders stay 0; only standard axioms. Valid compiled B3 progress; STOP lists stratum application, packing, and assembly."},
     :commit "81286493603365c3376ae79b1a0822eebe8bbfec",
     :changed-paths ["ConstructionTargets/SardConvexDomain.lean"],
     :fixture
@@ -24481,7 +24492,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain.blueprint/B3",
    :acceptance
@@ -35328,7 +35339,7 @@
    :other-consumers []}
   {:consumer :t01A08,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -35341,7 +35352,9 @@
     :reported-by [:r-a08-sard-b3-whitney-cubes-1],
     :type "every metric set has a maximal separated same-radius cover",
     :area "sard-convex-domain",
-    :proved-in :r-a08-sard-b3-whitney-cubes-1},
+    :proved-in :r-a08-sard-b3-whitney-cubes-1,
+    :banked-by :r-a08-sard-b3-whitney-cubes-1,
+    :banked-commit "81286493603365c3376ae79b1a0822eebe8bbfec"},
    :id
    :lemma-constructiontargets-sardconvexdomain-exists-maximalseparated-cover,
    :kind :lemma,
