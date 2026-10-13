@@ -76414,7 +76414,9 @@
    :current-residual "Elect B7.",
    :other-consumers []}
   {:consumer :t96J02,
-   :stop-count 1,
+   :owner-reopen
+   "reopened: a lemma this row reported missing is now banked",
+   :stop-count 0,
    :evidence
    {:placeholder-delta 0,
     :residual "Complete B7 homeomorphism/equations; then B8/B9.",
@@ -76458,6 +76460,18 @@
     [{:cmd "first compile",
       :exit 1,
       :correction "explicit discrete index topology"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791849916752-8083-40d5098d",
+     :commands
+     ["git show/diff/hash 1a940f0bd"
+      "lake env lean ConstructionTargets/PolygonSurfacePiOne.lean"
+      "lake build ConstructionTargets.PolygonSurfacePiOne"
+      "python3 scripts/statement-registry.py check"
+      "#print axioms + placeholder scan"],
+     :finding
+     "PASS on STOP after real progress: commit 1a940f0bd adds a compiled orbit-indexed quotient of circles identifying exactly their basepoints, continuous leg inclusions, common-basepoint equality, and the paired-orbit positive coordinate equation. The final skeleton homeomorphism, boundary quotient inverse, and positive/negative signed arc equations remain explicitly not-started, so no facade is claimed as B7 completion. Scope is exact; fixture SHA-256 db688288...670a1 and blob 0b38e409...7859 match. Fresh Lean/build gates pass, registry is 131/0, placeholders are 0, and supporting results use only propext, Classical.choice, Quot.sound."},
     :commit "1a940f0bd",
     :changed-paths ["ConstructionTargets/PolygonSurfacePiOne.lean"],
     :fixture
@@ -76466,7 +76480,7 @@
      "db68828847e66d4ec38e432b6daf6f31692e682cbed0858380debb853f3670a1"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope ["ConstructionTargets/PolygonSurfacePiOne.lean"],
    :dag-node "ConstructionTargets/PolygonSurfacePiOne.blueprint.md/B7",
    :acceptance
@@ -76480,6 +76494,7 @@
    :id :routes-2026-10-12-polygon-b7-topo2-r1,
    :kind :reusable-theorem,
    :area "polygon-surface-pi1",
+   :fail-count 0,
    :depends-on
    [:routes-2026-10-12-polygon-b6-topo2-r1
     :routes-2026-10-12-checkpoint-topo2-r21],
@@ -86670,7 +86685,7 @@
    :other-consumers [:t92J05 :t94J04 :t97A01 :t97A03]}
   {:consumer :t96J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "PointWedgeQuotient.FiniteWedge",
@@ -86680,7 +86695,9 @@
     :reported-by [:routes-2026-10-12-polygon-b7-topo2-r1],
     :type "orbit-indexed circles with basepoints identified",
     :area "polygon-surface-pi1",
-    :proved-in :routes-2026-10-12-polygon-b7-topo2-r1},
+    :proved-in :routes-2026-10-12-polygon-b7-topo2-r1,
+    :banked-by :routes-2026-10-12-polygon-b7-topo2-r1,
+    :banked-commit "1a940f0bd"},
    :id :lemma-pointwedgequotient-finitewedge,
    :kind :lemma,
    :depends-on [],
