@@ -1592,4 +1592,39 @@ def PairingData.positiveWedgeArc (P : PairingData) (i : Fin P.edgeCount)
     P.positiveWedgeArc (P.pair i) z = P.positiveWedgeArc i z := by
   simp [PairingData.positiveWedgeArc]
 
+/-- The standard endpoint-identified parametrization of the circle. -/
+def circleArc (t : Set.Icc (0 : ℝ) 1) : Circle :=
+  AddCircle.toCircle (t.1 : AddCircle (1 : ℝ))
+
+/-- The arc coordinate selected by the sign of an oriented polygon edge.
+Negative edges use the inverse traversal. -/
+def PairingData.signedWedgeArc (P : PairingData) (i : Fin P.edgeCount)
+    (t : Set.Icc (0 : ℝ) 1) :
+    PointWedgeQuotient.FiniteWedge (PairingOrbit P.pair) :=
+  wedgeCircle (P.orbit i) (if P.sign i then circleArc t else circleArc (reverseIcc t))
+
+theorem PairingData.signedWedgeArc_of_sign (P : PairingData)
+    (i : Fin P.edgeCount) (t : Set.Icc (0 : ℝ) 1) (h : P.sign i = true) :
+    P.signedWedgeArc i t = wedgeCircle (P.orbit i) (circleArc t) := by
+  simp [PairingData.signedWedgeArc, h]
+
+theorem PairingData.signedWedgeArc_of_not_sign (P : PairingData)
+    (i : Fin P.edgeCount) (t : Set.Icc (0 : ℝ) 1) (h : P.sign i = false) :
+    P.signedWedgeArc i t =
+      wedgeCircle (P.orbit i) (circleArc (reverseIcc t)) := by
+  simp [PairingData.signedWedgeArc, h]
+
+/-- Paired polygon arcs have the same signed coordinate in the wedge. -/
+theorem PairingData.signedWedgeArc_pair (P : PairingData)
+    (i : Fin P.edgeCount) (t : Set.Icc (0 : ℝ) 1) :
+    P.signedWedgeArc (P.pair i) (pairedParameter P.pair P.sign i t) =
+      P.signedWedgeArc i t := by
+  by_cases h : P.sign i = P.sign (P.pair i)
+  · simp [PairingData.signedWedgeArc, pairedParameter, h]
+  · have hs : P.sign (P.pair i) = !P.sign i := by
+      cases hi : P.sign i <;> cases hp : P.sign (P.pair i) <;> simp_all
+    cases hi : P.sign i <;>
+      simp [PairingData.signedWedgeArc, pairedParameter, hs, hi,
+        reverseIcc_reverseIcc]
+
 end ConstructionTargets.PolygonSurfacePiOne
