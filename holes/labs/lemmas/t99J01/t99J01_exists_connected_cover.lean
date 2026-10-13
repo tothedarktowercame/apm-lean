@@ -39,7 +39,13 @@ theorem t99J01_exists_connected_cover
     (n : ℕ) (hn : 0 < n) :
     ∃ (E : Type) (_ : TopologicalSpace E) (p : E → ThreeCircles),
       PathConnectedSpace E ∧ IsKSheetedCover p n := by
-  sorry
+  letI : NeZero n := ⟨Nat.ne_of_gt hn⟩
+  let E := ConstructionTargets.CyclicThreeCirclesPullbackCover.Pullback n
+  let p : E → ThreeCircles :=
+    ConstructionTargets.CyclicThreeCirclesPullbackCover.projection n
+  exact ⟨E, inferInstance, p,
+    ConstructionTargets.CyclicThreeCirclesPullbackPathConnected.pullbackPathConnectedSpace n,
+    ConstructionTargets.CyclicThreeCirclesPullbackSheets.pullback_isKSheeted n⟩
 -- END SEAT AREA
 
 /-- A connected finite cover is the subgroup corresponding to one fiber
