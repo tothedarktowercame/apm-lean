@@ -401,8 +401,93 @@ theorem apm_t96j07_diagonal_link_degree :
     apm_t96j07_normalizedDiagonal_homotopic_sign
     apm_t96j07_signDiagonal_H2
 
-/-- Package the affine chart at the first coordinate axis.  The sphere-degree
-input is explicit so this leaf is independent of its eventual proof. -/
+/-- Seat (claude-14): the standard affine chart of `RP³` at axis `i`:
+`[x] ↦ (x (i.succAbove j) / x i)_j` on `{x i ≠ 0}` (well defined: invariant
+under scaling), inverse `y ↦ [insertNth i 1 y]`; source open, target all of `ℝ³`.
+Shared by the four axis leaves. -/
+theorem apm_t96j07_affine_chart :
+    ∀ i : Fin 4, ∃ chart : OpenPartialHomeomorph apm_t96j07_RP3 apm_t96j07_E3,
+      (∀ p, p ∈ chart.source ↔ p.rep i ≠ 0) ∧ chart.target = Set.univ ∧
+      (∀ (x : apm_t96j07_V) (hx : x ≠ 0), x i ≠ 0 →
+        chart (Projectivization.mk ℝ x hx) =
+          WithLp.toLp 2 (fun j => x (i.succAbove j) / x i)) ∧
+      (∀ y : apm_t96j07_E3, ∃ h, chart.symm y =
+        Projectivization.mk ℝ (Fin.insertNth i 1 (WithLp.ofLp y)) h) := by
+  sorry
+
+noncomputable def apm_t96j07_local_number_axis0_coords
+    (x : apm_t96j07_RP3) : apm_t96j07_E3 :=
+  WithLp.toLp 2 (fun j => Projectivization.rep x j.succ /
+    Projectivization.rep x 0)
+
+noncomputable def apm_t96j07_local_number_axis0_inv
+    (y : apm_t96j07_E3) : apm_t96j07_RP3 :=
+  Projectivization.mk ℝ (Fin.cases 1 (WithLp.ofLp y)) (by
+    intro h
+    have := congrFun h 0
+    simp at this)
+
+lemma apm_t96j07_local_number_axis0_rep_ratio
+    (v : apm_t96j07_V) (hv : v ≠ 0) (h0 : v 0 ≠ 0) :
+    apm_t96j07_local_number_axis0_coords (Projectivization.mk ℝ v hv) =
+      WithLp.toLp 2 (fun j => v j.succ / v 0) := by
+  ext j
+  unfold apm_t96j07_local_number_axis0_coords
+  simp only [WithLp.ofLp_toLp]
+  obtain ⟨a, ha⟩ := Projectivization.exists_smul_eq_mk_rep ℝ v hv
+  have hj := congrFun ha j.succ
+  have hi := congrFun ha 0
+  rw [← hj, ← hi]
+  simp only [Pi.smul_apply, Units.smul_def, smul_eq_mul]
+  exact mul_div_mul_left _ _ (Units.ne_zero a)
+
+lemma apm_t96j07_local_number_axis0_inv_coords (y : apm_t96j07_E3) :
+    apm_t96j07_local_number_axis0_coords
+      (apm_t96j07_local_number_axis0_inv y) = y := by
+  unfold apm_t96j07_local_number_axis0_inv
+  rw [apm_t96j07_local_number_axis0_rep_ratio]
+  · ext j
+    simp [apm_t96j07_local_number_axis0_inv]
+  · simp
+
+lemma apm_t96j07_local_number_axis0_coords_inv (x : apm_t96j07_RP3)
+    (hx : Projectivization.rep x 0 ≠ 0) :
+    apm_t96j07_local_number_axis0_inv
+      (apm_t96j07_local_number_axis0_coords x) = x := by
+  rw [← Projectivization.mk_rep x]
+  apply (Projectivization.mk_eq_mk_iff' ℝ _ _ _ _).2
+  refine ⟨(Projectivization.rep x 0)⁻¹, ?_⟩
+  funext j
+  refine Fin.cases ?_ (fun k => ?_) j
+  · simp [hx, apm_t96j07_local_number_axis0_inv]
+  · simp [apm_t96j07_local_number_axis0_inv,
+      apm_t96j07_local_number_axis0_coords, div_eq_inv_mul]
+
+lemma apm_t96j07_local_number_axis0_aux_chart
+    (hgen : ∀ i : Fin 4, ∃ chart : OpenPartialHomeomorph apm_t96j07_RP3 apm_t96j07_E3,
+        (∀ p, p ∈ chart.source ↔ p.rep i ≠ 0) ∧ chart.target = Set.univ ∧
+        (∀ (x : apm_t96j07_V) (hx : x ≠ 0), x i ≠ 0 →
+          chart (Projectivization.mk ℝ x hx) =
+            WithLp.toLp 2 (fun j => x (i.succAbove j) / x i)) ∧
+        (∀ y : apm_t96j07_E3, ∃ h, chart.symm y =
+          Projectivization.mk ℝ (Fin.insertNth i 1 (WithLp.ofLp y)) h))
+    (f : C(apm_t96j07_RP3, apm_t96j07_RP3))
+    (hformula : ∀ (x : apm_t96j07_V) (hx : x ≠ 0),
+      f (Projectivization.mk ℝ x hx) =
+        Projectivization.mk ℝ (apm_t96j07_A x) (apm_t96j07_A_ne_zero hx)) :
+    ∃ chart : OpenPartialHomeomorph apm_t96j07_RP3 apm_t96j07_E3,
+      (Projectivization.mk ℝ (apm_t96j07_axis 0) (by
+        intro h; have := congrFun h 0; simp [apm_t96j07_axis] at this)) ∈
+          chart.source ∧
+      chart (Projectivization.mk ℝ (apm_t96j07_axis 0) (by
+        intro h; have := congrFun h 0; simp [apm_t96j07_axis] at this)) = 0 ∧
+      chart.target = Set.univ ∧
+      (∀ y, chart.symm y ∈ chart.source) ∧
+      (∀ y, f (chart.symm y) ∈ chart.source) ∧
+      (∀ y, chart (f (chart.symm y)) =
+        WithLp.toLp 2 (fun j => (j.val + 2 : ℝ) * y j)) := by
+  sorry
+
 theorem apm_t96j07_local_number_axis0
     (f : C(apm_t96j07_RP3, apm_t96j07_RP3))
     (hformula : ∀ (x : apm_t96j07_V) (hx : x ≠ 0),
@@ -423,7 +508,47 @@ theorem apm_t96j07_local_number_axis0
     apm_t96j07_HasLocalLefschetzNumber f
         (Projectivization.mk ℝ (apm_t96j07_axis 0) (by
           intro h; have := congrFun h 0; simp [apm_t96j07_axis] at this)) (-1) := by
-  sorry
+  obtain ⟨chart, hq, hq0, htarget, hinv, hfsource, haction⟩ :=
+    apm_t96j07_local_number_axis0_aux_chart apm_t96j07_affine_chart f hformula
+  refine ⟨chart, hq, hq0, 1, by norm_num, ?_, ?_, ?_, ?_⟩
+  · rw [htarget]
+    exact Set.subset_univ _
+  · intro y hy
+    exact hfsource y
+  · intro y hy heq
+    rw [haction] at heq
+    ext j
+    have hj := congrArg (fun z : apm_t96j07_E3 => z j) heq
+    simp only [WithLp.ofLp_toLp] at hj
+    have : (j.val + 1 : ℝ) * y j = 0 := by linarith
+    exact (mul_eq_zero.mp this).resolve_left (by positivity)
+  · let a : Fin 3 → ℝ := fun j => (j.val + 2 : ℝ)
+    obtain ⟨link, hlink, orientation, horientation⟩ := hdegree a (by
+      intro j
+      fin_cases j <;> norm_num [a])
+    refine ⟨link, ?_, orientation, ?_⟩
+    · intro x
+      have hxsource := hinv ((1 : ℝ) • x.1)
+      have hfxsource := hfsource ((1 : ℝ) • x.1)
+      refine ⟨hxsource, hfxsource, ?_⟩
+      obtain ⟨hne, heq⟩ := hlink x
+      have hd : (1 : ℝ) • x.1 -
+          chart (f (chart.symm ((1 : ℝ) • x.1))) =
+          WithLp.toLp 2 (fun j => (1 - a j) * x.1 j) := by
+        rw [haction]
+        ext j
+        simp [a]
+        ring
+      refine ⟨?_, ?_⟩
+      · rw [hd]
+        exact hne
+      · rw [heq]
+        apply Subtype.ext
+        simp only [Subtype.coe_mk]
+        rw [hd]
+    · intro z
+      rw [horientation]
+      norm_num [a, Fin.prod_univ_succ]
 
 /-- Package the affine chart at the second coordinate axis. -/
 theorem apm_t96j07_local_number_axis1
