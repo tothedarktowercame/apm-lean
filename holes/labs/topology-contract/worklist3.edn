@@ -23716,20 +23716,20 @@
    :consumer :t01A08,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :implements-lemma
    :lemma-contdiffwithinat-domdomcongr-iteratedfderivwithin-of-infty,
    :evidence
    {:placeholder-delta {:t01A08 [1 1]},
     :residual
-    "Prove adjacent higher-jet slot equality from lower-jet Schwarz; invoke adjacent-swap closure; B1.",
+    "Use derivative-preservation plus lower-jet Schwarz to prove adjacent Fin slots; apply adjacent-swap closure; B1.",
     :outcome :stop,
     :warnings [],
     :missing-theorems
     [{:name
-      "ContinuousMultilinearMap.domDomCongr_eq_self_of_adjacent_swap",
+      "ContinuousMultilinearMap.domDomCongr_fderivWithin_eq_self",
       :type
-      "For m indexed by Fin(n+1), invariance under swap i.castSucc i.succ for every i:Fin n implies invariance under every Perm(Fin(n+1)).",
+      "EqOn (fun y => (g y).domDomCongr sigma) g s implies (fderivWithin ℝ g s x v).domDomCongr sigma = fderivWithin ℝ g s x v under UniqueDiffOn and x∈s",
       :status :proved,
       :consumers [:t01A08],
       :depends-on [],
@@ -23741,31 +23741,20 @@
       :status :partial,
       :consumers [:t01A08],
       :depends-on
-      ["ContinuousMultilinearMap.domDomCongr_eq_self_of_adjacent_swap"],
+      ["ContinuousMultilinearMap.domDomCongr_fderivWithin_eq_self"],
       :area "sard-convex-domain"}],
     :statement-hashes {:registry "147/147"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Reduced arbitrary permutation symmetry to adjacent slot swaps; analytic slot identity remains.",
+    "Proved within derivatives preserve pointwise domDomCongr identities; Fin curry/index step remains.",
     :commands
     [{:cmd "lake build ConstructionTargets.SardConvexDomain", :exit 0}
      {:cmd
-      "lake env lean adjacent-helper axiom check and fixture; scoped commit check; registry check",
+      "lake env lean derivative-helper axiom check and fixture; scoped commit check; registry check",
       :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1791878045822-9009-a6464ca0",
-     :commands
-     ["git show/diff 8ef6f515; scope and recorded-tree checks"
-      "lake build ConstructionTargets.SardConvexDomain"
-      "lake env lean fixture and /tmp/CheckSardAdjacent.lean"
-      "sha256sum fixture; statement-registry check; placeholder recount"],
-     :finding
-     "PASS: valid STOP after real progress. Recorded one-file commit proves adjacent swaps generate all Fin permutations via a stabilizer submonoid, with domDomCongr multiplication orientation checked. Build/export pass; fixture hash matches; helper has only standard axioms; registry 147/147; sorry/admit 0->0. Analytic adjacent-slot identity is explicitly remaining."},
-    :commit "8ef6f515709bc33088a81c1d80ee593e34e4ba4a",
+    :commit "11ad3d83d19e696301551b345cfea6bc6ff1c20c",
     :changed-paths ["ConstructionTargets/SardConvexDomain.lean"],
     :fixture
     {:path "/tmp/t01a08_smooth_symmetry_membership_probe.lean",
@@ -23774,7 +23763,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain/B1/symmetry",
    :acceptance
@@ -33570,7 +33559,8 @@
    :kind :lemma,
    :depends-on
    [:lemma-continuousmultilinearmap-domdomcongr-eq-self-of-swap
-    :lemma-continuousmultilinearmap-domdomcongr-eq-self-of-adjacent-swap],
+    :lemma-continuousmultilinearmap-domdomcongr-eq-self-of-adjacent-swap
+    :lemma-continuousmultilinearmap-domdomcongr-fderivwithin-eq-self],
    :other-consumers []}
   {:consumer :t01A08,
    :phase :lemma,
@@ -33614,6 +33604,26 @@
     :banked-commit "8ef6f515709bc33088a81c1d80ee593e34e4ba4a"},
    :id
    :lemma-continuousmultilinearmap-domdomcongr-eq-self-of-adjacent-swap,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t01A08,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "ContinuousMultilinearMap.domDomCongr_fderivWithin_eq_self",
+    :type
+    "EqOn (fun y => (g y).domDomCongr sigma) g s implies (fderivWithin ℝ g s x v).domDomCongr sigma = fderivWithin ℝ g s x v under UniqueDiffOn and x∈s"},
+   :lemma
+   {:name "ContinuousMultilinearMap.domDomCongr_fderivWithin_eq_self",
+    :reported-by [:r-a08-symmetry-slots-1],
+    :type
+    "EqOn (fun y => (g y).domDomCongr sigma) g s implies (fderivWithin ℝ g s x v).domDomCongr sigma = fderivWithin ℝ g s x v under UniqueDiffOn and x∈s",
+    :area "sard-convex-domain",
+    :proved-in :r-a08-symmetry-slots-1},
+   :id
+   :lemma-continuousmultilinearmap-domdomcongr-fderivwithin-eq-self,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}],
