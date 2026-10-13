@@ -1136,9 +1136,69 @@ theorem apm_m98J02_convolution_solves_fundamental
   · rw [hfK x hx, zero_mul, zero_mul]
 
 -- BEGIN SEAT AREA
+lemma apm_m98J02_constantDistribution_homogeneous_aux_of_integral_partial_zero
+    (hpartial : ∀ (i : Fin 2) (φ : apm_m98J02_Test),
+      ∫ x, apm_m98J02_partial i (φ : apm_m98J02_E → ℝ) x = 0) :
+    apm_m98J02_solvesT apm_m98J02_constantDistribution (fun _ ↦ 0) := by
+  intro φ
+  refine ⟨apm_m98J02_formalAdjointTest φ, fun x => by simp, ?_⟩
+  rw [apm_m98J02_constantDistribution_apply]
+  simp only [apm_m98J02_formalAdjointTest, TestFunction.coe_add,
+    TestFunction.coe_smul, Pi.add_apply, Pi.smul_apply, smul_eq_mul,
+    Pi.zero_apply, apm_m98J02_partialTest_apply, apm_m98J02_partialTest_coe]
+  change (∫ x, 2 • apm_m98J02_partial 0
+      (apm_m98J02_partial 0 (φ : apm_m98J02_E → ℝ)) x +
+      apm_m98J02_partial 1 (φ : apm_m98J02_E → ℝ) x +
+      3 • apm_m98J02_partial 0
+        (apm_m98J02_partial 1 (φ : apm_m98J02_E → ℝ)) x) = 0
+  have h00 := hpartial 0 (apm_m98J02_partialTest 0 φ)
+  have h01 := hpartial 0 (apm_m98J02_partialTest 1 φ)
+  rw [apm_m98J02_partialTest_coe] at h00 h01
+  have hi00 : Integrable (apm_m98J02_partial 0
+      (apm_m98J02_partial 0 (φ : apm_m98J02_E → ℝ))) :=
+    (apm_m98J02_partialTest 0 (apm_m98J02_partialTest 0 φ)).contDiff.continuous.integrable_of_hasCompactSupport
+      (apm_m98J02_partialTest 0 (apm_m98J02_partialTest 0 φ)).hasCompactSupport
+  have hi1 : Integrable (apm_m98J02_partial 1 (φ : apm_m98J02_E → ℝ)) :=
+    (apm_m98J02_partialTest 1 φ).contDiff.continuous.integrable_of_hasCompactSupport
+      (apm_m98J02_partialTest 1 φ).hasCompactSupport
+  have hi01 : Integrable (apm_m98J02_partial 0
+      (apm_m98J02_partial 1 (φ : apm_m98J02_E → ℝ))) :=
+    (apm_m98J02_partialTest 0 (apm_m98J02_partialTest 1 φ)).contDiff.continuous.integrable_of_hasCompactSupport
+      (apm_m98J02_partialTest 0 (apm_m98J02_partialTest 1 φ)).hasCompactSupport
+  simp only [nsmul_eq_mul]
+  rw [integral_add, integral_add, integral_const_mul, integral_const_mul,
+    h00, hpartial 1 φ, h01]
+  norm_num
+  all_goals
+    first
+    | exact hi00.const_mul _
+    | exact hi1
+    | exact hi01.const_mul _
+    | exact (hi00.const_mul _).add hi1
+
+/-- The integral of a coordinate partial of a test function vanishes (integration by parts
+against the constant `1`). -/
+lemma apm_m98J02_constantDistribution_homogeneous_aux_integral_partial (i : Fin 2) (φ : apm_m98J02_Test) :
+    ∫ x, apm_m98J02_partial i (φ : apm_m98J02_E → ℝ) x = 0 := by
+  have hφ : ContDiff ℝ 1 (φ : apm_m98J02_E → ℝ) := φ.contDiff.of_le (by simp)
+  have hd : Continuous (fun x => fderiv ℝ (φ : apm_m98J02_E → ℝ) x (EuclideanSpace.single i 1)) :=
+    (hφ.continuous_fderiv one_ne_zero).clm_apply continuous_const
+  have hI1 : Integrable (fun x => fderiv ℝ (φ : apm_m98J02_E → ℝ) x (EuclideanSpace.single i 1)) :=
+    hd.integrable_of_hasCompactSupport (φ.hasCompactSupport.fderiv_apply ℝ _)
+  have hI2 : Integrable (φ : apm_m98J02_E → ℝ) :=
+    φ.contDiff.continuous.integrable_of_hasCompactSupport φ.hasCompactSupport
+  have hibp := integral_mul_fderiv_eq_neg_fderiv_mul_of_integrable
+    (μ := (MeasureTheory.volume : MeasureTheory.Measure apm_m98J02_E))
+    (f := fun _ : apm_m98J02_E => (1 : ℝ))
+    (g := (φ : apm_m98J02_E → ℝ)) (v := EuclideanSpace.single i 1)
+    (by simp) (by simpa using hI1) (by simpa using hI2)
+    (fun x _ => differentiableAt_const _)
+    (fun x _ => hφ.differentiable one_ne_zero x)
+  simpa [apm_m98J02_partial] using hibp
+
 theorem apm_m98J02_constantDistribution_homogeneous :
     apm_m98J02_solvesT apm_m98J02_constantDistribution (fun _ ↦ 0) := by
-  sorry
+  exact apm_m98J02_constantDistribution_homogeneous_aux_of_integral_partial_zero apm_m98J02_constantDistribution_homogeneous_aux_integral_partial
 -- END SEAT AREA
 
 theorem apm_m98j02 :
