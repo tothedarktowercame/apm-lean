@@ -439,7 +439,37 @@ lemma apm_t02A07_transverse_iff_parameter_sq_ne_half_aux_submodule_aux_good_aux_
     (hne : fderiv ℝ apm_t02a07_constraints x u 1 ≠ 0) :
     apm_t02a07_tangentX x ≤
       Submodule.span ℝ {u} ⊔ apm_t02a07_tangentZ x := by
-  sorry
+  intro w hw
+  have hDu : fderiv ℝ apm_t02a07_constraints x u 1 =
+      x 3 * u 2 + x 2 * u 3 := by
+    rw [apm_t02A07_constraints_fderiv_surjective_aux_formula]
+    rfl
+  have hDw : fderiv ℝ apm_t02a07_constraints x w 1 =
+      x 3 * w 2 + x 2 * w 3 := by
+    rw [apm_t02A07_constraints_fderiv_surjective_aux_formula]
+    rfl
+  let t : ℝ :=
+    fderiv ℝ apm_t02a07_constraints x w 1 /
+      fderiv ℝ apm_t02a07_constraints x u 1
+  rw [Submodule.mem_sup]
+  refine ⟨t • u, ?_, w - t • u, ?_, by abel⟩
+  · exact Submodule.smul_mem _ t (Submodule.subset_span (Set.mem_singleton u))
+  · rw [apm_t02a07_tangentZ, LinearMap.mem_ker]
+    change fderiv ℝ apm_t02a07_constraints x (w - t • u) = 0
+    rw [apm_t02A07_constraints_fderiv_surjective_aux_formula]
+    apply PiLp.ext
+    intro i
+    fin_cases i
+    · rw [apm_t02a07_tangentX,
+        Submodule.mem_orthogonal_singleton_iff_inner_right] at hu hw
+      simp [inner_sub_right, inner_smul_right, hu, hw]
+    · simp only [Matrix.cons_val_one, Matrix.head_cons, Matrix.tail_cons,
+        PiLp.sub_apply, PiLp.smul_apply, smul_eq_mul]
+      dsimp [t]
+      rw [hDu] at hne
+      rw [hDu, hDw]
+      field_simp
+      ring
 -- END SEAT AREA
 
 lemma apm_t02A07_transverse_iff_parameter_sq_ne_half_aux_submodule_aux_good
