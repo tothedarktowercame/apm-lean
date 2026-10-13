@@ -1654,4 +1654,47 @@ theorem PairingData.skeletonArc_signed_coordinate (P : PairingData)
         P.signedWedgeArc i t :=
   ⟨P.skeletonArc_pair i t, P.signedWedgeArc_pair i t⟩
 
+abbrev PairingData.SkeletonArcSource (P : PairingData) :=
+  Fin P.edgeCount × Set.Icc (0 : ℝ) 1
+
+def PairingData.skeletonArcMap (P : PairingData) :
+    P.SkeletonArcSource → P.skeleton :=
+  fun a => P.skeletonArc a.1 a.2
+
+/-- The exact kernel relation of the parametrization by polygon boundary
+arcs.  This relation mentions the actual quotient skeleton, so subsequent
+identifications cannot silently replace it by an unrelated wedge model. -/
+def PairingData.SkeletonArcRel (P : PairingData)
+    (a b : P.SkeletonArcSource) : Prop :=
+  P.skeletonArcMap a = P.skeletonArcMap b
+
+abbrev PairingData.SkeletonArcQuotient (P : PairingData) :=
+  Quotient (Relation.EqvGen.setoid P.SkeletonArcRel)
+
+/-- The kernel quotient of boundary arcs is exactly the image in the actual
+surface skeleton. -/
+noncomputable def PairingData.skeletonArcQuotientEquivRange (P : PairingData) :
+    P.SkeletonArcQuotient ≃ Set.range P.skeletonArcMap where
+  toFun := Quotient.lift
+    (fun a => ⟨P.skeletonArcMap a, a, rfl⟩)
+    (by
+      intro a b h
+      apply Subtype.ext
+      induction h with
+      | rel a b h => exact h
+      | refl a => rfl
+      | symm a b _ ih => exact ih.symm
+      | trans a b c _ _ ih₁ ih₂ => exact ih₁.trans ih₂)
+  invFun := fun z => Quotient.mk _ (Classical.choose z.2)
+  left_inv := by
+    rintro ⟨a⟩
+    apply Quotient.sound
+    apply Relation.EqvGen.rel
+    exact Classical.choose_spec
+      ((⟨P.skeletonArcMap a, a, rfl⟩ : Set.range P.skeletonArcMap).2)
+  right_inv := by
+    intro z
+    apply Subtype.ext
+    exact Classical.choose_spec z.2
+
 end ConstructionTargets.PolygonSurfacePiOne
