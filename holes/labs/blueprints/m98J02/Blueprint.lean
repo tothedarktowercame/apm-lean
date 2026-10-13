@@ -1051,6 +1051,14 @@ lemma apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_partial_formula
       exact (apm_m98J02_translated_pairing_calculus v
         (List.foldr apm_m98J02_partialTest φ is)).2.1 i x
 
+lemma apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_translate_iteratedFDeriv
+    (φ : apm_m98J02_Test) (x y : apm_m98J02_E) (j : ℕ) :
+    iteratedFDeriv ℝ j
+        (apm_m98J02_translateTest x φ : apm_m98J02_E → ℝ) y =
+      iteratedFDeriv ℝ j (φ : apm_m98J02_E → ℝ) (x + y) := by
+  change iteratedFDeriv ℝ j (fun z => (φ : apm_m98J02_E → ℝ) (x + z)) y = _
+  exact iteratedFDeriv_comp_add_left j x y
+
 lemma apm_m98J02_bridge_2_aux_psi_aux_stage_cont
     (v : apm_m98J02_Dist) (χ : apm_m98J02_Test)
     (hsmooth : ∀ φ : apm_m98J02_Test,
