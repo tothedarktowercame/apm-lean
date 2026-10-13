@@ -68,7 +68,16 @@ def tftTranslationCompact (ψ : TFT E F) (x₀ : E) : Compacts E :=
 lemma tft_local_fixed_support (ψ : TFT E F) (x₀ : E) :
     ∀ x ∈ Metric.closedBall x₀ 1,
       tsupport (tftTranslate x ψ : E → F) ⊆ tftTranslationCompact ψ x₀ := by
-  sorry
+  intro x hx y hy
+  change y ∈ (fun p : E × E => p.2 - p.1) ''
+    (Metric.closedBall x₀ 1 ×ˢ tsupport (ψ : E → F))
+  refine ⟨(x, x + y), ⟨hx, ?_⟩, ?_⟩
+  · have hsupport := tsupport_comp_eq_preimage (ψ : E → F) (Homeomorph.addLeft x)
+    have : y ∈ (Homeomorph.addLeft x : E ≃ₜ E) ⁻¹' tsupport (ψ : E → F) := by
+      rw [← hsupport]
+      simpa [Function.comp_def] using hy
+    exact this
+  · simp
 
 
 lemma tft_local_fixed_function_support (ψ : TFT E F) (x₀ : E) :
