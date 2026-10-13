@@ -5899,6 +5899,33 @@ theorem genericPointWedgeNormalizedLeftLeg_eq_inl_iff_mappedLeft
   rw [genericPointWedgeNormalizedLeftLeg_eq_inl_iff_counit_commute,
     genericPointWedgeCounit_commute_inl_iff_mappedLeft_eq]
 
+/-- The mapped-left residual is the B3 comparison with the reconstructed
+source action, in the orientation used by the typed comparison square. -/
+theorem genericPointWedgeMappedLeft_eq_inl_iff_sourceComparison
+    (g : FundamentalGroup X x₀) :
+    genericPointWedgeMappedLeft x₀ y₀ M N hM hN hy hx cM cN g =
+        Monoid.Coprod.inl g ↔
+      (genericPointWedgeSourceEquivalence
+        x₀ y₀ M N hM hN hy hx cM cN).functor.map
+          (genericPointWedgeLeftLegMap x₀ y₀ g) =
+        genericPointWedgeMappedLeft x₀ y₀ M N hM hN hy hx cM cN g := by
+  rw [genericPointWedgeSourceFunctor_leftLeg_eq_inl]
+  exact eq_comm
+
+/-- Thus the normalized B6 left coordinate is equivalent directly to the
+typed B3 source-versus-mapped comparison. -/
+theorem genericPointWedgeNormalizedLeftLeg_eq_inl_iff_sourceComparison
+    (g : FundamentalGroup X x₀) :
+    genericPointWedgeNormalizedFundamentalGroupEquiv
+        x₀ y₀ M N hM hN hy hx cM cN
+        (genericPointWedgeLeftLegMap x₀ y₀ g) = Monoid.Coprod.inl g ↔
+      (genericPointWedgeSourceEquivalence
+        x₀ y₀ M N hM hN hy hx cM cN).functor.map
+          (genericPointWedgeLeftLegMap x₀ y₀ g) =
+        genericPointWedgeMappedLeft x₀ y₀ M N hM hN hy hx cM cN g := by
+  rw [genericPointWedgeNormalizedLeftLeg_eq_inl_iff_mappedLeft,
+    genericPointWedgeMappedLeft_eq_inl_iff_sourceComparison]
+
 /-- The reconstructed B4 source functor has exactly the right restriction
 conjugation on the literal right injection. -/
 theorem genericPointWedgeSourceFunctor_rightLeg_eq_conj_inr
@@ -6609,6 +6636,8 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeNormalizedLeftLeg_eq_inl_iff_counit_commute
 #print axioms genericPointWedgeCounit_commute_inl_iff_mappedLeft_eq
 #print axioms genericPointWedgeNormalizedLeftLeg_eq_inl_iff_mappedLeft
+#print axioms genericPointWedgeMappedLeft_eq_inl_iff_sourceComparison
+#print axioms genericPointWedgeNormalizedLeftLeg_eq_inl_iff_sourceComparison
 #print axioms genericPointWedgeLegCoordinates_of_mapped
 #print axioms genericPointWedgeLegCoordinates_iff_mapped
 #print axioms genericPointWedgeLegCoordinates_iff_sourceFunctor

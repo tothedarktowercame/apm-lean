@@ -1203,3 +1203,9 @@ identify counit commutation with the literal equation `mappedLeft g = inl g`.
 `genericPointWedgeNormalizedLeftLeg_eq_inl_iff_mappedLeft` composes this with
 the B5 reduction.  The remaining comparison-square task now has exactly the
 mapped-left equality as its target, entirely inside the free product.
+
+`genericPointWedgeMappedLeft_eq_inl_iff_sourceComparison` rewrites that target
+using the proved literal action of the reconstructed source functor, yielding
+exactly the source-versus-mapped equality supplied by the typed B3 comparison.
+`genericPointWedgeNormalizedLeftLeg_eq_inl_iff_sourceComparison` carries this
+orientation back to the normalized B6 left coordinate.
