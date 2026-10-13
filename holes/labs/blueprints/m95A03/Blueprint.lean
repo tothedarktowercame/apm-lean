@@ -523,6 +523,34 @@ noncomputable def apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_
 /-- Picard factorial estimate for the 2-component operator (sup metric on each component,
 max on the product): `dist (Tⁿu) (Tⁿv) ≤ (L (b − a))ⁿ / n! · dist u v` with
 `L = max (sup |r|) (sup |q|)` on `[a, b]`. -/
+lemma apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_system_aux_ode_aux_integral_aux_fixed_aux_iterate_bound_aux_coeff
+    (a b : ℝ) (r q : ℝ → ℝ) (hr : Continuous r) (hq : Continuous q) :
+    ∃ L : ℝ, 0 ≤ L ∧ ∀ t ∈ Set.Icc a b, |r t| ≤ L ∧ |q t| ≤ L := by
+  obtain ⟨R, hR⟩ := isCompact_Icc.exists_bound_of_continuousOn hr.continuousOn
+  obtain ⟨Q, hQ⟩ := isCompact_Icc.exists_bound_of_continuousOn hq.continuousOn
+  refine ⟨max 0 (max R Q), le_max_left _ _, fun t ht => ⟨?_, ?_⟩⟩
+  · simpa [Real.norm_eq_abs] using
+      (hR t ht).trans (le_trans (le_max_left R Q) (le_max_right 0 (max R Q)))
+  · simpa [Real.norm_eq_abs] using
+      (hQ t ht).trans (le_trans (le_max_right R Q) (le_max_right 0 (max R Q)))
+
+lemma apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_system_aux_ode_aux_integral_aux_fixed_aux_iterate_bound_aux_pointwise
+    (a b : ℝ) (hab : a < b) (r q g : ℝ → ℝ) (hr : Continuous r)
+    (hq : Continuous q) (hg : Continuous g) (c₀ d₀ : ℝ) :
+    ∃ L : ℝ, 0 ≤ L ∧ ∀ (n : ℕ)
+      (u v : C(Set.Icc a b, ℝ) × C(Set.Icc a b, ℝ)) (t : Set.Icc a b),
+      dist (((apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_system_aux_ode_aux_integral_aux_picard
+        a b hab r q g hr hq hg c₀ d₀)^[n] u).1 t)
+          (((apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_system_aux_ode_aux_integral_aux_picard
+        a b hab r q g hr hq hg c₀ d₀)^[n] v).1 t) ≤
+          (L * (t.1 - a)) ^ n / n.factorial * dist u v ∧
+      dist (((apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_system_aux_ode_aux_integral_aux_picard
+        a b hab r q g hr hq hg c₀ d₀)^[n] u).2 t)
+          (((apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_system_aux_ode_aux_integral_aux_picard
+        a b hab r q g hr hq hg c₀ d₀)^[n] v).2 t) ≤
+          (L * (t.1 - a)) ^ n / n.factorial * dist u v := by
+  sorry
+
 lemma apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_system_aux_ode_aux_integral_aux_fixed_aux_iterate_bound
     (a b : ℝ) (hab : a < b) (r q g : ℝ → ℝ) (hr : Continuous r)
     (hq : Continuous q) (hg : Continuous g) (c₀ d₀ : ℝ) :
@@ -530,7 +558,28 @@ lemma apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_syst
       dist ((apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_system_aux_ode_aux_integral_aux_picard a b hab r q g hr hq hg c₀ d₀)^[n] u)
           ((apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_system_aux_ode_aux_integral_aux_picard a b hab r q g hr hq hg c₀ d₀)^[n] v) ≤
         (L * (b - a)) ^ n / n.factorial * dist u v := by
-  sorry
+  obtain ⟨L, hL, hpoint⟩ :=
+    apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_system_aux_ode_aux_integral_aux_fixed_aux_iterate_bound_aux_pointwise
+      a b hab r q g hr hq hg c₀ d₀
+  refine ⟨L, hL, fun n u v => ?_⟩
+  have hbase : 0 ≤ L * (b - a) := mul_nonneg hL (sub_nonneg.2 hab.le)
+  have hfac : 0 < (n.factorial : ℝ) := by positivity
+  have hA : 0 ≤ (L * (b - a)) ^ n / n.factorial * dist u v :=
+    mul_nonneg (div_nonneg (pow_nonneg hbase _) hfac.le) dist_nonneg
+  rw [Prod.dist_eq]
+  apply max_le
+  · apply (ContinuousMap.dist_le hA).2
+    intro t
+    refine (hpoint n u v t).1.trans ?_
+    gcongr
+    exact mul_nonneg hL (sub_nonneg.2 t.2.1)
+    exact t.2.2
+  · apply (ContinuousMap.dist_le hA).2
+    intro t
+    refine (hpoint n u v t).2.trans ?_
+    gcongr
+    exact mul_nonneg hL (sub_nonneg.2 t.2.1)
+    exact t.2.2
 
 lemma apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_system_aux_ode_aux_integral_aux_fixed
     (a b : ℝ) (hab : a < b) (r q g : ℝ → ℝ) (hr : Continuous r)
