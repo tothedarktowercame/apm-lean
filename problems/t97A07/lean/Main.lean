@@ -63,6 +63,17 @@ theorem isCompact_criticalValues (m n : ℕ) {X : Type*}
       exact ⟨x, hxy, hx⟩]
   exact isCompact_image_criticalPoints f hf
 
+/-- B6: positive-dimensional targets have a critical value. -/
+theorem criticalValues_nonempty_of_pos (m n : ℕ) {X : Type*}
+    [TopologicalSpace X] [Nonempty X] [CompactSpace X]
+    [ChartedSpace (E m) X] [IsManifold 𝓘(ℝ, E m) ∞ X]
+    (f : X → E n)
+    (hf : ContMDiff 𝓘(ℝ, E m) 𝓘(ℝ, E n) ∞ f)
+    (hn : 0 < n) :
+    (criticalValues (m := m) f).Nonempty := by
+  obtain ⟨x, hx⟩ := exists_not_surjective_mfderiv_of_pos f hf hn
+  exact ⟨f x, x, rfl, hx⟩
+
 end t97A07Closure
 
 /-- Corrected part (a), with the zero-dimensional exception exposed, and part (b). -/
@@ -80,4 +91,5 @@ theorem apm_t97a07 (m n : ℕ) {X : Type*}
 #print axioms T97A07.criticalValues_zero
 #print axioms T97A07.not_nonempty_criticalValues_zero
 #print axioms t97A07Closure.isCompact_criticalValues
+#print axioms t97A07Closure.criticalValues_nonempty_of_pos
 #print axioms apm_t97a07

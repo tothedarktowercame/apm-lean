@@ -673,6 +673,26 @@ theorem not_surjective_mfderiv_of_isMaxOn_coordinate
     (fderiv_coordinate_comp_extChartAt_symm_eq_zero f i x hmax)
   simpa using hz
 
+/-- Blueprint B6 reusable core: in positive target dimension, a smooth map
+from a nonempty compact manifold has a critical point. -/
+theorem exists_not_surjective_mfderiv_of_pos
+    {m n : ℕ} {X : Type*} [TopologicalSpace X] [Nonempty X] [CompactSpace X]
+    [ChartedSpace (EuclideanModel m) X]
+    [IsManifold 𝓘(ℝ, EuclideanModel m) ∞ X]
+    (f : X → EuclideanModel n)
+    (hf : ContMDiff 𝓘(ℝ, EuclideanModel m)
+      𝓘(ℝ, EuclideanModel n) ∞ f)
+    (hn : 0 < n) :
+    ∃ x, ¬ Function.Surjective
+      (mfderiv 𝓘(ℝ, EuclideanModel m)
+        𝓘(ℝ, EuclideanModel n) f x) := by
+  let i : Fin n := ⟨0, hn⟩
+  have hc : Continuous (fun x : X ↦ f x i) :=
+    (PiLp.continuous_apply 2 (fun _ : Fin n ↦ ℝ) i).comp hf.continuous
+  obtain ⟨x, -, hx⟩ := isCompact_univ.exists_isMaxOn Set.univ_nonempty
+    hc.continuousOn
+  exact ⟨x, not_surjective_mfderiv_of_isMaxOn_coordinate f hf i x hx⟩
+
 end t97A07Closure
 
 #print axioms t97A07Closure.isOpen_setOf_surjective_clm
@@ -701,3 +721,4 @@ end t97A07Closure
 #print axioms t97A07Closure.fderiv_coordinate_comp_extChartAt_symm_eq_zero
 #print axioms t97A07Closure.fderiv_coordinate_comp_extChartAt_symm_apply
 #print axioms t97A07Closure.not_surjective_mfderiv_of_isMaxOn_coordinate
+#print axioms t97A07Closure.exists_not_surjective_mfderiv_of_pos

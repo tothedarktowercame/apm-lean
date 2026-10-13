@@ -247,12 +247,18 @@ t97A07 hypotheses, `0 < n → (T97A07.criticalValues (m := m) f).Nonempty`.
 
 uses: B5, Mathlib `IsCompact.exists_isMaxOn`
 
-status: planned
+status: proved
 
 Choose `i : Fin n`.  Compactness and nonemptiness of `X` give a maximizer of
 the continuous scalar function `fun x ↦ f x i`.  B5 makes that point
 critical; its image, together with the defining equality, witnesses
 membership in `criticalValues`.  Connectedness is not needed for this node.
+
+Compiled progress: `exists_not_surjective_mfderiv_of_pos` supplies the
+reusable critical point by maximizing one continuous coordinate on the
+compact source and applying B5.  The problem-local
+`criticalValues_nonempty_of_pos` packages its image and defining equality as
+the required member of `criticalValues`.  This completes B6.
 
 ### B7. A regular point maps onto a neighbourhood
 
