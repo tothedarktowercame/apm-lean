@@ -160,7 +160,14 @@ def apm_t00j03_projectiveLoopIntegral
 fundamental-domain properties so the two topology tasks are independent. -/
 theorem apm_t00j03_projectiveLoop_continuous :
     Continuous apm_t00j03_projectiveLoop := by
-  sorry
+  unfold apm_t00j03_projectiveLoop apm_t00j03_projectivize
+  apply continuous_quotient_mk'.comp
+  apply Continuous.subtype_mk
+  apply continuous_pi
+  intro i
+  fin_cases i
+  · simpa using Real.continuous_cos
+  · simpa using Real.continuous_sin
 
 /-- The half-open half-circle is a set of unique representatives for `RP¹`,
 and its two missing/added endpoints project to the same line. -/

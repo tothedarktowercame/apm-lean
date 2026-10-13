@@ -161,7 +161,14 @@ fundamental-domain properties so the two topology tasks are independent. -/
 -- BEGIN SEAT AREA
 theorem apm_t00j03_projectiveLoop_continuous :
     Continuous apm_t00j03_projectiveLoop := by
-  sorry
+  unfold apm_t00j03_projectiveLoop apm_t00j03_projectivize
+  apply continuous_quotient_mk'.comp
+  apply Continuous.subtype_mk
+  apply continuous_pi
+  intro i
+  fin_cases i
+  · simpa using Real.continuous_cos
+  · simpa using Real.continuous_sin
 -- END SEAT AREA
 
 /-- The half-open half-circle is a set of unique representatives for `RP¹`,
