@@ -72,7 +72,7 @@ preconnectedness.  This is independent of either surface construction. -/
 theorem t98J02_pathConnected_complement_nonseparating
     {E : Type} [TopologicalSpace E] (l : C(Circle, E))
     (h : IsPathConnected (range l)ᶜ) : Nonseparating l := by
-  sorry
+  exact h.isConnected.isPreconnected
 -- END SEAT AREA
 
 /-- LIBRARY: a degree-one lift of a nonseparating embedded circle through a
