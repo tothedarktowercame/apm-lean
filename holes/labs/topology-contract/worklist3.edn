@@ -22675,8 +22675,72 @@
      :typed-residual-change
      :infrastructure-packets
      :review-outcomes]},
+   :evidence
+   {:outcome :replan,
+    :seat "topo-12",
+    :commands
+    [{:cmd
+      "bb holes/labs/topology-contract/build_step.bb priorities holes/labs/topology-contract/worklist3.edn",
+      :exit 0}],
+    :finding
+    {:measures "Δ0;A08 7/1;blueprint PASS",
+     :routes
+     "A02:2/13,A03:2/6,J02+98A02:1/10,A08:1/1,1J01:3/4,2A04:3/8,3J02:2/8,3J03:4/11,91J05:3/7,92J05+97J02:3/15,94J04:2/10,95J06:2/8,96A01:1/12,96A02:1/8,96J06:2/4,97A05+6:1/11",
+     :review "Whitney B1-B7 repairs B6; B8-B11 use ambient Sard."},
+    :lemmas
+    [{:name
+      "ConstructionTargets.SardConvexDomain.ContDiffOn.convexWithinJet",
+      :type "blueprint B1",
+      :status :not-started,
+      :consumers [:t01A08],
+      :depends-on [],
+      :area "sard-convex-domain"}],
+    :replacement-items
+    [{:bounded-exception "Rule0 B1.",
+      :consumer :t01A08,
+      :implements-lemma :lemma-sard-convex-b1,
+      :phase :probe,
+      :state :open,
+      :scope ["ConstructionTargets/SardConvexDomain.lean"],
+      :dag-node "SardConvexDomain.blueprint/B1",
+      :acceptance
+      {:probe "Compile B1 within jets.",
+       :declaration
+       "ConstructionTargets.SardConvexDomain.ContDiffOn.convexWithinJet",
+       :type "exact B1 type in blueprint",
+       :blueprint "ConstructionTargets/SardConvexDomain.blueprint.md",
+       :placeholder "t01A08 sorry",
+       :route-step "B1 within jets"},
+      :id :r-a08-sard-b1-1,
+      :kind :reusable-theorem,
+      :area "sard-convex-domain",
+      :depends-on [:r-topo3-cp6b],
+      :current-residual "B2.",
+      :other-consumers []}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 1,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :phase :strategy,
+      :state :open,
+      :scope [],
+      :dag-node "TOPOLOGY-ROUTES.md",
+      :acceptance {:strategy "Rerank after B1."},
+      :id :r-topo3-cp7,
+      :kind :strategy-checkpoint,
+      :area "portfolio",
+      :depends-on [:r-a08-sard-b1-1],
+      :current-residual "Elect next node.",
+      :other-consumers []}],
+    :author "topo-12",
+    :disposition :replan},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance {:strategy "Review B6 repair."},
@@ -22685,6 +22749,48 @@
    :area "portfolio",
    :depends-on [:r-a08-sard-b6-repair-1 :r-topo3-cp5],
    :current-residual "Elect B1 after review.",
+   :other-consumers []}
+  {:bounded-exception "Rule0 B1.",
+   :consumer :t01A08,
+   :implements-lemma
+   :lemma-constructiontargets-sardconvexdomain-contdiffon-convexwithinjet,
+   :phase :probe,
+   :state :blocked,
+   :scope ["ConstructionTargets/SardConvexDomain.lean"],
+   :dag-node "SardConvexDomain.blueprint/B1",
+   :acceptance
+   {:probe "Compile B1 within jets.",
+    :declaration
+    "ConstructionTargets.SardConvexDomain.ContDiffOn.convexWithinJet",
+    :type "exact B1 type in blueprint",
+    :blueprint "ConstructionTargets/SardConvexDomain.blueprint.md",
+    :placeholder "t01A08 sorry",
+    :route-step "B1 within jets"},
+   :id :r-a08-sard-b1-1,
+   :kind :reusable-theorem,
+   :area "sard-convex-domain",
+   :depends-on [:r-topo3-cp6b],
+   :current-residual "B2.",
+   :other-consumers []}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 1,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md",
+   :acceptance {:strategy "Rerank after B1."},
+   :id :r-topo3-cp7,
+   :kind :strategy-checkpoint,
+   :area "portfolio",
+   :depends-on [:r-a08-sard-b1-1 :r-topo3-cp6b],
+   :current-residual "Elect next node.",
    :other-consumers []}
   {:bounded-exception "Rule0 repair.",
    :consumer :t01A08,
@@ -32352,6 +32458,25 @@
    :kind :lemma,
    :depends-on
    [:lemma-constructiontargets-sardconvexdomain-modelrange-withincriticalimage-subset-inter],
+   :other-consumers []}
+  {:consumer :t01A08,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.SardConvexDomain.ContDiffOn.convexWithinJet",
+    :type "blueprint B1"},
+   :lemma
+   {:name
+    "ConstructionTargets.SardConvexDomain.ContDiffOn.convexWithinJet",
+    :reported-by [:r-topo3-cp6b],
+    :type "blueprint B1",
+    :area "sard-convex-domain"},
+   :id
+   :lemma-constructiontargets-sardconvexdomain-contdiffon-convexwithinjet,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
