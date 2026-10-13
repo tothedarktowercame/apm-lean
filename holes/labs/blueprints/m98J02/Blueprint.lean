@@ -1203,6 +1203,67 @@ lemma apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_norm_coord_one
     _ = (|L (EuclideanSpace.single 0 1)| +
         |L (EuclideanSpace.single 1 1)|) * ‖y‖ := by ring
 
+lemma apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_norm_coord_one_general
+    {F : Type*} [NormedAddCommGroup F] [NormedSpace ℝ F]
+    (L : apm_m98J02_E →L[ℝ] F) :
+    ‖L‖ ≤ ‖L (EuclideanSpace.single 0 1)‖ +
+      ‖L (EuclideanSpace.single 1 1)‖ := by
+  apply L.opNorm_le_bound (by positivity)
+  intro y
+  have hy : y = y 0 • EuclideanSpace.single 0 1 +
+      y 1 • EuclideanSpace.single 1 1 := by
+    ext i
+    fin_cases i <;> simp
+  calc
+    ‖L y‖ = ‖L (y 0 • EuclideanSpace.single 0 1 +
+        y 1 • EuclideanSpace.single 1 1)‖ := by rw [← hy]
+    _ = ‖y 0 • L (EuclideanSpace.single 0 1) +
+        y 1 • L (EuclideanSpace.single 1 1)‖ := by
+          rw [map_add, map_smul, map_smul]
+    _ ≤ ‖y 0 • L (EuclideanSpace.single 0 1)‖ +
+          ‖y 1 • L (EuclideanSpace.single 1 1)‖ := norm_add_le _ _
+    _ = |y 0| * ‖L (EuclideanSpace.single 0 1)‖ +
+        |y 1| * ‖L (EuclideanSpace.single 1 1)‖ := by
+          rw [norm_smul, norm_smul, Real.norm_eq_abs, Real.norm_eq_abs]
+    _ ≤ ‖y‖ * ‖L (EuclideanSpace.single 0 1)‖ +
+        ‖y‖ * ‖L (EuclideanSpace.single 1 1)‖ := by
+          gcongr
+          · simpa [Real.norm_eq_abs] using PiLp.norm_apply_le y 0
+          · simpa [Real.norm_eq_abs] using PiLp.norm_apply_le y 1
+    _ = (‖L (EuclideanSpace.single 0 1)‖ +
+        ‖L (EuclideanSpace.single 1 1)‖) * ‖y‖ := by ring
+
+lemma apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_norm_coord
+    {F : Type*} [NormedAddCommGroup F] [NormedSpace ℝ F] :
+    ∀ (k : ℕ) (A : ContinuousMultilinearMap ℝ (fun _ : Fin k => apm_m98J02_E) F),
+      ‖A‖ ≤ ∑ c : Fin k → Fin 2, ‖A (fun i => EuclideanSpace.single (c i) (1 : ℝ))‖ := by
+  intro k
+  induction k with
+  | zero =>
+    intro A
+    refine (Finset.single_le_sum (f := fun c : Fin 0 → Fin 2 =>
+      ‖A (fun i => EuclideanSpace.single (c i) (1 : ℝ))‖) (fun _ _ => norm_nonneg _)
+      (Finset.mem_univ (fun i => i.elim0))).trans' ?_
+    refine A.opNorm_le_bound (norm_nonneg _) fun m => ?_
+    simp only [Finset.univ_eq_empty, Finset.prod_empty, mul_one]
+    rw [Subsingleton.elim m (fun i => EuclideanSpace.single ((fun i : Fin 0 => i.elim0) i) (1 : ℝ))]
+  | succ k ih =>
+    intro A
+    calc ‖A‖ = ‖A.curryLeft‖ := (ContinuousMultilinearMap.curryLeft_norm A).symm
+      _ ≤ ‖A.curryLeft (EuclideanSpace.single 0 1)‖ + ‖A.curryLeft (EuclideanSpace.single 1 1)‖ :=
+          apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_norm_coord_one_general _
+      _ ≤ (∑ c : Fin k → Fin 2,
+            ‖A.curryLeft (EuclideanSpace.single 0 1) (fun i => EuclideanSpace.single (c i) (1 : ℝ))‖) +
+          (∑ c : Fin k → Fin 2,
+            ‖A.curryLeft (EuclideanSpace.single 1 1) (fun i => EuclideanSpace.single (c i) (1 : ℝ))‖) :=
+          add_le_add (ih _) (ih _)
+      _ = ∑ c : Fin (k + 1) → Fin 2, ‖A (fun i => EuclideanSpace.single (c i) (1 : ℝ))‖ := by
+          rw [← Fintype.sum_equiv (Fin.consEquiv fun _ : Fin (k + 1) => Fin 2) _ _ (fun _ => rfl),
+            Fintype.sum_prod_type, Fin.sum_univ_two]
+          congr 1 <;> refine Finset.sum_congr rfl fun c _ => ?_ <;>
+            simp only [ContinuousMultilinearMap.curryLeft_apply, Fin.consEquiv_apply] <;>
+            congr 2 <;> funext i <;> refine Fin.cases ?_ ?_ i <;> simp
+
 lemma apm_m98J02_bridge_2_aux_psi_aux_stage_cont
     (v : apm_m98J02_Dist) (χ : apm_m98J02_Test)
     (hsmooth : ∀ φ : apm_m98J02_Test,
