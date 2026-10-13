@@ -639,7 +639,67 @@ theorem apm_t01A01_projectivePlane_circle_log
     (hlift : ∀ g : C(Metric.sphere (0 : EuclideanSpace ℝ (Fin 3)) 1, Circle), ∃ h : C(Metric.sphere (0 : EuclideanSpace ℝ (Fin 3)) 1, ℝ), ∀ x, Circle.exp (h x) = g x)
     (f : C(apm_t01A01_RP2, Circle)) :
     ∃ k : C(apm_t01A01_RP2, ℝ), ∀ y, Circle.exp (k y) = f y := by
-  sorry
+  let g : C(Metric.sphere (0 : EuclideanSpace ℝ (Fin 3)) 1, Circle) := f.comp π
+  obtain ⟨h, hh⟩ := hlift g
+  let a : C(Metric.sphere (0 : EuclideanSpace ℝ (Fin 3)) 1,
+      Metric.sphere (0 : EuclideanSpace ℝ (Fin 3)) 1) :=
+    ⟨fun x ↦ -x, continuous_neg⟩
+  let x₀ : Metric.sphere (0 : EuclideanSpace ℝ (Fin 3)) 1 :=
+    ⟨EuclideanSpace.single 0 1, by simp [mem_sphere_zero_iff_norm]⟩
+  have hexp₀ : Circle.exp (h (a x₀)) = Circle.exp (h x₀) := by
+    rw [hh, hh]
+    exact congrArg f (hπa x₀)
+  obtain ⟨n, hn⟩ := Circle.exp_eq_exp.mp hexp₀
+  let c : ℝ := (n : ℝ) * (2 * Real.pi)
+  have hc : h (a x₀) = h x₀ + c := by
+    simpa [c] using hn
+  let h₁ : C(Metric.sphere (0 : EuclideanSpace ℝ (Fin 3)) 1, ℝ) := h.comp a
+  let h₂ : C(Metric.sphere (0 : EuclideanSpace ℝ (Fin 3)) 1, ℝ) :=
+    ⟨fun x ↦ h x + c, h.continuous.add continuous_const⟩
+  have hcomp : Circle.exp ∘ h₁ = Circle.exp ∘ h₂ := by
+    funext x
+    change Circle.exp (h (a x)) = Circle.exp (h x + c)
+    rw [Circle.exp_add]
+    have hperiod : Circle.exp c = 1 := by
+      exact Circle.exp_eq_one.mpr ⟨n, rfl⟩
+    rw [hperiod, mul_one, hh, hh]
+    exact congrArg f (hπa x)
+  have heq : h₁ = h₂ := by
+    letI : PreconnectedSpace (Metric.sphere
+        (0 : EuclideanSpace ℝ (Fin 3)) 1) :=
+      Subtype.preconnectedSpace (isPreconnected_sphere (by
+        rw [(WithLp.linearEquiv 2 ℝ (Fin 3 → ℝ)).rank_eq]
+        rw [rank_fin_fun]
+        norm_num) 0 1)
+    apply ContinuousMap.coe_injective
+    apply ConstructionTargets.CircleUniversalCover.circleCover_isCoveringMap.eq_of_comp_eq
+      h₁.continuous h₂.continuous hcomp x₀
+    simpa [h₁, h₂] using hc
+  have hc0 : c = 0 := by
+    have hx := DFunLike.congr_fun heq (a x₀)
+    have ha2 : a (a x₀) = x₀ := by
+      apply Subtype.ext
+      simp [a]
+    change h (a (a x₀)) = h (a x₀) + c at hx
+    rw [ha2, hc] at hx
+    linarith
+  have heven : ∀ x, h (a x) = h x := by
+    intro x
+    have hx := DFunLike.congr_fun heq x
+    change h (a x) = h x + c at hx
+    simpa [hc0] using hx
+  have hfac : Function.FactorsThrough h π := by
+    intro x y hxy
+    rcases hπf x y hxy with rfl | hy
+    · rfl
+    · subst y
+      simpa [a] using (heven x).symm
+  let k : C(apm_t01A01_RP2, ℝ) := hπq.lift h hfac
+  refine ⟨k, ?_⟩
+  intro y
+  obtain ⟨x, rfl⟩ := hπs y
+  rw [show k (π x) = h x from DFunLike.congr_fun (hπq.lift_comp h hfac) x]
+  exact hh x
 
 /-- Seat: a circle-valued map with a real logarithm is homotopic to the
 constant `1` (`H t y = exp ((1 - t) k y)`). -/
