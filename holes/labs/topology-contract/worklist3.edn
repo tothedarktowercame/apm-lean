@@ -36159,6 +36159,17 @@
     [{:cmd "lake build closure",
       :exit 1,
       :correction "exposed relations/maps"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791931479479-10757-d22a5bfc",
+     :commands
+     ["git show/diff ca72d69c; scope/presentation review"
+      "sha256sum fixture; show --check; placeholder recount"
+      "lake build ConstructionTargets.t93J03Closure; lean fixture"
+      "statement-registry check"],
+     :finding
+     "PASS. Commit ca72d69c adds compiled, sorry-free standard-axiom progress after 3e08de9d: it defines the exact aabb singleton presentation, descends mutually inverse substitutions x->a*b,y->b^-1 and a->x*y,b->y^-1 through both relator quotients, and proves a MulEquiv by generator extensionality. Fixture hash matches; registry 166/166; Main placeholder 1->1. Van Kampen, C1 composition, C2, and Main remain listed. SemilocallySimplyConnected X is unused, mandated by problem.md."},
     :commit "ca72d69cb5ebe9fa284de91ef921687e1a909b0a",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
@@ -36170,7 +36181,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -36188,7 +36199,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t93J03Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed generator change equating aabb with the frozen Klein relator; topological van Kampen quotient remains.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed aabb presentation equivalence; van Kampen remains.",
    :id :program-2026-10-13-close-t93j03,
    :kind :final-adapter,
    :campaign-priority 30,
@@ -36238,7 +36249,11 @@
     {:job 2,
      :commit "3e08de9de0a5d677abbf695732c2eabb8a6fe0a9",
      :reason
-     "Committed generator change equating aabb with the frozen Klein relator; topological van Kampen quotient remains."}]}
+     "Committed generator change equating aabb with the frozen Klein relator; topological van Kampen quotient remains."}
+    {:job 3,
+     :commit "ca72d69cb5ebe9fa284de91ef921687e1a909b0a",
+     :reason
+     "Committed aabb presentation equivalence; van Kampen remains."}]}
   {:consumer :t99J05,
    :stop-count 5,
    :evidence
@@ -37698,7 +37713,7 @@
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "kleinPolygonPresentedGroupEquiv",
@@ -37708,7 +37723,9 @@
     :reported-by [:program-2026-10-13-close-t93j03],
     :type "PresentedGroup(aabb) equiv frozen Klein group",
     :area "covering-subgroup-correspondence",
-    :proved-in :program-2026-10-13-close-t93j03},
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "ca72d69cb5ebe9fa284de91ef921687e1a909b0a"},
    :id :lemma-kleinpolygonpresentedgroupequiv,
    :kind :lemma,
    :depends-on [:lemma-kleinrelator-generatorchange-eq-one-iff],
