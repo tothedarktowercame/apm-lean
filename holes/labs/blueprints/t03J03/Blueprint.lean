@@ -68,7 +68,7 @@ lemma apm_t03J03_euler_N4 : eulerCharacteristic false 4 = -2 := by
 
 lemma apm_t03J03_character_card : Nat.card apm_t03J03_character = 7 := by
   rw [Nat.card_eq_fintype_card]
-  native_decide
+  decide
 
 lemma apm_t03J03_orientationCharacter_ne_zero :
     apm_t03J03_orientationCharacter ≠ 0 := by
@@ -120,6 +120,45 @@ theorem apm_t03J03_connected_double_cover_classification :
             (reps phi).topology inferInstance)) := by
   sorry
 
+lemma apm_t03J03_disconnected_double_cover_trivial_aux_base_pathConnected :
+    IsPathConnected (Set.univ : Set apm_t03J03_N3) := by
+  letI : PathConnectedSpace Disk :=
+    isPathConnected_iff_pathConnectedSpace.mp
+      (Metric.isPathConnected_closedBall (E := ℂ) zero_le_one)
+  rw [← Set.range_eq_univ.mpr (surjective_surfaceQuotient false 3)]
+  simpa only [Set.image_univ] using
+    (pathConnectedSpace_iff_univ.mp (inferInstance : PathConnectedSpace Disk)).image
+      (continuous_surfaceQuotient false 3)
+
+/-- Seat: `N₃` is locally connected (a quotient of the closed disc, which is
+locally connected; quotient maps preserve local connectedness). -/
+theorem apm_t03J03_N3_locallyConnected : LocallyConnectedSpace apm_t03J03_N3 := by
+  sorry
+
+/-- Seat (generic): a disconnected two-sheeted covering of a connected, locally
+connected space splits into a clopen set and its complement, each meeting every
+fibre exactly once (the sheet count of a clopen set is locally constant over
+connected evenly covered neighbourhoods; it is 0, 1 or 2, and 0/2 force `U`
+empty/everything). -/
+theorem apm_t03J03_disconnected_two_sheeted_split {E X : Type}
+    [TopologicalSpace E] [TopologicalSpace X] [ConnectedSpace X]
+    [LocallyConnectedSpace X] (p : E → X) (hp : IsCoveringMap p)
+    (h2 : ∀ x : X, Nat.card {e : E // p e = x} = 2) (hE : ¬ IsConnected (Set.univ : Set E)) :
+    ∃ U : Set E, IsClopen U ∧ (∀ x, ∃! e, e ∈ U ∧ p e = x) ∧
+      (∀ x, ∃! e, e ∉ U ∧ p e = x) := by
+  sorry
+
+/-- Seat (generic): a split as above makes `p` equivalent to the trivial cover
+`X ⊕ X → X` (each clopen piece maps homeomorphically: a bijective covering map
+is a homeomorphism, being a continuous open bijection). -/
+theorem apm_t03J03_trivial_of_split {E X : Type}
+    [TopologicalSpace E] [TopologicalSpace X] (p : E → X) (hp : IsCoveringMap p)
+    (U : Set E) (hU : IsClopen U) (h1 : ∀ x, ∃! e, e ∈ U ∧ p e = x)
+    (h1' : ∀ x, ∃! e, e ∉ U ∧ p e = x) :
+    apm_t03J03_generalCoverEquivalent inferInstance inferInstance p
+      (apm_t03J03_trivialCoverMap (X := X)) := by
+  sorry
+
 /-- **LIBRARY: classification of disconnected two-sheeted covers.** -/
 theorem apm_t03J03_disconnected_double_cover_trivial :
     ∀ (E : Type) (tE : TopologicalSpace E) (p : E → apm_t03J03_N3),
@@ -127,7 +166,13 @@ theorem apm_t03J03_disconnected_double_cover_trivial :
       ¬ @IsConnected E tE (Set.univ : Set E) →
       apm_t03J03_generalCoverEquivalent tE inferInstance
         p apm_t03J03_trivialCoverMap := by
-  sorry
+  intro E tE p hcov hE
+  haveI := apm_t03J03_N3_locallyConnected
+  haveI : PathConnectedSpace apm_t03J03_N3 :=
+    (pathConnectedSpace_iff_univ.mpr apm_t03J03_disconnected_double_cover_trivial_aux_base_pathConnected)
+  obtain ⟨U, hU, h1, h1'⟩ :=
+    @apm_t03J03_disconnected_two_sheeted_split E _ tE _ inferInstance _ p hcov.1 hcov.2 hE
+  exact @apm_t03J03_trivial_of_split E _ tE _ p hcov.1 U hU h1 h1'
 
 /-- **LIBRARY: the two-sided annulus core has trivial orientation monodromy.** -/
 theorem apm_t03J03_orientable_double_cover_annulus_lift :
