@@ -254,7 +254,12 @@ theorem apm_t00j01_klein_local_chart
 theorem apm_t00j01_circle_local_chart :
     ∀ z : Circle, ∃ (U : Set Circle) (V : Set ℝ),
       z ∈ U ∧ IsOpen U ∧ IsOpen V ∧ Nonempty (U ≃ₜ V) := by
-  sorry
+  intro z
+  obtain ⟨e, he, hexp⟩ := isLocalHomeomorph_circleExp (Complex.arg z)
+  refine ⟨e.target, e.source, ?_, e.open_target, e.open_source, ?_⟩
+  · rw [← Circle.exp_arg z, hexp]
+    exact e.map_source he
+  · exact ⟨e.symm.toHomeomorphSourceTarget⟩
 -- END SEAT AREA
 
 /-- Compactness of the two factors assembles to compactness of their product.
