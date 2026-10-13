@@ -21568,7 +21568,7 @@
   {:consumer :t00J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "Frozen-fixture identity remains invalid in both authoritative acceptance copies: each still records aad5a9cda739c1cbcceb1eca8ab8b33395db8a08c9d68941a87c644f4d13586e and omits :mode, while the freshly compiling fixture hashes to 7e72195e1214d7580994264481ae57d0ecf87755d31825ab85cbda5f1220c4b1. Update both copies to that digest with :mode :post-build-export-check, then resubmit f0afa7bd; scoped diff, standard axioms, and registry 145/145 pass.",
    :implements-lemma
@@ -21576,15 +21576,15 @@
    :evidence
    {:placeholder-delta {:t00J02 [1 1], :t98A02 [1 1]},
     :residual
-    "Supervisor: update both copies to digest 7e72195e... with :mode :post-build-export-check; accept f0afa7bd.",
+    "Supervisor: update both acceptance copies to verified digest and :mode :post-build-export-check; accept f0afa7bd.",
     :outcome :stop,
     :warnings [],
-    :statement-hashes {:registry "145/145"},
+    :statement-hashes {:registry "146/146"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Fixture identity remains stale in both acceptance copies (aad5a9cd, no :mode); scoped theorem compiles and matches f0afa7bd.",
+    "Both authoritative acceptance copies still record stale aad5a9cd and omit post-build mode; repairing ledger metadata is outside scoped source.",
     :commands
     [{:cmd "sha256sum /tmp/closedboundarycoords.lean", :exit 0}
      {:cmd "lake env lean /tmp/closedboundarycoords.lean", :exit 0}
@@ -21601,7 +21601,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/manifold-fundamental-class",
    :acceptance
