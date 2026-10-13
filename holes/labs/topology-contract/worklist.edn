@@ -113850,7 +113850,7 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 10,
+   :stop-count 0,
    :review-finding
    "Recorded fixture hash mismatch: :fixture.sha256 is 0bca6ce32c019fc3053c7f813c26917169cf817375b44d5e722b864b61a526450c1, but ConstructionTargets/PointWedgeVanKampen.blueprint.md at recorded commit c9b3af27 has exact SHA-256 0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0. Re-record the fixture hash for the reviewed commit.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
@@ -113905,7 +113905,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -117131,6 +117131,17 @@
     [{:cmd "lean draft",
       :exit 1,
       :finding "Corrected univ neighbourhood lemma."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791888672249-9466-54e52854",
+     :commands
+     ["git show/diff 8f491522^..8f491522"
+      "git archive 8f491522; lake env lean archived t97A07Closure.lean"
+      "lake env lean archived problems/t97A07/lean/Main.lean"
+      "statement-registry check; recorded-tree sha256; placeholders; diff-tree"],
+     :finding
+     "PASS program STOP: 8f491522 is new after history and adds compiled, sorry-free B5 progress. A global coordinate maximum remains maximal after precomposition with extChartAt.symm, and symm sends the chart centre back to x; Fermat then gives the displayed zero fderiv. Statements and orientation are faithful, and the blueprint note correctly leaves the chain-rule/mfderiv identification unresolved. Scope is closure Lean+blueprint; hashes match source eee255ed, closure 6af022dc, fixture f66b47b4; source placeholders stay 1->1, closure has 0; registry 149/149; standard axioms only. Archived consumer compiles with its one listed existing sorry."},
     :commit "8f491522a2bf1d5f448cd971b2e560e00d044538",
     :changed-paths
     ["ConstructionTargets/t97A07Closure.lean"
@@ -117141,7 +117152,7 @@
      "f66b47b494f09592c60e057507ab231d9572fb4f1be0d6796442f298ae5f7b58"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A07/lean/Main.lean"
     "problems/t97A07/status.json"
@@ -117157,7 +117168,7 @@
     ["lake env lean problems/t97A07/lean/Main.lean"
      "python3 scripts/statement-registry.py check"]},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: B5 partial: coordinate-range vanishing contradicts surjectivity.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: B5 partial: transferred the global coordinate maximum to the fixed source chart and proved its scalar derivative vanishes.",
    :id :program-2026-10-11-close-t97a07,
    :kind :final-adapter,
    :campaign-priority 44,
@@ -117234,7 +117245,11 @@
     {:job 1,
      :commit "cb6f4855c23574d6168462b393e6ecf972eae5cf",
      :reason
-     "B5 partial: coordinate-range vanishing contradicts surjectivity."}]}
+     "B5 partial: coordinate-range vanishing contradicts surjectivity."}
+    {:job 2,
+     :commit "8f491522a2bf1d5f448cd971b2e560e00d044538",
+     :reason
+     "B5 partial: transferred the global coordinate maximum to the fixed source chart and proved its scalar derivative vanishes."}]}
   {:consumer :t91J06,
    :stop-count 3,
    :review-finding
