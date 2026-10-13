@@ -331,7 +331,40 @@ noncomputable def apm_t01A01_projectiveLine_map_nullhomotopic_aux_homeomorph_aux
 /-- Seat: `RP¹` is compact (continuous image of the unit circle in `ℝ²`, or of
 `{v | ‖v‖ = 1}` under the quotient map). -/
 theorem apm_t01A01_RP1_compact : CompactSpace apm_t01A01_RP1 := by
-  sorry
+  let S := Metric.sphere (0 : Fin 2 → ℝ) 1
+  let π : S → apm_t01A01_RP1 := fun x ↦
+    Projectivization.mk ℝ x.1 (by
+      intro hx
+      have : ‖(x : Fin 2 → ℝ)‖ = 1 := by
+        simpa [S, Metric.mem_sphere] using x.2
+      simpa [hx] using this)
+  have hπ : Continuous π := by
+    let j : S → {v : Fin 2 → ℝ // v ≠ 0} := fun x ↦
+      ⟨x.1, by
+        intro hx
+        have : ‖(x : Fin 2 → ℝ)‖ = 1 := by
+          simpa [S, Metric.mem_sphere] using x.2
+        simpa [hx] using this⟩
+    have hj : Continuous j := by
+      exact Continuous.subtype_mk continuous_subtype_val _
+    exact (ConstructionTargets.ProjectiveSpaceTopology.continuous_quotientMap ℝ 1).comp hj
+  have hsurj : Function.Surjective π := by
+    intro y
+    obtain ⟨v, hv, rfl⟩ :=
+      ConstructionTargets.ProjectiveSpaceTopology.surjective_quotientMap ℝ 1 y
+    have hnorm : ‖(v : Fin 2 → ℝ)‖ ≠ 0 := norm_ne_zero_iff.mpr v.2
+    let w : Fin 2 → ℝ := ‖(v : Fin 2 → ℝ)‖⁻¹ • v.1
+    have hw_norm : ‖w‖ = 1 := by
+      simp [w, norm_smul, hnorm]
+    have hw : w ≠ 0 := by
+      exact norm_ne_zero_iff.mp (by simpa [hw_norm])
+    let x : S := ⟨w, by simpa [S, Metric.mem_sphere, hw_norm]⟩
+    refine ⟨x, ?_⟩
+    apply (Projectivization.mk_eq_mk_iff' ℝ w v.1 hw v.2).mpr
+    exact ⟨‖(v : Fin 2 → ℝ)‖⁻¹, rfl⟩
+  have hcompact : IsCompact (Set.range π) := isCompact_range hπ
+  rw [hsurj.range_eq] at hcompact
+  exact ⟨hcompact⟩
 
 /-- Seat: `[x : y] ↦ x / y` (and `[x : 0] ↦ ∞`) is a continuous bijection
 `RP¹ → OnePoint ℝ` (`OnePoint.equivProjectivization` up to `Fin 2 → ℝ ≃ ℝ × ℝ`;
