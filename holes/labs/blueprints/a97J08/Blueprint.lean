@@ -2332,7 +2332,26 @@ theorem apm_a97j08_boundary_balanced (Q : Finset (ℤ × ℤ))
       ∑ e ∈ apm_a97j08_boundaryEdges Q, f e =
         ∑ q ∈ Q, ∑ e ∈ apm_a97j08_squareEdges q, f e) :
     apm_a97j08_Balanced (apm_a97j08_boundaryEdges Q) := by
-  sorry
+  intro v
+  let f : ((ℤ × ℤ) × (ℤ × ℤ)) → ℝ := fun e ↦
+    (if e.1 = v then 1 else 0) - (if e.2 = v then 1 else 0)
+  have hanti : ∀ e ∈ apm_a97j08_allEdges Q, f e.swap = -f e := by
+    intro e he
+    rcases e with ⟨a, b⟩
+    simp [f]
+  have hsquare : ∀ q : ℤ × ℤ,
+      ∑ e ∈ apm_a97j08_squareEdges q, f e = 0 := by
+    intro q
+    rw [apm_a97j08_squareSum_inside_aux_expand f q]
+    dsimp [f]
+    ring
+  have hsum := hC1 f hanti
+  simp_rw [hsquare, Finset.sum_const_zero] at hsum
+  have hcards :
+      ((↑((apm_a97j08_boundaryEdges Q).filter fun e ↦ e.1 = v).card : ℕ) : ℝ) -
+        ((↑((apm_a97j08_boundaryEdges Q).filter fun e ↦ e.2 = v).card : ℕ) : ℝ) = 0 := by
+    simpa [f, Finset.sum_sub_distrib] using hsum
+  exact_mod_cast (sub_eq_zero.mp hcards)
 
 -- (C3a) A nonempty balanced finite edge set contains a simple directed cycle.
 lemma apm_a97j08_exists_simple_cycle_aux_outgoing {V : Type*} [DecidableEq V]
