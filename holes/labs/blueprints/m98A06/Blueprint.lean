@@ -334,12 +334,47 @@ lemma apm_m98A06_duBoisReymond_aux_forward_aux_unscaled_variation
   norm_num at h
   exact h
 
+lemma apm_m98A06_duBoisReymond_aux_forward_aux_classification_aux_deriv_eq
+    (a y₀ ya : ℝ) (ha : 0 < a) (y : ℝ → ℝ)
+    (hy : apm_m98a06_IsStationary a y₀ ya y) :
+    ∀ x ∈ Ioo (0 : ℝ) a,
+      deriv y x = derivWithin y (Icc 0 a) x := by
+  intro x hx
+  have hdiff : DifferentiableAt ℝ y x :=
+    (hy.1.1.differentiableOn_one x (mem_Icc_of_Ioo hx)).differentiableAt
+      (Icc_mem_nhds hx.1 hx.2)
+  exact (derivWithin_of_mem_nhds (Icc_mem_nhds hx.1 hx.2)).symm
+
+-- du Bois-Reymond first integral: y' + ∫₀ˣ y is constant on [0, a].
+lemma apm_m98A06_duBoisReymond_aux_forward_aux_classification_aux_core_aux_first_integral
+    (a y₀ ya : ℝ) (ha : 0 < a) (y : ℝ → ℝ)
+    (hy : apm_m98a06_IsStationary a y₀ ya y) :
+    ∃ m : ℝ, ∀ x ∈ Icc (0 : ℝ) a,
+      derivWithin y (Icc 0 a) x + ∫ t in (0 : ℝ)..x, y t = m := by
+  sorry
+
+-- The first integral makes y'' = −y, so y is a trigonometric combination (ODE uniqueness).
+lemma apm_m98A06_duBoisReymond_aux_forward_aux_classification_aux_core_aux_ode
+    (a : ℝ) (ha : 0 < a) (y : ℝ → ℝ) (hy : ContDiffOn ℝ 1 y (Icc 0 a)) (m : ℝ)
+    (hm : ∀ x ∈ Icc (0 : ℝ) a, derivWithin y (Icc 0 a) x + ∫ t in (0 : ℝ)..x, y t = m) :
+    ∃ A B : ℝ, ∀ x ∈ Icc (0 : ℝ) a,
+      y x = A * Real.cos x + B * Real.sin x := by
+  sorry
+
+lemma apm_m98A06_duBoisReymond_aux_forward_aux_classification_aux_core
+    (a y₀ ya : ℝ) (ha : 0 < a) (y : ℝ → ℝ)
+    (hy : apm_m98a06_IsStationary a y₀ ya y) :
+    ∃ A B : ℝ, ∀ x ∈ Icc (0 : ℝ) a,
+      y x = A * Real.cos x + B * Real.sin x := by
+  obtain ⟨m, hm⟩ := apm_m98A06_duBoisReymond_aux_forward_aux_classification_aux_core_aux_first_integral a y₀ ya ha y hy
+  exact apm_m98A06_duBoisReymond_aux_forward_aux_classification_aux_core_aux_ode a ha y hy.1.1 m hm
+
 lemma apm_m98A06_duBoisReymond_aux_forward_aux_classification
     (a y₀ ya : ℝ) (ha : 0 < a) (y : ℝ → ℝ)
     (hy : apm_m98a06_IsStationary a y₀ ya y) :
     ∃ A B : ℝ, ∀ x ∈ Icc (0 : ℝ) a,
       y x = A * Real.cos x + B * Real.sin x := by
-  sorry
+  exact apm_m98A06_duBoisReymond_aux_forward_aux_classification_aux_core a y₀ ya ha y hy
 
 lemma apm_m98A06_duBoisReymond_aux_forward :
     ∀ a y₀ ya : ℝ, 0 < a → ∀ y : ℝ → ℝ,
