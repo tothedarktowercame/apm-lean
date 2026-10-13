@@ -24035,7 +24035,27 @@
    :consumer :t01A08,
    :implements-lemma
    :lemma-constructiontargets-sardconvexdomain-contdiffon-convexwithinjet,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:outcome :go,
+     :fixture
+     {:path "/tmp/t01a08_b1_probe.lean",
+      :sha256
+      "1a75ad577b4fd33450d4f90228c7d736aee3c05f3fd360ae2e27610a1d1b8061"},
+     :commands
+     [{:cmd "lake env lean /tmp/t01a08_b1_probe.lean", :exit 0}
+      {:cmd "sha256sum /tmp/t01a08_b1_probe.lean", :exit 0}],
+     :implementation
+     {:scope ["ConstructionTargets/SardConvexDomain.lean"],
+      :declaration
+      "ConstructionTargets.SardConvexDomain.ContDiffOn.convexWithinJet",
+      :type
+      "Convex ℝ s → (interior s).Nonempty → ContDiffOn ℝ ∞ f s → ∃ J n x := iteratedFDerivWithin ℝ n f s x, continuous on s, J0=f, J1=fderivWithin, and ∀ permutations σ, (J n x).domDomCongr σ=J n x"},
+     :residual
+     "Implement compiled B1 exactly; then convexWithinJet_isWhitney/criticalImageNull."}},
+   :phase :implementation,
+   :type
+   "Convex ℝ s → (interior s).Nonempty → ContDiffOn ℝ ∞ f s → ∃ J n x := iteratedFDerivWithin ℝ n f s x, continuous on s, J0=f, J1=fderivWithin, and ∀ permutations σ, (J n x).domDomCongr σ=J n x",
    :state :open,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain.blueprint/B1",
@@ -24050,6 +24070,8 @@
    :id :r-a08-sard-b1-3,
    :kind :reusable-theorem,
    :area "sard-convex-domain",
+   :declaration
+   "ConstructionTargets.SardConvexDomain.ContDiffOn.convexWithinJet",
    :depends-on [:r-topo3-cp13c],
    :current-residual "criticalImageNull then adapter.",
    :other-consumers []}
