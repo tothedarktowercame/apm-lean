@@ -4,6 +4,7 @@ import ConstructionTargets.KleinPlaneActionFree
 import ConstructionTargets.KleinPlaneOrbitQuotientTopology
 import ConstructionTargets.DeckGroupQuotientFundamentalGroup
 import ConstructionTargets.KleinClosedSquareOrbitInverseContinuity
+import ConstructionTargets.KleinSquareEqvGenCasesIff
 
 /-! # Generic closing lemmas for t93J03
 
@@ -23,6 +24,8 @@ open KleinCoordinateInversionPower
 open ConstructionTargets.KleinOrbitQuotientHomeomorph
 open ConstructionTargets.KleinClosedSquareOrbitQuotientEquiv
 open ConstructionTargets.KleinClosedSquareOrbitInverseContinuity
+open KleinPlaneActionSquareOrbitClassification
+open KleinSquareBoundaryRelation
 
 /-- An orbit intersection determines both integer normal-form coordinates by
 the source and target points.  These are the equations used to bound the
@@ -187,6 +190,42 @@ noncomputable def closedSquareOrbitHomeomorph :
   continuous_toFun := continuous_closedSquareOrbitQuotientEquiv
   continuous_invFun := closedSquareOrbitQuotientEquiv_continuous_symm_of_t2
 
+def closedSquareEdgeSetoid : Setoid ClosedSquare where
+  r p q := Relation.EqvGen SquareRel p.1 q.1
+  iseqv := ⟨fun p => Relation.EqvGen.refl p.1,
+    fun {_ _} h => h.symm,
+    fun {_ _ _} h₁ h₂ => Relation.EqvGen.trans _ _ _ h₁ h₂⟩
+
+abbrev ClosedSquareEdgeQuotient := Quotient closedSquareEdgeSetoid
+
+/-- On square representatives the generated polygon relation is exactly the
+orbit relation of the literal affine Klein action. -/
+theorem closedSquare_eqvGen_iff_sameOrbit (p q : ClosedSquare) :
+    Relation.EqvGen SquareRel p.1 q.1 ↔
+      KleinSquareEqvGenToCases.SameOrbit p.1 q.1 := by
+  rw [KleinSquareEqvGenCasesIff.eqvGen_iff_cases p.2 q.2]
+  exact (sameOrbit_iff_cases p.2 q.2).symm
+
+/-- Identity on closed-square representatives, descending the exact relation
+comparison to the two quotient spaces. -/
+noncomputable def closedSquareEdgeOrbitHomeomorph :
+    ClosedSquareEdgeQuotient ≃ₜ ClosedSquareOrbitQuotient where
+  toFun := Quotient.lift (fun p => Quotient.mk _ p) fun p q h =>
+    Quotient.sound ((closedSquare_eqvGen_iff_sameOrbit p q).mp (by
+      change Relation.EqvGen SquareRel p.1 q.1 at h
+      exact h))
+  invFun := Quotient.lift (fun p => Quotient.mk _ p) fun p q h =>
+    Quotient.sound (show closedSquareEdgeSetoid.r p q from
+      (closedSquare_eqvGen_iff_sameOrbit p q).mpr h)
+  left_inv := by rintro ⟨p⟩; rfl
+  right_inv := by rintro ⟨p⟩; rfl
+  continuous_toFun := by
+    apply Continuous.quotient_lift
+    exact continuous_coinduced_rng
+  continuous_invFun := by
+    apply Continuous.quotient_lift
+    exact continuous_coinduced_rng
+
 /-- Once proper discontinuity of the explicit affine action is supplied, the
 banked deck-group theorem computes the fundamental group at the canonical
 orbit of the origin. -/
@@ -273,5 +312,7 @@ theorem lift_isEmbedding_assembly
 #print axioms kleinPlaneProperlyDiscontinuousSMul
 #print axioms planeOrbitRelHomeomorph
 #print axioms closedSquareOrbitHomeomorph
+#print axioms closedSquare_eqvGen_iff_sameOrbit
+#print axioms closedSquareEdgeOrbitHomeomorph
 
 end ConstructionTargets.t93J03Closure

@@ -93,6 +93,13 @@ not a quotient of it.
 Dependencies: banked deck-group quotient, affine action, action freeness, and
 coordinate normal form. No dependency on another blueprint lemma.
 
+The closed-square comparison is now factored through
+`ClosedSquareEdgeQuotient`.  The compiled identity-on-representatives
+homeomorphism `closedSquareEdgeOrbitHomeomorph` proves that generated
+square-edge equivalence is exactly affine-orbit equivalence.  The remaining
+C1 representation step is therefore only the frozen disk quotient to this
+closed-square edge quotient.
+
 ### C2. `t93J03_cyclicCover_zpowers_generatorA` — LIBRARY
 
 Given the C1 presentation equivalence at `k`, construct a covering
