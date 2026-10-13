@@ -1002,4 +1002,28 @@ theorem dist_whitneyNormalize
   congr 1
   abel
 
+/-- A center from stratum `k` whose quarter-ball contains `x` normalizes into
+the fixed closed ball of radius `1/2` around the origin. -/
+theorem whitneyNormalize_mem_closedBall_half
+    {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    (s : Set E) (k : ℤ) (x c : E)
+    (hc : c ∈ whitneyScaleStratum s k)
+    (hxc : x ∈ Metric.ball c (Metric.infDist c s / 4)) :
+    whitneyNormalize k x c ∈ Metric.closedBall (0 : E) (1 / 2 : ℝ) := by
+  apply Metric.mem_closedBall.2
+  have hdist : dist c x < (2 : ℝ) ^ (k + 1) / 4 := by
+    have hxcd : dist x c < Metric.infDist c s / 4 := Metric.mem_ball.1 hxc
+    rw [dist_comm]
+    exact lt_trans hxcd (div_lt_div_of_pos_right hc.2.2 (by norm_num))
+  exact le_of_lt (calc
+    dist (whitneyNormalize k x c) 0 =
+        ((2 : ℝ) ^ k)⁻¹ * dist c x := by
+      simpa [whitneyNormalize] using dist_whitneyNormalize k x c x
+    _ < ((2 : ℝ) ^ k)⁻¹ * ((2 : ℝ) ^ (k + 1) / 4) :=
+      mul_lt_mul_of_pos_left hdist (inv_pos.mpr (by positivity))
+    _ = 1 / 2 := by
+      rw [zpow_add₀ (by norm_num : (2 : ℝ) ≠ 0)]
+      field_simp
+      norm_num)
+
 end ConstructionTargets.SardConvexDomain
