@@ -114,7 +114,15 @@ lemma t95J05_unitSphere_lower_mass :
 normalized Hausdorff measure.  This is independent of both chart-area leaves. -/
 lemma t95J05_unitSphere_equator_null :
     μHE[3] t95J05SphereEquator = 0 := by
-  sorry
+  have heq :
+      t95J05SphereEquator =
+        ConstructionTargets.SphereEquatorImageNullity.equator 3 := by
+    ext x
+    simp [t95J05SphereEquator,
+      ConstructionTargets.SphereEquatorImageNullity.equator]
+  rw [heq, Measure.euclideanHausdorffMeasure_def, Measure.smul_apply,
+    ConstructionTargets.SphereEquatorHausdorffNullity.equator_three_ambient_null]
+  simp
 
 lemma t95J05_euclideanHausdorff_unitSphere_mass_aux_ambient_aux_compare_aux_coarea :
     μHE[3] (Metric.sphere (0 : t95J05R4) 1) =
