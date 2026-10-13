@@ -430,7 +430,48 @@ lemma apm_t02A07_transverse_iff_parameter_sq_ne_half_aux_submodule_aux_good_aux_
     ∃ v ∈ apm_t02a07_sphereTangent y,
       fderiv ℝ apm_t02a07_constraints (apm_t02a07_family parameter y)
         (fderiv ℝ (apm_t02a07_familyAmbient parameter) y v) 1 ≠ 0 := by
-  sorry
+  have hlevel := apm_t02A07_transverse_iff_parameter_sq_ne_half_aux_level
+    parameter y hyZ
+  have hsphere := apm_t02A07_transverse_iff_parameter_sq_ne_half_aux_sphere y
+  have hparam :=
+    apm_t02A07_transverse_iff_parameter_sq_ne_half_aux_submodule_aux_parameter_sq parameter
+  have ha : parameter.1 0 ≠ 0 := by
+    intro ha
+    rw [ha] at hlevel
+    norm_num at hlevel
+  let u : apm_t02a07_E3 := WithLp.toLp 2
+    ![-(2 * y.1 1 * y.1 2) * y.1 0,
+      y.1 2 - (2 * y.1 1 * y.1 2) * y.1 1,
+      y.1 1 - (2 * y.1 1 * y.1 2) * y.1 2]
+  let q : ℝ := y.1 2 * u 1 + y.1 1 * u 2
+  have hu_inner : inner ℝ (y.1 : apm_t02a07_E3) u = 0 := by
+    simp [u, PiLp.inner_apply, Fin.sum_univ_succ, real_inner_eq_re_inner,
+      RCLike.inner_apply]
+    ring_nf
+    have hs := congrArg (fun z : ℝ => 2 * y.1 1 * y.1 2 * z) hsphere
+    ring_nf at hs
+    nlinarith
+  have hq : q ≠ 0 := by
+    intro hq0
+    have hq' : y.1 1 ^ 2 + y.1 2 ^ 2 - 4 * (y.1 1 * y.1 2) ^ 2 = 0 := by
+      simp [q, u] at hq0
+      ring_nf at hq0 ⊢
+      exact hq0
+    exact hp (apm_t02A07_transverse_iff_parameter_sq_ne_half_aux_submodule_aux_good_aux_algebra
+      hparam hsphere hlevel hq')
+  refine ⟨u, ?_, ?_⟩
+  · rw [apm_t02a07_sphereTangent,
+      Submodule.mem_orthogonal_singleton_iff_inner_right]
+    exact hu_inner
+  · rw [apm_t02A07_constraints_fderiv_surjective_aux_formula,
+      hderiv]
+    intro hz
+    have hz' : parameter.1 0 ^ 2 * q = 0 := by
+      dsimp [q]
+      simp [apm_t02a07_family] at hz
+      ring_nf at hz ⊢
+      exact hz
+    exact (mul_ne_zero (pow_ne_zero 2 ha) hq) hz'
 -- END SEAT AREA
 
 /-- One image direction transverse to the product constraint, together with
