@@ -21570,7 +21570,7 @@
    "reopened: a lemma this row reported missing is now banked",
    :stop-count 0,
    :review-finding
-   "Frozen fixture metadata is invalid in both authoritative acceptance copies: each records SHA aad5a9cda739c1cbcceb1eca8ab8b33395db8a08c9d68941a87c644f4d13586e and omits :mode, while the compiling fixture hashes to 7e72195e1214d7580994264481ae57d0ecf87755d31825ab85cbda5f1220c4b1. Update both copies to that digest with :mode :post-build-export-check, correct evidence :changed-paths to [\"ConstructionTargets/ManifoldFundamentalClass.lean\"], then resubmit f0afa7bd.",
+   "Frozen fixture metadata is invalid: acceptance records aad5a9cda739c1cbcceb1eca8ab8b33395db8a08c9d68941a87c644f4d13586e and omits :mode, but the compiling fixture hashes to 7e72195e1214d7580994264481ae57d0ecf87755d31825ab85cbda5f1220c4b1. Update both authoritative acceptance copies to that digest with :mode :post-build-export-check, then resubmit f0afa7bd.",
    :implements-lemma
    :lemma-constructiontargets-manifoldfundamentalclass-coefficientclosedboundary-coordinat,
    :evidence
@@ -21597,6 +21597,12 @@
      {:cmd "sha256sum fixture; lake env lean fixture", :exit 0}
      {:cmd "statement-registry check; placeholder recount; git status",
       :exit 0}],
+    :review
+    {:outcome :fail,
+     :seat "codex-11",
+     :job "invoke-1791888610730-9460-dc63544c",
+     :finding
+     "Frozen fixture metadata is invalid: acceptance records aad5a9cda739c1cbcceb1eca8ab8b33395db8a08c9d68941a87c644f4d13586e and omits :mode, but the compiling fixture hashes to 7e72195e1214d7580994264481ae57d0ecf87755d31825ab85cbda5f1220c4b1. Update both authoritative acceptance copies to that digest with :mode :post-build-export-check, then resubmit f0afa7bd."},
     :commit "f0afa7bdc4c95a8c87143342ceb8c9ce51cd5612",
     :changed-paths
     ["ConstructionTargets/ManifoldFundamentalClass.lean"],
@@ -21606,7 +21612,7 @@
      "7e72195e1214d7580994264481ae57d0ecf87755d31825ab85cbda5f1220c4b1",
      :mode :post-build-export-check}},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :repair,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/manifold-fundamental-class",
    :acceptance
@@ -21621,7 +21627,7 @@
    :id :routes-2026-10-12-mfclass-boundary-coordinates-r1,
    :kind :reusable-theorem,
    :area "manifold-fundamental-class",
-   :fail-count 0,
+   :fail-count 1,
    :depends-on [:routes-2026-10-12-mfclass-closed-generator-bridge-r1],
    :current-residual "Prove Bool H0 comparison.",
    :other-consumers [:t98A02]}
