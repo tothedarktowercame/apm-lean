@@ -113895,6 +113895,17 @@
       "lake build ConstructionTargets.ThreeCirclesFundamentalGroup",
       :exit 1,
       :finding "B12 absent."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791896207379-9679-867a7a5f",
+     :commands
+     ["git show/diff 207489df^..207489df"
+      "git archive 207489df; lake env lean archived PointWedgeVanKampen.lean"
+      "sha256/diff-tree/placeholder checks; statement-registry.py check"
+      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (expected absent)"],
+     :finding
+     "Reviewer codex-3. PASS program STOP: 207489df adds two compiled, sorry-free supporting theorems after c8e374ff. The equivalence triangle is used in the correct direction to rewrite inverse.map(functor.map unitInv) as the shifted unitInv component, and functor composition preserves the typed transported map. Scope is Lean+MD only; source/doc/fixture hashes match ledger (804a4a48/c2c9802c/0bca6ce3), placeholders 0, registry 149/149, axioms standard only. Residual: close the shifted recurrence at Unit, then projection=1, inl, B6/B12; B12 remains absent."},
     :commit "207489df98f507bf67e9a4834e5248b449a2d9df",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
@@ -113905,7 +113916,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113926,7 +113937,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Naturality square banked; coordinate unitInv map is identity.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: eK triangle reduces the transported map to the preceding unitInv component.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -114686,7 +114697,11 @@
     {:job 8,
      :commit "c8e374ff521df243a02e2fde5b8440ac827b8608",
      :reason
-     "Naturality square banked; coordinate unitInv map is identity."}]}
+     "Naturality square banked; coordinate unitInv map is identity."}
+    {:job 9,
+     :commit "207489df98f507bf67e9a4834e5248b449a2d9df",
+     :reason
+     "eK triangle reduces the transported map to the preceding unitInv component."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
