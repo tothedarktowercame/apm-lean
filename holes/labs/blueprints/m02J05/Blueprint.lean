@@ -195,6 +195,25 @@ lemma apm_m02J05_bridge_convex_and_submodule_of_young_shape_aux_add_aux_pointwis
       hshape.1.2 (mem_Ici.mpr (abs_nonneg _)) (mem_Ici.mpr (abs_nonneg _)) hr hs hrs
     _ = _ := rfl
 
+lemma apm_m02J05_bridge_convex_and_submodule_of_young_shape_aux_add_aux_continuous
+    (α : ℝ → ℝ) (hc : ContinuousOn α (Ici 0)) :
+    Continuous (fun t : ℝ ↦ apm_m02J05_young α |t|) := by
+  have ham : Continuous (fun x : ℝ ↦ α (max x 0)) :=
+    hc.comp_continuous (continuous_id.max continuous_const)
+      (fun x ↦ mem_Ici.mpr (le_max_right _ _))
+  have hp : Continuous (fun t : ℝ ↦ ∫ x in (0 : ℝ)..t, α (max x 0)) :=
+    continuous_primitive (fun a b ↦ ham.intervalIntegrable a b) 0
+  have heq : (fun t : ℝ ↦ apm_m02J05_young α |t|) =
+      fun t ↦ ∫ x in (0 : ℝ)..|t|, α (max x 0) := by
+    funext t
+    unfold apm_m02J05_young
+    apply intervalIntegral.integral_congr
+    intro x hx
+    rw [uIcc_of_le (abs_nonneg t)] at hx
+    simp [max_eq_left hx.1]
+  rw [heq]
+  exact hp.comp continuous_abs
+
 lemma apm_m02J05_bridge_convex_and_submodule_of_young_shape_aux_add
     (α : ℝ → ℝ)
     (hc : ContinuousOn α (Ici 0))
@@ -203,7 +222,37 @@ lemma apm_m02J05_bridge_convex_and_submodule_of_young_shape_aux_add
     (u v : apm_m02J05_Fun)
     (hu : u ∈ apm_m02J05_L α) (hv : v ∈ apm_m02J05_L α) :
     u + v ∈ apm_m02J05_L α := by
-  sorry
+  obtain ⟨a, ha, hau⟩ := hu
+  obtain ⟨b, hb, hbv⟩ := hv
+  set p := |a| with hpdef
+  set q := |b| with hqdef
+  have hp : 0 < p := abs_pos.2 ha
+  have hq : 0 < q := abs_pos.2 hb
+  have hpq : 0 < p + q := add_pos hp hq
+  set c := p * q / (p + q) with hcdef
+  have hc0 : c ≠ 0 := (div_pos (mul_pos hp hq) hpq).ne'
+  refine ⟨c, hc0, ?_⟩
+  have hY := apm_m02J05_bridge_convex_and_submodule_of_young_shape_aux_add_aux_continuous α hc
+  have hYnn : ∀ t, 0 ≤ apm_m02J05_young α |t| := fun t =>
+    intervalIntegral.integral_nonneg (abs_nonneg t) (fun x hx => hnonneg x hx.1)
+  have hF := hau
+  have hG := hbv
+  unfold apm_m02J05_K at hF hG ⊢
+  simp only [Set.mem_setOf_eq] at hF hG ⊢
+  have hdom : Integrable (fun x => (q / (p + q)) * apm_m02J05_young α |(a • u) x| +
+      (p / (p + q)) * apm_m02J05_young α |(b • v) x|) (volume.restrict (Icc (0 : ℝ) 1)) :=
+    (hF.const_mul _).add (hG.const_mul _)
+  refine hdom.mono' ((hY.comp_aestronglyMeasurable (c • (u + v)).aestronglyMeasurable)) ?_
+  filter_upwards [AEEqFun.coeFn_smul c (u + v), AEEqFun.coeFn_add u v,
+    AEEqFun.coeFn_smul a u, AEEqFun.coeFn_smul b v] with x h1 h2 h3 h4
+  simp only [Function.comp_apply, Real.norm_eq_abs]
+  rw [abs_of_nonneg (hYnn _), h1, Pi.smul_apply, h2, Pi.add_apply, h3, h4, Pi.smul_apply,
+    Pi.smul_apply, smul_eq_mul, smul_eq_mul, smul_eq_mul]
+  have hpa : |p * u x| = |a * u x| := by rw [abs_mul, abs_mul, hpdef, abs_abs]
+  have hqb : |q * v x| = |b * v x| := by rw [abs_mul, abs_mul, hqdef, abs_abs]
+  have := apm_m02J05_bridge_convex_and_submodule_of_young_shape_aux_add_aux_pointwise α hshape p q hp hq (u x) (v x)
+  rw [hpa, hqb] at this
+  exact this
 
 lemma apm_m02J05_bridge_convex_and_submodule_of_young_shape_aux_convex
     (α : ℝ → ℝ)
