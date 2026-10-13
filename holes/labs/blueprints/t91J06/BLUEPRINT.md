@@ -61,43 +61,100 @@ remaining bundled extension or gluing result.  The topology worklist and
 
 ## Remaining lemmas
 
-### `apm_t91J06_extend_interval_embedding_coordinates` — LIBRARY
+### Interval-coordinate extension: seven parallel leaves
 
-**Statement in words.** Let `t : [0,1] → [0,1]` be a continuous injection
-whose range lies in `(0,1)`.  Given arbitrary coordinates
-`q : [0,1] ≃ₜ [-(n+1),n+1]`, extend them to coordinates
-`Q : [0,1] ≃ₜ [-(n+2),n+2]` satisfying `Q (t x) = q x` exactly.
+The former 200–350 line LIBRARY boundary is now a sorry-free assembly.  It
+uses `t91J06Closure.intervalEmbedding_homeomorph_four_orientations` and calls
+one of four independent ramp constructors, an independent IVT lemma, and an
+independent packaging lemma.  In the descriptions below put
+`A = n + 2`, `u = (t 0 : ℝ)`, and `v = (t 1 : ℝ)`.
 
-**Why true.** Use
-`t91J06Closure.intervalEmbedding_homeomorph_four_orientations` to split on
-the independent orientations of `t` and `q`.  The endpoint images of `t` are
-distinct points strictly between `0` and `1`.  On the middle interval define
-`q ∘ t⁻¹`; on the two complementary intervals use affine ramps to the two new
-target endpoints.  Which target endpoint belongs to which side is determined
-by the orientation of the composite, so all four cases paste.  Prove
-continuity at the two seams, strict monotonicity or antitonicity across the
-three regions, and surjectivity, then package the continuous bijection using
-compact-to-Hausdorff.
+#### `apm_t91J06_extend_ramp_mono_mono` (90–140 lines, independent)
 
-This is marked **LIBRARY** because repeated topology-loop attempts stopped at
-the bundled affine-pasting construction and the active shared program
-`program-2026-10-11-close-t91j06` is building precisely this theorem in
-`ConstructionTargets/t91J06Closure.lean`.  That file is the closest sorry-free
-construction target and already contains the four-orientation front end; what
-is missing is the actual affine endpoint pieces, seam proofs, and packaging.
+Here `t` and the real coordinate of `q` are strictly increasing.  Define `F`
+on the closed pieces `[0,u]`, `[u,v]`, `[v,1]`: the outside formulas are the
+unique affine maps from `(-A,q 0)` and `(q 1,A)`, while the middle formula is
+`q (t⁻¹ y)`.  A convenient inverse is `Set.InjOn.invFun t univ`, or one can use
+`Function.invFun`; use `Function.leftInverse_invFun` after proving injectivity.
+For continuity, prove continuity on each `Icc` and paste twice with
+`ContinuousOn.piecewise` (or `ContinuousOn.union` plus `IsClosed.isClosed_Icc`);
+the seam equations reduce by `t`'s inverse law.  For strict monotonicity, use
+`strictMonoOn_iff_forall_lt` on each piece, then split two points according to
+the seams; `hqmono`, `htmono`, and positivity of the affine denominators close
+the cases.  `htint` at `t 0,t 1` proves `0<u<v<1`, so neither ramp degenerates.
 
-**Expected size.** 200–350 lines.  The lower estimate is possible with a good
-piecewise monotonicity API; otherwise it is program-sized rather than an
-honest one-session lemma.
+#### `apm_t91J06_extend_ramp_anti_anti` (90–140 lines, independent)
 
-**Dependencies.** Definitions and the imported four-orientation theorem only.
+Both maps reverse orientation, so their composite coordinate is increasing.
+Now `v<u`; use pieces `[0,v]`, `[v,u]`, `[u,1]`, joining `-A` to `q 1`, using
+`q ∘ t⁻¹` in the middle, and joining `q 0` to `A`.  The useful Mathlib tools
+are the same as in the mono/mono leaf, with `htanti.lt_iff_lt` and
+`hqanti.lt_iff_lt` (or direct applications of `StrictAnti`) for order reversal.
+The endpoint values of a decreasing homeomorphism are forced by surjectivity;
+derive them by applying `q.symm` to the target endpoints if simplification
+does not find them automatically.
 
-**Truth check.** For the increasing test embedding `t(x)=1/4+x/2` and
-increasing affine `q`, the construction extends the middle `[-(n+1),n+1]` by
-one unit on each side.  With decreasing `q(x)` the endpoint assignment swaps,
-which exposes and repairs the error in an earlier topology-loop plan that
-split only on `t`.  The strict-interior hypothesis makes both outside pieces
-nondegenerate.
+#### `apm_t91J06_extend_ramp_mono_anti` (90–140 lines, independent)
+
+Here `u<v`, but the required `F` is strictly decreasing.  Paste the affine
+ramp from `A` to `q 0`, the middle `q ∘ t⁻¹`, and the ramp from `q 1` to `-A`.
+Use `StrictAnti` throughout the cross-piece comparisons.  This is deliberately
+a separate leaf: it can be proved in parallel, or cheaply obtained from the
+mono/mono construction by postcomposing `q` and `F` with target negation.
+For that alternative, build the subtype homeomorphism with
+`Homeomorph.subtypeCongr`/`Homeomorph.setCongr` and `Homeomorph.neg`.
+
+#### `apm_t91J06_extend_ramp_anti_mono` (90–140 lines, independent)
+
+Here `v<u` and `F` is strictly decreasing.  The three pieces join `A` to
+`q 1`, use `q ∘ t⁻¹`, and join `q 0` to `-A`.  It can alternatively be reduced
+to the preceding leaf by precomposing with the unit reflection `x ↦ 1-x`.
+The strict-interior hypothesis again supplies strict inequalities at both
+outside pieces.  Reflections preserve the interval by `sub_nonneg.mpr` and
+`sub_le_one`; `Homeomorph.subtypeCongr` is the useful bundling tool.
+
+#### `apm_t91J06_mono_endpoint_surjective` (30–50 lines, independent)
+
+A continuous `F : [0,1] → ℝ` with endpoint values `a,b` hits every point of
+`[a,b]`.  This lemma intentionally does not assume monotonicity: apply the
+intermediate value theorem, preferably `intermediate_value_Icc`, to `hF` and
+the two endpoint equalities.  It remains true when `a=b` and when the interval
+is empty (`a>b`, in which case the quantified subtype has no inhabitants).
+
+#### `apm_t91J06_anti_endpoint_surjective` (30–50 lines, independent)
+
+The reversed-endpoint version of the same IVT fact.  Apply
+`intermediate_value_Icc` with endpoints exchanged, or reduce to the preceding
+lemma after negation.  No order or injectivity assumption is needed.  The
+degenerate and empty-target cases are harmless for the same reasons.
+
+#### `apm_t91J06_package_interval_coordinate` (45–80 lines, independent)
+
+Given a continuous injective `F`, an explicit proof that its values lie in the
+target `Icc`, explicit surjectivity, and the middle-piece equation, bundle
+`x ↦ ⟨F x,hFmem x⟩` as an `Equiv`.  Its continuity follows from
+`Continuous.subtype_mk`; package it with
+`Continuous.homeoOfEquivCompactToT2` (the domain subtype is compact and the
+target is T2).  The extension equation follows by `Subtype.ext`/`rfl` on
+values.  This statement carries no hidden interval argument: all bijectivity
+facts are explicit hypotheses.
+
+#### `apm_t91J06_extend_interval_embedding_coordinates` (assembly, proved)
+
+Split with
+`t91J06Closure.intervalEmbedding_homeomorph_four_orientations`, select the
+appropriate ramp leaf, obtain surjectivity from the matching endpoint-IVT
+leaf, and invoke the packaging leaf.  `StrictMono.injective` or
+`StrictAnti.injective` supplies injectivity.  Thus every admitted leaf above
+is mutually independent; none has another admitted declaration in its axiom
+closure.
+
+Truth checks: all four orientation combinations occur.  The range-in-interior
+hypothesis rules out `t 0` or `t 1` at a boundary and injection rules out equal
+seams.  The target has `A=n+2≥2`, so it is nonempty.  In particular, no leaf
+merely repeats its desired conclusion, and the packaging leaf cannot conceal
+the ramp argument because it receives continuity, range, injectivity,
+surjectivity, and compatibility separately.
 
 ### `apm_t91J06_compatible_stage_coordinates`
 
@@ -170,13 +227,16 @@ The final `apm_t91j06` has exactly the registered type.  It obtains the family
 from `apm_t91J06_compatible_stage_coordinates` and passes it to the corrected
 gluing lemma.  Its body contains no `sorry`.
 
-* **Layer 1 (parallel):**
-  `apm_t91J06_extend_interval_embedding_coordinates` (LIBRARY program),
+* **Layer 1 (parallel):** the four `apm_t91J06_extend_ramp_*` leaves, the two
+  endpoint-surjectivity leaves, `apm_t91J06_package_interval_coordinate`,
   `apm_t91J06_compatible_stage_coordinates` (proved against the extension
   contract), and `apm_t91J06_glue_with_embeddings` (proved against arbitrary
   compatible coordinates).
-* **Layer 2 (already compiled, no seat):** the final two-line assembly after
-  the three Layer 1 bodies are supplied.
+* **Layer 2 (already compiled, no seat):**
+  `apm_t91J06_extend_interval_embedding_coordinates`, assembled from the
+  seven interval leaves.
+* **Layer 3 (already compiled, no seat):** the final two-line assembly after
+  the coordinate and gluing bodies are supplied.
 
 ## Compilation and axioms
 
@@ -192,13 +252,14 @@ Then the blueprint compiled with:
 systemd-run --user --scope -q -p MemoryMax=12G lake env lean holes/labs/blueprints/t91J06/Blueprint.lean
 ```
 
-The three warnings are exactly the three top-level admitted lemmas above.  The
-requested final output was:
+The admitted declarations are exactly the seven independent interval leaves
+above; the rest of this blueprint is already proved.  The requested final
+output was:
 
 ```text
 'apm_t91j06' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
 ```
 
-Thus `sorryAx` reaches the registered theorem only through the three named
-lemma bodies; the definitions, reused preliminary lemmas, and main assembly
-are sorry-free.
+Thus `sorryAx` reaches the registered theorem only through the seven named
+leaf bodies; the definitions, reused preliminary lemmas, interval-extension
+assembly, and main assembly are sorry-free.

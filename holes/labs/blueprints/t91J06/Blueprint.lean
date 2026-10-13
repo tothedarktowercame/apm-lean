@@ -74,9 +74,102 @@ lemma apm_t91J06_exists_pair_mem_stage_interior
   exact ⟨max nx ny + 1, hnested (max nx ny) hxmax,
     hnested (max nx ny) hymax⟩
 
-/-- LIBRARY: extend arbitrary prescribed coordinates across an interval
-embedded strictly inside the unit interval.  The independent orientations of
-`t` and `q` account for all four cases. -/
+/-- The explicit three-piece affine construction when both coordinates have
+positive orientation. -/
+lemma apm_t91J06_extend_ramp_mono_mono
+    (n : ℕ) (t : apm_t91J06_I → apm_t91J06_I)
+    (ht : Continuous t) (htint : Set.range t ⊆ apm_t91J06_Iinterior)
+    (q : apm_t91J06_I ≃ₜ Set.Icc (-(n + 1 : ℝ)) (n + 1 : ℝ))
+    (htmono : StrictMono t)
+    (hqmono : StrictMono (fun x ↦ (q x : ℝ))) :
+    ∃ F : apm_t91J06_I → ℝ,
+      Continuous F ∧ StrictMono F ∧
+      (∀ x, F x ∈ Set.Icc (-(n + 2 : ℝ)) (n + 2 : ℝ)) ∧
+      F ⟨0, by norm_num⟩ = -(n + 2 : ℝ) ∧
+      F ⟨1, by norm_num⟩ = (n + 2 : ℝ) ∧
+      ∀ x, F (t x) = (q x : ℝ) := by
+  sorry
+
+/-- The explicit three-piece affine construction when both coordinates have
+negative orientation. -/
+lemma apm_t91J06_extend_ramp_anti_anti
+    (n : ℕ) (t : apm_t91J06_I → apm_t91J06_I)
+    (ht : Continuous t) (htint : Set.range t ⊆ apm_t91J06_Iinterior)
+    (q : apm_t91J06_I ≃ₜ Set.Icc (-(n + 1 : ℝ)) (n + 1 : ℝ))
+    (htanti : StrictAnti t)
+    (hqanti : StrictAnti (fun x ↦ (q x : ℝ))) :
+    ∃ F : apm_t91J06_I → ℝ,
+      Continuous F ∧ StrictMono F ∧
+      (∀ x, F x ∈ Set.Icc (-(n + 2 : ℝ)) (n + 2 : ℝ)) ∧
+      F ⟨0, by norm_num⟩ = -(n + 2 : ℝ) ∧
+      F ⟨1, by norm_num⟩ = (n + 2 : ℝ) ∧
+      ∀ x, F (t x) = (q x : ℝ) := by
+  sorry
+
+/-- The explicit three-piece affine construction when `t` preserves and `q`
+reverses orientation. -/
+lemma apm_t91J06_extend_ramp_mono_anti
+    (n : ℕ) (t : apm_t91J06_I → apm_t91J06_I)
+    (ht : Continuous t) (htint : Set.range t ⊆ apm_t91J06_Iinterior)
+    (q : apm_t91J06_I ≃ₜ Set.Icc (-(n + 1 : ℝ)) (n + 1 : ℝ))
+    (htmono : StrictMono t)
+    (hqanti : StrictAnti (fun x ↦ (q x : ℝ))) :
+    ∃ F : apm_t91J06_I → ℝ,
+      Continuous F ∧ StrictAnti F ∧
+      (∀ x, F x ∈ Set.Icc (-(n + 2 : ℝ)) (n + 2 : ℝ)) ∧
+      F ⟨0, by norm_num⟩ = (n + 2 : ℝ) ∧
+      F ⟨1, by norm_num⟩ = -(n + 2 : ℝ) ∧
+      ∀ x, F (t x) = (q x : ℝ) := by
+  sorry
+
+/-- The explicit three-piece affine construction when `t` reverses and `q`
+preserves orientation. -/
+lemma apm_t91J06_extend_ramp_anti_mono
+    (n : ℕ) (t : apm_t91J06_I → apm_t91J06_I)
+    (ht : Continuous t) (htint : Set.range t ⊆ apm_t91J06_Iinterior)
+    (q : apm_t91J06_I ≃ₜ Set.Icc (-(n + 1 : ℝ)) (n + 1 : ℝ))
+    (htanti : StrictAnti t)
+    (hqmono : StrictMono (fun x ↦ (q x : ℝ))) :
+    ∃ F : apm_t91J06_I → ℝ,
+      Continuous F ∧ StrictAnti F ∧
+      (∀ x, F x ∈ Set.Icc (-(n + 2 : ℝ)) (n + 2 : ℝ)) ∧
+      F ⟨0, by norm_num⟩ = (n + 2 : ℝ) ∧
+      F ⟨1, by norm_num⟩ = -(n + 2 : ℝ) ∧
+      ∀ x, F (t x) = (q x : ℝ) := by
+  sorry
+
+/-- IVT surjectivity for a continuous increasing coordinate with prescribed
+endpoint values. -/
+lemma apm_t91J06_mono_endpoint_surjective
+    {a b : ℝ} (F : apm_t91J06_I → ℝ) (hF : Continuous F)
+    (h0 : F ⟨0, by norm_num⟩ = a) (h1 : F ⟨1, by norm_num⟩ = b) :
+    ∀ y : Set.Icc a b, ∃ x, F x = y := by
+  sorry
+
+/-- IVT surjectivity for a continuous decreasing coordinate with prescribed
+endpoint values. -/
+lemma apm_t91J06_anti_endpoint_surjective
+    {a b : ℝ} (F : apm_t91J06_I → ℝ) (hF : Continuous F)
+    (h0 : F ⟨0, by norm_num⟩ = b) (h1 : F ⟨1, by norm_num⟩ = a) :
+    ∀ y : Set.Icc a b, ∃ x, F x = y := by
+  sorry
+
+/-- Package a continuous bijective real coordinate as a homeomorphism. -/
+lemma apm_t91J06_package_interval_coordinate
+    (n : ℕ) (t : apm_t91J06_I → apm_t91J06_I)
+    (q : apm_t91J06_I ≃ₜ Set.Icc (-(n + 1 : ℝ)) (n + 1 : ℝ))
+    (F : apm_t91J06_I → ℝ) (hF : Continuous F)
+    (hFinj : Function.Injective F)
+    (hFmem : ∀ x, F x ∈ Set.Icc (-(n + 2 : ℝ)) (n + 2 : ℝ))
+    (hFsurj : ∀ y : Set.Icc (-(n + 2 : ℝ)) (n + 2 : ℝ), ∃ x, F x = y)
+    (hext : ∀ x, F (t x) = (q x : ℝ)) :
+    ∃ Q : apm_t91J06_I ≃ₜ
+        Set.Icc (-(n + 2 : ℝ)) (n + 2 : ℝ),
+      ∀ x, (Q (t x) : ℝ) = (q x : ℝ) := by
+  sorry
+
+/-- Extend arbitrary prescribed coordinates across an interval embedded
+strictly inside the unit interval. -/
 theorem apm_t91J06_extend_interval_embedding_coordinates
     (n : ℕ) (t : apm_t91J06_I → apm_t91J06_I)
     (ht : Continuous t) (hi : Function.Injective t)
@@ -86,7 +179,24 @@ theorem apm_t91J06_extend_interval_embedding_coordinates
     ∃ Q : apm_t91J06_I ≃ₜ
         Set.Icc (-(n + 2 : ℝ)) (n + 2 : ℝ),
       ∀ x, (Q (t x) : ℝ) = (q x : ℝ) := by
-  sorry
+  rcases t91J06Closure.intervalEmbedding_homeomorph_four_orientations
+      t ht hi q with ⟨htmono | htanti, hqmono | hqanti⟩
+  · rcases apm_t91J06_extend_ramp_mono_mono n t ht htint q htmono hqmono with
+      ⟨F, hF, hFmono, hFmem, h0, h1, hext⟩
+    exact apm_t91J06_package_interval_coordinate n t q F hF hFmono.injective hFmem
+      (apm_t91J06_mono_endpoint_surjective F hF h0 h1) hext
+  · rcases apm_t91J06_extend_ramp_mono_anti n t ht htint q htmono hqanti with
+      ⟨F, hF, hFanti, hFmem, h0, h1, hext⟩
+    exact apm_t91J06_package_interval_coordinate n t q F hF hFanti.injective hFmem
+      (apm_t91J06_anti_endpoint_surjective F hF h0 h1) hext
+  · rcases apm_t91J06_extend_ramp_anti_mono n t ht htint q htanti hqmono with
+      ⟨F, hF, hFanti, hFmem, h0, h1, hext⟩
+    exact apm_t91J06_package_interval_coordinate n t q F hF hFanti.injective hFmem
+      (apm_t91J06_anti_endpoint_surjective F hF h0 h1) hext
+  · rcases apm_t91J06_extend_ramp_anti_anti n t ht htint q htanti hqanti with
+      ⟨F, hF, hFmono, hFmem, h0, h1, hext⟩
+    exact apm_t91J06_package_interval_coordinate n t q F hF hFmono.injective hFmem
+      (apm_t91J06_mono_endpoint_surjective F hF h0 h1) hext
 
 /-- Recursively choose coordinates on all compact stages.  The extension
 contract is an explicit parameter so this lemma can be developed in parallel
