@@ -4484,6 +4484,53 @@ def genericPointWedgeRightInverseBaseToRightBaseFromSpan :
   inv (genericPointWedgeRightBaseToInverseBase
     x₀ y₀ M N hM hN hy hx cM cN)
 
+/-- Expanding the inverse of the reverse comparison restores the inverse
+strict-span comparison followed by the forward equivalence unit. -/
+theorem genericPointWedgeRightInverseBaseToRightBaseFromSpan_eq_maps :
+    let r := genericPointWedgeActualRight x₀ y₀ M N
+    let eK := genericPointWedgeOverlapGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let eR := genericPointWedgeRightGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let aR := genericPointWedgeRightSpanIso
+      x₀ y₀ M N hM hN hy hx cM cN
+    let u : FundamentalGroupoid Unit := FundamentalGroupoid.mk ()
+    genericPointWedgeRightInverseBaseToRightBaseFromSpan
+        x₀ y₀ M N hM hN hy hx cM cN =
+      eR.inverse.map (aR.inv.app u) ≫
+        ((Functor.isoWhiskerLeft (eK.inverse ⋙ r)
+          eR.unitIso.symm).hom.app u) := by
+  dsimp only [genericPointWedgeRightInverseBaseToRightBaseFromSpan,
+    genericPointWedgeRightBaseToInverseBase]
+  rw [IsIso.inv_comp]
+  congr 1
+  · let F := (genericPointWedgeRightGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN).inverse
+    let i := genericPointWedgeRightSpanIso
+      x₀ y₀ M N hM hN hy hx cM cN
+    let u : FundamentalGroupoid Unit := FundamentalGroupoid.mk ()
+    apply (cancel_mono (F.map (i.hom.app u))).1
+    calc
+      inv (F.map (i.hom.app u)) ≫ F.map (i.hom.app u) = 𝟙 _ := by
+        simpa only [Category.comp_id] using
+          (IsIso.inv_hom_id_assoc (F.map (i.hom.app u)) (𝟙 _))
+      _ = F.map (i.inv.app u) ≫ F.map (i.hom.app u) := by
+        rw [← F.map_comp, Iso.inv_hom_id_app, F.map_id]
+  · let i := Functor.isoWhiskerLeft
+      ((genericPointWedgeOverlapGroupoidEquivalence
+        x₀ y₀ M N hM hN hy hx cM cN).inverse ⋙
+          genericPointWedgeActualRight x₀ y₀ M N)
+      (genericPointWedgeRightGroupoidEquivalence
+        x₀ y₀ M N hM hN hy hx cM cN).unitIso.symm
+    let u : FundamentalGroupoid Unit := FundamentalGroupoid.mk ()
+    apply (cancel_mono (i.inv.app u)).1
+    calc
+      inv (i.inv.app u) ≫ i.inv.app u = 𝟙 _ := by
+        simpa only [Category.comp_id] using
+          (IsIso.inv_hom_id_assoc (i.inv.app u) (𝟙 _))
+      _ = i.hom.app u ≫ i.inv.app u := by
+        rw [Iso.hom_inv_id_app]
+
 omit [PathConnectedSpace X] [PathConnectedSpace Y] in
 /-- The span-coordinate forward morphism is a right inverse of the reverse
 canonical morphism. -/
@@ -5572,6 +5619,8 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeRightInverseBaseToRightBase_map_heq_inr_counit
 #print axioms genericPointWedgeRightBaseToInverseBase
 #print axioms genericPointWedgeRightComparison_actualMaps_eq_reverseCanonical
+#print axioms genericPointWedgeRightInverseBaseToRightBaseFromSpan
+#print axioms genericPointWedgeRightInverseBaseToRightBaseFromSpan_eq_maps
 #print axioms genericPointWedgeMappedOpenCoverCounit_namedGlueSquare
 #print axioms genericPointWedgeMappedCoordinateSpanCounit_glueSquare
 #print axioms genericPointWedgeMappedCoordinateSpanSourceGlue

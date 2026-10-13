@@ -1013,3 +1013,8 @@ inverse while retaining that strict-span coordinate expression.  The theorem
 `genericPointWedgeRightBaseToInverseBase_comp_fromSpan` proves that the reverse
 followed by this forward morphism is the identity, without identifying its
 intermediate representation with the earlier base-transport normal form.
+
+`genericPointWedgeRightInverseBaseToRightBaseFromSpan_eq_maps` expands that
+categorical inverse into the inverse strict-span comparison followed by the
+forward equivalence unit.  This fixes the exact factor order needed to compare
+it with the normalized base-transport morphism.
