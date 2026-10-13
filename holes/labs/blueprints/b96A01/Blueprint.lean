@@ -83,12 +83,64 @@ theorem apm_b96a01_part_a :
     rfl
   · exact (Submodule.map_subtype_top N).symm
 
+lemma apm_b96a01_part_b_aux_finite_orbit
+    (n : Type*) [Fintype n] [DecidableEq n]
+    (G : Subgroup (Matrix.GeneralLinearGroup n ℚ)) [Finite G] :
+    ∃ s : Finset (n → ℚ),
+      (∀ j : n, Pi.single j 1 ∈ AddSubgroup.closure (s : Set (n → ℚ))) ∧
+      ∀ g : G, ∀ x ∈ AddSubgroup.closure (s : Set (n → ℚ)),
+        (g.1 : Matrix n n ℚ) *ᵥ x ∈ AddSubgroup.closure (s : Set (n → ℚ)) := by
+  letI : Fintype G := Fintype.ofFinite G
+  let s : Finset (n → ℚ) := Finset.univ.image fun p : G × n ↦
+    (p.1.1 : Matrix n n ℚ) *ᵥ Pi.single p.2 1
+  refine ⟨s, ?_, ?_⟩
+  · intro j
+    apply AddSubgroup.subset_closure
+    simp only [s, Finset.mem_coe, Finset.mem_image]
+    refine ⟨((1 : G), j), Finset.mem_univ _, ?_⟩
+    exact Matrix.one_mulVec _
+  · intro g x hx
+    let F : (n → ℚ) →+ (n → ℚ) :=
+      { toFun := fun x ↦ (g.1 : Matrix n n ℚ) *ᵥ x
+        map_zero' := Matrix.mulVec_zero _
+        map_add' := fun x y ↦ Matrix.mulVec_add _ _ _ }
+    change F x ∈ AddSubgroup.closure (s : Set (n → ℚ))
+    refine AddSubgroup.closure_induction
+      (p := fun y _ ↦ F y ∈ AddSubgroup.closure (s : Set (n → ℚ)))
+      ?_ (by simp) ?_ ?_ hx
+    · intro y hy
+      simp only [s, Finset.mem_coe, Finset.mem_image] at hy
+      obtain ⟨p, -, rfl⟩ := hy
+      apply AddSubgroup.subset_closure
+      simp only [s, Finset.mem_coe, Finset.mem_image]
+      refine ⟨(g * p.1, p.2), Finset.mem_univ _, ?_⟩
+      dsimp [F]
+      rw [← Matrix.mulVec_mulVec]
+    · intro y z hy hz ihy ihz
+      simpa only [map_add] using AddSubgroup.add_mem _ ihy ihz
+    · intro y hy ihy
+      simpa only [map_neg] using AddSubgroup.neg_mem _ ihy
+
+lemma apm_b96a01_part_b_aux_lattice_basis_conjugacy
+    (n : Type*) [Fintype n] [DecidableEq n]
+    (G : Subgroup (Matrix.GeneralLinearGroup n ℚ)) [Finite G]
+    (horbit : ∃ s : Finset (n → ℚ),
+      (∀ j : n, Pi.single j 1 ∈ AddSubgroup.closure (s : Set (n → ℚ))) ∧
+      ∀ g : G, ∀ x ∈ AddSubgroup.closure (s : Set (n → ℚ)),
+        (g.1 : Matrix n n ℚ) *ᵥ x ∈ AddSubgroup.closure (s : Set (n → ℚ))) :
+    ∃ P : Matrix n n ℚ, IsUnit P ∧
+      ∀ g : G, apmIntegralMatrix (P * (g.1 : Matrix n n ℚ) * P⁻¹) := by
+  sorry
+
 theorem apm_b96a01_part_b :
     ∀ (n : Type*) [Fintype n] [DecidableEq n]
       (G : Subgroup (Matrix.GeneralLinearGroup n ℚ)),
       Finite G → ∃ P : Matrix n n ℚ, IsUnit P ∧
         ∀ g : G, apmIntegralMatrix (P * (g.1 : Matrix n n ℚ) * P⁻¹) := by
-  sorry
+  intro n _ _ G hG
+  letI : Finite G := hG
+  exact apm_b96a01_part_b_aux_lattice_basis_conjugacy n G
+    (apm_b96a01_part_b_aux_finite_orbit n G)
 
 theorem apm_b96a01_part_c :
     ∀ (n : Type*) [Fintype n] [DecidableEq n] (p m : ℕ)
