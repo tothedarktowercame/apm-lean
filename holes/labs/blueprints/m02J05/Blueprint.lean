@@ -447,7 +447,34 @@ lemma apm_m02J05_lux_definite_aux_zero
         simp]
   exact csInf_Ioi
 
-lemma apm_m02J05_lux_definite_aux_nonzero
+lemma apm_m02J05_lux_definite_aux_nonzero_aux_young_lower
+    (α : ℝ → ℝ) (hc : ContinuousOn α (Ici 0))
+    (hmono : StrictMonoOn α (Ici 0))
+    (hnonneg : ∀ t, 0 ≤ t → 0 ≤ α t)
+    {t : ℝ} (ht : 1 ≤ t) :
+    (t - 1) * α 1 ≤ apm_m02J05_young α t := by
+  have hi01 : IntervalIntegrable α volume 0 1 :=
+    (hc.mono Icc_subset_Ici_self).intervalIntegrable_of_Icc zero_le_one
+  have hi1t : IntervalIntegrable α volume 1 t := by
+    apply ContinuousOn.intervalIntegrable_of_Icc ht
+    exact hc.mono (fun x hx => mem_Ici.mpr (zero_le_one.trans hx.1))
+  have hconst : IntervalIntegrable (fun _ : ℝ => α 1) volume 1 t :=
+    _root_.intervalIntegrable_const
+  have htail : (t - 1) * α 1 ≤ ∫ x in (1 : ℝ)..t, α x := by
+    have heq : (∫ _x in (1 : ℝ)..t, α 1) = (t - 1) * α 1 := by
+      simp
+    rw [← heq]
+    apply intervalIntegral.integral_mono_on ht hconst hi1t
+    intro x hx
+    exact hmono.monotoneOn (mem_Ici.mpr zero_le_one)
+      (mem_Ici.mpr (zero_le_one.trans hx.1)) hx.1
+  have hhead : 0 ≤ ∫ x in (0 : ℝ)..1, α x :=
+    intervalIntegral.integral_nonneg zero_le_one (fun x hx => hnonneg x hx.1)
+  unfold apm_m02J05_young
+  rw [← intervalIntegral.integral_add_adjacent_intervals hi01 hi1t]
+  linarith
+
+lemma apm_m02J05_lux_definite_aux_nonzero_aux_core
     (α : ℝ → ℝ)
     (hc : ContinuousOn α (Ici 0))
     (hmono : StrictMonoOn α (Ici 0))
@@ -457,6 +484,18 @@ lemma apm_m02J05_lux_definite_aux_nonzero
     (u : apm_m02J05_Fun) (hu : u ∈ apm_m02J05_L α) (hu0 : u ≠ 0) :
     apm_m02J05_lux α u ≠ 0 := by
   sorry
+
+lemma apm_m02J05_lux_definite_aux_nonzero
+    (α : ℝ → ℝ)
+    (hc : ContinuousOn α (Ici 0))
+    (hmono : StrictMonoOn α (Ici 0))
+    (hzero : α 0 = 0)
+    (hinfty : Tendsto α atTop atTop)
+    (hnonneg : ∀ t, 0 ≤ t → 0 ≤ α t)
+    (u : apm_m02J05_Fun) (hu : u ∈ apm_m02J05_L α) (hu0 : u ≠ 0) :
+    apm_m02J05_lux α u ≠ 0 := by
+  exact apm_m02J05_lux_definite_aux_nonzero_aux_core α hc hmono hzero hinfty hnonneg
+    u hu hu0
 
 theorem apm_m02J05_lux_definite
     (α : ℝ → ℝ)
