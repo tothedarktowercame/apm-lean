@@ -379,6 +379,48 @@ theorem apm_m02J05_lux_sublevel_attained
       (u ≠ 0 → apm_m02J05_lux α u ∈ apm_m02J05_luxSublevel α u) := by
   exact apm_m02J05_lux_sublevel_attained_aux_core α hc hmono hzero hinfty hnonneg
 
+lemma apm_m02J05_lux_definite_aux_zero
+    (α : ℝ → ℝ) : apm_m02J05_lux α (0 : apm_m02J05_Fun) = 0 := by
+  unfold apm_m02J05_lux
+  rw [show {c : ℝ | 0 < c ∧
+      IntegrableOn (fun x ↦ apm_m02J05_young α
+        (|(0 : apm_m02J05_Fun) x| / c)) (Icc (0 : ℝ) 1) volume ∧
+      ∫ x in Icc (0 : ℝ) 1,
+        apm_m02J05_young α (|(0 : apm_m02J05_Fun) x| / c) ∂volume ≤ 1} =
+      Ioi 0 by
+    ext c
+    simp only [mem_setOf_eq, mem_Ioi]
+    constructor
+    · exact fun h => h.1
+    · intro hc
+      refine ⟨hc, ?_, ?_⟩
+      · apply integrableOn_zero.congr
+        filter_upwards [AEEqFun.coeFn_zero (α := ℝ) (β := ℝ)
+          (μ := volume.restrict (Icc (0 : ℝ) 1))] with x hx
+        rw [hx]
+        simp [apm_m02J05_young_zero]
+      · have heq : (fun x ↦ apm_m02J05_young α
+            (|(0 : apm_m02J05_Fun) x| / c)) =ᵐ[volume.restrict (Icc (0 : ℝ) 1)]
+            (fun _ => 0) := by
+          filter_upwards [AEEqFun.coeFn_zero (α := ℝ) (β := ℝ)
+            (μ := volume.restrict (Icc (0 : ℝ) 1))] with x hx
+          rw [hx]
+          simp [apm_m02J05_young_zero]
+        rw [MeasureTheory.integral_congr_ae heq]
+        simp]
+  exact csInf_Ioi
+
+lemma apm_m02J05_lux_definite_aux_nonzero
+    (α : ℝ → ℝ)
+    (hc : ContinuousOn α (Ici 0))
+    (hmono : StrictMonoOn α (Ici 0))
+    (hzero : α 0 = 0)
+    (hinfty : Tendsto α atTop atTop)
+    (hnonneg : ∀ t, 0 ≤ t → 0 ≤ α t)
+    (u : apm_m02J05_Fun) (hu : u ∈ apm_m02J05_L α) (hu0 : u ≠ 0) :
+    apm_m02J05_lux α u ≠ 0 := by
+  sorry
+
 theorem apm_m02J05_lux_definite
     (α : ℝ → ℝ)
     (hc : ContinuousOn α (Ici 0))
@@ -387,7 +429,15 @@ theorem apm_m02J05_lux_definite
     (hinfty : Tendsto α atTop atTop)
     (hnonneg : ∀ t, 0 ≤ t → 0 ≤ α t) :
     ∀ u ∈ apm_m02J05_L α, apm_m02J05_lux α u = 0 ↔ u = 0 := by
-  sorry
+  intro u hu
+  constructor
+  · intro hlux
+    by_contra hu0
+    exact apm_m02J05_lux_definite_aux_nonzero α hc hmono hzero hinfty hnonneg
+      u hu hu0 hlux
+  · intro hu0
+    subst u
+    exact apm_m02J05_lux_definite_aux_zero α
 
 theorem apm_m02J05_lux_homogeneous
     (α : ℝ → ℝ)
