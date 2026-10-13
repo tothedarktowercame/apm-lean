@@ -82,7 +82,39 @@ set is connected for `n ≥ 2` (`Set.Countable.isPathConnected_compl_of_one_lt_r
 theorem t97A07_frontier_infinite (n : ℕ) (hn : 1 < n) (K : Set (E n))
     (hK : IsCompact K) (hconn : IsConnected K) (hab : ∃ a ∈ K, ∃ b ∈ K, a ≠ b) :
     (frontier K).Infinite := by
-  sorry
+  by_contra hfin
+  have hfrfin : (frontier K).Finite := Set.not_infinite.mp hfin
+  have hrank : 1 < Module.rank ℝ (E n) := by
+    rw [← Module.finrank_eq_rank]
+    simpa [E] using hn
+  have hcconn : IsConnected (frontier K)ᶜ :=
+    hfrfin.countable.isPathConnected_compl_of_one_lt_rank hrank |>.isConnected
+  rw [compl_frontier_eq_union_interior] at hcconn
+  have hext : (interior Kᶜ).Nonempty := by
+    letI : Nontrivial (E n) := Module.nontrivial_of_finrank_pos (R := ℝ)
+      (by simpa [E] using hn.trans' zero_lt_one)
+    have hc : Kᶜ.Nonempty := Set.nonempty_compl.mpr hK.ne_univ
+    simpa [hK.isClosed.isOpen_compl.interior_eq] using hc
+  by_cases hint : (interior K).Nonempty
+  · obtain ⟨x, hxK, hx1, hx2⟩ := hcconn.isPreconnected (interior K) (interior Kᶜ)
+      isOpen_interior isOpen_interior (by simp)
+      (by obtain ⟨x, hx⟩ := hint; exact ⟨x, Or.inl hx, hx⟩)
+      (by obtain ⟨x, hx⟩ := hext; exact ⟨x, Or.inr hx, hx⟩)
+    have : x ∈ K ∩ Kᶜ := ⟨interior_subset hx1, interior_subset hx2⟩
+    simpa using this
+  · have hi : interior K = ∅ := Set.not_nonempty_iff_eq_empty.mp hint
+    have hfr : frontier K = K := by
+      rw [hK.isClosed.frontier_eq, hi]
+      simp
+    have hKfin : K.Finite := by rwa [hfr] at hfrfin
+    obtain ⟨a, ha, b, hb, hab⟩ := hab
+    have hopen_a : IsOpen (K \ {a})ᶜ := hKfin.diff.isClosed.isOpen_compl
+    have hopen_rest : IsOpen ({a} : Set (E n))ᶜ := isClosed_singleton.isOpen_compl
+    obtain ⟨x, hxK, hx1, hx2⟩ := hconn.isPreconnected (K \ {a})ᶜ ({a} : Set (E n))ᶜ
+      hopen_a hopen_rest (by intro x hx; by_cases hxa : x = a <;> simp [hxa])
+      (by exact ⟨a, ha, by simp [ha]⟩)
+      (by exact ⟨b, hb, by simp [hab.symm]⟩)
+    exact hx1 ⟨hxK, hx2⟩
 -- END SEAT AREA
 
 /-- Seat (claude-14 split): at a point where the manifold derivative is
