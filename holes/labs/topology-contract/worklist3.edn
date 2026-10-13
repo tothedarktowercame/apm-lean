@@ -24430,7 +24430,7 @@
    :consumer :t01A08,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 0,
    :review-finding
    "extend Mathlib: state and prove the missing theorem in scope",
    :implements-lemma :lemma-closedset-whitneycubecover,
@@ -24473,6 +24473,17 @@
     [{:cmd "initial build",
       :exit 1,
       :correction "strict-to-weak separation; explicit radius"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791903923281-9918-b157eb72",
+     :commands
+     ["git show/diff 4211931; scope/orientation checks"
+      "sha256sum + lake env lean frozen fixture"
+      "lake build ConstructionTargets.SardConvexDomain"
+      "statement registry check; forbidden-count scan"],
+     :finding
+     "PASS. Recorded topo-10 commit 4211931 changes only the scoped Lean file and correctly proves fixed-scale compact packing. It converts strict IsSeparated at 2^k/8 to the required weak real-distance bound, then applies compact separated-set finiteness to net∩K via the right-hand subset. Fixture hash 3ca5057d... matches; build/fixture pass; registry 150/150; forbidden placeholders stay 0; only standard axioms. Valid compiled B3 progress; STOP explicitly leaves cross-scale overlap and assembly."},
     :commit "4211931d31be639dcc191f2c6b77a084d40c852e",
     :changed-paths ["ConstructionTargets/SardConvexDomain.lean"],
     :fixture
@@ -24482,7 +24493,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain.blueprint/B3",
    :acceptance
@@ -35430,7 +35441,7 @@
    :other-consumers []}
   {:consumer :t01A08,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -35442,7 +35453,9 @@
     :reported-by [:r-a08-sard-b3-whitney-cubes-1],
     :type "fixed-scale net intersects compact sets finitely",
     :area "sard-convex-domain",
-    :proved-in :r-a08-sard-b3-whitney-cubes-1},
+    :proved-in :r-a08-sard-b3-whitney-cubes-1,
+    :banked-by :r-a08-sard-b3-whitney-cubes-1,
+    :banked-commit "4211931d31be639dcc191f2c6b77a084d40c852e"},
    :id
    :lemma-constructiontargets-sardconvexdomain-finite-inter-whitneystratumnet-of-iscompact,
    :kind :lemma,
