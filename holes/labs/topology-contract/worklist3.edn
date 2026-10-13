@@ -36113,37 +36113,32 @@
    [:lemma-constructiontargets-sardconvexdomain-eq-whitneydyadicindexof-of-mem-cube-of-gene],
    :other-consumers []}
   {:consumer :t93J03,
-   :stop-count 1,
+   :stop-count 2,
    :review-finding
    "Program STOP commits nothing new since the prior reviewed attempt: it reuses commit 512a220f, and git history shows no later scoped commit. The unresolved SemilocallySimplyConnected hypothesis-coverage conflict is unchanged. Obtain the required owner specification decision or commit a new compiled milestone before resubmitting.",
    :evidence
    {:placeholder-delta {:t93J03 [1 1]},
     :residual
-    "Build literal orbit quotient/C1, then cyclic cover C2 and Main.",
+    "Build literal plane-orbit pi1 at its canonical point, apply adapter; then C2/Main.",
     :outcome :stop,
     :warnings
-    ["SemilocallySimplyConnected: owner-approved unused-mandated"],
+    ["SemilocallySimplyConnected X owner-approved unused-mandated"],
     :missing-theorems
-    [{:name "coveringLift_of_subgroup_le",
-      :type "cover subgroup inclusion gives lift",
-      :status :proved,
-      :consumers [:t93J03],
-      :depends-on [],
-      :area "covering-subgroup-correspondence"}
-     {:name "lift_isEmbedding_assembly",
-      :type "cover embedding plus lift embeds X",
+    [{:name "fundamentalGroupEquiv_every_basepoint",
+      :type
+      "one-basepoint pi1 equivalence transports to every basepoint",
       :status :proved,
       :consumers [:t93J03],
       :depends-on [],
       :area "covering-subgroup-correspondence"}
      {:name "t93J03_kleinBottle_pi1_every_basepoint",
-      :type "pi1 Klein bottle equiv presentation",
-      :status :not-started,
+      :type "pi1 Klein bottle equivalence at every point",
+      :status :partial,
       :consumers [:t93J03],
       :depends-on [],
       :area "covering-subgroup-correspondence"}
      {:name "t93J03_cyclicCover_zpowers_generatorA",
-      :type "planar cover realizes zpowers a",
+      :type "planar cyclic cover realizing generatorA",
       :status :not-started,
       :consumers [:t93J03],
       :depends-on ["t93J03_kleinBottle_pi1_every_basepoint"],
@@ -36153,33 +36148,26 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Recorded owner waiver and committed generic cover lifting plus embedding assembly. C1 orbit quotient and C2 cyclic cover remain; not refuted.",
+    "Committed compiled C1 basepoint transport; orbit computation remains; not refuted.",
     :commands
-    [{:cmd "build; registry; fixture; diff; commit", :exit 0}
-     {:cmd "rg forbidden closure", :exit 1, :expected-exit 1}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1791923568513-10421-b12aff2b",
-     :commands
-     ["git show/diff 30d10c96; scope and orientation review"
-      "lake build/lean ConstructionTargets.t93J03Closure"
-      "sha256sum + lake env lean assembly fixture"
-      "statement-registry check; placeholder recount"],
-     :finding
-     "PASS. Commit 30d10c96 adds compiled, sorry-free generic lifting and embedding assembly in scope. The subgroup equality is oriented exactly for comap membership and the lift equation exactly for embedding cancellation; the abstraction over G,H preserves the frozen presented-group use. C1 orbit quotient and C2 cyclic cover remain listed. Fixture hash matches; standard axioms only; registry 150/150; forbidden count 0->0. SemilocallySimplyConnected X is unused, mandated by problem.md under the owner exception."},
-    :commit "30d10c9666c11bb3dc9377857cfec5751b8a3054",
+    [{:cmd "lake build ConstructionTargets.t93J03Closure", :exit 0}
+     {:cmd "lake env lean /tmp/t93j03_basepoint_adapter_check.lean",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd "rg forbidden closure", :exit 1, :expected-exit 1}
+     {:cmd "git commit; git show --check", :exit 0}],
+    :commit "e702e81c79467b9272cae4e4b156d1e4765f5a28",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
      "ConstructionTargets/t93J03Closure.blueprint.md"],
     :fixture
-    {:path "/tmp/t93j03_generic_assembly_check.lean",
+    {:path "/tmp/t93j03_basepoint_adapter_check.lean",
      :sha256
-     "e034d96f16d254cd02817351ca46d3de3907780e17ef5f79459d6f37125b66d2",
+     "74ae84827a61c23719536a152b9c1d846d7f90ae3400d2e6ff99670e83b48eac",
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -36858,6 +36846,25 @@
     :banked-by :program-2026-10-13-close-t93j03,
     :banked-commit "30d10c9666c11bb3dc9377857cfec5751b8a3054"},
    :id :lemma-lift-isembedding-assembly,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "fundamentalGroupEquiv_every_basepoint",
+    :type
+    "one-basepoint pi1 equivalence transports to every basepoint"},
+   :lemma
+   {:name "fundamentalGroupEquiv_every_basepoint",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type
+    "one-basepoint pi1 equivalence transports to every basepoint",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03},
+   :id :lemma-fundamentalgroupequiv-every-basepoint,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}],
