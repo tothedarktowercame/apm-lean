@@ -1292,4 +1292,25 @@ theorem whitneyNetAnchor_nearest
     Metric.infDist i.center s = dist i.center (whitneyNetAnchor hs hne i) :=
   (Classical.choose_spec (exists_nearestPoint_of_isClosed hs hne i.center)).2
 
+/-- The quarter-distance balls centered at all selected Whitney net points
+cover the complement of the closed set. -/
+theorem compl_subset_iUnion_whitneyNetQuarterBalls
+    {E : Type*} [PseudoMetricSpace E] {s : Set E}
+    (hs : IsClosed s) (hne : s.Nonempty) :
+    sᶜ ⊆ ⋃ i : WhitneyNetIndex s,
+      Metric.ball i.center (Metric.infDist i.center s / 4) := by
+  intro x hx
+  obtain ⟨k, c, hc, hxk, hxc⟩ :=
+    exists_whitneyStratumNet_dist_le_of_not_mem hs hne hx
+  apply Set.mem_iUnion.2
+  refine ⟨⟨k, ⟨c, hc⟩⟩, Metric.mem_ball.2 ?_⟩
+  have hcscale : (2 : ℝ) ^ k ≤ Metric.infDist c s :=
+    ((whitneyStratumNet_spec s k).1 hc).2.1
+  calc
+    dist x c ≤ (2 : ℝ) ^ k / 8 := hxc
+    _ < (2 : ℝ) ^ k / 4 := by
+      have hk : (0 : ℝ) < 2 ^ k := by positivity
+      linarith
+    _ ≤ Metric.infDist c s / 4 := div_le_div_of_nonneg_right hcscale (by norm_num)
+
 end ConstructionTargets.SardConvexDomain
