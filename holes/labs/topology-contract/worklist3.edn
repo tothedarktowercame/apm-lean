@@ -22151,61 +22151,82 @@
    :current-residual
    "Prove frontier-image nullity by corner strata; source nullity is insufficient.",
    :other-consumers []}
+  {:bounded-exception "Rule0 aggregation.",
+   :consumer :t01A08,
+   :implements-lemma
+   :lemma-constructiontargets-sardconvexdomain-modelrange-withincriticalimage-null-of-inte,
+   :phase :implementation,
+   :state :open,
+   :scope ["ConstructionTargets/SardConvexDomain.lean"],
+   :dag-node "TOPOLOGY-ROUTES.md/t01A08/corners-sard",
+   :acceptance
+   {:declaration
+    "ConstructionTargets.SardConvexDomain.modelRange_withinCriticalImage_null_of_interior_of_frontier",
+    :type "exact type in fixture",
+    :fixture "/tmp/t01a08_critical_image_null_aggregate.lean",
+    :fixture-sha256
+    "d4041a37e02023ad8ce1b8e98bb7c6cbb338d539dbc89b7f8b484340dd9b13bd",
+    :placeholder "t01A08 sorry",
+    :route-step "aggregate interior and frontier image nullity"},
+   :id :r-t01a08-corners-null-aggregate-1,
+   :kind :reusable-theorem,
+   :area "sard-convex-domain",
+   :depends-on [:r-t01a08-corners-split-1],
+   :current-residual
+   "Prove frontier-image nullity by corner strata; source nullity is insufficient.",
+   :other-consumers []}
   {:bounded-exception "Rule0 final prerequisite.",
    :consumer :t01A08,
    :implements-lemma :lemma-sard-corners,
    :evidence
    {:probe
-    {:residual "Promote split; then frontier-image Sard.",
-     :outcome :revise,
+    {:outcome :revise,
+     :seat "topo-12",
+     :fixture
+     {:path "/tmp/t01a08_critical_image_null_aggregate.lean",
+      :sha256
+      "d4041a37e02023ad8ce1b8e98bb7c6cbb338d539dbc89b7f8b484340dd9b13bd"},
+     :commands
+     [{:cmd
+       "lake env lean /tmp/t01a08_critical_image_null_aggregate.lean && sha256sum /tmp/t01a08_critical_image_null_aggregate.lean && python3 scripts/statement-registry.py check",
+       :exit 0}],
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
      :missing-theorems
      [{:name
-       "ConstructionTargets.SardConvexDomain.modelRange_withinCriticalImage_subset_interior_union_frontier",
+       "ConstructionTargets.SardConvexDomain.modelRange_withinCriticalImage_null_of_interior_of_frontier",
        :type "exact type in fixture",
        :status :proved,
        :consumers [:t01A08],
        :depends-on
-       ["ConstructionTargets.SardGeneralModel.modelRange_interior_surjective_fderivWithin_iff"],
+       ["ConstructionTargets.SardConvexDomain.modelRange_withinCriticalImage_subset_interior_union_frontier"],
        :area "sard-convex-domain"}],
      :prerequisite
-     {:bounded-exception "Rule0 split.",
+     {:bounded-exception "Rule0 aggregation.",
       :consumer :t01A08,
-      :implements-lemma :lemma-sard-corners-split,
+      :implements-lemma :lemma-sard-corners-null-aggregate,
       :phase :implementation,
       :state :open,
       :scope ["ConstructionTargets/SardConvexDomain.lean"],
       :dag-node "TOPOLOGY-ROUTES.md/t01A08/corners-sard",
       :acceptance
       {:declaration
-       "ConstructionTargets.SardConvexDomain.modelRange_withinCriticalImage_subset_interior_union_frontier",
+       "ConstructionTargets.SardConvexDomain.modelRange_withinCriticalImage_null_of_interior_of_frontier",
        :type "exact type in fixture",
-       :fixture "/tmp/t01a08_critical_image_split.lean",
+       :fixture "/tmp/t01a08_critical_image_null_aggregate.lean",
        :fixture-sha256
-       "33874a1d76a652a444b1e6f37486b9edcfc5d4a037d0743d65926c7895952863",
+       "d4041a37e02023ad8ce1b8e98bb7c6cbb338d539dbc89b7f8b484340dd9b13bd",
        :placeholder "t01A08 sorry",
-       :route-step
-       "split critical image into interior and frontier images"},
-      :id :r-t01a08-corners-split-1,
+       :route-step "aggregate interior and frontier image nullity"},
+      :id :r-t01a08-corners-null-aggregate-1,
       :kind :reusable-theorem,
       :area "sard-convex-domain",
-      :depends-on
-      [:routes-2026-10-12-t01a08-interior-r1 :r-t01a08-boundary-2],
+      :depends-on [:r-t01a08-corners-split-1],
       :current-residual
       "Prove frontier-image nullity by corner strata; source nullity is insufficient.",
       :other-consumers []},
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :commands
-     [{:cmd
-       "lake env lean /tmp/t01a08_critical_image_split.lean && sha256sum /tmp/t01a08_critical_image_split.lean && python3 scripts/statement-registry.py check",
-       :exit 0}],
-     :diagnostic-history [{:exit 1, :correction "qualification"}],
-     :fixture
-     {:path "/tmp/t01a08_critical_image_split.lean",
-      :sha256
-      "33874a1d76a652a444b1e6f37486b9edcfc5d4a037d0743d65926c7895952863"},
-     :seat "topo-12"}},
+     :residual "Promote; then frontier-image Sard."}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t01A08/corners-sard",
    :acceptance
@@ -22222,7 +22243,8 @@
    :depends-on
    [:r-t01a08-boundary-2
     :r-topo3-checkpoint-2
-    :r-t01a08-corners-split-1],
+    :r-t01a08-corners-split-1
+    :r-t01a08-corners-null-aggregate-1],
    :current-residual "Then closure.",
    :other-consumers []}
   {:consumer :portfolio,
@@ -31806,6 +31828,27 @@
    :kind :lemma,
    :depends-on
    [:lemma-constructiontargets-sardgeneralmodel-modelrange-interior-surjective-fderivwithin],
+   :other-consumers []}
+  {:consumer :t01A08,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.SardConvexDomain.modelRange_withinCriticalImage_null_of_interior_of_frontier",
+    :type "exact type in fixture"},
+   :lemma
+   {:name
+    "ConstructionTargets.SardConvexDomain.modelRange_withinCriticalImage_null_of_interior_of_frontier",
+    :reported-by [:r-t01a08-corners-1],
+    :type "exact type in fixture",
+    :area "sard-convex-domain",
+    :proved-in :r-t01a08-corners-1},
+   :id
+   :lemma-constructiontargets-sardconvexdomain-modelrange-withincriticalimage-null-of-inte,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-sardconvexdomain-modelrange-withincriticalimage-subset-inter],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
