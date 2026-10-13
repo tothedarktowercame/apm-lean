@@ -833,7 +833,19 @@ theorem apm_m99J06_starProjection_convergence
     Tendsto (fun n ↦ (uSeq n : H)) atTop (nhds u) ∧
       Tendsto (fun n ↦ toWeakSpace ℝ H (uSeq n : H)) atTop
         (nhds (toWeakSpace ℝ H u)) := by
-  sorry
+  have hmono : Monotone V := monotone_nat_of_le_succ hnested
+  have hclosure : (⨆ n, V n).topologicalClosure = ⊤ := by
+    apply Submodule.dense_iff_topologicalClosure_eq_top.mp
+    apply hdense.mono
+    intro z hz
+    obtain ⟨n, hn⟩ := Set.mem_iUnion.mp hz
+    exact Submodule.mem_iSup_of_mem n hn
+  have hs : Tendsto (fun n => (V n).starProjection u) atTop (nhds u) :=
+    Submodule.starProjection_tendsto_self V hmono u (by rw [hclosure])
+  have hstrong : Tendsto (fun n => (uSeq n : H)) atTop (nhds u) := by
+    simpa only [hproj] using hs
+  refine ⟨hstrong, ?_⟩
+  exact (toWeakSpaceCLM ℝ H).continuous.continuousAt.tendsto.comp hstrong
 
 theorem apm_m99j06
     (H : Type*) [NormedAddCommGroup H] [InnerProductSpace ℝ H]
