@@ -29,7 +29,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "partial",
+  "classification": "complete",
   "closer_hop": 1,
   "boundary": null,
   "imported_at": "2026-07-13T17:26:56.549801Z"
