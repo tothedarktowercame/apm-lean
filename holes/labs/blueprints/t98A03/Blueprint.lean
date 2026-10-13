@@ -598,7 +598,43 @@ lemma apm_t98a03_manifold_punctured_neighborhood_of_dim_ne_one
       ∀ x ∈ W, ∃ V : Set (EuclideanSpace ℝ (Fin n)),
         IsOpen V ∧ x ∈ V ∧ V ⊆ W ∧ IsPreconnected (V \ {x})) :
     ∀ p : X, apm_t98a03_HasConnectedPuncturedNeighborhood Set.univ p := by
-  sorry
+  letI := charts
+  haveI := hman
+  intro p
+  let e := chartAt (EuclideanSpace ℝ (Fin n)) p
+  obtain ⟨V, hVopen, hpV, hVtarget, hVconn⟩ :=
+    heuclid e.target e.open_target (e p)
+      (mem_chart_target (EuclideanSpace ℝ (Fin n)) p)
+  refine ⟨e.source ∩ e ⁻¹' V, e.isOpen_inter_preimage hVopen,
+    ⟨mem_chart_source _ _, hpV⟩, ?_⟩
+  have hcont : ContinuousOn e.symm (V \ {e p}) :=
+    e.continuousOn_symm.mono (fun y hy ↦ hVtarget hy.1)
+  have himage : e.symm '' (V \ {e p}) =
+      (((e.source ∩ e ⁻¹' V) ∩ Set.univ) \ {p}) := by
+    ext z
+    constructor
+    · rintro ⟨y, ⟨hyV, hyp⟩, rfl⟩
+      have hyT : y ∈ e.target := hVtarget hyV
+      have hzS : e.symm y ∈ e.source := e.map_target hyT
+      refine ⟨⟨⟨hzS, ?_⟩, trivial⟩, ?_⟩
+      · simpa [e.right_inv hyT] using hyV
+      · intro hz
+        apply hyp
+        have := congrArg e hz
+        simpa only [mem_singleton_iff, e.right_inv hyT] using this
+    · rintro ⟨⟨⟨hzS, hzV⟩, -⟩, hzp⟩
+      refine ⟨e z, ⟨hzV, ?_⟩, ?_⟩
+      · intro heq
+        apply hzp
+        simp only [mem_singleton_iff]
+        calc
+          z = e.symm (e z) := (e.left_inv hzS).symm
+          _ = e.symm (e p) := congrArg e.symm heq
+          _ = p := e.left_inv (mem_chart_source _ _)
+      · exact e.left_inv hzS
+  have h := hVconn.image e.symm hcont
+  rw [himage] at h
+  exact h
 
 /-- A point has arbitrarily small preconnected punctured neighborhoods. -/
 def apm_t98a03_HasPuncturedPreconnectedBasis
