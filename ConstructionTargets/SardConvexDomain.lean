@@ -1477,4 +1477,36 @@ theorem not_locallyFinite_whitneyNetQuarterBalls_of_frontier_nonempty
     by simpa [dist_comm] using Metric.mem_closedBall.1 hxclosed
   linarith
 
+/-- Countable integer data for the dyadic parallelotopes determined by a
+chosen finite basis: a generation and one integer coordinate per basis vector. -/
+def WhitneyDyadicIndex (E : Type*) [AddCommGroup E] [Module ℝ E]
+    [Module.Free ℝ E] [Module.Finite ℝ E] :=
+  ℤ × (Fin (Module.finrank ℝ E) → ℤ)
+
+/-- The side length of a dyadic index. -/
+def whitneyDyadicScale {E : Type*} [AddCommGroup E] [Module ℝ E]
+    [Module.Free ℝ E] [Module.Finite ℝ E] (q : WhitneyDyadicIndex E) : ℝ :=
+  (2 : ℝ) ^ q.1
+
+/-- The half-open parallelotope attached to integer dyadic coordinates in the
+canonical finite basis. -/
+def whitneyDyadicCube {E : Type*} [AddCommGroup E] [Module ℝ E]
+    [Module.Free ℝ E] [Module.Finite ℝ E] (q : WhitneyDyadicIndex E) : Set E :=
+  {x | ∀ j,
+    (q.2 j : ℝ) * whitneyDyadicScale q ≤ (Module.finBasis ℝ E).repr x j ∧
+      (Module.finBasis ℝ E).repr x j < (q.2 j + 1 : ℤ) * whitneyDyadicScale q}
+
+instance countable_whitneyDyadicIndex
+    (E : Type*) [AddCommGroup E] [Module ℝ E]
+    [Module.Free ℝ E] [Module.Finite ℝ E] : Countable (WhitneyDyadicIndex E) :=
+  by
+    unfold WhitneyDyadicIndex
+    infer_instance
+
+theorem whitneyDyadicScale_pos
+    {E : Type*} [AddCommGroup E] [Module ℝ E]
+    [Module.Free ℝ E] [Module.Finite ℝ E] (q : WhitneyDyadicIndex E) :
+    0 < whitneyDyadicScale q := by
+  exact zpow_pos (by norm_num) _
+
 end ConstructionTargets.SardConvexDomain
