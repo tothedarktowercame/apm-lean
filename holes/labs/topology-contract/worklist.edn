@@ -113894,6 +113894,17 @@
       "lake build ConstructionTargets.ThreeCirclesFundamentalGroup",
       :exit 1,
       :finding "B12 absent."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791891689338-9575-7e2ba05a",
+     :commands
+     ["git show/diff 689d15ab^..689d15ab"
+      "git archive 689d15ab; lake env lean archived PointWedgeVanKampen.lean"
+      "sha256/diff-tree/placeholder checks; statement-registry.py check"
+      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (expected absent)"],
+     :finding
+     "Reviewer codex-3. PASS program STOP: 689d15ab adds a compiled, sorry-free supporting result after 206d7a82, identifying the round-trip target connector with the same based connector in the inverse-span normal form. The equality keeps the exact dependent object and correct connector orientation. Scope is exactly Lean+MD; source/doc/fixture hashes match ledger (3ed33f89/39505b27/0bca6ce3), placeholders remain 0, registry 149/149, axioms standard only. Residual: relate the natural-iso component to inverse-span transport, prove projection=1, factor through inl, then B6/B12; B12 remains absent as listed."},
     :commit "689d15ab58515ca3241b57cf3f96f64a847b6673",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
@@ -113904,7 +113915,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113925,7 +113936,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Round-trip source connector proved reflexive at y0.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Round-trip target is the inverse-span based connector.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -114672,7 +114683,11 @@
      "Round-trip normal form expanded to three connector factors."}
     {:job 4,
      :commit "206d7a82e30600cc1090303efd5e945d68cb56f4",
-     :reason "Round-trip source connector proved reflexive at y0."}]}
+     :reason "Round-trip source connector proved reflexive at y0."}
+    {:job 5,
+     :commit "689d15ab58515ca3241b57cf3f96f64a847b6673",
+     :reason
+     "Round-trip target is the inverse-span based connector."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
