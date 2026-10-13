@@ -23717,7 +23717,7 @@
    :consumer :t01A08,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "Recorded commit is invalid: f032efae9d1501f7ddfe93c66668f88f24ed37f4 is absent locally and origin rejects it as not our ref. The intended scoped commit appears to be f032efae9b89fb527a72ea9192f3c89f09f82615. Repair the row to record the exact existing full SHA, then rerun independent review.",
    :implements-lemma
@@ -23725,17 +23725,19 @@
    :evidence
    {:placeholder-delta {:t01A08 [1 1]},
     :residual
-    "Use finite-order neighborhoods in induction; extend lower symmetry from dense interior; lift tail swaps; combine finite Schwarz leading swap and adjacent closure; B1.",
+    "Induct lower symmetry on dense finite-smooth interior neighborhoods; lift it to later adjacent swaps; combine with the finite leading swap and adjacent closure; B1.",
     :outcome :stop,
     :warnings [],
     :missing-theorems
     [{:name
-      "ContDiffWithinAt.isSymmSndFDerivWithinAt_iteratedFDerivWithin_of_nat",
+      "ContDiffWithinAt.iteratedFDerivWithin_domDomCongr_swap_zero_one_of_nat",
       :type
-      "C^(n+2) within plus dense interior makes the n-th lower jet second derivative symmetric",
+      "C^(n+2) within fixes the leading adjacent transposition of the (n+2)-jet",
       :status :proved,
       :consumers [:t01A08],
-      :depends-on [],
+      :depends-on
+      ["ContDiffWithinAt.isSymmSndFDerivWithinAt_iteratedFDerivWithin_of_nat"
+       "iteratedFDerivWithin_domDomCongr_swap_zero_one"],
       :area "sard-convex-domain"}
      {:name
       "ContDiffWithinAt.domDomCongr_iteratedFDerivWithin_of_infty",
@@ -23743,7 +23745,7 @@
       :status :partial,
       :consumers [:t01A08],
       :depends-on
-      ["ContDiffWithinAt.isSymmSndFDerivWithinAt_iteratedFDerivWithin_of_nat"
+      ["ContDiffWithinAt.iteratedFDerivWithin_domDomCongr_swap_zero_one_of_nat"
        "ContDiffWithinAt.exists_mem_nhdsWithin_contDiffWithinAt_closure_interior_of_infty"],
       :area "sard-convex-domain"}],
     :statement-hashes {:registry "147/147"},
@@ -23751,28 +23753,12 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Lower-jet Schwarz now consumes exactly C^(n+2), enabling finite-order neighborhood induction; tail-swap assembly remains.",
+    "Finite C^(n+2) now directly proves the leading adjacent swap of the (n+2)-jet; later-slot induction remains.",
     :commands
     [{:cmd
       "lake build ConstructionTargets.SardConvexDomain; lake env lean helper and fixture; hash/registry/commit checks",
       :exit 0}],
-    :diagnostic-history
-    [{:cmd "finite Schwarz order proof",
-      :exit 1,
-      :correction
-      "typed the WithTop ENat commutativity equality; compiled"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1791883696534-9300-b6723a25",
-     :commands
-     ["git show/diff 343eb14e; scope and recorded-tree checks"
-      "lake build ConstructionTargets.SardConvexDomain"
-      "lake env lean fixture and /tmp/CheckSardFiniteSchwarz.lean"
-      "sha256sum fixture; statement-registry check; placeholder recount"],
-     :finding
-     "PASS: valid STOP after real progress. One-file commit correctly bounds the lower-jet Schwarz step by C^(n+2): iteratedFDerivWithin_right consumes 2+n derivatives, with the WithTop ENat order discharged by addition commutativity; UniqueDiffOn, membership, and dense-interior hypotheses are all used. Build/export pass; fixture hash matches; standard axioms only; registry 147/147; sorry/admit 0->0. Tail-swap assembly and final adjacent closure remain listed."},
-    :commit "343eb14e74e18598cfebb481cfccc5066ffd369f",
+    :commit "10406003c636fc8ceced0a2cfe13498fb455445c",
     :changed-paths ["ConstructionTargets/SardConvexDomain.lean"],
     :fixture
     {:path "/tmp/t01a08_smooth_symmetry_membership_probe.lean",
@@ -23781,7 +23767,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain/B1/symmetry",
    :acceptance
@@ -33751,7 +33737,8 @@
     :lemma-contdiffwithinat-exists-mem-nhdswithin-contdiffwithinat-of-infty
     :lemma-contdiffwithinat-domdomcongr-iteratedfderivwithin-of-eqon
     :lemma-contdiffwithinat-exists-mem-nhdswithin-contdiffwithinat-closure-interior-of-inft
-    :lemma-contdiffwithinat-issymmsndfderivwithinat-iteratedfderivwithin-of-nat],
+    :lemma-contdiffwithinat-issymmsndfderivwithinat-iteratedfderivwithin-of-nat
+    :lemma-contdiffwithinat-iteratedfderivwithin-domdomcongr-swap-zero-one-of-nat],
    :other-consumers []}
   {:consumer :t01A08,
    :phase :lemma,
@@ -34102,6 +34089,30 @@
    :lemma-contdiffwithinat-issymmsndfderivwithinat-iteratedfderivwithin-of-nat,
    :kind :lemma,
    :depends-on [],
+   :other-consumers []}
+  {:consumer :t01A08,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ContDiffWithinAt.iteratedFDerivWithin_domDomCongr_swap_zero_one_of_nat",
+    :type
+    "C^(n+2) within fixes the leading adjacent transposition of the (n+2)-jet"},
+   :lemma
+   {:name
+    "ContDiffWithinAt.iteratedFDerivWithin_domDomCongr_swap_zero_one_of_nat",
+    :reported-by [:r-a08-symmetry-slots-1],
+    :type
+    "C^(n+2) within fixes the leading adjacent transposition of the (n+2)-jet",
+    :area "sard-convex-domain",
+    :proved-in :r-a08-symmetry-slots-1},
+   :id
+   :lemma-contdiffwithinat-iteratedfderivwithin-domdomcongr-swap-zero-one-of-nat,
+   :kind :lemma,
+   :depends-on
+   [:lemma-contdiffwithinat-issymmsndfderivwithinat-iteratedfderivwithin-of-nat
+    :lemma-iteratedfderivwithin-domdomcongr-swap-zero-one],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
