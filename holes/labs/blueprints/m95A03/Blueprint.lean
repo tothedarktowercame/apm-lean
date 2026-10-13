@@ -64,7 +64,111 @@ theorem apm_m95A03_isMinOn_of_solves
     (hu : apm_m95A03_solves a b α β p q f u) :
     IsMinOn (apm_m95A03_energy a b p q f)
       (apm_m95A03_admissible a b α β) u := by
-  sorry
+  intro v hv
+  rcases hu with ⟨hu2, hua, hub, huODE⟩
+  rcases hv with ⟨hv1, hva, hvb⟩
+  let h : ℝ → ℝ := fun x ↦ v x - u x
+  have hu1 : ContDiff ℝ 1 u := hu2.of_le (by norm_num)
+  have hh : ContDiff ℝ 1 h := hv1.sub hu1
+  have ha0 : h a = 0 := by simp [h, hva, hua]
+  have hb0 : h b = 0 := by simp [h, hvb, hub]
+  let g : ℝ → ℝ := fun x ↦ p x * deriv u x
+  have hdu : ContDiff ℝ 1 (deriv u) := hu2.deriv'
+  have hg : ContDiff ℝ 1 g := hp.mul hdu
+  have hgderiv : ∀ x ∈ Set.Icc a b,
+      deriv g x = q x * u x + f x := by
+    intro x hx
+    dsimp [g]
+    linarith [huODE x hx]
+  have hHasG : ∀ x ∈ Set.uIcc a b, HasDerivAt g (deriv g x) x := by
+    intro x hx
+    exact (hg.differentiable (by norm_num) x).hasDerivAt
+  have hHasH : ∀ x ∈ Set.uIcc a b, HasDerivAt h (deriv h x) x := by
+    intro x hx
+    exact (hh.differentiable (by norm_num) x).hasDerivAt
+  have hgd : ContDiff ℝ 0 (deriv g) := hg.deriv'
+  have hg'int : IntervalIntegrable (deriv g) MeasureTheory.volume a b :=
+    hgd.continuous.intervalIntegrable _ _
+  have hhd : ContDiff ℝ 0 (deriv h) := hh.deriv'
+  have hh'int : IntervalIntegrable (deriv h) MeasureTheory.volume a b :=
+    hhd.continuous.intervalIntegrable _ _
+  have hibp := intervalIntegral.integral_mul_deriv_eq_deriv_mul
+    hHasG hHasH hg'int hh'int
+  rw [ha0, hb0] at hibp
+  have hcross_cont : Continuous (fun x ↦
+      g x * deriv h x + q x * u x * h x + f x * h x) := by
+    have hgc : Continuous g := hg.continuous
+    have hdhc : Continuous (deriv h) := hhd.continuous
+    exact (hgc.mul hdhc).add
+      ((hq.mul hu1.continuous).mul hh.continuous) |>.add (hf.mul hh.continuous)
+  have hcross : (∫ x in a..b,
+      g x * deriv h x + q x * u x * h x + f x * h x) = 0 := by
+    have heq : (∫ x in a..b,
+        g x * deriv h x + q x * u x * h x + f x * h x) =
+        ∫ x in a..b, g x * deriv h x + deriv g x * h x := by
+      apply intervalIntegral.integral_congr
+      intro x hx
+      change g x * deriv h x + q x * u x * h x + f x * h x =
+        g x * deriv h x + deriv g x * h x
+      rw [hgderiv x (Set.uIcc_of_le hab.le ▸ hx)]
+      ring
+    rw [heq, intervalIntegral.integral_add]
+    · rw [hibp]
+      ring
+    · exact (hg.continuous.mul hhd.continuous).intervalIntegrable _ _
+    · exact (hgd.continuous.mul hh.continuous).intervalIntegrable _ _
+  have hderiv (x : ℝ) : deriv v x = deriv u x + deriv h x := by
+    have hdv := hv1.differentiable (by norm_num) x
+    have hdu' := hu1.differentiable (by norm_num) x
+    have hs := deriv_sub hdv hdu'
+    change deriv h x = deriv v x - deriv u x at hs
+    linarith
+  let R : ℝ → ℝ := fun x ↦ p x * (deriv h x) ^ 2 + q x * (h x) ^ 2
+  have hRcont : Continuous R := by
+    dsimp [R]
+    fun_prop
+  have hRnonneg : ∀ x ∈ Set.Icc a b, 0 ≤ R x := by
+    intro x hx
+    dsimp [R]
+    have hpnonneg : 0 ≤ p x := le_trans hp₀.le (hp_lower x hx)
+    exact add_nonneg (mul_nonneg hpnonneg (sq_nonneg _))
+      (mul_nonneg (hq_nonneg x hx) (sq_nonneg _))
+  have hRint : 0 ≤ ∫ x in a..b, R x :=
+    intervalIntegral.integral_nonneg hab.le hRnonneg
+  have hUcont : Continuous (fun x ↦
+      p x * deriv u x ^ 2 + q x * u x ^ 2 + 2 * u x * f x) := by
+    have hduc : Continuous (deriv u) := hdu.continuous
+    fun_prop
+  have hTwocross : Continuous (fun x ↦
+      2 * (g x * deriv h x + q x * u x * h x + f x * h x)) :=
+    hcross_cont.const_mul 2
+  have hexpand : apm_m95A03_energy a b p q f v =
+      apm_m95A03_energy a b p q f u +
+        2 * (∫ x in a..b,
+          g x * deriv h x + q x * u x * h x + f x * h x) +
+        ∫ x in a..b, R x := by
+    unfold apm_m95A03_energy
+    calc
+      (∫ t in a..b, p t * deriv v t ^ 2 + q t * v t ^ 2 + 2 * v t * f t) =
+          ∫ t in a..b,
+            (p t * deriv u t ^ 2 + q t * u t ^ 2 + 2 * u t * f t) +
+            2 * (g t * deriv h t + q t * u t * h t + f t * h t) + R t := by
+        apply intervalIntegral.integral_congr
+        intro x hx
+        dsimp [g, R, h]
+        rw [hderiv x]
+        ring
+      _ = _ := by
+        rw [← intervalIntegral.integral_const_mul]
+        rw [← intervalIntegral.integral_add
+          (hUcont.intervalIntegrable _ _) (hTwocross.intervalIntegrable _ _)]
+        simpa only [Pi.add_apply] using (intervalIntegral.integral_add
+          (μ := MeasureTheory.volume) (a := a) (b := b)
+          ((hUcont.add hTwocross).intervalIntegrable _ _)
+          (hRcont.intervalIntegrable _ _))
+  change apm_m95A03_energy a b p q f u ≤ apm_m95A03_energy a b p q f v
+  rw [hexpand, hcross, mul_zero, add_zero]
+  exact le_add_of_nonneg_right hRint
 
 theorem apm_m95A03_solves_of_isMinOn
     (a b α β p₀ : ℝ) (hab : a < b) (hp₀ : 0 < p₀)
