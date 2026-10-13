@@ -439,6 +439,41 @@ theorem apm_m02J05_lux_definite
     subst u
     exact apm_m02J05_lux_definite_aux_zero α
 
+lemma apm_m02J05_lux_homogeneous_aux_abs_div
+    (c x d : ℝ) (hc : c ≠ 0) :
+    |c * x| / (|c| * d) = |x| / d := by
+  rw [abs_mul]
+  field_simp [abs_ne_zero.mpr hc]
+
+-- For c ≠ 0 the Luxemburg sublevel of c • u is the |c|-dilate of that of u
+-- (use the banked apm_m02J05_lux_homogeneous_aux_abs_div and a.e. congruence (c • u) x = c * u x).
+open scoped Pointwise in
+lemma apm_m02J05_lux_homogeneous_aux_sublevel_smul
+    (α : ℝ → ℝ) (u : apm_m02J05_Fun) (c : ℝ) (hc : c ≠ 0) :
+    {c' : ℝ | 0 < c' ∧
+      IntegrableOn (fun x ↦ apm_m02J05_young α (|(c • u) x| / c')) (Icc (0 : ℝ) 1) volume ∧
+      ∫ x in Icc (0 : ℝ) 1, apm_m02J05_young α (|(c • u) x| / c') ∂volume ≤ 1} =
+    |c| • {c' : ℝ | 0 < c' ∧
+      IntegrableOn (fun x ↦ apm_m02J05_young α (|u x| / c')) (Icc (0 : ℝ) 1) volume ∧
+      ∫ x in Icc (0 : ℝ) 1, apm_m02J05_young α (|u x| / c') ∂volume ≤ 1} := by
+  sorry
+
+lemma apm_m02J05_lux_homogeneous_aux_core
+    (alpha : ℝ → ℝ)
+    (hc : ContinuousOn alpha (Ici 0))
+    (hmono : StrictMonoOn alpha (Ici 0))
+    (hzero : alpha 0 = 0)
+    (hinfty : Tendsto alpha atTop atTop)
+    (hnonneg : ∀ t, 0 ≤ t → 0 ≤ alpha t) :
+    ∀ u ∈ apm_m02J05_L alpha, ∀ c : ℝ,
+      apm_m02J05_lux alpha (c • u) = |c| * apm_m02J05_lux alpha u := by
+  intro u _ c
+  by_cases hc0 : c = 0
+  · subst hc0
+    rw [zero_smul, apm_m02J05_lux_definite_aux_zero, abs_zero, zero_mul]
+  · unfold apm_m02J05_lux
+    rw [apm_m02J05_lux_homogeneous_aux_sublevel_smul alpha u c hc0, Real.sInf_smul_of_nonneg (abs_nonneg c), smul_eq_mul]
+
 theorem apm_m02J05_lux_homogeneous
     (α : ℝ → ℝ)
     (hc : ContinuousOn α (Ici 0))
@@ -448,7 +483,7 @@ theorem apm_m02J05_lux_homogeneous
     (hnonneg : ∀ t, 0 ≤ t → 0 ≤ α t) :
     ∀ u ∈ apm_m02J05_L α, ∀ c : ℝ,
       apm_m02J05_lux α (c • u) = |c| * apm_m02J05_lux α u := by
-  sorry
+  exact apm_m02J05_lux_homogeneous_aux_core α hc hmono hzero hinfty hnonneg
 
 theorem apm_m02J05_lux_triangle_of_facts
     (α : ℝ → ℝ)
