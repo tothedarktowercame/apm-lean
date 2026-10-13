@@ -113850,16 +113850,16 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 2,
    :review-finding
    "Recorded fixture hash mismatch: :fixture.sha256 is 0bca6ce32c019fc3053c7f813c26917169cf817375b44d5e722b864b61a526450c1, but ConstructionTargets/PointWedgeVanKampen.blueprint.md at recorded commit c9b3af27 has exact SHA-256 0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0. Re-record the fixture hash for the reviewed commit.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
    :evidence
    {:placeholder-delta {:source-before 0, :source-after 0},
     :residual
-    "Use the actual predecessor computation in the B6 left-leg equation; then B12.",
+    "Transport this actual-action chain through the explicit counit normalization to close B6; then B12.",
     :outcome :stop,
-    :warnings ["existing linter"],
+    :warnings ["existing unused-section-vars linter"],
     :missing-theorems
     [{:name
       "PointWedgeVanKampen.genericPointWedgeLegCoordinates_vanKampen",
@@ -113871,9 +113871,9 @@
       :area "fundamental-group-wedge-of-circles"}],
     :statement-hashes
     {:source
-     "e9af64dd60b95d1bd8251f9374bc86f0c57b94c4533fe3afc31956462b2a19c4",
+     "19c34ac518fdfaedbc4fab8e0f8822fc0afefe3e52e9ca4eccfc0353382d64cc",
      :documentation
-     "2cd9a0a4cfefc99fca30034d53a63aa46450db5bd7965d0428407b58fafa7e2b",
+     "bdd4d931b4635c0b874e7dc2f3bf47c40727b093947562ffb916b2780554db11",
      :blueprint
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0",
      :registry "147/147"},
@@ -113881,7 +113881,7 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
     :reason
-    "The full left comparison now uses the literal actual-span predecessor action.",
+    "Packaged the B6 left-leg source action through the literal lifted actual-span action to the coproduct injection.",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/PointWedgeVanKampen.lean",
@@ -113891,25 +113891,11 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "diff/hash/placeholders", :exit 0}],
     :diagnostic-history
-    [{:cmd "lean drafts",
-      :exit 1,
-      :finding "Fixed normal-form association and dependent types."}
-     {:cmd
+    [{:cmd
       "lake build ConstructionTargets.ThreeCirclesFundamentalGroup",
       :exit 1,
       :finding "B12 file absent."}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1791881762695-9200-b28b64ac",
-     :commands
-     ["git show/diff eb752a6d^..eb752a6d"
-      "git archive eb752a6d; lake env lean archived PointWedgeVanKampen.lean"
-      "statement-registry check; recorded-tree sha256; placeholders; diff-tree"
-      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (expected absent)"],
-     :finding
-     "PASS program STOP: eb752a6d is new after history and commits compiled, sorry-free progress. It factors predecessor≫counit via normalForm_comp, preserves the order as counit * predecessor under End multiplication, then replaces the injected predecessor with the literal actual-span action using the prior HEq in the correct symmetric direction. The outer boundary remains HEq; dependent endpoints are not erased. Scope is exactly Lean+notes. Hashes match source e9af64dd, notes 2cd9a0a4, blueprint 0bca6ce3; placeholders 0->0; registry 147/147; standard axioms only. Residual actual predecessor computation then B12 is explicit; the B12 file remains absent as listed."},
-    :commit "eb752a6d81b9213c0020a3bae2bf2932380da99d",
+    :commit "403246b8ff71ffca5a3a12ba2b89c6517d4e2ad4",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
      "ConstructionTargets/PointWedgeVanKampen.md"],
@@ -113919,7 +113905,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
