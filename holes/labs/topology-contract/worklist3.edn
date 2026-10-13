@@ -21568,7 +21568,7 @@
   {:consumer :t00J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "Frozen fixture metadata mismatch persists in both authoritative acceptance copies: they record aad5a9cda739c1cbcceb1eca8ab8b33395db8a08c9d68941a87c644f4d13586e and omit :mode, while /tmp/closedboundarycoords.lean freshly compiles and hashes to 7e72195e1214d7580994264481ae57d0ecf87755d31825ab85cbda5f1220c4b1. Update both copies to that digest with :mode :post-build-export-check, then resubmit commit f0afa7bd.",
    :implements-lemma
@@ -21576,7 +21576,7 @@
    :evidence
    {:placeholder-delta {:t00J02 [1 1], :t98A02 [1 1]},
     :residual
-    "Install verified digest and :mode :post-build-export-check in both acceptance copies; accept f0afa7bd.",
+    "Supervisor must install verified digest plus :mode :post-build-export-check in both copies and accept f0afa7bd.",
     :outcome :stop,
     :warnings [],
     :statement-hashes {:registry "142/142"},
@@ -21584,7 +21584,7 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Reviewed theorem compiles, but acceptance still records stale digest aad5a9cda739c1cbcceb1eca8ab8b33395db8a08c9d68941a87c644f4d13586e and no mode; supervisor must update both copies.",
+    "Reviewed scoped theorem is complete; frozen acceptance still has stale digest aad5a9cda739c1cbcceb1eca8ab8b33395db8a08c9d68941a87c644f4d13586e and omits :mode in both copies.",
     :commands
     [{:cmd "sha256sum /tmp/closedboundarycoords.lean", :exit 0}
      {:cmd "lake env lean /tmp/closedboundarycoords.lean", :exit 0}
@@ -21592,17 +21592,6 @@
       "git diff --exit-code f0afa7bd -- ConstructionTargets/ManifoldFundamentalClass.lean",
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1791866970532-8453-754ac9e2",
-     :commands
-     ["lake env lean /tmp/closedboundarycoords.lean"
-      "sha256sum /tmp/closedboundarycoords.lean"
-      "git diff --exit-code f0afa7bd -- ConstructionTargets/ManifoldFundamentalClass.lean"
-      "python3 scripts/statement-registry.py check"],
-     :finding
-     "PASS: fresh rerun confirms f0afa7bd exactly matches scoped file, fixture digest 7e72195e1214d7580994264481ae57d0ecf87755d31825ab85cbda5f1220c4b1, registry 142/142, zero placeholders, correct orientation, and only standard axioms. STOP follows compiled real progress. Ledger repair remains: update both stale aad5a9cd acceptance copies and add :mode :post-build-export-check."},
     :commit "f0afa7bdc4c95a8c87143342ceb8c9ce51cd5612",
     :changed-paths [],
     :fixture
@@ -21612,7 +21601,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/manifold-fundamental-class",
    :acceptance
