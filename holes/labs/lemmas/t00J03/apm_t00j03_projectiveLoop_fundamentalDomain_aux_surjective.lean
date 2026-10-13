@@ -203,7 +203,75 @@ lemma apm_t00j03_projectiveLoop_fundamentalDomain_aux_injective :
 -- BEGIN SEAT AREA
 lemma apm_t00j03_projectiveLoop_fundamentalDomain_aux_surjective :
     Set.SurjOn apm_t00j03_projectiveLoop (Set.Ico 0 Real.pi) Set.univ := by
-  sorry
+  intro p hp
+  let z : ℂ := ⟨p.rep 0, p.rep 1⟩
+  have hz : z ≠ 0 := by
+    intro h
+    apply p.rep_nonzero
+    funext i
+    fin_cases i
+    · exact congrArg Complex.re h
+    · exact congrArg Complex.im h
+  have hn : ‖z‖ ≠ 0 := norm_ne_zero_iff.mpr hz
+  have hc : Real.cos z.arg = p.rep 0 / ‖z‖ := by
+    simpa [z] using Complex.cos_arg hz
+  have hs : Real.sin z.arg = p.rep 1 / ‖z‖ := by
+    simpa [z] using Complex.sin_arg z
+  by_cases hneg : z.arg < 0
+  · refine ⟨z.arg + Real.pi, ⟨by linarith [Complex.neg_pi_lt_arg z], ?_⟩, ?_⟩
+    · linarith [Real.pi_pos]
+    · unfold apm_t00j03_projectiveLoop apm_t00j03_projectivize
+      rw [← p.mk_rep]
+      change Projectivization.mk ℝ (apm_t00j03_circlePoint (z.arg + Real.pi)).1 _ =
+        Projectivization.mk ℝ p.rep _
+      rw [Projectivization.mk_eq_mk_iff']
+      refine ⟨-(‖z‖⁻¹), ?_⟩
+      ext i
+      fin_cases i
+      · simp [apm_t00j03_circlePoint, Real.cos_add_pi]
+        rw [hc]
+        field_simp [hn]
+      · simp [apm_t00j03_circlePoint, Real.sin_add_pi]
+        rw [hs]
+        field_simp [hn]
+  · by_cases hpi : z.arg = Real.pi
+    · refine ⟨0, ⟨le_rfl, Real.pi_pos⟩, ?_⟩
+      unfold apm_t00j03_projectiveLoop apm_t00j03_projectivize
+      rw [← p.mk_rep]
+      change Projectivization.mk ℝ (apm_t00j03_circlePoint 0).1 _ =
+        Projectivization.mk ℝ p.rep _
+      rw [Projectivization.mk_eq_mk_iff']
+      refine ⟨-(‖z‖⁻¹), ?_⟩
+      ext i
+      fin_cases i
+      · simp [apm_t00j03_circlePoint]
+        have hc' := hc
+        rw [hpi] at hc'
+        simp at hc'
+        field_simp [hn] at hc' ⊢
+        linarith
+      · simp [apm_t00j03_circlePoint]
+        have hs' := hs
+        rw [hpi] at hs'
+        simp at hs'
+        have hv1 : p.rep 1 = 0 := by
+          exact ((div_eq_zero_iff.mp hs'.symm).resolve_right hn)
+        simp [hv1]
+    · refine ⟨z.arg, ⟨le_of_not_gt hneg, lt_of_le_of_ne (Complex.arg_le_pi z) hpi⟩, ?_⟩
+      unfold apm_t00j03_projectiveLoop apm_t00j03_projectivize
+      rw [← p.mk_rep]
+      change Projectivization.mk ℝ (apm_t00j03_circlePoint z.arg).1 _ =
+        Projectivization.mk ℝ p.rep _
+      rw [Projectivization.mk_eq_mk_iff']
+      refine ⟨‖z‖⁻¹, ?_⟩
+      ext i
+      fin_cases i
+      · simp [apm_t00j03_circlePoint]
+        rw [hc]
+        field_simp [hn]
+      · simp [apm_t00j03_circlePoint]
+        rw [hs]
+        field_simp [hn]
 -- END SEAT AREA
 
 theorem apm_t00j03_projectiveLoop_fundamentalDomain :
