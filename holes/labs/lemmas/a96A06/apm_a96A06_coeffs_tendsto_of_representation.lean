@@ -142,7 +142,28 @@ theorem apm_a96A06_coeffs_tendsto_of_representation
     (hrep : ∀ z : ℂ, z ≠ 1 → f z = c / (z - 1) + g z) :
     Tendsto (fun n => iteratedDeriv n f 0 / (n.factorial : ℂ))
       atTop (𝓝 1) := by
-  sorry
+  subst c
+  have hlocal : f =ᶠ[𝓝 0] fun z : ℂ ↦ (1 - z)⁻¹ + g z := by
+    filter_upwards [eventually_ne_nhds (show (0 : ℂ) ≠ 1 by norm_num)] with z hz
+    rw [hrep z hz]
+    congr 1
+    field_simp [sub_ne_zero.mpr hz, sub_ne_zero.mpr hz.symm]
+    ring
+  have hcoeff (n : ℕ) :
+      iteratedDeriv n f 0 / (n.factorial : ℂ) =
+        1 + iteratedDeriv n g 0 / (n.factorial : ℂ) := by
+    rw [hlocal.iteratedDeriv_eq n]
+    have hgeom : ContDiffAt ℂ n (fun z : ℂ ↦ (1 - z)⁻¹) 0 := by
+      exact (contDiffAt_const.sub contDiffAt_id).inv (by norm_num)
+    have hg' : ContDiffAt ℂ n g 0 := hg.contDiff.contDiffAt
+    change iteratedDeriv n ((fun z : ℂ ↦ (1 - z)⁻¹) + g) 0 /
+      (n.factorial : ℂ) = _
+    rw [iteratedDeriv_add hgeom hg', add_div, geom_taylor_coeff]
+  have ht : Tendsto
+      (fun n : ℕ ↦ (1 : ℂ) + iteratedDeriv n g 0 / (n.factorial : ℂ))
+      atTop (𝓝 ((1 : ℂ) + 0)) :=
+    tendsto_const_nhds.add (entire_coeffs_tendsto_zero g hg)
+  simpa only [hcoeff, add_zero] using ht
 -- END SEAT AREA
 
 /-- **Main theorem**: f^(n)(0)/n! → 1.
