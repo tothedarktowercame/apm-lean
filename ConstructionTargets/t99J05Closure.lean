@@ -44,6 +44,28 @@ structure ComplexProjectiveRationalHomologyData (n : ℕ) where
   vanishesOdd : ∀ k, Odd k → Subsingleton (Homology (CP n) k)
   evenEquiv (i : Fin (n + 1)) : Homology (CP n) (2 * i.val) ≃ₗ[ℚ] ℚ
 
+/-- The exact singular-homology output needed for a nonempty one-point space.
+The chain-level computation will construct this structure; it contains no
+projective-space-specific data. -/
+structure NonemptySubsingletonRationalHomologyData (X : Type)
+    [TopologicalSpace X] where
+  finiteDimensional : ∀ k, FiniteDimensional ℚ (Homology X k)
+  vanishesPositive : ∀ k, 0 < k → Subsingleton (Homology X k)
+  zeroEquiv : Homology X 0 ≃ₗ[ℚ] ℚ
+
+/-- The generic one-point homology calculation, once supplied, gives the full
+base datum for the literal `CP 0` quotient. -/
+noncomputable def cpZeroHomologyDataOfSubsingletonData
+    (h : NonemptySubsingletonRationalHomologyData (CP 0)) :
+    ComplexProjectiveRationalHomologyData 0 where
+  finiteDimensional := h.finiteDimensional
+  vanishesAbove k hk := h.vanishesPositive k (by simpa using hk)
+  vanishesOdd k hk := h.vanishesPositive k hk.pos
+  evenEquiv i := by
+    have hi : i = 0 := Fin.ext (by omega)
+    subst i
+    simpa using h.zeroEquiv
+
 /-- Install the finite-dimensional instance recorded by the homology data. -/
 theorem ComplexProjectiveRationalHomologyData.finiteDimensionalAt
     {n : ℕ} (h : ComplexProjectiveRationalHomologyData n) (k : ℕ) :
@@ -83,6 +105,7 @@ noncomputable def complexProjectiveRationalHomologyData_of_zero_of_step
 
 #print axioms ComplexProjectiveRationalHomologyData.finiteDimensionalAt
 #print axioms cp_zero_subsingleton
+#print axioms cpZeroHomologyDataOfSubsingletonData
 #print axioms ComplexProjectiveRationalHomologyData.subsingleton_of_two_mul_lt
 #print axioms ComplexProjectiveRationalHomologyData.subsingleton_of_odd
 #print axioms complexProjectiveRationalHomologyData_of_zero_of_step

@@ -82,6 +82,13 @@ What remains for the base is the singular-chain theorem computing rational
 homology of a subsingleton space (degree zero `ℚ`, positive degrees zero),
 then transport it to `ComplexProjectiveRationalHomologyData 0`.
 
+That transport is now compiled. The structure
+`NonemptySubsingletonRationalHomologyData X` fixes the chain theorem's exact
+output, and `cpZeroHomologyDataOfSubsingletonData` converts it to the C3 base
+interface. The only remaining base work is constructing this generic data for
+the nonempty literal space `CP 0`; no further degree arithmetic or projective
+representation comparison remains.
+
 Dependencies already banked:
 
 - `ConstructionTargets.CoefficientSubcomplexMayerVietoris`
