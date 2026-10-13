@@ -24430,7 +24430,7 @@
    :consumer :t01A08,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 0,
    :review-finding
    "extend Mathlib: state and prove the missing theorem in scope",
    :implements-lemma :lemma-closedset-whitneycubecover,
@@ -24471,6 +24471,17 @@
      {:cmd "git commit", :exit 0}],
     :diagnostic-history
     [{:cmd "build", :exit 1, :correction "unfolded pair before ext"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791918287475-10241-cee4355c",
+     :commands
+     ["git show/diff cc5e973c; scope and orientation review"
+      "lake build ConstructionTargets.SardConvexDomain"
+      "sha256sum + lake env lean uniqueness fixture"
+      "statement-registry check; placeholder recount"],
+     :finding
+     "PASS. Commit cc5e973c changes only SardConvexDomain.lean and correctly proves same-generation uniqueness from half-open coordinate bounds via floor_eq_iff. This is compiled, sorry-free standard-axiom progress; parent nesting, maximal selection, and proper-cover assembly remain explicitly listed. Build and fixture pass; fixture hash matches; registry 150/150; forbidden count 0->0."},
     :commit "cc5e973c91b06f46ae6b77eefaed4923440ec283",
     :changed-paths ["ConstructionTargets/SardConvexDomain.lean"],
     :fixture
@@ -24479,7 +24490,7 @@
      "1567b2e8b5208b7e7935aecadd3374e025b1dcc73e8e9525d6e1f6beeb370a52"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain.blueprint/B3",
    :acceptance
@@ -36041,7 +36052,7 @@
    :other-consumers []}
   {:consumer :t01A08,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -36055,7 +36066,9 @@
     :type
     "same-generation membership uniquely determines the floor-coordinate index",
     :area "sard-convex-domain",
-    :proved-in :r-a08-sard-b3-whitney-cubes-1},
+    :proved-in :r-a08-sard-b3-whitney-cubes-1,
+    :banked-by :r-a08-sard-b3-whitney-cubes-1,
+    :banked-commit "cc5e973c91b06f46ae6b77eefaed4923440ec283"},
    :id
    :lemma-constructiontargets-sardconvexdomain-eq-whitneydyadicindexof-of-mem-cube-of-gene,
    :kind :lemma,
