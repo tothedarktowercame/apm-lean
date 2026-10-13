@@ -212,3 +212,14 @@ smooth piece gives a bounded, piecewise-continuous integrand, so the affine-repa
 - `piecewisePath_concat_additive` (PARTIAL: concat definition + endpoints) is now a sorry-free assembly from the
   definition `apm_t96A08_concat` and two leaves: `apm_t96A08_concat_piecewiseSmooth` (merged rescaled cuts) and
   `apm_t96A08_concat_lineIntegral` (chain rule on each half, substitution; integrability from `homega_smooth`).
+
+## claude-14 restructure: derivative at the centre + smoothness bootstrap (2026-10-13)
+
+`euclidean_calculus` came back PARTIAL: all-orders smoothness of the parameter integral `G` within the (possibly
+non-open) set `W ∩ range I` is hard and unnecessary. Now:
+- `HasLocalRadialPrimitives` asks only `HasMFDerivAt g x (omega x)` at the centre (plus the radial-path identity).
+- `euclidean_calculus` proves only `HasFDerivWithinAt G (omegaCoord a) (W ∩ range I) a` (continuity of `omegaCoord`
+  at `a`: `G v - omegaCoord a (v - a) = ∫ (omegaCoord (a + t (v - a)) - omegaCoord a) (v - a) = o(‖v - a‖)`).
+- New leaf `contMDiff_of_hasMFDerivAt`: `f` with `HasMFDerivAt f p (omega p)` everywhere and `omega` smooth is smooth
+  (chart bootstrap with `contDiffOn_succ_iff_fderivWithin`).
+- `potential_of_local_primitives` re-proved (claude-14, sorry-free) under the new predicate, with smoothness from `hboot`.

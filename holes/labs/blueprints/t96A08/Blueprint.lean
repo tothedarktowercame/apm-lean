@@ -50,8 +50,7 @@ def apm_t96A08_HasLocalRadialPrimitives
     (omega : ∀ p : M, TangentSpace I p →L[ℝ] ℝ) : Prop :=
   ∀ x : M, ∃ U : Set M, IsOpen U ∧ x ∈ U ∧
     ∃ g : M → ℝ,
-      ContMDiffOn I 𝓘(ℝ, ℝ) (⊤ : WithTop ℕ∞) g U ∧
-      mfderiv I 𝓘(ℝ, ℝ) g x = omega x ∧
+      HasMFDerivAt I 𝓘(ℝ, ℝ) g x (omega x) ∧
       ∀ z ∈ U, ∃ delta : ℝ → M,
         apm_t96a08_IsPiecewiseSmoothPath I delta ∧
         delta 0 = x ∧ delta 1 = z ∧
@@ -514,8 +513,10 @@ lemma apm_t96A08_chart_radial_primitive_coordinate_formula
             (extChartAt I x z - extChartAt I x x) := by
   sorry
 
-/-- The parameter-integral calculation in a normed vector space.  Smoothness
-is requested on an ambient convex set, so this lemma has no corners issue. -/
+/-- The parameter-integral calculation in a normed vector space: only the
+derivative AT THE CENTRE is needed (claude-14 restructure: smoothness of the
+potential now comes from `apm_t96A08_contMDiff_of_hasMFDerivAt`).
+`G v = omegaCoord a (v - a) + o(‖v - a‖)` by continuity of `omegaCoord` at `a`. -/
 lemma apm_t96A08_chart_radial_primitive_euclidean_calculus
     {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E] [CompleteSpace E]
     (I : ModelWithCorners ℝ E E) (W : Set E) (a : E) (omegaCoord : E → (E →L[ℝ] ℝ))
@@ -524,8 +525,7 @@ lemma apm_t96A08_chart_radial_primitive_euclidean_calculus
       (W ∩ Set.range (I : E → E))) :
     let G : E → ℝ := fun v ↦ ∫ t : ℝ in (0 : ℝ)..1,
       omegaCoord (a + t • (v - a)) (v - a)
-    ContDiffOn ℝ (⊤ : WithTop ℕ∞) G (W ∩ Set.range (I : E → E)) ∧
-      fderivWithin ℝ G (W ∩ Set.range (I : E → E)) a = omegaCoord a := by
+    HasFDerivWithinAt G (omegaCoord a) (W ∩ Set.range (I : E → E)) a := by
   sorry
 
 /-- Transfer the ambient parameter-integral result through the chart.  All
@@ -575,8 +575,7 @@ lemma apm_t96A08_chart_radial_primitive_transfer
         (W ∩ Set.range (I : E → E)) →
       let G : E → ℝ := fun v ↦ ∫ t : ℝ in (0 : ℝ)..1,
         omegaCoord (a + t • (v - a)) (v - a)
-      ContDiffOn ℝ (⊤ : WithTop ℕ∞) G (W ∩ Set.range (I : E → E)) ∧
-      fderivWithin ℝ G (W ∩ Set.range (I : E → E)) a = omegaCoord a) :
+      HasFDerivWithinAt G (omegaCoord a) (W ∩ Set.range (I : E → E)) a) :
     apm_t96A08_HasLocalRadialPrimitives I omega := by
   sorry
 
@@ -595,8 +594,28 @@ theorem apm_t96A08_chart_radial_primitive
   · exact apm_t96A08_chart_radial_primitive_coordinate_formula I omega homega_smooth
   · exact apm_t96A08_chart_radial_primitive_euclidean_calculus I
 
-/-- Abstract local-to-global step: additive concatenation and local radial
-primitives identify the path-defined potential locally with a smooth one. -/
+/-- Seat (claude-14 restructure): a function whose manifold derivative exists
+everywhere and equals a smooth one-form is smooth.  In the chart at `p`,
+`f ∘ φ.symm` has within-derivative `omegaCoord` on `φ.target ∩ range I`
+(open ∩ convex, so unique differentiability), and `omegaCoord` is smooth there,
+so `contDiffOn_succ_iff_fderivWithin` bootstraps to `C^∞`. -/
+theorem apm_t96A08_contMDiff_of_hasMFDerivAt
+    {E M : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [CompleteSpace E] [TopologicalSpace M]
+    (I : ModelWithCorners ℝ E E) [ChartedSpace E M]
+    [IsManifold I (⊤ : WithTop ℕ∞) M]
+    (omega : ∀ p : M, TangentSpace I p →L[ℝ] ℝ)
+    (homega_smooth : ContMDiff I.tangent 𝓘(ℝ, ℝ) (⊤ : WithTop ℕ∞)
+      (fun v : TangentBundle I M => omega v.1 v.2))
+    (f : M → ℝ) (hf : ∀ p : M, HasMFDerivAt I 𝓘(ℝ, ℝ) f p (omega p)) :
+    ContMDiff I 𝓘(ℝ, ℝ) (⊤ : WithTop ℕ∞) f := by
+  sorry
+
+/-- Seat (claude-14 restructure of the former proved glue): additive
+concatenation and local primitives with the right derivative at their centre
+give `HasMFDerivAt f x (omega x)` at every `x` (`f = g + (f x - g x)` near `x`,
+as in the previous proof, then `HasMFDerivAt.congr_of_eventuallyEq`);
+smoothness comes from `hboot`. -/
 theorem apm_t96A08_potential_of_local_primitives
     {E M : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
     [CompleteSpace E] [TopologicalSpace M]
@@ -605,6 +624,8 @@ theorem apm_t96A08_potential_of_local_primitives
     (omega : ∀ p : M, TangentSpace I p →L[ℝ] ℝ) (base : M)
     (hconcat : apm_t96A08_HasAdditiveConcatenation I omega)
     (hlocal : apm_t96A08_HasLocalRadialPrimitives I omega)
+    (hboot : ∀ f : M → ℝ, (∀ p : M, HasMFDerivAt I 𝓘(ℝ, ℝ) f p (omega p)) →
+      ContMDiff I 𝓘(ℝ, ℝ) (⊤ : WithTop ℕ∞) f)
     (hreachable : ∀ p : M, ∃ gamma : ℝ → M,
       apm_t96a08_IsPiecewiseSmoothPath I gamma ∧
         gamma 0 = base ∧ gamma 1 = p)
@@ -615,11 +636,9 @@ theorem apm_t96A08_potential_of_local_primitives
       f p = apm_t96a08_LineIntegral I omega gamma) :
     ContMDiff I 𝓘(ℝ, ℝ) (⊤ : WithTop ℕ∞) f ∧
       ∀ p : M, mfderiv I 𝓘(ℝ, ℝ) f p = omega p := by
-  have h_at : ∀ x : M,
-      ContMDiffAt I 𝓘(ℝ, ℝ) (⊤ : WithTop ℕ∞) f x ∧
-        mfderiv I 𝓘(ℝ, ℝ) f x = omega x := by
+  have h_at : ∀ x : M, HasMFDerivAt I 𝓘(ℝ, ℝ) f x (omega x) := by
     intro x
-    rcases hlocal x with ⟨U, hU, hxU, g, hg, hgd, hradial⟩
+    rcases hlocal x with ⟨U, hU, hxU, g, hgd, hradial⟩
     rcases hreachable x with ⟨gamma, hgamma, hgamma0, hgamma1⟩
     have heq : ∀ z ∈ U, f z = g z + (f x - g x) := by
       intro z hz
@@ -629,23 +648,16 @@ theorem apm_t96A08_potential_of_local_primitives
       have hfz := hf z eta heta (heta0.trans hgamma0) (heta1.trans hdelta1)
       have hfx := hf x gamma hgamma hgamma0 hgamma1
       linarith
-    have hg_at : ContMDiffAt I 𝓘(ℝ, ℝ) (⊤ : WithTop ℕ∞) g x :=
-      hg.contMDiffAt (hU.mem_nhds hxU)
-    have hq_at : ContMDiffAt I 𝓘(ℝ, ℝ) (⊤ : WithTop ℕ∞)
-        (fun y ↦ g y + (f x - g x)) x :=
-      hg_at.add contMDiffAt_const
     have hfg : Filter.EventuallyEq (nhds x) f (fun y ↦ g y + (f x - g x)) :=
       Filter.mem_of_superset (hU.mem_nhds hxU) (fun z hz ↦ heq z hz)
-    refine ⟨hq_at.congr_of_eventuallyEq hfg, ?_⟩
-    rw [hfg.mfderiv_eq]
-    change mfderiv I 𝓘(ℝ, ℝ) (g + fun _ ↦ f x - g x) x = omega x
-    rw [mfderiv_add (hg_at.mdifferentiableAt (by simp)) mdifferentiableAt_const,
-      mfderiv_const]
-    rw [hgd]
-    ext v
-    change omega x v + 0 = omega x v
-    exact add_zero _
-  exact ⟨fun x ↦ (h_at x).1, fun x ↦ (h_at x).2⟩
+    have hq : HasMFDerivAt I 𝓘(ℝ, ℝ) (fun y ↦ g y + (f x - g x)) x (omega x) := by
+      have h2 := hgd.add (hasMFDerivAt_const (I := I) (I' := 𝓘(ℝ, ℝ)) (f x - g x) x)
+      convert h2 using 1
+      ext v
+      change omega x v = omega x v + 0
+      exact (add_zero _).symm
+    exact hq.congr_of_eventuallyEq hfg
+  exact ⟨hboot f h_at, fun x ↦ (h_at x).mfderiv⟩
 
 /-- The fundamental theorem assembled from the three independent library
 boundaries above. -/
@@ -670,6 +682,7 @@ theorem apm_t96A08_piecewise_lineIntegral_fundamental
   apply apm_t96A08_potential_of_local_primitives I omega base
   · exact apm_t96A08_piecewisePath_concat_additive I omega homega_smooth
   · exact apm_t96A08_chart_radial_primitive I omega homega_smooth
+  · exact apm_t96A08_contMDiff_of_hasMFDerivAt I omega homega_smooth
   · exact hreachable
   · exact hf
 
