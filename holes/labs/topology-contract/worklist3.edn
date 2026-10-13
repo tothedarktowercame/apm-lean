@@ -24430,25 +24430,24 @@
    :consumer :t01A08,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "extend Mathlib: state and prove the missing theorem in scope",
    :implements-lemma :lemma-closedset-whitneycubecover,
    :evidence
    {:placeholder-delta {:t01A08 [1 1]},
-    :residual
-    "Combine stratum nets, prove quantitative packing/overlap, assemble B3; then B4-B7, B9.",
+    :residual "Prove packing/overlap and assemble B3; then B4-B7, B9.",
     :outcome :stop,
     :warnings ["existing unnecessarySimpa:454"],
     :missing-theorems
     [{:name
-      "ConstructionTargets.SardConvexDomain.whitneyStratumNet_spec",
+      "ConstructionTargets.SardConvexDomain.exists_whitneyStratumNet_dist_le_of_not_mem",
       :type
-      "chosen dyadic stratum net is contained, separated at 2^k/8, and covers its stratum",
+      "each complement point has k and a same-stratum net center within 2^k/8",
       :status :proved,
       :consumers [:t01A08],
       :depends-on
-      ["ConstructionTargets.SardConvexDomain.exists_maximalSeparated_cover"
+      ["ConstructionTargets.SardConvexDomain.whitneyStratumNet_spec"
        "ConstructionTargets.SardConvexDomain.compl_subset_iUnion_whitneyScaleStratum"],
       :area "sard-convex-domain"}
      {:name
@@ -24457,7 +24456,7 @@
       :status :partial,
       :consumers [:t01A08],
       :depends-on
-      ["ConstructionTargets.SardConvexDomain.whitneyStratumNet_spec"
+      ["ConstructionTargets.SardConvexDomain.exists_whitneyStratumNet_dist_le_of_not_mem"
        "ConstructionTargets.SardConvexDomain.infDist_comparable_of_mem_quarter_balls"],
       :area "sard-convex-domain"}],
     :statement-hashes {:registry "150/150"},
@@ -24465,32 +24464,21 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Committed canonical maximal separated nets on every dyadic infDist stratum. Quantitative packing, uniform overlap, and certificate assembly remain; not a refutation.",
+    "Committed dyadic-net coverage: every complement point has a same-stratum center within 2^k/8. Packing, overlap bound, and assembly remain; not a refutation.",
     :commands
     [{:cmd "lake build ConstructionTargets.SardConvexDomain", :exit 0}
-     {:cmd "lean fixture; registry; forbidden scan; diff", :exit 0}
+     {:cmd "lean fixture; registry; scans; diff", :exit 0}
      {:cmd "git commit scoped file", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1791903046414-9899-f497ddfa",
-     :commands
-     ["git show/diff 68f2176; scope/type checks"
-      "sha256sum + lake env lean frozen fixture"
-      "lake build ConstructionTargets.SardConvexDomain"
-      "statement registry check; forbidden-count scan"],
-     :finding
-     "PASS. Recorded topo-10 commit 68f2176 changes only the scoped Lean file and correctly chooses a maximal net on each dyadic stratum. Radius 2^k/8 is positive NNReal and coerces correctly across IsSeparated/IsCover; choose_spec gives containment, separation, and coverage with matching argument order. Fixture hash 0b1a8cd6... matches; build/fixture pass; registry 150/150; forbidden placeholders stay 0; only standard axioms. Valid compiled B3 progress; STOP lists combined nets, packing/overlap, and assembly."},
-    :commit "68f21764a4e8817a5e89cc34bc927cc13209c740",
+    :commit "a611ed26f646f33476b59bba37152725b0388879",
     :changed-paths ["ConstructionTargets/SardConvexDomain.lean"],
     :fixture
-    {:path "/tmp/t01a08_b3_stratum_net_check.lean",
+    {:path "/tmp/t01a08_b3_combined_stratum_net_check.lean",
      :sha256
-     "0b1a8cd6ac8ea20c8dca597b6ca71acd50b70301295d592a8442537ad4425498",
+     "5ee072bd0be77c8f20d68c5bcb3e1d8d2d46ee68cadeb1ccb512f5b08ef67372",
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain.blueprint/B3",
    :acceptance
@@ -35151,7 +35139,8 @@
     :lemma-constructiontargets-sardconvexdomain-infdist-comparable-of-mem-quarter-balls
     :lemma-constructiontargets-sardconvexdomain-exists-maximalseparated-cover
     :lemma-constructiontargets-sardconvexdomain-compl-subset-iunion-whitneyscalestratum
-    :lemma-constructiontargets-sardconvexdomain-whitneystratumnet-spec],
+    :lemma-constructiontargets-sardconvexdomain-whitneystratumnet-spec
+    :lemma-constructiontargets-sardconvexdomain-exists-whitneystratumnet-dist-le-of-not-mem],
    :other-consumers []}
   {:consumer :t01A08,
    :phase :lemma,
@@ -35406,6 +35395,30 @@
    :kind :lemma,
    :depends-on
    [:lemma-constructiontargets-sardconvexdomain-exists-maximalseparated-cover
+    :lemma-constructiontargets-sardconvexdomain-compl-subset-iunion-whitneyscalestratum],
+   :other-consumers []}
+  {:consumer :t01A08,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.SardConvexDomain.exists_whitneyStratumNet_dist_le_of_not_mem",
+    :type
+    "each complement point has k and a same-stratum net center within 2^k/8"},
+   :lemma
+   {:name
+    "ConstructionTargets.SardConvexDomain.exists_whitneyStratumNet_dist_le_of_not_mem",
+    :reported-by [:r-a08-sard-b3-whitney-cubes-1],
+    :type
+    "each complement point has k and a same-stratum net center within 2^k/8",
+    :area "sard-convex-domain",
+    :proved-in :r-a08-sard-b3-whitney-cubes-1},
+   :id
+   :lemma-constructiontargets-sardconvexdomain-exists-whitneystratumnet-dist-le-of-not-mem,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-sardconvexdomain-whitneystratumnet-spec
     :lemma-constructiontargets-sardconvexdomain-compl-subset-iunion-whitneyscalestratum],
    :other-consumers []}],
  :consumer-baselines {},
