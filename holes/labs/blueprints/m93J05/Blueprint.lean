@@ -595,13 +595,90 @@ theorem apm_m93j05_trunc_kernel (N : ℕ)
 
 /-- (Sp) Splitting `f = Φ f + (f − Φ f)`. For `Φ (f − Φ f) = 0`: if `f · cos_k` is integrable the
 coefficients subtract; if not, neither is `(f − Φ f) · cos_k`, and both coefficients are `0`. -/
+lemma apm_m93j05_trunc_split_aux_continuous (N : ℕ) (f : ℝ → ℝ) :
+    Continuous (apm_m93j05_trunc N f) := by
+  apply Continuous.add continuous_const
+  apply continuous_finset_sum
+  intro j hj
+  apply Continuous.add
+  · exact continuous_const.mul
+      (Real.continuous_cos.comp (continuous_const.mul continuous_id))
+  · exact continuous_const.mul
+      (Real.continuous_sin.comp (continuous_const.mul continuous_id))
+
+lemma apm_m93j05_trunc_split_aux_integral_sub (f g : ℝ → ℝ)
+    (hg : IntegrableOn g (Set.Icc (0 : ℝ) 1))
+    (heq : (∫ x in Set.Icc (0 : ℝ) 1, f x) =
+      ∫ x in Set.Icc (0 : ℝ) 1, g x) :
+    (∫ x in Set.Icc (0 : ℝ) 1, (f x - g x)) = 0 := by
+  let μ := volume.restrict (Set.Icc (0 : ℝ) 1)
+  change (∫ x, f x - g x ∂μ) = 0
+  by_cases hf : Integrable f μ
+  · rw [integral_sub hf hg, heq, sub_self]
+  · have hfg : ¬ Integrable (fun x => f x - g x) μ := by
+      intro h
+      apply hf
+      have := h.add hg
+      exact this.congr (ae_of_all _ fun x => by simp)
+    exact integral_undef hfg
+
 theorem apm_m93j05_trunc_split (N : ℕ)
     (hC : ∀ f : ℝ → ℝ,
       (∫ x in Set.Icc (0 : ℝ) 1, apm_m93j05_trunc N f x) = ∫ x in Set.Icc (0 : ℝ) 1, f x ∧
       ∀ k ∈ Finset.Icc 1 N, apm_m93j05_cosCoeff (apm_m93j05_trunc N f) k = apm_m93j05_cosCoeff f k ∧ apm_m93j05_sinCoeff (apm_m93j05_trunc N f) k = apm_m93j05_sinCoeff f k)
     (f : ℝ → ℝ) :
     ∃ u v, f = u + v ∧ apm_m93j05_trunc N u = u ∧ apm_m93j05_trunc N v = 0 := by
-  sorry
+  let u := apm_m93j05_trunc N f
+  let v := f - u
+  refine ⟨u, v, ?_, ?_, ?_⟩
+  · funext x
+    simp [v]
+  · funext x
+    simp only [apm_m93j05_trunc]
+    rw [(hC f).1]
+    apply congrArg₂ (· + ·) rfl
+    apply Finset.sum_congr rfl
+    intro j hj
+    rw [(hC f).2 j hj |>.1, (hC f).2 j hj |>.2]
+  · funext x
+    simp only [apm_m93j05_trunc, Pi.zero_apply]
+    have hu : Continuous u := apm_m93j05_trunc_split_aux_continuous N f
+    have huI : IntegrableOn u (Set.Icc (0 : ℝ) 1) := hu.continuousOn.integrableOn_Icc
+    have hmean : (∫ y in Set.Icc (0 : ℝ) 1, v y) = 0 := by
+      rw [show (fun y => v y) = fun y => f y - u y by rfl,
+        apm_m93j05_trunc_split_aux_integral_sub f u huI (hC f).1.symm]
+    rw [hmean, zero_add]
+    apply Finset.sum_eq_zero
+    intro j hj
+    have hcosI : IntegrableOn (fun y => u y * Real.cos (j * 2 * Real.pi * y))
+        (Set.Icc (0 : ℝ) 1) :=
+      (hu.mul (Real.continuous_cos.comp
+        (continuous_const.mul continuous_id))).continuousOn.integrableOn_Icc
+    have hsinI : IntegrableOn (fun y => u y * Real.sin (j * 2 * Real.pi * y))
+        (Set.Icc (0 : ℝ) 1) :=
+      (hu.mul (Real.continuous_sin.comp
+        (continuous_const.mul continuous_id))).continuousOn.integrableOn_Icc
+    have hc : apm_m93j05_cosCoeff v j = 0 := by
+      have hh : apm_m93j05_cosCoeff u j = apm_m93j05_cosCoeff f j := by
+        simpa [u] using ((hC f).2 j hj).1
+      unfold apm_m93j05_cosCoeff at hh
+      unfold apm_m93j05_cosCoeff
+      rw [show (fun y => v y * Real.cos (j * 2 * Real.pi * y)) =
+          fun y => f y * Real.cos (j * 2 * Real.pi * y) -
+            u y * Real.cos (j * 2 * Real.pi * y) by funext y; simp [v]; ring,
+        apm_m93j05_trunc_split_aux_integral_sub _ _ hcosI (by nlinarith [hh])]
+      norm_num
+    have hs : apm_m93j05_sinCoeff v j = 0 := by
+      have hh : apm_m93j05_sinCoeff u j = apm_m93j05_sinCoeff f j := by
+        simpa [u] using ((hC f).2 j hj).2
+      unfold apm_m93j05_sinCoeff at hh
+      unfold apm_m93j05_sinCoeff
+      rw [show (fun y => v y * Real.sin (j * 2 * Real.pi * y)) =
+          fun y => f y * Real.sin (j * 2 * Real.pi * y) -
+            u y * Real.sin (j * 2 * Real.pi * y) by funext y; simp [v]; ring,
+        apm_m93j05_trunc_split_aux_integral_sub _ _ hsinI (by nlinarith [hh])]
+      norm_num
+    simp [hc, hs]
 
 theorem apm_m93j05_fourier_projection
     (N : ℕ) (p q : ℝ) (hp : 1 < p) (hq : 1 < q)
