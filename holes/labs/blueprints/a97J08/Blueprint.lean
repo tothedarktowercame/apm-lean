@@ -1972,6 +1972,103 @@ theorem apm_a97j08_segment_lift {z p q : ℂ} (h : z ∉ segment ℝ p q) :
 
 -- (L2) A closed polygon in `D` has a closed path in `D` with an angle lift
 -- whose total change is the sum of the angle steps (given L1).
+lemma apm_a97j08_polygon_path_lift_aux_singleton (D : Set ℂ) {z v : ℂ}
+    (hz : z ∈ Dᶜ)
+    (hL1 : ∀ {p q : ℂ}, z ∉ segment ℝ p q → ∃ θ : C(unitInterval, ℝ),
+      (∀ t : unitInterval, Complex.exp ((θ t : ℂ) * Complex.I) =
+        (AffineMap.lineMap p q (t : ℝ) - z) /
+          ((‖AffineMap.lineMap p q (t : ℝ) - z‖ : ℝ) : ℂ)) ∧
+      θ 1 - θ 0 = apm_a97j08_angleStep z p q)
+    (hseg : ∀ e ∈ apm_a97j08_cycleEdges [v], segment ℝ e.1 e.2 ⊆ D) :
+    ∃ x : ℂ, ∃ p : Path x x, (∀ t, p t ∈ D) ∧ ∃ θ : C(unitInterval, ℝ),
+      (∀ t : unitInterval, Complex.exp ((θ t : ℂ) * Complex.I) =
+        (p t - z) / ((‖p t - z‖ : ℝ) : ℂ)) ∧
+      θ 1 - θ 0 = apm_a97j08_cycleSum
+        (fun e => apm_a97j08_angleStep z e.1 e.2) [v] := by
+  have hed : (v, v) ∈ apm_a97j08_cycleEdges [v] := by
+    simp [apm_a97j08_cycleEdges]
+  have hsub : segment ℝ v v ⊆ D := hseg (v, v) hed
+  have hvD : v ∈ D := hsub (left_mem_segment ℝ v v)
+  have hzseg : z ∉ segment ℝ v v := fun hzv => hz (hsub hzv)
+  obtain ⟨θ, hθ, hstep⟩ := hL1 hzseg
+  refine ⟨v, Path.segment v v, ?_, θ, ?_, ?_⟩
+  · intro t
+    simpa using hvD
+  · intro t
+    simpa using hθ t
+  · simpa [apm_a97j08_cycleSum, apm_a97j08_cycleEdges] using hstep
+
+-- Gluing angle lifts along `Path.trans` (shift the second lift by a multiple of `2π`).
+lemma apm_a97j08_polygon_path_lift_aux_glue {z a b c : ℂ}
+    (p₁ : Path a b) (p₂ : Path b c) (θ₁ θ₂ : C(unitInterval, ℝ))
+    (h₁ : ∀ t : unitInterval, Complex.exp ((θ₁ t : ℂ) * Complex.I) =
+      (p₁ t - z) / ((‖p₁ t - z‖ : ℝ) : ℂ))
+    (h₂ : ∀ t : unitInterval, Complex.exp ((θ₂ t : ℂ) * Complex.I) =
+      (p₂ t - z) / ((‖p₂ t - z‖ : ℝ) : ℂ)) :
+    ∃ θ : C(unitInterval, ℝ),
+      (∀ t : unitInterval, Complex.exp ((θ t : ℂ) * Complex.I) =
+        ((p₁.trans p₂) t - z) / ((‖(p₁.trans p₂) t - z‖ : ℝ) : ℂ)) ∧
+      θ 1 - θ 0 = (θ₁ 1 - θ₁ 0) + (θ₂ 1 - θ₂ 0) := by
+  sorry
+
+-- Open polygonal chains: consecutive segments in `D` give a path in `D` with an
+-- angle lift whose change is the sum of the steps (induction on the list, using
+-- the glue lemma).
+lemma apm_a97j08_polygon_path_lift_aux_chain (D : Set ℂ) {z : ℂ} (hz : z ∈ Dᶜ)
+    (hL1 : ∀ {p q : ℂ}, z ∉ segment ℝ p q → ∃ θ : C(unitInterval, ℝ),
+      (∀ t : unitInterval, Complex.exp ((θ t : ℂ) * Complex.I) =
+        (AffineMap.lineMap p q (t : ℝ) - z) /
+          ((‖AffineMap.lineMap p q (t : ℝ) - z‖ : ℝ) : ℂ)) ∧
+      θ 1 - θ 0 = apm_a97j08_angleStep z p q)
+    (hglue : ∀ {a b c : ℂ} (p₁ : Path a b) (p₂ : Path b c) (θ₁ θ₂ : C(unitInterval, ℝ)),
+      (∀ t : unitInterval, Complex.exp ((θ₁ t : ℂ) * Complex.I) =
+        (p₁ t - z) / ((‖p₁ t - z‖ : ℝ) : ℂ)) →
+      (∀ t : unitInterval, Complex.exp ((θ₂ t : ℂ) * Complex.I) =
+        (p₂ t - z) / ((‖p₂ t - z‖ : ℝ) : ℂ)) →
+      ∃ θ : C(unitInterval, ℝ),
+        (∀ t : unitInterval, Complex.exp ((θ t : ℂ) * Complex.I) =
+          ((p₁.trans p₂) t - z) / ((‖(p₁.trans p₂) t - z‖ : ℝ) : ℂ)) ∧
+        θ 1 - θ 0 = (θ₁ 1 - θ₁ 0) + (θ₂ 1 - θ₂ 0))
+    (a : ℂ) (l : List ℂ)
+    (hseg : ∀ e ∈ (a :: l).zip l, segment ℝ e.1 e.2 ⊆ D) :
+    ∃ p : Path a ((a :: l).getLast (List.cons_ne_nil a l)), (∀ t, p t ∈ D) ∧
+      ∃ θ : C(unitInterval, ℝ),
+        (∀ t : unitInterval, Complex.exp ((θ t : ℂ) * Complex.I) =
+          (p t - z) / ((‖p t - z‖ : ℝ) : ℂ)) ∧
+        θ 1 - θ 0 = (((a :: l).zip l).map fun e => apm_a97j08_angleStep z e.1 e.2).sum := by
+  sorry
+
+lemma apm_a97j08_polygon_path_lift_aux_zip_snoc {α : Type*} (u x : α) (l : List α) :
+    (u :: l).zip (l ++ [x]) = (u :: (l ++ [x])).zip (l ++ [x]) := by
+  induction l generalizing u with
+  | nil => rfl
+  | cons d l ih => simp only [List.cons_append, List.zip_cons_cons, ih]
+
+lemma apm_a97j08_polygon_path_lift_aux_long (D : Set ℂ) {z : ℂ} (hz : z ∈ Dᶜ)
+    (hL1 : ∀ {p q : ℂ}, z ∉ segment ℝ p q → ∃ θ : C(unitInterval, ℝ),
+      (∀ t : unitInterval, Complex.exp ((θ t : ℂ) * Complex.I) =
+        (AffineMap.lineMap p q (t : ℝ) - z) /
+          ((‖AffineMap.lineMap p q (t : ℝ) - z‖ : ℝ) : ℂ)) ∧
+      θ 1 - θ 0 = apm_a97j08_angleStep z p q)
+    (v w : ℂ) (c : List ℂ)
+    (hseg : ∀ e ∈ apm_a97j08_cycleEdges (v :: w :: c), segment ℝ e.1 e.2 ⊆ D) :
+    ∃ x : ℂ, ∃ p : Path x x, (∀ t, p t ∈ D) ∧ ∃ θ : C(unitInterval, ℝ),
+      (∀ t : unitInterval, Complex.exp ((θ t : ℂ) * Complex.I) =
+        (p t - z) / ((‖p t - z‖ : ℝ) : ℂ)) ∧
+      θ 1 - θ 0 = apm_a97j08_cycleSum
+        (fun e => apm_a97j08_angleStep z e.1 e.2) (v :: w :: c) := by
+  have hrot : (v :: w :: c).rotate 1 = w :: c ++ [v] := by simp
+  have hedges : apm_a97j08_cycleEdges (v :: w :: c) = (v :: (w :: c ++ [v])).zip (w :: c ++ [v]) := by
+    rw [apm_a97j08_cycleEdges, hrot]
+    exact apm_a97j08_polygon_path_lift_aux_zip_snoc v v (w :: c)
+  rw [hedges] at hseg
+  obtain ⟨p, hpD, θ, hθ, hdisp⟩ := apm_a97j08_polygon_path_lift_aux_chain D hz hL1
+    (fun p₁ p₂ θ₁ θ₂ h₁ h₂ => apm_a97j08_polygon_path_lift_aux_glue p₁ p₂ θ₁ θ₂ h₁ h₂)
+    v (w :: c ++ [v]) hseg
+  have hlast : (v :: (w :: c ++ [v])).getLast (List.cons_ne_nil _ _) = v := by simp
+  refine ⟨v, p.cast rfl hlast.symm, fun t => hpD t, θ, fun t => hθ t, ?_⟩
+  rw [hdisp, apm_a97j08_cycleSum, hedges]
+
 theorem apm_a97j08_polygon_path_lift (D : Set ℂ) {z : ℂ} (hz : z ∈ Dᶜ)
     (hL1 : ∀ {p q : ℂ}, z ∉ segment ℝ p q → ∃ θ : C(unitInterval, ℝ),
       (∀ t : unitInterval, Complex.exp ((θ t : ℂ) * Complex.I) =
@@ -1984,7 +2081,12 @@ theorem apm_a97j08_polygon_path_lift (D : Set ℂ) {z : ℂ} (hz : z ∈ Dᶜ)
       (∀ t : unitInterval, Complex.exp ((θ t : ℂ) * Complex.I) =
         (p t - z) / ((‖p t - z‖ : ℝ) : ℂ)) ∧
       θ 1 - θ 0 = apm_a97j08_cycleSum (fun e => apm_a97j08_angleStep z e.1 e.2) c := by
-  sorry
+  cases c with
+  | nil => exact (hc rfl).elim
+  | cons v tail =>
+      cases tail with
+      | nil => exact apm_a97j08_polygon_path_lift_aux_singleton D hz hL1 hseg
+      | cons w c => exact apm_a97j08_polygon_path_lift_aux_long D hz hL1 v w c hseg
 
 -- (L3) A closed path in `D` whose angle lift about `z ∉ D` has nonzero total
 -- change gives a noncontractible circle in `D`.
