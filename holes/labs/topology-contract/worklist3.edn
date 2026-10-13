@@ -24504,8 +24504,66 @@
      :typed-residual-change
      :infrastructure-packets
      :review-outcomes]},
+   :evidence
+   {:outcome :replan,
+    :seat "topo-12",
+    :commands
+    [{:cmd
+      "bb holes/labs/topology-contract/build_step.bb priorities holes/labs/topology-contract/worklist3.edn",
+      :exit 0}],
+    :finding
+    {:measures "Δ0; B3 representation→construction; 1 packet; B3 STOP",
+     :routes
+     "A08:1 placeholder,31/4; bank certificate→closedSet theorem→B4-B7→B9→adapter",
+     :top
+     "smooth_compact_surface_classification; rule0 banks A08 certificate"},
+    :replacement-items
+    [{:bounded-exception "Rule0; milestone from stopped B3.",
+      :consumer :t01A08,
+      :implements-lemma
+      :lemma-constructiontargets-sardconvexdomain-whitneycubecover,
+      :phase :probe,
+      :state :open,
+      :scope ["ConstructionTargets/SardConvexDomain.lean"],
+      :dag-node "SardConvexDomain.blueprint/B3/representation",
+      :acceptance
+      {:probe "Compile exported B3 certificate.",
+       :declaration
+       "ConstructionTargets.SardConvexDomain.WhitneyCubeCover",
+       :type
+       "B3 certificate with cover, anchors, bounds and local finiteness",
+       :placeholder "t01A08 sorry",
+       :route-step "bank B3 representation"},
+      :id :r-a08-sard-b3-representation-bank-1,
+      :kind :reusable-theorem,
+      :area "sard-convex-domain",
+      :depends-on [:r-topo3-cp16],
+      :current-residual "closedSet_whitneyCubeCover.",
+      :other-consumers []}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 1,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :phase :strategy,
+      :state :open,
+      :scope [],
+      :dag-node "TOPOLOGY-ROUTES.md",
+      :acceptance {:strategy "Review B3 certificate; rerank."},
+      :id :r-topo3-cp17,
+      :kind :strategy-checkpoint,
+      :area "portfolio",
+      :depends-on [:r-a08-sard-b3-representation-bank-1],
+      :current-residual "Elect B3 construction after PASS.",
+      :other-consumers []}],
+    :author "topo-12",
+    :disposition :replan},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance {:strategy "Review B3 probe; rerank."},
@@ -24514,6 +24572,48 @@
    :area "portfolio",
    :depends-on [:r-a08-sard-b3-whitney-cubes-1 :r-topo3-cp15],
    :current-residual "Continue A08 Whitney route.",
+   :other-consumers []}
+  {:bounded-exception "Rule0; milestone from stopped B3.",
+   :consumer :t01A08,
+   :implements-lemma
+   :lemma-constructiontargets-sardconvexdomain-whitneycubecover,
+   :phase :probe,
+   :state :blocked,
+   :scope ["ConstructionTargets/SardConvexDomain.lean"],
+   :dag-node "SardConvexDomain.blueprint/B3/representation",
+   :acceptance
+   {:probe "Compile exported B3 certificate.",
+    :declaration
+    "ConstructionTargets.SardConvexDomain.WhitneyCubeCover",
+    :type
+    "B3 certificate with cover, anchors, bounds and local finiteness",
+    :placeholder "t01A08 sorry",
+    :route-step "bank B3 representation"},
+   :id :r-a08-sard-b3-representation-bank-1,
+   :kind :reusable-theorem,
+   :area "sard-convex-domain",
+   :depends-on [:r-topo3-cp16],
+   :current-residual "closedSet_whitneyCubeCover.",
+   :other-consumers []}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 1,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md",
+   :acceptance {:strategy "Review B3 certificate; rerank."},
+   :id :r-topo3-cp17,
+   :kind :strategy-checkpoint,
+   :area "portfolio",
+   :depends-on [:r-a08-sard-b3-representation-bank-1 :r-topo3-cp16],
+   :current-residual "Elect B3 construction after PASS.",
    :other-consumers []}
   {:bounded-exception "Rule0.",
    :consumer :t01A08,
