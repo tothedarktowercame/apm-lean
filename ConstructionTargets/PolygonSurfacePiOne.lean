@@ -1913,4 +1913,47 @@ theorem PairingData.continuous_skeletonArcMap (P : PairingData) :
     Complex.exp (Complex.I * (2 * Real.pi * ((i : ℝ) + t.1) / P.edgeCount))
   fun_prop
 
+/-- Exact topological descent for B7: once the common source presents both
+spaces as quotient maps and their kernels agree, the signed equivalence is a
+homeomorphism. -/
+noncomputable def PairingData.skeletonHomeomorphWedgeOfQuotientMaps
+    (P : PairingData) (h : P.SkeletonWedgeKernelAgreement)
+    (hs : Topology.IsQuotientMap P.skeletonArcMap)
+    (hw : Topology.IsQuotientMap P.signedWedgeArcMap) :
+    P.skeleton ≃ₜ PointWedgeQuotient.FiniteWedge (PairingOrbit P.pair) where
+  toEquiv := P.skeletonWedgeEquivOfKernelAgreement h
+  continuous_toFun := by
+    apply hs.continuous_iff.mpr
+    have heq :
+        (P.skeletonWedgeEquivOfKernelAgreement h).toFun ∘
+            P.skeletonArcMap = P.signedWedgeArcMap := by
+      funext a
+      exact P.skeletonWedgeEquivOfKernelAgreement_skeletonArc h a.1 a.2
+    rw [heq]
+    exact P.continuous_signedWedgeArcMap
+  continuous_invFun := by
+    apply hw.continuous_iff.mpr
+    have heq :
+        (P.skeletonWedgeEquivOfKernelAgreement h).invFun ∘
+            P.signedWedgeArcMap = P.skeletonArcMap := by
+      funext a
+      apply (P.skeletonWedgeEquivOfKernelAgreement h).injective
+      change (P.skeletonWedgeEquivOfKernelAgreement h)
+          ((P.skeletonWedgeEquivOfKernelAgreement h).symm
+            (P.signedWedgeArcMap a)) =
+        (P.skeletonWedgeEquivOfKernelAgreement h) (P.skeletonArcMap a)
+      rw [Equiv.apply_symm_apply]
+      exact (P.skeletonWedgeEquivOfKernelAgreement_skeletonArc h a.1 a.2).symm
+    rw [heq]
+    exact P.continuous_skeletonArcMap
+
+theorem PairingData.skeletonHomeomorphWedgeOfQuotientMaps_skeletonArc
+    (P : PairingData) (h : P.SkeletonWedgeKernelAgreement)
+    (hs : Topology.IsQuotientMap P.skeletonArcMap)
+    (hw : Topology.IsQuotientMap P.signedWedgeArcMap)
+    (i : Fin P.edgeCount) (t : Set.Icc (0 : ℝ) 1) :
+    P.skeletonHomeomorphWedgeOfQuotientMaps h hs hw (P.skeletonArc i t) =
+      P.signedWedgeArc i t :=
+  P.skeletonWedgeEquivOfKernelAgreement_skeletonArc h i t
+
 end ConstructionTargets.PolygonSurfacePiOne
