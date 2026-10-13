@@ -1,0 +1,85 @@
+import Mathlib
+import ConstructionTargets.IntrinsicSphereSecondMoments
+
+open MeasureTheory
+noncomputable section
+
+abbrev t95J05R4 := EuclideanSpace ℝ (Fin 4)
+abbrev t95J05SphereThree := Metric.sphere (0 : t95J05R4) 1
+
+def t95J05Antipode (x : t95J05SphereThree) : t95J05SphereThree :=
+  ⟨-x.1, by simpa [Metric.mem_sphere] using x.2⟩
+
+inductive T95J05AntipodalRel : t95J05SphereThree → t95J05SphereThree → Prop
+  | antipodal (x) : T95J05AntipodalRel x (t95J05Antipode x)
+
+def t95J05RealProjectiveThree :=
+  Quotient (Relation.EqvGen.setoid T95J05AntipodalRel)
+
+noncomputable instance : TopologicalSpace t95J05RealProjectiveThree :=
+  TopologicalSpace.coinduced
+    (fun x : t95J05SphereThree ↦
+      Quotient.mk (Relation.EqvGen.setoid T95J05AntipodalRel) x) inferInstance
+
+def T95J05ProjectiveThreeForm :=
+  {ρ : t95J05SphereThree → ℝ // ∀ x, ρ (t95J05Antipode x) = ρ x}
+
+def t95J05Omega (x : t95J05R4) : ℝ := x 1 ^ 3 - 4 * x 0
+def t95J05InclusionPullback (x : t95J05SphereThree) : ℝ :=
+  t95J05Omega x.1 * x.1 0
+def t95J05ProjectionPullback (η : T95J05ProjectiveThreeForm) :
+    t95J05SphereThree → ℝ := η.1
+def t95J05Integral (η : T95J05ProjectiveThreeForm) : ℝ :=
+  (1 / 2 : ℝ) * ∫ x, η.1 x ∂μHE[3]
+
+lemma t95J05InclusionPullback_antipodal (x : t95J05SphereThree) :
+    t95J05InclusionPullback (t95J05Antipode x) = t95J05InclusionPullback x := by
+  simp [t95J05InclusionPullback, t95J05Omega, t95J05Antipode]
+  ring
+
+lemma t95J05_existsUnique_projectiveThreeForm :
+    ∃! η : T95J05ProjectiveThreeForm,
+      t95J05ProjectionPullback η = t95J05InclusionPullback := by
+  let η : T95J05ProjectiveThreeForm :=
+    ⟨t95J05InclusionPullback, t95J05InclusionPullback_antipodal⟩
+  refine ⟨η, rfl, ?_⟩
+  intro z hz
+  apply Subtype.ext
+  exact hz
+
+lemma t95J05InclusionPullback_expand (x : t95J05SphereThree) :
+    t95J05InclusionPullback x = x.1 1 ^ 3 * x.1 0 - 4 * x.1 0 ^ 2 := by
+  simp [t95J05InclusionPullback, t95J05Omega]
+  ring
+
+/-- LIBRARY: normalized Euclidean three-dimensional surface mass of `S³`. -/
+theorem t95J05_euclideanHausdorff_unitSphere_mass :
+    (μHE[3] (Set.univ : Set t95J05SphereThree)).toReal =
+      2 * Real.pi ^ 2 := by
+  sorry
+
+/-- Scalar transport from the banked raw moment.  The mass equality is an
+argument so this lemma can be proved in parallel with the LIBRARY lemma. -/
+-- BEGIN SEAT AREA
+theorem t95J05_inclusionPullback_integral
+    (hmass : (μHE[3] (Set.univ : Set t95J05SphereThree)).toReal =
+      2 * Real.pi ^ 2) :
+    (∫ x : t95J05SphereThree, t95J05InclusionPullback x ∂μHE[3]) =
+      -2 * Real.pi ^ 2 := by
+  sorry
+-- END SEAT AREA
+
+theorem apm_t95j05 :
+    (∃! η : T95J05ProjectiveThreeForm,
+      t95J05ProjectionPullback η = t95J05InclusionPullback) ∧
+    (∀ η : T95J05ProjectiveThreeForm,
+      t95J05ProjectionPullback η = t95J05InclusionPullback →
+      t95J05Integral η = -Real.pi ^ 2) := by
+  refine ⟨t95J05_existsUnique_projectiveThreeForm, ?_⟩
+  intro η hη
+  unfold t95J05Integral t95J05ProjectionPullback at *
+  rw [hη, t95J05_inclusionPullback_integral
+    t95J05_euclideanHausdorff_unitSphere_mass]
+  ring
+
+#print axioms apm_t95j05
