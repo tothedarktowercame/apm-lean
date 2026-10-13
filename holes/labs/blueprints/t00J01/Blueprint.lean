@@ -399,7 +399,76 @@ theorem apm_t00j01_klein_local_chart
     ∀ x : apm_t00j01_Klein,
       ∃ (U : Set apm_t00j01_Klein) (V : Set (EuclideanSpace ℝ (Fin 2))),
         x ∈ U ∧ IsOpen U ∧ IsOpen V ∧ Nonempty (U ≃ₜ V) := by
-  sorry
+  intro x
+  obtain ⟨p, rfl⟩ := Quotient.exists_rep x
+  let q : ℝ × ℝ → apm_t00j01_Klein := fun z => Quotient.mk _ z
+  let B : Set (ℝ × ℝ) :=
+    Set.Ioo (p.1 - (1 / 4 : ℝ)) (p.1 + 1 / 4) ×ˢ
+      Set.Ioo (p.2 - (1 / 4 : ℝ)) (p.2 + 1 / 4)
+  have hpB : p ∈ B := by simp [B]
+  have hBopen : IsOpen B := isOpen_Ioo.prod isOpen_Ioo
+  have hinj : Set.InjOn q B := by
+    intro a ha b hb hab
+    have he : Relation.EqvGen apm_t00j01_kleinRel a b := Quotient.exact hab
+    obtain ⟨m, n, hx, hy⟩ := _hnf he
+    have hn0 : n = 0 := by
+      have ha2 := ha.2
+      have hb2 := hb.2
+      change p.2 - 1 / 4 < a.2 ∧ a.2 < p.2 + 1 / 4 at ha2
+      change p.2 - 1 / 4 < b.2 ∧ b.2 < p.2 + 1 / 4 at hb2
+      have hnlt : ((n : ℤ) : ℝ) < 1 := by linarith
+      have hngt : (-1 : ℝ) < ((n : ℤ) : ℝ) := by linarith
+      have hnlo : (-1 : ℤ) < n := by exact_mod_cast hngt
+      have hnhi : n < 1 := by exact_mod_cast hnlt
+      have hn : (-1 : ℤ) < n ∧ n < 1 := ⟨hnlo, hnhi⟩
+      omega
+    subst n
+    simp at hx hy
+    have hm0 : m = 0 := by
+      have ha1 := ha.1
+      have hb1 := hb.1
+      change p.1 - 1 / 4 < a.1 ∧ a.1 < p.1 + 1 / 4 at ha1
+      change p.1 - 1 / 4 < b.1 ∧ b.1 < p.1 + 1 / 4 at hb1
+      have hmlt : ((m : ℤ) : ℝ) < 1 := by linarith
+      have hmgt : (-1 : ℝ) < ((m : ℤ) : ℝ) := by linarith
+      have : (-1 : ℤ) < m ∧ m < 1 := by
+        constructor
+        · exact_mod_cast hmgt
+        · exact_mod_cast hmlt
+      omega
+    subst m
+    ext <;> simp_all
+  have hqopen : IsOpenMap q := by
+    intro A hA
+    rw [isOpen_coinduced]
+    apply isOpen_iff_forall_mem_open.mpr
+    intro z hz
+    obtain ⟨b, hb, hqb⟩ := hz
+    have he : Relation.EqvGen apm_t00j01_kleinRel b z := Quotient.exact hqb
+    obtain ⟨m, n, hx, hy⟩ := _hnf he
+    let e : (ℝ × ℝ) ≃ₜ (ℝ × ℝ) :=
+      (Homeomorph.prodCongr (Homeomorph.mulLeft₀ ((-1 : ℝ) ^ n) (by positivity)) (Homeomorph.refl ℝ)).trans
+        (Homeomorph.prodCongr (Homeomorph.addRight (m : ℝ)) (Homeomorph.addRight (n : ℝ)))
+    refine ⟨e '' A, ?_, e.isOpenMap A hA, ⟨b, hb, ?_⟩⟩
+    · rintro w ⟨v, hv, rfl⟩
+      refine ⟨v, hv, Quotient.sound ?_⟩
+      convert _haff v m n using 1
+      ext <;> simp [e, add_comm]
+    · ext <;> simp [e, hx, hy, mul_comm, add_comm]
+  let U := q '' B
+  have hUopen : IsOpen U := hqopen B hBopen
+  let eqv : B ≃ U := Equiv.Set.imageOfInjOn q B hinj
+  have heqcont : Continuous eqv := by
+    apply Continuous.subtype_mk
+    exact continuous_coinduced_rng.comp continuous_subtype_val
+  have heqopen : IsOpenMap eqv := by
+    exact (hqopen.restrict hBopen).subtype_mk (fun x => ⟨x, x.property, rfl⟩)
+  let hBU : B ≃ₜ U := eqv.toHomeomorphOfContinuousOpen heqcont heqopen
+  let plane : (ℝ × ℝ) ≃ₜ EuclideanSpace ℝ (Fin 2) :=
+    (ContinuousLinearEquiv.finTwoArrow ℝ ℝ).symm.toHomeomorph.trans
+      (EuclideanSpace.equiv (Fin 2) ℝ).symm.toHomeomorph
+  refine ⟨U, plane '' B, ⟨p, hpB, rfl⟩, hUopen, plane.isOpenMap B hBopen, ?_⟩
+  exact ⟨hBU.symm.trans (plane.image B)⟩
 
 /-- The circle has its usual one-dimensional punctured-circle charts. -/
 theorem apm_t00j01_circle_local_chart :
