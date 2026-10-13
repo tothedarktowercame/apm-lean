@@ -36222,6 +36222,17 @@
     :commands
     [{:cmd "build; registry; fixture; diff; commit", :exit 0}
      {:cmd "rg sorry-or-axiom closure", :exit 1, :expected-exit 1}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791922552251-10370-16bd8253",
+     :commands
+     ["git show/diff 5b4eba45; scope and adapter review"
+      "lake build/lean ConstructionTargets.t99J05Closure"
+      "sha256sum + lake env lean interface fixture"
+      "statement-registry check; placeholder recount"],
+     :finding
+     "PASS. Since program-history 385135c, commit 5b4eba45 adds a compiled, sorry-free singleton rational-homology output interface and a correctly oriented adapter to CP0 data: positive-degree vanishing supplies both above-zero and odd vanishing, while the unique Fin 1 even degree uses H0 equiv Q. It does not claim the chain computation is done; that construction and the MV successor remain listed. Fixture hash matches; standard axioms only; registry 150/150; forbidden count 0->0."},
     :commit "5b4eba45781d7566fbb438c855ccc079fe911c8f",
     :changed-paths
     ["ConstructionTargets/t99J05Closure.lean"
@@ -36233,7 +36244,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t99J05/lean/Main.lean"
     "problems/t99J05/status.json"
@@ -36251,7 +36262,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t99J05Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed literal CP0 singleton theorem via its affine chart. Base homology reduces to rational homology of a subsingleton; successor remains; not refuted.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed the generic singleton-homology interface and a compiled adapter to full CP0 data. Only the chain computation and MV successor remain before traces; not refuted.",
    :id :program-2026-10-13-close-t99j05,
    :kind :final-adapter,
    :campaign-priority 31,
@@ -36275,7 +36286,11 @@
     {:job 4,
      :commit "385135c706cfec5df353876bace021905b133f83",
      :reason
-     "Committed literal CP0 singleton theorem via its affine chart. Base homology reduces to rational homology of a subsingleton; successor remains; not refuted."}]}
+     "Committed literal CP0 singleton theorem via its affine chart. Base homology reduces to rational homology of a subsingleton; successor remains; not refuted."}
+    {:job 5,
+     :commit "5b4eba45781d7566fbb438c855ccc079fe911c8f",
+     :reason
+     "Committed the generic singleton-homology interface and a compiled adapter to full CP0 data. Only the chain computation and MV successor remain before traces; not refuted."}]}
   {:consumer :t98A02,
    :stop-count 0,
    :phase :implementation,
@@ -36552,7 +36567,7 @@
    :other-consumers []}
   {:consumer :t99J05,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "cpZeroHomologyDataOfSubsingletonData",
@@ -36562,7 +36577,9 @@
     :reported-by [:program-2026-10-13-close-t99j05],
     :type "singleton homology data -> CP0 data",
     :area "rational-homology-lefschetz",
-    :proved-in :program-2026-10-13-close-t99j05},
+    :proved-in :program-2026-10-13-close-t99j05,
+    :banked-by :program-2026-10-13-close-t99j05,
+    :banked-commit "5b4eba45781d7566fbb438c855ccc079fe911c8f"},
    :id :lemma-cpzerohomologydataofsubsingletondata,
    :kind :lemma,
    :depends-on [:lemma-cp-zero-subsingleton],
