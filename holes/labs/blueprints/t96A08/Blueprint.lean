@@ -481,7 +481,64 @@ theorem apm_t96A08_concat_lineIntegral_of_pieces
     apm_t96a08_LineIntegral I omega (apm_t96A08_concat gamma delta) =
       apm_t96a08_LineIntegral I omega gamma +
         apm_t96a08_LineIntegral I omega delta := by
-  sorry
+  let F : ℝ → ℝ := fun t ↦
+    omega (apm_t96A08_concat gamma delta t)
+      ((mfderiv 𝓘(ℝ, ℝ) I (apm_t96A08_concat gamma delta) t) 1)
+  let G : ℝ → ℝ := fun t ↦
+    2 * omega (gamma (2 * t)) ((mfderiv 𝓘(ℝ, ℝ) I gamma (2 * t)) 1)
+  let H : ℝ → ℝ := fun t ↦
+    2 * omega (delta (2 * t - 1))
+      ((mfderiv 𝓘(ℝ, ℝ) I delta (2 * t - 1)) 1)
+  have hFG : ∀ᵐ t ∂MeasureTheory.volume,
+      t ∈ Set.uIoc (0 : ℝ) (1 / 2) → F t = G t := by
+    filter_upwards [MeasureTheory.volume.ae_ne (0 : ℝ),
+      MeasureTheory.volume.ae_ne (1 / 2 : ℝ)] with t ht0 hthalf ht
+    apply hleft t
+    rw [Set.uIoc_of_le (by norm_num : (0 : ℝ) ≤ 1 / 2)] at ht
+    exact ⟨ht.1, lt_of_le_of_ne ht.2 hthalf⟩
+  have hFH : ∀ᵐ t ∂MeasureTheory.volume,
+      t ∈ Set.uIoc (1 / 2 : ℝ) 1 → F t = H t := by
+    filter_upwards [MeasureTheory.volume.ae_ne (1 / 2 : ℝ),
+      MeasureTheory.volume.ae_ne (1 : ℝ)] with t hthalf ht1 ht
+    apply hright t
+    rw [Set.uIoc_of_le (by norm_num : (1 / 2 : ℝ) ≤ 1)] at ht
+    exact ⟨ht.1, lt_of_le_of_ne ht.2 ht1⟩
+  have hGint : IntervalIntegrable G MeasureTheory.volume 0 (1 / 2) := by
+    apply IntervalIntegrable.const_mul
+    simpa [G] using hγ.comp_mul_left (c := (2 : ℝ))
+  have hHbase : IntervalIntegrable
+      (fun t : ℝ ↦ omega (delta (t - 1))
+        ((mfderiv 𝓘(ℝ, ℝ) I delta (t - 1)) 1))
+      MeasureTheory.volume 1 2 := by
+    convert hδ.comp_add_right (-1) using 1 <;> norm_num [sub_eq_add_neg]
+  have hHint : IntervalIntegrable H MeasureTheory.volume (1 / 2) 1 := by
+    apply IntervalIntegrable.const_mul
+    simpa [H, mul_sub] using hHbase.comp_mul_left (c := (2 : ℝ))
+  have hFleft : IntervalIntegrable F MeasureTheory.volume 0 (1 / 2) :=
+    hGint.congr_ae ((MeasureTheory.ae_restrict_iff' measurableSet_uIoc).2
+      (hFG.mono fun _ ht hmem ↦ (ht hmem).symm))
+  have hFright : IntervalIntegrable F MeasureTheory.volume (1 / 2) 1 :=
+    hHint.congr_ae ((MeasureTheory.ae_restrict_iff' measurableSet_uIoc).2
+      (hFH.mono fun _ ht hmem ↦ (ht hmem).symm))
+  change (∫ t : ℝ in (0 : ℝ)..1, F t) = _
+  rw [← intervalIntegral.integral_add_adjacent_intervals hFleft hFright,
+    intervalIntegral.integral_congr_ae hFG,
+    intervalIntegral.integral_congr_ae hFH]
+  change (∫ t : ℝ in (0 : ℝ)..(1 / 2 : ℝ), G t) +
+      (∫ t : ℝ in (1 / 2 : ℝ)..1, H t) = _
+  rw [show (∫ t : ℝ in (0 : ℝ)..(1 / 2 : ℝ), G t) =
+      ∫ t : ℝ in (0 : ℝ)..1,
+        omega (gamma t) ((mfderiv 𝓘(ℝ, ℝ) I gamma t) 1) by
+        simpa [G] using
+          (apm_t96A08_concat_lineIntegral_aux_left_substitution
+            (fun t : ℝ ↦ omega (gamma t) ((mfderiv 𝓘(ℝ, ℝ) I gamma t) 1)))]
+  rw [show (∫ t : ℝ in (1 / 2 : ℝ)..1, H t) =
+      ∫ t : ℝ in (0 : ℝ)..1,
+        omega (delta t) ((mfderiv 𝓘(ℝ, ℝ) I delta t) 1) by
+        simpa [H] using
+          (apm_t96A08_concat_lineIntegral_aux_right_substitution
+            (fun t : ℝ ↦ omega (delta t) ((mfderiv 𝓘(ℝ, ℝ) I delta t) 1)))]
+  rfl
 
 /-- The line integral is additive under concatenation (assembly). -/
 theorem apm_t96A08_concat_lineIntegral
