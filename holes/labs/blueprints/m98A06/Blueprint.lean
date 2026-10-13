@@ -2625,7 +2625,88 @@ lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_inequality_aux
       (∫ t in (0 : ℝ)..Real.pi, g t) = 0 ∧
       MemLp g 2 (volume.restrict (Ioo (0 : ℝ) Real.pi)) ∧
       (∫ x, (dy x - g x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi))) ≤ ε := by
-  sorry
+  let μ : Measure ℝ := volume.restrict (Ioo (0 : ℝ) Real.pi)
+  have hdy' : MemLp dy (ENNReal.ofReal 2) μ := by
+    simpa [μ] using hdy
+  obtain ⟨g₀, hg₀err, hg₀⟩ :=
+    hdy'.exists_boundedContinuous_integral_rpow_sub_le (p := 2) (by norm_num) hε
+  have hp : ENNReal.ofReal (2 : ℝ) = 2 := by norm_num
+  rw [hp] at hg₀
+  let A : ℝ := ∫ x, g₀ x ∂μ
+  let c : ℝ := A / Real.pi
+  let g : ℝ → ℝ := fun x ↦ g₀ x - c
+  have hμ : μ Set.univ = ENNReal.ofReal Real.pi := by
+    simp [μ, Real.pi_pos.le]
+  have hμreal : (μ Set.univ).toReal = Real.pi := by
+    rw [hμ, ENNReal.toReal_ofReal Real.pi_pos.le]
+  have hg₀i : Integrable (fun x ↦ (g₀ x : ℝ)) μ := hg₀.integrable (by norm_num)
+  have hdyi : Integrable dy μ := hdy.integrable (by norm_num)
+  have he : Integrable (fun x ↦ dy x - g₀ x) μ := hdyi.sub hg₀i
+  have heLp : MemLp (fun x ↦ dy x - g₀ x) 2 μ := by
+    rw [hp] at hdy'
+    simpa only [Pi.sub_apply] using hdy'.sub hg₀
+  have he2 : Integrable (fun x ↦ (dy x - g₀ x) ^ 2) μ :=
+    heLp.integrable_sq
+  have hsetmean : ∫ x, dy x ∂μ = 0 := by
+    have hi : (∫ x, dy x ∂μ) = ∫ x in (0 : ℝ)..Real.pi, dy x := by
+      rw [intervalIntegral.integral_of_le Real.pi_pos.le, integral_Ioc_eq_integral_Ioo]
+    rw [hi]
+    simpa using hmean
+  have heint : ∫ x, (dy x - g₀ x) ∂μ = -A := by
+    rw [integral_sub hdyi hg₀i, hsetmean, zero_sub]
+  have hgmean : ∫ x in (0 : ℝ)..Real.pi, g x = 0 := by
+    rw [intervalIntegral.integral_of_le Real.pi_pos.le, integral_Ioc_eq_integral_Ioo]
+    change ∫ x, (g₀ x - c) ∂μ = 0
+    rw [integral_sub hg₀i (integrable_const c), integral_const]
+    change A - (μ Set.univ).toReal * c = 0
+    rw [hμreal]
+    dsimp [c, A]
+    field_simp
+    ring
+  refine ⟨g, g₀.continuous.sub continuous_const, hgmean, ?_, ?_⟩
+  · simpa [g, μ, Pi.sub_apply] using hg₀.sub (memLp_const c)
+  · have hexpand :
+        (∫ x, (dy x - g x) ^ 2 ∂μ) =
+          (∫ x, (dy x - g₀ x) ^ 2 ∂μ) - A ^ 2 / Real.pi := by
+      have hcross : Integrable (fun x ↦ (2 * c) * (dy x - g₀ x)) μ :=
+        he.const_mul _
+      have hc2 : Integrable (fun _ : ℝ ↦ c ^ 2) μ := integrable_const _
+      have hadd₁ := integral_add (μ := μ) (he2.add hcross) hc2
+      have hadd₂ := integral_add (μ := μ) he2 hcross
+      calc
+        (∫ x, (dy x - g x) ^ 2 ∂μ) =
+            ∫ x, ((dy x - g₀ x) ^ 2 + (2 * c) * (dy x - g₀ x) + c ^ 2) ∂μ := by
+              apply integral_congr_ae
+              filter_upwards [] with x
+              dsimp [g]
+              ring
+        _ = (∫ x, (dy x - g₀ x) ^ 2 ∂μ) +
+              (2 * c) * (∫ x, (dy x - g₀ x) ∂μ) + c ^ 2 * Real.pi := by
+              simp only [Pi.add_apply] at hadd₁ hadd₂
+              rw [hadd₁, hadd₂, integral_const_mul, integral_const]
+              change (∫ x, (dy x - g₀ x) ^ 2 ∂μ) +
+                2 * c * (∫ x, (dy x - g₀ x) ∂μ) +
+                (μ Set.univ).toReal * c ^ 2 = _
+              rw [hμreal]
+              ring
+        _ = (∫ x, (dy x - g₀ x) ^ 2 ∂μ) - A ^ 2 / Real.pi := by
+              rw [heint]
+              dsimp [c]
+              field_simp
+              ring
+    change (∫ x, (dy x - g x) ^ 2 ∂μ) ≤ ε
+    rw [hexpand]
+    have hnonneg : 0 ≤ A ^ 2 / Real.pi := div_nonneg (sq_nonneg _) Real.pi_pos.le
+    have hg₀err' : (∫ x, (dy x - g₀ x) ^ 2 ∂μ) ≤ ε := by
+      calc
+        (∫ x, (dy x - g₀ x) ^ 2 ∂μ) =
+            ∫ x, ‖dy x - g₀ x‖ ^ 2 ∂μ := by
+              apply integral_congr_ae
+              filter_upwards [] with x
+              rw [Real.norm_eq_abs]
+              rw [Real.rpow_two, sq_abs]
+        _ ≤ ε := hg₀err
+    exact (sub_le_self _ hnonneg).trans hg₀err'
 
 lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_inequality_aux_approximation_aux_primitive_wirtinger
     (hWirtinger : apm_m98A06_WirtingerFact) (g : ℝ → ℝ) (hg : Continuous g)
