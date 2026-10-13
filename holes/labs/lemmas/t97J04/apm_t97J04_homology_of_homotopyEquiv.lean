@@ -100,7 +100,9 @@ group transport. -/
 theorem apm_t97J04_homology_of_homotopyEquiv
     (h : Nonempty (ContinuousMap.HomotopyEquiv apm_t97J04_X apm_t97J04_W)) :
     ∀ k : ℕ, Nonempty (apm_t97J04_H k ≅ apm_t97J04_WH k) := by
-  sorry
+  rcases h with ⟨e⟩
+  intro k
+  exact ⟨ConstructionTargets.T00A01MayerVietorisAdapters.moduleHomologyIsoOfHomotopyEquiv e k⟩
 -- END SEAT AREA
 
 /-- Assemble the two invariant transports from the common geometric
