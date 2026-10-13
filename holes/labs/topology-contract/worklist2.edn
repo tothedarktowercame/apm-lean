@@ -87768,6 +87768,17 @@
       :exit 1,
       :correction
       "used Homeomorph.isPreconnected_image iff in the forward direction"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791923428100-10413-a7bdd100",
+     :commands
+     ["git show/diff-tree/SHA256 8a1cfb44a"
+      "git show --check 8a1cfb44a"
+      "statement-registry.py check (150/0)"
+      "blueprint dependency review"],
+     :finding
+     "Valid program STOP with a new blueprint milestone. Exact one-file scope and fixture SHA match. B1 and B2 are true, use sufficient stated dependencies, faithfully match the Lean predicates, and are both used by assembly. Registry 150/0; no defect. Next milestones: prove the two named LIBRARY results."},
     :commit "02f7d5989",
     :changed-paths ["ConstructionTargets/t94A08Closure.lean"],
     :fixture
@@ -87776,7 +87787,7 @@
      "1b5368285154a563fd8ad15496a1596655f318bb64903e467f32cb6704346ca8"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t94A08/lean/Main.lean"
     "problems/t94A08/status.json"
@@ -87794,7 +87805,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t94A08Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked a homeomorphism from the punctured zeroth-chart sigma2 slice to the punctured affine cross.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked non-preconnectedness of the punctured sigma2 zeroth-chart slice.",
    :id :program-2026-10-13-close-t94a08,
    :kind :final-adapter,
    :campaign-priority 30,
@@ -87834,7 +87845,11 @@
     {:job 8,
      :commit "1edb9eddd",
      :reason
-     "Banked a homeomorphism from the punctured zeroth-chart sigma2 slice to the punctured affine cross."}]}
+     "Banked a homeomorphism from the punctured zeroth-chart sigma2 slice to the punctured affine cross."}
+    {:job 9,
+     :commit "02f7d5989",
+     :reason
+     "Banked non-preconnectedness of the punctured sigma2 zeroth-chart slice."}]}
   {:consumer :t97A01,
    :stop-count 0,
    :phase :implementation,
@@ -88162,7 +88177,7 @@
    :other-consumers []}
   {:consumer :t94A08,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "apm_t94a08_puncturedSigma2ZeroChart_not_isPreconnected",
@@ -88172,7 +88187,9 @@
     :reported-by [:program-2026-10-13-close-t94a08],
     :type "not IsPreconnected puncturedSigma2ZeroChart",
     :area "projective-affine-chart-homeomorph",
-    :proved-in :program-2026-10-13-close-t94a08},
+    :proved-in :program-2026-10-13-close-t94a08,
+    :banked-by :program-2026-10-13-close-t94a08,
+    :banked-commit "02f7d5989"},
    :id :lemma-apm-t94a08-puncturedsigma2zerochart-not-ispreconnected,
    :kind :lemma,
    :depends-on [:lemma-apm-t94a08-puncturedsigma2zerocharthomeomorph],
