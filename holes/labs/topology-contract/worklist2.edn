@@ -87899,73 +87899,59 @@
      :reason
      "Banked preconnectedness of the alleged chart's punctured ball source."}]}
   {:consumer :t97A01,
-   :stop-count 2,
+   :stop-count 3,
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Implement B4-B7 piece homology and MV arrow, then B8-B10.",
+    "Prove finite orbit-circle wedge homology for B4, then B6-B10.",
     :outcome :stop,
     :warnings
     ["preexisting dependency lints"
-     "unrelated t93J03/t00J02 edits preserved"],
+     "unrelated PointWedgeVanKampen edit preserved"],
     :missing-theorems
-    [{:name "attachingDegree",
-      :type "(P : PairingData) → PairingOrbit P.pair → ℤ",
+    [{:name "innerOverlapHomology",
+      :type "inner H0≅ℤ, Hk=0(k>0); overlap H0,H1≅ℤ, Hk=0(k>1)",
       :status :proved,
       :consumers [:t97A01 :t94J09],
       :depends-on [],
       :area "polygon-quotient-homology"}
-     {:name "attachingBoundary",
-      :type "(P : PairingData) → ℤ →ₗ[ℤ] (PairingOrbit P.pair → ℤ)",
-      :status :proved,
+     {:name "outerHomology",
+      :type "outer H0≅ℤ, H1≅(PairingOrbit P.pair→ℤ), Hk=0(k≥2)",
+      :status :not-started,
       :consumers [:t97A01 :t94J09],
-      :depends-on ["attachingDegree"],
+      :depends-on [],
       :area "polygon-quotient-homology"}
      {:name "polygonQuotient_homology",
       :type "H0=ℤ; H1=cokernel; H2=kernel; Hk=0,k≥3",
       :status :partial,
       :consumers [:t97A01 :t94J09],
-      :depends-on ["attachingBoundary"],
+      :depends-on
+      ["outerHomology" "innerOverlapHomology" "attachingBoundary"],
       :area "polygon-quotient-homology"}],
     :statement-hashes {:registry "166/0"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
     :reason
-    "Banked B1-B3 homology notation, signed degrees, and boundary kernel/cokernel.",
+    "Banked B5 inner-piece and annular-overlap integral homology.",
     :commands
     [{:cmd "lake build ConstructionTargets.PolygonSurfaceHomology",
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-     {:cmd "git show --check 8aa7f457d", :exit 0}],
+     {:cmd "git show --check f28078582", :exit 0}],
     :diagnostic-history
-    [{:cmd "draft compile 1",
+    [{:cmd "initial B5 compile",
       :exit 1,
-      :correction "explicit quotient equality decisions"}
-     {:cmd "draft compile 2",
-      :exit 1,
-      :correction "factored orbit contribution"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1791931210556-10747-8bb6e44f",
-     :commands
-     ["scope/SHA256 checks at 8aa7f457d"
-      "recorded blob | lake env lean /dev/stdin"
-      "comment-stripped placeholder scan (0)"
-      "qualified #print axioms boundary theorem"
-      "statement-registry.py check (166/0)"],
-     :finding
-     "Valid program STOP with new compiled progress beyond blueprint history 10593d059. H uses integral singular homology; edge contributions have the signedWedgeArc orientation (true +1, false -1); attachingDegree sums representative-free orbit contributions; attachingBoundary is n times that vector, with kernel/cokernel representation boundaries correct. Exact one-file scope/hash match; placeholders 0; only standard axioms. Remaining milestones B4-B10 are listed."},
-    :commit "8aa7f457d",
+      :correction "qualified open-cover API and fixed iso notation"}],
+    :commit "f28078582",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
     {:path "ConstructionTargets/PolygonSurfaceHomology.lean",
      :sha256
-     "2597be52bf1e06a8560e2526eccbcb6de7f1a294be3b2deaa0d6313d28ed2cac"},
+     "5b4032799aac0135ac02b6d237f5043c31a77dcd93e8e2a57b23b5dc52bc677b"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -88738,5 +88724,41 @@
     :area "polygon-quotient-homology"},
    :id :lemma-polygonquotient-homology,
    :kind :lemma,
-   :depends-on [:lemma-attachingboundary],
+   :depends-on
+   [:lemma-attachingboundary
+    :lemma-outerhomology
+    :lemma-inneroverlaphomology],
+   :other-consumers [:t94J09]}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "innerOverlapHomology",
+    :type "inner H0≅ℤ, Hk=0(k>0); overlap H0,H1≅ℤ, Hk=0(k>1)"},
+   :lemma
+   {:name "innerOverlapHomology",
+    :reported-by [:program-2026-10-13-polygon-surface-homology],
+    :type "inner H0≅ℤ, Hk=0(k>0); overlap H0,H1≅ℤ, Hk=0(k>1)",
+    :area "polygon-quotient-homology",
+    :proved-in :program-2026-10-13-polygon-surface-homology},
+   :id :lemma-inneroverlaphomology,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t94J09]}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "outerHomology",
+    :type "outer H0≅ℤ, H1≅(PairingOrbit P.pair→ℤ), Hk=0(k≥2)"},
+   :lemma
+   {:name "outerHomology",
+    :reported-by [:program-2026-10-13-polygon-surface-homology],
+    :type "outer H0≅ℤ, H1≅(PairingOrbit P.pair→ℤ), Hk=0(k≥2)",
+    :area "polygon-quotient-homology"},
+   :id :lemma-outerhomology,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers [:t94J09]}]}
