@@ -2785,12 +2785,77 @@ lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_inequality_aux
 -- Cauchy–Schwarz: y x − ∫₀ˣ g = ∫₀ˣ (dy − g) (y = ∫₀ˣ dy by hFTC), so its square is ≤ x·∫₀ˣ (dy−g)²
 -- ≤ π·∫_(0,π) (dy − g)².
 -- BEGIN SEAT AREA
+lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_inequality_aux_approximation_aux_limit_aux_error_aux_norm_estimate_aux_cs_aux_sq
+    {x : ℝ} (hx : 0 ≤ x) (f : ℝ → ℝ)
+    (hf : MemLp f 2 (volume.restrict (Ioo (0 : ℝ) x))) :
+    (∫ t in Ioo (0 : ℝ) x, f t) ^ 2 ≤ x * ∫ t in Ioo (0 : ℝ) x, f t ^ 2 := by
+  rcases hx.lt_or_eq with hx | rfl
+  · set A := ∫ t in Ioo (0 : ℝ) x, f t
+    set Q := ∫ t in Ioo (0 : ℝ) x, f t ^ 2
+    have h1 : Integrable f (volume.restrict (Ioo (0 : ℝ) x)) := hf.integrable (by norm_num)
+    have h2 : Integrable (fun t => f t ^ 2) (volume.restrict (Ioo (0 : ℝ) x)) := hf.integrable_sq
+    set c := A / x
+    have hvol : (volume.restrict (Ioo (0 : ℝ) x)).real univ = x := by
+      simp [Measure.real, Real.volume_Ioo, hx.le]
+    have key : ∫ t in Ioo (0 : ℝ) x, (f t - c) ^ 2 = Q - 2 * c * A + c ^ 2 * x := by
+      rw [show (∫ t in Ioo (0 : ℝ) x, (f t - c) ^ 2) =
+          ∫ t in Ioo (0 : ℝ) x, ((f t ^ 2 - (2 * c) * f t) + c ^ 2) from by
+            congr 1; funext t; ring]
+      rw [integral_add (f := fun t => f t ^ 2 - (2 * c) * f t) (g := fun _ => c ^ 2)
+          (h2.sub (h1.const_mul _)) (integrable_const _),
+        integral_sub (f := fun t => f t ^ 2) (g := fun t => (2 * c) * f t) h2 (h1.const_mul _),
+        integral_const_mul, integral_const, hvol, smul_eq_mul]
+      ring
+    have hnn : 0 ≤ ∫ t in Ioo (0 : ℝ) x, (f t - c) ^ 2 := integral_nonneg fun t => sq_nonneg _
+    rw [key] at hnn
+    have : Q - 2 * c * A + c ^ 2 * x = Q - A ^ 2 / x := by
+      simp only [c]; field_simp; ring
+    rw [this] at hnn
+    have := (div_le_iff₀ hx).mp (sub_nonneg.mp hnn)
+    linarith
+  · simp
+
 lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_inequality_aux_approximation_aux_limit_aux_error_aux_norm_estimate_aux_cs
     (hFTC : apm_m98A06_WeakFTCFact) (y dy : ℝ → ℝ) (h : apm_m98a06_InH10Pi y dy) :
     ∀ (g : ℝ → ℝ), Continuous g → ∀ x ∈ Icc (0 : ℝ) Real.pi,
         (y x - ∫ t in (0 : ℝ)..x, g t) ^ 2 ≤
           Real.pi * ∫ t, (dy t - g t) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)) := by
-  sorry
+  intro g hg x hx
+  obtain ⟨M, hM⟩ := (isCompact_Icc (a := (0 : ℝ)) (b := Real.pi)).exists_bound_of_continuousOn
+    hg.continuousOn
+  have hgL : MemLp g 2 (volume.restrict (Ioo (0 : ℝ) Real.pi)) := by
+    refine MemLp.of_bound hg.aestronglyMeasurable M ?_
+    refine (ae_restrict_iff' measurableSet_Ioo).mpr (Filter.Eventually.of_forall fun t ht => ?_)
+    exact hM t (Ioo_subset_Icc_self ht)
+  have hfL : MemLp (fun t => dy t - g t) 2 (volume.restrict (Ioo (0 : ℝ) Real.pi)) :=
+    h.2.2.2.2.1.sub hgL
+  have hsub : Ioo (0 : ℝ) x ⊆ Ioo 0 Real.pi := Ioo_subset_Ioo_right hx.2
+  have hfx : MemLp (fun t => dy t - g t) 2 (volume.restrict (Ioo (0 : ℝ) x)) :=
+    hfL.mono_measure (Measure.restrict_mono hsub le_rfl)
+  have hint : ∀ φ : ℝ → ℝ, MemLp φ 2 (volume.restrict (Ioo (0 : ℝ) x)) →
+      IntervalIntegrable φ volume 0 x := by
+    intro φ hφ
+    rw [intervalIntegrable_iff_integrableOn_Ioc_of_le hx.1, IntegrableOn,
+      ← restrict_Ioo_eq_restrict_Ioc]
+    exact hφ.integrable (by norm_num)
+  have hdyx : MemLp dy 2 (volume.restrict (Ioo (0 : ℝ) x)) :=
+    h.2.2.2.2.1.mono_measure (Measure.restrict_mono hsub le_rfl)
+  have hgx : MemLp g 2 (volume.restrict (Ioo (0 : ℝ) x)) :=
+    hgL.mono_measure (Measure.restrict_mono hsub le_rfl)
+  rw [hFTC y dy h x hx, ← intervalIntegral.integral_sub (hint _ hdyx) (hint _ hgx),
+    intervalIntegral.integral_of_le hx.1, ← restrict_Ioo_eq_restrict_Ioc]
+  refine (apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_inequality_aux_approximation_aux_limit_aux_error_aux_norm_estimate_aux_cs_aux_sq
+    hx.1 _ hfx).trans ?_
+  have hQ : ∫ t in Ioo (0 : ℝ) x, (dy t - g t) ^ 2 ≤
+      ∫ t in Ioo (0 : ℝ) Real.pi, (dy t - g t) ^ 2 :=
+    setIntegral_mono_set hfL.integrable_sq
+      (Filter.Eventually.of_forall fun t => sq_nonneg _) hsub.eventuallyLE
+  have hQ0 : 0 ≤ ∫ t in Ioo (0 : ℝ) x, (dy t - g t) ^ 2 := integral_nonneg fun t => sq_nonneg _
+  calc x * ∫ t in Ioo (0 : ℝ) x, (dy t - g t) ^ 2
+      ≤ Real.pi * ∫ t in Ioo (0 : ℝ) x, (dy t - g t) ^ 2 :=
+        mul_le_mul_of_nonneg_right hx.2 hQ0
+    _ ≤ Real.pi * ∫ t in Ioo (0 : ℝ) Real.pi, (dy t - g t) ^ 2 :=
+        mul_le_mul_of_nonneg_left hQ Real.pi_pos.le
 -- END SEAT AREA
 
 -- (a + b)² ≤ (1 + η) a² + (1 + 1/η) b² pointwise, integrated (squares of L² functions are
