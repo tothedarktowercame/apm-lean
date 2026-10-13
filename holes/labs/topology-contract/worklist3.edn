@@ -21568,7 +21568,7 @@
   {:consumer :t00J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 2,
    :review-finding
    "Frozen-fixture identity is still invalid in both authoritative acceptance copies: each records aad5a9cda739c1cbcceb1eca8ab8b33395db8a08c9d68941a87c644f4d13586e and omits :mode, but the compiling fixture hashes to 7e72195e1214d7580994264481ae57d0ecf87755d31825ab85cbda5f1220c4b1. Update both copies to the verified digest with :mode :post-build-export-check, then resubmit f0afa7bd.",
    :implements-lemma
@@ -21576,7 +21576,7 @@
    :evidence
    {:placeholder-delta {:t00J02 [1 1], :t98A02 [1 1]},
     :residual
-    "Supervisor: set digest 7e72195e1214d7580994264481ae57d0ecf87755d31825ab85cbda5f1220c4b1 and :mode :post-build-export-check in both copies; accept f0afa7bd.",
+    "Supervisor must set verified digest and :mode :post-build-export-check in both copies, then accept f0afa7bd.",
     :outcome :stop,
     :warnings [],
     :statement-hashes {:registry "142/142"},
@@ -21584,7 +21584,7 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Compiled theorem passed review; both authoritative acceptance copies still use stale aad5a9cd digest and omit post-build mode.",
+    "Repeated metadata boundary: both authoritative copies retain stale aad5a9cd digest and omit :mode; scoped theorem is reviewed, unchanged, and compiled.",
     :commands
     [{:cmd "sha256sum /tmp/closedboundarycoords.lean", :exit 0}
      {:cmd "lake env lean /tmp/closedboundarycoords.lean", :exit 0}
@@ -21592,12 +21592,6 @@
       "git diff --exit-code f0afa7bd -- ConstructionTargets/ManifoldFundamentalClass.lean",
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1791867902004-8498-5e2efe59",
-     :finding
-     "Frozen-fixture identity is still invalid in both authoritative acceptance copies: each records aad5a9cda739c1cbcceb1eca8ab8b33395db8a08c9d68941a87c644f4d13586e and omits :mode, but the compiling fixture hashes to 7e72195e1214d7580994264481ae57d0ecf87755d31825ab85cbda5f1220c4b1. Update both copies to the verified digest with :mode :post-build-export-check, then resubmit f0afa7bd."},
     :commit "f0afa7bdc4c95a8c87143342ceb8c9ce51cd5612",
     :changed-paths [],
     :fixture
@@ -21607,7 +21601,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :repair,
+   :state :needs-owner,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/manifold-fundamental-class",
    :acceptance
