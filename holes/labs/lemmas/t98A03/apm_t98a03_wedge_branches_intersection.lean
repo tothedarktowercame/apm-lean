@@ -312,11 +312,50 @@ lemma apm_t98a03_wedge_branches_closed
 
 /-- Seat: the two summand images meet only at the wedge point. -/
 -- BEGIN SEAT AREA
+def apm_t98a03_wedge_branches_intersection_aux_isBase
+    (t₀ : apm_t98a03_Torus) (r₀ : apm_t98a03_RP2) :
+    Sum apm_t98a03_Torus apm_t98a03_RP2 → Prop
+  | .inl t => t = t₀
+  | .inr r => r = r₀
+
+lemma apm_t98a03_wedge_branches_intersection_aux_eq_or_base
+    (t₀ : apm_t98a03_Torus) (r₀ : apm_t98a03_RP2)
+    {x y : Sum apm_t98a03_Torus apm_t98a03_RP2}
+    (h : Relation.EqvGen (apm_t98a03_wedgeRel t₀ r₀) x y) :
+    x = y ∨
+      (apm_t98a03_wedge_branches_intersection_aux_isBase t₀ r₀ x ∧
+       apm_t98a03_wedge_branches_intersection_aux_isBase t₀ r₀ y) := by
+  induction h with
+  | rel x y hxy =>
+      cases hxy
+      exact Or.inr ⟨rfl, rfl⟩
+  | refl x => exact Or.inl rfl
+  | symm x y _ ih =>
+      rcases ih with hxy | ⟨hx, hy⟩
+      · exact Or.inl hxy.symm
+      · exact Or.inr ⟨hy, hx⟩
+  | trans x y z _ _ ih₁ ih₂ =>
+      rcases ih₁ with hxy | ⟨hx, hy⟩
+      · subst y
+        exact ih₂
+      · rcases ih₂ with hyz | ⟨hy', hz⟩
+        · subst z
+          exact Or.inr ⟨hx, hy⟩
+        · exact Or.inr ⟨hx, hz⟩
+
 lemma apm_t98a03_wedge_branches_intersection
     (t₀ : apm_t98a03_Torus) (r₀ : apm_t98a03_RP2) :
     apm_t98a03_torusBranch t₀ r₀ ∩ apm_t98a03_rp2Branch t₀ r₀ ⊆
       {apm_t98a03_basepoint t₀ r₀} := by
-  sorry
+  rintro x ⟨⟨t, rfl⟩, ⟨r, hr⟩⟩
+  have heq : Relation.EqvGen (apm_t98a03_wedgeRel t₀ r₀)
+      (Sum.inl t) (Sum.inr r) := Quotient.exact hr.symm
+  rcases apm_t98a03_wedge_branches_intersection_aux_eq_or_base
+      t₀ r₀ heq with hbad | ⟨ht, hr₀⟩
+  · cases hbad
+  · change t = t₀ at ht
+    subst t
+    exact rfl
 -- END SEAT AREA
 
 /-- Seat: every open wedge-point neighborhood meets each branch away from it. -/
