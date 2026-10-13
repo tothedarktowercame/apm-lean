@@ -1224,7 +1224,51 @@ lemma apm_m95A03_minimizers_eqOn_aux_zero_of_le
     (hq_nonneg : ∀ t ∈ Set.Icc a b, 0 ≤ q t) (hw : ContDiff ℝ 1 w) (hwa : w a = 0)
     (hle : (∫ t in a..b, p t * (deriv w t) ^ 2 + q t * (w t) ^ 2) ≤ 0) :
     ∀ t ∈ Set.Icc a b, w t = 0 := by
-  sorry
+  let R : ℝ → ℝ := fun t => p t * (deriv w t) ^ 2 + q t * (w t) ^ 2
+  have hdw0 : ContDiff ℝ 0 (deriv w) := hw.deriv'
+  have hdw : Continuous (deriv w) := hdw0.continuous
+  have hRcont : Continuous R := by
+    dsimp [R]
+    fun_prop
+  have hRnonneg : ∀ t ∈ Set.Icc a b, 0 ≤ R t := by
+    intro t ht
+    have hpt : 0 ≤ p t := le_trans hp₀.le (hp_lower t ht)
+    exact add_nonneg (mul_nonneg hpt (sq_nonneg _))
+      (mul_nonneg (hq_nonneg t ht) (sq_nonneg _))
+  have hRzero : ∀ t ∈ Set.Icc a b, R t = 0 := by
+    intro t ht
+    apply le_antisymm
+    · apply not_lt.mp
+      intro hpos
+      have hstrict := intervalIntegral.integral_lt_integral_of_continuousOn_of_le_of_exists_lt
+        hab continuous_zero.continuousOn hRcont.continuousOn
+        (fun x hx => hRnonneg x (Set.Ioc_subset_Icc_self hx))
+        ⟨t, ht, by simpa using hpos⟩
+      have : 0 < ∫ x in a..b, R x := by simpa using hstrict
+      exact (not_lt_of_ge hle) this
+    · exact hRnonneg t ht
+  have hdwzero : ∀ t ∈ Set.Icc a b, deriv w t = 0 := by
+    intro t ht
+    have hp_pos : 0 < p t := lt_of_lt_of_le hp₀ (hp_lower t ht)
+    have hqterm : 0 ≤ q t * (w t) ^ 2 :=
+      mul_nonneg (hq_nonneg t ht) (sq_nonneg _)
+    have hpterm : p t * (deriv w t) ^ 2 = 0 := by
+      have hnonneg : 0 ≤ p t * (deriv w t) ^ 2 :=
+        mul_nonneg hp_pos.le (sq_nonneg _)
+      have hle0 : p t * (deriv w t) ^ 2 ≤ 0 := by
+        dsimp [R] at hRzero
+        linarith [hRzero t ht]
+      exact le_antisymm hle0 hnonneg
+    have : (deriv w t) ^ 2 = 0 := (mul_eq_zero.mp hpterm).resolve_left hp_pos.ne'
+    exact sq_eq_zero_iff.mp this
+  have hconst := constant_of_derivWithin_zero
+    (f := w) (a := a) (b := b) (hw.differentiable (by norm_num)).differentiableOn (by
+      intro t ht
+      rw [(hw.differentiable (by norm_num) t).derivWithin
+        ((uniqueDiffOn_Icc hab) t (Set.Ico_subset_Icc_self ht))]
+      exact hdwzero t (Set.Ico_subset_Icc_self ht))
+  intro t ht
+  rw [hconst t ht, hwa]
 
 theorem apm_m95A03_minimizers_eqOn
     (a b p₀ : ℝ) (hab : a < b) (hp₀ : 0 < p₀)
