@@ -156,7 +156,17 @@ lemma tft_translate_bcf_continuous
       tftBCFOfCompactSupport (fun y => f (x + y))
         (hf.comp (continuous_const.add continuous_id))
         (hfc.comp_homeomorph (Homeomorph.addLeft x))) := by
-  sorry
+  rw [Metric.continuous_iff]
+  intro x ε hε
+  have huc : UniformContinuous f := hfc.uniformContinuous_of_continuous hf
+  obtain ⟨δ, hδ, hmod⟩ :=
+    (Metric.uniformContinuous_iff.mp huc) (ε / 2) (half_pos hε)
+  refine ⟨δ, hδ, fun z hz => ?_⟩
+  apply lt_of_le_of_lt ((BoundedContinuousFunction.dist_le (le_of_lt (half_pos hε))).2 ?_)
+    (half_lt_self hε)
+  intro y
+  change dist (f (z + y)) (f (x + y)) ≤ ε / 2
+  exact le_of_lt (hmod (by simpa only [dist_add_right] using hz))
 
 lemma tft_difference_quotient_continuous
     (f : E → F) (hf : ContDiff ℝ 1 f) (x v : E) (h : ℝ) :
