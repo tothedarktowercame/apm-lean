@@ -21853,8 +21853,64 @@
      :typed-residual-change
      :infrastructure-packets
      :review-outcomes]},
+   :evidence
+   {:outcome :replan,
+    :seat "topo-12",
+    :commands
+    [{:cmd
+      "bb holes/labs/topology-contract/build_step.bb priorities holes/labs/topology-contract/worklist3.edn",
+      :exit 0}],
+    :finding
+    "Δ0;r=boundary-mode;i=3;reviews=3P/0C. p/b:2/13:t00A02;2/7:t00A03;1/10:t00J02,t98A02;1/2:t01A08;3/5:t01J01;3/8:t02A04;2/9:t03J02;4/11:t03J03;3/7:t91J05;3/15:t92J05,t97J02;2/10:t94J04;2/8:t95J06;1/12:t96A01;1/8:t96A02;2/4:t96J06;1/11:t97A05,t97A06. top=classification/finite-index/prod-homology;rule0=t01A08.",
+    :replacement-items
+    [{:bounded-exception "rule0",
+      :consumer :t01A08,
+      :implements-lemma
+      :lemma-constructiontargets-sardgeneralmodel-modelrange-frontier-addhaar-null,
+      :phase :implementation,
+      :state :open,
+      :scope ["ConstructionTargets/SardGeneralModel.lean"],
+      :dag-node "TOPOLOGY-ROUTES.md/t01A08/boundary",
+      :acceptance
+      {:declaration
+       "ConstructionTargets.SardGeneralModel.modelRange_frontier_addHaar_null",
+       :type "exact type in fixture",
+       :fixture "/tmp/t01a08_model_range_boundary_null.lean",
+       :fixture-sha256
+       "e8cd3a6cf79367917bc0c739ad8b5644e58e2ca8212e21edcea9f5af6a6c47d4",
+       :mode :post-build-export-check,
+       :placeholder "t01A08 sole sorry",
+       :route-step "boundary nullity"},
+      :id :r-t01a08-boundary-2,
+      :kind :reusable-theorem,
+      :area "sard-convex-domain",
+      :depends-on [:routes-2026-10-12-t01a08-interior-r1],
+      :current-residual "P.",
+      :other-consumers []}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 1,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :phase :strategy,
+      :state :open,
+      :scope [],
+      :dag-node "TOPOLOGY-ROUTES.md",
+      :acceptance {:strategy "Rerank."},
+      :id :r-topo3-checkpoint-2,
+      :kind :strategy-checkpoint,
+      :area "portfolio",
+      :depends-on [:r-t01a08-boundary-2],
+      :current-residual "R.",
+      :other-consumers []}],
+    :author "topo-12",
+    :disposition :replan},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -21870,6 +21926,54 @@
     :routes-2026-10-10-topo3-seed-checkpoint-1],
    :current-residual
    "Refill from closure outcome and the seeded 50-node topo3 DAG.",
+   :other-consumers []}
+  {:bounded-exception "rule0",
+   :consumer :t01A08,
+   :implements-lemma
+   :lemma-constructiontargets-sardgeneralmodel-modelrange-frontier-addhaar-null,
+   :phase :implementation,
+   :state :blocked,
+   :scope ["ConstructionTargets/SardGeneralModel.lean"],
+   :dag-node "TOPOLOGY-ROUTES.md/t01A08/boundary",
+   :acceptance
+   {:declaration
+    "ConstructionTargets.SardGeneralModel.modelRange_frontier_addHaar_null",
+    :type "exact type in fixture",
+    :fixture "/tmp/t01a08_model_range_boundary_null.lean",
+    :fixture-sha256
+    "e8cd3a6cf79367917bc0c739ad8b5644e58e2ca8212e21edcea9f5af6a6c47d4",
+    :mode :post-build-export-check,
+    :placeholder "t01A08 sole sorry",
+    :route-step "boundary nullity"},
+   :id :r-t01a08-boundary-2,
+   :kind :reusable-theorem,
+   :area "sard-convex-domain",
+   :depends-on
+   [:routes-2026-10-12-t01a08-interior-r1
+    :routes-2026-10-10-topo3-seed-checkpoint-2-r2],
+   :current-residual "P.",
+   :other-consumers []}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 1,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md",
+   :acceptance {:strategy "Rerank."},
+   :id :r-topo3-checkpoint-2,
+   :kind :strategy-checkpoint,
+   :area "portfolio",
+   :depends-on
+   [:r-t01a08-boundary-2
+    :routes-2026-10-10-topo3-seed-checkpoint-2-r2],
+   :current-residual "R.",
    :other-consumers []}
   {:consumer :t00A02,
    :implements-lemma
