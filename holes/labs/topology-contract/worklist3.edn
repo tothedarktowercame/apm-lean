@@ -22999,7 +22999,7 @@
    "reopened: a lemma this row reported missing is now banked",
    :stop-count 1,
    :review-finding
-   "extend Mathlib: state and prove the missing theorem in scope. The frozen fixture declares ContDiffWithinAt.domDomCongr_iteratedFDerivWithin_of_infty as an axiom, and #print shows convexWithinJet depends on that nonstandard axiom. The row records commit nil, no changed paths, and status :not-started; compiling an axiomatized facade is not progress toward discharging the frozen interface. Prove adjacent-swap symmetry and permutation induction in ConstructionTargets/SardConvexDomain.lean, then rerun the fixture without its axiom.",
+   "extend Mathlib: state and prove the missing theorem in scope",
    :evidence
    {:placeholder-delta {:t01A08 [1 1]},
     :residual
@@ -23025,6 +23025,12 @@
     [{:cmd
       "rg theorem/hypotheses; sha256sum fixture; lake env lean corrected export check; statement-registry check",
       :exit 0}],
+    :review
+    {:outcome :fail,
+     :seat "codex-11",
+     :job "invoke-1791887038155-9402-7a1f498f",
+     :finding
+     "extend Mathlib: state and prove the missing theorem in scope"},
     :commit nil,
     :changed-paths [],
     :fixture
@@ -23034,7 +23040,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :repair,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain.blueprint/B1/smooth-symmetry",
    :acceptance
@@ -23050,7 +23056,7 @@
    :id :r-a08-sard-smooth-jet-symmetry-1,
    :kind :reusable-theorem,
    :area "sard-convex-domain",
-   :fail-count 0,
+   :fail-count 1,
    :depends-on [:r-topo3-cp8],
    :current-residual
    "Then B1 continuity and canonical zero/one jets compile.",
