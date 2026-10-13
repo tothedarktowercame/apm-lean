@@ -1382,3 +1382,5 @@ dependent target inverse with the inverse of the named based connector.
 source endpoint equality together with its reflexive connector comparison.
 `genericPointWedgeOuterRight_targetConnectorHom_eq_based` also identifies the
 forward target connector with the named based connector.
+`genericPointWedgeOuterRight_sourceConnector_hom_inv_id` records cancellation
+of the remaining source connector in its exact dependent hom-set.
