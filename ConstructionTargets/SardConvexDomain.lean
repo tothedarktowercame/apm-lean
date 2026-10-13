@@ -1,7 +1,7 @@
 import ConstructionTargets.SardGeneralModel
 
 open scoped ContDiff Manifold
-open Set
+open Set MeasureTheory
 
 noncomputable section
 
@@ -27,5 +27,19 @@ theorem modelRange_withinCriticalImage_subset_interior_union_frontier
     refine ⟨x, ?_, rfl⟩
     rw [frontier, I.isClosed_range.closure_eq]
     exact ⟨hx.1, hxi⟩
+
+theorem modelRange_withinCriticalImage_null_of_interior_of_frontier
+    {E H F : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [TopologicalSpace H] [NormedAddCommGroup F] [NormedSpace ℝ F]
+    [MeasurableSpace F] (I : ModelWithCorners ℝ E H) (f : E → F)
+    (mu : Measure F)
+    (hinterior : mu (f '' {x | x ∈ interior (Set.range I) ∧
+      ¬ Function.Surjective (fderiv ℝ f x)}) = 0)
+    (hfrontier : mu (f '' frontier (Set.range I)) = 0) :
+    mu (f '' {x | x ∈ Set.range I ∧
+      ¬ Function.Surjective (fderivWithin ℝ f (Set.range I) x)}) = 0 := by
+  apply measure_mono_null
+    (modelRange_withinCriticalImage_subset_interior_union_frontier I f)
+  exact measure_union_null hinterior hfrontier
 
 end ConstructionTargets.SardConvexDomain
