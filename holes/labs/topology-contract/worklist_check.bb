@@ -24,8 +24,11 @@
       ;; topo1 paused at 04:31 with 74 backlog lemmas: its checkpoint waited
       ;; on a row blocked on an unelected lemma.
       ;; A reviewed STOP (:stopped) delivered nothing, and nothing will
-      ;; until a checkpoint elects the work it named, so it counts too.
-      (or (#{:needs-owner :stopped} (:state item))
+      ;; until a checkpoint elects the work it named, so it counts too; so
+      ;; does a :superseded row, which will never finish (2026-10-12: topo3's
+      ;; checkpoint waited on a superseded triangulation row and the loop
+      ;; exited with nothing eligible).
+      (or (#{:needs-owner :stopped :superseded} (:state item))
           (and (= :lemma (:kind item)) (= :backlog (:state item)))
           (and (= :blocked (:state item))
                (some #(owner-blocked? % (conj seen dependency))

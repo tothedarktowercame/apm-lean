@@ -21854,7 +21854,7 @@
      :infrastructure-packets
      :review-outcomes]},
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -21865,7 +21865,6 @@
    :area "portfolio",
    :depends-on
    [:routes-2026-10-10-t01a08-closure-probe-topo3-r2
-    :routes-2026-10-10-surface-triangulation-topo3-r2
     :routes-2026-10-10-surface-schoenflies-collar-topo3-r2
     :routes-2026-10-10-manifold-fundamental-class-topo3-r2
     :routes-2026-10-10-topo3-seed-checkpoint-1],
