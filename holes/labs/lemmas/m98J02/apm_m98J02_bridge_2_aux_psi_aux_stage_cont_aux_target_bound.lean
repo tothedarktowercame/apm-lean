@@ -1412,7 +1412,87 @@ lemma apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_target_bound
       ContDiffMapSupportedIn.seminorm ℝ apm_m98J02_E ℝ ⊤
           (apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_targetCompact χ) i (apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_stageLinear v χ hsmooth K hK φ) ≤
         C * (s.sup (ContDiffMapSupportedIn.seminorm ℝ apm_m98J02_E ℝ ⊤ K)) φ := by
-  sorry
+  classical
+  intro i
+  let ss : ℕ → Finset ℕ := fun k => Classical.choose (hpt k)
+  let cc : ℕ → ℝ := fun k => Classical.choose (Classical.choose_spec (hpt k))
+  have hcc : ∀ k (φ : 𝓓_{K}(apm_m98J02_E, ℝ)) x,
+      x ∈ tsupport (χ : apm_m98J02_E → ℝ) →
+      ‖iteratedFDeriv ℝ k (fun y : apm_m98J02_E =>
+          v (apm_m98J02_translateTest y (TestFunction.ofSupportedIn hK φ))) x‖ ≤
+        cc k * (ss k).sup
+          (ContDiffMapSupportedIn.seminorm ℝ apm_m98J02_E ℝ ⊤ K) φ := by
+    intro k
+    exact Classical.choose_spec (Classical.choose_spec (hpt k))
+  let S := (Finset.range (i + 1)).biUnion (fun j => ss (i - j))
+  let χK : ContDiffMapSupportedIn apm_m98J02_E ℝ ⊤
+      (apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_targetCompact χ) :=
+    { toFun := χ
+      contDiff' := χ.contDiff
+      zero_on_compl' := by
+        intro x hx
+        by_contra hn
+        exact hx (subset_tsupport _ hn) }
+  let a : ℕ → ℝ := fun j =>
+    ContDiffMapSupportedIn.seminorm ℝ apm_m98J02_E ℝ ⊤
+      (apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_targetCompact χ) j χK
+  let C := ∑ j ∈ Finset.range (i + 1),
+    (i.choose j : ℝ) * a j * max (cc (i - j)) 0
+  refine ⟨S, C, ?_⟩
+  intro φ
+  let q := S.sup (ContDiffMapSupportedIn.seminorm ℝ apm_m98J02_E ℝ ⊤ K) φ
+  have hq : 0 ≤ q := by
+    positivity
+  have hC : 0 ≤ C := by
+    dsimp [C]
+    positivity
+  apply (ContDiffMapSupportedIn.seminorm_top_le_iff ℝ (mul_nonneg hC hq) i _).2
+  intro x hx
+  change x ∈ tsupport (χ : apm_m98J02_E → ℝ) at hx
+  refine (apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_leibniz v χ
+    (TestFunction.ofSupportedIn hK φ) hsmooth i x).trans ?_
+  rw [show C * q = ∑ j ∈ Finset.range (i + 1),
+      ((i.choose j : ℝ) * a j * max (cc (i - j)) 0) * q by
+    simp [C, Finset.sum_mul]]
+  apply Finset.sum_le_sum
+  intro j hj
+  simp only [Finset.mem_range] at hj
+  have hchi : ‖iteratedFDeriv ℝ j (χ : apm_m98J02_E → ℝ) x‖ ≤ a j := by
+    simpa [χK, a] using
+      (ContDiffMapSupportedIn.norm_iteratedFDeriv_apply_le_seminorm_top
+        ℝ (f := χK) (x := x))
+  have hsub : ss (i - j) ⊆ S := by
+    exact Finset.subset_biUnion_of_mem (fun j => ss (i - j))
+      (Finset.mem_range.2 hj)
+  have hsup : (ss (i - j)).sup
+      (ContDiffMapSupportedIn.seminorm ℝ apm_m98J02_E ℝ ⊤ K) φ ≤ q := by
+    have hsSem : (ss (i - j)).sup
+        (ContDiffMapSupportedIn.seminorm ℝ apm_m98J02_E ℝ ⊤ K) ≤
+        S.sup (ContDiffMapSupportedIn.seminorm ℝ apm_m98J02_E ℝ ⊤ K) :=
+      Finset.sup_mono hsub
+    exact Seminorm.le_def.mp hsSem φ
+  have hp := hcc (i - j) φ x hx
+  have hp' : ‖iteratedFDeriv ℝ (i - j) (fun y : apm_m98J02_E =>
+      v (apm_m98J02_translateTest y (TestFunction.ofSupportedIn hK φ))) x‖ ≤
+      max (cc (i - j)) 0 * q := by
+    calc
+      _ ≤ cc (i - j) * (ss (i - j)).sup
+          (ContDiffMapSupportedIn.seminorm ℝ apm_m98J02_E ℝ ⊤ K) φ := hp
+      _ ≤ max (cc (i - j)) 0 * q := by
+        calc
+          _ ≤ max (cc (i - j)) 0 * (ss (i - j)).sup
+              (ContDiffMapSupportedIn.seminorm ℝ apm_m98J02_E ℝ ⊤ K) φ := by
+                apply mul_le_mul_of_nonneg_right (le_max_left _ _)
+                positivity
+          _ ≤ max (cc (i - j)) 0 * q :=
+            mul_le_mul_of_nonneg_left hsup (le_max_right _ _)
+  calc
+    (i.choose j : ℝ) * ‖iteratedFDeriv ℝ j (χ : apm_m98J02_E → ℝ) x‖ *
+        ‖iteratedFDeriv ℝ (i - j) (fun y : apm_m98J02_E =>
+          v (apm_m98J02_translateTest y (TestFunction.ofSupportedIn hK φ))) x‖
+      ≤ (i.choose j : ℝ) * a j * (max (cc (i - j)) 0 * q) := by
+        gcongr
+    _ = ((i.choose j : ℝ) * a j * max (cc (i - j)) 0) * q := by ring
 -- END SEAT AREA
 
 lemma apm_m98J02_bridge_2_aux_psi_aux_stage_cont
