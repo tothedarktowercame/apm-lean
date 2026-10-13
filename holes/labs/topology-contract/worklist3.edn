@@ -21568,7 +21568,7 @@
   {:consumer :t00J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 2,
    :review-finding
    "Frozen fixture metadata remains invalid: both authoritative acceptance copies record aad5a9cda739c1cbcceb1eca8ab8b33395db8a08c9d68941a87c644f4d13586e and omit :mode, while the compiling fixture hashes to 7e72195e1214d7580994264481ae57d0ecf87755d31825ab85cbda5f1220c4b1. Update both copies to that digest with :mode :post-build-export-check, then resubmit f0afa7bd.",
    :implements-lemma
@@ -21576,7 +21576,7 @@
    :evidence
    {:placeholder-delta {:t00J02 [1 1], :t98A02 [1 1]},
     :residual
-    "Supervisor must update both acceptance copies to 7e72195e with post-build mode, then resubmit f0afa7bd.",
+    "Stop-after-two: supervisor metadata repair must set both copies to 7e72195e with :mode :post-build-export-check, then resubmit f0afa7bd.",
     :outcome :stop,
     :warnings [],
     :missing-theorems
@@ -21592,22 +21592,13 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Acceptance metadata is outside the sole Lean scope. Both authoritative copies still record aad5a9cd and omit :mode, while the compiling fixture is 7e72195e. apply-result! replaces only :evidence; repair-fixture-hash! handles only evidence maps, not :acceptance :fixture-sha256. Direct ledger edits are forbidden. The theorem is complete at f0afa7bd.",
+    "Second identical metadata boundary. Both authoritative :acceptance maps still contain aad5a9cd and no :mode; the real compiling fixture is 7e72195e. The only scope is ManifoldFundamentalClass.lean, apply-result! cannot replace row acceptance, and ledger edits are forbidden. No Lean change can repair the reviewer input.",
     :commands
     [{:cmd
-      "sha256sum fixture; lake env lean fixture; verify commit; registry check",
+      "sha256sum fixture; lake env lean fixture; diff-tree commit; registry check",
       :exit 0}
-     {:cmd
-      "inspect both acceptance copies and result/repair transitions",
-      :exit 0}
-     {:cmd "comment-stripped placeholder counts; git status",
+     {:cmd "scan authoritative acceptance copies for stale digest",
       :exit 0}],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1791891764345-9581-fed7709e",
-     :finding
-     "Frozen fixture metadata remains invalid: both authoritative acceptance copies record aad5a9cda739c1cbcceb1eca8ab8b33395db8a08c9d68941a87c644f4d13586e and omit :mode, while the compiling fixture hashes to 7e72195e1214d7580994264481ae57d0ecf87755d31825ab85cbda5f1220c4b1. Update both copies to that digest with :mode :post-build-export-check, then resubmit f0afa7bd."},
     :commit "f0afa7bdc4c95a8c87143342ceb8c9ce51cd5612",
     :changed-paths
     ["ConstructionTargets/ManifoldFundamentalClass.lean"],
@@ -21618,7 +21609,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :repair,
+   :state :needs-owner,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/manifold-fundamental-class",
    :acceptance
