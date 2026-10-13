@@ -760,12 +760,82 @@ theorem apm_t01A01_RP1_compact : CompactSpace apm_t01A01_RP1 := by
   rw [hsurj.range_eq] at hcompact
   exact ⟨hcompact⟩
 
-/-- Seat: `[x : y] ↦ x / y` (and `[x : 0] ↦ ∞`) is a continuous bijection
-`RP¹ → OnePoint ℝ` (`OnePoint.equivProjectivization` up to `Fin 2 → ℝ ≃ ℝ × ℝ`;
-continuity by quotient descent, checking `OnePoint` neighbourhoods of `∞`). -/
+noncomputable def apm_t01A01_RP1_equiv_onePoint_aux_projectiveEquiv :
+    Projectivization ℝ (ℝ × ℝ) ≃ apm_t01A01_RP1 where
+  toFun := Projectivization.map (LinearEquiv.finTwoArrow ℝ ℝ).symm.toLinearMap
+    (LinearEquiv.finTwoArrow ℝ ℝ).symm.injective
+  invFun := Projectivization.map (LinearEquiv.finTwoArrow ℝ ℝ).toLinearMap
+    (LinearEquiv.finTwoArrow ℝ ℝ).injective
+  left_inv x := by
+    induction x using Projectivization.ind with
+    | h v hv =>
+      rw [Projectivization.map_mk, Projectivization.map_mk]
+      simp
+  right_inv x := by
+    induction x using Projectivization.ind with
+    | h v hv =>
+      rw [Projectivization.map_mk, Projectivization.map_mk]
+      congr 1
+      funext j
+      fin_cases j <;> rfl
+
+noncomputable def apm_t01A01_RP1_equiv_onePoint_aux_equiv :
+    OnePoint ℝ ≃ apm_t01A01_RP1 :=
+  (OnePoint.equivProjectivization ℝ).trans
+    apm_t01A01_RP1_equiv_onePoint_aux_projectiveEquiv
+
+lemma apm_t01A01_RP1_equiv_onePoint_aux_continuous :
+    Continuous apm_t01A01_RP1_equiv_onePoint_aux_equiv := by
+  rw [OnePoint.continuous_iff]
+  constructor
+  · have hinv : Filter.Tendsto (fun t : ℝ => t⁻¹)
+        (Filter.coclosedCompact ℝ) (nhds 0) := by
+      rw [Filter.coclosedCompact_eq_cocompact]
+      simpa [Metric.cobounded_eq_cocompact] using
+        (Filter.tendsto_inv₀_cobounded :
+          Filter.Tendsto (fun t : ℝ => t⁻¹) (Bornology.cobounded ℝ) (nhds 0))
+    let F : ℝ → {v : Fin 2 → ℝ // v ≠ 0} := fun s =>
+      ⟨![1, s], by intro h; have := congrFun h 0; simp at this⟩
+    have hF : Continuous F := by
+      apply Continuous.subtype_mk
+      apply continuous_pi
+      intro j
+      fin_cases j
+      · exact continuous_const
+      · exact continuous_id
+    have hlim := ((ConstructionTargets.ProjectiveSpaceTopology.continuous_quotientMap ℝ 1).comp
+      hF).continuousAt.tendsto.comp hinv
+    apply hlim.congr'
+    have hne : ∀ᶠ t in Filter.coclosedCompact ℝ, t ≠ 0 := by
+      exact isCompact_singleton.compl_mem_coclosedCompact_of_isClosed isClosed_singleton
+    filter_upwards [hne] with t ht
+    change Projectivization.mk ℝ ![1, t⁻¹] (by simp) =
+      apm_t01A01_RP1_equiv_onePoint_aux_equiv (t : OnePoint ℝ)
+    apply (Projectivization.mk_eq_mk_iff' ℝ _ _ (by simp) (by simp)).mpr
+    exact ⟨t⁻¹, by funext j; fin_cases j <;> simp [ht]⟩
+  · change Continuous (fun t : ℝ =>
+      Projectivization.mk ℝ ![t, 1] (by simp))
+    exact (ConstructionTargets.ProjectiveSpaceTopology.continuous_quotientMap ℝ 1).comp
+      (show Continuous (fun t : ℝ => (⟨![t, 1], by simp⟩ :
+          {v : Fin 2 → ℝ // v ≠ 0})) from by
+        apply Continuous.subtype_mk
+        apply continuous_pi
+        intro j
+        fin_cases j
+        · exact continuous_id
+        · exact continuous_const)
+
+/-- Seat (claude-14): `[v] ↦ v 0 / v 1` (or `∞` when `v 1 = 0`) is continuous:
+it lifts to a continuous map on `{v | v ≠ 0}` (near `v 1 = 0` the ratio is large,
+i.e. near `∞` in `OnePoint ℝ`), then descend through the quotient map. -/
+lemma apm_t01A01_RP1_equiv_onePoint_aux_inverse_continuous :
+    Continuous apm_t01A01_RP1_equiv_onePoint_aux_equiv.symm := by
+  sorry
+
 theorem apm_t01A01_RP1_equiv_onePoint :
     ∃ e : apm_t01A01_RP1 ≃ OnePoint ℝ, Continuous e := by
-  sorry
+  exact ⟨apm_t01A01_RP1_equiv_onePoint_aux_equiv.symm,
+    apm_t01A01_RP1_equiv_onePoint_aux_inverse_continuous⟩
 
 lemma apm_t01A01_projectiveLine_map_nullhomotopic_aux_homeomorph :
     Nonempty (apm_t01A01_RP1 ≃ₜ Circle) := by
