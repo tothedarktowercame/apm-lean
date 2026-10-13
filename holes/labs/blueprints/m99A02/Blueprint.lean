@@ -446,6 +446,8 @@ theorem apm_m99A02_directional_hasDerivAt (i : Fin 2) (x : m99A02Point)
     field_simp [hl.ne']
 
 /-- One-dimensional integration by parts on a line that misses the origin. -/
+lemma apm_m99A02_line_ibp_aux_option_anchor : True := by trivial
+set_option maxHeartbeats 3000000
 theorem apm_m99A02_line_ibp (i : Fin 2) {c : ℝ} (hc : c ≠ 0)
     (hdir : ∀ x : m99A02Point, x ≠ 0 → ‖x‖ < 1 →
       HasDerivAt (fun t : ℝ ↦ m99A02Function (x + t • EuclideanSpace.single i 1))
@@ -455,7 +457,150 @@ theorem apm_m99A02_line_ibp (i : Fin 2) {c : ℝ} (hc : c ≠ 0)
     (∫ t : ℝ, m99A02Function (m99A02Line i c t) *
         fderiv ℝ φ (m99A02Line i c t) (EuclideanSpace.single i 1)) =
       -∫ t : ℝ, m99A02Derivative i (m99A02Line i c t) * φ (m99A02Line i c t) := by
-  sorry
+  let L : ℝ → m99A02Point := fun t ↦ m99A02Line i c t
+  let u : ℝ → ℝ := fun t ↦ m99A02Function (L t)
+  let v : ℝ → ℝ := fun t ↦ φ (L t)
+  let u' : ℝ → ℝ := fun t ↦ m99A02Derivative i (L t)
+  let v' : ℝ → ℝ := fun t ↦ fderiv ℝ φ (L t) (EuclideanSpace.single i 1)
+  have hother : m99A02Other i ≠ i := by
+    fin_cases i <;> simp [m99A02Other]
+  have hLi (t : ℝ) : L t i = t := by
+    simp [L, m99A02Line, hother]
+  have hLo (t : ℝ) : L t (m99A02Other i) = c := by
+    have hoi : i ≠ m99A02Other i := Ne.symm hother
+    simp [L, m99A02Line, hoi]
+  have hL0 (t : ℝ) : L t ≠ 0 := by
+    intro h
+    have this := hLo t
+    rw [h] at this
+    simp only [PiLp.zero_apply] at this
+    exact hc this.symm
+  have hLder (t : ℝ) : HasDerivAt L (EuclideanSpace.single i 1) t := by
+    have hsmul (s : ℝ) : s • EuclideanSpace.single i 1 = EuclideanSpace.single i s := by
+      ext j
+      simp [EuclideanSpace.single_apply, mul_boole]
+    dsimp [L, m99A02Line]
+    simpa only [one_smul, hsmul] using
+      ((hasDerivAt_id t).smul_const (EuclideanSpace.single i 1)).add_const
+        (EuclideanSpace.single (m99A02Other i) c)
+  have hLcont : Continuous L := continuous_iff_continuousAt.2 fun t ↦ (hLder t).continuousAt
+  have hv_deriv (t : ℝ) : HasDerivAt v (v' t) t := by
+    dsimp [v, v']
+    simpa only [one_smul] using
+      (hφ.differentiable (by simp)).differentiableAt.hasFDerivAt.comp_hasDerivAt t (hLder t)
+  have hv_comp : HasCompactSupport v := by
+    apply HasCompactSupport.intro (isCompact_Icc : IsCompact (Icc (-1 : ℝ) 1))
+    intro t ht
+    apply Classical.byContradiction
+    intro hn
+    have hs : L t ∈ Function.support φ := hn
+    have hom := hφΩ hs
+    have hnorm : ‖L t‖ < 1 / 2 := by
+      simpa [m99A02Omega, Metric.mem_ball, dist_zero_right] using hom
+    have hcoord : |t| ≤ ‖L t‖ := by
+      calc
+        |t| = ‖(L t) i‖ := by rw [hLi]; exact (Real.norm_eq_abs t).symm
+        _ ≤ ‖L t‖ := PiLp.norm_apply_le (L t) i
+    have : |t| < 1 := hcoord.trans_lt (hnorm.trans (by norm_num))
+    exact ht ⟨(abs_lt.mp this).1.le, (abs_lt.mp this).2.le⟩
+  have hu_deriv (t : ℝ) (ht : t ∈ tsupport v) : HasDerivAt u (u' t) t := by
+    have hsupp : Function.support v ⊆ L ⁻¹' Metric.closedBall 0 (1 / 2) := by
+      intro s hs
+      have hom := hφΩ hs
+      have : ‖L s‖ < 1 / 2 := by
+        simpa [m99A02Omega, Metric.mem_ball, dist_zero_right] using hom
+      simpa [Metric.mem_closedBall, dist_zero_right] using this.le
+    have hs' : t ∈ L ⁻¹' Metric.closedBall 0 (1 / 2) :=
+      (closure_minimal hsupp (Metric.isClosed_closedBall.preimage hLcont)) ht
+    have hn : ‖L t‖ ≤ 1 / 2 := by
+      simpa [Metric.mem_closedBall, dist_zero_right] using hs'
+    have hd := hdir (L t) (hL0 t) (hn.trans_lt (by norm_num))
+    have htrans : (fun s : ℝ ↦ L t + (s - t) • EuclideanSpace.single i 1) = L := by
+      funext s
+      ext j
+      fin_cases i <;> fin_cases j <;>
+        simp [L, m99A02Line, m99A02Other] <;> ring
+    have hd0 : HasDerivAt
+        (fun q ↦ m99A02Function (L t + q • EuclideanSpace.single i 1))
+        (m99A02Derivative i (L t)) (t - t) := by simpa using hd
+    have hcomp := hd0.comp_sub_const t t
+    have hftrans :
+        (fun s ↦ m99A02Function (L t + (s - t) • EuclideanSpace.single i 1)) = u := by
+      simpa only [u, Function.comp_apply] using
+        congrArg (fun F ↦ m99A02Function ∘ F) htrans
+    rw [hftrans] at hcomp
+    exact hcomp
+  have hu_cont : Continuous u := by
+    have heq : u = fun t ↦ (-Real.log ‖L t‖) ^ (1 / 3 : ℝ) := by
+      funext t
+      simp [u, m99A02Function, hL0]
+    rw [heq]
+    have hlog : Continuous (fun t ↦ -Real.log ‖L t‖) :=
+      ((continuous_norm.comp hLcont).log
+        (fun t ↦ (norm_pos_iff.mpr (hL0 t)).ne')).neg
+    exact (Real.continuous_rpow_const (by norm_num)).comp hlog
+  have hv_cont : Continuous v :=
+    continuous_iff_continuousAt.2 fun t ↦ (hv_deriv t).continuousAt
+  have hv'_cont : Continuous v' := by
+    dsimp [v']
+    exact (hφ.continuous_fderiv_apply (by simp)).comp
+      (Continuous.prodMk hLcont continuous_const)
+  have hu'v_cont : Continuous (u' * v) := by
+    rw [continuous_iff_continuousAt]
+    intro t
+    by_cases ht : t ∈ tsupport v
+    · have hsupp : Function.support v ⊆ L ⁻¹' Metric.closedBall 0 (1 / 2) := by
+        intro s hs
+        have hom := hφΩ hs
+        have hh : ‖L s‖ < 1 / 2 := by
+          simpa [m99A02Omega, Metric.mem_ball, dist_zero_right] using hom
+        simpa [Metric.mem_closedBall, dist_zero_right] using hh.le
+      have hs' : t ∈ L ⁻¹' Metric.closedBall 0 (1 / 2) :=
+        (closure_minimal hsupp (Metric.isClosed_closedBall.preimage hLcont)) ht
+      have hn : ‖L t‖ < 1 := by
+        have : ‖L t‖ ≤ 1 / 2 := by
+          simpa [Metric.mem_closedBall, dist_zero_right] using hs'
+        exact this.trans_lt (by norm_num)
+      apply ContinuousAt.mul _ hv_cont.continuousAt
+      dsimp [u', m99A02Derivative]
+      simp only [hL0, ↓reduceIte]
+      have hp : 0 < -Real.log ‖L t‖ :=
+        neg_pos.mpr (Real.log_neg (norm_pos_iff.mpr (hL0 t)) hn)
+      have hcL : Continuous (fun s ↦ (L s) i) := by
+        convert continuous_id using 1
+        funext s
+        exact hLi s
+      have hnorm : Continuous (fun s ↦ ‖L s‖) := continuous_norm.comp hLcont
+      have hlog : Continuous (fun s ↦ -Real.log ‖L s‖) :=
+        ((continuous_norm.comp hLcont).log
+          (fun s ↦ (norm_pos_iff.mpr (hL0 s)).ne')).neg
+      apply ContinuousAt.div₀ (hcL.neg.continuousAt)
+        ((continuous_const.mul (hnorm.pow 2)).mul
+          ((Real.continuous_rpow_const (by norm_num)).comp hlog)).continuousAt
+      exact mul_ne_zero (mul_ne_zero (by norm_num)
+        (pow_ne_zero _ (norm_pos_iff.mpr (hL0 t)).ne'))
+        (Real.rpow_pos_of_pos hp _).ne'
+    · have hz : ∀ᶠ s in nhds t, v s = 0 := by
+        filter_upwards [(isClosed_tsupport (f := v)).isOpen_compl.mem_nhds ht] with s hs
+        exact not_ne_iff.mp (fun h ↦ hs (subset_closure h))
+      have heq : (u' * v) =ᶠ[nhds t] fun _ ↦ 0 := by
+        filter_upwards [hz] with s hs
+        simp [hs]
+      exact continuousAt_const.congr_of_eventuallyEq heq
+  have huv'_int : Integrable (u * v') :=
+    (hu_cont.mul hv'_cont).integrable_of_hasCompactSupport (by
+      have hv'eq : v' = deriv v := by
+        funext t
+        exact (hv_deriv t).deriv.symm
+      rw [hv'eq]
+      exact hv_comp.deriv.mul_left)
+  have hu'v_int : Integrable (u' * v) :=
+    hu'v_cont.integrable_of_hasCompactSupport hv_comp.mul_left
+  have huv_int : Integrable (u * v) :=
+    (hu_cont.mul hv_cont).integrable_of_hasCompactSupport hv_comp.mul_left
+  simpa [u, v, u', v', L] using
+    integral_mul_deriv_eq_deriv_mul_of_integrable hu_deriv
+      (fun t _ ↦ hv_deriv t) huv'_int hu'v_int huv_int
 
 /-- Fubini in the coordinates `(t, c)` of `m99A02Line i c t`. -/
 theorem apm_m99A02_integral_eq_iterated (i : Fin 2) (F : m99A02Point → ℝ)
