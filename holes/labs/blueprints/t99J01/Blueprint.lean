@@ -56,7 +56,25 @@ theorem t99J01_connected_cover_fundamentalGroup
     (E : Type) [TopologicalSpace E] [PathConnectedSpace E]
     (n : ℕ) (p : E → ThreeCircles) (hp : IsKSheetedCover p n) (e : E) :
     Nonempty (FundamentalGroup E e ≃* FreeGroup (Fin (2 * n + 1))) := by
-  sorry
+  let f := ConstructionTargets.coveringInducedFundamentalGroupMap hp.isCoveringMap e
+  obtain ⟨base⟩ := hbase (p e)
+  let H : Subgroup (FreeGroup (Fin 3)) := f.range.map base.toMonoidHom
+  have hn : 0 < n := by
+    rw [← hp.card_fiber (p e)]
+    letI : Finite {x : E // p x = p e} := hp.finite_fiber (p e)
+    letI : Nonempty {x : E // p x = p e} := ⟨⟨e, rfl⟩⟩
+    exact Nat.card_pos
+  have hindex : H.index = n := by
+    calc
+      H.index = f.range.index := Subgroup.index_map_equiv f.range base
+      _ = n := (t99j01_cover_pi1_subgroup_index n p hp e).2
+  obtain ⟨schreier⟩ :=
+    FiniteIndexFreeGroupSchreierRank.indexSubgroupFreeGroupFinThreeEquiv
+      n hn H hindex
+  refine ⟨?_⟩
+  exact
+    (MonoidHom.ofInjective (t99j01_cover_pi1_subgroup_index n p hp e).1).trans
+      ((Subgroup.equivMapOfInjective f.range base.toMonoidHom base.injective).trans schreier)
 
 /-- Restrict a cover to the path component through `e`.  That restriction is
 a connected finite cover whose degree is exactly `T99J01ComponentSheets`, and
