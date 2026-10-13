@@ -474,7 +474,24 @@ lemma apm_m02J05_lux_definite_aux_nonzero_aux_young_lower
   rw [← intervalIntegral.integral_add_adjacent_intervals hi01 hi1t]
   linarith
 
-lemma apm_m02J05_lux_definite_aux_nonzero_aux_core
+lemma apm_m02J05_lux_definite_aux_nonzero_aux_core_aux_small
+    (α : ℝ → ℝ) (u : apm_m02J05_Fun)
+    (hne : (apm_m02J05_luxSublevel α u).Nonempty)
+    (hz : apm_m02J05_lux α u = 0) :
+    ∀ δ : ℝ, 0 < δ → ∃ c ∈ apm_m02J05_luxSublevel α u, c < δ := by
+  intro δ hδ
+  apply exists_lt_of_csInf_lt hne
+  change sInf (apm_m02J05_luxSublevel α u) = 0 at hz
+  rw [hz]
+  exact hδ
+
+lemma apm_m02J05_lux_definite_aux_nonzero_aux_core_aux_level
+    (u : apm_m02J05_Fun) (hu0 : u ≠ 0) :
+    ∃ ε : ℝ, 0 < ε ∧
+      0 < volume.restrict (Icc (0 : ℝ) 1) {x | ε < |u x|} := by
+  sorry
+
+lemma apm_m02J05_lux_definite_aux_nonzero_aux_core_aux_contradiction
     (α : ℝ → ℝ)
     (hc : ContinuousOn α (Ici 0))
     (hmono : StrictMonoOn α (Ici 0))
@@ -484,6 +501,18 @@ lemma apm_m02J05_lux_definite_aux_nonzero_aux_core
     (u : apm_m02J05_Fun) (hu : u ∈ apm_m02J05_L α) (hu0 : u ≠ 0) :
     apm_m02J05_lux α u ≠ 0 := by
   sorry
+
+lemma apm_m02J05_lux_definite_aux_nonzero_aux_core
+    (α : ℝ → ℝ)
+    (hc : ContinuousOn α (Ici 0))
+    (hmono : StrictMonoOn α (Ici 0))
+    (hzero : α 0 = 0)
+    (hinfty : Tendsto α atTop atTop)
+    (hnonneg : ∀ t, 0 ≤ t → 0 ≤ α t)
+    (u : apm_m02J05_Fun) (hu : u ∈ apm_m02J05_L α) (hu0 : u ≠ 0) :
+    apm_m02J05_lux α u ≠ 0 := by
+  exact apm_m02J05_lux_definite_aux_nonzero_aux_core_aux_contradiction
+    α hc hmono hzero hinfty hnonneg u hu hu0
 
 lemma apm_m02J05_lux_definite_aux_nonzero
     (α : ℝ → ℝ)
