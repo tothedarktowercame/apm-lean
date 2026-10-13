@@ -117124,7 +117124,7 @@
   {:consumer :t97A07,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 3,
+   :stop-count 4,
    :review-finding
    "Blueprint dependency defect at f00781ca: B5 declares only Mathlib dependencies, but fderiv_coordinate_comp_extChartAt_symm_apply proves its key chain-rule identity by invoking coordinate_fderivWithin_eq_mfderiv, a B2 result. This violates the requirement that each node use only its uses: nodes and hypotheses. Exact repair: add B2 to B5 uses: (and retain the existing Mathlib dependencies), or replace that invocation with an in-node proof using only the currently listed dependencies. Archived Closure and Main compile; hashes match, placeholders stay 0/1, registry 149/149, and axioms are otherwise standard.",
    :evidence
@@ -117146,13 +117146,12 @@
      :target
      "6d7e320233a7f9a1914d5cf5ff94d3a42e339584cde5c4a93995a13e76b41fbd",
      :blueprint
-     "b00add1b7d70cbbafff2b9c935bb63470f3f235fa7706bd773d23ace8f0e53bc",
+     "e3ce1fc10fa1df89b93302b7d64886c307a5f65237a4152929b6341b97a6a9ae",
      :registry "149/149"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
-    :reason
-    "B5 proved: coordinate maximum forces nonsurjective mfderiv.",
+    :reason "Repair complete: B5 now declares its B2 dependency.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t97A07Closure.lean",
       :exit 0}
@@ -117160,28 +117159,16 @@
      {:cmd "lake env lean problems/t97A07/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "diff/hash/placeholders", :exit 0}],
-    :diagnostic-history
-    [{:cmd "lean chain-rule drafts",
-      :exit 1,
-      :finding
-      "Added tangent identification and explicit Euclidean projection."}],
-    :review
-    {:outcome :fail,
-     :seat "codex-3",
-     :job "invoke-1791897662002-9711-47d3fd3b",
-     :finding
-     "Blueprint dependency defect at f00781ca: B5 declares only Mathlib dependencies, but fderiv_coordinate_comp_extChartAt_symm_apply proves its key chain-rule identity by invoking coordinate_fderivWithin_eq_mfderiv, a B2 result. This violates the requirement that each node use only its uses: nodes and hypotheses. Exact repair: add B2 to B5 uses: (and retain the existing Mathlib dependencies), or replace that invocation with an in-node proof using only the currently listed dependencies. Archived Closure and Main compile; hashes match, placeholders stay 0/1, registry 149/149, and axioms are otherwise standard."},
-    :commit "f00781caf7f8dbfd38976f197da93613545c95ef",
-    :changed-paths
-    ["ConstructionTargets/t97A07Closure.lean"
-     "ConstructionTargets/t97A07Closure.blueprint.md"],
+    :diagnostic-history [],
+    :commit "9ce50fe3f42b157eb2ad74b657ce9cebee986c5a",
+    :changed-paths ["ConstructionTargets/t97A07Closure.blueprint.md"],
     :fixture
     {:path "ConstructionTargets/t97A07Closure.blueprint.md",
      :sha256
-     "b00add1b7d70cbbafff2b9c935bb63470f3f235fa7706bd773d23ace8f0e53bc"},
+     "e3ce1fc10fa1df89b93302b7d64886c307a5f65237a4152929b6341b97a6a9ae"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope
    ["problems/t97A07/lean/Main.lean"
     "problems/t97A07/status.json"
