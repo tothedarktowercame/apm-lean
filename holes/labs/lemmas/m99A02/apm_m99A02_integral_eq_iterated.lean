@@ -407,7 +407,40 @@ theorem apm_m99A02_line_ibp (i : Fin 2) {c : ℝ} (hc : c ≠ 0)
 theorem apm_m99A02_integral_eq_iterated (i : Fin 2) (F : m99A02Point → ℝ)
     (hF : Integrable F) :
     (∫ x, F x) = ∫ c : ℝ, ∫ t : ℝ, F (m99A02Line i c t) := by
-  sorry
+  let e : ℝ × ℝ ≃ᵐ m99A02Point :=
+    (MeasurableEquiv.finTwoArrow.symm.trans
+      (MeasurableEquiv.toLp 2 (Fin 2 → ℝ)))
+  have he : MeasurePreserving e volume volume :=
+    ((PiLp.volume_preserving_ofLp (Fin 2)).symm
+      (MeasurableEquiv.toLp 2 (Fin 2 → ℝ)).symm).comp
+      ((volume_preserving_finTwoArrow ℝ).symm MeasurableEquiv.finTwoArrow)
+  have hcomp : Integrable (fun z : ℝ × ℝ ↦ F (e z)) :=
+    he.integrable_comp_of_integrable hF
+  fin_cases i
+  · calc
+      (∫ x, F x) = ∫ z : ℝ × ℝ, F (e z) :=
+        (he.integral_comp e.measurableEmbedding F).symm
+      _ = ∫ c : ℝ, ∫ t : ℝ, F (e (t, c)) := integral_prod_symm _ hcomp
+      _ = ∫ c : ℝ, ∫ t : ℝ, F (m99A02Line 0 c t) := by
+        congr 1
+        funext c
+        congr 1
+        funext t
+        apply congrArg F
+        ext j
+        fin_cases j <;> simp [e, m99A02Line, m99A02Other]
+  · calc
+      (∫ x, F x) = ∫ z : ℝ × ℝ, F (e z) :=
+        (he.integral_comp e.measurableEmbedding F).symm
+      _ = ∫ c : ℝ, ∫ t : ℝ, F (e (c, t)) := integral_prod _ hcomp
+      _ = ∫ c : ℝ, ∫ t : ℝ, F (m99A02Line 1 c t) := by
+        congr 1
+        funext c
+        congr 1
+        funext t
+        apply congrArg F
+        ext j
+        fin_cases j <;> simp [e, m99A02Line, m99A02Other]
 -- END SEAT AREA
 
 /-- Both integrands are integrable on `Ω` (use `apm_m99A02_bridge_1`: `L²` on a
