@@ -6462,6 +6462,47 @@ theorem genericPointWedgeOuterRightSpan_precedingUnitInv_map_eq_id :
             (genericPointWedgeOverlapBase x₀ y₀ M N)))).mp
   exact hr.symm.trans (Category.comp_id _).symm
 
+omit [PathConnectedSpace X] [PathConnectedSpace Y] in
+/-- The preceding overlap round-trip component itself is heterogeneously the
+identity after applying the right target functor. -/
+theorem genericPointWedgeOuterRightRoundTrip_precedingComponent_heq_id :
+    let r := genericPointWedgeActualRight x₀ y₀ M N
+    let eK := genericPointWedgeOverlapGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let eR := genericPointWedgeRightGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let z := genericPointWedgeOverlapBase x₀ y₀ M N
+    HEq ((eK.funInvIdAssoc (r ⋙ eR.functor)).hom.app
+        ((eK.functor ⋙ eK.inverse).obj z))
+      (𝟙 ((r ⋙ eR.functor).obj z)) := by
+  dsimp only
+  rw [Equivalence.funInvIdAssoc_hom_app]
+  exact genericPointWedgeOuterRightSpan_precedingUnitInv_map_eq_id
+    x₀ y₀ M N hM hN hy hx cM cN
+
+omit [PathConnectedSpace X] in
+/-- The connector normal form of the preceding overlap round-trip component
+is the unit of the based fundamental group. -/
+theorem genericPointWedgeOuterRightRoundTrip_precedingNormalForm_eq_one :
+    let r := genericPointWedgeActualRight x₀ y₀ M N
+    let eK := genericPointWedgeOverlapGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let eR := genericPointWedgeRightGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let z := genericPointWedgeOverlapBase x₀ y₀ M N
+    (genericPointWedgeConnectors y₀).normalForm
+        ((eK.funInvIdAssoc (r ⋙ eR.functor)).hom.app
+          ((eK.functor ⋙ eK.inverse).obj z)) = 1 := by
+  dsimp only
+  have h := genericPointWedgeOverlap_shiftedCoordinateObject_eq
+    x₀ y₀ M N hM hN hy hx cM cN
+  have hp := genericPointWedgeOuterRightRoundTrip_precedingComponent_heq_id
+    x₀ y₀ M N hM hN hy hx cM cN
+  dsimp only at h hp
+  cases h
+  rw [eq_of_heq hp]
+  exact (genericPointWedgeConnectors y₀).normalForm_id _
+
 /-- An `inl` factorization of the right-base conjugator forces its canonical
 right projection to be trivial. -/
 theorem genericPointWedgeRightBase_inl_implies_rightProjection_eq_one
@@ -7197,6 +7238,8 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeOuterRightSpan_naturality_coordinateIdentity
 #print axioms genericPointWedgeOuterRightSpan_fixedComponent_recurrence
 #print axioms genericPointWedgeOuterRightSpan_precedingUnitInv_map_eq_id
+#print axioms genericPointWedgeOuterRightRoundTrip_precedingComponent_heq_id
+#print axioms genericPointWedgeOuterRightRoundTrip_precedingNormalForm_eq_one
 #print axioms genericPointWedgeRightBase_inl_implies_rightProjection_eq_one
 #print axioms genericPointWedgeLegCoordinates_of_mapped
 #print axioms genericPointWedgeLegCoordinates_iff_mapped

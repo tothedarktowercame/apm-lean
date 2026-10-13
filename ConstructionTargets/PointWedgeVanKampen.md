@@ -1286,3 +1286,10 @@ dependent transport.  Cancelling its inverse-span isomorphism component gives
 mapped overlap `unitInv` is the identity.  The next step is to substitute this
 identity into the two connector normal forms and prove their product has right
 projection one.
+The same result is now exposed at the round-trip representation by
+`genericPointWedgeOuterRightRoundTrip_precedingComponent_heq_id`, using the
+exact `funInvIdAssoc` component formula.  Its connector normal form is proved
+to be one by
+`genericPointWedgeOuterRightRoundTrip_precedingNormalForm_eq_one`.  It remains
+to transport this shifted normal form back to the factor at the chosen overlap
+base and combine it with the inverse-span normal form.
