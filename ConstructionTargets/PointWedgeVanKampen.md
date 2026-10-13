@@ -1239,3 +1239,8 @@ right projection kills them. The remaining projection is entirely the
 forward right outer comparison.
 `genericPointWedgeRightBase_rightProjection_eq_outerRight` records that exact
 reduction for the fixed reconstruction conjugator.
+
+`genericPointWedgeOuterRightComparison_rightProjection_eq_normalForms` expands
+the remaining projection as the ordered product of the right span-component
+normal form and the right overlap-round-trip normal form. Proving this product
+is one is now the exact residual needed for an `inl` factorization.

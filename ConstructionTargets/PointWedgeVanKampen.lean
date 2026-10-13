@@ -6130,6 +6130,36 @@ theorem genericPointWedgeRightBase_rightProjection_eq_outerRight :
   rw [genericPointWedgeOuterLeftComparison_rightProjection_eq_one]
   simp
 
+/-- The remaining right projection is the ordered product of the two right
+connector normal forms occurring in the forward outer comparison. -/
+theorem genericPointWedgeOuterRightComparison_rightProjection_eq_normalForms :
+    let r := genericPointWedgeActualRight x₀ y₀ M N
+    let r' := genericPointWedgeCoordinateRight y₀
+    let eK := genericPointWedgeOverlapGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let eR := genericPointWedgeRightGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let aR := genericPointWedgeRightSpanIso
+      x₀ y₀ M N hM hN hy hx cM cN
+    let Q := genericPointWedgeIdentityCoordinateSpan x₀ y₀
+    let z := genericPointWedgeOverlapBase x₀ y₀ M N
+    genericPointWedgeFreeProductRightProjection x₀ y₀
+        ((reverseRightComparison r r' eK eR aR Q.right).hom.app z) =
+      (genericPointWedgeConnectors y₀).normalForm
+          (aR.inv.app (eK.functor.obj z)) *
+        (genericPointWedgeConnectors y₀).normalForm
+          ((eK.funInvIdAssoc (r ⋙ eR.functor)).hom.app z) := by
+  dsimp only
+  simp only [genericPointWedgeOverlapBase]
+  rw [genericPointWedgeIdentityOuterRightComparison_app,
+    genericPointWedgeIdentityOuterRightSpanFactor_eq_map,
+    genericPointWedgeIdentityOuterRightRoundTrip_eq_map]
+  simp only [SingleObj.comp_as_mul, map_mul]
+  rw [eq_of_heq (genericPointWedgeIdentityCoordinateSpan_right_map
+    x₀ y₀ _), eq_of_heq (genericPointWedgeIdentityCoordinateSpan_right_map
+    x₀ y₀ _)]
+  rfl
+
 /-- An `inl` factorization of the right-base conjugator forces its canonical
 right projection to be trivial. -/
 theorem genericPointWedgeRightBase_inl_implies_rightProjection_eq_one
@@ -6849,6 +6879,7 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeFreeProductRightProjection
 #print axioms genericPointWedgeOuterLeftComparison_rightProjection_eq_one
 #print axioms genericPointWedgeRightBase_rightProjection_eq_outerRight
+#print axioms genericPointWedgeOuterRightComparison_rightProjection_eq_normalForms
 #print axioms genericPointWedgeRightBase_inl_implies_rightProjection_eq_one
 #print axioms genericPointWedgeLegCoordinates_of_mapped
 #print axioms genericPointWedgeLegCoordinates_iff_mapped
