@@ -525,6 +525,79 @@ lemma apm_m02J05_lux_definite_aux_nonzero_aux_core_aux_level
   refine ⟨(1 : ℝ) / (n + 1), by positivity, ?_⟩
   exact hn
 
+lemma apm_m02J05_lux_definite_aux_nonzero_aux_core_aux_contradiction_aux_alpha_one
+    (α : ℝ → ℝ) (hmono : StrictMonoOn α (Ici 0)) (hzero : α 0 = 0) :
+    0 < α 1 := by
+  rw [← hzero]
+  exact hmono (mem_Ici.mpr le_rfl) (mem_Ici.mpr zero_le_one) zero_lt_one
+
+lemma apm_m02J05_lux_definite_aux_nonzero_aux_core_aux_contradiction_aux_integral
+    (α : ℝ → ℝ)
+    (hc : ContinuousOn α (Ici 0))
+    (hmono : StrictMonoOn α (Ici 0))
+    (hzero : α 0 = 0)
+    (hinfty : Tendsto α atTop atTop)
+    (hnonneg : ∀ t, 0 ≤ t → 0 ≤ α t)
+    (u : apm_m02J05_Fun) (hu : u ∈ apm_m02J05_L α) (hu0 : u ≠ 0) :
+    apm_m02J05_lux α u ≠ 0 := by
+  intro hz
+  obtain ⟨ε, hε, hm⟩ := apm_m02J05_lux_definite_aux_nonzero_aux_core_aux_level u hu0
+  have hne := apm_m02J05_lux_sublevel_attained_aux_core_aux_nonempty α hc hmono hzero hinfty
+    hnonneg u hu
+  have hα1 : 0 < α 1 := by
+    have := hmono (Set.left_mem_Ici) (show (1 : ℝ) ∈ Ici (0 : ℝ) from Set.mem_Ici.2 zero_le_one) zero_lt_one
+    rwa [hzero] at this
+  set μ := volume.restrict (Icc (0 : ℝ) 1) with hμ
+  set S := {x | ε < |u x|} with hS
+  have hSmeas : MeasurableSet S :=
+    measurableSet_lt measurable_const (u.stronglyMeasurable.measurable.abs)
+  have hfin : μ S < ⊤ := by
+    calc μ S ≤ μ Set.univ := measure_mono (Set.subset_univ _)
+      _ = volume (Icc (0 : ℝ) 1) := by simp [hμ]
+      _ < ⊤ := by simp
+  set mR := (μ S).toReal with hmR
+  have hmRpos : 0 < mR := ENNReal.toReal_pos hm.ne' hfin.ne
+  set δ := ε / (2 + 1 / (mR * α 1)) with hδ
+  have hδpos : 0 < δ := by positivity
+  obtain ⟨c, hcS, hcδ⟩ := apm_m02J05_lux_definite_aux_nonzero_aux_core_aux_small α u hne hz δ hδpos
+  obtain ⟨hc0, hcint, hcle⟩ := hcS
+  have hcε : c < ε := lt_of_lt_of_le hcδ (div_le_self hε.le (by
+    have : 0 ≤ 1 / (mR * α 1) := by positivity
+    linarith))
+  set K := (ε / c - 1) * α 1 with hK
+  have hYnn : ∀ t, 0 ≤ t → 0 ≤ apm_m02J05_young α t := fun t ht =>
+    intervalIntegral.integral_nonneg ht (fun x hx => hnonneg x hx.1)
+  have hpt : ∀ x, S.indicator (fun _ => K) x ≤ apm_m02J05_young α (|u x| / c) := by
+    intro x
+    by_cases hx : x ∈ S
+    · rw [Set.indicator_of_mem hx]
+      have hx' : ε < |u x| := hx
+      have h1 : 1 ≤ |u x| / c := by
+        rw [le_div_iff₀ hc0]; linarith
+      refine le_trans ?_ (apm_m02J05_lux_definite_aux_nonzero_aux_young_lower α hc hmono hnonneg h1)
+      apply mul_le_mul_of_nonneg_right _ hα1.le
+      have : ε / c ≤ |u x| / c := div_le_div_of_nonneg_right hx'.le hc0.le
+      linarith
+    · rw [Set.indicator_of_notMem hx]
+      exact hYnn _ (div_nonneg (abs_nonneg _) hc0.le)
+  have hlow : K * mR ≤ ∫ x in Icc (0 : ℝ) 1, apm_m02J05_young α (|u x| / c) ∂volume := by
+    have := integral_mono ((integrable_const K).indicator hSmeas |>.mono_measure le_rfl) hcint hpt
+    rw [integral_indicator_const _ hSmeas, smul_eq_mul] at this
+    convert this using 1
+    rw [hmR, measureReal_def, mul_comm]
+  have hK1 : 1 < K * mR := by
+    have hεc : ε / δ < ε / c := div_lt_div_of_pos_left hε hc0 hcδ
+    have hεδ : ε / δ = 2 + 1 / (mR * α 1) := by
+      rw [hδ]; field_simp
+    have : 1 + 1 / (mR * α 1) < ε / c - 1 + 0 := by linarith
+    have hpos : 0 < mR * α 1 := mul_pos hmRpos hα1
+    calc (1 : ℝ) < (1 + 1 / (mR * α 1)) * (mR * α 1) := by
+          rw [add_mul, one_div, inv_mul_cancel₀ hpos.ne']; nlinarith
+      _ ≤ (ε / c - 1) * (mR * α 1) := by
+          apply mul_le_mul_of_nonneg_right _ hpos.le; linarith
+      _ = K * mR := by rw [hK]; ring
+  linarith
+
 lemma apm_m02J05_lux_definite_aux_nonzero_aux_core_aux_contradiction
     (α : ℝ → ℝ)
     (hc : ContinuousOn α (Ici 0))
@@ -534,7 +607,8 @@ lemma apm_m02J05_lux_definite_aux_nonzero_aux_core_aux_contradiction
     (hnonneg : ∀ t, 0 ≤ t → 0 ≤ α t)
     (u : apm_m02J05_Fun) (hu : u ∈ apm_m02J05_L α) (hu0 : u ≠ 0) :
     apm_m02J05_lux α u ≠ 0 := by
-  sorry
+  exact apm_m02J05_lux_definite_aux_nonzero_aux_core_aux_contradiction_aux_integral
+    α hc hmono hzero hinfty hnonneg u hu hu0
 
 lemma apm_m02J05_lux_definite_aux_nonzero_aux_core
     (α : ℝ → ℝ)
