@@ -76,7 +76,28 @@ theorem t98J01_reflectionMap_not_homotopic_id :
     ¬ ContinuousMap.Homotopic
       (ConstructionTargets.CoefficientCoordinateReflections.reflectionMap (d := 2) 0)
       (ContinuousMap.id (T02A06.euclideanUnitSphere 2)) := by
-  sorry
+  intro h
+  have hhom :=
+    ConstructionTargets.SingularHomologyHomotopy.singularHomology_map_eq_of_homotopic
+      (ModuleCat ℤ) (ModuleCat.of ℤ ℤ) h 1
+  change
+    (ConstructionTargets.CoefficientCoordinateReflections.H ℤ 1).map
+        (TopCat.ofHom
+          (ConstructionTargets.CoefficientCoordinateReflections.reflectionMap 0)) =
+      (ConstructionTargets.CoefficientCoordinateReflections.H ℤ 1).map
+        (TopCat.ofHom (ContinuousMap.id _)) at hhom
+  rw [ConstructionTargets.CoefficientFirstReflection.all_reflections_negative
+        ℤ 1 (by decide) 0,
+      TopCat.ofHom_id, CategoryTheory.Functor.map_id] at hhom
+  let e := ConstructionTargets.CoefficientFirstReflection.topIso ℤ 0
+  have he := by
+    open CategoryTheory in
+      exact congrArg (fun f => e.inv ≫ f ≫ e.hom) hhom
+  simp only [CategoryTheory.Preadditive.comp_neg,
+    CategoryTheory.Preadditive.neg_comp, CategoryTheory.Category.comp_id,
+    CategoryTheory.Category.id_comp, CategoryTheory.Iso.inv_hom_id] at he
+  have hone := congrArg (fun f => f.hom (1 : ℤ)) he
+  simp at hone
 
 /-- The reflected circle factor detects that the product map is not homotopic
 to the identity (claude-14 split of the former LIBRARY lemma). -/
