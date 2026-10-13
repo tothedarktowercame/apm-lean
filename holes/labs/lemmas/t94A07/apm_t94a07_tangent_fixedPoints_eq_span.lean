@@ -166,12 +166,82 @@ lemma apm_t94a07_fixedSet_eq (R r : ℝ) (hr : 0 < r) (hR : r < R) :
 /-- Compute the kernel of the derivative of the square-root torus constraint
 at each of the four fixed-axis points. -/
 -- BEGIN SEAT AREA
+lemma apm_t94a07_tangent_fixedPoints_eq_span_aux_fderiv
+    (R r x : ℝ) (hx : x ≠ 0) (v : apm_t94a07_E3) :
+    fderiv ℝ (apm_t94a07_constraint R r)
+        (WithLp.toLp 2 ![x, 0, 0]) v =
+      2 * (|x| - R) * (x / |x|) * v 0 := by
+  let e : Fin 3 → apm_t94a07_E3 →L[ℝ] ℝ := fun i =>
+    (ContinuousLinearMap.proj i : (Fin 3 → ℝ) →L[ℝ] ℝ).comp
+      (PiLp.continuousLinearEquiv 2 ℝ (fun _ : Fin 3 => ℝ) :
+        apm_t94a07_E3 →L[ℝ] (Fin 3 → ℝ))
+  let q : apm_t94a07_E3 := WithLp.toLp 2 ![x, 0, 0]
+  have h0 := ((e 0).hasFDerivAt (x := q)).pow 2
+  have h1 := ((e 1).hasFDerivAt (x := q)).pow 2
+  have hs := h0.add h1
+  have hs0 : (q 0) ^ 2 + (q 1) ^ 2 ≠ 0 := by simp [q, hx]
+  have hsqrt := hs.sqrt hs0
+  have hout := (hsqrt.sub_const R).pow 2
+  have h2 := ((e 2).hasFDerivAt (x := q)).pow 2
+  have hall := (hout.add h2).sub_const (r ^ 2)
+  have hall' := hall
+  change HasFDerivAt (apm_t94a07_constraint R r) _ q at hall'
+  rw [hall'.fderiv]
+  simp [apm_t94a07_constraint, e, q, Real.sqrt_sq_eq_abs, hx]
+  field_simp
+
+lemma apm_t94a07_tangent_fixedPoints_eq_span_aux_mem_span
+    (v : apm_t94a07_E3) :
+    v ∈ Submodule.span ℝ (Set.range apm_t94a07_tangentBasisVector) ↔ v 0 = 0 := by
+  constructor
+  · intro hv
+    refine Submodule.span_induction ?_ ?_ ?_ ?_ hv
+    · rintro w ⟨i, rfl⟩
+      simp [apm_t94a07_tangentBasisVector]
+    · simp
+    · intro x y hx hy hx0 hy0
+      simp [hx0, hy0]
+    · intro a x hx hx0
+      simp [hx0]
+  · intro hv
+    have heq : v =
+        v 1 • apm_t94a07_tangentBasisVector 0 +
+          v 2 • apm_t94a07_tangentBasisVector 1 := by
+      apply PiLp.ext
+      intro i
+      fin_cases i <;> simp [apm_t94a07_tangentBasisVector, hv]
+    rw [heq]
+    apply Submodule.add_mem
+    · apply Submodule.smul_mem
+      exact Submodule.subset_span ⟨0, rfl⟩
+    · apply Submodule.smul_mem
+      exact Submodule.subset_span ⟨1, rfl⟩
+
 theorem apm_t94a07_tangent_fixedPoints_eq_span (R r : ℝ)
     (hr : 0 < r) (hR : r < R) :
     ∀ p ∈ apm_t94a07_fixedPoints R r,
       apm_t94a07_tangent R r p =
         Submodule.span ℝ (Set.range apm_t94a07_tangentBasisVector) := by
-  sorry
+  intro p hp
+  simp only [apm_t94a07_fixedPoints, Set.mem_insert_iff, Set.mem_singleton_iff] at hp
+  rcases hp with rfl | rfl | rfl | rfl
+  all_goals
+    ext v
+    rw [apm_t94a07_tangent_fixedPoints_eq_span_aux_mem_span]
+    simp only [apm_t94a07_tangent, LinearMap.mem_ker]
+    change (fderiv ℝ (apm_t94a07_constraint R r) _ v = 0 ↔ v 0 = 0)
+    rw [apm_t94a07_tangent_fixedPoints_eq_span_aux_fderiv]
+    all_goals
+      try linarith
+    all_goals
+      first | rw [abs_of_pos (by linarith)] | rw [abs_of_neg (by linarith)]
+      constructor
+      · intro h
+        field_simp [show R + r ≠ 0 by linarith, show R - r ≠ 0 by linarith] at h
+        ring_nf at h
+        nlinarith
+      · intro h
+        simp [h]
 -- END SEAT AREA
 
 /-- Assemble all local fixed-point assertions from the tangent-plane
