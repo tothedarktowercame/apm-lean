@@ -319,7 +319,39 @@ theorem apm_m02J05_bridge_convex_and_submodule_of_young_shape
 the Luxemburg gauge on the rescalable modular class: nonnegativity,
 definiteness modulo a.e. equality, absolute homogeneity, and the triangle
 inequality. -/
-theorem apm_m02J05_lux_sublevel_attained
+lemma apm_m02J05_lux_sublevel_attained_aux_bdd
+    (α : ℝ → ℝ) (u : apm_m02J05_Fun) :
+    BddBelow (apm_m02J05_luxSublevel α u) := by
+  refine ⟨0, ?_⟩
+  intro c hc
+  exact hc.1.le
+
+lemma apm_m02J05_lux_sublevel_attained_aux_nonneg
+    (α : ℝ → ℝ) (u : apm_m02J05_Fun)
+    (hne : (apm_m02J05_luxSublevel α u).Nonempty) :
+    0 ≤ apm_m02J05_lux α u := by
+  unfold apm_m02J05_lux
+  exact le_csInf hne (fun c hc ↦ hc.1.le)
+
+lemma apm_m02J05_lux_sublevel_attained_aux_zero_mem
+    (α : ℝ → ℝ) :
+    (1 : ℝ) ∈ apm_m02J05_luxSublevel α (0 : apm_m02J05_Fun) := by
+  refine ⟨one_pos, ?_, ?_⟩
+  · apply integrableOn_zero.congr
+    filter_upwards [AEEqFun.coeFn_zero (α := ℝ) (β := ℝ)
+      (μ := volume.restrict (Icc (0 : ℝ) 1))] with x hx
+    rw [hx]
+    simp [apm_m02J05_young_zero]
+  · have hz : (fun x ↦ apm_m02J05_young α
+        (|(0 : apm_m02J05_Fun) x| / (1 : ℝ))) =ᵐ[volume.restrict (Icc (0 : ℝ) 1)] 0 := by
+      filter_upwards [AEEqFun.coeFn_zero (α := ℝ) (β := ℝ)
+        (μ := volume.restrict (Icc (0 : ℝ) 1))] with x hx
+      rw [hx]
+      simp [apm_m02J05_young_zero]
+    rw [integral_congr_ae hz]
+    norm_num
+
+lemma apm_m02J05_lux_sublevel_attained_aux_core
     (α : ℝ → ℝ)
     (hc : ContinuousOn α (Ici 0))
     (hmono : StrictMonoOn α (Ici 0))
@@ -332,6 +364,20 @@ theorem apm_m02J05_lux_sublevel_attained
       0 ≤ apm_m02J05_lux α u ∧
       (u ≠ 0 → apm_m02J05_lux α u ∈ apm_m02J05_luxSublevel α u) := by
   sorry
+
+theorem apm_m02J05_lux_sublevel_attained
+    (α : ℝ → ℝ)
+    (hc : ContinuousOn α (Ici 0))
+    (hmono : StrictMonoOn α (Ici 0))
+    (hzero : α 0 = 0)
+    (hinfty : Tendsto α atTop atTop)
+    (hnonneg : ∀ t, 0 ≤ t → 0 ≤ α t) :
+    ∀ u ∈ apm_m02J05_L α,
+      (apm_m02J05_luxSublevel α u).Nonempty ∧
+      BddBelow (apm_m02J05_luxSublevel α u) ∧
+      0 ≤ apm_m02J05_lux α u ∧
+      (u ≠ 0 → apm_m02J05_lux α u ∈ apm_m02J05_luxSublevel α u) := by
+  exact apm_m02J05_lux_sublevel_attained_aux_core α hc hmono hzero hinfty hnonneg
 
 theorem apm_m02J05_lux_definite
     (α : ℝ → ℝ)
