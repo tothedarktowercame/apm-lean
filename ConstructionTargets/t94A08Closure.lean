@@ -425,3 +425,39 @@ theorem apm_t94a08_sigma1_isRealTwoManifold :
   · exact ConstructionTargets.ComplexProjectiveChartTargets.affineSource_isOpen i
   · obtain ⟨e⟩ := apm_t94a08_sigma1_isRealTwoManifold_aux_chartSlice i
     exact ⟨e.trans apm_t94a08_sigma1_isRealTwoManifold_aux_affineConicReal⟩
+
+/-! ## Affine algebra for the nodal obstruction
+
+In the chart where the zeroth homogeneous coordinate is nonzero, the two
+projective branches are the following two complex lines.  The next lemmas
+isolate the algebraic fact used by the punctured-neighborhood argument: the
+branches meet only at the origin.
+-/
+
+def apm_t94a08_affineBranchPlus : Set (ℂ × ℂ) :=
+  {z | z.1 + Complex.I * z.2 = 0}
+
+def apm_t94a08_affineBranchMinus : Set (ℂ × ℂ) :=
+  {z | z.1 - Complex.I * z.2 = 0}
+
+lemma apm_t94a08_affineBranch_common_zero
+    {u v : ℂ} (hplus : u + Complex.I * v = 0)
+    (hminus : u - Complex.I * v = 0) : u = 0 ∧ v = 0 := by
+  constructor
+  · linear_combination (hplus + hminus) / 2
+  · have hiv : Complex.I * v = 0 := by
+      linear_combination (hplus - hminus) / 2
+    exact (mul_eq_zero.mp hiv).resolve_left Complex.I_ne_zero
+
+lemma apm_t94a08_affineBranches_inter :
+    apm_t94a08_affineBranchPlus ∩ apm_t94a08_affineBranchMinus = {(0, 0)} := by
+  ext z
+  constructor
+  · intro hz
+    rcases hz with ⟨hplus, hminus⟩
+    have hzero := apm_t94a08_affineBranch_common_zero hplus hminus
+    simpa [Prod.ext_iff] using hzero
+  · intro hz
+    have hz0 : z = (0, 0) := by simpa using hz
+    subst z
+    simp [apm_t94a08_affineBranchPlus, apm_t94a08_affineBranchMinus]
