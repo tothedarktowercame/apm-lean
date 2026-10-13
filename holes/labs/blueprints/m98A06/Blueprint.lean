@@ -759,6 +759,61 @@ lemma apm_m98A06_wirtinger_aux_core_aux_picone_limit_aux_gap_aux_deriv_boundary
   field_simp
   ring
 
+lemma apm_m98A06_wirtinger_aux_core_aux_picone_limit_aux_gap_aux_boundary_limits_aux_left
+    (L : ℝ) (hL : 0 < L) (η : ℝ → ℝ)
+    (hη : apm_m98a06_Admissible L 0 0 η) :
+    Filter.Tendsto (fun δ => η δ ^ 2 *
+        ((Real.pi / L) * Real.cos (Real.pi * δ / L)) /
+          Real.sin (Real.pi * δ / L)) (nhdsWithin 0 (Ioi 0)) (nhds 0) := by
+  let k : ℝ := Real.pi / L
+  have hk : k ≠ 0 := div_ne_zero Real.pi_ne_zero hL.ne'
+  have hηder : HasDerivWithinAt η (derivWithin η (Icc 0 L) 0)
+      (Icc 0 L) 0 :=
+    (hη.1.differentiableOn (by norm_num) 0 ⟨le_rfl, hL.le⟩).hasDerivWithinAt
+  have hηslope : Filter.Tendsto (fun δ => η δ / δ) (nhdsWithin 0 (Ioi 0))
+      (nhds (derivWithin η (Icc 0 L) 0)) := by
+    have hmem : Icc (0 : ℝ) L ∈ nhdsWithin 0 (Ioi 0) := by
+      apply mem_nhdsWithin_iff_exists_mem_nhds_inter.mpr
+      refine ⟨Iio L, Iio_mem_nhds hL, ?_⟩
+      intro z hz
+      exact ⟨hz.2.le, hz.1.le⟩
+    have ht := hasDerivWithinAt_iff_tendsto_slope.mp
+      (hηder.mono_of_mem_nhdsWithin hmem)
+    rw [show Ioi (0 : ℝ) \ {0} = Ioi 0 by ext z; simp] at ht
+    apply ht.congr'
+    filter_upwards [self_mem_nhdsWithin] with δ hδ
+    simp [slope, hη.2.1, div_eq_inv_mul, mul_comm]
+  have hsslope : Filter.Tendsto (fun δ => Real.sin (k * δ) / δ)
+      (nhdsWithin 0 (Ioi 0)) (nhds k) := by
+    have hi : HasDerivAt (fun t : ℝ => k * t) k 0 :=
+      by convert (hasDerivAt_id 0).const_mul k using 1 <;> ring
+    have hs := ((Real.hasDerivAt_sin (k * 0)).comp 0 hi).tendsto_slope_zero_right
+    simpa [smul_eq_mul, slope, hk, div_eq_inv_mul, mul_comm] using hs
+  have hcos : Filter.Tendsto (fun δ => Real.cos (k * δ))
+      (nhdsWithin 0 (Ioi 0)) (nhds 1) := by
+    have harg : Filter.Tendsto (fun δ : ℝ => k * δ)
+        (nhdsWithin 0 (Ioi 0)) (nhds 0) := by
+      simpa using (tendsto_const_nhds.mul
+        (continuousAt_id.tendsto.mono_left inf_le_left) :
+          Filter.Tendsto (fun δ : ℝ => k * δ)
+            (nhdsWithin 0 (Ioi 0)) (nhds (k * 0)))
+    simpa using Real.continuous_cos.continuousAt.tendsto.comp harg
+  have hkcos : Filter.Tendsto (fun δ : ℝ => k * Real.cos (k * δ))
+      (nhdsWithin 0 (Ioi 0)) (nhds (k * 1)) :=
+    (tendsto_const_nhds : Filter.Tendsto (fun _ : ℝ => k)
+      (nhdsWithin 0 (Ioi 0)) (nhds k)).mul hcos
+  have hfrac := hkcos.div hsslope hk
+  have hδ : Filter.Tendsto (fun δ : ℝ => δ)
+      (nhdsWithin 0 (Ioi 0)) (nhds 0) :=
+    continuousAt_id.tendsto.mono_left inf_le_left
+  have ht := (hδ.mul (hηslope.pow 2)).mul hfrac
+  have ht' := ht
+  simpa [hk] using ht'.congr' (by
+    filter_upwards [self_mem_nhdsWithin] with δ hδ
+    have hd : δ ≠ 0 := ne_of_gt hδ
+    dsimp [k]
+    field_simp)
+
 lemma apm_m98A06_wirtinger_aux_core_aux_picone_limit_aux_gap_aux_boundary_limits
     (L : ℝ) (hL : 0 < L) (η : ℝ → ℝ)
     (hη : apm_m98a06_Admissible L 0 0 η) :
@@ -769,7 +824,34 @@ lemma apm_m98A06_wirtinger_aux_core_aux_picone_limit_aux_gap_aux_boundary_limits
         ((Real.pi / L) * Real.cos (Real.pi * (L - δ) / L)) /
           Real.sin (Real.pi * (L - δ) / L))
         (nhdsWithin 0 (Ioi 0)) (nhds 0) := by
-  sorry
+  constructor
+  · exact apm_m98A06_wirtinger_aux_core_aux_picone_limit_aux_gap_aux_boundary_limits_aux_left
+      L hL η hη
+  · let ζ : ℝ → ℝ := fun t => η (L - t)
+    have hmap : MapsTo (fun t : ℝ => L - t) (Icc 0 L) (Icc 0 L) := by
+      intro t ht
+      rcases ht with ⟨ht0, htL⟩
+      change 0 ≤ L - t ∧ L - t ≤ L
+      constructor <;> linarith
+    have hζdiff : ContDiffOn ℝ 1 ζ (Icc 0 L) := by
+      exact hη.1.comp (contDiff_const.sub contDiff_id).contDiffOn hmap
+    have hζ : apm_m98a06_Admissible L 0 0 ζ := by
+      refine ⟨hζdiff, ?_, ?_⟩
+      · dsimp [ζ]
+        simpa using hη.2.2
+      · dsimp [ζ]
+        simpa using hη.2.1
+    have hz := apm_m98A06_wirtinger_aux_core_aux_picone_limit_aux_gap_aux_boundary_limits_aux_left
+      L hL ζ hζ
+    have hn := hz.neg
+    simpa only [neg_zero] using hn.congr' (by
+      filter_upwards with δ
+      dsimp [ζ]
+      have hang : Real.pi * (L - δ) / L =
+          Real.pi - Real.pi * δ / L := by
+        field_simp [hL.ne']
+      rw [hang, Real.sin_pi_sub, Real.cos_pi_sub]
+      ring)
 
 lemma apm_m98A06_wirtinger_aux_core_aux_picone_limit_aux_gap_aux_truncated
     (L δ : ℝ) (hL : 0 < L) (hδ : 0 < δ) (hδL : δ < L - δ)
