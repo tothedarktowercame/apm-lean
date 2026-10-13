@@ -887,13 +887,79 @@ lemma apm_m98J02_bridge_2_aux_smooth (v : apm_m98J02_Dist) (φ : apm_m98J02_Test
     ContDiff ℝ ∞ (fun x : apm_m98J02_E => v (apm_m98J02_translateTest x φ)) := by
   sorry
 
+noncomputable def apm_m98J02_bridge_2_aux_psi_aux_fun
+    (v : apm_m98J02_Dist) (χ : apm_m98J02_Test)
+    (hsmooth : ∀ φ : apm_m98J02_Test,
+      ContDiff ℝ ∞ (fun x : apm_m98J02_E =>
+        v (apm_m98J02_translateTest x φ)))
+    (φ : apm_m98J02_Test) : apm_m98J02_Test :=
+  TestFunction.mk
+    (fun x => χ x * v (apm_m98J02_translateTest x φ))
+    (χ.contDiff.mul (hsmooth φ))
+    χ.hasCompactSupport.mul_right
+    (by simp)
+
+@[simp] lemma apm_m98J02_bridge_2_aux_psi_aux_fun_apply
+    (v : apm_m98J02_Dist) (χ : apm_m98J02_Test)
+    (hsmooth : ∀ φ : apm_m98J02_Test,
+      ContDiff ℝ ∞ (fun x : apm_m98J02_E =>
+        v (apm_m98J02_translateTest x φ)))
+    (φ : apm_m98J02_Test) (x : apm_m98J02_E) :
+    apm_m98J02_bridge_2_aux_psi_aux_fun v χ hsmooth φ x =
+      χ x * v (apm_m98J02_translateTest x φ) := rfl
+
+noncomputable def apm_m98J02_bridge_2_aux_psi_aux_linear
+    (v : apm_m98J02_Dist) (χ : apm_m98J02_Test)
+    (hsmooth : ∀ φ : apm_m98J02_Test,
+      ContDiff ℝ ∞ (fun x : apm_m98J02_E =>
+        v (apm_m98J02_translateTest x φ))) :
+    apm_m98J02_Test →ₗ[ℝ] apm_m98J02_Test where
+  toFun := apm_m98J02_bridge_2_aux_psi_aux_fun v χ hsmooth
+  map_add' φ ψ := by
+    apply TestFunction.toTestFunctionClass.coe_injective'
+    funext x
+    simp only [apm_m98J02_bridge_2_aux_psi_aux_fun_apply,
+      TestFunction.coe_add, Pi.add_apply]
+    have ht : apm_m98J02_translateTest x (φ + ψ) =
+        apm_m98J02_translateTest x φ + apm_m98J02_translateTest x ψ := by
+      ext y
+      rfl
+    rw [ht, map_add, mul_add]
+  map_smul' c φ := by
+    apply TestFunction.toTestFunctionClass.coe_injective'
+    funext x
+    simp only [apm_m98J02_bridge_2_aux_psi_aux_fun_apply,
+      RingHom.id_apply, TestFunction.coe_smul, Pi.smul_apply, smul_eq_mul]
+    have ht : apm_m98J02_translateTest x (c • φ) =
+        c • apm_m98J02_translateTest x φ := by
+      ext y
+      rfl
+    rw [ht, map_smul]
+    simp [smul_eq_mul]
+    ring
+
+-- Continuity on each fixed-support stage: the seminorm estimate (Leibniz + one uniform stage
+-- of translates on which v is bounded by finitely many seminorms).
+lemma apm_m98J02_bridge_2_aux_psi_aux_stage_cont
+    (v : apm_m98J02_Dist) (χ : apm_m98J02_Test)
+    (hsmooth : ∀ φ : apm_m98J02_Test,
+      ContDiff ℝ ∞ (fun x : apm_m98J02_E =>
+        v (apm_m98J02_translateTest x φ)))
+    (K : TopologicalSpace.Compacts apm_m98J02_E)
+    (hK : (K : Set apm_m98J02_E) ⊆ (⊤ : TopologicalSpace.Opens apm_m98J02_E)) :
+    Continuous (apm_m98J02_bridge_2_aux_psi_aux_linear v χ hsmooth ∘ TestFunction.ofSupportedIn hK) := by
+  sorry
+
 lemma apm_m98J02_bridge_2_aux_psi
     (v : apm_m98J02_Dist) (χ : apm_m98J02_Test)
     (hsmooth : ∀ φ : apm_m98J02_Test,
       ContDiff ℝ ∞ (fun x : apm_m98J02_E => v (apm_m98J02_translateTest x φ))) :
     ∃ Ψ : apm_m98J02_Test →L[ℝ] apm_m98J02_Test,
       ∀ φ x, Ψ φ x = χ x * v (apm_m98J02_translateTest x φ) := by
-  sorry
+  refine ⟨⟨apm_m98J02_bridge_2_aux_psi_aux_linear v χ hsmooth,
+    (TestFunction.continuous_iff_continuous_comp _).2
+      (fun K hK => apm_m98J02_bridge_2_aux_psi_aux_stage_cont v χ hsmooth K hK)⟩, fun φ x => ?_⟩
+  rfl
 
 theorem apm_m98J02_bridge_2
     (u v : apm_m98J02_Dist) (K : Set apm_m98J02_E)
