@@ -76,6 +76,68 @@ theorem t99J01_arbitrary_cover_component_aux_restricted_cover
 
 /-- Missing from the advertised component-restriction construction target. -/
 -- BEGIN SEAT AREA
+private def t99J01_arbitrary_cover_component_aux_pi1_equiv_aux_path
+    {E : Type} [TopologicalSpace E] {e : E} (p : Path e e) :
+    Path
+      (ConstructionTargets.T99J01PathComponentCoverRestriction.t99j01ComponentBase e)
+      (ConstructionTargets.T99J01PathComponentCoverRestriction.t99j01ComponentBase e) where
+  toFun t := ⟨p t, by
+    show Joined e (p t)
+    exact ⟨(p.subpath 0 t).cast p.source.symm rfl⟩⟩
+  continuous_toFun := p.continuous.subtype_mk _
+  source' := Subtype.ext p.source
+  target' := Subtype.ext p.target
+
+private def t99J01_arbitrary_cover_component_aux_pi1_equiv_aux_homotopy
+    {E : Type} [TopologicalSpace E] {e : E} {p q : Path e e}
+    (F : p.Homotopy q) :
+    (t99J01_arbitrary_cover_component_aux_pi1_equiv_aux_path p).Homotopy
+      (t99J01_arbitrary_cover_component_aux_pi1_equiv_aux_path q) where
+  toFun x := ⟨F x, by
+    show Joined e (F x)
+    exact ⟨((F.eval x.1).subpath 0 x.2).cast (F.eval x.1).source.symm rfl⟩⟩
+  continuous_toFun := F.continuous.subtype_mk (fun x => by
+    show Joined e (F x)
+    exact ⟨((F.eval x.1).subpath 0 x.2).cast (F.eval x.1).source.symm rfl⟩)
+  map_zero_left x := Subtype.ext (F.map_zero_left x)
+  map_one_left x := Subtype.ext (F.map_one_left x)
+  prop' t x hx := by
+    apply Subtype.ext
+    exact F.prop' t x hx
+
+private theorem t99J01_arbitrary_cover_component_aux_pi1_equiv_aux_bijective
+    {E : Type} [TopologicalSpace E] (e : E) :
+    Function.Bijective
+      (FundamentalGroup.map
+        (ConstructionTargets.T99J01PathComponentCoverRestriction.t99j01ComponentInclusion e)
+        (ConstructionTargets.T99J01PathComponentCoverRestriction.t99j01ComponentBase e)) := by
+  constructor
+  · intro a b hab
+    induction a using Path.Homotopic.Quotient.ind with
+    | mk p =>
+      induction b using Path.Homotopic.Quotient.ind with
+      | mk q =>
+        change (Path.Homotopic.Quotient.mk p).map _ =
+          (Path.Homotopic.Quotient.mk q).map _ at hab
+        rw [← Path.Homotopic.Quotient.mk_map,
+          ← Path.Homotopic.Quotient.mk_map,
+          Path.Homotopic.Quotient.eq] at hab
+        change (Path.Homotopic.Quotient.mk p) = Path.Homotopic.Quotient.mk q
+        rw [Path.Homotopic.Quotient.eq]
+        rcases hab with ⟨F⟩
+        refine ⟨Path.Homotopy.cast
+          (t99J01_arbitrary_cover_component_aux_pi1_equiv_aux_homotopy F) ?_ ?_⟩
+        · ext t
+          rfl
+        · ext t
+          rfl
+  · intro a
+    induction a using Path.Homotopic.Quotient.ind with
+    | mk p =>
+      refine ⟨Path.Homotopic.Quotient.mk
+        (t99J01_arbitrary_cover_component_aux_pi1_equiv_aux_path p), ?_⟩
+      rfl
+
 theorem t99J01_arbitrary_cover_component_aux_pi1_equiv
     (E : Type) [TopologicalSpace E] (e : E) :
     Nonempty
@@ -83,7 +145,11 @@ theorem t99J01_arbitrary_cover_component_aux_pi1_equiv
         FundamentalGroup
           (ConstructionTargets.T99J01PathComponentCoverRestriction.t99j01ComponentAt e)
           (ConstructionTargets.T99J01PathComponentCoverRestriction.t99j01ComponentBase e)) := by
-  sorry
+  exact ⟨(MulEquiv.ofBijective
+    (FundamentalGroup.map
+      (ConstructionTargets.T99J01PathComponentCoverRestriction.t99j01ComponentInclusion e)
+      (ConstructionTargets.T99J01PathComponentCoverRestriction.t99j01ComponentBase e))
+    (t99J01_arbitrary_cover_component_aux_pi1_equiv_aux_bijective e)).symm⟩
 -- END SEAT AREA
 
 theorem t99J01_arbitrary_cover_component
