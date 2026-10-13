@@ -449,7 +449,54 @@ theorem apm_m98J05_heatSolution_dx_hasDerivAt_space
     (f : ℝ → ℂ) (hf : Integrable f) {t : ℝ} (ht : 0 < t) (z : ℝ) :
     HasDerivAt (fun w ↦ ∫ y, f y * (apm_m98J05_kernelDx t (w - y) : ℂ))
       (∫ y, f y * (apm_m98J05_kernelDt t (z - y) : ℂ)) z := by
-  sorry
+  obtain ⟨C, hC⟩ := apm_m98J05_kernel_derivs_bounded (a := t) (b := t) ht
+  have hC0 : 0 ≤ C := by
+    have h := (hC t ⟨le_rfl, le_rfl⟩ 0).1
+    exact (abs_nonneg _).trans h
+  let F : ℝ → ℝ → ℂ := fun w y ↦
+    f y * (apm_m98J05_kernelDx t (w - y) : ℂ)
+  let F' : ℝ → ℝ → ℂ := fun w y ↦
+    f y * (apm_m98J05_kernelDt t (w - y) : ℂ)
+  let B : ℝ → ℝ := fun y ↦ C * ‖f y‖
+  have hdxcont : Continuous (fun u : ℝ ↦ apm_m98J05_kernelDx t u) :=
+    continuous_iff_continuousAt.2 fun u =>
+      (apm_m98J05_kernelDx_hasDerivAt_space ht u).continuousAt
+  have hdtcont : Continuous (fun u : ℝ ↦ apm_m98J05_kernelDt t u) := by
+    unfold apm_m98J05_kernelDt apm_m98J05_heatKernel
+    fun_prop
+  refine (_root_.hasDerivAt_integral_of_dominated_loc_of_deriv_le
+    (F := F) (F' := F') (bound := B) (s := Set.univ)
+    univ_mem ?_ ?_ ?_ ?_ ?_ ?_).2
+  · exact Filter.Eventually.of_forall fun w =>
+      hf.aestronglyMeasurable.mul
+        ((Complex.continuous_ofReal.comp
+          (hdxcont.comp (continuous_const.sub continuous_id))).aestronglyMeasurable)
+  · refine (hf.norm.const_mul C).mono' ?_ ?_
+    · exact hf.aestronglyMeasurable.mul
+        ((Complex.continuous_ofReal.comp
+          (hdxcont.comp (continuous_const.sub continuous_id))).aestronglyMeasurable)
+    · filter_upwards with y
+      simp only [F, norm_mul, Complex.norm_real, Real.norm_eq_abs]
+      have hb := (hC t ⟨le_rfl, le_rfl⟩ (z - y)).2
+      nlinarith [norm_nonneg (f y)]
+  · exact hf.aestronglyMeasurable.mul
+      ((Complex.continuous_ofReal.comp
+        (hdtcont.comp (continuous_const.sub continuous_id))).aestronglyMeasurable)
+  · filter_upwards with y
+    intro w hw
+    simp only [F', B, norm_mul, Complex.norm_real, Real.norm_eq_abs]
+    have hb := (hC t ⟨le_rfl, le_rfl⟩ (w - y)).1
+    nlinarith [norm_nonneg (f y)]
+  · exact hf.norm.const_mul C
+  · filter_upwards with y
+    intro w hw
+    have hk := (apm_m98J05_kernelDx_hasDerivAt_space ht (w - y)).comp w
+      ((hasDerivAt_id w).sub_const y)
+    have hkc : HasDerivAt
+        (fun u : ℝ ↦ (apm_m98J05_kernelDx t (u - y) : ℂ))
+        (apm_m98J05_kernelDt t (w - y) : ℂ) w := by
+      simpa only [Function.comp_apply, id_eq, mul_one] using hk.ofReal_comp
+    simpa [F, F'] using hkc.const_mul (f y)
 -- END SEAT AREA
 
 /-- Why this unblocks `apm_m98j05`: domination by derivatives of a positive-
