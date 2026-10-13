@@ -1058,6 +1058,41 @@ lemma apm_m98A06_wirtinger_aux_core_aux_picone_limit_aux_gap
   sorry
 
 -- Equality in Wirtinger iff the Picone gap vanishes iff η/sin is constant.
+lemma apm_m98A06_wirtinger_aux_core_aux_picone_limit_aux_iff_aux_rigidity_aux_pointwise_aux_integrable_aux_bound_aux_measurable
+    (L : ℝ) (hL : 0 < L) (η : ℝ → ℝ)
+    (hη : apm_m98a06_Admissible L 0 0 η) :
+    AEStronglyMeasurable (fun x => (derivWithin η (Icc 0 L) x -
+      η x * ((Real.pi / L) * Real.cos (Real.pi * x / L)) /
+        Real.sin (Real.pi * x / L)) ^ 2)
+      (volume.restrict (Ioc 0 L)) := by
+  let f : ℝ → ℝ := fun x => derivWithin η (Icc 0 L) x -
+    η x * ((Real.pi / L) * Real.cos (Real.pi * x / L)) /
+      Real.sin (Real.pi * x / L)
+  have hd : ContinuousOn (derivWithin η (Icc 0 L)) (Icc 0 L) :=
+    hη.1.continuousOn_derivWithin (uniqueDiffOn_Icc hL) (by norm_num)
+  have hf : ContinuousOn f (Ioo 0 L) := by
+    apply ContinuousOn.sub
+    · exact hd.mono Ioo_subset_Icc_self
+    · apply ContinuousOn.div
+      · exact (hη.1.continuousOn.mono Ioo_subset_Icc_self).mul (by fun_prop)
+      · fun_prop
+      · intro x hx
+        exact ne_of_gt (apm_m98A06_wirtinger_aux_core_aux_sine_pos L x hL hx)
+  have hm : AEStronglyMeasurable (fun x => (f x) ^ 2)
+      (volume.restrict (Ioo 0 L)) :=
+    (hf.pow 2).aestronglyMeasurable measurableSet_Ioo
+  rw [Measure.restrict_congr_set Ioo_ae_eq_Ioc] at hm
+  exact hm
+
+lemma apm_m98A06_wirtinger_aux_core_aux_picone_limit_aux_iff_aux_rigidity_aux_pointwise_aux_integrable_aux_bound_aux_uniform
+    (L : ℝ) (hL : 0 < L) (η : ℝ → ℝ)
+    (hη : apm_m98a06_Admissible L 0 0 η) :
+    ∃ C : ℝ, ∀ᵐ x ∂(volume.restrict (Ioc 0 L)),
+      ‖(derivWithin η (Icc 0 L) x -
+        η x * ((Real.pi / L) * Real.cos (Real.pi * x / L)) /
+          Real.sin (Real.pi * x / L)) ^ 2‖ ≤ C := by
+  sorry
+
 lemma apm_m98A06_wirtinger_aux_core_aux_picone_limit_aux_iff_aux_rigidity_aux_pointwise_aux_integrable_aux_bound
     (L : ℝ) (hL : 0 < L) (η : ℝ → ℝ)
     (hη : apm_m98a06_Admissible L 0 0 η) :
@@ -1070,7 +1105,12 @@ lemma apm_m98A06_wirtinger_aux_core_aux_picone_limit_aux_iff_aux_rigidity_aux_po
         ‖(derivWithin η (Icc 0 L) x -
           η x * ((Real.pi / L) * Real.cos (Real.pi * x / L)) /
             Real.sin (Real.pi * x / L)) ^ 2‖ ≤ C := by
-  sorry
+  obtain ⟨C, hC⟩ :=
+    apm_m98A06_wirtinger_aux_core_aux_picone_limit_aux_iff_aux_rigidity_aux_pointwise_aux_integrable_aux_bound_aux_uniform
+      L hL η hη
+  exact ⟨C,
+    apm_m98A06_wirtinger_aux_core_aux_picone_limit_aux_iff_aux_rigidity_aux_pointwise_aux_integrable_aux_bound_aux_measurable
+      L hL η hη, hC⟩
 
 lemma apm_m98A06_wirtinger_aux_core_aux_picone_limit_aux_iff_aux_rigidity_aux_pointwise_aux_integrable
     (L : ℝ) (hL : 0 < L) (η : ℝ → ℝ)
