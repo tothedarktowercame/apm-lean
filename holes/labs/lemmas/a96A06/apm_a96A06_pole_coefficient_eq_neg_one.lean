@@ -105,7 +105,36 @@ theorem apm_a96A06_pole_coefficient_eq_neg_one
     (hrep : ∀ z : ℂ, z ≠ 1 → f z = c / (z - 1) + g z)
     (hf_int : ∮ z in C(0, 2), f z = -(2 * Real.pi * I)) :
     c = -1 := by
-  sorry
+  have hone : (1 : ℂ) ∈ ball 0 2 := by
+    simp [mem_ball]
+  have hnot : (1 : ℂ) ∉ sphere 0 |(2 : ℝ)| := by
+    simp [mem_sphere]
+  have hinv : CircleIntegrable (fun z : ℂ ↦ (z - 1)⁻¹) 0 2 := by
+    rw [circleIntegrable_sub_inv_iff]
+    exact Or.inr hnot
+  have hgint : CircleIntegrable g 0 2 :=
+    hg.continuous.continuousOn.circleIntegrable'
+  have hcongr : (∮ z in C(0, 2), f z) =
+      ∮ z in C(0, 2), c * (z - 1)⁻¹ + g z := by
+    apply circleIntegral.integral_congr (by norm_num)
+    intro z hz
+    rw [hrep z]
+    · simp [div_eq_mul_inv]
+    · intro h
+      subst z
+      simpa [mem_sphere] using hz
+  have hgzero : (∮ z in C(0, 2), g z) = 0 := by
+    exact hg.diffContOnCl.circleIntegral_eq_zero (by norm_num)
+  have hpole : (∮ z in C(0, 2), (z - 1)⁻¹) = 2 * Real.pi * I :=
+    circleIntegral.integral_sub_inv_of_mem_ball hone
+  have hcinv : CircleIntegrable (fun z : ℂ ↦ c * (z - 1)⁻¹) 0 2 := by
+    exact CircleIntegrable.const_smul (a := c) hinv
+  rw [hcongr, circleIntegral.integral_add hcinv hgint,
+    circleIntegral.integral_const_mul, hpole, hgzero, add_zero] at hf_int
+  have hfac : (2 * (Real.pi : ℂ) * I) ≠ 0 := by
+    exact mul_ne_zero (mul_ne_zero (by norm_num) (by exact_mod_cast Real.pi_ne_zero)) I_ne_zero
+  apply (mul_right_cancel₀ hfac)
+  simpa [mul_assoc] using hf_int
 -- END SEAT AREA
 
 theorem apm_a96A06_coeffs_tendsto_of_representation
