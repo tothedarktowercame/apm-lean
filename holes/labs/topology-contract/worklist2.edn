@@ -87771,6 +87771,18 @@
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "git show --check e0af1bd17", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791926009237-10523-1488b897",
+     :commands
+     ["scope/SHA256 checks at d59e0345d"
+      "recorded blob | lake env lean /dev/stdin"
+      "comment-stripped placeholder scan (0)"
+      "#print axioms witness theorem"
+      "statement-registry.py check (166/0)"],
+     :finding
+     "Valid program STOP with new compiled progress beyond history commit 02f7d5989. The theorem constructs nonzero exclusive points (r,I*r) and (r,-I*r) in every open neighborhood of zero, with branch orientations correct. Exact scope/hash match; placeholders 0; only standard axioms. Remaining milestone: chart transport and punctured-plane contradiction."},
     :commit "e0af1bd17",
     :changed-paths ["ConstructionTargets/t94A08Closure.lean"],
     :fixture
@@ -87779,7 +87791,7 @@
      "689c445a3478b3ab1be2c919812a919b21d77efd98c4413e31a1a7b401a37df6"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t94A08/lean/Main.lean"
     "problems/t94A08/status.json"
@@ -87797,7 +87809,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t94A08Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked non-preconnectedness of every open neighborhood intersected with the punctured affine cross.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked the affine image obstruction for every open projective neighborhood of the node.",
    :id :program-2026-10-13-close-t94a08,
    :kind :final-adapter,
    :campaign-priority 30,
@@ -87849,7 +87861,11 @@
     {:job 2,
      :commit "ccb3fad28",
      :reason
-     "Banked non-preconnectedness of every open neighborhood intersected with the punctured affine cross."}]}
+     "Banked non-preconnectedness of every open neighborhood intersected with the punctured affine cross."}
+    {:job 3,
+     :commit "e0af1bd17",
+     :reason
+     "Banked the affine image obstruction for every open projective neighborhood of the node."}]}
   {:consumer :t97A01,
    :stop-count 1,
    :evidence
@@ -88456,7 +88472,7 @@
    :other-consumers []}
   {:consumer :t94A08,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -88470,7 +88486,9 @@
     :type
     "IsOpen U -> node in U -> not IsPreconnected (zeroChartImage U intersect puncturedAffineCross)",
     :area "projective-affine-chart-homeomorph",
-    :proved-in :program-2026-10-13-close-t94a08},
+    :proved-in :program-2026-10-13-close-t94a08,
+    :banked-by :program-2026-10-13-close-t94a08,
+    :banked-commit "e0af1bd17"},
    :id
    :lemma-apm-t94a08-zerochartimage-inter-puncturedcross-not-ispreconnected,
    :kind :lemma,
