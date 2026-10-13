@@ -36220,6 +36220,17 @@
       :exit 1,
       :correction
       "new file is untracked; checked scoped status then committed"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791920997879-10309-9207682d",
+     :commands
+     ["git show/diff 05ab28e1; scope and blueprint review"
+      "sha256sum recorded blueprint"
+      "lake env lean t99J05 reference"
+      "statement-registry check; placeholder recount"],
+     :finding
+     "PASS. The one-file blueprint commit has the recorded hash and faithfully uses the literal CP n quotient/charts and rational homology interfaces. C1 fixed points, C2 positive real determinants/local index +1, C3 even-degree CP n homology including n=0, C4 homotopy-invariant trace sum, and C5 assembly are mathematically coherent with their stated dependencies; the sole final input n is used throughout. The reference compiles with only the declared C4 sorryAx; registry is 150/150 and scoped placeholders remain Main 1->1, blueprint 0."},
     :commit "05ab28e1f45cde90f026ffcf2423cbfce12cbcaf",
     :changed-paths ["ConstructionTargets/t99J05Closure.blueprint.md"],
     :fixture
@@ -36229,7 +36240,7 @@
      :mode :blueprint},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t99J05/lean/Main.lean"
     "problems/t99J05/status.json"
@@ -36247,14 +36258,19 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t99J05Closure.blueprint.md"},
    :continue-from
-   "NEXT JOB: copy holes/labs/blueprints/t99J05/BLUEPRINT.md's plan into ConstructionTargets/t99J05Closure.blueprint.md, move the blueprint's proved lemmas into place, then build the LIBRARY obligations one milestone per job.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Blueprint written and committed. It isolates rational CP^n homology as the internal dependency of the sole LIBRARY obligation, reuses compiled fixed-point/local-index/assembly proofs, covers n=0, and records hypothesis use. Implementation continues at C3.",
    :id :program-2026-10-13-close-t99j05,
    :kind :final-adapter,
    :campaign-priority 31,
    :fail-count 0,
    :depends-on [],
    :program true,
-   :other-consumers []}
+   :other-consumers [],
+   :program-history
+   [{:job 1,
+     :commit "05ab28e1f45cde90f026ffcf2423cbfce12cbcaf",
+     :reason
+     "Blueprint written and committed. It isolates rational CP^n homology as the internal dependency of the sole LIBRARY obligation, reuses compiled fixed-point/local-index/assembly proofs, covers n=0, and records hypothesis use. Implementation continues at C3."}]}
   {:consumer :t98A02,
    :stop-count 0,
    :phase :implementation,
