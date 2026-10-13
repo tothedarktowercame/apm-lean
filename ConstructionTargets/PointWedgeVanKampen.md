@@ -1293,3 +1293,11 @@ to be one by
 `genericPointWedgeOuterRightRoundTrip_precedingNormalForm_eq_one`.  It remains
 to transport this shifted normal form back to the factor at the chosen overlap
 base and combine it with the inverse-span normal form.
+`genericPointWedgeOuterRightSpan_shiftedNormalForm_eq_base` now performs the
+corresponding coordinate-object transport for the inverse-span normal form.
+Thus both shifted facts are expressed at the chosen coordinate image; the
+two factors are combined by
+`genericPointWedgeOuterRight_shiftedNormalForms_product_eq_base`.  The
+remaining comparison identifies this chosen-base normal form with the
+right-base projection factor, after which the existing `inl` criterion closes
+B6.

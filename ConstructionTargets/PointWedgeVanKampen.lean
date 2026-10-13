@@ -6503,6 +6503,50 @@ theorem genericPointWedgeOuterRightRoundTrip_precedingNormalForm_eq_one :
   rw [eq_of_heq hp]
   exact (genericPointWedgeConnectors y₀).normalForm_id _
 
+omit [PathConnectedSpace X] in
+/-- Transporting the inverse-span component along the named coordinate-object
+equality does not change its connector normal form. -/
+theorem genericPointWedgeOuterRightSpan_shiftedNormalForm_eq_base :
+    let eK := genericPointWedgeOverlapGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let aR := genericPointWedgeRightSpanIso
+      x₀ y₀ M N hM hN hy hx cM cN
+    let z := genericPointWedgeOverlapBase x₀ y₀ M N
+    (genericPointWedgeConnectors y₀).normalForm
+        (aR.inv.app (eK.functor.obj ((eK.functor ⋙ eK.inverse).obj z))) =
+      (genericPointWedgeConnectors y₀).normalForm
+        (aR.inv.app (eK.functor.obj z)) := by
+  dsimp only
+  have h := genericPointWedgeOverlap_shiftedCoordinateObject_eq
+    x₀ y₀ M N hM hN hy hx cM cN
+  dsimp only at h
+  cases h
+  rfl
+
+omit [PathConnectedSpace X] in
+/-- At the shifted overlap object, the inverse-span and round-trip normal
+forms combine to the inverse-span normal form at the chosen coordinate base. -/
+theorem genericPointWedgeOuterRight_shiftedNormalForms_product_eq_base :
+    let r := genericPointWedgeActualRight x₀ y₀ M N
+    let eK := genericPointWedgeOverlapGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let eR := genericPointWedgeRightGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let aR := genericPointWedgeRightSpanIso
+      x₀ y₀ M N hM hN hy hx cM cN
+    let z := genericPointWedgeOverlapBase x₀ y₀ M N
+    (genericPointWedgeConnectors y₀).normalForm
+          (aR.inv.app (eK.functor.obj
+            ((eK.functor ⋙ eK.inverse).obj z))) *
+        (genericPointWedgeConnectors y₀).normalForm
+          ((eK.funInvIdAssoc (r ⋙ eR.functor)).hom.app
+            ((eK.functor ⋙ eK.inverse).obj z)) =
+      (genericPointWedgeConnectors y₀).normalForm
+        (aR.inv.app (eK.functor.obj z)) := by
+  dsimp only
+  rw [genericPointWedgeOuterRightSpan_shiftedNormalForm_eq_base,
+    genericPointWedgeOuterRightRoundTrip_precedingNormalForm_eq_one, mul_one]
+
 /-- An `inl` factorization of the right-base conjugator forces its canonical
 right projection to be trivial. -/
 theorem genericPointWedgeRightBase_inl_implies_rightProjection_eq_one
@@ -7240,6 +7284,8 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeOuterRightSpan_precedingUnitInv_map_eq_id
 #print axioms genericPointWedgeOuterRightRoundTrip_precedingComponent_heq_id
 #print axioms genericPointWedgeOuterRightRoundTrip_precedingNormalForm_eq_one
+#print axioms genericPointWedgeOuterRightSpan_shiftedNormalForm_eq_base
+#print axioms genericPointWedgeOuterRight_shiftedNormalForms_product_eq_base
 #print axioms genericPointWedgeRightBase_inl_implies_rightProjection_eq_one
 #print axioms genericPointWedgeLegCoordinates_of_mapped
 #print axioms genericPointWedgeLegCoordinates_iff_mapped
