@@ -798,6 +798,22 @@
    "rev": "56de913a",
    "approved_at": "2026-09-28T00:17:27Z"
   },
+  "t01J04": {
+   "decls": [
+    "apm_t01j04"
+   ],
+   "sha256": "77120f9a209ecac7ed1faadb34a832bf16b84b2459f66f1fa5efb2ee079bfc2e",
+   "defs": [
+    "apm_t01J04_Euclidean",
+    "apm_t01J04_IsSmoothEmbeddedManifoldWithBoundary"
+   ],
+   "grade": "faithful",
+   "grader": "claude-14 outside grader (read-only Claude subagent, 2026-10-13, repair batch 2; correction)",
+   "evidence": "holes/labs/statement-registry/repair-grades-2.md",
+   "prelim_defect": null,
+   "rev": "e25b1d373",
+   "approved_at": "2026-10-13T20:44:06Z"
+  },
   "t01J05": {
    "decls": [
     "apm_t01j05"
@@ -817,6 +833,39 @@
    "prelim_defect": null,
    "rev": "a7dd67d58",
    "approved_at": "2026-10-13T20:33:44Z"
+  },
+  "t01J06": {
+   "decls": [
+    "apm_t01j06"
+   ],
+   "sha256": "ec318cc2f07db2a4ac115d1b2f4eea90ab5967ce05fe668097fec1feb051bc63",
+   "defs": [
+    "apm_t01J06_AmbientForm2",
+    "apm_t01J06_AmbientProductForm2",
+    "apm_t01J06_E2",
+    "apm_t01J06_E3",
+    "apm_t01J06_E5",
+    "apm_t01J06_IsClosedProductExtension",
+    "apm_t01J06_ProductForm2",
+    "apm_t01J06_S1",
+    "apm_t01J06_S2",
+    "apm_t01J06_SphereForm2",
+    "apm_t01J06_circleTangent",
+    "apm_t01J06_isInclusionPullback",
+    "apm_t01J06_isJPullback",
+    "apm_t01J06_isOmega",
+    "apm_t01J06_orientedCoefficient",
+    "apm_t01J06_productRestriction",
+    "apm_t01J06_sphereIntegral",
+    "apm_t01J06_sphereTangent",
+    "apm_t01J06_tangentProjection"
+   ],
+   "grade": "faithful",
+   "grader": "claude-14 outside grader (read-only Claude subagent, 2026-10-13, repair batch 2; correction)",
+   "evidence": "holes/labs/statement-registry/repair-grades-2.md",
+   "prelim_defect": null,
+   "rev": "e25b1d373",
+   "approved_at": "2026-10-13T20:44:06Z"
   },
   "t02A01": {
    "decls": [
@@ -975,6 +1024,28 @@
    "prelim_defect": null,
    "rev": "735377b84",
    "approved_at": "2026-10-13T06:28:05Z"
+  },
+  "t03J01": {
+   "decls": [
+    "apm_t03j01"
+   ],
+   "sha256": "eeab37c4e7d260862620d31e254e3cc5dc49a240958492601c802932531060ec",
+   "defs": [
+    "apm_t03j01_CutsIntoTwicePuncturedTorus",
+    "apm_t03j01_CutsIntoTwoOncePuncturedTori",
+    "apm_t03j01_E2",
+    "apm_t03j01_H",
+    "apm_t03j01_HasGenusTwoHomology",
+    "apm_t03j01_IsCurve",
+    "apm_t03j01_Model",
+    "apm_t03j01_RetractsOnto"
+   ],
+   "grade": "stronger",
+   "grader": "claude-14 outside grader (read-only Claude subagent, 2026-10-13, repair batch 2; improvement)",
+   "evidence": "holes/labs/statement-registry/repair-grades-2.md",
+   "prelim_defect": null,
+   "rev": "e25b1d373",
+   "approved_at": "2026-10-13T20:44:06Z"
   },
   "t03J02": {
    "decls": [
@@ -2054,6 +2125,26 @@
    "rev": "4489e960",
    "approved_at": "2026-09-28T00:25:56Z"
   },
+  "t95J03": {
+   "decls": [
+    "apm_t95j03"
+   ],
+   "sha256": "2240ca3d0f5a8617deee399d296196533fe2537be7c0dd83112e12e64e72e47c",
+   "defs": [
+    "T95J03ClosedSurface",
+    "T95J03IsKFoldCover",
+    "T95J03SharesKFoldCover",
+    "T95J03SurfaceSpace",
+    "t95J03KleinBottle",
+    "t95J03Torus"
+   ],
+   "grade": "faithful",
+   "grader": "claude-14 outside grader (read-only Claude subagent, 2026-10-13, repair batch 2; correction)",
+   "evidence": "holes/labs/statement-registry/repair-grades-2.md",
+   "prelim_defect": null,
+   "rev": "e25b1d373",
+   "approved_at": "2026-10-13T20:44:06Z"
+  },
   "t95J04": {
    "decls": [
     "apm_t95j04"
@@ -2223,6 +2314,22 @@
    "prelim_defect": null,
    "rev": "6802e9ad",
    "approved_at": "2026-09-28T00:23:54Z"
+  },
+  "t96A08": {
+   "decls": [
+    "apm_t96a08"
+   ],
+   "sha256": "f5480fd4b32a277206b459285e796fbf96cfd0d52edf7b03bf4d996d02ba8ba6",
+   "defs": [
+    "apm_t96a08_IsPiecewiseSmoothPath",
+    "apm_t96a08_LineIntegral"
+   ],
+   "grade": "faithful",
+   "grader": "claude-14 outside grader (read-only Claude subagent, 2026-10-13, repair batch 2; correction)",
+   "evidence": "holes/labs/statement-registry/repair-grades-2.md",
+   "prelim_defect": null,
+   "rev": "e25b1d373",
+   "approved_at": "2026-10-13T20:44:06Z"
   },
   "t96J01": {
    "decls": [
