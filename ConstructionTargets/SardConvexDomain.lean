@@ -642,4 +642,29 @@ theorem exists_positive_infDist_nearest_of_isClosed
   exact ⟨(hs.notMem_iff_infDist_pos hne).1 hx,
     exists_nearestPoint_of_isClosed hs hne x⟩
 
+/-- The metric ball attached to a complement point at one quarter of its
+distance from the closed set has the geometric bounds used by the cover. -/
+theorem quarter_infDist_ball_data
+    {E : Type*} [PseudoMetricSpace E] {s : Set E}
+    (hs : IsClosed s) (hne : s.Nonempty) {x : E} (hx : x ∉ s) :
+    let r := Metric.infDist x s / 4
+    0 < r ∧ Metric.ball x r ⊆ sᶜ ∧
+      Metric.ball x r ⊆ Metric.closedBall x (Metric.infDist x s) ∧
+      r ≤ Metric.infDist x s ∧ Metric.infDist x s ≤ 8 * r := by
+  dsimp only
+  have hd : 0 < Metric.infDist x s := (hs.notMem_iff_infDist_pos hne).1 hx
+  constructor
+  · positivity
+  constructor
+  · intro y hy hys
+    have hle := Metric.infDist_le_dist_of_mem (x := x) hys
+    have hy' := Metric.mem_ball.mp hy
+    rw [dist_comm] at hle
+    linarith
+  constructor
+  · intro y hy
+    have hy' := Metric.mem_ball.mp hy
+    exact Metric.mem_closedBall.2 (le_trans (le_of_lt hy') (by linarith))
+  constructor <;> linarith
+
 end ConstructionTargets.SardConvexDomain
