@@ -24430,7 +24430,7 @@
    :consumer :t01A08,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 0,
    :review-finding
    "extend Mathlib: state and prove the missing theorem in scope",
    :implements-lemma :lemma-closedset-whitneycubecover,
@@ -24467,6 +24467,17 @@
     [{:cmd "lake build ConstructionTargets.SardConvexDomain", :exit 0}
      {:cmd "fixture; registry; scans; diff", :exit 0}
      {:cmd "git commit", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791907807621-9975-cbd7b0a4",
+     :commands
+     ["git show/diff 433c851; scope/scaling checks"
+      "sha256sum + lake env lean frozen fixture"
+      "lake build ConstructionTargets.SardConvexDomain"
+      "statement registry check; forbidden-count scan"],
+     :finding
+     "PASS. Recorded topo-10 commit 433c851 changes only the scoped Lean file and correctly defines translation plus dyadic rescaling. Translation cancels in the distance; norm_smul and positivity of 2^k yield exactly dist(Tc,Td)=(2^k)^-1·dist(c,d). The real normed-space boundary fits the later finite-dimensional packing use. Fixture hash 14b781a8... matches; build/fixture pass; registry 150/150; forbidden placeholders stay 0; only standard axioms. Valid compiled B3 progress; STOP leaves transport to a fixed packing bound, adjacent-stratum sum, and assembly."},
     :commit "433c851beddbf8ac6f007371985c77bb24f493b9",
     :changed-paths ["ConstructionTargets/SardConvexDomain.lean"],
     :fixture
@@ -24476,7 +24487,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain.blueprint/B3",
    :acceptance
@@ -35544,7 +35555,7 @@
    :other-consumers []}
   {:consumer :t01A08,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -35555,7 +35566,9 @@
     :reported-by [:r-a08-sard-b3-whitney-cubes-1],
     :type "dyadic normalization rescales distance by 2^-k",
     :area "sard-convex-domain",
-    :proved-in :r-a08-sard-b3-whitney-cubes-1},
+    :proved-in :r-a08-sard-b3-whitney-cubes-1,
+    :banked-by :r-a08-sard-b3-whitney-cubes-1,
+    :banked-commit "433c851beddbf8ac6f007371985c77bb24f493b9"},
    :id
    :lemma-constructiontargets-sardconvexdomain-dist-whitneynormalize,
    :kind :lemma,
