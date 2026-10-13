@@ -1046,7 +1046,7 @@ lemma apm_m98A06_wirtinger_aux_core_aux_picone_limit_aux_gap_aux_gap_integrable
     IntervalIntegrable (fun x ↦ (derivWithin η (Icc 0 L) x -
       η x * ((Real.pi / L) * Real.cos (Real.pi * x / L)) /
         Real.sin (Real.pi * x / L)) ^ 2) volume 0 L := by
-  sorry
+  exact apm_m98A06_wirtinger_aux_core_aux_picone_limit_aux_iff_aux_rigidity_aux_pointwise_aux_integrable L hL η hη
 
 lemma apm_m98A06_wirtinger_aux_core_aux_picone_limit_aux_iff_aux_rigidity_aux_pointwise_aux_integrable_aux_bound_aux_measurable
     (L : ℝ) (hL : 0 < L) (η : ℝ → ℝ)
