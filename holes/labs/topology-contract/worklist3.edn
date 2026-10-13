@@ -23217,40 +23217,46 @@
    :other-consumers []}
   {:bounded-exception "Rule0.",
    :consumer :t01A08,
+   :stop-count 1,
    :implements-lemma
    :lemma-contdiffwithinat-domdomcongr-iteratedfderivwithin-of-infty,
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "topo-12",
-     :fixture
-     {:path "/tmp/t01a08_smooth_symmetry_closure_probe.lean",
-      :sha256
-      "1f735b44b345e872ea336a1b79fe51f67c951de83fe0bf5b03b5912efcad80a8",
-      :mode :post-build-export-check},
-     :commands
-     [{:cmd
-       "lake env lean /tmp/t01a08_smooth_symmetry_closure_probe.lean && sha256sum /tmp/t01a08_smooth_symmetry_closure_probe.lean && python3 scripts/statement-registry.py check",
-       :exit 0}],
-     :axioms
-     ["propext"
-      "Classical.choice"
-      "Quot.sound"
-      "ContDiffWithinAt.domDomCongr_iteratedFDerivWithin_of_infty"],
-     :implementation
-     {:scope ["ConstructionTargets/SardConvexDomain.lean"],
-      :declaration
-      "ContDiffWithinAt.domDomCongr_iteratedFDerivWithin_of_infty",
-      :type
-      "{E F} [NormedAddCommGroup E] [NormedSpace ℝ E] [NormedAddCommGroup F] [NormedSpace ℝ F] {s} {f} {x} → ContDiffWithinAt ℝ ∞ f s x → UniqueDiffOn ℝ s → x ∈ closure (interior s) → ∀ {n} (σ : Equiv.Perm (Fin n)), (iteratedFDerivWithin ℝ n f s x).domDomCongr σ = iteratedFDerivWithin ℝ n f s x",
-      :proof-plan
-      "Prove adjacent-transposition symmetry using finite-smooth Schwarz at closure(interior s), then induct over permutations."},
-     :residual
-     "Implement corrected finite-smooth permutation symmetry; B1 derives closure membership from convexity and nonempty interior."}},
+   {:placeholder-delta {:t01A08 [1 1]},
+    :residual
+    "Restore x∈s from the prior frozen interface; then prove adjacent swaps and permutation induction.",
+    :missing-hypothesis "x ∈ s",
+    :outcome :stop,
+    :warnings [],
+    :statement-hashes {:registry "146/146"},
+    :disposition :stop,
+    :axioms [],
+    :author :topo-10,
+    :reason
+    "Frozen type omits x∈s. The adjacent-swap base theorem ContDiffWithinAt.isSymmSndFDerivWithinAt requires closure-interior membership and x∈s; UniqueDiffOn s gives uniqueness only at members.",
+    :commands
+    [{:cmd
+      "rg -n -A4 finite-smooth-symmetry Mathlib/Analysis/Calculus/FDeriv/Symmetric.lean",
+      :exit 0}
+     {:cmd "sha256sum /tmp/t01a08_smooth_symmetry_closure_probe.lean",
+      :exit 0}
+     {:cmd "lake env lean ConstructionTargets/SardConvexDomain.lean",
+      :exit 0}
+     {:cmd
+      "git diff --exit-code -- ConstructionTargets/SardConvexDomain.lean",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
+    :commit nil,
+    :changed-paths [],
+    :fixture
+    {:path "/tmp/t01a08_smooth_symmetry_closure_probe.lean",
+     :sha256
+     "1f735b44b345e872ea336a1b79fe51f67c951de83fe0bf5b03b5912efcad80a8",
+     :mode :post-build-export-check},
+    :seat :topo-10},
    :phase :implementation,
    :type
    "{E F} [NormedAddCommGroup E] [NormedSpace ℝ E] [NormedAddCommGroup F] [NormedSpace ℝ F] {s} {f} {x} → ContDiffWithinAt ℝ ∞ f s x → UniqueDiffOn ℝ s → x ∈ closure (interior s) → ∀ {n} (σ : Equiv.Perm (Fin n)), (iteratedFDerivWithin ℝ n f s x).domDomCongr σ = iteratedFDerivWithin ℝ n f s x",
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain/B1/symmetry",
    :acceptance
