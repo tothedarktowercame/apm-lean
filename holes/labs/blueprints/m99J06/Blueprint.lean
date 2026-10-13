@@ -554,7 +554,33 @@ inner products against every `z` through `inner_eq`. -/
 theorem apm_m99J06_model_smul {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℝ H]
     (M : apm_m99J06_H01Model H) (c : ℝ) (v : H) :
     M.val (c • v) = c • M.val v ∧ M.weakDeriv (c • v) = c • M.weakDeriv v := by
-  sorry
+  obtain ⟨w, hwv, hwd⟩ := M.realizes (c • M.val v) (c • M.weakDeriv v)
+    (apm_m99J06_isH01Pair_smul (M.represents v) c)
+  have hw : w = c • v := by
+    apply ext_inner_right ℝ
+    intro z
+    rw [M.inner_eq, hwv, hwd, inner_smul_left, M.inner_eq]
+    have hvz := apm_m99J06_integrable_inner_components M v z
+    have hvz' : Integrable (fun x ↦
+        M.val v x * M.val z x + M.weakDeriv v x * M.weakDeriv z x)
+        apm_m99J06_intervalMeasure := hvz.1.add hvz.2
+    change (∫ x, (c • M.val v) x * M.val z x +
+        (c • M.weakDeriv v) x * M.weakDeriv z x
+          ∂apm_m99J06_intervalMeasure) =
+      c * ∫ x, M.val v x * M.val z x +
+        M.weakDeriv v x * M.weakDeriv z x
+          ∂apm_m99J06_intervalMeasure
+    rw [← MeasureTheory.integral_const_mul]
+    apply MeasureTheory.integral_congr_ae
+    filter_upwards [Lp.coeFn_smul c (M.weakDeriv v)] with x hx
+    change (c * M.val v x) * M.val z x +
+      (c • M.weakDeriv v) x * M.weakDeriv z x =
+      c * (M.val v x * M.val z x + M.weakDeriv v x * M.weakDeriv z x)
+    rw [hx]
+    simp only [Pi.smul_apply, smul_eq_mul]
+    ring
+  subst w
+  exact ⟨hwv, hwd⟩
 
 /-- `v ↦ val v` is a bounded linear map into `L²(0,1)`: `‖val v‖₂² ≤ ∫ (val v)² + (v')² = ‖v‖²`. -/
 theorem apm_m99J06_val_clm {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℝ H]
