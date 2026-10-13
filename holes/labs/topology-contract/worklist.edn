@@ -113853,14 +113853,14 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 7,
+   :stop-count 8,
    :review-finding
    "Recorded fixture hash mismatch: :fixture.sha256 is 0bca6ce32c019fc3053c7f813c26917169cf817375b44d5e722b864b61a526450c1, but ConstructionTargets/PointWedgeVanKampen.blueprint.md at recorded commit c9b3af27 has exact SHA-256 0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0. Re-record the fixture hash for the reviewed commit.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
    :evidence
    {:placeholder-delta {:source-before 0, :source-after 0},
     :residual
-    "Use endpoint/HEq for source transport cancellation; then projection/B6/B12.",
+    "Construct dependent source transport cancellation; then projection/B6/B12.",
     :outcome :stop,
     :warnings ["existing linter"],
     :missing-theorems
@@ -113874,9 +113874,9 @@
       :area "fundamental-group-wedge-of-circles"}],
     :statement-hashes
     {:source
-     "569c0b6b1ba8d936d69a3605035c672960009b10a8bec5d640f71607a487995f",
+     "1288058a9388383e766ef4129b8f13998a68decb679f423ae443e96fa3eb8104",
      :documentation
-     "327daeb7b64567b9de574fd1cd6ea53872257fcb28a6e93f485c0bbad058d921",
+     "4186c066c197da7c27e2ce1e5d8fcac50af47cc5531a5a5cf6fa6fbb4ada800f",
      :blueprint
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0",
      :registry "166/166"},
@@ -113884,7 +113884,7 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
     :reason
-    "Source endpoint equality and reflexive connector HEq packaged.",
+    "Target connector hom identified with named based connector.",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/PointWedgeVanKampen.lean",
@@ -113894,26 +113894,14 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "sha256/diff/placeholders", :exit 0}],
     :diagnostic-history
-    [{:cmd "dependent transport drafts",
+    [{:cmd "source-hom HEq draft",
       :exit 1,
-      :finding
-      "Direct elimination failed; packaged equality with HEq."}
+      :finding "Dependent Iso elimination failed."}
      {:cmd
       "lake build ConstructionTargets.ThreeCirclesFundamentalGroup",
       :exit 1,
       :finding "B12 absent."}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1791927575313-10586-3efd2f5b",
-     :commands
-     ["git show/diff-tree 6dbbfa8f9"
-      "git archive 6dbbfa8f9; lake env lean archived PointWedgeVanKampen.lean"
-      "lake build ConstructionTargets.PointWedgeVanKampen"
-      "sha256sum; placeholder delta; statement-registry.py check"],
-     :finding
-     "Recorded scope is target+note; source/doc/fixture hashes match 569c0b6b/327daeb7/0bca6ce3. Archived and target builds pass; placeholders 0->0, registry 166/166, standard axioms only. The package faithfully combines the existing equality from the transported object to the literal right base with the connector HEq to Iso.refl at that base; both concern the same dependent endpoint and have the needed directions. New compiled progress is present; eliminate connector transports, then projection/B6/B12."},
-    :commit "6dbbfa8f9c705168cf59c2c719ecf87dac8628d5",
+    :commit "c071cf8c36bdf269ce23cff8b425c951ae37521e",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
      "ConstructionTargets/PointWedgeVanKampen.md"],
@@ -113923,7 +113911,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
