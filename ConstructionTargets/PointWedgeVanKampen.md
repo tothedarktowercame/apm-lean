@@ -1340,3 +1340,7 @@ comparison is now a homogeneous equality between those two morphisms.
 target transport and expands the inverse round-trip as the inverse of the
 mapped overlap `unitInv`.  The residual homogeneous equality is therefore
 the inverse-span equality transport versus that explicit two-factor map.
+`genericPointWedgeOuterRightSpan_component_eq_baseTransport` now normalizes
+the inverse-span side itself to the canonical right-base `eqToHom`, using the
+unique object of `FundamentalGroupoid Unit`.  The remaining equation compares
+that canonical transport directly with the explicit endpoint/unitInv product.

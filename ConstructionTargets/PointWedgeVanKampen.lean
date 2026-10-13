@@ -6710,6 +6710,29 @@ theorem genericPointWedgeOuterRight_transportInvRoundTrip_eq_map :
   unfold genericPointWedgeOuterRight_transportInvRoundTrip
   simp
 
+omit [PathConnectedSpace X] [PathConnectedSpace Y] in
+/-- At the chosen overlap base, the inverse-span component is the canonical
+right-base equality transport; the apparent coordinate object is the unique
+object of the `Unit` fundamental groupoid. -/
+theorem genericPointWedgeOuterRightSpan_component_eq_baseTransport :
+    let eK := genericPointWedgeOverlapGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let aR := genericPointWedgeRightSpanIso
+      x₀ y₀ M N hM hN hy hx cM cN
+    let z := genericPointWedgeOverlapBase x₀ y₀ M N
+    aR.inv.app (eK.functor.obj z) =
+      eqToHom (genericPointWedgeRightEquiv_obj_rightBase
+        x₀ y₀ M N hM hN hy hx cM cN).symm := by
+  dsimp only
+  have h :
+      (genericPointWedgeOverlapGroupoidEquivalence
+        x₀ y₀ M N hM hN hy hx cM cN).functor.obj
+          (genericPointWedgeOverlapBase x₀ y₀ M N) =
+        FundamentalGroupoid.mk () := Subsingleton.elim _ _
+  cases h
+  exact genericPointWedgeRightSpanIso_inv_app_eq_baseTransport
+    x₀ y₀ M N hM hN hy hx cM cN
+
 /-- An `inl` factorization of the right-base conjugator forces its canonical
 right projection to be trivial. -/
 theorem genericPointWedgeRightBase_inl_implies_rightProjection_eq_one
@@ -7456,6 +7479,7 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeOuterRight_middleComponent_endpoints
 #print axioms genericPointWedgeOuterRight_transportInvRoundTrip
 #print axioms genericPointWedgeOuterRight_transportInvRoundTrip_eq_map
+#print axioms genericPointWedgeOuterRightSpan_component_eq_baseTransport
 #print axioms genericPointWedgeRightBase_inl_implies_rightProjection_eq_one
 #print axioms genericPointWedgeLegCoordinates_of_mapped
 #print axioms genericPointWedgeLegCoordinates_iff_mapped
