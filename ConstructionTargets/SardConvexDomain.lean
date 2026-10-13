@@ -1224,4 +1224,33 @@ theorem finite_whitneyNetIncidence_and_ncard_le
   change (whitneyNetIncidence s x).ncard ≤ N.toNat * 3
   omega
 
+/-- Each separated Whitney stratum net is countable in a separable metric
+space. -/
+theorem countable_whitneyStratumNet
+    {E : Type*} [MetricSpace E] [TopologicalSpace.SeparableSpace E]
+    (s : Set E) (k : ℤ) : Countable ↥(whitneyStratumNet s k) := by
+  let r : ℝ := (2 : ℝ) ^ k / 16
+  apply Pairwise.countable_of_isOpen_disjoint (α := E)
+    (s := fun i : ↥(whitneyStratumNet s k) => Metric.ball i r)
+  · intro i j hij
+    apply Metric.ball_disjoint_ball
+    have hsep := (whitneyStratumNet_spec s k).2.1 i.2 j.2
+      (fun h => hij (Subtype.ext h))
+    have hreal : (2 : ℝ) ^ k / 8 < dist i.1 j.1 := by
+      simpa [whitneyStratumRadius, edist_dist] using hsep
+    dsimp [r]
+    linarith
+  · exact fun _ => Metric.isOpen_ball
+  · intro i
+    exact ⟨i, Metric.mem_ball_self (by dsimp [r]; positivity)⟩
+
+/-- The sigma type of all Whitney net centers is countable. -/
+theorem countable_whitneyNetIndex
+    {E : Type*} [MetricSpace E] [TopologicalSpace.SeparableSpace E] (s : Set E) :
+    Countable (WhitneyNetIndex s) := by
+  letI (k : ℤ) : Countable ↥(whitneyStratumNet s k) :=
+    countable_whitneyStratumNet s k
+  unfold WhitneyNetIndex
+  infer_instance
+
 end ConstructionTargets.SardConvexDomain
