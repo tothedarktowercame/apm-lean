@@ -21939,8 +21939,34 @@
    :consumer :t01A08,
    :implements-lemma
    :lemma-constructiontargets-sardgeneralmodel-modelrange-frontier-addhaar-null,
+   :evidence
+   {:placeholder-delta {:t01A08 [1 1]},
+    :residual
+    "Bank theorem, then elect t01A08 sole-sorry closure adapter.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes {:registry "131/131"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author :topo-10,
+    :commands
+    [{:cmd "sha256sum /tmp/t01a08_model_range_boundary_null.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.SardGeneralModel", :exit 0}
+     {:cmd "lake env lean /tmp/check_t01a08_boundary_axioms.lean",
+      :exit 0}
+     {:cmd
+      "git diff --exit-code e30f8627 -- ConstructionTargets/SardGeneralModel.lean",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
+    :commit "e30f8627733147a6b81e20528ebf3e4fcff8f3f2",
+    :changed-paths ["ConstructionTargets/SardGeneralModel.lean"],
+    :fixture
+    {:path "/tmp/t01a08_model_range_boundary_null.lean",
+     :sha256
+     "e8cd3a6cf79367917bc0c739ad8b5644e58e2ca8212e21edcea9f5af6a6c47d4",
+     :mode :post-build-export-check}},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/SardGeneralModel.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t01A08/boundary",
    :acceptance
