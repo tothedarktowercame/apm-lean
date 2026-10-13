@@ -346,12 +346,60 @@ lemma apm_m98A06_duBoisReymond_aux_forward_aux_classification_aux_deriv_eq
   exact (derivWithin_of_mem_nhds (Icc_mem_nhds hx.1 hx.2)).symm
 
 -- du Bois-Reymond first integral: y' + ∫₀ˣ y is constant on [0, a].
+lemma apm_m98A06_duBoisReymond_aux_forward_aux_classification_aux_core_aux_first_integral_aux_primitive_continuous
+    (a y₀ ya : ℝ) (ha : 0 < a) (y : ℝ → ℝ)
+    (hy : apm_m98a06_IsStationary a y₀ ya y) :
+    ContinuousOn (fun x ↦ ∫ t in (0 : ℝ)..x, y t) (Icc 0 a) := by
+  have hi : IntegrableOn y (uIcc (0 : ℝ) a) := by
+    rw [uIcc_of_le ha.le]
+    exact hy.1.1.continuousOn.integrableOn_Icc
+  simpa [uIcc_of_le ha.le] using
+    (intervalIntegral.continuousOn_primitive_interval hi)
+
+lemma apm_m98A06_duBoisReymond_aux_forward_aux_classification_aux_core_aux_first_integral_aux_g_continuous
+    (a y₀ ya : ℝ) (ha : 0 < a) (y : ℝ → ℝ)
+    (hy : apm_m98a06_IsStationary a y₀ ya y) :
+    ContinuousOn
+      (fun x ↦ derivWithin y (Icc 0 a) x + ∫ t in (0 : ℝ)..x, y t)
+      (Icc 0 a) := by
+  exact (apm_m98A06_duBoisReymond_aux_forward_aux_derivWithin_continuous
+    a y₀ ya ha y hy.1).add
+      (apm_m98A06_duBoisReymond_aux_forward_aux_classification_aux_core_aux_first_integral_aux_primitive_continuous
+        a y₀ ya ha y hy)
+
+-- Integration by parts: stationarity gives ∫₀ᵃ g η' = 0 for every admissible η.
+lemma apm_m98A06_duBoisReymond_aux_forward_aux_classification_aux_core_aux_first_integral_aux_weak
+    (a y₀ ya : ℝ) (ha : 0 < a) (y : ℝ → ℝ)
+    (hy : apm_m98a06_IsStationary a y₀ ya y) :
+    ∀ η : ℝ → ℝ, ContDiffOn ℝ 1 η (Icc 0 a) → η 0 = 0 → η a = 0 →
+      ∫ x in (0 : ℝ)..a,
+        (derivWithin y (Icc 0 a) x + ∫ t in (0 : ℝ)..x, y t) * derivWithin η (Icc 0 a) x = 0 := by
+  sorry
+
+-- Classical du Bois-Reymond: a continuous g with ∫ g η' = 0 for all admissible η is constant.
+lemma apm_m98A06_duBoisReymond_aux_forward_aux_classification_aux_core_aux_first_integral_aux_dbr
+    (a : ℝ) (ha : 0 < a) (g : ℝ → ℝ) (hg : ContinuousOn g (Icc 0 a))
+    (hw : ∀ η : ℝ → ℝ, ContDiffOn ℝ 1 η (Icc 0 a) → η 0 = 0 → η a = 0 →
+      ∫ x in (0 : ℝ)..a, g x * derivWithin η (Icc 0 a) x = 0) :
+    ∃ m : ℝ, ∀ x ∈ Icc (0 : ℝ) a, g x = m := by
+  sorry
+
+lemma apm_m98A06_duBoisReymond_aux_forward_aux_classification_aux_core_aux_first_integral_aux_core
+    (a y₀ ya : ℝ) (ha : 0 < a) (y : ℝ → ℝ)
+    (hy : apm_m98a06_IsStationary a y₀ ya y) :
+    ∃ m : ℝ, ∀ x ∈ Icc (0 : ℝ) a,
+      derivWithin y (Icc 0 a) x + ∫ t in (0 : ℝ)..x, y t = m := by
+  exact apm_m98A06_duBoisReymond_aux_forward_aux_classification_aux_core_aux_first_integral_aux_dbr a ha _ (apm_m98A06_duBoisReymond_aux_forward_aux_classification_aux_core_aux_first_integral_aux_g_continuous a y₀ ya ha y hy)
+    (apm_m98A06_duBoisReymond_aux_forward_aux_classification_aux_core_aux_first_integral_aux_weak a y₀ ya ha y hy)
+
 lemma apm_m98A06_duBoisReymond_aux_forward_aux_classification_aux_core_aux_first_integral
     (a y₀ ya : ℝ) (ha : 0 < a) (y : ℝ → ℝ)
     (hy : apm_m98a06_IsStationary a y₀ ya y) :
     ∃ m : ℝ, ∀ x ∈ Icc (0 : ℝ) a,
       derivWithin y (Icc 0 a) x + ∫ t in (0 : ℝ)..x, y t = m := by
-  sorry
+  exact
+    apm_m98A06_duBoisReymond_aux_forward_aux_classification_aux_core_aux_first_integral_aux_core
+      a y₀ ya ha y hy
 
 -- The first integral makes y'' = −y, so y is a trigonometric combination (ODE uniqueness).
 lemma apm_m98A06_duBoisReymond_aux_forward_aux_classification_aux_core_aux_ode
