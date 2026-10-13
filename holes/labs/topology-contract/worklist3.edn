@@ -23007,13 +23007,13 @@
    :consumer :t01A08,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 2,
    :review-finding
    "extend Mathlib: state and prove the missing theorem in scope",
    :evidence
    {:placeholder-delta {:t01A08 [1 1]},
     :residual
-    "Reroute to banked convexWithinJet/B1; the weaker fixture is not implied by the banked lemma.",
+    "Stop-after-two: retire weaker row and continue from banked convexWithinJet/B1.",
     :missing-hypothesis "x ∈ closure (interior s)",
     :outcome :stop,
     :warnings [],
@@ -23030,19 +23030,12 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Owner-reopen does not discharge the frozen axiom. Fresh source inspection shows the banked theorem still requires hxi : x∈closure(interior s); the fixture still supplies only hf, UniqueDiffOn, and x∈s. Those premises do not imply hxi. The banked convex B1 derives hxi from additional convex/nonempty-interior hypotheses, which are likewise absent here.",
+    "Second unchanged hypothesis boundary. The banked standard-axiom theorem has arguments hf, hu, hx, hxi; the frozen axiom has only hf, hu, hx. UniqueDiffOn and membership do not imply closure of the interior. Extending the scoped library cannot remove an unprovable premise; convexWithinJet succeeds only because convexity and nonempty interior derive hxi.",
     :commands
-    [{:cmd "hash fixture; inspect exact banked and frozen signatures",
+    [{:cmd
+      "hash fixture; lake env lean corrected theorem; compare exact signatures",
       :exit 0}
-     {:cmd
-      "lake env lean corrected hxi theorem; registry check; git status",
-      :exit 0}],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1791893976857-9627-cf798479",
-     :finding
-     "extend Mathlib: state and prove the missing theorem in scope"},
+     {:cmd "statement-registry check", :exit 0}],
     :commit nil,
     :changed-paths [],
     :fixture
@@ -23052,7 +23045,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :repair,
+   :state :needs-owner,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain.blueprint/B1/smooth-symmetry",
    :acceptance
