@@ -2801,7 +2801,32 @@ lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_inequality_aux
         (∫ x, (f x + k x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi))) ≤
           (1 + η) * (∫ x, (f x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi))) +
           (1 + 1 / η) * ∫ x, (k x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)) := by
-  sorry
+  intro f k η hη hf hk
+  let μ := volume.restrict (Ioo (0 : ℝ) Real.pi)
+  have hfs : Integrable (fun x ↦ (f x) ^ 2) μ := hf.integrable_sq
+  have hks : Integrable (fun x ↦ (k x) ^ 2) μ := hk.integrable_sq
+  have hl : Integrable (fun x ↦ (f x + k x) ^ 2) μ := (hf.add hk).integrable_sq
+  have hr : Integrable
+      (fun x ↦ (1 + η) * (f x) ^ 2 + (1 + 1 / η) * (k x) ^ 2) μ :=
+    (hfs.const_mul _).add (hks.const_mul _)
+  have hp : ∀ x : ℝ, (f x + k x) ^ 2 ≤
+      (1 + η) * (f x) ^ 2 + (1 + 1 / η) * (k x) ^ 2 := by
+    intro x
+    have hid : (1 + η) * (f x) ^ 2 + (1 + 1 / η) * (k x) ^ 2 -
+        (f x + k x) ^ 2 =
+        (η * f x - k x) ^ 2 / η := by
+      field_simp [ne_of_gt hη]
+      ring
+    rw [← sub_nonneg, hid]
+    exact div_nonneg (sq_nonneg _) hη.le
+  calc
+    (∫ x, (f x + k x) ^ 2 ∂μ) ≤
+        ∫ x, ((1 + η) * (f x) ^ 2 + (1 + 1 / η) * (k x) ^ 2) ∂μ :=
+      integral_mono hl hr hp
+    _ = (1 + η) * (∫ x, (f x) ^ 2 ∂μ) +
+        (1 + 1 / η) * ∫ x, (k x) ^ 2 ∂μ := by
+      rw [integral_add (hfs.const_mul _) (hks.const_mul _),
+        integral_const_mul, integral_const_mul]
 -- END SEAT AREA
 
 lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_inequality_aux_approximation_aux_limit_aux_error_aux_norm_estimate_aux_transfer
