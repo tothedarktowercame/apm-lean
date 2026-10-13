@@ -2327,6 +2327,27 @@ lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_forward
   · exact apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_forward_aux_primitive
       hFTC y dy h
 
+lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_reverse_aux_unique
+    (u du v dv : ℝ → ℝ) (hu : apm_m98a06_InH10Pi u du)
+    (hv : apm_m98a06_InH10Pi v dv)
+    (huv : u =ᵐ[volume.restrict (Ioo (0 : ℝ) Real.pi)] v) :
+    du =ᵐ[volume.restrict (Ioo (0 : ℝ) Real.pi)] dv := by
+  sorry
+
+lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_reverse_aux_smul
+    (c : ℝ) (u du : ℝ → ℝ) (h : apm_m98a06_InH10Pi u du) :
+    apm_m98a06_InH10Pi (fun x => c * u x) (fun x => c * du x) := by
+  refine ⟨continuousOn_const.mul h.1, by simp [h.2.1], by simp [h.2.2.1],
+    h.2.2.2.1.const_smul c, h.2.2.2.2.1.const_smul c, ?_⟩
+  intro φ hφ hφc hφs
+  have hw := h.2.2.2.2.2 φ hφ hφc hφs
+  rw [show (fun x => c * u x * deriv φ x) = fun x => c * (u x * deriv φ x) by
+      funext x; ring,
+    show (fun x => c * du x * φ x) = fun x => c * (du x * φ x) by
+      funext x; ring,
+    integral_const_mul, integral_const_mul, hw]
+  ring
+
 lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_reverse
     (hSine : apm_m98A06_SineComputationsFact) (y dy : ℝ → ℝ)
     (h : apm_m98a06_InH10Pi y dy)
@@ -2336,7 +2357,33 @@ lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_reverse
         fun x ↦ s * Real.sqrt (2 / Real.pi) * Real.sin x) :
     ∫ x, (dy x) ^ 2 - (y x) ^ 2
       ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)) = 0 := by
-  sorry
+  rcases hs with ⟨s, hs, hys⟩
+  let Y : ℝ → ℝ := fun x => Real.sqrt (2 / Real.pi) * Real.sin x
+  let D : ℝ → ℝ := fun x => Real.sqrt (2 / Real.pi) * Real.cos x
+  obtain ⟨hreg, hder, hH, hnormY, henergyY⟩ := hSine.2 1 one_ne_zero
+  have hHYD : apm_m98a06_InH10Pi Y D := by simpa [Y, D] using hH
+  have hHs : apm_m98a06_InH10Pi (fun x => s * Y x) (fun x => s * D x) :=
+    apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_reverse_aux_smul
+      s Y D hHYD
+  have hys' : y =ᵐ[volume.restrict (Ioo (0 : ℝ) Real.pi)] fun x => s * Y x := by
+    simpa [Y, mul_assoc] using hys
+  have hdys : dy =ᵐ[volume.restrict (Ioo (0 : ℝ) Real.pi)] fun x => s * D x :=
+    apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_reverse_aux_unique
+      y dy (fun x => s * Y x) (fun x => s * D x) h hHs hys'
+  calc
+    (∫ x, (dy x) ^ 2 - (y x) ^ 2
+      ∂(volume.restrict (Ioo (0 : ℝ) Real.pi))) =
+        ∫ x, (s * D x) ^ 2 - (s * Y x) ^ 2
+          ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)) := by
+            apply integral_congr_ae
+            filter_upwards [hdys, hys'] with x hdx hyx
+            rw [hdx, hyx]
+    _ = ∫ x, (D x) ^ 2 - (Y x) ^ 2
+          ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)) := by
+            apply integral_congr_ae
+            filter_upwards [] with x
+            rcases hs with rfl | rfl <;> ring
+    _ = 0 := by simpa [Y, D] using henergyY
 
 lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core
     (hWirtinger : apm_m98A06_WirtingerFact)
