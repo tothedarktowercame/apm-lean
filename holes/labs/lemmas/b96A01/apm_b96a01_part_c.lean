@@ -222,12 +222,98 @@ theorem apm_b96a01_part_b :
     (apm_b96a01_part_b_aux_finite_orbit n G)
 
 -- BEGIN SEAT AREA
+lemma apm_b96a01_part_c_aux_mul_eq_zero
+    (p m : ℕ) (hdiv : p ^ (m - 1) ∣ p ^ m) (hm : 2 ≤ m)
+    (x y : ZMod (p ^ m))
+    (hx : ZMod.castHom hdiv (ZMod (p ^ (m - 1))) x = 0)
+    (hy : ZMod.castHom hdiv (ZMod (p ^ (m - 1))) y = 0) :
+    x * y = 0 := by
+  have key : ∀ z : ZMod (p ^ m), ZMod.castHom hdiv (ZMod (p ^ (m - 1))) z = 0 →
+      ((p ^ (m - 1) : ℕ) : ℤ) ∣ (z.cast : ℤ) := by
+    intro z hz
+    rw [← ZMod.intCast_zmod_cast z, map_intCast] at hz
+    exact (ZMod.intCast_zmod_eq_zero_iff_dvd _ _).1 hz
+  obtain ⟨k, hk⟩ := key x hx
+  obtain ⟨l, hl⟩ := key y hy
+  rw [← ZMod.intCast_zmod_cast x, ← ZMod.intCast_zmod_cast y, hk, hl, ← Int.cast_mul,
+    ZMod.intCast_zmod_eq_zero_iff_dvd]
+  have hpow : ((p : ℤ) ^ m) ∣ (p : ℤ) ^ (m - 1) * (p : ℤ) ^ (m - 1) := by
+    rw [← pow_add]; exact pow_dvd_pow _ (by omega)
+  push_cast
+  exact hpow.trans ⟨k * l, by ring⟩
+
 theorem apm_b96a01_part_c :
     ∀ (n : Type*) [Fintype n] [DecidableEq n] (p m : ℕ)
       (hdiv : p ^ (m - 1) ∣ p ^ m), 2 ≤ m →
       ∀ a b, a ∈ (apmReduction n p m hdiv).ker →
         b ∈ (apmReduction n p m hdiv).ker → a * b = b * a := by
-  sorry
+  intro n _ _ p m hdiv hm a b ha hb
+  have ha_map : apmReduction n p m hdiv a = 1 := ha
+  have hb_map : apmReduction n p m hdiv b = 1 := hb
+  let A : Matrix n n (ZMod (p ^ m)) := (a : Matrix n n (ZMod (p ^ m))) - 1
+  let B : Matrix n n (ZMod (p ^ m)) := (b : Matrix n n (ZMod (p ^ m))) - 1
+  have hA (i j : n) :
+      ZMod.castHom hdiv (ZMod (p ^ (m - 1))) (A i j) = 0 := by
+    have h := congrArg (fun g : Matrix.GeneralLinearGroup n (ZMod (p ^ (m - 1))) => g i j)
+      ha_map
+    have h' : ZMod.castHom hdiv (ZMod (p ^ (m - 1)))
+        ((a : Matrix n n (ZMod (p ^ m))) i j) =
+        (1 : Matrix n n (ZMod (p ^ (m - 1)))) i j := by
+      simpa [apmReduction, Matrix.GeneralLinearGroup.map_apply] using h
+    change ZMod.castHom hdiv (ZMod (p ^ (m - 1)))
+      ((a : Matrix n n (ZMod (p ^ m))) i j -
+        (1 : Matrix n n (ZMod (p ^ m))) i j) = 0
+    rw [map_sub, h']
+    by_cases hij : i = j
+    · subst j
+      simp only [Matrix.one_apply, if_pos]
+      change (1 : ZMod (p ^ (m - 1))) -
+        ZMod.castHom hdiv (ZMod (p ^ (m - 1))) (1 : ZMod (p ^ m)) = 0
+      rw [map_one]
+      simp
+    · simp [Matrix.one_apply, hij]
+  have hB (i j : n) :
+      ZMod.castHom hdiv (ZMod (p ^ (m - 1))) (B i j) = 0 := by
+    have h := congrArg (fun g : Matrix.GeneralLinearGroup n (ZMod (p ^ (m - 1))) => g i j)
+      hb_map
+    have h' : ZMod.castHom hdiv (ZMod (p ^ (m - 1)))
+        ((b : Matrix n n (ZMod (p ^ m))) i j) =
+        (1 : Matrix n n (ZMod (p ^ (m - 1)))) i j := by
+      simpa [apmReduction, Matrix.GeneralLinearGroup.map_apply] using h
+    change ZMod.castHom hdiv (ZMod (p ^ (m - 1)))
+      ((b : Matrix n n (ZMod (p ^ m))) i j -
+        (1 : Matrix n n (ZMod (p ^ m))) i j) = 0
+    rw [map_sub, h']
+    by_cases hij : i = j
+    · subst j
+      simp only [Matrix.one_apply, if_pos]
+      change (1 : ZMod (p ^ (m - 1))) -
+        ZMod.castHom hdiv (ZMod (p ^ (m - 1))) (1 : ZMod (p ^ m)) = 0
+      rw [map_one]
+      simp
+    · simp [Matrix.one_apply, hij]
+  have hAB : A * B = 0 := by
+    ext i j
+    simp only [Matrix.mul_apply, Matrix.zero_apply]
+    apply Finset.sum_eq_zero
+    intro k hk
+    exact apm_b96a01_part_c_aux_mul_eq_zero p m hdiv hm (A i k) (B k j) (hA i k) (hB k j)
+  have hBA : B * A = 0 := by
+    ext i j
+    simp only [Matrix.mul_apply, Matrix.zero_apply]
+    apply Finset.sum_eq_zero
+    intro k hk
+    exact apm_b96a01_part_c_aux_mul_eq_zero p m hdiv hm (B i k) (A k j) (hB i k) (hA k j)
+  apply Matrix.GeneralLinearGroup.ext
+  intro i j
+  have ha' : (a : Matrix n n (ZMod (p ^ m))) = 1 + A := by simp [A]
+  have hb' : (b : Matrix n n (ZMod (p ^ m))) = 1 + B := by simp [B]
+  have hmat : (a : Matrix n n (ZMod (p ^ m))) * b =
+      (b : Matrix n n (ZMod (p ^ m))) * a := by
+    rw [ha', hb']
+    simp only [add_mul, mul_add, one_mul, mul_one, hAB, hBA, add_zero]
+    abel
+  exact congrFun (congrFun hmat i) j
 -- END SEAT AREA
 
 theorem apm_b96a01_part_d_nonabelian :
