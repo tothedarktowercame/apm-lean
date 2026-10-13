@@ -1022,6 +1022,35 @@ lemma apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_v_bound
       (ContDiffMapSupportedIn.withSeminorms ℝ apm_m98J02_E ℝ ⊤ K')
       L.toLinearMap.toSeminorm hL)
 
+noncomputable def apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_partialListTest
+    (is : List (Fin 2)) (φ : apm_m98J02_Test) : apm_m98J02_Test :=
+  is.foldr apm_m98J02_partialTest φ
+
+def apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_partialList
+    (is : List (Fin 2)) (f : apm_m98J02_E → ℝ) : apm_m98J02_E → ℝ :=
+  is.foldr apm_m98J02_partial f
+
+lemma apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_partial_formula
+    (v : apm_m98J02_Dist) (φ : apm_m98J02_Test) (is : List (Fin 2)) :
+    apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_partialList is
+        (fun x : apm_m98J02_E => v (apm_m98J02_translateTest x φ)) =
+      fun x => v (apm_m98J02_translateTest x
+        (apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_partialListTest is φ)) := by
+  induction is with
+  | nil => rfl
+  | cons i is ih =>
+      simp only [apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_partialList,
+        apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_partialListTest,
+        List.foldr_cons]
+      change List.foldr apm_m98J02_partial
+          (fun x : apm_m98J02_E => v (apm_m98J02_translateTest x φ)) is =
+        (fun x => v (apm_m98J02_translateTest x
+          (List.foldr apm_m98J02_partialTest φ is))) at ih
+      rw [ih]
+      funext x
+      exact (apm_m98J02_translated_pairing_calculus v
+        (List.foldr apm_m98J02_partialTest φ is)).2.1 i x
+
 lemma apm_m98J02_bridge_2_aux_psi_aux_stage_cont
     (v : apm_m98J02_Dist) (χ : apm_m98J02_Test)
     (hsmooth : ∀ φ : apm_m98J02_Test,
