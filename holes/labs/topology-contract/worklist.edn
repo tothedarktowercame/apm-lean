@@ -113850,14 +113850,14 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 9,
+   :stop-count 10,
    :review-finding
    "Recorded fixture hash mismatch: :fixture.sha256 is 0bca6ce32c019fc3053c7f813c26917169cf817375b44d5e722b864b61a526450c1, but ConstructionTargets/PointWedgeVanKampen.blueprint.md at recorded commit c9b3af27 has exact SHA-256 0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0. Re-record the fixture hash for the reviewed commit.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
    :evidence
    {:placeholder-delta {:source-before 0, :source-after 0},
     :residual
-    "Compare inverse-span NF factorwise with reversed unshifted factors; then projection=1, inl, B6/B12.",
+    "Compare inverse-span component with inverse unshifted component; outer connectors now agree; then projection=1, inl, B6/B12.",
     :outcome :stop,
     :warnings ["existing linter"],
     :missing-theorems
@@ -113871,17 +113871,16 @@
       :area "fundamental-group-wedge-of-circles"}],
     :statement-hashes
     {:source
-     "928164669f6f98604224dff37b725d7786612022667c969624d25025fb47eab3",
+     "0b58c748909b8fa5841dcc671fe2f971de62f0e65b9e136dfcf1f34f95fcee98",
      :documentation
-     "f4018ff613d7101fab3fc1ca06ea758974e6c14c71c8d6f2815bb66d9d9ab263",
+     "793cb0a5c1117221d6989039cf83a7b9fb91678516712f220d8256791125e55f",
      :blueprint
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0",
      :registry "150/150"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
-    :reason
-    "Inverse unshifted normal form expanded into three dependent factors.",
+    :reason "Leading normal-form connectors identified by typed HEq.",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/PointWedgeVanKampen.lean",
@@ -113891,25 +113890,11 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "sha256/diff/placeholders", :exit 0}],
     :diagnostic-history
-    [{:cmd "lean dependent rewrite draft",
-      :exit 1,
-      :finding
-      "inv witness blocked rewriting; expanded factors instead."}
-     {:cmd
+    [{:cmd
       "lake build ConstructionTargets.ThreeCirclesFundamentalGroup",
       :exit 1,
       :finding "B12 absent."}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1791909013241-9991-fb9e2e19",
-     :commands
-     ["git show/diff-tree faa757c3"
-      "git archive faa757c3; lake env lean archived PointWedgeVanKampen.lean"
-      "sha256sum source/doc/blueprint; rg placeholders; statement-registry.py check"],
-     :finding
-     "Recorded commit changes only target+note; hashes match source 92816466, doc f4018ff6, fixture 0bca6ce3; archived Lean compiles, placeholders 0->0, registry 150/150, standard axioms only. New theorem correctly expands inverse normalForm by reversing dependent connector order/endpoints. Compiled progress beyond prior history; residual inverse-span factor comparison, then projection/B6/B12."},
-    :commit "faa757c3b059fe2ea4b05f7fc67808048b7108b5",
+    :commit "b76646cd0bfee9e243352d09fbd920b7b216c29e",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
      "ConstructionTargets/PointWedgeVanKampen.md"],
@@ -113919,7 +113904,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :needs-owner,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
