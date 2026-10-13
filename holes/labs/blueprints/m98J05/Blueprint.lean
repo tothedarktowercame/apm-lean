@@ -442,7 +442,38 @@ theorem apm_m98J05_heatSolution_hasDerivAt_space
     (f : ℝ → ℂ) (hf : Integrable f) {t : ℝ} (ht : 0 < t) (z : ℝ) :
     HasDerivAt (fun w ↦ apm_m98J05_heatSolution f w t)
       (∫ y, f y * (apm_m98J05_kernelDx t (z - y) : ℂ)) z := by
-  sorry
+  obtain ⟨C, hC⟩ := apm_m98J05_kernel_derivs_bounded (a := t) (b := t) ht
+  have hC0 : 0 ≤ C := by
+    have h := (hC t ⟨le_rfl, le_rfl⟩ 0).2
+    exact (abs_nonneg _).trans h
+  unfold apm_m98J05_heatSolution
+  exact (hasDerivAt_integral_of_dominated_loc_of_deriv_le
+    (F := fun w y ↦ f y * (apm_m98J05_heatKernel t (w - y) : ℂ))
+    (F' := fun w y ↦ f y * (apm_m98J05_kernelDx t (w - y) : ℂ))
+    (bound := fun y ↦ C * ‖f y‖) (s := Set.univ) univ_mem
+    (by
+      filter_upwards with w
+      exact hf.aestronglyMeasurable.mul
+        ((by unfold apm_m98J05_heatKernel; fun_prop : Continuous fun y : ℝ ↦
+          (apm_m98J05_heatKernel t (w - y) : ℂ)).aestronglyMeasurable))
+    (apm_m98J05_heatSolution_integrable hf ht z)
+    (hf.aestronglyMeasurable.mul
+      ((by unfold apm_m98J05_kernelDx apm_m98J05_heatKernel; fun_prop :
+        Continuous fun y : ℝ ↦ (apm_m98J05_kernelDx t (z - y) : ℂ)).aestronglyMeasurable))
+    (by
+      filter_upwards with y
+      intro w hw
+      rw [norm_mul, Complex.norm_real, Real.norm_eq_abs]
+      rw [mul_comm C]
+      exact mul_le_mul_of_nonneg_left (hC t ⟨le_rfl, le_rfl⟩ (w - y)).2
+        (norm_nonneg (f y)))
+    (hf.norm.const_mul C)
+    (by
+      filter_upwards with y
+      intro w hw
+      simpa using ((hasDerivAt_const w (f y)).mul
+        (((apm_m98J05_kernel_hasDerivAt_space ht (w - y)).comp w
+          ((hasDerivAt_id w).sub_const y)).ofReal_comp)))).2
 
 theorem apm_m98J05_heatSolution_dx_hasDerivAt_space
     (f : ℝ → ℂ) (hf : Integrable f) {t : ℝ} (ht : 0 < t) (z : ℝ) :
