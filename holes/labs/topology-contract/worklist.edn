@@ -113895,6 +113895,17 @@
       "lake build ConstructionTargets.ThreeCirclesFundamentalGroup",
       :exit 1,
       :finding "B12 absent."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791883759424-9307-42716462",
+     :commands
+     ["git show/diff 06eae79e^..06eae79e"
+      "git archive 06eae79e; lake env lean archived PointWedgeVanKampen.lean"
+      "statement-registry check; recorded-tree sha256; placeholders; diff-tree"
+      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (expected absent)"],
+     :finding
+     "PASS program STOP: 06eae79e is new after history and adds compiled, sorry-free B6 progress. The group calculation is correct in both directions: c*z*c^-1=z iff c*z=z*c, with multiplication order preserved; composing it with the prior normalized-left-leg iff yields the stated exact residual. No counit component is assumed trivial and no representation boundary is crossed. Scope is Lean+notes; hashes match source ddf7f5cd, notes 165a043a, blueprint 0bca6ce3; placeholders 0->0; registry 147/147; standard axioms only. The typed comparison square must still prove commutation, then B6/B12; B12 remains absent."},
     :commit "06eae79e5bbc3d05a46f61426b8d8b21cd5946f5",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
@@ -113905,7 +113916,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113926,7 +113937,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Transported the B6 left action through B5 and isolated its counit-normalization fixed-point equation.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Reduced the B6 normalized left-leg equation to commutation of the B3 counit element with every left injection.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -114634,7 +114645,11 @@
     {:job 3,
      :commit "e39e3086f760df01669290d3866cc8b5940ad2f8",
      :reason
-     "Transported the B6 left action through B5 and isolated its counit-normalization fixed-point equation."}]}
+     "Transported the B6 left action through B5 and isolated its counit-normalization fixed-point equation."}
+    {:job 4,
+     :commit "06eae79e5bbc3d05a46f61426b8d8b21cd5946f5",
+     :reason
+     "Reduced the B6 normalized left-leg equation to commutation of the B3 counit element with every left injection."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
