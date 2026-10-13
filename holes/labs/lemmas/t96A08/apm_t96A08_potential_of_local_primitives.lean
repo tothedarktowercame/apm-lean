@@ -105,7 +105,37 @@ theorem apm_t96A08_potential_of_local_primitives
       f p = apm_t96a08_LineIntegral I omega gamma) :
     ContMDiff I 𝓘(ℝ, ℝ) (⊤ : WithTop ℕ∞) f ∧
       ∀ p : M, mfderiv I 𝓘(ℝ, ℝ) f p = omega p := by
-  sorry
+  have h_at : ∀ x : M,
+      ContMDiffAt I 𝓘(ℝ, ℝ) (⊤ : WithTop ℕ∞) f x ∧
+        mfderiv I 𝓘(ℝ, ℝ) f x = omega x := by
+    intro x
+    rcases hlocal x with ⟨U, hU, hxU, g, hg, hgd, hradial⟩
+    rcases hreachable x with ⟨gamma, hgamma, hgamma0, hgamma1⟩
+    have heq : ∀ z ∈ U, f z = g z + (f x - g x) := by
+      intro z hz
+      rcases hradial z hz with ⟨delta, hdelta, hdelta0, hdelta1, hdelta_int⟩
+      rcases hconcat gamma delta hgamma hdelta (hgamma1.trans hdelta0.symm) with
+        ⟨eta, heta, heta0, heta1, heta_int⟩
+      have hfz := hf z eta heta (heta0.trans hgamma0) (heta1.trans hdelta1)
+      have hfx := hf x gamma hgamma hgamma0 hgamma1
+      linarith
+    have hg_at : ContMDiffAt I 𝓘(ℝ, ℝ) (⊤ : WithTop ℕ∞) g x :=
+      hg.contMDiffAt (hU.mem_nhds hxU)
+    have hq_at : ContMDiffAt I 𝓘(ℝ, ℝ) (⊤ : WithTop ℕ∞)
+        (fun y ↦ g y + (f x - g x)) x :=
+      hg_at.add contMDiffAt_const
+    have hfg : Filter.EventuallyEq (nhds x) f (fun y ↦ g y + (f x - g x)) :=
+      Filter.mem_of_superset (hU.mem_nhds hxU) (fun z hz ↦ heq z hz)
+    refine ⟨hq_at.congr_of_eventuallyEq hfg, ?_⟩
+    rw [hfg.mfderiv_eq]
+    change mfderiv I 𝓘(ℝ, ℝ) (g + fun _ ↦ f x - g x) x = omega x
+    rw [mfderiv_add (hg_at.mdifferentiableAt (by simp)) mdifferentiableAt_const,
+      mfderiv_const]
+    rw [hgd]
+    ext v
+    change omega x v + 0 = omega x v
+    exact add_zero _
+  exact ⟨fun x ↦ (h_at x).1, fun x ↦ (h_at x).2⟩
 -- END SEAT AREA
 
 /-- The fundamental theorem assembled from the three independent library
