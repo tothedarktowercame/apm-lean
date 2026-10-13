@@ -18,9 +18,8 @@ None.
 ## Encoding questions
 
 `RP²`, `S²`, and `S¹` are encoded as their actual projectivization and metric
-spheres. A closed oriented genus-two surface is an actual compact connected
-2-manifold with integral homology `H₀ = ℤ`, `H₁ = ℤ⁴`, `H₂ = ℤ`, and zero
-higher homology. Its asserted fundamental group is the actual presented group
+spheres. The closed oriented genus-two surface is described under "Genus
+encoding" below. Its asserted fundamental group is the actual presented group
 on four generators with relator `[a₁,b₁][a₂,b₂]`.
 
 ## Genus encoding (revised 2026-10-12)

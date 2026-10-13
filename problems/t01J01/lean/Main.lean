@@ -10,15 +10,14 @@ import ConstructionTargets.Surfaces
 ## Statement repairs
 
 The former genus-two and null-homology hypotheses were opaque predicates.
-They are replaced by a genuine compact connected 2-manifold with its
-characteristic integral homology groups, and by vanishing of the morphism on
+They are replaced by an actual genus-two surface (see "Genus encoding" below)
+and by vanishing of the morphism on
 actual first singular homology induced by each curve. No source claim is
 changed.
 
 ## Encoding questions
 
-Mathlib has no packaged surface-genus predicate. As in `t00A02`, genus two is
-encoded by the integral homology of an actual compact connected 2-manifold.
+Mathlib has no packaged surface-genus predicate; see "Genus encoding" below.
 The curves, embeddedness, disjointness, null-homotopies, annular subset,
 homeomorphism `A ≃ S¹ × I`, and boundary equality remain explicit.
 

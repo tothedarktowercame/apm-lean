@@ -15,9 +15,8 @@ We add the standard connectedness hypothesis, as does the supplied solution.
 
 ## Encoding questions
 
-Mathlib has covering maps and manifolds but no packaged surface genus. The
-genus-five hypothesis is encoded by an actual compact connected 2-manifold
-with its characteristic integral homology groups. `ℝP²`, its antipodal cover,
+Mathlib has covering maps and manifolds but no packaged surface genus; the
+genus-five hypothesis is described under "Genus encoding" below. `ℝP²`, its antipodal cover,
 and the wedge are genuine quotient spaces. Regularity is transitivity of the
 actual deck-homeomorphism action on each fiber.
 

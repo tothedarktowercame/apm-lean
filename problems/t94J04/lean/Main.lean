@@ -17,9 +17,8 @@ isomorphic.  The informal solution also explicitly assumes `k ≥ 1`.
 ## Encoding questions
 
 The group is the actual Mathlib fundamental group of a compact connected
-smooth surface. Following `t00A02`, genus two and orientability are encoded by
-the surface's characteristic integral homology groups: `H₀ = ℤ`, `H₁ = ℤ⁴`,
-`H₂ = ℤ`, and vanishing higher homology. Subgroups, their index, and the
+smooth surface; genus two and orientability are described under "Genus
+encoding" below. Subgroups, their index, and the
 resulting group isomorphism are all native.
 
 ## Genus encoding (revised 2026-10-12)

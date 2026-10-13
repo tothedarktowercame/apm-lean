@@ -16,7 +16,7 @@ The former encoding omitted the surface and encoded the conclusion of part
 (a) in its `pantsAtomic` hypothesis.  The repaired statement uses an actual
 compact connected surface, embedded circles, concrete null-homotopy and
 free-homotopy tests for essentiality and parallelism, and the actual connected
-components of the complement.  Genus is pinned by integral singular homology.
+components of the complement.  Genus: see "Genus encoding" below.
 
 ## Genus encoding (revised 2026-10-12)
 

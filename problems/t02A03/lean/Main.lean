@@ -320,8 +320,8 @@ noncomputable def apm_t02a03_leftCore (t : ℝ) : apm_t02a03_E3 :=
 noncomputable def apm_t02a03_rightCore (t : ℝ) : apm_t02a03_E3 :=
   WithLp.toLp 2 ![6 / 5 - Real.cos t, Real.sin t, 0]
 
-/-- A concrete planar figure-eight spine for the standard genus-two
-handlebody. -/
+/-- The two disjoint planar core circles of the standard genus-two handlebody;
+`W` is their closed 1/4-neighbourhood, in which the two tubes overlap. -/
 def apm_t02a03_genusTwoSpine : Set apm_t02a03_E3 :=
   Set.range apm_t02a03_leftCore ∪ Set.range apm_t02a03_rightCore
 
