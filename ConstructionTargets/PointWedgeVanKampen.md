@@ -1330,3 +1330,6 @@ both are transported to the reflexive connector at the literal right base.
 The terminal connectors are already the same expression, so the comparison
 is reduced to the inverse-span component versus the inverse unshifted
 round-trip component.
+`genericPointWedgeOuterRight_middleComponent_endpoints` now gives both exact
+endpoint equalities in the orientation of that comparison.  It remains to
+identify the two middle morphisms after transport along these equalities.
