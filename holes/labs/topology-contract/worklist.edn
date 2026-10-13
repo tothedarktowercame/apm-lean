@@ -113898,6 +113898,17 @@
       "lake build ConstructionTargets.ThreeCirclesFundamentalGroup",
       :exit 1,
       :finding "B12 absent."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791884438047-9334-170effe5",
+     :commands
+     ["git show/diff d7a9b3c6^..d7a9b3c6"
+      "git archive d7a9b3c6; lake env lean archived PointWedgeVanKampen.lean"
+      "statement-registry check; recorded-tree sha256; placeholders; diff-tree"
+      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (expected absent)"],
+     :finding
+     "PASS program STOP: d7a9b3c6 is new after history and adds compiled, sorry-free B6 progress. Injectivity is used in the correct direction to show counit commutation iff mappedLeft g=inl g; the reverse implication uses the proved normalization_left equation with h.symm. The composed iff is faithful and remains wholly in the free-product representation. Scope is Lean+notes; hashes match source bb3d2c4e, notes 8757c210, blueprint 0bca6ce3; placeholders 0->0; registry gate passes (149/149 now, including all 148 recorded entries); standard axioms only. The typed square must still prove mappedLeft equality, then B6/B12; B12 remains absent."},
     :commit "d7a9b3c6b14583c6435721bf5189c1550a5f0cea",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
@@ -113908,7 +113919,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113929,7 +113940,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Reduced the B6 normalized left-leg equation to commutation of the B3 counit element with every left injection.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Identified the B6 left equation with the exact B3 mapped-left equality.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -114641,7 +114652,11 @@
     {:job 4,
      :commit "06eae79e5bbc3d05a46f61426b8d8b21cd5946f5",
      :reason
-     "Reduced the B6 normalized left-leg equation to commutation of the B3 counit element with every left injection."}]}
+     "Reduced the B6 normalized left-leg equation to commutation of the B3 counit element with every left injection."}
+    {:job 5,
+     :commit "d7a9b3c6b14583c6435721bf5189c1550a5f0cea",
+     :reason
+     "Identified the B6 left equation with the exact B3 mapped-left equality."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
