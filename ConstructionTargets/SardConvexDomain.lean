@@ -5,6 +5,27 @@ open Set MeasureTheory
 
 noncomputable section
 
+/-- Two maps continuous within a set agree at a point in the closure of any smaller set on
+which they agree. -/
+theorem ContinuousWithinAt.eq_of_eqOn_of_mem_closure
+    {X Y : Type*} [TopologicalSpace X] [TopologicalSpace Y] [T2Space Y]
+    {s t : Set X} {x : X} {f g : X → Y}
+    (hx : x ∈ closure t) (hts : t ⊆ s)
+    (hf : ContinuousWithinAt f s x) (hg : ContinuousWithinAt g s x)
+    (heq : Set.EqOn f g t) : f x = g x := by
+  have hn : (nhdsWithin x t).NeBot := mem_closure_iff_clusterPt.mp hx
+  exact tendsto_nhds_unique_of_eventuallyEq
+    (hf.mono hts) (hg.mono hts)
+    (heq.eventuallyEq_of_mem self_mem_nhdsWithin)
+
+/-- Intersecting a set with a neighborhood of a closure point preserves that closure point. -/
+theorem mem_closure_inter_of_mem_nhds
+    {X : Type*} [TopologicalSpace X] {t u : Set X} {x : X}
+    (hx : x ∈ closure t) (hu : u ∈ nhds x) : x ∈ closure (u ∩ t) := by
+  rw [mem_closure_iff_nhdsWithin_neBot, nhdsWithin_inter_of_mem]
+  · exact mem_closure_iff_nhdsWithin_neBot.mp hx
+  · exact mem_nhdsWithin_iff_exists_mem_nhds_inter.mpr ⟨u, hu, inter_subset_left⟩
+
 /-- Two maps continuous within a set agree at a point in the closure of its interior if they
 agree throughout that interior. -/
 theorem ContinuousWithinAt.eq_of_eqOn_interior_of_mem_closure
