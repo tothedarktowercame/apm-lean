@@ -263,7 +263,14 @@ lemma tft_stage_continuousAt_of_structure_maps
       (ContDiffMapSupportedIn.structureMapCLM ℝ ⊤ i ∘
         tftTranslateStageLocal ψ x₀) x₀) :
     ContinuousAt (tftTranslateStageLocal ψ x₀) x₀ := by
-  sorry
+  let T := ContinuousLinearMap.pi
+    (ContDiffMapSupportedIn.structureMapCLM ℝ (⊤ : ℕ∞) :
+      ∀ i : ℕ, ContDiffMapSupportedIn E F ⊤ (tftTranslationCompact ψ x₀) →L[ℝ]
+        E →ᵇ (E [×i]→L[ℝ] F))
+  apply (ContDiffMapSupportedIn.isUniformEmbedding_pi_structureMapCLM ℝ).toIsUniformInducing.isInducing.continuousAt_iff.mpr
+  rw [continuousAt_pi]
+  intro i
+  simpa [T, Function.comp_def] using hU1 i
 
 /-- S1 with U1 discharged for every iterated derivative of `ψ`. -/
 lemma tft_stage_continuousAt (ψ : TFT E F) (x₀ : E) :
