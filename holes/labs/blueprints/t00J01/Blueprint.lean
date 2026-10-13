@@ -262,9 +262,64 @@ theorem apm_t00j01_foldRegular_pi :
   sorry
 
 /-- Every lift of the fiber over `1` has nonzero derivative. -/
+lemma apm_t00j01_foldRegular_one_aux_int_gap (j : ℤ) :
+    (1 / 3 : ℝ) ≤ |(j : ℝ) - 1 / 3| := by
+  by_cases hj : j ≤ 0
+  · have hj' : (j : ℝ) ≤ 0 := by exact_mod_cast hj
+    rw [abs_of_nonpos (by linarith)]
+    linarith
+  · have hj : 1 ≤ j := by omega
+    have hj' : (1 : ℝ) ≤ (j : ℝ) := by exact_mod_cast hj
+    rw [abs_of_nonneg (by linarith)]
+    linarith
+
+lemma apm_t00j01_foldRegular_one_aux_cos_two_pi_div_three :
+    Real.cos (2 * Real.pi / 3) = (-1 / 2 : ℝ) := by
+  rw [show 2 * Real.pi / 3 = Real.pi - Real.pi / 3 by ring]
+  rw [Real.cos_sub, Real.cos_pi, Real.sin_pi, Real.cos_pi_div_three]
+  ring
+
 theorem apm_t00j01_foldRegular_one :
     apm_t00j01_foldRegular 1 := by
-  sorry
+  intro θ hfold hderiv
+  have hexp : Circle.exp (apm_t00j01_foldLift θ) = Circle.exp 0 := by
+    rw [← apm_t00j01_fold_exp]
+    simpa using hfold
+  obtain ⟨n, hn, -⟩ :=
+    (ConstructionTargets.CircleWindingUniqueness.exp_eq_iff_existsUnique_endpointWinding
+      (apm_t00j01_foldLift θ) 0).mp hexp
+  have hcos : Real.cos θ = (-1 / 2 : ℝ) := by linarith
+  have hclass := (Real.cos_eq_cos_iff).mp
+    (hcos.trans apm_t00j01_foldRegular_one_aux_cos_two_pi_div_three.symm)
+  rcases hclass with ⟨k, hk | hk⟩
+  · let j : ℤ := n + k
+    have heq : Real.sin θ = Real.pi * ((j : ℝ) - 1 / 3) := by
+      unfold ConstructionTargets.CircleWindingUniqueness.IsEndpointWinding at hn
+      simp only [apm_t00j01_foldLift, zero_add] at hn
+      dsimp [j]
+      push_cast
+      nlinarith [hk]
+    have hgap := apm_t00j01_foldRegular_one_aux_int_gap j
+    have hpi : 3 < Real.pi := Real.pi_gt_three
+    have habs : 1 < |Real.sin θ| := by
+      rw [heq, abs_mul]
+      rw [abs_of_pos (by positivity : 0 < Real.pi)]
+      nlinarith
+    exact (not_lt_of_ge (Real.abs_sin_le_one θ)) habs
+  · let j : ℤ := k - n
+    have heq : Real.sin θ = -Real.pi * ((j : ℝ) - 1 / 3) := by
+      unfold ConstructionTargets.CircleWindingUniqueness.IsEndpointWinding at hn
+      simp only [apm_t00j01_foldLift, zero_add] at hn
+      dsimp [j]
+      push_cast
+      nlinarith [hk]
+    have hgap := apm_t00j01_foldRegular_one_aux_int_gap j
+    have hpi : 3 < Real.pi := Real.pi_gt_three
+    have habs : 1 < |Real.sin θ| := by
+      rw [heq, abs_mul]
+      rw [abs_neg, abs_of_pos (by positivity : 0 < Real.pi)]
+      nlinarith
+    exact (not_lt_of_ge (Real.abs_sin_le_one θ)) habs
 
 def apm_t00j01_foldFiberCard_pi_aux_angleEquiv :
     {z : Circle // apm_t00j01_fold z = Circle.exp Real.pi} ≃
