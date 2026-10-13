@@ -19,6 +19,18 @@ open CategoryTheory
 
 None.
 
+## Model geometry (revised 2026-10-12)
+
+The source fixes no coordinates for the standardly embedded genus-two region.
+The cores are unit circles centred at `(±6/5, 0, 0)`, 2/5 apart, and `W` is
+their closed 1/4-neighbourhood: two solid tori meeting in a lens-shaped ball,
+whose boundary is a standardly embedded genus-two surface. `C` is the left
+core, which stays 2/5 from the right core and so lies in the interior of `W`
+away from the right handle, going around one hole as `K` does. (The earlier
+model used tangent circles centred at `(±1, 0, 0)`; there the left core
+crossed the right tube in an arc. That model was also faithful, but its
+right handle minus `C` was not a circle, which made the proof needlessly hard.)
+
 ## Encoding note
 
 The two complements are represented by their explicit deformation-retract
@@ -303,10 +315,10 @@ abbrev apm_t02a03_X :=
 abbrev apm_t02a03_E3 := EuclideanSpace ℝ (Fin 3)
 
 noncomputable def apm_t02a03_leftCore (t : ℝ) : apm_t02a03_E3 :=
-  WithLp.toLp 2 ![-1 + Real.cos t, Real.sin t, 0]
+  WithLp.toLp 2 ![-6 / 5 + Real.cos t, Real.sin t, 0]
 
 noncomputable def apm_t02a03_rightCore (t : ℝ) : apm_t02a03_E3 :=
-  WithLp.toLp 2 ![1 - Real.cos t, Real.sin t, 0]
+  WithLp.toLp 2 ![6 / 5 - Real.cos t, Real.sin t, 0]
 
 /-- A concrete planar figure-eight spine for the standard genus-two
 handlebody. -/

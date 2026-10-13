@@ -2,6 +2,7 @@ import Mathlib
 import Mathlib.AlgebraicTopology.SingularHomology.Basic
 import Mathlib.Algebra.Category.ModuleCat.Colimits
 import Mathlib.Algebra.Category.ModuleCat.Abelian
+import ConstructionTargets.Surfaces
 
 /-!
 # APM t00A02: Finite coverings of surfaces and a projective-plane wedge
@@ -19,6 +20,17 @@ genus-five hypothesis is encoded by an actual compact connected 2-manifold
 with its characteristic integral homology groups. `ℝP²`, its antipodal cover,
 and the wedge are genuine quotient spaces. Regularity is transitivity of the
 actual deck-homeomorphism action on each fiber.
+
+## Genus encoding (revised 2026-10-12)
+
+The source's "a closed orientable surface of genus 5" names a homeomorphism class, so the hypothesis is a
+homeomorphism to the standard polygon model
+`ConstructionTargets.Surfaces.Surface true g` (the 4g-gon with word
+a₁b₁a₁⁻¹b₁⁻¹⋯). The earlier encoding by integral singular homology of a compact
+smooth 2-manifold picks out the same class only via the classification of
+surfaces, which the source uses as background and never asks for (Joe,
+2026-10-12). The remaining manifold instances are kept; every closed
+topological surface admits a smooth structure, so they exclude nothing.
 -/
 
 open CategoryTheory Set
@@ -34,11 +46,10 @@ abbrev apm_t00A02_H (k : ℕ) (X : Type) [TopologicalSpace X] :=
   (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) k).obj
     (ModuleCat.of ℤ ℤ)).obj (TopCat.of X))
 
-def apm_t00A02_hasGenusFiveHomology (X : Type) [TopologicalSpace X] : Prop :=
-  Nonempty (apm_t00A02_H 0 X ≅ ModuleCat.of ℤ ℤ) ∧
-  Nonempty (apm_t00A02_H 1 X ≅ ModuleCat.of ℤ (Fin 10 → ℤ)) ∧
-  Nonempty (apm_t00A02_H 2 X ≅ ModuleCat.of ℤ ℤ) ∧
-  ∀ k : ℕ, 3 ≤ k → Limits.IsZero (apm_t00A02_H k X)
+/-- `a closed orientable surface of genus 5`: homeomorphic to the standard polygon model. -/
+def apm_t00A02_isGenusFiveSurface
+    (X : Type) [TopologicalSpace X] : Prop :=
+  Nonempty (X ≃ₜ ConstructionTargets.Surfaces.Surface true 5)
 
 def apm_t00A02_isNfoldCover {E B : Type} [TopologicalSpace E]
     [TopologicalSpace B] (n : ℕ) (p : E → B) : Prop :=
@@ -204,7 +215,7 @@ theorem apm_t00A02_bridge_global_cover_classification_and_wedge :
         [IsManifold apm_t00A02_I2 (⊤ : ℕ∞) F]
         [TopologicalSpace E₁] [PathConnectedSpace E₁]
         [TopologicalSpace E₂] [PathConnectedSpace E₂]
-        (_hF : apm_t00A02_hasGenusFiveHomology F)
+        (_hF : apm_t00A02_isGenusFiveSurface F)
         (p₁ : E₁ → F) (p₂ : E₂ → F),
       apm_t00A02_isNfoldCover 10 p₁ →
       apm_t00A02_isNfoldCover 10 p₂ → Nonempty (E₁ ≃ₜ E₂)) ∧
@@ -220,7 +231,7 @@ theorem apm_t00a02 :
         [IsManifold apm_t00A02_I2 (⊤ : ℕ∞) F]
         [TopologicalSpace E₁] [PathConnectedSpace E₁]
         [TopologicalSpace E₂] [PathConnectedSpace E₂]
-        (hF : apm_t00A02_hasGenusFiveHomology F)
+        (hF : apm_t00A02_isGenusFiveSurface F)
         (p₁ : E₁ → F) (p₂ : E₂ → F),
       apm_t00A02_isNfoldCover 10 p₁ →
       apm_t00A02_isNfoldCover 10 p₂ → Nonempty (E₁ ≃ₜ E₂)) ∧

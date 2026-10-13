@@ -2,6 +2,7 @@ import Mathlib
 import Mathlib.AlgebraicTopology.SingularHomology.Basic
 import Mathlib.Algebra.Category.ModuleCat.Colimits
 import Mathlib.Algebra.Category.ModuleCat.Abelian
+import ConstructionTargets.Surfaces
 
 /-!
 # APM t94J04
@@ -20,6 +21,17 @@ smooth surface. Following `t00A02`, genus two and orientability are encoded by
 the surface's characteristic integral homology groups: `H₀ = ℤ`, `H₁ = ℤ⁴`,
 `H₂ = ℤ`, and vanishing higher homology. Subgroups, their index, and the
 resulting group isomorphism are all native.
+
+## Genus encoding (revised 2026-10-12)
+
+The source's "a closed orientable surface of genus 2" names a homeomorphism class, so the hypothesis is a
+homeomorphism to the standard polygon model
+`ConstructionTargets.Surfaces.Surface true g` (the 4g-gon with word
+a₁b₁a₁⁻¹b₁⁻¹⋯). The earlier encoding by integral singular homology of a compact
+smooth 2-manifold picks out the same class only via the classification of
+surfaces, which the source uses as background and never asks for (Joe,
+2026-10-12). The remaining manifold instances are kept; every closed
+topological surface admits a smooth structure, so they exclude nothing.
 -/
 
 open CategoryTheory
@@ -33,13 +45,10 @@ abbrev apm_t94J04_H (k : ℕ) (X : Type) [TopologicalSpace X] :=
   (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) k).obj
     (ModuleCat.of ℤ ℤ)).obj (TopCat.of X))
 
-/-- The integral homology of a closed orientable surface of genus two. -/
-def apm_t94J04_hasOrientedGenusTwoHomology
+/-- `a closed orientable surface of genus 2`: homeomorphic to the standard polygon model. -/
+def apm_t94J04_isGenusTwoSurface
     (F : Type) [TopologicalSpace F] : Prop :=
-  Nonempty (apm_t94J04_H 0 F ≅ ModuleCat.of ℤ ℤ) ∧
-  Nonempty (apm_t94J04_H 1 F ≅ ModuleCat.of ℤ (Fin 4 → ℤ)) ∧
-  Nonempty (apm_t94J04_H 2 F ≅ ModuleCat.of ℤ ℤ) ∧
-  ∀ k : ℕ, 3 ≤ k → Limits.IsZero (apm_t94J04_H k F)
+  Nonempty (F ≃ₜ ConstructionTargets.Surfaces.Surface true 2)
 
 lemma apm_t94J04_subgroups_equiv_of_index_one
     {G : Type*} [Group G] (H K : Subgroup G)
@@ -80,7 +89,7 @@ theorem apm_t94J04_bridge_equal_index_subgroups
     {F : Type} [TopologicalSpace F] [T2Space F] [CompactSpace F]
     [PathConnectedSpace F] [ChartedSpace apm_t94J04_E F]
     [IsManifold (𝓘(ℝ, apm_t94J04_E)) ∞ F]
-    (hF : apm_t94J04_hasOrientedGenusTwoHomology F)
+    (hF : apm_t94J04_isGenusTwoSurface F)
     (p : F) (k : ℕ) (hk : 2 ≤ k)
     (H K : Subgroup (FundamentalGroup F p))
     (hH : H.index = k) (hK : K.index = k) :
@@ -91,7 +100,7 @@ theorem apm_t94j04
     {F : Type} [TopologicalSpace F] [T2Space F] [CompactSpace F]
     [PathConnectedSpace F] [ChartedSpace apm_t94J04_E F]
     [IsManifold (𝓘(ℝ, apm_t94J04_E)) ∞ F]
-    (hF : apm_t94J04_hasOrientedGenusTwoHomology F)
+    (hF : apm_t94J04_isGenusTwoSurface F)
     (p : F) (k : ℕ) (hk : 0 < k)
     (H K : Subgroup (FundamentalGroup F p))
     (hH : H.index = k) (hK : K.index = k) :

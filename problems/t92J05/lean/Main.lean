@@ -6,6 +6,7 @@ import Mathlib.Algebra.Category.ModuleCat.Abelian
 import ConstructionTargets.SimplyConnectedSphereProducts
 import ConstructionTargets.CircleMetricFundamentalGroup
 import ConstructionTargets.BoundaryTorusHurewiczIsomorphism
+import ConstructionTargets.Surfaces
 
 /-!
 # APM t92J05
@@ -21,6 +22,17 @@ spheres. A closed oriented genus-two surface is an actual compact connected
 2-manifold with integral homology `H₀ = ℤ`, `H₁ = ℤ⁴`, `H₂ = ℤ`, and zero
 higher homology. Its asserted fundamental group is the actual presented group
 on four generators with relator `[a₁,b₁][a₂,b₂]`.
+
+## Genus encoding (revised 2026-10-12)
+
+The source's "the closed oriented surface of genus 2" names a homeomorphism class, so the hypothesis is a
+homeomorphism to the standard polygon model
+`ConstructionTargets.Surfaces.Surface true g` (the 4g-gon with word
+a₁b₁a₁⁻¹b₁⁻¹⋯). The earlier encoding by integral singular homology of a compact
+smooth 2-manifold picks out the same class only via the classification of
+surfaces, which the source uses as background and never asks for (Joe,
+2026-10-12). The remaining manifold instances are kept; every closed
+topological surface admits a smooth structure, so they exclude nothing.
 -/
 
 open CategoryTheory Set
@@ -44,12 +56,10 @@ abbrev apm_t92J05_H (k : ℕ) (S : Type) [TopologicalSpace S] :=
   (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) k).obj
     (ModuleCat.of ℤ ℤ)).obj (TopCat.of S))
 
-def apm_t92J05_HasGenusTwoHomology
+/-- `the closed oriented surface of genus 2`: homeomorphic to the standard polygon model. -/
+def apm_t92J05_IsGenusTwoSurface
     (S : Type) [TopologicalSpace S] : Prop :=
-  Nonempty (apm_t92J05_H 0 S ≅ ModuleCat.of ℤ ℤ) ∧
-  Nonempty (apm_t92J05_H 1 S ≅ ModuleCat.of ℤ (Fin 4 → ℤ)) ∧
-  Nonempty (apm_t92J05_H 2 S ≅ ModuleCat.of ℤ ℤ) ∧
-  ∀ k : ℕ, 3 ≤ k → Limits.IsZero (apm_t92J05_H k S)
+  Nonempty (S ≃ₜ ConstructionTargets.Surfaces.Surface true 2)
 
 /-- The commutator word on two generators of `FreeGroup (Fin 4)`. -/
 def apm_t92J05_commutator (a b : Fin 4) : FreeGroup (Fin 4) :=
@@ -183,7 +193,7 @@ theorem apm_t92J05_bridge_genusTwo_fundamentalGroup :
     ∀ (S : Type) [TopologicalSpace S] [T2Space S] [CompactSpace S]
         [PathConnectedSpace S] [ChartedSpace apm_t92J05_E2 S]
         [IsManifold apm_t92J05_Model ∞ S],
-      apm_t92J05_HasGenusTwoHomology S → ∀ x : S,
+      apm_t92J05_IsGenusTwoSurface S → ∀ x : S,
         Nonempty
           (FundamentalGroup S x ≃* apm_t92J05_genusTwoGroup) := by
   sorry
@@ -199,7 +209,7 @@ theorem apm_t92j05 :
     ∀ (S : Type) [TopologicalSpace S] [T2Space S] [CompactSpace S]
         [PathConnectedSpace S] [ChartedSpace apm_t92J05_E2 S]
         [IsManifold apm_t92J05_Model ∞ S]
-        (hS : apm_t92J05_HasGenusTwoHomology S) (x : S),
+        (hS : apm_t92J05_IsGenusTwoSurface S) (x : S),
       Nonempty
         (FundamentalGroup S x ≃* apm_t92J05_genusTwoGroup) := by
   /-

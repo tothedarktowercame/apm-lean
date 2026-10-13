@@ -2,6 +2,7 @@ import Mathlib
 import Mathlib.AlgebraicTopology.SingularHomology.Basic
 import Mathlib.Algebra.Category.ModuleCat.Colimits
 import Mathlib.Algebra.Category.ModuleCat.Abelian
+import ConstructionTargets.Surfaces
 
 /-!
 # APM t01J01
@@ -20,6 +21,17 @@ Mathlib has no packaged surface-genus predicate. As in `t00A02`, genus two is
 encoded by the integral homology of an actual compact connected 2-manifold.
 The curves, embeddedness, disjointness, null-homotopies, annular subset,
 homeomorphism `A ≃ S¹ × I`, and boundary equality remain explicit.
+
+## Genus encoding (revised 2026-10-12)
+
+The source's "a closed orientable surface of genus 2" names a homeomorphism class, so the hypothesis is a
+homeomorphism to the standard polygon model
+`ConstructionTargets.Surfaces.Surface true g` (the 4g-gon with word
+a₁b₁a₁⁻¹b₁⁻¹⋯). The earlier encoding by integral singular homology of a compact
+smooth 2-manifold picks out the same class only via the classification of
+surfaces, which the source uses as background and never asks for (Joe,
+2026-10-12). The remaining manifold instances are kept; every closed
+topological surface admits a smooth structure, so they exclude nothing.
 -/
 
 open CategoryTheory Set
@@ -35,12 +47,10 @@ abbrev apm_t01j01_H (k : ℕ) (X : Type) [TopologicalSpace X] :=
   (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) k).obj
     (ModuleCat.of ℤ ℤ)).obj (TopCat.of X))
 
-def apm_t01j01_HasGenusTwoHomology
+/-- `a closed orientable surface of genus 2`: homeomorphic to the standard polygon model. -/
+def apm_t01j01_IsGenusTwoSurface
     (S : Type) [TopologicalSpace S] : Prop :=
-  Nonempty (apm_t01j01_H 0 S ≅ ModuleCat.of ℤ ℤ) ∧
-  Nonempty (apm_t01j01_H 1 S ≅ ModuleCat.of ℤ (Fin 4 → ℤ)) ∧
-  Nonempty (apm_t01j01_H 2 S ≅ ModuleCat.of ℤ ℤ) ∧
-  ∀ k : ℕ, 3 ≤ k → Limits.IsZero (apm_t01j01_H k S)
+  Nonempty (S ≃ₜ ConstructionTargets.Surfaces.Surface true 2)
 
 def apm_t01j01_HomologyMap {X Y : Type} [TopologicalSpace X]
     [TopologicalSpace Y] (k : ℕ) (f : C(X, Y)) :=
@@ -135,7 +145,7 @@ theorem apm_t01J01_bridge_separates_of_nullHomologous
     (S : Type) [TopologicalSpace S] [T2Space S] [CompactSpace S]
     [PathConnectedSpace S] [ChartedSpace apm_t01j01_E2 S]
     [IsManifold apm_t01j01_Model ∞ S]
-    (hS : apm_t01j01_HasGenusTwoHomology S)
+    (hS : apm_t01j01_IsGenusTwoSurface S)
     (γ : C(Circle, S))
     (hγ : Topology.IsEmbedding (γ : Circle → S))
     (hhom : apm_t01j01_IsNullHomologous γ) :
@@ -150,7 +160,7 @@ theorem apm_t01J01_bridge_annulus_of_separating
     (S : Type) [TopologicalSpace S] [T2Space S] [CompactSpace S]
     [PathConnectedSpace S] [ChartedSpace apm_t01j01_E2 S]
     [IsManifold apm_t01j01_Model ∞ S]
-    (hS : apm_t01j01_HasGenusTwoHomology S)
+    (hS : apm_t01j01_IsGenusTwoSurface S)
     (γ₁ γ₂ : C(Circle, S))
     (hγ₁ : Topology.IsEmbedding (γ₁ : Circle → S))
     (hγ₂ : Topology.IsEmbedding (γ₂ : Circle → S))
@@ -166,7 +176,7 @@ theorem apm_t01j01
     (S : Type) [TopologicalSpace S] [T2Space S] [CompactSpace S]
     [PathConnectedSpace S] [ChartedSpace apm_t01j01_E2 S]
     [IsManifold apm_t01j01_Model ∞ S]
-    (hS : apm_t01j01_HasGenusTwoHomology S)
+    (hS : apm_t01j01_IsGenusTwoSurface S)
     (γ₁ γ₂ : C(Circle, S))
     (hγ₁ : Topology.IsEmbedding (γ₁ : Circle → S))
     (hγ₂ : Topology.IsEmbedding (γ₂ : Circle → S))

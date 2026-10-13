@@ -2,6 +2,7 @@ import Mathlib
 import Mathlib.AlgebraicTopology.SingularHomology.Basic
 import Mathlib.Algebra.Category.ModuleCat.Colimits
 import Mathlib.Algebra.Category.ModuleCat.Abelian
+import ConstructionTargets.Surfaces
 
 /-!
 # APM t00A03 — pants decompositions
@@ -16,6 +17,17 @@ The former encoding omitted the surface and encoded the conclusion of part
 compact connected surface, embedded circles, concrete null-homotopy and
 free-homotopy tests for essentiality and parallelism, and the actual connected
 components of the complement.  Genus is pinned by integral singular homology.
+
+## Genus encoding (revised 2026-10-12)
+
+The source's "a closed orientable surface of genus `g`" names a homeomorphism class, so the hypothesis is a
+homeomorphism to the standard polygon model
+`ConstructionTargets.Surfaces.Surface true g` (the 4g-gon with word
+a₁b₁a₁⁻¹b₁⁻¹⋯). The earlier encoding by integral singular homology of a compact
+smooth 2-manifold picks out the same class only via the classification of
+surfaces, which the source uses as background and never asks for (Joe,
+2026-10-12). The remaining manifold instances are kept; every closed
+topological surface admits a smooth structure, so they exclude nothing.
 -/
 
 open CategoryTheory Set
@@ -29,11 +41,10 @@ abbrev apm_t00a03_H (k : ℕ) (F : Type) [TopologicalSpace F] :=
   (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) k).obj
     (ModuleCat.of ℤ ℤ)).obj (TopCat.of F))
 
-def apm_t00a03_hasGenus (g : ℕ) (F : Type) [TopologicalSpace F] : Prop :=
-  Nonempty (apm_t00a03_H 0 F ≅ ModuleCat.of ℤ ℤ) ∧
-  Nonempty (apm_t00a03_H 1 F ≅ ModuleCat.of ℤ (Fin (2 * g) → ℤ)) ∧
-  Nonempty (apm_t00a03_H 2 F ≅ ModuleCat.of ℤ ℤ) ∧
-  ∀ k : ℕ, 3 ≤ k → Limits.IsZero (apm_t00a03_H k F)
+/-- `a closed orientable surface of genus `g``: homeomorphic to the standard polygon model. -/
+def apm_t00a03_isGenusSurface
+    (g : ℕ) (F : Type) [TopologicalSpace F] : Prop :=
+  Nonempty (F ≃ₜ ConstructionTargets.Surfaces.Surface true g)
 
 abbrev apm_t00a03_Curve (F : Type) := Circle → F
 
@@ -168,7 +179,7 @@ theorem apm_t00A03_bridge_1
     [TopologicalSpace F] [T2Space F] [CompactSpace F]
     [PathConnectedSpace F] [ChartedSpace apm_t00a03_E2 F]
     [IsManifold apm_t00a03_I2 (⊤ : ℕ∞) F]
-    (hg : 2 ≤ g) (hgenus : apm_t00a03_hasGenus g F)
+    (hg : 2 ≤ g) (hgenus : apm_t00a03_isGenusSurface g F)
     (curves : Fin n → apm_t00a03_Curve F)
     (hemb : ∀ i, Topology.IsEmbedding (curves i))
     (hessential : ∀ i, ¬apm_t00a03_nullHomotopic (curves i))
@@ -195,7 +206,7 @@ theorem apm_t00A03_bridge_2
     [TopologicalSpace F] [T2Space F] [CompactSpace F]
     [PathConnectedSpace F] [ChartedSpace apm_t00a03_E2 F]
     [IsManifold apm_t00a03_I2 (⊤ : ℕ∞) F]
-    (hg : 2 ≤ g) (hgenus : apm_t00a03_hasGenus g F)
+    (hg : 2 ≤ g) (hgenus : apm_t00a03_isGenusSurface g F)
     (curves : Fin n → apm_t00a03_Curve F)
     (hemb : ∀ i, Topology.IsEmbedding (curves i))
     (hessential : ∀ i, ¬apm_t00a03_nullHomotopic (curves i))
@@ -215,7 +226,7 @@ theorem apm_t00a03 :
       [TopologicalSpace F] [T2Space F] [CompactSpace F]
       [PathConnectedSpace F] [ChartedSpace apm_t00a03_E2 F]
       [IsManifold apm_t00a03_I2 (⊤ : ℕ∞) F],
-      2 ≤ g → apm_t00a03_hasGenus g F →
+      2 ≤ g → apm_t00a03_isGenusSurface g F →
       ∀ curves : Fin n → apm_t00a03_Curve F,
         (∀ i, Topology.IsEmbedding (curves i)) →
         (∀ i, ¬apm_t00a03_nullHomotopic (curves i)) →
