@@ -1884,11 +1884,98 @@ theorem apm_a97j08_squareSum_outside {z shift : ℂ} {δ : ℝ} (hδ : 0 < δ)
   sorry
 
 -- (A3) A grid square with `z` in its interior has total angle step `2π`.
+lemma apm_a97j08_squareSum_inside_aux_delta_ne {δ : ℝ} (hδ : 0 < δ) : δ ≠ 0 :=
+  ne_of_gt hδ
+
+-- The four counterclockwise edges of a square, summed term by term.
+lemma apm_a97j08_squareSum_inside_aux_expand (g : (ℤ × ℤ) × (ℤ × ℤ) → ℝ) (q : ℤ × ℤ) :
+    ∑ e ∈ apm_a97j08_squareEdges q, g e =
+      g ((q.1, q.2), (q.1 + 1, q.2)) + g ((q.1 + 1, q.2), (q.1 + 1, q.2 + 1)) +
+        g ((q.1 + 1, q.2 + 1), (q.1, q.2 + 1)) + g ((q.1, q.2 + 1), (q.1, q.2)) := by
+  rw [apm_a97j08_squareEdges, Finset.sum_insert, Finset.sum_insert, Finset.sum_insert,
+    Finset.sum_singleton]
+  · ring
+  all_goals simp [Prod.ext_iff]
+
+-- (i) Interior of a closed grid square: strict coordinate bounds.
+lemma apm_a97j08_squareSum_inside_aux_open {z shift : ℂ} {δ : ℝ} (q : ℤ × ℤ)
+    (hz : z ∈ interior (apm_a97j08_gridSquare shift δ q)) :
+    shift.re + q.1 * δ < z.re ∧ z.re < shift.re + (q.1 + 1) * δ ∧
+      shift.im + q.2 * δ < z.im ∧ z.im < shift.im + (q.2 + 1) * δ := by
+  sorry
+
+-- (ii) Strict bounds make every counterclockwise edge turn positively about `z`.
+lemma apm_a97j08_squareSum_inside_aux_cross {z shift : ℂ} {δ : ℝ} (hδ : 0 < δ)
+    (q : ℤ × ℤ)
+    (h : shift.re + q.1 * δ < z.re ∧ z.re < shift.re + (q.1 + 1) * δ ∧
+      shift.im + q.2 * δ < z.im ∧ z.im < shift.im + (q.2 + 1) * δ) :
+    ∀ e ∈ apm_a97j08_squareEdges q,
+      0 < ((starRingEnd ℂ) (apm_a97j08_gridVertex shift δ e.1 - z) *
+        (apm_a97j08_gridVertex shift δ e.2 - z)).im := by
+  sorry
+
+-- (iii) A positive turn has angle step in `(0, π)`.
+lemma apm_a97j08_squareSum_inside_aux_pos {z p q : ℂ}
+    (h : 0 < ((starRingEnd ℂ) (p - z) * (q - z)).im) :
+    0 < apm_a97j08_angleStep z p q ∧ apm_a97j08_angleStep z p q < Real.pi := by
+  sorry
+
+-- (iv) The angle steps around a closed quadrilateral sum to a multiple of `2π`.
+lemma apm_a97j08_squareSum_inside_aux_mult {z v₀ v₁ v₂ v₃ : ℂ}
+    (h₀ : v₀ ≠ z) (h₁ : v₁ ≠ z) (h₂ : v₂ ≠ z) (h₃ : v₃ ≠ z) :
+    ∃ k : ℤ, apm_a97j08_angleStep z v₀ v₁ + apm_a97j08_angleStep z v₁ v₂ +
+      apm_a97j08_angleStep z v₂ v₃ + apm_a97j08_angleStep z v₃ v₀ =
+        k * (2 * Real.pi) := by
+  sorry
+
+lemma apm_a97j08_squareSum_inside_aux_core {z shift : ℂ} {δ : ℝ} (hδ : 0 < δ)
+    (q : ℤ × ℤ) (hz : z ∈ interior (apm_a97j08_gridSquare shift δ q)) :
+    ∑ e ∈ apm_a97j08_squareEdges q, apm_a97j08_edgeAngle z shift δ e =
+      2 * Real.pi := by
+  have hcross := apm_a97j08_squareSum_inside_aux_cross hδ q
+    (apm_a97j08_squareSum_inside_aux_open q hz)
+  have hpos : ∀ e ∈ apm_a97j08_squareEdges q,
+      0 < apm_a97j08_edgeAngle z shift δ e ∧ apm_a97j08_edgeAngle z shift δ e < Real.pi :=
+    fun e he => apm_a97j08_squareSum_inside_aux_pos (hcross e he)
+  have hne : ∀ e ∈ apm_a97j08_squareEdges q, apm_a97j08_gridVertex shift δ e.1 ≠ z := by
+    intro e he hz'
+    have := hcross e he
+    rw [hz', sub_self, map_zero, zero_mul, Complex.zero_im] at this
+    exact lt_irrefl _ this
+  have hmem : ∀ e, e ∈ apm_a97j08_squareEdges q ↔ e ∈ apm_a97j08_squareEdges q := fun _ => Iff.rfl
+  have m0 : ((q.1, q.2), (q.1 + 1, q.2)) ∈ apm_a97j08_squareEdges q := by
+    simp [apm_a97j08_squareEdges]
+  have m1 : ((q.1 + 1, q.2), (q.1 + 1, q.2 + 1)) ∈ apm_a97j08_squareEdges q := by
+    simp [apm_a97j08_squareEdges]
+  have m2 : ((q.1 + 1, q.2 + 1), (q.1, q.2 + 1)) ∈ apm_a97j08_squareEdges q := by
+    simp [apm_a97j08_squareEdges]
+  have m3 : ((q.1, q.2 + 1), (q.1, q.2)) ∈ apm_a97j08_squareEdges q := by
+    simp [apm_a97j08_squareEdges]
+  obtain ⟨k, hk⟩ := apm_a97j08_squareSum_inside_aux_mult (z := z)
+    (hne _ m0) (hne _ m1) (hne _ m2) (hne _ m3)
+  rw [apm_a97j08_squareSum_inside_aux_expand]
+  simp only [apm_a97j08_edgeAngle] at hpos ⊢
+  rw [hk]
+  have p0 := hpos _ m0; have p1 := hpos _ m1; have p2 := hpos _ m2; have p3 := hpos _ m3
+  simp only at p0 p1 p2 p3
+  have hπ := Real.pi_pos
+  have hlo : (0 : ℝ) < k := by
+    have : (0 : ℝ) < k * (2 * Real.pi) := by rw [← hk]; linarith [p0.1, p1.1, p2.1, p3.1]
+    nlinarith
+  have hhi : (k : ℝ) < 2 := by
+    have : k * (2 * Real.pi) < 4 * Real.pi := by rw [← hk]; linarith [p0.2, p1.2, p2.2, p3.2]
+    nlinarith
+  have : k = 1 := by
+    have h1 : (0 : ℤ) < k := by exact_mod_cast hlo
+    have h2 : k < 2 := by exact_mod_cast hhi
+    omega
+  rw [this]; push_cast; ring
+
 theorem apm_a97j08_squareSum_inside {z shift : ℂ} {δ : ℝ} (hδ : 0 < δ)
     (q : ℤ × ℤ) (hz : z ∈ interior (apm_a97j08_gridSquare shift δ q)) :
     ∑ e ∈ apm_a97j08_squareEdges q, apm_a97j08_edgeAngle z shift δ e =
       2 * Real.pi := by
-  sorry
+  exact apm_a97j08_squareSum_inside_aux_core hδ q hz
 
 -- (A4) Off the grid lines, every lattice edge angle is antisymmetric (from A1).
 theorem apm_a97j08_edgeAngle_swap {z shift : ℂ} {δ : ℝ} (hδ : 0 < δ)
