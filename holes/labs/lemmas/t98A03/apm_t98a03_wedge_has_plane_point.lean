@@ -511,11 +511,130 @@ def apm_t98a03_HasPuncturedPreconnectedBasis
 
 /-- Seat: a torus point away from the gluing point retains its plane property. -/
 -- BEGIN SEAT AREA
+lemma apm_t98a03_wedge_has_plane_point_aux_prod_exp_local :
+    IsLocalHomeomorph
+      (fun x : EuclideanSpace ℝ (Fin 2) =>
+        (Circle.exp (x 0), Circle.exp (x 1))) := by
+  intro x
+  obtain ⟨e₀, hx₀, he₀⟩ := isLocalHomeomorph_circleExp (x 0)
+  obtain ⟨e₁, hx₁, he₁⟩ := isLocalHomeomorph_circleExp (x 1)
+  let h : EuclideanSpace ℝ (Fin 2) ≃ₜ ℝ × ℝ :=
+    (EuclideanSpace.equiv (Fin 2) ℝ).toHomeomorph.trans
+      (Homeomorph.finTwoArrow (X := ℝ))
+  refine ⟨h.toOpenPartialHomeomorph.trans (e₀.prod e₁), ?_, ?_⟩
+  · simp [h, hx₀, hx₁]
+  · funext y
+    simp [h, ← he₀, ← he₁]
+
 lemma apm_t98a03_wedge_has_plane_point
     (t₀ : apm_t98a03_Torus) (r₀ : apm_t98a03_RP2) :
     ∃ p : apm_t98a03_X t₀ r₀,
       apm_t98a03_HasPuncturedPreconnectedBasis p := by
-  sorry
+  classical
+  let F : EuclideanSpace ℝ (Fin 2) → apm_t98a03_Torus := fun x =>
+    (Circle.exp (x 0), Circle.exp (x 1))
+  let t' : apm_t98a03_Torus := (1, 1)
+  let t'' : apm_t98a03_Torus := (Circle.exp Real.pi, 1)
+  have htt : t'' ≠ t' := by
+    intro h
+    exact Circle.exp_pi_ne_one (congrArg Prod.fst h)
+  let t : apm_t98a03_Torus := if t' ≠ t₀ then t' else t''
+  have ht : t ≠ t₀ := by
+    simp only [t]
+    split_ifs with h
+    · exact h
+    · intro heq
+      exact htt (heq.trans (not_ne_iff.mp h).symm)
+  let z : EuclideanSpace ℝ (Fin 2) :=
+    ((EuclideanSpace.equiv (Fin 2) ℝ).toHomeomorph.trans
+      (Homeomorph.finTwoArrow (X := ℝ))).symm (Complex.arg t.1, Complex.arg t.2)
+  have hFz : F z = t := by
+    apply Prod.ext
+    · exact Circle.exp_arg t.1
+    · exact Circle.exp_arg t.2
+  let q : Sum apm_t98a03_Torus apm_t98a03_RP2 → apm_t98a03_X t₀ r₀ :=
+    fun s => Quotient.mk _ s
+  refine ⟨q (.inl t), ?_⟩
+  intro U hU hpU
+  have hFlocal : IsLocalHomeomorph F := by
+    simpa [F] using apm_t98a03_wedge_has_plane_point_aux_prod_exp_local
+  obtain ⟨e, hze, he⟩ := hFlocal z
+  let W : Set (EuclideanSpace ℝ (Fin 2)) :=
+    e.source ∩ F ⁻¹' ((fun a => q (.inl a)) ⁻¹' U) ∩ F ⁻¹' ({t₀}ᶜ)
+  have hFcont : Continuous F := by
+    exact (Circle.exp.continuous.comp (EuclideanSpace.proj 0).continuous).prodMk
+      (Circle.exp.continuous.comp (EuclideanSpace.proj 1).continuous)
+  have hWopen : IsOpen W := by
+    exact (e.open_source.inter
+      (hU.preimage (continuous_coinduced_rng.comp
+        (continuous_inl.comp hFcont)))).inter
+      (isOpen_compl_singleton.preimage hFcont)
+  have hzW : z ∈ W := by
+    refine ⟨⟨hze, ?_⟩, ?_⟩
+    · simpa [q, hFz] using hpU
+    · simpa [hFz] using ht
+  obtain ⟨V, hVopen, hzV, hVW, hVpre⟩ :=
+    apm_t98a03_plane_punctured_neighborhood W hWopen hzW
+  let A : Set apm_t98a03_Torus := F '' V
+  let N : Set (apm_t98a03_X t₀ r₀) := q '' (Sum.inl '' A)
+  have hFinj : Set.InjOn F V := by
+    intro x hx y hy hxy
+    have hxsrc : x ∈ e.source := (hVW hx).1.1
+    have hysrc : y ∈ e.source := (hVW hy).1.1
+    have : e x = e y := by simpa [he] using hxy
+    exact e.injOn hxsrc hysrc this
+  have hAt₀ : t₀ ∉ A := by
+    rintro ⟨x, hx, hxt⟩
+    exact (hVW hx).2 hxt
+  have hAopen : IsOpen A := by
+    rw [show A = e '' V by ext y; simp [A, he]]
+    exact e.isOpen_image_of_subset_source hVopen (fun _ hx => (hVW hx).1.1)
+  have hpreimage : q ⁻¹' N = Sum.inl '' A := by
+    ext s
+    constructor
+    · rintro ⟨_, ⟨a, ha, rfl⟩, hs⟩
+      have hrel : Relation.EqvGen (apm_t98a03_wedgeRel t₀ r₀) s (.inl a) :=
+        (Quotient.exact hs).symm
+      rcases apm_t98a03_wedge_branches_intersection_aux_eq_or_base
+          t₀ r₀ hrel with hsa | ⟨hsbase, habase⟩
+      · subst s
+        exact ⟨a, ha, rfl⟩
+      · change a = t₀ at habase
+        subst a
+        exact (hAt₀ ha).elim
+    · rintro ⟨a, ha, rfl⟩
+      exact ⟨.inl a, ⟨a, ha, rfl⟩, rfl⟩
+  refine ⟨N, ?_, ?_, ?_, ?_⟩
+  · rw [isOpen_coinduced, hpreimage]
+    simpa using isOpenMap_inl _ hAopen
+  · exact ⟨.inl t, ⟨t, ⟨z, hzV, hFz⟩, rfl⟩, rfl⟩
+  · rintro y ⟨_, ⟨a, ⟨x, hx, rfl⟩, rfl⟩, rfl⟩
+    have hxU : q (.inl (F x)) ∈ U := (hVW hx).1.2
+    exact hxU
+  · have himage : (fun x => q (.inl (F x))) '' (V \ {z}) =
+        N \ {q (.inl t)} := by
+      ext y
+      constructor
+      · rintro ⟨x, ⟨hxV, hxz⟩, rfl⟩
+        refine ⟨⟨.inl (F x), ⟨F x, ⟨x, hxV, rfl⟩, rfl⟩, rfl⟩, ?_⟩
+        intro heq
+        have hrel : Relation.EqvGen (apm_t98a03_wedgeRel t₀ r₀)
+            (.inl (F x)) (.inl t) := Quotient.exact heq
+        rcases apm_t98a03_wedge_branches_intersection_aux_eq_or_base
+            t₀ r₀ hrel with hsame | ⟨_, htbase⟩
+        · apply hxz
+          apply hFinj hxV hzV
+          simpa [hFz] using Sum.inl.inj hsame
+        · exact ht (by simpa using htbase)
+      · rintro ⟨⟨_, ⟨a, ⟨x, hxV, hxa⟩, rfl⟩, rfl⟩, hyne⟩
+        subst a
+        refine ⟨x, ⟨hxV, ?_⟩, rfl⟩
+        intro hxz
+        subst x
+        exact hyne (by simp [hFz])
+    rw [← himage]
+    exact hVpre.image _
+      ((continuous_coinduced_rng.comp continuous_inl).comp hFcont).continuousOn
 -- END SEAT AREA
 
 /-- Seat: a one-manifold has the opposite local puncture property. -/
