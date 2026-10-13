@@ -81679,7 +81679,8 @@
     :lemma-apm-t94a08-puncturedsigma2zerochart-not-ispreconnected
     :lemma-apm-t94a08-cross-subset-not-ispreconnected-of-branch-witnesses
     :lemma-apm-t94a08-open-mem-zero-has-affine-branch-witnesses
-    :lemma-apm-t94a08-open-inter-puncturedaffinecross-not-ispreconnected],
+    :lemma-apm-t94a08-open-inter-puncturedaffinecross-not-ispreconnected
+    :lemma-apm-t94a08-zerochartimage-inter-puncturedcross-not-ispreconnected],
    :other-consumers []}
   {:consumer :t94A10,
    :phase :lemma,
@@ -87733,70 +87734,52 @@
   {:consumer :t94A08,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 2,
+   :stop-count 3,
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Transport the local non-preconnectedness through zeroChartHomeomorph and contradict connected punctured Euclidean neighborhoods in an alleged manifold chart.",
-    :stop-count 12,
+    "Identify the chart image intersection with the punctured local sigma2 slice, then contradict punctured Euclidean neighborhood connectedness.",
+    :stop-count 13,
     :outcome :stop,
     :warnings
-    ["preexisting Lean lints"
-     "unrelated modified PointWedgeVanKampen.lean preserved"],
+    ["preexisting Lean lints" "unrelated t93J03 edits preserved"],
     :missing-theorems
     [{:name
-      "apm_t94a08_open_inter_puncturedAffineCross_not_isPreconnected",
+      "apm_t94a08_zeroChartImage_inter_puncturedCross_not_isPreconnected",
       :type
-      "open V containing zero implies not IsPreconnected (V intersect puncturedAffineCross)",
+      "IsOpen U -> node in U -> not IsPreconnected (zeroChartImage U intersect puncturedAffineCross)",
       :status :proved,
       :consumers [:t94A08],
       :depends-on
-      ["apm_t94a08_open_mem_zero_has_affine_branch_witnesses"
-       "apm_t94a08_cross_subset_not_isPreconnected_of_branch_witnesses"],
+      ["apm_t94a08_open_inter_puncturedAffineCross_not_isPreconnected"],
       :area "projective-affine-chart-homeomorph"}
      {:name "apm_t94a08_nodal_not_manifold_at",
       :type "not IsRealTwoManifoldAt sigma2 node",
       :status :partial,
       :consumers [:t94A08],
       :depends-on
-      ["apm_t94a08_open_inter_puncturedAffineCross_not_isPreconnected"],
+      ["apm_t94a08_zeroChartImage_inter_puncturedCross_not_isPreconnected"],
       :area "projective-affine-chart-homeomorph"}],
     :statement-hashes {:registry "166/0"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
     :reason
-    "Banked non-preconnectedness of every open neighborhood intersected with the punctured affine cross.",
+    "Banked the affine image obstruction for every open projective neighborhood of the node.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t94A08Closure.lean",
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-     {:cmd "git show --check ccb3fad28", :exit 0}],
-    :diagnostic-history
-    [{:cmd "initial compile",
-      :exit 1,
-      :correction "moved theorem after completed witness proof"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1791925754340-10513-632d381a",
-     :commands
-     ["scope/SHA256 checks at d59e0345d"
-      "recorded blob | lake env lean /dev/stdin"
-      "comment-stripped placeholder scan (0)"
-      "#print axioms witness theorem"
-      "statement-registry.py check (166/0)"],
-     :finding
-     "Valid program STOP with new compiled progress beyond history commit 02f7d5989. The theorem constructs nonzero exclusive points (r,I*r) and (r,-I*r) in every open neighborhood of zero, with branch orientations correct. Exact scope/hash match; placeholders 0; only standard axioms. Remaining milestone: chart transport and punctured-plane contradiction."},
-    :commit "ccb3fad28",
+     {:cmd "git show --check e0af1bd17", :exit 0}],
+    :commit "e0af1bd17",
     :changed-paths ["ConstructionTargets/t94A08Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t94A08Closure.lean",
      :sha256
-     "4fb98066d0282a77a949012c462e6a00d3b008ff7d5d32f5d900e44377f2977a"},
+     "689c445a3478b3ab1be2c919812a919b21d77efd98c4413e31a1a7b401a37df6"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t94A08/lean/Main.lean"
     "problems/t94A08/status.json"
@@ -88470,4 +88453,27 @@
    :depends-on
    [:lemma-apm-t94a08-open-mem-zero-has-affine-branch-witnesses
     :lemma-apm-t94a08-cross-subset-not-ispreconnected-of-branch-witnesses],
+   :other-consumers []}
+  {:consumer :t94A08,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "apm_t94a08_zeroChartImage_inter_puncturedCross_not_isPreconnected",
+    :type
+    "IsOpen U -> node in U -> not IsPreconnected (zeroChartImage U intersect puncturedAffineCross)"},
+   :lemma
+   {:name
+    "apm_t94a08_zeroChartImage_inter_puncturedCross_not_isPreconnected",
+    :reported-by [:program-2026-10-13-close-t94a08],
+    :type
+    "IsOpen U -> node in U -> not IsPreconnected (zeroChartImage U intersect puncturedAffineCross)",
+    :area "projective-affine-chart-homeomorph",
+    :proved-in :program-2026-10-13-close-t94a08},
+   :id
+   :lemma-apm-t94a08-zerochartimage-inter-puncturedcross-not-ispreconnected,
+   :kind :lemma,
+   :depends-on
+   [:lemma-apm-t94a08-open-inter-puncturedaffinecross-not-ispreconnected],
    :other-consumers []}]}
