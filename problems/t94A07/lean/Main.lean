@@ -1,19 +1,9 @@
 import Mathlib
+import ConstructionTargets.EuclideanThreeHalfTurnDerivative
+import ConstructionTargets.CoefficientFirstReflection
+import ConstructionTargets.SingularHomologyHomotopy
 
-/-!
-# APM t94A07 — the half-turn of an embedded torus
-
-## Statement repairs
-
-None.
-
-## Encoding questions
-
-The tangent plane is the kernel of the derivative of the torus's actual
-defining equation.  The local matrix is extracted from the actual `fderiv` of
-the half-turn in an explicit tangent basis, and the local index is the sign of
-its determinant.
--/
+/-! # Blueprint for APM t94A07 — the half-turn of an embedded torus -/
 
 noncomputable section
 
@@ -24,19 +14,6 @@ def apm_t94a07_torus (R r : ℝ) : Set apm_t94a07_E3 :=
 
 def apm_t94a07_halfTurn (p : apm_t94a07_E3) : apm_t94a07_E3 :=
   WithLp.toLp 2 ![p 0, -p 1, -p 2]
-
-lemma apm_t94a07_halfTurn_eq_iff (p : apm_t94a07_E3) :
-    apm_t94a07_halfTurn p = p ↔ p 1 = 0 ∧ p 2 = 0 := by
-  constructor
-  · intro h
-    have h1 := congr_fun (congr_arg WithLp.ofLp h) 1
-    have h2 := congr_fun (congr_arg WithLp.ofLp h) 2
-    simp [apm_t94a07_halfTurn] at h1 h2
-    exact ⟨by linarith, by linarith⟩
-  · rintro ⟨h1, h2⟩
-    apply PiLp.ext
-    intro i
-    fin_cases i <;> simp [apm_t94a07_halfTurn, h1, h2]
 
 def apm_t94a07_fixedPoints (R r : ℝ) : Set apm_t94a07_E3 :=
   {WithLp.toLp 2 ![R + r, 0, 0],
@@ -57,18 +34,14 @@ def apm_t94a07_IsLefschetzFixedPoint
     ∀ v : apm_t94a07_tangent R r p,
       apm_t94a07_halfTurn (v : apm_t94a07_E3) = v → v = 0
 
-/-- The `y,z` basis of the tangent plane at the four fixed points. -/
 def apm_t94a07_tangentBasisVector (i : Fin 2) : apm_t94a07_E3 :=
   EuclideanSpace.single i.succ 1
 
-/-- Matrix of `I - Df` in the explicit tangent basis.  Unlike the former
-definition, every entry is computed from the derivative of the actual map. -/
 def apm_t94a07_localMatrix (p : apm_t94a07_E3) : Matrix (Fin 2) (Fin 2) ℝ :=
   fun i j ↦
     (apm_t94a07_tangentBasisVector j -
       fderiv ℝ apm_t94a07_halfTurn p (apm_t94a07_tangentBasisVector j)) i.succ
 
-/-- The nondegenerate local Lefschetz index `sign(det(I-Df))`. -/
 def apm_t94a07_localLefschetzNumber (p : apm_t94a07_E3) : ℤ :=
   if 0 < Matrix.det (apm_t94a07_localMatrix p) then 1
   else if Matrix.det (apm_t94a07_localMatrix p) < 0 then -1 else 0
@@ -86,6 +59,19 @@ def apm_t94a07_fixedPointParam (R r : ℝ) : Fin 4 → apm_t94a07_E3
   | 1 => WithLp.toLp 2 ![R - r, 0, 0]
   | 2 => WithLp.toLp 2 ![-(R - r), 0, 0]
   | 3 => WithLp.toLp 2 ![-(R + r), 0, 0]
+
+lemma apm_t94a07_halfTurn_eq_iff (p : apm_t94a07_E3) :
+    apm_t94a07_halfTurn p = p ↔ p 1 = 0 ∧ p 2 = 0 := by
+  constructor
+  · intro h
+    have h1 := congr_fun (congr_arg WithLp.ofLp h) 1
+    have h2 := congr_fun (congr_arg WithLp.ofLp h) 2
+    simp [apm_t94a07_halfTurn] at h1 h2
+    exact ⟨by linarith, by linarith⟩
+  · rintro ⟨h1, h2⟩
+    apply PiLp.ext
+    intro i
+    fin_cases i <;> simp [apm_t94a07_halfTurn, h1, h2]
 
 lemma apm_t94a07_fixedPoints_eq_range (R r : ℝ) :
     apm_t94a07_fixedPoints R r = Set.range (apm_t94a07_fixedPointParam R r) := by
@@ -121,8 +107,6 @@ lemma apm_t94a07_fixedPoints_card (R r : ℝ)
       (apm_t94a07_fixedPointParam_injective R r hr hR)]
   simp
 
-/-- Solving the defining equation on the fixed axis gives exactly the four
-displayed points. -/
 lemma apm_t94a07_fixedSet_eq (R r : ℝ) (hr : 0 < r) (hR : r < R) :
     {p | p ∈ apm_t94a07_torus R r ∧ apm_t94a07_halfTurn p = p} =
       apm_t94a07_fixedPoints R r := by
@@ -135,35 +119,30 @@ lemma apm_t94a07_fixedSet_eq (R r : ℝ) (hr : 0 < r) (hR : r < R) :
     rcases eq_or_eq_neg_of_sq_eq_sq (|p 0| - R) r hs with hs | hs
     · have ha : |p 0| = R + r := by linarith
       rcases (abs_eq (by linarith : 0 ≤ R + r)).1 ha with hx | hx
-      · simp only [apm_t94a07_fixedPoints, Set.mem_insert_iff,
-          Set.mem_singleton_iff]
+      · simp only [apm_t94a07_fixedPoints, Set.mem_insert_iff, Set.mem_singleton_iff]
         left
         apply PiLp.ext
         intro i
         fin_cases i <;> simp [hx, hy, hz]
-      · simp only [apm_t94a07_fixedPoints, Set.mem_insert_iff,
-          Set.mem_singleton_iff]
+      · simp only [apm_t94a07_fixedPoints, Set.mem_insert_iff, Set.mem_singleton_iff]
         right; right; right
         apply PiLp.ext
         intro i
         fin_cases i <;> simp [hx, hy, hz]
     · have ha : |p 0| = R - r := by linarith
       rcases (abs_eq (by linarith : 0 ≤ R - r)).1 ha with hx | hx
-      · simp only [apm_t94a07_fixedPoints, Set.mem_insert_iff,
-          Set.mem_singleton_iff]
+      · simp only [apm_t94a07_fixedPoints, Set.mem_insert_iff, Set.mem_singleton_iff]
         right; left
         apply PiLp.ext
         intro i
         fin_cases i <;> simp [hx, hy, hz]
-      · simp only [apm_t94a07_fixedPoints, Set.mem_insert_iff,
-          Set.mem_singleton_iff]
+      · simp only [apm_t94a07_fixedPoints, Set.mem_insert_iff, Set.mem_singleton_iff]
         right; right; left
         apply PiLp.ext
         intro i
         fin_cases i <;> simp [hx, hy, hz]
   · intro hp
-    simp only [apm_t94a07_fixedPoints, Set.mem_insert_iff,
-      Set.mem_singleton_iff] at hp
+    simp only [apm_t94a07_fixedPoints, Set.mem_insert_iff, Set.mem_singleton_iff] at hp
     rcases hp with rfl | rfl | rfl | rfl
     · constructor
       · simp [apm_t94a07_torus, Real.sqrt_sq_eq_abs,
@@ -184,6 +163,287 @@ lemma apm_t94a07_fixedSet_eq (R r : ℝ) (hr : 0 < r) (hR : r < R) :
           abs_of_neg (by linarith : -r - R < 0)]
       · simp [apm_t94a07_halfTurn]
 
+/-- Compute the kernel of the derivative of the square-root torus constraint
+at each of the four fixed-axis points. -/
+lemma apm_t94a07_tangent_fixedPoints_eq_span_aux_fderiv
+    (R r x : ℝ) (hx : x ≠ 0) (v : apm_t94a07_E3) :
+    fderiv ℝ (apm_t94a07_constraint R r)
+        (WithLp.toLp 2 ![x, 0, 0]) v =
+      2 * (|x| - R) * (x / |x|) * v 0 := by
+  let e : Fin 3 → apm_t94a07_E3 →L[ℝ] ℝ := fun i =>
+    (ContinuousLinearMap.proj i : (Fin 3 → ℝ) →L[ℝ] ℝ).comp
+      (PiLp.continuousLinearEquiv 2 ℝ (fun _ : Fin 3 => ℝ) :
+        apm_t94a07_E3 →L[ℝ] (Fin 3 → ℝ))
+  let q : apm_t94a07_E3 := WithLp.toLp 2 ![x, 0, 0]
+  have h0 := ((e 0).hasFDerivAt (x := q)).pow 2
+  have h1 := ((e 1).hasFDerivAt (x := q)).pow 2
+  have hs := h0.add h1
+  have hs0 : (q 0) ^ 2 + (q 1) ^ 2 ≠ 0 := by simp [q, hx]
+  have hsqrt := hs.sqrt hs0
+  have hout := (hsqrt.sub_const R).pow 2
+  have h2 := ((e 2).hasFDerivAt (x := q)).pow 2
+  have hall := (hout.add h2).sub_const (r ^ 2)
+  have hall' := hall
+  change HasFDerivAt (apm_t94a07_constraint R r) _ q at hall'
+  rw [hall'.fderiv]
+  simp [apm_t94a07_constraint, e, q, Real.sqrt_sq_eq_abs, hx]
+  field_simp
+
+lemma apm_t94a07_tangent_fixedPoints_eq_span_aux_mem_span
+    (v : apm_t94a07_E3) :
+    v ∈ Submodule.span ℝ (Set.range apm_t94a07_tangentBasisVector) ↔ v 0 = 0 := by
+  constructor
+  · intro hv
+    refine Submodule.span_induction ?_ ?_ ?_ ?_ hv
+    · rintro w ⟨i, rfl⟩
+      simp [apm_t94a07_tangentBasisVector]
+    · simp
+    · intro x y hx hy hx0 hy0
+      simp [hx0, hy0]
+    · intro a x hx hx0
+      simp [hx0]
+  · intro hv
+    have heq : v =
+        v 1 • apm_t94a07_tangentBasisVector 0 +
+          v 2 • apm_t94a07_tangentBasisVector 1 := by
+      apply PiLp.ext
+      intro i
+      fin_cases i <;> simp [apm_t94a07_tangentBasisVector, hv]
+    rw [heq]
+    apply Submodule.add_mem
+    · apply Submodule.smul_mem
+      exact Submodule.subset_span ⟨0, rfl⟩
+    · apply Submodule.smul_mem
+      exact Submodule.subset_span ⟨1, rfl⟩
+
+theorem apm_t94a07_tangent_fixedPoints_eq_span (R r : ℝ)
+    (hr : 0 < r) (hR : r < R) :
+    ∀ p ∈ apm_t94a07_fixedPoints R r,
+      apm_t94a07_tangent R r p =
+        Submodule.span ℝ (Set.range apm_t94a07_tangentBasisVector) := by
+  intro p hp
+  simp only [apm_t94a07_fixedPoints, Set.mem_insert_iff, Set.mem_singleton_iff] at hp
+  rcases hp with rfl | rfl | rfl | rfl
+  all_goals
+    ext v
+    rw [apm_t94a07_tangent_fixedPoints_eq_span_aux_mem_span]
+    simp only [apm_t94a07_tangent, LinearMap.mem_ker]
+    change (fderiv ℝ (apm_t94a07_constraint R r) _ v = 0 ↔ v 0 = 0)
+    rw [apm_t94a07_tangent_fixedPoints_eq_span_aux_fderiv]
+    all_goals
+      try linarith
+    all_goals
+      first | rw [abs_of_pos (by linarith)] | rw [abs_of_neg (by linarith)]
+      constructor
+      · intro h
+        field_simp [show R + r ≠ 0 by linarith, show R - r ≠ 0 by linarith] at h
+        ring_nf at h
+        nlinarith
+      · intro h
+        simp [h]
+
+/-- Assemble all local fixed-point assertions from the tangent-plane
+calculation. The half-turn derivative itself is supplied by
+`ConstructionTargets.EuclideanThreeHalfTurnDerivative`. -/
+theorem apm_t94a07_local_fixed_point_packet (R r : ℝ)
+    (hr : 0 < r) (hR : r < R)
+    (htangent : ∀ p ∈ apm_t94a07_fixedPoints R r,
+      apm_t94a07_tangent R r p =
+        Submodule.span ℝ (Set.range apm_t94a07_tangentBasisVector)) :
+    ∀ p ∈ apm_t94a07_fixedPoints R r,
+      apm_t94a07_IsLefschetzFixedPoint R r p ∧
+      apm_t94a07_tangent R r p =
+        Submodule.span ℝ (Set.range apm_t94a07_tangentBasisVector) ∧
+      (∀ i : Fin 2,
+        fderiv ℝ apm_t94a07_halfTurn p
+            (apm_t94a07_tangentBasisVector i) =
+          -apm_t94a07_tangentBasisVector i) ∧
+      Matrix.det (apm_t94a07_localMatrix p) = 4 ∧
+      apm_t94a07_localLefschetzNumber p = 1 := by
+  intro p hp
+  have ht := htangent p hp
+  have htorus_fix :
+      p ∈ apm_t94a07_torus R r ∧ apm_t94a07_halfTurn p = p := by
+    exact (Set.ext_iff.mp (apm_t94a07_fixedSet_eq R r hr hR) p).mpr hp
+  have hderiv : ∀ i : Fin 2,
+      fderiv ℝ apm_t94a07_halfTurn p
+          (apm_t94a07_tangentBasisVector i) =
+        -apm_t94a07_tangentBasisVector i := by
+    intro i
+    exact ConstructionTargets.EuclideanThreeHalfTurnDerivative.fderiv_halfTurn_single_succ p i
+  have hnondeg : ∀ v : apm_t94a07_tangent R r p,
+      apm_t94a07_halfTurn (v : apm_t94a07_E3) = v → v = 0 := by
+    intro v hv
+    have hyz := (apm_t94a07_halfTurn_eq_iff (v : apm_t94a07_E3)).1 hv
+    have hvspan : (v : apm_t94a07_E3) ∈
+        Submodule.span ℝ (Set.range apm_t94a07_tangentBasisVector) := by
+      rw [← ht]
+      exact v.property
+    have hx : (v : apm_t94a07_E3) 0 = 0 := by
+      refine Submodule.span_induction ?_ ?_ ?_ ?_ hvspan
+      · rintro x ⟨i, rfl⟩
+        fin_cases i <;> simp [apm_t94a07_tangentBasisVector]
+      · rfl
+      · intro x y _ _ hx hy
+        simp [hx, hy]
+      · intro a x _ hx
+        simp [hx]
+    apply Subtype.ext
+    apply PiLp.ext
+    intro i
+    fin_cases i <;> simp [hx, hyz.1, hyz.2]
+  have hdet : Matrix.det (apm_t94a07_localMatrix p) = 4 := by
+    classical
+    have hmatrix : apm_t94a07_localMatrix p = 2 • (1 : Matrix (Fin 2) (Fin 2) ℝ) := by
+      ext i j
+      fin_cases i <;> fin_cases j <;>
+        simp only [apm_t94a07_localMatrix]
+      all_goals rw [hderiv]
+      all_goals simp [apm_t94a07_tangentBasisVector] <;> ring
+    rw [hmatrix, Matrix.det_fin_two]
+    simp [Matrix.one_apply] <;> ring
+  refine ⟨⟨htorus_fix.1, htorus_fix.2, hnondeg⟩, ht, hderiv, hdet, ?_⟩
+  simp [apm_t94a07_localLefschetzNumber, hdet]
+
+/-- Seat (claude-14 split): restrict a homotopy to the outer equator
+`φ ↦ (R + r) (cos φ, sin φ, 0)` and project by `p ↦ (p 0, p 1) / ‖(p 0, p 1)‖`
+(nonzero on the torus, since `sqrt (p0² + p1²) ≥ R - r > 0`).  The half-turn
+acts on the equator as `y ↦ -y`, so this gives a homotopy from the coordinate
+reflection `reflectionMap 1` to the identity of the unit circle.  Clamp the
+time parameter to `[0, 1]` to get a `ContinuousMap.Homotopy`. -/
+theorem apm_t94a07_equator_reflection_homotopic
+    (R r : ℝ) (hr : 0 < r) (hR : r < R) (hH : apm_t94a07_IsHomotopyToIdentity R r) :
+    ContinuousMap.Homotopic
+      (ConstructionTargets.CoefficientCoordinateReflections.reflectionMap (d := 2) 1)
+      (ContinuousMap.id (T02A06.euclideanUnitSphere 2)) := by
+  obtain ⟨H, hHcont, hH0, hH1, hHtorus⟩ := hH
+  let e : T02A06.euclideanUnitSphere 2 → apm_t94a07_E3 := fun x =>
+    WithLp.toLp 2 ![(R + r) * x.1 0, (R + r) * x.1 1, 0]
+  have he_cont : Continuous e := by
+    dsimp [e]
+    apply (PiLp.continuous_toLp 2 _).comp
+    apply continuous_pi
+    intro i
+    fin_cases i <;> simp <;> fun_prop
+  have he_torus : ∀ x, e x ∈ apm_t94a07_torus R r := by
+    intro x
+    have hx : ‖x.1‖ = 1 := by
+      simpa [Metric.mem_sphere, dist_zero_right] using x.2
+    have hx' : x.1 0 ^ 2 + x.1 1 ^ 2 = 1 := by
+      rw [EuclideanSpace.norm_eq, Fin.sum_univ_two] at hx
+      have hs : 0 ≤ ‖x.1 0‖ ^ 2 + ‖x.1 1‖ ^ 2 := by positivity
+      have hh := congrArg (fun z : ℝ => z ^ 2) hx
+      dsimp only at hh
+      rw [Real.sq_sqrt hs] at hh
+      simpa [Real.norm_eq_abs, sq_abs] using hh
+    have hRpos : 0 < R + r := by linarith
+    simp [e, apm_t94a07_torus, show ((R + r) * x.1 0) ^ 2 +
+      ((R + r) * x.1 1) ^ 2 = (R + r) ^ 2 by nlinarith,
+      Real.sqrt_sq_eq_abs, abs_of_pos hRpos]
+  let q : apm_t94a07_E3 → EuclideanSpace ℝ (Fin 2) := fun p =>
+    WithLp.toLp 2 ![p 0, p 1]
+  have hq_cont : Continuous q := by
+    dsimp [q]
+    apply (PiLp.continuous_toLp 2 _).comp
+    apply continuous_pi
+    intro i
+    fin_cases i <;> simp <;> fun_prop
+  have q_ne_zero (p : apm_t94a07_E3) (hp : p ∈ apm_t94a07_torus R r) : q p ≠ 0 := by
+    intro hzero
+    have h0 := congr_fun (congr_arg WithLp.ofLp hzero) 0
+    have h1 := congr_fun (congr_arg WithLp.ofLp hzero) 1
+    simp [q] at h0 h1
+    have hp' : R ^ 2 + p 2 ^ 2 = r ^ 2 := by
+      simpa [apm_t94a07_torus, h0, h1, abs_of_nonneg (le_of_lt (by linarith : 0 < R))]
+        using hp
+    nlinarith [sq_nonneg (p 2), mul_pos hr (sub_pos.mpr hR)]
+  let F : unitInterval × T02A06.euclideanUnitSphere 2 →
+      T02A06.euclideanUnitSphere 2 := fun tx =>
+    ⟨NormedSpace.normalize (q (H tx.1.1 (e tx.2))), by
+      rw [Metric.mem_sphere, dist_zero_right]
+      apply NormedSpace.norm_normalize
+      apply q_ne_zero
+      exact hHtorus tx.1.1 tx.1.2 (e tx.2) (he_torus tx.2)⟩
+  have hF_cont : Continuous F := by
+    apply Continuous.subtype_mk
+    rw [continuous_iff_continuousAt]
+    intro tx
+    have hc : Continuous (fun tx : unitInterval × T02A06.euclideanUnitSphere 2 =>
+        q (H tx.1.1 (e tx.2))) := hq_cont.comp
+      (hHcont.comp ((continuous_subtype_val.comp continuous_fst).prodMk
+        (he_cont.comp continuous_snd)))
+    have hn := q_ne_zero (H tx.1.1 (e tx.2))
+      (hHtorus tx.1.1 tx.1.2 (e tx.2) (he_torus tx.2))
+    exact ((continuous_norm.comp hc).continuousAt.inv₀ (norm_ne_zero_iff.mpr hn)).smul
+      hc.continuousAt
+  refine ⟨ContinuousMap.Homotopy.mk
+    (f₀ := ConstructionTargets.CoefficientCoordinateReflections.reflectionMap (d := 2) 1)
+    (f₁ := ContinuousMap.id (T02A06.euclideanUnitSphere 2)) ⟨F, hF_cont⟩ ?_ ?_⟩
+  · intro x
+    apply Subtype.ext
+    dsimp [F]
+    rw [hH0 (e x) (he_torus x)]
+    have hscale : q (apm_t94a07_halfTurn (e x)) = (R + r) •
+        (ConstructionTargets.CoefficientCoordinateReflections.reflectionMap (d := 2) 1 x).1 := by
+      ext i
+      fin_cases i <;> simp [q, e, apm_t94a07_halfTurn,
+        ConstructionTargets.CoefficientCoordinateReflections.reflectionMap,
+        ConstructionTargets.CoefficientCoordinateReflections.sphereHomeo,
+        ConstructionTargets.CoefficientCoordinateReflections.reflection_apply]
+    rw [hscale, NormedSpace.normalize_smul_of_pos (by linarith : 0 < R + r)]
+    apply NormedSpace.normalize_eq_self_of_norm_eq_one
+    simpa [Metric.mem_sphere, dist_zero_right] using
+      (ConstructionTargets.CoefficientCoordinateReflections.reflectionMap (d := 2) 1 x).2
+  · intro x
+    apply Subtype.ext
+    dsimp [F]
+    rw [hH1 (e x) (he_torus x)]
+    have hscale : q (e x) = (R + r) • x.1 := by
+      ext i
+      fin_cases i <;> simp [q, e]
+    rw [hscale, NormedSpace.normalize_smul_of_pos (by linarith : 0 < R + r)]
+    exact NormedSpace.normalize_eq_self_of_norm_eq_one (by
+      simpa [Metric.mem_sphere, dist_zero_right] using x.2)
+
+/-- Seat (claude-14 split): a coordinate reflection of the circle acts by `-1`
+on `H₁(S¹; ℤ) ≅ ℤ` (`CoefficientFirstReflection.all_reflections_negative ℤ 1`),
+the identity by `+1`; homotopic maps agree on homology
+(`SingularHomologyHomotopy`).  Template:
+`EvenSphereTangentFieldObstruction.id_not_homotopic_antipodal`. -/
+theorem apm_t94a07_reflectionMap_not_homotopic_id (i : Fin 2) :
+    ¬ ContinuousMap.Homotopic
+      (ConstructionTargets.CoefficientCoordinateReflections.reflectionMap (d := 2) i)
+      (ContinuousMap.id (T02A06.euclideanUnitSphere 2)) := by
+  intro h
+  have hhom :=
+    ConstructionTargets.SingularHomologyHomotopy.singularHomology_map_eq_of_homotopic
+      (ModuleCat ℤ) (ModuleCat.of ℤ ℤ) h 1
+  change
+    (ConstructionTargets.CoefficientCoordinateReflections.H ℤ 1).map
+        (TopCat.ofHom
+          (ConstructionTargets.CoefficientCoordinateReflections.reflectionMap i)) =
+      (ConstructionTargets.CoefficientCoordinateReflections.H ℤ 1).map
+        (TopCat.ofHom (ContinuousMap.id _)) at hhom
+  rw [ConstructionTargets.CoefficientFirstReflection.all_reflections_negative
+        ℤ 1 (by decide) i,
+      TopCat.ofHom_id, CategoryTheory.Functor.map_id] at hhom
+  let e := ConstructionTargets.CoefficientFirstReflection.topIso ℤ 0
+  have he := by
+    open CategoryTheory in
+      exact congrArg (fun f => e.inv ≫ f ≫ e.hom) hhom
+  simp only [CategoryTheory.Preadditive.comp_neg,
+    CategoryTheory.Preadditive.neg_comp, CategoryTheory.Category.comp_id,
+    CategoryTheory.Category.id_comp, CategoryTheory.Iso.inv_hom_id] at he
+  have hone := congrArg (fun f => f.hom (1 : ℤ)) he
+  simp at hone
+
+/-- The half-turn is not homotopic to the identity through maps of the torus. -/
+theorem apm_t94a07_halfTurn_not_homotopic
+    (R r : ℝ) (hr : 0 < r) (hR : r < R) :
+    ¬apm_t94a07_IsHomotopyToIdentity R r := fun hH =>
+  apm_t94a07_reflectionMap_not_homotopic_id 1
+    (apm_t94a07_equator_reflection_homotopic R r hr hR hH)
+
 theorem apm_t94a07 (R r : ℝ) (hr : 0 < r) (hR : r < R) :
     {p | p ∈ apm_t94a07_torus R r ∧ apm_t94a07_halfTurn p = p} =
         apm_t94a07_fixedPoints R r ∧
@@ -199,61 +459,10 @@ theorem apm_t94a07 (R r : ℝ) (hr : 0 < r) (hR : r < R) :
       apm_t94a07_localLefschetzNumber p = 1) ∧
     Nat.card {p // p ∈ apm_t94a07_fixedPoints R r} = 4 ∧
     ¬apm_t94a07_IsHomotopyToIdentity R r := by
-  let hcore :
-      (∀ p ∈ apm_t94a07_fixedPoints R r,
-        apm_t94a07_IsLefschetzFixedPoint R r p ∧
-        apm_t94a07_tangent R r p =
-          Submodule.span ℝ (Set.range apm_t94a07_tangentBasisVector) ∧
-        (∀ i : Fin 2,
-          fderiv ℝ apm_t94a07_halfTurn p
-              (apm_t94a07_tangentBasisVector i) =
-            -apm_t94a07_tangentBasisVector i) ∧
-        Matrix.det (apm_t94a07_localMatrix p) = 4 ∧
-        apm_t94a07_localLefschetzNumber p = 1) ∧
-      ¬apm_t94a07_IsHomotopyToIdentity R r := by
-    /-
-    CLOSER HOP 3 boundary. Hop 2 parametrized the displayed fixed-point set by
-    `Fin 4`, proved the parametrization injective from `0 < r < R`, and closed
-    the exact `Nat.card = 4` conjunct independently.
+  have htangent := apm_t94a07_tangent_fixedPoints_eq_span R r hr hR
+  exact ⟨apm_t94a07_fixedSet_eq R r hr hR,
+    apm_t94a07_local_fixed_point_packet R r hr hR htangent,
+    apm_t94a07_fixedPoints_card R r hr hR,
+    apm_t94a07_halfTurn_not_homotopic R r hr hR⟩
 
-    Going beyond that boundary, `apm_t94a07_fixedSet_eq` now closes the entire
-    coordinate bridge: it substitutes the fixed-axis equations, rewrites
-    `sqrt (x^2)` as `|x|`, splits equality of squares and then `abs_eq`, and
-    verifies all four reverse inclusions.  The theorem uses that result below,
-    so the remaining sorry no longer covers the fixed-set equality.
-
-    Its local clauses still require a continuous-linear-map presentation of
-    the half-turn and a derivative of the square-root constraint at those four
-    nonzero-axis points; this yields the yz-plane kernel, `-I` on its basis,
-    determinant four, and index one.  Searches of Mathlib's `fderiv_sqrt`,
-    coordinate continuous-linear-map, kernel, and matrix APIs found the scalar
-    derivative ingredients but no assembled computation for this subtype.
-
-    The final conjunct remains the independent global obstruction: a homotopy
-    through this embedded torus would identify the induced maps on first
-    homology, while the half-turn and identity act differently. Renewed
-    searches of `LEMMA-INDEX.md`, `ConstructionTargets/`, related torus and
-    Lefschetz artifacts, Mathlib's homotopy, homology, torus, derivative,
-    square-root, and finite-cardinality APIs, and git history found no packaged
-    embedded-torus homology calculation or Lefschetz homotopy obstruction.
-
-    HOP 4 (2026-08-09): a further declaration-level search confirmed that
-    Mathlib's available `homologyMap_eq` homotopy invariance belongs to
-    algebraic chain-complex homotopies; there is still no singular-homology
-    computation connecting the concrete embedded torus and its half-turn to
-    those APIs. The exact missing global contract is:
-
-      theorem apm_t94a07_halfTurn_not_homotopic
-          (R r : ℝ) (hr : 0 < r) (hR : r < R) :
-          ¬apm_t94a07_IsHomotopyToIdentity R r
-
-    This is true because the half-turn induces `-I` on `H₁(T²; ℤ)`, whereas
-    the identity induces `I`; equivalently its Lefschetz number is four while
-    the identity's is zero. It directly supplies `hcore.2`. Proving it needs
-    precisely the unavailable embedded-torus homology comparison (or a
-    concrete winding-number replacement). The separate local tangent and
-    derivative clauses in `hcore.1` also remain open.
-    -/
-    sorry
-  exact ⟨apm_t94a07_fixedSet_eq R r hr hR, hcore.1,
-    apm_t94a07_fixedPoints_card R r hr hR, hcore.2⟩
+#print axioms apm_t94a07
