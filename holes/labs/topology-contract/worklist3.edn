@@ -24207,21 +24207,20 @@
    :other-consumers []}
   {:bounded-exception "Rule0; exact B9 prerequisite.",
    :consumer :t01A08,
-   :stop-count 1,
+   :stop-count 2,
    :review-finding
    "extend Mathlib: state and prove the missing theorem in scope",
    :evidence
    {:placeholder-delta {:t01A08 [1 1]},
     :residual
-    "Correct B7 to the finite-dimensional B9 generality, then split B2-B6 into blueprint-node rows.",
+    "Stop-after-two: correct B7 to B9 finite-dimensional generality, then elect B2-B6 separately.",
     :missing-hypothesis
-    "FiniteDimensional ℝ E and smooth Euclidean Whitney-cover structure; blueprint also states finite-dimensional F",
+    "FiniteDimensional ℝ E plus Euclidean smooth-bump/Whitney-cover structure; blueprint states FiniteDimensional ℝ F",
     :outcome :stop,
     :warnings [],
     :missing-theorems
     [{:name "closedSet_whitneyCubeCover",
-      :type
-      "finite-dimensional closed-set Whitney cube cover with nearest points",
+      :type "finite-dimensional Euclidean Whitney cube cover",
       :status :not-started,
       :consumers [:t01A08],
       :depends-on [],
@@ -24231,24 +24230,13 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Frozen B7 quantifies over arbitrary normed E,F, but the reviewed B3-B6 construction requires finite-dimensional Euclidean source geometry: properness/nearest points, dyadic cubes, and smooth bump partitions; B5 also specifies finite-dimensional target. No such instances occur in the frozen type. Mathlib has no general Banach Whitney extension, and the blueprint cannot prove this interface without adding at least FiniteDimensional ℝ E (and its stated target hypothesis).",
+    "Second exact type audit: frozen B7 has only normed-space instances. Reviewed B3 requires finite-dimensional Euclidean properness/dyadic cubes; B4 requires Euclidean smooth bumps; B5 states finite-dimensional target. These hypotheses cannot be synthesized from the frozen binders, so implementing B2-B6 cannot discharge this axiom. This is a frozen-type hypothesis defect, not a missing Mathlib declaration.",
     :commands
-    [{:cmd
-      "read blueprint B1-B9; search Mathlib/scoped extension machinery",
+    [{:cmd "lake env lean frozen/type audit and fixture; hash fixture",
       :exit 0}
-     {:cmd "lake env lean fixture; hash fixture; verify B2-B6 absent",
-      :exit 0}
-     {:cmd "registry check; placeholder count; git status", :exit 0}],
-    :diagnostic-history
-    [{:cmd "fixture; registry; raw no-match scan",
-      :exit 1,
-      :correction "reran no-match scan with explicit success"}],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1791893803881-9614-fb9e1699",
-     :finding
-     "extend Mathlib: state and prove the missing theorem in scope"},
+     {:cmd
+      "compare B3-B6 declared assumptions; registry check; git status",
+      :exit 0}],
     :commit nil,
     :changed-paths [],
     :fixture
@@ -24258,7 +24246,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :repair,
+   :state :needs-owner,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain.blueprint/B7",
    :acceptance
@@ -24360,7 +24348,7 @@
      :infrastructure-packets
      :review-outcomes]},
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance {:strategy "Review Sard probe; rerank."},
