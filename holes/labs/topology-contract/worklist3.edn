@@ -24430,27 +24430,26 @@
    :consumer :t01A08,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "extend Mathlib: state and prove the missing theorem in scope",
    :implements-lemma :lemma-closedset-whitneycubecover,
    :evidence
    {:placeholder-delta {:t01A08 [1 1]},
     :residual
-    "Ambient local finiteness and B3 assembly; then B4-B7, B9.",
+    "Bound half-ball incidence, prove ambient local finiteness, assemble B3; then B4-B7, B9.",
     :outcome :stop,
     :warnings
     ["existing unnecessarySimpa:454"
      "existing unnecessarySeqFocus:1199"],
     :missing-theorems
     [{:name
-      "ConstructionTargets.SardConvexDomain.compl_subset_iUnion_whitneyNetQuarterBalls",
+      "ConstructionTargets.SardConvexDomain.infDist_center_comparable_of_mem_half_ball",
       :type
-      "closed nonempty s => s^c subset union of Whitney quarter-infDist balls",
+      "x in ball c (infDist c s/2) => infDist c s < 2*infDist x s and 2*infDist x s < 3*infDist c s",
       :status :proved,
       :consumers [:t01A08],
-      :depends-on
-      ["ConstructionTargets.SardConvexDomain.whitneyStratumNet_spec"],
+      :depends-on [],
       :area "sard-convex-domain"}
      {:name
       "ConstructionTargets.SardConvexDomain.closedSet_whitneyCubeCover_proper",
@@ -24458,43 +24457,33 @@
       :status :partial,
       :consumers [:t01A08],
       :depends-on
-      ["ConstructionTargets.SardConvexDomain.compl_subset_iUnion_whitneyNetQuarterBalls"
-       "ConstructionTargets.SardConvexDomain.whitneyNetAnchor_nearest"
-       "ConstructionTargets.SardConvexDomain.pointFinite_whitneyNetQuarterBalls"],
+      ["ConstructionTargets.SardConvexDomain.infDist_center_comparable_of_mem_half_ball"
+       "ConstructionTargets.SardConvexDomain.compl_subset_iUnion_whitneyNetQuarterBalls"],
       :area "sard-convex-domain"}],
     :statement-hashes {:registry "150/150"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Committed complement coverage by quarter-infDist balls. Local finiteness and assembly remain; not refuted.",
+    "Committed half-ball point/center scale comparison for the local-finiteness packing step. Half-ball incidence and assembly remain; not refuted.",
     :commands
     [{:cmd "lake build ConstructionTargets.SardConvexDomain", :exit 0}
-     {:cmd "fixture; registry; scans; diff", :exit 0}
+     {:cmd "fixture; registry; scans; scoped diff", :exit 0}
      {:cmd "git commit", :exit 0}],
     :diagnostic-history
-    [{:cmd "build", :exit 1, :correction "added zpow positivity"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1791912100515-10114-21a4239c",
-     :commands
-     ["git show/diff 7d6d59b; scope/orientation checks"
-      "sha256sum + lake env lean frozen fixture"
-      "lake build ConstructionTargets.SardConvexDomain"
-      "statement registry check; forbidden-count scan"],
-     :finding
-     "PASS. Recorded topo-10 commit 7d6d59b changes only the scoped Lean file and correctly proves complement coverage by indexed quarter-infDist balls. Same-scale net coverage gives dist(x,c)≤2^k/8; positivity gives strict <2^k/4; the center stratum lower bound gives ≤infDist(c,s)/4. The sigma witness preserves k, center, and membership. Fixture hash 6c514c6d... matches; build/fixture pass; registry 150/150; forbidden placeholders stay 0; only standard axioms. Valid compiled B3 progress; STOP leaves ambient local finiteness and assembly."},
-    :commit "7d6d59bf06297bd3654bbc7bdb6fa436bc90702d",
+    [{:cmd "HEAD scope gate",
+      :exit 1,
+      :correction "supervisor advanced HEAD; reran on commit"}],
+    :commit "7caab153170c707abade3e8bfb2f12ce0a3a4ec1",
     :changed-paths ["ConstructionTargets/SardConvexDomain.lean"],
     :fixture
-    {:path "/tmp/t01a08_b3_cover_check.lean",
+    {:path "/tmp/t01a08_b3_half_scale_check.lean",
      :sha256
-     "6c514c6d32cd3f377c9854ef296c9f7e732f0168d79abd40da6925a13cf5d750",
+     "3100e8d4b2b02eea591c80047f4a3bad4e55737710c6197604f4dd13f8b9f255",
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain.blueprint/B3",
    :acceptance
@@ -35173,7 +35162,8 @@
     :lemma-constructiontargets-sardconvexdomain-countable-whitneynetindex
     :lemma-constructiontargets-sardconvexdomain-pointfinite-whitneynetquarterballs
     :lemma-constructiontargets-sardconvexdomain-whitneynetanchor-nearest
-    :lemma-constructiontargets-sardconvexdomain-compl-subset-iunion-whitneynetquarterballs],
+    :lemma-constructiontargets-sardconvexdomain-compl-subset-iunion-whitneynetquarterballs
+    :lemma-constructiontargets-sardconvexdomain-infdist-center-comparable-of-mem-half-ball],
    :other-consumers []}
   {:consumer :t01A08,
    :phase :lemma,
@@ -35875,6 +35865,28 @@
    :kind :lemma,
    :depends-on
    [:lemma-constructiontargets-sardconvexdomain-whitneystratumnet-spec],
+   :other-consumers []}
+  {:consumer :t01A08,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.SardConvexDomain.infDist_center_comparable_of_mem_half_ball",
+    :type
+    "x in ball c (infDist c s/2) => infDist c s < 2*infDist x s and 2*infDist x s < 3*infDist c s"},
+   :lemma
+   {:name
+    "ConstructionTargets.SardConvexDomain.infDist_center_comparable_of_mem_half_ball",
+    :reported-by [:r-a08-sard-b3-whitney-cubes-1],
+    :type
+    "x in ball c (infDist c s/2) => infDist c s < 2*infDist x s and 2*infDist x s < 3*infDist c s",
+    :area "sard-convex-domain",
+    :proved-in :r-a08-sard-b3-whitney-cubes-1},
+   :id
+   :lemma-constructiontargets-sardconvexdomain-infdist-center-comparable-of-mem-half-ball,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
