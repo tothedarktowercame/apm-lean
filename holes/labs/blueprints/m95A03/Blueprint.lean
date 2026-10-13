@@ -170,6 +170,57 @@ theorem apm_m95A03_isMinOn_of_solves
   rw [hexpand, hcross, mul_zero, add_zero]
   exact le_add_of_nonneg_right hRint
 
+lemma apm_m95A03_solves_of_isMinOn_aux_residual_continuous
+    (p q f u : ℝ → ℝ) (hp : ContDiff ℝ 1 p)
+    (hq : Continuous q) (hf : Continuous f) (hu2 : ContDiff ℝ 2 u) :
+    Continuous (fun t =>
+      deriv (fun x => p x * deriv u x) t - q t * u t - f t) := by
+  have hdu : ContDiff ℝ 1 (deriv u) := hu2.deriv'
+  have hg : ContDiff ℝ 1 (fun x => p x * deriv u x) := hp.mul hdu
+  have hgd : ContDiff ℝ 0 (deriv (fun x => p x * deriv u x)) := hg.deriv'
+  exact (hgd.continuous.sub (hq.mul hu2.continuous)).sub hf
+
+lemma apm_m95A03_solves_of_isMinOn_aux_perturb_admissible
+    (a b α β s : ℝ) (u η : ℝ → ℝ)
+    (hu : ContDiff ℝ 1 u) (hua : u a = α) (hub : u b = β)
+    (hη : ContDiff ℝ 1 η) (hηa : η a = 0) (hηb : η b = 0) :
+    (fun x => u x + s * η x) ∈ apm_m95A03_admissible a b α β := by
+  refine ⟨hu.add (contDiff_const.mul hη), ?_, ?_⟩
+  · simp [hua, hηa]
+  · simp [hub, hηb]
+
+/-- First variation: minimality against `u + s η` for both signs of `s` kills the
+linear term of the quadratic `s ↦ energy (u + s η)`. -/
+lemma apm_m95A03_solves_of_isMinOn_aux_first_variation
+    (a b α β : ℝ) (hab : a < b)
+    (p q f u : ℝ → ℝ) (hp : ContDiff ℝ 1 p)
+    (hq : Continuous q) (hf : Continuous f)
+    (hu2 : ContDiff ℝ 2 u) (hua : u a = α) (hub : u b = β)
+    (hmin : IsMinOn (apm_m95A03_energy a b p q f)
+      (apm_m95A03_admissible a b α β) u)
+    (η : ℝ → ℝ) (hη : ContDiff ℝ 1 η) (hηa : η a = 0) (hηb : η b = 0) :
+    (∫ t in a..b, p t * deriv u t * deriv η t + q t * u t * η t + f t * η t) = 0 := by
+  sorry
+
+/-- Integration by parts of the weak form against a variation vanishing at both ends. -/
+lemma apm_m95A03_solves_of_isMinOn_aux_ibp
+    (a b : ℝ) (hab : a < b)
+    (p q f u : ℝ → ℝ) (hp : ContDiff ℝ 1 p)
+    (hq : Continuous q) (hf : Continuous f) (hu2 : ContDiff ℝ 2 u)
+    (η : ℝ → ℝ) (hη : ContDiff ℝ 1 η) (hηa : η a = 0) (hηb : η b = 0) :
+    (∫ t in a..b, p t * deriv u t * deriv η t + q t * u t * η t + f t * η t) =
+      -∫ t in a..b, (deriv (fun x => p x * deriv u x) t - q t * u t - f t) * η t := by
+  sorry
+
+/-- Fundamental lemma of the calculus of variations on `[a, b]`, for a continuous
+function tested against `C¹` variations vanishing at both ends. -/
+lemma apm_m95A03_solves_of_isMinOn_aux_fundamental
+    (a b : ℝ) (hab : a < b) (R : ℝ → ℝ) (hR : Continuous R)
+    (h : ∀ η : ℝ → ℝ, ContDiff ℝ 1 η → η a = 0 → η b = 0 →
+      (∫ t in a..b, R t * η t) = 0) :
+    ∀ t ∈ Set.Icc a b, R t = 0 := by
+  sorry
+
 theorem apm_m95A03_solves_of_isMinOn
     (a b α β p₀ : ℝ) (hab : a < b) (hp₀ : 0 < p₀)
     (p q f u : ℝ → ℝ) (hp : ContDiff ℝ 1 p)
@@ -180,7 +231,14 @@ theorem apm_m95A03_solves_of_isMinOn
     (hmin : IsMinOn (apm_m95A03_energy a b p q f)
       (apm_m95A03_admissible a b α β) u) :
     apm_m95A03_solves a b α β p q f u := by
-  sorry
+  refine ⟨hu2, hua, hub, fun t ht => ?_⟩
+  have hR := apm_m95A03_solves_of_isMinOn_aux_residual_continuous p q f u hp hq hf hu2
+  have hzero := apm_m95A03_solves_of_isMinOn_aux_fundamental a b hab _ hR (fun η hη hηa hηb => by
+    have h1 := apm_m95A03_solves_of_isMinOn_aux_first_variation a b α β hab p q f u hp hq hf hu2 hua hub hmin
+      η hη hηa hηb
+    rw [apm_m95A03_solves_of_isMinOn_aux_ibp a b hab p q f u hp hq hf hu2 η hη hηa hηb, neg_eq_zero] at h1
+    exact h1) t ht
+  linarith
 
 theorem apm_m95A03_homogenization
     (a b α β : ℝ) (hab : a < b) (p q f u : ℝ → ℝ) :
