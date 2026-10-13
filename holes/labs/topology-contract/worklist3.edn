@@ -24430,70 +24430,57 @@
    :consumer :t01A08,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "extend Mathlib: state and prove the missing theorem in scope",
    :implements-lemma :lemma-closedset-whitneycubecover,
    :evidence
    {:placeholder-delta {:t01A08 [1 1]},
-    :residual "Boundary local finiteness and B3; then B4-B7, B9.",
+    :residual
+    "Build maximal dyadic cubes and assemble B3; then B4-B7, B9.",
     :outcome :stop,
     :warnings
     ["existing unnecessarySimpa:454"
      "existing unnecessarySeqFocus:1199"],
     :missing-theorems
     [{:name
-      "ConstructionTargets.SardConvexDomain.finite_whitneyNetQuarterBalls_meeting_nhds_of_not_mem",
+      "ConstructionTargets.SardConvexDomain.not_locallyFinite_whitneyNetQuarterBalls_of_frontier_nonempty",
       :type
-      "hs hne hx => exists U in nhds x, finitely many quarter-balls meet U",
+      "closed nonempty s, nonempty frontier => quarter-balls not ambient locally finite",
       :status :proved,
       :consumers [:t01A08],
       :depends-on
-      ["ConstructionTargets.SardConvexDomain.finite_whitneyNetHalfIncidence"],
+      ["ConstructionTargets.SardConvexDomain.compl_subset_iUnion_whitneyNetQuarterBalls"],
       :area "sard-convex-domain"}
      {:name
       "ConstructionTargets.SardConvexDomain.closedSet_whitneyCubeCover_proper",
-      :type "proper closed-set Whitney cover",
+      :type "proper closed-set cover using maximal dyadic cubes",
       :status :partial,
       :consumers [:t01A08],
-      :depends-on
-      ["ConstructionTargets.SardConvexDomain.finite_whitneyNetQuarterBalls_meeting_nhds_of_not_mem"],
+      :depends-on [],
       :area "sard-convex-domain"}],
     :statement-hashes {:registry "150/150"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Committed quarter-ball neighborhood finiteness off s. Boundary local finiteness and B3 remain; not refuted.",
+    "Compiled obstruction: net quarter-balls covering s^c are not ambient locally finite when frontier s is nonempty. B3 needs maximal dyadic cubes; frozen declaration not refuted.",
     :commands
     [{:cmd "lake build ConstructionTargets.SardConvexDomain", :exit 0}
-     {:cmd "fixture; registry; scan; diff", :exit 0}
+     {:cmd "fixture; registry; scan; commit diff", :exit 0}
      {:cmd "git commit", :exit 0}],
     :diagnostic-history
-    [{:cmd "builds",
-      :exit 1,
-      :correction "used nhds, symmetry, positive infDist"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1791914479867-10185-3de8df7b",
-     :commands
-     ["git show/diff 05c3222; scope/neighborhood checks"
-      "sha256sum + lake env lean frozen fixture"
-      "lake build ConstructionTargets.SardConvexDomain"
-      "statement registry check; forbidden-count scan"],
-     :finding
-     "PASS. Recorded topo-10 commit 05c3222 changes only the scoped Lean file and correctly proves neighborhood finiteness off s. The ball of radius infDist(x,s)/16 is a neighborhood; any quarter-ball meeting it has x in the center half-ball by triangle inequality plus the infDist Lipschitz bound, so meeting indices lie in the finite half-incidence set. Fixture hash 1fbe4277... matches; build/fixture pass; registry 150/150; forbidden placeholders stay 0; only standard axioms. Valid compiled B3 progress; STOP leaves boundary local finiteness and assembly."},
-    :commit "05c3222136eeb54d4a83cf44b47b5ffc27612123",
+    [{:cmd "build", :exit 1, :correction "used closure_compl"}],
+    :commit "384fad1cbfcc6bef5dd235a3f17f0bba962cbc45",
     :changed-paths ["ConstructionTargets/SardConvexDomain.lean"],
     :fixture
-    {:path "/tmp/t01a08_b3_complement_local_check.lean",
+    {:path "/tmp/t01a08_b3_boundary_obstruction_check.lean",
      :sha256
-     "1fbe42776409873dd8987474b95c9b4dd22d37e943d32b0b7aa3f1ec988fe7be",
+     "d74ae9ad5823ca793fa854b70b32a4431767461cd5ea82c2b2eb98527c6db1cd",
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain.blueprint/B3",
    :acceptance
@@ -35975,6 +35962,29 @@
    :kind :lemma,
    :depends-on
    [:lemma-constructiontargets-sardconvexdomain-finite-whitneynethalfincidence],
+   :other-consumers []}
+  {:consumer :t01A08,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.SardConvexDomain.not_locallyFinite_whitneyNetQuarterBalls_of_frontier_nonempty",
+    :type
+    "closed nonempty s, nonempty frontier => quarter-balls not ambient locally finite"},
+   :lemma
+   {:name
+    "ConstructionTargets.SardConvexDomain.not_locallyFinite_whitneyNetQuarterBalls_of_frontier_nonempty",
+    :reported-by [:r-a08-sard-b3-whitney-cubes-1],
+    :type
+    "closed nonempty s, nonempty frontier => quarter-balls not ambient locally finite",
+    :area "sard-convex-domain",
+    :proved-in :r-a08-sard-b3-whitney-cubes-1},
+   :id
+   :lemma-constructiontargets-sardconvexdomain-not-locallyfinite-whitneynetquarterballs-of,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-sardconvexdomain-compl-subset-iunion-whitneynetquarterballs],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
