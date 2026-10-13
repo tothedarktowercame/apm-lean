@@ -741,7 +741,108 @@ lemma apm_t94a08_branches_accumulate (U : Set apm_t94a08_CP2) (hU : IsOpen U)
     (hnode : apm_t94a08_node ∈ U) :
     ((U ∩ apm_t94a08_sigma2BranchPlus) \ {apm_t94a08_node}).Nonempty ∧
       ((U ∩ apm_t94a08_sigma2BranchMinus) \ {apm_t94a08_node}).Nonempty := by
-  sorry
+  let fplus : ℂ → apm_t94a08_CP2 := fun t =>
+    ConstructionTargets.ComplexProjectiveChartTargets.chartInverse 0
+      (fun q => if q.1 = 1 then t else Complex.I * t)
+  let fminus : ℂ → apm_t94a08_CP2 := fun t =>
+    ConstructionTargets.ComplexProjectiveChartTargets.chartInverse 0
+      (fun q => if q.1 = 1 then t else -Complex.I * t)
+  have hzero : ConstructionTargets.ComplexProjectiveChartTargets.chartInverse
+      (0 : Fin 3) 0 = apm_t94a08_node := by
+    rw [ConstructionTargets.T94A08ProjectiveConic.chartInverse_zero]
+    unfold apm_t94a08_node ConstructionTargets.ProjectiveSpaceTopology.coordinateLine
+    rfl
+  have hfplus : Continuous fplus := by
+    apply (ConstructionTargets.T94A08ProjectiveConic.continuous_chartInverse 0).comp
+    apply continuous_pi
+    intro q
+    by_cases hq : q.1 = 1
+    · simpa [fplus, hq] using (continuous_id : Continuous fun t : ℂ => t)
+    · simpa [fplus, hq] using
+        (continuous_const.mul (continuous_id : Continuous fun t : ℂ => t))
+  have hfminus : Continuous fminus := by
+    apply (ConstructionTargets.T94A08ProjectiveConic.continuous_chartInverse 0).comp
+    apply continuous_pi
+    intro q
+    by_cases hq : q.1 = 1
+    · simpa [fminus, hq] using (continuous_id : Continuous fun t : ℂ => t)
+    · simpa [fminus, hq] using
+        (continuous_const.mul (continuous_id : Continuous fun t : ℂ => t)).neg
+  have fplus_zero : fplus 0 = apm_t94a08_node := by
+    change ConstructionTargets.ComplexProjectiveChartTargets.chartInverse 0 _ = _
+    rw [show (fun q : {q : Fin 3 // q ≠ 0} =>
+        if q.1 = 1 then (0 : ℂ) else Complex.I * 0) = 0 by funext q; simp]
+    exact hzero
+  have fminus_zero : fminus 0 = apm_t94a08_node := by
+    change ConstructionTargets.ComplexProjectiveChartTargets.chartInverse 0 _ = _
+    rw [show (fun q : {q : Fin 3 // q ≠ 0} =>
+        if q.1 = 1 then (0 : ℂ) else -Complex.I * 0) = 0 by funext q; simp]
+    exact hzero
+  have choose_point (f : ℂ → apm_t94a08_CP2) (hf : Continuous f)
+      (hf0 : f 0 = apm_t94a08_node) : ∃ t : ℂ, t ≠ 0 ∧ f t ∈ U := by
+    have hopen : IsOpen (f ⁻¹' U) := hU.preimage hf
+    have hzmem : (0 : ℂ) ∈ f ⁻¹' U := by simpa [hf0] using hnode
+    obtain ⟨r, hr, hrsub⟩ := (Metric.isOpen_iff.mp hopen) 0 hzmem
+    let t : ℂ := (r / 2 : ℝ)
+    refine ⟨t, ?_, hrsub ?_⟩
+    · dsimp [t]
+      exact_mod_cast (half_pos hr).ne'
+    · change dist t 0 < r
+      rw [dist_zero_right, Complex.norm_real, Real.norm_of_nonneg (le_of_lt (half_pos hr))]
+      linarith
+  obtain ⟨tp, htp, htpU⟩ := choose_point fplus hfplus fplus_zero
+  obtain ⟨tm, htm, htmU⟩ := choose_point fminus hfminus fminus_zero
+  constructor
+  · refine ⟨fplus tp, ⟨htpU, ?_⟩, ?_⟩
+    · change Projectivization.rep (fplus tp) 1 +
+          Complex.I * Projectivization.rep (fplus tp) 2 = 0
+      have hc := congrFun
+        (ConstructionTargets.T94A08ProjectiveConic.coordinates_chartInverse
+          (0 : Fin 3) (fun q => if q.1 = 1 then tp else Complex.I * tp))
+      have h1 := hc ⟨1, by decide⟩
+      have h2 := hc ⟨2, by decide⟩
+      dsimp [ConstructionTargets.ComplexProjectiveChartTargets.coordinates, fplus] at h1 h2 ⊢
+      have h0 := ConstructionTargets.T94A08ProjectiveConic.chartInverse_mem_affineSource
+        (0 : Fin 3) (fun q => if q.1 = 1 then tp else Complex.I * tp)
+      field_simp [h0] at h1 h2
+      rw [h1, h2]
+      ring_nf
+      rw [show Complex.I ^ 2 = (-1 : ℂ) from Complex.I_sq]
+      ring
+    · simp only [mem_singleton_iff]
+      intro heq
+      have hc := congrArg
+        (ConstructionTargets.ComplexProjectiveChartTargets.coordinates (0 : Fin 3)) heq
+      rw [← fplus_zero] at hc
+      have hc1 := congrFun hc ⟨1, by decide⟩
+      simp [fplus] at hc1
+      exact htp hc1
+  · refine ⟨fminus tm, ⟨htmU, ?_⟩, ?_⟩
+    · change Projectivization.rep (fminus tm) 1 -
+          Complex.I * Projectivization.rep (fminus tm) 2 = 0
+      have hc := congrFun
+        (ConstructionTargets.T94A08ProjectiveConic.coordinates_chartInverse
+          (0 : Fin 3) (fun q => if q.1 = 1 then tm else -Complex.I * tm))
+      have h1 := hc ⟨1, by decide⟩
+      have h2 := hc ⟨2, by decide⟩
+      dsimp [ConstructionTargets.ComplexProjectiveChartTargets.coordinates, fminus] at h1 h2 ⊢
+      simp only [neg_mul] at h1 h2 ⊢
+      have h0 := ConstructionTargets.T94A08ProjectiveConic.chartInverse_mem_affineSource
+        (0 : Fin 3) (fun q => if q.1 = 1 then tm else -Complex.I * tm)
+      simp only [neg_mul] at h0
+      field_simp [h0] at h1 h2
+      rw [h1, h2]
+      ring_nf
+      rw [show Complex.I ^ 2 = (-1 : ℂ) from Complex.I_sq]
+      ring
+    · simp only [mem_singleton_iff]
+      intro heq
+      have hc := congrArg
+        (ConstructionTargets.ComplexProjectiveChartTargets.coordinates (0 : Fin 3)) heq
+      rw [← fminus_zero] at hc
+      have hc1 := congrFun hc ⟨1, by decide⟩
+      simp [fminus] at hc1
+      exact htm hc1
 
 /-- Seat (general topology): if `A, B` are closed, meet at most in `p`, and an
 open-set slice meets both away from `p`, then the punctured slice of `A ∪ B` is
