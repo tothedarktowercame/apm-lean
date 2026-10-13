@@ -2169,6 +2169,24 @@ theorem edgePointCircle_eq_toCircle (n e : ℕ)
   push_cast
   field_simp
 
+/-- Equality of two polygon-edge points differs by an integral full turn in
+the unscaled edge coordinate. -/
+theorem edgePoint_eq_imp_exists_int_turn (n : ℕ) (hn : 0 < n)
+    (i j : Fin n) (t u : Set.Icc (0 : ℝ) 1)
+    (h : edgePoint n i t = edgePoint n j u) :
+    ∃ k : ℤ, (i : ℝ) + t = (j : ℝ) + u + k * n := by
+  have hc := congrArg (fun z : Disk => (z : ℂ)) h
+  change Complex.exp _ = Complex.exp _ at hc
+  obtain ⟨k, hk⟩ := Complex.exp_eq_exp_iff_exists_int.mp hc
+  refine ⟨k, ?_⟩
+  ring_nf at hk
+  have him := congrArg Complex.im hk
+  norm_num [Complex.mul_im] at him
+  have hn' : (0 : ℝ) < n := by exact_mod_cast hn
+  have hp := Real.pi_pos
+  field_simp at him
+  nlinarith
+
 /-- The standard polygon arcs cover its entire boundary circle. -/
 theorem edgePoint_surjective_boundary (n : ℕ) (hn : 0 < n) (x : Disk)
     (hx : ‖(x : ℂ)‖ = 1) :
