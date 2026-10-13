@@ -23716,7 +23716,7 @@
    :consumer :t01A08,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 0,
    :implements-lemma
    :lemma-contdiffwithinat-domdomcongr-iteratedfderivwithin-of-infty,
    :evidence
@@ -23754,6 +23754,17 @@
      {:cmd
       "lake env lean adjacent-helper axiom check and fixture; scoped commit check; registry check",
       :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791878045822-9009-a6464ca0",
+     :commands
+     ["git show/diff 8ef6f515; scope and recorded-tree checks"
+      "lake build ConstructionTargets.SardConvexDomain"
+      "lake env lean fixture and /tmp/CheckSardAdjacent.lean"
+      "sha256sum fixture; statement-registry check; placeholder recount"],
+     :finding
+     "PASS: valid STOP after real progress. Recorded one-file commit proves adjacent swaps generate all Fin permutations via a stabilizer submonoid, with domDomCongr multiplication orientation checked. Build/export pass; fixture hash matches; helper has only standard axioms; registry 147/147; sorry/admit 0->0. Analytic adjacent-slot identity is explicitly remaining."},
     :commit "8ef6f515709bc33088a81c1d80ee593e34e4ba4a",
     :changed-paths ["ConstructionTargets/SardConvexDomain.lean"],
     :fixture
@@ -23763,7 +23774,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain/B1/symmetry",
    :acceptance
@@ -33584,7 +33595,7 @@
    :other-consumers []}
   {:consumer :t01A08,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -33598,7 +33609,9 @@
     :type
     "For m indexed by Fin(n+1), invariance under swap i.castSucc i.succ for every i:Fin n implies invariance under every Perm(Fin(n+1)).",
     :area "sard-convex-domain",
-    :proved-in :r-a08-symmetry-slots-1},
+    :proved-in :r-a08-symmetry-slots-1,
+    :banked-by :r-a08-symmetry-slots-1,
+    :banked-commit "8ef6f515709bc33088a81c1d80ee593e34e4ba4a"},
    :id
    :lemma-continuousmultilinearmap-domdomcongr-eq-self-of-adjacent-swap,
    :kind :lemma,
