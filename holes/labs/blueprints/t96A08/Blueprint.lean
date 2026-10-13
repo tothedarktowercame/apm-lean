@@ -346,7 +346,61 @@ theorem apm_t96A08_concat_integrand_right
     omega (apm_t96A08_concat gamma delta t)
         ((mfderiv 𝓘(ℝ, ℝ) I (apm_t96A08_concat gamma delta) t) 1) =
       2 * omega (delta (2 * t - 1)) ((mfderiv 𝓘(ℝ, ℝ) I delta (2 * t - 1)) 1) := by
-  sorry
+  let phi : ℝ → ℝ := fun s ↦ 2 * s - 1
+  have hphi : MDifferentiableAt 𝓘(ℝ, ℝ) 𝓘(ℝ, ℝ) phi t := by
+    have hp : ContMDiff 𝓘(ℝ, ℝ) 𝓘(ℝ, ℝ) (⊤ : WithTop ℕ∞) phi := by
+      rw [contMDiff_iff_contDiff]
+      fun_prop
+    exact hp.mdifferentiableAt (by simp)
+  have hlocal : apm_t96A08_concat gamma delta =ᶠ[nhds t] delta ∘ phi := by
+    filter_upwards [eventually_gt_nhds ht.1] with s hs
+    simp only [apm_t96A08_concat, Function.comp_apply]
+    rw [if_neg]
+    linarith
+  by_cases hd : MDifferentiableAt 𝓘(ℝ, ℝ) I delta (phi t)
+  · have hderiv := hlocal.mfderiv_eq (I := 𝓘(ℝ, ℝ)) (I' := I)
+    rw [show apm_t96A08_concat gamma delta t = delta (phi t) by
+      rw [apm_t96A08_concat, if_neg (not_le.mpr ht.1)]]
+    rw [hderiv, mfderiv_comp t hd hphi]
+    have hphi_deriv : mfderiv 𝓘(ℝ, ℝ) 𝓘(ℝ, ℝ) phi t 1 = (2 : ℝ) := by
+      rw [mfderiv_eq_fderiv]
+      have hh : fderiv ℝ phi t = (2 : ℝ) • ContinuousLinearMap.id ℝ ℝ := by
+        simpa [phi] using
+          HasFDerivAt.fderiv (hasFDerivAt_id t |>.const_mul (2 : ℝ) |>.sub_const (1 : ℝ))
+      simpa using congrArg (fun L : ℝ →L[ℝ] ℝ ↦ L 1) hh
+    rw [ContinuousLinearMap.comp_apply, hphi_deriv]
+    have htwo : (mfderiv 𝓘(ℝ, ℝ) I delta (phi t)) (2 : ℝ) =
+        (2 : ℝ) • (mfderiv 𝓘(ℝ, ℝ) I delta (phi t)) 1 := by
+      conv_lhs => rw [show (2 : ℝ) = (2 : ℝ) • (1 : ℝ) by norm_num]
+      exact (mfderiv 𝓘(ℝ, ℝ) I delta (phi t)).map_smul (2 : ℝ) (1 : ℝ)
+    rw [htwo, map_smul]
+    simp [phi]
+  · have hcomp : ¬ MDifferentiableAt 𝓘(ℝ, ℝ) I (delta ∘ phi) t := by
+      intro hc
+      let psi : ℝ → ℝ := fun s ↦ (s + 1) / 2
+      have hpsi : MDifferentiableAt 𝓘(ℝ, ℝ) 𝓘(ℝ, ℝ) psi (phi t) := by
+        have hp : ContMDiff 𝓘(ℝ, ℝ) 𝓘(ℝ, ℝ) (⊤ : WithTop ℕ∞) psi := by
+          rw [contMDiff_iff_contDiff]
+          fun_prop
+        exact hp.mdifferentiableAt (by simp)
+      have hi : delta =ᶠ[nhds (phi t)] (delta ∘ phi) ∘ psi := by
+        filter_upwards with s
+        congr 1
+        simp only [Function.comp_apply, phi, psi]
+        ring
+      have hpt : psi (phi t) = t := by simp [psi, phi]
+      have hc' : MDifferentiableAt 𝓘(ℝ, ℝ) I (delta ∘ phi) (psi (phi t)) := by
+        rwa [hpt]
+      exact hd (hi.mdifferentiableAt_iff.mpr (hc'.comp (phi t) hpsi))
+    have hc0 : mfderiv 𝓘(ℝ, ℝ) I (apm_t96A08_concat gamma delta) t = 0 := by
+      rw [hlocal.mfderiv_eq]
+      exact mfderiv_zero_of_not_mdifferentiableAt hcomp
+    have hd0 : mfderiv 𝓘(ℝ, ℝ) I delta (phi t) = 0 :=
+      mfderiv_zero_of_not_mdifferentiableAt hd
+    rw [hc0, hd0]
+    rw [show apm_t96A08_concat gamma delta t = delta (phi t) by
+      rw [apm_t96A08_concat, if_neg (not_le.mpr ht.1)]]
+    simp [phi]
 
 /-- Seat (assembly from explicit hypotheses): split `∫₀¹` at `1/2`, replace the
 integrand a.e. on each half (`intervalIntegral.integral_congr_ae`, endpoints
