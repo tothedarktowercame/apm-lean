@@ -24589,7 +24589,32 @@
    :consumer :t01A08,
    :implements-lemma
    :lemma-constructiontargets-sardconvexdomain-whitneycubecover,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:outcome :go,
+     :fixture
+     {:path "/tmp/t01a08_b3_representation_probe.lean",
+      :sha256
+      "bf77b01d4a19b661d8ee79fc130963ace32b0a5a3cd9853518d4419dd43a14da"},
+     :commands
+     [{:cmd "lake env lean /tmp/t01a08_b3_representation_probe.lean",
+       :exit 0}
+      {:cmd "sha256sum /tmp/t01a08_b3_representation_probe.lean",
+       :exit 0}],
+     :implementation
+     {:scope ["ConstructionTargets/SardConvexDomain.lean"],
+      :declaration
+      "ConstructionTargets.SardConvexDomain.WhitneyCubeCover",
+      :type
+      "structure over PseudoMetricSpace E and s:Set E: countable cubes/enlargements/centers/anchors/scales; positive scales; anchors nearest in s; complement cover; ball/closedBall bounds; local finiteness; infDist comparison; finite uniformly bounded overlap",
+      :mode :declaration-found,
+      :source-commit "6ff20638065f666b599cbb132f300dd808b2bea2"},
+     :residual
+     "Bank certificate; then implement closedSet_whitneyCubeCover."}},
+   :mode :declaration-found,
+   :phase :implementation,
+   :type
+   "structure over PseudoMetricSpace E and s:Set E: countable cubes/enlargements/centers/anchors/scales; positive scales; anchors nearest in s; complement cover; ball/closedBall bounds; local finiteness; infDist comparison; finite uniformly bounded overlap",
    :state :open,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain.blueprint/B3/representation",
@@ -24601,9 +24626,12 @@
     "B3 certificate with cover, anchors, bounds and local finiteness",
     :placeholder "t01A08 sorry",
     :route-step "bank B3 representation"},
+   :source-commit "6ff20638065f666b599cbb132f300dd808b2bea2",
    :id :r-a08-sard-b3-representation-bank-1,
    :kind :reusable-theorem,
    :area "sard-convex-domain",
+   :declaration
+   "ConstructionTargets.SardConvexDomain.WhitneyCubeCover",
    :depends-on [:r-topo3-cp16],
    :current-residual "closedSet_whitneyCubeCover.",
    :other-consumers []}
