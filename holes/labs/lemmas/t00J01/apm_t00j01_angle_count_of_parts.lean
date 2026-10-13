@@ -485,7 +485,94 @@ theorem apm_t00j01_angle_count_of_parts
       apm_t00j01_foldLift θ = Real.pi ↔ θ = x₀ ∨ θ = Real.pi) :
     Nat.card {θ : Set.Ioc (-Real.pi) Real.pi //
       Circle.exp (apm_t00j01_foldLift θ.1) = Circle.exp Real.pi} = 3 := by
-  sorry
+  obtain ⟨x₀, hx₀, hpos⟩ := hpos
+  have hsolutions : ∀ θ ∈ Set.Ioc (-Real.pi) Real.pi,
+      Circle.exp (apm_t00j01_foldLift θ) = Circle.exp Real.pi ↔
+        θ = x₀ ∨ θ = Real.pi ∨ θ = -x₀ := by
+    intro θ hθ
+    rw [hclass θ hθ]
+    constructor
+    · intro hg
+      by_cases hnonneg : 0 ≤ θ
+      · have hsin : 0 ≤ Real.sin θ :=
+          Real.sin_nonneg_of_nonneg_of_le_pi hnonneg hθ.2
+        rcases hg with hg | hg
+        · rcases (hpos θ ⟨hnonneg, hθ.2⟩).mp hg with h | h
+          · exact Or.inl h
+          · exact Or.inr (Or.inl h)
+        · exfalso
+          dsimp [apm_t00j01_foldLift] at hg
+          nlinarith [Real.pi_pos]
+      · have hneg : θ < 0 := lt_of_not_ge hnonneg
+        have hmθ : -θ ∈ Set.Icc (0 : ℝ) Real.pi := by
+          constructor <;> linarith [hθ.1]
+        rcases hg with hg | hg
+        · have hsin : Real.sin θ ≤ 0 := by
+            have := Real.sin_nonneg_of_nonneg_of_le_pi hmθ.1 hmθ.2
+            simpa using this
+          exfalso
+          dsimp [apm_t00j01_foldLift] at hg
+          nlinarith [Real.pi_pos]
+        · have hm : apm_t00j01_foldLift (-θ) = Real.pi := by
+            rw [apm_t00j01_foldFiberCard_pi_aux_angle_count_aux_odd, hg]
+            ring
+          rcases (hpos (-θ) hmθ).mp hm with hm | hm
+          · exact Or.inr (Or.inr (by linarith))
+          · exfalso
+            linarith [hθ.1]
+    · intro h
+      rcases h with h | h | h
+      · subst θ
+        exact Or.inl ((hpos x₀ ⟨hx₀.1.le, le_trans hx₀.2.le
+          (by linarith [Real.pi_pos] : Real.pi / 2 ≤ Real.pi)⟩).2 (Or.inl rfl))
+      · subst θ
+        exact Or.inl ((hpos Real.pi ⟨Real.pi_pos.le, le_rfl⟩).2 (Or.inr rfl))
+      · subst θ
+        exact Or.inr (by
+          rw [apm_t00j01_foldFiberCard_pi_aux_angle_count_aux_odd]
+          have := (hpos x₀ ⟨hx₀.1.le, le_trans hx₀.2.le
+            (by linarith [Real.pi_pos] : Real.pi / 2 ≤ Real.pi)⟩).2 (Or.inl rfl)
+          rw [this])
+  have hmem : ∀ θ : ℝ, θ = x₀ ∨ θ = Real.pi ∨ θ = -x₀ →
+      θ ∈ Set.Ioc (-Real.pi) Real.pi := by
+    intro θ h
+    rcases h with h | h | h
+    · rw [h]
+      constructor <;> linarith [hx₀.1, hx₀.2, Real.pi_pos]
+    · rw [h]
+      exact ⟨by linarith [Real.pi_pos], le_rfl⟩
+    · rw [h]
+      constructor <;> linarith [hx₀.1, hx₀.2, Real.pi_pos]
+  let e : {θ : Set.Ioc (-Real.pi) Real.pi //
+      Circle.exp (apm_t00j01_foldLift θ.1) = Circle.exp Real.pi} ≃
+      {θ : ℝ // θ = x₀ ∨ θ = Real.pi ∨ θ = -x₀} :=
+    { toFun := fun θ => ⟨θ.1, (hsolutions θ.1 θ.1.2).mp θ.2⟩
+      invFun := fun θ => ⟨⟨θ.1, hmem θ.1 θ.2⟩,
+        (hsolutions θ.1 (hmem θ.1 θ.2)).2 θ.2⟩
+      left_inv := fun θ => by apply Subtype.ext; rfl
+      right_inv := fun θ => by apply Subtype.ext; rfl }
+  rw [Nat.card_congr e]
+  have hne₁ : x₀ ≠ Real.pi := by linarith [hx₀.2, Real.pi_pos]
+  have hne₂ : x₀ ≠ -x₀ := by linarith [hx₀.1]
+  have hne₃ : Real.pi ≠ -x₀ := by linarith [hx₀.1, Real.pi_pos]
+  let e' : {θ : ℝ // θ = x₀ ∨ θ = Real.pi ∨ θ = -x₀} ≃ Fin 3 :=
+    { toFun := fun θ => if θ.1 = x₀ then 0 else if θ.1 = Real.pi then 1 else 2
+      invFun := fun i => ⟨![x₀, Real.pi, -x₀] i, by fin_cases i <;> simp⟩
+      left_inv := fun θ => by
+        rcases θ.2 with h | h | h
+        · apply Subtype.ext
+          simp [h]
+        · apply Subtype.ext
+          simp [h, hne₁.symm]
+        · apply Subtype.ext
+          simp [h, hne₂.symm, hne₃.symm]
+      right_inv := fun i => by
+        fin_cases i
+        · simp
+        · simp [hne₁.symm]
+        · simp [hne₂.symm, hne₃.symm] }
+  rw [Nat.card_congr e']
+  simp
 -- END SEAT AREA
 
 lemma apm_t00j01_foldFiberCard_pi_aux_angle_count :
