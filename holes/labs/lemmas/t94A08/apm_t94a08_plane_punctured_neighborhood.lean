@@ -439,7 +439,56 @@ lemma apm_t94a08_plane_punctured_neighborhood
     (W : Set (EuclideanSpace ℝ (Fin 2))) (hW : IsOpen W) {x} (hx : x ∈ W) :
     ∃ V : Set (EuclideanSpace ℝ (Fin 2)),
       IsOpen V ∧ x ∈ V ∧ V ⊆ W ∧ IsPreconnected (V \ {x}) := by
-  sorry
+  obtain ⟨r, hr, hrW⟩ := Metric.isOpen_iff.1 hW x hx
+  refine ⟨Metric.ball x r, Metric.isOpen_ball, Metric.mem_ball_self hr, hrW, ?_⟩
+  let A : Set (ℝ × EuclideanSpace ℝ (Fin 2)) :=
+    Set.Ioo 0 r ×ˢ Metric.sphere 0 1
+  let f : ℝ × EuclideanSpace ℝ (Fin 2) → EuclideanSpace ℝ (Fin 2) :=
+    fun q => x + q.1 • q.2
+  have hrank : 1 < Module.rank ℝ (EuclideanSpace ℝ (Fin 2)) := by
+    rw [← Module.finrank_eq_rank]
+    simp
+  have hA : IsPreconnected A := by
+    exact (ordConnected_Ioo.isPreconnected.prod
+      (isPathConnected_sphere hrank 0 (r := 1) (by norm_num)).isConnected.isPreconnected)
+  have hf : Continuous f := by
+    exact continuous_const.add (continuous_fst.smul continuous_snd)
+  have himage : f '' A = Metric.ball x r \ {x} := by
+    ext y
+    constructor
+    · rintro ⟨q, ⟨hq, hu⟩, rfl⟩
+      have hq0 : 0 < q.1 := hq.1
+      have hu_norm : ‖q.2‖ = 1 := by
+        simpa [Metric.mem_sphere] using hu
+      constructor
+      · rw [Metric.mem_ball, dist_eq_norm]
+        rw [add_sub_cancel_left, norm_smul, hu_norm, mul_one]
+        simpa [Real.norm_eq_abs, abs_of_pos hq0] using hq.2
+      · simp only [mem_singleton_iff]
+        intro heq
+        have : q.1 • q.2 = 0 := by
+          simpa [f] using congrArg (fun z => z - x) heq
+        exact hq0.ne' (smul_eq_zero.mp this |>.resolve_right (by
+          intro hz
+          simpa [hz] using hu_norm))
+    · rintro ⟨hyball, hyx⟩
+      let ρ : ℝ := ‖y - x‖
+      let u : EuclideanSpace ℝ (Fin 2) := ρ⁻¹ • (y - x)
+      have hρ : 0 < ρ := by
+        rw [show ρ = dist y x by simp [ρ, dist_eq_norm]]
+        exact dist_pos.mpr (by simpa [mem_singleton_iff] using hyx)
+      have hρr : ρ < r := by
+        rw [Metric.mem_ball, dist_comm, dist_eq_norm] at hyball
+        simpa [ρ, norm_sub_rev] using hyball
+      have hu : u ∈ Metric.sphere (0 : EuclideanSpace ℝ (Fin 2)) 1 := by
+        rw [Metric.mem_sphere, dist_zero_right]
+        rw [show ‖u‖ = |ρ⁻¹| * ‖y - x‖ by simp [u, norm_smul]]
+        rw [abs_of_pos (inv_pos.mpr hρ)]
+        exact inv_mul_cancel₀ hρ.ne'
+      refine ⟨(ρ, u), ⟨⟨hρ, hρr⟩, hu⟩, ?_⟩
+      simp [f, u, hρ.ne']
+  rw [← himage]
+  exact hA.image _ hf.continuousOn
 -- END SEAT AREA
 
 /-- LIBRARY: transport a connected punctured neighborhood through a local
