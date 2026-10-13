@@ -734,7 +734,63 @@ lemma apm_m98A06_sine_computations_aux_unit_H10 (k : ℕ) (hk : k ≠ 0) :
     let y : ℝ → ℝ := fun x ↦ Real.sqrt (2 / Real.pi) * Real.sin ((k : ℝ) * x)
     let dy : ℝ → ℝ := fun x ↦ Real.sqrt (2 / Real.pi) * (k : ℝ) * Real.cos ((k : ℝ) * x)
     ContDiff ℝ 1 y ∧ dy = deriv y ∧ apm_m98a06_InH10Pi y dy := by
-  sorry
+  dsimp
+  let C : ℝ := Real.sqrt (2 / Real.pi)
+  let y : ℝ → ℝ := fun x => C * Real.sin ((k : ℝ) * x)
+  let dy : ℝ → ℝ := fun x => C * (k : ℝ) * Real.cos ((k : ℝ) * x)
+  have hy : ContDiff ℝ 1 y := by
+    dsimp [y, C]
+    fun_prop
+  have hyd : ∀ x, HasDerivAt y (dy x) x := by
+    intro x
+    dsimp [y, dy]
+    convert ((Real.hasDerivAt_sin ((k : ℝ) * x)).comp x
+      ((hasDerivAt_id x).const_mul (k : ℝ))).const_mul C using 1 <;> ring
+  have hdy : dy = deriv y := by
+    funext x
+    exact (hyd x).deriv.symm
+  refine ⟨by simpa [y, C] using hy, by simpa [y, dy, C] using hdy, ?_⟩
+  change apm_m98a06_InH10Pi y dy
+  have hy0 : y 0 = 0 := by simp [y]
+  have hypi : y Real.pi = 0 := by
+    dsimp [y]
+    rw [Real.sin_nat_mul_pi, mul_zero]
+  have hylp : MemLp y 2 (volume.restrict (Ioo (0 : ℝ) Real.pi)) := by
+    apply MemLp.of_bound hy.continuous.aestronglyMeasurable.restrict |C|
+    filter_upwards [] with x
+    rw [Real.norm_eq_abs, abs_mul]
+    exact mul_le_of_le_one_right (abs_nonneg C) (Real.abs_sin_le_one _)
+  have hdylp : MemLp dy 2 (volume.restrict (Ioo (0 : ℝ) Real.pi)) := by
+    apply MemLp.of_bound (by fun_prop : Continuous dy).aestronglyMeasurable.restrict
+      (|C * (k : ℝ)|)
+    filter_upwards [] with x
+    change |C * (k : ℝ) * Real.cos ((k : ℝ) * x)| ≤ |C * (k : ℝ)|
+    rw [abs_mul]
+    exact mul_le_of_le_one_right (abs_nonneg (C * (k : ℝ))) (Real.abs_cos_le_one _)
+  refine ⟨hy.continuous.continuousOn, hy0, hypi, hylp, hdylp, ?_⟩
+  intro φ hφ hφc hφsupp
+  have hφ0 : φ 0 = 0 := by
+    apply Function.notMem_support.mp
+    intro hmem
+    exact (hφsupp hmem).1.false
+  have hφpi : φ Real.pi = 0 := by
+    apply Function.notMem_support.mp
+    intro hmem
+    exact (hφsupp hmem).2.false
+  have hibp := intervalIntegral.integral_mul_deriv_eq_deriv_mul
+    (a := (0 : ℝ)) (b := Real.pi) (u := y) (v := φ)
+    (u' := dy) (v' := deriv φ)
+    (fun x hx => hyd x) (fun x hx => (hφ.differentiable (by norm_num) x).hasDerivAt)
+    ((by fun_prop : Continuous dy).intervalIntegrable _ _)
+    ((hφ.continuous_deriv (by simp)).intervalIntegrable _ _)
+  change (∫ x in Ioo (0 : ℝ) Real.pi, y x * deriv φ x) =
+    -(∫ x in Ioo (0 : ℝ) Real.pi, dy x * φ x)
+  rw [← MeasureTheory.integral_Ioc_eq_integral_Ioo,
+    ← intervalIntegral.integral_of_le Real.pi_pos.le,
+    ← MeasureTheory.integral_Ioc_eq_integral_Ioo,
+    ← intervalIntegral.integral_of_le Real.pi_pos.le]
+  rw [hibp, hy0, hypi, hφ0, hφpi]
+  ring
 
 -- The normalised modes on [0, π]: unit L² norm and energy k² − 1.
 lemma apm_m98A06_sine_computations_aux_unit_integrals (k : ℕ) (hk : k ≠ 0) :
