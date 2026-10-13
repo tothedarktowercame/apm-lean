@@ -113898,6 +113898,17 @@
       "lake build ConstructionTargets.ThreeCirclesFundamentalGroup",
       :exit 1,
       :finding "B12 file absent."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791881762695-9200-b28b64ac",
+     :commands
+     ["git show/diff eb752a6d^..eb752a6d"
+      "git archive eb752a6d; lake env lean archived PointWedgeVanKampen.lean"
+      "statement-registry check; recorded-tree sha256; placeholders; diff-tree"
+      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (expected absent)"],
+     :finding
+     "PASS program STOP: eb752a6d is new after history and commits compiled, sorry-free progress. It factors predecessor≫counit via normalForm_comp, preserves the order as counit * predecessor under End multiplication, then replaces the injected predecessor with the literal actual-span action using the prior HEq in the correct symmetric direction. The outer boundary remains HEq; dependent endpoints are not erased. Scope is exactly Lean+notes. Hashes match source e9af64dd, notes 2cd9a0a4, blueprint 0bca6ce3; placeholders 0->0; registry 147/147; standard axioms only. Residual actual predecessor computation then B12 is explicit; the B12 file remains absent as listed."},
     :commit "eb752a6d81b9213c0020a3bae2bf2932380da99d",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
@@ -113908,7 +113919,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113929,7 +113940,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Rewrote the full left comparison by the injected counit square into its typed round-trip predecessor form.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: The full left comparison now uses the literal actual-span predecessor action.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -114625,7 +114636,11 @@
     {:job 9,
      :commit "29cc465b8c3a1ef469346cee6d4de6b89259b902",
      :reason
-     "Rewrote the full left comparison by the injected counit square into its typed round-trip predecessor form."}]}
+     "Rewrote the full left comparison by the injected counit square into its typed round-trip predecessor form."}
+    {:job 1,
+     :commit "eb752a6d81b9213c0020a3bae2bf2932380da99d",
+     :reason
+     "The full left comparison now uses the literal actual-span predecessor action."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
