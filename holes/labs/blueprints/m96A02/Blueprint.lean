@@ -119,7 +119,46 @@ lemma apm_m96A02_lipschitz_ode_aux_unique
     (f : ℝ → ℝ) (u₀ : ℝ) (K : NNReal) (hK : LipschitzWith K f)
     (u v : ℝ → ℝ) (hu : apm_m96a02_Solves f u₀ u) (hv : apm_m96a02_Solves f u₀ v) :
     Set.EqOn u v (Set.Icc 0 1) := by
-  sorry
+  have hendpoint (w : ℝ → ℝ) (hw : apm_m96a02_Solves f u₀ w) :
+      HasDerivWithinAt w (f (w 0)) (Set.Ici 0) 0 := by
+    apply hasDerivWithinAt_Ici_of_tendsto_deriv
+        (s := Set.Ioo (0 : ℝ) 1)
+    · intro t ht
+      exact (hw.2.2 t ht).differentiableAt.differentiableWithinAt
+    · exact (hw.1.continuousWithinAt (by norm_num : (0 : ℝ) ∈ Set.Icc 0 1)).mono
+        Set.Ioo_subset_Icc_self
+    · exact Ioo_mem_nhdsGT zero_lt_one
+    · have hcontw : Tendsto w (nhdsWithin (0 : ℝ) (Set.Ioi 0)) (nhds (w 0)) := by
+        have hc := hw.1.continuousWithinAt (by norm_num : (0 : ℝ) ∈ Set.Icc 0 1)
+        apply hc.mono_left
+        apply nhdsWithin_le_iff.mpr
+        filter_upwards [Ioo_mem_nhdsGT zero_lt_one] with t ht
+        exact ⟨le_of_lt ht.1, le_of_lt ht.2⟩
+      have hfw : Tendsto (fun t ↦ f (w t)) (nhdsWithin (0 : ℝ) (Set.Ioi 0))
+          (nhds (f (w 0))) :=
+        hK.continuous.continuousAt.tendsto.comp hcontw
+      apply hfw.congr'
+      filter_upwards [Ioo_mem_nhdsGT zero_lt_one] with t ht
+      exact (hw.2.2 t ht).deriv.symm
+  apply ODE_solution_unique_of_mem_Icc_right
+      (v := fun _ y : ℝ ↦ f y) (s := fun _ ↦ Set.univ) (K := K)
+  · intro t ht
+    exact hK.lipschitzOnWith
+  · exact hu.1
+  · intro t ht
+    rcases eq_or_lt_of_le ht.1 with rfl | ht0
+    · simpa using hendpoint u hu
+    · exact (hu.2.2 t ⟨ht0, ht.2⟩).hasDerivWithinAt
+  · intro t ht
+    trivial
+  · exact hv.1
+  · intro t ht
+    rcases eq_or_lt_of_le ht.1 with rfl | ht0
+    · simpa using hendpoint v hv
+    · exact (hv.2.2 t ⟨ht0, ht.2⟩).hasDerivWithinAt
+  · intro t ht
+    trivial
+  · exact hu.2.1.trans hv.2.1.symm
 
 theorem apm_m96A02_lipschitz_ode
     (f : ℝ → ℝ) (u₀ : ℝ)
