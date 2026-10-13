@@ -53,6 +53,20 @@ theorem t96J02_presented_torus_subgroup :
 equivalence.  This isolates all `Subgroup.map` and finite-index bookkeeping
 from both substantive seats. -/
 -- BEGIN SEAT AREA
+lemma t96J02_transport_across_equiv_aux_index_map
+    {G K : Type*} [Group G] [Group K] (e : G ≃* K) (H : Subgroup G) :
+    (H.map (e : G →* K)).index = H.index := by
+  have h := Subgroup.relIndex_map_map_of_injective
+    (f := (e : G →* K)) H (⊤ : Subgroup G) e.injective
+  simpa using h
+
+lemma t96J02_transport_across_equiv_aux_finiteIndex_map
+    {G K : Type*} [Group G] [Group K] (e : G ≃* K) (H : Subgroup G)
+    (hH : H.FiniteIndex) : (H.map (e : G →* K)).FiniteIndex := by
+  rw [Subgroup.finiteIndex_iff,
+    t96J02_transport_across_equiv_aux_index_map e H]
+  exact Subgroup.finiteIndex_iff.mp hH
+
 theorem t96J02_transport_across_equiv
     {G K A : Type*} [Group G] [Group K] [Group A]
     (e : G ≃* K)
@@ -64,7 +78,28 @@ theorem t96J02_transport_across_equiv
       Nonempty (H ≃* G) ∨ Nonempty (H ≃* A)) ∧
     (∃ H : Subgroup G, H.FiniteIndex ∧ Nonempty (H ≃* G)) ∧
     (∃ H : Subgroup G, H.FiniteIndex ∧ Nonempty (H ≃* A)) := by
-  sorry
+  constructor
+  · intro H hH
+    have hm : (H.map (e : G →* K)).FiniteIndex :=
+      t96J02_transport_across_equiv_aux_finiteIndex_map e H hH
+    rcases hclass (H.map (e : G →* K)) hm with h | h
+    · left
+      rcases h with ⟨f⟩
+      exact ⟨((e.subgroupMap H).trans f).trans e.symm⟩
+    · right
+      rcases h with ⟨f⟩
+      exact ⟨(e.subgroupMap H).trans f⟩
+  constructor
+  · rcases hK with ⟨H, hH, ⟨f⟩⟩
+    let H' : Subgroup G := H.map (e.symm : K →* G)
+    refine ⟨H', ?_, ?_⟩
+    · exact t96J02_transport_across_equiv_aux_finiteIndex_map e.symm H hH
+    · exact ⟨((e.symm.subgroupMap H).symm.trans f).trans e.symm⟩
+  · rcases hA with ⟨H, hH, ⟨f⟩⟩
+    let H' : Subgroup G := H.map (e.symm : K →* G)
+    refine ⟨H', ?_, ?_⟩
+    · exact t96J02_transport_across_equiv_aux_finiteIndex_map e.symm H hH
+    · exact ⟨(e.symm.subgroupMap H).symm.trans f⟩
 -- END SEAT AREA
 
 theorem apm_t96j02 :
