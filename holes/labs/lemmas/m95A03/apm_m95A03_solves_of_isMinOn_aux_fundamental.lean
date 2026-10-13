@@ -220,7 +220,42 @@ lemma apm_m95A03_solves_of_isMinOn_aux_fundamental
     (h : ∀ η : ℝ → ℝ, ContDiff ℝ 1 η → η a = 0 → η b = 0 →
       (∫ t in a..b, R t * η t) = 0) :
     ∀ t ∈ Set.Icc a b, R t = 0 := by
-  sorry
+  have hloc : MeasureTheory.LocallyIntegrableOn R (Set.Ioo a b) :=
+    (hR.locallyIntegrable (μ := MeasureTheory.MeasureSpace.volume)).locallyIntegrableOn _
+  have hae : ∀ᵐ t ∂MeasureTheory.MeasureSpace.volume,
+      t ∈ Set.Ioo a b → R t = 0 :=
+    isOpen_Ioo.ae_eq_zero_of_integral_contDiff_smul_eq_zero hloc (by
+      intro g hg hgc hgs
+      have hga : g a = 0 := by
+        by_contra hga
+        have ha_supp : a ∈ Function.support g := by simpa [Function.mem_support]
+        have haU := hgs (subset_closure ha_supp)
+        exact (not_lt_of_ge le_rfl) haU.1
+      have hgb : g b = 0 := by
+        by_contra hgb
+        have hb_supp : b ∈ Function.support g := by simpa [Function.mem_support]
+        have hbU := hgs (subset_closure hb_supp)
+        exact (not_lt_of_ge le_rfl) hbU.2
+      have hsupp : Function.support (fun t => R t * g t) ⊆ Set.Ioc a b := by
+        intro t ht
+        have htg : t ∈ Function.support g :=
+          (Function.support_mul R g ▸ ht).2
+        have htU := hgs (subset_closure htg)
+        exact ⟨htU.1, htU.2.le⟩
+      have hz := h g (hg.of_le (by norm_num)) hga hgb
+      rw [intervalIntegral.integral_eq_integral_of_support_subset hsupp] at hz
+      simpa [smul_eq_mul, mul_comm] using hz)
+  have hae' : R =ᵐ[(MeasureTheory.MeasureSpace.volume : MeasureTheory.Measure ℝ).restrict
+      (Set.Ioo a b)] (0 : ℝ → ℝ) := by
+    apply (MeasureTheory.ae_restrict_iff' measurableSet_Ioo).2
+    simpa only [Pi.zero_apply] using hae
+  have hinterior : Set.EqOn R 0 (Set.Ioo a b) :=
+    MeasureTheory.Measure.eqOn_open_of_ae_eq hae' isOpen_Ioo hR.continuousOn
+      continuous_zero.continuousOn
+  have hclosed : Set.EqOn R 0 (Set.Icc a b) := hinterior.of_subset_closure
+    hR.continuousOn continuous_zero.continuousOn Set.Ioo_subset_Icc_self (by
+      rw [closure_Ioo hab.ne])
+  exact hclosed
 -- END SEAT AREA
 
 theorem apm_m95A03_solves_of_isMinOn
