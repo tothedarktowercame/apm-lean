@@ -511,6 +511,79 @@ terms and rigidity in the equality case. -/
 -- The Picone gap identity on the whole interval: integrate the banked pointwise identity on
 -- [δ, L − δ] and let δ → 0⁺ (boundary terms η² s'/s → 0 since η(0) = η(L) = 0 and η is C¹;
 -- the gap integrand is bounded near the endpoints).
+lemma apm_m98A06_wirtinger_aux_core_aux_picone_limit_aux_gap_aux_deriv_boundary
+    (L : ℝ) (hL : 0 < L) (η : ℝ → ℝ)
+    (hη : apm_m98a06_Admissible L 0 0 η)
+    (x : ℝ) (hx : x ∈ Ioo (0 : ℝ) L) :
+    deriv (fun t => η t ^ 2 *
+        ((Real.pi / L) * Real.cos (Real.pi * t / L)) /
+          Real.sin (Real.pi * t / L)) x =
+      2 * η x * derivWithin η (Icc 0 L) x *
+          ((Real.pi / L) * Real.cos (Real.pi * x / L)) /
+            Real.sin (Real.pi * x / L) -
+        η x ^ 2 * ((Real.pi / L) ^ 2 *
+            Real.sin (Real.pi * x / L) ^ 2 +
+          ((Real.pi / L) * Real.cos (Real.pi * x / L)) ^ 2) /
+            Real.sin (Real.pi * x / L) ^ 2 := by
+  have hxi : x ∈ Icc (0 : ℝ) L := ⟨hx.1.le, hx.2.le⟩
+  have hηat := (hη.1.differentiableOn (by norm_num) x hxi).differentiableAt
+    (Icc_mem_nhds hx.1 hx.2)
+  have hdη : deriv η x = derivWithin η (Icc 0 L) x :=
+    (hηat.derivWithin ((uniqueDiffOn_Icc hL).uniqueDiffWithinAt hxi)).symm
+  have hspos := apm_m98A06_wirtinger_aux_core_aux_sine_pos L x hL hx
+  have hlin : HasDerivAt (fun t : ℝ => Real.pi * t / L)
+      (Real.pi / L) x := by
+    convert ((hasDerivAt_id x).const_mul Real.pi).div_const L using 1 <;> ring
+  have hs : HasDerivAt (fun t : ℝ => Real.sin (Real.pi * t / L))
+      ((Real.pi / L) * Real.cos (Real.pi * x / L)) x := by
+    convert (Real.hasDerivAt_sin _).comp x hlin using 1 <;> ring
+  have hc : HasDerivAt (fun t : ℝ => (Real.pi / L) *
+      Real.cos (Real.pi * t / L))
+      (-(Real.pi / L) ^ 2 * Real.sin (Real.pi * x / L)) x := by
+    convert ((Real.hasDerivAt_cos _).comp x hlin).const_mul
+        (Real.pi / L) using 1 <;> ring
+  have hB := (hηat.hasDerivAt.pow 2).mul (hc.div hs hspos.ne')
+  have hfun : (fun t => η t ^ 2 *
+      ((Real.pi / L) * Real.cos (Real.pi * t / L)) /
+        Real.sin (Real.pi * t / L)) =
+      (η ^ 2) * ((fun t => (Real.pi / L) * Real.cos (Real.pi * t / L)) /
+        (fun t => Real.sin (Real.pi * t / L))) := by
+    funext t
+    change η t ^ 2 * _ / _ = η t ^ 2 * (_ / _)
+    ring
+  rw [hfun]
+  rw [hB.deriv, hdη]
+  simp only [Pi.pow_apply, Pi.mul_apply, Pi.div_apply]
+  field_simp
+  ring
+
+lemma apm_m98A06_wirtinger_aux_core_aux_picone_limit_aux_gap_aux_boundary_limits
+    (L : ℝ) (hL : 0 < L) (η : ℝ → ℝ)
+    (hη : apm_m98a06_Admissible L 0 0 η) :
+    Filter.Tendsto (fun δ => η δ ^ 2 *
+        ((Real.pi / L) * Real.cos (Real.pi * δ / L)) /
+          Real.sin (Real.pi * δ / L)) (nhdsWithin 0 (Ioi 0)) (nhds 0) ∧
+      Filter.Tendsto (fun δ => η (L - δ) ^ 2 *
+        ((Real.pi / L) * Real.cos (Real.pi * (L - δ) / L)) /
+          Real.sin (Real.pi * (L - δ) / L))
+        (nhdsWithin 0 (Ioi 0)) (nhds 0) := by
+  sorry
+
+lemma apm_m98A06_wirtinger_aux_core_aux_picone_limit_aux_gap_aux_truncated
+    (L δ : ℝ) (hL : 0 < L) (hδ : 0 < δ) (hδL : δ < L - δ)
+    (η : ℝ → ℝ) (hη : apm_m98a06_Admissible L 0 0 η) :
+    (∫ x in δ..L - δ, (derivWithin η (Icc 0 L) x) ^ 2 -
+        (Real.pi / L) ^ 2 * η x ^ 2) =
+      (∫ x in δ..L - δ, (derivWithin η (Icc 0 L) x -
+        η x * ((Real.pi / L) * Real.cos (Real.pi * x / L)) /
+          Real.sin (Real.pi * x / L)) ^ 2) +
+      η (L - δ) ^ 2 * ((Real.pi / L) *
+        Real.cos (Real.pi * (L - δ) / L)) /
+          Real.sin (Real.pi * (L - δ) / L) -
+      η δ ^ 2 * ((Real.pi / L) * Real.cos (Real.pi * δ / L)) /
+        Real.sin (Real.pi * δ / L) := by
+  sorry
+
 lemma apm_m98A06_wirtinger_aux_core_aux_picone_limit_aux_gap
     (L : ℝ) (hL : 0 < L) (η : ℝ → ℝ)
     (hη : apm_m98a06_Admissible L 0 0 η) :
