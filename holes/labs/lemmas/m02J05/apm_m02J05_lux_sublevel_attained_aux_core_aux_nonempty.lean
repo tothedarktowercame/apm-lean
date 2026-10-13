@@ -360,6 +360,39 @@ lemma apm_m02J05_lux_sublevel_attained_aux_core_aux_scale
   simpa [apm_m02J05_young_zero] using hc
 
 -- BEGIN SEAT AREA
+lemma apm_m02J05_lux_sublevel_attained_aux_core_aux_nonempty_aux_continuous
+    (α : ℝ → ℝ) (hc : ContinuousOn α (Ici 0)) :
+    ContinuousOn (apm_m02J05_young α) (Ici 0) := by
+  intro x hx
+  have hxb : x < x + 1 := by linarith
+  have hi : IntegrableOn α (uIcc (0 : ℝ) (x + 1)) := by
+    rw [uIcc_of_le (hx.trans hxb.le)]
+    exact (hc.mono Icc_subset_Ici_self).integrableOn_Icc
+  have hlocal : ContinuousOn (apm_m02J05_young α) (Icc 0 (x + 1)) := by
+    simpa [apm_m02J05_young, uIcc_of_le (hx.trans hxb.le)] using
+      (intervalIntegral.continuousOn_primitive_interval hi)
+  apply (hlocal x ⟨hx, hxb.le⟩).mono_of_mem_nhdsWithin (s := Ici 0)
+  refine mem_nhdsWithin_iff_exists_mem_nhds_inter.mpr
+    ⟨Iio (x + 1), Iio_mem_nhds hxb, ?_⟩
+  rintro y ⟨hy, hy0⟩
+  exact ⟨hy0, hy.le⟩
+
+lemma apm_m02J05_lux_sublevel_attained_aux_core_aux_nonempty_aux_scaled
+    (α : ℝ → ℝ) (hshape : apm_m02J05_YoungShapeFact α)
+    {c M z w : ℝ} (hc : c ≠ 0) (hM : 1 ≤ M) (hz : 0 ≤ z)
+    (hw : |w| = |c| * z) :
+    apm_m02J05_young α (z / (M / |c|)) ≤
+      (1 / M) * apm_m02J05_young α |w| := by
+  have hcabs : |c| ≠ 0 := abs_ne_zero.mpr hc
+  have hM0 : M ≠ 0 := ne_of_gt (lt_of_lt_of_le zero_lt_one hM)
+  have heq : z / (M / |c|) = (1 / M) * |w| := by
+    rw [hw]
+    field_simp
+  rw [heq]
+  exact apm_m02J05_lux_sublevel_attained_aux_core_aux_scale α hshape
+    (by positivity) ((div_le_one (by linarith : 0 < M)).2 hM)
+    (abs_nonneg w)
+
 lemma apm_m02J05_lux_sublevel_attained_aux_core_aux_nonempty
     (α : ℝ → ℝ)
     (hc : ContinuousOn α (Ici 0))
@@ -369,7 +402,59 @@ lemma apm_m02J05_lux_sublevel_attained_aux_core_aux_nonempty
     (hnonneg : ∀ t, 0 ≤ t → 0 ≤ α t)
     (u : apm_m02J05_Fun) (hu : u ∈ apm_m02J05_L α) :
     (apm_m02J05_luxSublevel α u).Nonempty := by
-  sorry
+  rcases hu with ⟨c, hcn, hcu⟩
+  let F : ℝ → ℝ := fun x ↦ apm_m02J05_young α |(c • u) x|
+  let A : ℝ := ∫ x in Icc (0 : ℝ) 1, F x
+  let M : ℝ := max 1 A
+  let lam : ℝ := M / |c|
+  have hM : 1 ≤ M := le_max_left _ _
+  have hMpos : 0 < M := zero_lt_one.trans_le hM
+  have hcabs : 0 < |c| := abs_pos.mpr hcn
+  have hlam : 0 < lam := div_pos hMpos hcabs
+  have hshape := apm_m02J05_young_shape α hc hmono hzero hnonneg
+  have hdom : (fun x ↦ apm_m02J05_young α (|u x| / lam)) ≤ᵐ[
+      volume.restrict (Icc (0 : ℝ) 1)] fun x ↦ (1 / M) * F x := by
+    filter_upwards [AEEqFun.coeFn_smul c u] with x hx
+    apply apm_m02J05_lux_sublevel_attained_aux_core_aux_nonempty_aux_scaled
+      α hshape hcn hM (abs_nonneg (u x))
+    rw [hx]
+    simp [abs_mul]
+  have hF : Integrable F (volume.restrict (Icc (0 : ℝ) 1)) := hcu
+  have hright : Integrable (fun x ↦ (1 / M) * F x)
+      (volume.restrict (Icc (0 : ℝ) 1)) := hF.const_mul _
+  have hYcont :=
+    apm_m02J05_lux_sublevel_attained_aux_core_aux_nonempty_aux_continuous α hc
+  have hYmax : Continuous (fun t : ℝ ↦ apm_m02J05_young α (max t 0)) := by
+    simpa only [Function.comp_apply] using hYcont.comp_continuous
+      (continuous_id.max continuous_const) (fun t ↦ le_max_right t 0)
+  have harg : AEStronglyMeasurable (fun x ↦ |u x| / lam)
+      (volume.restrict (Icc (0 : ℝ) 1)) :=
+    (continuous_abs.div_const lam).comp_aestronglyMeasurable u.aestronglyMeasurable
+  have hmeas : AEStronglyMeasurable
+      (fun x ↦ apm_m02J05_young α (|u x| / lam))
+      (volume.restrict (Icc (0 : ℝ) 1)) := by
+    rcases hYmax.comp_aestronglyMeasurable harg with ⟨g, hg, heq⟩
+    refine ⟨g, hg, ?_⟩
+    filter_upwards [heq] with x hx
+    simpa [max_eq_left (div_nonneg (abs_nonneg _) hlam.le)] using hx
+  have hleft : Integrable (fun x ↦ apm_m02J05_young α (|u x| / lam))
+      (volume.restrict (Icc (0 : ℝ) 1)) := by
+    apply hright.mono' hmeas
+    filter_upwards [hdom] with x hx
+    rw [Real.norm_eq_abs, abs_of_nonneg
+      (apm_m02J05_young_nonneg hnonneg (div_nonneg (abs_nonneg _) hlam.le))]
+    exact hx
+  refine ⟨lam, hlam, hleft, ?_⟩
+  calc
+    (∫ x in Icc (0 : ℝ) 1, apm_m02J05_young α (|u x| / lam))
+        ≤ ∫ x in Icc (0 : ℝ) 1, (1 / M) * F x :=
+          integral_mono_ae hleft hright hdom
+    _ = (1 / M) * A := by rw [MeasureTheory.integral_const_mul]
+    _ ≤ 1 := by
+      have hAM : A ≤ M := le_max_right _ _
+      calc
+        (1 / M) * A ≤ (1 / M) * M := mul_le_mul_of_nonneg_left hAM (by positivity)
+        _ = 1 := by field_simp
 -- END SEAT AREA
 
 lemma apm_m02J05_lux_sublevel_attained_aux_core_aux_attained
