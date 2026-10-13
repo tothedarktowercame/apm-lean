@@ -76416,7 +76416,7 @@
   {:consumer :t96J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 0,
    :review-finding
    "Deterministic topology defect in commit ee79eaeb2: it changes the index topology for FiniteWedge from ⊥ to ⊤ while claiming this makes it discrete. Mathlib/Topology/Order.lean states exactly the opposite: ⊥ is discrete and ⊤ is indiscrete. Consequently L × Circle is not the coproduct/disjoint-union source of indexed circle legs, and the coinduced quotient is not the B7 finite-wedge topology; future skeletonHomeomorphWedge would target the wrong space. Repair by restoring TopologicalSpace L := ⊥ in both the FiniteWedge instance and continuous_wedgeCircle proof, then rerun Lean/build and retain coverage, quotient-topology, wedge-relation, and signed-equation residuals. Recorded scope is otherwise exact and fixture SHA-256 386d0e41...ae305 matches.",
    :evidence
@@ -76463,6 +76463,17 @@
     [{:cmd "first compile",
       :exit 1,
       :correction "fixed unitSphere and AddCircle coercions"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791856713700-8185-8a5fed49",
+     :commands
+     ["git diff-tree/blob/SHA checks at 34fa7c1df"
+      "lake env lean ConstructionTargets/PolygonSurfacePiOne.lean"
+      "statement-registry.py check"
+      "placeholder scan; #print axioms"],
+     :finding
+     "PASS: exact one-file scope, fixture SHA and recorded blob match. The commit proves circleArc and signedWedgeArcMap surjective; quotient induction reaches every orbit-indexed wedge point, and the false-sign branch reverses twice, so orientation is correct. Lean compiles; registry 131/0; placeholders 0; only standard axioms. STOP lists source coverage, kernel agreement, quotient topology, final homeomorphism, then B8/B9."},
     :commit "ce8be025e",
     :changed-paths ["ConstructionTargets/PolygonSurfacePiOne.lean"],
     :fixture
@@ -76471,7 +76482,7 @@
      "ab9f19907d7a1bd3757e4364107cc404315f7a251f59e1fca410e3cd0238fe34"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope ["ConstructionTargets/PolygonSurfacePiOne.lean"],
    :dag-node "ConstructionTargets/PolygonSurfacePiOne.blueprint.md/B7",
    :acceptance
@@ -87008,7 +87019,7 @@
    :other-consumers []}
   {:consumer :t96J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "PairingData.surjective_skeletonArcMap",
@@ -87018,7 +87029,9 @@
     :reported-by [:routes-2026-10-12-polygon-b7-topo2-r1],
     :type "arcs cover actual skeleton",
     :area "polygon-surface-pi1",
-    :proved-in :routes-2026-10-12-polygon-b7-topo2-r1},
+    :proved-in :routes-2026-10-12-polygon-b7-topo2-r1,
+    :banked-by :routes-2026-10-12-polygon-b7-topo2-r1,
+    :banked-commit "ce8be025e"},
    :id :lemma-pairingdata-surjective-skeletonarcmap,
    :kind :lemma,
    :depends-on [:lemma-pairingdata-skeletonarcquotientequivrange],
