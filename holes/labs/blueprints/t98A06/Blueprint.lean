@@ -80,7 +80,33 @@ theorem t98A06_global_vectorField_lift
       (∀ x, Function.Surjective (mfderiv (𝓡 n) (𝓡 m) f x)) →
       ∀ v : ∀ y : Y, TangentSpace (𝓡 m) y, SmoothVectorField v →
       HasSmoothLift (n := n) (m := m) f v := by
-  sorry
+  intro n m X Y _ _ _ _ _ _ _ _ _ _ f hf hsurj v hv
+  let t : ∀ x : X, Set (TangentSpace (modelWithCornersSelf ℝ (E n)) x) :=
+    fun x ↦ {u | mfderiv (modelWithCornersSelf ℝ (E n))
+      (modelWithCornersSelf ℝ (E m)) f x u = v (f x)}
+  have ht : ∀ x, Convex ℝ (t x) := by
+    intro x
+    exact (convex_singleton (v (f x)) : Convex ℝ {v (f x)}).linear_preimage
+      (mfderiv (modelWithCornersSelf ℝ (E n))
+        (modelWithCornersSelf ℝ (E m)) f x).toLinearMap
+  have hloc :
+      ∀ x₀ : X, ∃ U ∈ nhds x₀,
+        ∃ w : ∀ x : X, TangentSpace (modelWithCornersSelf ℝ (E n)) x,
+        ContMDiffOn (modelWithCornersSelf ℝ (E n))
+          (modelWithCornersSelf ℝ (E n)).tangent ∞
+          (fun x ↦ (w x : TangentBundle (modelWithCornersSelf ℝ (E n)) X)) U ∧
+        ∀ x ∈ U, w x ∈ t x := by
+    simpa [t] using hlocal n m X Y f hf hsurj v hv
+  letI : LocallyCompactSpace X :=
+    Manifold.locallyCompact_of_finiteDimensional (modelWithCornersSelf ℝ (E n))
+  letI : SigmaCompactSpace X :=
+    sigmaCompactSpace_of_locallyCompact_secondCountable
+  obtain ⟨w, hw⟩ :=
+    exists_contMDiffSection_forall_mem_convex_of_local (modelWithCornersSelf ℝ (E n))
+      (fun x : X ↦ TangentSpace (modelWithCornersSelf ℝ (E n)) x) t ht hloc
+  refine ⟨fun x ↦ w x, w.contMDiff, ?_⟩
+  intro x
+  exact hw x
 
 /-- **LIBRARY.** The complete smooth flow of a lifted angular vector field
 restricts at time `π` to a diffeomorphism of the two regular fibers.  The
