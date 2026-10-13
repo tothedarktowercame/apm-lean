@@ -1380,6 +1380,92 @@ lemma apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_partialStage_seminorm
 -- partialList_eq_iteratedFDeriv + partial_formula + v_bound + translate_seminorm +
 -- partialStage_seminorm).
 -- BEGIN SEAT AREA
+lemma apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_pointwise_bound_aux_shiftedSup
+    (K : TopologicalSpace.Compacts apm_m98J02_E)
+    (s : Finset ℕ) (is : List (Fin 2))
+    (φ : 𝓓_{K}(apm_m98J02_E, ℝ)) :
+    (s.sup (ContDiffMapSupportedIn.seminorm ℝ apm_m98J02_E ℝ ⊤ K))
+        (apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_partialStage K is φ) ≤
+      ((s.image fun j => j + is.length).sup
+        (ContDiffMapSupportedIn.seminorm ℝ apm_m98J02_E ℝ ⊤ K)) φ := by
+  apply Seminorm.finset_sup_apply_le (apply_nonneg _ _)
+  intro j hj
+  refine (apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_partialStage_seminorm
+    K is φ j).trans ?_
+  exact Seminorm.le_finset_sup_apply
+    (Finset.mem_image.2 ⟨j, hj, rfl⟩)
+
+lemma apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_pointwise_bound_aux_listTest_coe
+    (is : List (Fin 2)) (ψ : apm_m98J02_Test) :
+    (apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_partialListTest is ψ : apm_m98J02_E → ℝ) =
+      apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_partialList is (ψ : apm_m98J02_E → ℝ) := by
+  induction is with
+  | nil => rfl
+  | cons i is ih =>
+      simp only [apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_partialListTest,
+        apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_partialList, List.foldr_cons] at ih ⊢
+      funext x
+      rw [apm_m98J02_partialTest_apply, ← ih]
+
+lemma apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_pointwise_bound_aux_one
+    (v : apm_m98J02_Dist) (χ : apm_m98J02_Test)
+    (K : TopologicalSpace.Compacts apm_m98J02_E)
+    (hK : (K : Set apm_m98J02_E) ⊆ (⊤ : TopologicalSpace.Opens apm_m98J02_E))
+    (s0 : Finset ℕ) (C0 : NNReal)
+    (hv : ((v.comp (TestFunction.ofSupportedInCLM ℝ
+        (show (apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_translateCompact K χ :
+          Set apm_m98J02_E) ⊆ (⊤ : Opens apm_m98J02_E) by simp))).toLinearMap.toSeminorm ≤
+        C0 • s0.sup (ContDiffMapSupportedIn.seminorm ℝ apm_m98J02_E ℝ ⊤
+          (apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_translateCompact K χ))))
+    (is : List (Fin 2)) (φ : 𝓓_{K}(apm_m98J02_E, ℝ)) (x : apm_m98J02_E)
+    (hx : x ∈ tsupport (χ : apm_m98J02_E → ℝ)) :
+    ‖apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_partialList is
+        (fun y : apm_m98J02_E =>
+          v (apm_m98J02_translateTest y (TestFunction.ofSupportedIn hK φ))) x‖ ≤
+      (C0 : ℝ) * ((s0.image fun j => j + is.length).sup
+        (ContDiffMapSupportedIn.seminorm ℝ apm_m98J02_E ℝ ⊤ K)) φ := by
+  set φ' := apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_partialStage K is φ
+  have hτ := fun j => apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_translate_seminorm
+    K hK χ φ' x hx j
+  dsimp only at hτ
+  set K' := apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_translateCompact K χ
+  set τ : 𝓓_{K'}(apm_m98J02_E, ℝ) :=
+      { toFun := fun y => TestFunction.ofSupportedIn hK φ' (x + y)
+        contDiff' := (TestFunction.ofSupportedIn hK φ').contDiff.comp
+          (contDiff_const.add contDiff_id)
+        zero_on_compl' := by
+          intro y hy
+          by_contra hne
+          exact hy (apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_translateSupport
+            K χ (TestFunction.ofSupportedIn hK φ') (by
+              change tsupport (φ' : apm_m98J02_E → ℝ) ⊆ (K : Set apm_m98J02_E)
+              exact φ'.tsupport_subset) x hx
+              (subset_tsupport _ hne)) } with hτdef
+  have heq : apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_partialList is
+        (fun y : apm_m98J02_E =>
+          v (apm_m98J02_translateTest y (TestFunction.ofSupportedIn hK φ))) x =
+      v (TestFunction.ofSupportedInCLM ℝ
+        (show (K' : Set apm_m98J02_E) ⊆ (⊤ : Opens apm_m98J02_E) by simp) τ) := by
+    rw [apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_partial_formula]
+    beta_reduce
+    congr 1
+    refine DFunLike.ext _ _ fun y => ?_
+    simp only [apm_m98J02_translateTest_apply, TestFunction.coe_ofSupportedInCLM]
+    rw [apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_pointwise_bound_aux_listTest_coe]
+    change _ = φ' (x + y)
+    rw [apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_partialStage_apply]
+    rfl
+  rw [heq]
+  have h1 := hv τ
+  simp only [LinearMap.toSeminorm_apply, Seminorm.smul_apply, NNReal.smul_def,
+    smul_eq_mul] at h1
+  refine h1.trans (mul_le_mul_of_nonneg_left ?_ C0.coe_nonneg)
+  refine le_trans ?_ (apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_pointwise_bound_aux_shiftedSup
+    K s0 is φ)
+  apply Seminorm.finset_sup_apply_le (apply_nonneg _ _)
+  intro j hj
+  exact (hτ j).trans (Seminorm.le_finset_sup_apply hj)
+
 lemma apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_pointwise_bound
     (v : apm_m98J02_Dist) (χ : apm_m98J02_Test)
     (hsmooth : ∀ φ : apm_m98J02_Test,
@@ -1392,7 +1478,43 @@ lemma apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_pointwise_bound
         ‖iteratedFDeriv ℝ k (fun y : apm_m98J02_E =>
             v (apm_m98J02_translateTest y (TestFunction.ofSupportedIn hK φ))) x‖ ≤
           C * (s.sup (ContDiffMapSupportedIn.seminorm ℝ apm_m98J02_E ℝ ⊤ K)) φ := by
-  sorry
+  intro k
+  obtain ⟨s0, C0, -, hv⟩ := apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_v_bound v K χ
+  refine ⟨s0.image (fun j => j + k), (Fintype.card (Fin k → Fin 2) : ℝ) * C0, ?_⟩
+  intro φ x hx
+  set P : apm_m98J02_E → ℝ := fun y : apm_m98J02_E =>
+    v (apm_m98J02_translateTest y (TestFunction.ofSupportedIn hK φ)) with hP
+  have hterm : ∀ c : Fin k → Fin 2,
+      ‖iteratedFDeriv ℝ k P x (fun i => EuclideanSpace.single (c i) (1 : ℝ))‖ ≤
+        (C0 : ℝ) * ((s0.image fun j => j + k).sup
+          (ContDiffMapSupportedIn.seminorm ℝ apm_m98J02_E ℝ ⊤ K)) φ := by
+    intro c
+    have gen : ∀ (n : ℕ) (hn : (List.ofFn c).length = n),
+        iteratedFDeriv ℝ n P x
+          (fun j => EuclideanSpace.single ((List.ofFn c).get (Fin.cast hn.symm j)) (1 : ℝ)) =
+        apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_partialList (List.ofFn c) P x := by
+      intro n hn; subst hn
+      exact (apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_partialList_eq_iteratedFDeriv
+        P (hsmooth _) _ x).symm
+    have hc := gen k List.length_ofFn
+    have hfun : (fun j : Fin k => EuclideanSpace.single
+        ((List.ofFn c).get (Fin.cast List.length_ofFn.symm j)) (1 : ℝ)) =
+        fun j => EuclideanSpace.single (c j) (1 : ℝ) := by
+      funext j; simp
+    rw [hfun] at hc
+    rw [hc]
+    have := apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_pointwise_bound_aux_one
+      v χ K hK s0 C0 hv (List.ofFn c) φ x hx
+    simpa only [List.length_ofFn] using this
+  calc ‖iteratedFDeriv ℝ k P x‖
+      ≤ ∑ c : Fin k → Fin 2,
+          ‖iteratedFDeriv ℝ k P x (fun i => EuclideanSpace.single (c i) (1 : ℝ))‖ :=
+        apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_norm_coord k _
+    _ ≤ ∑ _c : Fin k → Fin 2, (C0 : ℝ) * ((s0.image fun j => j + k).sup
+          (ContDiffMapSupportedIn.seminorm ℝ apm_m98J02_E ℝ ⊤ K)) φ :=
+        Finset.sum_le_sum fun c _ => hterm c
+    _ = _ := by
+      rw [Finset.sum_const, Finset.card_univ, nsmul_eq_mul]; ring
 -- END SEAT AREA
 
 -- Target-stage seminorm bound, given the pointwise bound (leibniz + bounds on the
