@@ -2748,6 +2748,37 @@ lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_forward_aux
         ∫ x, y x * φ x ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)) := by
   sorry
 
+lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_forward_aux_rigidity_aux_pointwise_aux_representation_aux_regular
+    (hFTC : apm_m98A06_WeakFTCFact) (y dy : ℝ → ℝ)
+    (h : apm_m98a06_InH10Pi y dy)
+    (hEL : ∀ φ : ℝ → ℝ, ContDiff ℝ ∞ φ → HasCompactSupport φ →
+      Function.support φ ⊆ Ioo (0 : ℝ) Real.pi →
+      (∫ x, dy x * deriv φ x ∂(volume.restrict (Ioo (0 : ℝ) Real.pi))) =
+        ∫ x, y x * φ x ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)))
+    (hprim : ∀ x ∈ Icc (0 : ℝ) Real.pi,
+      y x = ∫ t in (0 : ℝ)..x, dy t) :
+    ContDiffOn ℝ 1 y (Icc (0 : ℝ) Real.pi) ∧
+      ∃ m : ℝ, ∀ x ∈ Icc (0 : ℝ) Real.pi,
+        derivWithin y (Icc 0 Real.pi) x + ∫ t in (0 : ℝ)..x, y t = m := by
+  sorry
+
+lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_forward_aux_rigidity_aux_pointwise_aux_representation_aux_ode
+    (y : ℝ → ℝ) (hy : ContDiffOn ℝ 1 y (Icc (0 : ℝ) Real.pi))
+    (hy0 : y 0 = 0) (m : ℝ)
+    (hm : ∀ x ∈ Icc (0 : ℝ) Real.pi,
+      derivWithin y (Icc 0 Real.pi) x + ∫ t in (0 : ℝ)..x, y t = m) :
+    ∃ c : ℝ, ∀ x ∈ Icc (0 : ℝ) Real.pi, y x = c * Real.sin x := by
+  obtain ⟨A, B, hAB⟩ :=
+    apm_m98A06_duBoisReymond_aux_forward_aux_classification_aux_core_aux_ode_aux_core
+      Real.pi Real.pi_pos y hy m hm
+  have hA : A = 0 := by
+    have hzero := hAB 0 ⟨le_rfl, Real.pi_pos.le⟩
+    simp [hy0] at hzero
+    exact hzero.symm
+  refine ⟨B, fun x hx => ?_⟩
+  rw [hAB x hx, hA]
+  ring
+
 lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_forward_aux_rigidity_aux_pointwise_aux_representation
     (hFTC : apm_m98A06_WeakFTCFact) (y dy : ℝ → ℝ)
     (h : apm_m98a06_InH10Pi y dy)
@@ -2758,7 +2789,12 @@ lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_forward_aux
     (hprim : ∀ x ∈ Icc (0 : ℝ) Real.pi,
       y x = ∫ t in (0 : ℝ)..x, dy t) :
     ∃ c : ℝ, ∀ x ∈ Icc (0 : ℝ) Real.pi, y x = c * Real.sin x := by
-  sorry
+  obtain ⟨hy, m, hm⟩ :=
+    apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_forward_aux_rigidity_aux_pointwise_aux_representation_aux_regular
+      hFTC y dy h hEL hprim
+  exact
+    apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_forward_aux_rigidity_aux_pointwise_aux_representation_aux_ode
+      y hy h.2.1 m hm
 
 lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_forward_aux_rigidity_aux_pointwise_aux_normalize
     (y : ℝ → ℝ)
