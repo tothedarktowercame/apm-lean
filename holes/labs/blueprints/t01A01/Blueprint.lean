@@ -476,6 +476,57 @@ theorem apm_t01A01_inclusion_exists :
 /-- Seat: for maps with these formulas, `r ∘ i = id` and `i ∘ r ≃ id` via
 `H t [x : y : z] = [x : y : (1 - t) z]` (never `[0 : 0 : 1]` since `(x, y) ≠ 0`;
 continuity by quotient descent of `I × (ℝ³ ∖ z-axis)`, `I` locally compact). -/
+lemma apm_t01A01_retraction_homotopy_aux_xy
+    (v : Fin 3 → ℝ) (hv : v ≠ 0)
+    (hq : Projectivization.mk ℝ v hv ≠ apm_t01A01_q0) :
+    (![v 0, v 1] : Fin 2 → ℝ) ≠ 0 := by
+  intro h
+  apply hq
+  apply (Projectivization.mk_eq_mk_iff ℝ _ _ hv _).mpr
+  have hv2 : v 2 ≠ 0 := by
+    intro hz
+    apply hv
+    funext j
+    fin_cases j
+    · exact congrFun h 0
+    · exact congrFun h 1
+    · exact hz
+  refine ⟨Units.mk0 (v 2) hv2, ?_⟩
+  funext j
+  fin_cases j
+  · simpa using (congrFun h 0).symm
+  · simpa using (congrFun h 1).symm
+  · simp
+
+def apm_t01A01_retraction_homotopy_aux_vec
+    (s : Set.Icc (0 : ℝ) 1) (v : Fin 3 → ℝ) : Fin 3 → ℝ :=
+  ![v 0, v 1, s.1 * v 2]
+
+lemma apm_t01A01_retraction_homotopy_aux_vec_ne
+    (s : Set.Icc (0 : ℝ) 1) (v : Fin 3 → ℝ)
+    (h2 : (![v 0, v 1] : Fin 2 → ℝ) ≠ 0) :
+    apm_t01A01_retraction_homotopy_aux_vec s v ≠ 0 := by
+  intro h
+  apply h2
+  funext j
+  fin_cases j
+  · exact congrFun h 0
+  · exact congrFun h 1
+
+lemma apm_t01A01_retraction_homotopy_aux_ne_q0
+    (s : Set.Icc (0 : ℝ) 1) (v : Fin 3 → ℝ)
+    (h2 : (![v 0, v 1] : Fin 2 → ℝ) ≠ 0) :
+    Projectivization.mk ℝ (apm_t01A01_retraction_homotopy_aux_vec s v)
+      (apm_t01A01_retraction_homotopy_aux_vec_ne s v h2) ≠ apm_t01A01_q0 := by
+  intro h
+  obtain ⟨a, ha⟩ := (Projectivization.mk_eq_mk_iff ℝ _ _
+    (apm_t01A01_retraction_homotopy_aux_vec_ne s v h2) _).mp h
+  apply h2
+  funext j
+  fin_cases j
+  · have z := congrFun ha 0; simpa [apm_t01A01_retraction_homotopy_aux_vec] using z.symm
+  · have z := congrFun ha 1; simpa [apm_t01A01_retraction_homotopy_aux_vec] using z.symm
+
 theorem apm_t01A01_retraction_homotopy
     (r : C({y : apm_t01A01_RP2 // y ≠ apm_t01A01_q0}, apm_t01A01_RP1))
     (hr : ∀ (v : Fin 3 → ℝ) (hv : v ≠ 0) (hq : Projectivization.mk ℝ v hv ≠ apm_t01A01_q0)
@@ -487,7 +538,155 @@ theorem apm_t01A01_retraction_homotopy
           Projectivization.mk ℝ ![w 0, w 1, 0] h3) :
     ContinuousMap.Homotopic (i.comp r) (ContinuousMap.id _) ∧
       r.comp i = ContinuousMap.id _ := by
-  sorry
+  let U : Set apm_t01A01_RP2 := {y | y ≠ apm_t01A01_q0}
+  let q0 : C({v : {v : Fin 3 → ℝ // v ≠ 0} //
+      ConstructionTargets.ProjectiveSpaceTopology.quotientMap ℝ 2 v ∈ U}, U) :=
+    ⟨U.restrictPreimage (ConstructionTargets.ProjectiveSpaceTopology.quotientMap ℝ 2),
+      (ConstructionTargets.ProjectiveSpaceTopology.continuous_quotientMap ℝ 2).restrictPreimage⟩
+  have hq0 : IsOpenQuotientMap q0 := by
+    refine ⟨?_, q0.continuous, ?_⟩
+    · exact (ConstructionTargets.ProjectiveSpaceTopology.surjective_quotientMap ℝ 2).restrictPreimage U
+    · exact (ConstructionTargets.ProjectiveQuotientDescent.projectiveQuotientMap_isOpen ℝ 2).restrictPreimage U
+  let qp : C(Set.Icc (0 : ℝ) 1 × {v : {v : Fin 3 → ℝ // v ≠ 0} //
+      ConstructionTargets.ProjectiveSpaceTopology.quotientMap ℝ 2 v ∈ U},
+      Set.Icc (0 : ℝ) 1 × U) :=
+    ⟨Prod.map id q0, continuous_id.prodMap q0.continuous⟩
+  have hqp : Topology.IsQuotientMap qp :=
+    (IsOpenQuotientMap.id.prodMap hq0).isQuotientMap
+  let lift : C(Set.Icc (0 : ℝ) 1 × {v : {v : Fin 3 → ℝ // v ≠ 0} //
+      ConstructionTargets.ProjectiveSpaceTopology.quotientMap ℝ 2 v ∈ U}, U) := by
+    let F := fun z : Set.Icc (0 : ℝ) 1 × {v : {v : Fin 3 → ℝ // v ≠ 0} //
+        ConstructionTargets.ProjectiveSpaceTopology.quotientMap ℝ 2 v ∈ U} =>
+      apm_t01A01_retraction_homotopy_aux_vec z.1 z.2.1.1
+    have hxy : ∀ z : Set.Icc (0 : ℝ) 1 × {v : {v : Fin 3 → ℝ // v ≠ 0} //
+        ConstructionTargets.ProjectiveSpaceTopology.quotientMap ℝ 2 v ∈ U},
+        (![z.2.1.1 0, z.2.1.1 1] : Fin 2 → ℝ) ≠ 0 := by
+      intro z
+      exact apm_t01A01_retraction_homotopy_aux_xy z.2.1.1 z.2.1.2 z.2.2
+    refine ⟨fun z => ⟨Projectivization.mk ℝ (F z)
+      (apm_t01A01_retraction_homotopy_aux_vec_ne z.1 z.2.1.1 (hxy z)),
+      apm_t01A01_retraction_homotopy_aux_ne_q0 z.1 z.2.1.1 (hxy z)⟩, ?_⟩
+    apply Continuous.subtype_mk
+    change Continuous (ConstructionTargets.ProjectiveSpaceTopology.quotientMap ℝ 2 ∘
+      fun z => ⟨F z, apm_t01A01_retraction_homotopy_aux_vec_ne z.1 z.2.1.1 (hxy z)⟩)
+    apply (ConstructionTargets.ProjectiveSpaceTopology.continuous_quotientMap ℝ 2).comp
+    apply Continuous.subtype_mk
+    apply continuous_pi
+    intro j
+    fin_cases j
+    · exact ((continuous_apply 0).comp continuous_subtype_val).comp
+        (continuous_subtype_val.comp continuous_snd)
+    · exact ((continuous_apply 1).comp continuous_subtype_val).comp
+        (continuous_subtype_val.comp continuous_snd)
+    · exact (continuous_subtype_val.comp continuous_fst).mul
+        (((continuous_apply 2).comp continuous_subtype_val).comp
+          (continuous_subtype_val.comp continuous_snd))
+  have hfac : Function.FactorsThrough lift qp := by
+    intro a b hab
+    apply Subtype.ext
+    change Projectivization.mk ℝ
+      (apm_t01A01_retraction_homotopy_aux_vec a.1 a.2.1.1) _ =
+      Projectivization.mk ℝ
+      (apm_t01A01_retraction_homotopy_aux_vec b.1 b.2.1.1) _
+    apply (Projectivization.mk_eq_mk_iff ℝ _ _ _ _).mpr
+    have hs := congrArg Prod.fst hab
+    change a.1 = b.1 at hs
+    have hv := congrArg Prod.snd hab
+    change q0 a.2 = q0 b.2 at hv
+    obtain ⟨c, hc⟩ := (Projectivization.mk_eq_mk_iff ℝ _ _ a.2.1.2 b.2.1.2).mp
+      (congrArg Subtype.val hv)
+    refine ⟨c, ?_⟩
+    rw [hs]
+    funext j
+    fin_cases j
+    · simpa [apm_t01A01_retraction_homotopy_aux_vec] using congrFun hc 0
+    · simpa [apm_t01A01_retraction_homotopy_aux_vec] using congrFun hc 1
+    · have hc2 := congrFun hc 2
+      change (c : ℝ) * b.2.1.1 2 = a.2.1.1 2 at hc2
+      change (c : ℝ) * (b.1.1 * b.2.1.1 2) =
+        b.1.1 * a.2.1.1 2
+      rw [← hc2]
+      ring
+  let H : C(Set.Icc (0 : ℝ) 1 × U, U) := hqp.lift lift hfac
+  constructor
+  · refine ⟨ContinuousMap.Homotopy.mk H ?_ ?_⟩
+    · intro x
+      obtain ⟨v, hv⟩ := ConstructionTargets.ProjectiveSpaceTopology.surjective_quotientMap ℝ 2 x.1
+      have hx : x = ⟨ConstructionTargets.ProjectiveSpaceTopology.quotientMap ℝ 2 v,
+          hv ▸ x.2⟩ := Subtype.ext hv.symm
+      rw [hx]
+      apply Subtype.ext
+      let vv : {v : {v : Fin 3 → ℝ // v ≠ 0} //
+          ConstructionTargets.ProjectiveSpaceTopology.quotientMap ℝ 2 v ∈ U} :=
+        ⟨v, hv ▸ x.2⟩
+      have hh := DFunLike.congr_fun (hqp.lift_comp lift hfac)
+        ((0 : Set.Icc (0 : ℝ) 1), vv)
+      change H (0, ⟨ConstructionTargets.ProjectiveSpaceTopology.quotientMap ℝ 2 v, _⟩) =
+        lift (0, vv) at hh
+      have hh' := congrArg Subtype.val hh
+      change (H.toFun (0, ⟨ConstructionTargets.ProjectiveSpaceTopology.quotientMap ℝ 2 v, _⟩)).1 =
+        (lift (0, vv)).1 at hh'
+      apply hh'.trans
+      dsimp only [lift]
+      have hqv : Projectivization.mk ℝ v.1 v.2 ≠ apm_t01A01_q0 := vv.2
+      change Projectivization.mk ℝ
+          (apm_t01A01_retraction_homotopy_aux_vec 0 v.1) _ =
+        (i (r ⟨Projectivization.mk ℝ v.1 v.2, _⟩)).1
+      rw [hr v.1 v.2 hqv (apm_t01A01_retraction_homotopy_aux_xy v.1 v.2 hqv)]
+      rw [hi (![v.1 0, v.1 1])
+        (apm_t01A01_retraction_homotopy_aux_xy v.1 v.2 hqv) (by
+          intro h
+          apply apm_t01A01_retraction_homotopy_aux_xy v.1 v.2 hqv
+          funext j
+          fin_cases j
+          · exact congrFun h 0
+          · exact congrFun h 1)]
+      apply (Projectivization.mk_eq_mk_iff ℝ _ _ _ _).mpr
+      exact ⟨1, by ext j; fin_cases j <;> simp [apm_t01A01_retraction_homotopy_aux_vec]⟩
+    · intro x
+      obtain ⟨v, hv⟩ := ConstructionTargets.ProjectiveSpaceTopology.surjective_quotientMap ℝ 2 x.1
+      have hx : x = ⟨ConstructionTargets.ProjectiveSpaceTopology.quotientMap ℝ 2 v,
+          hv ▸ x.2⟩ := Subtype.ext hv.symm
+      rw [hx]
+      apply Subtype.ext
+      let vv : {v : {v : Fin 3 → ℝ // v ≠ 0} //
+          ConstructionTargets.ProjectiveSpaceTopology.quotientMap ℝ 2 v ∈ U} :=
+        ⟨v, hv ▸ x.2⟩
+      have hh := DFunLike.congr_fun (hqp.lift_comp lift hfac)
+        ((1 : Set.Icc (0 : ℝ) 1), vv)
+      change H (1, ⟨ConstructionTargets.ProjectiveSpaceTopology.quotientMap ℝ 2 v, _⟩) =
+        lift (1, vv) at hh
+      have hh' := congrArg Subtype.val hh
+      change (H.toFun (1, ⟨ConstructionTargets.ProjectiveSpaceTopology.quotientMap ℝ 2 v, _⟩)).1 =
+        (lift (1, vv)).1 at hh'
+      apply hh'.trans
+      apply (Projectivization.mk_eq_mk_iff ℝ _ _ _ _).mpr
+      exact ⟨1, by ext j; fin_cases j <;> simp [vv, apm_t01A01_retraction_homotopy_aux_vec]⟩
+  · ext x
+    obtain ⟨w, hw⟩ := ConstructionTargets.ProjectiveSpaceTopology.surjective_quotientMap ℝ 1 x
+    subst x
+    change r (i (Projectivization.mk ℝ w.1 w.2)) = Projectivization.mk ℝ w.1 w.2
+    have h3 : (![w.1 0, w.1 1, 0] : Fin 3 → ℝ) ≠ 0 := by
+      intro h; apply w.2; funext j; fin_cases j
+      · exact congrFun h 0
+      · exact congrFun h 1
+    have h2 : (![(w.1 0), (w.1 1)] : Fin 2 → ℝ) ≠ 0 := by
+      intro h; apply w.2; funext j; fin_cases j
+      · exact congrFun h 0
+      · exact congrFun h 1
+    have hnq : Projectivization.mk ℝ (![w.1 0, w.1 1, 0]) h3 ≠
+        apm_t01A01_q0 := by
+      simpa [apm_t01A01_retraction_homotopy_aux_vec] using
+        (apm_t01A01_retraction_homotopy_aux_ne_q0 ⟨0, by norm_num⟩
+          (![w.1 0, w.1 1, 0]) (by simpa using h2))
+    have hii : i (Projectivization.mk ℝ w.1 w.2) =
+        ⟨Projectivization.mk ℝ (![w.1 0, w.1 1, 0]) h3,
+          hnq⟩ := by
+      apply Subtype.ext
+      exact hi w.1 w.2 h3
+    rw [hii, hr (![w.1 0, w.1 1, 0]) h3 hnq (by simpa using h2)]
+    apply (Projectivization.mk_eq_mk_iff ℝ _ _ _ _).mpr
+    exact ⟨1, by ext j; fin_cases j <;> simp⟩
 
 /-- LIBRARY: the complement of a point in `RP²` has the homotopy type of its
 projective-line core.  A proof may choose coordinates sending `q` to a
