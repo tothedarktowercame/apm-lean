@@ -1179,7 +1179,11 @@ theorem apm_t96A08_contMDiff_of_chart
     (hf : ∀ x : M, ContDiffOn ℝ (⊤ : WithTop ℕ∞) (f ∘ (extChartAt I x).symm)
       (extChartAt I x).target) :
     ContMDiff I 𝓘(ℝ, ℝ) (⊤ : WithTop ℕ∞) f := by
-  sorry
+  intro x
+  rw [contMDiffAt_iff_source, contMDiffWithinAt_iff_contDiffWithinAt]
+  exact (hf x (extChartAt I x x) (by
+    exact (extChartAt I x).map_source (mem_extChartAt_source x))).mono_of_mem_nhdsWithin
+      (extChartAt_target_mem_nhdsWithin x)
 -- END SEAT AREA
 
 /-- Seat (claude-14 restructure): a function whose manifold derivative exists

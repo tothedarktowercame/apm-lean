@@ -1345,9 +1345,6 @@ theorem apm_t96A08_contDiffOn_of_hasFDerivWithinAt
   refine ⟨fun y hy ↦ (hg y hy).differentiableWithinAt, ?_⟩
   exact hL.congr fun y hy ↦ (hg y hy).fderivWithin (hS y hy)
 
-/-- Seat: a real function on `M` that is smooth in every chart
-(`f ∘ (extChartAt I x).symm` smooth on `(extChartAt I x).target`) is smooth
-(`contMDiffAt_iff_target`/`contMDiffOn_extChartAt_symm`, `contMDiff_iff`). -/
 theorem apm_t96A08_contMDiff_of_chart
     {E M : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
     [CompleteSpace E] [TopologicalSpace M]
@@ -1357,7 +1354,11 @@ theorem apm_t96A08_contMDiff_of_chart
     (hf : ∀ x : M, ContDiffOn ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) (f ∘ (extChartAt I x).symm)
       (extChartAt I x).target) :
     ContMDiff I 𝓘(ℝ, ℝ) ((⊤ : ℕ∞) : WithTop ℕ∞) f := by
-  sorry
+  intro x
+  rw [contMDiffAt_iff_source, contMDiffWithinAt_iff_contDiffWithinAt]
+  exact (hf x (extChartAt I x x) (by
+    exact (extChartAt I x).map_source (mem_extChartAt_source x))).mono_of_mem_nhdsWithin
+      (extChartAt_target_mem_nhdsWithin x)
 
 /-- Seat (claude-14 restructure): a function whose manifold derivative exists
 everywhere and equals a smooth one-form is smooth.  In the chart at `p`,
