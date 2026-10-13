@@ -304,11 +304,113 @@ lemma apm_t98a03_wedge_branches_cover
   · exact Or.inr ⟨r, rfl⟩
 
 /-- Seat: both compact summand images are closed. -/
+def apm_t98a03_wedge_branches_closed_aux_torusPred
+    (r₀ : apm_t98a03_RP2) :
+    Sum apm_t98a03_Torus apm_t98a03_RP2 → Prop
+  | .inl _ => True
+  | .inr r => r = r₀
+
+def apm_t98a03_wedge_branches_closed_aux_rp2Pred
+    (t₀ : apm_t98a03_Torus) :
+    Sum apm_t98a03_Torus apm_t98a03_RP2 → Prop
+  | .inl t => t = t₀
+  | .inr _ => True
+
+lemma apm_t98a03_wedge_branches_closed_aux_torus_invariant
+    (t₀ : apm_t98a03_Torus) (r₀ : apm_t98a03_RP2)
+    {a b : Sum apm_t98a03_Torus apm_t98a03_RP2}
+    (h : Relation.EqvGen (apm_t98a03_wedgeRel t₀ r₀) a b) :
+    apm_t98a03_wedge_branches_closed_aux_torusPred r₀ a ↔
+      apm_t98a03_wedge_branches_closed_aux_torusPred r₀ b := by
+  induction h with
+  | rel a b h => cases h; simp [apm_t98a03_wedge_branches_closed_aux_torusPred]
+  | refl => exact Iff.rfl
+  | symm a b h ih => exact ih.symm
+  | trans a b c hab hbc ihab ihbc => exact ihab.trans ihbc
+
+lemma apm_t98a03_wedge_branches_closed_aux_rp2_invariant
+    (t₀ : apm_t98a03_Torus) (r₀ : apm_t98a03_RP2)
+    {a b : Sum apm_t98a03_Torus apm_t98a03_RP2}
+    (h : Relation.EqvGen (apm_t98a03_wedgeRel t₀ r₀) a b) :
+    apm_t98a03_wedge_branches_closed_aux_rp2Pred t₀ a ↔
+      apm_t98a03_wedge_branches_closed_aux_rp2Pred t₀ b := by
+  induction h with
+  | rel a b h => cases h; simp [apm_t98a03_wedge_branches_closed_aux_rp2Pred]
+  | refl => exact Iff.rfl
+  | symm a b h ih => exact ih.symm
+  | trans a b c hab hbc ihab ihbc => exact ihab.trans ihbc
+
 lemma apm_t98a03_wedge_branches_closed
     (t₀ : apm_t98a03_Torus) (r₀ : apm_t98a03_RP2) :
     IsClosed (apm_t98a03_torusBranch t₀ r₀) ∧
       IsClosed (apm_t98a03_rp2Branch t₀ r₀) := by
-  sorry
+  have hr₀ : IsClosed ({r₀} : Set apm_t98a03_RP2) := by
+    rw [isClosed_coinduced]
+    have heq :
+        (Projectivization.mk' ℝ) ⁻¹' ({r₀} : Set apm_t98a03_RP2) =
+          Subtype.val ⁻¹' (Submodule.span ℝ {r₀.rep}) := by
+      ext w
+      simp only [mem_preimage, mem_singleton_iff]
+      rw [Projectivization.mk'_eq_mk]
+      conv_lhs => rw [← Projectivization.mk_rep r₀]
+      rw [Projectivization.mk_eq_mk_iff']
+      exact Submodule.mem_span_singleton.symm
+    rw [heq]
+    exact (Submodule.span ℝ {r₀.rep}).closed_of_finiteDimensional.preimage
+      continuous_subtype_val
+  rw [isClosed_coinduced, isClosed_coinduced]
+  constructor
+  · have heq :
+        (fun z : Sum apm_t98a03_Torus apm_t98a03_RP2 ↦ Quotient.mk _ z) ⁻¹'
+            apm_t98a03_torusBranch t₀ r₀ =
+          Set.range Sum.inl ∪ {Sum.inr r₀} := by
+      ext z
+      constructor
+      · rintro ⟨t, ht⟩
+        have hrel : Relation.EqvGen (apm_t98a03_wedgeRel t₀ r₀) z (.inl t) :=
+          (Quotient.exact ht).symm
+        have hi := (apm_t98a03_wedge_branches_closed_aux_torus_invariant
+          t₀ r₀ hrel).2 trivial
+        cases z with
+        | inl s => exact Or.inl ⟨s, rfl⟩
+        | inr r => exact Or.inr (by simpa using hi)
+      · rintro (hz | hz)
+        · rcases hz with ⟨t, rfl⟩
+          exact ⟨t, rfl⟩
+        · simp only [mem_singleton_iff] at hz
+          subst hz
+          exact ⟨t₀, by simpa [apm_t98a03_basepoint] using
+            apm_t98a03_wedge_base_eq t₀ r₀⟩
+    have hir : IsClosed ({Sum.inr r₀} : Set
+        (Sum apm_t98a03_Torus apm_t98a03_RP2)) := by
+      simpa using isClosedMap_inr _ hr₀
+    exact heq.symm ▸ (isClosed_range_inl.union hir)
+  · have heq :
+        (fun z : Sum apm_t98a03_Torus apm_t98a03_RP2 ↦ Quotient.mk _ z) ⁻¹'
+            apm_t98a03_rp2Branch t₀ r₀ =
+          {Sum.inl t₀} ∪ Set.range Sum.inr := by
+      ext z
+      constructor
+      · rintro ⟨r, hr⟩
+        have hrel : Relation.EqvGen (apm_t98a03_wedgeRel t₀ r₀) z (.inr r) :=
+          (Quotient.exact hr).symm
+        have hi := (apm_t98a03_wedge_branches_closed_aux_rp2_invariant
+          t₀ r₀ hrel).2 trivial
+        cases z with
+        | inl t => exact Or.inl (by simpa using hi)
+        | inr s => exact Or.inr ⟨s, rfl⟩
+      · rintro (hz | hz)
+        · simp only [mem_singleton_iff] at hz
+          subst hz
+          exact ⟨r₀, by simpa [apm_t98a03_basepoint] using
+            (apm_t98a03_wedge_base_eq t₀ r₀).symm⟩
+        · rcases hz with ⟨r, rfl⟩
+          exact ⟨r, rfl⟩
+    have ht₀ : IsClosed ({t₀} : Set apm_t98a03_Torus) := isClosed_singleton
+    have hil : IsClosed ({Sum.inl t₀} : Set
+        (Sum apm_t98a03_Torus apm_t98a03_RP2)) := by
+      simpa using isClosedMap_inl _ ht₀
+    exact heq.symm ▸ (hil.union isClosed_range_inr)
 
 /-- Seat: the two summand images meet only at the wedge point. -/
 def apm_t98a03_wedge_branches_intersection_aux_isBase
