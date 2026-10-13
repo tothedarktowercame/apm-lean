@@ -113898,6 +113898,17 @@
       "lake build ConstructionTargets.ThreeCirclesFundamentalGroup",
       :exit 1,
       :finding "B12 absent."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791885835501-9382-803c95f6",
+     :commands
+     ["git show/diff 953d1212^..953d1212"
+      "git archive 953d1212; lake env lean archived PointWedgeVanKampen.lean"
+      "statement-registry check; recorded-tree sha256; placeholders; diff-tree"
+      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (expected absent)"],
+     :finding
+     "PASS program STOP with compiled refutation/progress: 953d1212 records the exact naturality equation. Under SingleObj.comp_as_mul, mapped≫counit = counit≫inl becomes counit*mappedLeft = inl*counit; the orientation is correct. Thus the typed square proves conjugacy, not source=mapped, and the revised residual correctly requires a normalization fixing inl while correcting the right leg. No invalid counit-identity shortcut is used. Scope is Lean+notes; hashes match source 45059bd0, notes 3e40f435, blueprint 0bca6ce3; placeholders 0->0; registry 149/149; standard axioms only. B12 remains absent."},
     :commit "953d1212afcbf9e470db9d7cda44dd8d69a887a8",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
@@ -113908,7 +113919,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113929,7 +113940,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Oriented the B6 left residual as the exact B3 source-versus-mapped comparison.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: The typed B3 square proves counit conjugacy, not source=mapped; equality needs commutation, so global conjugation cannot close B6 from naturality.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -114649,7 +114660,11 @@
     {:job 6,
      :commit "b70650864738f70045e7db85f23ae52e3dd9d2d4",
      :reason
-     "Oriented the B6 left residual as the exact B3 source-versus-mapped comparison."}]}
+     "Oriented the B6 left residual as the exact B3 source-versus-mapped comparison."}
+    {:job 7,
+     :commit "953d1212afcbf9e470db9d7cda44dd8d69a887a8",
+     :reason
+     "The typed B3 square proves counit conjugacy, not source=mapped; equality needs commutation, so global conjugation cannot close B6 from naturality."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
