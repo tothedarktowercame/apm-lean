@@ -36179,65 +36179,67 @@
    :program true,
    :other-consumers []}
   {:consumer :t99J05,
-   :stop-count 2,
+   :stop-count 4,
    :evidence
    {:placeholder-delta {:t99J05 [1 1]},
     :residual
-    "Construct C3 via coefficient Mayer-Vietoris; then C4 traces and Main.",
+    "Prove subsingleton rational homology; build CP0 data and MV successor.",
     :outcome :stop,
     :warnings [],
     :missing-theorems
-    [{:name
-      "ConstructionTargets.t99J05Closure.ComplexProjectiveRationalHomologyData",
-      :type
-      "finite rational H_k(CP n), zero odd/above 2n, equiv Q at 2i",
+    [{:name "cp_zero_subsingleton",
+      :type "Subsingleton (CP 0)",
       :status :proved,
       :consumers [:t99J05],
       :depends-on [],
       :area "rational-homology-lefschetz"}
-     {:name "t99J05_cp_homology",
-      :type "construct the CP n homology data",
+     {:name "t99J05_subsingleton_rational_homology",
+      :type "H0(X;Q)=Q; Hk=0 for k>0",
+      :status :not-started,
+      :consumers [:t99J05],
+      :depends-on [],
+      :area "rational-homology-lefschetz"}
+     {:name "t99J05_lefschetz_euler",
+      :type "Lefschetz/Euler n+1",
       :status :partial,
       :consumers [:t99J05],
       :depends-on
-      ["ConstructionTargets.t99J05Closure.ComplexProjectiveRationalHomologyData"],
-      :area "rational-homology-lefschetz"}
-     {:name "t99J05_lefschetz_euler",
-      :type "Lefschetz and Euler values n+1",
-      :status :partial,
-      :consumers [:t99J05],
-      :depends-on ["t99J05_cp_homology"],
+      ["t99J05_subsingleton_rational_homology"
+       "t99J05_cp_homology_step"],
       :area "rational-homology-lefschetz"}],
     :statement-hashes {:registry "150/150"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Committed C3 interface: rational CP^n homology data for finite dimensionality, odd/top vanishing, and one-dimensional even groups. Mayer-Vietoris construction remains; not refuted.",
+    "Committed literal CP0 singleton theorem via its affine chart. Base homology reduces to rational homology of a subsingleton; successor remains; not refuted.",
     :commands
-    [{:cmd "lake build ConstructionTargets.t99J05Closure", :exit 0}
-     {:cmd "registry; fixture; scoped diff", :exit 0}
-     {:cmd "rg sorry-or-axiom closure", :exit 1, :expected-exit 1}
-     {:cmd "git commit", :exit 0}],
+    [{:cmd "build; registry; fixture; diff; commit", :exit 0}
+     {:cmd "rg sorry-or-axiom closure", :exit 1, :expected-exit 1}],
+    :diagnostic-history
+    [{:cmd "lean closure",
+      :exit 1,
+      :correction
+      "proved Fin1/empty-coordinate equalities explicitly"}],
     :review
     {:outcome :pass,
      :seat "codex-11",
-     :job "invoke-1791921209553-10323-94727778",
+     :job "invoke-1791922062829-10348-50781089",
      :commands
-     ["git show/diff e766cbfc; scope and interface review"
+     ["git show/diff 385135c; scope and representation review"
       "lake build/lean ConstructionTargets.t99J05Closure"
       "sha256sum + lake env lean interface fixture"
       "statement-registry check; placeholder recount"],
      :finding
-     "PASS. Since program-history 05ab28e1, commit e766cbfc adds a compiled, sorry-free C3 interface in the two allowed files. It faithfully models rational H_k(CP n): finite dimensional in every degree, subsingleton above 2n and in odd degrees, and linearly equivalent to Q in each even degree 2i for i<=n. Remaining construction, trace calculation, and Main assembly are listed. Fixture hash matches; standard axioms only; registry 150/150; closure placeholders 0 and Main remains 1."},
-    :commit "e766cbfcd2f0abb2e2efd42110f4e3bd14637fda",
+     "PASS. Since program-history c97d155, commit 385135c adds the compiled, sorry-free theorem Subsingleton (CP 0) for the literal projectivization, using its fixed affine chart rather than substituting another model. This is genuine C3 base progress; rational homology of subsingletons, CP0 data, and the Mayer-Vietoris successor remain explicitly listed. Fixture hash matches; standard axioms only; registry 150/150; closure forbidden count 0->0."},
+    :commit "385135c706cfec5df353876bace021905b133f83",
     :changed-paths
     ["ConstructionTargets/t99J05Closure.lean"
      "ConstructionTargets/t99J05Closure.blueprint.md"],
     :fixture
     {:path "/tmp/t99j05_cp_homology_interface_check.lean",
      :sha256
-     "c9ad488ebf7086b3bf0d443e310d38faf48b4d0cd7b52d7a35537760e3235bd3",
+     "a59a92b5d0f8a6ba5b9a62fc602f076d828f437130f312a4622582698be5ca8f",
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
@@ -36259,7 +36261,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t99J05Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed C3 interface: rational CP^n homology data for finite dimensionality, odd/top vanishing, and one-dimensional even groups. Mayer-Vietoris construction remains; not refuted.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed literal CP0 singleton theorem via its affine chart. Base homology reduces to rational homology of a subsingleton; successor remains; not refuted.",
    :id :program-2026-10-13-close-t99j05,
    :kind :final-adapter,
    :campaign-priority 31,
@@ -36275,7 +36277,15 @@
     {:job 2,
      :commit "e766cbfcd2f0abb2e2efd42110f4e3bd14637fda",
      :reason
-     "Committed C3 interface: rational CP^n homology data for finite dimensionality, odd/top vanishing, and one-dimensional even groups. Mayer-Vietoris construction remains; not refuted."}]}
+     "Committed C3 interface: rational CP^n homology data for finite dimensionality, odd/top vanishing, and one-dimensional even groups. Mayer-Vietoris construction remains; not refuted."}
+    {:job 3,
+     :commit "c97d1550317667236760fc2274f9abf7370e0573",
+     :reason
+     "Committed C3 induction: CP0 data plus a Mayer-Vietoris successor yields data for every CP n. Base and successor remain; not refuted."}
+    {:job 4,
+     :commit "385135c706cfec5df353876bace021905b133f83",
+     :reason
+     "Committed literal CP0 singleton theorem via its affine chart. Base homology reduces to rational homology of a subsingleton; successor remains; not refuted."}]}
   {:consumer :t98A02,
    :stop-count 0,
    :phase :implementation,
@@ -36436,7 +36446,11 @@
     :area "rational-homology-lefschetz"},
    :id :lemma-t99j05-lefschetz-euler,
    :kind :lemma,
-   :depends-on [:lemma-t99j05-cp-homology],
+   :depends-on
+   [:lemma-t99j05-cp-homology
+    :lemma-t99j05-cp0-homology
+    :lemma-t99j05-cp-homology-step
+    :lemma-t99j05-subsingleton-rational-homology],
    :other-consumers []}
   {:consumer :t99J05,
    :phase :lemma,
@@ -36459,6 +36473,90 @@
     :banked-commit "e766cbfcd2f0abb2e2efd42110f4e3bd14637fda"},
    :id
    :lemma-constructiontargets-t99j05closure-complexprojectiverationalhomologydata,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t99J05,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "complexProjectiveRationalHomologyData_of_zero_of_step",
+    :type "CP0 plus successor gives all CP n"},
+   :lemma
+   {:name "complexProjectiveRationalHomologyData_of_zero_of_step",
+    :reported-by [:program-2026-10-13-close-t99j05],
+    :type "CP0 plus successor gives all CP n",
+    :area "rational-homology-lefschetz",
+    :proved-in :program-2026-10-13-close-t99j05,
+    :banked-by :program-2026-10-13-close-t99j05,
+    :banked-commit "c97d1550317667236760fc2274f9abf7370e0573"},
+   :id :lemma-complexprojectiverationalhomologydata-of-zero-of-step,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t99J05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t99J05_cp0_homology", :type "CP homology data at 0"},
+   :lemma
+   {:name "t99J05_cp0_homology",
+    :reported-by [:program-2026-10-13-close-t99j05],
+    :type "CP homology data at 0",
+    :area "rational-homology-lefschetz"},
+   :id :lemma-t99j05-cp0-homology,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t99J05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t99J05_cp_homology_step",
+    :type "CP n data -> CP(n+1) data"},
+   :lemma
+   {:name "t99J05_cp_homology_step",
+    :reported-by [:program-2026-10-13-close-t99j05],
+    :type "CP n data -> CP(n+1) data",
+    :area "rational-homology-lefschetz"},
+   :id :lemma-t99j05-cp-homology-step,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t99J05,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "cp_zero_subsingleton", :type "Subsingleton (CP 0)"},
+   :lemma
+   {:name "cp_zero_subsingleton",
+    :reported-by [:program-2026-10-13-close-t99j05],
+    :type "Subsingleton (CP 0)",
+    :area "rational-homology-lefschetz",
+    :proved-in :program-2026-10-13-close-t99j05,
+    :banked-by :program-2026-10-13-close-t99j05,
+    :banked-commit "385135c706cfec5df353876bace021905b133f83"},
+   :id :lemma-cp-zero-subsingleton,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t99J05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t99J05_subsingleton_rational_homology",
+    :type "H0(X;Q)=Q; Hk=0 for k>0"},
+   :lemma
+   {:name "t99J05_subsingleton_rational_homology",
+    :reported-by [:program-2026-10-13-close-t99j05],
+    :type "H0(X;Q)=Q; Hk=0 for k>0",
+    :area "rational-homology-lefschetz"},
+   :id :lemma-t99j05-subsingleton-rational-homology,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}],

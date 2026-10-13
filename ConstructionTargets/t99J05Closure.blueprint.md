@@ -76,6 +76,12 @@ Accordingly the construction now has two independent proof obligations: the
 chain computation for `CP 0`, and the coefficient Mayer–Vietoris successor
 adjoining the cell in degree `2*(n+1)`.
 
+The base geometry is now banked as `cp_zero_subsingleton`: the literal
+projectivization `CP 0` has one point, proved through its fixed affine chart.
+What remains for the base is the singular-chain theorem computing rational
+homology of a subsingleton space (degree zero `ℚ`, positive degrees zero),
+then transport it to `ComplexProjectiveRationalHomologyData 0`.
+
 Dependencies already banked:
 
 - `ConstructionTargets.CoefficientSubcomplexMayerVietoris`

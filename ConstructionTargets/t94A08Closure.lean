@@ -516,3 +516,78 @@ lemma apm_t94a08_puncturedAffineCross_homeomorph_image_not_isPreconnected
   intro himage
   exact apm_t94a08_puncturedAffineCross_not_isPreconnected
     (e.isInducing.isPreconnected_image.mp himage)
+
+/-! The zeroth projective chart carries `sigma2` exactly to the affine cross. -/
+
+lemma apm_t94a08_sigma2_zeroChart_mem_iff (p : apm_t94a08_CP2)
+    (hp : Projectivization.rep p (0 : Fin 3) ≠ 0) :
+    let z :=
+      (ConstructionTargets.ComplexProjectiveChartTargets.coordinates (0 : Fin 3) p
+          ⟨1, by decide⟩,
+        ConstructionTargets.ComplexProjectiveChartTargets.coordinates (0 : Fin 3) p
+          ⟨2, by decide⟩)
+    p ∈ apm_t94a08_sigma2 ↔
+      z ∈ apm_t94a08_affineBranchPlus ∪ apm_t94a08_affineBranchMinus := by
+  dsimp only
+  rw [apm_t94a08_sigma2, mem_setOf_eq, apm_t94a08_quadratic2_factor]
+  change _ ↔
+    Projectivization.rep p 1 / Projectivization.rep p 0 +
+          Complex.I * (Projectivization.rep p 2 / Projectivization.rep p 0) = 0 ∨
+      Projectivization.rep p 1 / Projectivization.rep p 0 -
+          Complex.I * (Projectivization.rep p 2 / Projectivization.rep p 0) = 0
+  rw [mul_eq_zero]
+  constructor
+  · rintro (hplus | hminus)
+    · left
+      field_simp
+      simpa using hplus
+    · right
+      field_simp
+      simpa using hminus
+  · rintro (hplus | hminus)
+    · left
+      field_simp [hp] at hplus
+      simpa using hplus
+    · right
+      field_simp [hp] at hminus
+      simpa using hminus
+
+def apm_t94a08_zeroChartHomeomorph :
+    ↑{p : apm_t94a08_CP2 | Projectivization.rep p (0 : Fin 3) ≠ 0} ≃ₜ
+      (ℂ × ℂ) := by
+  open ConstructionTargets.ComplexProjectiveChartTargets in
+    let a : Fin 3 := 0
+    let j : {q : Fin 3 // q ≠ a} := ⟨1, by decide⟩
+    let k : {q : Fin 3 // q ≠ a} := ⟨2, by decide⟩
+    let f : ↑{p : apm_t94a08_CP2 | Projectivization.rep p a ≠ 0} → ℂ × ℂ :=
+      fun p ↦ (coordinates a p.1 j, coordinates a p.1 k)
+    let g : ℂ × ℂ →
+        ↑{p : apm_t94a08_CP2 | Projectivization.rep p a ≠ 0} :=
+      fun z ↦ ⟨chartInverse a (fun q ↦ if q.1 = 1 then z.1 else z.2),
+        ConstructionTargets.T94A08ProjectiveConic.chartInverse_mem_affineSource _ _⟩
+    exact Homeomorph.mk (Equiv.mk f g (by
+      intro p
+      apply Subtype.ext
+      dsimp [f, g]
+      have heq : (fun q : {q : Fin 3 // q ≠ a} ↦
+          if q.1 = 1 then coordinates a p.1 j else coordinates a p.1 k) =
+          coordinates a p.1 := by
+        funext q
+        fin_cases q <;> simp [a, j, k]
+      rw [heq, ConstructionTargets.T94A08ProjectiveConic.chartInverse_coordinates]
+      exact p.2) (by
+      intro z
+      apply Prod.ext <;>
+        simp [f, g, j, k,
+          ConstructionTargets.T94A08ProjectiveConic.coordinates_chartInverse])) (by
+      apply Continuous.prodMk
+      · exact (continuous_apply j).comp
+          ((ConstructionTargets.T94A08ProjectiveConic.continuous_coordinates a).comp_continuous
+            continuous_subtype_val (fun p ↦ p.2))
+      · exact (continuous_apply k).comp
+          ((ConstructionTargets.T94A08ProjectiveConic.continuous_coordinates a).comp_continuous
+            continuous_subtype_val (fun p ↦ p.2))) (by
+      apply Continuous.subtype_mk
+      exact (ConstructionTargets.T94A08ProjectiveConic.continuous_chartInverse a).comp
+        (continuous_pi fun q ↦ by
+          fin_cases q <;> simp [a] <;> fun_prop))
