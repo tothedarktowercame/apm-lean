@@ -24430,23 +24430,25 @@
    :consumer :t01A08,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "extend Mathlib: state and prove the missing theorem in scope",
    :implements-lemma :lemma-closedset-whitneycubecover,
    :evidence
    {:placeholder-delta {:t01A08 [1 1]},
     :residual
-    "Select centers, bound overlap, assemble B3; then B4-B7, B9.",
+    "Select scale-stratified centers, uniformly bound overlap, assemble B3; then B4-B7, B9.",
     :outcome :stop,
     :warnings ["existing unnecessarySimpa:454"],
     :missing-theorems
     [{:name
-      "ConstructionTargets.SardConvexDomain.finite_of_subset_compact_of_pairwise_dist",
-      :type "separated subset of compact metric set is finite",
+      "ConstructionTargets.SardConvexDomain.finite_indices_of_centers_in_compact",
+      :type
+      "injective separated centers in compact set have finite index preimage",
       :status :proved,
       :consumers [:t01A08],
-      :depends-on [],
+      :depends-on
+      ["ConstructionTargets.SardConvexDomain.finite_of_subset_compact_of_pairwise_dist"],
       :area "sard-convex-domain"}
      {:name
       "ConstructionTargets.SardConvexDomain.closedSet_whitneyCubeCover_proper",
@@ -24455,43 +24457,28 @@
       :consumers [:t01A08],
       :depends-on
       ["ConstructionTargets.SardConvexDomain.compl_subset_iUnion_quarter_infDist_ball"
-       "ConstructionTargets.SardConvexDomain.finite_of_subset_compact_of_pairwise_dist"],
+       "ConstructionTargets.SardConvexDomain.finite_indices_of_centers_in_compact"],
       :area "sard-convex-domain"}],
     :statement-hashes {:registry "149/149"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Committed compact packing finiteness: a uniformly separated subset of a compact metric set is finite. Selection, uniform overlap bound, and certificate assembly remain; not a refutation.",
+    "Committed indexed compact packing: injective uniformly separated centers in a compact region have finitely many indices. Scale-stratified maximal selection, a uniform overlap cardinal bound, and certificate assembly remain; not a refutation.",
     :commands
     [{:cmd "lake build ConstructionTargets.SardConvexDomain", :exit 0}
      {:cmd "lean fixture; registry; forbidden scan; diff", :exit 0}
      {:cmd "git commit scoped file", :exit 0}],
-    :diagnostic-history
-    [{:cmd "initial build",
-      :exit 1,
-      :correction "fixed compact API and intersection order"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1791899934963-9818-366b0a6f",
-     :commands
-     ["git show/diff 5c1a23bc; scope and packing-proof review"
-      "lake build ConstructionTargets.SardConvexDomain"
-      "sha256sum and lake env lean t01a08_b3_compact_packing_check"
-      "statement-registry check; forbidden-token recount"],
-     :finding
-     "PASS. Valid STOP after compiled progress. The scoped theorem correctly proves that a uniformly ε-separated subset of a compact metric set is finite: separation makes it closed and discrete via ε/2 balls, while containment supplies compactness. Selection, a uniform overlap bound, and certificate assembly remain explicitly partial. Build/export pass; fixture hash matches; standard axioms only; registry 149/149; forbidden count 0->0."},
-    :commit "5c1a23bc56f37976b38d589d218038b6dda34570",
+    :commit "a1a1f703ffb22f3b360811ce1e43d26b612e7e61",
     :changed-paths ["ConstructionTargets/SardConvexDomain.lean"],
     :fixture
-    {:path "/tmp/t01a08_b3_compact_packing_check.lean",
+    {:path "/tmp/t01a08_b3_indexed_packing_check.lean",
      :sha256
-     "52bce0a345220c53cc5712007d6b50bb0a2785aa6fecbe29534db713748d31cb",
+     "c278aac527272241088e60fa1ef8fddaa077f79ff6c1e9e4758f65b5186cb284",
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain.blueprint/B3",
    :acceptance
@@ -35146,7 +35133,8 @@
     :lemma-constructiontargets-sardconvexdomain-quarter-infdist-ball-data
     :lemma-constructiontargets-sardconvexdomain-infdist-comparable-of-dist-lt-half
     :lemma-constructiontargets-sardconvexdomain-compl-subset-iunion-quarter-infdist-ball
-    :lemma-constructiontargets-sardconvexdomain-finite-of-subset-compact-of-pairwise-dist],
+    :lemma-constructiontargets-sardconvexdomain-finite-of-subset-compact-of-pairwise-dist
+    :lemma-constructiontargets-sardconvexdomain-finite-indices-of-centers-in-compact],
    :other-consumers []}
   {:consumer :t01A08,
    :phase :lemma,
@@ -35259,6 +35247,29 @@
    :lemma-constructiontargets-sardconvexdomain-finite-of-subset-compact-of-pairwise-dist,
    :kind :lemma,
    :depends-on [],
+   :other-consumers []}
+  {:consumer :t01A08,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.SardConvexDomain.finite_indices_of_centers_in_compact",
+    :type
+    "injective separated centers in compact set have finite index preimage"},
+   :lemma
+   {:name
+    "ConstructionTargets.SardConvexDomain.finite_indices_of_centers_in_compact",
+    :reported-by [:r-a08-sard-b3-whitney-cubes-1],
+    :type
+    "injective separated centers in compact set have finite index preimage",
+    :area "sard-convex-domain",
+    :proved-in :r-a08-sard-b3-whitney-cubes-1},
+   :id
+   :lemma-constructiontargets-sardconvexdomain-finite-indices-of-centers-in-compact,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-sardconvexdomain-finite-of-subset-compact-of-pairwise-dist],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
