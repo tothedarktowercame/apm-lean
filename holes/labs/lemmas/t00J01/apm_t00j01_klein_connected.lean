@@ -187,7 +187,12 @@ plane (equivalently, as the image of the connected fundamental square). -/
 -- BEGIN SEAT AREA
 theorem apm_t00j01_klein_connected :
     IsConnected (Set.univ : Set apm_t00j01_Klein) := by
-  sorry
+  let q : ℝ × ℝ → apm_t00j01_Klein :=
+    fun p => Quotient.mk (Relation.EqvGen.setoid apm_t00j01_kleinRel) p
+  have hq : Continuous q := continuous_coinduced_rng
+  have hsurj : Function.Surjective q := Quotient.mk_surjective
+  rw [← hsurj.range_eq]
+  exact isConnected_range hq
 -- END SEAT AREA
 
 /-- The normal form gives a small evenly-covered rectangle at every point of
