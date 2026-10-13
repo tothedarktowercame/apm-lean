@@ -24430,26 +24430,27 @@
    :consumer :t01A08,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "extend Mathlib: state and prove the missing theorem in scope",
    :implements-lemma :lemma-closedset-whitneycubecover,
    :evidence
    {:placeholder-delta {:t01A08 [1 1]},
     :residual
-    "Countability/local finiteness, anchors and B3 assembly; then B4-B7, B9.",
+    "Local finiteness, anchors, B3 assembly; then B4-B7, B9.",
     :outcome :stop,
     :warnings
-    ["existing unnecessarySimpa:454" "unnecessarySeqFocus:1199"],
+    ["existing unnecessarySimpa:454"
+     "existing unnecessarySeqFocus:1199"],
     :missing-theorems
     [{:name
-      "ConstructionTargets.SardConvexDomain.finite_whitneyNetIncidence_and_ncard_le",
-      :type "incidence finite and ncard <= fixed packing toNat * 3",
+      "ConstructionTargets.SardConvexDomain.countable_whitneyNetIndex",
+      :type
+      "{E} [MetricSpace E] [TopologicalSpace.SeparableSpace E] (s : Set E) : Countable (WhitneyNetIndex s)",
       :status :proved,
       :consumers [:t01A08],
       :depends-on
-      ["ConstructionTargets.SardConvexDomain.fixed_whitneyPackingNumber_ne_top"
-       "ConstructionTargets.SardConvexDomain.encard_whitneyNetIncidence_le_three_fixed_packingNumbers"],
+      ["ConstructionTargets.SardConvexDomain.whitneyStratumNet_spec"],
       :area "sard-convex-domain"}
      {:name
       "ConstructionTargets.SardConvexDomain.closedSet_whitneyCubeCover_proper",
@@ -24457,44 +24458,33 @@
       :status :partial,
       :consumers [:t01A08],
       :depends-on
-      ["ConstructionTargets.SardConvexDomain.finite_whitneyNetIncidence_and_ncard_le"],
+      ["ConstructionTargets.SardConvexDomain.countable_whitneyNetIndex"
+       "ConstructionTargets.SardConvexDomain.finite_whitneyNetIncidence_and_ncard_le"],
       :area "sard-convex-domain"}],
     :statement-hashes {:registry "150/150"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Committed finite incidence and natural overlap bound. Index countability, local finiteness, anchors, and B3 assembly remain; not refuted.",
+    "Committed countability of stratum nets and their integer sigma index. Local finiteness, anchors, and assembly remain; not refuted.",
     :commands
     [{:cmd "lake build ConstructionTargets.SardConvexDomain", :exit 0}
-     {:cmd "fixture; registry; scans; diff", :exit 0}
+     {:cmd "fixture; registry; scans; scope/diff", :exit 0}
      {:cmd "git commit", :exit 0}],
     :diagnostic-history
     [{:cmd "builds",
       :exit 1,
-      :correction
-      "used ENat toNat monotonicity and ncard definition"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1791910661994-10049-4ceadfdd",
-     :commands
-     ["git show/diff 8723fbf; scope/cardinal checks"
-      "sha256sum + lake env lean frozen fixture"
-      "lake build ConstructionTargets.SardConvexDomain"
-      "statement registry check; forbidden-count scan"],
-     :finding
-     "PASS. Recorded topo-10 commit 8723fbf changes only the scoped Lean file and correctly converts the three-packing ENat bound to finite incidence plus a Nat ncard bound. Non-top of N propagates through both additions; toNat monotonicity and finite-add identities yield ncard≤N.toNat*3. Fixture hash 3c51e109... matches; build/fixture pass; registry 150/150; forbidden placeholders stay 0; only standard axioms. Valid compiled B3 progress; STOP explicitly leaves index countability/local finiteness, anchors, and assembly."},
-    :commit "8723fbff85660482c725b6b8ca372090544d72f1",
+      :correction "qualified SeparableSpace; fixed inference"}],
+    :commit "e4808ad92ce13fe4934e9ec9b53fa54cf2401ff5",
     :changed-paths ["ConstructionTargets/SardConvexDomain.lean"],
     :fixture
-    {:path "/tmp/t01a08_b3_nat_overlap_check.lean",
+    {:path "/tmp/t01a08_b3_countable_index_check.lean",
      :sha256
-     "3c51e109737071a51fddbfd18b0beb6c2419ac3a5527b34855d387a66247e512",
+     "390445d53d78f650bcf386ae42d62d3cfb2481213b4ca373c5d88cd0723b05ce",
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain.blueprint/B3",
    :acceptance
@@ -35169,7 +35159,8 @@
     :lemma-constructiontargets-sardconvexdomain-whitneynetindex-incident-stratum-eq-or-eq-a
     :lemma-constructiontargets-sardconvexdomain-encard-whitneynetincidence-le-three-fixed-p
     :lemma-constructiontargets-sardconvexdomain-fixed-whitneypackingnumber-ne-top
-    :lemma-constructiontargets-sardconvexdomain-finite-whitneynetincidence-and-ncard-le],
+    :lemma-constructiontargets-sardconvexdomain-finite-whitneynetincidence-and-ncard-le
+    :lemma-constructiontargets-sardconvexdomain-countable-whitneynetindex],
    :other-consumers []}
   {:consumer :t01A08,
    :phase :lemma,
@@ -35753,6 +35744,29 @@
    :depends-on
    [:lemma-constructiontargets-sardconvexdomain-fixed-whitneypackingnumber-ne-top
     :lemma-constructiontargets-sardconvexdomain-encard-whitneynetincidence-le-three-fixed-p],
+   :other-consumers []}
+  {:consumer :t01A08,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.SardConvexDomain.countable_whitneyNetIndex",
+    :type
+    "{E} [MetricSpace E] [TopologicalSpace.SeparableSpace E] (s : Set E) : Countable (WhitneyNetIndex s)"},
+   :lemma
+   {:name
+    "ConstructionTargets.SardConvexDomain.countable_whitneyNetIndex",
+    :reported-by [:r-a08-sard-b3-whitney-cubes-1],
+    :type
+    "{E} [MetricSpace E] [TopologicalSpace.SeparableSpace E] (s : Set E) : Countable (WhitneyNetIndex s)",
+    :area "sard-convex-domain",
+    :proved-in :r-a08-sard-b3-whitney-cubes-1},
+   :id
+   :lemma-constructiontargets-sardconvexdomain-countable-whitneynetindex,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-sardconvexdomain-whitneystratumnet-spec],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
