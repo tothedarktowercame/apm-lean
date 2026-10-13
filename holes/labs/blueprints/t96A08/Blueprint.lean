@@ -15,7 +15,7 @@ def apm_t96a08_IsPiecewiseSmoothPath
   Continuous γ ∧
     ∃ (n : ℕ) (cuts : Fin (n + 1) → ℝ),
       StrictMono cuts ∧ cuts 0 = 0 ∧ cuts (Fin.last n) = 1 ∧
-      ∀ i : Fin n, ContMDiffOn 𝓘(ℝ, ℝ) I (⊤ : WithTop ℕ∞) γ
+      ∀ i : Fin n, ContMDiffOn 𝓘(ℝ, ℝ) I ((⊤ : ℕ∞) : WithTop ℕ∞) γ
         (Set.Icc (cuts i.castSucc) (cuts i.succ))
 
 def apm_t96a08_LineIntegral
@@ -142,7 +142,7 @@ theorem apm_t96A08_concat_piecewiseSmooth
         rw [show cuts i.castSucc = cγ ⟨i.val, by omega⟩ / 2 by simp [cuts, hics],
           show cuts i.succ = cγ ⟨i.val + 1, by omega⟩ / 2 by simp [cuts, his]] at ht
         constructor <;> linarith
-      have haff : ContMDiff 𝓘(ℝ, ℝ) 𝓘(ℝ, ℝ) (⊤ : WithTop ℕ∞)
+      have haff : ContMDiff 𝓘(ℝ, ℝ) 𝓘(ℝ, ℝ) ((⊤ : ℕ∞) : WithTop ℕ∞)
           (fun t : ℝ ↦ 2 * t) := by
         exact contMDiff_const.mul contMDiff_id
       have hc := (hγsmooth ⟨i.val, hi⟩).comp haff.contMDiffOn heq
@@ -182,7 +182,7 @@ theorem apm_t96A08_concat_piecewiseSmooth
         have he : i.val + 1 - nγ = i.val - nγ + 1 := by omega
         simp [he] at ht
         constructor <;> linarith
-      have haff : ContMDiff 𝓘(ℝ, ℝ) 𝓘(ℝ, ℝ) (⊤ : WithTop ℕ∞)
+      have haff : ContMDiff 𝓘(ℝ, ℝ) 𝓘(ℝ, ℝ) ((⊤ : ℕ∞) : WithTop ℕ∞)
           (fun t : ℝ ↦ 2 * t - 1) := by
         exact (contMDiff_const.mul contMDiff_id).sub contMDiff_const
       have hc := (hδsmooth k).comp haff.contMDiffOn heq
@@ -237,9 +237,9 @@ theorem apm_t96A08_lineIntegrand_intervalIntegrable
     {E M : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
     [CompleteSpace E] [TopologicalSpace M]
     (I : ModelWithCorners ℝ E E) [ChartedSpace E M]
-    [IsManifold I (⊤ : WithTop ℕ∞) M]
+    [IsManifold I ((⊤ : ℕ∞) : WithTop ℕ∞) M]
     (omega : ∀ p : M, TangentSpace I p →L[ℝ] ℝ)
-    (homega_smooth : ContMDiff I.tangent 𝓘(ℝ, ℝ) (⊤ : WithTop ℕ∞)
+    (homega_smooth : ContMDiff I.tangent 𝓘(ℝ, ℝ) ((⊤ : ℕ∞) : WithTop ℕ∞)
       (fun v : TangentBundle I M => omega v.1 v.2))
     (gamma : ℝ → M) (hgamma : apm_t96a08_IsPiecewiseSmoothPath I gamma) :
     IntervalIntegrable
@@ -327,7 +327,7 @@ theorem apm_t96A08_concat_integrand_left
     {E M : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
     [CompleteSpace E] [TopologicalSpace M]
     (I : ModelWithCorners ℝ E E) [ChartedSpace E M]
-    [IsManifold I (⊤ : WithTop ℕ∞) M]
+    [IsManifold I ((⊤ : ℕ∞) : WithTop ℕ∞) M]
     (omega : ∀ p : M, TangentSpace I p →L[ℝ] ℝ)
     (gamma delta : ℝ → M) (t : ℝ) (ht : t ∈ Set.Ioo (0 : ℝ) (1 / 2)) :
     omega (apm_t96A08_concat gamma delta t)
@@ -391,7 +391,7 @@ theorem apm_t96A08_concat_integrand_right
     {E M : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
     [CompleteSpace E] [TopologicalSpace M]
     (I : ModelWithCorners ℝ E E) [ChartedSpace E M]
-    [IsManifold I (⊤ : WithTop ℕ∞) M]
+    [IsManifold I ((⊤ : ℕ∞) : WithTop ℕ∞) M]
     (omega : ∀ p : M, TangentSpace I p →L[ℝ] ℝ)
     (gamma delta : ℝ → M) (t : ℝ) (ht : t ∈ Set.Ioo (1 / 2 : ℝ) 1) :
     omega (apm_t96A08_concat gamma delta t)
@@ -399,7 +399,7 @@ theorem apm_t96A08_concat_integrand_right
       2 * omega (delta (2 * t - 1)) ((mfderiv 𝓘(ℝ, ℝ) I delta (2 * t - 1)) 1) := by
   let phi : ℝ → ℝ := fun s ↦ 2 * s - 1
   have hphi : MDifferentiableAt 𝓘(ℝ, ℝ) 𝓘(ℝ, ℝ) phi t := by
-    have hp : ContMDiff 𝓘(ℝ, ℝ) 𝓘(ℝ, ℝ) (⊤ : WithTop ℕ∞) phi := by
+    have hp : ContMDiff 𝓘(ℝ, ℝ) 𝓘(ℝ, ℝ) ((⊤ : ℕ∞) : WithTop ℕ∞) phi := by
       rw [contMDiff_iff_contDiff]
       fun_prop
     exact hp.mdifferentiableAt (by simp)
@@ -430,7 +430,7 @@ theorem apm_t96A08_concat_integrand_right
       intro hc
       let psi : ℝ → ℝ := fun s ↦ (s + 1) / 2
       have hpsi : MDifferentiableAt 𝓘(ℝ, ℝ) 𝓘(ℝ, ℝ) psi (phi t) := by
-        have hp : ContMDiff 𝓘(ℝ, ℝ) 𝓘(ℝ, ℝ) (⊤ : WithTop ℕ∞) psi := by
+        have hp : ContMDiff 𝓘(ℝ, ℝ) 𝓘(ℝ, ℝ) ((⊤ : ℕ∞) : WithTop ℕ∞) psi := by
           rw [contMDiff_iff_contDiff]
           fun_prop
         exact hp.mdifferentiableAt (by simp)
@@ -461,7 +461,7 @@ theorem apm_t96A08_concat_lineIntegral_of_pieces
     {E M : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
     [CompleteSpace E] [TopologicalSpace M]
     (I : ModelWithCorners ℝ E E) [ChartedSpace E M]
-    [IsManifold I (⊤ : WithTop ℕ∞) M]
+    [IsManifold I ((⊤ : ℕ∞) : WithTop ℕ∞) M]
     (omega : ∀ p : M, TangentSpace I p →L[ℝ] ℝ)
     (gamma delta : ℝ → M)
     (hγ : IntervalIntegrable
@@ -545,9 +545,9 @@ theorem apm_t96A08_concat_lineIntegral
     {E M : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
     [CompleteSpace E] [TopologicalSpace M]
     (I : ModelWithCorners ℝ E E) [ChartedSpace E M]
-    [IsManifold I (⊤ : WithTop ℕ∞) M]
+    [IsManifold I ((⊤ : ℕ∞) : WithTop ℕ∞) M]
     (omega : ∀ p : M, TangentSpace I p →L[ℝ] ℝ)
-    (homega_smooth : ContMDiff I.tangent 𝓘(ℝ, ℝ) (⊤ : WithTop ℕ∞)
+    (homega_smooth : ContMDiff I.tangent 𝓘(ℝ, ℝ) ((⊤ : ℕ∞) : WithTop ℕ∞)
       (fun v : TangentBundle I M => omega v.1 v.2))
     (gamma delta : ℝ → M)
     (hgamma : apm_t96a08_IsPiecewiseSmoothPath I gamma)
@@ -568,9 +568,9 @@ theorem apm_t96A08_piecewisePath_concat_additive
     {E M : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
     [CompleteSpace E] [TopologicalSpace M]
     (I : ModelWithCorners ℝ E E) [ChartedSpace E M]
-    [IsManifold I (⊤ : WithTop ℕ∞) M]
+    [IsManifold I ((⊤ : ℕ∞) : WithTop ℕ∞) M]
     (omega : ∀ p : M, TangentSpace I p →L[ℝ] ℝ)
-    (homega_smooth : ContMDiff I.tangent 𝓘(ℝ, ℝ) (⊤ : WithTop ℕ∞)
+    (homega_smooth : ContMDiff I.tangent 𝓘(ℝ, ℝ) ((⊤ : ℕ∞) : WithTop ℕ∞)
       (fun v : TangentBundle I M => omega v.1 v.2)) :
     apm_t96A08_HasAdditiveConcatenation I omega := by
   intro gamma delta hgamma hdelta hend
@@ -587,7 +587,7 @@ lemma apm_t96A08_chart_radial_primitive_aux_path_of_contMDiff
     {E M : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
     [TopologicalSpace M] (I : ModelWithCorners ℝ E E) [ChartedSpace E M]
     (gamma : ℝ → M)
-    (hgamma : ContMDiff 𝓘(ℝ, ℝ) I (⊤ : WithTop ℕ∞) gamma) :
+    (hgamma : ContMDiff 𝓘(ℝ, ℝ) I ((⊤ : ℕ∞) : WithTop ℕ∞) gamma) :
     apm_t96a08_IsPiecewiseSmoothPath I gamma := by
   refine ⟨hgamma.continuous, 1, fun i ↦ (i.val : ℝ), ?_, ?_, ?_, ?_⟩
   · intro i j hij
@@ -611,7 +611,7 @@ lemma apm_t96A08_chart_radial_primitive_chart_neighborhood
     {E M : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
     [CompleteSpace E] [TopologicalSpace M]
     (I : ModelWithCorners ℝ E E) [ChartedSpace E M]
-    [IsManifold I (⊤ : WithTop ℕ∞) M] (x : M) :
+    [IsManifold I ((⊤ : ℕ∞) : WithTop ℕ∞) M] (x : M) :
     ∃ (U : Set M) (W : Set E), IsOpen U ∧ x ∈ U ∧ IsOpen W ∧
       Convex ℝ W ∧ (extChartAt I x x) ∈ W ∧
       W ∩ Set.range (I : E → E) ⊆ (extChartAt I x).target ∧
@@ -634,7 +634,7 @@ lemma apm_t96A08_chart_radial_primitive_radial_paths
     {E M : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
     [CompleteSpace E] [TopologicalSpace M]
     (I : ModelWithCorners ℝ E E) [ChartedSpace E M]
-    [IsManifold I (⊤ : WithTop ℕ∞) M] (x : M) (U : Set M) (W : Set E)
+    [IsManifold I ((⊤ : ℕ∞) : WithTop ℕ∞) M] (x : M) (U : Set M) (W : Set E)
     (hU : U = (extChartAt I x).source ∩ (extChartAt I x) ⁻¹' W)
     (hxW : extChartAt I x x ∈ W) (hWconv : Convex ℝ W)
     (hWtarget : W ∩ Set.range (I : E → E) ⊆ (extChartAt I x).target) :
@@ -676,16 +676,16 @@ lemma apm_t96A08_chart_radial_primitive_radial_paths
   have hq_cont : Continuous q :=
     heta_cont.comp (continuous_subtype_val.comp continuous_projIcc)
   have hdelta_cont : Continuous delta := by
-    exact (contMDiffOn_extChartAt_symm (I := I) (n := (⊤ : WithTop ℕ∞)) x).continuousOn.comp_continuous
+    exact (contMDiffOn_extChartAt_symm (I := I) (n := ((⊤ : ℕ∞) : WithTop ℕ∞)) x).continuousOn.comp_continuous
       hq_cont hq_target
   have heta_smooth : ContMDiff (modelWithCornersSelf ℝ ℝ)
-      (modelWithCornersSelf ℝ E) (⊤ : WithTop ℕ∞) eta := by
+      (modelWithCornersSelf ℝ E) ((⊤ : ℕ∞) : WithTop ℕ∞) eta := by
     rw [contMDiff_iff_contDiff]
     fun_prop
   have hdelta_smooth : ContMDiffOn (modelWithCornersSelf ℝ ℝ) I
-      (⊤ : WithTop ℕ∞) delta
+      ((⊤ : ℕ∞) : WithTop ℕ∞) delta
       (Set.Icc (0 : ℝ) 1) := by
-    have hg := (contMDiffOn_extChartAt_symm (I := I) (n := (⊤ : WithTop ℕ∞)) x).comp
+    have hg := (contMDiffOn_extChartAt_symm (I := I) (n := ((⊤ : ℕ∞) : WithTop ℕ∞)) x).comp
       heta_smooth.contMDiffOn (fun t ht ↦ heta_target t ht)
     apply hg.congr
     intro t ht
@@ -734,9 +734,9 @@ theorem apm_t96A08_omegaCoord_eval_contDiffOn
     {E M : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
     [CompleteSpace E] [TopologicalSpace M]
     (I : ModelWithCorners ℝ E E) [ChartedSpace E M]
-    [IsManifold I (⊤ : WithTop ℕ∞) M]
+    [IsManifold I ((⊤ : ℕ∞) : WithTop ℕ∞) M]
     (omega : ∀ p : M, TangentSpace I p →L[ℝ] ℝ)
-    (homega_smooth : ContMDiff I.tangent 𝓘(ℝ, ℝ) (⊤ : WithTop ℕ∞)
+    (homega_smooth : ContMDiff I.tangent 𝓘(ℝ, ℝ) ((⊤ : ℕ∞) : WithTop ℕ∞)
       (fun v : TangentBundle I M => omega v.1 v.2))
     (x : M) :
     ContDiffOn ℝ 1 (fun p : E × E ↦ apm_t96A08_omegaCoord I omega x p.1 p.2)
@@ -746,15 +746,15 @@ theorem apm_t96A08_omegaCoord_eval_contDiffOn
   let T : TangentBundle (modelWithCornersSelf ℝ E) E → TangentBundle I M :=
     tangentMapWithin (modelWithCornersSelf ℝ E) I (extChartAt I x).symm
       (extChartAt I x).target
-  have hs : ContMDiffOn (modelWithCornersSelf ℝ E) I (⊤ : WithTop ℕ∞)
+  have hs : ContMDiffOn (modelWithCornersSelf ℝ E) I ((⊤ : ℕ∞) : WithTop ℕ∞)
       (extChartAt I x).symm (extChartAt I x).target :=
     contMDiffOn_extChartAt_symm x
   have hT : ContMDiffOn (modelWithCornersSelf ℝ E).tangent I.tangent 1 T
       (Bundle.TotalSpace.proj ⁻¹' (extChartAt I x).target) :=
-    hs.contMDiffOn_tangentMapWithin (by simp)
+    hs.contMDiffOn_tangentMapWithin (by norm_cast)
       (uniqueDiffOn_extChartAt_target x).uniqueMDiffOn
   have he : ContMDiff (modelWithCornersSelf ℝ (E × E))
-      (modelWithCornersSelf ℝ E).tangent (⊤ : WithTop ℕ∞) e := by
+      (modelWithCornersSelf ℝ E).tangent ((⊤ : ℕ∞) : WithTop ℕ∞) e := by
     apply contMDiff_iff.2
     constructor
     · change Continuous
@@ -845,9 +845,9 @@ theorem apm_t96A08_omegaCoord_continuousOn
     {E M : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
     [CompleteSpace E] [TopologicalSpace M]
     (I : ModelWithCorners ℝ E E) [ChartedSpace E M]
-    [IsManifold I (⊤ : WithTop ℕ∞) M]
+    [IsManifold I ((⊤ : ℕ∞) : WithTop ℕ∞) M]
     (omega : ∀ p : M, TangentSpace I p →L[ℝ] ℝ)
-    (homega_smooth : ContMDiff I.tangent 𝓘(ℝ, ℝ) (⊤ : WithTop ℕ∞)
+    (homega_smooth : ContMDiff I.tangent 𝓘(ℝ, ℝ) ((⊤ : ℕ∞) : WithTop ℕ∞)
       (fun v : TangentBundle I M => omega v.1 v.2))
     (x : M) (W : Set E)
     (hWtarget : W ∩ Set.range (I : E → E) ⊆ (extChartAt I x).target) :
@@ -862,7 +862,7 @@ theorem apm_t96A08_omegaCoord_centre
     {E M : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
     [CompleteSpace E] [TopologicalSpace M]
     (I : ModelWithCorners ℝ E E) [ChartedSpace E M]
-    [IsManifold I (⊤ : WithTop ℕ∞) M]
+    [IsManifold I ((⊤ : ℕ∞) : WithTop ℕ∞) M]
     (omega : ∀ p : M, TangentSpace I p →L[ℝ] ℝ) (x : M) :
     apm_t96A08_omegaCoord I omega x (extChartAt I x x) = (omega x).comp
       (mfderivWithin 𝓘(ℝ, E) I (extChartAt I x).symm (Set.range I)
@@ -878,10 +878,10 @@ theorem apm_t96A08_omegaCoord_lineIntegral
     {E M : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
     [CompleteSpace E] [TopologicalSpace M]
     (I : ModelWithCorners ℝ E E) [ChartedSpace E M]
-    [IsManifold I (⊤ : WithTop ℕ∞) M]
+    [IsManifold I ((⊤ : ℕ∞) : WithTop ℕ∞) M]
     (omega : ∀ p : M, TangentSpace I p →L[ℝ] ℝ) (x z : M) (delta : ℝ → M)
     (hdelta_source : ∀ t ∈ Set.Icc (0 : ℝ) 1, delta t ∈ (extChartAt I x).source)
-    (hdelta_smooth : ContMDiffOn 𝓘(ℝ, ℝ) I (⊤ : WithTop ℕ∞) delta (Set.Icc (0 : ℝ) 1))
+    (hdelta_smooth : ContMDiffOn 𝓘(ℝ, ℝ) I ((⊤ : ℕ∞) : WithTop ℕ∞) delta (Set.Icc (0 : ℝ) 1))
     (hdelta : ∀ t ∈ Set.Icc (0 : ℝ) 1,
       extChartAt I x (delta t) = extChartAt I x x +
         t • (extChartAt I x z - extChartAt I x x)) :
@@ -891,7 +891,7 @@ theorem apm_t96A08_omegaCoord_lineIntegral
         (extChartAt I x z - extChartAt I x x) := by
   let eta : ℝ → E := fun t ↦ extChartAt I x x +
     t • (extChartAt I x z - extChartAt I x x)
-  have heta_smooth : ContMDiff 𝓘(ℝ, ℝ) 𝓘(ℝ, E) (⊤ : WithTop ℕ∞) eta := by
+  have heta_smooth : ContMDiff 𝓘(ℝ, ℝ) 𝓘(ℝ, E) ((⊤ : ℕ∞) : WithTop ℕ∞) eta := by
     rw [contMDiff_iff_contDiff]
     fun_prop
   have heta_range : ∀ t ∈ Set.Icc (0 : ℝ) 1, eta t ∈ Set.range (I : E → E) := by
@@ -930,14 +930,14 @@ theorem apm_t96A08_omegaCoord_lineIntegral
           change (extChartAt I x x + t • (extChartAt I x z - extChartAt I x x)) ∈ _
           rw [← hdelta t htIcc]
           exact PartialEquiv.map_source _ (hdelta_source t htIcc))
-      · exact heta_smooth.mdifferentiableAt WithTop.top_ne_zero |>.mdifferentiableWithinAt
+      · exact heta_smooth.mdifferentiableAt (by simp) |>.mdifferentiableWithinAt
       · exact heta_range
       · rw [uniqueMDiffWithinAt_iff_uniqueDiffWithinAt]
         exact uniqueDiffOn_Icc zero_lt_one t htIcc
     have hdelta_at : MDifferentiableAt 𝓘(ℝ, ℝ) I delta t :=
-      (hdelta_smooth t htIcc).contMDiffAt hnhds |>.mdifferentiableAt WithTop.top_ne_zero
+      (hdelta_smooth t htIcc).contMDiffAt hnhds |>.mdifferentiableAt (by simp)
     have heta_at : MDifferentiableAt 𝓘(ℝ, ℝ) 𝓘(ℝ, E) eta t :=
-      heta_smooth.mdifferentiableAt WithTop.top_ne_zero
+      heta_smooth.mdifferentiableAt (by simp)
     rw [← mfderivWithin_eq_mfderiv
       (by rw [uniqueMDiffWithinAt_iff_uniqueDiffWithinAt];
           exact uniqueDiffOn_Icc zero_lt_one t htIcc) hdelta_at]
@@ -979,9 +979,9 @@ lemma apm_t96A08_chart_radial_primitive_coordinate_formula
     {E M : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
     [CompleteSpace E] [TopologicalSpace M]
     (I : ModelWithCorners ℝ E E) [ChartedSpace E M]
-    [IsManifold I (⊤ : WithTop ℕ∞) M]
+    [IsManifold I ((⊤ : ℕ∞) : WithTop ℕ∞) M]
     (omega : ∀ p : M, TangentSpace I p →L[ℝ] ℝ)
-    (homega_smooth : ContMDiff I.tangent 𝓘(ℝ, ℝ) (⊤ : WithTop ℕ∞)
+    (homega_smooth : ContMDiff I.tangent 𝓘(ℝ, ℝ) ((⊤ : ℕ∞) : WithTop ℕ∞)
       (fun v : TangentBundle I M => omega v.1 v.2))
     (x : M) (W : Set E)
     (hWtarget : W ∩ Set.range (I : E → E) ⊆ (extChartAt I x).target) :
@@ -993,7 +993,7 @@ lemma apm_t96A08_chart_radial_primitive_coordinate_formula
           (extChartAt I x x)) ∧
       ∀ (z : M) (delta : ℝ → M),
         (∀ t ∈ Set.Icc (0 : ℝ) 1, delta t ∈ (extChartAt I x).source) →
-        ContMDiffOn 𝓘(ℝ, ℝ) I (⊤ : WithTop ℕ∞) delta (Set.Icc (0 : ℝ) 1) →
+        ContMDiffOn 𝓘(ℝ, ℝ) I ((⊤ : ℕ∞) : WithTop ℕ∞) delta (Set.Icc (0 : ℝ) 1) →
         (∀ t ∈ Set.Icc (0 : ℝ) 1,
           extChartAt I x (delta t) = extChartAt I x x +
             t • (extChartAt I x z - extChartAt I x x)) →
@@ -1093,9 +1093,9 @@ lemma apm_t96A08_chart_radial_primitive_transfer
     {E M : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
     [CompleteSpace E] [TopologicalSpace M]
     (I : ModelWithCorners ℝ E E) [ChartedSpace E M]
-    [IsManifold I (⊤ : WithTop ℕ∞) M]
+    [IsManifold I ((⊤ : ℕ∞) : WithTop ℕ∞) M]
     (omega : ∀ p : M, TangentSpace I p →L[ℝ] ℝ)
-    (homega_smooth : ContMDiff I.tangent 𝓘(ℝ, ℝ) (⊤ : WithTop ℕ∞)
+    (homega_smooth : ContMDiff I.tangent 𝓘(ℝ, ℝ) ((⊤ : ℕ∞) : WithTop ℕ∞)
       (fun v : TangentBundle I M => omega v.1 v.2))
     (hcharts : ∀ x : M, ∃ (U : Set M) (W : Set E), IsOpen U ∧ x ∈ U ∧
       IsOpen W ∧ Convex ℝ W ∧ extChartAt I x x ∈ W ∧
@@ -1120,7 +1120,7 @@ lemma apm_t96A08_chart_radial_primitive_transfer
             (extChartAt I x x)) ∧
         ∀ (z : M) (delta : ℝ → M),
           (∀ t ∈ Set.Icc (0 : ℝ) 1, delta t ∈ (extChartAt I x).source) →
-          ContMDiffOn 𝓘(ℝ, ℝ) I (⊤ : WithTop ℕ∞) delta (Set.Icc (0 : ℝ) 1) →
+          ContMDiffOn 𝓘(ℝ, ℝ) I ((⊤ : ℕ∞) : WithTop ℕ∞) delta (Set.Icc (0 : ℝ) 1) →
           (∀ t ∈ Set.Icc (0 : ℝ) 1, extChartAt I x (delta t) =
             extChartAt I x x + t • (extChartAt I x z - extChartAt I x x)) →
           apm_t96a08_LineIntegral I omega delta = ∫ t : ℝ in (0 : ℝ)..1,
@@ -1176,11 +1176,11 @@ lemma apm_t96A08_chart_radial_primitive_transfer
     ⟨delta, hdelta, hd0, hd1, hdsource, hdchart⟩
   refine ⟨delta, hdelta, hd0, hd1, ?_⟩
   have hsmooth : ContMDiffOn (modelWithCornersSelf ℝ ℝ) I
-      (⊤ : WithTop ℕ∞) delta (Set.Icc (0 : ℝ) 1) := by
+      ((⊤ : ℕ∞) : WithTop ℕ∞) delta (Set.Icc (0 : ℝ) 1) := by
     let q : ℝ → E := fun t ↦ extChartAt I x x +
       t • (extChartAt I x z - extChartAt I x x)
     have hq : ContMDiff (modelWithCornersSelf ℝ ℝ)
-        (modelWithCornersSelf ℝ E) (⊤ : WithTop ℕ∞) q := by
+        (modelWithCornersSelf ℝ E) ((⊤ : ℕ∞) : WithTop ℕ∞) q := by
       exact contMDiff_const.add (contMDiff_id.smul contMDiff_const)
     have hqt : Set.Icc (0 : ℝ) 1 ⊆ q ⁻¹' (extChartAt I x).target := by
       intro t ht
@@ -1201,9 +1201,9 @@ theorem apm_t96A08_chart_radial_primitive
     {E M : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
     [CompleteSpace E] [TopologicalSpace M]
     (I : ModelWithCorners ℝ E E) [ChartedSpace E M]
-    [IsManifold I (⊤ : WithTop ℕ∞) M]
+    [IsManifold I ((⊤ : ℕ∞) : WithTop ℕ∞) M]
     (omega : ∀ p : M, TangentSpace I p →L[ℝ] ℝ)
-    (homega_smooth : ContMDiff I.tangent 𝓘(ℝ, ℝ) (⊤ : WithTop ℕ∞)
+    (homega_smooth : ContMDiff I.tangent 𝓘(ℝ, ℝ) ((⊤ : ℕ∞) : WithTop ℕ∞)
       (fun v : TangentBundle I M => omega v.1 v.2)) :
     apm_t96A08_HasLocalRadialPrimitives I omega := by
   apply apm_t96A08_chart_radial_primitive_transfer I omega homega_smooth
@@ -1218,12 +1218,12 @@ theorem apm_t96A08_omegaCoord_eval_contDiffOn_top
     {E M : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
     [CompleteSpace E] [TopologicalSpace M]
     (I : ModelWithCorners ℝ E E) [ChartedSpace E M]
-    [IsManifold I (⊤ : WithTop ℕ∞) M]
+    [IsManifold I ((⊤ : ℕ∞) : WithTop ℕ∞) M]
     (omega : ∀ p : M, TangentSpace I p →L[ℝ] ℝ)
-    (homega_smooth : ContMDiff I.tangent 𝓘(ℝ, ℝ) (⊤ : WithTop ℕ∞)
+    (homega_smooth : ContMDiff I.tangent 𝓘(ℝ, ℝ) ((⊤ : ℕ∞) : WithTop ℕ∞)
       (fun v : TangentBundle I M => omega v.1 v.2))
     (x : M) :
-    ContDiffOn ℝ (⊤ : WithTop ℕ∞)
+    ContDiffOn ℝ ((⊤ : ℕ∞) : WithTop ℕ∞)
       (fun p : E × E ↦ apm_t96A08_omegaCoord I omega x p.1 p.2)
       ((extChartAt I x).target ×ˢ Set.univ) := by
   let e : E × E → TangentBundle (modelWithCornersSelf ℝ E) E :=
@@ -1231,15 +1231,15 @@ theorem apm_t96A08_omegaCoord_eval_contDiffOn_top
   let T : TangentBundle (modelWithCornersSelf ℝ E) E → TangentBundle I M :=
     tangentMapWithin (modelWithCornersSelf ℝ E) I (extChartAt I x).symm
       (extChartAt I x).target
-  have hs : ContMDiffOn (modelWithCornersSelf ℝ E) I (⊤ : WithTop ℕ∞)
+  have hs : ContMDiffOn (modelWithCornersSelf ℝ E) I ((⊤ : ℕ∞) : WithTop ℕ∞)
       (extChartAt I x).symm (extChartAt I x).target :=
     contMDiffOn_extChartAt_symm x
-  have hT : ContMDiffOn (modelWithCornersSelf ℝ E).tangent I.tangent (⊤ : WithTop ℕ∞) T
+  have hT : ContMDiffOn (modelWithCornersSelf ℝ E).tangent I.tangent ((⊤ : ℕ∞) : WithTop ℕ∞) T
       (Bundle.TotalSpace.proj ⁻¹' (extChartAt I x).target) :=
-    hs.contMDiffOn_tangentMapWithin (by simp)
+    hs.contMDiffOn_tangentMapWithin (by norm_cast)
       (uniqueDiffOn_extChartAt_target x).uniqueMDiffOn
   have he : ContMDiff (modelWithCornersSelf ℝ (E × E))
-      (modelWithCornersSelf ℝ E).tangent (⊤ : WithTop ℕ∞) e := by
+      (modelWithCornersSelf ℝ E).tangent ((⊤ : ℕ∞) : WithTop ℕ∞) e := by
     apply contMDiff_iff.2
     constructor
     · change Continuous
@@ -1250,7 +1250,7 @@ theorem apm_t96A08_omegaCoord_eval_contDiffOn_top
       apply contDiffOn_id.congr
       simp only [e, mfld_simps, Prod.mk.injEq]
   have hc : ContMDiffOn (modelWithCornersSelf ℝ (E × E))
-      (modelWithCornersSelf ℝ ℝ) (⊤ : WithTop ℕ∞)
+      (modelWithCornersSelf ℝ ℝ) ((⊤ : ℕ∞) : WithTop ℕ∞)
       ((fun v : TangentBundle I M ↦ omega v.1 v.2) ∘ T ∘ e)
       ((extChartAt I x).target ×ˢ Set.univ) := by
     exact (homega_smooth.of_le (by simp)).comp_contMDiffOn
@@ -1276,8 +1276,8 @@ evaluation is smooth on `S ×ˢ univ` is smooth on `S` (operator norm): `L y` is
 theorem apm_t96A08_contDiffOn_of_eval_contDiffOn
     {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
     (S : Set E) (L : E → (E →L[ℝ] ℝ)) (hS : UniqueDiffOn ℝ S)
-    (hL : ContDiffOn ℝ (⊤ : WithTop ℕ∞) (fun p : E × E ↦ L p.1 p.2) (S ×ˢ Set.univ)) :
-    ContDiffOn ℝ (⊤ : WithTop ℕ∞) L S := by
+    (hL : ContDiffOn ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) (fun p : E × E ↦ L p.1 p.2) (S ×ˢ Set.univ)) :
+    ContDiffOn ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) L S := by
   sorry
 
 /-- Seat: in the chart at `x`, `f ∘ φ.symm` has within-derivative
@@ -1289,7 +1289,7 @@ theorem apm_t96A08_chart_hasFDerivWithinAt
     {E M : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
     [CompleteSpace E] [TopologicalSpace M]
     (I : ModelWithCorners ℝ E E) [ChartedSpace E M]
-    [IsManifold I (⊤ : WithTop ℕ∞) M]
+    [IsManifold I ((⊤ : ℕ∞) : WithTop ℕ∞) M]
     (omega : ∀ p : M, TangentSpace I p →L[ℝ] ℝ)
     (f : M → ℝ) (hf : ∀ p : M, HasMFDerivAt I 𝓘(ℝ, ℝ) f p (omega p)) (x : M) :
     ∀ y ∈ (extChartAt I x).target,
@@ -1309,9 +1309,11 @@ theorem apm_t96A08_contDiffOn_of_hasFDerivWithinAt
     {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
     (S : Set E) (g : E → ℝ) (L : E → (E →L[ℝ] ℝ)) (hS : UniqueDiffOn ℝ S)
     (hg : ∀ y ∈ S, HasFDerivWithinAt g (L y) S y)
-    (hL : ContDiffOn ℝ (⊤ : WithTop ℕ∞) L S) :
-    ContDiffOn ℝ (⊤ : WithTop ℕ∞) g S := by
-  sorry
+    (hL : ContDiffOn ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) L S) :
+    ContDiffOn ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) g S := by
+  rw [contDiffOn_infty_iff_fderivWithin hS]
+  refine ⟨fun y hy ↦ (hg y hy).differentiableWithinAt, ?_⟩
+  exact hL.congr fun y hy ↦ (hg y hy).fderivWithin (hS y hy)
 
 /-- Seat: a real function on `M` that is smooth in every chart
 (`f ∘ (extChartAt I x).symm` smooth on `(extChartAt I x).target`) is smooth
@@ -1320,28 +1322,28 @@ theorem apm_t96A08_contMDiff_of_chart
     {E M : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
     [CompleteSpace E] [TopologicalSpace M]
     (I : ModelWithCorners ℝ E E) [ChartedSpace E M]
-    [IsManifold I (⊤ : WithTop ℕ∞) M]
+    [IsManifold I ((⊤ : ℕ∞) : WithTop ℕ∞) M]
     (f : M → ℝ)
-    (hf : ∀ x : M, ContDiffOn ℝ (⊤ : WithTop ℕ∞) (f ∘ (extChartAt I x).symm)
+    (hf : ∀ x : M, ContDiffOn ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) (f ∘ (extChartAt I x).symm)
       (extChartAt I x).target) :
-    ContMDiff I 𝓘(ℝ, ℝ) (⊤ : WithTop ℕ∞) f := by
+    ContMDiff I 𝓘(ℝ, ℝ) ((⊤ : ℕ∞) : WithTop ℕ∞) f := by
   sorry
 
 /-- Seat (claude-14 restructure): a function whose manifold derivative exists
 everywhere and equals a smooth one-form is smooth.  In the chart at `p`,
 `f ∘ φ.symm` has within-derivative `omegaCoord` on `φ.target ∩ range I`
 (open ∩ convex, so unique differentiability), and `omegaCoord` is smooth there,
-so `contDiffOn_succ_iff_fderivWithin` bootstraps to `C^∞`. -/
+so `contDiffOn_succ_iff_fderivWithin` bootstraps to `C^((⊤ : ℕ∞) : WithTop ℕ∞)`. -/
 theorem apm_t96A08_contMDiff_of_hasMFDerivAt
     {E M : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
     [CompleteSpace E] [TopologicalSpace M]
     (I : ModelWithCorners ℝ E E) [ChartedSpace E M]
-    [IsManifold I (⊤ : WithTop ℕ∞) M]
+    [IsManifold I ((⊤ : ℕ∞) : WithTop ℕ∞) M]
     (omega : ∀ p : M, TangentSpace I p →L[ℝ] ℝ)
-    (homega_smooth : ContMDiff I.tangent 𝓘(ℝ, ℝ) (⊤ : WithTop ℕ∞)
+    (homega_smooth : ContMDiff I.tangent 𝓘(ℝ, ℝ) ((⊤ : ℕ∞) : WithTop ℕ∞)
       (fun v : TangentBundle I M => omega v.1 v.2))
     (f : M → ℝ) (hf : ∀ p : M, HasMFDerivAt I 𝓘(ℝ, ℝ) f p (omega p)) :
-    ContMDiff I 𝓘(ℝ, ℝ) (⊤ : WithTop ℕ∞) f := by
+    ContMDiff I 𝓘(ℝ, ℝ) ((⊤ : ℕ∞) : WithTop ℕ∞) f := by
   apply apm_t96A08_contMDiff_of_chart I f
   intro x
   have hS : UniqueDiffOn ℝ (extChartAt I x).target := uniqueDiffOn_extChartAt_target x
@@ -1359,12 +1361,12 @@ theorem apm_t96A08_potential_of_local_primitives
     {E M : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
     [CompleteSpace E] [TopologicalSpace M]
     (I : ModelWithCorners ℝ E E) [ChartedSpace E M]
-    [IsManifold I (⊤ : WithTop ℕ∞) M]
+    [IsManifold I ((⊤ : ℕ∞) : WithTop ℕ∞) M]
     (omega : ∀ p : M, TangentSpace I p →L[ℝ] ℝ) (base : M)
     (hconcat : apm_t96A08_HasAdditiveConcatenation I omega)
     (hlocal : apm_t96A08_HasLocalRadialPrimitives I omega)
     (hboot : ∀ f : M → ℝ, (∀ p : M, HasMFDerivAt I 𝓘(ℝ, ℝ) f p (omega p)) →
-      ContMDiff I 𝓘(ℝ, ℝ) (⊤ : WithTop ℕ∞) f)
+      ContMDiff I 𝓘(ℝ, ℝ) ((⊤ : ℕ∞) : WithTop ℕ∞) f)
     (hreachable : ∀ p : M, ∃ gamma : ℝ → M,
       apm_t96a08_IsPiecewiseSmoothPath I gamma ∧
         gamma 0 = base ∧ gamma 1 = p)
@@ -1373,7 +1375,7 @@ theorem apm_t96A08_potential_of_local_primitives
       apm_t96a08_IsPiecewiseSmoothPath I gamma →
       gamma 0 = base → gamma 1 = p →
       f p = apm_t96a08_LineIntegral I omega gamma) :
-    ContMDiff I 𝓘(ℝ, ℝ) (⊤ : WithTop ℕ∞) f ∧
+    ContMDiff I 𝓘(ℝ, ℝ) ((⊤ : ℕ∞) : WithTop ℕ∞) f ∧
       ∀ p : M, mfderiv I 𝓘(ℝ, ℝ) f p = omega p := by
   have h_at : ∀ x : M, HasMFDerivAt I 𝓘(ℝ, ℝ) f x (omega x) := by
     intro x
@@ -1404,9 +1406,9 @@ theorem apm_t96A08_piecewise_lineIntegral_fundamental
     {E M : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
     [CompleteSpace E] [TopologicalSpace M]
     (I : ModelWithCorners ℝ E E) [ChartedSpace E M]
-    [IsManifold I (⊤ : WithTop ℕ∞) M]
+    [IsManifold I ((⊤ : ℕ∞) : WithTop ℕ∞) M]
     (omega : ∀ p : M, TangentSpace I p →L[ℝ] ℝ) (base : M)
-    (homega_smooth : ContMDiff I.tangent 𝓘(ℝ, ℝ) (⊤ : WithTop ℕ∞)
+    (homega_smooth : ContMDiff I.tangent 𝓘(ℝ, ℝ) ((⊤ : ℕ∞) : WithTop ℕ∞)
       (fun v : TangentBundle I M => omega v.1 v.2))
     (hreachable : ∀ p : M, ∃ gamma : ℝ → M,
       apm_t96a08_IsPiecewiseSmoothPath I gamma ∧
@@ -1416,7 +1418,7 @@ theorem apm_t96A08_piecewise_lineIntegral_fundamental
       apm_t96a08_IsPiecewiseSmoothPath I gamma →
       gamma 0 = base → gamma 1 = p →
       f p = apm_t96a08_LineIntegral I omega gamma) :
-    ContMDiff I 𝓘(ℝ, ℝ) (⊤ : WithTop ℕ∞) f ∧
+    ContMDiff I 𝓘(ℝ, ℝ) ((⊤ : ℕ∞) : WithTop ℕ∞) f ∧
       ∀ p : M, mfderiv I 𝓘(ℝ, ℝ) f p = omega p := by
   apply apm_t96A08_potential_of_local_primitives I omega base
   · exact apm_t96A08_piecewisePath_concat_additive I omega homega_smooth
@@ -1429,9 +1431,9 @@ theorem apm_t96a08
     {E M : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
     [CompleteSpace E] [TopologicalSpace M]
     (I : ModelWithCorners ℝ E E) [ChartedSpace E M]
-    [IsManifold I (⊤ : WithTop ℕ∞) M]
+    [IsManifold I ((⊤ : ℕ∞) : WithTop ℕ∞) M]
     (ω : ∀ p : M, TangentSpace I p →L[ℝ] ℝ) (base : M)
-    (hωsmooth : ContMDiff I.tangent 𝓘(ℝ, ℝ) (⊤ : WithTop ℕ∞)
+    (hωsmooth : ContMDiff I.tangent 𝓘(ℝ, ℝ) ((⊤ : ℕ∞) : WithTop ℕ∞)
       (fun v : TangentBundle I M => ω v.1 v.2))
     (hreachable : ∀ p : M, ∃ γ : ℝ → M,
       apm_t96a08_IsPiecewiseSmoothPath I γ ∧ γ 0 = base ∧ γ 1 = p)
@@ -1444,7 +1446,7 @@ theorem apm_t96a08
       (∀ p : M, ∀ γ : ℝ → M,
         apm_t96a08_IsPiecewiseSmoothPath I γ → γ 0 = base → γ 1 = p →
         f p = apm_t96a08_LineIntegral I ω γ) ∧
-      ContMDiff I 𝓘(ℝ, ℝ) (⊤ : WithTop ℕ∞) f ∧
+      ContMDiff I 𝓘(ℝ, ℝ) ((⊤ : ℕ∞) : WithTop ℕ∞) f ∧
       ∀ p : M, mfderiv I 𝓘(ℝ, ℝ) f p = ω p := by
   classical
   have hreach := hreachable

@@ -13,7 +13,7 @@ def apm_t96a08_IsPiecewiseSmoothPath
   Continuous γ ∧
     ∃ (n : ℕ) (cuts : Fin (n + 1) → ℝ),
       StrictMono cuts ∧ cuts 0 = 0 ∧ cuts (Fin.last n) = 1 ∧
-      ∀ i : Fin n, ContMDiffOn 𝓘(ℝ, ℝ) I (⊤ : WithTop ℕ∞) γ
+      ∀ i : Fin n, ContMDiffOn 𝓘(ℝ, ℝ) I ((⊤ : ℕ∞) : WithTop ℕ∞) γ
         (Set.Icc (cuts i.castSucc) (cuts i.succ))
 
 def apm_t96a08_LineIntegral
@@ -27,9 +27,9 @@ theorem apm_t96a08
     {E M : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
     [CompleteSpace E] [TopologicalSpace M]
     (I : ModelWithCorners ℝ E E) [ChartedSpace E M]
-    [IsManifold I (⊤ : WithTop ℕ∞) M]
+    [IsManifold I ((⊤ : ℕ∞) : WithTop ℕ∞) M]
     (ω : ∀ p : M, TangentSpace I p →L[ℝ] ℝ) (base : M)
-    (hωsmooth : ContMDiff I.tangent 𝓘(ℝ, ℝ) (⊤ : WithTop ℕ∞)
+    (hωsmooth : ContMDiff I.tangent 𝓘(ℝ, ℝ) ((⊤ : ℕ∞) : WithTop ℕ∞)
       (fun v : TangentBundle I M => ω v.1 v.2))
     (hreachable : ∀ p : M, ∃ γ : ℝ → M,
       apm_t96a08_IsPiecewiseSmoothPath I γ ∧ γ 0 = base ∧ γ 1 = p)
@@ -42,6 +42,6 @@ theorem apm_t96a08
       (∀ p : M, ∀ γ : ℝ → M,
         apm_t96a08_IsPiecewiseSmoothPath I γ → γ 0 = base → γ 1 = p →
         f p = apm_t96a08_LineIntegral I ω γ) ∧
-      ContMDiff I 𝓘(ℝ, ℝ) (⊤ : WithTop ℕ∞) f ∧
+      ContMDiff I 𝓘(ℝ, ℝ) ((⊤ : ℕ∞) : WithTop ℕ∞) f ∧
       ∀ p : M, mfderiv I 𝓘(ℝ, ℝ) f p = ω p := by
   sorry

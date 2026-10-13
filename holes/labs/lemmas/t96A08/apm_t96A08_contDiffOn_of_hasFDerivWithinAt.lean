@@ -1060,6 +1060,16 @@ theorem apm_t96A08_chart_hasFDerivWithinAt
 a uniquely differentiable `S` and `L` is smooth on `S`, then `g` is smooth on
 `S` (`contDiffOn_infty_iff_fderivWithin`, with `fderivWithin g S = L` on `S`). -/
 -- BEGIN SEAT AREA
+theorem apm_t96A08_contDiffOn_of_hasFDerivWithinAt_aux_smooth
+    {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    (S : Set E) (g : E → ℝ) (L : E → (E →L[ℝ] ℝ)) (hS : UniqueDiffOn ℝ S)
+    (hg : ∀ y ∈ S, HasFDerivWithinAt g (L y) S y)
+    (hL : ContDiffOn ℝ (⊤ : ℕ∞) L S) :
+    ContDiffOn ℝ (⊤ : ℕ∞) g S := by
+  rw [contDiffOn_infty_iff_fderivWithin hS]
+  refine ⟨fun y hy ↦ (hg y hy).differentiableWithinAt, ?_⟩
+  exact hL.congr fun y hy ↦ (hg y hy).fderivWithin (hS y hy)
+
 theorem apm_t96A08_contDiffOn_of_hasFDerivWithinAt
     {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
     (S : Set E) (g : E → ℝ) (L : E → (E →L[ℝ] ℝ)) (hS : UniqueDiffOn ℝ S)
