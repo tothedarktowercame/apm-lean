@@ -1327,4 +1327,40 @@ theorem infDist_center_comparable_of_mem_half_ball
   have h₂ := Metric.infDist_le_infDist_add_dist (s := s) (x := x) (y := c)
   constructor <;> linarith
 
+/-- Half-infDist balls meeting at one point have dyadic indices differing by
+at most two. -/
+theorem whitneyStratum_indices_le_add_two_of_mem_half_balls
+    {E : Type*} [PseudoMetricSpace E] (s : Set E)
+    {k l : ℤ} {c d x : E}
+    (hc : c ∈ whitneyScaleStratum s k)
+    (hd : d ∈ whitneyScaleStratum s l)
+    (hxc : x ∈ Metric.ball c (Metric.infDist c s / 2))
+    (hxd : x ∈ Metric.ball d (Metric.infDist d s / 2)) :
+    k ≤ l + 2 ∧ l ≤ k + 2 := by
+  have hccomp := infDist_center_comparable_of_mem_half_ball s hxc
+  have hdcomp := infDist_center_comparable_of_mem_half_ball s hxd
+  constructor
+  · by_contra hkl
+    have hpow : (2 : ℝ) ^ (l + 3) ≤ (2 : ℝ) ^ k :=
+      zpow_le_zpow_right₀ (by norm_num) (by omega)
+    have hpos : 0 < (2 : ℝ) ^ l := by positivity
+    rw [zpow_add₀ (by norm_num : (2 : ℝ) ≠ 0)] at hpow
+    norm_num at hpow
+    have hc' := hc.2.1
+    have hd' := hd.2.2
+    rw [zpow_add₀ (by norm_num : (2 : ℝ) ≠ 0)] at hd'
+    norm_num at hd'
+    linarith
+  · by_contra hlk
+    have hpow : (2 : ℝ) ^ (k + 3) ≤ (2 : ℝ) ^ l :=
+      zpow_le_zpow_right₀ (by norm_num) (by omega)
+    have hpos : 0 < (2 : ℝ) ^ k := by positivity
+    rw [zpow_add₀ (by norm_num : (2 : ℝ) ≠ 0)] at hpow
+    norm_num at hpow
+    have hd' := hd.2.1
+    have hc' := hc.2.2
+    rw [zpow_add₀ (by norm_num : (2 : ℝ) ≠ 0)] at hc'
+    norm_num at hc'
+    linarith
+
 end ConstructionTargets.SardConvexDomain
