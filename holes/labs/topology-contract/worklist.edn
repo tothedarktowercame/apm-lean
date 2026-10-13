@@ -113897,6 +113897,18 @@
       "lake build ConstructionTargets.ThreeCirclesFundamentalGroup",
       :exit 1,
       :finding "B12 absent."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791864712584-8387-20965333",
+     :commands
+     ["git archive e4f833cd; lake env lean <archive>/ConstructionTargets/PointWedgeVanKampen.lean"
+      "lake build ConstructionTargets.PointWedgeVanKampen"
+      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (exit 1: declared B12 residual absent)"
+      "python3 scripts/statement-registry.py check"
+      "git diff-tree/show sha256/git grep placeholders"],
+     :finding
+     "PASS program STOP: e4f833cd is new after history, changes only scoped Lean/MD files, and commits compiled sorry-free progress. Hashes match source 9d213d59, docs 31055cf5, fixture 0bca6ce3; registry 131/131; sorry/admit 0->0; new declarations use only propext, Classical.choice, Quot.sound. Forward-then-reverse cancellation has the correct order and follows functoriality plus inv_hom_id. In the full comparison, the counit square is rewritten through the proved base-transport equality; typed group aliases keep all factors in the free-product representation, and eq_of_heq is used only after Lean establishes one equality type. The final inverse-factor cancellation has the correct orientation. Left counits, point-span, B6/B12 and the final module remain explicitly listed."},
     :commit "e4f833cd8199f6f204dc5a78a43fa818a949ba45",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
@@ -113907,7 +113919,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113928,7 +113940,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Span-coordinate forward morphism equals canonical right-base transport.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Full right comparison cancels the global canonical base transport.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -114565,7 +114577,11 @@
     {:job 3,
      :commit "af6f2855c2f19f8b1565c3e9e2e5bbb3af000218",
      :reason
-     "Span-coordinate forward morphism equals canonical right-base transport."}]}
+     "Span-coordinate forward morphism equals canonical right-base transport."}
+    {:job 4,
+     :commit "e4f833cd8199f6f204dc5a78a43fa818a949ba45",
+     :reason
+     "Full right comparison cancels the global canonical base transport."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
