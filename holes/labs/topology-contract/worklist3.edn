@@ -23717,7 +23717,7 @@
    :consumer :t01A08,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "Recorded commit is invalid: f032efae9d1501f7ddfe93c66668f88f24ed37f4 is absent locally and origin rejects it as not our ref. The intended scoped commit appears to be f032efae9b89fb527a72ea9192f3c89f09f82615. Repair the row to record the exact existing full SHA, then rerun independent review.",
    :implements-lemma
@@ -23725,17 +23725,16 @@
    :evidence
    {:placeholder-delta {:t01A08 [1 1]},
     :residual
-    "Extend lower-jet symmetry from interior points by continuity on the local C∞ neighborhood; lift tail swaps; combine leading swap and adjacent closure; B1.",
+    "Use local C∞ continuity of jets and interior-point induction to obtain eventual symmetry; lift tail swaps; combine leading swap and adjacent closure; B1.",
     :outcome :stop,
     :warnings [],
     :missing-theorems
-    [{:name
-      "iteratedFDerivWithin_domDomCongr_decomposeFin_symm_zero_of_eventuallyEq",
-      :type "local lower-jet symmetry lifts to next tail slots",
+    [{:name "ContinuousWithinAt.eq_of_eqOn_interior_of_mem_closure",
+      :type
+      "continuous within maps equal on interior agree on its closure",
       :status :proved,
       :consumers [:t01A08],
-      :depends-on
-      ["ContinuousMultilinearMap.domDomCongr_fderivWithin_eq_self_of_eventuallyEq"],
+      :depends-on [],
       :area "sard-convex-domain"}
      {:name
       "ContDiffWithinAt.domDomCongr_iteratedFDerivWithin_of_infty",
@@ -23743,33 +23742,22 @@
       :status :partial,
       :consumers [:t01A08],
       :depends-on
-      ["iteratedFDerivWithin_domDomCongr_decomposeFin_symm_zero_of_eventuallyEq"],
+      ["ContinuousWithinAt.eq_of_eqOn_interior_of_mem_closure"],
       :area "sard-convex-domain"}],
     :statement-hashes {:registry "147/147"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Local tail-slot lift proved; eventual lower-jet identity from dense interior remains.",
+    "Dense-interior continuity extension proved; instantiate it for jet permutation maps and assemble induction.",
     :commands
     [{:cmd
-      "lake build ConstructionTargets.SardConvexDomain; lake env lean local-tail axiom check and fixture",
+      "lake build ConstructionTargets.SardConvexDomain; lake env lean dense-extension axiom check and fixture",
       :exit 0}
      {:cmd
       "sha256sum fixture; scoped commit check; statement-registry check",
       :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1791880360774-9147-c1e28053",
-     :commands
-     ["git show/diff 9d47ef50; scope and recorded-tree checks"
-      "lake build ConstructionTargets.SardConvexDomain"
-      "lake env lean fixture and /tmp/CheckSardLocalTail.lean"
-      "sha256sum fixture; statement-registry check; placeholder recount"],
-     :finding
-     "PASS: valid STOP after real progress. One-file commit correctly lifts an eventual lower-jet permutation identity to the next derivative tail via decomposeFin.symm; the fixed leading coordinate and tail permutation orientations match the representation. Build/export pass; fixture hash matches; standard axioms only; registry 147/147; sorry/admit 0->0. Dense-interior eventual symmetry remains listed."},
-    :commit "9d47ef502f1ffd2a1505cc8a6691b739b997435a",
+    :commit "7f2fec07087dd3df54d2ff73ffb7e08904baf7e0",
     :changed-paths ["ConstructionTargets/SardConvexDomain.lean"],
     :fixture
     {:path "/tmp/t01a08_smooth_symmetry_membership_probe.lean",
@@ -23778,7 +23766,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain/B1/symmetry",
    :acceptance
@@ -33739,7 +33727,8 @@
     :lemma-iteratedfderivwithin-domdomcongr-decomposefin-symm-zero
     :lemma-iteratedfderivwithin-domdomcongr-swap-zero-one
     :lemma-continuousmultilinearmap-domdomcongr-fderivwithin-eq-self-of-eventuallyeq
-    :lemma-iteratedfderivwithin-domdomcongr-decomposefin-symm-zero-of-eventuallyeq],
+    :lemma-iteratedfderivwithin-domdomcongr-decomposefin-symm-zero-of-eventuallyeq
+    :lemma-continuouswithinat-eq-of-eqon-interior-of-mem-closure],
    :other-consumers []}
   {:consumer :t01A08,
    :phase :lemma,
@@ -33893,6 +33882,25 @@
    :kind :lemma,
    :depends-on
    [:lemma-continuousmultilinearmap-domdomcongr-fderivwithin-eq-self-of-eventuallyeq],
+   :other-consumers []}
+  {:consumer :t01A08,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "ContinuousWithinAt.eq_of_eqOn_interior_of_mem_closure",
+    :type
+    "continuous within maps equal on interior agree on its closure"},
+   :lemma
+   {:name "ContinuousWithinAt.eq_of_eqOn_interior_of_mem_closure",
+    :reported-by [:r-a08-symmetry-slots-1],
+    :type
+    "continuous within maps equal on interior agree on its closure",
+    :area "sard-convex-domain",
+    :proved-in :r-a08-symmetry-slots-1},
+   :id :lemma-continuouswithinat-eq-of-eqon-interior-of-mem-closure,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
