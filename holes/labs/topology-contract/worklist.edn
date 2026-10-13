@@ -113850,13 +113850,14 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 4,
+   :stop-count 5,
    :review-finding
    "Recorded fixture hash mismatch: :fixture.sha256 is 0bca6ce32c019fc3053c7f813c26917169cf817375b44d5e722b864b61a526450c1, but ConstructionTargets/PointWedgeVanKampen.blueprint.md at recorded commit c9b3af27 has exact SHA-256 0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0. Re-record the fixture hash for the reviewed commit.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
    :evidence
    {:placeholder-delta {:source-before 0, :source-after 0},
-    :residual "Normalize left counits, point-span, B6/B12.",
+    :residual
+    "Use named left factors with counit naturality; then point-span, B6/B12.",
     :outcome :stop,
     :warnings ["existing linter"],
     :missing-theorems
@@ -113870,17 +113871,17 @@
       :area "fundamental-group-wedge-of-circles"}],
     :statement-hashes
     {:source
-     "9d213d5911b70b42f6e610075fb9629209943a642ce7640365379d3a75c79f46",
+     "5b875c4d2a8324690d631dc05fa4da716178982bcc0e6c834ca37de321536018",
      :documentation
-     "31055cf53cd4200fbe8480407a4dc9970a98ee0be4fc4cfaf3ab27ea4a271f13",
+     "78151849113a623abc7f1941b1d212f960e39908068b302a93f034f793950dc6",
      :blueprint
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0",
-     :registry "131/131"},
+     :registry "142/142"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
     :reason
-    "Full right comparison cancels the global canonical base transport.",
+    "Left comparison split into named unit and strict-span factors in exact free-product order.",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/PointWedgeVanKampen.lean",
@@ -113890,26 +113891,11 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "diff/hash/placeholders", :exit 0}],
     :diagnostic-history
-    [{:cmd "lean group cancellation",
-      :exit 1,
-      :finding "Dependent morphisms; used typed group aliases."}
-     {:cmd
+    [{:cmd
       "lake build ConstructionTargets.ThreeCirclesFundamentalGroup",
       :exit 1,
-      :finding "B12 absent."}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1791864712584-8387-20965333",
-     :commands
-     ["git archive e4f833cd; lake env lean <archive>/ConstructionTargets/PointWedgeVanKampen.lean"
-      "lake build ConstructionTargets.PointWedgeVanKampen"
-      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (exit 1: declared B12 residual absent)"
-      "python3 scripts/statement-registry.py check"
-      "git diff-tree/show sha256/git grep placeholders"],
-     :finding
-     "PASS program STOP: e4f833cd is new after history, changes only scoped Lean/MD files, and commits compiled sorry-free progress. Hashes match source 9d213d59, docs 31055cf5, fixture 0bca6ce3; registry 131/131; sorry/admit 0->0; new declarations use only propext, Classical.choice, Quot.sound. Forward-then-reverse cancellation has the correct order and follows functoriality plus inv_hom_id. In the full comparison, the counit square is rewritten through the proved base-transport equality; typed group aliases keep all factors in the free-product representation, and eq_of_heq is used only after Lean establishes one equality type. The final inverse-factor cancellation has the correct orientation. Left counits, point-span, B6/B12 and the final module remain explicitly listed."},
-    :commit "e4f833cd8199f6f204dc5a78a43fa818a949ba45",
+      :finding "B12 module absent."}],
+    :commit "e4f182fc59758df53a861422952c43cc3b41bd6b",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
      "ConstructionTargets/PointWedgeVanKampen.md"],
@@ -113919,7 +113905,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
