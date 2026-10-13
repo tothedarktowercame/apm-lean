@@ -88,6 +88,49 @@ round-2 attempt that banked the three helpers above). (O) and (S) are independen
 
 /-- (O) Orthogonality of the trigonometric system on `[0,1]` for frequencies `j, k ≥ 1`. -/
 -- BEGIN SEAT AREA
+lemma apm_m93j05_trig_orthogonality_aux_cos_int (n : ℤ) (hn : n ≠ 0) :
+    (∫ x in Set.Icc (0 : ℝ) 1, Real.cos (n * (2 * Real.pi) * x)) = 0 := by
+  rw [apm_m93j05_fourier_projection_aux_integral_Icc_eq_interval]
+  let a : ℝ := n * (2 * Real.pi)
+  have ha : a ≠ 0 := by dsimp [a]; positivity
+  have hd : ∀ x : ℝ, HasDerivAt (fun y : ℝ => Real.sin (a * y) / a)
+      (Real.cos (a * x)) x := by
+    intro x
+    convert ((Real.hasDerivAt_sin (a * x)).comp x
+      ((hasDerivAt_id x).const_mul a)).div_const a using 1
+    field_simp
+  change (∫ x in (0 : ℝ)..1, Real.cos (a * x)) = 0
+  rw [intervalIntegral.integral_deriv_eq_sub' (a := 0) (b := 1)
+    (fun x : ℝ => Real.sin (a * x) / a) (funext fun x => (hd x).deriv)
+    (fun x hx => (hd x).differentiableAt)
+    (Real.continuous_cos.comp (continuous_const.mul continuous_id)).continuousOn]
+  dsimp [a]
+  have hs : Real.sin ((n : ℝ) * (2 * Real.pi)) = 0 := by
+    rw [show (n : ℝ) * (2 * Real.pi) = (2 * n : ℤ) * Real.pi by push_cast; ring]
+    exact Real.sin_int_mul_pi _
+  simp [hs]
+
+lemma apm_m93j05_trig_orthogonality_aux_sin_int (n : ℤ) :
+    (∫ x in Set.Icc (0 : ℝ) 1, Real.sin (n * (2 * Real.pi) * x)) = 0 := by
+  by_cases hn : n = 0
+  · subst n; simp
+  rw [apm_m93j05_fourier_projection_aux_integral_Icc_eq_interval]
+  let a : ℝ := n * (2 * Real.pi)
+  have ha : a ≠ 0 := by dsimp [a]; positivity
+  have hd : ∀ x : ℝ, HasDerivAt (fun y : ℝ => -Real.cos (a * y) / a)
+      (Real.sin (a * x)) x := by
+    intro x
+    convert ((Real.hasDerivAt_cos (a * x)).comp x
+      ((hasDerivAt_id x).const_mul a)).neg.div_const a using 1
+    field_simp
+  change (∫ x in (0 : ℝ)..1, Real.sin (a * x)) = 0
+  rw [intervalIntegral.integral_deriv_eq_sub' (a := 0) (b := 1)
+    (fun x : ℝ => -Real.cos (a * x) / a) (funext fun x => (hd x).deriv)
+    (fun x hx => (hd x).differentiableAt)
+    (Real.continuous_sin.comp (continuous_const.mul continuous_id)).continuousOn]
+  dsimp [a]
+  simp [Real.cos_int_mul_two_pi]
+
 theorem apm_m93j05_trig_orthogonality (j k : ℕ) (hj : 1 ≤ j) (hk : 1 ≤ k) :
     (∫ x in Set.Icc (0 : ℝ) 1, Real.cos (j * 2 * Real.pi * x) * Real.cos (k * 2 * Real.pi * x))
         = (if j = k then 1 / 2 else 0) ∧
@@ -95,7 +138,77 @@ theorem apm_m93j05_trig_orthogonality (j k : ℕ) (hj : 1 ≤ j) (hk : 1 ≤ k) 
         = (if j = k then 1 / 2 else 0) ∧
     (∫ x in Set.Icc (0 : ℝ) 1, Real.cos (j * 2 * Real.pi * x) * Real.sin (k * 2 * Real.pi * x))
         = 0 := by
-  sorry
+  have hj0 : j ≠ 0 := Nat.ne_of_gt hj
+  have hk0 : k ≠ 0 := Nat.ne_of_gt hk
+  have hsum : (j : ℤ) + k ≠ 0 := by omega
+  have hcc : (fun x : ℝ => Real.cos (j * 2 * Real.pi * x) *
+      Real.cos (k * 2 * Real.pi * x)) = fun x =>
+      (Real.cos (((j : ℝ) - k) * (2 * Real.pi) * x) +
+       Real.cos (((j : ℝ) + k) * (2 * Real.pi) * x)) / 2 := by
+    funext x
+    rw [show ((j : ℝ) - k) * (2 * Real.pi) * x =
+        (j * 2 * Real.pi * x) - (k * 2 * Real.pi * x) by ring,
+      show ((j : ℝ) + k) * (2 * Real.pi) * x =
+        (j * 2 * Real.pi * x) + (k * 2 * Real.pi * x) by push_cast; ring,
+      Real.cos_sub, Real.cos_add]
+    ring
+  have hss : (fun x : ℝ => Real.sin (j * 2 * Real.pi * x) *
+      Real.sin (k * 2 * Real.pi * x)) = fun x =>
+      (Real.cos (((j : ℝ) - k) * (2 * Real.pi) * x) -
+       Real.cos (((j : ℝ) + k) * (2 * Real.pi) * x)) / 2 := by
+    funext x
+    rw [show ((j : ℝ) - k) * (2 * Real.pi) * x =
+        (j * 2 * Real.pi * x) - (k * 2 * Real.pi * x) by ring,
+      show ((j : ℝ) + k) * (2 * Real.pi) * x =
+        (j * 2 * Real.pi * x) + (k * 2 * Real.pi * x) by push_cast; ring,
+      Real.cos_sub, Real.cos_add]
+    ring
+  have hcs : (fun x : ℝ => Real.cos (j * 2 * Real.pi * x) *
+      Real.sin (k * 2 * Real.pi * x)) = fun x =>
+      (Real.sin (((j : ℝ) + k) * (2 * Real.pi) * x) -
+       Real.sin (((j : ℝ) - k) * (2 * Real.pi) * x)) / 2 := by
+    funext x
+    rw [show ((j : ℝ) - k) * (2 * Real.pi) * x =
+        (j * 2 * Real.pi * x) - (k * 2 * Real.pi * x) by ring,
+      show ((j : ℝ) + k) * (2 * Real.pi) * x =
+        (j * 2 * Real.pi * x) + (k * 2 * Real.pi * x) by push_cast; ring,
+      Real.sin_sub, Real.sin_add]
+    ring
+  rw [hcc, hss, hcs]
+  have hcplus : (∫ x in Set.Icc (0 : ℝ) 1,
+      Real.cos (((j : ℝ) + k) * (2 * Real.pi) * x)) = 0 := by
+    simpa only [Int.cast_add, Int.cast_natCast] using
+      apm_m93j05_trig_orthogonality_aux_cos_int ((j : ℤ) + k) hsum
+  have hsplus : (∫ x in Set.Icc (0 : ℝ) 1,
+      Real.sin (((j : ℝ) + k) * (2 * Real.pi) * x)) = 0 := by
+    simpa only [Int.cast_add, Int.cast_natCast] using
+      apm_m93j05_trig_orthogonality_aux_sin_int ((j : ℤ) + k)
+  by_cases heq : j = k
+  · subst k
+    simp only [if_pos rfl, Int.cast_sub, Int.cast_natCast, sub_self, zero_mul,
+      Real.cos_zero, one_div]
+    rw [MeasureTheory.integral_div, MeasureTheory.integral_add,
+      MeasureTheory.integral_div, MeasureTheory.integral_sub,
+      MeasureTheory.integral_div, MeasureTheory.integral_sub]
+    all_goals try exact (by fun_prop : Continuous _).integrableOn_Icc
+    rw [hcplus, hsplus]
+    norm_num
+  · have hdiff : (j : ℤ) - k ≠ 0 := by omega
+    have hcminus : (∫ x in Set.Icc (0 : ℝ) 1,
+        Real.cos (((j : ℝ) - k) * (2 * Real.pi) * x)) = 0 := by
+      simpa only [Int.cast_sub, Int.cast_natCast] using
+        apm_m93j05_trig_orthogonality_aux_cos_int ((j : ℤ) - k) hdiff
+    have hsminus : (∫ x in Set.Icc (0 : ℝ) 1,
+        Real.sin (((j : ℝ) - k) * (2 * Real.pi) * x)) = 0 := by
+      simpa only [Int.cast_sub, Int.cast_natCast] using
+        apm_m93j05_trig_orthogonality_aux_sin_int ((j : ℤ) - k)
+    simp only [if_neg heq]
+    rw [MeasureTheory.integral_div, MeasureTheory.integral_add,
+      MeasureTheory.integral_div, MeasureTheory.integral_sub,
+      MeasureTheory.integral_div, MeasureTheory.integral_sub]
+    all_goals try exact (by fun_prop : Continuous _).integrableOn_Icc
+    rw [hcminus, hcplus, hsplus, hsminus]
+    norm_num
 -- END SEAT AREA
 
 /-- (C) Truncation keeps the mean and the coefficients `1 ≤ k ≤ N`, for every `f` (the truncation
