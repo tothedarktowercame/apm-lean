@@ -81681,7 +81681,8 @@
     :lemma-apm-t94a08-open-mem-zero-has-affine-branch-witnesses
     :lemma-apm-t94a08-open-inter-puncturedaffinecross-not-ispreconnected
     :lemma-apm-t94a08-zerochartimage-inter-puncturedcross-not-ispreconnected
-    :lemma-apm-t94a08-puncturedsigma2zerochartin-not-ispreconnected],
+    :lemma-apm-t94a08-puncturedsigma2zerochartin-not-ispreconnected
+    :lemma-apm-t94a08-punctured-euclidean-ball-ispreconnected],
    :other-consumers []}
   {:consumer :t94A10,
    :phase :lemma,
@@ -87735,64 +87736,58 @@
   {:consumer :t94A08,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 4,
+   :stop-count 5,
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Shrink an alleged Euclidean manifold chart and prove its punctured target neighborhood preconnected, contradicting the local obstruction.",
-    :stop-count 14,
+    "Restrict an alleged manifold chart to a small target ball and transfer punctured-ball preconnectedness back to contradict the local sigma2 obstruction.",
+    :stop-count 15,
     :outcome :stop,
     :warnings
-    ["preexisting Lean lints"
-     "unrelated PointWedgeVanKampen edit preserved"],
+    ["preexisting Lean lints" "unrelated t93J03 edits preserved"],
     :missing-theorems
-    [{:name "apm_t94a08_puncturedSigma2ZeroChartIn_not_isPreconnected",
-      :type
-      "IsOpen U -> node in U -> not IsPreconnected (puncturedSigma2ZeroChartIn U)",
+    [{:name "apm_t94a08_punctured_euclidean_ball_isPreconnected",
+      :type "0 < r -> IsPreconnected (ball c r minus singleton c)",
       :status :proved,
       :consumers [:t94A08],
-      :depends-on
-      ["apm_t94a08_zeroChartImage_inter_puncturedCross_not_isPreconnected"],
+      :depends-on [],
       :area "projective-affine-chart-homeomorph"}
      {:name "apm_t94a08_nodal_not_manifold_at",
       :type "not IsRealTwoManifoldAt sigma2 node",
       :status :partial,
       :consumers [:t94A08],
       :depends-on
-      ["apm_t94a08_puncturedSigma2ZeroChartIn_not_isPreconnected"],
+      ["apm_t94a08_punctured_euclidean_ball_isPreconnected"
+       "apm_t94a08_puncturedSigma2ZeroChartIn_not_isPreconnected"],
       :area "projective-affine-chart-homeomorph"}],
     :statement-hashes {:registry "166/0"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
     :reason
-    "Banked non-preconnectedness of every punctured local sigma2 slice.",
+    "Banked preconnectedness of punctured positive-radius Euclidean 2-balls.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t94A08Closure.lean",
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-     {:cmd "git show --check 3aca8b939", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1791926668184-10549-e996cfb8",
-     :commands
-     ["scope/SHA256 checks at d59e0345d"
-      "recorded blob | lake env lean /dev/stdin"
-      "comment-stripped placeholder scan (0)"
-      "#print axioms witness theorem"
-      "statement-registry.py check (166/0)"],
-     :finding
-     "Valid program STOP with new compiled progress beyond history commit 02f7d5989. The theorem constructs nonzero exclusive points (r,I*r) and (r,-I*r) in every open neighborhood of zero, with branch orientations correct. Exact scope/hash match; placeholders 0; only standard axioms. Remaining milestone: chart transport and punctured-plane contradiction."},
-    :commit "3aca8b939",
+     {:cmd "git show --check 92cfea4b5", :exit 0}],
+    :diagnostic-history
+    [{:cmd "compile draft 1",
+      :exit 1,
+      :correction
+      "used finrank-rank equality and correct path-connected API"}
+     {:cmd "compile draft 2",
+      :exit 1,
+      :correction "used partial-homeomorph mapsTo"}],
+    :commit "92cfea4b5",
     :changed-paths ["ConstructionTargets/t94A08Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t94A08Closure.lean",
      :sha256
-     "f8b3abd5104eb858e2c551b3e351ff4cc27e68f27fe05e64a0958f579e7cf09f"},
+     "f59be9614fd2d1d3904156c874b71fa2dacd0d932d20c41201103493a4b7e1df"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t94A08/lean/Main.lean"
     "problems/t94A08/status.json"
@@ -88521,4 +88516,21 @@
    :kind :lemma,
    :depends-on
    [:lemma-apm-t94a08-zerochartimage-inter-puncturedcross-not-ispreconnected],
+   :other-consumers []}
+  {:consumer :t94A08,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t94a08_punctured_euclidean_ball_isPreconnected",
+    :type "0 < r -> IsPreconnected (ball c r minus singleton c)"},
+   :lemma
+   {:name "apm_t94a08_punctured_euclidean_ball_isPreconnected",
+    :reported-by [:program-2026-10-13-close-t94a08],
+    :type "0 < r -> IsPreconnected (ball c r minus singleton c)",
+    :area "projective-affine-chart-homeomorph",
+    :proved-in :program-2026-10-13-close-t94a08},
+   :id :lemma-apm-t94a08-punctured-euclidean-ball-ispreconnected,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers []}]}
