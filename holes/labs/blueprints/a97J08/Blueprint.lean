@@ -2713,7 +2713,47 @@ lemma apm_a97j08_polygon_path_lift_aux_chain (D : Set ℂ) {z : ℂ} (hz : z ∈
         (∀ t : unitInterval, Complex.exp ((θ t : ℂ) * Complex.I) =
           (p t - z) / ((‖p t - z‖ : ℝ) : ℂ)) ∧
         θ 1 - θ 0 = (((a :: l).zip l).map fun e => apm_a97j08_angleStep z e.1 e.2).sum := by
-  sorry
+  induction l generalizing a with
+  | nil =>
+      have hza : z ≠ a := fun hza => hz (hza ▸ ha)
+      have hzseg : z ∉ segment ℝ a a := by
+        intro hzmem
+        apply hza
+        have heq : segment ℝ a a = {a} := segment_same ℝ a
+        rw [heq] at hzmem
+        exact hzmem
+      obtain ⟨θ, hθ, hstep⟩ := hL1 hzseg
+      refine ⟨Path.segment a a, ?_, θ, ?_, ?_⟩
+      · intro t
+        simpa using ha
+      · intro t
+        simpa using hθ t
+      · rw [hstep]
+        simp [apm_a97j08_angleStep]
+  | cons b l ih =>
+      have hab : segment ℝ a b ⊆ D := hseg (a, b) (by simp)
+      have hb : b ∈ D := hab (right_mem_segment ℝ a b)
+      have hzseg : z ∉ segment ℝ a b := fun hzs => hz (hab hzs)
+      obtain ⟨θ₁, hθ₁, hstep⟩ := hL1 hzseg
+      have htail : ∀ e ∈ (b :: l).zip l, segment ℝ e.1 e.2 ⊆ D := by
+        intro e he
+        exact hseg e (by simp [he])
+      obtain ⟨p₂, hp₂D, θ₂, hθ₂, hsum⟩ := ih b hb htail
+      obtain ⟨θ, hθ, hchange⟩ := hglue (Path.segment a b) p₂ θ₁ θ₂
+        (fun t => by simpa using hθ₁ t) hθ₂
+      refine ⟨(Path.segment a b).trans p₂, ?_, θ, hθ, ?_⟩
+      · intro t
+        rw [Path.trans_apply]
+        split_ifs with ht
+        · apply hab
+          have heq : segment ℝ a b = AffineMap.lineMap a b '' Icc (0 : ℝ) 1 :=
+            segment_eq_image_lineMap ℝ a b
+          rw [heq]
+          exact ⟨2 * (t : ℝ),
+            ⟨mul_nonneg (by norm_num) t.2.1, by linarith⟩, rfl⟩
+        · exact hp₂D _
+      · rw [hchange, hstep, hsum]
+        simp
 
 lemma apm_a97j08_polygon_path_lift_aux_zip_snoc {α : Type*} (u x : α) (l : List α) :
     (u :: l).zip (l ++ [x]) = (u :: (l ++ [x])).zip (l ++ [x]) := by
