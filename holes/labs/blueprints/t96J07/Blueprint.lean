@@ -206,7 +206,75 @@ theorem apm_t96j07_map_fixedPoints :
           intro h
           have := congrFun h i
           simp [apm_t96j07_axis] at this)) := by
-  sorry
+  let lift : {x : apm_t96j07_V // x ≠ 0} → apm_t96j07_RP3 := fun x =>
+    Projectivization.mk ℝ (apm_t96j07_A x.1) (apm_t96j07_A_ne_zero x.2)
+  have hlift : Continuous lift := by
+    change Continuous
+      (ConstructionTargets.ProjectiveSpaceTopology.quotientMap ℝ 3 ∘
+        fun x : {x : apm_t96j07_V // x ≠ 0} =>
+          ⟨apm_t96j07_A x.1, apm_t96j07_A_ne_zero x.2⟩)
+    apply (ConstructionTargets.ProjectiveSpaceTopology.continuous_quotientMap ℝ 3).comp
+    apply Continuous.subtype_mk
+    apply continuous_pi
+    intro i
+    exact continuous_const.mul
+      ((continuous_apply i).comp continuous_subtype_val)
+  obtain ⟨f, hf⟩ :=
+    ConstructionTargets.ProjectiveQuotientDescent.projectiveHomogeneousMapDescent
+      ℝ lift hlift (by
+        intro a b t hab
+        apply (Projectivization.mk_eq_mk_iff ℝ _ _
+          (apm_t96j07_A_ne_zero a.2) (apm_t96j07_A_ne_zero b.2)).mpr
+        by_cases ht : t = 0
+        · subst t
+          exfalso
+          apply a.2
+          simpa using hab
+        · refine ⟨Units.mk0 t ht, ?_⟩
+          rw [hab]
+          funext i
+          simp [apm_t96j07_A]
+          ring)
+  refine ⟨f, ?_, ?_⟩
+  · intro x hx
+    exact hf ⟨x, hx⟩
+  · intro q
+    induction q using Projectivization.ind with
+    | h x hx =>
+      have hf' := hf ⟨x, hx⟩
+      change f (Projectivization.mk ℝ x hx) =
+        Projectivization.mk ℝ (apm_t96j07_A x) (apm_t96j07_A_ne_zero hx) at hf'
+      constructor
+      · intro hfix
+        have hfix' : Projectivization.mk ℝ (apm_t96j07_A x)
+              (apm_t96j07_A_ne_zero hx) = Projectivization.mk ℝ x hx :=
+          hf'.symm.trans hfix
+        have hproj : apm_t96j07_projectivelyEq x (apm_t96j07_A x) := by
+          obtain ⟨a, ha⟩ :=
+            (Projectivization.mk_eq_mk_iff ℝ (apm_t96j07_A x) x
+              (apm_t96j07_A_ne_zero hx) hx).mp hfix'
+          exact ⟨(a : ℝ), Units.ne_zero a, ha.symm⟩
+        obtain ⟨i, hi⟩ :=
+          (apm_t96j07_previous_encoding.1 x hx).mp hproj
+        refine ⟨i, ?_⟩
+        rcases hi with ⟨c, hc, haxis⟩
+        apply (Projectivization.mk_eq_mk_iff ℝ x (apm_t96j07_axis i) hx _).mpr
+        refine ⟨Units.mk0 c⁻¹ (inv_ne_zero hc), ?_⟩
+        rw [haxis]
+        simpa [smul_smul, hc]
+      · rintro ⟨i, hi⟩
+        have hproj : apm_t96j07_projectivelyEq x (apm_t96j07_axis i) := by
+          obtain ⟨a, ha⟩ :=
+            (Projectivization.mk_eq_mk_iff ℝ (apm_t96j07_axis i) x _ hx).mp hi.symm
+          exact ⟨(a : ℝ), Units.ne_zero a, ha.symm⟩
+        obtain ⟨c, hc, hA⟩ :=
+          (apm_t96j07_previous_encoding.1 x hx).mpr ⟨i, hproj⟩
+        have hAx : Projectivization.mk ℝ (apm_t96j07_A x)
+            (apm_t96j07_A_ne_zero hx) = Projectivization.mk ℝ x hx := by
+          apply (Projectivization.mk_eq_mk_iff ℝ (apm_t96j07_A x) x
+            (apm_t96j07_A_ne_zero hx) hx).mpr
+          exact ⟨Units.mk0 c hc, hA.symm⟩
+        exact hf'.trans hAx
 
 /-- The degree calculation used in every affine chart.  An invertible diagonal
 displacement on `R^3`, normalized to the unit sphere, acts on integral top
