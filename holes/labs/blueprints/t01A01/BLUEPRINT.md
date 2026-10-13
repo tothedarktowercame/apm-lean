@@ -38,45 +38,76 @@ the missing punctured-`RP²` retraction.
 
 ## Remaining lemmas
 
-### `apm_t01A01_punctured_factor_nullhomotopic` — LIBRARY
+### `apm_t01A01_punctured_homotopyEquiv_projectiveLine` — LIBRARY
 
-**Statement in words.** Every continuous map from `RP²` to the complement of
-an arbitrary point of `RP²` is homotopic, in that complement, to a constant.
+**Statement.** The complement of any `q : RP²` is homotopy equivalent to
+`RP¹ = Projectivization ℝ (Fin 2 → ℝ)`.
 
-**Why true.** Normalize the missed projective point by a linear isometry.
-Represent `RP²` by the antipodal quotient of `S²`; radial/orthogonal projection
-away from the two representatives of the missed point gives a deformation
-retraction onto the equatorial projective line.  Identify that line with
-`Circle`.  For the resulting map `RP² → Circle`, pull back along the sphere
-projection.  Lift the sphere map through `Circle.exp : ℝ → Circle` using sphere
-simple connectedness and the banked covering machinery.  Antipodal invariance
-forces the lift difference at antipodal points to be a constant integer; applying
-the antipodal map twice and connectedness forces that integer to be zero.  The
-lift therefore descends through the projective quotient.  Contract it linearly
-in `ℝ`, use `ComponentRealLiftAssembly`, and transport the homotopy back through
-the projective-line retraction.
+**Proof route (120–150 lines).** Choose a nonzero representative of `q`, extend
+its normalized vector to an orthogonal basis, and conjugate by the resulting
+linear isometry so that `q` is the last coordinate line.  On nonzero vectors
+not on that line, contract the last coordinate linearly to zero while retaining
+the first two coordinates.  Descend the endpoint map with
+`ProjectiveQuotientDescent.projectiveHomogeneousMapDescent` and the homotopy with
+`ProjectiveQuotientDescent.projectiveHomogeneousHomotopyDescent`; their proofs
+already use `projectiveQuotientMap_isOpen` and
+`projectiveQuotientMap_prod_interval_isOpenQuotient`.  Package the inclusion,
+projection, and descended homotopies as `ContinuousMap.HomotopyEquiv`.
 
-**What the library program must add.** The closest sorry-free modules are
-`ProjectiveSpaceTopology` and `ProjectiveQuotientDescent`, but the former only
-has continuity/surjectivity of the quotient and the latter does not yet package
-the exact restricted and interval-product descent needed here.  The program
-must add the open-quotient/restriction machinery, coordinate normalization of
-an arbitrary `q`, the explicit punctured-`RP²` deformation retraction, and the
-projective-line/Circle identification.  The already banked circle-cover and
-real-lift modules apply only after those maps exist.  This is intentionally one
-honest LIBRARY boundary rather than several small lemmas that conceal the same
-large construction.
+**Truth/edge checks.** The first-two-coordinate vector is nonzero precisely
+because the deleted point is the last coordinate line, so normalization has no
+zero denominator.  At time zero the descended map is the identity and at time
+one it lands on the projective line.  Scalar multiples give scalar multiples
+at every time, including negative scalars, so quotient descent is well-defined.
+The construction also works at points already on the core and fixes them.
 
-**Expected size.** 500–900 lines (a multi-session library program).
+### `apm_t01A01_projectiveLine_map_nullhomotopic` — LIBRARY
 
-**Dependencies.** Only the definitions and the imported sorry-free
-ConstructionTargets modules.
+**Statement.** Every continuous `RP² → RP¹` map is freely null-homotopic.
 
-**Truth check.** In disk coordinates, remove the center and retract radially to
-the boundary; the retraction commutes with the antipodal boundary relation and
-descends to the core circle of the Möbius band.  At the boundary it is the
-identity, and no denominator vanishes because the removed point is excluded.
-For constant `g`, choose its value as `p`; the stated homotopy is reflexivity.
+**Proof route (120–150 lines).** Identify `RP¹` with `Circle` (the angle-doubling
+map on the unit circle is invariant under antipodes).  Pull the map back along
+`RealProjectiveSmoothTarget.sphereProjection 2`.  Use
+`SimplyConnectedOpenCover.simplyConnectedSpace_sphere_of_pole` and
+`CircleUniversalCover.circleCover_isCoveringMap` to obtain a real lift.  Compare
+the lift at antipodal points using `CircleUniversalCover.circleCover_eq_iff` and
+`period_integer_unique`.  Connectedness makes the integer difference constant;
+applying the antipodal involution twice makes it its own negative, hence zero.
+Descend the invariant lift with
+`ProjectiveQuotientDescent.projectiveHomogeneousMapDescent`, contract it linearly
+in `ℝ`, and use `ComponentRealLiftAssembly.nullhomotopic_of_component_lifts` (or
+its `classical_component_lifts_nullhomotopic` wrapper).
+
+**Truth/edge checks.** The only homomorphism `Z/2 → Z` is zero.  The integer
+obtained from antipodal lift comparison cannot be a nonzero two-torsion integer.
+No basepoint choice is hidden: the result is a free homotopy.  Constant maps
+lift constantly and reduce to reflexivity.  `RP²` and `RP¹` are nonempty, so the
+chosen endpoint exists.
+
+### `apm_t01A01_nullhomotopic_of_target_homotopyEquiv` — LIBRARY
+
+**Statement.** If `e : Y ≃ₕ Z` and `e ∘ g` is homotopic to a constant, then
+`g : X → Y` is homotopic to a constant.
+
+**Proof route (30–50 lines).** Postcompose the supplied homotopy with
+`e.invFun`, using `ContinuousMap.Homotopic.comp`, and concatenate it with
+`e.left_inv` precomposed by `g`.  Simplify both composites and choose
+`e.invFun p` as the constant value.  Useful APIs are
+`ContinuousMap.Homotopic.comp`, `.trans`, `.refl`, and
+`ContinuousMap.HomotopyEquiv.left_inv`.
+
+**Truth/edge checks.** This is valid for empty `X` as well as nonempty `X`; no
+point of `X` is selected.  It does not assume that a homotopy equivalence is a
+homeomorphism.  The conclusion's constant is explicitly the inverse image of
+the supplied constant point.
+
+### `apm_t01A01_punctured_factor_nullhomotopic` — assembly
+
+Obtain the punctured-target homotopy equivalence, apply the independent
+projective-line lemma to `e.toFun.comp g`, and invoke the abstract transport
+lemma.  This proof is sorry-free.  The three LIBRARY leaves are mutually
+independent: the transport leaf receives both `e` and the null-homotopy as
+explicit hypotheses, and neither geometric leaf mentions the other.
 
 ### `apm_t01A01_piOne_trivial_of_nullhomotopic`
 
@@ -130,4 +161,3 @@ of `#print axioms apm_t01a01` is:
 ```text
 'apm_t01a01' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
 ```
-

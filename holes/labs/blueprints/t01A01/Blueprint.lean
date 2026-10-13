@@ -12,10 +12,17 @@ open scoped LinearAlgebra.Projectivization
 
 abbrev apm_t01A01_RP2 := Projectivization ℝ (Fin 3 → ℝ)
 
+abbrev apm_t01A01_RP1 := Projectivization ℝ (Fin 2 → ℝ)
+
 noncomputable instance : TopologicalSpace apm_t01A01_RP2 :=
   inferInstanceAs
     (TopologicalSpace
       (Quotient (projectivizationSetoid ℝ (Fin 3 → ℝ))))
+
+noncomputable instance : TopologicalSpace apm_t01A01_RP1 :=
+  inferInstanceAs
+    (TopologicalSpace
+      (Quotient (projectivizationSetoid ℝ (Fin 2 → ℝ))))
 
 lemma apm_t01A01_factor_through_complement
     (f : C(apm_t01A01_RP2, apm_t01A01_RP2))
@@ -48,14 +55,49 @@ lemma apm_t01A01_nullhomotopic_of_factor
     exact hfg x
   simpa [hleft, inclusion] using hcomp
 
-/-- LIBRARY: the punctured-projective-plane geometry and quotient descent
-missing from Mathlib. -/
+/-- LIBRARY: the complement of a point in `RP²` has the homotopy type of its
+projective-line core.  A proof may choose coordinates sending `q` to a
+coordinate line and descend the radial deformation through the projective
+quotient. -/
+theorem apm_t01A01_punctured_homotopyEquiv_projectiveLine
+    (q : apm_t01A01_RP2) :
+    Nonempty (ContinuousMap.HomotopyEquiv
+      {y : apm_t01A01_RP2 // y ≠ q} apm_t01A01_RP1) := by
+  sorry
+
+/-- LIBRARY: every map from `RP²` to the projective line is null-homotopic.
+This is the `Z/2 → Z` lifting step, separated from the geometry of the
+punctured target. -/
+theorem apm_t01A01_projectiveLine_map_nullhomotopic
+    (h : C(apm_t01A01_RP2, apm_t01A01_RP1)) :
+    ∃ p : apm_t01A01_RP1,
+      ContinuousMap.Homotopic h
+        (ContinuousMap.const apm_t01A01_RP2 p) := by
+  sorry
+
+/-- LIBRARY: transport a null-homotopy across a target homotopy equivalence.
+The conclusion deliberately takes the null-homotopy as an explicit hypothesis,
+so this lemma is independent of the two geometric leaves above. -/
+theorem apm_t01A01_nullhomotopic_of_target_homotopyEquiv
+    {X Y Z : Type*} [TopologicalSpace X] [TopologicalSpace Y]
+    [TopologicalSpace Z] (e : ContinuousMap.HomotopyEquiv Y Z) (g : C(X, Y))
+    (p : Z)
+    (hg : ContinuousMap.Homotopic (e.toFun.comp g)
+      (ContinuousMap.const X p)) :
+    ∃ y : Y, ContinuousMap.Homotopic g (ContinuousMap.const X y) := by
+  sorry
+
+/-- Assembly of the punctured-projective-plane retraction, the projective-line
+lifting argument, and transport back through the retraction. -/
 theorem apm_t01A01_punctured_factor_nullhomotopic
     (q : apm_t01A01_RP2)
     (g : C(apm_t01A01_RP2, {y : apm_t01A01_RP2 // y ≠ q})) :
     ∃ p : {y : apm_t01A01_RP2 // y ≠ q},
       ContinuousMap.Homotopic g (ContinuousMap.const apm_t01A01_RP2 p) := by
-  sorry
+  obtain ⟨e⟩ := apm_t01A01_punctured_homotopyEquiv_projectiveLine q
+  obtain ⟨p, hp⟩ :=
+    apm_t01A01_projectiveLine_map_nullhomotopic (e.toFun.comp g)
+  exact apm_t01A01_nullhomotopic_of_target_homotopyEquiv e g p hp
 
 open CategoryTheory
 
