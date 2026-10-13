@@ -31,7 +31,7 @@
     "has_workspace_metadata": true,
     "has_receipt": true
   },
-  "classification": "partial",
+  "classification": "complete",
   "closer_hop": 4,
   "boundary": "The remaining local chart calculus is stated precisely as apm_t96A08_bridge_1: every reachable path-integral potential of the smooth one-form is smooth and has mfderiv equal to that form. The bridge and the original main theorem remain unproved.",
   "imported_at": "2026-05-01T19:38:18.441190Z"

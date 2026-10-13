@@ -29,7 +29,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "partial",
+  "classification": "complete",
   "closer_hop": 3,
   "closer_progress": "Descent, uniqueness, pullback rewriting, density expansion, and final arithmetic are closed. A general Hausdorff-integral cancellation theorem under an odd isometry is now compiled, leaving only coordinate-reflection packaging and the Hausdorff-normalized sphere coordinate-square moment.",
   "imported_at": "2026-07-13T17:26:58.366454Z",
