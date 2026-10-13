@@ -93,10 +93,10 @@ lemma apm_m93J04_formalAdjoint_eq (φ : ℝ → ℝ) (x : ℝ) :
 
 /-- Smooth test functions make the formal-adjoint expression continuous. -/
 lemma apm_m93J04_formalAdjoint_continuous (φ : ℝ → ℝ)
-    (hφ : ContDiff ℝ ⊤ φ) : Continuous (apm_m93J04_formalAdjoint φ) := by
+    (hφ : ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) φ) : Continuous (apm_m93J04_formalAdjoint φ) := by
   have hφ₂ : Continuous (iteratedDeriv 2 φ) :=
-    hφ.continuous_iteratedDeriv 2 (by simp)
-  have hφ₁ : Continuous (deriv φ) := hφ.continuous_deriv (by simp)
+    hφ.continuous_iteratedDeriv 2 (by norm_cast)
+  have hφ₁ : Continuous (deriv φ) := hφ.continuous_deriv (by norm_cast)
   have hφ₀ : Continuous φ := hφ.continuous
   unfold apm_m93J04_formalAdjoint
   fun_prop
@@ -105,7 +105,7 @@ lemma apm_m93J04_formalAdjoint_continuous (φ : ℝ → ℝ)
 integrable.  This supplies the hypotheses needed by the adjacent-interval
 split and by the eventual integrations by parts. -/
 lemma apm_m93J04_branch_intervalIntegrable (y : ℝ) (hy : y ∈ Ioo (0 : ℝ) 1)
-    (φ : ℝ → ℝ) (hφ : ContDiff ℝ ⊤ φ) :
+    (φ : ℝ → ℝ) (hφ : ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) φ) :
     IntervalIntegrable
         (fun x ↦ apm_m93J04_kernel x y * apm_m93J04_formalAdjoint φ x)
         volume 0 y ∧
@@ -151,7 +151,7 @@ private def apm_m93J04_rightPrimitive (y : ℝ) (φ : ℝ → ℝ) (x : ℝ) : �
 /-- The left weighted formal adjoint has an explicit primitive.  This replaces
 two integrations by parts by one application of the interval FTC. -/
 lemma apm_m93J04_left_branch_integral (y : ℝ) (hy : y ∈ Ioo (0 : ℝ) 1)
-    (φ : ℝ → ℝ) (hφ : ContDiff ℝ ⊤ φ) :
+    (φ : ℝ → ℝ) (hφ : ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) φ) :
     (∫ x in (0 : ℝ)..y,
         (x * Real.log y / y ^ 2) * apm_m93J04_formalAdjoint φ x) =
       apm_m93J04_leftPrimitive y φ y - apm_m93J04_leftPrimitive y φ 0 := by
@@ -175,7 +175,7 @@ lemma apm_m93J04_left_branch_integral (y : ℝ) (hy : y ∈ Ioo (0 : ℝ) 1)
 /-- The right weighted formal adjoint has an explicit primitive away from
 zero.  Positivity of the pole makes the logarithmic derivative legitimate. -/
 lemma apm_m93J04_right_branch_integral (y : ℝ) (hy : y ∈ Ioo (0 : ℝ) 1)
-    (φ : ℝ → ℝ) (hφ : ContDiff ℝ ⊤ φ) :
+    (φ : ℝ → ℝ) (hφ : ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) φ) :
     (∫ x in y..(1 : ℝ),
         (x * Real.log x / y ^ 2) * apm_m93J04_formalAdjoint φ x) =
       apm_m93J04_rightPrimitive y φ 1 - apm_m93J04_rightPrimitive y φ y := by
@@ -203,7 +203,7 @@ lemma apm_m93J04_right_branch_integral (y : ℝ) (hy : y ∈ Ioo (0 : ℝ) 1)
 theorem apm_m93j04 :
     ∀ y : ℝ, y ∈ Ioo (0 : ℝ) 1 →
       ∀ φ : ℝ → ℝ,
-        ContDiff ℝ ⊤ φ →
+        ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) φ →
         HasCompactSupport φ →
         Function.support φ ⊆ Ioo (0 : ℝ) 1 →
         (∫ x in Ioo (0 : ℝ) 1,

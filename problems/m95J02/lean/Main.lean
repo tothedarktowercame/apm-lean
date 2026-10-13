@@ -702,16 +702,16 @@ lemma apm_m95J02_poissonSolution_eq_convolution
 
 lemma apm_m95J02_poissonSolution_contDiff
     {n : ℕ} (hn : 2 ≤ n) (f : EuclideanSpace ℝ (Fin n) → ℝ)
-    (hf : ContDiff ℝ ⊤ f) (hfc : HasCompactSupport f) :
+    (hf : ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) f) (hfc : HasCompactSupport f) :
     ContDiff ℝ 2 (apm_m95J02_poissonSolution n f) := by
   rw [apm_m95J02_poissonSolution_eq_convolution]
   exact hfc.contDiff_convolution_left (ContinuousLinearMap.lsmul ℝ ℝ)
-    (hf.of_le (by norm_num))
+    (hf.of_le (by norm_cast))
     (apm_m95J02_fundamental_locallyIntegrable hn)
 
 lemma apm_m95J02_fderiv_poissonSolution
     {n : ℕ} (hn : 2 ≤ n) (f : EuclideanSpace ℝ (Fin n) → ℝ)
-    (hf : ContDiff ℝ ⊤ f) (hfc : HasCompactSupport f)
+    (hf : ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) f) (hfc : HasCompactSupport f)
     (x : EuclideanSpace ℝ (Fin n)) :
     fderiv ℝ (apm_m95J02_poissonSolution n f) x =
       ((fderiv ℝ f) ⋆[
@@ -721,12 +721,12 @@ lemma apm_m95J02_fderiv_poissonSolution
   rw [apm_m95J02_poissonSolution_eq_convolution]
   exact (hfc.hasFDerivAt_convolution_left
     (ContinuousLinearMap.lsmul ℝ ℝ)
-    (hf.of_le (by norm_num))
+    (hf.of_le (by norm_cast))
     (apm_m95J02_fundamental_locallyIntegrable hn) x).fderiv
 
 lemma apm_m95J02_fderiv_fderiv_poissonSolution
     {n : ℕ} (hn : 2 ≤ n) (f : EuclideanSpace ℝ (Fin n) → ℝ)
-    (hf : ContDiff ℝ ⊤ f) (hfc : HasCompactSupport f)
+    (hf : ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) f) (hfc : HasCompactSupport f)
     (x : EuclideanSpace ℝ (Fin n)) :
     fderiv ℝ (fderiv ℝ (apm_m95J02_poissonSolution n f)) x =
       ∫ y, apm_m95J02_fundamental n (x - y) •
@@ -742,7 +742,7 @@ lemma apm_m95J02_fderiv_fderiv_poissonSolution
   have h := ((hfc.fderiv ℝ).hasFDerivAt_convolution_left
     ((ContinuousLinearMap.lsmul ℝ ℝ).precompL
       (EuclideanSpace ℝ (Fin n)))
-    (hf.fderiv_right (m := 1) (by simp))
+    (hf.fderiv_right (m := 1) (by norm_cast))
     (apm_m95J02_fundamental_locallyIntegrable hn) x).fderiv
   rw [h]
   rw [MeasureTheory.convolution]
@@ -753,7 +753,7 @@ lemma apm_m95J02_fderiv_fderiv_poissonSolution
 
 lemma apm_m95J02_diagonal_hessian_integrable
     {n : ℕ} (hn : 2 ≤ n) (f : EuclideanSpace ℝ (Fin n) → ℝ)
-    (hf : ContDiff ℝ ⊤ f) (hfc : HasCompactSupport f)
+    (hf : ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) f) (hfc : HasCompactSupport f)
     (x e : EuclideanSpace ℝ (Fin n)) :
     Integrable (fun y => apm_m95J02_fundamental n (x - y) *
       fderiv ℝ (fderiv ℝ f) y e e) := by
@@ -763,9 +763,9 @@ lemma apm_m95J02_diagonal_hessian_integrable
   have hc : HasCompactSupport (fun y => d (fderiv ℝ (fderiv ℝ f) y)) :=
     ((hfc.fderiv ℝ).fderiv ℝ).comp_left hd0
   have hd : ContDiff ℝ 1 (fderiv ℝ f) :=
-    hf.fderiv_right (m := 1) (by simp)
+    hf.fderiv_right (m := 1) (by norm_cast)
   have hdd : Continuous (fderiv ℝ (fderiv ℝ f)) :=
-    (hd.fderiv_right (m := 0) (by norm_num)).continuous
+    (hd.fderiv_right (m := 0) (by norm_cast)).continuous
   have hdcont : Continuous d := by
     fun_prop
   have hi := hc.convolutionExists_left (ContinuousLinearMap.lsmul ℝ ℝ)
@@ -776,7 +776,7 @@ lemma apm_m95J02_diagonal_hessian_integrable
 
 lemma apm_m95J02_fderiv_poissonSolution_apply
     {n : ℕ} (hn : 2 ≤ n) (f : EuclideanSpace ℝ (Fin n) → ℝ)
-    (hf : ContDiff ℝ ⊤ f) (hfc : HasCompactSupport f)
+    (hf : ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) f) (hfc : HasCompactSupport f)
     (x e : EuclideanSpace ℝ (Fin n)) :
     fderiv ℝ (apm_m95J02_poissonSolution n f) x e =
       ∫ y, apm_m95J02_fundamental n (x - y) * fderiv ℝ f y e := by
@@ -787,7 +787,7 @@ lemma apm_m95J02_fderiv_poissonSolution_apply
     (ContinuousLinearMap.lsmul ℝ ℝ).precompL
       (EuclideanSpace ℝ (Fin n))
   have hi := (hfc.fderiv ℝ).convolutionExists_left L
-    (hf.fderiv_right (m := 0) (by norm_num)).continuous
+    (hf.fderiv_right (m := 0) (by norm_cast)).continuous
     (apm_m95J02_fundamental_locallyIntegrable hn) x
   rw [ContinuousLinearMap.integral_apply hi e]
   apply integral_congr_ae
@@ -804,9 +804,9 @@ lemma apm_m95J02_directionalFDeriv_hasCompactSupport
 
 lemma apm_m95J02_directionalFDeriv_contDiff
     {n : ℕ} (f : EuclideanSpace ℝ (Fin n) → ℝ)
-    (hf : ContDiff ℝ ⊤ f) (e : EuclideanSpace ℝ (Fin n)) :
+    (hf : ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) f) (e : EuclideanSpace ℝ (Fin n)) :
     ContDiff ℝ 1 (fun y => fderiv ℝ f y e) := by
-  exact (hf.fderiv_right (m := 1) (by simp)).clm_apply contDiff_const
+  exact (hf.fderiv_right (m := 1) (by norm_cast)).clm_apply contDiff_const
 
 lemma apm_m95J02_fderiv_directionalFDeriv
     {n : ℕ} (f : EuclideanSpace ℝ (Fin n) → ℝ)
@@ -814,13 +814,13 @@ lemma apm_m95J02_fderiv_directionalFDeriv
     fderiv ℝ (fun z => fderiv ℝ f z e) y =
       (fderiv ℝ (fderiv ℝ f) y).flip e := by
   rw [fderiv_clm_apply
-    ((hf.fderiv_right (m := 1) (by norm_num)).differentiable (by norm_num) y)
+    ((hf.fderiv_right (m := 1) (by norm_cast)).differentiable (by norm_num) y)
     (differentiableAt_const (c := e))]
   simp
 
 lemma apm_m95J02_directional_poisson_eq_convolution
     {n : ℕ} (hn : 2 ≤ n) (f : EuclideanSpace ℝ (Fin n) → ℝ)
-    (hf : ContDiff ℝ ⊤ f) (hfc : HasCompactSupport f)
+    (hf : ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) f) (hfc : HasCompactSupport f)
     (e : EuclideanSpace ℝ (Fin n)) :
     (fun z => fderiv ℝ (apm_m95J02_poissonSolution n f) z e) =
       (fun y => fderiv ℝ f y e) ⋆[ContinuousLinearMap.lsmul ℝ ℝ]
@@ -834,7 +834,7 @@ lemma apm_m95J02_directional_poisson_eq_convolution
 
 lemma apm_m95J02_fderiv_directional_poisson
     {n : ℕ} (hn : 2 ≤ n) (f : EuclideanSpace ℝ (Fin n) → ℝ)
-    (hf : ContDiff ℝ ⊤ f) (hfc : HasCompactSupport f)
+    (hf : ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) f) (hfc : HasCompactSupport f)
     (x e : EuclideanSpace ℝ (Fin n)) :
     fderiv ℝ (fun z => fderiv ℝ (apm_m95J02_poissonSolution n f) z e) x =
       ((fderiv ℝ (fun y => fderiv ℝ f y e)) ⋆[
@@ -849,7 +849,7 @@ lemma apm_m95J02_fderiv_directional_poisson
 
 lemma apm_m95J02_second_diagonal_poissonSolution
     {n : ℕ} (hn : 2 ≤ n) (f : EuclideanSpace ℝ (Fin n) → ℝ)
-    (hf : ContDiff ℝ ⊤ f) (hfc : HasCompactSupport f)
+    (hf : ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) f) (hfc : HasCompactSupport f)
     (x e : EuclideanSpace ℝ (Fin n)) :
     fderiv ℝ (fun z => fderiv ℝ (apm_m95J02_poissonSolution n f) z e) x e =
       ∫ y, apm_m95J02_fundamental n (x - y) *
@@ -868,12 +868,12 @@ lemma apm_m95J02_second_diagonal_poissonSolution
   rw [ContinuousLinearMap.integral_apply hi e]
   apply integral_congr_ae
   filter_upwards [] with y
-  rw [apm_m95J02_fderiv_directionalFDeriv f (hf.of_le (by norm_num)) e y]
+  rw [apm_m95J02_fderiv_directionalFDeriv f (hf.of_le (by norm_cast)) e y]
   simp [L, mul_comm]
 
 lemma apm_m95J02_laplacian_poissonSolution_eq_integral
     {n : ℕ} (hn : 2 ≤ n) (f : EuclideanSpace ℝ (Fin n) → ℝ)
-    (hf : ContDiff ℝ ⊤ f) (hfc : HasCompactSupport f)
+    (hf : ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) f) (hfc : HasCompactSupport f)
     (x : EuclideanSpace ℝ (Fin n)) :
     Laplacian.laplacian (apm_m95J02_poissonSolution n f) x =
       ∫ y, apm_m95J02_fundamental n (x - y) * Laplacian.laplacian f y := by
@@ -882,7 +882,7 @@ lemma apm_m95J02_laplacian_poissonSolution_eq_integral
   simp_rw [iteratedFDeriv_two_apply]
   let b := stdOrthonormalBasis ℝ (EuclideanSpace ℝ (Fin n))
   have hp : ContDiff ℝ 2 (apm_m95J02_poissonSolution n f) :=
-    (apm_m95J02_poissonSolution_contDiff hn f hf hfc).of_le (by norm_num)
+    (apm_m95J02_poissonSolution_contDiff hn f hf hfc).of_le (by norm_cast)
   have hdiag (i : Fin (Module.finrank ℝ (EuclideanSpace ℝ (Fin n)))) :
       fderiv ℝ (fderiv ℝ (apm_m95J02_poissonSolution n f)) x (b i) (b i) =
         ∫ y, apm_m95J02_fundamental n (x - y) *
@@ -952,8 +952,8 @@ lemma apm_m95J02_laplacian_comp_subLeft
 
 lemma apm_m95J02_translatedTest_contDiff
     {n : ℕ} {f : EuclideanSpace ℝ (Fin n) → ℝ}
-    (hf : ContDiff ℝ ⊤ f) (x : EuclideanSpace ℝ (Fin n)) :
-    ContDiff ℝ ⊤ (fun y => f (x - y)) := by
+    (hf : ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) f) (x : EuclideanSpace ℝ (Fin n)) :
+    ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) (fun y => f (x - y)) := by
   exact hf.comp (contDiff_const.sub contDiff_id)
 
 lemma apm_m95J02_translatedTest_hasCompactSupport
@@ -965,10 +965,10 @@ lemma apm_m95J02_translatedTest_hasCompactSupport
 lemma apm_m95J02_poisson_eq_of_weakIdentity
     {n : ℕ} (hn : 2 ≤ n)
     (hweak : ∀ φ : EuclideanSpace ℝ (Fin n) → ℝ,
-      ContDiff ℝ ⊤ φ → HasCompactSupport φ →
+      ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) φ → HasCompactSupport φ →
         (∫ x, apm_m95J02_fundamental n x * Laplacian.laplacian φ x) = φ 0)
     (f : EuclideanSpace ℝ (Fin n) → ℝ)
-    (hf : ContDiff ℝ ⊤ f) (hfc : HasCompactSupport f)
+    (hf : ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) f) (hfc : HasCompactSupport f)
     (x : EuclideanSpace ℝ (Fin n)) :
     Laplacian.laplacian (apm_m95J02_poissonSolution n f) x = f x := by
   rw [apm_m95J02_laplacian_poissonSolution_eq_integral hn f hf hfc x]
@@ -985,7 +985,7 @@ lemma apm_m95J02_poisson_eq_of_weakIdentity
       apply integral_congr_ae
       filter_upwards [] with z
       simp only [g, sub_sub_cancel]
-      rw [apm_m95J02_laplacian_comp_subLeft f (hf.of_le (by norm_num)) x z]
+      rw [apm_m95J02_laplacian_comp_subLeft f (hf.of_le (by norm_cast)) x z]
     _ = f x := by simpa using hw
 
 lemma apm_m95J02_weakIdentity_of_regularization
@@ -1013,19 +1013,19 @@ lemma apm_m95J02_weakIdentity_of_regularization_family
     {n : ℕ}
     (K ρ : ℕ → EuclideanSpace ℝ (Fin n) → ℝ)
     (hkernel : ∀ φ : EuclideanSpace ℝ (Fin n) → ℝ,
-      ContDiff ℝ ⊤ φ → HasCompactSupport φ →
+      ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) φ → HasCompactSupport φ →
         Filter.Tendsto (fun k => ∫ x, K k x * Laplacian.laplacian φ x)
           Filter.atTop (nhds (∫ x, apm_m95J02_fundamental n x *
             Laplacian.laplacian φ x)))
     (hgreen : ∀ (φ : EuclideanSpace ℝ (Fin n) → ℝ),
-      ContDiff ℝ ⊤ φ → HasCompactSupport φ → ∀ k,
+      ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) φ → HasCompactSupport φ → ∀ k,
         (∫ x, K k x * Laplacian.laplacian φ x) =
           ∫ x, ρ k x * φ x)
     (hdensity : ∀ φ : EuclideanSpace ℝ (Fin n) → ℝ,
-      ContDiff ℝ ⊤ φ → HasCompactSupport φ →
+      ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) φ → HasCompactSupport φ →
         Filter.Tendsto (fun k => ∫ x, ρ k x * φ x) Filter.atTop (nhds (φ 0))) :
     ∀ φ : EuclideanSpace ℝ (Fin n) → ℝ,
-      ContDiff ℝ ⊤ φ → HasCompactSupport φ →
+      ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) φ → HasCompactSupport φ →
         (∫ x, apm_m95J02_fundamental n x * Laplacian.laplacian φ x) = φ 0 := by
   intro φ hφ hφc
   exact apm_m95J02_weakIdentity_of_regularization φ K ρ
@@ -2035,7 +2035,7 @@ lemma apm_m95J02_laplacian_continuous_of_smooth
     (hφc : HasCompactSupport φ) :
     Continuous (Laplacian.laplacian φ) := by
   let ψ : SchwartzMap (EuclideanSpace ℝ (Fin n)) ℝ :=
-    hφc.toSchwartzMap (hφ.of_le (by simp))
+    hφc.toSchwartzMap (hφ.of_le (by norm_cast))
   convert (Laplacian.laplacian ψ).continuous using 1
   funext x
   rw [SchwartzMap.laplacian_apply]
@@ -2106,10 +2106,10 @@ theorem apm_m95j02
           iteratedDeriv 2 v ‖x‖ +
             ((n : ℝ) - 1) / ‖x‖ * deriv v ‖x‖) ∧
     (∀ φ : EuclideanSpace ℝ (Fin n) → ℝ,
-      ContDiff ℝ ⊤ φ → HasCompactSupport φ →
+      ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) φ → HasCompactSupport φ →
         (∫ x, apm_m95J02_fundamental n x * Laplacian.laplacian φ x) = φ 0) ∧
     (∀ f : EuclideanSpace ℝ (Fin n) → ℝ,
-      ContDiff ℝ ⊤ f → HasCompactSupport f →
+      ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) f → HasCompactSupport f →
         ∀ x : EuclideanSpace ℝ (Fin n),
           Laplacian.laplacian (apm_m95J02_poissonSolution n f) x = f x) := by
   /-
@@ -2167,7 +2167,7 @@ theorem apm_m95j02
   APIs: `Laplacian.laplacian`, `ContDiff`, `HasCompactSupport`, `EuclideanSpace`.
   -/
   have hweak : ∀ φ : EuclideanSpace ℝ (Fin n) → ℝ,
-      ContDiff ℝ ⊤ φ → HasCompactSupport φ →
+      ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) φ → HasCompactSupport φ →
         (∫ x, apm_m95J02_fundamental n x * Laplacian.laplacian φ x) = φ 0 := by
     let c : ℕ → ℝ := fun k => (k : ℝ) + 1
     let K : ℕ → EuclideanSpace ℝ (Fin n) → ℝ := fun k =>
@@ -2177,7 +2177,7 @@ theorem apm_m95j02
     apply apm_m95J02_weakIdentity_of_regularization_family K ρ
     · intro φ hφ hφc
       have hφ' : ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) φ :=
-        hφ.of_le (by simp)
+        hφ.of_le (by norm_cast)
       have hlcont := apm_m95J02_laplacian_continuous_of_smooth φ hφ' hφc
       have hlcomp := apm_m95J02_laplacian_hasCompactSupport φ hφc
       have hc : Filter.Tendsto c Filter.atTop Filter.atTop := by
@@ -2195,7 +2195,7 @@ theorem apm_m95j02
             (Laplacian.laplacian φ) hlcont hlcomp).comp hc
     · intro φ hφ hφc k
       have hφ' : ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) φ :=
-        hφ.of_le (by simp)
+        hφ.of_le (by norm_cast)
       exact apm_m95J02_regularizedFundamental_green_identity
         (inv_ne_zero (by dsimp [c]; positivity)) φ hφ' hφc
     · intro φ hφ hφc
