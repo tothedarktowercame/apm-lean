@@ -113898,6 +113898,17 @@
       "lake build ConstructionTargets.ThreeCirclesFundamentalGroup",
       :exit 1,
       :finding "B12 absent."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791887944282-9424-b0576772",
+     :commands
+     ["git show/diff 12215de9^..12215de9"
+      "git archive 12215de9; lake env lean archived PointWedgeVanKampen.lean"
+      "statement-registry check; recorded-tree sha256; placeholders; diff-tree"
+      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (expected absent)"],
+     :finding
+     "PASS program STOP: 12215de9 is new after history and adds compiled, sorry-free conditional B6 progress. The composed equivalence fixes the left factor. On the right, the source action is c^-1*inr g*c; after ha identifies c=inl a, the partial automorphism fixes c and sends inr g to c*inr g*c^-1, so the factors cancel in the stated order. Both literal leg equations follow without crossing representations. Scope is Lean+notes; hashes match source 230cd5dd, notes 88db757d, blueprint 0bca6ce3; placeholders 0->0; registry 149/149; standard axioms only. Proving rightBase=inl a, then B6/B12, remains explicit; B12 is absent."},
     :commit "12215de979cc632433ff402e069f35f3212e1021",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
@@ -113908,7 +113919,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113929,7 +113940,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Built partial conjugation fixing inl and conjugating inr by a left-factor element.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Packaged a conditional B6 equivalence whose two literal leg equations follow from rightBase=inl a.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -114657,7 +114668,11 @@
     {:job 8,
      :commit "69d4aed66c9e398635c9a2bd5a5fa66c3eeed594",
      :reason
-     "Built partial conjugation fixing inl and conjugating inr by a left-factor element."}]}
+     "Built partial conjugation fixing inl and conjugating inr by a left-factor element."}
+    {:job 9,
+     :commit "12215de979cc632433ff402e069f35f3212e1021",
+     :reason
+     "Packaged a conditional B6 equivalence whose two literal leg equations follow from rightBase=inl a."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
