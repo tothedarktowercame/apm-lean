@@ -1878,10 +1878,71 @@ theorem apm_a97j08_angleStep_swap {z p q : ℂ} (h : z ∉ segment ℝ p q) :
   sorry
 
 -- (A2) A grid square missing `z` has total angle step zero.
+lemma apm_a97j08_squareSum_outside_aux_cases {z shift : ℂ} {δ : ℝ}
+    (q : ℤ × ℤ) (hz : z ∉ apm_a97j08_gridSquare shift δ q) :
+    z.re < shift.re + q.1 * δ ∨
+      shift.re + (q.1 + 1) * δ < z.re ∨
+      z.im < shift.im + q.2 * δ ∨
+      shift.im + (q.2 + 1) * δ < z.im := by
+  by_contra hn
+  push_neg at hn
+  apply hz
+  exact hn
+
+lemma apm_a97j08_squareSum_outside_aux_expand
+    (z shift : ℂ) (δ : ℝ) (q : ℤ × ℤ) :
+    (∑ e ∈ apm_a97j08_squareEdges q,
+      apm_a97j08_edgeAngle z shift δ e) =
+      apm_a97j08_edgeAngle z shift δ ((q.1, q.2), (q.1 + 1, q.2)) +
+      apm_a97j08_edgeAngle z shift δ ((q.1 + 1, q.2), (q.1 + 1, q.2 + 1)) +
+      apm_a97j08_edgeAngle z shift δ ((q.1 + 1, q.2 + 1), (q.1, q.2 + 1)) +
+      apm_a97j08_edgeAngle z shift δ ((q.1, q.2 + 1), (q.1, q.2)) := by
+  rw [apm_a97j08_squareEdges, Finset.sum_insert, Finset.sum_insert, Finset.sum_insert,
+    Finset.sum_singleton]
+  · ring
+  all_goals simp [Prod.ext_iff]
+
+-- In an open half-plane `{w | 0 < re (c * w)}`, the angle step is a difference of
+-- arguments (both lie in `(-π/2, π/2)` after rotating by `c`).
+lemma apm_a97j08_squareSum_outside_aux_step (c : ℂ) {w₁ w₂ : ℂ}
+    (h₁ : 0 < (c * w₁).re) (h₂ : 0 < (c * w₂).re) :
+    Complex.arg (w₂ / w₁) = Complex.arg (c * w₂) - Complex.arg (c * w₁) := by
+  sorry
+
+-- A point strictly left/right/below/above the square sees all four corners in
+-- one open half-plane.
+lemma apm_a97j08_squareSum_outside_aux_halfplane {z shift : ℂ} {δ : ℝ}
+    (hδ : 0 < δ) (q : ℤ × ℤ)
+    (hcase : z.re < shift.re + q.1 * δ ∨
+      shift.re + (q.1 + 1) * δ < z.re ∨
+      z.im < shift.im + q.2 * δ ∨
+      shift.im + (q.2 + 1) * δ < z.im) :
+    ∃ c : ℂ, ∀ v ∈ ({(q.1, q.2), (q.1 + 1, q.2), (q.1 + 1, q.2 + 1), (q.1, q.2 + 1)} :
+        Finset (ℤ × ℤ)),
+      0 < (c * (apm_a97j08_gridVertex shift δ v - z)).re := by
+  sorry
+
+lemma apm_a97j08_squareSum_outside_aux_core {z shift : ℂ} {δ : ℝ}
+    (hδ : 0 < δ) (q : ℤ × ℤ)
+    (hz : z ∉ apm_a97j08_gridSquare shift δ q) :
+    ∑ e ∈ apm_a97j08_squareEdges q,
+      apm_a97j08_edgeAngle z shift δ e = 0 := by
+  obtain ⟨c, hc⟩ := apm_a97j08_squareSum_outside_aux_halfplane hδ q
+    (apm_a97j08_squareSum_outside_aux_cases q hz)
+  have h0 := hc (q.1, q.2) (by simp)
+  have h1 := hc (q.1 + 1, q.2) (by simp)
+  have h2 := hc (q.1 + 1, q.2 + 1) (by simp)
+  have h3 := hc (q.1, q.2 + 1) (by simp)
+  rw [apm_a97j08_squareSum_outside_aux_expand]
+  simp only [apm_a97j08_edgeAngle, apm_a97j08_angleStep]
+  rw [apm_a97j08_squareSum_outside_aux_step c h0 h1, apm_a97j08_squareSum_outside_aux_step c h1 h2,
+    apm_a97j08_squareSum_outside_aux_step c h2 h3, apm_a97j08_squareSum_outside_aux_step c h3 h0]
+  ring
+
 theorem apm_a97j08_squareSum_outside {z shift : ℂ} {δ : ℝ} (hδ : 0 < δ)
     (q : ℤ × ℤ) (hz : z ∉ apm_a97j08_gridSquare shift δ q) :
     ∑ e ∈ apm_a97j08_squareEdges q, apm_a97j08_edgeAngle z shift δ e = 0 := by
-  sorry
+  exact apm_a97j08_squareSum_outside_aux_core hδ q hz
 
 -- (A3) A grid square with `z` in its interior has total angle step `2π`.
 lemma apm_a97j08_squareSum_inside_aux_delta_ne {δ : ℝ} (hδ : 0 < δ) : δ ≠ 0 :=
