@@ -290,7 +290,112 @@ theorem apm_m98J05_kernelDx_hasDerivAt_space {t : ℝ} (ht : 0 < t) (x : ℝ) :
 theorem apm_m98J05_kernel_derivs_bounded {a b : ℝ} (ha : 0 < a) :
     ∃ C : ℝ, ∀ s ∈ Icc a b, ∀ x : ℝ,
       |apm_m98J05_kernelDt s x| ≤ C ∧ |apm_m98J05_kernelDx s x| ≤ C := by
-  sorry
+  have hexp (q : ℝ) (hq : 0 ≤ q) : Real.exp (-q) ≤ 1 := by
+    rw [Real.exp_le_one_iff]
+    linarith
+  have hqexp (q : ℝ) (hq : 0 ≤ q) : q * Real.exp (-q) ≤ 1 := by
+    have h := Real.add_one_le_exp q
+    have he : 0 < Real.exp q := Real.exp_pos q
+    rw [Real.exp_neg]
+    rw [← div_eq_mul_inv]
+    apply (div_le_iff₀ he).2
+    nlinarith
+  let C := (1 / (2 * Real.sqrt (Real.pi * a))) * (2 / a + 1)
+  refine ⟨C, ?_⟩
+  intro s hs x
+  have hs0 : 0 < s := lt_of_lt_of_le ha hs.1
+  have hpa : 0 < Real.sqrt (Real.pi * a) :=
+    Real.sqrt_pos.2 (mul_pos Real.pi_pos ha)
+  have hps : 0 < Real.sqrt (Real.pi * s) :=
+    Real.sqrt_pos.2 (mul_pos Real.pi_pos hs0)
+  have hroot : Real.sqrt (Real.pi * a) ≤ Real.sqrt (Real.pi * s) := by
+    exact Real.sqrt_le_sqrt (mul_le_mul_of_nonneg_left hs.1 Real.pi_pos.le)
+  let q := x ^ 2 / (4 * s)
+  have hq : 0 ≤ q := div_nonneg (sq_nonneg x) (by positivity)
+  have he := hexp q hq
+  have hqe := hqexp q hq
+  have hc : 1 / (2 * Real.sqrt (Real.pi * s)) ≤
+      1 / (2 * Real.sqrt (Real.pi * a)) := by
+    gcongr
+  constructor
+  · unfold apm_m98J05_kernelDt
+    rw [abs_mul]
+    have hfactor : |x ^ 2 / (4 * s ^ 2) - 1 / (2 * s)| =
+        |q - 1 / 2| / s := by
+      dsimp [q]
+      have hi : x ^ 2 / (4 * s ^ 2) - 1 / (2 * s) =
+          (x ^ 2 / (4 * s) - 1 / 2) / s := by
+        field_simp
+      rw [hi, abs_div, abs_of_pos hs0]
+    rw [hfactor]
+    have habs : |q - 1 / 2| ≤ q + 1 / 2 := by
+      rw [abs_le]
+      constructor <;> linarith
+    have hprod : (q + 1 / 2) * Real.exp (-q) ≤ 3 / 2 := by
+      nlinarith [mul_nonneg hq (Real.exp_pos (-q)).le]
+    unfold apm_m98J05_heatKernel
+    rw [abs_mul, abs_of_nonneg (by positivity : 0 ≤ 1 / (2 * Real.sqrt (Real.pi * s))),
+      abs_of_pos (Real.exp_pos _)]
+    rw [show -x ^ 2 / (4 * s) = -q by dsimp [q]; ring]
+    change (1 / (2 * Real.sqrt (Real.pi * s))) * Real.exp (-q) *
+      (|q - 1 / 2| / s) ≤ C
+    calc
+      _ = (1 / (2 * Real.sqrt (Real.pi * s))) *
+          (((Real.exp (-q) * |q - 1 / 2|) / s)) := by ring
+      _ ≤ (1 / (2 * Real.sqrt (Real.pi * a))) * ((3 / 2) / a) := by
+        gcongr
+        · calc
+            Real.exp (-q) * |q - 1 / 2| ≤ Real.exp (-q) * (q + 1 / 2) :=
+                mul_le_mul_of_nonneg_left habs (Real.exp_pos _).le
+            _ = (q + 1 / 2) * Real.exp (-q) := by ring
+            _ ≤ 3 / 2 := hprod
+        · exact hs.1
+      _ ≤ C := by
+        dsimp [C]
+        apply mul_le_mul_of_nonneg_left ?_ (by positivity)
+        apply (div_le_iff₀ ha).2
+        field_simp [ne_of_gt ha]
+        nlinarith
+  · unfold apm_m98J05_kernelDx
+    rw [abs_mul, abs_neg]
+    have hx : |x / (2 * s)| ≤ (q + s) / (2 * s) := by
+      rw [abs_div, abs_of_pos (show 0 < 2 * s by positivity)]
+      have hxq : |x| ≤ q + s := by
+        dsimp [q]
+        field_simp
+        nlinarith [sq_nonneg (|x| - 2 * s), sq_abs x]
+      exact (div_le_div_iff₀ (by positivity) (by positivity)).2 (by nlinarith)
+    unfold apm_m98J05_heatKernel
+    rw [abs_mul, abs_of_nonneg (by positivity : 0 ≤ 1 / (2 * Real.sqrt (Real.pi * s))),
+      abs_of_pos (Real.exp_pos _)]
+    rw [show -x ^ 2 / (4 * s) = -q by dsimp [q]; ring]
+    change |x / (2 * s)| *
+      ((1 / (2 * Real.sqrt (Real.pi * s))) * Real.exp (-q)) ≤ C
+    calc
+      _ ≤ ((q + s) / (2 * s)) *
+          ((1 / (2 * Real.sqrt (Real.pi * s))) * Real.exp (-q)) := by
+        gcongr
+      _ = (1 / (2 * Real.sqrt (Real.pi * s))) *
+          ((q * Real.exp (-q)) / (2 * s) + Real.exp (-q) / 2) := by
+        field_simp
+      _ ≤ (1 / (2 * Real.sqrt (Real.pi * a))) * (1 / (2 * a) + 1 / 2) := by
+        have hdiv : q * Real.exp (-q) / (2 * s) ≤ 1 / (2 * a) := by
+          calc
+            _ ≤ 1 / (2 * s) := div_le_div_of_nonneg_right hqe (by positivity)
+            _ ≤ 1 / (2 * a) := by
+              apply div_le_div_of_nonneg_left (by norm_num) (by positivity)
+              nlinarith [hs.1]
+        have hi : q * Real.exp (-q) / (2 * s) + Real.exp (-q) / 2 ≤
+            1 / (2 * a) + 1 / 2 := by
+          gcongr
+        exact mul_le_mul hc hi (by positivity) (by positivity)
+      _ ≤ C := by
+        dsimp [C]
+        apply mul_le_mul_of_nonneg_left ?_ (by positivity)
+        have : 1 / (2 * a) ≤ 2 / a := by
+          field_simp [ne_of_gt ha]
+          norm_num
+        linarith
 -- END SEAT AREA
 
 theorem apm_m98J05_heatSolution_hasDerivAt_time
