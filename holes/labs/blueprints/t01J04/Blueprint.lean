@@ -50,7 +50,22 @@ theorem apm_t01J04_zero_dimensional_domain
       apm_t01J04_IsSmoothEmbeddedManifoldWithBoundary n X
         (modelWithCornersSelf ℝ (apm_t01J04_Euclidean n))
         {x : X // x ∈ f ⁻¹' closure V} Subtype.val := by
-  sorry
+  subst n
+  letI : DiscreteTopology X := ChartedSpace.discreteTopology
+    (apm_t01J04_Euclidean 0) X
+  obtain ⟨V, hVy, hVclosed, hVU⟩ := exists_mem_nhds_isClosed_subset hU
+  refine ⟨V, hVy, ?_, Or.inl ⟨rfl, ?_⟩⟩
+  · rwa [hVclosed.closure_eq]
+  · let charts : ChartedSpace (apm_t01J04_Euclidean 0)
+        {x : X // x ∈ f ⁻¹' closure V} :=
+      ChartedSpace.of_discreteTopology
+    refine ⟨charts, ?_, ?_, ?_⟩
+    · exact IsManifold.of_discreteTopology _
+    · exact contMDiff_of_discreteTopology
+    · intro z
+      intro v w hvw
+      unfold TangentSpace at v w
+      exact Subsingleton.elim v w
 
 /-- LIBRARY: Sard selection plus the regular-sublevel-set theorem, including
 construction of the literal half-space atlas and smooth immersed inclusion. -/
