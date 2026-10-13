@@ -670,6 +670,54 @@ lemma apm_m02J05_lux_sublevel_attained_aux_core_aux_attained_aux_pos
 
 /-- Sequential closedness of the modular sublevel at its positive infimum,
 using monotone convergence for `young (|u| / cₙ)` as `cₙ ↓ sInf`. -/
+lemma apm_m02J05_lux_sublevel_attained_aux_core_aux_attained_aux_closed_aux_sequence
+    (α : ℝ → ℝ) (u : apm_m02J05_Fun)
+    (hne : (apm_m02J05_luxSublevel α u).Nonempty)
+    (hb : BddBelow (apm_m02J05_luxSublevel α u)) :
+    ∃ c : ℕ → ℝ, ∀ n,
+      c n ∈ apm_m02J05_luxSublevel α u ∧
+      apm_m02J05_lux α u ≤ c n ∧
+      c n < apm_m02J05_lux α u + 1 / (n + 1 : ℝ) := by
+  have hex : ∀ n : ℕ, ∃ c ∈ apm_m02J05_luxSublevel α u,
+      c < apm_m02J05_lux α u + 1 / (n + 1 : ℝ) := by
+    intro n
+    apply exists_lt_of_csInf_lt hne
+    unfold apm_m02J05_lux
+    have hp : 0 < (1 / (n + 1 : ℝ)) := by positivity
+    exact lt_add_of_pos_right _ hp
+  choose c hc hclt using hex
+  refine ⟨c, fun n ↦ ⟨hc n, ?_, hclt n⟩⟩
+  unfold apm_m02J05_lux
+  exact csInf_le hb (hc n)
+
+lemma apm_m02J05_lux_sublevel_attained_aux_core_aux_attained_aux_closed_aux_sequence_tendsto
+    (α : ℝ → ℝ) (u : apm_m02J05_Fun) (c : ℕ → ℝ)
+    (hc : ∀ n, apm_m02J05_lux α u ≤ c n ∧
+      c n < apm_m02J05_lux α u + 1 / (n + 1 : ℝ)) :
+    Tendsto c atTop (nhds (apm_m02J05_lux α u)) := by
+  have hupp : Tendsto (fun n : ℕ ↦ apm_m02J05_lux α u + 1 / (n + 1 : ℝ))
+      atTop (nhds (apm_m02J05_lux α u)) := by
+    simpa using (tendsto_const_nhds.add
+      (tendsto_one_div_add_atTop_nhds_zero_nat :
+        Tendsto (fun n : ℕ ↦ (1 : ℝ) / (n + 1)) atTop (nhds 0)))
+  apply tendsto_of_tendsto_of_tendsto_of_le_of_le tendsto_const_nhds hupp
+  · exact fun n ↦ (hc n).1
+  · exact fun n ↦ (hc n).2.le
+
+/-- Fatou closedness for the modular along a positive minimizing sequence. -/
+lemma apm_m02J05_lux_sublevel_attained_aux_core_aux_attained_aux_closed_aux_fatou
+    (α : ℝ → ℝ)
+    (hc : ContinuousOn α (Ici 0))
+    (hmono : StrictMonoOn α (Ici 0))
+    (hzero : α 0 = 0)
+    (hnonneg : ∀ t, 0 ≤ t → 0 ≤ α t)
+    (u : apm_m02J05_Fun)
+    (hpos : 0 < apm_m02J05_lux α u)
+    (c : ℕ → ℝ) (hcsub : ∀ n, c n ∈ apm_m02J05_luxSublevel α u)
+    (hct : Tendsto c atTop (nhds (apm_m02J05_lux α u))) :
+    apm_m02J05_lux α u ∈ apm_m02J05_luxSublevel α u := by
+  sorry
+
 lemma apm_m02J05_lux_sublevel_attained_aux_core_aux_attained_aux_closed
     (α : ℝ → ℝ)
     (hc : ContinuousOn α (Ici 0))
@@ -680,7 +728,16 @@ lemma apm_m02J05_lux_sublevel_attained_aux_core_aux_attained_aux_closed
     (u : apm_m02J05_Fun) (hu : u ∈ apm_m02J05_L α)
     (hpos : 0 < apm_m02J05_lux α u) :
     apm_m02J05_lux α u ∈ apm_m02J05_luxSublevel α u := by
-  sorry
+  have hne := apm_m02J05_lux_sublevel_attained_aux_core_aux_nonempty
+    α hc hmono hzero hinfty hnonneg u hu
+  have hb := apm_m02J05_lux_sublevel_attained_aux_bdd α u
+  obtain ⟨c, hcsub⟩ :=
+    apm_m02J05_lux_sublevel_attained_aux_core_aux_attained_aux_closed_aux_sequence
+      α u hne hb
+  apply apm_m02J05_lux_sublevel_attained_aux_core_aux_attained_aux_closed_aux_fatou
+    α hc hmono hzero hnonneg u hpos c (fun n ↦ (hcsub n).1)
+  exact apm_m02J05_lux_sublevel_attained_aux_core_aux_attained_aux_closed_aux_sequence_tendsto
+    α u c (fun n ↦ ⟨(hcsub n).2.1, (hcsub n).2.2⟩)
 
 lemma apm_m02J05_lux_sublevel_attained_aux_core_aux_attained
     (α : ℝ → ℝ)
