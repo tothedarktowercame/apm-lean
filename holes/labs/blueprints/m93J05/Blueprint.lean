@@ -1508,7 +1508,200 @@ theorem apm_m93j05_J_path_differentiableAt (N : ℕ) (p q : ℝ) (hp : 1 < p) (h
     (g f₀ h : ℝ → ℝ) (hg : MemLp g (ENNReal.ofReal q) (volume.restrict (Set.Icc (0 : ℝ) 1)))
     (hf₀ : MemLp f₀ (ENNReal.ofReal p) (volume.restrict (Set.Icc (0 : ℝ) 1))) (hh : MemLp h (ENNReal.ofReal p) (volume.restrict (Set.Icc (0 : ℝ) 1))) :
     DifferentiableAt ℝ (fun t : ℝ ↦ apm_m93j05_J N p g (f₀ + t • h)) 0 := by
-  sorry
+  let μ := volume.restrict (Set.Icc (0 : ℝ) 1)
+  have hfi : Integrable f₀ μ := hf₀.integrable (by rw [ENNReal.one_le_ofReal]; linarith)
+  have hhi : Integrable h μ := hh.integrable (by rw [ENNReal.one_le_ofReal]; linarith)
+  have htrunc : ∀ (r : ℝ) (v : ℝ → ℝ), MemLp (apm_m93j05_trunc N v)
+      (ENNReal.ofReal r) μ := by
+    intro r v
+    let C : ℝ := |∫ x in Set.Icc (0 : ℝ) 1, v x| +
+      ∑ j ∈ Finset.Icc 1 N,
+        (|apm_m93j05_cosCoeff v j| + |apm_m93j05_sinCoeff v j|)
+    apply MemLp.of_bound (C := C)
+    · exact (apm_m93j05_trunc_split_aux_continuous N v).aestronglyMeasurable
+    · filter_upwards with x
+      rw [Real.norm_eq_abs]
+      unfold apm_m93j05_trunc
+      calc
+        |_ + _| ≤ |∫ z in Set.Icc (0 : ℝ) 1, v z| +
+            |∑ j ∈ Finset.Icc 1 N, _| := abs_add_le _ _
+        _ ≤ C := by
+          dsimp [C]
+          apply add_le_add le_rfl
+          refine (Finset.abs_sum_le_sum_abs _ _).trans ?_
+          apply Finset.sum_le_sum
+          intro j hj
+          calc
+            |_ + _| ≤ |_| + |_| := abs_add_le _ _
+            _ ≤ |apm_m93j05_cosCoeff v j| + |apm_m93j05_sinCoeff v j| := by
+              simp only [abs_mul]
+              exact add_le_add
+                (mul_le_of_le_one_right (abs_nonneg _) (Real.abs_cos_le_one _))
+                (mul_le_of_le_one_right (abs_nonneg _) (Real.abs_sin_le_one _))
+  have hcos (v : ℝ → ℝ) (hv : Integrable v μ) (j : ℕ) :
+      Integrable (fun x ↦ v x * Real.cos (j * 2 * Real.pi * x)) μ := by
+    exact hv.mul_bdd
+      ((Real.continuous_cos.comp (by fun_prop)).aestronglyMeasurable)
+      (Filter.Eventually.of_forall fun x => by
+        simpa [Real.norm_eq_abs] using Real.abs_cos_le_one (j * 2 * Real.pi * x))
+  have hsin (v : ℝ → ℝ) (hv : Integrable v μ) (j : ℕ) :
+      Integrable (fun x ↦ v x * Real.sin (j * 2 * Real.pi * x)) μ := by
+    exact hv.mul_bdd
+      ((Real.continuous_sin.comp (by fun_prop)).aestronglyMeasurable)
+      (Filter.Eventually.of_forall fun x => by
+        simpa [Real.norm_eq_abs] using Real.abs_sin_le_one (j * 2 * Real.pi * x))
+  have hmean (t : ℝ) : (∫ x, f₀ x + t * h x ∂μ) =
+      (∫ x, f₀ x ∂μ) + t * ∫ x, h x ∂μ := by
+    rw [MeasureTheory.integral_add hfi (hhi.const_mul t),
+      MeasureTheory.integral_const_mul]
+  have hcoslin (t : ℝ) (j : ℕ) :
+      (∫ x, (f₀ x + t * h x) * Real.cos (j * 2 * Real.pi * x) ∂μ) =
+        (∫ x, f₀ x * Real.cos (j * 2 * Real.pi * x) ∂μ) +
+          t * ∫ x, h x * Real.cos (j * 2 * Real.pi * x) ∂μ := by
+    rw [show (fun x ↦ (f₀ x + t * h x) * Real.cos (j * 2 * Real.pi * x)) =
+      fun x ↦ f₀ x * Real.cos (j * 2 * Real.pi * x) +
+        t * (h x * Real.cos (j * 2 * Real.pi * x)) by funext x; ring]
+    rw [MeasureTheory.integral_add (hcos f₀ hfi j) ((hcos h hhi j).const_mul t),
+      MeasureTheory.integral_const_mul]
+  have hsinlin (t : ℝ) (j : ℕ) :
+      (∫ x, (f₀ x + t * h x) * Real.sin (j * 2 * Real.pi * x) ∂μ) =
+        (∫ x, f₀ x * Real.sin (j * 2 * Real.pi * x) ∂μ) +
+          t * ∫ x, h x * Real.sin (j * 2 * Real.pi * x) ∂μ := by
+    rw [show (fun x ↦ (f₀ x + t * h x) * Real.sin (j * 2 * Real.pi * x)) =
+      fun x ↦ f₀ x * Real.sin (j * 2 * Real.pi * x) +
+        t * (h x * Real.sin (j * 2 * Real.pi * x)) by funext x; ring]
+    rw [MeasureTheory.integral_add (hsin f₀ hfi j) ((hsin h hhi j).const_mul t),
+      MeasureTheory.integral_const_mul]
+  have hccoeff (t : ℝ) (j : ℕ) : apm_m93j05_cosCoeff (f₀ + t • h) j =
+      apm_m93j05_cosCoeff f₀ j + t * apm_m93j05_cosCoeff h j := by
+    unfold apm_m93j05_cosCoeff
+    simp only [Pi.add_apply, Pi.smul_apply, smul_eq_mul]
+    rw [hcoslin]
+    ring
+  have hscoeff (t : ℝ) (j : ℕ) : apm_m93j05_sinCoeff (f₀ + t • h) j =
+      apm_m93j05_sinCoeff f₀ j + t * apm_m93j05_sinCoeff h j := by
+    unfold apm_m93j05_sinCoeff
+    simp only [Pi.add_apply, Pi.smul_apply, smul_eq_mul]
+    rw [hsinlin]
+    ring
+  have hlinear (t : ℝ) : apm_m93j05_trunc N (f₀ + t • h) =
+      fun x ↦ apm_m93j05_trunc N f₀ x + t * apm_m93j05_trunc N h x := by
+    funext x
+    unfold apm_m93j05_trunc
+    simp only [Pi.add_apply, Pi.smul_apply, smul_eq_mul]
+    rw [hmean]
+    simp_rw [hccoeff, hscoeff]
+    rw [show (∑ j ∈ Finset.Icc 1 N,
+        ((apm_m93j05_cosCoeff f₀ j + t * apm_m93j05_cosCoeff h j) *
+            Real.cos (j * 2 * Real.pi * x) +
+          (apm_m93j05_sinCoeff f₀ j + t * apm_m93j05_sinCoeff h j) *
+            Real.sin (j * 2 * Real.pi * x))) =
+      (∑ j ∈ Finset.Icc 1 N,
+        (apm_m93j05_cosCoeff f₀ j * Real.cos (j * 2 * Real.pi * x) +
+          apm_m93j05_sinCoeff f₀ j * Real.sin (j * 2 * Real.pi * x))) +
+      t * (∑ j ∈ Finset.Icc 1 N,
+        (apm_m93j05_cosCoeff h j * Real.cos (j * 2 * Real.pi * x) +
+          apm_m93j05_sinCoeff h j * Real.sin (j * 2 * Real.pi * x))) by
+        rw [Finset.mul_sum, ← Finset.sum_add_distrib]
+        apply Finset.sum_congr rfl
+        intro j hj
+        ring]
+    ring
+  let a := fun x ↦ f₀ x - apm_m93j05_trunc N f₀ x
+  let b := fun x ↦ h x - apm_m93j05_trunc N h x
+  have ha : MemLp a (ENNReal.ofReal p) μ := hf₀.sub (htrunc p f₀)
+  have hb : MemLp b (ENNReal.ofReal p) μ := hh.sub (htrunc p h)
+  have hab (t : ℝ) :
+      (fun x ↦ (f₀ + t • h) x - apm_m93j05_trunc N (f₀ + t • h) x) =
+        fun x ↦ a x + t * b x := by
+    funext x
+    rw [hlinear]
+    simp only [Pi.add_apply, Pi.smul_apply, smul_eq_mul]
+    dsimp [a, b]
+    ring
+  have hhigh : DifferentiableAt ℝ (fun (t : ℝ) ↦ Real.rpow
+      (eLpNorm (fun x ↦ (f₀ + t • h) x - apm_m93j05_trunc N (f₀ + t • h) x)
+        (ENNReal.ofReal p) μ).toReal p) 0 := by
+    simpa only [μ, hab] using hD1 a b ha hb
+  have hA2 := htrunc (2 : ℝ) f₀
+  have hB2 := htrunc (2 : ℝ) h
+  have hc2 : (2 : ℝ).HolderConjugate 2 := by
+    rw [Real.holderConjugate_iff]
+    norm_num
+  letI : ENNReal.HolderTriple (ENNReal.ofReal (2 : ℝ)) (ENNReal.ofReal (2 : ℝ)) 1 :=
+    hc2.ennrealOfReal
+  have hAA : Integrable (fun x ↦ apm_m93j05_trunc N f₀ x ^ 2) μ := by
+    simpa [pow_two] using hA2.integrable_mul hA2
+  have hAB : Integrable (fun x ↦ apm_m93j05_trunc N f₀ x *
+      apm_m93j05_trunc N h x) μ := hA2.integrable_mul hB2
+  have hBB : Integrable (fun x ↦ apm_m93j05_trunc N h x ^ 2) μ := by
+    simpa [pow_two] using hB2.integrable_mul hB2
+  have hlow_eq : (fun (t : ℝ) ↦ (eLpNorm (apm_m93j05_trunc N (f₀ + t • h)) 2 μ).toReal ^ 2) =
+      fun (t : ℝ) ↦ (∫ x, apm_m93j05_trunc N f₀ x ^ 2 ∂μ) +
+        2 * t * (∫ x, apm_m93j05_trunc N f₀ x * apm_m93j05_trunc N h x ∂μ) +
+        t ^ 2 * (∫ x, apm_m93j05_trunc N h x ^ 2 ∂μ) := by
+    funext t
+    rw [hlinear]
+    have hm := apm_m93j05_rpow_eLpNorm_eq_integral 2 (by norm_num)
+      (fun x ↦ apm_m93j05_trunc N f₀ x + t * apm_m93j05_trunc N h x)
+      (hA2.add (hB2.const_smul t))
+    simp only [Real.rpow_two] at hm
+    norm_num [ENNReal.ofReal_ofNat] at hm ⊢
+    rw [hm]
+    simp_rw [add_sq, mul_pow]
+    rw [show (fun x ↦ apm_m93j05_trunc N f₀ x ^ 2 +
+          2 * apm_m93j05_trunc N f₀ x * (t * apm_m93j05_trunc N h x) +
+          t ^ 2 * apm_m93j05_trunc N h x ^ 2) =
+        fun x ↦ apm_m93j05_trunc N f₀ x ^ 2 + (2*t) *
+          (apm_m93j05_trunc N f₀ x * apm_m93j05_trunc N h x) +
+          (t^2) * apm_m93j05_trunc N h x ^ 2 by funext x; ring]
+    change (∫ x, apm_m93j05_trunc N f₀ x ^ 2 + (2*t) *
+        (apm_m93j05_trunc N f₀ x * apm_m93j05_trunc N h x) +
+        (t^2) * apm_m93j05_trunc N h x ^ 2 ∂μ) = _
+    have hiAB : Integrable (fun x ↦ (2*t) *
+        (apm_m93j05_trunc N f₀ x * apm_m93j05_trunc N h x)) μ := by
+      simpa [mul_comm] using hAB.const_mul (2*t)
+    have hiBB : Integrable (fun x ↦ (t^2) * apm_m93j05_trunc N h x ^ 2) μ := by
+      simpa [mul_comm] using hBB.const_mul (t^2)
+    calc
+      _ = (∫ x, apm_m93j05_trunc N f₀ x ^ 2 + (2*t) *
+            (apm_m93j05_trunc N f₀ x * apm_m93j05_trunc N h x) ∂μ) +
+          ∫ x, (t^2) * apm_m93j05_trunc N h x ^ 2 ∂μ := by
+            simpa only [Pi.add_apply] using
+              MeasureTheory.integral_add (hAA.add hiAB) hiBB
+      _ = ((∫ x, apm_m93j05_trunc N f₀ x ^ 2 ∂μ) +
+            ∫ x, (2*t) * (apm_m93j05_trunc N f₀ x *
+              apm_m93j05_trunc N h x) ∂μ) +
+          ∫ x, (t^2) * apm_m93j05_trunc N h x ^ 2 ∂μ := by
+            rw [MeasureTheory.integral_add hAA hiAB]
+      _ = _ := by simp only [MeasureTheory.integral_const_mul]
+  have hlow : DifferentiableAt ℝ
+      (fun (t : ℝ) ↦ (eLpNorm (apm_m93j05_trunc N (f₀ + t • h)) 2 μ).toReal ^ 2) 0 := by
+    rw [hlow_eq]
+    fun_prop
+  have hc : p.HolderConjugate q := Real.holderConjugate_iff.mpr ⟨hp, by
+    simpa [div_eq_mul_inv, add_comm] using hpq⟩
+  letI : ENNReal.HolderTriple (ENNReal.ofReal p) (ENNReal.ofReal q) 1 := hc.ennrealOfReal
+  have hfg : Integrable (f₀ * g) μ := hf₀.integrable_mul hg
+  have hhg : Integrable (h * g) μ := hh.integrable_mul hg
+  have hpair_eq : (fun (t : ℝ) ↦ ∫ x, (f₀ + t • h) x * g x ∂μ) =
+      fun (t : ℝ) ↦ (∫ x, f₀ x * g x ∂μ) + t * (∫ x, h x * g x ∂μ) := by
+    funext t
+    simp only [Pi.add_apply, Pi.smul_apply, smul_eq_mul, add_mul]
+    calc
+      (∫ x, f₀ x * g x + t * h x * g x ∂μ) =
+          ∫ x, (f₀ * g) x + (t • (h * g)) x ∂μ := by congr 1; funext x; simp; ring
+      _ = (∫ x, (f₀ * g) x ∂μ) + ∫ x, (t • (h * g)) x ∂μ :=
+        MeasureTheory.integral_add hfg (hhg.const_mul t)
+      _ = _ := by simp [MeasureTheory.integral_const_mul]
+  have hpair : DifferentiableAt ℝ (fun (t : ℝ) ↦ ∫ x, (f₀ + t • h) x * g x ∂μ) 0 := by
+    exact hpair_eq.symm ▸ (by fun_prop)
+  change DifferentiableAt ℝ (fun (t : ℝ) ↦
+    Real.rpow (eLpNorm (fun x ↦ (f₀ + t • h) x - apm_m93j05_trunc N (f₀ + t • h) x)
+      (ENNReal.ofReal p) μ).toReal p +
+    (eLpNorm (apm_m93j05_trunc N (f₀ + t • h)) 2 μ).toReal ^ 2 +
+    ∫ x, (f₀ + t • h) x * g x ∂μ) 0
+  exact (hhigh.add hlow).add hpair
 
 theorem apm_m93j05_stationary_at_minimizer
     (N : ℕ) (p q : ℝ) (hp : 1 < p) (hq : 1 < q)
