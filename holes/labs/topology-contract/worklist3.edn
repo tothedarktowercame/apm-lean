@@ -24430,7 +24430,7 @@
    :consumer :t01A08,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 0,
    :review-finding
    "extend Mathlib: state and prove the missing theorem in scope",
    :implements-lemma :lemma-closedset-whitneycubecover,
@@ -24472,6 +24472,17 @@
     [{:cmd "initial build",
       :exit 1,
       :correction "fixed ball-membership distance orientation"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791901660949-9869-aaf8e70c",
+     :commands
+     ["git show/diff 144b2d58; scope/orientation checks"
+      "sha256sum + lake env lean frozen fixture"
+      "lake build ConstructionTargets.SardConvexDomain"
+      "statement registry check; forbidden-count scan"],
+     :finding
+     "PASS. Recorded topo-10 commit 144b2d58 changes only the scoped Lean file and correctly proves symmetric 5/3 scale comparability for intersecting quarter-infDist balls using triangle inequality and both infDist Lipschitz orientations. Fixture hash b8a499c0... matches; build and fixture pass; registry 150/150; forbidden placeholders stay 0; only standard axioms. Valid compiled B3 progress; STOP explicitly leaves scale selection, quantitative packing, and assembly."},
     :commit "144b2d58a3c58ced462aec927944da56b39d5b60",
     :changed-paths ["ConstructionTargets/SardConvexDomain.lean"],
     :fixture
@@ -24481,7 +24492,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain.blueprint/B3",
    :acceptance
@@ -35303,7 +35314,7 @@
    :other-consumers []}
   {:consumer :t01A08,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -35317,7 +35328,9 @@
     :type
     "overlapping quarter-infDist balls have 5/3-comparable scales",
     :area "sard-convex-domain",
-    :proved-in :r-a08-sard-b3-whitney-cubes-1},
+    :proved-in :r-a08-sard-b3-whitney-cubes-1,
+    :banked-by :r-a08-sard-b3-whitney-cubes-1,
+    :banked-commit "144b2d58a3c58ced462aec927944da56b39d5b60"},
    :id
    :lemma-constructiontargets-sardconvexdomain-infdist-comparable-of-mem-quarter-balls,
    :kind :lemma,
