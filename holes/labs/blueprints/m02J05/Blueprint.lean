@@ -158,6 +158,43 @@ lemma apm_m02J05_bridge_convex_and_submodule_of_young_shape_aux_smul
     rw [smul_smul]
     field_simp
 
+lemma apm_m02J05_bridge_convex_and_submodule_of_young_shape_aux_add_aux_pointwise
+    (α : ℝ → ℝ) (hshape : apm_m02J05_YoungShapeFact α)
+    (p q : ℝ) (hp : 0 < p) (hq : 0 < q) (U V : ℝ) :
+    apm_m02J05_young α |(p * q / (p + q)) * (U + V)| ≤
+      (q / (p + q)) * apm_m02J05_young α |p * U| +
+        (p / (p + q)) * apm_m02J05_young α |q * V| := by
+  have hpq : 0 < p + q := add_pos hp hq
+  let r : ℝ := q / (p + q)
+  let s : ℝ := p / (p + q)
+  have hr : 0 ≤ r := (div_pos hq hpq).le
+  have hs : 0 ≤ s := (div_pos hp hpq).le
+  have hrs : r + s = 1 := by
+    dsimp [r, s]
+    field_simp
+    ring
+  have habs : |(p * q / (p + q)) * (U + V)| ≤
+      r * |p * U| + s * |q * V| := by
+    calc
+      |(p * q / (p + q)) * (U + V)| =
+          |r * (p * U) + s * (q * V)| := by
+            congr 1
+            dsimp [r, s]
+            field_simp
+      _ ≤ |r * (p * U)| + |s * (q * V)| := abs_add_le _ _
+      _ = r * |p * U| + s * |q * V| := by
+        simp only [abs_mul, abs_of_nonneg hr, abs_of_nonneg hs]
+  calc
+    apm_m02J05_young α |(p * q / (p + q)) * (U + V)| ≤
+        apm_m02J05_young α (r * |p * U| + s * |q * V|) :=
+      hshape.2 (mem_Ici.mpr (abs_nonneg _))
+        (mem_Ici.mpr <| add_nonneg (mul_nonneg hr (abs_nonneg _))
+          (mul_nonneg hs (abs_nonneg _))) habs
+    _ ≤ r * apm_m02J05_young α |p * U| +
+        s * apm_m02J05_young α |q * V| :=
+      hshape.1.2 (mem_Ici.mpr (abs_nonneg _)) (mem_Ici.mpr (abs_nonneg _)) hr hs hrs
+    _ = _ := rfl
+
 lemma apm_m02J05_bridge_convex_and_submodule_of_young_shape_aux_add
     (α : ℝ → ℝ)
     (hc : ContinuousOn α (Ici 0))
