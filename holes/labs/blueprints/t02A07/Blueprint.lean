@@ -127,7 +127,42 @@ theorem apm_t02A07_bridge_constraint_gradients_independent
     LinearIndependent ℝ
       (![x, (WithLp.toLp 2 ![(0 : ℝ), 0, x 3, x 2] :
         apm_t02a07_E4)] : Fin 2 → apm_t02a07_E4) := by
-  sorry
+  rw [Fintype.linearIndependent_iff]
+  intro c hc i
+  have hcoord (j : Fin 4) := congrFun (congrArg WithLp.ofLp hc) j
+  have h0 : c 0 * x 0 = 0 := by simpa using hcoord 0
+  have h1 : c 0 * x 1 = 0 := by simpa using hcoord 1
+  have h2 : c 0 * x 2 + c 1 * x 3 = 0 := by simpa using hcoord 2
+  have h3 : c 0 * x 3 + c 1 * x 2 = 0 := by simpa using hcoord 3
+  have hxprod : x 2 * x 3 = (1 : ℝ) / 4 := hx.2
+  have hxnorm : ‖x‖ = 1 := by simpa [apm_t02a07_X] using hx.1
+  have hsquares : x 0 ^ 2 + x 1 ^ 2 + x 2 ^ 2 + x 3 ^ 2 = 1 := by
+    have h := EuclideanSpace.real_norm_sq_eq x
+    have h' : x 0 ^ 2 + (x 1 ^ 2 + (x 2 ^ 2 + x 3 ^ 2)) = 1 := by
+      simpa [Fin.sum_univ_succ, hxnorm] using h.symm
+    nlinarith
+  have hc0 : c 0 = 0 := by
+    by_contra hc0
+    have hx0 : x 0 = 0 := (mul_eq_zero.mp h0).resolve_left hc0
+    have hx1 : x 1 = 0 := (mul_eq_zero.mp h1).resolve_left hc0
+    have hh2 : (c 0 * x 2 + c 1 * x 3) * x 2 = 0 := by rw [h2, zero_mul]
+    have hh3 : (c 0 * x 3 + c 1 * x 2) * x 3 = 0 := by rw [h3, zero_mul]
+    have heq : x 2 ^ 2 = x 3 ^ 2 := by
+      apply (mul_left_cancel₀ hc0)
+      nlinarith
+    have hsame : x 2 = x 3 := by
+      rcases (sq_eq_sq_iff_eq_or_eq_neg).mp heq with h | h
+      · exact h
+      · nlinarith
+    rw [hx0, hx1, hsame] at hsquares
+    rw [hsame] at hxprod
+    norm_num at hsquares hxprod
+    nlinarith
+  have hc1 : c 1 = 0 := by
+    rw [hc0, zero_mul, zero_add] at h2
+    exact (mul_eq_zero.mp h2).resolve_right
+      (apm_t02a07_product_coordinates_ne_zero hx).2
+  fin_cases i <;> assumption
 
 /-- Compute the frozen `fderiv` and turn independence of its two coordinate
 rows into surjectivity.  The independence result is an explicit hypothesis so
