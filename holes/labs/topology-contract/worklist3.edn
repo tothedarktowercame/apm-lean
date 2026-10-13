@@ -24430,7 +24430,7 @@
    :consumer :t01A08,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 0,
    :review-finding
    "extend Mathlib: state and prove the missing theorem in scope",
    :implements-lemma :lemma-closedset-whitneycubecover,
@@ -24474,6 +24474,17 @@
     [{:cmd "initial build",
       :exit 1,
       :correction "fixed universe and empty fibers"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791898096653-9738-a9c598b0",
+     :commands
+     ["git show/diff c7da603d; scope and theorem review"
+      "lake build ConstructionTargets.SardConvexDomain"
+      "sha256sum and lake env lean t01a08_b3_univ_branch_check"
+      "statement-registry check; forbidden-token recount"],
+     :finding
+     "PASS. Valid STOP after compiled progress. The one-file commit proves the empty-complement branch: for s=univ an Empty-index WhitneyCubeCover satisfies cover, local-finiteness, metric, anchor, and overlap fields vacuously, with overlap bound 0. The proper-set maximal scale-adapted cover remains explicitly listed as partial. Build/export pass; fixture hash matches; standard axioms only; registry 149/149; sorry/admit/axiom 0->0."},
     :commit "c7da603dbc7403e367a05a63ebe80b8be8882d95",
     :changed-paths ["ConstructionTargets/SardConvexDomain.lean"],
     :fixture
@@ -24483,7 +24494,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain.blueprint/B3",
    :acceptance
@@ -35067,7 +35078,7 @@
    :other-consumers []}
   {:consumer :t01A08,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -35079,7 +35090,9 @@
     :reported-by [:r-a08-sard-b3-whitney-cubes-1],
     :type "Nonempty (WhitneyCubeCover univ)",
     :area "sard-convex-domain",
-    :proved-in :r-a08-sard-b3-whitney-cubes-1},
+    :proved-in :r-a08-sard-b3-whitney-cubes-1,
+    :banked-by :r-a08-sard-b3-whitney-cubes-1,
+    :banked-commit "c7da603dbc7403e367a05a63ebe80b8be8882d95"},
    :id
    :lemma-constructiontargets-sardconvexdomain-closedset-whitneycubecover-univ,
    :kind :lemma,
