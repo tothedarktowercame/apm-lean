@@ -151,7 +151,58 @@ theorem apm_t99J04_euclid_local_inverse
     ∃ e : OpenPartialHomeomorph E E', a ∈ e.source ∧ e.source ⊆ U ∧
       (∀ x ∈ e.source, e x = f x) ∧ ContDiffOn ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) e e.source ∧
       ContDiffOn ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) e.symm e.target := by
-  sorry
+  let A : Set (E →L[ℝ] E') := Set.range ((↑) : (E ≃L[ℝ] E') → E →L[ℝ] E')
+  let V : Set E := U ∩ (fderiv ℝ f) ⁻¹' A
+  have hdf : ContinuousOn (fderiv ℝ f) U :=
+    hf.continuousOn_fderiv_of_isOpen hU (by simp)
+  have hV : IsOpen V := by
+    exact hdf.isOpen_inter_preimage hU ContinuousLinearEquiv.isOpen
+  let ea : E ≃L[ℝ] E' := ContinuousLinearEquiv.ofBijective (fderiv ℝ f a)
+    (LinearMap.ker_eq_bot.mpr hb.1) (LinearMap.range_eq_top.mpr hb.2)
+  have hea : (ea : E →L[ℝ] E') = fderiv ℝ f a := by
+    exact ContinuousLinearEquiv.coe_ofBijective _ _ _
+  have haV : a ∈ V := by
+    refine ⟨ha, ?_⟩
+    exact ⟨ea, hea⟩
+  have hfa : ContDiffAt ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) f a :=
+    hf.contDiffAt (hU.mem_nhds ha)
+  have hderiva : HasFDerivAt f (ea : E →L[ℝ] E') a := by
+    rw [hea]
+    exact hfa.differentiableAt (by simp) |>.hasFDerivAt
+  let e0 : OpenPartialHomeomorph E E' :=
+    hfa.toOpenPartialHomeomorph f hderiva (by simp)
+  let e : OpenPartialHomeomorph E E' := e0.restr V
+  have he_source : e.source = e0.source ∩ V := by
+    exact e0.restr_source' V hV
+  have hae0 : a ∈ e0.source := hfa.mem_toOpenPartialHomeomorph_source hderiva (by simp)
+  have hae : a ∈ e.source := by
+    rw [he_source]
+    exact ⟨hae0, haV⟩
+  refine ⟨e, hae, ?_, ?_, ?_, ?_⟩
+  · intro x hx
+    rw [he_source] at hx
+    exact hx.2.1
+  · intro x hx
+    rfl
+  · intro x hx
+    have heU : e.source ⊆ U := by
+      intro z hz
+      rw [he_source] at hz
+      exact hz.2.1
+    simpa [e, e0] using (hf x (heU hx)).mono heU
+  · intro y hy
+    have hxy : e.symm y ∈ e.source := e.symm_mapsTo hy
+    have hxV : e.symm y ∈ V := by
+      rw [he_source] at hxy
+      exact hxy.2
+    rcases hxV.2 with ⟨ex, hex⟩
+    have hfx : ContDiffAt ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) f (e.symm y) :=
+      hf.contDiffAt (hU.mem_nhds hxV.1)
+    have hdx : HasFDerivAt f (ex : E →L[ℝ] E') (e.symm y) := by
+      rw [hex]
+      exact hfx.differentiableAt (by simp) |>.hasFDerivAt
+    exact (e.contDiffAt_symm hy (by simpa [e, e0] using hdx)
+      (by simpa [e, e0] using hfx)).contDiffWithinAt
 
 theorem apm_t99J04_bridge_local_inverse_function
     {E E' X Y : Type}
