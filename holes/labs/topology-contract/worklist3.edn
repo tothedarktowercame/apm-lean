@@ -23717,7 +23717,7 @@
    :consumer :t01A08,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 0,
    :review-finding
    "Recorded commit is invalid: f032efae9d1501f7ddfe93c66668f88f24ed37f4 is absent locally and origin rejects it as not our ref. The intended scoped commit appears to be f032efae9b89fb527a72ea9192f3c89f09f82615. Repair the row to record the exact existing full SHA, then rerun independent review.",
    :implements-lemma
@@ -23761,6 +23761,17 @@
       :exit 1,
       :correction
       "proved decomposeFin equality by Fin cases; compiled"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791884372890-9329-54300e92",
+     :commands
+     ["git show/diff 4c4fe5be; scope and recorded-tree checks"
+      "lake build ConstructionTargets.SardConvexDomain"
+      "lake env lean fixture and /tmp/CheckSardAdjacentSucc.lean"
+      "sha256sum fixture; statement-registry check; placeholder recount"],
+     :finding
+     "PASS: valid STOP after real progress. One-file commit correctly lifts lower adjacent swap(i,i+1) past the new leading slot to swap(i+1,i+2); the proved decomposeFin permutation equality has the correct direction and index casts. Build/export pass; fixture hash matches; standard axioms only; current registry 148/148; sorry/admit 0->0. Localizing lower symmetry and final adjacent closure remain listed."},
     :commit "4c4fe5be3a1115b7bff53d521423a57b11c52807",
     :changed-paths ["ConstructionTargets/SardConvexDomain.lean"],
     :fixture
@@ -23770,7 +23781,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain/B1/symmetry",
    :acceptance
@@ -34122,7 +34133,7 @@
    :other-consumers []}
   {:consumer :t01A08,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "iteratedFDerivWithin_domDomCongr_adjacent_succ",
@@ -34134,7 +34145,9 @@
     :type
     "lower adjacent symmetry lifts to the shifted swap of the next jet",
     :area "sard-convex-domain",
-    :proved-in :r-a08-symmetry-slots-1},
+    :proved-in :r-a08-symmetry-slots-1,
+    :banked-by :r-a08-symmetry-slots-1,
+    :banked-commit "4c4fe5be3a1115b7bff53d521423a57b11c52807"},
    :id :lemma-iteratedfderivwithin-domdomcongr-adjacent-succ,
    :kind :lemma,
    :depends-on
