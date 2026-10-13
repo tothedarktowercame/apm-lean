@@ -24430,7 +24430,7 @@
    :consumer :t01A08,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 0,
    :review-finding
    "extend Mathlib: state and prove the missing theorem in scope",
    :implements-lemma :lemma-closedset-whitneycubecover,
@@ -24474,6 +24474,17 @@
      {:cmd "git commit", :exit 0}],
     :diagnostic-history
     [{:cmd "build", :exit 1, :correction "added zpow positivity"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791912100515-10114-21a4239c",
+     :commands
+     ["git show/diff 7d6d59b; scope/orientation checks"
+      "sha256sum + lake env lean frozen fixture"
+      "lake build ConstructionTargets.SardConvexDomain"
+      "statement registry check; forbidden-count scan"],
+     :finding
+     "PASS. Recorded topo-10 commit 7d6d59b changes only the scoped Lean file and correctly proves complement coverage by indexed quarter-infDist balls. Same-scale net coverage gives dist(x,c)≤2^k/8; positivity gives strict <2^k/4; the center stratum lower bound gives ≤infDist(c,s)/4. The sigma witness preserves k, center, and membership. Fixture hash 6c514c6d... matches; build/fixture pass; registry 150/150; forbidden placeholders stay 0; only standard axioms. Valid compiled B3 progress; STOP leaves ambient local finiteness and assembly."},
     :commit "7d6d59bf06297bd3654bbc7bdb6fa436bc90702d",
     :changed-paths ["ConstructionTargets/SardConvexDomain.lean"],
     :fixture
@@ -24483,7 +24494,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain.blueprint/B3",
    :acceptance
@@ -35842,7 +35853,7 @@
    :other-consumers []}
   {:consumer :t01A08,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -35856,7 +35867,9 @@
     :type
     "closed nonempty s => s^c subset union of Whitney quarter-infDist balls",
     :area "sard-convex-domain",
-    :proved-in :r-a08-sard-b3-whitney-cubes-1},
+    :proved-in :r-a08-sard-b3-whitney-cubes-1,
+    :banked-by :r-a08-sard-b3-whitney-cubes-1,
+    :banked-commit "7d6d59bf06297bd3654bbc7bdb6fa436bc90702d"},
    :id
    :lemma-constructiontargets-sardconvexdomain-compl-subset-iunion-whitneynetquarterballs,
    :kind :lemma,
