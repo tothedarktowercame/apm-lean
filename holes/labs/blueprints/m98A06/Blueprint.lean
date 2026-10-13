@@ -1058,13 +1058,31 @@ lemma apm_m98A06_wirtinger_aux_core_aux_picone_limit_aux_gap
   sorry
 
 -- Equality in Wirtinger iff the Picone gap vanishes iff η/sin is constant.
+lemma apm_m98A06_wirtinger_aux_core_aux_picone_limit_aux_iff_aux_rigidity_aux_pointwise_aux_integrable_aux_bound
+    (L : ℝ) (hL : 0 < L) (η : ℝ → ℝ)
+    (hη : apm_m98a06_Admissible L 0 0 η) :
+    ∃ C : ℝ,
+      AEStronglyMeasurable (fun x => (derivWithin η (Icc 0 L) x -
+        η x * ((Real.pi / L) * Real.cos (Real.pi * x / L)) /
+          Real.sin (Real.pi * x / L)) ^ 2)
+        (volume.restrict (Ioc 0 L)) ∧
+      ∀ᵐ x ∂(volume.restrict (Ioc 0 L)),
+        ‖(derivWithin η (Icc 0 L) x -
+          η x * ((Real.pi / L) * Real.cos (Real.pi * x / L)) /
+            Real.sin (Real.pi * x / L)) ^ 2‖ ≤ C := by
+  sorry
+
 lemma apm_m98A06_wirtinger_aux_core_aux_picone_limit_aux_iff_aux_rigidity_aux_pointwise_aux_integrable
     (L : ℝ) (hL : 0 < L) (η : ℝ → ℝ)
     (hη : apm_m98a06_Admissible L 0 0 η) :
     IntervalIntegrable (fun x => (derivWithin η (Icc 0 L) x -
       η x * ((Real.pi / L) * Real.cos (Real.pi * x / L)) /
         Real.sin (Real.pi * x / L)) ^ 2) volume 0 L := by
-  sorry
+  obtain ⟨C, hm, hC⟩ :=
+    apm_m98A06_wirtinger_aux_core_aux_picone_limit_aux_iff_aux_rigidity_aux_pointwise_aux_integrable_aux_bound
+      L hL η hη
+  rw [intervalIntegrable_iff, uIoc_of_le hL.le]
+  exact ⟨hm, HasFiniteIntegral.of_bounded hC⟩
 
 lemma apm_m98A06_wirtinger_aux_core_aux_picone_limit_aux_iff_aux_rigidity_aux_pointwise
     (L : ℝ) (hL : 0 < L) (η : ℝ → ℝ)
