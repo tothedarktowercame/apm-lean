@@ -1227,13 +1227,65 @@ lemma apm_m98A06_weak_FTC_aux_representation_aux_const_aux_interior_aux_local
     MeasureTheory.LocallyIntegrableOn w (Ioo (0 : ℝ) Real.pi) volume := by
   exact (hw.mono Ioo_subset_Icc_self).locallyIntegrableOn measurableSet_Ioo
 
+lemma apm_m98A06_weak_FTC_aux_representation_aux_const_aux_interior_aux_distribution_aux_bump :
+    ∃ ψ : ℝ → ℝ, ContDiff ℝ ∞ ψ ∧ HasCompactSupport ψ ∧
+      tsupport ψ ⊆ Ioo (0 : ℝ) Real.pi ∧ ∫ x, ψ x = 1 := by
+  let f : ContDiffBump (Real.pi / 2 : ℝ) :=
+    ⟨Real.pi / 8, Real.pi / 4, by nlinarith [Real.pi_pos],
+      by nlinarith [Real.pi_pos]⟩
+  refine ⟨f.normed volume, f.contDiff_normed, f.hasCompactSupport_normed, ?_,
+    f.integral_normed⟩
+  rw [f.tsupport_normed_eq]
+  intro x hx
+  rw [Metric.mem_closedBall, Real.dist_eq, abs_le] at hx
+  change -(Real.pi / 4) ≤ x - Real.pi / 2 ∧
+    x - Real.pi / 2 ≤ Real.pi / 4 at hx
+  constructor <;> linarith [Real.pi_pos]
+
+-- A mean-zero test function supported in (0, π) is the derivative of a test function
+-- supported in (0, π) (its primitive from 0).
+lemma apm_m98A06_weak_FTC_aux_representation_aux_const_aux_interior_aux_distribution_aux_primitive_test
+    (ψ : ℝ → ℝ) (hψ : ContDiff ℝ ∞ ψ) (hψc : HasCompactSupport ψ)
+    (hψs : tsupport ψ ⊆ Ioo (0 : ℝ) Real.pi) (hψ0 : ∫ x, ψ x = 0) :
+    ∃ φ : ℝ → ℝ, ContDiff ℝ ∞ φ ∧ HasCompactSupport φ ∧
+      Function.support φ ⊆ Ioo (0 : ℝ) Real.pi ∧ deriv φ = ψ := by
+  sorry
+
+-- The core, given primitives of mean-zero test functions: fundamental lemma on (0, π)
+-- (IsOpen.ae_eq_zero_of_integral_contDiff_smul_eq_zero) and continuity.
+lemma apm_m98A06_weak_FTC_aux_representation_aux_const_aux_interior_aux_distribution_aux_core_aux_given_primitives
+    (w : ℝ → ℝ)
+    (hw : ContinuousOn w (Icc (0 : ℝ) Real.pi))
+    (hwloc : MeasureTheory.LocallyIntegrableOn w (Ioo (0 : ℝ) Real.pi) volume)
+    (hweak : apm_m98a06_IsWeakDerivativeOn (Ioo 0 Real.pi) w 0)
+    (hbump : ∃ ψ : ℝ → ℝ, ContDiff ℝ ∞ ψ ∧ HasCompactSupport ψ ∧
+      tsupport ψ ⊆ Ioo (0 : ℝ) Real.pi ∧ ∫ x, ψ x = 1)
+    (hprim : ∀ ψ : ℝ → ℝ, ContDiff ℝ ∞ ψ → HasCompactSupport ψ →
+      tsupport ψ ⊆ Ioo (0 : ℝ) Real.pi → ∫ x, ψ x = 0 →
+      ∃ φ : ℝ → ℝ, ContDiff ℝ ∞ φ ∧ HasCompactSupport φ ∧
+        Function.support φ ⊆ Ioo (0 : ℝ) Real.pi ∧ deriv φ = ψ) :
+    ∃ c : ℝ, ∀ x ∈ Ioo (0 : ℝ) Real.pi, w x = c := by
+  sorry
+
+lemma apm_m98A06_weak_FTC_aux_representation_aux_const_aux_interior_aux_distribution_aux_core
+    (w : ℝ → ℝ)
+    (hw : ContinuousOn w (Icc (0 : ℝ) Real.pi))
+    (hwloc : MeasureTheory.LocallyIntegrableOn w (Ioo (0 : ℝ) Real.pi) volume)
+    (hweak : apm_m98a06_IsWeakDerivativeOn (Ioo 0 Real.pi) w 0)
+    (hbump : ∃ ψ : ℝ → ℝ, ContDiff ℝ ∞ ψ ∧ HasCompactSupport ψ ∧
+      tsupport ψ ⊆ Ioo (0 : ℝ) Real.pi ∧ ∫ x, ψ x = 1) :
+    ∃ c : ℝ, ∀ x ∈ Ioo (0 : ℝ) Real.pi, w x = c := by
+  exact apm_m98A06_weak_FTC_aux_representation_aux_const_aux_interior_aux_distribution_aux_core_aux_given_primitives w hw hwloc hweak hbump apm_m98A06_weak_FTC_aux_representation_aux_const_aux_interior_aux_distribution_aux_primitive_test
+
 lemma apm_m98A06_weak_FTC_aux_representation_aux_const_aux_interior_aux_distribution
     (w : ℝ → ℝ)
     (hw : ContinuousOn w (Icc (0 : ℝ) Real.pi))
     (hwloc : MeasureTheory.LocallyIntegrableOn w (Ioo (0 : ℝ) Real.pi) volume)
     (hweak : apm_m98a06_IsWeakDerivativeOn (Ioo 0 Real.pi) w 0) :
     ∃ c : ℝ, ∀ x ∈ Ioo (0 : ℝ) Real.pi, w x = c := by
-  sorry
+  exact apm_m98A06_weak_FTC_aux_representation_aux_const_aux_interior_aux_distribution_aux_core
+    w hw hwloc hweak
+      apm_m98A06_weak_FTC_aux_representation_aux_const_aux_interior_aux_distribution_aux_bump
 
 lemma apm_m98A06_weak_FTC_aux_representation_aux_const_aux_interior
     (w : ℝ → ℝ) (hw : ContinuousOn w (Icc (0 : ℝ) Real.pi))
