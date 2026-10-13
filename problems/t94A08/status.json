@@ -12,10 +12,12 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,
-    "files": ["lean/Main.lean"],
-    "sorry_count_main": 1,
+    "files": [
+      "lean/Main.lean"
+    ],
+    "sorry_count_main": 0,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 1
+    "sorry_count_total": 0
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -35,7 +37,9 @@
     "exit_code": 0,
     "command": "lake env lean problems/t94A08/lean/Main.lean",
     "sorry_count": 1,
-    "sorry_locations": ["apm_t94a08 (two topological manifold conjuncts)"],
+    "sorry_locations": [
+      "apm_t94a08 (two topological manifold conjuncts)"
+    ],
     "proved": [
       "apm_t94a08_regularLevelSet_quadratic1",
       "apm_t94a08_node_mem_sigma2",
