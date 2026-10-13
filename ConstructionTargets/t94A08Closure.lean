@@ -903,3 +903,47 @@ lemma apm_t94a08_manifoldChart_has_preconnected_punctured_ball
   obtain ⟨r, hr, hrW⟩ := Metric.isOpen_iff.mp hW c hc
   refine ⟨r, hr, hrW, ?_⟩
   exact apm_t94a08_punctured_euclidean_ball_isPreconnected c hr
+
+def apm_t94a08_manifoldChartPuncturedBallSource
+    (U : Set apm_t94a08_CP2) (hnodeU : apm_t94a08_node ∈ U)
+    (W : Set (EuclideanSpace ℝ (Fin 2)))
+    (e : ↑(U ∩ apm_t94a08_sigma2) ≃ₜ ↑W) (r : ℝ) :
+    Set ↑(U ∩ apm_t94a08_sigma2) :=
+  {x | (e x).1 ∈ Metric.ball
+      (e ⟨apm_t94a08_node, hnodeU, apm_t94a08_node_mem_sigma2⟩).1 r ∧
+    x.1 ≠ apm_t94a08_node}
+
+def apm_t94a08_manifoldChartPuncturedBallTarget
+    (U : Set apm_t94a08_CP2) (hnodeU : apm_t94a08_node ∈ U)
+    (W : Set (EuclideanSpace ℝ (Fin 2)))
+    (e : ↑(U ∩ apm_t94a08_sigma2) ≃ₜ ↑W) (r : ℝ) : Set ↑W :=
+  {y | y.1 ∈ Metric.ball
+      (e ⟨apm_t94a08_node, hnodeU, apm_t94a08_node_mem_sigma2⟩).1 r ∧
+    y.1 ≠ (e ⟨apm_t94a08_node, hnodeU,
+      apm_t94a08_node_mem_sigma2⟩).1}
+
+def apm_t94a08_manifoldChartPuncturedBallHomeomorph
+    (U : Set apm_t94a08_CP2) (hnodeU : apm_t94a08_node ∈ U)
+    (W : Set (EuclideanSpace ℝ (Fin 2)))
+    (e : ↑(U ∩ apm_t94a08_sigma2) ≃ₜ ↑W) (r : ℝ) :
+    ↑(apm_t94a08_manifoldChartPuncturedBallSource U hnodeU W e r) ≃ₜ
+      ↑(apm_t94a08_manifoldChartPuncturedBallTarget U hnodeU W e r) :=
+  e.subtype (fun x ↦ by
+    rw [apm_t94a08_manifoldChartPuncturedBallSource,
+      apm_t94a08_manifoldChartPuncturedBallTarget]
+    change (_ ∧ x.1 ≠ apm_t94a08_node) ↔
+      (_ ∧ (e x).1 ≠
+        (e ⟨apm_t94a08_node, hnodeU,
+          apm_t94a08_node_mem_sigma2⟩).1)
+    refine and_congr_right fun _ ↦ ?_
+    constructor
+    · intro hx hval
+      apply hx
+      have heq : e x = e ⟨apm_t94a08_node, hnodeU,
+          apm_t94a08_node_mem_sigma2⟩ := Subtype.ext hval
+      exact congrArg Subtype.val (e.injective heq)
+    · intro hx hnode
+      apply hx
+      apply congrArg Subtype.val
+      apply congrArg e
+      exact Subtype.ext hnode)
