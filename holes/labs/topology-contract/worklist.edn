@@ -113853,7 +113853,7 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 10,
+   :stop-count 0,
    :review-finding
    "Recorded fixture hash mismatch: :fixture.sha256 is 0bca6ce32c019fc3053c7f813c26917169cf817375b44d5e722b864b61a526450c1, but ConstructionTargets/PointWedgeVanKampen.blueprint.md at recorded commit c9b3af27 has exact SHA-256 0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0. Re-record the fixture hash for the reviewed commit.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
@@ -113912,7 +113912,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -118972,6 +118972,16 @@
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "sha256/diff-tree/placeholders", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791931210822-10748-9c7865c4",
+     :commands
+     ["git show/diff-tree 7d9f683de"
+      "git archive 7d9f683de; lake env lean archived Blueprint.lean and Main.lean"
+      "sha256sum; placeholder delta; statement-registry.py check"],
+     :finding
+     "Recorded commit adds only the blueprint; fixture/Main hashes match afb497a6/0b3b4888, Main placeholders stay 1->1, registry 166/166. Archived Blueprint and Main compile; sole sorryAx is the declared library boundary. Mathematics is sound: transverse preimage components are circles; disk fillings kill their H1 classes; nonzero Circle H1 map is mono into H1(S)=Z^4; signed local degrees therefore vanish, forcing H2(f)=0, and the frozen degree adapter yields degree=0. All final hypotheses feed the library lemma or adapter; Producer is correctly excluded. This is a valid initial blueprint milestone."},
     :commit "7d9f683de2d6d5ad371b9c3bd59cdf0d3220b4a9",
     :changed-paths ["ConstructionTargets/t00J02Closure.blueprint.md"],
     :fixture
@@ -118980,7 +118990,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -118998,14 +119008,18 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t00J02Closure.blueprint.md"},
    :continue-from
-   "NEXT JOB: copy holes/labs/blueprints/t00J02/BLUEPRINT.md's plan into ConstructionTargets/t00J02Closure.blueprint.md, move the blueprint's proved lemmas into place, then build the LIBRARY obligations one milestone per job.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Blueprint written.",
    :id :program-2026-10-13-close-t00j02,
    :kind :final-adapter,
    :campaign-priority 45,
    :fail-count 0,
    :depends-on [],
    :program true,
-   :other-consumers []}
+   :other-consumers [],
+   :program-history
+   [{:job 1,
+     :commit "7d9f683de2d6d5ad371b9c3bd59cdf0d3220b4a9",
+     :reason "Blueprint written."}]}
   {:consumer :t98A06,
    :stop-count 0,
    :phase :implementation,
