@@ -661,3 +661,33 @@ lemma apm_t94a08_puncturedSigma2ZeroChart_not_isPreconnected :
     ⟨htarget_univ⟩
   exact apm_t94a08_puncturedAffineCross_not_isPreconnected
     (isPreconnected_iff_preconnectedSpace.mpr htarget_space)
+
+lemma apm_t94a08_cross_subset_not_isPreconnected_of_branch_witnesses
+    (S : Set (ℂ × ℂ))
+    (hS : S ⊆ apm_t94a08_puncturedAffineCross)
+    (hplus : ∃ z ∈ S, z ∈ apm_t94a08_affineBranchPlus ∧
+      z ∉ apm_t94a08_affineBranchMinus)
+    (hminus : ∃ z ∈ S, z ∈ apm_t94a08_affineBranchMinus ∧
+      z ∉ apm_t94a08_affineBranchPlus) :
+    ¬ IsPreconnected S := by
+  intro hconn
+  rw [isPreconnected_iff_subset_of_disjoint_closed] at hconn
+  have hcover : S ⊆
+      apm_t94a08_affineBranchPlus ∪ apm_t94a08_affineBranchMinus :=
+    fun z hz ↦ (hS hz).1
+  have hinter : S ∩
+      (apm_t94a08_affineBranchPlus ∩ apm_t94a08_affineBranchMinus) = ∅ := by
+    ext z
+    constructor
+    · intro hz
+      have hzero : z = (0, 0) := by
+        rw [apm_t94a08_affineBranches_inter] at hz
+        simpa using hz.2
+      exact ((hS hz.1).2 (by simpa [hzero])).elim
+    · exact fun hz ↦ hz.elim
+  rcases hconn _ _ apm_t94a08_affineBranchPlus_isClosed
+      apm_t94a08_affineBranchMinus_isClosed hcover hinter with hsub | hsub
+  · obtain ⟨z, hzS, _, hznot⟩ := hminus
+    exact hznot (hsub hzS)
+  · obtain ⟨z, hzS, _, hznot⟩ := hplus
+    exact hznot (hsub hzS)
