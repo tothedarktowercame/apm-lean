@@ -10,7 +10,7 @@ prove the same technical fact (a Wirtinger inequality, convergence of difference
 quotients in the test-function topology, regularity from a weak derivative), state
 that fact as its own lemma and have both depend on it. Otherwise two seats prove it
 twice and the "parallel" layer is not parallel. m98A04 and m98A06 were split by
-conclusion; their QUEUE notes give the split by dependency.
+conclusion; the split by dependency for each is in ~/notes/packets/blueprints/QUEUE.md.
 
 If a problem is already sorry-free in problems/P/lean/Main.lean, say so in
 BLUEPRINT.md and do not copy the file (m97A06).
