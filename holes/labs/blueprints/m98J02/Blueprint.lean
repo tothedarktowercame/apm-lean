@@ -1059,6 +1059,41 @@ lemma apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_translate_iteratedFDeriv
   change iteratedFDeriv ℝ j (fun z => (φ : apm_m98J02_E → ℝ) (x + z)) y = _
   exact iteratedFDeriv_comp_add_left j x y
 
+lemma apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_translate_seminorm
+    (K : TopologicalSpace.Compacts apm_m98J02_E)
+    (hK : (K : Set apm_m98J02_E) ⊆ (⊤ : Opens apm_m98J02_E))
+    (χ : apm_m98J02_Test) (φ : 𝓓_{K}(apm_m98J02_E, ℝ))
+    (x : apm_m98J02_E) (hx : x ∈ tsupport (χ : apm_m98J02_E → ℝ))
+    (j : ℕ) :
+    let K' := apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_translateCompact K χ
+    let τ : 𝓓_{K'}(apm_m98J02_E, ℝ) :=
+      { toFun := fun y => TestFunction.ofSupportedIn hK φ (x + y)
+        contDiff' := (TestFunction.ofSupportedIn hK φ).contDiff.comp
+          (contDiff_const.add contDiff_id)
+        zero_on_compl' := by
+          intro y hy
+          by_contra hne
+          exact hy (apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_translateSupport
+            K χ (TestFunction.ofSupportedIn hK φ) (by
+              change tsupport (φ : apm_m98J02_E → ℝ) ⊆ (K : Set apm_m98J02_E)
+              exact φ.tsupport_subset) x hx
+              (subset_tsupport _ hne)) }
+    ContDiffMapSupportedIn.seminorm ℝ apm_m98J02_E ℝ ⊤ K' j τ ≤
+      ContDiffMapSupportedIn.seminorm ℝ apm_m98J02_E ℝ ⊤ K j φ := by
+  dsimp only
+  have hnonneg : 0 ≤
+      ContDiffMapSupportedIn.seminorm ℝ apm_m98J02_E ℝ ⊤ K j φ := by
+    change 0 ≤ ‖ContDiffMapSupportedIn.structureMapCLM ℝ ⊤ j φ‖
+    positivity
+  apply (ContDiffMapSupportedIn.seminorm_top_le_iff ℝ hnonneg j _).2
+  intro y hy
+  change ‖iteratedFDeriv ℝ j
+    (apm_m98J02_translateTest x (TestFunction.ofSupportedIn hK φ) :
+      apm_m98J02_E → ℝ) y‖ ≤ _
+  rw [apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_translate_iteratedFDeriv]
+  change ‖(ContDiffMapSupportedIn.structureMapCLM ℝ ⊤ j φ) (x + y)‖ ≤ _
+  exact (ContDiffMapSupportedIn.structureMapCLM ℝ ⊤ j φ).norm_coe_le_norm (x + y)
+
 lemma apm_m98J02_bridge_2_aux_psi_aux_stage_cont
     (v : apm_m98J02_Dist) (χ : apm_m98J02_Test)
     (hsmooth : ∀ φ : apm_m98J02_Test,
