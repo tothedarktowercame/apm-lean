@@ -24590,32 +24590,42 @@
    :implements-lemma
    :lemma-constructiontargets-sardconvexdomain-whitneycubecover,
    :evidence
-   {:probe
-    {:outcome :go,
-     :fixture
-     {:path "/tmp/t01a08_b3_representation_probe.lean",
-      :sha256
-      "bf77b01d4a19b661d8ee79fc130963ace32b0a5a3cd9853518d4419dd43a14da"},
-     :commands
-     [{:cmd "lake env lean /tmp/t01a08_b3_representation_probe.lean",
-       :exit 0}
-      {:cmd "sha256sum /tmp/t01a08_b3_representation_probe.lean",
-       :exit 0}],
-     :implementation
-     {:scope ["ConstructionTargets/SardConvexDomain.lean"],
-      :declaration
-      "ConstructionTargets.SardConvexDomain.WhitneyCubeCover",
+   {:placeholder-delta {:t01A08 [1 1]},
+    :residual
+    "Bank B3 representation; next prove closedSet_whitneyCubeCover.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :missing-theorems
+    [{:name "ConstructionTargets.SardConvexDomain.WhitneyCubeCover",
       :type
-      "structure over PseudoMetricSpace E and s:Set E: countable cubes/enlargements/centers/anchors/scales; positive scales; anchors nearest in s; complement cover; ball/closedBall bounds; local finiteness; infDist comparison; finite uniformly bounded overlap",
-      :mode :declaration-found,
-      :source-commit "6ff20638065f666b599cbb132f300dd808b2bea2"},
-     :residual
-     "Bank certificate; then implement closedSet_whitneyCubeCover."}},
+      "B3 certificate: countable complement cover, enlargements, centers, nearest anchors, positive scales, metric bounds, local finiteness, uniformly bounded overlap",
+      :status :proved,
+      :consumers [:t01A08],
+      :depends-on [],
+      :area "sard-convex-domain"}],
+    :statement-hashes {:registry "149/149"},
+    :axioms [],
+    :author :topo-10,
+    :commands
+    [{:cmd "sha256sum /tmp/t01a08_b3_representation_probe.lean",
+      :exit 0}
+     {:cmd "lake env lean /tmp/t01a08_b3_representation_probe.lean",
+      :exit 0}
+     {:cmd
+      "verify source commit; registry check; no sorry/axiom scan; git status",
+      :exit 0}],
+    :commit "6ff20638065f666b599cbb132f300dd808b2bea2",
+    :changed-paths ["ConstructionTargets/SardConvexDomain.lean"],
+    :fixture
+    {:path "/tmp/t01a08_b3_representation_probe.lean",
+     :sha256
+     "bf77b01d4a19b661d8ee79fc130963ace32b0a5a3cd9853518d4419dd43a14da",
+     :mode :post-build-export-check}},
    :mode :declaration-found,
    :phase :implementation,
    :type
    "structure over PseudoMetricSpace E and s:Set E: countable cubes/enlargements/centers/anchors/scales; positive scales; anchors nearest in s; complement cover; ball/closedBall bounds; local finiteness; infDist comparison; finite uniformly bounded overlap",
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain.blueprint/B3/representation",
    :acceptance
@@ -35005,7 +35015,9 @@
     "certificate: countable complement cover, enlargements, anchors, metric bounds, local finiteness, bounded overlap"},
    :lemma
    {:name "ConstructionTargets.SardConvexDomain.WhitneyCubeCover",
-    :reported-by [:r-a08-sard-b3-whitney-cubes-1],
+    :reported-by
+    [:r-a08-sard-b3-whitney-cubes-1
+     :r-a08-sard-b3-representation-bank-1],
     :type
     "certificate: countable complement cover, enlargements, anchors, metric bounds, local finiteness, bounded overlap",
     :area "sard-convex-domain",
