@@ -500,6 +500,30 @@ theorem apm_t97J05_xCharts_isManifold (hc : apm_t97J05_HasXCharts) :
 smooth on the target (where `t 0 ≠ 0`) with derivative `h ↦ (h 0, 0, -h 0 / t 0²)`,
 which is injective (first component). -/
 -- BEGIN SEAT AREA
+lemma apm_t97J05_xCharts_inclusion_aux_isManifold (hc : apm_t97J05_HasXCharts) :
+    letI := apm_t97J05_xChartedSpace hc
+    IsManifold (𝓘(ℝ, apm_t97J05_R1)) (⊤ : ℕ∞) apm_t97J05_W := by
+  letI := apm_t97J05_xChartedSpace hc
+  apply isManifold_of_contDiffOn
+  intro c c' hcmem hc'mem
+  rcases hcmem with ⟨q, rfl⟩
+  rcases hc'mem with ⟨q', rfl⟩
+  let cq := Classical.choose (hc q)
+  let cq' := Classical.choose (hc q')
+  have hq := Classical.choose_spec (hc q)
+  have hq' := Classical.choose_spec (hc q')
+  apply contDiffOn_id.congr
+  intro t ht
+  have httrans : t ∈ (cq.symm ≫ₕ cq').source := by
+    simpa only [mfld_simps] using ht.1
+  have ht_target : t ∈ cq.target := httrans.1
+  have hsymm_source : cq.symm t ∈ cq'.source := httrans.2
+  have hcq' := hq'.2.1 (cq.symm t) hsymm_source
+  have hcq := hq.2.1 (cq.symm t) (by
+    simpa only [cq] using cq.map_target ht_target)
+  have hleft : cq (cq.symm t) = t := cq.right_inv ht_target
+  simpa only [mfld_simps, cq, cq'] using hcq'.trans (hcq.symm.trans hleft)
+
 theorem apm_t97J05_xCharts_inclusion (hc : apm_t97J05_HasXCharts) :
     letI := apm_t97J05_xChartedSpace hc
     ContMDiff (𝓘(ℝ, apm_t97J05_R1)) (𝓘(ℝ, apm_t97J05_R3))
@@ -507,7 +531,78 @@ theorem apm_t97J05_xCharts_inclusion (hc : apm_t97J05_HasXCharts) :
       ∀ x : apm_t97J05_W, Function.Injective
         (mfderiv (𝓘(ℝ, apm_t97J05_R1)) (𝓘(ℝ, apm_t97J05_R3))
           (Subtype.val : apm_t97J05_W → apm_t97J05_R3) x) := by
-  sorry
+  letI := apm_t97J05_xChartedSpace hc
+  letI : IsManifold (𝓘(ℝ, apm_t97J05_R1)) (⊤ : ℕ∞) apm_t97J05_W :=
+    apm_t97J05_xCharts_inclusion_aux_isManifold hc
+  have hsmooth : ContMDiff (𝓘(ℝ, apm_t97J05_R1)) (𝓘(ℝ, apm_t97J05_R3))
+      (⊤ : ℕ∞) (Subtype.val : apm_t97J05_W → apm_t97J05_R3) := by
+    intro q
+    let c := Classical.choose (hc q)
+    have hq := Classical.choose_spec (hc q)
+    rw [contMDiffAt_iff_of_mem_source hq.1
+      (show (q : apm_t97J05_R3) ∈
+        (chartAt apm_t97J05_R3 (q : apm_t97J05_R3)).source by simp)]
+    constructor
+    · exact continuousAt_subtype_val
+    · have hform : ∀ t ∈ c.target,
+          ((Subtype.val : apm_t97J05_W → apm_t97J05_R3) (c.symm t)) =
+            WithLp.toLp 2 ![t 0, (q : apm_t97J05_R3) 1, 1 / t 0] :=
+        fun t ht => (hq.2.2 t ht).2
+      have hs : ContDiffOn ℝ (⊤ : ℕ∞)
+          (fun t : apm_t97J05_R1 =>
+            WithLp.toLp 2 ![t 0, (q : apm_t97J05_R3) 1, 1 / t 0]) c.target := by
+        intro t ht
+        rw [contDiffWithinAt_piLp]
+        intro i
+        fin_cases i <;> simp
+        · exact ((PiLp.proj 2 (fun _ : Fin 1 => ℝ) 0 :
+            apm_t97J05_R1 →L[ℝ] ℝ).contDiff.contDiffWithinAt)
+        · exact contDiffWithinAt_const
+        · exact ((PiLp.proj 2 (fun _ : Fin 1 => ℝ) 0 :
+            apm_t97J05_R1 →L[ℝ] ℝ).contDiff.contDiffWithinAt.inv
+              (hq.2.2 t ht).1)
+      have ht : c q ∈ c.target := c.map_source hq.1
+      have hat := ((hs.congr hform) (c q) ht).contDiffAt (c.open_target.mem_nhds ht)
+      simpa only [mfld_simps, apm_t97J05_xChartedSpace, c] using hat.contDiffWithinAt
+  refine ⟨hsmooth, ?_⟩
+  intro q
+  let P : apm_t97J05_R3 → apm_t97J05_R1 := fun z =>
+    WithLp.toLp 2 ![z 0]
+  have hP : ContMDiff (𝓘(ℝ, apm_t97J05_R3)) (𝓘(ℝ, apm_t97J05_R1))
+      (⊤ : ℕ∞) P := by
+    rw [contMDiff_iff_contDiff]
+    unfold P
+    rw [contDiff_piLp]
+    intro i
+    fin_cases i
+    exact (PiLp.proj 2 (fun _ : Fin 3 => ℝ) 0 :
+      apm_t97J05_R3 →L[ℝ] ℝ).contDiff
+  have hqmem : q ∈ (chartAt apm_t97J05_R1 q).source :=
+    ChartedSpace.mem_chart_source q
+  have hchartAll := mdifferentiable_chart
+    (I := 𝓘(ℝ, apm_t97J05_R1)) q
+  have hchart := hchartAll.mdifferentiableAt hqmem
+  have hval : MDifferentiableAt (𝓘(ℝ, apm_t97J05_R1))
+      (𝓘(ℝ, apm_t97J05_R3))
+      (Subtype.val : apm_t97J05_W → apm_t97J05_R3) q :=
+    hsmooth.mdifferentiableAt (by simp)
+  have hpAt : MDifferentiableAt (𝓘(ℝ, apm_t97J05_R3))
+      (𝓘(ℝ, apm_t97J05_R1)) P (q : apm_t97J05_R3) :=
+    hP.mdifferentiableAt (by simp)
+  have hcomp := hpAt.hasMFDerivAt.comp q hval.hasMFDerivAt
+  have hevent : (chartAt apm_t97J05_R1 q : apm_t97J05_W → apm_t97J05_R1) =ᶠ[nhds q]
+      P ∘ (Subtype.val : apm_t97J05_W → apm_t97J05_R3) := by
+    filter_upwards [(chartAt apm_t97J05_R1 q).open_source.mem_nhds hqmem] with w hw
+    have hw' := (Classical.choose_spec (hc q)).2.1 w hw
+    simpa only [apm_t97J05_xChartedSpace, P, Function.comp_apply] using hw'
+  have hcder := hcomp.congr_of_eventuallyEq hevent
+  have heq := hcder.mfderiv
+  refine fun u v huv => ?_
+  apply hchartAll.mfderiv_injective hqmem
+  rw [heq]
+  exact congrArg (fun z =>
+    mfderiv (𝓘(ℝ, apm_t97J05_R3)) (𝓘(ℝ, apm_t97J05_R1)) P
+      (q : apm_t97J05_R3) z) huv
 -- END SEAT AREA
 
 /-- Global assembly (claude-14 restatement 2026-10-13): explicit x-charts
