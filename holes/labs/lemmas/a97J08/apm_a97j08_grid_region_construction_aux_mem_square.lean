@@ -1992,7 +1992,31 @@ lemma apm_a97j08_grid_region_construction_aux_shift
 -- BEGIN SEAT AREA
 lemma apm_a97j08_grid_region_construction_aux_mem_square (s : ℂ) {ε : ℝ} (hε : 0 < ε)
     (w : ℂ) : ∃ q : ℤ × ℤ, w ∈ apm_a97j08_gridSquare s ε q := by
-  sorry
+  let m : ℤ := ⌊(w.re - s.re) / ε⌋
+  let n : ℤ := ⌊(w.im - s.im) / ε⌋
+  refine ⟨(m, n), ?_⟩
+  simp only [apm_a97j08_gridSquare, Set.mem_setOf_eq]
+  have hm₀ : (m : ℝ) ≤ (w.re - s.re) / ε := by
+    exact Int.floor_le _
+  have hm₁ : (w.re - s.re) / ε < (m : ℝ) + 1 := by
+    exact Int.lt_floor_add_one _
+  have hn₀ : (n : ℝ) ≤ (w.im - s.im) / ε := by
+    exact Int.floor_le _
+  have hn₁ : (w.im - s.im) / ε < (n : ℝ) + 1 := by
+    exact Int.lt_floor_add_one _
+  constructor
+  · rw [le_div_iff₀ hε] at hm₀
+    linarith
+  constructor
+  · have := (div_lt_iff₀ hε).mp hm₁
+    push_cast
+    linarith
+  constructor
+  · rw [le_div_iff₀ hε] at hn₀
+    linarith
+  · have := (div_lt_iff₀ hε).mp hn₁
+    push_cast
+    linarith
 -- END SEAT AREA
 
 -- (P2) Two points of one lattice square are within `2ε`.
