@@ -15,6 +15,25 @@ open ConstructionTargets.RationalLefschetz
 noncomputable section
 namespace ConstructionTargets.t99J05Closure
 
+/-- The literal quotient model `CP 0` has exactly one projective point.  This
+is the geometric base of the projective filtration, proved directly from the
+fixed affine-chart representation rather than replacing `CP 0` by a model. -/
+theorem cp_zero_subsingleton : Subsingleton (CP 0) := by
+  constructor
+  intro x y
+  let i : Fin 1 := 0
+  have hrep (p : CP 0) : Projectivization.rep p i ≠ 0 := by
+    intro hi
+    apply Projectivization.rep_nonzero p
+    funext j
+    have hj : j = i := Fin.ext (by omega)
+    simpa [hj] using hi
+  rw [← chartInverse_coordinates i x (hrep x)]
+  rw [← chartInverse_coordinates i y (hrep y)]
+  apply congrArg (chartInverse i)
+  funext j
+  exact (j.2 (Fin.ext (by omega))).elim
+
 /-- The rational singular-homology data of `CP n` needed by the Lefschetz
 calculation: finite dimensionality in every degree, vanishing above the top
 degree and in odd degrees, and one chosen generator in each surviving even
@@ -63,6 +82,7 @@ noncomputable def complexProjectiveRationalHomologyData_of_zero_of_step
       simpa only [Nat.succ_eq_add_one] using hstep n ih
 
 #print axioms ComplexProjectiveRationalHomologyData.finiteDimensionalAt
+#print axioms cp_zero_subsingleton
 #print axioms ComplexProjectiveRationalHomologyData.subsingleton_of_two_mul_lt
 #print axioms ComplexProjectiveRationalHomologyData.subsingleton_of_odd
 #print axioms complexProjectiveRationalHomologyData_of_zero_of_step
