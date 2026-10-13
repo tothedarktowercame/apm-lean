@@ -4571,6 +4571,32 @@ theorem genericPointWedgeRightReverse_forward_map_comp :
   exact (genericPointWedgeIdentityActualSpan
     x₀ y₀ M N hM hN hy hx cM cN).right.map_id _
 
+/-- The full right comparison has one mapped reverse morphism between its two
+outer restriction counits. -/
+theorem genericPointWedgeCoordinateSpanGlobalRestrictionRightComparison_eq_reverse :
+    let r' := genericPointWedgeCoordinateRight y₀
+    let eR := genericPointWedgeRightGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let r := genericPointWedgeActualRight x₀ y₀ M N
+    let eK := genericPointWedgeOverlapGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let u : FundamentalGroupoid Unit := FundamentalGroupoid.mk ()
+    genericPointWedgeCoordinateSpanGlobalRestrictionRightComparison
+        x₀ y₀ M N hM hN hy hx cM cN =
+      (genericPointWedgeIdentityGlobalRightRestrictionElement
+          x₀ y₀ M N hM hN hy hx cM cN
+            ((r' ⋙ eR.inverse).obj u))⁻¹ *
+        (genericPointWedgeIdentityActualSpan
+          x₀ y₀ M N hM hN hy hx cM cN).right.map
+            (genericPointWedgeRightBaseToInverseBase
+              x₀ y₀ M N hM hN hy hx cM cN) *
+        genericPointWedgeIdentityGlobalRightRestrictionElement
+          x₀ y₀ M N hM hN hy hx cM cN ((eK.inverse ⋙ r).obj u) := by
+  rw [genericPointWedgeCoordinateSpanGlobalRestrictionRightComparison_eq_actual]
+  rw [← genericPointWedgeRightComparison_actualMaps_eq_reverseCanonical]
+  simp only [SingleObj.comp_as_mul, mul_assoc]
+  rfl
+
 omit [PathConnectedSpace X] in
 /-- The connector normal form of the mapped lifted right loop is conjugation
 by the explicit equality transport at its common endpoint. -/
@@ -5653,6 +5679,7 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeRightInverseBaseToRightBaseFromSpan_eq_maps
 #print axioms genericPointWedgeRightInverseBaseToRightBaseFromSpan_map_eq_inv
 #print axioms genericPointWedgeRightReverse_forward_map_comp
+#print axioms genericPointWedgeCoordinateSpanGlobalRestrictionRightComparison_eq_reverse
 #print axioms genericPointWedgeMappedOpenCoverCounit_namedGlueSquare
 #print axioms genericPointWedgeMappedCoordinateSpanCounit_glueSquare
 #print axioms genericPointWedgeMappedCoordinateSpanSourceGlue

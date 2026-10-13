@@ -1028,3 +1028,8 @@ comparison.
 `genericPointWedgeRightReverse_forward_map_comp` records that cancellation
 categorically in the actual free-product representation: mapped reverse
 followed by mapped forward is the identity morphism.
+
+`genericPointWedgeCoordinateSpanGlobalRestrictionRightComparison_eq_reverse`
+uses the categorical combination, then converts composition into the reversed
+multiplication order of the single-object target.  The full right comparison
+now has one mapped reverse morphism between its outer restriction counits.
