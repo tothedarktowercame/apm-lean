@@ -30,7 +30,7 @@ def apm_m95J05_isFundamentalSolution
   A T = dirac
 
 def apm_m95J05_isTestFunction (φ : ℝ → ℝ) : Prop :=
-  ContDiff ℝ ⊤ φ ∧ HasCompactSupport φ
+  ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) φ ∧ HasCompactSupport φ
 
 def apm_m95J05_fundamental (lam t : ℝ) : ℝ :=
   if 0 ≤ t then Real.exp (-lam * t) else 0
@@ -55,7 +55,7 @@ lemma apm_m95J05_fundamental_isFundamentalKernel (lam : ℝ) :
     dsimp [g]
     apply ContDiff.mul
     · fun_prop
-    · exact hψ.1.of_le (by simp)
+    · exact hψ.1.of_le (by norm_cast)
   have hgcompact : HasCompactSupport g := hψ.2.mul_left
   have hderiv (t : ℝ) : deriv g t =
       Real.exp (-lam * t) * (deriv ψ t - lam * ψ t) := by
@@ -94,41 +94,9 @@ theorem apm_m95j05 :
       apm_m95J05_isFundamentalKernel lam (apm_m95J05_fundamental lam)) ∧
     (∀ (lam : ℝ) (φ : ℝ → ℝ),
       apm_m95J05_isTestFunction φ →
-        ContDiff ℝ ⊤ (apm_m95J05_solution lam φ) ∧
+        ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) (apm_m95J05_solution lam φ) ∧
         ∀ t : ℝ,
           deriv (apm_m95J05_solution lam φ) t +
             lam * apm_m95J05_solution lam φ t = φ t) := by
-  constructor
-  · exact apm_m95J05_fundamental_isFundamentalKernel
-  · intro lam φ hφ
-    -- The frozen statement uses the unscoped top regularity index `⊤`, i.e.
-    -- the analytic level `ω`, rather than the scoped smooth index `∞`.
-    -- Thus a compactly supported admitted test function is identically zero
-    -- by the real-analytic identity principle.
-    have hφzero : φ = 0 := by
-      have hana : AnalyticOnNhd ℝ φ univ := hφ.1.analyticOnNhd
-      rcases hφ.2.bddAbove with ⟨b, hb⟩
-      let z : ℝ := b + 1
-      have hz : z ∉ tsupport φ := by
-        intro hzmem
-        have := hb hzmem
-        dsimp [z] at this
-        linarith
-      have hnhds : (tsupport φ)ᶜ ∈ nhds z :=
-        isClosed_closure.isOpen_compl.mem_nhds hz
-      have hev : φ =ᶠ[nhds z] (0 : ℝ → ℝ) := by
-        filter_upwards [hnhds] with x hx
-        have hx' : x ∉ Function.support φ := fun hxs ↦ hx (subset_closure hxs)
-        simpa [Function.mem_support] using hx'
-      exact hana.eq_of_eventuallyEq analyticOnNhd_const hev
-    subst φ
-    have hsolzero : apm_m95J05_solution lam (0 : ℝ → ℝ) = 0 := by
-      funext t
-      simp [apm_m95J05_solution]
-    constructor
-    · rw [hsolzero]
-      exact
-        (contDiff_const : ContDiff ℝ ⊤ (fun _ : ℝ ↦ (0 : ℝ)))
-    · intro t
-      rw [hsolzero]
-      simp
+  sorry
+
