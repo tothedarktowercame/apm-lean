@@ -198,7 +198,63 @@ theorem apm_m98J05_bridge_1
     (f : ℝ → ℂ) (hf_cont : Continuous f) (hf : Integrable f) (x : ℝ) :
     Tendsto (fun t ↦ apm_m98J05_heatSolution f x t)
       (nhdsWithin 0 (Ioi 0)) (nhds (f x)) := by
-  sorry
+  let φ : ℝ → ℝ := fun z ↦
+    (1 / (2 * Real.sqrt Real.pi)) * Real.exp (-(z ^ 2) / 4)
+  have hφ_nonneg : ∀ z, 0 ≤ φ z := by
+    intro z
+    dsimp [φ]
+    positivity
+  have hφ_int : ∫ z : ℝ, φ z = 1 := by
+    simpa [φ, apm_m98J05_heatKernel, mul_assoc] using
+      (apm_m98J05_heatKernel_integral (t := 1) zero_lt_one)
+  have hφ_decay :
+      Tendsto (fun z : ℝ ↦ ‖z‖ ^ Module.finrank ℝ ℝ * φ z)
+        (Bornology.cobounded ℝ) (nhds 0) := by
+    have h := tendsto_rpow_abs_mul_exp_neg_mul_sq_cocompact
+      (a := (1 / 4 : ℝ)) (by norm_num) (1 : ℝ)
+    have h' := h.const_mul (1 / (2 * Real.sqrt Real.pi))
+    rw [mul_zero] at h'
+    rw [Metric.cobounded_eq_cocompact]
+    refine h'.congr' ?_
+    filter_upwards with z
+    simp only [φ, Module.finrank_self, pow_one, Real.norm_eq_abs, Real.rpow_one]
+    ring
+  have H := tendsto_integral_comp_smul_smul_of_integrable' (x₀ := x)
+    hφ_nonneg hφ_int hφ_decay hf hf_cont.continuousAt
+  have hc : Tendsto (fun t : ℝ ↦ (Real.sqrt t)⁻¹)
+      (nhdsWithin 0 (Ioi 0)) atTop := by
+    apply Filter.Tendsto.inv_tendsto_nhdsGT_zero
+    refine tendsto_inf.2 ⟨?_, ?_⟩
+    · simpa using
+        (Real.continuous_sqrt.continuousAt.mono_left inf_le_left :
+          Tendsto Real.sqrt (nhdsWithin 0 (Ioi 0)) (nhds (Real.sqrt 0)))
+    exact tendsto_principal.2 (by
+      filter_upwards [self_mem_nhdsWithin] with t ht
+      exact Real.sqrt_pos.2 ht)
+  have HH := H.comp hc
+  apply HH.congr'
+  filter_upwards [self_mem_nhdsWithin] with t ht
+  have ht0 : 0 < t := ht
+  unfold apm_m98J05_heatSolution
+  apply MeasureTheory.integral_congr_ae
+  filter_upwards with y
+  simp only [Module.finrank_self, pow_one, smul_eq_mul]
+  have hs : Real.sqrt t ≠ 0 := ne_of_gt (Real.sqrt_pos.2 ht0)
+  have hsqrtpi : Real.sqrt (Real.pi * t) = Real.sqrt Real.pi * Real.sqrt t := by
+    rw [Real.sqrt_mul (le_of_lt Real.pi_pos)]
+  have hexp :
+      -(((Real.sqrt t)⁻¹ * (x - y)) ^ 2) / 4 = -(x - y) ^ 2 / (4 * t) := by
+    field_simp [hs]
+    nlinarith [Real.sq_sqrt (le_of_lt ht0)]
+  have hk : (Real.sqrt t)⁻¹ * φ ((Real.sqrt t)⁻¹ * (x - y)) =
+      apm_m98J05_heatKernel t (x - y) := by
+    unfold apm_m98J05_heatKernel
+    dsimp [φ]
+    rw [hexp, hsqrtpi]
+    field_simp [hs]
+  rw [hk]
+  change (apm_m98J05_heatKernel t (x - y) : ℂ) * f y = _
+  rw [mul_comm]
 
 /-- Why this unblocks `apm_m98j05`: domination by derivatives of a positive-
 time Gaussian justifies differentiating the convolution in both variables;
