@@ -22675,26 +22675,22 @@
      :typed-residual-change
      :infrastructure-packets
      :review-outcomes]},
+   :review-finding
+   "Blueprint remains false as written. B3 assumes only IsClosed s yet requires a chosen nearest point in s for every Whitney cube; take s=∅, when no such point exists. Also B1 invokes unique within derivatives from nonempty interior, but B7/B9 assume only s.Nonempty, so their stated hypotheses do not supply B1. Add s.Nonempty to B3 and (interior s).Nonempty through B1/B2/B7/B9 (then B10 supplies it), or prove an affine-hull/nonunique-jet replacement. Fresh priorities also contradict recorded A08 7/1: they report 7 banked, 2 backlog.",
    :evidence
    {:outcome :replan,
-    :seat "topo-12",
+    :disposition :replan,
+    :author "topo-12",
     :commands
     [{:cmd
       "bb holes/labs/topology-contract/build_step.bb priorities holes/labs/topology-contract/worklist3.edn",
       :exit 0}],
-    :finding
-    {:measures "Δ0;A08 7/1;blueprint PASS",
-     :routes
-     "A02:2/13,A03:2/6,J02+98A02:1/10,A08:1/1,1J01:3/4,2A04:3/8,3J02:2/8,3J03:4/11,91J05:3/7,92J05+97J02:3/15,94J04:2/10,95J06:2/8,96A01:1/12,96A02:1/8,96J06:2/4,97A05+6:1/11",
-     :review "Whitney B1-B7 repairs B6; B8-B11 use ambient Sard."},
-    :lemmas
-    [{:name
-      "ConstructionTargets.SardConvexDomain.ContDiffOn.convexWithinJet",
-      :type "blueprint B1",
-      :status :not-started,
-      :consumers [:t01A08],
-      :depends-on [],
-      :area "sard-convex-domain"}],
+    :review
+    {:outcome :fail,
+     :seat "codex-11",
+     :job "invoke-1791868439806-8512-f5a948da",
+     :finding
+     "Blueprint remains false as written. B3 assumes only IsClosed s yet requires a chosen nearest point in s for every Whitney cube; take s=∅, when no such point exists. Also B1 invokes unique within derivatives from nonempty interior, but B7/B9 assume only s.Nonempty, so their stated hypotheses do not supply B1. Add s.Nonempty to B3 and (interior s).Nonempty through B1/B2/B7/B9 (then B10 supplies it), or prove an affine-hull/nonunique-jet replacement. Fresh priorities also contradict recorded A08 7/1: they report 7 banked, 2 backlog."},
     :replacement-items
     [{:bounded-exception "Rule0 B1.",
       :consumer :t01A08,
@@ -22737,10 +22733,22 @@
       :depends-on [:r-a08-sard-b1-1],
       :current-residual "Elect next node.",
       :other-consumers []}],
-    :author "topo-12",
-    :disposition :replan},
+    :finding
+    {:measures "Δ0;A08 7/1;blueprint PASS",
+     :routes
+     "A02:2/13,A03:2/6,J02+98A02:1/10,A08:1/1,1J01:3/4,2A04:3/8,3J02:2/8,3J03:4/11,91J05:3/7,92J05+97J02:3/15,94J04:2/10,95J06:2/8,96A01:1/12,96A02:1/8,96J06:2/4,97A05+6:1/11",
+     :review "Whitney B1-B7 repairs B6; B8-B11 use ambient Sard."},
+    :lemmas
+    [{:name
+      "ConstructionTargets.SardConvexDomain.ContDiffOn.convexWithinJet",
+      :type "blueprint B1",
+      :status :not-started,
+      :consumers [:t01A08],
+      :depends-on [],
+      :area "sard-convex-domain"}],
+    :seat "topo-12"},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :repair,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance {:strategy "Review B6 repair."},
@@ -22755,7 +22763,7 @@
    :implements-lemma
    :lemma-constructiontargets-sardconvexdomain-contdiffon-convexwithinjet,
    :phase :probe,
-   :state :blocked,
+   :state :superseded,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain.blueprint/B1",
    :acceptance
@@ -22782,7 +22790,7 @@
      :infrastructure-packets
      :review-outcomes]},
    :phase :strategy,
-   :state :blocked,
+   :state :superseded,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance {:strategy "Rerank after B1."},
