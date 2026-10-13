@@ -517,7 +517,19 @@ lemma apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_equa
     (hYz : ∀ t ∈ Set.Icc a b, p t * deriv Y t = z t)
     (hz : ∀ t ∈ Set.Icc a b, HasDerivWithinAt z (q t * Y t + g t) (Set.Icc a b) t) :
     ∀ t ∈ Set.Icc a b, deriv (fun x => p x * deriv Y x) t - q t * Y t = g t := by
-  sorry
+  intro t ht
+  let P : ℝ → ℝ := fun x ↦ p x * deriv Y x
+  have hP : ContDiff ℝ 1 P := hp.mul hY.deriv'
+  have hPat : HasDerivAt P (deriv P t) t :=
+    (hP.differentiable (by norm_num) t).hasDerivAt
+  have hzP : HasDerivWithinAt P (q t * Y t + g t) (Set.Icc a b) t :=
+    (hz t ht).congr (fun x hx ↦ hYz x hx) (hYz t ht)
+  have heq := (uniqueDiffOn_Icc hab t ht).eq
+    hPat.hasDerivWithinAt.hasFDerivWithinAt hzP.hasFDerivWithinAt
+  have heq' := congrArg (fun L : ℝ →L[ℝ] ℝ ↦ L 1) heq
+  have : deriv P t = q t * Y t + g t := by simpa using heq'
+  change deriv P t - q t * Y t = g t
+  linarith
 
 lemma apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp
     (a b p₀ : ℝ) (hab : a < b) (hp₀ : 0 < p₀)
