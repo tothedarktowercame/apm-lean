@@ -113897,6 +113897,17 @@
       "lake build ConstructionTargets.ThreeCirclesFundamentalGroup",
       :exit 1,
       :finding "B12 absent."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791902821548-9887-8fda7efd",
+     :commands
+     ["git show/diff 51177486^..51177486"
+      "git archive 51177486; lake env lean archived PointWedgeVanKampen.lean"
+      "sha256/diff-tree/placeholder checks; statement-registry.py check"
+      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (expected absent)"],
+     :finding
+     "Reviewer codex-3. PASS program STOP: 51177486 adds two compiled, sorry-free results after 2a0d3b15. The exact funInvIdAssoc component formula correctly lifts the mapped identity to a dependent HEq; transport by the named coordinate-object equality then makes its connector normal form one via normalForm_id. Scope is Lean+MD only; hashes match ledger (0b5ea9af/0a6870c7/0bca6ce3), placeholders 0, registry 150/150, axioms standard only. Residual: transport this normal form to the chosen base, combine inverse-span, then projection=1, inl, B6/B12; B12 absent."},
     :commit "51177486ba5786906edc01f792df135a699b5e2f",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
@@ -113907,7 +113918,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113928,7 +113939,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Shifted recurrence and mapped identity proved.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Shifted round-trip normal form is identity.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -114705,7 +114716,10 @@
      :reason "Typed coordinate-side identity square banked."}
     {:job 4,
      :commit "2a0d3b15c93e88999fafc9057bbdb7b01ea0a979",
-     :reason "Shifted recurrence and mapped identity proved."}]}
+     :reason "Shifted recurrence and mapped identity proved."}
+    {:job 5,
+     :commit "51177486ba5786906edc01f792df135a699b5e2f",
+     :reason "Shifted round-trip normal form is identity."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
