@@ -704,6 +704,14 @@ lemma apm_t96j07_local_number_axis0_coords_inv (x : apm_t96j07_RP3)
   · simp [apm_t96j07_local_number_axis0_inv,
       apm_t96j07_local_number_axis0_coords, div_eq_inv_mul]
 
+lemma apm_t96j07_local_number_axis0_aux_chart_rep_ne
+    (v : apm_t96j07_V) (hv : v ≠ 0) (i : Fin 4) (hi : v i ≠ 0) :
+    (Projectivization.mk ℝ v hv).rep i ≠ 0 := by
+  obtain ⟨a, ha⟩ := Projectivization.exists_smul_eq_mk_rep ℝ v hv
+  have hai := congrFun ha i
+  rw [← hai]
+  exact mul_ne_zero (Units.ne_zero a) hi
+
 lemma apm_t96j07_local_number_axis0_aux_chart
     (hgen : ∀ i : Fin 4, ∃ chart : OpenPartialHomeomorph apm_t96j07_RP3 apm_t96j07_E3,
         (∀ p, p ∈ chart.source ↔ p.rep i ≠ 0) ∧ chart.target = Set.univ ∧
@@ -727,7 +735,37 @@ lemma apm_t96j07_local_number_axis0_aux_chart
       (∀ y, f (chart.symm y) ∈ chart.source) ∧
       (∀ y, chart (f (chart.symm y)) =
         WithLp.toLp 2 (fun j => (j.val + 2 : ℝ) * y j)) := by
-  sorry
+  obtain ⟨chart, hsource, htarget, hchart, hinv⟩ := hgen 0
+  refine ⟨chart, ?_, ?_, htarget, ?_, ?_, ?_⟩
+  · rw [hsource]
+    apply apm_t96j07_local_number_axis0_aux_chart_rep_ne
+    simp [apm_t96j07_axis]
+  · rw [hchart _ _ (by simp [apm_t96j07_axis])]
+    ext j
+    simp [apm_t96j07_axis]
+  · intro y
+    apply chart.map_target
+    rw [htarget]
+    exact Set.mem_univ y
+  · intro y
+    obtain ⟨hv, hy⟩ := hinv y
+    rw [hy, hformula]
+    rw [hsource]
+    apply apm_t96j07_local_number_axis0_aux_chart_rep_ne
+    show apm_t96j07_A (Fin.insertNth 0 1 (WithLp.ofLp y)) 0 ≠ 0
+    norm_num [apm_t96j07_A]
+  · intro y
+    obtain ⟨hv, hy⟩ := hinv y
+    rw [hy, hformula]
+    have hA0 : apm_t96j07_A (Fin.insertNth 0 1 (WithLp.ofLp y)) 0 ≠ 0 := by
+      norm_num [apm_t96j07_A]
+    rw [hchart _ _ hA0]
+    ext j
+    simp only [WithLp.ofLp_toLp, apm_t96j07_A, Fin.succAbove_zero,
+      Fin.insertNth_zero, Fin.cons_succ, Fin.cons_zero]
+    simp only [Fin.val_succ, Fin.val_zero, cast_eq, Nat.cast_add, Nat.cast_one,
+      Nat.cast_zero, zero_add, mul_one, div_one]
+    ring
 
 theorem apm_t96j07_local_number_axis0
     (f : C(apm_t96j07_RP3, apm_t96j07_RP3))
