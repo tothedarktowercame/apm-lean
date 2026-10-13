@@ -36106,7 +36106,7 @@
   {:consumer :t93J03,
    :stop-count 3,
    :review-finding
-   "Blueprint repair is vacuous: C3 extracts hslsc x and pairs that independent certificate with a lift proved solely by the subgroup criterion; C5 destructures and discards the certificate. Thus SemilocallySimplyConnected still contributes nothing to the final conclusion. Do not pad an intermediate conclusion to simulate use; either give a proof step whose result depends on hslsc, or revise the frozen statement/global hypothesis-coverage requirement through the owning process.",
+   "Blueprint still fails the required hypothesis-coverage gate: the frozen SemilocallySimplyConnected X argument is anonymous in C5 and unused by C1-C4. Commit 512a220f correctly retracts the vacuous certificate workaround and documents the conflict, but does not repair it. Owner must explicitly waive/revise the global gate or revise the frozen statement before this blueprint can PASS.",
    :evidence
    {:placeholder-delta {:t93J03 [1 1]},
     :residual
@@ -36138,6 +36138,12 @@
       :exit 0}
      {:cmd "registry; defect/retraction scans; diff checks", :exit 0}
      {:cmd "git commit; scoped commit; placeholder recount", :exit 0}],
+    :review
+    {:outcome :fail,
+     :seat "codex-11",
+     :job "invoke-1791919956969-10290-5706f71c",
+     :finding
+     "Blueprint still fails the required hypothesis-coverage gate: the frozen SemilocallySimplyConnected X argument is anonymous in C5 and unused by C1-C4. Commit 512a220f correctly retracts the vacuous certificate workaround and documents the conflict, but does not repair it. Owner must explicitly waive/revise the global gate or revise the frozen statement before this blueprint can PASS."},
     :commit "512a220f610893826b53df094fdc793cb0028bc6",
     :changed-paths ["ConstructionTargets/t93J03Closure.blueprint.md"],
     :fixture
@@ -36147,7 +36153,7 @@
      :mode :blueprint},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :repair,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -36169,7 +36175,7 @@
    :id :program-2026-10-13-close-t93j03,
    :kind :final-adapter,
    :campaign-priority 30,
-   :fail-count 2,
+   :fail-count 3,
    :depends-on [],
    :program true,
    :other-consumers []}
