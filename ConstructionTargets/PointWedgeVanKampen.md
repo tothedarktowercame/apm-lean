@@ -1265,5 +1265,9 @@ That triangle reduction is now explicit in
 `genericPointWedgeOverlap_inverse_map_functor_map_unitInv`, and
 `genericPointWedgeOuterRightSpan_transport_map_eq_precedingUnitInv` rewrites
 the transported side as the right target image of the preceding overlap
-round-trip component.  The residual is to identify the shifted span component
-and close the resulting recurrence at the unique coordinate object.
+round-trip component.
+`genericPointWedgeOuterRightSpan_shiftedComponent_heq` now identifies the
+shifted and unshifted inverse-span components with their dependent endpoints
+preserved, using uniqueness of objects in `FundamentalGroupoid Unit`.  The
+residual is to transport the whole typed naturality square across this `HEq`
+and close the resulting fixed-component recurrence.

@@ -6328,6 +6328,34 @@ theorem genericPointWedgeOuterRightSpan_transport_map_eq_precedingUnitInv :
     genericPointWedgeOverlap_inverse_map_functor_map_unitInv]
   rfl
 
+omit [PathConnectedSpace X] [PathConnectedSpace Y] in
+/-- The shifted and unshifted inverse right-span components are dependently
+equal, since their arguments are objects of `FundamentalGroupoid Unit`. -/
+theorem genericPointWedgeOuterRightSpan_shiftedComponent_heq :
+    let eK := genericPointWedgeOverlapGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let aR := genericPointWedgeRightSpanIso
+      x₀ y₀ M N hM hN hy hx cM cN
+    let z := genericPointWedgeOverlapBase x₀ y₀ M N
+    HEq (aR.inv.app
+        (eK.functor.obj ((eK.functor ⋙ eK.inverse).obj z)))
+      (aR.inv.app (eK.functor.obj z)) := by
+  dsimp only
+  have h :
+      (genericPointWedgeOverlapGroupoidEquivalence
+          x₀ y₀ M N hM hN hy hx cM cN).functor.obj
+          (((genericPointWedgeOverlapGroupoidEquivalence
+              x₀ y₀ M N hM hN hy hx cM cN).functor ⋙
+            (genericPointWedgeOverlapGroupoidEquivalence
+              x₀ y₀ M N hM hN hy hx cM cN).inverse).obj
+            (genericPointWedgeOverlapBase x₀ y₀ M N)) =
+        (genericPointWedgeOverlapGroupoidEquivalence
+          x₀ y₀ M N hM hN hy hx cM cN).functor.obj
+            (genericPointWedgeOverlapBase x₀ y₀ M N) :=
+    Subsingleton.elim _ _
+  cases h
+  rfl
+
 /-- An `inl` factorization of the right-base conjugator forces its canonical
 right projection to be trivial. -/
 theorem genericPointWedgeRightBase_inl_implies_rightProjection_eq_one
@@ -7057,6 +7085,7 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeOuterRightSpan_unitInv_coordinateMap_eq_id
 #print axioms genericPointWedgeOverlap_inverse_map_functor_map_unitInv
 #print axioms genericPointWedgeOuterRightSpan_transport_map_eq_precedingUnitInv
+#print axioms genericPointWedgeOuterRightSpan_shiftedComponent_heq
 #print axioms genericPointWedgeRightBase_inl_implies_rightProjection_eq_one
 #print axioms genericPointWedgeLegCoordinates_of_mapped
 #print axioms genericPointWedgeLegCoordinates_iff_mapped
