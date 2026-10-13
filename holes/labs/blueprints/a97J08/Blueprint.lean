@@ -2197,7 +2197,27 @@ lemma apm_a97j08_squareSum_outside_aux_halfplane {z shift : ℂ} {δ : ℝ}
     ∃ c : ℂ, ∀ v ∈ ({(q.1, q.2), (q.1 + 1, q.2), (q.1 + 1, q.2 + 1), (q.1, q.2 + 1)} :
         Finset (ℤ × ℤ)),
       0 < (c * (apm_a97j08_gridVertex shift δ v - z)).re := by
-  sorry
+  rcases hcase with hleft | hright | hbelow | habove
+  · refine ⟨1, fun v hv => ?_⟩
+    simp only [Finset.mem_insert, Finset.mem_singleton] at hv
+    rcases hv with rfl | rfl | rfl | rfl <;>
+      simp [apm_a97j08_gridVertex, Complex.mul_re] <;>
+      push_cast <;> nlinarith
+  · refine ⟨-1, fun v hv => ?_⟩
+    simp only [Finset.mem_insert, Finset.mem_singleton] at hv
+    rcases hv with rfl | rfl | rfl | rfl <;>
+      simp [apm_a97j08_gridVertex, Complex.mul_re] <;>
+      push_cast <;> nlinarith
+  · refine ⟨-Complex.I, fun v hv => ?_⟩
+    simp only [Finset.mem_insert, Finset.mem_singleton] at hv
+    rcases hv with rfl | rfl | rfl | rfl <;>
+      simp [apm_a97j08_gridVertex, Complex.mul_re] <;>
+      push_cast <;> nlinarith
+  · refine ⟨Complex.I, fun v hv => ?_⟩
+    simp only [Finset.mem_insert, Finset.mem_singleton] at hv
+    rcases hv with rfl | rfl | rfl | rfl <;>
+      simp [apm_a97j08_gridVertex, Complex.mul_re] <;>
+      push_cast <;> nlinarith
 
 lemma apm_a97j08_squareSum_outside_aux_core {z shift : ℂ} {δ : ℝ}
     (hδ : 0 < δ) (q : ℤ × ℤ)
