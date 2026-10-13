@@ -48,7 +48,19 @@ theorem apm_m96A02_iterate_contraction_fixed_point
     (M : Type*) [MetricSpace M] [CompleteSpace M] [Nonempty M] (T : M → M)
     (hT : ∃ N : ℕ, 1 ≤ N ∧ apm_m96a02_IsContraction (T^[N])) :
     ∃! x : M, T x = x := by
-  sorry
+  obtain ⟨N, hN, k, hk0, hk1, hk⟩ := hT
+  let K : NNReal := ⟨k, hk0⟩
+  have hK : ContractingWith K (T^[N]) := by
+    refine ⟨?_, ?_⟩
+    · exact_mod_cast hk1
+    · apply LipschitzWith.of_dist_le_mul
+      intro x y
+      simpa [K] using hk x y
+  let xstar : M := ContractingWith.fixedPoint (T^[N]) hK
+  refine ⟨xstar, ?_, ?_⟩
+  · exact hK.isFixedPt_fixedPoint_iterate
+  · intro y hy
+    exact hK.fixedPoint_unique (Function.IsFixedPt.iterate hy N)
 -- END SEAT AREA
 
 theorem apm_m96A02_lipschitz_ode
