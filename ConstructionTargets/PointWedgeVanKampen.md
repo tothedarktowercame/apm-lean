@@ -1280,3 +1280,9 @@ identity by `genericPointWedgeOuterRightSpan_naturality_coordinateIdentity`.
 The residual is to transport the identity and inverse-span component together
 across the named coordinate-object equality and close the resulting
 fixed-component recurrence.
+`genericPointWedgeOuterRightSpan_fixedComponent_recurrence` performs that
+dependent transport.  Cancelling its inverse-span isomorphism component gives
+`genericPointWedgeOuterRightSpan_precedingUnitInv_map_eq_id`: the remaining
+mapped overlap `unitInv` is the identity.  The next step is to substitute this
+identity into the two connector normal forms and prove their product has right
+projection one.

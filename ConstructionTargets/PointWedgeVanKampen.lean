@@ -6408,6 +6408,60 @@ theorem genericPointWedgeOuterRightSpan_naturality_coordinateIdentity :
   rw [genericPointWedgeOuterRightSpan_unitInv_coordinateMap_eq_id] at hn
   exact hn
 
+omit [PathConnectedSpace X] [PathConnectedSpace Y] in
+/-- After transporting along the named coordinate-object equality, the
+inverse-span square is a recurrence at one fixed coordinate component. -/
+theorem genericPointWedgeOuterRightSpan_fixedComponent_recurrence :
+    let r := genericPointWedgeActualRight x₀ y₀ M N
+    let eK := genericPointWedgeOverlapGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let eR := genericPointWedgeRightGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let aR := genericPointWedgeRightSpanIso
+      x₀ y₀ M N hM hN hy hx cM cN
+    let z := genericPointWedgeOverlapBase x₀ y₀ M N
+    aR.inv.app (eK.functor.obj z) =
+      aR.inv.app (eK.functor.obj z) ≫
+        (r ⋙ eR.functor).map
+          (eK.unitInv.app ((eK.functor ⋙ eK.inverse).obj z)) := by
+  dsimp only
+  have h := genericPointWedgeOverlap_shiftedCoordinateObject_eq
+    x₀ y₀ M N hM hN hy hx cM cN
+  have hn := genericPointWedgeOuterRightSpan_naturality_coordinateIdentity
+    x₀ y₀ M N hM hN hy hx cM cN
+  dsimp only at h hn
+  cases h
+  simpa using hn
+
+omit [PathConnectedSpace X] [PathConnectedSpace Y] in
+/-- Cancelling the inverse-span isomorphism component in the fixed recurrence
+shows that the preceding transported overlap component maps to identity. -/
+theorem genericPointWedgeOuterRightSpan_precedingUnitInv_map_eq_id :
+    let r := genericPointWedgeActualRight x₀ y₀ M N
+    let eK := genericPointWedgeOverlapGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let eR := genericPointWedgeRightGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let z := genericPointWedgeOverlapBase x₀ y₀ M N
+    HEq ((r ⋙ eR.functor).map
+        (eK.unitInv.app ((eK.functor ⋙ eK.inverse).obj z)))
+      (𝟙 ((r ⋙ eR.functor).obj z)) := by
+  dsimp only
+  have h := genericPointWedgeOverlap_shiftedCoordinateObject_eq
+    x₀ y₀ M N hM hN hy hx cM cN
+  have hr := genericPointWedgeOuterRightSpan_fixedComponent_recurrence
+    x₀ y₀ M N hM hN hy hx cM cN
+  dsimp only at h hr
+  cases h
+  apply heq_of_eq
+  apply (cancel_epi
+    ((genericPointWedgeRightSpanIso
+      x₀ y₀ M N hM hN hy hx cM cN).inv.app
+        ((genericPointWedgeOverlapGroupoidEquivalence
+          x₀ y₀ M N hM hN hy hx cM cN).functor.obj
+            (genericPointWedgeOverlapBase x₀ y₀ M N)))).mp
+  exact hr.symm.trans (Category.comp_id _).symm
+
 /-- An `inl` factorization of the right-base conjugator forces its canonical
 right projection to be trivial. -/
 theorem genericPointWedgeRightBase_inl_implies_rightProjection_eq_one
@@ -7141,6 +7195,8 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeOuterRightSpan_shiftedComponent_heq
 #print axioms genericPointWedgeOuterRightSpan_naturality_precedingUnitInv
 #print axioms genericPointWedgeOuterRightSpan_naturality_coordinateIdentity
+#print axioms genericPointWedgeOuterRightSpan_fixedComponent_recurrence
+#print axioms genericPointWedgeOuterRightSpan_precedingUnitInv_map_eq_id
 #print axioms genericPointWedgeRightBase_inl_implies_rightProjection_eq_one
 #print axioms genericPointWedgeLegCoordinates_of_mapped
 #print axioms genericPointWedgeLegCoordinates_iff_mapped
