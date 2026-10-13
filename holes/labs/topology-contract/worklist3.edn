@@ -23717,7 +23717,7 @@
    :consumer :t01A08,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "Recorded commit is invalid: f032efae9d1501f7ddfe93c66668f88f24ed37f4 is absent locally and origin rejects it as not our ref. The intended scoped commit appears to be f032efae9b89fb527a72ea9192f3c89f09f82615. Repair the row to record the exact existing full SHA, then rerun independent review.",
    :implements-lemma
@@ -23725,18 +23725,12 @@
    :evidence
    {:placeholder-delta {:t01A08 [1 1]},
     :residual
-    "Choose hf's neighborhood; induct at interior points; extend over neighborhood∩interior; combine swaps and adjacent closure; B1.",
+    "Take hf.eventually set in nhdsWithin s; its interior intersection remains dense at x; induct there, extend symmetry, combine swaps; B1.",
     :outcome :stop,
     :warnings [],
     :missing-theorems
-    [{:name "ContinuousWithinAt.eq_of_eqOn_of_mem_closure",
-      :type "equality extends from smaller-set closure",
-      :status :proved,
-      :consumers [:t01A08],
-      :depends-on [],
-      :area "sard-convex-domain"}
-     {:name "mem_closure_inter_of_mem_nhds",
-      :type "closure survives neighborhood intersection",
+    [{:name "mem_closure_inter_of_mem_nhdsWithin",
+      :type "closure survives intersection with relative neighborhood",
       :status :proved,
       :consumers [:t01A08],
       :depends-on [],
@@ -23746,36 +23740,19 @@
       :type "C∞ within implies permutation invariance",
       :status :partial,
       :consumers [:t01A08],
-      :depends-on
-      ["ContinuousWithinAt.eq_of_eqOn_of_mem_closure"
-       "mem_closure_inter_of_mem_nhds"],
+      :depends-on ["mem_closure_inter_of_mem_nhdsWithin"],
       :area "sard-convex-domain"}],
     :statement-hashes {:registry "147/147"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Localized closure equality proved; apply it on hf's neighborhood, then induct.",
+    "Relative-neighborhood closure localization proved; instantiate with hf.eventually and assemble induction.",
     :commands
     [{:cmd
       "lake build scoped module; lean helper/fixture; hash/scope/registry checks",
       :exit 0}],
-    :diagnostic-history
-    [{:cmd "closure-inter draft",
-      :exit 1,
-      :correction "used nhdsWithin membership theorem; compiled"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1791881952121-9214-6ba6c845",
-     :commands
-     ["git show/diff 033eb5b8; scope and recorded-tree checks"
-      "lake build ConstructionTargets.SardConvexDomain"
-      "lake env lean fixture and /tmp/CheckSardLocalClosure.lean"
-      "sha256sum fixture; statement-registry check; placeholder recount"],
-     :finding
-     "PASS: valid STOP after real progress. One-file commit proves both localization tools correctly: T2 uniqueness extends EqOn from any smaller set whose closure contains x, and intersecting that set with a neighborhood preserves closure membership. Hypothesis directions and nhdsWithin representation are correct. Build/export pass; fixture hash matches; standard axioms only; registry 147/147; sorry/admit 0->0. Applying them in the smooth-neighborhood induction remains listed."},
-    :commit "033eb5b87896f0eafa050c5a9e329aba11d92bbf",
+    :commit "02cb50369f7b686cc693544825add1c02095af1a",
     :changed-paths ["ConstructionTargets/SardConvexDomain.lean"],
     :fixture
     {:path "/tmp/t01a08_smooth_symmetry_membership_probe.lean",
@@ -23784,7 +23761,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain/B1/symmetry",
    :acceptance
@@ -33749,7 +33726,8 @@
     :lemma-continuouswithinat-eq-of-eqon-interior-of-mem-closure
     :lemma-contdiffwithinat-domdomcongr-iteratedfderivwithin-of-eqon-interior
     :lemma-continuouswithinat-eq-of-eqon-of-mem-closure
-    :lemma-mem-closure-inter-of-mem-nhds],
+    :lemma-mem-closure-inter-of-mem-nhds
+    :lemma-mem-closure-inter-of-mem-nhdswithin],
    :other-consumers []}
   {:consumer :t01A08,
    :phase :lemma,
@@ -33983,6 +33961,23 @@
     :banked-by :r-a08-symmetry-slots-1,
     :banked-commit "033eb5b87896f0eafa050c5a9e329aba11d92bbf"},
    :id :lemma-mem-closure-inter-of-mem-nhds,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t01A08,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "mem_closure_inter_of_mem_nhdsWithin",
+    :type "closure survives intersection with relative neighborhood"},
+   :lemma
+   {:name "mem_closure_inter_of_mem_nhdsWithin",
+    :reported-by [:r-a08-symmetry-slots-1],
+    :type "closure survives intersection with relative neighborhood",
+    :area "sard-convex-domain",
+    :proved-in :r-a08-symmetry-slots-1},
+   :id :lemma-mem-closure-inter-of-mem-nhdswithin,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}],
