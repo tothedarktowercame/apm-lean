@@ -23219,7 +23219,37 @@
    :consumer :t01A08,
    :implements-lemma
    :lemma-contdiffwithinat-domdomcongr-iteratedfderivwithin-of-infty,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:outcome :go,
+     :seat "topo-12",
+     :fixture
+     {:path "/tmp/t01a08_smooth_symmetry_closure_probe.lean",
+      :sha256
+      "1f735b44b345e872ea336a1b79fe51f67c951de83fe0bf5b03b5912efcad80a8",
+      :mode :post-build-export-check},
+     :commands
+     [{:cmd
+       "lake env lean /tmp/t01a08_smooth_symmetry_closure_probe.lean && sha256sum /tmp/t01a08_smooth_symmetry_closure_probe.lean && python3 scripts/statement-registry.py check",
+       :exit 0}],
+     :axioms
+     ["propext"
+      "Classical.choice"
+      "Quot.sound"
+      "ContDiffWithinAt.domDomCongr_iteratedFDerivWithin_of_infty"],
+     :implementation
+     {:scope ["ConstructionTargets/SardConvexDomain.lean"],
+      :declaration
+      "ContDiffWithinAt.domDomCongr_iteratedFDerivWithin_of_infty",
+      :type
+      "{E F} [NormedAddCommGroup E] [NormedSpace ℝ E] [NormedAddCommGroup F] [NormedSpace ℝ F] {s} {f} {x} → ContDiffWithinAt ℝ ∞ f s x → UniqueDiffOn ℝ s → x ∈ closure (interior s) → ∀ {n} (σ : Equiv.Perm (Fin n)), (iteratedFDerivWithin ℝ n f s x).domDomCongr σ = iteratedFDerivWithin ℝ n f s x",
+      :proof-plan
+      "Prove adjacent-transposition symmetry using finite-smooth Schwarz at closure(interior s), then induct over permutations."},
+     :residual
+     "Implement corrected finite-smooth permutation symmetry; B1 derives closure membership from convexity and nonempty interior."}},
+   :phase :implementation,
+   :type
+   "{E F} [NormedAddCommGroup E] [NormedSpace ℝ E] [NormedAddCommGroup F] [NormedSpace ℝ F] {s} {f} {x} → ContDiffWithinAt ℝ ∞ f s x → UniqueDiffOn ℝ s → x ∈ closure (interior s) → ∀ {n} (σ : Equiv.Perm (Fin n)), (iteratedFDerivWithin ℝ n f s x).domDomCongr σ = iteratedFDerivWithin ℝ n f s x",
    :state :open,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain/B1/symmetry",
@@ -23233,9 +23263,13 @@
    :id :r-a08-symmetry-closure-1,
    :kind :reusable-theorem,
    :area "sard-convex-domain",
+   :declaration
+   "ContDiffWithinAt.domDomCongr_iteratedFDerivWithin_of_infty",
    :depends-on [:r-topo3-cp9],
    :current-residual "B1 supplies closure membership.",
-   :other-consumers []}
+   :other-consumers [],
+   :proof-plan
+   "Prove adjacent-transposition symmetry using finite-smooth Schwarz at closure(interior s), then induct over permutations."}
   {:consumer :portfolio,
    :checkpoint
    {:after-problems 1,
