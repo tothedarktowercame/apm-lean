@@ -152,11 +152,89 @@ theorem apm_t97J05_gamma_smooth :
       (contDiffWithinAt_id.inv ht0 :
         ContDiffWithinAt ℝ ∞ (fun x : ℝ => (id x)⁻¹) apm_t97J05_parameterDomain t)
 
-/-- LIBRARY: the regular-level theorem, including the induced manifold structure
-and the immersion assertion for its subtype inclusion. -/
-theorem apm_t97J05_regular_fiber_embedded :
+/-- The equations defining the fiber force the third coordinate to be nonzero
+(`q 0 * q 2 = 1`). -/
+lemma apm_t97J05_fiber_third_ne_zero (q : apm_t97J05_R3)
+    (hq : q ∈ apm_t97J05_W) : q 2 ≠ 0 := by
+  sorry
+
+/-- At every point of the fiber, the trigonometric factor used in the regularity
+calculation is nonzero. -/
+lemma apm_t97J05_fiber_sin_ne_zero (q : apm_t97J05_R3)
+    (hq : q ∈ apm_t97J05_W) : Real.sin (q 1) ≠ 0 := by
+  sorry
+
+/-- The completion of `f` by the last coordinate, used uniformly at every fiber
+point. -/
+def apm_t97J05_regular_aux_H (q : apm_t97J05_R3) : apm_t97J05_R3 :=
+  WithLp.toLp 2 ![Real.exp (q 0) * Real.cos (q 1), q 0 * q 2, q 2]
+
+lemma apm_t97J05_regular_aux_smooth :
+    ContDiff ℝ ∞ apm_t97J05_regular_aux_H := by
+  sorry
+
+/-- The derivative formula for the completed map at an arbitrary point. -/
+lemma apm_t97J05_regular_aux_deriv_apply (q h : apm_t97J05_R3) :
+    fderiv ℝ apm_t97J05_regular_aux_H q h =
+      WithLp.toLp 2
+        ![Real.exp (q 0) * Real.cos (q 1) * h 0 -
+            Real.exp (q 0) * Real.sin (q 1) * h 1,
+          q 2 * h 0 + q 0 * h 2, h 2] := by
+  sorry
+
+/-- The displayed derivative is invertible under precisely the two nonvanishing
+conditions available on the fiber (the determinant is `q 2 * exp (q 0) * sin (q 1)`).  The conditions are explicit hypotheses so
+this seat is independent of the fiber-equation seats. -/
+lemma apm_t97J05_regular_aux_deriv_bijective (q : apm_t97J05_R3)
+    (hz : q 2 ≠ 0) (hs : Real.sin (q 1) ≠ 0) :
+    Function.Bijective (fderiv ℝ apm_t97J05_regular_aux_H q) := by
+  sorry
+
+/-- An inverse-function chart around an arbitrary point where the completed
+map has bijective derivative.  Bijectivity is passed explicitly to keep this
+seat parallel to the derivative calculation. -/
+lemma apm_t97J05_regular_aux_local_inverse (q : apm_t97J05_R3)
+    (hb : Function.Bijective (fderiv ℝ apm_t97J05_regular_aux_H q)) :
+    ∃ e : OpenPartialHomeomorph apm_t97J05_R3 apm_t97J05_R3,
+      q ∈ e.source ∧ apm_t97J05_regular_aux_H q ∈ e.target ∧
+      (e : apm_t97J05_R3 → apm_t97J05_R3) = apm_t97J05_regular_aux_H ∧
+      ContDiffOn ℝ ∞ e e.source ∧ ContDiffOn ℝ ∞ e.symm e.target := by
+  sorry
+
+/-- A local flat model of the fiber.  The local inverse is supplied as a
+hypothesis, so proving this statement requires only unpacking the first two
+coordinates of `H`. -/
+lemma apm_t97J05_regular_aux_flattens_fiber
+    (e : OpenPartialHomeomorph apm_t97J05_R3 apm_t97J05_R3)
+    (he : (e : apm_t97J05_R3 → apm_t97J05_R3) = apm_t97J05_regular_aux_H) :
+    ∀ z ∈ e.source,
+      z ∈ apm_t97J05_W ↔ e z 0 = 0 ∧ e z 1 = 1 := by
+  sorry
+
+/-- LIBRARY: global regular-level/embedded-submanifold assembly.  This is the
+remaining missing Mathlib foundation: compatible subtype charts and the
+smooth embedded inclusion are constructed from flat local fiber models. -/
+lemma apm_t97J05_regular_fiber_global_assembly
+    (hlocal : ∀ q ∈ apm_t97J05_W,
+      ∃ e : OpenPartialHomeomorph apm_t97J05_R3 apm_t97J05_R3,
+        q ∈ e.source ∧ ContDiffOn ℝ ∞ e e.source ∧
+        ContDiffOn ℝ ∞ e.symm e.target ∧
+        ∀ z ∈ e.source,
+          z ∈ apm_t97J05_W ↔ e z 0 = 0 ∧ e z 1 = 1) :
     apm_t97J05_IsSmoothSubmanifold apm_t97J05_W := by
   sorry
+
+theorem apm_t97J05_regular_fiber_embedded :
+    apm_t97J05_IsSmoothSubmanifold apm_t97J05_W := by
+  apply apm_t97J05_regular_fiber_global_assembly
+  intro q hq
+  have hz := apm_t97J05_fiber_third_ne_zero q hq
+  have hs := apm_t97J05_fiber_sin_ne_zero q hq
+  have hb := apm_t97J05_regular_aux_deriv_bijective q hz hs
+  rcases apm_t97J05_regular_aux_local_inverse q hb with
+    ⟨e, hqsrc, _hqtarget, he, hes, heis⟩
+  exact ⟨e, hqsrc, hes, heis,
+    apm_t97J05_regular_aux_flattens_fiber e he⟩
 
 def apm_t97J05_local_normal_form_aux_H (q : apm_t97J05_R3) : apm_t97J05_R3 :=
   WithLp.toLp 2 ![Real.exp (q 0) * Real.cos (q 1), q 0 * q 2, q 2]

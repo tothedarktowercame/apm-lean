@@ -79,27 +79,99 @@ for inverse and assemble the finite Euclidean vector coordinatewise.
 **Truth check.** The only possible singularity is `t=0`, while every domain
 point satisfies `t>1/2`.
 
-### `apm_t97J05_regular_fiber_embedded` — LIBRARY
+### Regular-fiber split
 
-**Statement.** The complete fiber `f⁻¹ {(0,1)}` carries a smooth
-one-manifold structure whose subtype inclusion is smooth, topologically
-embedded, and has injective manifold derivative everywhere.
+`apm_t97J05_regular_fiber_embedded` is now a sorry-free assembly.  Its leaves
+are below.  Except for the final explicitly marked LIBRARY leaf, they are
+independent seats; where one mathematical step consumes another, its statement
+takes that result as an explicit hypothesis.
 
-**Why true.** The row-rank calculation above holds at every fiber point:
-`x ≠ 0` and `sin y = ±1`.  Apply the regular-level/preimage theorem for a
-smooth map `ℝ³ → ℝ²`, and its theorem identifying the induced subtype
-inclusion as an embedding and immersion.
+#### `apm_t97J05_fiber_third_ne_zero`
 
-**Expected size.** 300+ lines if the missing regular-level assembly must be
-built from current Mathlib primitives; this is intentionally one LIBRARY
-boundary rather than fake small wrappers.  **Dependencies:** definitions
-only (the all-points rank calculation is internal, not the distinguished-point
-lemma above).
+From the second fiber equation obtain `q 0 * q 2 = 1`, hence `q 2 ≠ 0`.
+Use `mul_ne_zero` contrapositively after extracting coordinate 1 with
+`congrArg`, or `mul_eq_zero`.  **Expected size:** 15–30 lines. **Independent.**
+Degenerate check: this rules out the only problematic branch `x = 0`.
 
-**Truth check.** Checked every component `y = π/2+kπ` and both signs of
-nonzero `x`; the same nonzero two-column minor works.  This is the exact
-missing global regular-preimage theorem recorded by the topology loop.  No
-sorry-free `ConstructionTargets` module currently supplies it.
+#### `apm_t97J05_fiber_sin_ne_zero`
+
+The first fiber equation and `Real.exp_ne_zero` give `cos (q 1) = 0`.
+Then use `Real.sin_sq_add_cos_sq` to show `sin (q 1)^2 = 1`, hence the sine is
+nonzero.  (There is no need to classify all zeros of cosine.)
+**Expected size:** 20–35 lines. **Independent.**  This includes every branch
+`q 1 = π/2 + kπ`, with either sign of the sine.
+
+#### `apm_t97J05_regular_aux_smooth`
+
+Prove smoothness of `H(x,y,z)=(exp x cos y,xz,z)` coordinatewise with
+`contDiff_piLp`, `ContDiff.exp`, `ContDiff.cos`, and `ContDiff.mul` (or
+`fun_prop`). **Expected size:** 10–20 lines. **Independent.**
+
+#### `apm_t97J05_regular_aux_deriv_apply`
+
+Compute `DH_q(h)` at an arbitrary `q`.  Follow the already proved
+`apm_t97J05_local_normal_form_aux_deriv_apply`, replacing simplification at
+`p` by the product-rule expression.  Useful lemmas are `fderiv_pi`,
+`fderiv_fun_mul`, `fderiv_exp`, `fderiv_cos`, and `PiLp.hasFDerivAt_toLp`.
+**Expected size:** 60–100 lines. **Independent.**  The signs are fixed by
+`D(cos)_y(h) = -sin(y)h`; the first coordinate is
+`exp(x)cos(y)h₀ - exp(x)sin(y)h₁`.
+
+#### `apm_t97J05_regular_aux_deriv_bijective`
+
+Assuming explicitly `q 2 ≠ 0` and `sin(q 1) ≠ 0`, prove `DH_q` bijective.
+(claude-14 review fix: det DH_q = q 2 · exp(q 0) · sin(q 1), so the hypothesis must be q 2 ≠ 0; with only q 0 ≠ 0 the lemma was false at q = (1, π/2, 0).)
+Use `apm_t97J05_regular_aux_deriv_apply` only as a rewrite target in the
+eventual proof; if strict seat independence is required, repeat that displayed
+formula locally rather than invoking the lemma.  Solve successively from the
+third, second, and first output coordinates; denominators are nonzero by the
+hypotheses and `Real.exp_ne_zero`. **Expected size:** 45–80 lines.
+**Independent statement.**  Neither `cos(q 1)=0` nor membership in the fiber
+is needed, so boundary/off-fiber points satisfying the two hypotheses are
+also covered.
+
+#### `apm_t97J05_regular_aux_local_inverse`
+
+The derivative bijectivity is an explicit hypothesis.  Convert it with
+`ContinuousLinearEquiv.ofBijective`; apply
+`ContDiffAt.toOpenPartialHomeomorph` and `ContDiffAt.to_localInverse` as in
+`apm_t97J05_local_normal_form_aux_inverse_at_p`.  Restrict to the open set
+where the derivative is a unit, as in
+`apm_t97J05_local_normal_form_aux_smooth_local_inverse`, to obtain smoothness
+of the inverse on the whole target.  Key lemmas:
+`ContinuousLinearMap.isUnit_iff_bijective`, `Units.isOpen`,
+`OpenPartialHomeomorph.restrOpen`, and `contDiffAt_symm`.
+**Expected size:** 70–120 lines. **Independent given its explicit `hb`.**
+
+#### `apm_t97J05_regular_aux_flattens_fiber`
+
+Given a chart explicitly whose underlying map is `H`, unpack coordinates 0 and 1:
+`z ∈ W` iff `f z=(0,1)` iff `(e z) 0=0 ∧ (e z) 1=1`, because `e=H`.
+Use `Subtype`/set membership simplification, `Prod`-style coordinate
+extensionality via `fin_cases`, and `congrArg` in the reverse direction.
+**Expected size:** 25–45 lines. **Independent given its explicit chart
+hypotheses.**  The equivalence is valid at every source point, not merely near
+`q`, so no hidden connectedness or branch assumption occurs.
+
+#### `apm_t97J05_regular_fiber_global_assembly` — LIBRARY
+
+From a flat local model at every fiber point, construct the one-dimensional
+charted structure on the subtype, prove transition-map smoothness, prove
+`IsManifold`, and prove that `Subtype.val` is smooth with injective `mfderiv`.
+`Topology.IsEmbedding` is already available as `Topology.isEmbedding_subtypeVal`.
+The chart transition calculation should use that ambient transitions preserve
+the affine plane `{u | u 0=0 ∧ u 1=1}` and restrict to its third coordinate;
+the local inclusion in these coordinates is `t ↦ (0,1,t)`, whose derivative
+is injective. **Expected size:** 180–300 lines. **Independent given `hlocal`.**
+
+This is the genuine missing regular-level/preimage foundation in current
+Mathlib, not an analytic difficulty particular to this example.  It remains
+one marked LIBRARY leaf because splitting it further would require exposing a
+large bespoke atlas data structure merely to pass the same charts between
+lemmas.  Empty-set and dimension-zero cases are irrelevant to this concrete
+statement (`p ∈ W`, and the model has exactly one free coordinate), while the
+hypothesis covers all disconnected fiber components and boundary-free open
+chart domains.
 
 ### `apm_t97J05_local_normal_form`
 
