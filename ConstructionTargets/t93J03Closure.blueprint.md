@@ -13,30 +13,25 @@ each path-connected subspace whose induced fundamental group lies in
 the subspace. Empty subspaces are excluded by `PathConnectedSpace`; singleton
 subspaces satisfy the subgroup condition; the whole Klein bottle does not.
 
-### Frozen redundant-hypothesis resolution
+### Frozen redundant-hypothesis defect
 
 The semilocally simply connected hypothesis is mathematically redundant once
-the cyclic cover is explicitly constructed: Mathlib's subgroup lifting
-criterion needs path connectedness and local path connectedness, but not
-semilocal simple connectedness.  The registered statement is frozen, so the
-formal adapter must neither delete the hypothesis nor pretend that it is
-needed to construct C1 or C2.
+the cyclic cover is explicitly constructed. Mathlib's subgroup lifting
+criterion used by C3 assumes path connectedness and local path connectedness,
+but not semilocal simple connectedness. C4 derives the embedding only from the
+lift equation and the two embeddings. Thus C1--C4 prove the final conclusion
+without this hypothesis, exactly as the compiled reference's
+`intro X _ _ _ x hx hX` records.
 
-To satisfy the final-hypothesis audit honestly, C3 takes a named
-`hslsc : SemilocallySimplyConnected X` argument and extracts its actual
-content at the selected basepoint `x`:
+The previous repair paired a witness extracted from this hypothesis with the
+independently proved lift. That was vacuous and is retracted: the final theorem
+does not mention the witness, so C5 necessarily discarded it. No proof step in
+this route has a result that genuinely depends on the hypothesis.
 
-```lean
-obtain ⟨U, hUopen, hxU, hUloops⟩ := hslsc x
-```
-
-C3 returns this witness together with the lift, then applies the stronger
-global subgroup lifting criterion for the lift component.  Thus the frozen
-hypothesis is used according to its definition, while the blueprint explicitly
-records that the resulting lift theorem is stronger and would remain true
-without it.  C5 must bind the argument as `hslsc`, never `_`, and pass it to
-C3.  This is the explicit resolution of the redundant frozen hypothesis; no
-registered type is changed.
+This is an interface conflict: the registered theorem is frozen, while the
+global every-final-hypothesis-used gate rejects its stronger proof. The owning
+process must approve the redundant frozen hypothesis or revise the registered
+statement. Formalisation must not manufacture a dependency.
 
 ## Frozen shared definitions
 
@@ -91,26 +86,14 @@ C2 takes C1's equivalence as an explicit parameter.
 
 ### C3. `t93J03_coveringLift_of_subgroup_le`
 
-For a supplied cover whose induced range is the preimage of `⟨a⟩`, a named
-`hslsc : SemilocallySimplyConnected X`, and the subgroup hypothesis, derive a
-continuous lift of the subtype inclusion.
-
-Its conclusion is deliberately certificate-bearing:
-
-```lean
-∃ U : Set X, IsOpen U ∧ x ∈ U ∧
-  (∀ γ : Path x x, (∀ t, γ t ∈ U) → Path.Homotopic γ (Path.refl x)) ∧
-  ∃ l : C(X, C), p ∘ l = inclusion X
-```
+For a supplied cover whose induced range is the preimage of `⟨a⟩`, derive a
+continuous lift of the subtype inclusion from the subgroup hypothesis.
 
 Rewrite membership in the induced range using the supplied equality, then use
 `IsCoveringMap.existsUnique_continuousMap_lifts_of_range_le` from
 `Mathlib/Topology/Homotopy/Lifting.lean`. Transport the basepoint equality
 between `p c = k` and `p c = inclusion X x` using the chosen point of `X`.
-Before applying the global criterion, extract `⟨U, hUopen, hxU, hUloops⟩`
-from `hslsc x`; return those four fields together with the lift produced by
-the subgroup criterion. This lemma accepts the
-cover interface as hypotheses and does not invoke C2.
+This lemma accepts the cover interface as hypotheses and does not invoke C2.
 
 ### C4. `t93J03_lift_isEmbedding_assembly` — already proved
 
@@ -123,10 +106,8 @@ compiled proof from `holes/labs/blueprints/t93J03/Blueprint.lean`.
 
 Copy the sorry-free assembly from the reference blueprint after C1–C4 are
 available. It chooses the presentation equivalence, constructs the cyclic
-cover, binds the frozen hypothesis as `hslsc`, passes `hslsc` to C3,
-destructures both its neighborhood certificate and lift, and finishes with
-C4. The reference line `intro X _ _ _ x hx hX` must therefore be repaired to
-`intro X _ _ hslsc x hx hX`.
+cover, applies C3, and finishes with C4. The anonymous semilocal-simple-
+connectedness argument is the frozen redundant hypothesis described above.
 
 ## Dependency layers
 
@@ -138,8 +119,8 @@ Bank C1 and C2 separately as the two LIBRARY obligations. The principal risk
 is the literal orbit-quotient homeomorphism and intermediate-cylinder cover,
 not the frozen theorem.
 
-Final-hypothesis gate: C5 passes every named hypothesis onward; specifically,
-`hslsc` is consumed by C3's basepoint neighborhood witness extraction.
+Final-hypothesis gate: blocked by the frozen redundant hypothesis; owner
+resolution is required before formalisation proceeds.
 
 ## Gates
 
