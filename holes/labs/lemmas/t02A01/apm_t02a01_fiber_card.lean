@@ -109,7 +109,40 @@ theorem apm_t02a01_fiber_card
     (x : p ⁻¹' apm_t02a01_boundary) :
     Nat.card (apm_t02a01_restrictedCover p ⁻¹'
       {apm_t02a01_restrictedCover p x}) = n := by
-  sorry
+  let f : ZMod n → (apm_t02a01_restrictedCover p ⁻¹'
+      {apm_t02a01_restrictedCover p x}) := fun z =>
+    ⟨⟨deck z x.1, by
+      change p (deck z x.1) ∈ apm_t02a01_boundary
+      rw [hdeck_over]
+      exact x.2⟩, by
+        apply Subtype.ext
+        exact hdeck_over z x.1⟩
+  have hf_injective : Function.Injective f := by
+    intro z w hzw
+    have hz : deck z x.1 = (f w).1.1 := by
+      simpa [f] using congrArg (fun y => y.1.1) hzw
+    have hw : deck w x.1 = (f w).1.1 := by
+      rfl
+    obtain ⟨u, hu, huniq⟩ := hdeck_transitive x.1 (f w).1.1 (by
+      change p x.1 = p (deck w x.1)
+      symm
+      exact hdeck_over w x.1)
+    exact (huniq z hz).trans (huniq w hw).symm
+  have hf_surjective : Function.Surjective f := by
+    intro y
+    have hpy : p x.1 = p y.1.1 := by
+      have h := congrArg Subtype.val y.2
+      exact h.symm
+    obtain ⟨z, hz, _⟩ := hdeck_transitive x.1 y.1.1 hpy
+    refine ⟨z, ?_⟩
+    apply Subtype.ext
+    apply Subtype.ext
+    exact hz
+  let e : ZMod n ≃ (apm_t02a01_restrictedCover p ⁻¹'
+      {apm_t02a01_restrictedCover p x}) :=
+    Equiv.ofBijective f ⟨hf_injective, hf_surjective⟩
+  rw [← Nat.card_congr e]
+  exact Nat.card_zmod n
 -- END SEAT AREA
 
 theorem apm_t02a01
