@@ -514,4 +514,31 @@ theorem modelRange_withinCriticalImage_null_of_interior_of_frontier
     (modelRange_withinCriticalImage_subset_interior_union_frontier I f)
   exact measure_union_null hinterior hfrontier
 
+theorem ContDiffOn.convexWithinJet
+    {E F : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [NormedAddCommGroup F] [NormedSpace ℝ F]
+    {s : Set E} {f : E → F}
+    (hs : Convex ℝ s) (hsi : (interior s).Nonempty)
+    (hf : ContDiffOn ℝ ∞ f s) :
+    ∃ J : (n : ℕ) → E → E[×n]→L[ℝ] F,
+      (∀ n, ContinuousOn (J n) s) ∧
+      (∀ x ∈ s, J 0 x (fun i => Fin.elim0 i) = f x) ∧
+      (∀ x ∈ s, ∀ v, J 1 x (fun _ => v) = fderivWithin ℝ f s x v) ∧
+      (∀ n x, x ∈ s → ∀ σ : Equiv.Perm (Fin n),
+        (J n x).domDomCongr σ = J n x) := by
+  have hu : UniqueDiffOn ℝ s := uniqueDiffOn_convex hs hsi
+  refine ⟨fun n => iteratedFDerivWithin ℝ n f s, ?_, ?_, ?_, ?_⟩
+  · intro n
+    exact hf.continuousOn_iteratedFDerivWithin
+      (WithTop.coe_le_coe.mpr le_top) hu
+  · intro x hx
+    exact iteratedFDerivWithin_zero_apply _
+  · intro x hx v
+    exact iteratedFDerivWithin_one_apply (hu x hx) _
+  · intro n x hx σ
+    exact (hf x hx).domDomCongr_iteratedFDerivWithin_of_infty hu hx
+      (by
+        rw [hs.closure_interior_eq_closure_of_nonempty_interior hsi]
+        exact subset_closure hx) σ
+
 end ConstructionTargets.SardConvexDomain
