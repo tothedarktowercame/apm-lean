@@ -113850,14 +113850,14 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 4,
+   :stop-count 5,
    :review-finding
    "Recorded fixture hash mismatch: :fixture.sha256 is 0bca6ce32c019fc3053c7f813c26917169cf817375b44d5e722b864b61a526450c1, but ConstructionTargets/PointWedgeVanKampen.blueprint.md at recorded commit c9b3af27 has exact SHA-256 0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0. Re-record the fixture hash for the reviewed commit.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
    :evidence
    {:placeholder-delta {:source-before 0, :source-after 0},
     :residual
-    "Use mapped identity in normal forms; prove projection=1, inl, B6/B12.",
+    "Transport normal form to chosen base; combine inverse-span, projection=1, inl, B6/B12.",
     :outcome :stop,
     :warnings ["existing linter"],
     :missing-theorems
@@ -113871,16 +113871,16 @@
       :area "fundamental-group-wedge-of-circles"}],
     :statement-hashes
     {:source
-     "1a704eb51a8a3eb234078fb7aed9420ee58b1caf40d5a5ae69f51fbe99024590",
+     "0b5ea9afcec3a7aeb996a55b1d7ea484f901c041adadbfebdfb9bb747c88b2a4",
      :documentation
-     "7ee2b664c27d331492e7700309f8dcd1a642ccba5379fc3e4243bed7a790feb0",
+     "0a6870c78f8c6e5225b2b17e1e622c855ef0dc27250931ac30b87822529f0a6d",
      :blueprint
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0",
      :registry "150/150"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
-    :reason "Shifted recurrence and mapped identity proved.",
+    :reason "Shifted round-trip normal form is identity.",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/PointWedgeVanKampen.lean",
@@ -113890,25 +113890,14 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "sha256/diff/placeholders", :exit 0}],
     :diagnostic-history
-    [{:cmd "lean cancellation draft",
+    [{:cmd "lean representation drafts",
       :exit 1,
-      :finding "Explicit HEq required."}
+      :finding "Used funInvIdAssoc and normalForm_id."}
      {:cmd
       "lake build ConstructionTargets.ThreeCirclesFundamentalGroup",
       :exit 1,
       :finding "B12 absent."}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1791901495694-9861-6c0f122c",
-     :commands
-     ["git show/diff 2a0d3b15^..2a0d3b15"
-      "git archive 2a0d3b15; lake env lean archived PointWedgeVanKampen.lean"
-      "sha256/diff-tree/placeholder checks; statement-registry.py check"
-      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (expected absent)"],
-     :finding
-     "Reviewer codex-3. PASS program STOP: 2a0d3b15 adds two compiled, sorry-free results after cc263507. Transport by the named coordinate-object equality correctly yields a fixed-component recurrence; cancelling the inverse-span isomorphism uses epi cancellation in the right direction and returns a typed HEq to identity. Scope is Lean+MD only; hashes match ledger (1a704eb5/7ee2b664/0bca6ce3), placeholders 0, registry 150/150, axioms standard only. Residual: substitute the mapped identity into connector normal forms, prove projection=1, factor inl, then B6/B12; B12 absent."},
-    :commit "2a0d3b15c93e88999fafc9057bbdb7b01ea0a979",
+    :commit "51177486ba5786906edc01f792df135a699b5e2f",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
      "ConstructionTargets/PointWedgeVanKampen.md"],
@@ -113918,7 +113907,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
