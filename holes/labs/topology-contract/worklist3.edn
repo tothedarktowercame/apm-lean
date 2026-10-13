@@ -24430,24 +24430,24 @@
    :consumer :t01A08,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "extend Mathlib: state and prove the missing theorem in scope",
    :implements-lemma :lemma-closedset-whitneycubecover,
    :evidence
    {:placeholder-delta {:t01A08 [1 1]},
-    :residual "Assemble B3 cover/certificates; then B4-B7, B9.",
+    :residual
+    "Nat bound, countability/local finiteness, anchors and B3 assembly; then B4-B7, B9.",
     :outcome :stop,
-    :warnings ["existing unnecessarySimpa:454"],
+    :warnings
+    ["existing unnecessarySimpa:454" "unnecessarySeqFocus:1199"],
     :missing-theorems
     [{:name
-      "ConstructionTargets.SardConvexDomain.encard_whitneyNetIncidence_le_three_fixed_packingNumbers",
-      :type "total incidence encard <= three fixed packing numbers",
+      "ConstructionTargets.SardConvexDomain.fixed_whitneyPackingNumber_ne_top",
+      :type "fixed half-ball packing number at 1/8 is not top",
       :status :proved,
       :consumers [:t01A08],
-      :depends-on
-      ["ConstructionTargets.SardConvexDomain.whitneyNetIndex_incident_stratum_eq_or_eq_add_one"
-       "ConstructionTargets.SardConvexDomain.encard_whitneyStratumNet_mem_quarter_ball_le_fixed_packingNumber"],
+      :depends-on [],
       :area "sard-convex-domain"}
      {:name
       "ConstructionTargets.SardConvexDomain.closedSet_whitneyCubeCover_proper",
@@ -24455,14 +24455,15 @@
       :status :partial,
       :consumers [:t01A08],
       :depends-on
-      ["ConstructionTargets.SardConvexDomain.encard_whitneyNetIncidence_le_three_fixed_packingNumbers"],
+      ["ConstructionTargets.SardConvexDomain.fixed_whitneyPackingNumber_ne_top"
+       "ConstructionTargets.SardConvexDomain.encard_whitneyNetIncidence_le_three_fixed_packingNumbers"],
       :area "sard-convex-domain"}],
     :statement-hashes {:registry "150/150"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Committed total incidence encard bound by three fixed packing numbers. B3 cover assembly remains; not refuted.",
+    "Committed finiteness of the fixed packing number via compact finite cover. Convert to Nat, prove index countability/local finiteness, and assemble B3; not refuted.",
     :commands
     [{:cmd "lake build ConstructionTargets.SardConvexDomain", :exit 0}
      {:cmd "fixture; registry; scans; diff", :exit 0}
@@ -24470,28 +24471,18 @@
     :diagnostic-history
     [{:cmd "builds",
       :exit 1,
-      :correction "fixed sigma equality and union association"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1791910289887-10028-0a035288",
-     :commands
-     ["git show/diff 1713b90; scope/cardinal checks"
-      "sha256sum + lake env lean frozen fixture"
-      "lake build ConstructionTargets.SardConvexDomain"
-      "statement registry check; forbidden-count scan"],
-     :finding
-     "PASS. Recorded topo-10 commit 1713b90 changes only the scoped Lean file and correctly bounds total incidence by three fixed packing numbers. Center projection is injective within a fixed sigma fiber; each fiber maps into the corresponding center incidence set; any nonempty incidence family lies in strata k-1,k,k+1; nested union encard bounds match N+N+N. Empty incidence is handled separately. Fixture hash 28981371... matches; build/fixture pass; registry 150/150; forbidden placeholders stay 0; only standard axioms. Valid compiled B3 progress; STOP leaves cover/certificate assembly."},
-    :commit "1713b902c1e72367458ed1a2c2d5cf4a911b7129",
+      :correction
+      "converted ball cover to edist and normalized radii"}],
+    :commit "c97e31bd1bac3440905e83caa74da220509a46f6",
     :changed-paths ["ConstructionTargets/SardConvexDomain.lean"],
     :fixture
-    {:path "/tmp/t01a08_b3_three_fiber_check.lean",
+    {:path "/tmp/t01a08_b3_fixed_packing_finite_check.lean",
      :sha256
-     "28981371daf2ff61b45e427c29027323612970b5e0d07c1f2a4a4ca725337c21",
+     "d97ba41a2c833ebd17bd2ad983c859ce88f25babbda2edb6dc28527dcc87eed4",
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain.blueprint/B3",
    :acceptance
@@ -35164,7 +35155,8 @@
     :lemma-constructiontargets-sardconvexdomain-isseparated-image-whitneynormalize-incidenc
     :lemma-constructiontargets-sardconvexdomain-encard-whitneystratumne-a5bb5ee43d22
     :lemma-constructiontargets-sardconvexdomain-whitneynetindex-incident-stratum-eq-or-eq-a
-    :lemma-constructiontargets-sardconvexdomain-encard-whitneynetincidence-le-three-fixed-p],
+    :lemma-constructiontargets-sardconvexdomain-encard-whitneynetincidence-le-three-fixed-p
+    :lemma-constructiontargets-sardconvexdomain-fixed-whitneypackingnumber-ne-top],
    :other-consumers []}
   {:consumer :t01A08,
    :phase :lemma,
@@ -35702,6 +35694,26 @@
    :depends-on
    [:lemma-constructiontargets-sardconvexdomain-whitneynetindex-incident-stratum-eq-or-eq-a
     :lemma-constructiontargets-sardconvexdomain-encard-whitneystratumne-a5bb5ee43d22],
+   :other-consumers []}
+  {:consumer :t01A08,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.SardConvexDomain.fixed_whitneyPackingNumber_ne_top",
+    :type "fixed half-ball packing number at 1/8 is not top"},
+   :lemma
+   {:name
+    "ConstructionTargets.SardConvexDomain.fixed_whitneyPackingNumber_ne_top",
+    :reported-by [:r-a08-sard-b3-whitney-cubes-1],
+    :type "fixed half-ball packing number at 1/8 is not top",
+    :area "sard-convex-domain",
+    :proved-in :r-a08-sard-b3-whitney-cubes-1},
+   :id
+   :lemma-constructiontargets-sardconvexdomain-fixed-whitneypackingnumber-ne-top,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
