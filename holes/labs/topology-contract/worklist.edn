@@ -117159,70 +117159,53 @@
      :commit "e816789ea8e370108b53f41ae43ea70a5140a0d4",
      :reason "B3 proved: regular points are open."}]}
   {:consumer :t91J06,
-   :stop-count 2,
+   :stop-count 3,
    :review-finding
    "Blueprint B1 proof omits the orientation of arbitrary q. The middle prescription q o t^-1 is increasing iff q and t have the same orientation, but the plan swaps target endpoints based only on t. Counterexample to that plan: t(x)=1/4+x/2 is increasing while q(x)=1-2x maps [0,1] homeomorphically and decreasingly to [-1,1]; the middle map decreases from 1 to -1, so the increasing-t endpoint assignment cannot paste to the claimed affine side pieces. Split on q (or directly on q o t^-1) and assign complementary target endpoints from the composite orientation.",
    :evidence
    {:placeholder-delta {:source-before 3, :source-after 3},
-    :residual "Re-review blueprint; then formalize B1's four cases.",
+    :residual
+    "Build and paste affine endpoint pieces in four orientation cases; then B2-B5.",
     :outcome :stop,
     :warnings [{:kind :existing-placeholder}],
     :missing-theorems
     [{:name "t91J06Closure.extend_interval_embedding_coordinates",
-      :type "Extend prescribed coordinates over nested interval",
-      :status :not-started,
+      :type "Extend coordinates over nested interval",
+      :status :partial,
       :consumers [:t91J06],
       :depends-on [],
-      :area "nested-interval-exhaustion"}
-     {:name "apm_t91J06_bridge_compatible_stage_coordinates",
-      :type "Compatible recursive stage coordinates",
-      :status :not-started,
-      :consumers [:t91J06],
-      :depends-on
-      ["t91J06Closure.extend_interval_embedding_coordinates"],
-      :area "nested-interval-exhaustion"}
-     {:name "apm_t91J06_bridge_glue_with_embeddings",
-      :type "Glue coordinates using hf",
-      :status :not-started,
-      :consumers [:t91J06],
-      :depends-on ["apm_t91J06_bridge_compatible_stage_coordinates"],
       :area "nested-interval-exhaustion"}],
     :statement-hashes
     {:target
      "77deaa5c86092187afc0ba92eefe4692bc1991508f81deb6a626c3d106b86625",
+     :construction
+     "ddf2271d2a05bad690abb2756840694c7937d57ce6ed81e80c745d8fb3584281",
      :blueprint
-     "2424bbb21000e8d3a2672f1774f622351b6b89f77002cab4bd36727ffdaf85a7",
-     :registry "131/131"},
+     "20444d0ef11ddf2ff8afe25a2eefd78117fe2c56a090336be32feb65c0eced51",
+     :registry "145/145"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
-    :reason
-    "B1 repaired: endpoint pieces follow the composite orientation.",
+    :reason "B1 partial: independent t/q orientation splits compile.",
     :commands
-    [{:cmd "lake env lean problems/t91J06/lean/Main.lean", :exit 0}
+    [{:cmd "lake env lean ConstructionTargets/t91J06Closure.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.t91J06Closure", :exit 0}
+     {:cmd "lake env lean problems/t91J06/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-     {:cmd "placeholder/diff validation", :exit 0}],
+     {:cmd "diff/hash/placeholders", :exit 0}],
     :diagnostic-history [],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1791797419646-6739-dfc8342b",
-     :commands
-     ["git show/diff-tree cc04d44a"
-      "sha256/diff/placeholder checks"
-      "statement-registry.py check"
-      "lake env lean problems/t91J06/lean/Main.lean"],
-     :finding
-     "PASS repaired blueprint STOP: B1 now splits on both t and q, uses the orientation of q o t^-1, and assigns affine endpoint pieces correctly in all four cases. B2-B5 are true as stated, use only listed dependencies, preserve subtype/range and weak-topology boundaries, and use hf, hnested, hcover, hweak. Exact 1-file scope; fixture/target hashes match; target placeholders 3->3; registry 131/131; target elaborates. Residual is formalize B1."},
-    :commit "cc04d44ab8eaebaaa3e62ff918db6b5c755d1aa1",
-    :changed-paths ["ConstructionTargets/t91J06Closure.blueprint.md"],
+    :commit "05b937c1d705187a30bfc02e24cfd9cc0497f0fb",
+    :changed-paths
+    ["ConstructionTargets/t91J06Closure.lean"
+     "ConstructionTargets/t91J06Closure.blueprint.md"],
     :fixture
     {:path "ConstructionTargets/t91J06Closure.blueprint.md",
      :sha256
-     "2424bbb21000e8d3a2672f1774f622351b6b89f77002cab4bd36727ffdaf85a7"},
+     "20444d0ef11ddf2ff8afe25a2eefd78117fe2c56a090336be32feb65c0eced51"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t91J06/lean/Main.lean"
     "problems/t91J06/status.json"
