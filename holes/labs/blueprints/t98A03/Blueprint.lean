@@ -504,7 +504,67 @@ lemma apm_t98a03_wedge_branches_accumulate_aux_rp2
     (U : Set (apm_t98a03_X t₀ r₀)) (hU : IsOpen U)
     (hpU : apm_t98a03_basepoint t₀ r₀ ∈ U) :
     ∃ r ≠ r₀, Quotient.mk _ (Sum.inr r) ∈ U := by
-  sorry
+  let q : Sum apm_t98a03_Torus apm_t98a03_RP2 → apm_t98a03_X t₀ r₀ :=
+    fun z => Quotient.mk _ z
+  have hopen : IsOpen (q ⁻¹' U) := by
+    exact hU
+  have hrU : Sum.inr r₀ ∈ q ⁻¹' U := by
+    change Quotient.mk _ (Sum.inr r₀) ∈ U
+    rw [← apm_t98a03_wedge_base_eq t₀ r₀]
+    exact hpU
+  have hRopen : IsOpen (Sum.inr ⁻¹' (q ⁻¹' U)) :=
+    hopen.preimage continuous_inr
+  rw [isOpen_coinduced] at hRopen
+  let v : Fin 3 → ℝ := r₀.rep
+  have hv : v ≠ 0 := r₀.rep_nonzero
+  have hvU : (⟨v, hv⟩ : {w : Fin 3 → ℝ // w ≠ 0}) ∈
+      (Projectivization.mk' ℝ) ⁻¹' (Sum.inr ⁻¹' (q ⁻¹' U)) := by
+    simpa [v, Projectivization.mk_rep] using hrU
+  obtain ⟨ε, hε, hball⟩ := Metric.isOpen_iff.1 hRopen _ hvU
+  have hspan : Submodule.span ℝ ({v} : Set (Fin 3 → ℝ)) ≠ ⊤ := by
+    intro htop
+    have hfin : Module.finrank ℝ (Submodule.span ℝ ({v} : Set (Fin 3 → ℝ))) =
+        Module.finrank ℝ (⊤ : Submodule ℝ (Fin 3 → ℝ)) := by rw [htop]
+    rw [finrank_span_singleton hv] at hfin
+    norm_num at hfin
+  obtain ⟨w, -, hw⟩ :=
+    SetLike.exists_of_lt (show Submodule.span ℝ ({v} : Set (Fin 3 → ℝ)) < ⊤ from
+      lt_top_iff_ne_top.mpr hspan)
+  let a : ℝ := ε / (2 * (‖w‖ + 1))
+  have ha : 0 < a := div_pos hε (by positivity)
+  have haw : ‖a • w‖ < ε := by
+    rw [norm_smul, Real.norm_eq_abs, abs_of_pos ha]
+    dsimp [a]
+    have hd : 0 < 2 * (‖w‖ + 1) := by positivity
+    rw [div_mul_eq_mul_div, div_lt_iff₀ hd]
+    nlinarith [norm_nonneg w]
+  have hvaw : v + a • w ≠ 0 := by
+    intro hz
+    apply hw
+    apply (Submodule.smul_mem_iff _ ha.ne').mp
+    have : a • w = -v := by simpa using congrArg (fun z => z - v) hz
+    rw [this]
+    exact Submodule.neg_mem _ (Submodule.subset_span (by simp))
+  let r : apm_t98a03_RP2 := Projectivization.mk ℝ (v + a • w) hvaw
+  refine ⟨r, ?_, ?_⟩
+  · intro heq
+    have hm : Projectivization.mk ℝ (v + a • w) hvaw =
+        Projectivization.mk ℝ v hv := by simpa [r, v, Projectivization.mk_rep] using heq
+    obtain ⟨c, hc⟩ := (Projectivization.mk_eq_mk_iff' ℝ _ _ _ _).mp hm
+    have hmem : v + a • w ∈ Submodule.span ℝ ({v} : Set (Fin 3 → ℝ)) := by
+      rw [← hc]
+      exact Submodule.smul_mem _ _ (Submodule.subset_span (by simp))
+    apply hw
+    have ht := Submodule.sub_mem _ hmem (Submodule.subset_span (by simp) :
+      v ∈ Submodule.span ℝ ({v} : Set (Fin 3 → ℝ)))
+    have : a • w ∈ Submodule.span ℝ ({v} : Set (Fin 3 → ℝ)) := by
+      simpa only [add_sub_cancel_left] using ht
+    exact (Submodule.smul_mem_iff _ ha.ne').mp this
+  · apply hball
+    rw [Metric.mem_ball]
+    change dist (⟨v + a • w, hvaw⟩ : {z : Fin 3 → ℝ // z ≠ 0}) ⟨v, hv⟩ < ε
+    change ‖(v + a • w) - v‖ < ε
+    simpa using haw
 
 lemma apm_t98a03_wedge_branches_accumulate
     (t₀ : apm_t98a03_Torus) (r₀ : apm_t98a03_RP2)
