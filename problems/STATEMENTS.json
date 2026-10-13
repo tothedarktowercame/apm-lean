@@ -726,12 +726,12 @@
     "apm_t01a08_line",
     "apm_t01a08_projection"
    ],
-   "grade": "stronger",
-   "grader": "claude-18 outside grader (read-only Claude agent, 2026-09-28)",
-   "evidence": "holes/labs/statement-registry/open-grades-2.md",
+   "grade": "faithful",
+   "grader": "claude-14 outside triage grader (read-only Claude subagent, 2026-10-13; stronger)",
+   "evidence": "holes/labs/statement-registry/triage-1.md",
    "prelim_defect": null,
-   "rev": "6802e9ad",
-   "approved_at": "2026-09-28T00:23:50Z"
+   "rev": "f21d58e61",
+   "approved_at": "2026-10-13T20:09:46Z"
   },
   "t01J01": {
    "decls": [
