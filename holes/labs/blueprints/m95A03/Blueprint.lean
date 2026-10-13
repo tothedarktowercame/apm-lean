@@ -488,6 +488,53 @@ lemma apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_inv_
 
 /-- The first-order system `y' = z / p, z' = q y + g` has a solution on `[a, b]` with any
 initial data (linear system with continuous coefficients: Picard iteration / Grönwall). -/
+lemma apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_system_aux_inv
+    (a b : ℝ) (p : ℝ → ℝ) (hp : Continuous p)
+    (hpos : ∀ t ∈ Set.Icc a b, 0 < p t) :
+    ContinuousOn (fun t => (p t)⁻¹) (Set.Icc a b) := by
+  exact hp.continuousOn.inv₀ (fun t ht => (hpos t ht).ne')
+
+/-- Picard iteration for the linear integral system with continuous coefficients on `ℝ`
+(time-dependent analogue of m96A02's scalar argument). -/
+lemma apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_system_aux_ode_aux_integral
+    (a b : ℝ) (hab : a < b) (r q g : ℝ → ℝ) (hr : Continuous r)
+    (hq : Continuous q) (hg : Continuous g) (c₀ d₀ : ℝ) :
+    ∃ y z : ℝ → ℝ, Continuous y ∧ Continuous z ∧ ∀ t ∈ Set.Icc a b,
+      y t = c₀ + (∫ s in a..t, z s * r s) ∧
+      z t = d₀ + ∫ s in a..t, (q s * y s + g s) := by
+  sorry
+
+lemma apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_system_aux_ode
+    (a b : ℝ) (hab : a < b) (p q g : ℝ → ℝ) (hp : Continuous p)
+    (hq : Continuous q) (hg : Continuous g) (hpos : ∀ t ∈ Set.Icc a b, 0 < p t)
+    (c₀ d₀ : ℝ) :
+    ∃ y z : ℝ → ℝ, y a = c₀ ∧ z a = d₀ ∧ ∀ t ∈ Set.Icc a b,
+      HasDerivWithinAt y (z t / p t) (Set.Icc a b) t ∧
+      HasDerivWithinAt z (q t * y t + g t) (Set.Icc a b) t := by
+  set r : ℝ → ℝ := fun s => (p (Set.projIcc a b hab.le s))⁻¹ with hrdef
+  have hproj : ∀ s, (Set.projIcc a b hab.le s : ℝ) ∈ Set.Icc a b := fun s => Subtype.prop _
+  have hr : Continuous r :=
+    (hp.comp (continuous_subtype_val.comp continuous_projIcc)).inv₀
+      (fun s => (hpos _ (hproj s)).ne')
+  have hrt : ∀ t ∈ Set.Icc a b, r t = (p t)⁻¹ := by
+    intro t ht
+    simp [hrdef, Set.projIcc_of_mem hab.le ht]
+  obtain ⟨y, z, hy, hz, hint⟩ := apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_system_aux_ode_aux_integral a b hab r q g hr hq hg c₀ d₀
+  have ha : a ∈ Set.Icc a b := ⟨le_rfl, hab.le⟩
+  refine ⟨y, z, by simpa using (hint a ha).1, by simpa using (hint a ha).2, fun t ht => ⟨?_, ?_⟩⟩
+  · have hF : Continuous (fun s => z s * r s) := hz.mul hr
+    have hd : HasDerivAt (fun t => c₀ + ∫ s in a..t, z s * r s) (z t * r t) t :=
+      (intervalIntegral.integral_hasDerivAt_right (hF.intervalIntegrable _ _)
+        hF.aestronglyMeasurable.stronglyMeasurableAtFilter hF.continuousAt).const_add c₀
+    have := hd.hasDerivWithinAt (s := Set.Icc a b)
+    rw [hrt t ht, ← div_eq_mul_inv] at this
+    exact this.congr (fun u hu => (hint u hu).1) (hint t ht).1
+  · have hF : Continuous (fun s => q s * y s + g s) := (hq.mul hy).add hg
+    have hd : HasDerivAt (fun t => d₀ + ∫ s in a..t, (q s * y s + g s)) (q t * y t + g t) t :=
+      (intervalIntegral.integral_hasDerivAt_right (hF.intervalIntegrable _ _)
+        hF.aestronglyMeasurable.stronglyMeasurableAtFilter hF.continuousAt).const_add d₀
+    exact (hd.hasDerivWithinAt (s := Set.Icc a b)).congr (fun u hu => (hint u hu).2) (hint t ht).2
+
 lemma apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_system
     (a b : ℝ) (hab : a < b) (p q g : ℝ → ℝ) (hp : ContDiff ℝ 1 p)
     (hq : Continuous q) (hg : Continuous g) (hpos : ∀ t ∈ Set.Icc a b, 0 < p t)
@@ -495,7 +542,8 @@ lemma apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_syst
     ∃ y z : ℝ → ℝ, y a = c₀ ∧ z a = d₀ ∧ ∀ t ∈ Set.Icc a b,
       HasDerivWithinAt y (z t / p t) (Set.Icc a b) t ∧
       HasDerivWithinAt z (q t * y t + g t) (Set.Icc a b) t := by
-  sorry
+  exact apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_system_aux_ode
+    a b hab p q g hp.continuous hq hg hpos c₀ d₀
 
 /-- A solution of the system on `[a, b]` is the restriction of a global `C²` function `Y`
 with `p Y' = z` there (`y` is `C²` on `[a, b]`; extend past the endpoints by second-order
