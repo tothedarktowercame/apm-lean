@@ -898,7 +898,77 @@ lemma apm_m93j05_lp_rpow_weak_lsc_aux_norming_bounds
       (∫ x, v x * h x ∂μ) ≤
         (eLpNorm v (ENNReal.ofReal p) μ).toReal *
           Real.rpow (eLpNorm u (ENNReal.ofReal p) μ).toReal (p - 1) := by
-  sorry
+  dsimp
+  have hp0 : p ≠ 0 := ne_of_gt (lt_trans (by norm_num) hp)
+  have hp0' : (ENNReal.ofReal p) ≠ 0 := by
+    rw [Ne, ENNReal.ofReal_eq_zero, not_le]
+    linarith
+  have hp_top : (ENNReal.ofReal p) ≠ (⊤ : ENNReal) := ENNReal.ofReal_ne_top
+  have hpq' : p.HolderConjugate q :=
+    Real.holderConjugate_iff.mpr ⟨hp, by simpa [one_div] using hpq⟩
+  have hpoint (x : ℝ) :
+      u x * (u x * |u x| ^ (p - 2)) = |u x| ^ p := by
+    by_cases hx : u x = 0
+    · simp [hx, Real.zero_rpow hp0]
+    · rw [← mul_assoc, ← pow_two, ← sq_abs, ← Real.rpow_two,
+        ← Real.rpow_add (abs_pos.mpr hx)]
+      congr 1
+      ring
+  have hint_nonneg : 0 ≤ ∫ x, ‖u x‖ ^ p ∂μ :=
+    integral_nonneg fun x => Real.rpow_nonneg (norm_nonneg _) _
+  have hnorm_u :
+      (eLpNorm u (ENNReal.ofReal p) μ).toReal =
+        (∫ x, ‖u x‖ ^ p ∂μ) ^ (1 / p) := by
+    rw [toReal_eLpNorm hu.1]
+    simpa [ENNReal.toReal_ofReal (le_trans (by norm_num) hp.le)] using
+      lpNorm_eq_integral_norm_rpow_toReal hp0' hp_top hu.1
+  constructor
+  · rw [integral_congr_ae (Eventually.of_forall fun x => by
+        simpa [Real.norm_eq_abs] using hpoint x), hnorm_u]
+    simpa [one_div] using (Real.rpow_inv_rpow hint_nonneg hp0).symm
+  · have hh := apm_m93j05_lp_rpow_weak_lsc_aux_norming_memLp hp hpq hu
+    have hle_norm :
+        (∫ x, v x * (u x * ‖u x‖ ^ (p - 2)) ∂μ) ≤
+          ∫ x, ‖v x‖ * ‖u x * ‖u x‖ ^ (p - 2)‖ ∂μ := by
+      refine le_trans (le_abs_self _) ?_
+      simpa [norm_mul] using
+        (norm_integral_le_integral_norm
+          (fun x => v x * (u x * ‖u x‖ ^ (p - 2))) :
+          ‖∫ x, v x * (u x * ‖u x‖ ^ (p - 2)) ∂μ‖ ≤
+            ∫ x, ‖v x * (u x * ‖u x‖ ^ (p - 2))‖ ∂μ)
+    refine hle_norm.trans ?_
+    have hholder := integral_mul_norm_le_Lp_mul_Lq hpq' hv hh
+    refine hholder.trans_eq ?_
+    have hnorm_v :
+        (∫ x, ‖v x‖ ^ p ∂μ) ^ (1 / p) =
+          (eLpNorm v (ENNReal.ofReal p) μ).toReal := by
+      rw [toReal_eLpNorm hv.1]
+      simpa [ENNReal.toReal_ofReal (le_trans (by norm_num) hp.le)] using
+        (lpNorm_eq_integral_norm_rpow_toReal hp0' hp_top hv.1).symm
+    have hq0 : q ≠ 0 := hpq'.symm.ne_zero
+    have hqp : q * (p - 1) = p := by
+      have := hpq'.conjugate_eq
+      field_simp [hp0, hq0] at hpq ⊢
+      nlinarith
+    have hhpow :
+        (∫ x, ‖u x * ‖u x‖ ^ (p - 2)‖ ^ q ∂μ) =
+          ∫ x, ‖u x‖ ^ p ∂μ := by
+      apply integral_congr_ae
+      filter_upwards [] with x
+      by_cases hx : u x = 0
+      · simp [hx, Real.zero_rpow hp0, Real.zero_rpow hq0]
+      · rw [show ‖u x * ‖u x‖ ^ (p - 2)‖ = ‖u x‖ ^ (p - 1) by
+          rw [norm_mul, Real.norm_rpow_of_nonneg (norm_nonneg _), norm_norm]
+          calc
+            ‖u x‖ * ‖u x‖ ^ (p - 2) = ‖u x‖ ^ (1 : ℝ) * ‖u x‖ ^ (p - 2) := by rw [Real.rpow_one]
+            _ = ‖u x‖ ^ ((1 : ℝ) + (p - 2)) := (Real.rpow_add (norm_pos_iff.mpr hx) _ _).symm
+            _ = ‖u x‖ ^ (p - 1) := by ring_nf,
+          ← Real.rpow_mul (norm_nonneg _), mul_comm (p - 1) q, hqp]
+    rw [hnorm_v, hhpow, hnorm_u]
+    rw [← Real.rpow_mul hint_nonneg]
+    congr 2
+    field_simp [hp0, hq0] at hpq ⊢
+    nlinarith
 
 lemma apm_m93j05_lp_rpow_weak_lsc_aux_limit
     {p r A : ℝ} (hp : 1 < p) (hA : 0 ≤ A)
