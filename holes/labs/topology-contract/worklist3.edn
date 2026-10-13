@@ -24430,31 +24430,31 @@
    :consumer :t01A08,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "extend Mathlib: state and prove the missing theorem in scope",
    :implements-lemma :lemma-closedset-whitneycubecover,
    :evidence
    {:placeholder-delta {:t01A08 [1 1]},
     :residual
-    "Build maximal selection, local finiteness, overlap; compose B3; then B4-B7, B9.",
+    "Select locally finite bounded-overlap centers; assemble B3; then B4-B7, B9.",
     :outcome :stop,
     :warnings ["existing unnecessarySimpa:454"],
     :missing-theorems
     [{:name
-      "ConstructionTargets.SardConvexDomain.exists_positive_infDist_nearest_of_isClosed",
-      :type "x∉s gives positive infDist and a nearest anchor in s",
+      "ConstructionTargets.SardConvexDomain.quarter_infDist_ball_data",
+      :type "quarter-distance ball bounds",
       :status :proved,
       :consumers [:t01A08],
       :depends-on [],
       :area "sard-convex-domain"}
      {:name
       "ConstructionTargets.SardConvexDomain.closedSet_whitneyCubeCover_proper",
-      :type "closed nonempty proper s has WhitneyCubeCover",
+      :type "proper closed-set Whitney cover",
       :status :partial,
       :consumers [:t01A08],
       :depends-on
-      ["ConstructionTargets.SardConvexDomain.WhitneyCubeCover"
+      ["ConstructionTargets.SardConvexDomain.quarter_infDist_ball_data"
        "ConstructionTargets.SardConvexDomain.exists_positive_infDist_nearest_of_isClosed"],
       :area "sard-convex-domain"}],
     :statement-hashes {:registry "149/149"},
@@ -24462,33 +24462,25 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Committed the next B3 milestone: every complement center of a closed nonempty finite-dimensional set has positive infDist and a chosen nearest anchor. This supplies scale positivity and anchor fields. The remaining proper-set theorem is now the discrete maximal selection plus local-finiteness and uniform-overlap bounds; not a refutation.",
+    "Committed B3 per-center geometry: the quarter-infDist ball is positive, lies in the complement and infDist closed ball, and satisfies both scale inequalities. Only countable locally finite bounded-overlap selection remains; not a refutation.",
     :commands
     [{:cmd "lake build ConstructionTargets.SardConvexDomain", :exit 0}
-     {:cmd
-      "lean fixture; registry; no-sorry/axiom; diff check; commit",
+     {:cmd "lean fixture; registry; forbidden scan; diff; commit",
       :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1791898658836-9758-e5f1296f",
-     :commands
-     ["git show/diff c722da96; scope and theorem review"
-      "lake build ConstructionTargets.SardConvexDomain"
-      "sha256sum and lake env lean t01a08_b3_center_anchor_check"
-      "statement-registry check; forbidden-token recount"],
-     :finding
-     "PASS. Valid STOP after compiled progress. The one-file theorem correctly combines closed-set complement separation (positive infDist) with finite-dimensional nearest-point attainment, producing exactly the positive scale and anchor data required by the Whitney certificate. The maximal selection, local-finiteness, and overlap construction remains explicitly partial. Build/export pass; fixture hash matches; standard axioms only; registry 149/149; sorry/admit/axiom 0->0."},
-    :commit "c722da96e312216203bd871916ce290649260066",
+    :diagnostic-history
+    [{:cmd "exploratory builds",
+      :exit 1,
+      :correction "fixed center and distance orientation"}],
+    :commit "82275f37919538ec61b9596737a25a2648a4d7da",
     :changed-paths ["ConstructionTargets/SardConvexDomain.lean"],
     :fixture
-    {:path "/tmp/t01a08_b3_center_anchor_check.lean",
+    {:path "/tmp/t01a08_b3_quarter_ball_check.lean",
      :sha256
-     "2ddfaf0d1b0caa047387e49488c7cab4c8807754f4a773092fb0a676a0952572",
+     "81a7e4ddde31108f5a3709740b03aeaf40762aee7ca5bfb0ded91d36d9d30891",
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain.blueprint/B3",
    :acceptance
@@ -35139,7 +35131,8 @@
    :kind :lemma,
    :depends-on
    [:lemma-constructiontargets-sardconvexdomain-whitneycubecover
-    :lemma-constructiontargets-sardconvexdomain-exists-positive-infdist-nearest-of-isclosed],
+    :lemma-constructiontargets-sardconvexdomain-exists-positive-infdist-nearest-of-isclosed
+    :lemma-constructiontargets-sardconvexdomain-quarter-infdist-ball-data],
    :other-consumers []}
   {:consumer :t01A08,
    :phase :lemma,
@@ -35160,6 +35153,26 @@
     :banked-commit "c722da96e312216203bd871916ce290649260066"},
    :id
    :lemma-constructiontargets-sardconvexdomain-exists-positive-infdist-nearest-of-isclosed,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t01A08,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.SardConvexDomain.quarter_infDist_ball_data",
+    :type "quarter-distance ball bounds"},
+   :lemma
+   {:name
+    "ConstructionTargets.SardConvexDomain.quarter_infDist_ball_data",
+    :reported-by [:r-a08-sard-b3-whitney-cubes-1],
+    :type "quarter-distance ball bounds",
+    :area "sard-convex-domain",
+    :proved-in :r-a08-sard-b3-whitney-cubes-1},
+   :id
+   :lemma-constructiontargets-sardconvexdomain-quarter-infdist-ball-data,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}],
