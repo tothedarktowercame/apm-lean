@@ -1196,3 +1196,10 @@ order explicitly.  `genericPointWedgeNormalizedLeftLeg_eq_inl_iff_counit_commute
 then identifies this commutation statement as precisely the remaining B6
 left-leg equation.  The comparison square must now prove this equality; no
 counit component has been replaced by an identity.
+
+`genericPointWedgeCounit_commute_inl_iff_mappedLeft_eq` uses injectivity of
+the normalization and its proved action on `genericPointWedgeMappedLeft` to
+identify counit commutation with the literal equation `mappedLeft g = inl g`.
+`genericPointWedgeNormalizedLeftLeg_eq_inl_iff_mappedLeft` composes this with
+the B5 reduction.  The remaining comparison-square task now has exactly the
+mapped-left equality as its target, entirely inside the free product.
