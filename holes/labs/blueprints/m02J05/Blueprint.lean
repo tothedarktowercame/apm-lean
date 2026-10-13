@@ -1306,7 +1306,80 @@ lemma apm_m02J05_bridge_complementary_young_holder_of_lux_facts_aux_young_aux_ar
     (hαβ : ∀ t, 0 ≤ t → α (β t) = t)
     {b : ℝ} (hb : 0 < b) :
     b * α b ≤ apm_m02J05_young α b + apm_m02J05_young β (α b) := by
-  sorry
+  let μ : Measure ℝ := volume.restrict (Ioc (0 : ℝ) b)
+  have hab : 0 < α b := by
+    rw [← hαzero]
+    exact hαmono (mem_Ici.mpr le_rfl) (mem_Ici.mpr hb.le) hb
+  have hβzero : β 0 = 0 := by simpa [hαzero] using hβα 0 le_rfl
+  have hαint : Integrable α μ := by
+    have hi : IntegrableOn α (Icc (0 : ℝ) b) :=
+      (hαc.mono fun _ hx ↦ hx.1).integrableOn_Icc
+    exact hi.mono_set fun _ hx ↦ ⟨hx.1.le, hx.2⟩
+  have hαnn : 0 ≤ᵐ[μ] α := by
+    filter_upwards [ae_restrict_mem measurableSet_Ioc] with x hx
+    exact (hnonneg x hx.1.le).1
+  have hαbdd : α ≤ᵐ[μ] (fun _ ↦ α b) := by
+    filter_upwards [ae_restrict_mem measurableSet_Ioc] with x hx
+    exact hαmono.monotoneOn (mem_Ici.mpr hx.1.le) (mem_Ici.mpr hb.le) hx.2
+  have hlayer := hαint.integral_eq_integral_Ioc_meas_le hαnn hαbdd
+  have hmeasure : ∀ t ∈ Ioc (0 : ℝ) (α b),
+      μ.real {x : ℝ | t ≤ α x} = b - β t := by
+    intro t ht
+    have hβt0 : 0 < β t := by
+      rw [← hβzero]
+      exact
+        (apm_m02J05_bridge_complementary_young_holder_of_lux_facts_aux_beta_strictMono
+          α β hαmono (fun z hz ↦ (hnonneg z hz).2) hαβ)
+          (mem_Ici.mpr le_rfl) (mem_Ici.mpr ht.1.le) ht.1
+    have hβtb : β t ≤ b :=
+      (apm_m02J05_bridge_complementary_young_holder_of_lux_facts_aux_young_aux_area_aux_galois
+        α β hαmono hnonneg hαβ hb.le ht.1.le).2 ht.2
+    have hset : Ioc (0 : ℝ) b ∩ {x : ℝ | t ≤ α x} = Icc (β t) b := by
+      ext x
+      simp only [mem_inter_iff, mem_Ioc, mem_setOf_eq, mem_Icc]
+      constructor
+      · rintro ⟨⟨hx0, hxb⟩, htx⟩
+        exact ⟨(apm_m02J05_bridge_complementary_young_holder_of_lux_facts_aux_young_aux_area_aux_galois
+          α β hαmono hnonneg hαβ hx0.le ht.1.le).2 htx, hxb⟩
+      · rintro ⟨hbx, hxb⟩
+        have hx0 : 0 < x := hβt0.trans_le hbx
+        exact ⟨⟨hx0, hxb⟩,
+          (apm_m02J05_bridge_complementary_young_holder_of_lux_facts_aux_young_aux_area_aux_galois
+            α β hαmono hnonneg hαβ hx0.le ht.1.le).1 hbx⟩
+    have hae : {x : ℝ | t ≤ α x} =ᵐ[μ] Icc (β t) b := by
+      filter_upwards [ae_restrict_mem measurableSet_Ioc] with x hx
+      have hs := Set.ext_iff.mp hset x
+      simp only [mem_inter_iff, mem_Ioc, mem_setOf_eq, mem_Icc] at hs ⊢
+      apply propext
+      change (t ≤ α x) ↔ (β t ≤ x ∧ x ≤ b)
+      exact ⟨fun h ↦ hs.mp ⟨hx, h⟩, fun h ↦ (hs.mpr h).2⟩
+    change (μ {x : ℝ | t ≤ α x}).toReal = _
+    rw [measure_congr hae]
+    change ((volume.restrict (Ioc (0 : ℝ) b)) (Icc (β t) b)).toReal = _
+    rw [Measure.restrict_apply measurableSet_Icc]
+    have hinter : Icc (β t) b ∩ Ioc (0 : ℝ) b = Icc (β t) b := by
+      ext x
+      simp only [mem_inter_iff, mem_Icc, mem_Ioc]
+      constructor
+      · exact fun hx ↦ hx.1
+      · intro hx
+        exact ⟨hx, hβt0.trans_le hx.1, hx.2⟩
+    rw [hinter, Real.volume_Icc, ENNReal.toReal_ofReal]
+    exact sub_nonneg.mpr hβtb
+  have hαeq : apm_m02J05_young α b =
+      ∫ t in Ioc (0 : ℝ) (α b), (b - β t) := by
+    rw [apm_m02J05_young, intervalIntegral.integral_of_le hb.le]
+    change (∫ x, α x ∂μ) = _
+    rw [hlayer]
+    exact setIntegral_congr_fun measurableSet_Ioc hmeasure
+  have hβint : IntervalIntegrable β volume 0 (α b) :=
+    (hβc.mono fun _ hx ↦ hx.1).intervalIntegrable_of_Icc hab.le
+  rw [← intervalIntegral.integral_of_le hab.le] at hαeq
+  rw [hαeq, apm_m02J05_young]
+  rw [intervalIntegral.integral_sub
+    (intervalIntegral.intervalIntegrable_const :
+      IntervalIntegrable (fun _ : ℝ ↦ b) volume 0 (α b)) hβint]
+  simp [hab.le, mul_comm]
 
 lemma apm_m02J05_bridge_complementary_young_holder_of_lux_facts_aux_young_aux_area_aux_diagonal
     (α β : ℝ → ℝ)
