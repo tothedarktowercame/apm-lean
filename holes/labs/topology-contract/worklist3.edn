@@ -23717,7 +23717,7 @@
    :consumer :t01A08,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "Recorded commit is invalid: f032efae9d1501f7ddfe93c66668f88f24ed37f4 is absent locally and origin rejects it as not our ref. The intended scoped commit appears to be f032efae9b89fb527a72ea9192f3c89f09f82615. Repair the row to record the exact existing full SHA, then rerun independent review.",
    :implements-lemma
@@ -23725,45 +23725,45 @@
    :evidence
    {:placeholder-delta {:t01A08 [1 1]},
     :residual
-    "Take hf.eventually set in nhdsWithin s; its interior intersection remains dense at x; induct there, extend symmetry, combine swaps; B1.",
+    "Use the finite-order relative neighborhood with closure localization; induct on order; combine leading/tail swaps and adjacent closure; B1.",
     :outcome :stop,
     :warnings [],
     :missing-theorems
-    [{:name "mem_closure_inter_of_mem_nhdsWithin",
-      :type "closure survives intersection with relative neighborhood",
+    [{:name
+      "ContDiffWithinAt.exists_mem_nhdsWithin_contDiffWithinAt_of_infty",
+      :type
+      "C-infinity supplies a relative neighborhood of pointwise C-k smoothness for each finite k",
       :status :proved,
       :consumers [:t01A08],
       :depends-on [],
       :area "sard-convex-domain"}
      {:name
       "ContDiffWithinAt.domDomCongr_iteratedFDerivWithin_of_infty",
-      :type "C∞ within implies permutation invariance",
+      :type "C-infinity within implies all permutation invariance",
       :status :partial,
       :consumers [:t01A08],
-      :depends-on ["mem_closure_inter_of_mem_nhdsWithin"],
+      :depends-on
+      ["ContDiffWithinAt.exists_mem_nhdsWithin_contDiffWithinAt_of_infty"],
       :area "sard-convex-domain"}],
     :statement-hashes {:registry "147/147"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Relative-neighborhood closure localization proved; instantiate with hf.eventually and assemble induction.",
+    "Finite-order smooth relative neighborhood proved; instantiate it with closure localization and finish the permutation induction.",
     :commands
     [{:cmd
-      "lake build scoped module; lean helper/fixture; hash/scope/registry checks",
+      "lake build ConstructionTargets.SardConvexDomain; lake env lean helper and fixture; hash/registry/commit checks",
       :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1791882361339-9233-8bdd1293",
-     :commands
-     ["git show/diff 02cb5036; scope and recorded-tree checks"
-      "lake build ConstructionTargets.SardConvexDomain"
-      "lake env lean fixture and /tmp/CheckSardRelativeClosure.lean"
-      "sha256sum fixture; statement-registry check; placeholder recount"],
-     :finding
-     "PASS: valid STOP after real progress. One-file commit correctly proves closure survives intersection with a relative neighborhood: t⊆s transports u from nhdsWithin x s to nhdsWithin x t, after which the standard intersection identity preserves NeBot. Direction and filter representation are correct. Build/export pass; fixture hash matches; standard axioms only; registry 147/147; sorry/admit 0->0. Instantiation with the local smoothness set and final induction remain listed."},
-    :commit "02cb50369f7b686cc693544825add1c02095af1a",
+    :diagnostic-history
+    [{:cmd "finite-order scratch",
+      :exit 1,
+      :correction "made WithTop order coercion explicit; compiled"}
+     {:cmd "frame symlink precheck",
+      :exit 1,
+      :correction
+      "canonical apm-lean checkout is not a frame; ran gates with its package authority"}],
+    :commit "cb65ff3000337602c3de8aab28cb628f79b7a4e1",
     :changed-paths ["ConstructionTargets/SardConvexDomain.lean"],
     :fixture
     {:path "/tmp/t01a08_smooth_symmetry_membership_probe.lean",
@@ -23772,7 +23772,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain/B1/symmetry",
    :acceptance
@@ -33738,7 +33738,8 @@
     :lemma-contdiffwithinat-domdomcongr-iteratedfderivwithin-of-eqon-interior
     :lemma-continuouswithinat-eq-of-eqon-of-mem-closure
     :lemma-mem-closure-inter-of-mem-nhds
-    :lemma-mem-closure-inter-of-mem-nhdswithin],
+    :lemma-mem-closure-inter-of-mem-nhdswithin
+    :lemma-contdiffwithinat-exists-mem-nhdswithin-contdiffwithinat-of-infty],
    :other-consumers []}
   {:consumer :t01A08,
    :phase :lemma,
@@ -33991,6 +33992,28 @@
     :banked-by :r-a08-symmetry-slots-1,
     :banked-commit "02cb50369f7b686cc693544825add1c02095af1a"},
    :id :lemma-mem-closure-inter-of-mem-nhdswithin,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t01A08,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ContDiffWithinAt.exists_mem_nhdsWithin_contDiffWithinAt_of_infty",
+    :type
+    "C-infinity supplies a relative neighborhood of pointwise C-k smoothness for each finite k"},
+   :lemma
+   {:name
+    "ContDiffWithinAt.exists_mem_nhdsWithin_contDiffWithinAt_of_infty",
+    :reported-by [:r-a08-symmetry-slots-1],
+    :type
+    "C-infinity supplies a relative neighborhood of pointwise C-k smoothness for each finite k",
+    :area "sard-convex-domain",
+    :proved-in :r-a08-symmetry-slots-1},
+   :id
+   :lemma-contdiffwithinat-exists-mem-nhdswithin-contdiffwithinat-of-infty,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}],
