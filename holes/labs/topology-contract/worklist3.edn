@@ -36104,13 +36104,13 @@
    [:lemma-constructiontargets-sardconvexdomain-eq-whitneydyadicindexof-of-mem-cube-of-gene],
    :other-consumers []}
   {:consumer :t93J03,
-   :stop-count 3,
+   :stop-count 4,
    :review-finding
    "Blueprint still fails the required hypothesis-coverage gate: the frozen SemilocallySimplyConnected X argument is anonymous in C5 and unused by C1-C4. Commit 512a220f correctly retracts the vacuous certificate workaround and documents the conflict, but does not repair it. Owner must explicitly waive/revise the global gate or revise the frozen statement before this blueprint can PASS.",
    :evidence
    {:placeholder-delta {:t93J03 [1 1]},
     :residual
-    "Resolve frozen redundant-hypothesis gate; then build orbit quotient, C1, C2, and Main assembly.",
+    "Owner resolution of frozen hypothesis gate; then orbit quotient, C1, C2, Main.",
     :outcome :stop,
     :warnings ["reference has expected sorryAx only in C1/C2"],
     :missing-theorems
@@ -36132,18 +36132,11 @@
     :axioms [],
     :author :topo-10,
     :reason
-    "Exact interface conflict: compiled C1-C4 route proves the embedding without SemilocallySimplyConnected X; C3 uses only path/local-path connectedness and subgroup inclusion, C4 only the lift equation and embeddings. The frozen theorem retains the redundant hypothesis while the global gate requires semantic use. Prior certificate padding was retracted. Owner must approve redundancy or revise the frozen statement/audit rule; mathematics is not refuted.",
+    "Blocked after three reviewed attempts by an external specification decision: the frozen SemilocallySimplyConnected X hypothesis is semantically redundant, while hypothesis coverage requires genuine use. Fresh checks confirm C3 uses only the subgroup lifting criterion, C4 only lift/embedding data, and C5 binds the hypothesis anonymously. No valid scoped repair exists; owner must waive/revise the gate or revise the frozen statement.",
     :commands
-    [{:cmd "lake env lean holes/labs/blueprints/t93J03/Blueprint.lean",
-      :exit 0}
-     {:cmd "registry; defect/retraction scans; diff checks", :exit 0}
-     {:cmd "git commit; scoped commit; placeholder recount", :exit 0}],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1791919956969-10290-5706f71c",
-     :finding
-     "Blueprint still fails the required hypothesis-coverage gate: the frozen SemilocallySimplyConnected X argument is anonymous in C5 and unused by C1-C4. Commit 512a220f correctly retracts the vacuous certificate workaround and documents the conflict, but does not repair it. Owner must explicitly waive/revise the global gate or revise the frozen statement before this blueprint can PASS."},
+    [{:cmd "hash; lake env lean reference; registry", :exit 0}
+     {:cmd "reference dependency and blueprint blocker scans", :exit 0}
+     {:cmd "git show --check 512a220f", :exit 0}],
     :commit "512a220f610893826b53df094fdc793cb0028bc6",
     :changed-paths ["ConstructionTargets/t93J03Closure.blueprint.md"],
     :fixture
@@ -36153,7 +36146,7 @@
      :mode :blueprint},
     :seat :topo-10},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
