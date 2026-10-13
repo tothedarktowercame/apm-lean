@@ -923,11 +923,25 @@ lemma apm_m98A06_weak_FTC_aux_representation_aux_sub
     integral_sub hui hvi, ewu, ewv]
   simp
 
+lemma apm_m98A06_weak_FTC_aux_representation_aux_const_aux_interior_aux_local
+    (w : ℝ → ℝ) (hw : ContinuousOn w (Icc (0 : ℝ) Real.pi)) :
+    MeasureTheory.LocallyIntegrableOn w (Ioo (0 : ℝ) Real.pi) volume := by
+  exact (hw.mono Ioo_subset_Icc_self).locallyIntegrableOn measurableSet_Ioo
+
+lemma apm_m98A06_weak_FTC_aux_representation_aux_const_aux_interior_aux_distribution
+    (w : ℝ → ℝ)
+    (hw : ContinuousOn w (Icc (0 : ℝ) Real.pi))
+    (hwloc : MeasureTheory.LocallyIntegrableOn w (Ioo (0 : ℝ) Real.pi) volume)
+    (hweak : apm_m98a06_IsWeakDerivativeOn (Ioo 0 Real.pi) w 0) :
+    ∃ c : ℝ, ∀ x ∈ Ioo (0 : ℝ) Real.pi, w x = c := by
+  sorry
+
 lemma apm_m98A06_weak_FTC_aux_representation_aux_const_aux_interior
     (w : ℝ → ℝ) (hw : ContinuousOn w (Icc (0 : ℝ) Real.pi))
     (hweak : apm_m98a06_IsWeakDerivativeOn (Ioo 0 Real.pi) w 0) :
     ∃ c : ℝ, ∀ x ∈ Ioo (0 : ℝ) Real.pi, w x = c := by
-  sorry
+  exact apm_m98A06_weak_FTC_aux_representation_aux_const_aux_interior_aux_distribution
+    w hw (apm_m98A06_weak_FTC_aux_representation_aux_const_aux_interior_aux_local w hw) hweak
 
 lemma apm_m98A06_weak_FTC_aux_representation_aux_const_aux_closure
     (w : ℝ → ℝ) (hw : ContinuousOn w (Icc (0 : ℝ) Real.pi))
