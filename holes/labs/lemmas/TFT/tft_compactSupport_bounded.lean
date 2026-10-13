@@ -112,7 +112,7 @@ def tftDirectionalTranslateStage (ψ : TFT E F) (x₀ x v : E) :
 -- BEGIN SEAT AREA
 lemma tft_compactSupport_bounded (f : E → F) (hf : Continuous f)
     (hfc : HasCompactSupport f) : ∃ C : ℝ, ∀ x, ‖f x‖ ≤ C := by
-  sorry
+  exact hfc.exists_bound_of_continuous hf
 -- END SEAT AREA
 
 /-- A compactly supported continuous map, bundled as a bounded continuous

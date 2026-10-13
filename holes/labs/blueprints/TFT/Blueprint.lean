@@ -137,7 +137,7 @@ def tftDirectionalTranslateStage (ψ : TFT E F) (x₀ x v : E) :
 
 lemma tft_compactSupport_bounded (f : E → F) (hf : Continuous f)
     (hfc : HasCompactSupport f) : ∃ C : ℝ, ∀ x, ‖f x‖ ≤ C := by
-  sorry
+  exact hfc.exists_bound_of_continuous hf
 
 /-- A compactly supported continuous map, bundled as a bounded continuous
 map.  This vector-valued wrapper avoids the ring-valued specialization of
