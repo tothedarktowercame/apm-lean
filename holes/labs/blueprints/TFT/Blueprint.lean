@@ -194,7 +194,52 @@ lemma tft_fderiv_translate_hasCompactSupport
   simpa [Function.comp_def] using
     (hfc.fderiv_apply ℝ v).comp_homeomorph (Homeomorph.addLeft x)
 
-/-- U2: the directional difference quotient converges in sup norm. -/
+/-- U2 step: mean-value bound for one difference quotient, given a modulus for `fderiv`. -/
+lemma tft_translate_bcf_difference_quotient_aux_mvt
+    (f : E → F) (hf : ContDiff ℝ 1 f) (z v : E) (h ε : ℝ) (hh : h ≠ 0)
+    (hε : ∀ w, dist w z ≤ |h| * ‖v‖ → ‖fderiv ℝ f w - fderiv ℝ f z‖ ≤ ε) :
+    ‖h⁻¹ • (f (z + h • v) - f z) - fderiv ℝ f z v‖ ≤ ε * ‖v‖ := by
+  sorry
+
+lemma tft_translate_bcf_difference_quotient_aux_uniform
+    (f : E → F) (hf : ContDiff ℝ 1 f) (hfc : HasCompactSupport f) (x v : E) :
+    Tendsto (fun h : ℝ =>
+        ‖tftBCFOfCompactSupport
+            (fun y => h⁻¹ • (f (x + h • v + y) - f (x + y)))
+            (tft_difference_quotient_continuous f hf x v h)
+            (tft_difference_quotient_hasCompactSupport f hfc x v h) -
+          tftBCFOfCompactSupport
+            (fun y => fderiv ℝ f (x + y) v)
+            (tft_fderiv_translate_continuous f hf x v)
+            (tft_fderiv_translate_hasCompactSupport f hf hfc x v)‖)
+      (nhdsWithin 0 ({0} : Set ℝ)ᶜ) (nhds 0) := by
+  rw [Metric.tendsto_nhdsWithin_nhds]
+  intro ε hε
+  have huc : UniformContinuous (fderiv ℝ f) :=
+    (hfc.fderiv ℝ).uniformContinuous_of_continuous (hf.continuous_fderiv (by norm_num))
+  have hv : (0 : ℝ) < ‖v‖ + 1 := by positivity
+  obtain ⟨δ, hδ, hmod⟩ := Metric.uniformContinuous_iff.1 huc (ε / 2 / (‖v‖ + 1)) (by positivity)
+  refine ⟨δ / (‖v‖ + 1), by positivity, fun h hh0 hh => ?_⟩
+  have hh0' : h ≠ 0 := hh0
+  have hhδ : |h| * ‖v‖ < δ := by
+    rw [dist_zero_right, Real.norm_eq_abs, lt_div_iff₀ hv] at hh
+    nlinarith [abs_nonneg h]
+  rw [dist_zero_right, norm_norm]
+  refine lt_of_le_of_lt ?_ (half_lt_self hε)
+  refine (BoundedContinuousFunction.norm_le (by positivity)).2 fun y => ?_
+  rw [BoundedContinuousFunction.sub_apply]
+  simp only [tftBCFOfCompactSupport, BoundedContinuousFunction.coe_ofNormedAddCommGroup]
+  have key := tft_translate_bcf_difference_quotient_aux_mvt f hf (x + y) v h
+    (ε / 2 / (‖v‖ + 1)) hh0' (fun w hw => by
+      have := hmod (lt_of_le_of_lt hw hhδ)
+      rw [dist_eq_norm] at this
+      exact this.le)
+  rw [show x + h • v + y = x + y + h • v by abel]
+  refine key.trans ?_
+  rw [div_mul_eq_mul_div, div_le_iff₀ hv]
+  nlinarith [norm_nonneg v]
+
+/-- U2 (assembled). -/
 lemma tft_translate_bcf_difference_quotient
     (f : E → F) (hf : ContDiff ℝ 1 f) (hfc : HasCompactSupport f) (x v : E) :
     Tendsto (fun h : ℝ =>
@@ -207,7 +252,8 @@ lemma tft_translate_bcf_difference_quotient
         (fun y => fderiv ℝ f (x + y) v)
         (tft_fderiv_translate_continuous f hf x v)
         (tft_fderiv_translate_hasCompactSupport f hf hfc x v))) := by
-  sorry
+  rw [tendsto_iff_norm_sub_tendsto_zero]
+  exact tft_translate_bcf_difference_quotient_aux_uniform f hf hfc x v
 
 /-- S1: continuity into the fixed stage.  The hypothesis is precisely U1 for
 every iterated derivative (the maps occurring in `continuous_iff_comp`). -/
