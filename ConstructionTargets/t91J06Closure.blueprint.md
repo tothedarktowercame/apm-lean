@@ -26,7 +26,7 @@ counterpart, applied separately to `t` and to the underlying map of `q`;
 endpoint extrema for monotone maps, affine homeomorphisms of closed intervals,
 and the pasting lemma for two closed endpoint intervals
 
-status: planned
+status: partial
 
 Classify both `t` and the underlying real-valued map of `q` as strictly
 monotone or strictly antitone.  The endpoint images of `t` are distinct
@@ -41,6 +41,13 @@ q)` cases agree at both seams.  Prove continuity by closed-set pasting,
 strict monotonicity or strict antitonicity piecewise and across seams, and
 surjectivity by the intermediate value theorem.  Package the continuous
 bijection as a homeomorphism using compactness of `I` and the Hausdorff target.
+
+Compiled progress: `intervalEmbedding_orientation` and
+`intervalHomeomorph_orientation` classify the orientations of `t` and the
+real coordinate of `q` independently.  The theorem
+`intervalEmbedding_homeomorph_four_orientations` packages both decisions, so
+the implementation must now construct and paste the affine endpoint pieces
+in those four cases.
 
 ### B2. Canonical coordinates on one embedded stage
 
