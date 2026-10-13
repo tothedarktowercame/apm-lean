@@ -1442,4 +1442,39 @@ theorem finite_whitneyNetQuarterBalls_meeting_nhds_of_not_mem
   norm_num [div_eq_mul_inv] at hxc ⊢
   nlinarith
 
+/-- The selected quarter-distance balls cannot be locally finite in the
+ambient space when the closed set has a boundary point.  Their union covers
+the complement, while every individual closed ball stays away from the set. -/
+theorem not_locallyFinite_whitneyNetQuarterBalls_of_frontier_nonempty
+    {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E] [ProperSpace E]
+    {s : Set E} (hs : IsClosed s) (hne : s.Nonempty)
+    (hfront : (frontier s).Nonempty) :
+    ¬ LocallyFinite (fun i : WhitneyNetIndex s =>
+      Metric.ball i.center (Metric.infDist i.center s / 4)) := by
+  intro hlocal
+  obtain ⟨x, hx⟩ := hfront
+  have hxcl : x ∈ closure (sᶜ) := by
+    rw [closure_compl]
+    exact hx.2
+  have hxunion : x ∈ closure (⋃ i : WhitneyNetIndex s,
+      Metric.ball i.center (Metric.infDist i.center s / 4)) :=
+    closure_mono (compl_subset_iUnion_whitneyNetQuarterBalls hs hne) hxcl
+  rw [hlocal.closure_iUnion] at hxunion
+  obtain ⟨i, hxi⟩ := Set.mem_iUnion.1 hxunion
+  have hxclosed : x ∈ Metric.closedBall i.center
+      (Metric.infDist i.center s / 4) :=
+    Metric.closure_ball_subset_closedBall hxi
+  have hcenter : i.center ∉ s :=
+    ((whitneyStratumNet_spec s i.1).1 i.2.2).1
+  have hpos : 0 < Metric.infDist i.center s :=
+    (hs.notMem_iff_infDist_pos hne).1 hcenter
+  have hxs : x ∈ s := by
+    rw [← hs.closure_eq]
+    exact hx.1
+  have hlower : Metric.infDist i.center s ≤ dist i.center x :=
+    Metric.infDist_le_dist_of_mem hxs
+  have hupper : dist i.center x ≤ Metric.infDist i.center s / 4 :=
+    by simpa [dist_comm] using Metric.mem_closedBall.1 hxclosed
+  linarith
+
 end ConstructionTargets.SardConvexDomain
