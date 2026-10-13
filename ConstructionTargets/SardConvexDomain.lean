@@ -680,4 +680,17 @@ theorem infDist_comparable_of_dist_lt_half
   rw [dist_comm y x] at h₂
   constructor <;> linarith
 
+/-- The full family of quarter-distance balls, indexed by complement points,
+covers the complement.  The maximal-selection step only has to thin this
+family while retaining coverage. -/
+theorem compl_subset_iUnion_quarter_infDist_ball
+    {E : Type*} [PseudoMetricSpace E] {s : Set E}
+    (hs : IsClosed s) (hne : s.Nonempty) :
+    sᶜ ⊆ ⋃ x : (sᶜ : Set E), Metric.ball x.1 (Metric.infDist x.1 s / 4) := by
+  intro x hx
+  have hxn : x ∉ s := hx
+  apply Set.mem_iUnion.2
+  refine ⟨⟨x, hx⟩, Metric.mem_ball_self ?_⟩
+  exact div_pos ((hs.notMem_iff_infDist_pos hne).1 hxn) (by norm_num)
+
 end ConstructionTargets.SardConvexDomain
