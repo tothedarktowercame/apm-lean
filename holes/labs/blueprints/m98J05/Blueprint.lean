@@ -289,7 +289,14 @@ theorem apm_m98J05_kernel_hasDerivAt_space {t : ℝ} (ht : 0 < t) (x : ℝ) :
 
 theorem apm_m98J05_kernelDx_hasDerivAt_space {t : ℝ} (ht : 0 < t) (x : ℝ) :
     HasDerivAt (fun z ↦ apm_m98J05_kernelDx t z) (apm_m98J05_kernelDt t x) x := by
-  sorry
+  unfold apm_m98J05_kernelDx apm_m98J05_kernelDt apm_m98J05_heatKernel
+  have hlin := ((hasDerivAt_id x).div_const (2 * t)).neg
+  have hexp := ((((hasDerivAt_id x).pow 2).neg.div_const (4 * t)).exp)
+  have hgauss := hexp.const_mul (1 / (2 * Real.sqrt (Real.pi * t)))
+  convert hlin.mul hgauss using 1
+  simp
+  field_simp [ne_of_gt ht]
+  <;> ring
 
 /-- Uniform bounds on a compact time range away from zero. -/
 theorem apm_m98J05_kernel_derivs_bounded {a b : ℝ} (ha : 0 < a) :
