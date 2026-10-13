@@ -1264,6 +1264,39 @@ lemma apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_norm_coord
             simp only [ContinuousMultilinearMap.curryLeft_apply, Fin.consEquiv_apply] <;>
             congr 2 <;> funext i <;> refine Fin.cases ?_ ?_ i <;> simp
 
+lemma apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_partialList_eq_iteratedFDeriv
+    (f : apm_m98J02_E → ℝ) (hf : ContDiff ℝ ∞ f)
+    (is : List (Fin 2)) (x : apm_m98J02_E) :
+    apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_partialList is f x =
+      iteratedFDeriv ℝ is.length f x
+        (fun j => EuclideanSpace.single (is.get j) (1 : ℝ)) := by
+  induction is generalizing f x with
+  | nil =>
+      simp only [apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_partialList,
+        List.foldr_nil, List.length_nil]
+      exact (iteratedFDeriv_zero_apply (𝕜 := ℝ) (f := f) (x := x)
+        (fun j => EuclideanSpace.single ([].get j) (1 : ℝ))).symm
+  | cons i is ih =>
+      simp only [apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_partialList,
+        List.foldr_cons, List.length_cons]
+      have hfun : List.foldr apm_m98J02_partial f is =
+          fun z => iteratedFDeriv ℝ is.length f z
+            (fun j => EuclideanSpace.single (is.get j) (1 : ℝ)) := by
+        funext z
+        exact ih f hf z
+      rw [hfun]
+      change fderiv ℝ (fun z => iteratedFDeriv ℝ is.length f z
+          (fun j => EuclideanSpace.single (is.get j) (1 : ℝ))) x
+          (EuclideanSpace.single i 1) = _
+      rw [fderiv_continuousMultilinear_apply_const_apply]
+      · symm
+        simpa [Fin.tail] using
+          (iteratedFDeriv_succ_apply_left (𝕜 := ℝ) (f := f) (x := x)
+            (m := fun j : Fin (is.length + 1) =>
+              EuclideanSpace.single ((i :: is).get j) (1 : ℝ)))
+      · exact (ContDiff.differentiable_iteratedFDeriv
+          (by exact_mod_cast ENat.coe_lt_top is.length) hf) x
+
 lemma apm_m98J02_bridge_2_aux_psi_aux_stage_cont
     (v : apm_m98J02_Dist) (χ : apm_m98J02_Test)
     (hsmooth : ∀ φ : apm_m98J02_Test,
