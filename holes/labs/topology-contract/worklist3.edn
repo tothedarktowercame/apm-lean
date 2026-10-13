@@ -22570,6 +22570,8 @@
      :typed-residual-change
      :infrastructure-packets
      :review-outcomes]},
+   :review-finding
+   "Replan repairs the wrong blueprint defect. The recorded review rejects B6 because nonlinear B5 coordinates do not preserve convexity of kernel-fiber slices; the elected repair only adds nonempty-interior hypotheses to B7/B9. Replace the repair scope with one that fixes B6 by proving an extension theorem or strengthening induction to the actual nonconvex relative chart domains, then propagate that change through B7-B10. Fresh priorities correctly show t01A08 at 1 placeholder, 7 banked, 1 backlog.",
    :evidence
    {:outcome :replan,
     :seat "topo-12",
@@ -22624,9 +22626,15 @@
       :current-residual "Elect B1 after review.",
       :other-consumers []}],
     :author "topo-12",
-    :disposition :replan},
+    :disposition :replan,
+    :review
+    {:outcome :fail,
+     :seat "codex-11",
+     :job "invoke-1791865594297-8418-43049dd2",
+     :finding
+     "Replan repairs the wrong blueprint defect. The recorded review rejects B6 because nonlinear B5 coordinates do not preserve convexity of kernel-fiber slices; the elected repair only adds nonempty-interior hypotheses to B7/B9. Replace the repair scope with one that fixes B6 by proving an extension theorem or strengthening induction to the actual nonconvex relative chart domains, then propagate that change through B7-B10. Fresh priorities correctly show t01A08 at 1 placeholder, 7 banked, 1 backlog."}},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :repair,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance {:strategy "Review blueprint and rerank."},
@@ -22639,7 +22647,7 @@
   {:bounded-exception "Rule0 repair.",
    :consumer :t01A08,
    :phase :implementation,
-   :state :blocked,
+   :state :superseded,
    :scope ["ConstructionTargets/SardConvexDomain.blueprint.md"],
    :dag-node "TOPOLOGY-ROUTES.md/t01A08/corners-sard",
    :acceptance
@@ -22665,7 +22673,7 @@
      :infrastructure-packets
      :review-outcomes]},
    :phase :strategy,
-   :state :blocked,
+   :state :superseded,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance {:strategy "Review repaired blueprint."},
