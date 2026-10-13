@@ -1057,4 +1057,33 @@ theorem isSeparated_image_whitneyNormalize_incidence
   exact (ENNReal.ofReal_lt_ofReal_iff
     (lt_trans (by norm_num : (0 : ℝ) < 1 / 8) hfixed)).2 hfixed
 
+/-- The number of scale-`k` centers incident to one point is bounded by one
+fixed packing number, independently of `k` and the point. -/
+theorem encard_whitneyStratumNet_mem_quarter_ball_le_fixed_packingNumber
+    {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    (s : Set E) (k : ℤ) (x : E) :
+    {c | c ∈ whitneyStratumNet s k ∧
+      x ∈ Metric.ball c (Metric.infDist c s / 4)}.encard ≤
+      Metric.packingNumber ((1 : NNReal) / 8)
+        (Metric.closedBall (0 : E) (1 / 2 : ℝ)) := by
+  let I : Set E := {c | c ∈ whitneyStratumNet s k ∧
+    x ∈ Metric.ball c (Metric.infDist c s / 4)}
+  have hsep := isSeparated_image_whitneyNormalize_incidence s k x
+  have hsub : whitneyNormalize k x '' I ⊆ Metric.closedBall (0 : E) (1 / 2) := by
+    rintro _ ⟨c, hc, rfl⟩
+    exact whitneyNormalize_mem_closedBall_half s k x c
+      ((whitneyStratumNet_spec s k).1 hc.1) hc.2
+  have hinj : Set.InjOn (whitneyNormalize k x) I := by
+    intro c hc d hd h
+    have hzero : ((2 : ℝ) ^ k)⁻¹ * dist c d = 0 := by
+      rw [← dist_whitneyNormalize k x c d, h, dist_self]
+    have hdist : dist c d = 0 :=
+      (mul_eq_zero.mp hzero).resolve_left (ne_of_gt (inv_pos.mpr (by positivity)))
+    exact dist_eq_zero.mp hdist
+  rw [← hinj.encard_image]
+  have hsep' : Metric.IsSeparated (↑((1 : NNReal) / 8))
+      (whitneyNormalize k x '' I) := by
+    simpa [I] using hsep
+  exact hsep'.encard_le_packingNumber hsub
+
 end ConstructionTargets.SardConvexDomain
