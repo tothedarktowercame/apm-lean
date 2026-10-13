@@ -469,10 +469,32 @@ theorem apm_t96j07_diagonal_link_degree :
     apm_t96j07_normalizedDiagonal_homotopic_sign
     apm_t96j07_signDiagonal_H2
 
-/-- Seat (claude-14): the standard affine chart of `RP³` at axis `i`:
-`[x] ↦ (x (i.succAbove j) / x i)_j` on `{x i ≠ 0}` (well defined: invariant
-under scaling), inverse `y ↦ [insertNth i 1 y]`; source open, target all of `ℝ³`.
-Shared by the four axis leaves. -/
+lemma apm_t96j07_affine_chart_aux_rep_ratio (i : Fin 4)
+    (x : apm_t96j07_V) (hx : x ≠ 0) :
+    (WithLp.toLp 2 (fun j =>
+        (Projectivization.mk ℝ x hx).rep (i.succAbove j) /
+          (Projectivization.mk ℝ x hx).rep i) : apm_t96j07_E3) =
+      (WithLp.toLp 2 (fun j => x (i.succAbove j) / x i) : apm_t96j07_E3) := by
+  obtain ⟨a, ha⟩ := Projectivization.exists_smul_eq_mk_rep ℝ x hx
+  ext j
+  have hi := congrFun ha i
+  have hj := congrFun ha (i.succAbove j)
+  change (a : ℝ) * x i = _ at hi
+  change (a : ℝ) * x (i.succAbove j) = _ at hj
+  simp only [WithLp.ofLp_toLp]
+  rw [← hi, ← hj]
+  field_simp [Units.ne_zero a]
+
+noncomputable def apm_t96j07_affine_chart_aux_insert (i : Fin 4)
+    (y : apm_t96j07_E3) : apm_t96j07_V :=
+  fun k => i.succAboveCases (1 : ℝ) (WithLp.ofLp y) k
+
+lemma apm_t96j07_affine_chart_aux_insert_ne (i : Fin 4)
+    (y : apm_t96j07_E3) : apm_t96j07_affine_chart_aux_insert i y ≠ 0 := by
+  intro h
+  have hi := congrFun h i
+  simpa [apm_t96j07_affine_chart_aux_insert] using hi
+
 theorem apm_t96j07_affine_chart :
     ∀ i : Fin 4, ∃ chart : OpenPartialHomeomorph apm_t96j07_RP3 apm_t96j07_E3,
       (∀ p, p ∈ chart.source ↔ p.rep i ≠ 0) ∧ chart.target = Set.univ ∧
