@@ -76416,35 +76416,34 @@
   {:consumer :t96J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :evidence
    {:placeholder-delta 0,
-    :residual "Complete B7 homeomorphism/equations; then B8/B9.",
+    :residual "Construct quotient homeomorphism; then B8/B9.",
     :outcome :stop,
     :warnings ["preexisting/imported lints"],
     :missing-theorems
-    [{:name "PointWedgeQuotient.FiniteWedge",
-      :type "orbit-indexed circles with basepoints identified",
+    [{:name "PairingData.signedWedgeArc_pair",
+      :type "paired arcs share the sign-selected orbit coordinate",
       :status :proved,
       :consumers [:t96J02 :t92J05 :t94J04 :t97A01 :t97A03],
-      :depends-on [],
+      :depends-on ["PointWedgeQuotient.FiniteWedge"],
       :area "polygon-surface-pi1"}
      {:name
       "ConstructionTargets.PolygonSurfacePiOne.skeletonHomeomorphWedge",
-      :type
-      "P.skeleton ≃ₜ orbit-indexed circle wedge, with signed arc equations",
-      :status :not-started,
+      :type "P.skeleton ≃ₜ orbit-indexed wedge with signed equations",
+      :status :partial,
       :consumers [:t96J02 :t92J05 :t94J04 :t97A01 :t97A03],
-      :depends-on ["PointWedgeQuotient.FiniteWedge"],
+      :depends-on ["PairingData.signedWedgeArc_pair"],
       :area "polygon-surface-pi1"}],
     :statement-hashes
     {:registry "131/0",
-     :module "0b38e409168bccd9156ea0dccdc9761e02d67859"},
+     :module "0d32aea8d5e3d043f73c7d2697f7e09e61ccc439"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
     :reason
-    "Orbit-indexed wedge and paired-orbit coordinate compile. Boundary quotient inverse and signed arc equations remain.",
+    "Signed positive/inverse coordinates and pairing invariance compile; the skeleton-wedge homeomorphism remains.",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/PolygonSurfacePiOne.lean",
@@ -76453,34 +76452,21 @@
       :exit 0}
      {:cmd "statement-registry check", :exit 0, :output "131/0"}
      {:cmd "sorry/admit/axiom scan", :exit 0, :output "0/0/0"}
-     {:cmd "#print axioms wedgeCircle_base_eq/positiveWedgeArc_pair",
-      :exit 0}
-     {:cmd "git show --check 1a940f0bd", :exit 0}],
+     {:cmd "#print axioms signedWedgeArc_pair", :exit 0}
+     {:cmd "git show --check 02b1fdfe0", :exit 0}],
     :diagnostic-history
-    [{:cmd "first compile",
+    [{:cmd "first coordinate compile",
       :exit 1,
-      :correction "explicit discrete index topology"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1791849916752-8083-40d5098d",
-     :commands
-     ["git show/diff/hash 1a940f0bd"
-      "lake env lean ConstructionTargets/PolygonSurfacePiOne.lean"
-      "lake build ConstructionTargets.PolygonSurfacePiOne"
-      "python3 scripts/statement-registry.py check"
-      "#print axioms + placeholder scan"],
-     :finding
-     "PASS on STOP after real progress: commit 1a940f0bd adds a compiled orbit-indexed quotient of circles identifying exactly their basepoints, continuous leg inclusions, common-basepoint equality, and the paired-orbit positive coordinate equation. The final skeleton homeomorphism, boundary quotient inverse, and positive/negative signed arc equations remain explicitly not-started, so no facade is claimed as B7 completion. Scope is exact; fixture SHA-256 db688288...670a1 and blob 0b38e409...7859 match. Fresh Lean/build gates pass, registry is 131/0, placeholders are 0, and supporting results use only propext, Classical.choice, Quot.sound."},
-    :commit "1a940f0bd",
+      :correction "split Boolean orientation"}],
+    :commit "02b1fdfe0",
     :changed-paths ["ConstructionTargets/PolygonSurfacePiOne.lean"],
     :fixture
     {:path "ConstructionTargets/PolygonSurfacePiOne.lean",
      :sha256
-     "db68828847e66d4ec38e432b6daf6f31692e682cbed0858380debb853f3670a1"},
+     "33b48672108ed86692b669c4c3e04b2b6a4d2b0fd99f459cb4c7c8a81f8b7eb0"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/PolygonSurfacePiOne.lean"],
    :dag-node "ConstructionTargets/PolygonSurfacePiOne.blueprint.md/B7",
    :acceptance
@@ -86720,6 +86706,25 @@
     :area "polygon-surface-pi1"},
    :id
    :lemma-constructiontargets-polygonsurfacepione-skeletonhomeomorphwedge,
+   :kind :lemma,
+   :depends-on
+   [:lemma-pointwedgequotient-finitewedge
+    :lemma-pairingdata-signedwedgearc-pair],
+   :other-consumers [:t92J05 :t94J04 :t97A01 :t97A03]}
+  {:consumer :t96J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "PairingData.signedWedgeArc_pair",
+    :type "paired arcs share the sign-selected orbit coordinate"},
+   :lemma
+   {:name "PairingData.signedWedgeArc_pair",
+    :reported-by [:routes-2026-10-12-polygon-b7-topo2-r1],
+    :type "paired arcs share the sign-selected orbit coordinate",
+    :area "polygon-surface-pi1",
+    :proved-in :routes-2026-10-12-polygon-b7-topo2-r1},
+   :id :lemma-pairingdata-signedwedgearc-pair,
    :kind :lemma,
    :depends-on [:lemma-pointwedgequotient-finitewedge],
    :other-consumers [:t92J05 :t94J04 :t97A01 :t97A03]}]}
