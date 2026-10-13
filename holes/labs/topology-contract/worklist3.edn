@@ -24430,25 +24430,24 @@
    :consumer :t01A08,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "extend Mathlib: state and prove the missing theorem in scope",
    :implements-lemma :lemma-closedset-whitneycubecover,
    :evidence
    {:placeholder-delta {:t01A08 [1 1]},
-    :residual
-    "Bound the three-fiber sum; assemble B3; then B4-B7, B9.",
+    :residual "Assemble B3 cover/certificates; then B4-B7, B9.",
     :outcome :stop,
     :warnings ["existing unnecessarySimpa:454"],
     :missing-theorems
     [{:name
-      "ConstructionTargets.SardConvexDomain.whitneyNetIndex_incident_stratum_eq_or_eq_add_one",
-      :type
-      "relative to an incident index, every incident scale is k-1,k,k+1",
+      "ConstructionTargets.SardConvexDomain.encard_whitneyNetIncidence_le_three_fixed_packingNumbers",
+      :type "total incidence encard <= three fixed packing numbers",
       :status :proved,
       :consumers [:t01A08],
       :depends-on
-      ["ConstructionTargets.SardConvexDomain.whitneyStratum_indices_le_add_one_of_mem_quarter_balls"],
+      ["ConstructionTargets.SardConvexDomain.whitneyNetIndex_incident_stratum_eq_or_eq_add_one"
+       "ConstructionTargets.SardConvexDomain.encard_whitneyStratumNet_mem_quarter_ball_le_fixed_packingNumber"],
       :area "sard-convex-domain"}
      {:name
       "ConstructionTargets.SardConvexDomain.closedSet_whitneyCubeCover_proper",
@@ -24456,44 +24455,32 @@
       :status :partial,
       :consumers [:t01A08],
       :depends-on
-      ["ConstructionTargets.SardConvexDomain.whitneyNetIndex_incident_stratum_eq_or_eq_add_one"
-       "ConstructionTargets.SardConvexDomain.encard_whitneyStratumNet_mem_quarter_ball_le_fixed_packingNumber"],
+      ["ConstructionTargets.SardConvexDomain.encard_whitneyNetIncidence_le_three_fixed_packingNumbers"],
       :area "sard-convex-domain"}],
     :statement-hashes {:registry "150/150"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Committed global net indices and proved incident scales are k-1,k,k+1. Three-fiber cardinal sum and B3 assembly remain; not refuted.",
+    "Committed total incidence encard bound by three fixed packing numbers. B3 cover assembly remains; not refuted.",
     :commands
     [{:cmd "lake build ConstructionTargets.SardConvexDomain", :exit 0}
      {:cmd "fixture; registry; scans; diff", :exit 0}
      {:cmd "git commit", :exit 0}],
     :diagnostic-history
-    [{:cmd "initial build",
+    [{:cmd "builds",
       :exit 1,
-      :correction "used PseudoMetricSpace for index"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1791909973210-10020-4b1a84ec",
-     :commands
-     ["git show/diff 9fa965c; scope/index checks"
-      "sha256sum + lake env lean frozen fixture"
-      "lake build ConstructionTargets.SardConvexDomain"
-      "statement registry check; forbidden-count scan"],
-     :finding
-     "PASS. Recorded topo-10 commit 9fa965c changes only the scoped Lean file and introduces a faithful sigma index carrying stratum plus net membership. For two centers incident to x, the prior symmetric bounds on their integer strata imply exactly j.k=i.k-1, i.k, or i.k+1; projection and membership orientations are correct. Fixture hash a4464109... matches; build/fixture pass; registry 150/150; forbidden placeholders stay 0; only standard axioms. Valid compiled B3 progress; STOP leaves the three-fiber cardinal sum and assembly."},
-    :commit "9fa965c742cd94be4965fd13af06c23f9b201444",
+      :correction "fixed sigma equality and union association"}],
+    :commit "1713b902c1e72367458ed1a2c2d5cf4a911b7129",
     :changed-paths ["ConstructionTargets/SardConvexDomain.lean"],
     :fixture
-    {:path "/tmp/t01a08_b3_adjacent_incidence_check.lean",
+    {:path "/tmp/t01a08_b3_three_fiber_check.lean",
      :sha256
-     "a4464109cb413de36a3c5040a1e39c8c48748a08dfcfb716077fff37115ec36f",
+     "28981371daf2ff61b45e427c29027323612970b5e0d07c1f2a4a4ca725337c21",
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain.blueprint/B3",
    :acceptance
@@ -35165,7 +35152,8 @@
     :lemma-constructiontargets-sardconvexdomain-whitneynormalize-mem-closedball-half
     :lemma-constructiontargets-sardconvexdomain-isseparated-image-whitneynormalize-incidenc
     :lemma-constructiontargets-sardconvexdomain-encard-whitneystratumne-a5bb5ee43d22
-    :lemma-constructiontargets-sardconvexdomain-whitneynetindex-incident-stratum-eq-or-eq-a],
+    :lemma-constructiontargets-sardconvexdomain-whitneynetindex-incident-stratum-eq-or-eq-a
+    :lemma-constructiontargets-sardconvexdomain-encard-whitneynetincidence-le-three-fixed-p],
    :other-consumers []}
   {:consumer :t01A08,
    :phase :lemma,
@@ -35679,6 +35667,28 @@
    :kind :lemma,
    :depends-on
    [:lemma-constructiontargets-sardconvexdomain-whitneystratum-indices-le-add-one-of-mem-qu],
+   :other-consumers []}
+  {:consumer :t01A08,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.SardConvexDomain.encard_whitneyNetIncidence_le_three_fixed_packingNumbers",
+    :type "total incidence encard <= three fixed packing numbers"},
+   :lemma
+   {:name
+    "ConstructionTargets.SardConvexDomain.encard_whitneyNetIncidence_le_three_fixed_packingNumbers",
+    :reported-by [:r-a08-sard-b3-whitney-cubes-1],
+    :type "total incidence encard <= three fixed packing numbers",
+    :area "sard-convex-domain",
+    :proved-in :r-a08-sard-b3-whitney-cubes-1},
+   :id
+   :lemma-constructiontargets-sardconvexdomain-encard-whitneynetincidence-le-three-fixed-p,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-sardconvexdomain-whitneynetindex-incident-stratum-eq-or-eq-a
+    :lemma-constructiontargets-sardconvexdomain-encard-whitneystratumne-a5bb5ee43d22],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
