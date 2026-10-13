@@ -1905,7 +1905,78 @@ lemma apm_a97j08_clopen_separation_of_bounded_component_aux_clopen
       connectedComponentIn Dᶜ z ⊆ A ∧ z ∈ A ∧
       Dᶜ ∩ Metric.closedBall 0 R = A ∪ B ∧ Disjoint A B ∧
       A ⊆ Metric.ball 0 R := by
-  sorry
+  obtain ⟨R, hR, hKR⟩ :=
+    apm_a97j08_clopen_separation_of_bounded_component_aux_radius D hzbounded
+  obtain ⟨hXc, hKX, hKS⟩ :=
+    apm_a97j08_clopen_separation_of_bounded_component_aux_truncation
+      D hD_open R hR hKR
+  let X : Set ℂ := Dᶜ ∩ Metric.closedBall 0 R
+  have hzK : z ∈ connectedComponentIn Dᶜ z := mem_connectedComponentIn hz
+  have hzX : z ∈ X := hKX hzK
+  let zX : X := ⟨z, hzX⟩
+  letI : CompactSpace X := isCompact_iff_compactSpace.mp hXc
+  let S : Set X := {w | (w : ℂ) ∈ Metric.sphere 0 R}
+  have hSc : IsCompact S :=
+    (isClosed_sphere.preimage continuous_subtype_val).isCompact
+  have hcomp : connectedComponentIn X z = connectedComponentIn Dᶜ z := by
+    apply Set.Subset.antisymm
+    · exact connectedComponentIn_mono z inter_subset_left
+    · exact isPreconnected_connectedComponentIn.subset_connectedComponentIn hzK hKX
+  have hSint : S ∩ connectedComponent zX = ∅ := by
+    rw [Set.eq_empty_iff_forall_notMem]
+    rintro w ⟨hwS, hwC⟩
+    have hwK : (w : ℂ) ∈ connectedComponentIn Dᶜ z := by
+      rw [← hcomp, connectedComponentIn_eq_image hzX]
+      exact ⟨w, hwC, rfl⟩
+    exact Set.disjoint_left.mp hKS hwK ⟨w.property, hwS⟩
+  let ι := {s : Set X // IsClopen s ∧ zX ∈ s}
+  have hall : S ∩ ⋂ s : ι, (s : Set X) = ∅ := by
+    simpa [connectedComponent_eq_iInter_isClopen] using hSint
+  obtain ⟨F, hF⟩ := hSc.elim_finite_subfamily_closed
+    (fun s : ι ↦ (s : Set X)) (fun s ↦ s.2.1.isClosed) hall
+  let U : Set X := ⋂ s ∈ F, (s : Set X)
+  have hU : IsClopen U := isClopen_biInter_finset fun s _ ↦ s.2.1
+  have hzU : zX ∈ U := Set.mem_iInter₂.mpr fun s _ ↦ s.2.2
+  have hSU : S ∩ U = ∅ := hF
+  let A : Set ℂ := Subtype.val '' U
+  let B : Set ℂ := Subtype.val '' Uᶜ
+  refine ⟨R, hR, A, B, ?_, ?_, ?_, ?_, ?_, ?_, ?_⟩
+  · exact hU.isClosed.isCompact.image continuous_subtype_val
+  · exact hU.compl.isClosed.isCompact.image continuous_subtype_val
+  · intro w hw
+    have hwX : w ∈ X := hKX hw
+    have hwC : (⟨w, hwX⟩ : X) ∈ connectedComponent zX := by
+      have hi : w ∈ Subtype.val '' connectedComponent zX := by
+        rw [← connectedComponentIn_eq_image hzX, hcomp]
+        exact hw
+      obtain ⟨u, hu, huw⟩ := hi
+      have hueq : u = (⟨w, hwX⟩ : X) := Subtype.ext huw
+      simpa [hueq] using hu
+    exact ⟨⟨w, hwX⟩, hU.connectedComponent_subset hzU hwC, rfl⟩
+  · exact ⟨zX, hzU, rfl⟩
+  · apply Set.Subset.antisymm
+    · intro w hw
+      let wx : X := ⟨w, hw⟩
+      by_cases h : wx ∈ U
+      · exact Set.mem_union_left _ ⟨wx, h, rfl⟩
+      · exact Set.mem_union_right _ ⟨wx, h, rfl⟩
+    · exact Set.union_subset
+        (Set.image_subset_iff.mpr fun w _ ↦ w.property)
+        (Set.image_subset_iff.mpr fun w _ ↦ w.property)
+  · rw [Set.disjoint_left]
+    rintro w ⟨a, ha, rfl⟩ ⟨b, hb, hab⟩
+    have : b = a := Subtype.ext hab
+    subst b
+    exact hb ha
+  · rintro w ⟨wx, hwU, rfl⟩
+    rw [Metric.mem_ball, dist_zero_right]
+    have hwclosed := wx.property.2
+    rw [Metric.mem_closedBall, dist_zero_right] at hwclosed
+    exact lt_of_le_of_ne hwclosed fun heq ↦ by
+      have hwS : wx ∈ S := by
+        change dist (wx : ℂ) 0 = R
+        simpa [dist_comm] using heq
+      exact (Set.eq_empty_iff_forall_notMem.mp hSU wx) ⟨hwS, hwU⟩
 
 lemma apm_a97j08_clopen_separation_of_bounded_component_aux_margin
     (D : Set ℂ) {z : ℂ} {R : ℝ} (hR : 1 < R) {A B : Set ℂ}
