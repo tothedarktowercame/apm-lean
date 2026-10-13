@@ -23717,7 +23717,7 @@
    :consumer :t01A08,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "Recorded commit is invalid: f032efae9d1501f7ddfe93c66668f88f24ed37f4 is absent locally and origin rejects it as not our ref. The intended scoped commit appears to be f032efae9b89fb527a72ea9192f3c89f09f82615. Repair the row to record the exact existing full SHA, then rerun independent review.",
    :implements-lemma
@@ -23725,12 +23725,14 @@
    :evidence
    {:placeholder-delta {:t01A08 [1 1]},
     :residual
-    "Induct on order: leading swap by Schwarz, later adjacent swaps by tail lift; apply adjacent-swap closure; B1.",
+    "Derive eventual lower-jet symmetry on the C∞ neighborhood; lift tail swaps locally; combine with leading swap and adjacent closure; B1.",
     :outcome :stop,
     :warnings [],
     :missing-theorems
-    [{:name "iteratedFDerivWithin_domDomCongr_swap_zero_one",
-      :type "lower-jet Schwarz fixes leading swap of next-next jet",
+    [{:name
+      "ContinuousMultilinearMap.domDomCongr_fderivWithin_eq_self_of_eventuallyEq",
+      :type
+      "local within permutation identity is preserved by fderivWithin",
       :status :proved,
       :consumers [:t01A08],
       :depends-on [],
@@ -23741,39 +23743,27 @@
       :status :partial,
       :consumers [:t01A08],
       :depends-on
-      ["iteratedFDerivWithin_domDomCongr_swap_zero_one"
-       "iteratedFDerivWithin_domDomCongr_decomposeFin_symm_zero"],
+      ["ContinuousMultilinearMap.domDomCongr_fderivWithin_eq_self_of_eventuallyEq"],
       :area "sard-convex-domain"}],
     :statement-hashes {:registry "147/147"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Leading slot swap proved; induction assembling leading and tail swaps remains.",
+    "Local derivative-preservation proved; construct eventual lower-jet symmetry from local C∞ data, then finish induction.",
     :commands
     [{:cmd
-      "lake build ConstructionTargets.SardConvexDomain; lake env lean leading-swap axiom check and fixture",
+      "lake build ConstructionTargets.SardConvexDomain; lake env lean local-helper axiom check and fixture",
       :exit 0}
      {:cmd
       "sha256sum fixture; scoped commit check; statement-registry check",
       :exit 0}],
     :diagnostic-history
-    [{:cmd "initial curry rewrite probes",
+    [{:cmd "eventual-helper scratch drafts",
       :exit 1,
       :correction
-      "specified curry isometry function and domain explicitly; compiled"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1791879895733-9120-374c3a87",
-     :commands
-     ["git show/diff b372d6f6; scope and recorded-tree checks"
-      "lake build ConstructionTargets.SardConvexDomain"
-      "lake env lean fixture and /tmp/CheckSardLeadingSwap.lean"
-      "sha256sum fixture; statement-registry check; placeholder recount"],
-     :finding
-     "PASS: valid STOP after real progress. One-file commit derives the leading Fin-slot swap from lower-jet Schwarz symmetry; curry-left conversion, swap orientation, and unchanged tail arguments are correct. Build/export pass; fixture hash matches; helper uses standard axioms; registry 147/147; sorry/admit 0->0. Final induction combining leading and tail swaps is listed as remaining."},
-    :commit "b372d6f6df7abcf763bde3c8b20cfd699362c410",
+      "used nhdsWithin explicitly and typed derivative equality; compiled"}],
+    :commit "9f289ef73df577dad01edae4afc193e8f112bb10",
     :changed-paths ["ConstructionTargets/SardConvexDomain.lean"],
     :fixture
     {:path "/tmp/t01a08_smooth_symmetry_membership_probe.lean",
@@ -23782,7 +23772,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain/B1/symmetry",
    :acceptance
@@ -33741,7 +33731,8 @@
     :lemma-continuousmultilinearmap-domdomcongr-eq-self-of-adjacent-swap
     :lemma-continuousmultilinearmap-domdomcongr-fderivwithin-eq-self
     :lemma-iteratedfderivwithin-domdomcongr-decomposefin-symm-zero
-    :lemma-iteratedfderivwithin-domdomcongr-swap-zero-one],
+    :lemma-iteratedfderivwithin-domdomcongr-swap-zero-one
+    :lemma-continuousmultilinearmap-domdomcongr-fderivwithin-eq-self-of-eventuallyeq],
    :other-consumers []}
   {:consumer :t01A08,
    :phase :lemma,
@@ -33846,6 +33837,28 @@
     :banked-by :r-a08-symmetry-slots-1,
     :banked-commit "b372d6f6df7abcf763bde3c8b20cfd699362c410"},
    :id :lemma-iteratedfderivwithin-domdomcongr-swap-zero-one,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t01A08,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ContinuousMultilinearMap.domDomCongr_fderivWithin_eq_self_of_eventuallyEq",
+    :type
+    "local within permutation identity is preserved by fderivWithin"},
+   :lemma
+   {:name
+    "ContinuousMultilinearMap.domDomCongr_fderivWithin_eq_self_of_eventuallyEq",
+    :reported-by [:r-a08-symmetry-slots-1],
+    :type
+    "local within permutation identity is preserved by fderivWithin",
+    :area "sard-convex-domain",
+    :proved-in :r-a08-symmetry-slots-1},
+   :id
+   :lemma-continuousmultilinearmap-domdomcongr-fderivwithin-eq-self-of-eventuallyeq,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}],
