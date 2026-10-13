@@ -717,7 +717,79 @@ lemma apm_m02J05_lux_sublevel_attained_aux_core_aux_attained_aux_closed_aux_fato
     (c : ℕ → ℝ) (hcsub : ∀ n, c n ∈ apm_m02J05_luxSublevel α u)
     (hct : Tendsto c atTop (nhds (apm_m02J05_lux α u))) :
     apm_m02J05_lux α u ∈ apm_m02J05_luxSublevel α u := by
-  sorry
+  let μ := volume.restrict (Icc (0 : ℝ) 1)
+  let lam := apm_m02J05_lux α u
+  let F : ℝ → ℝ := fun x ↦ apm_m02J05_young α (|u x| / lam)
+  let Fn : ℕ → ℝ → ℝ := fun n x ↦ apm_m02J05_young α (|u x| / c n)
+  have hYcont :=
+    apm_m02J05_lux_sublevel_attained_aux_core_aux_nonempty_aux_continuous α hc
+  have hYmax : Continuous (fun t : ℝ ↦ apm_m02J05_young α (max t 0)) := by
+    simpa only [Function.comp_apply] using hYcont.comp_continuous
+      (continuous_id.max continuous_const) (fun t ↦ le_max_right t 0)
+  have hcpos : ∀ n, 0 < c n := fun n ↦ (hcsub n).1
+  have hFn_nonneg : ∀ n, 0 ≤ᵐ[μ] Fn n := fun n ↦
+    Eventually.of_forall fun x ↦ apm_m02J05_young_nonneg hnonneg
+      (div_nonneg (abs_nonneg _) (hcpos n).le)
+  have hF_nonneg : 0 ≤ᵐ[μ] F := Eventually.of_forall fun x ↦
+    apm_m02J05_young_nonneg hnonneg (div_nonneg (abs_nonneg _) hpos.le)
+  have hFn_meas : ∀ n, AEStronglyMeasurable (Fn n) μ := by
+    intro n
+    have ha := (continuous_abs.div_const (c n)).comp_aestronglyMeasurable
+      u.aestronglyMeasurable
+    rcases hYmax.comp_aestronglyMeasurable ha with ⟨g, hg, heq⟩
+    refine ⟨g, hg, ?_⟩
+    filter_upwards [heq] with x hx
+    simpa [Fn, max_eq_left (div_nonneg (abs_nonneg _) (hcpos n).le)] using hx
+  have hF_meas : AEStronglyMeasurable F μ := by
+    have ha := (continuous_abs.div_const lam).comp_aestronglyMeasurable
+      u.aestronglyMeasurable
+    rcases hYmax.comp_aestronglyMeasurable ha with ⟨g, hg, heq⟩
+    refine ⟨g, hg, ?_⟩
+    filter_upwards [heq] with x hx
+    simpa [F, lam, max_eq_left (div_nonneg (abs_nonneg _) hpos.le)] using hx
+  have hlim (x : ℝ) : Tendsto (fun n ↦ ENNReal.ofReal (Fn n x)) atTop
+      (nhds (ENNReal.ofReal (F x))) := by
+    have hdiv : Tendsto (fun n ↦ |u x| / c n) atTop
+        (nhds (|u x| / lam)) := by
+      exact tendsto_const_nhds.div (by simpa [lam] using hct) (ne_of_gt hpos)
+    have hym := hYmax.continuousAt.tendsto.comp hdiv
+    have hy : Tendsto (fun n ↦ Fn n x) atTop (nhds (F x)) := by
+      have hym' : Tendsto (fun n ↦ apm_m02J05_young α (|u x| / c n)) atTop
+          (nhds (apm_m02J05_young α (max (|u x| / lam) 0))) := by
+        apply hym.congr'
+        exact Eventually.of_forall fun n ↦ by
+          simp [max_eq_left (div_nonneg (abs_nonneg _) (hcpos n).le)]
+      rw [max_eq_left (div_nonneg (abs_nonneg _) hpos.le)] at hym'
+      simpa [Fn, F] using hym'
+    exact ENNReal.continuous_ofReal.continuousAt.tendsto.comp hy
+  have hfatou := lintegral_liminf_le' (μ := μ)
+    (fun n ↦ (hFn_meas n).aemeasurable.ennreal_ofReal)
+  have hleft : (∫⁻ x, ENNReal.ofReal (F x) ∂μ) ≤
+      liminf (fun n ↦ ∫⁻ x, ENNReal.ofReal (Fn n x) ∂μ) atTop := by
+    rw [show (∫⁻ x, ENNReal.ofReal (F x) ∂μ) =
+        ∫⁻ x, liminf (fun n ↦ ENNReal.ofReal (Fn n x)) atTop ∂μ by
+      apply lintegral_congr
+      intro x
+      exact (hlim x).liminf_eq.symm]
+    exact hfatou
+  have heach : ∀ n, (∫⁻ x, ENNReal.ofReal (Fn n x) ∂μ) ≤ 1 := by
+    intro n
+    have hi : Integrable (Fn n) μ := (hcsub n).2.1
+    rw [← ofReal_integral_eq_lintegral_ofReal hi (hFn_nonneg n)]
+    change ENNReal.ofReal (∫ x in Icc (0 : ℝ) 1,
+      apm_m02J05_young α (|u x| / c n)) ≤ 1
+    simpa using ENNReal.ofReal_le_ofReal ((hcsub n).2.2)
+  have hright : liminf (fun n ↦ ∫⁻ x, ENNReal.ofReal (Fn n x) ∂μ) atTop ≤ 1 :=
+    liminf_le_of_frequently_le (Frequently.of_forall heach)
+  have hlin : (∫⁻ x, ENNReal.ofReal (F x) ∂μ) ≤ 1 := hleft.trans hright
+  have hFint : Integrable F μ := ⟨hF_meas,
+    (hasFiniteIntegral_iff_ofReal hF_nonneg).2 (hlin.trans_lt ENNReal.one_lt_top)⟩
+  refine ⟨hpos, hFint, ?_⟩
+  have hint : (∫ x, F x ∂μ) = (∫⁻ x, ENNReal.ofReal (F x) ∂μ).toReal :=
+    integral_eq_lintegral_of_nonneg_ae hF_nonneg hF_meas
+  rw [show (fun x ↦ apm_m02J05_young α (|u x| / apm_m02J05_lux α u)) = F by
+    rfl, hint]
+  exact ENNReal.toReal_le_of_le_ofReal (by norm_num) (by simpa using hlin)
 -- END SEAT AREA
 
 lemma apm_m02J05_lux_sublevel_attained_aux_core_aux_attained_aux_closed
