@@ -20,7 +20,7 @@ The submanifold claim is encoded by the regular-value criterion for the two
 actual constraint functions in `ℝ⁴`, giving dimension `4 - 2 = 2`.
 Transversality is the concrete tangent-space condition: at every intersection,
 the image of the derivative of the displayed family plus the kernel of the
-constraint derivative is the full ambient space.
+constraint derivative is the tangent space `T_xX = xᗮ` of the sphere.
 -/
 
 noncomputable section
