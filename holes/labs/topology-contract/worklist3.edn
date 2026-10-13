@@ -24430,27 +24430,27 @@
    :consumer :t01A08,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "extend Mathlib: state and prove the missing theorem in scope",
    :implements-lemma :lemma-closedset-whitneycubecover,
    :evidence
    {:placeholder-delta {:t01A08 [1 1]},
     :residual
-    "Prove local finiteness and anchors; assemble B3; then B4-B7, B9.",
+    "Prove local finiteness and assemble B3; then B4-B7, B9.",
     :outcome :stop,
     :warnings
     ["existing unnecessarySimpa:454"
      "existing unnecessarySeqFocus:1199"],
     :missing-theorems
     [{:name
-      "ConstructionTargets.SardConvexDomain.pointFinite_whitneyNetQuarterBalls",
+      "ConstructionTargets.SardConvexDomain.whitneyNetAnchor_nearest",
       :type
-      "(E) [NormedAddCommGroup E] [NormedSpace R E] [ProperSpace E] (s) : point-finite quarter-balls and ncard <= fixed packing toNat * 3",
+      "[FiniteDimensional R E] (hs : IsClosed s) (hne : s.Nonempty) (i : WhitneyNetIndex s) : infDist i.center s = dist i.center (whitneyNetAnchor hs hne i)",
       :status :proved,
       :consumers [:t01A08],
       :depends-on
-      ["ConstructionTargets.SardConvexDomain.finite_whitneyNetIncidence_and_ncard_le"],
+      ["ConstructionTargets.SardConvexDomain.exists_nearestPoint_of_isClosed"],
       :area "sard-convex-domain"}
      {:name
       "ConstructionTargets.SardConvexDomain.closedSet_whitneyCubeCover_proper",
@@ -24458,7 +24458,8 @@
       :status :partial,
       :consumers [:t01A08],
       :depends-on
-      ["ConstructionTargets.SardConvexDomain.pointFinite_whitneyNetQuarterBalls"
+      ["ConstructionTargets.SardConvexDomain.whitneyNetAnchor_nearest"
+       "ConstructionTargets.SardConvexDomain.pointFinite_whitneyNetQuarterBalls"
        "ConstructionTargets.SardConvexDomain.countable_whitneyNetIndex"],
       :area "sard-convex-domain"}],
     :statement-hashes {:registry "150/150"},
@@ -24466,32 +24467,21 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Committed point-finiteness and uniform ncard bound for indexed quarter-balls. Local finiteness, anchors, and assembly remain; not refuted.",
+    "Committed chosen nearest anchors for every Whitney index, with membership and exact infDist certificates. Local finiteness and assembly remain; not refuted.",
     :commands
     [{:cmd "lake build ConstructionTargets.SardConvexDomain", :exit 0}
      {:cmd "fixture; registry; scans; scope/diff", :exit 0}
      {:cmd "git commit", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1791911724441-10083-0d40814e",
-     :commands
-     ["git show/diff f279820; scope/type checks"
-      "sha256sum + lake env lean frozen fixture"
-      "lake build ConstructionTargets.SardConvexDomain"
-      "statement registry check; forbidden-count scan"],
-     :finding
-     "PASS. Recorded topo-10 commit f279820 changes only the scoped Lean file and correctly packages the prior incidence theorem as point-finiteness plus the uniform ncard bound for indexed quarter-infDist balls. The displayed set is definitionally whitneyNetIncidence, with center/ball orientation unchanged. It does not claim local finiteness; that remains explicitly listed. Fixture hash 576e1aa3... matches; build/fixture pass; registry 150/150; forbidden placeholders stay 0; only standard axioms. Valid compiled B3 progress; STOP leaves local finiteness, anchors, and assembly."},
-    :commit "f2798204bb0a59a1049a9e421409539ed62e9467",
+    :commit "9404603a3e8e872c65776ee49219c6a950eb3e5f",
     :changed-paths ["ConstructionTargets/SardConvexDomain.lean"],
     :fixture
-    {:path "/tmp/t01a08_b3_pointfinite_check.lean",
+    {:path "/tmp/t01a08_b3_anchor_check.lean",
      :sha256
-     "576e1aa3b180fc7d2cf8251b2c97b7d1d2818c840ada65a0e56ffedaca043476",
+     "80cec96cb12371e3593f5d29635449779c29c67b9044c946fd1937bb0a7ae5e0",
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain.blueprint/B3",
    :acceptance
@@ -35168,7 +35158,8 @@
     :lemma-constructiontargets-sardconvexdomain-fixed-whitneypackingnumber-ne-top
     :lemma-constructiontargets-sardconvexdomain-finite-whitneynetincidence-and-ncard-le
     :lemma-constructiontargets-sardconvexdomain-countable-whitneynetindex
-    :lemma-constructiontargets-sardconvexdomain-pointfinite-whitneynetquarterballs],
+    :lemma-constructiontargets-sardconvexdomain-pointfinite-whitneynetquarterballs
+    :lemma-constructiontargets-sardconvexdomain-whitneynetanchor-nearest],
    :other-consumers []}
   {:consumer :t01A08,
    :phase :lemma,
@@ -35802,6 +35793,45 @@
    :kind :lemma,
    :depends-on
    [:lemma-constructiontargets-sardconvexdomain-finite-whitneynetincidence-and-ncard-le],
+   :other-consumers []}
+  {:consumer :t01A08,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.SardConvexDomain.whitneyNetAnchor_nearest",
+    :type
+    "[FiniteDimensional R E] (hs : IsClosed s) (hne : s.Nonempty) (i : WhitneyNetIndex s) : infDist i.center s = dist i.center (whitneyNetAnchor hs hne i)"},
+   :lemma
+   {:name
+    "ConstructionTargets.SardConvexDomain.whitneyNetAnchor_nearest",
+    :reported-by [:r-a08-sard-b3-whitney-cubes-1],
+    :type
+    "[FiniteDimensional R E] (hs : IsClosed s) (hne : s.Nonempty) (i : WhitneyNetIndex s) : infDist i.center s = dist i.center (whitneyNetAnchor hs hne i)",
+    :area "sard-convex-domain",
+    :proved-in :r-a08-sard-b3-whitney-cubes-1},
+   :id
+   :lemma-constructiontargets-sardconvexdomain-whitneynetanchor-nearest,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-sardconvexdomain-exists-nearestpoint-of-isclosed],
+   :other-consumers []}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.SardConvexDomain.exists_nearestPoint_of_isClosed"},
+   :lemma
+   {:name
+    "ConstructionTargets.SardConvexDomain.exists_nearestPoint_of_isClosed",
+    :reported-by []},
+   :id
+   :lemma-constructiontargets-sardconvexdomain-exists-nearestpoint-of-isclosed,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
