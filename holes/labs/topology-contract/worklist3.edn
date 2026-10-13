@@ -24430,25 +24430,25 @@
    :consumer :t01A08,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "extend Mathlib: state and prove the missing theorem in scope",
    :implements-lemma :lemma-closedset-whitneycubecover,
    :evidence
    {:placeholder-delta {:t01A08 [1 1]},
-    :residual "Prove packing/overlap and assemble B3; then B4-B7, B9.",
+    :residual
+    "Prove cross-scale overlap; assemble B3; then B4-B7, B9.",
     :outcome :stop,
     :warnings ["existing unnecessarySimpa:454"],
     :missing-theorems
     [{:name
-      "ConstructionTargets.SardConvexDomain.exists_whitneyStratumNet_dist_le_of_not_mem",
-      :type
-      "each complement point has k and a same-stratum net center within 2^k/8",
+      "ConstructionTargets.SardConvexDomain.finite_inter_whitneyStratumNet_of_isCompact",
+      :type "fixed-scale net intersects compact sets finitely",
       :status :proved,
       :consumers [:t01A08],
       :depends-on
       ["ConstructionTargets.SardConvexDomain.whitneyStratumNet_spec"
-       "ConstructionTargets.SardConvexDomain.compl_subset_iUnion_whitneyScaleStratum"],
+       "ConstructionTargets.SardConvexDomain.finite_of_subset_compact_of_pairwise_dist"],
       :area "sard-convex-domain"}
      {:name
       "ConstructionTargets.SardConvexDomain.closedSet_whitneyCubeCover_proper",
@@ -24456,7 +24456,7 @@
       :status :partial,
       :consumers [:t01A08],
       :depends-on
-      ["ConstructionTargets.SardConvexDomain.exists_whitneyStratumNet_dist_le_of_not_mem"
+      ["ConstructionTargets.SardConvexDomain.finite_inter_whitneyStratumNet_of_isCompact"
        "ConstructionTargets.SardConvexDomain.infDist_comparable_of_mem_quarter_balls"],
       :area "sard-convex-domain"}],
     :statement-hashes {:registry "150/150"},
@@ -24464,32 +24464,25 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Committed dyadic-net coverage: every complement point has a same-stratum center within 2^k/8. Packing, overlap bound, and assembly remain; not a refutation.",
+    "Committed fixed-scale packing: 2^k/8-separated net centers have finite intersection with compact sets. Cross-scale overlap and assembly remain; not refuted.",
     :commands
     [{:cmd "lake build ConstructionTargets.SardConvexDomain", :exit 0}
-     {:cmd "lean fixture; registry; scans; diff", :exit 0}
-     {:cmd "git commit scoped file", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1791903739239-9909-af964158",
-     :commands
-     ["git show/diff a611ed2; scope/witness checks"
-      "sha256sum + lake env lean frozen fixture"
-      "lake build ConstructionTargets.SardConvexDomain"
-      "statement registry check; forbidden-count scan"],
-     :finding
-     "PASS. Recorded topo-10 commit a611ed2 changes only the scoped Lean file and correctly combines stratum coverage with the chosen net: x and c retain the same integer scale k, c belongs to that net, and edist_dist converts IsCover to dist x c≤2^k/8. Fixture hash 5ee072bd... matches; build/fixture pass; registry 150/150; forbidden placeholders stay 0; only standard axioms. Valid compiled B3 progress; STOP explicitly leaves packing, overlap bound, and assembly."},
-    :commit "a611ed26f646f33476b59bba37152725b0388879",
+     {:cmd "fixture; registry; scans; diff", :exit 0}
+     {:cmd "git commit", :exit 0}],
+    :diagnostic-history
+    [{:cmd "initial build",
+      :exit 1,
+      :correction "strict-to-weak separation; explicit radius"}],
+    :commit "4211931d31be639dcc191f2c6b77a084d40c852e",
     :changed-paths ["ConstructionTargets/SardConvexDomain.lean"],
     :fixture
-    {:path "/tmp/t01a08_b3_combined_stratum_net_check.lean",
+    {:path "/tmp/t01a08_b3_stratum_packing_check.lean",
      :sha256
-     "5ee072bd0be77c8f20d68c5bcb3e1d8d2d46ee68cadeb1ccb512f5b08ef67372",
+     "3ca5057dcdfc3c88b675216e127e548841338ff1e6c84f9efbcc5fef356420d1",
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain.blueprint/B3",
    :acceptance
@@ -35151,7 +35144,8 @@
     :lemma-constructiontargets-sardconvexdomain-exists-maximalseparated-cover
     :lemma-constructiontargets-sardconvexdomain-compl-subset-iunion-whitneyscalestratum
     :lemma-constructiontargets-sardconvexdomain-whitneystratumnet-spec
-    :lemma-constructiontargets-sardconvexdomain-exists-whitneystratumnet-dist-le-of-not-mem],
+    :lemma-constructiontargets-sardconvexdomain-exists-whitneystratumnet-dist-le-of-not-mem
+    :lemma-constructiontargets-sardconvexdomain-finite-inter-whitneystratumnet-of-iscompact],
    :other-consumers []}
   {:consumer :t01A08,
    :phase :lemma,
@@ -35433,6 +35427,28 @@
    :depends-on
    [:lemma-constructiontargets-sardconvexdomain-whitneystratumnet-spec
     :lemma-constructiontargets-sardconvexdomain-compl-subset-iunion-whitneyscalestratum],
+   :other-consumers []}
+  {:consumer :t01A08,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.SardConvexDomain.finite_inter_whitneyStratumNet_of_isCompact",
+    :type "fixed-scale net intersects compact sets finitely"},
+   :lemma
+   {:name
+    "ConstructionTargets.SardConvexDomain.finite_inter_whitneyStratumNet_of_isCompact",
+    :reported-by [:r-a08-sard-b3-whitney-cubes-1],
+    :type "fixed-scale net intersects compact sets finitely",
+    :area "sard-convex-domain",
+    :proved-in :r-a08-sard-b3-whitney-cubes-1},
+   :id
+   :lemma-constructiontargets-sardconvexdomain-finite-inter-whitneystratumnet-of-iscompact,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-sardconvexdomain-whitneystratumnet-spec
+    :lemma-constructiontargets-sardconvexdomain-finite-of-subset-compact-of-pairwise-dist],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
