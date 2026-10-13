@@ -1313,4 +1313,18 @@ theorem compl_subset_iUnion_whitneyNetQuarterBalls
       linarith
     _ ≤ Metric.infDist c s / 4 := div_le_div_of_nonneg_right hcscale (by norm_num)
 
+/-- Membership in a half-distance ball still gives uniform comparison between
+the center scale and the scale at the contained point. -/
+theorem infDist_center_comparable_of_mem_half_ball
+    {E : Type*} [PseudoMetricSpace E] (s : Set E) {c x : E}
+    (hxc : x ∈ Metric.ball c (Metric.infDist c s / 2)) :
+    Metric.infDist c s < 2 * Metric.infDist x s ∧
+      2 * Metric.infDist x s < 3 * Metric.infDist c s := by
+  have hdist : dist x c < Metric.infDist c s / 2 := Metric.mem_ball.1 hxc
+  have hdist' : dist c x < Metric.infDist c s / 2 := by
+    simpa [dist_comm] using hdist
+  have h₁ := Metric.infDist_le_infDist_add_dist (s := s) (x := c) (y := x)
+  have h₂ := Metric.infDist_le_infDist_add_dist (s := s) (x := x) (y := c)
+  constructor <;> linarith
+
 end ConstructionTargets.SardConvexDomain
