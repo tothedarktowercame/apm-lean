@@ -1384,3 +1384,5 @@ source endpoint equality together with its reflexive connector comparison.
 forward target connector with the named based connector.
 `genericPointWedgeOuterRight_sourceConnector_hom_inv_id` records cancellation
 of the remaining source connector in its exact dependent hom-set.
+`genericPointWedgeOuterRight_sourceConnector_hom_inv_id_at_basepoint` exposes
+that identity at the literal fundamental-group basepoint.

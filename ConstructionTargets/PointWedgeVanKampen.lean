@@ -275,6 +275,10 @@ def genericPointWedgeConnectors
   base := FundamentalGroupoid.mk z₀
   connector := genericPointWedgeBasedConnector z₀
 
+theorem genericPointWedgeConnectors_base
+    {Z : Type} [TopologicalSpace Z] [PathConnectedSpace Z] (z₀ : Z) :
+    (genericPointWedgeConnectors z₀).base = FundamentalGroupoid.mk z₀ := rfl
+
 def genericPointWedgeUnitEndMulEquiv :
     End genericPointWedgeUnitConnectors.base ≃* PUnit :=
   { toFun := fun _ => ()
@@ -7005,6 +7009,23 @@ theorem genericPointWedgeOuterRight_sourceConnector_hom_inv_id :
       𝟙 (genericPointWedgeConnectors y₀).base := by
   simp
 
+omit [PathConnectedSpace X] in
+/-- The same source-connector cancellation, with the definitional connector
+base exposed as the literal fundamental-group basepoint. -/
+theorem genericPointWedgeOuterRight_sourceConnector_hom_inv_id_at_basepoint :
+    let r := genericPointWedgeActualRight x₀ y₀ M N
+    let eR := genericPointWedgeRightGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let z := genericPointWedgeOverlapBase x₀ y₀ M N
+    ((genericPointWedgeConnectors y₀).connector
+        ((r ⋙ eR.functor).obj z)).hom ≫
+      ((genericPointWedgeConnectors y₀).connector
+        ((r ⋙ eR.functor).obj z)).inv =
+      𝟙 (FundamentalGroupoid.mk y₀) := by
+  change _ = 𝟙 (genericPointWedgeConnectors y₀).base
+  exact genericPointWedgeOuterRight_sourceConnector_hom_inv_id
+    x₀ y₀ M N hM hN hy hx cM cN
+
 /-- An `inl` factorization of the right-base conjugator forces its canonical
 right projection to be trivial. -/
 theorem genericPointWedgeRightBase_inl_implies_rightProjection_eq_one
@@ -7768,6 +7789,7 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeOuterRight_sourceConnector_endpoint_and_heq
 #print axioms genericPointWedgeOuterRight_targetConnectorHom_eq_based
 #print axioms genericPointWedgeOuterRight_sourceConnector_hom_inv_id
+#print axioms genericPointWedgeOuterRight_sourceConnector_hom_inv_id_at_basepoint
 #print axioms genericPointWedgeRightBase_inl_implies_rightProjection_eq_one
 #print axioms genericPointWedgeLegCoordinates_of_mapped
 #print axioms genericPointWedgeLegCoordinates_iff_mapped
