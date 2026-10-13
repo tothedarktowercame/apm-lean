@@ -897,6 +897,25 @@ theorem apm_m98J02_regular_convolution_is_C2
       apm_m98J02_representsFunction w g ∧ ContDiff ℝ 2 g := by
   sorry
 
+/-- `T*` commutes with translation, so pairing `w₀` (with `T w₀ = δ₀`) against the
+translated adjoint of `φ` evaluates `φ` at the translation point. -/
+lemma apm_m98J02_convolution_solves_fundamental_aux_pairing
+    (w₀ : apm_m98J02_Dist)
+    (hw₀ : apm_m98J02_solvesT w₀ (fun φ ↦ φ 0))
+    (φ : apm_m98J02_Test) (x : apm_m98J02_E) :
+    w₀ (apm_m98J02_translateTest x (apm_m98J02_formalAdjointTest φ)) = φ x := by
+  sorry
+
+/-- A regular distribution that vanishes on every test function supported off a compact
+`K` has its (continuous) density vanishing off `K`. -/
+lemma apm_m98J02_convolution_solves_fundamental_aux_support
+    (f : apm_m98J02_E → ℝ) (hf : Continuous f) (hfc : HasCompactSupport f)
+    (K : Set apm_m98J02_E) (hK : IsCompact K)
+    (hvan : ∀ η : apm_m98J02_Test, Disjoint (tsupport (η : apm_m98J02_E → ℝ)) K →
+      apm_m98J02_regularDistribution f hf hfc η = 0) :
+    ∀ x ∉ K, f x = 0 := by
+  sorry
+
 theorem apm_m98J02_convolution_solves_fundamental
     (f : apm_m98J02_E → ℝ) (w₀ w : apm_m98J02_Dist)
     (hf : ContDiff ℝ 2 f) (hfc : IsCompact (tsupport f))
@@ -904,7 +923,21 @@ theorem apm_m98J02_convolution_solves_fundamental
     (hconv : apm_m98J02_isConvolution
       (apm_m98J02_regularDistribution f hf.continuous hfc) w₀ w) :
     apm_m98J02_solvesT w (fun φ ↦ ∫ x, f x * φ x) := by
-  sorry
+  intro φ
+  refine ⟨apm_m98J02_formalAdjointTest φ, fun x => by simp, ?_⟩
+  obtain ⟨K, χ, Ψ, hK, hvan, ⟨U, -, hKU, hχ⟩, hΨ, hw⟩ := hconv (apm_m98J02_formalAdjointTest φ)
+  rw [hw]
+  have hfK := apm_m98J02_convolution_solves_fundamental_aux_support f hf.continuous hfc K hK hvan
+  change (∫ x, f x * Ψ x) = ∫ x, f x * φ x
+  congr 1
+  funext x
+  obtain ⟨τ, hτ, hΨx⟩ := hΨ x
+  have hτ' : τ = apm_m98J02_translateTest x (apm_m98J02_formalAdjointTest φ) := by
+    ext y; rw [hτ y]; rfl
+  rw [hΨx, hτ', apm_m98J02_convolution_solves_fundamental_aux_pairing w₀ hw₀ φ x]
+  by_cases hx : x ∈ K
+  · rw [hχ x (hKU hx), one_mul]
+  · rw [hfK x hx, zero_mul, zero_mul]
 
 theorem apm_m98J02_constantDistribution_homogeneous :
     apm_m98J02_solvesT apm_m98J02_constantDistribution (fun _ ↦ 0) := by
