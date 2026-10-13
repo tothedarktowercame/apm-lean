@@ -524,6 +524,42 @@ lemma apm_m02J05_lux_homogeneous_aux_abs_div
 -- For c ≠ 0 the Luxemburg sublevel of c • u is the |c|-dilate of that of u
 -- (use the banked apm_m02J05_lux_homogeneous_aux_abs_div and a.e. congruence (c • u) x = c * u x).
 open scoped Pointwise in
+local instance : SMul ℝ (Set ℝ) := Set.smulSet
+
+lemma apm_m02J05_lux_homogeneous_aux_sublevel_smul_aux_ae
+    (α : ℝ → ℝ) (u : apm_m02J05_Fun) (c d : ℝ) (hc : c ≠ 0) :
+    (fun x ↦ apm_m02J05_young α (|(c • u) x| / (|c| * d)))
+      =ᵐ[volume.restrict (Icc (0 : ℝ) 1)]
+    (fun x ↦ apm_m02J05_young α (|u x| / d)) := by
+  filter_upwards [AEEqFun.coeFn_smul c u] with x hx
+  rw [hx, Pi.smul_apply, smul_eq_mul,
+    apm_m02J05_lux_homogeneous_aux_abs_div c (u x) d hc]
+
+lemma apm_m02J05_lux_homogeneous_aux_sublevel_smul_aux_core
+    (α : ℝ → ℝ) (u : apm_m02J05_Fun) (c : ℝ) (hc : c ≠ 0) :
+    {c' : ℝ | 0 < c' ∧
+      IntegrableOn (fun x ↦ apm_m02J05_young α (|(c • u) x| / c')) (Icc (0 : ℝ) 1) volume ∧
+      ∫ x in Icc (0 : ℝ) 1, apm_m02J05_young α (|(c • u) x| / c') ∂volume ≤ 1} =
+    |c| • {c' : ℝ | 0 < c' ∧
+      IntegrableOn (fun x ↦ apm_m02J05_young α (|u x| / c')) (Icc (0 : ℝ) 1) volume ∧
+      ∫ x in Icc (0 : ℝ) 1, apm_m02J05_young α (|u x| / c') ∂volume ≤ 1} := by
+  have habs : 0 < |c| := abs_pos.2 hc
+  ext c'
+  rw [Set.mem_smul_set]
+  constructor
+  · rintro ⟨hpos, hint, hle⟩
+    have hae := apm_m02J05_lux_homogeneous_aux_sublevel_smul_aux_ae α u c (c' / |c|) hc
+    have hcc : |c| * (c' / |c|) = c' := by field_simp
+    rw [hcc] at hae
+    refine ⟨c' / |c|, ⟨div_pos hpos habs, ?_, ?_⟩, by simp [smul_eq_mul, hcc]⟩
+    · exact hint.congr hae
+    · rw [← integral_congr_ae hae]; exact hle
+  · rintro ⟨d, ⟨hpos, hint, hle⟩, rfl⟩
+    have hae := apm_m02J05_lux_homogeneous_aux_sublevel_smul_aux_ae α u c d hc
+    simp only [smul_eq_mul]
+    refine ⟨mul_pos habs hpos, hint.congr hae.symm, ?_⟩
+    rw [integral_congr_ae hae]; exact hle
+
 lemma apm_m02J05_lux_homogeneous_aux_sublevel_smul
     (α : ℝ → ℝ) (u : apm_m02J05_Fun) (c : ℝ) (hc : c ≠ 0) :
     {c' : ℝ | 0 < c' ∧
@@ -532,7 +568,7 @@ lemma apm_m02J05_lux_homogeneous_aux_sublevel_smul
     |c| • {c' : ℝ | 0 < c' ∧
       IntegrableOn (fun x ↦ apm_m02J05_young α (|u x| / c')) (Icc (0 : ℝ) 1) volume ∧
       ∫ x in Icc (0 : ℝ) 1, apm_m02J05_young α (|u x| / c') ∂volume ≤ 1} := by
-  sorry
+  exact apm_m02J05_lux_homogeneous_aux_sublevel_smul_aux_core α u c hc
 
 lemma apm_m02J05_lux_homogeneous_aux_core
     (alpha : ℝ → ℝ)
