@@ -84,6 +84,11 @@ lemma t93A06_periodic_form_descent_aux_pullback_injective
     exact L.apply_symm_apply (v i)
   simpa [hv] using happ
 
+lemma t93A06_periodic_form_descent_aux_source_smooth :
+    ContDiff ℝ ∞ sourceForm := by
+  unfold sourceForm areaForm
+  fun_prop
+
 /-- A smooth invariant form descends uniquely through the quotient atlas.
 The fibre characterization is supplied as a hypothesis to keep this seat
 independent of the atlas and fibre seats. -/
