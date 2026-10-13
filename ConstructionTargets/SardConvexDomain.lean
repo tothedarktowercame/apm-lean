@@ -54,6 +54,33 @@ theorem ContinuousMultilinearMap.domDomCongr_eq_self_of_swap
       change m (v ∘ (Equiv.swap i j * sigma)) = m v
       exact (DFunLike.congr_fun ih (v ∘ Equiv.swap i j)).trans (DFunLike.congr_fun (h i j) v)
 
+/-- Adjacent transpositions suffice to fix a continuous multilinear map on `Fin (n + 1)`. -/
+theorem ContinuousMultilinearMap.domDomCongr_eq_self_of_adjacent_swap
+    {R E F : Type*} [Semiring R] [TopologicalSpace R]
+    [AddCommMonoid E] [Module R E] [TopologicalSpace E]
+    [AddCommMonoid F] [Module R F] [TopologicalSpace F]
+    {n : ℕ} (m : ContinuousMultilinearMap R (λ _ : Fin (n + 1) ↦ E) F)
+    (h : ∀ i : Fin n, m.domDomCongr (Equiv.swap i.castSucc i.succ) = m)
+    (sigma : Equiv.Perm (Fin (n + 1))) : m.domDomCongr sigma = m := by
+  let S : Submonoid (Equiv.Perm (Fin (n + 1))) :=
+    { carrier := {sigma | m.domDomCongr sigma = m}
+      one_mem' := rfl
+      mul_mem' := by
+        intro a b ha hb
+        ext v
+        change m (fun i ↦ v ((a * b) i)) = m v
+        exact (DFunLike.congr_fun hb (v ∘ a)).trans (DFunLike.congr_fun ha v) }
+  have hrange : Set.range (λ i : Fin n ↦ Equiv.swap i.castSucc i.succ) ⊆ S := by
+    rintro _ ⟨i, rfl⟩
+    exact h i
+  have htop : S = ⊤ := by
+    apply top_unique
+    rw [← Equiv.Perm.mclosure_swap_castSucc_succ n]
+    exact Submonoid.closure_le.mpr hrange
+  show sigma ∈ S
+  rw [htop]
+  exact Submonoid.mem_top sigma
+
 namespace ConstructionTargets.SardConvexDomain
 
 theorem modelRange_withinCriticalImage_subset_interior_union_frontier
