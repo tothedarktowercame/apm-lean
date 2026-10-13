@@ -22516,51 +22516,36 @@
    :other-consumers []}
   {:bounded-exception "Rule0 blueprint.",
    :consumer :t01A08,
-   :stop-count 1,
+   :stop-count 2,
    :review-finding
    "Blueprint B6 is false as written: a nonlinear B5 coordinate chart need not preserve convexity of kernel-fiber slices. Counterexample: s={(x,y)|y>=0}, Phi(x,y)=(y-x^2,x); Phi is a diffeomorphism with positive-rank first coordinate, but its slice at c<0 is {x|x^2>=-c}, nonconvex. Thus B6 cannot invoke the smaller closed-convex induction hypothesis. Repair by proving an extension theorem or strengthening induction to the actual nonconvex relative chart domains.",
    :evidence
    {:placeholder-delta {:t01A08 [1 1]},
     :residual
-    "Independent blueprint review, then elect B1 relative rank strata.",
+    "Independent review of repaired blueprint, then elect B1 within-jet construction.",
     :outcome :stop,
     :warnings
-    ["Current aggregation assumes the whole frontier image is null; blueprint instead proves nullity of the within-critical image."],
-    :statement-hashes {:registry "131/131"},
+    ["B1-B7 constitute the missing Whitney extension foundation for closed convex domains."],
+    :statement-hashes {:registry "142/142"},
     :disposition :stop,
     :axioms [],
     :author :topo-10,
     :reason
-    "Blueprint written and committed; review before electing B1.",
+    "Blueprint repaired and committed; nonlinear-slice induction replaced by Whitney extension followed by banked ambient Sard.",
     :commands
     [{:cmd
       "git diff --check HEAD^ HEAD -- ConstructionTargets/SardConvexDomain.blueprint.md",
       :exit 0}
      {:cmd
-      "test \"$(git diff-tree --no-commit-id --name-only -r HEAD)\" = \"ConstructionTargets/SardConvexDomain.blueprint.md\"",
-      :exit 0}
-     {:cmd
-      "rg -q '^### B11\\.' ConstructionTargets/SardConvexDomain.blueprint.md",
+      "rg -n '^### B[0-9]+\\.' ConstructionTargets/SardConvexDomain.blueprint.md",
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
-    :diagnostic-history
-    [{:cmd
-      "git add ConstructionTargets/SardConvexDomain.blueprint.md && git commit -m ...",
-      :exit 128,
-      :finding
-      "Transient index.lock; verified absent, then commit succeeded."}],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1791865105627-8399-77969aa4",
-     :finding
-     "Blueprint B6 is false as written: a nonlinear B5 coordinate chart need not preserve convexity of kernel-fiber slices. Counterexample: s={(x,y)|y>=0}, Phi(x,y)=(y-x^2,x); Phi is a diffeomorphism with positive-rank first coordinate, but its slice at c<0 is {x|x^2>=-c}, nonconvex. Thus B6 cannot invoke the smaller closed-convex induction hypothesis. Repair by proving an extension theorem or strengthening induction to the actual nonconvex relative chart domains."},
-    :commit "b288b8c6ff3649abd872df8bd07adc056fc818bb",
+    :commit "e38a96fe8411931eb322d681cb60de0443e5d299",
     :changed-paths
     ["ConstructionTargets/SardConvexDomain.blueprint.md"],
     :seat :topo-10},
    :phase :implementation,
-   :state :repair,
+   :state :needs-owner,
    :scope ["ConstructionTargets/SardConvexDomain.blueprint.md"],
    :dag-node "TOPOLOGY-ROUTES.md/t01A08/corners-sard",
    :acceptance
@@ -22586,7 +22571,7 @@
      :infrastructure-packets
      :review-outcomes]},
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance {:strategy "Review blueprint and rerank."},
