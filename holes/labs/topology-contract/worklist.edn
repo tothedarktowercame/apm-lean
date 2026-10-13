@@ -113901,6 +113901,17 @@
       "lake build ConstructionTargets.ThreeCirclesFundamentalGroup",
       :exit 1,
       :finding "B12 absent."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791928759363-10637-7d6d50ee",
+     :commands
+     ["git show/diff-tree c071cf8c3"
+      "git archive c071cf8c3; lake env lean archived PointWedgeVanKampen.lean"
+      "lake build ConstructionTargets.PointWedgeVanKampen"
+      "sha256sum; placeholder delta; statement-registry.py check"],
+     :finding
+     "Recorded scope is target+note; source/doc/fixture hashes match 1288058a/4186c066/0bca6ce3. Archived and target builds pass; placeholders 0->0, registry 166/166, standard axioms only. congrArg Iso.hom correctly yields the forward connector equality at the identical dependent endpoint and needed orientation. The same-file cases h.symm edit only fixes equality-elimination direction in an unchanged theorem, which recompiles. New progress is present; connector cancellation, projection/B6/B12 remain."},
     :commit "c071cf8c36bdf269ce23cff8b425c951ae37521e",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
@@ -113911,7 +113922,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113932,7 +113943,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Source endpoint equality and reflexive connector HEq packaged.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Target connector hom identified with named based connector.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -114789,7 +114800,11 @@
     {:job 7,
      :commit "6dbbfa8f9c705168cf59c2c719ecf87dac8628d5",
      :reason
-     "Source endpoint equality and reflexive connector HEq packaged."}]}
+     "Source endpoint equality and reflexive connector HEq packaged."}
+    {:job 8,
+     :commit "c071cf8c36bdf269ce23cff8b425c951ae37521e",
+     :reason
+     "Target connector hom identified with named based connector."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
