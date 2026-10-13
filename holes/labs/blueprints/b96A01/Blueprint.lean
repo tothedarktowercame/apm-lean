@@ -564,11 +564,32 @@ lemma apm_b96a01_part_d_abelian_aux_representation_aux_prime_card
 /-- An element of prime order `ℓ` in `GLₙ(ℚ)` forces `ℓ - 1 ≤ n`: its minimal polynomial
 divides `X^ℓ - 1 = (X - 1) Φ_ℓ`, is not `X - 1`, and `Φ_ℓ` is irreducible over `ℚ` of degree
 `ℓ - 1`. -/
+lemma apm_b96a01_part_d_abelian_aux_representation_aux_dim_bound_aux_minpoly
+    (n : Type*) [Fintype n] [DecidableEq n] (A : Matrix n n ℚ) :
+    (minpoly ℚ A).natDegree ≤ Fintype.card n := by
+  have hd := Polynomial.natDegree_le_of_dvd (Matrix.minpoly_dvd_charpoly A)
+    (Matrix.charpoly_monic A).ne_zero
+  simpa using hd
+
+/-- `Φ_ℓ` divides the minimal polynomial of a matrix of prime order `ℓ`: the minimal
+polynomial divides `X^ℓ − 1 = (X − 1) Φ_ℓ`; if `Φ_ℓ` (irreducible over `ℚ`) did not divide it,
+it would divide `X − 1`, forcing the matrix to be `1`. -/
+lemma apm_b96a01_part_d_abelian_aux_representation_aux_dim_bound_aux_cyclotomic_dvd
+    (n : Type*) [Fintype n] [DecidableEq n] (ℓ : ℕ) (hℓ : ℓ.Prime)
+    (g : Matrix.GeneralLinearGroup n ℚ) (hg : orderOf g = ℓ) :
+    Polynomial.cyclotomic ℓ ℚ ∣ minpoly ℚ (g : Matrix n n ℚ) := by
+  sorry
+
 lemma apm_b96a01_part_d_abelian_aux_representation_aux_dim_bound
     (n : Type*) [Fintype n] [DecidableEq n] (ℓ : ℕ) (hℓ : ℓ.Prime)
     (g : Matrix.GeneralLinearGroup n ℚ) (hg : orderOf g = ℓ) :
     ℓ - 1 ≤ Fintype.card n := by
-  sorry
+  have hd := apm_b96a01_part_d_abelian_aux_representation_aux_dim_bound_aux_cyclotomic_dvd n ℓ hℓ g hg
+  have hne : minpoly ℚ (g : Matrix n n ℚ) ≠ 0 :=
+    minpoly.ne_zero (Algebra.IsIntegral.isIntegral _)
+  have h := Polynomial.natDegree_le_of_dvd hd hne
+  rw [Polynomial.natDegree_cyclotomic, Nat.totient_prime hℓ] at h
+  exact h.trans (apm_b96a01_part_d_abelian_aux_representation_aux_dim_bound_aux_minpoly n _)
 
 /-- `GLₙ(F_p)` has an element of every prime order `ℓ` with `ℓ - 1 ≤ n`, except
 `n = 1, p = 2` (a unipotent Jordan block if `ℓ = p`, a companion matrix of a factor of
