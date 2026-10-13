@@ -270,6 +270,33 @@ theorem iteratedFDerivWithin_domDomCongr_decomposeFin_symm_zero
   have hv := DFunLike.congr_fun hd (Fin.tail v)
   simpa [Function.comp_def, Fin.tail, Equiv.Perm.decomposeFin_symm_apply_succ] using hv
 
+/-- An adjacent symmetry of a lower jet lifts to the same adjacent transposition shifted
+past the new leading derivative slot. -/
+theorem iteratedFDerivWithin_domDomCongr_adjacent_succ
+    {E F : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [NormedAddCommGroup F] [NormedSpace ℝ F]
+    {s : Set E} {f : E → F} {x : E} {n : ℕ}
+    (hu : UniqueDiffOn ℝ s) (hxs : x ∈ s) (i : Fin n)
+    (hg : ∀ y ∈ s,
+      (iteratedFDerivWithin ℝ (n + 1) f s y).domDomCongr
+          (Equiv.swap i.castSucc i.succ) =
+        iteratedFDerivWithin ℝ (n + 1) f s y) :
+    (iteratedFDerivWithin ℝ (n + 2) f s x).domDomCongr
+        (Equiv.swap i.castSucc.succ i.succ.succ) =
+      iteratedFDerivWithin ℝ (n + 2) f s x := by
+  have hp : Equiv.Perm.decomposeFin.symm (0, Equiv.swap i.castSucc i.succ) =
+      Equiv.swap i.castSucc.succ i.succ.succ := by
+    ext j
+    refine Fin.cases ?_ (fun j => ?_) j
+    · rw [Equiv.Perm.decomposeFin_symm_apply_zero,
+        Equiv.swap_apply_of_ne_of_ne] <;> grind
+    · simp only [Equiv.Perm.decomposeFin_symm_apply_succ]
+      simp [Equiv.swap_apply_def]
+      split_ifs <;> simp_all
+  rw [← hp]
+  exact iteratedFDerivWithin_domDomCongr_decomposeFin_symm_zero hu hxs
+    (Equiv.swap i.castSucc i.succ) hg
+
 /-- A local symmetry identity for an iterated derivative lifts to the tail slots of the next
 iterated derivative. -/
 theorem iteratedFDerivWithin_domDomCongr_decomposeFin_symm_zero_of_eventuallyEq
