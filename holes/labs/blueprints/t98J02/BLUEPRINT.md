@@ -65,10 +65,11 @@ primitive circle has nonzero mod-2 class whenever its base does, matching the
 homology argument.  Connectedness is essential: the next lemma supplies the
 degenerate disconnected counterexample.
 
-### `t98J02_disconnected_trivialCover_counterexample` — LIBRARY
+### `t98J02_disconnected_trivialCover_model` — LIBRARY leaf
 
-**Statement.** There is a positive finite-sheeted disconnected cover with a
-nonseparating base circle whose degree-one lift is separating.
+**Statement.** The torus trivial double cover, coordinate base circle, and
+one-sheet lift exist with all covering/embedding facts and with two explicit
+open pieces certifying that the lifted complement is separated.
 
 **Why true.** Take the torus `Circle × Circle`, the trivial cover by two
 disjoint copies, and a coordinate circle `c`.  Put `l` in one sheet.  The base
@@ -78,10 +79,13 @@ preconnected.  Product charts must be transported to the exact
 `EuclideanSpace ℝ (Fin 2)` chart model required by `ClosedSurface`, and the
 product projection must be packaged as an `IsKSheetedCover`.
 
-**Expected size.** 180–350 lines.  Marked LIBRARY because the old compiled
-adapter was lost and the audited replacement is a surface-chart construction,
-not a small Mathlib application.  Program name:
-`torus_trivialCover_separatingLift`.
+**Expected size.** 120–150 lines.  Use product compactness/Hausdorff/second
+countability instances, product manifold charts transported along the standard
+linear equivalence to `EuclideanSpace ℝ (Fin 2)`, `IsCoveringMap.prod`, and the
+finite-fiber lemmas behind `IsKSheetedCover`.  For the coordinate-circle
+complement use the circle-minus-point interval model and
+`IsPathConnected.isPreconnected`.  The open pieces are the chosen-sheet
+complement and the untouched sheet.
 
 **Dependencies.** Definitions and `ConstructionTargets.CoveringDegree` only;
 it is independent of the other two lemmas.
@@ -92,10 +96,31 @@ and clopen.  The two fibers of the projection have cardinality two.  The old
 topology-loop fixture reportedly compiled this exact model before its ephemeral
 source was lost.
 
-### `t98J02_connected_doubleCover_counterexample` — LIBRARY
+### `t98J02_separatesSet_not_preconnected` — independent topology leaf
 
-**Statement.** There is a positive finite-sheeted connected cover with a
-separating base circle whose degree-one lift is nonseparating.
+**Statement.** Two disjoint open pieces which cover a set and both meet it
+force that set not to be preconnected.
+
+**Expected size.** 30–50 lines.  Use `IsPreconnected.isPreconnected_iff` (or
+`IsPreconnected.subset_univ` plus its clopen separation characterization),
+`Set.not_nonempty_iff_eq_empty`, and `Set.disjoint_left`.
+
+**Truth check.** Both nonemptiness assumptions are essential; without either,
+the alleged separation could have an empty side.  The definition uses
+`IsOpen (s ∩ U)` and `IsOpen (s ∩ V)`, so there is no hidden relative-topology
+conversion.
+
+### `t98J02_disconnected_trivialCover_counterexample` — proved assembly
+
+Extract the explicit model and apply
+`t98J02_separatesSet_not_preconnected`; this contains no `sorry`.
+
+### `t98J02_connected_doubleCover_model` — LIBRARY leaf
+
+**Statement.** There is an explicit positive connected finite cover with a
+separating embedded base circle and degree-one lift whose complement is
+path-connected.  Path-connectedness is deliberately a stronger, independently
+checkable certificate rather than the requested conclusion itself.
 
 **Why true.** Split a genus-two surface into two once-punctured tori along
 `C`.  Choose a homomorphism to `Z/2` nonzero on a loop in each side and take
@@ -107,11 +132,14 @@ model can be used, but it still needs quotient charts, the two-sheeted covering
 proof, and direct complement calculations.  No present sorry-free target
 packages these facts.
 
-**Expected size.** 530–1050 lines, corresponding to the audit programs
-`kleinQuotient_closedSurface` (350–700) and
-`kleinSeparatingCurve_nonseparatingLift` (180–350).  It remains one LIBRARY
-interface because splitting it without committing to explicit model
-definitions would make the adapter assume its own geometric content.
+**Expected size.** 120–150 lines once an explicit quotient/gluing model is
+chosen.  Useful Mathlib tools are `IsCoveringMap.of_inducing`, quotient-map
+open-map lemmas, `IsPathConnected.union`, and product/quotient manifold-chart
+transport.  This is the irreducible model-construction leaf: the worklist's
+`kleinQuotient_closedSurface` foundation is currently missing and is itself
+estimated at 350–700 lines.  If that foundation cannot be replaced by a short
+explicit construction, this leaf must remain LIBRARY rather than hiding the
+quotient-chart development in another lemma.
 
 **Dependencies.** Definitions and `ConstructionTargets.CoveringDegree` only;
 it is independent of the other two lemmas.
@@ -122,17 +150,38 @@ other circle, so the complement stays connected.  Cutting the base along `C`
 produces its two punctured-torus sides, so the base complement is disconnected.
 Positivity holds with `n = 2`.
 
+### `t98J02_pathConnected_complement_nonseparating` — independent topology leaf
+
+**Statement.** A path-connected curve complement is preconnected, hence the
+curve is nonseparating.
+
+**Expected size.** 5–15 lines, using `IsPathConnected.isPreconnected` after
+unfolding `Nonseparating`.  It is fully independent of all model leaves.
+
+**Truth check.** `IsPathConnected` includes nonemptiness in Mathlib, so the
+empty-complement edge case is not being smuggled through.  Boundary points are
+irrelevant because the set is literally `(range l)ᶜ`.
+
+### `t98J02_connected_doubleCover_counterexample` — proved assembly
+
+Extract the model and weaken path-connectedness to preconnectedness; this
+contains no `sorry`.
+
 ## Assembly and dependency layers
 
 The main theorem is the conjunction of the three lemma conclusions and is
 proved by one `exact`; it has no direct `sorry`.
 
-* **Layer 1 (parallel LIBRARY programs):**
-  `t98J02_nonseparating_lift_connectedCover`,
-  `t98J02_disconnected_trivialCover_counterexample`, and
-  `t98J02_connected_doubleCover_counterexample`.
-* **Layer 2 (already compiled):** `apm_t98j02` assembly after all three Layer 1
-  results are supplied.
+* **Layer 1 (all parallel):**
+  `t98J02_nonseparating_lift_connectedCover` (large missing collar/homology
+  foundation), `t98J02_disconnected_trivialCover_model`,
+  `t98J02_separatesSet_not_preconnected`,
+  `t98J02_connected_doubleCover_model`, and
+  `t98J02_pathConnected_complement_nonseparating`.
+* **Layer 2 (sorry-free):** the two named counterexample lemmas assemble their
+  corresponding model and generic topology leaves.
+* **Layer 3 (already compiled):** `apm_t98j02` assembles the three registered
+  conclusions.
 
 The main doubt is engineering scope, not truth: the general collar theorem and
 the explicit quotient surface charts are large missing library developments.
