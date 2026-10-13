@@ -36158,6 +36158,17 @@
     [{:cmd "lake build closure",
       :exit 1,
       :correction "explicit Fin witnesses"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791930986899-10734-0d1e7c01",
+     :commands
+     ["git show/diff 16c5ec32; scope/math review"
+      "sha256sum fixture; show --check; placeholder recount"
+      "lake build ConstructionTargets.t93J03Closure; lean fixture"
+      "statement-registry check"],
+     :finding
+     "PASS. Commit 16c5ec32 adds compiled, sorry-free standard-axiom progress after the polygon-model milestone: for each of the exact four Klein pairing arcs, it computes the established skeleton homeomorphism as the correctly labeled wedge-circle traversal with reversed interval coordinate, matching the all-false signs and aabb attaching word. Fixture hash matches; registry 166/166; Main placeholder 1->1. Polygon van Kampen, C1, C2, and Main remain listed. SemilocallySimplyConnected X is unused, mandated by problem.md."},
     :commit "16c5ec329b04bb60f39050bed8712ab753a70dca",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
@@ -36169,7 +36180,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -36187,7 +36198,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t93J03Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed polygon and skeleton models; van Kampen remains.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed exact four-arc attaching-loop computation; van Kampen remains.",
    :id :program-2026-10-13-close-t93j03,
    :kind :final-adapter,
    :campaign-priority 30,
@@ -36229,7 +36240,11 @@
     {:job 9,
      :commit "5d1dafaa596e4ea99ab52ee71d664816f858aedc",
      :reason
-     "Committed polygon and skeleton models; van Kampen remains."}]}
+     "Committed polygon and skeleton models; van Kampen remains."}
+    {:job 1,
+     :commit "16c5ec329b04bb60f39050bed8712ab753a70dca",
+     :reason
+     "Committed exact four-arc attaching-loop computation; van Kampen remains."}]}
   {:consumer :t99J05,
    :stop-count 5,
    :evidence
@@ -37649,7 +37664,7 @@
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "kleinPolygon_attaching_arcs",
@@ -37659,7 +37674,9 @@
     :reported-by [:program-2026-10-13-close-t93j03],
     :type "four reversed arcs give a a b b",
     :area "covering-subgroup-correspondence",
-    :proved-in :program-2026-10-13-close-t93j03},
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "16c5ec329b04bb60f39050bed8712ab753a70dca"},
    :id :lemma-kleinpolygon-attaching-arcs,
    :kind :lemma,
    :depends-on [:lemma-kleinpairingorbitequivbool],
