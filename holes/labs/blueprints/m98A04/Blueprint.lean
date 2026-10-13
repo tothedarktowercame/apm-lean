@@ -835,6 +835,19 @@ theorem apm_m98a04_translation_pairing_fderiv_of_stage_dq {n : ℕ}
 
 /-- Smoothness extraction by induction on derivative order, from supplied
 fixed-stage continuity and difference-quotient facts for every test function. -/
+lemma apm_m98a04_translation_pairing_contDiff_of_stage_facts_aux_continuousAt {n : ℕ}
+    (T : Distribution (⊤ : Opens (EuclideanSpace ℝ (Fin n))) ℝ ⊤)
+    (ψ : apm_m98a04_TF n) (x : EuclideanSpace ℝ (Fin n))
+    (hcont : ContinuousAt (apm_m98a04_translateReflectStageLocal ψ x) x) :
+    ContinuousAt (fun z => T (apm_m98a04_translateReflect ψ z)) x := by
+  have hc : ContinuousAt (fun z => T (apm_m98a04_translationStageToTest ψ x
+      (apm_m98a04_translateReflectStageLocal ψ x z))) x :=
+    T.continuous.continuousAt.comp
+      ((apm_m98a04_translationStageToTest ψ x).continuous.continuousAt.comp hcont)
+  apply hc.congr_of_eventuallyEq
+  filter_upwards [Metric.closedBall_mem_nhds x zero_lt_one] with z hz
+  rw [apm_m98a04_translateReflectStageLocal_difference_quotient_aux_local_to_test ψ x z hz]
+
 theorem apm_m98a04_translation_pairing_contDiff_of_stage_facts {n : ℕ}
     (T : Distribution (⊤ : Opens (EuclideanSpace ℝ (Fin n))) ℝ ⊤)
     (φ : apm_m98a04_TF n)
@@ -848,7 +861,28 @@ theorem apm_m98a04_translation_pairing_contDiff_of_stage_facts {n : ℕ}
         (nhds (apm_m98a04_translateReflect
           (apm_m98a04_directionalTF v ψ) x))) :
     ContDiff ℝ ∞ (fun x => T (apm_m98a04_translateReflect φ x)) := by
-  sorry
+  have hF : ∀ ψ : apm_m98a04_TF n, ∀ x, HasFDerivAt
+      (fun z => T (apm_m98a04_translateReflect ψ z))
+      (∑ i, T (apm_m98a04_translateReflect (apm_m98a04_partialListTF [i] ψ) x) •
+        (EuclideanSpace.proj i : EuclideanSpace ℝ (Fin n) →L[ℝ] ℝ)) x := fun ψ x =>
+    apm_m98a04_translation_pairing_fderiv_of_stage_dq_aux_hasFDerivAt _
+      (fun j z => T (apm_m98a04_translateReflect (apm_m98a04_partialListTF [j] ψ) z))
+      (fun j => apm_m98a04_translation_pairing_fderiv_of_stage_dq_aux_continuous T _)
+      (fun j z => by
+        have hs := apm_m98a04_translation_pairing_fderiv_of_stage_dq_aux_slope T ψ (hdq ψ) j z
+        exact hs) x
+  have hk : ∀ k : ℕ, ∀ ψ : apm_m98a04_TF n,
+      ContDiff ℝ k (fun x => T (apm_m98a04_translateReflect ψ x)) := by
+    intro k
+    induction k with
+    | zero => intro ψ; exact contDiff_zero.2 (apm_m98a04_translation_pairing_fderiv_of_stage_dq_aux_continuous T ψ)
+    | succ k ih =>
+      intro ψ
+      rw [show ((k + 1 : ℕ) : WithTop ℕ∞) = (k : WithTop ℕ∞) + 1 by norm_cast,
+        contDiff_succ_iff_hasFDerivAt]
+      refine ⟨_, ?_, hF ψ⟩
+      exact ContDiff.sum fun i _ => (ih _).smul contDiff_const
+  exact contDiff_infty.2 fun k => hk k φ
 
 theorem apm_m98a04_translation_pairing_contDiff_of_pos_dim {n : ℕ}
     (hn : 0 < n)
