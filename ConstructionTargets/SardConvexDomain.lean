@@ -667,4 +667,17 @@ theorem quarter_infDist_ball_data
     exact Metric.mem_closedBall.2 (le_trans (le_of_lt hy') (by linarith))
   constructor <;> linarith
 
+/-- Distance-to-set scales at two nearby centers differ by less than a factor
+of two.  This is the local scale estimate used in the locally finite
+selection and bounded-overlap arguments. -/
+theorem infDist_comparable_of_dist_lt_half
+    {E : Type*} [PseudoMetricSpace E] (s : Set E) {x y : E}
+    (hxy : dist x y < Metric.infDist x s / 2) :
+    Metric.infDist x s / 2 < Metric.infDist y s ∧
+      Metric.infDist y s < 3 * Metric.infDist x s / 2 := by
+  have h₁ := Metric.infDist_le_infDist_add_dist (s := s) (x := x) (y := y)
+  have h₂ := Metric.infDist_le_infDist_add_dist (s := s) (x := y) (y := x)
+  rw [dist_comm y x] at h₂
+  constructor <;> linarith
+
 end ConstructionTargets.SardConvexDomain
