@@ -427,6 +427,57 @@ noncomputable def kleinPolygonPresentedGroupEquiv :
     exact DFunLike.congr_fun hhom g
   map_mul' := kleinPolygonToPresented.map_mul
 
+/-- A homeomorphism transports the based fundamental group. -/
+def fundamentalGroupEquivOfHomeomorph
+    {X Y : Type*} [TopologicalSpace X] [TopologicalSpace Y]
+    (e : X ≃ₜ Y) (x : X) :
+    FundamentalGroup X x ≃* FundamentalGroup Y (e x) where
+  toFun := FundamentalGroup.map ⟨e, e.continuous⟩ x
+  invFun := FundamentalGroup.mapOfEq ⟨e.symm, e.symm.continuous⟩
+    (e.symm_apply_apply x)
+  left_inv p := by
+    induction p using Path.Homotopic.Quotient.ind with
+    | mk p =>
+      rw [FundamentalGroup.map_apply]
+      change (FundamentalGroup.mapOfEq _ _)
+        (Path.Homotopic.Quotient.mk (p.map e.continuous)) = _
+      rw [FundamentalGroup.mapOfEq_apply]
+      apply Path.Homotopic.Quotient.eq.mpr
+      convert Path.Homotopic.refl p using 1
+      ext t
+      exact e.symm_apply_apply (p t)
+  right_inv p := by
+    induction p using Path.Homotopic.Quotient.ind with
+    | mk p =>
+      rw [FundamentalGroup.mapOfEq_apply]
+      apply Path.Homotopic.Quotient.eq.mpr
+      convert Path.Homotopic.refl p using 1
+      ext t
+      exact e.apply_symm_apply (p t)
+  map_mul' := map_mul _
+
+/-- Final C1 adapter: a van Kampen computation of the `aabb` presentation at
+one point of the polygon model yields the registered presentation at every
+basepoint of the frozen Klein bottle. -/
+theorem kleinBottle_pi1_every_basepoint_of_polygon_van_kampen
+    [PathConnectedSpace KleinBottle]
+    (q₀ : kleinPairingData.Space)
+    (h₀ : Nonempty
+      (FundamentalGroup kleinPairingData.Space q₀ ≃*
+        KleinPolygonPresentedGroup)) :
+    ∀ k : KleinBottle,
+      Nonempty (FundamentalGroup KleinBottle k ≃* PresentedKleinGroup) := by
+  obtain ⟨e₀⟩ := h₀
+  have himage : Nonempty
+      (FundamentalGroup KleinBottle (kleinPairingSpaceHomeomorph q₀) ≃*
+        PresentedKleinGroup) :=
+    ⟨(fundamentalGroupEquivOfHomeomorph kleinPairingSpaceHomeomorph q₀).symm |>.trans
+      (e₀.trans kleinPolygonPresentedGroupEquiv)⟩
+  intro k
+  obtain ⟨eimage⟩ := himage
+  exact ⟨(FundamentalGroup.fundamentalGroupMulEquivOfPathConnected k
+    (kleinPairingSpaceHomeomorph q₀)).trans eimage⟩
+
 /-- Once proper discontinuity of the explicit affine action is supplied, the
 banked deck-group theorem computes the fundamental group at the canonical
 orbit of the origin. -/
@@ -521,5 +572,6 @@ theorem lift_isEmbedding_assembly
 #print axioms kleinPolygon_attaching_arcs
 #print axioms kleinRelator_generatorChange_eq_one_iff
 #print axioms kleinPolygonPresentedGroupEquiv
+#print axioms kleinBottle_pi1_every_basepoint_of_polygon_van_kampen
 
 end ConstructionTargets.t93J03Closure

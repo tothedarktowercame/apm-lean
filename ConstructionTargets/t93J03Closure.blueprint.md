@@ -174,6 +174,12 @@ been descended through both presentations and proved inverse in
 `kleinPolygonPresentedGroupEquiv`; after van Kampen returns the `aabb`
 presentation, no further group-presentation argument is needed.
 
+The compiled `kleinBottle_pi1_every_basepoint_of_polygon_van_kampen` is the
+complete downstream C1 adapter: it transports any one-basepoint `aabb`
+fundamental-group calculation through the polygon homeomorphism, changes to
+the frozen presentation, and then reaches every frozen basepoint.  Thus C1
+now has exactly one remaining input, the topological van Kampen calculation.
+
 - Layer 1: C1, C3, and C4. C1 and C3 are independent; C4 is already complete.
 - Layer 2: C2 against the explicit C1 equivalence interface.
 - Layer 3: C5, already complete modulo C1 and C2.
