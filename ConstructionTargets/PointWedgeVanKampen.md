@@ -1111,6 +1111,11 @@ applies that square.  The full left comparison is now the mapped target
 counit followed by the strict span comparison, ready for the point-span
 transport stage.
 
+`genericPointWedgeCoordinateSpanGlobalRestrictionLeftComparison_heq_inl_counitTarget`
+performs that transport: the complete comparison is the left coproduct
+injection of the connector normal form of the explicit counit/strict-span
+composite.  No identity normalization of the counit is used.
+
 `genericPointWedgeCoordinateSpanGlobalRestrictionLeftRoundTrip_counit_map`
 applies the coordinate-span left functor to the left-equivalence counit
 naturality square.  Both ordered composites are now equal inside the
