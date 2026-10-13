@@ -76774,7 +76774,7 @@
   {:consumer :t96J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 0,
    :evidence
    {:placeholder-delta 0,
     :residual
@@ -76816,6 +76816,17 @@
     [{:cmd "first interface witness compile",
       :exit 1,
       :correction "stated emptiness via IsEmpty"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791870538634-8641-0ba74937",
+     :commands
+     ["git scope/SHA/blob checks at 34d5fe3e4"
+      "git show 34d5fe3e4:... | lake env lean /dev/stdin"
+      "statement-registry.py check (145/0)"
+      "placeholder scan; #print axioms empty-wedge witness"],
+     :finding
+     "PASS: correct STOP with compiled refutation. Exact one-file scope and frozen hashes match; committed blob compiles, placeholders 0, registry 145/0, standard axioms only. Frozen B8 permits L=Empty yet requires wedgePoint and says the empty case is a trivial based group. Current FiniteWedge L is Quotient of L×Circle, so FiniteWedge Empty is empty; the new theorem proves its nonemptiness is false. Repair by requiring Nonempty L or adjoining a basepoint, then prove B8 and B9."},
     :commit "8ff5cb54a",
     :changed-paths ["ConstructionTargets/PolygonSurfacePiOne.lean"],
     :fixture
@@ -76824,7 +76835,7 @@
      "8bb4cf5d53c64717292de2cab25decbc62907fcc988a8052958bc0148f881904"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope ["ConstructionTargets/PolygonSurfacePiOne.lean"],
    :dag-node "ConstructionTargets/PolygonSurfacePiOne.blueprint.md/B8",
    :acceptance
@@ -87704,7 +87715,7 @@
    :other-consumers [:t92J05 :t94J04 :t97A01 :t97A03]}
   {:consumer :t96J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "PointWedgeQuotient.no_finiteWedgePoint",
@@ -87714,7 +87725,9 @@
     :reported-by [:routes-2026-10-13-polygon-b8-topo2-r1],
     :type "IsEmpty ((L : Type) -> [Fintype L] -> FiniteWedge L)",
     :area "polygon-surface-pi1",
-    :proved-in :routes-2026-10-13-polygon-b8-topo2-r1},
+    :proved-in :routes-2026-10-13-polygon-b8-topo2-r1,
+    :banked-by :routes-2026-10-13-polygon-b8-topo2-r1,
+    :banked-commit "8ff5cb54a"},
    :id :lemma-pointwedgequotient-no-finitewedgepoint,
    :kind :lemma,
    :depends-on [],
