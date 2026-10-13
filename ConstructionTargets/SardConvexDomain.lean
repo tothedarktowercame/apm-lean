@@ -942,4 +942,22 @@ theorem whitneyStratum_indices_le_add_one_of_mem_quarter_balls
     norm_num at hc'
     linarith
 
+/-- At one fixed stratum, the selected centers whose quarter-infDist balls
+contain a point form a finite set.  All such centers lie in one scale-sized
+closed ball around that point. -/
+theorem finite_whitneyStratumNet_mem_quarter_ball
+    {E : Type*} [MetricSpace E] [ProperSpace E] (s : Set E) (k : ℤ) (x : E) :
+    {c | c ∈ whitneyStratumNet s k ∧
+      x ∈ Metric.ball c (Metric.infDist c s / 4)}.Finite := by
+  have hfinite := finite_inter_whitneyStratumNet_of_isCompact s k
+    (isCompact_closedBall x ((2 : ℝ) ^ (k + 1) / 4))
+  apply hfinite.subset
+  intro c hc
+  refine ⟨hc.1, Metric.mem_closedBall.2 ?_⟩
+  have hdist : dist x c < Metric.infDist c s / 4 := Metric.mem_ball.1 hc.2
+  have hscale : Metric.infDist c s < (2 : ℝ) ^ (k + 1) :=
+    ((whitneyStratumNet_spec s k).1 hc.1).2.2
+  rw [dist_comm]
+  exact le_of_lt (lt_trans hdist (div_lt_div_of_pos_right hscale (by norm_num)))
+
 end ConstructionTargets.SardConvexDomain
