@@ -2377,6 +2377,46 @@ theorem PairingData.skeletonWedgeKernelAgreement (P : PairingData) :
   · exact P.signedWedgeArc_eq_of_skeletonArc_eq i j t u
   · exact P.skeletonArc_eq_of_signedWedgeArc_eq i j t u
 
+/-- Generated polygon equivalence is either literal equality or equality of
+the signed coordinates of concrete boundary-arc representatives. -/
+theorem PairingData.eqvGen_iff_eq_or_signed_representatives (P : PairingData)
+    (x y : Disk) :
+    Relation.EqvGen P.Rel x y ↔
+      x = y ∨ ∃ (i j : Fin P.edgeCount)
+        (t u : Set.Icc (0 : ℝ) 1),
+        edgePoint P.edgeCount i t = x ∧
+        edgePoint P.edgeCount j u = y ∧
+        P.signedWedgeArc i t = P.signedWedgeArc j u := by
+  constructor
+  · intro h
+    induction h with
+    | rel x y h =>
+        rcases h with ⟨i, t, hx, hy⟩
+        right
+        exact ⟨i, P.pair i, t, pairedParameter P.pair P.sign i t,
+          hx.symm, hy.symm, (P.signedWedgeArc_pair i t).symm⟩
+    | refl x => exact Or.inl rfl
+    | symm x y _ ih =>
+        rcases ih with hxy | ⟨i, j, t, u, hi, hj, hs⟩
+        · exact Or.inl hxy.symm
+        · exact Or.inr ⟨j, i, u, t, hj, hi, hs.symm⟩
+    | trans x y z _ _ ih₁ ih₂ =>
+        rcases ih₁ with hxy | ⟨i, j, t, u, hi, hj, hs₁⟩
+        · subst y
+          exact ih₂
+        · rcases ih₂ with hyz | ⟨k, l, v, w, hk, hl, hs₂⟩
+          · subst z
+            exact Or.inr ⟨i, j, t, u, hi, hj, hs₁⟩
+          · right
+            refine ⟨i, l, t, w, hi, hl, hs₁.trans ?_⟩
+            exact (P.signedWedgeArc_eq_of_edgePoint_eq j k u v
+              (hj.trans hk.symm)).trans hs₂
+  · rintro (rfl | ⟨i, j, t, u, hi, hj, hs⟩)
+    · exact Relation.EqvGen.refl x
+    · rw [← hi, ← hj]
+      exact (P.skeletonArc_eq_iff_eqvGen i j t u).mp
+        (P.skeletonArc_eq_of_signedWedgeArc_eq i j t u hs)
+
 /-- The standard polygon arcs cover its entire boundary circle. -/
 theorem edgePoint_surjective_boundary (n : ℕ) (hn : 0 < n) (x : Disk)
     (hx : ‖(x : ℂ)‖ = 1) :
@@ -2508,6 +2548,81 @@ theorem PairingData.continuous_skeletonArcMap (P : PairingData) :
     Complex.exp (Complex.I * (2 * Real.pi * ((i : ℝ) + t.1) / P.edgeCount))
   fun_prop
 
+/-- The concrete edge parametrization of the polygon boundary is continuous
+on the finite discrete family of closed intervals. -/
+theorem PairingData.continuous_edgePointArcMap (P : PairingData) :
+    Continuous (fun a : P.SkeletonArcSource =>
+      edgePoint P.edgeCount a.1 a.2) := by
+  rw [continuous_prod_of_discrete_left]
+  intro i
+  apply Continuous.subtype_mk
+  change Continuous fun t : Set.Icc (0 : ℝ) 1 =>
+    Complex.exp (Complex.I * (2 * Real.pi * ((i : ℝ) + t.1) / P.edgeCount))
+  fun_prop
+
+/-- The generated polygon relation has closed graph.  Its non-diagonal part
+is the compact image of pairs of boundary arcs with equal signed coordinates. -/
+theorem PairingData.eqvGenRel_isClosed (P : PairingData) :
+    IsClosed {p : Disk × Disk | Relation.EqvGen P.Rel p.1 p.2} := by
+  letI : Finite (PairingOrbit P.pair) :=
+    Finite.of_surjective
+      (fun i => Quotient.mk (Relation.EqvGen.setoid
+        (fun i j : Fin P.edgeCount => j = P.pair i)) i)
+      Quotient.mk_surjective
+  letI : T2Space
+      (PointWedgeQuotient.FiniteWedge (PairingOrbit P.pair)) :=
+    PointWedgeQuotient.finiteWedgeT2 _
+  let A : Set (P.SkeletonArcSource × P.SkeletonArcSource) :=
+    {a | P.signedWedgeArcMap a.1 = P.signedWedgeArcMap a.2}
+  let f : P.SkeletonArcSource × P.SkeletonArcSource → Disk × Disk :=
+    fun a => (edgePoint P.edgeCount a.1.1 a.1.2,
+      edgePoint P.edgeCount a.2.1 a.2.2)
+  have hA : IsClosed A := by
+    exact isClosed_eq
+      (P.continuous_signedWedgeArcMap.comp continuous_fst)
+      (P.continuous_signedWedgeArcMap.comp continuous_snd)
+  have hf : Continuous f := by
+    exact (P.continuous_edgePointArcMap.comp continuous_fst).prodMk
+      (P.continuous_edgePointArcMap.comp continuous_snd)
+  have himage : IsClosed (f '' A) :=
+    (hA.isCompact.image hf).isClosed
+  have hdiag : IsClosed {p : Disk × Disk | p.1 = p.2} :=
+    isClosed_eq continuous_fst continuous_snd
+  convert hdiag.union himage using 1
+  ext p
+  rw [Set.mem_union]
+  change Relation.EqvGen P.Rel p.1 p.2 ↔
+    p.1 = p.2 ∨ p ∈ f '' A
+  rw [P.eqvGen_iff_eq_or_signed_representatives]
+  constructor
+  · rintro (h | ⟨i, j, t, u, hi, hj, hs⟩)
+    · exact Or.inl h
+    · right
+      refine ⟨((i, t), (j, u)), ?_, ?_⟩
+      · exact hs
+      · exact Prod.ext hi hj
+  · rintro (h | ⟨⟨⟨i, t⟩, ⟨j, u⟩⟩, hs, hp⟩)
+    · exact Or.inl h
+    · right
+      have hi := congrArg Prod.fst hp
+      have hj := congrArg Prod.snd hp
+      exact ⟨i, j, t, u, hi, hj, hs⟩
+
+/-- The polygon surface quotient is Hausdorff because its equivalence graph
+is closed in the compact Hausdorff disk. -/
+@[implicit_reducible] noncomputable def PairingData.spaceT2 (P : PairingData) :
+    T2Space P.Space := by
+  apply compact_closed_equivalence_quotient_t2
+  exact P.eqvGenRel_isClosed
+
+/-- The finite closed-interval family is a quotient presentation of the
+actual boundary skeleton. -/
+theorem PairingData.skeletonArcMap_isQuotientMap (P : PairingData) :
+    Topology.IsQuotientMap P.skeletonArcMap := by
+  letI : T2Space P.Space := P.spaceT2
+  exact IsQuotientMap.of_surjective_continuous
+    P.surjective_skeletonArcMap P.continuous_skeletonArcMap
+
 /-- The signed family of interval arcs presents the finite wedge as a
 quotient.  Compactness of the finite interval family and Hausdorffness of the
 closed basepoint quotient turn continuity and coverage into the quotient-map
@@ -2601,5 +2716,20 @@ theorem PairingData.skeletonHomeomorphWedgeOfQuotientMaps_skeletonArc
     P.skeletonHomeomorphWedgeOfQuotientMaps h hs hw (P.skeletonArc i t) =
       P.signedWedgeArc i t :=
   P.skeletonWedgeEquivOfKernelAgreement_skeletonArc h i t
+
+/-- B7: the actual quotient boundary skeleton is the orbit-indexed finite
+wedge, with its signed polygon-arc coordinates fixed explicitly. -/
+noncomputable def PairingData.skeletonHomeomorphWedge (P : PairingData) :
+    P.skeleton ≃ₜ PointWedgeQuotient.FiniteWedge (PairingOrbit P.pair) :=
+  P.skeletonHomeomorphWedgeOfQuotientMaps P.skeletonWedgeKernelAgreement
+    P.skeletonArcMap_isQuotientMap P.signedWedgeArcMap_isQuotientMap
+
+theorem PairingData.skeletonHomeomorphWedge_skeletonArc (P : PairingData)
+    (i : Fin P.edgeCount) (t : Set.Icc (0 : ℝ) 1) :
+    P.skeletonHomeomorphWedge (P.skeletonArc i t) =
+      P.signedWedgeArc i t :=
+  P.skeletonHomeomorphWedgeOfQuotientMaps_skeletonArc
+    P.skeletonWedgeKernelAgreement P.skeletonArcMap_isQuotientMap
+      P.signedWedgeArcMap_isQuotientMap i t
 
 end ConstructionTargets.PolygonSurfacePiOne
