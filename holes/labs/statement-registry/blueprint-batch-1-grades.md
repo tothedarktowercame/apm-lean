@@ -20,3 +20,11 @@ for repairs already there; holes/labs/blueprints/<id>/RevisedMain.lean (branch `
 | m99J06 | RevisedMain | faithful (slightly stronger) | apm_m99j06 | full-sequence weak convergence, as the source asks (uₙ = P_{Vₙ}u*, norm convergence) | no; the old subsequence form was an unwarranted narrowing |
 
 Full grader reports: this session's transcript (claude-14, 2026-10-13).
+
+## Re-grade: m95A03 (RevisedMain, b1207c9c1)
+
+| id | candidate | grade | decl | reason | prelim-defect |
+|---|---|---|---|---|---|
+| m95A03 | RevisedMain | faithful | apm_m95a03 | part (c) witness now admissible; uniqueness on [a,b] over all C¹ admissible minimisers (J(v) = J(u) + ∫p(v−u)′² + q(v−u)²); (a), (b) unchanged and true; non-vacuous (p = 1, q = f = 0) | none remaining |
+
+Grader: read-only Claude subagent, 2026-10-13.
