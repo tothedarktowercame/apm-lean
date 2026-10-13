@@ -1,0 +1,298 @@
+import Mathlib
+
+/-!
+# APM m99J06: Galerkin approximation in `H¹₀(0,1)`
+
+## Statement repairs
+
+The former model stored weak derivatives as literal functions even though its
+inner product observed them only almost everywhere, making the hypothesized
+structure inconsistent. Weak derivatives are now elements of Mathlib's `L²`
+space, which quotients functions by almost-everywhere equality. Thus changing a
+derivative on a singleton no longer creates a distinct representative.
+
+Part (d) says that `uₙ` itself converges weakly, but the suggested boundedness
+argument guarantees only a weakly convergent subsequence. We state that precise
+conclusion, as does the supplied solution. Uniqueness can subsequently
+upgrade it to convergence of the full sequence, but that is not needed for
+part (e).
+
+## Encoding questions
+
+None. `H¹₀(0,1)` is represented by absolutely continuous functions with an
+`L²` weak derivative and zero endpoint trace. The derivative is an `L²`
+equivalence class, so all identities have the correct almost-everywhere
+semantics.
+-/
+
+open Filter MeasureTheory Set
+
+noncomputable section
+
+abbrev apm_m99J06_intervalMeasure : Measure ℝ :=
+  volume.restrict (Icc 0 1)
+
+abbrev apm_m99J06_L2 :=
+  Lp ℝ 2 apm_m99J06_intervalMeasure
+
+def apm_m99J06_isH01Pair (u : ℝ → ℝ) (du : apm_m99J06_L2) : Prop :=
+  AbsolutelyContinuousOnInterval u 0 1 ∧
+  MemLp u 2 apm_m99J06_intervalMeasure ∧
+  (∃ duRep : ℝ → ℝ,
+    ∃ hdu : MemLp duRep 2 apm_m99J06_intervalMeasure,
+      hdu.toLp duRep = du ∧
+      ∀ᵐ x ∂apm_m99J06_intervalMeasure, HasDerivAt u (duRep x) x) ∧
+  u 0 = 0 ∧ u 1 = 0
+
+structure apm_m99J06_H01Model (H : Type*) [NormedAddCommGroup H]
+    [InnerProductSpace ℝ H] where
+  val : H → ℝ → ℝ
+  weakDeriv : H → apm_m99J06_L2
+  represents : ∀ u : H, apm_m99J06_isH01Pair (val u) (weakDeriv u)
+  realizes : ∀ (u : ℝ → ℝ) (du : apm_m99J06_L2),
+    apm_m99J06_isH01Pair u du →
+      ∃ w : H, val w = u ∧ weakDeriv w = du
+  inner_eq : ∀ u v : H,
+    inner ℝ u v = ∫ x in Icc (0 : ℝ) 1,
+      val u x * val v x + weakDeriv u x * weakDeriv v x
+
+def apm_m99J06_weakSolution {H : Type*} [NormedAddCommGroup H]
+    [InnerProductSpace ℝ H] (M : apm_m99J06_H01Model H)
+    (f : ℝ → ℝ) (u : H) : Prop :=
+  ∀ v : H, inner ℝ u v = ∫ x in Icc (0 : ℝ) 1, f x * M.val v x
+
+def apm_m99J06_strongSolution {H : Type*} [NormedAddCommGroup H]
+    [InnerProductSpace ℝ H] (M : apm_m99J06_H01Model H)
+    (f : ℝ → ℝ) (u : H) : Prop :=
+  ∃ du ddu : ℝ → ℝ,
+    ∃ hdu : MemLp du 2 apm_m99J06_intervalMeasure,
+    ∃ hddu : MemLp ddu 2 apm_m99J06_intervalMeasure,
+      hdu.toLp du = M.weakDeriv u ∧
+      AbsolutelyContinuousOnInterval du 0 1 ∧
+      (∀ᵐ x ∂apm_m99J06_intervalMeasure, HasDerivAt du (ddu x) x) ∧
+      (∀ᵐ x ∂apm_m99J06_intervalMeasure, M.val u x - ddu x = f x)
+
+def apm_m99J06_galerkinEquation {H : Type*} [NormedAddCommGroup H]
+    [InnerProductSpace ℝ H] (M : apm_m99J06_H01Model H)
+    (f : ℝ → ℝ) (V : Submodule ℝ H) (u : V) : Prop :=
+  ∀ v : V, inner ℝ (u : H) (v : H) =
+    ∫ x in Icc (0 : ℝ) 1, f x * M.val (v : H) x
+
+lemma apm_m99J06_isH01Pair_zero :
+    apm_m99J06_isH01Pair (fun _ : ℝ ↦ 0) (0 : apm_m99J06_L2) := by
+  refine ⟨?_, MemLp.zero, ?_, rfl, rfl⟩
+  · rw [absolutelyContinuousOnInterval_iff]
+    intro ε hε
+    refine ⟨1, zero_lt_one, ?_⟩
+    intro E _ _
+    simpa using hε
+  · refine ⟨(fun _ : ℝ ↦ 0), MemLp.zero, ?_, ?_⟩
+    · simp
+    · filter_upwards with x
+      simpa using (hasDerivAt_const x (0 : ℝ))
+
+lemma apm_m99J06_model_zero {H : Type*} [NormedAddCommGroup H]
+    [InnerProductSpace ℝ H] (M : apm_m99J06_H01Model H) :
+    M.val 0 = (fun _ : ℝ ↦ 0) ∧ M.weakDeriv 0 = 0 := by
+  obtain ⟨w, hwv, hwd⟩ := M.realizes (fun _ : ℝ ↦ 0) 0 apm_m99J06_isH01Pair_zero
+  have hi : inner ℝ w w = 0 := by
+    rw [M.inner_eq, hwv, hwd]
+    apply MeasureTheory.integral_eq_zero_of_ae
+    filter_upwards [Lp.coeFn_zero ℝ 2 apm_m99J06_intervalMeasure] with x hx
+    have hx' : (0 : apm_m99J06_L2) x = 0 := by simpa using hx
+    rw [hx']
+    norm_num
+  have hw0 : w = 0 := inner_self_eq_zero.mp hi
+  subst w
+  exact ⟨hwv, hwd⟩
+
+lemma apm_m99J06_isH01Pair_add
+    {u v : ℝ → ℝ} {du dv : apm_m99J06_L2}
+    (hu : apm_m99J06_isH01Pair u du)
+    (hv : apm_m99J06_isH01Pair v dv) :
+    apm_m99J06_isH01Pair (u + v) (du + dv) := by
+  rcases hu with ⟨huac, huLp, ⟨duRep, hduRep, hduto, huderiv⟩, hu0, hu1⟩
+  rcases hv with ⟨hvac, hvLp, ⟨dvRep, hdvRep, hdvto, hvderiv⟩, hv0, hv1⟩
+  refine ⟨huac.add hvac, huLp.add hvLp, ?_, ?_, ?_⟩
+  · refine ⟨duRep + dvRep, hduRep.add hdvRep, ?_, ?_⟩
+    · change (hduRep.add hdvRep).toLp (duRep + dvRep) = du + dv
+      rw [hduRep.toLp_add hdvRep, hduto, hdvto]
+    · filter_upwards [huderiv, hvderiv] with x hux hvx
+      simpa only [Pi.add_apply] using hux.add hvx
+  · simp only [Pi.add_apply, hu0, hv0, add_zero]
+  · simp only [Pi.add_apply, hu1, hv1, add_zero]
+
+lemma apm_m99J06_isH01Pair_smul
+    {u : ℝ → ℝ} {du : apm_m99J06_L2}
+    (hu : apm_m99J06_isH01Pair u du) (c : ℝ) :
+    apm_m99J06_isH01Pair (c • u) (c • du) := by
+  rcases hu with ⟨huac, huLp, ⟨duRep, hduRep, hduto, huderiv⟩, hu0, hu1⟩
+  refine ⟨huac.const_smul c, huLp.const_smul c, ?_, ?_, ?_⟩
+  · refine ⟨c • duRep, hduRep.const_smul c, ?_, ?_⟩
+    · change (hduRep.const_smul c).toLp (c • duRep) = c • du
+      rw [hduRep.toLp_const_smul c, hduto]
+    · filter_upwards [huderiv] with x hx
+      simpa only [Pi.smul_apply, smul_eq_mul] using hx.const_smul c
+  · simp only [Pi.smul_apply, smul_eq_mul, hu0, mul_zero]
+  · simp only [Pi.smul_apply, smul_eq_mul, hu1, mul_zero]
+
+lemma apm_m99J06_integrable_inner_components {H : Type*}
+    [NormedAddCommGroup H] [InnerProductSpace ℝ H]
+    (M : apm_m99J06_H01Model H) (u v : H) :
+    Integrable (M.val u * M.val v) apm_m99J06_intervalMeasure ∧
+    Integrable (fun x ↦ M.weakDeriv u x * M.weakDeriv v x)
+      apm_m99J06_intervalMeasure := by
+  constructor
+  · exact (M.represents u).2.1.integrable_mul (M.represents v).2.1
+  · simpa only [Pi.mul_apply] using
+      (Lp.memLp (M.weakDeriv u)).integrable_mul (Lp.memLp (M.weakDeriv v))
+
+lemma apm_m99J06_model_add {H : Type*} [NormedAddCommGroup H]
+    [InnerProductSpace ℝ H] (M : apm_m99J06_H01Model H) (u v : H) :
+    M.val (u + v) = M.val u + M.val v ∧
+      M.weakDeriv (u + v) = M.weakDeriv u + M.weakDeriv v := by
+  obtain ⟨w, hwv, hwd⟩ := M.realizes (M.val u + M.val v)
+    (M.weakDeriv u + M.weakDeriv v)
+    (apm_m99J06_isH01Pair_add (M.represents u) (M.represents v))
+  have hw : w = u + v := by
+    apply ext_inner_right ℝ
+    intro z
+    rw [M.inner_eq, hwv, hwd, inner_add_left, M.inner_eq, M.inner_eq]
+    have huz := apm_m99J06_integrable_inner_components M u z
+    have hvz := apm_m99J06_integrable_inner_components M v z
+    have huz' : Integrable (fun x ↦
+        M.val u x * M.val z x + M.weakDeriv u x * M.weakDeriv z x)
+        apm_m99J06_intervalMeasure := by
+      exact (huz.1.add huz.2)
+    have hvz' : Integrable (fun x ↦
+        M.val v x * M.val z x + M.weakDeriv v x * M.weakDeriv z x)
+        apm_m99J06_intervalMeasure := by
+      exact (hvz.1.add hvz.2)
+    change (∫ x, (M.val u x + M.val v x) * M.val z x +
+        (M.weakDeriv u + M.weakDeriv v) x * M.weakDeriv z x
+          ∂apm_m99J06_intervalMeasure) =
+      (∫ x, M.val u x * M.val z x + M.weakDeriv u x * M.weakDeriv z x
+          ∂apm_m99J06_intervalMeasure) +
+      ∫ x, M.val v x * M.val z x + M.weakDeriv v x * M.weakDeriv z x
+          ∂apm_m99J06_intervalMeasure
+    rw [← MeasureTheory.integral_add huz' hvz']
+    apply MeasureTheory.integral_congr_ae
+    filter_upwards [Lp.coeFn_add (M.weakDeriv u) (M.weakDeriv v)] with x hx
+    change ((M.val u x + M.val v x) * M.val z x +
+        (M.weakDeriv u + M.weakDeriv v) x * M.weakDeriv z x) = _
+    rw [hx]
+    simp only [Pi.add_apply]
+    ring
+  subst w
+  exact ⟨hwv, hwd⟩
+
+/-- A represented function together with its `L²` weak derivative uniquely
+determines the Hilbert-space element. -/
+lemma apm_m99J06_model_ext {H : Type*} [NormedAddCommGroup H]
+    [InnerProductSpace ℝ H] (M : apm_m99J06_H01Model H) {u v : H}
+    (hval : M.val u = M.val v) (hderiv : M.weakDeriv u = M.weakDeriv v) :
+    u = v := by
+  apply ext_inner_right ℝ
+  intro w
+  rw [M.inner_eq, M.inner_eq, hval, hderiv]
+
+/-- The realization supplied by the model is unique. -/
+lemma apm_m99J06_realizes_unique {H : Type*} [NormedAddCommGroup H]
+    [InnerProductSpace ℝ H] (M : apm_m99J06_H01Model H)
+    {u : ℝ → ℝ} {du : apm_m99J06_L2} (h : apm_m99J06_isH01Pair u du)
+    {w₁ w₂ : H}
+    (h₁ : M.val w₁ = u ∧ M.weakDeriv w₁ = du)
+    (h₂ : M.val w₂ = u ∧ M.weakDeriv w₂ = du) : w₁ = w₂ := by
+  apply apm_m99J06_model_ext M
+  · exact h₁.1.trans h₂.1.symm
+  · exact h₁.2.trans h₂.2.symm
+
+/-- Galerkin solutions are unique on every subspace; this uses only the
+coercivity of the ambient inner product. -/
+lemma apm_m99J06_galerkin_unique {H : Type*} [NormedAddCommGroup H]
+    [InnerProductSpace ℝ H] (M : apm_m99J06_H01Model H)
+    (f : ℝ → ℝ) (V : Submodule ℝ H) {u w : V}
+    (hu : apm_m99J06_galerkinEquation M f V u)
+    (hw : apm_m99J06_galerkinEquation M f V w) : u = w := by
+  apply Subtype.ext
+  have hz' := hw (u - w)
+  have hinner : inner ℝ ((u : H) - (w : H)) ((u : H) - (w : H)) = 0 := by
+    rw [inner_sub_left]
+    simpa using sub_eq_zero.mpr ((hu (u - w)).trans hz'.symm)
+  exact sub_eq_zero.mp (inner_self_eq_zero.mp hinner)
+
+theorem apm_m99J06_weak_iff_strong
+    {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℝ H]
+    (M : apm_m99J06_H01Model H) (f : ℝ → ℝ)
+    (hf : MemLp f 2 apm_m99J06_intervalMeasure) :
+    ∀ u : H, apm_m99J06_weakSolution M f u ↔
+      apm_m99J06_strongSolution M f u := by
+  sorry
+
+theorem apm_m99J06_galerkin_exists_unique
+    {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℝ H]
+    [CompleteSpace H] (M : apm_m99J06_H01Model H)
+    (f : ℝ → ℝ) (hf : MemLp f 2 apm_m99J06_intervalMeasure)
+    (V : Submodule ℝ H) [FiniteDimensional ℝ V] :
+    ∃! u : V, apm_m99J06_galerkinEquation M f V u := by
+  sorry
+
+theorem apm_m99J06_galerkin_norm_le
+    {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℝ H]
+    (M : apm_m99J06_H01Model H)
+    (f : ℝ → ℝ) (hf : MemLp f 2 apm_m99J06_intervalMeasure)
+    (V : Submodule ℝ H) (u : V)
+    (hu : apm_m99J06_galerkinEquation M f V u) :
+    ‖(u : H)‖ ≤ (eLpNorm f 2 apm_m99J06_intervalMeasure).toReal := by
+  sorry
+
+theorem apm_m99J06_weak_subsequence_solves
+    {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℝ H]
+    [CompleteSpace H] (M : apm_m99J06_H01Model H)
+    (f : ℝ → ℝ) (hf : MemLp f 2 apm_m99J06_intervalMeasure)
+    (V : ℕ → Submodule ℝ H)
+    (hnested : ∀ n : ℕ, V n ≤ V (n + 1))
+    (hdense : Dense (⋃ n : ℕ, (V n : Set H)))
+    (uSeq : ∀ n : ℕ, V n)
+    (heq : ∀ n, apm_m99J06_galerkinEquation M f (V n) (uSeq n))
+    (hbound : ∀ n,
+      ‖(uSeq n : H)‖ ≤ (eLpNorm f 2 apm_m99J06_intervalMeasure).toReal) :
+    ∃ k : ℕ → ℕ, StrictMono k ∧
+      ∃ u : H,
+        Tendsto (fun j ↦ toWeakSpace ℝ H (uSeq (k j) : H)) atTop
+          (nhds (toWeakSpace ℝ H u)) ∧
+        apm_m99J06_weakSolution M f u := by
+  sorry
+
+theorem apm_m99j06
+    (H : Type*) [NormedAddCommGroup H] [InnerProductSpace ℝ H]
+    [CompleteSpace H] (M : apm_m99J06_H01Model H)
+    (f : ℝ → ℝ) (hf : MemLp f 2 apm_m99J06_intervalMeasure) :
+    (∀ u : H,
+      apm_m99J06_weakSolution M f u ↔
+        apm_m99J06_strongSolution M f u) ∧
+    (∀ V : ℕ → Submodule ℝ H,
+      (∀ n : ℕ, FiniteDimensional ℝ (V n)) →
+      (∀ n : ℕ, V n ≤ V (n + 1)) →
+      Dense (⋃ n : ℕ, (V n : Set H)) →
+        (∀ n : ℕ, ∃! u : V n, apm_m99J06_galerkinEquation M f (V n) u) ∧
+        ∀ uSeq : ∀ n : ℕ, V n,
+          (∀ n, apm_m99J06_galerkinEquation M f (V n) (uSeq n)) →
+          (∀ n, ‖(uSeq n : H)‖ ≤ (eLpNorm f 2 apm_m99J06_intervalMeasure).toReal) ∧
+          ∃ k : ℕ → ℕ, StrictMono k ∧
+            ∃ u : H,
+              Tendsto (fun j ↦ toWeakSpace ℝ H (uSeq (k j) : H)) atTop
+                (nhds (toWeakSpace ℝ H u)) ∧
+              apm_m99J06_weakSolution M f u) := by
+  refine ⟨apm_m99J06_weak_iff_strong M f hf, ?_⟩
+  intro V hfinite hnested hdense
+  letI (n : ℕ) : FiniteDimensional ℝ (V n) := hfinite n
+  refine ⟨fun n ↦ apm_m99J06_galerkin_exists_unique M f hf (V n), ?_⟩
+  intro uSeq heq
+  have hbound : ∀ n,
+      ‖(uSeq n : H)‖ ≤ (eLpNorm f 2 apm_m99J06_intervalMeasure).toReal :=
+    fun n ↦ apm_m99J06_galerkin_norm_le M f hf (V n) (uSeq n) (heq n)
+  exact ⟨hbound,
+    apm_m99J06_weak_subsequence_solves M f hf V hnested hdense uSeq heq hbound⟩
+
+#print axioms apm_m99j06
