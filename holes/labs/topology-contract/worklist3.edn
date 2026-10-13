@@ -24058,6 +24058,17 @@
      {:cmd "statement-registry check; placeholder count; diff check",
       :exit 0}
      {:cmd "scoped axiom/sorry scan; verify commit", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791891114209-9553-257788e2",
+     :commands
+     ["git show/diff 6a9ebc96; scope and blueprint checks"
+      "lake build ConstructionTargets.SardConvexDomain"
+      "sha256sum t01a08_b1_probe; lake env lean t01a08_b1_export_check"
+      "statement-registry check; placeholder recount"],
+     :finding
+     "PASS. The one-file commit faithfully proves B1 using J n x = iteratedFDerivWithin: continuity, J0, J1, and correctly oriented permutation invariance all match the blueprint and export type. Convexity and nonempty interior supply UniqueDiffOn and x∈closure(interior s); no hypothesis is unused. Build/export pass with standard axioms; fixture hash matches; registry 149/149; sorry/admit 0->0."},
     :commit "6a9ebc96e6ce91756a3e8dc6d074d9e86defe7de",
     :changed-paths ["ConstructionTargets/SardConvexDomain.lean"],
     :declaration
@@ -24070,7 +24081,7 @@
    :phase :implementation,
    :type
    "Convex ℝ s → (interior s).Nonempty → ContDiffOn ℝ ∞ f s → ∃ J n x := iteratedFDerivWithin ℝ n f s x, continuous on s, J0=f, J1=fderivWithin, and ∀ permutations σ, (J n x).domDomCongr σ=J n x",
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain.blueprint/B1",
    :acceptance
@@ -24099,7 +24110,7 @@
      :infrastructure-packets
      :review-outcomes]},
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance {:strategy "Review B1 probe; rerank."},
@@ -33868,7 +33879,7 @@
    :other-consumers []}
   {:consumer :t01A08,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -33880,7 +33891,9 @@
     :reported-by [:r-topo3-cp6b :r-a08-sard-b1-3],
     :type "blueprint B1",
     :area "sard-convex-domain",
-    :proved-in :r-a08-sard-b1-3},
+    :proved-in :r-a08-sard-b1-3,
+    :banked-by :r-a08-sard-b1-3,
+    :banked-commit "6a9ebc96e6ce91756a3e8dc6d074d9e86defe7de"},
    :id
    :lemma-constructiontargets-sardconvexdomain-contdiffon-convexwithinjet,
    :kind :lemma,
