@@ -22858,6 +22858,8 @@
   {:bounded-exception "Rule0 reroute.",
    :consumer :t01A08,
    :stop-count 1,
+   :review-finding
+   "Blueprint still omits a required hypothesis from the B1/B2 Lean types. B1 is described as receiving only (interior s).Nonempty and ContDiffOn; B2 likewise states only interior nonempty, yet B2 explicitly proves its remainder estimate using Convex.segment_subset. Nonempty interior does not imply convexity (e.g. two disjoint closed balls). Add hs : Convex ℝ s explicitly to B1 and B2 and pass B7/B9 convexity through their uses. The recorded one-file diff, formatting, repaired B3/B7/B9/B10 hypotheses, and registry 145/145 otherwise pass.",
    :evidence
    {:placeholder-delta {:t01A08 [1 1]},
     :residual
@@ -22885,12 +22887,18 @@
     [{:cmd "receipt validation shell",
       :exit 2,
       :finding "Quote collision corrected; EDN validation rerun."}],
+    :review
+    {:outcome :fail,
+     :seat "codex-11",
+     :job "invoke-1791870268991-8619-0b9fd24e",
+     :finding
+     "Blueprint still omits a required hypothesis from the B1/B2 Lean types. B1 is described as receiving only (interior s).Nonempty and ContDiffOn; B2 likewise states only interior nonempty, yet B2 explicitly proves its remainder estimate using Convex.segment_subset. Nonempty interior does not imply convexity (e.g. two disjoint closed balls). Add hs : Convex ℝ s explicitly to B1 and B2 and pass B7/B9 convexity through their uses. The recorded one-file diff, formatting, repaired B3/B7/B9/B10 hypotheses, and registry 145/145 otherwise pass."},
     :commit "fb9b20eff2982c54f25c2cf7918bd3b8413c29db",
     :changed-paths
     ["ConstructionTargets/SardConvexDomain.blueprint.md"],
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :repair,
    :scope ["ConstructionTargets/SardConvexDomain.blueprint.md"],
    :dag-node "TOPOLOGY-ROUTES.md/t01A08/corners-sard",
    :acceptance
@@ -22903,6 +22911,7 @@
    :id :r-a08-sard-hyp-reroute-1,
    :kind :documentation,
    :area "sard-convex-domain",
+   :fail-count 1,
    :depends-on [:r-a08-agg-3 :r-topo3-cp7b],
    :current-residual "Review, then B1.",
    :other-consumers []}
