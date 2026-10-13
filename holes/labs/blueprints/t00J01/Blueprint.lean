@@ -424,10 +424,73 @@ lemma apm_t00j01_foldFiberCard_pi_aux_reduce_to_angles :
         Circle.exp (apm_t00j01_foldLift θ.1) = Circle.exp Real.pi} := by
   exact Nat.card_congr apm_t00j01_foldFiberCard_pi_aux_angleEquiv
 
-lemma apm_t00j01_foldFiberCard_pi_aux_angle_count :
+lemma apm_t00j01_foldFiberCard_pi_aux_angle_count_aux_strictConcave :
+    StrictConcaveOn ℝ (Set.Icc 0 Real.pi) apm_t00j01_foldLift := by
+  refine ⟨strictConcaveOn_sin_Icc.1, ?_⟩
+  intro x hx y hy hxy a b ha hb hab
+  have hs := strictConcaveOn_sin_Icc.2 hx hy hxy ha hb hab
+  dsimp [apm_t00j01_foldLift] at hs ⊢
+  nlinarith
+
+lemma apm_t00j01_foldFiberCard_pi_aux_angle_count_aux_odd (x : ℝ) :
+    apm_t00j01_foldLift (-x) = -apm_t00j01_foldLift x := by
+  simp [apm_t00j01_foldLift]
+  ring
+
+lemma apm_t00j01_foldFiberCard_pi_aux_angle_count_aux_inner_root :
+    ∃ x ∈ Set.Ioo 0 (Real.pi / 2), apm_t00j01_foldLift x = Real.pi := by
+  have hcont : ContinuousOn apm_t00j01_foldLift (Set.Icc 0 (Real.pi / 2)) := by
+    exact (continuous_id.add (Real.continuous_sin.const_mul 2)).continuousOn
+  have h0 : apm_t00j01_foldLift 0 < Real.pi := by
+    simp [apm_t00j01_foldLift, Real.pi_pos]
+  have hmid : Real.pi < apm_t00j01_foldLift (Real.pi / 2) := by
+    rw [apm_t00j01_foldLift, Real.sin_pi_div_two]
+    linarith [Real.pi_lt_four]
+  have himage : Real.pi ∈ apm_t00j01_foldLift '' Set.Icc 0 (Real.pi / 2) :=
+    (intermediate_value_Icc (by positivity) hcont) ⟨h0.le, hmid.le⟩
+  rcases himage with ⟨x, hx, hfx⟩
+  refine ⟨x, ⟨?_, ?_⟩, hfx⟩
+  · exact lt_of_not_ge fun h => by
+      have : x = 0 := le_antisymm h hx.1
+      subst x
+      simp [apm_t00j01_foldLift] at hfx
+      exact Real.pi_ne_zero hfx.symm
+  · exact lt_of_le_of_ne hx.2 fun h => by
+      subst x
+      exact hmid.ne' hfx
+
+/-- Seat: on `(-π, π]`, `exp (g θ) = exp π` iff `g θ = π` or `g θ = -π`
+(`|g θ| ≤ π + 2 < 3π`; `Circle.exp_eq_exp` up to `2π ℤ`). -/
+theorem apm_t00j01_angle_classify (θ : ℝ) (hθ : θ ∈ Set.Ioc (-Real.pi) Real.pi) :
+    Circle.exp (apm_t00j01_foldLift θ) = Circle.exp Real.pi ↔
+      apm_t00j01_foldLift θ = Real.pi ∨ apm_t00j01_foldLift θ = -Real.pi := by
+  sorry
+
+/-- Seat: on `[0, π]` the equation `g θ = π` has exactly the interior root and
+`θ = π` (strict concavity: a strictly concave function takes a value at most
+twice; `g 0 = 0`; use the banked concavity and root lemmas above). -/
+theorem apm_t00j01_angle_positive_roots :
+    ∃ x₀ ∈ Set.Ioo 0 (Real.pi / 2), ∀ θ ∈ Set.Icc 0 Real.pi,
+      apm_t00j01_foldLift θ = Real.pi ↔ θ = x₀ ∨ θ = Real.pi := by
+  sorry
+
+/-- Seat (assembly from hypotheses): with oddness (banked) and `g ≥ 0` on `[0, π]`
+(`sin ≥ 0` there), the solutions in `(-π, π]` are exactly `x₀, π, -x₀`. -/
+theorem apm_t00j01_angle_count_of_parts
+    (hclass : ∀ θ ∈ Set.Ioc (-Real.pi) Real.pi,
+      Circle.exp (apm_t00j01_foldLift θ) = Circle.exp Real.pi ↔
+        apm_t00j01_foldLift θ = Real.pi ∨ apm_t00j01_foldLift θ = -Real.pi)
+    (hpos : ∃ x₀ ∈ Set.Ioo 0 (Real.pi / 2), ∀ θ ∈ Set.Icc 0 Real.pi,
+      apm_t00j01_foldLift θ = Real.pi ↔ θ = x₀ ∨ θ = Real.pi) :
     Nat.card {θ : Set.Ioc (-Real.pi) Real.pi //
       Circle.exp (apm_t00j01_foldLift θ.1) = Circle.exp Real.pi} = 3 := by
   sorry
+
+lemma apm_t00j01_foldFiberCard_pi_aux_angle_count :
+    Nat.card {θ : Set.Ioc (-Real.pi) Real.pi //
+      Circle.exp (apm_t00j01_foldLift θ.1) = Circle.exp Real.pi} = 3 := by
+  exact apm_t00j01_angle_count_of_parts apm_t00j01_angle_classify
+    apm_t00j01_angle_positive_roots
 
 theorem apm_t00j01_foldFiberCard_pi :
     Nat.card {z : Circle // apm_t00j01_fold z = Circle.exp Real.pi} = 3 := by
