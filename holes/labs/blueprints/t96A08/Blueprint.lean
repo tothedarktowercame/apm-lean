@@ -382,7 +382,17 @@ lemma apm_t96A08_chart_radial_primitive_chart_neighborhood
       Convex ℝ W ∧ (extChartAt I x x) ∈ W ∧
       W ∩ Set.range (I : E → E) ⊆ (extChartAt I x).target ∧
       U = (extChartAt I x).source ∩ (extChartAt I x) ⁻¹' W := by
-  sorry
+  obtain ⟨r, hr, hrsub⟩ := Metric.mem_nhdsWithin_iff.mp
+    (extChartAt_target_mem_nhdsWithin (I := I) x)
+  let W : Set E := Metric.ball (extChartAt I x x) r
+  let U : Set M :=
+    (extChartAt I x).source ∩ (extChartAt I x) ⁻¹' W
+  refine ⟨U, W, ?_, ?_, Metric.isOpen_ball, convex_ball _ _, ?_, ?_, rfl⟩
+  · exact (continuousOn_extChartAt (I := I) x).isOpen_inter_preimage
+      (isOpen_extChartAt_source (I := I) x) Metric.isOpen_ball
+  · exact ⟨mem_extChartAt_source (I := I) x, Metric.mem_ball_self hr⟩
+  · exact Metric.mem_ball_self hr
+  · exact hrsub
 
 /-- Relative convexity in the chart produces the clamped radial paths.  This
 seat only does chart and endpoint bookkeeping. -/
