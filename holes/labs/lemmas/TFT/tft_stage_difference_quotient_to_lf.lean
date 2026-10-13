@@ -512,7 +512,33 @@ lemma tft_stage_difference_quotient_to_lf (ψ : TFT E F) (x v : E) :
         (tftTranslate (x + h • v) ψ - tftTranslate x ψ))
       (nhdsWithin 0 ({0} : Set ℝ)ᶜ)
       (nhds (tftTranslate x (tftDirectional v ψ))) := by
-  sorry
+  let hsub : (tftTranslationCompact ψ x : Set E) ⊆ (⊤ : Opens E) := by simp
+  let inc : ContDiffMapSupportedIn E F ⊤ (tftTranslationCompact ψ x) →
+      TFT E F := TestFunction.ofSupportedIn hsub
+  have hinc : Continuous inc := TestFunction.continuous_ofSupportedIn hsub
+  have hstage := hinc.continuousAt.tendsto.comp
+    (tft_stage_difference_quotient ψ x v)
+  have hlim : inc (tftDirectionalTranslateStage ψ x x v) =
+      tftTranslate x (tftDirectional v ψ) := by
+    apply TestFunction.toTestFunctionClass.coe_injective'
+    funext y
+    simp [inc, tftDirectionalTranslateStage, tftTranslate, tftDirectional]
+  rw [← hlim]
+  refine hstage.congr' ?_
+  filter_upwards [tft_stage_difference_quotient_aux_eventually x v] with h hh
+  change inc (h⁻¹ • (tftTranslateStageLocal ψ x (x + h • v) -
+      tftTranslateStageLocal ψ x x)) =
+    h⁻¹ • (tftTranslate (x + h • v) ψ - tftTranslate x ψ)
+  change (TestFunction.ofSupportedInCLM ℝ hsub)
+      (h⁻¹ • (tftTranslateStageLocal ψ x (x + h • v) -
+        tftTranslateStageLocal ψ x x)) = _
+  rw [map_smul, map_sub]
+  change h⁻¹ • (inc (tftTranslateStageLocal ψ x (x + h • v)) -
+      inc (tftTranslateStageLocal ψ x x)) = _
+  dsimp only [inc]
+  rw [tft_ofSupportedIn_stage_eq ψ x (x + h • v) hh,
+    tft_ofSupportedIn_stage_eq ψ x x
+      (Metric.mem_closedBall_self zero_le_one)]
 -- END SEAT AREA
 
 /-- T1: translation is continuous in the LF test-function topology. -/
