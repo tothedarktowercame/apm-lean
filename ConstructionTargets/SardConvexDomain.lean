@@ -618,4 +618,17 @@ theorem closedSet_whitneyCubeCover_univ
       rw [h]
       simp }⟩
 
+/-- Reduction of the closed-set Whitney cover theorem to the only geometric
+case: a closed nonempty proper subset. -/
+theorem closedSet_whitneyCubeCover_of_proper_case
+    {E : Type*} [PseudoMetricSpace E] {s : Set E}
+    (hs : IsClosed s) (hne : s.Nonempty)
+    (hproper : IsClosed s → s.Nonempty → s ≠ Set.univ →
+      Nonempty (WhitneyCubeCover.{_, 0} s)) :
+    Nonempty (WhitneyCubeCover.{_, 0} s) := by
+  by_cases hsu : s = Set.univ
+  · subst s
+    exact closedSet_whitneyCubeCover_univ E
+  · exact hproper hs hne hsu
+
 end ConstructionTargets.SardConvexDomain
