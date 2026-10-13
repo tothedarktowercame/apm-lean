@@ -1,5 +1,6 @@
 import Mathlib
 import Mathlib.MeasureTheory.Measure.OpenPos
+import ConstructionTargets.TestFunctionTranslation
 
 /-!
 # APM m98J02
@@ -537,7 +538,7 @@ lemma apm_m98J02_translateTest_continuous_aux_local_support
 /-- (a) Translation is continuous into the test-function space. -/
 theorem apm_m98J02_translateTest_continuous (ψ : apm_m98J02_Test) :
     Continuous (fun x : apm_m98J02_E ↦ apm_m98J02_translateTest x ψ) := by
-  sorry
+  exact ConstructionTargets.TestFunctionTranslation.tftTranslate_continuous ψ
 
 lemma apm_m98J02_translateTest_difference_quotient_aux_pointwise
     (ψ : apm_m98J02_Test) (i : Fin 2) (x y : apm_m98J02_E) :
@@ -573,7 +574,16 @@ lemma apm_m98J02_translateTest_difference_quotient_aux_fixed_stage
           (x + h • EuclideanSpace.single i 1) ψ : apm_m98J02_E → ℝ) ⊆ K) ∧
       Function.support (apm_m98J02_translateTest x
         (apm_m98J02_partialTest i ψ) : apm_m98J02_E → ℝ) ⊆ K := by
-  sorry
+  refine ⟨ConstructionTargets.TestFunctionTranslation.tftTranslationCompact ψ x,
+    fun h hh => ?_, ?_⟩
+  · have hx : x + h • EuclideanSpace.single i 1 ∈ Metric.closedBall x 1 := by
+      rw [Metric.mem_closedBall, dist_eq_norm, add_sub_cancel_left, norm_smul,
+        EuclideanSpace.norm_single, norm_one, mul_one, Real.norm_eq_abs]
+      exact hh
+    exact (subset_tsupport _).trans
+      (ConstructionTargets.TestFunctionTranslation.tft_local_fixed_support ψ x _ hx)
+  · exact ConstructionTargets.TestFunctionTranslation.tft_directional_translate_function_support
+      ψ x x _ (Metric.mem_closedBall_self zero_le_one)
 
 lemma apm_m98J02_translateTest_difference_quotient_aux_stage_convergence
     (ψ : apm_m98J02_Test) (i : Fin 2) (x : apm_m98J02_E) :
@@ -582,7 +592,8 @@ lemma apm_m98J02_translateTest_difference_quotient_aux_stage_convergence
           apm_m98J02_translateTest x ψ))
       (nhdsWithin (0 : ℝ) ({0} : Set ℝ)ᶜ)
       (nhds (apm_m98J02_translateTest x (apm_m98J02_partialTest i ψ))) := by
-  sorry
+  exact ConstructionTargets.TestFunctionTranslation.tftTranslate_difference_quotient ψ x
+    (EuclideanSpace.single i 1)
 
 theorem apm_m98J02_translateTest_difference_quotient (ψ : apm_m98J02_Test) (i : Fin 2)
     (x : apm_m98J02_E) :
