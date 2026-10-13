@@ -23716,19 +23716,20 @@
    :consumer :t01A08,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :implements-lemma
    :lemma-contdiffwithinat-domdomcongr-iteratedfderivwithin-of-infty,
    :evidence
    {:placeholder-delta {:t01A08 [1 1]},
     :residual
-    "Prove each transposition fixes the higher jet using the lower-jet Schwarz helper; apply permutation closure; B1.",
+    "Prove adjacent higher-jet slot equality from lower-jet Schwarz; invoke adjacent-swap closure; B1.",
     :outcome :stop,
     :warnings [],
     :missing-theorems
-    [{:name "ContinuousMultilinearMap.domDomCongr_eq_self_of_swap",
+    [{:name
+      "ContinuousMultilinearMap.domDomCongr_eq_self_of_adjacent_swap",
       :type
-      "[Finite ι] [DecidableEq ι] → (m : ContinuousMultilinearMap R (λ _ : ι ↦ E) F) → (∀ i j, m.domDomCongr (Equiv.swap i j)=m) → ∀ σ : Equiv.Perm ι, m.domDomCongr σ=m",
+      "For m indexed by Fin(n+1), invariance under swap i.castSucc i.succ for every i:Fin n implies invariance under every Perm(Fin(n+1)).",
       :status :proved,
       :consumers [:t01A08],
       :depends-on [],
@@ -23740,31 +23741,20 @@
       :status :partial,
       :consumers [:t01A08],
       :depends-on
-      ["ContinuousMultilinearMap.domDomCongr_eq_self_of_swap"],
+      ["ContinuousMultilinearMap.domDomCongr_eq_self_of_adjacent_swap"],
       :area "sard-convex-domain"}],
     :statement-hashes {:registry "147/147"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Permutation closure proved; higher-jet transposition identification remains.",
+    "Reduced arbitrary permutation symmetry to adjacent slot swaps; analytic slot identity remains.",
     :commands
     [{:cmd "lake build ConstructionTargets.SardConvexDomain", :exit 0}
      {:cmd
-      "lake env lean axiom/fixture checks; scoped commit check; registry check",
+      "lake env lean adjacent-helper axiom check and fixture; scoped commit check; registry check",
       :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1791877566052-8992-cb3ab4bb",
-     :commands
-     ["git show/diff 7ccfb88e; scope/diff checks"
-      "lake build ConstructionTargets.SardConvexDomain"
-      "lake env lean fixture + /tmp/CheckSardPerm.lean"
-      "sha256sum fixture; statement-registry check; placeholder counts"],
-     :finding
-     "PASS: valid STOP after real progress. Recorded one-file commit adds compiled swap-to-permutation closure with correct domDomCongr orientation; fixture hash matches; export probe has only its frozen axiom; helper uses standard axioms; registry 147/147; sorry/admit 0->0. Remaining higher-jet transposition identification is listed."},
-    :commit "7ccfb88e02cd571d70c8d8396c349a41ca5f86cc",
+    :commit "8ef6f515709bc33088a81c1d80ee593e34e4ba4a",
     :changed-paths ["ConstructionTargets/SardConvexDomain.lean"],
     :fixture
     {:path "/tmp/t01a08_smooth_symmetry_membership_probe.lean",
@@ -23773,7 +23763,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain/B1/symmetry",
    :acceptance
@@ -33568,7 +33558,8 @@
    :lemma-contdiffwithinat-domdomcongr-iteratedfderivwithin-of-infty,
    :kind :lemma,
    :depends-on
-   [:lemma-continuousmultilinearmap-domdomcongr-eq-self-of-swap],
+   [:lemma-continuousmultilinearmap-domdomcongr-eq-self-of-swap
+    :lemma-continuousmultilinearmap-domdomcongr-eq-self-of-adjacent-swap],
    :other-consumers []}
   {:consumer :t01A08,
    :phase :lemma,
@@ -33588,6 +33579,28 @@
     :banked-by :r-a08-symmetry-slots-1,
     :banked-commit "7ccfb88e02cd571d70c8d8396c349a41ca5f86cc"},
    :id :lemma-continuousmultilinearmap-domdomcongr-eq-self-of-swap,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t01A08,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ContinuousMultilinearMap.domDomCongr_eq_self_of_adjacent_swap",
+    :type
+    "For m indexed by Fin(n+1), invariance under swap i.castSucc i.succ for every i:Fin n implies invariance under every Perm(Fin(n+1))."},
+   :lemma
+   {:name
+    "ContinuousMultilinearMap.domDomCongr_eq_self_of_adjacent_swap",
+    :reported-by [:r-a08-symmetry-slots-1],
+    :type
+    "For m indexed by Fin(n+1), invariance under swap i.castSucc i.succ for every i:Fin n implies invariance under every Perm(Fin(n+1)).",
+    :area "sard-convex-domain",
+    :proved-in :r-a08-symmetry-slots-1},
+   :id
+   :lemma-continuousmultilinearmap-domdomcongr-eq-self-of-adjacent-swap,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}],
