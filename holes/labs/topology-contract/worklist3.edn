@@ -23717,7 +23717,7 @@
    :consumer :t01A08,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 0,
    :review-finding
    "Recorded commit is invalid: f032efae9d1501f7ddfe93c66668f88f24ed37f4 is absent locally and origin rejects it as not our ref. The intended scoped commit appears to be f032efae9b89fb527a72ea9192f3c89f09f82615. Repair the row to record the exact existing full SHA, then rerun independent review.",
    :implements-lemma
@@ -23757,6 +23757,17 @@
     [{:cmd
       "lake build scoped module; lean helper/fixture; hash/registry/commit checks",
       :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791884540875-9342-597cd5df",
+     :commands
+     ["git show/diff 4c4b5d21; scope and recorded-tree checks"
+      "lake build ConstructionTargets.SardConvexDomain"
+      "lake env lean fixture and /tmp/CheckSardLocalAdjacentSucc.lean"
+      "sha256sum fixture; statement-registry check; placeholder recount"],
+     :finding
+     "PASS: valid STOP after real progress. One-file commit correctly lifts an eventual lower swap(i,i+1) identity to shifted swap(i+1,i+2) at x. The decomposeFin equality, casts, equality orientation, and eventual representation all agree with the prior tail-lift theorem. Build/export pass; fixture hash matches; standard axioms only; registry 148/148; sorry/admit 0->0. Constructing the eventual identities by finite-order induction remains listed."},
     :commit "4c4b5d21f26a5a1dd8d101a0725740df8fada5c8",
     :changed-paths ["ConstructionTargets/SardConvexDomain.lean"],
     :fixture
@@ -23766,7 +23777,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain/B1/symmetry",
    :acceptance
@@ -34141,7 +34152,7 @@
    :other-consumers []}
   {:consumer :t01A08,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -34155,7 +34166,9 @@
     :type
     "eventual lower adjacent symmetry lifts to the shifted swap at x",
     :area "sard-convex-domain",
-    :proved-in :r-a08-symmetry-slots-1},
+    :proved-in :r-a08-symmetry-slots-1,
+    :banked-by :r-a08-symmetry-slots-1,
+    :banked-commit "4c4b5d21f26a5a1dd8d101a0725740df8fada5c8"},
    :id
    :lemma-iteratedfderivwithin-domdomcongr-adjacent-succ-of-eventuallyeq,
    :kind :lemma,
