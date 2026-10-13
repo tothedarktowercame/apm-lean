@@ -36113,7 +36113,9 @@
    [:lemma-constructiontargets-sardconvexdomain-eq-whitneydyadicindexof-of-mem-cube-of-gene],
    :other-consumers []}
   {:consumer :t93J03,
-   :stop-count 10,
+   :owner-reopen
+   "reopened: a lemma this row reported missing is now banked",
+   :stop-count 0,
    :review-finding
    "Program STOP commits nothing new since the prior reviewed attempt: it reuses commit 512a220f, and git history shows no later scoped commit. The unresolved SemilocallySimplyConnected hypothesis-coverage conflict is unchanged. Obtain the required owner specification decision or commit a new compiled milestone before resubmitting.",
    :evidence
@@ -36171,7 +36173,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -36193,7 +36195,7 @@
    :id :program-2026-10-13-close-t93j03,
    :kind :final-adapter,
    :campaign-priority 30,
-   :fail-count 4,
+   :fail-count 0,
    :depends-on [],
    :program true,
    :other-consumers [],
@@ -36689,6 +36691,17 @@
     [{:cmd "build closure",
       :exit 1,
       :correction "dependent-proof-safe simpa"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791930059259-10700-72c2a6a0",
+     :commands
+     ["git show/diff 9f24553d; scope/orientation review"
+      "sha256sum fixture; show --check; placeholder recount"
+      "lake build ConstructionTargets.t96A06Closure; lean fixture"
+      "statement-registry check"],
+     :finding
+     "PASS. Commit 9f24553d adds compiled, sorry-free standard-axiom progress after the blueprint-only attempt: it fixes the exact continuous descent of the literal four-coordinate quadratic on Space real 3, proves its representative equation in the consumer-required direction, and packages the registered existential formula. Fixture hash matches; registry 166/166; Main placeholder 1->1. RP3 rational homology, degree four, invariants, and final assembly remain listed."},
     :commit "9f24553dfb349e6292f6f0b2305b37378e3ed403",
     :changed-paths
     ["ConstructionTargets/t96A06Closure.lean"
@@ -36700,7 +36713,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -36718,14 +36731,19 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t96A06Closure.blueprint.md"},
    :continue-from
-   "NEXT JOB: copy holes/labs/blueprints/t96A06/BLUEPRINT.md's plan into ConstructionTargets/t96A06Closure.blueprint.md, move the blueprint's proved lemmas into place, then build the LIBRARY obligations one milestone per job.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed fixed quadratic descent and formula; homology/degree remain.",
    :id :program-2026-10-13-close-t96a06,
    :kind :final-adapter,
    :campaign-priority 31,
    :fail-count 2,
    :depends-on [],
    :program true,
-   :other-consumers []}
+   :other-consumers [],
+   :program-history
+   [{:job 3,
+     :commit "9f24553dfb349e6292f6f0b2305b37378e3ed403",
+     :reason
+     "Committed fixed quadratic descent and formula; homology/degree remain."}]}
   {:consumer :t96J05,
    :stop-count 0,
    :phase :implementation,
@@ -37548,7 +37566,7 @@
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "kleinPairingOrbitEquivBool",
@@ -37558,7 +37576,9 @@
     :reported-by [:program-2026-10-13-close-t93j03],
     :type "pairing orbits equiv Bool generators",
     :area "covering-subgroup-correspondence",
-    :proved-in :program-2026-10-13-close-t93j03},
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t93J03Closure.lean"]},
    :id :lemma-kleinpairingorbitequivbool,
    :kind :lemma,
    :depends-on [],
@@ -37581,7 +37601,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "T96A06_polynomialMap_descends",
@@ -37591,7 +37611,9 @@
     :reported-by [:program-2026-10-13-close-t96a06],
     :type "printed quadratic descends to literal RP3",
     :area "projective-covering-sphere",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :program-2026-10-13-close-t96a06,
+    :banked-commit "9f24553dfb349e6292f6f0b2305b37378e3ed403"},
    :id :lemma-t96a06-polynomialmap-descends,
    :kind :lemma,
    :depends-on [],
