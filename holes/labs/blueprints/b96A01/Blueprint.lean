@@ -578,7 +578,38 @@ lemma apm_b96a01_part_d_abelian_aux_representation_aux_dim_bound_aux_cyclotomic_
     (n : Type*) [Fintype n] [DecidableEq n] (ℓ : ℕ) (hℓ : ℓ.Prime)
     (g : Matrix.GeneralLinearGroup n ℚ) (hg : orderOf g = ℓ) :
     Polynomial.cyclotomic ℓ ℚ ∣ minpoly ℚ (g : Matrix n n ℚ) := by
-  sorry
+  let A : Matrix n n ℚ := g
+  have hgp : g ^ ℓ = 1 := by
+    rw [← hg]
+    exact pow_orderOf_eq_one g
+  have hAp : A ^ ℓ = 1 := by
+    exact congrArg Units.val hgp
+  have hmin : minpoly ℚ A ∣ Polynomial.X ^ ℓ - 1 := by
+    apply minpoly.dvd ℚ A
+    simp [hAp]
+  letI : Fact ℓ.Prime := ⟨hℓ⟩
+  by_contra hnot
+  have hirr : Irreducible (Polynomial.cyclotomic ℓ ℚ) :=
+    Polynomial.cyclotomic.irreducible_rat hℓ.pos
+  have hcop : IsCoprime (Polynomial.cyclotomic ℓ ℚ) (minpoly ℚ A) :=
+    hirr.coprime_iff_not_dvd.mpr hnot
+  have hfac : minpoly ℚ A ∣
+      (Polynomial.X - 1) * Polynomial.cyclotomic ℓ ℚ := by
+    rw [mul_comm, Polynomial.cyclotomic_prime_mul_X_sub_one]
+    exact hmin
+  have hlin : minpoly ℚ A ∣ Polynomial.X - 1 :=
+    hcop.symm.dvd_of_dvd_mul_right hfac
+  have hev : Polynomial.aeval A (Polynomial.X - 1 : Polynomial ℚ) = 0 :=
+    minpoly.dvd_iff.mp hlin
+  have hAone : A = 1 := by
+    apply sub_eq_zero.mp
+    simpa using hev
+  have hgone : g = 1 := by
+    apply Units.ext
+    exact hAone
+  have : ℓ = 1 := by
+    rw [← hg, hgone, orderOf_one]
+  exact hℓ.ne_one this
 
 lemma apm_b96a01_part_d_abelian_aux_representation_aux_dim_bound
     (n : Type*) [Fintype n] [DecidableEq n] (ℓ : ℕ) (hℓ : ℓ.Prime)
