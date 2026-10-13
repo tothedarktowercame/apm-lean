@@ -103,14 +103,123 @@ lemma apm_t92J05_product_group_of_subsingleton_left
       FundamentalGroup A a × FundamentalGroup B b ≃*
         FundamentalGroup B b).trans hB.some)⟩
 
-/-- **LIBRARY.** The antipodal two-sphere cover computes the fundamental
-group of the concrete real projective plane at every basepoint. -/
+abbrev apm_t92J05_antipodalGroup := Multiplicative (ZMod 2)
+
+def apm_t92J05_antipodalSMul
+    (g : apm_t92J05_antipodalGroup) (x : apm_t92J05_S2) : apm_t92J05_S2 :=
+  if g.toAdd = 0 then x else -x
+
+instance : MulAction apm_t92J05_antipodalGroup apm_t92J05_S2 where
+  smul := apm_t92J05_antipodalSMul
+  one_smul x := by
+    change apm_t92J05_antipodalSMul (.ofAdd 0) x = x
+    simp [apm_t92J05_antipodalSMul]
+  mul_smul g h x := by
+    change apm_t92J05_antipodalSMul (g * h) x =
+      apm_t92J05_antipodalSMul g (apm_t92J05_antipodalSMul h x)
+    fin_cases g <;> fin_cases h
+    · change apm_t92J05_antipodalSMul (.ofAdd 0) x =
+        apm_t92J05_antipodalSMul (.ofAdd 0)
+          (apm_t92J05_antipodalSMul (.ofAdd 0) x)
+      simp [apm_t92J05_antipodalSMul]
+    · change apm_t92J05_antipodalSMul (.ofAdd 1) x =
+        apm_t92J05_antipodalSMul (.ofAdd 0)
+          (apm_t92J05_antipodalSMul (.ofAdd 1) x)
+      simp [apm_t92J05_antipodalSMul, show (1 : ZMod 2) ≠ 0 by decide]
+    · change apm_t92J05_antipodalSMul (.ofAdd 1) x =
+        apm_t92J05_antipodalSMul (.ofAdd 1)
+          (apm_t92J05_antipodalSMul (.ofAdd 0) x)
+      simp [apm_t92J05_antipodalSMul, show (1 : ZMod 2) ≠ 0 by decide]
+    · change apm_t92J05_antipodalSMul (.ofAdd 0) x =
+        apm_t92J05_antipodalSMul (.ofAdd 1)
+          (apm_t92J05_antipodalSMul (.ofAdd 1) x)
+      simp [apm_t92J05_antipodalSMul, show (1 : ZMod 2) ≠ 0 by decide]
+
+instance : ContinuousConstSMul apm_t92J05_antipodalGroup apm_t92J05_S2 where
+  continuous_const_smul g := by
+    fin_cases g
+    · simpa [apm_t92J05_antipodalSMul] using
+        (continuous_id : Continuous (id : apm_t92J05_S2 → apm_t92J05_S2))
+    · exact (continuous_neg.comp continuous_subtype_val).subtype_mk _
+
+/-- **LIBRARY.** The antipodal `ZMod 2` action on the unit two-sphere is free. -/
+lemma apm_t92J05_antipodalAction_free :
+    ∀ g : apm_t92J05_antipodalGroup, ∀ x : apm_t92J05_S2,
+      g • x = x → g = 1 := by
+  sorry
+
+/-- **LIBRARY.** The finite antipodal action is properly discontinuous. -/
+lemma apm_t92J05_antipodalAction_properlyDiscontinuous :
+    ProperlyDiscontinuousSMul apm_t92J05_antipodalGroup apm_t92J05_S2 := by
+  sorry
+
+/-- **LIBRARY.** Real projective two-space is the orbit quotient of the unit
+two-sphere by the antipodal action. -/
+lemma apm_t92J05_projectivePlane_homeomorph_antipodalQuotient :
+    Nonempty
+      (MulAction.orbitRel.Quotient apm_t92J05_antipodalGroup apm_t92J05_S2 ≃ₜ
+        apm_t92J05_RP2) := by
+  sorry
+
+/-- **LIBRARY.** Specialization of the deck-group quotient theorem to the
+antipodal action, with the two action obligations supplied explicitly. -/
+lemma apm_t92J05_antipodalQuotient_fundamentalGroup
+    (hfree : ∀ g : apm_t92J05_antipodalGroup, ∀ x : apm_t92J05_S2,
+      g • x = x → g = 1)
+    (hproper : ProperlyDiscontinuousSMul
+      apm_t92J05_antipodalGroup apm_t92J05_S2)
+    (x : apm_t92J05_S2) :
+    Nonempty
+      (FundamentalGroup
+          (MulAction.orbitRel.Quotient apm_t92J05_antipodalGroup apm_t92J05_S2)
+          (Quotient.mk _ x) ≃*
+        apm_t92J05_antipodalGroup) := by
+  sorry
+
+/-- **LIBRARY.** A quotient/projectivization homeomorphism transports the deck
+calculation to at least one concrete projective-plane basepoint. -/
+lemma apm_t92J05_projectivePlane_fundamentalGroup_at_one_point
+    (e : MulAction.orbitRel.Quotient apm_t92J05_antipodalGroup apm_t92J05_S2 ≃ₜ
+      apm_t92J05_RP2)
+    (hdeck : ∀ x : apm_t92J05_S2,
+      Nonempty
+        (FundamentalGroup
+            (MulAction.orbitRel.Quotient apm_t92J05_antipodalGroup apm_t92J05_S2)
+            (Quotient.mk _ x) ≃*
+          apm_t92J05_antipodalGroup)) :
+    ∃ x : apm_t92J05_RP2,
+      Nonempty (FundamentalGroup apm_t92J05_RP2 x ≃* Multiplicative (ZMod 2)) := by
+  sorry
+
+/-- **LIBRARY.** The concrete real projective plane is path connected. -/
+lemma apm_t92J05_projectivePlane_pathConnected :
+    PathConnectedSpace apm_t92J05_RP2 := by
+  sorry
+
+/-- **LIBRARY.** On a path-connected space, one computed fundamental group
+determines it at every basepoint. -/
+lemma apm_t92J05_fundamentalGroup_all_basepoints
+    {X G : Type} [TopologicalSpace X] [Group G]
+    (hpath : PathConnectedSpace X)
+    (hone : ∃ x₀ : X, Nonempty (FundamentalGroup X x₀ ≃* G)) :
+    ∀ x : X, Nonempty (FundamentalGroup X x ≃* G) := by
+  sorry
+
+/-- The antipodal two-sphere cover computes the fundamental group of the
+concrete real projective plane at every basepoint. -/
 theorem apm_t92J05_bridge_projectivePlane_fundamentalGroup :
     ∀ x : apm_t92J05_RP2,
       Nonempty
         (FundamentalGroup apm_t92J05_RP2 x ≃*
           Multiplicative (ZMod 2)) := by
-  sorry
+  letI := apm_t92J05_antipodalAction_properlyDiscontinuous
+  have hdeck := apm_t92J05_antipodalQuotient_fundamentalGroup
+    apm_t92J05_antipodalAction_free
+    apm_t92J05_antipodalAction_properlyDiscontinuous
+  obtain ⟨e⟩ := apm_t92J05_projectivePlane_homeomorph_antipodalQuotient
+  exact apm_t92J05_fundamentalGroup_all_basepoints
+    apm_t92J05_projectivePlane_pathConnected
+    (apm_t92J05_projectivePlane_fundamentalGroup_at_one_point e hdeck)
 
 theorem apm_t92J05_bridge_sphere_circle_fundamentalGroups :
     (∀ x : apm_t92J05_S2,
