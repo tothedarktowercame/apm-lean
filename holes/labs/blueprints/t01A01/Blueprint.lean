@@ -85,7 +85,12 @@ theorem apm_t01A01_nullhomotopic_of_target_homotopyEquiv
     (hg : ContinuousMap.Homotopic (e.toFun.comp g)
       (ContinuousMap.const X p)) :
     ∃ y : Y, ContinuousMap.Homotopic g (ContinuousMap.const X y) := by
-  sorry
+  refine ⟨e.invFun p, ?_⟩
+  have hleft := ContinuousMap.Homotopic.comp e.left_inv
+    (ContinuousMap.Homotopic.refl g)
+  have hconst := ContinuousMap.Homotopic.comp
+    (ContinuousMap.Homotopic.refl e.invFun) hg
+  exact hleft.symm.trans hconst
 
 /-- Assembly of the punctured-projective-plane retraction, the projective-line
 lifting argument, and transport back through the retraction. -/
