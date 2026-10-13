@@ -113898,6 +113898,19 @@
       "lake build ConstructionTargets.ThreeCirclesFundamentalGroup",
       :exit 1,
       :finding "Awaits B12."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791851913794-8106-99c0d0d0",
+     :commands
+     ["lake env lean <commit-archive>/ConstructionTargets/PointWedgeVanKampen.lean"
+      "lake build ConstructionTargets.PointWedgeVanKampen"
+      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (expected exit 1: residual module absent)"
+      "python3 scripts/statement-registry.py check"
+      "#print axioms new declarations via /dev/stdin"
+      "git-show sha256/placeholders/scope"],
+     :finding
+     "PASS program STOP. Commit e09edd2f adds compiled, sorry-free progress beyond prior history and changes only scoped Lean/MD files. Exact source/doc/fixture hashes match evidence (fixture 0bca6ce3...b8c8b0); registry 131/131; sorry/admit 0->0. The new forward morphism is explicitly inv(reverse), with correct endpoint reversal, and reverse≫inv(reverse)=𝟙 has the submitted orientation by IsIso.hom_inv_id. It does not pretend this inverse is already the earlier normalized transport: that representation-identification theorem is explicitly residual. Both declarations use only propext, Classical.choice, Quot.sound. The absent final module is explicitly residual; the partial milestone and next right-comparison steps are listed."},
     :commit "e09edd2fb7ce38860f26727d26ffbf7a74ba2004",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
@@ -113908,7 +113921,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113929,7 +113942,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Right-comparison factors combine as one mapped reverse morphism.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Reverse canonical map followed by its inverse is identity.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -114532,7 +114545,11 @@
     {:job 3,
      :commit "ae3a666610d5d0767c104780399f8339eefcdc0a",
      :reason
-     "Right-comparison factors combine as one mapped reverse morphism."}]}
+     "Right-comparison factors combine as one mapped reverse morphism."}
+    {:job 4,
+     :commit "e09edd2fb7ce38860f26727d26ffbf7a74ba2004",
+     :reason
+     "Reverse canonical map followed by its inverse is identity."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
