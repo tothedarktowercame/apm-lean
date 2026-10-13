@@ -91,7 +91,33 @@ theorem apm_t96A05_extend_from_complex_logarithm
     (hlift : ∃ u : C(A, ℂ), ∀ a : A,
       Complex.exp (u a) = (APMT96A05.toComplex (f a)).1) :
     ∃ F : C(X, APMT96A05.PuncturedPlane), ∀ a : A, F a = f a := by
-  sorry
+  obtain ⟨u, hu⟩ := hlift
+  let up : C(A, ℝ × ℝ) :=
+    ⟨fun a ↦ Complex.equivRealProdCLM (u a),
+      Complex.equivRealProdCLM.continuous.comp u.continuous⟩
+  obtain ⟨U, hU⟩ := up.exists_extension hA.isClosedEmbedding_subtypeVal
+  let z : C(X, ℂ) :=
+    ⟨fun x ↦ Complex.equivRealProdCLM.symm (U x),
+      Complex.equivRealProdCLM.symm.continuous.comp U.continuous⟩
+  let ez : C(X, {z : ℂ // z ≠ 0}) :=
+    ⟨fun x ↦ ⟨Complex.exp (z x), Complex.exp_ne_zero _⟩,
+      Continuous.subtype_mk (Complex.continuous_exp.comp z.continuous) _⟩
+  let F : C(X, APMT96A05.PuncturedPlane) :=
+    ⟨fun x ↦ APMT96A05.ofComplex (ez x), by
+      apply Continuous.subtype_mk
+      exact Complex.equivRealProdCLM.continuous.comp
+        (continuous_subtype_val.comp ez.continuous)⟩
+  refine ⟨F, ?_⟩
+  intro a
+  apply Subtype.ext
+  have hUa : U a = up a := congrArg (fun k : C(A, ℝ × ℝ) ↦ k a) hU
+  have he : (ez a).1 = (APMT96A05.toComplex (f a)).1 := by
+    dsimp [ez, z]
+    rw [hUa]
+    simpa [up] using hu a
+  change Complex.equivRealProdCLM (ez a).1 = (f a).1
+  rw [he]
+  exact congrArg Subtype.val (APMT96A05.ofComplex_toComplex (f a))
 -- END SEAT AREA
 
 theorem apm_t96a05
