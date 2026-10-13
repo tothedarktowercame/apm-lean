@@ -977,7 +977,53 @@ lemma apm_m93j05_lp_rpow_weak_lsc_aux_limit
     (hzB : ∀ n, z n ≤ B n * Real.rpow A (p - 1))
     (hfreq : ∃ᶠ n in atTop, Real.rpow (B n) p ≤ r) :
     Real.rpow A p ≤ r := by
-  sorry
+  have hp0 : 0 < p := by linarith
+  have hpne : p ≠ 0 := ne_of_gt hp0
+  have hr : 0 ≤ r := by
+    obtain ⟨n, hn⟩ := hfreq.exists
+    exact le_trans (Real.rpow_nonneg (hB n) p) hn
+  let R : ℝ := Real.rpow r p⁻¹
+  have hR : 0 ≤ R := Real.rpow_nonneg hr _
+  have hRp : Real.rpow R p = r := by
+    dsimp [R]
+    exact Real.rpow_inv_rpow hr hpne
+  let l : Filter ℕ := atTop ⊓ Filter.principal
+    {n | Real.rpow (B n) p ≤ r}
+  letI : l.NeBot := (Filter.frequently_iff_neBot.mp hfreq)
+  have hl_atTop : l ≤ atTop := inf_le_left
+  have hl_bound : ∀ᶠ n in l, Real.rpow (B n) p ≤ r := by
+    apply Filter.Eventually.filter_mono inf_le_right
+    simp
+  have hBR : ∀ᶠ n in l, B n ≤ R := by
+    filter_upwards [hl_bound] with n hn
+    apply (Real.rpow_le_rpow_iff (hB n) hR hp0).mp
+    calc
+      Real.rpow (B n) p ≤ r := hn
+      _ = Real.rpow R p := hRp.symm
+  have hfactor : 0 ≤ Real.rpow A (p - 1) := Real.rpow_nonneg hA _
+  have hzle : ∀ᶠ n in l, z n ≤ R * Real.rpow A (p - 1) := by
+    filter_upwards [hBR] with n hn
+    exact (hzB n).trans (mul_le_mul_of_nonneg_right hn hfactor)
+  have hlim : Real.rpow A p ≤ R * Real.rpow A (p - 1) :=
+    le_of_tendsto (hz.mono_left hl_atTop) hzle
+  by_cases hAz : A = 0
+  · subst A
+    simpa [Real.zero_rpow hp0.ne'] using hr
+  have hApos : 0 < A := lt_of_le_of_ne hA (Ne.symm hAz)
+  have hsplit : Real.rpow A p = A * Real.rpow A (p - 1) := by
+    calc
+      Real.rpow A p = Real.rpow A (1 + (p - 1)) := by ring_nf
+      _ = Real.rpow A 1 * Real.rpow A (p - 1) := Real.rpow_add hApos 1 (p - 1)
+      _ = A * Real.rpow A (p - 1) := by simp
+  rw [hsplit] at hlim
+  have hAR : A ≤ R := by
+    apply le_of_not_gt
+    intro hRA
+    have hstrict := mul_lt_mul_of_pos_right hRA
+      (Real.rpow_pos_of_pos hApos (p - 1))
+    exact (not_lt_of_ge hlim) hstrict
+  rw [← hRp]
+  exact Real.rpow_le_rpow hA hAR hp0.le
 
 theorem apm_m93j05_lp_rpow_weak_lsc (p q : ℝ) (hp : 1 < p) (hq : 1 < q) (hpq : 1 / p + 1 / q = 1) :
     ∀ (u : ℝ → ℝ) (w : ℕ → ℝ → ℝ), MemLp u (ENNReal.ofReal p) (volume.restrict (Set.Icc (0 : ℝ) 1)) →
