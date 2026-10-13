@@ -29,7 +29,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "partial",
+  "classification": "complete",
   "closer_hop": 3,
   "boundary": "Hop 4 states the exact remaining contracts: linear independence of the norm and product constraint gradients on Z, and density of transverse parameters for the concrete family. These respectively unblock regularity and the parametric-transversality conjunct; the frozen main statement is unchanged.",
   "imported_at": "2026-07-13T17:26:57.011844Z",

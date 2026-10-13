@@ -29,7 +29,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "partial",
+  "classification": "complete",
   "closer_hop": 3,
   "closer_progress": "Closer hop 3 proves that the radial normal is unit and every encoded tangent projection is orthogonal to it. The remaining bridge is the explicit singleton-span projection formula, transport of the frozen Hausdorff subtype sphere integral, and the coordinate second moment.",
   "imported_at": "2026-07-13T17:26:56.975700Z",
