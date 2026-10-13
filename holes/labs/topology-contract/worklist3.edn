@@ -36641,19 +36641,17 @@
    :depends-on [:lemma-cp-zero-subsingleton],
    :other-consumers []}
   {:consumer :t96A06,
-   :stop-count 2,
+   :stop-count 3,
    :review-finding
    "extend Mathlib: state and prove the missing theorem in scope",
    :evidence
    {:placeholder-delta {:t96A06 [1 1]},
-    :residual
-    "Review blueprint; then build RP3 rational homology and degree-four milestones.",
+    :residual "Build RP3 rational homology and degree four.",
     :outcome :stop,
-    :warnings
-    ["source blueprint absent; created reviewed in-scope plan"],
+    :warnings [],
     :missing-theorems
     [{:name "T96A06_polynomialMap_descends",
-      :type "printed quadratic descends to literal RP3",
+      :type "fixed descent with exact formula",
       :status :proved,
       :consumers [:t96A06],
       :depends-on [],
@@ -36665,13 +36663,13 @@
       :depends-on [],
       :area "rp-rational-homology"}
      {:name "t96A06_polynomial_degree_four",
-      :type "descended quadratic acts by 4 on H3",
+      :type "quadratic acts by 4 on H3",
       :status :not-started,
       :consumers [:t96A06],
       :depends-on ["T96A06_polynomialMap_descends"],
       :area "sphere-map-degree"}
      {:name "T96A06_polynomialDescent_invariants",
-      :type "Lefschetz -3 and not homotopic to id",
+      :type "Lefschetz -3 and nonhomotopy",
       :status :not-started,
       :consumers [:t96A06],
       :depends-on
@@ -36679,29 +36677,30 @@
       :area "rational-homology-lefschetz"}],
     :statement-hashes {:registry "166/166"},
     :disposition :stop,
-    :axioms [],
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Missing t96A06 blueprint written and committed; implementation starts at C2/C3.",
+    "Committed fixed quadratic descent and formula; homology/degree remain.",
     :commands
-    [{:cmd "registry; placeholder; blueprint node scan; diff", :exit 0}
-     {:cmd "git commit; show --check", :exit 0}],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1791929045249-10664-96ba84a1",
-     :finding
-     "extend Mathlib: state and prove the missing theorem in scope"},
-    :commit "dfeb9e51024d9285b2d0620c00c38d6cbbcbfd57",
-    :changed-paths ["ConstructionTargets/t96A06Closure.blueprint.md"],
+    [{:cmd "build closure; lean fixture", :exit 0}
+     {:cmd "registry; placeholder; diff; commit", :exit 0}
+     {:cmd "rg forbidden", :exit 1, :expected-exit 1}],
+    :diagnostic-history
+    [{:cmd "build closure",
+      :exit 1,
+      :correction "dependent-proof-safe simpa"}],
+    :commit "9f24553dfb349e6292f6f0b2305b37378e3ed403",
+    :changed-paths
+    ["ConstructionTargets/t96A06Closure.lean"
+     "ConstructionTargets/t96A06Closure.blueprint.md"],
     :fixture
-    {:path "ConstructionTargets/t96A06Closure.blueprint.md",
+    {:path "/tmp/t96a06_descent_check.lean",
      :sha256
-     "fbbb8ecf92f8739231eb78e5380be51ae04e92106558a00079d2ee79f8981d84",
-     :mode :blueprint},
+     "0c04084fdc6eacfc443f1d259d6b61ff565b152363fc6d52db1d14e09cdb7c23",
+     :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
