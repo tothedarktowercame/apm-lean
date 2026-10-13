@@ -81,6 +81,27 @@ theorem ContinuousMultilinearMap.domDomCongr_eq_self_of_adjacent_swap
   rw [htop]
   exact Submonoid.mem_top sigma
 
+/-- A permutation identity holding for a multilinear-valued map on a set is preserved by its
+within derivative. -/
+theorem ContinuousMultilinearMap.domDomCongr_fderivWithin_eq_self
+    {E F : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [NormedAddCommGroup F] [NormedSpace ℝ F]
+    {s : Set E} {x : E} {n : ℕ}
+    (g : E → ContinuousMultilinearMap ℝ (λ _ : Fin n ↦ E) F)
+    (hu : UniqueDiffOn ℝ s) (hxs : x ∈ s) (sigma : Equiv.Perm (Fin n))
+    (hg : ∀ y ∈ s, (g y).domDomCongr sigma = g y) (v : E) :
+    (fderivWithin ℝ g s x v).domDomCongr sigma = fderivWithin ℝ g s x v := by
+  let L : ContinuousMultilinearMap ℝ (λ _ : Fin n ↦ E) F ≃ₗᵢ[ℝ]
+      ContinuousMultilinearMap ℝ (λ _ : Fin n ↦ E) F :=
+    ContinuousMultilinearMap.domDomCongrₗᵢ ℝ E F sigma
+  have heq : EqOn (L ∘ g) g s := by
+    intro y hy
+    exact hg y hy
+  have hd : fderivWithin ℝ (L ∘ g) s x = fderivWithin ℝ g s x :=
+    fderivWithin_congr heq (heq hxs)
+  rw [LinearIsometryEquiv.comp_fderivWithin (𝕜 := ℝ) L (hu x hxs)] at hd
+  exact DFunLike.congr_fun hd v
+
 namespace ConstructionTargets.SardConvexDomain
 
 theorem modelRange_withinCriticalImage_subset_interior_union_frontier
