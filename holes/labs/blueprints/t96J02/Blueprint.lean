@@ -44,10 +44,144 @@ theorem t96J02_presented_self_subgroup :
 
 /-- The subgroup with even second coordinate realizes the torus-group
 alternative. -/
+theorem t96J02_presented_torus_subgroup_aux_even_action
+    (n : ℤ) (x : ZMul) :
+    action (Multiplicative.ofAdd (2 * n)) x = x := by
+  change (inversion ^ (2 * n)) x = x
+  rw [zpow_mul]
+  have hi : inversion ^ (2 : ℤ) = 1 := by
+    ext y
+    change inversion (inversion y) = y
+    simp [inversion]
+  rw [hi, one_zpow]
+  rfl
+
+def t96J02_presented_torus_subgroup_aux_embedding :
+    T96J02TorusGroup →* Coordinates where
+  toFun p := ⟨Multiplicative.ofAdd p.toAdd.1,
+    Multiplicative.ofAdd (2 * p.toAdd.2)⟩
+  map_one' := by ext <;> simp
+  map_mul' p q := by
+    apply SemidirectProduct.ext
+    · change Multiplicative.ofAdd (p.toAdd.1 + q.toAdd.1) =
+        Multiplicative.ofAdd p.toAdd.1 *
+          action (Multiplicative.ofAdd (2 * p.toAdd.2))
+            (Multiplicative.ofAdd q.toAdd.1)
+      rw [t96J02_presented_torus_subgroup_aux_even_action]
+      rfl
+    · change Multiplicative.ofAdd (2 * (p.toAdd.2 + q.toAdd.2)) =
+        Multiplicative.ofAdd (2 * p.toAdd.2) *
+          Multiplicative.ofAdd (2 * q.toAdd.2)
+      change Multiplicative.ofAdd (2 * (p.toAdd.2 + q.toAdd.2)) =
+        Multiplicative.ofAdd (2 * p.toAdd.2 + 2 * q.toAdd.2)
+      congr 1 <;> ring
+
+@[simp] theorem t96J02_presented_torus_subgroup_aux_embedding_left
+    (p : T96J02TorusGroup) :
+    (t96J02_presented_torus_subgroup_aux_embedding p).left =
+      Multiplicative.ofAdd p.toAdd.1 := rfl
+
+@[simp] theorem t96J02_presented_torus_subgroup_aux_embedding_right
+    (p : T96J02TorusGroup) :
+    (t96J02_presented_torus_subgroup_aux_embedding p).right =
+      Multiplicative.ofAdd (2 * p.toAdd.2) := rfl
+
+theorem t96J02_presented_torus_subgroup_aux_embedding_injective :
+    Function.Injective t96J02_presented_torus_subgroup_aux_embedding := by
+  intro p q h
+  apply Multiplicative.toAdd.injective
+  apply Prod.ext
+  · have hh := congrArg (fun z : Coordinates => z.left) h
+    change Multiplicative.ofAdd p.toAdd.1 =
+      Multiplicative.ofAdd q.toAdd.1 at hh
+    exact Multiplicative.ofAdd.injective hh
+  · have hh := congrArg
+      (fun z : Coordinates => Multiplicative.toAdd z.right) h
+    change 2 * p.toAdd.2 = 2 * q.toAdd.2 at hh
+    omega
+
+def t96J02_presented_torus_subgroup_aux_toPresented :
+    T96J02TorusGroup →* T96J02PresentedGroup :=
+  KleinPresentedGroupCoordinateNormalForm.coordinateEquiv.symm.toMonoidHom.comp
+    t96J02_presented_torus_subgroup_aux_embedding
+
+def t96J02_presented_torus_subgroup_aux_parity :
+    T96J02PresentedGroup →* Multiplicative (ZMod 2) :=
+  (Int.castAddHom (ZMod 2)).toMultiplicative.comp
+    (SemidirectProduct.rightHom.comp
+      KleinPresentedGroupCoordinateNormalForm.coordinateEquiv.toMonoidHom)
+
+theorem t96J02_presented_torus_subgroup_aux_range_eq_ker :
+    t96J02_presented_torus_subgroup_aux_toPresented.range =
+      t96J02_presented_torus_subgroup_aux_parity.ker := by
+  ext x
+  constructor
+  · rintro ⟨p, rfl⟩
+    change t96J02_presented_torus_subgroup_aux_parity
+      (t96J02_presented_torus_subgroup_aux_toPresented p) = 1
+    change Multiplicative.ofAdd (((Multiplicative.toAdd
+      (KleinPresentedGroupCoordinateNormalForm.coordinateEquiv
+        (KleinPresentedGroupCoordinateNormalForm.coordinateEquiv.symm
+          (t96J02_presented_torus_subgroup_aux_embedding p))).right : ℤ) :
+            ZMod 2)) = 1
+    rw [KleinPresentedGroupCoordinateNormalForm.coordinateEquiv.apply_symm_apply]
+    rw [t96J02_presented_torus_subgroup_aux_embedding_right]
+    apply Multiplicative.toAdd.injective
+    change (((2 * p.toAdd.2 : ℤ) : ZMod 2)) = 0
+    rw [Int.cast_mul]
+    change (2 : ZMod 2) * (p.toAdd.2 : ZMod 2) = 0
+    rw [show (2 : ZMod 2) = 0 by decide, zero_mul]
+  · intro hx
+    change Multiplicative.ofAdd
+      ((Multiplicative.toAdd
+        (KleinPresentedGroupCoordinateNormalForm.coordinateEquiv x).right : ℤ) :
+          ZMod 2) = 1 at hx
+    have hz :
+        ((Multiplicative.toAdd
+          (KleinPresentedGroupCoordinateNormalForm.coordinateEquiv x).right : ℤ) :
+            ZMod 2) = 0 := by
+      exact Multiplicative.ofAdd.injective hx
+    have hd : (2 : ℤ) ∣ Multiplicative.toAdd
+        (KleinPresentedGroupCoordinateNormalForm.coordinateEquiv x).right := by
+      have hd' : (2 : ℤ) ∣ 0 - Multiplicative.toAdd
+          (KleinPresentedGroupCoordinateNormalForm.coordinateEquiv x).right :=
+        (ZMod.intCast_eq_intCast_iff_dvd_sub _ _ 2).mp hz
+      obtain ⟨k, hk⟩ := hd'
+      use -k
+      omega
+    obtain ⟨k, hk⟩ := hd
+    let p : T96J02TorusGroup := Multiplicative.ofAdd
+      (Multiplicative.toAdd
+        (KleinPresentedGroupCoordinateNormalForm.coordinateEquiv x).left, k)
+    refine ⟨p, ?_⟩
+    apply KleinPresentedGroupCoordinateNormalForm.coordinateEquiv.injective
+    change KleinPresentedGroupCoordinateNormalForm.coordinateEquiv
+      (KleinPresentedGroupCoordinateNormalForm.coordinateEquiv.symm
+        (t96J02_presented_torus_subgroup_aux_embedding p)) =
+          KleinPresentedGroupCoordinateNormalForm.coordinateEquiv x
+    rw [KleinPresentedGroupCoordinateNormalForm.coordinateEquiv.apply_symm_apply]
+    apply SemidirectProduct.ext
+    · change Multiplicative.ofAdd p.toAdd.1 =
+        (KleinPresentedGroupCoordinateNormalForm.coordinateEquiv x).left
+      rfl
+    · change Multiplicative.ofAdd (2 * k) =
+        (KleinPresentedGroupCoordinateNormalForm.coordinateEquiv x).right
+      apply Multiplicative.toAdd.injective
+      simp [hk]
+      ring
+
 theorem t96J02_presented_torus_subgroup :
     ∃ H : Subgroup T96J02PresentedGroup,
       H.FiniteIndex ∧ Nonempty (H ≃* T96J02TorusGroup) := by
-  sorry
+  refine ⟨t96J02_presented_torus_subgroup_aux_parity.ker, inferInstance, ?_⟩
+  refine ⟨((MonoidHom.ofInjective
+    (f := t96J02_presented_torus_subgroup_aux_toPresented) ?_).trans
+      (MulEquiv.subgroupCongr
+        t96J02_presented_torus_subgroup_aux_range_eq_ker)).symm⟩
+  intro p q h
+  apply t96J02_presented_torus_subgroup_aux_embedding_injective
+  apply KleinPresentedGroupCoordinateNormalForm.coordinateEquiv.symm.injective
+  exact h
 
 /-- Transport classification and the two witnesses across an arbitrary group
 equivalence.  This isolates all `Subgroup.map` and finite-index bookkeeping
