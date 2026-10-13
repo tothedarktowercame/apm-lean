@@ -740,4 +740,31 @@ theorem finite_indices_of_centers_in_compact
     hfinite.preimage hcenter.injOn
   simpa [I, hcenter.preimage_image] using hpre
 
+/-- Uniform separation and a common radius bound make an indexed family
+locally finite in a proper metric space. -/
+theorem locallyFinite_of_separated_centers_of_subset_closedBall
+    {ι E : Type*} [MetricSpace E] [ProperSpace E] {ε R : ℝ}
+    (center : ι → E) (enlargement : ι → Set E)
+    (hcenter : Function.Injective center) (hε : 0 < ε)
+    (hsep : Pairwise fun i j => ε ≤ dist (center i) (center j))
+    (hsub : ∀ i, enlargement i ⊆ Metric.closedBall (center i) R) :
+    LocallyFinite enlargement := by
+  intro x
+  refine ⟨Metric.ball x 1, Metric.ball_mem_nhds x zero_lt_one, ?_⟩
+  have hfinite : {i | center i ∈ Metric.closedBall x (R + 1)}.Finite :=
+    finite_indices_of_centers_in_compact (K := Metric.closedBall x (R + 1))
+      center hcenter (isCompact_closedBall x (R + 1)) hε hsep
+  apply hfinite.subset
+  intro i hi
+  obtain ⟨y, hyi, hyx⟩ := hi
+  have hyic : dist y (center i) ≤ R := Metric.mem_closedBall.1 (hsub i hyi)
+  have hyxo : dist x y < 1 := by
+    simpa [dist_comm] using Metric.mem_ball.1 hyx
+  show center i ∈ Metric.closedBall x (R + 1)
+  exact Metric.mem_closedBall.2 (by
+    rw [dist_comm]
+    calc
+      dist x (center i) ≤ dist x y + dist y (center i) := dist_triangle _ _ _
+      _ ≤ R + 1 := by linarith)
+
 end ConstructionTargets.SardConvexDomain
