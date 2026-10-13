@@ -671,6 +671,26 @@ theorem apm_m02J05_inverse_partner_lux_facts
     (∀ u ∈ apm_m02J05_L β, apm_m02J05_lux β u = 0 ↔ u = 0) := by
   sorry
 
+lemma apm_m02J05_bridge_complementary_young_holder_of_lux_facts_aux_beta_zero
+    (α β : ℝ → ℝ) (hαzero : α 0 = 0)
+    (hβα : ∀ t, 0 ≤ t → β (α t) = t) : β 0 = 0 := by
+  simpa [hαzero] using hβα 0 le_rfl
+
+lemma apm_m02J05_bridge_complementary_young_holder_of_lux_facts_aux_beta_strictMono
+    (α β : ℝ → ℝ)
+    (hαmono : StrictMonoOn α (Ici 0))
+    (hnonneg : ∀ t, 0 ≤ t → 0 ≤ β t)
+    (hαβ : ∀ t, 0 ≤ t → α (β t) = t) :
+    StrictMonoOn β (Ici 0) := by
+  intro s hs t ht hst
+  have hβs : β s ∈ Ici (0 : ℝ) := mem_Ici.mpr (hnonneg s (mem_Ici.mp hs))
+  have hβt : β t ∈ Ici (0 : ℝ) := mem_Ici.mpr (hnonneg t (mem_Ici.mp ht))
+  by_contra hnot
+  have hle : β t ≤ β s := le_of_not_gt hnot
+  have hale : α (β t) ≤ α (β s) := hαmono.monotoneOn hβt hβs hle
+  rw [hαβ t (mem_Ici.mp ht), hαβ s (mem_Ici.mp hs)] at hale
+  exact (not_le.mpr hst) hale
+
 theorem apm_m02J05_bridge_complementary_young_holder_of_lux_facts
     (α β : ℝ → ℝ)
     (hαc : ContinuousOn α (Ici 0))
