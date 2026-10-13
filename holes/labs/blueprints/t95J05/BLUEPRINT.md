@@ -71,23 +71,65 @@ proved polar/coarea comparison with four-dimensional volume and
 `Measure.euclideanHausdorffMeasure_def` and
 `EuclideanSpace.euclideanHausdorffMeasure_eq_volume`.
 
-This is the large missing library result.  The closest sorry-free construction
-files are `ConstructionTargets/SphereCapNullEquatorMeasureAssembly.lean`,
-`SphereCapHausdorffTransport.lean`, and `SphereCapGraphDensity.lean`.  The
-two-dimensional analogue, including all chart assembly and scalar conversion,
-is compiled in `holes/labs/blueprints/t02A05/Blueprint.lean`; the required
-program is its dimension-three generalization (Euclidean `S³` surface-mass
-normalization).
+The comparison is split at the genuine chart boundary into the following
+three independent leaves.  The original `...compare_aux_coarea` lemma is now
+a sorry-free measurable-partition assembly of their conclusions.  None of the
+three leaves mentions either of the others, so they may land in any order.
 
-**Expected size.** 120–220 lines using the existing cap infrastructure; mark
-as a shared LIBRARY program rather than splitting the coarea argument into
-fake consumer lemmas.
+#### `t95J05_unitSphere_upper_mass` — independent LIBRARY leaf
 
-**Dependencies.** Mathlib and the cited sphere-cap construction targets only.
+The strict cap `S³ ∩ {0 < x₃}` has normalized Hausdorff mass
+`2 * volume (ball 0 1 : Set ℝ⁴)`.  Use the graph
+`x ↦ (x, sqrt (1-‖x‖²))` over the open unit ball in `ℝ³`, the area formula,
+and the top-dimensional normalization.  The exact APIs demonstrated by the
+existing (but deliberately not imported here) library proofs are
+`ConstructionTargets.C1GraphGlobalBounds.exact_area_value`,
+`ConstructionTargets.SphereCapGraphDensity.fderiv_upper_density`,
+`Measure.euclideanHausdorffMeasure_def`, and
+`EuclideanSpace.euclideanHausdorffMeasure_eq_volume`.  The last radial
+calculation may instead use
+`MeasureTheory.Measure.measurePreserving_homeomorphUnitSphereProd` and
+`MeasureTheory.Measure.toSphere_apply_univ` after identifying the cap chart.
 
-**Truth check.** The classical formula
-`area(S³)=4·vol(B⁴)=4·(π²/2)=2π²`; radius scaling predicts `2π² r³`, including
-zero at `r=0` and the stated value at `r=1`.
+**Expected proof size:** 80–140 lines using the reusable graph APIs.  If those
+APIs are inaccessible without a forbidden import, stop and expose the needed
+general theorem instead of repeating a proof over 150 lines.  **Truth/edge check:** the cap is strict, so the singular boundary
+is excluded; its missing equator is handled by the separate nullity leaf.  The
+integrand is positive and locally integrable despite tending to infinity at
+the boundary.
+
+#### `t95J05_unitSphere_lower_mass` — independent LIBRARY leaf
+
+The strict lower cap has the same mass.  To keep this leaf fully independent,
+use its lower graph chart with
+`ConstructionTargets.SphereCapGraphDensity.fderiv_lower_density` and
+`ConstructionTargets.C1GraphGlobalBounds.exact_area_value`.
+
+**Expected proof size:** 80–140 lines by the direct chart.
+**Truth/edge check:** reflection preserves the ambient Euclidean metric and
+exchanges the two strict inequalities exactly; no orientation sign enters a
+measure identity.
+
+#### `t95J05_unitSphere_equator_null` — independent LIBRARY leaf
+
+The set `S³ ∩ {x₃ = 0}` has zero `μHE[3]` mass.  Parameterize it by the
+isometric `Fin 3 → Fin 4` coordinate inclusion and use the lower-dimensional
+Hausdorff-null theorem.  Useful APIs are
+`Isometry.euclideanHausdorffMeasure_image`, `Measure.hausdorffMeasure_zero_of_dim_lt`,
+and the pattern in `ConstructionTargets.SphereEquatorHausdorffNullity` /
+`ConstructionTargets.SphereEquatorImageNullity` (again, do not add those
+SphereCap imports to this blueprint).
+
+**Expected proof size:** 40–90 lines.  **Truth/edge check:** this is genuinely
+codimension one inside the three-dimensional surface (dimension two in the
+four-dimensional ambient space), hence its three-dimensional normalized
+Hausdorff measure is zero.  The set is nonempty, so the proof must be by
+dimension, not by an accidental emptiness simplification.
+
+The assembly uses the exact trichotomy `x₃>0`, `x₃<0`, `x₃=0`, proves all
+pieces measurable, applies `measure_union` twice, and simplifies
+`2V + 2V + 0 = 4V`.  Thus it covers boundary points once and requires no
+cancellation assumptions about whether `V` is zero or infinite.
 
 ### `t95J05_inclusionPullback_integral`
 
