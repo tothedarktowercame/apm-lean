@@ -76416,33 +76416,27 @@
   {:consumer :t96J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "Deterministic topology defect in commit ee79eaeb2: it changes the index topology for FiniteWedge from ⊥ to ⊤ while claiming this makes it discrete. Mathlib/Topology/Order.lean states exactly the opposite: ⊥ is discrete and ⊤ is indiscrete. Consequently L × Circle is not the coproduct/disjoint-union source of indexed circle legs, and the coinduced quotient is not the B7 finite-wedge topology; future skeletonHomeomorphWedge would target the wrong space. Repair by restoring TopologicalSpace L := ⊥ in both the FiniteWedge instance and continuous_wedgeCircle proof, then rerun Lean/build and retain coverage, quotient-topology, wedge-relation, and signed-equation residuals. Recorded scope is otherwise exact and fixture SHA-256 386d0e41...ae305 matches.",
    :evidence
    {:placeholder-delta 0,
-    :residual "Invariance, quotient, homeomorphism; then B8/B9.",
+    :residual
+    "Classify turns; prove invariance, quotient, homeomorphism; B8/B9.",
     :outcome :stop,
-    :warnings ["lints" "worklist temp preserved"],
+    :warnings ["lints"],
     :missing-theorems
-    [{:name "PairingData.skeletonArc_eq_iff_eqvGen",
-      :type "source equality iff generated relation",
+    [{:name "edgePoint_eq_imp_exists_int_turn",
+      :type "edge equality gives integer turn",
       :status :proved,
       :consumers [:t96J02],
       :depends-on [],
       :area "polygon-surface-pi1"}
      {:name "PairingData.eqvGen_boundaryRel_implies_signedWedgeArc_eq",
-      :type "generated relation preserves signed arcs",
-      :status :not-started,
-      :consumers [:t96J02],
-      :depends-on ["PairingData.skeletonArc_eq_iff_eqvGen"],
-      :area "polygon-surface-pi1"}
-     {:name "PairingData.SkeletonWedgeKernelAgreement",
-      :type "source kernel iff target",
+      :type "classify turns; relation preserves signed arcs",
       :status :partial,
       :consumers [:t96J02],
-      :depends-on
-      ["PairingData.eqvGen_boundaryRel_implies_signedWedgeArc_eq"],
+      :depends-on ["edgePoint_eq_imp_exists_int_turn"],
       :area "polygon-surface-pi1"}
      {:name "PairingData.skeletonArcMap_isQuotientMap",
       :type "source quotient",
@@ -76452,12 +76446,12 @@
       :area "polygon-surface-pi1"}],
     :statement-hashes
     {:registry "142/0",
-     :module "5c108954c3a93d7ffbe15145acfd3a03bb2f3de2"},
+     :module "72d8b087bb6317832e9cccd761982bdef157c62b"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
     :reason
-    "Source equality is generated boundary equivalence; invariance remains.",
+    "Edge equality gives an integer turn; bounded classification remains.",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/PolygonSurfacePiOne.lean",
@@ -76466,28 +76460,21 @@
       :exit 0}
      {:cmd "registry check", :exit 0}
      {:cmd "placeholder scan", :exit 0}
-     {:cmd "#print axioms source kernel iff", :exit 0}
-     {:cmd "git show --check 80f6ec02e", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1791865530965-8416-b75b2a9d",
-     :commands
-     ["git scope/SHA/blob checks at 34fa7c1df"
-      "git show 34fa7c1df:... | lake env lean /dev/stdin"
-      "statement-registry.py check (142/0 current)"
-      "placeholder/orientation scans; #print axioms"],
-     :finding
-     "PASS: exact recorded one-file scope and frozen fixture/blob hashes match; the recorded blob itself compiles. Nested quotient induction covers every indexed-wedge point; positive sign preserves t and negative sign uses reverseIcc t, cancelled by map reversal. Placeholders 0 and standard axioms only; current registry is 142/0 after later additions. STOP records real progress and lists source coverage, kernel agreement, quotient topology, final homeomorphism and B8/B9 remaining."},
-    :commit "80f6ec02e",
+     {:cmd "#print axioms integer-turn", :exit 0}
+     {:cmd "git show --check 2d9a17dd5", :exit 0}],
+    :diagnostic-history
+    [{:cmd "first compile",
+      :exit 1,
+      :correction "normalized before taking imaginary parts"}],
+    :commit "2d9a17dd5",
     :changed-paths ["ConstructionTargets/PolygonSurfacePiOne.lean"],
     :fixture
     {:path "ConstructionTargets/PolygonSurfacePiOne.lean",
      :sha256
-     "36b9e7e57959a357292ace483dd0fe61e53210f78b6307385880bf0b9e03a1d1"},
+     "974a9023dad6697f006c2233947ab9205aca6f063b32cf1c085665abb07ac98b"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/PolygonSurfacePiOne.lean"],
    :dag-node "ConstructionTargets/PolygonSurfacePiOne.blueprint.md/B7",
    :acceptance
@@ -87309,5 +87296,24 @@
     :area "polygon-surface-pi1"},
    :id :lemma-pairingdata-eqvgen-boundaryrel-implies-signedwedgearc-eq,
    :kind :lemma,
-   :depends-on [:lemma-pairingdata-skeletonarc-eq-iff-eqvgen],
+   :depends-on
+   [:lemma-pairingdata-skeletonarc-eq-iff-eqvgen
+    :lemma-edgepoint-eq-imp-exists-int-turn],
+   :other-consumers []}
+  {:consumer :t96J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "edgePoint_eq_imp_exists_int_turn",
+    :type "edge equality gives integer turn"},
+   :lemma
+   {:name "edgePoint_eq_imp_exists_int_turn",
+    :reported-by [:routes-2026-10-12-polygon-b7-topo2-r1],
+    :type "edge equality gives integer turn",
+    :area "polygon-surface-pi1",
+    :proved-in :routes-2026-10-12-polygon-b7-topo2-r1},
+   :id :lemma-edgepoint-eq-imp-exists-int-turn,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers []}]}
