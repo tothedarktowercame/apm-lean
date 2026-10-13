@@ -209,3 +209,15 @@ Both files compiled with the prescribed 12G command.  The final output of
 
 The four warnings are exactly the four top-level seat lemmas.  The main theorem
 has no direct `sorry`.
+
+## claude-14 restatement of the global assembly (2026-10-13)
+
+lemma-6's attempt at a general regular-level atlas came back PARTIAL (only line-model helpers). The
+fiber is explicit: W = {cos y = 0, x z = 1} = ⋃_k {(x, π/2 + kπ, 1/x) : x ≠ 0}, so the first coordinate is
+a chart on each branch and every transition map is the identity. `apm_t97J05_regular_fiber_global_assembly`
+is now a sorry-free assembly from `apm_t97J05_xChartedSpace` (a definition from the chosen charts) and four leaves:
+- `fiber_second_coord_eq` (20-40): zeros of cos are π apart.
+- `xCharts_exist` (80-140): the chart at q (source |w1 - q1| < π/2 and w0 q0 > 0; inverse t ↦ (t, q1, 1/t)).
+- `xCharts_isManifold` (40-80): transitions are identity on their sources (isManifold_of_contDiffOn).
+- `xCharts_inclusion` (60-120): val in charts is t ↦ (t, q1, 1/t), smooth for t ≠ 0, first derivative component h0.
+Embedding is `Topology.IsEmbedding.subtypeVal`. `hlocal` is unused (kept so the caller is unchanged).

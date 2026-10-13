@@ -451,9 +451,65 @@ lemma apm_t97J05_regular_aux_flattens_fiber
     · simpa [hez, apm_t97J05_regular_aux_H, apm_t97J05_f,
         apm_t97J05_value] using h1
 
-/-- LIBRARY: global regular-level/embedded-submanifold assembly.  This is the
-remaining missing Mathlib foundation: compatible subtype charts and the
-smooth embedded inclusion are constructed from flat local fiber models. -/
+/-- Explicit charts on the fiber: on each branch `y = q 1` (a zero of `cos`),
+the fiber is the graph `z = 1/x`, so the first coordinate is a chart whose
+inverse is `t ↦ (t, q 1, 1/t)`. -/
+def apm_t97J05_HasXCharts : Prop :=
+  ∀ q : apm_t97J05_W, ∃ c : OpenPartialHomeomorph apm_t97J05_W apm_t97J05_R1,
+    q ∈ c.source ∧
+    (∀ w ∈ c.source, c w = WithLp.toLp 2 ![(w : apm_t97J05_R3) 0]) ∧
+    (∀ t ∈ c.target, t 0 ≠ 0 ∧
+      ((c.symm t : apm_t97J05_W) : apm_t97J05_R3) =
+        WithLp.toLp 2 ![t 0, (q : apm_t97J05_R3) 1, 1 / t 0])
+
+/-- The charted space given by the chosen x-charts. -/
+noncomputable def apm_t97J05_xChartedSpace (hc : apm_t97J05_HasXCharts) :
+    ChartedSpace apm_t97J05_R1 apm_t97J05_W where
+  atlas := {c | ∃ q, c = Classical.choose (hc q)}
+  chartAt q := Classical.choose (hc q)
+  mem_chart_source q := (Classical.choose_spec (hc q)).1
+  chart_mem_atlas q := ⟨q, rfl⟩
+
+/-- Seat: two fiber points whose second coordinates differ by less than `π`
+have equal second coordinates (the zeros of `cos` are `π/2 + kπ`). -/
+theorem apm_t97J05_fiber_second_coord_eq {q w : apm_t97J05_R3}
+    (hq : q ∈ apm_t97J05_W) (hw : w ∈ apm_t97J05_W)
+    (hlt : |w 1 - q 1| < Real.pi) : w 1 = q 1 := by
+  sorry
+
+/-- Seat: the x-charts exist.  Chart at `q`: source
+`{w | |w 1 - q 1| < π/2 ∧ 0 < w 0 * q 0}`, map `w ↦ ![w 0]`, target
+`{t | 0 < t 0 * q 0}`, inverse `t ↦ (t 0, q 1, 1 / t 0)` (in `W` because
+`cos (q 1) = 0` and `t 0 * (1 / t 0) = 1`).  The second-coordinate lemma is a
+hypothesis, so this runs in parallel with it. -/
+theorem apm_t97J05_xCharts_exist
+    (hsecond : ∀ {q w : apm_t97J05_R3}, q ∈ apm_t97J05_W → w ∈ apm_t97J05_W →
+      |w 1 - q 1| < Real.pi → w 1 = q 1) :
+    apm_t97J05_HasXCharts := by
+  sorry
+
+/-- Seat: every transition map of the x-atlas is the identity on its source
+(`c' (c.symm t) = ![(c.symm t) 0] = t`), hence smooth: `IsManifold` via
+`isManifold_of_contDiffOn`. -/
+theorem apm_t97J05_xCharts_isManifold (hc : apm_t97J05_HasXCharts) :
+    letI := apm_t97J05_xChartedSpace hc
+    IsManifold (𝓘(ℝ, apm_t97J05_R1)) (⊤ : ℕ∞) apm_t97J05_W := by
+  sorry
+
+/-- Seat: in the chart at `q` the inclusion reads `t ↦ (t 0, q 1, 1 / t 0)`,
+smooth on the target (where `t 0 ≠ 0`) with derivative `h ↦ (h 0, 0, -h 0 / t 0²)`,
+which is injective (first component). -/
+theorem apm_t97J05_xCharts_inclusion (hc : apm_t97J05_HasXCharts) :
+    letI := apm_t97J05_xChartedSpace hc
+    ContMDiff (𝓘(ℝ, apm_t97J05_R1)) (𝓘(ℝ, apm_t97J05_R3))
+        (⊤ : ℕ∞) (Subtype.val : apm_t97J05_W → apm_t97J05_R3) ∧
+      ∀ x : apm_t97J05_W, Function.Injective
+        (mfderiv (𝓘(ℝ, apm_t97J05_R1)) (𝓘(ℝ, apm_t97J05_R3))
+          (Subtype.val : apm_t97J05_W → apm_t97J05_R3) x) := by
+  sorry
+
+/-- Global assembly (claude-14 restatement 2026-10-13): explicit x-charts
+instead of a general regular-level atlas; `hlocal` is no longer needed. -/
 lemma apm_t97J05_regular_fiber_global_assembly
     (hlocal : ∀ q ∈ apm_t97J05_W,
       ∃ e : OpenPartialHomeomorph apm_t97J05_R3 apm_t97J05_R3,
@@ -462,7 +518,10 @@ lemma apm_t97J05_regular_fiber_global_assembly
         ∀ z ∈ e.source,
           z ∈ apm_t97J05_W ↔ e z 0 = 0 ∧ e z 1 = 1) :
     apm_t97J05_IsSmoothSubmanifold apm_t97J05_W := by
-  sorry
+  have hc := apm_t97J05_xCharts_exist apm_t97J05_fiber_second_coord_eq
+  refine ⟨apm_t97J05_xChartedSpace hc, apm_t97J05_xCharts_isManifold hc,
+    (apm_t97J05_xCharts_inclusion hc).1, Topology.IsEmbedding.subtypeVal,
+    (apm_t97J05_xCharts_inclusion hc).2⟩
 
 theorem apm_t97J05_regular_fiber_embedded :
     apm_t97J05_IsSmoothSubmanifold apm_t97J05_W := by
