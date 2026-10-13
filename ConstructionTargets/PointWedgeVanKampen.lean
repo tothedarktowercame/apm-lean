@@ -6569,6 +6569,45 @@ theorem genericPointWedgeRightBase_rightProjection_eq_normalForms :
   rw [genericPointWedgeRightBase_rightProjection_eq_outerRight,
     genericPointWedgeOuterRightComparison_rightProjection_eq_normalForms]
 
+/-- Triviality of the reconstruction conjugator's right projection is
+equivalent to one exact comparison: the chosen-base inverse-span normal form
+is the inverse of the unshifted overlap round-trip normal form. -/
+theorem genericPointWedgeRightBase_rightProjection_eq_one_iff_normalForms :
+    let r := genericPointWedgeActualRight x₀ y₀ M N
+    let eK := genericPointWedgeOverlapGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let eR := genericPointWedgeRightGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let aR := genericPointWedgeRightSpanIso
+      x₀ y₀ M N hM hN hy hx cM cN
+    let z := genericPointWedgeOverlapBase x₀ y₀ M N
+    genericPointWedgeFreeProductRightProjection x₀ y₀
+        (genericPointWedgeIdentityGlobalRightBaseElement
+          x₀ y₀ M N hM hN hy hx cM cN) = 1 ↔
+      (genericPointWedgeConnectors y₀).normalForm
+          (aR.inv.app (eK.functor.obj z)) =
+        ((genericPointWedgeConnectors y₀).normalForm
+          ((eK.funInvIdAssoc (r ⋙ eR.functor)).hom.app z))⁻¹ := by
+  dsimp only
+  rw [genericPointWedgeRightBase_rightProjection_eq_normalForms]
+  let r := genericPointWedgeActualRight x₀ y₀ M N
+  let eK := genericPointWedgeOverlapGroupoidEquivalence
+    x₀ y₀ M N hM hN hy hx cM cN
+  let eR := genericPointWedgeRightGroupoidEquivalence
+    x₀ y₀ M N hM hN hy hx cM cN
+  let aR := genericPointWedgeRightSpanIso
+    x₀ y₀ M N hM hN hy hx cM cN
+  let z := genericPointWedgeOverlapBase x₀ y₀ M N
+  let a :=
+    (genericPointWedgeConnectors y₀).normalForm
+      (aR.inv.app (eK.functor.obj z))
+  let b :=
+    (genericPointWedgeConnectors y₀).normalForm
+      ((eK.funInvIdAssoc (r ⋙ eR.functor)).hom.app z)
+  simpa only [a, b] using
+    (@mul_eq_one_iff_eq_inv _
+      (Groupoid.vertexGroup (genericPointWedgeConnectors y₀).base) a b)
+
 /-- An `inl` factorization of the right-base conjugator forces its canonical
 right projection to be trivial. -/
 theorem genericPointWedgeRightBase_inl_implies_rightProjection_eq_one
@@ -7309,6 +7348,7 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeOuterRightSpan_shiftedNormalForm_eq_base
 #print axioms genericPointWedgeOuterRight_shiftedNormalForms_product_eq_base
 #print axioms genericPointWedgeRightBase_rightProjection_eq_normalForms
+#print axioms genericPointWedgeRightBase_rightProjection_eq_one_iff_normalForms
 #print axioms genericPointWedgeRightBase_inl_implies_rightProjection_eq_one
 #print axioms genericPointWedgeLegCoordinates_of_mapped
 #print axioms genericPointWedgeLegCoordinates_iff_mapped

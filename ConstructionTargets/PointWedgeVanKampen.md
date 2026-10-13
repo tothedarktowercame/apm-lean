@@ -1309,3 +1309,10 @@ unshifted round-trip normal form.  The shifted round-trip result does not by
 itself rewrite this unshifted component; that comparison is the next typed
 step toward proving the product is one and factoring the conjugator through
 `inl`.
+
+`genericPointWedgeRightBase_rightProjection_eq_one_iff_normalForms` isolates
+the remaining group equation exactly: the projection is one if and only if
+the chosen-base inverse-span normal form is the inverse of the unshifted
+round-trip normal form.  Closing that comparison, rather than substituting
+the already-proved shifted identity into a differently typed component, is
+the next step.
