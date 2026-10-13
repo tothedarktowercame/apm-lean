@@ -2695,6 +2695,98 @@ lemma apm_a97j08_boundaryEdge_segment_subset_aux_segment_in_union
 -- (a) Across each square edge lies a neighbouring square whose open interior comes
 -- arbitrarily close to every point of the edge.
 -- BEGIN SEAT AREA
+lemma apm_a97j08_boundaryEdge_segment_subset_aux_neighbor_aux_edge
+    (q : ℤ × ℤ) (e : (ℤ × ℤ) × (ℤ × ℤ))
+    (he : e ∈ apm_a97j08_squareEdges q) :
+    ∃ q' : ℤ × ℤ, e.swap ∈ apm_a97j08_squareEdges q' := by
+  simp only [apm_a97j08_squareEdges, Finset.mem_insert, Finset.mem_singleton] at he
+  rcases he with rfl | rfl | rfl | rfl
+  · refine ⟨(q.1, q.2 - 1), ?_⟩
+    simp [apm_a97j08_squareEdges]
+  · refine ⟨(q.1 + 1, q.2), ?_⟩
+    simp [apm_a97j08_squareEdges]
+  · refine ⟨(q.1, q.2 + 1), ?_⟩
+    simp [apm_a97j08_squareEdges]
+  · refine ⟨(q.1 - 1, q.2), ?_⟩
+    simp [apm_a97j08_squareEdges]
+
+lemma apm_a97j08_boundaryEdge_segment_subset_aux_neighbor_aux_in_square
+    {δ : ℝ} (hδ : 0 < δ) (shift : ℂ) (e : (ℤ × ℤ) × (ℤ × ℤ)) (q : ℤ × ℤ)
+    (heq : e ∈ apm_a97j08_squareEdges q) :
+    segment ℝ (apm_a97j08_gridVertex shift δ e.1) (apm_a97j08_gridVertex shift δ e.2) ⊆
+      apm_a97j08_gridSquare shift δ q := by
+  have hconv : Convex ℝ (apm_a97j08_gridSquare shift δ q) := by
+    intro x hx y hy a b ha hb hab
+    simp only [apm_a97j08_gridSquare, Set.mem_setOf_eq] at hx hy ⊢
+    simp only [Complex.add_re, Complex.smul_re,
+      Complex.add_im, Complex.smul_im, smul_eq_mul]
+    have hrx := mul_le_mul_of_nonneg_left hx.1 ha
+    have hry := mul_le_mul_of_nonneg_left hy.1 hb
+    have hrx' := mul_le_mul_of_nonneg_left hx.2.1 ha
+    have hry' := mul_le_mul_of_nonneg_left hy.2.1 hb
+    have hix := mul_le_mul_of_nonneg_left hx.2.2.1 ha
+    have hiy := mul_le_mul_of_nonneg_left hy.2.2.1 hb
+    have hix' := mul_le_mul_of_nonneg_left hx.2.2.2 ha
+    have hiy' := mul_le_mul_of_nonneg_left hy.2.2.2 hb
+    have hc (c : ℝ) : a * c + b * c = c := by
+      rw [← add_mul, hab, one_mul]
+    constructor
+    · linarith [hc (shift.re + (q.1 : ℝ) * δ)]
+    constructor
+    · linarith [hc (shift.re + ((q.1 : ℝ) + 1) * δ)]
+    constructor
+    · linarith [hc (shift.im + (q.2 : ℝ) * δ)]
+    · linarith [hc (shift.im + ((q.2 : ℝ) + 1) * δ)]
+  have hend : apm_a97j08_gridVertex shift δ e.1 ∈
+        apm_a97j08_gridSquare shift δ q ∧
+      apm_a97j08_gridVertex shift δ e.2 ∈
+        apm_a97j08_gridSquare shift δ q := by
+    simp only [apm_a97j08_squareEdges, Finset.mem_insert, Finset.mem_singleton] at heq
+    rcases heq with rfl | rfl | rfl | rfl <;>
+      simp [apm_a97j08_gridSquare, apm_a97j08_gridVertex] <;>
+      norm_num <;> constructor <;> nlinarith
+  exact hconv.segment_subset hend.1 hend.2
+
+lemma apm_a97j08_boundaryEdge_segment_subset_aux_neighbor_aux_near
+    {δ : ℝ} (hδ : 0 < δ) (shift : ℂ)
+    (e : (ℤ × ℤ) × (ℤ × ℤ)) (q' : ℤ × ℤ)
+    (he : e.swap ∈ apm_a97j08_squareEdges q') :
+    ∀ w ∈ segment ℝ (apm_a97j08_gridVertex shift δ e.1)
+        (apm_a97j08_gridVertex shift δ e.2), ∀ ε > 0, ∃ w' : ℂ, dist w w' < ε ∧
+      shift.re + q'.1 * δ < w'.re ∧ w'.re < shift.re + (q'.1 + 1) * δ ∧
+      shift.im + q'.2 * δ < w'.im ∧ w'.im < shift.im + (q'.2 + 1) * δ := by
+  intro w hw ε hε
+  have hwq : w ∈ apm_a97j08_gridSquare shift δ q' := by
+    have := apm_a97j08_boundaryEdge_segment_subset_aux_neighbor_aux_in_square hδ shift
+      e.swap q' he
+    simp only [Prod.fst_swap, Prod.snd_swap] at this
+    rw [segment_symm] at this
+    exact this hw
+  obtain ⟨h1, h2, h3, h4⟩ := hwq
+  set a := shift.re + (q'.1 : ℝ) * δ
+  set b := shift.im + (q'.2 : ℝ) * δ
+  set c : ℂ := ⟨a + δ / 2, b + δ / 2⟩
+  set s : ℝ := min (1 / 2) (ε / (4 * δ))
+  have hs0 : 0 < s := lt_min (by norm_num) (by positivity)
+  have hs1 : s ≤ 1 / 2 := min_le_left _ _
+  have hsε : s * (4 * δ) ≤ ε := by
+    have := min_le_right (1 / 2 : ℝ) (ε / (4 * δ))
+    rwa [le_div_iff₀ (by positivity)] at this
+  refine ⟨w + (s : ℂ) * (c - w), ?_, ?_⟩
+  · rw [dist_comm, dist_self_add_left, norm_mul, Complex.norm_real, Real.norm_of_nonneg hs0.le]
+    have hre : |(c - w).re| ≤ δ := by
+      rw [Complex.sub_re, abs_le]; simp only [c]; constructor <;> linarith
+    have him : |(c - w).im| ≤ δ := by
+      rw [Complex.sub_im, abs_le]; simp only [c]; constructor <;> linarith
+    have hn := Complex.norm_le_abs_re_add_abs_im (c - w)
+    have : ‖c - w‖ ≤ 2 * δ := by linarith
+    nlinarith
+  · simp only [Complex.add_re, Complex.add_im, Complex.mul_re, Complex.mul_im,
+      Complex.ofReal_re, Complex.ofReal_im, Complex.sub_re, Complex.sub_im, c,
+      zero_mul, sub_zero, add_zero]
+    push_cast at h1 h2 h3 h4 ⊢
+    refine ⟨?_, ?_, ?_, ?_⟩ <;> nlinarith
+
 lemma apm_a97j08_boundaryEdge_segment_subset_aux_neighbor {δ : ℝ} (hδ : 0 < δ)
     (shift : ℂ) (q : ℤ × ℤ) (e : (ℤ × ℤ) × (ℤ × ℤ)) (he : e ∈ apm_a97j08_squareEdges q) :
     ∃ q' : ℤ × ℤ, e.swap ∈ apm_a97j08_squareEdges q' ∧
@@ -2702,7 +2794,10 @@ lemma apm_a97j08_boundaryEdge_segment_subset_aux_neighbor {δ : ℝ} (hδ : 0 < 
           (apm_a97j08_gridVertex shift δ e.2), ∀ ε > 0, ∃ w' : ℂ, dist w w' < ε ∧
         shift.re + q'.1 * δ < w'.re ∧ w'.re < shift.re + (q'.1 + 1) * δ ∧
         shift.im + q'.2 * δ < w'.im ∧ w'.im < shift.im + (q'.2 + 1) * δ := by
-  sorry
+  obtain ⟨q', hq'⟩ :=
+    apm_a97j08_boundaryEdge_segment_subset_aux_neighbor_aux_edge q e he
+  exact ⟨q', hq',
+    apm_a97j08_boundaryEdge_segment_subset_aux_neighbor_aux_near hδ shift e q' hq'⟩
 -- END SEAT AREA
 
 -- (b) A point strictly inside square `q'` lies in no other lattice square.
