@@ -23717,7 +23717,7 @@
    :consumer :t01A08,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "Recorded commit is invalid: f032efae9d1501f7ddfe93c66668f88f24ed37f4 is absent locally and origin rejects it as not our ref. The intended scoped commit appears to be f032efae9b89fb527a72ea9192f3c89f09f82615. Repair the row to record the exact existing full SHA, then rerun independent review.",
    :implements-lemma
@@ -23725,13 +23725,14 @@
    :evidence
    {:placeholder-delta {:t01A08 [1 1]},
     :residual
-    "Prove pointwise lower adjacent identities on the finite-smooth relative neighborhood by induction; lift shifted swaps; combine leading swap and adjacent closure; B1.",
+    "Formalize finite-order induction at interior points using the eventual interior-smooth neighborhood; derive shifted swaps; extend to x; apply adjacent closure; B1.",
     :outcome :stop,
     :warnings [],
     :missing-theorems
-    [{:name "iteratedFDerivWithin_domDomCongr_eventuallyEq_of_mem",
+    [{:name
+      "ContDiffWithinAt.eventually_mem_interior_contDiffWithinAt_of_nat",
       :type
-      "pointwise jet symmetry on u in nhdsWithin x s gives eventual equality",
+      "finite smoothness at an interior point persists eventually inside the interior",
       :status :proved,
       :consumers [:t01A08],
       :depends-on [],
@@ -23742,7 +23743,7 @@
       :status :partial,
       :consumers [:t01A08],
       :depends-on
-      ["iteratedFDerivWithin_domDomCongr_eventuallyEq_of_mem"
+      ["ContDiffWithinAt.eventually_mem_interior_contDiffWithinAt_of_nat"
        "iteratedFDerivWithin_domDomCongr_adjacent_succ_of_eventuallyEq"],
       :area "sard-convex-domain"}],
     :statement-hashes {:registry "149/149"},
@@ -23750,23 +23751,16 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Pointwise lower-jet symmetry on a relative neighborhood now produces the exact eventual equality used by tail lifting; the finite induction remains.",
+    "At an interior point, finite C-k now persists eventually within the interior; apply the induction hypothesis there to obtain lower swaps.",
     :commands
     [{:cmd
       "lake build scoped module; lean helper/fixture; hash/registry/commit checks",
       :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1791884957530-9359-c408c4b9",
-     :commands
-     ["git show/diff 4b4ba30a; scope and recorded-tree checks"
-      "lake build ConstructionTargets.SardConvexDomain"
-      "lake env lean fixture and CheckSardEventualIdentity.lean"
-      "sha256sum fixture; statement-registry check; placeholder recount"],
-     :finding
-     "Valid STOP after real progress. The one-file commit correctly turns pointwise jet-permutation equality on a relative-neighborhood member into the required nhdsWithin EventuallyEq; orientation and representation match consumers. Build/export pass; fixture hash matches; standard axioms only; registry 149/149; sorry/admit 0->0. Finite-order pointwise induction and final swap assembly remain listed."},
-    :commit "4b4ba30aa6dc2ae857e44582c7c9f1f4db518395",
+    :diagnostic-history
+    [{:cmd "interior-eventually draft",
+      :exit 1,
+      :correction "used mem_nhdsWithin_of_mem_nhds; compiled"}],
+    :commit "6a0af2be8f704106a7e34bb8198a9b135a499cff",
     :changed-paths ["ConstructionTargets/SardConvexDomain.lean"],
     :fixture
     {:path "/tmp/t01a08_smooth_symmetry_membership_probe.lean",
@@ -23775,7 +23769,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain/B1/symmetry",
    :acceptance
@@ -33749,7 +33743,8 @@
     :lemma-contdiffwithinat-iteratedfderivwithin-domdomcongr-swap-zero-one-of-nat
     :lemma-iteratedfderivwithin-domdomcongr-adjacent-succ
     :lemma-iteratedfderivwithin-domdomcongr-adjacent-succ-of-eventuallyeq
-    :lemma-iteratedfderivwithin-domdomcongr-eventuallyeq-of-mem],
+    :lemma-iteratedfderivwithin-domdomcongr-eventuallyeq-of-mem
+    :lemma-contdiffwithinat-eventually-mem-interior-contdiffwithinat-of-nat],
    :other-consumers []}
   {:consumer :t01A08,
    :phase :lemma,
@@ -34192,6 +34187,28 @@
     :banked-by :r-a08-symmetry-slots-1,
     :banked-commit "4b4ba30aa6dc2ae857e44582c7c9f1f4db518395"},
    :id :lemma-iteratedfderivwithin-domdomcongr-eventuallyeq-of-mem,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t01A08,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ContDiffWithinAt.eventually_mem_interior_contDiffWithinAt_of_nat",
+    :type
+    "finite smoothness at an interior point persists eventually inside the interior"},
+   :lemma
+   {:name
+    "ContDiffWithinAt.eventually_mem_interior_contDiffWithinAt_of_nat",
+    :reported-by [:r-a08-symmetry-slots-1],
+    :type
+    "finite smoothness at an interior point persists eventually inside the interior",
+    :area "sard-convex-domain",
+    :proved-in :r-a08-symmetry-slots-1},
+   :id
+   :lemma-contdiffwithinat-eventually-mem-interior-contdiffwithinat-of-nat,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}],
