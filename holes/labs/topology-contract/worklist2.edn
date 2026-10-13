@@ -87760,6 +87760,17 @@
     [{:cmd "initial compile",
       :exit 1,
       :correction "derived I*v=0 then resolved I≠0"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791920728986-10299-db41b780",
+     :commands
+     ["git show/diff-tree/SHA256 8a1cfb44a"
+      "git show --check 8a1cfb44a"
+      "statement-registry.py check (150/0)"
+      "blueprint dependency review"],
+     :finding
+     "Valid program STOP with a new blueprint milestone. Exact one-file scope and fixture SHA match. B1 and B2 are true, use sufficient stated dependencies, faithfully match the Lean predicates, and are both used by assembly. Registry 150/0; no defect. Next milestones: prove the two named LIBRARY results."},
     :commit "b48b3aecd",
     :changed-paths ["ConstructionTargets/t94A08Closure.lean"],
     :fixture
@@ -87768,7 +87779,7 @@
      "70fc4a7301de0b1a75ee8156948560e6553773803d08eaf833430e845e9bf579"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t94A08/lean/Main.lean"
     "problems/t94A08/status.json"
@@ -87786,7 +87797,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t94A08Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked the compiled smooth-conic manifold milestone; next job proves the independent nodal obstruction.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Compiled the affine branch-intersection milestone; punctured-neighborhood separation remains.",
    :id :program-2026-10-13-close-t94a08,
    :kind :final-adapter,
    :campaign-priority 30,
@@ -87802,7 +87813,11 @@
     {:job 2,
      :commit "b17a010a9",
      :reason
-     "Banked the compiled smooth-conic manifold milestone; next job proves the independent nodal obstruction."}]}
+     "Banked the compiled smooth-conic manifold milestone; next job proves the independent nodal obstruction."}
+    {:job 3,
+     :commit "b48b3aecd",
+     :reason
+     "Compiled the affine branch-intersection milestone; punctured-neighborhood separation remains."}]}
   {:consumer :t97A01,
    :stop-count 0,
    :phase :implementation,
@@ -87942,7 +87957,7 @@
    :other-consumers []}
   {:consumer :t94A08,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "apm_t94a08_affineBranches_inter",
@@ -87954,7 +87969,9 @@
     :type
     "apm_t94a08_affineBranchPlus ∩ apm_t94a08_affineBranchMinus = {(0,0)}",
     :area "projective-affine-chart-homeomorph",
-    :proved-in :program-2026-10-13-close-t94a08},
+    :proved-in :program-2026-10-13-close-t94a08,
+    :banked-by :program-2026-10-13-close-t94a08,
+    :banked-commit "b48b3aecd"},
    :id :lemma-apm-t94a08-affinebranches-inter,
    :kind :lemma,
    :depends-on [],
