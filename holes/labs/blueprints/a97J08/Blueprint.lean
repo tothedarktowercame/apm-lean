@@ -2609,6 +2609,49 @@ theorem apm_a97j08_boundaryEdge_segment_subset
   exact hwAB.elim hwnA hwnB
 
 -- (Z1) Exactly one selected square contains `z`, so the square sums total `2π`.
+lemma apm_a97j08_square_total_aux_strict {z shift : ℂ} {δ : ℝ}
+    (q : ℤ × ℤ) (hz : z ∈ apm_a97j08_gridSquare shift δ q)
+    (hre : z.re ∉ {x | ∃ k : ℤ, x = shift.re + k * δ})
+    (him : z.im ∉ {y | ∃ k : ℤ, y = shift.im + k * δ}) :
+    shift.re + q.1 * δ < z.re ∧ z.re < shift.re + (q.1 + 1) * δ ∧
+      shift.im + q.2 * δ < z.im ∧ z.im < shift.im + (q.2 + 1) * δ := by
+  rcases hz with ⟨hr0, hr1, hi0, hi1⟩
+  refine ⟨lt_of_le_of_ne hr0 ?_, lt_of_le_of_ne hr1 ?_,
+    lt_of_le_of_ne hi0 ?_, lt_of_le_of_ne hi1 ?_⟩
+  · intro heq
+    apply hre
+    exact ⟨q.1, heq.symm⟩
+  · intro heq
+    apply hre
+    exact ⟨q.1 + 1, by simpa using heq⟩
+  · intro heq
+    apply him
+    exact ⟨q.2, heq.symm⟩
+  · intro heq
+    apply him
+    exact ⟨q.2 + 1, by simpa using heq⟩
+
+lemma apm_a97j08_square_total_aux_interior {z shift : ℂ} {δ : ℝ}
+    (q : ℤ × ℤ)
+    (hz : shift.re + q.1 * δ < z.re ∧ z.re < shift.re + (q.1 + 1) * δ ∧
+      shift.im + q.2 * δ < z.im ∧ z.im < shift.im + (q.2 + 1) * δ) :
+    z ∈ interior (apm_a97j08_gridSquare shift δ q) := by
+  have hopen : IsOpen {w : ℂ | shift.re + q.1 * δ < w.re ∧ w.re < shift.re + (q.1 + 1) * δ ∧
+      shift.im + q.2 * δ < w.im ∧ w.im < shift.im + (q.2 + 1) * δ} := by
+    refine (isOpen_lt continuous_const Complex.continuous_re).inter
+      ((isOpen_lt Complex.continuous_re continuous_const).inter
+        ((isOpen_lt continuous_const Complex.continuous_im).inter
+          (isOpen_lt Complex.continuous_im continuous_const)))
+  refine interior_maximal (fun w hw => ?_) hopen hz
+  exact ⟨hw.1.le, hw.2.1.le, hw.2.2.1.le, hw.2.2.2.le⟩
+
+lemma apm_a97j08_square_total_aux_unique {z shift : ℂ} {δ : ℝ} (hδ : 0 < δ)
+    {q₀ q : ℤ × ℤ}
+    (hz : shift.re + q₀.1 * δ < z.re ∧ z.re < shift.re + (q₀.1 + 1) * δ ∧
+      shift.im + q₀.2 * δ < z.im ∧ z.im < shift.im + (q₀.2 + 1) * δ)
+    (hq : z ∈ apm_a97j08_gridSquare shift δ q) : q = q₀ := by
+  exact apm_a97j08_boundaryEdge_segment_subset_aux_open_unique hδ shift hz hq
+
 theorem apm_a97j08_square_total {z shift : ℂ} {δ : ℝ} (hδ : 0 < δ)
     (Q : Finset (ℤ × ℤ)) (hzU : z ∈ ⋃ q ∈ Q, apm_a97j08_gridSquare shift δ q)
     (hre : z.re ∉ {x | ∃ k : ℤ, x = shift.re + k * δ})
@@ -2620,7 +2663,17 @@ theorem apm_a97j08_square_total {z shift : ℂ} {δ : ℝ} (hδ : 0 < δ)
         2 * Real.pi) :
     ∑ q ∈ Q, ∑ e ∈ apm_a97j08_squareEdges q, apm_a97j08_edgeAngle z shift δ e =
       2 * Real.pi := by
-  sorry
+  simp only [Set.mem_iUnion] at hzU
+  obtain ⟨q₀, hq₀Q, hzq₀⟩ := hzU
+  have hstrict := apm_a97j08_square_total_aux_strict q₀ hzq₀ hre him
+  have hmain := hA3 q₀ (apm_a97j08_square_total_aux_interior q₀ hstrict)
+  calc
+    _ = ∑ e ∈ apm_a97j08_squareEdges q₀,
+        apm_a97j08_edgeAngle z shift δ e := Finset.sum_eq_single q₀
+      (fun q hqQ hne => hA2 q (fun hzq =>
+        hne (apm_a97j08_square_total_aux_unique hδ hstrict hzq)))
+      (fun hn => (hn hq₀Q).elim)
+    _ = 2 * Real.pi := hmain
 
 -- (L1) The straight segment from `p` to `q` has a continuous angle lift about
 -- `z` whose total change is the angle step.
