@@ -76416,42 +76416,48 @@
   {:consumer :t96J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "Deterministic topology defect in commit ee79eaeb2: it changes the index topology for FiniteWedge from ⊥ to ⊤ while claiming this makes it discrete. Mathlib/Topology/Order.lean states exactly the opposite: ⊥ is discrete and ⊤ is indiscrete. Consequently L × Circle is not the coproduct/disjoint-union source of indexed circle legs, and the coinduced quotient is not the B7 finite-wedge topology; future skeletonHomeomorphWedge would target the wrong space. Repair by restoring TopologicalSpace L := ⊥ in both the FiniteWedge instance and continuous_wedgeCircle proof, then rerun Lean/build and retain coverage, quotient-topology, wedge-relation, and signed-equation residuals. Recorded scope is otherwise exact and fixture SHA-256 386d0e41...ae305 matches.",
    :evidence
    {:placeholder-delta 0,
-    :residual
-    "Reverse kernel, source quotient, homeomorphism; then B8/B9.",
+    :residual "Invariance, quotient, homeomorphism; then B8/B9.",
     :outcome :stop,
-    :warnings ["preexisting lints"],
+    :warnings ["lints" "worklist temp preserved"],
     :missing-theorems
-    [{:name "PairingData.skeletonArc_eq_of_signedWedgeArc_eq",
-      :type "target kernel implies source kernel",
+    [{:name "PairingData.skeletonArc_eq_iff_eqvGen",
+      :type "source equality iff generated relation",
       :status :proved,
-      :consumers [:t96J02 :t92J05 :t94J04 :t97A01 :t97A03],
-      :depends-on ["PairingData.skeletonArc_zero_eq"],
+      :consumers [:t96J02],
+      :depends-on [],
+      :area "polygon-surface-pi1"}
+     {:name "PairingData.eqvGen_boundaryRel_implies_signedWedgeArc_eq",
+      :type "generated relation preserves signed arcs",
+      :status :not-started,
+      :consumers [:t96J02],
+      :depends-on ["PairingData.skeletonArc_eq_iff_eqvGen"],
       :area "polygon-surface-pi1"}
      {:name "PairingData.SkeletonWedgeKernelAgreement",
       :type "source kernel iff target",
       :status :partial,
-      :consumers [:t96J02 :t92J05 :t94J04 :t97A01 :t97A03],
-      :depends-on ["PairingData.skeletonArc_eq_of_signedWedgeArc_eq"],
+      :consumers [:t96J02],
+      :depends-on
+      ["PairingData.eqvGen_boundaryRel_implies_signedWedgeArc_eq"],
       :area "polygon-surface-pi1"}
      {:name "PairingData.skeletonArcMap_isQuotientMap",
       :type "source quotient",
       :status :not-started,
-      :consumers [:t96J02 :t92J05 :t94J04 :t97A01 :t97A03],
+      :consumers [:t96J02],
       :depends-on [],
       :area "polygon-surface-pi1"}],
     :statement-hashes
-    {:registry "131/0",
-     :module "6c410d4eedcb48658acb65c30126fa8915ed85ef"},
+    {:registry "142/0",
+     :module "5c108954c3a93d7ffbe15145acfd3a03bb2f3de2"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
     :reason
-    "Target-to-source kernel proved; reverse and quotient remain.",
+    "Source equality is generated boundary equivalence; invariance remains.",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/PolygonSurfacePiOne.lean",
@@ -76460,32 +76466,17 @@
       :exit 0}
      {:cmd "registry check", :exit 0}
      {:cmd "placeholder scan", :exit 0}
-     {:cmd "#print axioms kernel direction", :exit 0}
-     {:cmd "git show --check c431fefe5", :exit 0}],
-    :diagnostic-history
-    [{:cmd "early wrap compiles",
-      :exit 1,
-      :correction "qualified lemma; proved cyclic exponential"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1791865071455-8397-5ea301a1",
-     :commands
-     ["git scope/SHA/blob checks at 34fa7c1df"
-      "lake env lean ConstructionTargets/PolygonSurfacePiOne.lean"
-      "statement-registry.py check"
-      "placeholder/orientation scans; #print axioms"],
-     :finding
-     "PASS: recorded one-file scope and frozen fixture/blob hashes match. Nested quotient induction supplies every indexed-wedge point; positive sign preserves t, while negative sign uses reverseIcc t so the signed map reverses back. Representation and orientation boundaries are correct. Lean passes, registry 131/0, placeholders 0, standard axioms only. STOP is substantive progress and lists source coverage, kernel agreement, quotient topology, final homeomorphism and B8/B9 remaining."},
-    :commit "c431fefe5",
+     {:cmd "#print axioms source kernel iff", :exit 0}
+     {:cmd "git show --check 80f6ec02e", :exit 0}],
+    :commit "80f6ec02e",
     :changed-paths ["ConstructionTargets/PolygonSurfacePiOne.lean"],
     :fixture
     {:path "ConstructionTargets/PolygonSurfacePiOne.lean",
      :sha256
-     "a35f50256cecbd0fb9c68e319e9b1aa4bcbb0cbb0a76ef0a4059aa7653532e48"},
+     "36b9e7e57959a357292ace483dd0fe61e53210f78b6307385880bf0b9e03a1d1"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/PolygonSurfacePiOne.lean"],
    :dag-node "ConstructionTargets/PolygonSurfacePiOne.blueprint.md/B7",
    :acceptance
@@ -87084,7 +87075,8 @@
     :lemma-pairingdata-signedwedgearc-eq-iff-parameters
     :lemma-pairingdata-skeletonarc-eq-of-signedparameter-eq
     :lemma-pairingdata-skeletonarc-zero-eq
-    :lemma-pairingdata-skeletonarc-eq-of-signedwedgearc-eq],
+    :lemma-pairingdata-skeletonarc-eq-of-signedwedgearc-eq
+    :lemma-pairingdata-eqvgen-boundaryrel-implies-signedwedgearc-eq],
    :other-consumers [:t92J05 :t94J04 :t97A01 :t97A03]}
   {:consumer :t96J02,
    :phase :lemma,
@@ -87272,4 +87264,37 @@
    :id :lemma-pairingdata-skeletonarc-eq-of-signedwedgearc-eq,
    :kind :lemma,
    :depends-on [:lemma-pairingdata-skeletonarc-zero-eq],
-   :other-consumers [:t92J05 :t94J04 :t97A01 :t97A03]}]}
+   :other-consumers [:t92J05 :t94J04 :t97A01 :t97A03]}
+  {:consumer :t96J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "PairingData.skeletonArc_eq_iff_eqvGen",
+    :type "source equality iff generated relation"},
+   :lemma
+   {:name "PairingData.skeletonArc_eq_iff_eqvGen",
+    :reported-by [:routes-2026-10-12-polygon-b7-topo2-r1],
+    :type "source equality iff generated relation",
+    :area "polygon-surface-pi1",
+    :proved-in :routes-2026-10-12-polygon-b7-topo2-r1},
+   :id :lemma-pairingdata-skeletonarc-eq-iff-eqvgen,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t96J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "PairingData.eqvGen_boundaryRel_implies_signedWedgeArc_eq",
+    :type "generated relation preserves signed arcs"},
+   :lemma
+   {:name "PairingData.eqvGen_boundaryRel_implies_signedWedgeArc_eq",
+    :reported-by [:routes-2026-10-12-polygon-b7-topo2-r1],
+    :type "generated relation preserves signed arcs",
+    :area "polygon-surface-pi1"},
+   :id :lemma-pairingdata-eqvgen-boundaryrel-implies-signedwedgearc-eq,
+   :kind :lemma,
+   :depends-on [:lemma-pairingdata-skeletonarc-eq-iff-eqvgen],
+   :other-consumers []}]}
