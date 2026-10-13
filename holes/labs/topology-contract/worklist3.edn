@@ -36179,22 +36179,28 @@
    :program true,
    :other-consumers []}
   {:consumer :t99J05,
-   :stop-count 4,
+   :stop-count 5,
    :evidence
    {:placeholder-delta {:t99J05 [1 1]},
     :residual
-    "Prove subsingleton rational homology; build CP0 data and MV successor.",
+    "Construct singleton chain homology and MV successor; then C4/Main.",
     :outcome :stop,
     :warnings [],
     :missing-theorems
-    [{:name "cp_zero_subsingleton",
-      :type "Subsingleton (CP 0)",
+    [{:name "cpZeroHomologyDataOfSubsingletonData",
+      :type "singleton homology data -> CP0 data",
       :status :proved,
+      :consumers [:t99J05],
+      :depends-on ["cp_zero_subsingleton"],
+      :area "rational-homology-lefschetz"}
+     {:name "t99J05_subsingleton_rational_homology",
+      :type "construct singleton rational homology data",
+      :status :not-started,
       :consumers [:t99J05],
       :depends-on [],
       :area "rational-homology-lefschetz"}
-     {:name "t99J05_subsingleton_rational_homology",
-      :type "H0(X;Q)=Q; Hk=0 for k>0",
+     {:name "t99J05_cp_homology_step",
+      :type "CP n data -> CP(n+1) data",
       :status :not-started,
       :consumers [:t99J05],
       :depends-on [],
@@ -36212,38 +36218,22 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Committed literal CP0 singleton theorem via its affine chart. Base homology reduces to rational homology of a subsingleton; successor remains; not refuted.",
+    "Committed the generic singleton-homology interface and a compiled adapter to full CP0 data. Only the chain computation and MV successor remain before traces; not refuted.",
     :commands
     [{:cmd "build; registry; fixture; diff; commit", :exit 0}
      {:cmd "rg sorry-or-axiom closure", :exit 1, :expected-exit 1}],
-    :diagnostic-history
-    [{:cmd "lean closure",
-      :exit 1,
-      :correction
-      "proved Fin1/empty-coordinate equalities explicitly"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1791922062829-10348-50781089",
-     :commands
-     ["git show/diff 385135c; scope and representation review"
-      "lake build/lean ConstructionTargets.t99J05Closure"
-      "sha256sum + lake env lean interface fixture"
-      "statement-registry check; placeholder recount"],
-     :finding
-     "PASS. Since program-history c97d155, commit 385135c adds the compiled, sorry-free theorem Subsingleton (CP 0) for the literal projectivization, using its fixed affine chart rather than substituting another model. This is genuine C3 base progress; rational homology of subsingletons, CP0 data, and the Mayer-Vietoris successor remain explicitly listed. Fixture hash matches; standard axioms only; registry 150/150; closure forbidden count 0->0."},
-    :commit "385135c706cfec5df353876bace021905b133f83",
+    :commit "5b4eba45781d7566fbb438c855ccc079fe911c8f",
     :changed-paths
     ["ConstructionTargets/t99J05Closure.lean"
      "ConstructionTargets/t99J05Closure.blueprint.md"],
     :fixture
     {:path "/tmp/t99j05_cp_homology_interface_check.lean",
      :sha256
-     "a59a92b5d0f8a6ba5b9a62fc602f076d828f437130f312a4622582698be5ca8f",
+     "4aeb8b6a37db46c068902548d7063d256d1729f1cf9ef9d9d0c92bf70dbeea8d",
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t99J05/lean/Main.lean"
     "problems/t99J05/status.json"
@@ -36559,6 +36549,23 @@
    :id :lemma-t99j05-subsingleton-rational-homology,
    :kind :lemma,
    :depends-on [],
+   :other-consumers []}
+  {:consumer :t99J05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "cpZeroHomologyDataOfSubsingletonData",
+    :type "singleton homology data -> CP0 data"},
+   :lemma
+   {:name "cpZeroHomologyDataOfSubsingletonData",
+    :reported-by [:program-2026-10-13-close-t99j05],
+    :type "singleton homology data -> CP0 data",
+    :area "rational-homology-lefschetz",
+    :proved-in :program-2026-10-13-close-t99j05},
+   :id :lemma-cpzerohomologydataofsubsingletondata,
+   :kind :lemma,
+   :depends-on [:lemma-cp-zero-subsingleton],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
