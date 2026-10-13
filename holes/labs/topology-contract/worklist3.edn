@@ -24430,7 +24430,7 @@
    :consumer :t01A08,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 0,
    :review-finding
    "extend Mathlib: state and prove the missing theorem in scope",
    :implements-lemma :lemma-closedset-whitneycubecover,
@@ -24474,6 +24474,17 @@
     [{:cmd "HEAD scope gate",
       :exit 1,
       :correction "supervisor advanced HEAD; reran on commit"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791913181485-10136-2c075175",
+     :commands
+     ["git show/diff 7caab15; scope/orientation checks"
+      "sha256sum + lake env lean frozen fixture"
+      "lake build ConstructionTargets.SardConvexDomain"
+      "statement registry check; forbidden-count scan"],
+     :finding
+     "PASS. Recorded topo-10 commit 7caab15 changes only the scoped Lean file and correctly proves half-ball point/center scale comparison. From dist(x,c)<dc/2 and both one-Lipschitz infDist orientations it derives dc<2dx and 2dx<3dc; the distance reversal is explicit. Fixture hash 3100e8d4... matches; build/fixture pass; registry 150/150; forbidden placeholders stay 0; only standard axioms. Valid compiled B3 progress; STOP explicitly leaves half-ball incidence, ambient local finiteness, and assembly."},
     :commit "7caab153170c707abade3e8bfb2f12ce0a3a4ec1",
     :changed-paths ["ConstructionTargets/SardConvexDomain.lean"],
     :fixture
@@ -24483,7 +24494,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain.blueprint/B3",
    :acceptance
@@ -35868,7 +35879,7 @@
    :other-consumers []}
   {:consumer :t01A08,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -35882,7 +35893,9 @@
     :type
     "x in ball c (infDist c s/2) => infDist c s < 2*infDist x s and 2*infDist x s < 3*infDist c s",
     :area "sard-convex-domain",
-    :proved-in :r-a08-sard-b3-whitney-cubes-1},
+    :proved-in :r-a08-sard-b3-whitney-cubes-1,
+    :banked-by :r-a08-sard-b3-whitney-cubes-1,
+    :banked-commit "7caab153170c707abade3e8bfb2f12ce0a3a4ec1"},
    :id
    :lemma-constructiontargets-sardconvexdomain-infdist-center-comparable-of-mem-half-ball,
    :kind :lemma,
