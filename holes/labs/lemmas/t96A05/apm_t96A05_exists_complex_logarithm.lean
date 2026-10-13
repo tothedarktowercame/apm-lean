@@ -53,7 +53,34 @@ theorem apm_t96A05_exists_complex_logarithm
     (f : C(A, APMT96A05.PuncturedPlane)) (hf : f.Nullhomotopic) :
     ∃ u : C(A, ℂ), ∀ a : A,
       Complex.exp (u a) = (APMT96A05.toComplex (f a)).1 := by
-  sorry
+  let c : C(APMT96A05.PuncturedPlane, {z : ℂ // z ≠ 0}) :=
+    ⟨APMT96A05.toComplex, by
+      apply Continuous.subtype_mk
+      exact Complex.equivRealProdCLM.symm.continuous.comp continuous_subtype_val⟩
+  obtain ⟨z₀, hz₀⟩ := hf.comp_right c
+  obtain ⟨H⟩ := hz₀
+  let Hr := H.symm
+  let g : C(A, ℂ) := ContinuousMap.const A (Complex.log z₀.1)
+  have hg : ∀ a : A, Hr (0, a) =
+      (fun z : ℂ ↦ (⟨Complex.exp z, Complex.exp_ne_zero z⟩ : {z : ℂ // z ≠ 0})) (g a) := by
+    intro a
+    rw [ContinuousMap.Homotopy.apply_zero]
+    apply Subtype.ext
+    change z₀.1 = Complex.exp (Complex.log z₀.1)
+    exact (Complex.exp_log z₀.2).symm
+  let L : C(unitInterval × A, ℂ) :=
+    Complex.isCoveringMap_exp.liftHomotopy Hr g hg
+  let atOne : C(A, unitInterval × A) :=
+    (ContinuousMap.const A (1 : unitInterval)).prodMk (ContinuousMap.id A)
+  let u : C(A, ℂ) := L.comp atOne
+  refine ⟨u, ?_⟩
+  intro a
+  have hl := congr_fun
+    (Complex.isCoveringMap_exp.liftHomotopy_lifts Hr g hg) ((1 : unitInterval), a)
+  have hOne : Hr ((1 : unitInterval), a) = c (f a) := by
+    exact ContinuousMap.Homotopy.apply_one Hr a
+  have := congrArg Subtype.val hl
+  simpa [u, atOne, L, hOne, c] using this
 -- END SEAT AREA
 
 /-- Tietze-extend a supplied logarithm and exponentiate it.  The logarithm
