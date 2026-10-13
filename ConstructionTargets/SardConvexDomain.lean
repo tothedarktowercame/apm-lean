@@ -1363,4 +1363,52 @@ theorem whitneyStratum_indices_le_add_two_of_mem_half_balls
     norm_num at hc'
     linarith
 
+/-- Only finitely many selected half-distance balls contain any fixed point. -/
+theorem finite_whitneyNetHalfIncidence
+    {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E] [ProperSpace E]
+    (s : Set E) (x : E) :
+    {i : WhitneyNetIndex s |
+      x ∈ Metric.ball i.center (Metric.infDist i.center s / 2)}.Finite := by
+  let I : Set (WhitneyNetIndex s) :=
+    {i | x ∈ Metric.ball i.center (Metric.infDist i.center s / 2)}
+  have hfiber (k : ℤ) : {i | i.1 = k ∧ i ∈ I}.Finite := by
+    let f : WhitneyNetIndex s → E := WhitneyNetIndex.center
+    have hinj : Set.InjOn f {i | i.1 = k ∧ i ∈ I} := by
+      intro i hi j hj hij
+      have hk : i.1 = j.1 := hi.1.trans hj.1.symm
+      cases i with
+      | mk ik ic =>
+        cases j with
+        | mk jk jc =>
+          dsimp at hk hij ⊢
+          subst jk
+          exact congrArg (Sigma.mk ik) (Subtype.ext hij)
+    apply Set.Finite.of_finite_image (f := f) _ hinj
+    apply (finite_inter_whitneyStratumNet_of_isCompact s k
+      (isCompact_closedBall x ((2 : ℝ) ^ (k + 1) / 2))).subset
+    rintro c ⟨i, hi, rfl⟩
+    constructor
+    · change i.2.1 ∈ whitneyStratumNet s k
+      rw [← hi.1]
+      exact i.2.2
+    · apply Metric.mem_closedBall.2
+      rw [dist_comm, ← hi.1]
+      exact (le_of_lt (Metric.mem_ball.1 hi.2)).trans
+        (div_le_div_of_nonneg_right
+          (le_of_lt ((whitneyStratumNet_spec s i.1).1 i.2.2).2.2) (by norm_num))
+  by_cases hI : I.Nonempty
+  · obtain ⟨i, hi⟩ := hI
+    have hfinite := (Set.finite_Icc (i.1 - 2) (i.1 + 2)).biUnion
+      (fun k _ => hfiber k)
+    apply hfinite.subset
+    intro j hj
+    have hb := whitneyStratum_indices_le_add_two_of_mem_half_balls s
+      ((whitneyStratumNet_spec s i.1).1 i.2.2)
+      ((whitneyStratumNet_spec s j.1).1 j.2.2) hi hj
+    apply Set.mem_iUnion₂.2
+    exact ⟨j.1, ⟨by omega, by omega⟩, ⟨rfl, hj⟩⟩
+  · change I.Finite
+    rw [Set.not_nonempty_iff_eq_empty.mp hI]
+    exact Set.finite_empty
+
 end ConstructionTargets.SardConvexDomain
