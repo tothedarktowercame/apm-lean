@@ -89,7 +89,23 @@ to a puncture at an arbitrary point, by coordinatewise circle translation. -/
 -- BEGIN SEAT AREA
 theorem apm_t01A02_punctured_H2_isZero (q : apm_t01A02_Torus) :
     IsZero (apm_t01A02_H2 {x : apm_t01A02_Torus // x ≠ q}) := by
-  sorry
+  let c₁ : Circle := q.1⁻¹ * ConstructionTargets.T01A02PuncturedTorus.circleMinusOne
+  let c₂ : Circle := q.2⁻¹ * ConstructionTargets.T01A02PuncturedTorus.circleMinusOne
+  let h : apm_t01A02_Torus ≃ₜ apm_t01A02_Torus :=
+    (Homeomorph.mulRight c₁).prodCongr (Homeomorph.mulRight c₂)
+  have hq : h q = ConstructionTargets.T01A02PuncturedTorus.missingPoint := by
+    ext <;> simp [h, c₁, c₂,
+      ConstructionTargets.T01A02PuncturedTorus.missingPoint]
+  let e : {x : apm_t01A02_Torus // x ≠ q} ≃ₜ
+      ConstructionTargets.T01A02PuncturedTorus.X :=
+    h.subtype fun x => by
+      rw [ne_eq, ne_eq, ← hq]
+      exact not_congr h.injective.eq_iff.symm
+  let F := (AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 2).obj
+    (ModuleCat.of ℤ ℤ)
+  exact IsZero.of_iso
+    ConstructionTargets.T01A02PuncturedTorus.puncturedTorus_H2_isZero
+    (F.mapIso (TopCat.isoOfHomeo e))
 -- END SEAT AREA
 
 theorem apm_t01A02_H2map_eq_zero
