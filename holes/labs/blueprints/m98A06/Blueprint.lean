@@ -2748,6 +2748,36 @@ lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_forward_aux
         ∫ x, y x * φ x ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)) := by
   sorry
 
+lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_forward_aux_rigidity_aux_pointwise_aux_representation_aux_regular_aux_Y_continuous
+    (y : ℝ → ℝ) (hy : ContinuousOn y (Icc (0 : ℝ) Real.pi)) :
+    ContinuousOn (fun x => ∫ t in (0 : ℝ)..x, y t) (Icc (0 : ℝ) Real.pi) := by
+  have hi : IntegrableOn y (uIcc (0 : ℝ) Real.pi) := by
+    rw [uIcc_of_le Real.pi_pos.le]
+    exact hy.integrableOn_Icc
+  simpa [uIcc_of_le Real.pi_pos.le] using
+    intervalIntegral.continuousOn_primitive_interval hi
+
+lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_forward_aux_rigidity_aux_pointwise_aux_representation_aux_regular_aux_ae_constant
+    (y dy : ℝ → ℝ) (h : apm_m98a06_InH10Pi y dy)
+    (hEL : ∀ φ : ℝ → ℝ, ContDiff ℝ ∞ φ → HasCompactSupport φ →
+      Function.support φ ⊆ Ioo (0 : ℝ) Real.pi →
+      (∫ x, dy x * deriv φ x ∂(volume.restrict (Ioo (0 : ℝ) Real.pi))) =
+        ∫ x, y x * φ x ∂(volume.restrict (Ioo (0 : ℝ) Real.pi))) :
+    ∃ m : ℝ, dy =ᵐ[volume.restrict (Ioo (0 : ℝ) Real.pi)]
+      fun x => m - ∫ t in (0 : ℝ)..x, y t := by
+  sorry
+
+lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_forward_aux_rigidity_aux_pointwise_aux_representation_aux_regular_aux_finish
+    (y dy : ℝ → ℝ) (h : apm_m98a06_InH10Pi y dy)
+    (hprim : ∀ x ∈ Icc (0 : ℝ) Real.pi,
+      y x = ∫ t in (0 : ℝ)..x, dy t)
+    (m : ℝ) (hae : dy =ᵐ[volume.restrict (Ioo (0 : ℝ) Real.pi)]
+      fun x => m - ∫ t in (0 : ℝ)..x, y t) :
+    ContDiffOn ℝ 1 y (Icc (0 : ℝ) Real.pi) ∧
+      ∀ x ∈ Icc (0 : ℝ) Real.pi,
+        derivWithin y (Icc 0 Real.pi) x + ∫ t in (0 : ℝ)..x, y t = m := by
+  sorry
+
 lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_forward_aux_rigidity_aux_pointwise_aux_representation_aux_regular
     (hFTC : apm_m98A06_WeakFTCFact) (y dy : ℝ → ℝ)
     (h : apm_m98a06_InH10Pi y dy)
@@ -2760,7 +2790,13 @@ lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_forward_aux
     ContDiffOn ℝ 1 y (Icc (0 : ℝ) Real.pi) ∧
       ∃ m : ℝ, ∀ x ∈ Icc (0 : ℝ) Real.pi,
         derivWithin y (Icc 0 Real.pi) x + ∫ t in (0 : ℝ)..x, y t = m := by
-  sorry
+  obtain ⟨m, hm⟩ :=
+    apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_forward_aux_rigidity_aux_pointwise_aux_representation_aux_regular_aux_ae_constant
+      y dy h hEL
+  obtain ⟨hy, hfirst⟩ :=
+    apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_forward_aux_rigidity_aux_pointwise_aux_representation_aux_regular_aux_finish
+      y dy h hprim m hm
+  exact ⟨hy, m, hfirst⟩
 
 lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_forward_aux_rigidity_aux_pointwise_aux_representation_aux_ode
     (y : ℝ → ℝ) (hy : ContDiffOn ℝ 1 y (Icc (0 : ℝ) Real.pi))
