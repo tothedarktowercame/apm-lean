@@ -22517,6 +22517,8 @@
   {:bounded-exception "Rule0 blueprint.",
    :consumer :t01A08,
    :stop-count 1,
+   :review-finding
+   "Blueprint B6 is false as written: a nonlinear B5 coordinate chart need not preserve convexity of kernel-fiber slices. Counterexample: s={(x,y)|y>=0}, Phi(x,y)=(y-x^2,x); Phi is a diffeomorphism with positive-rank first coordinate, but its slice at c<0 is {x|x^2>=-c}, nonconvex. Thus B6 cannot invoke the smaller closed-convex induction hypothesis. Repair by proving an extension theorem or strengthening induction to the actual nonconvex relative chart domains.",
    :evidence
    {:placeholder-delta {:t01A08 [1 1]},
     :residual
@@ -22547,12 +22549,18 @@
       :exit 128,
       :finding
       "Transient index.lock; verified absent, then commit succeeded."}],
+    :review
+    {:outcome :fail,
+     :seat "codex-11",
+     :job "invoke-1791865105627-8399-77969aa4",
+     :finding
+     "Blueprint B6 is false as written: a nonlinear B5 coordinate chart need not preserve convexity of kernel-fiber slices. Counterexample: s={(x,y)|y>=0}, Phi(x,y)=(y-x^2,x); Phi is a diffeomorphism with positive-rank first coordinate, but its slice at c<0 is {x|x^2>=-c}, nonconvex. Thus B6 cannot invoke the smaller closed-convex induction hypothesis. Repair by proving an extension theorem or strengthening induction to the actual nonconvex relative chart domains."},
     :commit "b288b8c6ff3649abd872df8bd07adc056fc818bb",
     :changed-paths
     ["ConstructionTargets/SardConvexDomain.blueprint.md"],
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :repair,
    :scope ["ConstructionTargets/SardConvexDomain.blueprint.md"],
    :dag-node "TOPOLOGY-ROUTES.md/t01A08/corners-sard",
    :acceptance
@@ -22564,6 +22572,7 @@
    :id :r-a08-sard-blueprint-1,
    :kind :documentation,
    :area "sard-convex-domain",
+   :fail-count 1,
    :depends-on [:r-a08-agg-3 :r-topo3-cp4b],
    :current-residual "Review blueprint, then elect B1.",
    :other-consumers []}
