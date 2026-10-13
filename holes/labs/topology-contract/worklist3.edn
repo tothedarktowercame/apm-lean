@@ -22088,11 +22088,87 @@
     :routes-2026-10-10-topo3-seed-checkpoint-2-r2],
    :current-residual "R.",
    :other-consumers []}
+  {:bounded-exception "Rule0 split.",
+   :consumer :t01A08,
+   :implements-lemma
+   :lemma-constructiontargets-sardconvexdomain-modelrange-withincriticalimage-subset-inter,
+   :phase :implementation,
+   :state :open,
+   :scope ["ConstructionTargets/SardConvexDomain.lean"],
+   :dag-node "TOPOLOGY-ROUTES.md/t01A08/corners-sard",
+   :acceptance
+   {:declaration
+    "ConstructionTargets.SardConvexDomain.modelRange_withinCriticalImage_subset_interior_union_frontier",
+    :type "exact type in fixture",
+    :fixture "/tmp/t01a08_critical_image_split.lean",
+    :fixture-sha256
+    "33874a1d76a652a444b1e6f37486b9edcfc5d4a037d0743d65926c7895952863",
+    :placeholder "t01A08 sorry",
+    :route-step
+    "split critical image into interior and frontier images"},
+   :id :r-t01a08-corners-split-1,
+   :kind :reusable-theorem,
+   :area "sard-convex-domain",
+   :depends-on
+   [:routes-2026-10-12-t01a08-interior-r1 :r-t01a08-boundary-2],
+   :current-residual
+   "Prove frontier-image nullity by corner strata; source nullity is insufficient.",
+   :other-consumers []}
   {:bounded-exception "Rule0 final prerequisite.",
    :consumer :t01A08,
    :implements-lemma :lemma-sard-corners,
+   :evidence
+   {:probe
+    {:residual "Promote split; then frontier-image Sard.",
+     :outcome :revise,
+     :missing-theorems
+     [{:name
+       "ConstructionTargets.SardConvexDomain.modelRange_withinCriticalImage_subset_interior_union_frontier",
+       :type "exact type in fixture",
+       :status :proved,
+       :consumers [:t01A08],
+       :depends-on
+       ["ConstructionTargets.SardGeneralModel.modelRange_interior_surjective_fderivWithin_iff"],
+       :area "sard-convex-domain"}],
+     :prerequisite
+     {:bounded-exception "Rule0 split.",
+      :consumer :t01A08,
+      :implements-lemma :lemma-sard-corners-split,
+      :phase :implementation,
+      :state :open,
+      :scope ["ConstructionTargets/SardConvexDomain.lean"],
+      :dag-node "TOPOLOGY-ROUTES.md/t01A08/corners-sard",
+      :acceptance
+      {:declaration
+       "ConstructionTargets.SardConvexDomain.modelRange_withinCriticalImage_subset_interior_union_frontier",
+       :type "exact type in fixture",
+       :fixture "/tmp/t01a08_critical_image_split.lean",
+       :fixture-sha256
+       "33874a1d76a652a444b1e6f37486b9edcfc5d4a037d0743d65926c7895952863",
+       :placeholder "t01A08 sorry",
+       :route-step
+       "split critical image into interior and frontier images"},
+      :id :r-t01a08-corners-split-1,
+      :kind :reusable-theorem,
+      :area "sard-convex-domain",
+      :depends-on
+      [:routes-2026-10-12-t01a08-interior-r1 :r-t01a08-boundary-2],
+      :current-residual
+      "Prove frontier-image nullity by corner strata; source nullity is insufficient.",
+      :other-consumers []},
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
+     :commands
+     [{:cmd
+       "lake env lean /tmp/t01a08_critical_image_split.lean && sha256sum /tmp/t01a08_critical_image_split.lean && python3 scripts/statement-registry.py check",
+       :exit 0}],
+     :diagnostic-history [{:exit 1, :correction "qualification"}],
+     :fixture
+     {:path "/tmp/t01a08_critical_image_split.lean",
+      :sha256
+      "33874a1d76a652a444b1e6f37486b9edcfc5d4a037d0743d65926c7895952863"},
+     :seat "topo-12"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t01A08/corners-sard",
    :acceptance
@@ -22106,7 +22182,10 @@
    :id :r-t01a08-corners-1,
    :kind :reusable-theorem,
    :area "sard-convex-domain",
-   :depends-on [:r-t01a08-boundary-2 :r-topo3-checkpoint-2],
+   :depends-on
+   [:r-t01a08-boundary-2
+    :r-topo3-checkpoint-2
+    :r-t01a08-corners-split-1],
    :current-residual "Then closure.",
    :other-consumers []}
   {:consumer :portfolio,
@@ -31667,7 +31746,28 @@
    :kind :lemma,
    :depends-on
    [:lemma-constructiontargets-surfaceschoenflies-embeddedcirclelocallyflat-of-zerosection-],
-   :other-consumers [:t01J01 :t03J02]}],
+   :other-consumers [:t01J01 :t03J02]}
+  {:consumer :t01A08,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.SardConvexDomain.modelRange_withinCriticalImage_subset_interior_union_frontier",
+    :type "exact type in fixture"},
+   :lemma
+   {:name
+    "ConstructionTargets.SardConvexDomain.modelRange_withinCriticalImage_subset_interior_union_frontier",
+    :reported-by [:r-t01a08-corners-1],
+    :type "exact type in fixture",
+    :area "sard-convex-domain",
+    :proved-in :r-t01a08-corners-1},
+   :id
+   :lemma-constructiontargets-sardconvexdomain-modelrange-withincriticalimage-subset-inter,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-sardgeneralmodel-modelrange-interior-surjective-fderivwithin],
+   :other-consumers []}],
  :consumer-baselines {},
  :statuses
  #{:open
