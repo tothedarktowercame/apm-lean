@@ -517,7 +517,25 @@ theorem apm_t97J05_xCharts_exist
 theorem apm_t97J05_xCharts_isManifold (hc : apm_t97J05_HasXCharts) :
     letI := apm_t97J05_xChartedSpace hc
     IsManifold (𝓘(ℝ, apm_t97J05_R1)) (⊤ : ℕ∞) apm_t97J05_W := by
-  sorry
+  letI := apm_t97J05_xChartedSpace hc
+  apply isManifold_of_contDiffOn
+  intro c c' hcmem hc'mem
+  rcases hcmem with ⟨q, rfl⟩
+  rcases hc'mem with ⟨q', rfl⟩
+  let cq := Classical.choose (hc q)
+  let cq' := Classical.choose (hc q')
+  have hq := Classical.choose_spec (hc q)
+  have hq' := Classical.choose_spec (hc q')
+  apply contDiffOn_id.congr
+  intro t ht
+  have httrans : t ∈ (cq.symm ≫ₕ cq').source := by
+    simpa only [mfld_simps] using ht.1
+  have ht_target : t ∈ cq.target := httrans.1
+  have hsymm_source : cq.symm t ∈ cq'.source := httrans.2
+  have hcq' := hq'.2.1 (cq.symm t) hsymm_source
+  have hcq := hq.2.1 (cq.symm t) (cq.symm.map_source ht_target)
+  have hleft : cq (cq.symm t) = t := cq.right_inv ht_target
+  simpa only [mfld_simps, cq, cq'] using hcq'.trans (hcq.symm.trans hleft)
 
 /-- Seat: in the chart at `q` the inclusion reads `t ↦ (t 0, q 1, 1 / t 0)`,
 smooth on the target (where `t 0 ≠ 0`) with derivative `h ↦ (h 0, 0, -h 0 / t 0²)`,
