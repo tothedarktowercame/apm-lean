@@ -455,83 +455,6 @@ lemma apm_m02J05_lux_sublevel_attained_aux_core_aux_nonempty
         (1 / M) * A ≤ (1 / M) * M := mul_le_mul_of_nonneg_left hAM (by positivity)
         _ = 1 := by field_simp
 
-lemma apm_m02J05_lux_sublevel_attained_aux_core_aux_attained
-    (α : ℝ → ℝ)
-    (hc : ContinuousOn α (Ici 0))
-    (hmono : StrictMonoOn α (Ici 0))
-    (hzero : α 0 = 0)
-    (hinfty : Tendsto α atTop atTop)
-    (hnonneg : ∀ t, 0 ≤ t → 0 ≤ α t)
-    (u : apm_m02J05_Fun) (hu : u ∈ apm_m02J05_L α)
-    (hu0 : u ≠ 0) :
-    apm_m02J05_lux α u ∈ apm_m02J05_luxSublevel α u := by
-  sorry
-
-lemma apm_m02J05_lux_sublevel_attained_aux_core
-    (α : ℝ → ℝ)
-    (hc : ContinuousOn α (Ici 0))
-    (hmono : StrictMonoOn α (Ici 0))
-    (hzero : α 0 = 0)
-    (hinfty : Tendsto α atTop atTop)
-    (hnonneg : ∀ t, 0 ≤ t → 0 ≤ α t) :
-    ∀ u ∈ apm_m02J05_L α,
-      (apm_m02J05_luxSublevel α u).Nonempty ∧
-      BddBelow (apm_m02J05_luxSublevel α u) ∧
-      0 ≤ apm_m02J05_lux α u ∧
-      (u ≠ 0 → apm_m02J05_lux α u ∈ apm_m02J05_luxSublevel α u) := by
-  intro u hu
-  have hne := apm_m02J05_lux_sublevel_attained_aux_core_aux_nonempty
-    α hc hmono hzero hinfty hnonneg u hu
-  exact ⟨hne, apm_m02J05_lux_sublevel_attained_aux_bdd α u,
-    apm_m02J05_lux_sublevel_attained_aux_nonneg α u hne,
-    apm_m02J05_lux_sublevel_attained_aux_core_aux_attained
-      α hc hmono hzero hinfty hnonneg u hu⟩
-
-theorem apm_m02J05_lux_sublevel_attained
-    (α : ℝ → ℝ)
-    (hc : ContinuousOn α (Ici 0))
-    (hmono : StrictMonoOn α (Ici 0))
-    (hzero : α 0 = 0)
-    (hinfty : Tendsto α atTop atTop)
-    (hnonneg : ∀ t, 0 ≤ t → 0 ≤ α t) :
-    ∀ u ∈ apm_m02J05_L α,
-      (apm_m02J05_luxSublevel α u).Nonempty ∧
-      BddBelow (apm_m02J05_luxSublevel α u) ∧
-      0 ≤ apm_m02J05_lux α u ∧
-      (u ≠ 0 → apm_m02J05_lux α u ∈ apm_m02J05_luxSublevel α u) := by
-  exact apm_m02J05_lux_sublevel_attained_aux_core α hc hmono hzero hinfty hnonneg
-
-lemma apm_m02J05_lux_definite_aux_zero
-    (α : ℝ → ℝ) : apm_m02J05_lux α (0 : apm_m02J05_Fun) = 0 := by
-  unfold apm_m02J05_lux
-  rw [show {c : ℝ | 0 < c ∧
-      IntegrableOn (fun x ↦ apm_m02J05_young α
-        (|(0 : apm_m02J05_Fun) x| / c)) (Icc (0 : ℝ) 1) volume ∧
-      ∫ x in Icc (0 : ℝ) 1,
-        apm_m02J05_young α (|(0 : apm_m02J05_Fun) x| / c) ∂volume ≤ 1} =
-      Ioi 0 by
-    ext c
-    simp only [mem_setOf_eq, mem_Ioi]
-    constructor
-    · exact fun h => h.1
-    · intro hc
-      refine ⟨hc, ?_, ?_⟩
-      · apply integrableOn_zero.congr
-        filter_upwards [AEEqFun.coeFn_zero (α := ℝ) (β := ℝ)
-          (μ := volume.restrict (Icc (0 : ℝ) 1))] with x hx
-        rw [hx]
-        simp [apm_m02J05_young_zero]
-      · have heq : (fun x ↦ apm_m02J05_young α
-            (|(0 : apm_m02J05_Fun) x| / c)) =ᵐ[volume.restrict (Icc (0 : ℝ) 1)]
-            (fun _ => 0) := by
-          filter_upwards [AEEqFun.coeFn_zero (α := ℝ) (β := ℝ)
-            (μ := volume.restrict (Icc (0 : ℝ) 1))] with x hx
-          rw [hx]
-          simp [apm_m02J05_young_zero]
-        rw [MeasureTheory.integral_congr_ae heq]
-        simp]
-  exact csInf_Ioi
-
 lemma apm_m02J05_lux_definite_aux_nonzero_aux_young_lower
     (α : ℝ → ℝ) (hc : ContinuousOn α (Ici 0))
     (hmono : StrictMonoOn α (Ici 0))
@@ -636,6 +559,134 @@ lemma apm_m02J05_lux_definite_aux_nonzero
     apm_m02J05_lux α u ≠ 0 := by
   exact apm_m02J05_lux_definite_aux_nonzero_aux_core α hc hmono hzero hinfty hnonneg
     u hu hu0
+
+lemma apm_m02J05_lux_sublevel_attained_aux_core_aux_attained_aux_bounds
+    (α : ℝ → ℝ)
+    (hc : ContinuousOn α (Ici 0))
+    (hmono : StrictMonoOn α (Ici 0))
+    (hzero : α 0 = 0)
+    (hinfty : Tendsto α atTop atTop)
+    (hnonneg : ∀ t, 0 ≤ t → 0 ≤ α t)
+    (u : apm_m02J05_Fun) (hu : u ∈ apm_m02J05_L α) :
+    (apm_m02J05_luxSublevel α u).Nonempty ∧
+      BddBelow (apm_m02J05_luxSublevel α u) ∧
+      0 ≤ apm_m02J05_lux α u ∧
+      ∀ c ∈ apm_m02J05_luxSublevel α u, apm_m02J05_lux α u ≤ c := by
+  have hne := apm_m02J05_lux_sublevel_attained_aux_core_aux_nonempty
+    α hc hmono hzero hinfty hnonneg u hu
+  have hb := apm_m02J05_lux_sublevel_attained_aux_bdd α u
+  refine ⟨hne, hb, apm_m02J05_lux_sublevel_attained_aux_nonneg α u hne, ?_⟩
+  intro c hcsub
+  exact csInf_le hb hcsub
+
+/-- Coercivity at zero: a nonzero a.e.-class has strictly positive Luxemburg
+gauge because `α → ∞`, hence its Young primitive diverges along every set on
+which `|u|` is bounded below by a positive constant. -/
+lemma apm_m02J05_lux_sublevel_attained_aux_core_aux_attained_aux_pos
+    (α : ℝ → ℝ)
+    (hc : ContinuousOn α (Ici 0))
+    (hmono : StrictMonoOn α (Ici 0))
+    (hzero : α 0 = 0)
+    (hinfty : Tendsto α atTop atTop)
+    (hnonneg : ∀ t, 0 ≤ t → 0 ≤ α t)
+    (u : apm_m02J05_Fun) (hu : u ∈ apm_m02J05_L α) (hu0 : u ≠ 0) :
+    0 < apm_m02J05_lux α u := by
+  exact lt_of_le_of_ne (apm_m02J05_lux_sublevel_attained_aux_core_aux_attained_aux_bounds α hc hmono hzero hinfty hnonneg u hu).2.2.1
+    (apm_m02J05_lux_definite_aux_nonzero α hc hmono hzero hinfty hnonneg u hu hu0).symm
+
+/-- Sequential closedness of the modular sublevel at its positive infimum,
+using monotone convergence for `young (|u| / cₙ)` as `cₙ ↓ sInf`. -/
+lemma apm_m02J05_lux_sublevel_attained_aux_core_aux_attained_aux_closed
+    (α : ℝ → ℝ)
+    (hc : ContinuousOn α (Ici 0))
+    (hmono : StrictMonoOn α (Ici 0))
+    (hzero : α 0 = 0)
+    (hinfty : Tendsto α atTop atTop)
+    (hnonneg : ∀ t, 0 ≤ t → 0 ≤ α t)
+    (u : apm_m02J05_Fun) (hu : u ∈ apm_m02J05_L α)
+    (hpos : 0 < apm_m02J05_lux α u) :
+    apm_m02J05_lux α u ∈ apm_m02J05_luxSublevel α u := by
+  sorry
+
+lemma apm_m02J05_lux_sublevel_attained_aux_core_aux_attained
+    (α : ℝ → ℝ)
+    (hc : ContinuousOn α (Ici 0))
+    (hmono : StrictMonoOn α (Ici 0))
+    (hzero : α 0 = 0)
+    (hinfty : Tendsto α atTop atTop)
+    (hnonneg : ∀ t, 0 ≤ t → 0 ≤ α t)
+    (u : apm_m02J05_Fun) (hu : u ∈ apm_m02J05_L α)
+    (hu0 : u ≠ 0) :
+    apm_m02J05_lux α u ∈ apm_m02J05_luxSublevel α u := by
+  apply apm_m02J05_lux_sublevel_attained_aux_core_aux_attained_aux_closed
+    α hc hmono hzero hinfty hnonneg u hu
+  exact apm_m02J05_lux_sublevel_attained_aux_core_aux_attained_aux_pos
+    α hc hmono hzero hinfty hnonneg u hu hu0
+
+lemma apm_m02J05_lux_sublevel_attained_aux_core
+    (α : ℝ → ℝ)
+    (hc : ContinuousOn α (Ici 0))
+    (hmono : StrictMonoOn α (Ici 0))
+    (hzero : α 0 = 0)
+    (hinfty : Tendsto α atTop atTop)
+    (hnonneg : ∀ t, 0 ≤ t → 0 ≤ α t) :
+    ∀ u ∈ apm_m02J05_L α,
+      (apm_m02J05_luxSublevel α u).Nonempty ∧
+      BddBelow (apm_m02J05_luxSublevel α u) ∧
+      0 ≤ apm_m02J05_lux α u ∧
+      (u ≠ 0 → apm_m02J05_lux α u ∈ apm_m02J05_luxSublevel α u) := by
+  intro u hu
+  have hne := apm_m02J05_lux_sublevel_attained_aux_core_aux_nonempty
+    α hc hmono hzero hinfty hnonneg u hu
+  exact ⟨hne, apm_m02J05_lux_sublevel_attained_aux_bdd α u,
+    apm_m02J05_lux_sublevel_attained_aux_nonneg α u hne,
+    apm_m02J05_lux_sublevel_attained_aux_core_aux_attained
+      α hc hmono hzero hinfty hnonneg u hu⟩
+
+theorem apm_m02J05_lux_sublevel_attained
+    (α : ℝ → ℝ)
+    (hc : ContinuousOn α (Ici 0))
+    (hmono : StrictMonoOn α (Ici 0))
+    (hzero : α 0 = 0)
+    (hinfty : Tendsto α atTop atTop)
+    (hnonneg : ∀ t, 0 ≤ t → 0 ≤ α t) :
+    ∀ u ∈ apm_m02J05_L α,
+      (apm_m02J05_luxSublevel α u).Nonempty ∧
+      BddBelow (apm_m02J05_luxSublevel α u) ∧
+      0 ≤ apm_m02J05_lux α u ∧
+      (u ≠ 0 → apm_m02J05_lux α u ∈ apm_m02J05_luxSublevel α u) := by
+  exact apm_m02J05_lux_sublevel_attained_aux_core α hc hmono hzero hinfty hnonneg
+
+lemma apm_m02J05_lux_definite_aux_zero
+    (α : ℝ → ℝ) : apm_m02J05_lux α (0 : apm_m02J05_Fun) = 0 := by
+  unfold apm_m02J05_lux
+  rw [show {c : ℝ | 0 < c ∧
+      IntegrableOn (fun x ↦ apm_m02J05_young α
+        (|(0 : apm_m02J05_Fun) x| / c)) (Icc (0 : ℝ) 1) volume ∧
+      ∫ x in Icc (0 : ℝ) 1,
+        apm_m02J05_young α (|(0 : apm_m02J05_Fun) x| / c) ∂volume ≤ 1} =
+      Ioi 0 by
+    ext c
+    simp only [mem_setOf_eq, mem_Ioi]
+    constructor
+    · exact fun h => h.1
+    · intro hc
+      refine ⟨hc, ?_, ?_⟩
+      · apply integrableOn_zero.congr
+        filter_upwards [AEEqFun.coeFn_zero (α := ℝ) (β := ℝ)
+          (μ := volume.restrict (Icc (0 : ℝ) 1))] with x hx
+        rw [hx]
+        simp [apm_m02J05_young_zero]
+      · have heq : (fun x ↦ apm_m02J05_young α
+            (|(0 : apm_m02J05_Fun) x| / c)) =ᵐ[volume.restrict (Icc (0 : ℝ) 1)]
+            (fun _ => 0) := by
+          filter_upwards [AEEqFun.coeFn_zero (α := ℝ) (β := ℝ)
+            (μ := volume.restrict (Icc (0 : ℝ) 1))] with x hx
+          rw [hx]
+          simp [apm_m02J05_young_zero]
+        rw [MeasureTheory.integral_congr_ae heq]
+        simp]
+  exact csInf_Ioi
 
 theorem apm_m02J05_lux_definite
     (α : ℝ → ℝ)
