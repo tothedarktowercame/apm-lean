@@ -616,6 +616,74 @@ theorem apm_m98a04_translateReflectStageLocal_continuousAt {n : ℕ}
 /-- Shared topology fact 2: directional difference quotients of reflected
 translations converge in the same fixed compact-support stage. -/
 -- BEGIN SEAT AREA
+noncomputable def apm_m98a04_translateReflectStageLocal_difference_quotient_aux_reflect
+    {n : ℕ} (φ : apm_m98a04_TF n) : apm_m98a04_TF n :=
+  TestFunction.mk (fun y => φ (-y))
+    (φ.contDiff.comp contDiff_neg)
+    (φ.hasCompactSupport.comp_homeomorph (Homeomorph.neg _))
+    (by simp)
+
+lemma apm_m98a04_translateReflectStageLocal_difference_quotient_aux_translate
+    {n : ℕ} (φ : apm_m98a04_TF n)
+    (x : EuclideanSpace ℝ (Fin n)) :
+    ConstructionTargets.TestFunctionTranslation.tftTranslate (-x)
+        (apm_m98a04_translateReflectStageLocal_difference_quotient_aux_reflect φ) =
+      apm_m98a04_translateReflect φ x := by
+  apply TestFunction.toTestFunctionClass.coe_injective'
+  funext y
+  simp [ConstructionTargets.TestFunctionTranslation.tftTranslate,
+    apm_m98a04_translateReflectStageLocal_difference_quotient_aux_reflect]
+  congr 1
+  abel
+
+lemma apm_m98a04_translateReflectStageLocal_difference_quotient_aux_local_to_test
+    {n : ℕ} (φ : apm_m98a04_TF n) (x₀ x : EuclideanSpace ℝ (Fin n))
+    (hx : x ∈ Metric.closedBall x₀ (1 : ℝ)) :
+    apm_m98a04_translationStageToTest φ x₀
+        (apm_m98a04_translateReflectStageLocal φ x₀ x) =
+      apm_m98a04_translateReflect φ x := by
+  simp only [apm_m98a04_translateReflectStageLocal, hx, dite_true]
+  exact apm_m98a04_ofSupportedIn_translateReflectStage φ x₀ ⟨x, hx⟩
+
+/-- The limit: differentiating the reflected function in direction `-v` and translating by
+`-x₀` is the reflected translate of the directional derivative `∑ vᵢ ∂ᵢ φ`. -/
+lemma apm_m98a04_translateReflectStageLocal_difference_quotient_aux_limit_eq
+    {n : ℕ} (φ : apm_m98a04_TF n) (x₀ v : EuclideanSpace ℝ (Fin n)) :
+    ConstructionTargets.TestFunctionTranslation.tftTranslate (-x₀)
+        (ConstructionTargets.TestFunctionTranslation.tftDirectional (-v) (apm_m98a04_translateReflectStageLocal_difference_quotient_aux_reflect φ)) =
+      apm_m98a04_translateReflect (apm_m98a04_directionalTF v φ) x₀ := by
+  apply TestFunction.toTestFunctionClass.coe_injective'
+  funext y
+  simp only [ConstructionTargets.TestFunctionTranslation.tftTranslate_apply,
+    ConstructionTargets.TestFunctionTranslation.tftDirectional_apply,
+    apm_m98a04_translateReflect_apply]
+  have hr : ⇑(apm_m98a04_translateReflectStageLocal_difference_quotient_aux_reflect φ) = fun z => φ (-z) := rfl
+  rw [hr]
+  have h1 := (φ.contDiff.differentiable (by simp) (x₀ - y)).hasFDerivAt
+  have h1' : HasFDerivAt (⇑φ) (fderiv ℝ (⇑φ) (x₀ - y)) (-(-x₀ + y)) := by
+    rw [show -(-x₀ + y) = x₀ - y by abel]; exact h1
+  have key := h1'.comp (-x₀ + y) (hasFDerivAt_id (-x₀ + y)).neg
+  rw [show (fun z => φ (-z)) = (⇑φ ∘ Neg.neg) from rfl, key.fderiv]
+  simp only [ContinuousLinearMap.comp_apply, ContinuousLinearMap.neg_apply,
+    ContinuousLinearMap.id_apply, neg_neg]
+  have hv : v = ∑ i, v i • EuclideanSpace.single i (1 : ℝ) := by
+    conv_lhs => rw [← (EuclideanSpace.basisFun (Fin n) ℝ).sum_repr v]
+    simp
+  simp [apm_m98a04_directionalTF, apm_m98a04_partialListTF_apply, apm_m98a04_partialList]
+  have hcoe : ∀ (w : EuclideanSpace ℝ (Fin n)),
+      (∑ x, v x • apm_m98a04_partialListTF [x] φ : apm_m98a04_TF n) w =
+        ∑ x, v x * apm_m98a04_partialListTF [x] φ w := by
+    intro w
+    change (TestFunction.coeFnAddMonoidHom (⊤ : Opens (EuclideanSpace ℝ (Fin n))) ℝ ⊤
+      (∑ x, v x • apm_m98a04_partialListTF [x] φ)) w = _
+    rw [map_sum, Finset.sum_apply]
+    rfl
+  rw [hcoe]
+  simp only [apm_m98a04_partialListTF_apply, apm_m98a04_partialList]
+  conv_lhs => rw [hv]
+  rw [map_sum]
+  simp only [map_smul, smul_eq_mul]
+
 theorem apm_m98a04_translateReflectStageLocal_difference_quotient {n : ℕ}
     (φ : apm_m98a04_TF n) (x₀ v : EuclideanSpace ℝ (Fin n)) :
     Tendsto (fun h : ℝ => apm_m98a04_translationStageToTest φ x₀
@@ -624,7 +692,19 @@ theorem apm_m98a04_translateReflectStageLocal_difference_quotient {n : ℕ}
       (nhdsWithin (0 : ℝ) ({0} : Set ℝ)ᶜ)
       (nhds (apm_m98a04_translateReflect
         (apm_m98a04_directionalTF v φ) x₀)) := by
-  sorry
+  have hlim := ConstructionTargets.TestFunctionTranslation.tftTranslate_difference_quotient
+    (apm_m98a04_translateReflectStageLocal_difference_quotient_aux_reflect φ) (-x₀) (-v)
+  rw [apm_m98a04_translateReflectStageLocal_difference_quotient_aux_limit_eq] at hlim
+  refine hlim.congr' ?_
+  have hc : Tendsto (fun h : ℝ => x₀ + h • v) (nhdsWithin (0 : ℝ) ({0} : Set ℝ)ᶜ) (nhds x₀) := by
+    have : ContinuousAt (fun h : ℝ => x₀ + h • v) 0 := by fun_prop
+    simpa using this.tendsto.mono_left nhdsWithin_le_nhds
+  filter_upwards [hc.eventually (Metric.closedBall_mem_nhds x₀ zero_lt_one)] with h hh
+  rw [map_smul, map_sub, apm_m98a04_translateReflectStageLocal_difference_quotient_aux_local_to_test φ x₀ _ hh,
+    apm_m98a04_translateReflectStageLocal_difference_quotient_aux_local_to_test φ x₀ _ (Metric.mem_closedBall_self zero_le_one),
+    ← apm_m98a04_translateReflectStageLocal_difference_quotient_aux_translate, ← apm_m98a04_translateReflectStageLocal_difference_quotient_aux_translate]
+  congr 3
+  rw [neg_add, smul_neg]
 -- END SEAT AREA
 
 /-- Scalar derivative extraction from an explicitly supplied fixed-stage
