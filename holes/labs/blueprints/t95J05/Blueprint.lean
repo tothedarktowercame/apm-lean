@@ -86,10 +86,17 @@ lemma t95J05_euclideanHausdorff_unitSphere_mass_aux_ambient_aux_toSphere :
     ring
   · positivity
 
+lemma t95J05_euclideanHausdorff_unitSphere_mass_aux_ambient_aux_compare_aux_coarea :
+    μHE[3] (Metric.sphere (0 : t95J05R4) 1) =
+      (4 : ENNReal) * volume (Metric.ball (0 : t95J05R4) 1) := by
+  sorry
+
 lemma t95J05_euclideanHausdorff_unitSphere_mass_aux_ambient_aux_compare :
     μHE[3] (Metric.sphere (0 : t95J05R4) 1) =
       volume.toSphere (Set.univ : Set t95J05SphereThree) := by
-  sorry
+  rw [t95J05_euclideanHausdorff_unitSphere_mass_aux_ambient_aux_compare_aux_coarea,
+    Measure.toSphere_apply_univ]
+  norm_num
 
 lemma t95J05_euclideanHausdorff_unitSphere_mass_aux_ambient :
     (μHE[3] (Metric.sphere (0 : t95J05R4) 1)).toReal =
