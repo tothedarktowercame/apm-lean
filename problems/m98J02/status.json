@@ -15,9 +15,9 @@
     "files": [
       "lean/Main.lean"
     ],
-    "sorry_count_main": 3,
+    "sorry_count_main": 0,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 3
+    "sorry_count_total": 0
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -31,7 +31,7 @@
   },
   "classification": "partial",
   "closer_hop": 3,
-  "boundary": "Compact-support closure under addition, zero, negation, subtraction, and scalar multiplication is proved, as is preservation of solvesT under addition of a homogeneous solution. Translated test functions y \u21a6 \u03c6 (x+y) are now constructed with smoothness and compact support. Remaining work requires a regular Distribution constructor, a cutoff test function, continuity of the iterated convolution pairing, differentiation through convolution, and a nonzero homogeneous witness.",
+  "boundary": "Compact-support closure under addition, zero, negation, subtraction, and scalar multiplication is proved, as is preservation of solvesT under addition of a homogeneous solution. Translated test functions y ↦ φ (x+y) are now constructed with smoothness and compact support. Remaining work requires a regular Distribution constructor, a cutoff test function, continuity of the iterated convolution pairing, differentiation through convolution, and a nonzero homogeneous witness.",
   "imported_at": "2026-07-13T17:26:55.971140Z",
   "sorry_audit": {
     "method": "lake env lean elaboration + comment-aware token count",
@@ -44,7 +44,7 @@
     {
       "areas": [],
       "areas_are": "necessary",
-      "missing": "[closer_hop] 3\n\n[boundary] Compact-support closure under addition, zero, negation, subtraction, and scalar multiplication is proved, as is preservation of solvesT under addition of a homogeneous solution. Translated test functions y \u21a6 \u03c6 (x+y) are now constructed with smoothness and compact support. Remaining work requires a regular Distribution constructor, a cutoff test function, continuity of the iterated convolution pairing, differentiation through convolution, and a nonzero homogeneous witness.",
+      "missing": "[closer_hop] 3\n\n[boundary] Compact-support closure under addition, zero, negation, subtraction, and scalar multiplication is proved, as is preservation of solvesT under addition of a homogeneous solution. Translated test functions y ↦ φ (x+y) are now constructed with smoothness and compact support. Remaining work requires a regular Distribution constructor, a cutoff test function, continuity of the iterated convolution pairing, differentiation through convolution, and a nonzero homogeneous witness.",
       "recorded_by": "codex-6",
       "frame": "phase-2d-adversarial-migration",
       "at_commit": "a00ea1f",
