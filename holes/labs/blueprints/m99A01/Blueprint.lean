@@ -394,7 +394,137 @@ theorem apm_m99A01_stationary_residual_zero
     (y : ℝ → ℝ) (hy2 : ContDiff ℝ 2 y) (hyadm : y ∈ apm_m99A01_admissible)
     (hystat : apm_m99A01_stationary y) :
     ∀ t ∈ Set.Ioo 0 (Real.pi / 2), apm_m99A01_residual y t = 0 := by
-  sorry
+  have hy1 : ContDiff ℝ 1 y := hy2.of_le (by norm_num)
+  have hyd1 : ContDiff ℝ 1 (deriv y) := hy2.deriv'
+  have hfirst : ∀ η : ℝ → ℝ, ContDiff ℝ 1 η → η 0 = 0 →
+      η (Real.pi / 2) = 0 →
+      ∫ t in (0 : ℝ)..(Real.pi / 2),
+        deriv y t * deriv η t + (y t + 1) * η t = 0 := by
+    intro η hη hη0 hηpi
+    let A := ∫ t in (0 : ℝ)..(Real.pi / 2),
+      deriv y t * deriv η t + (y t + 1) * η t
+    let B := ∫ t in (0 : ℝ)..(Real.pi / 2),
+      (deriv η t) ^ 2 + (η t) ^ 2
+    have hdη : ContDiff ℝ 0 (deriv η) := hη.deriv'
+    have hbase : IntervalIntegrable
+        (fun t ↦ deriv y t ^ 2 + y t ^ 2 + 2 * y t)
+        MeasureTheory.volume 0 (Real.pi / 2) :=
+      (((hyd1.continuous.pow 2).add (hy1.continuous.pow 2)).add
+        (continuous_const.mul hy1.continuous)).intervalIntegrable _ _
+    have hcross : IntervalIntegrable
+        (fun t ↦ deriv y t * deriv η t + (y t + 1) * η t)
+        MeasureTheory.volume 0 (Real.pi / 2) :=
+      ((hyd1.continuous.mul hdη.continuous).add
+        ((hy1.continuous.add continuous_const).mul hη.continuous)).intervalIntegrable _ _
+    have hsquare : IntervalIntegrable
+        (fun t ↦ deriv η t ^ 2 + η t ^ 2)
+        MeasureTheory.volume 0 (Real.pi / 2) :=
+      ((hdη.continuous.pow 2).add (hη.continuous.pow 2)).intervalIntegrable _ _
+    have hline : (fun s ↦ apm_m99A01_functional (fun t ↦ y t + s * η t)) =
+        fun s ↦ apm_m99A01_functional y + 2 * s * A + s ^ 2 * B := by
+      funext s
+      have hp : (fun t ↦
+          deriv (fun x ↦ y x + s * η x) t ^ 2 +
+            (y t + s * η t) ^ 2 + 2 * (y t + s * η t)) =
+          fun t ↦ (deriv y t ^ 2 + y t ^ 2 + 2 * y t) +
+            (2 * s) * (deriv y t * deriv η t + (y t + 1) * η t) +
+            s ^ 2 * ((deriv η t) ^ 2 + (η t) ^ 2) := by
+        funext t
+        have hsder : deriv (fun x ↦ s * η x) t = s * deriv η t :=
+          deriv_const_mul s (hη.differentiable (by norm_num) t)
+        have hd : deriv (fun x ↦ y x + s * η x) t =
+            deriv y t + s * deriv η t := by
+          change deriv (y + fun x ↦ s * η x) t = _
+          rw [deriv_add (hy1.differentiable (by norm_num) t)
+            ((hη.differentiable (by norm_num) t).const_mul s), hsder]
+        rw [hd]
+        ring
+      unfold apm_m99A01_functional
+      rw [hp, intervalIntegral.integral_add (hbase.add (hcross.const_mul (2 * s)))
+        (hsquare.const_mul (s ^ 2)),
+        intervalIntegral.integral_add hbase (hcross.const_mul (2 * s)),
+        intervalIntegral.integral_const_mul,
+        intervalIntegral.integral_const_mul]
+    have hs := hystat η hη hη0 hηpi
+    rw [hline] at hs
+    have hp : HasDerivAt
+        (fun s : ℝ ↦ apm_m99A01_functional y + 2 * s * A + s ^ 2 * B)
+        (2 * A) 0 := by
+      convert (((hasDerivAt_const (0 : ℝ) (apm_m99A01_functional y)).add
+        ((hasDerivAt_id (x := (0 : ℝ))).const_mul 2 |>.mul_const A)).add
+        (((hasDerivAt_id (x := (0 : ℝ))).pow 2).mul_const B)) using 1 <;>
+        norm_num [id] <;> ring
+    have : (2 : ℝ) * A = 0 := hp.unique hs
+    simpa [A] using (mul_eq_zero.mp this).resolve_left (by norm_num)
+  have hloc : MeasureTheory.LocallyIntegrableOn
+      (apm_m99A01_residual y) (Ioo 0 (Real.pi / 2)) MeasureTheory.volume := by
+    have hc : Continuous (apm_m99A01_residual y) := by
+      unfold apm_m99A01_residual
+      exact (hyd1.continuous_deriv (by norm_num) |>.sub hy1.continuous).sub continuous_const
+    exact (hc.locallyIntegrable (μ := MeasureTheory.volume)).locallyIntegrableOn _
+  have hae := isOpen_Ioo.ae_eq_zero_of_integral_contDiff_smul_eq_zero hloc
+    (fun g hg hgc hgs ↦ by
+      have hg1 : ContDiff ℝ 1 g := hg.of_le (by norm_num)
+      have hg0 : g 0 = 0 := by
+        by_contra hn
+        have hm : 0 ∈ tsupport g := subset_tsupport _ hn
+        exact (hgs hm).1.false
+      have hgb : g (Real.pi / 2) = 0 := by
+        by_contra hn
+        have hm : Real.pi / 2 ∈ tsupport g := subset_tsupport _ hn
+        exact (hgs hm).2.false
+      have hzero := hfirst g hg1 hg0 hgb
+      have hydd : ∀ x ∈ Set.uIcc (0 : ℝ) (Real.pi / 2),
+          HasDerivAt (deriv y) (deriv (deriv y) x) x := by
+        intro x hx
+        exact (hyd1.differentiable (by norm_num) x).hasDerivAt
+      have hgd : ∀ x ∈ Set.uIcc (0 : ℝ) (Real.pi / 2),
+          HasDerivAt g (deriv g x) x := by
+        intro x hx
+        exact (hg1.differentiable (by norm_num) x).hasDerivAt
+      have hyddint : IntervalIntegrable (deriv (deriv y)) MeasureTheory.volume
+          0 (Real.pi / 2) :=
+        (hyd1.continuous_deriv (by norm_num)).intervalIntegrable _ _
+      have hgdint : IntervalIntegrable (deriv g) MeasureTheory.volume
+          0 (Real.pi / 2) :=
+        (hg1.continuous_deriv (by norm_num)).intervalIntegrable _ _
+      have hibp := intervalIntegral.integral_mul_deriv_eq_deriv_mul
+        hydd hgd hyddint hgdint
+      rw [hg0, hgb] at hibp
+      simp only [mul_zero, sub_self] at hibp
+      have hi : ∫ t in (0 : ℝ)..(Real.pi / 2),
+          g t * apm_m99A01_residual y t = 0 := by
+        unfold apm_m99A01_residual
+        have hcongr : (fun t ↦ g t * (deriv (deriv y) t - y t - 1)) =
+            fun t ↦ deriv (deriv y) t * g t - (y t + 1) * g t := by
+          funext t
+          ring
+        have hleft : IntervalIntegrable (fun t ↦ deriv (deriv y) t * g t)
+            MeasureTheory.volume 0 (Real.pi / 2) :=
+          ((hyd1.continuous_deriv (by norm_num)).mul hg.continuous).intervalIntegrable _ _
+        have hright : IntervalIntegrable (fun t ↦ (y t + 1) * g t)
+            MeasureTheory.volume 0 (Real.pi / 2) :=
+          ((hy1.continuous.add continuous_const).mul hg.continuous).intervalIntegrable _ _
+        have hcross : IntervalIntegrable (fun t ↦ deriv y t * deriv g t)
+            MeasureTheory.volume 0 (Real.pi / 2) :=
+          (hyd1.continuous.mul (hg1.continuous_deriv (by norm_num))).intervalIntegrable _ _
+        rw [intervalIntegral.integral_add hcross hright] at hzero
+        rw [hcongr, intervalIntegral.integral_sub hleft hright]
+        linarith
+      rw [← intervalIntegral.integral_eq_integral_of_support_subset
+        (a := (0 : ℝ)) (b := Real.pi / 2)]
+      · simpa [smul_eq_mul] using hi
+      · intro x hx
+        have hgx : g x ≠ 0 := by
+          intro hz
+          exact hx (by simp [hz])
+        exact ⟨(hgs (subset_tsupport g hgx)).1,
+          (hgs (subset_tsupport g hgx)).2.le⟩)
+  apply apm_m99A01_eq_zero_on_Ioo_of_ae (apm_m99A01_residual y)
+  · unfold apm_m99A01_residual
+    exact (((hyd1.continuous_deriv (by norm_num)).sub hy1.continuous).sub
+      continuous_const).continuousOn
+  · exact hae
 
 theorem apm_m99A01_eqOn_extremal_of_residual_zero
     (y : ℝ → ℝ) (hy2 : ContDiff ℝ 2 y) (hyadm : y ∈ apm_m99A01_admissible)
