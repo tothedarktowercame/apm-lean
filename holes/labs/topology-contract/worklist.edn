@@ -113850,14 +113850,14 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "Recorded fixture hash mismatch: :fixture.sha256 is 0bca6ce32c019fc3053c7f813c26917169cf817375b44d5e722b864b61a526450c1, but ConstructionTargets/PointWedgeVanKampen.blueprint.md at recorded commit c9b3af27 has exact SHA-256 0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0. Re-record the fixture hash for the reviewed commit.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
    :evidence
    {:placeholder-delta {:source-before 0, :source-after 0},
     :residual
-    "Identify component cast with base transport; apply right square; then left counits, point-span, B6/B12.",
+    "Reduce component cast to base transport; right square, left counits, point-span, B6/B12.",
     :outcome :stop,
     :warnings ["existing linter"],
     :missing-theorems
@@ -113871,16 +113871,16 @@
       :area "fundamental-group-wedge-of-circles"}],
     :statement-hashes
     {:source
-     "85c0edd889426e7d76a8bdc20bca338fe1b5de999ff118c89e00de480d3defb2",
+     "7d5d039f86ce859b8e738a4ea50aed151b8e9c478023b8cd4ad1ea45f1a9cb0b",
      :documentation
-     "cc559e93c7a53e7ff05fe5361053de90db945353b54c277d1e35389affb5f650",
+     "ddce2b81a2ea16cad01d490cf95e0e7bfa4dd1235d4219f7b38c69299495524d",
      :blueprint
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0",
      :registry "131/131"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
-    :reason "Named the right span's constant-map equality.",
+    :reason "Right-span iso is eqToIso of the named mapped equality.",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/PointWedgeVanKampen.lean",
@@ -113890,14 +113890,14 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "diff/hash/placeholders", :exit 0}],
     :diagnostic-history
-    [{:cmd "lean component equality",
+    [{:cmd "component reduction",
       :exit 1,
-      :finding "Cast remains; named its source."}
+      :finding "Cast remained; named its functor equality."}
      {:cmd
       "lake build ConstructionTargets.ThreeCirclesFundamentalGroup",
       :exit 1,
       :finding "B12 absent."}],
-    :commit "c2fd89d590682ed85cc2d948738385637852516b",
+    :commit "47f0c698b34af93f2257a4c8ef9b4ce71ab141e4",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
      "ConstructionTargets/PointWedgeVanKampen.md"],
@@ -113907,7 +113907,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
