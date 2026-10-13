@@ -113895,6 +113895,17 @@
       "lake build ConstructionTargets.ThreeCirclesFundamentalGroup",
       :exit 1,
       :finding "B12 file absent."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791911829948-10093-e98f189b",
+     :commands
+     ["git show/diff-tree abddc9780b"
+      "git archive abddc9780b; lake env lean archived PointWedgeVanKampen.lean"
+      "lake build ConstructionTargets.PointWedgeVanKampen"
+      "sha256sum; placeholder delta; statement-registry.py check"],
+     :finding
+     "Recorded scope is exactly target+note; source/doc/fixture hashes match 3fba88ca/47aa13c9/0bca6ce3. Archived and target builds pass; placeholders 0->0, registry 150/150, standard axioms only. Transport orientation is correct: h.1 enters the inverse counit source, inv counit reaches the round-trip source, and h.2.symm lands at the inverse-span target. This is compiled progress beyond the endpoint milestone; homogeneous middle equality, projection/B6/B12 remain."},
     :commit "abddc9780baf5b0bc5308c53f23d36c5ec69b36d",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
@@ -113905,7 +113916,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113926,7 +113937,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Both exact endpoint equalities for the remaining middle-component comparison are banked.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: The inverse round-trip is transported into the exact inverse-span hom-set.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -114726,7 +114737,11 @@
     {:job 1,
      :commit "f55f412737e40a5c45a81e98254bf97a19b59d92",
      :reason
-     "Both exact endpoint equalities for the remaining middle-component comparison are banked."}]}
+     "Both exact endpoint equalities for the remaining middle-component comparison are banked."}
+    {:job 2,
+     :commit "abddc9780baf5b0bc5308c53f23d36c5ec69b36d",
+     :reason
+     "The inverse round-trip is transported into the exact inverse-span hom-set."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
