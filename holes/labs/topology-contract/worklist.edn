@@ -118932,9 +118932,55 @@
    :depends-on [:lemma-apm-t91j06-bridge-compatible-stage-coordinates],
    :other-consumers []}
   {:consumer :t00J02,
-   :stop-count 0,
+   :stop-count 1,
+   :evidence
+   {:placeholder-delta {:source-before 1, :source-after 1},
+    :residual
+    "Implement local-fundamental-class stage; then signed-count stages and consumer assembly.",
+    :outcome :stop,
+    :warnings
+    ["existing fixture/Main sorryAx"
+     "unrelated dirty t93J03 files preserved"],
+    :missing-theorems
+    [{:name "t00J02_transverse_diskBounded_topHomologyMap_eq_zero",
+      :type
+      "transverse disk-bounded preimage implies induced H₂ map is zero",
+      :status :not-started,
+      :consumers [:t00J02],
+      :depends-on
+      ["surfaceTopHomology_localFundamentalClassIso"
+       "regularValue_topHomologyMap_signedCount"
+       "transverseCircle_preimage_component_signedCount"
+       "circleDegree_eq_homologyMap"],
+      :area "oriented-surface-degree"}],
+    :statement-hashes
+    {:source
+     "0b3b4888807bfa06c8d60d86829b75776394ea8aa45a98c933c087165521f923",
+     :documentation
+     "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984",
+     :blueprint
+     "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984",
+     :registry "166/166"},
+    :disposition :stop,
+    :axioms ["propext" "sorryAx" "Classical.choice" "Quot.sound"],
+    :author "topo-2",
+    :reason "Blueprint written.",
+    :commands
+    [{:cmd "diff audited/target blueprint", :exit 0}
+     {:cmd "lake env lean holes/labs/blueprints/t00J02/Blueprint.lean",
+      :exit 0}
+     {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd "sha256/diff-tree/placeholders", :exit 0}],
+    :commit "7d9f683de2d6d5ad371b9c3bd59cdf0d3220b4a9",
+    :changed-paths ["ConstructionTargets/t00J02Closure.blueprint.md"],
+    :fixture
+    {:path "ConstructionTargets/t00J02Closure.blueprint.md",
+     :sha256
+     "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
+    :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119017,6 +119063,74 @@
    :fail-count 0,
    :depends-on [],
    :program true,
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t00J02_transverse_diskBounded_topHomologyMap_eq_zero",
+    :type
+    "transverse disk-bounded preimage implies induced H₂ map is zero"},
+   :lemma
+   {:name "t00J02_transverse_diskBounded_topHomologyMap_eq_zero",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type
+    "transverse disk-bounded preimage implies induced H₂ map is zero",
+    :area "oriented-surface-degree"},
+   :id :lemma-t00j02-transverse-diskbounded-tophomologymap-eq-zero,
+   :kind :lemma,
+   :depends-on
+   [:lemma-surfacetophomology-localfundamentalclassiso
+    :lemma-regularvalue-tophomologymap-signedcount
+    :lemma-transversecircle-preimage-component-signedcount
+    :lemma-circledegree-eq-homologymap],
+   :other-consumers []}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance {:lemma "surfaceTopHomology_localFundamentalClassIso"},
+   :lemma
+   {:name "surfaceTopHomology_localFundamentalClassIso",
+    :reported-by []},
+   :id :lemma-surfacetophomology-localfundamentalclassiso,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance {:lemma "regularValue_topHomologyMap_signedCount"},
+   :lemma
+   {:name "regularValue_topHomologyMap_signedCount", :reported-by []},
+   :id :lemma-regularvalue-tophomologymap-signedcount,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "transverseCircle_preimage_component_signedCount"},
+   :lemma
+   {:name "transverseCircle_preimage_component_signedCount",
+    :reported-by []},
+   :id :lemma-transversecircle-preimage-component-signedcount,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance {:lemma "circleDegree_eq_homologyMap"},
+   :lemma {:name "circleDegree_eq_homologyMap", :reported-by []},
+   :id :lemma-circledegree-eq-homologymap,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
