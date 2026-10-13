@@ -569,6 +569,20 @@ theorem isCompact_image_criticalPoints
       (isOpen_regularPoints f hf).isClosed_compl
   exact hclosed.isCompact.image hf.continuous
 
+/-- If one target coordinate vanishes on the range of a continuous linear
+map into Euclidean space, that map is not surjective.  This is the final
+linear-algebra contradiction in blueprint B5. -/
+theorem not_surjective_of_coordinate_eq_zero
+    {m n : ℕ} (L : EuclideanModel m →L[ℝ] EuclideanModel n)
+    (i : Fin n) (hzero : ∀ v, L v i = 0) :
+    ¬ Function.Surjective L := by
+  intro hsurj
+  obtain ⟨v, hv⟩ := hsurj (EuclideanSpace.single i 1)
+  have hi := congrArg (fun w : EuclideanModel n ↦ w i) hv
+  change L v i = (EuclideanSpace.single i 1 : EuclideanModel n) i at hi
+  rw [hzero v] at hi
+  simp at hi
+
 end t97A07Closure
 
 #print axioms t97A07Closure.isOpen_setOf_surjective_clm
@@ -592,3 +606,4 @@ end t97A07Closure
 #print axioms t97A07Closure.surjective_mfderiv_of_surjective_inTangentCoordinates
 #print axioms t97A07Closure.isOpen_regularPoints
 #print axioms t97A07Closure.isCompact_image_criticalPoints
+#print axioms t97A07Closure.not_surjective_of_coordinate_eq_zero

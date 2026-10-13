@@ -214,6 +214,12 @@ and the extended-chart derivative equivalences
 
 status: planned
 
+Compiled progress: `not_surjective_of_coordinate_eq_zero` proves the final
+linear-algebra step: a map whose `i`th coordinate vanishes on its entire
+range cannot hit the `i`th Euclidean basis vector.  The remaining B5 work is
+to transfer the global coordinate maximum into the fixed source chart and
+prove that the derivative of that scalar chart representative is zero.
+
 Transfer the global maximum to a local maximum of the scalar-valued fixed
 chart representative `z ↦ (f ((extChartAt _ x).symm z)) i`.  Its Fréchet
 derivative at the chart centre is zero.  The chain rule identifies this
