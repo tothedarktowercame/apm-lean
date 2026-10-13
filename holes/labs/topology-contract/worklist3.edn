@@ -24430,7 +24430,7 @@
    :consumer :t01A08,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 0,
    :review-finding
    "extend Mathlib: state and prove the missing theorem in scope",
    :implements-lemma :lemma-closedset-whitneycubecover,
@@ -24475,6 +24475,17 @@
     [{:cmd "build",
       :exit 1,
       :correction "fixed orientation and empty case"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791913847668-10164-ceb63e3c",
+     :commands
+     ["git show/diff 2737bac; scope/finiteness checks"
+      "sha256sum + lake env lean frozen fixture"
+      "lake build ConstructionTargets.SardConvexDomain"
+      "statement registry check; forbidden-count scan"],
+     :finding
+     "PASS. Recorded topo-10 commit 2737bac changes only the scoped Lean file and correctly proves finite half-ball incidence. Each fixed-scale fiber injects into separated centers in a compact scale-sized ball; one incident index bounds all others to the five integer strata k-2..k+2, whose finite union contains the incidence set; empty incidence is handled. Fixture hash 8090bfa6... matches; build/fixture pass; registry 150/150; forbidden placeholders stay 0; only standard axioms. Valid compiled B3 progress; STOP leaves ambient local finiteness and assembly."},
     :commit "2737bacf200d2e73dcb945cb7a9e25145fae8414",
     :changed-paths ["ConstructionTargets/SardConvexDomain.lean"],
     :fixture
@@ -24484,7 +24495,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain.blueprint/B3",
    :acceptance
@@ -35918,7 +35929,7 @@
    :other-consumers []}
   {:consumer :t01A08,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -35932,7 +35943,9 @@
     :type
     "[ProperSpace E] (s) (x) : {i | x in ball i.center (infDist i.center s/2)}.Finite",
     :area "sard-convex-domain",
-    :proved-in :r-a08-sard-b3-whitney-cubes-1},
+    :proved-in :r-a08-sard-b3-whitney-cubes-1,
+    :banked-by :r-a08-sard-b3-whitney-cubes-1,
+    :banked-commit "2737bacf200d2e73dcb945cb7a9e25145fae8414"},
    :id
    :lemma-constructiontargets-sardconvexdomain-finite-whitneynethalfincidence,
    :kind :lemma,
