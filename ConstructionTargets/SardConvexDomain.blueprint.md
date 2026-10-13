@@ -29,143 +29,135 @@ The existing theorem
 `modelRange_withinCriticalImage_null_of_interior_of_frontier` is bookkeeping
 only.  Its hypothesis that the image of the entire frontier is null is too
 strong in source dimension greater than target dimension.  The nodes below
-prove nullity of the *critical* frontier image and then combine it with the
-interior result.
+prove nullity of the complete within-critical image directly; in particular
+they do not infer anything about an image from source nullity.
 
-### B1. Relative critical rank strata
+### B1. Within jets on a convex set
 
-lean: `withinCriticalRankStratum` and
-`withinCriticalSet_eq_iUnion_rankStrata` : definitions and equality for
-`{x ∈ s | ¬ Function.Surjective (fderivWithin ℝ f s x)}` indexed by
-the finite rank of `fderivWithin ℝ f s x`
+lean: `ContDiffOn.convexWithinJet` : from `hf : ContDiffOn ℝ ∞ f s`,
+produce symmetric continuous multilinear maps `J n x` for `x ∈ s`, with
+`J 0 x = f x`, `J 1 x = fderivWithin ℝ f s x`, and continuity on `s`
 
-uses: Mathlib `LinearMap.finrank_range`, finite-dimensional rank bounds
-
-status: planned
-
-Define the rank strata using the ambient continuous linear map returned by
-`fderivWithin`.  Finite dimensionality bounds every deficient rank by the
-target finrank, so the critical set is a finite (hence countable) union.  This
-step does not replace the within derivative by an ordinary derivative.
-
-### B2. Compact exhaustion of a relative rank stratum
-
-lean: `withinCriticalRankStratum_eq_iUnion_compact` : for closed `s` and
-`hf : ContDiffOn ℝ ∞ f s`, each relative rank stratum is covered by a
-countable family of compact subsets on which the derivative rank is bounded
-by the same index
-
-uses: B1, Mathlib continuity of iterated within derivatives on `s`,
-`SardClosedSetCompactExhaustion`
+uses: Mathlib iterated within derivatives and uniqueness on a convex set with
+nonempty interior
 
 status: planned
 
-Intersect `s` with closed balls and closed quantitative rank conditions.  The
-continuity supplied by `hf` makes those conditions relatively closed; because
-`s` is closed, each bounded piece is compact.  Every point enters a piece by
-choosing integer bounds for its norm and the local derivative data.
+Use the canonical iterated within derivatives.  Nonempty interior makes `s`
+a unique-differentiability set, so the jets do not depend on auxiliary
+derivative witnesses.  Symmetry follows by restriction from interior points
+and continuity to the boundary.
 
-### B3. Relative Taylor remainder on convex segments
+### B2. Whitney compatibility of convex within jets
 
-lean: `ContDiffOn.uniform_taylor_remainder_on_compact_convex` : on a compact
-`K ⊆ s`, with `Convex ℝ s`, `ContDiffOn ℝ n f s` gives the uniform
-Taylor remainder estimates along every segment in `s` with endpoints near
-`K`
+lean: `ContDiffOn.convexWithinJet_isWhitney` : for every finite order `n`,
+the jets from B1 satisfy the order-`n` Whitney remainder estimates on `s`
 
-uses: Mathlib `Convex.segment_subset`, within iterated derivatives, the
-estimates used by `SardCompactUniformSmallTaylorRemainder`
+uses: B1, Mathlib `Convex.segment_subset`, one-variable Taylor formula with
+integral remainder
 
 status: planned
 
-All difference quotients are taken along segments contained in `s`; convexity
-is used exactly here.  Compactness turns the pointwise continuity of the
-highest within derivative into a uniform bound.  The conclusion has the same
-numerical estimate as the ambient compact Taylor lemma, with every derivative
-replaced by its within version.
+For `x,y ∈ s`, integrate along the segment from `x` to `y`, which remains
+in `s`.  Iterating the fundamental theorem of calculus gives the Taylor
+polynomial based at `x`; continuity of `J n` gives the required little-o
+remainder uniformly on compact subsets.  Convexity is used only to keep this
+segment in the domain.
 
-### B4. Relative rank-zero compact image nullity
+### B3. Whitney cubes for the complement
 
-lean: `compact_withinRankZero_image_null` : if `K ⊆ s` is compact,
-`Convex ℝ s`, `s.Nonempty`, `hf : ContDiffOn ℝ ∞ f s`, and
-`fderivWithin ℝ f s x = 0` on `K`, then `μ (f '' K) = 0`
+lean: `closedSet_whitneyCubeCover` : for closed `s` in a finite-dimensional
+Euclidean space, construct a countable locally finite cover of `sᶜ` by
+half-open dyadic cubes whose diameter is comparable to their distance from
+`s`, with a chosen nearest point of `s` for every cube
 
-uses: B3, the packing and finite-cover estimates from
-`SardCompactRankZeroSmallSourceNullity`, the finite-order admissibility
-inequality from `SardClassicalRegularityAdmissibility`
-
-status: planned
-
-Repeat the compact cube/ball covering estimate with B3.  Convexity keeps each
-segment used by the estimate inside the domain.  Choose a finite differentiability
-order strictly above the source/target dimension ratio from the infinity
-hypothesis, then let the covering scale tend to zero.
-
-### B5. Constant-rank coordinates relative to a convex domain
-
-lean: `withinRank_positive_local_projected_chart` : at `x ∈ s` where
-`fderivWithin ℝ f s x` has positive rank `r`, construct complementary
-source and target linear coordinates and a relative local chart in which the
-first `r` target coordinates are source coordinates
-
-uses: Mathlib finite-dimensional complemented subspaces,
-`HasFDerivWithinAt`, `Iff` forms of the inverse function theorem within a
-convex set, and the linear packages used by
-`SardComplementedDerivativeSplit`
+uses: finite-dimensional properness, dyadic cubes, countability of integer
+lattices, distance to a closed set
 
 status: planned
 
-Split the source by the kernel and the target by the derivative range.  Apply
-the inverse-function argument to the range-coordinate map, retaining the
-condition that source points lie in `s`.  The conclusion is an equality on a
-relative neighborhood, which is sufficient for images of subsets of `s`; no
-open extension of `f` is asserted.
+Choose maximal dyadic cubes satisfying the standard distance inequality.
+Maximality gives coverage and diameter/distance comparison; bounded diameter
+ratios for intersecting enlargements give local finiteness and bounded
+overlap.  Properness supplies a nearest point in nonempty closed `s`.
 
-### B6. Relative positive-rank slice reduction
+### B4. Smooth partition subordinate to Whitney cubes
 
-lean: `withinPositiveRank_local_image_null_of_smaller` : in B5's coordinates,
-nullity of the critical image for the kernel-variable slice implies local
-nullity of the rank-`r` stratum image
+lean: `closedSet_whitneyPartition` : smooth functions `φ Q : E → ℝ`
+supported in fixed enlargements of B3's cubes, locally finite on `sᶜ`, whose
+sum is one there, with derivative bounds scaling as inverse cube diameter
 
-uses: B5, B3, `SardCompactProductImageFiberNullity`, and the smaller-source
-induction hypothesis
-
-status: planned
-
-Fix the `r` regular coordinates.  Each remaining slice has source the
-intersection of B5's relative chart image with an affine kernel fiber; it is
-convex, and its closure is treated by the same relative theorem in strictly
-smaller source dimension.  The projected derivative is nonsurjective on the
-slice.  The product/fiber nullity theorem then assembles the slices.  This is
-where positive rank decreases the induction dimension.
-
-### B7. Compact positive-rank stratum nullity
-
-lean: `compact_withinPositiveRankStratum_image_null` : every compact subset
-of a fixed positive deficient within-rank stratum has null image
-
-uses: B5, B6, compact finite subcovers, measure monotonicity and finite unions
+uses: B3, a fixed smooth compactly supported bump on Euclidean space,
+locally finite sums
 
 status: planned
 
-Choose B5 coordinates at every point, shrink to neighborhoods on which the
-rank upper bound persists, and take a finite subcover of the compact set.
-Apply B6 in every chart and combine the finitely many null images.
+Rescale and translate the fixed bump to every cube, then normalize by the
+locally finite positive sum.  Bounded overlap and the cube comparison prove
+the derivative estimates for the normalized functions.
 
-### B8. Closed-convex Sard induction step
+### B5. Whitney extension formula
 
-lean: `closedConvex_critical_image_null_of_smaller` : assuming the closed
-convex-domain theorem in every strictly smaller source finrank, prove it for
-`E`
+lean: `whitneyExtension` : define `F = f` on `s`; off `s`, define `F x` as
+the locally finite sum of `φ Q x` times the Taylor polynomial formed from B1's
+jet at B3's chosen point of `s`
 
-uses: B1, B2, B4, B7, countable union nullity
+uses: B1, B3, B4
 
 status: planned
 
-Use B4 for rank zero and B7 for every positive deficient rank.  B2 converts
-each stratum to countably many compact pieces; B1 covers the full critical
-set by finitely many ranks.  The zero-dimensional and subsingleton-target
-cases are discharged directly, matching the base cases of the banked ambient
-Sard induction.
+The off-set definition is a finite sum in a neighborhood of every point of
+`sᶜ`, hence smooth there.  The formula is coordinate-free: Taylor
+polynomials evaluate continuous symmetric multilinear maps on repeated copies
+of `x - a Q`, so the target may be any finite-dimensional real normed space.
+
+### B6. Whitney extension approaches every prescribed jet
+
+lean: `whitneyExtension_hasJetWithin` : for every `n` and `x ∈ s`, the
+`n`th derivative of B5's off-set formula tends to `J n x` as its argument
+tends to `x` through `sᶜ`
+
+uses: B2, B3, B4, B5, bounded overlap and the partition derivative bounds
+
+status: planned
+
+Subtract the Taylor polynomial at `x`.  B2 bounds every polynomial difference;
+B3 replaces cube diameter and basepoint distance by distance to `s`; B4
+controls derivatives of the coefficients.  In every Leibniz term the powers
+from the Whitney remainder cancel the inverse-diameter powers, leaving a
+quantity tending to zero.  This avoids any claim that nonlinear coordinate
+changes preserve convex fibers.
+
+### B7. Smooth extension from a closed convex domain
+
+lean: `ContDiffOn.exists_contDiff_extension_of_isClosed_convex` :
+`IsClosed s → Convex ℝ s → s.Nonempty → ContDiffOn ℝ ∞ f s →
+  ∃ F, ContDiff ℝ ∞ F ∧ Set.EqOn F f s ∧
+    ∀ x ∈ s, fderiv ℝ F x = fderivWithin ℝ f s x`
+
+uses: B1, B5, B6, gluing differentiability across a closed set
+
+status: planned
+
+Take B5's function.  It is smooth off `s`; B6 supplies every derivative and
+its continuity at `s`, so induction on finite order proves global smoothness
+and the displayed jet identities.  The equality and first-derivative identity
+are the order-zero and order-one cases.
+
+### B8. Relative critical values embed in ambient critical values
+
+lean: `withinCriticalImage_subset_extensionCriticalImage` : for the extension
+`F` from B7,
+`f '' {x | x ∈ s ∧ ¬ Surjective (fderivWithin ℝ f s x)} ⊆
+ F '' {x | ¬ Surjective (fderiv ℝ F x)}`
+
+uses: B7
+
+status: planned
+
+For a critical `x ∈ s`, rewrite the value using `EqOn` and the derivative
+using B7's first-jet identity.  The same point witnesses membership in the
+ambient critical image.
 
 ### B9. Sard on a closed convex domain
 
@@ -177,27 +169,34 @@ lean: `closedConvex_critical_image_null` :
 with finite-dimensional complete real inner-product source and target, Borel
 target, and `[μ.IsAddHaarMeasure]`
 
-uses: B8, strong induction on `Module.finrank ℝ E`
+uses: B7, B8,
+`SardGenuineSmoothEuclideanProbe.critical_image_null`, measure monotonicity
 
 status: planned
 
-Quantify the induction hypothesis over every source space, closed convex
-domain, target, Haar measure, and smooth map of the smaller dimension.  This
-allows B6's kernel coordinates to instantiate it without changing the
-theorem's representation.
+Choose B7's global smooth extension.  Ambient Sard makes its complete critical
+image null; B8 and measure monotonicity give the relative conclusion.  Thus
+the difficult positive-rank argument is reused exactly once from the banked
+ambient theorem, after the extension theorem has put the map in its required
+representation.
 
 ### B10. Model-range critical image nullity
 
-lean: `modelRange_withinCriticalImage_null` : specialize B9 to
-`s := Set.range I`
+lean: `modelRange_withinCriticalImage_null` : transport the source to a
+Euclidean space and specialize B9 to the linear image of `Set.range I`
 
-uses: B9, `I.isClosed_range`, `I.convex_range`,
-`I.nonempty_interior.nonempty`
+uses: B9, `ContinuousLinearEquiv.ofFinrankEq`, `I.isClosed_range`,
+`I.convex_range`, `I.nonempty_interior.nonempty`, chain rules for
+`fderivWithin`
 
 status: planned
 
-Apply B9 directly to the chart representative.  This is the theorem consumed
-by the `t01A08` manifold chart argument.  It supersedes the stronger
+Choose `L : E ≃L[ℝ] EuclideanSpace ℝ (Fin (finrank ℝ E))`, set
+`s' := L '' Set.range I`, and apply B9 to `f ∘ L.symm` on `s'`.  Linear
+homeomorphisms preserve closedness, convexity, and nonempty interior.  The
+within chain rule and invertibility of `L` identify surjectivity of the two
+within derivatives, while the function images are equal.  This is the theorem
+consumed by the `t01A08` manifold chart argument.  It supersedes the stronger
 whole-frontier-image premise in the current aggregation lemma; the interior
 split remains useful as a check and for boundaryless reuse, but is not needed
 to prove B10.
