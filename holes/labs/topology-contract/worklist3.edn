@@ -24430,7 +24430,7 @@
    :consumer :t01A08,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 0,
    :review-finding
    "extend Mathlib: state and prove the missing theorem in scope",
    :implements-lemma :lemma-closedset-whitneycubecover,
@@ -24467,6 +24467,17 @@
     [{:cmd "lake build ConstructionTargets.SardConvexDomain", :exit 0}
      {:cmd "lean fixture; registry; forbidden scan; diff; commit",
       :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791899267098-9787-b4571383",
+     :commands
+     ["git show/diff 20c444ea; scope and inequality-orientation review"
+      "lake build ConstructionTargets.SardConvexDomain"
+      "sha256sum and lake env lean t01a08_b3_scale_comparison_check"
+      "statement-registry check; forbidden-token recount"],
+     :finding
+     "PASS. Valid STOP after compiled progress. The one-file theorem correctly applies the two infDist Lipschitz bounds in opposite directions (using dist symmetry) to show nearby centers have scales strictly between one-half and three-halves of the first scale. This is the stated local comparison milestone; maximal selection, local finiteness, and bounded overlap remain explicitly partial. Build/export pass; fixture hash matches; standard axioms only; registry 149/149; forbidden count 0->0."},
     :commit "20c444ea74ff3512d69c06d057c266c6058701b8",
     :changed-paths ["ConstructionTargets/SardConvexDomain.lean"],
     :fixture
@@ -24476,7 +24487,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain.blueprint/B3",
    :acceptance
@@ -35177,7 +35188,7 @@
    :other-consumers []}
   {:consumer :t01A08,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -35189,7 +35200,9 @@
     :reported-by [:r-a08-sard-b3-whitney-cubes-1],
     :type "nearby centers have comparable infDist scales",
     :area "sard-convex-domain",
-    :proved-in :r-a08-sard-b3-whitney-cubes-1},
+    :proved-in :r-a08-sard-b3-whitney-cubes-1,
+    :banked-by :r-a08-sard-b3-whitney-cubes-1,
+    :banked-commit "20c444ea74ff3512d69c06d057c266c6058701b8"},
    :id
    :lemma-constructiontargets-sardconvexdomain-infdist-comparable-of-dist-lt-half,
    :kind :lemma,
