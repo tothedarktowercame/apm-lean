@@ -21568,7 +21568,7 @@
   {:consumer :t00J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 2,
+   :stop-count 0,
    :review-finding
    "Frozen fixture metadata mismatch persists in both authoritative acceptance copies: they record aad5a9cda739c1cbcceb1eca8ab8b33395db8a08c9d68941a87c644f4d13586e and omit :mode, while /tmp/closedboundarycoords.lean freshly compiles and hashes to 7e72195e1214d7580994264481ae57d0ecf87755d31825ab85cbda5f1220c4b1. Update both copies to that digest with :mode :post-build-export-check, then resubmit commit f0afa7bd.",
    :implements-lemma
@@ -21601,7 +21601,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/manifold-fundamental-class",
    :acceptance
@@ -21616,7 +21616,7 @@
    :id :routes-2026-10-12-mfclass-boundary-coordinates-r1,
    :kind :reusable-theorem,
    :area "manifold-fundamental-class",
-   :fail-count 1,
+   :fail-count 0,
    :depends-on [:routes-2026-10-12-mfclass-closed-generator-bridge-r1],
    :current-residual "Prove Bool H0 comparison.",
    :other-consumers [:t98A02]}
@@ -22349,9 +22349,18 @@
       :current-residual "Elect frontier Sard.",
       :other-consumers []}],
     :author "topo-12",
-    :disposition :replan},
+    :disposition :replan,
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791861827207-8331-a49a3c6f",
+     :commands
+     ["bb holes/labs/topology-contract/build_step.bb priorities holes/labs/topology-contract/worklist3.edn"
+      "verify r-a08-agg-3 metadata copies"],
+     :finding
+     "PASS: scope-empty strategy checkpoint; no fixture or source commit applies. Fresh priorities reproduce t01A08 at 1 placeholder, 6 banked, 2 backlog. The revised replan fixes the known defect: both r-a08-agg-3 acceptance copies include :mode :post-build-export-check, and exactly one aggregate row is elected before the next checkpoint."}},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance {:strategy "Rerank after corners Sard."},
@@ -22366,7 +22375,7 @@
    :implements-lemma
    :lemma-constructiontargets-sardconvexdomain-modelrange-withincriticalimage-null-of-inte,
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t01A08/corners-sard",
    :acceptance
@@ -32012,7 +32021,7 @@
    :other-consumers []}
   {:consumer :t01A08,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -32024,7 +32033,9 @@
     :reported-by [:r-t01a08-corners-1],
     :type "exact type in fixture",
     :area "sard-convex-domain",
-    :proved-in :r-t01a08-corners-1},
+    :proved-in :r-t01a08-corners-1,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/SardConvexDomain.lean"]},
    :id
    :lemma-constructiontargets-sardconvexdomain-modelrange-withincriticalimage-null-of-inte,
    :kind :lemma,
