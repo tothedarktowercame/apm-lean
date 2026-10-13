@@ -348,7 +348,35 @@ lemma apm_b96a01_part_d_nonabelian_aux_climb
       (apmReduction n p m h).comp (ρ m) = ρ (m - 1))
     (h1 : ρ 1 = 1) :
     ∀ m, 1 ≤ m → ρ m = 1 := by
-  sorry
+  intro m hm
+  induction m with
+  | zero => omega
+  | succ m ih =>
+      by_cases hm0 : m = 0
+      · subst m
+        simpa using h1
+      · have hm1 : 1 ≤ m := Nat.one_le_iff_ne_zero.mpr hm0
+        have hprev : ρ m = 1 := ih hm1
+        have hdiv : p ^ ((m + 1) - 1) ∣ p ^ (m + 1) := by
+          simp only [Nat.add_sub_cancel]
+          exact pow_dvd_pow p (Nat.le_succ m)
+        have hm2 : 2 ≤ m + 1 := by omega
+        have hc := hcompat (m + 1) hdiv hm2
+        have hker (g : G) : ρ (m + 1) g ∈
+            (apmReduction n p (m + 1) hdiv).ker := by
+          change apmReduction n p (m + 1) hdiv (ρ (m + 1) g) = 1
+          have hg := DFunLike.congr_fun hc g
+          simp only [MonoidHom.comp_apply] at hg
+          rw [hg, Nat.add_sub_cancel, hprev]
+          rfl
+        rcases apm_b96a01_part_d_nonabelian_aux_injective_or_trivial (ρ (m + 1)) with hinj | htriv
+        · exfalso
+          apply hnc
+          intro a b
+          apply hinj
+          simpa using apm_b96a01_part_c n p (m + 1) hdiv hm2
+            (ρ (m + 1) a) (ρ (m + 1) b) (hker a) (hker b)
+        · exact htriv
 -- END SEAT AREA
 
 theorem apm_b96a01_part_d_nonabelian :
