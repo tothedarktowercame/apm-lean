@@ -163,7 +163,69 @@ theorem apm_t03J03_trivial_of_split {E X : Type}
     (h1' : ∀ x, ∃! e, e ∉ U ∧ p e = x) :
     apm_t03J03_generalCoverEquivalent inferInstance inferInstance p
       (apm_t03J03_trivialCoverMap (X := X)) := by
-  sorry
+  classical
+  let f : E → X ⊕ X := fun e ↦ if e ∈ U then Sum.inl (p e) else Sum.inr (p e)
+  have hf_cont : Continuous f := by
+    apply Continuous.piecewise
+    · intro e he
+      rw [hU.frontier_eq] at he
+      exact he.elim
+    · exact continuous_inl.comp hp.continuous
+    · exact continuous_inr.comp hp.continuous
+  have hf_inj : Function.Injective f := by
+    intro e e' heq
+    by_cases he : e ∈ U
+    · have he' : e' ∈ U := by
+        by_contra hn
+        simp [f, he, hn] at heq
+      have hp_eq : p e = p e' := by simpa [f, he, he'] using heq
+      exact (h1 (p e)).unique (⟨he, rfl⟩) (⟨he', hp_eq.symm⟩)
+    · have he' : e' ∉ U := by
+        intro he'
+        simp [f, he, he'] at heq
+      have hp_eq : p e = p e' := by simpa [f, he, he'] using heq
+      exact (h1' (p e)).unique (⟨he, rfl⟩) (⟨he', hp_eq.symm⟩)
+  have hf_surj : Function.Surjective f := by
+    intro z
+    cases z with
+    | inl x =>
+        obtain ⟨e, he, hpe⟩ := (h1 x).exists
+        exact ⟨e, by simp [f, he, hpe]⟩
+    | inr x =>
+        obtain ⟨e, he, hpe⟩ := (h1' x).exists
+        exact ⟨e, by simp [f, he, hpe]⟩
+  have hf_open : IsOpenMap f := by
+    intro V hV
+    rw [isOpen_sum_iff]
+    constructor
+    · have himage : Sum.inl ⁻¹' (f '' V) = p '' (V ∩ U) := by
+        ext x
+        simp only [Set.mem_preimage, Set.mem_image, Set.mem_inter_iff]
+        constructor
+        · rintro ⟨e, heV, heq⟩
+          by_cases heU : e ∈ U
+          · exact ⟨e, ⟨heV, heU⟩, by simpa [f, heU] using heq⟩
+          · simp [f, heU] at heq
+        · rintro ⟨e, ⟨heV, heU⟩, rfl⟩
+          exact ⟨e, heV, by simp [f, heU]⟩
+      rw [himage]
+      exact hp.isOpenMap _ (hV.inter hU.isOpen)
+    · have himage : Sum.inr ⁻¹' (f '' V) = p '' (V ∩ Uᶜ) := by
+        ext x
+        simp only [Set.mem_preimage, Set.mem_image, Set.mem_inter_iff, Set.mem_compl_iff]
+        constructor
+        · rintro ⟨e, heV, heq⟩
+          by_cases heU : e ∈ U
+          · simp [f, heU] at heq
+          · exact ⟨e, ⟨heV, heU⟩, by simpa [f, heU] using heq⟩
+        · rintro ⟨e, ⟨heV, heU⟩, rfl⟩
+          exact ⟨e, heV, by simp [f, heU]⟩
+      rw [himage]
+      exact hp.isOpenMap _ (hV.inter hU.isClosed.isOpen_compl)
+  refine ⟨(Equiv.ofBijective f ⟨hf_inj, hf_surj⟩).toHomeomorphOfContinuousOpen
+      hf_cont hf_open, ?_⟩
+  intro e
+  by_cases he : e ∈ U <;> simp [apm_t03J03_trivialCoverMap, f, he]
 -- END SEAT AREA
 
 /-- **LIBRARY: classification of disconnected two-sheeted covers.** -/
