@@ -113850,14 +113850,14 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 2,
+   :stop-count 3,
    :review-finding
    "Recorded fixture hash mismatch: :fixture.sha256 is 0bca6ce32c019fc3053c7f813c26917169cf817375b44d5e722b864b61a526450c1, but ConstructionTargets/PointWedgeVanKampen.blueprint.md at recorded commit c9b3af27 has exact SHA-256 0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0. Re-record the fixture hash for the reviewed commit.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
    :evidence
    {:placeholder-delta {:source-before 0, :source-after 0},
     :residual
-    "Normalize strict and counit connector factors individually; then B6/B12.",
+    "Normalize the target-counit connector factor; then B6/B12.",
     :outcome :stop,
     :warnings ["existing linter"],
     :missing-theorems
@@ -113871,17 +113871,17 @@
       :area "fundamental-group-wedge-of-circles"}],
     :statement-hashes
     {:source
-     "4b523db5fa3c8b6e5a68ebd9704fa991a5489784ddcd75280336e0da67a96a1d",
+     "c1e9a642eab6daf32c2c7cb6086892daf5be78a2b06a9050da9b0022bf2c527b",
      :documentation
-     "bf1e857e64efe83b6e77f1afdea06d2d9c1cce31565572b785f44f279fb8fff9",
+     "cf182319b17e6abbd438354e4ec6a8459ddef0e1afd98ec723d6b7fbb7cc0732",
      :blueprint
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0",
-     :registry "145/145"},
+     :registry "146/146"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
     :reason
-    "Left comparison split into injected strict and counit connector factors in exact multiplication order.",
+    "Strict left factor expanded into its endpoint connectors and inverse span component.",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/PointWedgeVanKampen.lean",
@@ -113891,26 +113891,14 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "diff/hash/placeholders", :exit 0}],
     :diagnostic-history
-    [{:cmd "lean drafts",
+    [{:cmd "lean draft",
       :exit 1,
-      :finding "Fixed inl types, End order, and explicit map_mul."}
+      :finding "Fixed connector projection and omit placement."}
      {:cmd
       "lake build ConstructionTargets.ThreeCirclesFundamentalGroup",
       :exit 1,
       :finding "B12 file absent."}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1791871552404-8682-f6b7a8b3",
-     :commands
-     ["git archive 23be385f; lake env lean <archive>/ConstructionTargets/PointWedgeVanKampen.lean"
-      "lake build ConstructionTargets.PointWedgeVanKampen"
-      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (exit 1: declared B12 residual absent)"
-      "python3 scripts/statement-registry.py check"
-      "git diff-tree/show sha256/git grep placeholders"],
-     :finding
-     "PASS program STOP: 23be385f is new after history, changes only scoped Lean/MD files, and commits compiled sorry-free progress. Hashes match source 4b523db5, docs bf1e857e, fixture 0bca6ce3; registry 145/145; sorry/admit 0->0; the theorem uses only propext, Classical.choice, Quot.sound. The actual statement has the correct orientation: normalForm maps categorical counit-then-strict composition to the endomorphism product strict*counit via End.mul_def, and coproduct map_mul preserves that order. HEq is retained across the endpoint-dependent representation boundary rather than promoted to equality. The declaration name/prose order is non-authoritative; its checked type is correct. Individual factor normalization, B6/B12 and the final module remain listed."},
-    :commit "23be385fe36d307a3d04d99f76d1f3147302d79c",
+    :commit "2b5f068236e8d3a1408809ad555b6249048a19f3",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
      "ConstructionTargets/PointWedgeVanKampen.md"],
@@ -113920,7 +113908,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
