@@ -24430,7 +24430,7 @@
    :consumer :t01A08,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 0,
    :review-finding
    "extend Mathlib: state and prove the missing theorem in scope",
    :implements-lemma :lemma-closedset-whitneycubecover,
@@ -24467,6 +24467,17 @@
     [{:cmd "lake build ConstructionTargets.SardConvexDomain", :exit 0}
      {:cmd "lean fixture; registry; scans; diff", :exit 0}
      {:cmd "git commit scoped file", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791902903399-9890-4e0f8b65",
+     :commands
+     ["git show/diff c965749; scope/orientation checks"
+      "sha256sum + lake env lean frozen fixture"
+      "lake build ConstructionTargets.SardConvexDomain"
+      "statement registry check; forbidden-count scan"],
+     :finding
+     "PASS. Recorded topo-10 commit c965749 changes only the scoped Lean file and correctly defines integer dyadic infDist strata and covers sᶜ: closed nonempty s gives positive infDist, then exists_mem_Ico_zpow supplies 2^k≤d<2^(k+1) in the required orientation. Fixture hash ca675ebf... matches; build/fixture pass; registry 150/150; forbidden placeholders stay 0; only standard axioms. Valid compiled B3 progress; STOP lists net choice, packing, and assembly."},
     :commit "c965749eb91295b57c6cbd8b88a3394e5d3b1f88",
     :changed-paths ["ConstructionTargets/SardConvexDomain.lean"],
     :fixture
@@ -24476,7 +24487,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain.blueprint/B3",
    :acceptance
@@ -35347,7 +35358,7 @@
    :other-consumers []}
   {:consumer :t01A08,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -35359,7 +35370,9 @@
     :reported-by [:r-a08-sard-b3-whitney-cubes-1],
     :type "dyadic infDist strata cover the closed-set complement",
     :area "sard-convex-domain",
-    :proved-in :r-a08-sard-b3-whitney-cubes-1},
+    :proved-in :r-a08-sard-b3-whitney-cubes-1,
+    :banked-by :r-a08-sard-b3-whitney-cubes-1,
+    :banked-commit "c965749eb91295b57c6cbd8b88a3394e5d3b1f88"},
    :id
    :lemma-constructiontargets-sardconvexdomain-compl-subset-iunion-whitneyscalestratum,
    :kind :lemma,
