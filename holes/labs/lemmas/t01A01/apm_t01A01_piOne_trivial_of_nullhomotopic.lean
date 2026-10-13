@@ -58,13 +58,41 @@ theorem apm_t01A01_punctured_factor_nullhomotopic
   sorry
 
 -- BEGIN SEAT AREA
+open CategoryTheory
+
 theorem apm_t01A01_piOne_trivial_of_nullhomotopic
     {X Y : Type*} [TopologicalSpace X] [TopologicalSpace Y]
     (f : C(X, Y)) (p : Y)
     (hf : ContinuousMap.Homotopic f (ContinuousMap.const X p)) :
     ∀ (x : X) (γ : FundamentalGroup X x),
       FundamentalGroup.map f x γ = 1 := by
-  sorry
+  intro x γ
+  let c : C(X, Y) := ContinuousMap.const X p
+  have hc : FundamentalGroup.map c x γ = 1 := by
+    induction γ using Path.Homotopic.Quotient.ind with
+    | mk q =>
+      change Path.Homotopic.Quotient.map (.mk q) c =
+        Path.Homotopic.Quotient.refl p
+      rw [← Path.Homotopic.Quotient.mk_map]
+      have hq : q.map c.continuous = Path.refl p := by
+        ext t
+        rfl
+      rw [hq]
+      rfl
+  obtain ⟨H⟩ := hf
+  let η := FundamentalGroupoidFunctor.homotopicMapsNatIso H
+  have hn := η.naturality γ
+  change FundamentalGroup.map f x γ ≫ η.app (FundamentalGroupoid.mk x) =
+    η.app (FundamentalGroupoid.mk x) ≫ FundamentalGroup.map c x γ at hn
+  dsimp [c] at hc hn
+  rw [hc] at hn
+  change FundamentalGroup.map f x γ ≫ η.app (FundamentalGroupoid.mk x) =
+    η.app (FundamentalGroupoid.mk x) ≫ 𝟙 (FundamentalGroupoid.mk p) at hn
+  have hn' : FundamentalGroup.map f x γ ≫ η.app (FundamentalGroupoid.mk x) =
+      η.app (FundamentalGroupoid.mk x) :=
+    hn.trans (Category.comp_id _)
+  apply (cancel_mono (η.app (FundamentalGroupoid.mk x))).mp
+  exact hn'.trans (Category.id_comp _).symm
 -- END SEAT AREA
 
 theorem apm_t01a01 :
