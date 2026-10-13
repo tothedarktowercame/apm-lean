@@ -1314,6 +1314,22 @@ theorem apm_m93j05_weak_lowerSemicontinuous
     (apm_m93j05_lp_rpow_weak_lsc p q hp hq hpq)
     (apm_m93j05_high_modes_weak_tendsto N p q hp hq hpq f s hf hs hweak)
 
+lemma apm_m93j05_exists_minimizer_aux_zero_memLp (p : ℝ) :
+    MemLp (0 : ℝ → ℝ) (ENNReal.ofReal p)
+      (volume.restrict (Set.Icc (0 : ℝ) 1)) := by
+  exact MemLp.zero
+
+lemma apm_m93j05_exists_minimizer_aux_trunc_zero (N : ℕ) :
+    apm_m93j05_trunc N (0 : ℝ → ℝ) = 0 := by
+  funext x
+  simp [apm_m93j05_trunc, apm_m93j05_cosCoeff, apm_m93j05_sinCoeff]
+
+lemma apm_m93j05_exists_minimizer_aux_J_zero (N : ℕ) (p : ℝ) (g : ℝ → ℝ)
+    (hp : 0 < p) :
+    apm_m93j05_J N p g (0 : ℝ → ℝ) = 0 := by
+  simp [apm_m93j05_J, apm_m93j05_exists_minimizer_aux_trunc_zero,
+    Real.zero_rpow hp.ne']
+
 theorem apm_m93j05_exists_minimizer
     (N : ℕ) (p q : ℝ) (hp : 1 < p) (hq : 1 < q)
     (hpq : 1 / p + 1 / q = 1) :
