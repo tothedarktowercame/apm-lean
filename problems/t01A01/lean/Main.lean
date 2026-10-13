@@ -1,31 +1,29 @@
 import Mathlib
+import ConstructionTargets.ProjectiveSpaceTopology
+import ConstructionTargets.ProjectiveQuotientDescent
+import ConstructionTargets.RealProjectiveSmoothTarget
+import ConstructionTargets.SimplyConnectedOpenCover
+import ConstructionTargets.CircleUniversalCover
+import ConstructionTargets.ComponentRealLiftAssembly
 
-/-!
-# APM t01A01
-
-## Statement repairs
-
-None.
-
-## Encoding questions
-
-The real projective plane is encoded as the actual projectivization of `ℝ³`
-with quotient topology. Triviality of the induced fundamental-group map is
-stated at every basepoint; its codomain is based at `f x`, as required for a
-not-necessarily-basepoint-preserving map.
--/
+/-! # APM t01A01: nonsurjective self-maps of `RP²` -/
 
 open scoped LinearAlgebra.Projectivization
 
 abbrev apm_t01A01_RP2 := Projectivization ℝ (Fin 3 → ℝ)
+
+abbrev apm_t01A01_RP1 := Projectivization ℝ (Fin 2 → ℝ)
 
 noncomputable instance : TopologicalSpace apm_t01A01_RP2 :=
   inferInstanceAs
     (TopologicalSpace
       (Quotient (projectivizationSetoid ℝ (Fin 3 → ℝ))))
 
-/-- A nonsurjective continuous self-map factors continuously through the
-complement of a point that it misses. -/
+noncomputable instance : TopologicalSpace apm_t01A01_RP1 :=
+  inferInstanceAs
+    (TopologicalSpace
+      (Quotient (projectivizationSetoid ℝ (Fin 2 → ℝ))))
+
 lemma apm_t01A01_factor_through_complement
     (f : C(apm_t01A01_RP2, apm_t01A01_RP2))
     (hnot_surj : ¬Function.Surjective f) :
@@ -39,8 +37,6 @@ lemma apm_t01A01_factor_through_complement
   · intro x
     rfl
 
-/-- Null-homotopy of the complement-valued factor descends through the
-inclusion to null-homotopy of the original map. -/
 lemma apm_t01A01_nullhomotopic_of_factor
     (f : C(apm_t01A01_RP2, apm_t01A01_RP2))
     (q : apm_t01A01_RP2)
@@ -59,17 +55,1112 @@ lemma apm_t01A01_nullhomotopic_of_factor
     exact hfg x
   simpa [hleft, inclusion] using hcomp
 
-/-- Why this unblocks `apm_t01a01`: a punctured real projective plane has the
-homotopy type of a circle, while every map from `RP²` to a circle has trivial
-integral fundamental-group class.  Thus the complement-valued factor of a
-nonsurjective self-map is null-homotopic, after which
-`apm_t01A01_nullhomotopic_of_factor` supplies the required null-homotopy. -/
-theorem apm_t01A01_bridge_1
+/-- The point `[0 : 0 : 1]`. -/
+noncomputable def apm_t01A01_q0 : apm_t01A01_RP2 :=
+  Projectivization.mk ℝ ![0, 0, 1] (by intro h; have := congrFun h 2; simp at this)
+
+/-- Seat: removing any point of `RP²` gives a space homeomorphic to removing
+`[0 : 0 : 1]` (an invertible linear map of `ℝ³` sending a representative of `q`
+to `e₃` induces a homeomorphism of `RP²`, `ProjectiveQuotientDescent`; restrict
+it to the complements). -/
+noncomputable def apm_t01A01_puncture_transitive_aux_A
+    (w : Fin 3 → ℝ) (hw : w 2 ≠ 0) (x : Fin 3 → ℝ) : Fin 3 → ℝ :=
+  fun j => if j = 2 then x 2 / w 2 else x j - (x 2 / w 2) * w j
+
+noncomputable def apm_t01A01_puncture_transitive_aux_B
+    (w : Fin 3 → ℝ) (x : Fin 3 → ℝ) : Fin 3 → ℝ :=
+  fun j => if j = 2 then x 2 * w 2 else x j + x 2 * w j
+
+lemma apm_t01A01_puncture_transitive_aux_AB
+    (w : Fin 3 → ℝ) (hw : w 2 ≠ 0) (x : Fin 3 → ℝ) :
+    apm_t01A01_puncture_transitive_aux_A w hw
+      (apm_t01A01_puncture_transitive_aux_B w x) = x := by
+  funext j
+  fin_cases j <;> simp [apm_t01A01_puncture_transitive_aux_A,
+    apm_t01A01_puncture_transitive_aux_B, hw]
+
+lemma apm_t01A01_puncture_transitive_aux_BA
+    (w : Fin 3 → ℝ) (hw : w 2 ≠ 0) (x : Fin 3 → ℝ) :
+    apm_t01A01_puncture_transitive_aux_B w
+      (apm_t01A01_puncture_transitive_aux_A w hw x) = x := by
+  funext j
+  fin_cases j <;> simp [apm_t01A01_puncture_transitive_aux_A,
+    apm_t01A01_puncture_transitive_aux_B, hw]
+
+lemma apm_t01A01_puncture_transitive_aux_A_smul
+    (w : Fin 3 → ℝ) (hw : w 2 ≠ 0) (t : ℝ) (x : Fin 3 → ℝ) :
+    apm_t01A01_puncture_transitive_aux_A w hw (t • x) =
+      t • apm_t01A01_puncture_transitive_aux_A w hw x := by
+  funext j
+  by_cases h : j = 2
+  · simp only [apm_t01A01_puncture_transitive_aux_A, h, if_true,
+      Pi.smul_apply, smul_eq_mul]
+    ring
+  · simp only [apm_t01A01_puncture_transitive_aux_A, h, if_false,
+      Pi.smul_apply, smul_eq_mul]
+    ring
+
+lemma apm_t01A01_puncture_transitive_aux_B_smul
+    (w : Fin 3 → ℝ) (t : ℝ) (x : Fin 3 → ℝ) :
+    apm_t01A01_puncture_transitive_aux_B w (t • x) =
+      t • apm_t01A01_puncture_transitive_aux_B w x := by
+  funext j
+  by_cases h : j = 2
+  · simp only [apm_t01A01_puncture_transitive_aux_B, h, if_true,
+      Pi.smul_apply, smul_eq_mul]
+    ring
+  · simp only [apm_t01A01_puncture_transitive_aux_B, h, if_false,
+      Pi.smul_apply, smul_eq_mul]
+    ring
+
+lemma apm_t01A01_puncture_transitive_aux_contA
+    (w : Fin 3 → ℝ) (hw : w 2 ≠ 0) :
+    Continuous (apm_t01A01_puncture_transitive_aux_A w hw) := by
+  apply continuous_pi
+  intro j
+  by_cases h : j = 2
+  · simp only [apm_t01A01_puncture_transitive_aux_A, h, if_pos]
+    fun_prop
+  · change Continuous (fun a : Fin 3 → ℝ => if j = 2 then a 2 / w 2
+        else a j - a 2 / w 2 * w j)
+    simp only [if_neg h]
+    fun_prop
+
+lemma apm_t01A01_puncture_transitive_aux_contB (w : Fin 3 → ℝ) :
+    Continuous (apm_t01A01_puncture_transitive_aux_B w) := by
+  apply continuous_pi
+  intro j
+  by_cases h : j = 2
+  · simp only [apm_t01A01_puncture_transitive_aux_B, h, if_pos]
+    fun_prop
+  · change Continuous (fun a : Fin 3 → ℝ => if j = 2 then a 2 * w 2
+        else a j + a 2 * w j)
+    simp only [if_neg h]
+    fun_prop
+
+theorem apm_t01A01_puncture_transitive (q : apm_t01A01_RP2) :
+    Nonempty ({y : apm_t01A01_RP2 // y ≠ q} ≃ₜ {y : apm_t01A01_RP2 // y ≠ apm_t01A01_q0}) := by
+  let v := Projectivization.rep q
+  have hv : v ≠ 0 := Projectivization.rep_nonzero q
+  obtain ⟨i, hi⟩ : ∃ i, v i ≠ 0 := by
+    simpa [funext_iff] using hv
+  let s : Fin 3 ≃ Fin 3 := Equiv.swap i 2
+  let w : Fin 3 → ℝ := fun j => v (s j)
+  have hw : w 2 ≠ 0 := by simpa [w, s] using hi
+  let A : (Fin 3 → ℝ) → (Fin 3 → ℝ) := fun x =>
+    apm_t01A01_puncture_transitive_aux_A w hw (fun j => x (s j))
+  let B : (Fin 3 → ℝ) → (Fin 3 → ℝ) := fun x j =>
+    apm_t01A01_puncture_transitive_aux_B w x (s j)
+  have hBA (x : Fin 3 → ℝ) : B (A x) = x := by
+    funext j
+    have h := congrFun (apm_t01A01_puncture_transitive_aux_BA w hw
+      (fun k => x (s k))) (s j)
+    simpa [A, B, s] using h
+  have hAB (x : Fin 3 → ℝ) : A (B x) = x := by
+    have h := apm_t01A01_puncture_transitive_aux_AB w hw x
+    simpa [A, B, s] using h
+  have hAs (t : ℝ) (x : Fin 3 → ℝ) : A (t • x) = t • A x := by
+    simpa [A] using apm_t01A01_puncture_transitive_aux_A_smul w hw t
+      (fun j => x (s j))
+  have hBs (t : ℝ) (x : Fin 3 → ℝ) : B (t • x) = t • B x := by
+    funext j
+    exact congrFun (apm_t01A01_puncture_transitive_aux_B_smul w t x) (s j)
+  have hcA : Continuous A := by
+    apply (apm_t01A01_puncture_transitive_aux_contA w hw).comp
+    fun_prop
+  have hcB : Continuous B := by
+    apply continuous_pi
+    intro j
+    exact continuous_apply (s j) |>.comp
+      (apm_t01A01_puncture_transitive_aux_contB w)
+  have hAv : A v = (![0, 0, 1] : Fin 3 → ℝ) := by
+    funext j
+    fin_cases j <;> simp [A, w, s, apm_t01A01_puncture_transitive_aux_A, hi]
+  have hA0 (x : Fin 3 → ℝ) (hx : x ≠ 0) : A x ≠ 0 := by
+    intro h
+    apply hx
+    rw [← hBA x, h]
+    simpa using hBs 0 x
+  have hB0 (x : Fin 3 → ℝ) (hx : x ≠ 0) : B x ≠ 0 := by
+    intro h
+    apply hx
+    rw [← hAB x, h]
+    simpa using hAs 0 x
+  let fa : {x : Fin 3 → ℝ // x ≠ 0} → apm_t01A01_RP2 := fun x =>
+    Projectivization.mk ℝ (A x.1) (hA0 x.1 x.2)
+  let fb : {x : Fin 3 → ℝ // x ≠ 0} → apm_t01A01_RP2 := fun x =>
+    Projectivization.mk ℝ (B x.1) (hB0 x.1 x.2)
+  have hca : Continuous fa := by
+    change Continuous (ConstructionTargets.ProjectiveSpaceTopology.quotientMap ℝ 2 ∘
+      fun x : {x : Fin 3 → ℝ // x ≠ 0} => ⟨A x.1, hA0 x.1 x.2⟩)
+    apply (ConstructionTargets.ProjectiveSpaceTopology.continuous_quotientMap ℝ 2).comp
+    exact hcA.comp continuous_subtype_val |>.subtype_mk _
+  have hcb : Continuous fb := by
+    change Continuous (ConstructionTargets.ProjectiveSpaceTopology.quotientMap ℝ 2 ∘
+      fun x : {x : Fin 3 → ℝ // x ≠ 0} => ⟨B x.1, hB0 x.1 x.2⟩)
+    apply (ConstructionTargets.ProjectiveSpaceTopology.continuous_quotientMap ℝ 2).comp
+    exact hcB.comp continuous_subtype_val |>.subtype_mk _
+  obtain ⟨F, hF⟩ := ConstructionTargets.ProjectiveQuotientDescent.projectiveHomogeneousMapDescent
+    ℝ fa hca (by
+      intro a b t hab
+      apply (Projectivization.mk_eq_mk_iff ℝ _ _ _ _).mpr
+      by_cases ht : t = 0
+      · subst t; exfalso; exact a.2 (by simpa using hab)
+      · refine ⟨Units.mk0 t ht, ?_⟩
+        have hh := congrArg A hab
+        rw [hAs] at hh
+        simpa [fa] using hh.symm)
+  obtain ⟨G, hG⟩ := ConstructionTargets.ProjectiveQuotientDescent.projectiveHomogeneousMapDescent
+    ℝ fb hcb (by
+      intro a b t hab
+      apply (Projectivization.mk_eq_mk_iff ℝ _ _ _ _).mpr
+      by_cases ht : t = 0
+      · subst t; exfalso; exact a.2 (by simpa using hab)
+      · refine ⟨Units.mk0 t ht, ?_⟩
+        have hh := congrArg B hab
+        rw [hBs] at hh
+        simpa [fb] using hh.symm)
+  have hFG : Function.LeftInverse G F := by
+    intro x
+    induction x using Projectivization.ind with
+    | _ x hx =>
+      change G (F (ConstructionTargets.ProjectiveSpaceTopology.quotientMap ℝ 2 ⟨x, hx⟩)) = _
+      rw [hF ⟨x, hx⟩]
+      change G (ConstructionTargets.ProjectiveSpaceTopology.quotientMap ℝ 2
+        ⟨A x, hA0 x hx⟩) = _
+      rw [hG ⟨A x, hA0 x hx⟩]
+      apply (Projectivization.mk_eq_mk_iff ℝ _ _ _ _).mpr
+      exact ⟨1, by simpa using (hBA x).symm⟩
+  have hGF : Function.RightInverse G F := by
+    intro x
+    induction x using Projectivization.ind with
+    | _ x hx =>
+      change F (G (ConstructionTargets.ProjectiveSpaceTopology.quotientMap ℝ 2 ⟨x, hx⟩)) = _
+      rw [hG ⟨x, hx⟩]
+      change F (ConstructionTargets.ProjectiveSpaceTopology.quotientMap ℝ 2
+        ⟨B x, hB0 x hx⟩) = _
+      rw [hF ⟨B x, hB0 x hx⟩]
+      apply (Projectivization.mk_eq_mk_iff ℝ _ _ _ _).mpr
+      exact ⟨1, by simpa using (hAB x).symm⟩
+  have hFq : F q = apm_t01A01_q0 := by
+    rw [show q = Projectivization.mk ℝ v hv from (Projectivization.mk_rep q).symm]
+    change F (ConstructionTargets.ProjectiveSpaceTopology.quotientMap ℝ 2 ⟨v, hv⟩) = _
+    rw [hF ⟨v, hv⟩]
+    apply (Projectivization.mk_eq_mk_iff ℝ _ _ _ _).mpr
+    exact ⟨1, by simpa [fa, apm_t01A01_q0] using hAv.symm⟩
+  let e : apm_t01A01_RP2 ≃ₜ apm_t01A01_RP2 :=
+    { toFun := F, invFun := G, left_inv := hFG, right_inv := hGF,
+      continuous_toFun := F.continuous, continuous_invFun := G.continuous }
+  refine ⟨{
+    toFun := fun y => ⟨e y.1, fun h => y.2 (e.injective (h.trans hFq.symm))⟩
+    invFun := fun y => ⟨e.symm y.1, fun h => y.2 (calc
+      y.1 = e (e.symm y.1) := (e.apply_symm_apply y.1).symm
+      _ = e q := congrArg e h
+      _ = apm_t01A01_q0 := hFq)⟩
+    left_inv := fun y => Subtype.ext (e.left_inv y.1)
+    right_inv := fun y => Subtype.ext (e.right_inv y.1)
+    continuous_toFun := e.continuous.comp continuous_subtype_val |>.subtype_mk _
+    continuous_invFun := e.symm.continuous.comp continuous_subtype_val |>.subtype_mk _ }⟩
+
+/-- Seat: the retraction `[x : y : z] ↦ [x : y]` is well defined and continuous
+off `[0 : 0 : 1]` (quotient descent from `{v | (v 0, v 1) ≠ 0}`). -/
+lemma apm_t01A01_retraction_exists_aux_firstTwo_ne_zero
+    (v : Fin 3 → ℝ) (hv : v ≠ 0)
+    (hq : Projectivization.mk ℝ v hv ≠ apm_t01A01_q0) :
+    (![v 0, v 1] : Fin 2 → ℝ) ≠ 0 := by
+  intro h
+  have h0 := congrFun h 0
+  have h1 := congrFun h 1
+  simp at h0 h1
+  have h2 : v 2 ≠ 0 := by
+    intro hz
+    apply hv
+    funext i
+    fin_cases i <;> simp [h0, h1, hz]
+  apply hq
+  apply (Projectivization.mk_eq_mk_iff ℝ v ![0, 0, 1] hv (by
+    intro h
+    have := congrFun h 2
+    simp at this)).mpr
+  refine ⟨Units.mk0 (v 2) h2, ?_⟩
+  funext i
+  fin_cases i <;> simp [h0, h1]
+
+theorem apm_t01A01_retraction_exists :
+    ∃ r : C({y : apm_t01A01_RP2 // y ≠ apm_t01A01_q0}, apm_t01A01_RP1),
+      ∀ (v : Fin 3 → ℝ) (hv : v ≠ 0) (hq : Projectivization.mk ℝ v hv ≠ apm_t01A01_q0)
+        (h2 : (![v 0, v 1] : Fin 2 → ℝ) ≠ 0),
+        r ⟨Projectivization.mk ℝ v hv, hq⟩ = Projectivization.mk ℝ ![v 0, v 1] h2 := by
+  let proj (v : Fin 3 → ℝ) : Fin 2 → ℝ := ![v 0, v 1]
+  let fallback : apm_t01A01_RP1 :=
+    Projectivization.mk ℝ ![1, 0] (by intro h; have := congrFun h 0; simp at this)
+  let lift : {v : Fin 3 → ℝ // v ≠ 0} → apm_t01A01_RP1 := fun v ↦
+    if h : proj v.1 ≠ 0 then Projectivization.mk ℝ (proj v.1) h else fallback
+  have horbit : ∀ (a b : {v : Fin 3 → ℝ // v ≠ 0}) (t : ℝ),
+      a = t • (b : Fin 3 → ℝ) → lift a = lift b := by
+    intro a b t hab
+    have ht : t ≠ 0 := by
+      intro ht
+      apply a.2
+      simpa [ht] using hab
+    have hp : proj a.1 = t • proj b.1 := by
+      rw [hab]
+      funext i
+      fin_cases i <;> simp [proj]
+    by_cases hb : proj b.1 ≠ 0
+    · have ha : proj a.1 ≠ 0 := by
+        rw [hp]
+        exact smul_ne_zero ht hb
+      simp only [lift, dif_pos ha, dif_pos hb]
+      apply (Projectivization.mk_eq_mk_iff' ℝ _ _ ha hb).mpr
+      exact ⟨t, hp.symm⟩
+    · have ha : ¬ proj a.1 ≠ 0 := by simpa [hp, hb]
+      simp only [lift]
+      rw [dif_neg ha, dif_neg hb]
+  let rfun : apm_t01A01_RP2 → apm_t01A01_RP1 :=
+    Projectivization.lift lift horbit
+  let U : Set apm_t01A01_RP2 := {y | y ≠ apm_t01A01_q0}
+  let qmap := ConstructionTargets.ProjectiveSpaceTopology.quotientMap ℝ 2
+  have hqbase : Topology.IsQuotientMap qmap :=
+    ⟨ConstructionTargets.ProjectiveSpaceTopology.surjective_quotientMap ℝ 2, rfl⟩
+  have hU : IsOpen U := by
+    apply hqbase.isOpen_preimage.mp
+    have hc : Continuous (fun x : {v : Fin 3 → ℝ // v ≠ 0} ↦ proj x.1) := by
+      apply continuous_pi
+      intro i
+      fin_cases i
+      · change Continuous (fun x : {v : Fin 3 → ℝ // v ≠ 0} ↦ x.1 0)
+        exact (continuous_apply 0).comp continuous_subtype_val
+      · change Continuous (fun x : {v : Fin 3 → ℝ // v ≠ 0} ↦ x.1 1)
+        exact (continuous_apply 1).comp continuous_subtype_val
+    have heq : qmap ⁻¹' U = {x | proj x.1 ≠ 0} := by
+      ext x
+      simp only [Set.mem_preimage, Set.mem_setOf_eq]
+      constructor
+      · exact apm_t01A01_retraction_exists_aux_firstTwo_ne_zero x.1 x.2
+      · intro hp he
+        apply hp
+        have hm := (Projectivization.mk_eq_mk_iff ℝ x.1 ![0, 0, 1] x.2 (by
+          intro h; have := congrFun h 2; simp at this)).mp he
+        obtain ⟨a, ha⟩ := hm
+        funext i
+        fin_cases i
+        · have := congrFun ha 0
+          simpa [proj] using this.symm
+        · have := congrFun ha 1
+          simpa [proj] using this.symm
+    rw [heq]
+    exact (isOpen_compl_singleton.preimage hc)
+  have hqquot : Topology.IsQuotientMap (U.restrictPreimage qmap) :=
+    hqbase.restrictPreimage_isOpen hU
+  have hcomp : Continuous ((fun y : U ↦ rfun y.1) ∘ U.restrictPreimage qmap) := by
+    let raw : {x : {v : Fin 3 → ℝ // v ≠ 0} // qmap x ∈ U} →
+        {w : Fin 2 → ℝ // w ≠ 0} := fun x ↦
+      ⟨proj x.1.1, apm_t01A01_retraction_exists_aux_firstTwo_ne_zero
+        x.1.1 x.1.2 x.2⟩
+    have hraw : Continuous raw := by
+      apply Continuous.subtype_mk
+      apply continuous_pi
+      intro i
+      fin_cases i
+      · change Continuous (fun x : {x : {v : Fin 3 → ℝ // v ≠ 0} // qmap x ∈ U} ↦ x.1.1 0)
+        exact (continuous_apply 0).comp (continuous_subtype_val.comp continuous_subtype_val)
+      · change Continuous (fun x : {x : {v : Fin 3 → ℝ // v ≠ 0} // qmap x ∈ U} ↦ x.1.1 1)
+        exact (continuous_apply 1).comp (continuous_subtype_val.comp continuous_subtype_val)
+    have heq : (fun y : U ↦ rfun y.1) ∘ U.restrictPreimage qmap =
+        ConstructionTargets.ProjectiveSpaceTopology.quotientMap ℝ 1 ∘ raw := by
+      funext x
+      change Projectivization.lift lift horbit (Projectivization.mk ℝ x.1.1 x.1.2) = _
+      rw [Projectivization.lift_mk]
+      have hp := apm_t01A01_retraction_exists_aux_firstTwo_ne_zero
+        x.1.1 x.1.2 x.2
+      simp only [lift]
+      rw [dif_pos hp]
+      rfl
+    rw [heq]
+    exact (ConstructionTargets.ProjectiveSpaceTopology.continuous_quotientMap ℝ 1).comp hraw
+  have hrfun : Continuous (fun y : U ↦ rfun y.1) := by
+    exact hqquot.continuous_iff.mpr hcomp
+  refine ⟨⟨fun y ↦ rfun y.1, hrfun⟩, ?_⟩
+  intro v hv hq h2
+  change rfun (Projectivization.mk ℝ v hv) = _
+  rw [show rfun (Projectivization.mk ℝ v hv) = lift ⟨v, hv⟩ by
+    exact Projectivization.lift_mk lift horbit v hv]
+  have hp : proj v ≠ 0 := h2
+  simp only [lift]
+  rw [dif_pos hp]
+
+/-- Seat: the inclusion `[x : y] ↦ [x : y : 0]` misses `[0 : 0 : 1]` and is continuous. -/
+def apm_t01A01_inclusion_exists_aux_embed (w : Fin 2 → ℝ) : Fin 3 → ℝ :=
+  ![w 0, w 1, 0]
+
+lemma apm_t01A01_inclusion_exists_aux_nonzero
+    (w : Fin 2 → ℝ) (hw : w ≠ 0) :
+    apm_t01A01_inclusion_exists_aux_embed w ≠ 0 := by
+  intro h
+  apply hw
+  funext j
+  fin_cases j
+  · exact congrFun h 0
+  · exact congrFun h 1
+
+lemma apm_t01A01_inclusion_exists_aux_ne_q0
+    (w : Fin 2 → ℝ) (hw : w ≠ 0) :
+    Projectivization.mk ℝ (apm_t01A01_inclusion_exists_aux_embed w)
+        (apm_t01A01_inclusion_exists_aux_nonzero w hw) ≠ apm_t01A01_q0 := by
+  intro h
+  obtain ⟨a, ha⟩ := (Projectivization.mk_eq_mk_iff ℝ _ _
+    (apm_t01A01_inclusion_exists_aux_nonzero w hw) _).mp h
+  apply hw
+  funext j
+  fin_cases j
+  · have := congrFun ha 0
+    simpa [apm_t01A01_inclusion_exists_aux_embed] using this.symm
+  · have := congrFun ha 1
+    simpa [apm_t01A01_inclusion_exists_aux_embed] using this.symm
+
+theorem apm_t01A01_inclusion_exists :
+    ∃ i : C(apm_t01A01_RP1, {y : apm_t01A01_RP2 // y ≠ apm_t01A01_q0}),
+      ∀ (w : Fin 2 → ℝ) (hw : w ≠ 0) (h3 : (![w 0, w 1, 0] : Fin 3 → ℝ) ≠ 0),
+        (i (Projectivization.mk ℝ w hw) : apm_t01A01_RP2) =
+          Projectivization.mk ℝ ![w 0, w 1, 0] h3 := by
+  let lift : {w : (Fin 2 → ℝ) // w ≠ 0} →
+      {y : apm_t01A01_RP2 // y ≠ apm_t01A01_q0} := fun w =>
+    ⟨Projectivization.mk ℝ (apm_t01A01_inclusion_exists_aux_embed w.1)
+      (apm_t01A01_inclusion_exists_aux_nonzero w.1 w.2),
+      apm_t01A01_inclusion_exists_aux_ne_q0 w.1 w.2⟩
+  have hlift : Continuous lift := by
+    apply Continuous.subtype_mk
+    change Continuous
+      (ConstructionTargets.ProjectiveSpaceTopology.quotientMap ℝ 2 ∘
+        fun w : {w : (Fin 2 → ℝ) // w ≠ 0} =>
+          ⟨apm_t01A01_inclusion_exists_aux_embed w.1,
+            apm_t01A01_inclusion_exists_aux_nonzero w.1 w.2⟩)
+    apply (ConstructionTargets.ProjectiveSpaceTopology.continuous_quotientMap ℝ 2).comp
+    apply Continuous.subtype_mk
+    apply continuous_pi
+    intro j
+    fin_cases j
+    · simpa [apm_t01A01_inclusion_exists_aux_embed] using
+        ((continuous_apply (0 : Fin 2)).comp
+          (continuous_subtype_val : Continuous
+            (fun w : {w : (Fin 2 → ℝ) // w ≠ 0} => w.1)))
+    · simpa [apm_t01A01_inclusion_exists_aux_embed] using
+        ((continuous_apply (1 : Fin 2)).comp
+          (continuous_subtype_val : Continuous
+            (fun w : {w : (Fin 2 → ℝ) // w ≠ 0} => w.1)))
+    · exact continuous_const
+  obtain ⟨i, hi⟩ :=
+    ConstructionTargets.ProjectiveQuotientDescent.projectiveHomogeneousMapDescent
+      ℝ lift hlift (by
+        intro a b t hab
+        apply Subtype.ext
+        apply (Projectivization.mk_eq_mk_iff ℝ _ _
+          (apm_t01A01_inclusion_exists_aux_nonzero a.1 a.2)
+          (apm_t01A01_inclusion_exists_aux_nonzero b.1 b.2)).mpr
+        by_cases ht : t = 0
+        · subst t
+          exfalso
+          apply a.2
+          simpa using hab
+        · refine ⟨Units.mk0 t ht, ?_⟩
+          rw [hab]
+          funext j
+          fin_cases j <;> simp [apm_t01A01_inclusion_exists_aux_embed])
+  refine ⟨i, ?_⟩
+  intro w hw h3
+  have h := congrArg Subtype.val (hi ⟨w, hw⟩)
+  simpa [ConstructionTargets.ProjectiveSpaceTopology.quotientMap,
+    apm_t01A01_inclusion_exists_aux_embed] using h
+
+/-- Seat: for maps with these formulas, `r ∘ i = id` and `i ∘ r ≃ id` via
+`H t [x : y : z] = [x : y : (1 - t) z]` (never `[0 : 0 : 1]` since `(x, y) ≠ 0`;
+continuity by quotient descent of `I × (ℝ³ ∖ z-axis)`, `I` locally compact). -/
+lemma apm_t01A01_retraction_homotopy_aux_xy
+    (v : Fin 3 → ℝ) (hv : v ≠ 0)
+    (hq : Projectivization.mk ℝ v hv ≠ apm_t01A01_q0) :
+    (![v 0, v 1] : Fin 2 → ℝ) ≠ 0 := by
+  intro h
+  apply hq
+  apply (Projectivization.mk_eq_mk_iff ℝ _ _ hv _).mpr
+  have hv2 : v 2 ≠ 0 := by
+    intro hz
+    apply hv
+    funext j
+    fin_cases j
+    · exact congrFun h 0
+    · exact congrFun h 1
+    · exact hz
+  refine ⟨Units.mk0 (v 2) hv2, ?_⟩
+  funext j
+  fin_cases j
+  · simpa using (congrFun h 0).symm
+  · simpa using (congrFun h 1).symm
+  · simp
+
+def apm_t01A01_retraction_homotopy_aux_vec
+    (s : Set.Icc (0 : ℝ) 1) (v : Fin 3 → ℝ) : Fin 3 → ℝ :=
+  ![v 0, v 1, s.1 * v 2]
+
+lemma apm_t01A01_retraction_homotopy_aux_vec_ne
+    (s : Set.Icc (0 : ℝ) 1) (v : Fin 3 → ℝ)
+    (h2 : (![v 0, v 1] : Fin 2 → ℝ) ≠ 0) :
+    apm_t01A01_retraction_homotopy_aux_vec s v ≠ 0 := by
+  intro h
+  apply h2
+  funext j
+  fin_cases j
+  · exact congrFun h 0
+  · exact congrFun h 1
+
+lemma apm_t01A01_retraction_homotopy_aux_ne_q0
+    (s : Set.Icc (0 : ℝ) 1) (v : Fin 3 → ℝ)
+    (h2 : (![v 0, v 1] : Fin 2 → ℝ) ≠ 0) :
+    Projectivization.mk ℝ (apm_t01A01_retraction_homotopy_aux_vec s v)
+      (apm_t01A01_retraction_homotopy_aux_vec_ne s v h2) ≠ apm_t01A01_q0 := by
+  intro h
+  obtain ⟨a, ha⟩ := (Projectivization.mk_eq_mk_iff ℝ _ _
+    (apm_t01A01_retraction_homotopy_aux_vec_ne s v h2) _).mp h
+  apply h2
+  funext j
+  fin_cases j
+  · have z := congrFun ha 0; simpa [apm_t01A01_retraction_homotopy_aux_vec] using z.symm
+  · have z := congrFun ha 1; simpa [apm_t01A01_retraction_homotopy_aux_vec] using z.symm
+
+theorem apm_t01A01_retraction_homotopy
+    (r : C({y : apm_t01A01_RP2 // y ≠ apm_t01A01_q0}, apm_t01A01_RP1))
+    (hr : ∀ (v : Fin 3 → ℝ) (hv : v ≠ 0) (hq : Projectivization.mk ℝ v hv ≠ apm_t01A01_q0)
+        (h2 : (![v 0, v 1] : Fin 2 → ℝ) ≠ 0),
+        r ⟨Projectivization.mk ℝ v hv, hq⟩ = Projectivization.mk ℝ ![v 0, v 1] h2)
+    (i : C(apm_t01A01_RP1, {y : apm_t01A01_RP2 // y ≠ apm_t01A01_q0}))
+    (hi : ∀ (w : Fin 2 → ℝ) (hw : w ≠ 0) (h3 : (![w 0, w 1, 0] : Fin 3 → ℝ) ≠ 0),
+        (i (Projectivization.mk ℝ w hw) : apm_t01A01_RP2) =
+          Projectivization.mk ℝ ![w 0, w 1, 0] h3) :
+    ContinuousMap.Homotopic (i.comp r) (ContinuousMap.id _) ∧
+      r.comp i = ContinuousMap.id _ := by
+  let U : Set apm_t01A01_RP2 := {y | y ≠ apm_t01A01_q0}
+  let q0 : C({v : {v : Fin 3 → ℝ // v ≠ 0} //
+      ConstructionTargets.ProjectiveSpaceTopology.quotientMap ℝ 2 v ∈ U}, U) :=
+    ⟨U.restrictPreimage (ConstructionTargets.ProjectiveSpaceTopology.quotientMap ℝ 2),
+      (ConstructionTargets.ProjectiveSpaceTopology.continuous_quotientMap ℝ 2).restrictPreimage⟩
+  have hq0 : IsOpenQuotientMap q0 := by
+    refine ⟨?_, q0.continuous, ?_⟩
+    · exact (ConstructionTargets.ProjectiveSpaceTopology.surjective_quotientMap ℝ 2).restrictPreimage U
+    · exact (ConstructionTargets.ProjectiveQuotientDescent.projectiveQuotientMap_isOpen ℝ 2).restrictPreimage U
+  let qp : C(Set.Icc (0 : ℝ) 1 × {v : {v : Fin 3 → ℝ // v ≠ 0} //
+      ConstructionTargets.ProjectiveSpaceTopology.quotientMap ℝ 2 v ∈ U},
+      Set.Icc (0 : ℝ) 1 × U) :=
+    ⟨Prod.map id q0, continuous_id.prodMap q0.continuous⟩
+  have hqp : Topology.IsQuotientMap qp :=
+    (IsOpenQuotientMap.id.prodMap hq0).isQuotientMap
+  let lift : C(Set.Icc (0 : ℝ) 1 × {v : {v : Fin 3 → ℝ // v ≠ 0} //
+      ConstructionTargets.ProjectiveSpaceTopology.quotientMap ℝ 2 v ∈ U}, U) := by
+    let F := fun z : Set.Icc (0 : ℝ) 1 × {v : {v : Fin 3 → ℝ // v ≠ 0} //
+        ConstructionTargets.ProjectiveSpaceTopology.quotientMap ℝ 2 v ∈ U} =>
+      apm_t01A01_retraction_homotopy_aux_vec z.1 z.2.1.1
+    have hxy : ∀ z : Set.Icc (0 : ℝ) 1 × {v : {v : Fin 3 → ℝ // v ≠ 0} //
+        ConstructionTargets.ProjectiveSpaceTopology.quotientMap ℝ 2 v ∈ U},
+        (![z.2.1.1 0, z.2.1.1 1] : Fin 2 → ℝ) ≠ 0 := by
+      intro z
+      exact apm_t01A01_retraction_homotopy_aux_xy z.2.1.1 z.2.1.2 z.2.2
+    refine ⟨fun z => ⟨Projectivization.mk ℝ (F z)
+      (apm_t01A01_retraction_homotopy_aux_vec_ne z.1 z.2.1.1 (hxy z)),
+      apm_t01A01_retraction_homotopy_aux_ne_q0 z.1 z.2.1.1 (hxy z)⟩, ?_⟩
+    apply Continuous.subtype_mk
+    change Continuous (ConstructionTargets.ProjectiveSpaceTopology.quotientMap ℝ 2 ∘
+      fun z => ⟨F z, apm_t01A01_retraction_homotopy_aux_vec_ne z.1 z.2.1.1 (hxy z)⟩)
+    apply (ConstructionTargets.ProjectiveSpaceTopology.continuous_quotientMap ℝ 2).comp
+    apply Continuous.subtype_mk
+    apply continuous_pi
+    intro j
+    fin_cases j
+    · exact ((continuous_apply 0).comp continuous_subtype_val).comp
+        (continuous_subtype_val.comp continuous_snd)
+    · exact ((continuous_apply 1).comp continuous_subtype_val).comp
+        (continuous_subtype_val.comp continuous_snd)
+    · exact (continuous_subtype_val.comp continuous_fst).mul
+        (((continuous_apply 2).comp continuous_subtype_val).comp
+          (continuous_subtype_val.comp continuous_snd))
+  have hfac : Function.FactorsThrough lift qp := by
+    intro a b hab
+    apply Subtype.ext
+    change Projectivization.mk ℝ
+      (apm_t01A01_retraction_homotopy_aux_vec a.1 a.2.1.1) _ =
+      Projectivization.mk ℝ
+      (apm_t01A01_retraction_homotopy_aux_vec b.1 b.2.1.1) _
+    apply (Projectivization.mk_eq_mk_iff ℝ _ _ _ _).mpr
+    have hs := congrArg Prod.fst hab
+    change a.1 = b.1 at hs
+    have hv := congrArg Prod.snd hab
+    change q0 a.2 = q0 b.2 at hv
+    obtain ⟨c, hc⟩ := (Projectivization.mk_eq_mk_iff ℝ _ _ a.2.1.2 b.2.1.2).mp
+      (congrArg Subtype.val hv)
+    refine ⟨c, ?_⟩
+    rw [hs]
+    funext j
+    fin_cases j
+    · simpa [apm_t01A01_retraction_homotopy_aux_vec] using congrFun hc 0
+    · simpa [apm_t01A01_retraction_homotopy_aux_vec] using congrFun hc 1
+    · have hc2 := congrFun hc 2
+      change (c : ℝ) * b.2.1.1 2 = a.2.1.1 2 at hc2
+      change (c : ℝ) * (b.1.1 * b.2.1.1 2) =
+        b.1.1 * a.2.1.1 2
+      rw [← hc2]
+      ring
+  let H : C(Set.Icc (0 : ℝ) 1 × U, U) := hqp.lift lift hfac
+  constructor
+  · refine ⟨ContinuousMap.Homotopy.mk H ?_ ?_⟩
+    · intro x
+      obtain ⟨v, hv⟩ := ConstructionTargets.ProjectiveSpaceTopology.surjective_quotientMap ℝ 2 x.1
+      have hx : x = ⟨ConstructionTargets.ProjectiveSpaceTopology.quotientMap ℝ 2 v,
+          hv ▸ x.2⟩ := Subtype.ext hv.symm
+      rw [hx]
+      apply Subtype.ext
+      let vv : {v : {v : Fin 3 → ℝ // v ≠ 0} //
+          ConstructionTargets.ProjectiveSpaceTopology.quotientMap ℝ 2 v ∈ U} :=
+        ⟨v, hv ▸ x.2⟩
+      have hh := DFunLike.congr_fun (hqp.lift_comp lift hfac)
+        ((0 : Set.Icc (0 : ℝ) 1), vv)
+      change H (0, ⟨ConstructionTargets.ProjectiveSpaceTopology.quotientMap ℝ 2 v, _⟩) =
+        lift (0, vv) at hh
+      have hh' := congrArg Subtype.val hh
+      change (H.toFun (0, ⟨ConstructionTargets.ProjectiveSpaceTopology.quotientMap ℝ 2 v, _⟩)).1 =
+        (lift (0, vv)).1 at hh'
+      apply hh'.trans
+      dsimp only [lift]
+      have hqv : Projectivization.mk ℝ v.1 v.2 ≠ apm_t01A01_q0 := vv.2
+      change Projectivization.mk ℝ
+          (apm_t01A01_retraction_homotopy_aux_vec 0 v.1) _ =
+        (i (r ⟨Projectivization.mk ℝ v.1 v.2, _⟩)).1
+      rw [hr v.1 v.2 hqv (apm_t01A01_retraction_homotopy_aux_xy v.1 v.2 hqv)]
+      rw [hi (![v.1 0, v.1 1])
+        (apm_t01A01_retraction_homotopy_aux_xy v.1 v.2 hqv) (by
+          intro h
+          apply apm_t01A01_retraction_homotopy_aux_xy v.1 v.2 hqv
+          funext j
+          fin_cases j
+          · exact congrFun h 0
+          · exact congrFun h 1)]
+      apply (Projectivization.mk_eq_mk_iff ℝ _ _ _ _).mpr
+      exact ⟨1, by ext j; fin_cases j <;> simp [apm_t01A01_retraction_homotopy_aux_vec]⟩
+    · intro x
+      obtain ⟨v, hv⟩ := ConstructionTargets.ProjectiveSpaceTopology.surjective_quotientMap ℝ 2 x.1
+      have hx : x = ⟨ConstructionTargets.ProjectiveSpaceTopology.quotientMap ℝ 2 v,
+          hv ▸ x.2⟩ := Subtype.ext hv.symm
+      rw [hx]
+      apply Subtype.ext
+      let vv : {v : {v : Fin 3 → ℝ // v ≠ 0} //
+          ConstructionTargets.ProjectiveSpaceTopology.quotientMap ℝ 2 v ∈ U} :=
+        ⟨v, hv ▸ x.2⟩
+      have hh := DFunLike.congr_fun (hqp.lift_comp lift hfac)
+        ((1 : Set.Icc (0 : ℝ) 1), vv)
+      change H (1, ⟨ConstructionTargets.ProjectiveSpaceTopology.quotientMap ℝ 2 v, _⟩) =
+        lift (1, vv) at hh
+      have hh' := congrArg Subtype.val hh
+      change (H.toFun (1, ⟨ConstructionTargets.ProjectiveSpaceTopology.quotientMap ℝ 2 v, _⟩)).1 =
+        (lift (1, vv)).1 at hh'
+      apply hh'.trans
+      apply (Projectivization.mk_eq_mk_iff ℝ _ _ _ _).mpr
+      exact ⟨1, by ext j; fin_cases j <;> simp [vv, apm_t01A01_retraction_homotopy_aux_vec]⟩
+  · ext x
+    obtain ⟨w, hw⟩ := ConstructionTargets.ProjectiveSpaceTopology.surjective_quotientMap ℝ 1 x
+    subst x
+    change r (i (Projectivization.mk ℝ w.1 w.2)) = Projectivization.mk ℝ w.1 w.2
+    have h3 : (![w.1 0, w.1 1, 0] : Fin 3 → ℝ) ≠ 0 := by
+      intro h; apply w.2; funext j; fin_cases j
+      · exact congrFun h 0
+      · exact congrFun h 1
+    have h2 : (![(w.1 0), (w.1 1)] : Fin 2 → ℝ) ≠ 0 := by
+      intro h; apply w.2; funext j; fin_cases j
+      · exact congrFun h 0
+      · exact congrFun h 1
+    have hnq : Projectivization.mk ℝ (![w.1 0, w.1 1, 0]) h3 ≠
+        apm_t01A01_q0 := by
+      simpa [apm_t01A01_retraction_homotopy_aux_vec] using
+        (apm_t01A01_retraction_homotopy_aux_ne_q0 ⟨0, by norm_num⟩
+          (![w.1 0, w.1 1, 0]) (by simpa using h2))
+    have hii : i (Projectivization.mk ℝ w.1 w.2) =
+        ⟨Projectivization.mk ℝ (![w.1 0, w.1 1, 0]) h3,
+          hnq⟩ := by
+      apply Subtype.ext
+      exact hi w.1 w.2 h3
+    rw [hii, hr (![w.1 0, w.1 1, 0]) h3 hnq (by simpa using h2)]
+    apply (Projectivization.mk_eq_mk_iff ℝ _ _ _ _).mpr
+    exact ⟨1, by ext j; fin_cases j <;> simp⟩
+
+/-- LIBRARY: the complement of a point in `RP²` has the homotopy type of its
+projective-line core.  A proof may choose coordinates sending `q` to a
+coordinate line and descend the radial deformation through the projective
+quotient. -/
+theorem apm_t01A01_punctured_homotopyEquiv_projectiveLine
+    (q : apm_t01A01_RP2) :
+    Nonempty (ContinuousMap.HomotopyEquiv
+      {y : apm_t01A01_RP2 // y ≠ q} apm_t01A01_RP1) := by
+  obtain ⟨e⟩ := apm_t01A01_puncture_transitive q
+  obtain ⟨r, hr⟩ := apm_t01A01_retraction_exists
+  obtain ⟨i, hi⟩ := apm_t01A01_inclusion_exists
+  obtain ⟨h1, h2⟩ := apm_t01A01_retraction_homotopy r hr i hi
+  exact ⟨e.toHomotopyEquiv.trans
+    { toFun := r, invFun := i, left_inv := h1,
+      right_inv := by rw [h2] }⟩
+
+/-- LIBRARY: every map from `RP²` to the projective line is null-homotopic.
+This is the `Z/2 → Z` lifting step, separated from the geometry of the
+punctured target. -/
+noncomputable def apm_t01A01_projectiveLine_map_nullhomotopic_aux_homeomorph_aux_onePointCircle :
+    OnePoint ℝ ≃ₜ Circle := by
+  let e₁ : OnePoint ℝ ≃ₜ
+      Metric.sphere (0 : EuclideanSpace ℝ (Fin 2)) 1 :=
+    onePointEquivSphereOfFinrankEq (by simp)
+  let L : EuclideanSpace ℝ (Fin 2) ≃ₗᵢ[ℝ] ℂ :=
+    Complex.orthonormalBasisOneI.repr.symm
+  let e₂ : Metric.sphere (0 : EuclideanSpace ℝ (Fin 2)) 1 ≃ₜ Circle :=
+    Homeomorph.subtype L.toHomeomorph (by
+      intro x
+      change x ∈ Metric.sphere (0 : EuclideanSpace ℝ (Fin 2)) 1 ↔
+        L x ∈ Metric.sphere (0 : ℂ) 1
+      simp only [Metric.mem_sphere, dist_zero_right, L.norm_map])
+  exact e₁.trans e₂
+
+/-- Seat: `RP¹` is compact (continuous image of the unit circle in `ℝ²`, or of
+`{v | ‖v‖ = 1}` under the quotient map). -/
+theorem apm_t01A01_RP1_compact : CompactSpace apm_t01A01_RP1 := by
+  let S := Metric.sphere (0 : Fin 2 → ℝ) 1
+  let π : S → apm_t01A01_RP1 := fun x ↦
+    Projectivization.mk ℝ x.1 (by
+      intro hx
+      have : ‖(x : Fin 2 → ℝ)‖ = 1 := by
+        simpa [S, Metric.mem_sphere] using x.2
+      simpa [hx] using this)
+  have hπ : Continuous π := by
+    let j : S → {v : Fin 2 → ℝ // v ≠ 0} := fun x ↦
+      ⟨x.1, by
+        intro hx
+        have : ‖(x : Fin 2 → ℝ)‖ = 1 := by
+          simpa [S, Metric.mem_sphere] using x.2
+        simpa [hx] using this⟩
+    have hj : Continuous j := by
+      exact Continuous.subtype_mk continuous_subtype_val _
+    exact (ConstructionTargets.ProjectiveSpaceTopology.continuous_quotientMap ℝ 1).comp hj
+  have hsurj : Function.Surjective π := by
+    intro y
+    obtain ⟨v, hv, rfl⟩ :=
+      ConstructionTargets.ProjectiveSpaceTopology.surjective_quotientMap ℝ 1 y
+    have hnorm : ‖(v : Fin 2 → ℝ)‖ ≠ 0 := norm_ne_zero_iff.mpr v.2
+    let w : Fin 2 → ℝ := ‖(v : Fin 2 → ℝ)‖⁻¹ • v.1
+    have hw_norm : ‖w‖ = 1 := by
+      simp [w, norm_smul, hnorm]
+    have hw : w ≠ 0 := by
+      exact norm_ne_zero_iff.mp (by simpa [hw_norm])
+    let x : S := ⟨w, by simpa [S, Metric.mem_sphere, hw_norm]⟩
+    refine ⟨x, ?_⟩
+    apply (Projectivization.mk_eq_mk_iff' ℝ w v.1 hw v.2).mpr
+    exact ⟨‖(v : Fin 2 → ℝ)‖⁻¹, rfl⟩
+  have hcompact : IsCompact (Set.range π) := isCompact_range hπ
+  rw [hsurj.range_eq] at hcompact
+  exact ⟨hcompact⟩
+
+noncomputable def apm_t01A01_RP1_equiv_onePoint_aux_projectiveEquiv :
+    Projectivization ℝ (ℝ × ℝ) ≃ apm_t01A01_RP1 where
+  toFun := Projectivization.map (LinearEquiv.finTwoArrow ℝ ℝ).symm.toLinearMap
+    (LinearEquiv.finTwoArrow ℝ ℝ).symm.injective
+  invFun := Projectivization.map (LinearEquiv.finTwoArrow ℝ ℝ).toLinearMap
+    (LinearEquiv.finTwoArrow ℝ ℝ).injective
+  left_inv x := by
+    induction x using Projectivization.ind with
+    | h v hv =>
+      rw [Projectivization.map_mk, Projectivization.map_mk]
+      simp
+  right_inv x := by
+    induction x using Projectivization.ind with
+    | h v hv =>
+      rw [Projectivization.map_mk, Projectivization.map_mk]
+      congr 1
+      funext j
+      fin_cases j <;> rfl
+
+noncomputable def apm_t01A01_RP1_equiv_onePoint_aux_equiv :
+    OnePoint ℝ ≃ apm_t01A01_RP1 :=
+  (OnePoint.equivProjectivization ℝ).trans
+    apm_t01A01_RP1_equiv_onePoint_aux_projectiveEquiv
+
+lemma apm_t01A01_RP1_equiv_onePoint_aux_continuous :
+    Continuous apm_t01A01_RP1_equiv_onePoint_aux_equiv := by
+  rw [OnePoint.continuous_iff]
+  constructor
+  · have hinv : Filter.Tendsto (fun t : ℝ => t⁻¹)
+        (Filter.coclosedCompact ℝ) (nhds 0) := by
+      rw [Filter.coclosedCompact_eq_cocompact]
+      simpa [Metric.cobounded_eq_cocompact] using
+        (Filter.tendsto_inv₀_cobounded :
+          Filter.Tendsto (fun t : ℝ => t⁻¹) (Bornology.cobounded ℝ) (nhds 0))
+    let F : ℝ → {v : Fin 2 → ℝ // v ≠ 0} := fun s =>
+      ⟨![1, s], by intro h; have := congrFun h 0; simp at this⟩
+    have hF : Continuous F := by
+      apply Continuous.subtype_mk
+      apply continuous_pi
+      intro j
+      fin_cases j
+      · exact continuous_const
+      · exact continuous_id
+    have hlim := ((ConstructionTargets.ProjectiveSpaceTopology.continuous_quotientMap ℝ 1).comp
+      hF).continuousAt.tendsto.comp hinv
+    apply hlim.congr'
+    have hne : ∀ᶠ t in Filter.coclosedCompact ℝ, t ≠ 0 := by
+      exact isCompact_singleton.compl_mem_coclosedCompact_of_isClosed isClosed_singleton
+    filter_upwards [hne] with t ht
+    change Projectivization.mk ℝ ![1, t⁻¹] (by simp) =
+      apm_t01A01_RP1_equiv_onePoint_aux_equiv (t : OnePoint ℝ)
+    apply (Projectivization.mk_eq_mk_iff' ℝ _ _ (by simp) (by simp)).mpr
+    exact ⟨t⁻¹, by funext j; fin_cases j <;> simp [ht]⟩
+  · change Continuous (fun t : ℝ =>
+      Projectivization.mk ℝ ![t, 1] (by simp))
+    exact (ConstructionTargets.ProjectiveSpaceTopology.continuous_quotientMap ℝ 1).comp
+      (show Continuous (fun t : ℝ => (⟨![t, 1], by simp⟩ :
+          {v : Fin 2 → ℝ // v ≠ 0})) from by
+        apply Continuous.subtype_mk
+        apply continuous_pi
+        intro j
+        fin_cases j
+        · exact continuous_id
+        · exact continuous_const)
+
+/-- Seat (claude-14): `[v] ↦ v 0 / v 1` (or `∞` when `v 1 = 0`) is continuous:
+it lifts to a continuous map on `{v | v ≠ 0}` (near `v 1 = 0` the ratio is large,
+i.e. near `∞` in `OnePoint ℝ`), then descend through the quotient map. -/
+noncomputable def apm_t01A01_RP1_equiv_onePoint_aux_inverse_continuous_aux_inv
+    (t : ℝ) : OnePoint ℝ :=
+  if t = 0 then OnePoint.infty else (↑(t⁻¹) : OnePoint ℝ)
+
+lemma apm_t01A01_RP1_equiv_onePoint_aux_inverse_continuous_aux_inv_continuous :
+    Continuous apm_t01A01_RP1_equiv_onePoint_aux_inverse_continuous_aux_inv := by
+  rw [continuous_iff_continuousAt]
+  intro t
+  by_cases ht : t = 0
+  · subst t
+    rw [ContinuousAt]
+    simp only [apm_t01A01_RP1_equiv_onePoint_aux_inverse_continuous_aux_inv,
+      if_pos]
+    rw [← nhdsNE_sup_pure]
+    apply Filter.Tendsto.sup
+    · have hinv : Filter.Tendsto (fun x : ℝ => x⁻¹) (nhdsWithin 0 {0}ᶜ)
+          (Filter.coclosedCompact ℝ) := by
+        simpa [Filter.coclosedCompact_eq_cocompact,
+          Metric.cobounded_eq_cocompact] using
+            (Filter.tendsto_inv₀_nhdsNE_zero (α := ℝ))
+      apply (OnePoint.tendsto_coe_infty.comp hinv).congr'
+      filter_upwards [self_mem_nhdsWithin] with x hx
+      have hx' : x ≠ 0 := by simpa using hx
+      simp [apm_t01A01_RP1_equiv_onePoint_aux_inverse_continuous_aux_inv, hx']
+    · simpa [apm_t01A01_RP1_equiv_onePoint_aux_inverse_continuous_aux_inv] using
+        (tendsto_pure_nhds
+          apm_t01A01_RP1_equiv_onePoint_aux_inverse_continuous_aux_inv 0)
+  · have hi : ContinuousAt (fun x : ℝ => (↑(x⁻¹) : OnePoint ℝ)) t :=
+      OnePoint.continuous_coe.continuousAt.comp (continuousAt_inv₀ ht)
+    apply hi.congr_of_eventuallyEq
+    filter_upwards [eventually_ne_nhds ht] with x hx
+    simp [apm_t01A01_RP1_equiv_onePoint_aux_inverse_continuous_aux_inv, hx]
+
+lemma apm_t01A01_RP1_equiv_onePoint_aux_inverse_continuous :
+    Continuous apm_t01A01_RP1_equiv_onePoint_aux_equiv.symm := by
+  let q := ConstructionTargets.ProjectiveSpaceTopology.quotientMap ℝ 1
+  have hq : Topology.IsQuotientMap q :=
+    ⟨ConstructionTargets.ProjectiveSpaceTopology.surjective_quotientMap ℝ 1, rfl⟩
+  apply hq.continuous_iff.mpr
+  let raw : {v : Fin 2 → ℝ // v ≠ 0} → OnePoint ℝ := fun v =>
+    if v.1 1 = 0 then OnePoint.infty
+      else (↑((v.1 1)⁻¹ * v.1 0) : OnePoint ℝ)
+  have hraw : Continuous raw := by
+    rw [continuous_iff_continuousAt]
+    intro v
+    by_cases hy : v.1 1 = 0
+    · have hx : v.1 0 ≠ 0 := by
+        intro hx
+        apply v.2
+        funext j
+        fin_cases j <;> assumption
+      let u : {v : Fin 2 → ℝ // v ≠ 0} → ℝ := fun w => w.1 1 / w.1 0
+      have hu : ContinuousAt u v := by
+        exact ((continuous_apply 1).continuousAt.comp continuous_subtype_val.continuousAt).div₀
+          ((continuous_apply 0).continuousAt.comp continuous_subtype_val.continuousAt) hx
+      have hevent : ∀ᶠ w in nhds v, w.1 0 ≠ 0 :=
+        (isOpen_compl_singleton.preimage
+          ((continuous_apply 0).comp continuous_subtype_val)).mem_nhds hx
+      apply apm_t01A01_RP1_equiv_onePoint_aux_inverse_continuous_aux_inv_continuous.continuousAt.comp
+        hu |>.congr_of_eventuallyEq
+      filter_upwards [hevent] with w hw
+      simp only [raw, u]
+      by_cases hwy : w.1 1 = 0
+      · simp [hwy,
+          apm_t01A01_RP1_equiv_onePoint_aux_inverse_continuous_aux_inv]
+      · simp [hwy, hw,
+          apm_t01A01_RP1_equiv_onePoint_aux_inverse_continuous_aux_inv]
+        field_simp
+    · have hc : ContinuousAt
+          (fun w : {v : Fin 2 → ℝ // v ≠ 0} =>
+            (↑((w.1 1)⁻¹ * w.1 0) : OnePoint ℝ)) v := by
+        apply OnePoint.continuous_coe.continuousAt.comp
+        have h1 : ContinuousAt (fun w : {v : Fin 2 → ℝ // v ≠ 0} => w.1 1) v :=
+          (continuous_apply 1).continuousAt.comp continuous_subtype_val.continuousAt
+        have h0 : ContinuousAt (fun w : {v : Fin 2 → ℝ // v ≠ 0} => w.1 0) v :=
+          (continuous_apply 0).continuousAt.comp continuous_subtype_val.continuousAt
+        exact (h1.inv₀ hy).mul h0
+      apply hc.congr_of_eventuallyEq
+      have hevent : ∀ᶠ w in nhds v, w.1 1 ≠ 0 :=
+        (isOpen_compl_singleton.preimage
+          ((continuous_apply 1).comp continuous_subtype_val)).mem_nhds hy
+      filter_upwards [hevent] with w hw
+      simp [raw, hw]
+  have heq : apm_t01A01_RP1_equiv_onePoint_aux_equiv.symm ∘ q = raw := by
+    funext v
+    change (OnePoint.equivProjectivization ℝ).symm
+      (Projectivization.map (LinearEquiv.finTwoArrow ℝ ℝ).toLinearMap
+        (LinearEquiv.finTwoArrow ℝ ℝ).injective
+        (Projectivization.mk ℝ v.1 v.2)) = raw v
+    rw [Projectivization.map_mk]
+    simp [raw, div_eq_inv_mul]
+  exact heq ▸ hraw
+
+theorem apm_t01A01_RP1_equiv_onePoint :
+    ∃ e : apm_t01A01_RP1 ≃ OnePoint ℝ, Continuous e := by
+  exact ⟨apm_t01A01_RP1_equiv_onePoint_aux_equiv.symm,
+    apm_t01A01_RP1_equiv_onePoint_aux_inverse_continuous⟩
+
+lemma apm_t01A01_projectiveLine_map_nullhomotopic_aux_homeomorph :
+    Nonempty (apm_t01A01_RP1 ≃ₜ Circle) := by
+  obtain ⟨e, he⟩ := apm_t01A01_RP1_equiv_onePoint
+  haveI := apm_t01A01_RP1_compact
+  exact ⟨he.homeoOfEquivCompactToT2.trans
+    apm_t01A01_projectiveLine_map_nullhomotopic_aux_homeomorph_aux_onePointCircle⟩
+
+/-- Seat: the antipodal quotient `S² → RP²`, `x ↦ [x]`, is a continuous
+surjective quotient map identifying antipodes (`ProjectiveQuotientDescent`). -/
+theorem apm_t01A01_sphere_quotient :
+    ∃ π : C(Metric.sphere (0 : EuclideanSpace ℝ (Fin 3)) 1, apm_t01A01_RP2),
+      Function.Surjective π ∧ Topology.IsQuotientMap π ∧ (∀ x, π (-x) = π x) ∧
+        ∀ x y, π x = π y → y = x ∨ y = -x := by
+  let π : C(Metric.sphere (0 : EuclideanSpace ℝ (Fin 3)) 1,
+      apm_t01A01_RP2) :=
+    ⟨ConstructionTargets.RealProjectiveSmoothTarget.sphereProjection 2,
+      ConstructionTargets.RealProjectiveSmoothTarget.continuous_sphereProjection⟩
+  refine ⟨π, ?_, ?_, ?_, ?_⟩
+  · exact ConstructionTargets.RealProjectiveSmoothTarget.sphereProjectionQuotientAuthority.surjective
+  · exact ConstructionTargets.RealProjectiveSmoothTarget.sphereProjectionQuotientAuthority
+  · intro x
+    exact ((ConstructionTargets.RealProjectiveSmoothTarget.sphereProjection_eq_iff x (-x)).2
+      (Or.inr rfl)).symm
+  · intro x y hxy
+    exact (ConstructionTargets.RealProjectiveSmoothTarget.sphereProjection_eq_iff x y).1 hxy
+
+/-- Seat: every map `S² → S¹` lifts through `Circle.exp` (`S²` is simply
+connected: `ConstructionTargets.SimplyConnectedOpenCover.simplyConnectedSpace_sphere_of_pole`;
+`Circle.exp` is a covering map, `isCoveringMap_exp`-style; lift by
+`ConstructionTargets.CoveringLiftRestriction` / `IsCoveringMap.exists_lift`). -/
+lemma apm_t01A01_sphere_circle_lift_aux_simplyConnected :
+    SimplyConnectedSpace (Metric.sphere (0 : EuclideanSpace ℝ (Fin 3)) 1) := by
+  let v : EuclideanSpace ℝ (Fin 3) := EuclideanSpace.single 0 1
+  have hv : ‖v‖ = 1 := by simp [v]
+  have hv0 : v ≠ 0 := by
+    intro h
+    have h0 := congrArg (fun x : EuclideanSpace ℝ (Fin 3) ↦ x 0) h
+    simpa [v] using h0
+  haveI : Fact (Module.finrank ℝ (EuclideanSpace ℝ (Fin 3)) = 3) :=
+    ⟨by simp [Module.finrank_fin_fun]⟩
+  have hfin : Module.finrank ℝ (Submodule.orthogonal (ℝ ∙ v)) = 2 :=
+    Submodule.finrank_orthogonal_span_singleton hv0
+  apply simplyConnectedSpace_sphere_of_pole v hv
+  rw [← Module.finrank_eq_rank, hfin]
+  norm_num
+
+theorem apm_t01A01_sphere_circle_lift (g : C(Metric.sphere (0 : EuclideanSpace ℝ (Fin 3)) 1, Circle)) :
+    ∃ h : C(Metric.sphere (0 : EuclideanSpace ℝ (Fin 3)) 1, ℝ), ∀ x, Circle.exp (h x) = g x := by
+  letI := apm_t01A01_sphere_circle_lift_aux_simplyConnected
+  letI : LocPathConnectedSpace
+      (Metric.sphere (0 : EuclideanSpace ℝ (Fin 3)) 1) :=
+    ChartedSpace.locPathConnectedSpace (EuclideanSpace ℝ (Fin 2)) _
+  let a₀ : Metric.sphere (0 : EuclideanSpace ℝ (Fin 3)) 1 :=
+    ⟨EuclideanSpace.single 0 1, by simp [Metric.mem_sphere]⟩
+  obtain ⟨h, hh, _⟩ :=
+    ConstructionTargets.CircleUniversalCover.circleCover_isCoveringMap.existsUnique_continuousMap_lifts
+      g a₀ (Complex.arg (g a₀)) (by
+        exact Circle.exp_arg (g a₀))
+  exact ⟨h, fun x ↦ congrFun hh.2 x⟩
+
+/-- Seat: a map `RP² → S¹` has a real logarithm.  Lift `f ∘ π` to `h`; then
+`h (-x) - h x ∈ 2πℤ` is continuous on the connected sphere, hence a constant
+`c`, and applying it twice gives `c = -c`, so `c = 0`; `h` descends through the
+quotient map `π`. -/
+theorem apm_t01A01_projectivePlane_circle_log
+    (π : C(Metric.sphere (0 : EuclideanSpace ℝ (Fin 3)) 1, apm_t01A01_RP2)) (hπs : Function.Surjective π)
+    (hπq : Topology.IsQuotientMap π) (hπa : ∀ x, π (-x) = π x)
+    (hπf : ∀ x y, π x = π y → y = x ∨ y = -x)
+    (hlift : ∀ g : C(Metric.sphere (0 : EuclideanSpace ℝ (Fin 3)) 1, Circle), ∃ h : C(Metric.sphere (0 : EuclideanSpace ℝ (Fin 3)) 1, ℝ), ∀ x, Circle.exp (h x) = g x)
+    (f : C(apm_t01A01_RP2, Circle)) :
+    ∃ k : C(apm_t01A01_RP2, ℝ), ∀ y, Circle.exp (k y) = f y := by
+  let g : C(Metric.sphere (0 : EuclideanSpace ℝ (Fin 3)) 1, Circle) := f.comp π
+  obtain ⟨h, hh⟩ := hlift g
+  let a : C(Metric.sphere (0 : EuclideanSpace ℝ (Fin 3)) 1,
+      Metric.sphere (0 : EuclideanSpace ℝ (Fin 3)) 1) :=
+    ⟨fun x ↦ -x, continuous_neg⟩
+  let x₀ : Metric.sphere (0 : EuclideanSpace ℝ (Fin 3)) 1 :=
+    ⟨EuclideanSpace.single 0 1, by simp [mem_sphere_zero_iff_norm]⟩
+  have hexp₀ : Circle.exp (h (a x₀)) = Circle.exp (h x₀) := by
+    rw [hh, hh]
+    exact congrArg f (hπa x₀)
+  obtain ⟨n, hn⟩ := Circle.exp_eq_exp.mp hexp₀
+  let c : ℝ := (n : ℝ) * (2 * Real.pi)
+  have hc : h (a x₀) = h x₀ + c := by
+    simpa [c] using hn
+  let h₁ : C(Metric.sphere (0 : EuclideanSpace ℝ (Fin 3)) 1, ℝ) := h.comp a
+  let h₂ : C(Metric.sphere (0 : EuclideanSpace ℝ (Fin 3)) 1, ℝ) :=
+    ⟨fun x ↦ h x + c, h.continuous.add continuous_const⟩
+  have hcomp : Circle.exp ∘ h₁ = Circle.exp ∘ h₂ := by
+    funext x
+    change Circle.exp (h (a x)) = Circle.exp (h x + c)
+    rw [Circle.exp_add]
+    have hperiod : Circle.exp c = 1 := by
+      exact Circle.exp_eq_one.mpr ⟨n, rfl⟩
+    rw [hperiod, mul_one, hh, hh]
+    exact congrArg f (hπa x)
+  have heq : h₁ = h₂ := by
+    letI : PreconnectedSpace (Metric.sphere
+        (0 : EuclideanSpace ℝ (Fin 3)) 1) :=
+      Subtype.preconnectedSpace (isPreconnected_sphere (by
+        rw [(WithLp.linearEquiv 2 ℝ (Fin 3 → ℝ)).rank_eq]
+        rw [rank_fin_fun]
+        norm_num) 0 1)
+    apply ContinuousMap.coe_injective
+    apply ConstructionTargets.CircleUniversalCover.circleCover_isCoveringMap.eq_of_comp_eq
+      h₁.continuous h₂.continuous hcomp x₀
+    simpa [h₁, h₂] using hc
+  have hc0 : c = 0 := by
+    have hx := DFunLike.congr_fun heq (a x₀)
+    have ha2 : a (a x₀) = x₀ := by
+      apply Subtype.ext
+      simp [a]
+    change h (a (a x₀)) = h (a x₀) + c at hx
+    rw [ha2, hc] at hx
+    linarith
+  have heven : ∀ x, h (a x) = h x := by
+    intro x
+    have hx := DFunLike.congr_fun heq x
+    change h (a x) = h x + c at hx
+    simpa [hc0] using hx
+  have hfac : Function.FactorsThrough h π := by
+    intro x y hxy
+    rcases hπf x y hxy with rfl | hy
+    · rfl
+    · subst y
+      simpa [a] using (heven x).symm
+  let k : C(apm_t01A01_RP2, ℝ) := hπq.lift h hfac
+  refine ⟨k, ?_⟩
+  intro y
+  obtain ⟨x, rfl⟩ := hπs y
+  rw [show k (π x) = h x from DFunLike.congr_fun (hπq.lift_comp h hfac) x]
+  exact hh x
+
+/-- Seat: a circle-valued map with a real logarithm is homotopic to the
+constant `1` (`H t y = exp ((1 - t) k y)`). -/
+theorem apm_t01A01_circle_nullhomotopic_of_log {X : Type*} [TopologicalSpace X]
+    (f : C(X, Circle)) (k : C(X, ℝ)) (hk : ∀ y, Circle.exp (k y) = f y) :
+    ContinuousMap.Homotopic f (ContinuousMap.const X (1 : Circle)) := by
+  refine ⟨{ toFun := fun tx => Circle.exp ((1 - (tx.1 : ℝ)) * k tx.2)
+            continuous_toFun := by fun_prop
+            map_zero_left := by intro x; simpa using hk x
+            map_one_left := by intro x; simp }⟩
+
+lemma apm_t01A01_projectiveLine_map_nullhomotopic_aux_circle
+    (f : C(apm_t01A01_RP2, Circle)) :
+    ContinuousMap.Homotopic f
+      (ContinuousMap.const apm_t01A01_RP2 (1 : Circle)) := by
+  obtain ⟨π, hπs, hπq, hπa, hπf⟩ := apm_t01A01_sphere_quotient
+  obtain ⟨k, hk⟩ := apm_t01A01_projectivePlane_circle_log π hπs hπq hπa hπf
+    apm_t01A01_sphere_circle_lift f
+  exact apm_t01A01_circle_nullhomotopic_of_log f k hk
+
+theorem apm_t01A01_projectiveLine_map_nullhomotopic
+    (h : C(apm_t01A01_RP2, apm_t01A01_RP1)) :
+    ∃ p : apm_t01A01_RP1,
+      ContinuousMap.Homotopic h
+        (ContinuousMap.const apm_t01A01_RP2 p) := by
+  obtain ⟨e⟩ := apm_t01A01_projectiveLine_map_nullhomotopic_aux_homeomorph
+  let ef : C(apm_t01A01_RP1, Circle) := ⟨e, e.continuous⟩
+  let ei : C(Circle, apm_t01A01_RP1) := ⟨e.symm, e.symm.continuous⟩
+  have hh := apm_t01A01_projectiveLine_map_nullhomotopic_aux_circle
+    (ef.comp h)
+  refine ⟨e.symm 1, ?_⟩
+  have hc := ContinuousMap.Homotopic.comp
+    (ContinuousMap.Homotopic.refl ei) hh
+  have heq : ei.comp (ef.comp h) = h := by
+    ext x
+    exact e.symm_apply_apply (h x)
+  rw [heq] at hc
+  simpa [ei] using hc
+
+/-- LIBRARY: transport a null-homotopy across a target homotopy equivalence.
+The conclusion deliberately takes the null-homotopy as an explicit hypothesis,
+so this lemma is independent of the two geometric leaves above. -/
+theorem apm_t01A01_nullhomotopic_of_target_homotopyEquiv
+    {X Y Z : Type*} [TopologicalSpace X] [TopologicalSpace Y]
+    [TopologicalSpace Z] (e : ContinuousMap.HomotopyEquiv Y Z) (g : C(X, Y))
+    (p : Z)
+    (hg : ContinuousMap.Homotopic (e.toFun.comp g)
+      (ContinuousMap.const X p)) :
+    ∃ y : Y, ContinuousMap.Homotopic g (ContinuousMap.const X y) := by
+  refine ⟨e.invFun p, ?_⟩
+  have hleft := ContinuousMap.Homotopic.comp e.left_inv
+    (ContinuousMap.Homotopic.refl g)
+  have hconst := ContinuousMap.Homotopic.comp
+    (ContinuousMap.Homotopic.refl e.invFun) hg
+  exact hleft.symm.trans hconst
+
+/-- Assembly of the punctured-projective-plane retraction, the projective-line
+lifting argument, and transport back through the retraction. -/
+theorem apm_t01A01_punctured_factor_nullhomotopic
     (q : apm_t01A01_RP2)
     (g : C(apm_t01A01_RP2, {y : apm_t01A01_RP2 // y ≠ q})) :
     ∃ p : {y : apm_t01A01_RP2 // y ≠ q},
       ContinuousMap.Homotopic g (ContinuousMap.const apm_t01A01_RP2 p) := by
-  sorry
+  obtain ⟨e⟩ := apm_t01A01_punctured_homotopyEquiv_projectiveLine q
+  obtain ⟨p, hp⟩ :=
+    apm_t01A01_projectiveLine_map_nullhomotopic (e.toFun.comp g)
+  exact apm_t01A01_nullhomotopic_of_target_homotopyEquiv e g p hp
+
+open CategoryTheory
+
+theorem apm_t01A01_piOne_trivial_of_nullhomotopic
+    {X Y : Type*} [TopologicalSpace X] [TopologicalSpace Y]
+    (f : C(X, Y)) (p : Y)
+    (hf : ContinuousMap.Homotopic f (ContinuousMap.const X p)) :
+    ∀ (x : X) (γ : FundamentalGroup X x),
+      FundamentalGroup.map f x γ = 1 := by
+  intro x γ
+  let c : C(X, Y) := ContinuousMap.const X p
+  have hc : FundamentalGroup.map c x γ = 1 := by
+    induction γ using Path.Homotopic.Quotient.ind with
+    | mk q =>
+      change Path.Homotopic.Quotient.map (.mk q) c =
+        Path.Homotopic.Quotient.refl p
+      rw [← Path.Homotopic.Quotient.mk_map]
+      have hq : q.map c.continuous = Path.refl p := by
+        ext t
+        rfl
+      rw [hq]
+      rfl
+  obtain ⟨H⟩ := hf
+  let η := FundamentalGroupoidFunctor.homotopicMapsNatIso H
+  have hn := η.naturality γ
+  change FundamentalGroup.map f x γ ≫ η.app (FundamentalGroupoid.mk x) =
+    η.app (FundamentalGroupoid.mk x) ≫ FundamentalGroup.map c x γ at hn
+  dsimp [c] at hc hn
+  rw [hc] at hn
+  change FundamentalGroup.map f x γ ≫ η.app (FundamentalGroupoid.mk x) =
+    η.app (FundamentalGroupoid.mk x) ≫ 𝟙 (FundamentalGroupoid.mk p) at hn
+  have hn' : FundamentalGroup.map f x γ ≫ η.app (FundamentalGroupoid.mk x) =
+      η.app (FundamentalGroupoid.mk x) :=
+    hn.trans (Category.comp_id _)
+  apply (cancel_mono (η.app (FundamentalGroupoid.mk x))).mp
+  exact hn'.trans (Category.id_comp _).symm
 
 theorem apm_t01a01 :
     ∀ f : C(apm_t01A01_RP2, apm_t01A01_RP2),
@@ -79,49 +1170,12 @@ theorem apm_t01a01 :
       ∃ p : apm_t01A01_RP2,
         ContinuousMap.Homotopic f (ContinuousMap.const _ p) := by
   intro f hnot_surj
-  have hfactor := apm_t01A01_factor_through_complement f hnot_surj
-  /-
-  Boundary (closer hop 2): factorization through the complement of a missed point is proved
-  above. Completing the frozen theorem requires the specific topology of real
-  projective space: `RP² \ {q}` deformation retracts to `RP¹ ≃ S¹`,
-  `π₁(RP²) ≃ ZMod 2`, and the circle's universal-cover lifting criterion.
-  I searched Mathlib's `Projectivization`, `FundamentalGroup`, homotopy,
-  covering-map lifting, sphere/circle, and quotient APIs. None of those
-  projective-space computations or the punctured-plane deformation retraction
-  is available, so the factorization cannot presently be converted into the
-  two requested conclusions without a substantial new topology development.
-  The partial siblings `t00J07` and `t92J05` confirm that the required `RP²`
-  fundamental-group and cell-attachment computations are not packaged; the
-  wedge-cover sibling `t98A03` is blocked by the same quotient-space gap. No
-  relevant bridge occurs in `ConstructionTargets/` or `YoungL2.lean`.
+  obtain ⟨q, g, hfg⟩ := apm_t01A01_factor_through_complement f hnot_surj
+  obtain ⟨p, hg⟩ := apm_t01A01_punctured_factor_nullhomotopic q g
+  have hf : ContinuousMap.Homotopic f
+      (ContinuousMap.const apm_t01A01_RP2 (p : apm_t01A01_RP2)) :=
+    apm_t01A01_nullhomotopic_of_factor f q g hfg p hg
+  exact ⟨apm_t01A01_piOne_trivial_of_nullhomotopic f (p : apm_t01A01_RP2) hf,
+    ⟨p, hf⟩⟩
 
-  Closer hop 1 additionally searched `LEMMA-INDEX.md` and all fully closed
-  artifacts for projectivization/fundamental-group lemmas. The only new
-  Mathlib neighbor found was `OnePoint.equivProjectivization`, which treats
-  the projective line rather than the projective plane and supplies no
-  punctured-plane retraction. Git history contains only the statement-bank
-  commit and the two earlier partial passes. The proved elementary bridge has
-  now been extracted as `apm_t01A01_factor_through_complement`; the remaining
-  proof hole is confined to the unavailable RP² topology computation.
-
-  This hop additionally proves `apm_t01A01_nullhomotopic_of_factor`: a
-  null-homotopy of the complement-valued factor composes with the subtype
-  inclusion to give exactly the frozen null-homotopy conclusion for `f`.
-  Thus no further continuous-map composition or endpoint transport remains
-  after the punctured-RP² factor has been contracted.
-
-  Closer hop 3 inspected Mathlib's lower-level homotopy-invariance machinery.
-  `FundamentalGroupoidFunctor.homotopicMapsNatIso` does give a natural
-  isomorphism between the functors induced by homotopic maps, and hence offers
-  a route from the eventual null-homotopy to the first (fundamental-group)
-  conjunct.  Its components change basepoints by conjugation, so this is not a
-  direct rewriting lemma for the frozen `FundamentalGroup.map`; nevertheless a
-  constant map has trivial image and conjugation preserves the identity.  This
-  sharpens the dependency graph but does not produce the missing null-homotopy.
-  Renewed searches of `FundamentalGroupoid/InducedMaps.lean`, the projective-
-  space sources, `LEMMA-INDEX.md`, the closed corpus, and git history still
-  found no contraction of `RP² \ {q}`, no `RP²` fundamental-group computation,
-  and no covering-space lifting theorem specialized enough to construct it.
-  The frozen theorem therefore remains honestly open at that topology bridge.
-  -/
-  sorry
+#print axioms apm_t01a01
