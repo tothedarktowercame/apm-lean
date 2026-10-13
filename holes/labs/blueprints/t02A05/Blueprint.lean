@@ -1,6 +1,8 @@
 import Mathlib
 import Mathlib.Analysis.Calculus.DifferentialForm.Basic
 import ConstructionTargets.IntrinsicSphereFourthMoments
+import ConstructionTargets.C1GraphGlobalBounds
+import ConstructionTargets.SphereCapNullEquatorMeasureAssembly
 
 open MeasureTheory
 open scoped ENNReal
