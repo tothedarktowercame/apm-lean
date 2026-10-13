@@ -3759,7 +3759,29 @@ theorem apm_m98A06_poincare_best_constant_of_facts
     IsLeast {C : ℝ | ∀ f df : ℝ → ℝ, apm_m98a06_InH10Pi f df →
       ∫ x, (f x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)) ≤
         C * ∫ x, (df x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi))} 1 := by
-  sorry
+  constructor
+  · intro f df h
+    simpa using
+      apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_inequality_aux_approximation
+        hWirtinger hFTC f df h
+  · intro C hC
+    let y : ℝ → ℝ := fun x ↦ Real.sqrt (2 / Real.pi) * Real.sin x
+    let dy : ℝ → ℝ := fun x ↦ Real.sqrt (2 / Real.pi) * Real.cos x
+    obtain ⟨_, _, hH, hnorm, henergy⟩ := hSine.2 1 one_ne_zero
+    have hH' : apm_m98a06_InH10Pi y dy := by simpa [y, dy] using hH
+    have hnorm' : ∫ x, (y x) ^ 2
+        ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)) = 1 := by
+      simpa [y] using hnorm
+    have henergy' : ∫ x, (dy x) ^ 2 - (y x) ^ 2
+        ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)) = 0 := by
+      simpa [y, dy] using henergy
+    have hdnorm : ∫ x, (dy x) ^ 2
+        ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)) = 1 :=
+      apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_forward_aux_deriv_norm
+        y dy hH' hnorm' henergy'
+    have hbound := hC y dy hH'
+    rw [hnorm', hdnorm, mul_one] at hbound
+    exact hbound
 -- END SEAT AREA
 
 /-! The original seven conclusion-level lemmas are assembly only. -/
