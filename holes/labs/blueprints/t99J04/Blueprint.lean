@@ -128,6 +128,31 @@ theorem apm_t99J04_bridge_local_inverse_function_aux_chart
 
 /-- LIBRARY: the missing boundaryless finite-dimensional manifold inverse
 function theorem. -/
+def apm_t99J04_bridge_local_inverse_function_aux_extChart
+    {E X : Type} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [TopologicalSpace X] [ChartedSpace E X]
+    (x : X) : OpenPartialHomeomorph X E where
+  toPartialEquiv := extChartAt (𝓘(ℝ, E)) x
+  open_source := isOpen_extChartAt_source x
+  open_target := isOpen_extChartAt_target x
+  continuousOn_toFun := continuousOn_extChartAt x
+  continuousOn_invFun := continuousOn_extChartAt_symm x
+
+/-- Seat (claude-14): normed-space inverse function theorem with a C^∞
+neighbourhood: shrink the `HasStrictFDerivAt.toOpenPartialHomeomorph` source so
+the derivative stays invertible (`isOpen_setOf_isUnit`-style openness of
+invertible maps); the inverse is `ContDiffAt` at every target point
+(`ContDiffAt.to_localInverse`), hence `ContDiffOn` on the open target. -/
+theorem apm_t99J04_euclid_local_inverse
+    {E E' : Type} [NormedAddCommGroup E] [NormedSpace ℝ E] [CompleteSpace E]
+    [NormedAddCommGroup E'] [NormedSpace ℝ E'] [CompleteSpace E']
+    (f : E → E') (U : Set E) (hU : IsOpen U) (a : E) (ha : a ∈ U)
+    (hf : ContDiffOn ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) f U) (hb : Function.Bijective (fderiv ℝ f a)) :
+    ∃ e : OpenPartialHomeomorph E E', a ∈ e.source ∧ e.source ⊆ U ∧
+      (∀ x ∈ e.source, e x = f x) ∧ ContDiffOn ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) e e.source ∧
+      ContDiffOn ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) e.symm e.target := by
+  sorry
+
 theorem apm_t99J04_bridge_local_inverse_function
     {E E' X Y : Type}
     [NormedAddCommGroup E] [NormedSpace ℝ E]
@@ -138,6 +163,11 @@ theorem apm_t99J04_bridge_local_inverse_function
     [IsManifold (𝓘(ℝ, E)) (⊤ : ℕ∞) X]
     [TopologicalSpace Y] [ChartedSpace E' Y]
     [IsManifold (𝓘(ℝ, E')) (⊤ : ℕ∞) Y]
+    (heuclid : ∀ (U : Set E) (a : E), IsOpen U → a ∈ U →
+      ∀ g : E → E', ContDiffOn ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) g U → Function.Bijective (fderiv ℝ g a) →
+      ∃ e : OpenPartialHomeomorph E E', a ∈ e.source ∧ e.source ⊆ U ∧
+        (∀ x ∈ e.source, e x = g x) ∧ ContDiffOn ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) e e.source ∧
+        ContDiffOn ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) e.symm e.target)
     (f : X → Y) (x : X)
     (hf : ContMDiff (𝓘(ℝ, E)) (𝓘(ℝ, E')) (⊤ : ℕ∞) f)
     (hbij : Function.Bijective
@@ -277,10 +307,10 @@ theorem apm_t99j04 :
   constructor
   · intro n X _ _ _ x f hf hli
     have hsmooth := apm_t99J04_coordinateMap_contMDiff n X f hf
-    exact apm_t99J04_bridge_local_inverse_function _ _ hsmooth
+    exact apm_t99J04_bridge_local_inverse_function (fun U a hU ha g hg hb => apm_t99J04_euclid_local_inverse g U hU a ha hg hb) _ _ hsmooth
       (apm_t99J04_bridge_coordinateMap_mfderiv_bijective n X x f hf hsmooth hli)
   · intro E E' _ _ _ _ _ _ _ _ X Y _ _ _ _ _ _ _ _ _ _ _ f hf hbij
     exact apm_t99J04_surjective_of_bijective_mfderiv_of_localIFT f hf hbij
-      (fun x _ hb ↦ apm_t99J04_bridge_local_inverse_function f x hf hb)
+      (fun x _ hb ↦ apm_t99J04_bridge_local_inverse_function (fun U a hU ha g hg hb => apm_t99J04_euclid_local_inverse g U hU a ha hg hb) f x hf hb)
 
 #print axioms apm_t99j04
