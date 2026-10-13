@@ -275,7 +275,30 @@ noncomputable def apm_m98J05_kernelDx (t x : ℝ) : ℝ :=
 
 theorem apm_m98J05_kernel_hasDerivAt_time {t : ℝ} (ht : 0 < t) (x : ℝ) :
     HasDerivAt (fun s ↦ apm_m98J05_heatKernel s x) (apm_m98J05_kernelDt t x) t := by
-  sorry
+  unfold apm_m98J05_kernelDt apm_m98J05_heatKernel
+  have hpit : 0 < Real.pi * t := mul_pos Real.pi_pos ht
+  have hsqrt : Real.sqrt (Real.pi * t) ≠ 0 := ne_of_gt (Real.sqrt_pos.2 hpit)
+  have hpi : HasDerivAt (fun s : ℝ ↦ Real.pi * s) Real.pi t := by
+    simpa using (hasDerivAt_id t).const_mul Real.pi
+  have hsqrt' : HasDerivAt (fun s : ℝ ↦ Real.sqrt (Real.pi * s))
+      (1 / (2 * Real.sqrt (Real.pi * t)) * Real.pi) t :=
+    (Real.hasDerivAt_sqrt hpit.ne').comp t hpi
+  have hcoef : HasDerivAt (fun s : ℝ ↦ 1 / (2 * Real.sqrt (Real.pi * s)))
+      ((0 * (2 * Real.sqrt (Real.pi * t)) -
+        1 * (2 * (1 / (2 * Real.sqrt (Real.pi * t)) * Real.pi))) /
+          (2 * Real.sqrt (Real.pi * t)) ^ 2) t :=
+    (hasDerivAt_const t 1).div (hsqrt'.const_mul 2) (by positivity)
+  have hfour : HasDerivAt (fun s : ℝ ↦ 4 * s) 4 t := by
+    simpa using (hasDerivAt_id t).const_mul 4
+  have harg : HasDerivAt (fun s : ℝ ↦ -(x ^ 2) / (4 * s))
+      ((0 * (4 * t) - (-(x ^ 2)) * 4) / (4 * t) ^ 2) t :=
+    (hasDerivAt_const t (-(x ^ 2))).div hfour (by positivity)
+  have h := hcoef.mul ((Real.hasDerivAt_exp _).comp t harg)
+  convert h using 1
+  dsimp only [Function.comp_apply]
+  field_simp [ht.ne', hpit.ne', hsqrt]
+  rw [Real.sq_sqrt hpit.le]
+  ring
 
 theorem apm_m98J05_kernel_hasDerivAt_space {t : ℝ} (ht : 0 < t) (x : ℝ) :
     HasDerivAt (fun z ↦ apm_m98J05_heatKernel t z) (apm_m98J05_kernelDx t x) x := by
