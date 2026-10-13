@@ -538,7 +538,8 @@ theorem apm_m95A03_exists_homogeneous_minimizer
 
 theorem apm_m95A03_minimizers_eqOn
     (a b p₀ : ℝ) (hab : a < b) (hp₀ : 0 < p₀)
-    (p q f u v : ℝ → ℝ)
+    (p q f u v : ℝ → ℝ) (hp : ContDiff ℝ 1 p)
+    (hq : Continuous q) (hf : Continuous f)
     (hp_lower : ∀ t ∈ Set.Icc a b, p₀ ≤ p t)
     (hq_nonneg : ∀ t ∈ Set.Icc a b, 0 ≤ q t)
     (huadm : u ∈ apm_m95A03_admissible a b 0 0)
@@ -591,7 +592,7 @@ theorem apm_m95a03
         hp hq hf hp_lower hq_nonneg
     refine ⟨u, hu2, huadm, humin, ?_⟩
     intro v hvadm hvmin
-    exact apm_m95A03_minimizers_eqOn a b p₀ hab hp₀ p q f u v
+    exact apm_m95A03_minimizers_eqOn a b p₀ hab hp₀ p q f u v hp hq hf
       hp_lower hq_nonneg huadm humin hvadm hvmin
 
 #print axioms apm_m95a03
