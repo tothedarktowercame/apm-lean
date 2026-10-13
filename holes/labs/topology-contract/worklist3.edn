@@ -24430,7 +24430,7 @@
    :consumer :t01A08,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 0,
    :review-finding
    "extend Mathlib: state and prove the missing theorem in scope",
    :implements-lemma :lemma-closedset-whitneycubecover,
@@ -24470,6 +24470,17 @@
     [{:cmd "lake build ConstructionTargets.SardConvexDomain", :exit 0}
      {:cmd "lean fixture; registry; forbidden scan; diff", :exit 0}
      {:cmd "git commit scoped file", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791903046414-9899-f497ddfa",
+     :commands
+     ["git show/diff 68f2176; scope/type checks"
+      "sha256sum + lake env lean frozen fixture"
+      "lake build ConstructionTargets.SardConvexDomain"
+      "statement registry check; forbidden-count scan"],
+     :finding
+     "PASS. Recorded topo-10 commit 68f2176 changes only the scoped Lean file and correctly chooses a maximal net on each dyadic stratum. Radius 2^k/8 is positive NNReal and coerces correctly across IsSeparated/IsCover; choose_spec gives containment, separation, and coverage with matching argument order. Fixture hash 0b1a8cd6... matches; build/fixture pass; registry 150/150; forbidden placeholders stay 0; only standard axioms. Valid compiled B3 progress; STOP lists combined nets, packing/overlap, and assembly."},
     :commit "68f21764a4e8817a5e89cc34bc927cc13209c740",
     :changed-paths ["ConstructionTargets/SardConvexDomain.lean"],
     :fixture
@@ -24479,7 +24490,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain.blueprint/B3",
    :acceptance
@@ -35373,7 +35384,7 @@
    :other-consumers []}
   {:consumer :t01A08,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -35387,7 +35398,9 @@
     :type
     "chosen dyadic stratum net is contained, separated at 2^k/8, and covers its stratum",
     :area "sard-convex-domain",
-    :proved-in :r-a08-sard-b3-whitney-cubes-1},
+    :proved-in :r-a08-sard-b3-whitney-cubes-1,
+    :banked-by :r-a08-sard-b3-whitney-cubes-1,
+    :banked-commit "68f21764a4e8817a5e89cc34bc927cc13209c740"},
    :id
    :lemma-constructiontargets-sardconvexdomain-whitneystratumnet-spec,
    :kind :lemma,
