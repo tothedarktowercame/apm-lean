@@ -24423,9 +24423,27 @@
    :other-consumers []}
   {:bounded-exception "Rule0; named by stopped B7.",
    :consumer :t01A08,
+   :stop-count 1,
    :implements-lemma :lemma-closedset-whitneycubecover,
+   :evidence
+   {:outcome :stop,
+    :seat "topo-12",
+    :reason
+    "Representation boundary: reviewed B3 names half-open dyadic cubes, enlargements, diameter/distance comparability, local finiteness, bounded overlap, and chosen nearest points, but defines none of their Lean types. No Lean dyadic/Whitney cube API exists in Mathlib or ConstructionTargets; an exact fixture would invent the result representation rather than test a frozen type. This is not a refutation.",
+    :commands
+    [{:cmd
+      "rg -n -i -g *.lean dyadic/Whitney-cube terms ConstructionTargets Mathlib",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "sed -n 69,89p ConstructionTargets/SardConvexDomain.blueprint.md",
+      :exit 0}],
+    :residual
+    "First specify and review the B3 cube/enlargement/cover record and exact closedSet_whitneyCubeCover type; then probe its construction.",
+    :author "topo-12",
+    :disposition :stop},
    :phase :probe,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain.blueprint/B3",
    :acceptance
