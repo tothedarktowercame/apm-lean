@@ -22997,8 +22997,52 @@
    :other-consumers []}
   {:bounded-exception "Rule0 B1 prerequisite.",
    :consumer :t01A08,
+   :stop-count 1,
+   :evidence
+   {:placeholder-delta {:t01A08 [1 1]},
+    :residual
+    "Prove adjacent-swap symmetry by order induction, then Perm.swap_induction_on; resume B1.",
+    :outcome :stop,
+    :warnings [],
+    :missing-theorems
+    [{:name
+      "ContDiffWithinAt.domDomCongr_iteratedFDerivWithin_of_infty",
+      :type
+      "ContDiffWithinAt R infinity f s x -> UniqueDiffOn R s -> x in s -> forall n sigma, domDomCongr sigma (iteratedFDerivWithin R n f s x) = iteratedFDerivWithin R n f s x",
+      :status :not-started,
+      :consumers [:t01A08],
+      :depends-on [],
+      :area "sard-convex-domain"}],
+    :statement-hashes {:registry "145/145"},
+    :disposition :stop,
+    :axioms [],
+    :author :topo-10,
+    :reason
+    "Mathlib arbitrary-permutation symmetry requires C-omega, not frozen real C-infinity; proving it needs adjacent-swap induction for all orders.",
+    :commands
+    [{:cmd "lake env lean ConstructionTargets/SardConvexDomain.lean",
+      :exit 0}
+     {:cmd "lake env lean /tmp/t01a08_sard_b1_probe.lean", :exit 0}
+     {:cmd "sha256sum /tmp/t01a08_sard_b1_probe.lean", :exit 0}
+     {:cmd
+      "git diff --exit-code -- ConstructionTargets/SardConvexDomain.lean",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
+    :diagnostic-history
+    [{:cmd "lake env lean ConstructionTargets/SardConvexDomain.lean",
+      :exit 1,
+      :finding
+      "Invalid reuse: hf is C-infinity; library theorem expects C-omega."}],
+    :commit nil,
+    :changed-paths [],
+    :fixture
+    {:path "/tmp/t01a08_sard_b1_probe.lean",
+     :sha256
+     "ea3109560f5021cca443745512695ffed3abc6ebc7e77625ea1cbb71dd3a009c",
+     :mode :post-build-export-check},
+    :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain.blueprint/B1/smooth-symmetry",
    :acceptance
@@ -32831,6 +32875,26 @@
     :area "sard-convex-domain"},
    :id
    :lemma-constructiontargets-sardconvexdomain-contdiffon-convexwithinjet,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t01A08,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ContDiffWithinAt.domDomCongr_iteratedFDerivWithin_of_infty",
+    :type
+    "ContDiffWithinAt R infinity f s x -> UniqueDiffOn R s -> x in s -> forall n sigma, domDomCongr sigma (iteratedFDerivWithin R n f s x) = iteratedFDerivWithin R n f s x"},
+   :lemma
+   {:name "ContDiffWithinAt.domDomCongr_iteratedFDerivWithin_of_infty",
+    :reported-by [:r-a08-sard-smooth-jet-symmetry-1],
+    :type
+    "ContDiffWithinAt R infinity f s x -> UniqueDiffOn R s -> x in s -> forall n sigma, domDomCongr sigma (iteratedFDerivWithin R n f s x) = iteratedFDerivWithin R n f s x",
+    :area "sard-convex-domain"},
+   :id
+   :lemma-contdiffwithinat-domdomcongr-iteratedfderivwithin-of-infty,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}],
