@@ -1253,4 +1253,21 @@ theorem countable_whitneyNetIndex
   unfold WhitneyNetIndex
   infer_instance
 
+/-- The selected quarter-distance balls have the point-finiteness and uniform
+cardinality bound required by the overlap fields of a Whitney cover. -/
+theorem pointFinite_whitneyNetQuarterBalls
+    (E : Type*) [NormedAddCommGroup E] [NormedSpace ℝ E] [ProperSpace E]
+    (s : Set E) :
+    (∀ x, {i : WhitneyNetIndex s |
+        x ∈ Metric.ball i.center (Metric.infDist i.center s / 4)}.Finite) ∧
+      ∀ x, {i : WhitneyNetIndex s |
+          x ∈ Metric.ball i.center (Metric.infDist i.center s / 4)}.ncard ≤
+        (Metric.packingNumber ((1 : NNReal) / 8)
+          (Metric.closedBall (0 : E) (1 / 2))).toNat * 3 := by
+  constructor
+  · intro x
+    exact (finite_whitneyNetIncidence_and_ncard_le E s x).1
+  · intro x
+    exact (finite_whitneyNetIncidence_and_ncard_le E s x).2
+
 end ConstructionTargets.SardConvexDomain
