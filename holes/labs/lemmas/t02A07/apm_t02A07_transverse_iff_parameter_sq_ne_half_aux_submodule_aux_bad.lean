@@ -513,7 +513,72 @@ lemma apm_t02A07_transverse_iff_parameter_sq_ne_half_aux_submodule_aux_bad
             v 2 * parameter.1 0] : apm_t02a07_E4))
     (htrans : apm_t02a07_IsTransverse parameter) :
     parameter.1 0 ^ 2 ≠ (1 : ℝ) / 2 := by
-  sorry
+  intro hp
+  let y0 : apm_t02a07_E3 := WithLp.toLp 2
+    ![(0 : ℝ), parameter.1 0, parameter.1 0]
+  have hy0 : ‖y0‖ = 1 := by
+    apply (sq_eq_sq₀ (norm_nonneg _) (by norm_num : (0 : ℝ) ≤ 1)).mp
+    rw [EuclideanSpace.norm_sq_eq]
+    simp [y0, Fin.sum_univ_succ]
+    nlinarith
+  let y : apm_t02a07_S2 := ⟨y0, by simpa [Metric.mem_sphere] using hy0⟩
+  have hparam :=
+    apm_t02A07_transverse_iff_parameter_sq_ne_half_aux_submodule_aux_parameter_sq
+      parameter
+  have hyZ : apm_t02a07_family parameter y ∈ apm_t02a07_Z := by
+    constructor
+    · exact apm_t02a07_family_mem_X parameter y
+    · simp [apm_t02a07_family, y, y0]
+      nlinarith
+  let z : apm_t02a07_E4 := WithLp.toLp 2
+    ![(0 : ℝ), -1, parameter.1 1, parameter.1 1]
+  have hzX : z ∈ apm_t02a07_tangentX (apm_t02a07_family parameter y) := by
+    rw [apm_t02a07_tangentX,
+      Submodule.mem_orthogonal_singleton_iff_inner_right]
+    simp [z, apm_t02a07_family, y, y0, PiLp.inner_apply,
+      Fin.sum_univ_succ, real_inner_eq_re_inner, RCLike.inner_apply]
+    have haa : parameter.1 0 * parameter.1 0 = (1 : ℝ) / 2 := by nlinarith [hp]
+    rw [haa]
+    ring
+  have hz := (htrans y hyZ).symm ▸ hzX
+  rw [Submodule.mem_sup] at hz
+  rcases hz with ⟨w, hw, q, hq, hwq⟩
+  rcases hw with ⟨v, hv, rfl⟩
+  rw [apm_t02a07_sphereTangent] at hv
+  have hv' : inner ℝ (y : apm_t02a07_E3) v = 0 :=
+    Submodule.mem_orthogonal_singleton_iff_inner_right.mp hv
+  have hvsum : v 1 * parameter.1 0 + v 2 * parameter.1 0 = 0 := by
+    simpa [y, y0, PiLp.inner_apply, Fin.sum_univ_succ,
+      real_inner_eq_re_inner, RCLike.inner_apply] using hv'
+  have hqprod : q 2 + q 3 = 0 := by
+    rw [apm_t02a07_tangentZ, LinearMap.mem_ker] at hq
+    change fderiv ℝ apm_t02a07_constraints
+      (apm_t02a07_family parameter y) q = 0 at hq
+    rw [apm_t02A07_constraints_fderiv_surjective_aux_formula] at hq
+    have hcoord := congrFun (congrArg WithLp.ofLp hq) (1 : Fin 2)
+    simp [apm_t02a07_family, y, y0] at hcoord
+    nlinarith
+  have ha : parameter.1 0 ≠ 0 := by nlinarith
+  have hb : parameter.1 1 ≠ 0 := by nlinarith
+  have hwprod :
+      (fderiv ℝ (apm_t02a07_familyAmbient parameter) (y : apm_t02a07_E3) v) 2 +
+        (fderiv ℝ (apm_t02a07_familyAmbient parameter) (y : apm_t02a07_E3) v) 3 = 0 := by
+    rw [hderiv]
+    simp
+    exact hvsum
+  have hzprod : z 2 + z 3 = 0 := by
+    have h2 := congrArg (fun r : apm_t02a07_E4 => r 2) hwq
+    have h3 := congrArg (fun r : apm_t02a07_E4 => r 3) hwq
+    simp only [PiLp.add_apply] at h2 h3
+    change
+      (fderiv ℝ (apm_t02a07_familyAmbient parameter) (y : apm_t02a07_E3) v) 2 +
+        q 2 = z 2 at h2
+    change
+      (fderiv ℝ (apm_t02a07_familyAmbient parameter) (y : apm_t02a07_E3) v) 3 +
+        q 3 = z 3 at h3
+    linarith [h2, h3, hwprod, hqprod]
+  simp [z] at hzprod
+  exact hb (by linarith)
 -- END SEAT AREA
 
 lemma apm_t02A07_transverse_iff_parameter_sq_ne_half_aux_submodule
