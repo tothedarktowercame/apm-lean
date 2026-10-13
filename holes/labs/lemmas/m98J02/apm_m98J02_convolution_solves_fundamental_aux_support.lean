@@ -915,7 +915,67 @@ lemma apm_m98J02_convolution_solves_fundamental_aux_support
     (hvan : ∀ η : apm_m98J02_Test, Disjoint (tsupport (η : apm_m98J02_E → ℝ)) K →
       apm_m98J02_regularDistribution f hf hfc η = 0) :
     ∀ x ∉ K, f x = 0 := by
-  sorry
+  intro x hxK
+  by_contra hfx
+  let s : ℝ := if 0 < f x then 1 else -1
+  have hsfx : 0 < s * f x := by
+    dsimp [s]
+    split_ifs with h
+    · simpa using h
+    · have : f x < 0 := lt_of_le_of_ne (le_of_not_gt h) hfx
+      simpa using neg_pos.mpr this
+  let U : Set apm_m98J02_E := Kᶜ ∩ {y | 0 < s * f y}
+  have hUopen : IsOpen U := hK.isClosed.isOpen_compl.inter
+    (isOpen_lt continuous_const (continuous_const.mul hf))
+  have hxU : x ∈ U := ⟨hxK, hsfx⟩
+  obtain ⟨r, hr, hball⟩ := Metric.isOpen_iff.mp hUopen x hxU
+  let b : ContDiffBump x :=
+    ⟨r / 4, r / 2, by positivity, by linarith⟩
+  let η : apm_m98J02_Test := TestFunction.mk b b.contDiff b.hasCompactSupport (by simp)
+  have hbsub : Metric.closedBall x b.rOut ⊆ U := by
+    intro y hy
+    apply hball
+    have : dist y x ≤ r / 2 := by simpa [b] using hy
+    show dist y x < r
+    linarith
+  have hdis : Disjoint (tsupport (η : apm_m98J02_E → ℝ)) K := by
+    rw [Set.disjoint_left]
+    intro y hyb hyK
+    have hybc : y ∈ Metric.closedBall x b.rOut := by
+      rw [← b.tsupport_eq]
+      simpa [η] using hyb
+    have hyU : y ∈ U := hbsub hybc
+    exact hyU.1 hyK
+  have hzero := hvan (s • η) (by
+    apply hdis.mono ?_ le_rfl
+    simpa only [TestFunction.coe_smul, Pi.smul_apply] using
+      (tsupport_smul_subset_right (fun _ : apm_m98J02_E => s) (η : apm_m98J02_E → ℝ)))
+  rw [apm_m98J02_regularDistribution_apply] at hzero
+  have hcont : Continuous (fun y => f y * (s * b y)) :=
+    hf.mul (continuous_const.mul b.continuous)
+  have hcomp : HasCompactSupport (fun y => f y * (s * b y)) :=
+    HasCompactSupport.mul_left (b.hasCompactSupport.smul_left (f := fun _ => s))
+  have hnonneg : 0 ≤ fun y => f y * (s * b y) := by
+    intro y
+    by_cases hy : y ∈ Metric.closedBall x b.rOut
+    · have hypos := (hbsub hy).2
+      calc
+        0 ≤ (s * f y) * b y := mul_nonneg hypos.le (b.nonneg' y)
+        _ = f y * (s * b y) := by ring
+    · have hby : b y = 0 := by
+        by_contra hb0
+        exact hy (by rw [← b.tsupport_eq]; exact subset_tsupport b hb0)
+      simp [hby]
+  have hpos : 0 < ∫ y, f y * (s * b y) :=
+    hcont.integral_pos_of_hasCompactSupport_nonneg_nonzero hcomp hnonneg (x := x) (by
+      have hbx : b x = 1 := b.one_of_mem_closedBall (by simp [b.rIn_pos.le])
+      have hs : s ≠ 0 := by
+        dsimp [s]
+        split <;> norm_num
+      simp [hbx, hfx, hs])
+  have : (∫ y, f y * (s * b y)) = 0 := by
+    simpa [η, mul_assoc, mul_left_comm, mul_comm] using hzero
+  linarith
 -- END SEAT AREA
 
 theorem apm_m98J02_convolution_solves_fundamental
