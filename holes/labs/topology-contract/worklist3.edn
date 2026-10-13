@@ -22391,6 +22391,19 @@
       "git diff --exit-code f59140ec -- ConstructionTargets/SardConvexDomain.lean",
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791861946919-8339-e5a117ad",
+     :commands
+     ["git diff-tree recorded commit"
+      "sha256sum frozen fixture"
+      "lake build ConstructionTargets.SardConvexDomain"
+      "lake env lean exported axiom check"
+      "statement-registry check"
+      "recorded-source placeholder count"],
+     :finding
+     "PASS: commit f59140ec has exact one-file scope; frozen SHA d4041a37 and post-build-export-check mode match; source placeholders 0; registry 131/131; standard axioms only. The proof correctly combines the proved critical-image subset with nullity of the interior and frontier image branches via measure_mono_null and measure_union_null."},
     :commit "f59140ec28f828b0e0aac1cae29fd535e56dc21e",
     :changed-paths ["ConstructionTargets/SardConvexDomain.lean"],
     :fixture
@@ -22399,7 +22412,7 @@
      "d4041a37e02023ad8ce1b8e98bb7c6cbb338d539dbc89b7f8b484340dd9b13bd",
      :mode :post-build-export-check}},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t01A08/corners-sard",
    :acceptance
@@ -22428,7 +22441,7 @@
      :infrastructure-packets
      :review-outcomes]},
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance {:strategy "Rerank."},
