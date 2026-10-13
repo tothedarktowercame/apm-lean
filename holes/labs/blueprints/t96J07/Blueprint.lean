@@ -358,7 +358,51 @@ theorem apm_t96j07_normalizedDiagonal_homotopic_sign (b : Fin 3 → ℝ)
     (hl : apm_t96j07_IsNormalizedDiagonal b l)
     (hl' : apm_t96j07_IsNormalizedDiagonal (fun j ↦ if 0 < b j then 1 else -1) l') :
     ContinuousMap.Homotopic l l' := by
-  sorry
+  let ε : Fin 3 → ℝ := fun j => if 0 < b j then 1 else -1
+  have hsign (j : Fin 3) :
+      (0 < b j ∧ ε j = 1) ∨ (b j < 0 ∧ ε j = -1) := by
+    rcases lt_or_gt_of_ne (hb j) with hj | hj
+    · exact Or.inr ⟨hj, by simp [ε, not_lt.mpr hj.le]⟩
+    · exact Or.inl ⟨hj, by simp [ε, hj]⟩
+  let c : Set.Icc (0 : ℝ) 1 × apm_t96j07_S2 → Fin 3 → ℝ :=
+    fun tx j => (1 - (tx.1.1 : ℝ)) * b j + (tx.1.1 : ℝ) * ε j
+  have hc_ne (tx : Set.Icc (0 : ℝ) 1 × apm_t96j07_S2) (j : Fin 3) :
+      c tx j ≠ 0 := by
+    exact apm_t96j07_diagonal_link_degree_aux_interp (b j) (ε j) tx.1.1
+      (hb j) (hsign j) tx.1.2.1 tx.1.2.2
+  let g : Set.Icc (0 : ℝ) 1 × apm_t96j07_S2 → apm_t96j07_E3 := fun tx =>
+    WithLp.toLp 2 (fun j => c tx j * tx.2.1 j)
+  have hg_ne (tx : Set.Icc (0 : ℝ) 1 × apm_t96j07_S2) : g tx ≠ 0 := by
+    exact apm_t96j07_diagonal_link_degree_aux_vector_ne_zero
+      (c tx) (hc_ne tx) tx.2
+  have hg : Continuous g := by
+    apply (PiLp.continuous_toLp 2 _).comp
+    apply continuous_pi
+    intro j
+    exact (by fun_prop : Continuous (fun tx : Set.Icc (0 : ℝ) 1 × apm_t96j07_S2 =>
+      c tx j * tx.2.1 j))
+  have hn : Continuous (fun tx => ‖g tx‖⁻¹ • g tx) :=
+    ((continuous_norm.comp hg).inv₀
+      (fun tx => norm_ne_zero_iff.mpr (hg_ne tx))).smul hg
+  refine ⟨{
+    toFun := fun tx => ⟨‖g tx‖⁻¹ • g tx, by
+      rw [Metric.mem_sphere, dist_zero_right, norm_smul, norm_inv, norm_norm]
+      exact inv_mul_cancel₀ (norm_ne_zero_iff.mpr (hg_ne tx))⟩
+    continuous_toFun := Continuous.subtype_mk hn (fun tx => by
+      rw [Metric.mem_sphere, dist_zero_right, norm_smul, norm_inv, norm_norm]
+      exact inv_mul_cancel₀ (norm_ne_zero_iff.mpr (hg_ne tx)))
+    map_zero_left := ?_
+    map_one_left := ?_ }⟩
+  · intro x
+    rcases hl x with ⟨hx, hxl⟩
+    apply Subtype.ext
+    rw [hxl]
+    simp [g, c]
+  · intro x
+    rcases hl' x with ⟨hx, hxl⟩
+    apply Subtype.ext
+    rw [hxl]
+    simp [g, c, ε]
 
 /-- Seat: a sign-diagonal map (a product of coordinate reflections) acts on
 `H₂(S²; ℤ) ≅ ℤ` by the product of the signs
