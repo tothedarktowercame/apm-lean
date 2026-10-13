@@ -24430,7 +24430,7 @@
    :consumer :t01A08,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 0,
    :review-finding
    "extend Mathlib: state and prove the missing theorem in scope",
    :implements-lemma :lemma-closedset-whitneycubecover,
@@ -24473,6 +24473,17 @@
     [{:cmd "builds",
       :exit 1,
       :correction "used nhds, symmetry, positive infDist"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791914479867-10185-3de8df7b",
+     :commands
+     ["git show/diff 05c3222; scope/neighborhood checks"
+      "sha256sum + lake env lean frozen fixture"
+      "lake build ConstructionTargets.SardConvexDomain"
+      "statement registry check; forbidden-count scan"],
+     :finding
+     "PASS. Recorded topo-10 commit 05c3222 changes only the scoped Lean file and correctly proves neighborhood finiteness off s. The ball of radius infDist(x,s)/16 is a neighborhood; any quarter-ball meeting it has x in the center half-ball by triangle inequality plus the infDist Lipschitz bound, so meeting indices lie in the finite half-incidence set. Fixture hash 1fbe4277... matches; build/fixture pass; registry 150/150; forbidden placeholders stay 0; only standard axioms. Valid compiled B3 progress; STOP leaves boundary local finiteness and assembly."},
     :commit "05c3222136eeb54d4a83cf44b47b5ffc27612123",
     :changed-paths ["ConstructionTargets/SardConvexDomain.lean"],
     :fixture
@@ -24482,7 +24493,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain.blueprint/B3",
    :acceptance
@@ -35942,7 +35953,7 @@
    :other-consumers []}
   {:consumer :t01A08,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -35956,7 +35967,9 @@
     :type
     "hs hne hx => exists U in nhds x, finitely many quarter-balls meet U",
     :area "sard-convex-domain",
-    :proved-in :r-a08-sard-b3-whitney-cubes-1},
+    :proved-in :r-a08-sard-b3-whitney-cubes-1,
+    :banked-by :r-a08-sard-b3-whitney-cubes-1,
+    :banked-commit "05c3222136eeb54d4a83cf44b47b5ffc27612123"},
    :id
    :lemma-constructiontargets-sardconvexdomain-finite-whitneynetquarterballs-meeting-nhds-,
    :kind :lemma,
