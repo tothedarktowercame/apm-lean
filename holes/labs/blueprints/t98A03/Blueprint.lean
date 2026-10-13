@@ -458,14 +458,47 @@ lemma apm_t98a03_wedge_branches_intersection
     subst t
     exact rfl
 
-/-- Seat: every open wedge-point neighborhood meets each branch away from it. -/
+lemma apm_t98a03_wedge_branches_accumulate_aux_torus
+    (t₀ : apm_t98a03_Torus) (r₀ : apm_t98a03_RP2)
+    (U : Set (apm_t98a03_X t₀ r₀)) (hU : IsOpen U)
+    (hpU : apm_t98a03_basepoint t₀ r₀ ∈ U) :
+    ∃ t ≠ t₀, Quotient.mk _ (Sum.inl t) ∈ U := by
+  sorry
+
+lemma apm_t98a03_wedge_branches_accumulate_aux_rp2
+    (t₀ : apm_t98a03_Torus) (r₀ : apm_t98a03_RP2)
+    (U : Set (apm_t98a03_X t₀ r₀)) (hU : IsOpen U)
+    (hpU : apm_t98a03_basepoint t₀ r₀ ∈ U) :
+    ∃ r ≠ r₀, Quotient.mk _ (Sum.inr r) ∈ U := by
+  sorry
+
 lemma apm_t98a03_wedge_branches_accumulate
     (t₀ : apm_t98a03_Torus) (r₀ : apm_t98a03_RP2)
     (U : Set (apm_t98a03_X t₀ r₀)) (hU : IsOpen U)
     (hpU : apm_t98a03_basepoint t₀ r₀ ∈ U) :
     ((U ∩ apm_t98a03_torusBranch t₀ r₀) \ {apm_t98a03_basepoint t₀ r₀}).Nonempty ∧
       ((U ∩ apm_t98a03_rp2Branch t₀ r₀) \ {apm_t98a03_basepoint t₀ r₀}).Nonempty := by
-  sorry
+  obtain ⟨t, ht, htU⟩ :=
+    apm_t98a03_wedge_branches_accumulate_aux_torus t₀ r₀ U hU hpU
+  obtain ⟨r, hr, hrU⟩ :=
+    apm_t98a03_wedge_branches_accumulate_aux_rp2 t₀ r₀ U hU hpU
+  constructor
+  · refine ⟨Quotient.mk _ (Sum.inl t), ⟨⟨htU, ⟨t, rfl⟩⟩, ?_⟩⟩
+    intro heq
+    have hrel : Relation.EqvGen (apm_t98a03_wedgeRel t₀ r₀)
+        (Sum.inl t) (Sum.inl t₀) := Quotient.exact heq
+    rcases apm_t98a03_wedge_branches_intersection_aux_eq_or_base
+        t₀ r₀ hrel with h | h
+    · exact ht (Sum.inl.inj h)
+    · exact ht h.1
+  · refine ⟨Quotient.mk _ (Sum.inr r), ⟨⟨hrU, ⟨r, rfl⟩⟩, ?_⟩⟩
+    intro heq
+    have hrel : Relation.EqvGen (apm_t98a03_wedgeRel t₀ r₀)
+        (Sum.inr r) (Sum.inl t₀) := Quotient.exact heq
+    rcases apm_t98a03_wedge_branches_intersection_aux_eq_or_base
+        t₀ r₀ hrel with h | h
+    · cases h
+    · exact hr h.1
 
 /-- Sorry-free assembly of the quotient-geometry facts. -/
 lemma apm_t98a03_wedge_point_no_connected_punctured_neighborhood
