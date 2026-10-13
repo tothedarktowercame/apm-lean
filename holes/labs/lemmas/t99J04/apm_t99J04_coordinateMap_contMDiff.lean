@@ -119,7 +119,15 @@ theorem apm_t99J04_coordinateMap_contMDiff
     ContMDiff (𝓘(ℝ, apm_t99J04_Euclidean n))
       𝓘(ℝ, apm_t99J04_Euclidean n) (⊤ : ℕ∞)
       (apm_t99J04_coordinateMap f) := by
-  sorry
+  have hpi : ContMDiff (modelWithCornersSelf ℝ (apm_t99J04_Euclidean n))
+      (modelWithCornersSelf ℝ (Fin n → ℝ)) (⊤ : ℕ∞) (fun p i ↦ f i p) :=
+    contMDiff_pi_space.2 hf
+  have hlp : ContMDiff (modelWithCornersSelf ℝ (Fin n → ℝ))
+      (modelWithCornersSelf ℝ (apm_t99J04_Euclidean n)) (⊤ : ℕ∞)
+      (PiLp.continuousLinearEquiv 2 ℝ (fun _ : Fin n ↦ ℝ)).symm :=
+    ContinuousLinearMap.contMDiff
+      (PiLp.continuousLinearEquiv 2 ℝ (fun _ : Fin n ↦ ℝ)).symm.toContinuousLinearMap
+  exact hlp.comp hpi
 -- END SEAT AREA
 
 theorem apm_t99J04_bridge_coordinateMap_mfderiv_bijective
