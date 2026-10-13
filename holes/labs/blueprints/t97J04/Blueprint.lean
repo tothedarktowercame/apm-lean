@@ -74,15 +74,45 @@ abbrev apm_t97J04_WH (k : ℕ) :=
   (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) k).obj
     (ModuleCat.of ℤ ℤ)).obj (TopCat.of apm_t97J04_W))
 
-/-- LIBRARY: collapse the meridian-capped genus-two polygon quotient to the
-torus-circle wedge, with the based fundamental-group and all-degree singular
-homology transports needed by the two independent invariant computations. -/
+/-- LIBRARY: the remaining geometric core.  Construct the two quotient maps
+and the two explicit homotopies which collapse the meridian disk together
+with the `c`-handle.  This is kept as one leaf because the repository has no
+polygon/CW coordinate model in which the four constructions can be stated
+separately without making the compatibility condition circular. -/
+theorem apm_t97J04_complex_wedge_homotopyEquiv :
+    Nonempty (ContinuousMap.HomotopyEquiv apm_t97J04_X apm_t97J04_W) := by
+  sorry
+
+/-- A supplied geometric homotopy equivalence gives the required based
+fundamental-group comparison.  The conclusion of the geometric leaf is an
+explicit hypothesis, so this transport can be proved independently. -/
+theorem apm_t97J04_fundamentalGroup_of_homotopyEquiv
+    (h : Nonempty (ContinuousMap.HomotopyEquiv apm_t97J04_X apm_t97J04_W)) :
+    Nonempty
+      (FundamentalGroup apm_t97J04_X apm_t97J04_basepoint ≃*
+        FundamentalGroup apm_t97J04_W apm_t97J04_wedgeBase) := by
+  sorry
+
+/-- A supplied geometric homotopy equivalence induces the all-degree
+singular-homology comparison.  This is independent of the based fundamental
+group transport. -/
+theorem apm_t97J04_homology_of_homotopyEquiv
+    (h : Nonempty (ContinuousMap.HomotopyEquiv apm_t97J04_X apm_t97J04_W)) :
+    ∀ k : ℕ, Nonempty (apm_t97J04_H k ≅ apm_t97J04_WH k) := by
+  sorry
+
+/-- Assemble the two invariant transports from the common geometric
+homotopy equivalence. -/
 theorem apm_t97J04_complex_to_wedge :
     Nonempty
       (FundamentalGroup apm_t97J04_X apm_t97J04_basepoint ≃*
         FundamentalGroup apm_t97J04_W apm_t97J04_wedgeBase) ∧
     (∀ k : ℕ, Nonempty (apm_t97J04_H k ≅ apm_t97J04_WH k)) := by
-  sorry
+  exact
+    ⟨apm_t97J04_fundamentalGroup_of_homotopyEquiv
+        apm_t97J04_complex_wedge_homotopyEquiv,
+      apm_t97J04_homology_of_homotopyEquiv
+        apm_t97J04_complex_wedge_homotopyEquiv⟩
 
 /-- Pure group-presentation simplification: `ℤ² * ℤ` is the three-generator
 presentation with the single commutator relation on the first two generators. -/

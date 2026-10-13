@@ -58,20 +58,18 @@ no predicate is defined to equal a desired conclusion.
 All imported `ConstructionTargets` Lean sources were checked to contain no
 `sorry`.
 
-## Lemma 1 — `apm_t97J04_complex_to_wedge` (LIBRARY)
+## Lemma 1a — `apm_t97J04_complex_wedge_homotopyEquiv` (LIBRARY)
 
-Statement in words: the based fundamental group of the literal two-disk
-quotient is equivalent to that of the production torus-circle wedge, and its
-integral singular homology is isomorphic to the wedge's in every degree.
+Statement in words: the literal two-disk quotient is homotopy equivalent to
+the production torus-circle wedge.
 
-Why true: collapse the meridian disk together with the `c` handle.  On the
+Why true: construct the forward quotient map, inverse quotient map, and the
+two cylinder homotopies which collapse the meridian disk together with the
+`c` handle.  On the
 usual genus-two CW model, the attached disk kills `c`; the surface relation
 then becomes `[a,b]`, while `d` is left as a free circle.  Geometrically this
 is a sequence of elementary CW collapses/expansions from the capped genus-two
-complex to `T² ∨ S¹`.  Track the centre basepoint through the collapse.
-The based homotopy equivalence induces the displayed fundamental-group
-equivalence, and homotopy invariance of singular homology gives the family of
-module isomorphisms.
+complex to `T² ∨ S¹`.
 
 Closest sorry-free foundations:
 
@@ -81,20 +79,74 @@ Closest sorry-free foundations:
 - `ConstructionTargets.T00A01MayerVietorisAdapters`
 
 What is missing: a polygon/CW-collapse package connecting this particular
-octagon-plus-disk quotient to the production point wedge, including the
-basepoint and induced invariant transports.  No current construction target
-states this comparison.
+octagon-plus-disk quotient to the production point wedge.  In particular,
+there is presently no common polygon-coordinate target in which one can state
+the forward map, inverse map, and their quotient-relation compatibility as
+separate true lemmas.  Splitting those four fields now would require either a
+new large coordinate-model definition or a vacuous predicate that already
+asserts the desired homotopies.  Following the campaign stop rule, this one
+genuinely missing foundation remains LIBRARY; the invariant transports below
+are separated from it.
 
 Estimated size: 500–900 lines.  It is marked LIBRARY rather than divided into
-fake wrappers: the geometric collapse is the common hard input for both
-fundamental group and homology.
+fake wrappers.  Expected internal proof leaves, once a coordinate model is
+chosen, are: forward raw map and `Quotient.lift` relation proof (80–140 lines),
+inverse raw map and relation proof (80–140), forward continuity via
+`isQuotientMap_quotient_mk'.continuous_lift` / `IsQuotientMap.lift` (30–70),
+inverse continuity by the same lemmas (30–70), and the two quotient homotopies
+(100–150 lines each).
 
 Dependencies: none.
 
 Truth check: hand CW collapse and the independent van Kampen/cellular-chain
-computations above.  The boundary cases `t = 0,1` are compatible because the
-octagon vertices form one equivalence class and `edgePoint 1 0` has coincident
-endpoints.
+computations above.  The source and target are nonempty.  The boundary cases
+`t = 0,1` are compatible because the octagon vertices form one equivalence
+class and `edgePoint 1 0` has coincident endpoints; the reversed parameters
+on all four paired edges give the orientable, not nonorientable, quotient.
+
+## Lemma 1b — `apm_t97J04_fundamentalGroup_of_homotopyEquiv`
+
+Statement in words: a supplied homotopy equivalence from the quotient complex
+to the wedge induces the required based fundamental-group equivalence.
+
+Why true: use
+`FundamentalGroupoidFunctor.equivOfHomotopyEquiv`, then
+`FullyFaithful.mulEquivEnd` at the source basepoint, and change from the image
+basepoint to `apm_t97J04_wedgeBase` with
+`FundamentalGroup.fundamentalGroupMulEquivOfPath`.  Obtain the path from a
+`PathConnectedSpace apm_t97J04_W` instance; this follows from the production
+wedge models (or directly by mapping paths in the two wedge summands).
+
+Estimated size: 30–70 lines.  Independent: yes; the homotopy equivalence is an
+explicit hypothesis.
+
+Truth check: no equality of basepoints is assumed.  The change-of-basepoint
+path handles that issue, including the case where the forward collapse sends
+the disk centre to a different representative of the wedge point.
+
+## Lemma 1c — `apm_t97J04_homology_of_homotopyEquiv`
+
+Statement in words: a supplied homotopy equivalence induces an isomorphism on
+integral singular homology in every degree.
+
+Why true: use
+`ConstructionTargets.SingularHomologyConcrete.singularHomologyIsoOfHomotopyEquiv`
+(available through the current imports), degree by degree.  If elaboration
+exposes the coefficient-category spelling, use
+`singularHomologyIsoOfTopCatHomotopyEquivalence` and its cylinder adapters
+`continuousMapHomotopyCylinder_zero` and
+`continuousMapHomotopyCylinder_one`.
+
+Estimated size: 10–30 lines.  Independent: yes; the homotopy equivalence is an
+explicit hypothesis, and this leaf has no fundamental-group dependency.
+
+Truth check: the theorem quantifies over all `k : ℕ`, so it includes degree
+zero and has no hidden positive-degree assumption.  Homotopy invariance does
+not require nonemptiness or connectedness.
+
+## Lemma 1d — `apm_t97J04_complex_to_wedge`
+
+Sorry-free assembly: apply Lemmas 1b and 1c to Lemma 1a and pair the results.
 
 ## Lemma 2 — `apm_t97J04_coprod_equiv_presentation`
 
@@ -142,12 +194,16 @@ already proves vanishing for every `k ≥ 3`.
 
 ## Dependency layers
 
-- Layer 1, fully parallel: `apm_t97J04_complex_to_wedge` (LIBRARY),
+- Layer 1, fully parallel: `apm_t97J04_complex_wedge_homotopyEquiv` (LIBRARY),
+  `apm_t97J04_fundamentalGroup_of_homotopyEquiv`,
+  `apm_t97J04_homology_of_homotopyEquiv`,
   `apm_t97J04_coprod_equiv_presentation`, and
   `apm_t97J04_invariants_of_comparison`.
-- Layer 2: the sorry-free three-line assembly of `apm_t97j04`.
+- Layer 2: sorry-free `apm_t97J04_complex_to_wedge`.
+- Layer 3: the sorry-free three-line assembly of `apm_t97j04`.
 
-Lemma count: 3 (one LIBRARY, two ordinary seat tasks).
+Lemma count: 6 named proof tasks (one LIBRARY, five ordinary seat tasks), plus
+two sorry-free assemblies.
 
 ## Compilation and axioms gate
 
