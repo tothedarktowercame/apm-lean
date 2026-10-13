@@ -23717,7 +23717,7 @@
    :consumer :t01A08,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "Recorded commit is invalid: f032efae9d1501f7ddfe93c66668f88f24ed37f4 is absent locally and origin rejects it as not our ref. The intended scoped commit appears to be f032efae9b89fb527a72ea9192f3c89f09f82615. Repair the row to record the exact existing full SHA, then rerun independent review.",
    :implements-lemma
@@ -23725,17 +23725,17 @@
    :evidence
    {:placeholder-delta {:t01A08 [1 1]},
     :residual
-    "Derive eventual lower-jet symmetry on the C∞ neighborhood; lift tail swaps locally; combine with leading swap and adjacent closure; B1.",
+    "Extend lower-jet symmetry from interior points by continuity on the local C∞ neighborhood; lift tail swaps; combine leading swap and adjacent closure; B1.",
     :outcome :stop,
     :warnings [],
     :missing-theorems
     [{:name
-      "ContinuousMultilinearMap.domDomCongr_fderivWithin_eq_self_of_eventuallyEq",
-      :type
-      "local within permutation identity is preserved by fderivWithin",
+      "iteratedFDerivWithin_domDomCongr_decomposeFin_symm_zero_of_eventuallyEq",
+      :type "local lower-jet symmetry lifts to next tail slots",
       :status :proved,
       :consumers [:t01A08],
-      :depends-on [],
+      :depends-on
+      ["ContinuousMultilinearMap.domDomCongr_fderivWithin_eq_self_of_eventuallyEq"],
       :area "sard-convex-domain"}
      {:name
       "ContDiffWithinAt.domDomCongr_iteratedFDerivWithin_of_infty",
@@ -23743,38 +23743,22 @@
       :status :partial,
       :consumers [:t01A08],
       :depends-on
-      ["ContinuousMultilinearMap.domDomCongr_fderivWithin_eq_self_of_eventuallyEq"],
+      ["iteratedFDerivWithin_domDomCongr_decomposeFin_symm_zero_of_eventuallyEq"],
       :area "sard-convex-domain"}],
     :statement-hashes {:registry "147/147"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Local derivative-preservation proved; construct eventual lower-jet symmetry from local C∞ data, then finish induction.",
+    "Local tail-slot lift proved; eventual lower-jet identity from dense interior remains.",
     :commands
     [{:cmd
-      "lake build ConstructionTargets.SardConvexDomain; lake env lean local-helper axiom check and fixture",
+      "lake build ConstructionTargets.SardConvexDomain; lake env lean local-tail axiom check and fixture",
       :exit 0}
      {:cmd
       "sha256sum fixture; scoped commit check; statement-registry check",
       :exit 0}],
-    :diagnostic-history
-    [{:cmd "eventual-helper scratch drafts",
-      :exit 1,
-      :correction
-      "used nhdsWithin explicitly and typed derivative equality; compiled"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1791880153232-9135-c4c1b857",
-     :commands
-     ["git show/diff 9f289ef7; scope and recorded-tree checks"
-      "lake build ConstructionTargets.SardConvexDomain"
-      "lake env lean fixture and /tmp/CheckSardEventually.lean"
-      "sha256sum fixture; statement-registry check; placeholder recount"],
-     :finding
-     "PASS: valid STOP after real progress. One-file commit correctly transports a local nhdsWithin permutation identity through fderivWithin using eventual derivative congruence and the domDomCongr linear isometry; equality orientation and function representation agree. Build/export pass; fixture hash matches; standard axioms only; registry 147/147; sorry/admit 0->0. Constructing eventual lower-jet symmetry and final induction remain listed."},
-    :commit "9f289ef73df577dad01edae4afc193e8f112bb10",
+    :commit "9d47ef502f1ffd2a1505cc8a6691b739b997435a",
     :changed-paths ["ConstructionTargets/SardConvexDomain.lean"],
     :fixture
     {:path "/tmp/t01a08_smooth_symmetry_membership_probe.lean",
@@ -23783,7 +23767,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain/B1/symmetry",
    :acceptance
@@ -33743,7 +33727,8 @@
     :lemma-continuousmultilinearmap-domdomcongr-fderivwithin-eq-self
     :lemma-iteratedfderivwithin-domdomcongr-decomposefin-symm-zero
     :lemma-iteratedfderivwithin-domdomcongr-swap-zero-one
-    :lemma-continuousmultilinearmap-domdomcongr-fderivwithin-eq-self-of-eventuallyeq],
+    :lemma-continuousmultilinearmap-domdomcongr-fderivwithin-eq-self-of-eventuallyeq
+    :lemma-iteratedfderivwithin-domdomcongr-decomposefin-symm-zero-of-eventuallyeq],
    :other-consumers []}
   {:consumer :t01A08,
    :phase :lemma,
@@ -33874,6 +33859,27 @@
    :lemma-continuousmultilinearmap-domdomcongr-fderivwithin-eq-self-of-eventuallyeq,
    :kind :lemma,
    :depends-on [],
+   :other-consumers []}
+  {:consumer :t01A08,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "iteratedFDerivWithin_domDomCongr_decomposeFin_symm_zero_of_eventuallyEq",
+    :type "local lower-jet symmetry lifts to next tail slots"},
+   :lemma
+   {:name
+    "iteratedFDerivWithin_domDomCongr_decomposeFin_symm_zero_of_eventuallyEq",
+    :reported-by [:r-a08-symmetry-slots-1],
+    :type "local lower-jet symmetry lifts to next tail slots",
+    :area "sard-convex-domain",
+    :proved-in :r-a08-symmetry-slots-1},
+   :id
+   :lemma-iteratedfderivwithin-domdomcongr-decomposefin-symm-zero-of-eventuallyeq,
+   :kind :lemma,
+   :depends-on
+   [:lemma-continuousmultilinearmap-domdomcongr-fderivwithin-eq-self-of-eventuallyeq],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
