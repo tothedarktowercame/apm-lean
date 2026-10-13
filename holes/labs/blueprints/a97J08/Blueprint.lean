@@ -2154,7 +2154,37 @@ lemma apm_a97j08_squareSum_outside_aux_expand
 lemma apm_a97j08_squareSum_outside_aux_step (c : ℂ) {w₁ w₂ : ℂ}
     (h₁ : 0 < (c * w₁).re) (h₂ : 0 < (c * w₂).re) :
     Complex.arg (w₂ / w₁) = Complex.arg (c * w₂) - Complex.arg (c * w₁) := by
-  sorry
+  have hc : c ≠ 0 := by
+    intro hc
+    simp [hc] at h₁
+  have hw₁ : w₁ ≠ 0 := by
+    intro hw₁
+    simp [hw₁] at h₁
+  have hcw₁ : c * w₁ ≠ 0 := mul_ne_zero hc hw₁
+  have hw₂ : w₂ ≠ 0 := by
+    intro hw₂
+    simp [hw₂] at h₂
+  have hcw₂ : c * w₂ ≠ 0 := mul_ne_zero hc hw₂
+  have ha₁ : |Complex.arg (c * w₁)| < Real.pi / 2 :=
+    Complex.abs_arg_lt_pi_div_two_iff.mpr (Or.inl h₁)
+  have ha₂ : |Complex.arg (c * w₂)| < Real.pi / 2 :=
+    Complex.abs_arg_lt_pi_div_two_iff.mpr (Or.inl h₂)
+  rw [abs_lt] at ha₁ ha₂
+  have hd : -Real.pi < Complex.arg (c * w₂) - Complex.arg (c * w₁) ∧
+      Complex.arg (c * w₂) - Complex.arg (c * w₁) ≤ Real.pi := by
+    constructor <;> linarith
+  have htoReal :
+      ((Complex.arg (c * w₂) - Complex.arg (c * w₁) : ℝ) : Real.Angle).toReal =
+        Complex.arg (c * w₂) - Complex.arg (c * w₁) :=
+    Real.Angle.toReal_coe_eq_self_iff.mpr hd
+  have hang :
+      (Complex.arg ((c * w₂) / (c * w₁)) : Real.Angle) =
+        ((Complex.arg (c * w₂) - Complex.arg (c * w₁) : ℝ) : Real.Angle) := by
+    simpa using Complex.arg_div_coe_angle hcw₂ hcw₁
+  have harg := (Complex.arg_coe_angle_eq_iff_eq_toReal.mp hang)
+  rw [htoReal] at harg
+  rw [← mul_div_mul_left w₂ w₁ hc]
+  exact harg
 
 -- A point strictly left/right/below/above the square sees all four corners in
 -- one open half-plane.
