@@ -36,7 +36,7 @@ theorem apm_b96a01_part_c :
         b ∈ (apmReduction n p m hdiv).ker → a * b = b * a := by
   sorry
 
-theorem apm_b96a01_part_d :
+theorem apm_b96a01_part_d_nonabelian :
     ∀ (n : Type*) [Fintype n] [DecidableEq n]
       (G : Subgroup (Matrix.GeneralLinearGroup n ℚ)),
       Finite G → IsSimpleGroup G → ¬(∀ a b : G, a * b = b * a) →
@@ -44,6 +44,27 @@ theorem apm_b96a01_part_d :
         ∃ ρ : G →* Matrix.GeneralLinearGroup n (ZMod p),
           Function.Injective ρ := by
   sorry
+
+theorem apm_b96a01_part_d_abelian :
+    ∀ (n : Type*) [Fintype n] [DecidableEq n]
+      (G : Subgroup (Matrix.GeneralLinearGroup n ℚ)),
+      Finite G → IsSimpleGroup G → (∀ a b : G, a * b = b * a) →
+      ∀ p : ℕ, p.Prime → ¬(Fintype.card n = 1 ∧ p = 2) →
+        ∃ ρ : G →* Matrix.GeneralLinearGroup n (ZMod p),
+          Function.Injective ρ := by
+  sorry
+
+theorem apm_b96a01_part_d :
+    ∀ (n : Type*) [Fintype n] [DecidableEq n]
+      (G : Subgroup (Matrix.GeneralLinearGroup n ℚ)),
+      Finite G → IsSimpleGroup G →
+      ∀ p : ℕ, p.Prime → ¬(Fintype.card n = 1 ∧ p = 2) →
+        ∃ ρ : G →* Matrix.GeneralLinearGroup n (ZMod p),
+          Function.Injective ρ := by
+  intro n _ _ G hG hs p hp hex
+  by_cases hcomm : ∀ a b : G, a * b = b * a
+  · exact apm_b96a01_part_d_abelian n G hG hs hcomm p hp hex
+  · exact apm_b96a01_part_d_nonabelian n G hG hs hcomm p hp
 
 theorem apm_b96a01 :
     (∀ (V : Type*) [AddCommGroup V] [Module ℚ V] [FiniteDimensional ℚ V]
@@ -61,8 +82,8 @@ theorem apm_b96a01 :
         b ∈ (apmReduction n p m hdiv).ker → a * b = b * a) ∧
     (∀ (n : Type*) [Fintype n] [DecidableEq n]
       (G : Subgroup (Matrix.GeneralLinearGroup n ℚ)),
-      Finite G → IsSimpleGroup G → ¬(∀ a b : G, a * b = b * a) →
-      ∀ p : ℕ, p.Prime →
+      Finite G → IsSimpleGroup G →
+      ∀ p : ℕ, p.Prime → ¬(Fintype.card n = 1 ∧ p = 2) →
         ∃ ρ : G →* Matrix.GeneralLinearGroup n (ZMod p),
           Function.Injective ρ) := by
   exact ⟨apm_b96a01_part_a, apm_b96a01_part_b,

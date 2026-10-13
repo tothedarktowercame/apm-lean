@@ -2,17 +2,17 @@
 
 ## Triage and repair
 
-**Verdict: the printed problem is false; the current Lean statement contains the necessary minimal repair.** Parts (a)–(c) are faithful. Part (d) says merely that `G` is finite simple, but the intended proof uses that `G` is nonabelian. Take `n = 1`, `G = {±1} ⊆ GL₁(ℚ)`, and `p = 2`. This `G` is simple of order two, while `GL₁(ℤ/2ℤ)` is trivial, so no injection exists.
+**Verdict: the printed problem is false in exactly one case.** Parts (a)–(c) are faithful. In part (d), take `n = 1`, `G = {±1} ⊆ GL₁(ℚ)`, and `p = 2`. This group is simple of order two, while `GL₁(ℤ/2ℤ)` is trivial, so no injection exists.
 
-The source itself is therefore defective. Its informal argument explicitly reaches a contradiction only from **nonabelian** simplicity. `RevisedMain.lean` records the smallest warranted repair: the hypothesis
+The earlier repair requiring `G` to be nonabelian was too narrow. An abelian finite simple group is cyclic of prime order `q`. A faithful rational representation has dimension at least `q-1` for odd `q`; if `p≠q`, `Cq` embeds through `𝔽_(p^d)^×` with `d=ord_q(p)≤q-1`, and if `p=q` it embeds via a nontrivial unipotent block in dimension two. For `q=2`, odd `p` works in dimension one. Hence the sole failure is `n=1,p=2`, and `RevisedMain.lean` uses the exact exclusion
 
 ```text
-¬(∀ a b : G, a * b = b * a)
+¬(Fintype.card n = 1 ∧ p = 2)
 ```
 
-in part (d). This is exactly the repair already present in `problems/b96A01/lean/Main.lean`; no further alteration was made. Part (a) also correctly asks for some finite subset of some basis, rather than asserting that an arbitrary supplied generating finset is independent.
+in part (d). No other abelian failure was found. Part (a) correctly asks for some finite subset of some basis, rather than asserting that an arbitrary supplied generating finset is independent.
 
-Degenerate checks: for `V = 0`, part (a) uses the empty basis subset; for the trivial subgroup in part (b), `P = 1` works; in part (c), `p = 0` or `p = 1` makes the relevant reduction kernel trivial, so allowing arbitrary natural `p` causes no counterexample. Part (d)'s explicit noncommutativity hypothesis excludes both the trivial group and all cyclic simple groups.
+Degenerate checks: for `V = 0`, part (a) uses the empty basis subset; for the trivial subgroup in part (b), `P = 1` works; in part (c), `p = 0` or `p = 1` makes the relevant reduction kernel trivial. `IsSimpleGroup` rules out a trivial `G`; the dimension-zero case therefore cannot produce an additional part-(d) counterexample.
 
 ## Definitions
 
@@ -57,7 +57,7 @@ Degenerate checks: for `V = 0`, part (a) uses the empty basis subset; for the tr
 
 **Truth check.** For `n = 1` the whole ambient group is already abelian. At `m = 2`, the discarded product has coefficient `p²`, exactly zero modulo `p²`. For `p = 0` and `p = 1`, the reduction is respectively an identity-like or trivial-ring map and the kernel remains commutative.
 
-### `apm_b96a01_part_d`
+### `apm_b96a01_part_d_nonabelian`
 
 **Statement.** A finite nonabelian simple subgroup of `GLₙ(ℚ)` injects into `GLₙ(ZMod p)` for every prime `p`.
 
@@ -69,12 +69,24 @@ Degenerate checks: for `V = 0`, part (a) uses the empty basis subset; for the tr
 
 **Truth check.** The excluded `C₂`, `p = 2`, `n = 1` example demonstrates why the repair is necessary. For a nonabelian simple group, any homomorphism to an abelian group is trivial because its kernel cannot be bottom (otherwise the group would be abelian). The intersection of the integral congruence filtration is visibly `{I}` entrywise.
 
+### `apm_b96a01_part_d_abelian`
+
+**Statement.** An abelian finite simple rational matrix group embeds in `GLₙ(ZMod p)` unless `n=1,p=2`.
+
+**Proof sketch.** Identify `G` with `Cq` for a prime `q`. Faithfulness of the given rational representation implies `n≥q-1` for odd `q`, using the degree of the cyclotomic polynomial. If `p≠q`, let `d=ord_q(p)`; multiplication by an element of order `q` in `𝔽_(p^d)^×` gives a faithful `d`-dimensional representation, and pad it by identity blocks to dimension `n`. If `p=q`, use `I+E₁₂`, which has order `p` in characteristic `p`; the dimension bound gives `n≥2`, except for `q=p=2,n=1`, precisely the excluded case. For `q=2,p` odd, send the generator to `-I`.
+
+**Estimate.** 220–300 lines.
+
+**Dependencies.** Finite simple abelian group classification, cyclotomic degree/order facts, and finite-field linear representation APIs; independent of parts (b) and (c).
+
+**Truth check.** `C₂` embeds in `GL₁(𝔽₃)` via `-1`; `C₃` embeds in `GL₂(𝔽₂)` using the companion matrix of `X²+X+1`; in characteristic `q`, the `2×2` unipotent block has exact order `q`.
+
 ## Dependency layers
 
 - **Layer 1, parallel:** `apm_b96a01_part_a`, `apm_b96a01_part_c`.
 - **Layer 2:** `apm_b96a01_part_b` after part (a).
-- **Layer 3:** `apm_b96a01_part_d` after parts (b) and (c).
-- **Assembly:** `apm_b96a01` is already proved directly from the four lemmas and contains no `sorry`.
+- **Layer 3, parallel:** the nonabelian part-(d) lemma after parts (b),(c), and the independent abelian part-(d) lemma.
+- **Assembly:** `apm_b96a01_part_d` splits on commutativity, and `apm_b96a01` combines the four problem parts. Both are proved without `sorry`.
 
 ## Compilation and axioms
 
@@ -84,4 +96,4 @@ Both `RevisedMain.lean` and `Blueprint.lean` compile with the prescribed 12 GB m
 'apm_b96a01' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
 ```
 
-`sorryAx` enters only through the four named blueprint lemmas.
+`sorryAx` enters only through the five named blueprint lemmas.
