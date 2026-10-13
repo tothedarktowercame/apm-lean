@@ -339,8 +339,36 @@ theorem apm_m98A06_duBoisReymond : apm_m98A06_DuBoisReymondFact := by
   · exact apm_m98A06_duBoisReymond_aux_forward a y₀ ya ha y
   · exact apm_m98A06_duBoisReymond_aux_reverse a y₀ ya ha y
 
-theorem apm_m98A06_wirtinger : apm_m98A06_WirtingerFact := by
+lemma apm_m98A06_wirtinger_aux_regular
+    {L : ℝ} (hL : 0 < L) {η : ℝ → ℝ}
+    (hη : apm_m98a06_Admissible L 0 0 η) :
+    ContinuousOn η (Icc 0 L) ∧
+      ContinuousOn (fun x ↦ derivWithin η (Icc 0 L) x) (Icc 0 L) ∧
+      IntervalIntegrable (fun x ↦ (η x) ^ 2) volume 0 L ∧
+      IntervalIntegrable (fun x ↦ (derivWithin η (Icc 0 L) x) ^ 2)
+        volume 0 L := by
+  have hc : ContinuousOn η (Icc 0 L) := hη.1.continuousOn
+  have hd : ContinuousOn (fun x ↦ derivWithin η (Icc 0 L) x) (Icc 0 L) :=
+    hη.1.continuousOn_derivWithin (uniqueDiffOn_Icc hL) (by norm_num)
+  exact ⟨hc, hd, (hc.pow 2).intervalIntegrable_of_Icc hL.le,
+    (hd.pow 2).intervalIntegrable_of_Icc hL.le⟩
+
+lemma apm_m98A06_wirtinger_aux_core
+    (L : ℝ) (hL : 0 < L) (η : ℝ → ℝ)
+    (hη : apm_m98a06_Admissible L 0 0 η) :
+    (∫ x in (0 : ℝ)..L, (η x) ^ 2) ≤
+        (L / Real.pi) ^ 2 *
+          ∫ x in (0 : ℝ)..L, (derivWithin η (Icc 0 L) x) ^ 2 ∧
+      ((∫ x in (0 : ℝ)..L, (η x) ^ 2) =
+          (L / Real.pi) ^ 2 *
+            ∫ x in (0 : ℝ)..L, (derivWithin η (Icc 0 L) x) ^ 2 ↔
+        ∃ c : ℝ, ∀ x ∈ Icc (0 : ℝ) L,
+          η x = c * Real.sin (Real.pi * x / L)) := by
   sorry
+
+theorem apm_m98A06_wirtinger : apm_m98A06_WirtingerFact := by
+  intro L hL η hη
+  exact apm_m98A06_wirtinger_aux_core L hL η hη
 
 theorem apm_m98A06_weak_FTC : apm_m98A06_WeakFTCFact := by
   sorry
