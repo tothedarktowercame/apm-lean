@@ -113897,6 +113897,17 @@
       "lake build ConstructionTargets.ThreeCirclesFundamentalGroup",
       :exit 1,
       :finding "B12 absent."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791901495694-9861-6c0f122c",
+     :commands
+     ["git show/diff 2a0d3b15^..2a0d3b15"
+      "git archive 2a0d3b15; lake env lean archived PointWedgeVanKampen.lean"
+      "sha256/diff-tree/placeholder checks; statement-registry.py check"
+      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (expected absent)"],
+     :finding
+     "Reviewer codex-3. PASS program STOP: 2a0d3b15 adds two compiled, sorry-free results after cc263507. Transport by the named coordinate-object equality correctly yields a fixed-component recurrence; cancelling the inverse-span isomorphism uses epi cancellation in the right direction and returns a typed HEq to identity. Scope is Lean+MD only; hashes match ledger (1a704eb5/7ee2b664/0bca6ce3), placeholders 0, registry 150/150, axioms standard only. Residual: substitute the mapped identity into connector normal forms, prove projection=1, factor inl, then B6/B12; B12 absent."},
     :commit "2a0d3b15c93e88999fafc9057bbdb7b01ea0a979",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
@@ -113907,7 +113918,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113928,7 +113939,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Typed coordinate-side identity square banked.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Shifted recurrence and mapped identity proved.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -114702,7 +114713,10 @@
      "Naturality and triangle reductions composed in one typed square."}
     {:job 3,
      :commit "cc26350771438a0e82f47ff44ae49db88b62c70e",
-     :reason "Typed coordinate-side identity square banked."}]}
+     :reason "Typed coordinate-side identity square banked."}
+    {:job 4,
+     :commit "2a0d3b15c93e88999fafc9057bbdb7b01ea0a979",
+     :reason "Shifted recurrence and mapped identity proved."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
