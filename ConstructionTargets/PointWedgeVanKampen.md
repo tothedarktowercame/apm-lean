@@ -1261,3 +1261,9 @@ as the exact naturality square for the inverse span isomorphism.  Its
 coordinate-side `unitInv` map is the identity by
 `genericPointWedgeOuterRightSpan_unitInv_coordinateMap_eq_id`; the remaining
 step is to reduce the transported side with the equivalence triangle.
+That triangle reduction is now explicit in
+`genericPointWedgeOverlap_inverse_map_functor_map_unitInv`, and
+`genericPointWedgeOuterRightSpan_transport_map_eq_precedingUnitInv` rewrites
+the transported side as the right target image of the preceding overlap
+round-trip component.  The residual is to identify the shifted span component
+and close the resulting recurrence at the unique coordinate object.

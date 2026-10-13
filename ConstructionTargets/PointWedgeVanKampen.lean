@@ -6295,6 +6295,39 @@ theorem genericPointWedgeOuterRightSpan_unitInv_coordinateMap_eq_id :
   rw [hunit]
   exact (genericPointWedgeCoordinateRight y₀).map_id _
 
+omit [PathConnectedSpace X] [PathConnectedSpace Y] in
+/-- Applying the overlap inverse functor to the coordinate image of
+`unitInv` reduces, by the equivalence triangle, to `unitInv` one round trip
+farther back. -/
+theorem genericPointWedgeOverlap_inverse_map_functor_map_unitInv :
+    let eK := genericPointWedgeOverlapGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let z := genericPointWedgeOverlapBase x₀ y₀ M N
+    eK.inverse.map (eK.functor.map (eK.unitInv.app z)) =
+      eK.unitInv.app ((eK.functor ⋙ eK.inverse).obj z) := by
+  dsimp only
+  rw [Equivalence.inv_fun_map]
+  simp
+
+omit [PathConnectedSpace X] [PathConnectedSpace Y] in
+/-- Consequently the transported side of the inverse-span naturality square
+is the right target map of the preceding overlap round-trip component. -/
+theorem genericPointWedgeOuterRightSpan_transport_map_eq_precedingUnitInv :
+    let r := genericPointWedgeActualRight x₀ y₀ M N
+    let eK := genericPointWedgeOverlapGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let eR := genericPointWedgeRightGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let z := genericPointWedgeOverlapBase x₀ y₀ M N
+    (eK.inverse ⋙ r ⋙ eR.functor).map
+        (eK.functor.map (eK.unitInv.app z)) =
+      (r ⋙ eR.functor).map
+        (eK.unitInv.app ((eK.functor ⋙ eK.inverse).obj z)) := by
+  dsimp only
+  rw [Functor.comp_map, Functor.comp_map,
+    genericPointWedgeOverlap_inverse_map_functor_map_unitInv]
+  rfl
+
 /-- An `inl` factorization of the right-base conjugator forces its canonical
 right projection to be trivial. -/
 theorem genericPointWedgeRightBase_inl_implies_rightProjection_eq_one
@@ -7022,6 +7055,8 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeOuterRightRoundTrip_component_target
 #print axioms genericPointWedgeOuterRightSpan_unitInv_naturality
 #print axioms genericPointWedgeOuterRightSpan_unitInv_coordinateMap_eq_id
+#print axioms genericPointWedgeOverlap_inverse_map_functor_map_unitInv
+#print axioms genericPointWedgeOuterRightSpan_transport_map_eq_precedingUnitInv
 #print axioms genericPointWedgeRightBase_inl_implies_rightProjection_eq_one
 #print axioms genericPointWedgeLegCoordinates_of_mapped
 #print axioms genericPointWedgeLegCoordinates_iff_mapped
