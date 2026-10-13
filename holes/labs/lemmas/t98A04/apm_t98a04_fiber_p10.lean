@@ -81,7 +81,22 @@ theorem apm_t98a04_fiber_eq_circleOrbit
 -- BEGIN SEAT AREA
 theorem apm_t98a04_fiber_p10 :
     apm_t98a04_fiber apm_t98a04_p10 = {z | z.1 1 = 0} := by
-  sorry
+  ext z
+  change apm_t98a04_hopf z = apm_t98a04_p10 ↔ z.1 1 = 0
+  rw [apm_t98a04_hopf, apm_t98a04_p10,
+    Projectivization.mk'_eq_mk]
+  rw [Projectivization.mk_eq_mk_iff']
+  constructor
+  · rintro ⟨a, ha⟩
+    have h := congrFun (congrArg WithLp.ofLp ha) 1
+    simpa [apm_t98a04_e0] using h.symm
+  · intro hz
+    refine ⟨z.1 0, ?_⟩
+    apply PiLp.ext
+    intro i
+    fin_cases i
+    · simp [apm_t98a04_e0]
+    · simpa [apm_t98a04_e0] using hz.symm
 -- END SEAT AREA
 
 /-- Every Hopf fiber is homeomorphic to the unit circle. -/
