@@ -36113,32 +36113,33 @@
    [:lemma-constructiontargets-sardconvexdomain-eq-whitneydyadicindexof-of-mem-cube-of-gene],
    :other-consumers []}
   {:consumer :t93J03,
-   :stop-count 9,
+   :stop-count 10,
    :review-finding
    "Program STOP commits nothing new since the prior reviewed attempt: it reuses commit 512a220f, and git history shows no later scoped commit. The unresolved SemilocallySimplyConnected hypothesis-coverage conflict is unchanged. Obtain the required owner specification decision or commit a new compiled milestone before resubmitting.",
    :evidence
    {:placeholder-delta {:t93J03 [1 1]},
-    :residual "Compute polygon pi1; then C1 transport, C2/Main.",
+    :residual
+    "Compute attaching word and van Kampen; then C1, C2/Main.",
     :outcome :stop,
     :warnings ["unused SLSC owner-approved"],
     :missing-theorems
-    [{:name "kleinPairingSpaceHomeomorph",
-      :type "polygon quotient = frozen KleinBottle",
+    [{:name "kleinPairingOrbitEquivBool",
+      :type "pairing orbits equiv Bool generators",
       :status :proved,
       :consumers [:t93J03],
       :depends-on [],
       :area "covering-subgroup-correspondence"}
-     {:name "kleinSkeletonHomeomorphTwoCircles",
-      :type "skeleton = two-circle wedge",
-      :status :proved,
+     {:name "t93J03_polygon_attaching_word",
+      :type "attaching word gives Klein relator",
+      :status :not-started,
       :consumers [:t93J03],
-      :depends-on [],
+      :depends-on ["kleinPairingOrbitEquivBool"],
       :area "covering-subgroup-correspondence"}
      {:name "t93J03_polygon_van_kampen",
       :type "pi1 polygon has Klein presentation",
       :status :not-started,
       :consumers [:t93J03],
-      :depends-on ["kleinSkeletonHomeomorphTwoCircles"],
+      :depends-on ["t93J03_polygon_attaching_word"],
       :area "covering-subgroup-correspondence"}
      {:name "t93J03_kleinBottle_pi1_every_basepoint",
       :type "pi1 equivalence every point",
@@ -36150,39 +36151,27 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
-    :reason
-    "Committed polygon and skeleton models; van Kampen remains.",
+    :reason "Committed Bool labels for polygon edge orbits.",
     :commands
     [{:cmd "build closure; lean fixture", :exit 0}
      {:cmd "registry; placeholder; diff; commit", :exit 0}
      {:cmd "rg forbidden", :exit 1, :expected-exit 1}],
     :diagnostic-history
-    [{:cmd "build closure",
+    [{:cmd "lean name probe",
       :exit 1,
-      :correction "fixed field and namespace"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1791928677248-10631-fddae91d",
-     :commands
-     ["git show/diff 5d1dafaa; scope/representation review"
-      "sha256sum fixture; show --check; placeholder recount"
-      "lake build ConstructionTargets.t93J03Closure; lean fixture"
-      "statement-registry check"],
-     :finding
-     "PASS. Commit 5d1dafaa adds compiled, sorry-free standard-axiom progress after 813a790e: it specializes the proved standard nonorientable disk quotient at genus 2 to the exact frozen KleinBottle (definitionally Surface false 2) and exposes that pairing's actual boundary skeleton homeomorphism to its orbit-indexed circle wedge. Fixture hash matches; registry 166/166; Main placeholder 1->1. Polygon van Kampen, C1 transport, C2, and Main remain listed. SemilocallySimplyConnected X is unused, mandated by problem.md."},
-    :commit "5d1dafaa596e4ea99ab52ee71d664816f858aedc",
+      :correction "used root finTwoEquiv"}],
+    :commit "f44902bb68555014d6dba4ca617cc653bd7ee823",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
      "ConstructionTargets/t93J03Closure.blueprint.md"],
     :fixture
-    {:path "/tmp/t93j03_polygon_model_check.lean",
+    {:path "/tmp/t93j03_generator_labels_check.lean",
      :sha256
-     "236249a1c15ea6479f17c7b352ef77568ae97e6c60c3ecfc5ab09f8b0ae806d5",
+     "182148d2c0d3d6c4ac62722770e4ea16b592cad8796d9a3e7eb0b3139a29fe72",
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :needs-owner,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -37535,7 +37524,42 @@
     :area "covering-subgroup-correspondence"},
    :id :lemma-t93j03-polygon-van-kampen,
    :kind :lemma,
-   :depends-on [:lemma-kleinskeletonhomeomorphtwocircles],
+   :depends-on
+   [:lemma-kleinskeletonhomeomorphtwocircles
+    :lemma-t93j03-polygon-attaching-word],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "kleinPairingOrbitEquivBool",
+    :type "pairing orbits equiv Bool generators"},
+   :lemma
+   {:name "kleinPairingOrbitEquivBool",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type "pairing orbits equiv Bool generators",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03},
+   :id :lemma-kleinpairingorbitequivbool,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t93J03_polygon_attaching_word",
+    :type "attaching word gives Klein relator"},
+   :lemma
+   {:name "t93J03_polygon_attaching_word",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type "attaching word gives Klein relator",
+    :area "covering-subgroup-correspondence"},
+   :id :lemma-t93j03-polygon-attaching-word,
+   :kind :lemma,
+   :depends-on [:lemma-kleinpairingorbitequivbool],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
