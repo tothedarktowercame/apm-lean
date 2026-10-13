@@ -691,3 +691,51 @@ lemma apm_t94a08_cross_subset_not_isPreconnected_of_branch_witnesses
     exact hznot (hsub hzS)
   · obtain ⟨z, hzS, _, hznot⟩ := hplus
     exact hznot (hsub hzS)
+
+lemma apm_t94a08_open_mem_zero_has_affine_branch_witnesses
+    (V : Set (ℂ × ℂ)) (hV : IsOpen V) (h0 : (0, 0) ∈ V) :
+    (∃ z ∈ V, z ∈ apm_t94a08_affineBranchPlus ∧
+      z ∉ apm_t94a08_affineBranchMinus ∧ z ≠ (0, 0)) ∧
+    (∃ z ∈ V, z ∈ apm_t94a08_affineBranchMinus ∧
+      z ∉ apm_t94a08_affineBranchPlus ∧ z ≠ (0, 0)) := by
+  obtain ⟨ε, hε, hball⟩ := Metric.isOpen_iff.mp hV (0, 0) h0
+  let r : ℂ := ((ε / 2 : ℝ) : ℂ)
+  have hr : r ≠ 0 := by
+    simp [r, hε.ne']
+  have hplusV : (r, Complex.I * r) ∈ V := by
+    apply hball
+    rw [Metric.mem_ball, Prod.dist_eq]
+    simp only [Prod.fst_zero, Prod.snd_zero, Complex.dist_eq, sub_zero,
+      norm_mul, Complex.norm_I, one_mul, max_self]
+    rw [show ‖r‖ = |ε / 2| by
+      simp [r, Complex.norm_real, Real.norm_eq_abs, abs_div]]
+    rw [abs_of_pos (half_pos hε)]
+    exact half_lt_self hε
+  have hminusV : (r, -Complex.I * r) ∈ V := by
+    apply hball
+    rw [Metric.mem_ball, Prod.dist_eq]
+    simp only [Prod.fst_zero, Prod.snd_zero, Complex.dist_eq, sub_zero,
+      norm_mul, norm_neg, Complex.norm_I, one_mul, max_self]
+    rw [show ‖r‖ = |ε / 2| by
+      simp [r, Complex.norm_real, Real.norm_eq_abs, abs_div]]
+    rw [abs_of_pos (half_pos hε)]
+    exact half_lt_self hε
+  constructor
+  · refine ⟨(r, Complex.I * r), hplusV, ?_, ?_, ?_⟩
+    · change r + Complex.I * (Complex.I * r) = 0
+      rw [← mul_assoc, Complex.I_mul_I]
+      simp
+    · change r - Complex.I * (Complex.I * r) ≠ 0
+      rw [← mul_assoc, Complex.I_mul_I]
+      simpa using hr
+    · simpa [Prod.ext_iff] using hr
+  · refine ⟨(r, -Complex.I * r), hminusV, ?_, ?_, ?_⟩
+    · change r - Complex.I * (-Complex.I * r) = 0
+      ring_nf
+      rw [pow_two, Complex.I_mul_I]
+      ring
+    · change r + Complex.I * (-Complex.I * r) ≠ 0
+      ring_nf
+      rw [pow_two, Complex.I_mul_I]
+      simpa using hr
+    · simpa [Prod.ext_iff] using hr
