@@ -113901,6 +113901,17 @@
       "lake build ConstructionTargets.ThreeCirclesFundamentalGroup",
       :exit 1,
       :finding "B12 file absent."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791923498499-10418-cdd7ba7e",
+     :commands
+     ["git show/diff-tree aeace1888"
+      "git archive aeace1888; lake env lean archived PointWedgeVanKampen.lean"
+      "lake build ConstructionTargets.PointWedgeVanKampen"
+      "sha256sum; placeholder delta; statement-registry.py check"],
+     :finding
+     "Recorded scope is target+note; source/doc/fixture hashes match b58ceebc/3de20445/0bca6ce3. Archived and target builds pass; placeholders 0->0, registry 150/150, standard axioms only. The inverse-span component and cancelled typed comparator both normalize to the same sourceTransport; applying the cancellation theorem symmetrically gives the stated orientation in the chosen-base hom-set. New compiled progress is present; feed comparison into projection, then B6/B12."},
     :commit "aeace188853a1ca6f21879b0ba2583813ae5b8bf",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
@@ -113911,7 +113922,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113932,7 +113943,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Typed comparator cancels against mapped unitInv.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Cancelled comparator identified with chosen-base inverse-span component.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -114770,7 +114781,11 @@
      "Typed composite identified with endpoint transport times inverse mapped unitInv."}
     {:job 2,
      :commit "9d46eae724bd7af20df30cb274f27b7f5344d108",
-     :reason "Typed comparator cancels against mapped unitInv."}]}
+     :reason "Typed comparator cancels against mapped unitInv."}
+    {:job 3,
+     :commit "aeace188853a1ca6f21879b0ba2583813ae5b8bf",
+     :reason
+     "Cancelled comparator identified with chosen-base inverse-span component."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
