@@ -6765,6 +6765,23 @@ theorem genericPointWedgeOuterRight_targetEquality_eq_roundTripSource :
       x₀ y₀ M N hM hN hy hx cM cN).symm := by
   rfl
 
+/-- The inverse unshifted round-trip component, before endpoint transport. -/
+noncomputable def genericPointWedgeOuterRight_inverseRoundTripComponent :
+    let r := genericPointWedgeActualRight x₀ y₀ M N
+    let eK := genericPointWedgeOverlapGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let eR := genericPointWedgeRightGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let z := genericPointWedgeOverlapBase x₀ y₀ M N
+    (eK.functor ⋙ eK.inverse ⋙ r ⋙ eR.functor).obj z ⟶
+      (r ⋙ eR.functor).obj z := by
+  exact inv (((genericPointWedgeOverlapGroupoidEquivalence
+    x₀ y₀ M N hM hN hy hx cM cN).funInvIdAssoc
+      (genericPointWedgeActualRight x₀ y₀ M N ⋙
+        (genericPointWedgeRightGroupoidEquivalence
+          x₀ y₀ M N hM hN hy hx cM cN).functor)).hom.app
+            (genericPointWedgeOverlapBase x₀ y₀ M N))
+
 /-- An `inl` factorization of the right-base conjugator forces its canonical
 right projection to be trivial. -/
 theorem genericPointWedgeRightBase_inl_implies_rightProjection_eq_one
@@ -7515,6 +7532,7 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeOuterRight_endpointTransport_eq_baseTransport
 #print axioms genericPointWedgeOuterRight_endpointEquality_eq_rightBase
 #print axioms genericPointWedgeOuterRight_targetEquality_eq_roundTripSource
+#print axioms genericPointWedgeOuterRight_inverseRoundTripComponent
 #print axioms genericPointWedgeRightBase_inl_implies_rightProjection_eq_one
 #print axioms genericPointWedgeLegCoordinates_of_mapped
 #print axioms genericPointWedgeLegCoordinates_iff_mapped

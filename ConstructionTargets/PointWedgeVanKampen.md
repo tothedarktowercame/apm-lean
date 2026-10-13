@@ -1353,3 +1353,6 @@ equality.  The remaining step is the unshifted mapped `unitInv` normalization.
 `genericPointWedgeOuterRight_targetEquality_eq_roundTripSource` similarly
 identifies the terminal equality witness with the symmetric named source
 equality, fixing both transports before the mapped-component cancellation.
+`genericPointWedgeOuterRight_inverseRoundTripComponent` packages the middle
+inverse round-trip in its exact source and target hom-set.  The next step can
+compose it with the two named transports without an inferred identity object.
