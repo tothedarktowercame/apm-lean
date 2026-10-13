@@ -36156,6 +36156,17 @@
      {:cmd "statement registry; placeholder; diff checks", :exit 0}
      {:cmd "rg forbidden closure", :exit 1, :expected-exit 1}
      {:cmd "git commit; show --check", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791925754121-10512-db102d3f",
+     :commands
+     ["git show/diff 2f56a1d; scope and coordinate review"
+      "lake build/lean ConstructionTargets.t93J03Closure"
+      "sha256sum + lake env lean algebra fixture"
+      "statement-registry check; placeholder recount"],
+     :finding
+     "PASS. Since program-history a55cadcd, commit 2f56a1d adds compiled, sorry-free algebraic progress for literal-action proper discontinuity. Orbit equality yields the vertical translation and signed horizontal coordinate equations in the correct direction, and injectivity of coordinatePairEquiv turns finite coordinate sets into finitely many actors. Compact projection bounds and assembly of proper discontinuity, then orbit homeomorphism/C1/C2/Main, remain listed. Fixture hash matches; standard axioms only; registry 166/166; forbidden count 0->0. SemilocallySimplyConnected X is unused, mandated by problem.md."},
     :commit "2f56a1d96c44a4f260d57f1ccac7cdc8b4a9e577",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
@@ -36167,7 +36178,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -36185,7 +36196,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t93J03Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed affine-action continuity and canonical-orbit pi1 application; geometry remains.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed algebraic half of proper discontinuity; compact bounds remain.",
    :id :program-2026-10-13-close-t93j03,
    :kind :final-adapter,
    :campaign-priority 30,
@@ -36205,7 +36216,11 @@
     {:job 3,
      :commit "a55cadcd9d6ac70ebcb215ccd5bbec22bee9c238",
      :reason
-     "Committed affine-action continuity and canonical-orbit pi1 application; geometry remains."}]}
+     "Committed affine-action continuity and canonical-orbit pi1 application; geometry remains."}
+    {:job 4,
+     :commit "2f56a1d96c44a4f260d57f1ccac7cdc8b4a9e577",
+     :reason
+     "Committed algebraic half of proper discontinuity; compact bounds remain."}]}
   {:consumer :t99J05,
    :stop-count 5,
    :evidence
@@ -37255,7 +37270,7 @@
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "coordinate_equations_of_smul_eq",
@@ -37265,14 +37280,16 @@
     :reported-by [:program-2026-10-13-close-t93j03],
     :type "orbit equality determines integer coordinates",
     :area "covering-subgroup-correspondence",
-    :proved-in :program-2026-10-13-close-t93j03},
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "2f56a1d96c44a4f260d57f1ccac7cdc8b4a9e577"},
    :id :lemma-coordinate-equations-of-smul-eq,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "finite_of_coordinatePair_mem",
@@ -37282,7 +37299,9 @@
     :reported-by [:program-2026-10-13-close-t93j03],
     :type "finite coordinate ranges give finite group set",
     :area "covering-subgroup-correspondence",
-    :proved-in :program-2026-10-13-close-t93j03},
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "2f56a1d96c44a4f260d57f1ccac7cdc8b4a9e577"},
    :id :lemma-finite-of-coordinatepair-mem,
    :kind :lemma,
    :depends-on [],
