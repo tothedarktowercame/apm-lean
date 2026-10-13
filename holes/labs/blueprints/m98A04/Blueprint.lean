@@ -801,6 +801,51 @@ lemma apm_m98a04_translation_pairing_fderiv_of_stage_dq_aux_continuous {n : ℕ}
 /-- The `C¹` criterion on `ℝⁿ`: continuous coordinate slope limits give a Fréchet
 derivative (n-dimensional version of m98J02's two-dimensional
 `apm_m98J02_translated_pairing_calculus_of_facts_aux_hasFDerivAt`). -/
+lemma apm_m98a04_translation_pairing_fderiv_of_stage_dq_aux_hasFDerivAt_aux_line
+    {n : ℕ} (F : EuclideanSpace ℝ (Fin n) → ℝ)
+    (G : Fin n → EuclideanSpace ℝ (Fin n) → ℝ)
+    (hF : ∀ i x, Tendsto
+      (fun h : ℝ ↦ h⁻¹ * (F (x + h • EuclideanSpace.single i 1) - F x))
+      (nhdsWithin (0 : ℝ) ({0} : Set ℝ)ᶜ) (nhds (G i x)))
+    (i : Fin n) (z : EuclideanSpace ℝ (Fin n)) (t : ℝ) :
+    HasDerivAt (fun s : ℝ => F (z + s • EuclideanSpace.single i 1))
+      (G i (z + t • EuclideanSpace.single i 1)) t := by
+  rw [hasDerivAt_iff_tendsto_slope_zero]
+  convert hF i (z + t • EuclideanSpace.single i 1) using 1
+  funext s
+  congr 3
+  module
+
+lemma apm_m98a04_translation_pairing_fderiv_of_stage_dq_aux_hasFDerivAt_aux_segment
+    {n : ℕ} (F : EuclideanSpace ℝ (Fin n) → ℝ)
+    (G : Fin n → EuclideanSpace ℝ (Fin n) → ℝ)
+    (hF : ∀ i x, Tendsto
+      (fun h : ℝ ↦ h⁻¹ * (F (x + h • EuclideanSpace.single i 1) - F x))
+      (nhdsWithin (0 : ℝ) ({0} : Set ℝ)ᶜ) (nhds (G i x)))
+    (i : Fin n) (p : EuclideanSpace ℝ (Fin n)) (c ε t : ℝ)
+    (hε : ∀ s : ℝ, |s| ≤ |t| →
+      |G i (p + s • EuclideanSpace.single i 1) - c| ≤ ε) :
+    |F (p + t • EuclideanSpace.single i 1) - F p - c * t| ≤ ε * |t| := by
+  have hd : ∀ s ∈ Set.Icc (-|t|) |t|, HasDerivWithinAt
+      (fun s : ℝ => F (p + s • EuclideanSpace.single i 1) - c * s)
+      (G i (p + s • EuclideanSpace.single i 1) - c) (Set.Icc (-|t|) |t|) s := by
+    intro s _
+    have hs :=
+      (apm_m98a04_translation_pairing_fderiv_of_stage_dq_aux_hasFDerivAt_aux_line
+        F G hF i p s).sub ((hasDerivAt_id s).const_mul c)
+    simpa using hs.hasDerivWithinAt
+  have hb : ∀ s ∈ Set.Icc (-|t|) |t|,
+      ‖G i (p + s • EuclideanSpace.single i 1) - c‖ ≤ ε := by
+    intro s hs
+    rw [Real.norm_eq_abs]
+    exact hε s (abs_le.2 hs)
+  have key := (convex_Icc (-|t|) |t|).norm_image_sub_le_of_norm_hasDerivWithin_le
+    hd hb (x := 0) (y := t) (by constructor <;> simp)
+      (by constructor <;> [exact neg_abs_le t; exact le_abs_self t])
+  simp only [Real.norm_eq_abs, sub_zero, zero_smul, add_zero, mul_zero] at key
+  convert key using 2
+  ring
+
 lemma apm_m98a04_translation_pairing_fderiv_of_stage_dq_aux_hasFDerivAt {n : ℕ}
     (F : EuclideanSpace ℝ (Fin n) → ℝ) (G : Fin n → EuclideanSpace ℝ (Fin n) → ℝ)
     (hG : ∀ i, Continuous (G i))
