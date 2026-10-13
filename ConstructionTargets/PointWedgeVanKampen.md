@@ -1356,3 +1356,6 @@ equality, fixing both transports before the mapped-component cancellation.
 `genericPointWedgeOuterRight_inverseRoundTripComponent` packages the middle
 inverse round-trip in its exact source and target hom-set.  The next step can
 compose it with the two named transports without an inferred identity object.
+`genericPointWedgeOuterRight_sourceTransport` and
+`genericPointWedgeOuterRight_targetTransport` package those two endpoint
+coercions in their exact hom-sets.  All three comparator factors are now typed.

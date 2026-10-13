@@ -6782,6 +6782,32 @@ noncomputable def genericPointWedgeOuterRight_inverseRoundTripComponent :
           x₀ y₀ M N hM hN hy hx cM cN).functor)).hom.app
             (genericPointWedgeOverlapBase x₀ y₀ M N))
 
+/-- The canonical source transport into the unshifted right round-trip. -/
+noncomputable def genericPointWedgeOuterRight_sourceTransport :
+    let r := genericPointWedgeActualRight x₀ y₀ M N
+    let eK := genericPointWedgeOverlapGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let eR := genericPointWedgeRightGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let z := genericPointWedgeOverlapBase x₀ y₀ M N
+    (genericPointWedgeCoordinateRight y₀).obj (eK.functor.obj z) ⟶
+      (r ⋙ eR.functor).obj z := by
+  exact eqToHom (genericPointWedgeRightEquiv_obj_rightBase
+    x₀ y₀ M N hM hN hy hx cM cN).symm
+
+/-- The canonical target transport out of the unshifted right round-trip. -/
+noncomputable def genericPointWedgeOuterRight_targetTransport :
+    let r := genericPointWedgeActualRight x₀ y₀ M N
+    let eK := genericPointWedgeOverlapGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let eR := genericPointWedgeRightGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let z := genericPointWedgeOverlapBase x₀ y₀ M N
+    (r ⋙ eR.functor).obj z ⟶
+      (eK.inverse ⋙ r ⋙ eR.functor).obj (eK.functor.obj z) := by
+  exact eqToHom (genericPointWedgeOuterRightRoundTrip_component_source
+    x₀ y₀ M N hM hN hy hx cM cN)
+
 /-- An `inl` factorization of the right-base conjugator forces its canonical
 right projection to be trivial. -/
 theorem genericPointWedgeRightBase_inl_implies_rightProjection_eq_one
@@ -7533,6 +7559,8 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeOuterRight_endpointEquality_eq_rightBase
 #print axioms genericPointWedgeOuterRight_targetEquality_eq_roundTripSource
 #print axioms genericPointWedgeOuterRight_inverseRoundTripComponent
+#print axioms genericPointWedgeOuterRight_sourceTransport
+#print axioms genericPointWedgeOuterRight_targetTransport
 #print axioms genericPointWedgeRightBase_inl_implies_rightProjection_eq_one
 #print axioms genericPointWedgeLegCoordinates_of_mapped
 #print axioms genericPointWedgeLegCoordinates_iff_mapped
