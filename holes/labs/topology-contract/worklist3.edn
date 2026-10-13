@@ -24430,23 +24430,26 @@
    :consumer :t01A08,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "extend Mathlib: state and prove the missing theorem in scope",
    :implements-lemma :lemma-closedset-whitneycubecover,
    :evidence
    {:placeholder-delta {:t01A08 [1 1]},
     :residual
-    "Choose stratum nets, prove quantitative packing, assemble B3; then B4-B7, B9.",
+    "Combine stratum nets, prove quantitative packing/overlap, assemble B3; then B4-B7, B9.",
     :outcome :stop,
     :warnings ["existing unnecessarySimpa:454"],
     :missing-theorems
     [{:name
-      "ConstructionTargets.SardConvexDomain.compl_subset_iUnion_whitneyScaleStratum",
-      :type "dyadic infDist strata cover the closed-set complement",
+      "ConstructionTargets.SardConvexDomain.whitneyStratumNet_spec",
+      :type
+      "chosen dyadic stratum net is contained, separated at 2^k/8, and covers its stratum",
       :status :proved,
       :consumers [:t01A08],
-      :depends-on [],
+      :depends-on
+      ["ConstructionTargets.SardConvexDomain.exists_maximalSeparated_cover"
+       "ConstructionTargets.SardConvexDomain.compl_subset_iUnion_whitneyScaleStratum"],
       :area "sard-convex-domain"}
      {:name
       "ConstructionTargets.SardConvexDomain.closedSet_whitneyCubeCover_proper",
@@ -24454,40 +24457,29 @@
       :status :partial,
       :consumers [:t01A08],
       :depends-on
-      ["ConstructionTargets.SardConvexDomain.compl_subset_iUnion_whitneyScaleStratum"
-       "ConstructionTargets.SardConvexDomain.exists_maximalSeparated_cover"],
+      ["ConstructionTargets.SardConvexDomain.whitneyStratumNet_spec"
+       "ConstructionTargets.SardConvexDomain.infDist_comparable_of_mem_quarter_balls"],
       :area "sard-convex-domain"}],
     :statement-hashes {:registry "150/150"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Committed dyadic infDist strata and proved their union covers the complement of every closed nonempty set. Choosing maximal nets on the strata, quantitative packing, and certificate assembly remain; not a refutation.",
+    "Committed canonical maximal separated nets on every dyadic infDist stratum. Quantitative packing, uniform overlap, and certificate assembly remain; not a refutation.",
     :commands
     [{:cmd "lake build ConstructionTargets.SardConvexDomain", :exit 0}
-     {:cmd "lean fixture; registry; scans; diff", :exit 0}
+     {:cmd "lean fixture; registry; forbidden scan; diff", :exit 0}
      {:cmd "git commit scoped file", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1791902903399-9890-4e0f8b65",
-     :commands
-     ["git show/diff c965749; scope/orientation checks"
-      "sha256sum + lake env lean frozen fixture"
-      "lake build ConstructionTargets.SardConvexDomain"
-      "statement registry check; forbidden-count scan"],
-     :finding
-     "PASS. Recorded topo-10 commit c965749 changes only the scoped Lean file and correctly defines integer dyadic infDist strata and covers sᶜ: closed nonempty s gives positive infDist, then exists_mem_Ico_zpow supplies 2^k≤d<2^(k+1) in the required orientation. Fixture hash ca675ebf... matches; build/fixture pass; registry 150/150; forbidden placeholders stay 0; only standard axioms. Valid compiled B3 progress; STOP lists net choice, packing, and assembly."},
-    :commit "c965749eb91295b57c6cbd8b88a3394e5d3b1f88",
+    :commit "68f21764a4e8817a5e89cc34bc927cc13209c740",
     :changed-paths ["ConstructionTargets/SardConvexDomain.lean"],
     :fixture
-    {:path "/tmp/t01a08_b3_dyadic_strata_check.lean",
+    {:path "/tmp/t01a08_b3_stratum_net_check.lean",
      :sha256
-     "ca675ebf10e21d862af8f3b4dda71068eaaea553b3bd49407ad236589ecbab1f",
+     "0b1a8cd6ac8ea20c8dca597b6ca71acd50b70301295d592a8442537ad4425498",
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain.blueprint/B3",
    :acceptance
@@ -35147,7 +35139,8 @@
     :lemma-constructiontargets-sardconvexdomain-locallyfinite-of-separated-centers-of-subse
     :lemma-constructiontargets-sardconvexdomain-infdist-comparable-of-mem-quarter-balls
     :lemma-constructiontargets-sardconvexdomain-exists-maximalseparated-cover
-    :lemma-constructiontargets-sardconvexdomain-compl-subset-iunion-whitneyscalestratum],
+    :lemma-constructiontargets-sardconvexdomain-compl-subset-iunion-whitneyscalestratum
+    :lemma-constructiontargets-sardconvexdomain-whitneystratumnet-spec],
    :other-consumers []}
   {:consumer :t01A08,
    :phase :lemma,
@@ -35377,6 +35370,30 @@
    :lemma-constructiontargets-sardconvexdomain-compl-subset-iunion-whitneyscalestratum,
    :kind :lemma,
    :depends-on [],
+   :other-consumers []}
+  {:consumer :t01A08,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.SardConvexDomain.whitneyStratumNet_spec",
+    :type
+    "chosen dyadic stratum net is contained, separated at 2^k/8, and covers its stratum"},
+   :lemma
+   {:name
+    "ConstructionTargets.SardConvexDomain.whitneyStratumNet_spec",
+    :reported-by [:r-a08-sard-b3-whitney-cubes-1],
+    :type
+    "chosen dyadic stratum net is contained, separated at 2^k/8, and covers its stratum",
+    :area "sard-convex-domain",
+    :proved-in :r-a08-sard-b3-whitney-cubes-1},
+   :id
+   :lemma-constructiontargets-sardconvexdomain-whitneystratumnet-spec,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-sardconvexdomain-exists-maximalseparated-cover
+    :lemma-constructiontargets-sardconvexdomain-compl-subset-iunion-whitneyscalestratum],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
