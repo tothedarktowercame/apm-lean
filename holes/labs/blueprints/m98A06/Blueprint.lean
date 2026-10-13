@@ -1041,6 +1041,14 @@ lemma apm_m98A06_wirtinger_aux_core_aux_picone_limit_aux_gap
   sorry
 
 -- Equality in Wirtinger iff the Picone gap vanishes iff η/sin is constant.
+lemma apm_m98A06_wirtinger_aux_core_aux_picone_limit_aux_iff_aux_rigidity_aux_pointwise_aux_integrable
+    (L : ℝ) (hL : 0 < L) (η : ℝ → ℝ)
+    (hη : apm_m98a06_Admissible L 0 0 η) :
+    IntervalIntegrable (fun x => (derivWithin η (Icc 0 L) x -
+      η x * ((Real.pi / L) * Real.cos (Real.pi * x / L)) /
+        Real.sin (Real.pi * x / L)) ^ 2) volume 0 L := by
+  sorry
+
 lemma apm_m98A06_wirtinger_aux_core_aux_picone_limit_aux_iff_aux_rigidity_aux_pointwise
     (L : ℝ) (hL : 0 < L) (η : ℝ → ℝ)
     (hη : apm_m98a06_Admissible L 0 0 η)
@@ -1051,7 +1059,40 @@ lemma apm_m98A06_wirtinger_aux_core_aux_picone_limit_aux_iff_aux_rigidity_aux_po
       derivWithin η (Icc 0 L) x -
         η x * ((Real.pi / L) * Real.cos (Real.pi * x / L)) /
           Real.sin (Real.pi * x / L) = 0 := by
-  sorry
+  let f : ℝ → ℝ := fun x => derivWithin η (Icc 0 L) x -
+    η x * ((Real.pi / L) * Real.cos (Real.pi * x / L)) /
+      Real.sin (Real.pi * x / L)
+  let g : ℝ → ℝ := fun x => (f x) ^ 2
+  have hd : ContinuousOn (derivWithin η (Icc 0 L)) (Icc 0 L) :=
+    hη.1.continuousOn_derivWithin (uniqueDiffOn_Icc hL) (by norm_num)
+  have hf : ContinuousOn f (Ioo 0 L) := by
+    apply ContinuousOn.sub
+    · exact hd.mono Ioo_subset_Icc_self
+    · apply ContinuousOn.div
+      · exact (hη.1.continuousOn.mono Ioo_subset_Icc_self).mul
+          (by fun_prop : ContinuousOn (fun x : ℝ =>
+            (Real.pi / L) * Real.cos (Real.pi * x / L)) (Ioo 0 L))
+      · fun_prop
+      · intro x hx
+        exact ne_of_gt (apm_m98A06_wirtinger_aux_core_aux_sine_pos L x hL hx)
+  have hg : ContinuousOn g (Ioo 0 L) := hf.pow 2
+  have hfi : IntervalIntegrable g volume 0 L := by
+    exact apm_m98A06_wirtinger_aux_core_aux_picone_limit_aux_iff_aux_rigidity_aux_pointwise_aux_integrable
+      L hL η hη
+  have hae : g =ᵐ[volume.restrict (Ioc (0 : ℝ) L)] 0 := by
+    have hnonneg : 0 ≤ᵐ[volume.restrict (Ioc (0 : ℝ) L ∪ Ioc L 0)] g :=
+      Filter.Eventually.of_forall (fun x => sq_nonneg (f x))
+    have hz' : ∫ x in (0 : ℝ)..L, g x = 0 := hz
+    have := (intervalIntegral.integral_eq_zero_iff_of_nonneg_ae hnonneg hfi).mp hz'
+    simpa [min_eq_left hL.le, max_eq_right hL.le] using this
+  have hae' : g =ᵐ[volume.restrict (Ioo (0 : ℝ) L)] 0 :=
+    ae_restrict_of_ae_restrict_of_subset Ioo_subset_Ioc_self hae
+  have heq : EqOn g 0 (Ioo (0 : ℝ) L) := by
+    exact Measure.eqOn_open_of_ae_eq hae' isOpen_Ioo hg continuousOn_const
+  intro x hx
+  have hxzero : g x = 0 := heq hx
+  dsimp [g] at hxzero
+  exact sq_eq_zero_iff.mp hxzero
 
 lemma apm_m98A06_wirtinger_aux_core_aux_picone_limit_aux_iff_aux_rigidity_aux_ratio
     (L : ℝ) (hL : 0 < L) (η : ℝ → ℝ)
