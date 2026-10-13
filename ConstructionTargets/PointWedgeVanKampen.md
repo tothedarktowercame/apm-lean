@@ -1254,3 +1254,5 @@ Its target connector is now identified with the same chosen based connector
 that terminates the inverse-span normal form.
 The intervening natural-isomorphism component's source is now exposed as the
 same transported right object used by both based target connectors.
+Its target is the literal right base object `y₀`, completing the endpoint
+description needed to compare it with the inverse-span equality transport.
