@@ -413,7 +413,30 @@ lemma apm_t02A07_transverse_iff_parameter_sq_ne_half_aux_submodule_aux_good_aux_
         (apm_t02a07_sphereTangent y) ⊔
       apm_t02a07_tangentZ (apm_t02a07_family parameter y) ≤
         apm_t02a07_tangentX (apm_t02a07_family parameter y) := by
-  sorry
+  rw [sup_le_iff]
+  constructor
+  · rintro z ⟨v, hv, rfl⟩
+    have hv' : inner ℝ (y : apm_t02a07_E3) v = 0 := by
+      exact Submodule.mem_orthogonal_singleton_iff_inner_right.mp hv
+    rw [apm_t02a07_tangentX,
+      Submodule.mem_orthogonal_singleton_iff_inner_right]
+    change inner ℝ (apm_t02a07_family parameter y)
+      (fderiv ℝ (apm_t02a07_familyAmbient parameter)
+        (y : apm_t02a07_E3) v) = 0
+    rw [hderiv]
+    simp [apm_t02a07_family, PiLp.inner_apply, Fin.sum_univ_succ,
+      real_inner_eq_re_inner, RCLike.inner_apply] at hv' ⊢
+    linear_combination parameter.1 0 ^ 2 * hv'
+  · intro z hz
+    rw [apm_t02a07_tangentX,
+      Submodule.mem_orthogonal_singleton_iff_inner_right]
+    rw [apm_t02a07_tangentZ, LinearMap.mem_ker] at hz
+    change fderiv ℝ apm_t02a07_constraints
+      (apm_t02a07_family parameter y) z = 0 at hz
+    rw [apm_t02A07_constraints_fderiv_surjective_aux_formula] at hz
+    have hz0 := congrFun (congrArg WithLp.ofLp hz) (0 : Fin 2)
+    simp at hz0
+    simpa only [apm_t02a07_family_eq_familyAmbient] using hz0
 
 /-- Away from `parameter₀² = 1/2`, some tangent direction of the slice moves
 the product constraint to first order (uses `_aux_algebra`). -/
