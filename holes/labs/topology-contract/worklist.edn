@@ -113899,6 +113899,17 @@
       "lake build ConstructionTargets.ThreeCirclesFundamentalGroup",
       :exit 1,
       :finding "B12 file absent."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791905454810-9934-29dd736e",
+     :commands
+     ["git show/diff 379c0dfd^..379c0dfd"
+      "git archive 379c0dfd; lake env lean archived PointWedgeVanKampen.lean"
+      "sha256/diff-tree/placeholder checks; statement-registry.py check"
+      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (expected absent)"],
+     :finding
+     "Reviewer codex-3. PASS program STOP: 379c0dfd adds a compiled, sorry-free interface theorem after 8fec4041, correctly composing the reconstruction-conjugator projection reduction with the forward-right normal-form expansion. Factor order is preserved and the documentation honestly distinguishes the unshifted component from the proved shifted identity. Scope is Lean+MD only; hashes match ledger (e6eccd06/cb028297/0bca6ce3), placeholders 0, registry 150/150, axioms standard only. Residual: compare unshifted with shifted round-trip normal form, prove product=1, factor inl, then B6/B12; B12 absent."},
     :commit "379c0dfd105ac978c5d8a4a314fadbaef8cc3ac9",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
@@ -113909,7 +113920,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113930,7 +113941,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Shifted normal-form product transported to chosen coordinate base.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Right-base projection identified with chosen-base normal-form product.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -114714,7 +114725,11 @@
     {:job 6,
      :commit "8fec4041048a116f66a781387adc31ac353f72e2",
      :reason
-     "Shifted normal-form product transported to chosen coordinate base."}]}
+     "Shifted normal-form product transported to chosen coordinate base."}
+    {:job 7,
+     :commit "379c0dfd105ac978c5d8a4a314fadbaef8cc3ac9",
+     :reason
+     "Right-base projection identified with chosen-base normal-form product."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
