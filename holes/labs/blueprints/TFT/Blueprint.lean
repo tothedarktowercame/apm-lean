@@ -175,7 +175,8 @@ lemma tft_difference_quotient_hasCompactSupport
 lemma tft_fderiv_translate_continuous
     (f : E → F) (hf : ContDiff ℝ 1 f) (x v : E) :
     Continuous (fun y => fderiv ℝ f (x + y) v) := by
-  sorry
+  exact ((hf.continuous_fderiv (by norm_num)).comp
+    (continuous_const.add continuous_id)).clm_apply continuous_const
 
 lemma tft_fderiv_translate_hasCompactSupport
     (f : E → F) (hf : ContDiff ℝ 1 f) (hfc : HasCompactSupport f) (x v : E) :
