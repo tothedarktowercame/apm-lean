@@ -22501,27 +22501,6 @@
    :state :backlog,
    :scope [],
    :acceptance
-   {:lemma
-    "ConstructionTargets.SurfaceClassification.recognizeFromIntegralHomology",
-    :type
-    "Recognize the consumers' compact smooth surfaces from integral homology."},
-   :lemma
-   {:name
-    "ConstructionTargets.SurfaceClassification.recognizeFromIntegralHomology",
-    :reported-by [:routes-2026-10-10-topo3-seed-checkpoint-1],
-    :type
-    "Recognize the consumers' compact smooth surfaces from integral homology.",
-    :area "surface-classification"},
-   :id :lemma-surface-genus-recognition,
-   :kind :lemma,
-   :depends-on
-   [:lemma-constructiontargets-surfaceclassification-compactsmoothsurfacefinitetriangulatio],
-   :other-consumers [:t94J04]}
-  {:consumer :t92J05,
-   :phase :lemma,
-   :state :backlog,
-   :scope [],
-   :acceptance
    {:lemma "ConstructionTargets.SurfaceFundamentalGroup.presentation",
     :type
     "Compute the standard orientable polygon surface fundamental-group presentation."},
@@ -27670,24 +27649,6 @@
    :state :backlog,
    :scope [],
    :acceptance
-   {:lemma "surface_recognition_genus_two",
-    :type
-    "The frozen H1/H2 signature implies Nonempty (F ≃ₜ Surface true 2)  (size: 800+ lines / 1-3 months)"},
-   :lemma
-   {:name "surface_recognition_genus_two",
-    :reported-by [:owner],
-    :type
-    "The frozen H1/H2 signature implies Nonempty (F ≃ₜ Surface true 2)  (size: 800+ lines / 1-3 months)",
-    :area "surface-classification"},
-   :id :lemma-surface-recognition-genus-two,
-   :kind :lemma,
-   :depends-on [],
-   :other-consumers [:t92J05]}
-  {:consumer :t94J04,
-   :phase :lemma,
-   :state :backlog,
-   :scope [],
-   :acceptance
    {:lemma "surface_subgroup_connected_cover",
     :type
     "An index-k subgroup H ≤ FundamentalGroup F p yields a connected k-sheet cover with fundamental group isomorphic to H  (size: 400+ lines / 2-5 weeks)"},
@@ -27717,9 +27678,7 @@
     :area "euler-characteristic-covers"},
    :id :lemma-finite-surface-cover-genus,
    :kind :lemma,
-   :depends-on
-   [:lemma-surface-recognition-genus-two
-    :lemma-surface-subgroup-connected-cover],
+   :depends-on [:lemma-surface-subgroup-connected-cover],
    :other-consumers [:t91J05 :t96A01 :t97J02]}
   {:consumer :t94J04,
    :phase :lemma,
@@ -27738,8 +27697,7 @@
    :id :lemma-apm-t94j04-bridge-equal-index-subgroups,
    :kind :lemma,
    :depends-on
-   [:lemma-surface-recognition-genus-two
-    :lemma-surface-subgroup-connected-cover
+   [:lemma-surface-subgroup-connected-cover
     :lemma-finite-surface-cover-genus],
    :other-consumers []}
   {:consumer :t95J06,
@@ -30680,7 +30638,7 @@
    :depends-on [],
    :other-consumers []}
   {:owner-park
-   "2026-10-12 claude-14 (Joe: blueprints that match the real need and available tooling, not textbook formalization). Paused for a route redesign: ~/notes/closer/routes/<foundation>.md. Resume or replace once the reviewed blueprint is in.",
+   "Superseded 2026-10-12: t00A02 t00A03 t92J05 t94J04 t01J01 now assume F ≃ₜ Surface true g (re-admitted faithful), so no consumer needs triangulation-first classification; ~/notes/closer/routes/surfaces.md.",
    :consumer :t00A02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
@@ -30725,7 +30683,7 @@
     :changed-paths [],
     :seat :topo-10},
    :phase :implementation,
-   :state :needs-owner,
+   :state :superseded,
    :scope
    ["ConstructionTargets/SurfaceClassification.lean"
     "ConstructionTargets/SurfaceClassification.md"

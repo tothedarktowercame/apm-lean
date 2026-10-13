@@ -81203,7 +81203,8 @@
    :id :lemma-apm-t02a03-geometric-adapter,
    :kind :lemma,
    :depends-on
-   [:lemma-constructiontargets-t02a03geometrictubedeformation-geometricyhomotopyequivgeneri],
+   [:lemma-constructiontargets-t02a03geometrictubedeformation-geometricyhomotopyequivgeneri
+    :lemma-t02a03-closedcover-contractibleoverlap-wedge],
    :other-consumers []}
   {:consumer :t02A05,
    :phase :lemma,
@@ -86931,4 +86932,75 @@
    :id :lemma-pairingdata-surjective-signedwedgearcmap,
    :kind :lemma,
    :depends-on [:lemma-pairingdata-signedwedgearcquotientequivrange],
-   :other-consumers [:t92J05 :t94J04 :t97A01 :t97A03]}]}
+   :other-consumers [:t92J05 :t94J04 :t97A01 :t97A03]}
+  {:consumer :t02A03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t02A03_leftTubeMinusCore_homotopyEquiv_torus_centred",
+    :type
+    "Left 1/4-tube about the circle centred (-6/5,0,0) minus that core ≃ₕ Circle × Circle: transport the proved leftTubeMinusCoreHomotopyEquivTorus (old centre (-1,0,0)) along the translation by (-1/5,0,0)  (size: 30-80 lines / hours)"},
+   :lemma
+   {:name "t02A03_leftTubeMinusCore_homotopyEquiv_torus_centred",
+    :reported-by [:owner],
+    :type
+    "Left 1/4-tube about the circle centred (-6/5,0,0) minus that core ≃ₕ Circle × Circle: transport the proved leftTubeMinusCoreHomotopyEquivTorus (old centre (-1,0,0)) along the translation by (-1/5,0,0)  (size: 30-80 lines / hours)"},
+   :id :lemma-t02a03-lefttubeminuscore-homotopyequiv-torus-centred,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t02A03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t02A03_rightTube_homotopyEquiv_circle",
+    :type
+    "With centres (±6/5,0,0) the left core misses the right 1/4-tube (distance 2/5), so right tube minus left core is the whole right tube; radial retraction onto the right core gives ≃ₕ Circle (reuse the radial right-tube coordinates in T02A03GeometricTubeDeformation.lean, re-centred)  (size: 60-150 lines)"},
+   :lemma
+   {:name "t02A03_rightTube_homotopyEquiv_circle",
+    :reported-by [:owner],
+    :type
+    "With centres (±6/5,0,0) the left core misses the right 1/4-tube (distance 2/5), so right tube minus left core is the whole right tube; radial retraction onto the right core gives ≃ₕ Circle (reuse the radial right-tube coordinates in T02A03GeometricTubeDeformation.lean, re-centred)  (size: 60-150 lines)"},
+   :id :lemma-t02a03-righttube-homotopyequiv-circle,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t02A03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t02A03_tubeOverlap_contractible",
+    :type
+    "leftTube ∩ rightTube (a lens about the origin, disjoint from both cores) is contractible, by straight-line contraction to the origin or convexity  (size: 40-120 lines)"},
+   :lemma
+   {:name "t02A03_tubeOverlap_contractible",
+    :reported-by [:owner],
+    :type
+    "leftTube ∩ rightTube (a lens about the origin, disjoint from both cores) is contractible, by straight-line contraction to the origin or convexity  (size: 40-120 lines)"},
+   :id :lemma-t02a03-tubeoverlap-contractible,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t02A03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t02A03_closedCover_contractibleOverlap_wedge",
+    :type
+    "Two closed pieces A ≃ₕ T², B ≃ₕ S¹ covering geometricY with contractible overlap give geometricY ≃ₕ apm_t02a03_Y (specialised gluing theorem; see ~/notes/closer/routes/t02a03.md step 3)  (size: 90-180 lines, uncertain)"},
+   :lemma
+   {:name "t02A03_closedCover_contractibleOverlap_wedge",
+    :reported-by [:owner],
+    :type
+    "Two closed pieces A ≃ₕ T², B ≃ₕ S¹ covering geometricY with contractible overlap give geometricY ≃ₕ apm_t02a03_Y (specialised gluing theorem; see ~/notes/closer/routes/t02a03.md step 3)  (size: 90-180 lines, uncertain)"},
+   :id :lemma-t02a03-closedcover-contractibleoverlap-wedge,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t02a03-lefttubeminuscore-homotopyequiv-torus-centred
+    :lemma-t02a03-righttube-homotopyequiv-circle
+    :lemma-t02a03-tubeoverlap-contractible],
+   :other-consumers []}]}
