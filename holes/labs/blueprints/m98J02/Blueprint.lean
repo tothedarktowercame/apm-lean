@@ -9,7 +9,11 @@ import Mathlib.MeasureTheory.Measure.OpenPos
 Part (d) assumes only `f ∈ C²(ℝ²)`, but the convolution construction in
 parts (b)--(c) requires one factor to have compact support. Following the
 informal solution, `f` is minimally assumed compactly supported. This is also
-the hypothesis under which the stated `C²` convolution regularity is standard.
+the hypothesis under which the convolution is defined here.  The printed
+regularity conclusion is false for an arbitrary fundamental distribution of
+this non-hypoelliptic operator.  Following the informal solution's explicit
+function-level convolution argument, `w₀` is additionally required to be the
+regular distribution represented by a locally integrable function.
 
 The garbled operator typography is read, as in the supplied solution, as
 `T = 2 ∂²/∂x² - ∂/∂y + 3 ∂²/(∂x∂y)`.
@@ -415,6 +419,48 @@ noncomputable def apm_m98J02_formalAdjointTest
   simp [apm_m98J02_formalAdjointTest, apm_m98J02_formalAdjoint,
     apm_m98J02_partialTest_coe]
 
+/-- Shared cutoff-independence fact for a compactly supported distribution. -/
+theorem apm_m98J02_cutoff_independence
+    (u : apm_m98J02_Dist) (F : apm_m98J02_E → ℝ)
+    (K₁ K₂ : Set apm_m98J02_E) (χ₁ χ₂ Ψ₁ Ψ₂ : apm_m98J02_Test)
+    (hK₁ : IsCompact K₁) (hK₂ : IsCompact K₂)
+    (hu₁ : ∀ η : apm_m98J02_Test,
+      Disjoint (tsupport (η : apm_m98J02_E → ℝ)) K₁ → u η = 0)
+    (hu₂ : ∀ η : apm_m98J02_Test,
+      Disjoint (tsupport (η : apm_m98J02_E → ℝ)) K₂ → u η = 0)
+    (hχ₁ : ∀ x ∈ K₁, χ₁ x = 1) (hχ₂ : ∀ x ∈ K₂, χ₂ x = 1)
+    (hΨ₁ : ∀ x, Ψ₁ x = χ₁ x * F x)
+    (hΨ₂ : ∀ x, Ψ₂ x = χ₂ x * F x) :
+    u Ψ₁ = u Ψ₂ := by
+  sorry
+
+/-- Shared translation calculus needed by construction, differentiation of
+convolution, and the PDE identity. -/
+theorem apm_m98J02_translated_pairing_calculus
+    (v : apm_m98J02_Dist) (φ : apm_m98J02_Test) :
+    ContDiff ℝ 2 (fun x : apm_m98J02_E =>
+      v (apm_m98J02_translateTest x φ)) ∧
+    (∀ i x,
+      apm_m98J02_partial i
+          (fun z : apm_m98J02_E => v (apm_m98J02_translateTest z φ)) x =
+        v (apm_m98J02_translateTest x (apm_m98J02_partialTest i φ))) ∧
+    (∀ i j x,
+      apm_m98J02_partial i
+          (apm_m98J02_partial j
+            (fun z : apm_m98J02_E => v (apm_m98J02_translateTest z φ))) x =
+        v (apm_m98J02_translateTest x
+          (apm_m98J02_partialTest i (apm_m98J02_partialTest j φ)))) := by
+  sorry
+
+/-- The cutoff-based predicate defines at most one distribution.  This rules
+out choosing a smoother witness when the fixed fundamental solution is bad. -/
+theorem apm_m98J02_isConvolution_unique
+    (u v w₁ w₂ : apm_m98J02_Dist)
+    (h₁ : apm_m98J02_isConvolution u v w₁)
+    (h₂ : apm_m98J02_isConvolution u v w₂) :
+    w₁ = w₂ := by
+  sorry
+
 /-- Why this unblocks the convolution step in `apm_m98j02`: this packages the
 iterated pairing
 `φ ↦ u (x ↦ χ x * v (y ↦ φ (x + y)))` as a continuous linear functional on
@@ -429,8 +475,10 @@ theorem apm_m98J02_bridge_2
   sorry
 
 theorem apm_m98J02_regular_convolution_is_C2
-    (f : apm_m98J02_E → ℝ) (w₀ w : apm_m98J02_Dist)
+    (f k : apm_m98J02_E → ℝ) (w₀ w : apm_m98J02_Dist)
     (hf : ContDiff ℝ 2 f) (hfc : IsCompact (tsupport f))
+    (hk : LocallyIntegrable k)
+    (hw₀rep : apm_m98J02_representsFunction w₀ k)
     (hconv : apm_m98J02_isConvolution
       (apm_m98J02_regularDistribution f hf.continuous hfc) w₀ w) :
     ∃ g : apm_m98J02_E → ℝ,
@@ -458,8 +506,9 @@ theorem apm_m98j02 :
     (∀ u v : apm_m98J02_Dist,
       apm_m98J02_hasCompactSupport u →
         ∃ w : apm_m98J02_Dist, apm_m98J02_isConvolution u v w) ∧
-    ∀ (f : apm_m98J02_E → ℝ) (w₀ : apm_m98J02_Dist),
+    ∀ (f k : apm_m98J02_E → ℝ) (w₀ : apm_m98J02_Dist),
       ContDiff ℝ 2 f → IsCompact (tsupport f) →
+      LocallyIntegrable k → apm_m98J02_representsFunction w₀ k →
       apm_m98J02_solvesT w₀ (fun φ ↦ φ 0) →
       ∃ (u w w' : apm_m98J02_Dist) (g : apm_m98J02_E → ℝ),
         apm_m98J02_representsFunction u f ∧
@@ -477,7 +526,7 @@ theorem apm_m98j02 :
     · intro u v hu
       obtain ⟨K, hK, huK⟩ := hu
       exact apm_m98J02_bridge_2 u v K hK huK
-    · intro f w₀ hf hfc hw₀
+    · intro f k w₀ hf hfc hk hw₀rep hw₀
       let u := apm_m98J02_regularDistribution f hf.continuous hfc
       have huRep : apm_m98J02_representsFunction u f :=
         apm_m98J02_regularDistribution_represents f hf.continuous hfc
@@ -486,7 +535,7 @@ theorem apm_m98j02 :
       obtain ⟨K, hK, huK⟩ := huComp
       obtain ⟨w, hconv⟩ := apm_m98J02_bridge_2 u w₀ K hK huK
       obtain ⟨g, hwRep, hg⟩ :=
-        apm_m98J02_regular_convolution_is_C2 f w₀ w hf hfc hconv
+        apm_m98J02_regular_convolution_is_C2 f k w₀ w hf hfc hk hw₀rep hconv
       have hwSolve :=
         apm_m98J02_convolution_solves_fundamental f w₀ w hf hfc hw₀ hconv
       let w' := w + apm_m98J02_constantDistribution

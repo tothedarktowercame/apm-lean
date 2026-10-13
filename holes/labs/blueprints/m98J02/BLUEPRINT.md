@@ -1,172 +1,68 @@
 # Blueprint for m98J02
 
-## Triage
+## Triage and repair
 
-Verdict: **true and faithful after the documented source repair**.
+**Verdict: false.** The previous lemma `apm_m98J02_regular_convolution_is_C2`, and therefore canonical part (d), is false for arbitrary distributional fundamental solutions.
 
-The source's PDE clause assumes only `f ∈ C²(ℝ²)` but invokes the convolution
-construction from the preceding parts, which requires one factor to have
-compact support.  The formal statement adds `IsCompact (tsupport f)`, exactly
-the condition used by the supplied informal solution.  It otherwise uses
-genuine Mathlib test functions and distributions rather than replacing them
-with ordinary functions.
+The symbol of `T = 2∂x² − ∂y + 3∂x∂y` is `−2ξ²−3ξη−iη`. Its complex zero branch `η(ξ)=−2ξ²/(3ξ+i)` has unbounded real part and bounded imaginary part, violating the constant-coefficient hypoellipticity criterion. Polynomially weighted sums of the resulting exponential modes give a nonsmooth distribution `h` with `Th=0`. Thus `w₀+h` is another fundamental solution; Banach–Steinhaus on a fixed `C²_c(K)` stage supplies some compactly supported `C²` function whose convolution with it is not `C²`.
 
-I checked the principal degeneracies and signs:
+The encoded predicate cannot choose a different smooth convolution. For fixed `u,v`, translated test functions are unique by extensionality, and two support/cutoff witnesses give the same distributional value by cutoff independence. Hence `apm_m98J02_isConvolution u v w₁` and the same predicate for `w₂` imply `w₁=w₂`. This is now an explicit blueprint lemma.
 
-* The zero distribution has compact support (empty witness), and convolution
-  with it is consistently zero.
-* Empty or disjoint supports make the defining distribution pairing vanish.
-* The adjoint changes the sign of the first-order `-∂y` term and preserves the
-  second-order signs, giving `2∂x² + ∂y + 3∂x∂y` as encoded.
-* The regular constant distribution is nonzero but all derivatives in the
-  operator vanish, so it supplies a genuine homogeneous solution.
-* For `f = 0`, the construction may choose the zero solution, and adding the
-  constant distribution still proves nonuniqueness.
+The informal solution's regularity paragraph explicitly treats `w₀` as a locally integrable function. `RevisedMain.lean` makes the smallest warranted repair by adding a function `k`, `LocallyIntegrable k`, and `apm_m98J02_representsFunction w₀ k`. Convolution of such `k` with compactly supported `C²` `f` is `C²`, with derivatives placed on `f`. The prior compact-support repair for `f` remains necessary to define the convolution used by the source argument. Strict hyperbolicity ensures the intended operator has locally bounded fundamental solutions, but the revised theorem only assumes the representation and need not formalize that construction.
 
-The canonical obstruction explicitly says no refutation was found.  The main
-regularity claim is consistent with the fundamental-solution method under the
-added compact-support hypothesis.
+Checks: for `f=0`, the convolution is zero and adding the compiled nonzero constant homogeneous distribution proves nonuniqueness. Locally bounded fundamental functions satisfy the new local-integrability premise. A zero distribution cannot satisfy `Tw₀=δ₀`.
 
-## Reused completed work
+## Reused work
 
-The cached attempt is retained through its compiled constructions of:
+The blueprint retains complete proofs for compact cutoffs, regular distributions of continuous compactly supported functions, translated and differentiated test functions, support calculus, the nonzero constant distribution, and addition of homogeneous solutions.
 
-* smooth cutoffs equal to one on arbitrary compact sets;
-* compactly supported regular distributions induced by continuous functions;
-* the nonzero regular constant distribution;
-* translated test functions;
-* bundled coordinate derivatives and the bundled formal adjoint;
-* support closure under linear operations; and
-* addition of a homogeneous solution to an inhomogeneous one.
+## Lemmas
 
-The main theorem's convolution-existence and PDE assembly are proved from the
-four obligations below, with no direct `sorry`.
+### `apm_m98J02_cutoff_independence`
 
-## Remaining lemmas
+Two compactly supported cutoff realizations of one smooth function have equal evaluation under `u`, even with different support witnesses. Both witnesses contain the distributional support; decompose the difference into test functions supported away from the respective compact sets using compact separation. **Estimate:** 80–150 lines. **Dependencies:** compiled cutoff/support infrastructure. **Check:** for a Dirac mass both sides equal `F` at its support point; equal compact witnesses are immediate.
 
-### `apm_m98J02_bridge_2`
+### `apm_m98J02_translated_pairing_calculus`
 
-**Statement in words.** If `u` vanishes off a compact set `K`, then for every
-distribution `v` there is a distribution satisfying the encoded convolution
-pairing.
-
-**Why true.** Obtain the compiled cutoff `χ = 1` on `K`.  For a test function
-`φ`, define
-
-`Ψφ(x) = χ(x) · v(apm_m98J02_translateTest x φ)`.
-
-First prove smooth dependence on `x`: locally, translated test functions lie
-in one fixed compact-support stage, and their difference quotients converge
-in every stage seminorm.  Applying the continuous functional `v` preserves
-these derivatives.  Multiplication by `χ` gives compact support.  Next show
-`φ ↦ Ψφ` is continuous on every fixed-support stage; compose it with `u` and
-use `TestFunction.mkCLM` to construct `w`.  The cutoff, translation, and
-pairing clauses then follow by construction.  The compiled
-`apm_m98J02_bridge_1`, `apm_m98J02_translateTest`, and Mathlib's
-`TestFunction.mkCLM` are the intended APIs; all occur in the compiling file.
-
-**Expected size:** 240–340 lines.
-
-**Dependencies:** proved definitions and lemmas only.
-
-**Truth check:** for `u = 0`, take `w = 0`; for `v` equal to point evaluation,
-the inner pairing reduces to the ordinary translated value `φ(x)` and the
-formula becomes an ordinary compactly supported integral/pairing.
-
-### `apm_m98J02_regular_convolution_is_C2`
-
-**Statement in words.** Any distribution satisfying the encoded convolution
-of the compactly supported regular distribution induced by `f ∈ C²` with
-`w₀` is represented by a `C²` function.
-
-**Why true.** For each translation parameter, use the convolution identity
-and move derivatives of order at most two onto `f`.  Compact support of `f`
-keeps all translated derivatives in common compact stages locally, so
-continuity of `w₀` gives continuous derivatives of the scalar pairing.  Define
-`g` by that pairing, prove `ContDiff ℝ 2 g`, and use Fubini plus cutoff
-independence to show `w φ = ∫ gφ`.  The already bundled coordinate derivative
-test functions eliminate the remaining support bookkeeping.
-
-**Expected size:** 220–320 lines.
-
-**Dependencies:** definitions and compiled regular-distribution/translation
-infrastructure only; the lemma assumes the convolution predicate and can be
-proved independently of `bridge_2`.
-
-**Truth check:** when `w₀` is Dirac evaluation, the pairing recovers a reflected
-or translated copy of `f`, visibly `C²`.  When `f = 0`, it recovers zero.
-
-### `apm_m98J02_convolution_solves_fundamental`
-
-**Statement in words.** Convolving the regular distribution of `f` with a
-fundamental solution `w₀` produces a distributional solution of `Tw=f`.
-
-**Why true.** Test against `φ` and use
-`apm_m98J02_formalAdjointTest φ`.  Expand the convolution pairing, commute its
-coordinate derivatives through translation, and apply `hw₀` to the translated
-adjoint test function.  The result is evaluation at zero, hence the original
-regular pairing `∫fφ`.  Cutoff independence follows because `f` is supported
-inside the compact support witness.
-
-**Expected size:** 180–280 lines.
-
-**Dependencies:** definitions and compiled bundled-adjoint infrastructure
-only; it assumes a convolution witness and is independent of the preceding
-two proof obligations.
-
-**Truth check:** formally this is the identity
-`T(f*w₀) = f*(Tw₀) = f*δ₀ = f`.  For zero `f`, every pairing reduces to zero.
+The map `x ↦ v(φ(x+·))` is `C²`, with first and second coordinate derivatives obtained by translating the bundled derivatives of `φ`. On compact parameter sets all translates occupy one fixed support stage; difference quotients converge in every seminorm, and continuity of `v` transports convergence to scalars. **Estimate:** 180–300 lines. **Dependencies:** compiled translation and derivative definitions. **Check:** for `v=δ₀` this is ordinary differentiation of `φ(x)`; for the constant distribution all derivatives vanish.
 
 ### `apm_m98J02_constantDistribution_homogeneous`
 
-**Statement in words.** The nonzero regular distribution induced by the
-constant function one solves the homogeneous equation.
+The nonzero constant regular distribution solves the homogeneous equation. Integrals of all compactly supported coordinate derivatives in the formal adjoint vanish by Fubini and one-dimensional FTC. **Estimate:** 90–160 lines. **Dependencies:** compiled adjoint/constant lemmas. **Check:** classically `T(1)=0`.
 
-**Why true.** Choose the compiled formal-adjoint test function.  Its integral
-is zero: each coordinate derivative of a compactly supported smooth function
-has zero integral, proved by Fubini and the one-dimensional fundamental
-theorem; apply this once to the first-order term and iteratively to both
-second-order terms.  Then use
-`apm_m98J02_constantDistribution_apply`.
+### `apm_m98J02_isConvolution_unique`
 
-**Expected size:** 90–160 lines.
+The encoded convolution predicate is functional. Unpack two witnesses, identify their translated test functions, and apply cutoff independence for every `φ`, then distribution extensionality. **Estimate:** 50–90 lines. **Dependencies:** cutoff independence. **Check:** for `u=0` every convolution is zero; for `u=δ₀` it reduces uniquely to `v` (up to the fixed translation convention).
 
-**Dependencies:** definitions and proved bundled-adjoint/constant-distribution
-lemmas only.
+### `apm_m98J02_bridge_2`
 
-**Truth check:** classically `T(1)=0`; every term contains at least one
-derivative.  The compiled lemma proving the constant distribution nonzero
-ensures this is not a vacuous homogeneous witness.
+If `u` vanishes off compact `K`, its convolution with arbitrary `v` exists. Choose the compiled cutoff and set `Ψφ(x)=χ(x)v(φ(x+·))`; shared translation calculus gives smoothness and `χ` gives compact support. Prove fixed-stage continuity and bundle with `TestFunction.mkCLM`. **Estimate:** 180–280 lines. **Dependencies:** cutoff independence and translated-pairing calculus. **Check:** `u=0` gives zero; `u=δ₀` recovers the expected translate of `v`.
+
+### `apm_m98J02_regular_convolution_is_C2`
+
+If `w₀` is represented by locally integrable `k`, its encoded convolution with compactly supported `C²` `f` is represented by a `C²` function. Define the ordinary convolution integral; locally dominate on one compact set and differentiate twice with derivatives on `f`. Fubini identifies its regular distribution with an explicit encoded convolution, and uniqueness identifies it with abstract `w`. **Estimate:** 180–280 lines. **Dependencies:** translation calculus and convolution uniqueness. **Check:** `k=1` gives a constant; `f=0` gives zero; locally bounded `k` is the elementary case.
+
+### `apm_m98J02_convolution_solves_fundamental`
+
+Convolution with a fundamental solution solves `Tw=f`. Commute the bundled adjoint derivatives through translation using shared calculus, apply `Tw₀=δ₀`, and use cutoff independence to obtain `∫fφ`. **Estimate:** 150–250 lines. **Dependencies:** both shared lemmas. **Check:** this is `T(f*w₀)=f*(Tw₀)=f*δ₀=f`; for zero `f`, all pairings vanish.
 
 ## Dependency layers
 
-* **Layer 1 (parallel):** all four lemmas above.  The last three accept an
-  abstract convolution witness where needed and do not depend on the proof of
-  `bridge_2`.
-* **Layer 2 (already proved):** instantiate the regular distribution, obtain a
-  convolution from `bridge_2`, obtain its `C²` representative and PDE identity,
-  then add the constant homogeneous distribution.
+- **Layer 1, parallel:** cutoff independence, translated-pairing calculus, constant homogeneous distribution.
+- **Layer 2, parallel:** convolution uniqueness, convolution construction, and fundamental-solution PDE identity, after their relevant Layer 1 dependencies.
+- **Layer 3:** regular convolution is `C²`, using translation calculus and uniqueness.
+- **Layer 4:** the already compiled main assembly; it has no direct `sorry`.
 
 ## Compilation and axioms
 
-Compiled with:
-
-```text
-systemd-run --user --scope -q -p MemoryMax=12G lake env lean holes/labs/blueprints/m98J02/Blueprint.lean
-```
-
-The final output of `#print axioms apm_m98j02` was:
+Both Lean files compile under the prescribed memory scope. `Blueprint.lean` prints:
 
 ```text
 'apm_m98j02' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
 ```
 
-The four warnings are exactly the four Layer 1 lemmas.  The main theorem has
-no direct `sorry`.
+`sorryAx` enters only through the seven named lemmas.
 
 ## Doubt
 
-The statements are mathematically standard and I found no counterexample.
-The largest implementation risk is `apm_m98J02_bridge_2`: continuity of the
-two-level translated pairing in Mathlib's LF topology may exceed one session
-unless its fixed-support-stage argument is factored into local helper lemmas.
+The repair is mathematically sound. The principal implementation risk remains fixed-support-stage convergence in the translated-pairing calculus; Mathlib does not package smooth parameter dependence of test-function translations.
