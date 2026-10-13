@@ -76417,6 +76417,8 @@
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
    :stop-count 1,
+   :review-finding
+   "Deterministic topology defect in commit ee79eaeb2: it changes the index topology for FiniteWedge from ⊥ to ⊤ while claiming this makes it discrete. Mathlib/Topology/Order.lean states exactly the opposite: ⊥ is discrete and ⊤ is indiscrete. Consequently L × Circle is not the coproduct/disjoint-union source of indexed circle legs, and the coinduced quotient is not the B7 finite-wedge topology; future skeletonHomeomorphWedge would target the wrong space. Repair by restoring TopologicalSpace L := ⊥ in both the FiniteWedge instance and continuous_wedgeCircle proof, then rerun Lean/build and retain coverage, quotient-topology, wedge-relation, and signed-equation residuals. Recorded scope is otherwise exact and fixture SHA-256 386d0e41...ae305 matches.",
    :evidence
    {:placeholder-delta 0,
     :residual
@@ -76458,6 +76460,12 @@
       "#print axioms continuous_wedgeCircle/skeletonArcQuotientEquivRange",
       :exit 0}
      {:cmd "git show --check ee79eaeb2", :exit 0}],
+    :review
+    {:outcome :fail,
+     :seat "codex-7",
+     :job "invoke-1791852077879-8110-4c339be0",
+     :finding
+     "Deterministic topology defect in commit ee79eaeb2: it changes the index topology for FiniteWedge from ⊥ to ⊤ while claiming this makes it discrete. Mathlib/Topology/Order.lean states exactly the opposite: ⊥ is discrete and ⊤ is indiscrete. Consequently L × Circle is not the coproduct/disjoint-union source of indexed circle legs, and the coinduced quotient is not the B7 finite-wedge topology; future skeletonHomeomorphWedge would target the wrong space. Repair by restoring TopologicalSpace L := ⊥ in both the FiniteWedge instance and continuous_wedgeCircle proof, then rerun Lean/build and retain coverage, quotient-topology, wedge-relation, and signed-equation residuals. Recorded scope is otherwise exact and fixture SHA-256 386d0e41...ae305 matches."},
     :commit "ee79eaeb2",
     :changed-paths ["ConstructionTargets/PolygonSurfacePiOne.lean"],
     :fixture
@@ -76466,7 +76474,7 @@
      "386d0e41aa8f1cd65c4f4d02675db497aa426c0b9bc5b61c551f7753dd5ae305"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :repair,
    :scope ["ConstructionTargets/PolygonSurfacePiOne.lean"],
    :dag-node "ConstructionTargets/PolygonSurfacePiOne.blueprint.md/B7",
    :acceptance
@@ -76480,7 +76488,7 @@
    :id :routes-2026-10-12-polygon-b7-topo2-r1,
    :kind :reusable-theorem,
    :area "polygon-surface-pi1",
-   :fail-count 0,
+   :fail-count 1,
    :depends-on
    [:routes-2026-10-12-polygon-b6-topo2-r1
     :routes-2026-10-12-checkpoint-topo2-r21],
