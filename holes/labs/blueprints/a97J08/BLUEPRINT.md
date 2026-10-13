@@ -42,48 +42,52 @@ separation conclusion is an explicit hypothesis, so this seat is independent.
 **Truth check:** for `A` a circle separated from `B={0}`, `U` is correctly an
 annulus, not a disk; a one-square compactum gives one square.
 
-### `apm_a97j08_grid_boundary_cycle_decomposition` (G2)
+### Revision v3 (2026-10-13, claude-14): grid winding by angle steps
 
-**Statement.** Decompose the oriented exposed edges of `U` into finitely many
-closed simple edge-loops, all lying in `D`, and attach their integer winding
-coordinates. **Sketch.** Every grid vertex has balanced oriented incidence,
-so the finite edge set splits into cycles. Boundary points avoid `A`; the mesh
-and separation exclude `B`, hence the partition forces membership in `D`.
-**Estimate:** 100–150 lines. **Dependencies:** region and separation are
-explicit hypotheses. **Truth check:** an annulus yields two loops with
-opposite boundary orientations; disconnected pixel components may yield more.
+The v2 split was unsound as a parallel plan. `IsOrientedGridBoundary C` was
+*defined* as `∑ winding = 1`, so G3 was vacuous, and G2 had to produce the
+whole boundary-loop family together with sum one and a soundness certificate:
+all of the Jordan-type content in one seat. `GridInput` also let `A` touch the
+truncation sphere, and then G1 is false. `GridInput` now requires
+`A ⊆ ball 0 (R - δ)`; the clopen separation can supply this because the
+sphere slice is compact and disjoint from the component.
 
-### `apm_a97j08_grid_boundary_winding_sum` (G3)
+G2–G4 are replaced by thirteen statements, each with a consumer that takes
+its suppliers as hypotheses. The assembly
+`apm_a97j08_exists_noncontractible_circle_of_bounded_compl_component` is
+proved from them.
 
-**Statement.** The sum of the winding coordinates of all oriented boundary
-loops is one. **Sketch.** Sum the oriented boundaries of all selected squares;
-internal edges cancel. A square contributes one exactly when it contains `z`
-and zero otherwise. The shifted-grid condition gives a unique square
-containing `z`. **Estimate:** 60–110 lines. **Dependencies:** the oriented
-cycle certificate is explicit. **Truth check:** for an annulus around `z`,
-the outer and inner boundary contributions combine to one; no individual
-frontier component is selected prematurely.
+Notation: lattice vertices `ℤ × ℤ` ↦ `gridVertex shift δ`; a square has its
+four counterclockwise edges `squareEdges q`; `boundaryEdges Q` are the square
+edges whose reverse is not a square edge; `angleStep z p q = arg((q-z)/(p-z))`
+is the exact angle swept along `[p, q]` when the segment misses `z`;
+`cycleEdges c = c.zip (c.rotate 1)`.
 
-### `apm_a97j08_noncontractible_circle_of_cycle_winding` (G4)
+| id | lemma | content | kind |
+|---|---|---|---|
+| A1 | `angleStep_swap` | `arg` of the inverse; the ratio is not a negative real since `z ∉ [p,q]` | complex analysis, short |
+| A2 | `squareSum_outside` | `z` outside a convex square: all vertices lie in an open half-plane at `z`, so the steps telescope to 0 | planar geometry |
+| A3 | `squareSum_inside` | `z` inside: four steps in `(0, π)` summing to a multiple of `2π`, hence `2π` | planar geometry |
+| A4 | `edgeAngle_swap` | lattice edges lie on grid lines, which `z` avoids; apply A1 | short |
+| C1 | `boundary_sum` | distinct squares share no oriented edge; interior edges cancel in pairs | finite combinatorics |
+| C2 | `boundary_balanced` | apply C1 to `[e.1 = v] - [e.2 = v]` | finite combinatorics |
+| C3a | `exists_simple_cycle` | follow out-edges in a balanced finite edge set until a vertex repeats | graph combinatorics |
+| C3b | `cycle_decomposition` | peel simple cycles (C3a); balance survives removal | graph combinatorics |
+| E1 | `boundaryEdge_segment_subset` | a boundary edge borders an unselected square, so it misses `interior U ⊇ A`; it lies in `U`, so it misses `B`; hence it lies in `D` | point-set topology |
+| Z1 | `square_total` | `z` is in exactly one lattice square, which is selected | short |
+| L1 | `segment_lift` | `θ t = arg(p-z) + arg((lineMap p q t - z)/(p-z))`; the ratio stays in the slit plane | complex analysis |
+| L2 | `polygon_path_lift` | concatenate segment paths; shift each lift by a multiple of `2π` to match | paths |
+| L3 | `not_nullhomotopic_of_lift` | a nullhomotopy would make the lift's displacement 0 (`PeriodicCircleHomotopyWinding`, covering lifts) | homotopy lifting |
 
-**Statement.** If a finite family of loops in `D` has winding sum one, some
-loop has nonzero winding and is non-nullhomotopic in `D`. **Sketch.** If every
-integer were zero their finite sum would be zero. For the chosen loop, use
-the stored winding certificate and radial projection; a nullhomotopy would
-remain one after composition. **Estimate:** 30–60 lines. **Dependencies:**
-the family, boundary membership, and sum identity are explicit hypotheses.
-**Truth check:** this works with any number of loops, including annular and
-multiply connected regions; the empty family cannot have sum one.
-
-The old `apm_a97j08_exists_noncontractible_circle_of_bounded_compl_component`
-is now a proved assembly of these five statements.
+The clopen separation and G1 keep their v2 sketches. G1 may shrink `δ` (take a
+quarter of the separation as mesh and output constant), so its squares stay
+inside `ball 0 R` and away from `B`.
 
 ## Dependency layers
 
-- Layer 1, parallel: all five lemmas above. Every consumer takes the supplier's
-  conclusion as an explicit hypothesis, so none inherits another lemma's
-  `sorryAx`.
-- Layer 2, proved: the former monolithic noncontractible-circle lemma.
+- Layer 1, parallel: all fifteen statements. Every consumer takes its
+  suppliers' conclusions as explicit hypotheses.
+- Layer 2, proved: the noncontractible-circle assembly.
 - Layer 3, proved: all essential-loop, simple-connectivity, and main-theorem
   consequences.
 
@@ -101,7 +105,7 @@ The final command in the file prints:
 'apm_a97j08' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
 ```
 
-The five Layer 1 lemmas are exactly the sources of `sorryAx`.
+The fifteen Layer 1 lemmas are exactly the sources of `sorryAx`.
 
 ## Doubt
 

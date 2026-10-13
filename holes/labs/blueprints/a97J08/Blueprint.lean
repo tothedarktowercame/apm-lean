@@ -1796,7 +1796,8 @@ def apm_a97j08_GridInput
     connectedComponentIn Dᶜ z ⊆ A ∧
     Dᶜ ∩ Metric.closedBall 0 R = A ∪ B ∧
     Disjoint A B ∧
-    ∀ a ∈ A, ∀ b ∈ B, δ ≤ dist a b
+    (∀ a ∈ A, ∀ b ∈ B, δ ≤ dist a b) ∧
+    A ⊆ Metric.ball 0 (R - δ)
 
 def apm_a97j08_ClopenSeparationFact
     (D : Set ℂ) (z : ℂ) : Prop :=
@@ -1815,24 +1816,45 @@ def apm_a97j08_IsGridRegion
     z.re ∉ {x | ∃ k : ℤ, x = shift.re + k * δ} ∧
     z.im ∉ {y | ∃ k : ℤ, y = shift.im + k * δ}
 
-structure apm_a97j08_GridCycleFamily
-    (D : Set ℂ) (z : ℂ) (U : Set ℂ) where
-  n : ℕ
-  loops : Fin n → C(Circle, ℂ)
-  winding : Fin n → ℤ
-  boundary_eq : frontier U = ⋃ i, Set.range (loops i)
-  loop_simple : ∀ i, Set.InjOn (loops i) Set.univ
-  winding_sound : ∀ (hz : z ∈ Dᶜ) (i : Fin n)
-      (hmem : ∀ u : Circle, loops i u ∈ D), winding i ≠ 0 →
-    ¬ ContinuousMap.Nullhomotopic
-      ((apm_a97j08_radialMap D z hz).comp
-        ⟨fun u ↦ ⟨loops i u, hmem u⟩,
-          (loops i).continuous.subtype_mk hmem⟩)
+/-! ### Grid winding: lattice edges, angle steps, cycles
 
-def apm_a97j08_IsOrientedGridBoundary
-    {D : Set ℂ} {z : ℂ} {U : Set ℂ}
-    (C : apm_a97j08_GridCycleFamily D z U) : Prop :=
-  ∑ i, C.winding i = 1
+A lattice edge is an ordered pair of lattice vertices.  Each grid square
+contributes its four counterclockwise edges; the boundary edges of a finite
+family of squares are those whose reverse is not also a square edge.  Seen from
+`z`, an oriented segment `[p, q]` turns through `arg ((q - z) / (p - z))`; when
+the segment misses `z` this is the exact angle swept, so sums of these steps
+around closed polygons are winding numbers times `2π`. -/
+
+def apm_a97j08_gridVertex (shift : ℂ) (δ : ℝ) (v : ℤ × ℤ) : ℂ :=
+  shift + (((v.1 : ℝ) * δ : ℝ) : ℂ) + (((v.2 : ℝ) * δ : ℝ) : ℂ) * Complex.I
+
+def apm_a97j08_squareEdges (q : ℤ × ℤ) : Finset ((ℤ × ℤ) × (ℤ × ℤ)) :=
+  {((q.1, q.2), (q.1 + 1, q.2)), ((q.1 + 1, q.2), (q.1 + 1, q.2 + 1)),
+    ((q.1 + 1, q.2 + 1), (q.1, q.2 + 1)), ((q.1, q.2 + 1), (q.1, q.2))}
+
+def apm_a97j08_allEdges (Q : Finset (ℤ × ℤ)) : Finset ((ℤ × ℤ) × (ℤ × ℤ)) :=
+  Q.biUnion apm_a97j08_squareEdges
+
+def apm_a97j08_boundaryEdges (Q : Finset (ℤ × ℤ)) : Finset ((ℤ × ℤ) × (ℤ × ℤ)) :=
+  (apm_a97j08_allEdges Q).filter fun e => e.swap ∉ apm_a97j08_allEdges Q
+
+noncomputable def apm_a97j08_angleStep (z p q : ℂ) : ℝ :=
+  Complex.arg ((q - z) / (p - z))
+
+noncomputable def apm_a97j08_edgeAngle (z shift : ℂ) (δ : ℝ)
+    (e : (ℤ × ℤ) × (ℤ × ℤ)) : ℝ :=
+  apm_a97j08_angleStep z (apm_a97j08_gridVertex shift δ e.1)
+    (apm_a97j08_gridVertex shift δ e.2)
+
+/-- The closing edge list `(c₀,c₁), …, (cₙ₋₁,c₀)` of a cyclic vertex list. -/
+def apm_a97j08_cycleEdges {V : Type*} (c : List V) : List (V × V) :=
+  c.zip (c.rotate 1)
+
+noncomputable def apm_a97j08_cycleSum {V : Type*} (f : V × V → ℝ) (c : List V) : ℝ :=
+  ((apm_a97j08_cycleEdges c).map f).sum
+
+def apm_a97j08_Balanced {V : Type*} [DecidableEq V] (E : Finset (V × V)) : Prop :=
+  ∀ v : V, (E.filter fun e => e.1 = v).card = (E.filter fun e => e.2 = v).card
 
 theorem apm_a97j08_clopen_separation_of_bounded_component
     (D : Set ℂ) (hD_open : IsOpen D)
@@ -1849,34 +1871,139 @@ theorem apm_a97j08_grid_region_construction
       apm_a97j08_IsGridRegion A B R δ z U := by
   sorry
 
-theorem apm_a97j08_grid_boundary_cycle_decomposition
-    (D : Set ℂ) {z : ℂ} {R δ : ℝ} {A B U : Set ℂ}
-    (hinput : apm_a97j08_GridInput D z R δ A B)
-    (hregion : apm_a97j08_IsGridRegion A B R δ z U) :
-    ∃ C : apm_a97j08_GridCycleFamily D z U,
-      (∀ i, ∀ u : Circle, C.loops i u ∈ D) ∧
-      apm_a97j08_IsOrientedGridBoundary C := by
+
+-- (A1) A segment missing `z` turns through opposite angles in the two directions.
+theorem apm_a97j08_angleStep_swap {z p q : ℂ} (h : z ∉ segment ℝ p q) :
+    apm_a97j08_angleStep z q p = -apm_a97j08_angleStep z p q := by
   sorry
 
-theorem apm_a97j08_grid_boundary_winding_sum
-    (D : Set ℂ) {z : ℂ} {R δ : ℝ} {A B U : Set ℂ}
-    (hinput : apm_a97j08_GridInput D z R δ A B)
-    (hregion : apm_a97j08_IsGridRegion A B R δ z U)
-    (C : apm_a97j08_GridCycleFamily D z U)
-    (horiented : apm_a97j08_IsOrientedGridBoundary C) :
-    ∑ i, C.winding i = 1 := by
+-- (A2) A grid square missing `z` has total angle step zero.
+theorem apm_a97j08_squareSum_outside {z shift : ℂ} {δ : ℝ} (hδ : 0 < δ)
+    (q : ℤ × ℤ) (hz : z ∉ apm_a97j08_gridSquare shift δ q) :
+    ∑ e ∈ apm_a97j08_squareEdges q, apm_a97j08_edgeAngle z shift δ e = 0 := by
   sorry
 
-theorem apm_a97j08_noncontractible_circle_of_cycle_winding
-    (D : Set ℂ) {z : ℂ} (hz : z ∈ Dᶜ) {U : Set ℂ}
-    (C : apm_a97j08_GridCycleFamily D z U)
-    (hboundary : ∀ i, ∀ u : Circle, C.loops i u ∈ D)
-    (hsum : ∑ i, C.winding i = 1) :
+-- (A3) A grid square with `z` in its interior has total angle step `2π`.
+theorem apm_a97j08_squareSum_inside {z shift : ℂ} {δ : ℝ} (hδ : 0 < δ)
+    (q : ℤ × ℤ) (hz : z ∈ interior (apm_a97j08_gridSquare shift δ q)) :
+    ∑ e ∈ apm_a97j08_squareEdges q, apm_a97j08_edgeAngle z shift δ e =
+      2 * Real.pi := by
+  sorry
+
+-- (A4) Off the grid lines, every lattice edge angle is antisymmetric (from A1).
+theorem apm_a97j08_edgeAngle_swap {z shift : ℂ} {δ : ℝ} (hδ : 0 < δ)
+    (hre : z.re ∉ {x | ∃ k : ℤ, x = shift.re + k * δ})
+    (him : z.im ∉ {y | ∃ k : ℤ, y = shift.im + k * δ})
+    (hA1 : ∀ {p q : ℂ}, z ∉ segment ℝ p q →
+      apm_a97j08_angleStep z q p = -apm_a97j08_angleStep z p q)
+    (q : ℤ × ℤ) (e : (ℤ × ℤ) × (ℤ × ℤ)) (he : e ∈ apm_a97j08_squareEdges q) :
+    apm_a97j08_edgeAngle z shift δ e.swap = -apm_a97j08_edgeAngle z shift δ e := by
+  sorry
+
+-- (C1) Interior edges cancel: summing an antisymmetric edge function over the
+-- boundary edges equals summing it over all square boundaries.
+theorem apm_a97j08_boundary_sum (Q : Finset (ℤ × ℤ))
+    (f : (ℤ × ℤ) × (ℤ × ℤ) → ℝ)
+    (hf : ∀ e ∈ apm_a97j08_allEdges Q, f e.swap = -f e) :
+    ∑ e ∈ apm_a97j08_boundaryEdges Q, f e =
+      ∑ q ∈ Q, ∑ e ∈ apm_a97j08_squareEdges q, f e := by
+  sorry
+
+-- (C2) The boundary edges are balanced (apply C1 to `[e.1 = v] - [e.2 = v]`).
+theorem apm_a97j08_boundary_balanced (Q : Finset (ℤ × ℤ))
+    (hC1 : ∀ f : (ℤ × ℤ) × (ℤ × ℤ) → ℝ,
+      (∀ e ∈ apm_a97j08_allEdges Q, f e.swap = -f e) →
+      ∑ e ∈ apm_a97j08_boundaryEdges Q, f e =
+        ∑ q ∈ Q, ∑ e ∈ apm_a97j08_squareEdges q, f e) :
+    apm_a97j08_Balanced (apm_a97j08_boundaryEdges Q) := by
+  sorry
+
+-- (C3a) A nonempty balanced finite edge set contains a simple directed cycle.
+theorem apm_a97j08_exists_simple_cycle {V : Type*} [DecidableEq V]
+    (E : Finset (V × V)) (hbal : apm_a97j08_Balanced E) (hne : E.Nonempty) :
+    ∃ c : List V, c ≠ [] ∧ c.Nodup ∧ ∀ e ∈ apm_a97j08_cycleEdges c, e ∈ E := by
+  sorry
+
+-- (C3b) Peeling off simple cycles decomposes a balanced edge set (given C3a).
+theorem apm_a97j08_cycle_decomposition {V : Type*} [DecidableEq V]
+    (hC3a : ∀ E : Finset (V × V), apm_a97j08_Balanced E → E.Nonempty →
+      ∃ c : List V, c ≠ [] ∧ c.Nodup ∧ ∀ e ∈ apm_a97j08_cycleEdges c, e ∈ E)
+    (E : Finset (V × V)) (hbal : apm_a97j08_Balanced E) :
+    ∃ cs : List (List V), (∀ c ∈ cs, c ≠ [] ∧ ∀ e ∈ apm_a97j08_cycleEdges c, e ∈ E) ∧
+      ∀ f : V × V → ℝ, ∑ e ∈ E, f e = (cs.map (apm_a97j08_cycleSum f)).sum := by
+  sorry
+
+-- (E1) Boundary edges of the grid region lie in `D`.
+theorem apm_a97j08_boundaryEdge_segment_subset
+    (D : Set ℂ) {z : ℂ} {R δ : ℝ} {A B : Set ℂ}
+    (hinput : apm_a97j08_GridInput D z R δ A B)
+    (shift : ℂ) (Q : Finset (ℤ × ℤ))
+    (hU_A : A ⊆ interior (⋃ q ∈ Q, apm_a97j08_gridSquare shift δ q))
+    (hU_B : Disjoint (⋃ q ∈ Q, apm_a97j08_gridSquare shift δ q) B)
+    (hU_R : (⋃ q ∈ Q, apm_a97j08_gridSquare shift δ q) ⊆ Metric.closedBall 0 R)
+    (e : (ℤ × ℤ) × (ℤ × ℤ)) (he : e ∈ apm_a97j08_boundaryEdges Q) :
+    segment ℝ (apm_a97j08_gridVertex shift δ e.1)
+      (apm_a97j08_gridVertex shift δ e.2) ⊆ D := by
+  sorry
+
+-- (Z1) Exactly one selected square contains `z`, so the square sums total `2π`.
+theorem apm_a97j08_square_total {z shift : ℂ} {δ : ℝ} (hδ : 0 < δ)
+    (Q : Finset (ℤ × ℤ)) (hzU : z ∈ ⋃ q ∈ Q, apm_a97j08_gridSquare shift δ q)
+    (hre : z.re ∉ {x | ∃ k : ℤ, x = shift.re + k * δ})
+    (him : z.im ∉ {y | ∃ k : ℤ, y = shift.im + k * δ})
+    (hA2 : ∀ q, z ∉ apm_a97j08_gridSquare shift δ q →
+      ∑ e ∈ apm_a97j08_squareEdges q, apm_a97j08_edgeAngle z shift δ e = 0)
+    (hA3 : ∀ q, z ∈ interior (apm_a97j08_gridSquare shift δ q) →
+      ∑ e ∈ apm_a97j08_squareEdges q, apm_a97j08_edgeAngle z shift δ e =
+        2 * Real.pi) :
+    ∑ q ∈ Q, ∑ e ∈ apm_a97j08_squareEdges q, apm_a97j08_edgeAngle z shift δ e =
+      2 * Real.pi := by
+  sorry
+
+-- (L1) The straight segment from `p` to `q` has a continuous angle lift about
+-- `z` whose total change is the angle step.
+theorem apm_a97j08_segment_lift {z p q : ℂ} (h : z ∉ segment ℝ p q) :
+    ∃ θ : C(unitInterval, ℝ),
+      (∀ t : unitInterval, Complex.exp ((θ t : ℂ) * Complex.I) =
+        (AffineMap.lineMap p q (t : ℝ) - z) /
+          ((‖AffineMap.lineMap p q (t : ℝ) - z‖ : ℝ) : ℂ)) ∧
+      θ 1 - θ 0 = apm_a97j08_angleStep z p q := by
+  sorry
+
+-- (L2) A closed polygon in `D` has a closed path in `D` with an angle lift
+-- whose total change is the sum of the angle steps (given L1).
+theorem apm_a97j08_polygon_path_lift (D : Set ℂ) {z : ℂ} (hz : z ∈ Dᶜ)
+    (hL1 : ∀ {p q : ℂ}, z ∉ segment ℝ p q → ∃ θ : C(unitInterval, ℝ),
+      (∀ t : unitInterval, Complex.exp ((θ t : ℂ) * Complex.I) =
+        (AffineMap.lineMap p q (t : ℝ) - z) /
+          ((‖AffineMap.lineMap p q (t : ℝ) - z‖ : ℝ) : ℂ)) ∧
+      θ 1 - θ 0 = apm_a97j08_angleStep z p q)
+    (c : List ℂ) (hc : c ≠ [])
+    (hseg : ∀ e ∈ apm_a97j08_cycleEdges c, segment ℝ e.1 e.2 ⊆ D) :
+    ∃ x : ℂ, ∃ p : Path x x, (∀ t, p t ∈ D) ∧ ∃ θ : C(unitInterval, ℝ),
+      (∀ t : unitInterval, Complex.exp ((θ t : ℂ) * Complex.I) =
+        (p t - z) / ((‖p t - z‖ : ℝ) : ℂ)) ∧
+      θ 1 - θ 0 = apm_a97j08_cycleSum (fun e => apm_a97j08_angleStep z e.1 e.2) c := by
+  sorry
+
+-- (L3) A closed path in `D` whose angle lift about `z ∉ D` has nonzero total
+-- change gives a noncontractible circle in `D`.
+theorem apm_a97j08_not_nullhomotopic_of_lift (D : Set ℂ) {z : ℂ} (hz : z ∈ Dᶜ)
+    {x : ℂ} (p : Path x x) (hpD : ∀ t, p t ∈ D) (θ : C(unitInterval, ℝ))
+    (hθ : ∀ t : unitInterval, Complex.exp ((θ t : ℂ) * Complex.I) =
+        (p t - z) / ((‖p t - z‖ : ℝ) : ℂ))
+    (hs : θ 1 ≠ θ 0) :
     ∃ cD : C(Circle, D), ¬ ContinuousMap.Nullhomotopic cD := by
   sorry
 
+lemma apm_a97j08_cycleEdges_map {V W : Type*} (g : V → W) (c : List V) :
+    apm_a97j08_cycleEdges (c.map g) = (apm_a97j08_cycleEdges c).map (Prod.map g g) := by
+  simp only [apm_a97j08_cycleEdges, ← List.map_rotate, List.map_prod_left_eq_zip]
+  rw [List.zip_map]
+
 /-- A bounded complementary component produces a noncontractible circle in
-the domain subtype, assembled from compact separation and the grid cycle. -/
+the domain subtype: separate, pixelate, sum the angle steps over the boundary
+edges (total `2π`), split them into cycles, and take a cycle with nonzero sum. -/
 lemma apm_a97j08_exists_noncontractible_circle_of_bounded_compl_component
     (D : Set ℂ) (hD_open : IsOpen D)
     {z : ℂ} (hz : z ∈ Dᶜ)
@@ -1885,12 +2012,52 @@ lemma apm_a97j08_exists_noncontractible_circle_of_bounded_compl_component
       ¬ ContinuousMap.Nullhomotopic c := by
   have hsep := apm_a97j08_clopen_separation_of_bounded_component
     D hD_open hz hzbounded
-  obtain ⟨R, δ, A, B, U, hinput, hregion⟩ :=
+  obtain ⟨R, δ, A, B, U, hinput, shift, Q, hU, hzU, hAU, hUB, hUR, hre, him⟩ :=
     apm_a97j08_grid_region_construction D hsep
-  obtain ⟨C, hboundary, horiented⟩ :=
-    apm_a97j08_grid_boundary_cycle_decomposition D hinput hregion
-  exact apm_a97j08_noncontractible_circle_of_cycle_winding D hz C hboundary
-    (apm_a97j08_grid_boundary_winding_sum D hinput hregion C horiented)
+  have hδ : 0 < δ := hinput.2.1
+  subst hU
+  set f := apm_a97j08_edgeAngle z shift δ
+  have hanti : ∀ e ∈ apm_a97j08_allEdges Q, f e.swap = -f e := by
+    intro e he
+    obtain ⟨q, -, heq⟩ := Finset.mem_biUnion.mp he
+    exact apm_a97j08_edgeAngle_swap hδ hre him
+      (fun h => apm_a97j08_angleStep_swap h) q e heq
+  have hC1 := apm_a97j08_boundary_sum Q
+  have hbal := apm_a97j08_boundary_balanced Q (fun g hg => hC1 g hg)
+  obtain ⟨cs, hcs, hsum⟩ := apm_a97j08_cycle_decomposition
+    (fun E hE hne => apm_a97j08_exists_simple_cycle E hE hne) _ hbal
+  have htotal : (cs.map (apm_a97j08_cycleSum f)).sum = 2 * Real.pi := by
+    rw [← hsum f, hC1 f hanti]
+    exact apm_a97j08_square_total hδ Q (interior_subset hzU) hre him
+      (fun q hq => apm_a97j08_squareSum_outside hδ q hq)
+      (fun q hq => apm_a97j08_squareSum_inside hδ q hq)
+  obtain ⟨c, hc, hcne⟩ : ∃ c ∈ cs, apm_a97j08_cycleSum f c ≠ 0 := by
+    by_contra hall
+    push_neg at hall
+    have : (cs.map (apm_a97j08_cycleSum f)).sum = 0 :=
+      List.sum_eq_zero fun x hx => by
+        obtain ⟨c, hc, rfl⟩ := List.mem_map.mp hx
+        exact hall c hc
+    rw [this] at htotal
+    linarith [Real.pi_pos]
+  obtain ⟨hcne', hcE⟩ := hcs c hc
+  set g := apm_a97j08_gridVertex shift δ
+  have hseg : ∀ e ∈ apm_a97j08_cycleEdges (c.map g), segment ℝ e.1 e.2 ⊆ D := by
+    intro e he
+    rw [apm_a97j08_cycleEdges_map] at he
+    obtain ⟨e', he', rfl⟩ := List.mem_map.mp he
+    exact apm_a97j08_boundaryEdge_segment_subset D hinput shift Q hAU hUB hUR e'
+      (hcE e' he')
+  obtain ⟨x, p, hpD, θ, hθ, hdisp⟩ := apm_a97j08_polygon_path_lift D hz
+    (fun h => apm_a97j08_segment_lift h) (c.map g) (by simpa using hcne') hseg
+  refine apm_a97j08_not_nullhomotopic_of_lift D hz p hpD θ hθ ?_
+  intro h01
+  apply hcne
+  have : apm_a97j08_cycleSum (fun e => apm_a97j08_angleStep z e.1 e.2) (c.map g) =
+      apm_a97j08_cycleSum f c := by
+    simp only [apm_a97j08_cycleSum, apm_a97j08_cycleEdges_map, List.map_map]
+    rfl
+  rw [← this, ← hdisp, h01, sub_self]
 
 /-- The genuinely planar obstruction missing from Mathlib: a bounded
 component of the complement of an open plane domain produces a loop in the
