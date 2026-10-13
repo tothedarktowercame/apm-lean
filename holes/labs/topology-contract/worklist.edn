@@ -113850,14 +113850,14 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 2,
+   :stop-count 3,
    :review-finding
    "Recorded fixture hash mismatch: :fixture.sha256 is 0bca6ce32c019fc3053c7f813c26917169cf817375b44d5e722b864b61a526450c1, but ConstructionTargets/PointWedgeVanKampen.blueprint.md at recorded commit c9b3af27 has exact SHA-256 0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0. Re-record the fixture hash for the reviewed commit.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
    :evidence
    {:placeholder-delta {:source-before 0, :source-after 0},
     :residual
-    "Transport reduced square by coordinate equality; recurrence, projection=1, inl, B6/B12.",
+    "Transport identity and inverse-span component by coordinate equality; close recurrence, projection=1, inl, B6/B12.",
     :outcome :stop,
     :warnings ["existing linter"],
     :missing-theorems
@@ -113871,17 +113871,16 @@
       :area "fundamental-group-wedge-of-circles"}],
     :statement-hashes
     {:source
-     "8651c0deb2a4a4c849ef48dcbcca66d378158ee0090f4c303a769f16662c0695",
+     "af62c1f6e29cdee926235be95a5a06e6bd34734f5c862653ecd67a14547bdd8a",
      :documentation
-     "e6606a5df9d9e173d740b9917e71466d4e68b31c02be043e648de99a545abc1f",
+     "9d8c20fdee0727dfef76e9f4d5aad7632d8b677b09a00392071b2e03cbadfca4",
      :blueprint
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0",
      :registry "149/149"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
-    :reason
-    "Naturality and triangle reductions composed in one typed square.",
+    :reason "Typed coordinate-side identity square banked.",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/PointWedgeVanKampen.lean",
@@ -113889,27 +113888,13 @@
      {:cmd "lake build ConstructionTargets.PointWedgeVanKampen",
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-     {:cmd "hash/diff/placeholders", :exit 0}],
+     {:cmd "sha256/diff/placeholders", :exit 0}],
     :diagnostic-history
-    [{:cmd "lean direct rewrite",
-      :exit 1,
-      :finding "Let-bound square required explicit reduction."}
-     {:cmd
+    [{:cmd
       "lake build ConstructionTargets.ThreeCirclesFundamentalGroup",
       :exit 1,
       :finding "B12 absent."}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1791899274201-9788-47ef8162",
-     :commands
-     ["git show/diff 5c8e375d^..5c8e375d"
-      "git archive 5c8e375d; lake env lean archived PointWedgeVanKampen.lean"
-      "sha256/diff-tree/placeholder checks; statement-registry.py check"
-      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (expected absent)"],
-     :finding
-     "Reviewer codex-3. PASS program STOP: 5c8e375d adds a compiled, sorry-free typed square after e1aed878 by composing the inverse-span naturality theorem with the correctly oriented equivalence-triangle transport reduction. Its endpoints remain in the original dependent representations. Scope is Lean+MD only; source/doc/fixture hashes match ledger (8651c0de/e6606a5d/0bca6ce3), placeholders 0, registry 149/149, axioms standard only. Residual: transport the reduced square by the named coordinate equality, close recurrence, then projection=1, inl, B6/B12; B12 absent."},
-    :commit "5c8e375d9bcdf4498db2ee2ecba7589113943882",
+    :commit "cc26350771438a0e82f47ff44ae49db88b62c70e",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
      "ConstructionTargets/PointWedgeVanKampen.md"],
@@ -113919,7 +113904,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
