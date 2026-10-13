@@ -684,12 +684,133 @@ lemma apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_exte
 /-- A function with a continuous within-derivative on `[a, b]` is the restriction of a global
 `C¹` function (extend past each endpoint by the tangent line). -/
 -- BEGIN SEAT AREA
+def apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_extend_aux_core_aux_C1_extension_aux_R
+    (a b : ℝ) (h h' : ℝ → ℝ) (t : ℝ) : ℝ :=
+  if t < a then h a + h' a * (t - a)
+  else if t ≤ b then h t
+  else h b + h' b * (t - b)
+
+lemma apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_extend_aux_core_aux_C1_extension_aux_eq
+    (a b : ℝ) (h h' : ℝ → ℝ) {t : ℝ} (ht : t ∈ Set.Icc a b) :
+    apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_extend_aux_core_aux_C1_extension_aux_R
+      a b h h' t = h t := by
+  simp [apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_extend_aux_core_aux_C1_extension_aux_R,
+    not_lt.mpr ht.1, ht.2]
+
+open Filter Topology in
+lemma apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_extend_aux_core_aux_C1_extension_aux_deriv_away
+    (a b : ℝ) (hab : a < b) (h h' : ℝ → ℝ)
+    (hd : ∀ t ∈ Set.Icc a b, HasDerivWithinAt h (h' t) (Set.Icc a b) t) :
+    ∀ t, t < a ∨ (a < t ∧ t < b) ∨ b < t →
+      HasDerivAt (apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_extend_aux_core_aux_C1_extension_aux_R a b h h')
+        (if t < a then h' a else if t ≤ b then h' t else h' b) t := by
+  intro t ht
+  rcases ht with hta | htab | hbt
+  · have he : (apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_extend_aux_core_aux_C1_extension_aux_R a b h h') =ᶠ[𝓝 t] (fun x => h a + h' a * (x - a)) :=
+      Filter.eventually_of_mem (Iio_mem_nhds hta) fun x hx => by
+        simp [apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_extend_aux_core_aux_C1_extension_aux_R, show x < a from hx]
+    have hl : HasDerivAt (fun x => h a + h' a * (x - a)) (h' a) t := by
+      convert (hasDerivAt_const t (h a)).add
+        ((hasDerivAt_id t).sub_const a |>.const_mul (h' a)) using 1
+      simp
+    rw [if_pos hta]
+    exact hl.congr_of_eventuallyEq he
+  · have hi := (hd t ⟨htab.1.le, htab.2.le⟩).hasDerivAt (Icc_mem_nhds htab.1 htab.2)
+    have he : (apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_extend_aux_core_aux_C1_extension_aux_R a b h h') =ᶠ[𝓝 t] h :=
+      Filter.eventually_of_mem (Ioo_mem_nhds htab.1 htab.2) fun x hx =>
+        apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_extend_aux_core_aux_C1_extension_aux_eq a b h h' ⟨hx.1.le, hx.2.le⟩
+    rw [if_neg (not_lt.mpr htab.1.le), if_pos htab.2.le]
+    exact hi.congr_of_eventuallyEq he
+  · have he : (apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_extend_aux_core_aux_C1_extension_aux_R a b h h') =ᶠ[𝓝 t] (fun x => h b + h' b * (x - b)) :=
+      Filter.eventually_of_mem (Ioi_mem_nhds hbt) fun x hx => by
+        have hx' : b < x := hx
+        simp [apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_extend_aux_core_aux_C1_extension_aux_R, show ¬ x < a from not_lt.mpr (hab.le.trans hx'.le),
+          show ¬ x ≤ b from not_le.mpr hx']
+    have hl : HasDerivAt (fun x => h b + h' b * (x - b)) (h' b) t := by
+      convert (hasDerivAt_const t (h b)).add
+        ((hasDerivAt_id t).sub_const b |>.const_mul (h' b)) using 1
+      simp
+    rw [if_neg (not_lt.mpr (hab.le.trans hbt.le)), if_neg (not_le.mpr hbt)]
+    exact hl.congr_of_eventuallyEq he
+
+lemma apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_extend_aux_core_aux_C1_extension_aux_finish
+    (a b : ℝ) (hab : a < b) (h h' : ℝ → ℝ)
+    (hd : ∀ t ∈ Set.Icc a b, HasDerivWithinAt h (h' t) (Set.Icc a b) t)
+    (hc : ContinuousOn h' (Set.Icc a b)) :
+    ContDiff ℝ 1
+      (apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_extend_aux_core_aux_C1_extension_aux_R
+        a b h h') := by
+  set R := apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_extend_aux_core_aux_C1_extension_aux_R a b h h' with hRdef
+  set D : ℝ → ℝ := fun t => h' (Set.projIcc a b hab.le t) with hDdef
+  have hDc : Continuous D :=
+    hc.comp_continuous (continuous_subtype_val.comp continuous_projIcc)
+      (fun t => Subtype.prop _)
+  have hDa : ∀ t, t ≤ a → D t = h' a := fun t ht => by
+    simp [hDdef, Set.projIcc_of_le_left hab.le ht]
+  have hDb : ∀ t, b ≤ t → D t = h' b := fun t ht => by
+    simp [hDdef, Set.projIcc_of_right_le hab.le ht]
+  have hDm : ∀ t ∈ Set.Icc a b, D t = h' t := fun t ht => by
+    simp [hDdef, Set.projIcc_of_mem hab.le ht]
+  have hRI : ∀ t ∈ Set.Icc a b, R t = h t := fun t ht => apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_extend_aux_core_aux_C1_extension_aux_eq a b h h' ht
+  -- one-sided derivatives at an endpoint c ∈ {a, b}
+  have hline_left : HasDerivWithinAt R (h' a) (Set.Iic a) a := by
+    have hl : HasDerivAt (fun x => h a + h' a * (x - a)) (h' a) a := by
+      convert (hasDerivAt_const a (h a)).add
+        ((hasDerivAt_id a).sub_const a |>.const_mul (h' a)) using 1
+      simp
+    refine hl.hasDerivWithinAt.congr (fun x hx => ?_) ?_
+    · rcases lt_or_eq_of_le (Set.mem_Iic.1 hx) with hxa | hxa
+      · simp [hRdef, apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_extend_aux_core_aux_C1_extension_aux_R, hxa]
+      · subst hxa; rw [hRI x ⟨le_rfl, hab.le⟩]; simp
+    · rw [hRI a ⟨le_rfl, hab.le⟩]; simp
+  have hin_right : HasDerivWithinAt R (h' a) (Set.Ici a) a := by
+    have := (hd a ⟨le_rfl, hab.le⟩).congr (fun x hx => hRI x hx) (hRI a ⟨le_rfl, hab.le⟩)
+    exact this.mono_of_mem_nhdsWithin (Icc_mem_nhdsGE hab)
+  have hin_left : HasDerivWithinAt R (h' b) (Set.Iic b) b := by
+    have := (hd b ⟨hab.le, le_rfl⟩).congr (fun x hx => hRI x hx) (hRI b ⟨hab.le, le_rfl⟩)
+    exact this.mono_of_mem_nhdsWithin (Icc_mem_nhdsLE hab)
+  have hline_right : HasDerivWithinAt R (h' b) (Set.Ici b) b := by
+    have hl : HasDerivAt (fun x => h b + h' b * (x - b)) (h' b) b := by
+      convert (hasDerivAt_const b (h b)).add
+        ((hasDerivAt_id b).sub_const b |>.const_mul (h' b)) using 1
+      simp
+    refine hl.hasDerivWithinAt.congr (fun x hx => ?_) ?_
+    · rcases lt_or_eq_of_le (Set.mem_Ici.1 hx) with hxb | hxb
+      · simp [hRdef, apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_extend_aux_core_aux_C1_extension_aux_R, (not_lt.mpr (hab.trans hxb).le), (not_le.mpr hxb)]
+      · rw [← hxb, hRI b ⟨hab.le, le_rfl⟩]; simp
+    · rw [hRI b ⟨hab.le, le_rfl⟩]; simp
+  have hall : ∀ t, HasDerivAt R (D t) t := by
+    intro t
+    rcases lt_trichotomy t a with hta | rfl | hta
+    · have := apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_extend_aux_core_aux_C1_extension_aux_deriv_away a b hab h h' hd t (Or.inl hta)
+      rwa [if_pos hta, ← hDa t hta.le] at this
+    · have := (hline_left.union hin_right)
+      rw [Set.Iic_union_Ici, hasDerivWithinAt_univ] at this
+      rwa [← hDa t le_rfl] at this
+    · rcases lt_trichotomy t b with htb | rfl | htb
+      · have := apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_extend_aux_core_aux_C1_extension_aux_deriv_away a b hab h h' hd t (Or.inr (Or.inl ⟨hta, htb⟩))
+        rwa [if_neg (not_lt.mpr hta.le), if_pos htb.le, ← hDm t ⟨hta.le, htb.le⟩] at this
+      · have := (hin_left.union hline_right)
+        rw [Set.Iic_union_Ici, hasDerivWithinAt_univ] at this
+        rwa [← hDb t le_rfl] at this
+      · have := apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_extend_aux_core_aux_C1_extension_aux_deriv_away a b hab h h' hd t (Or.inr (Or.inr htb))
+        rwa [if_neg (not_lt.mpr (hab.trans htb).le), if_neg (not_le.mpr htb), ← hDb t htb.le] at this
+  rw [contDiff_one_iff_deriv]
+  refine ⟨fun t => (hall t).differentiableAt, ?_⟩
+  have : deriv R = D := funext fun t => (hall t).deriv
+  rw [this]; exact hDc
+
 lemma apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_extend_aux_core_aux_C1_extension
     (a b : ℝ) (hab : a < b) (h h' : ℝ → ℝ)
     (hd : ∀ t ∈ Set.Icc a b, HasDerivWithinAt h (h' t) (Set.Icc a b) t)
     (hc : ContinuousOn h' (Set.Icc a b)) :
     ∃ R : ℝ → ℝ, ContDiff ℝ 1 R ∧ ∀ t ∈ Set.Icc a b, R t = h t := by
-  sorry
+  refine ⟨apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_extend_aux_core_aux_C1_extension_aux_R
+    a b h h', apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_extend_aux_core_aux_C1_extension_aux_finish
+      a b hab h h' hd hc, ?_⟩
+  intro t ht
+  exact apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_extend_aux_core_aux_C1_extension_aux_eq
+    a b h h' ht
 -- END SEAT AREA
 
 lemma apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_extend_aux_core
