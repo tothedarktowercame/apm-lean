@@ -2271,6 +2271,39 @@ lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_energy_sub_one
   rw [MeasureTheory.integral_sub h.2.2.2.2.1.integrable_sq h.2.2.2.1.integrable_sq,
     hnorm]
 
+lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_inequality_aux_integrable
+    (y dy : ℝ → ℝ) (h : apm_m98a06_InH10Pi y dy) :
+    Integrable y (volume.restrict (Ioo (0 : ℝ) Real.pi)) ∧
+      Integrable dy (volume.restrict (Ioo (0 : ℝ) Real.pi)) := by
+  exact ⟨h.2.2.2.1.integrable (by norm_num), h.2.2.2.2.1.integrable (by norm_num)⟩
+
+lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_inequality_aux_representation
+    (hFTC : apm_m98A06_WeakFTCFact) (y dy : ℝ → ℝ)
+    (h : apm_m98a06_InH10Pi y dy) :
+    ∀ x ∈ Icc (0 : ℝ) Real.pi, y x = ∫ t in (0 : ℝ)..x, dy t := by
+  exact hFTC y dy h
+
+lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_inequality_aux_mean_zero
+    (hFTC : apm_m98A06_WeakFTCFact) (y dy : ℝ → ℝ)
+    (h : apm_m98a06_InH10Pi y dy) :
+    ∫ t in (0 : ℝ)..Real.pi, dy t = 0 := by
+  have hrep :=
+    apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_inequality_aux_representation
+      hFTC y dy h Real.pi ⟨Real.pi_pos.le, le_rfl⟩
+  rw [h.2.2.1] at hrep
+  exact hrep.symm
+
+/-- The sole remaining analytic bridge: extend the classical `C¹` Wirtinger
+inequality to an `L²` weak derivative by continuous `L²` approximation, after
+subtracting the mean of each approximant. -/
+lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_inequality_aux_approximation
+    (hWirtinger : apm_m98A06_WirtingerFact)
+    (hFTC : apm_m98A06_WeakFTCFact) (y dy : ℝ → ℝ)
+    (h : apm_m98a06_InH10Pi y dy) :
+    (∫ x, (y x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi))) ≤
+      ∫ x, (dy x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)) := by
+  sorry
+
 lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_inequality
     (hWirtinger : apm_m98A06_WirtingerFact)
     (hFTC : apm_m98A06_WeakFTCFact) :
@@ -2278,7 +2311,13 @@ lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_inequality
       ∫ x, (y x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)) = 1 →
       0 ≤ ∫ x, (dy x) ^ 2 - (y x) ^ 2
         ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)) := by
-  sorry
+  intro y dy h hnorm
+  rw [apm_m98A06_weak_poincare_and_equality_of_facts_aux_energy_sub_one y dy h hnorm]
+  have hp :=
+    apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_inequality_aux_approximation
+      hWirtinger hFTC y dy h
+  rw [hnorm] at hp
+  linarith
 
 lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_forward_aux_deriv_norm
     (y dy : ℝ → ℝ) (h : apm_m98a06_InH10Pi y dy)
