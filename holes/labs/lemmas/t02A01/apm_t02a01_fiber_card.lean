@@ -104,6 +104,7 @@ theorem apm_t02a01_fiber_card
     {Stilde : Type*} [TopologicalSpace Stilde]
     (p : Stilde → apm_t02a01_puncturedTorus) (n : ℕ)
     (deck : ZMod n → Homeomorph Stilde Stilde)
+    (hdeck_over : ∀ z x, p (deck z x) = p x)
     (hdeck_transitive : ∀ x y, p x = p y → ∃! z, deck z x = y)
     (x : p ⁻¹' apm_t02a01_boundary) :
     Nat.card (apm_t02a01_restrictedCover p ⁻¹'
@@ -136,6 +137,6 @@ theorem apm_t02a01
   obtain ⟨equiv⟩ := apm_t02a01_components_equiv_fiber
     (apm_t02a01_restrictedCover p) hcov e (hmono e)
   rw [Nat.card_congr equiv]
-  exact apm_t02a01_fiber_card p n deck hdeck_transitive e
+  exact apm_t02a01_fiber_card p n deck hdeck_over hdeck_transitive e
 
 #print axioms apm_t02a01
