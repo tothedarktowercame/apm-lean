@@ -166,12 +166,87 @@ theorem apm_t00j01_sphere_identity_bridge :
     have := t00J01Identity_lefschetz_value 1 h
     norm_num at this
 
-/-- LIBRARY: the explicit coinduced plane quotient, times the circle, is a
-compact connected topological three-manifold in the concrete sense used by
-the registered statement. -/
+/-- Every equivalence in the presented Klein quotient has the expected affine
+normal form.  This is kept separate from topology so the group calculation and
+the local-chart construction can be proved in parallel. -/
+theorem apm_t00j01_kleinRel_normal_form {p q : ℝ × ℝ}
+    (h : Relation.EqvGen apm_t00j01_kleinRel p q) :
+    ∃ m n : ℤ,
+      q.1 = (m : ℝ) + (-1 : ℝ) ^ n * p.1 ∧
+      q.2 = (n : ℝ) + p.2 := by
+  sorry
+
+/-- The explicit Klein quotient is compact.  The closed fundamental square
+and its orbit classification are supplied by the imported construction chain. -/
+theorem apm_t00j01_klein_compact :
+    IsCompact (Set.univ : Set apm_t00j01_Klein) := by
+  sorry
+
+/-- The explicit Klein quotient is connected, as a quotient of the connected
+plane (equivalently, as the image of the connected fundamental square). -/
+theorem apm_t00j01_klein_connected :
+    IsConnected (Set.univ : Set apm_t00j01_Klein) := by
+  sorry
+
+/-- The normal form gives a small evenly-covered rectangle at every point of
+the plane quotient, hence a two-dimensional Euclidean chart.  Its algebraic
+input is an explicit hypothesis so this seat is independent of the normal-form
+seat. -/
+theorem apm_t00j01_klein_local_chart
+    (_hnf : ∀ {p q : ℝ × ℝ},
+      Relation.EqvGen apm_t00j01_kleinRel p q →
+        ∃ m n : ℤ,
+          q.1 = (m : ℝ) + (-1 : ℝ) ^ n * p.1 ∧
+          q.2 = (n : ℝ) + p.2) :
+    ∀ x : apm_t00j01_Klein,
+      ∃ (U : Set apm_t00j01_Klein) (V : Set (EuclideanSpace ℝ (Fin 2))),
+        x ∈ U ∧ IsOpen U ∧ IsOpen V ∧ Nonempty (U ≃ₜ V) := by
+  sorry
+
+/-- The circle has its usual one-dimensional punctured-circle charts. -/
+theorem apm_t00j01_circle_local_chart :
+    ∀ z : Circle, ∃ (U : Set Circle) (V : Set ℝ),
+      z ∈ U ∧ IsOpen U ∧ IsOpen V ∧ Nonempty (U ≃ₜ V) := by
+  sorry
+
+/-- Compactness of the two factors assembles to compactness of their product.
+The factor facts are hypotheses so all three seats are independent. -/
+theorem apm_t00j01_klein_circle_compact
+    (_hK : IsCompact (Set.univ : Set apm_t00j01_Klein)) :
+    IsCompact (Set.univ : Set apm_t00j01_nonorientable3) := by
+  sorry
+
+/-- Connectedness of the two nonempty factors assembles to connectedness of
+their product. -/
+theorem apm_t00j01_klein_circle_connected
+    (_hK : IsConnected (Set.univ : Set apm_t00j01_Klein)) :
+    IsConnected (Set.univ : Set apm_t00j01_nonorientable3) := by
+  sorry
+
+/-- A two-dimensional Klein chart and a one-dimensional circle chart combine,
+after the standard coordinate reassociation, to an open chart in `ℝ³`. -/
+theorem apm_t00j01_klein_circle_local_chart
+    (_hK : ∀ x : apm_t00j01_Klein,
+      ∃ (U : Set apm_t00j01_Klein) (V : Set (EuclideanSpace ℝ (Fin 2))),
+        x ∈ U ∧ IsOpen U ∧ IsOpen V ∧ Nonempty (U ≃ₜ V))
+    (_hC : ∀ z : Circle, ∃ (U : Set Circle) (V : Set ℝ),
+      z ∈ U ∧ IsOpen U ∧ IsOpen V ∧ Nonempty (U ≃ₜ V)) :
+    ∀ x : apm_t00j01_nonorientable3,
+      ∃ (U : Set apm_t00j01_nonorientable3) (V : Set apm_t00j01_E3),
+        x ∈ U ∧ IsOpen U ∧ IsOpen V ∧ Nonempty (U ≃ₜ V) := by
+  sorry
+
+/-- The explicit coinduced plane quotient, times the circle, is a compact
+connected topological three-manifold in the concrete sense used by the
+registered statement. -/
 theorem apm_t00j01_klein_quotient_charts :
     apm_t00j01_isThreeManifold apm_t00j01_nonorientable3 := by
-  sorry
+  refine ⟨apm_t00j01_klein_circle_compact apm_t00j01_klein_compact,
+    apm_t00j01_klein_circle_connected apm_t00j01_klein_connected, ?_⟩
+  exact apm_t00j01_klein_circle_local_chart
+    (apm_t00j01_klein_local_chart fun {_ _} h =>
+      apm_t00j01_kleinRel_normal_form h)
+    apm_t00j01_circle_local_chart
 
 /-- LIBRARY: the integral top singular homology of the concrete Klein-bottle
 product vanishes.  The manifold conclusion is passed in explicitly so this

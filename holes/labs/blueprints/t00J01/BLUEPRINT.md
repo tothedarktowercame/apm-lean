@@ -31,30 +31,104 @@ the banked Klein quotient chain available.
 
 ## Remaining lemmas
 
-### `apm_t00j01_klein_quotient_charts` — LIBRARY
+### Klein quotient/chart split (all leaves are parallel)
 
-**Statement.** The explicit coinduced quotient `apm_t00j01_Klein × Circle` is
-compact, connected, and locally homeomorphic to open subsets of `ℝ³`.
+#### `apm_t00j01_kleinRel_normal_form` (50–90 lines)
 
-**Why true.** Identify the `EqvGen` quotient with the quotient of the plane by
-the standard free Klein group action.  The banked Klein action, square orbit
-classification, quotient equivalence, compact-square argument, and inverse
-continuity chain culminates in the imported
-`KleinClosedSquareOrbitInverseContinuity` module.  What is still missing is the
-local quotient-chart construction (and its product with the standard circle
-charts), plus the direct connectedness assembly for this exact local quotient
-type.  This is precisely the topology ledger's `quotient-surface-charts` STOP.
+Every generated relation has form
+`(x,y) ↦ (m + (-1)^n x, n + y)`.  Induct on `Relation.EqvGen` using
+`Relation.EqvGen.rec`; the relation, reflexive, symmetric, and transitive cases
+reduce to integer arithmetic, `Int.cast_add`, `zpow_add₀`/parity simplification,
+and `ring`.  Alternatively transport through the already proved coordinate
+model (`KleinPlaneAffineAction.coordinateAct`,
+`KleinPresentedGroupCoordinateNormalForm.coordinateEquiv`).
 
-**Expected size.** 250–500 lines; marked LIBRARY rather than artificially
-split because the compatible quotient-chart construction is one coherent
-infrastructure result.
+Truth check: negative `n` is intentional; integer powers of `-1` are defined
+and still equal `±1`.  The formula includes reflexivity with `m=n=0`.
 
-**Dependencies.** Definitions and the imported banked Klein quotient modules.
+#### `apm_t00j01_klein_compact` (70–120 lines)
 
-**Truth check.** The action generators are translations/reflections with no
-fixed points in the generated plane action; the fundamental square is compact
-and connected, and product charts have dimension `2 + 1 = 3`.  The empty-space
-degeneracy cannot occur because the quotient contains the class of `(0,0)`.
+Show the image of `[0,1]²` under the quotient map is all of the quotient, then
+use `ConstructionTargets.KleinClosedSquareOrbitInverseContinuity.isCompact_closedSquare_set`,
+`IsCompact.image`, and `isCompact_range`.  The imported
+`KleinSquareRepresentative.exists_closedSquare_smul` and
+`KleinClosedSquareOrbitQuotientEquiv.closedSquareToOrbitQuotient_surjective`
+provide the fundamental-domain calculation; bridge its `SameOrbit` relation to
+this file's `EqvGen` generators using `generatorA_smul`, `generatorB_smul`, and
+the normal-form induction locally (do not depend on the new normal-form lemma).
+
+Truth check: the square is nonempty and closed/bounded; boundary duplication
+does not affect compactness or surjectivity.
+
+#### `apm_t00j01_klein_connected` (30–50 lines)
+
+The quotient map from `ℝ²` is continuous by `continuous_coinduced_rng`, is
+surjective by `Quotient.mk_surjective`, and the plane is connected.  Use
+`IsConnected.image` (or `isConnected_range`) and rewrite the range as `univ`.
+
+Truth check: this avoids the false claim that the closed fundamental square
+quotient is automatically connected without checking its quotient map; the
+plane-domain proof has no boundary cases.
+
+#### `apm_t00j01_klein_local_chart` (100–150 lines)
+
+Assuming the displayed affine normal form, take an open box of radius `< 1/2`
+around a lift.  The integer-coordinate bounds show no nonidentity translate of
+that box meets it.  Its saturation is open (prove directly, or mirror
+`KleinPlaneOrbitQuotient.quotient_preimage_image` and
+`KleinPlaneOrbitQuotient.quotientMap_isOpen`).  Restrict the quotient map and
+use `Homeomorph.homeomorphOfContinuousOpen` / `Homeomorph.SetCongr` plus the
+standard homeomorphism `EuclideanSpace ℝ (Fin 2) ≃ₜ ℝ × ℝ`.
+
+This is the one genuinely technical chart leaf, but the group normal form is
+an explicit hypothesis and hence proved independently.  Boundary points of a
+chosen square need no special case: the chart is centered at a plane lift, not
+cut out inside the fundamental square.  Freeness follows from the same bounds;
+in particular odd vertical translation cannot fix a point because it changes
+the second coordinate by a nonzero integer.
+
+#### `apm_t00j01_circle_local_chart` (30–60 lines)
+
+Use the punctured-circle chart around each point, rotating the standard chart
+if convenient.  Relevant Mathlib tools are `Circle.exp`,
+`Circle.expHomeomorph`, `Homeomorph.trans`, `IsOpen.preimage`, and
+`Complex.continuous_mul`; the existing `RotatedCircleChartTransport` module is
+also a model for the rotation step.
+
+Truth check: remove the antipode, never the chart center.  `Circle` is
+nonempty, and the open real interval is genuinely open.
+
+#### `apm_t00j01_klein_circle_compact` (20–40 lines)
+
+Given compactness of the Klein factor, obtain `CompactSpace` with
+`isCompact_iff_compactSpace`, use the existing compact-space instance for
+`Circle`, and apply `isCompact_univ` to the product.  The factor conclusion is
+an explicit hypothesis.
+
+#### `apm_t00j01_klein_circle_connected` (20–40 lines)
+
+Given connectedness of the Klein factor, combine it with `isConnected_univ`
+for `Circle` using `IsConnected.prod`; simplify `univ ×ˢ univ = univ`.
+Both factors are nonempty, so no empty-product degeneracy occurs.
+
+#### `apm_t00j01_klein_circle_local_chart` (70–120 lines)
+
+Take the two supplied factor charts, use `Homeomorph.prod` on their subtype
+homeomorphisms, identify the source with the product-open set, and reassociate
+coordinates via `EuclideanSpace.equiv` / `EuclideanSpace.piLpCongrLeft` (or an
+explicit `LinearEquiv` upgraded with `LinearEquiv.toHomeomorph`) from
+`EuclideanSpace ℝ (Fin 2) × ℝ` to `EuclideanSpace ℝ (Fin 3)`.
+Use `IsOpen.prod` for both source and target sets.
+
+Truth check: product-chart membership is componentwise, and the coordinate
+map is onto all three coordinates; no dimension-zero or empty-open-set case is
+present.
+
+#### `apm_t00j01_klein_quotient_charts` (assembly; sorry-free)
+
+Combines the compactness and connectedness leaves and applies the local product
+chart leaf to `apm_t00j01_klein_local_chart apm_t00j01_kleinRel_normal_form`
+and `apm_t00j01_circle_local_chart`.
 
 ### `apm_t00j01_klein_product_H3_zero` — LIBRARY
 
@@ -159,13 +233,19 @@ The main theorem contains no `sorry`: it pairs the chart lemma with the H3
 lemma, reuses the completed sphere bridge, and inserts continuity plus the four
 circle facts directly.
 
-- **Layer 1 (parallel):** `apm_t00j01_klein_quotient_charts`,
-  `apm_t00j01_klein_product_H3_zero` (with the chart conclusion as a
+- **Layer 1 (parallel):** the eight Klein leaves
+  `apm_t00j01_kleinRel_normal_form`, `apm_t00j01_klein_compact`,
+  `apm_t00j01_klein_connected`, `apm_t00j01_klein_local_chart`,
+  `apm_t00j01_circle_local_chart`, `apm_t00j01_klein_circle_compact`,
+  `apm_t00j01_klein_circle_connected`, and
+  `apm_t00j01_klein_circle_local_chart`; also
+  `apm_t00j01_klein_product_H3_zero` (with the final chart conclusion as a
   hypothesis), `apm_t00j01_foldRegular_pi`,
   `apm_t00j01_foldRegular_one`, `apm_t00j01_foldFiberCard_pi`, and
   `apm_t00j01_foldFiberCard_one`.
-- **Layer 2 (already compiled):** the main theorem assembly after the six
-  Layer 1 bodies are supplied.
+- **Layer 2 (already compiled):** `apm_t00j01_klein_quotient_charts` assembles
+  the eight Klein leaves; the main theorem then uses it with the other five
+  independent leaves.
 
 ## Compilation and axioms
 
@@ -181,6 +261,6 @@ The output of `#print axioms apm_t00j01` was:
 'apm_t00j01' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
 ```
 
-The six warnings identifying `sorry` are exactly the six named remaining
-lemmas.  The theorem assembly and all reused declarations have no direct
-`sorry`.
+The thirteen warnings identifying `sorry` are exactly the eight new Klein
+leaves and the five other previously named remaining lemmas.  Both theorem
+assemblies and all reused declarations have no direct `sorry`.
