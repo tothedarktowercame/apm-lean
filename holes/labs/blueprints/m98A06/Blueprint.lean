@@ -1830,7 +1830,71 @@ lemma apm_m98A06_nonresonant_energy_geometry_of_facts_aux_positive_direction
   · exact ⟨1, Or.inl rfl, by nlinarith⟩
   · exact ⟨-1, Or.inr rfl, by nlinarith⟩
 
-lemma apm_m98A06_nonresonant_energy_geometry_of_facts_aux_energy_geometry
+lemma apm_m98A06_nonresonant_energy_geometry_of_facts_aux_energy_geometry_aux_candidate_stationary
+    {a : ℝ} (ha : 0 < a) (hsin : Real.sin a ≠ 0) :
+    apm_m98a06_IsStationary a 0 1 (fun x ↦ Real.sin x / Real.sin a) := by
+  apply apm_m98A06_duBoisReymond_aux_reverse a 0 1 ha
+  refine ⟨apm_m98a06_nonresonant_candidate_admissible hsin, 0,
+    1 / Real.sin a, ?_⟩
+  intro x _
+  ring
+
+lemma apm_m98A06_nonresonant_energy_geometry_of_facts_aux_energy_geometry_aux_candidate_split
+    {a : ℝ} (ha : 0 < a) (hsin : Real.sin a ≠ 0)
+    {η : ℝ → ℝ} (hη : apm_m98a06_Admissible a 0 0 η) :
+    apm_m98a06_I a (fun x ↦ Real.sin x / Real.sin a + η x) =
+      apm_m98a06_I a (fun x ↦ Real.sin x / Real.sin a) + apm_m98a06_I a η := by
+  exact apm_m98A06_stationary_energy_split ha
+    (apm_m98A06_nonresonant_energy_geometry_of_facts_aux_energy_geometry_aux_candidate_stationary
+      ha hsin) hη
+
+lemma apm_m98A06_nonresonant_energy_geometry_of_facts_aux_energy_geometry_aux_nonneg
+    (hWirtinger : apm_m98A06_WirtingerFact)
+    {a : ℝ} (ha : 0 < a) (hapi : a < Real.pi)
+    {η : ℝ → ℝ} (hη : apm_m98a06_Admissible a 0 0 η) :
+    0 ≤ apm_m98a06_I a η := by
+  obtain ⟨hW, _⟩ := hWirtinger a ha η hη
+  have hD : 0 ≤ ∫ x in (0 : ℝ)..a,
+      (derivWithin η (Icc 0 a) x) ^ 2 :=
+    intervalIntegral.integral_nonneg ha.le (fun x _ ↦ sq_nonneg _)
+  have hr : (a / Real.pi) ^ 2 < 1 := by
+    have hp := Real.pi_pos
+    have : 0 ≤ a / Real.pi := div_nonneg ha.le hp.le
+    have : a / Real.pi < 1 := (div_lt_one hp).2 hapi
+    nlinarith
+  rw [apm_m98A06_I_eq_derivWithin ha hη.1]
+  rw [intervalIntegral.integral_sub]
+  · nlinarith
+  · exact ((hη.1.continuousOn_derivWithin (uniqueDiffOn_Icc ha) (by norm_num)).pow 2).intervalIntegrable_of_Icc ha.le
+  · exact (hη.1.continuousOn.pow 2).intervalIntegrable_of_Icc ha.le
+
+lemma apm_m98A06_nonresonant_energy_geometry_of_facts_aux_energy_geometry_aux_minimum
+    (hWirtinger : apm_m98A06_WirtingerFact)
+    {a : ℝ} (ha : 0 < a) (hapi : a < Real.pi) (hsin : Real.sin a ≠ 0)
+    {z : ℝ → ℝ} (hz : apm_m98a06_Admissible a 0 1 z) :
+    apm_m98a06_I a (fun x ↦ Real.sin x / Real.sin a) ≤ apm_m98a06_I a z := by
+  let u : ℝ → ℝ := fun x ↦ Real.sin x / Real.sin a
+  let η : ℝ → ℝ := fun x ↦ z x - u x
+  have hu : apm_m98a06_Admissible a 0 1 u := by
+    simpa [u] using apm_m98a06_nonresonant_candidate_admissible hsin
+  have hη : apm_m98a06_Admissible a 0 0 η :=
+    apm_m98A06_nonresonant_energy_geometry_of_facts_aux_difference hu hz
+  have hzfun : z = fun x ↦ u x + η x := by
+    funext x
+    simp [η]
+  rw [hzfun]
+  have hs : apm_m98a06_I a (fun x ↦ u x + η x) =
+      apm_m98a06_I a u + apm_m98a06_I a η := by
+    simpa [u] using
+      (apm_m98A06_nonresonant_energy_geometry_of_facts_aux_energy_geometry_aux_candidate_split
+        ha hsin hη)
+  change apm_m98a06_I a u ≤ apm_m98a06_I a (fun x ↦ u x + η x)
+  rw [hs]
+  exact le_add_of_nonneg_right
+    (apm_m98A06_nonresonant_energy_geometry_of_facts_aux_energy_geometry_aux_nonneg
+      hWirtinger ha hapi hη)
+
+lemma apm_m98A06_nonresonant_energy_geometry_of_facts_aux_energy_geometry_aux_remaining
     (hWirtinger : apm_m98A06_WirtingerFact)
     (hSine : apm_m98A06_SineComputationsFact) :
     ∀ a : ℝ, 0 < a → (∀ k : ℤ, a ≠ k * Real.pi) →
@@ -1848,6 +1912,27 @@ lemma apm_m98A06_nonresonant_energy_geometry_of_facts_aux_energy_geometry
         ∃ z : ℝ → ℝ, apm_m98a06_Admissible a 0 1 z ∧
           apm_m98a06_I a y < apm_m98a06_I a z) := by
   sorry
+
+lemma apm_m98A06_nonresonant_energy_geometry_of_facts_aux_energy_geometry
+    (hWirtinger : apm_m98A06_WirtingerFact)
+    (hSine : apm_m98A06_SineComputationsFact) :
+    ∀ a : ℝ, 0 < a → (∀ k : ℤ, a ≠ k * Real.pi) →
+      (a < Real.pi →
+        (∀ z : ℝ → ℝ, apm_m98a06_Admissible a 0 1 z →
+          apm_m98a06_I a (fun x ↦ Real.sin x / Real.sin a) ≤ apm_m98a06_I a z ∧
+          (apm_m98a06_I a z = apm_m98a06_I a (fun x ↦ Real.sin x / Real.sin a) →
+            ∀ x ∈ Icc (0 : ℝ) a, z x = Real.sin x / Real.sin a)) ∧
+        ∀ y : ℝ → ℝ, apm_m98a06_Admissible a 0 1 y →
+          ∃ z : ℝ → ℝ, apm_m98a06_Admissible a 0 1 z ∧
+            apm_m98a06_I a y < apm_m98a06_I a z) ∧
+      (Real.pi < a → ∀ y : ℝ → ℝ, apm_m98a06_Admissible a 0 1 y →
+        (∃ z : ℝ → ℝ, apm_m98a06_Admissible a 0 1 z ∧
+          apm_m98a06_I a z < apm_m98a06_I a y) ∧
+        ∃ z : ℝ → ℝ, apm_m98a06_Admissible a 0 1 z ∧
+          apm_m98a06_I a y < apm_m98a06_I a z) := by
+  exact
+    apm_m98A06_nonresonant_energy_geometry_of_facts_aux_energy_geometry_aux_remaining
+      hWirtinger hSine
 
 theorem apm_m98A06_nonresonant_energy_geometry_of_facts
     (hWirtinger : apm_m98A06_WirtingerFact)
