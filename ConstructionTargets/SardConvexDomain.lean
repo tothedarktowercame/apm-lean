@@ -1531,4 +1531,27 @@ theorem mem_whitneyDyadicCube_indexOf
       ((Module.finBasis ℝ E).repr x j / (2 : ℝ) ^ k) using 1 <;>
       simp [whitneyDyadicIndexOf]
 
+/-- At a fixed generation, membership determines the dyadic cube uniquely. -/
+theorem eq_whitneyDyadicIndexOf_of_mem_cube_of_generation_eq
+    {E : Type*} [AddCommGroup E] [Module ℝ E]
+    [Module.Free ℝ E] [Module.Finite ℝ E]
+    (q : WhitneyDyadicIndex E) (k : ℤ) (x : E)
+    (hqk : q.1 = k) (hx : x ∈ whitneyDyadicCube q) :
+    q = whitneyDyadicIndexOf k x := by
+  rcases q with ⟨l, m⟩
+  simp only at hqk
+  subst l
+  change (k, m) = (k, fun j =>
+    ⌊(Module.finBasis ℝ E).repr x j / (2 : ℝ) ^ k⌋)
+  congr 1
+  funext j
+  have hj := hx j
+  have hk : 0 < (2 : ℝ) ^ k := zpow_pos (by norm_num) _
+  apply Eq.symm
+  apply Int.floor_eq_iff.mpr
+  constructor
+  · exact (le_div_iff₀ hk).mpr hj.1
+  · apply (div_lt_iff₀ hk).mpr
+    convert hj.2 using 1 <;> simp [whitneyDyadicScale]
+
 end ConstructionTargets.SardConvexDomain
