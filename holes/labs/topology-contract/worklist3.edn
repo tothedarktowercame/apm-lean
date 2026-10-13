@@ -21568,15 +21568,14 @@
   {:consumer :t00J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "Frozen fixture metadata remains invalid: both authoritative acceptance copies record aad5a9cda739c1cbcceb1eca8ab8b33395db8a08c9d68941a87c644f4d13586e and omit :mode, while the compiling fixture hashes to 7e72195e1214d7580994264481ae57d0ecf87755d31825ab85cbda5f1220c4b1. Update both copies to that digest with :mode :post-build-export-check, then resubmit f0afa7bd.",
    :implements-lemma
    :lemma-constructiontargets-manifoldfundamentalclass-coefficientclosedboundary-coordinat,
    :evidence
    {:placeholder-delta {:t00J02 [1 1], :t98A02 [1 1]},
-    :residual
-    "Stop-after-two: supervisor must update both acceptance copies to 7e72195e with post-build mode, then resubmit f0afa7bd.",
+    :residual "Repair both acceptance copies, then resubmit f0afa7bd.",
     :outcome :stop,
     :warnings [],
     :missing-theorems
@@ -21592,10 +21591,13 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Second unchanged metadata boundary. The implementation commit exists and the actual 7e72195e fixture compiles, but authoritative acceptance still records aad5a9cd and omits post-build mode. The row scope permits only the Lean module; result application does not rewrite acceptance and ledger edits are forbidden.",
+    "Fresh verification confirms the theorem at f0afa7bd and the actual fixture compile, but acceptance still records aad5a9cd and omits post-build mode in both authoritative copies. The sole permitted scope is the Lean module; direct ledger edits are forbidden and no Lean change can alter reviewer metadata. Supervisor must replace both acceptance digests with 7e72195e and set :mode :post-build-export-check.",
     :commands
-    [{:cmd "hash and lake-check fixture; verify commit", :exit 0}
-     {:cmd "scan stale acceptance digests; registry check", :exit 0}],
+    [{:cmd
+      "sha256sum fixture; lake env lean fixture; verify commit; registry check; git status",
+      :exit 0}
+     {:cmd "rg stale digest in authoritative worklist copies",
+      :exit 0}],
     :commit "f0afa7bdc4c95a8c87143342ceb8c9ce51cd5612",
     :changed-paths
     ["ConstructionTargets/ManifoldFundamentalClass.lean"],
@@ -21606,7 +21608,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/manifold-fundamental-class",
    :acceptance
