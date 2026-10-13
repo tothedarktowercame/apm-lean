@@ -48,7 +48,16 @@ circle at a basepoint, project back to it) to a homotopy `reflection ≃ id`. -/
 theorem t98J01_reflection_homotopic_of_h
     (hH : ContinuousMap.Homotopic T98J01.h (ContinuousMap.id T98J01.ProductSpace)) :
     ContinuousMap.Homotopic t98J01_reflectionCM (ContinuousMap.id T98J01.S1) := by
-  sorry
+  let a : T98J01.S2 := ⟨(0, 0, 1), by norm_num⟩
+  let b : T98J01.S1 := ⟨(0, 1), by norm_num⟩
+  let inclusion : C(T98J01.S1, T98J01.ProductSpace) :=
+    ⟨fun x => (a, x, b), by fun_prop⟩
+  let projection : C(T98J01.ProductSpace, T98J01.S1) :=
+    ⟨fun x => x.2.1, by fun_prop⟩
+  have hrestricted := ContinuousMap.Homotopic.comp
+    (ContinuousMap.Homotopic.refl projection)
+    (ContinuousMap.Homotopic.comp hH (ContinuousMap.Homotopic.refl inclusion))
+  simpa [projection, inclusion, T98J01.h, t98J01_reflectionCM] using hrestricted
 -- END SEAT AREA
 
 /-- Seat: transport along the homeomorphism `(x, y) ↦ toLp ![x, y]` from the
