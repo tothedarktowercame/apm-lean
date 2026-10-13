@@ -113850,14 +113850,14 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 5,
+   :stop-count 6,
    :review-finding
    "Recorded fixture hash mismatch: :fixture.sha256 is 0bca6ce32c019fc3053c7f813c26917169cf817375b44d5e722b864b61a526450c1, but ConstructionTargets/PointWedgeVanKampen.blueprint.md at recorded commit c9b3af27 has exact SHA-256 0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0. Re-record the fixture hash for the reviewed commit.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
    :evidence
    {:placeholder-delta {:source-before 0, :source-after 0},
     :residual
-    "Use named left factors with counit naturality; then point-span, B6/B12.",
+    "Combine the two actual-span left factors via counit naturality; then point-span, B6/B12.",
     :outcome :stop,
     :warnings ["existing linter"],
     :missing-theorems
@@ -113871,9 +113871,9 @@
       :area "fundamental-group-wedge-of-circles"}],
     :statement-hashes
     {:source
-     "5b875c4d2a8324690d631dc05fa4da716178982bcc0e6c834ca37de321536018",
+     "0ef04d10b71dc0e045bc79b32160757378daf2388a5b357a46c5a2dbd2295637",
      :documentation
-     "78151849113a623abc7f1941b1d212f960e39908068b302a93f034f793950dc6",
+     "da4e29e92598df63a995be42d10aff603ea82b0a2e2ce6ae54b5fc502183961a",
      :blueprint
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0",
      :registry "142/142"},
@@ -113881,7 +113881,7 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
     :reason
-    "Left comparison split into named unit and strict-span factors in exact free-product order.",
+    "Left unit factor is now the literal actual-span image of the equivalence unit.",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/PointWedgeVanKampen.lean",
@@ -113895,19 +113895,7 @@
       "lake build ConstructionTargets.ThreeCirclesFundamentalGroup",
       :exit 1,
       :finding "B12 module absent."}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1791865469006-8412-ca7b0a6d",
-     :commands
-     ["git archive e4f182fc; lake env lean <archive>/ConstructionTargets/PointWedgeVanKampen.lean"
-      "lake build ConstructionTargets.PointWedgeVanKampen"
-      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (exit 1: declared B12 residual absent)"
-      "python3 scripts/statement-registry.py check"
-      "git diff-tree/show sha256/git grep placeholders"],
-     :finding
-     "PASS program STOP: e4f182fc is new after history, changes only scoped Lean/MD files, and commits compiled sorry-free progress. Hashes match source 5b875c4d, docs 78151849, fixture 0bca6ce3; registry 142/142; sorry/admit 0->0; new declarations use only propext, Classical.choice, Quot.sound. The named unit factor is exactly the left-equivalence unit component in the free-product target. The factor theorem has the correct order: categorical strict-factor-then-unit composition becomes unit-times-strict multiplication in the single-object groupoid, confirmed definitionally. Both sides stay in genericPointWedgeFreeProduct, so no representation boundary is hidden. Left counit naturality, point-span, B6/B12 and the final module remain explicitly listed."},
-    :commit "e4f182fc59758df53a861422952c43cc3b41bd6b",
+    :commit "98f5765df475a09a9566b4ddbca7f02c76026b13",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
      "ConstructionTargets/PointWedgeVanKampen.md"],
@@ -113917,7 +113905,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
