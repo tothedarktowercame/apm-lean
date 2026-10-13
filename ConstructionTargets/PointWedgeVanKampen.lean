@@ -7026,6 +7026,31 @@ theorem genericPointWedgeOuterRight_sourceConnector_hom_inv_id_at_basepoint :
   exact genericPointWedgeOuterRight_sourceConnector_hom_inv_id
     x₀ y₀ M N hM hN hy hx cM cN
 
+/-- The expanded four-factor normal form is reassociated so the typed
+comparator and mapped `unitInv` form one literal middle subexpression. -/
+theorem genericPointWedgeOuterRight_typedComposite_normalForm_reassociated :
+    let r := genericPointWedgeActualRight x₀ y₀ M N
+    let eK := genericPointWedgeOverlapGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let eR := genericPointWedgeRightGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let z := genericPointWedgeOverlapBase x₀ y₀ M N
+    (genericPointWedgeConnectors y₀).normalForm
+        (genericPointWedgeOuterRight_typedTransportComposite
+            x₀ y₀ M N hM hN hy hx cM cN ≫
+          (r ⋙ eR.functor).map (eK.unitInv.app z)) =
+      ((genericPointWedgeConnectors y₀).connector
+          ((genericPointWedgeCoordinateRight y₀).obj
+            (eK.functor.obj z))).hom ≫
+        (genericPointWedgeOuterRight_typedTransportComposite
+            x₀ y₀ M N hM hN hy hx cM cN ≫
+          (r ⋙ eR.functor).map (eK.unitInv.app z)) ≫
+        ((genericPointWedgeConnectors y₀).connector
+          ((r ⋙ eR.functor).obj z)).inv := by
+  dsimp only
+  rw [genericPointWedgeOuterRight_typedComposite_normalForm_expanded]
+  simp only [Category.assoc]
+
 /-- An `inl` factorization of the right-base conjugator forces its canonical
 right projection to be trivial. -/
 theorem genericPointWedgeRightBase_inl_implies_rightProjection_eq_one
@@ -7790,6 +7815,7 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeOuterRight_targetConnectorHom_eq_based
 #print axioms genericPointWedgeOuterRight_sourceConnector_hom_inv_id
 #print axioms genericPointWedgeOuterRight_sourceConnector_hom_inv_id_at_basepoint
+#print axioms genericPointWedgeOuterRight_typedComposite_normalForm_reassociated
 #print axioms genericPointWedgeRightBase_inl_implies_rightProjection_eq_one
 #print axioms genericPointWedgeLegCoordinates_of_mapped
 #print axioms genericPointWedgeLegCoordinates_iff_mapped

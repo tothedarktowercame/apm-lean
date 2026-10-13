@@ -1386,3 +1386,9 @@ forward target connector with the named based connector.
 of the remaining source connector in its exact dependent hom-set.
 `genericPointWedgeOuterRight_sourceConnector_hom_inv_id_at_basepoint` exposes
 that identity at the literal fundamental-group basepoint.
+`genericPointWedgeOuterRight_typedComposite_normalForm_reassociated` puts the
+expanded four-factor normal form in the exact association where the typed
+comparator and mapped `unitInv` are one literal middle subexpression. Applying
+their cancellation there, then aligning the endpoint transport with the two
+outer connectors, is the next step before the right-projection criterion
+closes.
