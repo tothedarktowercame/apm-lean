@@ -76416,7 +76416,7 @@
   {:consumer :t96J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 0,
    :evidence
    {:placeholder-delta 0,
     :residual
@@ -76456,6 +76456,17 @@
      {:cmd "sorry/admit/axiom scan", :exit 0, :output "0/0/0"}
      {:cmd "#print axioms skeletonArc_signed_coordinate", :exit 0}
      {:cmd "git show --check 7bf4cec33", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791850824471-8098-73cbdf2e",
+     :commands
+     ["git show/diff/hash 7bf4cec33"
+      "lake env lean ConstructionTargets/PolygonSurfacePiOne.lean"
+      "python3 scripts/statement-registry.py check"
+      "#print axioms + placeholder scan"],
+     :finding
+     "PASS on STOP after real progress: commit 7bf4cec33 defines actual points of P.skeleton from boundary arcs and proves the source quotient identifies paired arcs at pairedParameter; it then aligns that equality with the previously proved signed wedge-coordinate equality. Global boundary-arc coverage, quotient continuity/bijectivity, and the resulting homeomorphism remain explicitly partial, so no facade is claimed complete. Scope is exact; fixture SHA-256 c0f007b5...cda95 and blob 88b22f08...054f0 match. Fresh Lean/registry gates pass (131/0), placeholders are 0, and new results use only propext, Classical.choice, Quot.sound."},
     :commit "7bf4cec33",
     :changed-paths ["ConstructionTargets/PolygonSurfacePiOne.lean"],
     :fixture
@@ -76464,7 +76475,7 @@
      "c0f007b50c1f2789e476b5bdad866e07fbb36a33280f16cc3c9b29c0843cda95"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope ["ConstructionTargets/PolygonSurfacePiOne.lean"],
    :dag-node "ConstructionTargets/PolygonSurfacePiOne.blueprint.md/B7",
    :acceptance
@@ -86731,7 +86742,7 @@
    :other-consumers [:t92J05 :t94J04 :t97A01 :t97A03]}
   {:consumer :t96J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "PairingData.skeletonArc_signed_coordinate",
@@ -86743,7 +86754,9 @@
     :type
     "paired actual skeleton arcs and signed wedge coordinates agree",
     :area "polygon-surface-pi1",
-    :proved-in :routes-2026-10-12-polygon-b7-topo2-r1},
+    :proved-in :routes-2026-10-12-polygon-b7-topo2-r1,
+    :banked-by :routes-2026-10-12-polygon-b7-topo2-r1,
+    :banked-commit "7bf4cec33"},
    :id :lemma-pairingdata-skeletonarc-signed-coordinate,
    :kind :lemma,
    :depends-on [:lemma-pairingdata-signedwedgearc-pair],
