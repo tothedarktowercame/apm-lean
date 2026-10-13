@@ -113850,14 +113850,14 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 3,
+   :stop-count 4,
    :review-finding
    "Recorded fixture hash mismatch: :fixture.sha256 is 0bca6ce32c019fc3053c7f813c26917169cf817375b44d5e722b864b61a526450c1, but ConstructionTargets/PointWedgeVanKampen.blueprint.md at recorded commit c9b3af27 has exact SHA-256 0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0. Re-record the fixture hash for the reviewed commit.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
    :evidence
    {:placeholder-delta {:source-before 0, :source-after 0},
     :residual
-    "Prove counit conjugation fixes each left injection via the comparison square; then B6/B12.",
+    "Derive counit-element/left-injection commutation from the typed comparison square; then B6/B12.",
     :outcome :stop,
     :warnings ["existing linter"],
     :missing-theorems
@@ -113871,9 +113871,9 @@
       :area "fundamental-group-wedge-of-circles"}],
     :statement-hashes
     {:source
-     "c479bdc7ef72477ef5fdefec54b61418a88f22c339fc3757446ffa2eb6300561",
+     "ddf7f5cda0a81fc677b01fcdf71c70b3cfc8258c97b76c1dbe89bee79c751bed",
      :documentation
-     "09eaf451ea2f3586777fd8ff676f5b04993718e7bb6de76a32b0b970921f4339",
+     "165a043a117e10d10e9b52d162d9804b5c680d518f5b15e9f5111204aabe377b",
      :blueprint
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0",
      :registry "147/147"},
@@ -113881,7 +113881,7 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
     :reason
-    "Transported the B6 left action through B5 and isolated its counit-normalization fixed-point equation.",
+    "Reduced the B6 normalized left-leg equation to commutation of the B3 counit element with every left injection.",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/PointWedgeVanKampen.lean",
@@ -113894,19 +113894,8 @@
     [{:cmd
       "lake build ConstructionTargets.ThreeCirclesFundamentalGroup",
       :exit 1,
-      :finding "B12 file absent."}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1791883080884-9275-a2298130",
-     :commands
-     ["git show/diff e39e3086^..e39e3086"
-      "git archive e39e3086; lake env lean archived PointWedgeVanKampen.lean"
-      "statement-registry check; recorded-tree sha256; placeholders; diff-tree"
-      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (expected absent)"],
-     :finding
-     "PASS program STOP: e39e3086 is new after history and adds compiled, sorry-free B6 progress. The first theorem unfolds the normalized equivalence and correctly transports the already-typed left action to counitNormalization(inl g); the iff then isolates, without assuming, the exact remaining fixed-point equation. It does not hide the unresolved counit proof behind a facade or cross an unsafe representation boundary. Scope is Lean+notes; hashes match source c479bdc7, notes 09eaf451, blueprint 0bca6ce3; placeholders 0->0; registry 147/147; standard axioms only. Residual counit conjugation, then B6/B12, is explicit; B12 remains absent."},
-    :commit "e39e3086f760df01669290d3866cc8b5940ad2f8",
+      :finding "B12 absent."}],
+    :commit "06eae79e5bbc3d05a46f61426b8d8b21cd5946f5",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
      "ConstructionTargets/PointWedgeVanKampen.md"],
@@ -113916,7 +113905,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
