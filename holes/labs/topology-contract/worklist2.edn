@@ -76774,13 +76774,13 @@
   {:consumer :t96J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :evidence
    {:terminal true,
     :placeholder-delta 0,
     :residual
     "Specification repair only: require Nonempty L or adjoin a basepoint.",
-    :stop-count 34,
+    :stop-count 35,
     :outcome :stop,
     :warnings ["preexisting lints" "invalid owner-reopen"],
     :missing-theorems [],
@@ -76798,17 +76798,6 @@
       :exit 0}
      {:cmd "statement-registry check", :exit 0}
      {:cmd "git show --check 8ff5cb54a", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1791885908539-9385-0db07d9f",
-     :commands
-     ["scope/SHA/blob checks at 34d5fe3e4"
-      "recorded blob | lake env lean /dev/stdin"
-      "statement-registry.py check (131/0)"
-      "placeholder scan"],
-     :finding
-     "Valid STOP with compiled refutation. One-file scope and frozen hashes match; recorded blob compiles; placeholders 0; registry 131/0; standard axioms only. Frozen B8 permits L=Empty and claims a based trivial-group case, but FiniteWedge Empty is a quotient of Empty x Circle and has no point; the commit proves it is not Nonempty. Repair: require Nonempty L or adjoin a basepoint before B8/B9."},
     :commit "8ff5cb54a",
     :counterexample
     "PointWedgeQuotient.finiteWedge_empty_not_nonempty",
@@ -76819,10 +76808,10 @@
      :sha256
      "8bb4cf5d53c64717292de2cab25decbc62907fcc988a8052958bc0148f881904"},
     :finding
-    "Thirty-fourth repeated STOP; scheduler reset outer stop-count despite reviewed terminal evidence and no missing lemmas.",
+    "Thirty-fifth repeated STOP; scheduler reset outer stop-count despite reviewed terminal evidence and no missing lemmas.",
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/PolygonSurfacePiOne.lean"],
    :dag-node "ConstructionTargets/PolygonSurfacePiOne.blueprint.md/B8",
    :acceptance
