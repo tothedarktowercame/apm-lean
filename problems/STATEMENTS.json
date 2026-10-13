@@ -31,6 +31,23 @@
    "rev": "573847ac4",
    "approved_at": "2026-10-13T04:19:30Z"
   },
+  "a97J08": {
+   "decls": [
+    "apm_a97j08"
+   ],
+   "sha256": "39884ec9f4caff915a5ab546d3d3107faf910767e191d4d3639fdb57c7a5e63c",
+   "defs": [
+    "apm_a97j08_curveImage",
+    "apm_a97j08_curveInterior",
+    "apm_a97j08_zeroCount"
+   ],
+   "grade": "faithful",
+   "grader": "claude-14 outside grader (read-only Claude subagent, 2026-10-13)",
+   "evidence": "holes/labs/statement-registry/a97J08-grade.md",
+   "prelim_defect": null,
+   "rev": "0d99d4b2f",
+   "approved_at": "2026-10-13T14:12:41Z"
+  },
   "b96A01": {
    "decls": [
     "apm_b96a01"

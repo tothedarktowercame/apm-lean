@@ -1789,21 +1789,1968 @@ lemma apm_a97j08_not_nullhomotopic_of_radial_homotopy
   apm_a97j08_not_nullhomotopic_of_circle_homotopyLeftInverse c
     (apm_a97j08_radialMap D z hz) hdegree
 
-/-- The exact missing planar separation theorem: a bounded complementary
-component produces a noncontractible circle in the domain subtype.  A
-degree-one circle detected by `apm_a97j08_radialMap` is one concrete way to
-supply this weakest sufficient certificate. -/
+def apm_a97j08_GridInput
+    (D : Set ℂ) (z : ℂ) (R δ : ℝ) (A B : Set ℂ) : Prop :=
+    0 < R ∧ 0 < δ ∧ z ∈ A ∧
+    IsCompact A ∧ IsCompact B ∧
+    connectedComponentIn Dᶜ z ⊆ A ∧
+    Dᶜ ∩ Metric.closedBall 0 R = A ∪ B ∧
+    Disjoint A B ∧
+    (∀ a ∈ A, ∀ b ∈ B, δ ≤ dist a b) ∧
+    A ⊆ Metric.ball 0 (R - δ)
+
+def apm_a97j08_ClopenSeparationFact
+    (D : Set ℂ) (z : ℂ) : Prop :=
+  ∃ R δ : ℝ, ∃ A B : Set ℂ, apm_a97j08_GridInput D z R δ A B
+
+def apm_a97j08_gridSquare (shift : ℂ) (δ : ℝ) (q : ℤ × ℤ) : Set ℂ :=
+  {w | shift.re + q.1 * δ ≤ w.re ∧ w.re ≤ shift.re + (q.1 + 1) * δ ∧
+    shift.im + q.2 * δ ≤ w.im ∧ w.im ≤ shift.im + (q.2 + 1) * δ}
+
+def apm_a97j08_IsGridRegion
+    (A B : Set ℂ) (R δ : ℝ) (z : ℂ) (U : Set ℂ) : Prop :=
+  ∃ shift : ℂ, ∃ Q : Finset (ℤ × ℤ),
+    U = ⋃ q ∈ Q, apm_a97j08_gridSquare shift δ q ∧
+    z ∈ interior U ∧ A ⊆ interior U ∧ Disjoint U B ∧
+    U ⊆ Metric.closedBall 0 R ∧
+    z.re ∉ {x | ∃ k : ℤ, x = shift.re + k * δ} ∧
+    z.im ∉ {y | ∃ k : ℤ, y = shift.im + k * δ}
+
+/-! ### Grid winding: lattice edges, angle steps, cycles
+
+A lattice edge is an ordered pair of lattice vertices.  Each grid square
+contributes its four counterclockwise edges; the boundary edges of a finite
+family of squares are those whose reverse is not also a square edge.  Seen from
+`z`, an oriented segment `[p, q]` turns through `arg ((q - z) / (p - z))`; when
+the segment misses `z` this is the exact angle swept, so sums of these steps
+around closed polygons are winding numbers times `2π`. -/
+
+def apm_a97j08_gridVertex (shift : ℂ) (δ : ℝ) (v : ℤ × ℤ) : ℂ :=
+  shift + (((v.1 : ℝ) * δ : ℝ) : ℂ) + (((v.2 : ℝ) * δ : ℝ) : ℂ) * Complex.I
+
+def apm_a97j08_squareEdges (q : ℤ × ℤ) : Finset ((ℤ × ℤ) × (ℤ × ℤ)) :=
+  {((q.1, q.2), (q.1 + 1, q.2)), ((q.1 + 1, q.2), (q.1 + 1, q.2 + 1)),
+    ((q.1 + 1, q.2 + 1), (q.1, q.2 + 1)), ((q.1, q.2 + 1), (q.1, q.2))}
+
+def apm_a97j08_allEdges (Q : Finset (ℤ × ℤ)) : Finset ((ℤ × ℤ) × (ℤ × ℤ)) :=
+  Q.biUnion apm_a97j08_squareEdges
+
+def apm_a97j08_boundaryEdges (Q : Finset (ℤ × ℤ)) : Finset ((ℤ × ℤ) × (ℤ × ℤ)) :=
+  (apm_a97j08_allEdges Q).filter fun e => e.swap ∉ apm_a97j08_allEdges Q
+
+noncomputable def apm_a97j08_angleStep (z p q : ℂ) : ℝ :=
+  Complex.arg ((q - z) / (p - z))
+
+noncomputable def apm_a97j08_edgeAngle (z shift : ℂ) (δ : ℝ)
+    (e : (ℤ × ℤ) × (ℤ × ℤ)) : ℝ :=
+  apm_a97j08_angleStep z (apm_a97j08_gridVertex shift δ e.1)
+    (apm_a97j08_gridVertex shift δ e.2)
+
+/-- The closing edge list `(c₀,c₁), …, (cₙ₋₁,c₀)` of a cyclic vertex list. -/
+def apm_a97j08_cycleEdges {V : Type*} (c : List V) : List (V × V) :=
+  c.zip (c.rotate 1)
+
+noncomputable def apm_a97j08_cycleSum {V : Type*} (f : V × V → ℝ) (c : List V) : ℝ :=
+  ((apm_a97j08_cycleEdges c).map f).sum
+
+def apm_a97j08_Balanced {V : Type*} [DecidableEq V] (E : Finset (V × V)) : Prop :=
+  ∀ v : V, (E.filter fun e => e.1 = v).card = (E.filter fun e => e.2 = v).card
+
+lemma apm_a97j08_clopen_separation_of_bounded_component_aux_radius
+    (D : Set ℂ) {z : ℂ}
+    (hzbounded : Bornology.IsBounded (connectedComponentIn Dᶜ z)) :
+    ∃ R : ℝ, 1 < R ∧
+      connectedComponentIn Dᶜ z ⊆ Metric.ball 0 (R - 1) := by
+  obtain ⟨C, hC⟩ := hzbounded.exists_norm_le
+  let R : ℝ := max C 0 + 2
+  refine ⟨R, by dsimp [R]; linarith [le_max_right C 0], ?_⟩
+  intro x hx
+  rw [Metric.mem_ball, dist_zero_right]
+  have hxC := hC x hx
+  dsimp [R]
+  linarith [le_max_left C 0]
+
+lemma apm_a97j08_clopen_separation_of_bounded_component_aux_truncation
+    (D : Set ℂ) (hD_open : IsOpen D) {z : ℂ} (R : ℝ) (hR : 1 < R)
+    (hKR : connectedComponentIn Dᶜ z ⊆ Metric.ball 0 (R - 1)) :
+    IsCompact (Dᶜ ∩ Metric.closedBall 0 R) ∧
+      connectedComponentIn Dᶜ z ⊆ Dᶜ ∩ Metric.closedBall 0 R ∧
+      Disjoint (connectedComponentIn Dᶜ z)
+        ((Dᶜ ∩ Metric.closedBall 0 R) ∩ Metric.sphere 0 R) := by
+  have hX : IsCompact (Dᶜ ∩ Metric.closedBall 0 R) :=
+    (isCompact_closedBall (0 : ℂ) R).inter_left hD_open.isClosed_compl
+  refine ⟨hX, ?_, ?_⟩
+  · intro x hx
+    refine ⟨connectedComponentIn_subset Dᶜ z hx, ?_⟩
+    have hb := hKR hx
+    rw [Metric.mem_ball] at hb
+    rw [Metric.mem_closedBall]
+    linarith
+  · rw [Set.disjoint_left]
+    intro x hxK hxS
+    have hb := hKR hxK
+    rw [Metric.mem_ball] at hb
+    have hs := hxS.2
+    rw [Metric.mem_sphere] at hs
+    linarith
+
+/-- Compact-Hausdorff quasi-component separation inside a sufficiently large
+closed ball.  The selected clopen neighbourhood contains the full component
+and misses the truncation sphere. -/
+lemma apm_a97j08_clopen_separation_of_bounded_component_aux_clopen
+    (D : Set ℂ) (hD_open : IsOpen D) {z : ℂ} (hz : z ∈ Dᶜ)
+    (hzbounded : Bornology.IsBounded (connectedComponentIn Dᶜ z)) :
+    ∃ R : ℝ, 1 < R ∧ ∃ A B : Set ℂ,
+      IsCompact A ∧ IsCompact B ∧
+      connectedComponentIn Dᶜ z ⊆ A ∧ z ∈ A ∧
+      Dᶜ ∩ Metric.closedBall 0 R = A ∪ B ∧ Disjoint A B ∧
+      A ⊆ Metric.ball 0 R := by
+  obtain ⟨R, hR, hKR⟩ :=
+    apm_a97j08_clopen_separation_of_bounded_component_aux_radius D hzbounded
+  obtain ⟨hXc, hKX, hKS⟩ :=
+    apm_a97j08_clopen_separation_of_bounded_component_aux_truncation
+      D hD_open R hR hKR
+  let X : Set ℂ := Dᶜ ∩ Metric.closedBall 0 R
+  have hzK : z ∈ connectedComponentIn Dᶜ z := mem_connectedComponentIn hz
+  have hzX : z ∈ X := hKX hzK
+  let zX : X := ⟨z, hzX⟩
+  letI : CompactSpace X := isCompact_iff_compactSpace.mp hXc
+  let S : Set X := {w | (w : ℂ) ∈ Metric.sphere 0 R}
+  have hSc : IsCompact S :=
+    (isClosed_sphere.preimage continuous_subtype_val).isCompact
+  have hcomp : connectedComponentIn X z = connectedComponentIn Dᶜ z := by
+    apply Set.Subset.antisymm
+    · exact connectedComponentIn_mono z inter_subset_left
+    · exact isPreconnected_connectedComponentIn.subset_connectedComponentIn hzK hKX
+  have hSint : S ∩ connectedComponent zX = ∅ := by
+    rw [Set.eq_empty_iff_forall_notMem]
+    rintro w ⟨hwS, hwC⟩
+    have hwK : (w : ℂ) ∈ connectedComponentIn Dᶜ z := by
+      rw [← hcomp, connectedComponentIn_eq_image hzX]
+      exact ⟨w, hwC, rfl⟩
+    exact Set.disjoint_left.mp hKS hwK ⟨w.property, hwS⟩
+  let ι := {s : Set X // IsClopen s ∧ zX ∈ s}
+  have hall : S ∩ ⋂ s : ι, (s : Set X) = ∅ := by
+    simpa [connectedComponent_eq_iInter_isClopen] using hSint
+  obtain ⟨F, hF⟩ := hSc.elim_finite_subfamily_closed
+    (fun s : ι ↦ (s : Set X)) (fun s ↦ s.2.1.isClosed) hall
+  let U : Set X := ⋂ s ∈ F, (s : Set X)
+  have hU : IsClopen U := isClopen_biInter_finset fun s _ ↦ s.2.1
+  have hzU : zX ∈ U := Set.mem_iInter₂.mpr fun s _ ↦ s.2.2
+  have hSU : S ∩ U = ∅ := hF
+  let A : Set ℂ := Subtype.val '' U
+  let B : Set ℂ := Subtype.val '' Uᶜ
+  refine ⟨R, hR, A, B, ?_, ?_, ?_, ?_, ?_, ?_, ?_⟩
+  · exact hU.isClosed.isCompact.image continuous_subtype_val
+  · exact hU.compl.isClosed.isCompact.image continuous_subtype_val
+  · intro w hw
+    have hwX : w ∈ X := hKX hw
+    have hwC : (⟨w, hwX⟩ : X) ∈ connectedComponent zX := by
+      have hi : w ∈ Subtype.val '' connectedComponent zX := by
+        rw [← connectedComponentIn_eq_image hzX, hcomp]
+        exact hw
+      obtain ⟨u, hu, huw⟩ := hi
+      have hueq : u = (⟨w, hwX⟩ : X) := Subtype.ext huw
+      simpa [hueq] using hu
+    exact ⟨⟨w, hwX⟩, hU.connectedComponent_subset hzU hwC, rfl⟩
+  · exact ⟨zX, hzU, rfl⟩
+  · apply Set.Subset.antisymm
+    · intro w hw
+      let wx : X := ⟨w, hw⟩
+      by_cases h : wx ∈ U
+      · exact Set.mem_union_left _ ⟨wx, h, rfl⟩
+      · exact Set.mem_union_right _ ⟨wx, h, rfl⟩
+    · exact Set.union_subset
+        (Set.image_subset_iff.mpr fun w _ ↦ w.property)
+        (Set.image_subset_iff.mpr fun w _ ↦ w.property)
+  · rw [Set.disjoint_left]
+    rintro w ⟨a, ha, rfl⟩ ⟨b, hb, hab⟩
+    have : b = a := Subtype.ext hab
+    subst b
+    exact hb ha
+  · rintro w ⟨wx, hwU, rfl⟩
+    rw [Metric.mem_ball, dist_zero_right]
+    have hwclosed := wx.property.2
+    rw [Metric.mem_closedBall, dist_zero_right] at hwclosed
+    exact lt_of_le_of_ne hwclosed fun heq ↦ by
+      have hwS : wx ∈ S := by
+        change dist (wx : ℂ) 0 = R
+        simpa [dist_comm] using heq
+      exact (Set.eq_empty_iff_forall_notMem.mp hSU wx) ⟨hwS, hwU⟩
+
+lemma apm_a97j08_clopen_separation_of_bounded_component_aux_margin
+    (D : Set ℂ) {z : ℂ} {R : ℝ} (hR : 1 < R) {A B : Set ℂ}
+    (hA : IsCompact A) (hB : IsCompact B)
+    (hcomp : connectedComponentIn Dᶜ z ⊆ A) (hzA : z ∈ A)
+    (hcover : Dᶜ ∩ Metric.closedBall 0 R = A ∪ B) (hdisj : Disjoint A B)
+    (hball : A ⊆ Metric.ball 0 R) :
+    apm_a97j08_ClopenSeparationFact D z := by
+  -- separation constant between `A` and `B`
+  obtain ⟨δ₁, hδ₁, hsep⟩ : ∃ δ₁ : ℝ, 0 < δ₁ ∧ ∀ a ∈ A, ∀ b ∈ B, δ₁ ≤ dist a b := by
+    rcases (A ×ˢ B).eq_empty_or_nonempty with h | h
+    · refine ⟨1, one_pos, fun a ha b hb => ?_⟩
+      exact absurd (Set.mk_mem_prod ha hb) (h ▸ Set.notMem_empty _)
+    · obtain ⟨p, hp, hmin⟩ := (hA.prod hB).exists_isMinOn h
+        (continuous_dist.continuousOn)
+      refine ⟨dist p.1 p.2, dist_pos.mpr fun hEq => ?_, fun a ha b hb => ?_⟩
+      · exact Set.disjoint_left.mp hdisj hp.1 (hEq ▸ hp.2)
+      · exact hmin (Set.mk_mem_prod ha hb)
+  -- radial margin of `A` inside the open ball
+  obtain ⟨δ₂, hδ₂, hmar⟩ : ∃ δ₂ : ℝ, 0 < δ₂ ∧ ∀ a ∈ A, ‖a‖ < R - δ₂ := by
+    obtain ⟨m, hm, hmax⟩ := hA.exists_isMaxOn ⟨z, hzA⟩ continuous_norm.continuousOn
+    have hmR : ‖m‖ < R := by simpa using hball hm
+    refine ⟨(R - ‖m‖) / 2, by linarith, fun a ha => ?_⟩
+    have := hmax ha
+    simp only [Set.mem_setOf_eq] at this
+    linarith
+  refine ⟨R, min δ₁ δ₂, A, B, by linarith, lt_min hδ₁ hδ₂, hzA, hA, hB, hcomp, hcover,
+    hdisj, fun a ha b hb => (min_le_left _ _).trans (hsep a ha b hb), fun a ha => ?_⟩
+  rw [Metric.mem_ball, dist_zero_right]
+  linarith [hmar a ha, min_le_right δ₁ δ₂]
+
+theorem apm_a97j08_clopen_separation_of_bounded_component
+    (D : Set ℂ) (hD_open : IsOpen D)
+    {z : ℂ} (hz : z ∈ Dᶜ)
+    (hzbounded : Bornology.IsBounded (connectedComponentIn Dᶜ z)) :
+    apm_a97j08_ClopenSeparationFact D z := by
+  obtain ⟨R, hR, A, B, hA, hB, hcomp, hzA, hcover, hdisj, hball⟩ :=
+    apm_a97j08_clopen_separation_of_bounded_component_aux_clopen D hD_open hz hzbounded
+  exact apm_a97j08_clopen_separation_of_bounded_component_aux_margin
+    D hR hA hB hcomp hzA hcover hdisj hball
+
+lemma apm_a97j08_grid_region_construction_aux_shrink
+    (D : Set ℂ) (z : ℂ) (R δ : ℝ) (A B : Set ℂ)
+    (h : apm_a97j08_GridInput D z R δ A B) :
+    apm_a97j08_GridInput D z R (δ / 4) A B := by
+  rcases h with ⟨hR, hδ, hz, hAc, hBc, hcomp, hdecomp, hAB, hsep, hball⟩
+  refine ⟨hR, by positivity, hz, hAc, hBc, hcomp, hdecomp, hAB, ?_, ?_⟩
+  · intro a ha b hb
+    exact (by linarith : δ / 4 ≤ δ).trans (hsep a ha b hb)
+  · intro a ha
+    have hmem := hball ha
+    rw [Metric.mem_ball] at hmem ⊢
+    linarith
+
+lemma apm_a97j08_grid_region_construction_aux_shift
+    (z : ℂ) {δ : ℝ} (hδ : 0 < δ) :
+    let shift : ℂ := z - ((δ / 2 : ℝ) : ℂ) * (1 + Complex.I)
+    z.re ∉ {x | ∃ k : ℤ, x = shift.re + k * δ} ∧
+      z.im ∉ {y | ∃ k : ℤ, y = shift.im + k * δ} := by
+  dsimp
+  constructor <;> rintro ⟨k, hk⟩
+  · have hcast : (k : ℝ) = 1 / 2 := by
+      simp only [map_sub, Complex.sub_re, Complex.mul_re, Complex.ofReal_re,
+        Complex.ofReal_im, Complex.add_re, Complex.one_re, Complex.I_re,
+        zero_mul, mul_zero, add_zero, Complex.sub_im, Complex.add_im,
+        Complex.one_im, Complex.I_im, zero_add] at hk
+      apply (mul_left_cancel₀ (ne_of_gt hδ))
+      nlinarith
+    have hkreal : (2 : ℝ) * (k : ℝ) = 1 := by nlinarith [hcast]
+    have hkint : (2 * k : ℤ) = 1 := by exact_mod_cast hkreal
+    omega
+  · have hcast : (k : ℝ) = 1 / 2 := by
+      simp only [map_sub, Complex.sub_re, Complex.mul_re, Complex.ofReal_re,
+        Complex.ofReal_im, Complex.add_re, Complex.one_re, Complex.I_re,
+        zero_mul, mul_zero, add_zero, Complex.sub_im, Complex.add_im,
+        Complex.one_im, Complex.I_im, zero_add] at hk
+      apply (mul_left_cancel₀ (ne_of_gt hδ))
+      nlinarith
+    have hkreal : (2 : ℝ) * (k : ℝ) = 1 := by nlinarith [hcast]
+    have hkint : (2 * k : ℤ) = 1 := by exact_mod_cast hkreal
+    omega
+
+-- (P1) Every point lies in some lattice square.
+lemma apm_a97j08_grid_region_construction_aux_mem_square (s : ℂ) {ε : ℝ} (hε : 0 < ε)
+    (w : ℂ) : ∃ q : ℤ × ℤ, w ∈ apm_a97j08_gridSquare s ε q := by
+  let m : ℤ := ⌊(w.re - s.re) / ε⌋
+  let n : ℤ := ⌊(w.im - s.im) / ε⌋
+  refine ⟨(m, n), ?_⟩
+  simp only [apm_a97j08_gridSquare, Set.mem_setOf_eq]
+  have hm₀ : (m : ℝ) ≤ (w.re - s.re) / ε := by
+    exact Int.floor_le _
+  have hm₁ : (w.re - s.re) / ε < (m : ℝ) + 1 := by
+    exact Int.lt_floor_add_one _
+  have hn₀ : (n : ℝ) ≤ (w.im - s.im) / ε := by
+    exact Int.floor_le _
+  have hn₁ : (w.im - s.im) / ε < (n : ℝ) + 1 := by
+    exact Int.lt_floor_add_one _
+  constructor
+  · rw [le_div_iff₀ hε] at hm₀
+    linarith
+  constructor
+  · have := (div_lt_iff₀ hε).mp hm₁
+    push_cast
+    linarith
+  constructor
+  · rw [le_div_iff₀ hε] at hn₀
+    linarith
+  · have := (div_lt_iff₀ hε).mp hn₁
+    push_cast
+    linarith
+
+-- (P2) Two points of one lattice square are within `2ε`.
+lemma apm_a97j08_grid_region_construction_aux_square_dist (s : ℂ) {ε : ℝ} (hε : 0 < ε)
+    (q : ℤ × ℤ) {u w : ℂ} (hu : u ∈ apm_a97j08_gridSquare s ε q)
+    (hw : w ∈ apm_a97j08_gridSquare s ε q) : dist u w ≤ 2 * ε := by
+  rcases hu with ⟨hu₁, hu₂, hu₃, hu₄⟩
+  rcases hw with ⟨hw₁, hw₂, hw₃, hw₄⟩
+  have hre : |u.re - w.re| ≤ ε := by
+    rw [abs_le]
+    constructor <;> norm_num at hu₂ hw₂ hu₄ hw₄ ⊢ <;> linarith
+  have him : |u.im - w.im| ≤ ε := by
+    rw [abs_le]
+    constructor <;> norm_num at hu₂ hw₂ hu₄ hw₄ ⊢ <;> linarith
+  calc
+    dist u w = ‖u - w‖ := dist_eq_norm u w
+    _ ≤ |(u - w).re| + |(u - w).im| := Complex.norm_le_abs_re_add_abs_im _
+    _ ≤ 2 * ε := by
+      rw [Complex.sub_re, Complex.sub_im]
+      linarith
+
+-- (P3) Only finitely many lattice squares meet a bounded set.
+lemma apm_a97j08_grid_region_construction_aux_finite (s : ℂ) {ε : ℝ} (hε : 0 < ε)
+    (T : Set ℂ) (hT : Bornology.IsBounded T) :
+    ∃ Q : Finset (ℤ × ℤ), ∀ q, q ∈ Q ↔ (apm_a97j08_gridSquare s ε q ∩ T).Nonempty := by
+  classical
+  obtain ⟨M, hM⟩ := hT.subset_closedBall (0 : ℂ)
+  obtain ⟨N : ℕ, hN⟩ := exists_nat_gt
+    (max ((M + |s.re| + ε) / ε) ((M + |s.im| + ε) / ε))
+  let S : Set (ℤ × ℤ) :=
+    {q | (apm_a97j08_gridSquare s ε q ∩ T).Nonempty}
+  have hsub : S ⊆ (Set.Icc (-(N : ℤ)) (N : ℤ) ×ˢ Set.Icc (-(N : ℤ)) (N : ℤ)) := by
+    intro q hq
+    obtain ⟨w, hwq, hwT⟩ := hq
+    have hwnorm : ‖w‖ ≤ M := by
+      have := hM hwT
+      simpa [Metric.mem_closedBall, dist_zero_right] using this
+    have hwre : |w.re| ≤ M := (Complex.abs_re_le_norm w).trans hwnorm
+    have hwim : |w.im| ≤ M := (Complex.abs_im_le_norm w).trans hwnorm
+    have hqr := hwq
+    change s.re + (q.1 : ℝ) * ε ≤ w.re ∧
+      w.re ≤ s.re + ((q.1 : ℝ) + 1) * ε ∧
+      s.im + (q.2 : ℝ) * ε ≤ w.im ∧
+      w.im ≤ s.im + ((q.2 : ℝ) + 1) * ε at hqr
+    have hNre : (M + |s.re| + ε) / ε < N :=
+      lt_of_le_of_lt (le_max_left _ _) hN
+    have hNim : (M + |s.im| + ε) / ε < N :=
+      lt_of_le_of_lt (le_max_right _ _) hN
+    have hq1loR : -(N : ℝ) < (q.1 : ℝ) := by
+      have hsre : s.re ≤ |s.re| := le_abs_self _
+      have hwrel : -M ≤ w.re := (neg_le_of_abs_le hwre)
+      have hNre' := (div_lt_iff₀ hε).mp hNre
+      by_contra hn
+      have hmul := mul_le_mul_of_nonneg_right (le_of_not_gt hn) hε.le
+      ring_nf at hmul hNre' hqr
+      linarith [hqr.2.1]
+    have hq1hiR : (q.1 : ℝ) < N := by
+      have hsre : -|s.re| ≤ s.re := neg_abs_le _
+      have hwreu : w.re ≤ M := (le_of_abs_le hwre)
+      have hNre' := (div_lt_iff₀ hε).mp hNre
+      by_contra hn
+      have hmul := mul_le_mul_of_nonneg_right (le_of_not_gt hn) hε.le
+      ring_nf at hmul hNre' hqr
+      linarith [hqr.1]
+    have hq2loR : -(N : ℝ) < (q.2 : ℝ) := by
+      have hsim : s.im ≤ |s.im| := le_abs_self _
+      have hwiml : -M ≤ w.im := neg_le_of_abs_le hwim
+      have hNim' := (div_lt_iff₀ hε).mp hNim
+      by_contra hn
+      have hmul := mul_le_mul_of_nonneg_right (le_of_not_gt hn) hε.le
+      ring_nf at hmul hNim' hqr
+      linarith [hqr.2.2.2]
+    have hq2hiR : (q.2 : ℝ) < N := by
+      have hsim : -|s.im| ≤ s.im := neg_abs_le _
+      have hwimu : w.im ≤ M := le_of_abs_le hwim
+      have hNim' := (div_lt_iff₀ hε).mp hNim
+      by_contra hn
+      have hmul := mul_le_mul_of_nonneg_right (le_of_not_gt hn) hε.le
+      ring_nf at hmul hNim' hqr
+      linarith [hqr.2.2.1]
+    exact ⟨⟨by exact_mod_cast hq1loR.le, by exact_mod_cast hq1hiR.le⟩,
+      ⟨by exact_mod_cast hq2loR.le, by exact_mod_cast hq2hiR.le⟩⟩
+  let box : Finset (ℤ × ℤ) :=
+    Finset.Icc (-(N : ℤ)) (N : ℤ) ×ˢ Finset.Icc (-(N : ℤ)) (N : ℤ)
+  let Q := box.filter fun q ↦ (apm_a97j08_gridSquare s ε q ∩ T).Nonempty
+  refine ⟨Q, fun q ↦ ?_⟩
+  simp only [Q, Finset.mem_filter]
+  constructor
+  · exact fun h ↦ h.2
+  · intro hq
+    refine ⟨?_, hq⟩
+    have hb := hsub (show q ∈ S by exact hq)
+    rcases hb with ⟨hlo, hhi⟩
+    simp only [box, Finset.mem_product, Finset.mem_Icc]
+    exact ⟨hlo, hhi⟩
+
+lemma apm_a97j08_grid_region_construction_aux_cover
+    (D : Set ℂ) (z : ℂ) (R δ : ℝ) (A B : Set ℂ)
+    (h : apm_a97j08_GridInput D z R δ A B) :
+    ∃ U : Set ℂ, apm_a97j08_IsGridRegion A B R (δ / 4) z U := by
+  obtain ⟨hR, hδ, hzA, -, -, -, -, -, hsep, hmargin⟩ := h
+  set ε := δ / 4 with hεdef
+  have hε : 0 < ε := by positivity
+  set s : ℂ := z - ((ε / 2 : ℝ) : ℂ) * (1 + Complex.I) with hs
+  have hsh := apm_a97j08_grid_region_construction_aux_shift z hε
+  set T : Set ℂ := {w | ∃ a ∈ A, dist w a ≤ ε} with hT
+  have hTb : Bornology.IsBounded T := by
+    refine (Metric.isBounded_closedBall (x := (0 : ℂ)) (r := R)).subset ?_
+    rintro w ⟨a, ha, hwa⟩
+    have := hmargin ha
+    rw [Metric.mem_ball, dist_zero_right] at this
+    rw [Metric.mem_closedBall, dist_zero_right]
+    have : ‖w‖ ≤ ‖a‖ + dist w a := by
+      have := norm_le_norm_add_norm_sub' w a
+      rw [dist_eq_norm]; linarith [norm_sub_rev w a]
+    linarith
+  obtain ⟨Q, hQ⟩ := apm_a97j08_grid_region_construction_aux_finite s hε T hTb
+  set U := ⋃ q ∈ Q, apm_a97j08_gridSquare s ε q with hU
+  have hTU : T ⊆ U := by
+    intro w hw
+    obtain ⟨q, hq⟩ := apm_a97j08_grid_region_construction_aux_mem_square s hε w
+    exact Set.mem_biUnion ((hQ q).mpr ⟨w, hq, hw⟩) hq
+  have hAU : A ⊆ interior U := by
+    intro a ha
+    have hball : Metric.ball a ε ⊆ U := fun w hw =>
+      hTU ⟨a, ha, (Metric.mem_ball.mp hw).le⟩
+    exact interior_maximal hball Metric.isOpen_ball (Metric.mem_ball_self hε)
+  -- every point of `U` is within `3ε` of `A`
+  have hnear : ∀ u ∈ U, ∃ a ∈ A, dist u a ≤ 3 * ε := by
+    intro u hu
+    obtain ⟨q, hqQ, hu⟩ := Set.mem_iUnion₂.mp hu
+    obtain ⟨w, hwq, a, ha, hwa⟩ := (hQ q).mp hqQ
+    refine ⟨a, ha, ?_⟩
+    have := apm_a97j08_grid_region_construction_aux_square_dist s hε q hu hwq
+    linarith [dist_triangle u w a]
+  refine ⟨U, s, Q, rfl, hAU hzA, hAU, ?_, ?_, hsh.1, hsh.2⟩
+  · rw [Set.disjoint_left]
+    intro u hu huB
+    obtain ⟨a, ha, hua⟩ := hnear u hu
+    have := hsep a ha u huB
+    rw [dist_comm] at hua
+    linarith
+  · intro u hu
+    obtain ⟨a, ha, hua⟩ := hnear u hu
+    have := hmargin ha
+    rw [Metric.mem_ball, dist_zero_right] at this
+    rw [Metric.mem_closedBall, dist_zero_right]
+    have : ‖u‖ ≤ ‖a‖ + dist u a := by
+      have := norm_le_norm_add_norm_sub' u a
+      rw [dist_eq_norm]; linarith [norm_sub_rev u a]
+    linarith
+
+theorem apm_a97j08_grid_region_construction
+    (D : Set ℂ) {z : ℂ}
+    (hsep : apm_a97j08_ClopenSeparationFact D z) :
+    ∃ R δ : ℝ, ∃ A B : Set ℂ, ∃ U : Set ℂ,
+      apm_a97j08_GridInput D z R δ A B ∧
+      apm_a97j08_IsGridRegion A B R δ z U := by
+  obtain ⟨R, δ, A, B, hinput⟩ := hsep
+  obtain ⟨U, hU⟩ := apm_a97j08_grid_region_construction_aux_cover
+    D z R δ A B hinput
+  exact ⟨R, δ / 4, A, B, U,
+    apm_a97j08_grid_region_construction_aux_shrink D z R δ A B hinput, hU⟩
+
+
+-- (A1) A segment missing `z` turns through opposite angles in the two directions.
+theorem apm_a97j08_angleStep_swap {z p q : ℂ} (h : z ∉ segment ℝ p q) :
+    apm_a97j08_angleStep z q p = -apm_a97j08_angleStep z p q := by
+  have hp : p - z ≠ 0 := by
+    rw [sub_ne_zero]
+    intro hpz
+    apply h
+    simpa [hpz] using (left_mem_segment ℝ p q)
+  have hq : q - z ≠ 0 := by
+    rw [sub_ne_zero]
+    intro hqz
+    apply h
+    simpa [hqz] using (right_mem_segment ℝ p q)
+  let x : ℂ := (q - z) / (p - z)
+  have hxpi : Complex.arg x ≠ Real.pi := by
+    intro harg
+    rcases Complex.arg_eq_pi_iff.mp harg with ⟨hre, him⟩
+    let s : ℝ := -x.re
+    have hs : 0 < s := by dsimp [s]; linarith
+    have hxeq : x = -(s : ℂ) := by
+      apply Complex.ext
+      · simp [s]
+      · simpa [s] using him
+    have hratio : q - z = -(s : ℂ) * (p - z) := by
+      have := congrArg (fun w : ℂ => w * (p - z)) hxeq
+      simpa [x, hp] using this
+    apply h
+    refine ⟨s / (1 + s), 1 / (1 + s), ?_, ?_, ?_, ?_⟩
+    · positivity
+    · positivity
+    · field_simp
+      <;> ring
+    · apply Complex.ext
+      · have hr := congrArg Complex.re hratio
+        simp [Complex.mul_re] at hr
+        simp only [Complex.add_re, Complex.smul_re, smul_eq_mul]
+        field_simp
+        nlinarith
+      · have hi := congrArg Complex.im hratio
+        simp [Complex.mul_im] at hi
+        simp only [Complex.add_im, Complex.smul_im, smul_eq_mul]
+        field_simp
+        nlinarith
+  change Complex.arg ((p - z) / (q - z)) =
+    -Complex.arg ((q - z) / (p - z))
+  have hinv : (p - z) / (q - z) = x⁻¹ := by
+    dsimp [x]
+    field_simp
+  rw [hinv, Complex.arg_inv, if_neg hxpi]
+
+-- (A2) A grid square missing `z` has total angle step zero.
+lemma apm_a97j08_squareSum_outside_aux_cases {z shift : ℂ} {δ : ℝ}
+    (q : ℤ × ℤ) (hz : z ∉ apm_a97j08_gridSquare shift δ q) :
+    z.re < shift.re + q.1 * δ ∨
+      shift.re + (q.1 + 1) * δ < z.re ∨
+      z.im < shift.im + q.2 * δ ∨
+      shift.im + (q.2 + 1) * δ < z.im := by
+  by_contra hn
+  push_neg at hn
+  apply hz
+  exact hn
+
+lemma apm_a97j08_squareSum_outside_aux_expand
+    (z shift : ℂ) (δ : ℝ) (q : ℤ × ℤ) :
+    (∑ e ∈ apm_a97j08_squareEdges q,
+      apm_a97j08_edgeAngle z shift δ e) =
+      apm_a97j08_edgeAngle z shift δ ((q.1, q.2), (q.1 + 1, q.2)) +
+      apm_a97j08_edgeAngle z shift δ ((q.1 + 1, q.2), (q.1 + 1, q.2 + 1)) +
+      apm_a97j08_edgeAngle z shift δ ((q.1 + 1, q.2 + 1), (q.1, q.2 + 1)) +
+      apm_a97j08_edgeAngle z shift δ ((q.1, q.2 + 1), (q.1, q.2)) := by
+  rw [apm_a97j08_squareEdges, Finset.sum_insert, Finset.sum_insert, Finset.sum_insert,
+    Finset.sum_singleton]
+  · ring
+  all_goals simp [Prod.ext_iff]
+
+-- In an open half-plane `{w | 0 < re (c * w)}`, the angle step is a difference of
+-- arguments (both lie in `(-π/2, π/2)` after rotating by `c`).
+lemma apm_a97j08_squareSum_outside_aux_step (c : ℂ) {w₁ w₂ : ℂ}
+    (h₁ : 0 < (c * w₁).re) (h₂ : 0 < (c * w₂).re) :
+    Complex.arg (w₂ / w₁) = Complex.arg (c * w₂) - Complex.arg (c * w₁) := by
+  have hc : c ≠ 0 := by
+    intro hc
+    simp [hc] at h₁
+  have hw₁ : w₁ ≠ 0 := by
+    intro hw₁
+    simp [hw₁] at h₁
+  have hcw₁ : c * w₁ ≠ 0 := mul_ne_zero hc hw₁
+  have hw₂ : w₂ ≠ 0 := by
+    intro hw₂
+    simp [hw₂] at h₂
+  have hcw₂ : c * w₂ ≠ 0 := mul_ne_zero hc hw₂
+  have ha₁ : |Complex.arg (c * w₁)| < Real.pi / 2 :=
+    Complex.abs_arg_lt_pi_div_two_iff.mpr (Or.inl h₁)
+  have ha₂ : |Complex.arg (c * w₂)| < Real.pi / 2 :=
+    Complex.abs_arg_lt_pi_div_two_iff.mpr (Or.inl h₂)
+  rw [abs_lt] at ha₁ ha₂
+  have hd : -Real.pi < Complex.arg (c * w₂) - Complex.arg (c * w₁) ∧
+      Complex.arg (c * w₂) - Complex.arg (c * w₁) ≤ Real.pi := by
+    constructor <;> linarith
+  have htoReal :
+      ((Complex.arg (c * w₂) - Complex.arg (c * w₁) : ℝ) : Real.Angle).toReal =
+        Complex.arg (c * w₂) - Complex.arg (c * w₁) :=
+    Real.Angle.toReal_coe_eq_self_iff.mpr hd
+  have hang :
+      (Complex.arg ((c * w₂) / (c * w₁)) : Real.Angle) =
+        ((Complex.arg (c * w₂) - Complex.arg (c * w₁) : ℝ) : Real.Angle) := by
+    simpa using Complex.arg_div_coe_angle hcw₂ hcw₁
+  have harg := (Complex.arg_coe_angle_eq_iff_eq_toReal.mp hang)
+  rw [htoReal] at harg
+  rw [← mul_div_mul_left w₂ w₁ hc]
+  exact harg
+
+-- A point strictly left/right/below/above the square sees all four corners in
+-- one open half-plane.
+lemma apm_a97j08_squareSum_outside_aux_halfplane {z shift : ℂ} {δ : ℝ}
+    (hδ : 0 < δ) (q : ℤ × ℤ)
+    (hcase : z.re < shift.re + q.1 * δ ∨
+      shift.re + (q.1 + 1) * δ < z.re ∨
+      z.im < shift.im + q.2 * δ ∨
+      shift.im + (q.2 + 1) * δ < z.im) :
+    ∃ c : ℂ, ∀ v ∈ ({(q.1, q.2), (q.1 + 1, q.2), (q.1 + 1, q.2 + 1), (q.1, q.2 + 1)} :
+        Finset (ℤ × ℤ)),
+      0 < (c * (apm_a97j08_gridVertex shift δ v - z)).re := by
+  rcases hcase with hleft | hright | hbelow | habove
+  · refine ⟨1, fun v hv => ?_⟩
+    simp only [Finset.mem_insert, Finset.mem_singleton] at hv
+    rcases hv with rfl | rfl | rfl | rfl <;>
+      simp [apm_a97j08_gridVertex, Complex.mul_re] <;>
+      push_cast <;> nlinarith
+  · refine ⟨-1, fun v hv => ?_⟩
+    simp only [Finset.mem_insert, Finset.mem_singleton] at hv
+    rcases hv with rfl | rfl | rfl | rfl <;>
+      simp [apm_a97j08_gridVertex, Complex.mul_re] <;>
+      push_cast <;> nlinarith
+  · refine ⟨-Complex.I, fun v hv => ?_⟩
+    simp only [Finset.mem_insert, Finset.mem_singleton] at hv
+    rcases hv with rfl | rfl | rfl | rfl <;>
+      simp [apm_a97j08_gridVertex, Complex.mul_re] <;>
+      push_cast <;> nlinarith
+  · refine ⟨Complex.I, fun v hv => ?_⟩
+    simp only [Finset.mem_insert, Finset.mem_singleton] at hv
+    rcases hv with rfl | rfl | rfl | rfl <;>
+      simp [apm_a97j08_gridVertex, Complex.mul_re] <;>
+      push_cast <;> nlinarith
+
+lemma apm_a97j08_squareSum_outside_aux_core {z shift : ℂ} {δ : ℝ}
+    (hδ : 0 < δ) (q : ℤ × ℤ)
+    (hz : z ∉ apm_a97j08_gridSquare shift δ q) :
+    ∑ e ∈ apm_a97j08_squareEdges q,
+      apm_a97j08_edgeAngle z shift δ e = 0 := by
+  obtain ⟨c, hc⟩ := apm_a97j08_squareSum_outside_aux_halfplane hδ q
+    (apm_a97j08_squareSum_outside_aux_cases q hz)
+  have h0 := hc (q.1, q.2) (by simp)
+  have h1 := hc (q.1 + 1, q.2) (by simp)
+  have h2 := hc (q.1 + 1, q.2 + 1) (by simp)
+  have h3 := hc (q.1, q.2 + 1) (by simp)
+  rw [apm_a97j08_squareSum_outside_aux_expand]
+  simp only [apm_a97j08_edgeAngle, apm_a97j08_angleStep]
+  rw [apm_a97j08_squareSum_outside_aux_step c h0 h1, apm_a97j08_squareSum_outside_aux_step c h1 h2,
+    apm_a97j08_squareSum_outside_aux_step c h2 h3, apm_a97j08_squareSum_outside_aux_step c h3 h0]
+  ring
+
+theorem apm_a97j08_squareSum_outside {z shift : ℂ} {δ : ℝ} (hδ : 0 < δ)
+    (q : ℤ × ℤ) (hz : z ∉ apm_a97j08_gridSquare shift δ q) :
+    ∑ e ∈ apm_a97j08_squareEdges q, apm_a97j08_edgeAngle z shift δ e = 0 := by
+  exact apm_a97j08_squareSum_outside_aux_core hδ q hz
+
+-- (A3) A grid square with `z` in its interior has total angle step `2π`.
+lemma apm_a97j08_squareSum_inside_aux_delta_ne {δ : ℝ} (hδ : 0 < δ) : δ ≠ 0 :=
+  ne_of_gt hδ
+
+-- The four counterclockwise edges of a square, summed term by term.
+lemma apm_a97j08_squareSum_inside_aux_expand (g : (ℤ × ℤ) × (ℤ × ℤ) → ℝ) (q : ℤ × ℤ) :
+    ∑ e ∈ apm_a97j08_squareEdges q, g e =
+      g ((q.1, q.2), (q.1 + 1, q.2)) + g ((q.1 + 1, q.2), (q.1 + 1, q.2 + 1)) +
+        g ((q.1 + 1, q.2 + 1), (q.1, q.2 + 1)) + g ((q.1, q.2 + 1), (q.1, q.2)) := by
+  rw [apm_a97j08_squareEdges, Finset.sum_insert, Finset.sum_insert, Finset.sum_insert,
+    Finset.sum_singleton]
+  · ring
+  all_goals simp [Prod.ext_iff]
+
+-- (i) Interior of a closed grid square: strict coordinate bounds.
+lemma apm_a97j08_squareSum_inside_aux_open {z shift : ℂ} {δ : ℝ} (q : ℤ × ℤ)
+    (hz : z ∈ interior (apm_a97j08_gridSquare shift δ q)) :
+    shift.re + q.1 * δ < z.re ∧ z.re < shift.re + (q.1 + 1) * δ ∧
+      shift.im + q.2 * δ < z.im ∧ z.im < shift.im + (q.2 + 1) * δ := by
+  have hsquare : apm_a97j08_gridSquare shift δ q =
+      Icc (shift.re + q.1 * δ) (shift.re + (q.1 + 1) * δ) ×ℂ
+        Icc (shift.im + q.2 * δ) (shift.im + (q.2 + 1) * δ) := by
+    ext w
+    simp only [apm_a97j08_gridSquare, mem_setOf_eq, Complex.mem_reProdIm, mem_Icc]
+    tauto
+  rw [hsquare, Complex.interior_reProdIm, interior_Icc, interior_Icc] at hz
+  rcases (Complex.mem_reProdIm.mp hz) with ⟨hre, him⟩
+  exact ⟨hre.1, hre.2, him.1, him.2⟩
+
+-- (ii) Strict bounds make every counterclockwise edge turn positively about `z`.
+lemma apm_a97j08_squareSum_inside_aux_cross {z shift : ℂ} {δ : ℝ} (hδ : 0 < δ)
+    (q : ℤ × ℤ)
+    (h : shift.re + q.1 * δ < z.re ∧ z.re < shift.re + (q.1 + 1) * δ ∧
+      shift.im + q.2 * δ < z.im ∧ z.im < shift.im + (q.2 + 1) * δ) :
+    ∀ e ∈ apm_a97j08_squareEdges q,
+      0 < ((starRingEnd ℂ) (apm_a97j08_gridVertex shift δ e.1 - z) *
+        (apm_a97j08_gridVertex shift δ e.2 - z)).im := by
+  intro e he
+  simp only [apm_a97j08_squareEdges, Finset.mem_insert, Finset.mem_singleton] at he
+  rcases he with rfl | rfl | rfl | rfl <;>
+    simp only [apm_a97j08_gridVertex, map_sub, map_add, map_mul,
+      map_natCast, Complex.star_def, Complex.conj_ofReal, Complex.conj_I,
+      Complex.mul_im, Complex.add_re, Complex.add_im, Complex.sub_re,
+      Complex.sub_im, Complex.ofReal_re, Complex.ofReal_im, Complex.I_re,
+      Complex.I_im, Complex.mul_re, Complex.conj_re, Complex.conj_im,
+      mul_zero, mul_one, add_zero, zero_add, Complex.neg_re,
+      Complex.neg_im, Int.cast_add, Int.cast_one] <;>
+    nlinarith
+
+-- (iii) A positive turn has angle step in `(0, π)`.
+lemma apm_a97j08_squareSum_inside_aux_pos {z p q : ℂ}
+    (h : 0 < ((starRingEnd ℂ) (p - z) * (q - z)).im) :
+    0 < apm_a97j08_angleStep z p q ∧ apm_a97j08_angleStep z p q < Real.pi := by
+  have hpz : p - z ≠ 0 := by
+    intro hpz
+    have : ((starRingEnd ℂ) (p - z) * (q - z)).im = 0 := by simp [hpz]
+    linarith
+  have hn : 0 < Complex.normSq (p - z) := Complex.normSq_pos.mpr hpz
+  have hnum : 0 < (q - z).im * (p - z).re - (q - z).re * (p - z).im := by
+    have hs := h
+    simp only [map_sub, Complex.mul_im, Complex.sub_re, Complex.sub_im,
+      map_id, Complex.conj_re, Complex.conj_im] at hs
+    convert hs using 1 <;> simp only [Complex.sub_re, Complex.sub_im] <;> ring
+  have him : 0 < ((q - z) / (p - z)).im := by
+    rw [Complex.div_im]
+    rw [← sub_div]
+    exact div_pos hnum hn
+  unfold apm_a97j08_angleStep
+  constructor
+  · have hnonneg : 0 ≤ Complex.arg ((q - z) / (p - z)) :=
+      Complex.arg_nonneg_iff.mpr him.le
+    have hne : Complex.arg ((q - z) / (p - z)) ≠ 0 := by
+      intro ha
+      have hz := Complex.arg_eq_zero_iff.mp ha
+      exact (ne_of_gt him) hz.2
+    exact lt_of_le_of_ne hnonneg (Ne.symm hne)
+  · exact Complex.arg_lt_pi_iff.mpr (Or.inr (ne_of_gt him))
+
+-- (iv) The angle steps around a closed quadrilateral sum to a multiple of `2π`.
+lemma apm_a97j08_squareSum_inside_aux_mult {z v₀ v₁ v₂ v₃ : ℂ}
+    (h₀ : v₀ ≠ z) (h₁ : v₁ ≠ z) (h₂ : v₂ ≠ z) (h₃ : v₃ ≠ z) :
+    ∃ k : ℤ, apm_a97j08_angleStep z v₀ v₁ + apm_a97j08_angleStep z v₁ v₂ +
+      apm_a97j08_angleStep z v₂ v₃ + apm_a97j08_angleStep z v₃ v₀ =
+        k * (2 * Real.pi) := by
+  let S := apm_a97j08_angleStep z v₀ v₁ + apm_a97j08_angleStep z v₁ v₂ +
+    apm_a97j08_angleStep z v₂ v₃ + apm_a97j08_angleStep z v₃ v₀
+  have hn₀ : v₀ - z ≠ 0 := sub_ne_zero.mpr h₀
+  have hn₁ : v₁ - z ≠ 0 := sub_ne_zero.mpr h₁
+  have hn₂ : v₂ - z ≠ 0 := sub_ne_zero.mpr h₂
+  have hn₃ : v₃ - z ≠ 0 := sub_ne_zero.mpr h₃
+  have hS : (S : Real.Angle) = 0 := by
+    simp only [S, apm_a97j08_angleStep, Real.Angle.coe_add]
+    rw [Complex.arg_div_coe_angle hn₁ hn₀,
+      Complex.arg_div_coe_angle hn₂ hn₁,
+      Complex.arg_div_coe_angle hn₃ hn₂,
+      Complex.arg_div_coe_angle hn₀ hn₃]
+    abel
+  obtain ⟨k, hk⟩ := Real.Angle.coe_eq_zero_iff.mp hS
+  refine ⟨k, ?_⟩
+  change S = k * (2 * Real.pi)
+  simpa [zsmul_eq_mul] using hk.symm
+
+lemma apm_a97j08_squareSum_inside_aux_core {z shift : ℂ} {δ : ℝ} (hδ : 0 < δ)
+    (q : ℤ × ℤ) (hz : z ∈ interior (apm_a97j08_gridSquare shift δ q)) :
+    ∑ e ∈ apm_a97j08_squareEdges q, apm_a97j08_edgeAngle z shift δ e =
+      2 * Real.pi := by
+  have hcross := apm_a97j08_squareSum_inside_aux_cross hδ q
+    (apm_a97j08_squareSum_inside_aux_open q hz)
+  have hpos : ∀ e ∈ apm_a97j08_squareEdges q,
+      0 < apm_a97j08_edgeAngle z shift δ e ∧ apm_a97j08_edgeAngle z shift δ e < Real.pi :=
+    fun e he => apm_a97j08_squareSum_inside_aux_pos (hcross e he)
+  have hne : ∀ e ∈ apm_a97j08_squareEdges q, apm_a97j08_gridVertex shift δ e.1 ≠ z := by
+    intro e he hz'
+    have := hcross e he
+    rw [hz', sub_self, map_zero, zero_mul, Complex.zero_im] at this
+    exact lt_irrefl _ this
+  have hmem : ∀ e, e ∈ apm_a97j08_squareEdges q ↔ e ∈ apm_a97j08_squareEdges q := fun _ => Iff.rfl
+  have m0 : ((q.1, q.2), (q.1 + 1, q.2)) ∈ apm_a97j08_squareEdges q := by
+    simp [apm_a97j08_squareEdges]
+  have m1 : ((q.1 + 1, q.2), (q.1 + 1, q.2 + 1)) ∈ apm_a97j08_squareEdges q := by
+    simp [apm_a97j08_squareEdges]
+  have m2 : ((q.1 + 1, q.2 + 1), (q.1, q.2 + 1)) ∈ apm_a97j08_squareEdges q := by
+    simp [apm_a97j08_squareEdges]
+  have m3 : ((q.1, q.2 + 1), (q.1, q.2)) ∈ apm_a97j08_squareEdges q := by
+    simp [apm_a97j08_squareEdges]
+  obtain ⟨k, hk⟩ := apm_a97j08_squareSum_inside_aux_mult (z := z)
+    (hne _ m0) (hne _ m1) (hne _ m2) (hne _ m3)
+  rw [apm_a97j08_squareSum_inside_aux_expand]
+  simp only [apm_a97j08_edgeAngle] at hpos ⊢
+  rw [hk]
+  have p0 := hpos _ m0; have p1 := hpos _ m1; have p2 := hpos _ m2; have p3 := hpos _ m3
+  simp only at p0 p1 p2 p3
+  have hπ := Real.pi_pos
+  have hlo : (0 : ℝ) < k := by
+    have : (0 : ℝ) < k * (2 * Real.pi) := by rw [← hk]; linarith [p0.1, p1.1, p2.1, p3.1]
+    nlinarith
+  have hhi : (k : ℝ) < 2 := by
+    have : k * (2 * Real.pi) < 4 * Real.pi := by rw [← hk]; linarith [p0.2, p1.2, p2.2, p3.2]
+    nlinarith
+  have : k = 1 := by
+    have h1 : (0 : ℤ) < k := by exact_mod_cast hlo
+    have h2 : k < 2 := by exact_mod_cast hhi
+    omega
+  rw [this]; push_cast; ring
+
+theorem apm_a97j08_squareSum_inside {z shift : ℂ} {δ : ℝ} (hδ : 0 < δ)
+    (q : ℤ × ℤ) (hz : z ∈ interior (apm_a97j08_gridSquare shift δ q)) :
+    ∑ e ∈ apm_a97j08_squareEdges q, apm_a97j08_edgeAngle z shift δ e =
+      2 * Real.pi := by
+  exact apm_a97j08_squareSum_inside_aux_core hδ q hz
+
+-- (A4) Off the grid lines, every lattice edge angle is antisymmetric (from A1).
+theorem apm_a97j08_edgeAngle_swap {z shift : ℂ} {δ : ℝ} (hδ : 0 < δ)
+    (hre : z.re ∉ {x | ∃ k : ℤ, x = shift.re + k * δ})
+    (him : z.im ∉ {y | ∃ k : ℤ, y = shift.im + k * δ})
+    (hA1 : ∀ {p q : ℂ}, z ∉ segment ℝ p q →
+      apm_a97j08_angleStep z q p = -apm_a97j08_angleStep z p q)
+    (q : ℤ × ℤ) (e : (ℤ × ℤ) × (ℤ × ℤ)) (he : e ∈ apm_a97j08_squareEdges q) :
+    apm_a97j08_edgeAngle z shift δ e.swap = -apm_a97j08_edgeAngle z shift δ e := by
+  have horizontal (a b : ℤ × ℤ) (hab : a.2 = b.2) :
+      z ∉ segment ℝ (apm_a97j08_gridVertex shift δ a)
+        (apm_a97j08_gridVertex shift δ b) := by
+    intro hzseg
+    have hzseg' : z ∈ (fun t : ℝ ↦ (1 - t) • apm_a97j08_gridVertex shift δ a +
+        t • apm_a97j08_gridVertex shift δ b) '' Set.Icc 0 1 := by
+      exact (segment_eq_image ℝ (apm_a97j08_gridVertex shift δ a)
+        (apm_a97j08_gridVertex shift δ b) ▸ hzseg)
+    obtain ⟨t, ht, hzt⟩ := hzseg'
+    apply him
+    refine ⟨a.2, ?_⟩
+    rw [← hzt]
+    simp only [AffineMap.lineMap_apply, apm_a97j08_gridVertex, Complex.add_im,
+      Complex.ofReal_im, Complex.mul_im, Complex.I_im, Complex.I_re,
+      Complex.ofReal_re, Complex.smul_im, smul_eq_mul]
+    rw [hab]
+    ring
+  have vertical (a b : ℤ × ℤ) (hab : a.1 = b.1) :
+      z ∉ segment ℝ (apm_a97j08_gridVertex shift δ a)
+        (apm_a97j08_gridVertex shift δ b) := by
+    intro hzseg
+    have hzseg' : z ∈ (fun t : ℝ ↦ (1 - t) • apm_a97j08_gridVertex shift δ a +
+        t • apm_a97j08_gridVertex shift δ b) '' Set.Icc 0 1 := by
+      exact (segment_eq_image ℝ (apm_a97j08_gridVertex shift δ a)
+        (apm_a97j08_gridVertex shift δ b) ▸ hzseg)
+    obtain ⟨t, ht, hzt⟩ := hzseg'
+    apply hre
+    refine ⟨a.1, ?_⟩
+    rw [← hzt]
+    simp only [AffineMap.lineMap_apply, apm_a97j08_gridVertex, Complex.add_re,
+      Complex.ofReal_re, Complex.mul_re, Complex.I_im, Complex.I_re,
+      Complex.ofReal_im, Complex.smul_re, smul_eq_mul]
+    rw [hab]
+    ring
+  simp only [apm_a97j08_squareEdges, Finset.mem_insert, Finset.mem_singleton] at he
+  rcases he with rfl | rfl | rfl | rfl
+  · exact hA1 (horizontal _ _ rfl)
+  · exact hA1 (vertical _ _ rfl)
+  · exact hA1 (horizontal _ _ rfl)
+  · exact hA1 (vertical _ _ rfl)
+
+-- (C1) Interior edges cancel: summing an antisymmetric edge function over the
+-- boundary edges equals summing it over all square boundaries.
+lemma apm_a97j08_boundary_sum_aux_disjoint {q r : ℤ × ℤ} (hqr : q ≠ r) :
+    Disjoint (apm_a97j08_squareEdges q) (apm_a97j08_squareEdges r) := by
+  rw [Finset.disjoint_left]
+  intro e heq her
+  simp only [apm_a97j08_squareEdges, Finset.mem_insert, Finset.mem_singleton] at heq her
+  rcases heq with rfl | rfl | rfl | rfl <;>
+    rcases her with h | h | h | h <;>
+    simp only [Prod.mk.injEq] at h <;>
+    apply hqr <;> ext <;> omega
+
+lemma apm_a97j08_boundary_sum_aux_biUnion (Q : Finset (ℤ × ℤ))
+    (f : (ℤ × ℤ) × (ℤ × ℤ) → ℝ) :
+    ∑ e ∈ apm_a97j08_allEdges Q, f e =
+      ∑ q ∈ Q, ∑ e ∈ apm_a97j08_squareEdges q, f e := by
+  unfold apm_a97j08_allEdges
+  apply Finset.sum_biUnion
+  intro q hq r hr hqr
+  exact apm_a97j08_boundary_sum_aux_disjoint hqr
+
+lemma apm_a97j08_boundary_sum_aux_ne_swap (Q : Finset (ℤ × ℤ))
+    {e : (ℤ × ℤ) × (ℤ × ℤ)} (he : e ∈ apm_a97j08_allEdges Q) :
+    e.swap ≠ e := by
+  rw [apm_a97j08_allEdges, Finset.mem_biUnion] at he
+  obtain ⟨q, hq, he⟩ := he
+  simp only [apm_a97j08_squareEdges, Finset.mem_insert, Finset.mem_singleton] at he
+  rcases he with rfl | rfl | rfl | rfl <;> simp [Prod.ext_iff] <;> omega
+
+lemma apm_a97j08_boundary_sum_aux_interior (Q : Finset (ℤ × ℤ))
+    (f : (ℤ × ℤ) × (ℤ × ℤ) → ℝ)
+    (hf : ∀ e ∈ apm_a97j08_allEdges Q, f e.swap = -f e) :
+    ∑ e ∈ (apm_a97j08_allEdges Q).filter
+      (fun e => e.swap ∈ apm_a97j08_allEdges Q), f e = 0 := by
+  apply Finset.sum_involution (fun e _ => e.swap)
+  · intro e he
+    have heall : e ∈ apm_a97j08_allEdges Q := (Finset.mem_filter.mp he).1
+    rw [hf e heall]
+    ring
+  · intro e he hfe
+    exact apm_a97j08_boundary_sum_aux_ne_swap Q (Finset.mem_filter.mp he).1
+  · intro e he
+    simp
+  · intro e he
+    have h := Finset.mem_filter.mp he
+    exact Finset.mem_filter.mpr ⟨h.2, by simpa using h.1⟩
+
+theorem apm_a97j08_boundary_sum (Q : Finset (ℤ × ℤ))
+    (f : (ℤ × ℤ) × (ℤ × ℤ) → ℝ)
+    (hf : ∀ e ∈ apm_a97j08_allEdges Q, f e.swap = -f e) :
+    ∑ e ∈ apm_a97j08_boundaryEdges Q, f e =
+      ∑ q ∈ Q, ∑ e ∈ apm_a97j08_squareEdges q, f e := by
+  rw [← apm_a97j08_boundary_sum_aux_biUnion Q f]
+  have hint := apm_a97j08_boundary_sum_aux_interior Q f hf
+  have hnot : ∑ e ∈ (apm_a97j08_allEdges Q).filter
+      (fun e => ¬ e.swap ∉ apm_a97j08_allEdges Q), f e = 0 := by
+    have heq : (apm_a97j08_allEdges Q).filter
+        (fun e => ¬ e.swap ∉ apm_a97j08_allEdges Q) =
+        (apm_a97j08_allEdges Q).filter
+          (fun e => e.swap ∈ apm_a97j08_allEdges Q) := by
+      ext e
+      simp
+    rw [heq]
+    exact hint
+  unfold apm_a97j08_boundaryEdges
+  calc
+    ∑ e ∈ (apm_a97j08_allEdges Q).filter
+        (fun e => e.swap ∉ apm_a97j08_allEdges Q), f e =
+      (∑ e ∈ (apm_a97j08_allEdges Q).filter
+        (fun e => e.swap ∉ apm_a97j08_allEdges Q), f e) +
+      (∑ e ∈ (apm_a97j08_allEdges Q).filter
+        (fun e => ¬ e.swap ∉ apm_a97j08_allEdges Q), f e) := by rw [hnot, add_zero]
+    _ = ∑ e ∈ apm_a97j08_allEdges Q, f e :=
+      Finset.sum_filter_add_sum_filter_not _ _ _
+
+-- (C2) The boundary edges are balanced (apply C1 to `[e.1 = v] - [e.2 = v]`).
+theorem apm_a97j08_boundary_balanced (Q : Finset (ℤ × ℤ))
+    (hC1 : ∀ f : (ℤ × ℤ) × (ℤ × ℤ) → ℝ,
+      (∀ e ∈ apm_a97j08_allEdges Q, f e.swap = -f e) →
+      ∑ e ∈ apm_a97j08_boundaryEdges Q, f e =
+        ∑ q ∈ Q, ∑ e ∈ apm_a97j08_squareEdges q, f e) :
+    apm_a97j08_Balanced (apm_a97j08_boundaryEdges Q) := by
+  intro v
+  let f : ((ℤ × ℤ) × (ℤ × ℤ)) → ℝ := fun e ↦
+    (if e.1 = v then 1 else 0) - (if e.2 = v then 1 else 0)
+  have hanti : ∀ e ∈ apm_a97j08_allEdges Q, f e.swap = -f e := by
+    intro e he
+    rcases e with ⟨a, b⟩
+    simp [f]
+  have hsquare : ∀ q : ℤ × ℤ,
+      ∑ e ∈ apm_a97j08_squareEdges q, f e = 0 := by
+    intro q
+    rw [apm_a97j08_squareSum_inside_aux_expand f q]
+    dsimp [f]
+    ring
+  have hsum := hC1 f hanti
+  simp_rw [hsquare, Finset.sum_const_zero] at hsum
+  have hcards :
+      ((↑((apm_a97j08_boundaryEdges Q).filter fun e ↦ e.1 = v).card : ℕ) : ℝ) -
+        ((↑((apm_a97j08_boundaryEdges Q).filter fun e ↦ e.2 = v).card : ℕ) : ℝ) = 0 := by
+    simpa [f, Finset.sum_sub_distrib] using hsum
+  exact_mod_cast (sub_eq_zero.mp hcards)
+
+-- (C3a) A nonempty balanced finite edge set contains a simple directed cycle.
+lemma apm_a97j08_exists_simple_cycle_aux_outgoing {V : Type*} [DecidableEq V]
+    (E : Finset (V × V)) (hbal : apm_a97j08_Balanced E) {v : V}
+    (hin : ∃ u, (u, v) ∈ E) : ∃ w, (v, w) ∈ E := by
+  have hin_ne : (E.filter fun e => e.2 = v).Nonempty := by
+    obtain ⟨u, hu⟩ := hin
+    exact ⟨(u, v), by simp [hu]⟩
+  have hcard : 0 < (E.filter fun e => e.1 = v).card := by
+    rw [hbal v]
+    exact Finset.card_pos.mpr hin_ne
+  obtain ⟨e, he⟩ := Finset.card_pos.mp hcard
+  have heE : e ∈ E := (Finset.mem_filter.mp he).1
+  have hev : e.1 = v := (Finset.mem_filter.mp he).2
+  rcases e with ⟨a, w⟩
+  dsimp at hev ⊢
+  subst a
+  exact ⟨w, heE⟩
+
+-- A self-map of a finite set has a periodic orbit: listed once around, it is
+-- duplicate-free and rotating it by one applies the map.
+lemma apm_a97j08_exists_simple_cycle_aux_periodic_aux_rotate
+    {V : Type*} (f : V → V) {p : V} (hp : p ∈ Function.periodicPts f) :
+    let n := Function.minimalPeriod f p
+    let c := (List.range n).map (fun k => f^[k] p)
+    c.rotate 1 = c.map f := by
+  intro n c
+  have hn : 0 < n := Function.minimalPeriod_pos_of_mem_periodicPts hp
+  obtain ⟨m, hm⟩ : ∃ m, n = m + 1 := ⟨n - 1, by omega⟩
+  have hfix : f^[m + 1] p = p := by rw [← hm]; exact Function.iterate_minimalPeriod
+  simp only [c, hm]
+  rw [List.range_succ_eq_map, List.map_cons, List.map_map, Function.iterate_zero, id,
+    List.rotate_cons_succ, List.rotate_zero, List.map_cons, List.map_map]
+  have hl : (fun k => f^[k] p) ∘ Nat.succ = f ∘ fun k => f^[k] p := by
+    funext k; simp [Function.iterate_succ_apply']
+  rw [hl]
+  have e1 : List.map (fun k => f^[k + 1] p) (List.range (m + 1)) =
+      List.map (f ∘ fun k => f^[k] p) (List.range m) ++ [p] := by
+    rw [List.range_succ, List.map_append, List.map_singleton, hfix]
+    congr 1
+    exact List.map_congr_left fun k _ => by simp [Function.iterate_succ_apply']
+  have e2 : List.map (fun k => f^[k + 1] p) (List.range (m + 1)) =
+      f p :: List.map (f ∘ f ∘ fun k => f^[k] p) (List.range m) := by
+    rw [List.range_succ_eq_map, List.map_cons, List.map_map]
+    congr 1
+    exact List.map_congr_left fun k _ => by simp [Function.iterate_succ_apply']
+  exact e1.symm.trans e2
+
+lemma apm_a97j08_exists_simple_cycle_aux_periodic {V : Type*} [DecidableEq V]
+    (f : V → V) (S : Finset V) (hS : ∀ x ∈ S, f x ∈ S) {v₀ : V} (hv₀ : v₀ ∈ S) :
+    ∃ c : List V, c ≠ [] ∧ c.Nodup ∧ (∀ x ∈ c, x ∈ S) ∧ c.rotate 1 = c.map f := by
+  classical
+  have hit : ∀ n : ℕ, f^[n] v₀ ∈ S := by
+    intro n
+    induction n with
+    | zero => simpa using hv₀
+    | succ n ih =>
+        rw [Function.iterate_succ_apply']
+        exact hS _ ih
+  obtain ⟨i, hi, j, hj, hij, heq⟩ :=
+    Finset.exists_ne_map_eq_of_card_lt_of_maps_to
+      (s := Finset.range (S.card + 1)) (t := S)
+      (f := fun n => f^[n] v₀) (by simp) (by
+        intro n hn
+        exact hit n)
+  have build (i j : ℕ) (hijlt : i < j) (heq : f^[i] v₀ = f^[j] v₀) :
+      ∃ c : List V, c ≠ [] ∧ c.Nodup ∧ (∀ x ∈ c, x ∈ S) ∧
+        c.rotate 1 = c.map f := by
+    let p := f^[i] v₀
+    have hpS : p ∈ S := hit i
+    have hperiod : Function.IsPeriodicPt f (j - i) p := by
+      have hjform : j = i + (j - i) := (Nat.add_sub_of_le hijlt.le).symm
+      change f^[j - i] (f^[i] v₀) = f^[i] v₀
+      rw [← Function.iterate_add_apply, Nat.sub_add_cancel hijlt.le]
+      exact heq.symm
+    have hpos : 0 < j - i := Nat.sub_pos_of_lt hijlt
+    have hpper : p ∈ Function.periodicPts f :=
+      Function.mk_mem_periodicPts hpos hperiod
+    let n := Function.minimalPeriod f p
+    have hn : 0 < n := Function.minimalPeriod_pos_of_mem_periodicPts hpper
+    let c := (List.range n).map (fun k => f^[k] p)
+    refine ⟨c, ?_, ?_, ?_, ?_⟩
+    · simp [c, hn.ne']
+    · dsimp [c]
+      apply List.Nodup.map_on _ List.nodup_range
+      intro a ha b hb hab
+      apply Function.iterate_injOn_Iio_minimalPeriod
+      · simpa using ha
+      · simpa using hb
+      · exact hab
+    · intro x hx
+      rcases List.mem_map.mp hx with ⟨k, hk, rfl⟩
+      simpa [p, Function.iterate_add_apply] using hit (k + i)
+    · exact apm_a97j08_exists_simple_cycle_aux_periodic_aux_rotate f hpper
+  rcases Nat.lt_or_gt_of_ne hij with hijlt | hjilt
+  · exact build i j hijlt heq
+  · exact build j i hjilt heq.symm
+
+lemma apm_a97j08_exists_simple_cycle_aux_zip_map {V : Type*} (f : V → V) (c : List V) :
+    ∀ e ∈ c.zip (c.map f), e.1 ∈ c ∧ e.2 = f e.1 := by
+  induction c with
+  | nil => simp
+  | cons a l ih =>
+      intro e he
+      simp only [List.map_cons, List.zip_cons_cons, List.mem_cons] at he
+      rcases he with rfl | he
+      · simp
+      · obtain ⟨h1, h2⟩ := ih e he
+        exact ⟨List.mem_cons_of_mem _ h1, h2⟩
+
+lemma apm_a97j08_exists_simple_cycle_aux_finite_orbit {V : Type*} [DecidableEq V]
+    (E : Finset (V × V)) (hne : E.Nonempty)
+    (hout : ∀ {v : V}, (∃ u, (u, v) ∈ E) → ∃ w, (v, w) ∈ E) :
+    ∃ c : List V, c ≠ [] ∧ c.Nodup ∧
+      ∀ e ∈ apm_a97j08_cycleEdges c, e ∈ E := by
+  classical
+  let S : Finset V := E.image Prod.snd
+  have hSin : ∀ x ∈ S, ∃ u, (u, x) ∈ E := by
+    intro x hx
+    obtain ⟨e, he, rfl⟩ := Finset.mem_image.mp hx
+    exact ⟨e.1, by simpa using he⟩
+  let f : V → V := fun x => if h : ∃ u, (u, x) ∈ E then (hout h).choose else x
+  have hfE : ∀ x ∈ S, (x, f x) ∈ E := by
+    intro x hx
+    have h := hSin x hx
+    simp only [f, dif_pos h]
+    exact (hout h).choose_spec
+  have hS : ∀ x ∈ S, f x ∈ S := fun x hx =>
+    Finset.mem_image.mpr ⟨(x, f x), hfE x hx, rfl⟩
+  obtain ⟨e₀, he₀⟩ := hne
+  obtain ⟨c, hc, hnd, hcS, hrot⟩ :=
+    apm_a97j08_exists_simple_cycle_aux_periodic f S hS
+      (Finset.mem_image.mpr ⟨e₀, he₀, rfl⟩)
+  refine ⟨c, hc, hnd, fun e he => ?_⟩
+  rw [apm_a97j08_cycleEdges, hrot] at he
+  obtain ⟨h1, h2⟩ := apm_a97j08_exists_simple_cycle_aux_zip_map f c e he
+  have := hfE e.1 (hcS _ h1)
+  rw [← h2] at this
+  exact this
+
+theorem apm_a97j08_exists_simple_cycle {V : Type*} [DecidableEq V]
+    (E : Finset (V × V)) (hbal : apm_a97j08_Balanced E) (hne : E.Nonempty) :
+    ∃ c : List V, c ≠ [] ∧ c.Nodup ∧ ∀ e ∈ apm_a97j08_cycleEdges c, e ∈ E := by
+  exact apm_a97j08_exists_simple_cycle_aux_finite_orbit E hne
+    (fun hin ↦ apm_a97j08_exists_simple_cycle_aux_outgoing E hbal hin)
+
+-- (C3b) Peeling off simple cycles decomposes a balanced edge set (given C3a).
+lemma apm_a97j08_cycle_decomposition_aux_edges_nodup {V : Type*} [DecidableEq V]
+    {c : List V} (hc : c.Nodup) : (apm_a97j08_cycleEdges c).Nodup := by
+  apply List.Nodup.of_map Prod.fst
+  have hmap : (apm_a97j08_cycleEdges c).map Prod.fst = c := by
+    apply List.map_fst_zip
+    simp [apm_a97j08_cycleEdges]
+  rwa [hmap]
+
+lemma apm_a97j08_cycle_decomposition_aux_cycle_sum_toFinset
+    {V : Type*} [DecidableEq V] (f : V × V → ℝ) {c : List V} (hc : c.Nodup) :
+    ∑ e ∈ (apm_a97j08_cycleEdges c).toFinset, f e = apm_a97j08_cycleSum f c := by
+  rw [apm_a97j08_cycleSum]
+  exact List.sum_toFinset f (apm_a97j08_cycle_decomposition_aux_edges_nodup hc)
+
+lemma apm_a97j08_cycle_decomposition_aux_sdiff_balanced
+    {V : Type*} [DecidableEq V] (E : Finset (V × V))
+    (hbal : apm_a97j08_Balanced E) {c : List V} (hc0 : c ≠ []) (hc : c.Nodup)
+    (hsub : ∀ e ∈ apm_a97j08_cycleEdges c, e ∈ E) :
+    apm_a97j08_Balanced (E \ (apm_a97j08_cycleEdges c).toFinset) := by
+  let C := (apm_a97j08_cycleEdges c).toFinset
+  have hCE : C ⊆ E := by
+    intro e he
+    exact hsub e (by simpa [C] using he)
+  have hedge := apm_a97j08_cycle_decomposition_aux_edges_nodup hc
+  have hcycle : apm_a97j08_Balanced C := by
+    intro v
+    have hfst : (apm_a97j08_cycleEdges c).map Prod.fst = c := by
+      apply List.map_fst_zip
+      simp [apm_a97j08_cycleEdges]
+    have hsnd : (apm_a97j08_cycleEdges c).map Prod.snd = c.rotate 1 := by
+      apply List.map_snd_zip
+      simp [apm_a97j08_cycleEdges]
+    have hfilt_fst (l : List (V × V)) :
+        (l.filter fun e => e.1 = v).length =
+          ((l.map Prod.fst).filter fun x => x = v).length := by
+      induction l with
+      | nil => simp
+      | cons e l ih =>
+          by_cases h : e.1 = v <;> simp [h, ih]
+    have hfilt_snd (l : List (V × V)) :
+        (l.filter fun e => e.2 = v).length =
+          ((l.map Prod.snd).filter fun x => x = v).length := by
+      induction l with
+      | nil => simp
+      | cons e l ih =>
+          by_cases h : e.2 = v <;> simp [h, ih]
+    rw [show C.filter (fun e => e.1 = v) =
+        ((apm_a97j08_cycleEdges c).filter fun e => e.1 = v).toFinset by
+          ext e; simp [C],
+      show C.filter (fun e => e.2 = v) =
+        ((apm_a97j08_cycleEdges c).filter fun e => e.2 = v).toFinset by
+          ext e; simp [C],
+      List.toFinset_card_of_nodup (hedge.filter _),
+      List.toFinset_card_of_nodup (hedge.filter _), hfilt_fst, hfilt_snd, hfst, hsnd]
+    exact ((List.rotate_perm c 1).filter fun x => decide (x = v)).length_eq.symm
+  intro v
+  rw [show (E \ C).filter (fun e => e.1 = v) =
+      E.filter (fun e => e.1 = v) \ C.filter (fun e => e.1 = v) by
+        ext e
+        simp only [Finset.mem_filter, Finset.mem_sdiff]
+        aesop,
+    show (E \ C).filter (fun e => e.2 = v) =
+      E.filter (fun e => e.2 = v) \ C.filter (fun e => e.2 = v) by
+        ext e
+        simp only [Finset.mem_filter, Finset.mem_sdiff]
+        aesop,
+    Finset.card_sdiff_of_subset (Finset.filter_subset_filter _ hCE),
+    Finset.card_sdiff_of_subset (Finset.filter_subset_filter _ hCE), hbal v, hcycle v]
+
+theorem apm_a97j08_cycle_decomposition {V : Type*} [DecidableEq V]
+    (hC3a : ∀ E : Finset (V × V), apm_a97j08_Balanced E → E.Nonempty →
+      ∃ c : List V, c ≠ [] ∧ c.Nodup ∧ ∀ e ∈ apm_a97j08_cycleEdges c, e ∈ E)
+    (E : Finset (V × V)) (hbal : apm_a97j08_Balanced E) :
+    ∃ cs : List (List V), (∀ c ∈ cs, c ≠ [] ∧ ∀ e ∈ apm_a97j08_cycleEdges c, e ∈ E) ∧
+      ∀ f : V × V → ℝ, ∑ e ∈ E, f e = (cs.map (apm_a97j08_cycleSum f)).sum := by
+  classical
+  induction hn : E.card using Nat.strong_induction_on generalizing E with
+  | _ n ih =>
+    rcases E.eq_empty_or_nonempty with rfl | hne
+    · exact ⟨[], by simp, fun f => by simp⟩
+    obtain ⟨c, hc0, hc, hsub⟩ := hC3a E hbal hne
+    set C := (apm_a97j08_cycleEdges c).toFinset with hCdef
+    have hCE : C ⊆ E := fun e he => hsub e (List.mem_toFinset.mp he)
+    have hCpos : 0 < C.card := by
+      rw [hCdef, List.toFinset_card_of_nodup (apm_a97j08_cycle_decomposition_aux_edges_nodup hc),
+        apm_a97j08_cycleEdges, List.length_zip, List.length_rotate, min_self]
+      exact List.length_pos_of_ne_nil hc0
+    have hlt : (E \ C).card < n := by
+      have hEC := Finset.card_le_card hCE
+      rw [Finset.card_sdiff_of_subset hCE, ← hn]; omega
+    obtain ⟨cs, hcs, hsum⟩ := ih _ hlt (E \ C)
+      (apm_a97j08_cycle_decomposition_aux_sdiff_balanced E hbal hc0 hc hsub) rfl
+    refine ⟨c :: cs, ?_, fun f => ?_⟩
+    · intro c' hc'
+      rcases List.mem_cons.mp hc' with rfl | hc'
+      · exact ⟨hc0, hsub⟩
+      · obtain ⟨h1, h2⟩ := hcs c' hc'
+        exact ⟨h1, fun e he => (Finset.mem_sdiff.mp (h2 e he)).1⟩
+    · rw [← Finset.sum_sdiff hCE, hsum f,
+        apm_a97j08_cycle_decomposition_aux_cycle_sum_toFinset f hc, List.map_cons,
+        List.sum_cons, add_comm]
+
+-- (E1) Boundary edges of the grid region lie in `D`.
+lemma apm_a97j08_boundaryEdge_segment_subset_aux_edge_witness
+    (Q : Finset (ℤ × ℤ)) (e : (ℤ × ℤ) × (ℤ × ℤ))
+    (he : e ∈ apm_a97j08_boundaryEdges Q) :
+    (∃ q ∈ Q, e ∈ apm_a97j08_squareEdges q) ∧
+      e.swap ∉ apm_a97j08_allEdges Q := by
+  rw [apm_a97j08_boundaryEdges, Finset.mem_filter] at he
+  refine ⟨?_, he.2⟩
+  simpa [apm_a97j08_allEdges, Finset.mem_biUnion] using he.1
+
+lemma apm_a97j08_boundaryEdge_segment_subset_aux_segment_in_union
+    {δ : ℝ} (hδ : 0 < δ) (shift : ℂ) (Q : Finset (ℤ × ℤ))
+    (e : (ℤ × ℤ) × (ℤ × ℤ))
+    (he : e ∈ apm_a97j08_boundaryEdges Q) :
+    segment ℝ (apm_a97j08_gridVertex shift δ e.1)
+        (apm_a97j08_gridVertex shift δ e.2) ⊆
+      ⋃ q ∈ Q, apm_a97j08_gridSquare shift δ q := by
+  rcases apm_a97j08_boundaryEdge_segment_subset_aux_edge_witness Q e he with
+    ⟨⟨q, hq, heq⟩, -⟩
+  have hconv : Convex ℝ (apm_a97j08_gridSquare shift δ q) := by
+    intro x hx y hy a b ha hb hab
+    simp only [apm_a97j08_gridSquare, Set.mem_setOf_eq] at hx hy ⊢
+    simp only [Complex.add_re, Complex.smul_re,
+      Complex.add_im, Complex.smul_im, smul_eq_mul]
+    have hrx := mul_le_mul_of_nonneg_left hx.1 ha
+    have hry := mul_le_mul_of_nonneg_left hy.1 hb
+    have hrx' := mul_le_mul_of_nonneg_left hx.2.1 ha
+    have hry' := mul_le_mul_of_nonneg_left hy.2.1 hb
+    have hix := mul_le_mul_of_nonneg_left hx.2.2.1 ha
+    have hiy := mul_le_mul_of_nonneg_left hy.2.2.1 hb
+    have hix' := mul_le_mul_of_nonneg_left hx.2.2.2 ha
+    have hiy' := mul_le_mul_of_nonneg_left hy.2.2.2 hb
+    have hc (c : ℝ) : a * c + b * c = c := by
+      rw [← add_mul, hab, one_mul]
+    constructor
+    · linarith [hc (shift.re + (q.1 : ℝ) * δ)]
+    constructor
+    · linarith [hc (shift.re + ((q.1 : ℝ) + 1) * δ)]
+    constructor
+    · linarith [hc (shift.im + (q.2 : ℝ) * δ)]
+    · linarith [hc (shift.im + ((q.2 : ℝ) + 1) * δ)]
+  have hend : apm_a97j08_gridVertex shift δ e.1 ∈
+        apm_a97j08_gridSquare shift δ q ∧
+      apm_a97j08_gridVertex shift δ e.2 ∈
+        apm_a97j08_gridSquare shift δ q := by
+    simp only [apm_a97j08_squareEdges, Finset.mem_insert, Finset.mem_singleton] at heq
+    rcases heq with rfl | rfl | rfl | rfl <;>
+      simp [apm_a97j08_gridSquare, apm_a97j08_gridVertex] <;>
+      norm_num <;> constructor <;> nlinarith
+  intro w hw
+  simp only [Set.mem_iUnion]
+  exact ⟨q, ⟨hq, hconv.segment_subset hend.1 hend.2 hw⟩⟩
+
+-- (a) Across each square edge lies a neighbouring square whose open interior comes
+-- arbitrarily close to every point of the edge.
+lemma apm_a97j08_boundaryEdge_segment_subset_aux_neighbor_aux_edge
+    (q : ℤ × ℤ) (e : (ℤ × ℤ) × (ℤ × ℤ))
+    (he : e ∈ apm_a97j08_squareEdges q) :
+    ∃ q' : ℤ × ℤ, e.swap ∈ apm_a97j08_squareEdges q' := by
+  simp only [apm_a97j08_squareEdges, Finset.mem_insert, Finset.mem_singleton] at he
+  rcases he with rfl | rfl | rfl | rfl
+  · refine ⟨(q.1, q.2 - 1), ?_⟩
+    simp [apm_a97j08_squareEdges]
+  · refine ⟨(q.1 + 1, q.2), ?_⟩
+    simp [apm_a97j08_squareEdges]
+  · refine ⟨(q.1, q.2 + 1), ?_⟩
+    simp [apm_a97j08_squareEdges]
+  · refine ⟨(q.1 - 1, q.2), ?_⟩
+    simp [apm_a97j08_squareEdges]
+
+lemma apm_a97j08_boundaryEdge_segment_subset_aux_neighbor_aux_in_square
+    {δ : ℝ} (hδ : 0 < δ) (shift : ℂ) (e : (ℤ × ℤ) × (ℤ × ℤ)) (q : ℤ × ℤ)
+    (heq : e ∈ apm_a97j08_squareEdges q) :
+    segment ℝ (apm_a97j08_gridVertex shift δ e.1) (apm_a97j08_gridVertex shift δ e.2) ⊆
+      apm_a97j08_gridSquare shift δ q := by
+  have hconv : Convex ℝ (apm_a97j08_gridSquare shift δ q) := by
+    intro x hx y hy a b ha hb hab
+    simp only [apm_a97j08_gridSquare, Set.mem_setOf_eq] at hx hy ⊢
+    simp only [Complex.add_re, Complex.smul_re,
+      Complex.add_im, Complex.smul_im, smul_eq_mul]
+    have hrx := mul_le_mul_of_nonneg_left hx.1 ha
+    have hry := mul_le_mul_of_nonneg_left hy.1 hb
+    have hrx' := mul_le_mul_of_nonneg_left hx.2.1 ha
+    have hry' := mul_le_mul_of_nonneg_left hy.2.1 hb
+    have hix := mul_le_mul_of_nonneg_left hx.2.2.1 ha
+    have hiy := mul_le_mul_of_nonneg_left hy.2.2.1 hb
+    have hix' := mul_le_mul_of_nonneg_left hx.2.2.2 ha
+    have hiy' := mul_le_mul_of_nonneg_left hy.2.2.2 hb
+    have hc (c : ℝ) : a * c + b * c = c := by
+      rw [← add_mul, hab, one_mul]
+    constructor
+    · linarith [hc (shift.re + (q.1 : ℝ) * δ)]
+    constructor
+    · linarith [hc (shift.re + ((q.1 : ℝ) + 1) * δ)]
+    constructor
+    · linarith [hc (shift.im + (q.2 : ℝ) * δ)]
+    · linarith [hc (shift.im + ((q.2 : ℝ) + 1) * δ)]
+  have hend : apm_a97j08_gridVertex shift δ e.1 ∈
+        apm_a97j08_gridSquare shift δ q ∧
+      apm_a97j08_gridVertex shift δ e.2 ∈
+        apm_a97j08_gridSquare shift δ q := by
+    simp only [apm_a97j08_squareEdges, Finset.mem_insert, Finset.mem_singleton] at heq
+    rcases heq with rfl | rfl | rfl | rfl <;>
+      simp [apm_a97j08_gridSquare, apm_a97j08_gridVertex] <;>
+      norm_num <;> constructor <;> nlinarith
+  exact hconv.segment_subset hend.1 hend.2
+
+lemma apm_a97j08_boundaryEdge_segment_subset_aux_neighbor_aux_near
+    {δ : ℝ} (hδ : 0 < δ) (shift : ℂ)
+    (e : (ℤ × ℤ) × (ℤ × ℤ)) (q' : ℤ × ℤ)
+    (he : e.swap ∈ apm_a97j08_squareEdges q') :
+    ∀ w ∈ segment ℝ (apm_a97j08_gridVertex shift δ e.1)
+        (apm_a97j08_gridVertex shift δ e.2), ∀ ε > 0, ∃ w' : ℂ, dist w w' < ε ∧
+      shift.re + q'.1 * δ < w'.re ∧ w'.re < shift.re + (q'.1 + 1) * δ ∧
+      shift.im + q'.2 * δ < w'.im ∧ w'.im < shift.im + (q'.2 + 1) * δ := by
+  intro w hw ε hε
+  have hwq : w ∈ apm_a97j08_gridSquare shift δ q' := by
+    have := apm_a97j08_boundaryEdge_segment_subset_aux_neighbor_aux_in_square hδ shift
+      e.swap q' he
+    simp only [Prod.fst_swap, Prod.snd_swap] at this
+    rw [segment_symm] at this
+    exact this hw
+  obtain ⟨h1, h2, h3, h4⟩ := hwq
+  set a := shift.re + (q'.1 : ℝ) * δ
+  set b := shift.im + (q'.2 : ℝ) * δ
+  set c : ℂ := ⟨a + δ / 2, b + δ / 2⟩
+  set s : ℝ := min (1 / 2) (ε / (4 * δ))
+  have hs0 : 0 < s := lt_min (by norm_num) (by positivity)
+  have hs1 : s ≤ 1 / 2 := min_le_left _ _
+  have hsε : s * (4 * δ) ≤ ε := by
+    have := min_le_right (1 / 2 : ℝ) (ε / (4 * δ))
+    rwa [le_div_iff₀ (by positivity)] at this
+  refine ⟨w + (s : ℂ) * (c - w), ?_, ?_⟩
+  · rw [dist_comm, dist_self_add_left, norm_mul, Complex.norm_real, Real.norm_of_nonneg hs0.le]
+    have hre : |(c - w).re| ≤ δ := by
+      rw [Complex.sub_re, abs_le]; simp only [c]; constructor <;> linarith
+    have him : |(c - w).im| ≤ δ := by
+      rw [Complex.sub_im, abs_le]; simp only [c]; constructor <;> linarith
+    have hn := Complex.norm_le_abs_re_add_abs_im (c - w)
+    have : ‖c - w‖ ≤ 2 * δ := by linarith
+    nlinarith
+  · simp only [Complex.add_re, Complex.add_im, Complex.mul_re, Complex.mul_im,
+      Complex.ofReal_re, Complex.ofReal_im, Complex.sub_re, Complex.sub_im, c,
+      zero_mul, sub_zero, add_zero]
+    push_cast at h1 h2 h3 h4 ⊢
+    refine ⟨?_, ?_, ?_, ?_⟩ <;> nlinarith
+
+lemma apm_a97j08_boundaryEdge_segment_subset_aux_neighbor {δ : ℝ} (hδ : 0 < δ)
+    (shift : ℂ) (q : ℤ × ℤ) (e : (ℤ × ℤ) × (ℤ × ℤ)) (he : e ∈ apm_a97j08_squareEdges q) :
+    ∃ q' : ℤ × ℤ, e.swap ∈ apm_a97j08_squareEdges q' ∧
+      ∀ w ∈ segment ℝ (apm_a97j08_gridVertex shift δ e.1)
+          (apm_a97j08_gridVertex shift δ e.2), ∀ ε > 0, ∃ w' : ℂ, dist w w' < ε ∧
+        shift.re + q'.1 * δ < w'.re ∧ w'.re < shift.re + (q'.1 + 1) * δ ∧
+        shift.im + q'.2 * δ < w'.im ∧ w'.im < shift.im + (q'.2 + 1) * δ := by
+  obtain ⟨q', hq'⟩ :=
+    apm_a97j08_boundaryEdge_segment_subset_aux_neighbor_aux_edge q e he
+  exact ⟨q', hq',
+    apm_a97j08_boundaryEdge_segment_subset_aux_neighbor_aux_near hδ shift e q' hq'⟩
+
+-- (b) A point strictly inside square `q'` lies in no other lattice square.
+lemma apm_a97j08_boundaryEdge_segment_subset_aux_open_unique {δ : ℝ} (hδ : 0 < δ)
+    (shift : ℂ) {q q' : ℤ × ℤ} {w : ℂ}
+    (hw : shift.re + q'.1 * δ < w.re ∧ w.re < shift.re + (q'.1 + 1) * δ ∧
+        shift.im + q'.2 * δ < w.im ∧ w.im < shift.im + (q'.2 + 1) * δ)
+    (hq : w ∈ apm_a97j08_gridSquare shift δ q) : q = q' := by
+  rcases hw with ⟨hxlo, hxhi, hylo, hyhi⟩
+  rcases hq with ⟨hqxlo, hqxhi, hqylo, hqyhi⟩
+  have hx₁ : (q'.1 : ℝ) < (q.1 : ℝ) + 1 := by nlinarith
+  have hx₂ : (q.1 : ℝ) < (q'.1 : ℝ) + 1 := by nlinarith
+  have hx₁' : q'.1 < q.1 + 1 := by exact_mod_cast hx₁
+  have hx₂' : q.1 < q'.1 + 1 := by exact_mod_cast hx₂
+  have hx : q.1 = q'.1 := by omega
+  have hy₁ : (q'.2 : ℝ) < (q.2 : ℝ) + 1 := by nlinarith
+  have hy₂ : (q.2 : ℝ) < (q'.2 : ℝ) + 1 := by nlinarith
+  have hy₁' : q'.2 < q.2 + 1 := by exact_mod_cast hy₁
+  have hy₂' : q.2 < q'.2 + 1 := by exact_mod_cast hy₂
+  have hy : q.2 = q'.2 := by omega
+  exact Prod.ext hx hy
+
+lemma apm_a97j08_boundaryEdge_segment_subset_aux_not_interior
+    {δ : ℝ} (hδ : 0 < δ) (shift : ℂ) (Q : Finset (ℤ × ℤ))
+    (e : (ℤ × ℤ) × (ℤ × ℤ))
+    (he : e ∈ apm_a97j08_boundaryEdges Q) :
+    Disjoint
+      (segment ℝ (apm_a97j08_gridVertex shift δ e.1)
+        (apm_a97j08_gridVertex shift δ e.2))
+      (interior (⋃ q ∈ Q, apm_a97j08_gridSquare shift δ q)) := by
+  obtain ⟨⟨q, -, heq⟩, hswap⟩ :=
+    apm_a97j08_boundaryEdge_segment_subset_aux_edge_witness Q e he
+  obtain ⟨q', hq', hnear⟩ :=
+    apm_a97j08_boundaryEdge_segment_subset_aux_neighbor hδ shift q e heq
+  have hq'Q : q' ∉ Q := fun h =>
+    hswap (Finset.mem_biUnion.mpr ⟨q', h, hq'⟩)
+  rw [Set.disjoint_left]
+  intro w hw hint
+  obtain ⟨ε, hε, hball⟩ := Metric.isOpen_iff.mp isOpen_interior w hint
+  obtain ⟨w', hww', hw'⟩ := hnear w hw ε hε
+  have hw'U := interior_subset (hball (by rw [Metric.mem_ball, dist_comm]; exact hww'))
+  obtain ⟨q'', hq''Q, hq''⟩ := Set.mem_iUnion₂.mp hw'U
+  have := apm_a97j08_boundaryEdge_segment_subset_aux_open_unique hδ shift hw' hq''
+  exact hq'Q (this ▸ hq''Q)
+
+theorem apm_a97j08_boundaryEdge_segment_subset
+    (D : Set ℂ) {z : ℂ} {R δ : ℝ} {A B : Set ℂ}
+    (hinput : apm_a97j08_GridInput D z R δ A B)
+    (shift : ℂ) (Q : Finset (ℤ × ℤ))
+    (hU_A : A ⊆ interior (⋃ q ∈ Q, apm_a97j08_gridSquare shift δ q))
+    (hU_B : Disjoint (⋃ q ∈ Q, apm_a97j08_gridSquare shift δ q) B)
+    (hU_R : (⋃ q ∈ Q, apm_a97j08_gridSquare shift δ q) ⊆ Metric.closedBall 0 R)
+    (e : (ℤ × ℤ) × (ℤ × ℤ)) (he : e ∈ apm_a97j08_boundaryEdges Q) :
+    segment ℝ (apm_a97j08_gridVertex shift δ e.1)
+      (apm_a97j08_gridVertex shift δ e.2) ⊆ D := by
+  rcases hinput with
+    ⟨hR, hδ, hzA, hAc, hBc, hDB, hdecomp, hAB, hsep, hAball⟩
+  have hin := apm_a97j08_boundaryEdge_segment_subset_aux_segment_in_union
+    hδ shift Q e he
+  have hfront := apm_a97j08_boundaryEdge_segment_subset_aux_not_interior
+    hδ shift Q e he
+  intro w hw
+  have hwU : w ∈ ⋃ q ∈ Q, apm_a97j08_gridSquare shift δ q := hin hw
+  have hwR : w ∈ Metric.closedBall (0 : ℂ) R := hU_R hwU
+  have hwnB : w ∉ B := by
+    intro hwB
+    exact Set.disjoint_left.1 hU_B hwU hwB
+  have hwnA : w ∉ A := by
+    intro hwA
+    exact Set.disjoint_left.1 hfront hw (hU_A hwA)
+  by_contra hwD
+  have hwDc : w ∈ Dᶜ := hwD
+  have hwAB : w ∈ A ∪ B := by
+    rw [← hdecomp]
+    exact ⟨hwDc, hwR⟩
+  exact hwAB.elim hwnA hwnB
+
+-- (Z1) Exactly one selected square contains `z`, so the square sums total `2π`.
+lemma apm_a97j08_square_total_aux_strict {z shift : ℂ} {δ : ℝ}
+    (q : ℤ × ℤ) (hz : z ∈ apm_a97j08_gridSquare shift δ q)
+    (hre : z.re ∉ {x | ∃ k : ℤ, x = shift.re + k * δ})
+    (him : z.im ∉ {y | ∃ k : ℤ, y = shift.im + k * δ}) :
+    shift.re + q.1 * δ < z.re ∧ z.re < shift.re + (q.1 + 1) * δ ∧
+      shift.im + q.2 * δ < z.im ∧ z.im < shift.im + (q.2 + 1) * δ := by
+  rcases hz with ⟨hr0, hr1, hi0, hi1⟩
+  refine ⟨lt_of_le_of_ne hr0 ?_, lt_of_le_of_ne hr1 ?_,
+    lt_of_le_of_ne hi0 ?_, lt_of_le_of_ne hi1 ?_⟩
+  · intro heq
+    apply hre
+    exact ⟨q.1, heq.symm⟩
+  · intro heq
+    apply hre
+    exact ⟨q.1 + 1, by simpa using heq⟩
+  · intro heq
+    apply him
+    exact ⟨q.2, heq.symm⟩
+  · intro heq
+    apply him
+    exact ⟨q.2 + 1, by simpa using heq⟩
+
+lemma apm_a97j08_square_total_aux_interior {z shift : ℂ} {δ : ℝ}
+    (q : ℤ × ℤ)
+    (hz : shift.re + q.1 * δ < z.re ∧ z.re < shift.re + (q.1 + 1) * δ ∧
+      shift.im + q.2 * δ < z.im ∧ z.im < shift.im + (q.2 + 1) * δ) :
+    z ∈ interior (apm_a97j08_gridSquare shift δ q) := by
+  have hopen : IsOpen {w : ℂ | shift.re + q.1 * δ < w.re ∧ w.re < shift.re + (q.1 + 1) * δ ∧
+      shift.im + q.2 * δ < w.im ∧ w.im < shift.im + (q.2 + 1) * δ} := by
+    refine (isOpen_lt continuous_const Complex.continuous_re).inter
+      ((isOpen_lt Complex.continuous_re continuous_const).inter
+        ((isOpen_lt continuous_const Complex.continuous_im).inter
+          (isOpen_lt Complex.continuous_im continuous_const)))
+  refine interior_maximal (fun w hw => ?_) hopen hz
+  exact ⟨hw.1.le, hw.2.1.le, hw.2.2.1.le, hw.2.2.2.le⟩
+
+lemma apm_a97j08_square_total_aux_unique {z shift : ℂ} {δ : ℝ} (hδ : 0 < δ)
+    {q₀ q : ℤ × ℤ}
+    (hz : shift.re + q₀.1 * δ < z.re ∧ z.re < shift.re + (q₀.1 + 1) * δ ∧
+      shift.im + q₀.2 * δ < z.im ∧ z.im < shift.im + (q₀.2 + 1) * δ)
+    (hq : z ∈ apm_a97j08_gridSquare shift δ q) : q = q₀ := by
+  exact apm_a97j08_boundaryEdge_segment_subset_aux_open_unique hδ shift hz hq
+
+theorem apm_a97j08_square_total {z shift : ℂ} {δ : ℝ} (hδ : 0 < δ)
+    (Q : Finset (ℤ × ℤ)) (hzU : z ∈ ⋃ q ∈ Q, apm_a97j08_gridSquare shift δ q)
+    (hre : z.re ∉ {x | ∃ k : ℤ, x = shift.re + k * δ})
+    (him : z.im ∉ {y | ∃ k : ℤ, y = shift.im + k * δ})
+    (hA2 : ∀ q, z ∉ apm_a97j08_gridSquare shift δ q →
+      ∑ e ∈ apm_a97j08_squareEdges q, apm_a97j08_edgeAngle z shift δ e = 0)
+    (hA3 : ∀ q, z ∈ interior (apm_a97j08_gridSquare shift δ q) →
+      ∑ e ∈ apm_a97j08_squareEdges q, apm_a97j08_edgeAngle z shift δ e =
+        2 * Real.pi) :
+    ∑ q ∈ Q, ∑ e ∈ apm_a97j08_squareEdges q, apm_a97j08_edgeAngle z shift δ e =
+      2 * Real.pi := by
+  simp only [Set.mem_iUnion] at hzU
+  obtain ⟨q₀, hq₀Q, hzq₀⟩ := hzU
+  have hstrict := apm_a97j08_square_total_aux_strict q₀ hzq₀ hre him
+  have hmain := hA3 q₀ (apm_a97j08_square_total_aux_interior q₀ hstrict)
+  calc
+    _ = ∑ e ∈ apm_a97j08_squareEdges q₀,
+        apm_a97j08_edgeAngle z shift δ e := Finset.sum_eq_single q₀
+      (fun q hqQ hne => hA2 q (fun hzq =>
+        hne (apm_a97j08_square_total_aux_unique hδ hstrict hzq)))
+      (fun hn => (hn hq₀Q).elim)
+    _ = 2 * Real.pi := hmain
+
+-- (L1) The straight segment from `p` to `q` has a continuous angle lift about
+-- `z` whose total change is the angle step.
+lemma apm_a97j08_segment_lift_aux_endpoints {z p q : ℂ}
+    (h : z ∉ segment ℝ p q) : p ≠ z ∧ q ≠ z := by
+  constructor
+  · intro hp
+    apply h
+    rw [← hp]
+    exact left_mem_segment ℝ p q
+  · intro hq
+    apply h
+    rw [← hq]
+    exact right_mem_segment ℝ p q
+
+lemma apm_a97j08_segment_lift_aux_ne_zero {z p q : ℂ}
+    (h : z ∉ segment ℝ p q) (t : unitInterval) :
+    AffineMap.lineMap p q (t : ℝ) - z ≠ 0 := by
+  intro hz
+  have heq : AffineMap.lineMap p q (t : ℝ) = z := sub_eq_zero.mp hz
+  apply h
+  rw [← heq]
+  exact (segment_eq_image_lineMap ℝ p q).symm ▸ ⟨(t : ℝ), t.property, rfl⟩
+
+-- The ratio of the moving point to the starting point, seen from `z`, never
+-- crosses the cut `(-∞, 0]` of the principal argument.
+lemma apm_a97j08_segment_lift_aux_slit {z p q : ℂ}
+    (h : z ∉ segment ℝ p q) (t : unitInterval) :
+    (AffineMap.lineMap p q (t : ℝ) - z) / (p - z) ∈ Complex.slitPlane := by
+  obtain ⟨hp, -⟩ := apm_a97j08_segment_lift_aux_endpoints h
+  have hpz : p - z ≠ 0 := sub_ne_zero.mpr hp
+  let m : ℂ := (q - p) / (p - z)
+  have hratio (u : ℝ) :
+      (AffineMap.lineMap p q u - z) / (p - z) = 1 + (u : ℂ) * m := by
+    dsimp [m]
+    rw [AffineMap.lineMap_apply]
+    field_simp
+    simp only [vsub_eq_sub, vadd_eq_add]
+    change (u : ℂ) * (q - p) + p - z = _
+    ring
+  rw [Complex.mem_slitPlane_iff, hratio]
+  by_cases ht : (t : ℝ) = 0
+  · left
+    simp [ht]
+  have htpos : 0 < (t : ℝ) := lt_of_le_of_ne t.property.1 (Ne.symm ht)
+  by_cases hm : m.im = 0
+  · left
+    simp only [Complex.add_re, Complex.one_re, Complex.mul_re, Complex.ofReal_re,
+      Complex.ofReal_im, zero_mul, sub_zero]
+    by_contra hnot
+    have hle : 1 + (t : ℝ) * m.re ≤ 0 := le_of_not_gt hnot
+    have hmneg : m.re < 0 := by nlinarith
+    let s : ℝ := -1 / m.re
+    have hspos : 0 < s := by
+      dsimp [s]
+      exact div_pos_of_neg_of_neg (by norm_num) hmneg
+    have hst : s ≤ (t : ℝ) := by
+      dsimp [s]
+      apply (div_le_iff_of_neg hmneg).2
+      nlinarith
+    have hsone : s ≤ 1 := hst.trans t.property.2
+    let su : unitInterval := ⟨s, hspos.le, hsone⟩
+    have hn := apm_a97j08_segment_lift_aux_ne_zero h su
+    apply hn
+    have hmext : m = (m.re : ℂ) := by
+      apply Complex.ext
+      · simp
+      · simpa [hm]
+    have hzero : (1 : ℂ) + (s : ℂ) * m = 0 := by
+      rw [hmext]
+      apply Complex.ext
+      · simp only [Complex.add_re, Complex.one_re, Complex.mul_re, Complex.ofReal_re,
+          Complex.ofReal_im, zero_mul, sub_zero, Complex.zero_re]
+        dsimp [s]
+        field_simp [ne_of_lt hmneg]
+        norm_num
+      · simp
+    have hzratio := hratio s
+    rw [hzero] at hzratio
+    exact (div_eq_zero_iff.mp hzratio).resolve_right hpz
+  · right
+    simp only [Complex.add_im, Complex.one_im, Complex.mul_im, Complex.ofReal_re,
+      Complex.ofReal_im, zero_mul, zero_add]
+    simpa only [add_zero] using mul_ne_zero (ne_of_gt htpos) hm
+
+lemma apm_a97j08_segment_lift_aux_exp_arg {w : ℂ} (hw : w ≠ 0) :
+    Complex.exp ((Complex.arg w : ℂ) * Complex.I) = w / ((‖w‖ : ℝ) : ℂ) := by
+  have hn : ((‖w‖ : ℝ) : ℂ) ≠ 0 := by exact_mod_cast norm_ne_zero_iff.mpr hw
+  rw [eq_div_iff hn, mul_comm]
+  exact Complex.norm_mul_exp_arg_mul_I w
+
+lemma apm_a97j08_segment_lift_aux_core {z p q : ℂ}
+    (h : z ∉ segment ℝ p q) :
+    ∃ θ : C(unitInterval, ℝ),
+      (∀ t : unitInterval, Complex.exp ((θ t : ℂ) * Complex.I) =
+        (AffineMap.lineMap p q (t : ℝ) - z) /
+          ((‖AffineMap.lineMap p q (t : ℝ) - z‖ : ℝ) : ℂ)) ∧
+      θ 1 - θ 0 = apm_a97j08_angleStep z p q := by
+  obtain ⟨hp, hq⟩ := apm_a97j08_segment_lift_aux_endpoints h
+  have hpz : p - z ≠ 0 := sub_ne_zero.mpr hp
+  let r : unitInterval → ℂ := fun t => (AffineMap.lineMap p q (t : ℝ) - z) / (p - z)
+  have hr : Continuous r := by
+    refine Continuous.div_const (Continuous.sub ?_ continuous_const) _
+    exact ((AffineMap.lineMap_continuous (R := ℝ) (p := p) (q := q))).comp
+      continuous_subtype_val
+  have harg : Continuous fun t => Complex.arg (r t) :=
+    continuous_iff_continuousAt.mpr fun t =>
+      (Complex.continuousAt_arg (apm_a97j08_segment_lift_aux_slit h t)).comp
+        (f := r) hr.continuousAt
+  let θ : C(unitInterval, ℝ) :=
+    ⟨fun t => Complex.arg (p - z) + Complex.arg (r t), continuous_const.add harg⟩
+  refine ⟨θ, fun t => ?_, ?_⟩
+  · have hL := apm_a97j08_segment_lift_aux_ne_zero h t
+    have hrt : r t ≠ 0 := div_ne_zero hL hpz
+    change Complex.exp (((Complex.arg (p - z) + Complex.arg (r t) : ℝ) : ℂ) * Complex.I) = _
+    rw [Complex.ofReal_add, add_mul, Complex.exp_add,
+      apm_a97j08_segment_lift_aux_exp_arg hpz, apm_a97j08_segment_lift_aux_exp_arg hrt]
+    simp only [r, norm_div]
+    have h1 : ((‖p - z‖ : ℝ) : ℂ) ≠ 0 := by exact_mod_cast norm_ne_zero_iff.mpr hpz
+    have h2 : ((‖AffineMap.lineMap p q (t : ℝ) - z‖ : ℝ) : ℂ) ≠ 0 := by
+      exact_mod_cast norm_ne_zero_iff.mpr hL
+    push_cast
+    field_simp
+  · change (Complex.arg (p - z) + Complex.arg (r 1)) - (Complex.arg (p - z) + Complex.arg (r 0)) = _
+    simp only [r, Set.Icc.coe_one, Set.Icc.coe_zero, AffineMap.lineMap_apply_one,
+      AffineMap.lineMap_apply_zero, div_self hpz, Complex.arg_one, apm_a97j08_angleStep]
+    ring
+
+theorem apm_a97j08_segment_lift {z p q : ℂ} (h : z ∉ segment ℝ p q) :
+    ∃ θ : C(unitInterval, ℝ),
+      (∀ t : unitInterval, Complex.exp ((θ t : ℂ) * Complex.I) =
+        (AffineMap.lineMap p q (t : ℝ) - z) /
+          ((‖AffineMap.lineMap p q (t : ℝ) - z‖ : ℝ) : ℂ)) ∧
+      θ 1 - θ 0 = apm_a97j08_angleStep z p q := by
+  exact apm_a97j08_segment_lift_aux_core h
+
+-- (L2) A closed polygon in `D` has a closed path in `D` with an angle lift
+-- whose total change is the sum of the angle steps (given L1).
+lemma apm_a97j08_polygon_path_lift_aux_singleton (D : Set ℂ) {z v : ℂ}
+    (hz : z ∈ Dᶜ)
+    (hL1 : ∀ {p q : ℂ}, z ∉ segment ℝ p q → ∃ θ : C(unitInterval, ℝ),
+      (∀ t : unitInterval, Complex.exp ((θ t : ℂ) * Complex.I) =
+        (AffineMap.lineMap p q (t : ℝ) - z) /
+          ((‖AffineMap.lineMap p q (t : ℝ) - z‖ : ℝ) : ℂ)) ∧
+      θ 1 - θ 0 = apm_a97j08_angleStep z p q)
+    (hseg : ∀ e ∈ apm_a97j08_cycleEdges [v], segment ℝ e.1 e.2 ⊆ D) :
+    ∃ x : ℂ, ∃ p : Path x x, (∀ t, p t ∈ D) ∧ ∃ θ : C(unitInterval, ℝ),
+      (∀ t : unitInterval, Complex.exp ((θ t : ℂ) * Complex.I) =
+        (p t - z) / ((‖p t - z‖ : ℝ) : ℂ)) ∧
+      θ 1 - θ 0 = apm_a97j08_cycleSum
+        (fun e => apm_a97j08_angleStep z e.1 e.2) [v] := by
+  have hed : (v, v) ∈ apm_a97j08_cycleEdges [v] := by
+    simp [apm_a97j08_cycleEdges]
+  have hsub : segment ℝ v v ⊆ D := hseg (v, v) hed
+  have hvD : v ∈ D := hsub (left_mem_segment ℝ v v)
+  have hzseg : z ∉ segment ℝ v v := fun hzv => hz (hsub hzv)
+  obtain ⟨θ, hθ, hstep⟩ := hL1 hzseg
+  refine ⟨v, Path.segment v v, ?_, θ, ?_, ?_⟩
+  · intro t
+    simpa using hvD
+  · intro t
+    simpa using hθ t
+  · simpa [apm_a97j08_cycleSum, apm_a97j08_cycleEdges] using hstep
+
+-- Gluing angle lifts along `Path.trans` (shift the second lift by a multiple of `2π`).
+lemma apm_a97j08_polygon_path_lift_aux_glue {z a b c : ℂ}
+    (p₁ : Path a b) (p₂ : Path b c) (θ₁ θ₂ : C(unitInterval, ℝ))
+    (h₁ : ∀ t : unitInterval, Complex.exp ((θ₁ t : ℂ) * Complex.I) =
+      (p₁ t - z) / ((‖p₁ t - z‖ : ℝ) : ℂ))
+    (h₂ : ∀ t : unitInterval, Complex.exp ((θ₂ t : ℂ) * Complex.I) =
+      (p₂ t - z) / ((‖p₂ t - z‖ : ℝ) : ℂ)) :
+    ∃ θ : C(unitInterval, ℝ),
+      (∀ t : unitInterval, Complex.exp ((θ t : ℂ) * Complex.I) =
+        ((p₁.trans p₂) t - z) / ((‖(p₁.trans p₂) t - z‖ : ℝ) : ℂ)) ∧
+      θ 1 - θ 0 = (θ₁ 1 - θ₁ 0) + (θ₂ 1 - θ₂ 0) := by
+  let δ : ℝ := θ₁ 1 - θ₂ 0
+  have hj : Complex.exp ((θ₁ 1 : ℂ) * Complex.I) =
+      Complex.exp ((θ₂ 0 : ℂ) * Complex.I) := by
+    rw [h₁ 1, h₂ 0]
+    simp
+  have hδ : Complex.exp ((δ : ℂ) * Complex.I) = 1 := by
+    rw [show (δ : ℂ) * Complex.I =
+      (θ₁ 1 : ℂ) * Complex.I - (θ₂ 0 : ℂ) * Complex.I by
+        simp [δ]; ring]
+    rw [Complex.exp_sub, hj]
+    simp
+  let q₁ : Path (θ₁ 0) (θ₁ 1) :=
+    { toContinuousMap := θ₁
+      source' := rfl
+      target' := rfl }
+  let θ₂' : C(unitInterval, ℝ) := θ₂ + ContinuousMap.const _ δ
+  let q₂ : Path (θ₁ 1) (θ₂ 1 + δ) :=
+    { toContinuousMap := θ₂'
+      source' := by simp [θ₂', δ]
+      target' := by simp [θ₂'] }
+  let θ : C(unitInterval, ℝ) := (q₁.trans q₂).toContinuousMap
+  refine ⟨θ, ?_, ?_⟩
+  · intro t
+    rw [show θ t = (q₁.trans q₂) t by rfl, Path.trans_apply,
+      Path.trans_apply]
+    split_ifs with ht
+    · exact h₁ _
+    · change Complex.exp (((θ₂ _ + δ : ℝ) : ℂ) * Complex.I) = _
+      rw [show (((θ₂ _ + δ : ℝ) : ℂ) * Complex.I) =
+        (θ₂ _ : ℂ) * Complex.I + (δ : ℂ) * Complex.I by push_cast; ring,
+        Complex.exp_add, hδ, mul_one]
+      exact h₂ _
+  · change (q₁.trans q₂) 1 - (q₁.trans q₂) 0 = _
+    simp [q₁, q₂, θ₂', δ]
+    ring
+
+-- Open polygonal chains: consecutive segments in `D` give a path in `D` with an
+-- angle lift whose change is the sum of the steps (induction on the list, using
+-- the glue lemma).
+lemma apm_a97j08_polygon_path_lift_aux_chain (D : Set ℂ) {z : ℂ} (hz : z ∈ Dᶜ)
+    (hL1 : ∀ {p q : ℂ}, z ∉ segment ℝ p q → ∃ θ : C(unitInterval, ℝ),
+      (∀ t : unitInterval, Complex.exp ((θ t : ℂ) * Complex.I) =
+        (AffineMap.lineMap p q (t : ℝ) - z) /
+          ((‖AffineMap.lineMap p q (t : ℝ) - z‖ : ℝ) : ℂ)) ∧
+      θ 1 - θ 0 = apm_a97j08_angleStep z p q)
+    (hglue : ∀ {a b c : ℂ} (p₁ : Path a b) (p₂ : Path b c) (θ₁ θ₂ : C(unitInterval, ℝ)),
+      (∀ t : unitInterval, Complex.exp ((θ₁ t : ℂ) * Complex.I) =
+        (p₁ t - z) / ((‖p₁ t - z‖ : ℝ) : ℂ)) →
+      (∀ t : unitInterval, Complex.exp ((θ₂ t : ℂ) * Complex.I) =
+        (p₂ t - z) / ((‖p₂ t - z‖ : ℝ) : ℂ)) →
+      ∃ θ : C(unitInterval, ℝ),
+        (∀ t : unitInterval, Complex.exp ((θ t : ℂ) * Complex.I) =
+          ((p₁.trans p₂) t - z) / ((‖(p₁.trans p₂) t - z‖ : ℝ) : ℂ)) ∧
+        θ 1 - θ 0 = (θ₁ 1 - θ₁ 0) + (θ₂ 1 - θ₂ 0))
+    (a : ℂ) (ha : a ∈ D) (l : List ℂ)
+    (hseg : ∀ e ∈ (a :: l).zip l, segment ℝ e.1 e.2 ⊆ D) :
+    ∃ p : Path a ((a :: l).getLast (List.cons_ne_nil a l)), (∀ t, p t ∈ D) ∧
+      ∃ θ : C(unitInterval, ℝ),
+        (∀ t : unitInterval, Complex.exp ((θ t : ℂ) * Complex.I) =
+          (p t - z) / ((‖p t - z‖ : ℝ) : ℂ)) ∧
+        θ 1 - θ 0 = (((a :: l).zip l).map fun e => apm_a97j08_angleStep z e.1 e.2).sum := by
+  induction l generalizing a with
+  | nil =>
+      have hza : z ≠ a := fun hza => hz (hza ▸ ha)
+      have hzseg : z ∉ segment ℝ a a := by
+        intro hzmem
+        apply hza
+        have heq : segment ℝ a a = {a} := segment_same ℝ a
+        rw [heq] at hzmem
+        exact hzmem
+      obtain ⟨θ, hθ, hstep⟩ := hL1 hzseg
+      refine ⟨Path.segment a a, ?_, θ, ?_, ?_⟩
+      · intro t
+        simpa using ha
+      · intro t
+        simpa using hθ t
+      · rw [hstep]
+        simp [apm_a97j08_angleStep]
+  | cons b l ih =>
+      have hab : segment ℝ a b ⊆ D := hseg (a, b) (by simp)
+      have hb : b ∈ D := hab (right_mem_segment ℝ a b)
+      have hzseg : z ∉ segment ℝ a b := fun hzs => hz (hab hzs)
+      obtain ⟨θ₁, hθ₁, hstep⟩ := hL1 hzseg
+      have htail : ∀ e ∈ (b :: l).zip l, segment ℝ e.1 e.2 ⊆ D := by
+        intro e he
+        exact hseg e (by simp [he])
+      obtain ⟨p₂, hp₂D, θ₂, hθ₂, hsum⟩ := ih b hb htail
+      obtain ⟨θ, hθ, hchange⟩ := hglue (Path.segment a b) p₂ θ₁ θ₂
+        (fun t => by simpa using hθ₁ t) hθ₂
+      refine ⟨(Path.segment a b).trans p₂, ?_, θ, hθ, ?_⟩
+      · intro t
+        rw [Path.trans_apply]
+        split_ifs with ht
+        · apply hab
+          have heq : segment ℝ a b = AffineMap.lineMap a b '' Icc (0 : ℝ) 1 :=
+            segment_eq_image_lineMap ℝ a b
+          rw [heq]
+          exact ⟨2 * (t : ℝ),
+            ⟨mul_nonneg (by norm_num) t.2.1, by linarith⟩, rfl⟩
+        · exact hp₂D _
+      · rw [hchange, hstep, hsum]
+        simp
+
+lemma apm_a97j08_polygon_path_lift_aux_zip_snoc {α : Type*} (u x : α) (l : List α) :
+    (u :: l).zip (l ++ [x]) = (u :: (l ++ [x])).zip (l ++ [x]) := by
+  induction l generalizing u with
+  | nil => rfl
+  | cons d l ih => simp only [List.cons_append, List.zip_cons_cons, ih]
+
+lemma apm_a97j08_polygon_path_lift_aux_long (D : Set ℂ) {z : ℂ} (hz : z ∈ Dᶜ)
+    (hL1 : ∀ {p q : ℂ}, z ∉ segment ℝ p q → ∃ θ : C(unitInterval, ℝ),
+      (∀ t : unitInterval, Complex.exp ((θ t : ℂ) * Complex.I) =
+        (AffineMap.lineMap p q (t : ℝ) - z) /
+          ((‖AffineMap.lineMap p q (t : ℝ) - z‖ : ℝ) : ℂ)) ∧
+      θ 1 - θ 0 = apm_a97j08_angleStep z p q)
+    (v w : ℂ) (c : List ℂ)
+    (hseg : ∀ e ∈ apm_a97j08_cycleEdges (v :: w :: c), segment ℝ e.1 e.2 ⊆ D) :
+    ∃ x : ℂ, ∃ p : Path x x, (∀ t, p t ∈ D) ∧ ∃ θ : C(unitInterval, ℝ),
+      (∀ t : unitInterval, Complex.exp ((θ t : ℂ) * Complex.I) =
+        (p t - z) / ((‖p t - z‖ : ℝ) : ℂ)) ∧
+      θ 1 - θ 0 = apm_a97j08_cycleSum
+        (fun e => apm_a97j08_angleStep z e.1 e.2) (v :: w :: c) := by
+  have hrot : (v :: w :: c).rotate 1 = w :: c ++ [v] := by simp
+  have hedges : apm_a97j08_cycleEdges (v :: w :: c) = (v :: (w :: c ++ [v])).zip (w :: c ++ [v]) := by
+    rw [apm_a97j08_cycleEdges, hrot]
+    exact apm_a97j08_polygon_path_lift_aux_zip_snoc v v (w :: c)
+  rw [hedges] at hseg
+  obtain ⟨p, hpD, θ, hθ, hdisp⟩ := apm_a97j08_polygon_path_lift_aux_chain D hz hL1
+    (fun p₁ p₂ θ₁ θ₂ h₁ h₂ => apm_a97j08_polygon_path_lift_aux_glue p₁ p₂ θ₁ θ₂ h₁ h₂)
+    v (hseg (v, w) (by simp) (left_mem_segment ℝ v w)) (w :: c ++ [v]) hseg
+  have hlast : (v :: (w :: c ++ [v])).getLast (List.cons_ne_nil _ _) = v := by simp
+  refine ⟨v, p.cast rfl hlast.symm, fun t => hpD t, θ, fun t => hθ t, ?_⟩
+  rw [hdisp, apm_a97j08_cycleSum, hedges]
+
+theorem apm_a97j08_polygon_path_lift (D : Set ℂ) {z : ℂ} (hz : z ∈ Dᶜ)
+    (hL1 : ∀ {p q : ℂ}, z ∉ segment ℝ p q → ∃ θ : C(unitInterval, ℝ),
+      (∀ t : unitInterval, Complex.exp ((θ t : ℂ) * Complex.I) =
+        (AffineMap.lineMap p q (t : ℝ) - z) /
+          ((‖AffineMap.lineMap p q (t : ℝ) - z‖ : ℝ) : ℂ)) ∧
+      θ 1 - θ 0 = apm_a97j08_angleStep z p q)
+    (c : List ℂ) (hc : c ≠ [])
+    (hseg : ∀ e ∈ apm_a97j08_cycleEdges c, segment ℝ e.1 e.2 ⊆ D) :
+    ∃ x : ℂ, ∃ p : Path x x, (∀ t, p t ∈ D) ∧ ∃ θ : C(unitInterval, ℝ),
+      (∀ t : unitInterval, Complex.exp ((θ t : ℂ) * Complex.I) =
+        (p t - z) / ((‖p t - z‖ : ℝ) : ℂ)) ∧
+      θ 1 - θ 0 = apm_a97j08_cycleSum (fun e => apm_a97j08_angleStep z e.1 e.2) c := by
+  cases c with
+  | nil => exact (hc rfl).elim
+  | cons v tail =>
+      cases tail with
+      | nil => exact apm_a97j08_polygon_path_lift_aux_singleton D hz hL1 hseg
+      | cons w c => exact apm_a97j08_polygon_path_lift_aux_long D hz hL1 v w c hseg
+
+-- (L3) A closed path in `D` whose angle lift about `z ∉ D` has nonzero total
+-- change gives a noncontractible circle in `D`.
+theorem apm_a97j08_not_nullhomotopic_of_lift (D : Set ℂ) {z : ℂ} (hz : z ∈ Dᶜ)
+    {x : ℂ} (p : Path x x) (hpD : ∀ t, p t ∈ D) (θ : C(unitInterval, ℝ))
+    (hθ : ∀ t : unitInterval, Complex.exp ((θ t : ℂ) * Complex.I) =
+        (p t - z) / ((‖p t - z‖ : ℝ) : ℂ))
+    (hs : θ 1 ≠ θ 0) :
+    ∃ cD : C(Circle, D), ¬ ContinuousMap.Nullhomotopic cD := by
+  have hx : x ∈ D := by simpa using hpD 0
+  let pD : Path (⟨x, hx⟩ : D) ⟨x, hx⟩ :=
+    { toFun := fun t ↦ ⟨p t, hpD t⟩
+      continuous_toFun := p.continuous.subtype_mk hpD
+      source' := by ext; simp
+      target' := by ext; simp }
+  let cD : C(Circle, D) := apm_a97j08_pathCircleMap pD
+  refine ⟨cD, ?_⟩
+  intro hc
+  let r := (apm_a97j08_radialMap D z hz).comp cD
+  obtain ⟨y, hhom⟩ := hc.comp_right (apm_a97j08_radialMap D z hz)
+  obtain ⟨H⟩ := hhom
+  let Q : C(unitInterval × unitInterval, Circle) :=
+    ⟨fun w ↦ H (w.2, apm_a97j08_circleParam w.1),
+      H.continuous.comp
+        (continuous_snd.prodMk (apm_a97j08_circleParam_continuous.comp continuous_fst))⟩
+  have hQ0 : Q (0, 0) = Circle.exp (θ 0) := by
+    apply Subtype.ext
+    change ((H (0, apm_a97j08_circleParam 0) : Circle) : ℂ) = _
+    rw [H.apply_zero]
+    simp only [r, ContinuousMap.comp_apply,
+      cD, apm_a97j08_pathCircleMap_apply_circleParam, pD,
+      apm_a97j08_radialMap]
+    simpa [Circle.coe_exp] using (hθ 0).symm
+  let L0 : C(unitInterval, ℝ) :=
+    Circle.isCoveringMap_exp.liftPath
+      (Q.comp ((ContinuousMap.const unitInterval (0 : unitInterval)).prodMk
+        (ContinuousMap.id unitInterval))) (θ 0) hQ0
+  let L : C(unitInterval × unitInterval, ℝ) :=
+    Circle.isCoveringMap_exp.liftHomotopy Q L0 (fun u ↦ by
+      exact (congr_fun (Circle.isCoveringMap_exp.liftPath_lifts
+        (Q.comp ((ContinuousMap.const unitInterval (0 : unitInterval)).prodMk
+          (ContinuousMap.id unitInterval)))
+        (θ 0) hQ0) u).symm)
+  have hLexp (w : unitInterval × unitInterval) : Circle.exp (L w) = Q w :=
+    congr_fun (Circle.isCoveringMap_exp.liftHomotopy_lifts Q L0 _) w
+  have hloop (s : unitInterval) : Q (1, s) = Q (0, s) := by
+    simp [Q, apm_a97j08_circleParam]
+  have hdisp : L (1, 0) - L (0, 0) = L (1, 1) - L (0, 1) := by
+    apply Circle.isCoveringMap_exp.const_of_comp
+      (((L.continuous.comp
+          ((ContinuousMap.const unitInterval (1 : unitInterval)).prodMk
+            (ContinuousMap.id unitInterval)).continuous).sub
+        (L.continuous.comp
+          ((ContinuousMap.const unitInterval (0 : unitInterval)).prodMk
+            (ContinuousMap.id unitInterval)).continuous)))
+    intro u v
+    change Circle.exp (L (1, u) - L (0, u)) =
+      Circle.exp (L (1, v) - L (0, v))
+    rw [Circle.exp_sub, Circle.exp_sub, hLexp, hLexp, hLexp, hLexp,
+      hloop u, hloop v]
+    simp
+  have htop : L (1, 1) = L (0, 1) := by
+    apply Circle.isCoveringMap_exp.const_of_comp
+      (L.continuous.comp
+        ((ContinuousMap.id unitInterval).prodMk
+          (ContinuousMap.const unitInterval (1 : unitInterval))).continuous)
+    intro u v
+    change Circle.exp (L (u, 1)) = Circle.exp (L (v, 1))
+    rw [hLexp, hLexp]
+    simp [Q]
+  have hbottom : L (1, 0) - θ 1 = L (0, 0) - θ 0 := by
+    apply Circle.isCoveringMap_exp.const_of_comp
+      (((L.continuous.comp
+          ((ContinuousMap.id unitInterval).prodMk
+            (ContinuousMap.const unitInterval (0 : unitInterval))).continuous).sub
+        θ.continuous))
+    intro u v
+    change Circle.exp (L (u, 0) - θ u) =
+      Circle.exp (L (v, 0) - θ v)
+    rw [Circle.exp_sub, Circle.exp_sub, hLexp, hLexp]
+    have hrad (t : unitInterval) : Q (t, 0) = Circle.exp (θ t) := by
+      apply Subtype.ext
+      change ((H (0, apm_a97j08_circleParam t) : Circle) : ℂ) = _
+      rw [H.apply_zero]
+      simp only [r, ContinuousMap.comp_apply,
+        cD, apm_a97j08_pathCircleMap_apply_circleParam, pD,
+        apm_a97j08_radialMap]
+      simpa [Circle.coe_exp] using (hθ t).symm
+    rw [hrad u, hrad v]
+    simp
+  apply hs
+  linarith
+
+lemma apm_a97j08_cycleEdges_map {V W : Type*} (g : V → W) (c : List V) :
+    apm_a97j08_cycleEdges (c.map g) = (apm_a97j08_cycleEdges c).map (Prod.map g g) := by
+  simp only [apm_a97j08_cycleEdges, ← List.map_rotate, List.map_prod_left_eq_zip]
+  rw [List.zip_map]
+
+/-- A bounded complementary component produces a noncontractible circle in
+the domain subtype: separate, pixelate, sum the angle steps over the boundary
+edges (total `2π`), split them into cycles, and take a cycle with nonzero sum. -/
 lemma apm_a97j08_exists_noncontractible_circle_of_bounded_compl_component
     (D : Set ℂ) (hD_open : IsOpen D)
     {z : ℂ} (hz : z ∈ Dᶜ)
     (hzbounded : Bornology.IsBounded (connectedComponentIn Dᶜ z)) :
     ∃ c : C(Circle, D),
       ¬ ContinuousMap.Nullhomotopic c := by
-  have _hDnonempty : D.Nonempty :=
-    apm_a97j08_nonempty_of_bounded_compl_component hz hzbounded
-  have _hhole :=
-    apm_a97j08_compl_component_compact_connected hD_open hz hzbounded
-  sorry
+  have hsep := apm_a97j08_clopen_separation_of_bounded_component
+    D hD_open hz hzbounded
+  obtain ⟨R, δ, A, B, U, hinput, shift, Q, hU, hzU, hAU, hUB, hUR, hre, him⟩ :=
+    apm_a97j08_grid_region_construction D hsep
+  have hδ : 0 < δ := hinput.2.1
+  subst hU
+  set f := apm_a97j08_edgeAngle z shift δ
+  have hanti : ∀ e ∈ apm_a97j08_allEdges Q, f e.swap = -f e := by
+    intro e he
+    obtain ⟨q, -, heq⟩ := Finset.mem_biUnion.mp he
+    exact apm_a97j08_edgeAngle_swap hδ hre him
+      (fun h => apm_a97j08_angleStep_swap h) q e heq
+  have hC1 := apm_a97j08_boundary_sum Q
+  have hbal := apm_a97j08_boundary_balanced Q (fun g hg => hC1 g hg)
+  obtain ⟨cs, hcs, hsum⟩ := apm_a97j08_cycle_decomposition
+    (fun E hE hne => apm_a97j08_exists_simple_cycle E hE hne) _ hbal
+  have htotal : (cs.map (apm_a97j08_cycleSum f)).sum = 2 * Real.pi := by
+    rw [← hsum f, hC1 f hanti]
+    exact apm_a97j08_square_total hδ Q (interior_subset hzU) hre him
+      (fun q hq => apm_a97j08_squareSum_outside hδ q hq)
+      (fun q hq => apm_a97j08_squareSum_inside hδ q hq)
+  obtain ⟨c, hc, hcne⟩ : ∃ c ∈ cs, apm_a97j08_cycleSum f c ≠ 0 := by
+    by_contra hall
+    push_neg at hall
+    have : (cs.map (apm_a97j08_cycleSum f)).sum = 0 :=
+      List.sum_eq_zero fun x hx => by
+        obtain ⟨c, hc, rfl⟩ := List.mem_map.mp hx
+        exact hall c hc
+    rw [this] at htotal
+    linarith [Real.pi_pos]
+  obtain ⟨hcne', hcE⟩ := hcs c hc
+  set g := apm_a97j08_gridVertex shift δ
+  have hseg : ∀ e ∈ apm_a97j08_cycleEdges (c.map g), segment ℝ e.1 e.2 ⊆ D := by
+    intro e he
+    rw [apm_a97j08_cycleEdges_map] at he
+    obtain ⟨e', he', rfl⟩ := List.mem_map.mp he
+    exact apm_a97j08_boundaryEdge_segment_subset D hinput shift Q hAU hUB hUR e'
+      (hcE e' he')
+  obtain ⟨x, p, hpD, θ, hθ, hdisp⟩ := apm_a97j08_polygon_path_lift D hz
+    (fun h => apm_a97j08_segment_lift h) (c.map g) (by simpa using hcne') hseg
+  refine apm_a97j08_not_nullhomotopic_of_lift D hz p hpD θ hθ ?_
+  intro h01
+  apply hcne
+  have : apm_a97j08_cycleSum (fun e => apm_a97j08_angleStep z e.1 e.2) (c.map g) =
+      apm_a97j08_cycleSum f c := by
+    simp only [apm_a97j08_cycleSum, apm_a97j08_cycleEdges_map, List.map_map]
+    rfl
+  rw [← this, ← hdisp, h01, sub_self]
 
 /-- The genuinely planar obstruction missing from Mathlib: a bounded
 component of the complement of an open plane domain produces a loop in the
@@ -1960,3 +3907,5 @@ theorem apm_a97j08 (D : Set ℂ) (γ : ℝ → ℂ) (F : ℕ → ℂ → ℂ) (g
   exact apm_a97j08_eventual_zeroCount_of_closure_subset
     D γ F g hD_open hD_simplyConnected.isPathConnected.isConnected.isPreconnected
     hγ_cont hγD hF_analytic hF_tendsto hg_ne hUD
+
+#print axioms apm_a97j08
