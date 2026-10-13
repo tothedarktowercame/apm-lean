@@ -1323,3 +1323,10 @@ the inverse on the unshifted side without rewriting beneath its dependent
 inverse round-trip component, and the source connector.  The remaining
 comparison can now be made factor-by-factor against the inverse-span normal
 form.
+
+`genericPointWedgeOuterRight_leadingConnectors_heq` identifies the leading
+connector of that reversed product with the inverse-span leading connector:
+both are transported to the reflexive connector at the literal right base.
+The terminal connectors are already the same expression, so the comparison
+is reduced to the inverse-span component versus the inverse unshifted
+round-trip component.
