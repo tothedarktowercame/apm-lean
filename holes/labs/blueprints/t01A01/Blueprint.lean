@@ -646,7 +646,10 @@ constant `1` (`H t y = exp ((1 - t) k y)`). -/
 theorem apm_t01A01_circle_nullhomotopic_of_log {X : Type*} [TopologicalSpace X]
     (f : C(X, Circle)) (k : C(X, ℝ)) (hk : ∀ y, Circle.exp (k y) = f y) :
     ContinuousMap.Homotopic f (ContinuousMap.const X (1 : Circle)) := by
-  sorry
+  refine ⟨{ toFun := fun tx => Circle.exp ((1 - (tx.1 : ℝ)) * k tx.2)
+            continuous_toFun := by fun_prop
+            map_zero_left := by intro x; simpa using hk x
+            map_one_left := by intro x; simp }⟩
 
 lemma apm_t01A01_projectiveLine_map_nullhomotopic_aux_circle
     (f : C(apm_t01A01_RP2, Circle)) :
