@@ -113850,14 +113850,14 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "Recorded fixture hash mismatch: :fixture.sha256 is 0bca6ce32c019fc3053c7f813c26917169cf817375b44d5e722b864b61a526450c1, but ConstructionTargets/PointWedgeVanKampen.blueprint.md at recorded commit c9b3af27 has exact SHA-256 0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0. Re-record the fixture hash for the reviewed commit.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
    :evidence
    {:placeholder-delta {:source-before 0, :source-after 0},
     :residual
-    "Compare inverse-span component with inverse unshifted component; outer connectors now agree; then projection=1, inl, B6/B12.",
+    "Identify the two middle morphisms after endpoint transport; then projection=1, inl, B6/B12.",
     :outcome :stop,
     :warnings ["existing linter"],
     :missing-theorems
@@ -113871,16 +113871,17 @@
       :area "fundamental-group-wedge-of-circles"}],
     :statement-hashes
     {:source
-     "0b58c748909b8fa5841dcc671fe2f971de62f0e65b9e136dfcf1f34f95fcee98",
+     "72b0f54d6550ee339719265f927c751e2ce3dd893feb12ba74c13b900fb6f437",
      :documentation
-     "793cb0a5c1117221d6989039cf83a7b9fb91678516712f220d8256791125e55f",
+     "fe9fbedb18d63ea62f47c0d0c53a30e68254b88f7a66031d18eab88703d9a40e",
      :blueprint
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0",
      :registry "150/150"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
-    :reason "Leading normal-form connectors identified by typed HEq.",
+    :reason
+    "Both exact endpoint equalities for the remaining middle-component comparison are banked.",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/PointWedgeVanKampen.lean",
@@ -113893,8 +113894,8 @@
     [{:cmd
       "lake build ConstructionTargets.ThreeCirclesFundamentalGroup",
       :exit 1,
-      :finding "B12 absent."}],
-    :commit "b76646cd0bfee9e243352d09fbd920b7b216c29e",
+      :finding "B12 file absent."}],
+    :commit "f55f412737e40a5c45a81e98254bf97a19b59d92",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
      "ConstructionTargets/PointWedgeVanKampen.md"],
@@ -113904,7 +113905,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
