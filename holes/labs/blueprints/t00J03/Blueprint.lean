@@ -171,11 +171,46 @@ theorem apm_t00j03_projectiveLoop_continuous :
 
 /-- The half-open half-circle is a set of unique representatives for `RP¹`,
 and its two missing/added endpoints project to the same line. -/
+lemma apm_t00j03_projectiveLoop_fundamentalDomain_aux_endpoints :
+    apm_t00j03_projectiveLoop 0 = apm_t00j03_projectiveLoop Real.pi := by
+  unfold apm_t00j03_projectiveLoop apm_t00j03_projectivize
+  change Projectivization.mk ℝ (apm_t00j03_circlePoint 0).1 _ =
+    Projectivization.mk ℝ (apm_t00j03_circlePoint Real.pi).1 _
+  rw [Projectivization.mk_eq_mk_iff']
+  refine ⟨(-1 : ℝ), ?_⟩
+  ext i
+  fin_cases i <;> simp [apm_t00j03_circlePoint]
+
+lemma apm_t00j03_projectiveLoop_fundamentalDomain_aux_injective :
+    Set.InjOn apm_t00j03_projectiveLoop (Set.Ico 0 Real.pi) := by
+  intro θ hθ φ hφ heq
+  unfold apm_t00j03_projectiveLoop apm_t00j03_projectivize at heq
+  change Projectivization.mk ℝ (apm_t00j03_circlePoint θ).1 _ =
+    Projectivization.mk ℝ (apm_t00j03_circlePoint φ).1 _ at heq
+  rw [Projectivization.mk_eq_mk_iff'] at heq
+  obtain ⟨a, ha⟩ := heq
+  have h0 := congrFun ha 0
+  have h1 := congrFun ha 1
+  simp [apm_t00j03_circlePoint] at h0 h1
+  have hs : Real.sin (θ - φ) = 0 := by
+    rw [Real.sin_sub]
+    rw [← h1, ← h0]
+    ring
+  have hdlo : -Real.pi < θ - φ := by linarith [hθ.1, hφ.2]
+  have hdhi : θ - φ < Real.pi := by linarith [hθ.2, hφ.1]
+  exact sub_eq_zero.mp ((Real.sin_eq_zero_iff_of_lt_of_lt hdlo hdhi).mp hs)
+
+lemma apm_t00j03_projectiveLoop_fundamentalDomain_aux_surjective :
+    Set.SurjOn apm_t00j03_projectiveLoop (Set.Ico 0 Real.pi) Set.univ := by
+  sorry
+
 theorem apm_t00j03_projectiveLoop_fundamentalDomain :
     Set.SurjOn apm_t00j03_projectiveLoop (Set.Ico 0 Real.pi) Set.univ ∧
     Set.InjOn apm_t00j03_projectiveLoop (Set.Ico 0 Real.pi) ∧
     apm_t00j03_projectiveLoop 0 = apm_t00j03_projectiveLoop Real.pi := by
-  sorry
+  exact ⟨apm_t00j03_projectiveLoop_fundamentalDomain_aux_surjective,
+    apm_t00j03_projectiveLoop_fundamentalDomain_aux_injective,
+    apm_t00j03_projectiveLoop_fundamentalDomain_aux_endpoints⟩
 
 /-- The displayed angle form descends to `RP¹`; with the orientation induced
 by the projected half-circle its integral is `π`, and reversing orientation
