@@ -24036,27 +24036,41 @@
    :implements-lemma
    :lemma-constructiontargets-sardconvexdomain-contdiffon-convexwithinjet,
    :evidence
-   {:probe
-    {:outcome :go,
-     :fixture
-     {:path "/tmp/t01a08_b1_probe.lean",
-      :sha256
-      "1a75ad577b4fd33450d4f90228c7d736aee3c05f3fd360ae2e27610a1d1b8061"},
-     :commands
-     [{:cmd "lake env lean /tmp/t01a08_b1_probe.lean", :exit 0}
-      {:cmd "sha256sum /tmp/t01a08_b1_probe.lean", :exit 0}],
-     :implementation
-     {:scope ["ConstructionTargets/SardConvexDomain.lean"],
-      :declaration
+   {:placeholder-delta {:t01A08 [1 1]},
+    :residual
+    "convexWithinJet_isWhitney/criticalImageNull then adapter.",
+    :outcome :done-unreviewed,
+    :warnings ["existing unnecessarySimpa at line 454"],
+    :missing-theorems
+    [{:name
       "ConstructionTargets.SardConvexDomain.ContDiffOn.convexWithinJet",
-      :type
-      "Convex ℝ s → (interior s).Nonempty → ContDiffOn ℝ ∞ f s → ∃ J n x := iteratedFDerivWithin ℝ n f s x, continuous on s, J0=f, J1=fderivWithin, and ∀ permutations σ, (J n x).domDomCongr σ=J n x"},
-     :residual
-     "Implement compiled B1 exactly; then convexWithinJet_isWhitney/criticalImageNull."}},
+      :type "exact B1 type in reviewed blueprint",
+      :status :proved,
+      :consumers [:t01A08],
+      :depends-on [],
+      :area "sard-convex-domain"}],
+    :statement-hashes {:registry "149/149"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author :topo-10,
+    :commands
+    [{:cmd "lake build ConstructionTargets.SardConvexDomain", :exit 0}
+     {:cmd "sha256sum fixture; lake env lean export-check", :exit 0}
+     {:cmd "statement-registry check; placeholder count; diff check",
+      :exit 0}
+     {:cmd "scoped axiom/sorry scan; verify commit", :exit 0}],
+    :commit "6a9ebc96e6ce91756a3e8dc6d074d9e86defe7de",
+    :changed-paths ["ConstructionTargets/SardConvexDomain.lean"],
+    :declaration
+    "ConstructionTargets.SardConvexDomain.ContDiffOn.convexWithinJet",
+    :fixture
+    {:path "/tmp/t01a08_b1_probe.lean",
+     :sha256
+     "1a75ad577b4fd33450d4f90228c7d736aee3c05f3fd360ae2e27610a1d1b8061",
+     :mode :post-build-export-check}},
    :phase :implementation,
    :type
    "Convex ℝ s → (interior s).Nonempty → ContDiffOn ℝ ∞ f s → ∃ J n x := iteratedFDerivWithin ℝ n f s x, continuous on s, J0=f, J1=fderivWithin, and ∀ permutations σ, (J n x).domDomCongr σ=J n x",
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain.blueprint/B1",
    :acceptance
@@ -33863,9 +33877,10 @@
    :lemma
    {:name
     "ConstructionTargets.SardConvexDomain.ContDiffOn.convexWithinJet",
-    :reported-by [:r-topo3-cp6b],
+    :reported-by [:r-topo3-cp6b :r-a08-sard-b1-3],
     :type "blueprint B1",
-    :area "sard-convex-domain"},
+    :area "sard-convex-domain",
+    :proved-in :r-a08-sard-b1-3},
    :id
    :lemma-constructiontargets-sardconvexdomain-contdiffon-convexwithinjet,
    :kind :lemma,
