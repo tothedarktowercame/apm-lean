@@ -70,10 +70,32 @@ lemma t95J05_euclideanHausdorff_unitSphere_mass_aux_subtype :
         μHE[3] (Subtype.val '' (Set.univ : Set t95J05SphereThree)) := h.symm
     _ = μHE[3] (Metric.sphere (0 : t95J05R4) 1) := by rw [himage]
 
+lemma t95J05_euclideanHausdorff_unitSphere_mass_aux_ambient_aux_volume_ball :
+    volume (Metric.ball (0 : t95J05R4) 1) =
+      ENNReal.ofReal (Real.pi ^ 2 / 2) := by
+  rw [InnerProductSpace.volume_ball_of_dim_even (k := 2) (by simp)]
+  norm_num
+
+lemma t95J05_euclideanHausdorff_unitSphere_mass_aux_ambient_aux_toSphere :
+    (volume.toSphere (Set.univ : Set t95J05SphereThree)).toReal =
+      2 * Real.pi ^ 2 := by
+  rw [Measure.toSphere_apply_univ,
+    t95J05_euclideanHausdorff_unitSphere_mass_aux_ambient_aux_volume_ball,
+    ENNReal.toReal_mul, ENNReal.toReal_ofReal]
+  · norm_num
+    ring
+  · positivity
+
+lemma t95J05_euclideanHausdorff_unitSphere_mass_aux_ambient_aux_compare :
+    μHE[3] (Metric.sphere (0 : t95J05R4) 1) =
+      volume.toSphere (Set.univ : Set t95J05SphereThree) := by
+  sorry
+
 lemma t95J05_euclideanHausdorff_unitSphere_mass_aux_ambient :
     (μHE[3] (Metric.sphere (0 : t95J05R4) 1)).toReal =
       2 * Real.pi ^ 2 := by
-  sorry
+  rw [t95J05_euclideanHausdorff_unitSphere_mass_aux_ambient_aux_compare]
+  exact t95J05_euclideanHausdorff_unitSphere_mass_aux_ambient_aux_toSphere
 
 theorem t95J05_euclideanHausdorff_unitSphere_mass :
     (μHE[3] (Set.univ : Set t95J05SphereThree)).toReal =
