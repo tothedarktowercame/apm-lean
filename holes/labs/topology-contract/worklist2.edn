@@ -87765,6 +87765,17 @@
      {:cmd "compile draft 2",
       :exit 1,
       :correction "removed unavailable intersection lemma"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791921015475-10311-1e436be0",
+     :commands
+     ["git show/diff-tree/SHA256 8a1cfb44a"
+      "git show --check 8a1cfb44a"
+      "statement-registry.py check (150/0)"
+      "blueprint dependency review"],
+     :finding
+     "Valid program STOP with a new blueprint milestone. Exact one-file scope and fixture SHA match. B1 and B2 are true, use sufficient stated dependencies, faithfully match the Lean predicates, and are both used by assembly. Registry 150/0; no defect. Next milestones: prove the two named LIBRARY results."},
     :commit "89bca4cbb",
     :changed-paths ["ConstructionTargets/t94A08Closure.lean"],
     :fixture
@@ -87773,7 +87784,7 @@
      "0095e8d3d14307fe7cefe91a7477d4d8f6d3a5e0d947b520b4fab23909ae00c3"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t94A08/lean/Main.lean"
     "problems/t94A08/status.json"
@@ -87791,7 +87802,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t94A08Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Compiled the affine branch-intersection milestone; punctured-neighborhood separation remains.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Proved the punctured affine cross is not preconnected; chart transport and planar contradiction remain.",
    :id :program-2026-10-13-close-t94a08,
    :kind :final-adapter,
    :campaign-priority 30,
@@ -87811,7 +87822,11 @@
     {:job 3,
      :commit "b48b3aecd",
      :reason
-     "Compiled the affine branch-intersection milestone; punctured-neighborhood separation remains."}]}
+     "Compiled the affine branch-intersection milestone; punctured-neighborhood separation remains."}
+    {:job 4,
+     :commit "89bca4cbb",
+     :reason
+     "Proved the punctured affine cross is not preconnected; chart transport and planar contradiction remain."}]}
   {:consumer :t97A01,
    :stop-count 0,
    :phase :implementation,
@@ -87972,7 +87987,7 @@
    :other-consumers []}
   {:consumer :t94A08,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "apm_t94a08_puncturedAffineCross_not_isPreconnected",
@@ -87982,7 +87997,9 @@
     :reported-by [:program-2026-10-13-close-t94a08],
     :type "¬ IsPreconnected apm_t94a08_puncturedAffineCross",
     :area "projective-affine-chart-homeomorph",
-    :proved-in :program-2026-10-13-close-t94a08},
+    :proved-in :program-2026-10-13-close-t94a08,
+    :banked-by :program-2026-10-13-close-t94a08,
+    :banked-commit "89bca4cbb"},
    :id :lemma-apm-t94a08-puncturedaffinecross-not-ispreconnected,
    :kind :lemma,
    :depends-on [:lemma-apm-t94a08-affinebranches-inter],
