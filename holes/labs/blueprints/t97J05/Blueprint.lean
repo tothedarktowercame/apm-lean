@@ -158,6 +158,39 @@ theorem apm_t97J05_regular_fiber_embedded :
     apm_t97J05_IsSmoothSubmanifold apm_t97J05_W := by
   sorry
 
+def apm_t97J05_local_normal_form_aux_H (q : apm_t97J05_R3) : apm_t97J05_R3 :=
+  WithLp.toLp 2 ![Real.exp (q 0) * Real.cos (q 1), q 0 * q 2, q 2]
+
+lemma apm_t97J05_local_normal_form_aux_smooth :
+    ContDiff ℝ ∞ apm_t97J05_local_normal_form_aux_H := by
+  sorry
+
+lemma apm_t97J05_local_normal_form_aux_deriv_apply (h : apm_t97J05_R3) :
+    fderiv ℝ apm_t97J05_local_normal_form_aux_H apm_t97J05_p h =
+      WithLp.toLp 2 ![-Real.exp 1 * h 1, h 0 + h 2, h 2] := by
+  sorry
+
+lemma apm_t97J05_local_normal_form_aux_deriv_bij :
+    Function.Bijective (fderiv ℝ apm_t97J05_local_normal_form_aux_H apm_t97J05_p) := by
+  constructor
+  · intro x y hxy
+    have h0 := congrArg (fun q : apm_t97J05_R3 ↦ q 0) hxy
+    have h1 := congrArg (fun q : apm_t97J05_R3 ↦ q 1) hxy
+    have h2 := congrArg (fun q : apm_t97J05_R3 ↦ q 2) hxy
+    simp only [apm_t97J05_local_normal_form_aux_deriv_apply] at h0 h1 h2
+    ext i
+    fin_cases i
+    · simp at h1 h2
+      simpa using sub_eq_zero.mp (by linarith : x 0 - y 0 = 0)
+    · simpa using h0
+    · simpa using h2
+  · intro y
+    let x : apm_t97J05_R3 := WithLp.toLp 2 ![y 1 - y 2, -y 0 / Real.exp 1, y 2]
+    refine ⟨x, ?_⟩
+    ext i
+    fin_cases i <;> simp [apm_t97J05_local_normal_form_aux_deriv_apply, x] <;>
+      field_simp [Real.exp_ne_zero]
+
 theorem apm_t97J05_local_normal_form :
     ∃ (φ : OpenPartialHomeomorph apm_t97J05_R3 apm_t97J05_R3)
         (ψ : OpenPartialHomeomorph apm_t97J05_R2 apm_t97J05_R2),
