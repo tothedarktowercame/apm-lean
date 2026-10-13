@@ -113850,14 +113850,14 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 8,
+   :stop-count 9,
    :review-finding
    "Recorded fixture hash mismatch: :fixture.sha256 is 0bca6ce32c019fc3053c7f813c26917169cf817375b44d5e722b864b61a526450c1, but ConstructionTargets/PointWedgeVanKampen.blueprint.md at recorded commit c9b3af27 has exact SHA-256 0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0. Re-record the fixture hash for the reviewed commit.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
    :evidence
    {:placeholder-delta {:source-before 0, :source-after 0},
     :residual
-    "Factor the right-base conjugator through inl; apply partial conjugation for B6, then B12.",
+    "Prove rightBase=inl a for some left loop; then instantiate B6 and build B12.",
     :outcome :stop,
     :warnings ["existing linter"],
     :missing-theorems
@@ -113871,9 +113871,9 @@
       :area "fundamental-group-wedge-of-circles"}],
     :statement-hashes
     {:source
-     "1ab4d5ddd74f30210151e55f5bae056788ebbc59152409b36de30c3fd386fd2e",
+     "230cd5dd47d17dffb4fe2f6b9363f7bad23a67ff34bb09259ffae69b338b2b2f",
      :documentation
-     "3a5aa07f1ced49b6197320ac4237a91a0e9d48cf998c500cf0601552dff1e747",
+     "88db757d6a92c65d8c820c530c4c19537531ca533501132cdb701328792a4d06",
      :blueprint
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0",
      :registry "149/149"},
@@ -113881,7 +113881,7 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
     :reason
-    "Built partial conjugation fixing inl and conjugating inr by a left-factor element.",
+    "Packaged a conditional B6 equivalence whose two literal leg equations follow from rightBase=inl a.",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/PointWedgeVanKampen.lean",
@@ -113891,25 +113891,14 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "diff/hash/placeholders", :exit 0}],
     :diagnostic-history
-    [{:cmd "lean drafts",
+    [{:cmd "lean draft",
       :exit 1,
-      :finding "Corrected coproduct inverse laws."}
+      :finding "Unfolded composed equivalence."}
      {:cmd
       "lake build ConstructionTargets.ThreeCirclesFundamentalGroup",
       :exit 1,
       :finding "B12 absent."}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1791887043031-9403-d3fc6346",
-     :commands
-     ["git show/diff 69d4aed6^..69d4aed6"
-      "git archive 69d4aed6; lake env lean archived PointWedgeVanKampen.lean"
-      "statement-registry check; recorded-tree sha256; placeholders; diff-tree"
-      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (expected absent)"],
-     :finding
-     "PASS program STOP: 69d4aed6 is new after history and adds a compiled, sorry-free partial-conjugation automorphism. The coproduct lift fixes inl and sends inr g to c*inr g*c^-1; the proposed inverse fixes c and conjugates inr by c^-1, and both composite proofs have the correct multiplication order. This is a genuine corrected normalization interface, not global conjugation. Scope is Lean+notes; hashes match source 1ab4d5dd, notes 3a5aa07f, blueprint 0bca6ce3; placeholders 0->0; registry 149/149; standard axioms only. Factoring the actual right conjugator through inl, then B6/B12, remains explicit; B12 is absent."},
-    :commit "69d4aed66c9e398635c9a2bd5a5fa66c3eeed594",
+    :commit "12215de979cc632433ff402e069f35f3212e1021",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
      "ConstructionTargets/PointWedgeVanKampen.md"],
@@ -113919,7 +113908,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
