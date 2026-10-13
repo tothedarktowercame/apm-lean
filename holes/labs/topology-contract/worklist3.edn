@@ -24430,7 +24430,7 @@
    :consumer :t01A08,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 0,
    :review-finding
    "extend Mathlib: state and prove the missing theorem in scope",
    :implements-lemma :lemma-closedset-whitneycubecover,
@@ -24468,6 +24468,17 @@
     [{:cmd "lake build ConstructionTargets.SardConvexDomain", :exit 0}
      {:cmd "fixture; registry; scans; diff", :exit 0}
      {:cmd "git commit", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791905562259-9941-b4a734cf",
+     :commands
+     ["git show/diff dee7326; scope/scale checks"
+      "sha256sum + lake env lean frozen fixture"
+      "lake build ConstructionTargets.SardConvexDomain"
+      "statement registry check; forbidden-count scan"],
+     :finding
+     "PASS. Recorded topo-10 commit dee7326 changes only the scoped Lean file and correctly proves overlapping quarter-infDist balls have dyadic indices differing by at most one. A two-step gap gives center scales ≥4·2^l and <2·2^l, contradicting the symmetric 3:5 comparison; the reverse direction is analogous. Fixture hash d1f84505... matches; build/fixture pass; registry 150/150; forbidden placeholders stay 0; only standard axioms. Valid compiled B3 progress; STOP leaves uniform per-stratum cardinality and assembly."},
     :commit "dee7326137ca8f54dd6a21e5b45b24a2b34d64d2",
     :changed-paths ["ConstructionTargets/SardConvexDomain.lean"],
     :fixture
@@ -24477,7 +24488,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain.blueprint/B3",
    :acceptance
@@ -35473,7 +35484,7 @@
    :other-consumers []}
   {:consumer :t01A08,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -35485,7 +35496,9 @@
     :reported-by [:r-a08-sard-b3-whitney-cubes-1],
     :type "meeting stratum quarter-balls have |k-l|≤1",
     :area "sard-convex-domain",
-    :proved-in :r-a08-sard-b3-whitney-cubes-1},
+    :proved-in :r-a08-sard-b3-whitney-cubes-1,
+    :banked-by :r-a08-sard-b3-whitney-cubes-1,
+    :banked-commit "dee7326137ca8f54dd6a21e5b45b24a2b34d64d2"},
    :id
    :lemma-constructiontargets-sardconvexdomain-whitneystratum-indices-le-add-one-of-mem-qu,
    :kind :lemma,
