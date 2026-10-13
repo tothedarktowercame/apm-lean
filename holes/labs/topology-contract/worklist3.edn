@@ -36160,6 +36160,17 @@
     [{:cmd "build closure",
       :exit 1,
       :correction "fixed field and namespace"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791928677248-10631-fddae91d",
+     :commands
+     ["git show/diff 5d1dafaa; scope/representation review"
+      "sha256sum fixture; show --check; placeholder recount"
+      "lake build ConstructionTargets.t93J03Closure; lean fixture"
+      "statement-registry check"],
+     :finding
+     "PASS. Commit 5d1dafaa adds compiled, sorry-free standard-axiom progress after 813a790e: it specializes the proved standard nonorientable disk quotient at genus 2 to the exact frozen KleinBottle (definitionally Surface false 2) and exposes that pairing's actual boundary skeleton homeomorphism to its orbit-indexed circle wedge. Fixture hash matches; registry 166/166; Main placeholder 1->1. Polygon van Kampen, C1 transport, C2, and Main remain listed. SemilocallySimplyConnected X is unused, mandated by problem.md."},
     :commit "5d1dafaa596e4ea99ab52ee71d664816f858aedc",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
@@ -36171,7 +36182,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -36189,7 +36200,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t93J03Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed exact square-edge/orbit quotient comparison; disk comparison remains.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed polygon and skeleton models; van Kampen remains.",
    :id :program-2026-10-13-close-t93j03,
    :kind :final-adapter,
    :campaign-priority 30,
@@ -36227,7 +36238,11 @@
     {:job 8,
      :commit "813a790e7c8e90e2b4d2b99fd3ec4cf084721edf",
      :reason
-     "Committed exact square-edge/orbit quotient comparison; disk comparison remains."}]}
+     "Committed exact square-edge/orbit quotient comparison; disk comparison remains."}
+    {:job 9,
+     :commit "5d1dafaa596e4ea99ab52ee71d664816f858aedc",
+     :reason
+     "Committed polygon and skeleton models; van Kampen remains."}]}
   {:consumer :t99J05,
    :stop-count 5,
    :evidence
@@ -37470,7 +37485,7 @@
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "kleinPairingSpaceHomeomorph",
@@ -37480,14 +37495,16 @@
     :reported-by [:program-2026-10-13-close-t93j03],
     :type "polygon quotient = frozen KleinBottle",
     :area "covering-subgroup-correspondence",
-    :proved-in :program-2026-10-13-close-t93j03},
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "5d1dafaa596e4ea99ab52ee71d664816f858aedc"},
    :id :lemma-kleinpairingspacehomeomorph,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "kleinSkeletonHomeomorphTwoCircles",
@@ -37497,7 +37514,9 @@
     :reported-by [:program-2026-10-13-close-t93j03],
     :type "skeleton = two-circle wedge",
     :area "covering-subgroup-correspondence",
-    :proved-in :program-2026-10-13-close-t93j03},
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "5d1dafaa596e4ea99ab52ee71d664816f858aedc"},
    :id :lemma-kleinskeletonhomeomorphtwocircles,
    :kind :lemma,
    :depends-on [],
