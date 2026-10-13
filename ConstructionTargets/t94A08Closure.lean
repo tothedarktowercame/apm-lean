@@ -461,3 +461,51 @@ lemma apm_t94a08_affineBranches_inter :
     have hz0 : z = (0, 0) := by simpa using hz
     subst z
     simp [apm_t94a08_affineBranchPlus, apm_t94a08_affineBranchMinus]
+
+def apm_t94a08_puncturedAffineCross : Set (ℂ × ℂ) :=
+  (apm_t94a08_affineBranchPlus ∪ apm_t94a08_affineBranchMinus) \ {(0, 0)}
+
+lemma apm_t94a08_affineBranchPlus_isClosed :
+    IsClosed apm_t94a08_affineBranchPlus := by
+  exact isClosed_singleton.preimage
+    (continuous_fst.add (continuous_const.mul continuous_snd))
+
+lemma apm_t94a08_affineBranchMinus_isClosed :
+    IsClosed apm_t94a08_affineBranchMinus := by
+  exact isClosed_singleton.preimage
+    (continuous_fst.sub (continuous_const.mul continuous_snd))
+
+lemma apm_t94a08_puncturedAffineCross_not_isPreconnected :
+    ¬ IsPreconnected apm_t94a08_puncturedAffineCross := by
+  intro hconn
+  rw [isPreconnected_iff_subset_of_disjoint_closed] at hconn
+  have hcover : apm_t94a08_puncturedAffineCross ⊆
+      apm_t94a08_affineBranchPlus ∪ apm_t94a08_affineBranchMinus :=
+    fun _ hz ↦ hz.1
+  have hinter : apm_t94a08_puncturedAffineCross ∩
+      (apm_t94a08_affineBranchPlus ∩ apm_t94a08_affineBranchMinus) = ∅ := by
+    ext z
+    constructor
+    · intro hz
+      have hzero : z = (0, 0) := by
+        rw [apm_t94a08_affineBranches_inter] at hz
+        simpa using hz.2
+      exact (hz.1.2 (by simpa [hzero])).elim
+    · intro hz
+      exact hz.elim
+  rcases hconn _ _ apm_t94a08_affineBranchPlus_isClosed
+      apm_t94a08_affineBranchMinus_isClosed hcover hinter with hplus | hminus
+  · have hm : (1, -Complex.I) ∈ apm_t94a08_puncturedAffineCross := by
+      constructor
+      · right
+        simp [apm_t94a08_affineBranchMinus]
+      · simp [Complex.I_ne_zero]
+    have := hplus hm
+    simpa [apm_t94a08_affineBranchPlus] using this
+  · have hp : (1, Complex.I) ∈ apm_t94a08_puncturedAffineCross := by
+      constructor
+      · left
+        simp [apm_t94a08_affineBranchPlus]
+      · simp [Complex.I_ne_zero]
+    have := hminus hp
+    simpa [apm_t94a08_affineBranchMinus] using this
