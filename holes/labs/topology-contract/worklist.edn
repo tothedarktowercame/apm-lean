@@ -113850,7 +113850,7 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 10,
+   :stop-count 0,
    :review-finding
    "Recorded fixture hash mismatch: :fixture.sha256 is 0bca6ce32c019fc3053c7f813c26917169cf817375b44d5e722b864b61a526450c1, but ConstructionTargets/PointWedgeVanKampen.blueprint.md at recorded commit c9b3af27 has exact SHA-256 0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0. Re-record the fixture hash for the reviewed commit.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
@@ -113905,7 +113905,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -117095,6 +117095,18 @@
     [{:cmd "lean draft",
       :exit 1,
       :finding "Exposed PiLp coordinate; corrected."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791878293582-9023-2b7211ab",
+     :commands
+     ["git show/diff cb6f4855^..cb6f4855"
+      "git archive cb6f4855; lake env lean archived t97A07Closure.lean"
+      "lake env lean archived problems/t97A07/lean/Main.lean (resource-stalled; terminated)"
+      "python3 scripts/statement-registry.py check"
+      "recorded-tree sha256; diff-tree; placeholder counts"],
+     :finding
+     "PASS program STOP: cb6f4855 is new after history and adds a compiled, sorry-free B5 linear-algebra milestone. The theorem correctly refutes surjectivity by evaluating a preimage of the i-th basis vector; orientation/types are faithful and it uses only standard axioms. Scope is exactly closure Lean+blueprint. Frozen hashes match source eee255ed, closure 1f5e34be, blueprint d99f6f35; source placeholders stay 1->1, closure has 0; registry 147/147. Blueprint statements are unchanged; the new progress note accurately leaves maximum-to-chart derivative vanishing, then B6-B9. Archived consumer recheck stalled in host I/O after closure passed and was terminated; the consumer tree was unchanged."},
     :commit "cb6f4855c23574d6168462b393e6ecf972eae5cf",
     :changed-paths
     ["ConstructionTargets/t97A07Closure.lean"
@@ -117105,7 +117117,7 @@
      "d99f6f355cf9af60cb412a77500d3d1f9558b3e5ff1d6a9aa730c8a1c05b04b3"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A07/lean/Main.lean"
     "problems/t97A07/status.json"
@@ -117121,7 +117133,7 @@
     ["lake env lean problems/t97A07/lean/Main.lean"
      "python3 scripts/statement-registry.py check"]},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: B3 proved: regular points are open.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: B5 partial: coordinate-range vanishing contradicts surjectivity.",
    :id :program-2026-10-11-close-t97a07,
    :kind :final-adapter,
    :campaign-priority 44,
@@ -117194,7 +117206,11 @@
      "B2 interface proved: both coordinate families are continuous, eventually equal, and anchored at mfderiv."}
     {:job 9,
      :commit "e816789ea8e370108b53f41ae43ea70a5140a0d4",
-     :reason "B3 proved: regular points are open."}]}
+     :reason "B3 proved: regular points are open."}
+    {:job 1,
+     :commit "cb6f4855c23574d6168462b393e6ecf972eae5cf",
+     :reason
+     "B5 partial: coordinate-range vanishing contradicts surjectivity."}]}
   {:consumer :t91J06,
    :stop-count 3,
    :review-finding
@@ -118351,7 +118367,7 @@
    :other-consumers []}
   {:consumer :t97A07,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t97A07Closure.isCompact_criticalValues",
@@ -118361,7 +118377,9 @@
     :reported-by [:program-2026-10-11-close-t97a07],
     :type "The frozen critical-value set is compact",
     :area "regular-points-open",
-    :proved-in :program-2026-10-11-close-t97a07},
+    :proved-in :program-2026-10-11-close-t97a07,
+    :banked-by :program-2026-10-11-close-t97a07,
+    :banked-commit "cb6f4855c23574d6168462b393e6ecf972eae5cf"},
    :id :lemma-t97a07closure-iscompact-criticalvalues,
    :kind :lemma,
    :depends-on [:lemma-t97a07closure-isopen-regularpoints],
