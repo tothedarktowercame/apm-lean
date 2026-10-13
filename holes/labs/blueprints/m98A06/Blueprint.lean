@@ -2009,6 +2009,106 @@ lemma apm_m98A06_nonresonant_energy_geometry_of_facts_aux_energy_geometry_aux_mi
     (apm_m98A06_nonresonant_energy_geometry_of_facts_aux_energy_geometry_aux_nonneg
       hWirtinger ha hapi hη)
 
+lemma apm_m98A06_nonresonant_energy_geometry_of_facts_aux_energy_geometry_aux_remaining_aux_lower
+    {a : ℝ} (ha : 0 < a) {y η : ℝ → ℝ}
+    (hy : apm_m98a06_Admissible a 0 1 y)
+    (hη : apm_m98a06_Admissible a 0 0 η)
+    (hq : apm_m98a06_I a η < 0) :
+    ∃ z : ℝ → ℝ, apm_m98a06_Admissible a 0 1 z ∧
+      apm_m98a06_I a z < apm_m98a06_I a y := by
+  let A := ∫ x in (0 : ℝ)..a,
+    derivWithin y (Icc 0 a) x * derivWithin η (Icc 0 a) x - y x * η x
+  obtain ⟨c, _, hc⟩ :=
+    apm_m98A06_nonresonant_energy_geometry_of_facts_aux_negative_direction
+      A (apm_m98a06_I a η) hq
+  refine ⟨fun x ↦ y x + c * η x,
+    apm_m98A06_nonresonant_energy_geometry_of_facts_aux_perturb hy hη, ?_⟩
+  rw [apm_m98A06_I_add_smul ha hy.1 hη.1]
+  change apm_m98a06_I a y + 2 * c * A + c ^ 2 * apm_m98a06_I a η < _
+  linarith
+
+lemma apm_m98A06_nonresonant_energy_geometry_of_facts_aux_energy_geometry_aux_remaining_aux_upper
+    {a : ℝ} (ha : 0 < a) {y η : ℝ → ℝ}
+    (hy : apm_m98a06_Admissible a 0 1 y)
+    (hη : apm_m98a06_Admissible a 0 0 η)
+    (hq : 0 < apm_m98a06_I a η) :
+    ∃ z : ℝ → ℝ, apm_m98a06_Admissible a 0 1 z ∧
+      apm_m98a06_I a y < apm_m98a06_I a z := by
+  let A := ∫ x in (0 : ℝ)..a,
+    derivWithin y (Icc 0 a) x * derivWithin η (Icc 0 a) x - y x * η x
+  obtain ⟨c, _, hc⟩ :=
+    apm_m98A06_nonresonant_energy_geometry_of_facts_aux_positive_direction
+      A (apm_m98a06_I a η) hq
+  refine ⟨fun x ↦ y x + c * η x,
+    apm_m98A06_nonresonant_energy_geometry_of_facts_aux_perturb hy hη, ?_⟩
+  rw [apm_m98A06_I_add_smul ha hy.1 hη.1]
+  change _ < apm_m98a06_I a y + 2 * c * A + c ^ 2 * apm_m98a06_I a η
+  linarith
+
+lemma apm_m98A06_nonresonant_energy_geometry_of_facts_aux_energy_geometry_aux_remaining_aux_first_pos
+    (hSine : apm_m98A06_SineComputationsFact)
+    {a : ℝ} (ha : 0 < a) (hapi : a < Real.pi) :
+    let η : ℝ → ℝ := fun x ↦ Real.sin (Real.pi * x / a)
+    apm_m98a06_Admissible a 0 0 η ∧ 0 < apm_m98a06_I a η := by
+  dsimp
+  obtain ⟨hη, hI⟩ := hSine.1 a ha 1 (by norm_num)
+  refine ⟨by simpa using hη, ?_⟩
+  norm_num at hI
+  rw [hI]
+  have hp := Real.pi_pos
+  have hratio : 1 < Real.pi / a := (lt_div_iff₀ ha).2 (by simpa using hapi)
+  have : 0 < (Real.pi / a) ^ 2 - 1 := by nlinarith
+  positivity
+
+lemma apm_m98A06_nonresonant_energy_geometry_of_facts_aux_energy_geometry_aux_remaining_aux_first_neg
+    (hSine : apm_m98A06_SineComputationsFact)
+    {a : ℝ} (ha : 0 < a) (hapi : Real.pi < a) :
+    let η : ℝ → ℝ := fun x ↦ Real.sin (Real.pi * x / a)
+    apm_m98a06_Admissible a 0 0 η ∧ apm_m98a06_I a η < 0 := by
+  dsimp
+  obtain ⟨hη, hI⟩ := hSine.1 a ha 1 (by norm_num)
+  refine ⟨by simpa using hη, ?_⟩
+  norm_num at hI
+  rw [hI]
+  have hp := Real.pi_pos
+  have hratio : Real.pi / a < 1 := (div_lt_one ha).2 hapi
+  have hrnonneg : 0 ≤ Real.pi / a := div_nonneg hp.le ha.le
+  have : (Real.pi / a) ^ 2 - 1 < 0 := by nlinarith
+  have : 0 < a / 2 := by positivity
+  nlinarith
+
+lemma apm_m98A06_nonresonant_energy_geometry_of_facts_aux_energy_geometry_aux_remaining_aux_high_pos
+    (hSine : apm_m98A06_SineComputationsFact) {a : ℝ} (ha : 0 < a) :
+    ∃ η : ℝ → ℝ, apm_m98a06_Admissible a 0 0 η ∧
+      0 < apm_m98a06_I a η := by
+  obtain ⟨k, hk⟩ := exists_nat_gt (a / Real.pi)
+  have hk0 : k ≠ 0 := by
+    intro hkz
+    subst k
+    norm_num at hk
+    exact (not_lt_of_ge (div_nonneg ha.le Real.pi_pos.le)) hk
+  let η : ℝ → ℝ := fun x ↦ Real.sin ((k : ℝ) * Real.pi * x / a)
+  obtain ⟨hη, hI⟩ := hSine.1 a ha k hk0
+  refine ⟨η, by simpa [η] using hη, ?_⟩
+  change 0 < apm_m98a06_I a (fun x ↦ Real.sin ((k : ℝ) * Real.pi * x / a))
+  rw [hI]
+  have hp := Real.pi_pos
+  have hka : a < (k : ℝ) * Real.pi := (div_lt_iff₀ hp).1 hk
+  have hratio : 1 < (k : ℝ) * Real.pi / a := by
+    apply (lt_div_iff₀ ha).2
+    simpa using hka
+  have hq : 0 < ((k : ℝ) * Real.pi / a) ^ 2 - 1 := by nlinarith
+  positivity
+
+lemma apm_m98A06_nonresonant_energy_geometry_of_facts_aux_energy_geometry_aux_remaining_aux_unique
+    (hWirtinger : apm_m98A06_WirtingerFact)
+    {a : ℝ} (ha : 0 < a) (hapi : a < Real.pi) (hsin : Real.sin a ≠ 0)
+    {z : ℝ → ℝ} (hz : apm_m98a06_Admissible a 0 1 z)
+    (heq : apm_m98a06_I a z =
+      apm_m98a06_I a (fun x ↦ Real.sin x / Real.sin a)) :
+    ∀ x ∈ Icc (0 : ℝ) a, z x = Real.sin x / Real.sin a := by
+  sorry
+
 lemma apm_m98A06_nonresonant_energy_geometry_of_facts_aux_energy_geometry_aux_remaining
     (hWirtinger : apm_m98A06_WirtingerFact)
     (hSine : apm_m98A06_SineComputationsFact) :
@@ -2026,7 +2126,39 @@ lemma apm_m98A06_nonresonant_energy_geometry_of_facts_aux_energy_geometry_aux_re
           apm_m98a06_I a z < apm_m98a06_I a y) ∧
         ∃ z : ℝ → ℝ, apm_m98a06_Admissible a 0 1 z ∧
           apm_m98a06_I a y < apm_m98a06_I a z) := by
-  sorry
+  intro a ha hnon
+  have hsin : Real.sin a ≠ 0 := apm_m98a06_sin_ne_zero_of_nonresonant hnon
+  constructor
+  · intro hapi
+    constructor
+    · intro z hz
+      refine ⟨apm_m98A06_nonresonant_energy_geometry_of_facts_aux_energy_geometry_aux_minimum
+        hWirtinger ha hapi hsin hz, ?_⟩
+      intro heq
+      exact
+        apm_m98A06_nonresonant_energy_geometry_of_facts_aux_energy_geometry_aux_remaining_aux_unique
+          hWirtinger ha hapi hsin hz heq
+    · intro y hy
+      let η : ℝ → ℝ := fun x ↦ Real.sin (Real.pi * x / a)
+      obtain ⟨hη, hq⟩ :=
+        apm_m98A06_nonresonant_energy_geometry_of_facts_aux_energy_geometry_aux_remaining_aux_first_pos
+          hSine ha hapi
+      exact
+        apm_m98A06_nonresonant_energy_geometry_of_facts_aux_energy_geometry_aux_remaining_aux_upper
+          ha hy hη hq
+  · intro hapi y hy
+    let η : ℝ → ℝ := fun x ↦ Real.sin (Real.pi * x / a)
+    obtain ⟨hη, hq⟩ :=
+      apm_m98A06_nonresonant_energy_geometry_of_facts_aux_energy_geometry_aux_remaining_aux_first_neg
+        hSine ha hapi
+    refine ⟨apm_m98A06_nonresonant_energy_geometry_of_facts_aux_energy_geometry_aux_remaining_aux_lower
+      ha hy hη hq, ?_⟩
+    obtain ⟨ξ, hξ, hξq⟩ :=
+      apm_m98A06_nonresonant_energy_geometry_of_facts_aux_energy_geometry_aux_remaining_aux_high_pos
+        hSine ha
+    exact
+      apm_m98A06_nonresonant_energy_geometry_of_facts_aux_energy_geometry_aux_remaining_aux_upper
+        ha hy hξ hξq
 
 lemma apm_m98A06_nonresonant_energy_geometry_of_facts_aux_energy_geometry
     (hWirtinger : apm_m98A06_WirtingerFact)
