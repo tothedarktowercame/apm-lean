@@ -117124,20 +117124,19 @@
   {:consumer :t97A07,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 2,
+   :stop-count 3,
    :review-finding
    "Recorded fixture hash mismatch: :fixture.sha256 is eaeed21919599335d4a33b437815c4a9cbb5b72110213b29440d6944cc982182 (the blueprint at older commit 736c2566), but commit 8432f937 changes ConstructionTargets/t97A07Closure.blueprint.md and its exact SHA-256 is 5bb02c342b988406e8bd26aeda1b9e67335a8c1f626d97ec96701cb039ae708f. Re-record the fixture hash for the reviewed commit.",
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
-    :residual
-    "Identify the zero scalar chart derivative by the chain rule with the selected coordinate of mfderiv; then B6-B9.",
+    :residual "B6 critical-value nonempty, then B7-B9 closure.",
     :outcome :stop,
     :warnings [{:kind :existing-placeholder}],
     :missing-theorems
     [{:name
       "t97A07Closure.not_surjective_mfderiv_of_isMaxOn_coordinate",
       :type "Coordinate maximum implies nonsurjective mfderiv",
-      :status :partial,
+      :status :proved,
       :consumers [:t97A07],
       :depends-on ["t97A07Closure.isCompact_criticalValues"],
       :area "regular-points-open"}],
@@ -117145,15 +117144,15 @@
     {:source
      "eee255ed8120c697ee30c05d04474bae6dfd228582ddccde03a8b7f450cd4819",
      :target
-     "6af022dcd03b6005ee856bf25a81ce76ec0ce72b1a7ab999b5808d57741b1949",
+     "6d7e320233a7f9a1914d5cf5ff94d3a42e339584cde5c4a93995a13e76b41fbd",
      :blueprint
-     "f66b47b494f09592c60e057507ab231d9572fb4f1be0d6796442f298ae5f7b58",
+     "b00add1b7d70cbbafff2b9c935bb63470f3f235fa7706bd773d23ace8f0e53bc",
      :registry "149/149"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
     :reason
-    "B5 partial: transferred the global coordinate maximum to the fixed source chart and proved its scalar derivative vanishes.",
+    "B5 proved: coordinate maximum forces nonsurjective mfderiv.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t97A07Closure.lean",
       :exit 0}
@@ -117162,31 +117161,21 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "diff/hash/placeholders", :exit 0}],
     :diagnostic-history
-    [{:cmd "lean draft",
+    [{:cmd "lean chain-rule drafts",
       :exit 1,
-      :finding "Corrected univ neighbourhood lemma."}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1791888672249-9466-54e52854",
-     :commands
-     ["git show/diff 8f491522^..8f491522"
-      "git archive 8f491522; lake env lean archived t97A07Closure.lean"
-      "lake env lean archived problems/t97A07/lean/Main.lean"
-      "statement-registry check; recorded-tree sha256; placeholders; diff-tree"],
-     :finding
-     "PASS program STOP: 8f491522 is new after history and adds compiled, sorry-free B5 progress. A global coordinate maximum remains maximal after precomposition with extChartAt.symm, and symm sends the chart centre back to x; Fermat then gives the displayed zero fderiv. Statements and orientation are faithful, and the blueprint note correctly leaves the chain-rule/mfderiv identification unresolved. Scope is closure Lean+blueprint; hashes match source eee255ed, closure 6af022dc, fixture f66b47b4; source placeholders stay 1->1, closure has 0; registry 149/149; standard axioms only. Archived consumer compiles with its one listed existing sorry."},
-    :commit "8f491522a2bf1d5f448cd971b2e560e00d044538",
+      :finding
+      "Added tangent identification and explicit Euclidean projection."}],
+    :commit "f00781caf7f8dbfd38976f197da93613545c95ef",
     :changed-paths
     ["ConstructionTargets/t97A07Closure.lean"
      "ConstructionTargets/t97A07Closure.blueprint.md"],
     :fixture
     {:path "ConstructionTargets/t97A07Closure.blueprint.md",
      :sha256
-     "f66b47b494f09592c60e057507ab231d9572fb4f1be0d6796442f298ae5f7b58"},
+     "b00add1b7d70cbbafff2b9c935bb63470f3f235fa7706bd773d23ace8f0e53bc"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t97A07/lean/Main.lean"
     "problems/t97A07/status.json"
@@ -118471,7 +118460,8 @@
     :reported-by [:program-2026-10-11-close-t97a07],
     :type
     "A maximizer of a target coordinate has nonsurjective manifold derivative",
-    :area "regular-points-open"},
+    :area "regular-points-open",
+    :proved-in :program-2026-10-11-close-t97a07},
    :id
    :lemma-t97a07closure-not-surjective-mfderiv-of-ismaxon-coordinate,
    :kind :lemma,
