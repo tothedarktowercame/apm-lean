@@ -823,11 +823,29 @@ lemma apm_m98A06_weak_FTC_aux_representation_aux_sub
     apm_m98a06_IsWeakDerivativeOn (Ioo 0 Real.pi) (fun x => u x - v x) 0 := by
   sorry
 
+lemma apm_m98A06_weak_FTC_aux_representation_aux_const_aux_interior
+    (w : ℝ → ℝ) (hw : ContinuousOn w (Icc (0 : ℝ) Real.pi))
+    (hweak : apm_m98a06_IsWeakDerivativeOn (Ioo 0 Real.pi) w 0) :
+    ∃ c : ℝ, ∀ x ∈ Ioo (0 : ℝ) Real.pi, w x = c := by
+  sorry
+
+lemma apm_m98A06_weak_FTC_aux_representation_aux_const_aux_closure
+    (w : ℝ → ℝ) (hw : ContinuousOn w (Icc (0 : ℝ) Real.pi))
+    (c : ℝ) (hc : ∀ x ∈ Ioo (0 : ℝ) Real.pi, w x = c) :
+    ∀ x ∈ Icc (0 : ℝ) Real.pi, w x = c := by
+  have heq : Set.EqOn w (fun _ : ℝ => c) (Ioo (0 : ℝ) Real.pi) := hc
+  apply heq.of_subset_closure hw continuousOn_const Ioo_subset_Icc_self
+  rw [closure_Ioo (a := (0 : ℝ)) (b := Real.pi) Real.pi_ne_zero.symm]
+
 lemma apm_m98A06_weak_FTC_aux_representation_aux_const
     (w : ℝ → ℝ) (hw : ContinuousOn w (Icc (0 : ℝ) Real.pi))
     (hweak : apm_m98a06_IsWeakDerivativeOn (Ioo 0 Real.pi) w 0) :
     ∀ x ∈ Icc (0 : ℝ) Real.pi, w x = w 0 := by
-  sorry
+  obtain ⟨c, hc⟩ :=
+    apm_m98A06_weak_FTC_aux_representation_aux_const_aux_interior w hw hweak
+  have hclosed := apm_m98A06_weak_FTC_aux_representation_aux_const_aux_closure w hw c hc
+  intro x hx
+  rw [hclosed x hx, hclosed 0 ⟨le_rfl, Real.pi_pos.le⟩]
 
 lemma apm_m98A06_weak_FTC_aux_representation
     (u du : ℝ → ℝ)
