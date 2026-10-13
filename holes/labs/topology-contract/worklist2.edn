@@ -87764,6 +87764,17 @@
     [{:cmd "initial compile",
       :exit 1,
       :correction "normalized field-simp zero products"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791921995081-10342-f3bf007f",
+     :commands
+     ["git show/diff-tree/SHA256 8a1cfb44a"
+      "git show --check 8a1cfb44a"
+      "statement-registry.py check (150/0)"
+      "blueprint dependency review"],
+     :finding
+     "Valid program STOP with a new blueprint milestone. Exact one-file scope and fixture SHA match. B1 and B2 are true, use sufficient stated dependencies, faithfully match the Lean predicates, and are both used by assembly. Registry 150/0; no defect. Next milestones: prove the two named LIBRARY results."},
     :commit "1a39ba8e2",
     :changed-paths ["ConstructionTargets/t94A08Closure.lean"],
     :fixture
@@ -87772,7 +87783,7 @@
      "7087e954c039019e6d25d42a87418c30c0e39e34c05d7b8df25438661440b172"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t94A08/lean/Main.lean"
     "problems/t94A08/status.json"
@@ -87790,7 +87801,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t94A08Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked homeomorphism transport of the punctured-cross obstruction; identify the projective chart slice next.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked exact zeroth-chart membership identification for sigma2; punctured-slice topology remains.",
    :id :program-2026-10-13-close-t94a08,
    :kind :final-adapter,
    :campaign-priority 30,
@@ -87818,7 +87829,11 @@
     {:job 5,
      :commit "544437f31",
      :reason
-     "Banked homeomorphism transport of the punctured-cross obstruction; identify the projective chart slice next."}]}
+     "Banked homeomorphism transport of the punctured-cross obstruction; identify the projective chart slice next."}
+    {:job 6,
+     :commit "1a39ba8e2",
+     :reason
+     "Banked exact zeroth-chart membership identification for sigma2; punctured-slice topology remains."}]}
   {:consumer :t97A01,
    :stop-count 0,
    :phase :implementation,
@@ -88023,7 +88038,7 @@
    :other-consumers []}
   {:consumer :t94A08,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "apm_t94a08_sigma2_zeroChart_mem_iff",
@@ -88035,7 +88050,9 @@
     :type
     "rep p 0 != 0 -> (p in sigma2 iff zero-chart coordinates p lie in the affine branch union)",
     :area "projective-affine-chart-homeomorph",
-    :proved-in :program-2026-10-13-close-t94a08},
+    :proved-in :program-2026-10-13-close-t94a08,
+    :banked-by :program-2026-10-13-close-t94a08,
+    :banked-commit "1a39ba8e2"},
    :id :lemma-apm-t94a08-sigma2-zerochart-mem-iff,
    :kind :lemma,
    :depends-on [],
