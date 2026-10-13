@@ -36158,6 +36158,17 @@
     [{:cmd "lean closure",
       :exit 1,
       :correction "qualified deck theorem"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791925256580-10498-fd4b5941",
+     :commands
+     ["git show/diff a55cadcd; scope and representation review"
+      "lake build/lean ConstructionTargets.t93J03Closure"
+      "sha256sum + lake env lean orbit fixture"
+      "statement-registry check; placeholder recount"],
+     :finding
+     "PASS. Since program-history e702e81c, commit a55cadcd adds the compiled continuous-action instance and correctly applies the banked deck-group theorem to the literal affine orbit quotient at [(0,0)], conditional only on the still-unproved proper-discontinuity instance. It does not conflate that orbit quotient with the frozen polygon model; proper discontinuity and the explicit homeomorphism, then C2/Main, remain listed. Fixture hash matches; standard axioms only; registry 166/166; forbidden count 0->0. SemilocallySimplyConnected X is unused, mandated by problem.md."},
     :commit "a55cadcd9d6ac70ebcb215ccd5bbec22bee9c238",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
@@ -36169,7 +36180,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -36187,7 +36198,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t93J03Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed compiled C1 basepoint transport; orbit computation remains; not refuted.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed affine-action continuity and canonical-orbit pi1 application; geometry remains.",
    :id :program-2026-10-13-close-t93j03,
    :kind :final-adapter,
    :campaign-priority 30,
@@ -36203,7 +36214,11 @@
     {:job 2,
      :commit "e702e81c79467b9272cae4e4b156d1e4765f5a28",
      :reason
-     "Committed compiled C1 basepoint transport; orbit computation remains; not refuted."}]}
+     "Committed compiled C1 basepoint transport; orbit computation remains; not refuted."}
+    {:job 3,
+     :commit "a55cadcd9d6ac70ebcb215ccd5bbec22bee9c238",
+     :reason
+     "Committed affine-action continuity and canonical-orbit pi1 application; geometry remains."}]}
   {:consumer :t99J05,
    :stop-count 5,
    :evidence
@@ -37197,7 +37212,7 @@
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "kleinPlaneContinuousConstSMul",
@@ -37207,14 +37222,16 @@
     :reported-by [:program-2026-10-13-close-t93j03],
     :type "continuous affine action",
     :area "covering-subgroup-correspondence",
-    :proved-in :program-2026-10-13-close-t93j03},
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "a55cadcd9d6ac70ebcb215ccd5bbec22bee9c238"},
    :id :lemma-kleinplanecontinuousconstsmul,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "kleinPlaneOrbit_pi1_at_origin",
@@ -37224,7 +37241,9 @@
     :reported-by [:program-2026-10-13-close-t93j03],
     :type "proper discontinuity gives orbit pi1 equiv",
     :area "covering-subgroup-correspondence",
-    :proved-in :program-2026-10-13-close-t93j03},
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "a55cadcd9d6ac70ebcb215ccd5bbec22bee9c238"},
    :id :lemma-kleinplaneorbit-pi1-at-origin,
    :kind :lemma,
    :depends-on [],
