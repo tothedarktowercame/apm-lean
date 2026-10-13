@@ -2602,13 +2602,89 @@ lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_inequality_aux
 /-- The sole remaining analytic bridge: extend the classical `C¹` Wirtinger
 inequality to an `L²` weak derivative by continuous `L²` approximation, after
 subtracting the mean of each approximant. -/
-lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_inequality_aux_approximation
+lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_inequality_aux_approximation_aux_raw_density
+    (dy : ℝ → ℝ) (hdy : MemLp dy 2 (volume.restrict (Ioo (0 : ℝ) Real.pi)))
+    {ε : ℝ} (hε : 0 < ε) :
+    ∃ g : BoundedContinuousFunction ℝ ℝ,
+      (∫ x, (dy x - g x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi))) ≤ ε ∧
+      MemLp g 2 (volume.restrict (Ioo (0 : ℝ) Real.pi)) := by
+  have hdy' : MemLp dy (ENNReal.ofReal 2) (volume.restrict (Ioo (0 : ℝ) Real.pi)) := by
+    norm_num at hdy ⊢
+    exact hdy
+  obtain ⟨g, hg, hgp⟩ :=
+    hdy'.exists_boundedContinuous_integral_rpow_sub_le (p := 2) (by norm_num) hε
+  norm_num at hgp
+  refine ⟨g, ?_, hgp⟩
+  simpa [Real.norm_eq_abs, sq_abs] using hg
+
+/-- Mean-corrected continuous density in the derivative space. -/
+lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_inequality_aux_approximation_aux_density
+    (dy : ℝ → ℝ) (hdy : MemLp dy 2 (volume.restrict (Ioo (0 : ℝ) Real.pi)))
+    (hmean : ∫ t in (0 : ℝ)..Real.pi, dy t = 0) {ε : ℝ} (hε : 0 < ε) :
+    ∃ g : ℝ → ℝ, Continuous g ∧
+      (∫ t in (0 : ℝ)..Real.pi, g t) = 0 ∧
+      MemLp g 2 (volume.restrict (Ioo (0 : ℝ) Real.pi)) ∧
+      (∫ x, (dy x - g x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi))) ≤ ε := by
+  sorry
+
+lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_inequality_aux_approximation_aux_primitive_wirtinger
+    (hWirtinger : apm_m98A06_WirtingerFact) (g : ℝ → ℝ) (hg : Continuous g)
+    (hmean : ∫ t in (0 : ℝ)..Real.pi, g t = 0) :
+    let G : ℝ → ℝ := fun x ↦ ∫ t in (0 : ℝ)..x, g t
+    (∫ x, (G x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi))) ≤
+      ∫ x, (g x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)) := by
+  let G : ℝ → ℝ := fun x ↦ ∫ t in (0 : ℝ)..x, g t
+  have hd : ∀ x, HasDerivAt G (g x) x := by
+    intro x
+    exact intervalIntegral.integral_hasDerivAt_right
+      (hg.intervalIntegrable _ _) hg.aestronglyMeasurable.stronglyMeasurableAtFilter
+      hg.continuousAt
+  have hGdiff : ContDiff ℝ 1 G := by
+    rw [contDiff_one_iff_deriv]
+    exact ⟨fun x ↦ (hd x).differentiableAt, by
+      convert hg using 1
+      funext x
+      exact (hd x).deriv⟩
+  have hGa : apm_m98a06_Admissible Real.pi 0 0 G := by
+    refine ⟨hGdiff.contDiffOn, by simp [G], ?_⟩
+    simpa [G] using hmean
+  have hw := (hWirtinger Real.pi Real.pi_pos G hGa).1
+  have hdw : ∀ x ∈ Icc (0 : ℝ) Real.pi,
+      derivWithin G (Icc 0 Real.pi) x = g x := by
+    intro x hx
+    exact (hd x).hasDerivWithinAt.derivWithin
+      ((uniqueDiffOn_Icc Real.pi_pos).uniqueDiffWithinAt hx)
+  have hdeq : (∫ x in (0 : ℝ)..Real.pi,
+      (derivWithin G (Icc 0 Real.pi) x) ^ 2) =
+      ∫ x in (0 : ℝ)..Real.pi, (g x) ^ 2 := by
+    rw [intervalIntegral.integral_of_le Real.pi_pos.le,
+      intervalIntegral.integral_of_le Real.pi_pos.le]
+    apply integral_congr_ae
+    filter_upwards [ae_restrict_mem measurableSet_Ioc] with x hx
+    rw [hdw x ⟨hx.1.le, hx.2⟩]
+  rw [hdeq] at hw
+  simpa [intervalIntegral.integral_of_le Real.pi_pos.le,
+    integral_Ioc_eq_integral_Ioo, Real.pi_ne_zero] using hw
+
+/-- Stability of primitives and their `L²` norms under the mean-zero density
+approximation. -/
+lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_inequality_aux_approximation_aux_limit
     (hWirtinger : apm_m98A06_WirtingerFact)
     (hFTC : apm_m98A06_WeakFTCFact) (y dy : ℝ → ℝ)
     (h : apm_m98a06_InH10Pi y dy) :
     (∫ x, (y x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi))) ≤
       ∫ x, (dy x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)) := by
   sorry
+
+lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_inequality_aux_approximation
+    (hWirtinger : apm_m98A06_WirtingerFact)
+    (hFTC : apm_m98A06_WeakFTCFact) (y dy : ℝ → ℝ)
+    (h : apm_m98a06_InH10Pi y dy) :
+    (∫ x, (y x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi))) ≤
+      ∫ x, (dy x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)) := by
+  exact
+    apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_inequality_aux_approximation_aux_limit
+      hWirtinger hFTC y dy h
 
 lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_inequality
     (hWirtinger : apm_m98A06_WirtingerFact)
