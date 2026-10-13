@@ -1,4 +1,5 @@
 import Mathlib
+import ConstructionTargets.EuclideanHausdorffIntegralTransport
 import ConstructionTargets.IntrinsicSphereSecondMoments
 
 open MeasureTheory
@@ -53,10 +54,32 @@ lemma t95J05InclusionPullback_expand (x : t95J05SphereThree) :
   ring
 
 /-- LIBRARY: normalized Euclidean three-dimensional surface mass of `S³`. -/
+lemma t95J05_euclideanHausdorff_unitSphere_mass_aux_subtype :
+    μHE[3] (Set.univ : Set t95J05SphereThree) =
+      μHE[3] (Metric.sphere (0 : t95J05R4) 1) := by
+  have h := (isometry_subtype_coe : Isometry
+    (Subtype.val : t95J05SphereThree → t95J05R4))
+    |>.euclideanHausdorffMeasure_image (d := 3) Set.univ
+  have himage :
+      Subtype.val '' (Set.univ : Set t95J05SphereThree) =
+        Metric.sphere (0 : t95J05R4) 1 := by
+    ext x
+    simp
+  calc
+    μHE[3] (Set.univ : Set t95J05SphereThree) =
+        μHE[3] (Subtype.val '' (Set.univ : Set t95J05SphereThree)) := h.symm
+    _ = μHE[3] (Metric.sphere (0 : t95J05R4) 1) := by rw [himage]
+
+lemma t95J05_euclideanHausdorff_unitSphere_mass_aux_ambient :
+    (μHE[3] (Metric.sphere (0 : t95J05R4) 1)).toReal =
+      2 * Real.pi ^ 2 := by
+  sorry
+
 theorem t95J05_euclideanHausdorff_unitSphere_mass :
     (μHE[3] (Set.univ : Set t95J05SphereThree)).toReal =
       2 * Real.pi ^ 2 := by
-  sorry
+  rw [t95J05_euclideanHausdorff_unitSphere_mass_aux_subtype]
+  exact t95J05_euclideanHausdorff_unitSphere_mass_aux_ambient
 
 /-- Scalar transport from the banked raw moment.  The mass equality is an
 argument so this lemma can be proved in parallel with the LIBRARY lemma. -/
