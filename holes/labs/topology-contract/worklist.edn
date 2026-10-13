@@ -113850,14 +113850,14 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 6,
+   :stop-count 7,
    :review-finding
    "Recorded fixture hash mismatch: :fixture.sha256 is 0bca6ce32c019fc3053c7f813c26917169cf817375b44d5e722b864b61a526450c1, but ConstructionTargets/PointWedgeVanKampen.blueprint.md at recorded commit c9b3af27 has exact SHA-256 0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0. Re-record the fixture hash for the reviewed commit.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
    :evidence
    {:placeholder-delta {:source-before 0, :source-after 0},
     :residual
-    "Identify chosen-base normal form with right projection; prove projection=1, inl, B6/B12.",
+    "Compare unshifted round-trip normal form with shifted recurrence; product=1, inl, B6/B12.",
     :outcome :stop,
     :warnings ["existing linter"],
     :missing-theorems
@@ -113871,9 +113871,9 @@
       :area "fundamental-group-wedge-of-circles"}],
     :statement-hashes
     {:source
-     "c0a54283698799d2180fbb24f84562849bae0620af15612ec5957ca39c278578",
+     "e6eccd0635930484d340ecfb5e36e0a05c54a6562135026680a5a13cd2650c5b",
      :documentation
-     "4d99c4a5119c0b625861faf83b7f8e6f00278a5c05898d84f82bd2d0e37a3313",
+     "cb028297941b81dde3276e3f3a39209eb5b77749d1163f866dcc3a0cca292bdc",
      :blueprint
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0",
      :registry "150/150"},
@@ -113881,7 +113881,7 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
     :reason
-    "Shifted normal-form product transported to chosen coordinate base.",
+    "Right-base projection identified with chosen-base normal-form product.",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/PointWedgeVanKampen.lean",
@@ -113891,25 +113891,15 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "sha256/diff/placeholders", :exit 0}],
     :diagnostic-history
-    [{:cmd "lean direct rewrite",
+    [{:cmd "lean cancellation draft",
       :exit 1,
-      :finding "Let-bound product needed dsimp."}
+      :finding
+      "Shifted result does not rewrite unshifted component; removed."}
      {:cmd
       "lake build ConstructionTargets.ThreeCirclesFundamentalGroup",
       :exit 1,
       :finding "B12 file absent."}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1791903701503-9905-01f621c7",
-     :commands
-     ["git show/diff 8fec4041^..8fec4041"
-      "git archive 8fec4041; lake env lean archived PointWedgeVanKampen.lean"
-      "sha256/diff-tree/placeholder checks; statement-registry.py check"
-      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (expected absent)"],
-     :finding
-     "Reviewer codex-3. PASS program STOP: 8fec4041 adds two compiled, sorry-free transport results after 51177486. Eliminating the named coordinate-object equality preserves the dependent inverse-span normal form; combining it with the proved shifted round-trip unit has the correct factor order and yields the chosen-base inverse-span form. Scope is Lean+MD only; hashes match ledger (c0a54283/4d99c4a5/0bca6ce3), placeholders 0, registry 150/150, axioms standard only. Residual: identify the chosen-base normal form with the projection factor, then projection=1, inl, B6/B12; B12 absent."},
-    :commit "8fec4041048a116f66a781387adc31ac353f72e2",
+    :commit "379c0dfd105ac978c5d8a4a314fadbaef8cc3ac9",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
      "ConstructionTargets/PointWedgeVanKampen.md"],
@@ -113919,7 +113909,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
