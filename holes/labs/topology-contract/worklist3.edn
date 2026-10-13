@@ -24430,7 +24430,7 @@
    :consumer :t01A08,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 0,
    :review-finding
    "extend Mathlib: state and prove the missing theorem in scope",
    :implements-lemma :lemma-closedset-whitneycubecover,
@@ -24472,6 +24472,17 @@
     [{:cmd "initial build",
       :exit 1,
       :correction "fixed closed-ball distance orientation"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791905742163-9951-ef74e745",
+     :commands
+     ["git show/diff fa37751; scope/orientation checks"
+      "sha256sum + lake env lean frozen fixture"
+      "lake build ConstructionTargets.SardConvexDomain"
+      "statement registry check; forbidden-count scan"],
+     :finding
+     "PASS. Recorded topo-10 commit fa37751 changes only the scoped Lean file and correctly proves fixed-stratum incidence finiteness. A contributing center lies in the stratum net and, by the stratum upper infDist bound, inside compact closedBall(x,2^(k+1)/4); the distance orientation is corrected explicitly. ProperSpace is the needed compactness boundary. Fixture hash 7401a97b... matches; build/fixture pass; registry 150/150; forbidden placeholders stay 0; only standard axioms. Valid compiled B3 progress; STOP leaves uniform normalized cardinality and assembly."},
     :commit "fa37751a3c770179acc1d4c5cf86fdbc6f3f6e5a",
     :changed-paths ["ConstructionTargets/SardConvexDomain.lean"],
     :fixture
@@ -24481,7 +24492,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain.blueprint/B3",
    :acceptance
@@ -35501,7 +35512,7 @@
    :other-consumers []}
   {:consumer :t01A08,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -35513,7 +35524,9 @@
     :reported-by [:r-a08-sard-b3-whitney-cubes-1],
     :type "fixed-stratum quarter-ball incidence is finite",
     :area "sard-convex-domain",
-    :proved-in :r-a08-sard-b3-whitney-cubes-1},
+    :proved-in :r-a08-sard-b3-whitney-cubes-1,
+    :banked-by :r-a08-sard-b3-whitney-cubes-1,
+    :banked-commit "fa37751a3c770179acc1d4c5cf86fdbc6f3f6e5a"},
    :id
    :lemma-constructiontargets-sardconvexdomain-finite-whitneystratumnet-mem-quarter-ball,
    :kind :lemma,
