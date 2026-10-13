@@ -263,12 +263,41 @@ theorem fderiv_parametrization_injective_on_interior
   · exact h0
   · exact h1
 
+lemma pullback_coefficients_aux_wedge (i j : Fin 3) (u v : V) :
+    coordinateWedge i j ![u, v] = u 0 * 0 + (u i * v j - u j * v i) := by
+  change Matrix.det ![![u i, u j], ![v i, v j]] = _
+  simp [Matrix.det_fin_two]
+
 theorem pullback_coefficients
     (hderiv : ∀ p q, fderiv ℝ parametrization p q = parameterDerivative p q) :
     (∀ p, pullbackCoefficient (fun _ => coordinateWedge 0 1) parametrization p =
       1 - p 1) ∧
     (∀ p, pullbackCoefficient alpha parametrization p = alphaPullbackFormula p) := by
-  sorry
+  constructor
+  · intro p
+    unfold pullbackCoefficient
+    rw [hderiv, hderiv]
+    rw [pullback_coefficients_aux_wedge]
+    simp [parameterDerivative]
+    calc
+      (1 - p 1) * Real.sin (p 0) * Real.sin (p 0) +
+          (1 - p 1) * Real.cos (p 0) * Real.cos (p 0) =
+          (1 - p 1) * (Real.sin (p 0) ^ 2 + Real.cos (p 0) ^ 2) := by ring
+      _ = 1 - p 1 := by rw [Real.sin_sq_add_cos_sq]; ring
+  · intro p
+    unfold pullbackCoefficient
+    rw [hderiv, hderiv]
+    simp only [alpha, parametrization, parameterDerivative, alphaPullbackFormula,
+      Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.cons_val_two,
+      ContinuousAlternatingMap.add_apply, ContinuousAlternatingMap.smul_apply,
+      smul_eq_mul]
+    rw [pullback_coefficients_aux_wedge, pullback_coefficients_aux_wedge,
+      pullback_coefficients_aux_wedge]
+    simp
+    have htrig := Real.sin_sq_add_cos_sq (p 0)
+    ring_nf at htrig ⊢
+    left
+    linear_combination (1 - p 1) * htrig
 
 theorem rectangle_integrals
     (hxy : ∀ p, pullbackCoefficient (fun _ => coordinateWedge 0 1) parametrization p =
