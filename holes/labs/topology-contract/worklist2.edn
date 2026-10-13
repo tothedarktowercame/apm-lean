@@ -87773,6 +87773,18 @@
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "git show --check 7ef6b184c", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791927657840-10588-50e9a1f6",
+     :commands
+     ["scope/SHA256 checks at d59e0345d"
+      "recorded blob | lake env lean /dev/stdin"
+      "comment-stripped placeholder scan (0)"
+      "#print axioms witness theorem"
+      "statement-registry.py check (166/0)"],
+     :finding
+     "Valid program STOP with new compiled progress beyond history commit 02f7d5989. The theorem constructs nonzero exclusive points (r,I*r) and (r,-I*r) in every open neighborhood of zero, with branch orientations correct. Exact scope/hash match; placeholders 0; only standard axioms. Remaining milestone: chart transport and punctured-plane contradiction."},
     :commit "7ef6b184c",
     :changed-paths ["ConstructionTargets/t94A08Closure.lean"],
     :fixture
@@ -87781,7 +87793,7 @@
      "515be12aad00f47bbd58663c715a31889690b3ec0ebf4adb4d45f55f067bb364"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t94A08/lean/Main.lean"
     "problems/t94A08/status.json"
@@ -87799,7 +87811,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t94A08Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked preconnectedness of punctured positive-radius Euclidean 2-balls.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked shrinking an alleged manifold chart to a preconnected punctured target ball.",
    :id :program-2026-10-13-close-t94a08,
    :kind :final-adapter,
    :campaign-priority 30,
@@ -87863,7 +87875,11 @@
     {:job 5,
      :commit "92cfea4b5",
      :reason
-     "Banked preconnectedness of punctured positive-radius Euclidean 2-balls."}]}
+     "Banked preconnectedness of punctured positive-radius Euclidean 2-balls."}
+    {:job 6,
+     :commit "7ef6b184c",
+     :reason
+     "Banked shrinking an alleged manifold chart to a preconnected punctured target ball."}]}
   {:consumer :t97A01,
    :stop-count 1,
    :evidence
@@ -88536,7 +88552,7 @@
    :other-consumers []}
   {:consumer :t94A08,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "apm_t94a08_manifoldChart_has_preconnected_punctured_ball",
@@ -88548,7 +88564,9 @@
     :type
     "open chart target yields a positive contained ball whose puncture is preconnected",
     :area "projective-affine-chart-homeomorph",
-    :proved-in :program-2026-10-13-close-t94a08},
+    :proved-in :program-2026-10-13-close-t94a08,
+    :banked-by :program-2026-10-13-close-t94a08,
+    :banked-commit "7ef6b184c"},
    :id :lemma-apm-t94a08-manifoldchart-has-preconnected-punctured-ball,
    :kind :lemma,
    :depends-on
