@@ -22857,13 +22857,13 @@
    :other-consumers []}
   {:bounded-exception "Rule0 reroute.",
    :consumer :t01A08,
-   :stop-count 1,
+   :stop-count 2,
    :review-finding
    "Blueprint still omits a required hypothesis from the B1/B2 Lean types. B1 is described as receiving only (interior s).Nonempty and ContDiffOn; B2 likewise states only interior nonempty, yet B2 explicitly proves its remainder estimate using Convex.segment_subset. Nonempty interior does not imply convexity (e.g. two disjoint closed balls). Add hs : Convex ℝ s explicitly to B1 and B2 and pass B7/B9 convexity through their uses. The recorded one-file diff, formatting, repaired B3/B7/B9/B10 hypotheses, and registry 145/145 otherwise pass.",
    :evidence
    {:placeholder-delta {:t01A08 [1 1]},
     :residual
-    "Independent review, then elect B1 with nonempty-interior hypothesis.",
+    "Independent review, then elect B1 with convexity and nonempty-interior hypotheses.",
     :outcome :stop,
     :warnings [],
     :statement-hashes {:registry "145/145"},
@@ -22871,34 +22871,22 @@
     :axioms [],
     :author :topo-10,
     :reason
-    "Blueprint hypotheses repaired and committed; review before B1.",
+    "Blueprint convexity hypotheses repaired and committed; review before B1.",
     :commands
     [{:cmd
       "git diff --check HEAD^ HEAD -- ConstructionTargets/SardConvexDomain.blueprint.md",
       :exit 0}
+     {:cmd "test scoped diff-tree path", :exit 0}
      {:cmd
-      "test \"$(git diff-tree --no-commit-id --name-only -r HEAD)\" = \"ConstructionTargets/SardConvexDomain.blueprint.md\"",
-      :exit 0}
-     {:cmd
-      "rg -q I.nonempty_interior ConstructionTargets/SardConvexDomain.blueprint.md",
+      "rg -q hs-convex ConstructionTargets/SardConvexDomain.blueprint.md",
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
-    :diagnostic-history
-    [{:cmd "receipt validation shell",
-      :exit 2,
-      :finding "Quote collision corrected; EDN validation rerun."}],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1791870268991-8619-0b9fd24e",
-     :finding
-     "Blueprint still omits a required hypothesis from the B1/B2 Lean types. B1 is described as receiving only (interior s).Nonempty and ContDiffOn; B2 likewise states only interior nonempty, yet B2 explicitly proves its remainder estimate using Convex.segment_subset. Nonempty interior does not imply convexity (e.g. two disjoint closed balls). Add hs : Convex ℝ s explicitly to B1 and B2 and pass B7/B9 convexity through their uses. The recorded one-file diff, formatting, repaired B3/B7/B9/B10 hypotheses, and registry 145/145 otherwise pass."},
-    :commit "fb9b20eff2982c54f25c2cf7918bd3b8413c29db",
+    :commit "f40427d6014b2b0910a9a3c1fb2638dad79ecd5d",
     :changed-paths
     ["ConstructionTargets/SardConvexDomain.blueprint.md"],
     :seat :topo-10},
    :phase :implementation,
-   :state :repair,
+   :state :needs-owner,
    :scope ["ConstructionTargets/SardConvexDomain.blueprint.md"],
    :dag-node "TOPOLOGY-ROUTES.md/t01A08/corners-sard",
    :acceptance
@@ -22925,7 +22913,7 @@
      :infrastructure-packets
      :review-outcomes]},
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance {:strategy "Review applied repair."},
