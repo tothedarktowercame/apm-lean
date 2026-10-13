@@ -100,7 +100,18 @@ independent. -/
 theorem apm_t02a05_sphere_subtype_mass :
     (μHE[2] (Set.univ : Set (Metric.sphere (0 : apm_t02a05_E3) 1))) =
       (μHE[2] (Metric.sphere (0 : apm_t02a05_E3) 1)) := by
-  sorry
+  have h := (isometry_subtype_coe : Isometry
+    (Subtype.val : Metric.sphere (0 : apm_t02a05_E3) 1 → apm_t02a05_E3))
+    |>.euclideanHausdorffMeasure_image (d := 2) Set.univ
+  have himage :
+      (Subtype.val '' (Set.univ : Set (Metric.sphere (0 : apm_t02a05_E3) 1))) =
+        Metric.sphere (0 : apm_t02a05_E3) 1 := by
+    ext x
+    simp
+  calc
+    _ = μHE[2] (Subtype.val ''
+        (Set.univ : Set (Metric.sphere (0 : apm_t02a05_E3) 1))) := h.symm
+    _ = _ := congrArg (fun s : Set apm_t02a05_E3 ↦ μHE[2] s) himage
 -- END SEAT AREA
 
 /-- (B) Two caps over the unit disk, with `μHE[2]` on the sphere and Lebesgue measure on the disk:
