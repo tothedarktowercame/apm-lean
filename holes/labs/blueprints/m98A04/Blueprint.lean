@@ -20,7 +20,7 @@ characterized pointwise, avoiding any replacement of distributions by regular
 functions.
 -/
 
-open MeasureTheory Set TopologicalSpace
+open Filter MeasureTheory Set TopologicalSpace
 open scoped ContDiff Distributions Interval Pointwise
 
 abbrev apm_m98a04_TF (n : ℕ) :=
@@ -578,12 +578,97 @@ theorem apm_m98a04_translation_analytic_bridge_zero_dim
 stage estimates above.  They deliberately expose exactly what
 `apm_m98a04_translation_bridge_of_first_derivative` consumes. -/
 
+/-- A locally defined fixed-stage translation.  Outside the closed unit ball
+we use zero; this does not affect continuity or derivatives at `x₀`. -/
+noncomputable def apm_m98a04_translateReflectStageLocal {n : ℕ}
+    (φ : apm_m98a04_TF n) (x₀ x : EuclideanSpace ℝ (Fin n)) :
+    ContDiffMapSupportedIn (EuclideanSpace ℝ (Fin n)) ℝ ⊤
+      (apm_m98a04_translationCompact φ x₀) := by
+  classical
+  exact if hx : x ∈ Metric.closedBall x₀ (1 : ℝ) then
+      apm_m98a04_translateReflectStage φ x₀ ⟨x, hx⟩
+    else 0
+
+/-- The test function obtained by differentiating `φ` in direction `v`. -/
+noncomputable def apm_m98a04_directionalTF {n : ℕ}
+    (v : EuclideanSpace ℝ (Fin n)) (φ : apm_m98a04_TF n) :
+    apm_m98a04_TF n :=
+  ∑ i : Fin n, (v i) • apm_m98a04_partialListTF [i] φ
+
+noncomputable def apm_m98a04_translationStageToTest {n : ℕ}
+    (φ : apm_m98a04_TF n) (x₀ : EuclideanSpace ℝ (Fin n)) :
+    ContDiffMapSupportedIn (EuclideanSpace ℝ (Fin n)) ℝ ⊤
+        (apm_m98a04_translationCompact φ x₀) →L[ℝ]
+      apm_m98a04_TF n :=
+  TestFunction.ofSupportedInCLM ℝ (by simp :
+    (apm_m98a04_translationCompact φ x₀ :
+      Set (EuclideanSpace ℝ (Fin n))) ⊆
+        (⊤ : Opens (EuclideanSpace ℝ (Fin n))))
+
+/-- Shared topology fact 1: reflected translation is continuous into one
+fixed compact-support stage near its base point. -/
+theorem apm_m98a04_translateReflectStageLocal_continuousAt {n : ℕ}
+    (φ : apm_m98a04_TF n) (x₀ : EuclideanSpace ℝ (Fin n)) :
+    ContinuousAt (apm_m98a04_translateReflectStageLocal φ x₀) x₀ := by
+  sorry
+
+/-- Shared topology fact 2: directional difference quotients of reflected
+translations converge in the same fixed compact-support stage. -/
+theorem apm_m98a04_translateReflectStageLocal_difference_quotient {n : ℕ}
+    (φ : apm_m98a04_TF n) (x₀ v : EuclideanSpace ℝ (Fin n)) :
+    Tendsto (fun h : ℝ => apm_m98a04_translationStageToTest φ x₀
+        (h⁻¹ • (apm_m98a04_translateReflectStageLocal φ x₀ (x₀ + h • v) -
+          apm_m98a04_translateReflectStageLocal φ x₀ x₀)))
+      (nhdsWithin (0 : ℝ) ({0} : Set ℝ)ᶜ)
+      (nhds (apm_m98a04_translateReflect
+        (apm_m98a04_directionalTF v φ) x₀)) := by
+  sorry
+
+/-- Scalar derivative extraction from an explicitly supplied fixed-stage
+difference-quotient theorem. -/
+theorem apm_m98a04_translation_pairing_fderiv_of_stage_dq {n : ℕ}
+    (T : Distribution (⊤ : Opens (EuclideanSpace ℝ (Fin n))) ℝ ⊤)
+    (φ : apm_m98a04_TF n)
+    (hdq : ∀ (x v : EuclideanSpace ℝ (Fin n)),
+      Tendsto (fun h : ℝ => apm_m98a04_translationStageToTest φ x
+          (h⁻¹ • (apm_m98a04_translateReflectStageLocal φ x (x + h • v) -
+            apm_m98a04_translateReflectStageLocal φ x x)))
+        (nhdsWithin (0 : ℝ) ({0} : Set ℝ)ᶜ)
+        (nhds (apm_m98a04_translateReflect
+          (apm_m98a04_directionalTF v φ) x)))
+    (i : Fin n) (x : EuclideanSpace ℝ (Fin n)) :
+    fderiv ℝ (fun z => T (apm_m98a04_translateReflect φ z)) x
+        (EuclideanSpace.single i 1) =
+      T (apm_m98a04_translateReflect
+        (apm_m98a04_partialListTF [i] φ) x) := by
+  sorry
+
+/-- Smoothness extraction by induction on derivative order, from supplied
+fixed-stage continuity and difference-quotient facts for every test function. -/
+theorem apm_m98a04_translation_pairing_contDiff_of_stage_facts {n : ℕ}
+    (T : Distribution (⊤ : Opens (EuclideanSpace ℝ (Fin n))) ℝ ⊤)
+    (φ : apm_m98a04_TF n)
+    (hcont : ∀ (ψ : apm_m98a04_TF n) (x : EuclideanSpace ℝ (Fin n)),
+      ContinuousAt (apm_m98a04_translateReflectStageLocal ψ x) x)
+    (hdq : ∀ (ψ : apm_m98a04_TF n) (x v : EuclideanSpace ℝ (Fin n)),
+      Tendsto (fun h : ℝ => apm_m98a04_translationStageToTest ψ x
+          (h⁻¹ • (apm_m98a04_translateReflectStageLocal ψ x (x + h • v) -
+            apm_m98a04_translateReflectStageLocal ψ x x)))
+        (nhdsWithin (0 : ℝ) ({0} : Set ℝ)ᶜ)
+        (nhds (apm_m98a04_translateReflect
+          (apm_m98a04_directionalTF v ψ) x))) :
+    ContDiff ℝ ∞ (fun x => T (apm_m98a04_translateReflect φ x)) := by
+  sorry
+
 theorem apm_m98a04_translation_pairing_contDiff_of_pos_dim {n : ℕ}
     (hn : 0 < n)
     (T : Distribution (⊤ : Opens (EuclideanSpace ℝ (Fin n))) ℝ ⊤)
     (φ : apm_m98a04_TF n) :
     ContDiff ℝ ∞ (fun x => T (apm_m98a04_translateReflect φ x)) := by
-  sorry
+  exact apm_m98a04_translation_pairing_contDiff_of_stage_facts T φ
+    (fun ψ x => apm_m98a04_translateReflectStageLocal_continuousAt ψ x)
+    (fun ψ x v =>
+      apm_m98a04_translateReflectStageLocal_difference_quotient ψ x v)
 
 theorem apm_m98a04_translation_pairing_fderiv_single_of_pos_dim {n : ℕ}
     (hn : 0 < n)
@@ -594,7 +679,9 @@ theorem apm_m98a04_translation_pairing_fderiv_single_of_pos_dim {n : ℕ}
         (EuclideanSpace.single i 1) =
       T (apm_m98a04_translateReflect
         (apm_m98a04_partialListTF [i] φ) x) := by
-  sorry
+  exact apm_m98a04_translation_pairing_fderiv_of_stage_dq T φ
+    (fun x v =>
+      apm_m98a04_translateReflectStageLocal_difference_quotient φ x v) i x
 
 theorem apm_m98a04_translation_analytic_bridge {n : ℕ}
     (T : Distribution (⊤ : Opens (EuclideanSpace ℝ (Fin n))) ℝ ⊤)
