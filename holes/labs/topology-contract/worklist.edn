@@ -113850,14 +113850,14 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 9,
+   :stop-count 10,
    :review-finding
    "Recorded fixture hash mismatch: :fixture.sha256 is 0bca6ce32c019fc3053c7f813c26917169cf817375b44d5e722b864b61a526450c1, but ConstructionTargets/PointWedgeVanKampen.blueprint.md at recorded commit c9b3af27 has exact SHA-256 0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0. Re-record the fixture hash for the reviewed commit.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
    :evidence
    {:placeholder-delta {:source-before 0, :source-after 0},
     :residual
-    "Prove rightBase=inl a for some left loop; then instantiate B6 and build B12.",
+    "Compute the right projection of rightBase from the outer comparisons; if unit, factor through inl, then B6/B12.",
     :outcome :stop,
     :warnings ["existing linter"],
     :missing-theorems
@@ -113871,9 +113871,9 @@
       :area "fundamental-group-wedge-of-circles"}],
     :statement-hashes
     {:source
-     "230cd5dd47d17dffb4fe2f6b9363f7bad23a67ff34bb09259ffae69b338b2b2f",
+     "250a3f1bdc6c13f5a9965bb5caa9bfde41b6be5df5692bf54ae50b76abf7479a",
      :documentation
-     "88db757d6a92c65d8c820c530c4c19537531ca533501132cdb701328792a4d06",
+     "89386a58e3fef827ab105a1bfa994d695ae8f85e66b0d651633d96dc9e0cb9d0",
      :blueprint
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0",
      :registry "149/149"},
@@ -113881,7 +113881,7 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
     :reason
-    "Packaged a conditional B6 equivalence whose two literal leg equations follow from rightBase=inl a.",
+    "An inl factorization requires trivial canonical right projection; the outer-comparison projection is not yet computed.",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/PointWedgeVanKampen.lean",
@@ -113891,25 +113891,11 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "diff/hash/placeholders", :exit 0}],
     :diagnostic-history
-    [{:cmd "lean draft",
-      :exit 1,
-      :finding "Unfolded composed equivalence."}
-     {:cmd
+    [{:cmd
       "lake build ConstructionTargets.ThreeCirclesFundamentalGroup",
       :exit 1,
-      :finding "B12 absent."}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1791887944282-9424-b0576772",
-     :commands
-     ["git show/diff 12215de9^..12215de9"
-      "git archive 12215de9; lake env lean archived PointWedgeVanKampen.lean"
-      "statement-registry check; recorded-tree sha256; placeholders; diff-tree"
-      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (expected absent)"],
-     :finding
-     "PASS program STOP: 12215de9 is new after history and adds compiled, sorry-free conditional B6 progress. The composed equivalence fixes the left factor. On the right, the source action is c^-1*inr g*c; after ha identifies c=inl a, the partial automorphism fixes c and sends inr g to c*inr g*c^-1, so the factors cancel in the stated order. Both literal leg equations follow without crossing representations. Scope is Lean+notes; hashes match source 230cd5dd, notes 88db757d, blueprint 0bca6ce3; placeholders 0->0; registry 149/149; standard axioms only. Proving rightBase=inl a, then B6/B12, remains explicit; B12 is absent."},
-    :commit "12215de979cc632433ff402e069f35f3212e1021",
+      :finding "B12 absent"}],
+    :commit "1dabaf035886d47a295c30e16fb48ca7cfe7c11a",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
      "ConstructionTargets/PointWedgeVanKampen.md"],
@@ -113919,7 +113905,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :needs-owner,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
