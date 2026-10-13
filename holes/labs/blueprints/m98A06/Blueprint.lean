@@ -2815,6 +2815,42 @@ lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_forward_aux
     have := hy x (Ioo_subset_Icc_self hx)
     convert this using 1 <;> ring
 
+lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_forward_aux_rigidity_aux_pointwise_aux_EL_aux_quadratic
+    (A B C : ℝ) (hA : A = 0)
+    (hQ : ∀ t : ℝ, 0 ≤ A + 2 * t * B + t ^ 2 * C) : B = 0 := by
+  subst A
+  have hC : 0 ≤ C := by
+    have h1 := hQ 1
+    have hm1 := hQ (-1)
+    norm_num at h1 hm1
+    linarith
+  have hden : 0 < C + 1 := by linarith
+  have ht := hQ (-B / (C + 1))
+  norm_num at ht
+  field_simp [ne_of_gt hden] at ht
+  nlinarith [sq_nonneg B]
+
+lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_forward_aux_rigidity_aux_pointwise_aux_EL_aux_variation
+    (y dy φ : ℝ → ℝ)
+    (h : apm_m98a06_InH10Pi y dy)
+    (hφ : ContDiff ℝ ∞ φ) (hφc : HasCompactSupport φ)
+    (hφs : Function.support φ ⊆ Ioo (0 : ℝ) Real.pi) :
+    ∀ t : ℝ, apm_m98a06_InH10Pi
+      (fun x => y x + t * φ x) (fun x => dy x + t * deriv φ x) := by
+  sorry
+
+lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_forward_aux_rigidity_aux_pointwise_aux_EL_aux_integral
+    (hWirtinger : apm_m98A06_WirtingerFact)
+    (hFTC : apm_m98A06_WeakFTCFact) (y dy φ : ℝ → ℝ)
+    (h : apm_m98a06_InH10Pi y dy)
+    (hnorm : ∫ x, (y x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)) = 1)
+    (hdnorm : ∫ x, (dy x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)) = 1)
+    (hvar : ∀ t : ℝ, apm_m98a06_InH10Pi
+      (fun x => y x + t * φ x) (fun x => dy x + t * deriv φ x)) :
+    (∫ x, dy x * deriv φ x ∂(volume.restrict (Ioo (0 : ℝ) Real.pi))) =
+      ∫ x, y x * φ x ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)) := by
+  sorry
+
 lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_forward_aux_rigidity_aux_pointwise_aux_EL
     (hWirtinger : apm_m98A06_WirtingerFact)
     (hFTC : apm_m98A06_WeakFTCFact) (y dy : ℝ → ℝ)
@@ -2827,7 +2863,11 @@ lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_forward_aux
       Function.support φ ⊆ Ioo (0 : ℝ) Real.pi →
       (∫ x, dy x * deriv φ x ∂(volume.restrict (Ioo (0 : ℝ) Real.pi))) =
         ∫ x, y x * φ x ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)) := by
-  sorry
+  intro φ hφ hφc hφs
+  apply apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_forward_aux_rigidity_aux_pointwise_aux_EL_aux_integral
+    hWirtinger hFTC y dy φ h hnorm hdnorm
+  exact apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_forward_aux_rigidity_aux_pointwise_aux_EL_aux_variation
+    y dy φ h hφ hφc hφs
 
 lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_forward_aux_rigidity_aux_pointwise_aux_representation_aux_regular_aux_Y_continuous
     (y : ℝ → ℝ) (hy : ContinuousOn y (Icc (0 : ℝ) Real.pi)) :
