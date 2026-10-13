@@ -540,7 +540,89 @@ theorem apm_t96A08_omegaCoord_lineIntegral
       ∫ t : ℝ in (0 : ℝ)..1, apm_t96A08_omegaCoord I omega x
         (extChartAt I x x + t • (extChartAt I x z - extChartAt I x x))
         (extChartAt I x z - extChartAt I x x) := by
-  sorry
+  let eta : ℝ → E := fun t ↦ extChartAt I x x +
+    t • (extChartAt I x z - extChartAt I x x)
+  have heta_smooth : ContMDiff 𝓘(ℝ, ℝ) 𝓘(ℝ, E) (⊤ : WithTop ℕ∞) eta := by
+    rw [contMDiff_iff_contDiff]
+    fun_prop
+  have heta_range : ∀ t ∈ Set.Icc (0 : ℝ) 1, eta t ∈ Set.range (I : E → E) := by
+    intro t ht
+    change (extChartAt I x x + t • (extChartAt I x z - extChartAt I x x)) ∈ _
+    rw [← hdelta t ht]
+    exact extChartAt_target_subset_range x
+      (PartialEquiv.map_source _ (hdelta_source t ht))
+  have hpoint : ∀ t ∈ Set.Ioo (0 : ℝ) 1,
+      omega (delta t) ((mfderiv 𝓘(ℝ, ℝ) I delta t) 1) =
+        apm_t96A08_omegaCoord I omega x (eta t)
+          (extChartAt I x z - extChartAt I x x) := by
+    intro t ht
+    have htIcc : t ∈ Set.Icc (0 : ℝ) 1 := ⟨ht.1.le, ht.2.le⟩
+    have hnhds : Set.Icc (0 : ℝ) 1 ∈ nhds t := Icc_mem_nhds ht.1 ht.2
+    have hdt : delta t = (extChartAt I x).symm (eta t) := by
+      calc
+        delta t = (extChartAt I x).symm (extChartAt I x (delta t)) :=
+          ((extChartAt I x).left_inv (hdelta_source t htIcc)).symm
+        _ = (extChartAt I x).symm (eta t) := by
+          rw [hdelta t htIcc]
+    have hcomp : ∀ s ∈ Set.Icc (0 : ℝ) 1,
+        delta s = (extChartAt I x).symm (eta s) := by
+      intro s hs
+      calc
+        delta s = (extChartAt I x).symm (extChartAt I x (delta s)) :=
+          ((extChartAt I x).left_inv (hdelta_source s hs)).symm
+        _ = (extChartAt I x).symm (eta s) := by rw [hdelta s hs]
+    have hderivWithin :
+        mfderivWithin 𝓘(ℝ, ℝ) I delta (Set.Icc 0 1) t =
+          (mfderivWithin 𝓘(ℝ, E) I (extChartAt I x).symm (Set.range I) (eta t)).comp
+            (mfderivWithin 𝓘(ℝ, ℝ) 𝓘(ℝ, E) eta (Set.Icc 0 1) t) := by
+      rw [mfderivWithin_congr hcomp hdt]
+      apply mfderivWithin_comp
+      · exact mdifferentiableWithinAt_extChartAt_symm (by
+          change (extChartAt I x x + t • (extChartAt I x z - extChartAt I x x)) ∈ _
+          rw [← hdelta t htIcc]
+          exact PartialEquiv.map_source _ (hdelta_source t htIcc))
+      · exact heta_smooth.mdifferentiableAt WithTop.top_ne_zero |>.mdifferentiableWithinAt
+      · exact heta_range
+      · rw [uniqueMDiffWithinAt_iff_uniqueDiffWithinAt]
+        exact uniqueDiffOn_Icc zero_lt_one t htIcc
+    have hdelta_at : MDifferentiableAt 𝓘(ℝ, ℝ) I delta t :=
+      (hdelta_smooth t htIcc).contMDiffAt hnhds |>.mdifferentiableAt WithTop.top_ne_zero
+    have heta_at : MDifferentiableAt 𝓘(ℝ, ℝ) 𝓘(ℝ, E) eta t :=
+      heta_smooth.mdifferentiableAt WithTop.top_ne_zero
+    rw [← mfderivWithin_eq_mfderiv
+      (by rw [uniqueMDiffWithinAt_iff_uniqueDiffWithinAt];
+          exact uniqueDiffOn_Icc zero_lt_one t htIcc) hdelta_at]
+    rw [hderivWithin]
+    rw [hdt]
+    simp only [apm_t96A08_omegaCoord, ContinuousLinearMap.comp_apply]
+    rw [mfderivWithin_eq_mfderiv
+      (by rw [uniqueMDiffWithinAt_iff_uniqueDiffWithinAt];
+          exact uniqueDiffOn_Icc zero_lt_one t htIcc) heta_at]
+    have hsmul : fderiv ℝ
+        (fun y : ℝ ↦ y • (extChartAt I x z - extChartAt I x x)) t 1 =
+          extChartAt I x z - extChartAt I x x := by
+      have hd := ((hasFDerivAt_id (𝕜 := ℝ) t).smul_const
+        (extChartAt I x z - extChartAt I x x)).fderiv
+      have hd' := congrArg (fun L : ℝ →L[ℝ] E ↦ L 1) hd
+      simpa using hd'
+    apply congrArg (fun v : E ↦
+      omega ((extChartAt I x).symm (eta t))
+        (mfderivWithin 𝓘(ℝ, E) I (extChartAt I x).symm
+          (Set.range I) (eta t) v))
+    rw [mfderiv_eq_fderiv]
+    simpa only [eta, fderiv_const_add] using hsmul
+  unfold apm_t96a08_LineIntegral
+  apply intervalIntegral.integral_congr_ae
+  have hae : ∀ᵐ t : ℝ, t ≠ 1 := by
+    rw [MeasureTheory.ae_iff]
+    simpa using (MeasureTheory.measure_singleton (1 : ℝ))
+  filter_upwards [hae] with t htne htmem
+  have ht : t ∈ Set.Ioo (0 : ℝ) 1 := by
+    rw [Set.mem_uIoc] at htmem
+    rcases htmem with htmem | htmem
+    · exact ⟨htmem.1, lt_of_le_of_ne htmem.2 htne⟩
+    · linarith
+  simpa [eta] using hpoint t ht
 -- END SEAT AREA
 
 /-- Pulling the one-form and the radial path into the extended chart gives
