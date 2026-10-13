@@ -301,8 +301,43 @@ def apm_m98A06_SineComputationsFact : Prop :=
         ∫ x, (dy x) ^ 2 - (y x) ^ 2
           ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)) = (k : ℝ) ^ 2 - 1)
 
-theorem apm_m98A06_duBoisReymond : apm_m98A06_DuBoisReymondFact := by
+lemma apm_m98A06_duBoisReymond_aux_trig
+    (A B : ℝ) :
+    ContDiff ℝ 2 (fun x : ℝ => A * Real.cos x + B * Real.sin x) ∧
+      ∀ x, deriv (fun t : ℝ => A * Real.cos t + B * Real.sin t) x =
+        -A * Real.sin x + B * Real.cos x ∧
+      deriv (fun x : ℝ => -A * Real.sin x + B * Real.cos x) x =
+        -(A * Real.cos x + B * Real.sin x) := by
+  constructor
+  · fun_prop
+  · intro x
+    constructor
+    · convert ((Real.hasDerivAt_cos x).const_mul A).add
+        ((Real.hasDerivAt_sin x).const_mul B) |>.deriv using 1 <;> ring
+    · convert ((Real.hasDerivAt_sin x).const_mul (-A)).add
+        ((Real.hasDerivAt_cos x).const_mul B) |>.deriv using 1 <;> ring
+
+lemma apm_m98A06_duBoisReymond_aux_forward :
+    ∀ a y₀ ya : ℝ, 0 < a → ∀ y : ℝ → ℝ,
+      apm_m98a06_IsStationary a y₀ ya y →
+        apm_m98a06_Admissible a y₀ ya y ∧
+          ∃ A B : ℝ, ∀ x ∈ Icc (0 : ℝ) a,
+            y x = A * Real.cos x + B * Real.sin x := by
   sorry
+
+lemma apm_m98A06_duBoisReymond_aux_reverse :
+    ∀ a y₀ ya : ℝ, 0 < a → ∀ y : ℝ → ℝ,
+      apm_m98a06_Admissible a y₀ ya y ∧
+          (∃ A B : ℝ, ∀ x ∈ Icc (0 : ℝ) a,
+            y x = A * Real.cos x + B * Real.sin x) →
+        apm_m98a06_IsStationary a y₀ ya y := by
+  sorry
+
+theorem apm_m98A06_duBoisReymond : apm_m98A06_DuBoisReymondFact := by
+  intro a y₀ ya ha y
+  constructor
+  · exact apm_m98A06_duBoisReymond_aux_forward a y₀ ya ha y
+  · exact apm_m98A06_duBoisReymond_aux_reverse a y₀ ya ha y
 
 theorem apm_m98A06_wirtinger : apm_m98A06_WirtingerFact := by
   sorry
