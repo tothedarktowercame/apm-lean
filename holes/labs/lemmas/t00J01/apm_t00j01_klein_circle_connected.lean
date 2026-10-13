@@ -268,7 +268,15 @@ their product. -/
 theorem apm_t00j01_klein_circle_connected
     (_hK : IsConnected (Set.univ : Set apm_t00j01_Klein)) :
     IsConnected (Set.univ : Set apm_t00j01_nonorientable3) := by
-  sorry
+  have hC : IsConnected (Set.univ : Set Circle) := by
+    have hrange : Set.range (Circle.exp : ℝ → Circle) = Set.univ := by
+      apply Set.eq_univ_of_forall
+      intro z
+      exact ⟨Complex.arg z, Circle.exp_arg z⟩
+    rw [← hrange]
+    exact isConnected_range Circle.exp.continuous
+  simpa only [Set.univ_prod_univ] using
+    _hK.prod hC
 -- END SEAT AREA
 
 /-- A two-dimensional Klein chart and a one-dimensional circle chart combine,
