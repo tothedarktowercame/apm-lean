@@ -1297,6 +1297,85 @@ lemma apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_partialList_eq_iteratedFDer
       · exact (ContDiff.differentiable_iteratedFDeriv
           (by exact_mod_cast ENat.coe_lt_top is.length) hf) x
 
+noncomputable def apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_partialStageOne
+    (K : TopologicalSpace.Compacts apm_m98J02_E) (i : Fin 2) :
+    𝓓_{K}(apm_m98J02_E, ℝ) →L[ℝ] 𝓓_{K}(apm_m98J02_E, ℝ) :=
+  ContDiffMapSupportedIn.postcompCLM
+      (ContinuousLinearMap.apply ℝ ℝ (EuclideanSpace.single i 1)) ∘L
+    ContDiffMapSupportedIn.fderivCLM ℝ (⊤ : ℕ∞) (⊤ : ℕ∞)
+
+noncomputable def apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_partialStage
+    (K : TopologicalSpace.Compacts apm_m98J02_E) :
+    List (Fin 2) →
+      (𝓓_{K}(apm_m98J02_E, ℝ) →L[ℝ] 𝓓_{K}(apm_m98J02_E, ℝ))
+  | [] => ContinuousLinearMap.id ℝ _
+  | i :: is =>
+      apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_partialStageOne K i ∘L
+        apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_partialStage K is
+
+lemma apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_partialStage_apply
+    (K : TopologicalSpace.Compacts apm_m98J02_E)
+    (is : List (Fin 2)) (φ : 𝓓_{K}(apm_m98J02_E, ℝ)) (x : apm_m98J02_E) :
+    apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_partialStage K is φ x =
+      apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_partialList is
+        (φ : apm_m98J02_E → ℝ) x := by
+  induction is generalizing x with
+  | nil => rfl
+  | cons i is ih =>
+      simp only [apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_partialStage,
+        ContinuousLinearMap.coe_comp', Function.comp_apply,
+        apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_partialStageOne,
+        ContDiffMapSupportedIn.postcompCLM_apply,
+        ContDiffMapSupportedIn.fderivCLM_apply]
+      rw [if_pos (by simp)]
+      simp only [ContinuousLinearMap.apply_apply]
+      change fderiv ℝ
+          (apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_partialStage K is φ :
+            apm_m98J02_E → ℝ) x (EuclideanSpace.single i 1) = _
+      rw [show (apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_partialStage K is φ :
+          apm_m98J02_E → ℝ) =
+          apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_partialList is φ from
+        funext ih]
+      rfl
+
+lemma apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_partialStage_seminorm
+    (K : TopologicalSpace.Compacts apm_m98J02_E)
+    (is : List (Fin 2)) (φ : 𝓓_{K}(apm_m98J02_E, ℝ)) (j : ℕ) :
+    ContDiffMapSupportedIn.seminorm ℝ apm_m98J02_E ℝ ⊤ K j
+        (apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_partialStage K is φ) ≤
+      ContDiffMapSupportedIn.seminorm ℝ apm_m98J02_E ℝ ⊤ K
+        (j + is.length) φ := by
+  induction is generalizing j φ with
+  | nil => simp [apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_partialStage]
+  | cons i is ih =>
+      let ev : (apm_m98J02_E →L[ℝ] ℝ) →L[ℝ] ℝ :=
+        ContinuousLinearMap.apply ℝ ℝ (EuclideanSpace.single i 1)
+      have hev : ‖ev‖ ≤ 1 := by
+        apply ev.opNorm_le_bound zero_le_one
+        intro L
+        simpa [ev] using L.le_opNorm (EuclideanSpace.single i 1)
+      calc
+        ContDiffMapSupportedIn.seminorm ℝ apm_m98J02_E ℝ ⊤ K j
+            (apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_partialStage K (i :: is) φ)
+            ≤ ‖ev‖ * ContDiffMapSupportedIn.seminorm ℝ apm_m98J02_E
+                (apm_m98J02_E →L[ℝ] ℝ) ⊤ K j
+                (ContDiffMapSupportedIn.fderivLM ℝ ⊤ ⊤
+                  (apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_partialStage K is φ)) := by
+              exact ContDiffMapSupportedIn.seminorm_postcompLM_le ℝ ev _
+        _ ≤ ContDiffMapSupportedIn.seminorm ℝ apm_m98J02_E
+                (apm_m98J02_E →L[ℝ] ℝ) ⊤ K j
+                (ContDiffMapSupportedIn.fderivLM ℝ ⊤ ⊤
+                  (apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_partialStage K is φ)) := by
+              simpa using mul_le_of_le_one_left (apply_nonneg _ _) hev
+        _ = ContDiffMapSupportedIn.seminorm ℝ apm_m98J02_E ℝ ⊤ K (j + 1)
+                (apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_partialStage K is φ) :=
+              ContDiffMapSupportedIn.seminorm_fderivLM_top ℝ _
+        _ ≤ ContDiffMapSupportedIn.seminorm ℝ apm_m98J02_E ℝ ⊤ K
+                ((j + 1) + is.length) φ := ih _ _
+        _ = ContDiffMapSupportedIn.seminorm ℝ apm_m98J02_E ℝ ⊤ K
+                (j + (i :: is).length) φ := by
+              simp [Nat.add_assoc, Nat.add_comm, Nat.add_left_comm]
+
 lemma apm_m98J02_bridge_2_aux_psi_aux_stage_cont
     (v : apm_m98J02_Dist) (χ : apm_m98J02_Test)
     (hsmooth : ∀ φ : apm_m98J02_Test,
