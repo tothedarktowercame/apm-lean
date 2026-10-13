@@ -36158,6 +36158,17 @@
     [{:cmd "lean closure",
       :exit 1,
       :correction "fixed singleton and binders"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791926670299-10550-149b78ce",
+     :commands
+     ["git show/diff 9fd7db7; scope and action review"
+      "lake build/lean ConstructionTargets.t93J03Closure"
+      "sha256sum + lake env lean proper-action fixture"
+      "statement-registry check; placeholder recount"],
+     :finding
+     "PASS. Since program-history 42d9d0e, commit 9fd7db7 completes compiled, sorry-free proper discontinuity for the literal affine Klein action. For each finite vertical candidate it bounds the signed horizontal coordinate using the actual action n 1 multiplier, takes the finite union, and pulls it back through the injective coordinate equivalence; the resulting instance has the required compact-intersection orientation. The orbit-quotient homeomorphism, then C1/C2/Main, remain listed. Fixture hash matches; standard axioms only; registry 166/166; forbidden count 0->0. SemilocallySimplyConnected X is unused, mandated by problem.md."},
     :commit "9fd7db79829014860bf4bf666288111efb9269de",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
@@ -36169,7 +36180,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -36187,7 +36198,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t93J03Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed compact and vertical-coordinate finiteness; horizontal bound remains.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed literal affine-action proper discontinuity.",
    :id :program-2026-10-13-close-t93j03,
    :kind :final-adapter,
    :campaign-priority 30,
@@ -36215,7 +36226,10 @@
     {:job 5,
      :commit "42d9d0e66410d8ed20d89c7bfc11da54a7a3f0f0",
      :reason
-     "Committed compact and vertical-coordinate finiteness; horizontal bound remains."}]}
+     "Committed compact and vertical-coordinate finiteness; horizontal bound remains."}
+    {:job 6,
+     :commit "9fd7db79829014860bf4bf666288111efb9269de",
+     :reason "Committed literal affine-action proper discontinuity."}]}
   {:consumer :t99J05,
    :stop-count 5,
    :evidence
@@ -37247,7 +37261,7 @@
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t93J03_kleinPlane_properlyDiscontinuous",
@@ -37257,7 +37271,9 @@
     :reported-by [:program-2026-10-13-close-t93j03],
     :type "proper discontinuity of affine action",
     :area "covering-subgroup-correspondence",
-    :proved-in :program-2026-10-13-close-t93j03},
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "9fd7db79829014860bf4bf666288111efb9269de"},
    :id :lemma-t93j03-kleinplane-properlydiscontinuous,
    :kind :lemma,
    :depends-on
@@ -37344,7 +37360,7 @@
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "finite_horizontal_coordinates_of_compact",
@@ -37354,7 +37370,9 @@
     :reported-by [:program-2026-10-13-close-t93j03],
     :type "finite horizontal candidates at fixed vertical coordinate",
     :area "covering-subgroup-correspondence",
-    :proved-in :program-2026-10-13-close-t93j03},
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "9fd7db79829014860bf4bf666288111efb9269de"},
    :id :lemma-finite-horizontal-coordinates-of-compact,
    :kind :lemma,
    :depends-on [],
