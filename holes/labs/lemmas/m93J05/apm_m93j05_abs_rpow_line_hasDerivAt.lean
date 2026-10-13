@@ -773,7 +773,9 @@ theorem apm_m93j05_rpow_eLpNorm_eq_integral (p : ℝ) (hp : 0 < p) (u : ℝ → 
 theorem apm_m93j05_abs_rpow_line_hasDerivAt (p : ℝ) (hp : 1 < p) (x y s : ℝ) :
     HasDerivAt (fun r : ℝ ↦ |x + r * y| ^ p)
       (p * |x + s * y| ^ (p - 2) * (x + s * y) * y) s := by
-  sorry
+  have hinner : HasDerivAt (fun r : ℝ ↦ x + r * y) y s := by
+    simpa [id] using ((hasDerivAt_id s).mul_const y).const_add x
+  exact (hasDerivAt_abs_rpow (x + s * y) hp).comp s hinner
 -- END SEAT AREA
 
 theorem apm_m93j05_integral_abs_rpow_line_differentiableAt (p : ℝ) (hp : 1 < p)
