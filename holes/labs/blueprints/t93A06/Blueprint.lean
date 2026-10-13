@@ -187,7 +187,57 @@ theorem t93A06_primitive_calculus :
 the parallelogram. -/
 theorem t93A06_primitive_parallelogramIntegral :
     parallelogramIntegral primitive = 1 / 4 := by
-  sorry
+  simp [parallelogramIntegral, segmentIntegral, primitive]
+  let f : ℝ → ℝ := fun x ↦
+    (x / 2 - Real.sin (4 * Real.pi * x) / (8 * Real.pi)) *
+      Real.cos (2 * Real.pi * x) ^ 2
+  have hf : Continuous f := by
+    unfold f
+    fun_prop
+  have hreflect : (∫ x : ℝ in 0..1, f (1 - x)) = ∫ x : ℝ in 0..1, f x := by
+    simpa using (intervalIntegral.integral_comp_sub_left f (a := (0 : ℝ)) (b := 1) 1)
+  have hshift (x : ℝ) :
+      ((1 - x + x * 2) / 2 -
+          Real.sin (4 * Real.pi * (1 - x + x * 2)) / (8 * Real.pi)) *
+          Real.cos (2 * Real.pi * x) ^ 2 =
+        f x + (1 / 2 : ℝ) * Real.cos (2 * Real.pi * x) ^ 2 := by
+    have hs : Real.sin (4 * Real.pi * (1 - x + x * 2)) =
+        Real.sin (4 * Real.pi * x) := by
+      rw [show 4 * Real.pi * (1 - x + x * 2) =
+        4 * Real.pi * x + (2 : ℤ) * (2 * Real.pi) by push_cast; ring]
+      exact Real.sin_add_int_mul_two_pi _ _
+    rw [hs]
+    unfold f
+    ring
+  rw [intervalIntegral.integral_congr (fun x _ ↦ hshift x)]
+  change (∫ x : ℝ in 0..1, (f x + (1 / 2 : ℝ) * Real.cos (2 * Real.pi * x) ^ 2)) -
+      (∫ x : ℝ in 0..1, f (1 - x)) = 4⁻¹
+  have hg : Continuous (fun x : ℝ ↦
+      (1 / 2 : ℝ) * Real.cos (2 * Real.pi * x) ^ 2) := by fun_prop
+  rw [hreflect, intervalIntegral.integral_add (hf.intervalIntegrable 0 1)
+    (hg.intervalIntegrable 0 1)]
+  ring_nf
+  have hder (x : ℝ) : HasDerivAt
+      (fun y : ℝ ↦ y / 4 + Real.sin (4 * Real.pi * y) / (16 * Real.pi))
+      (Real.cos (Real.pi * x * 2) ^ 2 * (1 / 2)) x := by
+    have h := (hasDerivAt_id x).div_const 4 |>.add
+      ((((hasDerivAt_const x (4 * Real.pi)).mul (hasDerivAt_id x)).sin).div_const
+        (16 * Real.pi))
+    convert h using 1
+    · simp only [Pi.mul_apply, id_eq, zero_mul, zero_add, one_mul]
+      rw [show Real.pi * x * 2 = 2 * Real.pi * x by ring, Real.cos_sq]
+      rw [show 4 * Real.pi * x = 2 * (2 * Real.pi * x) by ring,
+        Real.cos_two_mul]
+      field_simp [Real.pi_ne_zero]
+      ring_nf
+  rw [intervalIntegral.integral_eq_sub_of_hasDerivAt
+    (fun x _ ↦ hder x)
+    ((by fun_prop : Continuous (fun x : ℝ ↦
+      Real.cos (Real.pi * x * 2) ^ 2 * (1 / 2))).intervalIntegrable 0 1)]
+  have hs : Real.sin (4 * Real.pi) = 0 := by
+    rw [show 4 * Real.pi = 0 + (2 : ℤ) * (2 * Real.pi) by push_cast; ring,
+      Real.sin_add_int_mul_two_pi, Real.sin_zero]
+  simp [hs]
 
 theorem apm_t93a06 : ∃ atlas : SmoothAtlas,
     letI := atlas.charts
