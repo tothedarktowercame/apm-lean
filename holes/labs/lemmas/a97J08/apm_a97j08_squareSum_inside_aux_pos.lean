@@ -2182,7 +2182,30 @@ lemma apm_a97j08_squareSum_inside_aux_cross {z shift : ℂ} {δ : ℝ} (hδ : 0 
 lemma apm_a97j08_squareSum_inside_aux_pos {z p q : ℂ}
     (h : 0 < ((starRingEnd ℂ) (p - z) * (q - z)).im) :
     0 < apm_a97j08_angleStep z p q ∧ apm_a97j08_angleStep z p q < Real.pi := by
-  sorry
+  have hpz : p - z ≠ 0 := by
+    intro hpz
+    have : ((starRingEnd ℂ) (p - z) * (q - z)).im = 0 := by simp [hpz]
+    linarith
+  have hn : 0 < Complex.normSq (p - z) := Complex.normSq_pos.mpr hpz
+  have hnum : 0 < (q - z).im * (p - z).re - (q - z).re * (p - z).im := by
+    have hs := h
+    simp only [map_sub, Complex.mul_im, Complex.sub_re, Complex.sub_im,
+      map_id, Complex.conj_re, Complex.conj_im] at hs
+    convert hs using 1 <;> simp only [Complex.sub_re, Complex.sub_im] <;> ring
+  have him : 0 < ((q - z) / (p - z)).im := by
+    rw [Complex.div_im]
+    rw [← sub_div]
+    exact div_pos hnum hn
+  unfold apm_a97j08_angleStep
+  constructor
+  · have hnonneg : 0 ≤ Complex.arg ((q - z) / (p - z)) :=
+      Complex.arg_nonneg_iff.mpr him.le
+    have hne : Complex.arg ((q - z) / (p - z)) ≠ 0 := by
+      intro ha
+      have hz := Complex.arg_eq_zero_iff.mp ha
+      exact (ne_of_gt him) hz.2
+    exact lt_of_le_of_ne hnonneg (Ne.symm hne)
+  · exact Complex.arg_lt_pi_iff.mpr (Or.inr (ne_of_gt him))
 -- END SEAT AREA
 
 -- (iv) The angle steps around a closed quadrilateral sum to a multiple of `2π`.
