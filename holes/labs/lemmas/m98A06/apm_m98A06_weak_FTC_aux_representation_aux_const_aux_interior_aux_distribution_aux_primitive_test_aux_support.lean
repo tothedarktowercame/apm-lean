@@ -1348,7 +1348,33 @@ lemma apm_m98A06_weak_FTC_aux_representation_aux_const_aux_interior_aux_distribu
     (hψs : tsupport ψ ⊆ Ioo (0 : ℝ) Real.pi) (hψ0 : ∫ x, ψ x = 0)
     (hφ : ∀ x, φ x = ∫ t in (0 : ℝ)..x, ψ t) :
     HasCompactSupport φ ∧ Function.support φ ⊆ Ioo (0 : ℝ) Real.pi := by
-  sorry
+  have hzero : ∀ {x : ℝ}, x ∉ Ioo (0 : ℝ) Real.pi → ψ x = 0 := by
+    intro x hx
+    by_contra hn
+    exact hx (hψs (subset_tsupport ψ hn))
+  have hleft : ∀ x : ℝ, x ≤ 0 → φ x = 0 := by
+    intro x hx
+    rw [hφ, intervalIntegral.integral_zero_ae]
+    filter_upwards [] with t ht
+    apply hzero
+    rw [uIoc_of_ge hx] at ht
+    exact fun h => (not_lt_of_ge ht.2) h.1
+  have hright : ∀ x : ℝ, Real.pi ≤ x → φ x = 0 := by
+    intro x hx
+    rw [hφ, intervalIntegral.integral_eq_integral_of_support_subset]
+    · exact hψ0
+    · intro t ht
+      have ht' : t ∈ Ioo (0 : ℝ) Real.pi := hψs (subset_tsupport ψ ht)
+      exact ⟨ht'.1, ht'.2.le.trans hx⟩
+  have hsupp : Function.support φ ⊆ Ioo (0 : ℝ) Real.pi := by
+    intro x hx
+    constructor
+    · exact lt_of_not_ge (fun h => hx (hleft x h))
+    · exact lt_of_not_ge (fun h => hx (hright x h))
+  refine ⟨?_, hsupp⟩
+  unfold HasCompactSupport
+  apply isCompact_Icc.of_isClosed_subset (isClosed_tsupport φ)
+  exact closure_minimal (hsupp.trans Ioo_subset_Icc_self) isClosed_Icc
 -- END SEAT AREA
 
 lemma apm_m98A06_weak_FTC_aux_representation_aux_const_aux_interior_aux_distribution_aux_primitive_test
