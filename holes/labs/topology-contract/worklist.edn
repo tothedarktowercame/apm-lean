@@ -113902,6 +113902,17 @@
       "lake build ConstructionTargets.ThreeCirclesFundamentalGroup",
       :exit 1,
       :finding "B12 file absent."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791925093532-10493-6ca386a8",
+     :commands
+     ["git show/diff-tree 53f254401"
+      "git archive 53f254401; lake env lean archived PointWedgeVanKampen.lean"
+      "lake build ConstructionTargets.PointWedgeVanKampen"
+      "sha256sum; placeholder delta; statement-registry.py check"],
+     :finding
+     "Recorded scope is target+note; source/doc/fixture hashes match e79b5f87/290a50bd/0bca6ce3. Archived and target builds pass; placeholders 0->0, recorded registry 165/165 and fresh registry 166/166, standard axioms only. congrArg correctly transports the typed inverse-span equality through normalForm; both arguments share its required hom-set, so no endpoint orientation changes. New compiled progress is present; cancel dependent connectors, then projection/B6/B12."},
     :commit "53f2544013e8783809f90e1a69fbbd57bad70842",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
@@ -113912,7 +113923,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113933,7 +113944,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Cancelled comparator identified with chosen-base inverse-span component.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Inverse-span equality transported through connector normal form.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -114775,7 +114786,11 @@
     {:job 3,
      :commit "aeace188853a1ca6f21879b0ba2583813ae5b8bf",
      :reason
-     "Cancelled comparator identified with chosen-base inverse-span component."}]}
+     "Cancelled comparator identified with chosen-base inverse-span component."}
+    {:job 4,
+     :commit "53f2544013e8783809f90e1a69fbbd57bad70842",
+     :reason
+     "Inverse-span equality transported through connector normal form."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
