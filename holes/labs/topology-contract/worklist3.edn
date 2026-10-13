@@ -24205,11 +24205,79 @@
    :depends-on [:r-a08-sard-b1-3 :r-topo3-cp13c],
    :current-residual "Next A08 node.",
    :other-consumers []}
+  {:bounded-exception "Rule0; exact B9 prerequisite.",
+   :consumer :t01A08,
+   :phase :implementation,
+   :state :open,
+   :scope ["ConstructionTargets/SardConvexDomain.lean"],
+   :dag-node "SardConvexDomain.blueprint/B7",
+   :acceptance
+   {:declaration
+    "ConstructionTargets.SardConvexDomain.ContDiffOn.exists_contDiff_extension_of_isClosed_convex",
+    :type
+    "ContDiffOn ℝ ∞ f s → IsClosed s → Convex ℝ s → (interior s).Nonempty → ∃ g, ContDiff ℝ ∞ g ∧ EqOn g f s ∧ ∀ x∈s, fderiv ℝ g x=fderivWithin ℝ f s x",
+    :fixture "/tmp/t01a08_critical_image_probe.lean",
+    :fixture-sha256
+    "e87094bf31619afe261e02f92d060f3d3cb14376e5c95e71007a0775d272a14f",
+    :mode :post-build-export-check,
+    :blueprint "ConstructionTargets/SardConvexDomain.blueprint.md",
+    :placeholder "t01A08 sorry",
+    :route-step "B2-B7 Whitney extension"},
+   :id :r-a08-sard-b7-extension-1,
+   :kind :reusable-theorem,
+   :area "sard-convex-domain",
+   :depends-on
+   [:lemma-constructiontargets-sardconvexdomain-contdiffon-convexwithinjet],
+   :current-residual
+   "B9 follows by ambient Sard and measure monotonicity.",
+   :other-consumers []}
   {:bounded-exception "Rule0; final Sard foundation node.",
    :consumer :t01A08,
    :implements-lemma :lemma-sard-corners,
+   :evidence
+   {:probe
+    {:outcome :revise,
+     :seat "topo-12",
+     :fixture
+     {:path "/tmp/t01a08_critical_image_probe.lean",
+      :sha256
+      "e87094bf31619afe261e02f92d060f3d3cb14376e5c95e71007a0775d272a14f"},
+     :commands
+     [{:cmd "lake env lean /tmp/t01a08_critical_image_probe.lean",
+       :exit 0}
+      {:cmd "sha256sum /tmp/t01a08_critical_image_probe.lean",
+       :exit 0}],
+     :prerequisite
+     {:bounded-exception "Rule0; exact B9 prerequisite.",
+      :consumer :t01A08,
+      :phase :implementation,
+      :state :open,
+      :scope ["ConstructionTargets/SardConvexDomain.lean"],
+      :dag-node "SardConvexDomain.blueprint/B7",
+      :acceptance
+      {:declaration
+       "ConstructionTargets.SardConvexDomain.ContDiffOn.exists_contDiff_extension_of_isClosed_convex",
+       :type
+       "ContDiffOn ℝ ∞ f s → IsClosed s → Convex ℝ s → (interior s).Nonempty → ∃ g, ContDiff ℝ ∞ g ∧ EqOn g f s ∧ ∀ x∈s, fderiv ℝ g x=fderivWithin ℝ f s x",
+       :fixture "/tmp/t01a08_critical_image_probe.lean",
+       :fixture-sha256
+       "e87094bf31619afe261e02f92d060f3d3cb14376e5c95e71007a0775d272a14f",
+       :mode :post-build-export-check,
+       :blueprint "ConstructionTargets/SardConvexDomain.blueprint.md",
+       :placeholder "t01A08 sorry",
+       :route-step "B2-B7 Whitney extension"},
+      :id :r-a08-sard-b7-extension-1,
+      :kind :reusable-theorem,
+      :area "sard-convex-domain",
+      :depends-on
+      [:lemma-constructiontargets-sardconvexdomain-contdiffon-convexwithinjet],
+      :current-residual
+      "B9 follows by ambient Sard and measure monotonicity.",
+      :other-consumers []},
+     :residual
+     "Implement B7; compiled fixture then proves criticalImageNull."}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain.blueprint/B9",
    :acceptance
@@ -24227,7 +24295,8 @@
    :area "sard-convex-domain",
    :depends-on
    [:r-topo3-cp14b
-    :lemma-constructiontargets-sardconvexdomain-contdiffon-convexwithinjet],
+    :lemma-constructiontargets-sardconvexdomain-contdiffon-convexwithinjet
+    :r-a08-sard-b7-extension-1],
    :current-residual "Consumer adapter.",
    :other-consumers []}
   {:consumer :portfolio,
