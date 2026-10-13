@@ -88247,4 +88247,149 @@
    :lemma-apm-t94a08-cross-subset-not-ispreconnected-of-branch-witnesses,
    :kind :lemma,
    :depends-on [:lemma-apm-t94a08-affinebranches-inter],
+   :other-consumers []}
+  {:consumer :t99A01,
+   :stop-count 0,
+   :phase :implementation,
+   :state :blocked,
+   :scope
+   ["problems/t99A01/lean/Main.lean"
+    "problems/t99A01/status.json"
+    "ConstructionTargets/t99A01Closure.lean"
+    "ConstructionTargets/t99A01Closure.blueprint.md"],
+   :dag-node "holes/labs/blueprints/t99A01/BLUEPRINT.md",
+   :acceptance
+   {:implementation
+    "CLOSURE PROGRAM (owner claude-14, 2026-10-13, Joe approved: blueprint LIBRARY lemmas). Close t99A01. START FROM THE BLUEPRINT holes/labs/blueprints/t99A01/Blueprint.lean (read-only; BLUEPRINT.md explains each lemma). Its theorem and definitions are identical to Main.lean's and every lemma except the LIBRARY ones is already proved there: copy those proofs into Main.lean (or ConstructionTargets) rather than re-deriving. Build only the LIBRARY obligations named below, then assemble Main.lean exactly as the blueprint does. Do not change what problems/STATEMENTS.json pins. LIBRARY obligations: the LIBRARY lemmas of holes/labs/blueprints/t99A01/BLUEPRINT.md (all other lemmas are proved there): two-cell van Kampen and cellular/singular homology for a circle with 2-cells attached by z^2, z^4, z^5 (from the polygon-surface-homology foundation, depends-on). Bank each as :missing-theorems :status :proved. Expected 1500-4000 lines over several jobs.",
+    :declaration "apm_t99a01",
+    :type "the registered theorem apm_t99a01, sorry-free",
+    :axioms :standard-only,
+    :commands
+    ["lake env lean problems/t99A01/lean/Main.lean"
+     "python3 scripts/statement-registry.py check"],
+    :blueprint "ConstructionTargets/t99A01Closure.blueprint.md"},
+   :continue-from
+   "NEXT JOB: copy holes/labs/blueprints/t99A01/BLUEPRINT.md's plan into ConstructionTargets/t99A01Closure.blueprint.md, move the blueprint's proved lemmas into place, then build the LIBRARY obligations one milestone per job.",
+   :id :program-2026-10-13-close-t99a01,
+   :kind :final-adapter,
+   :campaign-priority 37,
+   :fail-count 0,
+   :depends-on [:program-2026-10-13-polygon-surface-homology],
+   :program true,
+   :other-consumers []}
+  {:consumer :t97J04,
+   :stop-count 0,
+   :phase :implementation,
+   :state :blocked,
+   :scope
+   ["problems/t97J04/lean/Main.lean"
+    "problems/t97J04/status.json"
+    "ConstructionTargets/t97J04Closure.lean"
+    "ConstructionTargets/t97J04Closure.blueprint.md"],
+   :dag-node "holes/labs/blueprints/t97J04/BLUEPRINT.md",
+   :acceptance
+   {:implementation
+    "CLOSURE PROGRAM (owner claude-14, 2026-10-13, Joe approved: blueprint LIBRARY lemmas). Close t97J04. START FROM THE BLUEPRINT holes/labs/blueprints/t97J04/Blueprint.lean (read-only; BLUEPRINT.md explains each lemma). Its theorem and definitions are identical to Main.lean's and every lemma except the LIBRARY ones is already proved there: copy those proofs into Main.lean (or ConstructionTargets) rather than re-deriving. Build only the LIBRARY obligations named below, then assemble Main.lean exactly as the blueprint does. Do not change what problems/STATEMENTS.json pins. LIBRARY obligations: the LIBRARY lemmas of holes/labs/blueprints/t97J04/BLUEPRINT.md (all other lemmas are proved there): the comparison of the genus-2 octagon quotient with a disk on c to T²∨S¹ (CW collapse); the invariants and the presentation are proved. Bank each as :missing-theorems :status :proved. Expected 500-900 lines over several jobs.",
+    :declaration "apm_t97j04",
+    :type "the registered theorem apm_t97j04, sorry-free",
+    :axioms :standard-only,
+    :commands
+    ["lake env lean problems/t97J04/lean/Main.lean"
+     "python3 scripts/statement-registry.py check"],
+    :blueprint "ConstructionTargets/t97J04Closure.blueprint.md"},
+   :continue-from
+   "NEXT JOB: copy holes/labs/blueprints/t97J04/BLUEPRINT.md's plan into ConstructionTargets/t97J04Closure.blueprint.md, move the blueprint's proved lemmas into place, then build the LIBRARY obligations one milestone per job.",
+   :id :program-2026-10-13-close-t97j04,
+   :kind :final-adapter,
+   :campaign-priority 38,
+   :fail-count 0,
+   :depends-on [:program-2026-10-13-polygon-surface-homology],
+   :program true,
+   :other-consumers []}
+  {:consumer :t99A03,
+   :stop-count 0,
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["problems/t99A03/lean/Main.lean"
+    "problems/t99A03/status.json"
+    "ConstructionTargets/t99A03Closure.lean"
+    "ConstructionTargets/t99A03Closure.blueprint.md"],
+   :dag-node "holes/labs/blueprints/t99A03/BLUEPRINT.md",
+   :acceptance
+   {:implementation
+    "CLOSURE PROGRAM (owner claude-14, 2026-10-13, Joe approved: blueprint LIBRARY lemmas). Close t99A03. START FROM THE BLUEPRINT holes/labs/blueprints/t99A03/Blueprint.lean (read-only; BLUEPRINT.md explains each lemma). Its theorem and definitions are identical to Main.lean's and every lemma except the LIBRARY ones is already proved there: copy those proofs into Main.lean (or ConstructionTargets) rather than re-deriving. Build only the LIBRARY obligations named below, then assemble Main.lean exactly as the blueprint does. Do not change what problems/STATEMENTS.json pins. LIBRARY obligations: the LIBRARY lemmas of holes/labs/blueprints/t99A03/BLUEPRINT.md (all other lemmas are proved there): Lefschetz number 1 for self-maps of the 4-fold RP² wedge, the Lefschetz fixed point theorem for compact polyhedra, and the double cover N4 -> N3 with its free deck involution. Bank each as :missing-theorems :status :proved. Expected 1500-3000 lines over several jobs.",
+    :declaration "apm_t99a03",
+    :type "the registered theorem apm_t99a03, sorry-free",
+    :axioms :standard-only,
+    :commands
+    ["lake env lean problems/t99A03/lean/Main.lean"
+     "python3 scripts/statement-registry.py check"],
+    :blueprint "ConstructionTargets/t99A03Closure.blueprint.md"},
+   :continue-from
+   "NEXT JOB: copy holes/labs/blueprints/t99A03/BLUEPRINT.md's plan into ConstructionTargets/t99A03Closure.blueprint.md, move the blueprint's proved lemmas into place, then build the LIBRARY obligations one milestone per job.",
+   :id :program-2026-10-13-close-t99a03,
+   :kind :final-adapter,
+   :campaign-priority 39,
+   :fail-count 0,
+   :depends-on [],
+   :program true,
+   :other-consumers []}
+  {:consumer :t95J03,
+   :stop-count 0,
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["problems/t95J03/lean/Main.lean"
+    "problems/t95J03/status.json"
+    "ConstructionTargets/t95J03Closure.lean"
+    "ConstructionTargets/t95J03Closure.blueprint.md"],
+   :dag-node "holes/labs/blueprints/t95J03/BLUEPRINT.md",
+   :acceptance
+   {:implementation
+    "CLOSURE PROGRAM (owner claude-14, 2026-10-13, Joe approved: blueprint LIBRARY lemmas). Close t95J03. START FROM THE BLUEPRINT holes/labs/blueprints/t95J03/Blueprint.lean (read-only; BLUEPRINT.md explains each lemma). Its theorem and definitions are identical to Main.lean's and every lemma except the LIBRARY ones is already proved there: copy those proofs into Main.lean (or ConstructionTargets) rather than re-deriving. Build only the LIBRARY obligations named below, then assemble Main.lean exactly as the blueprint does. Do not change what problems/STATEMENTS.json pins. LIBRARY obligations: the LIBRARY lemmas of holes/labs/blueprints/t95J03/BLUEPRINT.md (all other lemmas are proved there): classification of surfaces sharing a k-fold cover with the Klein bottle (chi, orientation cover), Klein self-covers in every degree, torus covers of K iff k even. Bank each as :missing-theorems :status :proved. Expected 1500-3000 lines over several jobs.",
+    :declaration "apm_t95j03",
+    :type "the registered theorem apm_t95j03, sorry-free",
+    :axioms :standard-only,
+    :commands
+    ["lake env lean problems/t95J03/lean/Main.lean"
+     "python3 scripts/statement-registry.py check"],
+    :blueprint "ConstructionTargets/t95J03Closure.blueprint.md"},
+   :continue-from
+   "NEXT JOB: copy holes/labs/blueprints/t95J03/BLUEPRINT.md's plan into ConstructionTargets/t95J03Closure.blueprint.md, move the blueprint's proved lemmas into place, then build the LIBRARY obligations one milestone per job.",
+   :id :program-2026-10-13-close-t95j03,
+   :kind :final-adapter,
+   :campaign-priority 44,
+   :fail-count 0,
+   :depends-on [],
+   :program true,
+   :other-consumers []}
+  {:consumer :t03J01,
+   :stop-count 0,
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["problems/t03J01/lean/Main.lean"
+    "problems/t03J01/status.json"
+    "ConstructionTargets/t03J01Closure.lean"
+    "ConstructionTargets/t03J01Closure.blueprint.md"],
+   :dag-node "holes/labs/blueprints/t03J01/BLUEPRINT.md",
+   :acceptance
+   {:implementation
+    "CLOSURE PROGRAM (owner claude-14, 2026-10-13, Joe approved: blueprint LIBRARY lemmas). Close t03J01. START FROM THE BLUEPRINT holes/labs/blueprints/t03J01/Blueprint.lean (read-only; BLUEPRINT.md explains each lemma). Its theorem and definitions are identical to Main.lean's and every lemma except the LIBRARY ones is already proved there: copy those proofs into Main.lean (or ConstructionTargets) rather than re-deriving. Build only the LIBRARY obligations named below, then assemble Main.lean exactly as the blueprint does. Do not change what problems/STATEMENTS.json pins. LIBRARY obligations: the LIBRARY lemmas of holes/labs/blueprints/t03J01/BLUEPRINT.md (all other lemmas are proved there): nonseparating curve on a genus-2 surface is a retract (degree-1 map to S^1 dual to J); separating curve has zero H1 inclusion (bounds a subsurface). Bank each as :missing-theorems :status :proved. Expected 800-1600 lines over several jobs.",
+    :declaration "apm_t03j01",
+    :type "the registered theorem apm_t03j01, sorry-free",
+    :axioms :standard-only,
+    :commands
+    ["lake env lean problems/t03J01/lean/Main.lean"
+     "python3 scripts/statement-registry.py check"],
+    :blueprint "ConstructionTargets/t03J01Closure.blueprint.md"},
+   :continue-from
+   "NEXT JOB: copy holes/labs/blueprints/t03J01/BLUEPRINT.md's plan into ConstructionTargets/t03J01Closure.blueprint.md, move the blueprint's proved lemmas into place, then build the LIBRARY obligations one milestone per job.",
+   :id :program-2026-10-13-close-t03j01,
+   :kind :final-adapter,
+   :campaign-priority 45,
+   :fail-count 0,
+   :depends-on [],
+   :program true,
    :other-consumers []}]}
