@@ -36156,6 +36156,17 @@
       :exit 1,
       :correction
       "compared orbit setoids; supplied explicit instances"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791927021550-10577-ea769103",
+     :commands
+     ["git show/diff 5f43680a; scope/orientation review"
+      "sha256sum fixture; git show --check; placeholder recount"
+      "lake build ConstructionTargets.t93J03Closure; lake env lean fixture"
+      "statement-registry check"],
+     :finding
+     "PASS. Commit 5f43680a adds compiled, sorry-free standard-axiom progress beyond program-history 9fd7db7: the explicit plane orbit setoid is homeomorphic to Mathlib action-orbit quotient, and the compact closed-square orbit quotient is homeomorphic to the Hausdorff plane quotient. Fixture hash matches; registry 166/166; Main placeholder 1->1. Square-to-frozen-disk quotient remains explicitly listed. SemilocallySimplyConnected X is unused, mandated by problem.md."},
     :commit "5f43680a890059d05f8015a9e3091740acc57397",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
@@ -36167,7 +36178,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -36185,7 +36196,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t93J03Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed literal affine-action proper discontinuity.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed orbit and closed-square homeomorphisms.",
    :id :program-2026-10-13-close-t93j03,
    :kind :final-adapter,
    :campaign-priority 30,
@@ -36216,7 +36227,10 @@
      "Committed compact and vertical-coordinate finiteness; horizontal bound remains."}
     {:job 6,
      :commit "9fd7db79829014860bf4bf666288111efb9269de",
-     :reason "Committed literal affine-action proper discontinuity."}]}
+     :reason "Committed literal affine-action proper discontinuity."}
+    {:job 7,
+     :commit "5f43680a890059d05f8015a9e3091740acc57397",
+     :reason "Committed orbit and closed-square homeomorphisms."}]}
   {:consumer :t99J05,
    :stop-count 5,
    :evidence
@@ -37382,7 +37396,7 @@
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "planeOrbitRelHomeomorph",
@@ -37392,14 +37406,16 @@
     :reported-by [:program-2026-10-13-close-t93j03],
     :type "explicit orbit setoid homeomorphic to action quotient",
     :area "covering-subgroup-correspondence",
-    :proved-in :program-2026-10-13-close-t93j03},
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "5f43680a890059d05f8015a9e3091740acc57397"},
    :id :lemma-planeorbitrelhomeomorph,
    :kind :lemma,
    :depends-on [:lemma-t93j03-kleinplane-properlydiscontinuous],
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "closedSquareOrbitHomeomorph",
@@ -37409,7 +37425,9 @@
     :reported-by [:program-2026-10-13-close-t93j03],
     :type "square orbit quotient homeomorphic to plane quotient",
     :area "covering-subgroup-correspondence",
-    :proved-in :program-2026-10-13-close-t93j03},
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "5f43680a890059d05f8015a9e3091740acc57397"},
    :id :lemma-closedsquareorbithomeomorph,
    :kind :lemma,
    :depends-on [:lemma-planeorbitrelhomeomorph],
