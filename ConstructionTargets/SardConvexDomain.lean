@@ -51,6 +51,28 @@ theorem ContDiffWithinAt.isSymmSndFDerivWithinAt_iteratedFDerivWithin_of_infty
   · exact hxs
   · exact WithTop.coe_le_coe.mpr le_top
 
+/-- An iterated-derivative permutation identity valid on the interior extends to a boundary
+point where the map is smooth within the set and the interior is dense. -/
+theorem ContDiffWithinAt.domDomCongr_iteratedFDerivWithin_of_eqOn_interior
+    {E F : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [NormedAddCommGroup F] [NormedSpace ℝ F]
+    {s : Set E} {f : E → F} {x : E}
+    (hf : ContDiffWithinAt ℝ ∞ f s x) (hu : UniqueDiffOn ℝ s)
+    (hxs : x ∈ s) (hxi : x ∈ closure (interior s))
+    (n : ℕ) (sigma : Equiv.Perm (Fin n))
+    (heq : ∀ y ∈ interior s,
+      (iteratedFDerivWithin ℝ n f s y).domDomCongr sigma =
+        iteratedFDerivWithin ℝ n f s y) :
+    (iteratedFDerivWithin ℝ n f s x).domDomCongr sigma =
+      iteratedFDerivWithin ℝ n f s x := by
+  let L : ContinuousMultilinearMap ℝ (λ _ : Fin n ↦ E) F ≃ₗᵢ[ℝ]
+      ContinuousMultilinearMap ℝ (λ _ : Fin n ↦ E) F :=
+    ContinuousMultilinearMap.domDomCongrₗᵢ ℝ E F sigma
+  have hc := hf.continuousWithinAt_iteratedFDerivWithin hu
+    (show (n : WithTop ENat) ≤ (∞ : WithTop ENat) from WithTop.coe_le_coe.mpr le_top) hxs
+  exact ContinuousWithinAt.eq_of_eqOn_interior_of_mem_closure hxi
+    (L.continuous.continuousAt.comp_continuousWithinAt hc) hc heq
+
 /-- A continuous multilinear map fixed by every transposition is fixed by every permutation. -/
 theorem ContinuousMultilinearMap.domDomCongr_eq_self_of_swap
     {R E F ι : Type*} [Semiring R] [TopologicalSpace R]
