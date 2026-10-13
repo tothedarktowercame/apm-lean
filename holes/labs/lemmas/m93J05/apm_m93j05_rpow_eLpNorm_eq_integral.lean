@@ -768,7 +768,19 @@ given (D1c). All parallel. -/
 theorem apm_m93j05_rpow_eLpNorm_eq_integral (p : ℝ) (hp : 0 < p) (u : ℝ → ℝ)
     (hu : MemLp u (ENNReal.ofReal p) (volume.restrict (Set.Icc (0 : ℝ) 1))) :
     Real.rpow (eLpNorm u (ENNReal.ofReal p) (volume.restrict (Set.Icc (0 : ℝ) 1))).toReal p = ∫ x, |u x| ^ p ∂(volume.restrict (Set.Icc (0 : ℝ) 1)) := by
-  sorry
+  let μ := volume.restrict (Set.Icc (0 : ℝ) 1)
+  have hp0 : ENNReal.ofReal p ≠ 0 := ENNReal.ofReal_ne_zero_iff.mpr hp
+  have hpTop : ENNReal.ofReal p ≠ ⊤ := ENNReal.ofReal_ne_top
+  have hnorm := hu.eLpNorm_eq_integral_rpow_norm hp0 hpTop
+  have hnonneg : 0 ≤ ∫ x, |u x| ^ p ∂μ :=
+    MeasureTheory.integral_nonneg (fun x ↦ by positivity)
+  rw [hnorm]
+  simp only [ENNReal.toReal_ofReal hp.le, Real.norm_eq_abs]
+  rw [ENNReal.toReal_ofReal (Real.rpow_nonneg hnonneg _)]
+  change ((∫ x, |u x| ^ p ∂μ) ^ p⁻¹) ^ p = ∫ x, |u x| ^ p ∂μ
+  rw [← Real.rpow_mul hnonneg]
+  field_simp
+  exact Real.rpow_one _
 -- END SEAT AREA
 
 theorem apm_m93j05_abs_rpow_line_hasDerivAt (p : ℝ) (hp : 1 < p) (x y s : ℝ) :
