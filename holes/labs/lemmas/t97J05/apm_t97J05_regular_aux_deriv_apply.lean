@@ -181,7 +181,54 @@ lemma apm_t97J05_regular_aux_deriv_apply (q h : apm_t97J05_R3) :
         ![Real.exp (q 0) * Real.cos (q 1) * h 0 -
             Real.exp (q 0) * Real.sin (q 1) * h 1,
           q 2 * h 0 + q 0 * h 2, h 2] := by
-  sorry
+  let g : apm_t97J05_R3 → (Fin 3 → ℝ) := fun x =>
+    ![Real.exp (x 0) * Real.cos (x 1), x 0 * x 2, x 2]
+  have hg : DifferentiableAt ℝ g q := by
+    apply differentiableAt_pi.mpr
+    intro i
+    fin_cases i <;> dsimp [g] <;> fun_prop
+  have hc := (PiLp.hasFDerivAt_toLp (𝕜 := ℝ) 2 (g q)).comp q hg.hasFDerivAt
+  have hdj (j : Fin 3) :
+      DifferentiableAt ℝ (fun x : apm_t97J05_R3 => x j) q := by
+    exact (PiLp.proj 2 (fun _ : Fin 3 => ℝ) j).differentiableAt
+  have hj (j : Fin 3) :
+      fderiv ℝ (fun x : apm_t97J05_R3 => x j) q h = h j := by
+    let P : apm_t97J05_R3 →L[ℝ] ℝ := PiLp.proj 2 (fun _ : Fin 3 => ℝ) j
+    have hd := P.hasFDerivAt (x := q)
+    exact congrArg (fun L : apm_t97J05_R3 →L[ℝ] ℝ => L h) hd.fderiv
+  have hgv :
+      fderiv ℝ g q h =
+        ![Real.exp (q 0) * Real.cos (q 1) * h 0 -
+            Real.exp (q 0) * Real.sin (q 1) * h 1,
+          q 2 * h 0 + q 0 * h 2, h 2] := by
+    rw [fderiv_pi]
+    · ext i
+      fin_cases i
+      · dsimp [g]
+        rw [fderiv_fun_mul]
+        · rw [fderiv_exp, fderiv_cos]
+          simp only [ContinuousLinearMap.add_apply, ContinuousLinearMap.smul_apply,
+            smul_eq_mul]
+          rw [hj, hj]
+          ring
+          all_goals exact hdj _
+        · exact (hdj 0).exp
+        · exact (hdj 1).cos
+      · dsimp [g]
+        rw [fderiv_fun_mul]
+        · simp only [ContinuousLinearMap.add_apply, ContinuousLinearMap.smul_apply,
+            smul_eq_mul]
+          rw [hj, hj]
+          ring
+        all_goals exact hdj _
+      · dsimp [g]
+        rw [hj]
+    · intro i
+      fin_cases i <;> dsimp [g] <;> fun_prop
+  change fderiv ℝ (WithLp.toLp 2 ∘ g) q h = _
+  rw [hc.fderiv]
+  change WithLp.toLp 2 (fderiv ℝ g q h) = _
+  rw [hgv]
 -- END SEAT AREA
 
 /-- The displayed derivative is invertible under precisely the two nonvanishing
