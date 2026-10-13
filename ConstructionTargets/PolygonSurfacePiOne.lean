@@ -1608,6 +1608,12 @@ theorem finiteWedge_empty_not_nonempty :
   rintro ⟨x⟩
   exact finiteWedge_empty_elim x
 
+/-- In particular, the current representation admits no polymorphic
+`wedgePoint` under only a `Fintype` hypothesis. -/
+theorem no_finiteWedgePoint :
+    IsEmpty ((L : Type) → [Fintype L] → FiniteWedge L) :=
+  ⟨fun h => finiteWedge_empty_elim (h Empty)⟩
+
 noncomputable instance (L : Type*) : TopologicalSpace (FiniteWedge L) :=
   letI : TopologicalSpace L := ⊥
   TopologicalSpace.coinduced
