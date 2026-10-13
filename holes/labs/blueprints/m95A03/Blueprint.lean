@@ -272,7 +272,59 @@ lemma apm_m95A03_solves_of_isMinOn_aux_ibp
     (η : ℝ → ℝ) (hη : ContDiff ℝ 1 η) (hηa : η a = 0) (hηb : η b = 0) :
     (∫ t in a..b, p t * deriv u t * deriv η t + q t * u t * η t + f t * η t) =
       -∫ t in a..b, (deriv (fun x => p x * deriv u x) t - q t * u t - f t) * η t := by
-  sorry
+  have hu' : ContDiff ℝ 1 (deriv u) := by
+    simpa using hu2.deriv'
+  have hg : ContDiff ℝ 1 (fun x => p x * deriv u x) := hp.mul hu'
+  have hdg : Continuous (fun x => deriv (fun y => p y * deriv u y) x) :=
+    hg.continuous_deriv_one
+  have hdη : Continuous (deriv η) := hη.continuous_deriv_one
+  have hdg_int : IntervalIntegrable (deriv (fun x => p x * deriv u x))
+      MeasureTheory.volume a b := by
+    simpa only using hdg.intervalIntegrable (a := a) (b := b)
+  have hdη_int : IntervalIntegrable (deriv η) MeasureTheory.volume a b :=
+    hdη.intervalIntegrable (μ := MeasureTheory.volume) (a := a) (b := b)
+  have hibp := intervalIntegral.integral_mul_deriv_eq_deriv_mul
+    (a := a) (b := b)
+    (u := fun x => p x * deriv u x) (v := η)
+    (u' := deriv (fun x => p x * deriv u x)) (v' := deriv η)
+    (fun x _ => (hg.differentiable (by simp) x).hasDerivAt)
+    (fun x _ => (hη.differentiable (by simp) x).hasDerivAt)
+    hdg_int hdη_int
+  have hibp' :
+      (∫ t in a..b, p t * deriv u t * deriv η t) =
+        -∫ t in a..b, deriv (fun x => p x * deriv u x) t * η t := by
+    simpa [hηa, hηb] using hibp
+  have hqu : Continuous (fun t => q t * u t * η t) :=
+    (hq.mul hu2.continuous).mul hη.continuous
+  have hfη : Continuous (fun t => f t * η t) := hf.mul hη.continuous
+  have hgdη : Continuous (fun t => deriv (fun x => p x * deriv u x) t * η t) :=
+    hdg.mul hη.continuous
+  have hA : IntervalIntegrable (fun t => p t * deriv u t * deriv η t)
+      MeasureTheory.volume a b := by
+    simpa only [Pi.mul_apply] using
+      (hg.continuous.mul hdη).intervalIntegrable (a := a) (b := b)
+  have hB : IntervalIntegrable (fun t => q t * u t * η t)
+      MeasureTheory.volume a b := hqu.intervalIntegrable
+        (μ := MeasureTheory.volume) (a := a) (b := b)
+  have hC : IntervalIntegrable (fun t => f t * η t)
+      MeasureTheory.volume a b := hfη.intervalIntegrable
+        (μ := MeasureTheory.volume) (a := a) (b := b)
+  have hD : IntervalIntegrable
+      (fun t => deriv (fun x => p x * deriv u x) t * η t)
+      MeasureTheory.volume a b := hgdη.intervalIntegrable
+        (μ := MeasureTheory.volume) (a := a) (b := b)
+  have hr : (∫ t in a..b,
+      (deriv (fun x => p x * deriv u x) t - q t * u t - f t) * η t) =
+      (∫ t in a..b, deriv (fun x => p x * deriv u x) t * η t) -
+        (∫ t in a..b, q t * u t * η t) - (∫ t in a..b, f t * η t) := by
+    rw [← intervalIntegral.integral_sub hD hB,
+      ← intervalIntegral.integral_sub (hD.sub hB) hC]
+    apply intervalIntegral.integral_congr
+    intro t _
+    ring
+  rw [intervalIntegral.integral_add (hA.add hB) hC,
+    intervalIntegral.integral_add hA hB, hibp', hr]
+  ring
 
 /-- Fundamental lemma of the calculus of variations on `[a, b]`, for a continuous
 function tested against `C¹` variations vanishing at both ends. -/
