@@ -60,7 +60,38 @@ theorem apm_t01J06_orientedCoefficient_eq
     (alpha : apm_t01J06_SphereForm2)
     (halpha : apm_t01J06_isInclusionPullback omega alpha) (q : apm_t01J06_S2) :
     apm_t01J06_orientedCoefficient alpha q = (q.1 2 + 3) * q.1 2 := by
-  sorry
+  have hq : ‖(q : apm_t01J06_E3)‖ = 1 := by
+    have h := q.property
+    simpa [Metric.mem_sphere, dist_eq_norm] using h
+  have hproj (i j : Fin 3) :
+      (apm_t01J06_tangentProjection q i : apm_t01J06_E3) j =
+        (EuclideanSpace.single i 1 : apm_t01J06_E3) j - q.1 i * q.1 j := by
+    change (((Submodule.span ℝ ({(q : apm_t01J06_E3)} : Set apm_t01J06_E3)).orthogonal
+      ).orthogonalProjection (EuclideanSpace.single i 1) : apm_t01J06_E3) j = _
+    change (((ℝ ∙ (q : apm_t01J06_E3))ᗮ.starProjection
+      (EuclideanSpace.single i 1 : apm_t01J06_E3)) j) = _
+    rw [Submodule.starProjection_orthogonal_val,
+      Submodule.starProjection_singleton ℝ]
+    rw [hq]
+    simp only [one_pow, Nat.cast_one, div_one, PiLp.sub_apply,
+      PiLp.smul_apply, smul_eq_mul]
+    have hi : inner ℝ (q : apm_t01J06_E3)
+        (EuclideanSpace.single i 1) = q.1 i := by
+      simpa using EuclideanSpace.inner_single_right i (1 : ℝ)
+        (q : apm_t01J06_E3)
+    rw [hi]
+    norm_num
+  unfold apm_t01J06_orientedCoefficient
+  rw [halpha, halpha, halpha, homega, homega, homega]
+  simp only [Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.cons_val_two,
+    Matrix.head_cons, Matrix.tail_cons]
+  simp_rw [hproj]
+  simp
+  have hnormsq : q.1 0 ^ 2 + q.1 1 ^ 2 + q.1 2 ^ 2 = 1 := by
+    have h : ‖(q : apm_t01J06_E3)‖ ^ 2 = 1 := by rw [hq]; norm_num
+    simpa only [EuclideanSpace.norm_sq_eq, Fin.sum_univ_three, add_assoc,
+      Real.norm_eq_abs, sq_abs] using h
+  ring_nf at hnormsq ⊢
 -- END SEAT AREA
 
 /-- LIBRARY: the two normalized Hausdorff moments needed here. -/
