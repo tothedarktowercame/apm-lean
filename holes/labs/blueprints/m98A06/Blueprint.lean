@@ -1484,7 +1484,28 @@ lemma apm_m98A06_weak_FTC_aux_representation_aux_const_aux_interior_aux_distribu
     (h : ∀ g : ℝ → ℝ, ContDiff ℝ ∞ g → HasCompactSupport g → tsupport g ⊆ Ioo (0 : ℝ) Real.pi →
       ∫ x, g x • (w x - c) = 0) :
     ∀ x ∈ Ioo (0 : ℝ) Real.pi, w x = c := by
-  sorry
+  let U : Set ℝ := Ioo (0 : ℝ) Real.pi
+  let f : ℝ → ℝ := fun x ↦ w x - c
+  have hfloc : MeasureTheory.LocallyIntegrableOn f U volume := by
+    exact hwloc.sub (MeasureTheory.locallyIntegrableOn_const c)
+  have hae : ∀ᵐ x ∂volume, x ∈ U → f x = 0 := by
+    apply isOpen_Ioo.ae_eq_zero_of_integral_contDiff_smul_eq_zero hfloc
+    intro g hg hgc hgs
+    exact h g hg hgc hgs
+  have haer : f =ᵐ[volume.restrict U] 0 := by
+    change ∀ᵐ x ∂volume.restrict U, f x = 0
+    dsimp only [U]
+    rw [MeasureTheory.ae_restrict_iff' measurableSet_Ioo]
+    filter_upwards [hae] with x hx
+    exact hx
+  have hfc : ContinuousOn f U := by
+    exact (hw.mono Ioo_subset_Icc_self).sub continuousOn_const
+  have heq : Set.EqOn f 0 U :=
+    MeasureTheory.Measure.eqOn_open_of_ae_eq haer isOpen_Ioo hfc continuousOn_const
+  intro x hx
+  have hz := heq hx
+  dsimp [f] at hz
+  linarith
 
 -- The test identity: with c := ∫ w ψ₀ (ψ₀ the normalised bump), every test g in (0, π) has
 -- ∫ g (w − c) = 0 (g − (∫ g) ψ₀ has mean zero, so it is φ' for a supported φ; use hweak).
