@@ -1380,3 +1380,5 @@ connector in their exact categorical order.
 dependent target inverse with the inverse of the named based connector.
 `genericPointWedgeOuterRight_sourceConnector_endpoint_and_heq` packages the
 source endpoint equality together with its reflexive connector comparison.
+`genericPointWedgeOuterRight_targetConnectorHom_eq_based` also identifies the
+forward target connector with the named based connector.

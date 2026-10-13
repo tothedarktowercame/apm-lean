@@ -3211,7 +3211,7 @@ theorem genericPointWedgeGlobalRestrictionOverlapGlue_eq_one :
     pseudopushoutEquivalence_functor_obj_glue,
     descentOverlapIso, descentOverlapAppIso]
   generalize_proofs h
-  cases h
+  cases h.symm
   rfl
 
 /-- The same fixed-base component after the definitional pseudococone-to-span
@@ -6973,6 +6973,23 @@ theorem genericPointWedgeOuterRight_sourceConnector_endpoint_and_heq :
     genericPointWedgeOuterRightRoundTrip_sourceConnector_heq_refl
       x₀ y₀ M N hM hN hy hx cM cN⟩
 
+/-- The transported target connector hom is the hom of the named based
+connector at the same dependent endpoint. -/
+theorem genericPointWedgeOuterRight_targetConnectorHom_eq_based :
+    let r := genericPointWedgeActualRight x₀ y₀ M N
+    let eK := genericPointWedgeOverlapGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let eR := genericPointWedgeRightGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let z := genericPointWedgeOverlapBase x₀ y₀ M N
+    ((genericPointWedgeConnectors y₀).connector
+      ((eK.inverse ⋙ r ⋙ eR.functor).obj (eK.functor.obj z))).hom =
+      (genericPointWedgeBasedConnector y₀
+        ((eK.inverse ⋙ r ⋙ eR.functor).obj (eK.functor.obj z))).hom := by
+  exact congrArg Iso.hom
+    (genericPointWedgeOuterRightRoundTrip_targetConnector_eq_based
+      x₀ y₀ M N hM hN hy hx cM cN)
+
 /-- An `inl` factorization of the right-base conjugator forces its canonical
 right projection to be trivial. -/
 theorem genericPointWedgeRightBase_inl_implies_rightProjection_eq_one
@@ -7734,6 +7751,7 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeOuterRight_typedComposite_normalForm_expanded
 #print axioms genericPointWedgeOuterRight_targetConnectorInv_eq_based
 #print axioms genericPointWedgeOuterRight_sourceConnector_endpoint_and_heq
+#print axioms genericPointWedgeOuterRight_targetConnectorHom_eq_based
 #print axioms genericPointWedgeRightBase_inl_implies_rightProjection_eq_one
 #print axioms genericPointWedgeLegCoordinates_of_mapped
 #print axioms genericPointWedgeLegCoordinates_iff_mapped
