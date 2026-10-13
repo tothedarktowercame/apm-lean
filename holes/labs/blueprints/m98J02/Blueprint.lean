@@ -511,6 +511,31 @@ theorem apm_m98J02_translateTest_continuous (ψ : apm_m98J02_Test) :
     Continuous (fun x : apm_m98J02_E ↦ apm_m98J02_translateTest x ψ) := by
   sorry
 
+lemma apm_m98J02_translateTest_difference_quotient_aux_pointwise
+    (ψ : apm_m98J02_Test) (i : Fin 2) (x y : apm_m98J02_E) :
+    Filter.Tendsto (fun h : ℝ ↦ h⁻¹ *
+        (apm_m98J02_translateTest (x + h • EuclideanSpace.single i 1) ψ y -
+          apm_m98J02_translateTest x ψ y))
+      (nhdsWithin (0 : ℝ) ({0} : Set ℝ)ᶜ)
+      (nhds (apm_m98J02_translateTest x (apm_m98J02_partialTest i ψ) y)) := by
+  let e : apm_m98J02_E := EuclideanSpace.single i 1
+  let F : ℝ → ℝ := fun h ↦ ψ (x + h • e + y)
+  have hψ : DifferentiableAt ℝ (ψ : apm_m98J02_E → ℝ) (x + y) :=
+    (ψ.contDiff.differentiable (by simp)).differentiableAt
+  have hline : HasDerivAt (fun h : ℝ ↦ x + h • e + y)
+      ((1 : ℝ) • e) 0 := by
+    simpa [add_comm] using
+      (((hasDerivAt_id (𝕜 := ℝ) (x := 0)).smul_const e).const_add x |>.add_const y)
+  have hF : HasDerivAt F (apm_m98J02_partial i ψ (x + y)) 0 := by
+    have hψ0 : DifferentiableAt ℝ (ψ : apm_m98J02_E → ℝ)
+        (x + (0 : ℝ) • e + y) := by
+      simpa using hψ
+    have hc := hψ0.hasFDerivAt.comp 0 hline.hasFDerivAt
+    simpa [F, e, apm_m98J02_partial] using hc.hasDerivAt
+  simpa [F, e, apm_m98J02_translateTest_apply,
+    apm_m98J02_partialTest_apply, apm_m98J02_partial, div_eq_inv_mul,
+    mul_comm] using hF.tendsto_slope_zero
+
 /-- (b) Difference quotients of translation converge in the test-function space. -/
 theorem apm_m98J02_translateTest_difference_quotient (ψ : apm_m98J02_Test) (i : Fin 2)
     (x : apm_m98J02_E) :
