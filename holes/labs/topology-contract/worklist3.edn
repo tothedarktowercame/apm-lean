@@ -24430,7 +24430,7 @@
    :consumer :t01A08,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 0,
    :review-finding
    "extend Mathlib: state and prove the missing theorem in scope",
    :implements-lemma :lemma-closedset-whitneycubecover,
@@ -24471,6 +24471,17 @@
     [{:cmd "initial build",
       :exit 1,
       :correction "fixed compact API and intersection order"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791899934963-9818-366b0a6f",
+     :commands
+     ["git show/diff 5c1a23bc; scope and packing-proof review"
+      "lake build ConstructionTargets.SardConvexDomain"
+      "sha256sum and lake env lean t01a08_b3_compact_packing_check"
+      "statement-registry check; forbidden-token recount"],
+     :finding
+     "PASS. Valid STOP after compiled progress. The scoped theorem correctly proves that a uniformly ε-separated subset of a compact metric set is finite: separation makes it closed and discrete via ε/2 balls, while containment supplies compactness. Selection, a uniform overlap bound, and certificate assembly remain explicitly partial. Build/export pass; fixture hash matches; standard axioms only; registry 149/149; forbidden count 0->0."},
     :commit "5c1a23bc56f37976b38d589d218038b6dda34570",
     :changed-paths ["ConstructionTargets/SardConvexDomain.lean"],
     :fixture
@@ -24480,7 +24491,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain.blueprint/B3",
    :acceptance
@@ -35229,7 +35240,7 @@
    :other-consumers []}
   {:consumer :t01A08,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -35241,7 +35252,9 @@
     :reported-by [:r-a08-sard-b3-whitney-cubes-1],
     :type "separated subset of compact metric set is finite",
     :area "sard-convex-domain",
-    :proved-in :r-a08-sard-b3-whitney-cubes-1},
+    :proved-in :r-a08-sard-b3-whitney-cubes-1,
+    :banked-by :r-a08-sard-b3-whitney-cubes-1,
+    :banked-commit "5c1a23bc56f37976b38d589d218038b6dda34570"},
    :id
    :lemma-constructiontargets-sardconvexdomain-finite-of-subset-compact-of-pairwise-dist,
    :kind :lemma,
