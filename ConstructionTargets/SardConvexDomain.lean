@@ -960,4 +960,28 @@ theorem finite_whitneyStratumNet_mem_quarter_ball
   rw [dist_comm]
   exact le_of_lt (lt_trans hdist (div_lt_div_of_pos_right hscale (by norm_num)))
 
+/-- The cardinality of the centers from one stratum whose quarter-balls contain
+`x` is bounded by the packing number of the corresponding scale-sized ball. -/
+theorem encard_whitneyStratumNet_mem_quarter_ball_le_packingNumber
+    {E : Type*} [MetricSpace E] (s : Set E) (k : ℤ) (x : E) :
+    {c | c ∈ whitneyStratumNet s k ∧
+      x ∈ Metric.ball c (Metric.infDist c s / 4)}.encard ≤
+      Metric.packingNumber (whitneyStratumRadius k)
+        (Metric.closedBall x ((2 : ℝ) ^ (k + 1) / 4)) := by
+  let I : Set E := {c | c ∈ whitneyStratumNet s k ∧
+    x ∈ Metric.ball c (Metric.infDist c s / 4)}
+  have hsub : I ⊆ Metric.closedBall x ((2 : ℝ) ^ (k + 1) / 4) := by
+    intro c hc
+    have hdist : dist x c < Metric.infDist c s / 4 := Metric.mem_ball.1 hc.2
+    have hscale : Metric.infDist c s < (2 : ℝ) ^ (k + 1) :=
+      ((whitneyStratumNet_spec s k).1 hc.1).2.2
+    apply Metric.mem_closedBall.2
+    rw [dist_comm]
+    exact le_of_lt
+      (lt_trans hdist (div_lt_div_of_pos_right hscale (by norm_num)))
+  have hsep : Metric.IsSeparated (whitneyStratumRadius k) I := by
+    intro c hc d hd hcd
+    exact (whitneyStratumNet_spec s k).2.1 hc.1 hd.1 hcd
+  exact hsep.encard_le_packingNumber hsub
+
 end ConstructionTargets.SardConvexDomain
