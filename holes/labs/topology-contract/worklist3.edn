@@ -24430,27 +24430,27 @@
    :consumer :t01A08,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "extend Mathlib: state and prove the missing theorem in scope",
    :implements-lemma :lemma-closedset-whitneycubecover,
    :evidence
    {:placeholder-delta {:t01A08 [1 1]},
     :residual
-    "Prove local finiteness and assemble B3; then B4-B7, B9.",
+    "Ambient local finiteness and B3 assembly; then B4-B7, B9.",
     :outcome :stop,
     :warnings
     ["existing unnecessarySimpa:454"
      "existing unnecessarySeqFocus:1199"],
     :missing-theorems
     [{:name
-      "ConstructionTargets.SardConvexDomain.whitneyNetAnchor_nearest",
+      "ConstructionTargets.SardConvexDomain.compl_subset_iUnion_whitneyNetQuarterBalls",
       :type
-      "[FiniteDimensional R E] (hs : IsClosed s) (hne : s.Nonempty) (i : WhitneyNetIndex s) : infDist i.center s = dist i.center (whitneyNetAnchor hs hne i)",
+      "closed nonempty s => s^c subset union of Whitney quarter-infDist balls",
       :status :proved,
       :consumers [:t01A08],
       :depends-on
-      ["ConstructionTargets.SardConvexDomain.exists_nearestPoint_of_isClosed"],
+      ["ConstructionTargets.SardConvexDomain.whitneyStratumNet_spec"],
       :area "sard-convex-domain"}
      {:name
       "ConstructionTargets.SardConvexDomain.closedSet_whitneyCubeCover_proper",
@@ -24458,41 +24458,32 @@
       :status :partial,
       :consumers [:t01A08],
       :depends-on
-      ["ConstructionTargets.SardConvexDomain.whitneyNetAnchor_nearest"
-       "ConstructionTargets.SardConvexDomain.pointFinite_whitneyNetQuarterBalls"
-       "ConstructionTargets.SardConvexDomain.countable_whitneyNetIndex"],
+      ["ConstructionTargets.SardConvexDomain.compl_subset_iUnion_whitneyNetQuarterBalls"
+       "ConstructionTargets.SardConvexDomain.whitneyNetAnchor_nearest"
+       "ConstructionTargets.SardConvexDomain.pointFinite_whitneyNetQuarterBalls"],
       :area "sard-convex-domain"}],
     :statement-hashes {:registry "150/150"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Committed chosen nearest anchors for every Whitney index, with membership and exact infDist certificates. Local finiteness and assembly remain; not refuted.",
+    "Committed complement coverage by quarter-infDist balls. Local finiteness and assembly remain; not refuted.",
     :commands
     [{:cmd "lake build ConstructionTargets.SardConvexDomain", :exit 0}
-     {:cmd "fixture; registry; scans; scope/diff", :exit 0}
+     {:cmd "fixture; registry; scans; diff", :exit 0}
      {:cmd "git commit", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1791911872381-10095-462fab69",
-     :commands
-     ["git show/diff 9404603; scope/orientation checks"
-      "sha256sum + lake env lean frozen fixture"
-      "lake build ConstructionTargets.SardConvexDomain"
-      "statement registry check; forbidden-count scan"],
-     :finding
-     "PASS. Recorded topo-10 commit 9404603 changes only the scoped Lean file and correctly chooses nearest anchors using the proved finite-dimensional closed-set theorem. choose_spec yields anchor∈s and the required orientation infDist(center,s)=dist(center,anchor), with no representation mismatch at WhitneyNetIndex.center. Fixture hash 80cec96c... matches; build/fixture pass; registry 150/150; forbidden placeholders stay 0; only standard axioms. Valid compiled B3 progress; STOP explicitly leaves local finiteness and assembly."},
-    :commit "9404603a3e8e872c65776ee49219c6a950eb3e5f",
+    :diagnostic-history
+    [{:cmd "build", :exit 1, :correction "added zpow positivity"}],
+    :commit "7d6d59bf06297bd3654bbc7bdb6fa436bc90702d",
     :changed-paths ["ConstructionTargets/SardConvexDomain.lean"],
     :fixture
-    {:path "/tmp/t01a08_b3_anchor_check.lean",
+    {:path "/tmp/t01a08_b3_cover_check.lean",
      :sha256
-     "80cec96cb12371e3593f5d29635449779c29c67b9044c946fd1937bb0a7ae5e0",
+     "6c514c6d32cd3f377c9854ef296c9f7e732f0168d79abd40da6925a13cf5d750",
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain.blueprint/B3",
    :acceptance
@@ -35170,7 +35161,8 @@
     :lemma-constructiontargets-sardconvexdomain-finite-whitneynetincidence-and-ncard-le
     :lemma-constructiontargets-sardconvexdomain-countable-whitneynetindex
     :lemma-constructiontargets-sardconvexdomain-pointfinite-whitneynetquarterballs
-    :lemma-constructiontargets-sardconvexdomain-whitneynetanchor-nearest],
+    :lemma-constructiontargets-sardconvexdomain-whitneynetanchor-nearest
+    :lemma-constructiontargets-sardconvexdomain-compl-subset-iunion-whitneynetquarterballs],
    :other-consumers []}
   {:consumer :t01A08,
    :phase :lemma,
@@ -35847,6 +35839,29 @@
    :lemma-constructiontargets-sardconvexdomain-exists-nearestpoint-of-isclosed,
    :kind :lemma,
    :depends-on [],
+   :other-consumers []}
+  {:consumer :t01A08,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.SardConvexDomain.compl_subset_iUnion_whitneyNetQuarterBalls",
+    :type
+    "closed nonempty s => s^c subset union of Whitney quarter-infDist balls"},
+   :lemma
+   {:name
+    "ConstructionTargets.SardConvexDomain.compl_subset_iUnion_whitneyNetQuarterBalls",
+    :reported-by [:r-a08-sard-b3-whitney-cubes-1],
+    :type
+    "closed nonempty s => s^c subset union of Whitney quarter-infDist balls",
+    :area "sard-convex-domain",
+    :proved-in :r-a08-sard-b3-whitney-cubes-1},
+   :id
+   :lemma-constructiontargets-sardconvexdomain-compl-subset-iunion-whitneynetquarterballs,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-sardconvexdomain-whitneystratumnet-spec],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
