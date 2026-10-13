@@ -22679,39 +22679,36 @@
    "Blueprint remains false as written. B3 assumes only IsClosed s yet requires a chosen nearest point in s for every Whitney cube; take s=∅, when no such point exists. Also B1 invokes unique within derivatives from nonempty interior, but B7/B9 assume only s.Nonempty, so their stated hypotheses do not supply B1. Add s.Nonempty to B3 and (interior s).Nonempty through B1/B2/B7/B9 (then B10 supplies it), or prove an affine-hull/nonunique-jet replacement. Fresh priorities also contradict recorded A08 7/1: they report 7 banked, 2 backlog.",
    :evidence
    {:outcome :replan,
-    :disposition :replan,
-    :author "topo-12",
+    :seat "topo-12",
     :commands
     [{:cmd
       "bb holes/labs/topology-contract/build_step.bb priorities holes/labs/topology-contract/worklist3.edn",
       :exit 0}],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1791868439806-8512-f5a948da",
-     :finding
-     "Blueprint remains false as written. B3 assumes only IsClosed s yet requires a chosen nearest point in s for every Whitney cube; take s=∅, when no such point exists. Also B1 invokes unique within derivatives from nonempty interior, but B7/B9 assume only s.Nonempty, so their stated hypotheses do not supply B1. Add s.Nonempty to B3 and (interior s).Nonempty through B1/B2/B7/B9 (then B10 supplies it), or prove an affine-hull/nonunique-jet replacement. Fresh priorities also contradict recorded A08 7/1: they report 7 banked, 2 backlog."},
+    :finding
+    {:measures "Δ0;A08 7/2;blueprint FAIL",
+     :routes
+     "A02:2/13,A03:2/6,J02+98A02:1/10,A08:1/2,1J01:3/4,2A04:3/8,3J02:2/8,3J03:4/11,91J05:3/7,92J05+97J02:3/15,94J04:2/10,95J06:2/8,96A01:1/12,96A02:1/8,96J06:2/4,97A05+6:1/11",
+     :review
+     "B3 fails for empty s; B1/B2 assumptions do not reach B7/B9."},
     :replacement-items
-    [{:bounded-exception "Rule0 B1.",
+    [{:bounded-exception "Rule0 repair.",
       :consumer :t01A08,
-      :implements-lemma :lemma-sard-convex-b1,
-      :phase :probe,
+      :phase :implementation,
       :state :open,
-      :scope ["ConstructionTargets/SardConvexDomain.lean"],
-      :dag-node "SardConvexDomain.blueprint/B1",
+      :scope ["ConstructionTargets/SardConvexDomain.blueprint.md"],
+      :dag-node "TOPOLOGY-ROUTES.md/t01A08/corners-sard",
       :acceptance
-      {:probe "Compile B1 within jets.",
-       :declaration
-       "ConstructionTargets.SardConvexDomain.ContDiffOn.convexWithinJet",
-       :type "exact B1 type in blueprint",
-       :blueprint "ConstructionTargets/SardConvexDomain.blueprint.md",
+      {:blueprint "ConstructionTargets/SardConvexDomain.blueprint.md",
+       :repair
+       "Add s.Nonempty to B3. Require (interior s).Nonempty through B1,B2,B7,B9, propagate uses through B10, and state how B10 supplies it.",
        :placeholder "t01A08 sorry",
-       :route-step "B1 within jets"},
-      :id :r-a08-sard-b1-1,
-      :kind :reusable-theorem,
+       :route-step "repair Whitney hypotheses",
+       :completion "Commit; STOP blueprint written."},
+      :id :r-a08-sard-hyp-repair-1,
+      :kind :documentation,
       :area "sard-convex-domain",
-      :depends-on [:r-topo3-cp6b],
-      :current-residual "B2.",
+      :depends-on [:r-a08-sard-b6-repair-1 :r-topo3-cp6b],
+      :current-residual "Independent review, then B1.",
       :other-consumers []}
      {:consumer :portfolio,
       :checkpoint
@@ -22726,29 +22723,17 @@
       :state :open,
       :scope [],
       :dag-node "TOPOLOGY-ROUTES.md",
-      :acceptance {:strategy "Rerank after B1."},
-      :id :r-topo3-cp7,
+      :acceptance {:strategy "Review hypothesis repair."},
+      :id :r-topo3-cp7b,
       :kind :strategy-checkpoint,
       :area "portfolio",
-      :depends-on [:r-a08-sard-b1-1],
-      :current-residual "Elect next node.",
+      :depends-on [:r-a08-sard-hyp-repair-1],
+      :current-residual "Elect B1 only after review.",
       :other-consumers []}],
-    :finding
-    {:measures "Δ0;A08 7/1;blueprint PASS",
-     :routes
-     "A02:2/13,A03:2/6,J02+98A02:1/10,A08:1/1,1J01:3/4,2A04:3/8,3J02:2/8,3J03:4/11,91J05:3/7,92J05+97J02:3/15,94J04:2/10,95J06:2/8,96A01:1/12,96A02:1/8,96J06:2/4,97A05+6:1/11",
-     :review "Whitney B1-B7 repairs B6; B8-B11 use ambient Sard."},
-    :lemmas
-    [{:name
-      "ConstructionTargets.SardConvexDomain.ContDiffOn.convexWithinJet",
-      :type "blueprint B1",
-      :status :not-started,
-      :consumers [:t01A08],
-      :depends-on [],
-      :area "sard-convex-domain"}],
-    :seat "topo-12"},
+    :author "topo-12",
+    :disposition :replan},
    :phase :strategy,
-   :state :repair,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance {:strategy "Review B6 repair."},
@@ -22757,6 +22742,45 @@
    :area "portfolio",
    :depends-on [:r-a08-sard-b6-repair-1 :r-topo3-cp5],
    :current-residual "Elect B1 after review.",
+   :other-consumers []}
+  {:bounded-exception "Rule0 repair.",
+   :consumer :t01A08,
+   :phase :implementation,
+   :state :blocked,
+   :scope ["ConstructionTargets/SardConvexDomain.blueprint.md"],
+   :dag-node "TOPOLOGY-ROUTES.md/t01A08/corners-sard",
+   :acceptance
+   {:blueprint "ConstructionTargets/SardConvexDomain.blueprint.md",
+    :repair
+    "Add s.Nonempty to B3. Require (interior s).Nonempty through B1,B2,B7,B9, propagate uses through B10, and state how B10 supplies it.",
+    :placeholder "t01A08 sorry",
+    :route-step "repair Whitney hypotheses",
+    :completion "Commit; STOP blueprint written."},
+   :id :r-a08-sard-hyp-repair-1,
+   :kind :documentation,
+   :area "sard-convex-domain",
+   :depends-on [:r-a08-sard-b6-repair-1 :r-topo3-cp6b],
+   :current-residual "Independent review, then B1.",
+   :other-consumers []}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 1,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md",
+   :acceptance {:strategy "Review hypothesis repair."},
+   :id :r-topo3-cp7b,
+   :kind :strategy-checkpoint,
+   :area "portfolio",
+   :depends-on [:r-a08-sard-hyp-repair-1 :r-topo3-cp6b],
+   :current-residual "Elect B1 only after review.",
    :other-consumers []}
   {:bounded-exception "Rule0 B1.",
    :consumer :t01A08,
