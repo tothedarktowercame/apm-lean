@@ -317,13 +317,38 @@ lemma apm_m98A06_duBoisReymond_aux_trig
     · convert ((Real.hasDerivAt_sin x).const_mul (-A)).add
         ((Real.hasDerivAt_cos x).const_mul B) |>.deriv using 1 <;> ring
 
+lemma apm_m98A06_duBoisReymond_aux_forward_aux_derivWithin_continuous
+    (a y₀ ya : ℝ) (ha : 0 < a) (y : ℝ → ℝ)
+    (hy : apm_m98a06_Admissible a y₀ ya y) :
+    ContinuousOn (derivWithin y (Icc 0 a)) (Icc 0 a) := by
+  exact hy.1.continuousOn_derivWithin (uniqueDiffOn_Icc ha) le_rfl
+
+lemma apm_m98A06_duBoisReymond_aux_forward_aux_unscaled_variation
+    (a y₀ ya : ℝ) (y : ℝ → ℝ)
+    (hy : apm_m98a06_IsStationary a y₀ ya y) :
+    ∀ η : ℝ → ℝ, ContDiffOn ℝ 1 η (Icc 0 a) → η 0 = 0 → η a = 0 →
+      ∫ x in 0..a, (deriv y x * deriv η x - y x * η x) = 0 := by
+  intro η hη hη0 hηa
+  have h := hy.2 η hη hη0 hηa
+  rw [intervalIntegral.integral_const_mul] at h
+  norm_num at h
+  exact h
+
+lemma apm_m98A06_duBoisReymond_aux_forward_aux_classification
+    (a y₀ ya : ℝ) (ha : 0 < a) (y : ℝ → ℝ)
+    (hy : apm_m98a06_IsStationary a y₀ ya y) :
+    ∃ A B : ℝ, ∀ x ∈ Icc (0 : ℝ) a,
+      y x = A * Real.cos x + B * Real.sin x := by
+  sorry
+
 lemma apm_m98A06_duBoisReymond_aux_forward :
     ∀ a y₀ ya : ℝ, 0 < a → ∀ y : ℝ → ℝ,
       apm_m98a06_IsStationary a y₀ ya y →
         apm_m98a06_Admissible a y₀ ya y ∧
           ∃ A B : ℝ, ∀ x ∈ Icc (0 : ℝ) a,
             y x = A * Real.cos x + B * Real.sin x := by
-  sorry
+  intro a y₀ ya ha y hy
+  exact ⟨hy.1, apm_m98A06_duBoisReymond_aux_forward_aux_classification a y₀ ya ha y hy⟩
 
 lemma apm_m98A06_duBoisReymond_aux_reverse :
     ∀ a y₀ ya : ℝ, 0 < a → ∀ y : ℝ → ℝ,
