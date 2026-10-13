@@ -116984,65 +116984,61 @@
   {:consumer :t97A07,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 8,
+   :stop-count 9,
    :review-finding
    "Recorded fixture hash mismatch: :fixture.sha256 is eaeed21919599335d4a33b437815c4a9cbb5b72110213b29440d6944cc982182 (the blueprint at older commit 736c2566), but commit 8432f937 changes ConstructionTargets/t97A07Closure.blueprint.md and its exact SHA-256 is 5bb02c342b988406e8bd26aeda1b9e67335a8c1f626d97ec96701cb039ae708f. Re-record the fixture hash for the reviewed commit.",
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
     :residual
-    "B2 proved; B3 regular-points openness next, then B4-B9.",
+    "B3 proved; B4 compactness of critical values next, then B5-B9.",
     :outcome :stop,
-    :warnings [{:kind :existing-placeholder}],
+    :warnings
+    [{:kind :existing-placeholder}
+     {:kind :unrelated-dirty-file,
+      :path "ConstructionTargets/PolygonSurfacePiOne.lean"}],
     :missing-theorems
-    [{:name "t97A07Closure.continuousAt_coordinate_mfderiv",
-      :type "Chart derivative continuity and mfderiv equality",
+    [{:name "t97A07Closure.isOpen_regularPoints",
+      :type "IsOpen {x | Surjective (mfderiv f x)}",
       :status :proved,
       :consumers [:t97A07],
-      :depends-on [],
+      :depends-on
+      ["t97A07Closure.isOpen_setOf_surjective_clm"
+       "t97A07Closure.continuousAt_coordinate_mfderiv"],
       :area "regular-points-open"}],
     :statement-hashes
     {:source
-     "d15ad7a3d13288ea6afa64744caac0e95308e522d69b1cf50eabeb5b6d3cb5db",
+     "d7836e66e9805e5a76a1e591c1a4630cdc3641931674301f57272b758795f44a",
      :target
      "f13a687334f894f060c24b9aa390e8de88a2bf5f3d36e1de717af326c84d78f2",
      :blueprint
-     "858b28f951dba2dc109f8bf6b8d88934b79b5b0d4cf84f80dced6b5e6849f720",
+     "35d66abdfccbc8a67ef8f162a2b174875e37102ceebeb086a353aac3875c252b",
      :registry "131/131"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
-    :reason
-    "B2 interface proved: both coordinate families are continuous, eventually equal, and anchored at mfderiv.",
+    :reason "B3 proved: regular points are open.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t97A07Closure.lean",
       :exit 0}
      {:cmd "lake build ConstructionTargets.t97A07Closure", :exit 0}
      {:cmd "lake env lean problems/t97A07/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-     {:cmd "placeholder/diff validation", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1791848772380-8060-8b63abf2",
-     :commands
-     ["lake env lean <commit-archive>/ConstructionTargets/t97A07Closure.lean"
-      "lake build ConstructionTargets.t97A07Closure"
-      "lake env lean problems/t97A07/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"
-      "git-show sha256/placeholders/scope"],
-     :finding
-     "PASS program STOP. Commit 5125176c adds compiled progress beyond history and changes only scoped closure Lean/blueprint files. Exact source/target/fixture hashes match evidence (fixture 858b28f9...49f720); registry 131/131; sorry/admit remains 1->1, the declared existing Main placeholder. B2 is mathematically sound: chart-source membership yields eventual pointwise equality; the interface packages continuity of both fixed-coordinate families, that equality, and the centre value mfderiv f x. It does not identify varying tangent fibers; transport remains explicit. The blueprint status/proof account is faithful, uses its stated chart-calculus ingredients, and B3 consumes exactly B1+B2. New declarations use only propext, Classical.choice, Quot.sound. Residual B3-B9 milestones are listed."},
-    :commit "5125176c03b6cd10e63f6124bda1d607e83cf3e1",
+     {:cmd "diff/hash/placeholders", :exit 0}],
+    :diagnostic-history
+    [{:cmd "lean chart injectivity application",
+      :exit 1,
+      :finding "Corrected implicit chart arguments."}],
+    :commit "e816789ea8e370108b53f41ae43ea70a5140a0d4",
     :changed-paths
     ["ConstructionTargets/t97A07Closure.lean"
      "ConstructionTargets/t97A07Closure.blueprint.md"],
     :fixture
     {:path "ConstructionTargets/t97A07Closure.blueprint.md",
      :sha256
-     "858b28f951dba2dc109f8bf6b8d88934b79b5b0d4cf84f80dced6b5e6849f720"},
+     "35d66abdfccbc8a67ef8f162a2b174875e37102ceebeb086a353aac3875c252b"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t97A07/lean/Main.lean"
     "problems/t97A07/status.json"
@@ -118274,7 +118270,8 @@
    {:name "t97A07Closure.isOpen_regularPoints",
     :reported-by [:program-2026-10-11-close-t97a07],
     :type "The points where mfderiv is surjective form an open set",
-    :area "regular-points-open"},
+    :area "regular-points-open",
+    :proved-in :program-2026-10-11-close-t97a07},
    :id :lemma-t97a07closure-isopen-regularpoints,
    :kind :lemma,
    :depends-on
