@@ -949,7 +949,317 @@ lemma apm_m98A06_wirtinger_aux_core_aux_picone_limit_aux_gap_aux_truncated
           Real.sin (Real.pi * (L - δ) / L) -
       η δ ^ 2 * ((Real.pi / L) * Real.cos (Real.pi * δ / L)) /
         Real.sin (Real.pi * δ / L) := by
-  sorry
+  let B : ℝ → ℝ := fun x ↦ η x ^ 2 *
+    ((Real.pi / L) * Real.cos (Real.pi * x / L)) /
+      Real.sin (Real.pi * x / L)
+  let G : ℝ → ℝ := fun x ↦
+    (derivWithin η (Icc 0 L) x -
+      η x * ((Real.pi / L) * Real.cos (Real.pi * x / L)) /
+        Real.sin (Real.pi * x / L)) ^ 2
+  let D : ℝ → ℝ := fun x ↦
+    2 * η x * derivWithin η (Icc 0 L) x *
+        ((Real.pi / L) * Real.cos (Real.pi * x / L)) /
+          Real.sin (Real.pi * x / L) -
+      η x ^ 2 * ((Real.pi / L) ^ 2 *
+          Real.sin (Real.pi * x / L) ^ 2 +
+        ((Real.pi / L) * Real.cos (Real.pi * x / L)) ^ 2) /
+          Real.sin (Real.pi * x / L) ^ 2
+  have hsub : Icc δ (L - δ) ⊆ Ioo (0 : ℝ) L := by
+    intro x hx
+    exact ⟨hδ.trans_le hx.1, hx.2.trans_lt (sub_lt_self L hδ)⟩
+  have hsne : ∀ x ∈ Icc δ (L - δ), Real.sin (Real.pi * x / L) ≠ 0 :=
+    fun x hx ↦ (apm_m98A06_wirtinger_aux_core_aux_sine_pos L x hL (hsub hx)).ne'
+  have hηc : ContinuousOn η (Icc δ (L - δ)) :=
+    hη.1.continuousOn.mono (fun x hx ↦ ⟨(hsub hx).1.le, (hsub hx).2.le⟩)
+  have hdc : ContinuousOn (derivWithin η (Icc 0 L)) (Icc δ (L - δ)) :=
+    (apm_m98A06_wirtinger_aux_regular hL hη).2.1.mono
+      (fun x hx ↦ ⟨(hsub hx).1.le, (hsub hx).2.le⟩)
+  have hsinc : ContinuousOn (fun x : ℝ ↦ Real.sin (Real.pi * x / L))
+      (Icc δ (L - δ)) := by fun_prop
+  have hcosc : ContinuousOn (fun x : ℝ ↦
+      (Real.pi / L) * Real.cos (Real.pi * x / L)) (Icc δ (L - δ)) := by fun_prop
+  have hquotc : ContinuousOn (fun x : ℝ ↦
+      ((Real.pi / L) * Real.cos (Real.pi * x / L)) /
+        Real.sin (Real.pi * x / L)) (Icc δ (L - δ)) :=
+    hcosc.div hsinc hsne
+  have hBcont : ContinuousOn B (Icc δ (L - δ)) := by
+    convert (hηc.pow 2).mul hquotc using 1 <;> ext x <;> dsimp [B] <;> ring
+  have hDcont : ContinuousOn D (Icc δ (L - δ)) := by
+    convert (((hηc.mul hdc).const_mul 2).mul hquotc).sub
+      ((hηc.pow 2).mul
+        (((((hsinc.pow 2).const_mul ((Real.pi / L) ^ 2)).add (hcosc.pow 2)).div
+          (hsinc.pow 2) (fun x hx ↦ pow_ne_zero 2 (hsne x hx))))) using 1 <;>
+      ext x <;> dsimp [D] <;> ring
+  have hDint : IntervalIntegrable D volume δ (L - δ) :=
+    hDcont.intervalIntegrable_of_Icc hδL.le
+  have hFTC : (∫ x in δ..L - δ, D x) = B (L - δ) - B δ := by
+    apply intervalIntegral.integral_eq_sub_of_hasDerivAt_of_le hδL.le hBcont
+    · intro x hx
+      have hdif : DifferentiableAt ℝ B x := by
+        have hηdiff := (hη.1.differentiableOn (by norm_num) x
+          ⟨(hsub ⟨hx.1.le, hx.2.le⟩).1.le,
+            (hsub ⟨hx.1.le, hx.2.le⟩).2.le⟩).differentiableAt
+              (Icc_mem_nhds (hsub ⟨hx.1.le, hx.2.le⟩).1
+                (hsub ⟨hx.1.le, hx.2.le⟩).2)
+        dsimp [B]
+        fun_prop (disch := exact (apm_m98A06_wirtinger_aux_core_aux_sine_pos
+          L x hL (hsub ⟨hx.1.le, hx.2.le⟩)).ne')
+      apply hdif.hasDerivAt.congr_deriv
+      exact apm_m98A06_wirtinger_aux_core_aux_picone_limit_aux_gap_aux_deriv_boundary
+        L hL η hη x (hsub ⟨hx.1.le, hx.2.le⟩)
+    · exact hDint
+  have hpoint : ∀ x ∈ Icc δ (L - δ),
+      derivWithin η (Icc 0 L) x ^ 2 - (Real.pi / L) ^ 2 * η x ^ 2 =
+        G x + D x := by
+    intro x hx
+    have hs := hsne x hx
+    rw [apm_m98A06_wirtinger_aux_core_aux_picone_identity
+      (Real.pi / L) (η x) (derivWithin η (Icc 0 L) x)
+      (Real.sin (Real.pi * x / L))
+      ((Real.pi / L) * Real.cos (Real.pi * x / L)) hs]
+    dsimp [G, D]
+    have ht := Real.sin_sq_add_cos_sq (Real.pi * x / L)
+    field_simp [hs]
+    nlinarith
+  rw [intervalIntegral.integral_congr (fun x hx ↦ hpoint x (by
+    simpa [uIcc_of_le hδL.le] using hx))]
+  rw [intervalIntegral.integral_add]
+  · rw [hFTC]
+    dsimp [G, B]
+    ring
+  · apply ContinuousOn.intervalIntegrable_of_Icc hδL.le
+    convert (hdc.sub (hηc.mul hquotc)).pow 2 using 1 <;> ext x <;> dsimp [G] <;> ring
+  · exact hDint
+
+lemma apm_m98A06_wirtinger_aux_core_aux_picone_limit_aux_gap_aux_lhs_integrable
+    (L : ℝ) (hL : 0 < L) (η : ℝ → ℝ)
+    (hη : apm_m98a06_Admissible L 0 0 η) :
+    IntervalIntegrable (fun x ↦
+      (derivWithin η (Icc 0 L) x) ^ 2 - (Real.pi / L) ^ 2 * η x ^ 2)
+      volume 0 L := by
+  have hr := apm_m98A06_wirtinger_aux_regular hL hη
+  exact hr.2.2.2.sub (hr.2.2.1.const_mul ((Real.pi / L) ^ 2))
+
+lemma apm_m98A06_wirtinger_aux_core_aux_picone_limit_aux_iff_aux_rigidity_aux_pointwise_aux_integrable_aux_bound_aux_measurable
+    (L : ℝ) (hL : 0 < L) (η : ℝ → ℝ)
+    (hη : apm_m98a06_Admissible L 0 0 η) :
+    AEStronglyMeasurable (fun x => (derivWithin η (Icc 0 L) x -
+      η x * ((Real.pi / L) * Real.cos (Real.pi * x / L)) /
+        Real.sin (Real.pi * x / L)) ^ 2)
+      (volume.restrict (Ioc 0 L)) := by
+  let f : ℝ → ℝ := fun x => derivWithin η (Icc 0 L) x -
+    η x * ((Real.pi / L) * Real.cos (Real.pi * x / L)) /
+      Real.sin (Real.pi * x / L)
+  have hd : ContinuousOn (derivWithin η (Icc 0 L)) (Icc 0 L) :=
+    hη.1.continuousOn_derivWithin (uniqueDiffOn_Icc hL) (by norm_num)
+  have hf : ContinuousOn f (Ioo 0 L) := by
+    apply ContinuousOn.sub
+    · exact hd.mono Ioo_subset_Icc_self
+    · apply ContinuousOn.div
+      · exact (hη.1.continuousOn.mono Ioo_subset_Icc_self).mul (by fun_prop)
+      · fun_prop
+      · intro x hx
+        exact ne_of_gt (apm_m98A06_wirtinger_aux_core_aux_sine_pos L x hL hx)
+  have hm : AEStronglyMeasurable (fun x => (f x) ^ 2)
+      (volume.restrict (Ioo 0 L)) :=
+    (hf.pow 2).aestronglyMeasurable measurableSet_Ioo
+  rw [Measure.restrict_congr_set Ioo_ae_eq_Ioc] at hm
+  exact hm
+
+lemma apm_m98A06_wirtinger_aux_core_aux_picone_limit_aux_iff_aux_rigidity_aux_pointwise_aux_integrable_aux_bound_aux_uniform_aux_deriv_bound
+    (L : ℝ) (hL : 0 < L) (η : ℝ → ℝ)
+    (hη : apm_m98a06_Admissible L 0 0 η) :
+    ∃ M : ℝ, 0 ≤ M ∧ ∀ x ∈ Icc (0 : ℝ) L,
+      ‖derivWithin η (Icc 0 L) x‖ ≤ M := by
+  have hd : ContinuousOn (derivWithin η (Icc 0 L)) (Icc 0 L) :=
+    hη.1.continuousOn_derivWithin (uniqueDiffOn_Icc hL) (by norm_num)
+  obtain ⟨C, hC⟩ := isCompact_Icc.exists_bound_of_continuousOn hd
+  refine ⟨max C 0, le_max_right _ _, fun x hx => ?_⟩
+  exact (hC x hx).trans (le_max_left _ _)
+
+lemma apm_m98A06_wirtinger_aux_core_aux_picone_limit_aux_iff_aux_rigidity_aux_pointwise_aux_integrable_aux_bound_aux_uniform_aux_endpoint
+    (L : ℝ) (hL : 0 < L) (η : ℝ → ℝ)
+    (hη : apm_m98a06_Admissible L 0 0 η)
+    (M : ℝ) (hM : 0 ≤ M)
+    (hd : ∀ x ∈ Icc (0 : ℝ) L, ‖derivWithin η (Icc 0 L) x‖ ≤ M) :
+    ∃ C : ℝ, ∀ x ∈ Ioo (0 : ℝ) L,
+      ‖(derivWithin η (Icc 0 L) x -
+        η x * ((Real.pi / L) * Real.cos (Real.pi * x / L)) /
+          Real.sin (Real.pi * x / L)) ^ 2‖ ≤ C := by
+  refine ⟨(M * (1 + Real.pi / 2)) ^ 2, fun x hx => ?_⟩
+  have hxI : x ∈ Icc (0 : ℝ) L := ⟨hx.1.le, hx.2.le⟩
+  have hx0 : 0 < x := hx.1
+  have hder : ∀ t ∈ Icc (0 : ℝ) L, HasDerivWithinAt η (derivWithin η (Icc 0 L) t) (Icc 0 L) t :=
+    fun t ht => (hη.1.differentiableOn one_ne_zero t ht).hasDerivWithinAt
+  have hmvt := fun a b (ha : a ∈ Icc (0 : ℝ) L) (hb : b ∈ Icc (0 : ℝ) L) =>
+    (convex_Icc (0 : ℝ) L).norm_image_sub_le_of_norm_hasDerivWithin_le hder hd ha hb
+  have h0 : (0 : ℝ) ∈ Icc (0 : ℝ) L := ⟨le_rfl, hL.le⟩
+  have hLm : L ∈ Icc (0 : ℝ) L := ⟨hL.le, le_rfl⟩
+  have hleft : |η x| ≤ M * x := by
+    have := hmvt 0 x h0 hxI
+    rw [hη.2.1, sub_zero, Real.norm_eq_abs, Real.norm_eq_abs, sub_zero, abs_of_pos hx.1] at this
+    exact this
+  have hright : |η x| ≤ M * (L - x) := by
+    have := hmvt x L hxI hLm
+    rw [hη.2.2, zero_sub, norm_neg, Real.norm_eq_abs, Real.norm_eq_abs,
+      abs_of_pos (sub_pos.2 hx.2)] at this
+    exact this
+  have hsinpos : 0 < Real.sin (Real.pi * x / L) := by
+    apply Real.sin_pos_of_pos_of_lt_pi
+    · positivity
+    · rw [div_lt_iff₀ hL]; nlinarith [Real.pi_pos, hx.2]
+  have hkey : |η x| ≤ (M * L / 2) * Real.sin (Real.pi * x / L) := by
+    rcases le_total x (L / 2) with hxh | hxh
+    · have hj := Real.mul_le_sin (x := Real.pi * x / L) (by positivity)
+        (by rw [div_le_iff₀ hL]; nlinarith [Real.pi_pos])
+      have : 2 / Real.pi * (Real.pi * x / L) = 2 * x / L := by
+        field_simp
+      rw [this] at hj
+      calc |η x| ≤ M * x := hleft
+        _ = (M * L / 2) * (2 * x / L) := by field_simp
+        _ ≤ (M * L / 2) * Real.sin (Real.pi * x / L) :=
+            mul_le_mul_of_nonneg_left hj (by positivity)
+    · have hsym : Real.sin (Real.pi * x / L) = Real.sin (Real.pi * (L - x) / L) := by
+        rw [← Real.sin_pi_sub]; congr 1; field_simp
+      have hj := Real.mul_le_sin (x := Real.pi * (L - x) / L)
+        (by have := sub_pos.2 hx.2; positivity)
+        (by rw [div_le_iff₀ hL]; nlinarith [Real.pi_pos])
+      have : 2 / Real.pi * (Real.pi * (L - x) / L) = 2 * (L - x) / L := by
+        field_simp
+      rw [this, ← hsym] at hj
+      calc |η x| ≤ M * (L - x) := hright
+        _ = (M * L / 2) * (2 * (L - x) / L) := by field_simp
+        _ ≤ (M * L / 2) * Real.sin (Real.pi * x / L) :=
+            mul_le_mul_of_nonneg_left hj (by positivity)
+  have hquot : |η x / Real.sin (Real.pi * x / L)| ≤ M * L / 2 := by
+    rw [abs_div, abs_of_pos hsinpos, div_le_iff₀ hsinpos]
+    exact hkey
+  have hdx : |derivWithin η (Icc 0 L) x| ≤ M := by
+    have := hd x hxI; rwa [Real.norm_eq_abs] at this
+  have hgap : |derivWithin η (Icc 0 L) x -
+      η x * ((Real.pi / L) * Real.cos (Real.pi * x / L)) / Real.sin (Real.pi * x / L)| ≤
+      M * (1 + Real.pi / 2) := by
+    have hre : η x * ((Real.pi / L) * Real.cos (Real.pi * x / L)) / Real.sin (Real.pi * x / L) =
+        (η x / Real.sin (Real.pi * x / L)) * ((Real.pi / L) * Real.cos (Real.pi * x / L)) := by
+      ring
+    rw [hre]
+    calc _ ≤ |derivWithin η (Icc 0 L) x| +
+          |(η x / Real.sin (Real.pi * x / L)) * ((Real.pi / L) * Real.cos (Real.pi * x / L))| :=
+          abs_sub _ _
+      _ ≤ M + (M * L / 2) * (Real.pi / L) := by
+          gcongr
+          rw [abs_mul]
+          apply mul_le_mul hquot _ (abs_nonneg _) (by positivity)
+          rw [abs_mul, abs_of_pos (div_pos Real.pi_pos hL)]
+          calc Real.pi / L * |Real.cos (Real.pi * x / L)| ≤ Real.pi / L * 1 :=
+                mul_le_mul_of_nonneg_left (Real.abs_cos_le_one _) (by positivity)
+            _ = Real.pi / L := mul_one _
+      _ = M * (1 + Real.pi / 2) := by field_simp
+  rw [Real.norm_eq_abs, abs_pow]
+  exact pow_le_pow_left₀ (abs_nonneg _) hgap 2
+
+lemma apm_m98A06_wirtinger_aux_core_aux_picone_limit_aux_iff_aux_rigidity_aux_pointwise_aux_integrable_aux_bound_aux_uniform
+    (L : ℝ) (hL : 0 < L) (η : ℝ → ℝ)
+    (hη : apm_m98a06_Admissible L 0 0 η) :
+    ∃ C : ℝ, ∀ᵐ x ∂(volume.restrict (Ioc 0 L)),
+      ‖(derivWithin η (Icc 0 L) x -
+        η x * ((Real.pi / L) * Real.cos (Real.pi * x / L)) /
+          Real.sin (Real.pi * x / L)) ^ 2‖ ≤ C := by
+  obtain ⟨M, hM, hd⟩ :=
+    apm_m98A06_wirtinger_aux_core_aux_picone_limit_aux_iff_aux_rigidity_aux_pointwise_aux_integrable_aux_bound_aux_uniform_aux_deriv_bound
+      L hL η hη
+  obtain ⟨C, hC⟩ :=
+    apm_m98A06_wirtinger_aux_core_aux_picone_limit_aux_iff_aux_rigidity_aux_pointwise_aux_integrable_aux_bound_aux_uniform_aux_endpoint
+      L hL η hη M hM hd
+  refine ⟨C, ?_⟩
+  filter_upwards [ae_restrict_of_ae
+    ((countable_singleton L).ae_notMem (volume : Measure ℝ)),
+    ae_restrict_mem measurableSet_Ioc]
+    with x hxL hxI
+  have hx : x ∈ Ioo (0 : ℝ) L :=
+    ⟨hxI.1, lt_of_le_of_ne hxI.2 (by simpa using hxL)⟩
+  exact hC x hx
+
+lemma apm_m98A06_wirtinger_aux_core_aux_picone_limit_aux_iff_aux_rigidity_aux_pointwise_aux_integrable_aux_bound
+    (L : ℝ) (hL : 0 < L) (η : ℝ → ℝ)
+    (hη : apm_m98a06_Admissible L 0 0 η) :
+    ∃ C : ℝ,
+      AEStronglyMeasurable (fun x => (derivWithin η (Icc 0 L) x -
+        η x * ((Real.pi / L) * Real.cos (Real.pi * x / L)) /
+          Real.sin (Real.pi * x / L)) ^ 2)
+        (volume.restrict (Ioc 0 L)) ∧
+      ∀ᵐ x ∂(volume.restrict (Ioc 0 L)),
+        ‖(derivWithin η (Icc 0 L) x -
+          η x * ((Real.pi / L) * Real.cos (Real.pi * x / L)) /
+            Real.sin (Real.pi * x / L)) ^ 2‖ ≤ C := by
+  obtain ⟨C, hC⟩ :=
+    apm_m98A06_wirtinger_aux_core_aux_picone_limit_aux_iff_aux_rigidity_aux_pointwise_aux_integrable_aux_bound_aux_uniform
+      L hL η hη
+  exact ⟨C,
+    apm_m98A06_wirtinger_aux_core_aux_picone_limit_aux_iff_aux_rigidity_aux_pointwise_aux_integrable_aux_bound_aux_measurable
+      L hL η hη, hC⟩
+
+lemma apm_m98A06_wirtinger_aux_core_aux_picone_limit_aux_iff_aux_rigidity_aux_pointwise_aux_integrable
+    (L : ℝ) (hL : 0 < L) (η : ℝ → ℝ)
+    (hη : apm_m98a06_Admissible L 0 0 η) :
+    IntervalIntegrable (fun x => (derivWithin η (Icc 0 L) x -
+      η x * ((Real.pi / L) * Real.cos (Real.pi * x / L)) /
+        Real.sin (Real.pi * x / L)) ^ 2) volume 0 L := by
+  obtain ⟨C, hm, hC⟩ :=
+    apm_m98A06_wirtinger_aux_core_aux_picone_limit_aux_iff_aux_rigidity_aux_pointwise_aux_integrable_aux_bound
+      L hL η hη
+  rw [intervalIntegrable_iff, uIoc_of_le hL.le]
+  exact ⟨hm, HasFiniteIntegral.of_bounded hC⟩
+
+lemma apm_m98A06_wirtinger_aux_core_aux_picone_limit_aux_gap_aux_gap_integrable
+    (L : ℝ) (hL : 0 < L) (η : ℝ → ℝ)
+    (hη : apm_m98a06_Admissible L 0 0 η) :
+    IntervalIntegrable (fun x ↦ (derivWithin η (Icc 0 L) x -
+      η x * ((Real.pi / L) * Real.cos (Real.pi * x / L)) /
+        Real.sin (Real.pi * x / L)) ^ 2) volume 0 L := by
+  exact apm_m98A06_wirtinger_aux_core_aux_picone_limit_aux_iff_aux_rigidity_aux_pointwise_aux_integrable L hL η hη
+
+lemma apm_m98A06_wirtinger_aux_core_aux_picone_limit_aux_gap_aux_shrink
+    (L : ℝ) (hL : 0 < L) (f : ℝ → ℝ)
+    (hf : IntervalIntegrable f volume 0 L) :
+    Filter.Tendsto (fun δ => ∫ x in δ..L - δ, f x)
+      (nhdsWithin 0 (Ioi 0)) (nhds (∫ x in (0 : ℝ)..L, f x)) := by
+  set F : ℝ → ℝ := fun t => ∫ x in (0 : ℝ)..t, f x with hF
+  have hu : Set.uIcc (0 : ℝ) L = Icc 0 L := Set.uIcc_of_le hL.le
+  have hI : IntegrableOn f (Set.uIcc 0 L) := by
+    rw [hu]; exact (intervalIntegrable_iff_integrableOn_Icc_of_le hL.le).1 hf
+  have hFc : ContinuousOn F (Set.uIcc 0 L) := intervalIntegral.continuousOn_primitive_interval hI
+  rw [hu] at hFc
+  have hmem0 : (0 : ℝ) ∈ Icc (0 : ℝ) L := ⟨le_rfl, hL.le⟩
+  have hmemL : L ∈ Icc (0 : ℝ) L := ⟨hL.le, le_rfl⟩
+  -- δ ↦ δ tends to 0 within Icc 0 L, and δ ↦ L − δ tends to L within Icc 0 L
+  have hev : ∀ᶠ δ in nhdsWithin (0 : ℝ) (Ioi 0), δ ∈ Icc (0 : ℝ) L ∧ L - δ ∈ Icc (0 : ℝ) L := by
+    have h1 : ∀ᶠ δ in nhdsWithin (0 : ℝ) (Ioi 0), 0 < δ := self_mem_nhdsWithin
+    have h2 : ∀ᶠ δ in nhdsWithin (0 : ℝ) (Ioi 0), δ < L :=
+      nhdsWithin_le_nhds (Iio_mem_nhds hL)
+    filter_upwards [h1, h2] with δ hδ1 hδ2
+    exact ⟨⟨hδ1.le, hδ2.le⟩, ⟨by linarith, by linarith⟩⟩
+  have hid : Filter.Tendsto (fun δ : ℝ => δ) (nhdsWithin 0 (Ioi 0)) (nhdsWithin 0 (Icc 0 L)) :=
+    tendsto_nhdsWithin_of_tendsto_nhds_of_eventually_within _
+      (Filter.tendsto_id.mono_left nhdsWithin_le_nhds)
+      (hev.mono fun δ h => h.1)
+  have hsub : Filter.Tendsto (fun δ : ℝ => L - δ) (nhdsWithin 0 (Ioi 0)) (nhdsWithin L (Icc 0 L)) := by
+    refine tendsto_nhdsWithin_of_tendsto_nhds_of_eventually_within _ ?_ (hev.mono fun δ h => h.2)
+    have : Filter.Tendsto (fun δ : ℝ => L - δ) (nhds 0) (nhds (L - 0)) :=
+      (continuous_const.sub continuous_id).tendsto 0
+    simpa using this.mono_left nhdsWithin_le_nhds
+  have hA := ((hFc L hmemL).tendsto).comp hsub
+  have hB := ((hFc 0 hmem0).tendsto).comp hid
+  have hlim := hA.sub hB
+  simp only [hF, intervalIntegral.integral_same, sub_zero] at hlim
+  refine hlim.congr' ?_
+  filter_upwards [hev] with δ hδ
+  simp only [Function.comp_apply]
+  have hiL : IntervalIntegrable f volume 0 (L - δ) :=
+    hf.mono_set (Set.uIcc_subset_uIcc (by rw [hu]; exact hmem0) (by rw [hu]; exact hδ.2))
+  have hi0 : IntervalIntegrable f volume 0 δ :=
+    hf.mono_set (Set.uIcc_subset_uIcc (by rw [hu]; exact hmem0) (by rw [hu]; exact hδ.1))
+  rw [intervalIntegral.integral_interval_sub_left hiL hi0]
 
 lemma apm_m98A06_wirtinger_aux_core_aux_picone_limit_aux_gap
     (L : ℝ) (hL : 0 < L) (η : ℝ → ℝ)
@@ -958,7 +1268,47 @@ lemma apm_m98A06_wirtinger_aux_core_aux_picone_limit_aux_gap
         (Real.pi / L) ^ 2 * (∫ x in (0 : ℝ)..L, (η x) ^ 2) =
       ∫ x in (0 : ℝ)..L, (fun x => (derivWithin η (Icc 0 L) x -
           η x * ((Real.pi / L) * Real.cos (Real.pi * x / L)) / Real.sin (Real.pi * x / L)) ^ 2) x := by
-  sorry
+  let f : ℝ → ℝ := fun x => (derivWithin η (Icc 0 L) x) ^ 2 -
+    (Real.pi / L) ^ 2 * η x ^ 2
+  let g : ℝ → ℝ := fun x => (derivWithin η (Icc 0 L) x -
+    η x * ((Real.pi / L) * Real.cos (Real.pi * x / L)) /
+      Real.sin (Real.pi * x / L)) ^ 2
+  let b₀ : ℝ → ℝ := fun δ => η δ ^ 2 *
+    ((Real.pi / L) * Real.cos (Real.pi * δ / L)) /
+      Real.sin (Real.pi * δ / L)
+  let b₁ : ℝ → ℝ := fun δ => η (L - δ) ^ 2 *
+    ((Real.pi / L) * Real.cos (Real.pi * (L - δ) / L)) /
+      Real.sin (Real.pi * (L - δ) / L)
+  have hf := apm_m98A06_wirtinger_aux_core_aux_picone_limit_aux_gap_aux_lhs_integrable
+    L hL η hη
+  have hg := apm_m98A06_wirtinger_aux_core_aux_picone_limit_aux_iff_aux_rigidity_aux_pointwise_aux_integrable
+    L hL η hη
+  have hflim :=
+    apm_m98A06_wirtinger_aux_core_aux_picone_limit_aux_gap_aux_shrink L hL f hf
+  have hglim :=
+    apm_m98A06_wirtinger_aux_core_aux_picone_limit_aux_gap_aux_shrink L hL g hg
+  have hb := apm_m98A06_wirtinger_aux_core_aux_picone_limit_aux_gap_aux_boundary_limits
+    L hL η hη
+  have hrlim : Filter.Tendsto (fun δ => (∫ x in δ..L - δ, g x) + b₁ δ - b₀ δ)
+      (nhdsWithin 0 (Ioi 0)) (nhds ((∫ x in (0 : ℝ)..L, g x) + 0 - 0)) :=
+    (hglim.add hb.2).sub hb.1
+  have hevent : (fun δ => ∫ x in δ..L - δ, f x) =ᶠ[nhdsWithin 0 (Ioi 0)]
+      (fun δ => (∫ x in δ..L - δ, g x) + b₁ δ - b₀ δ) := by
+    filter_upwards [self_mem_nhdsWithin,
+      Filter.Eventually.filter_mono inf_le_left
+        (Iio_mem_nhds (show (0 : ℝ) < L / 2 by linarith))]
+      with δ hδ hδhalf
+    dsimp [f, g, b₀, b₁]
+    exact apm_m98A06_wirtinger_aux_core_aux_picone_limit_aux_gap_aux_truncated
+      L δ hL hδ (by linarith) η hη
+  have hsame := hrlim.congr' hevent.symm
+  have heq := tendsto_nhds_unique hflim hsame
+  dsimp [f, g] at heq
+  have hr := apm_m98A06_wirtinger_aux_regular hL hη
+  rw [intervalIntegral.integral_sub hr.2.2.2
+    (hr.2.2.1.const_mul ((Real.pi / L) ^ 2)),
+    intervalIntegral.integral_const_mul] at heq
+  simpa only [add_zero, sub_zero] using heq
 
 -- Equality in Wirtinger iff the Picone gap vanishes iff η/sin is constant.
 lemma apm_m98A06_wirtinger_aux_core_aux_picone_limit_aux_iff_aux_rigidity_aux_pointwise
@@ -971,7 +1321,40 @@ lemma apm_m98A06_wirtinger_aux_core_aux_picone_limit_aux_iff_aux_rigidity_aux_po
       derivWithin η (Icc 0 L) x -
         η x * ((Real.pi / L) * Real.cos (Real.pi * x / L)) /
           Real.sin (Real.pi * x / L) = 0 := by
-  sorry
+  let f : ℝ → ℝ := fun x => derivWithin η (Icc 0 L) x -
+    η x * ((Real.pi / L) * Real.cos (Real.pi * x / L)) /
+      Real.sin (Real.pi * x / L)
+  let g : ℝ → ℝ := fun x => (f x) ^ 2
+  have hd : ContinuousOn (derivWithin η (Icc 0 L)) (Icc 0 L) :=
+    hη.1.continuousOn_derivWithin (uniqueDiffOn_Icc hL) (by norm_num)
+  have hf : ContinuousOn f (Ioo 0 L) := by
+    apply ContinuousOn.sub
+    · exact hd.mono Ioo_subset_Icc_self
+    · apply ContinuousOn.div
+      · exact (hη.1.continuousOn.mono Ioo_subset_Icc_self).mul
+          (by fun_prop : ContinuousOn (fun x : ℝ =>
+            (Real.pi / L) * Real.cos (Real.pi * x / L)) (Ioo 0 L))
+      · fun_prop
+      · intro x hx
+        exact ne_of_gt (apm_m98A06_wirtinger_aux_core_aux_sine_pos L x hL hx)
+  have hg : ContinuousOn g (Ioo 0 L) := hf.pow 2
+  have hfi : IntervalIntegrable g volume 0 L := by
+    exact apm_m98A06_wirtinger_aux_core_aux_picone_limit_aux_iff_aux_rigidity_aux_pointwise_aux_integrable
+      L hL η hη
+  have hae : g =ᵐ[volume.restrict (Ioc (0 : ℝ) L)] 0 := by
+    have hnonneg : 0 ≤ᵐ[volume.restrict (Ioc (0 : ℝ) L ∪ Ioc L 0)] g :=
+      Filter.Eventually.of_forall (fun x => sq_nonneg (f x))
+    have hz' : ∫ x in (0 : ℝ)..L, g x = 0 := hz
+    have := (intervalIntegral.integral_eq_zero_iff_of_nonneg_ae hnonneg hfi).mp hz'
+    simpa [min_eq_left hL.le, max_eq_right hL.le] using this
+  have hae' : g =ᵐ[volume.restrict (Ioo (0 : ℝ) L)] 0 :=
+    ae_restrict_of_ae_restrict_of_subset Ioo_subset_Ioc_self hae
+  have heq : EqOn g 0 (Ioo (0 : ℝ) L) := by
+    exact Measure.eqOn_open_of_ae_eq hae' isOpen_Ioo hg continuousOn_const
+  intro x hx
+  have hxzero : g x = 0 := heq hx
+  dsimp [g] at hxzero
+  exact sq_eq_zero_iff.mp hxzero
 
 lemma apm_m98A06_wirtinger_aux_core_aux_picone_limit_aux_iff_aux_rigidity_aux_ratio
     (L : ℝ) (hL : 0 < L) (η : ℝ → ℝ)
@@ -1227,13 +1610,259 @@ lemma apm_m98A06_weak_FTC_aux_representation_aux_const_aux_interior_aux_local
     MeasureTheory.LocallyIntegrableOn w (Ioo (0 : ℝ) Real.pi) volume := by
   exact (hw.mono Ioo_subset_Icc_self).locallyIntegrableOn measurableSet_Ioo
 
+lemma apm_m98A06_weak_FTC_aux_representation_aux_const_aux_interior_aux_distribution_aux_bump :
+    ∃ ψ : ℝ → ℝ, ContDiff ℝ ∞ ψ ∧ HasCompactSupport ψ ∧
+      tsupport ψ ⊆ Ioo (0 : ℝ) Real.pi ∧ ∫ x, ψ x = 1 := by
+  let f : ContDiffBump (Real.pi / 2 : ℝ) :=
+    ⟨Real.pi / 8, Real.pi / 4, by nlinarith [Real.pi_pos],
+      by nlinarith [Real.pi_pos]⟩
+  refine ⟨f.normed volume, f.contDiff_normed, f.hasCompactSupport_normed, ?_,
+    f.integral_normed⟩
+  rw [f.tsupport_normed_eq]
+  intro x hx
+  rw [Metric.mem_closedBall, Real.dist_eq, abs_le] at hx
+  change -(Real.pi / 4) ≤ x - Real.pi / 2 ∧
+    x - Real.pi / 2 ≤ Real.pi / 4 at hx
+  constructor <;> linarith [Real.pi_pos]
+
+-- A mean-zero test function supported in (0, π) is the derivative of a test function
+-- supported in (0, π) (its primitive from 0).
+lemma apm_m98A06_weak_FTC_aux_representation_aux_const_aux_interior_aux_distribution_aux_primitive_test_aux_smooth
+    (ψ : ℝ → ℝ) (hψ : ContDiff ℝ ∞ ψ) :
+    ∃ φ : ℝ → ℝ, ContDiff ℝ ∞ φ ∧ deriv φ = ψ ∧
+      ∀ x, φ x = ∫ t in (0 : ℝ)..x, ψ t := by
+  let φ : ℝ → ℝ := fun x => ∫ t in (0 : ℝ)..x, ψ t
+  have hd : ∀ x, HasDerivAt φ (ψ x) x := by
+    intro x
+    exact intervalIntegral.integral_hasDerivAt_right
+      (hψ.continuous.intervalIntegrable _ _)
+      hψ.continuous.aestronglyMeasurable.stronglyMeasurableAtFilter
+      hψ.continuous.continuousAt
+  have hderiv : deriv φ = ψ := by
+    funext x
+    exact (hd x).deriv
+  refine ⟨φ, ?_, hderiv, fun x => rfl⟩
+  rw [contDiff_infty_iff_deriv]
+  exact ⟨fun x => (hd x).differentiableAt, hderiv ▸ hψ⟩
+
+lemma apm_m98A06_weak_FTC_aux_representation_aux_const_aux_interior_aux_distribution_aux_primitive_test_aux_support
+    (ψ φ : ℝ → ℝ) (hψ : ContDiff ℝ ∞ ψ) (hψc : HasCompactSupport ψ)
+    (hψs : tsupport ψ ⊆ Ioo (0 : ℝ) Real.pi) (hψ0 : ∫ x, ψ x = 0)
+    (hφ : ∀ x, φ x = ∫ t in (0 : ℝ)..x, ψ t) :
+    HasCompactSupport φ ∧ Function.support φ ⊆ Ioo (0 : ℝ) Real.pi := by
+  have hzero : ∀ {x : ℝ}, x ∉ Ioo (0 : ℝ) Real.pi → ψ x = 0 := by
+    intro x hx
+    by_contra hn
+    exact hx (hψs (subset_tsupport ψ hn))
+  have hleft : ∀ x : ℝ, x ≤ 0 → φ x = 0 := by
+    intro x hx
+    rw [hφ, intervalIntegral.integral_zero_ae]
+    filter_upwards [] with t ht
+    apply hzero
+    rw [uIoc_of_ge hx] at ht
+    exact fun h => (not_lt_of_ge ht.2) h.1
+  have hright : ∀ x : ℝ, Real.pi ≤ x → φ x = 0 := by
+    intro x hx
+    rw [hφ, intervalIntegral.integral_eq_integral_of_support_subset]
+    · exact hψ0
+    · intro t ht
+      have ht' : t ∈ Ioo (0 : ℝ) Real.pi := hψs (subset_tsupport ψ ht)
+      exact ⟨ht'.1, ht'.2.le.trans hx⟩
+  have hsupp : Function.support φ ⊆ Ioo (0 : ℝ) Real.pi := by
+    intro x hx
+    constructor
+    · exact lt_of_not_ge (fun h => hx (hleft x h))
+    · exact lt_of_not_ge (fun h => hx (hright x h))
+  refine ⟨?_, hsupp⟩
+  unfold HasCompactSupport
+  apply isCompact_Icc.of_isClosed_subset (isClosed_tsupport φ)
+  exact closure_minimal (hsupp.trans Ioo_subset_Icc_self) isClosed_Icc
+
+lemma apm_m98A06_weak_FTC_aux_representation_aux_const_aux_interior_aux_distribution_aux_primitive_test
+    (ψ : ℝ → ℝ) (hψ : ContDiff ℝ ∞ ψ) (hψc : HasCompactSupport ψ)
+    (hψs : tsupport ψ ⊆ Ioo (0 : ℝ) Real.pi) (hψ0 : ∫ x, ψ x = 0) :
+    ∃ φ : ℝ → ℝ, ContDiff ℝ ∞ φ ∧ HasCompactSupport φ ∧
+      Function.support φ ⊆ Ioo (0 : ℝ) Real.pi ∧ deriv φ = ψ := by
+  obtain ⟨φ, hφdiff, hφderiv, hφ⟩ :=
+    apm_m98A06_weak_FTC_aux_representation_aux_const_aux_interior_aux_distribution_aux_primitive_test_aux_smooth
+      ψ hψ
+  obtain ⟨hφc, hφs⟩ :=
+    apm_m98A06_weak_FTC_aux_representation_aux_const_aux_interior_aux_distribution_aux_primitive_test_aux_support
+      ψ φ hψ hψc hψs hψ0 hφ
+  exact ⟨φ, hφdiff, hφc, hφs, hφderiv⟩
+
+-- The core, given primitives of mean-zero test functions: fundamental lemma on (0, π)
+-- (IsOpen.ae_eq_zero_of_integral_contDiff_smul_eq_zero) and continuity.
+lemma apm_m98A06_weak_FTC_aux_representation_aux_const_aux_interior_aux_distribution_aux_core_aux_given_primitives_aux_normalized_integral
+    (g ψ₀ : ℝ → ℝ) (hg : ContDiff ℝ ∞ g) (hgc : HasCompactSupport g)
+    (hψ : ContDiff ℝ ∞ ψ₀) (hψc : HasCompactSupport ψ₀)
+    (hψone : ∫ x, ψ₀ x = 1) :
+    ∫ x, (g x - (∫ t, g t) * ψ₀ x) = 0 := by
+  have hgi : Integrable g := hg.continuous.integrable_of_hasCompactSupport hgc
+  have hψi : Integrable ψ₀ := hψ.continuous.integrable_of_hasCompactSupport hψc
+  rw [MeasureTheory.integral_sub hgi (hψi.const_mul _),
+    MeasureTheory.integral_const_mul, hψone, mul_one, sub_self]
+
+-- From vanishing tests against w − c on (0, π) to w = c there: the open-set fundamental lemma
+-- (IsOpen.ae_eq_zero_of_integral_contDiff_smul_eq_zero) and continuity of w.
+lemma apm_m98A06_weak_FTC_aux_representation_aux_const_aux_interior_aux_distribution_aux_core_aux_given_primitives_aux_pointwise
+    (w : ℝ → ℝ) (hw : ContinuousOn w (Icc (0 : ℝ) Real.pi))
+    (hwloc : MeasureTheory.LocallyIntegrableOn w (Ioo (0 : ℝ) Real.pi) volume) (c : ℝ)
+    (h : ∀ g : ℝ → ℝ, ContDiff ℝ ∞ g → HasCompactSupport g → tsupport g ⊆ Ioo (0 : ℝ) Real.pi →
+      ∫ x, g x • (w x - c) = 0) :
+    ∀ x ∈ Ioo (0 : ℝ) Real.pi, w x = c := by
+  let U : Set ℝ := Ioo (0 : ℝ) Real.pi
+  let f : ℝ → ℝ := fun x ↦ w x - c
+  have hfloc : MeasureTheory.LocallyIntegrableOn f U volume := by
+    exact hwloc.sub (MeasureTheory.locallyIntegrableOn_const c)
+  have hae : ∀ᵐ x ∂volume, x ∈ U → f x = 0 := by
+    apply isOpen_Ioo.ae_eq_zero_of_integral_contDiff_smul_eq_zero hfloc
+    intro g hg hgc hgs
+    exact h g hg hgc hgs
+  have haer : f =ᵐ[volume.restrict U] 0 := by
+    change ∀ᵐ x ∂volume.restrict U, f x = 0
+    dsimp only [U]
+    rw [MeasureTheory.ae_restrict_iff' measurableSet_Ioo]
+    filter_upwards [hae] with x hx
+    exact hx
+  have hfc : ContinuousOn f U := by
+    exact (hw.mono Ioo_subset_Icc_self).sub continuousOn_const
+  have heq : Set.EqOn f 0 U :=
+    MeasureTheory.Measure.eqOn_open_of_ae_eq haer isOpen_Ioo hfc continuousOn_const
+  intro x hx
+  have hz := heq hx
+  dsimp [f] at hz
+  linarith
+
+-- The test identity: with c := ∫ w ψ₀ (ψ₀ the normalised bump), every test g in (0, π) has
+-- ∫ g (w − c) = 0 (g − (∫ g) ψ₀ has mean zero, so it is φ' for a supported φ; use hweak).
+lemma apm_m98A06_weak_FTC_aux_representation_aux_const_aux_interior_aux_distribution_aux_core_aux_given_primitives_aux_identity_aux_smooth
+    (g ψ₀ : ℝ → ℝ) (hg : ContDiff ℝ ∞ g) (hψ₀ : ContDiff ℝ ∞ ψ₀) :
+    ContDiff ℝ ∞ (fun x ↦ g x - (∫ t, g t) * ψ₀ x) := by
+  simpa [smul_eq_mul] using hg.sub (hψ₀.const_smul (∫ t, g t))
+
+lemma apm_m98A06_weak_FTC_aux_representation_aux_const_aux_interior_aux_distribution_aux_core_aux_given_primitives_aux_identity_aux_core
+    (w : ℝ → ℝ)
+    (hwloc : MeasureTheory.LocallyIntegrableOn w (Ioo (0 : ℝ) Real.pi) volume)
+    (hweak : apm_m98a06_IsWeakDerivativeOn (Ioo 0 Real.pi) w 0)
+    (ψ₀ : ℝ → ℝ) (hψ₀ : ContDiff ℝ ∞ ψ₀) (hψ₀c : HasCompactSupport ψ₀)
+    (hψ₀s : tsupport ψ₀ ⊆ Ioo (0 : ℝ) Real.pi) (hψ₀1 : ∫ x, ψ₀ x = 1)
+    (hprim : ∀ ψ : ℝ → ℝ, ContDiff ℝ ∞ ψ → HasCompactSupport ψ →
+      tsupport ψ ⊆ Ioo (0 : ℝ) Real.pi → ∫ x, ψ x = 0 →
+      ∃ φ : ℝ → ℝ, ContDiff ℝ ∞ φ ∧ HasCompactSupport φ ∧
+        Function.support φ ⊆ Ioo (0 : ℝ) Real.pi ∧ deriv φ = ψ) :
+    ∀ g : ℝ → ℝ, ContDiff ℝ ∞ g → HasCompactSupport g →
+      tsupport g ⊆ Ioo (0 : ℝ) Real.pi →
+      ∫ x, g x • (w x - ∫ y, w y * ψ₀ y) = 0 := by
+  have hint : ∀ h : ℝ → ℝ, Continuous h → HasCompactSupport h →
+      tsupport h ⊆ Ioo (0 : ℝ) Real.pi → Integrable (fun x => w x * h x) := by
+    intro h hc hcs hs
+    have hwK := hwloc.integrableOn_compact_subset hs hcs
+    exact (hwK.mul_continuousOn hc.continuousOn hcs).integrable_of_forall_notMem_eq_zero
+      (fun x hx => by simp [image_eq_zero_of_notMem_tsupport hx])
+  intro g hg hgc hgs
+  set I := ∫ t, g t with hI
+  set c := ∫ y, w y * ψ₀ y with hc
+  set ψ : ℝ → ℝ := fun x => g x - I * ψ₀ x with hψdef
+  have hsub : tsupport ψ ⊆ tsupport g ∪ tsupport ψ₀ := by
+    apply closure_minimal _ ((isClosed_tsupport g).union (isClosed_tsupport ψ₀))
+    intro x hx
+    by_contra hn
+    simp only [Set.mem_union, not_or] at hn
+    apply hx
+    simp [hψdef, image_eq_zero_of_notMem_tsupport hn.1, image_eq_zero_of_notMem_tsupport hn.2]
+  have hψs : tsupport ψ ⊆ Ioo (0 : ℝ) Real.pi := hsub.trans (Set.union_subset hgs hψ₀s)
+  have hψc : HasCompactSupport ψ :=
+    IsCompact.of_isClosed_subset (hgc.isCompact.union hψ₀c.isCompact) (isClosed_tsupport ψ) hsub
+  have hgi : Integrable g := hg.continuous.integrable_of_hasCompactSupport hgc
+  have hψ₀i : Integrable ψ₀ := hψ₀.continuous.integrable_of_hasCompactSupport hψ₀c
+  have hψ0 : ∫ x, ψ x = 0 := by
+    simp only [hψdef]
+    rw [integral_sub hgi (hψ₀i.const_mul I), integral_const_mul, hψ₀1, mul_one, sub_self]
+  obtain ⟨φ, hφ, hφc, hφs, hφd⟩ :=
+    hprim ψ (apm_m98A06_weak_FTC_aux_representation_aux_const_aux_interior_aux_distribution_aux_core_aux_given_primitives_aux_identity_aux_smooth g ψ₀ hg hψ₀) hψc hψs hψ0
+  have hw := hweak φ hφ hφc hφs
+  rw [hφd] at hw
+  simp only [Pi.zero_apply, zero_mul, integral_zero, neg_zero] at hw
+  rw [setIntegral_eq_integral_of_forall_compl_eq_zero (fun x hx => by
+    simp [image_eq_zero_of_notMem_tsupport (fun h => hx (hψs h))])] at hw
+  have hexp : (fun x => w x * ψ x) = fun x => w x * g x - I * (w x * ψ₀ x) := by
+    funext x; simp only [hψdef]; ring
+  rw [hexp, integral_sub (hint g hg.continuous hgc hgs)
+    ((hint ψ₀ hψ₀.continuous hψ₀c hψ₀s).const_mul I), integral_const_mul] at hw
+  have hgoal : (fun x => g x • (w x - c)) = fun x => w x * g x - c * g x := by
+    funext x; simp only [smul_eq_mul]; ring
+  rw [hgoal, integral_sub (hint g hg.continuous hgc hgs) (hgi.const_mul c), integral_const_mul]
+  rw [← hc] at hw
+  linarith
+
+lemma apm_m98A06_weak_FTC_aux_representation_aux_const_aux_interior_aux_distribution_aux_core_aux_given_primitives_aux_identity
+    (w : ℝ → ℝ)
+    (hwloc : MeasureTheory.LocallyIntegrableOn w (Ioo (0 : ℝ) Real.pi) volume)
+    (hweak : apm_m98a06_IsWeakDerivativeOn (Ioo 0 Real.pi) w 0)
+    (ψ₀ : ℝ → ℝ) (hψ₀ : ContDiff ℝ ∞ ψ₀) (hψ₀c : HasCompactSupport ψ₀)
+    (hψ₀s : tsupport ψ₀ ⊆ Ioo (0 : ℝ) Real.pi) (hψ₀1 : ∫ x, ψ₀ x = 1)
+    (hprim : ∀ ψ : ℝ → ℝ, ContDiff ℝ ∞ ψ → HasCompactSupport ψ →
+      tsupport ψ ⊆ Ioo (0 : ℝ) Real.pi → ∫ x, ψ x = 0 →
+      ∃ φ : ℝ → ℝ, ContDiff ℝ ∞ φ ∧ HasCompactSupport φ ∧
+        Function.support φ ⊆ Ioo (0 : ℝ) Real.pi ∧ deriv φ = ψ) :
+    ∀ g : ℝ → ℝ, ContDiff ℝ ∞ g → HasCompactSupport g → tsupport g ⊆ Ioo (0 : ℝ) Real.pi →
+      ∫ x, g x • (w x - ∫ y, w y * ψ₀ y) = 0 := by
+  exact
+    apm_m98A06_weak_FTC_aux_representation_aux_const_aux_interior_aux_distribution_aux_core_aux_given_primitives_aux_identity_aux_core
+      w hwloc hweak ψ₀ hψ₀ hψ₀c hψ₀s hψ₀1 hprim
+
+lemma apm_m98A06_weak_FTC_aux_representation_aux_const_aux_interior_aux_distribution_aux_core_aux_given_primitives_aux_core
+    (w : ℝ → ℝ)
+    (hw : ContinuousOn w (Icc (0 : ℝ) Real.pi))
+    (hwloc : MeasureTheory.LocallyIntegrableOn w (Ioo (0 : ℝ) Real.pi) volume)
+    (hweak : apm_m98a06_IsWeakDerivativeOn (Ioo 0 Real.pi) w 0)
+    (hbump : ∃ ψ : ℝ → ℝ, ContDiff ℝ ∞ ψ ∧ HasCompactSupport ψ ∧
+      tsupport ψ ⊆ Ioo (0 : ℝ) Real.pi ∧ ∫ x, ψ x = 1)
+    (hprim : ∀ ψ : ℝ → ℝ, ContDiff ℝ ∞ ψ → HasCompactSupport ψ →
+      tsupport ψ ⊆ Ioo (0 : ℝ) Real.pi → ∫ x, ψ x = 0 →
+      ∃ φ : ℝ → ℝ, ContDiff ℝ ∞ φ ∧ HasCompactSupport φ ∧
+        Function.support φ ⊆ Ioo (0 : ℝ) Real.pi ∧ deriv φ = ψ) :
+    ∃ c : ℝ, ∀ x ∈ Ioo (0 : ℝ) Real.pi, w x = c := by
+  obtain ⟨ψ₀, hψ₀, hψ₀c, hψ₀s, hψ₀1⟩ := hbump
+  exact ⟨_, apm_m98A06_weak_FTC_aux_representation_aux_const_aux_interior_aux_distribution_aux_core_aux_given_primitives_aux_pointwise w hw hwloc _
+    (apm_m98A06_weak_FTC_aux_representation_aux_const_aux_interior_aux_distribution_aux_core_aux_given_primitives_aux_identity w hwloc hweak ψ₀ hψ₀ hψ₀c hψ₀s hψ₀1 hprim)⟩
+
+lemma apm_m98A06_weak_FTC_aux_representation_aux_const_aux_interior_aux_distribution_aux_core_aux_given_primitives
+    (w : ℝ → ℝ)
+    (hw : ContinuousOn w (Icc (0 : ℝ) Real.pi))
+    (hwloc : MeasureTheory.LocallyIntegrableOn w (Ioo (0 : ℝ) Real.pi) volume)
+    (hweak : apm_m98a06_IsWeakDerivativeOn (Ioo 0 Real.pi) w 0)
+    (hbump : ∃ ψ : ℝ → ℝ, ContDiff ℝ ∞ ψ ∧ HasCompactSupport ψ ∧
+      tsupport ψ ⊆ Ioo (0 : ℝ) Real.pi ∧ ∫ x, ψ x = 1)
+    (hprim : ∀ ψ : ℝ → ℝ, ContDiff ℝ ∞ ψ → HasCompactSupport ψ →
+      tsupport ψ ⊆ Ioo (0 : ℝ) Real.pi → ∫ x, ψ x = 0 →
+      ∃ φ : ℝ → ℝ, ContDiff ℝ ∞ φ ∧ HasCompactSupport φ ∧
+        Function.support φ ⊆ Ioo (0 : ℝ) Real.pi ∧ deriv φ = ψ) :
+    ∃ c : ℝ, ∀ x ∈ Ioo (0 : ℝ) Real.pi, w x = c := by
+  exact
+    apm_m98A06_weak_FTC_aux_representation_aux_const_aux_interior_aux_distribution_aux_core_aux_given_primitives_aux_core
+      w hw hwloc hweak hbump hprim
+
+lemma apm_m98A06_weak_FTC_aux_representation_aux_const_aux_interior_aux_distribution_aux_core
+    (w : ℝ → ℝ)
+    (hw : ContinuousOn w (Icc (0 : ℝ) Real.pi))
+    (hwloc : MeasureTheory.LocallyIntegrableOn w (Ioo (0 : ℝ) Real.pi) volume)
+    (hweak : apm_m98a06_IsWeakDerivativeOn (Ioo 0 Real.pi) w 0)
+    (hbump : ∃ ψ : ℝ → ℝ, ContDiff ℝ ∞ ψ ∧ HasCompactSupport ψ ∧
+      tsupport ψ ⊆ Ioo (0 : ℝ) Real.pi ∧ ∫ x, ψ x = 1) :
+    ∃ c : ℝ, ∀ x ∈ Ioo (0 : ℝ) Real.pi, w x = c := by
+  exact apm_m98A06_weak_FTC_aux_representation_aux_const_aux_interior_aux_distribution_aux_core_aux_given_primitives w hw hwloc hweak hbump apm_m98A06_weak_FTC_aux_representation_aux_const_aux_interior_aux_distribution_aux_primitive_test
+
 lemma apm_m98A06_weak_FTC_aux_representation_aux_const_aux_interior_aux_distribution
     (w : ℝ → ℝ)
     (hw : ContinuousOn w (Icc (0 : ℝ) Real.pi))
     (hwloc : MeasureTheory.LocallyIntegrableOn w (Ioo (0 : ℝ) Real.pi) volume)
     (hweak : apm_m98a06_IsWeakDerivativeOn (Ioo 0 Real.pi) w 0) :
     ∃ c : ℝ, ∀ x ∈ Ioo (0 : ℝ) Real.pi, w x = c := by
-  sorry
+  exact apm_m98A06_weak_FTC_aux_representation_aux_const_aux_interior_aux_distribution_aux_core
+    w hw hwloc hweak
+      apm_m98A06_weak_FTC_aux_representation_aux_const_aux_interior_aux_distribution_aux_bump
 
 lemma apm_m98A06_weak_FTC_aux_representation_aux_const_aux_interior
     (w : ℝ → ℝ) (hw : ContinuousOn w (Icc (0 : ℝ) Real.pi))
@@ -1626,6 +2255,278 @@ lemma apm_m98A06_nonresonant_energy_geometry_of_facts_aux_positive_direction
   · exact ⟨1, Or.inl rfl, by nlinarith⟩
   · exact ⟨-1, Or.inr rfl, by nlinarith⟩
 
+lemma apm_m98A06_nonresonant_energy_geometry_of_facts_aux_energy_geometry_aux_candidate_stationary
+    {a : ℝ} (ha : 0 < a) (hsin : Real.sin a ≠ 0) :
+    apm_m98a06_IsStationary a 0 1 (fun x ↦ Real.sin x / Real.sin a) := by
+  apply apm_m98A06_duBoisReymond_aux_reverse a 0 1 ha
+  refine ⟨apm_m98a06_nonresonant_candidate_admissible hsin, 0,
+    1 / Real.sin a, ?_⟩
+  intro x _
+  ring
+
+lemma apm_m98A06_nonresonant_energy_geometry_of_facts_aux_energy_geometry_aux_candidate_split
+    {a : ℝ} (ha : 0 < a) (hsin : Real.sin a ≠ 0)
+    {η : ℝ → ℝ} (hη : apm_m98a06_Admissible a 0 0 η) :
+    apm_m98a06_I a (fun x ↦ Real.sin x / Real.sin a + η x) =
+      apm_m98a06_I a (fun x ↦ Real.sin x / Real.sin a) + apm_m98a06_I a η := by
+  exact apm_m98A06_stationary_energy_split ha
+    (apm_m98A06_nonresonant_energy_geometry_of_facts_aux_energy_geometry_aux_candidate_stationary
+      ha hsin) hη
+
+lemma apm_m98A06_nonresonant_energy_geometry_of_facts_aux_energy_geometry_aux_nonneg
+    (hWirtinger : apm_m98A06_WirtingerFact)
+    {a : ℝ} (ha : 0 < a) (hapi : a < Real.pi)
+    {η : ℝ → ℝ} (hη : apm_m98a06_Admissible a 0 0 η) :
+    0 ≤ apm_m98a06_I a η := by
+  obtain ⟨hW, _⟩ := hWirtinger a ha η hη
+  have hD : 0 ≤ ∫ x in (0 : ℝ)..a,
+      (derivWithin η (Icc 0 a) x) ^ 2 :=
+    intervalIntegral.integral_nonneg ha.le (fun x _ ↦ sq_nonneg _)
+  have hr : (a / Real.pi) ^ 2 < 1 := by
+    have hp := Real.pi_pos
+    have : 0 ≤ a / Real.pi := div_nonneg ha.le hp.le
+    have : a / Real.pi < 1 := (div_lt_one hp).2 hapi
+    nlinarith
+  rw [apm_m98A06_I_eq_derivWithin ha hη.1]
+  rw [intervalIntegral.integral_sub]
+  · nlinarith
+  · exact ((hη.1.continuousOn_derivWithin (uniqueDiffOn_Icc ha) (by norm_num)).pow 2).intervalIntegrable_of_Icc ha.le
+  · exact (hη.1.continuousOn.pow 2).intervalIntegrable_of_Icc ha.le
+
+lemma apm_m98A06_nonresonant_energy_geometry_of_facts_aux_energy_geometry_aux_minimum
+    (hWirtinger : apm_m98A06_WirtingerFact)
+    {a : ℝ} (ha : 0 < a) (hapi : a < Real.pi) (hsin : Real.sin a ≠ 0)
+    {z : ℝ → ℝ} (hz : apm_m98a06_Admissible a 0 1 z) :
+    apm_m98a06_I a (fun x ↦ Real.sin x / Real.sin a) ≤ apm_m98a06_I a z := by
+  let u : ℝ → ℝ := fun x ↦ Real.sin x / Real.sin a
+  let η : ℝ → ℝ := fun x ↦ z x - u x
+  have hu : apm_m98a06_Admissible a 0 1 u := by
+    simpa [u] using apm_m98a06_nonresonant_candidate_admissible hsin
+  have hη : apm_m98a06_Admissible a 0 0 η :=
+    apm_m98A06_nonresonant_energy_geometry_of_facts_aux_difference hu hz
+  have hzfun : z = fun x ↦ u x + η x := by
+    funext x
+    simp [η]
+  rw [hzfun]
+  have hs : apm_m98a06_I a (fun x ↦ u x + η x) =
+      apm_m98a06_I a u + apm_m98a06_I a η := by
+    simpa [u] using
+      (apm_m98A06_nonresonant_energy_geometry_of_facts_aux_energy_geometry_aux_candidate_split
+        ha hsin hη)
+  change apm_m98a06_I a u ≤ apm_m98a06_I a (fun x ↦ u x + η x)
+  rw [hs]
+  exact le_add_of_nonneg_right
+    (apm_m98A06_nonresonant_energy_geometry_of_facts_aux_energy_geometry_aux_nonneg
+      hWirtinger ha hapi hη)
+
+lemma apm_m98A06_nonresonant_energy_geometry_of_facts_aux_energy_geometry_aux_remaining_aux_lower
+    {a : ℝ} (ha : 0 < a) {y η : ℝ → ℝ}
+    (hy : apm_m98a06_Admissible a 0 1 y)
+    (hη : apm_m98a06_Admissible a 0 0 η)
+    (hq : apm_m98a06_I a η < 0) :
+    ∃ z : ℝ → ℝ, apm_m98a06_Admissible a 0 1 z ∧
+      apm_m98a06_I a z < apm_m98a06_I a y := by
+  let A := ∫ x in (0 : ℝ)..a,
+    derivWithin y (Icc 0 a) x * derivWithin η (Icc 0 a) x - y x * η x
+  obtain ⟨c, _, hc⟩ :=
+    apm_m98A06_nonresonant_energy_geometry_of_facts_aux_negative_direction
+      A (apm_m98a06_I a η) hq
+  refine ⟨fun x ↦ y x + c * η x,
+    apm_m98A06_nonresonant_energy_geometry_of_facts_aux_perturb hy hη, ?_⟩
+  rw [apm_m98A06_I_add_smul ha hy.1 hη.1]
+  change apm_m98a06_I a y + 2 * c * A + c ^ 2 * apm_m98a06_I a η < _
+  linarith
+
+lemma apm_m98A06_nonresonant_energy_geometry_of_facts_aux_energy_geometry_aux_remaining_aux_upper
+    {a : ℝ} (ha : 0 < a) {y η : ℝ → ℝ}
+    (hy : apm_m98a06_Admissible a 0 1 y)
+    (hη : apm_m98a06_Admissible a 0 0 η)
+    (hq : 0 < apm_m98a06_I a η) :
+    ∃ z : ℝ → ℝ, apm_m98a06_Admissible a 0 1 z ∧
+      apm_m98a06_I a y < apm_m98a06_I a z := by
+  let A := ∫ x in (0 : ℝ)..a,
+    derivWithin y (Icc 0 a) x * derivWithin η (Icc 0 a) x - y x * η x
+  obtain ⟨c, _, hc⟩ :=
+    apm_m98A06_nonresonant_energy_geometry_of_facts_aux_positive_direction
+      A (apm_m98a06_I a η) hq
+  refine ⟨fun x ↦ y x + c * η x,
+    apm_m98A06_nonresonant_energy_geometry_of_facts_aux_perturb hy hη, ?_⟩
+  rw [apm_m98A06_I_add_smul ha hy.1 hη.1]
+  change _ < apm_m98a06_I a y + 2 * c * A + c ^ 2 * apm_m98a06_I a η
+  linarith
+
+lemma apm_m98A06_nonresonant_energy_geometry_of_facts_aux_energy_geometry_aux_remaining_aux_first_pos
+    (hSine : apm_m98A06_SineComputationsFact)
+    {a : ℝ} (ha : 0 < a) (hapi : a < Real.pi) :
+    let η : ℝ → ℝ := fun x ↦ Real.sin (Real.pi * x / a)
+    apm_m98a06_Admissible a 0 0 η ∧ 0 < apm_m98a06_I a η := by
+  dsimp
+  obtain ⟨hη, hI⟩ := hSine.1 a ha 1 (by norm_num)
+  refine ⟨by simpa using hη, ?_⟩
+  norm_num at hI
+  rw [hI]
+  have hp := Real.pi_pos
+  have hratio : 1 < Real.pi / a := (lt_div_iff₀ ha).2 (by simpa using hapi)
+  have : 0 < (Real.pi / a) ^ 2 - 1 := by nlinarith
+  positivity
+
+lemma apm_m98A06_nonresonant_energy_geometry_of_facts_aux_energy_geometry_aux_remaining_aux_first_neg
+    (hSine : apm_m98A06_SineComputationsFact)
+    {a : ℝ} (ha : 0 < a) (hapi : Real.pi < a) :
+    let η : ℝ → ℝ := fun x ↦ Real.sin (Real.pi * x / a)
+    apm_m98a06_Admissible a 0 0 η ∧ apm_m98a06_I a η < 0 := by
+  dsimp
+  obtain ⟨hη, hI⟩ := hSine.1 a ha 1 (by norm_num)
+  refine ⟨by simpa using hη, ?_⟩
+  norm_num at hI
+  rw [hI]
+  have hp := Real.pi_pos
+  have hratio : Real.pi / a < 1 := (div_lt_one ha).2 hapi
+  have hrnonneg : 0 ≤ Real.pi / a := div_nonneg hp.le ha.le
+  have : (Real.pi / a) ^ 2 - 1 < 0 := by nlinarith
+  have : 0 < a / 2 := by positivity
+  nlinarith
+
+lemma apm_m98A06_nonresonant_energy_geometry_of_facts_aux_energy_geometry_aux_remaining_aux_high_pos
+    (hSine : apm_m98A06_SineComputationsFact) {a : ℝ} (ha : 0 < a) :
+    ∃ η : ℝ → ℝ, apm_m98a06_Admissible a 0 0 η ∧
+      0 < apm_m98a06_I a η := by
+  obtain ⟨k, hk⟩ := exists_nat_gt (a / Real.pi)
+  have hk0 : k ≠ 0 := by
+    intro hkz
+    subst k
+    norm_num at hk
+    exact (not_lt_of_ge (div_nonneg ha.le Real.pi_pos.le)) hk
+  let η : ℝ → ℝ := fun x ↦ Real.sin ((k : ℝ) * Real.pi * x / a)
+  obtain ⟨hη, hI⟩ := hSine.1 a ha k hk0
+  refine ⟨η, by simpa [η] using hη, ?_⟩
+  change 0 < apm_m98a06_I a (fun x ↦ Real.sin ((k : ℝ) * Real.pi * x / a))
+  rw [hI]
+  have hp := Real.pi_pos
+  have hka : a < (k : ℝ) * Real.pi := (div_lt_iff₀ hp).1 hk
+  have hratio : 1 < (k : ℝ) * Real.pi / a := by
+    apply (lt_div_iff₀ ha).2
+    simpa using hka
+  have hq : 0 < ((k : ℝ) * Real.pi / a) ^ 2 - 1 := by nlinarith
+  positivity
+
+lemma apm_m98A06_nonresonant_energy_geometry_of_facts_aux_energy_geometry_aux_remaining_aux_unique
+    (hWirtinger : apm_m98A06_WirtingerFact)
+    {a : ℝ} (ha : 0 < a) (hapi : a < Real.pi) (hsin : Real.sin a ≠ 0)
+    {z : ℝ → ℝ} (hz : apm_m98a06_Admissible a 0 1 z)
+    (heq : apm_m98a06_I a z =
+      apm_m98a06_I a (fun x ↦ Real.sin x / Real.sin a)) :
+    ∀ x ∈ Icc (0 : ℝ) a, z x = Real.sin x / Real.sin a := by
+  let u : ℝ → ℝ := fun x ↦ Real.sin x / Real.sin a
+  let η : ℝ → ℝ := fun x ↦ z x - u x
+  have hu : apm_m98a06_Admissible a 0 1 u := by
+    simpa [u] using apm_m98a06_nonresonant_candidate_admissible hsin
+  have hη : apm_m98a06_Admissible a 0 0 η :=
+    apm_m98A06_nonresonant_energy_geometry_of_facts_aux_difference hu hz
+  have hzfun : z = fun x ↦ u x + η x := by
+    funext x
+    simp [η]
+  have hsplit : apm_m98a06_I a z = apm_m98a06_I a u + apm_m98a06_I a η := by
+    rw [hzfun]
+    simpa [u] using
+      (apm_m98A06_nonresonant_energy_geometry_of_facts_aux_energy_geometry_aux_candidate_split
+        ha hsin hη)
+  have hIη : apm_m98a06_I a η = 0 := by
+    change apm_m98a06_I a z = apm_m98a06_I a u at heq
+    linarith
+  let D := ∫ x in (0 : ℝ)..a, (derivWithin η (Icc 0 a) x) ^ 2
+  let E := ∫ x in (0 : ℝ)..a, (η x) ^ 2
+  have hDE : D - E = 0 := by
+    rw [← hIη, apm_m98A06_I_eq_derivWithin ha hη.1]
+    rw [intervalIntegral.integral_sub]
+    · exact ((hη.1.continuousOn_derivWithin (uniqueDiffOn_Icc ha)
+        (by norm_num)).pow 2).intervalIntegrable_of_Icc ha.le
+    · exact (hη.1.continuousOn.pow 2).intervalIntegrable_of_Icc ha.le
+  obtain ⟨hW, _⟩ := hWirtinger a ha η hη
+  have hD : 0 ≤ D :=
+    intervalIntegral.integral_nonneg ha.le (fun x _ ↦ sq_nonneg _)
+  have hr0 : 0 ≤ a / Real.pi := div_nonneg ha.le Real.pi_pos.le
+  have hr1 : a / Real.pi < 1 := (div_lt_one Real.pi_pos).2 hapi
+  have hE : E = 0 := by
+    change E ≤ (a / Real.pi) ^ 2 * D at hW
+    have : (a / Real.pi) ^ 2 < 1 := by nlinarith
+    nlinarith
+  have hEint : IntervalIntegrable (fun x ↦ η x ^ 2) volume 0 a :=
+    (hη.1.continuousOn.pow 2).intervalIntegrable_of_Icc ha.le
+  have hae : (fun x ↦ η x ^ 2) =ᵐ[volume.restrict (Ioc (0 : ℝ) a)] 0 := by
+    apply (intervalIntegral.integral_eq_zero_iff_of_le_of_nonneg_ae ha.le
+      (Filter.Eventually.of_forall fun x ↦ sq_nonneg (η x)) hEint).1
+    exact hE
+  have hae' : (fun x ↦ η x ^ 2) =ᵐ[volume.restrict (Ioo (0 : ℝ) a)] 0 :=
+    ae_restrict_of_ae_restrict_of_subset Ioo_subset_Ioc_self hae
+  have hzint : Set.EqOn (fun x ↦ η x ^ 2) 0 (Ioo (0 : ℝ) a) :=
+    MeasureTheory.Measure.eqOn_open_of_ae_eq hae' isOpen_Ioo
+      ((hη.1.continuousOn.pow 2).mono Ioo_subset_Icc_self)
+      continuousOn_const
+  intro x hx
+  have hηx : η x = 0 := by
+    rcases eq_or_lt_of_le hx.1 with rfl | hx0
+    · exact hη.2.1
+    rcases eq_or_lt_of_le hx.2 with rfl | hxa
+    · exact hη.2.2
+    · have hs := hzint ⟨hx0, hxa⟩
+      change η x ^ 2 = 0 at hs
+      nlinarith [sq_nonneg (η x)]
+  change z x = u x
+  dsimp [η] at hηx
+  linarith
+
+lemma apm_m98A06_nonresonant_energy_geometry_of_facts_aux_energy_geometry_aux_remaining
+    (hWirtinger : apm_m98A06_WirtingerFact)
+    (hSine : apm_m98A06_SineComputationsFact) :
+    ∀ a : ℝ, 0 < a → (∀ k : ℤ, a ≠ k * Real.pi) →
+      (a < Real.pi →
+        (∀ z : ℝ → ℝ, apm_m98a06_Admissible a 0 1 z →
+          apm_m98a06_I a (fun x ↦ Real.sin x / Real.sin a) ≤ apm_m98a06_I a z ∧
+          (apm_m98a06_I a z = apm_m98a06_I a (fun x ↦ Real.sin x / Real.sin a) →
+            ∀ x ∈ Icc (0 : ℝ) a, z x = Real.sin x / Real.sin a)) ∧
+        ∀ y : ℝ → ℝ, apm_m98a06_Admissible a 0 1 y →
+          ∃ z : ℝ → ℝ, apm_m98a06_Admissible a 0 1 z ∧
+            apm_m98a06_I a y < apm_m98a06_I a z) ∧
+      (Real.pi < a → ∀ y : ℝ → ℝ, apm_m98a06_Admissible a 0 1 y →
+        (∃ z : ℝ → ℝ, apm_m98a06_Admissible a 0 1 z ∧
+          apm_m98a06_I a z < apm_m98a06_I a y) ∧
+        ∃ z : ℝ → ℝ, apm_m98a06_Admissible a 0 1 z ∧
+          apm_m98a06_I a y < apm_m98a06_I a z) := by
+  intro a ha hnon
+  have hsin : Real.sin a ≠ 0 := apm_m98a06_sin_ne_zero_of_nonresonant hnon
+  constructor
+  · intro hapi
+    constructor
+    · intro z hz
+      refine ⟨apm_m98A06_nonresonant_energy_geometry_of_facts_aux_energy_geometry_aux_minimum
+        hWirtinger ha hapi hsin hz, ?_⟩
+      intro heq
+      exact
+        apm_m98A06_nonresonant_energy_geometry_of_facts_aux_energy_geometry_aux_remaining_aux_unique
+          hWirtinger ha hapi hsin hz heq
+    · intro y hy
+      let η : ℝ → ℝ := fun x ↦ Real.sin (Real.pi * x / a)
+      obtain ⟨hη, hq⟩ :=
+        apm_m98A06_nonresonant_energy_geometry_of_facts_aux_energy_geometry_aux_remaining_aux_first_pos
+          hSine ha hapi
+      exact
+        apm_m98A06_nonresonant_energy_geometry_of_facts_aux_energy_geometry_aux_remaining_aux_upper
+          ha hy hη hq
+  · intro hapi y hy
+    let η : ℝ → ℝ := fun x ↦ Real.sin (Real.pi * x / a)
+    obtain ⟨hη, hq⟩ :=
+      apm_m98A06_nonresonant_energy_geometry_of_facts_aux_energy_geometry_aux_remaining_aux_first_neg
+        hSine ha hapi
+    refine ⟨apm_m98A06_nonresonant_energy_geometry_of_facts_aux_energy_geometry_aux_remaining_aux_lower
+      ha hy hη hq, ?_⟩
+    obtain ⟨ξ, hξ, hξq⟩ :=
+      apm_m98A06_nonresonant_energy_geometry_of_facts_aux_energy_geometry_aux_remaining_aux_high_pos
+        hSine ha
+    exact
+      apm_m98A06_nonresonant_energy_geometry_of_facts_aux_energy_geometry_aux_remaining_aux_upper
+        ha hy hξ hξq
+
 lemma apm_m98A06_nonresonant_energy_geometry_of_facts_aux_energy_geometry
     (hWirtinger : apm_m98A06_WirtingerFact)
     (hSine : apm_m98A06_SineComputationsFact) :
@@ -1643,7 +2544,9 @@ lemma apm_m98A06_nonresonant_energy_geometry_of_facts_aux_energy_geometry
           apm_m98a06_I a z < apm_m98a06_I a y) ∧
         ∃ z : ℝ → ℝ, apm_m98a06_Admissible a 0 1 z ∧
           apm_m98a06_I a y < apm_m98a06_I a z) := by
-  sorry
+  exact
+    apm_m98A06_nonresonant_energy_geometry_of_facts_aux_energy_geometry_aux_remaining
+      hWirtinger hSine
 
 theorem apm_m98A06_nonresonant_energy_geometry_of_facts
     (hWirtinger : apm_m98A06_WirtingerFact)
@@ -1665,6 +2568,440 @@ theorem apm_m98A06_nonresonant_energy_geometry_of_facts
   exact apm_m98A06_nonresonant_energy_geometry_of_facts_aux_energy_geometry
     hWirtinger hSine
 
+lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_energy_sub_one
+    (y dy : ℝ → ℝ) (h : apm_m98a06_InH10Pi y dy)
+    (hnorm : ∫ x, (y x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)) = 1) :
+    (∫ x, (dy x) ^ 2 - (y x) ^ 2
+      ∂(volume.restrict (Ioo (0 : ℝ) Real.pi))) =
+      (∫ x, (dy x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi))) - 1 := by
+  rw [MeasureTheory.integral_sub h.2.2.2.2.1.integrable_sq h.2.2.2.1.integrable_sq,
+    hnorm]
+
+lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_inequality_aux_integrable
+    (y dy : ℝ → ℝ) (h : apm_m98a06_InH10Pi y dy) :
+    Integrable y (volume.restrict (Ioo (0 : ℝ) Real.pi)) ∧
+      Integrable dy (volume.restrict (Ioo (0 : ℝ) Real.pi)) := by
+  exact ⟨h.2.2.2.1.integrable (by norm_num), h.2.2.2.2.1.integrable (by norm_num)⟩
+
+lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_inequality_aux_representation
+    (hFTC : apm_m98A06_WeakFTCFact) (y dy : ℝ → ℝ)
+    (h : apm_m98a06_InH10Pi y dy) :
+    ∀ x ∈ Icc (0 : ℝ) Real.pi, y x = ∫ t in (0 : ℝ)..x, dy t := by
+  exact hFTC y dy h
+
+lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_inequality_aux_mean_zero
+    (hFTC : apm_m98A06_WeakFTCFact) (y dy : ℝ → ℝ)
+    (h : apm_m98a06_InH10Pi y dy) :
+    ∫ t in (0 : ℝ)..Real.pi, dy t = 0 := by
+  have hrep :=
+    apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_inequality_aux_representation
+      hFTC y dy h Real.pi ⟨Real.pi_pos.le, le_rfl⟩
+  rw [h.2.2.1] at hrep
+  exact hrep.symm
+
+/-- The sole remaining analytic bridge: extend the classical `C¹` Wirtinger
+inequality to an `L²` weak derivative by continuous `L²` approximation, after
+subtracting the mean of each approximant. -/
+lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_inequality_aux_approximation_aux_raw_density
+    (dy : ℝ → ℝ) (hdy : MemLp dy 2 (volume.restrict (Ioo (0 : ℝ) Real.pi)))
+    {ε : ℝ} (hε : 0 < ε) :
+    ∃ g : BoundedContinuousFunction ℝ ℝ,
+      (∫ x, (dy x - g x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi))) ≤ ε ∧
+      MemLp g 2 (volume.restrict (Ioo (0 : ℝ) Real.pi)) := by
+  have hdy' : MemLp dy (ENNReal.ofReal 2) (volume.restrict (Ioo (0 : ℝ) Real.pi)) := by
+    norm_num at hdy ⊢
+    exact hdy
+  obtain ⟨g, hg, hgp⟩ :=
+    hdy'.exists_boundedContinuous_integral_rpow_sub_le (p := 2) (by norm_num) hε
+  norm_num at hgp
+  refine ⟨g, ?_, hgp⟩
+  simpa [Real.norm_eq_abs, sq_abs] using hg
+
+/-- Mean-corrected continuous density in the derivative space. -/
+lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_inequality_aux_approximation_aux_density
+    (dy : ℝ → ℝ) (hdy : MemLp dy 2 (volume.restrict (Ioo (0 : ℝ) Real.pi)))
+    (hmean : ∫ t in (0 : ℝ)..Real.pi, dy t = 0) {ε : ℝ} (hε : 0 < ε) :
+    ∃ g : ℝ → ℝ, Continuous g ∧
+      (∫ t in (0 : ℝ)..Real.pi, g t) = 0 ∧
+      MemLp g 2 (volume.restrict (Ioo (0 : ℝ) Real.pi)) ∧
+      (∫ x, (dy x - g x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi))) ≤ ε := by
+  sorry
+
+lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_inequality_aux_approximation_aux_primitive_wirtinger
+    (hWirtinger : apm_m98A06_WirtingerFact) (g : ℝ → ℝ) (hg : Continuous g)
+    (hmean : ∫ t in (0 : ℝ)..Real.pi, g t = 0) :
+    let G : ℝ → ℝ := fun x ↦ ∫ t in (0 : ℝ)..x, g t
+    (∫ x, (G x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi))) ≤
+      ∫ x, (g x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)) := by
+  let G : ℝ → ℝ := fun x ↦ ∫ t in (0 : ℝ)..x, g t
+  have hd : ∀ x, HasDerivAt G (g x) x := by
+    intro x
+    exact intervalIntegral.integral_hasDerivAt_right
+      (hg.intervalIntegrable _ _) hg.aestronglyMeasurable.stronglyMeasurableAtFilter
+      hg.continuousAt
+  have hGdiff : ContDiff ℝ 1 G := by
+    rw [contDiff_one_iff_deriv]
+    exact ⟨fun x ↦ (hd x).differentiableAt, by
+      convert hg using 1
+      funext x
+      exact (hd x).deriv⟩
+  have hGa : apm_m98a06_Admissible Real.pi 0 0 G := by
+    refine ⟨hGdiff.contDiffOn, by simp [G], ?_⟩
+    simpa [G] using hmean
+  have hw := (hWirtinger Real.pi Real.pi_pos G hGa).1
+  have hdw : ∀ x ∈ Icc (0 : ℝ) Real.pi,
+      derivWithin G (Icc 0 Real.pi) x = g x := by
+    intro x hx
+    exact (hd x).hasDerivWithinAt.derivWithin
+      ((uniqueDiffOn_Icc Real.pi_pos).uniqueDiffWithinAt hx)
+  have hdeq : (∫ x in (0 : ℝ)..Real.pi,
+      (derivWithin G (Icc 0 Real.pi) x) ^ 2) =
+      ∫ x in (0 : ℝ)..Real.pi, (g x) ^ 2 := by
+    rw [intervalIntegral.integral_of_le Real.pi_pos.le,
+      intervalIntegral.integral_of_le Real.pi_pos.le]
+    apply integral_congr_ae
+    filter_upwards [ae_restrict_mem measurableSet_Ioc] with x hx
+    rw [hdw x ⟨hx.1.le, hx.2⟩]
+  rw [hdeq] at hw
+  simpa [intervalIntegral.integral_of_le Real.pi_pos.le,
+    integral_Ioc_eq_integral_Ioo, Real.pi_ne_zero] using hw
+
+/-- Stability of primitives and their `L²` norms under the mean-zero density
+approximation. -/
+lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_inequality_aux_approximation_aux_limit
+    (hWirtinger : apm_m98A06_WirtingerFact)
+    (hFTC : apm_m98A06_WeakFTCFact) (y dy : ℝ → ℝ)
+    (h : apm_m98a06_InH10Pi y dy) :
+    (∫ x, (y x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi))) ≤
+      ∫ x, (dy x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)) := by
+  sorry
+
+lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_inequality_aux_approximation
+    (hWirtinger : apm_m98A06_WirtingerFact)
+    (hFTC : apm_m98A06_WeakFTCFact) (y dy : ℝ → ℝ)
+    (h : apm_m98a06_InH10Pi y dy) :
+    (∫ x, (y x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi))) ≤
+      ∫ x, (dy x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)) := by
+  exact
+    apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_inequality_aux_approximation_aux_limit
+      hWirtinger hFTC y dy h
+
+lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_inequality
+    (hWirtinger : apm_m98A06_WirtingerFact)
+    (hFTC : apm_m98A06_WeakFTCFact) :
+    ∀ y dy : ℝ → ℝ, apm_m98a06_InH10Pi y dy →
+      ∫ x, (y x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)) = 1 →
+      0 ≤ ∫ x, (dy x) ^ 2 - (y x) ^ 2
+        ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)) := by
+  intro y dy h hnorm
+  rw [apm_m98A06_weak_poincare_and_equality_of_facts_aux_energy_sub_one y dy h hnorm]
+  have hp :=
+    apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_inequality_aux_approximation
+      hWirtinger hFTC y dy h
+  rw [hnorm] at hp
+  linarith
+
+lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_forward_aux_deriv_norm
+    (y dy : ℝ → ℝ) (h : apm_m98a06_InH10Pi y dy)
+    (hnorm : ∫ x, (y x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)) = 1)
+    (henergy : ∫ x, (dy x) ^ 2 - (y x) ^ 2
+      ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)) = 0) :
+    ∫ x, (dy x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)) = 1 := by
+  have he := apm_m98A06_weak_poincare_and_equality_of_facts_aux_energy_sub_one
+    y dy h hnorm
+  rw [henergy] at he
+  linarith
+
+lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_forward_aux_primitive
+    (hFTC : apm_m98A06_WeakFTCFact) (y dy : ℝ → ℝ)
+    (h : apm_m98a06_InH10Pi y dy) :
+    ∀ x ∈ Icc (0 : ℝ) Real.pi, y x = ∫ t in (0 : ℝ)..x, dy t := by
+  exact hFTC y dy h
+
+lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_forward_aux_rigidity_aux_ae
+    (y : ℝ → ℝ) (c : ℝ)
+    (hy : ∀ x ∈ Icc (0 : ℝ) Real.pi, y x = c * Real.sin x)
+    (hc : c = Real.sqrt (2 / Real.pi) ∨ c = -Real.sqrt (2 / Real.pi)) :
+    ∃ s : ℝ, (s = 1 ∨ s = -1) ∧
+      y =ᵐ[volume.restrict (Ioo (0 : ℝ) Real.pi)]
+        fun x ↦ s * Real.sqrt (2 / Real.pi) * Real.sin x := by
+  rcases hc with rfl | rfl
+  · refine ⟨1, Or.inl rfl, ?_⟩
+    filter_upwards [MeasureTheory.ae_restrict_mem measurableSet_Ioo] with x hx
+    simpa using hy x (Ioo_subset_Icc_self hx)
+  · refine ⟨-1, Or.inr rfl, ?_⟩
+    filter_upwards [MeasureTheory.ae_restrict_mem measurableSet_Ioo] with x hx
+    have := hy x (Ioo_subset_Icc_self hx)
+    convert this using 1 <;> ring
+
+lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_forward_aux_rigidity_aux_pointwise_aux_EL
+    (hWirtinger : apm_m98A06_WirtingerFact)
+    (hFTC : apm_m98A06_WeakFTCFact) (y dy : ℝ → ℝ)
+    (h : apm_m98a06_InH10Pi y dy)
+    (hnorm : ∫ x, (y x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)) = 1)
+    (hdnorm : ∫ x, (dy x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)) = 1)
+    (hprim : ∀ x ∈ Icc (0 : ℝ) Real.pi,
+      y x = ∫ t in (0 : ℝ)..x, dy t) :
+    ∀ φ : ℝ → ℝ, ContDiff ℝ ∞ φ → HasCompactSupport φ →
+      Function.support φ ⊆ Ioo (0 : ℝ) Real.pi →
+      (∫ x, dy x * deriv φ x ∂(volume.restrict (Ioo (0 : ℝ) Real.pi))) =
+        ∫ x, y x * φ x ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)) := by
+  sorry
+
+lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_forward_aux_rigidity_aux_pointwise_aux_representation_aux_regular
+    (hFTC : apm_m98A06_WeakFTCFact) (y dy : ℝ → ℝ)
+    (h : apm_m98a06_InH10Pi y dy)
+    (hEL : ∀ φ : ℝ → ℝ, ContDiff ℝ ∞ φ → HasCompactSupport φ →
+      Function.support φ ⊆ Ioo (0 : ℝ) Real.pi →
+      (∫ x, dy x * deriv φ x ∂(volume.restrict (Ioo (0 : ℝ) Real.pi))) =
+        ∫ x, y x * φ x ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)))
+    (hprim : ∀ x ∈ Icc (0 : ℝ) Real.pi,
+      y x = ∫ t in (0 : ℝ)..x, dy t) :
+    ContDiffOn ℝ 1 y (Icc (0 : ℝ) Real.pi) ∧
+      ∃ m : ℝ, ∀ x ∈ Icc (0 : ℝ) Real.pi,
+        derivWithin y (Icc 0 Real.pi) x + ∫ t in (0 : ℝ)..x, y t = m := by
+  sorry
+
+lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_forward_aux_rigidity_aux_pointwise_aux_representation_aux_ode
+    (y : ℝ → ℝ) (hy : ContDiffOn ℝ 1 y (Icc (0 : ℝ) Real.pi))
+    (hy0 : y 0 = 0) (m : ℝ)
+    (hm : ∀ x ∈ Icc (0 : ℝ) Real.pi,
+      derivWithin y (Icc 0 Real.pi) x + ∫ t in (0 : ℝ)..x, y t = m) :
+    ∃ c : ℝ, ∀ x ∈ Icc (0 : ℝ) Real.pi, y x = c * Real.sin x := by
+  obtain ⟨A, B, hAB⟩ :=
+    apm_m98A06_duBoisReymond_aux_forward_aux_classification_aux_core_aux_ode_aux_core
+      Real.pi Real.pi_pos y hy m hm
+  have hA : A = 0 := by
+    have hzero := hAB 0 ⟨le_rfl, Real.pi_pos.le⟩
+    simp [hy0] at hzero
+    exact hzero.symm
+  refine ⟨B, fun x hx => ?_⟩
+  rw [hAB x hx, hA]
+  ring
+
+lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_forward_aux_rigidity_aux_pointwise_aux_representation
+    (hFTC : apm_m98A06_WeakFTCFact) (y dy : ℝ → ℝ)
+    (h : apm_m98a06_InH10Pi y dy)
+    (hEL : ∀ φ : ℝ → ℝ, ContDiff ℝ ∞ φ → HasCompactSupport φ →
+      Function.support φ ⊆ Ioo (0 : ℝ) Real.pi →
+      (∫ x, dy x * deriv φ x ∂(volume.restrict (Ioo (0 : ℝ) Real.pi))) =
+        ∫ x, y x * φ x ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)))
+    (hprim : ∀ x ∈ Icc (0 : ℝ) Real.pi,
+      y x = ∫ t in (0 : ℝ)..x, dy t) :
+    ∃ c : ℝ, ∀ x ∈ Icc (0 : ℝ) Real.pi, y x = c * Real.sin x := by
+  obtain ⟨hy, m, hm⟩ :=
+    apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_forward_aux_rigidity_aux_pointwise_aux_representation_aux_regular
+      hFTC y dy h hEL hprim
+  exact
+    apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_forward_aux_rigidity_aux_pointwise_aux_representation_aux_ode
+      y hy h.2.1 m hm
+
+lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_forward_aux_rigidity_aux_pointwise_aux_normalize
+    (y : ℝ → ℝ)
+    (hnorm : ∫ x, (y x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)) = 1)
+    (c : ℝ) (hy : ∀ x ∈ Icc (0 : ℝ) Real.pi, y x = c * Real.sin x) :
+    c = Real.sqrt (2 / Real.pi) ∨ c = -Real.sqrt (2 / Real.pi) := by
+  have hae : (fun x => (y x) ^ 2) =ᵐ[volume.restrict (Ioo (0 : ℝ) Real.pi)]
+      fun x => (c * Real.sin x) ^ 2 := by
+    filter_upwards [MeasureTheory.ae_restrict_mem measurableSet_Ioo] with x hx
+    rw [hy x (Ioo_subset_Icc_self hx)]
+  rw [MeasureTheory.integral_congr_ae hae] at hnorm
+  have hi : (∫ x in (0 : ℝ)..Real.pi, (c * Real.sin x) ^ 2) = 1 := by
+    rw [intervalIntegral.integral_of_le Real.pi_pos.le]
+    rw [Measure.restrict_congr_set Ioo_ae_eq_Ioc.symm]
+    exact hnorm
+  have hc2 : c ^ 2 = 2 / Real.pi := by
+    rw [show (fun x : ℝ => (c * Real.sin x) ^ 2) =
+        fun x => c ^ 2 * Real.sin x ^ 2 by funext x; ring,
+      intervalIntegral.integral_const_mul, integral_sin_sq] at hi
+    simp only [Real.sin_zero, Real.cos_zero, zero_mul, Real.sin_pi,
+      Real.cos_pi, sub_zero, zero_add] at hi
+    apply (mul_right_cancel₀ Real.pi_ne_zero)
+    field_simp [Real.pi_ne_zero]
+    nlinarith
+  have hs : (Real.sqrt (2 / Real.pi)) ^ 2 = 2 / Real.pi :=
+    Real.sq_sqrt (by positivity)
+  exact eq_or_eq_neg_of_sq_eq_sq c _ (hc2.trans hs.symm)
+
+lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_forward_aux_rigidity_aux_pointwise
+    (hWirtinger : apm_m98A06_WirtingerFact)
+    (hFTC : apm_m98A06_WeakFTCFact) (y dy : ℝ → ℝ)
+    (h : apm_m98a06_InH10Pi y dy)
+    (hnorm : ∫ x, (y x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)) = 1)
+    (hdnorm : ∫ x, (dy x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)) = 1)
+    (hprim : ∀ x ∈ Icc (0 : ℝ) Real.pi,
+      y x = ∫ t in (0 : ℝ)..x, dy t) :
+    ∃ c : ℝ, (∀ x ∈ Icc (0 : ℝ) Real.pi, y x = c * Real.sin x) ∧
+      (c = Real.sqrt (2 / Real.pi) ∨ c = -Real.sqrt (2 / Real.pi)) := by
+  have hEL :=
+    apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_forward_aux_rigidity_aux_pointwise_aux_EL
+      hWirtinger hFTC y dy h hnorm hdnorm hprim
+  obtain ⟨c, hc⟩ :=
+    apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_forward_aux_rigidity_aux_pointwise_aux_representation
+      hFTC y dy h hEL hprim
+  exact ⟨c, hc,
+    apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_forward_aux_rigidity_aux_pointwise_aux_normalize
+      y hnorm c hc⟩
+
+lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_forward_aux_rigidity
+    (hWirtinger : apm_m98A06_WirtingerFact)
+    (hFTC : apm_m98A06_WeakFTCFact) (y dy : ℝ → ℝ)
+    (h : apm_m98a06_InH10Pi y dy)
+    (hnorm : ∫ x, (y x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)) = 1)
+    (hdnorm : ∫ x, (dy x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)) = 1)
+    (hprim : ∀ x ∈ Icc (0 : ℝ) Real.pi,
+      y x = ∫ t in (0 : ℝ)..x, dy t) :
+    ∃ s : ℝ, (s = 1 ∨ s = -1) ∧
+      y =ᵐ[volume.restrict (Ioo (0 : ℝ) Real.pi)]
+        fun x ↦ s * Real.sqrt (2 / Real.pi) * Real.sin x := by
+  obtain ⟨c, hy, hc⟩ :=
+    apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_forward_aux_rigidity_aux_pointwise
+      hWirtinger hFTC y dy h hnorm hdnorm hprim
+  exact apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_forward_aux_rigidity_aux_ae
+    y c hy hc
+
+lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_forward
+    (hWirtinger : apm_m98A06_WirtingerFact)
+    (hFTC : apm_m98A06_WeakFTCFact) (y dy : ℝ → ℝ)
+    (h : apm_m98a06_InH10Pi y dy)
+    (hnorm : ∫ x, (y x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)) = 1)
+    (henergy : ∫ x, (dy x) ^ 2 - (y x) ^ 2
+      ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)) = 0) :
+    ∃ s : ℝ, (s = 1 ∨ s = -1) ∧
+      y =ᵐ[volume.restrict (Ioo (0 : ℝ) Real.pi)]
+        fun x ↦ s * Real.sqrt (2 / Real.pi) * Real.sin x := by
+  apply apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_forward_aux_rigidity
+    hWirtinger hFTC y dy h hnorm
+  · exact apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_forward_aux_deriv_norm
+      y dy h hnorm henergy
+  · exact apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_forward_aux_primitive
+      hFTC y dy h
+
+lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_reverse_aux_unique
+    (u du v dv : ℝ → ℝ) (hu : apm_m98a06_InH10Pi u du)
+    (hv : apm_m98a06_InH10Pi v dv)
+    (huv : u =ᵐ[volume.restrict (Ioo (0 : ℝ) Real.pi)] v) :
+    du =ᵐ[volume.restrict (Ioo (0 : ℝ) Real.pi)] dv := by
+  let U : Set ℝ := Ioo (0 : ℝ) Real.pi
+  have hdu : IntegrableOn du U := hu.2.2.2.2.1.integrable (by norm_num)
+  have hdv : IntegrableOn dv U := hv.2.2.2.2.1.integrable (by norm_num)
+  have hloc : LocallyIntegrableOn (fun x => du x - dv x) U volume :=
+    (hdu.sub hdv).locallyIntegrableOn
+  have hz := isOpen_Ioo.ae_eq_zero_of_integral_contDiff_smul_eq_zero hloc
+    (fun φ hφ hφc hφt => by
+      have hφs : Function.support φ ⊆ U :=
+        (subset_tsupport φ).trans hφt
+      have hu' := hu.2.2.2.2.2 φ hφ hφc hφs
+      have hv' := hv.2.2.2.2.2 φ hφ hφc hφs
+      have huv' : (∫ x, u x * deriv φ x ∂(volume.restrict U)) =
+          ∫ x, v x * deriv φ x ∂(volume.restrict U) := by
+        apply integral_congr_ae
+        filter_upwards [huv] with x hx
+        rw [hx]
+      have hdudv : (∫ x, du x * φ x ∂(volume.restrict U)) =
+          ∫ x, dv x * φ x ∂(volume.restrict U) := by linarith
+      have hφdu : IntegrableOn (fun x => du x * φ x) U :=
+        hdu.mul_continuousOn_of_subset hφ.continuous.continuousOn measurableSet_Ioo
+          isCompact_Icc Ioo_subset_Icc_self
+      have hφdv : IntegrableOn (fun x => dv x * φ x) U :=
+        hdv.mul_continuousOn_of_subset hφ.continuous.continuousOn measurableSet_Ioo
+          isCompact_Icc Ioo_subset_Icc_self
+      have hrest : (∫ x, φ x * (du x - dv x) ∂(volume.restrict U)) = 0 := by
+        rw [show (fun x => φ x * (du x - dv x)) =
+            fun x => du x * φ x - dv x * φ x by funext x; ring,
+          integral_sub hφdu hφdv, hdudv, sub_self]
+      change (∫ x, φ x * (du x - dv x) ∂volume) = 0
+      rw [← intervalIntegral.integral_eq_integral_of_support_subset
+        (a := (0 : ℝ)) (b := Real.pi) (μ := volume) (f := fun x => φ x * (du x - dv x))]
+      · rw [intervalIntegral.integral_of_le Real.pi_pos.le,
+          integral_Ioc_eq_integral_Ioo]
+        exact hrest
+      · intro x hx
+        have hxφ : x ∈ Function.support φ := by
+          intro hzero
+          exact hx (by simp [hzero])
+        exact Ioo_subset_Ioc_self (hφt (subset_tsupport _ hxφ)) )
+  change ∀ᵐ x ∂volume.restrict (Ioo (0 : ℝ) Real.pi), du x = dv x
+  rw [ae_restrict_iff' measurableSet_Ioo]
+  filter_upwards [hz] with x hx hmem
+  exact sub_eq_zero.mp (hx hmem)
+
+lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_reverse_aux_smul
+    (c : ℝ) (u du : ℝ → ℝ) (h : apm_m98a06_InH10Pi u du) :
+    apm_m98a06_InH10Pi (fun x => c * u x) (fun x => c * du x) := by
+  refine ⟨continuousOn_const.mul h.1, by simp [h.2.1], by simp [h.2.2.1],
+    h.2.2.2.1.const_smul c, h.2.2.2.2.1.const_smul c, ?_⟩
+  intro φ hφ hφc hφs
+  have hw := h.2.2.2.2.2 φ hφ hφc hφs
+  rw [show (fun x => c * u x * deriv φ x) = fun x => c * (u x * deriv φ x) by
+      funext x; ring,
+    show (fun x => c * du x * φ x) = fun x => c * (du x * φ x) by
+      funext x; ring,
+    integral_const_mul, integral_const_mul, hw]
+  ring
+
+lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_reverse
+    (hSine : apm_m98A06_SineComputationsFact) (y dy : ℝ → ℝ)
+    (h : apm_m98a06_InH10Pi y dy)
+    (hnorm : ∫ x, (y x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)) = 1)
+    (hs : ∃ s : ℝ, (s = 1 ∨ s = -1) ∧
+      y =ᵐ[volume.restrict (Ioo (0 : ℝ) Real.pi)]
+        fun x ↦ s * Real.sqrt (2 / Real.pi) * Real.sin x) :
+    ∫ x, (dy x) ^ 2 - (y x) ^ 2
+      ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)) = 0 := by
+  rcases hs with ⟨s, hs, hys⟩
+  let Y : ℝ → ℝ := fun x => Real.sqrt (2 / Real.pi) * Real.sin x
+  let D : ℝ → ℝ := fun x => Real.sqrt (2 / Real.pi) * Real.cos x
+  obtain ⟨hreg, hder, hH, hnormY, henergyY⟩ := hSine.2 1 one_ne_zero
+  have hHYD : apm_m98a06_InH10Pi Y D := by simpa [Y, D] using hH
+  have hHs : apm_m98a06_InH10Pi (fun x => s * Y x) (fun x => s * D x) :=
+    apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_reverse_aux_smul
+      s Y D hHYD
+  have hys' : y =ᵐ[volume.restrict (Ioo (0 : ℝ) Real.pi)] fun x => s * Y x := by
+    simpa [Y, mul_assoc] using hys
+  have hdys : dy =ᵐ[volume.restrict (Ioo (0 : ℝ) Real.pi)] fun x => s * D x :=
+    apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_reverse_aux_unique
+      y dy (fun x => s * Y x) (fun x => s * D x) h hHs hys'
+  calc
+    (∫ x, (dy x) ^ 2 - (y x) ^ 2
+      ∂(volume.restrict (Ioo (0 : ℝ) Real.pi))) =
+        ∫ x, (s * D x) ^ 2 - (s * Y x) ^ 2
+          ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)) := by
+            apply integral_congr_ae
+            filter_upwards [hdys, hys'] with x hdx hyx
+            rw [hdx, hyx]
+    _ = ∫ x, (D x) ^ 2 - (Y x) ^ 2
+          ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)) := by
+            apply integral_congr_ae
+            filter_upwards [] with x
+            rcases hs with rfl | rfl <;> ring
+    _ = 0 := by simpa [Y, D] using henergyY
+
+lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core
+    (hWirtinger : apm_m98A06_WirtingerFact)
+    (hFTC : apm_m98A06_WeakFTCFact)
+    (hSine : apm_m98A06_SineComputationsFact) :
+    (∀ y dy : ℝ → ℝ, apm_m98a06_InH10Pi y dy →
+      ∫ x, (y x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)) = 1 →
+      0 ≤ ∫ x, (dy x) ^ 2 - (y x) ^ 2
+        ∂(volume.restrict (Ioo (0 : ℝ) Real.pi))) ∧
+    (∀ y dy : ℝ → ℝ, apm_m98a06_InH10Pi y dy →
+      ∫ x, (y x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)) = 1 →
+      ((∫ x, (dy x) ^ 2 - (y x) ^ 2
+        ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)) = 0) ↔
+        ∃ s : ℝ, (s = 1 ∨ s = -1) ∧
+          y =ᵐ[volume.restrict (Ioo (0 : ℝ) Real.pi)]
+            fun x ↦ s * Real.sqrt (2 / Real.pi) * Real.sin x)) := by
+  constructor
+  · exact apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_inequality
+      hWirtinger hFTC
+  · intro y dy h hnorm
+    constructor
+    · exact apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_forward
+        hWirtinger hFTC y dy h hnorm
+    · exact apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_reverse
+        hSine y dy h hnorm
+
 theorem apm_m98A06_weak_poincare_and_equality_of_facts
     (hWirtinger : apm_m98A06_WirtingerFact)
     (hFTC : apm_m98A06_WeakFTCFact)
@@ -1680,7 +3017,7 @@ theorem apm_m98A06_weak_poincare_and_equality_of_facts
         ∃ s : ℝ, (s = 1 ∨ s = -1) ∧
           y =ᵐ[volume.restrict (Ioo (0 : ℝ) Real.pi)]
             fun x ↦ s * Real.sqrt (2 / Real.pi) * Real.sin x)) := by
-  sorry
+  exact apm_m98A06_weak_poincare_and_equality_of_facts_aux_core hWirtinger hFTC hSine
 
 theorem apm_m98A06_constrained_energy_unbounded_above_of_sine_computations
     (hSine : apm_m98A06_SineComputationsFact) :
@@ -1689,7 +3026,32 @@ theorem apm_m98A06_constrained_energy_unbounded_above_of_sine_computations
       ∫ x, (y x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)) = 1 ∧
       M < ∫ x, (dy x) ^ 2 - (y x) ^ 2
         ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)) := by
-  sorry
+  intro M
+  obtain ⟨k : ℕ, hk⟩ := exists_nat_gt (max M 0 + 1)
+  have hk0 : k ≠ 0 := by
+    intro hkz
+    subst k
+    norm_num at hk
+    linarith [le_max_right M 0]
+  let y : ℝ → ℝ := fun x ↦
+    Real.sqrt (2 / Real.pi) * Real.sin ((k : ℝ) * x)
+  let dy : ℝ → ℝ := fun x ↦
+    Real.sqrt (2 / Real.pi) * (k : ℝ) * Real.cos ((k : ℝ) * x)
+  obtain ⟨hy, hdy, hH, hnorm, henergy⟩ := hSine.2 k hk0
+  refine ⟨y, dy, ?_, ?_, ?_, ?_, ?_⟩
+  · simpa [y] using hy
+  · simpa [y, dy] using hdy
+  · simpa [y, dy] using hH
+  · simpa [y] using hnorm
+  · rw [show (∫ x, (dy x) ^ 2 - (y x) ^ 2
+        ∂(volume.restrict (Ioo (0 : ℝ) Real.pi))) = (k : ℝ) ^ 2 - 1 by
+      simpa [y, dy] using henergy]
+    have hk_nonneg : (0 : ℝ) ≤ k := by positivity
+    have hk_large : M + 1 < (k : ℝ) := by
+      exact lt_of_le_of_lt (by linarith [le_max_left M 0]) hk
+    have hk_one : (1 : ℝ) < k := by
+      exact lt_of_le_of_lt (by linarith [le_max_right M 0]) hk
+    nlinarith
 
 -- BEGIN SEAT AREA
 theorem apm_m98A06_poincare_best_constant_of_facts
