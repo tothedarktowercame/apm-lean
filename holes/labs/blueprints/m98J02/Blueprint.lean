@@ -1114,6 +1114,66 @@ lemma apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_leibniz
   exact norm_iteratedFDeriv_mul_le χ.contDiff (hsmooth φ) x (by
     exact_mod_cast (le_top : (i : ℕ∞) ≤ ⊤))
 
+noncomputable def apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_targetCompact
+    (χ : apm_m98J02_Test) : TopologicalSpace.Compacts apm_m98J02_E :=
+  ⟨tsupport (χ : apm_m98J02_E → ℝ), χ.hasCompactSupport⟩
+
+noncomputable def apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_stageLinear
+    (v : apm_m98J02_Dist) (χ : apm_m98J02_Test)
+    (hsmooth : ∀ φ : apm_m98J02_Test,
+      ContDiff ℝ ∞ (fun x : apm_m98J02_E =>
+        v (apm_m98J02_translateTest x φ)))
+    (K : TopologicalSpace.Compacts apm_m98J02_E)
+    (hK : (K : Set apm_m98J02_E) ⊆ (⊤ : TopologicalSpace.Opens apm_m98J02_E)) :
+    𝓓_{K}(apm_m98J02_E, ℝ) →ₗ[ℝ]
+      ContDiffMapSupportedIn apm_m98J02_E ℝ (⊤ : ℕ∞)
+        (apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_targetCompact χ) where
+  toFun φ :=
+    { toFun := apm_m98J02_bridge_2_aux_psi_aux_fun v χ hsmooth
+        (TestFunction.ofSupportedIn hK φ)
+      contDiff' := (apm_m98J02_bridge_2_aux_psi_aux_fun v χ hsmooth
+        (TestFunction.ofSupportedIn hK φ)).contDiff
+      zero_on_compl' := by
+        intro x hx
+        by_contra hne
+        exact hx (apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_support
+          v χ hsmooth (TestFunction.ofSupportedIn hK φ)
+          (subset_tsupport _ hne)) }
+  map_add' φ ψ := by
+    ext x
+    exact congrFun (congrArg DFunLike.coe
+      ((apm_m98J02_bridge_2_aux_psi_aux_linear v χ hsmooth).map_add
+        (TestFunction.ofSupportedIn hK φ)
+        (TestFunction.ofSupportedIn hK ψ))) x
+  map_smul' c φ := by
+    ext x
+    exact congrFun (congrArg DFunLike.coe
+      ((apm_m98J02_bridge_2_aux_psi_aux_linear v χ hsmooth).map_smul c
+        (TestFunction.ofSupportedIn hK φ))) x
+
+lemma apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_of_stage
+    (v : apm_m98J02_Dist) (χ : apm_m98J02_Test)
+    (hsmooth : ∀ φ : apm_m98J02_Test,
+      ContDiff ℝ ∞ (fun x : apm_m98J02_E =>
+        v (apm_m98J02_translateTest x φ)))
+    (K : TopologicalSpace.Compacts apm_m98J02_E)
+    (hK : (K : Set apm_m98J02_E) ⊆ (⊤ : TopologicalSpace.Opens apm_m98J02_E))
+    (hstage : Continuous
+      (apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_stageLinear
+        v χ hsmooth K hK)) :
+    Continuous (apm_m98J02_bridge_2_aux_psi_aux_linear v χ hsmooth ∘
+      TestFunction.ofSupportedIn hK) := by
+  let Kχ := apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_targetCompact χ
+  have hKχ : (Kχ : Set apm_m98J02_E) ⊆
+      (⊤ : TopologicalSpace.Opens apm_m98J02_E) := by simp
+  have hinc : Continuous
+      (TestFunction.ofSupportedIn hKχ :
+        ContDiffMapSupportedIn apm_m98J02_E ℝ (⊤ : ℕ∞) Kχ →
+          apm_m98J02_Test) := TestFunction.continuous_ofSupportedIn hKχ
+  simpa [Kχ, Function.comp_def,
+    apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_stageLinear] using
+      hinc.comp hstage
+
 lemma apm_m98J02_bridge_2_aux_psi_aux_stage_cont
     (v : apm_m98J02_Dist) (χ : apm_m98J02_Test)
     (hsmooth : ∀ φ : apm_m98J02_Test,
