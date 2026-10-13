@@ -483,6 +483,62 @@ lemma apm_t96A08_chart_radial_primitive_radial_paths
     simpa only [delta, q, hp, eta] using
       (extChartAt I x).right_inv (heta_target t ht)
 
+/-- The coordinate expression of `omega` in the chart at `x`. -/
+noncomputable def apm_t96A08_omegaCoord
+    {E M : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [TopologicalSpace M] (I : ModelWithCorners ℝ E E) [ChartedSpace E M]
+    (omega : ∀ p : M, TangentSpace I p →L[ℝ] ℝ) (x : M) : E → (E →L[ℝ] ℝ) :=
+  fun y ↦ (omega ((extChartAt I x).symm y)).comp
+    (mfderivWithin 𝓘(ℝ, E) I (extChartAt I x).symm (Set.range I) y)
+
+/-- Seat: the coordinate expression is continuous on `W ∩ range I` inside the
+chart target (`homega_smooth` and smoothness of `(extChartAt I x).symm` within
+`range I`; the tangent-bundle evaluation is continuous). -/
+theorem apm_t96A08_omegaCoord_continuousOn
+    {E M : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [CompleteSpace E] [TopologicalSpace M]
+    (I : ModelWithCorners ℝ E E) [ChartedSpace E M]
+    [IsManifold I (⊤ : WithTop ℕ∞) M]
+    (omega : ∀ p : M, TangentSpace I p →L[ℝ] ℝ)
+    (homega_smooth : ContMDiff I.tangent 𝓘(ℝ, ℝ) (⊤ : WithTop ℕ∞)
+      (fun v : TangentBundle I M => omega v.1 v.2))
+    (x : M) (W : Set E)
+    (hWtarget : W ∩ Set.range (I : E → E) ⊆ (extChartAt I x).target) :
+    ContinuousOn (apm_t96A08_omegaCoord I omega x) (W ∩ Set.range (I : E → E)) := by
+  sorry
+
+/-- Seat: the value at the centre (`(extChartAt I x).symm (extChartAt I x x) = x`). -/
+theorem apm_t96A08_omegaCoord_centre
+    {E M : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [CompleteSpace E] [TopologicalSpace M]
+    (I : ModelWithCorners ℝ E E) [ChartedSpace E M]
+    [IsManifold I (⊤ : WithTop ℕ∞) M]
+    (omega : ∀ p : M, TangentSpace I p →L[ℝ] ℝ) (x : M) :
+    apm_t96A08_omegaCoord I omega x (extChartAt I x x) = (omega x).comp
+      (mfderivWithin 𝓘(ℝ, E) I (extChartAt I x).symm (Set.range I)
+        (extChartAt I x x)) := by
+  sorry
+
+/-- Seat: along a chart-linear path the line integral is the coordinate
+integral (chart chain rule on `(0, 1)`: `delta = φ.symm ∘ (affine)` there;
+endpoints are null; `intervalIntegral.integral_congr_ae`). -/
+theorem apm_t96A08_omegaCoord_lineIntegral
+    {E M : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [CompleteSpace E] [TopologicalSpace M]
+    (I : ModelWithCorners ℝ E E) [ChartedSpace E M]
+    [IsManifold I (⊤ : WithTop ℕ∞) M]
+    (omega : ∀ p : M, TangentSpace I p →L[ℝ] ℝ) (x z : M) (delta : ℝ → M)
+    (hdelta_source : ∀ t ∈ Set.Icc (0 : ℝ) 1, delta t ∈ (extChartAt I x).source)
+    (hdelta_smooth : ContMDiffOn 𝓘(ℝ, ℝ) I (⊤ : WithTop ℕ∞) delta (Set.Icc (0 : ℝ) 1))
+    (hdelta : ∀ t ∈ Set.Icc (0 : ℝ) 1,
+      extChartAt I x (delta t) = extChartAt I x x +
+        t • (extChartAt I x z - extChartAt I x x)) :
+    apm_t96a08_LineIntegral I omega delta =
+      ∫ t : ℝ in (0 : ℝ)..1, apm_t96A08_omegaCoord I omega x
+        (extChartAt I x x + t • (extChartAt I x z - extChartAt I x x))
+        (extChartAt I x z - extChartAt I x x) := by
+  sorry
+
 /-- Pulling the one-form and the radial path into the extended chart gives
 the ordinary coordinate interval integral. -/
 lemma apm_t96A08_chart_radial_primitive_coordinate_formula
@@ -496,7 +552,7 @@ lemma apm_t96A08_chart_radial_primitive_coordinate_formula
     (x : M) (W : Set E)
     (hWtarget : W ∩ Set.range (I : E → E) ⊆ (extChartAt I x).target) :
     ∃ omegaCoord : E → (E →L[ℝ] ℝ),
-      ContDiffOn ℝ (⊤ : WithTop ℕ∞) omegaCoord
+      ContinuousOn omegaCoord
         (W ∩ Set.range (I : E → E)) ∧
       omegaCoord (extChartAt I x x) = (omega x).comp
         (mfderivWithin 𝓘(ℝ, E) I (extChartAt I x).symm (Set.range I)
@@ -511,7 +567,10 @@ lemma apm_t96A08_chart_radial_primitive_coordinate_formula
           ∫ t : ℝ in (0 : ℝ)..1, omegaCoord
             (extChartAt I x x + t • (extChartAt I x z - extChartAt I x x))
             (extChartAt I x z - extChartAt I x x) := by
-  sorry
+  exact ⟨apm_t96A08_omegaCoord I omega x,
+    apm_t96A08_omegaCoord_continuousOn I omega homega_smooth x W hWtarget,
+    apm_t96A08_omegaCoord_centre I omega x,
+    fun z delta h1 h2 h3 ↦ apm_t96A08_omegaCoord_lineIntegral I omega x z delta h1 h2 h3⟩
 
 /-- The parameter-integral calculation in a normed vector space: only the
 derivative AT THE CENTRE is needed (claude-14 restructure: smoothness of the
@@ -521,7 +580,7 @@ lemma apm_t96A08_chart_radial_primitive_euclidean_calculus
     {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E] [CompleteSpace E]
     (I : ModelWithCorners ℝ E E) (W : Set E) (a : E) (omegaCoord : E → (E →L[ℝ] ℝ))
     (hWopen : IsOpen W) (hWconv : Convex ℝ W) (haW : a ∈ W ∩ Set.range (I : E → E))
-    (homega : ContDiffOn ℝ (⊤ : WithTop ℕ∞) omegaCoord
+    (homega : ContinuousOn omegaCoord
       (W ∩ Set.range (I : E → E))) :
     let G : E → ℝ := fun v ↦ ∫ t : ℝ in (0 : ℝ)..1,
       omegaCoord (a + t • (v - a)) (v - a)
@@ -555,7 +614,7 @@ lemma apm_t96A08_chart_radial_primitive_transfer
     (hcoord : ∀ (x : M) (W : Set E),
       W ∩ Set.range (I : E → E) ⊆ (extChartAt I x).target →
       ∃ omegaCoord : E → (E →L[ℝ] ℝ),
-        ContDiffOn ℝ (⊤ : WithTop ℕ∞) omegaCoord
+        ContinuousOn omegaCoord
           (W ∩ Set.range (I : E → E)) ∧
         omegaCoord (extChartAt I x x) = (omega x).comp
           (mfderivWithin 𝓘(ℝ, E) I (extChartAt I x).symm (Set.range I)
@@ -571,7 +630,7 @@ lemma apm_t96A08_chart_radial_primitive_transfer
               (extChartAt I x z - extChartAt I x x))
     (heuclid : ∀ (W : Set E) (a : E) (omegaCoord : E → (E →L[ℝ] ℝ)),
       IsOpen W → Convex ℝ W → a ∈ W ∩ Set.range (I : E → E) →
-      ContDiffOn ℝ (⊤ : WithTop ℕ∞) omegaCoord
+      ContinuousOn omegaCoord
         (W ∩ Set.range (I : E → E)) →
       let G : E → ℝ := fun v ↦ ∫ t : ℝ in (0 : ℝ)..1,
         omegaCoord (a + t • (v - a)) (v - a)
