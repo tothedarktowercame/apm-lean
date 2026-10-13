@@ -806,7 +806,87 @@ lemma apm_m02J05_bridge_complementary_young_holder_of_lux_facts_aux_holder
     ∀ u ∈ apm_m02J05_L α, ∀ v ∈ apm_m02J05_L β,
       ∫ x in Icc (0 : ℝ) 1, u x * v x ∂volume ≤
         2 * apm_m02J05_lux α u * apm_m02J05_lux β v := by
-  sorry
+  intro u hu v hv
+  by_cases hu0 : u = 0
+  · subst u
+    have hz : (fun x => (0 : apm_m02J05_Fun) x * v x) =ᵐ[
+        volume.restrict (Icc (0 : ℝ) 1)] (fun _ : ℝ => (0 : ℝ)) := by
+      filter_upwards [AEEqFun.coeFn_zero (α := ℝ) (β := ℝ)
+        (μ := volume.restrict (Icc (0 : ℝ) 1))] with x hx
+      simp [hx]
+    rw [integral_congr_ae hz]
+    have hlux : apm_m02J05_lux α (0 : apm_m02J05_Fun) = 0 :=
+      (hdefα (0 : apm_m02J05_Fun) hu).mpr rfl
+    rw [hlux]
+    norm_num
+  by_cases hv0 : v = 0
+  · subst v
+    have hz : (fun x => u x * (0 : apm_m02J05_Fun) x) =ᵐ[
+        volume.restrict (Icc (0 : ℝ) 1)] (fun _ : ℝ => (0 : ℝ)) := by
+      filter_upwards [AEEqFun.coeFn_zero (α := ℝ) (β := ℝ)
+        (μ := volume.restrict (Icc (0 : ℝ) 1))] with x hx
+      simp [hx]
+    rw [integral_congr_ae hz]
+    have hlux : apm_m02J05_lux β (0 : apm_m02J05_Fun) = 0 :=
+      (hdefβ (0 : apm_m02J05_Fun) hv).mpr rfl
+    rw [hlux]
+    norm_num
+  let a := apm_m02J05_lux α u
+  let b := apm_m02J05_lux β v
+  have ha0 : 0 < a := lt_of_le_of_ne (hsubα u hu).2.2.1
+    (fun h => hu0 ((hdefα u hu).mp h.symm))
+  have hb0 : 0 < b := lt_of_le_of_ne (hsubβ v hv).2.2.1
+    (fun h => hv0 ((hdefβ v hv).mp h.symm))
+  have hsa := (hsubα u hu).2.2.2 hu0
+  have hsb := (hsubβ v hv).2.2.2 hv0
+  have hiA : IntegrableOn (fun x => apm_m02J05_young α (|u x| / a))
+      (Icc (0 : ℝ) 1) volume := hsa.2.1
+  have hiB : IntegrableOn (fun x => apm_m02J05_young β (|v x| / b))
+      (Icc (0 : ℝ) 1) volume := hsb.2.1
+  have hiG : IntegrableOn (fun x => a * b *
+      (apm_m02J05_young α (|u x| / a) +
+       apm_m02J05_young β (|v x| / b))) (Icc (0 : ℝ) 1) volume :=
+    (hiA.add hiB).const_mul (a * b)
+  have hpoint : ∀ᵐ x ∂volume.restrict (Icc (0 : ℝ) 1),
+      |u x| * |v x| ≤ a * b *
+        (apm_m02J05_young α (|u x| / a) +
+         apm_m02J05_young β (|v x| / b)) := by
+    filter_upwards [] with x
+    have hy := hyoung (|u x| / a) (|v x| / b)
+      (div_nonneg (abs_nonneg _) ha0.le) (div_nonneg (abs_nonneg _) hb0.le)
+    calc
+      |u x| * |v x| = (a * b) * ((|u x| / a) * (|v x| / b)) := by field_simp
+      _ ≤ (a * b) * (apm_m02J05_young α (|u x| / a) +
+          apm_m02J05_young β (|v x| / b)) :=
+        mul_le_mul_of_nonneg_left hy (mul_nonneg ha0.le hb0.le)
+  have hmeas : AEStronglyMeasurable (fun x => |u x| * |v x|)
+      (volume.restrict (Icc (0 : ℝ) 1)) :=
+    (u.aestronglyMeasurable.norm.mul v.aestronglyMeasurable.norm).congr
+      (Filter.Eventually.of_forall fun x => by simp [Real.norm_eq_abs])
+  have hiF : IntegrableOn (fun x => |u x| * |v x|) (Icc (0 : ℝ) 1) volume :=
+    hiG.mono' hmeas (hpoint.mono fun x hx => by simpa [Real.norm_eq_abs] using hx)
+  calc
+    ∫ x in Icc (0 : ℝ) 1, u x * v x ∂volume
+        ≤ ∫ x in Icc (0 : ℝ) 1, |u x| * |v x| ∂volume :=
+      integral_mono_ae (hiF.mono' (u.aestronglyMeasurable.mul v.aestronglyMeasurable)
+        (Filter.Eventually.of_forall fun x => by
+          simpa [Real.norm_eq_abs] using (le_abs_self (u x * v x)))) hiF
+        (Filter.Eventually.of_forall fun x => by
+          simpa [abs_mul] using (le_abs_self (u x * v x)))
+    _ ≤ ∫ x in Icc (0 : ℝ) 1, a * b *
+          (apm_m02J05_young α (|u x| / a) +
+           apm_m02J05_young β (|v x| / b)) ∂volume :=
+      integral_mono_ae hiF hiG hpoint
+    _ = a * b * ((∫ x in Icc (0 : ℝ) 1,
+          apm_m02J05_young α (|u x| / a) ∂volume) +
+        ∫ x in Icc (0 : ℝ) 1,
+          apm_m02J05_young β (|v x| / b) ∂volume) := by
+      rw [MeasureTheory.integral_const_mul, MeasureTheory.integral_add hiA hiB]
+    _ ≤ a * b * 2 := mul_le_mul_of_nonneg_left (by linarith [hsa.2.2, hsb.2.2])
+      (mul_nonneg ha0.le hb0.le)
+    _ = 2 * apm_m02J05_lux α u * apm_m02J05_lux β v := by
+      dsimp [a, b]
+      ring
 -- END SEAT AREA
 
 theorem apm_m02J05_bridge_complementary_young_holder_of_lux_facts
