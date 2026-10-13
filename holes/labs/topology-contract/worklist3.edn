@@ -22997,13 +22997,13 @@
    :consumer :t01A08,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 2,
    :review-finding
    "extend Mathlib: state and prove the missing theorem in scope",
    :evidence
    {:placeholder-delta {:t01A08 [1 1]},
     :residual
-    "Add closure-interior membership to the fixture; convex B1 supplies it.",
+    "Reroute after two STOPs: correct fixture with closure-interior membership, which convex B1 supplies.",
     :missing-hypothesis "x ∈ closure (interior s)",
     :outcome :stop,
     :warnings [],
@@ -23020,20 +23020,12 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Frozen C∞ interface omits x∈closure(interior s). The real within-set Schwarz theorem requires that premise already at order 2; the premise-free theorem is only for analytic order ω. UniqueDiffOn plus x∈s supplies neither. The interface therefore needs the exact missing hypothesis.",
+    "Repeated boundary: the frozen C∞ interface omits x∈closure(interior s). Real within-set Schwarz requires it already at order 2; only analytic order ω has the premise-free theorem. UniqueDiffOn and x∈s imply neither. No scoped implementation can discharge this frozen type without an invalid axiom.",
     :commands
-    [{:cmd
-      "inspect Mathlib ω and C∞ Schwarz theorem types; hash fixture",
-      :exit 0}
+    [{:cmd "hash fixture; locate Mathlib ω/C∞ theorem types", :exit 0}
      {:cmd
       "lake env lean corrected theorem check; registry; scoped diff",
       :exit 0}],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1791888013447-9428-cf22e614",
-     :finding
-     "extend Mathlib: state and prove the missing theorem in scope"},
     :commit nil,
     :changed-paths [],
     :fixture
@@ -23043,7 +23035,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :repair,
+   :state :needs-owner,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain.blueprint/B1/smooth-symmetry",
    :acceptance
