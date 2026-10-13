@@ -1411,4 +1411,35 @@ theorem finite_whitneyNetHalfIncidence
     rw [Set.not_nonempty_iff_eq_empty.mp hI]
     exact Set.finite_empty
 
+/-- At every point of the complement, a definite neighborhood meets only
+finitely many selected quarter-distance balls. -/
+theorem finite_whitneyNetQuarterBalls_meeting_nhds_of_not_mem
+    {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E] [ProperSpace E]
+    {s : Set E} (hs : IsClosed s) (hne : s.Nonempty) {x : E} (hx : x ∉ s) :
+    ∃ U ∈ nhds x, {i : WhitneyNetIndex s |
+      (U ∩ Metric.ball i.center (Metric.infDist i.center s / 4)).Nonempty}.Finite := by
+  let r := Metric.infDist x s / 16
+  refine ⟨Metric.ball x r, Metric.ball_mem_nhds x (by
+    dsimp [r]
+    exact div_pos ((hs.notMem_iff_infDist_pos hne).1 hx) (by norm_num)), ?_⟩
+  apply (finite_whitneyNetHalfIncidence s x).subset
+  intro i hi
+  obtain ⟨y, hyU, hyi⟩ := hi
+  apply Metric.mem_ball.2
+  have hyx : dist x y < Metric.infDist x s / 16 := by
+    simpa [r, dist_comm] using Metric.mem_ball.1 hyU
+  have hyc : dist y i.center < Metric.infDist i.center s / 4 :=
+    Metric.mem_ball.1 hyi
+  have hxc : dist x i.center < Metric.infDist x s / 16 +
+      Metric.infDist i.center s / 4 :=
+    (dist_triangle x y i.center).trans_lt (add_lt_add hyx hyc)
+  have hlip := Metric.infDist_le_infDist_add_dist
+    (s := s) (x := x) (y := i.center)
+  have hcenter : i.center ∉ s :=
+    ((whitneyStratumNet_spec s i.1).1 i.2.2).1
+  have hdc : 0 < Metric.infDist i.center s :=
+    (hs.notMem_iff_infDist_pos hne).1 hcenter
+  norm_num [div_eq_mul_inv] at hxc ⊢
+  nlinarith
+
 end ConstructionTargets.SardConvexDomain
