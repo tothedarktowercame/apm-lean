@@ -86,11 +86,112 @@ theorem apm_t97J04_complex_to_wedge :
 
 /-- Pure group-presentation simplification: `ℤ² * ℤ` is the three-generator
 presentation with the single commutator relation on the first two generators. -/
+def apm_t97J04_coprod_equiv_presentation_aux_zpowHom {G : Type*} [Group G] (x : G) :
+    Multiplicative ℤ →* G where
+  toFun n := x ^ Multiplicative.toAdd n
+  map_one' := by simp
+  map_mul' m n := by
+    change x ^ (Multiplicative.toAdd m + Multiplicative.toAdd n) = _
+    exact zpow_add x _ _
+
+def apm_t97J04_coprod_equiv_presentation_aux_prodHom {G : Type*} [Group G]
+    (x y : G) (hxy : Commute x y) : Multiplicative (ℤ × ℤ) →* G :=
+  (apm_t97J04_coprod_equiv_presentation_aux_zpowHom x).noncommCoprod
+    (apm_t97J04_coprod_equiv_presentation_aux_zpowHom y)
+    (fun m n ↦ hxy.zpow_zpow (Multiplicative.toAdd m) (Multiplicative.toAdd n))
+
 theorem apm_t97J04_coprod_equiv_presentation :
     Nonempty
       (Monoid.Coprod (Multiplicative (ℤ × ℤ)) (Multiplicative ℤ) ≃*
         apm_t97J04_piOne) := by
-  sorry
+  let P := apm_t97J04_piOne
+  let a : P := PresentedGroup.of 0
+  let b : P := PresentedGroup.of 1
+  let c : P := PresentedGroup.of 2
+  have hrel : a * b * a⁻¹ * b⁻¹ = 1 := by
+    exact PresentedGroup.one_of_mem (by simp [apm_t97J04_relator, a, b])
+  have hab : Commute a b := by
+    rw [commute_iff_eq]
+    exact (mul_inv_eq_iff_eq_mul).mp ((mul_eq_one_iff_eq_inv).mp hrel)
+  let fAB : Multiplicative (ℤ × ℤ) →* P :=
+    apm_t97J04_coprod_equiv_presentation_aux_prodHom a b hab
+  let fC : Multiplicative ℤ →* P :=
+    apm_t97J04_coprod_equiv_presentation_aux_zpowHom c
+  let f : Monoid.Coprod (Multiplicative (ℤ × ℤ)) (Multiplicative ℤ) →* P :=
+    Monoid.Coprod.lift fAB fC
+  let A := Monoid.Coprod (Multiplicative (ℤ × ℤ)) (Multiplicative ℤ)
+  let gen : Fin 3 → A := ![
+    Monoid.Coprod.inl (Multiplicative.ofAdd (1, 0)),
+    Monoid.Coprod.inl (Multiplicative.ofAdd (0, 1)),
+    Monoid.Coprod.inr (Multiplicative.ofAdd 1)]
+  have gen_rel : ∀ r ∈ ({apm_t97J04_relator} : Set (FreeGroup (Fin 3))),
+      FreeGroup.lift gen r = 1 := by
+    intro r hr
+    simp only [Set.mem_singleton_iff] at hr
+    subst r
+    change gen 0 * gen 1 * (gen 0)⁻¹ * (gen 1)⁻¹ = 1
+    simp only [gen, Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.cons_val_two]
+    have hc : Commute
+        ((Monoid.Coprod.inl : Multiplicative (ℤ × ℤ) →* A)
+          (Multiplicative.ofAdd ((1 : ℤ), (0 : ℤ))))
+        ((Monoid.Coprod.inl : Multiplicative (ℤ × ℤ) →* A)
+          (Multiplicative.ofAdd ((0 : ℤ), (1 : ℤ)))) := by
+      exact (Commute.all
+        (Multiplicative.ofAdd ((1 : ℤ), (0 : ℤ)))
+        (Multiplicative.ofAdd ((0 : ℤ), (1 : ℤ)))).map
+          (Monoid.Coprod.inl : Multiplicative (ℤ × ℤ) →* A)
+    rw [hc.mul_inv_cancel, mul_inv_cancel]
+  let g : P →* A := PresentedGroup.toGroup gen_rel
+  have hgf : g.comp f = MonoidHom.id A := by
+    apply Monoid.Coprod.hom_ext
+    · apply MonoidHom.ext
+      intro p
+      rcases p with ⟨m, n⟩
+      change g (a ^ m * b ^ n) = Monoid.Coprod.inl (Multiplicative.ofAdd (m, n))
+      rw [map_mul, map_zpow, map_zpow]
+      simp only [g, a, b, PresentedGroup.toGroup.of, gen, Matrix.cons_val_zero,
+        Matrix.cons_val_one]
+      change Monoid.Coprod.inl (Multiplicative.ofAdd ((1 : ℤ), (0 : ℤ))) ^ m *
+        Monoid.Coprod.inl (Multiplicative.ofAdd ((0 : ℤ), (1 : ℤ))) ^ n =
+        Monoid.Coprod.inl (Multiplicative.ofAdd (m, n))
+      calc
+        _ = Monoid.Coprod.inl
+            ((Multiplicative.ofAdd ((1 : ℤ), (0 : ℤ))) ^ m) *
+            Monoid.Coprod.inl
+            ((Multiplicative.ofAdd ((0 : ℤ), (1 : ℤ))) ^ n) := by
+              rw [map_zpow, map_zpow]
+        _ = Monoid.Coprod.inl
+            ((Multiplicative.ofAdd ((1 : ℤ), (0 : ℤ))) ^ m *
+             (Multiplicative.ofAdd ((0 : ℤ), (1 : ℤ))) ^ n) := by rw [map_mul]
+        _ = _ := by
+          congr
+          apply Multiplicative.toAdd.injective
+          ext <;> simp
+    · apply MonoidHom.ext
+      intro n
+      simp only [MonoidHom.comp_apply, f, Monoid.Coprod.lift_apply_inr, fC,
+        apm_t97J04_coprod_equiv_presentation_aux_zpowHom, g, PresentedGroup.toGroup.of,
+        MonoidHom.id_apply, gen]
+      norm_num
+      change Monoid.Coprod.inr (Multiplicative.ofAdd 1) ^ Multiplicative.toAdd n =
+        Monoid.Coprod.inr n
+      rw [← map_zpow]
+      congr
+      apply Multiplicative.toAdd.injective
+      simp
+  have hfg : f.comp g = MonoidHom.id P := by
+    apply PresentedGroup.ext
+    intro i
+    change f (g (PresentedGroup.of i)) = PresentedGroup.of i
+    rw [show g (PresentedGroup.of i) = gen i from PresentedGroup.toGroup.of gen_rel]
+    fin_cases i
+    · change a ^ (1 : ℤ) * b ^ (0 : ℤ) = PresentedGroup.of 0
+      simp [a]
+    · change a ^ (0 : ℤ) * b ^ (1 : ℤ) = PresentedGroup.of 1
+      simp [b]
+    · change c ^ (1 : ℤ) = PresentedGroup.of 2
+      simp [c]
+  exact ⟨MonoidHom.toMulEquiv f g hgf hfg⟩
 
 /-- Transport the already-computed torus-circle wedge invariants across the
 geometric comparison.  The comparison is an explicit hypothesis so this
