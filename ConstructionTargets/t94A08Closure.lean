@@ -551,3 +551,43 @@ lemma apm_t94a08_sigma2_zeroChart_mem_iff (p : apm_t94a08_CP2)
     · right
       field_simp [hp] at hminus
       simpa using hminus
+
+def apm_t94a08_zeroChartHomeomorph :
+    ↑{p : apm_t94a08_CP2 | Projectivization.rep p (0 : Fin 3) ≠ 0} ≃ₜ
+      (ℂ × ℂ) := by
+  open ConstructionTargets.ComplexProjectiveChartTargets in
+    let a : Fin 3 := 0
+    let j : {q : Fin 3 // q ≠ a} := ⟨1, by decide⟩
+    let k : {q : Fin 3 // q ≠ a} := ⟨2, by decide⟩
+    let f : ↑{p : apm_t94a08_CP2 | Projectivization.rep p a ≠ 0} → ℂ × ℂ :=
+      fun p ↦ (coordinates a p.1 j, coordinates a p.1 k)
+    let g : ℂ × ℂ →
+        ↑{p : apm_t94a08_CP2 | Projectivization.rep p a ≠ 0} :=
+      fun z ↦ ⟨chartInverse a (fun q ↦ if q.1 = 1 then z.1 else z.2),
+        ConstructionTargets.T94A08ProjectiveConic.chartInverse_mem_affineSource _ _⟩
+    exact Homeomorph.mk (Equiv.mk f g (by
+      intro p
+      apply Subtype.ext
+      dsimp [f, g]
+      have heq : (fun q : {q : Fin 3 // q ≠ a} ↦
+          if q.1 = 1 then coordinates a p.1 j else coordinates a p.1 k) =
+          coordinates a p.1 := by
+        funext q
+        fin_cases q <;> simp [a, j, k]
+      rw [heq, ConstructionTargets.T94A08ProjectiveConic.chartInverse_coordinates]
+      exact p.2) (by
+      intro z
+      apply Prod.ext <;>
+        simp [f, g, j, k,
+          ConstructionTargets.T94A08ProjectiveConic.coordinates_chartInverse])) (by
+      apply Continuous.prodMk
+      · exact (continuous_apply j).comp
+          ((ConstructionTargets.T94A08ProjectiveConic.continuous_coordinates a).comp_continuous
+            continuous_subtype_val (fun p ↦ p.2))
+      · exact (continuous_apply k).comp
+          ((ConstructionTargets.T94A08ProjectiveConic.continuous_coordinates a).comp_continuous
+            continuous_subtype_val (fun p ↦ p.2))) (by
+      apply Continuous.subtype_mk
+      exact (ConstructionTargets.T94A08ProjectiveConic.continuous_chartInverse a).comp
+        (continuous_pi fun q ↦ by
+          fin_cases q <;> simp [a] <;> fun_prop))
