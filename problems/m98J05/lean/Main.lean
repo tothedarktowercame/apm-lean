@@ -8,9 +8,10 @@ import Mathlib
 The differentiation rule printed in part (b) omits the hypotheses needed for
 integration by parts. It is stated for a differentiable function whose value
 and derivative are integrable and whose boundary values vanish at both ends.
-For parts (c)--(d), the initial datum is minimally strengthened to `C²`, with
-its first two derivatives integrable, so that the displayed classical heat
-equation and all Fourier transforms in the statement are defined.
+For parts (c)--(d), the initial datum is continuous and integrable: continuity
+for the pointwise initial limit, integrability for the Fourier transforms and the
+convolution. (Revised 2026-10-13: the earlier `C²` assumption with integrable
+derivatives was never used and narrowed the statement.)
 
 ## Encoding questions
 
@@ -679,8 +680,7 @@ theorem apm_m98j05 :
         apm_m98J05_fourier f' ξ =
           Complex.I * (ξ : ℂ) * apm_m98J05_fourier f ξ) ∧
     ∀ f : ℝ → ℂ,
-      ContDiff ℝ 2 f →
-      Integrable f → Integrable (deriv f) → Integrable (iteratedDeriv 2 f) →
+      Continuous f → Integrable f →
       let u := apm_m98J05_heatSolution f
       (∀ x : ℝ,
         Tendsto (fun t ↦ u x t) (nhdsWithin 0 (Ioi 0)) (nhds (f x))) ∧
@@ -713,7 +713,7 @@ theorem apm_m98j05 :
           (2 * (Real.pi : ℂ) * Complex.I * (ξ / (2 * Real.pi) : ℝ)) *
             𝓕 f (ξ / (2 * Real.pi)) := hm
       _ = Complex.I * (ξ : ℂ) * 𝓕 f (ξ / (2 * Real.pi)) := by rw [hfac]
-  · intro f hf2 hf hf' hf''
+  · intro f hfc hf
     have hmultiplier_ode (c : ℂ) (ξ t : ℝ) :
       HasDerivAt
         (fun s : ℝ ↦ c * Complex.exp (-(s : ℂ) * (ξ : ℂ) ^ 2))
@@ -731,7 +731,7 @@ theorem apm_m98j05 :
           ring
       exact hc.comp_ofReal
     dsimp
-    refine ⟨fun x => apm_m98J05_bridge_1 f hf2.continuous hf x,
+    refine ⟨fun x => apm_m98J05_bridge_1 f hfc hf x,
       fun x t ht => apm_m98J05_bridge_2 f hf x t ht,
       fun ξ t ht => apm_m98J05_bridge_3 f hf ξ t ht, ?_⟩
     intro ξ t ht
