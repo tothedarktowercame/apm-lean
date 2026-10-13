@@ -44,6 +44,12 @@ predicate and do not change the registered theorem or these definitions.
 
 ### C1. `t93J03_kleinBottle_pi1_every_basepoint` — LIBRARY
 
+The literal affine action's `ContinuousConstSMul` instance and the application
+of the banked deck-group theorem at the orbit of `(0, 0)` are compiled as
+`kleinPlaneContinuousConstSMul` and `kleinPlaneOrbit_pi1_at_origin`.  The
+remaining geometric inputs are proper discontinuity and the homeomorphism to
+the frozen polygon quotient.
+
 The arbitrary-basepoint tail is compiled as
 `ConstructionTargets.t93J03Closure.fundamentalGroupEquiv_every_basepoint`.
 Thus the orbit computation need only establish the equivalence at its

@@ -1,5 +1,8 @@
 import Mathlib
 import ConstructionTargets.StatementSurfaceModels
+import ConstructionTargets.KleinPlaneActionFree
+import ConstructionTargets.KleinPlaneOrbitQuotientTopology
+import ConstructionTargets.DeckGroupQuotientFundamentalGroup
 
 /-! # Generic closing lemmas for t93J03
 
@@ -11,6 +14,26 @@ and embedding arguments used after that equality is available.
 open ConstructionTargets.StatementSurfaceModels Set
 noncomputable section
 namespace ConstructionTargets.t93J03Closure
+
+open KleinPresentedGroupCoordinateModel
+open KleinPlaneAffineAction
+
+/-- The literal affine Klein action is continuous in the plane variable. -/
+noncomputable instance kleinPlaneContinuousConstSMul :
+    ContinuousConstSMul PresentedKleinGroup (ℝ × ℝ) where
+  continuous_const_smul := KleinPlaneOrbitQuotient.continuous_smul
+
+/-- Once proper discontinuity of the explicit affine action is supplied, the
+banked deck-group theorem computes the fundamental group at the canonical
+orbit of the origin. -/
+theorem kleinPlaneOrbit_pi1_at_origin
+    [ProperlyDiscontinuousSMul PresentedKleinGroup (ℝ × ℝ)] :
+    Nonempty
+      (FundamentalGroup
+          (MulAction.orbitRel.Quotient PresentedKleinGroup (ℝ × ℝ))
+          (Quotient.mk _ (0, 0)) ≃* PresentedKleinGroup) :=
+  ConstructionTargets.DeckGroupQuotientFundamentalGroup.freeProperlyDiscontinuousQuotient_fundamentalGroupEquiv
+      eq_one_of_smul_eq (0, 0)
 
 /-- Transport a computed fundamental group from one basepoint to every
 basepoint of a path-connected space.  This is the final basepoint adapter in
@@ -75,5 +98,7 @@ theorem lift_isEmbedding_assembly
 #print axioms coveringLift_of_subgroup_le
 #print axioms lift_isEmbedding_assembly
 #print axioms fundamentalGroupEquiv_every_basepoint
+#print axioms kleinPlaneContinuousConstSMul
+#print axioms kleinPlaneOrbit_pi1_at_origin
 
 end ConstructionTargets.t93J03Closure
