@@ -2273,7 +2273,64 @@ lemma apm_m98A06_nonresonant_energy_geometry_of_facts_aux_energy_geometry_aux_re
     (heq : apm_m98a06_I a z =
       apm_m98a06_I a (fun x ↦ Real.sin x / Real.sin a)) :
     ∀ x ∈ Icc (0 : ℝ) a, z x = Real.sin x / Real.sin a := by
-  sorry
+  let u : ℝ → ℝ := fun x ↦ Real.sin x / Real.sin a
+  let η : ℝ → ℝ := fun x ↦ z x - u x
+  have hu : apm_m98a06_Admissible a 0 1 u := by
+    simpa [u] using apm_m98a06_nonresonant_candidate_admissible hsin
+  have hη : apm_m98a06_Admissible a 0 0 η :=
+    apm_m98A06_nonresonant_energy_geometry_of_facts_aux_difference hu hz
+  have hzfun : z = fun x ↦ u x + η x := by
+    funext x
+    simp [η]
+  have hsplit : apm_m98a06_I a z = apm_m98a06_I a u + apm_m98a06_I a η := by
+    rw [hzfun]
+    simpa [u] using
+      (apm_m98A06_nonresonant_energy_geometry_of_facts_aux_energy_geometry_aux_candidate_split
+        ha hsin hη)
+  have hIη : apm_m98a06_I a η = 0 := by
+    change apm_m98a06_I a z = apm_m98a06_I a u at heq
+    linarith
+  let D := ∫ x in (0 : ℝ)..a, (derivWithin η (Icc 0 a) x) ^ 2
+  let E := ∫ x in (0 : ℝ)..a, (η x) ^ 2
+  have hDE : D - E = 0 := by
+    rw [← hIη, apm_m98A06_I_eq_derivWithin ha hη.1]
+    rw [intervalIntegral.integral_sub]
+    · exact ((hη.1.continuousOn_derivWithin (uniqueDiffOn_Icc ha)
+        (by norm_num)).pow 2).intervalIntegrable_of_Icc ha.le
+    · exact (hη.1.continuousOn.pow 2).intervalIntegrable_of_Icc ha.le
+  obtain ⟨hW, _⟩ := hWirtinger a ha η hη
+  have hD : 0 ≤ D :=
+    intervalIntegral.integral_nonneg ha.le (fun x _ ↦ sq_nonneg _)
+  have hr0 : 0 ≤ a / Real.pi := div_nonneg ha.le Real.pi_pos.le
+  have hr1 : a / Real.pi < 1 := (div_lt_one Real.pi_pos).2 hapi
+  have hE : E = 0 := by
+    change E ≤ (a / Real.pi) ^ 2 * D at hW
+    have : (a / Real.pi) ^ 2 < 1 := by nlinarith
+    nlinarith
+  have hEint : IntervalIntegrable (fun x ↦ η x ^ 2) volume 0 a :=
+    (hη.1.continuousOn.pow 2).intervalIntegrable_of_Icc ha.le
+  have hae : (fun x ↦ η x ^ 2) =ᵐ[volume.restrict (Ioc (0 : ℝ) a)] 0 := by
+    apply (intervalIntegral.integral_eq_zero_iff_of_le_of_nonneg_ae ha.le
+      (Filter.Eventually.of_forall fun x ↦ sq_nonneg (η x)) hEint).1
+    exact hE
+  have hae' : (fun x ↦ η x ^ 2) =ᵐ[volume.restrict (Ioo (0 : ℝ) a)] 0 :=
+    ae_restrict_of_ae_restrict_of_subset Ioo_subset_Ioc_self hae
+  have hzint : Set.EqOn (fun x ↦ η x ^ 2) 0 (Ioo (0 : ℝ) a) :=
+    MeasureTheory.Measure.eqOn_open_of_ae_eq hae' isOpen_Ioo
+      ((hη.1.continuousOn.pow 2).mono Ioo_subset_Icc_self)
+      continuousOn_const
+  intro x hx
+  have hηx : η x = 0 := by
+    rcases eq_or_lt_of_le hx.1 with rfl | hx0
+    · exact hη.2.1
+    rcases eq_or_lt_of_le hx.2 with rfl | hxa
+    · exact hη.2.2
+    · have hs := hzint ⟨hx0, hxa⟩
+      change η x ^ 2 = 0 at hs
+      nlinarith [sq_nonneg (η x)]
+  change z x = u x
+  dsimp [η] at hηx
+  linarith
 
 lemma apm_m98A06_nonresonant_energy_geometry_of_facts_aux_energy_geometry_aux_remaining
     (hWirtinger : apm_m98A06_WirtingerFact)
