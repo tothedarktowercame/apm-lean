@@ -465,7 +465,62 @@ cross becomes disconnected after deleting the origin. -/
 lemma apm_t94a08_complexCross_punctured_not_preconnected
     (V : Set (ℂ × ℂ)) (hV : IsOpen V) (h0 : (0, 0) ∈ V) :
     ¬ IsPreconnected ((V ∩ apm_t94a08_complexCross) \ {(0, 0)}) := by
-  sorry
+  intro hpre
+  obtain ⟨r, hr, hrV⟩ := Metric.isOpen_iff.mp hV (0, 0) h0
+  let a : ℂ := (r / 2 : ℝ)
+  have ha : a ≠ 0 := by
+    simp [a, ne_of_gt hr]
+  have haV : (a, 0) ∈ V := by
+    apply hrV
+    rw [Metric.mem_ball, Prod.dist_eq]
+    simp [a, abs_of_pos hr, hr]
+  have hbV : (0, a) ∈ V := by
+    apply hrV
+    rw [Metric.mem_ball, Prod.dist_eq]
+    simp [a, abs_of_pos hr, hr]
+  let A : Set (ℂ × ℂ) := Prod.fst ⁻¹' ({0} : Set ℂ)ᶜ
+  let B : Set (ℂ × ℂ) := Prod.snd ⁻¹' ({0} : Set ℂ)ᶜ
+  have hA : IsOpen A := by
+    exact isClosed_singleton.isOpen_compl.preimage continuous_fst
+  have hB : IsOpen B := by
+    exact isClosed_singleton.isOpen_compl.preimage continuous_snd
+  have hcover : ((V ∩ apm_t94a08_complexCross) \ {(0, 0)}) ⊆ A ∪ B := by
+    rintro z ⟨⟨hzV, hz⟩, hz0⟩
+    change z.1 = 0 ∨ z.2 = 0 at hz
+    change z ∈ A ∨ z ∈ B
+    rcases hz with hfst | hsnd
+    · right
+      change z.2 ≠ 0
+      intro h
+      apply hz0
+      simp only [mem_singleton_iff]
+      apply Prod.ext <;> assumption
+    · left
+      change z.1 ≠ 0
+      intro h
+      apply hz0
+      simp only [mem_singleton_iff]
+      apply Prod.ext <;> assumption
+  have hdisj :
+      ((V ∩ apm_t94a08_complexCross) \ {(0, 0)}) ∩ (A ∩ B) = ∅ := by
+    apply Set.not_nonempty_iff_eq_empty.mp
+    rintro ⟨z, ⟨⟨⟨_, hcross⟩, _⟩, hzA, hzB⟩⟩
+    change z.1 ≠ 0 at hzA
+    change z.2 ≠ 0 at hzB
+    change z.1 = 0 ∨ z.2 = 0 at hcross
+    exact hcross.elim hzA hzB
+  rcases (isPreconnected_iff_subset_of_disjoint.mp hpre A B hA hB hcover hdisj) with
+    hsub | hsub
+  · have hmem : (0, a) ∈ ((V ∩ apm_t94a08_complexCross) \ {(0, 0)}) := by
+      refine ⟨⟨hbV, ?_⟩, ?_⟩
+      · exact Or.inl rfl
+      · simpa [Prod.ext_iff] using ha
+    exact (hsub hmem) rfl
+  · have hmem : (a, 0) ∈ ((V ∩ apm_t94a08_complexCross) \ {(0, 0)}) := by
+      refine ⟨⟨haV, ?_⟩, ?_⟩
+      · exact Or.inr rfl
+      · simpa [Prod.ext_iff] using ha
+    exact (hsub hmem) rfl
 -- END SEAT AREA
 
 /-- LIBRARY: the projective affine chart at the node transports the complex
