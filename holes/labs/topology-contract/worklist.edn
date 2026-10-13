@@ -113897,6 +113897,18 @@
       "lake build ConstructionTargets.ThreeCirclesFundamentalGroup",
       :exit 1,
       :finding "B12 absent."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791866916677-8449-a868989b",
+     :commands
+     ["git archive 501a29d4; lake env lean <archive>/ConstructionTargets/PointWedgeVanKampen.lean"
+      "lake build ConstructionTargets.PointWedgeVanKampen"
+      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (exit 1: declared B12 residual absent)"
+      "python3 scripts/statement-registry.py check"
+      "git diff-tree/show sha256/git grep placeholders"],
+     :finding
+     "PASS program STOP: 501a29d4 is new after history, changes only scoped Lean/MD files, and commits compiled sorry-free progress. Hashes match source 281eb773, docs b660df07, fixture 0bca6ce3; registry 142/142; sorry/admit 0->0; the new theorem uses only propext, Classical.choice, Quot.sound. Its orientation is correct: the prior unit-times-strict product corresponds under SingleObj.comp_as_mul to categorical strict-then-unit composition f≫g. Functor.map_comp then combines the two actual-span maps in exactly that order; both source factors and the result remain in the same typed actual-span/free-product representation. Left counit naturality, point-span, B6/B12 and the final module remain explicitly listed."},
     :commit "501a29d4955e74977bef4bf9e1ed54ee4d078a41",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
@@ -113907,7 +113919,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113928,7 +113940,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Left unit factor is now the literal actual-span image of the equivalence unit.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Left comparison is one actual-span map of its ordered composite.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -114577,7 +114589,11 @@
     {:job 6,
      :commit "98f5765df475a09a9566b4ddbca7f02c76026b13",
      :reason
-     "Left unit factor is now the literal actual-span image of the equivalence unit."}]}
+     "Left unit factor is now the literal actual-span image of the equivalence unit."}
+    {:job 7,
+     :commit "501a29d4955e74977bef4bf9e1ed54ee4d078a41",
+     :reason
+     "Left comparison is one actual-span map of its ordered composite."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
