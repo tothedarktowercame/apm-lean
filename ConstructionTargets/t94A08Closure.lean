@@ -994,3 +994,36 @@ lemma apm_t94a08_manifoldChartPuncturedBallSource_isPreconnected
     simpa only [Set.image_univ, h.symm.surjective.range_eq] using
       h.symm.isPreconnected_image.mpr isPreconnected_univ
   exact isPreconnected_iff_preconnectedSpace.mpr ⟨hsource_univ⟩
+
+lemma apm_t94a08_manifoldChartBallSource_exists_ambient_open
+    (U : Set apm_t94a08_CP2) (hnodeU : apm_t94a08_node ∈ U)
+    (W : Set (EuclideanSpace ℝ (Fin 2)))
+    (e : ↑(U ∩ apm_t94a08_sigma2) ≃ₜ ↑W) (r : ℝ) (hr : 0 < r) :
+    ∃ V : Set apm_t94a08_CP2,
+      IsOpen V ∧ apm_t94a08_node ∈ V ∧
+        ∀ x : ↑(U ∩ apm_t94a08_sigma2),
+          (x.1 ∈ V ↔ (e x).1 ∈ Metric.ball
+            (e ⟨apm_t94a08_node, hnodeU,
+              apm_t94a08_node_mem_sigma2⟩).1 r) := by
+  let A : Set ↑(U ∩ apm_t94a08_sigma2) :=
+    {x | (e x).1 ∈ Metric.ball
+      (e ⟨apm_t94a08_node, hnodeU,
+        apm_t94a08_node_mem_sigma2⟩).1 r}
+  have hA : IsOpen A := by
+    exact Metric.isOpen_ball.preimage (continuous_subtype_val.comp e.continuous)
+  rcases isOpen_induced_iff.mp hA with ⟨V, hV, hpre⟩
+  refine ⟨V, hV, ?_, ?_⟩
+  · have hnodeA :
+        (⟨apm_t94a08_node, hnodeU,
+          apm_t94a08_node_mem_sigma2⟩ : ↑(U ∩ apm_t94a08_sigma2)) ∈ A := by
+      simp [A, Metric.mem_ball, hr]
+    have hnodePre :
+        (⟨apm_t94a08_node, hnodeU,
+          apm_t94a08_node_mem_sigma2⟩ : ↑(U ∩ apm_t94a08_sigma2)) ∈
+          Subtype.val ⁻¹' V := by
+      rw [hpre]
+      exact hnodeA
+    exact hnodePre
+  · intro x
+    change x ∈ Subtype.val ⁻¹' V ↔ x ∈ A
+    rw [hpre]
