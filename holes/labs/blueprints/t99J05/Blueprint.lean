@@ -99,7 +99,97 @@ theorem t99J05_map_fixedPoints (n : ℕ) :
       ContinuousMap.Homotopic f (ContinuousMap.id (CP n)) ∧
       (∀ p : CP n, f p = p ↔
         ∃ i : Fin (n + 1), p = coordinateLine ℂ n i) := by
-  sorry
+  obtain ⟨H, hHformula, hHzero, hHone⟩ :=
+    T99J05Diagonal_homotopy_descends n
+  let one : Set.Icc (0 : ℝ) 1 := ⟨1, by norm_num⟩
+  let zero : Set.Icc (0 : ℝ) 1 := ⟨0, by norm_num⟩
+  let f : C(CP n, CP n) := H.comp
+    ⟨fun p => (p, one), continuous_id.prodMk continuous_const⟩
+  refine ⟨f, ?_, ?_, ?_⟩
+  · intro v
+    refine ⟨by
+      rw [T99J05Diagonal_eq_consumerDiagonal]
+      exact t99J05Diagonal_nonzero v, ?_⟩
+    exact hHone v
+  · apply ContinuousMap.Homotopic.symm
+    refine ⟨{
+      toContinuousMap := H.comp
+        ⟨fun z : Set.Icc (0 : ℝ) 1 × CP n => (z.2, z.1),
+          continuous_snd.prodMk continuous_fst⟩
+      map_zero_left := ?_
+      map_one_left := ?_ }⟩
+    · intro p
+      obtain ⟨v, rfl⟩ := surjective_quotientMap ℂ n p
+      exact hHzero v
+    · intro p
+      obtain ⟨v, rfl⟩ := surjective_quotientMap ℂ n p
+      simpa [f, one] using hHone v
+  · intro p
+    obtain ⟨v, rfl⟩ := surjective_quotientMap ℂ n p
+    constructor
+    · intro hfix
+      have heq : quotientMap ℂ n
+          ⟨T99J05Diagonal n v.1, by
+            rw [T99J05Diagonal_eq_consumerDiagonal]
+            exact t99J05Diagonal_nonzero v⟩ = quotientMap ℂ n v := by
+        rw [← hfix]
+        exact (hHone v).symm
+      obtain ⟨a, ha⟩ := (Projectivization.mk_eq_mk_iff ℂ _ _ _ _).mp heq
+      obtain ⟨i, hi⟩ : ∃ i, v.1 i ≠ 0 := by
+        by_contra h
+        apply v.2
+        funext i
+        exact not_ne_iff.mp (not_exists.mp h i)
+      have hweight_i : (a : ℂ) = (((i.val + 1 : ℕ) : ℂ)) := by
+        have hai := congrFun ha i
+        simp only [Pi.smul_apply, Units.smul_def, T99J05Diagonal] at hai
+        exact (mul_right_cancel₀ hi) hai
+      have hjzero (j : Fin (n + 1)) (hji : j ≠ i) : v.1 j = 0 := by
+        by_contra hj
+        have haj := congrFun ha j
+        simp only [Pi.smul_apply, Units.smul_def, T99J05Diagonal] at haj
+        have hweight_j : (a : ℂ) = (((j.val + 1 : ℕ) : ℂ)) :=
+          (mul_right_cancel₀ hj) haj
+        have hw : (((i.val + 1 : ℕ) : ℂ)) = (((j.val + 1 : ℕ) : ℂ)) := by
+          rw [← hweight_i, ← hweight_j]
+        have hij : i.val = j.val := by
+          have : i.val + 1 = j.val + 1 := by exact_mod_cast hw
+          omega
+        exact hji (Fin.ext hij.symm)
+      refine ⟨i, ?_⟩
+      unfold coordinateLine
+      apply (Projectivization.mk_eq_mk_iff ℂ _ _ _ _).mpr
+      refine ⟨Units.mk0 (v.1 i) hi, ?_⟩
+      funext j
+      by_cases hji : j = i
+      · subst j
+        simp
+      · simp [hjzero j hji, Pi.single_apply, hji]
+    · rintro ⟨i, hi⟩
+      let e : NonzeroVectors ℂ n := ⟨Pi.single i 1, by
+        intro h
+        have := congrFun h i
+        simp at this⟩
+      have he : coordinateLine ℂ n i = quotientMap ℂ n e := rfl
+      rw [hi, he]
+      calc
+        f (quotientMap ℂ n e) = quotientMap ℂ n
+            ⟨T99J05Diagonal n e.1, by
+              rw [T99J05Diagonal_eq_consumerDiagonal]
+              exact t99J05Diagonal_nonzero e⟩ := by
+          simpa [f, one] using hHone e
+        _ = quotientMap ℂ n e := by
+          apply (Projectivization.mk_eq_mk_iff ℂ _ _ _ _).mpr
+          let w : ℂ := ((i.val + 1 : ℕ) : ℂ)
+          have hw : w ≠ 0 := by
+            dsimp [w]
+            exact_mod_cast (Nat.succ_ne_zero i.val)
+          refine ⟨Units.mk0 w hw, ?_⟩
+          funext j
+          by_cases hji : j = i
+          · subst j
+            simp [T99J05Diagonal, e, w]
+          · simp [T99J05Diagonal, e, Pi.single_apply, hji]
 
 /-- The affine-coordinate calculation, stated conditionally on the quotient
 formula so that it can be proved independently of `t99J05_map_fixedPoints`. -/
