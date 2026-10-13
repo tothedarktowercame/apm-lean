@@ -87945,6 +87945,18 @@
      {:cmd "draft compile 2",
       :exit 1,
       :correction "factored orbit contribution"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791931210556-10747-8bb6e44f",
+     :commands
+     ["scope/SHA256 checks at 8aa7f457d"
+      "recorded blob | lake env lean /dev/stdin"
+      "comment-stripped placeholder scan (0)"
+      "qualified #print axioms boundary theorem"
+      "statement-registry.py check (166/0)"],
+     :finding
+     "Valid program STOP with new compiled progress beyond blueprint history 10593d059. H uses integral singular homology; edge contributions have the signedWedgeArc orientation (true +1, false -1); attachingDegree sums representative-free orbit contributions; attachingBoundary is n times that vector, with kernel/cokernel representation boundaries correct. Exact one-file scope/hash match; placeholders 0; only standard axioms. Remaining milestones B4-B10 are listed."},
     :commit "8aa7f457d",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
@@ -87953,7 +87965,7 @@
      "2597be52bf1e06a8560e2526eccbcb6de7f1a294be3b2deaa0d6313d28ed2cac"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -87973,7 +87985,7 @@
     :blueprint
     "ConstructionTargets/PolygonSurfaceHomology.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Blueprint written; independent review is required before formalization.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked B1-B3 homology notation, signed degrees, and boundary kernel/cokernel.",
    :id :program-2026-10-13-polygon-surface-homology,
    :kind :reusable-theorem,
    :campaign-priority 31,
@@ -87985,7 +87997,11 @@
    [{:job 1,
      :commit "10593d059",
      :reason
-     "Blueprint written; independent review is required before formalization."}]}
+     "Blueprint written; independent review is required before formalization."}
+    {:job 2,
+     :commit "8aa7f457d",
+     :reason
+     "Banked B1-B3 homology notation, signed degrees, and boundary kernel/cokernel."}]}
   {:consumer :t97A01,
    :stop-count 0,
    :phase :implementation,
@@ -88672,7 +88688,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "attachingDegree",
@@ -88682,14 +88698,16 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "(P : PairingData) → PairingOrbit P.pair → ℤ",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :program-2026-10-13-polygon-surface-homology,
+    :banked-commit "8aa7f457d"},
    :id :lemma-attachingdegree,
    :kind :lemma,
    :depends-on [],
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "attachingBoundary",
@@ -88699,7 +88717,9 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "(P : PairingData) → ℤ →ₗ[ℤ] (PairingOrbit P.pair → ℤ)",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :program-2026-10-13-polygon-surface-homology,
+    :banked-commit "8aa7f457d"},
    :id :lemma-attachingboundary,
    :kind :lemma,
    :depends-on [:lemma-attachingdegree],
