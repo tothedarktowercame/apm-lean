@@ -76416,7 +76416,7 @@
   {:consumer :t96J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 0,
    :review-finding
    "Deterministic topology defect in commit ee79eaeb2: it changes the index topology for FiniteWedge from ⊥ to ⊤ while claiming this makes it discrete. Mathlib/Topology/Order.lean states exactly the opposite: ⊥ is discrete and ⊤ is indiscrete. Consequently L × Circle is not the coproduct/disjoint-union source of indexed circle legs, and the coinduced quotient is not the B7 finite-wedge topology; future skeletonHomeomorphWedge would target the wrong space. Repair by restoring TopologicalSpace L := ⊥ in both the FiniteWedge instance and continuous_wedgeCircle proof, then rerun Lean/build and retain coverage, quotient-topology, wedge-relation, and signed-equation residuals. Recorded scope is otherwise exact and fixture SHA-256 386d0e41...ae305 matches.",
    :evidence
@@ -76465,6 +76465,17 @@
      {:cmd "placeholder scan", :exit 0}
      {:cmd "#print axioms continuity", :exit 0}
      {:cmd "git show --check f42eea7e2", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791857938245-8220-e3ed2b2c",
+     :commands
+     ["git scope/SHA/blob checks at 34fa7c1df"
+      "lake env lean ConstructionTargets/PolygonSurfacePiOne.lean"
+      "statement-registry.py check"
+      "placeholder scan and #print axioms"],
+     :finding
+     "PASS: exact scope and frozen fixture/blob hashes match. This is substantive compiled progress: endpoint-quotient surjectivity supplies each circle point, nested quotient induction supplies each orbit index, and the false-sign reverseIcc witness cancels signedWedgeArc reversal. Registry 131/0, placeholders 0, standard axioms only. STOP explicitly retains source coverage, kernel agreement, quotient topology, final homeomorphism, then B8/B9."},
     :commit "f42eea7e2",
     :changed-paths ["ConstructionTargets/PolygonSurfacePiOne.lean"],
     :fixture
@@ -76473,7 +76484,7 @@
      "ef40fa5e49c14498ce6f7ff314e906484f4f7ece131e9a2ea5c6007b41ebf823"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope ["ConstructionTargets/PolygonSurfacePiOne.lean"],
    :dag-node "ConstructionTargets/PolygonSurfacePiOne.blueprint.md/B7",
    :acceptance
@@ -87068,7 +87079,7 @@
    :other-consumers [:t92J05 :t94J04 :t97A01 :t97A03]}
   {:consumer :t96J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "PairingData.continuous_skeletonArcMap",
@@ -87078,7 +87089,9 @@
     :reported-by [:routes-2026-10-12-polygon-b7-topo2-r1],
     :type "source and signed target arc maps continuous",
     :area "polygon-surface-pi1",
-    :proved-in :routes-2026-10-12-polygon-b7-topo2-r1},
+    :proved-in :routes-2026-10-12-polygon-b7-topo2-r1,
+    :banked-by :routes-2026-10-12-polygon-b7-topo2-r1,
+    :banked-commit "f42eea7e2"},
    :id :lemma-pairingdata-continuous-skeletonarcmap,
    :kind :lemma,
    :depends-on [],
