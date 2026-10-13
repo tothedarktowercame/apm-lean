@@ -767,14 +767,196 @@ lemma apm_m93j05_trunc_energy_tendsto_aux_coeffs
       (hweak (fun x : ℝ => Real.sin (j * 2 * Real.pi * x))
         (apm_m93j05_weak_lowerSemicontinuous_aux_sin_memLp q j)).const_mul 2
 
+lemma apm_m93j05_trunc_parseval_aux_norm_sq (N : ℕ) (f : ℝ → ℝ) :
+    (eLpNorm (apm_m93j05_trunc N f) 2
+      (volume.restrict (Set.Icc (0 : ℝ) 1))).toReal ^ 2 =
+      ∫ x in Set.Icc (0 : ℝ) 1,
+        apm_m93j05_trunc N f x * apm_m93j05_trunc N f x := by
+  let μ := volume.restrict (Set.Icc (0 : ℝ) 1)
+  let g := apm_m93j05_trunc N f
+  have hgcont : Continuous g := apm_m93j05_trunc_split_aux_continuous N f
+  have hg : MemLp g 2 μ := by
+    rw [memLp_two_iff_integrable_sq_norm hgcont.aestronglyMeasurable]
+    exact (hgcont.norm.pow 2).continuousOn.integrableOn_Icc
+  let G : Lp ℝ 2 μ := hg.toLp g
+  rw [← Lp.norm_toLp g hg]
+  rw [← real_inner_self_eq_norm_sq G, MeasureTheory.L2.inner_def]
+  apply integral_congr_ae
+  filter_upwards [hg.coeFn_toLp, hg.coeFn_toLp] with x hx₁ hx₂
+  rw [real_inner_self_eq_norm_sq]
+  simp only [Real.norm_eq_abs, sq_abs]
+  rw [hx₁]
+  simp [g, pow_two]
+
+lemma apm_m93j05_trunc_parseval_aux_mean (a b : ℝ) (j : ℕ) (hj : 1 ≤ j) :
+    (∫ x in Set.Icc (0 : ℝ) 1,
+      (a * Real.cos (j * 2 * Real.pi * x) +
+       b * Real.sin (j * 2 * Real.pi * x))) = 0 := by
+  rw [MeasureTheory.integral_add]
+  · rw [MeasureTheory.integral_const_mul, MeasureTheory.integral_const_mul,
+      apm_m93j05_fourier_projection_aux_cos_mean_zero j (by omega),
+      apm_m93j05_fourier_projection_aux_sin_mean_zero j]
+    ring
+  · exact (continuous_const.mul (Real.continuous_cos.comp
+      (continuous_const.mul continuous_id))).integrableOn_Icc
+  · exact (continuous_const.mul (Real.continuous_sin.comp
+      (continuous_const.mul continuous_id))).integrableOn_Icc
+
+lemma apm_m93j05_trunc_parseval_aux_inner (a b c d : ℝ) (j k : ℕ)
+    (hj : 1 ≤ j) (hk : 1 ≤ k) :
+    (∫ x in Set.Icc (0 : ℝ) 1,
+      (a * Real.cos (j * 2 * Real.pi * x) + b * Real.sin (j * 2 * Real.pi * x)) *
+      (c * Real.cos (k * 2 * Real.pi * x) + d * Real.sin (k * 2 * Real.pi * x))) =
+      if j = k then (a * c + b * d) / 2 else 0 := by
+  have hcont : ∀ (r s : ℕ), Continuous (fun x : ℝ =>
+      Real.cos (r * 2 * Real.pi * x) * Real.sin (s * 2 * Real.pi * x)) := by
+    intro r s
+    exact (Real.continuous_cos.comp (continuous_const.mul continuous_id)).mul
+      (Real.continuous_sin.comp (continuous_const.mul continuous_id))
+  have hcc := (apm_m93j05_trig_orthogonality j k hj hk).1
+  have hss := (apm_m93j05_trig_orthogonality j k hj hk).2.1
+  have hcs := (apm_m93j05_trig_orthogonality j k hj hk).2.2
+  have hsc : (∫ x in Set.Icc (0 : ℝ) 1,
+      Real.sin (j * 2 * Real.pi * x) * Real.cos (k * 2 * Real.pi * x)) = 0 := by
+    simpa [mul_comm] using (apm_m93j05_trig_orthogonality k j hk hj).2.2
+  rw [show (fun x : ℝ =>
+      (a * Real.cos (j * 2 * Real.pi * x) + b * Real.sin (j * 2 * Real.pi * x)) *
+      (c * Real.cos (k * 2 * Real.pi * x) + d * Real.sin (k * 2 * Real.pi * x))) =
+      fun x => a*c*(Real.cos (j*2*Real.pi*x)*Real.cos (k*2*Real.pi*x)) +
+        a*d*(Real.cos (j*2*Real.pi*x)*Real.sin (k*2*Real.pi*x)) +
+        b*c*(Real.sin (j*2*Real.pi*x)*Real.cos (k*2*Real.pi*x)) +
+        b*d*(Real.sin (j*2*Real.pi*x)*Real.sin (k*2*Real.pi*x)) by
+        funext x; ring]
+  rw [MeasureTheory.integral_add, MeasureTheory.integral_add,
+    MeasureTheory.integral_add] <;>
+    try exact (by fun_prop : Continuous _).continuousOn.integrableOn_Icc
+  simp_rw [MeasureTheory.integral_const_mul]
+  rw [hcc, hcs, hsc, hss]
+  split_ifs with h <;> ring
+
+lemma apm_m93j05_trunc_parseval_aux_expand (N : ℕ) (f : ℝ → ℝ) (x : ℝ) :
+    apm_m93j05_trunc N f x ^ 2 =
+      (∫ y in Set.Icc (0 : ℝ) 1, f y) ^ 2 +
+      2 * (∫ y in Set.Icc (0 : ℝ) 1, f y) *
+        (∑ j ∈ Finset.Icc 1 N,
+          (apm_m93j05_cosCoeff f j * Real.cos (j * 2 * Real.pi * x) +
+           apm_m93j05_sinCoeff f j * Real.sin (j * 2 * Real.pi * x))) +
+      ∑ j ∈ Finset.Icc 1 N, ∑ k ∈ Finset.Icc 1 N,
+        (apm_m93j05_cosCoeff f j * Real.cos (j * 2 * Real.pi * x) +
+         apm_m93j05_sinCoeff f j * Real.sin (j * 2 * Real.pi * x)) *
+        (apm_m93j05_cosCoeff f k * Real.cos (k * 2 * Real.pi * x) +
+         apm_m93j05_sinCoeff f k * Real.sin (k * 2 * Real.pi * x)) := by
+  unfold apm_m93j05_trunc
+  rw [pow_two]
+  have hsum := Finset.sum_mul_sum
+    (s := Finset.Icc 1 N) (t := Finset.Icc 1 N)
+    (f := fun j => apm_m93j05_cosCoeff f j * Real.cos (j * 2 * Real.pi * x) +
+      apm_m93j05_sinCoeff f j * Real.sin (j * 2 * Real.pi * x))
+    (g := fun k => apm_m93j05_cosCoeff f k * Real.cos (k * 2 * Real.pi * x) +
+      apm_m93j05_sinCoeff f k * Real.sin (k * 2 * Real.pi * x))
+  rw [← hsum]
+  ring
+
 /-- Parseval for the truncation: `∫₀¹ (m + Σ aⱼ cos + bⱼ sin)² = m² + Σ (aⱼ² + bⱼ²)/2`
 (from `apm_m93j05_trig_orthogonality` and the mean-zero helpers). -/
 -- BEGIN SEAT AREA
+lemma apm_m93j05_trunc_parseval_aux_integrated (N : ℕ) (f : ℝ → ℝ) :
+    (∫ x in Set.Icc (0 : ℝ) 1, apm_m93j05_trunc N f x ^ 2) =
+      (∫ x in Set.Icc (0 : ℝ) 1, f x) ^ 2 +
+      ∑ j ∈ Finset.Icc 1 N, ∑ k ∈ Finset.Icc 1 N,
+        if j = k then
+          (apm_m93j05_cosCoeff f j * apm_m93j05_cosCoeff f k +
+           apm_m93j05_sinCoeff f j * apm_m93j05_sinCoeff f k) / 2
+        else 0 := by
+  let S := Finset.Icc 1 N
+  let m := ∫ x in Set.Icc (0 : ℝ) 1, f x
+  let T : ℕ → ℝ → ℝ := fun j x =>
+    apm_m93j05_cosCoeff f j * Real.cos (j * 2 * Real.pi * x) +
+    apm_m93j05_sinCoeff f j * Real.sin (j * 2 * Real.pi * x)
+  have hT (j : ℕ) : Continuous (T j) := by
+    exact (continuous_const.mul (Real.continuous_cos.comp
+      (continuous_const.mul continuous_id))).add
+      (continuous_const.mul (Real.continuous_sin.comp
+        (continuous_const.mul continuous_id)))
+  have hsum : Continuous (fun x => ∑ j ∈ S, T j x) := by
+    fun_prop
+  calc
+    (∫ x in Set.Icc (0 : ℝ) 1, apm_m93j05_trunc N f x ^ 2) =
+        ∫ x in Set.Icc (0 : ℝ) 1,
+          m ^ 2 + 2 * m * (∑ j ∈ S, T j x) +
+            ∑ j ∈ S, ∑ k ∈ S, T j x * T k x := by
+      apply MeasureTheory.integral_congr_ae
+      filter_upwards [] with x
+      simpa [S, m, T] using apm_m93j05_trunc_parseval_aux_expand N f x
+    _ = m ^ 2 +
+        ∑ j ∈ S, ∑ k ∈ S,
+          if j = k then
+            (apm_m93j05_cosCoeff f j * apm_m93j05_cosCoeff f k +
+             apm_m93j05_sinCoeff f j * apm_m93j05_sinCoeff f k) / 2
+          else 0 := by
+      rw [MeasureTheory.integral_add]
+      · rw [MeasureTheory.integral_add]
+        · rw [MeasureTheory.integral_const]
+          simp only [Measure.real, Measure.restrict_apply_univ, Set.univ_inter,
+            Real.volume_Icc, sub_zero, ENNReal.ofReal_one, ENNReal.toReal_one,
+            one_mul]
+          have hdouble : (∫ x in Set.Icc (0 : ℝ) 1,
+              ∑ j ∈ S, ∑ k ∈ S, T j x * T k x) =
+              ∑ j ∈ S, ∑ k ∈ S, if j = k then
+                (apm_m93j05_cosCoeff f j * apm_m93j05_cosCoeff f k +
+                 apm_m93j05_sinCoeff f j * apm_m93j05_sinCoeff f k) / 2 else 0 := by
+            rw [MeasureTheory.integral_finset_sum S]
+            · apply Finset.sum_congr rfl
+              intro j hj
+              rw [MeasureTheory.integral_finset_sum S]
+              · apply Finset.sum_congr rfl
+                intro k hk
+                exact apm_m93j05_trunc_parseval_aux_inner _ _ _ _ j k
+                  (Finset.mem_Icc.mp hj).1 (Finset.mem_Icc.mp hk).1
+              · intro k hk
+                exact ((hT j).mul (hT k)).continuousOn.integrableOn_Icc
+            · intro j hj
+              exact MeasureTheory.integrable_finset_sum S fun k hk =>
+                ((hT j).mul (hT k)).continuousOn.integrableOn_Icc
+          have hcross : (∫ x in Set.Icc (0 : ℝ) 1,
+              2 * m * (∑ j ∈ S, T j x)) = 0 := by
+            rw [MeasureTheory.integral_const_mul,
+              MeasureTheory.integral_finset_sum S]
+            · apply mul_eq_zero_of_right
+              apply Finset.sum_eq_zero
+              intro j hj
+              exact apm_m93j05_trunc_parseval_aux_mean _ _ j
+                (Finset.mem_Icc.mp hj).1
+            · intro j hj
+              exact (hT j).continuousOn.integrableOn_Icc
+          rw [hcross, hdouble]
+          simp
+        · exact integrableOn_const (hs := measure_Icc_lt_top.ne)
+        · exact (continuous_const.mul hsum).continuousOn.integrableOn_Icc
+      · exact (continuous_const.add (continuous_const.mul hsum)).continuousOn.integrableOn_Icc
+      · exact MeasureTheory.integrable_finset_sum S fun j hj =>
+          MeasureTheory.integrable_finset_sum S fun k hk =>
+            ((hT j).mul (hT k)).continuousOn.integrableOn_Icc
+    _ = _ := by rfl
+
 theorem apm_m93j05_trunc_parseval (N : ℕ) (f : ℝ → ℝ) :
     (eLpNorm (apm_m93j05_trunc N f) 2 (volume.restrict (Set.Icc (0 : ℝ) 1))).toReal ^ 2 =
       (∫ x in Set.Icc (0 : ℝ) 1, f x) ^ 2 +
         ∑ j ∈ Finset.Icc 1 N, (apm_m93j05_cosCoeff f j ^ 2 + apm_m93j05_sinCoeff f j ^ 2) / 2 := by
-  sorry
+  rw [apm_m93j05_trunc_parseval_aux_norm_sq]
+  rw [show (∫ x in Set.Icc (0 : ℝ) 1,
+      apm_m93j05_trunc N f x * apm_m93j05_trunc N f x) =
+      (∫ x in Set.Icc (0 : ℝ) 1, f x) ^ 2 +
+      ∑ j ∈ Finset.Icc 1 N, ∑ k ∈ Finset.Icc 1 N,
+        if j = k then
+          (apm_m93j05_cosCoeff f j * apm_m93j05_cosCoeff f k +
+           apm_m93j05_sinCoeff f j * apm_m93j05_sinCoeff f k) / 2
+        else 0 by simpa [pow_two] using apm_m93j05_trunc_parseval_aux_integrated N f]
+  congr 1
+  apply Finset.sum_congr rfl
+  intro j hj
+  rw [Finset.sum_ite_eq]
+  simp [hj, pow_two]
 -- END SEAT AREA
 
 theorem apm_m93j05_trunc_energy_tendsto (N : ℕ) (p q : ℝ) (hp : 1 < p) (hq : 1 < q) (hpq : 1 / p + 1 / q = 1)
@@ -788,20 +970,253 @@ theorem apm_m93j05_trunc_energy_tendsto (N : ℕ) (p q : ℝ) (hp : 1 < p) (hq :
   refine (hm.pow 2).add (tendsto_finset_sum _ fun j _ ↦ ?_)
   exact (((hc j).pow 2).add ((hs j).pow 2)).div_const 2
 
+lemma apm_m93j05_lp_rpow_weak_lsc_aux_norming_memLp
+    {p q : ℝ} (hp : 1 < p) (hpq : 1 / p + 1 / q = 1)
+    {μ : Measure ℝ} {u : ℝ → ℝ} (hu : MemLp u (ENNReal.ofReal p) μ) :
+    MemLp (fun x => u x * ‖u x‖ ^ (p - 2)) (ENNReal.ofReal q) μ := by
+  have hp1 : 0 < p - 1 := by linarith
+  have hq : q = p / (p - 1) := by
+    have hp0 : p ≠ 0 := ne_of_gt (lt_trans (by norm_num) hp)
+    have hq0 : q ≠ 0 := by
+      intro h
+      rw [h, div_zero] at hpq
+      field_simp at hpq
+      linarith
+    field_simp [hp0, hq0] at hpq ⊢
+    nlinarith
+  have hpow : MemLp (fun x => ‖u x‖ ^ (p - 1)) (ENNReal.ofReal q) μ := by
+    convert hu.norm_rpow_div (ENNReal.ofReal (p - 1)) using 1
+    · simp [ENNReal.toReal_ofReal hp1.le]
+    · rw [hq, ENNReal.ofReal_div_of_pos hp1]
+  have hmeas : AEStronglyMeasurable (fun x => u x * ‖u x‖ ^ (p - 2)) μ :=
+    hu.1.mul (hu.1.norm.aemeasurable.pow aemeasurable_const).aestronglyMeasurable
+  apply (memLp_norm_iff hmeas).mp
+  convert hpow using 1
+  funext x
+  by_cases hx : u x = 0
+  · simp [hx, Real.zero_rpow (ne_of_gt hp1)]
+  · rw [norm_mul, Real.norm_rpow_of_nonneg (norm_nonneg _)]
+    simp only [norm_norm]
+    calc
+      ‖u x‖ * ‖u x‖ ^ (p - 2) = ‖u x‖ ^ (1 : ℝ) * ‖u x‖ ^ (p - 2) := by
+        rw [Real.rpow_one]
+      _ = ‖u x‖ ^ ((1 : ℝ) + (p - 2)) :=
+        (Real.rpow_add (norm_pos_iff.mpr hx) _ _).symm
+      _ = ‖u x‖ ^ (p - 1) := by ring_nf
+
+lemma apm_m93j05_lp_rpow_weak_lsc_aux_norming_bounds
+    {p q : ℝ} (hp : 1 < p) (hpq : 1 / p + 1 / q = 1)
+    {μ : Measure ℝ} {u v : ℝ → ℝ}
+    (hu : MemLp u (ENNReal.ofReal p) μ)
+    (hv : MemLp v (ENNReal.ofReal p) μ) :
+    let h := fun x => u x * ‖u x‖ ^ (p - 2)
+    (∫ x, u x * h x ∂μ) =
+        Real.rpow (eLpNorm u (ENNReal.ofReal p) μ).toReal p ∧
+      (∫ x, v x * h x ∂μ) ≤
+        (eLpNorm v (ENNReal.ofReal p) μ).toReal *
+          Real.rpow (eLpNorm u (ENNReal.ofReal p) μ).toReal (p - 1) := by
+  dsimp
+  have hp0 : p ≠ 0 := ne_of_gt (lt_trans (by norm_num) hp)
+  have hp0' : (ENNReal.ofReal p) ≠ 0 := by
+    rw [Ne, ENNReal.ofReal_eq_zero, not_le]
+    linarith
+  have hp_top : (ENNReal.ofReal p) ≠ (⊤ : ENNReal) := ENNReal.ofReal_ne_top
+  have hpq' : p.HolderConjugate q :=
+    Real.holderConjugate_iff.mpr ⟨hp, by simpa [one_div] using hpq⟩
+  have hpoint (x : ℝ) :
+      u x * (u x * |u x| ^ (p - 2)) = |u x| ^ p := by
+    by_cases hx : u x = 0
+    · simp [hx, Real.zero_rpow hp0]
+    · rw [← mul_assoc, ← pow_two, ← sq_abs, ← Real.rpow_two,
+        ← Real.rpow_add (abs_pos.mpr hx)]
+      congr 1
+      ring
+  have hint_nonneg : 0 ≤ ∫ x, ‖u x‖ ^ p ∂μ :=
+    integral_nonneg fun x => Real.rpow_nonneg (norm_nonneg _) _
+  have hnorm_u :
+      (eLpNorm u (ENNReal.ofReal p) μ).toReal =
+        (∫ x, ‖u x‖ ^ p ∂μ) ^ (1 / p) := by
+    rw [toReal_eLpNorm hu.1]
+    simpa [ENNReal.toReal_ofReal (le_trans (by norm_num) hp.le)] using
+      lpNorm_eq_integral_norm_rpow_toReal hp0' hp_top hu.1
+  constructor
+  · rw [integral_congr_ae (Eventually.of_forall fun x => by
+        simpa [Real.norm_eq_abs] using hpoint x), hnorm_u]
+    simpa [one_div] using (Real.rpow_inv_rpow hint_nonneg hp0).symm
+  · have hh := apm_m93j05_lp_rpow_weak_lsc_aux_norming_memLp hp hpq hu
+    have hle_norm :
+        (∫ x, v x * (u x * ‖u x‖ ^ (p - 2)) ∂μ) ≤
+          ∫ x, ‖v x‖ * ‖u x * ‖u x‖ ^ (p - 2)‖ ∂μ := by
+      refine le_trans (le_abs_self _) ?_
+      simpa [norm_mul] using
+        (norm_integral_le_integral_norm
+          (fun x => v x * (u x * ‖u x‖ ^ (p - 2))) :
+          ‖∫ x, v x * (u x * ‖u x‖ ^ (p - 2)) ∂μ‖ ≤
+            ∫ x, ‖v x * (u x * ‖u x‖ ^ (p - 2))‖ ∂μ)
+    refine hle_norm.trans ?_
+    have hholder := integral_mul_norm_le_Lp_mul_Lq hpq' hv hh
+    refine hholder.trans_eq ?_
+    have hnorm_v :
+        (∫ x, ‖v x‖ ^ p ∂μ) ^ (1 / p) =
+          (eLpNorm v (ENNReal.ofReal p) μ).toReal := by
+      rw [toReal_eLpNorm hv.1]
+      simpa [ENNReal.toReal_ofReal (le_trans (by norm_num) hp.le)] using
+        (lpNorm_eq_integral_norm_rpow_toReal hp0' hp_top hv.1).symm
+    have hq0 : q ≠ 0 := hpq'.symm.ne_zero
+    have hqp : q * (p - 1) = p := by
+      have := hpq'.conjugate_eq
+      field_simp [hp0, hq0] at hpq ⊢
+      nlinarith
+    have hhpow :
+        (∫ x, ‖u x * ‖u x‖ ^ (p - 2)‖ ^ q ∂μ) =
+          ∫ x, ‖u x‖ ^ p ∂μ := by
+      apply integral_congr_ae
+      filter_upwards [] with x
+      by_cases hx : u x = 0
+      · simp [hx, Real.zero_rpow hp0, Real.zero_rpow hq0]
+      · rw [show ‖u x * ‖u x‖ ^ (p - 2)‖ = ‖u x‖ ^ (p - 1) by
+          rw [norm_mul, Real.norm_rpow_of_nonneg (norm_nonneg _), norm_norm]
+          calc
+            ‖u x‖ * ‖u x‖ ^ (p - 2) = ‖u x‖ ^ (1 : ℝ) * ‖u x‖ ^ (p - 2) := by rw [Real.rpow_one]
+            _ = ‖u x‖ ^ ((1 : ℝ) + (p - 2)) := (Real.rpow_add (norm_pos_iff.mpr hx) _ _).symm
+            _ = ‖u x‖ ^ (p - 1) := by ring_nf,
+          ← Real.rpow_mul (norm_nonneg _), mul_comm (p - 1) q, hqp]
+    rw [hnorm_v, hhpow, hnorm_u]
+    rw [← Real.rpow_mul hint_nonneg]
+    congr 2
+    field_simp [hp0, hq0] at hpq ⊢
+    nlinarith
+
+lemma apm_m93j05_lp_rpow_weak_lsc_aux_limit
+    {p r A : ℝ} (hp : 1 < p) (hA : 0 ≤ A)
+    {B z : ℕ → ℝ} (hB : ∀ n, 0 ≤ B n)
+    (hz : Tendsto z atTop (nhds (Real.rpow A p)))
+    (hzB : ∀ n, z n ≤ B n * Real.rpow A (p - 1))
+    (hfreq : ∃ᶠ n in atTop, Real.rpow (B n) p ≤ r) :
+    Real.rpow A p ≤ r := by
+  have hp0 : 0 < p := by linarith
+  have hpne : p ≠ 0 := ne_of_gt hp0
+  have hr : 0 ≤ r := by
+    obtain ⟨n, hn⟩ := hfreq.exists
+    exact le_trans (Real.rpow_nonneg (hB n) p) hn
+  let R : ℝ := Real.rpow r p⁻¹
+  have hR : 0 ≤ R := Real.rpow_nonneg hr _
+  have hRp : Real.rpow R p = r := by
+    dsimp [R]
+    exact Real.rpow_inv_rpow hr hpne
+  let l : Filter ℕ := atTop ⊓ Filter.principal
+    {n | Real.rpow (B n) p ≤ r}
+  letI : l.NeBot := (Filter.frequently_iff_neBot.mp hfreq)
+  have hl_atTop : l ≤ atTop := inf_le_left
+  have hl_bound : ∀ᶠ n in l, Real.rpow (B n) p ≤ r := by
+    apply Filter.Eventually.filter_mono inf_le_right
+    simp
+  have hBR : ∀ᶠ n in l, B n ≤ R := by
+    filter_upwards [hl_bound] with n hn
+    apply (Real.rpow_le_rpow_iff (hB n) hR hp0).mp
+    calc
+      Real.rpow (B n) p ≤ r := hn
+      _ = Real.rpow R p := hRp.symm
+  have hfactor : 0 ≤ Real.rpow A (p - 1) := Real.rpow_nonneg hA _
+  have hzle : ∀ᶠ n in l, z n ≤ R * Real.rpow A (p - 1) := by
+    filter_upwards [hBR] with n hn
+    exact (hzB n).trans (mul_le_mul_of_nonneg_right hn hfactor)
+  have hlim : Real.rpow A p ≤ R * Real.rpow A (p - 1) :=
+    le_of_tendsto (hz.mono_left hl_atTop) hzle
+  by_cases hAz : A = 0
+  · subst A
+    simpa [Real.zero_rpow hp0.ne'] using hr
+  have hApos : 0 < A := lt_of_le_of_ne hA (Ne.symm hAz)
+  have hsplit : Real.rpow A p = A * Real.rpow A (p - 1) := by
+    calc
+      Real.rpow A p = Real.rpow A (1 + (p - 1)) := by ring_nf
+      _ = Real.rpow A 1 * Real.rpow A (p - 1) := Real.rpow_add hApos 1 (p - 1)
+      _ = A * Real.rpow A (p - 1) := by simp
+  rw [hsplit] at hlim
+  have hAR : A ≤ R := by
+    apply le_of_not_gt
+    intro hRA
+    have hstrict := mul_lt_mul_of_pos_right hRA
+      (Real.rpow_pos_of_pos hApos (p - 1))
+    exact (not_lt_of_ge hlim) hstrict
+  rw [← hRp]
+  exact Real.rpow_le_rpow hA hAR hp0.le
+
 theorem apm_m93j05_lp_rpow_weak_lsc (p q : ℝ) (hp : 1 < p) (hq : 1 < q) (hpq : 1 / p + 1 / q = 1) :
     ∀ (u : ℝ → ℝ) (w : ℕ → ℝ → ℝ), MemLp u (ENNReal.ofReal p) (volume.restrict (Set.Icc (0 : ℝ) 1)) →
       (∀ n, MemLp (w n) (ENNReal.ofReal p) (volume.restrict (Set.Icc (0 : ℝ) 1))) →
       (∀ h, MemLp h (ENNReal.ofReal q) (volume.restrict (Set.Icc (0 : ℝ) 1)) → Tendsto (fun n ↦ ∫ x, w n x * h x ∂(volume.restrict (Set.Icc (0 : ℝ) 1))) atTop (nhds (∫ x, u x * h x ∂(volume.restrict (Set.Icc (0 : ℝ) 1))))) →
       ∀ r, (∃ᶠ n in atTop, Real.rpow (eLpNorm (w n) (ENNReal.ofReal p) (volume.restrict (Set.Icc (0 : ℝ) 1))).toReal p ≤ r) →
         Real.rpow (eLpNorm u (ENNReal.ofReal p) (volume.restrict (Set.Icc (0 : ℝ) 1))).toReal p ≤ r := by
-  sorry
+  intro u w hu hw hweak r hfreq
+  let μ := volume.restrict (Set.Icc (0 : ℝ) 1)
+  let h := fun x => u x * ‖u x‖ ^ (p - 2)
+  let A := (eLpNorm u (ENNReal.ofReal p) μ).toReal
+  let B := fun n => (eLpNorm (w n) (ENNReal.ofReal p) μ).toReal
+  let z := fun n => ∫ x, w n x * h x ∂μ
+  have hh : MemLp h (ENNReal.ofReal q) μ :=
+    apm_m93j05_lp_rpow_weak_lsc_aux_norming_memLp hp hpq hu
+  have hpair := apm_m93j05_lp_rpow_weak_lsc_aux_norming_bounds hp hpq hu hu
+  have hz : Tendsto z atTop (nhds (Real.rpow A p)) := by
+    have ht := hweak h hh
+    rw [hpair.1] at ht
+    simpa [z, A, h, μ] using ht
+  apply apm_m93j05_lp_rpow_weak_lsc_aux_limit hp ENNReal.toReal_nonneg
+    (fun n => ENNReal.toReal_nonneg) hz
+  · intro n
+    exact (apm_m93j05_lp_rpow_weak_lsc_aux_norming_bounds hp hpq hu (hw n)).2
+  · exact hfreq
+
+lemma apm_m93j05_high_modes_weak_tendsto_aux_trunc_continuous
+    (N : ℕ) (h : ℝ → ℝ) : Continuous (apm_m93j05_trunc N h) := by
+  unfold apm_m93j05_trunc
+  fun_prop
 
 theorem apm_m93j05_high_modes_weak_tendsto (N : ℕ) (p q : ℝ) (hp : 1 < p) (hq : 1 < q) (hpq : 1 / p + 1 / q = 1)
     (f : ℝ → ℝ) (s : ℕ → ℝ → ℝ) (hf : MemLp f (ENNReal.ofReal p) (volume.restrict (Set.Icc (0 : ℝ) 1)))
     (hs : ∀ n, MemLp (s n) (ENNReal.ofReal p) (volume.restrict (Set.Icc (0 : ℝ) 1)))
     (hweak : (∀ h, MemLp h (ENNReal.ofReal q) (volume.restrict (Set.Icc (0 : ℝ) 1)) → Tendsto (fun n ↦ ∫ x, s n x * h x ∂(volume.restrict (Set.Icc (0 : ℝ) 1))) atTop (nhds (∫ x, f x * h x ∂(volume.restrict (Set.Icc (0 : ℝ) 1)))))) :
     (∀ h, MemLp h (ENNReal.ofReal q) (volume.restrict (Set.Icc (0 : ℝ) 1)) → Tendsto (fun n ↦ ∫ x, (s n x - apm_m93j05_trunc N (s n) x) * h x ∂(volume.restrict (Set.Icc (0 : ℝ) 1))) atTop (nhds (∫ x, (f x - apm_m93j05_trunc N f x) * h x ∂(volume.restrict (Set.Icc (0 : ℝ) 1))))) := by
-  sorry
+  intro h hh
+  let μ := volume.restrict (Set.Icc (0 : ℝ) 1)
+  have htrunc (r : ℝ) (v : ℝ → ℝ) :
+      MemLp (apm_m93j05_trunc N v) (ENNReal.ofReal r) μ := by
+    have hcont := apm_m93j05_high_modes_weak_tendsto_aux_trunc_continuous N v
+    have hbdd : BddAbove ((fun x ↦ |apm_m93j05_trunc N v x|) '' Set.Icc (0 : ℝ) 1) :=
+      isCompact_Icc.bddAbove_image hcont.abs.continuousOn
+    obtain ⟨C, hC⟩ := hbdd
+    apply MemLp.of_bound hcont.aestronglyMeasurable C
+    filter_upwards [ae_restrict_mem measurableSet_Icc] with x hx
+    simpa [Real.norm_eq_abs] using hC (Set.mem_image_of_mem _ hx)
+  have hth := htrunc q h
+  have hc : p.HolderConjugate q := Real.holderConjugate_iff.mpr ⟨hp, by
+    simpa [div_eq_mul_inv, add_comm] using hpq⟩
+  letI : ENNReal.HolderTriple (ENNReal.ofReal p) (ENNReal.ofReal q) 1 := hc.ennrealOfReal
+  have A := hweak h hh
+  have B := hweak (apm_m93j05_trunc N h) hth
+  have B' : Tendsto
+      (fun n ↦ ∫ x, apm_m93j05_trunc N (s n) x * h x ∂μ) atTop
+      (nhds (∫ x, apm_m93j05_trunc N f x * h x ∂μ)) := by
+    rw [apm_m93j05_trunc_selfAdjoint N p q hp hq f h hf hh]
+    apply B.congr'
+    filter_upwards with n
+    exact (apm_m93j05_trunc_selfAdjoint N p q hp hq (s n) h (hs n) hh).symm
+  have H := A.sub B'
+  rw [show (∫ x, (f x - apm_m93j05_trunc N f x) * h x ∂μ) =
+      (∫ x, f x * h x ∂μ) - (∫ x, apm_m93j05_trunc N f x * h x ∂μ) by
+    calc
+      _ = ∫ x, f x * h x - apm_m93j05_trunc N f x * h x ∂μ := by
+        congr 1; funext x; ring
+      _ = _ := MeasureTheory.integral_sub (hf.integrable_mul hh)
+        ((htrunc p f).integrable_mul hh)]
+  apply H.congr'
+  filter_upwards with n
+  symm
+  calc
+    _ = ∫ x, s n x * h x - apm_m93j05_trunc N (s n) x * h x ∂μ := by
+      congr 1; funext x; ring
+    _ = _ := MeasureTheory.integral_sub ((hs n).integrable_mul hh)
+      ((htrunc p (s n)).integrable_mul hh)
 
 theorem apm_m93j05_weak_lsc_of_parts (N : ℕ) (p q : ℝ) (hp : 1 < p) (hq : 1 < q) (hpq : 1 / p + 1 / q = 1)
     (f : ℝ → ℝ) (s : ℕ → ℝ → ℝ) (hf : MemLp f (ENNReal.ofReal p) (volume.restrict (Set.Icc (0 : ℝ) 1)))
@@ -815,7 +1230,72 @@ theorem apm_m93j05_weak_lsc_of_parts (N : ℕ) (p q : ℝ) (hp : 1 < p) (hq : 1 
       ∀ r, (∃ᶠ n in atTop, Real.rpow (eLpNorm (w n) (ENNReal.ofReal p) (volume.restrict (Set.Icc (0 : ℝ) 1))).toReal p ≤ r) →
         Real.rpow (eLpNorm u (ENNReal.ofReal p) (volume.restrict (Set.Icc (0 : ℝ) 1))).toReal p ≤ r) (hL3 : (∀ h, MemLp h (ENNReal.ofReal q) (volume.restrict (Set.Icc (0 : ℝ) 1)) → Tendsto (fun n ↦ ∫ x, (s n x - apm_m93j05_trunc N (s n) x) * h x ∂(volume.restrict (Set.Icc (0 : ℝ) 1))) atTop (nhds (∫ x, (f x - apm_m93j05_trunc N f x) * h x ∂(volume.restrict (Set.Icc (0 : ℝ) 1)))))) :
     ∀ r, (∃ᶠ n in atTop, apm_m93j05_J N p g (s n) ≤ r) → apm_m93j05_J N p g f ≤ r := by
-  sorry
+  let μ := volume.restrict (Set.Icc (0 : ℝ) 1)
+  have htrunc : ∀ v : ℝ → ℝ,
+      MemLp (apm_m93j05_trunc N v) (ENNReal.ofReal p) μ := by
+    intro v
+    let C : ℝ := |∫ x in Set.Icc (0 : ℝ) 1, v x| +
+      ∑ j ∈ Finset.Icc 1 N,
+        (|apm_m93j05_cosCoeff v j| + |apm_m93j05_sinCoeff v j|)
+    apply MemLp.of_bound (C := C)
+    · exact (apm_m93j05_trunc_split_aux_continuous N v).aestronglyMeasurable
+    · filter_upwards with x
+      rw [Real.norm_eq_abs]
+      unfold apm_m93j05_trunc
+      calc
+        |_ + _| ≤ |∫ z in Set.Icc (0 : ℝ) 1, v z| +
+              |∑ j ∈ Finset.Icc 1 N,
+                (apm_m93j05_cosCoeff v j * Real.cos (j * 2 * Real.pi * x) +
+                 apm_m93j05_sinCoeff v j * Real.sin (j * 2 * Real.pi * x))| := abs_add_le _ _
+        _ ≤ C := by
+          dsimp [C]
+          apply add_le_add le_rfl
+          calc
+            |∑ j ∈ Finset.Icc 1 N, _| ≤
+                ∑ j ∈ Finset.Icc 1 N,
+                  |apm_m93j05_cosCoeff v j * Real.cos (j * 2 * Real.pi * x) +
+                   apm_m93j05_sinCoeff v j * Real.sin (j * 2 * Real.pi * x)| :=
+              Finset.abs_sum_le_sum_abs _ _
+            _ ≤ ∑ j ∈ Finset.Icc 1 N,
+                (|apm_m93j05_cosCoeff v j| + |apm_m93j05_sinCoeff v j|) := by
+              apply Finset.sum_le_sum
+              intro j hj
+              calc
+                |_ + _| ≤ |_| + |_| := abs_add_le _ _
+                _ ≤ |apm_m93j05_cosCoeff v j| + |apm_m93j05_sinCoeff v j| := by
+                  simp only [abs_mul]
+                  exact add_le_add
+                    (mul_le_of_le_one_right (abs_nonneg _) (Real.abs_cos_le_one _))
+                    (mul_le_of_le_one_right (abs_nonneg _) (Real.abs_sin_le_one _))
+  have huf : MemLp (fun x ↦ f x - apm_m93j05_trunc N f x)
+      (ENNReal.ofReal p) μ := hf.sub (htrunc f)
+  have huw : ∀ n, MemLp (fun x ↦ s n x - apm_m93j05_trunc N (s n) x)
+      (ENNReal.ofReal p) μ := fun n ↦ (hs n).sub (htrunc (s n))
+  have hpair := apm_m93j05_weak_lowerSemicontinuous_aux_pairing g f s hg hweak
+  let A : (ℝ → ℝ) → ℝ := fun v ↦ Real.rpow
+    (eLpNorm (fun x ↦ v x - apm_m93j05_trunc N v x) (ENNReal.ofReal p) μ).toReal p
+  let B : (ℝ → ℝ) → ℝ := fun v ↦
+    (eLpNorm (apm_m93j05_trunc N v) 2 μ).toReal ^ 2
+  let C : (ℝ → ℝ) → ℝ := fun v ↦ ∫ x, v x * g x ∂μ
+  have hBC : Tendsto (fun n ↦ B (s n) + C (s n)) atTop
+      (nhds (B f + C f)) := hL1.add hpair
+  intro r hr
+  apply le_of_forall_pos_le_add
+  intro ε hε
+  have hev : ∀ᶠ n in atTop, B f + C f - ε < B (s n) + C (s n) :=
+    (tendsto_order.1 hBC).1 _ (by linarith)
+  have hfreq := hr.and_eventually hev
+  have hAfreq : ∃ᶠ n in atTop, A (s n) ≤ r - (B f + C f) + ε := by
+    apply hfreq.mono
+    intro n hn
+    dsimp [apm_m93j05_J, A, B, C, μ] at hn ⊢
+    linarith
+  have hAle : A f ≤ r - (B f + C f) + ε :=
+    hL2 (fun x ↦ f x - apm_m93j05_trunc N f x)
+      (fun n x ↦ s n x - apm_m93j05_trunc N (s n) x)
+      huf huw hL3 _ (by simpa [A, μ] using hAfreq)
+  dsimp [apm_m93j05_J, A, B, C, μ] at hAle ⊢
+  linarith
 
 theorem apm_m93j05_weak_lowerSemicontinuous
     (N : ℕ) (p q : ℝ) (hp : 1 < p) (hq : 1 < q)
@@ -900,7 +1380,90 @@ theorem apm_m93j05_integral_abs_rpow_line_differentiableAt (p : ℝ) (hp : 1 < p
       (p * |x + s * y| ^ (p - 2) * (x + s * y) * y) s)
     (a b : ℝ → ℝ) (ha : MemLp a (ENNReal.ofReal p) (volume.restrict (Set.Icc (0 : ℝ) 1))) (hb : MemLp b (ENNReal.ofReal p) (volume.restrict (Set.Icc (0 : ℝ) 1))) :
     DifferentiableAt ℝ (fun t : ℝ ↦ ∫ x, |a x + t * b x| ^ p ∂(volume.restrict (Set.Icc (0 : ℝ) 1))) 0 := by
-  sorry
+  let μ := volume.restrict (Set.Icc (0 : ℝ) 1)
+  let F : ℝ → ℝ → ℝ := fun t x ↦ |a x + t * b x| ^ p
+  let F' : ℝ → ℝ → ℝ := fun t x ↦
+    p * |a x + t * b x| ^ (p - 2) * (a x + t * b x) * b x
+  let c : ℝ → ℝ := fun x ↦ |a x| + |b x|
+  let q : ENNReal := ENNReal.ofReal (p - 1)
+  have hp0 : 0 < p := by linarith
+  have hq0 : q ≠ 0 := ENNReal.ofReal_ne_zero_iff.mpr (by linarith)
+  have hqtop : q ≠ ⊤ := ENNReal.ofReal_ne_top
+  have hc : MemLp c (ENNReal.ofReal p) μ := by
+    exact ha.norm.add hb.norm
+  have hpow : MemLp (fun x ↦ c x ^ (p - 1))
+      (ENNReal.ofReal p / q) μ := by
+    have heq : (fun x ↦ ‖c x‖ ^ q.toReal) = fun x ↦ c x ^ (p - 1) := by
+      funext x
+      rw [show ‖c x‖ = c x by
+        rw [Real.norm_eq_abs, abs_of_nonneg]
+        exact add_nonneg (abs_nonneg _) (abs_nonneg _)]
+      simp [q, ENNReal.toReal_ofReal (by linarith : 0 ≤ p - 1)]
+    rw [← heq]
+    exact hc.norm_rpow_div q
+  have hr : Real.HolderConjugate (p / (p - 1)) p := by
+    exact (Real.holderConjugate_iff_eq_conjExponent hp).2 rfl |>.symm
+  have hholder : ENNReal.HolderTriple (ENNReal.ofReal p / q) (ENNReal.ofReal p) 1 := by
+    simpa [q, ENNReal.ofReal_div_of_pos (by linarith : 0 < p - 1)] using
+      hr.ennrealOfReal
+  letI := hholder
+  have hprod : Integrable (fun x ↦ c x ^ (p - 1) * |b x|) μ :=
+    hpow.integrable_mul hb.norm
+  have hbound : Integrable (fun x ↦ p * (c x ^ (p - 1) * |b x|)) μ :=
+    hprod.const_mul p
+  have hF0 : Integrable (F 0) μ := by
+    simpa [F, ENNReal.toReal_ofReal hp0.le] using
+      ha.integrable_norm_rpow (ENNReal.ofReal_ne_zero_iff.mpr hp0) ENNReal.ofReal_ne_top
+  have hmeas : ∀ᶠ t in nhds (0 : ℝ), AEStronglyMeasurable (F t) μ := by
+    filter_upwards with t
+    exact (((ha.1.add (hb.1.const_smul t)).norm.aemeasurable.pow_const p).aestronglyMeasurable)
+  have hF'meas : AEStronglyMeasurable (F' 0) μ := by
+    simpa [F', mul_assoc] using (((ha.1.norm.aemeasurable.pow_const (p - 2)).mul
+      ha.1.aemeasurable |>.mul hb.1.aemeasurable).const_mul p).aestronglyMeasurable
+  have hderiv : ∀ᵐ x ∂μ, ∀ t ∈ Set.Icc (-1 : ℝ) 1,
+      HasDerivAt (F · x) (F' t x) t := by
+    filter_upwards with x
+    intro t ht
+    exact hD1c (a x) (b x) t
+  have hle : ∀ᵐ x ∂μ, ∀ t ∈ Set.Icc (-1 : ℝ) 1,
+      ‖F' t x‖ ≤ p * (c x ^ (p - 1) * |b x|) := by
+    filter_upwards with x
+    intro t ht
+    dsimp [F', c]
+    have ht' : |t| ≤ 1 := (abs_le).2 ht
+    have hz : |a x + t * b x| ≤ |a x| + |b x| := by
+      calc
+        _ ≤ |a x| + |t| * |b x| := by simpa [abs_mul] using abs_add_le (a x) (t * b x)
+        _ ≤ _ := by
+          gcongr
+          exact mul_le_of_le_one_left (abs_nonneg _) ht'
+    have hp1 : 0 ≤ p - 1 := by linarith
+    rw [abs_mul, abs_mul, abs_mul, abs_of_pos hp0,
+      abs_of_nonneg (Real.rpow_nonneg (abs_nonneg _) _)]
+    have hid : |a x + t * b x| ^ (p - 2) * |a x + t * b x| =
+        |a x + t * b x| ^ (p - 1) := by
+      by_cases hzero : |a x + t * b x| = 0
+      · rw [hzero, mul_zero, Real.zero_rpow (by linarith)]
+      conv_lhs => rhs; rw [← Real.rpow_one |a x + t * b x|]
+      rw [← Real.rpow_add (lt_of_le_of_ne (abs_nonneg _) (Ne.symm hzero))]
+      congr 1
+      ring
+    calc
+      p * |a x + t * b x| ^ (p - 2) * |a x + t * b x| * |b x| =
+          p * (|a x + t * b x| ^ (p - 2) * |a x + t * b x|) * |b x| := by ring
+      _ = p * |a x + t * b x| ^ (p - 1) * |b x| := by rw [hid]
+      _ ≤ p * (c x ^ (p - 1) * |b x|) := by
+        dsimp [c]
+        rw [mul_assoc]
+        apply mul_le_mul_of_nonneg_left ?_ hp0.le
+        apply mul_le_mul_of_nonneg_right ?_ (abs_nonneg _)
+        exact Real.rpow_le_rpow (abs_nonneg _) hz hp1
+  have hs : Set.Icc (-1 : ℝ) 1 ∈ nhds (0 : ℝ) := by
+    exact mem_nhds_iff.mpr ⟨Set.Ioo (-1) 1, Set.Ioo_subset_Icc_self,
+      isOpen_Ioo, by norm_num⟩
+  exact (hasDerivAt_integral_of_dominated_loc_of_deriv_le
+    (F := F) (F' := F') (bound := fun x ↦ p * (c x ^ (p - 1) * |b x|))
+    hs hmeas hF0 hF'meas hle hbound hderiv).2.differentiableAt
 
 /-- (D1) For `p > 1`, `t ↦ ‖a + t b‖ₚᵖ` is differentiable at `0`
 (derivative `p ∫ |a|^(p-2) a b`; dominate the difference quotient by `p (|a|+|b|)^(p-1) |b|`). -/

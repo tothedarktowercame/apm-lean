@@ -589,7 +589,71 @@ theorem apm_m99J06_val_clm {H : Type*} [NormedAddCommGroup H] [InnerProductSpace
       M.weakDeriv (c • v) = c • M.weakDeriv v) :
     ∃ L : H →L[ℝ] apm_m99J06_L2, ∀ v : H,
       (L v : ℝ → ℝ) =ᵐ[apm_m99J06_intervalMeasure] M.val v := by
-  sorry
+  let T : H →ₗ[ℝ] apm_m99J06_L2 :=
+    { toFun := fun v ↦ (M.represents v).2.1.toLp (M.val v)
+      map_add' := by
+        intro u v
+        apply Lp.ext
+        filter_upwards [MemLp.coeFn_toLp (M.represents (u + v)).2.1,
+          MemLp.coeFn_toLp (M.represents u).2.1,
+          MemLp.coeFn_toLp (M.represents v).2.1,
+          Lp.coeFn_add ((M.represents u).2.1.toLp (M.val u))
+            ((M.represents v).2.1.toLp (M.val v))] with x huv hu hv hadd
+        calc
+          _ = M.val (u + v) x := huv
+          _ = M.val u x + M.val v x := congrFun (apm_m99J06_model_add M u v).1 x
+          _ = _ := by
+            rw [← hu, ← hv]
+            simpa only [Pi.add_apply] using hadd.symm
+      map_smul' := by
+        intro c v
+        apply Lp.ext
+        filter_upwards [MemLp.coeFn_toLp (M.represents (c • v)).2.1,
+          MemLp.coeFn_toLp (M.represents v).2.1,
+          Lp.coeFn_smul c ((M.represents v).2.1.toLp (M.val v))] with x hcv hv hsm
+        calc
+          _ = M.val (c • v) x := hcv
+          _ = (c • M.val v) x := congrFun (hsmul c v).1 x
+          _ = _ := by
+            rw [Pi.smul_apply, smul_eq_mul, ← hv]
+            simpa only [RingHom.id_apply, Pi.smul_apply, smul_eq_mul] using hsm.symm }
+  have hT_le (v : H) : ‖T v‖ ≤ ‖v‖ := by
+    have hv := (M.represents v).2.1
+    have he := hv.eLpNorm_eq_integral_rpow_norm (by norm_num) (by norm_num)
+    have hnorm : ‖T v‖ ^ 2 = ∫ x, (M.val v x) ^ 2 ∂apm_m99J06_intervalMeasure := by
+      change ‖hv.toLp (M.val v)‖ ^ 2 = _
+      rw [Lp.norm_toLp, he]
+      norm_num [Real.norm_eq_abs] at ⊢
+      have hI : 0 ≤ ∫ x, (M.val v x) ^ 2 ∂apm_m99J06_intervalMeasure :=
+        MeasureTheory.integral_nonneg (fun x ↦ sq_nonneg _)
+      rw [ENNReal.toReal_ofReal (Real.rpow_nonneg hI _)]
+      rw [← Real.sqrt_eq_rpow, Real.sq_sqrt hI]
+    have hderiv_nonneg : 0 ≤ ∫ x, (M.weakDeriv v x) ^ 2
+        ∂apm_m99J06_intervalMeasure :=
+      MeasureTheory.integral_nonneg (fun x ↦ sq_nonneg _)
+    have henergy : ‖v‖ ^ 2 =
+        (∫ x, (M.val v x) ^ 2 ∂apm_m99J06_intervalMeasure) +
+          ∫ x, (M.weakDeriv v x) ^ 2 ∂apm_m99J06_intervalMeasure := by
+      have he := M.inner_eq v v
+      rw [inner_self_eq_norm_sq_to_K] at he
+      change ‖v‖ ^ 2 = ∫ x, M.val v x * M.val v x +
+        M.weakDeriv v x * M.weakDeriv v x ∂apm_m99J06_intervalMeasure at he
+      have hi1 : Integrable (fun x ↦ M.val v x * M.val v x)
+          apm_m99J06_intervalMeasure := by
+        simpa only [Pi.mul_apply] using (apm_m99J06_integrable_inner_components M v v).1
+      have hi2 : Integrable (fun x ↦ M.weakDeriv v x * M.weakDeriv v x)
+          apm_m99J06_intervalMeasure :=
+        (apm_m99J06_integrable_inner_components M v v).2
+      rw [MeasureTheory.integral_add hi1 hi2] at he
+      simpa [pow_two] using he
+    apply (sq_le_sq₀ (norm_nonneg _) (norm_nonneg _)).mp
+    rw [hnorm, henergy]
+    linarith
+  let L : H →L[ℝ] apm_m99J06_L2 := T.mkContinuous 1 (by simpa using hT_le)
+  refine ⟨L, ?_⟩
+  intro v
+  change ((M.represents v).2.1.toLp (M.val v) : ℝ → ℝ) =ᵐ[_] M.val v
+  exact MemLp.coeFn_toLp (M.represents v).2.1
 
 /-- Riesz on a complete submodule, given the bounded map: the forcing functional is
 `v ↦ ⟪hf.toLp f, L v⟫_{L²}`; represent it with `InnerProductSpace.toDual ℝ V`, uniqueness from
@@ -602,7 +666,23 @@ theorem apm_m99J06_riesz_of_val_clm
       (L v : ℝ → ℝ) =ᵐ[apm_m99J06_intervalMeasure] M.val v)
     (V : Submodule ℝ H) [CompleteSpace V] :
     ∃! u : V, apm_m99J06_galerkinEquation M f V u := by
-  sorry
+  have hV : CompleteSpace V := inferInstance
+  obtain ⟨L, hL⟩ := hL
+  let ℓ : V →L[ℝ] ℝ :=
+    (innerSL ℝ (hf.toLp f)).comp (L.comp V.subtypeL)
+  let u : V := (@InnerProductSpace.toDual ℝ V _ _ _ hV).symm ℓ
+  have hu : apm_m99J06_galerkinEquation M f V u := by
+    intro v
+    rw [show inner ℝ (u : H) (v : H) = inner ℝ u v by rfl]
+    change inner ℝ ((@InnerProductSpace.toDual ℝ V _ _ _ hV).symm ℓ) v = _
+    rw [@InnerProductSpace.toDual_symm_apply ℝ V _ _ _ hV]
+    change inner ℝ (hf.toLp f) (L (v : H)) = _
+    rw [MeasureTheory.L2.inner_def]
+    apply MeasureTheory.integral_congr_ae
+    filter_upwards [hf.coeFn_toLp, hL (v : H)] with x hfx hvx
+    rw [hfx, hvx, real_inner_eq_re_inner]
+    exact mul_comm _ _
+  exact ⟨u, hu, fun w hw ↦ apm_m99J06_galerkin_unique M f V hw hu⟩
 
 /-- Shared Riesz-representation bridge for both the ambient weak problem and
 finite-dimensional Galerkin problems. -/

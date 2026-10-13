@@ -172,7 +172,55 @@ lemma apm_t02A07_constraints_fderiv_surjective_aux_formula
     (x v : apm_t02a07_E4) :
     fderiv ℝ apm_t02a07_constraints x v =
       WithLp.toLp 2 ![2 * inner ℝ x v, x 3 * v 2 + x 2 * v 3] := by
-  sorry
+  let qfun : apm_t02a07_E4 → (Fin 2 → ℝ) := fun z j ↦
+    if j = 0 then ‖z‖ ^ 2 - 1 else z 2 * z 3 - (1 : ℝ) / 4
+  have hq : DifferentiableAt ℝ qfun x := by
+    apply differentiableAt_pi.mpr
+    intro j
+    fin_cases j
+    · simpa [qfun] using
+        (hasStrictFDerivAt_norm_sq x).differentiableAt.sub
+          (differentiableAt_const (c := (1 : ℝ)))
+    · simp [qfun]
+      fun_prop
+  have hconstraints : apm_t02a07_constraints = WithLp.toLp 2 ∘ qfun := by
+    funext z
+    apply WithLp.ofLp_injective
+    funext j
+    fin_cases j <;> simp [apm_t02a07_constraints, qfun]
+  have hc := (PiLp.hasFDerivAt_toLp (p := 2) (𝕜 := ℝ) (qfun x)).comp x
+    hq.hasFDerivAt
+  rw [hconstraints, hc.fderiv]
+  apply congrArg (WithLp.toLp 2)
+  have hcoord : ∀ j : Fin 2, DifferentiableAt ℝ (fun z ↦ qfun z j) x := by
+    intro j
+    fin_cases j
+    · simpa [qfun] using
+        (hasStrictFDerivAt_norm_sq x).differentiableAt.sub
+          (differentiableAt_const (c := (1 : ℝ)))
+    · simp [qfun]
+      fun_prop
+  rw [fderiv_pi hcoord]
+  funext j
+  fin_cases j
+  · change (fderiv ℝ (fun z ↦ qfun z 0) x) v = 2 * inner ℝ x v
+    simp only [qfun, if_pos]
+    have hd := (hasStrictFDerivAt_norm_sq x).hasFDerivAt.sub
+      (hasFDerivAt_const (x := x) (1 : ℝ))
+    have he := congrArg (fun L : apm_t02a07_E4 →L[ℝ] ℝ ↦ L v) hd.fderiv
+    simpa using he
+  · have h2 : DifferentiableAt ℝ (fun z : apm_t02a07_E4 ↦ z 2) x := by fun_prop
+    have h3 : DifferentiableAt ℝ (fun z : apm_t02a07_E4 ↦ z 3) x := by fun_prop
+    change (fderiv ℝ (fun z ↦ qfun z 1) x) v = x 3 * v 2 + x 2 * v 3
+    simp only [qfun, if_neg (by decide : (1 : Fin 2) ≠ 0)]
+    have hd := (h2.hasFDerivAt.mul h3.hasFDerivAt).sub
+      (hasFDerivAt_const (x := x) ((1 : ℝ) / 4))
+    have he := congrArg (fun L : apm_t02a07_E4 →L[ℝ] ℝ ↦ L v) hd.fderiv
+    have he2 := congrArg (fun L : apm_t02a07_E4 →L[ℝ] ℝ ↦ L v)
+      (PiLp.hasFDerivAt_apply (p := 2) (𝕜 := ℝ) x (2 : Fin 4)).fderiv
+    have he3 := congrArg (fun L : apm_t02a07_E4 →L[ℝ] ℝ ↦ L v)
+      (PiLp.hasFDerivAt_apply (p := 2) (𝕜 := ℝ) x (3 : Fin 4)).fderiv
+    simpa [add_comm, he2, he3] using he
 -- END SEAT AREA
 
 lemma apm_t02A07_constraints_fderiv_surjective_aux_rank

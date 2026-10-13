@@ -738,13 +738,53 @@ lemma apm_m93j05_weak_lowerSemicontinuous_aux_sin_memLp
 (L1) truncation energies converge, (L2) weak lower semicontinuity of `‖·‖ₚᵖ` (generic, via the
 norming dual function), (L3) the high-mode parts converge weakly, (L4) combine. Parallel. -/
 
+lemma apm_m93j05_trunc_energy_tendsto_aux_coeffs
+    (N q : ℝ) (f : ℝ → ℝ) (s : ℕ → ℝ → ℝ)
+    (hweak : ∀ h, MemLp h (ENNReal.ofReal q)
+        (volume.restrict (Set.Icc (0 : ℝ) 1)) →
+      Tendsto (fun n ↦ ∫ x, s n x * h x ∂(volume.restrict (Set.Icc (0 : ℝ) 1)))
+        atTop (nhds (∫ x, f x * h x ∂(volume.restrict (Set.Icc (0 : ℝ) 1))))) :
+    Tendsto (fun n ↦ ∫ x in Set.Icc (0 : ℝ) 1, s n x) atTop
+        (nhds (∫ x in Set.Icc (0 : ℝ) 1, f x)) ∧
+      (∀ j : ℕ, Tendsto (fun n ↦ apm_m93j05_cosCoeff (s n) j) atTop
+        (nhds (apm_m93j05_cosCoeff f j))) ∧
+      ∀ j : ℕ, Tendsto (fun n ↦ apm_m93j05_sinCoeff (s n) j) atTop
+        (nhds (apm_m93j05_sinCoeff f j)) := by
+  have hone : MemLp (fun _ : ℝ => (1 : ℝ)) (ENNReal.ofReal q)
+      (volume.restrict (Set.Icc (0 : ℝ) 1)) := by
+    apply MemLp.of_bound (C := (1 : ℝ))
+    · exact aestronglyMeasurable_const
+    · filter_upwards [] with x
+      norm_num
+  refine ⟨?_, ?_, ?_⟩
+  · simpa using hweak (fun _ : ℝ => (1 : ℝ)) hone
+  · intro j
+    simpa [apm_m93j05_cosCoeff] using
+      (hweak (fun x : ℝ => Real.cos (j * 2 * Real.pi * x))
+        (apm_m93j05_weak_lowerSemicontinuous_aux_cos_memLp q j)).const_mul 2
+  · intro j
+    simpa [apm_m93j05_sinCoeff] using
+      (hweak (fun x : ℝ => Real.sin (j * 2 * Real.pi * x))
+        (apm_m93j05_weak_lowerSemicontinuous_aux_sin_memLp q j)).const_mul 2
+
+/-- Parseval for the truncation: `∫₀¹ (m + Σ aⱼ cos + bⱼ sin)² = m² + Σ (aⱼ² + bⱼ²)/2`
+(from `apm_m93j05_trig_orthogonality` and the mean-zero helpers). -/
+theorem apm_m93j05_trunc_parseval (N : ℕ) (f : ℝ → ℝ) :
+    (eLpNorm (apm_m93j05_trunc N f) 2 (volume.restrict (Set.Icc (0 : ℝ) 1))).toReal ^ 2 =
+      (∫ x in Set.Icc (0 : ℝ) 1, f x) ^ 2 +
+        ∑ j ∈ Finset.Icc 1 N, (apm_m93j05_cosCoeff f j ^ 2 + apm_m93j05_sinCoeff f j ^ 2) / 2 := by
+  sorry
+
 theorem apm_m93j05_trunc_energy_tendsto (N : ℕ) (p q : ℝ) (hp : 1 < p) (hq : 1 < q) (hpq : 1 / p + 1 / q = 1)
     (f : ℝ → ℝ) (s : ℕ → ℝ → ℝ) (hf : MemLp f (ENNReal.ofReal p) (volume.restrict (Set.Icc (0 : ℝ) 1)))
     (hs : ∀ n, MemLp (s n) (ENNReal.ofReal p) (volume.restrict (Set.Icc (0 : ℝ) 1)))
     (hweak : (∀ h, MemLp h (ENNReal.ofReal q) (volume.restrict (Set.Icc (0 : ℝ) 1)) → Tendsto (fun n ↦ ∫ x, s n x * h x ∂(volume.restrict (Set.Icc (0 : ℝ) 1))) atTop (nhds (∫ x, f x * h x ∂(volume.restrict (Set.Icc (0 : ℝ) 1)))))) :
     Tendsto (fun n ↦ (eLpNorm (apm_m93j05_trunc N (s n)) 2 (volume.restrict (Set.Icc (0 : ℝ) 1))).toReal ^ 2) atTop
       (nhds ((eLpNorm (apm_m93j05_trunc N f) 2 (volume.restrict (Set.Icc (0 : ℝ) 1))).toReal ^ 2)) := by
-  sorry
+  obtain ⟨hm, hc, hs⟩ := apm_m93j05_trunc_energy_tendsto_aux_coeffs (N : ℝ) q f s hweak
+  simp only [apm_m93j05_trunc_parseval]
+  refine (hm.pow 2).add (tendsto_finset_sum _ fun j _ ↦ ?_)
+  exact (((hc j).pow 2).add ((hs j).pow 2)).div_const 2
 
 theorem apm_m93j05_lp_rpow_weak_lsc (p q : ℝ) (hp : 1 < p) (hq : 1 < q) (hpq : 1 / p + 1 / q = 1) :
     ∀ (u : ℝ → ℝ) (w : ℕ → ℝ → ℝ), MemLp u (ENNReal.ofReal p) (volume.restrict (Set.Icc (0 : ℝ) 1)) →
@@ -754,13 +794,57 @@ theorem apm_m93j05_lp_rpow_weak_lsc (p q : ℝ) (hp : 1 < p) (hq : 1 < q) (hpq :
         Real.rpow (eLpNorm u (ENNReal.ofReal p) (volume.restrict (Set.Icc (0 : ℝ) 1))).toReal p ≤ r := by
   sorry
 
+lemma apm_m93j05_high_modes_weak_tendsto_aux_trunc_continuous
+    (N : ℕ) (h : ℝ → ℝ) : Continuous (apm_m93j05_trunc N h) := by
+  unfold apm_m93j05_trunc
+  fun_prop
+
 -- BEGIN SEAT AREA
 theorem apm_m93j05_high_modes_weak_tendsto (N : ℕ) (p q : ℝ) (hp : 1 < p) (hq : 1 < q) (hpq : 1 / p + 1 / q = 1)
     (f : ℝ → ℝ) (s : ℕ → ℝ → ℝ) (hf : MemLp f (ENNReal.ofReal p) (volume.restrict (Set.Icc (0 : ℝ) 1)))
     (hs : ∀ n, MemLp (s n) (ENNReal.ofReal p) (volume.restrict (Set.Icc (0 : ℝ) 1)))
     (hweak : (∀ h, MemLp h (ENNReal.ofReal q) (volume.restrict (Set.Icc (0 : ℝ) 1)) → Tendsto (fun n ↦ ∫ x, s n x * h x ∂(volume.restrict (Set.Icc (0 : ℝ) 1))) atTop (nhds (∫ x, f x * h x ∂(volume.restrict (Set.Icc (0 : ℝ) 1)))))) :
     (∀ h, MemLp h (ENNReal.ofReal q) (volume.restrict (Set.Icc (0 : ℝ) 1)) → Tendsto (fun n ↦ ∫ x, (s n x - apm_m93j05_trunc N (s n) x) * h x ∂(volume.restrict (Set.Icc (0 : ℝ) 1))) atTop (nhds (∫ x, (f x - apm_m93j05_trunc N f x) * h x ∂(volume.restrict (Set.Icc (0 : ℝ) 1))))) := by
-  sorry
+  intro h hh
+  let μ := volume.restrict (Set.Icc (0 : ℝ) 1)
+  have htrunc (r : ℝ) (v : ℝ → ℝ) :
+      MemLp (apm_m93j05_trunc N v) (ENNReal.ofReal r) μ := by
+    have hcont := apm_m93j05_high_modes_weak_tendsto_aux_trunc_continuous N v
+    have hbdd : BddAbove ((fun x ↦ |apm_m93j05_trunc N v x|) '' Set.Icc (0 : ℝ) 1) :=
+      isCompact_Icc.bddAbove_image hcont.abs.continuousOn
+    obtain ⟨C, hC⟩ := hbdd
+    apply MemLp.of_bound hcont.aestronglyMeasurable C
+    filter_upwards [ae_restrict_mem measurableSet_Icc] with x hx
+    simpa [Real.norm_eq_abs] using hC (Set.mem_image_of_mem _ hx)
+  have hth := htrunc q h
+  have hc : p.HolderConjugate q := Real.holderConjugate_iff.mpr ⟨hp, by
+    simpa [div_eq_mul_inv, add_comm] using hpq⟩
+  letI : ENNReal.HolderTriple (ENNReal.ofReal p) (ENNReal.ofReal q) 1 := hc.ennrealOfReal
+  have A := hweak h hh
+  have B := hweak (apm_m93j05_trunc N h) hth
+  have B' : Tendsto
+      (fun n ↦ ∫ x, apm_m93j05_trunc N (s n) x * h x ∂μ) atTop
+      (nhds (∫ x, apm_m93j05_trunc N f x * h x ∂μ)) := by
+    rw [apm_m93j05_trunc_selfAdjoint N p q hp hq f h hf hh]
+    apply B.congr'
+    filter_upwards with n
+    exact (apm_m93j05_trunc_selfAdjoint N p q hp hq (s n) h (hs n) hh).symm
+  have H := A.sub B'
+  rw [show (∫ x, (f x - apm_m93j05_trunc N f x) * h x ∂μ) =
+      (∫ x, f x * h x ∂μ) - (∫ x, apm_m93j05_trunc N f x * h x ∂μ) by
+    calc
+      _ = ∫ x, f x * h x - apm_m93j05_trunc N f x * h x ∂μ := by
+        congr 1; funext x; ring
+      _ = _ := MeasureTheory.integral_sub (hf.integrable_mul hh)
+        ((htrunc p f).integrable_mul hh)]
+  apply H.congr'
+  filter_upwards with n
+  symm
+  calc
+    _ = ∫ x, s n x * h x - apm_m93j05_trunc N (s n) x * h x ∂μ := by
+      congr 1; funext x; ring
+    _ = _ := MeasureTheory.integral_sub ((hs n).integrable_mul hh)
+      ((htrunc p (s n)).integrable_mul hh)
 -- END SEAT AREA
 
 theorem apm_m93j05_weak_lsc_of_parts (N : ℕ) (p q : ℝ) (hp : 1 < p) (hq : 1 < q) (hpq : 1 / p + 1 / q = 1)
@@ -851,7 +935,9 @@ theorem apm_m93j05_rpow_eLpNorm_eq_integral (p : ℝ) (hp : 0 < p) (u : ℝ → 
 theorem apm_m93j05_abs_rpow_line_hasDerivAt (p : ℝ) (hp : 1 < p) (x y s : ℝ) :
     HasDerivAt (fun r : ℝ ↦ |x + r * y| ^ p)
       (p * |x + s * y| ^ (p - 2) * (x + s * y) * y) s := by
-  sorry
+  have hinner : HasDerivAt (fun r : ℝ ↦ x + r * y) y s := by
+    simpa [id] using ((hasDerivAt_id s).mul_const y).const_add x
+  exact (hasDerivAt_abs_rpow (x + s * y) hp).comp s hinner
 
 theorem apm_m93j05_integral_abs_rpow_line_differentiableAt (p : ℝ) (hp : 1 < p)
     (hD1c : ∀ x y s : ℝ, HasDerivAt (fun r : ℝ ↦ |x + r * y| ^ p)

@@ -41,11 +41,11 @@ def tftTranslate (x : E) (ψ : TFT E F) : TFT E F where
 
 lemma tft_directional_contDiff (v : E) (ψ : TFT E F) :
     ContDiff ℝ ∞ (fun y => fderiv ℝ (ψ : E → F) y v) := by
-  sorry
+  exact (contDiff_infty_iff_fderiv.mp ψ.contDiff).2.clm_apply contDiff_const
 
 lemma tft_directional_hasCompactSupport (v : E) (ψ : TFT E F) :
     HasCompactSupport (fun y => fderiv ℝ (ψ : E → F) y v) := by
-  sorry
+  exact ψ.hasCompactSupport.fderiv_apply ℝ v
 
 /-- The directional derivative, bundled again as a test function. -/
 def tftDirectional (v : E) (ψ : TFT E F) : TFT E F where
@@ -68,13 +68,27 @@ def tftTranslationCompact (ψ : TFT E F) (x₀ : E) : Compacts E :=
 lemma tft_local_fixed_support (ψ : TFT E F) (x₀ : E) :
     ∀ x ∈ Metric.closedBall x₀ 1,
       tsupport (tftTranslate x ψ : E → F) ⊆ tftTranslationCompact ψ x₀ := by
-  sorry
+  intro x hx y hy
+  change y ∈ (fun p : E × E => p.2 - p.1) ''
+    (Metric.closedBall x₀ 1 ×ˢ tsupport (ψ : E → F))
+  refine ⟨(x, x + y), ⟨hx, ?_⟩, ?_⟩
+  · have hsupport := tsupport_comp_eq_preimage (ψ : E → F) (Homeomorph.addLeft x)
+    have : y ∈ (Homeomorph.addLeft x : E ≃ₜ E) ⁻¹' tsupport (ψ : E → F) := by
+      rw [← hsupport]
+      simpa [Function.comp_def] using hy
+    exact this
+  · simp
 
 
 lemma tft_local_fixed_function_support (ψ : TFT E F) (x₀ : E) :
     ∀ x ∈ Metric.closedBall x₀ 1,
       Function.support (fun y => ψ (x + y)) ⊆ tftTranslationCompact ψ x₀ := by
-  sorry
+  intro x hx y hy
+  change y ∈ (fun p : E × E ↦ p.2 - p.1) ''
+    (Metric.closedBall x₀ 1 ×ˢ tsupport (ψ : E → F))
+  refine ⟨(x, x + y), ⟨hx, ?_⟩, ?_⟩
+  · exact subset_tsupport _ hy
+  · simp
 
 /-- The nearby translate regarded as an element of one fixed Fréchet stage;
 outside the closed unit ball it is harmlessly set to zero. -/
@@ -96,7 +110,19 @@ lemma tft_directional_translate_function_support
     (ψ : TFT E F) (x₀ x v : E) (hx : x ∈ Metric.closedBall x₀ 1) :
     Function.support (fun y => fderiv ℝ (ψ : E → F) (x + y) v) ⊆
       tftTranslationCompact ψ x₀ := by
-  sorry
+  intro y hy
+  have hlin : fderiv ℝ (ψ : E → F) (x + y) ≠ 0 := by
+    intro hzero
+    apply hy
+    dsimp
+    rw [hzero]
+    exact ContinuousLinearMap.zero_apply v
+  have hz : x + y ∈ tsupport (ψ : E → F) :=
+    support_fderiv_subset ℝ hlin
+  change y ∈ (fun p : E × E => p.2 - p.1) ''
+    (Metric.closedBall x₀ 1 ×ˢ tsupport (ψ : E → F))
+  refine ⟨(x, x + y), ⟨hx, hz⟩, ?_⟩
+  simp
 
 /-- The translated directional derivative, bundled in the *same* stage as
 `ψ`; differentiation does not enlarge support. -/
@@ -111,7 +137,7 @@ def tftDirectionalTranslateStage (ψ : TFT E F) (x₀ x v : E) :
 
 lemma tft_compactSupport_bounded (f : E → F) (hf : Continuous f)
     (hfc : HasCompactSupport f) : ∃ C : ℝ, ∀ x, ‖f x‖ ≤ C := by
-  sorry
+  exact hfc.exists_bound_of_continuous hf
 
 /-- A compactly supported continuous map, bundled as a bounded continuous
 map.  This vector-valued wrapper avoids the ring-valued specialization of
@@ -130,29 +156,133 @@ lemma tft_translate_bcf_continuous
       tftBCFOfCompactSupport (fun y => f (x + y))
         (hf.comp (continuous_const.add continuous_id))
         (hfc.comp_homeomorph (Homeomorph.addLeft x))) := by
-  sorry
+  rw [Metric.continuous_iff]
+  intro x ε hε
+  have huc : UniformContinuous f := hfc.uniformContinuous_of_continuous hf
+  obtain ⟨δ, hδ, hmod⟩ :=
+    (Metric.uniformContinuous_iff.mp huc) (ε / 2) (half_pos hε)
+  refine ⟨δ, hδ, fun z hz => ?_⟩
+  apply lt_of_le_of_lt ((BoundedContinuousFunction.dist_le (le_of_lt (half_pos hε))).2 ?_)
+    (half_lt_self hε)
+  intro y
+  change dist (f (z + y)) (f (x + y)) ≤ ε / 2
+  exact le_of_lt (hmod (by simpa only [dist_add_right] using hz))
 
 lemma tft_difference_quotient_continuous
     (f : E → F) (hf : ContDiff ℝ 1 f) (x v : E) (h : ℝ) :
     Continuous (fun y => h⁻¹ • (f (x + h • v + y) - f (x + y))) := by
-  sorry
+  fun_prop
 
 lemma tft_difference_quotient_hasCompactSupport
     (f : E → F) (hfc : HasCompactSupport f) (x v : E) (h : ℝ) :
     HasCompactSupport (fun y => h⁻¹ • (f (x + h • v + y) - f (x + y))) := by
-  sorry
+  have h₁ := hfc.comp_homeomorph (Homeomorph.addLeft (x + h • v))
+  have h₂ := hfc.comp_homeomorph (Homeomorph.addLeft x)
+  have hs := h₁.sub h₂
+  have hm := hs.comp_left (g := fun z : F => h⁻¹ • z) (smul_zero _)
+  simpa [Function.comp_def] using hm
 
 lemma tft_fderiv_translate_continuous
     (f : E → F) (hf : ContDiff ℝ 1 f) (x v : E) :
     Continuous (fun y => fderiv ℝ f (x + y) v) := by
-  sorry
+  exact ((hf.continuous_fderiv (by norm_num)).comp
+    (continuous_const.add continuous_id)).clm_apply continuous_const
 
 lemma tft_fderiv_translate_hasCompactSupport
     (f : E → F) (hf : ContDiff ℝ 1 f) (hfc : HasCompactSupport f) (x v : E) :
     HasCompactSupport (fun y => fderiv ℝ f (x + y) v) := by
-  sorry
+  simpa [Function.comp_def] using
+    (hfc.fderiv_apply ℝ v).comp_homeomorph (Homeomorph.addLeft x)
 
-/-- U2: the directional difference quotient converges in sup norm. -/
+/-- U2 step: mean-value bound for one difference quotient, given a modulus for `fderiv`. -/
+lemma tft_translate_bcf_difference_quotient_aux_mvt
+    (f : E → F) (hf : ContDiff ℝ 1 f) (z v : E) (h ε : ℝ) (hh : h ≠ 0)
+    (hε : ∀ w, dist w z ≤ |h| * ‖v‖ → ‖fderiv ℝ f w - fderiv ℝ f z‖ ≤ ε) :
+    ‖h⁻¹ • (f (z + h • v) - f z) - fderiv ℝ f z v‖ ≤ ε * ‖v‖ := by
+  let D : E →L[ℝ] F := fderiv ℝ f z
+  let g : E → F := fun w => f w - D w
+  have hf' : Differentiable ℝ f := hf.differentiable (by norm_num)
+  have hg' : ∀ w, DifferentiableAt ℝ g w := by
+    intro w
+    exact (hf' w).sub D.differentiableAt
+  have hD : ∀ w, fderiv ℝ g w = fderiv ℝ f w - D := by
+    intro w
+    exact ((hf' w).hasFDerivAt.sub D.hasFDerivAt).fderiv
+  have hε0 : 0 ≤ ε := by
+    have hz := hε z (by simp; positivity)
+    simpa using (norm_nonneg (fderiv ℝ f z - fderiv ℝ f z)).trans hz
+  let s : Set E := Metric.closedBall z (|h| * ‖v‖)
+  have hend : z + h • v ∈ s := by
+    change dist (z + h • v) z ≤ |h| * ‖v‖
+    rw [dist_eq_norm, add_sub_cancel_left, norm_smul, Real.norm_eq_abs]
+  have hstart : z ∈ s := by
+    change dist z z ≤ |h| * ‖v‖
+    simp
+    positivity
+  have hbound : ∀ w ∈ s, ‖fderiv ℝ g w‖ ≤ ε := by
+    intro w hw
+    rw [hD]
+    exact hε w hw
+  have hmvt : ‖g (z + h • v) - g z‖ ≤ ε * ‖(z + h • v) - z‖ :=
+    (convex_closedBall z (|h| * ‖v‖)).norm_image_sub_le_of_norm_fderiv_le
+      (fun w _ => hg' w) hbound hstart hend
+  have hrewrite :
+      h⁻¹ • (f (z + h • v) - f z) - fderiv ℝ f z v =
+        h⁻¹ • (g (z + h • v) - g z) := by
+    dsimp [g, D]
+    rw [map_add, map_smul]
+    simp only [smul_sub, smul_add, smul_smul]
+    have hinv : h⁻¹ * h = 1 := inv_mul_cancel₀ hh
+    rw [hinv, one_smul]
+    module
+  rw [hrewrite, norm_smul, Real.norm_eq_abs]
+  calc
+    |h⁻¹| * ‖g (z + h • v) - g z‖ ≤
+        |h⁻¹| * (ε * ‖(z + h • v) - z‖) :=
+      mul_le_mul_of_nonneg_left hmvt (abs_nonneg _)
+    _ = ε * ‖v‖ := by
+      rw [add_sub_cancel_left, norm_smul, Real.norm_eq_abs, abs_inv]
+      field_simp [abs_ne_zero.mpr hh]
+
+lemma tft_translate_bcf_difference_quotient_aux_uniform
+    (f : E → F) (hf : ContDiff ℝ 1 f) (hfc : HasCompactSupport f) (x v : E) :
+    Tendsto (fun h : ℝ =>
+        ‖tftBCFOfCompactSupport
+            (fun y => h⁻¹ • (f (x + h • v + y) - f (x + y)))
+            (tft_difference_quotient_continuous f hf x v h)
+            (tft_difference_quotient_hasCompactSupport f hfc x v h) -
+          tftBCFOfCompactSupport
+            (fun y => fderiv ℝ f (x + y) v)
+            (tft_fderiv_translate_continuous f hf x v)
+            (tft_fderiv_translate_hasCompactSupport f hf hfc x v)‖)
+      (nhdsWithin 0 ({0} : Set ℝ)ᶜ) (nhds 0) := by
+  rw [Metric.tendsto_nhdsWithin_nhds]
+  intro ε hε
+  have huc : UniformContinuous (fderiv ℝ f) :=
+    (hfc.fderiv ℝ).uniformContinuous_of_continuous (hf.continuous_fderiv (by norm_num))
+  have hv : (0 : ℝ) < ‖v‖ + 1 := by positivity
+  obtain ⟨δ, hδ, hmod⟩ := Metric.uniformContinuous_iff.1 huc (ε / 2 / (‖v‖ + 1)) (by positivity)
+  refine ⟨δ / (‖v‖ + 1), by positivity, fun h hh0 hh => ?_⟩
+  have hh0' : h ≠ 0 := hh0
+  have hhδ : |h| * ‖v‖ < δ := by
+    rw [dist_zero_right, Real.norm_eq_abs, lt_div_iff₀ hv] at hh
+    nlinarith [abs_nonneg h]
+  rw [dist_zero_right, norm_norm]
+  refine lt_of_le_of_lt ?_ (half_lt_self hε)
+  refine (BoundedContinuousFunction.norm_le (by positivity)).2 fun y => ?_
+  rw [BoundedContinuousFunction.sub_apply]
+  simp only [tftBCFOfCompactSupport, BoundedContinuousFunction.coe_ofNormedAddCommGroup]
+  have key := tft_translate_bcf_difference_quotient_aux_mvt f hf (x + y) v h
+    (ε / 2 / (‖v‖ + 1)) hh0' (fun w hw => by
+      have := hmod (lt_of_le_of_lt hw hhδ)
+      rw [dist_eq_norm] at this
+      exact this.le)
+  rw [show x + h • v + y = x + y + h • v by abel]
+  refine key.trans ?_
+  rw [div_mul_eq_mul_div, div_le_iff₀ hv]
+  nlinarith [norm_nonneg v]
+
+/-- U2 (assembled). -/
 lemma tft_translate_bcf_difference_quotient
     (f : E → F) (hf : ContDiff ℝ 1 f) (hfc : HasCompactSupport f) (x v : E) :
     Tendsto (fun h : ℝ =>
@@ -165,7 +295,8 @@ lemma tft_translate_bcf_difference_quotient
         (fun y => fderiv ℝ f (x + y) v)
         (tft_fderiv_translate_continuous f hf x v)
         (tft_fderiv_translate_hasCompactSupport f hf hfc x v))) := by
-  sorry
+  rw [tendsto_iff_norm_sub_tendsto_zero]
+  exact tft_translate_bcf_difference_quotient_aux_uniform f hf hfc x v
 
 /-- S1: continuity into the fixed stage.  The hypothesis is precisely U1 for
 every iterated derivative (the maps occurring in `continuous_iff_comp`). -/
@@ -175,12 +306,41 @@ lemma tft_stage_continuousAt_of_structure_maps
       (ContDiffMapSupportedIn.structureMapCLM ℝ ⊤ i ∘
         tftTranslateStageLocal ψ x₀) x₀) :
     ContinuousAt (tftTranslateStageLocal ψ x₀) x₀ := by
-  sorry
+  let T := ContinuousLinearMap.pi
+    (ContDiffMapSupportedIn.structureMapCLM ℝ (⊤ : ℕ∞) :
+      ∀ i : ℕ, ContDiffMapSupportedIn E F ⊤ (tftTranslationCompact ψ x₀) →L[ℝ]
+        E →ᵇ (E [×i]→L[ℝ] F))
+  apply (ContDiffMapSupportedIn.isUniformEmbedding_pi_structureMapCLM ℝ).toIsUniformInducing.isInducing.continuousAt_iff.mpr
+  rw [continuousAt_pi]
+  intro i
+  simpa [T, Function.comp_def] using hU1 i
 
 /-- S1 with U1 discharged for every iterated derivative of `ψ`. -/
 lemma tft_stage_continuousAt (ψ : TFT E F) (x₀ : E) :
     ContinuousAt (tftTranslateStageLocal ψ x₀) x₀ := by
-  sorry
+  apply tft_stage_continuousAt_of_structure_maps ψ x₀
+  intro i
+  let f : E → (E [×i]→L[ℝ] F) := iteratedFDeriv ℝ i (ψ : E → F)
+  have hf : Continuous f :=
+    ψ.contDiff.continuous_iteratedFDeriv (by exact_mod_cast le_top)
+  have hfc : HasCompactSupport f := ψ.hasCompactSupport.iteratedFDeriv i
+  have hc : ContinuousAt (fun x : E =>
+      tftBCFOfCompactSupport (fun y => f (x + y))
+        (hf.comp (continuous_const.add continuous_id))
+        (hfc.comp_homeomorph (Homeomorph.addLeft x))) x₀ :=
+    (tft_translate_bcf_continuous f hf hfc).continuousAt
+  apply hc.congr_of_eventuallyEq
+  filter_upwards [Metric.closedBall_mem_nhds x₀ (by norm_num : (0 : ℝ) < 1)] with x hx
+  apply BoundedContinuousFunction.ext
+  intro y
+  have heq : (tftTranslateStageLocal ψ x₀ x : E → F) =
+      fun z ↦ ψ (x + z) := by
+    funext z
+    exact tftTranslateStageLocal_apply ψ x₀ x hx z
+  rw [Function.comp_apply, ContDiffMapSupportedIn.structureMapCLM_top_apply]
+  change iteratedFDeriv ℝ i (tftTranslateStageLocal ψ x₀ x : E → F) y = _
+  rw [heq, iteratedFDeriv_comp_add_left]
+  rfl
 
 /-- S2: convergence in a fixed stage, reduced to convergence under every
 structure map. -/
@@ -198,7 +358,22 @@ lemma tft_stage_difference_quotient_of_structure_maps
           tftTranslateStageLocal ψ x₀ x₀))
       (nhdsWithin 0 ({0} : Set ℝ)ᶜ)
       (nhds (tftDirectionalTranslateStage ψ x₀ x₀ v)) := by
-  sorry
+  rw [show nhds (tftDirectionalTranslateStage ψ x₀ x₀ v) =
+      ⨅ i : ℕ, Filter.comap
+        (ContDiffMapSupportedIn.structureMapCLM ℝ ⊤ i)
+        (nhds (ContDiffMapSupportedIn.structureMapCLM ℝ ⊤ i
+          (tftDirectionalTranslateStage ψ x₀ x₀ v))) by
+    change @nhds _ (⨅ i : ℕ, TopologicalSpace.induced
+      (ContDiffMapSupportedIn.structureMapLM ℝ ⊤ i) inferInstance) _ = _
+    rw [nhds_iInf]
+    congr 1
+    funext i
+    rw [nhds_induced]
+    rfl]
+  rw [Filter.tendsto_iInf]
+  intro i
+  rw [Filter.tendsto_comap_iff]
+  exact hU2 i
 
 /-- S2 with U2 discharged for every iterated derivative of `ψ`. -/
 lemma tft_stage_difference_quotient (ψ : TFT E F) (x₀ v : E) :

@@ -174,13 +174,88 @@ lemma apm_t02A07_constraints_fderiv_surjective_aux_formula
   sorry
 
 -- BEGIN SEAT AREA
+lemma apm_t02A07_constraints_fderiv_surjective_aux_rank_aux_formula
+    (x v : apm_t02a07_E4) :
+    fderiv ℝ apm_t02a07_constraints x v =
+      WithLp.toLp 2 ![2 * inner ℝ x v, x 3 * v 2 + x 2 * v 3] := by
+  unfold apm_t02a07_constraints
+  let g : apm_t02a07_E4 → (Fin 2 → ℝ) := fun z =>
+    ![‖z‖ ^ 2 - 1, z 2 * z 3 - (1 : ℝ) / 4]
+  have hg : DifferentiableAt ℝ g x := by
+    apply differentiableAt_pi.mpr
+    intro i
+    fin_cases i
+    · exact ((hasFDerivAt_id x).norm_sq.sub_const _).differentiableAt
+    · dsimp [g]
+      fun_prop
+  have hc := (PiLp.hasFDerivAt_toLp (𝕜 := ℝ) 2 (g x)).comp x hg.hasFDerivAt
+  have hgv : fderiv ℝ g x v =
+      ![2 * inner ℝ x v, x 3 * v 2 + x 2 * v 3] := by
+    have hj (j : Fin 4) : fderiv ℝ (fun z : apm_t02a07_E4 => z j) x v = v j := by
+      let P : apm_t02a07_E4 →L[ℝ] ℝ := PiLp.proj 2 (fun _ : Fin 4 => ℝ) j
+      have h := P.hasFDerivAt (x := x)
+      exact congrArg (fun q : apm_t02a07_E4 →L[ℝ] ℝ => q v) h.fderiv
+    rw [fderiv_pi]
+    · ext i
+      fin_cases i
+      · dsimp [g]
+        rw [fderiv_sub_const, fderiv_norm_sq_apply]
+        simp
+      · dsimp [g]
+        rw [fderiv_sub_const, fderiv_fun_mul]
+        · simp only [ContinuousLinearMap.add_apply, ContinuousLinearMap.smul_apply, smul_eq_mul]
+          rw [hj, hj]
+          ring
+        all_goals fun_prop
+    · intro i
+      fin_cases i
+      · exact ((hasFDerivAt_id x).norm_sq.sub_const _).differentiableAt
+      · dsimp [g]
+        fun_prop
+  change fderiv ℝ (WithLp.toLp 2 ∘ g) x v = _
+  rw [hc.fderiv]
+  change WithLp.toLp 2 (fderiv ℝ g x v) = _
+  rw [hgv]
+
 lemma apm_t02A07_constraints_fderiv_surjective_aux_rank
     (x : apm_t02a07_E4)
     (hind : LinearIndependent ℝ
       (![x, (WithLp.toLp 2 ![(0 : ℝ), 0, x 3, x 2] :
         apm_t02a07_E4)] : Fin 2 → apm_t02a07_E4)) :
     Function.Surjective (fderiv ℝ apm_t02a07_constraints x) := by
-  sorry
+  let A := fderiv ℝ apm_t02a07_constraints x
+  let w : apm_t02a07_E4 := WithLp.toLp 2 ![(0 : ℝ), 0, x 3, x 2]
+  have hadj (c : apm_t02a07_E2) :
+      A.adjoint c = (2 * c 0) • x + (c 1) • w := by
+    apply ext_inner_right ℝ
+    intro v
+    rw [ContinuousLinearMap.adjoint_inner_left]
+    rw [apm_t02A07_constraints_fderiv_surjective_aux_rank_aux_formula]
+    simp [w, PiLp.inner_apply, Fin.sum_univ_succ, real_inner_eq_re_inner,
+      RCLike.inner_apply]
+    ring
+  have hi : Function.Injective A.adjoint := by
+    intro c d hcd
+    have hc : A.adjoint (c - d) = 0 := by
+      simp [hcd]
+    rw [hadj] at hc
+    have hs : ∑ i : Fin 2, (![2 * (c - d) 0, (c - d) 1] i) • (![x, w] i) = 0 := by
+      simpa [Fin.sum_univ_succ] using hc
+    have hz := (Fintype.linearIndependent_iff.mp (by simpa [w] using hind)) _ hs
+    rw [← sub_eq_zero]
+    apply PiLp.ext
+    intro i
+    fin_cases i
+    · have := hz 0
+      simp at this
+      simpa using this
+    · simpa using hz 1
+  have hr := LinearMap.finrank_range_adjoint A.toLinearMap
+  have hra : Module.finrank ℝ A.adjoint.range = Module.finrank ℝ apm_t02a07_E2 :=
+    LinearMap.finrank_range_of_inj hi
+  have hA : Module.finrank ℝ A.toLinearMap.range = Module.finrank ℝ apm_t02a07_E2 := by
+    exact hr.symm.trans hra
+  exact LinearMap.range_eq_top.mp (Submodule.eq_top_of_finrank_eq hA)
 -- END SEAT AREA
 
 theorem apm_t02A07_constraints_fderiv_surjective

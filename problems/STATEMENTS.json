@@ -871,6 +871,35 @@
    "rev": "56de913a",
    "approved_at": "2026-09-28T00:17:27Z"
   },
+  "t02A07": {
+   "decls": [
+    "apm_t02a07"
+   ],
+   "sha256": "b74c1ff8939b613c5cc3e1071d85cf819d72f115a341e969bde971516d2ae536",
+   "defs": [
+    "apm_t02a07_E2",
+    "apm_t02a07_E3",
+    "apm_t02a07_E4",
+    "apm_t02a07_IsRegularDimensionTwo",
+    "apm_t02a07_IsTransverse",
+    "apm_t02a07_S2",
+    "apm_t02a07_X",
+    "apm_t02a07_Z",
+    "apm_t02a07_constraints",
+    "apm_t02a07_family",
+    "apm_t02a07_familyAmbient",
+    "apm_t02a07_parameterCircle",
+    "apm_t02a07_sphereTangent",
+    "apm_t02a07_tangentX",
+    "apm_t02a07_tangentZ"
+   ],
+   "grade": "faithful",
+   "grader": "claude-14 outside grader (read-only Claude subagent, 2026-10-13, re-grade)",
+   "evidence": "holes/labs/statement-registry/grading-batch-2.md",
+   "prelim_defect": null,
+   "rev": "735377b84",
+   "approved_at": "2026-10-13T06:28:05Z"
+  },
   "t03J02": {
    "decls": [
     "apm_t03j02"
