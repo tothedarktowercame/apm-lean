@@ -23891,8 +23891,32 @@
    :other-consumers []}
   {:bounded-exception "Receipt repair only; no mathematics.",
    :consumer :t01A08,
+   :evidence
+   {:placeholder-delta {:t01A08 [1 1]},
+    :residual
+    "Independent review must replace the predecessor receipt SHA with the corrected full SHA; do not bank or schedule leading swap.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes {:registry "149/149"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author :topo-10,
+    :commands
+    [{:cmd "git cat-file/show/diff-tree/merge-base corrected SHA",
+      :exit 0}
+     {:cmd "lake env lean symmetry export check; registry check",
+      :exit 0}
+     {:cmd "verify empty audit commit and clean worktree", :exit 0}],
+    :commit "9c4e1f43f3b877b3db2b897430f4aad66157c341",
+    :changed-paths [],
+    :repair-target :r-a08-symmetry-slots-1,
+    :fixture
+    {:path "/tmp/CheckSardFinalSymmetry.lean",
+     :sha256
+     "e382e8954fee4433e3b9f96899ee3ef77b8ef6c13c8ad68454022735c90486d6",
+     :mode :post-build-export-check},
+    :corrected-commit "f032efae9b89fb527a72ea9192f3c89f09f82615"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "SardConvexDomain/B1/symmetry",
    :acceptance
