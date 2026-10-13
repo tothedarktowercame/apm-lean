@@ -1863,13 +1863,131 @@ theorem apm_a97j08_clopen_separation_of_bounded_component
     apm_a97j08_ClopenSeparationFact D z := by
   sorry
 
+lemma apm_a97j08_grid_region_construction_aux_shrink
+    (D : Set ℂ) (z : ℂ) (R δ : ℝ) (A B : Set ℂ)
+    (h : apm_a97j08_GridInput D z R δ A B) :
+    apm_a97j08_GridInput D z R (δ / 4) A B := by
+  rcases h with ⟨hR, hδ, hz, hAc, hBc, hcomp, hdecomp, hAB, hsep, hball⟩
+  refine ⟨hR, by positivity, hz, hAc, hBc, hcomp, hdecomp, hAB, ?_, ?_⟩
+  · intro a ha b hb
+    exact (by linarith : δ / 4 ≤ δ).trans (hsep a ha b hb)
+  · intro a ha
+    have hmem := hball ha
+    rw [Metric.mem_ball] at hmem ⊢
+    linarith
+
+lemma apm_a97j08_grid_region_construction_aux_shift
+    (z : ℂ) {δ : ℝ} (hδ : 0 < δ) :
+    let shift : ℂ := z - ((δ / 2 : ℝ) : ℂ) * (1 + Complex.I)
+    z.re ∉ {x | ∃ k : ℤ, x = shift.re + k * δ} ∧
+      z.im ∉ {y | ∃ k : ℤ, y = shift.im + k * δ} := by
+  dsimp
+  constructor <;> rintro ⟨k, hk⟩
+  · have hcast : (k : ℝ) = 1 / 2 := by
+      simp only [map_sub, Complex.sub_re, Complex.mul_re, Complex.ofReal_re,
+        Complex.ofReal_im, Complex.add_re, Complex.one_re, Complex.I_re,
+        zero_mul, mul_zero, add_zero, Complex.sub_im, Complex.add_im,
+        Complex.one_im, Complex.I_im, zero_add] at hk
+      apply (mul_left_cancel₀ (ne_of_gt hδ))
+      nlinarith
+    have hkreal : (2 : ℝ) * (k : ℝ) = 1 := by nlinarith [hcast]
+    have hkint : (2 * k : ℤ) = 1 := by exact_mod_cast hkreal
+    omega
+  · have hcast : (k : ℝ) = 1 / 2 := by
+      simp only [map_sub, Complex.sub_re, Complex.mul_re, Complex.ofReal_re,
+        Complex.ofReal_im, Complex.add_re, Complex.one_re, Complex.I_re,
+        zero_mul, mul_zero, add_zero, Complex.sub_im, Complex.add_im,
+        Complex.one_im, Complex.I_im, zero_add] at hk
+      apply (mul_left_cancel₀ (ne_of_gt hδ))
+      nlinarith
+    have hkreal : (2 : ℝ) * (k : ℝ) = 1 := by nlinarith [hcast]
+    have hkint : (2 * k : ℤ) = 1 := by exact_mod_cast hkreal
+    omega
+
+-- (P1) Every point lies in some lattice square.
+lemma apm_a97j08_grid_region_construction_aux_mem_square (s : ℂ) {ε : ℝ} (hε : 0 < ε)
+    (w : ℂ) : ∃ q : ℤ × ℤ, w ∈ apm_a97j08_gridSquare s ε q := by
+  sorry
+
+-- (P2) Two points of one lattice square are within `2ε`.
+lemma apm_a97j08_grid_region_construction_aux_square_dist (s : ℂ) {ε : ℝ} (hε : 0 < ε)
+    (q : ℤ × ℤ) {u w : ℂ} (hu : u ∈ apm_a97j08_gridSquare s ε q)
+    (hw : w ∈ apm_a97j08_gridSquare s ε q) : dist u w ≤ 2 * ε := by
+  sorry
+
+-- (P3) Only finitely many lattice squares meet a bounded set.
+lemma apm_a97j08_grid_region_construction_aux_finite (s : ℂ) {ε : ℝ} (hε : 0 < ε)
+    (T : Set ℂ) (hT : Bornology.IsBounded T) :
+    ∃ Q : Finset (ℤ × ℤ), ∀ q, q ∈ Q ↔ (apm_a97j08_gridSquare s ε q ∩ T).Nonempty := by
+  sorry
+
+lemma apm_a97j08_grid_region_construction_aux_cover
+    (D : Set ℂ) (z : ℂ) (R δ : ℝ) (A B : Set ℂ)
+    (h : apm_a97j08_GridInput D z R δ A B) :
+    ∃ U : Set ℂ, apm_a97j08_IsGridRegion A B R (δ / 4) z U := by
+  obtain ⟨hR, hδ, hzA, -, -, -, -, -, hsep, hmargin⟩ := h
+  set ε := δ / 4 with hεdef
+  have hε : 0 < ε := by positivity
+  set s : ℂ := z - ((ε / 2 : ℝ) : ℂ) * (1 + Complex.I) with hs
+  have hsh := apm_a97j08_grid_region_construction_aux_shift z hε
+  set T : Set ℂ := {w | ∃ a ∈ A, dist w a ≤ ε} with hT
+  have hTb : Bornology.IsBounded T := by
+    refine (Metric.isBounded_closedBall (x := (0 : ℂ)) (r := R)).subset ?_
+    rintro w ⟨a, ha, hwa⟩
+    have := hmargin ha
+    rw [Metric.mem_ball, dist_zero_right] at this
+    rw [Metric.mem_closedBall, dist_zero_right]
+    have : ‖w‖ ≤ ‖a‖ + dist w a := by
+      have := norm_le_norm_add_norm_sub' w a
+      rw [dist_eq_norm]; linarith [norm_sub_rev w a]
+    linarith
+  obtain ⟨Q, hQ⟩ := apm_a97j08_grid_region_construction_aux_finite s hε T hTb
+  set U := ⋃ q ∈ Q, apm_a97j08_gridSquare s ε q with hU
+  have hTU : T ⊆ U := by
+    intro w hw
+    obtain ⟨q, hq⟩ := apm_a97j08_grid_region_construction_aux_mem_square s hε w
+    exact Set.mem_biUnion ((hQ q).mpr ⟨w, hq, hw⟩) hq
+  have hAU : A ⊆ interior U := by
+    intro a ha
+    have hball : Metric.ball a ε ⊆ U := fun w hw =>
+      hTU ⟨a, ha, (Metric.mem_ball.mp hw).le⟩
+    exact interior_maximal hball Metric.isOpen_ball (Metric.mem_ball_self hε)
+  -- every point of `U` is within `3ε` of `A`
+  have hnear : ∀ u ∈ U, ∃ a ∈ A, dist u a ≤ 3 * ε := by
+    intro u hu
+    obtain ⟨q, hqQ, hu⟩ := Set.mem_iUnion₂.mp hu
+    obtain ⟨w, hwq, a, ha, hwa⟩ := (hQ q).mp hqQ
+    refine ⟨a, ha, ?_⟩
+    have := apm_a97j08_grid_region_construction_aux_square_dist s hε q hu hwq
+    linarith [dist_triangle u w a]
+  refine ⟨U, s, Q, rfl, hAU hzA, hAU, ?_, ?_, hsh.1, hsh.2⟩
+  · rw [Set.disjoint_left]
+    intro u hu huB
+    obtain ⟨a, ha, hua⟩ := hnear u hu
+    have := hsep a ha u huB
+    rw [dist_comm] at hua
+    linarith
+  · intro u hu
+    obtain ⟨a, ha, hua⟩ := hnear u hu
+    have := hmargin ha
+    rw [Metric.mem_ball, dist_zero_right] at this
+    rw [Metric.mem_closedBall, dist_zero_right]
+    have : ‖u‖ ≤ ‖a‖ + dist u a := by
+      have := norm_le_norm_add_norm_sub' u a
+      rw [dist_eq_norm]; linarith [norm_sub_rev u a]
+    linarith
+
 theorem apm_a97j08_grid_region_construction
     (D : Set ℂ) {z : ℂ}
     (hsep : apm_a97j08_ClopenSeparationFact D z) :
     ∃ R δ : ℝ, ∃ A B : Set ℂ, ∃ U : Set ℂ,
       apm_a97j08_GridInput D z R δ A B ∧
       apm_a97j08_IsGridRegion A B R δ z U := by
-  sorry
+  obtain ⟨R, δ, A, B, hinput⟩ := hsep
+  obtain ⟨U, hU⟩ := apm_a97j08_grid_region_construction_aux_cover
+    D z R δ A B hinput
+  exact ⟨R, δ / 4, A, B, U,
+    apm_a97j08_grid_region_construction_aux_shrink D z R δ A B hinput, hU⟩
 
 
 -- (A1) A segment missing `z` turns through opposite angles in the two directions.
