@@ -24430,26 +24430,26 @@
    :consumer :t01A08,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "extend Mathlib: state and prove the missing theorem in scope",
    :implements-lemma :lemma-closedset-whitneycubecover,
    :evidence
    {:placeholder-delta {:t01A08 [1 1]},
     :residual
-    "Prove parent nesting; select maximal cubes; assemble B3; then B4-B7, B9.",
+    "Select maximal admissible cubes; prove geometry/local finiteness; assemble B3; then B4-B7, B9.",
     :outcome :stop,
     :warnings
     ["unnecessarySimpa:454" "unnecessarySeqFocus:1199,1531,1555"],
     :missing-theorems
     [{:name
-      "ConstructionTargets.SardConvexDomain.eq_whitneyDyadicIndexOf_of_mem_cube_of_generation_eq",
+      "ConstructionTargets.SardConvexDomain.whitneyDyadicCube_subset_parent",
       :type
-      "same-generation membership uniquely determines the floor-coordinate index",
+      "each half-open dyadic cube is contained in its generation-plus-one parent",
       :status :proved,
       :consumers [:t01A08],
       :depends-on
-      ["ConstructionTargets.SardConvexDomain.mem_whitneyDyadicCube_indexOf"],
+      ["ConstructionTargets.SardConvexDomain.eq_whitneyDyadicIndexOf_of_mem_cube_of_generation_eq"],
       :area "sard-convex-domain"}
      {:name
       "ConstructionTargets.SardConvexDomain.closedSet_whitneyCubeCover_proper",
@@ -24457,40 +24457,31 @@
       :status :partial,
       :consumers [:t01A08],
       :depends-on
-      ["ConstructionTargets.SardConvexDomain.eq_whitneyDyadicIndexOf_of_mem_cube_of_generation_eq"],
+      ["ConstructionTargets.SardConvexDomain.whitneyDyadicCube_subset_parent"],
       :area "sard-convex-domain"}],
     :statement-hashes {:registry "150/150"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Committed fixed-generation uniqueness: cube membership forces the floor-coordinate index. Parent nesting and maximal selection remain; not refuted.",
+    "Committed the dyadic parent and proved every half-open cube is contained in it, using fixed-scale uniqueness and floor division by two. Maximal admissible-cube selection remains; not refuted.",
     :commands
     [{:cmd "lake build ConstructionTargets.SardConvexDomain", :exit 0}
      {:cmd "fixture; registry; scan; commit diff", :exit 0}
      {:cmd "git commit", :exit 0}],
     :diagnostic-history
-    [{:cmd "build", :exit 1, :correction "unfolded pair before ext"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1791918287475-10241-cee4355c",
-     :commands
-     ["git show/diff cc5e973c; scope and orientation review"
-      "lake build ConstructionTargets.SardConvexDomain"
-      "sha256sum + lake env lean uniqueness fixture"
-      "statement-registry check; placeholder recount"],
-     :finding
-     "PASS. Commit cc5e973c changes only SardConvexDomain.lean and correctly proves same-generation uniqueness from half-open coordinate bounds via floor_eq_iff. This is compiled, sorry-free standard-axiom progress; parent nesting, maximal selection, and proper-cover assembly remain explicitly listed. Build and fixture pass; fixture hash matches; registry 150/150; forbidden count 0->0."},
-    :commit "cc5e973c91b06f46ae6b77eefaed4923440ec283",
+    [{:cmd "build",
+      :exit 1,
+      :correction "matched floor_div_natCast orientation"}],
+    :commit "70b63a88d84bf231927d4c726b87b8a9905f1f31",
     :changed-paths ["ConstructionTargets/SardConvexDomain.lean"],
     :fixture
-    {:path "/tmp/t01a08_b3_dyadic_unique_check.lean",
+    {:path "/tmp/t01a08_b3_dyadic_parent_check.lean",
      :sha256
-     "1567b2e8b5208b7e7935aecadd3374e025b1dcc73e8e9525d6e1f6beeb370a52"},
+     "c0ccf36ed6a78c909dc05224aa91301e15dcb49fb29adba5db55852c31e794c3"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain.blueprint/B3",
    :acceptance
@@ -35176,7 +35167,8 @@
     :lemma-constructiontargets-sardconvexdomain-finite-whitneynetquarterballs-meeting-nhds-
     :lemma-constructiontargets-sardconvexdomain-countable-whitneydyadicindex
     :lemma-constructiontargets-sardconvexdomain-mem-whitneydyadiccube-indexof
-    :lemma-constructiontargets-sardconvexdomain-eq-whitneydyadicindexof-of-mem-cube-of-gene],
+    :lemma-constructiontargets-sardconvexdomain-eq-whitneydyadicindexof-of-mem-cube-of-gene
+    :lemma-constructiontargets-sardconvexdomain-whitneydyadiccube-subset-parent],
    :other-consumers []}
   {:consumer :t01A08,
    :phase :lemma,
@@ -36074,6 +36066,29 @@
    :kind :lemma,
    :depends-on
    [:lemma-constructiontargets-sardconvexdomain-mem-whitneydyadiccube-indexof],
+   :other-consumers []}
+  {:consumer :t01A08,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.SardConvexDomain.whitneyDyadicCube_subset_parent",
+    :type
+    "each half-open dyadic cube is contained in its generation-plus-one parent"},
+   :lemma
+   {:name
+    "ConstructionTargets.SardConvexDomain.whitneyDyadicCube_subset_parent",
+    :reported-by [:r-a08-sard-b3-whitney-cubes-1],
+    :type
+    "each half-open dyadic cube is contained in its generation-plus-one parent",
+    :area "sard-convex-domain",
+    :proved-in :r-a08-sard-b3-whitney-cubes-1},
+   :id
+   :lemma-constructiontargets-sardconvexdomain-whitneydyadiccube-subset-parent,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-sardconvexdomain-eq-whitneydyadicindexof-of-mem-cube-of-gene],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
