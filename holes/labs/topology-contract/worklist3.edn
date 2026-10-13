@@ -36104,20 +36104,19 @@
    [:lemma-constructiontargets-sardconvexdomain-eq-whitneydyadicindexof-of-mem-cube-of-gene],
    :other-consumers []}
   {:consumer :t93J03,
-   :stop-count 1,
+   :stop-count 2,
    :review-finding
    "Blueprint defect: the frozen final hypothesis SemilocallySimplyConnected X is unused. C5 introduces it as `_`, and C1-C4 do not consume it; this violates the required every-final-hypothesis-used gate. Revise the blueprint to identify a mathematically genuine use or explicitly resolve the redundant frozen hypothesis before formalisation.",
    :evidence
    {:placeholder-delta {:t93J03 [1 1]},
     :residual
-    "Build literal orbit-quotient homeomorphism, then C1 pi1 adapter; C2 cyclic cover; copy compiled assembly into Main.",
+    "Build literal orbit-quotient homeomorphism, C1 pi1 adapter, C2 cyclic cover, then copy assembly into Main.",
     :outcome :stop,
     :warnings
-    ["reference Blueprint.lean retains expected sorryAx in unfinished library lemmas"],
+    ["reference Blueprint.lean has expected sorryAx in C1/C2"],
     :missing-theorems
     [{:name "t93J03_kleinBottle_pi1_every_basepoint",
-      :type
-      "forall k:KleinBottle, FundamentalGroup k equiv PresentedKleinGroup",
+      :type "forall k, FundamentalGroup k equiv PresentedKleinGroup",
       :status :not-started,
       :consumers [:t93J03],
       :depends-on [],
@@ -36134,29 +36133,28 @@
     :axioms [],
     :author :topo-10,
     :reason
-    "Blueprint written and committed. It records the two LIBRARY obligations, proved lifting/embedding assembly, dependency layers, truth checks, and gates; implementation continues with the literal orbit-quotient homeomorphism.",
+    "Repaired blueprint: C3 now consumes hslsc at x and returns its open-neighborhood/null-homotopy certificate with the lift; C5 binds and passes hslsc. Library implementation remains; not refuted.",
     :commands
     [{:cmd "lake env lean holes/labs/blueprints/t93J03/Blueprint.lean",
       :exit 0}
-     {:cmd "statement registry; blueprint headings; scoped diff",
-      :exit 0}
-     {:cmd "git commit", :exit 0}],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1791919277989-10272-fd4bb601",
-     :finding
-     "Blueprint defect: the frozen final hypothesis SemilocallySimplyConnected X is unused. C5 introduces it as `_`, and C1-C4 do not consume it; this violates the required every-final-hypothesis-used gate. Revise the blueprint to identify a mathematically genuine use or explicitly resolve the redundant frozen hypothesis before formalisation."},
-    :commit "81cda184c2a072a73b5f073ee163cfff612cd84b",
+     {:cmd "statement registry; hslsc route; diff checks", :exit 0}
+     {:cmd "git commit; scoped commit check; placeholder recount",
+      :exit 0}],
+    :diagnostic-history
+    [{:cmd "frame package-link check",
+      :exit 1,
+      :correction
+      "canonical authority checkout; frame-only rule inapplicable"}],
+    :commit "f8d7aa67801441bed344d8966e407079cd4de0b7",
     :changed-paths ["ConstructionTargets/t93J03Closure.blueprint.md"],
     :fixture
     {:path "ConstructionTargets/t93J03Closure.blueprint.md",
      :sha256
-     "a1b69533216919b91980135fea578beb4b220d2e9410179680ce4073c0c21bdb",
+     "0eb7bcdc51db1366773a28765e79c1810363a3c938989fc1290bea6f7a029ed1",
      :mode :blueprint},
     :seat :topo-10},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
