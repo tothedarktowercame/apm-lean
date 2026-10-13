@@ -24430,24 +24430,25 @@
    :consumer :t01A08,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "extend Mathlib: state and prove the missing theorem in scope",
    :implements-lemma :lemma-closedset-whitneycubecover,
    :evidence
    {:placeholder-delta {:t01A08 [1 1]},
     :residual
-    "Prove normalized separation/fixed packing; sum strata; assemble B3; then B4-B7, B9.",
+    "Fixed packing bound; sum adjacent strata; assemble B3; then B4-B7, B9.",
     :outcome :stop,
     :warnings ["existing unnecessarySimpa:454"],
     :missing-theorems
     [{:name
-      "ConstructionTargets.SardConvexDomain.whitneyNormalize_mem_closedBall_half",
-      :type "incident centers normalize into closedBall 0 (1/2)",
+      "ConstructionTargets.SardConvexDomain.isSeparated_image_whitneyNormalize_incidence",
+      :type "normalized incidence image is 1/8-separated",
       :status :proved,
       :consumers [:t01A08],
       :depends-on
-      ["ConstructionTargets.SardConvexDomain.dist_whitneyNormalize"],
+      ["ConstructionTargets.SardConvexDomain.dist_whitneyNormalize"
+       "ConstructionTargets.SardConvexDomain.whitneyStratumNet_spec"],
       :area "sard-convex-domain"}
      {:name
       "ConstructionTargets.SardConvexDomain.closedSet_whitneyCubeCover_proper",
@@ -24455,45 +24456,33 @@
       :status :partial,
       :consumers [:t01A08],
       :depends-on
-      ["ConstructionTargets.SardConvexDomain.whitneyNormalize_mem_closedBall_half"
-       "ConstructionTargets.SardConvexDomain.encard_whitneyStratumNet_mem_quarter_ball_le_packingNumber"],
+      ["ConstructionTargets.SardConvexDomain.isSeparated_image_whitneyNormalize_incidence"
+       "ConstructionTargets.SardConvexDomain.whitneyNormalize_mem_closedBall_half"],
       :area "sard-convex-domain"}],
     :statement-hashes {:registry "150/150"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Committed normalization containment: every incident scale-k center maps into closedBall(0,1/2). Normalized separation, fixed packing bound, and assembly remain; not refuted.",
+    "Committed normalized scale-k incidence separation by 1/8. Fixed packing and assembly remain; not refuted.",
     :commands
     [{:cmd "lake build ConstructionTargets.SardConvexDomain", :exit 0}
      {:cmd "fixture; registry; scans; diff", :exit 0}
-     {:cmd "git commit scoped file", :exit 0}],
+     {:cmd "git commit", :exit 0}],
     :diagnostic-history
     [{:cmd "exploratory builds",
       :exit 1,
-      :correction
-      "fixed distance orientation and zpow normalization"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1791908998573-9990-b662fd59",
-     :commands
-     ["git show/diff 10df004; scope/scaling checks"
-      "sha256sum + lake env lean frozen fixture"
-      "lake build ConstructionTargets.SardConvexDomain"
-      "statement registry check; forbidden-count scan"],
-     :finding
-     "PASS. Recorded topo-10 commit 10df004 changes only the scoped Lean file and correctly transports incident scale-k centers into closedBall(0,1/2). The stratum upper bound gives dist(c,x)<2^(k+1)/4; the exact normalization law and zpow algebra reduce this to <1/2, with zero-center and distance orientations correct. Fixture hash cda59318... matches; build/fixture pass; registry 150/150; forbidden placeholders stay 0; only standard axioms. Valid compiled B3 progress; STOP leaves normalized separation/fixed packing, stratum sum, and assembly."},
-    :commit "10df00408c00b9f9da395c1e82e05313d95ea971",
+      :correction "fixed onFun/edist and positivity"}],
+    :commit "69dea2af4ff324aa69b59e7e2be7e82f3d67a4e9",
     :changed-paths ["ConstructionTargets/SardConvexDomain.lean"],
     :fixture
-    {:path "/tmp/t01a08_b3_normalized_ball_check.lean",
+    {:path "/tmp/t01a08_b3_normalized_separation_check.lean",
      :sha256
-     "cda593188071854ded7d14c1ca647c9f59b4092f1015380a46add076cc071f12",
+     "777f5648ba601ccbf38bd1656fdd9a562e7736922061df748fcc7dd3f7e5bc20",
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain.blueprint/B3",
    :acceptance
@@ -35162,7 +35151,8 @@
     :lemma-constructiontargets-sardconvexdomain-finite-whitneystratumnet-mem-quarter-ball
     :lemma-constructiontargets-sardconvexdomain-encard-whitneystratumnet-mem-quarter-ball-l
     :lemma-constructiontargets-sardconvexdomain-dist-whitneynormalize
-    :lemma-constructiontargets-sardconvexdomain-whitneynormalize-mem-closedball-half],
+    :lemma-constructiontargets-sardconvexdomain-whitneynormalize-mem-closedball-half
+    :lemma-constructiontargets-sardconvexdomain-isseparated-image-whitneynormalize-incidenc],
    :other-consumers []}
   {:consumer :t01A08,
    :phase :lemma,
@@ -35603,6 +35593,28 @@
    :kind :lemma,
    :depends-on
    [:lemma-constructiontargets-sardconvexdomain-dist-whitneynormalize],
+   :other-consumers []}
+  {:consumer :t01A08,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.SardConvexDomain.isSeparated_image_whitneyNormalize_incidence",
+    :type "normalized incidence image is 1/8-separated"},
+   :lemma
+   {:name
+    "ConstructionTargets.SardConvexDomain.isSeparated_image_whitneyNormalize_incidence",
+    :reported-by [:r-a08-sard-b3-whitney-cubes-1],
+    :type "normalized incidence image is 1/8-separated",
+    :area "sard-convex-domain",
+    :proved-in :r-a08-sard-b3-whitney-cubes-1},
+   :id
+   :lemma-constructiontargets-sardconvexdomain-isseparated-image-whitneynormalize-incidenc,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-sardconvexdomain-dist-whitneynormalize
+    :lemma-constructiontargets-sardconvexdomain-whitneystratumnet-spec],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
