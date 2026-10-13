@@ -113,6 +113,36 @@ theorem apm_m02J05_young_shape
 the modular class and closure of its rescalable hull under the vector-space
 operations on `AEEqFun`. These are the two structural conjuncts preceding the
 Luxemburg functional laws. -/
+lemma apm_m02J05_bridge_convex_and_submodule_of_young_shape_aux_smul
+    (α : ℝ → ℝ) (r : ℝ) (u : apm_m02J05_Fun)
+    (hu : u ∈ apm_m02J05_L α) : r • u ∈ apm_m02J05_L α := by
+  by_cases hr : r = 0
+  · subst r
+    simpa using apm_m02J05_zero_mem_L α
+  · obtain ⟨c, hc, hcu⟩ := hu
+    refine ⟨c / r, div_ne_zero hc hr, ?_⟩
+    convert hcu using 1
+    rw [smul_smul]
+    field_simp
+
+lemma apm_m02J05_bridge_convex_and_submodule_of_young_shape_aux_add
+    (α : ℝ → ℝ)
+    (hc : ContinuousOn α (Ici 0))
+    (hnonneg : ∀ t, 0 ≤ t → 0 ≤ α t)
+    (hshape : apm_m02J05_YoungShapeFact α)
+    (u v : apm_m02J05_Fun)
+    (hu : u ∈ apm_m02J05_L α) (hv : v ∈ apm_m02J05_L α) :
+    u + v ∈ apm_m02J05_L α := by
+  sorry
+
+lemma apm_m02J05_bridge_convex_and_submodule_of_young_shape_aux_convex
+    (α : ℝ → ℝ)
+    (hc : ContinuousOn α (Ici 0))
+    (hnonneg : ∀ t, 0 ≤ t → 0 ≤ α t)
+    (hshape : apm_m02J05_YoungShapeFact α) :
+    Convex ℝ (apm_m02J05_K α) := by
+  sorry
+
 theorem apm_m02J05_bridge_convex_and_submodule_of_young_shape
     (α : ℝ → ℝ)
     (hc : ContinuousOn α (Ici 0))
@@ -124,7 +154,17 @@ theorem apm_m02J05_bridge_convex_and_submodule_of_young_shape
     Convex ℝ (apm_m02J05_K α) ∧
       ∃ S : Submodule ℝ apm_m02J05_Fun,
         (S : Set apm_m02J05_Fun) = apm_m02J05_L α := by
-  sorry
+  refine ⟨apm_m02J05_bridge_convex_and_submodule_of_young_shape_aux_convex
+    α hc hnonneg hshape, ?_⟩
+  let S : Submodule ℝ apm_m02J05_Fun :=
+    { carrier := apm_m02J05_L α
+      zero_mem' := apm_m02J05_zero_mem_L α
+      add_mem' := fun hu hv ↦
+        apm_m02J05_bridge_convex_and_submodule_of_young_shape_aux_add
+          α hc hnonneg hshape _ _ hu hv
+      smul_mem' := fun r _ hu ↦
+        apm_m02J05_bridge_convex_and_submodule_of_young_shape_aux_smul α r _ hu }
+  exact ⟨S, rfl⟩
 
 /-- Why this unblocks `apm_m02j05`: this is the complete `sInf` theory for
 the Luxemburg gauge on the rescalable modular class: nonnegativity,
