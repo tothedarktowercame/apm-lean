@@ -23218,6 +23218,8 @@
   {:bounded-exception "Rule0.",
    :consumer :t01A08,
    :stop-count 1,
+   :review-finding
+   "extend Mathlib: state and prove the missing theorem in scope. The elected frozen type dropped hx : x ∈ s, although ContDiffWithinAt.isSymmSndFDerivWithinAt and conversion to iteratedFDerivWithin symmetry require it; UniqueDiffOn supplies pointwise uniqueness only at members. Restore hx : x ∈ s in the registered type, then prove adjacent-swap symmetry and permutation induction in SardConvexDomain.lean. Current row has commit nil/no changed paths, and its fixture merely axiomatizes the declaration (nonstandard axiom appears in #print).",
    :implements-lemma
    :lemma-contdiffwithinat-domdomcongr-iteratedfderivwithin-of-infty,
    :evidence
@@ -23245,6 +23247,12 @@
       "git diff --exit-code -- ConstructionTargets/SardConvexDomain.lean",
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
+    :review
+    {:outcome :fail,
+     :seat "codex-11",
+     :job "invoke-1791873380395-8789-b75a4297",
+     :finding
+     "extend Mathlib: state and prove the missing theorem in scope. The elected frozen type dropped hx : x ∈ s, although ContDiffWithinAt.isSymmSndFDerivWithinAt and conversion to iteratedFDerivWithin symmetry require it; UniqueDiffOn supplies pointwise uniqueness only at members. Restore hx : x ∈ s in the registered type, then prove adjacent-swap symmetry and permutation induction in SardConvexDomain.lean. Current row has commit nil/no changed paths, and its fixture merely axiomatizes the declaration (nonstandard axiom appears in #print)."},
     :commit nil,
     :changed-paths [],
     :fixture
@@ -23256,7 +23264,7 @@
    :phase :implementation,
    :type
    "{E F} [NormedAddCommGroup E] [NormedSpace ℝ E] [NormedAddCommGroup F] [NormedSpace ℝ F] {s} {f} {x} → ContDiffWithinAt ℝ ∞ f s x → UniqueDiffOn ℝ s → x ∈ closure (interior s) → ∀ {n} (σ : Equiv.Perm (Fin n)), (iteratedFDerivWithin ℝ n f s x).domDomCongr σ = iteratedFDerivWithin ℝ n f s x",
-   :state :done-unreviewed,
+   :state :repair,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain/B1/symmetry",
    :acceptance
@@ -23271,6 +23279,7 @@
    :area "sard-convex-domain",
    :declaration
    "ContDiffWithinAt.domDomCongr_iteratedFDerivWithin_of_infty",
+   :fail-count 1,
    :depends-on [:r-topo3-cp9],
    :current-residual "B1 supplies closure membership.",
    :other-consumers [],
