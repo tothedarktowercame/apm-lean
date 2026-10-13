@@ -34,8 +34,9 @@ they do not infer anything about an image from source nullity.
 
 ### B1. Within jets on a convex set
 
-lean: `ContDiffOn.convexWithinJet` : from `hf : ContDiffOn ℝ ∞ f s`,
-produce symmetric continuous multilinear maps `J n x` for `x ∈ s`, with
+lean: `ContDiffOn.convexWithinJet` : from `(interior s).Nonempty` and
+`hf : ContDiffOn ℝ ∞ f s`, produce symmetric continuous multilinear
+maps `J n x` for `x ∈ s`, with
 `J 0 x = f x`, `J 1 x = fderivWithin ℝ f s x`, and continuity on `s`
 
 uses: Mathlib iterated within derivatives and uniqueness on a convex set with
@@ -50,8 +51,9 @@ and continuity to the boundary.
 
 ### B2. Whitney compatibility of convex within jets
 
-lean: `ContDiffOn.convexWithinJet_isWhitney` : for every finite order `n`,
-the jets from B1 satisfy the order-`n` Whitney remainder estimates on `s`
+lean: `ContDiffOn.convexWithinJet_isWhitney` : assuming
+`(interior s).Nonempty`, for every finite order `n`, the jets from B1 satisfy
+the order-`n` Whitney remainder estimates on `s`
 
 uses: B1, Mathlib `Convex.segment_subset`, one-variable Taylor formula with
 integral remainder
@@ -66,8 +68,8 @@ segment in the domain.
 
 ### B3. Whitney cubes for the complement
 
-lean: `closedSet_whitneyCubeCover` : for closed `s` in a finite-dimensional
-Euclidean space, construct a countable locally finite cover of `sᶜ` by
+lean: `closedSet_whitneyCubeCover` : for closed nonempty `s` in a
+finite-dimensional Euclidean space, construct a countable locally finite cover of `sᶜ` by
 half-open dyadic cubes whose diameter is comparable to their distance from
 `s`, with a chosen nearest point of `s` for every cube
 
@@ -131,7 +133,8 @@ changes preserve convex fibers.
 ### B7. Smooth extension from a closed convex domain
 
 lean: `ContDiffOn.exists_contDiff_extension_of_isClosed_convex` :
-`IsClosed s → Convex ℝ s → s.Nonempty → ContDiffOn ℝ ∞ f s →
+`IsClosed s → Convex ℝ s → (interior s).Nonempty →
+  ContDiffOn ℝ ∞ f s →
   ∃ F, ContDiff ℝ ∞ F ∧ Set.EqOn F f s ∧
     ∀ x ∈ s, fderiv ℝ F x = fderivWithin ℝ f s x`
 
@@ -139,7 +142,8 @@ uses: B1, B5, B6, gluing differentiability across a closed set
 
 status: planned
 
-Take B5's function.  It is smooth off `s`; B6 supplies every derivative and
+The interior witness supplies `s.Nonempty` for B3.  Take B5's function.  It is
+smooth off `s`; B6 supplies every derivative and
 its continuity at `s`, so induction on finite order proves global smoothness
 and the displayed jet identities.  The equality and first-derivative identity
 are the order-zero and order-one cases.
@@ -162,7 +166,8 @@ ambient critical image.
 ### B9. Sard on a closed convex domain
 
 lean: `closedConvex_critical_image_null` :
-`IsClosed s → Convex ℝ s → s.Nonempty → ContDiffOn ℝ ∞ f s →
+`IsClosed s → Convex ℝ s → (interior s).Nonempty →
+  ContDiffOn ℝ ∞ f s →
   μ (f '' {x | x ∈ s ∧ ¬ Function.Surjective
     (fderivWithin ℝ f s x)}) = 0`
 
@@ -186,14 +191,17 @@ lean: `modelRange_withinCriticalImage_null` : transport the source to a
 Euclidean space and specialize B9 to the linear image of `Set.range I`
 
 uses: B9, `ContinuousLinearEquiv.ofFinrankEq`, `I.isClosed_range`,
-`I.convex_range`, `I.nonempty_interior.nonempty`, chain rules for
+`I.convex_range`, `I.nonempty_interior`, chain rules for
 `fderivWithin`
 
 status: planned
 
 Choose `L : E ≃L[ℝ] EuclideanSpace ℝ (Fin (finrank ℝ E))`, set
 `s' := L '' Set.range I`, and apply B9 to `f ∘ L.symm` on `s'`.  Linear
-homeomorphisms preserve closedness, convexity, and nonempty interior.  The
+homeomorphisms preserve closedness and convexity.  For B9's interior
+hypothesis, choose `x ∈ interior (Set.range I)` from `I.nonempty_interior`;
+the homeomorphism maps `x` into `interior s'`, giving `(interior s').Nonempty`.
+The
 within chain rule and invertibility of `L` identify surjectivity of the two
 within derivatives, while the function images are equal.  This is the theorem
 consumed by the `t01A08` manifold chart argument.  It supersedes the stronger
