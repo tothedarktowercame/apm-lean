@@ -6329,6 +6329,18 @@ theorem genericPointWedgeOuterRightSpan_transport_map_eq_precedingUnitInv :
   rfl
 
 omit [PathConnectedSpace X] [PathConnectedSpace Y] in
+/-- The shifted and unshifted overlap objects agree after passage to the
+single-object coordinate groupoid. -/
+theorem genericPointWedgeOverlap_shiftedCoordinateObject_eq :
+    let eK := genericPointWedgeOverlapGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let z := genericPointWedgeOverlapBase x₀ y₀ M N
+    eK.functor.obj ((eK.functor ⋙ eK.inverse).obj z) =
+      eK.functor.obj z := by
+  dsimp only
+  exact Subsingleton.elim _ _
+
+omit [PathConnectedSpace X] [PathConnectedSpace Y] in
 /-- The shifted and unshifted inverse right-span components are dependently
 equal, since their arguments are objects of `FundamentalGroupoid Unit`. -/
 theorem genericPointWedgeOuterRightSpan_shiftedComponent_heq :
@@ -6341,18 +6353,8 @@ theorem genericPointWedgeOuterRightSpan_shiftedComponent_heq :
         (eK.functor.obj ((eK.functor ⋙ eK.inverse).obj z)))
       (aR.inv.app (eK.functor.obj z)) := by
   dsimp only
-  have h :
-      (genericPointWedgeOverlapGroupoidEquivalence
-          x₀ y₀ M N hM hN hy hx cM cN).functor.obj
-          (((genericPointWedgeOverlapGroupoidEquivalence
-              x₀ y₀ M N hM hN hy hx cM cN).functor ⋙
-            (genericPointWedgeOverlapGroupoidEquivalence
-              x₀ y₀ M N hM hN hy hx cM cN).inverse).obj
-            (genericPointWedgeOverlapBase x₀ y₀ M N)) =
-        (genericPointWedgeOverlapGroupoidEquivalence
-          x₀ y₀ M N hM hN hy hx cM cN).functor.obj
-            (genericPointWedgeOverlapBase x₀ y₀ M N) :=
-    Subsingleton.elim _ _
+  have h := genericPointWedgeOverlap_shiftedCoordinateObject_eq
+    x₀ y₀ M N hM hN hy hx cM cN
   cases h
   rfl
 
@@ -7085,6 +7087,7 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeOuterRightSpan_unitInv_coordinateMap_eq_id
 #print axioms genericPointWedgeOverlap_inverse_map_functor_map_unitInv
 #print axioms genericPointWedgeOuterRightSpan_transport_map_eq_precedingUnitInv
+#print axioms genericPointWedgeOverlap_shiftedCoordinateObject_eq
 #print axioms genericPointWedgeOuterRightSpan_shiftedComponent_heq
 #print axioms genericPointWedgeRightBase_inl_implies_rightProjection_eq_one
 #print axioms genericPointWedgeLegCoordinates_of_mapped

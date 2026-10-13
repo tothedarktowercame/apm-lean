@@ -1269,5 +1269,8 @@ round-trip component.
 `genericPointWedgeOuterRightSpan_shiftedComponent_heq` now identifies the
 shifted and unshifted inverse-span components with their dependent endpoints
 preserved, using uniqueness of objects in `FundamentalGroupoid Unit`.  The
-residual is to transport the whole typed naturality square across this `HEq`
-and close the resulting fixed-component recurrence.
+underlying coordinate-object equality is now separately named by
+`genericPointWedgeOverlap_shiftedCoordinateObject_eq`, so the next step can
+transport the identity morphism and inverse-span component with the same
+witness.  The residual is to transport the whole typed naturality square
+across that equality and close the resulting fixed-component recurrence.
