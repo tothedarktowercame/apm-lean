@@ -12,6 +12,10 @@ Uniqueness in part (c) is up to equality on `[a, b]`. The functions are
 `ℝ → ℝ` and the energy only sees `[a, b]`, so a minimizer changed outside
 `[a, b]` is another minimizer; `∃!` over all of `ℝ → ℝ` is false (compiled
 counterexample: holes/labs/solve-loop/refutations/m95A03/Refute.lean).
+Part (c) also records admissibility explicitly: Mathlib's `IsMinOn` compares a
+point with members of a set but does not assert that the point itself belongs
+to that set.  Uniqueness ranges over all admissible `C¹` minimizers, as in the
+source, rather than only globally `C²` competitors.
 
 ## Encoding questions
 
@@ -89,6 +93,7 @@ theorem apm_m95A03_exists_homogeneous_minimizer
     (hp_lower : ∀ t ∈ Set.Icc a b, p₀ ≤ p t)
     (hq_nonneg : ∀ t ∈ Set.Icc a b, 0 ≤ q t) :
     ∃ u : ℝ → ℝ, ContDiff ℝ 2 u ∧
+      u ∈ apm_m95A03_admissible a b 0 0 ∧
       IsMinOn (apm_m95A03_energy a b p q f)
         (apm_m95A03_admissible a b 0 0) u := by
   sorry
@@ -98,10 +103,10 @@ theorem apm_m95A03_minimizers_eqOn
     (p q f u v : ℝ → ℝ)
     (hp_lower : ∀ t ∈ Set.Icc a b, p₀ ≤ p t)
     (hq_nonneg : ∀ t ∈ Set.Icc a b, 0 ≤ q t)
-    (hu2 : ContDiff ℝ 2 u)
+    (huadm : u ∈ apm_m95A03_admissible a b 0 0)
     (humin : IsMinOn (apm_m95A03_energy a b p q f)
       (apm_m95A03_admissible a b 0 0) u)
-    (hv2 : ContDiff ℝ 2 v)
+    (hvadm : v ∈ apm_m95A03_admissible a b 0 0)
     (hvmin : IsMinOn (apm_m95A03_energy a b p q f)
       (apm_m95A03_admissible a b 0 0) v) :
     Set.EqOn v u (Set.Icc a b) := by
@@ -126,9 +131,11 @@ theorem apm_m95a03
           (apm_m95A03_modifiedRHS p q f w) (u - w)) ∧
     ∃ u : ℝ → ℝ,
       ContDiff ℝ 2 u ∧
+      u ∈ apm_m95A03_admissible a b 0 0 ∧
       IsMinOn (apm_m95A03_energy a b p q f)
         (apm_m95A03_admissible a b 0 0) u ∧
-      ∀ v : ℝ → ℝ, ContDiff ℝ 2 v →
+      ∀ v : ℝ → ℝ,
+        v ∈ apm_m95A03_admissible a b 0 0 →
         IsMinOn (apm_m95A03_energy a b p q f)
           (apm_m95A03_admissible a b 0 0) v →
         Set.EqOn v u (Set.Icc a b) := by
@@ -141,12 +148,12 @@ theorem apm_m95a03
         hp hq hf hp_lower hq_nonneg hu2 hua hub
   constructor
   · exact apm_m95A03_homogenization a b α β hab p q f
-  · obtain ⟨u, hu2, humin⟩ :=
+  · obtain ⟨u, hu2, huadm, humin⟩ :=
       apm_m95A03_exists_homogeneous_minimizer a b p₀ hab hp₀ p q f
         hp hq hf hp_lower hq_nonneg
-    refine ⟨u, hu2, humin, ?_⟩
-    intro v hv2 hvmin
+    refine ⟨u, hu2, huadm, humin, ?_⟩
+    intro v hvadm hvmin
     exact apm_m95A03_minimizers_eqOn a b p₀ hab hp₀ p q f u v
-      hp_lower hq_nonneg hu2 humin hv2 hvmin
+      hp_lower hq_nonneg huadm humin hvadm hvmin
 
 #print axioms apm_m95a03

@@ -12,6 +12,10 @@ Uniqueness in part (c) is up to equality on `[a, b]`. The functions are
 `ℝ → ℝ` and the energy only sees `[a, b]`, so a minimizer changed outside
 `[a, b]` is another minimizer; `∃!` over all of `ℝ → ℝ` is false (compiled
 counterexample: holes/labs/solve-loop/refutations/m95A03/Refute.lean).
+Part (c) also records admissibility explicitly: Mathlib's `IsMinOn` compares a
+point with members of a set but does not assert that the point itself belongs
+to that set.  Uniqueness ranges over all admissible `C¹` minimizers, as in the
+source, rather than only globally `C²` competitors.
 
 ## Encoding questions
 
@@ -68,9 +72,11 @@ theorem apm_m95a03
           (apm_m95A03_modifiedRHS p q f w) (u - w)) ∧
     ∃ u : ℝ → ℝ,
       ContDiff ℝ 2 u ∧
+      u ∈ apm_m95A03_admissible a b 0 0 ∧
       IsMinOn (apm_m95A03_energy a b p q f)
         (apm_m95A03_admissible a b 0 0) u ∧
-      ∀ v : ℝ → ℝ, ContDiff ℝ 2 v →
+      ∀ v : ℝ → ℝ,
+        v ∈ apm_m95A03_admissible a b 0 0 →
         IsMinOn (apm_m95A03_energy a b p q f)
           (apm_m95A03_admissible a b 0 0) v →
         Set.EqOn v u (Set.Icc a b) := by

@@ -1,6 +1,6 @@
 # Statement repair and blueprint for m95A03
 
-## Triage verdict: false as originally encoded; proposed repair adopted
+## Triage verdict: false; second repair required
 
 The source asks for existence and uniqueness of the solution/minimizer on the
 interval `[a,b]`. The frozen statement instead used `∃!` over global functions
@@ -14,10 +14,23 @@ it has the same admissibility and energy while being a different global
 function. The file proves the negation of the full original universally
 quantified theorem without placeholders.
 
-The solve-loop proposal replaces the final `∃!` by existence of one global
-`C²` representative together with `Set.EqOn` uniqueness on `Icc a b`. This is
-exactly the source's interval-local meaning, so `RevisedMain.lean` adopts the
-proposal unchanged.
+The first repair replaced global function equality by `Set.EqOn` on `Icc a b`,
+but it was still false.  Mathlib's `IsMinOn F s u` means only that `F u ≤ F v`
+for every `v ∈ s`; it does **not** imply `u ∈ s`.  With `p=1`, `q=f=0`,
+both `u=0` and the non-admissible constant `v=1` satisfy the bare `IsMinOn`
+predicate, although they differ on the interval.
+
+The new `RevisedMain.lean` changes only part (c).  Its witness explicitly
+belongs to `apm_m95A03_admissible a b 0 0`, and uniqueness quantifies over all
+`v` that explicitly belong to this admissible class and satisfy `IsMinOn`.
+The unnecessary `ContDiff ℝ 2 v` restriction is removed: admissibility already
+provides the `C¹` regularity of the variational class, and strict convexity gives
+uniqueness over that entire class.
+
+Part (a) does not suffer from the same trap.  Before stating its equivalence it
+assumes `ContDiff ℝ 2 u`, `u a = α`, and `u b = β`; these hypotheses imply
+`u ∈ apm_m95A03_admissible a b α β`.  Thus its candidate is admissible even
+though `IsMinOn` alone would not say so.
 
 Degenerate and endpoint checks:
 
@@ -27,6 +40,7 @@ Degenerate and endpoint checks:
   vanish, and the zero endpoint condition forces interval equality;
 - exterior bumps remain possible, but are intentionally identified only by
   `EqOn` rather than global equality;
+- constant non-admissible functions are now excluded by explicit membership;
 - the ODE is required on `Icc`, including endpoints. The residual is
   continuous under the stated `C¹/C²/continuous` hypotheses, so an equation
   first derived on `Ioo` extends to the endpoints.
@@ -101,7 +115,8 @@ directions.
 ### `apm_m95A03_exists_homogeneous_minimizer`
 
 **Statement.** Under uniform positivity of `p` and nonnegativity of `q`, the
-zero-boundary energy has a global `C²` minimizer.
+zero-boundary energy has a global `C²` minimizer that explicitly belongs to
+the admissible class.
 
 **Proof sketch.** Solve the linear two-point BVP. One route is the source's
 coercive weak formulation on `H¹₀(a,b)`: Poincaré plus `p≥p₀` makes the
@@ -127,11 +142,13 @@ showing the shooting denominator is nonzero.
 
 ### `apm_m95A03_minimizers_eqOn`
 
-**Statement.** Any two global `C²` zero-boundary minimizers agree throughout
-`[a,b]`.
+**Statement.** Any two admissible `C¹` zero-boundary minimizers agree
+throughout `[a,b]`; only the existence witness is separately known to be
+globally `C²`.
 
-**Proof sketch.** Let `h=v-u`. Since both are minimizers, the midpoint is
-admissible and convexity gives equality in the quadratic midpoint identity.
+**Proof sketch.** Let `h=v-u`. Explicit membership of both functions makes the
+midpoint admissible. Since both are minimizers, convexity gives equality in
+the quadratic midpoint identity.
 Equivalently compare the two exact energy expansions. Deduce
 `∫(p(h')²+q h²)=0`. The continuous integrand is nonnegative, so it vanishes;
 `p≥p₀>0` gives `h'=0` on the interval. The endpoint value `h(a)=0` then gives
@@ -142,8 +159,9 @@ Equivalently compare the two exact energy expansions. Deduce
 **Dependencies.** Definitions only; no remaining lemma.
 
 **Truth check.** Exterior bumps demonstrate why only `EqOn` is possible, but
-they satisfy the conclusion. With `q=0`, derivative equality plus one endpoint
-still proves equality; with positive `q`, the conclusion is only stronger.
+they satisfy the conclusion. The constant-one false minimizer is now excluded
+because it violates the zero endpoint conditions. With `q=0`, derivative
+equality plus one endpoint still proves equality.
 
 ## Dependency layers
 
