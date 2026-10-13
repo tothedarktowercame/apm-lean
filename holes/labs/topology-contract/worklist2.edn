@@ -87729,7 +87729,9 @@
    :depends-on [],
    :other-consumers []}
   {:consumer :t94A08,
-   :stop-count 10,
+   :owner-reopen
+   "reopened: a lemma this row reported missing is now banked",
+   :stop-count 0,
    :evidence
    {:placeholder-delta 0,
     :residual
@@ -87773,7 +87775,7 @@
      "c3412ae1def03a56690fcbe4912e238b4aeafb1f38a968707014d1ecb910571a"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["problems/t94A08/lean/Main.lean"
     "problems/t94A08/status.json"
@@ -87858,6 +87860,17 @@
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "git show --check 10593d059", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791923784016-10436-456af209",
+     :commands
+     ["git show/diff-tree/SHA256 10593d059"
+      "git show --check 10593d059"
+      "statement-registry.py check (150/0)"
+      "PairingData and consumer blueprint comparison"],
+     :finding
+     "Valid program STOP with a new blueprint milestone. Exact one-file scope and fixture SHA match. B1-B10 are true and dependency-closed: positive edge count gives nonempty orbit coordinates; signed degrees match consumers; Mayer-Vietoris yields the stated kernel, cokernel, H0, and higher vanishing. Final Lean type faithfully assembles B8-B9. Registry 150/0; no defect."},
     :commit "10593d059",
     :changed-paths
     ["ConstructionTargets/PolygonSurfaceHomology.blueprint.md"],
@@ -87867,7 +87880,7 @@
      "de51001b7d679ce2f9454dea4fa9da90576b732aa48fddc37c9a3757428ced6c"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -87887,14 +87900,19 @@
     :blueprint
     "ConstructionTargets/PolygonSurfaceHomology.blueprint.md"},
    :continue-from
-   "NEXT JOB: write ConstructionTargets/PolygonSurfaceHomology.blueprint.md (BLUEPRINTS.md), stating the final declaration in the exact form the consuming blueprints use, then formalise milestone by milestone.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Blueprint written; independent review is required before formalization.",
    :id :program-2026-10-13-polygon-surface-homology,
    :kind :reusable-theorem,
    :campaign-priority 31,
    :fail-count 0,
    :depends-on [],
    :program true,
-   :other-consumers [:t94J09]}
+   :other-consumers [:t94J09],
+   :program-history
+   [{:job 1,
+     :commit "10593d059",
+     :reason
+     "Blueprint written; independent review is required before formalization."}]}
   {:consumer :t97A01,
    :stop-count 0,
    :phase :implementation,
