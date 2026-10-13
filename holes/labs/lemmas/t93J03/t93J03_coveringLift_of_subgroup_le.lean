@@ -69,7 +69,21 @@ theorem t93J03_coveringLift_of_subgroup_le
     (hX : ∀ g ∈ (FundamentalGroup.mapOfEq (inclusion X) hx).range,
       e g ∈ Subgroup.zpowers generatorA) :
     ∃ l : C(X, C), p ∘ l = inclusion X := by
-  sorry
+  cases hx
+  have hle :
+      (FundamentalGroup.map (inclusion X) x).range ≤
+        (FundamentalGroup.mapOfEq ⟨p, hp.continuous⟩ hpc).range := by
+    rintro g ⟨y, rfl⟩
+    obtain ⟨γ, rfl⟩ := Path.Homotopic.Quotient.mk_surjective y
+    rw [hcover]
+    apply hX
+    refine ⟨FundamentalGroup.fromPath (.mk γ), ?_⟩
+    rw [FundamentalGroup.mapOfEq_apply, FundamentalGroup.map_apply]
+    rw [← Path.Homotopic.Quotient.mk_map]
+    congr
+  obtain ⟨l, ⟨_, hl⟩, _⟩ :=
+    hp.existsUnique_continuousMap_lifts_of_range_le hpc hle
+  exact ⟨l, hl⟩
 -- END SEAT AREA
 
 /-- A lift of a subspace inclusion is an embedding (embedding cancellation),
