@@ -157,7 +157,10 @@ theorem apm_t97J05_gamma_smooth :
 -- BEGIN SEAT AREA
 lemma apm_t97J05_fiber_third_ne_zero (q : apm_t97J05_R3)
     (hq : q ∈ apm_t97J05_W) : q 2 ≠ 0 := by
-  sorry
+  have hsecond := congrArg (fun u : apm_t97J05_R2 ↦ u 1) hq
+  have hmul : q 0 * q 2 = 1 := by
+    simpa [apm_t97J05_W, apm_t97J05_f, apm_t97J05_value] using hsecond
+  exact fun hz => by simp [hz] at hmul
 -- END SEAT AREA
 
 /-- At every point of the fiber, the trigonometric factor used in the regularity
