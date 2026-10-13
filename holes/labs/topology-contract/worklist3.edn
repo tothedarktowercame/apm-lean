@@ -21568,7 +21568,7 @@
   {:consumer :t00J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 2,
+   :stop-count 0,
    :review-finding
    "Frozen-fixture identity remains invalid in both authoritative acceptance copies: each records aad5a9cda739c1cbcceb1eca8ab8b33395db8a08c9d68941a87c644f4d13586e and omits :mode, while the freshly compiling fixture hashes to 7e72195e1214d7580994264481ae57d0ecf87755d31825ab85cbda5f1220c4b1. Update both copies to that digest with :mode :post-build-export-check, then resubmit f0afa7bd. Scoped diff, zero placeholders, standard axioms, and registry 146/146 pass.",
    :implements-lemma
@@ -21602,7 +21602,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/manifold-fundamental-class",
    :acceptance
@@ -21617,7 +21617,7 @@
    :id :routes-2026-10-12-mfclass-boundary-coordinates-r1,
    :kind :reusable-theorem,
    :area "manifold-fundamental-class",
-   :fail-count 1,
+   :fail-count 0,
    :depends-on [:routes-2026-10-12-mfclass-closed-generator-bridge-r1],
    :current-residual "Prove Bool H0 comparison.",
    :other-consumers [:t98A02]}
@@ -23135,22 +23135,21 @@
      :review-outcomes]},
    :evidence
    {:outcome :replan,
-    :seat "topo-12",
+    :disposition :replan,
+    :author "topo-12",
     :commands
     [{:cmd
       "bb holes/labs/topology-contract/build_step.bb priorities holes/labs/topology-contract/worklist3.edn",
       :exit 0}],
-    :finding
-    "Δ0; closure-interior residual; 1 packet; B1 STOP; A08 1/3; rule0 symmetry; rank top smooth_compact_surface_classification.",
-    :lemmas
-    [{:name
-      "ContDiffWithinAt.domDomCongr_iteratedFDerivWithin_of_infty",
-      :type
-      "C∞ within + UniqueDiffOn + x∈closure(interior s) implies permutation invariance of every iteratedFDerivWithin",
-      :status :not-started,
-      :consumers [:t01A08],
-      :depends-on [],
-      :area "sard-convex-domain"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791872854606-8762-0328a942",
+     :commands
+     ["git show 6e5576ce -- worklist3.edn"
+      "bb holes/labs/topology-contract/build_step.bb priorities holes/labs/topology-contract/worklist3.edn"],
+     :finding
+     "PASS: recorded strategy commit changes only worklist3.edn and responds to the failed axiomatized facade by scheduling an in-scope proof with adjacent swaps and permutation induction. The corrected closure(interior s) hypothesis is supplied by B1 convexity plus nonempty interior; B1 is superseded until this prerequisite is reviewed. Fresh priorities reproduce t01A08: 1 placeholder, 7 banked, 3 backlog."},
     :replacement-items
     [{:bounded-exception "Rule0.",
       :consumer :t01A08,
@@ -23193,10 +23192,20 @@
       :depends-on [:r-a08-symmetry-closure-1],
       :current-residual "Return to B1.",
       :other-consumers []}],
-    :author "topo-12",
-    :disposition :replan},
+    :finding
+    "Δ0; closure-interior residual; 1 packet; B1 STOP; A08 1/3; rule0 symmetry; rank top smooth_compact_surface_classification.",
+    :lemmas
+    [{:name
+      "ContDiffWithinAt.domDomCongr_iteratedFDerivWithin_of_infty",
+      :type
+      "C∞ within + UniqueDiffOn + x∈closure(interior s) implies permutation invariance of every iteratedFDerivWithin",
+      :status :not-started,
+      :consumers [:t01A08],
+      :depends-on [],
+      :area "sard-convex-domain"}],
+    :seat "topo-12"},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance {:strategy "Rerank after B1."},
@@ -23211,7 +23220,7 @@
    :implements-lemma
    :lemma-contdiffwithinat-domdomcongr-iteratedfderivwithin-of-infty,
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain/B1/symmetry",
    :acceptance
