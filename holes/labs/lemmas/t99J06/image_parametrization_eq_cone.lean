@@ -51,7 +51,86 @@ theorem extDeriv_alpha :
 -- BEGIN SEAT AREA
 theorem image_parametrization_eq_cone :
     parametrization '' parameters = cone := by
-  sorry
+  ext p
+  constructor
+  · rintro ⟨q, hq, rfl⟩
+    rcases hq with ⟨hθ0, hθ2π, hz0, hz1⟩
+    refine ⟨?_, hz0, hz1⟩
+    simp only [parametrization, Matrix.cons_val_zero, Matrix.cons_val_one,
+      Matrix.cons_val_two]
+    have htrig : Real.cos (q 0) ^ 2 + Real.sin (q 0) ^ 2 = 1 := by
+      simpa [add_comm] using Real.sin_sq_add_cos_sq (q 0)
+    change ((1 - q 1) * Real.cos (q 0)) ^ 2 +
+      ((1 - q 1) * Real.sin (q 0)) ^ 2 - (q 1 - 1) ^ 2 = 0
+    nlinarith
+  · rintro ⟨heq, hz0, hz1⟩
+    by_cases hapex : p 2 = 1
+    · have hxy : p 0 ^ 2 + p 1 ^ 2 = 0 := by
+        rw [hapex] at heq
+        norm_num at heq ⊢
+        linarith
+      have hx : p 0 = 0 := by nlinarith [sq_nonneg (p 1)]
+      have hy : p 1 = 0 := by nlinarith [sq_nonneg (p 0)]
+      let q : Parameters := ![0, 1]
+      refine ⟨q, ?_, ?_⟩
+      · refine ⟨?_, ?_, ?_, ?_⟩
+        · simp [q]
+        · simp [q, Real.pi_pos.le]
+        · simp [q]
+        · simp [q]
+      · funext i
+        fin_cases i <;> simp [parametrization, q, hx, hy, hapex]
+    · have hr : 0 < 1 - p 2 := lt_of_le_of_ne (sub_nonneg.mpr hz1) (by
+        intro h
+        apply hapex
+        linarith)
+      let z : ℂ := ⟨p 0 / (1 - p 2), p 1 / (1 - p 2)⟩
+      have hnormsq : p 0 ^ 2 + p 1 ^ 2 = (1 - p 2) ^ 2 := by
+        nlinarith
+      have hznorm : ‖z‖ = 1 := by
+        have hsquare : ‖z‖ * ‖z‖ = 1 := by
+          rw [Complex.norm_mul_self_eq_normSq]
+          simp only [Complex.normSq_apply, z]
+          field_simp [ne_of_gt hr]
+          nlinarith
+        nlinarith [norm_nonneg z]
+      have hz_ne : z ≠ 0 := by
+        intro hz
+        rw [hz, norm_zero] at hznorm
+        norm_num at hznorm
+      let θ : ℝ := if 0 ≤ Complex.arg z then Complex.arg z else Complex.arg z + 2 * Real.pi
+      have hθ0 : 0 ≤ θ := by
+        dsimp [θ]
+        split_ifs with h
+        · exact h
+        · have ha := Complex.neg_pi_lt_arg z
+          linarith [Real.pi_pos]
+      have hθ2π : θ ≤ 2 * Real.pi := by
+        dsimp [θ]
+        split_ifs with h
+        · exact le_trans (Complex.arg_le_pi z) (by linarith [Real.pi_pos])
+        · linarith
+      have hcos : Real.cos θ = p 0 / (1 - p 2) := by
+        dsimp [θ]
+        split_ifs with h
+        · simpa [z, hznorm] using Complex.cos_arg hz_ne
+        · rw [Real.cos_add_two_pi]
+          simpa [z, hznorm] using Complex.cos_arg hz_ne
+      have hsin : Real.sin θ = p 1 / (1 - p 2) := by
+        dsimp [θ]
+        split_ifs with h
+        · simpa [z, hznorm] using Complex.sin_arg z
+        · rw [Real.sin_add_two_pi]
+          simpa [z, hznorm] using Complex.sin_arg z
+      let q : Parameters := ![θ, p 2]
+      refine ⟨q, ⟨hθ0, hθ2π, hz0, hz1⟩, ?_⟩
+      funext i
+      fin_cases i
+      · simp [parametrization, q, hcos]
+        field_simp
+      · simp [parametrization, q, hsin]
+        field_simp
+      · simp [parametrization, q]
 -- END SEAT AREA
 
 theorem injOn_parametrization_interior :
