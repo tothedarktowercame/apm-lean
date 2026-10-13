@@ -118,7 +118,131 @@ theorem apm_m93j05_trunc_selfAdjoint (N : ℕ) (p q : ℝ) (hp : 1 < p) (hq : 1 
     (hg : MemLp g (ENNReal.ofReal q) (volume.restrict (Set.Icc (0 : ℝ) 1))) :
     ∫ x, apm_m93j05_trunc N f x * g x ∂(volume.restrict (Set.Icc (0 : ℝ) 1)) =
       ∫ x, f x * apm_m93j05_trunc N g x ∂(volume.restrict (Set.Icc (0 : ℝ) 1)) := by
-  sorry
+  let μ := volume.restrict (Set.Icc (0 : ℝ) 1)
+  have hfi : Integrable f μ := hf.integrable (by
+    rw [ENNReal.one_le_ofReal]
+    linarith)
+  have hgi : Integrable g μ := hg.integrable (by
+    rw [ENNReal.one_le_ofReal]
+    linarith)
+  have hcos (h : ℝ → ℝ) (hh : Integrable h μ) (j : ℕ) :
+      Integrable (fun x ↦ Real.cos (j * 2 * Real.pi * x) * h x) μ := by
+    exact hh.bdd_mul
+      ((Real.continuous_cos.comp
+        (continuous_const.mul continuous_const |>.mul continuous_const |>.mul
+          continuous_id)).aestronglyMeasurable)
+      (Filter.Eventually.of_forall fun x => by
+        simpa [Real.norm_eq_abs] using Real.abs_cos_le_one (j * 2 * Real.pi * x))
+  have hsin (h : ℝ → ℝ) (hh : Integrable h μ) (j : ℕ) :
+      Integrable (fun x ↦ Real.sin (j * 2 * Real.pi * x) * h x) μ := by
+    exact hh.bdd_mul
+      ((Real.continuous_sin.comp
+        (continuous_const.mul continuous_const |>.mul continuous_const |>.mul
+          continuous_id)).aestronglyMeasurable)
+      (Filter.Eventually.of_forall fun x => by
+        simpa [Real.norm_eq_abs] using Real.abs_sin_le_one (j * 2 * Real.pi * x))
+  have hexpand (a b : ℝ → ℝ) (hb : Integrable b μ) :
+      (∫ x, apm_m93j05_trunc N a x * b x ∂μ) =
+        (∫ x, a x ∂μ) * (∫ x, b x ∂μ) +
+          ∑ j ∈ Finset.Icc 1 N,
+            (apm_m93j05_cosCoeff a j *
+                ∫ x, Real.cos (j * 2 * Real.pi * x) * b x ∂μ +
+              apm_m93j05_sinCoeff a j *
+                ∫ x, Real.sin (j * 2 * Real.pi * x) * b x ∂μ) := by
+    unfold apm_m93j05_trunc
+    simp_rw [add_mul, Finset.sum_mul]
+    rw [MeasureTheory.integral_add]
+    · rw [MeasureTheory.integral_const_mul]
+      rw [MeasureTheory.integral_finset_sum]
+      · apply congrArg
+          (fun z => (∫ x, a x ∂μ) * ∫ x, b x ∂μ + z)
+        apply Finset.sum_congr rfl
+        intro j hj
+        rw [show (fun x =>
+            (apm_m93j05_cosCoeff a j * Real.cos (j * 2 * Real.pi * x) +
+              apm_m93j05_sinCoeff a j * Real.sin (j * 2 * Real.pi * x)) * b x) =
+            (fun x => apm_m93j05_cosCoeff a j *
+                (Real.cos (j * 2 * Real.pi * x) * b x) +
+              apm_m93j05_sinCoeff a j *
+                (Real.sin (j * 2 * Real.pi * x) * b x)) by
+          funext x; ring]
+        rw [MeasureTheory.integral_add]
+        · simp_rw [mul_assoc]
+          rw [MeasureTheory.integral_const_mul,
+            MeasureTheory.integral_const_mul]
+        · exact (hcos b hb j).const_mul _
+        · exact (hsin b hb j).const_mul _
+      · intro j hj
+        rw [show (fun x =>
+            (apm_m93j05_cosCoeff a j * Real.cos (j * 2 * Real.pi * x) +
+              apm_m93j05_sinCoeff a j * Real.sin (j * 2 * Real.pi * x)) * b x) =
+            (fun x => apm_m93j05_cosCoeff a j *
+                (Real.cos (j * 2 * Real.pi * x) * b x) +
+              apm_m93j05_sinCoeff a j *
+                (Real.sin (j * 2 * Real.pi * x) * b x)) by
+          funext x; ring]
+        exact ((hcos b hb j).const_mul _).add ((hsin b hb j).const_mul _)
+    · exact hb.const_mul _
+    · apply integrable_finset_sum
+      intro j hj
+      rw [show (fun x =>
+          (apm_m93j05_cosCoeff a j * Real.cos (j * 2 * Real.pi * x) +
+            apm_m93j05_sinCoeff a j * Real.sin (j * 2 * Real.pi * x)) * b x) =
+          (fun x => apm_m93j05_cosCoeff a j *
+              (Real.cos (j * 2 * Real.pi * x) * b x) +
+            apm_m93j05_sinCoeff a j *
+              (Real.sin (j * 2 * Real.pi * x) * b x)) by
+        funext x; ring]
+      exact ((hcos b hb j).const_mul _).add ((hsin b hb j).const_mul _)
+  rw [hexpand f g hgi]
+  have hright : (∫ x, f x * apm_m93j05_trunc N g x ∂μ) =
+      (∫ x, apm_m93j05_trunc N g x * f x ∂μ) := by
+    apply MeasureTheory.integral_congr_ae
+    filter_upwards with x
+    ring
+  rw [hright, hexpand g f hfi]
+  have hcos_sym (a : ℝ → ℝ) (j : ℕ) :
+      (∫ x, Real.cos (j * 2 * Real.pi * x) * a x ∂μ) =
+        ∫ x, a x * Real.cos (j * 2 * Real.pi * x) ∂μ := by
+    apply MeasureTheory.integral_congr_ae
+    filter_upwards with x
+    ring
+  have hsin_sym (a : ℝ → ℝ) (j : ℕ) :
+      (∫ x, Real.sin (j * 2 * Real.pi * x) * a x ∂μ) =
+        ∫ x, a x * Real.sin (j * 2 * Real.pi * x) ∂μ := by
+    apply MeasureTheory.integral_congr_ae
+    filter_upwards with x
+    ring
+  simp_rw [hcos_sym, hsin_sym]
+  unfold apm_m93j05_cosCoeff apm_m93j05_sinCoeff
+  dsimp [μ]
+  rw [mul_comm (∫ x in Set.Icc (0 : ℝ) 1, f x)
+    (∫ x in Set.Icc (0 : ℝ) 1, g x)]
+  congr 1
+  apply Finset.sum_congr rfl
+  intro j hj
+  have hc (a : ℝ → ℝ) :
+      (∫ x in Set.Icc (0 : ℝ) 1,
+        a x * Real.cos (j * 2 * Real.pi * x)) =
+      ∫ x in Set.Icc (0 : ℝ) 1,
+        a x * Real.cos (Real.pi * j * x * 2) := by
+    apply MeasureTheory.integral_congr_ae
+    filter_upwards with x
+    congr 2
+    push_cast
+    ring
+  have hs (a : ℝ → ℝ) :
+      (∫ x in Set.Icc (0 : ℝ) 1,
+        a x * Real.sin (j * 2 * Real.pi * x)) =
+      ∫ x in Set.Icc (0 : ℝ) 1,
+        a x * Real.sin (Real.pi * j * x * 2) := by
+    apply MeasureTheory.integral_congr_ae
+    filter_upwards with x
+    congr 2
+    push_cast
+    ring
+  rw [hc f, hc g, hs f, hs g]
+  ring
 -- END SEAT AREA
 
 /-- (K) Kernel: `Φ f = 0` iff the mean and the coefficients up to `N` vanish. -/
