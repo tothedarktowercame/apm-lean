@@ -1256,3 +1256,8 @@ The intervening natural-isomorphism component's source is now exposed as the
 same transported right object used by both based target connectors.
 Its target is the literal right base object `y₀`, completing the endpoint
 description needed to compare it with the inverse-span equality transport.
+`genericPointWedgeOuterRightSpan_unitInv_naturality` records that comparison
+as the exact naturality square for the inverse span isomorphism.  Its
+coordinate-side `unitInv` map is the identity by
+`genericPointWedgeOuterRightSpan_unitInv_coordinateMap_eq_id`; the remaining
+step is to reduce the transported side with the equivalence triangle.

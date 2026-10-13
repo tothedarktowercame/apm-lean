@@ -6253,6 +6253,48 @@ theorem genericPointWedgeOuterRightRoundTrip_component_target :
   rw [genericPointWedgeOverlapToRight_obj_overlapBase,
     genericPointWedgeRightEquiv_obj_rightBase]
 
+omit [PathConnectedSpace X] [PathConnectedSpace Y] in
+/-- Naturality of the inverse right-span transport along the overlap
+`unitInv` gives the exact square relating that equality transport to the
+remaining mapped round-trip component. -/
+theorem genericPointWedgeOuterRightSpan_unitInv_naturality :
+    let r := genericPointWedgeActualRight x₀ y₀ M N
+    let eK := genericPointWedgeOverlapGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let eR := genericPointWedgeRightGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let aR := genericPointWedgeRightSpanIso
+      x₀ y₀ M N hM hN hy hx cM cN
+    let z := genericPointWedgeOverlapBase x₀ y₀ M N
+    (genericPointWedgeCoordinateRight y₀).map
+          (eK.functor.map (eK.unitInv.app z)) ≫
+        aR.inv.app (eK.functor.obj z) =
+      aR.inv.app (eK.functor.obj ((eK.functor ⋙ eK.inverse).obj z)) ≫
+        (eK.inverse ⋙ r ⋙ eR.functor).map
+          (eK.functor.map (eK.unitInv.app z)) := by
+  exact (genericPointWedgeRightSpanIso
+    x₀ y₀ M N hM hN hy hx cM cN).inv.naturality _
+
+omit [PathConnectedSpace X] [PathConnectedSpace Y] in
+/-- The coordinate-right image of the overlap `unitInv` is the identity,
+because it first lands in the fundamental groupoid of `Unit`. -/
+theorem genericPointWedgeOuterRightSpan_unitInv_coordinateMap_eq_id :
+    let eK := genericPointWedgeOverlapGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let z := genericPointWedgeOverlapBase x₀ y₀ M N
+    (genericPointWedgeCoordinateRight y₀).map
+        (eK.functor.map (eK.unitInv.app z)) = 𝟙 _ := by
+  dsimp only
+  have hunit :
+      (genericPointWedgeOverlapGroupoidEquivalence
+        x₀ y₀ M N hM hN hy hx cM cN).functor.map
+          ((genericPointWedgeOverlapGroupoidEquivalence
+            x₀ y₀ M N hM hN hy hx cM cN).unitInv.app
+              (genericPointWedgeOverlapBase x₀ y₀ M N)) = 𝟙 _ :=
+    Subsingleton.elim _ _
+  rw [hunit]
+  exact (genericPointWedgeCoordinateRight y₀).map_id _
+
 /-- An `inl` factorization of the right-base conjugator forces its canonical
 right projection to be trivial. -/
 theorem genericPointWedgeRightBase_inl_implies_rightProjection_eq_one
@@ -6978,6 +7020,8 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeOuterRightRoundTrip_targetConnector_eq_based
 #print axioms genericPointWedgeOuterRightRoundTrip_component_source
 #print axioms genericPointWedgeOuterRightRoundTrip_component_target
+#print axioms genericPointWedgeOuterRightSpan_unitInv_naturality
+#print axioms genericPointWedgeOuterRightSpan_unitInv_coordinateMap_eq_id
 #print axioms genericPointWedgeRightBase_inl_implies_rightProjection_eq_one
 #print axioms genericPointWedgeLegCoordinates_of_mapped
 #print axioms genericPointWedgeLegCoordinates_iff_mapped
