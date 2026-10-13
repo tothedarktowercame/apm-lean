@@ -23007,13 +23007,13 @@
    :consumer :t01A08,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "extend Mathlib: state and prove the missing theorem in scope",
    :evidence
    {:placeholder-delta {:t01A08 [1 1]},
     :residual
-    "Stop-after-two: retire this weaker fixture; continue from banked convexWithinJet/B1.",
+    "Reroute to banked convexWithinJet/B1; the weaker fixture is not implied by the banked lemma.",
     :missing-hypothesis "x ∈ closure (interior s)",
     :outcome :stop,
     :warnings [],
@@ -23030,13 +23030,12 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Frozen type lacks hxi : x∈closure(interior s). A new proof attempt through ContDiffWithinAt Taylor data fails structurally: FormalMultilinearSeries components are not symmetric by definition, and UniqueDiffOn only identifies them with iteratedFDerivWithin. The real C∞ Schwarz theorem needs hxi; the premise-free theorem is ω/analytic. Convex B1 supplies hxi and is banked, so this weaker row must be rerouted.",
+    "Owner-reopen does not discharge the frozen axiom. Fresh source inspection shows the banked theorem still requires hxi : x∈closure(interior s); the fixture still supplies only hf, UniqueDiffOn, and x∈s. Those premises do not imply hxi. The banked convex B1 derives hxi from additional convex/nonempty-interior hypotheses, which are likewise absent here.",
     :commands
-    [{:cmd
-      "inspect ContDiffWithinAt/Taylor-series definitions and symmetry theorems",
+    [{:cmd "hash fixture; inspect exact banked and frozen signatures",
       :exit 0}
      {:cmd
-      "lake env lean corrected hxi theorem; hash fixture; registry check",
+      "lake env lean corrected hxi theorem; registry check; git status",
       :exit 0}],
     :commit nil,
     :changed-paths [],
@@ -23047,7 +23046,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain.blueprint/B1/smooth-symmetry",
    :acceptance
