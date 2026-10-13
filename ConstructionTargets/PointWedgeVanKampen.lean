@@ -179,20 +179,28 @@ theorem genericPointWedgeRightSpanMappedIso_inv_app :
   unfold genericPointWedgeRightSpanMappedIso
   rw [eqToIso.inv, eqToHom_app]
 
-def genericPointWedgeRightSpanIso :
+theorem genericPointWedgeRightSpanFunctorComposite_eq_coordinateRight :
     (genericPointWedgeOverlapGroupoidEquivalence x₀ y₀ M N hM hN hy hx cM cN).inverse ⋙
         genericPointWedgeActualRight x₀ y₀ M N ⋙
-        (genericPointWedgeRightGroupoidEquivalence x₀ y₀ M N hM hN hy hx cM cN).functor ≅
+        (genericPointWedgeRightGroupoidEquivalence x₀ y₀ M N hM hN hy hx cM cN).functor =
       genericPointWedgeCoordinateRight y₀ := by
   change FundamentalGroupoid.map
         (genericPointWedgePackage x₀ y₀ M N hM hN hy hx cM cN).intersectionEquiv.invFun ⋙
       FundamentalGroupoid.map (overlapToRight x₀ y₀ M N) ⋙
       FundamentalGroupoid.map
-        (genericPointWedgePackage x₀ y₀ M N hM hN hy hx cM cN).rightEquiv.toFun ≅
+        (genericPointWedgePackage x₀ y₀ M N hM hN hy hx cM cN).rightEquiv.toFun =
       FundamentalGroupoid.map (ContinuousMap.const Unit y₀)
   rw [← FundamentalGroupoid.map_comp, ← FundamentalGroupoid.map_comp]
-  exact genericPointWedgeRightSpanMappedIso
+  exact genericPointWedgeRightSpanFunctor_eq_coordinateRight
     x₀ y₀ M N hM hN hy hx cM cN
+
+def genericPointWedgeRightSpanIso :
+    (genericPointWedgeOverlapGroupoidEquivalence x₀ y₀ M N hM hN hy hx cM cN).inverse ⋙
+        genericPointWedgeActualRight x₀ y₀ M N ⋙
+        (genericPointWedgeRightGroupoidEquivalence x₀ y₀ M N hM hN hy hx cM cN).functor ≅
+      genericPointWedgeCoordinateRight y₀ :=
+  eqToIso (genericPointWedgeRightSpanFunctorComposite_eq_coordinateRight
+    x₀ y₀ M N hM hN hy hx cM cN)
 
 def genericPointWedgeCoordinateSpanEquivalence
     (C : Type u) [Category C] :
@@ -4256,6 +4264,18 @@ theorem genericPointWedgeRightSpanMappedIso_inv_app_eq_baseTransport :
   rw [genericPointWedgeRightSpanMappedIso_inv_app]
   congr 1
 
+omit [PathConnectedSpace X] [PathConnectedSpace Y] in
+/-- The inverse component of the public, reassociated right-span comparison is
+the same canonical right-base equality transport. -/
+theorem genericPointWedgeRightSpanIso_inv_app_eq_baseTransport :
+    (genericPointWedgeRightSpanIso
+      x₀ y₀ M N hM hN hy hx cM cN).inv.app (FundamentalGroupoid.mk ()) =
+      eqToHom (genericPointWedgeRightEquiv_obj_rightBase
+        x₀ y₀ M N hM hN hy hx cM cN).symm := by
+  unfold genericPointWedgeRightSpanIso
+  rw [eqToIso.inv, eqToHom_app]
+  congr 1
+
 /-- The canonical morphism from the inverse-equivalence image of the literal
 right basepoint to the fixed right-cover representative. -/
 def genericPointWedgeRightInverseBaseToRightBase :
@@ -4597,6 +4617,17 @@ theorem genericPointWedgeRightInverseBaseToRightBaseFromSpan_eq_maps :
           (IsIso.inv_hom_id_assoc (i.inv.app u) (𝟙 _))
       _ = i.hom.app u ≫ i.inv.app u := by
         rw [Iso.hom_inv_id_app]
+
+/-- The forward morphism recovered from the right-span comparison is exactly
+the canonical inverse-image-to-right-base transport. -/
+theorem genericPointWedgeRightInverseBaseToRightBaseFromSpan_eq_baseTransport :
+    genericPointWedgeRightInverseBaseToRightBaseFromSpan
+        x₀ y₀ M N hM hN hy hx cM cN =
+      genericPointWedgeRightInverseBaseToRightBase
+        x₀ y₀ M N hM hN hy hx cM cN := by
+  rw [genericPointWedgeRightInverseBaseToRightBaseFromSpan_eq_maps]
+  rw [genericPointWedgeRightSpanIso_inv_app_eq_baseTransport]
+  rfl
 
 omit [PathConnectedSpace X] [PathConnectedSpace Y] in
 /-- The span-coordinate forward morphism is a right inverse of the reverse
@@ -5581,9 +5612,11 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeCoordinateSpanEquivalence
 #print axioms genericPointWedgeRightSpanContinuousMap_eq_const
 #print axioms genericPointWedgeRightSpanFunctor_eq_coordinateRight
+#print axioms genericPointWedgeRightSpanFunctorComposite_eq_coordinateRight
 #print axioms genericPointWedgeRightSpanMappedIso_inv_app
 #print axioms genericPointWedgeRightSpanFunctor_congrObj_eq_rightBase
 #print axioms genericPointWedgeRightSpanMappedIso_inv_app_eq_baseTransport
+#print axioms genericPointWedgeRightSpanIso_inv_app_eq_baseTransport
 #print axioms genericPointWedgeCoordinateSpanPostcomposeIso
 #print axioms genericPointWedgeCoordinatePointSpanEquivalence
 #print axioms genericPointWedgeCoordinatePointSpanPostcomposeIso
@@ -5800,6 +5833,7 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeRightComparison_actualMaps_eq_reverseCanonical
 #print axioms genericPointWedgeRightInverseBaseToRightBaseFromSpan
 #print axioms genericPointWedgeRightInverseBaseToRightBaseFromSpan_eq_maps
+#print axioms genericPointWedgeRightInverseBaseToRightBaseFromSpan_eq_baseTransport
 #print axioms genericPointWedgeRightInverseBaseToRightBaseFromSpan_map_eq_inv
 #print axioms genericPointWedgeRightReverse_forward_map_comp
 #print axioms genericPointWedgeCoordinateSpanGlobalRestrictionRightComparison_eq_reverse

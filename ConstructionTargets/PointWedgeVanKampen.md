@@ -1060,3 +1060,12 @@ component.  `genericPointWedgeRightSpanFunctor_congrObj_eq_rightBase` identifies
 that object equality with the fixed right-base equality by proof irrelevance,
 and `genericPointWedgeRightSpanMappedIso_inv_app_eq_baseTransport` gives the
 resulting canonical base transport.  Only the outer reassociation cast remains.
+
+`genericPointWedgeRightSpanFunctorComposite_eq_coordinateRight` names the
+equality at the original three-functor composite, so the public span
+isomorphism is now its direct `eqToIso`.  This removes the outer cast:
+`genericPointWedgeRightSpanIso_inv_app_eq_baseTransport` computes the public
+inverse component, and
+`genericPointWedgeRightInverseBaseToRightBaseFromSpan_eq_baseTransport`
+identifies the complete recovered forward morphism with the canonical
+inverse-image-to-right-base transport.
