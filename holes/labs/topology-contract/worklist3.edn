@@ -24430,7 +24430,7 @@
    :consumer :t01A08,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 0,
    :review-finding
    "extend Mathlib: state and prove the missing theorem in scope",
    :implements-lemma :lemma-closedset-whitneycubecover,
@@ -24471,6 +24471,17 @@
     [{:cmd "exploratory builds",
       :exit 1,
       :correction "fixed compact-ball and distance orientation"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791901431267-9857-3596f2ff",
+     :commands
+     ["git show/diff 74a379b; scope and orientation checks"
+      "sha256sum + lake env lean frozen fixture"
+      "lake build ConstructionTargets.SardConvexDomain"
+      "statement registry check; forbidden-count scan"],
+     :finding
+     "PASS. Recorded topo-10 commit 74a379b changes only the scoped Lean file and proves local finiteness: any member meeting ball(x,1) has its separated center in compact closedBall(x,R+1), so indexed compact packing gives finite incidence. Fixture hash db2f5c8b... matches; build and fixture pass; registry recomputes 150/150; forbidden placeholders remain 0; only standard axioms. Valid compiled B3 progress; STOP lists scale selection, overlap bound, and assembly remaining."},
     :commit "74a379b193857c84b8487561dddac7a4214ed7c1",
     :changed-paths ["ConstructionTargets/SardConvexDomain.lean"],
     :fixture
@@ -24480,7 +24491,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain.blueprint/B3",
    :acceptance
@@ -35278,7 +35289,7 @@
    :other-consumers []}
   {:consumer :t01A08,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -35290,7 +35301,9 @@
     :reported-by [:r-a08-sard-b3-whitney-cubes-1],
     :type "separated bounded-radius family is locally finite",
     :area "sard-convex-domain",
-    :proved-in :r-a08-sard-b3-whitney-cubes-1},
+    :proved-in :r-a08-sard-b3-whitney-cubes-1,
+    :banked-by :r-a08-sard-b3-whitney-cubes-1,
+    :banked-commit "74a379b193857c84b8487561dddac7a4214ed7c1"},
    :id
    :lemma-constructiontargets-sardconvexdomain-locallyfinite-of-separated-centers-of-subse,
    :kind :lemma,
