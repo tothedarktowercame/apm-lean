@@ -339,11 +339,82 @@ lemma apm_b96a01_part_d_nonabelian_aux_reductions_aux_integral_inverse
 /-- A finite subgroup of `GLₙ(ℚ)` embeds into `GLₙ(ℤ)` (conjugate by `P` from part (b);
 the integer lifts of `P g P⁻¹` are unique, so they form a homomorphism). -/
 -- BEGIN SEAT AREA
+noncomputable def apm_b96a01_part_d_nonabelian_aux_reductions_aux_integral_hom_aux_lift
+    {n : Type*} [Fintype n] (M : Matrix n n ℚ)
+    (hM : apmIntegralMatrix M) : Matrix n n ℤ :=
+  fun i j => Classical.choose (hM i j)
+
+lemma apm_b96a01_part_d_nonabelian_aux_reductions_aux_integral_hom_aux_lift_cast
+    {n : Type*} [Fintype n] (M : Matrix n n ℚ)
+    (hM : apmIntegralMatrix M) :
+    Matrix.map
+      (apm_b96a01_part_d_nonabelian_aux_reductions_aux_integral_hom_aux_lift M hM)
+      (Int.castRingHom ℚ) = M := by
+  ext i j
+  exact (Classical.choose_spec (hM i j)).symm
+
+lemma apm_b96a01_part_d_nonabelian_aux_reductions_aux_integral_hom_aux_lift_unique
+    {n : Type*} [Fintype n] (M : Matrix n n ℚ) (B C : Matrix n n ℤ)
+    (hB : Matrix.map B (Int.castRingHom ℚ) = M)
+    (hC : Matrix.map C (Int.castRingHom ℚ) = M) : B = C := by
+  ext i j
+  have h := congrFun (congrFun (hB.trans hC.symm) i) j
+  apply (Int.cast_injective (α := ℚ))
+  simpa using h
+
 lemma apm_b96a01_part_d_nonabelian_aux_reductions_aux_integral_hom
     (n : Type*) [Fintype n] [DecidableEq n]
     (G : Subgroup (Matrix.GeneralLinearGroup n ℚ)) (hG : Finite G) :
     ∃ A : G →* Matrix.GeneralLinearGroup n ℤ, Function.Injective A := by
-  sorry
+  obtain ⟨P, hPu, hP⟩ :=
+    apm_b96a01_part_d_nonabelian_aux_reductions_aux_integral_inverse n G hG
+  let U : Matrix.GeneralLinearGroup n ℚ := hPu.unit
+  have hUinv : ((U⁻¹ : Matrix.GeneralLinearGroup n ℚ) : Matrix n n ℚ) = P⁻¹ := by
+    rw [Matrix.coe_units_inv]; rfl
+  let c : G →* Matrix.GeneralLinearGroup n ℚ := (MulAut.conj U).toMonoidHom.comp G.subtype
+  have hc : ∀ g : G, ((c g : Matrix.GeneralLinearGroup n ℚ) : Matrix n n ℚ) =
+      P * (g.1 : Matrix n n ℚ) * P⁻¹ := by
+    intro g
+    simp only [c, MonoidHom.comp_apply, MulEquiv.coe_toMonoidHom, MulAut.conj_apply,
+      Subgroup.coe_subtype, Units.val_mul, hUinv]
+    rfl
+  have hcinj : Function.Injective c := by
+    intro g h hgh
+    simpa [c] using hgh
+  let φ : Matrix.GeneralLinearGroup n ℤ →* Matrix.GeneralLinearGroup n ℚ :=
+    Matrix.GeneralLinearGroup.map (Int.castRingHom ℚ)
+  have hφ : Function.Injective φ := by
+    intro V W hVW
+    ext i j
+    have := congrArg (fun X : Matrix.GeneralLinearGroup n ℚ => (X : Matrix n n ℚ) i j) hVW
+    simpa [φ] using this
+  have hsub : ∀ g : G, c g ∈ φ.range := by
+    intro g
+    set B := apm_b96a01_part_d_nonabelian_aux_reductions_aux_integral_hom_aux_lift _ (hP g).1
+    set B' := apm_b96a01_part_d_nonabelian_aux_reductions_aux_integral_hom_aux_lift _ (hP g).2
+    have hB := apm_b96a01_part_d_nonabelian_aux_reductions_aux_integral_hom_aux_lift_cast _ (hP g).1
+    have hB' := apm_b96a01_part_d_nonabelian_aux_reductions_aux_integral_hom_aux_lift_cast _ (hP g).2
+    have hprod : ∀ x y : G, x * y = 1 →
+        (P * (x.1 : Matrix n n ℚ) * P⁻¹) * (P * (y.1 : Matrix n n ℚ) * P⁻¹) = 1 := by
+      intro x y hxy
+      rw [← hc, ← hc, ← Units.val_mul, ← map_mul, hxy, map_one, Units.val_one]
+    have h1 : B * B' = 1 := by
+      apply apm_b96a01_part_d_nonabelian_aux_reductions_aux_integral_hom_aux_lift_unique ((P * (g.1 : Matrix n n ℚ) * P⁻¹) * (P * ((g⁻¹).1 : Matrix n n ℚ) * P⁻¹))
+      · rw [Matrix.map_mul, hB, hB']
+      · rw [hprod g g⁻¹ (mul_inv_cancel g), Matrix.map_one _ (by simp) (by simp)]
+    have h2 : B' * B = 1 := by
+      apply apm_b96a01_part_d_nonabelian_aux_reductions_aux_integral_hom_aux_lift_unique ((P * ((g⁻¹).1 : Matrix n n ℚ) * P⁻¹) * (P * (g.1 : Matrix n n ℚ) * P⁻¹))
+      · rw [Matrix.map_mul, hB, hB']
+      · rw [hprod g⁻¹ g (inv_mul_cancel g), Matrix.map_one _ (by simp) (by simp)]
+    refine ⟨⟨B, B', h1, h2⟩, ?_⟩
+    ext1
+    change Matrix.map B (Int.castRingHom ℚ) = _
+    rw [hB, hc]
+  refine ⟨(MonoidHom.ofInjective hφ).symm.toMonoidHom.comp (c.codRestrict φ.range hsub), ?_⟩
+  intro g h hgh
+  apply hcinj
+  have := congrArg (fun X => ((MonoidHom.ofInjective hφ) X : Matrix.GeneralLinearGroup n ℚ)) hgh
+  simpa using this
 -- END SEAT AREA
 
 /-- Reductions of an integral representation modulo the powers of `p`. -/
