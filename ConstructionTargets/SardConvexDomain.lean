@@ -578,4 +578,44 @@ theorem exists_nearestPoint_of_isClosed
     (x : E) : ∃ a ∈ s, Metric.infDist x s = dist x a :=
   hs.exists_infDist_eq_dist hne x
 
+/-- The degenerate Whitney cover when the closed set is the whole space.  This
+is the empty-family branch of `closedSet_whitneyCubeCover`; separating it keeps
+the maximal-cube construction focused on a nonempty complement. -/
+theorem closedSet_whitneyCubeCover_univ
+    (E : Type*) [PseudoMetricSpace E] :
+    Nonempty (WhitneyCubeCover.{_, 0} (Set.univ : Set E)) := by
+  let absurdIndex : Empty → False := Empty.elim
+  refine ⟨{
+    ι := Empty
+    countable_index := inferInstance
+    cube := Empty.elim
+    enlargement := Empty.elim
+    center := Empty.elim
+    anchor := Empty.elim
+    scale := Empty.elim
+    scale_pos := fun i => (absurdIndex i).elim
+    anchor_mem := fun i => (absurdIndex i).elim
+    anchor_nearest := fun i => (absurdIndex i).elim
+    cube_subset_compl := fun i => (absurdIndex i).elim
+    cube_subset_enlargement := fun i => (absurdIndex i).elim
+    ball_subset_cube := fun i => (absurdIndex i).elim
+    cube_subset_closedBall := fun i => (absurdIndex i).elim
+    cover_compl := by simp
+    locallyFinite_enlargement := locallyFinite_of_finite _
+    scale_le_infDist := fun i => (absurdIndex i).elim
+    infDist_le_scale := fun i => (absurdIndex i).elim
+    overlapBound := 0
+    overlap_finite := fun x => by
+      have h : {i : Empty | x ∈ (Empty.elim i : Set E)} = ∅ := by
+        ext i
+        exact Empty.elim i
+      rw [h]
+      exact Set.finite_empty
+    overlap_card_le := fun x => by
+      have h : {i : Empty | x ∈ (Empty.elim i : Set E)} = ∅ := by
+        ext i
+        exact Empty.elim i
+      rw [h]
+      simp }⟩
+
 end ConstructionTargets.SardConvexDomain
