@@ -36113,73 +36113,65 @@
    [:lemma-constructiontargets-sardconvexdomain-eq-whitneydyadicindexof-of-mem-cube-of-gene],
    :other-consumers []}
   {:consumer :t93J03,
-   :stop-count 8,
+   :stop-count 9,
    :review-finding
    "Program STOP commits nothing new since the prior reviewed attempt: it reuses commit 512a220f, and git history shows no later scoped commit. The unresolved SemilocallySimplyConnected hypothesis-coverage conflict is unchanged. Obtain the required owner specification decision or commit a new compiled milestone before resubmitting.",
    :evidence
    {:placeholder-delta {:t93J03 [1 1]},
-    :residual
-    "Build disk-to-square edge quotient homeomorphism; compose C1; then C2/Main.",
+    :residual "Compute polygon pi1; then C1 transport, C2/Main.",
     :outcome :stop,
-    :warnings ["owner-approved unused SLSC"],
+    :warnings ["unused SLSC owner-approved"],
     :missing-theorems
-    [{:name "closedSquareEdgeOrbitHomeomorph",
-      :type "square edge quotient = affine orbit quotient",
+    [{:name "kleinPairingSpaceHomeomorph",
+      :type "polygon quotient = frozen KleinBottle",
       :status :proved,
       :consumers [:t93J03],
       :depends-on [],
       :area "covering-subgroup-correspondence"}
-     {:name "t93J03_square_disk_quotient_homeomorph",
-      :type "disk quotient = square edge quotient",
+     {:name "kleinSkeletonHomeomorphTwoCircles",
+      :type "skeleton = two-circle wedge",
+      :status :proved,
+      :consumers [:t93J03],
+      :depends-on [],
+      :area "covering-subgroup-correspondence"}
+     {:name "t93J03_polygon_van_kampen",
+      :type "pi1 polygon has Klein presentation",
       :status :not-started,
       :consumers [:t93J03],
-      :depends-on ["closedSquareEdgeOrbitHomeomorph"],
+      :depends-on ["kleinSkeletonHomeomorphTwoCircles"],
       :area "covering-subgroup-correspondence"}
      {:name "t93J03_kleinBottle_pi1_every_basepoint",
       :type "pi1 equivalence every point",
       :status :partial,
       :consumers [:t93J03],
-      :depends-on ["t93J03_square_disk_quotient_homeomorph"],
+      :depends-on ["t93J03_polygon_van_kampen"],
       :area "covering-subgroup-correspondence"}],
     :statement-hashes {:registry "166/166"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Committed exact square-edge/orbit quotient comparison; disk comparison remains.",
+    "Committed polygon and skeleton models; van Kampen remains.",
     :commands
-    [{:cmd
-      "lake build ConstructionTargets.t93J03Closure; lean fixture",
-      :exit 0}
-     {:cmd "registry; placeholder; diff; commit; show", :exit 0}
+    [{:cmd "build closure; lean fixture", :exit 0}
+     {:cmd "registry; placeholder; diff; commit", :exit 0}
      {:cmd "rg forbidden", :exit 1, :expected-exit 1}],
     :diagnostic-history
-    [{:cmd "lake build closure",
+    [{:cmd "build closure",
       :exit 1,
-      :correction "made setoid relation explicit"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1791927706113-10590-967af73c",
-     :commands
-     ["git show/diff 813a790e; scope/math review"
-      "sha256sum fixture; show --check; placeholder recount"
-      "lake build ConstructionTargets.t93J03Closure; lean fixture"
-      "statement-registry check"],
-     :finding
-     "PASS. Commit 813a790e adds compiled, sorry-free standard-axiom progress after 5f43680a: it proves generated square-edge equivalence iff literal affine-orbit equivalence and descends the identity on representatives to a homeomorphism in the correct direction. Fixture hash matches; registry 166/166; Main placeholder 1->1. Disk-to-square quotient and then C1/C2/Main remain listed. SemilocallySimplyConnected X is unused, mandated by problem.md."},
-    :commit "813a790e7c8e90e2b4d2b99fd3ec4cf084721edf",
+      :correction "fixed field and namespace"}],
+    :commit "5d1dafaa596e4ea99ab52ee71d664816f858aedc",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
      "ConstructionTargets/t93J03Closure.blueprint.md"],
     :fixture
-    {:path "/tmp/t93j03_square_relation_check.lean",
+    {:path "/tmp/t93j03_polygon_model_check.lean",
      :sha256
-     "0f3ff589ec2b8fc04d4f06d6a4638972edec70aaa6f176febde785f1e0ca2f6f",
+     "236249a1c15ea6479f17c7b352ef77568ae97e6c60c3ecfc5ab09f8b0ae806d5",
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -36454,7 +36446,9 @@
     :area "covering-subgroup-correspondence"},
    :id :lemma-t93j03-kleinbottle-pi1-every-basepoint,
    :kind :lemma,
-   :depends-on [:lemma-t93j03-square-disk-quotient-homeomorph],
+   :depends-on
+   [:lemma-t93j03-square-disk-quotient-homeomorph
+    :lemma-t93j03-polygon-van-kampen],
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
@@ -37473,6 +37467,56 @@
    :id :lemma-closedsquareedgeorbithomeomorph,
    :kind :lemma,
    :depends-on [],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "kleinPairingSpaceHomeomorph",
+    :type "polygon quotient = frozen KleinBottle"},
+   :lemma
+   {:name "kleinPairingSpaceHomeomorph",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type "polygon quotient = frozen KleinBottle",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03},
+   :id :lemma-kleinpairingspacehomeomorph,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "kleinSkeletonHomeomorphTwoCircles",
+    :type "skeleton = two-circle wedge"},
+   :lemma
+   {:name "kleinSkeletonHomeomorphTwoCircles",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type "skeleton = two-circle wedge",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03},
+   :id :lemma-kleinskeletonhomeomorphtwocircles,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t93J03_polygon_van_kampen",
+    :type "pi1 polygon has Klein presentation"},
+   :lemma
+   {:name "t93J03_polygon_van_kampen",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type "pi1 polygon has Klein presentation",
+    :area "covering-subgroup-correspondence"},
+   :id :lemma-t93j03-polygon-van-kampen,
+   :kind :lemma,
+   :depends-on [:lemma-kleinskeletonhomeomorphtwocircles],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
