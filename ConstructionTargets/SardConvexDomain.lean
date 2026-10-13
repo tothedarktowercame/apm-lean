@@ -49,6 +49,19 @@ theorem ContDiffWithinAt.exists_mem_nhdsWithin_contDiffWithinAt_of_infty
   have he := hk.eventually (by simp)
   simpa [insert_eq_of_mem hxs] using he.exists_mem
 
+/-- The finite-smooth relative neighborhood supplied by `C∞` may be chosen together with
+the dense-interior closure fact needed to extend identities back to the base point. -/
+theorem ContDiffWithinAt.exists_mem_nhdsWithin_contDiffWithinAt_closure_interior_of_infty
+    {E F : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [NormedAddCommGroup F] [NormedSpace ℝ F]
+    {s : Set E} {f : E → F} {x : E}
+    (hf : ContDiffWithinAt ℝ ∞ f s x) (hxs : x ∈ s)
+    (hxi : x ∈ closure (interior s)) (k : ℕ) :
+    ∃ u ∈ nhdsWithin x s, x ∈ closure (u ∩ interior s) ∧
+      ∀ y ∈ u, ContDiffWithinAt ℝ k f s y := by
+  rcases hf.exists_mem_nhdsWithin_contDiffWithinAt_of_infty hxs k with ⟨u, hu, hfu⟩
+  exact ⟨u, hu, mem_closure_inter_of_mem_nhdsWithin hxi interior_subset hu, hfu⟩
+
 /-- Two maps continuous within a set agree at a point in the closure of its interior if they
 agree throughout that interior. -/
 theorem ContinuousWithinAt.eq_of_eqOn_interior_of_mem_closure
