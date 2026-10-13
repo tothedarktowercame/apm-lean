@@ -777,3 +777,69 @@ lemma apm_t94a08_zeroChartImage_inter_puncturedCross_not_isPreconnected
   apm_t94a08_open_inter_puncturedAffineCross_not_isPreconnected _
     (apm_t94a08_zeroChartImage_isOpen U hU)
     (apm_t94a08_zeroChartImage_mem_zero U hnode)
+
+def apm_t94a08_puncturedSigma2ZeroChartIn (U : Set apm_t94a08_CP2) :
+    Set ↑{p : apm_t94a08_CP2 | Projectivization.rep p (0 : Fin 3) ≠ 0} :=
+  {p | p.1 ∈ U ∧ p.1 ∈ apm_t94a08_sigma2 ∧ p.1 ≠ apm_t94a08_node}
+
+def apm_t94a08_puncturedSigma2ZeroChartInHomeomorph
+    (U : Set apm_t94a08_CP2) :
+    ↑(apm_t94a08_puncturedSigma2ZeroChartIn U) ≃ₜ
+      ↑(apm_t94a08_zeroChartImage U ∩ apm_t94a08_puncturedAffineCross) :=
+  apm_t94a08_zeroChartHomeomorph.subtype (fun p ↦ by
+    rw [apm_t94a08_puncturedSigma2ZeroChartIn,
+      apm_t94a08_puncturedAffineCross]
+    have hsigma := apm_t94a08_sigma2_zeroChart_mem_iff p.1 p.2
+    dsimp only at hsigma
+    change (p.1 ∈ U ∧ p.1 ∈ apm_t94a08_sigma2 ∧ p.1 ≠ apm_t94a08_node) ↔
+      (apm_t94a08_zeroChartHomeomorph p ∈ apm_t94a08_zeroChartImage U ∧
+        apm_t94a08_zeroChartHomeomorph p ∈
+          apm_t94a08_affineBranchPlus ∪ apm_t94a08_affineBranchMinus ∧
+        apm_t94a08_zeroChartHomeomorph p ∉ {(0, 0)})
+    rw [hsigma]
+    have hU : apm_t94a08_zeroChartHomeomorph p ∈ apm_t94a08_zeroChartImage U ↔
+        p.1 ∈ U := by
+      rw [apm_t94a08_zeroChartImage]
+      constructor
+      · rintro ⟨q, hq, heq⟩
+        have : q = p := apm_t94a08_zeroChartHomeomorph.injective heq
+        simpa [this] using hq
+      · intro hp
+        exact ⟨p, hp, rfl⟩
+    rw [hU]
+    constructor <;> rintro ⟨hpU, hcross, hne⟩ <;> refine ⟨hpU, hcross, ?_⟩
+    · intro himem
+      have himage : apm_t94a08_zeroChartHomeomorph p = (0, 0) := by
+        simpa using himem
+      apply hne
+      have hp : p = ⟨apm_t94a08_node, apm_t94a08_node_mem_zeroChart⟩ :=
+        apm_t94a08_zeroChartHomeomorph.injective
+          (himage.trans apm_t94a08_zeroChartHomeomorph_node.symm)
+      exact congrArg Subtype.val hp
+    · intro hpnode
+      apply hne
+      rw [Set.mem_singleton_iff]
+      have hp : p = ⟨apm_t94a08_node, apm_t94a08_node_mem_zeroChart⟩ :=
+        Subtype.ext hpnode
+      rw [hp]
+      exact apm_t94a08_zeroChartHomeomorph_node)
+
+lemma apm_t94a08_puncturedSigma2ZeroChartIn_not_isPreconnected
+    (U : Set apm_t94a08_CP2) (hU : IsOpen U)
+    (hnode : apm_t94a08_node ∈ U) :
+    ¬ IsPreconnected (apm_t94a08_puncturedSigma2ZeroChartIn U) := by
+  intro hsource
+  letI : PreconnectedSpace ↑(apm_t94a08_puncturedSigma2ZeroChartIn U) :=
+    isPreconnected_iff_preconnectedSpace.mp hsource
+  have htarget_univ : IsPreconnected
+      (Set.univ : Set ↑(apm_t94a08_zeroChartImage U ∩
+        apm_t94a08_puncturedAffineCross)) := by
+    simpa only [Set.image_univ,
+      (apm_t94a08_puncturedSigma2ZeroChartInHomeomorph U).surjective.range_eq] using
+      (apm_t94a08_puncturedSigma2ZeroChartInHomeomorph U).isPreconnected_image.mpr
+        isPreconnected_univ
+  have htarget_space : PreconnectedSpace
+      ↑(apm_t94a08_zeroChartImage U ∩ apm_t94a08_puncturedAffineCross) :=
+    ⟨htarget_univ⟩
+  exact apm_t94a08_zeroChartImage_inter_puncturedCross_not_isPreconnected U hU hnode
+    (isPreconnected_iff_preconnectedSpace.mpr htarget_space)
