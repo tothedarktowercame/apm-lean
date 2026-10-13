@@ -3560,6 +3560,29 @@ theorem genericPointWedgeCoordinateSpanGlobalRestrictionLeftRoundTrip_counit :
   exact (genericPointWedgeLeftGroupoidEquivalence
     x₀ y₀ M N hM hN hy hx cM cN).counitIso.hom.naturality _
 
+/-- The left-equivalence counit square after applying the coordinate-span
+left functor, so both sides lie in the free-product representation. -/
+theorem genericPointWedgeCoordinateSpanGlobalRestrictionLeftRoundTrip_counit_map :
+    let eK := genericPointWedgeOverlapGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let eL := genericPointWedgeLeftGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let aL := genericPointWedgeLeftSpanIso
+      x₀ y₀ M N hM hN hy hx cM cN
+    let l := genericPointWedgeActualLeft x₀ y₀ M N
+    let l' := genericPointWedgeCoordinateLeft x₀
+    let u : FundamentalGroupoid Unit := FundamentalGroupoid.mk ()
+    (genericPointWedgeIdentityCoordinateSpan x₀ y₀).left.map
+      (eL.functor.map (eL.inverse.map (aL.inv.app u)) ≫
+        eL.counitIso.hom.app ((eK.inverse ⋙ l ⋙ eL.functor).obj u)) =
+      (genericPointWedgeIdentityCoordinateSpan x₀ y₀).left.map
+          (eL.counitIso.hom.app (l'.obj u) ≫ aL.inv.app u) := by
+  dsimp only
+  exact congrArg
+    (fun q => (genericPointWedgeIdentityCoordinateSpan x₀ y₀).left.map q)
+    (genericPointWedgeCoordinateSpanGlobalRestrictionLeftRoundTrip_counit
+      x₀ y₀ M N hM hN hy hx cM cN)
+
 /-- The inverse right comparison introduced by coordinate-span transport,
 isolated before recombining it with the middle and left factors. -/
 def genericPointWedgeCoordinateSpanGlobalRestrictionRightComparison :
@@ -5979,6 +6002,7 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeCoordinateSpanGlobalRestrictionLeftComparison_eq_factors
 #print axioms genericPointWedgeCoordinateSpanGlobalRestrictionLeftComparison_eq_actualComposite
 #print axioms genericPointWedgeCoordinateSpanGlobalRestrictionLeftRoundTrip_counit
+#print axioms genericPointWedgeCoordinateSpanGlobalRestrictionLeftRoundTrip_counit_map
 #print axioms genericPointWedgeCoordinateSpanGlobalRestrictionRightComparison
 #print axioms genericPointWedgeCoordinateSpanGlobalRestrictionRightComparison_app
 #print axioms genericPointWedgeCoordinateSpanGlobalRestrictionRightUnitFactor
