@@ -87745,6 +87745,17 @@
     [{:cmd "rg blueprint headings with shell backticks",
       :exit 2,
       :correction "reran with single-quoted pattern"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791919368110-10275-4b18502c",
+     :commands
+     ["git show/diff-tree/SHA256 8a1cfb44a"
+      "git show --check 8a1cfb44a"
+      "statement-registry.py check (150/0)"
+      "blueprint/source theorem comparison"],
+     :finding
+     "Valid program STOP with a new reviewed blueprint milestone. Exact one-file scope and fixture SHA match. B1 and B2 are true, their stated dependencies suffice, their Lean predicates faithfully express the prose, and assembly uses both. Registry 150/0; no mathematical defect found. Next milestones are the two named LIBRARY proofs."},
     :commit "8a1cfb44a",
     :changed-paths ["ConstructionTargets/t94A08Closure.blueprint.md"],
     :fixture
@@ -87753,7 +87764,7 @@
      "de9129d76d93b1e1d4e7e2832ecb0ad874c24df44b5e26bf588361ee0c19cf68"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t94A08/lean/Main.lean"
     "problems/t94A08/status.json"
@@ -87771,14 +87782,19 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t94A08Closure.blueprint.md"},
    :continue-from
-   "NEXT JOB: copy holes/labs/blueprints/t94A08/BLUEPRINT.md's plan into ConstructionTargets/t94A08Closure.blueprint.md, move the blueprint's proved lemmas into place, then build the LIBRARY obligations one milestone per job.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Blueprint written; review is required before implementation.",
    :id :program-2026-10-13-close-t94a08,
    :kind :final-adapter,
    :campaign-priority 30,
    :fail-count 0,
    :depends-on [],
    :program true,
-   :other-consumers []}
+   :other-consumers [],
+   :program-history
+   [{:job 1,
+     :commit "8a1cfb44a",
+     :reason
+     "Blueprint written; review is required before implementation."}]}
   {:consumer :t97A01,
    :stop-count 0,
    :phase :implementation,
