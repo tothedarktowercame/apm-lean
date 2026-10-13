@@ -22109,6 +22109,20 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "git diff-tree --no-commit-id --name-only -r HEAD",
       :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791858185286-8230-35959bcb",
+     :commands
+     ["git diff-tree recorded commit"
+      "sha256sum frozen fixture"
+      "lake build ConstructionTargets.SardConvexDomain"
+      "lake env lean frozen fixture"
+      "statement-registry check"
+      "git diff --check"
+      "recorded-source placeholder count"],
+     :finding
+     "PASS: commit 76d64e123 has exact one-file scope; frozen SHA 33874a1d matches; source placeholders 0; registry 131/131; standard axioms only. Interior derivative equivalence is used in the correct direction; outside the interior, closedness identifies the model-range point with the frontier branch."},
     :commit "76d64e123a00b2d8b45ee74fa8f61d6f036bfee5",
     :changed-paths ["ConstructionTargets/SardConvexDomain.lean"],
     :fixture
@@ -22116,7 +22130,7 @@
      :sha256
      "33874a1d76a652a444b1e6f37486b9edcfc5d4a037d0743d65926c7895952863"}},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t01A08/corners-sard",
    :acceptance
@@ -22191,7 +22205,7 @@
       "33874a1d76a652a444b1e6f37486b9edcfc5d4a037d0743d65926c7895952863"},
      :seat "topo-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t01A08/corners-sard",
    :acceptance
@@ -31772,7 +31786,7 @@
    :other-consumers [:t01J01 :t03J02]}
   {:consumer :t01A08,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -31784,7 +31798,9 @@
     :reported-by [:r-t01a08-corners-1],
     :type "exact type in fixture",
     :area "sard-convex-domain",
-    :proved-in :r-t01a08-corners-1},
+    :proved-in :r-t01a08-corners-1,
+    :banked-by :r-t01a08-corners-split-1,
+    :banked-commit "76d64e123a00b2d8b45ee74fa8f61d6f036bfee5"},
    :id
    :lemma-constructiontargets-sardconvexdomain-modelrange-withincriticalimage-subset-inter,
    :kind :lemma,
