@@ -1940,6 +1940,82 @@ theorem PairingData.skeletonArc_zero_eq (P : PairingData)
   apply Quotient.sound
   exact P.oneVertex i j
 
+/-- The terminal endpoint of every polygon arc is the same quotient vertex
+as every chosen zero endpoint, including the final cyclic wrap. -/
+theorem PairingData.skeletonArc_one_eq_zero (P : PairingData)
+    (i j : Fin P.edgeCount) :
+    P.skeletonArc i ⟨1, by norm_num⟩ = P.skeletonArc j ⟨0, by norm_num⟩ := by
+  apply Subtype.ext
+  apply Quotient.sound
+  by_cases h : (i : ℕ) + 1 < P.edgeCount
+  · have he := PolygonBoundaryVertexClasses.edgePoint_one_eq_succ_zero
+        P.edgeCount (i : ℕ)
+    rw [show edgePoint P.edgeCount i ⟨1, by norm_num⟩ =
+        edgePoint P.edgeCount ((i : ℕ) + 1) ⟨0, by norm_num⟩ by
+      simpa [PolygonBoundaryVertexClasses.oneIcc,
+        PolygonBoundaryVertexClasses.zeroIcc] using he]
+    simpa [PairingData.Rel, polygonVertex] using
+      P.oneVertex ⟨(i : ℕ) + 1, h⟩ j
+  · have hi : (i : ℕ) + 1 = P.edgeCount := by omega
+    have heq : edgePoint P.edgeCount i ⟨1, by norm_num⟩ =
+        polygonVertex P.edgeCount ⟨0, P.edgeCount_pos⟩ := by
+      apply Subtype.ext
+      simp only [edgePoint, polygonVertex]
+      push_cast
+      have hic : ((i : ℕ) : ℂ) + 1 = P.edgeCount := by exact_mod_cast hi
+      rw [hic]
+      have hn : (P.edgeCount : ℂ) ≠ 0 := by exact_mod_cast (Nat.ne_of_gt P.edgeCount_pos)
+      field_simp [hn]
+      simpa [mul_assoc, mul_comm, mul_left_comm] using Complex.exp_two_pi_mul_I
+    rw [heq]
+    exact P.oneVertex ⟨0, P.edgeCount_pos⟩ j
+
+/-- If two signed parameters are endpoints, both source arcs represent the
+unique polygon vertex. -/
+theorem PairingData.skeletonArc_eq_of_signedParameter_endpoints (P : PairingData)
+    (i j : Fin P.edgeCount) (t u : Set.Icc (0 : ℝ) 1)
+    (ht : P.signedParameter i t = ⟨0, by norm_num⟩ ∨
+      P.signedParameter i t = ⟨1, by norm_num⟩)
+    (hu : P.signedParameter j u = ⟨0, by norm_num⟩ ∨
+      P.signedParameter j u = ⟨1, by norm_num⟩) :
+    P.skeletonArc i t = P.skeletonArc j u := by
+  have hi : P.skeletonArc i t = P.skeletonArc i ⟨0, by norm_num⟩ := by
+    rcases ht with ht | ht
+    · rw [P.signedParameter_eq_zero_iff] at ht
+      cases hs : P.sign i <;> simp [hs] at ht
+      · subst t; exact P.skeletonArc_one_eq_zero i i
+      · subst t; rfl
+    · rw [P.signedParameter_eq_one_iff] at ht
+      cases hs : P.sign i <;> simp [hs] at ht
+      · subst t; rfl
+      · subst t; exact P.skeletonArc_one_eq_zero i i
+  have hj : P.skeletonArc j u = P.skeletonArc j ⟨0, by norm_num⟩ := by
+    rcases hu with hu | hu
+    · rw [P.signedParameter_eq_zero_iff] at hu
+      cases hs : P.sign j <;> simp [hs] at hu
+      · subst u; exact P.skeletonArc_one_eq_zero j j
+      · subst u; rfl
+    · rw [P.signedParameter_eq_one_iff] at hu
+      cases hs : P.sign j <;> simp [hs] at hu
+      · subst u; rfl
+      · subst u; exact P.skeletonArc_one_eq_zero j j
+  exact hi.trans ((P.skeletonArc_zero_eq i j).trans hj.symm)
+
+/-- The complete target-to-source direction of kernel agreement. -/
+theorem PairingData.skeletonArc_eq_of_signedWedgeArc_eq (P : PairingData)
+    (i j : Fin P.edgeCount) (t u : Set.Icc (0 : ℝ) 1)
+    (h : P.signedWedgeArc i t = P.signedWedgeArc j u) :
+    P.skeletonArc i t = P.skeletonArc j u := by
+  rw [P.signedWedgeArc_eq_iff_parameters] at h
+  rcases h with ⟨hij, hp⟩ | hend
+  · rcases hp with hp | ⟨h0, h1⟩ | ⟨h1, h0⟩
+    · exact P.skeletonArc_eq_of_signedParameter_eq i j t u hij hp
+    · exact P.skeletonArc_eq_of_signedParameter_endpoints i j t u
+        (Or.inl h0) (Or.inr h1)
+    · exact P.skeletonArc_eq_of_signedParameter_endpoints i j t u
+        (Or.inr h1) (Or.inl h0)
+  · exact P.skeletonArc_eq_of_signedParameter_endpoints i j t u hend.1 hend.2
+
 /-- The representative-level correspondence which the B7 homeomorphism
 must induce: paired source arcs and paired signed wedge coordinates agree. -/
 theorem PairingData.skeletonArc_signed_coordinate (P : PairingData)
