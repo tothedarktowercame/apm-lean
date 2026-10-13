@@ -61,6 +61,14 @@ the arbitrary-coefficient range-to-literal-production comparison with
 Mayer–Vietoris naturality. The analogous integral production result does not
 supply a `ModuleCat ℚ` statement and must not be substituted.
 
+The compiled structure
+`ConstructionTargets.t99J05Closure.ComplexProjectiveRationalHomologyData`
+fixes C3's output interface: finite dimensionality in every degree,
+subsingleton homology above `2n` and in odd degrees, and a linear equivalence
+with `ℚ` at each degree `2*i`, `i : Fin (n+1)`. Its accessor lemmas are the
+first banked milestone. The remaining C3 work constructs this structure from
+the filtration and Mayer–Vietoris bridge.
+
 Dependencies already banked:
 
 - `ConstructionTargets.CoefficientSubcomplexMayerVietoris`
