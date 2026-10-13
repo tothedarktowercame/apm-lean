@@ -24430,26 +24430,28 @@
    :consumer :t01A08,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "extend Mathlib: state and prove the missing theorem in scope",
    :implements-lemma :lemma-closedset-whitneycubecover,
    :evidence
    {:placeholder-delta {:t01A08 [1 1]},
     :residual
-    "Prove dyadic partition/nesting, select maximal admissible cubes, assemble B3; then B4-B7, B9.",
+    "Prove fixed-scale uniqueness and parent nesting; select maximal admissible cubes; assemble B3; then B4-B7, B9.",
     :outcome :stop,
     :warnings
     ["existing unnecessarySimpa:454"
-     "existing unnecessarySeqFocus:1199"],
+     "existing unnecessarySeqFocus:1199"
+     "unnecessarySeqFocus:1531"],
     :missing-theorems
     [{:name
-      "ConstructionTargets.SardConvexDomain.countable_whitneyDyadicIndex",
+      "ConstructionTargets.SardConvexDomain.mem_whitneyDyadicCube_indexOf",
       :type
-      "finite-basis integer dyadic indices are countable; cubes and positive scales defined",
+      "each x belongs to its floor-coordinate dyadic cube at every integer generation",
       :status :proved,
       :consumers [:t01A08],
-      :depends-on [],
+      :depends-on
+      ["ConstructionTargets.SardConvexDomain.countable_whitneyDyadicIndex"],
       :area "sard-convex-domain"}
      {:name
       "ConstructionTargets.SardConvexDomain.closedSet_whitneyCubeCover_proper",
@@ -24457,14 +24459,14 @@
       :status :partial,
       :consumers [:t01A08],
       :depends-on
-      ["ConstructionTargets.SardConvexDomain.countable_whitneyDyadicIndex"],
+      ["ConstructionTargets.SardConvexDomain.mem_whitneyDyadicCube_indexOf"],
       :area "sard-convex-domain"}],
     :statement-hashes {:registry "150/150"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Committed the countable integer dyadic index, canonical-basis half-open cubes, and positive dyadic scale. Partition/nesting and maximal admissible-cube selection remain; not refuted.",
+    "Committed the floor-coordinate index and proved every point belongs to its half-open dyadic cube at every generation. Uniqueness/nesting and maximal selection remain; not refuted.",
     :commands
     [{:cmd "lake build ConstructionTargets.SardConvexDomain", :exit 0}
      {:cmd "fixture; registry; scan; commit diff", :exit 0}
@@ -24472,28 +24474,17 @@
     :diagnostic-history
     [{:cmd "build",
       :exit 1,
-      :correction "unfolded index for Countable; used zpow_pos"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1791917171304-10221-d733baf1",
-     :commands
-     ["git show/diff 383a45e; scope/representation checks"
-      "sha256sum + lake env lean frozen fixture"
-      "lake build ConstructionTargets.SardConvexDomain"
-      "statement registry check; forbidden-count scan"],
-     :finding
-     "PASS. Recorded topo-10 commit 383a45e changes only the scoped Lean file and establishes coherent dyadic replacement data after the compiled ball obstruction. The index is an integer generation plus finitely many integer coordinates and is countable; the half-open canonical-basis parallelotope uses side length 2^k, proved positive for all k. Fixture hash 4f24cce2... matches; build/fixture pass; registry 150/150; forbidden placeholders stay 0; only standard axioms. Valid compiled B3 progress; STOP lists partition/nesting, maximal admissible-cube selection, and assembly."},
-    :commit "383a45e3f2ece65a90219e86e678d6e7f659897b",
+      :correction "normalized cast of floor plus one"}],
+    :commit "924f12ae017e4376b17742f50eeadef54521aa12",
     :changed-paths ["ConstructionTargets/SardConvexDomain.lean"],
     :fixture
-    {:path "/tmp/t01a08_b3_dyadic_index_check.lean",
+    {:path "/tmp/t01a08_b3_dyadic_cover_check.lean",
      :sha256
-     "4f24cce295611a202e0077e7a72982b842f8d98e2ab55788d5ff712cf33900e6",
+     "2cede6f9b9928e6092022d25d4a1d85b2adcfe39c193a5f14ea9713209f088fa",
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain.blueprint/B3",
    :acceptance
@@ -35177,7 +35168,8 @@
     :lemma-constructiontargets-sardconvexdomain-whitneystratum-indices-le-add-two-of-mem-ha
     :lemma-constructiontargets-sardconvexdomain-finite-whitneynethalfincidence
     :lemma-constructiontargets-sardconvexdomain-finite-whitneynetquarterballs-meeting-nhds-
-    :lemma-constructiontargets-sardconvexdomain-countable-whitneydyadicindex],
+    :lemma-constructiontargets-sardconvexdomain-countable-whitneydyadicindex
+    :lemma-constructiontargets-sardconvexdomain-mem-whitneydyadiccube-indexof],
    :other-consumers []}
   {:consumer :t01A08,
    :phase :lemma,
@@ -36025,6 +36017,29 @@
    :lemma-constructiontargets-sardconvexdomain-countable-whitneydyadicindex,
    :kind :lemma,
    :depends-on [],
+   :other-consumers []}
+  {:consumer :t01A08,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.SardConvexDomain.mem_whitneyDyadicCube_indexOf",
+    :type
+    "each x belongs to its floor-coordinate dyadic cube at every integer generation"},
+   :lemma
+   {:name
+    "ConstructionTargets.SardConvexDomain.mem_whitneyDyadicCube_indexOf",
+    :reported-by [:r-a08-sard-b3-whitney-cubes-1],
+    :type
+    "each x belongs to its floor-coordinate dyadic cube at every integer generation",
+    :area "sard-convex-domain",
+    :proved-in :r-a08-sard-b3-whitney-cubes-1},
+   :id
+   :lemma-constructiontargets-sardconvexdomain-mem-whitneydyadiccube-indexof,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-sardconvexdomain-countable-whitneydyadicindex],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
