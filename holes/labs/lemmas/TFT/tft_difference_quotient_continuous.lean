@@ -162,7 +162,7 @@ lemma tft_translate_bcf_continuous
 lemma tft_difference_quotient_continuous
     (f : E → F) (hf : ContDiff ℝ 1 f) (x v : E) (h : ℝ) :
     Continuous (fun y => h⁻¹ • (f (x + h • v + y) - f (x + y))) := by
-  sorry
+  fun_prop
 -- END SEAT AREA
 
 lemma tft_difference_quotient_hasCompactSupport
