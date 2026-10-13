@@ -24614,6 +24614,17 @@
      {:cmd
       "verify source commit; registry check; no sorry/axiom scan; git status",
       :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791897811543-9722-dbe4df90",
+     :commands
+     ["git show/diff 6ff20638; scope and representation review"
+      "lake build ConstructionTargets.SardConvexDomain"
+      "sha256sum and lake env lean t01a08_b3_representation_probe"
+      "statement-registry check; sorry/admit/axiom recount"],
+     :finding
+     "PASS. This is valid compiled progress, not a claim that B3 is complete. The one-file commit exports a sorry-free WhitneyCubeCover certificate with explicit countability, complement cover, nearest anchors, scale/distance bounds, local finiteness, and uniformly bounded overlap, plus the finite-dimensional nearest-point lemma. The actual dyadic/maximal cover construction remains listed. Build/probe pass; fixture hash matches; registry 149/149; forbidden count 0->0."},
     :commit "6ff20638065f666b599cbb132f300dd808b2bea2",
     :changed-paths ["ConstructionTargets/SardConvexDomain.lean"],
     :fixture
@@ -24625,7 +24636,7 @@
    :phase :implementation,
    :type
    "structure over PseudoMetricSpace E and s:Set E: countable cubes/enlargements/centers/anchors/scales; positive scales; anchors nearest in s; complement cover; ball/closedBall bounds; local finiteness; infDist comparison; finite uniformly bounded overlap",
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain.blueprint/B3/representation",
    :acceptance
@@ -24655,7 +24666,7 @@
      :infrastructure-packets
      :review-outcomes]},
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance {:strategy "Review B3 certificate; rerank."},
