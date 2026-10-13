@@ -24430,24 +24430,24 @@
    :consumer :t01A08,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "extend Mathlib: state and prove the missing theorem in scope",
    :implements-lemma :lemma-closedset-whitneycubecover,
    :evidence
    {:placeholder-delta {:t01A08 [1 1]},
     :residual
-    "Prove uniform per-stratum packing cardinality; assemble B3; then B4-B7, B9.",
+    "Normalize packing for a uniform cardinal bound; assemble B3; then B4-B7, B9.",
     :outcome :stop,
     :warnings ["existing unnecessarySimpa:454"],
     :missing-theorems
     [{:name
-      "ConstructionTargets.SardConvexDomain.whitneyStratum_indices_le_add_one_of_mem_quarter_balls",
-      :type "meeting stratum quarter-balls have |k-l|≤1",
+      "ConstructionTargets.SardConvexDomain.finite_whitneyStratumNet_mem_quarter_ball",
+      :type "fixed-stratum quarter-ball incidence is finite",
       :status :proved,
       :consumers [:t01A08],
       :depends-on
-      ["ConstructionTargets.SardConvexDomain.infDist_comparable_of_mem_quarter_balls"],
+      ["ConstructionTargets.SardConvexDomain.finite_inter_whitneyStratumNet_of_isCompact"],
       :area "sard-convex-domain"}
      {:name
       "ConstructionTargets.SardConvexDomain.closedSet_whitneyCubeCover_proper",
@@ -24455,40 +24455,33 @@
       :status :partial,
       :consumers [:t01A08],
       :depends-on
-      ["ConstructionTargets.SardConvexDomain.whitneyStratum_indices_le_add_one_of_mem_quarter_balls"
-       "ConstructionTargets.SardConvexDomain.finite_inter_whitneyStratumNet_of_isCompact"],
+      ["ConstructionTargets.SardConvexDomain.finite_whitneyStratumNet_mem_quarter_ball"
+       "ConstructionTargets.SardConvexDomain.whitneyStratum_indices_le_add_one_of_mem_quarter_balls"],
       :area "sard-convex-domain"}],
     :statement-hashes {:registry "150/150"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Committed cross-scale control: meeting quarter-infDist balls have dyadic indices differing by at most one. Uniform per-stratum cardinality and assembly remain; not refuted.",
+    "Committed per-stratum incidence finiteness: centers whose quarter-balls contain x lie in a compact scale-sized ball. Uniform normalized cardinality and assembly remain; not refuted.",
     :commands
     [{:cmd "lake build ConstructionTargets.SardConvexDomain", :exit 0}
      {:cmd "fixture; registry; scans; diff", :exit 0}
      {:cmd "git commit", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1791905562259-9941-b4a734cf",
-     :commands
-     ["git show/diff dee7326; scope/scale checks"
-      "sha256sum + lake env lean frozen fixture"
-      "lake build ConstructionTargets.SardConvexDomain"
-      "statement registry check; forbidden-count scan"],
-     :finding
-     "PASS. Recorded topo-10 commit dee7326 changes only the scoped Lean file and correctly proves overlapping quarter-infDist balls have dyadic indices differing by at most one. A two-step gap gives center scales ≥4·2^l and <2·2^l, contradicting the symmetric 3:5 comparison; the reverse direction is analogous. Fixture hash d1f84505... matches; build/fixture pass; registry 150/150; forbidden placeholders stay 0; only standard axioms. Valid compiled B3 progress; STOP leaves uniform per-stratum cardinality and assembly."},
-    :commit "dee7326137ca8f54dd6a21e5b45b24a2b34d64d2",
+    :diagnostic-history
+    [{:cmd "initial build",
+      :exit 1,
+      :correction "fixed closed-ball distance orientation"}],
+    :commit "fa37751a3c770179acc1d4c5cf86fdbc6f3f6e5a",
     :changed-paths ["ConstructionTargets/SardConvexDomain.lean"],
     :fixture
-    {:path "/tmp/t01a08_b3_adjacent_strata_check.lean",
+    {:path "/tmp/t01a08_b3_stratum_incidence_check.lean",
      :sha256
-     "d1f84505196eec90fc3ea5a6cbb9a0d36e41aad0bbc64671736d79cc330075be",
+     "7401a97b432e6ed6bfb114f3517b501822dea5b6b39930c87319a4838470395f",
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain.blueprint/B3",
    :acceptance
@@ -35153,7 +35146,8 @@
     :lemma-constructiontargets-sardconvexdomain-exists-whitneystratumnet-dist-le-of-not-mem
     :lemma-constructiontargets-sardconvexdomain-finite-inter-whitneystratumnet-of-iscompact
     :lemma-constructiontargets-sardconvexdomain-infdist-center-comparable-of-mem-quarter-ba
-    :lemma-constructiontargets-sardconvexdomain-whitneystratum-indices-le-add-one-of-mem-qu],
+    :lemma-constructiontargets-sardconvexdomain-whitneystratum-indices-le-add-one-of-mem-qu
+    :lemma-constructiontargets-sardconvexdomain-finite-whitneystratumnet-mem-quarter-ball],
    :other-consumers []}
   {:consumer :t01A08,
    :phase :lemma,
@@ -35504,6 +35498,27 @@
    :kind :lemma,
    :depends-on
    [:lemma-constructiontargets-sardconvexdomain-infdist-comparable-of-mem-quarter-balls],
+   :other-consumers []}
+  {:consumer :t01A08,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.SardConvexDomain.finite_whitneyStratumNet_mem_quarter_ball",
+    :type "fixed-stratum quarter-ball incidence is finite"},
+   :lemma
+   {:name
+    "ConstructionTargets.SardConvexDomain.finite_whitneyStratumNet_mem_quarter_ball",
+    :reported-by [:r-a08-sard-b3-whitney-cubes-1],
+    :type "fixed-stratum quarter-ball incidence is finite",
+    :area "sard-convex-domain",
+    :proved-in :r-a08-sard-b3-whitney-cubes-1},
+   :id
+   :lemma-constructiontargets-sardconvexdomain-finite-whitneystratumnet-mem-quarter-ball,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-sardconvexdomain-finite-inter-whitneystratumnet-of-iscompact],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
