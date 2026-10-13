@@ -24430,20 +24430,21 @@
    :consumer :t01A08,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "extend Mathlib: state and prove the missing theorem in scope",
    :implements-lemma :lemma-closedset-whitneycubecover,
    :evidence
    {:placeholder-delta {:t01A08 [1 1]},
     :residual
-    "Prove maximal selection/local finiteness/overlap; assemble B3; then B4-B7, B9.",
+    "Thin raw cover locally finitely with bounded overlap; assemble B3; then B4-B7, B9.",
     :outcome :stop,
     :warnings ["existing unnecessarySimpa:454"],
     :missing-theorems
     [{:name
-      "ConstructionTargets.SardConvexDomain.infDist_comparable_of_dist_lt_half",
-      :type "nearby centers have comparable infDist scales",
+      "ConstructionTargets.SardConvexDomain.compl_subset_iUnion_quarter_infDist_ball",
+      :type
+      "quarter-infDist balls indexed by complement cover complement",
       :status :proved,
       :consumers [:t01A08],
       :depends-on [],
@@ -24454,7 +24455,7 @@
       :status :partial,
       :consumers [:t01A08],
       :depends-on
-      ["ConstructionTargets.SardConvexDomain.quarter_infDist_ball_data"
+      ["ConstructionTargets.SardConvexDomain.compl_subset_iUnion_quarter_infDist_ball"
        "ConstructionTargets.SardConvexDomain.infDist_comparable_of_dist_lt_half"],
       :area "sard-convex-domain"}],
     :statement-hashes {:registry "149/149"},
@@ -24462,32 +24463,26 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Committed the local Whitney scale estimate: centers within half the first infDist have distance-to-set scales between one-half and three-halves. This is the comparison needed to prove local finiteness and bound overlap after maximal selection. The discrete selection remains; not a refutation.",
+    "Committed the raw adaptive-ball cover: complement points lie in their own positive quarter-infDist ball. Remaining work is countable locally finite bounded-overlap thinning and certificate assembly; not a refutation.",
     :commands
     [{:cmd "lake build ConstructionTargets.SardConvexDomain", :exit 0}
-     {:cmd "lean fixture; registry; forbidden scan; diff; commit",
-      :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1791899267098-9787-b4571383",
-     :commands
-     ["git show/diff 20c444ea; scope and inequality-orientation review"
-      "lake build ConstructionTargets.SardConvexDomain"
-      "sha256sum and lake env lean t01a08_b3_scale_comparison_check"
-      "statement-registry check; forbidden-token recount"],
-     :finding
-     "PASS. Valid STOP after compiled progress. The one-file theorem correctly applies the two infDist Lipschitz bounds in opposite directions (using dist symmetry) to show nearby centers have scales strictly between one-half and three-halves of the first scale. This is the stated local comparison milestone; maximal selection, local finiteness, and bounded overlap remain explicitly partial. Build/export pass; fixture hash matches; standard axioms only; registry 149/149; forbidden count 0->0."},
-    :commit "20c444ea74ff3512d69c06d057c266c6058701b8",
+     {:cmd "lean fixture; registry; forbidden scan; diff check",
+      :exit 0}
+     {:cmd "commit scoped change", :exit 0}],
+    :diagnostic-history
+    [{:cmd "initial build",
+      :exit 1,
+      :correction "made complement subtype binder explicit"}],
+    :commit "15c88100c55b7c45fd2e1e7a0804033f54ad1ef9",
     :changed-paths ["ConstructionTargets/SardConvexDomain.lean"],
     :fixture
-    {:path "/tmp/t01a08_b3_scale_comparison_check.lean",
+    {:path "/tmp/t01a08_b3_raw_cover_check.lean",
      :sha256
-     "2e0df861db3e2972e95e1d0893a231d3dcc33765bce4ef593d761347e6e2d8ec",
+     "2daa706b404c9b3400e7205003f5742b7b067d9ea78fc57fff0e102207e76ece",
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain.blueprint/B3",
    :acceptance
@@ -35140,7 +35135,8 @@
    [:lemma-constructiontargets-sardconvexdomain-whitneycubecover
     :lemma-constructiontargets-sardconvexdomain-exists-positive-infdist-nearest-of-isclosed
     :lemma-constructiontargets-sardconvexdomain-quarter-infdist-ball-data
-    :lemma-constructiontargets-sardconvexdomain-infdist-comparable-of-dist-lt-half],
+    :lemma-constructiontargets-sardconvexdomain-infdist-comparable-of-dist-lt-half
+    :lemma-constructiontargets-sardconvexdomain-compl-subset-iunion-quarter-infdist-ball],
    :other-consumers []}
   {:consumer :t01A08,
    :phase :lemma,
@@ -35205,6 +35201,28 @@
     :banked-commit "20c444ea74ff3512d69c06d057c266c6058701b8"},
    :id
    :lemma-constructiontargets-sardconvexdomain-infdist-comparable-of-dist-lt-half,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t01A08,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.SardConvexDomain.compl_subset_iUnion_quarter_infDist_ball",
+    :type
+    "quarter-infDist balls indexed by complement cover complement"},
+   :lemma
+   {:name
+    "ConstructionTargets.SardConvexDomain.compl_subset_iUnion_quarter_infDist_ball",
+    :reported-by [:r-a08-sard-b3-whitney-cubes-1],
+    :type
+    "quarter-infDist balls indexed by complement cover complement",
+    :area "sard-convex-domain",
+    :proved-in :r-a08-sard-b3-whitney-cubes-1},
+   :id
+   :lemma-constructiontargets-sardconvexdomain-compl-subset-iunion-quarter-infdist-ball,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}],
