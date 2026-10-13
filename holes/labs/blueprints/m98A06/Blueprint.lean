@@ -798,7 +798,41 @@ lemma apm_m98A06_sine_computations_aux_unit_integrals (k : ℕ) (hk : k ≠ 0) :
     let dy : ℝ → ℝ := fun x ↦ Real.sqrt (2 / Real.pi) * (k : ℝ) * Real.cos ((k : ℝ) * x)
     ∫ x, (y x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)) = 1 ∧
       ∫ x, (dy x) ^ 2 - (y x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)) = (k : ℝ) ^ 2 - 1 := by
-  sorry
+  dsimp
+  have hkR : (k : ℝ) ≠ 0 := by exact_mod_cast hk
+  have hpi : Real.pi ≠ 0 := ne_of_gt Real.pi_pos
+  have hsqrt : (Real.sqrt (2 / Real.pi)) ^ 2 = 2 / Real.pi := by
+    rw [Real.sq_sqrt]
+    positivity
+  have hsin : (∫ x in (0 : ℝ)..Real.pi, Real.sin ((k : ℝ) * x) ^ 2) =
+      Real.pi / 2 := by
+    rw [intervalIntegral.integral_comp_mul_left (fun x : ℝ => Real.sin x ^ 2) hkR]
+    simp [integral_sin_sq]
+    field_simp
+  have hcos : (∫ x in (0 : ℝ)..Real.pi, Real.cos ((k : ℝ) * x) ^ 2) =
+      Real.pi / 2 := by
+    rw [intervalIntegral.integral_comp_mul_left (fun x : ℝ => Real.cos x ^ 2) hkR]
+    simp [integral_cos_sq]
+    field_simp
+  have hset (f : ℝ → ℝ) :
+      (∫ x, f x ∂(volume.restrict (Ioo (0 : ℝ) Real.pi))) =
+        ∫ x in (0 : ℝ)..Real.pi, f x := by
+    rw [intervalIntegral.integral_of_le Real.pi_pos.le,
+      integral_Ioc_eq_integral_Ioo]
+  constructor
+  · rw [hset]
+    simp_rw [mul_pow]
+    rw [intervalIntegral.integral_const_mul, hsqrt, hsin]
+    field_simp
+  · rw [hset, intervalIntegral.integral_sub]
+    · simp_rw [mul_pow]
+      rw [hsqrt, intervalIntegral.integral_const_mul,
+        intervalIntegral.integral_const_mul, hcos, hsin]
+      field_simp
+    · apply Continuous.intervalIntegrable
+      fun_prop
+    · apply Continuous.intervalIntegrable
+      fun_prop
 
 theorem apm_m98A06_sine_computations : apm_m98A06_SineComputationsFact := by
   refine ⟨fun L hL k hk => ⟨apm_m98A06_sine_computations_aux_admissible L hL k, apm_m98A06_sine_computations_aux_energy L hL k hk⟩,
