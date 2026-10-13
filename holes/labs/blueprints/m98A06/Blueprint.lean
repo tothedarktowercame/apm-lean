@@ -1048,16 +1048,6 @@ lemma apm_m98A06_wirtinger_aux_core_aux_picone_limit_aux_gap_aux_gap_integrable
         Real.sin (Real.pi * x / L)) ^ 2) volume 0 L := by
   sorry
 
-lemma apm_m98A06_wirtinger_aux_core_aux_picone_limit_aux_gap
-    (L : ℝ) (hL : 0 < L) (η : ℝ → ℝ)
-    (hη : apm_m98a06_Admissible L 0 0 η) :
-    (∫ x in (0 : ℝ)..L, (derivWithin η (Icc 0 L) x) ^ 2) -
-        (Real.pi / L) ^ 2 * (∫ x in (0 : ℝ)..L, (η x) ^ 2) =
-      ∫ x in (0 : ℝ)..L, (fun x => (derivWithin η (Icc 0 L) x -
-          η x * ((Real.pi / L) * Real.cos (Real.pi * x / L)) / Real.sin (Real.pi * x / L)) ^ 2) x := by
-  sorry
-
--- Equality in Wirtinger iff the Picone gap vanishes iff η/sin is constant.
 lemma apm_m98A06_wirtinger_aux_core_aux_picone_limit_aux_iff_aux_rigidity_aux_pointwise_aux_integrable_aux_bound_aux_measurable
     (L : ℝ) (hL : 0 < L) (η : ℝ → ℝ)
     (hη : apm_m98a06_Admissible L 0 0 η) :
@@ -1229,6 +1219,16 @@ lemma apm_m98A06_wirtinger_aux_core_aux_picone_limit_aux_iff_aux_rigidity_aux_po
   rw [intervalIntegrable_iff, uIoc_of_le hL.le]
   exact ⟨hm, HasFiniteIntegral.of_bounded hC⟩
 
+lemma apm_m98A06_wirtinger_aux_core_aux_picone_limit_aux_gap
+    (L : ℝ) (hL : 0 < L) (η : ℝ → ℝ)
+    (hη : apm_m98a06_Admissible L 0 0 η) :
+    (∫ x in (0 : ℝ)..L, (derivWithin η (Icc 0 L) x) ^ 2) -
+        (Real.pi / L) ^ 2 * (∫ x in (0 : ℝ)..L, (η x) ^ 2) =
+      ∫ x in (0 : ℝ)..L, (fun x => (derivWithin η (Icc 0 L) x -
+          η x * ((Real.pi / L) * Real.cos (Real.pi * x / L)) / Real.sin (Real.pi * x / L)) ^ 2) x := by
+  sorry
+
+-- Equality in Wirtinger iff the Picone gap vanishes iff η/sin is constant.
 lemma apm_m98A06_wirtinger_aux_core_aux_picone_limit_aux_iff_aux_rigidity_aux_pointwise
     (L : ℝ) (hL : 0 < L) (η : ℝ → ℝ)
     (hη : apm_m98a06_Admissible L 0 0 η)
