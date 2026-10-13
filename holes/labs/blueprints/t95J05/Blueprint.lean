@@ -96,19 +96,54 @@ def t95J05SphereLower : Set t95J05R4 :=
 def t95J05SphereEquator : Set t95J05R4 :=
   Metric.sphere 0 1 ∩ {x | x 3 = 0}
 
+/-- Seat (claude-14, from lemma-8's partial): the normalised graph-density
+integral over the unit 3-ball equals `2 · vol(B⁴)`; i.e.
+`∫_{B³} (1 - ‖x‖²)^{-1/2} dx = π² = 2 · (π²/2)`, with Mathlib's Hausdorff
+normalisation factor.  Polar coordinates in `ℝ³`
+(`MeasureTheory.integral_fun_norm_addHaar` / `lintegral_fun_norm`) reduce it to
+`4π ∫₀¹ r² (1 - r²)^{-1/2} dr = 4π · π/4`; compare with
+`InnerProductSpace.volume_ball` / `EuclideanSpace.volume_ball` in dimension 4. -/
+lemma t95J05_cap_integral :
+    (↑(Measure.addHaarScalarFactor
+        (volume : Measure (EuclideanSpace ℝ (Fin 3)))
+        (Measure.hausdorffMeasure (↑(3 : ℕ)) :
+          Measure (EuclideanSpace ℝ (Fin 3)))) : ENNReal) *
+      (∫⁻ x in ConstructionTargets.SphereCapHeight.domain 3,
+        ENNReal.ofReal
+          (1 / ConstructionTargets.SphereCapHeight.upper 3 x)
+          ∂ConstructionTargets.C1GraphMeasureDecomposition.domainMeasure 3) =
+      (2 : ENNReal) * volume (Metric.ball (0 : t95J05R4) 1) := by
+  sorry
+
 /-- LIBRARY: the normalized Hausdorff mass of the strict upper hemisphere of
 `S³` is half the full surface mass.  This is an independent graph-chart leaf. -/
 lemma t95J05_unitSphere_upper_mass :
     μHE[3] t95J05SphereUpper =
       (2 : ENNReal) * volume (Metric.ball (0 : t95J05R4) 1) := by
-  sorry
+  have hset :
+      t95J05SphereUpper =
+        ConstructionTargets.SphereCapEuclideanImage.strictUpperCap 3 := by
+    ext x
+    simp [t95J05SphereUpper,
+      ConstructionTargets.SphereCapEuclideanImage.strictUpperCap]
+  rw [hset, Measure.euclideanHausdorffMeasure_def, Measure.smul_apply,
+    ConstructionTargets.SphereCapHausdorffTransport.upper_strictCap_measure]
+  exact t95J05_cap_integral
 
 /-- LIBRARY: lower-hemisphere counterpart of `t95J05_unitSphere_upper_mass`.
 It is deliberately independent, so a seat may prove it directly or by reflection. -/
 lemma t95J05_unitSphere_lower_mass :
     μHE[3] t95J05SphereLower =
       (2 : ENNReal) * volume (Metric.ball (0 : t95J05R4) 1) := by
-  sorry
+  have hset :
+      t95J05SphereLower =
+        ConstructionTargets.SphereCapEuclideanImage.strictLowerCap 3 := by
+    ext x
+    simp [t95J05SphereLower,
+      ConstructionTargets.SphereCapEuclideanImage.strictLowerCap]
+  rw [hset, Measure.euclideanHausdorffMeasure_def, Measure.smul_apply,
+    ConstructionTargets.SphereCapHausdorffTransport.lower_strictCap_measure]
+  exact t95J05_cap_integral
 
 /-- LIBRARY: the coordinate equator in `S³` has zero three-dimensional
 normalized Hausdorff measure.  This is independent of both chart-area leaves. -/
