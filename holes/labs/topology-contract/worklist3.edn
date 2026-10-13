@@ -24430,7 +24430,7 @@
    :consumer :t01A08,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 0,
    :review-finding
    "extend Mathlib: state and prove the missing theorem in scope",
    :implements-lemma :lemma-closedset-whitneycubecover,
@@ -24472,6 +24472,17 @@
     [{:cmd "exploratory builds",
       :exit 1,
       :correction "fixed closed-ball distance orientation"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791907644625-9965-327893b5",
+     :commands
+     ["git show/diff 2ba0ec1; scope/type checks"
+      "sha256sum + lake env lean frozen fixture"
+      "lake build ConstructionTargets.SardConvexDomain"
+      "statement registry check; forbidden-count scan"],
+     :finding
+     "PASS. Recorded topo-10 commit 2ba0ec1 changes only the scoped Lean file and correctly bounds fixed-stratum incidence encard by a packing number. Incidence centers lie in closedBall(x,2^(k+1)/4) with the distance orientation handled, and inherit separation at whitneyStratumRadius k before encard_le_packingNumber. The possibly infinite bound is appropriate before the listed normalization step. Fixture hash a1dac993... matches; build/fixture pass; registry 150/150; forbidden placeholders stay 0; only standard axioms. Valid compiled B3 progress; STOP leaves normalization, adjacent-stratum sum, and assembly."},
     :commit "2ba0ec1732ec7a146c52d421bfa6d1fa8d36d543",
     :changed-paths ["ConstructionTargets/SardConvexDomain.lean"],
     :fixture
@@ -24481,7 +24492,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain.blueprint/B3",
    :acceptance
@@ -35525,7 +35536,7 @@
    :other-consumers []}
   {:consumer :t01A08,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -35537,7 +35548,9 @@
     :reported-by [:r-a08-sard-b3-whitney-cubes-1],
     :type "stratum incidence encard≤packingNumber at its scale",
     :area "sard-convex-domain",
-    :proved-in :r-a08-sard-b3-whitney-cubes-1},
+    :proved-in :r-a08-sard-b3-whitney-cubes-1,
+    :banked-by :r-a08-sard-b3-whitney-cubes-1,
+    :banked-commit "2ba0ec1732ec7a146c52d421bfa6d1fa8d36d543"},
    :id
    :lemma-constructiontargets-sardconvexdomain-encard-whitneystratumnet-mem-quarter-ball-l,
    :kind :lemma,
