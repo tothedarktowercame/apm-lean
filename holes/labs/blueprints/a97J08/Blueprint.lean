@@ -2029,7 +2029,7 @@ lemma apm_a97j08_polygon_path_lift_aux_chain (D : Set ℂ) {z : ℂ} (hz : z ∈
         (∀ t : unitInterval, Complex.exp ((θ t : ℂ) * Complex.I) =
           ((p₁.trans p₂) t - z) / ((‖(p₁.trans p₂) t - z‖ : ℝ) : ℂ)) ∧
         θ 1 - θ 0 = (θ₁ 1 - θ₁ 0) + (θ₂ 1 - θ₂ 0))
-    (a : ℂ) (l : List ℂ)
+    (a : ℂ) (ha : a ∈ D) (l : List ℂ)
     (hseg : ∀ e ∈ (a :: l).zip l, segment ℝ e.1 e.2 ⊆ D) :
     ∃ p : Path a ((a :: l).getLast (List.cons_ne_nil a l)), (∀ t, p t ∈ D) ∧
       ∃ θ : C(unitInterval, ℝ),
@@ -2064,7 +2064,7 @@ lemma apm_a97j08_polygon_path_lift_aux_long (D : Set ℂ) {z : ℂ} (hz : z ∈ 
   rw [hedges] at hseg
   obtain ⟨p, hpD, θ, hθ, hdisp⟩ := apm_a97j08_polygon_path_lift_aux_chain D hz hL1
     (fun p₁ p₂ θ₁ θ₂ h₁ h₂ => apm_a97j08_polygon_path_lift_aux_glue p₁ p₂ θ₁ θ₂ h₁ h₂)
-    v (w :: c ++ [v]) hseg
+    v (hseg (v, w) (by simp) (left_mem_segment ℝ v w)) (w :: c ++ [v]) hseg
   have hlast : (v :: (w :: c ++ [v])).getLast (List.cons_ne_nil _ _) = v := by simp
   refine ⟨v, p.cast rfl hlast.symm, fun t => hpD t, θ, fun t => hθ t, ?_⟩
   rw [hdisp, apm_a97j08_cycleSum, hedges]
