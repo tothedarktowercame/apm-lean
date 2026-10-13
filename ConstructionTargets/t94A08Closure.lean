@@ -509,3 +509,10 @@ lemma apm_t94a08_puncturedAffineCross_not_isPreconnected :
       · simp [Complex.I_ne_zero]
     have := hminus hp
     simpa [apm_t94a08_affineBranchMinus] using this
+
+lemma apm_t94a08_puncturedAffineCross_homeomorph_image_not_isPreconnected
+    {X : Type*} [TopologicalSpace X] (e : (ℂ × ℂ) ≃ₜ X) :
+    ¬ IsPreconnected (e '' apm_t94a08_puncturedAffineCross) := by
+  intro himage
+  exact apm_t94a08_puncturedAffineCross_not_isPreconnected
+    (e.isInducing.isPreconnected_image.mp himage)
