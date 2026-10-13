@@ -113898,6 +113898,17 @@
       "lake build ConstructionTargets.ThreeCirclesFundamentalGroup",
       :exit 1,
       :finding "B12 absent."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791918118967-10233-4f9a3d27",
+     :commands
+     ["git show/diff-tree 83592e22e"
+      "git archive 83592e22e; lake env lean archived PointWedgeVanKampen.lean"
+      "lake build ConstructionTargets.PointWedgeVanKampen"
+      "sha256sum; placeholder delta; statement-registry.py check"],
+     :finding
+     "Recorded scope is target+note; source/doc/fixture hashes match 42571440/fe2f0be8/0bca6ce3. Archived and target builds pass; placeholders 0->0, registry 150/150, standard axioms only. The terminal witness is definitionally the symmetric named round-trip source equality, exactly as middleComponent_endpoints constructs it; orientation and dependent hom-set boundary are correct. New compiled progress fixes both transports; mapped-component cancellation, projection/B6/B12 remain."},
     :commit "83592e22eaa639b3c0448a740f057a933f142b54",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
@@ -113908,7 +113919,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113929,7 +113940,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Endpoint equality witness is the canonical symmetric right-base equality.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Target equality witness is the symmetric named round-trip source equality.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -114749,7 +114760,11 @@
     {:job 6,
      :commit "a77a664a2b9a01d91ceebe9575386a9ecbf1417c",
      :reason
-     "Endpoint equality witness is the canonical symmetric right-base equality."}]}
+     "Endpoint equality witness is the canonical symmetric right-base equality."}
+    {:job 7,
+     :commit "83592e22eaa639b3c0448a740f057a933f142b54",
+     :reason
+     "Target equality witness is the symmetric named round-trip source equality."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
