@@ -1995,7 +1995,89 @@ theorem apm_a97j08_not_nullhomotopic_of_lift (D : Set ℂ) {z : ℂ} (hz : z ∈
         (p t - z) / ((‖p t - z‖ : ℝ) : ℂ))
     (hs : θ 1 ≠ θ 0) :
     ∃ cD : C(Circle, D), ¬ ContinuousMap.Nullhomotopic cD := by
-  sorry
+  have hx : x ∈ D := by simpa using hpD 0
+  let pD : Path (⟨x, hx⟩ : D) ⟨x, hx⟩ :=
+    { toFun := fun t ↦ ⟨p t, hpD t⟩
+      continuous_toFun := p.continuous.subtype_mk hpD
+      source' := by ext; simp
+      target' := by ext; simp }
+  let cD : C(Circle, D) := apm_a97j08_pathCircleMap pD
+  refine ⟨cD, ?_⟩
+  intro hc
+  let r := (apm_a97j08_radialMap D z hz).comp cD
+  obtain ⟨y, hhom⟩ := hc.comp_right (apm_a97j08_radialMap D z hz)
+  obtain ⟨H⟩ := hhom
+  let Q : C(unitInterval × unitInterval, Circle) :=
+    ⟨fun w ↦ H (w.2, apm_a97j08_circleParam w.1),
+      H.continuous.comp
+        (continuous_snd.prodMk (apm_a97j08_circleParam_continuous.comp continuous_fst))⟩
+  have hQ0 : Q (0, 0) = Circle.exp (θ 0) := by
+    apply Subtype.ext
+    change ((H (0, apm_a97j08_circleParam 0) : Circle) : ℂ) = _
+    rw [H.apply_zero]
+    simp only [r, ContinuousMap.comp_apply,
+      cD, apm_a97j08_pathCircleMap_apply_circleParam, pD,
+      apm_a97j08_radialMap]
+    simpa [Circle.coe_exp] using (hθ 0).symm
+  let L0 : C(unitInterval, ℝ) :=
+    Circle.isCoveringMap_exp.liftPath
+      (Q.comp ((ContinuousMap.const unitInterval (0 : unitInterval)).prodMk
+        (ContinuousMap.id unitInterval))) (θ 0) hQ0
+  let L : C(unitInterval × unitInterval, ℝ) :=
+    Circle.isCoveringMap_exp.liftHomotopy Q L0 (fun u ↦ by
+      exact (congr_fun (Circle.isCoveringMap_exp.liftPath_lifts
+        (Q.comp ((ContinuousMap.const unitInterval (0 : unitInterval)).prodMk
+          (ContinuousMap.id unitInterval)))
+        (θ 0) hQ0) u).symm)
+  have hLexp (w : unitInterval × unitInterval) : Circle.exp (L w) = Q w :=
+    congr_fun (Circle.isCoveringMap_exp.liftHomotopy_lifts Q L0 _) w
+  have hloop (s : unitInterval) : Q (1, s) = Q (0, s) := by
+    simp [Q, apm_a97j08_circleParam]
+  have hdisp : L (1, 0) - L (0, 0) = L (1, 1) - L (0, 1) := by
+    apply Circle.isCoveringMap_exp.const_of_comp
+      (((L.continuous.comp
+          ((ContinuousMap.const unitInterval (1 : unitInterval)).prodMk
+            (ContinuousMap.id unitInterval)).continuous).sub
+        (L.continuous.comp
+          ((ContinuousMap.const unitInterval (0 : unitInterval)).prodMk
+            (ContinuousMap.id unitInterval)).continuous)))
+    intro u v
+    change Circle.exp (L (1, u) - L (0, u)) =
+      Circle.exp (L (1, v) - L (0, v))
+    rw [Circle.exp_sub, Circle.exp_sub, hLexp, hLexp, hLexp, hLexp,
+      hloop u, hloop v]
+    simp
+  have htop : L (1, 1) = L (0, 1) := by
+    apply Circle.isCoveringMap_exp.const_of_comp
+      (L.continuous.comp
+        ((ContinuousMap.id unitInterval).prodMk
+          (ContinuousMap.const unitInterval (1 : unitInterval))).continuous)
+    intro u v
+    change Circle.exp (L (u, 1)) = Circle.exp (L (v, 1))
+    rw [hLexp, hLexp]
+    simp [Q]
+  have hbottom : L (1, 0) - θ 1 = L (0, 0) - θ 0 := by
+    apply Circle.isCoveringMap_exp.const_of_comp
+      (((L.continuous.comp
+          ((ContinuousMap.id unitInterval).prodMk
+            (ContinuousMap.const unitInterval (0 : unitInterval))).continuous).sub
+        θ.continuous))
+    intro u v
+    change Circle.exp (L (u, 0) - θ u) =
+      Circle.exp (L (v, 0) - θ v)
+    rw [Circle.exp_sub, Circle.exp_sub, hLexp, hLexp]
+    have hrad (t : unitInterval) : Q (t, 0) = Circle.exp (θ t) := by
+      apply Subtype.ext
+      change ((H (0, apm_a97j08_circleParam t) : Circle) : ℂ) = _
+      rw [H.apply_zero]
+      simp only [r, ContinuousMap.comp_apply,
+        cD, apm_a97j08_pathCircleMap_apply_circleParam, pD,
+        apm_a97j08_radialMap]
+      simpa [Circle.coe_exp] using (hθ t).symm
+    rw [hrad u, hrad v]
+    simp
+  apply hs
+  linarith
 -- END SEAT AREA
 
 lemma apm_a97j08_cycleEdges_map {V W : Type*} (g : V → W) (c : List V) :
