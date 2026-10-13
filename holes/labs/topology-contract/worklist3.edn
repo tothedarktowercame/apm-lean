@@ -24430,7 +24430,7 @@
    :consumer :t01A08,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 0,
    :review-finding
    "extend Mathlib: state and prove the missing theorem in scope",
    :implements-lemma :lemma-closedset-whitneycubecover,
@@ -24468,6 +24468,17 @@
      {:cmd
       "lean fixture; registry; no-sorry/axiom; diff check; commit",
       :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791898658836-9758-e5f1296f",
+     :commands
+     ["git show/diff c722da96; scope and theorem review"
+      "lake build ConstructionTargets.SardConvexDomain"
+      "sha256sum and lake env lean t01a08_b3_center_anchor_check"
+      "statement-registry check; forbidden-token recount"],
+     :finding
+     "PASS. Valid STOP after compiled progress. The one-file theorem correctly combines closed-set complement separation (positive infDist) with finite-dimensional nearest-point attainment, producing exactly the positive scale and anchor data required by the Whitney certificate. The maximal selection, local-finiteness, and overlap construction remains explicitly partial. Build/export pass; fixture hash matches; standard axioms only; registry 149/149; sorry/admit/axiom 0->0."},
     :commit "c722da96e312216203bd871916ce290649260066",
     :changed-paths ["ConstructionTargets/SardConvexDomain.lean"],
     :fixture
@@ -24477,7 +24488,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain.blueprint/B3",
    :acceptance
@@ -35132,7 +35143,7 @@
    :other-consumers []}
   {:consumer :t01A08,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -35144,7 +35155,9 @@
     :reported-by [:r-a08-sard-b3-whitney-cubes-1],
     :type "x∉s gives positive infDist and a nearest anchor in s",
     :area "sard-convex-domain",
-    :proved-in :r-a08-sard-b3-whitney-cubes-1},
+    :proved-in :r-a08-sard-b3-whitney-cubes-1,
+    :banked-by :r-a08-sard-b3-whitney-cubes-1,
+    :banked-commit "c722da96e312216203bd871916ce290649260066"},
    :id
    :lemma-constructiontargets-sardconvexdomain-exists-positive-infdist-nearest-of-isclosed,
    :kind :lemma,
