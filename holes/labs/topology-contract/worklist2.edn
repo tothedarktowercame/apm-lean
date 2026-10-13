@@ -76774,13 +76774,13 @@
   {:consumer :t96J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :evidence
    {:placeholder-delta 0,
     :residual
     "Repair frozen B8 type; then finite-wedge coordinates and B9.",
     :outcome :stop,
-    :warnings ["preexisting lints"],
+    :warnings ["preexisting lints" "unrelated dirty file preserved"],
     :missing-theorems
     [{:name "PointWedgeQuotient.no_finiteWedgePoint",
       :type "IsEmpty ((L : Type) -> [Fintype L] -> FiniteWedge L)",
@@ -76789,7 +76789,7 @@
       :depends-on [],
       :area "polygon-surface-pi1"}
      {:name "finiteWedgeCircle_pi1",
-      :type "requires Nonempty L or adjoined-basepoint representation",
+      :type "requires Nonempty L or an adjoined-basepoint FiniteWedge",
       :status :not-started,
       :consumers [:t96J02 :t92J05 :t94J04 :t97A01 :t97A03],
       :depends-on [],
@@ -76801,7 +76801,7 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
     :reason
-    "No polymorphic wedgePoint exists under only Fintype L: instantiating L=Empty gives the empty quotient. B8 needs Nonempty L or an adjoined basepoint.",
+    "Reopen supplies no hypothesis or representation repair: under only Fintype L, L=Empty makes FiniteWedge L empty, so no polymorphic wedgePoint exists.",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/PolygonSurfacePiOne.lean",
@@ -76812,21 +76812,6 @@
      {:cmd "placeholder scan", :exit 0}
      {:cmd "#print axioms no_finiteWedgePoint", :exit 0}
      {:cmd "git show --check 8ff5cb54a", :exit 0}],
-    :diagnostic-history
-    [{:cmd "first interface witness compile",
-      :exit 1,
-      :correction "stated emptiness via IsEmpty"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1791870538634-8641-0ba74937",
-     :commands
-     ["git scope/SHA/blob checks at 34d5fe3e4"
-      "git show 34d5fe3e4:... | lake env lean /dev/stdin"
-      "statement-registry.py check (145/0)"
-      "placeholder scan; #print axioms empty-wedge witness"],
-     :finding
-     "PASS: correct STOP with compiled refutation. Exact one-file scope and frozen hashes match; committed blob compiles, placeholders 0, registry 145/0, standard axioms only. Frozen B8 permits L=Empty yet requires wedgePoint and says the empty case is a trivial based group. Current FiniteWedge L is Quotient of L×Circle, so FiniteWedge Empty is empty; the new theorem proves its nonemptiness is false. Repair by requiring Nonempty L or adjoining a basepoint, then prove B8 and B9."},
     :commit "8ff5cb54a",
     :changed-paths ["ConstructionTargets/PolygonSurfacePiOne.lean"],
     :fixture
@@ -76835,7 +76820,7 @@
      "8bb4cf5d53c64717292de2cab25decbc62907fcc988a8052958bc0148f881904"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/PolygonSurfacePiOne.lean"],
    :dag-node "ConstructionTargets/PolygonSurfacePiOne.blueprint.md/B8",
    :acceptance
