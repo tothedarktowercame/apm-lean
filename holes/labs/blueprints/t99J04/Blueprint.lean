@@ -89,6 +89,43 @@ lemma apm_t99J04_surjective_of_bijective_mfderiv_of_localIFT
   intro x
   exact hlocalIFT x hf.contMDiffAt (hbij x)
 
+theorem apm_t99J04_bridge_local_inverse_function_aux_chart
+    {E E' X Y : Type}
+    [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [FiniteDimensional ℝ E] [CompleteSpace E]
+    [NormedAddCommGroup E'] [NormedSpace ℝ E']
+    [FiniteDimensional ℝ E'] [CompleteSpace E']
+    [TopologicalSpace X] [ChartedSpace E X]
+    [IsManifold (𝓘(ℝ, E)) (⊤ : ℕ∞) X]
+    [TopologicalSpace Y] [ChartedSpace E' Y]
+    [IsManifold (𝓘(ℝ, E')) (⊤ : ℕ∞) Y]
+    (f : X → Y) (x : X)
+    (hf : ContMDiffAt (𝓘(ℝ, E)) (𝓘(ℝ, E')) (⊤ : ℕ∞) f x)
+    (hbij : Function.Bijective
+      (mfderiv (𝓘(ℝ, E)) (𝓘(ℝ, E')) f x)) :
+    ∃ q : OpenPartialHomeomorph E E',
+      (extChartAt (𝓘(ℝ, E)) x) x ∈ q.source ∧
+      (q : E → E') = writtenInExtChartAt (𝓘(ℝ, E)) (𝓘(ℝ, E')) x f ∧
+      ContDiffAt ℝ (⊤ : ℕ∞) q.symm
+        ((extChartAt (𝓘(ℝ, E')) (f x)) (f x)) := by
+  let a : E := (extChartAt (𝓘(ℝ, E)) x) x
+  let g : E → E' := writtenInExtChartAt (𝓘(ℝ, E)) (𝓘(ℝ, E')) x f
+  have hg : ContDiffAt ℝ (⊤ : ℕ∞) g a := by
+    rw [contMDiffAt_iff] at hf
+    simpa [g, a, writtenInExtChartAt] using hf.2
+  have hderiv : fderiv ℝ g a = mfderiv (𝓘(ℝ, E)) (𝓘(ℝ, E')) f x := by
+    have hm := (hf.mdifferentiableAt (by simp)).mfderiv
+    simpa [g, a] using hm.symm
+  have hb' : Function.Bijective (fderiv ℝ g a) := hderiv.symm ▸ hbij
+  let e : E ≃L[ℝ] E' := ContinuousLinearEquiv.ofBijective (fderiv ℝ g a)
+    (LinearMap.ker_eq_bot.mpr hb'.1) (LinearMap.range_eq_top.mpr hb'.2)
+  have he : HasFDerivAt g (e : E →L[ℝ] E') a := by
+    convert (hg.differentiableAt (by simp)).hasFDerivAt
+  let q : OpenPartialHomeomorph E E' := hg.toOpenPartialHomeomorph g he (by simp)
+  refine ⟨q, hg.mem_toOpenPartialHomeomorph_source he (by simp), rfl, ?_⟩
+  have hi := hg.to_localInverse he (by simp)
+  simpa [q, g, a, writtenInExtChartAt] using hi
+
 /-- LIBRARY: the missing boundaryless finite-dimensional manifold inverse
 function theorem. -/
 theorem apm_t99J04_bridge_local_inverse_function
@@ -102,7 +139,7 @@ theorem apm_t99J04_bridge_local_inverse_function
     [TopologicalSpace Y] [ChartedSpace E' Y]
     [IsManifold (𝓘(ℝ, E')) (⊤ : ℕ∞) Y]
     (f : X → Y) (x : X)
-    (hf : ContMDiffAt (𝓘(ℝ, E)) (𝓘(ℝ, E')) (⊤ : ℕ∞) f x)
+    (hf : ContMDiff (𝓘(ℝ, E)) (𝓘(ℝ, E')) (⊤ : ℕ∞) f)
     (hbij : Function.Bijective
       (mfderiv (𝓘(ℝ, E)) (𝓘(ℝ, E')) f x)) :
     IsLocalDiffeomorphAt (𝓘(ℝ, E)) (𝓘(ℝ, E')) (⊤ : ℕ∞) f x := by
@@ -166,10 +203,10 @@ theorem apm_t99j04 :
   constructor
   · intro n X _ _ _ x f hf hli
     have hsmooth := apm_t99J04_coordinateMap_contMDiff n X f hf
-    exact apm_t99J04_bridge_local_inverse_function _ _ hsmooth.contMDiffAt
+    exact apm_t99J04_bridge_local_inverse_function _ _ hsmooth
       (apm_t99J04_bridge_coordinateMap_mfderiv_bijective n X x f hf hsmooth hli)
   · intro E E' _ _ _ _ _ _ _ _ X Y _ _ _ _ _ _ _ _ _ _ _ f hf hbij
     exact apm_t99J04_surjective_of_bijective_mfderiv_of_localIFT f hf hbij
-      (fun x hx hb ↦ apm_t99J04_bridge_local_inverse_function f x hx hb)
+      (fun x _ hb ↦ apm_t99J04_bridge_local_inverse_function f x hf hb)
 
 #print axioms apm_t99j04
