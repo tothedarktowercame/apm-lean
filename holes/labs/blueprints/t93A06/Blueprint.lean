@@ -21,7 +21,23 @@ translates. -/
 theorem t93A06_projection_fibers (x y : Plane) :
     projection x = projection y ↔
       ∃ k : Fin 2 → ℤ, ∀ i, y i = x i + (k i : ℝ) := by
-  sorry
+  constructor
+  · intro h
+    have hcoord (i : Fin 2) : (x i : AddCircle (1 : ℝ)) = (y i : AddCircle (1 : ℝ)) :=
+      congrFun h i
+    choose n hn using fun i =>
+      (AddCircle.coe_eq_zero_iff (p := (1 : ℝ)) (x := x i - y i)).mp (by
+        rw [AddCircle.coe_sub, hcoord i, sub_self])
+    refine ⟨fun i => -n i, fun i => ?_⟩
+    have hd : (n i : ℝ) = x i - y i := by
+      simpa using hn i
+    rw [Int.cast_neg]
+    linarith
+  · rintro ⟨k, hk⟩
+    funext i
+    change (x i : AddCircle (1 : ℝ)) = (y i : AddCircle (1 : ℝ))
+    rw [hk i, AddCircle.coe_add]
+    simp
 
 /-- A smooth invariant form descends uniquely through the quotient atlas.
 The fibre characterization is supplied as a hypothesis to keep this seat
