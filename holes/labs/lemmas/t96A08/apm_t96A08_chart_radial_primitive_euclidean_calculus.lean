@@ -518,6 +518,14 @@ derivative AT THE CENTRE is needed (claude-14 restructure: smoothness of the
 potential now comes from `apm_t96A08_contMDiff_of_hasMFDerivAt`).
 `G v = omegaCoord a (v - a) + o(‖v - a‖)` by continuity of `omegaCoord` at `a`. -/
 -- BEGIN SEAT AREA
+lemma apm_t96A08_chart_radial_primitive_euclidean_calculus_aux_segment
+    {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    (I : ModelWithCorners ℝ E E) (W : Set E) (a v : E)
+    (hWconv : Convex ℝ W) (ha : a ∈ W ∩ Set.range (I : E → E))
+    (hv : v ∈ W ∩ Set.range (I : E → E)) {t : ℝ} (ht : t ∈ Set.Icc (0 : ℝ) 1) :
+    a + t • (v - a) ∈ W ∩ Set.range (I : E → E) := by
+  exact (hWconv.inter I.convex_range).add_smul_sub_mem ha hv ht
+
 lemma apm_t96A08_chart_radial_primitive_euclidean_calculus
     {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E] [CompleteSpace E]
     (I : ModelWithCorners ℝ E E) (W : Set E) (a : E) (omegaCoord : E → (E →L[ℝ] ℝ))
@@ -527,7 +535,64 @@ lemma apm_t96A08_chart_radial_primitive_euclidean_calculus
     let G : E → ℝ := fun v ↦ ∫ t : ℝ in (0 : ℝ)..1,
       omegaCoord (a + t • (v - a)) (v - a)
     HasFDerivWithinAt G (omegaCoord a) (W ∩ Set.range (I : E → E)) a := by
-  sorry
+  dsimp only
+  rw [hasFDerivWithinAt_iff_isLittleO]
+  apply Asymptotics.IsLittleO.of_bound
+  intro c hc
+  have hcont := homega.continuousOn.continuousWithinAt haW
+  have htend : Filter.Tendsto omegaCoord (nhdsWithin a (W ∩ Set.range (I : E → E)))
+      (nhds (omegaCoord a)) := hcont
+  rw [Metric.tendsto_nhdsWithin_nhds] at htend
+  obtain ⟨d, hd, hdc⟩ := htend c hc
+  have hev : ∀ᶠ v in nhds a, dist v a < d :=
+    Metric.eventually_nhds_iff.2 ⟨d, hd, fun _ h => h⟩
+  have hev' : ∀ᶠ v in nhdsWithin a (W ∩ Set.range (I : E → E)), dist v a < d :=
+    hev.filter_mono inf_le_left
+  filter_upwards [self_mem_nhdsWithin, hev'] with v hvS hva
+  have hbound : ∀ t ∈ Set.uIoc (0 : ℝ) 1,
+      ‖omegaCoord (a + t • (v - a)) (v - a) - omegaCoord a (v - a)‖ ≤
+        c * ‖v - a‖ := by
+    intro t ht
+    rw [Set.uIoc_of_le (by norm_num : (0 : ℝ) ≤ 1)] at ht
+    have ht' : t ∈ Set.Icc (0 : ℝ) 1 := ⟨ht.1.le, ht.2⟩
+    have hs := apm_t96A08_chart_radial_primitive_euclidean_calculus_aux_segment
+      I W a v hWconv haW hvS ht'
+    have hdist : dist (a + t • (v - a)) a < d := by
+      rw [dist_eq_norm, add_sub_cancel_left, norm_smul, Real.norm_eq_abs]
+      have habs : |t| ≤ 1 := by rw [abs_of_nonneg ht'.1]; exact ht'.2
+      calc
+        |t| * ‖v - a‖ ≤ 1 * ‖v - a‖ := mul_le_mul_of_nonneg_right habs (norm_nonneg _)
+        _ = dist v a := by simp [dist_eq_norm]
+        _ < d := hva
+    have hop : ‖omegaCoord (a + t • (v - a)) - omegaCoord a‖ < c :=
+      by simpa [dist_eq_norm] using hdc hs hdist
+    rw [← ContinuousLinearMap.sub_apply]
+    calc
+      ‖(omegaCoord (a + t • (v - a)) - omegaCoord a) (v - a)‖ ≤
+          ‖omegaCoord (a + t • (v - a)) - omegaCoord a‖ * ‖v - a‖ :=
+        ContinuousLinearMap.le_opNorm _ _
+      _ ≤ c * ‖v - a‖ := mul_le_mul_of_nonneg_right hop.le (norm_nonneg _)
+  have hi := intervalIntegral.norm_integral_le_of_norm_le_const hbound
+  norm_num at hi
+  have hseg : Continuous (fun t : ℝ => a + t • (v - a)) :=
+    continuous_const.add (continuous_id.smul continuous_const)
+  have hf : IntervalIntegrable
+      (fun t : ℝ => omegaCoord (a + t • (v - a)) (v - a))
+      MeasureTheory.volume 0 1 := by
+    apply ContinuousOn.intervalIntegrable
+    apply ContinuousOn.clm_apply
+    · apply homega.continuousOn.comp hseg.continuousOn
+      intro t ht
+      apply apm_t96A08_chart_radial_primitive_euclidean_calculus_aux_segment
+        I W a v hWconv haW hvS
+      simpa [Set.uIcc_of_le (by norm_num : (0 : ℝ) ≤ 1)] using ht
+    · exact continuousOn_const
+  simp only [sub_self, smul_zero, add_zero, map_zero,
+    intervalIntegral.integral_zero, sub_zero]
+  have hcint : (∫ _ : ℝ in (0 : ℝ)..1, omegaCoord a (v - a)) =
+      omegaCoord a (v - a) := by simp
+  rw [← hcint, ← intervalIntegral.integral_sub hf intervalIntegrable_const]
+  simpa only [map_sub, Real.norm_eq_abs] using hi
 -- END SEAT AREA
 
 /-- Transfer the ambient parameter-integral result through the chart.  All
