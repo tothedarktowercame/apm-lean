@@ -117054,33 +117054,36 @@
   {:consumer :t97A07,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "Recorded fixture hash mismatch: :fixture.sha256 is eaeed21919599335d4a33b437815c4a9cbb5b72110213b29440d6944cc982182 (the blueprint at older commit 736c2566), but commit 8432f937 changes ConstructionTargets/t97A07Closure.blueprint.md and its exact SHA-256 is 5bb02c342b988406e8bd26aeda1b9e67335a8c1f626d97ec96701cb039ae708f. Re-record the fixture hash for the reviewed commit.",
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
-    :residual "B5 coordinate-maximum criticality next; then B6-B9.",
+    :residual
+    "Transfer the maximum to a source chart and prove derivative-coordinate vanishing; then B6-B9.",
     :outcome :stop,
     :warnings [{:kind :existing-placeholder}],
     :missing-theorems
-    [{:name "t97A07Closure.isCompact_criticalValues",
-      :type "IsCompact criticalValues",
-      :status :proved,
+    [{:name
+      "t97A07Closure.not_surjective_mfderiv_of_isMaxOn_coordinate",
+      :type "Coordinate maximum implies nonsurjective mfderiv",
+      :status :partial,
       :consumers [:t97A07],
-      :depends-on ["t97A07Closure.isOpen_regularPoints"],
+      :depends-on ["t97A07Closure.isCompact_criticalValues"],
       :area "regular-points-open"}],
     :statement-hashes
     {:source
      "eee255ed8120c697ee30c05d04474bae6dfd228582ddccde03a8b7f450cd4819",
      :target
-     "6428a1f90a7f08c14c24d0b8e37aad0d673ca8acf5c78bb662af2519933d9fa6",
+     "1f5e34bebe43058e9f2b3ad26cee1c25ebc8a57a1adca28bb0a9c024dbdf2313",
      :blueprint
-     "5160d488d92cee2ebb18532ea34b0ae74c1f847b8f4b68d8f75cbdf8eab7dadc",
-     :registry "145/145"},
+     "d99f6f355cf9af60cb412a77500d3d1f9558b3e5ff1d6a9aa730c8a1c05b04b3",
+     :registry "147/147"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
-    :reason "B4 proved: critical values are compact.",
+    :reason
+    "B5 partial: coordinate-range vanishing contradicts surjectivity.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t97A07Closure.lean",
       :exit 0}
@@ -117089,21 +117092,20 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "diff/hash/placeholders", :exit 0}],
     :diagnostic-history
-    [{:cmd "lake env lean problems/t97A07/lean/Main.lean",
+    [{:cmd "lean draft",
       :exit 1,
-      :finding "Built updated dependency, then passed."}],
-    :commit "16c2f58e3a9ac2303debe7b9e3b5f6599ce872ce",
+      :finding "Exposed PiLp coordinate; corrected."}],
+    :commit "cb6f4855c23574d6168462b393e6ecf972eae5cf",
     :changed-paths
     ["ConstructionTargets/t97A07Closure.lean"
-     "ConstructionTargets/t97A07Closure.blueprint.md"
-     "problems/t97A07/lean/Main.lean"],
+     "ConstructionTargets/t97A07Closure.blueprint.md"],
     :fixture
     {:path "ConstructionTargets/t97A07Closure.blueprint.md",
      :sha256
-     "5160d488d92cee2ebb18532ea34b0ae74c1f847b8f4b68d8f75cbdf8eab7dadc"},
+     "d99f6f355cf9af60cb412a77500d3d1f9558b3e5ff1d6a9aa730c8a1c05b04b3"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t97A07/lean/Main.lean"
     "problems/t97A07/status.json"
@@ -118382,7 +118384,7 @@
    :id
    :lemma-t97a07closure-not-surjective-mfderiv-of-ismaxon-coordinate,
    :kind :lemma,
-   :depends-on [],
+   :depends-on [:lemma-t97a07closure-iscompact-criticalvalues],
    :other-consumers []}
   {:consumer :t97A07,
    :phase :lemma,
