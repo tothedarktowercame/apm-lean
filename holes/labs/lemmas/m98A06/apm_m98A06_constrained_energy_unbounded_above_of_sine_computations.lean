@@ -1551,7 +1551,32 @@ theorem apm_m98A06_constrained_energy_unbounded_above_of_sine_computations
       ∫ x, (y x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)) = 1 ∧
       M < ∫ x, (dy x) ^ 2 - (y x) ^ 2
         ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)) := by
-  sorry
+  intro M
+  obtain ⟨k : ℕ, hk⟩ := exists_nat_gt (max M 0 + 1)
+  have hk0 : k ≠ 0 := by
+    intro hkz
+    subst k
+    norm_num at hk
+    linarith [le_max_right M 0]
+  let y : ℝ → ℝ := fun x ↦
+    Real.sqrt (2 / Real.pi) * Real.sin ((k : ℝ) * x)
+  let dy : ℝ → ℝ := fun x ↦
+    Real.sqrt (2 / Real.pi) * (k : ℝ) * Real.cos ((k : ℝ) * x)
+  obtain ⟨hy, hdy, hH, hnorm, henergy⟩ := hSine.2 k hk0
+  refine ⟨y, dy, ?_, ?_, ?_, ?_, ?_⟩
+  · simpa [y] using hy
+  · simpa [y, dy] using hdy
+  · simpa [y, dy] using hH
+  · simpa [y] using hnorm
+  · rw [show (∫ x, (dy x) ^ 2 - (y x) ^ 2
+        ∂(volume.restrict (Ioo (0 : ℝ) Real.pi))) = (k : ℝ) ^ 2 - 1 by
+      simpa [y, dy] using henergy]
+    have hk_nonneg : (0 : ℝ) ≤ k := by positivity
+    have hk_large : M + 1 < (k : ℝ) := by
+      exact lt_of_le_of_lt (by linarith [le_max_left M 0]) hk
+    have hk_one : (1 : ℝ) < k := by
+      exact lt_of_le_of_lt (by linarith [le_max_right M 0]) hk
+    nlinarith
 -- END SEAT AREA
 
 theorem apm_m98A06_poincare_best_constant_of_facts
