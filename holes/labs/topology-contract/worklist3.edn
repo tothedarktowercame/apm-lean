@@ -22153,7 +22153,7 @@
    :other-consumers []}
   {:bounded-exception "Rule0 aggregation.",
    :consumer :t01A08,
-   :stop-count 1,
+   :stop-count 2,
    :review-finding
    "Frozen fixture mode is missing in both authoritative acceptance copies. SHA d4041a37e02023ad8ce1b8e98bb7c6cbb338d539dbc89b7f8b484340dd9b13bd matches and the module builds, but literal fixture compilation exits 1 because modelRange_withinCriticalImage_null_of_interior_of_frontier is already declared. Add :mode :post-build-export-check to both copies, then resubmit commit f59140ec.",
    :implements-lemma
@@ -22161,7 +22161,7 @@
    :evidence
    {:placeholder-delta {:t01A08 [1 1]},
     :residual
-    "Add fixture mode to both acceptance copies, then resubmit f59140ec.",
+    "Stop repeated repair; update both acceptance copies, then resubmit f59140ec.",
     :outcome :stop,
     :warnings [],
     :statement-hashes {:registry "131/131"},
@@ -22169,7 +22169,7 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Both authoritative acceptance copies omit :mode. Supervisor must add :mode :post-build-export-check; f59140ec builds and matches the frozen fixture digest.",
+    "Third unchanged audit: both authoritative acceptance copies omit :mode. Supervisor must add :mode :post-build-export-check; f59140ec remains compiled and matches the frozen digest.",
     :commands
     [{:cmd "sha256sum /tmp/t01a08_critical_image_null_aggregate.lean",
       :exit 0}
@@ -22178,12 +22178,6 @@
       "git diff --exit-code f59140ec -- ConstructionTargets/SardConvexDomain.lean",
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1791858940305-8252-f67f0c1a",
-     :finding
-     "Frozen fixture mode is missing in both authoritative acceptance copies. SHA d4041a37e02023ad8ce1b8e98bb7c6cbb338d539dbc89b7f8b484340dd9b13bd matches and the module builds, but literal fixture compilation exits 1 because modelRange_withinCriticalImage_null_of_interior_of_frontier is already declared. Add :mode :post-build-export-check to both copies, then resubmit commit f59140ec."},
     :commit "f59140ec28f828b0e0aac1cae29fd535e56dc21e",
     :changed-paths [],
     :fixture
@@ -22193,7 +22187,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :repair,
+   :state :needs-owner,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t01A08/corners-sard",
    :acceptance
@@ -22295,7 +22289,7 @@
      :infrastructure-packets
      :review-outcomes]},
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance {:strategy "Rerank after corners Sard."},
