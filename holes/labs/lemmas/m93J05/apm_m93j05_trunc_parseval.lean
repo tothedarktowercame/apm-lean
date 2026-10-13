@@ -860,11 +860,103 @@ lemma apm_m93j05_trunc_parseval_aux_expand (N : ℕ) (f : ℝ → ℝ) (x : ℝ)
 /-- Parseval for the truncation: `∫₀¹ (m + Σ aⱼ cos + bⱼ sin)² = m² + Σ (aⱼ² + bⱼ²)/2`
 (from `apm_m93j05_trig_orthogonality` and the mean-zero helpers). -/
 -- BEGIN SEAT AREA
+lemma apm_m93j05_trunc_parseval_aux_integrated (N : ℕ) (f : ℝ → ℝ) :
+    (∫ x in Set.Icc (0 : ℝ) 1, apm_m93j05_trunc N f x ^ 2) =
+      (∫ x in Set.Icc (0 : ℝ) 1, f x) ^ 2 +
+      ∑ j ∈ Finset.Icc 1 N, ∑ k ∈ Finset.Icc 1 N,
+        if j = k then
+          (apm_m93j05_cosCoeff f j * apm_m93j05_cosCoeff f k +
+           apm_m93j05_sinCoeff f j * apm_m93j05_sinCoeff f k) / 2
+        else 0 := by
+  let S := Finset.Icc 1 N
+  let m := ∫ x in Set.Icc (0 : ℝ) 1, f x
+  let T : ℕ → ℝ → ℝ := fun j x =>
+    apm_m93j05_cosCoeff f j * Real.cos (j * 2 * Real.pi * x) +
+    apm_m93j05_sinCoeff f j * Real.sin (j * 2 * Real.pi * x)
+  have hT (j : ℕ) : Continuous (T j) := by
+    exact (continuous_const.mul (Real.continuous_cos.comp
+      (continuous_const.mul continuous_id))).add
+      (continuous_const.mul (Real.continuous_sin.comp
+        (continuous_const.mul continuous_id)))
+  have hsum : Continuous (fun x => ∑ j ∈ S, T j x) := by
+    fun_prop
+  calc
+    (∫ x in Set.Icc (0 : ℝ) 1, apm_m93j05_trunc N f x ^ 2) =
+        ∫ x in Set.Icc (0 : ℝ) 1,
+          m ^ 2 + 2 * m * (∑ j ∈ S, T j x) +
+            ∑ j ∈ S, ∑ k ∈ S, T j x * T k x := by
+      apply MeasureTheory.integral_congr_ae
+      filter_upwards [] with x
+      simpa [S, m, T] using apm_m93j05_trunc_parseval_aux_expand N f x
+    _ = m ^ 2 +
+        ∑ j ∈ S, ∑ k ∈ S,
+          if j = k then
+            (apm_m93j05_cosCoeff f j * apm_m93j05_cosCoeff f k +
+             apm_m93j05_sinCoeff f j * apm_m93j05_sinCoeff f k) / 2
+          else 0 := by
+      rw [MeasureTheory.integral_add]
+      · rw [MeasureTheory.integral_add]
+        · rw [MeasureTheory.integral_const]
+          simp only [Measure.real, Measure.restrict_apply_univ, Set.univ_inter,
+            Real.volume_Icc, sub_zero, ENNReal.ofReal_one, ENNReal.toReal_one,
+            one_mul]
+          have hdouble : (∫ x in Set.Icc (0 : ℝ) 1,
+              ∑ j ∈ S, ∑ k ∈ S, T j x * T k x) =
+              ∑ j ∈ S, ∑ k ∈ S, if j = k then
+                (apm_m93j05_cosCoeff f j * apm_m93j05_cosCoeff f k +
+                 apm_m93j05_sinCoeff f j * apm_m93j05_sinCoeff f k) / 2 else 0 := by
+            rw [MeasureTheory.integral_finset_sum S]
+            · apply Finset.sum_congr rfl
+              intro j hj
+              rw [MeasureTheory.integral_finset_sum S]
+              · apply Finset.sum_congr rfl
+                intro k hk
+                exact apm_m93j05_trunc_parseval_aux_inner _ _ _ _ j k
+                  (Finset.mem_Icc.mp hj).1 (Finset.mem_Icc.mp hk).1
+              · intro k hk
+                exact ((hT j).mul (hT k)).continuousOn.integrableOn_Icc
+            · intro j hj
+              exact MeasureTheory.integrable_finset_sum S fun k hk =>
+                ((hT j).mul (hT k)).continuousOn.integrableOn_Icc
+          have hcross : (∫ x in Set.Icc (0 : ℝ) 1,
+              2 * m * (∑ j ∈ S, T j x)) = 0 := by
+            rw [MeasureTheory.integral_const_mul,
+              MeasureTheory.integral_finset_sum S]
+            · apply mul_eq_zero_of_right
+              apply Finset.sum_eq_zero
+              intro j hj
+              exact apm_m93j05_trunc_parseval_aux_mean _ _ j
+                (Finset.mem_Icc.mp hj).1
+            · intro j hj
+              exact (hT j).continuousOn.integrableOn_Icc
+          rw [hcross, hdouble]
+          simp
+        · exact integrableOn_const (hs := measure_Icc_lt_top.ne)
+        · exact (continuous_const.mul hsum).continuousOn.integrableOn_Icc
+      · exact (continuous_const.add (continuous_const.mul hsum)).continuousOn.integrableOn_Icc
+      · exact MeasureTheory.integrable_finset_sum S fun j hj =>
+          MeasureTheory.integrable_finset_sum S fun k hk =>
+            ((hT j).mul (hT k)).continuousOn.integrableOn_Icc
+    _ = _ := by rfl
+
 theorem apm_m93j05_trunc_parseval (N : ℕ) (f : ℝ → ℝ) :
     (eLpNorm (apm_m93j05_trunc N f) 2 (volume.restrict (Set.Icc (0 : ℝ) 1))).toReal ^ 2 =
       (∫ x in Set.Icc (0 : ℝ) 1, f x) ^ 2 +
         ∑ j ∈ Finset.Icc 1 N, (apm_m93j05_cosCoeff f j ^ 2 + apm_m93j05_sinCoeff f j ^ 2) / 2 := by
-  sorry
+  rw [apm_m93j05_trunc_parseval_aux_norm_sq]
+  rw [show (∫ x in Set.Icc (0 : ℝ) 1,
+      apm_m93j05_trunc N f x * apm_m93j05_trunc N f x) =
+      (∫ x in Set.Icc (0 : ℝ) 1, f x) ^ 2 +
+      ∑ j ∈ Finset.Icc 1 N, ∑ k ∈ Finset.Icc 1 N,
+        if j = k then
+          (apm_m93j05_cosCoeff f j * apm_m93j05_cosCoeff f k +
+           apm_m93j05_sinCoeff f j * apm_m93j05_sinCoeff f k) / 2
+        else 0 by simpa [pow_two] using apm_m93j05_trunc_parseval_aux_integrated N f]
+  congr 1
+  apply Finset.sum_congr rfl
+  intro j hj
+  rw [Finset.sum_ite_eq]
+  simp [hj, pow_two]
 -- END SEAT AREA
 
 theorem apm_m93j05_trunc_energy_tendsto (N : ℕ) (p q : ℝ) (hp : 1 < p) (hq : 1 < q) (hpq : 1 / p + 1 / q = 1)
