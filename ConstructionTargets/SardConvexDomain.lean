@@ -319,6 +319,20 @@ theorem iteratedFDerivWithin_domDomCongr_swap_zero_one
       (v 0) (v 1)) (Fin.tail (Fin.tail v))
   exact DFunLike.congr_fun (h (v 1) (v 0)) (Fin.tail (Fin.tail v))
 
+/-- Finite-order smoothness directly fixes the leading adjacent transposition of the
+corresponding iterated derivative. -/
+theorem ContDiffWithinAt.iteratedFDerivWithin_domDomCongr_swap_zero_one_of_nat
+    {E F : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [NormedAddCommGroup F] [NormedSpace ℝ F]
+    {s : Set E} {f : E → F} {x : E} {n : ℕ}
+    (hf : ContDiffWithinAt ℝ (n + 2) f s x) (hu : UniqueDiffOn ℝ s)
+    (hxs : x ∈ s) (hxi : x ∈ closure (interior s)) :
+    (iteratedFDerivWithin ℝ (n + 2) f s x).domDomCongr
+        (Equiv.swap (0 : Fin (n + 2)) 1) =
+      iteratedFDerivWithin ℝ (n + 2) f s x :=
+  iteratedFDerivWithin_domDomCongr_swap_zero_one hu hxs
+    (hf.isSymmSndFDerivWithinAt_iteratedFDerivWithin_of_nat hu hxs hxi)
+
 namespace ConstructionTargets.SardConvexDomain
 
 theorem modelRange_withinCriticalImage_subset_interior_union_frontier
