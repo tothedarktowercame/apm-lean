@@ -113895,6 +113895,17 @@
       "lake build ConstructionTargets.ThreeCirclesFundamentalGroup",
       :exit 1,
       :finding "B12 absent."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791885031315-9363-82656eee",
+     :commands
+     ["git show/diff b7065086^..b7065086"
+      "git archive b7065086; lake env lean archived PointWedgeVanKampen.lean"
+      "statement-registry check; recorded-tree sha256; placeholders; diff-tree"
+      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (expected absent)"],
+     :finding
+     "PASS program STOP: b7065086 is new after history and adds compiled, sorry-free B6 progress. Rewriting the source action to inl g leaves mappedLeft g=inl g iff inl g=mappedLeft g, and eq_comm supplies exactly the displayed source-versus-mapped orientation; composing the prior iff is faithful. Both sides inhabit the free-product target, so no unsafe representation conversion occurs. Scope is Lean+notes; hashes match source fe187a0f, notes 27935591, blueprint 0bca6ce3; placeholders 0->0; registry 149/149; standard axioms only. The typed square comparison, then B6/B12, remains explicit; B12 is absent as listed."},
     :commit "b70650864738f70045e7db85f23ae52e3dd9d2d4",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
@@ -113905,7 +113916,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113926,7 +113937,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Identified the B6 left equation with the exact B3 mapped-left equality.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Oriented the B6 left residual as the exact B3 source-versus-mapped comparison.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -114642,7 +114653,11 @@
     {:job 5,
      :commit "d7a9b3c6b14583c6435721bf5189c1550a5f0cea",
      :reason
-     "Identified the B6 left equation with the exact B3 mapped-left equality."}]}
+     "Identified the B6 left equation with the exact B3 mapped-left equality."}
+    {:job 6,
+     :commit "b70650864738f70045e7db85f23ae52e3dd9d2d4",
+     :reason
+     "Oriented the B6 left residual as the exact B3 source-versus-mapped comparison."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
