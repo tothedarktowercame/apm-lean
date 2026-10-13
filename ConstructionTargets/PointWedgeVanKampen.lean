@@ -4563,6 +4563,75 @@ theorem genericPointWedgeMappedRight_eq_conj (g : FundamentalGroup Y y₀) :
   rw [h]
   simp [mul_assoc]
 
+/-- Conjugate only the right factor of a free product by an element of the
+left factor. Unlike global conjugation, this automorphism fixes every left
+injection. -/
+def genericPointWedgeConjugateRightByLeft
+    (a : FundamentalGroup X x₀) :
+    genericPointWedgeFreeProduct x₀ y₀ ≃*
+      genericPointWedgeFreeProduct x₀ y₀ := by
+  let c : genericPointWedgeFreeProduct x₀ y₀ := Monoid.Coprod.inl a
+  let forward : genericPointWedgeFreeProduct x₀ y₀ →*
+      genericPointWedgeFreeProduct x₀ y₀ :=
+    Monoid.Coprod.lift (Monoid.Coprod.inl (N := genericPointWedgeRightGroup y₀))
+      ((MulAut.conj c).toMonoidHom.comp
+        (Monoid.Coprod.inr (M := FundamentalGroup X x₀)))
+  let inverse : genericPointWedgeFreeProduct x₀ y₀ →*
+      genericPointWedgeFreeProduct x₀ y₀ :=
+    Monoid.Coprod.lift (Monoid.Coprod.inl (N := genericPointWedgeRightGroup y₀))
+      ((MulAut.conj c⁻¹).toMonoidHom.comp
+        (Monoid.Coprod.inr (M := FundamentalGroup X x₀)))
+  have hleft : inverse.comp forward = MonoidHom.id _ := by
+    apply Monoid.Coprod.hom_ext
+    · ext g
+      change inverse (forward (Monoid.Coprod.inl g)) = Monoid.Coprod.inl g
+      rw [show forward (Monoid.Coprod.inl g) = Monoid.Coprod.inl g by rfl]
+      rfl
+    · ext g
+      change inverse (forward (Monoid.Coprod.inr g)) = Monoid.Coprod.inr g
+      rw [show forward (Monoid.Coprod.inr g) = c * Monoid.Coprod.inr g * c⁻¹ by rfl]
+      rw [map_mul, map_mul, map_inv]
+      rw [show inverse c = c by dsimp [c]; rfl]
+      rw [show inverse (Monoid.Coprod.inr g) =
+          c⁻¹ * Monoid.Coprod.inr g * c by
+            change c⁻¹ * Monoid.Coprod.inr g * (c⁻¹)⁻¹ = _
+            simp]
+      simp [mul_assoc]
+  have hright : forward.comp inverse = MonoidHom.id _ := by
+    apply Monoid.Coprod.hom_ext
+    · ext g
+      change forward (inverse (Monoid.Coprod.inl g)) = Monoid.Coprod.inl g
+      rw [show inverse (Monoid.Coprod.inl g) = Monoid.Coprod.inl g by rfl]
+      rfl
+    · ext g
+      change forward (inverse (Monoid.Coprod.inr g)) = Monoid.Coprod.inr g
+      rw [show inverse (Monoid.Coprod.inr g) = c⁻¹ * Monoid.Coprod.inr g * c by
+        change c⁻¹ * Monoid.Coprod.inr g * (c⁻¹)⁻¹ = _
+        simp]
+      rw [map_mul, map_mul, map_inv]
+      rw [show forward c = c by dsimp [c]; rfl]
+      rw [show forward (Monoid.Coprod.inr g) =
+          c * Monoid.Coprod.inr g * c⁻¹ by rfl]
+      simp [mul_assoc]
+  exact
+    { toFun := forward
+      invFun := inverse
+      map_mul' := forward.map_mul
+      left_inv := DFunLike.congr_fun hleft
+      right_inv := DFunLike.congr_fun hright }
+
+@[simp] theorem genericPointWedgeConjugateRightByLeft_inl
+    (a g : FundamentalGroup X x₀) :
+    genericPointWedgeConjugateRightByLeft x₀ y₀ a (Monoid.Coprod.inl g) =
+      Monoid.Coprod.inl g := by
+  rfl
+
+theorem genericPointWedgeConjugateRightByLeft_inr
+    (a : FundamentalGroup X x₀) (g : FundamentalGroup Y y₀) :
+    genericPointWedgeConjugateRightByLeft x₀ y₀ a (Monoid.Coprod.inr g) =
+      Monoid.Coprod.inl a * Monoid.Coprod.inr g * (Monoid.Coprod.inl a)⁻¹ := by
+  rfl
+
 /-- Inner normalization by the counit element.  Composing the reconstructed
 source functor with this automorphism removes exactly the conjugation exposed
 by the two preceding theorems. -/
@@ -6633,6 +6702,9 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeCounitElement_eq_mappedRepresentationCounit
 #print axioms genericPointWedgeMappedLeft_eq_conj
 #print axioms genericPointWedgeMappedRight_eq_conj
+#print axioms genericPointWedgeConjugateRightByLeft
+#print axioms genericPointWedgeConjugateRightByLeft_inl
+#print axioms genericPointWedgeConjugateRightByLeft_inr
 #print axioms genericPointWedgeLeftRoundTripPredecessor_actualAction
 #print axioms genericPointWedgeCoordinateSpanGlobalRestrictionLeftComparison_heq_actualPredecessor
 #print axioms genericPointWedgeCounitNormalization_left

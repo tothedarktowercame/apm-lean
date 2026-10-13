@@ -1214,3 +1214,8 @@ orientation back to the normalized B6 left coordinate.
 of the typed B3 square: counit times mapped action equals reconstructed action
 times counit. It does not identify the actions without an additional
 commutation or a corrected normalization construction.
+
+`genericPointWedgeConjugateRightByLeft` supplies that corrected algebraic
+normalization when the right-base conjugator factors through the left
+injection. It fixes every `inl` and conjugates only `inr`; its inverse is the
+same partial conjugation by the inverse left element.
