@@ -293,7 +293,22 @@ lemma tft_stage_difference_quotient_of_structure_maps
           tftTranslateStageLocal ψ x₀ x₀))
       (nhdsWithin 0 ({0} : Set ℝ)ᶜ)
       (nhds (tftDirectionalTranslateStage ψ x₀ x₀ v)) := by
-  sorry
+  rw [show nhds (tftDirectionalTranslateStage ψ x₀ x₀ v) =
+      ⨅ i : ℕ, Filter.comap
+        (ContDiffMapSupportedIn.structureMapCLM ℝ ⊤ i)
+        (nhds (ContDiffMapSupportedIn.structureMapCLM ℝ ⊤ i
+          (tftDirectionalTranslateStage ψ x₀ x₀ v))) by
+    change @nhds _ (⨅ i : ℕ, TopologicalSpace.induced
+      (ContDiffMapSupportedIn.structureMapLM ℝ ⊤ i) inferInstance) _ = _
+    rw [nhds_iInf]
+    congr 1
+    funext i
+    rw [nhds_induced]
+    rfl]
+  rw [Filter.tendsto_iInf]
+  intro i
+  rw [Filter.tendsto_comap_iff]
+  exact hU2 i
 
 /-- S2 with U2 discharged for every iterated derivative of `ψ`. -/
 lemma tft_stage_difference_quotient (ψ : TFT E F) (x₀ v : E) :
