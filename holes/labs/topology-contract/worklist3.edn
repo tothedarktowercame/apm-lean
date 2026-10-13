@@ -36179,9 +36179,57 @@
    :program true,
    :other-consumers []}
   {:consumer :t99J05,
-   :stop-count 0,
+   :stop-count 1,
+   :evidence
+   {:placeholder-delta {:t99J05 [1 1]},
+    :residual
+    "Build C3 rational CP^n homology, then C4 trace sums and copy assembly into Main.",
+    :outcome :stop,
+    :warnings
+    ["reference sole expected sorryAx is t99J05_lefschetz_euler"
+     "existing reference lints: unnecessarySimpa, unusedSimpArgs"],
+    :missing-theorems
+    [{:name "t99J05_cp_homology",
+      :type
+      "H_k(CP n; Q)=Q in even degrees <=2n and 0 otherwise, with finiteness/vanishing",
+      :status :not-started,
+      :consumers [:t99J05],
+      :depends-on [],
+      :area "rational-homology-lefschetz"}
+     {:name "t99J05_lefschetz_euler",
+      :type
+      "f homotopic to id on CP n has Lefschetz number and Euler characteristic n+1",
+      :status :partial,
+      :consumers [:t99J05],
+      :depends-on ["t99J05_cp_homology"],
+      :area "rational-homology-lefschetz"}],
+    :statement-hashes {:registry "150/150"},
+    :disposition :stop,
+    :axioms [],
+    :author :topo-10,
+    :reason
+    "Blueprint written and committed. It isolates rational CP^n homology as the internal dependency of the sole LIBRARY obligation, reuses compiled fixed-point/local-index/assembly proofs, covers n=0, and records hypothesis use. Implementation continues at C3.",
+    :commands
+    [{:cmd "lake env lean holes/labs/blueprints/t99J05/Blueprint.lean",
+      :exit 0}
+     {:cmd "registry; milestone/hypothesis scans; diff checks",
+      :exit 0}
+     {:cmd "git commit; scoped commit; placeholder recount", :exit 0}],
+    :diagnostic-history
+    [{:cmd "git diff scope check",
+      :exit 1,
+      :correction
+      "new file is untracked; checked scoped status then committed"}],
+    :commit "05ab28e1f45cde90f026ffcf2423cbfce12cbcaf",
+    :changed-paths ["ConstructionTargets/t99J05Closure.blueprint.md"],
+    :fixture
+    {:path "ConstructionTargets/t99J05Closure.blueprint.md",
+     :sha256
+     "cb96c465df8b36ab973def3c0044c9e43c8702bbd2b142c7c69ee71661da9a16",
+     :mode :blueprint},
+    :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t99J05/lean/Main.lean"
     "problems/t99J05/status.json"
@@ -36331,6 +36379,42 @@
    :id :lemma-t93j03-cycliccover-zpowers-generatora,
    :kind :lemma,
    :depends-on [:lemma-t93j03-kleinbottle-pi1-every-basepoint],
+   :other-consumers []}
+  {:consumer :t99J05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t99J05_cp_homology",
+    :type
+    "H_k(CP n; Q)=Q in even degrees <=2n and 0 otherwise, with finiteness/vanishing"},
+   :lemma
+   {:name "t99J05_cp_homology",
+    :reported-by [:program-2026-10-13-close-t99j05],
+    :type
+    "H_k(CP n; Q)=Q in even degrees <=2n and 0 otherwise, with finiteness/vanishing",
+    :area "rational-homology-lefschetz"},
+   :id :lemma-t99j05-cp-homology,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t99J05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t99J05_lefschetz_euler",
+    :type
+    "f homotopic to id on CP n has Lefschetz number and Euler characteristic n+1"},
+   :lemma
+   {:name "t99J05_lefschetz_euler",
+    :reported-by [:program-2026-10-13-close-t99j05],
+    :type
+    "f homotopic to id on CP n has Lefschetz number and Euler characteristic n+1",
+    :area "rational-homology-lefschetz"},
+   :id :lemma-t99j05-lefschetz-euler,
+   :kind :lemma,
+   :depends-on [:lemma-t99j05-cp-homology],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
