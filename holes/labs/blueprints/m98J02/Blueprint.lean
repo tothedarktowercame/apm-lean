@@ -1376,6 +1376,43 @@ lemma apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_partialStage_seminorm
                 (j + (i :: is).length) φ := by
               simp [Nat.add_assoc, Nat.add_comm, Nat.add_left_comm]
 
+-- Pointwise bound on derivatives of the pairing over supp χ (norm_coord +
+-- partialList_eq_iteratedFDeriv + partial_formula + v_bound + translate_seminorm +
+-- partialStage_seminorm).
+lemma apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_pointwise_bound
+    (v : apm_m98J02_Dist) (χ : apm_m98J02_Test)
+    (hsmooth : ∀ φ : apm_m98J02_Test,
+      ContDiff ℝ ∞ (fun x : apm_m98J02_E =>
+        v (apm_m98J02_translateTest x φ)))
+    (K : TopologicalSpace.Compacts apm_m98J02_E)
+    (hK : (K : Set apm_m98J02_E) ⊆ (⊤ : TopologicalSpace.Opens apm_m98J02_E)) :
+    ∀ k : ℕ, ∃ s : Finset ℕ, ∃ C : ℝ, ∀ (φ : 𝓓_{K}(apm_m98J02_E, ℝ)) (x : apm_m98J02_E),
+        x ∈ tsupport (χ : apm_m98J02_E → ℝ) →
+        ‖iteratedFDeriv ℝ k (fun y : apm_m98J02_E =>
+            v (apm_m98J02_translateTest y (TestFunction.ofSupportedIn hK φ))) x‖ ≤
+          C * (s.sup (ContDiffMapSupportedIn.seminorm ℝ apm_m98J02_E ℝ ⊤ K)) φ := by
+  sorry
+
+-- Target-stage seminorm bound, given the pointwise bound (leibniz + bounds on the
+-- derivatives of χ + ContDiffMapSupportedIn.seminorm_le_iff).
+lemma apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_target_bound
+    (v : apm_m98J02_Dist) (χ : apm_m98J02_Test)
+    (hsmooth : ∀ φ : apm_m98J02_Test,
+      ContDiff ℝ ∞ (fun x : apm_m98J02_E =>
+        v (apm_m98J02_translateTest x φ)))
+    (K : TopologicalSpace.Compacts apm_m98J02_E)
+    (hK : (K : Set apm_m98J02_E) ⊆ (⊤ : TopologicalSpace.Opens apm_m98J02_E))
+    (hpt : ∀ k : ℕ, ∃ s : Finset ℕ, ∃ C : ℝ, ∀ (φ : 𝓓_{K}(apm_m98J02_E, ℝ)) (x : apm_m98J02_E),
+        x ∈ tsupport (χ : apm_m98J02_E → ℝ) →
+        ‖iteratedFDeriv ℝ k (fun y : apm_m98J02_E =>
+            v (apm_m98J02_translateTest y (TestFunction.ofSupportedIn hK φ))) x‖ ≤
+          C * (s.sup (ContDiffMapSupportedIn.seminorm ℝ apm_m98J02_E ℝ ⊤ K)) φ) :
+    ∀ i : ℕ, ∃ s : Finset ℕ, ∃ C : ℝ, ∀ φ : 𝓓_{K}(apm_m98J02_E, ℝ),
+      ContDiffMapSupportedIn.seminorm ℝ apm_m98J02_E ℝ ⊤
+          (apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_targetCompact χ) i (apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_stageLinear v χ hsmooth K hK φ) ≤
+        C * (s.sup (ContDiffMapSupportedIn.seminorm ℝ apm_m98J02_E ℝ ⊤ K)) φ := by
+  sorry
+
 lemma apm_m98J02_bridge_2_aux_psi_aux_stage_cont
     (v : apm_m98J02_Dist) (χ : apm_m98J02_Test)
     (hsmooth : ∀ φ : apm_m98J02_Test,
@@ -1384,7 +1421,11 @@ lemma apm_m98J02_bridge_2_aux_psi_aux_stage_cont
     (K : TopologicalSpace.Compacts apm_m98J02_E)
     (hK : (K : Set apm_m98J02_E) ⊆ (⊤ : TopologicalSpace.Opens apm_m98J02_E)) :
     Continuous (apm_m98J02_bridge_2_aux_psi_aux_linear v χ hsmooth ∘ TestFunction.ofSupportedIn hK) := by
-  sorry
+  refine apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_of_stage v χ hsmooth K hK ?_
+  exact (ContDiffMapSupportedIn.withSeminorms ℝ apm_m98J02_E ℝ ⊤ K).continuous_of_isBounded
+    (ContDiffMapSupportedIn.withSeminorms ℝ apm_m98J02_E ℝ ⊤ (apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_targetCompact χ)) _
+    (Seminorm.IsBounded.of_real (apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_target_bound v χ hsmooth K hK
+      (apm_m98J02_bridge_2_aux_psi_aux_stage_cont_aux_pointwise_bound v χ hsmooth K hK)))
 
 lemma apm_m98J02_bridge_2_aux_psi
     (v : apm_m98J02_Dist) (χ : apm_m98J02_Test)
