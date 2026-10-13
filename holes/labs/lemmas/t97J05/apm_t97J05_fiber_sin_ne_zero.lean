@@ -163,7 +163,12 @@ calculation is nonzero. -/
 -- BEGIN SEAT AREA
 lemma apm_t97J05_fiber_sin_ne_zero (q : apm_t97J05_R3)
     (hq : q ∈ apm_t97J05_W) : Real.sin (q 1) ≠ 0 := by
-  sorry
+  have hfirst := congrArg (fun u : apm_t97J05_R2 ↦ u 0) hq
+  have hcos : Real.cos (q 1) = 0 := by
+    simpa [apm_t97J05_W, apm_t97J05_f, apm_t97J05_value,
+      Real.exp_ne_zero] using hfirst
+  intro hsin
+  nlinarith [Real.sin_sq_add_cos_sq (q 1)]
 -- END SEAT AREA
 
 /-- The completion of `f` by the last coordinate, used uniformly at every fiber
