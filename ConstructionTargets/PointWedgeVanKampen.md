@@ -1137,6 +1137,12 @@ substitutes both expansions into the free-product comparison.  The strict
 three-factor injection remains left of the counit three-factor injection in
 single-object multiplication order, and the dependent boundary remains HEq.
 
+`genericPointWedgeLeftRoundTrip_counit_normalForms` applies the connector
+normal form to the exact left-equivalence counit naturality square.  Using
+it relates the two typed composites at the fixed base while preserving every
+endpoint object; no connector or
+counit is normalized independently.
+
 `genericPointWedgeCoordinateSpanGlobalRestrictionLeftRoundTrip_counit_map`
 applies the coordinate-span left functor to the left-equivalence counit
 naturality square.  Both ordered composites are now equal inside the

@@ -3787,6 +3787,30 @@ theorem genericPointWedgeCoordinateSpanGlobalRestrictionLeftComparison_heq_expan
     genericPointWedgeLeftTargetCounit_normalForm_eq_connectors] at h
   exact h
 
+omit [PathConnectedSpace Y] in
+/-- The left counit naturality square remains exact after both sides are
+put into the fixed-base connector coordinates.  This is the typed relation
+between the two expanded factors; no endpoint objects are identified. -/
+theorem genericPointWedgeLeftRoundTrip_counit_normalForms :
+    let eK := genericPointWedgeOverlapGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let eL := genericPointWedgeLeftGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let aL := genericPointWedgeLeftSpanIso
+      x₀ y₀ M N hM hN hy hx cM cN
+    let l := genericPointWedgeActualLeft x₀ y₀ M N
+    let l' := genericPointWedgeCoordinateLeft x₀
+    let u : FundamentalGroupoid Unit := FundamentalGroupoid.mk ()
+    (genericPointWedgeConnectors x₀).normalForm
+        (eL.functor.map (eL.inverse.map (aL.inv.app u)) ≫
+          eL.counitIso.hom.app ((eK.inverse ⋙ l ⋙ eL.functor).obj u)) =
+    (genericPointWedgeConnectors x₀).normalForm
+        (eL.counitIso.hom.app (l'.obj u) ≫ aL.inv.app u) := by
+  dsimp only
+  exact congrArg (genericPointWedgeConnectors x₀).normalForm
+    (genericPointWedgeCoordinateSpanGlobalRestrictionLeftRoundTrip_counit
+      x₀ y₀ M N hM hN hy hx cM cN)
+
 /-- The inverse right comparison introduced by coordinate-span transport,
 isolated before recombining it with the middle and left factors. -/
 def genericPointWedgeCoordinateSpanGlobalRestrictionRightComparison :
@@ -6216,6 +6240,7 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeLeftStrictFactor_normalForm_eq_connectors
 #print axioms genericPointWedgeLeftTargetCounit_normalForm_eq_connectors
 #print axioms genericPointWedgeCoordinateSpanGlobalRestrictionLeftComparison_heq_expandedFactors
+#print axioms genericPointWedgeLeftRoundTrip_counit_normalForms
 #print axioms genericPointWedgeCoordinateSpanGlobalRestrictionRightComparison
 #print axioms genericPointWedgeCoordinateSpanGlobalRestrictionRightComparison_app
 #print axioms genericPointWedgeCoordinateSpanGlobalRestrictionRightUnitFactor
