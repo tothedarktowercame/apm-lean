@@ -697,7 +697,49 @@ theorem apm_t96A08_continuousOn_of_eval_contDiffOn
     (S : Set E) (L : E → (E →L[ℝ] ℝ)) (hS : UniqueDiffOn ℝ S)
     (hL : ContDiffOn ℝ 1 (fun p : E × E ↦ L p.1 p.2) (S ×ˢ Set.univ)) :
     ContinuousOn L S := by
-  sorry
+  let F : E × E → ℝ := fun p ↦ L p.1 p.2
+  let T : Set (E × E) := S ×ˢ Set.univ
+  let j : E →L[ℝ] E × E := ContinuousLinearMap.inr ℝ E E
+  let D : E → (E →L[ℝ] ℝ) := fun y ↦
+    (fderivWithin ℝ F T (y, 0)).comp j
+  have hT : UniqueDiffOn ℝ T := hS.prod uniqueDiffOn_univ
+  have hder : ContinuousOn (fderivWithin ℝ F T) T := by
+    exact hL.continuousOn_fderivWithin hT (by norm_num)
+  have hemb : ContinuousOn (fun y : E ↦ (y, (0 : E))) S :=
+    (continuous_id.prodMk continuous_const).continuousOn
+  have hemb_maps : Set.MapsTo (fun y : E ↦ (y, (0 : E))) S T := by
+    intro y hy
+    exact ⟨hy, Set.mem_univ 0⟩
+  have hD : ContinuousOn D S := by
+    have hpre : ContinuousOn
+        (fun y : E ↦ fderivWithin ℝ F T (y, 0)) S :=
+      hder.comp hemb hemb_maps
+    have hpost : Continuous
+        (fun A : (E × E →L[ℝ] ℝ) ↦ A.comp j) := by
+      fun_prop
+    exact hpost.comp_continuousOn hpre
+  apply hD.congr
+  intro y hy
+  apply ContinuousLinearMap.ext
+  intro v
+  have hdiff := (hL (y, 0) ⟨hy, Set.mem_univ 0⟩).differentiableWithinAt
+    (by norm_num)
+  have hj : HasFDerivAt (fun v : E ↦ (y, v)) j 0 := by
+    simpa [j] using (hasFDerivAt_const (x := (0 : E)) y).prodMk
+      (hasFDerivAt_id (x := (0 : E)))
+  have hmap : Set.MapsTo (fun v : E ↦ (y, v)) Set.univ T := by
+    intro v hv
+    exact ⟨hy, Set.mem_univ v⟩
+  have hc := hdiff.hasFDerivWithinAt.comp 0 hj.hasFDerivWithinAt hmap
+  have hc' : HasFDerivWithinAt (fun v : E ↦ L y v)
+      ((fderivWithin ℝ F T (y, 0)).comp j) Set.univ 0 := by
+    simpa [F, Function.comp_def] using hc
+  have hu : UniqueDiffOn ℝ (Set.univ : Set E) := uniqueDiffOn_univ
+  have heq := hc'.fderivWithin (hu 0 (Set.mem_univ (0 : E)))
+  have hlin : fderivWithin ℝ (fun v : E ↦ L y v) Set.univ 0 = L y := by
+    simpa using (L y).hasFDerivAt.fderiv
+  simpa [D] using congrArg (fun A : E →L[ℝ] ℝ ↦ A v)
+    (heq.symm.trans hlin).symm
 -- END SEAT AREA
 
 /-- Seat: the coordinate expression is continuous on `W ∩ range I` inside the
