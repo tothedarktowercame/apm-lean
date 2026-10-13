@@ -351,6 +351,37 @@ lemma apm_m02J05_lux_sublevel_attained_aux_zero_mem
     rw [integral_congr_ae hz]
     norm_num
 
+lemma apm_m02J05_lux_sublevel_attained_aux_core_aux_scale
+    (α : ℝ → ℝ) (hshape : apm_m02J05_YoungShapeFact α)
+    {θ t : ℝ} (hθ0 : 0 ≤ θ) (hθ1 : θ ≤ 1) (ht : 0 ≤ t) :
+    apm_m02J05_young α (θ * t) ≤ θ * apm_m02J05_young α t := by
+  have hc := hshape.1.2 (show (0 : ℝ) ∈ Ici 0 by simp)
+    (show t ∈ Ici 0 by exact ht) (sub_nonneg.mpr hθ1) hθ0 (by ring)
+  simpa [apm_m02J05_young_zero] using hc
+
+lemma apm_m02J05_lux_sublevel_attained_aux_core_aux_nonempty
+    (α : ℝ → ℝ)
+    (hc : ContinuousOn α (Ici 0))
+    (hmono : StrictMonoOn α (Ici 0))
+    (hzero : α 0 = 0)
+    (hinfty : Tendsto α atTop atTop)
+    (hnonneg : ∀ t, 0 ≤ t → 0 ≤ α t)
+    (u : apm_m02J05_Fun) (hu : u ∈ apm_m02J05_L α) :
+    (apm_m02J05_luxSublevel α u).Nonempty := by
+  sorry
+
+lemma apm_m02J05_lux_sublevel_attained_aux_core_aux_attained
+    (α : ℝ → ℝ)
+    (hc : ContinuousOn α (Ici 0))
+    (hmono : StrictMonoOn α (Ici 0))
+    (hzero : α 0 = 0)
+    (hinfty : Tendsto α atTop atTop)
+    (hnonneg : ∀ t, 0 ≤ t → 0 ≤ α t)
+    (u : apm_m02J05_Fun) (hu : u ∈ apm_m02J05_L α)
+    (hu0 : u ≠ 0) :
+    apm_m02J05_lux α u ∈ apm_m02J05_luxSublevel α u := by
+  sorry
+
 lemma apm_m02J05_lux_sublevel_attained_aux_core
     (α : ℝ → ℝ)
     (hc : ContinuousOn α (Ici 0))
@@ -363,7 +394,13 @@ lemma apm_m02J05_lux_sublevel_attained_aux_core
       BddBelow (apm_m02J05_luxSublevel α u) ∧
       0 ≤ apm_m02J05_lux α u ∧
       (u ≠ 0 → apm_m02J05_lux α u ∈ apm_m02J05_luxSublevel α u) := by
-  sorry
+  intro u hu
+  have hne := apm_m02J05_lux_sublevel_attained_aux_core_aux_nonempty
+    α hc hmono hzero hinfty hnonneg u hu
+  exact ⟨hne, apm_m02J05_lux_sublevel_attained_aux_bdd α u,
+    apm_m02J05_lux_sublevel_attained_aux_nonneg α u hne,
+    apm_m02J05_lux_sublevel_attained_aux_core_aux_attained
+      α hc hmono hzero hinfty hnonneg u hu⟩
 
 theorem apm_m02J05_lux_sublevel_attained
     (α : ℝ → ℝ)
