@@ -36221,6 +36221,17 @@
       :exit 1,
       :correction
       "proved Fin1/empty-coordinate equalities explicitly"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791922062829-10348-50781089",
+     :commands
+     ["git show/diff 385135c; scope and representation review"
+      "lake build/lean ConstructionTargets.t99J05Closure"
+      "sha256sum + lake env lean interface fixture"
+      "statement-registry check; placeholder recount"],
+     :finding
+     "PASS. Since program-history c97d155, commit 385135c adds the compiled, sorry-free theorem Subsingleton (CP 0) for the literal projectivization, using its fixed affine chart rather than substituting another model. This is genuine C3 base progress; rational homology of subsingletons, CP0 data, and the Mayer-Vietoris successor remain explicitly listed. Fixture hash matches; standard axioms only; registry 150/150; closure forbidden count 0->0."},
     :commit "385135c706cfec5df353876bace021905b133f83",
     :changed-paths
     ["ConstructionTargets/t99J05Closure.lean"
@@ -36232,7 +36243,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t99J05/lean/Main.lean"
     "problems/t99J05/status.json"
@@ -36250,7 +36261,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t99J05Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed C3 induction: CP0 data plus a Mayer-Vietoris successor yields data for every CP n. Base and successor remain; not refuted.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed literal CP0 singleton theorem via its affine chart. Base homology reduces to rational homology of a subsingleton; successor remains; not refuted.",
    :id :program-2026-10-13-close-t99j05,
    :kind :final-adapter,
    :campaign-priority 31,
@@ -36270,7 +36281,11 @@
     {:job 3,
      :commit "c97d1550317667236760fc2274f9abf7370e0573",
      :reason
-     "Committed C3 induction: CP0 data plus a Mayer-Vietoris successor yields data for every CP n. Base and successor remain; not refuted."}]}
+     "Committed C3 induction: CP0 data plus a Mayer-Vietoris successor yields data for every CP n. Base and successor remain; not refuted."}
+    {:job 4,
+     :commit "385135c706cfec5df353876bace021905b133f83",
+     :reason
+     "Committed literal CP0 singleton theorem via its affine chart. Base homology reduces to rational homology of a subsingleton; successor remains; not refuted."}]}
   {:consumer :t98A02,
    :stop-count 0,
    :phase :implementation,
@@ -36513,7 +36528,7 @@
    :other-consumers []}
   {:consumer :t99J05,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "cp_zero_subsingleton", :type "Subsingleton (CP 0)"},
@@ -36522,7 +36537,9 @@
     :reported-by [:program-2026-10-13-close-t99j05],
     :type "Subsingleton (CP 0)",
     :area "rational-homology-lefschetz",
-    :proved-in :program-2026-10-13-close-t99j05},
+    :proved-in :program-2026-10-13-close-t99j05,
+    :banked-by :program-2026-10-13-close-t99j05,
+    :banked-commit "385135c706cfec5df353876bace021905b133f83"},
    :id :lemma-cp-zero-subsingleton,
    :kind :lemma,
    :depends-on [],
