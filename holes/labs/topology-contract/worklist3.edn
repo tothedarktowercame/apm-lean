@@ -22440,8 +22440,62 @@
      :typed-residual-change
      :infrastructure-packets
      :review-outcomes]},
+   :evidence
+   {:outcome :replan,
+    :seat "topo-12",
+    :commands
+    [{:cmd
+      "bb holes/labs/topology-contract/build_step.bb priorities holes/labs/topology-contract/worklist3.edn",
+      :exit 0}],
+    :finding
+    {:measures "Δ0;aggregate PASS;A08 7/1;1 packet",
+     :routes
+     "A02:2/13,A03:2/6,J02+98A02:1/10,A08:1/1,1J01:3/4,2A04:3/8,3J02:2/8,3J03:4/11,91J05:3/7,92J05+97J02:3/15,94J04:2/10,95J06:2/8,96A01:1/12,96A02:1/8,96J06:2/4,97A05+6:1/11",
+     :priority "A08 frontier Sard needs absent blueprint."},
+    :replacement-items
+    [{:bounded-exception "Rule0 blueprint.",
+      :consumer :t01A08,
+      :phase :implementation,
+      :state :open,
+      :scope ["ConstructionTargets/SardConvexDomain.blueprint.md"],
+      :dag-node "TOPOLOGY-ROUTES.md/t01A08/corners-sard",
+      :acceptance
+      {:blueprint "ConstructionTargets/SardConvexDomain.blueprint.md",
+       :audit "holes/labs/topology-routes/routes-1.md/t01A08 step 3",
+       :placeholder "t01A08 sorry",
+       :route-step
+       "plan convex-domain Sard and frontier-stratum nullity",
+       :completion "Commit blueprint; STOP blueprint written."},
+      :id :r-a08-sard-blueprint-1,
+      :kind :documentation,
+      :area "sard-convex-domain",
+      :depends-on [:r-a08-agg-3 :r-topo3-cp4b],
+      :current-residual "Review blueprint, then elect B1.",
+      :other-consumers []}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 1,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :phase :strategy,
+      :state :open,
+      :scope [],
+      :dag-node "TOPOLOGY-ROUTES.md",
+      :acceptance {:strategy "Review blueprint and rerank."},
+      :id :r-topo3-cp5,
+      :kind :strategy-checkpoint,
+      :area "portfolio",
+      :depends-on [:r-a08-sard-blueprint-1],
+      :current-residual "Elect reviewed B1.",
+      :other-consumers []}],
+    :author "topo-12",
+    :disposition :replan},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance {:strategy "Rerank."},
@@ -22450,6 +22504,44 @@
    :area "portfolio",
    :depends-on [:r-a08-agg-3 :r-topo3-checkpoint-3],
    :current-residual "Elect frontier Sard.",
+   :other-consumers []}
+  {:bounded-exception "Rule0 blueprint.",
+   :consumer :t01A08,
+   :phase :implementation,
+   :state :blocked,
+   :scope ["ConstructionTargets/SardConvexDomain.blueprint.md"],
+   :dag-node "TOPOLOGY-ROUTES.md/t01A08/corners-sard",
+   :acceptance
+   {:blueprint "ConstructionTargets/SardConvexDomain.blueprint.md",
+    :audit "holes/labs/topology-routes/routes-1.md/t01A08 step 3",
+    :placeholder "t01A08 sorry",
+    :route-step "plan convex-domain Sard and frontier-stratum nullity",
+    :completion "Commit blueprint; STOP blueprint written."},
+   :id :r-a08-sard-blueprint-1,
+   :kind :documentation,
+   :area "sard-convex-domain",
+   :depends-on [:r-a08-agg-3 :r-topo3-cp4b],
+   :current-residual "Review blueprint, then elect B1.",
+   :other-consumers []}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 1,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md",
+   :acceptance {:strategy "Review blueprint and rerank."},
+   :id :r-topo3-cp5,
+   :kind :strategy-checkpoint,
+   :area "portfolio",
+   :depends-on [:r-a08-sard-blueprint-1 :r-topo3-cp4b],
+   :current-residual "Elect reviewed B1.",
    :other-consumers []}
   {:bounded-exception "Rule0.",
    :consumer :t01A08,
