@@ -245,7 +245,80 @@ theorem apm_t96A08_lineIntegrand_intervalIntegrable
     IntervalIntegrable
       (fun t : ℝ => omega (gamma t) ((mfderiv 𝓘(ℝ, ℝ) I gamma t) 1))
       MeasureTheory.volume 0 1 := by
-  sorry
+  rcases hgamma with ⟨hγcont, n, cuts, hmono, hzero, hone, hsmooth⟩
+  have hn : 0 < n := by
+    by_contra h
+    have hn0 : n = 0 := by omega
+    subst n
+    have he : (0 : Fin 1) = Fin.last 0 := Subsingleton.elim _ _
+    rw [he] at hzero
+    linarith
+  let F : ℝ → ℝ := fun t ↦
+    omega (gamma t) ((mfderiv 𝓘(ℝ, ℝ) I gamma t) 1)
+  have hpiece : ∀ i : Fin n,
+      MeasureTheory.IntegrableOn F
+        (Set.Icc (cuts i.castSucc) (cuts i.succ)) := by
+    intro i
+    let s : Set ℝ := Set.Icc (cuts i.castSucc) (cuts i.succ)
+    let V : ℝ → TangentBundle 𝓘(ℝ, ℝ) ℝ := fun t ↦ ⟨t, 1⟩
+    let G : ℝ → ℝ := fun t ↦
+      (fun v : TangentBundle I M ↦ omega v.1 v.2)
+        (tangentMapWithin 𝓘(ℝ, ℝ) I gamma s (V t))
+    have hab : cuts i.castSucc < cuts i.succ := hmono (by simp)
+    have hus : UniqueMDiffOn 𝓘(ℝ, ℝ) s :=
+      (uniqueDiffOn_Icc hab).uniqueMDiffOn
+    have hV : Continuous V := by
+      change Continuous
+        ((tangentBundleModelSpaceHomeomorph 𝓘(ℝ, ℝ)).symm ∘
+          fun t : ℝ ↦ (t, (1 : ℝ)))
+      exact (tangentBundleModelSpaceHomeomorph 𝓘(ℝ, ℝ)).symm.continuous.comp
+        (continuous_id.prodMk continuous_const)
+    have htan : ContinuousOn (tangentMapWithin 𝓘(ℝ, ℝ) I gamma s)
+        (Bundle.TotalSpace.proj ⁻¹' s) :=
+      (hsmooth i).continuousOn_tangentMapWithin (by simp) hus
+    have hGs : ContinuousOn G s := by
+      apply homega_smooth.continuous.comp_continuousOn
+      apply htan.comp hV.continuousOn
+      intro t ht
+      exact ht
+    have hGint : MeasureTheory.IntegrableOn G s := by
+      exact hGs.integrableOn_Icc
+    apply hGint.congr
+    change G =ᵐ[MeasureTheory.volume.restrict
+      (Set.Icc (cuts i.castSucc) (cuts i.succ))] F
+    change ∀ᵐ t ∂MeasureTheory.volume.restrict
+      (Set.Icc (cuts i.castSucc) (cuts i.succ)), G t = F t
+    rw [MeasureTheory.ae_restrict_iff' measurableSet_Icc]
+    filter_upwards [MeasureTheory.volume.ae_ne (cuts i.castSucc),
+      MeasureTheory.volume.ae_ne (cuts i.succ)] with t htl htr
+    intro ht
+    have htio : t ∈ Set.Ioo (cuts i.castSucc) (cuts i.succ) :=
+      ⟨lt_of_le_of_ne ht.1 (Ne.symm htl), lt_of_le_of_ne ht.2 htr⟩
+    have hnhds : s ∈ nhds t := Icc_mem_nhds htio.1 htio.2
+    have hmd : MDifferentiableAt 𝓘(ℝ, ℝ) I gamma t :=
+      ((hsmooth i t ht).contMDiffAt hnhds).mdifferentiableAt (by simp)
+    simp only [F, G, V, tangentMapWithin_proj, tangentMapWithin_snd]
+    rw [mfderivWithin_eq_mfderiv (hus t ht) hmd]
+    rfl
+  have hp : ∀ k : ℕ, ∀ hk : k ≤ n,
+      IntervalIntegrable F MeasureTheory.volume (cuts 0) (cuts ⟨k, by omega⟩) := by
+    intro k
+    induction k with
+    | zero =>
+        intro hk
+        simp [intervalIntegrable_iff]
+    | succ k ih =>
+        intro hk
+        have hkn : k < n := by omega
+        have hprev := ih (by omega)
+        have hnext : IntervalIntegrable F MeasureTheory.volume
+            (cuts ⟨k, by omega⟩) (cuts ⟨k + 1, by omega⟩) := by
+          apply (intervalIntegrable_iff_integrableOn_Icc_of_le
+            (hmono.monotone (by simp))).2
+          simpa using hpiece ⟨k, hkn⟩
+        exact hprev.trans hnext
+  have hlast : (⟨n, by omega⟩ : Fin (n + 1)) = Fin.last n := by ext; simp
+  simpa only [F, hzero, hlast, hone] using hp n le_rfl
 
 /-- Seat: on `(0, 1/2)` the concatenation agrees with `gamma (2 ·)` near `t`,
 so the chain rule doubles the velocity (both sides vanish where `gamma` is not
