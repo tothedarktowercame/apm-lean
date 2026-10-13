@@ -319,7 +319,34 @@ theorem m99A06_fixedPointLp_contractingOn_closedBall
       (hmap.restrict (m99A06_fixedPointLp ε)
         (Metric.closedBall 0 (1 / 4 : ℝ))
         (Metric.closedBall 0 (1 / 4 : ℝ))) := by
-  sorry
+  refine ⟨by norm_num, LipschitzWith.of_dist_le_mul ?_⟩
+  intro u v
+  have hu : ‖(u : Lp ℝ 1 (volume : Measure ℝ))‖ ≤ 1 / 4 := by
+    simpa [Metric.mem_closedBall, dist_zero_right] using u.property
+  have hv : ‖(v : Lp ℝ 1 (volume : Measure ℝ))‖ ≤ 1 / 4 := by
+    simpa [Metric.mem_closedBall, dist_zero_right] using v.property
+  dsimp only [Set.MapsTo.restrict]
+  rw [Subtype.dist_eq, Subtype.dist_eq, dist_eq_norm, dist_eq_norm]
+  change ‖m99A06_fixedPointLp ε (u : Lp ℝ 1 (volume : Measure ℝ)) -
+      m99A06_fixedPointLp ε (v : Lp ℝ 1 (volume : Measure ℝ))‖ ≤
+        ((3 / 4 : NNReal) : ℝ) *
+          ‖(u : Lp ℝ 1 (volume : Measure ℝ)) -
+            (v : Lp ℝ 1 (volume : Measure ℝ))‖
+  calc
+    ‖m99A06_fixedPointLp ε (u : Lp ℝ 1 (volume : Measure ℝ)) -
+        m99A06_fixedPointLp ε (v : Lp ℝ 1 (volume : Measure ℝ))‖ ≤
+      ‖(u : Lp ℝ 1 (volume : Measure ℝ)) -
+        (v : Lp ℝ 1 (volume : Measure ℝ))‖ *
+        (‖(u : Lp ℝ 1 (volume : Measure ℝ))‖ +
+          ‖(v : Lp ℝ 1 (volume : Measure ℝ))‖) :=
+      m99A06_fixedPointLp_sub_norm_le ε u v
+    _ ≤ ((3 / 4 : NNReal) : ℝ) *
+        ‖(u : Lp ℝ 1 (volume : Measure ℝ)) -
+          (v : Lp ℝ 1 (volume : Measure ℝ))‖ := by
+      norm_num at hu hv ⊢
+      nlinarith [norm_nonneg
+        ((u : Lp ℝ 1 (volume : Measure ℝ)) -
+          (v : Lp ℝ 1 (volume : Measure ℝ)))]
 
 theorem m99A06_fixedPointLp_exists
     {ε : ℝ} (hε : 0 < ε)
