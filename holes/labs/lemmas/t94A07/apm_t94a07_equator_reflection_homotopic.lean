@@ -204,7 +204,94 @@ theorem apm_t94a07_equator_reflection_homotopic
     ContinuousMap.Homotopic
       (ConstructionTargets.CoefficientCoordinateReflections.reflectionMap (d := 2) 1)
       (ContinuousMap.id (T02A06.euclideanUnitSphere 2)) := by
-  sorry
+  obtain ⟨H, hHcont, hH0, hH1, hHtorus⟩ := hH
+  let e : T02A06.euclideanUnitSphere 2 → apm_t94a07_E3 := fun x =>
+    WithLp.toLp 2 ![(R + r) * x.1 0, (R + r) * x.1 1, 0]
+  have he_cont : Continuous e := by
+    dsimp [e]
+    apply (PiLp.continuous_toLp 2 _).comp
+    apply continuous_pi
+    intro i
+    fin_cases i <;> simp <;> fun_prop
+  have he_torus : ∀ x, e x ∈ apm_t94a07_torus R r := by
+    intro x
+    have hx : ‖x.1‖ = 1 := by
+      simpa [Metric.mem_sphere, dist_zero_right] using x.2
+    have hx' : x.1 0 ^ 2 + x.1 1 ^ 2 = 1 := by
+      rw [EuclideanSpace.norm_eq, Fin.sum_univ_two] at hx
+      have hs : 0 ≤ ‖x.1 0‖ ^ 2 + ‖x.1 1‖ ^ 2 := by positivity
+      have hh := congrArg (fun z : ℝ => z ^ 2) hx
+      dsimp only at hh
+      rw [Real.sq_sqrt hs] at hh
+      simpa [Real.norm_eq_abs, sq_abs] using hh
+    have hRpos : 0 < R + r := by linarith
+    simp [e, apm_t94a07_torus, show ((R + r) * x.1 0) ^ 2 +
+      ((R + r) * x.1 1) ^ 2 = (R + r) ^ 2 by nlinarith,
+      Real.sqrt_sq_eq_abs, abs_of_pos hRpos]
+  let q : apm_t94a07_E3 → EuclideanSpace ℝ (Fin 2) := fun p =>
+    WithLp.toLp 2 ![p 0, p 1]
+  have hq_cont : Continuous q := by
+    dsimp [q]
+    apply (PiLp.continuous_toLp 2 _).comp
+    apply continuous_pi
+    intro i
+    fin_cases i <;> simp <;> fun_prop
+  have q_ne_zero (p : apm_t94a07_E3) (hp : p ∈ apm_t94a07_torus R r) : q p ≠ 0 := by
+    intro hzero
+    have h0 := congr_fun (congr_arg WithLp.ofLp hzero) 0
+    have h1 := congr_fun (congr_arg WithLp.ofLp hzero) 1
+    simp [q] at h0 h1
+    have hp' : R ^ 2 + p 2 ^ 2 = r ^ 2 := by
+      simpa [apm_t94a07_torus, h0, h1, abs_of_nonneg (le_of_lt (by linarith : 0 < R))]
+        using hp
+    nlinarith [sq_nonneg (p 2), mul_pos hr (sub_pos.mpr hR)]
+  let F : unitInterval × T02A06.euclideanUnitSphere 2 →
+      T02A06.euclideanUnitSphere 2 := fun tx =>
+    ⟨NormedSpace.normalize (q (H tx.1.1 (e tx.2))), by
+      rw [Metric.mem_sphere, dist_zero_right]
+      apply NormedSpace.norm_normalize
+      apply q_ne_zero
+      exact hHtorus tx.1.1 tx.1.2 (e tx.2) (he_torus tx.2)⟩
+  have hF_cont : Continuous F := by
+    apply Continuous.subtype_mk
+    rw [continuous_iff_continuousAt]
+    intro tx
+    have hc : Continuous (fun tx : unitInterval × T02A06.euclideanUnitSphere 2 =>
+        q (H tx.1.1 (e tx.2))) := hq_cont.comp
+      (hHcont.comp ((continuous_subtype_val.comp continuous_fst).prodMk
+        (he_cont.comp continuous_snd)))
+    have hn := q_ne_zero (H tx.1.1 (e tx.2))
+      (hHtorus tx.1.1 tx.1.2 (e tx.2) (he_torus tx.2))
+    exact ((continuous_norm.comp hc).continuousAt.inv₀ (norm_ne_zero_iff.mpr hn)).smul
+      hc.continuousAt
+  refine ⟨ContinuousMap.Homotopy.mk
+    (f₀ := ConstructionTargets.CoefficientCoordinateReflections.reflectionMap (d := 2) 1)
+    (f₁ := ContinuousMap.id (T02A06.euclideanUnitSphere 2)) ⟨F, hF_cont⟩ ?_ ?_⟩
+  · intro x
+    apply Subtype.ext
+    dsimp [F]
+    rw [hH0 (e x) (he_torus x)]
+    have hscale : q (apm_t94a07_halfTurn (e x)) = (R + r) •
+        (ConstructionTargets.CoefficientCoordinateReflections.reflectionMap (d := 2) 1 x).1 := by
+      ext i
+      fin_cases i <;> simp [q, e, apm_t94a07_halfTurn,
+        ConstructionTargets.CoefficientCoordinateReflections.reflectionMap,
+        ConstructionTargets.CoefficientCoordinateReflections.sphereHomeo,
+        ConstructionTargets.CoefficientCoordinateReflections.reflection_apply]
+    rw [hscale, NormedSpace.normalize_smul_of_pos (by linarith : 0 < R + r)]
+    apply NormedSpace.normalize_eq_self_of_norm_eq_one
+    simpa [Metric.mem_sphere, dist_zero_right] using
+      (ConstructionTargets.CoefficientCoordinateReflections.reflectionMap (d := 2) 1 x).2
+  · intro x
+    apply Subtype.ext
+    dsimp [F]
+    rw [hH1 (e x) (he_torus x)]
+    have hscale : q (e x) = (R + r) • x.1 := by
+      ext i
+      fin_cases i <;> simp [q, e]
+    rw [hscale, NormedSpace.normalize_smul_of_pos (by linarith : 0 < R + r)]
+    exact NormedSpace.normalize_eq_self_of_norm_eq_one (by
+      simpa [Metric.mem_sphere, dist_zero_right] using x.2)
 -- END SEAT AREA
 
 /-- Seat (claude-14 split): a coordinate reflection of the circle acts by `-1`
