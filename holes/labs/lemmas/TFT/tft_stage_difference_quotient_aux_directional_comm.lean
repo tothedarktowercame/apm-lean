@@ -393,11 +393,49 @@ lemma tft_stage_difference_quotient_aux_contDiff (ψ : TFT E F) (i : ℕ) :
 /-- A directional derivative commutes with the `i`-th derivative of a smooth map
 (symmetry of higher derivatives; Mathlib has it only for analytic maps). -/
 -- BEGIN SEAT AREA
+lemma tft_stage_difference_quotient_aux_directional_comm_aux_smooth
+    (g : E → F) (hg : ContDiff ℝ (⊤ : ℕ∞) g) (i : ℕ) :
+    ContDiff ℝ (⊤ : ℕ∞) (iteratedFDeriv ℝ i g) := by
+  exact hg.iteratedFDeriv_right
+    (by exact_mod_cast (show (⊤ : ℕ∞) + i ≤ (⊤ : ℕ∞) from by simp))
+
 lemma tft_stage_difference_quotient_aux_directional_comm
     (g : E → F) (hg : ContDiff ℝ (⊤ : ℕ∞) g) (i : ℕ) (v y : E) :
     iteratedFDeriv ℝ i (fun z => fderiv ℝ g z v) y =
       fderiv ℝ (iteratedFDeriv ℝ i g) y v := by
-  sorry
+  revert y
+  rw [← funext_iff]
+  induction i with
+  | zero =>
+    funext y
+    rw [iteratedFDeriv_zero_eq_comp, iteratedFDeriv_zero_eq_comp]
+    rw [(continuousMultilinearCurryFin0 ℝ E F).symm.comp_fderiv]
+    rfl
+  | succ i ih =>
+    funext y
+    have hGs := tft_stage_difference_quotient_aux_directional_comm_aux_smooth g hg i
+    have hdG : Differentiable ℝ (fderiv ℝ (iteratedFDeriv ℝ i g)) :=
+      (contDiff_infty_iff_fderiv.1 hGs).2.differentiable (by simp)
+    have hL : iteratedFDeriv ℝ (i + 1) (fun z => fderiv ℝ g z v) y =
+        (continuousMultilinearCurryLeftEquiv ℝ (fun _ : Fin (i + 1) => E) F).symm
+          (fderiv ℝ (iteratedFDeriv ℝ i (fun z => fderiv ℝ g z v)) y) := by
+      rw [iteratedFDeriv_succ_eq_comp_left]; rfl
+    have hRR : iteratedFDeriv ℝ (i + 1) g =
+        ⇑(continuousMultilinearCurryLeftEquiv ℝ (fun _ : Fin (i + 1) => E) F).symm ∘
+          fderiv ℝ (iteratedFDeriv ℝ i g) := iteratedFDeriv_succ_eq_comp_left
+    rw [hL, hRR, ih]
+    have hR := ContinuousLinearEquiv.comp_fderiv (𝕜 := ℝ)
+      (continuousMultilinearCurryLeftEquiv ℝ (fun _ : Fin (i + 1) => E) F).symm.toContinuousLinearEquiv
+      (f := fderiv ℝ (iteratedFDeriv ℝ i g)) (x := y)
+    erw [hR, ContinuousLinearMap.comp_apply]
+    refine congrArg (continuousMultilinearCurryLeftEquiv ℝ (fun _ : Fin (i + 1) => E) F).symm ?_
+    have hsymm := (hGs.contDiffAt (x := y)).isSymmSndFDerivAt
+      (by rw [minSmoothness_of_isRCLikeNormedField]; exact WithTop.coe_le_coe.2 le_top)
+    ext w
+    rw [fderiv_clm_apply (hdG y) (differentiableAt_const v)]
+    rw [fderiv_const_apply, ContinuousLinearMap.comp_zero, zero_add,
+      ContinuousLinearMap.flip_apply, hsymm w v]
+
 -- END SEAT AREA
 
 lemma tft_stage_difference_quotient_aux_coe_local (ψ : TFT E F) (x₀ x : E)
