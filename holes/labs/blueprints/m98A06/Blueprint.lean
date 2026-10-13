@@ -261,20 +261,75 @@ theorem apm_m98A06_bridge_1
       apm_m98a06_I a y + apm_m98a06_I a η := by
   exact apm_m98A06_stationary_energy_split ha hy hη
 
-theorem apm_m98A06_stationary_resonant_classification :
+/-! The four shared analytic inputs.  The conclusion-level lemmas below take
+these facts as explicit hypotheses, so all eleven holes are independent. -/
+
+def apm_m98A06_DuBoisReymondFact : Prop :=
+  ∀ a y₀ ya : ℝ, 0 < a → ∀ y : ℝ → ℝ,
+    apm_m98a06_IsStationary a y₀ ya y ↔
+      apm_m98a06_Admissible a y₀ ya y ∧
+        ∃ A B : ℝ, ∀ x ∈ Icc (0 : ℝ) a,
+          y x = A * Real.cos x + B * Real.sin x
+
+def apm_m98A06_WirtingerFact : Prop :=
+  ∀ L : ℝ, 0 < L → ∀ η : ℝ → ℝ,
+    apm_m98a06_Admissible L 0 0 η →
+      (∫ x in (0 : ℝ)..L, (η x) ^ 2) ≤
+        (L / Real.pi) ^ 2 *
+          ∫ x in (0 : ℝ)..L, (derivWithin η (Icc 0 L) x) ^ 2 ∧
+      ((∫ x in (0 : ℝ)..L, (η x) ^ 2) =
+          (L / Real.pi) ^ 2 *
+            ∫ x in (0 : ℝ)..L, (derivWithin η (Icc 0 L) x) ^ 2 ↔
+        ∃ c : ℝ, ∀ x ∈ Icc (0 : ℝ) L,
+          η x = c * Real.sin (Real.pi * x / L))
+
+def apm_m98A06_WeakFTCFact : Prop :=
+  ∀ u du : ℝ → ℝ, apm_m98a06_InH10Pi u du →
+    ∀ x ∈ Icc (0 : ℝ) Real.pi, u x = ∫ t in (0 : ℝ)..x, du t
+
+def apm_m98A06_SineComputationsFact : Prop :=
+  (∀ L : ℝ, 0 < L → ∀ k : ℕ, k ≠ 0 →
+      apm_m98a06_Admissible L 0 0
+        (fun x ↦ Real.sin ((k : ℝ) * Real.pi * x / L)) ∧
+      apm_m98a06_I L (fun x ↦ Real.sin ((k : ℝ) * Real.pi * x / L)) =
+        ((((k : ℝ) * Real.pi / L) ^ 2 - 1) * (L / 2))) ∧
+    (∀ k : ℕ, k ≠ 0 →
+      let y : ℝ → ℝ := fun x ↦ Real.sqrt (2 / Real.pi) * Real.sin ((k : ℝ) * x)
+      let dy : ℝ → ℝ := fun x ↦ Real.sqrt (2 / Real.pi) * (k : ℝ) * Real.cos ((k : ℝ) * x)
+      ContDiff ℝ 1 y ∧ dy = deriv y ∧ apm_m98a06_InH10Pi y dy ∧
+        ∫ x, (y x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)) = 1 ∧
+        ∫ x, (dy x) ^ 2 - (y x) ^ 2
+          ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)) = (k : ℝ) ^ 2 - 1)
+
+theorem apm_m98A06_duBoisReymond : apm_m98A06_DuBoisReymondFact := by
+  sorry
+
+theorem apm_m98A06_wirtinger : apm_m98A06_WirtingerFact := by
+  sorry
+
+theorem apm_m98A06_weak_FTC : apm_m98A06_WeakFTCFact := by
+  sorry
+
+theorem apm_m98A06_sine_computations : apm_m98A06_SineComputationsFact := by
+  sorry
+
+theorem apm_m98A06_stationary_resonant_classification_of_duBoisReymond
+    (hDBR : apm_m98A06_DuBoisReymondFact) :
     ∀ y : ℝ → ℝ,
       apm_m98a06_IsStationary (2 * Real.pi) 1 1 y ↔
         ∃ B : ℝ, ∀ x ∈ Icc (0 : ℝ) (2 * Real.pi),
           y x = Real.cos x + B * Real.sin x := by
   sorry
 
-theorem apm_m98A06_stationary_nonresonant_classification :
+theorem apm_m98A06_stationary_nonresonant_classification_of_duBoisReymond
+    (hDBR : apm_m98A06_DuBoisReymondFact) :
     ∀ a : ℝ, 0 < a → (∀ k : ℤ, a ≠ k * Real.pi) →
       ∀ y : ℝ → ℝ, apm_m98a06_IsStationary a 0 1 y ↔
         ∀ x ∈ Icc (0 : ℝ) a, y x = Real.sin x / Real.sin a := by
   sorry
 
-theorem apm_m98A06_resonant_no_global_extrema :
+theorem apm_m98A06_resonant_no_global_extrema_of_sine_computations
+    (hSine : apm_m98A06_SineComputationsFact) :
     ∀ y : ℝ → ℝ, apm_m98a06_Admissible (2 * Real.pi) 1 1 y →
       (∃ z : ℝ → ℝ, apm_m98a06_Admissible (2 * Real.pi) 1 1 z ∧
         apm_m98a06_I (2 * Real.pi) z < apm_m98a06_I (2 * Real.pi) y) ∧
@@ -282,7 +337,9 @@ theorem apm_m98A06_resonant_no_global_extrema :
         apm_m98a06_I (2 * Real.pi) y < apm_m98a06_I (2 * Real.pi) z := by
   sorry
 
-theorem apm_m98A06_nonresonant_energy_geometry :
+theorem apm_m98A06_nonresonant_energy_geometry_of_facts
+    (hWirtinger : apm_m98A06_WirtingerFact)
+    (hSine : apm_m98A06_SineComputationsFact) :
     ∀ a : ℝ, 0 < a → (∀ k : ℤ, a ≠ k * Real.pi) →
       (a < Real.pi →
         (∀ z : ℝ → ℝ, apm_m98a06_Admissible a 0 1 z →
@@ -299,7 +356,10 @@ theorem apm_m98A06_nonresonant_energy_geometry :
           apm_m98a06_I a y < apm_m98a06_I a z) := by
   sorry
 
-theorem apm_m98A06_weak_poincare_and_equality :
+theorem apm_m98A06_weak_poincare_and_equality_of_facts
+    (hWirtinger : apm_m98A06_WirtingerFact)
+    (hFTC : apm_m98A06_WeakFTCFact)
+    (hSine : apm_m98A06_SineComputationsFact) :
     (∀ y dy : ℝ → ℝ, apm_m98a06_InH10Pi y dy →
       ∫ x, (y x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)) = 1 →
       0 ≤ ∫ x, (dy x) ^ 2 - (y x) ^ 2
@@ -313,7 +373,8 @@ theorem apm_m98A06_weak_poincare_and_equality :
             fun x ↦ s * Real.sqrt (2 / Real.pi) * Real.sin x)) := by
   sorry
 
-theorem apm_m98A06_constrained_energy_unbounded_above :
+theorem apm_m98A06_constrained_energy_unbounded_above_of_sine_computations
+    (hSine : apm_m98A06_SineComputationsFact) :
     ∀ M : ℝ, ∃ y dy : ℝ → ℝ, ContDiff ℝ 1 y ∧ dy = deriv y ∧
       apm_m98a06_InH10Pi y dy ∧
       ∫ x, (y x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)) = 1 ∧
@@ -321,11 +382,89 @@ theorem apm_m98A06_constrained_energy_unbounded_above :
         ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)) := by
   sorry
 
-theorem apm_m98A06_poincare_best_constant :
+theorem apm_m98A06_poincare_best_constant_of_facts
+    (hWirtinger : apm_m98A06_WirtingerFact)
+    (hFTC : apm_m98A06_WeakFTCFact)
+    (hSine : apm_m98A06_SineComputationsFact) :
     IsLeast {C : ℝ | ∀ f df : ℝ → ℝ, apm_m98a06_InH10Pi f df →
       ∫ x, (f x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)) ≤
         C * ∫ x, (df x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi))} 1 := by
   sorry
+
+/-! The original seven conclusion-level lemmas are assembly only. -/
+
+theorem apm_m98A06_stationary_resonant_classification :
+    ∀ y : ℝ → ℝ,
+      apm_m98a06_IsStationary (2 * Real.pi) 1 1 y ↔
+        ∃ B : ℝ, ∀ x ∈ Icc (0 : ℝ) (2 * Real.pi),
+          y x = Real.cos x + B * Real.sin x := by
+  exact apm_m98A06_stationary_resonant_classification_of_duBoisReymond
+    apm_m98A06_duBoisReymond
+
+theorem apm_m98A06_stationary_nonresonant_classification :
+    ∀ a : ℝ, 0 < a → (∀ k : ℤ, a ≠ k * Real.pi) →
+      ∀ y : ℝ → ℝ, apm_m98a06_IsStationary a 0 1 y ↔
+        ∀ x ∈ Icc (0 : ℝ) a, y x = Real.sin x / Real.sin a := by
+  exact apm_m98A06_stationary_nonresonant_classification_of_duBoisReymond
+    apm_m98A06_duBoisReymond
+
+theorem apm_m98A06_resonant_no_global_extrema :
+    ∀ y : ℝ → ℝ, apm_m98a06_Admissible (2 * Real.pi) 1 1 y →
+      (∃ z : ℝ → ℝ, apm_m98a06_Admissible (2 * Real.pi) 1 1 z ∧
+        apm_m98a06_I (2 * Real.pi) z < apm_m98a06_I (2 * Real.pi) y) ∧
+      ∃ z : ℝ → ℝ, apm_m98a06_Admissible (2 * Real.pi) 1 1 z ∧
+        apm_m98a06_I (2 * Real.pi) y < apm_m98a06_I (2 * Real.pi) z := by
+  exact apm_m98A06_resonant_no_global_extrema_of_sine_computations
+    apm_m98A06_sine_computations
+
+theorem apm_m98A06_nonresonant_energy_geometry :
+    ∀ a : ℝ, 0 < a → (∀ k : ℤ, a ≠ k * Real.pi) →
+      (a < Real.pi →
+        (∀ z : ℝ → ℝ, apm_m98a06_Admissible a 0 1 z →
+          apm_m98a06_I a (fun x ↦ Real.sin x / Real.sin a) ≤ apm_m98a06_I a z ∧
+          (apm_m98a06_I a z = apm_m98a06_I a (fun x ↦ Real.sin x / Real.sin a) →
+            ∀ x ∈ Icc (0 : ℝ) a, z x = Real.sin x / Real.sin a)) ∧
+        ∀ y : ℝ → ℝ, apm_m98a06_Admissible a 0 1 y →
+          ∃ z : ℝ → ℝ, apm_m98a06_Admissible a 0 1 z ∧
+            apm_m98a06_I a y < apm_m98a06_I a z) ∧
+      (Real.pi < a → ∀ y : ℝ → ℝ, apm_m98a06_Admissible a 0 1 y →
+        (∃ z : ℝ → ℝ, apm_m98a06_Admissible a 0 1 z ∧
+          apm_m98a06_I a z < apm_m98a06_I a y) ∧
+        ∃ z : ℝ → ℝ, apm_m98a06_Admissible a 0 1 z ∧
+          apm_m98a06_I a y < apm_m98a06_I a z) :=
+  apm_m98A06_nonresonant_energy_geometry_of_facts
+    apm_m98A06_wirtinger apm_m98A06_sine_computations
+
+theorem apm_m98A06_weak_poincare_and_equality :
+    (∀ y dy : ℝ → ℝ, apm_m98a06_InH10Pi y dy →
+      ∫ x, (y x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)) = 1 →
+      0 ≤ ∫ x, (dy x) ^ 2 - (y x) ^ 2
+        ∂(volume.restrict (Ioo (0 : ℝ) Real.pi))) ∧
+    (∀ y dy : ℝ → ℝ, apm_m98a06_InH10Pi y dy →
+      ∫ x, (y x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)) = 1 →
+      (∫ x, (dy x) ^ 2 - (y x) ^ 2
+        ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)) = 0 ↔
+        ∃ s : ℝ, (s = 1 ∨ s = -1) ∧
+          y =ᵐ[volume.restrict (Ioo (0 : ℝ) Real.pi)]
+            fun x ↦ s * Real.sqrt (2 / Real.pi) * Real.sin x)) :=
+  apm_m98A06_weak_poincare_and_equality_of_facts
+    apm_m98A06_wirtinger apm_m98A06_weak_FTC apm_m98A06_sine_computations
+
+theorem apm_m98A06_constrained_energy_unbounded_above :
+    ∀ M : ℝ, ∃ y dy : ℝ → ℝ, ContDiff ℝ 1 y ∧ dy = deriv y ∧
+      apm_m98a06_InH10Pi y dy ∧
+      ∫ x, (y x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)) = 1 ∧
+      M < ∫ x, (dy x) ^ 2 - (y x) ^ 2
+        ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)) :=
+  apm_m98A06_constrained_energy_unbounded_above_of_sine_computations
+    apm_m98A06_sine_computations
+
+theorem apm_m98A06_poincare_best_constant :
+    IsLeast {C : ℝ | ∀ f df : ℝ → ℝ, apm_m98a06_InH10Pi f df →
+      ∫ x, (f x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)) ≤
+        C * ∫ x, (df x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi))} 1 :=
+  apm_m98A06_poincare_best_constant_of_facts
+    apm_m98A06_wirtinger apm_m98A06_weak_FTC apm_m98A06_sine_computations
 
 /-- Why this unblocks the Euler--Lagrange clauses of `apm_m98a06`: this is
 the fundamental-lemma classification of stationary curves for the resonant
