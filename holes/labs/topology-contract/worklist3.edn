@@ -36113,24 +36113,24 @@
    [:lemma-constructiontargets-sardconvexdomain-eq-whitneydyadicindexof-of-mem-cube-of-gene],
    :other-consumers []}
   {:consumer :t93J03,
-   :stop-count 4,
+   :stop-count 5,
    :review-finding
    "Program STOP commits nothing new since the prior reviewed attempt: it reuses commit 512a220f, and git history shows no later scoped commit. The unresolved SemilocallySimplyConnected hypothesis-coverage conflict is unchanged. Obtain the required owner specification decision or commit a new compiled milestone before resubmitting.",
    :evidence
    {:placeholder-delta {:t93J03 [1 1]},
     :residual
-    "Bound coordinates from compact projections, assemble proper discontinuity; then orbit homeomorphism, C1/C2/Main.",
+    "Prove signed horizontal bound and assemble proper discontinuity; then orbit homeomorphism, C1/C2/Main.",
     :outcome :stop,
-    :warnings ["owner-approved unused SLSC hypothesis"],
+    :warnings ["owner-approved unused SLSC"],
     :missing-theorems
-    [{:name "coordinate_equations_of_smul_eq",
-      :type "orbit equality determines integer coordinates",
+    [{:name "finite_zmul_cast_mem_compact_image",
+      :type "integer casts in compact image are finite",
       :status :proved,
       :consumers [:t93J03],
       :depends-on [],
       :area "covering-subgroup-correspondence"}
-     {:name "finite_of_coordinatePair_mem",
-      :type "finite coordinate ranges give finite group set",
+     {:name "finite_vertical_coordinates_of_compact",
+      :type "compact intersection has finite vertical coordinates",
       :status :proved,
       :consumers [:t93J03],
       :depends-on [],
@@ -36139,46 +36139,35 @@
       :type "proper discontinuity of affine action",
       :status :partial,
       :consumers [:t93J03],
-      :depends-on
-      ["coordinate_equations_of_smul_eq"
-       "finite_of_coordinatePair_mem"],
+      :depends-on ["finite_vertical_coordinates_of_compact"],
       :area "covering-subgroup-correspondence"}],
     :statement-hashes {:registry "166/166"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Committed algebraic half of proper discontinuity; compact bounds remain.",
+    "Committed compact and vertical-coordinate finiteness; horizontal bound remains.",
     :commands
-    [{:cmd
-      "lake build ConstructionTargets.t93J03Closure; lean fixture",
-      :exit 0}
-     {:cmd "statement registry; placeholder; diff checks", :exit 0}
+    [{:cmd "lake build closure; lean fixture", :exit 0}
+     {:cmd "registry; placeholder; diff", :exit 0}
      {:cmd "rg forbidden closure", :exit 1, :expected-exit 1}
      {:cmd "git commit; show --check", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1791925754121-10512-db102d3f",
-     :commands
-     ["git show/diff 2f56a1d; scope and coordinate review"
-      "lake build/lean ConstructionTargets.t93J03Closure"
-      "sha256sum + lake env lean algebra fixture"
-      "statement-registry check; placeholder recount"],
-     :finding
-     "PASS. Since program-history a55cadcd, commit 2f56a1d adds compiled, sorry-free algebraic progress for literal-action proper discontinuity. Orbit equality yields the vertical translation and signed horizontal coordinate equations in the correct direction, and injectivity of coordinatePairEquiv turns finite coordinate sets into finitely many actors. Compact projection bounds and assembly of proper discontinuity, then orbit homeomorphism/C1/C2/Main, remain listed. Fixture hash matches; standard axioms only; registry 166/166; forbidden count 0->0. SemilocallySimplyConnected X is unused, mandated by problem.md."},
-    :commit "2f56a1d96c44a4f260d57f1ccac7cdc8b4a9e577",
+    :diagnostic-history
+    [{:cmd "lean closure",
+      :exit 1,
+      :correction "unfolded Multiplicative order"}],
+    :commit "42d9d0e66410d8ed20d89c7bfc11da54a7a3f0f0",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
      "ConstructionTargets/t93J03Closure.blueprint.md"],
     :fixture
-    {:path "/tmp/t93j03_proper_action_algebra_check.lean",
+    {:path "/tmp/t93j03_compact_coordinate_check.lean",
      :sha256
-     "d06d27a1559b1b4be44235a26cc7aca48c623a7725841fe9682b37525d4f3a38",
+     "60873bc71f327bfa270837618835e74c032a6a2127be6d794817d10718be58bc",
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -37266,7 +37255,8 @@
    :kind :lemma,
    :depends-on
    [:lemma-coordinate-equations-of-smul-eq
-    :lemma-finite-of-coordinatepair-mem],
+    :lemma-finite-of-coordinatepair-mem
+    :lemma-finite-vertical-coordinates-of-compact],
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
@@ -37303,6 +37293,40 @@
     :banked-by :program-2026-10-13-close-t93j03,
     :banked-commit "2f56a1d96c44a4f260d57f1ccac7cdc8b4a9e577"},
    :id :lemma-finite-of-coordinatepair-mem,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "finite_zmul_cast_mem_compact_image",
+    :type "integer casts in compact image are finite"},
+   :lemma
+   {:name "finite_zmul_cast_mem_compact_image",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type "integer casts in compact image are finite",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03},
+   :id :lemma-finite-zmul-cast-mem-compact-image,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "finite_vertical_coordinates_of_compact",
+    :type "compact intersection has finite vertical coordinates"},
+   :lemma
+   {:name "finite_vertical_coordinates_of_compact",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type "compact intersection has finite vertical coordinates",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03},
+   :id :lemma-finite-vertical-coordinates-of-compact,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}],
