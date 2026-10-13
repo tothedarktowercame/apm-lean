@@ -1370,3 +1370,6 @@ as the canonical endpoint transport followed by inverse mapped `unitInv`.
 that inverse against the mapped `unitInv`, leaving the named source transport.
 `genericPointWedgeOuterRightSpan_component_eq_typedComposite_comp_map` identifies
 the resulting morphism with the chosen-base inverse-span component.
+`genericPointWedgeOuterRight_inverseSpan_normalForm_eq_typedComposite` carries
+that equality through the connector normal form; one dependent connector
+transport cancellation remains before the projection criterion closes.

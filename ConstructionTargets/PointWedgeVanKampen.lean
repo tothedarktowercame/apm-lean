@@ -6895,6 +6895,27 @@ theorem genericPointWedgeOuterRightSpan_component_eq_typedComposite_comp_map :
     _ = _ := (genericPointWedgeOuterRight_typedTransportComposite_comp_map_unitInv
       x₀ y₀ M N hM hN hy hx cM cN).symm
 
+/-- The chosen-base inverse-span component equality transports through the
+connector normal-form operation. -/
+theorem genericPointWedgeOuterRight_inverseSpan_normalForm_eq_typedComposite :
+    let r := genericPointWedgeActualRight x₀ y₀ M N
+    let eK := genericPointWedgeOverlapGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let eR := genericPointWedgeRightGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let aR := genericPointWedgeRightSpanIso
+      x₀ y₀ M N hM hN hy hx cM cN
+    let z := genericPointWedgeOverlapBase x₀ y₀ M N
+    (genericPointWedgeConnectors y₀).normalForm
+        (aR.inv.app (eK.functor.obj z)) =
+      (genericPointWedgeConnectors y₀).normalForm
+        (genericPointWedgeOuterRight_typedTransportComposite
+            x₀ y₀ M N hM hN hy hx cM cN ≫
+          (r ⋙ eR.functor).map (eK.unitInv.app z)) := by
+  exact congrArg _
+    (genericPointWedgeOuterRightSpan_component_eq_typedComposite_comp_map
+      x₀ y₀ M N hM hN hy hx cM cN)
+
 /-- An `inl` factorization of the right-base conjugator forces its canonical
 right projection to be trivial. -/
 theorem genericPointWedgeRightBase_inl_implies_rightProjection_eq_one
@@ -7652,6 +7673,7 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeOuterRight_typedTransportComposite_eq_transport
 #print axioms genericPointWedgeOuterRight_typedTransportComposite_eq_map
 #print axioms genericPointWedgeOuterRightSpan_component_eq_typedComposite_comp_map
+#print axioms genericPointWedgeOuterRight_inverseSpan_normalForm_eq_typedComposite
 #print axioms genericPointWedgeRightBase_inl_implies_rightProjection_eq_one
 #print axioms genericPointWedgeLegCoordinates_of_mapped
 #print axioms genericPointWedgeLegCoordinates_iff_mapped
