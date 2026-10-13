@@ -621,6 +621,55 @@ lemma apm_m98J02_translated_pairing_calculus_of_facts_aux_continuous
 /-- Continuous partial derivatives (as one-sided-free coordinate slope limits)
 give a Fréchet derivative: the classical C¹ criterion on `ℝ²`. -/
 -- BEGIN SEAT AREA
+lemma apm_m98J02_translated_pairing_calculus_of_facts_aux_hasFDerivAt_aux_line_zero
+    (F : apm_m98J02_E → ℝ) (G : Fin 2 → apm_m98J02_E → ℝ)
+    (hF : ∀ i x, Filter.Tendsto
+      (fun h : ℝ ↦ h⁻¹ * (F (x + h • EuclideanSpace.single i 1) - F x))
+      (nhdsWithin (0 : ℝ) ({0} : Set ℝ)ᶜ) (nhds (G i x)))
+    (i : Fin 2) (z : apm_m98J02_E) :
+    HasDerivAt (fun t : ℝ => F (z + t • EuclideanSpace.single i 1)) (G i z) 0 := by
+  rw [hasDerivAt_iff_tendsto_slope_zero]
+  simpa [smul_eq_mul] using hF i z
+
+lemma apm_m98J02_translated_pairing_calculus_of_facts_aux_hasFDerivAt_aux_line
+    (F : apm_m98J02_E → ℝ) (G : Fin 2 → apm_m98J02_E → ℝ)
+    (hF : ∀ i x, Filter.Tendsto
+      (fun h : ℝ ↦ h⁻¹ * (F (x + h • EuclideanSpace.single i 1) - F x))
+      (nhdsWithin (0 : ℝ) ({0} : Set ℝ)ᶜ) (nhds (G i x)))
+    (i : Fin 2) (z : apm_m98J02_E) (t : ℝ) :
+    HasDerivAt (fun s : ℝ => F (z + s • EuclideanSpace.single i 1))
+      (G i (z + t • EuclideanSpace.single i 1)) t := by
+  rw [hasDerivAt_iff_tendsto_slope_zero]
+  convert hF i (z + t • EuclideanSpace.single i 1) using 1
+  funext s
+  congr 3
+  module
+
+lemma apm_m98J02_translated_pairing_calculus_of_facts_aux_hasFDerivAt_aux_segment
+    (F : apm_m98J02_E → ℝ) (G : Fin 2 → apm_m98J02_E → ℝ)
+    (hF : ∀ i x, Filter.Tendsto
+      (fun h : ℝ ↦ h⁻¹ * (F (x + h • EuclideanSpace.single i 1) - F x))
+      (nhdsWithin (0 : ℝ) ({0} : Set ℝ)ᶜ) (nhds (G i x)))
+    (i : Fin 2) (p : apm_m98J02_E) (c ε t : ℝ)
+    (hε : ∀ s : ℝ, |s| ≤ |t| → |G i (p + s • EuclideanSpace.single i 1) - c| ≤ ε) :
+    |F (p + t • EuclideanSpace.single i 1) - F p - c * t| ≤ ε * |t| := by
+  have hd : ∀ s ∈ Set.Icc (-|t|) |t|, HasDerivWithinAt
+      (fun s : ℝ => F (p + s • EuclideanSpace.single i 1) - c * s)
+      (G i (p + s • EuclideanSpace.single i 1) - c) (Set.Icc (-|t|) |t|) s := by
+    intro s _
+    have := (apm_m98J02_translated_pairing_calculus_of_facts_aux_hasFDerivAt_aux_line F G hF i p s).sub ((hasDerivAt_id s).const_mul c)
+    simpa using this.hasDerivWithinAt
+  have hb : ∀ s ∈ Set.Icc (-|t|) |t|,
+      ‖G i (p + s • EuclideanSpace.single i 1) - c‖ ≤ ε := by
+    intro s hs
+    rw [Real.norm_eq_abs]
+    exact hε s (abs_le.2 hs)
+  have key := (convex_Icc (-|t|) |t|).norm_image_sub_le_of_norm_hasDerivWithin_le hd hb
+    (x := 0) (y := t) (by constructor <;> simp) (by constructor <;> [exact neg_abs_le t; exact le_abs_self t])
+  simp only [Real.norm_eq_abs, sub_zero, zero_smul, add_zero, mul_zero] at key
+  convert key using 2
+  ring
+
 lemma apm_m98J02_translated_pairing_calculus_of_facts_aux_hasFDerivAt
     (F : apm_m98J02_E → ℝ) (G : Fin 2 → apm_m98J02_E → ℝ)
     (hG : ∀ i, Continuous (G i))
@@ -628,7 +677,64 @@ lemma apm_m98J02_translated_pairing_calculus_of_facts_aux_hasFDerivAt
       (nhdsWithin (0 : ℝ) ({0} : Set ℝ)ᶜ) (nhds (G i x)))
     (x : apm_m98J02_E) :
     HasFDerivAt F (∑ i, G i x • (EuclideanSpace.proj i : apm_m98J02_E →L[ℝ] ℝ)) x := by
-  sorry
+  rw [hasFDerivAt_iff_isLittleO_nhds_zero, Asymptotics.isLittleO_iff]
+  intro ε hε
+  obtain ⟨δ0, hδ0, H0⟩ := Metric.continuousAt_iff.1 (hG 0).continuousAt (ε / 2) (by positivity)
+  obtain ⟨δ1, hδ1, H1⟩ := Metric.continuousAt_iff.1 (hG 1).continuousAt (ε / 2) (by positivity)
+  have hball : ∀ i y, dist y x < min δ0 δ1 → |G i y - G i x| ≤ ε / 2 := by
+    intro i y hy
+    rw [← Real.dist_eq]
+    fin_cases i
+    · exact (H0 (lt_of_lt_of_le hy (min_le_left _ _))).le
+    · exact (H1 (lt_of_lt_of_le hy (min_le_right _ _))).le
+  filter_upwards [Metric.ball_mem_nhds (0 : apm_m98J02_E) (lt_min hδ0 hδ1)] with h hh
+  rw [Metric.mem_ball, dist_zero_right] at hh
+  have hsq : ‖h‖ ^ 2 = h 0 ^ 2 + h 1 ^ 2 := by
+    rw [EuclideanSpace.norm_sq_eq, Fin.sum_univ_two, Real.norm_eq_abs, Real.norm_eq_abs, sq_abs, sq_abs]
+  have hnorm2 : ∀ a b : ℝ, ‖a • EuclideanSpace.single (0 : Fin 2) (1 : ℝ) +
+      b • EuclideanSpace.single (1 : Fin 2) (1 : ℝ)‖ ^ 2 = a ^ 2 + b ^ 2 := by
+    intro a b
+    rw [EuclideanSpace.norm_sq_eq, Fin.sum_univ_two]
+    simp [sq_abs]
+  have hle : ∀ a b : ℝ, |a| ≤ |h 0| → |b| ≤ |h 1| →
+      ‖a • EuclideanSpace.single (0 : Fin 2) (1 : ℝ) +
+        b • EuclideanSpace.single (1 : Fin 2) (1 : ℝ)‖ ≤ ‖h‖ := by
+    intro a b ha hb
+    refine (pow_le_pow_iff_left₀ (norm_nonneg _) (norm_nonneg _) two_ne_zero).1 ?_
+    rw [hnorm2, hsq]
+    have := sq_le_sq.2 ha
+    have := sq_le_sq.2 hb
+    linarith
+  have hdec : h = h 0 • EuclideanSpace.single (0 : Fin 2) (1 : ℝ) +
+      h 1 • EuclideanSpace.single (1 : Fin 2) (1 : ℝ) := by
+    ext j; fin_cases j <;> simp
+  have e0 := apm_m98J02_translated_pairing_calculus_of_facts_aux_hasFDerivAt_aux_segment F G hF 0 x (G 0 x) (ε / 2) (h 0) (fun s hs => by
+    apply hball
+    rw [dist_eq_norm, add_sub_cancel_left]
+    refine lt_of_le_of_lt ?_ hh
+    simpa using hle s 0 hs (by simp))
+  have e1 := apm_m98J02_translated_pairing_calculus_of_facts_aux_hasFDerivAt_aux_segment F G hF 1 (x + h 0 • EuclideanSpace.single 0 1) (G 1 x) (ε / 2) (h 1)
+    (fun s hs => by
+      apply hball
+      rw [dist_eq_norm, add_assoc, add_sub_cancel_left]
+      exact lt_of_le_of_lt (hle (h 0) s le_rfl hs) hh)
+  have happ : (∑ i, G i x • (EuclideanSpace.proj i : apm_m98J02_E →L[ℝ] ℝ)) h =
+      G 0 x * h 0 + G 1 x * h 1 := by
+    simp [Fin.sum_univ_two]
+  rw [happ, Real.norm_eq_abs]
+  have hx : x + h = x + h 0 • EuclideanSpace.single 0 1 + h 1 • EuclideanSpace.single 1 1 := by
+    conv_lhs => rw [hdec]
+    abel
+  rw [hx]
+  have h0le : |h 0| ≤ ‖h‖ := by simpa using PiLp.norm_apply_le h 0
+  have h1le : |h 1| ≤ ‖h‖ := by simpa using PiLp.norm_apply_le h 1
+  calc |F (x + h 0 • EuclideanSpace.single 0 1 + h 1 • EuclideanSpace.single 1 1) - F x -
+        (G 0 x * h 0 + G 1 x * h 1)|
+      = |(F (x + h 0 • EuclideanSpace.single 0 1 + h 1 • EuclideanSpace.single 1 1) -
+          F (x + h 0 • EuclideanSpace.single 0 1) - G 1 x * h 1) +
+        (F (x + h 0 • EuclideanSpace.single 0 1) - F x - G 0 x * h 0)| := by ring_nf
+    _ ≤ ε / 2 * |h 1| + ε / 2 * |h 0| := (abs_add_le _ _).trans (add_le_add e1 e0)
+    _ ≤ ε * ‖h‖ := by nlinarith
 -- END SEAT AREA
 
 lemma apm_m98J02_translated_pairing_calculus_of_facts_aux_hasFDerivAt_pairing
