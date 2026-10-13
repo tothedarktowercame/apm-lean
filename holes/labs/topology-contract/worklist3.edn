@@ -23717,7 +23717,7 @@
    :consumer :t01A08,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 0,
    :review-finding
    "Recorded commit is invalid: f032efae9d1501f7ddfe93c66668f88f24ed37f4 is absent locally and origin rejects it as not our ref. The intended scoped commit appears to be f032efae9b89fb527a72ea9192f3c89f09f82615. Repair the row to record the exact existing full SHA, then rerun independent review.",
    :implements-lemma
@@ -23759,6 +23759,17 @@
      {:cmd
       "git cat-file/diff-tree/merge-base 2ce3852770c7e30dc3a31afb2c6e9e09a4d0c7b8",
       :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791883004705-9267-6afd397b",
+     :commands
+     ["git show/diff 2ce38527; scope and recorded-tree checks"
+      "lake build ConstructionTargets.SardConvexDomain"
+      "lake env lean fixture and /tmp/CheckSardLocalJetEq.lean"
+      "sha256sum fixture; statement-registry check; placeholder recount"],
+     :finding
+     "PASS: valid STOP after real progress. One-file commit correctly extends a jet-permutation identity from any t⊆s whose closure contains x: C∞ gives ambient jet continuity, domDomCongr is represented by its continuous linear isometry, and the localized T2 equality lemma applies with the right orientation. Build/export pass; fixture hash matches; standard axioms only; registry 147/147; sorry/admit 0->0. Instantiation on the finite-smooth interior neighborhood and final swap induction remain listed."},
     :commit "2ce3852770c7e30dc3a31afb2c6e9e09a4d0c7b8",
     :changed-paths ["ConstructionTargets/SardConvexDomain.lean"],
     :fixture
@@ -23768,7 +23779,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain/B1/symmetry",
    :acceptance
@@ -34018,7 +34029,7 @@
    :other-consumers []}
   {:consumer :t01A08,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "ContDiffWithinAt.domDomCongr_iteratedFDerivWithin_of_eqOn",
@@ -34030,7 +34041,9 @@
     :type
     "smooth jet permutation identity on a smaller set extends to a base point in its closure",
     :area "sard-convex-domain",
-    :proved-in :r-a08-symmetry-slots-1},
+    :proved-in :r-a08-symmetry-slots-1,
+    :banked-by :r-a08-symmetry-slots-1,
+    :banked-commit "2ce3852770c7e30dc3a31afb2c6e9e09a4d0c7b8"},
    :id
    :lemma-contdiffwithinat-domdomcongr-iteratedfderivwithin-of-eqon,
    :kind :lemma,
