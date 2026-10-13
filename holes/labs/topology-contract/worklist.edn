@@ -113850,13 +113850,14 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 7,
+   :stop-count 8,
    :review-finding
    "Recorded fixture hash mismatch: :fixture.sha256 is 0bca6ce32c019fc3053c7f813c26917169cf817375b44d5e722b864b61a526450c1, but ConstructionTargets/PointWedgeVanKampen.blueprint.md at recorded commit c9b3af27 has exact SHA-256 0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0. Re-record the fixture hash for the reviewed commit.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
    :evidence
    {:placeholder-delta {:source-before 0, :source-after 0},
-    :residual "Apply left counit naturality; then point-span, B6/B12.",
+    :residual
+    "Relate combined actual-span map to counit square; then point-span, B6/B12.",
     :outcome :stop,
     :warnings ["existing linter"],
     :missing-theorems
@@ -113870,17 +113871,16 @@
       :area "fundamental-group-wedge-of-circles"}],
     :statement-hashes
     {:source
-     "281eb773903d07c1f6d3de25583860bb1651a3f890f9e475b702b3482df76c0c",
+     "c7e8e5ee8fe21710938c9b98c92001163ad880802231ff44f14e81d8d5ed7d75",
      :documentation
-     "b660df0798a08dfa3fc607f4aea199201a64c18fac3dc43d49289aabe0c4f3a7",
+     "854295c1845e040cce111d101ac155453ee4dfb9fdd321c7979858b7f040d9c6",
      :blueprint
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0",
      :registry "142/142"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
-    :reason
-    "Left comparison is one actual-span map of its ordered composite.",
+    :reason "Left counit square mapped to the free product.",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/PointWedgeVanKampen.lean",
@@ -113890,26 +113890,14 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "diff/hash/placeholders", :exit 0}],
     :diagnostic-history
-    [{:cmd "lean map rewrite",
+    [{:cmd "lean actual-span map",
       :exit 1,
-      :finding "Let endpoints blocked rewrite; used typed map_comp."}
+      :finding "Counit is in X; used coordinate span."}
      {:cmd
       "lake build ConstructionTargets.ThreeCirclesFundamentalGroup",
       :exit 1,
       :finding "B12 absent."}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1791866916677-8449-a868989b",
-     :commands
-     ["git archive 501a29d4; lake env lean <archive>/ConstructionTargets/PointWedgeVanKampen.lean"
-      "lake build ConstructionTargets.PointWedgeVanKampen"
-      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (exit 1: declared B12 residual absent)"
-      "python3 scripts/statement-registry.py check"
-      "git diff-tree/show sha256/git grep placeholders"],
-     :finding
-     "PASS program STOP: 501a29d4 is new after history, changes only scoped Lean/MD files, and commits compiled sorry-free progress. Hashes match source 281eb773, docs b660df07, fixture 0bca6ce3; registry 142/142; sorry/admit 0->0; the new theorem uses only propext, Classical.choice, Quot.sound. Its orientation is correct: the prior unit-times-strict product corresponds under SingleObj.comp_as_mul to categorical strict-then-unit composition f≫g. Functor.map_comp then combines the two actual-span maps in exactly that order; both source factors and the result remain in the same typed actual-span/free-product representation. Left counit naturality, point-span, B6/B12 and the final module remain explicitly listed."},
-    :commit "501a29d4955e74977bef4bf9e1ed54ee4d078a41",
+    :commit "32e5cb238733ed1713c5f4b77046ec1365ee6852",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
      "ConstructionTargets/PointWedgeVanKampen.md"],
@@ -113919,7 +113907,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
