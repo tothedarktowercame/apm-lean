@@ -1554,4 +1554,35 @@ theorem eq_whitneyDyadicIndexOf_of_mem_cube_of_generation_eq
   · apply (div_lt_iff₀ hk).mpr
     convert hj.2 using 1 <;> simp [whitneyDyadicScale]
 
+/-- The dyadic parent raises the generation and halves every integer
+coordinate using Euclidean division. -/
+def whitneyDyadicParent
+    {E : Type*} [AddCommGroup E] [Module ℝ E]
+    [Module.Free ℝ E] [Module.Finite ℝ E] (q : WhitneyDyadicIndex E) :
+    WhitneyDyadicIndex E :=
+  (q.1 + 1, fun j => q.2 j / 2)
+
+/-- Every half-open dyadic cube is contained in its dyadic parent. -/
+theorem whitneyDyadicCube_subset_parent
+    {E : Type*} [AddCommGroup E] [Module ℝ E]
+    [Module.Free ℝ E] [Module.Finite ℝ E] (q : WhitneyDyadicIndex E) :
+    whitneyDyadicCube q ⊆ whitneyDyadicCube (whitneyDyadicParent q) := by
+  intro x hx
+  have hq := eq_whitneyDyadicIndexOf_of_mem_cube_of_generation_eq
+    q q.1 x rfl hx
+  rw [hq]
+  have hmem := mem_whitneyDyadicCube_indexOf (q.1 + 1) x
+  convert hmem using 1
+  apply congrArg whitneyDyadicCube
+  apply Prod.ext
+  · rfl
+  · funext j
+    simp only [whitneyDyadicParent, whitneyDyadicIndexOf]
+    rw [zpow_add₀ (by norm_num : (2 : ℝ) ≠ 0)]
+    norm_num
+    rw [div_mul_eq_div_mul_one_div]
+    exact Eq.symm (by
+      simpa [div_eq_mul_inv] using (Int.floor_div_natCast
+        ((Module.finBasis ℝ E).repr x j / (2 : ℝ) ^ q.1) 2))
+
 end ConstructionTargets.SardConvexDomain
