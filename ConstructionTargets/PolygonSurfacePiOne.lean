@@ -2525,6 +2525,40 @@ theorem PairingData.signedWedgeArcMap_isQuotientMap (P : PairingData) :
   exact IsQuotientMap.of_surjective_continuous
     P.surjective_signedWedgeArcMap P.continuous_signedWedgeArcMap
 
+/-- The inverse of the kernel equivalence is already continuous: the target
+signed arcs are a quotient presentation and their composite is the actual
+skeleton parametrization.  Only continuity in the forward direction remains
+for the B7 homeomorphism. -/
+theorem PairingData.continuous_skeletonWedgeEquiv_symm (P : PairingData) :
+    Continuous
+      (P.skeletonWedgeEquivOfKernelAgreement P.skeletonWedgeKernelAgreement).symm := by
+  apply P.signedWedgeArcMap_isQuotientMap.continuous_iff.mpr
+  have heq :
+      (P.skeletonWedgeEquivOfKernelAgreement P.skeletonWedgeKernelAgreement).symm ∘
+          P.signedWedgeArcMap = P.skeletonArcMap := by
+    funext a
+    apply (P.skeletonWedgeEquivOfKernelAgreement
+      P.skeletonWedgeKernelAgreement).injective
+    change (P.skeletonWedgeEquivOfKernelAgreement P.skeletonWedgeKernelAgreement)
+        ((P.skeletonWedgeEquivOfKernelAgreement P.skeletonWedgeKernelAgreement).symm
+          (P.signedWedgeArcMap a)) =
+      (P.skeletonWedgeEquivOfKernelAgreement P.skeletonWedgeKernelAgreement)
+        (P.skeletonArcMap a)
+    rw [Equiv.apply_symm_apply]
+    exact (P.skeletonWedgeEquivOfKernelAgreement_skeletonArc
+      P.skeletonWedgeKernelAgreement a.1 a.2).symm
+  rw [heq]
+  exact P.continuous_skeletonArcMap
+
+/-- The actual skeleton is compact independently of the still-missing
+Hausdorff/quotient-topology comparison. -/
+theorem PairingData.isCompact_univ_skeleton (P : PairingData) :
+    IsCompact (Set.univ : Set P.skeleton) := by
+  have h := (isCompact_univ : IsCompact (Set.univ : Set P.SkeletonArcSource)).image
+    P.continuous_skeletonArcMap
+  rw [Set.image_univ, Set.range_eq_univ.mpr P.surjective_skeletonArcMap] at h
+  exact h
+
 /-- Exact topological descent for B7: once the common source presents both
 spaces as quotient maps and their kernels agree, the signed equivalence is a
 homeomorphism. -/
