@@ -36156,6 +36156,17 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "rg forbidden closure", :exit 1, :expected-exit 1}
      {:cmd "git commit; git show --check", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791924772577-10474-219d1fb5",
+     :commands
+     ["git show/diff e702e81c; scope and orientation review"
+      "lake build/lean ConstructionTargets.t93J03Closure"
+      "sha256sum + lake env lean basepoint fixture"
+      "statement-registry check; placeholder recount"],
+     :finding
+     "PASS. Since program-history 30d10c96, commit e702e81c adds a compiled, sorry-free C1 adapter transporting a canonical-basepoint fundamental-group equivalence to every point of a path-connected space. The equivalence orientation is correct: pi1(Y,y) -> pi1(Y,y0) -> G. The literal plane-orbit computation, then C2/Main, remain listed. Fixture hash matches; standard axioms only; registry 165/165; forbidden count 0->0. SemilocallySimplyConnected X is unused, mandated by problem.md."},
     :commit "e702e81c79467b9272cae4e4b156d1e4765f5a28",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
@@ -36167,7 +36178,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -36185,7 +36196,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t93J03Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Recorded owner waiver and committed generic cover lifting plus embedding assembly. C1 orbit quotient and C2 cyclic cover remain; not refuted.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed compiled C1 basepoint transport; orbit computation remains; not refuted.",
    :id :program-2026-10-13-close-t93j03,
    :kind :final-adapter,
    :campaign-priority 30,
@@ -36197,7 +36208,11 @@
    [{:job 1,
      :commit "30d10c9666c11bb3dc9377857cfec5751b8a3054",
      :reason
-     "Recorded owner waiver and committed generic cover lifting plus embedding assembly. C1 orbit quotient and C2 cyclic cover remain; not refuted."}]}
+     "Recorded owner waiver and committed generic cover lifting plus embedding assembly. C1 orbit quotient and C2 cyclic cover remain; not refuted."}
+    {:job 2,
+     :commit "e702e81c79467b9272cae4e4b156d1e4765f5a28",
+     :reason
+     "Committed compiled C1 basepoint transport; orbit computation remains; not refuted."}]}
   {:consumer :t99J05,
    :stop-count 5,
    :evidence
@@ -36851,7 +36866,7 @@
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "fundamentalGroupEquiv_every_basepoint",
@@ -36863,7 +36878,9 @@
     :type
     "one-basepoint pi1 equivalence transports to every basepoint",
     :area "covering-subgroup-correspondence",
-    :proved-in :program-2026-10-13-close-t93j03},
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "e702e81c79467b9272cae4e4b156d1e4765f5a28"},
    :id :lemma-fundamentalgroupequiv-every-basepoint,
    :kind :lemma,
    :depends-on [],
