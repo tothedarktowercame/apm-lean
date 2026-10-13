@@ -850,4 +850,26 @@ theorem whitneyStratumNet_spec
   (exists_maximalSeparated_cover (whitneyStratumRadius k)
     (whitneyScaleStratum s k)).choose_spec
 
+/-- Every point of a dyadic distance stratum has a chosen net center in that
+stratum at distance at most `2^k/8`. -/
+theorem exists_mem_whitneyStratumNet_dist_le
+    {E : Type*} [PseudoMetricSpace E] (s : Set E) {k : ℤ} {x : E}
+    (hx : x ∈ whitneyScaleStratum s k) :
+    ∃ c ∈ whitneyStratumNet s k, dist x c ≤ (2 : ℝ) ^ k / 8 := by
+  obtain ⟨c, hc, hxc⟩ := (whitneyStratumNet_spec s k).2.2 hx
+  refine ⟨c, hc, ?_⟩
+  simpa [whitneyStratumRadius, edist_dist] using hxc
+
+/-- The union of the chosen stratum nets quantitatively covers the complement:
+each complement point is within `2^k/8` of a net center at its dyadic scale. -/
+theorem exists_whitneyStratumNet_dist_le_of_not_mem
+    {E : Type*} [PseudoMetricSpace E] {s : Set E}
+    (hs : IsClosed s) (hne : s.Nonempty) {x : E} (hx : x ∉ s) :
+    ∃ k : ℤ, ∃ c ∈ whitneyStratumNet s k,
+      x ∈ whitneyScaleStratum s k ∧ dist x c ≤ (2 : ℝ) ^ k / 8 := by
+  obtain ⟨k, hxk⟩ := Set.mem_iUnion.1
+    (compl_subset_iUnion_whitneyScaleStratum hs hne hx)
+  obtain ⟨c, hc, hxc⟩ := exists_mem_whitneyStratumNet_dist_le s hxk
+  exact ⟨k, c, hc, hxk, hxc⟩
+
 end ConstructionTargets.SardConvexDomain
