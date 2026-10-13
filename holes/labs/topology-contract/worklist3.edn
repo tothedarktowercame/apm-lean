@@ -22092,8 +22092,31 @@
    :consumer :t01A08,
    :implements-lemma
    :lemma-constructiontargets-sardconvexdomain-modelrange-withincriticalimage-subset-inter,
+   :evidence
+   {:placeholder-delta {:t01A08 [1 1]},
+    :residual
+    "Prove the frontier image null by corner strata, then close t01A08.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes {:registry "131/131"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author :topo-10,
+    :commands
+    [{:cmd "sha256sum /tmp/t01a08_critical_image_split.lean", :exit 0}
+     {:cmd "lake build ConstructionTargets.SardConvexDomain", :exit 0}
+     {:cmd "lake env lean /tmp/t01a08_critical_image_split.lean",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd "git diff-tree --no-commit-id --name-only -r HEAD",
+      :exit 0}],
+    :commit "76d64e123a00b2d8b45ee74fa8f61d6f036bfee5",
+    :changed-paths ["ConstructionTargets/SardConvexDomain.lean"],
+    :fixture
+    {:path "/tmp/t01a08_critical_image_split.lean",
+     :sha256
+     "33874a1d76a652a444b1e6f37486b9edcfc5d4a037d0743d65926c7895952863"}},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t01A08/corners-sard",
    :acceptance
