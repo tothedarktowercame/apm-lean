@@ -61,13 +61,38 @@ theorem apm_m96A02_iterate_contraction_fixed_point
   · intro y hy
     exact hK.fixedPoint_unique (Function.IsFixedPt.iterate hy N)
 
+lemma apm_m96A02_lipschitz_ode_aux_lipschitzWith
+    (f : ℝ → ℝ)
+    (hf : ∃ L ≥ 0, ∀ x y, |f x - f y| ≤ L * |x - y|) :
+    ∃ K : NNReal, LipschitzWith K f := by
+  obtain ⟨L, hL, hf⟩ := hf
+  refine ⟨⟨L, hL⟩, LipschitzWith.of_dist_le_mul ?_⟩
+  intro x y
+  simpa [Real.dist_eq] using hf x y
+
+/-- Existence on `[0, 1]` for a globally Lipschitz right-hand side (Picard iteration on
+`C([0,1])`, e.g. via `apm_m96A02_iterate_contraction_fixed_point`'s factorial estimate). -/
+lemma apm_m96A02_lipschitz_ode_aux_exists
+    (f : ℝ → ℝ) (u₀ : ℝ) (K : NNReal) (hK : LipschitzWith K f) :
+    ∃ u : ℝ → ℝ, apm_m96a02_Solves f u₀ u := by
+  sorry
+
+/-- Uniqueness on `[0, 1]` (Grönwall). -/
+lemma apm_m96A02_lipschitz_ode_aux_unique
+    (f : ℝ → ℝ) (u₀ : ℝ) (K : NNReal) (hK : LipschitzWith K f)
+    (u v : ℝ → ℝ) (hu : apm_m96a02_Solves f u₀ u) (hv : apm_m96a02_Solves f u₀ v) :
+    Set.EqOn u v (Set.Icc 0 1) := by
+  sorry
+
 theorem apm_m96A02_lipschitz_ode
     (f : ℝ → ℝ) (u₀ : ℝ)
     (hf : ∃ L ≥ 0, ∀ x y, |f x - f y| ≤ L * |x - y|) :
     ∃ u : ℝ → ℝ, apm_m96a02_Solves f u₀ u ∧
       ∀ v : ℝ → ℝ, apm_m96a02_Solves f u₀ v →
         Set.EqOn u v (Set.Icc 0 1) := by
-  sorry
+  obtain ⟨K, hK⟩ := apm_m96A02_lipschitz_ode_aux_lipschitzWith f hf
+  obtain ⟨u, hu⟩ := apm_m96A02_lipschitz_ode_aux_exists f u₀ K hK
+  exact ⟨u, hu, fun v hv => apm_m96A02_lipschitz_ode_aux_unique f u₀ K hK u v hu hv⟩
 
 theorem apm_m96a02 :
     (∀ (M : Type*) [MetricSpace M] [CompleteSpace M] [Nonempty M] (T : M → M),
