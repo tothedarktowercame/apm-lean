@@ -1748,6 +1748,21 @@ theorem circleArc_eq_one_iff (t : Set.Icc (0 : ℝ) 1) :
     · exact Or.inl rfl
     · exact Or.inr (Or.inr ⟨rfl, rfl⟩)
 
+theorem circleArc_coe_eq_one_iff (t : Set.Icc (0 : ℝ) 1) :
+    ((circleArc t : Circle) : ℂ) = 1 ↔
+      t = ⟨0, by norm_num⟩ ∨ t = ⟨1, by norm_num⟩ := by
+  constructor
+  · intro h
+    exact circleArc_eq_one_iff t |>.mp (Subtype.ext h)
+  · intro h
+    exact congrArg Subtype.val (circleArc_eq_one_iff t |>.mpr h)
+
+/-- The interval parameter after applying the orientation convention of an
+edge. -/
+def PairingData.signedParameter (P : PairingData) (i : Fin P.edgeCount)
+    (t : Set.Icc (0 : ℝ) 1) : Set.Icc (0 : ℝ) 1 :=
+  if P.sign i then t else reverseIcc t
+
 /-- The arc coordinate selected by the sign of an oriented polygon edge.
 Negative edges use the inverse traversal. -/
 def PairingData.signedWedgeArc (P : PairingData) (i : Fin P.edgeCount)
@@ -1772,6 +1787,29 @@ theorem PairingData.signedWedgeArc_eq_iff (P : PairingData)
     (_, _) (_, _) ↔ _
   rw [PointWedgeQuotient.eqvGen_finiteWedgeRel_iff]
   simp only [PointWedgeQuotient.FiniteWedgeRel, Prod.mk.injEq]
+
+/-- Parameter-level normal form for the target kernel. -/
+theorem PairingData.signedWedgeArc_eq_iff_parameters (P : PairingData)
+    (i j : Fin P.edgeCount) (t u : Set.Icc (0 : ℝ) 1) :
+    P.signedWedgeArc i t = P.signedWedgeArc j u ↔
+      (((j = i ∨ j = P.pair i) ∧
+        (P.signedParameter i t = P.signedParameter j u ∨
+          (P.signedParameter i t = ⟨0, by norm_num⟩ ∧
+            P.signedParameter j u = ⟨1, by norm_num⟩) ∨
+          (P.signedParameter i t = ⟨1, by norm_num⟩ ∧
+            P.signedParameter j u = ⟨0, by norm_num⟩))) ∨
+      ((P.signedParameter i t = ⟨0, by norm_num⟩ ∨
+          P.signedParameter i t = ⟨1, by norm_num⟩) ∧
+        (P.signedParameter j u = ⟨0, by norm_num⟩ ∨
+          P.signedParameter j u = ⟨1, by norm_num⟩))) := by
+  rw [P.signedWedgeArc_eq_iff, P.orbit_eq_iff]
+  simp only [← apply_ite]
+  change ((_ ∧ circleArc (P.signedParameter i t) =
+      circleArc (P.signedParameter j u)) ∨
+    (((circleArc (P.signedParameter i t) : Circle) : ℂ) = 1 ∧
+      ((circleArc (P.signedParameter j u) : Circle) : ℂ) = 1)) ↔ _
+  rw [circleArc_eq_iff, circleArc_coe_eq_one_iff,
+    circleArc_coe_eq_one_iff]
 
 theorem PairingData.signedWedgeArc_of_sign (P : PairingData)
     (i : Fin P.edgeCount) (t : Set.Icc (0 : ℝ) 1) (h : P.sign i = true) :
