@@ -1,6 +1,8 @@
 import Mathlib
 import ConstructionTargets.StatementSurfaceModels
 import ConstructionTargets.CoveringDegree
+import ConstructionTargets.T99J01PathComponentCoverRestriction
+import ConstructionTargets.T99J01ComponentSheetBounds
 
 /-! # t99J01: finite covers of a wedge of three circles
 
