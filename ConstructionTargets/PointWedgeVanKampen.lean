@@ -6755,6 +6755,16 @@ theorem genericPointWedgeOuterRight_endpointEquality_eq_rightBase :
   dsimp only
   exact Subsingleton.elim _ _
 
+omit [PathConnectedSpace X] [PathConnectedSpace Y] in
+/-- The target endpoint equality witness is exactly the symmetric named
+source equality for the unshifted round-trip component. -/
+theorem genericPointWedgeOuterRight_targetEquality_eq_roundTripSource :
+    let h := genericPointWedgeOuterRight_middleComponent_endpoints
+      x₀ y₀ M N hM hN hy hx cM cN
+    h.2 = (genericPointWedgeOuterRightRoundTrip_component_source
+      x₀ y₀ M N hM hN hy hx cM cN).symm := by
+  rfl
+
 /-- An `inl` factorization of the right-base conjugator forces its canonical
 right projection to be trivial. -/
 theorem genericPointWedgeRightBase_inl_implies_rightProjection_eq_one
@@ -7504,6 +7514,7 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeOuterRightSpan_component_eq_baseTransport
 #print axioms genericPointWedgeOuterRight_endpointTransport_eq_baseTransport
 #print axioms genericPointWedgeOuterRight_endpointEquality_eq_rightBase
+#print axioms genericPointWedgeOuterRight_targetEquality_eq_roundTripSource
 #print axioms genericPointWedgeRightBase_inl_implies_rightProjection_eq_one
 #print axioms genericPointWedgeLegCoordinates_of_mapped
 #print axioms genericPointWedgeLegCoordinates_iff_mapped

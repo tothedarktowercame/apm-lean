@@ -1350,3 +1350,6 @@ to cancel that common factor and normalize the unshifted mapped `unitInv`.
 `genericPointWedgeOuterRight_endpointEquality_eq_rightBase` identifies the
 underlying equality witness itself with the canonical symmetric right-base
 equality.  The remaining step is the unshifted mapped `unitInv` normalization.
+`genericPointWedgeOuterRight_targetEquality_eq_roundTripSource` similarly
+identifies the terminal equality witness with the symmetric named source
+equality, fixing both transports before the mapped-component cancellation.
