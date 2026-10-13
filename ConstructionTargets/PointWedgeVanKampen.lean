@@ -6608,6 +6608,26 @@ theorem genericPointWedgeRightBase_rightProjection_eq_one_iff_normalForms :
     (@mul_eq_one_iff_eq_inv _
       (Groupoid.vertexGroup (genericPointWedgeConnectors y₀).base) a b)
 
+omit [PathConnectedSpace X] in
+/-- Inverting the unshifted round-trip normal form reverses its three
+dependent connector factors. -/
+theorem genericPointWedgeOuterRightRoundTrip_inv_normalForm_eq_connectors :
+    let r := genericPointWedgeActualRight x₀ y₀ M N
+    let eK := genericPointWedgeOverlapGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let eR := genericPointWedgeRightGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let z := genericPointWedgeOverlapBase x₀ y₀ M N
+    ((genericPointWedgeConnectors y₀).normalForm
+      ((eK.funInvIdAssoc (r ⋙ eR.functor)).hom.app z))⁻¹ =
+      ((genericPointWedgeConnectors y₀).connector
+        ((r ⋙ eR.functor).obj z)).hom ≫
+        inv ((eK.funInvIdAssoc (r ⋙ eR.functor)).hom.app z) ≫
+        ((genericPointWedgeConnectors y₀).connector
+          ((eK.inverse ⋙ r ⋙ eR.functor).obj (eK.functor.obj z))).inv := by
+  simp only [ConnectorSystem.normalForm]
+  simp
+
 /-- An `inl` factorization of the right-base conjugator forces its canonical
 right projection to be trivial. -/
 theorem genericPointWedgeRightBase_inl_implies_rightProjection_eq_one
@@ -7349,6 +7369,7 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeOuterRight_shiftedNormalForms_product_eq_base
 #print axioms genericPointWedgeRightBase_rightProjection_eq_normalForms
 #print axioms genericPointWedgeRightBase_rightProjection_eq_one_iff_normalForms
+#print axioms genericPointWedgeOuterRightRoundTrip_inv_normalForm_eq_connectors
 #print axioms genericPointWedgeRightBase_inl_implies_rightProjection_eq_one
 #print axioms genericPointWedgeLegCoordinates_of_mapped
 #print axioms genericPointWedgeLegCoordinates_iff_mapped

@@ -1316,3 +1316,10 @@ the chosen-base inverse-span normal form is the inverse of the unshifted
 round-trip normal form.  Closing that comparison, rather than substituting
 the already-proved shifted identity into a differently typed component, is
 the next step.
+
+`genericPointWedgeOuterRightRoundTrip_inv_normalForm_eq_connectors` expands
+the inverse on the unshifted side without rewriting beneath its dependent
+`IsIso` witness.  It reverses the normal form into the target connector, the
+inverse round-trip component, and the source connector.  The remaining
+comparison can now be made factor-by-factor against the inverse-span normal
+form.
