@@ -193,6 +193,100 @@ theorem t99J05_map_fixedPoints (n : ℕ) :
 
 /-- The affine-coordinate calculation, stated conditionally on the quotient
 formula so that it can be proved independently of `t99J05_map_fixedPoints`. -/
+private def t99J05_localIndices_one_aux_r {n : ℕ} (i : Fin (n + 1))
+    (j : {j : Fin (n + 1) // j ≠ i}) : ℝ :=
+  ((j.1.val + 1 : ℕ) : ℝ) / ((i.val + 1 : ℕ) : ℝ)
+
+private def t99J05_localIndices_one_aux_L {n : ℕ} (i : Fin (n + 1)) :
+    AffineCoordinates i →L[ℝ] AffineCoordinates i :=
+  ContinuousLinearMap.pi fun j =>
+    (t99J05_localIndices_one_aux_r i j) •
+      (ContinuousLinearMap.proj j : AffineCoordinates i →L[ℝ] ℂ)
+
+private lemma t99J05_localIndices_one_aux_L_apply {n : ℕ} (i : Fin (n + 1))
+    (z : AffineCoordinates i) (j) :
+    t99J05_localIndices_one_aux_L i z j =
+      (t99J05_localIndices_one_aux_r i j : ℂ) * z j := by
+  simp only [t99J05_localIndices_one_aux_L, ContinuousLinearMap.pi_apply,
+    ContinuousLinearMap.coe_smul', Pi.smul_apply, ContinuousLinearMap.proj_apply]
+  rfl
+
+private lemma t99J05_localIndices_one_aux_formula (n : ℕ)
+    (f : ContinuousMap (CP n) (CP n))
+    (hformula : ∀ v : NonzeroVectors ℂ n,
+      ∃ hv : T99J05Diagonal n v.val ≠ 0,
+        f (quotientMap ℂ n v) =
+          quotientMap ℂ n ⟨T99J05Diagonal n v.val, hv⟩)
+    (i : Fin (n + 1)) :
+    localMap f i = t99J05_localIndices_one_aux_L i := by
+  funext z
+  have hinj : Function.Injective (chartInverse i) := fun x y h => by
+    have hh := congrArg (coordinates i) h
+    simpa using hh
+  apply hinj
+  change chartInverse i (coordinates i (f (chartInverse i z))) = _
+  let v : NonzeroVectors ℂ n :=
+    ⟨fun k => if h : k = i then 1 else z ⟨k, h⟩, by
+      intro hz
+      have := congrFun hz i
+      simp at this⟩
+  have hci : chartInverse i z = quotientMap ℂ n v := by rfl
+  obtain ⟨hv, hf⟩ := hformula v
+  have hout : Projectivization.rep (f (chartInverse i z)) i ≠ 0 := by
+    rw [hci, hf]
+    have hm : (⟨T99J05Diagonal n v.val, hv⟩ : NonzeroVectors ℂ n) ∈
+        {w : NonzeroVectors ℂ n | w.1 i ≠ 0} := by
+      simp [T99J05Diagonal, v]
+      exact_mod_cast Nat.succ_ne_zero i.val
+    have hp : (⟨T99J05Diagonal n v.val, hv⟩ : NonzeroVectors ℂ n) ∈
+        quotientMap ℂ n ⁻¹' {x : CP n | Projectivization.rep x i ≠ 0} := by
+      rw [affineSource_preimage i]
+      exact hm
+    exact hp
+  rw [chartInverse_coordinates i _ hout, hci, hf]
+  unfold chartInverse
+  apply (Projectivization.mk_eq_mk_iff' ℂ _ _ _ _).2
+  refine ⟨(((i.val + 1 : ℕ) : ℂ)), ?_⟩
+  funext k
+  by_cases hk : k = i
+  · subst k
+    simp [T99J05Diagonal, v]
+  · simp [T99J05Diagonal, v, hk, t99J05_localIndices_one_aux_L_apply,
+      t99J05_localIndices_one_aux_r, div_eq_inv_mul]
+    field_simp
+
+private lemma t99J05_localIndices_one_aux_det (n : ℕ) (i : Fin (n + 1)) :
+    0 < (ContinuousLinearMap.id ℝ (AffineCoordinates i) -
+      t99J05_localIndices_one_aux_L i).toLinearMap.det := by
+  let a : {j : Fin (n + 1) // j ≠ i} → ℝ := fun j =>
+    1 - t99J05_localIndices_one_aux_r i j
+  have heq : (ContinuousLinearMap.id ℝ (AffineCoordinates i) -
+      t99J05_localIndices_one_aux_L i).toLinearMap =
+      LinearMap.pi (fun j => ((a j) • LinearMap.id : ℂ →ₗ[ℝ] ℂ) ∘ₗ
+        (LinearMap.proj j : AffineCoordinates i →ₗ[ℝ] ℂ)) := by
+    apply LinearMap.ext
+    intro z
+    funext j
+    simp [a, t99J05_localIndices_one_aux_L_apply]
+    change z j - (t99J05_localIndices_one_aux_r i j : ℂ) * z j =
+      ((1 - t99J05_localIndices_one_aux_r i j : ℝ) : ℂ) * z j
+    push_cast
+    ring
+  rw [heq, LinearMap.det_pi]
+  apply Finset.prod_pos
+  intro j hj
+  rw [LinearMap.det_smul]
+  simp only [Complex.finrank_real_complex, pow_two, LinearMap.det_id, mul_one]
+  have hane : a j ≠ 0 := by
+    apply sub_ne_zero.mpr
+    dsimp [a, t99J05_localIndices_one_aux_r]
+    intro h
+    have hi : (0 : ℝ) < ((i.val + 1 : ℕ) : ℝ) := by positivity
+    have := (div_eq_one_iff_eq (ne_of_gt hi)).mp h.symm
+    norm_cast at this
+    exact j.2 (Fin.ext (Nat.succ.inj this))
+  exact mul_self_pos.mpr hane
+
 theorem t99J05_localIndices_one (n : ℕ) (f : ContinuousMap (CP n) (CP n))
     (hformula : ∀ v : NonzeroVectors ℂ n,
       ∃ hv : T99J05Diagonal n v.val ≠ 0,
@@ -200,7 +294,18 @@ theorem t99J05_localIndices_one (n : ℕ) (f : ContinuousMap (CP n) (CP n))
           quotientMap ℂ n ⟨T99J05Diagonal n v.val, hv⟩) :
     ∀ i : Fin (n + 1), ContDiffAt ℝ 1 (localMap f i) 0 ∧
       fixedPointDeterminant f i ≠ 0 ∧ localIndex f i = 1 := by
-  sorry
+  intro i
+  have hmap := t99J05_localIndices_one_aux_formula n f hformula i
+  have hdet := t99J05_localIndices_one_aux_det n i
+  have hfd : fderiv ℝ (localMap f i) 0 = t99J05_localIndices_one_aux_L i := by
+    rw [hmap]
+    exact (t99J05_localIndices_one_aux_L i).hasFDerivAt.fderiv
+  have hd : 0 < fixedPointDeterminant f i := by
+    simpa [fixedPointDeterminant, hfd] using hdet
+  refine ⟨?_, ne_of_gt hd, ?_⟩
+  · rw [hmap]
+    exact (t99J05_localIndices_one_aux_L i).contDiff.contDiffAt
+  · simp [localIndex, hd]
 
 /-- **LIBRARY:** rational homology of `CP n`, homotopy invariance of induced
 maps, and the resulting finite alternating-trace calculation. -/
