@@ -165,6 +165,25 @@
    "rev": "d823e3f5e",
    "approved_at": "2026-10-13T08:02:28Z"
   },
+  "m98A06": {
+   "decls": [
+    "apm_m98a06"
+   ],
+   "sha256": "4acda44329ea3fce66639952fdcf7753b5ed9fa6589003ee0f522004d376c998",
+   "defs": [
+    "apm_m98a06_Admissible",
+    "apm_m98a06_I",
+    "apm_m98a06_InH10Pi",
+    "apm_m98a06_IsStationary",
+    "apm_m98a06_IsWeakDerivativeOn"
+   ],
+   "grade": "faithful",
+   "grader": "claude-14",
+   "evidence": "holes/labs/statement-registry/m97A06-m98A06-grade.md",
+   "prelim_defect": null,
+   "rev": "a68f67e45",
+   "approved_at": "2026-10-13T09:42:56Z"
+  },
   "m98J02": {
    "decls": [
     "apm_m98j02"

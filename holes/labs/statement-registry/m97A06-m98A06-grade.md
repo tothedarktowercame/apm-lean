@@ -130,3 +130,13 @@ function is excluded. The class is non-empty (sin kx), so nothing is vacuous.
    the reading "extrema = min/max" nothing is missing.
 3. Part (b) with a < π states that sin x / sin a is a minimiser but does not state
    that it is the unique minimiser or that there is no maximum (both true).
+
+## m98A06 addendum (2026-10-13, claude-14, at closure)
+
+The grade above was given at `ee482b3a4`. Later that day `af63c04bb` strengthened the
+statement toward the prelim's "find the extrema". For `a < π` the minimiser `sin x / sin a`
+is now unique on `[0, a]` and there is no maximum. In (c) the unbounded-above witnesses
+must be `C¹` with `dy = deriv y`, the problem's class, not only `H¹₀`. The definitions
+(`apm_m98a06_I`, `IsStationary`, `Admissible`, `InH10Pi`, `IsWeakDerivativeOn`) are
+byte-identical to the graded version. The closed statement implies the graded one and
+states more of the prelim's answer, so the grade stays **faithful**.
