@@ -583,6 +583,39 @@ theorem not_surjective_of_coordinate_eq_zero
   rw [hzero v] at hi
   simp at hi
 
+/-- A global maximum of one target coordinate remains a local maximum after
+passing to the fixed extended source chart. -/
+theorem isLocalMax_coordinate_comp_extChartAt_symm
+    {m n : ℕ} {X : Type*} [TopologicalSpace X]
+    [ChartedSpace (EuclideanModel m) X]
+    [IsManifold 𝓘(ℝ, EuclideanModel m) ∞ X]
+    (f : X → EuclideanModel n) (i : Fin n) (x : X)
+    (hmax : IsMaxOn (fun z ↦ f z i) Set.univ x) :
+    IsLocalMax
+      (fun z ↦ f ((extChartAt 𝓘(ℝ, EuclideanModel m) x).symm z) i)
+      (extChartAt 𝓘(ℝ, EuclideanModel m) x x) := by
+  have hmax' : IsMaxOn
+      (fun z ↦ f ((extChartAt 𝓘(ℝ, EuclideanModel m) x).symm z) i)
+      Set.univ (extChartAt 𝓘(ℝ, EuclideanModel m) x x) := by
+    rw [isMaxOn_univ_iff] at hmax ⊢
+    intro z
+    simpa using hmax
+      ((extChartAt 𝓘(ℝ, EuclideanModel m) x).symm z)
+  exact hmax'.isLocalMax (by simp)
+
+/-- Fermat's theorem applied after transferring a coordinate maximum to the
+fixed source chart. -/
+theorem fderiv_coordinate_comp_extChartAt_symm_eq_zero
+    {m n : ℕ} {X : Type*} [TopologicalSpace X]
+    [ChartedSpace (EuclideanModel m) X]
+    [IsManifold 𝓘(ℝ, EuclideanModel m) ∞ X]
+    (f : X → EuclideanModel n) (i : Fin n) (x : X)
+    (hmax : IsMaxOn (fun z ↦ f z i) Set.univ x) :
+    fderiv ℝ
+      (fun z ↦ f ((extChartAt 𝓘(ℝ, EuclideanModel m) x).symm z) i)
+      (extChartAt 𝓘(ℝ, EuclideanModel m) x x) = 0 :=
+  (isLocalMax_coordinate_comp_extChartAt_symm f i x hmax).fderiv_eq_zero
+
 end t97A07Closure
 
 #print axioms t97A07Closure.isOpen_setOf_surjective_clm
@@ -607,3 +640,5 @@ end t97A07Closure
 #print axioms t97A07Closure.isOpen_regularPoints
 #print axioms t97A07Closure.isCompact_image_criticalPoints
 #print axioms t97A07Closure.not_surjective_of_coordinate_eq_zero
+#print axioms t97A07Closure.isLocalMax_coordinate_comp_extChartAt_symm
+#print axioms t97A07Closure.fderiv_coordinate_comp_extChartAt_symm_eq_zero

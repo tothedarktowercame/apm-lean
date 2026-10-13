@@ -229,6 +229,12 @@ a tangent vector mapping to the `i`th Euclidean basis vector; the displayed
 zero derivative would evaluate both to zero and to one.  This contradiction
 proves criticality.  The hypothesis `0 < n` is used only to choose `i`.
 
+Compiled progress: `isLocalMax_coordinate_comp_extChartAt_symm` performs the
+maximum transfer to the fixed extended source chart, and
+`fderiv_coordinate_comp_extChartAt_symm_eq_zero` applies Fermat's theorem at
+the chart centre.  B5 now remains only the chain-rule identification of this
+zero scalar derivative with the selected coordinate of `mfderiv f x`.
+
 ### B6. Positive-dimensional targets have a critical value
 
 lean: `t97A07Closure.criticalValues_nonempty_of_pos` : under the exact
