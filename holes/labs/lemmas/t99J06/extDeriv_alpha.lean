@@ -45,9 +45,63 @@ def alphaPullbackFormula (p : Parameters) : ℝ :=
       ((1 - p 1) * Real.cos (p 0))
 
 -- BEGIN SEAT AREA
+lemma extDeriv_alpha_aux_fderiv (a b c : ℝ) (x w : V) :
+    fderiv ℝ (fun y : V =>
+      (y 2 ^ 2 + 2 * y 0 * y 2 + 4) * a +
+      (y 0 - y 0 ^ 2) * b + (2 * y 1 * y 2) * c) x w =
+      (2 * x 2 * w 2 + 2 * w 0 * x 2 + 2 * x 0 * w 2) * a +
+      (w 0 - 2 * x 0 * w 0) * b +
+      (2 * w 1 * x 2 + 2 * x 1 * w 2) * c := by
+  have h0 := hasFDerivAt_apply (𝕜 := ℝ) (0 : Fin 3) x
+  have h1 := hasFDerivAt_apply (𝕜 := ℝ) (1 : Fin 3) x
+  have h2 := hasFDerivAt_apply (𝕜 := ℝ) (2 : Fin 3) x
+  have ha := (((h2.pow 2).add ((h0.const_mul 2).mul h2)).add_const 4).mul_const a
+  have hb := (h0.sub (h0.pow 2)).mul_const b
+  have hc := ((h1.const_mul 2).mul h2).mul_const c
+  have h := (ha.add hb).add hc
+  have hf := congrArg (fun L : V →L[ℝ] ℝ => L w) h.fderiv
+  convert hf using 1 <;> simp [ContinuousLinearMap.proj_apply] <;> ring
+
+lemma extDeriv_alpha_aux_wedge (i j : Fin 3) (v : Fin 2 → V) :
+    coordinateWedge i j v = v 0 i * v 1 j - v 0 j * v 1 i := by
+  change Matrix.det (fun k => ![v k i, v k j]) = _
+  rw [Matrix.det_fin_two]
+  rfl
+
+lemma extDeriv_alpha_aux_volume (v : Fin 3 → V) :
+    volumeForm v =
+      v 0 0 * (v 1 1 * v 2 2 - v 1 2 * v 2 1) -
+      v 0 1 * (v 1 0 * v 2 2 - v 1 2 * v 2 0) +
+      v 0 2 * (v 1 0 * v 2 1 - v 1 1 * v 2 0) := by
+  change Matrix.det v = _
+  rw [Matrix.det_fin_three]
+  ring
+
 theorem extDeriv_alpha :
     extDeriv alpha = fun p => (2 * p 2 + 1) • volumeForm := by
-  sorry
+  funext x
+  apply ContinuousAlternatingMap.ext
+  intro v
+  have hd : Differentiable ℝ alpha := by
+    unfold alpha
+    fun_prop
+  rw [extDeriv_apply (hd x)]
+  rw [Fin.sum_univ_three]
+  simp_rw [show ∀ i : Fin 3, (fun y => alpha y (i.removeNth v)) = fun y =>
+      (y 2 ^ 2 + 2 * y 0 * y 2 + 4) * (coordinateWedge 0 1 (i.removeNth v)) +
+      (y 0 - y 0 ^ 2) * (coordinateWedge 1 2 (i.removeNth v)) +
+      (2 * y 1 * y 2) * (coordinateWedge 2 2 (i.removeNth v)) by
+    intro i
+    funext y
+    simp [alpha]]
+  simp_rw [extDeriv_alpha_aux_fderiv]
+  simp_rw [extDeriv_alpha_aux_wedge]
+  change _ = (2 * x 2 + 1) * volumeForm v
+  rw [extDeriv_alpha_aux_volume]
+  simp [Fin.removeNth, Fin.tail]
+  have hs : v (Fin.succAbove (2 : Fin 3) (1 : Fin 2)) = v 1 := by congr 1
+  rw [hs]
+  ring
 -- END SEAT AREA
 
 theorem image_parametrization_eq_cone :
