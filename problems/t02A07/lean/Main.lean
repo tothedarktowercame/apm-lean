@@ -9,6 +9,11 @@ The defining equation for `X` repeats `(x²)²` and omits `(x¹)²`. It is
 repaired to the standard unit-sphere equation
 `(x¹)² + (x²)² + (x³)² + (x⁴)² = 1`, as required by the phrase “unit sphere”.
 
+Revised 2026-10-13 (outside grade, batch 2): transversality in `X` compares the sum of the
+two tangent images with `T_xX = xᗮ`, not with all of `ℝ⁴` (both summands lie in `T_xX`, so `= ⊤`
+was never satisfiable and the density claim was false). Part (a) now also states `dim Z = 2`
+as `finrank (tangentZ x) = 2` at every point of `Z`.
+
 ## Encoding questions
 
 The submanifold claim is encoded by the regular-value criterion for the two
@@ -110,12 +115,17 @@ lemma apm_t02a07_family_mem_X
 def apm_t02a07_tangentZ (x : apm_t02a07_E4) : Submodule ℝ apm_t02a07_E4 :=
   LinearMap.ker (fderiv ℝ apm_t02a07_constraints x).toLinearMap
 
+/-- Tangent space of the unit sphere `X` at `x`: the orthogonal complement of `x`. -/
+def apm_t02a07_tangentX (x : apm_t02a07_E4) : Submodule ℝ apm_t02a07_E4 :=
+  (Submodule.span ℝ ({x} : Set apm_t02a07_E4)).orthogonal
+
 def apm_t02a07_IsTransverse (parameter : apm_t02a07_parameterCircle) : Prop :=
   ∀ y : apm_t02a07_S2, apm_t02a07_family parameter y ∈ apm_t02a07_Z →
     Submodule.map
         (fderiv ℝ (apm_t02a07_familyAmbient parameter) y).toLinearMap
         (apm_t02a07_sphereTangent y) ⊔
-      apm_t02a07_tangentZ (apm_t02a07_family parameter y) = ⊤
+      apm_t02a07_tangentZ (apm_t02a07_family parameter y) =
+        apm_t02a07_tangentX (apm_t02a07_family parameter y)
 
 /-- Why this unblocks the regularity conjunct of `apm_t02a07`: these are the
 two coordinate gradients of the sphere and product constraints, up to the
@@ -140,6 +150,7 @@ theorem apm_t02A07_bridge_transverse_parameters_dense :
 
 theorem apm_t02a07 :
     apm_t02a07_IsRegularDimensionTwo ∧
+    (∀ x ∈ apm_t02a07_Z, Module.finrank ℝ (apm_t02a07_tangentZ x) = 2) ∧
     (∀ parameter : apm_t02a07_parameterCircle,
       Set.range (apm_t02a07_family parameter) ⊆ apm_t02a07_X) ∧
     Dense {parameter : apm_t02a07_parameterCircle |
