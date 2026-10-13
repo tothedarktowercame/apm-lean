@@ -1086,4 +1086,27 @@ theorem encard_whitneyStratumNet_mem_quarter_ball_le_fixed_packingNumber
     simpa [I] using hsep
   exact hsep'.encard_le_packingNumber hsub
 
+/-- Indices for all chosen Whitney net centers, retaining their dyadic
+stratum as part of the index. -/
+def WhitneyNetIndex {E : Type*} [PseudoMetricSpace E] (s : Set E) :=
+  Σ k : ℤ, ↥(whitneyStratumNet s k)
+
+/-- The center represented by a Whitney net index. -/
+def WhitneyNetIndex.center
+    {E : Type*} [PseudoMetricSpace E] {s : Set E} (i : WhitneyNetIndex s) : E :=
+  i.2.1
+
+/-- Relative to any incident center, all other incident centers come from its
+stratum or one of the two adjacent strata. -/
+theorem whitneyNetIndex_incident_stratum_eq_or_eq_add_one
+    {E : Type*} [PseudoMetricSpace E] (s : Set E) (x : E)
+    {i j : WhitneyNetIndex s}
+    (hi : x ∈ Metric.ball i.center (Metric.infDist i.center s / 4))
+    (hj : x ∈ Metric.ball j.center (Metric.infDist j.center s / 4)) :
+    j.1 = i.1 - 1 ∨ j.1 = i.1 ∨ j.1 = i.1 + 1 := by
+  have hbounds := whitneyStratum_indices_le_add_one_of_mem_quarter_balls s
+    ((whitneyStratumNet_spec s i.1).1 i.2.2)
+    ((whitneyStratumNet_spec s j.1).1 j.2.2) hi hj
+  omega
+
 end ConstructionTargets.SardConvexDomain
