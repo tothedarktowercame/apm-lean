@@ -57,6 +57,47 @@ def apm_t96A08_HasLocalRadialPrimitives
         delta 0 = x ∧ delta 1 = z ∧
         g z - g x = apm_t96a08_LineIntegral I omega delta
 
+/-- Two-speed concatenation: `gamma (2 t)` for `t ≤ 1/2`, then `delta (2 t - 1)`. -/
+def apm_t96A08_concat {M : Type*} (gamma delta : ℝ → M) : ℝ → M :=
+  fun t => if t ≤ (1 / 2 : ℝ) then gamma (2 * t) else delta (2 * t - 1)
+
+/-- Seat: the concatenation of two repaired piecewise-smooth paths with
+`gamma 1 = delta 0` is one (continuity by the matching endpoint; cut points
+`cutsγ i / 2` followed by `(1 + cutsδ j) / 2`, dropping the duplicated `1/2`;
+on each piece the path is an affine reparametrisation of a smooth piece). -/
+theorem apm_t96A08_concat_piecewiseSmooth
+    {E M : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [TopologicalSpace M] (I : ModelWithCorners ℝ E E) [ChartedSpace E M]
+    (gamma delta : ℝ → M)
+    (hgamma : apm_t96a08_IsPiecewiseSmoothPath I gamma)
+    (hdelta : apm_t96a08_IsPiecewiseSmoothPath I delta)
+    (hend : gamma 1 = delta 0) :
+    apm_t96a08_IsPiecewiseSmoothPath I (apm_t96A08_concat gamma delta) := by
+  sorry
+
+/-- Seat: the line integral is additive under concatenation.  On `(0, 1/2)` the
+manifold chain rule gives `mfderiv (concat) t 1 = 2 • mfderiv gamma (2 t) 1`
+(similarly on `(1/2, 1)`); the endpoints are null.  Integrability on each closed
+smooth piece comes from `homega_smooth` (continuous integrand, bounded on compact
+pieces); then substitute `s = 2 t` and `s = 2 t - 1`
+(`intervalIntegral.integral_comp_mul_left`, `integral_add_adjacent_intervals`). -/
+theorem apm_t96A08_concat_lineIntegral
+    {E M : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [CompleteSpace E] [TopologicalSpace M]
+    (I : ModelWithCorners ℝ E E) [ChartedSpace E M]
+    [IsManifold I (⊤ : WithTop ℕ∞) M]
+    (omega : ∀ p : M, TangentSpace I p →L[ℝ] ℝ)
+    (homega_smooth : ContMDiff I.tangent 𝓘(ℝ, ℝ) (⊤ : WithTop ℕ∞)
+      (fun v : TangentBundle I M => omega v.1 v.2))
+    (gamma delta : ℝ → M)
+    (hgamma : apm_t96a08_IsPiecewiseSmoothPath I gamma)
+    (hdelta : apm_t96a08_IsPiecewiseSmoothPath I delta)
+    (hend : gamma 1 = delta 0) :
+    apm_t96a08_LineIntegral I omega (apm_t96A08_concat gamma delta) =
+      apm_t96a08_LineIntegral I omega gamma +
+        apm_t96a08_LineIntegral I omega delta := by
+  sorry
+
 /-- Closed-piecewise-smooth paths can be concatenated, and the integral is
 additive under the standard affine reparameterizations. -/
 theorem apm_t96A08_piecewisePath_concat_additive
@@ -68,11 +109,159 @@ theorem apm_t96A08_piecewisePath_concat_additive
     (homega_smooth : ContMDiff I.tangent 𝓘(ℝ, ℝ) (⊤ : WithTop ℕ∞)
       (fun v : TangentBundle I M => omega v.1 v.2)) :
     apm_t96A08_HasAdditiveConcatenation I omega := by
-  sorry
+  intro gamma delta hgamma hdelta hend
+  refine ⟨apm_t96A08_concat gamma delta,
+    apm_t96A08_concat_piecewiseSmooth I gamma delta hgamma hdelta hend, ?_, ?_,
+    apm_t96A08_concat_lineIntegral I omega homega_smooth gamma delta hgamma hdelta hend⟩
+  · simp [apm_t96A08_concat]
+  · norm_num [apm_t96A08_concat]
 
 /-- In a sufficiently small convex chart, integration along the straight
 coordinate segment gives a smooth local function whose derivative at the
 centre is the prescribed one-form. -/
+lemma apm_t96A08_chart_radial_primitive_aux_path_of_contMDiff
+    {E M : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [TopologicalSpace M] (I : ModelWithCorners ℝ E E) [ChartedSpace E M]
+    (gamma : ℝ → M)
+    (hgamma : ContMDiff 𝓘(ℝ, ℝ) I (⊤ : WithTop ℕ∞) gamma) :
+    apm_t96a08_IsPiecewiseSmoothPath I gamma := by
+  refine ⟨hgamma.continuous, 1, fun i ↦ (i.val : ℝ), ?_, ?_, ?_, ?_⟩
+  · intro i j hij
+    exact Nat.cast_lt.mpr hij
+  · norm_num
+  · norm_num
+  · intro i
+    exact hgamma.contMDiffOn
+
+lemma apm_t96A08_chart_radial_primitive_aux_const_path
+    {E M : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [TopologicalSpace M] (I : ModelWithCorners ℝ E E) [ChartedSpace E M]
+    (x : M) :
+    apm_t96a08_IsPiecewiseSmoothPath I (fun _ : ℝ ↦ x) := by
+  apply apm_t96A08_chart_radial_primitive_aux_path_of_contMDiff
+  exact contMDiff_const
+
+/-- A chart can be shrunk using an ambient convex set.  The intersection with
+`range I` is essential at boundary points of a manifold with corners. -/
+lemma apm_t96A08_chart_radial_primitive_chart_neighborhood
+    {E M : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [CompleteSpace E] [TopologicalSpace M]
+    (I : ModelWithCorners ℝ E E) [ChartedSpace E M]
+    [IsManifold I (⊤ : WithTop ℕ∞) M] (x : M) :
+    ∃ (U : Set M) (W : Set E), IsOpen U ∧ x ∈ U ∧ IsOpen W ∧
+      Convex ℝ W ∧ (extChartAt I x x) ∈ W ∧
+      W ∩ Set.range (I : E → E) ⊆ (extChartAt I x).target ∧
+      U = (extChartAt I x).source ∩ (extChartAt I x) ⁻¹' W := by
+  sorry
+
+/-- Relative convexity in the chart produces the clamped radial paths.  This
+seat only does chart and endpoint bookkeeping. -/
+lemma apm_t96A08_chart_radial_primitive_radial_paths
+    {E M : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [CompleteSpace E] [TopologicalSpace M]
+    (I : ModelWithCorners ℝ E E) [ChartedSpace E M]
+    [IsManifold I (⊤ : WithTop ℕ∞) M] (x : M) (U : Set M) (W : Set E)
+    (hU : U = (extChartAt I x).source ∩ (extChartAt I x) ⁻¹' W)
+    (hxW : extChartAt I x x ∈ W) (hWconv : Convex ℝ W)
+    (hWtarget : W ∩ Set.range (I : E → E) ⊆ (extChartAt I x).target) :
+    ∀ z ∈ U, ∃ delta : ℝ → M,
+      apm_t96a08_IsPiecewiseSmoothPath I delta ∧ delta 0 = x ∧ delta 1 = z ∧
+      (∀ t ∈ Set.Icc (0 : ℝ) 1, delta t ∈ (extChartAt I x).source) ∧
+      ∀ t ∈ Set.Icc (0 : ℝ) 1,
+        extChartAt I x (delta t) = extChartAt I x x +
+          t • (extChartAt I x z - extChartAt I x x) := by
+  sorry
+
+/-- Pulling the one-form and the radial path into the extended chart gives
+the ordinary coordinate interval integral. -/
+lemma apm_t96A08_chart_radial_primitive_coordinate_formula
+    {E M : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [CompleteSpace E] [TopologicalSpace M]
+    (I : ModelWithCorners ℝ E E) [ChartedSpace E M]
+    [IsManifold I (⊤ : WithTop ℕ∞) M]
+    (omega : ∀ p : M, TangentSpace I p →L[ℝ] ℝ)
+    (homega_smooth : ContMDiff I.tangent 𝓘(ℝ, ℝ) (⊤ : WithTop ℕ∞)
+      (fun v : TangentBundle I M => omega v.1 v.2))
+    (x : M) (W : Set E)
+    (hWtarget : W ∩ Set.range (I : E → E) ⊆ (extChartAt I x).target) :
+    ∃ omegaCoord : E → (E →L[ℝ] ℝ),
+      ContDiffOn ℝ (⊤ : WithTop ℕ∞) omegaCoord
+        (W ∩ Set.range (I : E → E)) ∧
+      ∀ (z : M) (delta : ℝ → M),
+        (∀ t ∈ Set.Icc (0 : ℝ) 1, delta t ∈ (extChartAt I x).source) →
+        ContMDiffOn 𝓘(ℝ, ℝ) I (⊤ : WithTop ℕ∞) delta (Set.Icc (0 : ℝ) 1) →
+        (∀ t ∈ Set.Icc (0 : ℝ) 1,
+          extChartAt I x (delta t) = extChartAt I x x +
+            t • (extChartAt I x z - extChartAt I x x)) →
+        apm_t96a08_LineIntegral I omega delta =
+          ∫ t : ℝ in (0 : ℝ)..1, omegaCoord
+            (extChartAt I x x + t • (extChartAt I x z - extChartAt I x x))
+            (extChartAt I x z - extChartAt I x x) := by
+  sorry
+
+/-- The parameter-integral calculation in a normed vector space.  Smoothness
+is requested on an ambient convex set, so this lemma has no corners issue. -/
+lemma apm_t96A08_chart_radial_primitive_euclidean_calculus
+    {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E] [CompleteSpace E]
+    (I : ModelWithCorners ℝ E E) (W : Set E) (a : E) (omegaCoord : E → (E →L[ℝ] ℝ))
+    (hWopen : IsOpen W) (hWconv : Convex ℝ W) (haW : a ∈ W ∩ Set.range (I : E → E))
+    (homega : ContDiffOn ℝ (⊤ : WithTop ℕ∞) omegaCoord
+      (W ∩ Set.range (I : E → E))) :
+    let G : E → ℝ := fun v ↦ ∫ t : ℝ in (0 : ℝ)..1,
+      omegaCoord (a + t • (v - a)) (v - a)
+    ContDiffOn ℝ (⊤ : WithTop ℕ∞) G (W ∩ Set.range (I : E → E)) ∧
+      fderivWithin ℝ G (W ∩ Set.range (I : E → E)) a = omegaCoord a := by
+  sorry
+
+/-- Transfer the ambient parameter-integral result through the chart.  All
+four preceding conclusions are explicit hypotheses, keeping this seat
+independent of their proofs. -/
+lemma apm_t96A08_chart_radial_primitive_transfer
+    {E M : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [CompleteSpace E] [TopologicalSpace M]
+    (I : ModelWithCorners ℝ E E) [ChartedSpace E M]
+    [IsManifold I (⊤ : WithTop ℕ∞) M]
+    (omega : ∀ p : M, TangentSpace I p →L[ℝ] ℝ)
+    (homega_smooth : ContMDiff I.tangent 𝓘(ℝ, ℝ) (⊤ : WithTop ℕ∞)
+      (fun v : TangentBundle I M => omega v.1 v.2))
+    (hcharts : ∀ x : M, ∃ (U : Set M) (W : Set E), IsOpen U ∧ x ∈ U ∧
+      IsOpen W ∧ Convex ℝ W ∧ extChartAt I x x ∈ W ∧
+      W ∩ Set.range (I : E → E) ⊆ (extChartAt I x).target ∧
+      U = (extChartAt I x).source ∩ (extChartAt I x) ⁻¹' W)
+    (hpaths : ∀ (x : M) (U : Set M) (W : Set E),
+      U = (extChartAt I x).source ∩ (extChartAt I x) ⁻¹' W →
+      extChartAt I x x ∈ W → Convex ℝ W →
+      W ∩ Set.range (I : E → E) ⊆ (extChartAt I x).target →
+      ∀ z ∈ U, ∃ delta : ℝ → M,
+        apm_t96a08_IsPiecewiseSmoothPath I delta ∧ delta 0 = x ∧ delta 1 = z ∧
+        (∀ t ∈ Set.Icc (0 : ℝ) 1, delta t ∈ (extChartAt I x).source) ∧
+        ∀ t ∈ Set.Icc (0 : ℝ) 1, extChartAt I x (delta t) =
+          extChartAt I x x + t • (extChartAt I x z - extChartAt I x x))
+    (hcoord : ∀ (x : M) (W : Set E),
+      W ∩ Set.range (I : E → E) ⊆ (extChartAt I x).target →
+      ∃ omegaCoord : E → (E →L[ℝ] ℝ),
+        ContDiffOn ℝ (⊤ : WithTop ℕ∞) omegaCoord
+          (W ∩ Set.range (I : E → E)) ∧
+        ∀ (z : M) (delta : ℝ → M),
+          (∀ t ∈ Set.Icc (0 : ℝ) 1, delta t ∈ (extChartAt I x).source) →
+          ContMDiffOn 𝓘(ℝ, ℝ) I (⊤ : WithTop ℕ∞) delta (Set.Icc (0 : ℝ) 1) →
+          (∀ t ∈ Set.Icc (0 : ℝ) 1, extChartAt I x (delta t) =
+            extChartAt I x x + t • (extChartAt I x z - extChartAt I x x)) →
+          apm_t96a08_LineIntegral I omega delta = ∫ t : ℝ in (0 : ℝ)..1,
+            omegaCoord (extChartAt I x x + t •
+              (extChartAt I x z - extChartAt I x x))
+              (extChartAt I x z - extChartAt I x x))
+    (heuclid : ∀ (W : Set E) (a : E) (omegaCoord : E → (E →L[ℝ] ℝ)),
+      IsOpen W → Convex ℝ W → a ∈ W ∩ Set.range (I : E → E) →
+      ContDiffOn ℝ (⊤ : WithTop ℕ∞) omegaCoord
+        (W ∩ Set.range (I : E → E)) →
+      let G : E → ℝ := fun v ↦ ∫ t : ℝ in (0 : ℝ)..1,
+        omegaCoord (a + t • (v - a)) (v - a)
+      ContDiffOn ℝ (⊤ : WithTop ℕ∞) G (W ∩ Set.range (I : E → E)) ∧
+      fderivWithin ℝ G (W ∩ Set.range (I : E → E)) a = omegaCoord a) :
+    apm_t96A08_HasLocalRadialPrimitives I omega := by
+  sorry
+
 theorem apm_t96A08_chart_radial_primitive
     {E M : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
     [CompleteSpace E] [TopologicalSpace M]
@@ -82,7 +271,11 @@ theorem apm_t96A08_chart_radial_primitive
     (homega_smooth : ContMDiff I.tangent 𝓘(ℝ, ℝ) (⊤ : WithTop ℕ∞)
       (fun v : TangentBundle I M => omega v.1 v.2)) :
     apm_t96A08_HasLocalRadialPrimitives I omega := by
-  sorry
+  apply apm_t96A08_chart_radial_primitive_transfer I omega homega_smooth
+  · exact apm_t96A08_chart_radial_primitive_chart_neighborhood I
+  · exact apm_t96A08_chart_radial_primitive_radial_paths I
+  · exact apm_t96A08_chart_radial_primitive_coordinate_formula I omega homega_smooth
+  · exact apm_t96A08_chart_radial_primitive_euclidean_calculus I
 
 /-- Abstract local-to-global step: additive concatenation and local radial
 primitives identify the path-defined potential locally with a smooth one. -/

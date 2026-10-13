@@ -76,25 +76,73 @@ the endpoint equality; old endpoints remain in closed pieces; both affine
 maps are increasing, so there is no orientation sign, and their speed factors
 cancel the half-interval substitutions.
 
-### `apm_t96A08_chart_radial_primitive`
+### Radial primitive leaves (all parallel)
 
-Shrink a chart at `x` to the inverse image of a convex ball and integrate on
-the chart-linear segment from `x` to `z`. Prove the resulting local function
-smooth and compute its derivative at `x`. Independent of concatenation and of
-`f`. Expected size: **120--150 lines**. If chart bookkeeping pushes it over
-that bound, split construction of the convex chart neighbourhood from the
-parameter-integral calculation, passing the coordinate formula explicitly.
+`apm_t96A08_chart_radial_primitive_aux_path_of_contMDiff` and
+`apm_t96A08_chart_radial_primitive_aux_const_path` are copied from the partial
+seat and are proved.  The five remaining leaves are independent: the transfer
+leaf receives the exact statements of the other four as hypotheses.
 
-Useful Mathlib API: `extChartAt`, chart source/target openness,
-`Metric.isOpen_ball`, convexity of norm balls, `ContMDiff.cl_mfderiv`,
-`hasFDerivAt_integral_of_dominated_of_fderiv_le` (or the interval-integral
-variant), `writtenInExtChartAt`, and `mfld_simps`. Do not import `SphereCap*`
-or `LinearGraphMeasure`.
+* `apm_t96A08_chart_radial_primitive_chart_neighborhood` (P1, **45--80
+  lines**): choose an ambient open convex ball `W` about `extChartAt I x x`,
+  small enough that `W ∩ range I` lies in the extended-chart target, and set
+  `U = source ∩ extChart ⁻¹' W`.  Use `extChartAt_target`,
+  `ModelWithCorners.convex_range`, `Metric.isOpen_ball`,
+  `Metric.mem_ball`, `Metric.ball_subset_ball`, and the local-homeomorph
+  source/target openness lemmas.  At a boundary point it is deliberately
+  `W ∩ range I`, not a ball contained in the target.
 
-Degenerate checks: `z = x` gives the constant segment and zero integral;
-closed-piece smoothness includes `t = 0,1`; in dimension zero both derivative
-maps are uniquely zero. Choose a positive-radius ball whose closure stays in
-the chart target, so boundary points do not escape the chart.
+* `apm_t96A08_chart_radial_primitive_radial_paths` (P2, **70--120 lines**):
+  for `z ∈ U`, define the inverse-chart path using the affine segment with its
+  parameter projected/clamped to `Icc 0 1`.  Use `Set.projIcc`, convexity of
+  both `W` and `ModelWithCorners.range`, `PartialEquiv.left_inv/right_inv`,
+  `Continuous.clamp`, `ContMDiffOn.congr`, and the smoothness of an extended
+  chart inverse on its target.  The clamp makes the global curve continuous;
+  on the sole closed piece `[0,1]` it equals the affine segment.  If `z=x`, it
+  reduces to the already proved constant-path helper.
+
+* `apm_t96A08_chart_radial_primitive_coordinate_formula` (P3, **90--140
+  lines**): construct the pulled-back coordinate one-form on
+  `W ∩ range I`, prove its `ContDiffOn` regularity from `homega_smooth`, compute
+  the `mfderiv` of the affine inverse-chart curve on `(0,1)`, and change the
+  integrand almost everywhere.  Use `writtenInExtChartAt`,
+  `ContMDiffOn.contDiffOn`, `ContMDiffWithinAt.cl_mfderivWithin`, chain rules,
+  `mfld_simps`, `intervalIntegral.integral_congr_ae`, and
+  `MeasureTheory.ae_restrict_iff'`.  Endpoint derivative values may differ
+  because of the clamp but `{0,1}` is null.  The statement only asks for
+  smoothness within `W ∩ range I`; a global smooth extension is not available
+  for arbitrary Banach models.
+
+* `apm_t96A08_chart_radial_primitive_euclidean_calculus` (P4, **90--150
+  lines**): for
+  `G(v)=∫₀¹ ω̃(a+t(v-a))(v-a)dt`, prove `ContDiffOn G` on
+  `W ∩ range I` and `fderivWithin G ... a = ω̃ a`.  Use convexity to keep the
+  segment in the domain, parameter-integral differentiation
+  (`hasFDerivAt_integral_of_dominated_of_fderiv_le` or its current
+  interval-integral counterpart), `intervalIntegral.integral_const`, and
+  `isLittleO` estimates for the centre derivative.  All derivatives are
+  *within* `W ∩ range I`; this is essential at corners.  When `v=a`, the
+  integrand and `G(a)` are zero; in dimension zero the continuous linear maps
+  are uniquely zero.
+
+* `apm_t96A08_chart_radial_primitive_transfer` (P5, **80--130 lines**): unpack
+  P1, use P2 for each endpoint, use P3 to identify its line integral, and use
+  P4 plus the extended-chart chain rule to define `g=G∘extChartAt I x` on
+  `U`.  Suggested API: `contMDiffOn_iff`, `writtenInExtChartAt`,
+  `ContMDiffOn.congr`, `mfderivWithin`, `mfderivWithin_congr`, and
+  `UniqueMDiffOn`.  This leaf must explicitly prove that the chart derivative
+  and inverse-chart derivative cancel, turning the coordinate covector back
+  into `omega x`; that fact is intentionally not hidden in P4.
+
+`apm_t96A08_chart_radial_primitive` is now a sorry-free four-line assembly of
+P1--P5.  Expected total proof volume is roughly **375--620 lines**, but no
+seat boundary exceeds 150 lines.
+
+Degenerate checks for the split: `U` contains `x`, so it is never empty;
+`z=x` is the constant segment and both integrals vanish; clamp endpoint values
+do not affect the integral; `range I ≠ univ` is handled everywhere by within
+derivatives; and dimension zero makes both the coordinate and manifold
+covectors the unique zero map.
 
 ### `apm_t96A08_potential_of_local_primitives`
 
@@ -155,3 +203,12 @@ Without any regularity of `omega`, the integrand along `gamma` can be non-integr
 by convention) while `delta`'s is not, and the concatenation's integral is then `0 ≠ 0 + ∫delta`: the
 statement was not true for arbitrary `omega`. With `omega` continuous on the tangent bundle, each closed
 smooth piece gives a bounded, piecewise-continuous integrand, so the affine-reparameterised integrals add.
+
+## claude-14 review (2026-10-13, after lemma-2's chart_radial re-split and lemma-1's concat PARTIAL)
+
+- `chart_radial_primitive_coordinate_formula` (and `transfer`'s `hcoord`): the coordinate form is now chosen once per
+  chart (`∃ omegaCoord, smooth ∧ ∀ z delta, ...`). As split, it was chosen per endpoint `z`, which `transfer` cannot
+  use: the primitive `G v = ∫ omegaCoord (a + t (v - a)) (v - a)` needs one `omegaCoord` for all `v`.
+- `piecewisePath_concat_additive` (PARTIAL: concat definition + endpoints) is now a sorry-free assembly from the
+  definition `apm_t96A08_concat` and two leaves: `apm_t96A08_concat_piecewiseSmooth` (merged rescaled cuts) and
+  `apm_t96A08_concat_lineIntegral` (chain rule on each half, substitution; integrability from `homega_smooth`).
