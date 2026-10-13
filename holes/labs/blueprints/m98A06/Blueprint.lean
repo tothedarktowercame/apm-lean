@@ -2219,6 +2219,36 @@ lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_inequality
         ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)) := by
   sorry
 
+lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_forward_aux_deriv_norm
+    (y dy : ℝ → ℝ) (h : apm_m98a06_InH10Pi y dy)
+    (hnorm : ∫ x, (y x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)) = 1)
+    (henergy : ∫ x, (dy x) ^ 2 - (y x) ^ 2
+      ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)) = 0) :
+    ∫ x, (dy x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)) = 1 := by
+  have he := apm_m98A06_weak_poincare_and_equality_of_facts_aux_energy_sub_one
+    y dy h hnorm
+  rw [henergy] at he
+  linarith
+
+lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_forward_aux_primitive
+    (hFTC : apm_m98A06_WeakFTCFact) (y dy : ℝ → ℝ)
+    (h : apm_m98a06_InH10Pi y dy) :
+    ∀ x ∈ Icc (0 : ℝ) Real.pi, y x = ∫ t in (0 : ℝ)..x, dy t := by
+  exact hFTC y dy h
+
+lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_forward_aux_rigidity
+    (hWirtinger : apm_m98A06_WirtingerFact)
+    (hFTC : apm_m98A06_WeakFTCFact) (y dy : ℝ → ℝ)
+    (h : apm_m98a06_InH10Pi y dy)
+    (hnorm : ∫ x, (y x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)) = 1)
+    (hdnorm : ∫ x, (dy x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)) = 1)
+    (hprim : ∀ x ∈ Icc (0 : ℝ) Real.pi,
+      y x = ∫ t in (0 : ℝ)..x, dy t) :
+    ∃ s : ℝ, (s = 1 ∨ s = -1) ∧
+      y =ᵐ[volume.restrict (Ioo (0 : ℝ) Real.pi)]
+        fun x ↦ s * Real.sqrt (2 / Real.pi) * Real.sin x := by
+  sorry
+
 lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_forward
     (hWirtinger : apm_m98A06_WirtingerFact)
     (hFTC : apm_m98A06_WeakFTCFact) (y dy : ℝ → ℝ)
@@ -2229,7 +2259,12 @@ lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_forward
     ∃ s : ℝ, (s = 1 ∨ s = -1) ∧
       y =ᵐ[volume.restrict (Ioo (0 : ℝ) Real.pi)]
         fun x ↦ s * Real.sqrt (2 / Real.pi) * Real.sin x := by
-  sorry
+  apply apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_forward_aux_rigidity
+    hWirtinger hFTC y dy h hnorm
+  · exact apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_forward_aux_deriv_norm
+      y dy h hnorm henergy
+  · exact apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_forward_aux_primitive
+      hFTC y dy h
 
 lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_reverse
     (hSine : apm_m98A06_SineComputationsFact) (y dy : ℝ → ℝ)
