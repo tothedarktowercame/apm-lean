@@ -8,7 +8,11 @@ import Mathlib
 Part (d) assumes only `f ∈ C²(ℝ²)`, but the convolution construction in
 parts (b)--(c) requires one factor to have compact support. Following the
 informal solution, `f` is minimally assumed compactly supported. This is also
-the hypothesis under which the stated `C²` convolution regularity is standard.
+the hypothesis under which the convolution is defined here.  The printed
+regularity conclusion is false for an arbitrary fundamental distribution of
+this non-hypoelliptic operator.  Following the informal solution's explicit
+function-level convolution argument, `w₀` is additionally required to be the
+regular distribution represented by a locally integrable function.
 
 The garbled operator typography is read, as in the supplied solution, as
 `T = 2 ∂²/∂x² - ∂/∂y + 3 ∂²/(∂x∂y)`.
@@ -196,8 +200,9 @@ theorem apm_m98j02 :
     (∀ u v : apm_m98J02_Dist,
       apm_m98J02_hasCompactSupport u →
         ∃ w : apm_m98J02_Dist, apm_m98J02_isConvolution u v w) ∧
-    ∀ (f : apm_m98J02_E → ℝ) (w₀ : apm_m98J02_Dist),
+    ∀ (f k : apm_m98J02_E → ℝ) (w₀ : apm_m98J02_Dist),
       ContDiff ℝ 2 f → IsCompact (tsupport f) →
+      LocallyIntegrable k → apm_m98J02_representsFunction w₀ k →
       apm_m98J02_solvesT w₀ (fun φ ↦ φ 0) →
       ∃ (u w w' : apm_m98J02_Dist) (g : apm_m98J02_E → ℝ),
         apm_m98J02_representsFunction u f ∧

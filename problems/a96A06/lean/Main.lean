@@ -88,6 +88,12 @@ lemma entire_coeffs_tendsto_zero (g : ℂ → ℂ) (hg : Differentiable ℂ g) :
   exact tendsto_zero_iff_norm_tendsto_zero.mpr
     (squeeze_zero (fun n => norm_nonneg _) h_est h_tendsto)
 
+/-- `f` has a simple pole at `1` and no other singular part: off `1` it is a
+nonzero scalar multiple of `(z - 1)⁻¹` plus an entire function. -/
+def apm_a96A06_HasSimplePoleAtOne (f : ℂ → ℂ) : Prop :=
+  ∃ c : ℂ, ∃ g : ℂ → ℂ, c ≠ 0 ∧ Differentiable ℂ g ∧
+    ∀ z : ℂ, z ≠ 1 → f z = c / (z - 1) + g z
+
 /-- **Main theorem**: f^(n)(0)/n! → 1.
 
     f is holomorphic on ℂ \ {1} with ∮_{|z|=2} f(z)dz = -2πi.
@@ -95,30 +101,14 @@ lemma entire_coeffs_tendsto_zero (g : ℂ → ℂ) (hg : Differentiable ℂ g) :
     so f(z) = 1/(1-z) + g(z) with g entire.
     Taylor coefficients: f^(n)(0)/n! = 1 + g^(n)(0)/n! → 1.
 
-    The decomposition g = f - (1-z)⁻¹ being entire requires showing the
-    removable singularity at z = 1, which follows from the residue being -1. -/
-theorem taylor_coeffs_tend_to_one
+    The simple-pole hypothesis supplies the entire remainder explicitly. -/
+theorem apm_a96a06
     {f : ℂ → ℂ}
     (hf_holo : DifferentiableOn ℂ f ({(1 : ℂ)}ᶜ))
+    (hf_pole : apm_a96A06_HasSimplePoleAtOne f)
     (hf_int : ∮ z in C(0, 2), f z = -(2 * Real.pi * I)) :
     Tendsto (fun n => iteratedDeriv n f 0 / (n.factorial : ℂ))
       atTop (𝓝 1) := by
-  /- Boundary (closer hop 1): the frozen main statement is false.  Take
-  `f z = (1-z)⁻¹ + (z-1)⁻²`.  It is holomorphic off `1`; the second-order pole
-  has residue zero, so its integral around `C(0,2)` is zero, while the first
-  term has the required integral `-(2πi)`.  But `(z-1)⁻² = (1-z)⁻²` has
-  Taylor coefficient `n+1`, so the displayed coefficients of `f` are `n+2`
-  and do not tend to `1`.
-
-  Thus knowing only the contour integral fixes the residue, not the full
-  principal part.  The earlier argument incorrectly inferred removability
-  after cancelling the residue; a zero-residue isolated singularity may still
-  have a higher-order pole or be essential.  The intended theorem needs, for
-  example, an assumption that `f` has at most a simple pole at `1`.
-
-  `geom_iteratedDeriv` above was closed using Mathlib's
-  `iteratedDeriv_comp_const_sub` and `iteratedDerivWithin_one_div`, following
-  the inversion calculation in solved sibling `a01J04`. -/
   sorry
 
 end

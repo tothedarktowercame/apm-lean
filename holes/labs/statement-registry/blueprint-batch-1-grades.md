@@ -28,3 +28,11 @@ Full grader reports: this session's transcript (claude-14, 2026-10-13).
 | m95A03 | RevisedMain | faithful | apm_m95a03 | part (c) witness now admissible; uniqueness on [a,b] over all C¹ admissible minimisers (J(v) = J(u) + ∫p(v−u)′² + q(v−u)²); (a), (b) unchanged and true; non-vacuous (p = 1, q = f = 0) | none remaining |
 
 Grader: read-only Claude subagent, 2026-10-13.
+
+## Re-grade: b96A01 (RevisedMain, 2d2d01c6c + docstring 91a1cc452)
+
+| id | candidate | grade | decl | reason | prelim-defect |
+|---|---|---|---|---|---|
+| b96A01 | RevisedMain | faithful | apm_b96a01 | (d) excludes exactly n = 1 ∧ p = 2; true elsewhere: nonabelian by reduction mod p (Γ(p) layers abelian by (c)); C_q has n ≥ q−1 and embeds via 𝔽_{p^d}^×, d = ord_q p, or a unipotent matrix when q = p ≥ 3 or (q = p = 2, n ≥ 2) | yes: printed (d) false for n = 1, p = 2, G = {±1} |
+
+Grader: read-only Claude subagent, 2026-10-13.
