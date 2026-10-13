@@ -55,6 +55,51 @@ lemma apm_t01A01_nullhomotopic_of_factor
     exact hfg x
   simpa [hleft, inclusion] using hcomp
 
+/-- The point `[0 : 0 : 1]`. -/
+noncomputable def apm_t01A01_q0 : apm_t01A01_RP2 :=
+  Projectivization.mk ℝ ![0, 0, 1] (by intro h; have := congrFun h 2; simp at this)
+
+/-- Seat: removing any point of `RP²` gives a space homeomorphic to removing
+`[0 : 0 : 1]` (an invertible linear map of `ℝ³` sending a representative of `q`
+to `e₃` induces a homeomorphism of `RP²`, `ProjectiveQuotientDescent`; restrict
+it to the complements). -/
+theorem apm_t01A01_puncture_transitive (q : apm_t01A01_RP2) :
+    Nonempty ({y : apm_t01A01_RP2 // y ≠ q} ≃ₜ {y : apm_t01A01_RP2 // y ≠ apm_t01A01_q0}) := by
+  sorry
+
+/-- Seat: the retraction `[x : y : z] ↦ [x : y]` is well defined and continuous
+off `[0 : 0 : 1]` (quotient descent from `{v | (v 0, v 1) ≠ 0}`). -/
+theorem apm_t01A01_retraction_exists :
+    ∃ r : C({y : apm_t01A01_RP2 // y ≠ apm_t01A01_q0}, apm_t01A01_RP1),
+      ∀ (v : Fin 3 → ℝ) (hv : v ≠ 0) (hq : Projectivization.mk ℝ v hv ≠ apm_t01A01_q0)
+        (h2 : (![v 0, v 1] : Fin 2 → ℝ) ≠ 0),
+        r ⟨Projectivization.mk ℝ v hv, hq⟩ = Projectivization.mk ℝ ![v 0, v 1] h2 := by
+  sorry
+
+/-- Seat: the inclusion `[x : y] ↦ [x : y : 0]` misses `[0 : 0 : 1]` and is continuous. -/
+theorem apm_t01A01_inclusion_exists :
+    ∃ i : C(apm_t01A01_RP1, {y : apm_t01A01_RP2 // y ≠ apm_t01A01_q0}),
+      ∀ (w : Fin 2 → ℝ) (hw : w ≠ 0) (h3 : (![w 0, w 1, 0] : Fin 3 → ℝ) ≠ 0),
+        (i (Projectivization.mk ℝ w hw) : apm_t01A01_RP2) =
+          Projectivization.mk ℝ ![w 0, w 1, 0] h3 := by
+  sorry
+
+/-- Seat: for maps with these formulas, `r ∘ i = id` and `i ∘ r ≃ id` via
+`H t [x : y : z] = [x : y : (1 - t) z]` (never `[0 : 0 : 1]` since `(x, y) ≠ 0`;
+continuity by quotient descent of `I × (ℝ³ ∖ z-axis)`, `I` locally compact). -/
+theorem apm_t01A01_retraction_homotopy
+    (r : C({y : apm_t01A01_RP2 // y ≠ apm_t01A01_q0}, apm_t01A01_RP1))
+    (hr : ∀ (v : Fin 3 → ℝ) (hv : v ≠ 0) (hq : Projectivization.mk ℝ v hv ≠ apm_t01A01_q0)
+        (h2 : (![v 0, v 1] : Fin 2 → ℝ) ≠ 0),
+        r ⟨Projectivization.mk ℝ v hv, hq⟩ = Projectivization.mk ℝ ![v 0, v 1] h2)
+    (i : C(apm_t01A01_RP1, {y : apm_t01A01_RP2 // y ≠ apm_t01A01_q0}))
+    (hi : ∀ (w : Fin 2 → ℝ) (hw : w ≠ 0) (h3 : (![w 0, w 1, 0] : Fin 3 → ℝ) ≠ 0),
+        (i (Projectivization.mk ℝ w hw) : apm_t01A01_RP2) =
+          Projectivization.mk ℝ ![w 0, w 1, 0] h3) :
+    ContinuousMap.Homotopic (i.comp r) (ContinuousMap.id _) ∧
+      r.comp i = ContinuousMap.id _ := by
+  sorry
+
 /-- LIBRARY: the complement of a point in `RP²` has the homotopy type of its
 projective-line core.  A proof may choose coordinates sending `q` to a
 coordinate line and descend the radial deformation through the projective
@@ -63,7 +108,13 @@ theorem apm_t01A01_punctured_homotopyEquiv_projectiveLine
     (q : apm_t01A01_RP2) :
     Nonempty (ContinuousMap.HomotopyEquiv
       {y : apm_t01A01_RP2 // y ≠ q} apm_t01A01_RP1) := by
-  sorry
+  obtain ⟨e⟩ := apm_t01A01_puncture_transitive q
+  obtain ⟨r, hr⟩ := apm_t01A01_retraction_exists
+  obtain ⟨i, hi⟩ := apm_t01A01_inclusion_exists
+  obtain ⟨h1, h2⟩ := apm_t01A01_retraction_homotopy r hr i hi
+  exact ⟨e.toHomotopyEquiv.trans
+    { toFun := r, invFun := i, left_inv := h1,
+      right_inv := by rw [h2] }⟩
 
 /-- LIBRARY: every map from `RP²` to the projective line is null-homotopic.
 This is the `Z/2 → Z` lifting step, separated from the geometry of the
