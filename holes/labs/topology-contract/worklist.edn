@@ -113898,6 +113898,18 @@
       "lake build ConstructionTargets.ThreeCirclesFundamentalGroup",
       :exit 1,
       :finding "B12 file absent."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791872606581-8742-c3fa5b78",
+     :commands
+     ["git archive 2b5f0682; lake env lean <archive>/ConstructionTargets/PointWedgeVanKampen.lean"
+      "lake build ConstructionTargets.PointWedgeVanKampen"
+      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (exit 1: declared B12 residual absent)"
+      "python3 scripts/statement-registry.py check"
+      "git diff-tree/show sha256/git grep placeholders"],
+     :finding
+     "PASS program STOP: 2b5f0682 is new after history, changes only scoped Lean/MD files, and commits compiled sorry-free progress. Hashes match source c1e9a642, docs cf182319, fixture 0bca6ce3; registry 146/146; sorry/admit 0->0; the theorem uses only propext, Classical.choice, Quot.sound. The strict factor expansion is the connector normal form definition with correct endpoints and order: connector at the coordinate source, inverse span component, then inverse connector at the transported target. It deliberately preserves both dependent endpoints rather than identifying either with the base object, so the representation boundary is explicit. Target-counit normalization, B6/B12 and the final module remain listed."},
     :commit "2b5f068236e8d3a1408809ad555b6249048a19f3",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
@@ -113908,7 +113920,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113929,7 +113941,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Left comparison split into injected strict and counit connector factors in exact multiplication order.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Strict left factor expanded into its endpoint connectors and inverse span component.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -114597,7 +114609,11 @@
     {:job 2,
      :commit "23be385fe36d307a3d04d99f76d1f3147302d79c",
      :reason
-     "Left comparison split into injected strict and counit connector factors in exact multiplication order."}]}
+     "Left comparison split into injected strict and counit connector factors in exact multiplication order."}
+    {:job 3,
+     :commit "2b5f068236e8d3a1408809ad555b6249048a19f3",
+     :reason
+     "Strict left factor expanded into its endpoint connectors and inverse span component."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
