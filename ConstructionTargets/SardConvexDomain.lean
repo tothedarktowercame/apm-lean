@@ -767,4 +767,23 @@ theorem locallyFinite_of_separated_centers_of_subset_closedBall
       dist x (center i) ≤ dist x y + dist y (center i) := dist_triangle _ _ _
       _ ≤ R + 1 := by linarith)
 
+/-- Quarter-distance balls meeting at one point have comparable
+distance-to-set scales.  Thus only adjacent scale strata can overlap. -/
+theorem infDist_comparable_of_mem_quarter_balls
+    {E : Type*} [PseudoMetricSpace E] (s : Set E) {c d x : E}
+    (hxc : x ∈ Metric.ball c (Metric.infDist c s / 4))
+    (hxd : x ∈ Metric.ball d (Metric.infDist d s / 4)) :
+    3 * Metric.infDist c s < 5 * Metric.infDist d s ∧
+      3 * Metric.infDist d s < 5 * Metric.infDist c s := by
+  have hcd : dist c d < Metric.infDist c s / 4 + Metric.infDist d s / 4 := by
+    calc
+      dist c d ≤ dist c x + dist x d := dist_triangle _ _ _
+      _ < Metric.infDist c s / 4 + Metric.infDist d s / 4 :=
+        add_lt_add (by simpa [dist_comm] using Metric.mem_ball.1 hxc)
+          (Metric.mem_ball.1 hxd)
+  have h₁ := Metric.infDist_le_infDist_add_dist (s := s) (x := c) (y := d)
+  have h₂ := Metric.infDist_le_infDist_add_dist (s := s) (x := d) (y := c)
+  rw [dist_comm d c] at h₂
+  constructor <;> linarith
+
 end ConstructionTargets.SardConvexDomain
