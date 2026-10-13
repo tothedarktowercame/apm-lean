@@ -506,6 +506,34 @@ test-function (LF) topology, via one fixed compact support stage near each `x`; 
 calculus for a continuous linear `v`, given (a) and (b) as hypotheses. All three run in parallel.
 m98A04 needs the same two facts on `ℝⁿ` (its `translateReflectStageLocal` lemmas). -/
 
+lemma apm_m98J02_translateTest_continuous_aux_local_support
+    (ψ : apm_m98J02_Test) (x₀ : apm_m98J02_E) :
+    ∃ K : Set apm_m98J02_E, IsCompact K ∧
+      ∃ U ∈ nhds x₀, ∀ x ∈ U,
+        tsupport (apm_m98J02_translateTest x ψ : apm_m98J02_E → ℝ) ⊆ K := by
+  let B : Set apm_m98J02_E := Metric.closedBall x₀ 1
+  let S : Set apm_m98J02_E := tsupport (ψ : apm_m98J02_E → ℝ)
+  let K : Set apm_m98J02_E :=
+    (fun p : apm_m98J02_E × apm_m98J02_E => p.2 - p.1) '' (B ×ˢ S)
+  have hK : IsCompact K := by
+    have hB : IsCompact B := by
+      dsimp [B]
+      exact isCompact_closedBall x₀ 1
+    have hS : IsCompact S := ψ.hasCompactSupport
+    exact (hB.prod hS).image (by fun_prop)
+  refine ⟨K, hK, Metric.ball x₀ 1, Metric.ball_mem_nhds x₀ zero_lt_one, ?_⟩
+  intro x hx y hy
+  have hxB : x ∈ B := Metric.ball_subset_closedBall hx
+  have hsupport : x + y ∈ S := by
+    have he := tsupport_comp_eq_preimage (ψ : apm_m98J02_E → ℝ)
+      (Homeomorph.addLeft x)
+    have hy' : y ∈ tsupport ((ψ : apm_m98J02_E → ℝ) ∘ Homeomorph.addLeft x) := by
+      exact hy
+    rw [he] at hy'
+    exact hy'
+  refine ⟨(x, x + y), ⟨hxB, hsupport⟩, ?_⟩
+  simp
+
 /-- (a) Translation is continuous into the test-function space. -/
 theorem apm_m98J02_translateTest_continuous (ψ : apm_m98J02_Test) :
     Continuous (fun x : apm_m98J02_E ↦ apm_m98J02_translateTest x ψ) := by
