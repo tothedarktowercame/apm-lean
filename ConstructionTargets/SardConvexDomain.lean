@@ -102,6 +102,26 @@ theorem ContinuousMultilinearMap.domDomCongr_fderivWithin_eq_self
   rw [LinearIsometryEquiv.comp_fderivWithin (𝕜 := ℝ) L (hu x hxs)] at hd
   exact DFunLike.congr_fun hd v
 
+/-- A permutation identity holding locally within the differentiation set is preserved by the
+within derivative at the base point. -/
+theorem ContinuousMultilinearMap.domDomCongr_fderivWithin_eq_self_of_eventuallyEq
+    {E F : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [NormedAddCommGroup F] [NormedSpace ℝ F]
+    {s : Set E} {x : E} {n : ℕ}
+    (g : E → ContinuousMultilinearMap ℝ (λ _ : Fin n ↦ E) F)
+    (hu : UniqueDiffOn ℝ s) (hxs : x ∈ s) (sigma : Equiv.Perm (Fin n))
+    (hg : Filter.EventuallyEq (nhdsWithin x s) (fun y => (g y).domDomCongr sigma) g)
+    (v : E) :
+    (fderivWithin ℝ g s x v).domDomCongr sigma = fderivWithin ℝ g s x v := by
+  let L : ContinuousMultilinearMap ℝ (λ _ : Fin n ↦ E) F ≃ₗᵢ[ℝ]
+      ContinuousMultilinearMap ℝ (λ _ : Fin n ↦ E) F :=
+    ContinuousMultilinearMap.domDomCongrₗᵢ ℝ E F sigma
+  have heq : Filter.EventuallyEq (nhdsWithin x s) (L ∘ g) g := hg
+  have hd : fderivWithin ℝ (L ∘ g) s x = fderivWithin ℝ g s x :=
+    heq.fderivWithin_eq_of_mem hxs
+  rw [LinearIsometryEquiv.comp_fderivWithin (𝕜 := ℝ) L (hu x hxs)] at hd
+  exact DFunLike.congr_fun hd v
+
 /-- Symmetry of an iterated derivative lifts to the next derivative on the tail slots. -/
 theorem iteratedFDerivWithin_domDomCongr_decomposeFin_symm_zero
     {E F : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
