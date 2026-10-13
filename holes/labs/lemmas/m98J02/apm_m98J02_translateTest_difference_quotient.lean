@@ -511,6 +511,8 @@ theorem apm_m98J02_translateTest_continuous (ψ : apm_m98J02_Test) :
     Continuous (fun x : apm_m98J02_E ↦ apm_m98J02_translateTest x ψ) := by
   sorry
 
+/-- (b) Difference quotients of translation converge in the test-function space. -/
+-- BEGIN SEAT AREA
 lemma apm_m98J02_translateTest_difference_quotient_aux_pointwise
     (ψ : apm_m98J02_Test) (i : Fin 2) (x y : apm_m98J02_E) :
     Filter.Tendsto (fun h : ℝ ↦ h⁻¹ *
@@ -536,13 +538,30 @@ lemma apm_m98J02_translateTest_difference_quotient_aux_pointwise
     apm_m98J02_partialTest_apply, apm_m98J02_partial, div_eq_inv_mul,
     mul_comm] using hF.tendsto_slope_zero
 
-/-- (b) Difference quotients of translation converge in the test-function space. -/
--- BEGIN SEAT AREA
+lemma apm_m98J02_translateTest_difference_quotient_aux_fixed_stage
+    (ψ : apm_m98J02_Test) (i : Fin 2) (x : apm_m98J02_E) :
+    ∃ K : Compacts apm_m98J02_E,
+      (∀ h : ℝ, |h| ≤ 1 →
+        Function.support (apm_m98J02_translateTest
+          (x + h • EuclideanSpace.single i 1) ψ : apm_m98J02_E → ℝ) ⊆ K) ∧
+      Function.support (apm_m98J02_translateTest x
+        (apm_m98J02_partialTest i ψ) : apm_m98J02_E → ℝ) ⊆ K := by
+  sorry
+
+lemma apm_m98J02_translateTest_difference_quotient_aux_stage_convergence
+    (ψ : apm_m98J02_Test) (i : Fin 2) (x : apm_m98J02_E) :
+    Filter.Tendsto (fun h : ℝ ↦ h⁻¹ •
+        (apm_m98J02_translateTest (x + h • EuclideanSpace.single i 1) ψ -
+          apm_m98J02_translateTest x ψ))
+      (nhdsWithin (0 : ℝ) ({0} : Set ℝ)ᶜ)
+      (nhds (apm_m98J02_translateTest x (apm_m98J02_partialTest i ψ))) := by
+  sorry
+
 theorem apm_m98J02_translateTest_difference_quotient (ψ : apm_m98J02_Test) (i : Fin 2)
     (x : apm_m98J02_E) :
     Filter.Tendsto (fun h : ℝ ↦ h⁻¹ • (apm_m98J02_translateTest (x + h • EuclideanSpace.single i 1) ψ - apm_m98J02_translateTest x ψ))
       (nhdsWithin (0 : ℝ) ({0} : Set ℝ)ᶜ) (nhds (apm_m98J02_translateTest x (apm_m98J02_partialTest i ψ))) := by
-  sorry
+  exact apm_m98J02_translateTest_difference_quotient_aux_stage_convergence ψ i x
 -- END SEAT AREA
 
 /-- (c) Calculus of `x ↦ v (τₓ φ)` from (a), (b): partials by continuity of `v`, then continuous
