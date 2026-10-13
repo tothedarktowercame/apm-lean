@@ -994,3 +994,9 @@ connector followed by the counit at the literal `y₀` object.
 remaining product with the connector normal form of the right-equivalence
 counit itself.  The target connector is reflexive at `y₀`; the source
 connector remains the chosen one, with no identity normalization assumed.
+
+`genericPointWedgeRightInverseBaseToRightBase_map_heq_inr_counit` substitutes
+that result into the actual-span coordinate calculation.  The canonical
+right comparison morphism now maps directly to the right coproduct injection
+of the equivalence counit's based normal form, with dependent endpoints kept
+by `HEq`.

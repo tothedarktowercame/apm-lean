@@ -4386,6 +4386,42 @@ theorem genericPointWedgeRightSourceConnector_counit_eq_normalForm :
   rw [genericPointWedgeBasedConnector_base]
   simp
 
+/-- The actual-span image of the canonical right comparison morphism is the
+right coproduct injection of the right-equivalence counit's based normal
+form.  The heterogeneous equality retains the comparison endpoints. -/
+theorem genericPointWedgeRightInverseBaseToRightBase_map_heq_inr_counit :
+    let eR := genericPointWedgeRightGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let q := genericPointWedgeRightInverseBaseToRightBase
+      x₀ y₀ M N hM hN hy hx cM cN
+    HEq
+      ((genericPointWedgeIdentityActualSpan
+        x₀ y₀ M N hM hN hy hx cM cN).right.map q)
+      ((Monoid.Coprod.inr ((genericPointWedgeConnectors y₀).normalForm
+        (eR.counitIso.hom.app (FundamentalGroupoid.mk y₀)))) :
+          genericPointWedgeFreeProduct x₀ y₀) := by
+  dsimp only
+  have hmap := genericPointWedgeRightInverseBaseToRightBase_map_heq_inr
+    x₀ y₀ M N hM hN hy hx cM cN
+  have hnormal := (genericPointWedgeRightInverseBaseToRightBase_normalForm_eq_sourceCounit
+    x₀ y₀ M N hM hN hy hx cM cN).trans
+      (genericPointWedgeRightSourceConnector_counit_eq_normalForm
+        x₀ y₀ M N hM hN hy hx cM cN)
+  have hnormal' :
+      ((genericPointWedgeConnectors y₀).normalForm
+        ((genericPointWedgeRightGroupoidEquivalence
+          x₀ y₀ M N hM hN hy hx cM cN).functor.map
+            (genericPointWedgeRightInverseBaseToRightBase
+              x₀ y₀ M N hM hN hy hx cM cN)) :
+        genericPointWedgeRightGroup y₀) =
+      ((genericPointWedgeConnectors y₀).normalForm
+        ((genericPointWedgeRightGroupoidEquivalence
+          x₀ y₀ M N hM hN hy hx cM cN).counitIso.hom.app
+            (FundamentalGroupoid.mk y₀)) :
+        genericPointWedgeRightGroup y₀) := hnormal
+  exact hmap.trans (congrArg (fun k : genericPointWedgeRightGroup y₀ =>
+    (Monoid.Coprod.inr k : genericPointWedgeFreeProduct x₀ y₀)) hnormal').heq
+
 omit [PathConnectedSpace X] in
 /-- The connector normal form of the mapped lifted right loop is conjugation
 by the explicit equality transport at its common endpoint. -/
@@ -5461,6 +5497,7 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeRightInverseBaseToRightBase_normalForm_eq_counit
 #print axioms genericPointWedgeRightInverseBaseToRightBase_normalForm_eq_sourceCounit
 #print axioms genericPointWedgeRightSourceConnector_counit_eq_normalForm
+#print axioms genericPointWedgeRightInverseBaseToRightBase_map_heq_inr_counit
 #print axioms genericPointWedgeMappedOpenCoverCounit_namedGlueSquare
 #print axioms genericPointWedgeMappedCoordinateSpanCounit_glueSquare
 #print axioms genericPointWedgeMappedCoordinateSpanSourceGlue
