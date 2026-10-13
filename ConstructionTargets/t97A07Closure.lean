@@ -549,6 +549,26 @@ theorem isOpen_regularPoints
   exact surjective_mfderiv_of_surjective_inTangentCoordinates
     f x y hy.1 hy.2 hTy
 
+/-- The image of the critical-point set is compact.  This is the reusable
+compactness core of B4; the problem adapter identifies this image with its
+frozen existential definition of critical values. -/
+theorem isCompact_image_criticalPoints
+    {m n : ℕ} {X : Type*} [TopologicalSpace X] [CompactSpace X]
+    [ChartedSpace (EuclideanModel m) X]
+    [IsManifold 𝓘(ℝ, EuclideanModel m) ∞ X]
+    (f : X → EuclideanModel n)
+    (hf : ContMDiff 𝓘(ℝ, EuclideanModel m)
+      𝓘(ℝ, EuclideanModel n) ∞ f) :
+    IsCompact (f '' {x | ¬ Function.Surjective
+      (mfderiv 𝓘(ℝ, EuclideanModel m)
+        𝓘(ℝ, EuclideanModel n) f x)}) := by
+  have hclosed : IsClosed {x | ¬ Function.Surjective
+      (mfderiv 𝓘(ℝ, EuclideanModel m)
+        𝓘(ℝ, EuclideanModel n) f x)} := by
+    simpa only [Set.compl_setOf] using
+      (isOpen_regularPoints f hf).isClosed_compl
+  exact hclosed.isCompact.image hf.continuous
+
 end t97A07Closure
 
 #print axioms t97A07Closure.isOpen_setOf_surjective_clm
@@ -571,3 +591,4 @@ end t97A07Closure
 #print axioms t97A07Closure.continuousAt_coordinate_mfderiv
 #print axioms t97A07Closure.surjective_mfderiv_of_surjective_inTangentCoordinates
 #print axioms t97A07Closure.isOpen_regularPoints
+#print axioms t97A07Closure.isCompact_image_criticalPoints

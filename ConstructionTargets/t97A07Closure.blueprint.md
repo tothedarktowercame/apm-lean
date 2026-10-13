@@ -185,13 +185,22 @@ compactness, charted-space, manifold, and smoothness hypotheses of
 uses: B3, Mathlib `IsClosed.isCompact`, `IsCompact.image`, and
 `ContMDiff.continuous`
 
-status: planned
+status: proved
 
 The critical points are the complement of B3's open regular-point set, hence
 closed and compact in the compact source.  Smoothness makes `f` continuous,
 so their image is compact.  Unfold `T97A07.criticalValues` and prove that this
 image is exactly the frozen existential set; this node performs the only
 set-extensionality conversion needed by later nodes.
+
+Compiled progress: `isCompact_image_criticalPoints` proves the reusable core:
+the critical-point set is closed by B3, compact in the compact source, and
+has compact image under the continuous smooth map.  The remaining B4 adapter
+in the problem module identifies this image with `T97A07.criticalValues`;
+keeping that conversion there avoids an import cycle.
+
+`isCompact_criticalValues` in the problem module now performs that exact
+set-extensional conversion and completes B4.
 
 ### B5. A coordinate maximum is critical
 

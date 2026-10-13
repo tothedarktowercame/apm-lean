@@ -1,4 +1,4 @@
-import Mathlib
+import ConstructionTargets.t97A07Closure
 
 /-! # t97A07: critical values of a compact connected smooth manifold
 
@@ -41,6 +41,30 @@ theorem not_nonempty_criticalValues_zero {m : ℕ} {X : Type*} [TopologicalSpace
 end T97A07
 open T97A07
 
+namespace t97A07Closure
+
+/-- B4: the critical-value set is the compact image of the closed set of
+critical points. -/
+theorem isCompact_criticalValues (m n : ℕ) {X : Type*}
+    [TopologicalSpace X] [T2Space X] [SecondCountableTopology X]
+    [Nonempty X] [CompactSpace X] [ConnectedSpace X]
+    [ChartedSpace (E m) X] [IsManifold 𝓘(ℝ, E m) ∞ X]
+    (f : X → E n)
+    (hf : ContMDiff 𝓘(ℝ, E m) 𝓘(ℝ, E n) ∞ f) :
+    IsCompact (criticalValues (m := m) f) := by
+  rw [show criticalValues (m := m) f =
+      f '' {x | ¬ Function.Surjective
+        (mfderiv 𝓘(ℝ, E m) 𝓘(ℝ, E n) f x)} by
+    ext y
+    constructor
+    · rintro ⟨x, hxy, hx⟩
+      exact ⟨x, hx, hxy⟩
+    · rintro ⟨x, hx, hxy⟩
+      exact ⟨x, hxy, hx⟩]
+  exact isCompact_image_criticalPoints f hf
+
+end t97A07Closure
+
 /-- Corrected part (a), with the zero-dimensional exception exposed, and part (b). -/
 theorem apm_t97a07 (m n : ℕ) {X : Type*}
     [TopologicalSpace X] [T2Space X] [SecondCountableTopology X]
@@ -55,4 +79,5 @@ theorem apm_t97a07 (m n : ℕ) {X : Type*}
 
 #print axioms T97A07.criticalValues_zero
 #print axioms T97A07.not_nonempty_criticalValues_zero
+#print axioms t97A07Closure.isCompact_criticalValues
 #print axioms apm_t97a07
