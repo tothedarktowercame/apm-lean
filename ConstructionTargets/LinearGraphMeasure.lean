@@ -1,14 +1,19 @@
 import Mathlib.Analysis.InnerProductSpace.ProdL2
 import Mathlib.MeasureTheory.Measure.Hausdorff
 import Mathlib.MeasureTheory.Measure.Lebesgue.EqHaar
+import Mathlib.MeasureTheory.Measure.Haar.InnerProductSpace
 noncomputable section
 namespace ConstructionTargets.LinearGraphMeasure
 open MeasureTheory Set
 open scoped ENNReal
 abbrev E (d : ℕ) := EuclideanSpace ℝ (Fin d)
 abbrev Ambient (d : ℕ) := WithLp 2 (E d × ℝ)
-instance domainMeasurable (d : ℕ) : MeasurableSpace (E d) := borel _
-instance domainBorel (d : ℕ) : BorelSpace (E d) := ⟨rfl⟩
+/-- Formerly a global instance; that made a second `MeasurableSpace` on every
+`EuclideanSpace` (a diamond with Mathlib's).  Kept as plain definitions for
+consumers that name them; Mathlib's instance is the one in use. -/
+def domainMeasurable (d : ℕ) : MeasurableSpace (E d) := borel _
+theorem domainBorel (d : ℕ) : @BorelSpace (E d) _ (domainMeasurable d) :=
+  @BorelSpace.mk (E d) _ (domainMeasurable d) rfl
 instance ambientMeasurable (d : ℕ) : MeasurableSpace (Ambient d) := borel _
 instance ambientBorel (d : ℕ) : BorelSpace (Ambient d) := ⟨rfl⟩
 variable (d : ℕ) (ell : E d →L[ℝ] ℝ)

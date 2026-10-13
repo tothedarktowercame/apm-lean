@@ -152,11 +152,202 @@ theorem apm_t97J05_gamma_smooth :
       (contDiffWithinAt_id.inv ht0 :
         ContDiffWithinAt ℝ ∞ (fun x : ℝ => (id x)⁻¹) apm_t97J05_parameterDomain t)
 
-/-- LIBRARY: the regular-level theorem, including the induced manifold structure
-and the immersion assertion for its subtype inclusion. -/
-theorem apm_t97J05_regular_fiber_embedded :
+/-- The equations defining the fiber force the third coordinate to be nonzero
+(`q 0 * q 2 = 1`). -/
+lemma apm_t97J05_fiber_third_ne_zero (q : apm_t97J05_R3)
+    (hq : q ∈ apm_t97J05_W) : q 2 ≠ 0 := by
+  sorry
+
+/-- At every point of the fiber, the trigonometric factor used in the regularity
+calculation is nonzero. -/
+lemma apm_t97J05_fiber_sin_ne_zero (q : apm_t97J05_R3)
+    (hq : q ∈ apm_t97J05_W) : Real.sin (q 1) ≠ 0 := by
+  have hfirst := congrArg (fun u : apm_t97J05_R2 ↦ u 0) hq
+  have hcos : Real.cos (q 1) = 0 := by
+    simpa [apm_t97J05_W, apm_t97J05_f, apm_t97J05_value,
+      Real.exp_ne_zero] using hfirst
+  intro hsin
+  nlinarith [Real.sin_sq_add_cos_sq (q 1)]
+
+/-- The completion of `f` by the last coordinate, used uniformly at every fiber
+point. -/
+def apm_t97J05_regular_aux_H (q : apm_t97J05_R3) : apm_t97J05_R3 :=
+  WithLp.toLp 2 ![Real.exp (q 0) * Real.cos (q 1), q 0 * q 2, q 2]
+
+lemma apm_t97J05_regular_aux_smooth :
+    ContDiff ℝ ∞ apm_t97J05_regular_aux_H := by
+  sorry
+
+/-- The derivative formula for the completed map at an arbitrary point. -/
+lemma apm_t97J05_regular_aux_deriv_apply (q h : apm_t97J05_R3) :
+    fderiv ℝ apm_t97J05_regular_aux_H q h =
+      WithLp.toLp 2
+        ![Real.exp (q 0) * Real.cos (q 1) * h 0 -
+            Real.exp (q 0) * Real.sin (q 1) * h 1,
+          q 2 * h 0 + q 0 * h 2, h 2] := by
+  sorry
+
+/-- The displayed derivative is invertible under precisely the two nonvanishing
+conditions available on the fiber (the determinant is `q 2 * exp (q 0) * sin (q 1)`).  The conditions are explicit hypotheses so
+this seat is independent of the fiber-equation seats. -/
+-- BEGIN SEAT AREA
+lemma apm_t97J05_regular_aux_deriv_bijective_aux_formula
+    (q h : apm_t97J05_R3) :
+    fderiv ℝ apm_t97J05_regular_aux_H q h =
+      WithLp.toLp 2
+        ![Real.exp (q 0) * Real.cos (q 1) * h 0 -
+            Real.exp (q 0) * Real.sin (q 1) * h 1,
+          q 2 * h 0 + q 0 * h 2, h 2] := by
+  let g : apm_t97J05_R3 → (Fin 3 → ℝ) := fun x =>
+    ![Real.exp (x 0) * Real.cos (x 1), x 0 * x 2, x 2]
+  have hg : DifferentiableAt ℝ g q := by
+    apply differentiableAt_pi.mpr
+    intro i
+    fin_cases i <;> dsimp [g] <;> fun_prop
+  have hc := (PiLp.hasFDerivAt_toLp (𝕜 := ℝ) 2 (g q)).comp q hg.hasFDerivAt
+  have hdj (j : Fin 3) :
+      DifferentiableAt ℝ (fun x : apm_t97J05_R3 => x j) q := by
+    exact (PiLp.proj 2 (fun _ : Fin 3 => ℝ) j).differentiableAt
+  have hj (j : Fin 3) :
+      fderiv ℝ (fun x : apm_t97J05_R3 => x j) q h = h j := by
+    let P : apm_t97J05_R3 →L[ℝ] ℝ := PiLp.proj 2 (fun _ : Fin 3 => ℝ) j
+    have hd := P.hasFDerivAt (x := q)
+    exact congrArg (fun L : apm_t97J05_R3 →L[ℝ] ℝ => L h) hd.fderiv
+  have hgv :
+      fderiv ℝ g q h =
+        ![Real.exp (q 0) * Real.cos (q 1) * h 0 -
+            Real.exp (q 0) * Real.sin (q 1) * h 1,
+          q 2 * h 0 + q 0 * h 2, h 2] := by
+    rw [fderiv_pi]
+    · ext i
+      fin_cases i
+      · dsimp [g]
+        rw [fderiv_fun_mul]
+        · rw [fderiv_exp, fderiv_cos]
+          simp only [ContinuousLinearMap.add_apply, ContinuousLinearMap.smul_apply,
+            smul_eq_mul]
+          rw [hj, hj]
+          ring
+          all_goals exact hdj _
+        · exact (hdj 0).exp
+        · exact (hdj 1).cos
+      · dsimp [g]
+        rw [fderiv_fun_mul]
+        · simp only [ContinuousLinearMap.add_apply, ContinuousLinearMap.smul_apply,
+            smul_eq_mul]
+          rw [hj, hj]
+          ring
+        all_goals exact hdj _
+      · dsimp [g]
+        rw [hj]
+    · intro i
+      fin_cases i <;> dsimp [g] <;> fun_prop
+  change fderiv ℝ (WithLp.toLp 2 ∘ g) q h = _
+  rw [hc.fderiv]
+  change WithLp.toLp 2 (fderiv ℝ g q h) = _
+  rw [hgv]
+
+lemma apm_t97J05_regular_aux_deriv_bijective (q : apm_t97J05_R3)
+    (hz : q 2 ≠ 0) (hs : Real.sin (q 1) ≠ 0) :
+    Function.Bijective (fderiv ℝ apm_t97J05_regular_aux_H q) := by
+  have he : Real.exp (q 0) ≠ 0 := Real.exp_ne_zero _
+  constructor
+  · intro h k ehk
+    have e0 := congrArg (fun x : apm_t97J05_R3 => x 0) ehk
+    have e1 := congrArg (fun x : apm_t97J05_R3 => x 1) ehk
+    have e2 := congrArg (fun x : apm_t97J05_R3 => x 2) ehk
+    rw [apm_t97J05_regular_aux_deriv_bijective_aux_formula,
+      apm_t97J05_regular_aux_deriv_bijective_aux_formula] at e0 e1 e2
+    simp at e0 e1 e2
+    have hh2 : h 2 = k 2 := e2
+    have hh0 : h 0 = k 0 := by
+      apply (mul_left_cancel₀ hz)
+      calc
+        q 2 * h 0 = (q 2 * h 0 + q 0 * h 2) - q 0 * h 2 := by ring
+        _ = (q 2 * k 0 + q 0 * k 2) - q 0 * k 2 := by rw [e1, hh2]
+        _ = q 2 * k 0 := by ring
+    have hh1 : h 1 = k 1 := by
+      have e0' := e0
+      rw [hh0] at e0'
+      apply (mul_left_cancel₀ (mul_ne_zero he hs))
+      calc
+        Real.exp (q 0) * Real.sin (q 1) * h 1 =
+            Real.exp (q 0) * Real.cos (q 1) * h 0 -
+              (Real.exp (q 0) * Real.cos (q 1) * h 0 -
+                Real.exp (q 0) * Real.sin (q 1) * h 1) := by ring
+        _ = Real.exp (q 0) * Real.cos (q 1) * k 0 -
+              (Real.exp (q 0) * Real.cos (q 1) * k 0 -
+                Real.exp (q 0) * Real.sin (q 1) * k 1) := by rw [hh0, e0']
+        _ = Real.exp (q 0) * Real.sin (q 1) * k 1 := by ring
+    ext i
+    fin_cases i
+    · exact hh0
+    · exact hh1
+    · exact hh2
+  · intro y
+    let h : apm_t97J05_R3 := WithLp.toLp 2
+      ![(y 1 - q 0 * y 2) / q 2,
+        (Real.exp (q 0) * Real.cos (q 1) * ((y 1 - q 0 * y 2) / q 2) - y 0) /
+          (Real.exp (q 0) * Real.sin (q 1)),
+        y 2]
+    refine ⟨h, ?_⟩
+    rw [apm_t97J05_regular_aux_deriv_bijective_aux_formula]
+    ext i
+    fin_cases i
+    · simp [h]
+      field_simp [he, hs]
+      ring
+    · simp [h]
+      field_simp [hz]
+      ring
+    · simp [h]
+-- END SEAT AREA
+
+/-- An inverse-function chart around an arbitrary point where the completed
+map has bijective derivative.  Bijectivity is passed explicitly to keep this
+seat parallel to the derivative calculation. -/
+lemma apm_t97J05_regular_aux_local_inverse (q : apm_t97J05_R3)
+    (hb : Function.Bijective (fderiv ℝ apm_t97J05_regular_aux_H q)) :
+    ∃ e : OpenPartialHomeomorph apm_t97J05_R3 apm_t97J05_R3,
+      q ∈ e.source ∧ apm_t97J05_regular_aux_H q ∈ e.target ∧
+      (e : apm_t97J05_R3 → apm_t97J05_R3) = apm_t97J05_regular_aux_H ∧
+      ContDiffOn ℝ ∞ e e.source ∧ ContDiffOn ℝ ∞ e.symm e.target := by
+  sorry
+
+/-- A local flat model of the fiber.  The local inverse is supplied as a
+hypothesis, so proving this statement requires only unpacking the first two
+coordinates of `H`. -/
+lemma apm_t97J05_regular_aux_flattens_fiber
+    (e : OpenPartialHomeomorph apm_t97J05_R3 apm_t97J05_R3)
+    (he : (e : apm_t97J05_R3 → apm_t97J05_R3) = apm_t97J05_regular_aux_H) :
+    ∀ z ∈ e.source,
+      z ∈ apm_t97J05_W ↔ e z 0 = 0 ∧ e z 1 = 1 := by
+  sorry
+
+/-- LIBRARY: global regular-level/embedded-submanifold assembly.  This is the
+remaining missing Mathlib foundation: compatible subtype charts and the
+smooth embedded inclusion are constructed from flat local fiber models. -/
+lemma apm_t97J05_regular_fiber_global_assembly
+    (hlocal : ∀ q ∈ apm_t97J05_W,
+      ∃ e : OpenPartialHomeomorph apm_t97J05_R3 apm_t97J05_R3,
+        q ∈ e.source ∧ ContDiffOn ℝ ∞ e e.source ∧
+        ContDiffOn ℝ ∞ e.symm e.target ∧
+        ∀ z ∈ e.source,
+          z ∈ apm_t97J05_W ↔ e z 0 = 0 ∧ e z 1 = 1) :
     apm_t97J05_IsSmoothSubmanifold apm_t97J05_W := by
   sorry
+
+theorem apm_t97J05_regular_fiber_embedded :
+    apm_t97J05_IsSmoothSubmanifold apm_t97J05_W := by
+  apply apm_t97J05_regular_fiber_global_assembly
+  intro q hq
+  have hz := apm_t97J05_fiber_third_ne_zero q hq
+  have hs := apm_t97J05_fiber_sin_ne_zero q hq
+  have hb := apm_t97J05_regular_aux_deriv_bijective q hz hs
+  rcases apm_t97J05_regular_aux_local_inverse q hb with
+    ⟨e, hqsrc, _hqtarget, he, hes, heis⟩
+  exact ⟨e, hqsrc, hes, heis,
+    apm_t97J05_regular_aux_flattens_fiber e he⟩
 
 def apm_t97J05_local_normal_form_aux_H (q : apm_t97J05_R3) : apm_t97J05_R3 :=
   WithLp.toLp 2 ![Real.exp (q 0) * Real.cos (q 1), q 0 * q 2, q 2]
@@ -272,7 +463,52 @@ lemma apm_t97J05_local_normal_form_aux_inverse_at_p :
     hH.image_mem_toOpenPartialHomeomorph_target hHL (by simp), rfl, ?_⟩
   simpa [e] using hH.to_localInverse hHL (by simp)
 
--- BEGIN SEAT AREA
+lemma apm_t97J05_local_normal_form_aux_smooth_local_inverse :
+    ∃ e : OpenPartialHomeomorph apm_t97J05_R3 apm_t97J05_R3,
+      apm_t97J05_p ∈ e.source ∧
+      apm_t97J05_local_normal_form_aux_H apm_t97J05_p ∈ e.target ∧
+      (e : apm_t97J05_R3 → apm_t97J05_R3) = apm_t97J05_local_normal_form_aux_H ∧
+      ContDiffOn ℝ ∞ e e.source ∧ ContDiffOn ℝ ∞ e.symm e.target := by
+  rcases apm_t97J05_local_normal_form_aux_inverse_at_p with
+    ⟨e₀, hp, hHp, he₀, he₀inv⟩
+  let U : Set apm_t97J05_R3 :=
+    {x | IsUnit (fderiv ℝ apm_t97J05_local_normal_form_aux_H x)}
+  have hUopen : IsOpen U := by
+    exact Units.isOpen.preimage
+      (apm_t97J05_local_normal_form_aux_smooth.continuous_fderiv (by simp))
+  have hpU : apm_t97J05_p ∈ U := by
+    exact ContinuousLinearMap.isUnit_iff_bijective.mpr
+      apm_t97J05_local_normal_form_aux_deriv_bij
+  let e := e₀.restrOpen U hUopen
+  have hp' : apm_t97J05_p ∈ e.source := ⟨hp, hpU⟩
+  refine ⟨e, hp', ?_, ?_, ?_, ?_⟩
+  · rw [← he₀]
+    exact e.map_source hp'
+  · simpa [e] using he₀
+  · rw [show (e : apm_t97J05_R3 → apm_t97J05_R3) =
+        apm_t97J05_local_normal_form_aux_H by simpa [e] using he₀]
+    exact apm_t97J05_local_normal_form_aux_smooth.contDiffOn
+  · intro y hy
+    have hx : e.symm y ∈ U := by
+      exact (e.map_target hy).2
+    have hb : Function.Bijective
+        (fderiv ℝ apm_t97J05_local_normal_form_aux_H (e.symm y)) :=
+      ContinuousLinearMap.isUnit_iff_bijective.mp hx
+    let L : apm_t97J05_R3 ≃L[ℝ] apm_t97J05_R3 :=
+      ContinuousLinearEquiv.ofBijective
+        (fderiv ℝ apm_t97J05_local_normal_form_aux_H (e.symm y))
+        (LinearMap.ker_eq_bot.mpr hb.1) (LinearMap.range_eq_top.mpr hb.2)
+    apply (e.contDiffAt_symm (f₀' := L) hy ?_ ?_).contDiffWithinAt
+    · have hd := (apm_t97J05_local_normal_form_aux_smooth.differentiable
+          (by simp) (e.symm y)).hasFDerivAt
+      rw [show (e : apm_t97J05_R3 → apm_t97J05_R3) =
+          apm_t97J05_local_normal_form_aux_H by simpa [e] using he₀]
+      apply hd.congr_fderiv
+      exact ContinuousLinearEquiv.coe_ofBijective _ _ _ |>.symm
+    · rw [show (e : apm_t97J05_R3 → apm_t97J05_R3) =
+          apm_t97J05_local_normal_form_aux_H by simpa [e] using he₀]
+      exact apm_t97J05_local_normal_form_aux_smooth.contDiffAt
+
 theorem apm_t97J05_local_normal_form :
     ∃ (φ : OpenPartialHomeomorph apm_t97J05_R3 apm_t97J05_R3)
         (ψ : OpenPartialHomeomorph apm_t97J05_R2 apm_t97J05_R2),
@@ -282,8 +518,64 @@ theorem apm_t97J05_local_normal_form :
       ContDiffOn ℝ ∞ ψ ψ.source ∧ ContDiffOn ℝ ∞ ψ.symm ψ.target ∧
       ∀ q ∈ φ.source, apm_t97J05_f (φ q) ∈ ψ.source ∧
         ψ (apm_t97J05_f (φ q)) = WithLp.toLp 2 ![q 0, q 1] := by
-  sorry
--- END SEAT AREA
+  rcases apm_t97J05_local_normal_form_aux_smooth_local_inverse with
+    ⟨e₀, hp, hHp, he₀, he₀smooth, he₀inv⟩
+  let T : apm_t97J05_R3 ≃ₜ apm_t97J05_R3 :=
+    Homeomorph.addLeft (apm_t97J05_local_normal_form_aux_H apm_t97J05_p)
+  let φ₀ : OpenPartialHomeomorph apm_t97J05_R3 apm_t97J05_R3 :=
+    T.transOpenPartialHomeomorph e₀.symm
+  let φ : OpenPartialHomeomorph apm_t97J05_R3 apm_t97J05_R3 := φ₀
+  let ψ : OpenPartialHomeomorph apm_t97J05_R2 apm_t97J05_R2 :=
+    (Homeomorph.addLeft (-apm_t97J05_value)).toOpenPartialHomeomorph
+  refine ⟨φ, ψ, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_⟩
+  · change 0 ∈ φ₀.source
+    rw [Homeomorph.transOpenPartialHomeomorph_source]
+    simpa [T] using hHp
+  · change φ₀ 0 = apm_t97J05_p
+    change e₀.symm (apm_t97J05_local_normal_form_aux_H apm_t97J05_p + 0) = _
+    rw [← he₀]
+    simpa using e₀.left_inv hp
+  · simp [ψ]
+  · simp [ψ]
+  · intro x hx
+    change ContDiffWithinAt ℝ ∞ (e₀.symm ∘ T) φ₀.source x
+    apply (he₀inv (T x) (by simpa [φ₀] using hx)).comp x
+      ((contDiff_const.add contDiff_id).contDiffWithinAt)
+    exact fun y hy => by simpa [φ₀] using hy
+  · intro x hx
+    change ContDiffWithinAt ℝ ∞ (T.symm ∘ e₀) φ₀.target x
+    have hs := he₀smooth x (by simpa [φ₀] using hx)
+    have hout : ContDiff ℝ ∞ (fun y : apm_t97J05_R3 =>
+        y - apm_t97J05_local_normal_form_aux_H apm_t97J05_p) :=
+      contDiff_id.sub contDiff_const
+    have hc := hout.contDiffWithinAt.comp x hs
+      (fun y hy => Set.mem_univ _)
+    simpa [T, Function.comp_def, sub_eq_add_neg, add_comm] using hc
+  · intro x hx
+    exact ((contDiff_const.add contDiff_id).contDiffWithinAt)
+  · intro x hx
+    exact ((contDiff_const.add contDiff_id).contDiffWithinAt)
+  · intro q hq
+    constructor
+    · simp [ψ]
+    · have hq₀ : q ∈ φ₀.source := by
+        exact hq
+      have hTq : T q ∈ e₀.target := by
+        simpa [φ₀] using hq₀
+      have hinv : e₀ (φ₀ q) = T q := e₀.right_inv hTq
+      have hHq : apm_t97J05_local_normal_form_aux_H (φ q) =
+          apm_t97J05_local_normal_form_aux_H apm_t97J05_p + q := by
+        simpa [φ, φ₀, T, add_comm, he₀] using hinv
+      ext i
+      fin_cases i
+      · have h := congrArg (fun x : apm_t97J05_R3 ↦ x 0) hHq
+        simpa [ψ, apm_t97J05_f, apm_t97J05_value,
+          apm_t97J05_local_normal_form_aux_H, apm_t97J05_p,
+          Real.cos_pi_div_two] using h
+      · have h := congrArg (fun x : apm_t97J05_R3 ↦ x 1) hHq
+        have h' := congrArg (fun z : ℝ => z - 1) h
+        simpa [ψ, apm_t97J05_f, apm_t97J05_value, sub_eq_add_neg, add_comm,
+          apm_t97J05_local_normal_form_aux_H, apm_t97J05_p] using h'
 /-
   let L : apm_t97J05_R3 ≃L[ℝ] apm_t97J05_R3 :=
     ContinuousLinearEquiv.ofBijective

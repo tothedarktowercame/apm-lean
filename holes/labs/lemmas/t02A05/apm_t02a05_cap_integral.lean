@@ -159,8 +159,6 @@ lemma apm_t02a05_sphere_mass_eq_two_caps_aux_cap :
   rfl
 
 section mathlibInstance
-attribute [-instance] ConstructionTargets.LinearGraphMeasure.domainMeasurable
-attribute [-instance] ConstructionTargets.LinearGraphMeasure.domainBorel
 
 /-- Mathlib's normalising constant for `μH[2]` on `ℝ²`. -/
 noncomputable def apm_t02a05_cM : NNReal :=
@@ -220,6 +218,16 @@ theorem apm_t02a05_sphere_mass_eq_two_caps :
 
 /-- (C) The cap integral against Lebesgue measure: `∫₀^{2π} ∫₀¹ r / √(1 − r²) dr dθ = 2π`. -/
 -- BEGIN SEAT AREA
+lemma apm_t02a05_cap_integral_aux_measurable :
+    Measurable (fun x : EuclideanSpace ℝ (Fin 2) =>
+      ENNReal.ofReal (1 / Real.sqrt (1 - ‖x‖ ^ 2))) := by
+  fun_prop
+
+lemma apm_t02a05_cap_integral_aux_nonneg
+    (x : EuclideanSpace ℝ (Fin 2)) :
+    0 ≤ ENNReal.ofReal (1 / Real.sqrt (1 - ‖x‖ ^ 2)) := by
+  exact bot_le
+
 theorem apm_t02a05_cap_integral :
     (∫⁻ x in Metric.ball (0 : EuclideanSpace ℝ (Fin 2)) 1, ENNReal.ofReal (1 / Real.sqrt (1 - ‖x‖ ^ 2))) = ENNReal.ofReal (2 * Real.pi) := by
   sorry

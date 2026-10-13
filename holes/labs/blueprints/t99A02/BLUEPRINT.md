@@ -1,128 +1,116 @@
-# Blueprint for t99A02
+# Blueprint for t99A02 (second repair)
 
 ## Triage and repair
 
-Verdict: **unfaithful (the registered theorem is true, but it does not encode
-the requested answer).**
+Verdict: **unfaithful**.  The registered theorem is true, but merely says that
+the defining relators vanish in two presented groups (plus infinitude of one
+group).  The problem asks for the universal covers of `RP² ∨ RP²` and
+`S¹ ∨ RP²`; the registered theorem mentions neither space, a fundamental
+group, nor a covering map.
 
-The source asks for sketches of the universal covers of
-`RP² ∨ RP²` and `S¹ ∨ RP²`.  The old Lean conclusion instead says that
-three displayed relators become the identity in their own presented groups,
-and that the second presented group is infinite.  In particular, the old
-statement says neither that the first group is infinite nor what either group
-is.  Each of its three equations is immediate from the definition of
-`PresentedGroup`, because the word asserted to equal one is itself a member of
-the relation set.  Thus those equations cannot distinguish these presentations
-from unrelated presentations containing the same relators.
+The first repair, which identified the two abstract presentations, was still
+too narrow: it did not connect them to the spaces.  `RevisedMain.lean` now uses
+the repository's concrete models `ProjectivePlaneWedge` and
+`Wedge (1 : Circle) (surfacePoint false 1)`, at their actual quotient wedge
+points, and states
 
-This agrees with the outside triage in
-`holes/labs/statement-registry/triage-3.md`.  There was no cached solve-loop
-attempt, problem-specific solve-loop record, topology-contract row, or closer
-audit to reuse.
+* `π₁(RP² ∨ RP²) ≅ DihedralGroup 0`, and
+* `π₁(S¹ ∨ RP²) ≅ ℤ * (ℤ/2)`.
 
-`RevisedMain.lean` makes the smallest repair recommended by that triage: it
-keeps both concrete presentations and replaces the four-conjunct conclusion by
-the two group identifications
+This is the smallest faithful step requested by the outside grader.  The
+groups determine the Cayley/Bass--Serre pictures described by the informal
+solution.  I did not state the literal universal covers: the repository has no
+existing concrete type for either the bi-infinite chain of 2-spheres or the
+Bass--Serre tree of lines and spheres.  Introducing those spaces, their maps,
+`IsCoveringMap`, and `SimplyConnectedSpace` coherently is a separate large
+construction; an abstract predicate would merely hide the desired result.
 
-* `<a,b | a²,b²> ≅ D∞`, and
-* `<a,b | b²> ≅ ℤ * (ℤ/2)`.
+Degenerate checks: both wedge types use the image of the named basepoints, not
+an arbitrary or empty point.  `DihedralGroup 0` is the infinite dihedral group
+(not the finite group at a positive parameter), and `Multiplicative (ZMod 2)`
+is the order-two factor.  Thus neither conclusion collapses at zero.
 
-These are the algebraic data underlying exactly the two Cayley/Bass--Serre
-pictures in `informal-solution.md`: the first gives a bi-infinite alternating
-line, while the second gives the Bass--Serre tree for `ℤ * (ℤ/2)`.  Lean's
-current topology library does not provide a projective-plane wedge plus the
-explicit tree-of-spheres covering model, so the repaired statement uses the
-registry's stated minimum faithful content rather than inventing a predicate
-whose definition contains the desired conclusion.
+## Lemmas
 
-The grader's objection is removed: neither conjunct follows merely because a
-relator belongs to the relation set, and the first conjunct now implies the
-missing infinitude through `Infinite (DihedralGroup 0)`.
+### `t99A02_wedge_fundamentalGroups_presented` (LIBRARY)
 
-## Remaining lemmas
+**Statement.** The fundamental groups of the two concrete wedges are the
+presentations `<a,b | a²,b²>` and `<a,b | b²>`, respectively.
 
-### `t99A02_rp2WedgeRp2_presentedGroup_equiv` (LIBRARY)
+**Why true.** Compute the polygon model of `RP²` as the one-generator,
+one-relator group `<b | b²>`, use Mathlib's circle fundamental-group
+calculation, and apply point-wedge van Kampen.  Finally identify the coproduct
+presentations by their universal properties.  The point-wedge engine is the
+sorry-free `ConstructionTargets.PointWedgeVanKampen`, in particular
+`genericPointWedgeFundamentalGroupEquiv`; the missing surface input belongs to
+the shared `ConstructionTargets/PolygonSurfacePiOne.lean` program.  The two
+outputs are bundled in one lemma because they share exactly that missing
+projective-plane calculation.
 
-**Statement in words.** The group on two generators, each of order dividing
-two, is isomorphic to the infinite dihedral group.
+**Size.** LIBRARY, 300+ lines beyond the shared programs; mostly specialization
+and presentation normalization once polygon-surface pi-one lands.
 
-**Why true.** Map the two presented generators to the two standard reflections
-`sr 0` and `sr 1` in `DihedralGroup 0` using `PresentedGroup.toGroup`.  In the
-reverse direction, use the normal form `r n` or `sr n`, sending rotation to the
-product of the two presented involutions and reflection to an involution.
-Prove the two composites on generators with `PresentedGroup.ext`; the
-`DihedralGroup` normal forms prove the other composite.  Relevant checked APIs
-are `PresentedGroup.toGroup`, `PresentedGroup.ext`, `FreeGroup.lift`, and the
-constructors/normal form of `DihedralGroup`.
+**Dependencies.** Shared programs `PointWedgeVanKampen` and
+`PolygonSurfacePiOne`; no blueprint lemma.
 
-**Expected size.** 300--500 lines.  This is marked LIBRARY because Mathlib has
-no packaged equivalence between this presentation and `DihedralGroup 0`; the
-normal-form/inverse proof is a reusable presentation theorem rather than a
-small problem-specific adapter.  No sorry-free `ConstructionTargets` module
-currently supplies it.
+**Truth check.** Van Kampen gives `(Z/2) * (Z/2)` and `Z * (Z/2)`.
+Their normal forms give respectively alternating involutions and alternating
+free-product syllables.  The constant loop maps to the empty word in both
+cases, checking the identity endpoint.
 
-**Dependencies.** Definitions only.
+### `t99A02_rp2WedgeRp2_presentedGroup_equiv`
 
-**Truth check.** The standard hand normal form alternates the two involutions:
-every reduced word is uniquely `(ab)^n` or `b(ab)^n`.  At the degenerate word,
-the empty word maps to `r 0 = 1`.  The target is genuinely infinite because
-`DihedralGroup 0` has Mathlib's `Infinite` instance, so this also catches the
-content absent from the old theorem.
+**Statement.** `<a,b | a²,b²> ≅ D∞`.
 
-### `t99A02_circleWedgeRp2_presentedGroup_equiv` (LIBRARY)
+**Why true.** Send the generators to the two standard reflections.  Conversely
+send a rotation to powers of their product and a reflection to an involution;
+use `PresentedGroup.toGroup`, `PresentedGroup.ext`, and the `DihedralGroup`
+normal form to prove the inverse laws.
 
-**Statement in words.** The group on one unrestricted generator and one
-involutory generator is the free product `ℤ * (ℤ/2)`.
-
-**Why true.** Send generator `0` to the canonical image of `1 : ℤ` in the
-left factor and generator `1` to the canonical image of `1 : ZMod 2` in the
-right factor; the sole relator maps to one, so `PresentedGroup.toGroup`
-descends the map.  Conversely, map the left cyclic group by integer powers of
-presented generator `0`, the right cyclic group to generator `1`, and combine
-them with `Monoid.Coprod.lift`.  Use `PresentedGroup.ext` and
-`Monoid.Coprod.hom_ext` to show the composites are identities.  The relevant
-universal-property APIs are all present in Mathlib.
-
-**Expected size.** 250--400 lines.  This is marked LIBRARY because the missing
-piece is a general presentation/free-product comparison, with coercion and
-cyclic-group homomorphism work, not a short invocation of an existing theorem.
-No sorry-free `ConstructionTargets` module currently supplies it.
+**Size.** 200--350 lines (presentation/normal-form algebra seat).
 
 **Dependencies.** Definitions only.
 
-**Truth check.** With the second generator set to the nonzero element of
-`ZMod 2`, its square is zero/additively (one/multiplicatively), so the relation
-is satisfied.  Generator `0` has no relation and therefore supplies the
-infinite cyclic factor.  Reduced free-product words give injectivity; the empty
-word supplies the identity endpoint.  This also confirms that no accidental
-extra relation makes the group finite.
+**Truth check.** Every reduced word alternates and is uniquely a rotation or a
+reflection.  The empty word is the identity, while arbitrary rotation powers
+show the group is infinite.
 
-## Assembly and dependency layers
+### `t99A02_circleWedgeRp2_presentedGroup_equiv`
 
-The final theorem is a two-line pairing of the two equivalences and has no
-direct `sorry`.
+**Statement.** `<a,b | b²> ≅ ℤ * (ℤ/2)`.
 
-* **Layer 1 (parallel):**
-  `t99A02_rp2WedgeRp2_presentedGroup_equiv`,
-  `t99A02_circleWedgeRp2_presentedGroup_equiv`.
-* **Layer 2 (already proved):** `apm_t99a02`, after both Layer 1 lemmas.
+**Why true.** Map `a` to the canonical generator of the left factor and `b`
+to the nonzero element of `ZMod 2`; the relator permits descent through
+`PresentedGroup.toGroup`.  Build the inverse with `Monoid.Coprod.lift` and
+prove the composites using `PresentedGroup.ext` and
+`Monoid.Coprod.hom_ext`.
 
-There are **two** remaining lemmas, both independent LIBRARY obligations.
+**Size.** 180--300 lines (universal-property algebra seat).
+
+**Dependencies.** Definitions only.
+
+**Truth check.** The right generator squares to one and no relation mentions
+the left generator.  Reduced coproduct words give injectivity; the empty word
+checks the identity case.
+
+## Dependency layers
+
+There are **three** remaining lemmas.
+
+* **Layer 1 (parallel):** all three lemmas above.  The topology lemma is a
+  shared LIBRARY program; the two presentation calculations are independent
+  algebra seats.
+* **Layer 2:** `apm_t99a02`, which composes the two pairs of equivalences and
+  contains no `sorry`.
 
 ## Compilation and axioms
 
-Both files compiled with:
-
-```text
-systemd-run --user --scope -q -p MemoryMax=12G lake env lean holes/labs/blueprints/t99A02/RevisedMain.lean
-systemd-run --user --scope -q -p MemoryMax=12G lake env lean holes/labs/blueprints/t99A02/Blueprint.lean
-```
-
-The final output of `#print axioms apm_t99a02` was:
+Both Lean files compile with the required 12G systemd scope.  The final output
+of `#print axioms apm_t99a02` is:
 
 ```text
 'apm_t99a02' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
 ```
 
-The two `sorry` warnings are exactly the two Layer 1 library lemmas.  The main
-theorem contains no `sorry` of its own.
+The three warnings in `Blueprint.lean` are exactly the three top-level lemma
+bodies above; `apm_t99a02` has no direct `sorry`.

@@ -1,6 +1,7 @@
 import Mathlib
 import ConstructionTargets.EuclideanHausdorffIntegralTransport
 import ConstructionTargets.IntrinsicSphereSecondMoments
+import ConstructionTargets.SphereCapNullEquatorMeasureAssembly
 
 open MeasureTheory
 noncomputable section
@@ -86,10 +87,79 @@ lemma t95J05_euclideanHausdorff_unitSphere_mass_aux_ambient_aux_toSphere :
     ring
   · positivity
 
+def t95J05SphereUpper : Set t95J05R4 :=
+  Metric.sphere 0 1 ∩ {x | 0 < x 3}
+
+def t95J05SphereLower : Set t95J05R4 :=
+  Metric.sphere 0 1 ∩ {x | x 3 < 0}
+
+def t95J05SphereEquator : Set t95J05R4 :=
+  Metric.sphere 0 1 ∩ {x | x 3 = 0}
+
+/-- LIBRARY: the normalized Hausdorff mass of the strict upper hemisphere of
+`S³` is half the full surface mass.  This is an independent graph-chart leaf. -/
+lemma t95J05_unitSphere_upper_mass :
+    μHE[3] t95J05SphereUpper =
+      (2 : ENNReal) * volume (Metric.ball (0 : t95J05R4) 1) := by
+  sorry
+
+/-- LIBRARY: lower-hemisphere counterpart of `t95J05_unitSphere_upper_mass`.
+It is deliberately independent, so a seat may prove it directly or by reflection. -/
+lemma t95J05_unitSphere_lower_mass :
+    μHE[3] t95J05SphereLower =
+      (2 : ENNReal) * volume (Metric.ball (0 : t95J05R4) 1) := by
+  sorry
+
+/-- LIBRARY: the coordinate equator in `S³` has zero three-dimensional
+normalized Hausdorff measure.  This is independent of both chart-area leaves. -/
+lemma t95J05_unitSphere_equator_null :
+    μHE[3] t95J05SphereEquator = 0 := by
+  sorry
+
 lemma t95J05_euclideanHausdorff_unitSphere_mass_aux_ambient_aux_compare_aux_coarea :
     μHE[3] (Metric.sphere (0 : t95J05R4) 1) =
       (4 : ENNReal) * volume (Metric.ball (0 : t95J05R4) 1) := by
-  sorry
+  have hpartition : Metric.sphere (0 : t95J05R4) 1 =
+      (t95J05SphereUpper ∪ t95J05SphereLower) ∪ t95J05SphereEquator := by
+    ext x
+    simp only [t95J05SphereUpper, t95J05SphereLower, t95J05SphereEquator,
+      Set.mem_union, Set.mem_inter_iff, Set.mem_setOf_eq]
+    constructor
+    · intro hx
+      rcases lt_trichotomy (x 3) 0 with h | h | h
+      · exact Or.inl (Or.inr ⟨hx, h⟩)
+      · exact Or.inr ⟨hx, h⟩
+      · exact Or.inl (Or.inl ⟨hx, h⟩)
+    · rintro (⟨⟨hx, -⟩ | ⟨hx, -⟩⟩ | ⟨hx, -⟩)
+      · exact hx
+      · exact hx
+      · exact hx
+  have hmeasUpper : MeasurableSet t95J05SphereUpper := by
+    exact Metric.isClosed_sphere.measurableSet.inter
+      (measurableSet_lt measurable_const (Continuous.measurable (by fun_prop)))
+  have hmeasLower : MeasurableSet t95J05SphereLower := by
+    exact Metric.isClosed_sphere.measurableSet.inter
+      (measurableSet_lt (Continuous.measurable (by fun_prop)) measurable_const)
+  have hmeasEquator : MeasurableSet t95J05SphereEquator := by
+    exact Metric.isClosed_sphere.measurableSet.inter
+      (measurableSet_eq_fun (Continuous.measurable (by fun_prop)) measurable_const)
+  rw [hpartition]
+  have hdisjUL : Disjoint t95J05SphereUpper t95J05SphereLower := by
+    rw [Set.disjoint_left]
+    rintro x ⟨-, hx⟩ ⟨-, hy⟩
+    change 0 < x 3 at hx
+    change x 3 < 0 at hy
+    exact (not_lt_of_ge (le_of_lt hx)) hy
+  have hdisjEq : Disjoint (t95J05SphereUpper ∪ t95J05SphereLower)
+      t95J05SphereEquator := by
+    rw [Set.disjoint_left]
+    rintro x (⟨-, hx⟩ | ⟨-, hx⟩) ⟨-, heq⟩
+    · exact (ne_of_gt hx) heq
+    · exact (ne_of_lt hx) heq
+  rw [measure_union hdisjEq hmeasEquator, measure_union hdisjUL hmeasLower]
+  rw [t95J05_unitSphere_upper_mass, t95J05_unitSphere_lower_mass,
+    t95J05_unitSphere_equator_null]
+  ring
 
 lemma t95J05_euclideanHausdorff_unitSphere_mass_aux_ambient_aux_compare :
     μHE[3] (Metric.sphere (0 : t95J05R4) 1) =

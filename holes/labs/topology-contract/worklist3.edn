@@ -37041,7 +37041,7 @@
   {:consumer :t97J05,
    :stop-count 0,
    :phase :implementation,
-   :state :open,
+   :state :superseded,
    :scope
    ["problems/t97J05/lean/Main.lean"
     "problems/t97J05/status.json"
@@ -37058,9 +37058,12 @@
     ["lake env lean problems/t97J05/lean/Main.lean"
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t97J05Closure.blueprint.md"},
+   :superseded-note
+   "t97J05 closed by the blueprint/lemma rounds, lemmas commit 102e0df34 (claude-14 2026-10-13)",
    :continue-from
    "NEXT JOB: copy holes/labs/blueprints/t97J05/BLUEPRINT.md's plan into ConstructionTargets/t97J05Closure.blueprint.md, move the blueprint's proved lemmas into place, then build the LIBRARY obligations one milestone per job.",
    :id :program-2026-10-13-close-t97j05,
+   :superseded-by :blueprint-t97J05,
    :kind :final-adapter,
    :campaign-priority 38,
    :fail-count 0,

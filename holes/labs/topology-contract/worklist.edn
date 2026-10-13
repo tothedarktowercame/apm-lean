@@ -117297,7 +117297,7 @@
      "d9c0cf3c78f77b2af3fd51f71900de56e4e5c22f9b8efade5229d82d0a9ccef1"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :superseded,
    :scope
    ["problems/t97A07/lean/Main.lean"
     "problems/t97A07/status.json"
@@ -117312,9 +117312,12 @@
     :commands
     ["lake env lean problems/t97A07/lean/Main.lean"
      "python3 scripts/statement-registry.py check"]},
+   :superseded-note
+   "t97A07 closed by the blueprint/lemma rounds, lemmas commit 786aef966 (claude-14 2026-10-13)",
    :continue-from
    "Continue this program from its last commit; earlier jobs: :program-history. Last stop: B7 local image openness at regular points proved.",
    :id :program-2026-10-11-close-t97a07,
+   :superseded-by :blueprint-t97A07,
    :kind :final-adapter,
    :campaign-priority 44,
    :fail-count 1,
@@ -117499,7 +117502,7 @@
      "B1 partial: independent t/q orientation splits compile."}]}
   {:consumer :t94A07,
    :phase :implementation,
-   :state :open,
+   :state :superseded,
    :scope
    ["problems/t94A07/lean/Main.lean"
     "problems/t94A07/status.json"
@@ -117514,9 +117517,12 @@
     :commands
     ["lake env lean problems/t94A07/lean/Main.lean"
      "python3 scripts/statement-registry.py check"]},
+   :superseded-note
+   "t94A07 closed by the blueprint/lemma rounds, lemmas commit c054917c6 (claude-14 2026-10-13)",
    :continue-from
    "NEXT JOB: write the blueprint ConstructionTargets/t94A07Closure.blueprint.md (BLUEPRINTS.md) for the remaining chain in ~/notes/closer/t94a07-report.md, then formalise node by node.",
    :id :program-2026-10-11-close-t94a07,
+   :superseded-by :blueprint-t94A07,
    :kind :final-adapter,
    :campaign-priority 48,
    :depends-on [],

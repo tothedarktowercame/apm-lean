@@ -50663,12 +50663,14 @@
     :author "claude-18",
     :disposition :stop},
    :phase :implementation,
-   :state :needs-owner,
+   :state :superseded,
    :scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
    {:implementation
     "Retain the banked dimension-two rpSmoothAtlas and add rpSmoothAtlas_exists : Nonempty (SmoothAtlas 2) exactly as compiled. Verify that installing rpSmoothAtlas.charts and rpSmoothAtlas.smooth exposes rpSmoothAtlas.quotient_localDiffeomorph with the frozen sphereProjection 2. Run the module compile, placeholder scan, and statement-registry check."},
+   :superseded-note
+   "t94A08 closed by the blueprint/lemma rounds, lemmas commit 1175d9c1b (claude-14 2026-10-13)",
    :representation
    {:source
     "The nonvanishing-coordinate open subtypes of complex projective two-space with the frozen topology coinduced from quotientMap on nonzero vectors",
@@ -50677,6 +50679,7 @@
     :direction
     "Explicit OpenPartialHomeomorphs from each projective nonvanishing-coordinate source subtype to its affine coordinate target, with inverse chartInverse and exact coordinateLine normalization"},
    :id :routes-2026-09-28-t94a08-affine-chart-homeomorph-topo2-r1,
+   :superseded-by :blueprint-t94A08,
    :kind :representation-comparison,
    :depends-on
    [:routes-2026-09-28-t94a08-projective-quotient-open-topo2-r1
@@ -50742,13 +50745,16 @@
       :kind :representation-comparison,
       :depends-on []}}},
    :phase :probe,
-   :state :blocked,
+   :state :superseded,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
    {:probe
     "Compile a placeholder-free fixture proving t94A08ProjectiveConicTopology: apm_t94a08_IsRealTwoManifold apm_t94a08_sigma1 and not apm_t94a08_IsRealTwoManifold apm_t94a08_sigma2. Supply route step 1 affineChart_homeomorph, then route steps 2-3 for the smooth conic and nodal obstruction, exactly for CP2 and these two loci. The consumer-facing fixture /tmp/t94A08_topological_bridge.lean must then compile and its source must contain no sorry."},
+   :superseded-note
+   "t94A08 closed by the blueprint/lemma rounds, lemmas commit 1175d9c1b (claude-14 2026-10-13)",
    :id :routes-2026-09-28-t94a08-projective-conic-topology-topo2-r1,
+   :superseded-by :blueprint-t94A08,
    :kind :reusable-theorem,
    :depends-on
    [:routes-2026-09-28-t94a08-affine-chart-homeomorph-topo2-r1]}
@@ -50794,13 +50800,16 @@
       :kind :reusable-theorem,
       :depends-on []}}},
    :phase :probe,
-   :state :blocked,
+   :state :superseded,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
    {:probe
     "Compile one placeholder-free exact fixture for the frozen apm_t94a08 statement, supplying its sole sorry through route steps 1-3: affineChart_homeomorph for the coinduced complex projective topology, local manifold charts for Sigma1, and the disconnected punctured-neighbourhood obstruction for the Sigma2 node. GO only if the complete frozen theorem compiles and closes t94A08."},
+   :superseded-note
+   "t94A08 closed by the blueprint/lemma rounds, lemmas commit 1175d9c1b (claude-14 2026-10-13)",
    :id :routes-2026-09-28-t94a08-closure-topo2-r1,
+   :superseded-by :blueprint-t94A08,
    :kind :final-adapter,
    :depends-on
    [:routes-2026-09-28-checkpoint-topo2
@@ -87791,7 +87800,7 @@
      "1969afb33027cfc08e7deb83931241ddbbe6fa644b77168c00ab4764585cb1d2"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :superseded,
    :scope
    ["problems/t94A08/lean/Main.lean"
     "problems/t94A08/status.json"
@@ -87808,9 +87817,12 @@
     ["lake env lean problems/t94A08/lean/Main.lean"
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t94A08Closure.blueprint.md"},
+   :superseded-note
+   "t94A08 closed by the blueprint/lemma rounds, lemmas commit 1175d9c1b (claude-14 2026-10-13)",
    :continue-from
    "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked preconnectedness of the alleged chart's punctured ball source.",
    :id :program-2026-10-13-close-t94a08,
+   :superseded-by :blueprint-t94A08,
    :kind :final-adapter,
    :campaign-priority 30,
    :fail-count 0,
