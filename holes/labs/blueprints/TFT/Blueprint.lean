@@ -199,7 +199,50 @@ lemma tft_translate_bcf_difference_quotient_aux_mvt
     (f : E → F) (hf : ContDiff ℝ 1 f) (z v : E) (h ε : ℝ) (hh : h ≠ 0)
     (hε : ∀ w, dist w z ≤ |h| * ‖v‖ → ‖fderiv ℝ f w - fderiv ℝ f z‖ ≤ ε) :
     ‖h⁻¹ • (f (z + h • v) - f z) - fderiv ℝ f z v‖ ≤ ε * ‖v‖ := by
-  sorry
+  let D : E →L[ℝ] F := fderiv ℝ f z
+  let g : E → F := fun w => f w - D w
+  have hf' : Differentiable ℝ f := hf.differentiable (by norm_num)
+  have hg' : ∀ w, DifferentiableAt ℝ g w := by
+    intro w
+    exact (hf' w).sub D.differentiableAt
+  have hD : ∀ w, fderiv ℝ g w = fderiv ℝ f w - D := by
+    intro w
+    exact ((hf' w).hasFDerivAt.sub D.hasFDerivAt).fderiv
+  have hε0 : 0 ≤ ε := by
+    have hz := hε z (by simp; positivity)
+    simpa using (norm_nonneg (fderiv ℝ f z - fderiv ℝ f z)).trans hz
+  let s : Set E := Metric.closedBall z (|h| * ‖v‖)
+  have hend : z + h • v ∈ s := by
+    change dist (z + h • v) z ≤ |h| * ‖v‖
+    rw [dist_eq_norm, add_sub_cancel_left, norm_smul, Real.norm_eq_abs]
+  have hstart : z ∈ s := by
+    change dist z z ≤ |h| * ‖v‖
+    simp
+    positivity
+  have hbound : ∀ w ∈ s, ‖fderiv ℝ g w‖ ≤ ε := by
+    intro w hw
+    rw [hD]
+    exact hε w hw
+  have hmvt : ‖g (z + h • v) - g z‖ ≤ ε * ‖(z + h • v) - z‖ :=
+    (convex_closedBall z (|h| * ‖v‖)).norm_image_sub_le_of_norm_fderiv_le
+      (fun w _ => hg' w) hbound hstart hend
+  have hrewrite :
+      h⁻¹ • (f (z + h • v) - f z) - fderiv ℝ f z v =
+        h⁻¹ • (g (z + h • v) - g z) := by
+    dsimp [g, D]
+    rw [map_add, map_smul]
+    simp only [smul_sub, smul_add, smul_smul]
+    have hinv : h⁻¹ * h = 1 := inv_mul_cancel₀ hh
+    rw [hinv, one_smul]
+    module
+  rw [hrewrite, norm_smul, Real.norm_eq_abs]
+  calc
+    |h⁻¹| * ‖g (z + h • v) - g z‖ ≤
+        |h⁻¹| * (ε * ‖(z + h • v) - z‖) :=
+      mul_le_mul_of_nonneg_left hmvt (abs_nonneg _)
+    _ = ε * ‖v‖ := by
+      rw [add_sub_cancel_left, norm_smul, Real.norm_eq_abs, abs_inv]
+      field_simp [abs_ne_zero.mpr hh]
 
 lemma tft_translate_bcf_difference_quotient_aux_uniform
     (f : E → F) (hf : ContDiff ℝ 1 f) (hfc : HasCompactSupport f) (x v : E) :
