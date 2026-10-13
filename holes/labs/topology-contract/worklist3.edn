@@ -36115,71 +36115,62 @@
   {:consumer :t93J03,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 2,
+   :stop-count 3,
    :review-finding
    "Program STOP commits nothing new since the prior reviewed attempt: it reuses commit 512a220f, and git history shows no later scoped commit. The unresolved SemilocallySimplyConnected hypothesis-coverage conflict is unchanged. Obtain the required owner specification decision or commit a new compiled milestone before resubmitting.",
    :evidence
    {:placeholder-delta {:t93J03 [1 1]},
-    :residual
-    "Prove polygon van Kampen normal-closure quotient; then C1, C2/Main.",
+    :residual "Prove van Kampen; compose C1, then C2/Main.",
     :outcome :stop,
     :warnings ["unused SLSC owner-approved"],
     :missing-theorems
-    [{:name "kleinRelator_generatorChange_eq_one_iff",
-      :type "a=x*y,b=y^-1 identifies Klein relator with aabb",
+    [{:name "kleinPolygonPresentedGroupEquiv",
+      :type "PresentedGroup(aabb) equiv frozen Klein group",
       :status :proved,
+      :consumers [:t93J03],
+      :depends-on ["kleinRelator_generatorChange_eq_one_iff"],
+      :area "covering-subgroup-correspondence"}
+     {:name "t93J03_polygon_van_kampen",
+      :type "polygon pi1 equals PresentedGroup(aabb)",
+      :status :partial,
       :consumers [:t93J03],
       :depends-on ["kleinPolygon_attaching_arcs"],
       :area "covering-subgroup-correspondence"}
-     {:name "t93J03_polygon_van_kampen",
-      :type "polygon pi1 has Klein presentation",
+     {:name "t93J03_kleinBottle_pi1_every_basepoint",
+      :type "pi1 equiv every point",
       :status :partial,
       :consumers [:t93J03],
       :depends-on
-      ["kleinPolygon_attaching_arcs"
-       "kleinRelator_generatorChange_eq_one_iff"],
-      :area "covering-subgroup-correspondence"}
-     {:name "t93J03_kleinBottle_pi1_every_basepoint",
-      :type "pi1 equivalence every point",
-      :status :partial,
-      :consumers [:t93J03],
-      :depends-on ["t93J03_polygon_van_kampen"],
+      ["t93J03_polygon_van_kampen" "kleinPolygonPresentedGroupEquiv"],
       :area "covering-subgroup-correspondence"}],
     :statement-hashes {:registry "166/166"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Committed generator change equating aabb with the frozen Klein relator; topological van Kampen quotient remains.",
+    "Committed aabb presentation equivalence; van Kampen remains.",
     :commands
     [{:cmd "lake build ConstructionTargets.t93J03Closure", :exit 0}
-     {:cmd "lake env lean relator fixture", :exit 0}
-     {:cmd "statement-registry check; placeholder; diff", :exit 0}
-     {:cmd "rg forbidden closure", :exit 1, :expected-exit 1}
-     {:cmd "git commit; show --check", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1791931172343-10744-bea6b975",
-     :commands
-     ["git show/diff 3e08de9d; scope/algebra review"
-      "sha256sum fixture; show --check; placeholder recount"
-      "lake build ConstructionTargets.t93J03Closure; lean fixture"
-      "statement-registry check"],
-     :finding
-     "PASS. Commit 3e08de9d adds compiled, sorry-free standard-axiom progress after 16c5ec32: under a=x*y and b=y^-1, the exact frozen relator b^-1*a*b*a is proved conjugate to the polygon word x*x*y*y, and equality to one is equivalent in every group. Fixture hash matches; registry 166/166; Main placeholder 1->1. The topological van Kampen quotient, C1, C2, and Main remain listed. SemilocallySimplyConnected X is unused, mandated by problem.md."},
-    :commit "3e08de9de0a5d677abbf695732c2eabb8a6fe0a9",
+     {:cmd "lean presentation fixture", :exit 0}
+     {:cmd "registry; placeholder; diff", :exit 0}
+     {:cmd "rg forbidden", :exit 1, :expected-exit 1}
+     {:cmd "commit; show --check", :exit 0}],
+    :diagnostic-history
+    [{:cmd "lake build closure",
+      :exit 1,
+      :correction "exposed relations/maps"}],
+    :commit "ca72d69cb5ebe9fa284de91ef921687e1a909b0a",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
      "ConstructionTargets/t93J03Closure.blueprint.md"],
     :fixture
-    {:path "/tmp/t93j03_relator_change_check.lean",
+    {:path "/tmp/t93j03_polygon_presentation_check.lean",
      :sha256
-     "9f247ef4bc704691b0ceefe5b4c7fe68c183a2c058a905ed6a055f6e3b4a5017",
+     "5dffe4489d0a83b2969cae9dcbba3c439239a4964de10f10251dec05a456b27e",
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -36468,7 +36459,8 @@
    :kind :lemma,
    :depends-on
    [:lemma-t93j03-square-disk-quotient-homeomorph
-    :lemma-t93j03-polygon-van-kampen],
+    :lemma-t93j03-polygon-van-kampen
+    :lemma-kleinpolygonpresentedgroupequiv],
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
@@ -37703,6 +37695,23 @@
    :id :lemma-kleinrelator-generatorchange-eq-one-iff,
    :kind :lemma,
    :depends-on [:lemma-kleinpolygon-attaching-arcs],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "kleinPolygonPresentedGroupEquiv",
+    :type "PresentedGroup(aabb) equiv frozen Klein group"},
+   :lemma
+   {:name "kleinPolygonPresentedGroupEquiv",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type "PresentedGroup(aabb) equiv frozen Klein group",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03},
+   :id :lemma-kleinpolygonpresentedgroupequiv,
+   :kind :lemma,
+   :depends-on [:lemma-kleinrelator-generatorchange-eq-one-iff],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
