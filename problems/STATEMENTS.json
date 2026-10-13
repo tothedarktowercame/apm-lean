@@ -798,6 +798,26 @@
    "rev": "56de913a",
    "approved_at": "2026-09-28T00:17:27Z"
   },
+  "t01J05": {
+   "decls": [
+    "apm_t01j05"
+   ],
+   "sha256": "76a14db50e008b92b9d3c6c5362b68301ee8a3ee7195514cbd74bb541741db9e",
+   "defs": [
+    "apm_t01J05_Euclidean",
+    "apm_t01J05_H",
+    "apm_t01J05_IsOrientation",
+    "apm_t01J05_Model",
+    "apm_t01J05_OneForm",
+    "apm_t01J05_eulerCharacteristic"
+   ],
+   "grade": "faithful",
+   "grader": "claude-14 outside grader (read-only Claude subagent, 2026-10-13, repair batch 1; correction)",
+   "evidence": "holes/labs/statement-registry/repair-grades-1.md",
+   "prelim_defect": null,
+   "rev": "a7dd67d58",
+   "approved_at": "2026-10-13T20:33:44Z"
+  },
   "t02A01": {
    "decls": [
     "apm_t02a01"
@@ -1004,6 +1024,28 @@
    "prelim_defect": null,
    "rev": "e095da7f",
    "approved_at": "2026-09-28T00:25:37Z"
+  },
+  "t03J05": {
+   "decls": [
+    "apm_t03j05"
+   ],
+   "sha256": "19321a58afcb2735353558a4006ec58f7628a874387076eaf2228c178db99071",
+   "defs": [
+    "apm_t03J05_E2",
+    "apm_t03J05_GenusTwoSurface",
+    "apm_t03J05_IsSingleTransverseCrossing",
+    "apm_t03J05_Torus",
+    "apm_t03J05_imageIntersection",
+    "apm_t03J05_productTorusMap",
+    "apm_t03J05_punctured",
+    "apm_t03J05_unpunctureCurve"
+   ],
+   "grade": "faithful",
+   "grader": "claude-14 outside grader (read-only Claude subagent, 2026-10-13, repair batch 1; correction)",
+   "evidence": "holes/labs/statement-registry/repair-grades-1.md",
+   "prelim_defect": null,
+   "rev": "a7dd67d58",
+   "approved_at": "2026-10-13T20:33:44Z"
   },
   "t03J06": {
    "decls": [
@@ -1437,6 +1479,31 @@
    "rev": "56de913a",
    "approved_at": "2026-09-28T00:17:27Z"
   },
+  "t93A03": {
+   "decls": [
+    "apm_t93a03"
+   ],
+   "sha256": "30fc6ba441dc5e2ead95bd11b9be82f408d4c3e7cd87e476463f19ddb2669941",
+   "defs": [
+    "T93A03Boundary",
+    "T93A03CollarBall",
+    "T93A03ConnectedSum",
+    "T93A03ConnectedSumRel",
+    "T93A03Disk",
+    "T93A03E3",
+    "T93A03Punctured",
+    "T93A03Sphere2",
+    "T93A03Summand",
+    "t93A03BoundaryInDisk",
+    "t93A03DiskInCollarBall"
+   ],
+   "grade": "faithful",
+   "grader": "claude-14 outside grader (read-only Claude subagent, 2026-10-13, repair batch 1; correction)",
+   "evidence": "holes/labs/statement-registry/repair-grades-1.md",
+   "prelim_defect": null,
+   "rev": "a7dd67d58",
+   "approved_at": "2026-10-13T20:33:44Z"
+  },
   "t93A04": {
    "decls": [
     "apm_t93a04"
@@ -1621,6 +1688,26 @@
    "prelim_defect": null,
    "rev": "56de913a",
    "approved_at": "2026-09-28T00:17:27Z"
+  },
+  "t94A06": {
+   "decls": [
+    "apm_t94a06"
+   ],
+   "sha256": "41e524561595f5df04a229a421981a9d1d66164013553094e2e2c16f58b08bfe",
+   "defs": [
+    "apm_t94a06_E2",
+    "apm_t94a06_E3",
+    "apm_t94a06_IsTransverseToZAxis",
+    "apm_t94a06_family",
+    "apm_t94a06_normalTranslation",
+    "apm_t94a06_zAxis"
+   ],
+   "grade": "faithful",
+   "grader": "claude-14 outside grader (read-only Claude subagent, 2026-10-13, repair batch 1; correction)",
+   "evidence": "holes/labs/statement-registry/repair-grades-1.md",
+   "prelim_defect": null,
+   "rev": "a7dd67d58",
+   "approved_at": "2026-10-13T20:33:44Z"
   },
   "t94A07": {
    "decls": [
@@ -1987,6 +2074,28 @@
    "prelim_defect": null,
    "rev": "56de913a",
    "approved_at": "2026-09-28T00:17:28Z"
+  },
+  "t95J05": {
+   "decls": [
+    "apm_t95j05"
+   ],
+   "sha256": "a7ccfcdb6e6bb31f50d56ced8d64dc404bbb20875804a8eacca93b245fc5525d",
+   "defs": [
+    "T95J05ProjectiveThreeForm",
+    "t95J05Antipode",
+    "t95J05InclusionPullback",
+    "t95J05Integral",
+    "t95J05Omega",
+    "t95J05ProjectionPullback",
+    "t95J05R4",
+    "t95J05SphereThree"
+   ],
+   "grade": "faithful",
+   "grader": "claude-14 outside grader (read-only Claude subagent, 2026-10-13, repair batch 1; correction)",
+   "evidence": "holes/labs/statement-registry/repair-grades-1.md",
+   "prelim_defect": null,
+   "rev": "a7dd67d58",
+   "approved_at": "2026-10-13T20:33:44Z"
   },
   "t95J06": {
    "decls": [
