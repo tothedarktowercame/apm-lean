@@ -113850,14 +113850,14 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 6,
+   :stop-count 7,
    :review-finding
    "Recorded fixture hash mismatch: :fixture.sha256 is 0bca6ce32c019fc3053c7f813c26917169cf817375b44d5e722b864b61a526450c1, but ConstructionTargets/PointWedgeVanKampen.blueprint.md at recorded commit c9b3af27 has exact SHA-256 0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0. Re-record the fixture hash for the reviewed commit.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
    :evidence
    {:placeholder-delta {:source-before 0, :source-after 0},
     :residual
-    "Use the witness to type mapped unitInv cancellation; then projection/inl/B6/B12.",
+    "Both transport witnesses fixed; type mapped unitInv cancellation, then projection/inl/B6/B12.",
     :outcome :stop,
     :warnings ["existing linter"],
     :missing-theorems
@@ -113871,9 +113871,9 @@
       :area "fundamental-group-wedge-of-circles"}],
     :statement-hashes
     {:source
-     "d6180bd982b72e0189ffd12192e39be5adae65fe5e8ed329055d05bdf1694438",
+     "425714402bf53c6114554fb1bd9ba3a8eb9164dcde372c77c4c27d2f913989d0",
      :documentation
-     "5454b32322f55a3c4c6e0725175bd7b2537f497653398ae130ea0a7fa1206047",
+     "fe2f0be8c3d40bbd6b72f62d634cbe8c320cff2f58017072e7703707e2b78f5e",
      :blueprint
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0",
      :registry "150/150"},
@@ -113881,7 +113881,7 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
     :reason
-    "Endpoint equality witness is the canonical symmetric right-base equality.",
+    "Target equality witness is the symmetric named round-trip source equality.",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/PointWedgeVanKampen.lean",
@@ -113891,25 +113891,14 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "sha256/diff/placeholders", :exit 0}],
     :diagnostic-history
-    [{:cmd "direct cancellation draft",
+    [{:cmd "lake build draft",
       :exit 1,
-      :finding "Dependent identity needed; removed."}
+      :finding "Redundant tactic and omit order corrected."}
      {:cmd
       "lake build ConstructionTargets.ThreeCirclesFundamentalGroup",
       :exit 1,
       :finding "B12 absent."}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1791917000559-10213-b0925303",
-     :commands
-     ["git show/diff-tree a77a664a2"
-      "git archive a77a664a2; lake env lean archived PointWedgeVanKampen.lean"
-      "lake build ConstructionTargets.PointWedgeVanKampen"
-      "sha256sum; placeholder delta; statement-registry.py check"],
-     :finding
-     "Recorded scope is target+note; source/doc/fixture hashes match d6180bd9/5454b323/0bca6ce3. Archived and target builds pass; placeholders 0->0, registry 150/150, standard axioms only. Both equality witnesses prove the same symmetric right-base endpoint proposition, so proof irrelevance correctly identifies them; this resolves the dependent identity needed for cancellation. New compiled progress is present; mapped unitInv normalization, projection/B6/B12 remain."},
-    :commit "a77a664a2b9a01d91ceebe9575386a9ecbf1417c",
+    :commit "83592e22eaa639b3c0448a740f057a933f142b54",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
      "ConstructionTargets/PointWedgeVanKampen.md"],
@@ -113919,7 +113908,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
