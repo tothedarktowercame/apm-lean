@@ -653,7 +653,23 @@ lemma apm_t94a08_branches_closed :
 lemma apm_t94a08_branches_inter :
     apm_t94a08_sigma2BranchPlus ∩ apm_t94a08_sigma2BranchMinus ⊆
       {apm_t94a08_node} := by
-  sorry
+  intro p hp
+  rcases hp with ⟨hplus, hminus⟩
+  change p.rep 1 + Complex.I * p.rep 2 = 0 at hplus
+  change p.rep 1 - Complex.I * p.rep 2 = 0 at hminus
+  have h1 : p.rep 1 = 0 := by
+    linear_combination (hplus + hminus) / 2
+  have h2 : p.rep 2 = 0 := by
+    have hI : Complex.I * p.rep 2 = 0 := by
+      linear_combination (hplus - hminus) / 2
+    exact (mul_eq_zero.mp hI).resolve_left Complex.I_ne_zero
+  rw [mem_singleton_iff, ← Projectivization.mk_rep p]
+  unfold apm_t94a08_node
+  apply (Projectivization.mk_eq_mk_iff' ℂ _ _
+    (Projectivization.rep_nonzero p) apm_t94a08_e0_ne_zero).2
+  refine ⟨p.rep 0, ?_⟩
+  funext i
+  fin_cases i <;> simp [h1, h2]
 -- END SEAT AREA
 
 /-- Seat: every open neighbourhood of the node contains other points of each
