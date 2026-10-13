@@ -653,7 +653,32 @@ theorem apm_m99A01_stationary_of_eqOn_extremal
     (y : ℝ → ℝ) (hy2 : ContDiff ℝ 2 y) (hyadm : y ∈ apm_m99A01_admissible)
     (heq : Set.EqOn y apm_m99A01_extremal (Set.Icc 0 (Real.pi / 2))) :
     apm_m99A01_stationary y := by
-  sorry
+  intro η hη hη0 hηpi
+  have hfun : (fun s ↦ apm_m99A01_functional (fun t ↦ y t + s * η t)) =
+      fun s ↦ apm_m99A01_functional
+        (fun t ↦ apm_m99A01_extremal t + s * η t) := by
+    funext s
+    unfold apm_m99A01_functional
+    apply intervalIntegral.integral_congr_ae
+    have hne : ∀ᵐ t ∂MeasureTheory.volume, t ≠ Real.pi / 2 := by
+      rw [MeasureTheory.ae_iff]
+      simp
+    filter_upwards [hne] with t htne
+    intro ht
+    have htI : t ∈ Set.Ioc (0 : ℝ) (Real.pi / 2) := by
+      simpa [Set.uIoc_of_le (by positivity : (0 : ℝ) ≤ Real.pi / 2)] using ht
+    have ht' : t ∈ Set.Ioo (0 : ℝ) (Real.pi / 2) :=
+      ⟨htI.1, lt_of_le_of_ne htI.2 htne⟩
+    have hlocal : (fun z ↦ y z + s * η z) =ᶠ[nhds t]
+        (fun z ↦ apm_m99A01_extremal z + s * η z) := by
+      filter_upwards [Ioo_mem_nhds ht'.1 ht'.2] with z hz
+      rw [heq ⟨hz.1.le, hz.2.le⟩]
+    have hderiv := hlocal.deriv_eq
+    have hval := hlocal.self_of_nhds
+    change y t + s * η t = apm_m99A01_extremal t + s * η t at hval
+    rw [hderiv, hval]
+  rw [hfun]
+  exact apm_m99A01_extremal_stationary η hη hη0 hηpi
 -- END SEAT AREA
 
 theorem apm_m99a01 :
