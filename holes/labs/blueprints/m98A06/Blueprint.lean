@@ -2757,7 +2757,16 @@ lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_forward_aux
   simpa [uIcc_of_le Real.pi_pos.le] using
     intervalIntegral.continuousOn_primitive_interval hi
 
-lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_forward_aux_rigidity_aux_pointwise_aux_representation_aux_regular_aux_ae_constant
+lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_forward_aux_rigidity_aux_pointwise_aux_representation_aux_regular_aux_ae_constant_aux_primitive_continuous
+    (y dy : ℝ → ℝ) (h : apm_m98a06_InH10Pi y dy) :
+    ContinuousOn (fun x ↦ ∫ t in (0 : ℝ)..x, y t) (Icc 0 Real.pi) := by
+  have hi : IntegrableOn y (uIcc (0 : ℝ) Real.pi) := by
+    rw [uIcc_of_le Real.pi_pos.le]
+    exact h.1.integrableOn_Icc
+  simpa [uIcc_of_le Real.pi_pos.le] using
+    (intervalIntegral.continuousOn_primitive_interval hi)
+
+lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_forward_aux_rigidity_aux_pointwise_aux_representation_aux_regular_aux_ae_constant_aux_core
     (y dy : ℝ → ℝ) (h : apm_m98a06_InH10Pi y dy)
     (hEL : ∀ φ : ℝ → ℝ, ContDiff ℝ ∞ φ → HasCompactSupport φ →
       Function.support φ ⊆ Ioo (0 : ℝ) Real.pi →
@@ -2766,6 +2775,18 @@ lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_forward_aux
     ∃ m : ℝ, dy =ᵐ[volume.restrict (Ioo (0 : ℝ) Real.pi)]
       fun x => m - ∫ t in (0 : ℝ)..x, y t := by
   sorry
+
+lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_forward_aux_rigidity_aux_pointwise_aux_representation_aux_regular_aux_ae_constant
+    (y dy : ℝ → ℝ) (h : apm_m98a06_InH10Pi y dy)
+    (hEL : ∀ φ : ℝ → ℝ, ContDiff ℝ ∞ φ → HasCompactSupport φ →
+      Function.support φ ⊆ Ioo (0 : ℝ) Real.pi →
+      (∫ x, dy x * deriv φ x ∂(volume.restrict (Ioo (0 : ℝ) Real.pi))) =
+        ∫ x, y x * φ x ∂(volume.restrict (Ioo (0 : ℝ) Real.pi))) :
+    ∃ m : ℝ, dy =ᵐ[volume.restrict (Ioo (0 : ℝ) Real.pi)]
+      fun x => m - ∫ t in (0 : ℝ)..x, y t := by
+  exact
+    apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_forward_aux_rigidity_aux_pointwise_aux_representation_aux_regular_aux_ae_constant_aux_core
+      y dy h hEL
 
 lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_forward_aux_rigidity_aux_pointwise_aux_representation_aux_regular_aux_finish_aux_Y
     (y : ℝ → ℝ) (hy : ContinuousOn y (Icc (0 : ℝ) Real.pi)) :
