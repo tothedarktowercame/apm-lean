@@ -753,3 +753,27 @@ lemma apm_t94a08_open_inter_puncturedAffineCross_not_isPreconnected
     exact ⟨Or.inl hpPlus, by simpa using hp0⟩
   · refine ⟨zm, ⟨hmV, ?_⟩, hmMinus, hmNotPlus⟩
     exact ⟨Or.inr hmMinus, by simpa using hm0⟩
+
+def apm_t94a08_zeroChartImage (U : Set apm_t94a08_CP2) : Set (ℂ × ℂ) :=
+  apm_t94a08_zeroChartHomeomorph ''
+    {p : ↑{q : apm_t94a08_CP2 | Projectivization.rep q (0 : Fin 3) ≠ 0} |
+      p.1 ∈ U}
+
+lemma apm_t94a08_zeroChartImage_isOpen (U : Set apm_t94a08_CP2)
+    (hU : IsOpen U) : IsOpen (apm_t94a08_zeroChartImage U) := by
+  apply apm_t94a08_zeroChartHomeomorph.isOpenMap
+  exact hU.preimage continuous_subtype_val
+
+lemma apm_t94a08_zeroChartImage_mem_zero (U : Set apm_t94a08_CP2)
+    (hnode : apm_t94a08_node ∈ U) : (0, 0) ∈ apm_t94a08_zeroChartImage U := by
+  refine ⟨⟨apm_t94a08_node, apm_t94a08_node_mem_zeroChart⟩, hnode, ?_⟩
+  exact apm_t94a08_zeroChartHomeomorph_node
+
+lemma apm_t94a08_zeroChartImage_inter_puncturedCross_not_isPreconnected
+    (U : Set apm_t94a08_CP2) (hU : IsOpen U)
+    (hnode : apm_t94a08_node ∈ U) :
+    ¬ IsPreconnected
+      (apm_t94a08_zeroChartImage U ∩ apm_t94a08_puncturedAffineCross) :=
+  apm_t94a08_open_inter_puncturedAffineCross_not_isPreconnected _
+    (apm_t94a08_zeroChartImage_isOpen U hU)
+    (apm_t94a08_zeroChartImage_mem_zero U hnode)
