@@ -594,12 +594,69 @@ lemma apm_b96a01_part_d_abelian_aux_representation_aux_dim_bound
 /-- `GLₙ(F_p)` has an element of every prime order `ℓ` with `ℓ - 1 ≤ n`, except
 `n = 1, p = 2` (a unipotent Jordan block if `ℓ = p`, a companion matrix of a factor of
 `Φ_ℓ` over `F_p` padded by the identity otherwise). -/
+lemma apm_b96a01_part_d_abelian_aux_representation_aux_element_aux_card
+    (n : Type*) [Fintype n] [DecidableEq n] (p : ℕ) (hp : p.Prime) :
+    Nat.card (Matrix.GeneralLinearGroup n (ZMod p)) =
+      ∏ i : Fin (Fintype.card n),
+        (p ^ Fintype.card n - p ^ (i : ℕ)) := by
+  letI : Fact p.Prime := ⟨hp⟩
+  let e := Fintype.equivFin n
+  let A := Matrix.reindexAlgEquiv (ZMod p) (ZMod p) e
+  let E : Matrix n n (ZMod p) ≃* Matrix (Fin (Fintype.card n))
+      (Fin (Fintype.card n)) (ZMod p) :=
+    { A.toEquiv with map_mul' := A.map_mul }
+  rw [Nat.card_congr (Units.mapEquiv E).toEquiv]
+  simpa [ZMod.card] using
+    (Matrix.card_GL_field (𝔽 := ZMod p) (Fintype.card n))
+
+lemma apm_b96a01_part_d_abelian_aux_representation_aux_element_aux_dvd
+    (n : Type*) [Fintype n] [DecidableEq n] (p : ℕ) (hp : p.Prime)
+    (hex : ¬(Fintype.card n = 1 ∧ p = 2)) (ℓ : ℕ) (hℓ : ℓ.Prime)
+    (hdim : ℓ - 1 ≤ Fintype.card n) :
+    ℓ ∣ Nat.card (Matrix.GeneralLinearGroup n (ZMod p)) := by
+  rw [apm_b96a01_part_d_abelian_aux_representation_aux_element_aux_card n p hp]
+  set N := Fintype.card n with hN
+  have hℓ2 := hℓ.two_le
+  have hp2 := hp.two_le
+  suffices h : ∃ i : Fin N, ℓ ∣ p ^ N - p ^ (i : ℕ) by
+    obtain ⟨i, hi⟩ := h
+    exact hi.trans (Finset.dvd_prod_of_mem _ (Finset.mem_univ i))
+  by_cases hlp : ℓ = p
+  · subst hlp
+    have hN2 : 2 ≤ N := by
+      by_contra hc
+      have hN1 : N = 1 := by omega
+      exact hex ⟨hN1, by omega⟩
+    refine ⟨⟨1, by omega⟩, ?_⟩
+    simp only
+    exact Nat.dvd_sub (dvd_pow_self ℓ (by omega)) (by simp)
+  · have hi : N - (ℓ - 1) < N := by omega
+    refine ⟨⟨N - (ℓ - 1), hi⟩, ?_⟩
+    simp only
+    have hsplit : p ^ N - p ^ (N - (ℓ - 1)) = p ^ (N - (ℓ - 1)) * (p ^ (ℓ - 1) - 1) := by
+      rw [Nat.mul_sub, mul_one, ← pow_add, Nat.sub_add_cancel hdim]
+    rw [hsplit]
+    apply Dvd.dvd.mul_left
+    haveI : Fact ℓ.Prime := ⟨hℓ⟩
+    have hpℓ : (p : ZMod ℓ) ≠ 0 := by
+      rw [Ne, ZMod.natCast_eq_zero_iff]
+      intro hd
+      exact hlp ((Nat.prime_dvd_prime_iff_eq hℓ hp).1 hd)
+    rw [← ZMod.natCast_eq_zero_iff, Nat.cast_sub (Nat.one_le_pow _ _ (by omega)),
+      Nat.cast_pow, Nat.cast_one, ZMod.pow_card_sub_one_eq_one hpℓ, sub_self]
+
 lemma apm_b96a01_part_d_abelian_aux_representation_aux_element
     (n : Type*) [Fintype n] [DecidableEq n] (p : ℕ) (hp : p.Prime)
     (hex : ¬(Fintype.card n = 1 ∧ p = 2)) (ℓ : ℕ) (hℓ : ℓ.Prime)
     (hdim : ℓ - 1 ≤ Fintype.card n) :
     ∃ x : Matrix.GeneralLinearGroup n (ZMod p), orderOf x = ℓ := by
-  sorry
+  letI : Fact ℓ.Prime := ⟨hℓ⟩
+  letI : Fact p.Prime := ⟨hp⟩
+  letI := Fintype.ofFinite (Matrix.GeneralLinearGroup n (ZMod p))
+  exact exists_prime_orderOf_dvd_card ℓ (by
+    rw [Fintype.card_eq_nat_card]
+    exact apm_b96a01_part_d_abelian_aux_representation_aux_element_aux_dvd
+      n p hp hex ℓ hℓ hdim)
 
 /-- A group of prime order embeds wherever there is an element of that order. -/
 lemma apm_b96a01_part_d_abelian_aux_representation_aux_embed
