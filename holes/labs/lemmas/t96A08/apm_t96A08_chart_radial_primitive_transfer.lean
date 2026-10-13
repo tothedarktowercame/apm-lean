@@ -324,6 +324,9 @@ lemma apm_t96A08_chart_radial_primitive_coordinate_formula
     ∃ omegaCoord : E → (E →L[ℝ] ℝ),
       ContDiffOn ℝ (⊤ : WithTop ℕ∞) omegaCoord
         (W ∩ Set.range (I : E → E)) ∧
+      omegaCoord (extChartAt I x x) = (omega x).comp
+        (mfderivWithin 𝓘(ℝ, E) I (extChartAt I x).symm (Set.range I)
+          (extChartAt I x x)) ∧
       ∀ (z : M) (delta : ℝ → M),
         (∀ t ∈ Set.Icc (0 : ℝ) 1, delta t ∈ (extChartAt I x).source) →
         ContMDiffOn 𝓘(ℝ, ℝ) I (⊤ : WithTop ℕ∞) delta (Set.Icc (0 : ℝ) 1) →
@@ -380,6 +383,9 @@ lemma apm_t96A08_chart_radial_primitive_transfer
       ∃ omegaCoord : E → (E →L[ℝ] ℝ),
         ContDiffOn ℝ (⊤ : WithTop ℕ∞) omegaCoord
           (W ∩ Set.range (I : E → E)) ∧
+        omegaCoord (extChartAt I x x) = (omega x).comp
+          (mfderivWithin 𝓘(ℝ, E) I (extChartAt I x).symm (Set.range I)
+            (extChartAt I x x)) ∧
         ∀ (z : M) (delta : ℝ → M),
           (∀ t ∈ Set.Icc (0 : ℝ) 1, delta t ∈ (extChartAt I x).source) →
           ContMDiffOn 𝓘(ℝ, ℝ) I (⊤ : WithTop ℕ∞) delta (Set.Icc (0 : ℝ) 1) →
