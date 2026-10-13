@@ -212,12 +212,101 @@ theorem apm_t96A08_concat_piecewiseSmooth
         norm_num [apm_t96A08_concat, hend]
       · simp only [apm_t96A08_concat, if_neg hp, Function.comp_apply]
 
-/-- Seat: the line integral is additive under concatenation.  On `(0, 1/2)` the
-manifold chain rule gives `mfderiv (concat) t 1 = 2 • mfderiv gamma (2 t) 1`
-(similarly on `(1/2, 1)`); the endpoints are null.  Integrability on each closed
-smooth piece comes from `homega_smooth` (continuous integrand, bounded on compact
-pieces); then substitute `s = 2 t` and `s = 2 t - 1`
-(`intervalIntegral.integral_comp_mul_left`, `integral_add_adjacent_intervals`). -/
+lemma apm_t96A08_concat_lineIntegral_aux_left_substitution (f : ℝ → ℝ) :
+    (∫ t : ℝ in (0 : ℝ)..(1 / 2 : ℝ), (2 : ℝ) * f (2 * t)) =
+      ∫ s : ℝ in (0 : ℝ)..1, f s := by
+  rw [intervalIntegral.integral_const_mul]
+  change (2 : ℝ) • (∫ t : ℝ in (0 : ℝ)..(1 / 2 : ℝ), f (2 * t)) = _
+  rw [intervalIntegral.smul_integral_comp_mul_left]
+  norm_num
+
+lemma apm_t96A08_concat_lineIntegral_aux_right_substitution (f : ℝ → ℝ) :
+    (∫ t : ℝ in (1 / 2 : ℝ)..1, (2 : ℝ) * f (2 * t - 1)) =
+      ∫ s : ℝ in (0 : ℝ)..1, f s := by
+  rw [intervalIntegral.integral_const_mul]
+  change (2 : ℝ) • (∫ t : ℝ in (1 / 2 : ℝ)..1, f (2 * t - 1)) = _
+  rw [intervalIntegral.smul_integral_comp_mul_left
+    (f := fun s : ℝ ↦ f (s - 1))]
+  rw [intervalIntegral.integral_comp_sub_right]
+  norm_num
+
+/-- Seat: the line-integral integrand of a repaired piecewise-smooth path is
+interval integrable on `[0, 1]` (on each closed smooth piece the derivative
+within the piece is continuous and agrees with `mfderiv` in the interior; the
+cut points are null; `homega_smooth` makes the integrand continuous there). -/
+theorem apm_t96A08_lineIntegrand_intervalIntegrable
+    {E M : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [CompleteSpace E] [TopologicalSpace M]
+    (I : ModelWithCorners ℝ E E) [ChartedSpace E M]
+    [IsManifold I (⊤ : WithTop ℕ∞) M]
+    (omega : ∀ p : M, TangentSpace I p →L[ℝ] ℝ)
+    (homega_smooth : ContMDiff I.tangent 𝓘(ℝ, ℝ) (⊤ : WithTop ℕ∞)
+      (fun v : TangentBundle I M => omega v.1 v.2))
+    (gamma : ℝ → M) (hgamma : apm_t96a08_IsPiecewiseSmoothPath I gamma) :
+    IntervalIntegrable
+      (fun t : ℝ => omega (gamma t) ((mfderiv 𝓘(ℝ, ℝ) I gamma t) 1))
+      MeasureTheory.volume 0 1 := by
+  sorry
+
+/-- Seat: on `(0, 1/2)` the concatenation agrees with `gamma (2 ·)` near `t`,
+so the chain rule doubles the velocity (both sides vanish where `gamma` is not
+differentiable). -/
+theorem apm_t96A08_concat_integrand_left
+    {E M : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [CompleteSpace E] [TopologicalSpace M]
+    (I : ModelWithCorners ℝ E E) [ChartedSpace E M]
+    [IsManifold I (⊤ : WithTop ℕ∞) M]
+    (omega : ∀ p : M, TangentSpace I p →L[ℝ] ℝ)
+    (gamma delta : ℝ → M) (t : ℝ) (ht : t ∈ Set.Ioo (0 : ℝ) (1 / 2)) :
+    omega (apm_t96A08_concat gamma delta t)
+        ((mfderiv 𝓘(ℝ, ℝ) I (apm_t96A08_concat gamma delta) t) 1) =
+      2 * omega (gamma (2 * t)) ((mfderiv 𝓘(ℝ, ℝ) I gamma (2 * t)) 1) := by
+  sorry
+
+/-- Seat: on `(1/2, 1)` the concatenation agrees with `delta (2 · - 1)` near `t`. -/
+theorem apm_t96A08_concat_integrand_right
+    {E M : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [CompleteSpace E] [TopologicalSpace M]
+    (I : ModelWithCorners ℝ E E) [ChartedSpace E M]
+    [IsManifold I (⊤ : WithTop ℕ∞) M]
+    (omega : ∀ p : M, TangentSpace I p →L[ℝ] ℝ)
+    (gamma delta : ℝ → M) (t : ℝ) (ht : t ∈ Set.Ioo (1 / 2 : ℝ) 1) :
+    omega (apm_t96A08_concat gamma delta t)
+        ((mfderiv 𝓘(ℝ, ℝ) I (apm_t96A08_concat gamma delta) t) 1) =
+      2 * omega (delta (2 * t - 1)) ((mfderiv 𝓘(ℝ, ℝ) I delta (2 * t - 1)) 1) := by
+  sorry
+
+/-- Seat (assembly from explicit hypotheses): split `∫₀¹` at `1/2`, replace the
+integrand a.e. on each half (`intervalIntegral.integral_congr_ae`, endpoints
+null), and apply the two substitution helpers above.  Integrability of each half
+follows from `hγ`, `hδ` through the same a.e. identities. -/
+theorem apm_t96A08_concat_lineIntegral_of_pieces
+    {E M : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [CompleteSpace E] [TopologicalSpace M]
+    (I : ModelWithCorners ℝ E E) [ChartedSpace E M]
+    [IsManifold I (⊤ : WithTop ℕ∞) M]
+    (omega : ∀ p : M, TangentSpace I p →L[ℝ] ℝ)
+    (gamma delta : ℝ → M)
+    (hγ : IntervalIntegrable
+      (fun t : ℝ => omega (gamma t) ((mfderiv 𝓘(ℝ, ℝ) I gamma t) 1))
+      MeasureTheory.volume 0 1)
+    (hδ : IntervalIntegrable
+      (fun t : ℝ => omega (delta t) ((mfderiv 𝓘(ℝ, ℝ) I delta t) 1))
+      MeasureTheory.volume 0 1)
+    (hleft : ∀ t ∈ Set.Ioo (0 : ℝ) (1 / 2),
+      omega (apm_t96A08_concat gamma delta t)
+          ((mfderiv 𝓘(ℝ, ℝ) I (apm_t96A08_concat gamma delta) t) 1) =
+        2 * omega (gamma (2 * t)) ((mfderiv 𝓘(ℝ, ℝ) I gamma (2 * t)) 1))
+    (hright : ∀ t ∈ Set.Ioo (1 / 2 : ℝ) 1,
+      omega (apm_t96A08_concat gamma delta t)
+          ((mfderiv 𝓘(ℝ, ℝ) I (apm_t96A08_concat gamma delta) t) 1) =
+        2 * omega (delta (2 * t - 1)) ((mfderiv 𝓘(ℝ, ℝ) I delta (2 * t - 1)) 1)) :
+    apm_t96a08_LineIntegral I omega (apm_t96A08_concat gamma delta) =
+      apm_t96a08_LineIntegral I omega gamma +
+        apm_t96a08_LineIntegral I omega delta := by
+  sorry
+
+/-- The line integral is additive under concatenation (assembly). -/
 theorem apm_t96A08_concat_lineIntegral
     {E M : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
     [CompleteSpace E] [TopologicalSpace M]
@@ -232,8 +321,12 @@ theorem apm_t96A08_concat_lineIntegral
     (hend : gamma 1 = delta 0) :
     apm_t96a08_LineIntegral I omega (apm_t96A08_concat gamma delta) =
       apm_t96a08_LineIntegral I omega gamma +
-        apm_t96a08_LineIntegral I omega delta := by
-  sorry
+        apm_t96a08_LineIntegral I omega delta :=
+  apm_t96A08_concat_lineIntegral_of_pieces I omega gamma delta
+    (apm_t96A08_lineIntegrand_intervalIntegrable I omega homega_smooth gamma hgamma)
+    (apm_t96A08_lineIntegrand_intervalIntegrable I omega homega_smooth delta hdelta)
+    (fun t ht => apm_t96A08_concat_integrand_left I omega gamma delta t ht)
+    (fun t ht => apm_t96A08_concat_integrand_right I omega gamma delta t ht)
 
 /-- Closed-piecewise-smooth paths can be concatenated, and the integral is
 additive under the standard affine reparameterizations. -/
