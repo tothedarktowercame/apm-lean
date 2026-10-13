@@ -358,7 +358,25 @@ theorem apm_t00j01_klein_connected :
 lemma apm_t00j01_klein_local_chart_aux_vertical (p : ℝ × ℝ) (n : ℤ) :
     Relation.EqvGen apm_t00j01_kleinRel p
       ((-1 : ℝ) ^ n * p.1, (n : ℝ) + p.2) := by
-  sorry
+  induction n using Int.induction_on with
+  | zero => simpa using Relation.EqvGen.refl (r := apm_t00j01_kleinRel) p
+  | succ n ih =>
+      have hs := Relation.EqvGen.rel _ _
+        (apm_t00j01_kleinRel.twisted (((-1 : ℝ) ^ (n : ℤ)) * p.1)
+          ((n : ℝ) + p.2))
+      convert Relation.EqvGen.trans _ _ _ ih hs using 1 <;> simp [zpow_add₀] <;> ring
+  | pred n ih =>
+      have hs := (Relation.EqvGen.rel _ _
+        (apm_t00j01_kleinRel.twisted
+          (-(((-1 : ℝ) ^ (-(n : ℤ))) * p.1))
+          ((-(n : ℝ) - 1) + p.2))).symm
+      have hs' : Relation.EqvGen apm_t00j01_kleinRel
+          (((-1 : ℝ) ^ (-((n : ℕ) : ℤ))) * p.1,
+            (((-((n : ℕ) : ℤ) : ℤ) : ℝ)) + p.2)
+          (((-1 : ℝ) ^ (-((n : ℕ) : ℤ) - 1)) * p.1,
+            (((-((n : ℕ) : ℤ) - 1 : ℤ) : ℝ)) + p.2) := by
+        convert hs using 1 <;> simp [zpow_sub₀] <;> ring
+      exact Relation.EqvGen.trans _ _ _ ih hs'
 
 /-- Seat: compose `aux_vertical` with `m` horizontal steps (induction on `m`). -/
 -- BEGIN SEAT AREA
@@ -410,10 +428,29 @@ their product. -/
 theorem apm_t00j01_klein_circle_connected
     (_hK : IsConnected (Set.univ : Set apm_t00j01_Klein)) :
     IsConnected (Set.univ : Set apm_t00j01_nonorientable3) := by
-  sorry
+  have hC : IsConnected (Set.univ : Set Circle) := by
+    have hrange : Set.range (Circle.exp : ℝ → Circle) = Set.univ := by
+      apply Set.eq_univ_of_forall
+      intro z
+      exact ⟨Complex.arg z, Circle.exp_arg z⟩
+    rw [← hrange]
+    exact isConnected_range Circle.exp.continuous
+  simpa only [Set.univ_prod_univ] using
+    _hK.prod hC
 
 /-- A two-dimensional Klein chart and a one-dimensional circle chart combine,
 after the standard coordinate reassociation, to an open chart in `ℝ³`. -/
+def apm_t00j01_klein_circle_local_chart_aux_realLine :
+    ℝ ≃L[ℝ] EuclideanSpace ℝ (Fin 1) :=
+  ((EuclideanSpace.equiv (Fin 1) ℝ).trans
+    (ContinuousLinearEquiv.funUnique (Fin 1) ℝ ℝ)).symm
+
+def apm_t00j01_klein_circle_local_chart_aux_coordinates :
+    EuclideanSpace ℝ (Fin 2) × ℝ ≃ₜ EuclideanSpace ℝ (Fin 3) :=
+  ((ContinuousLinearEquiv.prodCongr (ContinuousLinearEquiv.refl ℝ _)
+      apm_t00j01_klein_circle_local_chart_aux_realLine).trans
+    (EuclideanSpace.finAddEquivProd (n := 2) (m := 1)).symm).toHomeomorph
+
 theorem apm_t00j01_klein_circle_local_chart
     (_hK : ∀ x : apm_t00j01_Klein,
       ∃ (U : Set apm_t00j01_Klein) (V : Set (EuclideanSpace ℝ (Fin 2))),
@@ -423,7 +460,21 @@ theorem apm_t00j01_klein_circle_local_chart
     ∀ x : apm_t00j01_nonorientable3,
       ∃ (U : Set apm_t00j01_nonorientable3) (V : Set apm_t00j01_E3),
         x ∈ U ∧ IsOpen U ∧ IsOpen V ∧ Nonempty (U ≃ₜ V) := by
-  sorry
+  intro x
+  obtain ⟨UK, VK, hxK, hUK, hVK, eK⟩ := _hK x.1
+  obtain ⟨UC, VC, hxC, hUC, hVC, eC⟩ := _hC x.2
+  let W : Set apm_t00j01_E3 :=
+    apm_t00j01_klein_circle_local_chart_aux_coordinates '' (VK ×ˢ VC)
+  refine ⟨UK ×ˢ UC, W, ⟨hxK, hxC⟩, hUK.prod hUC, ?_, ?_⟩
+  · exact apm_t00j01_klein_circle_local_chart_aux_coordinates.isOpenMap _
+      (hVK.prod hVC)
+  · rcases eK with ⟨eK⟩
+    rcases eC with ⟨eC⟩
+    dsimp [W]
+    exact ⟨(Homeomorph.Set.prod UK UC).trans
+      ((Homeomorph.prodCongr eK eC).trans
+        ((Homeomorph.Set.prod VK VC).symm.trans
+          (apm_t00j01_klein_circle_local_chart_aux_coordinates.image (VK ×ˢ VC))))⟩
 
 /-- The explicit coinduced plane quotient, times the circle, is a compact
 connected topological three-manifold in the concrete sense used by the
