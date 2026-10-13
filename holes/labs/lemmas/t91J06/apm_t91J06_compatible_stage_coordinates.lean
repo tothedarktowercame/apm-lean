@@ -92,6 +92,13 @@ theorem apm_t91J06_extend_interval_embedding_coordinates
 contract is an explicit parameter so this lemma can be developed in parallel
 with the library lemma above. -/
 -- BEGIN SEAT AREA
+noncomputable def apm_t91J06_compatible_stage_coordinates_aux_stageHomeo
+    {X : Type*} [TopologicalSpace X]
+    (f : ℕ → apm_t91J06_I → X) (hf : ∀ n, Topology.IsEmbedding (f n))
+    (n : ℕ) : ↥(apm_t91J06_stage f n) ≃ₜ apm_t91J06_I :=
+  (Homeomorph.setCongr (by simp [apm_t91J06_stage])).trans
+    (hf n).toHomeomorph.symm
+
 theorem apm_t91J06_compatible_stage_coordinates
     (hExtend : ∀ (n : ℕ) (t : apm_t91J06_I → apm_t91J06_I),
       Continuous t → Function.Injective t →
@@ -110,8 +117,74 @@ theorem apm_t91J06_compatible_stage_coordinates
       ∀ (n : ℕ) (x : X) (hx : x ∈ apm_t91J06_stage f n),
         ((g (n + 1))
             ⟨x, (apm_t91J06_stage_mono f hnested (Nat.le_succ n)) hx⟩ : ℝ) =
-          ((g n) ⟨x, hx⟩ : ℝ) := by
-  sorry
+        ((g n) ⟨x, hx⟩ : ℝ) := by
+  let hsub : ∀ n, Set.range (f n) ⊆ Set.range (f (n + 1)) := fun n => by
+    simpa only [image_univ] using
+      (hnested n).trans (image_subset_range (f (n + 1)) apm_t91J06_Iinterior)
+  let t : ∀ n, apm_t91J06_I → apm_t91J06_I := fun n =>
+    ConstructionTargets.NestedEmbeddingTransition.transition
+      (f n) (f (n + 1)) (hf (n + 1)) (hsub n)
+  have ht_cont : ∀ n, Continuous (t n) := fun n => by
+    exact ConstructionTargets.NestedEmbeddingTransition.continuous_transition
+      (f n) (f (n + 1)) (hf n).continuous (hf (n + 1)) (hsub n)
+  have ht_inj : ∀ n, Function.Injective (t n) := fun n => by
+    exact ConstructionTargets.NestedEmbeddingTransition.injective_transition
+      (f n) (f (n + 1)) (hf n).injective (hf (n + 1)) (hsub n)
+  have ht_int : ∀ n, Set.range (t n) ⊆ apm_t91J06_Iinterior := fun n => by
+    intro y hy
+    rcases hy with ⟨x, rfl⟩
+    exact ConstructionTargets.NestedEmbeddingTransition.transition_mem_of_range_subset_image
+      (f n) (f (n + 1)) (hf (n + 1)) apm_t91J06_Iinterior
+      (by simpa only [image_univ] using hnested n) x
+  let q : ∀ n : ℕ, apm_t91J06_I ≃ₜ Set.Icc (-(n + 1 : ℝ)) (n + 1 : ℝ) :=
+    fun (n : ℕ) => Nat.rec (motive := fun k : ℕ =>
+        apm_t91J06_I ≃ₜ Set.Icc (-(k + 1 : ℝ)) (k + 1 : ℝ))
+      (by
+        exact (Homeomorph.setCongr (show apm_t91J06_I = Set.Icc (0 : ℝ) 1 from rfl)).trans
+          ((iccHomeoI (-1 : ℝ) 1 (by norm_num)).symm.trans
+            (Homeomorph.setCongr (by norm_num))))
+      (fun k qk => by
+        let w := hExtend k (t k) (ht_cont k) (ht_inj k) (ht_int k) qk
+        exact (Classical.choose w).trans (Homeomorph.setCongr (by
+          congr 1 <;> norm_num [Nat.cast_succ] <;> ring)) ) n
+  have hq : ∀ n x, ((q (n + 1)) (t n x) : ℝ) = ((q n) x : ℝ) := by
+    intro n x
+    simp only [q]
+    exact Classical.choose_spec
+      (hExtend n (t n) (ht_cont n) (ht_inj n) (ht_int n) (q n)) x
+  refine ⟨fun n =>
+    (apm_t91J06_compatible_stage_coordinates_aux_stageHomeo f hf n).trans (q n), ?_⟩
+  intro n x hx
+  have hxnext : x ∈ apm_t91J06_stage f (n + 1) :=
+    apm_t91J06_stage_mono f hnested (Nat.le_succ n) hx
+  change ((q (n + 1))
+      ((apm_t91J06_compatible_stage_coordinates_aux_stageHomeo f hf (n + 1))
+        ⟨x, hxnext⟩) : ℝ) =
+    ((q n) ((apm_t91J06_compatible_stage_coordinates_aux_stageHomeo f hf n)
+      ⟨x, hx⟩) : ℝ)
+  have heq : t n
+      ((apm_t91J06_compatible_stage_coordinates_aux_stageHomeo f hf n) ⟨x, hx⟩) =
+      (apm_t91J06_compatible_stage_coordinates_aux_stageHomeo f hf (n + 1))
+        ⟨x, hxnext⟩ := by
+    apply (hf (n + 1)).injective
+    change f (n + 1) (t n _) = f (n + 1) _
+    rw [show t n = ConstructionTargets.NestedEmbeddingTransition.transition
+      (f n) (f (n + 1)) (hf (n + 1)) (hsub n) from rfl]
+    rw [ConstructionTargets.NestedEmbeddingTransition.g_transition
+      (f n) (f (n + 1)) (hf (n + 1)) (hsub n)
+      ((apm_t91J06_compatible_stage_coordinates_aux_stageHomeo f hf n) ⟨x, hx⟩)]
+    have hn : f n
+        ((apm_t91J06_compatible_stage_coordinates_aux_stageHomeo f hf n) ⟨x, hx⟩) = x := by
+      exact congrArg Subtype.val ((hf n).toHomeomorph.apply_symm_apply
+        ((Homeomorph.setCongr (by simp [apm_t91J06_stage])) ⟨x, hx⟩))
+    have hn1 : f (n + 1)
+        ((apm_t91J06_compatible_stage_coordinates_aux_stageHomeo f hf (n + 1))
+          ⟨x, hxnext⟩) = x := by
+      exact congrArg Subtype.val ((hf (n + 1)).toHomeomorph.apply_symm_apply
+        ((Homeomorph.setCongr (by simp [apm_t91J06_stage])) ⟨x, hxnext⟩))
+    exact hn.trans hn1.symm
+  rw [← heq]
+  exact hq n _
 -- END SEAT AREA
 
 /-- Glue compatible stage coordinates.  Unlike the false helper in the
