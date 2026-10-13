@@ -36105,6 +36105,8 @@
    :other-consumers []}
   {:consumer :t93J03,
    :stop-count 1,
+   :review-finding
+   "Blueprint defect: the frozen final hypothesis SemilocallySimplyConnected X is unused. C5 introduces it as `_`, and C1-C4 do not consume it; this violates the required every-final-hypothesis-used gate. Revise the blueprint to identify a mathematically genuine use or explicitly resolve the redundant frozen hypothesis before formalisation.",
    :evidence
    {:placeholder-delta {:t93J03 [1 1]},
     :residual
@@ -36139,6 +36141,12 @@
      {:cmd "statement registry; blueprint headings; scoped diff",
       :exit 0}
      {:cmd "git commit", :exit 0}],
+    :review
+    {:outcome :fail,
+     :seat "codex-11",
+     :job "invoke-1791919277989-10272-fd4bb601",
+     :finding
+     "Blueprint defect: the frozen final hypothesis SemilocallySimplyConnected X is unused. C5 introduces it as `_`, and C1-C4 do not consume it; this violates the required every-final-hypothesis-used gate. Revise the blueprint to identify a mathematically genuine use or explicitly resolve the redundant frozen hypothesis before formalisation."},
     :commit "81cda184c2a072a73b5f073ee163cfff612cd84b",
     :changed-paths ["ConstructionTargets/t93J03Closure.blueprint.md"],
     :fixture
@@ -36148,7 +36156,7 @@
      :mode :blueprint},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :repair,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -36170,7 +36178,7 @@
    :id :program-2026-10-13-close-t93j03,
    :kind :final-adapter,
    :campaign-priority 30,
-   :fail-count 0,
+   :fail-count 1,
    :depends-on [],
    :program true,
    :other-consumers []}
