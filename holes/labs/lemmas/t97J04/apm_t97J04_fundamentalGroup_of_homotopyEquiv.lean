@@ -87,12 +87,67 @@ theorem apm_t97J04_complex_wedge_homotopyEquiv :
 fundamental-group comparison.  The conclusion of the geometric leaf is an
 explicit hypothesis, so this transport can be proved independently. -/
 -- BEGIN SEAT AREA
+local instance apm_t97J04_fundamentalGroup_of_homotopyEquiv_aux_circlePathConnected :
+    PathConnectedSpace Circle :=
+  pathConnectedSpace_iff_univ.mpr (by
+    have hc : IsPathConnected
+        (ConstructionTargets.CircleHomology.circleHomeomorphSphereOne ⁻¹'
+          (Set.univ : Set (ConstructionTargets.SphereHomology.Sphere 1))) :=
+      ConstructionTargets.CircleHomology.circleHomeomorphSphereOne.isPathConnected_preimage.mpr
+        isPathConnected_univ
+    simpa using hc)
+
+local instance apm_t97J04_fundamentalGroup_of_homotopyEquiv_aux_torusPathConnected :
+    PathConnectedSpace (Circle × Circle) :=
+  ⟨⟨(1, 1)⟩, fun x y ↦
+    ⟨Path.prod (PathConnectedSpace.somePath x.1 y.1)
+      (PathConnectedSpace.somePath x.2 y.2)⟩⟩
+
+theorem apm_t97J04_fundamentalGroup_of_homotopyEquiv_aux_wedge_isPathConnected :
+    IsPathConnected (Set.univ : Set apm_t97J04_W) := by
+  let qmap := ConstructionTargets.PointWedgeQuotient.quotientMap
+    ((1, 1) : Circle × Circle) (1 : Circle)
+  refine ⟨qmap (.inl (1, 1)), Set.mem_univ _, ?_⟩
+  intro r _
+  obtain ⟨b, rfl⟩ :=
+    ConstructionTargets.PointWedgeQuotient.surjective_quotientMap
+      ((1, 1) : Circle × Circle) (1 : Circle) r
+  have hleft : Continuous (fun x : Circle × Circle ↦ qmap (.inl x)) :=
+    (ConstructionTargets.PointWedgeQuotient.continuous_quotientMap
+      ((1, 1) : Circle × Circle) (1 : Circle)).comp continuous_inl
+  have hright : Continuous (fun y : Circle ↦ qmap (.inr y)) :=
+    (ConstructionTargets.PointWedgeQuotient.continuous_quotientMap
+      ((1, 1) : Circle × Circle) (1 : Circle)).comp continuous_inr
+  rw [joinedIn_univ]
+  cases b with
+  | inl x =>
+      obtain ⟨γ⟩ := PathConnectedSpace.joined ((1, 1) : Circle × Circle) x
+      exact ⟨γ.map hleft⟩
+  | inr y =>
+      obtain ⟨δ⟩ := PathConnectedSpace.joined (1 : Circle) y
+      have hw : qmap (.inl (1, 1)) = qmap (.inr 1) :=
+        Quotient.sound (Relation.EqvGen.rel _ _
+          (ConstructionTargets.PointWedgeQuotient.Rel.base
+            (x₀ := ((1, 1) : Circle × Circle)) (y₀ := (1 : Circle))))
+      exact ⟨(Path.refl _).trans ((δ.map hright).cast hw rfl)⟩
+
+local instance apm_t97J04_fundamentalGroup_of_homotopyEquiv_aux_wedgePathConnected :
+    PathConnectedSpace apm_t97J04_W :=
+  pathConnectedSpace_iff_univ.mpr
+    apm_t97J04_fundamentalGroup_of_homotopyEquiv_aux_wedge_isPathConnected
+
 theorem apm_t97J04_fundamentalGroup_of_homotopyEquiv
     (h : Nonempty (ContinuousMap.HomotopyEquiv apm_t97J04_X apm_t97J04_W)) :
     Nonempty
       (FundamentalGroup apm_t97J04_X apm_t97J04_basepoint ≃*
         FundamentalGroup apm_t97J04_W apm_t97J04_wedgeBase) := by
-  sorry
+  obtain ⟨e⟩ := h
+  let E := FundamentalGroupoidFunctor.equivOfHomotopyEquiv e
+  let eπ := E.fullyFaithfulFunctor.mulEquivEnd
+    (FundamentalGroupoid.mk apm_t97J04_basepoint)
+  exact ⟨eπ.trans
+    (FundamentalGroup.fundamentalGroupMulEquivOfPathConnected
+      (e apm_t97J04_basepoint) apm_t97J04_wedgeBase)⟩
 -- END SEAT AREA
 
 /-- A supplied geometric homotopy equivalence induces the all-degree
