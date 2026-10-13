@@ -113850,7 +113850,7 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 10,
+   :stop-count 0,
    :review-finding
    "Recorded fixture hash mismatch: :fixture.sha256 is 0bca6ce32c019fc3053c7f813c26917169cf817375b44d5e722b864b61a526450c1, but ConstructionTargets/PointWedgeVanKampen.blueprint.md at recorded commit c9b3af27 has exact SHA-256 0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0. Re-record the fixture hash for the reviewed commit.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
@@ -113904,7 +113904,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -117197,6 +117197,17 @@
      {:cmd "lean Main before rebuild",
       :exit 1,
       :finding "Stale olean; rebuilt target."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791910383162-10035-9305ef2d",
+     :commands
+     ["git show/diff-tree 9c9877f62"
+      "git archive 9c9877f62; lake env lean archived target and Main"
+      "lake build ConstructionTargets.t97A07Closure"
+      "sha256sum; placeholder delta; statement-registry.py check"],
+     :finding
+     "Recorded scope is exactly target, blueprint, and Main; fixture hash 1c4c3901 matches. Archived files compile; target uses only standard axioms; placeholders remain 1->1 and registry is 150/150. B6 is true and faithful: choose a coordinate from 0<n, maximize it on nonempty compact X, apply B5 to obtain a nonsurjective mfderiv, then its image is a critical value. This is new compiled progress beyond history; B7-B9 remain."},
     :commit "9c9877f6232d029f85a2d30ee39db77c36aac553",
     :changed-paths
     ["ConstructionTargets/t97A07Closure.lean"
@@ -117208,7 +117219,7 @@
      "1c4c3901c0e8e9cc6c3e24b74387b65a173afb6c821dee2e2531cde9f5154858"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A07/lean/Main.lean"
     "problems/t97A07/status.json"
@@ -117224,7 +117235,7 @@
     ["lake env lean problems/t97A07/lean/Main.lean"
      "python3 scripts/statement-registry.py check"]},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Repair complete: B5 now declares its B2 dependency.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: B6 positive-dimensional critical-value nonemptiness proved.",
    :id :program-2026-10-11-close-t97a07,
    :kind :final-adapter,
    :campaign-priority 44,
@@ -117308,7 +117319,11 @@
      "B5 partial: transferred the global coordinate maximum to the fixed source chart and proved its scalar derivative vanishes."}
     {:job 4,
      :commit "9ce50fe3f42b157eb2ad74b657ce9cebee986c5a",
-     :reason "Repair complete: B5 now declares its B2 dependency."}]}
+     :reason "Repair complete: B5 now declares its B2 dependency."}
+    {:job 5,
+     :commit "9c9877f6232d029f85a2d30ee39db77c36aac553",
+     :reason
+     "B6 positive-dimensional critical-value nonemptiness proved."}]}
   {:consumer :t91J06,
    :stop-count 3,
    :review-finding
@@ -118507,7 +118522,7 @@
    :other-consumers []}
   {:consumer :t97A07,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t97A07Closure.criticalValues_nonempty_of_pos",
@@ -118519,7 +118534,9 @@
     :type
     "A smooth map from a nonempty compact manifold to a positive-dimensional Euclidean space has a critical value",
     :area "regular-points-open",
-    :proved-in :program-2026-10-11-close-t97a07},
+    :proved-in :program-2026-10-11-close-t97a07,
+    :banked-by :program-2026-10-11-close-t97a07,
+    :banked-commit "9c9877f6232d029f85a2d30ee39db77c36aac553"},
    :id :lemma-t97a07closure-criticalvalues-nonempty-of-pos,
    :kind :lemma,
    :depends-on
