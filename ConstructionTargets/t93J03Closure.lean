@@ -324,6 +324,109 @@ theorem kleinRelator_generatorChange_eq_one_iff
     rw [h]
     simp
 
+/-- The presentation read directly from the polygon attaching word. -/
+def kleinPolygonRelations : Set (FreeGroup Bool) :=
+  {FreeGroup.of false * FreeGroup.of false *
+    FreeGroup.of true * FreeGroup.of true}
+
+abbrev KleinPolygonPresentedGroup := PresentedGroup kleinPolygonRelations
+
+def kleinPolygonGeneratorX : KleinPolygonPresentedGroup := PresentedGroup.of false
+def kleinPolygonGeneratorY : KleinPolygonPresentedGroup := PresentedGroup.of true
+
+/-- Substitute `x = a*b`, `y = b⁻¹` in the polygon presentation. -/
+def kleinPolygonToPresented : KleinPolygonPresentedGroup →* PresentedKleinGroup :=
+  PresentedGroup.toGroup
+    (f := fun i => if i then generatorB⁻¹ else generatorA * generatorB) (by
+      intro r hr
+      change r ∈ ({FreeGroup.of false * FreeGroup.of false *
+        FreeGroup.of true * FreeGroup.of true} : Set (FreeGroup Bool)) at hr
+      rw [Set.mem_singleton_iff] at hr
+      subst r
+      simp only [map_mul, FreeGroup.lift_apply_of, if_false, if_true]
+      apply (kleinRelator_generatorChange_eq_one_iff
+        (generatorA * generatorB) generatorB⁻¹).mp
+      simpa [generatorA, generatorB, relations] using
+        (PresentedGroup.one_of_mem (rels := relations) (Set.mem_singleton _)))
+
+/-- Substitute `a = x*y`, `b = y⁻¹` in the frozen presentation. -/
+def kleinPresentedToPolygon : PresentedKleinGroup →* KleinPolygonPresentedGroup :=
+  PresentedGroup.toGroup
+    (f := fun i => if i then kleinPolygonGeneratorY⁻¹ else
+      kleinPolygonGeneratorX * kleinPolygonGeneratorY) (by
+      intro r hr
+      change r ∈ ({(FreeGroup.of true)⁻¹ * FreeGroup.of false *
+        FreeGroup.of true * FreeGroup.of false} : Set (FreeGroup Bool)) at hr
+      rw [Set.mem_singleton_iff] at hr
+      subst r
+      simp only [map_mul, map_inv, FreeGroup.lift_apply_of, if_false, if_true]
+      apply (kleinRelator_generatorChange_eq_one_iff
+        kleinPolygonGeneratorX kleinPolygonGeneratorY).mpr
+      simpa [kleinPolygonGeneratorX, kleinPolygonGeneratorY,
+        kleinPolygonRelations] using
+        (PresentedGroup.one_of_mem (rels := kleinPolygonRelations)
+          (Set.mem_singleton _)))
+
+@[simp] theorem kleinPolygonToPresented_x :
+    kleinPolygonToPresented kleinPolygonGeneratorX = generatorA * generatorB := by
+  simp [kleinPolygonToPresented, kleinPolygonGeneratorX]
+
+@[simp] theorem kleinPolygonToPresented_y :
+    kleinPolygonToPresented kleinPolygonGeneratorY = generatorB⁻¹ := by
+  simp [kleinPolygonToPresented, kleinPolygonGeneratorY]
+
+@[simp] theorem kleinPresentedToPolygon_a :
+    kleinPresentedToPolygon generatorA =
+      kleinPolygonGeneratorX * kleinPolygonGeneratorY := by
+  simp [kleinPresentedToPolygon, generatorA]
+
+@[simp] theorem kleinPresentedToPolygon_b :
+    kleinPresentedToPolygon generatorB = kleinPolygonGeneratorY⁻¹ := by
+  simp [kleinPresentedToPolygon, generatorB]
+
+/-- The `aabb` polygon presentation is exactly the registered Klein group. -/
+noncomputable def kleinPolygonPresentedGroupEquiv :
+    KleinPolygonPresentedGroup ≃* PresentedKleinGroup where
+  toFun := kleinPolygonToPresented
+  invFun := kleinPresentedToPolygon
+  left_inv := by
+    intro g
+    have hhom : kleinPresentedToPolygon.comp kleinPolygonToPresented =
+        MonoidHom.id KleinPolygonPresentedGroup := by
+      apply PresentedGroup.ext
+      intro i
+      cases i
+      · change kleinPresentedToPolygon
+          (kleinPolygonToPresented kleinPolygonGeneratorX) =
+            kleinPolygonGeneratorX
+        rw [kleinPolygonToPresented_x, map_mul,
+          kleinPresentedToPolygon_a, kleinPresentedToPolygon_b]
+        group
+      · change kleinPresentedToPolygon
+          (kleinPolygonToPresented kleinPolygonGeneratorY) =
+            kleinPolygonGeneratorY
+        rw [kleinPolygonToPresented_y, map_inv, kleinPresentedToPolygon_b]
+        group
+    exact DFunLike.congr_fun hhom g
+  right_inv := by
+    intro g
+    have hhom : kleinPolygonToPresented.comp kleinPresentedToPolygon =
+        MonoidHom.id PresentedKleinGroup := by
+      apply PresentedGroup.ext
+      intro i
+      cases i
+      · change kleinPolygonToPresented (kleinPresentedToPolygon generatorA) =
+          generatorA
+        rw [kleinPresentedToPolygon_a, map_mul,
+          kleinPolygonToPresented_x, kleinPolygonToPresented_y]
+        group
+      · change kleinPolygonToPresented (kleinPresentedToPolygon generatorB) =
+          generatorB
+        rw [kleinPresentedToPolygon_b, map_inv, kleinPolygonToPresented_y]
+        group
+    exact DFunLike.congr_fun hhom g
+  map_mul' := kleinPolygonToPresented.map_mul
+
 /-- Once proper discontinuity of the explicit affine action is supplied, the
 banked deck-group theorem computes the fundamental group at the canonical
 orbit of the origin. -/
@@ -417,5 +520,6 @@ theorem lift_isEmbedding_assembly
 #print axioms kleinPairingOrbitEquivBool
 #print axioms kleinPolygon_attaching_arcs
 #print axioms kleinRelator_generatorChange_eq_one_iff
+#print axioms kleinPolygonPresentedGroupEquiv
 
 end ConstructionTargets.t93J03Closure

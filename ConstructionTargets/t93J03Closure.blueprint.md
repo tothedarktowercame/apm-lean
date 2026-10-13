@@ -169,7 +169,10 @@ with `kleinPairingOrbitEquivBool`, this is the standard nonorientable word
 word into the registered Klein-group presentation.  The compiled theorem
 `kleinRelator_generatorChange_eq_one_iff` supplies the final algebraic change
 of generators (`a = x*y`, `b = y⁻¹`), so the topological van Kampen quotient
-is now the only unproved part of that step.
+is now the only unproved part of that step.  The two substitutions have also
+been descended through both presentations and proved inverse in
+`kleinPolygonPresentedGroupEquiv`; after van Kampen returns the `aabb`
+presentation, no further group-presentation argument is needed.
 
 - Layer 1: C1, C3, and C4. C1 and C3 are independent; C4 is already complete.
 - Layer 2: C2 against the explicit C1 equivalence interface.
