@@ -378,6 +378,93 @@ lemma apm_m98A06_wirtinger_aux_regular
   exact ⟨hc, hd, (hc.pow 2).intervalIntegrable_of_Icc hL.le,
     (hd.pow 2).intervalIntegrable_of_Icc hL.le⟩
 
+lemma apm_m98A06_wirtinger_aux_core_aux_picone_identity
+    (k y d s c : ℝ) (hs : s ≠ 0) :
+    d ^ 2 - k ^ 2 * y ^ 2 =
+      (d - y * c / s) ^ 2 + 2 * y * d * c / s -
+        y ^ 2 * (k ^ 2 * s ^ 2 + c ^ 2) / s ^ 2 := by
+  field_simp
+  ring
+
+lemma apm_m98A06_wirtinger_aux_core_aux_sine_pos
+    (L x : ℝ) (hL : 0 < L) (hx : x ∈ Ioo (0 : ℝ) L) :
+    0 < Real.sin (Real.pi * x / L) := by
+  apply Real.sin_pos_of_pos_of_lt_pi
+  · exact div_pos (mul_pos Real.pi_pos hx.1) hL
+  · rw [div_lt_iff₀ hL]
+    exact mul_lt_mul_of_pos_left hx.2 Real.pi_pos
+
+lemma apm_m98A06_wirtinger_aux_core_aux_sine_derivatives
+    (L x : ℝ) (hL : 0 < L) :
+    deriv (fun t : ℝ => Real.sin (Real.pi * t / L)) x =
+        (Real.pi / L) * Real.cos (Real.pi * x / L) ∧
+      deriv (fun t : ℝ => (Real.pi / L) *
+        Real.cos (Real.pi * t / L)) x =
+        -(Real.pi / L) ^ 2 * Real.sin (Real.pi * x / L) := by
+  have hlin : HasDerivAt (fun t : ℝ => Real.pi * t / L)
+      (Real.pi / L) x := by
+    convert ((hasDerivAt_id x).const_mul Real.pi).div_const L using 1 <;> ring
+  constructor
+  · convert (Real.hasDerivAt_sin _).comp x hlin |>.deriv using 1 <;> ring
+  · convert ((Real.hasDerivAt_cos _).comp x hlin).const_mul
+      (Real.pi / L) |>.deriv using 1 <;> ring
+
+/-- The limiting Picone argument, including vanishing of the two boundary
+terms and rigidity in the equality case. -/
+-- The Picone gap identity on the whole interval: integrate the banked pointwise identity on
+-- [δ, L − δ] and let δ → 0⁺ (boundary terms η² s'/s → 0 since η(0) = η(L) = 0 and η is C¹;
+-- the gap integrand is bounded near the endpoints).
+lemma apm_m98A06_wirtinger_aux_core_aux_picone_limit_aux_gap
+    (L : ℝ) (hL : 0 < L) (η : ℝ → ℝ)
+    (hη : apm_m98a06_Admissible L 0 0 η) :
+    (∫ x in (0 : ℝ)..L, (derivWithin η (Icc 0 L) x) ^ 2) -
+        (Real.pi / L) ^ 2 * (∫ x in (0 : ℝ)..L, (η x) ^ 2) =
+      ∫ x in (0 : ℝ)..L, (fun x => (derivWithin η (Icc 0 L) x -
+          η x * ((Real.pi / L) * Real.cos (Real.pi * x / L)) / Real.sin (Real.pi * x / L)) ^ 2) x := by
+  sorry
+
+-- Equality in Wirtinger iff the Picone gap vanishes iff η/sin is constant.
+lemma apm_m98A06_wirtinger_aux_core_aux_picone_limit_aux_iff
+    (L : ℝ) (hL : 0 < L) (η : ℝ → ℝ)
+    (hη : apm_m98a06_Admissible L 0 0 η)
+    (hgap : (∫ x in (0 : ℝ)..L, (derivWithin η (Icc 0 L) x) ^ 2) -
+        (Real.pi / L) ^ 2 * (∫ x in (0 : ℝ)..L, (η x) ^ 2) =
+      ∫ x in (0 : ℝ)..L, (fun x => (derivWithin η (Icc 0 L) x -
+          η x * ((Real.pi / L) * Real.cos (Real.pi * x / L)) / Real.sin (Real.pi * x / L)) ^ 2) x) :
+    ((∫ x in (0 : ℝ)..L, (η x) ^ 2) =
+          (L / Real.pi) ^ 2 *
+            ∫ x in (0 : ℝ)..L, (derivWithin η (Icc 0 L) x) ^ 2 ↔
+        ∃ c : ℝ, ∀ x ∈ Icc (0 : ℝ) L,
+          η x = c * Real.sin (Real.pi * x / L)) := by
+  sorry
+
+lemma apm_m98A06_wirtinger_aux_core_aux_picone_limit
+    (L : ℝ) (hL : 0 < L) (η : ℝ → ℝ)
+    (hη : apm_m98a06_Admissible L 0 0 η) :
+    (∫ x in (0 : ℝ)..L, (η x) ^ 2) ≤
+        (L / Real.pi) ^ 2 *
+          ∫ x in (0 : ℝ)..L, (derivWithin η (Icc 0 L) x) ^ 2 ∧
+      ((∫ x in (0 : ℝ)..L, (η x) ^ 2) =
+          (L / Real.pi) ^ 2 *
+            ∫ x in (0 : ℝ)..L, (derivWithin η (Icc 0 L) x) ^ 2 ↔
+        ∃ c : ℝ, ∀ x ∈ Icc (0 : ℝ) L,
+          η x = c * Real.sin (Real.pi * x / L)) := by
+  have hgap := apm_m98A06_wirtinger_aux_core_aux_picone_limit_aux_gap L hL η hη
+  refine ⟨?_, apm_m98A06_wirtinger_aux_core_aux_picone_limit_aux_iff L hL η hη hgap⟩
+  have hnn : 0 ≤ ∫ x in (0 : ℝ)..L, (fun x => (derivWithin η (Icc 0 L) x -
+          η x * ((Real.pi / L) * Real.cos (Real.pi * x / L)) / Real.sin (Real.pi * x / L)) ^ 2) x :=
+    intervalIntegral.integral_nonneg hL.le (fun x _ => sq_nonneg _)
+  have hpi : 0 < Real.pi / L := div_pos Real.pi_pos hL
+  have key : (Real.pi / L) ^ 2 * (∫ x in (0 : ℝ)..L, (η x) ^ 2) ≤
+      ∫ x in (0 : ℝ)..L, (derivWithin η (Icc 0 L) x) ^ 2 := by linarith
+  have hinv : (L / Real.pi) ^ 2 * (Real.pi / L) ^ 2 = 1 := by
+    rw [← mul_pow, div_mul_div_comm, mul_comm L, div_self (by positivity), one_pow]
+  calc (∫ x in (0 : ℝ)..L, (η x) ^ 2)
+      = (L / Real.pi) ^ 2 * ((Real.pi / L) ^ 2 * ∫ x in (0 : ℝ)..L, (η x) ^ 2) := by
+        rw [← mul_assoc, hinv, one_mul]
+    _ ≤ (L / Real.pi) ^ 2 * ∫ x in (0 : ℝ)..L, (derivWithin η (Icc 0 L) x) ^ 2 :=
+        mul_le_mul_of_nonneg_left key (sq_nonneg _)
+
 lemma apm_m98A06_wirtinger_aux_core
     (L : ℝ) (hL : 0 < L) (η : ℝ → ℝ)
     (hη : apm_m98a06_Admissible L 0 0 η) :
@@ -389,7 +476,7 @@ lemma apm_m98A06_wirtinger_aux_core
             ∫ x in (0 : ℝ)..L, (derivWithin η (Icc 0 L) x) ^ 2 ↔
         ∃ c : ℝ, ∀ x ∈ Icc (0 : ℝ) L,
           η x = c * Real.sin (Real.pi * x / L)) := by
-  sorry
+  exact apm_m98A06_wirtinger_aux_core_aux_picone_limit L hL η hη
 
 theorem apm_m98A06_wirtinger : apm_m98A06_WirtingerFact := by
   intro L hL η hη
