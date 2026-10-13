@@ -6358,6 +6358,31 @@ theorem genericPointWedgeOuterRightSpan_shiftedComponent_heq :
   cases h
   rfl
 
+omit [PathConnectedSpace X] [PathConnectedSpace Y] in
+/-- The inverse-span naturality square with its transported side reduced to
+the preceding overlap `unitInv` component. -/
+theorem genericPointWedgeOuterRightSpan_naturality_precedingUnitInv :
+    let r := genericPointWedgeActualRight x₀ y₀ M N
+    let eK := genericPointWedgeOverlapGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let eR := genericPointWedgeRightGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let aR := genericPointWedgeRightSpanIso
+      x₀ y₀ M N hM hN hy hx cM cN
+    let z := genericPointWedgeOverlapBase x₀ y₀ M N
+    (genericPointWedgeCoordinateRight y₀).map
+          (eK.functor.map (eK.unitInv.app z)) ≫
+        aR.inv.app (eK.functor.obj z) =
+      aR.inv.app (eK.functor.obj ((eK.functor ⋙ eK.inverse).obj z)) ≫
+        (r ⋙ eR.functor).map
+          (eK.unitInv.app ((eK.functor ⋙ eK.inverse).obj z)) := by
+  dsimp only
+  have hn := genericPointWedgeOuterRightSpan_unitInv_naturality
+    x₀ y₀ M N hM hN hy hx cM cN
+  dsimp only at hn
+  rw [genericPointWedgeOuterRightSpan_transport_map_eq_precedingUnitInv] at hn
+  exact hn
+
 /-- An `inl` factorization of the right-base conjugator forces its canonical
 right projection to be trivial. -/
 theorem genericPointWedgeRightBase_inl_implies_rightProjection_eq_one
@@ -7089,6 +7114,7 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeOuterRightSpan_transport_map_eq_precedingUnitInv
 #print axioms genericPointWedgeOverlap_shiftedCoordinateObject_eq
 #print axioms genericPointWedgeOuterRightSpan_shiftedComponent_heq
+#print axioms genericPointWedgeOuterRightSpan_naturality_precedingUnitInv
 #print axioms genericPointWedgeRightBase_inl_implies_rightProjection_eq_one
 #print axioms genericPointWedgeLegCoordinates_of_mapped
 #print axioms genericPointWedgeLegCoordinates_iff_mapped

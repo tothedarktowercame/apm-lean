@@ -1272,5 +1272,8 @@ preserved, using uniqueness of objects in `FundamentalGroupoid Unit`.  The
 underlying coordinate-object equality is now separately named by
 `genericPointWedgeOverlap_shiftedCoordinateObject_eq`, so the next step can
 transport the identity morphism and inverse-span component with the same
-witness.  The residual is to transport the whole typed naturality square
-across that equality and close the resulting fixed-component recurrence.
+witness.  `genericPointWedgeOuterRightSpan_naturality_precedingUnitInv`
+also composes the naturality and triangle reductions into one typed square:
+its only remaining mapped factor is the preceding overlap `unitInv`.  The
+residual is to transport this square across the coordinate-object equality
+and close the resulting fixed-component recurrence.
