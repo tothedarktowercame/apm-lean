@@ -1627,4 +1627,31 @@ theorem PairingData.signedWedgeArc_pair (P : PairingData)
       simp [PairingData.signedWedgeArc, pairedParameter, hs, hi,
         reverseIcc_reverseIcc]
 
+/-- The point of the actual quotient skeleton represented by polygon arc
+`i` at parameter `t`. -/
+def PairingData.skeletonArc (P : PairingData) (i : Fin P.edgeCount)
+    (t : Set.Icc (0 : ℝ) 1) : P.skeleton := by
+  refine ⟨P.quotientMap (edgePoint P.edgeCount i t), ?_⟩
+  exact ⟨edgePoint P.edgeCount i t, by simpa using norm_edgePoint P.edgeCount i t, rfl⟩
+
+/-- The source polygon relation identifies the two actual skeleton arc
+representatives with exactly the paired parameter. -/
+theorem PairingData.skeletonArc_pair (P : PairingData)
+    (i : Fin P.edgeCount) (t : Set.Icc (0 : ℝ) 1) :
+    P.skeletonArc (P.pair i) (pairedParameter P.pair P.sign i t) =
+      P.skeletonArc i t := by
+  apply Subtype.ext
+  apply Quotient.sound
+  exact Relation.EqvGen.symm _ _ (Relation.EqvGen.rel _ _ ⟨i, t, rfl, rfl⟩)
+
+/-- The representative-level correspondence which the B7 homeomorphism
+must induce: paired source arcs and paired signed wedge coordinates agree. -/
+theorem PairingData.skeletonArc_signed_coordinate (P : PairingData)
+    (i : Fin P.edgeCount) (t : Set.Icc (0 : ℝ) 1) :
+    P.skeletonArc (P.pair i) (pairedParameter P.pair P.sign i t) =
+        P.skeletonArc i t ∧
+      P.signedWedgeArc (P.pair i) (pairedParameter P.pair P.sign i t) =
+        P.signedWedgeArc i t :=
+  ⟨P.skeletonArc_pair i t, P.signedWedgeArc_pair i t⟩
+
 end ConstructionTargets.PolygonSurfacePiOne
