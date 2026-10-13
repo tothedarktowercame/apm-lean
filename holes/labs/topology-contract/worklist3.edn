@@ -22516,8 +22516,43 @@
    :other-consumers []}
   {:bounded-exception "Rule0 blueprint.",
    :consumer :t01A08,
+   :stop-count 1,
+   :evidence
+   {:placeholder-delta {:t01A08 [1 1]},
+    :residual
+    "Independent blueprint review, then elect B1 relative rank strata.",
+    :outcome :stop,
+    :warnings
+    ["Current aggregation assumes the whole frontier image is null; blueprint instead proves nullity of the within-critical image."],
+    :statement-hashes {:registry "131/131"},
+    :disposition :stop,
+    :axioms [],
+    :author :topo-10,
+    :reason
+    "Blueprint written and committed; review before electing B1.",
+    :commands
+    [{:cmd
+      "git diff --check HEAD^ HEAD -- ConstructionTargets/SardConvexDomain.blueprint.md",
+      :exit 0}
+     {:cmd
+      "test \"$(git diff-tree --no-commit-id --name-only -r HEAD)\" = \"ConstructionTargets/SardConvexDomain.blueprint.md\"",
+      :exit 0}
+     {:cmd
+      "rg -q '^### B11\\.' ConstructionTargets/SardConvexDomain.blueprint.md",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
+    :diagnostic-history
+    [{:cmd
+      "git add ConstructionTargets/SardConvexDomain.blueprint.md && git commit -m ...",
+      :exit 128,
+      :finding
+      "Transient index.lock; verified absent, then commit succeeded."}],
+    :commit "b288b8c6ff3649abd872df8bd07adc056fc818bb",
+    :changed-paths
+    ["ConstructionTargets/SardConvexDomain.blueprint.md"],
+    :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/SardConvexDomain.blueprint.md"],
    :dag-node "TOPOLOGY-ROUTES.md/t01A08/corners-sard",
    :acceptance
