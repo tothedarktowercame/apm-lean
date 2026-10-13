@@ -916,7 +916,65 @@ theorem apm_m98A06_resonant_no_global_extrema_of_sine_computations
         apm_m98a06_I (2 * Real.pi) z < apm_m98a06_I (2 * Real.pi) y) ∧
       ∃ z : ℝ → ℝ, apm_m98a06_Admissible (2 * Real.pi) 1 1 z ∧
         apm_m98a06_I (2 * Real.pi) y < apm_m98a06_I (2 * Real.pi) z := by
-  sorry
+  intro y hy
+  have hL : 0 < 2 * Real.pi := mul_pos (by norm_num) Real.pi_pos
+  let η₁ : ℝ → ℝ := fun x ↦ Real.sin ((1 : ℝ) * Real.pi * x / (2 * Real.pi))
+  let η₃ : ℝ → ℝ := fun x ↦ Real.sin ((3 : ℝ) * Real.pi * x / (2 * Real.pi))
+  obtain ⟨hη₁', hI₁'⟩ := hSine.1 (2 * Real.pi) hL 1 (by norm_num)
+  obtain ⟨hη₃', hI₃'⟩ := hSine.1 (2 * Real.pi) hL 3 (by norm_num)
+  have hη₁ : apm_m98a06_Admissible (2 * Real.pi) 0 0 η₁ := by
+    simpa [η₁] using hη₁'
+  have hI₁ : apm_m98a06_I (2 * Real.pi) η₁ =
+      ((((1 : ℝ) * Real.pi / (2 * Real.pi)) ^ 2 - 1) *
+        ((2 * Real.pi) / 2)) := by simpa [η₁] using hI₁'
+  have hη₃ : apm_m98a06_Admissible (2 * Real.pi) 0 0 η₃ := by
+    simpa [η₃] using hη₃'
+  have hI₃ : apm_m98a06_I (2 * Real.pi) η₃ =
+      ((((3 : ℝ) * Real.pi / (2 * Real.pi)) ^ 2 - 1) *
+        ((2 * Real.pi) / 2)) := by simpa [η₃] using hI₃'
+  have hI₁neg : apm_m98a06_I (2 * Real.pi) η₁ < 0 := by
+    rw [hI₁]
+    field_simp [ne_of_gt Real.pi_pos]
+    nlinarith [Real.pi_pos]
+  have hI₃pos : 0 < apm_m98a06_I (2 * Real.pi) η₃ := by
+    rw [hI₃]
+    field_simp [ne_of_gt Real.pi_pos]
+    nlinarith [Real.pi_pos]
+  let A₁ := ∫ x in (0 : ℝ)..2 * Real.pi,
+    derivWithin y (Icc 0 (2 * Real.pi)) x *
+      derivWithin η₁ (Icc 0 (2 * Real.pi)) x - y x * η₁ x
+  let A₃ := ∫ x in (0 : ℝ)..2 * Real.pi,
+    derivWithin y (Icc 0 (2 * Real.pi)) x *
+      derivWithin η₃ (Icc 0 (2 * Real.pi)) x - y x * η₃ x
+  have hadm (η : ℝ → ℝ) (hη : apm_m98a06_Admissible (2 * Real.pi) 0 0 η)
+      (c : ℝ) : apm_m98a06_Admissible (2 * Real.pi) 1 1
+        (fun x ↦ y x + c * η x) := by
+    refine ⟨hy.1.add (hη.1.const_smul c), ?_, ?_⟩
+    · simp [hy.2.1, hη.2.1]
+    · simp [hy.2.2, hη.2.2]
+  constructor
+  · by_cases hA : 0 ≤ A₁
+    · refine ⟨fun x ↦ y x + (-1 : ℝ) * η₁ x, hadm η₁ hη₁ (-1), ?_⟩
+      rw [apm_m98A06_I_add_smul hL hy.1 hη₁.1]
+      change apm_m98a06_I (2 * Real.pi) y + 2 * (-1) * A₁ +
+        (-1 : ℝ) ^ 2 * apm_m98a06_I (2 * Real.pi) η₁ < _
+      nlinarith
+    · refine ⟨fun x ↦ y x + (1 : ℝ) * η₁ x, hadm η₁ hη₁ 1, ?_⟩
+      rw [apm_m98A06_I_add_smul hL hy.1 hη₁.1]
+      change apm_m98a06_I (2 * Real.pi) y + 2 * 1 * A₁ +
+        (1 : ℝ) ^ 2 * apm_m98a06_I (2 * Real.pi) η₁ < _
+      nlinarith
+  · by_cases hA : 0 ≤ A₃
+    · refine ⟨fun x ↦ y x + (1 : ℝ) * η₃ x, hadm η₃ hη₃ 1, ?_⟩
+      rw [apm_m98A06_I_add_smul hL hy.1 hη₃.1]
+      change _ < apm_m98a06_I (2 * Real.pi) y + 2 * 1 * A₃ +
+        (1 : ℝ) ^ 2 * apm_m98a06_I (2 * Real.pi) η₃
+      nlinarith
+    · refine ⟨fun x ↦ y x + (-1 : ℝ) * η₃ x, hadm η₃ hη₃ (-1), ?_⟩
+      rw [apm_m98A06_I_add_smul hL hy.1 hη₃.1]
+      change _ < apm_m98a06_I (2 * Real.pi) y + 2 * (-1) * A₃ +
+        (-1 : ℝ) ^ 2 * apm_m98a06_I (2 * Real.pi) η₃
+      nlinarith
 -- END SEAT AREA
 
 theorem apm_m98A06_nonresonant_energy_geometry_of_facts
