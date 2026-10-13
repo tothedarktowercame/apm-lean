@@ -113902,6 +113902,17 @@
       "lake build ConstructionTargets.ThreeCirclesFundamentalGroup",
       :exit 1,
       :finding "B12 absent."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791935503418-10946-d974d3d5",
+     :commands
+     ["git show/diff-tree e60d74c0a"
+      "git archive e60d74c0a; lake env lean archived PointWedgeVanKampen.lean"
+      "lake build ConstructionTargets.PointWedgeVanKampen"
+      "sha256sum; placeholders; statement-registry.py check"],
+     :finding
+     "Independent review of topo-2 commit e60d74c0a: only scoped Lean/doc files changed. Archived source and lake build pass; source/doc/fixture hashes 63b2ce5f/ad348349/0bca6ce3 match evidence; placeholders 0->0; registry 166/166. Basepoint cancellation and four-factor reassociation are correctly typed/oriented with standard axioms. Valid program STOP with residual cancellation/transport/projection/B6/B12 listed."},
     :commit "e60d74c0adba4453cacffbd52b0ba6ac6787b9d8",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
@@ -113912,7 +113923,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113933,7 +113944,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Source connector hom/inv cancellation proved at its exact base.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Four-factor normal form reassociated at the comparator/unitInv middle.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -114798,7 +114809,11 @@
     {:job 9,
      :commit "a9f34a511af1ed2e4bf23d1195f251e47f40942b",
      :reason
-     "Source connector hom/inv cancellation proved at its exact base."}]}
+     "Source connector hom/inv cancellation proved at its exact base."}
+    {:job 1,
+     :commit "e60d74c0adba4453cacffbd52b0ba6ac6787b9d8",
+     :reason
+     "Four-factor normal form reassociated at the comparator/unitInv middle."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
