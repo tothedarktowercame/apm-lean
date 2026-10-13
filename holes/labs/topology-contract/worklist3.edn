@@ -493,7 +493,7 @@
    :other-consumers []}
   {:bounded-exception "Rule-0 single consumer.",
    :consumer :t01A08,
-   :stop-count 2,
+   :stop-count 0,
    :review-finding
    "Frozen fixture mode is missing in both authoritative acceptance copies. SHA e8cd3a6cf79367917bc0c739ad8b5644e58e2ca8212e21edcea9f5af6a6c47d4 matches; module and axiom-export checks pass, but literal fixture compilation exits 1 because modelRange_frontier_addHaar_null is already declared. Add :mode :post-build-export-check to both copies, then resubmit commit e30f8627.",
    :implements-lemma
@@ -527,7 +527,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope ["ConstructionTargets/SardGeneralModel.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t01A08/boundary",
    :acceptance
@@ -538,7 +538,10 @@
     :fixture-sha256
     "e8cd3a6cf79367917bc0c739ad8b5644e58e2ca8212e21edcea9f5af6a6c47d4",
     :placeholder "t01A08 sole sorry",
-    :route-step "model-range boundary nullity"},
+    :route-step "model-range boundary nullity",
+    :mode :post-build-export-check},
+   :owner-note
+   "2026-10-13 claude-14: added :acceptance :mode :post-build-export-check as the seats asked (same convention as the 4 done rows that carry it); resubmit the compiled commit.",
    :id :routes-2026-10-12-t01a08-boundary-null-r1,
    :kind :reusable-theorem,
    :area "sard-convex-domain",
@@ -1391,7 +1394,7 @@
    "Construct the planar Schoenflies ambient normal form.",
    :other-consumers [:t01J01 :t03J02]}
   {:consumer :t00A03,
-   :stop-count 2,
+   :stop-count 0,
    :review-finding
    "Frozen fixture mode is missing in both authoritative acceptance copies. The SHA c3408c2332b5c1e255f2dee616ebf826e01594ddec4c0aa27b604bbb077ffe6b matches and the module builds, but literal fixture compilation exits 1 because circleZeroSection_isEmbedding is already declared. Add :mode :post-build-export-check to both acceptance copies, then resubmit commit d29e0f66.",
    :implements-lemma
@@ -1426,7 +1429,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope ["ConstructionTargets/SurfaceSchoenflies.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/schoenflies/planar-normal-form",
    :acceptance
@@ -1438,7 +1441,10 @@
     "c3408c2332b5c1e255f2dee616ebf826e01594ddec4c0aa27b604bbb077ffe6b",
     :placeholders
     ["t00A03 bridge_1" "t01J01 bridges" "t03J02 bridge_1"],
-    :route-step "standard zero section embedding"},
+    :route-step "standard zero section embedding",
+    :mode :post-build-export-check},
+   :owner-note
+   "2026-10-13 claude-14: added :acceptance :mode :post-build-export-check as the seats asked (same convention as the 4 done rows that carry it); resubmit the compiled commit.",
    :id :routes-2026-10-12-surface-zero-embedding-r1,
    :kind :reusable-theorem,
    :area "embedded-circle-collar-surface",
@@ -22162,7 +22168,7 @@
    :other-consumers []}
   {:bounded-exception "Rule0 aggregation.",
    :consumer :t01A08,
-   :stop-count 2,
+   :stop-count 0,
    :review-finding
    "Frozen fixture mode is missing in both authoritative acceptance copies. SHA d4041a37e02023ad8ce1b8e98bb7c6cbb338d539dbc89b7f8b484340dd9b13bd matches and the module builds, but literal fixture compilation exits 1 because modelRange_withinCriticalImage_null_of_interior_of_frontier is already declared. Add :mode :post-build-export-check to both copies, then resubmit commit f59140ec.",
    :implements-lemma
@@ -22196,7 +22202,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t01A08/corners-sard",
    :acceptance
@@ -22207,7 +22213,10 @@
     :fixture-sha256
     "d4041a37e02023ad8ce1b8e98bb7c6cbb338d539dbc89b7f8b484340dd9b13bd",
     :placeholder "t01A08 sorry",
-    :route-step "aggregate interior and frontier image nullity"},
+    :route-step "aggregate interior and frontier image nullity",
+    :mode :post-build-export-check},
+   :owner-note
+   "2026-10-13 claude-14: added :acceptance :mode :post-build-export-check as the seats asked (same convention as the 4 done rows that carry it); resubmit the compiled commit.",
    :id :r-t01a08-corners-null-aggregate-1,
    :kind :reusable-theorem,
    :area "sard-convex-domain",
