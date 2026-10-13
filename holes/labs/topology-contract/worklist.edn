@@ -113895,6 +113895,18 @@
       "lake build ConstructionTargets.ThreeCirclesFundamentalGroup",
       :exit 1,
       :finding "B12 module absent."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791865469006-8412-ca7b0a6d",
+     :commands
+     ["git archive e4f182fc; lake env lean <archive>/ConstructionTargets/PointWedgeVanKampen.lean"
+      "lake build ConstructionTargets.PointWedgeVanKampen"
+      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (exit 1: declared B12 residual absent)"
+      "python3 scripts/statement-registry.py check"
+      "git diff-tree/show sha256/git grep placeholders"],
+     :finding
+     "PASS program STOP: e4f182fc is new after history, changes only scoped Lean/MD files, and commits compiled sorry-free progress. Hashes match source 5b875c4d, docs 78151849, fixture 0bca6ce3; registry 142/142; sorry/admit 0->0; new declarations use only propext, Classical.choice, Quot.sound. The named unit factor is exactly the left-equivalence unit component in the free-product target. The factor theorem has the correct order: categorical strict-factor-then-unit composition becomes unit-times-strict multiplication in the single-object groupoid, confirmed definitionally. Both sides stay in genericPointWedgeFreeProduct, so no representation boundary is hidden. Left counit naturality, point-span, B6/B12 and the final module remain explicitly listed."},
     :commit "e4f182fc59758df53a861422952c43cc3b41bd6b",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
@@ -113905,7 +113917,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113926,7 +113938,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Full right comparison cancels the global canonical base transport.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Left comparison split into named unit and strict-span factors in exact free-product order.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -114567,7 +114579,11 @@
     {:job 4,
      :commit "e4f833cd8199f6f204dc5a78a43fa818a949ba45",
      :reason
-     "Full right comparison cancels the global canonical base transport."}]}
+     "Full right comparison cancels the global canonical base transport."}
+    {:job 5,
+     :commit "e4f182fc59758df53a861422952c43cc3b41bd6b",
+     :reason
+     "Left comparison split into named unit and strict-span factors in exact free-product order."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
