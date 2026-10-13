@@ -24430,7 +24430,7 @@
    :consumer :t01A08,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 0,
    :review-finding
    "extend Mathlib: state and prove the missing theorem in scope",
    :implements-lemma :lemma-closedset-whitneycubecover,
@@ -24473,6 +24473,17 @@
     [{:cmd "build",
       :exit 1,
       :correction "unfolded index for Countable; used zpow_pos"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791917171304-10221-d733baf1",
+     :commands
+     ["git show/diff 383a45e; scope/representation checks"
+      "sha256sum + lake env lean frozen fixture"
+      "lake build ConstructionTargets.SardConvexDomain"
+      "statement registry check; forbidden-count scan"],
+     :finding
+     "PASS. Recorded topo-10 commit 383a45e changes only the scoped Lean file and establishes coherent dyadic replacement data after the compiled ball obstruction. The index is an integer generation plus finitely many integer coordinates and is countable; the half-open canonical-basis parallelotope uses side length 2^k, proved positive for all k. Fixture hash 4f24cce2... matches; build/fixture pass; registry 150/150; forbidden placeholders stay 0; only standard axioms. Valid compiled B3 progress; STOP lists partition/nesting, maximal admissible-cube selection, and assembly."},
     :commit "383a45e3f2ece65a90219e86e678d6e7f659897b",
     :changed-paths ["ConstructionTargets/SardConvexDomain.lean"],
     :fixture
@@ -24482,7 +24493,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain.blueprint/B3",
    :acceptance
@@ -35993,7 +36004,7 @@
    :other-consumers []}
   {:consumer :t01A08,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -36007,7 +36018,9 @@
     :type
     "finite-basis integer dyadic indices are countable; cubes and positive scales defined",
     :area "sard-convex-domain",
-    :proved-in :r-a08-sard-b3-whitney-cubes-1},
+    :proved-in :r-a08-sard-b3-whitney-cubes-1,
+    :banked-by :r-a08-sard-b3-whitney-cubes-1,
+    :banked-commit "383a45e3f2ece65a90219e86e678d6e7f659897b"},
    :id
    :lemma-constructiontargets-sardconvexdomain-countable-whitneydyadicindex,
    :kind :lemma,
