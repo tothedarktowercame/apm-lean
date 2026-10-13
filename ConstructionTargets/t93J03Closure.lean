@@ -246,6 +246,28 @@ noncomputable def kleinSkeletonHomeomorphTwoCircles :
       PointWedgeQuotient.FiniteWedge (PairingOrbit kleinPairingData.pair) :=
   kleinPairingData.skeletonHomeomorphWedge
 
+/-- The two circle factors are labeled by the registered generators `false`
+and `true`, in the order of the two nonorientable edge pairs. -/
+noncomputable def kleinPairingOrbitEquivBool :
+    PairingOrbit kleinPairingData.pair ≃ Bool :=
+  (nonorientableOrbitEquiv 2).trans finTwoEquiv
+
+@[simp] theorem kleinPairingOrbitEquivBool_edge_zero :
+    kleinPairingOrbitEquivBool (kleinPairingData.orbit (0 : Fin 4)) = false := by
+  rfl
+
+@[simp] theorem kleinPairingOrbitEquivBool_edge_one :
+    kleinPairingOrbitEquivBool (kleinPairingData.orbit (1 : Fin 4)) = false := by
+  rfl
+
+@[simp] theorem kleinPairingOrbitEquivBool_edge_two :
+    kleinPairingOrbitEquivBool (kleinPairingData.orbit (2 : Fin 4)) = true := by
+  rfl
+
+@[simp] theorem kleinPairingOrbitEquivBool_edge_three :
+    kleinPairingOrbitEquivBool (kleinPairingData.orbit (3 : Fin 4)) = true := by
+  rfl
+
 /-- Once proper discontinuity of the explicit affine action is supplied, the
 banked deck-group theorem computes the fundamental group at the canonical
 orbit of the origin. -/
@@ -336,5 +358,6 @@ theorem lift_isEmbedding_assembly
 #print axioms closedSquareEdgeOrbitHomeomorph
 #print axioms kleinPairingSpaceHomeomorph
 #print axioms kleinSkeletonHomeomorphTwoCircles
+#print axioms kleinPairingOrbitEquivBool
 
 end ConstructionTargets.t93J03Closure

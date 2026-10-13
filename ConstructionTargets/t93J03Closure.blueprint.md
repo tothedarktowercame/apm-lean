@@ -105,6 +105,9 @@ nonorientable polygon comparison directly to the frozen `KleinBottle`, and
 `kleinSkeletonHomeomorphTwoCircles` identifies its boundary skeleton with the
 two-orbit circle wedge.  These declarations expose the direct van Kampen
 route without requiring a representative-level disk-to-square carrier.
+`kleinPairingOrbitEquivBool` fixes the final generator convention: edges
+`0,1` label `false` and edges `2,3` label `true`, matching the registered
+two-generator presentation before the attaching-word calculation.
 
 ### C2. `t93J03_cyclicCover_zpowers_generatorA` — LIBRARY
 
