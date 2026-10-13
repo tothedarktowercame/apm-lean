@@ -279,7 +279,45 @@ lemma apm_t97J05_local_normal_form_aux_smooth_local_inverse :
       apm_t97J05_local_normal_form_aux_H apm_t97J05_p ∈ e.target ∧
       (e : apm_t97J05_R3 → apm_t97J05_R3) = apm_t97J05_local_normal_form_aux_H ∧
       ContDiffOn ℝ ∞ e e.source ∧ ContDiffOn ℝ ∞ e.symm e.target := by
-  sorry
+  rcases apm_t97J05_local_normal_form_aux_inverse_at_p with
+    ⟨e₀, hp, hHp, he₀, he₀inv⟩
+  let U : Set apm_t97J05_R3 :=
+    {x | IsUnit (fderiv ℝ apm_t97J05_local_normal_form_aux_H x)}
+  have hUopen : IsOpen U := by
+    exact Units.isOpen.preimage
+      (apm_t97J05_local_normal_form_aux_smooth.continuous_fderiv (by simp))
+  have hpU : apm_t97J05_p ∈ U := by
+    exact ContinuousLinearMap.isUnit_iff_bijective.mpr
+      apm_t97J05_local_normal_form_aux_deriv_bij
+  let e := e₀.restrOpen U hUopen
+  have hp' : apm_t97J05_p ∈ e.source := ⟨hp, hpU⟩
+  refine ⟨e, hp', ?_, ?_, ?_, ?_⟩
+  · rw [← he₀]
+    exact e.map_source hp'
+  · simpa [e] using he₀
+  · rw [show (e : apm_t97J05_R3 → apm_t97J05_R3) =
+        apm_t97J05_local_normal_form_aux_H by simpa [e] using he₀]
+    exact apm_t97J05_local_normal_form_aux_smooth.contDiffOn
+  · intro y hy
+    have hx : e.symm y ∈ U := by
+      exact (e.map_target hy).2
+    have hb : Function.Bijective
+        (fderiv ℝ apm_t97J05_local_normal_form_aux_H (e.symm y)) :=
+      ContinuousLinearMap.isUnit_iff_bijective.mp hx
+    let L : apm_t97J05_R3 ≃L[ℝ] apm_t97J05_R3 :=
+      ContinuousLinearEquiv.ofBijective
+        (fderiv ℝ apm_t97J05_local_normal_form_aux_H (e.symm y))
+        (LinearMap.ker_eq_bot.mpr hb.1) (LinearMap.range_eq_top.mpr hb.2)
+    apply (e.contDiffAt_symm (f₀' := L) hy ?_ ?_).contDiffWithinAt
+    · have hd := (apm_t97J05_local_normal_form_aux_smooth.differentiable
+          (by simp) (e.symm y)).hasFDerivAt
+      rw [show (e : apm_t97J05_R3 → apm_t97J05_R3) =
+          apm_t97J05_local_normal_form_aux_H by simpa [e] using he₀]
+      apply hd.congr_fderiv
+      exact ContinuousLinearEquiv.coe_ofBijective _ _ _ |>.symm
+    · rw [show (e : apm_t97J05_R3 → apm_t97J05_R3) =
+          apm_t97J05_local_normal_form_aux_H by simpa [e] using he₀]
+      exact apm_t97J05_local_normal_form_aux_smooth.contDiffAt
 -- END SEAT AREA
 
 theorem apm_t97J05_local_normal_form :
