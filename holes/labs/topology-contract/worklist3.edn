@@ -24430,7 +24430,7 @@
    :consumer :t01A08,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 0,
    :review-finding
    "extend Mathlib: state and prove the missing theorem in scope",
    :implements-lemma :lemma-closedset-whitneycubecover,
@@ -24473,6 +24473,17 @@
     [{:cmd "build",
       :exit 1,
       :correction "matched floor_div_natCast orientation"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791919112100-10261-00d7160d",
+     :commands
+     ["git show/diff 70b63a88; scope and nesting review"
+      "lake build ConstructionTargets.SardConvexDomain"
+      "sha256sum + lake env lean parent fixture"
+      "statement-registry check; placeholder recount"],
+     :finding
+     "PASS. Commit 70b63a88 changes only SardConvexDomain.lean and correctly defines the generation-plus-one parent using Euclidean integer division, then proves half-open cube inclusion through the unique floor-coordinate cube. This is compiled, sorry-free standard-axiom progress; maximal selection, geometry/local finiteness, and proper-cover assembly remain listed. Fixture hash matches; build/fixture pass; registry 150/150; forbidden count 0->0."},
     :commit "70b63a88d84bf231927d4c726b87b8a9905f1f31",
     :changed-paths ["ConstructionTargets/SardConvexDomain.lean"],
     :fixture
@@ -24481,7 +24492,7 @@
      "c0ccf36ed6a78c909dc05224aa91301e15dcb49fb29adba5db55852c31e794c3"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain.blueprint/B3",
    :acceptance
@@ -36069,7 +36080,7 @@
    :other-consumers []}
   {:consumer :t01A08,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -36083,7 +36094,9 @@
     :type
     "each half-open dyadic cube is contained in its generation-plus-one parent",
     :area "sard-convex-domain",
-    :proved-in :r-a08-sard-b3-whitney-cubes-1},
+    :proved-in :r-a08-sard-b3-whitney-cubes-1,
+    :banked-by :r-a08-sard-b3-whitney-cubes-1,
+    :banked-commit "70b63a88d84bf231927d4c726b87b8a9905f1f31"},
    :id
    :lemma-constructiontargets-sardconvexdomain-whitneydyadiccube-subset-parent,
    :kind :lemma,
