@@ -209,8 +209,8 @@ lean: `t97A07Closure.not_surjective_mfderiv_of_isMaxOn_coordinate` : if
 manifold, then
 `¬ Function.Surjective (mfderiv 𝒘(ℝ, E m) 𝒘(ℝ, E n) f x)`.
 
-uses: Mathlib `IsLocalMax.fderiv_eq_zero`, `contMDiffAt_iff`, `mfderiv_comp`,
-and the extended-chart derivative equivalences
+uses: B2, Mathlib `IsLocalMax.fderiv_eq_zero`, `contMDiffAt_iff`,
+`mfderiv_comp`, and the extended-chart derivative equivalences
 
 status: proved
 
