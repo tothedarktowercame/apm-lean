@@ -698,7 +698,36 @@ private lemma apm_m98A06_sine_computations_aux_admissible
 lemma apm_m98A06_sine_computations_aux_energy (L : ℝ) (hL : 0 < L) (k : ℕ) (hk : k ≠ 0) :
     apm_m98a06_I L (fun x ↦ Real.sin ((k : ℝ) * Real.pi * x / L)) =
       ((((k : ℝ) * Real.pi / L) ^ 2 - 1) * (L / 2)) := by
-  sorry
+  let a : ℝ := (k : ℝ) * Real.pi / L
+  have hL0 : L ≠ 0 := ne_of_gt hL
+  have hkR : (k : ℝ) ≠ 0 := by exact_mod_cast hk
+  have ha : a ≠ 0 := div_ne_zero (mul_ne_zero hkR Real.pi_ne_zero) hL0
+  have haL : a * L = (k : ℝ) * Real.pi := by
+    dsimp [a]
+    field_simp
+  simp_rw [apm_m98a06_I, apm_m98A06_sine_computations_aux_deriv]
+  have harg (x : ℝ) : (k : ℝ) * Real.pi * x / L = a * x := by
+    dsimp [a]
+    field_simp
+  simp_rw [harg]
+  change (∫ x in (0 : ℝ)..L,
+      (a * Real.cos (a * x)) ^ 2 - Real.sin (a * x) ^ 2) =
+    (a ^ 2 - 1) * (L / 2)
+  rw [intervalIntegral.integral_sub]
+  · rw [show (fun x : ℝ ↦ (a * Real.cos (a * x)) ^ 2) =
+        fun x ↦ a ^ 2 * Real.cos (a * x) ^ 2 by funext x; ring,
+      intervalIntegral.integral_const_mul,
+      intervalIntegral.integral_comp_mul_left (fun x : ℝ ↦ Real.cos x ^ 2) ha,
+      intervalIntegral.integral_comp_mul_left (fun x : ℝ ↦ Real.sin x ^ 2) ha,
+      haL]
+    simp [Real.sin_nat_mul_pi]
+    field_simp [ha]
+    rw [← haL]
+    ring
+  · exact (by fun_prop : Continuous fun x : ℝ ↦
+      (a * Real.cos (a * x)) ^ 2).intervalIntegrable _ _
+  · exact (by fun_prop : Continuous fun x : ℝ ↦
+      Real.sin (a * x) ^ 2).intervalIntegrable _ _
 
 -- The normalised modes on [0, π]: regularity and the H¹₀ membership predicate.
 lemma apm_m98A06_sine_computations_aux_unit_H10 (k : ℕ) (hk : k ≠ 0) :
