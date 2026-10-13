@@ -87837,9 +87837,37 @@
      :reason
      "Banked non-preconnectedness of the punctured sigma2 zeroth-chart slice."}]}
   {:consumer :t97A01,
-   :stop-count 0,
+   :stop-count 1,
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "After blueprint review, implement B1-B3 notation, signed attaching degrees, and the boundary linear map; then proceed through radial Mayer-Vietoris.",
+    :stop-count 1,
+    :outcome :stop,
+    :warnings ["unrelated modified t93J03 closure files preserved"],
+    :missing-theorems [],
+    :statement-hashes {:registry "150/0"},
+    :disposition :stop,
+    :axioms [],
+    :author "topo-6",
+    :reason
+    "Blueprint written; independent review is required before formalization.",
+    :commands
+    [{:cmd
+      "git diff --check -- ConstructionTargets/PolygonSurfaceHomology.blueprint.md",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd "git show --check 10593d059", :exit 0}],
+    :commit "10593d059",
+    :changed-paths
+    ["ConstructionTargets/PolygonSurfaceHomology.blueprint.md"],
+    :fixture
+    {:path "ConstructionTargets/PolygonSurfaceHomology.blueprint.md",
+     :sha256
+     "de51001b7d679ce2f9454dea4fa9da90576b732aa48fddc37c9a3757428ced6c"},
+    :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
