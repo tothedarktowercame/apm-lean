@@ -2111,7 +2111,76 @@ lemma apm_a97j08_grid_region_construction_aux_square_dist (s : ℂ) {ε : ℝ} (
 lemma apm_a97j08_grid_region_construction_aux_finite (s : ℂ) {ε : ℝ} (hε : 0 < ε)
     (T : Set ℂ) (hT : Bornology.IsBounded T) :
     ∃ Q : Finset (ℤ × ℤ), ∀ q, q ∈ Q ↔ (apm_a97j08_gridSquare s ε q ∩ T).Nonempty := by
-  sorry
+  classical
+  obtain ⟨M, hM⟩ := hT.subset_closedBall (0 : ℂ)
+  obtain ⟨N : ℕ, hN⟩ := exists_nat_gt
+    (max ((M + |s.re| + ε) / ε) ((M + |s.im| + ε) / ε))
+  let S : Set (ℤ × ℤ) :=
+    {q | (apm_a97j08_gridSquare s ε q ∩ T).Nonempty}
+  have hsub : S ⊆ (Set.Icc (-(N : ℤ)) (N : ℤ) ×ˢ Set.Icc (-(N : ℤ)) (N : ℤ)) := by
+    intro q hq
+    obtain ⟨w, hwq, hwT⟩ := hq
+    have hwnorm : ‖w‖ ≤ M := by
+      have := hM hwT
+      simpa [Metric.mem_closedBall, dist_zero_right] using this
+    have hwre : |w.re| ≤ M := (Complex.abs_re_le_norm w).trans hwnorm
+    have hwim : |w.im| ≤ M := (Complex.abs_im_le_norm w).trans hwnorm
+    have hqr := hwq
+    change s.re + (q.1 : ℝ) * ε ≤ w.re ∧
+      w.re ≤ s.re + ((q.1 : ℝ) + 1) * ε ∧
+      s.im + (q.2 : ℝ) * ε ≤ w.im ∧
+      w.im ≤ s.im + ((q.2 : ℝ) + 1) * ε at hqr
+    have hNre : (M + |s.re| + ε) / ε < N :=
+      lt_of_le_of_lt (le_max_left _ _) hN
+    have hNim : (M + |s.im| + ε) / ε < N :=
+      lt_of_le_of_lt (le_max_right _ _) hN
+    have hq1loR : -(N : ℝ) < (q.1 : ℝ) := by
+      have hsre : s.re ≤ |s.re| := le_abs_self _
+      have hwrel : -M ≤ w.re := (neg_le_of_abs_le hwre)
+      have hNre' := (div_lt_iff₀ hε).mp hNre
+      by_contra hn
+      have hmul := mul_le_mul_of_nonneg_right (le_of_not_gt hn) hε.le
+      ring_nf at hmul hNre' hqr
+      linarith [hqr.2.1]
+    have hq1hiR : (q.1 : ℝ) < N := by
+      have hsre : -|s.re| ≤ s.re := neg_abs_le _
+      have hwreu : w.re ≤ M := (le_of_abs_le hwre)
+      have hNre' := (div_lt_iff₀ hε).mp hNre
+      by_contra hn
+      have hmul := mul_le_mul_of_nonneg_right (le_of_not_gt hn) hε.le
+      ring_nf at hmul hNre' hqr
+      linarith [hqr.1]
+    have hq2loR : -(N : ℝ) < (q.2 : ℝ) := by
+      have hsim : s.im ≤ |s.im| := le_abs_self _
+      have hwiml : -M ≤ w.im := neg_le_of_abs_le hwim
+      have hNim' := (div_lt_iff₀ hε).mp hNim
+      by_contra hn
+      have hmul := mul_le_mul_of_nonneg_right (le_of_not_gt hn) hε.le
+      ring_nf at hmul hNim' hqr
+      linarith [hqr.2.2.2]
+    have hq2hiR : (q.2 : ℝ) < N := by
+      have hsim : -|s.im| ≤ s.im := neg_abs_le _
+      have hwimu : w.im ≤ M := le_of_abs_le hwim
+      have hNim' := (div_lt_iff₀ hε).mp hNim
+      by_contra hn
+      have hmul := mul_le_mul_of_nonneg_right (le_of_not_gt hn) hε.le
+      ring_nf at hmul hNim' hqr
+      linarith [hqr.2.2.1]
+    exact ⟨⟨by exact_mod_cast hq1loR.le, by exact_mod_cast hq1hiR.le⟩,
+      ⟨by exact_mod_cast hq2loR.le, by exact_mod_cast hq2hiR.le⟩⟩
+  let box : Finset (ℤ × ℤ) :=
+    Finset.Icc (-(N : ℤ)) (N : ℤ) ×ˢ Finset.Icc (-(N : ℤ)) (N : ℤ)
+  let Q := box.filter fun q ↦ (apm_a97j08_gridSquare s ε q ∩ T).Nonempty
+  refine ⟨Q, fun q ↦ ?_⟩
+  simp only [Q, Finset.mem_filter]
+  constructor
+  · exact fun h ↦ h.2
+  · intro hq
+    refine ⟨?_, hq⟩
+    have hb := hsub (show q ∈ S by exact hq)
+    rcases hb with ⟨hlo, hhi⟩
+    simp only [box, Finset.mem_product, Finset.mem_Icc]
+    exact ⟨hlo, hhi⟩
 
 lemma apm_a97j08_grid_region_construction_aux_cover
     (D : Set ℂ) (z : ℂ) (R δ : ℝ) (A B : Set ℂ)
