@@ -57,58 +57,80 @@ record beyond the source file's existing account of the same obstruction.
 predicate above.  `apm_t96a08_LineIntegral I omega gamma` retains the original
 concrete interval integral of the one-form applied to `mfderiv gamma`.
 
-## Remaining lemma
+## Split library lemmas
 
-### `apm_t96A08_piecewise_lineIntegral_fundamental` (LIBRARY)
+### `apm_t96A08_piecewisePath_concat_additive`
 
-**Statement in words.** Let a smooth one-form be given on a smooth manifold.
-If every point is reachable from `base` by a repaired piecewise-smooth path,
-and a function `f` equals the one-form integral along every such path from
-`base`, then `f` is smooth and its manifold derivative is the one-form.
+Construct the two-speed concatenation and combine the two finite cut lists;
+then prove integral additivity by affine changes of variables. Independent of
+all other new lemmas. Expected size: **90--140 lines**.
 
-**Why true.** Fix a point and a chart with a smaller convex chart
-neighbourhood.  Join `base` to the fixed point and append a chart-linear short
-segment to a variable endpoint.  Path independence (already packaged in the
-`hf` hypothesis) identifies `f` locally with a constant plus the integral on
-that final segment.  In coordinates, smoothness of the tangent-bundle
-evaluation map makes the parameter-dependent integrand smooth.  The
-parameterized fundamental theorem of calculus shows that this local expression
-is smooth and that its derivative at the fixed endpoint is `omega`.  Transfer
-the calculation through the chart, then use locality of `ContMDiff`.
+Useful Mathlib API: `Continuous.piecewise`, `ContMDiffOn.comp`,
+`intervalIntegral.integral_add_adjacent_intervals`,
+`intervalIntegral.integral_comp_mul_deriv`, `integral_congr_ae`, and `Fin`
+lemmas for joining cut lists. The integrand value at the single join is
+irrelevant almost everywhere.
 
-This is a genuine missing library theorem, not a useful 30--150 line seat.
-It needs the full manifold chart calculation plus a piecewise-path
-concatenation/reparameterization and interval-integral splitting API.  The
-existing solve attempt independently estimated it beyond a normal lemma seat
-and found no compatible Mathlib theorem or sorry-free `ConstructionTargets`
-module.  It is therefore stated once rather than split into fake lemmas whose
-proofs would duplicate this same calculation.
+Degenerate checks: constant paths work; continuity at the join follows from
+the endpoint equality; old endpoints remain in closed pieces; both affine
+maps are increasing, so there is no orientation sign, and their speed factors
+cancel the half-interval substitutions.
 
-**Expected size.** 300--600 lines (LIBRARY program).
+### `apm_t96A08_chart_radial_primitive`
 
-**Dependencies.** Only the definitions block and Mathlib.  Its `hf` hypothesis
-is the independently established path-integral specification, not the lemma's
-smoothness/derivative conclusion in disguise.
+Shrink a chart at `x` to the inverse image of a convex ball and integrate on
+the chart-linear segment from `x` to `z`. Prove the resulting local function
+smooth and compute its derivative at `x`. Independent of concatenation and of
+`f`. Expected size: **120--150 lines**. If chart bookkeeping pushes it over
+that bound, split construction of the convex chart neighbourhood from the
+parameter-integral calculation, passing the coordinate formula explicitly.
 
-**Truth check.** The hand proof above is the standard local proof.  On
-`M = ℝ` with `omega = dx`, it reduces to the ordinary fundamental theorem of
-calculus and gives `f(x) = x - base`.  For `omega = 0`, path independence gives
-the constant zero normalized potential and both conclusions follow.  The
-oscillatory old-path counterexample is excluded by the repaired closed-piece
-hypothesis.
+Useful Mathlib API: `extChartAt`, chart source/target openness,
+`Metric.isOpen_ball`, convexity of norm balls, `ContMDiff.cl_mfderiv`,
+`hasFDerivAt_integral_of_dominated_of_fderiv_le` (or the interval-integral
+variant), `writtenInExtChartAt`, and `mfld_simps`. Do not import `SphereCap*`
+or `LinearGraphMeasure`.
+
+Degenerate checks: `z = x` gives the constant segment and zero integral;
+closed-piece smoothness includes `t = 0,1`; in dimension zero both derivative
+maps are uniquely zero. Choose a positive-radius ball whose closure stays in
+the chart target, so boundary points do not escape the chart.
+
+### `apm_t96A08_potential_of_local_primitives`
+
+For fixed `x`, append each radial path to a chosen path from `base` to `x`.
+Additivity and `hf` yield `f z - f x = g z - g x`; use this local equality to
+transfer smoothness and derivative, then globalize. Both substantive results
+are explicit hypotheses, so this seat can be proved in parallel with them.
+Expected size: **45--80 lines**.
+
+Useful Mathlib API: `ContMDiffOn.congr`, `contMDiff_iff_contMDiffAt`,
+`ContMDiffAt.congr_of_eventuallyEq`, `mfderiv_congr_of_eventuallyEq`, and the
+derivative rules for adding a constant.
+
+Degenerate checks: `hreachable` handles `base`; the neighbourhood is nonempty
+because it contains `x`; the local additive constant has derivative zero.
+This is not vacuous: it requires both structural properties and the full path
+specification `hf`.
+
+### `apm_t96A08_piecewise_lineIntegral_fundamental` (assembly)
+
+Sorry-free assembly of the three lemmas above; its registered statement is
+unchanged.
 
 ## Assembly
 
 The main theorem uses classical choice to select one reachable path to each
 point and defines `f` to be its integral.  `hindependent` proves the full `hf`
-specification.  The LIBRARY lemma supplies smoothness and `mfderiv f = omega`.
+specification.  The assembled lemma supplies smoothness and `mfderiv f = omega`.
 This assembly is sorry-free.
 
 ## Dependency layers
 
-* **Layer 1:** `apm_t96A08_piecewise_lineIntegral_fundamental` (one LIBRARY
-  program).
-* **Layer 2 (already compiled):** choice, well-definedness, and final assembly.
+* **Layer 1 (parallel):** concatenation/additivity and chart radial primitive.
+* **Layer 2 (also independently provable):** abstract potential/locality glue.
+* **Layer 3:** sorry-free fundamental-lemma assembly.
+* **Layer 4 (already proved):** choice, well-definedness, and final assembly.
 
 ## Compilation and axioms
 
@@ -125,6 +147,11 @@ The final output of `#print axioms apm_t96a08` was:
 'apm_t96a08' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
 ```
 
-The sole `sorryAx` enters through the one top-level LIBRARY lemma.  The main
-theorem has no direct `sorry`.
+The `sorryAx` dependencies enter only through the three independent leaf
+lemmas. The fundamental lemma and main theorem have no direct `sorry`.
 
+**claude-14 review fix (2026-10-13).** `apm_t96A08_piecewisePath_concat_additive` now assumes `homega_smooth`.
+Without any regularity of `omega`, the integrand along `gamma` can be non-integrable (interval integral `0`
+by convention) while `delta`'s is not, and the concatenation's integral is then `0 ≠ 0 + ∫delta`: the
+statement was not true for arbitrary `omega`. With `omega` continuous on the tangent bundle, each closed
+smooth piece gives a bounded, piecewise-continuous integrand, so the affine-reparameterised integrals add.
