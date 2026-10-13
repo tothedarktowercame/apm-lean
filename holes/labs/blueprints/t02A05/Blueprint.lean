@@ -219,9 +219,31 @@ theorem apm_t02a05_sphere_mass_eq_two_caps :
   ring
 
 /-- (C) The cap integral against Lebesgue measure: `∫₀^{2π} ∫₀¹ r / √(1 − r²) dr dθ = 2π`. -/
+lemma apm_t02a05_cap_integral_aux_measurable :
+    Measurable (fun x : EuclideanSpace ℝ (Fin 2) =>
+      ENNReal.ofReal (1 / Real.sqrt (1 - ‖x‖ ^ 2))) := by
+  fun_prop
+
+lemma apm_t02a05_cap_integral_aux_nonneg
+    (x : EuclideanSpace ℝ (Fin 2)) :
+    0 ≤ ENNReal.ofReal (1 / Real.sqrt (1 - ‖x‖ ^ 2)) := by
+  exact bot_le
+
+/-- Polar coordinates: the radial integrand over the unit disc. -/
+lemma apm_t02a05_cap_integral_aux_polar :
+    (∫⁻ x in Metric.ball (0 : EuclideanSpace ℝ (Fin 2)) 1, ENNReal.ofReal (1 / Real.sqrt (1 - ‖x‖ ^ 2))) =
+      ENNReal.ofReal (2 * Real.pi) *
+        ∫⁻ r in Set.Ioo (0 : ℝ) 1, ENNReal.ofReal (r / Real.sqrt (1 - r ^ 2)) := by
+  sorry
+
+/-- The radial integral: `∫₀¹ r / √(1 - r²) dr = 1` (antiderivative `-√(1 - r²)`). -/
+lemma apm_t02a05_cap_integral_aux_radial :
+    (∫⁻ r in Set.Ioo (0 : ℝ) 1, ENNReal.ofReal (r / Real.sqrt (1 - r ^ 2))) = 1 := by
+  sorry
+
 theorem apm_t02a05_cap_integral :
     (∫⁻ x in Metric.ball (0 : EuclideanSpace ℝ (Fin 2)) 1, ENNReal.ofReal (1 / Real.sqrt (1 - ‖x‖ ^ 2))) = ENNReal.ofReal (2 * Real.pi) := by
-  sorry
+  rw [apm_t02a05_cap_integral_aux_polar, apm_t02a05_cap_integral_aux_radial, mul_one]
 
 /-- The normalized two-dimensional Hausdorff mass of the Euclidean unit
 sphere in three-space. -/
