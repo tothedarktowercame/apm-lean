@@ -23717,7 +23717,7 @@
    :consumer :t01A08,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "Recorded commit is invalid: f032efae9d1501f7ddfe93c66668f88f24ed37f4 is absent locally and origin rejects it as not our ref. The intended scoped commit appears to be f032efae9b89fb527a72ea9192f3c89f09f82615. Repair the row to record the exact existing full SHA, then rerun independent review.",
    :implements-lemma
@@ -23725,17 +23725,17 @@
    :evidence
    {:placeholder-delta {:t01A08 [1 1]},
     :residual
-    "Use the finite-order relative neighborhood with closure localization; induct on order; combine leading/tail swaps and adjacent closure; B1.",
+    "Intersect the finite-smooth relative neighborhood with interior s; induct there; extend lower symmetry; lift tail swaps; combine leading swap and adjacent closure; B1.",
     :outcome :stop,
     :warnings [],
     :missing-theorems
     [{:name
-      "ContDiffWithinAt.exists_mem_nhdsWithin_contDiffWithinAt_of_infty",
+      "ContDiffWithinAt.domDomCongr_iteratedFDerivWithin_of_eqOn",
       :type
-      "C-infinity supplies a relative neighborhood of pointwise C-k smoothness for each finite k",
+      "smooth jet permutation identity on a smaller set extends to a base point in its closure",
       :status :proved,
       :consumers [:t01A08],
-      :depends-on [],
+      :depends-on ["ContinuousWithinAt.eq_of_eqOn_of_mem_closure"],
       :area "sard-convex-domain"}
      {:name
       "ContDiffWithinAt.domDomCongr_iteratedFDerivWithin_of_infty",
@@ -23743,38 +23743,23 @@
       :status :partial,
       :consumers [:t01A08],
       :depends-on
-      ["ContDiffWithinAt.exists_mem_nhdsWithin_contDiffWithinAt_of_infty"],
+      ["ContDiffWithinAt.domDomCongr_iteratedFDerivWithin_of_eqOn"
+       "ContDiffWithinAt.exists_mem_nhdsWithin_contDiffWithinAt_of_infty"],
       :area "sard-convex-domain"}],
     :statement-hashes {:registry "147/147"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Finite-order smooth relative neighborhood proved; instantiate it with closure localization and finish the permutation induction.",
+    "Localized jet-permutation identities now extend from any dense smaller set; instantiate on the finite-smooth neighborhood intersection and finish induction.",
     :commands
     [{:cmd
-      "lake build ConstructionTargets.SardConvexDomain; lake env lean helper and fixture; hash/registry/commit checks",
+      "lake build ConstructionTargets.SardConvexDomain; lake env lean helper and fixture; hash/registry checks",
+      :exit 0}
+     {:cmd
+      "git cat-file/diff-tree/merge-base 2ce3852770c7e30dc3a31afb2c6e9e09a4d0c7b8",
       :exit 0}],
-    :diagnostic-history
-    [{:cmd "finite-order scratch",
-      :exit 1,
-      :correction "made WithTop order coercion explicit; compiled"}
-     {:cmd "frame symlink precheck",
-      :exit 1,
-      :correction
-      "canonical apm-lean checkout is not a frame; ran gates with its package authority"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1791882623871-9249-4c65e962",
-     :commands
-     ["git show/diff cb65ff30; scope and recorded-tree checks"
-      "lake build ConstructionTargets.SardConvexDomain"
-      "lake env lean fixture and /tmp/CheckSardSmoothSet.lean"
-      "sha256sum fixture; statement-registry check; placeholder recount"],
-     :finding
-     "PASS: valid STOP after real progress. One-file commit correctly extracts, for each finite k, a relative neighborhood where pointwise C^k-within smoothness holds: C∞ is lowered to k and ContDiffWithinAt.eventually supplies the set; x∈s removes the inserted base point. Build/export pass; fixture hash matches; standard axioms only; registry 147/147; sorry/admit 0->0. Combining this neighborhood with closure localization and the permutation induction remains listed."},
-    :commit "cb65ff3000337602c3de8aab28cb628f79b7a4e1",
+    :commit "2ce3852770c7e30dc3a31afb2c6e9e09a4d0c7b8",
     :changed-paths ["ConstructionTargets/SardConvexDomain.lean"],
     :fixture
     {:path "/tmp/t01a08_smooth_symmetry_membership_probe.lean",
@@ -23783,7 +23768,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain/B1/symmetry",
    :acceptance
@@ -33750,7 +33735,8 @@
     :lemma-continuouswithinat-eq-of-eqon-of-mem-closure
     :lemma-mem-closure-inter-of-mem-nhds
     :lemma-mem-closure-inter-of-mem-nhdswithin
-    :lemma-contdiffwithinat-exists-mem-nhdswithin-contdiffwithinat-of-infty],
+    :lemma-contdiffwithinat-exists-mem-nhdswithin-contdiffwithinat-of-infty
+    :lemma-contdiffwithinat-domdomcongr-iteratedfderivwithin-of-eqon],
    :other-consumers []}
   {:consumer :t01A08,
    :phase :lemma,
@@ -34029,6 +34015,26 @@
    :lemma-contdiffwithinat-exists-mem-nhdswithin-contdiffwithinat-of-infty,
    :kind :lemma,
    :depends-on [],
+   :other-consumers []}
+  {:consumer :t01A08,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "ContDiffWithinAt.domDomCongr_iteratedFDerivWithin_of_eqOn",
+    :type
+    "smooth jet permutation identity on a smaller set extends to a base point in its closure"},
+   :lemma
+   {:name "ContDiffWithinAt.domDomCongr_iteratedFDerivWithin_of_eqOn",
+    :reported-by [:r-a08-symmetry-slots-1],
+    :type
+    "smooth jet permutation identity on a smaller set extends to a base point in its closure",
+    :area "sard-convex-domain",
+    :proved-in :r-a08-symmetry-slots-1},
+   :id
+   :lemma-contdiffwithinat-domdomcongr-iteratedfderivwithin-of-eqon,
+   :kind :lemma,
+   :depends-on [:lemma-continuouswithinat-eq-of-eqon-of-mem-closure],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
