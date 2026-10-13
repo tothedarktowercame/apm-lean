@@ -24122,8 +24122,70 @@
      :typed-residual-change
      :infrastructure-packets
      :review-outcomes]},
+   :evidence
+   {:outcome :replan,
+    :seat "topo-12",
+    :commands
+    [{:cmd
+      "bb holes/labs/topology-contract/build_step.bb priorities holes/labs/topology-contract/worklist3.edn",
+      :exit 0}],
+    :finding
+    {:measures
+     "placeholder Δ0; typed residual B1→criticalImageNull; 1 packet; B1 PASS",
+     :routes
+     "A08:1 placeholder,31/1; B1 banked; criticalImageNull→consumer adapter",
+     :top
+     "smooth_compact_surface_classification; rule0 elects A08 criticalImageNull"},
+    :replacement-items
+    [{:bounded-exception "Rule0; final Sard foundation node.",
+      :consumer :t01A08,
+      :implements-lemma :lemma-sard-corners,
+      :phase :probe,
+      :state :open,
+      :scope ["ConstructionTargets/SardConvexDomain.lean"],
+      :dag-node "SardConvexDomain.blueprint/B9",
+      :acceptance
+      {:probe
+       "Compile criticalImageNull or exactly one next prerequisite.",
+       :declaration
+       "ConstructionTargets.SardConvexDomain.criticalImageNull",
+       :type
+       "B9 closed-convex within-critical image nullity in blueprint",
+       :blueprint "ConstructionTargets/SardConvexDomain.blueprint.md",
+       :placeholder "t01A08 sorry",
+       :route-step "B2-B9 convex-domain Sard"},
+      :id :r-a08-sard-critical-image-1,
+      :kind :reusable-theorem,
+      :area "sard-convex-domain",
+      :depends-on
+      [:r-topo3-cp14b
+       :lemma-constructiontargets-sardconvexdomain-contdiffon-convexwithinjet],
+      :current-residual "Consumer adapter.",
+      :other-consumers []}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 1,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :phase :strategy,
+      :state :open,
+      :scope [],
+      :dag-node "TOPOLOGY-ROUTES.md",
+      :acceptance {:strategy "Review Sard probe; rerank."},
+      :id :r-topo3-cp15,
+      :kind :strategy-checkpoint,
+      :area "portfolio",
+      :depends-on [:r-a08-sard-critical-image-1],
+      :current-residual "Close A08 route.",
+      :other-consumers []}],
+    :author "topo-12",
+    :disposition :replan},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance {:strategy "Review B1 probe; rerank."},
@@ -24132,6 +24194,51 @@
    :area "portfolio",
    :depends-on [:r-a08-sard-b1-3 :r-topo3-cp13c],
    :current-residual "Next A08 node.",
+   :other-consumers []}
+  {:bounded-exception "Rule0; final Sard foundation node.",
+   :consumer :t01A08,
+   :implements-lemma :lemma-sard-corners,
+   :phase :probe,
+   :state :blocked,
+   :scope ["ConstructionTargets/SardConvexDomain.lean"],
+   :dag-node "SardConvexDomain.blueprint/B9",
+   :acceptance
+   {:probe
+    "Compile criticalImageNull or exactly one next prerequisite.",
+    :declaration
+    "ConstructionTargets.SardConvexDomain.criticalImageNull",
+    :type
+    "B9 closed-convex within-critical image nullity in blueprint",
+    :blueprint "ConstructionTargets/SardConvexDomain.blueprint.md",
+    :placeholder "t01A08 sorry",
+    :route-step "B2-B9 convex-domain Sard"},
+   :id :r-a08-sard-critical-image-1,
+   :kind :reusable-theorem,
+   :area "sard-convex-domain",
+   :depends-on
+   [:r-topo3-cp14b
+    :lemma-constructiontargets-sardconvexdomain-contdiffon-convexwithinjet],
+   :current-residual "Consumer adapter.",
+   :other-consumers []}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 1,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md",
+   :acceptance {:strategy "Review Sard probe; rerank."},
+   :id :r-topo3-cp15,
+   :kind :strategy-checkpoint,
+   :area "portfolio",
+   :depends-on [:r-a08-sard-critical-image-1 :r-topo3-cp14b],
+   :current-residual "Close A08 route.",
    :other-consumers []}
   {:bounded-exception "Rule0.",
    :consumer :t01A08,
