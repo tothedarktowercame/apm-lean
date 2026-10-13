@@ -220,13 +220,56 @@ lemma apm_m99J06_galerkin_unique {H : Type*} [NormedAddCommGroup H]
     simpa using sub_eq_zero.mpr ((hu (u - w)).trans hz'.symm)
   exact sub_eq_zero.mp (inner_self_eq_zero.mp hinner)
 
+/-! ### Split of `apm_m99J06_weak_iff_strong` (claude-14, 2026-10-13, after a partial round-2 attempt)
+Mathlib supplies the analysis: `AbsolutelyContinuousOnInterval.integral_mul_deriv_eq_deriv_mul`,
+`IntervalIntegrable.absolutelyContinuousOnInterval_intervalIntegral`,
+`IntervalIntegrable.ae_hasDerivAt_integral`. The three lemmas below are parallel:
+`weak_to_strong` takes the du Bois-Reymond lemma as a hypothesis. -/
+
+/-- Strong ⇒ weak: integrate `ddu * v` by parts; the boundary term vanishes since `v 0 = v 1 = 0`. -/
+theorem apm_m99J06_strong_to_weak
+    {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℝ H]
+    (M : apm_m99J06_H01Model H) (f : ℝ → ℝ) (u : H)
+    (hu : apm_m99J06_strongSolution M f u) :
+    apm_m99J06_weakSolution M f u := by
+  sorry
+
+/-- du Bois-Reymond for the model: if `∫ g w' = ∫ h w` for every `w`, then `g = c − ∫₀ˣ h` a.e.
+Test with `w` realizing `x ↦ ∫₀ˣ (g + G − mean)`, `G x = ∫₀ˣ h`. -/
+theorem apm_m99J06_du_bois_reymond
+    {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℝ H]
+    (M : apm_m99J06_H01Model H) (g h : ℝ → ℝ)
+    (hg : MemLp g 2 apm_m99J06_intervalMeasure) (hh : MemLp h 2 apm_m99J06_intervalMeasure)
+    (hw : ∀ w : H, ∫ x in Icc (0 : ℝ) 1, g x * M.weakDeriv w x =
+      ∫ x in Icc (0 : ℝ) 1, h x * M.val w x) :
+    ∃ c : ℝ, ∀ᵐ x ∂apm_m99J06_intervalMeasure, g x = c - ∫ t in (0 : ℝ)..x, h t := by
+  sorry
+
+/-- Weak ⇒ strong, given du Bois-Reymond: with `h = f − u`, `u' = c + ∫₀ˣ (u − f)` is an absolutely
+continuous representative with derivative `u − f` a.e. -/
+theorem apm_m99J06_weak_to_strong
+    {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℝ H]
+    (M : apm_m99J06_H01Model H) (f : ℝ → ℝ)
+    (hf : MemLp f 2 apm_m99J06_intervalMeasure)
+    (hDBR : ∀ g h : ℝ → ℝ, MemLp g 2 apm_m99J06_intervalMeasure →
+      MemLp h 2 apm_m99J06_intervalMeasure →
+      (∀ w : H, ∫ x in Icc (0 : ℝ) 1, g x * M.weakDeriv w x =
+        ∫ x in Icc (0 : ℝ) 1, h x * M.val w x) →
+      ∃ c : ℝ, ∀ᵐ x ∂apm_m99J06_intervalMeasure, g x = c - ∫ t in (0 : ℝ)..x, h t)
+    (u : H) (hu : apm_m99J06_weakSolution M f u) :
+    apm_m99J06_strongSolution M f u := by
+  sorry
+
 theorem apm_m99J06_weak_iff_strong
     {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℝ H]
     (M : apm_m99J06_H01Model H) (f : ℝ → ℝ)
     (hf : MemLp f 2 apm_m99J06_intervalMeasure) :
     ∀ u : H, apm_m99J06_weakSolution M f u ↔
       apm_m99J06_strongSolution M f u := by
-  sorry
+  intro u
+  exact ⟨apm_m99J06_weak_to_strong M f hf
+      (fun g h hg hh hw ↦ apm_m99J06_du_bois_reymond M g h hg hh hw) u,
+    apm_m99J06_strong_to_weak M f u⟩
 
 /-- Shared Riesz-representation bridge for both the ambient weak problem and
 finite-dimensional Galerkin problems. -/
