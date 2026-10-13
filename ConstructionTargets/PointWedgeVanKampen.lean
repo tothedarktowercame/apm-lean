@@ -3513,6 +3513,32 @@ theorem genericPointWedgeCoordinateSpanGlobalRestrictionLeftComparison_eq_factor
   rw [genericPointWedgeCoordinateSpanGlobalRestrictionLeftComparison_app]
   rfl
 
+/-- The two left comparison factors combine as one morphism before mapping
+through the literal actual-span functor. -/
+theorem genericPointWedgeCoordinateSpanGlobalRestrictionLeftComparison_eq_actualComposite :
+    let l := genericPointWedgeActualLeft x₀ y₀ M N
+    let eK := genericPointWedgeOverlapGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let eL := genericPointWedgeLeftGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let aL := genericPointWedgeLeftSpanIso
+      x₀ y₀ M N hM hN hy hx cM cN
+    let u : FundamentalGroupoid Unit := FundamentalGroupoid.mk ()
+    let f := eL.inverse.map (aL.inv.app u)
+    let g := (Functor.isoWhiskerLeft (eK.inverse ⋙ l)
+      eL.unitIso.symm).hom.app u
+    genericPointWedgeCoordinateSpanGlobalRestrictionLeftComparison
+        x₀ y₀ M N hM hN hy hx cM cN =
+      (genericPointWedgeIdentityActualSpan
+        x₀ y₀ M N hM hN hy hx cM cN).left.map (f ≫ g) := by
+  rw [genericPointWedgeCoordinateSpanGlobalRestrictionLeftComparison_eq_factors,
+    genericPointWedgeCoordinateSpanGlobalRestrictionLeftUnitFactor_eq_actual,
+    genericPointWedgeCoordinateSpanGlobalRestrictionLeftStrictFactor_eq_actual]
+  rw [← SingleObj.comp_as_mul]
+  dsimp only
+  exact ((genericPointWedgeIdentityActualSpan
+    x₀ y₀ M N hM hN hy hx cM cN).left.map_comp _ _).symm
+
 omit [PathConnectedSpace X] [PathConnectedSpace Y] in
 /-- Naturality of the left-equivalence counit gives the exact conjugacy
 equation for the inverse strict-span comparison after its inverse/forward
@@ -5951,6 +5977,7 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeCoordinateSpanGlobalRestrictionLeftUnitFactor_eq_map
 #print axioms genericPointWedgeCoordinateSpanGlobalRestrictionLeftUnitFactor_eq_actual
 #print axioms genericPointWedgeCoordinateSpanGlobalRestrictionLeftComparison_eq_factors
+#print axioms genericPointWedgeCoordinateSpanGlobalRestrictionLeftComparison_eq_actualComposite
 #print axioms genericPointWedgeCoordinateSpanGlobalRestrictionLeftRoundTrip_counit
 #print axioms genericPointWedgeCoordinateSpanGlobalRestrictionRightComparison
 #print axioms genericPointWedgeCoordinateSpanGlobalRestrictionRightComparison_app

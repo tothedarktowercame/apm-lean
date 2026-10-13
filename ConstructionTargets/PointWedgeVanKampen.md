@@ -1088,3 +1088,9 @@ now be applied to these two named factors without unfolding the comparison.
 identify that unit factor first as a reconstructed restriction map and then
 as the literal actual-span image.  Thus both left comparison factors now live
 in the same actual-span representation used by the counit naturality square.
+
+`genericPointWedgeCoordinateSpanGlobalRestrictionLeftComparison_eq_actualComposite`
+uses functoriality to recombine those two images.  The full left comparison is
+now the actual-span image of the strict-span inverse followed categorically by
+the left-equivalence unit component, with the single-object multiplication
+reversal discharged explicitly.
