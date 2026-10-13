@@ -354,11 +354,25 @@ theorem apm_t00j01_klein_connected :
   rw [← hsurj.range_eq]
   exact isConnected_range hq
 
+/-- Seat: induction on `n` (twisted generator, and its inverse). -/
+lemma apm_t00j01_klein_local_chart_aux_vertical (p : ℝ × ℝ) (n : ℤ) :
+    Relation.EqvGen apm_t00j01_kleinRel p
+      ((-1 : ℝ) ^ n * p.1, (n : ℝ) + p.2) := by
+  sorry
+
+/-- Seat: compose `aux_vertical` with `m` horizontal steps (induction on `m`). -/
+lemma apm_t00j01_klein_local_chart_aux_affine (p : ℝ × ℝ) (m n : ℤ) :
+    Relation.EqvGen apm_t00j01_kleinRel p
+      ((m : ℝ) + (-1 : ℝ) ^ n * p.1, (n : ℝ) + p.2) := by
+  sorry
+
 /-- The normal form gives a small evenly-covered rectangle at every point of
 the plane quotient, hence a two-dimensional Euclidean chart.  Its algebraic
 input is an explicit hypothesis so this seat is independent of the normal-form
 seat. -/
 theorem apm_t00j01_klein_local_chart
+    (_haff : ∀ (p : ℝ × ℝ) (m n : ℤ), Relation.EqvGen apm_t00j01_kleinRel p
+      ((m : ℝ) + (-1 : ℝ) ^ n * p.1, (n : ℝ) + p.2))
     (_hnf : ∀ {p q : ℝ × ℝ},
       Relation.EqvGen apm_t00j01_kleinRel p q →
         ∃ m n : ℤ,
@@ -417,7 +431,7 @@ theorem apm_t00j01_klein_quotient_charts :
   refine ⟨apm_t00j01_klein_circle_compact apm_t00j01_klein_compact,
     apm_t00j01_klein_circle_connected apm_t00j01_klein_connected, ?_⟩
   exact apm_t00j01_klein_circle_local_chart
-    (apm_t00j01_klein_local_chart fun {_ _} h =>
+    (apm_t00j01_klein_local_chart apm_t00j01_klein_local_chart_aux_affine fun {_ _} h =>
       apm_t00j01_kleinRel_normal_form h)
     apm_t00j01_circle_local_chart
 
