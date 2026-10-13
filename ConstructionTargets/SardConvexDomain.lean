@@ -1026,4 +1026,35 @@ theorem whitneyNormalize_mem_closedBall_half
       field_simp
       norm_num)
 
+/-- Normalization sends the scale-`k` incidence centers to a uniformly
+`1/8`-separated set, independently of `k` and `x`. -/
+theorem isSeparated_image_whitneyNormalize_incidence
+    {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    (s : Set E) (k : ℤ) (x : E) :
+    Metric.IsSeparated (ENNReal.ofReal (1 / 8))
+      (whitneyNormalize k x '' {c | c ∈ whitneyStratumNet s k ∧
+        x ∈ Metric.ball c (Metric.infDist c s / 4)}) := by
+  apply Set.Pairwise.image
+  intro c hc d hd hne
+  have hcd : c ≠ d := by
+    intro h
+    apply hne
+    rw [h]
+  have hsep := (whitneyStratumNet_spec s k).2.1 hc.1 hd.1 hcd
+  have hreal : (2 : ℝ) ^ k / 8 < dist c d := by
+    simpa [whitneyStratumRadius, edist_dist] using hsep
+  have hnorm := dist_whitneyNormalize k x c d
+  have hfixed : (1 / 8 : ℝ) <
+      dist (whitneyNormalize k x c) (whitneyNormalize k x d) := by
+    calc
+      (1 / 8 : ℝ) = ((2 : ℝ) ^ k)⁻¹ * ((2 : ℝ) ^ k / 8) := by
+        field_simp
+      _ < ((2 : ℝ) ^ k)⁻¹ * dist c d :=
+        mul_lt_mul_of_pos_left hreal (inv_pos.mpr (by positivity))
+      _ = dist (whitneyNormalize k x c) (whitneyNormalize k x d) := hnorm.symm
+  dsimp only [Function.onFun]
+  rw [edist_dist]
+  exact (ENNReal.ofReal_lt_ofReal_iff
+    (lt_trans (by norm_num : (0 : ℝ) < 1 / 8) hfixed)).2 hfixed
+
 end ConstructionTargets.SardConvexDomain
