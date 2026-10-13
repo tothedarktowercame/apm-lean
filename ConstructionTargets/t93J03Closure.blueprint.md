@@ -44,6 +44,12 @@ predicate and do not change the registered theorem or these definitions.
 
 ### C1. `t93J03_kleinBottle_pi1_every_basepoint` — LIBRARY
 
+The arbitrary-basepoint tail is compiled as
+`ConstructionTargets.t93J03Closure.fundamentalGroupEquiv_every_basepoint`.
+Thus the orbit computation need only establish the equivalence at its
+canonical quotient point; path connectedness transports it to the point in
+the frozen statement.
+
 For every `k : KleinBottle`, construct an equivalence between
 `FundamentalGroup k` and the frozen `PresentedKleinGroup`.
 

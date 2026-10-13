@@ -12,6 +12,18 @@ open ConstructionTargets.StatementSurfaceModels Set
 noncomputable section
 namespace ConstructionTargets.t93J03Closure
 
+/-- Transport a computed fundamental group from one basepoint to every
+basepoint of a path-connected space.  This is the final basepoint adapter in
+C1: the orbit calculation may use the image of `(0, 0)`, while the registered
+statement quantifies over an arbitrary point of the Klein bottle. -/
+theorem fundamentalGroupEquiv_every_basepoint
+    {Y G : Type*} [TopologicalSpace Y] [PathConnectedSpace Y] [Group G]
+    (y₀ : Y) (h₀ : Nonempty (FundamentalGroup Y y₀ ≃* G)) :
+    ∀ y : Y, Nonempty (FundamentalGroup Y y ≃* G) := by
+  intro y
+  obtain ⟨e₀⟩ := h₀
+  exact ⟨(FundamentalGroup.fundamentalGroupMulEquivOfPathConnected y y₀).trans e₀⟩
+
 def subspaceInclusion (X : Set KleinBottle) : C(X, KleinBottle) :=
   ⟨Subtype.val, continuous_subtype_val⟩
 
@@ -62,5 +74,6 @@ theorem lift_isEmbedding_assembly
 
 #print axioms coveringLift_of_subgroup_le
 #print axioms lift_isEmbedding_assembly
+#print axioms fundamentalGroupEquiv_every_basepoint
 
 end ConstructionTargets.t93J03Closure
