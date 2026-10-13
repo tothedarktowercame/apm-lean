@@ -6745,6 +6745,16 @@ theorem genericPointWedgeOuterRight_endpointTransport_eq_baseTransport :
   dsimp only
   congr 1
 
+/-- The endpoint equality witness itself is the canonical symmetric
+right-base equality, by proof irrelevance. -/
+theorem genericPointWedgeOuterRight_endpointEquality_eq_rightBase :
+    let h := genericPointWedgeOuterRight_middleComponent_endpoints
+      x₀ y₀ M N hM hN hy hx cM cN
+    h.1 = (genericPointWedgeRightEquiv_obj_rightBase
+      x₀ y₀ M N hM hN hy hx cM cN).symm := by
+  dsimp only
+  exact Subsingleton.elim _ _
+
 /-- An `inl` factorization of the right-base conjugator forces its canonical
 right projection to be trivial. -/
 theorem genericPointWedgeRightBase_inl_implies_rightProjection_eq_one
@@ -7493,6 +7503,7 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeOuterRight_transportInvRoundTrip_eq_map
 #print axioms genericPointWedgeOuterRightSpan_component_eq_baseTransport
 #print axioms genericPointWedgeOuterRight_endpointTransport_eq_baseTransport
+#print axioms genericPointWedgeOuterRight_endpointEquality_eq_rightBase
 #print axioms genericPointWedgeRightBase_inl_implies_rightProjection_eq_one
 #print axioms genericPointWedgeLegCoordinates_of_mapped
 #print axioms genericPointWedgeLegCoordinates_iff_mapped

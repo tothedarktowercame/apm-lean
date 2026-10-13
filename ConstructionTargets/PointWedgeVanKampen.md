@@ -1347,3 +1347,6 @@ that canonical transport directly with the explicit endpoint/unitInv product.
 `genericPointWedgeOuterRight_endpointTransport_eq_baseTransport` identifies
 the product's endpoint factor with the same canonical transport.  It remains
 to cancel that common factor and normalize the unshifted mapped `unitInv`.
+`genericPointWedgeOuterRight_endpointEquality_eq_rightBase` identifies the
+underlying equality witness itself with the canonical symmetric right-base
+equality.  The remaining step is the unshifted mapped `unitInv` normalization.
