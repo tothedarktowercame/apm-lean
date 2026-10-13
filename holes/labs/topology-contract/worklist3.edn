@@ -24423,35 +24423,55 @@
    :other-consumers []}
   {:bounded-exception "Rule0; named by stopped B7.",
    :consumer :t01A08,
-   :stop-count 1,
+   :stop-count 2,
    :review-finding
    "extend Mathlib: state and prove the missing theorem in scope",
    :implements-lemma :lemma-closedset-whitneycubecover,
    :evidence
-   {:outcome :stop,
-    :seat "topo-12",
-    :reason
-    "Representation boundary: reviewed B3 names half-open dyadic cubes, enlargements, diameter/distance comparability, local finiteness, bounded overlap, and chosen nearest points, but defines none of their Lean types. No Lean dyadic/Whitney cube API exists in Mathlib or ConstructionTargets; an exact fixture would invent the result representation rather than test a frozen type. This is not a refutation.",
-    :commands
-    [{:cmd
-      "rg -n -i -g *.lean dyadic/Whitney-cube terms ConstructionTargets Mathlib",
-      :exit 1,
-      :expected-exit 1}
-     {:cmd
-      "sed -n 69,89p ConstructionTargets/SardConvexDomain.blueprint.md",
-      :exit 0}],
+   {:placeholder-delta {:t01A08 [1 1]},
     :residual
-    "First specify and review the B3 cube/enlargement/cover record and exact closedSet_whitneyCubeCover type; then probe its construction.",
-    :author "topo-12",
+    "Prove maximal dyadic cover theorem, then B4-B6, finite-dimensional B7, B9.",
+    :outcome :stop,
+    :warnings ["existing unnecessarySimpa:454"],
+    :missing-theorems
+    [{:name "ConstructionTargets.SardConvexDomain.WhitneyCubeCover",
+      :type
+      "certificate: countable complement cover, enlargements, anchors, metric bounds, local finiteness, bounded overlap",
+      :status :proved,
+      :consumers [:t01A08],
+      :depends-on [],
+      :area "sard-convex-domain"}
+     {:name
+      "ConstructionTargets.SardConvexDomain.closedSet_whitneyCubeCover",
+      :type
+      "IsClosed s -> s.Nonempty -> Nonempty (WhitneyCubeCover s)",
+      :status :partial,
+      :consumers [:t01A08],
+      :depends-on
+      ["ConstructionTargets.SardConvexDomain.WhitneyCubeCover"],
+      :area "sard-convex-domain"}],
+    :statement-hashes {:registry "149/149"},
     :disposition :stop,
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1791895470558-9662-5111b2e8",
-     :finding
-     "extend Mathlib: state and prove the missing theorem in scope"}},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author :topo-10,
+    :reason
+    "Committed the reviewed B3 representation and nearest-point milestone. The exact construction theorem remains: choose a countable maximal dyadic cover and prove local finiteness, metric comparability, and bounded overlap; no existing API supplies it.",
+    :commands
+    [{:cmd "lake build ConstructionTargets.SardConvexDomain", :exit 0}
+     {:cmd
+      "lake env lean /tmp/t01a08_b3_milestone_check.lean; registry check; no-placeholder/axiom scan",
+      :exit 0}
+     {:cmd "git diff --check; commit scoped change", :exit 0}],
+    :commit "6ff20638065f666b599cbb132f300dd808b2bea2",
+    :changed-paths ["ConstructionTargets/SardConvexDomain.lean"],
+    :fixture
+    {:path "/tmp/t01a08_b3_milestone_check.lean",
+     :sha256
+     "86d6076e1f1bb15aeae9ecbc498b2e706dfea6f2d245d3419a888e228bde3340",
+     :mode :post-build-export-check},
+    :seat :topo-10},
    :phase :implementation,
-   :state :repair,
+   :state :needs-owner,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain.blueprint/B3",
    :acceptance
@@ -24480,7 +24500,7 @@
      :infrastructure-packets
      :review-outcomes]},
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance {:strategy "Review B3 probe; rerank."},
@@ -34829,6 +34849,45 @@
    :id :lemma-closedset-whitneycubecover,
    :kind :lemma,
    :depends-on [],
+   :other-consumers []}
+  {:consumer :t01A08,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "ConstructionTargets.SardConvexDomain.WhitneyCubeCover",
+    :type
+    "certificate: countable complement cover, enlargements, anchors, metric bounds, local finiteness, bounded overlap"},
+   :lemma
+   {:name "ConstructionTargets.SardConvexDomain.WhitneyCubeCover",
+    :reported-by [:r-a08-sard-b3-whitney-cubes-1],
+    :type
+    "certificate: countable complement cover, enlargements, anchors, metric bounds, local finiteness, bounded overlap",
+    :area "sard-convex-domain",
+    :proved-in :r-a08-sard-b3-whitney-cubes-1},
+   :id :lemma-constructiontargets-sardconvexdomain-whitneycubecover,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t01A08,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.SardConvexDomain.closedSet_whitneyCubeCover",
+    :type "IsClosed s -> s.Nonempty -> Nonempty (WhitneyCubeCover s)"},
+   :lemma
+   {:name
+    "ConstructionTargets.SardConvexDomain.closedSet_whitneyCubeCover",
+    :reported-by [:r-a08-sard-b3-whitney-cubes-1],
+    :type "IsClosed s -> s.Nonempty -> Nonempty (WhitneyCubeCover s)",
+    :area "sard-convex-domain"},
+   :id
+   :lemma-constructiontargets-sardconvexdomain-closedset-whitneycubecover,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-sardconvexdomain-whitneycubecover],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
