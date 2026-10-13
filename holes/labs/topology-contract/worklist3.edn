@@ -22997,50 +22997,34 @@
    :other-consumers []}
   {:bounded-exception "Rule0 B1 prerequisite.",
    :consumer :t01A08,
-   :stop-count 1,
+   :stop-count 2,
    :review-finding
    "extend Mathlib: state and prove the missing theorem in scope. The frozen fixture declares ContDiffWithinAt.domDomCongr_iteratedFDerivWithin_of_infty as an axiom, and #print shows convexWithinJet depends on that nonstandard axiom. The row records commit nil, no changed paths, and status :not-started; compiling an axiomatized facade is not progress toward discharging the frozen interface. Prove adjacent-swap symmetry and permutation induction in ConstructionTargets/SardConvexDomain.lean, then rerun the fixture without its axiom.",
    :evidence
    {:placeholder-delta {:t01A08 [1 1]},
     :residual
-    "Prove adjacent-swap symmetry by order induction, then Perm.swap_induction_on; resume B1.",
+    "Repair frozen interface with closure-interior membership, then prove adjacent-swap induction and permutation invariance.",
+    :missing-hypothesis
+    "x ∈ closure (interior s); B1 can supply this from convexity and nonempty interior.",
     :outcome :stop,
     :warnings [],
-    :missing-theorems
-    [{:name
-      "ContDiffWithinAt.domDomCongr_iteratedFDerivWithin_of_infty",
-      :type
-      "ContDiffWithinAt R infinity f s x -> UniqueDiffOn R s -> x in s -> forall n sigma, domDomCongr sigma (iteratedFDerivWithin R n f s x) = iteratedFDerivWithin R n f s x",
-      :status :not-started,
-      :consumers [:t01A08],
-      :depends-on [],
-      :area "sard-convex-domain"}],
-    :statement-hashes {:registry "145/145"},
+    :statement-hashes {:registry "146/146"},
     :disposition :stop,
     :axioms [],
     :author :topo-10,
     :reason
-    "Mathlib arbitrary-permutation symmetry requires C-omega, not frozen real C-infinity; proving it needs adjacent-swap induction for all orders.",
+    "Frozen type lacks x in closure(interior s). Even order-2 real C2 symmetry requires this hypothesis; UniqueDiffOn plus x-in-s is insufficient for the available finite-smooth theorem. The analytic theorem needs C-omega.",
     :commands
-    [{:cmd "lake env lean ConstructionTargets/SardConvexDomain.lean",
+    [{:cmd
+      "rg -n finite-smooth-symmetry Mathlib/Analysis/Calculus/FDeriv/Symmetric.lean",
       :exit 0}
-     {:cmd "lake env lean /tmp/t01a08_sard_b1_probe.lean", :exit 0}
      {:cmd "sha256sum /tmp/t01a08_sard_b1_probe.lean", :exit 0}
+     {:cmd "lake env lean ConstructionTargets/SardConvexDomain.lean",
+      :exit 0}
      {:cmd
       "git diff --exit-code -- ConstructionTargets/SardConvexDomain.lean",
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
-    :diagnostic-history
-    [{:cmd "lake env lean ConstructionTargets/SardConvexDomain.lean",
-      :exit 1,
-      :finding
-      "Invalid reuse: hf is C-infinity; library theorem expects C-omega."}],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1791871625723-8689-b7fa77ba",
-     :finding
-     "extend Mathlib: state and prove the missing theorem in scope. The frozen fixture declares ContDiffWithinAt.domDomCongr_iteratedFDerivWithin_of_infty as an axiom, and #print shows convexWithinJet depends on that nonstandard axiom. The row records commit nil, no changed paths, and status :not-started; compiling an axiomatized facade is not progress toward discharging the frozen interface. Prove adjacent-swap symmetry and permutation induction in ConstructionTargets/SardConvexDomain.lean, then rerun the fixture without its axiom."},
     :commit nil,
     :changed-paths [],
     :fixture
@@ -23050,7 +23034,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :repair,
+   :state :needs-owner,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain.blueprint/B1/smooth-symmetry",
    :acceptance
@@ -23149,7 +23133,7 @@
      :infrastructure-packets
      :review-outcomes]},
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance {:strategy "Rerank after B1."},
