@@ -325,7 +325,31 @@ def apm_t96j07_IsNormalizedDiagonal (b : Fin 3 → ℝ)
 /-- Seat: the normalised diagonal map exists (continuous) when all `b j ≠ 0`. -/
 theorem apm_t96j07_exists_normalizedDiagonal (b : Fin 3 → ℝ) (hb : ∀ j, b j ≠ 0) :
     ∃ link, apm_t96j07_IsNormalizedDiagonal b link := by
-  sorry
+  let g : apm_t96j07_S2 → apm_t96j07_E3 := fun x =>
+    WithLp.toLp 2 (fun j ↦ b j * x.1 j)
+  have hg_ne : ∀ x, g x ≠ 0 := fun x =>
+    apm_t96j07_diagonal_link_degree_aux_vector_ne_zero b hb x
+  have hg : Continuous g := by
+    apply (PiLp.continuous_toLp 2 _).comp
+    apply continuous_pi
+    intro j
+    exact continuous_const.mul
+      ((continuous_apply j).comp
+        ((PiLp.continuous_ofLp 2 _).comp continuous_subtype_val))
+  have hnormalized : Continuous (fun x => ‖g x‖⁻¹ • g x) := by
+    exact ((continuous_norm.comp hg).inv₀
+      (fun x => norm_ne_zero_iff.mpr (hg_ne x))).smul hg
+  let link : C(apm_t96j07_S2, apm_t96j07_S2) :=
+    ⟨fun x => ⟨‖g x‖⁻¹ • g x, by
+      rw [Metric.mem_sphere, dist_zero_right, norm_smul, norm_inv, norm_norm]
+      exact inv_mul_cancel₀ (norm_ne_zero_iff.mpr (hg_ne x))⟩,
+      Continuous.subtype_mk hnormalized (fun x => by
+        rw [Metric.mem_sphere, dist_zero_right, norm_smul, norm_inv, norm_norm]
+        exact inv_mul_cancel₀ (norm_ne_zero_iff.mpr (hg_ne x)))⟩
+  refine ⟨link, ?_⟩
+  intro x
+  refine ⟨hg_ne x, ?_⟩
+  rfl
 
 /-- Seat: normalised diagonal maps for `b` and for the signs of `b` are homotopic
 (straight line `(1 - t) b + t sign b` has nonzero entries). -/
