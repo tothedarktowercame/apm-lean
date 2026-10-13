@@ -167,13 +167,28 @@ theorem apm_t02A07_bridge_constraint_gradients_independent
 /-- Compute the frozen `fderiv` and turn independence of its two coordinate
 rows into surjectivity.  The independence result is an explicit hypothesis so
 this lemma can be proved in parallel with the preceding one. -/
+lemma apm_t02A07_constraints_fderiv_surjective_aux_formula
+    (x v : apm_t02a07_E4) :
+    fderiv ℝ apm_t02a07_constraints x v =
+      WithLp.toLp 2 ![2 * inner ℝ x v, x 3 * v 2 + x 2 * v 3] := by
+  sorry
+
+lemma apm_t02A07_constraints_fderiv_surjective_aux_rank
+    (x : apm_t02a07_E4)
+    (hind : LinearIndependent ℝ
+      (![x, (WithLp.toLp 2 ![(0 : ℝ), 0, x 3, x 2] :
+        apm_t02a07_E4)] : Fin 2 → apm_t02a07_E4)) :
+    Function.Surjective (fderiv ℝ apm_t02a07_constraints x) := by
+  sorry
+
 theorem apm_t02A07_constraints_fderiv_surjective
     (hind : ∀ x ∈ apm_t02a07_Z,
       LinearIndependent ℝ
         (![x, (WithLp.toLp 2 ![(0 : ℝ), 0, x 3, x 2] :
           apm_t02a07_E4)] : Fin 2 → apm_t02a07_E4)) :
     apm_t02a07_IsRegularDimensionTwo := by
-  sorry
+  intro x hx
+  exact apm_t02A07_constraints_fderiv_surjective_aux_rank x (hind x hx)
 
 /-- Direct classification of the exceptional parameters.  A slice fails to
 be transverse exactly when the square of its first circle coordinate is
