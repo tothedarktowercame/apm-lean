@@ -1158,6 +1158,12 @@ counit/strict target normal form to the round-trip side.  The result is still
 an `HEq` across the representation boundary and exposes the exact predecessor
 map and source counit needed for the next B6 reduction.
 
+`genericPointWedgeLeftRoundTripPredecessor_actualAction` identifies that
+predecessor with the literal actual-span left action and then with the left
+coproduct injection of its connector normal form.  The identification keeps
+the predecessor's dependent endpoints and uses the already proved
+actual-to-coordinate span equality rather than an object normalization.
+
 `genericPointWedgeCoordinateSpanGlobalRestrictionLeftRoundTrip_counit_map`
 applies the coordinate-span left functor to the left-equivalence counit
 naturality square.  Both ordered composites are now equal inside the

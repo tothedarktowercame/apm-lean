@@ -3905,6 +3905,27 @@ theorem genericPointWedgeCoordinateSpanGlobalRestrictionLeftComparison_heq_round
   exact heq_of_eq (by
     simpa only [ConnectorSystem.normalForm, Category.assoc] using hs.symm)
 
+/-- The predecessor in the round-trip normal form is exactly the literal
+actual-span left action, expressed through the left coproduct injection.
+The dependent source and target of the predecessor remain unchanged. -/
+theorem genericPointWedgeLeftRoundTripPredecessor_actualAction :
+    let eL := genericPointWedgeLeftGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let aL := genericPointWedgeLeftSpanIso
+      x₀ y₀ M N hM hN hy hx cM cN
+    let u : FundamentalGroupoid Unit := FundamentalGroupoid.mk ()
+    HEq
+      ((genericPointWedgeIdentityActualSpan
+        x₀ y₀ M N hM hN hy hx cM cN).left.map
+          (eL.inverse.map (aL.inv.app u)))
+      ((Monoid.Coprod.inl (N := genericPointWedgeRightGroup y₀)
+        ((genericPointWedgeConnectors x₀).normalForm
+          (eL.functor.map (eL.inverse.map (aL.inv.app u))))) :
+        genericPointWedgeFreeProduct x₀ y₀) := by
+  dsimp only
+  rw [genericPointWedgeIdentityActualSpan_left_map]
+  exact genericPointWedgeIdentityCoordinateSpan_left_map x₀ y₀ _
+
 /-- The inverse right comparison introduced by coordinate-span transport,
 isolated before recombining it with the middle and left factors. -/
 def genericPointWedgeCoordinateSpanGlobalRestrictionRightComparison :
@@ -6382,6 +6403,7 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeCounitElement_eq_mappedRepresentationCounit
 #print axioms genericPointWedgeMappedLeft_eq_conj
 #print axioms genericPointWedgeMappedRight_eq_conj
+#print axioms genericPointWedgeLeftRoundTripPredecessor_actualAction
 #print axioms genericPointWedgeCounitNormalization_left
 #print axioms genericPointWedgeCounitNormalization_right
 #print axioms genericPointWedgeNormalizedSourceEquivalence
