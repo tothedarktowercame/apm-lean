@@ -22996,13 +22996,13 @@
    :consumer :t01A08,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 2,
    :review-finding
    "extend Mathlib: state and prove the missing theorem in scope",
    :evidence
    {:placeholder-delta {:t01A08 [1 1]},
     :residual
-    "Use banked convexWithinJet/B1; do not schedule the weaker frozen symmetry theorem.",
+    "Stop-after-two: retire this weaker fixture; continue from banked convexWithinJet/B1.",
     :missing-hypothesis "x ∈ closure (interior s)",
     :outcome :stop,
     :warnings [],
@@ -23019,24 +23019,14 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Frozen smooth symmetry omits hxi : x∈closure(interior s). The scoped C∞ theorem requires hxi; UniqueDiffOn and x∈s do not provide it. Convex B1 now derives hxi and is already implemented, but that hypothesis is absent from this interface. The raw fixture is also stale: it redeclares the banked B1 theorem.",
+    "Frozen type lacks hxi : x∈closure(interior s). A new proof attempt through ContDiffWithinAt Taylor data fails structurally: FormalMultilinearSeries components are not symmetric by definition, and UniqueDiffOn only identifies them with iteratedFDerivWithin. The real C∞ Schwarz theorem needs hxi; the premise-free theorem is ω/analytic. Convex B1 supplies hxi and is banked, so this weaker row must be rerouted.",
     :commands
-    [{:cmd "hash fixture; compare frozen/scoped/Mathlib signatures",
+    [{:cmd
+      "inspect ContDiffWithinAt/Taylor-series definitions and symmetry theorems",
       :exit 0}
      {:cmd
-      "lake env lean corrected hxi signature check; registry check",
+      "lake env lean corrected hxi theorem; hash fixture; registry check",
       :exit 0}],
-    :diagnostic-history
-    [{:cmd "lake env lean raw fixture",
-      :exit 1,
-      :correction
-      "post-build fixture is stale and redeclares convexWithinJet"}],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1791891355448-9565-a4e9900b",
-     :finding
-     "extend Mathlib: state and prove the missing theorem in scope"},
     :commit nil,
     :changed-paths [],
     :fixture
@@ -23046,7 +23036,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :repair,
+   :state :needs-owner,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain.blueprint/B1/smooth-symmetry",
    :acceptance
