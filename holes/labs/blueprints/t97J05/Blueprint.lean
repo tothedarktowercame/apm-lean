@@ -73,7 +73,66 @@ theorem apm_t97J05_derivative_and_rank :
       fderiv ℝ apm_t97J05_f apm_t97J05_p h =
         WithLp.toLp 2 ![-Real.exp 1 * h 1, h 0 + h 2]) ∧
     Function.Surjective (fderiv ℝ apm_t97J05_f apm_t97J05_p) := by
-  sorry
+  let g : apm_t97J05_R3 → (Fin 2 → ℝ) := fun q =>
+    ![Real.exp (q 0) * Real.cos (q 1), q 0 * q 2]
+  have hg : DifferentiableAt ℝ g apm_t97J05_p := by
+    apply differentiableAt_pi.mpr
+    intro i
+    fin_cases i <;> dsimp [g] <;> fun_prop
+  have hc := (PiLp.hasFDerivAt_toLp (𝕜 := ℝ) 2 (g apm_t97J05_p)).comp
+    apm_t97J05_p hg.hasFDerivAt
+  have hgv (h : apm_t97J05_R3) :
+      fderiv ℝ g apm_t97J05_p h =
+        ![-Real.exp 1 * h 1, h 0 + h 2] := by
+    have hdj (j : Fin 3) :
+        DifferentiableAt ℝ (fun q : apm_t97J05_R3 => q j) apm_t97J05_p := by
+      exact (PiLp.proj 2 (fun _ : Fin 3 => ℝ) j).differentiableAt
+    have hj (j : Fin 3) :
+        fderiv ℝ (fun q : apm_t97J05_R3 => q j) apm_t97J05_p h = h j := by
+      let P : apm_t97J05_R3 →L[ℝ] ℝ := PiLp.proj 2 (fun _ : Fin 3 => ℝ) j
+      have hd := P.hasFDerivAt (x := apm_t97J05_p)
+      exact congrArg (fun L : apm_t97J05_R3 →L[ℝ] ℝ => L h) hd.fderiv
+    rw [fderiv_pi]
+    · ext i
+      fin_cases i
+      · dsimp [g]
+        rw [fderiv_fun_mul]
+        · rw [fderiv_exp, fderiv_cos]
+          simp only [ContinuousLinearMap.add_apply, ContinuousLinearMap.smul_apply,
+            smul_eq_mul]
+          rw [hj, hj]
+          simp [apm_t97J05_p, Real.cos_pi_div_two, Real.sin_pi_div_two]
+          all_goals exact hdj _
+        · exact (hdj 0).exp
+        · exact (hdj 1).cos
+      · dsimp [g]
+        rw [fderiv_fun_mul]
+        · simp only [ContinuousLinearMap.add_apply, ContinuousLinearMap.smul_apply,
+            smul_eq_mul]
+          rw [hj, hj]
+          simp [apm_t97J05_p]
+          ring
+        all_goals exact hdj _
+    · intro i
+      fin_cases i <;> dsimp [g] <;> fun_prop
+  have hformula (h : apm_t97J05_R3) :
+      fderiv ℝ apm_t97J05_f apm_t97J05_p h =
+        WithLp.toLp 2 ![-Real.exp 1 * h 1, h 0 + h 2] := by
+    change fderiv ℝ (WithLp.toLp 2 ∘ g) apm_t97J05_p h = _
+    rw [hc.fderiv]
+    change WithLp.toLp 2 (fderiv ℝ g apm_t97J05_p h) = _
+    rw [hgv]
+  refine ⟨hformula, ?_⟩
+  intro y
+  let h : apm_t97J05_R3 :=
+    WithLp.toLp 2 ![y 1, -(y 0 / Real.exp 1), 0]
+  refine ⟨h, ?_⟩
+  rw [hformula]
+  ext i
+  fin_cases i
+  · simp [h]
+    field_simp [Real.exp_ne_zero]
+  · simp [h]
 
 theorem apm_t97J05_gamma_smooth :
     ContDiffOn ℝ ∞ apm_t97J05_gamma apm_t97J05_parameterDomain := by
