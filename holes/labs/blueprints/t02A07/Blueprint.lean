@@ -326,11 +326,48 @@ theorem apm_t02A07_constraints_fderiv_surjective
 /-- Direct classification of the exceptional parameters.  A slice fails to
 be transverse exactly when the square of its first circle coordinate is
 `1/2`. -/
+lemma apm_t02A07_transverse_iff_parameter_sq_ne_half_aux_level
+    (parameter : apm_t02a07_parameterCircle) (y : apm_t02a07_S2)
+    (hy : apm_t02a07_family parameter y ∈ apm_t02a07_Z) :
+    parameter.1 0 ^ 2 * y.1 1 * y.1 2 = (1 : ℝ) / 4 := by
+  have h := hy.2
+  simp [apm_t02a07_family] at h
+  nlinarith
+
+lemma apm_t02A07_transverse_iff_parameter_sq_ne_half_aux_sphere
+    (y : apm_t02a07_S2) :
+    y.1 0 ^ 2 + y.1 1 ^ 2 + y.1 2 ^ 2 = 1 := by
+  have hy : ‖(y : apm_t02a07_E3)‖ = 1 := by simpa using y.2
+  have h := EuclideanSpace.real_norm_sq_eq (y : apm_t02a07_E3)
+  have h' : y.1 0 ^ 2 + (y.1 1 ^ 2 + y.1 2 ^ 2) = 1 := by
+    simpa [Fin.sum_univ_succ, hy] using h.symm
+  nlinarith
+
+lemma apm_t02A07_transverse_iff_parameter_sq_ne_half_aux_fderiv
+    (parameter : apm_t02a07_parameterCircle) (y v : apm_t02a07_E3) :
+    fderiv ℝ (apm_t02a07_familyAmbient parameter) y v =
+      (WithLp.toLp 2
+        ![v 0 * parameter.1 0, 0, v 1 * parameter.1 0,
+          v 2 * parameter.1 0] : apm_t02a07_E4) := by
+  sorry
+
+lemma apm_t02A07_transverse_iff_parameter_sq_ne_half_aux_submodule
+    (parameter : apm_t02a07_parameterCircle)
+    (hderiv : ∀ (y v : apm_t02a07_E3),
+      fderiv ℝ (apm_t02a07_familyAmbient parameter) y v =
+        (WithLp.toLp 2
+          ![v 0 * parameter.1 0, 0, v 1 * parameter.1 0,
+            v 2 * parameter.1 0] : apm_t02a07_E4)) :
+    apm_t02a07_IsTransverse parameter ↔
+      parameter.1 0 ^ 2 ≠ (1 : ℝ) / 2 := by
+  sorry
+
 theorem apm_t02A07_transverse_iff_parameter_sq_ne_half
     (parameter : apm_t02a07_parameterCircle) :
     apm_t02a07_IsTransverse parameter ↔
       parameter.1 0 ^ 2 ≠ (1 : ℝ) / 2 := by
-  sorry
+  exact apm_t02A07_transverse_iff_parameter_sq_ne_half_aux_submodule parameter
+    (apm_t02A07_transverse_iff_parameter_sq_ne_half_aux_fderiv parameter)
 
 /-- Removing the four parameters with first-coordinate square `1/2` leaves a
 dense subset of the parameter circle. -/
