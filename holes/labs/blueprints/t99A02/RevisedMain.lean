@@ -1,28 +1,32 @@
 import Mathlib
+import ConstructionTargets.StatementSurfaceModels
 
-/-! # APM t99A02: universal covers of two wedges
+/-! # APM t99A02: fundamental groups of the two requested wedges -/
 
-The original formal statement recorded only defining relators.  This repaired
-statement records the two fundamental-group identifications that determine the
-Cayley/Bass--Serre pictures requested by the problem.
--/
+open ConstructionTargets.PointWedgeQuotient
+open ConstructionTargets.StatementSurfaceModels
+
+noncomputable section
 
 namespace APMT99A02
 
-def rp2WedgeRp2Relations : Set (FreeGroup (Fin 2)) :=
-  {(FreeGroup.of 0 : FreeGroup (Fin 2)) ^ 2,
-   (FreeGroup.of 1 : FreeGroup (Fin 2)) ^ 2}
+def rp2WedgeRp2Point : ProjectivePlaneWedge :=
+  quotientMap (surfacePoint false 1) (surfacePoint false 1)
+    (Sum.inl (surfacePoint false 1))
 
-def circleWedgeRp2Relations : Set (FreeGroup (Fin 2)) :=
-  {(FreeGroup.of 1 : FreeGroup (Fin 2)) ^ 2}
+abbrev CircleWedgeProjectivePlane := Wedge (1 : Circle) (surfacePoint false 1)
+
+def circleWedgeRp2Point : CircleWedgeProjectivePlane :=
+  quotientMap (1 : Circle) (surfacePoint false 1) (Sum.inl 1)
 
 end APMT99A02
 
 theorem apm_t99a02 :
     Nonempty
-      (PresentedGroup APMT99A02.rp2WedgeRp2Relations ≃*
+      (FundamentalGroup ProjectivePlaneWedge APMT99A02.rp2WedgeRp2Point ≃*
         DihedralGroup 0) ∧
     Nonempty
-      (PresentedGroup APMT99A02.circleWedgeRp2Relations ≃*
+      (FundamentalGroup APMT99A02.CircleWedgeProjectivePlane
+          APMT99A02.circleWedgeRp2Point ≃*
         Monoid.Coprod (Multiplicative ℤ) (Multiplicative (ZMod 2))) := by
   sorry
