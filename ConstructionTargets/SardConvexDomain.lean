@@ -1175,4 +1175,28 @@ theorem encard_whitneyNetIncidence_le_three_fixed_packingNumbers
   · rw [Set.not_nonempty_iff_eq_empty.mp hI]
     simp
 
+/-- In a proper normed space the fixed packing number used in the overlap
+estimate is finite. -/
+theorem fixed_whitneyPackingNumber_ne_top
+    (E : Type*) [NormedAddCommGroup E] [NormedSpace ℝ E] [ProperSpace E] :
+    Metric.packingNumber ((1 : NNReal) / 8)
+      (Metric.closedBall (0 : E) (1 / 2)) ≠ ⊤ := by
+  let K : Set E := Metric.closedBall (0 : E) (1 / 2)
+  obtain ⟨t, -, ht, hcover⟩ := (isCompact_closedBall (0 : E) (1 / 2)).finite_cover_balls
+    (by norm_num : (0 : ℝ) < 1 / 16)
+  have hcov : Metric.IsCover ((1 : NNReal) / 16) K t := by
+    intro y hy
+    obtain ⟨z, hz⟩ := Set.mem_iUnion₂.1 (hcover hy)
+    refine ⟨z, hz.1, ?_⟩
+    change edist y z ≤ ↑((1 : NNReal) / 16)
+    rw [edist_dist]
+    apply (ENNReal.ofReal_le_coe).2
+    norm_num
+    exact le_of_lt (Metric.mem_ball.1 hz.2)
+  have hle : Metric.packingNumber ((1 : NNReal) / 8) K ≤ t.encard := by
+    have h := (Metric.packingNumber_two_mul_le_externalCoveringNumber
+      ((1 : NNReal) / 16) K).trans hcov.externalCoveringNumber_le_encard
+    convert h using 1 <;> norm_num
+  exact fun htop => (Set.encard_ne_top_iff.mpr ht) (top_unique (htop ▸ hle))
+
 end ConstructionTargets.SardConvexDomain
