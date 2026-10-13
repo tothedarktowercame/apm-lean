@@ -429,8 +429,56 @@ theorem apm_m98A06_weak_FTC : apm_m98A06_WeakFTCFact := by
   exact apm_m98A06_weak_FTC_aux_representation u du h.1 h.2.1
     (apm_m98A06_weak_FTC_aux_integrable du h.2.2.2.2.1) h.2.2.2.2.2
 
-theorem apm_m98A06_sine_computations : apm_m98A06_SineComputationsFact := by
+private lemma apm_m98A06_sine_computations_aux_deriv
+    (L : ℝ) (k : ℕ) (x : ℝ) :
+    deriv (fun t : ℝ ↦ Real.sin ((k : ℝ) * Real.pi * t / L)) x =
+      ((k : ℝ) * Real.pi / L) *
+        Real.cos ((k : ℝ) * Real.pi * x / L) := by
+  by_cases hL : L = 0
+  · subst L
+    simp
+  · convert ((Real.hasDerivAt_sin ((k : ℝ) * Real.pi * x / L)).comp x
+      (((hasDerivAt_id x).const_mul ((k : ℝ) * Real.pi)).div_const L)).deriv using 1 <;>
+      field_simp <;> ring
+
+private lemma apm_m98A06_sine_computations_aux_admissible
+    (L : ℝ) (hL : 0 < L) (k : ℕ) :
+    apm_m98a06_Admissible L 0 0
+      (fun x ↦ Real.sin ((k : ℝ) * Real.pi * x / L)) := by
+  refine ⟨by fun_prop, by simp, ?_⟩
+  have heq : (k : ℝ) * Real.pi * L / L = (k : ℝ) * Real.pi := by
+    field_simp [ne_of_gt hL]
+  change Real.sin ((k : ℝ) * Real.pi * L / L) = 0
+  rw [heq]
+  exact Real.sin_nat_mul_pi k
+
+-- Energy of the k-th Dirichlet sine mode on [0, L].
+lemma apm_m98A06_sine_computations_aux_energy (L : ℝ) (hL : 0 < L) (k : ℕ) (hk : k ≠ 0) :
+    apm_m98a06_I L (fun x ↦ Real.sin ((k : ℝ) * Real.pi * x / L)) =
+      ((((k : ℝ) * Real.pi / L) ^ 2 - 1) * (L / 2)) := by
   sorry
+
+-- The normalised modes on [0, π]: regularity and the H¹₀ membership predicate.
+lemma apm_m98A06_sine_computations_aux_unit_H10 (k : ℕ) (hk : k ≠ 0) :
+    let y : ℝ → ℝ := fun x ↦ Real.sqrt (2 / Real.pi) * Real.sin ((k : ℝ) * x)
+    let dy : ℝ → ℝ := fun x ↦ Real.sqrt (2 / Real.pi) * (k : ℝ) * Real.cos ((k : ℝ) * x)
+    ContDiff ℝ 1 y ∧ dy = deriv y ∧ apm_m98a06_InH10Pi y dy := by
+  sorry
+
+-- The normalised modes on [0, π]: unit L² norm and energy k² − 1.
+lemma apm_m98A06_sine_computations_aux_unit_integrals (k : ℕ) (hk : k ≠ 0) :
+    let y : ℝ → ℝ := fun x ↦ Real.sqrt (2 / Real.pi) * Real.sin ((k : ℝ) * x)
+    let dy : ℝ → ℝ := fun x ↦ Real.sqrt (2 / Real.pi) * (k : ℝ) * Real.cos ((k : ℝ) * x)
+    ∫ x, (y x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)) = 1 ∧
+      ∫ x, (dy x) ^ 2 - (y x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)) = (k : ℝ) ^ 2 - 1 := by
+  sorry
+
+theorem apm_m98A06_sine_computations : apm_m98A06_SineComputationsFact := by
+  refine ⟨fun L hL k hk => ⟨apm_m98A06_sine_computations_aux_admissible L hL k, apm_m98A06_sine_computations_aux_energy L hL k hk⟩,
+    fun k hk => ?_⟩
+  obtain ⟨h1, h2, h3⟩ := apm_m98A06_sine_computations_aux_unit_H10 k hk
+  obtain ⟨h4, h5⟩ := apm_m98A06_sine_computations_aux_unit_integrals k hk
+  exact ⟨h1, h2, h3, h4, h5⟩
 
 theorem apm_m98A06_stationary_resonant_classification_of_duBoisReymond
     (hDBR : apm_m98A06_DuBoisReymondFact) :
