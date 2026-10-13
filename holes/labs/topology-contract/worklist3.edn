@@ -23717,7 +23717,7 @@
    :consumer :t01A08,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "Recorded commit is invalid: f032efae9d1501f7ddfe93c66668f88f24ed37f4 is absent locally and origin rejects it as not our ref. The intended scoped commit appears to be f032efae9b89fb527a72ea9192f3c89f09f82615. Repair the row to record the exact existing full SHA, then rerun independent review.",
    :implements-lemma
@@ -23725,39 +23725,44 @@
    :evidence
    {:placeholder-delta {:t01A08 [1 1]},
     :residual
-    "Prove leading adjacent swap from Schwarz; combine tail lift and adjacent-swap closure; B1.",
+    "Induct on order: leading swap by Schwarz, later adjacent swaps by tail lift; apply adjacent-swap closure; B1.",
     :outcome :stop,
     :warnings [],
     :missing-theorems
-    [{:name "iteratedFDerivWithin_domDomCongr_decomposeFin_symm_zero",
-      :type "lower symmetry lifts to next tail slots",
+    [{:name "iteratedFDerivWithin_domDomCongr_swap_zero_one",
+      :type "lower-jet Schwarz fixes leading swap of next-next jet",
       :status :proved,
       :consumers [:t01A08],
-      :depends-on
-      ["ContinuousMultilinearMap.domDomCongr_fderivWithin_eq_self"],
+      :depends-on [],
       :area "sard-convex-domain"}
      {:name
       "ContDiffWithinAt.domDomCongr_iteratedFDerivWithin_of_infty",
-      :type "C∞ within implies permutation invariance",
+      :type "C∞ within implies all permutation invariance",
       :status :partial,
       :consumers [:t01A08],
       :depends-on
-      ["iteratedFDerivWithin_domDomCongr_decomposeFin_symm_zero"],
+      ["iteratedFDerivWithin_domDomCongr_swap_zero_one"
+       "iteratedFDerivWithin_domDomCongr_decomposeFin_symm_zero"],
       :area "sard-convex-domain"}],
     :statement-hashes {:registry "147/147"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Tail-slot lift proved; leading adjacent-slot identity remains.",
+    "Leading slot swap proved; induction assembling leading and tail swaps remains.",
     :commands
     [{:cmd
-      "git cat-file/show/diff-tree/merge-base f032efae9b89fb527a72ea9192f3c89f09f82615",
+      "lake build ConstructionTargets.SardConvexDomain; lake env lean leading-swap axiom check and fixture",
       :exit 0}
      {:cmd
-      "sha256sum fixture; lake env lean helper-axiom-check and fixture; statement-registry check",
+      "sha256sum fixture; scoped commit check; statement-registry check",
       :exit 0}],
-    :commit "f032efae9b89fb527a72ea9192f3c89f09f82615",
+    :diagnostic-history
+    [{:cmd "initial curry rewrite probes",
+      :exit 1,
+      :correction
+      "specified curry isometry function and domain explicitly; compiled"}],
+    :commit "b372d6f6df7abcf763bde3c8b20cfd699362c410",
     :changed-paths ["ConstructionTargets/SardConvexDomain.lean"],
     :fixture
     {:path "/tmp/t01a08_smooth_symmetry_membership_probe.lean",
@@ -23766,7 +23771,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/SardConvexDomain.lean"],
    :dag-node "SardConvexDomain/B1/symmetry",
    :acceptance
@@ -33724,7 +33729,8 @@
    [:lemma-continuousmultilinearmap-domdomcongr-eq-self-of-swap
     :lemma-continuousmultilinearmap-domdomcongr-eq-self-of-adjacent-swap
     :lemma-continuousmultilinearmap-domdomcongr-fderivwithin-eq-self
-    :lemma-iteratedfderivwithin-domdomcongr-decomposefin-symm-zero],
+    :lemma-iteratedfderivwithin-domdomcongr-decomposefin-symm-zero
+    :lemma-iteratedfderivwithin-domdomcongr-swap-zero-one],
    :other-consumers []}
   {:consumer :t01A08,
    :phase :lemma,
@@ -33812,6 +33818,23 @@
    :kind :lemma,
    :depends-on
    [:lemma-continuousmultilinearmap-domdomcongr-fderivwithin-eq-self],
+   :other-consumers []}
+  {:consumer :t01A08,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "iteratedFDerivWithin_domDomCongr_swap_zero_one",
+    :type "lower-jet Schwarz fixes leading swap of next-next jet"},
+   :lemma
+   {:name "iteratedFDerivWithin_domDomCongr_swap_zero_one",
+    :reported-by [:r-a08-symmetry-slots-1],
+    :type "lower-jet Schwarz fixes leading swap of next-next jet",
+    :area "sard-convex-domain",
+    :proved-in :r-a08-symmetry-slots-1},
+   :id :lemma-iteratedfderivwithin-domdomcongr-swap-zero-one,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
