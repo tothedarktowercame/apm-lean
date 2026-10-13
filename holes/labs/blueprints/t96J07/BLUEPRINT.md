@@ -63,39 +63,76 @@ fixed-axis calculation.  Direct checks on a one-coordinate vector give a fixed
 class, while a vector with two nonzero coordinates would require two distinct
 weights to equal the same scalar.
 
-### `apm_t96j07_local_numbers` — LIBRARY
+### `apm_t96j07_diagonal_link_degree` — GENERIC LIBRARY leaf
 
-**Statement in words.** Any continuous projective self-map satisfying the
-registered diagonal action formula has intrinsic local Lefschetz numbers
-`-1,+1,-1,+1` at the four coordinate points, in the exact chart-and-linking
-sphere definition used by the theorem.
+**Statement in words.** For arbitrary diagonal coefficients `a : Fin 3 → R`
+with no `a j = 1`, normalization of the displacement
+`((1-a j)x_j)_j` defines a self-map of the unit two-sphere whose action on
+integral `H₂` is multiplication by the sign of `∏ j, (1-a j)`.
 
-**Why true.** In the affine chart `x_i=1`, the map is diagonal with entries
-`(j+1)/(i+1)` for `j ≠ i`.  Choose a sufficiently small closed Euclidean
-ball inside the chart.  The displacement is the invertible diagonal linear map
-`I-Df`; its normalization on the linking sphere has degree equal to the sign
-of its determinant.  The products are `-6, 1/4, -2/27, 3/32`, giving the
-four asserted integers.
+**Proof route / exact banked tools.** Split the diagonal map into coordinate
+signs and positive absolute-value scalings.  The straight-line path between
+the positive diagonal scaling and the identity remains invertible, hence its
+normalized sphere maps are homotopic.  Each negative coordinate contributes
+the literal map
+`ConstructionTargets.CoefficientCoordinateReflections.reflectionMap`;
+`ConstructionTargets.CoefficientFirstReflection.all_reflections_negative`
+(specialized to `R = ℤ`, `n = 2`) says its actual singular-homology map is
+`-𝟙`.  Use `Functor.map_comp`, homotopy invariance of
+`AlgebraicTopology.singularHomologyFunctor`, and
+`CoefficientFirstReflection.topIso ℤ 1` for the orientation.  The finite
+sign arithmetic is `Finset.prod_pos_iff` / `Finset.prod_neg_iff` (or a
+three-coordinate `fin_cases` proof).
 
-This is marked LIBRARY because the registered predicate demands actual
-`OpenPartialHomeomorph` charts, isolation on a closed ball, a continuous
-normalized displacement map, and its action on integral singular `H₂(S²)`.
-The final degree-to-determinant-sign bridge is substantially larger than one
-lemma-seat session.  The closest sorry-free banked infrastructure is
-`ConstructionTargets.RealProjectiveSmoothTarget` for real projective charts
-and the coefficient/local-homology comparison modules; no existing sorry-free
-target proves this exact normalized-sphere degree theorem.
+**Expected size.** 100–150 lines.  **Dependencies.** Definitions only; fully
+independent of all four chart leaves.
 
-**Expected size.** 600–1500 lines, dominated by the integral sphere-degree
-library and chart packaging.
+**Truth checks.** `∀ j, 1-a j ≠ 0` makes the displacement nonzero on every
+unit vector, so normalization is total.  `Fin 3` is nonempty and the sphere is
+genuinely `S²`; there is no dimension-zero endpoint.  Zero diagonal entries
+`a j = 0` are harmless.  The displacement convention is `x-Dx`, so the sign
+is `det(I-D)`, not `det(D-I)`.
 
-**Dependencies.** Definitions and the action-formula hypothesis only; it is
-independent of the construction proof.
+### `apm_t96j07_local_number_axis0` through `axis3` — four parallel leaves
 
-**Truth check.** The determinant arithmetic is compiled in
-`apm_t96j07_previous_encoding`.  None of the three factors at any axis
-vanishes, so the origin is isolated.  Hand multiplication gives exactly
-`-6,1/4,-2/27,3/32`.
+**Statement in words.** Each leaf constructs the affine chart at one coordinate
+axis and packages the generic diagonal link theorem into the exact
+`HasLocalLefschetzNumber` predicate.  The generic theorem is an explicit
+hypothesis (not a dependency), so all four seats can work in parallel with the
+generic seat.
+
+**Shared proof route / exact tools.** Use the quotient/projective chart
+construction from `ConstructionTargets.ProjectiveQuotientDescent` and the
+arbitrary affine-chart topology lemmas underlying
+`ConstructionTargets.RealProjectiveSmoothTarget`; in chart `x_i = 1`, derive
+from `hformula` that coordinate `j ≠ i` is multiplied by `(j+1)/(i+1)`.
+Choose a positive radius whose closed ball lies in the chart target using
+`Metric.isOpen_ball`, `Metric.closedBall_subset_ball`, and
+`Metric.closedBall_zero_subset_ball`; the diagonal coordinate formula proves
+the source condition and isolation.  Instantiate `hdegree`, rescale its link
+by `r` (the positive factor cancels under normalization), and discharge the
+three-factor signs with `norm_num` and `fin_cases`.
+
+- `apm_t96j07_local_number_axis0`: ratios `2,3,4`, determinant
+  `(1-2)(1-3)(1-4) = -6`, result `-1`. Estimated 100–150 lines.
+- `apm_t96j07_local_number_axis1`: ratios `1/2,3/2,2`, determinant `1/4`,
+  result `+1`. Estimated 100–150 lines.
+- `apm_t96j07_local_number_axis2`: ratios `1/3,2/3,4/3`, determinant
+  `-2/27`, result `-1`. Estimated 100–150 lines.
+- `apm_t96j07_local_number_axis3`: ratios `1/4,1/2,3/4`, determinant `3/32`,
+  result `+1`. Estimated 100–150 lines.
+
+**Truth checks.** Every chart denominator `i+1` is positive.  Each chart target
+contains zero, so a positive closed-ball radius exists.  The three ratios omit
+`i`, hence none equals one and the origin is the unique fixed point on the
+ball, including its boundary.  The ball is nonempty (`r > 0`), and the link
+formula uses the same `x-f(x)` sign convention as the predicate.
+
+### `apm_t96j07_local_numbers` — sorry-free assembly
+
+Applies the generic leaf to each of the four chart leaves and forms the nested
+conjunction.  It contains no `sorry`; its only `sorryAx` paths are the five new
+top-level leaves.
 
 ### `apm_t96j07_global_number` — LIBRARY (F2)
 
@@ -136,8 +173,9 @@ then package their conclusions.  The main theorem contains no `sorry`.
 ## Dependency layers
 
 - **Layer 1 (parallel):** `apm_t96j07_map_fixedPoints`,
-  `apm_t96j07_local_numbers` (LIBRARY), and
-  `apm_t96j07_global_number` (LIBRARY/F2).
+  `apm_t96j07_diagonal_link_degree`, all four
+  `apm_t96j07_local_number_axis*` leaves (each receives the generic result as
+  a hypothesis), and `apm_t96j07_global_number` (LIBRARY/F2).
 - **Layer 2:** the already compiled, sorry-free main-theorem assembly.
 
 ## Compilation and axioms
@@ -154,6 +192,6 @@ The final output of `#print axioms apm_t96j07` was:
 'apm_t96j07' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
 ```
 
-The three warnings are exactly the three named Layer 1 lemmas.  The definitions,
-copied proved lemmas, and final assembly contain no direct `sorry`.
-
+The seven warnings are `map_fixedPoints`, the five new local leaves, and
+`global_number`.  The definitions, copied proved lemmas, `local_numbers`, and
+final assembly contain no direct `sorry`.

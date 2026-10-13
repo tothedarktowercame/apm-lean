@@ -3,6 +3,7 @@ import ConstructionTargets.ProjectiveQuotientDescent
 import ConstructionTargets.ProjectiveConsumerLiftDemonstrations
 import ConstructionTargets.RealProjectiveSmoothTarget
 import ConstructionTargets.RationalLefschetz
+import ConstructionTargets.CoefficientFirstReflection
 
 open CategoryTheory
 
@@ -207,8 +208,121 @@ theorem apm_t96j07_map_fixedPoints :
           simp [apm_t96j07_axis] at this)) := by
   sorry
 
-/-- Compute the four intrinsic local indices.  The action formula is supplied
-as a hypothesis so this can be proved independently of map construction. -/
+/-- The degree calculation used in every affine chart.  An invertible diagonal
+displacement on `R^3`, normalized to the unit sphere, acts on integral top
+homology by the sign of its determinant. -/
+theorem apm_t96j07_diagonal_link_degree :
+    ∀ a : Fin 3 → ℝ, (∀ j, 1 - a j ≠ 0) →
+      ∃ link : C(apm_t96j07_S2, apm_t96j07_S2),
+        (∀ x, ∃ hne : WithLp.toLp 2 (fun j ↦ (1 - a j) * x.1 j) ≠ 0,
+          link x = ⟨‖WithLp.toLp 2 (fun j ↦ (1 - a j) * x.1 j)‖⁻¹ •
+            WithLp.toLp 2 (fun j ↦ (1 - a j) * x.1 j), by
+              rw [Metric.mem_sphere, dist_zero_right, norm_smul, norm_inv,
+                norm_norm]
+              exact inv_mul_cancel₀ (norm_ne_zero_iff.mpr hne)⟩) ∧
+        ∃ orientation : apm_t96j07_H2S2 ≅ ModuleCat.of ℤ ℤ,
+          ∀ z : apm_t96j07_H2S2,
+            orientation.hom
+                (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 2).obj
+                  (ModuleCat.of ℤ ℤ)).map (TopCat.ofHom link) z) =
+              (if 0 < ∏ j, (1 - a j) then 1 else -1) * orientation.hom z := by
+  sorry
+
+/-- Package the affine chart at the first coordinate axis.  The sphere-degree
+input is explicit so this leaf is independent of its eventual proof. -/
+theorem apm_t96j07_local_number_axis0
+    (f : C(apm_t96j07_RP3, apm_t96j07_RP3))
+    (hformula : ∀ (x : apm_t96j07_V) (hx : x ≠ 0),
+      f (Projectivization.mk ℝ x hx) =
+        Projectivization.mk ℝ (apm_t96j07_A x) (apm_t96j07_A_ne_zero hx))
+    (hdegree : ∀ a : Fin 3 → ℝ, (∀ j, 1 - a j ≠ 0) →
+      ∃ link : C(apm_t96j07_S2, apm_t96j07_S2),
+        (∀ x, ∃ hne : WithLp.toLp 2 (fun j ↦ (1 - a j) * x.1 j) ≠ 0,
+          link x = ⟨‖WithLp.toLp 2 (fun j ↦ (1 - a j) * x.1 j)‖⁻¹ •
+            WithLp.toLp 2 (fun j ↦ (1 - a j) * x.1 j), by
+              rw [Metric.mem_sphere, dist_zero_right, norm_smul, norm_inv, norm_norm]
+              exact inv_mul_cancel₀ (norm_ne_zero_iff.mpr hne)⟩) ∧
+        ∃ orientation : apm_t96j07_H2S2 ≅ ModuleCat.of ℤ ℤ,
+          ∀ z : apm_t96j07_H2S2, orientation.hom
+            (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 2).obj
+              (ModuleCat.of ℤ ℤ)).map (TopCat.ofHom link) z) =
+            (if 0 < ∏ j, (1 - a j) then 1 else -1) * orientation.hom z) :
+    apm_t96j07_HasLocalLefschetzNumber f
+        (Projectivization.mk ℝ (apm_t96j07_axis 0) (by
+          intro h; have := congrFun h 0; simp [apm_t96j07_axis] at this)) (-1) := by
+  sorry
+
+/-- Package the affine chart at the second coordinate axis. -/
+theorem apm_t96j07_local_number_axis1
+    (f : C(apm_t96j07_RP3, apm_t96j07_RP3))
+    (hformula : ∀ (x : apm_t96j07_V) (hx : x ≠ 0),
+      f (Projectivization.mk ℝ x hx) =
+        Projectivization.mk ℝ (apm_t96j07_A x) (apm_t96j07_A_ne_zero hx))
+    (hdegree : ∀ a : Fin 3 → ℝ, (∀ j, 1 - a j ≠ 0) →
+      ∃ link : C(apm_t96j07_S2, apm_t96j07_S2),
+        (∀ x, ∃ hne : WithLp.toLp 2 (fun j ↦ (1 - a j) * x.1 j) ≠ 0,
+          link x = ⟨‖WithLp.toLp 2 (fun j ↦ (1 - a j) * x.1 j)‖⁻¹ •
+            WithLp.toLp 2 (fun j ↦ (1 - a j) * x.1 j), by
+              rw [Metric.mem_sphere, dist_zero_right, norm_smul, norm_inv, norm_norm]
+              exact inv_mul_cancel₀ (norm_ne_zero_iff.mpr hne)⟩) ∧
+        ∃ orientation : apm_t96j07_H2S2 ≅ ModuleCat.of ℤ ℤ,
+          ∀ z : apm_t96j07_H2S2, orientation.hom
+            (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 2).obj
+              (ModuleCat.of ℤ ℤ)).map (TopCat.ofHom link) z) =
+            (if 0 < ∏ j, (1 - a j) then 1 else -1) * orientation.hom z) :
+    apm_t96j07_HasLocalLefschetzNumber f
+        (Projectivization.mk ℝ (apm_t96j07_axis 1) (by
+          intro h; have := congrFun h 1; simp [apm_t96j07_axis] at this)) 1 := by
+  sorry
+
+/-- Package the affine chart at the third coordinate axis. -/
+theorem apm_t96j07_local_number_axis2
+    (f : C(apm_t96j07_RP3, apm_t96j07_RP3))
+    (hformula : ∀ (x : apm_t96j07_V) (hx : x ≠ 0),
+      f (Projectivization.mk ℝ x hx) =
+        Projectivization.mk ℝ (apm_t96j07_A x) (apm_t96j07_A_ne_zero hx))
+    (hdegree : ∀ a : Fin 3 → ℝ, (∀ j, 1 - a j ≠ 0) →
+      ∃ link : C(apm_t96j07_S2, apm_t96j07_S2),
+        (∀ x, ∃ hne : WithLp.toLp 2 (fun j ↦ (1 - a j) * x.1 j) ≠ 0,
+          link x = ⟨‖WithLp.toLp 2 (fun j ↦ (1 - a j) * x.1 j)‖⁻¹ •
+            WithLp.toLp 2 (fun j ↦ (1 - a j) * x.1 j), by
+              rw [Metric.mem_sphere, dist_zero_right, norm_smul, norm_inv, norm_norm]
+              exact inv_mul_cancel₀ (norm_ne_zero_iff.mpr hne)⟩) ∧
+        ∃ orientation : apm_t96j07_H2S2 ≅ ModuleCat.of ℤ ℤ,
+          ∀ z : apm_t96j07_H2S2, orientation.hom
+            (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 2).obj
+              (ModuleCat.of ℤ ℤ)).map (TopCat.ofHom link) z) =
+            (if 0 < ∏ j, (1 - a j) then 1 else -1) * orientation.hom z) :
+    apm_t96j07_HasLocalLefschetzNumber f
+        (Projectivization.mk ℝ (apm_t96j07_axis 2) (by
+          intro h; have := congrFun h 2; simp [apm_t96j07_axis] at this)) (-1) := by
+  sorry
+
+/-- Package the affine chart at the fourth coordinate axis. -/
+theorem apm_t96j07_local_number_axis3
+    (f : C(apm_t96j07_RP3, apm_t96j07_RP3))
+    (hformula : ∀ (x : apm_t96j07_V) (hx : x ≠ 0),
+      f (Projectivization.mk ℝ x hx) =
+        Projectivization.mk ℝ (apm_t96j07_A x) (apm_t96j07_A_ne_zero hx))
+    (hdegree : ∀ a : Fin 3 → ℝ, (∀ j, 1 - a j ≠ 0) →
+      ∃ link : C(apm_t96j07_S2, apm_t96j07_S2),
+        (∀ x, ∃ hne : WithLp.toLp 2 (fun j ↦ (1 - a j) * x.1 j) ≠ 0,
+          link x = ⟨‖WithLp.toLp 2 (fun j ↦ (1 - a j) * x.1 j)‖⁻¹ •
+            WithLp.toLp 2 (fun j ↦ (1 - a j) * x.1 j), by
+              rw [Metric.mem_sphere, dist_zero_right, norm_smul, norm_inv, norm_norm]
+              exact inv_mul_cancel₀ (norm_ne_zero_iff.mpr hne)⟩) ∧
+        ∃ orientation : apm_t96j07_H2S2 ≅ ModuleCat.of ℤ ℤ,
+          ∀ z : apm_t96j07_H2S2, orientation.hom
+            (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 2).obj
+              (ModuleCat.of ℤ ℤ)).map (TopCat.ofHom link) z) =
+            (if 0 < ∏ j, (1 - a j) then 1 else -1) * orientation.hom z) :
+    apm_t96j07_HasLocalLefschetzNumber f
+        (Projectivization.mk ℝ (apm_t96j07_axis 3) (by
+          intro h; have := congrFun h 3; simp [apm_t96j07_axis] at this)) 1 := by
+  sorry
+
+/-- Compute the four intrinsic local indices.  This is only the sorry-free
+assembly of the generic degree calculation and four independent chart leaves. -/
 theorem apm_t96j07_local_numbers
     (f : C(apm_t96j07_RP3, apm_t96j07_RP3))
     (hformula : ∀ (x : apm_t96j07_V) (hx : x ≠ 0),
@@ -226,7 +340,10 @@ theorem apm_t96j07_local_numbers
     apm_t96j07_HasLocalLefschetzNumber f
         (Projectivization.mk ℝ (apm_t96j07_axis 3) (by
           intro h; have := congrFun h 3; simp [apm_t96j07_axis] at this)) 1 := by
-  sorry
+  exact ⟨apm_t96j07_local_number_axis0 f hformula apm_t96j07_diagonal_link_degree,
+    apm_t96j07_local_number_axis1 f hformula apm_t96j07_diagonal_link_degree,
+    apm_t96j07_local_number_axis2 f hformula apm_t96j07_diagonal_link_degree,
+    apm_t96j07_local_number_axis3 f hformula apm_t96j07_diagonal_link_degree⟩
 
 /-- Compute the rational-homological Lefschetz number.  The action formula is
 supplied directly so this lemma is parallel to map construction. -/
