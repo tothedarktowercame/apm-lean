@@ -22584,7 +22584,7 @@
      :routes
      "A02:2/13,A03:2/6,J02+98A02:1/10,A08:1/1,1J01:3/4,2A04:3/8,3J02:2/8,3J03:4/11,91J05:3/7,92J05+97J02:3/15,94J04:2/10,95J06:2/8,96A01:1/12,96A02:1/8,96J06:2/4,97A05+6:1/11",
      :review
-     "B1/B2 need nonempty interior; B7/B9 assume only s.Nonempty, so their uses mismatch."},
+     "B6 wrongly assumes nonlinear charts preserve convex slices."},
     :replacement-items
     [{:bounded-exception "Rule0 repair.",
       :consumer :t01A08,
@@ -22595,11 +22595,11 @@
       :acceptance
       {:blueprint "ConstructionTargets/SardConvexDomain.blueprint.md",
        :repair
-       "Make B7/B9 assume (interior s).Nonempty; propagate uses and note B10 supplies it.",
+       "Replace B6 convex-slice induction by Whitney extension (or induction on actual nonconvex chart domains); propagate statements and uses through B7-B10.",
        :placeholder "t01A08 sorry",
-       :route-step "repair convex Sard blueprint",
+       :route-step "repair B6 and B7-B10",
        :completion "Commit; STOP blueprint written."},
-      :id :r-a08-sard-blueprint-repair-1,
+      :id :r-a08-sard-b6-repair-1,
       :kind :documentation,
       :area "sard-convex-domain",
       :depends-on [:r-a08-sard-blueprint-1 :r-topo3-cp5],
@@ -22618,23 +22618,17 @@
       :state :open,
       :scope [],
       :dag-node "TOPOLOGY-ROUTES.md",
-      :acceptance {:strategy "Review repaired blueprint."},
-      :id :r-topo3-cp6,
+      :acceptance {:strategy "Review B6 repair."},
+      :id :r-topo3-cp6b,
       :kind :strategy-checkpoint,
       :area "portfolio",
-      :depends-on [:r-a08-sard-blueprint-repair-1],
+      :depends-on [:r-a08-sard-b6-repair-1],
       :current-residual "Elect B1 after review.",
       :other-consumers []}],
     :author "topo-12",
-    :disposition :replan,
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1791865594297-8418-43049dd2",
-     :finding
-     "Replan repairs the wrong blueprint defect. The recorded review rejects B6 because nonlinear B5 coordinates do not preserve convexity of kernel-fiber slices; the elected repair only adds nonempty-interior hypotheses to B7/B9. Replace the repair scope with one that fixes B6 by proving an extension theorem or strengthening induction to the actual nonconvex relative chart domains, then propagate that change through B7-B10. Fresh priorities correctly show t01A08 at 1 placeholder, 7 banked, 1 backlog."}},
+    :disposition :replan},
    :phase :strategy,
-   :state :repair,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance {:strategy "Review blueprint and rerank."},
@@ -22643,6 +22637,45 @@
    :area "portfolio",
    :depends-on [:r-a08-sard-blueprint-1 :r-topo3-cp4b],
    :current-residual "Elect reviewed B1.",
+   :other-consumers []}
+  {:bounded-exception "Rule0 repair.",
+   :consumer :t01A08,
+   :phase :implementation,
+   :state :blocked,
+   :scope ["ConstructionTargets/SardConvexDomain.blueprint.md"],
+   :dag-node "TOPOLOGY-ROUTES.md/t01A08/corners-sard",
+   :acceptance
+   {:blueprint "ConstructionTargets/SardConvexDomain.blueprint.md",
+    :repair
+    "Replace B6 convex-slice induction by Whitney extension (or induction on actual nonconvex chart domains); propagate statements and uses through B7-B10.",
+    :placeholder "t01A08 sorry",
+    :route-step "repair B6 and B7-B10",
+    :completion "Commit; STOP blueprint written."},
+   :id :r-a08-sard-b6-repair-1,
+   :kind :documentation,
+   :area "sard-convex-domain",
+   :depends-on [:r-a08-sard-blueprint-1 :r-topo3-cp5],
+   :current-residual "Review, then B1.",
+   :other-consumers []}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 1,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md",
+   :acceptance {:strategy "Review B6 repair."},
+   :id :r-topo3-cp6b,
+   :kind :strategy-checkpoint,
+   :area "portfolio",
+   :depends-on [:r-a08-sard-b6-repair-1 :r-topo3-cp5],
+   :current-residual "Elect B1 after review.",
    :other-consumers []}
   {:bounded-exception "Rule0 repair.",
    :consumer :t01A08,
