@@ -202,7 +202,172 @@ theorem apm_m99A02_bridge_1 :
     MemLp m99A02Function 2 (volume.restrict m99A02Omega) ∧
       ∀ i : Fin 2,
         MemLp (m99A02Derivative i) 2 (volume.restrict m99A02Omega) := by
-  sorry
+  have hhalf : (0 : ℝ) < 1 / 2 := by norm_num
+  have hfun_bound : ∀ r ∈ Ioo (0 : ℝ) (1 / 2),
+      r * (-Real.log r) ^ (2 / 3 : ℝ) ≤ 1 := by
+    intro r hr
+    have hr1 : r < 1 := hr.2.trans (by norm_num)
+    have hl : 0 < -Real.log r := neg_pos.mpr (Real.log_neg hr.1 hr1)
+    have hpow : (-Real.log r) ^ (2 / 3 : ℝ) ≤ (-Real.log r) + 1 := by
+      by_cases h : -Real.log r ≤ 1
+      · calc
+          (-Real.log r) ^ (2 / 3 : ℝ) ≤ 1 :=
+            Real.rpow_le_one hl.le h (by norm_num)
+          _ ≤ -Real.log r + 1 := by linarith
+      · have hbase : 1 ≤ -Real.log r := le_of_not_ge h
+        calc
+          (-Real.log r) ^ (2 / 3 : ℝ) ≤ (-Real.log r) ^ (1 : ℝ) :=
+            Real.rpow_le_rpow_of_exponent_le hbase (by norm_num)
+          _ = -Real.log r := by rw [Real.rpow_one]
+          _ ≤ -Real.log r + 1 := by linarith
+    have hlog : -Real.log r + 1 ≤ 1 / r := by
+      rw [show -Real.log r = Real.log (1 / r) by
+        rw [Real.log_div (by norm_num : (1 : ℝ) ≠ 0) hr.1.ne', Real.log_one]
+        ring]
+      linarith [Real.log_le_sub_one_of_pos (one_div_pos.mpr hr.1)]
+    calc
+      r * (-Real.log r) ^ (2 / 3 : ℝ) ≤ r * (1 / r) :=
+        mul_le_mul_of_nonneg_left (hpow.trans hlog) hr.1.le
+      _ = 1 := by simpa [one_div] using mul_inv_cancel₀ hr.1.ne'
+  have hfun_scalar : IntegrableOn
+      (fun r : ℝ ↦ r * (-Real.log r) ^ (2 / 3 : ℝ)) (Ioo 0 (1 / 2)) volume := by
+    apply Integrable.mono' (integrableOn_const (C := (1 : ℝ)) (measure_Ioo_lt_top.ne))
+    · fun_prop
+    filter_upwards [ae_restrict_mem measurableSet_Ioo] with r hr
+    have hl : 0 ≤ -Real.log r := (neg_pos.mpr
+      (Real.log_neg hr.1 (hr.2.trans (by norm_num)))).le
+    have hm : 0 ≤ r * (-Real.log r) ^ (2 / 3 : ℝ) :=
+      mul_nonneg hr.1.le (Real.rpow_nonneg hl _)
+    rw [Real.norm_eq_abs, abs_of_nonneg hm]
+    exact hfun_bound r hr
+  have hfun_radial : Integrable
+      (fun x : m99A02Point ↦ if ‖x‖ < 1 / 2
+        then (-Real.log ‖x‖) ^ (2 / 3 : ℝ) else 0) volume := by
+    let g : ℝ → ℝ := fun r ↦ if r < 1 / 2
+        then (-Real.log r) ^ (2 / 3 : ℝ) else 0
+    change Integrable (fun x : m99A02Point ↦ g ‖x‖) volume
+    rw [m99A02_integrable_radial_iff]
+    have hi := hfun_scalar.integrable_indicator measurableSet_Ioo
+    apply hi.integrableOn.congr_fun
+    intro r hr
+    have hr0 : 0 < r := hr
+    simp [Set.indicator, g, hr0]
+    exact measurableSet_Ioi
+  have hfun_int : Integrable (fun x ↦ (m99A02Function x) ^ 2)
+      (volume.restrict m99A02Omega) := by
+    apply hfun_radial.integrableOn.congr
+    filter_upwards [ae_restrict_mem measurableSet_ball] with x hx
+    simp only [m99A02Omega, Metric.mem_ball, dist_zero_right] at hx
+    by_cases hx0 : x = 0
+    · simp [m99A02Function, hx0]
+    · have hxOmega : x ∈ m99A02Omega := by
+        simpa [m99A02Omega, Metric.mem_ball, dist_zero_right] using hx
+      rw [m99A02Function, if_neg hx0, ← Real.rpow_natCast,
+        ← Real.rpow_mul (m99A02_neg_log_norm_pos hxOmega hx0).le]
+      have hx' : ‖x‖ < 2⁻¹ := by simpa only [one_div] using hx
+      rw [if_pos hx]
+      congr 1
+      norm_num
+  have hfun_mem : MemLp m99A02Function 2 (volume.restrict m99A02Omega) :=
+    (memLp_two_iff_integrable_sq
+      (m99A02Function_measurable.aestronglyMeasurable)).2 hfun_int
+  refine ⟨hfun_mem, ?_⟩
+  intro i
+  have hanti_cont : ContinuousOn
+      (fun r : ℝ ↦ if r = 0 then 0
+        else 3 * (-Real.log r) ^ (-(1 / 3 : ℝ))) (Icc 0 (1 / 2)) := by
+    intro r hrI
+    by_cases hr : r = 0
+    · subst r
+      rw [ContinuousWithinAt]
+      simp only [if_pos]
+      have hset : Icc (0 : ℝ) (1 / 2) = insert 0 (Ioc 0 (1 / 2)) := by
+        ext x
+        simp
+      rw [hset,
+        nhdsWithin_insert, Filter.tendsto_sup]
+      refine ⟨?_, ?_⟩
+      · simpa using (tendsto_pure_nhds
+          (fun r : ℝ ↦ if r = 0 then 0 else 3 * (-Real.log r) ^ (-(1 / 3 : ℝ))) 0)
+      apply (m99A02_tendsto_log_antiderivative_zero.mono_left
+        (nhdsWithin_mono _ Ioc_subset_Ioi_self)).congr'
+      filter_upwards [self_mem_nhdsWithin] with x hx
+      simp [hx.1.ne']
+    · apply ContinuousAt.continuousWithinAt
+      have hrpos : 0 < r := lt_of_le_of_ne hrI.1 (Ne.symm hr)
+      have hl : -Real.log r ≠ 0 := (neg_pos.mpr
+        (Real.log_neg hrpos (hrI.2.trans_lt (by norm_num)))).ne'
+      apply ContinuousAt.congr_of_eventuallyEq
+        (show ContinuousAt (fun x : ℝ ↦ 3 * (-Real.log x) ^ (-(1 / 3 : ℝ))) r by
+          exact continuousAt_const.mul (((Real.continuousAt_log hrpos.ne').neg).rpow_const
+            (Or.inl hl)))
+      filter_upwards [eventually_ne_nhds hr] with x hx
+      simp [hx]
+  have hder_scalar0 : IntegrableOn
+      (fun r : ℝ ↦ 1 / (r * (-Real.log r) ^ (4 / 3 : ℝ)))
+      (Ioo 0 (1 / 2)) volume := by
+    rw [← integrableOn_Ioc_iff_integrableOn_Ioo]
+    apply intervalIntegral.integrableOn_deriv_of_nonneg hanti_cont
+    · intro r hr
+      apply HasDerivAt.congr_of_eventuallyEq
+        (m99A02_log_antiderivative_hasDerivAt hr.1
+          (hr.2.trans (by norm_num)))
+      filter_upwards [eventually_ne_nhds hr.1.ne'] with x hx
+      simp [hx]
+    · intro r hr
+      have hl : 0 < -Real.log r := neg_pos.mpr
+        (Real.log_neg hr.1 (hr.2.trans (by norm_num)))
+      exact one_div_nonneg.mpr (mul_nonneg hr.1.le (Real.rpow_nonneg hl.le _))
+  have hder_scalar : IntegrableOn
+      (fun r : ℝ ↦ 1 / (9 * r * (-Real.log r) ^ (4 / 3 : ℝ)))
+      (Ioo 0 (1 / 2)) volume := by
+    apply (hder_scalar0.const_mul (1 / 9 : ℝ)).congr
+    filter_upwards with r
+    ring
+  have hgrad_radial : Integrable
+      (fun x : m99A02Point ↦ if ‖x‖ < 1 / 2
+        then 1 / (9 * ‖x‖ ^ 2 * (-Real.log ‖x‖) ^ (4 / 3 : ℝ)) else 0) volume := by
+    let g : ℝ → ℝ := fun r ↦ if r < 1 / 2
+        then 1 / (9 * r ^ 2 * (-Real.log r) ^ (4 / 3 : ℝ)) else 0
+    change Integrable (fun x : m99A02Point ↦ g ‖x‖) volume
+    rw [m99A02_integrable_radial_iff]
+    have hi := hder_scalar.integrable_indicator measurableSet_Ioo
+    apply hi.integrableOn.congr_fun
+    intro r hr
+    simp only [Set.indicator, mem_Ioo, g]
+    have hr0 : 0 < r := hr
+    by_cases h : r < 1 / 2
+    · simp [h, hr0]
+      field_simp
+    · have hn : ¬(0 < r ∧ r < 1 / 2) := fun hh ↦ h hh.2
+      have h' : ¬ r < 2⁻¹ := by simpa only [one_div] using h
+      have hle : 2⁻¹ ≤ r := by
+        rw [show (2⁻¹ : ℝ) = 1 / 2 by norm_num]
+        exact le_of_not_gt h
+      simp [h, hn, h']
+    exact measurableSet_Ioi
+  have hgrad_int : Integrable
+      (fun x ↦ ∑ j : Fin 2, (m99A02Derivative j x) ^ 2)
+      (volume.restrict m99A02Omega) := by
+    apply hgrad_radial.integrableOn.congr
+    filter_upwards [ae_restrict_mem measurableSet_ball] with x hx
+    simp only [m99A02Omega, Metric.mem_ball, dist_zero_right] at hx
+    by_cases hx0 : x = 0
+    · simp [m99A02Derivative, hx0]
+    · change (if ‖x‖ < 1 / 2 then _ else _) = ∑ j, _
+      have hxOmega : x ∈ m99A02Omega := by
+        simpa [m99A02Omega, Metric.mem_ball, dist_zero_right] using hx
+      rw [m99A02_sum_derivative_sq hxOmega hx0]
+      have hx' : ‖x‖ < 2⁻¹ := by simpa only [one_div] using hx
+      rw [if_pos hx]
+  apply (memLp_two_iff_integrable_sq
+    ((m99A02Derivative_measurable i).aestronglyMeasurable)).2
+  apply hgrad_int.mono'
+  · exact ((m99A02Derivative_measurable i).pow_const 2).aestronglyMeasurable
+  filter_upwards [ae_restrict_mem measurableSet_ball] with x hx
+  rw [Real.norm_eq_abs, abs_of_nonneg (sq_nonneg _)]
+  exact Finset.single_le_sum (fun j _ ↦ sq_nonneg (m99A02Derivative j x))
+    (Finset.mem_univ i)
 -- END SEAT AREA
 
 /-- Why this unblocks the weak-derivative clauses of `apm_m99a02`: this is
