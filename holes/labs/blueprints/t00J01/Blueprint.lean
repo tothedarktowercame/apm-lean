@@ -266,10 +266,39 @@ theorem apm_t00j01_foldRegular_one :
     apm_t00j01_foldRegular 1 := by
   sorry
 
-/-- The triple-covered regular fiber has exactly three circle points. -/
+def apm_t00j01_foldFiberCard_pi_aux_angleEquiv :
+    {z : Circle // apm_t00j01_fold z = Circle.exp Real.pi} ≃
+      {θ : Set.Ioc (-Real.pi) Real.pi //
+        Circle.exp (apm_t00j01_foldLift θ.1) = Circle.exp Real.pi} where
+  toFun z := ⟨⟨Complex.arg z.1, Complex.arg_mem_Ioc z.1⟩, by
+    rw [← apm_t00j01_fold_exp, Circle.exp_arg]
+    exact z.2⟩
+  invFun θ := ⟨Circle.exp θ.1.1, by
+    rw [apm_t00j01_fold_exp]
+    exact θ.2⟩
+  left_inv z := by
+    apply Subtype.ext
+    exact Circle.exp_arg z.1
+  right_inv θ := by
+    apply Subtype.ext
+    apply Subtype.ext
+    exact Circle.arg_exp θ.1.2.1 θ.1.2.2
+
+lemma apm_t00j01_foldFiberCard_pi_aux_reduce_to_angles :
+    Nat.card {z : Circle // apm_t00j01_fold z = Circle.exp Real.pi} =
+      Nat.card {θ : Set.Ioc (-Real.pi) Real.pi //
+        Circle.exp (apm_t00j01_foldLift θ.1) = Circle.exp Real.pi} := by
+  exact Nat.card_congr apm_t00j01_foldFiberCard_pi_aux_angleEquiv
+
+lemma apm_t00j01_foldFiberCard_pi_aux_angle_count :
+    Nat.card {θ : Set.Ioc (-Real.pi) Real.pi //
+      Circle.exp (apm_t00j01_foldLift θ.1) = Circle.exp Real.pi} = 3 := by
+  sorry
+
 theorem apm_t00j01_foldFiberCard_pi :
     Nat.card {z : Circle // apm_t00j01_fold z = Circle.exp Real.pi} = 3 := by
-  sorry
+  rw [apm_t00j01_foldFiberCard_pi_aux_reduce_to_angles]
+  exact apm_t00j01_foldFiberCard_pi_aux_angle_count
 
 /-- The other selected regular fiber has exactly one circle point. -/
 theorem apm_t00j01_foldFiberCard_one :
