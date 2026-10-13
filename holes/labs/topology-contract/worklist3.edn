@@ -36113,72 +36113,63 @@
    [:lemma-constructiontargets-sardconvexdomain-eq-whitneydyadicindexof-of-mem-cube-of-gene],
    :other-consumers []}
   {:consumer :t93J03,
-   :stop-count 5,
+   :stop-count 6,
    :review-finding
    "Program STOP commits nothing new since the prior reviewed attempt: it reuses commit 512a220f, and git history shows no later scoped commit. The unresolved SemilocallySimplyConnected hypothesis-coverage conflict is unchanged. Obtain the required owner specification decision or commit a new compiled milestone before resubmitting.",
    :evidence
    {:placeholder-delta {:t93J03 [1 1]},
     :residual
-    "Prove signed horizontal bound and assemble proper discontinuity; then orbit homeomorphism, C1/C2/Main.",
+    "Build orbit-quotient homeomorphism; then C1 transport, C2/Main.",
     :outcome :stop,
     :warnings ["owner-approved unused SLSC"],
     :missing-theorems
-    [{:name "finite_zmul_cast_mem_compact_image",
-      :type "integer casts in compact image are finite",
-      :status :proved,
-      :consumers [:t93J03],
-      :depends-on [],
-      :area "covering-subgroup-correspondence"}
-     {:name "finite_vertical_coordinates_of_compact",
-      :type "compact intersection has finite vertical coordinates",
+    [{:name "finite_horizontal_coordinates_of_compact",
+      :type
+      "finite horizontal candidates at fixed vertical coordinate",
       :status :proved,
       :consumers [:t93J03],
       :depends-on [],
       :area "covering-subgroup-correspondence"}
      {:name "t93J03_kleinPlane_properlyDiscontinuous",
       :type "proper discontinuity of affine action",
-      :status :partial,
+      :status :proved,
       :consumers [:t93J03],
-      :depends-on ["finite_vertical_coordinates_of_compact"],
+      :depends-on
+      ["finite_horizontal_coordinates_of_compact"
+       "finite_vertical_coordinates_of_compact"],
+      :area "covering-subgroup-correspondence"}
+     {:name "t93J03_klein_orbit_homeomorph",
+      :type "orbit quotient homeomorphic to frozen KleinBottle",
+      :status :not-started,
+      :consumers [:t93J03],
+      :depends-on ["t93J03_kleinPlane_properlyDiscontinuous"],
       :area "covering-subgroup-correspondence"}],
     :statement-hashes {:registry "166/166"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
-    :reason
-    "Committed compact and vertical-coordinate finiteness; horizontal bound remains.",
+    :reason "Committed literal affine-action proper discontinuity.",
     :commands
     [{:cmd "lake build closure; lean fixture", :exit 0}
      {:cmd "registry; placeholder; diff", :exit 0}
-     {:cmd "rg forbidden closure", :exit 1, :expected-exit 1}
-     {:cmd "git commit; show --check", :exit 0}],
+     {:cmd "rg forbidden", :exit 1, :expected-exit 1}
+     {:cmd "commit; show --check", :exit 0}],
     :diagnostic-history
     [{:cmd "lean closure",
       :exit 1,
-      :correction "unfolded Multiplicative order"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1791925985471-10521-c1c43150",
-     :commands
-     ["git show/diff 42d9d0e; scope and compactness review"
-      "lake build/lean ConstructionTargets.t93J03Closure"
-      "sha256sum + lake env lean compact fixture"
-      "statement-registry check; placeholder recount"],
-     :finding
-     "PASS. Since program-history 2f56a1d, commit 42d9d0e adds compiled, sorry-free compactness progress: continuous images of compact sets bound integer casts above and below, giving finite ZMul coordinates, and the vertical orbit equation is specialized to KxL with the correct q_y-p_y orientation. The signed horizontal bound and proper-discontinuity assembly, then orbit homeomorphism/C1/C2/Main, remain listed. Fixture hash matches; standard axioms only; registry 166/166; forbidden count 0->0. SemilocallySimplyConnected X is unused, mandated by problem.md."},
-    :commit "42d9d0e66410d8ed20d89c7bfc11da54a7a3f0f0",
+      :correction "fixed singleton and binders"}],
+    :commit "9fd7db79829014860bf4bf666288111efb9269de",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
      "ConstructionTargets/t93J03Closure.blueprint.md"],
     :fixture
-    {:path "/tmp/t93j03_compact_coordinate_check.lean",
+    {:path "/tmp/t93j03_proper_action_check.lean",
      :sha256
-     "60873bc71f327bfa270837618835e74c032a6a2127be6d794817d10718be58bc",
+     "43ad1736126cfc7999e80c54b5013a94974a4dbe3aa0d43f173e1a06c61a4ebb",
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -37265,13 +37256,15 @@
    {:name "t93J03_kleinPlane_properlyDiscontinuous",
     :reported-by [:program-2026-10-13-close-t93j03],
     :type "proper discontinuity of affine action",
-    :area "covering-subgroup-correspondence"},
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03},
    :id :lemma-t93j03-kleinplane-properlydiscontinuous,
    :kind :lemma,
    :depends-on
    [:lemma-coordinate-equations-of-smul-eq
     :lemma-finite-of-coordinatepair-mem
-    :lemma-finite-vertical-coordinates-of-compact],
+    :lemma-finite-vertical-coordinates-of-compact
+    :lemma-finite-horizontal-coordinates-of-compact],
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
@@ -37348,6 +37341,39 @@
    :id :lemma-finite-vertical-coordinates-of-compact,
    :kind :lemma,
    :depends-on [],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "finite_horizontal_coordinates_of_compact",
+    :type "finite horizontal candidates at fixed vertical coordinate"},
+   :lemma
+   {:name "finite_horizontal_coordinates_of_compact",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type "finite horizontal candidates at fixed vertical coordinate",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03},
+   :id :lemma-finite-horizontal-coordinates-of-compact,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t93J03_klein_orbit_homeomorph",
+    :type "orbit quotient homeomorphic to frozen KleinBottle"},
+   :lemma
+   {:name "t93J03_klein_orbit_homeomorph",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type "orbit quotient homeomorphic to frozen KleinBottle",
+    :area "covering-subgroup-correspondence"},
+   :id :lemma-t93j03-klein-orbit-homeomorph,
+   :kind :lemma,
+   :depends-on [:lemma-t93j03-kleinplane-properlydiscontinuous],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
