@@ -505,7 +505,8 @@ theorem apm_b96a01_part_d_nonabelian :
 lemma apm_b96a01_part_d_abelian_aux_representation_aux_prime_card
     {G : Type*} [Group G] [Finite G] [IsSimpleGroup G] (hcomm : ∀ a b : G, a * b = b * a) :
     (Nat.card G).Prime := by
-  sorry
+  letI : CommGroup G := { (inferInstance : Group G) with mul_comm := hcomm }
+  exact IsSimpleGroup.prime_card
 
 /-- An element of prime order `ℓ` in `GLₙ(ℚ)` forces `ℓ - 1 ≤ n`: its minimal polynomial
 divides `X^ℓ - 1 = (X - 1) Φ_ℓ`, is not `X - 1`, and `Φ_ℓ` is irreducible over `ℚ` of degree
