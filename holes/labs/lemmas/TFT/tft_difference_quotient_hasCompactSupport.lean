@@ -167,7 +167,11 @@ lemma tft_difference_quotient_continuous
 lemma tft_difference_quotient_hasCompactSupport
     (f : E → F) (hfc : HasCompactSupport f) (x v : E) (h : ℝ) :
     HasCompactSupport (fun y => h⁻¹ • (f (x + h • v + y) - f (x + y))) := by
-  sorry
+  have h₁ := hfc.comp_homeomorph (Homeomorph.addLeft (x + h • v))
+  have h₂ := hfc.comp_homeomorph (Homeomorph.addLeft x)
+  have hs := h₁.sub h₂
+  have hm := hs.comp_left (g := fun z : F => h⁻¹ • z) (smul_zero _)
+  simpa [Function.comp_def] using hm
 -- END SEAT AREA
 
 lemma tft_fderiv_translate_continuous
