@@ -26,6 +26,16 @@ theorem mem_closure_inter_of_mem_nhds
   · exact mem_closure_iff_nhdsWithin_neBot.mp hx
   · exact mem_nhdsWithin_iff_exists_mem_nhds_inter.mpr ⟨u, hu, inter_subset_left⟩
 
+/-- Intersecting a smaller set with a relative neighborhood in a larger set preserves a closure
+point of the smaller set. -/
+theorem mem_closure_inter_of_mem_nhdsWithin
+    {X : Type*} [TopologicalSpace X] {s t u : Set X} {x : X}
+    (hx : x ∈ closure t) (hts : t ⊆ s)
+    (hu : u ∈ nhdsWithin x s) : x ∈ closure (u ∩ t) := by
+  have hut : u ∈ nhdsWithin x t := (nhdsWithin_mono x hts) hu
+  rw [mem_closure_iff_nhdsWithin_neBot, nhdsWithin_inter_of_mem hut]
+  exact mem_closure_iff_nhdsWithin_neBot.mp hx
+
 /-- Two maps continuous within a set agree at a point in the closure of its interior if they
 agree throughout that interior. -/
 theorem ContinuousWithinAt.eq_of_eqOn_interior_of_mem_closure
