@@ -76416,7 +76416,7 @@
   {:consumer :t96J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 0,
    :evidence
    {:placeholder-delta 0,
     :residual "Construct quotient homeomorphism; then B8/B9.",
@@ -76458,6 +76458,17 @@
     [{:cmd "first coordinate compile",
       :exit 1,
       :correction "split Boolean orientation"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791850174476-8091-37485352",
+     :commands
+     ["git show/diff/hash 02b1fdfe0"
+      "lake env lean ConstructionTargets/PolygonSurfacePiOne.lean"
+      "python3 scripts/statement-registry.py check"
+      "#print axioms + placeholder scan"],
+     :finding
+     "PASS on STOP after real progress: commit 02b1fdfe0 adds compiled positive and inverse circle-leg coordinates and proves pairing invariance with the correct pairedParameter orientation, including reversal exactly when paired signs differ. The final quotient homeomorphism remains explicitly partial, so the coordinate packet is not presented as B7 completion. Scope is exact; fixture SHA-256 33b48672...b7eb0 and blob 0d32aea8...c439 match. Fresh Lean and registry gates pass (131/0), placeholders are 0, and signedWedgeArc_pair uses only propext, Classical.choice, Quot.sound."},
     :commit "02b1fdfe0",
     :changed-paths ["ConstructionTargets/PolygonSurfacePiOne.lean"],
     :fixture
@@ -76466,7 +76477,7 @@
      "33b48672108ed86692b669c4c3e04b2b6a4d2b0fd99f459cb4c7c8a81f8b7eb0"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope ["ConstructionTargets/PolygonSurfacePiOne.lean"],
    :dag-node "ConstructionTargets/PolygonSurfacePiOne.blueprint.md/B7",
    :acceptance
@@ -86713,7 +86724,7 @@
    :other-consumers [:t92J05 :t94J04 :t97A01 :t97A03]}
   {:consumer :t96J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "PairingData.signedWedgeArc_pair",
@@ -86723,7 +86734,9 @@
     :reported-by [:routes-2026-10-12-polygon-b7-topo2-r1],
     :type "paired arcs share the sign-selected orbit coordinate",
     :area "polygon-surface-pi1",
-    :proved-in :routes-2026-10-12-polygon-b7-topo2-r1},
+    :proved-in :routes-2026-10-12-polygon-b7-topo2-r1,
+    :banked-by :routes-2026-10-12-polygon-b7-topo2-r1,
+    :banked-commit "02b1fdfe0"},
    :id :lemma-pairingdata-signedwedgearc-pair,
    :kind :lemma,
    :depends-on [:lemma-pointwedgequotient-finitewedge],
