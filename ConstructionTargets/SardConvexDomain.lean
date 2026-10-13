@@ -1199,4 +1199,29 @@ theorem fixed_whitneyPackingNumber_ne_top
     convert h using 1 <;> norm_num
   exact fun htop => (Set.encard_ne_top_iff.mpr ht) (top_unique (htop ▸ hle))
 
+/-- Every incidence set is finite, with a natural cardinality bounded by
+three copies of the fixed packing number. -/
+theorem finite_whitneyNetIncidence_and_ncard_le
+    (E : Type*) [NormedAddCommGroup E] [NormedSpace ℝ E] [ProperSpace E]
+    (s : Set E) (x : E) :
+    (whitneyNetIncidence s x).Finite ∧
+      (whitneyNetIncidence s x).ncard ≤
+        (Metric.packingNumber ((1 : NNReal) / 8)
+          (Metric.closedBall (0 : E) (1 / 2))).toNat * 3 := by
+  let N := Metric.packingNumber ((1 : NNReal) / 8)
+    (Metric.closedBall (0 : E) (1 / 2))
+  have hN : N ≠ ⊤ := fixed_whitneyPackingNumber_ne_top E
+  have hle : (whitneyNetIncidence s x).encard ≤ N + N + N := by
+    simpa [N] using encard_whitneyNetIncidence_le_three_fixed_packingNumbers s x
+  have hNN : N + N ≠ ⊤ := WithTop.add_ne_top.mpr ⟨hN, hN⟩
+  have hsum : N + N + N ≠ ⊤ := WithTop.add_ne_top.mpr ⟨hNN, hN⟩
+  have hfinite : (whitneyNetIncidence s x).Finite :=
+    Set.encard_ne_top_iff.mp (fun htop => hsum (top_unique (htop ▸ hle)))
+  refine ⟨hfinite, ?_⟩
+  have hnat := ENat.toNat_le_toNat hle hsum
+  rw [ENat.toNat_add hNN hN, ENat.toNat_add hN hN] at hnat
+  change (whitneyNetIncidence s x).ncard ≤ N.toNat + N.toNat + N.toNat at hnat
+  change (whitneyNetIncidence s x).ncard ≤ N.toNat * 3
+  omega
+
 end ConstructionTargets.SardConvexDomain
