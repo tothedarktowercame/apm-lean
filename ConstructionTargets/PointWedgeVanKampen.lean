@@ -368,6 +368,35 @@ theorem connectorSystemComapEquivalence_connector_hom
         e.unitIso.inv.app A := rfl
 
 omit [PathConnectedSpace X] [PathConnectedSpace Y] in
+/-- A connector square in the target system pulls back through an
+equivalence to a connector square in the source system. -/
+theorem connectorSystemComapEquivalence_connectorSquare
+    {C D : Type} [Groupoid C] [Groupoid D]
+    (S : ConnectorSystem D) (e : C ≌ D) {A B : C} (f : A ⟶ B)
+    (h : (S.connector (e.functor.obj A)).hom ≫ e.functor.map f =
+      (S.connector (e.functor.obj B)).hom) :
+    ((connectorSystemComapEquivalence S e).connector A).hom ≫ f =
+      ((connectorSystemComapEquivalence S e).connector B).hom := by
+  rw [connectorSystemComapEquivalence_connector_hom,
+    connectorSystemComapEquivalence_connector_hom]
+  calc
+    (e.inverse.map (S.connector (e.functor.obj A)).hom ≫
+        e.unitIso.inv.app A) ≫ f =
+      e.inverse.map (S.connector (e.functor.obj A)).hom ≫
+        (e.unitIso.inv.app A ≫ f) := Category.assoc _ _ _
+    _ = e.inverse.map (S.connector (e.functor.obj A)).hom ≫
+        (e.inverse.map (e.functor.map f) ≫ e.unitIso.inv.app B) := by
+          congr 1
+          exact (e.unitIso.inv.naturality f).symm
+    _ = (e.inverse.map (S.connector (e.functor.obj A)).hom ≫
+        e.inverse.map (e.functor.map f)) ≫ e.unitIso.inv.app B :=
+          (Category.assoc _ _ _).symm
+    _ = e.inverse.map
+          ((S.connector (e.functor.obj A)).hom ≫ e.functor.map f) ≫
+        e.unitIso.inv.app B := by rw [Functor.map_comp]
+    _ = _ := by rw [h]
+
+omit [PathConnectedSpace X] [PathConnectedSpace Y] in
 /-- Mapping a pulled-back connector exposes the inverse-map, inverse-unit,
 and counit factors in their categorical order. -/
 theorem connectorSystemMap_comap_connector_hom_expanded

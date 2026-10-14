@@ -1456,3 +1456,8 @@ around those base changes: precomposing both connectors by the same rebasing
 isomorphism preserves the square.  Together the two generic lemmas reduce the
 installed target comparison to the corresponding square in the original
 pulled-back right-piece connector system.
+`connectorSystemComapEquivalence_connectorSquare` supplies the reverse
+transport step.  Its proof uses inverse-unit naturality, so the right-piece
+square is reduced to the literal `Y` connector square for the forward image
+of the overlap component.  The remaining specialization must identify that
+forward image with the based endpoint transport already calculated below.
