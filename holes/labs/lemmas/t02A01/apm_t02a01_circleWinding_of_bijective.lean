@@ -1,4 +1,5 @@
 import Mathlib
+import ConstructionTargets.CircleUniversalCover
 import ConstructionTargets.CoveringMonodromyCosets
 
 open Set
@@ -545,7 +546,46 @@ theorem apm_t02a01_angleToBoundary_bijective
     (hsurj : ∀ b : apm_t02a01_boundarySpace,
       ∃ s ∈ Set.Ico (0 : ℝ) 4, apm_t02a01_innerPoint s = b) :
     Function.Bijective (apm_t02a01_angleToBoundary hc h4) := by
-  sorry
+  constructor
+  · intro x y hxy
+    let ex := AddCircle.equivIco (2 * Real.pi) 0 x
+    let ey := AddCircle.equivIco (2 * Real.pi) 0 y
+    have hpi : 0 < Real.pi := Real.pi_pos
+    have hx : 2 * (ex : ℝ) / Real.pi ∈ Set.Ico (0 : ℝ) 4 := by
+      constructor
+      · exact div_nonneg (mul_nonneg (by norm_num) ex.2.1) hpi.le
+      · have := ex.2.2
+        apply (div_lt_iff₀ hpi).2
+        linarith
+    have hy : 2 * (ey : ℝ) / Real.pi ∈ Set.Ico (0 : ℝ) 4 := by
+      constructor
+      · exact div_nonneg (mul_nonneg (by norm_num) ey.2.1) hpi.le
+      · have := ey.2.2
+        apply (div_lt_iff₀ hpi).2
+        linarith
+    apply (AddCircle.equivIco (2 * Real.pi) 0).injective
+    apply Subtype.ext
+    have heq := hinj hx hy (by
+      simpa [apm_t02a01_angleToBoundary, AddCircle.liftIco] using hxy)
+    field_simp [Real.pi_ne_zero] at heq
+    linarith
+  · intro b
+    obtain ⟨s, hs, rfl⟩ := hsurj b
+    refine ⟨((Real.pi * s / 2 : ℝ) : AddCircle (2 * Real.pi)), ?_⟩
+    have htheta : Real.pi * s / 2 ∈ Set.Ico (0 : ℝ) (0 + 2 * Real.pi) := by
+      constructor
+      · exact div_nonneg (mul_nonneg Real.pi_pos.le hs.1) (by norm_num)
+      · have := hs.2
+        nlinarith [Real.pi_pos]
+    rw [show (apm_t02a01_angleToBoundary hc h4 :
+        AddCircle (2 * Real.pi) → apm_t02a01_boundarySpace)
+          (↑(Real.pi * s / 2 : ℝ)) =
+        apm_t02a01_innerPoint (2 * (Real.pi * s / 2) / Real.pi) by
+          simpa [apm_t02a01_angleToBoundary] using
+            (AddCircle.liftIco_coe_apply
+              (f := fun θ ↦ apm_t02a01_innerPoint (2 * θ / Real.pi)) htheta)]
+    congr 1
+    field_simp [Real.pi_ne_zero]
 
 /-- The final computation: transport across the homeomorphism (T2 from
 `apm_t02a01_boundary_homeomorph_circle`, `Continuous.homeoOfEquivCompactToT2`) and
@@ -840,17 +880,87 @@ theorem apm_t02a01_inner_conj_outer
     ((apm_t02a01_innerLoop hc h4).map (continuous_subtype_val :
         Continuous ((↑) : apm_t02a01_boundarySpace → apm_t02a01_puncturedTorus))).Homotopic
       ((apm_t02a01_delta hr).trans ((apm_t02a01_outerLoop hr).trans (apm_t02a01_delta hr).symm)) := by
+  apply hconj
+    ((apm_t02a01_innerLoop hc h4).map (continuous_subtype_val :
+      Continuous ((↑) : apm_t02a01_boundarySpace → apm_t02a01_puncturedTorus)))
+    (apm_t02a01_outerLoop hr) (apm_t02a01_delta hr)
+    ⟨apm_t02a01_radialPt, hr⟩
+  · intro t
+    change apm_t02a01_radialPt (0, t) =
+      (apm_t02a01_innerPoint (4 * (t : ℝ))).1
+    unfold apm_t02a01_radialPt apm_t02a01_innerPoint
+    apply congrArg (Quotient.mk _)
+    apply Subtype.ext
+    simp [apm_t02a01_radial]
+  · intro t
+    rfl
+  · intro s
+    rfl
+  · intro s
+    change apm_t02a01_radialPt (s, 1) = apm_t02a01_radialPt (s, 0)
+    unfold apm_t02a01_radialPt
+    apply congrArg (Quotient.mk _)
+    apply Subtype.ext
+    norm_num [apm_t02a01_radial, apm_t02a01_perimeter, apm_t02a01_clamp01]
+
+/-- The outer loop on each quarter: bottom side `A`, right side `B`, top side (identified
+with the bottom, reversed), left side (identified with the right, reversed). -/
+theorem apm_t02a01_outer_quarter_one (hr : Continuous apm_t02a01_radialPt)
+    (t : unitInterval) (ht : (t : ℝ) ≤ 1 / 4) :
+    apm_t02a01_outerLoop hr t = apm_t02a01_edgeA (4 * t) := by
   sorry
 
-/-- The outer square, read side by side: bottom `A`, right `B`, top `A` reversed, left `B`
-reversed (opposite sides are identified in the torus). -/
+theorem apm_t02a01_outer_quarter_two (hr : Continuous apm_t02a01_radialPt)
+    (t : unitInterval) (ht0 : 1 / 4 ≤ (t : ℝ)) (ht1 : (t : ℝ) ≤ 1 / 2) :
+    apm_t02a01_outerLoop hr t = apm_t02a01_edgeB (4 * t - 1) := by
+  sorry
+
+theorem apm_t02a01_outer_quarter_three (hr : Continuous apm_t02a01_radialPt)
+    (t : unitInterval) (ht0 : 1 / 2 ≤ (t : ℝ)) (ht1 : (t : ℝ) ≤ 3 / 4) :
+    apm_t02a01_outerLoop hr t = apm_t02a01_edgeA (3 - 4 * t) := by
+  sorry
+
+theorem apm_t02a01_outer_quarter_four (hr : Continuous apm_t02a01_radialPt)
+    (t : unitInterval) (ht0 : 3 / 4 ≤ (t : ℝ)) :
+    apm_t02a01_outerLoop hr t = apm_t02a01_edgeB (4 - 4 * t) := by
+  sorry
+
+/-- Reassemble the four quarters (`Path.trans_apply` twice; the quarter facts are explicit
+hypotheses so this is independent of them). -/
+theorem apm_t02a01_balanced_of_quarters
+    (hr : Continuous apm_t02a01_radialPt)
+    (hA : Continuous apm_t02a01_edgeA) (hB : Continuous apm_t02a01_edgeB)
+    (q1 : ∀ t : unitInterval, (t : ℝ) ≤ 1 / 4 →
+      apm_t02a01_outerLoop hr t = apm_t02a01_edgeA (4 * t))
+    (q2 : ∀ t : unitInterval, 1 / 4 ≤ (t : ℝ) → (t : ℝ) ≤ 1 / 2 →
+      apm_t02a01_outerLoop hr t = apm_t02a01_edgeB (4 * t - 1))
+    (q3 : ∀ t : unitInterval, 1 / 2 ≤ (t : ℝ) → (t : ℝ) ≤ 3 / 4 →
+      apm_t02a01_outerLoop hr t = apm_t02a01_edgeA (3 - 4 * t))
+    (q4 : ∀ t : unitInterval, 3 / 4 ≤ (t : ℝ) →
+      apm_t02a01_outerLoop hr t = apm_t02a01_edgeB (4 - 4 * t)) :
+    apm_t02a01_outerLoop hr =
+      ((apm_t02a01_loopA hA).trans (apm_t02a01_loopB hB)).trans
+        ((apm_t02a01_loopA hA).symm.trans (apm_t02a01_loopB hB).symm) := by
+  sorry
+
+theorem apm_t02a01_outer_word_aux_balanced
+    (hr : Continuous apm_t02a01_radialPt)
+    (hA : Continuous apm_t02a01_edgeA) (hB : Continuous apm_t02a01_edgeB) :
+    apm_t02a01_outerLoop hr =
+      ((apm_t02a01_loopA hA).trans (apm_t02a01_loopB hB)).trans
+        ((apm_t02a01_loopA hA).symm.trans (apm_t02a01_loopB hB).symm) :=
+  apm_t02a01_balanced_of_quarters hr hA hB (apm_t02a01_outer_quarter_one hr)
+    (apm_t02a01_outer_quarter_two hr) (apm_t02a01_outer_quarter_three hr)
+    (apm_t02a01_outer_quarter_four hr)
+
 theorem apm_t02a01_outer_word
     (hr : Continuous apm_t02a01_radialPt)
     (hA : Continuous apm_t02a01_edgeA) (hB : Continuous apm_t02a01_edgeB) :
     (apm_t02a01_outerLoop hr).Homotopic
       ((apm_t02a01_loopA hA).trans ((apm_t02a01_loopB hB).trans
         ((apm_t02a01_loopA hA).symm.trans (apm_t02a01_loopB hB).symm))) := by
-  sorry
+  rw [apm_t02a01_outer_word_aux_balanced hr hA hB]
+  exact Path.Homotopic.trans_assoc _ _ _
 
 /-- Algebra: conjugate `A` and `B` by `δ` to get the commutator in `π₁(T, innerBase)`. -/
 theorem apm_t02a01_commutator_of_homotopies
