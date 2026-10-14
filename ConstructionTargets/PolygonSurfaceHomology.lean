@@ -3440,6 +3440,47 @@ theorem radialMVPiecesExact (P : PairingData) (n : ℕ) :
     (openCover P).inner (openCover P).outer
     (openCover P).inner_open (openCover P).outer_open (openCover P).cover n
 
+/-- The remaining production exactness witness at the surface term.  Its
+inferred type retains the canonical connecting morphism and its zero proof. -/
+noncomputable def radialMVUnionExact (P : PairingData) (n : ℕ) :=
+  ConstructionTargets.ProductionOpenCoverMayerVietoris.productionMayerVietoris_exact_union
+    (openCover P).inner (openCover P).outer
+    (openCover P).inner_open (openCover P).outer_open (openCover P).cover n
+
+/-- The remaining production exactness witness at the next intersection
+term, completing the named radial long-exact-sequence fragment. -/
+noncomputable def radialMVIntersectionExact (P : PairingData) (n : ℕ) :=
+  ConstructionTargets.ProductionOpenCoverMayerVietoris.productionMayerVietoris_exact_intersection
+    (openCover P).inner (openCover P).outer
+    (openCover P).inner_open (openCover P).outer_open (openCover P).cover n
+
+/-- The inner degree-one group in the radial sequence is zero. -/
+theorem radialInnerH1GroupIsZero (P : PairingData) :
+    IsZero
+      (ConstructionTargets.SingularHomologyConcrete.SingularHomology 1
+        (TopCat.of (InnerPiece P))) :=
+  (ConstructionTargets.SingularHomologyConcrete.pointHigherHomology_isZero 1
+    (by omega)).of_iso
+      (ConstructionTargets.SingularHomologyConcrete.singularHomologyIsoOfHomotopyEquiv
+        (innerHomotopyEquivPoint P) 1)
+
+/-- The one nonzero degree-one map left after removing the contractible inner
+summand, expressed in the fixed positive-overlap and outer-orbit coordinates.
+This is the morphism computed geometrically in B7. -/
+noncomputable def radialMVBoundaryGroup (P : PairingData) :
+    AddCommGrpCat.of ℤ ⟶ AddCommGrpCat.of (PairingOrbit P.pair → ℤ) :=
+  (radialIntersectionH1GroupIsoInt P).inv ≫
+    ConstructionTargets.ProductionOpenCoverMayerVietoris.productionIntersectionArrow
+      (openCover P).inner (openCover P).outer 1 ≫
+    (biprod.snd :
+      ConstructionTargets.SingularHomologyConcrete.SingularHomology 1
+          (TopCat.of (InnerPiece P)) ⊞
+        ConstructionTargets.SingularHomologyConcrete.SingularHomology 1
+          (TopCat.of (OuterPiece P)) ⟶
+      ConstructionTargets.SingularHomologyConcrete.SingularHomology 1
+        (TopCat.of (OuterPiece P))) ≫
+    (radialOuterH1GroupIsoCoordinates P).hom
+
 end
 
 end ConstructionTargets.PolygonSurfaceHomology
