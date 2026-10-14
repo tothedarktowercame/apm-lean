@@ -2377,7 +2377,50 @@ lemma mergeRepeatedBlock_aux_boundary_relation_aux_forward_aux_yz_aux_ypair
     (h₂ : circleToDisk c₂ = edgePoint (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t).length (u.length + 3 + v.length) (reverseParameter s)) :
     Relation.EqvGen (fun p q : Circle => WordRel (u ++ [a] ++ v ++ [inv a] ++ t) (circleToDisk p) (circleToDisk q))
       (g c₁) (g c₂) := by
-  sorry
+  obtain ⟨r, hr, hyr⟩ := hg.on_y s
+  obtain ⟨r', hr', hyr'⟩ := hg.on_inv_y (reverseParameter s)
+  have hrr : r' = reverseParameter r := by
+    apply Subtype.ext
+    simp only [reverseParameter, Subtype.coe_mk]
+    rw [hr', hr]
+    simp only [reverseParameter, Subtype.coe_mk]
+    ring
+  have hc₁ : c₁ = ⟨edgePoint
+      (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t).length u.length s,
+      by simpa [Circle, Submonoid.unitSphere] using
+        norm_edgePoint (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t).length u.length s⟩ :=
+    mergeRepeatedBlock_aux_boundary_relation_aux_circleToDisk_injective h₁
+  have hc₂ : c₂ = ⟨edgePoint
+      (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t).length
+        (u.length + 3 + v.length) (reverseParameter s),
+      by simpa [Circle, Submonoid.unitSphere] using
+        norm_edgePoint (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t).length
+          (u.length + 3 + v.length) (reverseParameter s)⟩ :=
+    mergeRepeatedBlock_aux_boundary_relation_aux_circleToDisk_injective h₂
+  rw [hc₁, hc₂]
+  apply Relation.EqvGen.rel
+  let i : Fin (u ++ [a] ++ v ++ [inv a] ++ t).length :=
+    ⟨u.length, by simp⟩
+  let j : Fin (u ++ [a] ++ v ++ [inv a] ++ t).length :=
+    ⟨u.length + 1 + v.length, by simp; omega⟩
+  refine ⟨i, j, ?_, r, ?_, ?_, ?_⟩
+  · intro hij
+    have := congrArg Fin.val hij
+    simp only [i, j, Fin.val_mk] at this
+    omega
+  · simp [i, j, List.get_eq_getElem, List.getElem_append, inv,
+      Nat.add_assoc, show 1 + v.length = Nat.succ v.length by omega]
+  · simpa only [List.length_append, List.length_cons, List.length_nil, i,
+      Fin.val_mk, circleToDisk] using congrArg circleToDisk hyr
+  · have hsign :
+        ((u ++ [a] ++ v ++ [inv a] ++ t).get i).2 ≠
+          ((u ++ [a] ++ v ++ [inv a] ++ t).get j).2 := by
+      simp [i, j, List.get_eq_getElem, List.getElem_append, inv,
+        Nat.add_assoc, show 1 + v.length = Nat.succ v.length by omega]
+    rw [if_neg hsign]
+    rw [← hrr]
+    simpa only [List.length_append, List.length_cons, List.length_nil,
+      circleToDisk] using congrArg circleToDisk hyr'
 -- END SEAT AREA
 
 /-- `z` at `s` and `z⁻¹` at `1 - s` map to `a` at `(1+s)/2` and `a⁻¹` at `(1-s)/2`. -/
