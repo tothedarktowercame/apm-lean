@@ -36121,66 +36121,60 @@
   {:consumer :t93J03,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 6,
+   :stop-count 7,
    :review-finding
    "Program STOP commits no new mathematical progress since the prior milestone: KleinPolygonBasedVanKampen merely packages the already-required surjectivity and kernel hypotheses, and both consumers only reapply the previously proved three-input theorem. Prove the based van Kampen surjectivity/kernel result (or winding conjugacy) in scope; extend Mathlib: state and prove the missing theorem in scope.",
    :evidence
    {:placeholder-delta {:t93J03 [1 1]},
     :residual
-    "Define run-boundary outer-subtype family; instantiate outer fold; reverse kernel/surjectivity; winding; C1/C2/Main.",
+    "Prove boundary points outer; lift to subtype; instantiate fold; reverse kernel/surjectivity; winding; C1/C2/Main.",
     :outcome :stop,
     :warnings [],
     :missing-theorems
-    [{:name "pathTwoOpenSubdivision_runPartition_boundary_spec",
-      :type
-      "adjacent run targets equal following sources and lie in overlap",
+    [{:name "pathTwoOpenSubdivisionRunBoundaryPoints",
+      :type "canonical boundary list, length runs+1, head point zero",
       :status :proved,
       :consumers [:t93J03],
-      :depends-on ["boolSideRunPartition_end_indices"],
+      :depends-on
+      ["pathTwoOpenSubdivision_runPartition_boundary_spec"],
       :area "covering-subgroup-correspondence"}
      {:name "t93J03_polygon_based_van_kampen",
       :type "surjectivity; kernel equality",
       :status :partial,
       :consumers [:t93J03],
-      :depends-on
-      ["pathTwoOpenSubdivision_runPartition_boundary_spec"],
+      :depends-on ["pathTwoOpenSubdivisionRunBoundaryPoints"],
       :area "covering-subgroup-correspondence"}],
     :statement-hashes {:registry "166/166"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Packaged each adjacent run boundary with literal endpoint equality and overlap membership; subtype family remains.",
+    "Defined the canonical run-boundary list with exact length and initial vertex; outer-membership remains.",
     :commands
     [{:cmd "lake build ConstructionTargets.t93J03Closure", :exit 0}
-     {:cmd "lake env lean /tmp/t93j03_boundary_spec_check.lean",
+     {:cmd "lake env lean /tmp/t93j03_boundary_points_check.lean",
       :exit 0}
      {:cmd "lake env lean problems/t93J03/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder count", :exit 0}
      {:cmd "git diff --check", :exit 0}
      {:cmd "rg forbidden", :exit 1, :expected-exit 1}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1792009392587-12340-a2367de2",
-     :commands
-     ["git show/check/diff d23066eb; scope and fixture SHA-256"
-      "lake build ConstructionTargets.t93J03Closure; lean fixture and Main"
-      "statement-registry check; placeholder/axiom recount"],
-     :finding
-     "PASS: d23066eb adds compiled, sorry-free progress after 32d3aa6e. For every adjacent run pair, consecutive indices lift to literal equality of the preceding block target and following block source, while the same source is certified in the overlap. Blueprint is faithful; exact scope/hash match; closure placeholders 0->0; frozen Main remains 1; registry 166/166; standard axioms only. STOP lists the boundary outer-subtype family, outer-fold instantiation, reverse kernel/surjectivity, winding, C1/C2/Main."},
-    :commit "d23066ebf135266f6492546e82217349a47bc686",
+    :diagnostic-history
+    [{:cmd "initial compiles",
+      :exit 1,
+      :correction
+      "rebuilt concurrent dependency; fixed nonempty proof"}],
+    :commit "83b52a407f4be5673b93570b691710c7bd6ab7ed",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
      "ConstructionTargets/t93J03Closure.blueprint.md"],
     :fixture
-    {:path "/tmp/t93j03_boundary_spec_check.lean",
+    {:path "/tmp/t93j03_boundary_points_check.lean",
      :sha256
-     "a4a1147ca50308438585fdbde0eefc763ff1c7c948506f8b87fe8300a68893f1"},
+     "3dd725e7a2a9785a40c2367d3cdb44dbc4722350d5decfc36583ca36d5514af1"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -38723,7 +38717,8 @@
     :lemma-pathtwoopensubdivision-adjacentrunboundary-mem-overlap
     :lemma-pathtwoopensubdivision-runpartition-ischain-overlap
     :lemma-boolsiderunpartition-end-indices
-    :lemma-pathtwoopensubdivision-runpartition-boundary-spec],
+    :lemma-pathtwoopensubdivision-runpartition-boundary-spec
+    :lemma-pathtwoopensubdivisionrunboundarypoints],
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
@@ -39611,6 +39606,24 @@
    :id :lemma-pathtwoopensubdivision-runpartition-boundary-spec,
    :kind :lemma,
    :depends-on [:lemma-boolsiderunpartition-end-indices],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "pathTwoOpenSubdivisionRunBoundaryPoints",
+    :type "canonical boundary list, length runs+1, head point zero"},
+   :lemma
+   {:name "pathTwoOpenSubdivisionRunBoundaryPoints",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type "canonical boundary list, length runs+1, head point zero",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03},
+   :id :lemma-pathtwoopensubdivisionrunboundarypoints,
+   :kind :lemma,
+   :depends-on
+   [:lemma-pathtwoopensubdivision-runpartition-boundary-spec],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
