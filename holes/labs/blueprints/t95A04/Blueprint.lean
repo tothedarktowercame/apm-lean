@@ -195,7 +195,34 @@ theorem t95A04_augmented_hasFDerivAt
     (he : ∀ v, e (v, 0) = L v) :
     HasFDerivAt (fun z : E 2 × E 4 ↦ g z.1 + e (0, z.2))
       (e : (E 2 × E 4) →L[ℝ] E 6) (a, 0) := by
-  sorry
+  have hfst : HasFDerivAt (Prod.fst : E 2 × E 4 → E 2)
+      (ContinuousLinearMap.fst ℝ (E 2) (E 4)) (a, 0) := hasFDerivAt_fst
+  have hg' := hg.comp (a, (0 : E 4)) hfst
+  have hsn : HasFDerivAt (Prod.snd : E 2 × E 4 → E 4)
+      (ContinuousLinearMap.snd ℝ (E 2) (E 4)) (a, 0) := hasFDerivAt_snd
+  have hinr : HasFDerivAt (fun z : E 2 × E 4 => (0, z.2))
+      ((ContinuousLinearMap.inr ℝ (E 2) (E 4)).comp
+        (ContinuousLinearMap.snd ℝ (E 2) (E 4))) (a, 0) :=
+    (ContinuousLinearMap.inr ℝ (E 2) (E 4)).hasFDerivAt.comp (a, 0) hsn
+  have hk : HasFDerivAt (fun z : E 2 × E 4 => e (0, z.2))
+      ((e : (E 2 × E 4) →L[ℝ] E 6).comp
+        ((ContinuousLinearMap.inr ℝ (E 2) (E 4)).comp
+          (ContinuousLinearMap.snd ℝ (E 2) (E 4)))) (a, 0) :=
+    (e : (E 2 × E 4) →L[ℝ] E 6).hasFDerivAt.comp
+      (a, (0 : E 4)) hinr
+  have hder : L.comp (ContinuousLinearMap.fst ℝ (E 2) (E 4)) +
+      (e : (E 2 × E 4) →L[ℝ] E 6).comp
+        ((ContinuousLinearMap.inr ℝ (E 2) (E 4)).comp
+          (ContinuousLinearMap.snd ℝ (E 2) (E 4))) = e := by
+    apply ContinuousLinearMap.ext
+    intro z
+    rw [ContinuousLinearMap.add_apply, ContinuousLinearMap.comp_apply,
+      ContinuousLinearMap.comp_apply, ContinuousLinearMap.comp_apply]
+    change L z.1 + e (0, z.2) = e z
+    rw [← he z.1, ← map_add]
+    simp
+  rw [← hder]
+  simpa only [Function.comp_apply] using hg'.add hk
 
 /-- Smoothness near the base point of the augmented coordinate map. -/
 theorem t95A04_augmented_contDiffAt
