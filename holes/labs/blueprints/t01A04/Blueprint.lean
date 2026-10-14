@@ -1560,9 +1560,120 @@ lemma apm_t01A04_tbp_V_open (i : Fin 2) : IsOpen (apm_t01A04_tbp_V i) := by
 lemma apm_t01A04_tbp_V_disjoint : Pairwise (Function.onFun Disjoint apm_t01A04_tbp_V) := by
   sorry
 
+def apm_t01A04_tbp_preimage_aux_basePred :
+    Sum apm_t01a04_Torus Circle → Prop
+  | .inl q => 0 < (q.1 : ℂ).re ∧ 0 < (q.2 : ℂ).re
+  | .inr z => 0 < (z : ℂ).re
+
+def apm_t01A04_tbp_preimage_aux_totalPred (i : Fin 2) :
+    Sum apm_t01a04_Torus (Fin 2 × Circle) → Prop
+  | .inl q =>
+      0 < ((q.1 : ℂ) * star (apm_t01a04_sheetPoint i : ℂ)).re ∧
+      0 < ((q.1 : ℂ) ^ 2).re ∧ 0 < (q.2 : ℂ).re
+  | .inr p => p.1 = i ∧ 0 < (p.2 : ℂ).re
+
+lemma apm_t01A04_tbp_preimage_aux_base_invariant {r s}
+    (h : Relation.EqvGen apm_t01a04_wedgeRel r s) :
+    apm_t01A04_tbp_preimage_aux_basePred r ↔
+      apm_t01A04_tbp_preimage_aux_basePred s := by
+  induction h with
+  | rel _ _ h => cases h; simp [apm_t01A04_tbp_preimage_aux_basePred]
+  | refl _ => rfl
+  | symm _ _ _ ih => exact ih.symm
+  | trans _ _ _ _ _ ih₁ ih₂ => exact ih₁.trans ih₂
+
+lemma apm_t01A04_tbp_preimage_aux_total_invariant (i : Fin 2) {r s}
+    (h : Relation.EqvGen apm_t01a04_torusCoverRel r s) :
+    apm_t01A04_tbp_preimage_aux_totalPred i r ↔
+      apm_t01A04_tbp_preimage_aux_totalPred i s := by
+  induction h with
+  | rel _ _ h =>
+      cases h with
+      | glue j =>
+        fin_cases i <;> fin_cases j <;>
+          simp [apm_t01A04_tbp_preimage_aux_totalPred, apm_t01a04_sheetPoint,
+            Circle.exp, Complex.exp_mul_I]
+  | refl _ => rfl
+  | symm _ _ _ ih => exact ih.symm
+  | trans _ _ _ _ _ ih₁ ih₂ => exact ih₁.trans ih₂
+
+lemma apm_t01A04_tbp_preimage_aux_mem_U (r) :
+    (Quotient.mk _ r : apm_t01a04_X) ∈ apm_t01A04_tbp_U ↔
+      apm_t01A04_tbp_preimage_aux_basePred r := by
+  constructor
+  · rintro ⟨s, hs, hsr⟩
+    have hs' : apm_t01A04_tbp_preimage_aux_basePred s := by
+      cases s <;> exact hs
+    exact (apm_t01A04_tbp_preimage_aux_base_invariant
+      (Quotient.exact hsr)).mp hs'
+  · intro hr
+    refine ⟨r, ?_, rfl⟩
+    cases r <;> exact hr
+
+lemma apm_t01A04_tbp_preimage_aux_mem_V (i : Fin 2) (r) :
+    (Quotient.mk _ r : apm_t01a04_TorusCover) ∈ apm_t01A04_tbp_V i ↔
+      apm_t01A04_tbp_preimage_aux_totalPred i r := by
+  constructor
+  · rintro ⟨s, hs, hsr⟩
+    have hs' : apm_t01A04_tbp_preimage_aux_totalPred i s := by
+      cases s <;> exact hs
+    exact (apm_t01A04_tbp_preimage_aux_total_invariant i
+      (Quotient.exact hsr)).mp hs'
+  · intro hr
+    refine ⟨r, ?_, rfl⟩
+    cases r <;> exact hr
+
+lemma apm_t01A04_tbp_preimage_aux_arc (z : Circle)
+    (hz : 0 < ((z : ℂ) ^ 2).re) :
+    ∃ i : Fin 2,
+      0 < ((z : ℂ) * star (apm_t01a04_sheetPoint i : ℂ)).re := by
+  have hre : (z : ℂ).re ≠ 0 := by
+    intro h
+    have hz' : ((z : ℂ) ^ 2).re ≤ 0 := by
+      simp [pow_two, Complex.mul_re, h, mul_self_nonneg]
+    exact (not_lt_of_ge hz') hz
+  rcases lt_or_gt_of_ne hre with hre | hre
+  · refine ⟨1, ?_⟩
+    simp [apm_t01a04_sheetPoint, Circle.exp, Complex.exp_mul_I]
+    linarith
+  · refine ⟨0, ?_⟩
+    simpa [apm_t01a04_sheetPoint] using hre
+
 lemma apm_t01A04_tbp_preimage :
     apm_t01a04_torusCoverMap ⁻¹' apm_t01A04_tbp_U = ⋃ i, apm_t01A04_tbp_V i := by
-  sorry
+  ext e
+  refine Quotient.inductionOn e ?_
+  rintro (q | p)
+  · simp only [Set.mem_preimage, Set.mem_iUnion]
+    change
+      (Quotient.mk _ (Sum.inl (q.1 ^ 2, q.2)) : apm_t01a04_X) ∈
+          apm_t01A04_tbp_U ↔
+        ∃ i, (Quotient.mk _ (Sum.inl q) : apm_t01a04_TorusCover) ∈
+          apm_t01A04_tbp_V i
+    simp only [apm_t01A04_tbp_preimage_aux_mem_U,
+      apm_t01A04_tbp_preimage_aux_mem_V,
+      apm_t01A04_tbp_preimage_aux_basePred,
+      apm_t01A04_tbp_preimage_aux_totalPred]
+    constructor
+    · rintro ⟨h₁, h₂⟩
+      obtain ⟨i, hi⟩ := apm_t01A04_tbp_preimage_aux_arc q.1 h₁
+      exact ⟨i, hi, h₁, h₂⟩
+    · rintro ⟨i, -, h₁, h₂⟩
+      exact ⟨h₁, h₂⟩
+  · simp only [Set.mem_preimage, Set.mem_iUnion]
+    change
+      (Quotient.mk _ (Sum.inr p.2) : apm_t01a04_X) ∈ apm_t01A04_tbp_U ↔
+        ∃ i, (Quotient.mk _ (Sum.inr p) : apm_t01a04_TorusCover) ∈
+          apm_t01A04_tbp_V i
+    simp only [apm_t01A04_tbp_preimage_aux_mem_U,
+      apm_t01A04_tbp_preimage_aux_mem_V,
+      apm_t01A04_tbp_preimage_aux_basePred,
+      apm_t01A04_tbp_preimage_aux_totalPred]
+    constructor
+    · intro hp
+      exact ⟨p.1, rfl, hp⟩
+    · rintro ⟨i, -, hp⟩
+      exact hp
 
 noncomputable def apm_t01A04_tbp_sheet_homeomorph_aux_root
     (i : Fin 2) (z : Circle) : Circle :=
