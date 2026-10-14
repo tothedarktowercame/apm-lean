@@ -384,7 +384,8 @@ theorem t93A06_exact_integral_aux_square_formula (atlas : SmoothAtlas)
     (η : let _ := atlas.charts; Form Plane Torus 1)
     (hnat : letI := atlas.charts
       pullback projection (exteriorDerivative η) =
-        exteriorDerivative (E := Plane) (M := Plane) (pullback projection η)) :
+        exteriorDerivative (E := Plane) (M := Plane) (pullback projection η))
+    (hC1 : ∀ i : Fin 2, ContDiff ℝ 1 (t93A06_pulledCoeff atlas η i)) :
     letI := atlas.charts
     torusIntegral (exteriorDerivative η) =
       (∫ y : ℝ in 0..1, ∫ x : ℝ in 0..1,
@@ -437,6 +438,7 @@ theorem t93A06_not_exact_of_integral_quarter (atlas : SmoothAtlas)
   rintro ⟨η, hη, rfl⟩
   have hnat := t93A06_exact_integral_aux_pullback_d atlas η hη
   have hsquare := t93A06_exact_integral_aux_square_formula atlas η hnat
+    (fun i ↦ t93A06_exact_integral_aux_coeff_smooth_aux_global atlas η hη i)
   let P : ℝ → ℝ → ℝ := fun x y ↦ t93A06_pulledCoeff atlas η 0 ![x, y]
   let Q : ℝ → ℝ → ℝ := fun x y ↦ t93A06_pulledCoeff atlas η 1 ![x, y]
   obtain ⟨hQy, hPx⟩ := t93A06_exact_integral_aux_coeff_smooth atlas η hη
