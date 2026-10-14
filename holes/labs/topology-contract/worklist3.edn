@@ -36160,6 +36160,16 @@
     [{:cmd "replacement probe",
       :exit 1,
       :correction "opened overlap namespace; rerun passed"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1792000651948-12016-d87ae130",
+     :commands
+     ["git show/check/diff 0c1e3c72; scope and fixture SHA-256"
+      "lake build ConstructionTargets.t93J03Closure; lean fixture and Main"
+      "statement-registry check; placeholder/axiom recount"],
+     :finding
+     "PASS: 0c1e3c72 adds compiled, sorry-free progress beyond ebda0048. Path connectedness chooses an actual overlap path between the exact overlap endpoints; mapping it into the contractible inner piece and applying arbitrary-endpoint path-class uniqueness proves the required inner-run replacement without conflating the two subtypes. Exact scope/hash match; support placeholders 0->0; frozen Main remains 1; standard axioms only; registry 166/166. STOP lists finite-word replacement assembly, reverse kernel/surjectivity, winding, C1/C2/Main."},
     :commit "0c1e3c722fcff7ea48c6781d31c78f8a0ce0827b",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
@@ -36170,7 +36180,7 @@
      "bd6fc156804120f30cb2d922a72c520f4ef67e8acb0abe66074f2e2100006f35"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -36188,7 +36198,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t93J03Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Proved arbitrary-endpoint inner path-class uniqueness; run assembly and based van Kampen remain.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Proved each inner path between overlap endpoints equals an actual overlap-path image; finite-run assembly remains.",
    :id :program-2026-10-13-close-t93j03,
    :kind :final-adapter,
    :campaign-priority 30,
@@ -36398,7 +36408,11 @@
     {:job 7,
      :commit "ebda004808872a29a245f67338ad64f23bb87e52",
      :reason
-     "Proved arbitrary-endpoint inner path-class uniqueness; run assembly and based van Kampen remain."}]}
+     "Proved arbitrary-endpoint inner path-class uniqueness; run assembly and based van Kampen remain."}
+    {:job 8,
+     :commit "0c1e3c722fcff7ea48c6781d31c78f8a0ce0827b",
+     :reason
+     "Proved each inner path between overlap endpoints equals an actual overlap-path image; finite-run assembly remains."}]}
   {:consumer :t99J05,
    :stop-count 5,
    :evidence
@@ -38989,7 +39003,7 @@
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "kleinPolygonInner_pathClass_eq_overlapReplacement",
@@ -39001,7 +39015,9 @@
     :type
     "inner path between overlap endpoints equals image of an overlap path",
     :area "covering-subgroup-correspondence",
-    :proved-in :program-2026-10-13-close-t93j03},
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "0c1e3c722fcff7ea48c6781d31c78f8a0ce0827b"},
    :id :lemma-kleinpolygoninner-pathclass-eq-overlapreplacement,
    :kind :lemma,
    :depends-on
