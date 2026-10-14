@@ -338,6 +338,26 @@ theorem connectorSystemMapEquivalence_functorObj_connector_hom_eq_map
           e.unitIso.inv.app A) := (e.functor.map_comp _ _).symm
     _ = _ := congrArg e.functor.map h
 
+omit [PathConnectedSpace X] [PathConnectedSpace Y] in
+/-- A connector square is equivalent to triviality of the corresponding
+connector normal form. -/
+theorem connectorSystem_connectorSquare_iff_normalForm_eq_id
+    {C : Type} [Groupoid C] (S : ConnectorSystem C) {A B : C} (f : A ⟶ B) :
+    (S.connector A).hom ≫ f = (S.connector B).hom ↔
+      S.normalForm f = 𝟙 S.base := by
+  constructor
+  · intro h
+    simp only [ConnectorSystem.normalForm]
+    rw [← Category.assoc, h]
+    simp
+  · intro h
+    have hf : f = (S.connector A).inv ≫ (S.connector B).hom := by
+      apply S.normalForm_injective
+      rw [h]
+      simp [ConnectorSystem.normalForm]
+    rw [hf]
+    simp
+
 /-- Rebase a connector system along a specified isomorphism.  Keeping the
 isomorphism explicit lets transported connector choices be installed at the
 literal base object used by a based fundamental group. -/
@@ -5345,6 +5365,24 @@ theorem genericPointWedgeCoherentRightConnectors_rightBase_of_counit :
       x₀ y₀ M N hM hN hy hx cM cN htarget)]
   rfl
 
+/-- The remaining literal `Y` counit square at the fixed endpoint is exactly
+the assertion that its connector normal form is trivial. -/
+theorem genericPointWedgeRightBase_counit_connectorSquare_iff_normalForm :
+    let e := genericPointWedgeRightGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let A := e.functor.obj (e.inverse.obj
+      (e.functor.obj (genericPointWedgeRightBase x₀ y₀ N)))
+    let B := e.functor.obj (genericPointWedgeRightBase x₀ y₀ N)
+    ((genericPointWedgeConnectors y₀).connector A).hom ≫
+        e.counitIso.hom.app B =
+      ((genericPointWedgeConnectors y₀).connector B).hom ↔
+    (genericPointWedgeConnectors y₀).normalForm
+        (e.counitIso.hom.app B) =
+      𝟙 (genericPointWedgeConnectors y₀).base := by
+  dsimp only
+  exact connectorSystem_connectorSquare_iff_normalForm_eq_id
+    (genericPointWedgeConnectors y₀) _
+
 omit [PathConnectedSpace X] in
 /-- The canonical connector normal form with its inverse-unit factor rewritten
 as the equivalence counit.  The chosen source connector stays explicit. -/
@@ -8566,5 +8604,7 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeLegCoordinates_iff_sourceFunctor
 #print axioms genericPointWedgeLegCoordinates_iff_inverseIdentity
 #print axioms genericPointWedgeCoherentRightConnectors_rightBase_of_counit
+#print axioms connectorSystem_connectorSquare_iff_normalForm_eq_id
+#print axioms genericPointWedgeRightBase_counit_connectorSquare_iff_normalForm
 
 end ConstructionTargets.PointWedgeVanKampen

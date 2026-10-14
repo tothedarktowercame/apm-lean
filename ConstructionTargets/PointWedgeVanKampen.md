@@ -1509,3 +1509,11 @@ source-square reduction with the equivalence transport theorem. Consequently
 the literal counit square yields the exact installed-versus-rebased connector
 equality required at the unshifted endpoint of the final overlap square. The
 shifted endpoint and the literal counit square remain.
+`connectorSystem_connectorSquare_iff_normalForm_eq_id` identifies any
+connector square with triviality of the associated connector normal form.
+Its fixed-endpoint specialization,
+`genericPointWedgeRightBase_counit_connectorSquare_iff_normalForm`, shows that
+the remaining literal counit square is exactly the assertion that the
+right-equivalence counit has trivial normal form for the chosen `Y`
+connectors. Thus the next proof must establish this normalization (and its
+shifted counterpart), rather than appeal only to equivalence naturality.
