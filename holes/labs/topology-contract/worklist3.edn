@@ -36154,6 +36154,17 @@
      {:cmd "registry; placeholder; diff", :exit 0}
      {:cmd "rg forbidden", :exit 1, :expected-exit 1}
      {:cmd "commit; show --check", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791956165525-11629-722c0436",
+     :commands
+     ["git show/diff/show --check d033ca74"
+      "sha256sum fixture; scope; placeholders"
+      "lake env lean recorded closure, fixture, Main"
+      "statement-registry.py check"],
+     :finding
+     "PASS: new compiled sorry-free standard-axiom milestone. For two paths with common endpoints, the proof uses the target loop p^-1*q and verifies that the two transports of any based loop are conjugate in the correct direction. Canonical connector geometry, boundary word, and quotient remain accurately listed. Scope/hash verified; frozen placeholders 1->1 (support 0); registry 166/166; SLSC unused, mandated by problem.md."},
     :commit "d033ca7433e3bff48e8b4520d9703ee208bb929b",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
@@ -36165,7 +36176,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -36183,7 +36194,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t93J03Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed conjugacy-to-normal-closure adapter; geometric conjugacy and based quotient remain.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed path-transport conjugacy; canonical boundary-loop comparison and quotient remain.",
    :id :program-2026-10-13-close-t93j03,
    :kind :final-adapter,
    :campaign-priority 30,
@@ -36309,7 +36320,11 @@
     {:job 3,
      :commit "b8bce9d8294e1892901bc5969e1bc0967f1927cb",
      :reason
-     "Committed conjugacy-to-normal-closure adapter; geometric conjugacy and based quotient remain."}]}
+     "Committed conjugacy-to-normal-closure adapter; geometric conjugacy and based quotient remain."}
+    {:job 4,
+     :commit "d033ca7433e3bff48e8b4520d9703ee208bb929b",
+     :reason
+     "Committed path-transport conjugacy; canonical boundary-loop comparison and quotient remain."}]}
   {:consumer :t99J05,
    :stop-count 5,
    :evidence
@@ -38281,7 +38296,7 @@
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "fundamentalGroup_pathTransport_isConj",
@@ -38291,7 +38306,9 @@
     :reported-by [:program-2026-10-13-close-t93j03],
     :type "two path transports of one based loop are conjugate",
     :area "covering-subgroup-correspondence",
-    :proved-in :program-2026-10-13-close-t93j03},
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "d033ca7433e3bff48e8b4520d9703ee208bb929b"},
    :id :lemma-fundamentalgroup-pathtransport-isconj,
    :kind :lemma,
    :depends-on [],
