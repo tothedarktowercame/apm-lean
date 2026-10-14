@@ -1055,6 +1055,89 @@ theorem finiteWedgeFundamentalGroup_generated_by_legs_of_freeGroup_surjective
   rcases hsurj g with ⟨x, rfl⟩
   exact finiteWedgeLegFreeGroupMap_exists_word P x
 
+/-! ### Relabelling finite wedges -/
+
+/-- An equivalence of leg labels induces a homeomorphism of the corresponding
+finite circle wedges. -/
+noncomputable def finiteWedgeHomeomorphOfEquiv {L K : Type*} (e : L ≃ K) :
+    PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge L ≃ₜ
+      PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge K where
+  toFun := Quotient.lift
+    (fun p => PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (e p.1) p.2)
+    fun p q h => by
+      change Relation.EqvGen
+        (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedgeRel L) p q at h
+      rw [PolygonSurfacePiOne.PointWedgeQuotient.eqvGen_finiteWedgeRel_iff] at h
+      rcases h with rfl | ⟨hp, hq⟩
+      · rfl
+      · apply Quotient.sound
+        change Relation.EqvGen
+          (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedgeRel K)
+          (e p.1, p.2) (e q.1, q.2)
+        rw [PolygonSurfacePiOne.PointWedgeQuotient.eqvGen_finiteWedgeRel_iff]
+        exact Or.inr ⟨hp, hq⟩
+  invFun := Quotient.lift
+    (fun p => PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (e.symm p.1) p.2)
+    fun p q h => by
+      change Relation.EqvGen
+        (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedgeRel K) p q at h
+      rw [PolygonSurfacePiOne.PointWedgeQuotient.eqvGen_finiteWedgeRel_iff] at h
+      rcases h with rfl | ⟨hp, hq⟩
+      · rfl
+      · apply Quotient.sound
+        change Relation.EqvGen
+          (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedgeRel L)
+          (e.symm p.1, p.2) (e.symm q.1, q.2)
+        rw [PolygonSurfacePiOne.PointWedgeQuotient.eqvGen_finiteWedgeRel_iff]
+        exact Or.inr ⟨hp, hq⟩
+  left_inv := by
+    rintro ⟨⟨l, z⟩⟩
+    change PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (e.symm (e l)) z = _
+    rw [e.symm_apply_apply]
+    rfl
+  right_inv := by
+    rintro ⟨⟨k, z⟩⟩
+    change PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (e (e.symm k)) z = _
+    rw [e.apply_symm_apply]
+    rfl
+  continuous_toFun := by
+    letI : TopologicalSpace L := ⊥
+    letI : DiscreteTopology L := ⟨rfl⟩
+    apply Continuous.quotient_lift
+    rw [continuous_prod_of_discrete_left]
+    exact fun l =>
+      PolygonSurfacePiOne.PointWedgeQuotient.continuous_wedgeCircle (e l)
+  continuous_invFun := by
+    letI : TopologicalSpace K := ⊥
+    letI : DiscreteTopology K := ⟨rfl⟩
+    apply Continuous.quotient_lift
+    rw [continuous_prod_of_discrete_left]
+    exact fun k =>
+      PolygonSurfacePiOne.PointWedgeQuotient.continuous_wedgeCircle (e.symm k)
+
+@[simp]
+theorem finiteWedgeHomeomorphOfEquiv_wedgeCircle {L K : Type*} (e : L ≃ K)
+    (l : L) (z : Circle) :
+    finiteWedgeHomeomorphOfEquiv e
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle l z) =
+      PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (e l) z := rfl
+
+/-- The polygon's orbit-indexed wedge relabelled by the canonical finite
+coordinate type. -/
+noncomputable def finiteWedgeOrbitHomeomorphFin (P : PairingData) :
+    PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge (PairingOrbit P.pair) ≃ₜ
+      PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge
+        (Fin (Fintype.card (PairingOrbit P.pair))) :=
+  finiteWedgeHomeomorphOfEquiv (Fintype.equivFin (PairingOrbit P.pair))
+
+@[simp]
+theorem finiteWedgeOrbitHomeomorphFin_wedgeCircle (P : PairingData)
+    (l : PairingOrbit P.pair) (z : Circle) :
+    finiteWedgeOrbitHomeomorphFin P
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle l z) =
+      PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle
+        (Fintype.equivFin (PairingOrbit P.pair) l) z := rfl
+
 end
 
 end ConstructionTargets.PolygonSurfaceHomology
