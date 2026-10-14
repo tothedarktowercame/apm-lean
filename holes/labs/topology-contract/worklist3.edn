@@ -36121,57 +36121,59 @@
   {:consumer :t93J03,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "Program STOP commits no new mathematical progress since the prior milestone: KleinPolygonBasedVanKampen merely packages the already-required surjectivity and kernel hypotheses, and both consumers only reapply the previously proved three-input theorem. Prove the based van Kampen surjectivity/kernel result (or winding conjugacy) in scope; extend Mathlib: state and prove the missing theorem in scope.",
    :evidence
    {:placeholder-delta {:t93J03 [1 1]},
     :residual
-    "Fold alternating outer arrows into one outer word; reverse kernel/surjectivity; winding; C1/C2/Main.",
+    "Instantiate maximal runs; reverse kernel/surjectivity; winding; C1/C2/Main.",
     :outcome :stop,
-    :warnings
-    ["unused SLSC owner-approved" "dirty t00J02Closure preserved"],
+    :warnings [],
     :missing-theorems
-    [{:name "path_concat_exists_subtype_path",
-      :type "set-valued finite concat lifts to subtype path",
-      :status :proved,
-      :consumers [:t93J03],
-      :depends-on ["path_concat_mem_of_piece_mem"],
-      :area "covering-subgroup-correspondence"}
-     {:name "pathTwoOpenSubdivisionOuterBlock_exists_outerPath",
-      :type "packaged outer block is ambient image of outer path",
+    [{:name "path_concat_map_subtype",
+      :type "subtype concat mapping commutes with concat",
       :status :proved,
       :consumers [:t93J03],
       :depends-on ["path_concat_exists_subtype_path"],
+      :area "covering-subgroup-correspondence"}
+     {:name "path_concat_class_eq_outer_of_pieceClass_eq",
+      :type "outer-represented factors fold to one outer path",
+      :status :proved,
+      :consumers [:t93J03],
+      :depends-on ["path_concat_map_subtype"],
       :area "covering-subgroup-correspondence"}
      {:name "t93J03_polygon_based_van_kampen",
       :type "surjectivity; kernel equality",
       :status :partial,
       :consumers [:t93J03],
-      :depends-on
-      ["pathTwoOpenSubdivisionOuterBlock_exists_outerPath"],
+      :depends-on ["path_concat_class_eq_outer_of_pieceClass_eq"],
       :area "covering-subgroup-correspondence"}],
     :statement-hashes {:registry "166/166"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Proved every unchanged packaged outer block is literally the ambient image of an outer-piece path; both run kinds now yield outer arrows, and finite folding remains.",
+    "Finite outer-represented factors now concatenate to one outer path with equal ambient groupoid class; maximal-run instantiation remains.",
     :commands
     [{:cmd "lake build ConstructionTargets.t93J03Closure", :exit 0}
-     {:cmd "fixture; Main; registry; placeholder; diff/show", :exit 0}
+     {:cmd "fixture; Main; registry; checks", :exit 0}
      {:cmd "rg forbidden", :exit 1, :expected-exit 1}],
-    :commit "9267ddcf896ed621e6c7d806f79fe4419ae7c37b",
+    :diagnostic-history
+    [{:cmd "fold probes",
+      :exit 1,
+      :correction "fixed mapped trans and declaration order"}],
+    :commit "1d93d0b25c6f2fcf77e9296540eea268f893c28b",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
      "ConstructionTargets/t93J03Closure.blueprint.md"],
     :fixture
-    {:path "/tmp/t93j03_outer_block_check.lean",
+    {:path "/tmp/t93j03_outer_fold_check.lean",
      :sha256
-     "9acc7aa9a0d2457e208cd7c13be03f715168a1dcb4962442d91f9538c87b1a74"},
+     "cf536bf9c490e286cb8af1944891cb753029c05d241369966b22d6ed9708b4a1"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -38684,7 +38686,8 @@
     :lemma-boolsiderunpartition-isinfix-finrange
     :lemma-pathtwoopensubdivisionblockpiece
     :lemma-pathtwoopensubdivisioninnerblock-exists-outeroverlapreplacement
-    :lemma-pathtwoopensubdivisionouterblock-exists-outerpath],
+    :lemma-pathtwoopensubdivisionouterblock-exists-outerpath
+    :lemma-path-concat-class-eq-outer-of-piececlass-eq],
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
@@ -39433,6 +39436,40 @@
    :id :lemma-t96a06-rp3-rational-homologymap-surjective,
    :kind :lemma,
    :depends-on [:lemma-t96a06-rp3-sphere-twosheeted],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "path_concat_map_subtype",
+    :type "subtype concat mapping commutes with concat"},
+   :lemma
+   {:name "path_concat_map_subtype",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type "subtype concat mapping commutes with concat",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03},
+   :id :lemma-path-concat-map-subtype,
+   :kind :lemma,
+   :depends-on [:lemma-path-concat-exists-subtype-path],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "path_concat_class_eq_outer_of_pieceClass_eq",
+    :type "outer-represented factors fold to one outer path"},
+   :lemma
+   {:name "path_concat_class_eq_outer_of_pieceClass_eq",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type "outer-represented factors fold to one outer path",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03},
+   :id :lemma-path-concat-class-eq-outer-of-piececlass-eq,
+   :kind :lemma,
+   :depends-on [:lemma-path-concat-map-subtype],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
