@@ -2173,6 +2173,62 @@ theorem pathTwoOpenSubdivisionRun_exists_outerRepresentative
       exact (q t).property
     · exact congrArg Path.Homotopic.Quotient.mk hq.symm
 
+/-- Each maximal-run representative can be based at the consecutive entries
+of the canonical outer boundary family.  After forgetting the subtype, its
+class is exactly the endpoint-cast class of the original run block. -/
+theorem pathTwoOpenSubdivisionRun_exists_outerBoundaryPath
+    {x y : kleinPairingData.Space} {p : Path x y}
+    (S : PathTwoOpenSubdivision p (openCover kleinPairingData).inner
+      (openCover kleinPairingData).outer)
+    (hx : S.point 0 ∈ (openCover kleinPairingData).outer)
+    (hy : S.point (Fin.last (S.n + 1)) ∈ (openCover kleinPairingData).outer)
+    (i : Fin (boolSideRunPartition S.side).length) :
+    ∃ q : Path
+        (pathTwoOpenSubdivisionOuterRunBoundaryFamily S hx hy i.castSucc)
+        (pathTwoOpenSubdivisionOuterRunBoundaryFamily S hx hy i.succ),
+      (Path.Homotopic.Quotient.cast
+          (⟦Path.concat (pathTwoOpenSubdivisionRunBlockPoint S i)
+            (pathTwoOpenSubdivisionRunBlockPiece S i)⟧)
+          (pathTwoOpenSubdivisionOuterRunBoundaryFamily_castSucc_eq_runBlockPoint_zero
+            S hx hy i)
+          (pathTwoOpenSubdivisionOuterRunBoundaryFamily_succ_eq_runBlockPoint_last
+            S hx hy i)) =
+        ⟦q.map kleinPolygonOuterToSpace.continuous⟧ := by
+  obtain ⟨r, hrange, hr⟩ :=
+    pathTwoOpenSubdivisionRun_exists_outerRepresentative S hx hy i
+  let r' : Path
+      (⟨pathTwoOpenSubdivisionRunBlockPoint S i 0,
+        by simpa using hrange 0⟩ :
+        {z // z ∈ (openCover kleinPairingData).outer})
+      (⟨pathTwoOpenSubdivisionRunBlockPoint S i
+          (Fin.last (pathTwoOpenSubdivisionRunPredLength S i + 1)),
+        by simpa using hrange 1⟩ :
+        {z // z ∈ (openCover kleinPairingData).outer}) :=
+    { toFun := fun t => ⟨r t, hrange t⟩
+      continuous_toFun := r.continuous.subtype_mk _
+      source' := Subtype.ext r.source
+      target' := Subtype.ext r.target }
+  have hs : pathTwoOpenSubdivisionOuterRunBoundaryFamily S hx hy i.castSucc =
+      (⟨pathTwoOpenSubdivisionRunBlockPoint S i 0,
+        by simpa using hrange 0⟩ :
+        {z // z ∈ (openCover kleinPairingData).outer}) := by
+    apply Subtype.ext
+    exact pathTwoOpenSubdivisionOuterRunBoundaryFamily_castSucc_eq_runBlockPoint_zero
+      S hx hy i
+  have ht : pathTwoOpenSubdivisionOuterRunBoundaryFamily S hx hy i.succ =
+      (⟨pathTwoOpenSubdivisionRunBlockPoint S i
+          (Fin.last (pathTwoOpenSubdivisionRunPredLength S i + 1)),
+        by simpa using hrange 1⟩ :
+        {z // z ∈ (openCover kleinPairingData).outer}) := by
+    apply Subtype.ext
+    exact pathTwoOpenSubdivisionOuterRunBoundaryFamily_succ_eq_runBlockPoint_last
+      S hx hy i
+  refine ⟨r'.cast hs ht, ?_⟩
+  rw [← Path.Homotopic.Quotient.mk_cast, hr]
+  apply congrArg Path.Homotopic.Quotient.mk
+  ext t
+  exact congrFun (Path.cast_coe r' hs ht) t
+
 /-- Every overlap loop maps trivially in the polygon quotient.  This is the
 kernel inclusion in based van Kampen: the overlap inclusion factors through
 the contractible inner radial piece. -/

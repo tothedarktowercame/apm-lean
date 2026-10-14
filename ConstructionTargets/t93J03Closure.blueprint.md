@@ -501,7 +501,9 @@ before extracting based surjectivity and the reverse kernel inclusion.
 Boolean choice: every indexed maximal run has a literal ambient path with the
 same groupoid class as its dependent block, exact block endpoints, and range
 contained in the outer piece.  Casting these representatives to consecutive
-entries of the canonical outer boundary family and folding them remains.
+entries of the canonical outer boundary family is now packaged by
+`pathTwoOpenSubdivisionRun_exists_outerBoundaryPath`, preserving the endpoint-
+cast ambient groupoid class. Folding this dependent family remains.
 
 - Layer 1: C1, C3, and C4. C1 and C3 are independent; C4 is already complete.
 - Layer 2: C2 against the explicit C1 equivalence interface.
