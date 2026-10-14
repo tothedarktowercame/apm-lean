@@ -61,14 +61,66 @@ lemma apm_t91J03_height_ne_of_circleMap_eq
   · exact hprojection
   · exact Subtype.ext hheight
 
-/-- **LIBRARY: annular winding-two collision.**
+/-- **LIBRARY: classification of embedded circles in the closed annulus.**
 
-An embedded circle in the closed annulus whose first projection has homological
-degree of absolute value two would contain two distinct parameter points with
-the same annular coordinates.  Its intended proof lifts to `ℝ × I`; the two
-components of the lifted curve are cyclically permuted by deck translation,
-while planar separation orders them and forces that translation to fix them.
--/
+For every choice of generator of `H₁(S¹; ℤ)`, the first projection of an
+embedded annular circle acts by multiplication by `-1`, `0`, or `1`.
+
+This is the genuine missing topological foundation.  One proof lifts the
+embedded circle to the closed strip and uses Jordan separation to show that a
+deck translate cannot cross it; equivalently, an essential simple closed curve
+in an annulus represents a primitive homology class. -/
+lemma apm_t91J03_embedded_annular_circle_homology_bound
+    (gamma : C(Circle, apm_t91J03_Annulus))
+    (hgamma : Topology.IsEmbedding
+      (gamma : Circle → apm_t91J03_Annulus))
+    (orientation : apm_t91J03_H1Circle ≅ ModuleCat.of ℤ ℤ) :
+    ∃ m : ℤ, m.natAbs ≤ 1 ∧
+      ∀ a : apm_t91J03_H1Circle,
+        orientation.hom (apm_t91J03_H1Map gamma a) =
+          m * orientation.hom a := by
+  sorry
+
+/-- A scalar describing an endomorphism of a rank-one module is unique.
+This is deliberately independent of the annulus classification lemma. -/
+lemma apm_t91J03_rank_one_scalar_unique
+    (f : apm_t91J03_H1Circle ⟶ ModuleCat.of ℤ ℤ)
+    (orientation : apm_t91J03_H1Circle ≅ ModuleCat.of ℤ ℤ)
+    (n m : ℤ)
+    (hn : ∀ a : apm_t91J03_H1Circle,
+      f a = n * orientation.hom a)
+    (hm : ∀ a : apm_t91J03_H1Circle,
+      f a = m * orientation.hom a) :
+    n = m := by
+  sorry
+
+/-- An integer of absolute value two cannot have absolute value at most one.
+Kept separate so this leaf has no topological dependencies. -/
+lemma apm_t91J03_natAbs_two_not_le_one
+    (n : ℤ) (htwo : n.natAbs = 2) (hle : n.natAbs ≤ 1) : False := by
+  sorry
+
+/-- An embedded annular circle cannot have homological winding of absolute
+value two.  This assembly is sorry-free; its three inputs can be proved in
+parallel. -/
+lemma apm_t91J03_no_embedded_winding_two
+    (gamma : C(Circle, apm_t91J03_Annulus))
+    (hgamma : Topology.IsEmbedding
+      (gamma : Circle → apm_t91J03_Annulus))
+    (n : ℤ) (hn : apm_t91J03_HasWindingNumber gamma n)
+    (habs : n.natAbs = 2) : False := by
+  obtain ⟨orientation, hn⟩ := hn
+  obtain ⟨m, hm_bound, hm⟩ :=
+    apm_t91J03_embedded_annular_circle_homology_bound gamma hgamma orientation
+  have hnm : n = m := apm_t91J03_rank_one_scalar_unique
+    (apm_t91J03_H1Map gamma ≫ orientation.hom) orientation n m hn hm
+  subst m
+  exact apm_t91J03_natAbs_two_not_le_one n habs hm_bound
+
+/-- An embedded circle in the closed annulus whose first projection has
+homological degree of absolute value two would contain two distinct parameter
+points with the same annular coordinates.  The hypotheses are inconsistent by
+the annular-circle classification above, so the collision follows. -/
 theorem apm_t91J03_winding_two_forces_annulus_collision
     (gamma : C(Circle, apm_t91J03_Annulus))
     (hgamma : Topology.IsEmbedding
@@ -78,7 +130,8 @@ theorem apm_t91J03_winding_two_forces_annulus_collision
     ∃ z w : Circle, z ≠ w ∧
       apm_t91J03_circleMap gamma z = apm_t91J03_circleMap gamma w ∧
       apm_t91J03_height gamma z = apm_t91J03_height gamma w := by
-  sorry
+  exact False.elim
+    (apm_t91J03_no_embedded_winding_two gamma hgamma n hn habs)
 
 /-- The final contradiction, once the geometric collision is available. -/
 lemma apm_t91J03_no_two_of_forced_fiber_collision
