@@ -105,10 +105,80 @@ theorem apm_t02a01_boundary_homeomorph_circle_aux_eq_of_eqvGen
 boundary of the square `[1/4, 3/4]²`) is a topological circle, e.g. by radial
 projection `x ↦ (x - c) / ‖x - c‖₂` composed with `Circle` coordinates. -/
 -- BEGIN SEAT AREA
+noncomputable def apm_t02a01_boundary_homeomorph_circle_aux_sphere_aux_radial
+    {E F : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [NormedAddCommGroup F] [NormedSpace ℝ F] (e : E ≃L[ℝ] F) :
+    Metric.sphere (0 : E) 1 ≃ₜ Metric.sphere (0 : F) 1 where
+  toFun x := ⟨‖e x.1‖⁻¹ • e x.1, by
+    rw [mem_sphere_zero_iff_norm, norm_smul, Real.norm_eq_abs]
+    have hx : e x.1 ≠ 0 := e.map_ne_zero_iff.mpr
+      (norm_ne_zero_iff.mp (by simpa [mem_sphere_zero_iff_norm] using x.2))
+    simp [abs_of_nonneg (norm_nonneg _), hx]⟩
+  invFun y := ⟨‖e.symm y.1‖⁻¹ • e.symm y.1, by
+    rw [mem_sphere_zero_iff_norm, norm_smul, Real.norm_eq_abs]
+    have hy : e.symm y.1 ≠ 0 := e.symm.map_ne_zero_iff.mpr
+      (norm_ne_zero_iff.mp (by simpa [mem_sphere_zero_iff_norm] using y.2))
+    simp [abs_of_nonneg (norm_nonneg _), hy]⟩
+  left_inv x := by
+    apply Subtype.ext
+    have hx : e x.1 ≠ 0 := e.map_ne_zero_iff.mpr
+      (norm_ne_zero_iff.mp (by simpa [mem_sphere_zero_iff_norm] using x.2))
+    simp [norm_smul, abs_of_nonneg (norm_nonneg _), hx,
+      mem_sphere_zero_iff_norm.mp x.2]
+  right_inv y := by
+    apply Subtype.ext
+    have hy : e.symm y.1 ≠ 0 := e.symm.map_ne_zero_iff.mpr
+      (norm_ne_zero_iff.mp (by simpa [mem_sphere_zero_iff_norm] using y.2))
+    simp [norm_smul, abs_of_nonneg (norm_nonneg _), hy,
+      mem_sphere_zero_iff_norm.mp y.2]
+  continuous_toFun := by
+    exact Continuous.subtype_mk
+      (((e.continuous.comp continuous_subtype_val).norm.inv₀ (fun x ↦
+        norm_ne_zero_iff.mpr (e.map_ne_zero_iff.mpr
+          (norm_ne_zero_iff.mp (by simpa [mem_sphere_zero_iff_norm] using x.2))))).smul
+        (e.continuous.comp continuous_subtype_val)) _
+  continuous_invFun := by
+    exact Continuous.subtype_mk
+      (((e.symm.continuous.comp continuous_subtype_val).norm.inv₀ (fun x ↦
+        norm_ne_zero_iff.mpr (e.symm.map_ne_zero_iff.mpr
+          (norm_ne_zero_iff.mp (by simpa [mem_sphere_zero_iff_norm] using x.2))))).smul
+        (e.symm.continuous.comp continuous_subtype_val)) _
+
 theorem apm_t02a01_boundary_homeomorph_circle_aux_sphere :
     Nonempty ({x : apm_t02a01_squareAnnulus |
       ‖x.1 - ((1 / 2, 1 / 2) : ℝ × ℝ)‖ = (1 / 4 : ℝ)} ≃ₜ Circle) := by
-  sorry
+  let c : ℝ × ℝ := (1 / 2, 1 / 2)
+  let h : {x : apm_t02a01_squareAnnulus | ‖x.1 - c‖ = (1 / 4 : ℝ)} ≃ₜ
+      Metric.sphere (0 : ℝ × ℝ) 1 :=
+    { toFun := fun x ↦ ⟨(4 : ℝ) • (x.1.1 - c), by
+          rw [mem_sphere_zero_iff_norm, norm_smul, Real.norm_eq_abs]
+          rw [x.2]
+          norm_num⟩
+      invFun := fun y ↦ ⟨⟨c + (1 / 4 : ℝ) • y.1, by
+          have h1 := norm_fst_le y.1
+          have h2 := norm_snd_le y.1
+          have hyn : ‖y.1‖ = 1 := mem_sphere_zero_iff_norm.mp y.2
+          have hb1 : -(1 : ℝ) ≤ y.1.1 ∧ y.1.1 ≤ 1 := abs_le.mp (by
+            rw [hyn] at h1
+            simpa [Real.norm_eq_abs] using h1)
+          have hb2 : -(1 : ℝ) ≤ y.1.2 ∧ y.1.2 ≤ 1 := abs_le.mp (by
+            rw [hyn] at h2
+            simpa [Real.norm_eq_abs] using h2)
+          dsimp [c] at *
+          constructor
+          · constructor <;> linarith
+          constructor
+          · constructor <;> linarith
+          · simpa [norm_smul, Real.norm_eq_abs, hyn]⟩, by
+          have hyn : ‖y.1‖ = 1 := mem_sphere_zero_iff_norm.mp y.2
+          change ‖(c + (1 / 4 : ℝ) • y.1) - c‖ = (1 / 4 : ℝ)
+          simpa [norm_smul, Real.norm_eq_abs, hyn]⟩
+      left_inv := by intro x; apply Subtype.ext; apply Subtype.ext; dsimp [c]; module
+      right_inv := by intro y; apply Subtype.ext; dsimp [c]; module
+      continuous_toFun := by fun_prop
+      continuous_invFun := by fun_prop }
+  exact ⟨h.trans (apm_t02a01_boundary_homeomorph_circle_aux_sphere_aux_radial
+    Complex.equivRealProdCLM.symm)⟩
 -- END SEAT AREA
 
 /-- The quotient map restricts to a homeomorphism from the inner sphere onto
