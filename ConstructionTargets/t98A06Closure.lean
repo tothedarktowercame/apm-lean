@@ -65,6 +65,38 @@ theorem rightInverse_of_comp_continuousLinearEquiv {n m : ℕ}
 
 #print axioms rightInverse_of_comp_continuousLinearEquiv
 
+/-- A smoothly varying family of linear maps has a smoothly varying right
+inverse wherever one fixed pointwise right inverse makes the composite
+invertible.  This is the fixed-coordinate analytic step used after choosing
+tangent-bundle charts in the local submersion construction. -/
+theorem contDiff_rightInverse_of_comp_isInvertible
+    {Z : Type} [NormedAddCommGroup Z] [NormedSpace ℝ Z]
+    {n m : ℕ} (A : Z → E n →L[ℝ] E m) (R : E m →L[ℝ] E n)
+    (hA : ContDiff ℝ ∞ A)
+    (hinv : ∀ z, ((A z).comp R).IsInvertible) :
+    ∃ Q : Z → E m →L[ℝ] E n, ContDiff ℝ ∞ Q ∧
+      ∀ z, (A z).comp (Q z) = ContinuousLinearMap.id ℝ (E m) := by
+  let B : Z → E m →L[ℝ] E m := fun z => (A z).comp R
+  let Q : Z → E m →L[ℝ] E n := fun z =>
+    R.comp (ContinuousLinearMap.inverse (B z))
+  refine ⟨Q, ?_, ?_⟩
+  · rw [contDiff_iff_contDiffAt]
+    intro z
+    have hB : ContDiffAt ℝ ∞ B z :=
+      hA.contDiffAt.clm_comp contDiffAt_const
+    have hi : ContDiffAt ℝ ∞ ContinuousLinearMap.inverse (B z) :=
+      (hinv z).contDiffAt_map_inverse
+    have hiB : ContDiffAt ℝ ∞ (fun z => ContinuousLinearMap.inverse (B z)) z :=
+      hi.comp z hB
+    exact contDiffAt_const.clm_comp hiB
+  · intro z
+    change (A z).comp (R.comp (ContinuousLinearMap.inverse (B z))) = _
+    rw [← ContinuousLinearMap.comp_assoc]
+    change (B z).comp (ContinuousLinearMap.inverse (B z)) = _
+    exact (hinv z).self_comp_inverse
+
+#print axioms contDiff_rightInverse_of_comp_isInvertible
+
 theorem t98A06_global_vectorField_lift
     (hlocal : ∀ (n m : ℕ) (X Y : Type) [TopologicalSpace X] [TopologicalSpace Y]
       [T2Space X] [T2Space Y] [SecondCountableTopology X] [SecondCountableTopology Y]
