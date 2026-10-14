@@ -3140,7 +3140,25 @@ lemma apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity_minkowski_aux_join
     AEStronglyMeasurable
       (Function.uncurry fun (y x : EuclideanSpace ℝ (Fin d)) ↦ f (x - y) - f x)
       ((volume : Measure (EuclideanSpace ℝ (Fin d))).prod volume) := by
-  sorry
+  let μ : Measure (EuclideanSpace ℝ (Fin d)) := volume
+  have hshear : MeasurePreserving
+      (fun z : EuclideanSpace ℝ (Fin d) × EuclideanSpace ℝ (Fin d) ↦
+        (z.1, z.2 - z.1)) (μ.prod μ) (μ.prod μ) :=
+    measurePreserving_prod_sub μ μ
+  have hsub : Measure.QuasiMeasurePreserving
+      (fun z : EuclideanSpace ℝ (Fin d) × EuclideanSpace ℝ (Fin d) ↦
+        z.2 - z.1) (μ.prod μ) μ := by
+    simpa [Function.comp_def] using
+      (Measure.quasiMeasurePreserving_snd.comp hshear.quasiMeasurePreserving)
+  have h₁ : AEStronglyMeasurable
+      (fun z : EuclideanSpace ℝ (Fin d) × EuclideanSpace ℝ (Fin d) ↦
+        f (z.2 - z.1)) (μ.prod μ) :=
+    hf.1.comp_quasiMeasurePreserving hsub
+  have h₂ : AEStronglyMeasurable
+      (fun z : EuclideanSpace ℝ (Fin d) × EuclideanSpace ℝ (Fin d) ↦
+        f z.2) (μ.prod μ) :=
+    hf.1.comp_quasiMeasurePreserving Measure.quasiMeasurePreserving_snd
+  simpa [μ, Function.uncurry] using h₁.sub h₂
 
 /-- Minkowski's integral inequality for a probability kernel: the `L²` norm of
 a kernel average is at most the worst `L²` norm on the kernel's support. -/
