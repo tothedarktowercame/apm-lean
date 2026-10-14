@@ -1138,6 +1138,24 @@ noncomputable def canonicalRegularFiberWitness_of_isDiscrete
     ⟨y, hy, regularFiberFintype_of_isDiscrete f y hdiscrete⟩
   exact { choice := choice, calculations := calculations }
 
+/-- Pointwise local injectivity along a circle fiber supplies the discrete
+fiber required by `canonicalRegularFiberWitness_of_isDiscrete`. -/
+noncomputable def canonicalRegularFiberWitness_of_locallyInjective
+    {S : Type} [TopologicalSpace S] [T2Space S] [CompactSpace S]
+    [ChartedSpace SurfaceModel S]
+    (f : C(S, S)) (c : C(Circle, S))
+    (e : surfaceHomology S ≅ ModuleCat.of ℤ ℤ)
+    (y : S) (hy : y ∈ Set.range c)
+    (hlocal : LocallyInjectiveAlongFiber f y)
+    (calculations : letI :=
+      regularFiberFintype_of_locallyInjectiveAlongFiber f y hlocal
+      CanonicalRegularFiberDegreeCalculations
+        (f := f) (c := c) hy e) :
+    CanonicalRegularFiberWitness f c e :=
+  canonicalRegularFiberWitness_of_isDiscrete f c e y hy
+    (isDiscrete_preimage_singleton_of_locallyInjectiveAlongFiber f y hlocal)
+    calculations
+
 /-- The integrated regular-fiber witness is sufficient for top-homology
 vanishing; no additional component-lift choice is needed at this stage. -/
 theorem CanonicalRegularFiberWitness.topHomologyMap_eq_zero
@@ -1216,6 +1234,7 @@ end ConstructionTargets.T00J02Closure
 #print axioms ConstructionTargets.T00J02Closure.CanonicalRegularFiberDegreeCalculations.topHomologyMap_eq_zero_withoutLifts
 #print axioms ConstructionTargets.T00J02Closure.CanonicalRegularFiberWitness.topHomologyMap_eq_zero
 #print axioms ConstructionTargets.T00J02Closure.canonicalRegularFiberWitness_of_isDiscrete
+#print axioms ConstructionTargets.T00J02Closure.canonicalRegularFiberWitness_of_locallyInjective
 #print axioms ConstructionTargets.T00J02Closure.topHomologyMap_eq_zero_of_exists_canonicalRegularFiberWitness
 #print axioms ConstructionTargets.T00J02Closure.RegularFiberChartCalculations.topHomologyMap_eq_zero
 #print axioms ConstructionTargets.T00J02Closure.circleDegree_eq_homologyMap
