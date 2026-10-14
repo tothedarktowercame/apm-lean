@@ -5305,6 +5305,46 @@ theorem genericPointWedgeCoherentRightSourceConnectors_rightBase_unitInv_of_coun
     x₀ y₀ M N hM hN hy hx cM cN
   exact (congrArg (fun k => c ≫ k) hu).trans htarget
 
+/-- A literal `Y` counit square at the fixed right-cover representative
+identifies the installed coherent connector with the rebased mapped source
+connector at that endpoint. -/
+theorem genericPointWedgeCoherentRightConnectors_rightBase_of_counit :
+    let e := genericPointWedgeRightGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let h := genericPointWedgeRightEquiv_obj_rightBase
+      x₀ y₀ M N hM hN hy hx cM cN
+    let source := genericPointWedgeCoherentRightSourceConnectors
+      x₀ y₀ M N hM hN hy hx cM cN
+    (((genericPointWedgeConnectors y₀).connector
+          (e.functor.obj (e.inverse.obj (e.functor.obj
+            (genericPointWedgeRightBase x₀ y₀ N))))).hom ≫
+        e.counitIso.hom.app
+          (e.functor.obj (genericPointWedgeRightBase x₀ y₀ N)) =
+      ((genericPointWedgeConnectors y₀).connector
+        (e.functor.obj (genericPointWedgeRightBase x₀ y₀ N))).hom) →
+    ((genericPointWedgeCoherentRightConnectors
+        x₀ y₀ M N hM hN hy hx cM cN).connector
+          (e.functor.obj (genericPointWedgeRightBase x₀ y₀ N))).hom =
+      (eqToIso h.symm).hom ≫
+        e.functor.map
+          (source.connector (genericPointWedgeRightBase x₀ y₀ N)).hom := by
+  dsimp only
+  intro htarget
+  change (eqToIso (genericPointWedgeRightEquiv_obj_rightBase
+      x₀ y₀ M N hM hN hy hx cM cN).symm).hom ≫
+      ((connectorSystemMapEquivalence
+        (genericPointWedgeCoherentRightSourceConnectors
+          x₀ y₀ M N hM hN hy hx cM cN)
+        (genericPointWedgeRightGroupoidEquivalence
+          x₀ y₀ M N hM hN hy hx cM cN)).connector
+            ((genericPointWedgeRightGroupoidEquivalence
+              x₀ y₀ M N hM hN hy hx cM cN).functor.obj
+                (genericPointWedgeRightBase x₀ y₀ N))).hom = _
+  rw [connectorSystemMapEquivalence_functorObj_connector_hom_eq_map _ _ _
+    (genericPointWedgeCoherentRightSourceConnectors_rightBase_unitInv_of_counit
+      x₀ y₀ M N hM hN hy hx cM cN htarget)]
+  rfl
+
 omit [PathConnectedSpace X] in
 /-- The canonical connector normal form with its inverse-unit factor rewritten
 as the equivalence counit.  The chosen source connector stays explicit. -/
@@ -8525,5 +8565,6 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeLegCoordinates_iff_mapped
 #print axioms genericPointWedgeLegCoordinates_iff_sourceFunctor
 #print axioms genericPointWedgeLegCoordinates_iff_inverseIdentity
+#print axioms genericPointWedgeCoherentRightConnectors_rightBase_of_counit
 
 end ConstructionTargets.PointWedgeVanKampen

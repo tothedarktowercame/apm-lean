@@ -1504,3 +1504,8 @@ uses the equivalence triangle to replace that mapped inverse unit by the
 right-equivalence counit under the exact dependent connector prefix. The
 unshifted endpoint is therefore reduced to one literal connector–counit
 square; the shifted endpoint remains separate.
+`genericPointWedgeCoherentRightConnectors_rightBase_of_counit` composes that
+source-square reduction with the equivalence transport theorem. Consequently
+the literal counit square yields the exact installed-versus-rebased connector
+equality required at the unshifted endpoint of the final overlap square. The
+shifted endpoint and the literal counit square remain.
