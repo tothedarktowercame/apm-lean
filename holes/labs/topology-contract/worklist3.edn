@@ -36158,6 +36158,16 @@
     [{:cmd "initial proof build",
       :exit 1,
       :correction "used Nat.sub_add_cancel for positive run length"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1792013818192-12460-1719d4bb",
+     :commands
+     ["fixture SHA-256 assertion; lake env lean frozen interface"
+      "git show --check 8c4eb4f recorded paths"
+      "placeholder/forbidden recount and registry 166/166"],
+     :finding
+     "PASS: 8c4eb4f contributes new compiled, sorry-free progress beyond 263f5d47. The checked interface maps Fin(runs+1) into the outer subtype V and the value theorem correctly coerces each entry to its ambient canonical boundary. It supplies the representation boundary needed by the next fold and does not assume the missing van Kampen result. Hash matches; standard axioms only; Main 1->1 placeholder; residual milestones are listed."},
     :commit "d1f33974b4b2f99f6a186874a1ad29108b7719e6",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
@@ -36168,7 +36178,7 @@
      "b653206d3198da3c8eac24f356b99dd69923b199adb1a1848e6f8928cf85adee"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -36186,7 +36196,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t93J03Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Selected bounded slice coordinates for every indexed run and proved every piece stays in its head-selected chart; outer representative choice remains.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Packaged every indexed maximal run as the exact dependent point/path family consumed by Path.concat; boundary endpoint identification remains.",
    :id :program-2026-10-13-close-t93j03,
    :kind :final-adapter,
    :campaign-priority 30,
@@ -36488,7 +36498,11 @@
     {:job 3,
      :commit "1824df6191b36a90b7bc50eb8b3fa89a54c78f19",
      :reason
-     "Selected bounded slice coordinates for every indexed run and proved every piece stays in its head-selected chart; outer representative choice remains."}]}
+     "Selected bounded slice coordinates for every indexed run and proved every piece stays in its head-selected chart; outer representative choice remains."}
+    {:job 4,
+     :commit "d1f33974b4b2f99f6a186874a1ad29108b7719e6",
+     :reason
+     "Packaged every indexed maximal run as the exact dependent point/path family consumed by Path.concat; boundary endpoint identification remains."}]}
   {:consumer :t99J05,
    :stop-count 5,
    :evidence
@@ -39872,7 +39886,7 @@
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "pathTwoOpenSubdivisionRunBlockPiece",
@@ -39884,7 +39898,9 @@
     :type
     "dependent original-piece family for every indexed maximal run",
     :area "covering-subgroup-correspondence",
-    :proved-in :program-2026-10-13-close-t93j03},
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "d1f33974b4b2f99f6a186874a1ad29108b7719e6"},
    :id :lemma-pathtwoopensubdivisionrunblockpiece,
    :kind :lemma,
    :depends-on
