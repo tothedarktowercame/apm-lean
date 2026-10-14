@@ -36115,21 +36115,22 @@
   {:consumer :t93J03,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 7,
+   :stop-count 8,
    :review-finding
    "Program STOP commits nothing new since the prior reviewed attempt: it reuses commit 512a220f, and git history shows no later scoped commit. The unresolved SemilocallySimplyConnected hypothesis-coverage conflict is unchanged. Obtain the required owner specification decision or commit a new compiled milestone before resubmitting.",
    :evidence
    {:placeholder-delta {:t93J03 [1 1]},
     :residual
-    "Impose the aabb attaching relation; apply C1, then C2/Main.",
+    "Impose aabb attaching relation; apply C1, then C2/Main.",
     :outcome :stop,
     :warnings ["unused SLSC owner-approved"],
     :missing-theorems
-    [{:name "kleinSkeletonFundamentalGroupEquivCoprod",
-      :type "pi1(TwoCircles) equiv coproduct of two circle pi1 groups",
+    [{:name "kleinSkeletonHomeomorphStandardTwoCircles",
+      :type
+      "polygon skeleton homeomorphic to Boolean-labeled TwoCircles",
       :status :proved,
       :consumers [:t93J03],
-      :depends-on [],
+      :depends-on ["kleinPairingOrbitEquivBool"],
       :area "covering-subgroup-correspondence"}
      {:name "t93J03_polygon_van_kampen",
       :type "polygon pi1 equals PresentedGroup(aabb)",
@@ -36137,43 +36138,38 @@
       :consumers [:t93J03],
       :depends-on
       ["kleinPolygon_attaching_arcs"
-       "kleinSkeletonFundamentalGroupEquivCoprod"],
+       "kleinSkeletonFundamentalGroupEquivCoprod"
+       "kleinSkeletonHomeomorphStandardTwoCircles"],
       :area "covering-subgroup-correspondence"}],
     :statement-hashes {:registry "166/166"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Committed exact two-circle skeleton pi1 coproduct; attaching-cell van Kampen remains.",
+    "Committed exact orbit-indexed skeleton transport to standard TwoCircles; attaching-cell quotient remains.",
     :commands
     [{:cmd "lake build ConstructionTargets.t93J03Closure", :exit 0}
-     {:cmd "lake env lean skeleton-pi1 fixture", :exit 0}
-     {:cmd "statement-registry; placeholder; diff", :exit 0}
+     {:cmd "lake env lean skeleton-transport fixture", :exit 0}
+     {:cmd "registry; placeholder; diff", :exit 0}
      {:cmd "rg forbidden", :exit 1, :expected-exit 1}
      {:cmd "git commit; show --check", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1791937702926-11048-d259520e",
-     :commands
-     ["git show --check 8da45fbae"
-      "sha256sum fixture; placeholder 1->1; scope diff"
-      "lake env lean recorded PointWedgeVanKampen + t93J03Closure + fixture"
-      "python3 scripts/statement-registry.py check"],
-     :finding
-     "PASS: compiled sorry-free standard-axiom two-circle wedge pi1 coproduct is new program progress. Orbit-indexed finite-wedge transport is not explicit yet but belongs to the listed attaching-cell van Kampen milestone. SLSC unused, mandated by problem.md. Scope, fixture hash, and registry 166/166 verified."},
-    :commit "8da45fbae8f9a7f426a863fe55042dff748063c0",
+    :diagnostic-history
+    [{:cmd "lake build closure",
+      :exit 1,
+      :correction
+      "qualified finite-wedge namespace and explicit quotient relations"}],
+    :commit "12d2dbcccd4882bd3a769a6b01710e6a76ccdf5d",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
      "ConstructionTargets/t93J03Closure.blueprint.md"],
     :fixture
-    {:path "/tmp/t93j03_skeleton_pi1_check.lean",
+    {:path "/tmp/t93j03_skeleton_transport_check.lean",
      :sha256
-     "861c40ff0288697fc4c900ec9192b09f3d782d1a83e8b124b05450d4bd6521a5",
+     "221b4da8dfd20998dc6c7555e7dac7b3383c08f929b36951f30a46a40744ace7",
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -37600,7 +37596,8 @@
     :lemma-t93j03-polygon-attaching-word
     :lemma-kleinpolygon-attaching-arcs
     :lemma-kleinrelator-generatorchange-eq-one-iff
-    :lemma-kleinskeletonfundamentalgroupequivcoprod],
+    :lemma-kleinskeletonfundamentalgroupequivcoprod
+    :lemma-kleinskeletonhomeomorphstandardtwocircles],
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
@@ -37838,6 +37835,25 @@
    :id :lemma-kleinskeletonfundamentalgroupequivcoprod,
    :kind :lemma,
    :depends-on [],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "kleinSkeletonHomeomorphStandardTwoCircles",
+    :type
+    "polygon skeleton homeomorphic to Boolean-labeled TwoCircles"},
+   :lemma
+   {:name "kleinSkeletonHomeomorphStandardTwoCircles",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type
+    "polygon skeleton homeomorphic to Boolean-labeled TwoCircles",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03},
+   :id :lemma-kleinskeletonhomeomorphstandardtwocircles,
+   :kind :lemma,
+   :depends-on [:lemma-kleinpairingorbitequivbool],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
