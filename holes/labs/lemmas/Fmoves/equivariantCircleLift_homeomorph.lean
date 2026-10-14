@@ -1090,13 +1090,153 @@ structure EquivariantCircleLift (sourcePeriod targetPeriod : ℝ) where
 descends to the additive circles and hence, through `AddCircle.toCircle`, to
 the unit circle. -/
 -- BEGIN SEAT AREA
+lemma equivariantCircleLift_homeomorph_aux_period (sourcePeriod targetPeriod : ℝ)
+    (F : EquivariantCircleLift sourcePeriod targetPeriod) (x : ℝ) :
+    ∀ n : ℤ, F.toFun (x + n * sourcePeriod) = F.toFun x + n * targetPeriod := by
+  intro n
+  cases n with
+  | ofNat n =>
+      induction n with
+      | zero => simp
+      | succ n ih =>
+          norm_num at ih ⊢
+          rw [show x + ((n : ℝ) + 1) * sourcePeriod =
+              (x + (n : ℝ) * sourcePeriod) + sourcePeriod by ring,
+            F.toFun_add_period, ih]
+          ring
+  | negSucc n =>
+      induction n with
+      | zero =>
+          norm_num
+          have h := F.toFun_add_period (x - sourcePeriod)
+          rw [show x - sourcePeriod + sourcePeriod = x by ring] at h
+          push_cast
+          rw [show x + -sourcePeriod = x - sourcePeriod by ring]
+          linarith
+      | succ n ih =>
+          norm_num at ih ⊢
+          have h := F.toFun_add_period
+            (x + (-(n : ℝ) - 2) * sourcePeriod)
+          have ih' : F.toFun (x + (-(n : ℝ) - 1) * sourcePeriod) =
+              F.toFun x + (-(n : ℝ) - 1) * targetPeriod := by
+            convert ih using 1 <;> ring
+          rw [show x + (-(n : ℝ) - 2) * sourcePeriod + sourcePeriod =
+              x + (-(n : ℝ) - 1) * sourcePeriod by ring, ih'] at h
+          calc
+            F.toFun (x + (-1 + (-1 + -(n : ℝ))) * sourcePeriod) =
+                F.toFun (x + (-(n : ℝ) - 2) * sourcePeriod) := by congr 1 <;> ring
+            _ = F.toFun x + (-1 + (-1 + -(n : ℝ))) * targetPeriod := by linarith
+
+lemma equivariantCircleLift_homeomorph_aux_inv_period (sourcePeriod targetPeriod : ℝ)
+    (F : EquivariantCircleLift sourcePeriod targetPeriod) (x : ℝ) :
+    ∀ n : ℤ, F.invFun (x + n * targetPeriod) = F.invFun x + n * sourcePeriod := by
+  intro n
+  cases n with
+  | ofNat n =>
+      induction n with
+      | zero => simp
+      | succ n ih =>
+          norm_num at ih ⊢
+          rw [show x + ((n : ℝ) + 1) * targetPeriod =
+              (x + (n : ℝ) * targetPeriod) + targetPeriod by ring,
+            F.invFun_add_period, ih]
+          ring
+  | negSucc n =>
+      induction n with
+      | zero =>
+          norm_num
+          have h := F.invFun_add_period (x - targetPeriod)
+          rw [show x - targetPeriod + targetPeriod = x by ring] at h
+          push_cast
+          rw [show x + -targetPeriod = x - targetPeriod by ring]
+          linarith
+      | succ n ih =>
+          norm_num at ih ⊢
+          have h := F.invFun_add_period
+            (x + (-(n : ℝ) - 2) * targetPeriod)
+          have ih' : F.invFun (x + (-(n : ℝ) - 1) * targetPeriod) =
+              F.invFun x + (-(n : ℝ) - 1) * sourcePeriod := by
+            convert ih using 1 <;> ring
+          rw [show x + (-(n : ℝ) - 2) * targetPeriod + targetPeriod =
+              x + (-(n : ℝ) - 1) * targetPeriod by ring, ih'] at h
+          calc
+            F.invFun (x + (-1 + (-1 + -(n : ℝ))) * targetPeriod) =
+                F.invFun (x + (-(n : ℝ) - 2) * targetPeriod) := by congr 1 <;> ring
+            _ = F.invFun x + (-1 + (-1 + -(n : ℝ))) * sourcePeriod := by linarith
 lemma equivariantCircleLift_homeomorph (sourcePeriod targetPeriod : ℝ)
     (hs : 0 < sourcePeriod) (ht : 0 < targetPeriod)
     (F : EquivariantCircleLift sourcePeriod targetPeriod) :
     ∃ g : Circle ≃ₜ Circle, ∀ x : ℝ,
       g (AddCircle.toCircle (x : AddCircle sourcePeriod)) =
         AddCircle.toCircle (F.toFun x : AddCircle targetPeriod) := by
-  sorry
+  let f : AddCircle sourcePeriod → AddCircle targetPeriod := fun q =>
+    Quotient.liftOn' q (fun x : ℝ => (F.toFun x : AddCircle targetPeriod)) (by
+      intro x y hxy
+      have hq : (x : AddCircle sourcePeriod) = (y : AddCircle sourcePeriod) :=
+        Quotient.sound hxy
+      rcases (QuotientAddGroup.mk'_eq_mk' (AddSubgroup.zmultiples sourcePeriod)).1 hq with
+        ⟨z, hz, hxyz⟩
+      rcases AddSubgroup.mem_zmultiples_iff.mp hz with ⟨n, rfl⟩
+      rw [← hxyz]
+      change (F.toFun x : AddCircle targetPeriod) =
+        (F.toFun (x + n • sourcePeriod) : AddCircle targetPeriod)
+      rw [show n • sourcePeriod = (n : ℝ) * sourcePeriod by simp,
+        equivariantCircleLift_homeomorph_aux_period]
+      simp [AddCircle.coe_add, AddCircle.coe_zsmul])
+  let finv : AddCircle targetPeriod → AddCircle sourcePeriod := fun q =>
+    Quotient.liftOn' q (fun x : ℝ => (F.invFun x : AddCircle sourcePeriod)) (by
+      intro x y hxy
+      have hq : (x : AddCircle targetPeriod) = (y : AddCircle targetPeriod) :=
+        Quotient.sound hxy
+      rcases (QuotientAddGroup.mk'_eq_mk' (AddSubgroup.zmultiples targetPeriod)).1 hq with
+        ⟨z, hz, hxyz⟩
+      rcases AddSubgroup.mem_zmultiples_iff.mp hz with ⟨n, rfl⟩
+      rw [← hxyz]
+      change (F.invFun x : AddCircle sourcePeriod) =
+        (F.invFun (x + n • targetPeriod) : AddCircle sourcePeriod)
+      rw [show n • targetPeriod = (n : ℝ) * targetPeriod by simp,
+        equivariantCircleLift_homeomorph_aux_inv_period]
+      simp [AddCircle.coe_add, AddCircle.coe_zsmul])
+  have hf_mk (x : ℝ) : f (x : AddCircle sourcePeriod) =
+      (F.toFun x : AddCircle targetPeriod) := rfl
+  have hfinv_mk (x : ℝ) : finv (x : AddCircle targetPeriod) =
+      (F.invFun x : AddCircle sourcePeriod) := rfl
+  have hf_cont : Continuous f := by
+    apply continuous_quot_lift
+    exact (AddCircle.continuous_mk' targetPeriod).comp F.continuous_toFun
+  have hfinv_cont : Continuous finv := by
+    apply continuous_quot_lift
+    exact (AddCircle.continuous_mk' sourcePeriod).comp F.continuous_invFun
+  have hleft : Function.LeftInverse finv f := by
+    intro q
+    obtain ⟨x, rfl⟩ := QuotientAddGroup.mk'_surjective _ q
+    change finv (f (x : AddCircle sourcePeriod)) = (x : AddCircle sourcePeriod)
+    rw [hf_mk, hfinv_mk, F.left_inv]
+  have hright : Function.RightInverse finv f := by
+    intro q
+    obtain ⟨x, rfl⟩ := QuotientAddGroup.mk'_surjective _ q
+    change f (finv (x : AddCircle targetPeriod)) = (x : AddCircle targetPeriod)
+    rw [hfinv_mk, hf_mk, F.right_inv]
+  let e : AddCircle sourcePeriod ≃ₜ AddCircle targetPeriod :=
+    { toEquiv :=
+        { toFun := f
+          invFun := finv
+          left_inv := hleft
+          right_inv := hright }
+      continuous_toFun := hf_cont
+      continuous_invFun := hfinv_cont }
+  let g : Circle ≃ₜ Circle :=
+    (AddCircle.homeomorphCircle hs.ne').symm.trans
+      (e.trans (AddCircle.homeomorphCircle ht.ne'))
+  refine ⟨g, ?_⟩
+  intro x
+  unfold g
+  rw [Homeomorph.trans_apply, Homeomorph.trans_apply]
+  rw [← AddCircle.homeomorphCircle_apply hs.ne' (x : AddCircle sourcePeriod),
+    Homeomorph.symm_apply_apply]
+  change (AddCircle.homeomorphCircle ht.ne')
+    (f (x : AddCircle sourcePeriod)) = _
+  rw [hf_mk, AddCircle.homeomorphCircle_apply]
 -- END SEAT AREA
 
 /-- The explicit lift used by the merge.  Its six formulas say: unchanged
