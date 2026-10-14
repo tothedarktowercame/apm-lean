@@ -36927,60 +36927,57 @@
   {:consumer :t96A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "extend Mathlib: state and prove the missing theorem in scope",
    :evidence
    {:placeholder-delta {:t96A06 [1 1]},
     :residual
-    "Prove H3(RP3;Q)=Q and higher vanishing; degree four; invariants/Main.",
+    "Prove antipodal action/transfer gives H3(RP3;Q)=Q; higher vanishing; degree four; invariants/Main.",
     :outcome :stop,
     :warnings [],
     :missing-theorems
-    [{:name "t96A06_rp3_rational_middle_homology",
-      :type "H1(RP3;Q)=0 and H2(RP3;Q)=0",
+    [{:name "t96A06_sphere3_rational_H3Iso",
+      :type "H3(S3;Q) ≅ Q",
       :status :proved,
       :consumers [:t96A06],
-      :depends-on ["t96A06_rp3_rational_homologyMap_surjective"],
+      :depends-on ["t96A06_rp3_rational_middle_homology"],
       :area "rp-rational-homology"}
      {:name "t96A06_rp3_rational_homology",
       :type "RP3 rational homology Q,0,0,Q",
       :status :partial,
       :consumers [:t96A06],
-      :depends-on ["t96A06_rp3_rational_middle_homology"],
+      :depends-on ["t96A06_sphere3_rational_H3Iso"],
       :area "rp-rational-homology"}],
     :statement-hashes {:registry "166/166"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Proved H1 and H2 of RP3 over Q vanish; top group and higher-degree vanishing remain.",
+    "Proved H3(S3;Q)=Q; identifying H3(RP3;Q) now requires the degree-three antipodal/transfer comparison.",
     :commands
     [{:cmd "lake build ConstructionTargets.t96A06Closure", :exit 0}
-     {:cmd
-      "lake env lean /tmp/t96a06_rational_middle_homology_check.lean",
-      :exit 0}
+     {:cmd "lake env lean /tmp/t96a06_sphere3_h3_check.lean", :exit 0}
      {:cmd "lake env lean problems/t96A06/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder count", :exit 0}
      {:cmd "git diff --check", :exit 0}
      {:cmd "rg forbidden", :exit 1, :expected-exit 1}],
     :diagnostic-history
-    [{:cmd "initial theorem compiles",
+    [{:cmd "initial fixture",
       :exit 1,
-      :correction
-      "opened Limits, fixed namespace and explicit equality transport"}],
-    :commit "d975a07ebca129c8bde2d78122d8b040a195b74e",
+      :correction "marked fixture noncomputable"}],
+    :commit "b7a01bad22a84df73d65de2605dacd326499232d",
     :changed-paths
     ["ConstructionTargets/t96A06Closure.lean"
      "ConstructionTargets/t96A06Closure.blueprint.md"],
     :fixture
-    {:path "/tmp/t96a06_rational_middle_homology_check.lean",
+    {:path "/tmp/t96a06_sphere3_h3_check.lean",
      :sha256
-     "b4d3fef978ebb079b86fd73c99394e058914b6bc19a151325aaf8492b4feb6ae"},
+     "5cf1651451c0a87909c5d3725219722e4d7ead421cc395dad09f1b6c4fe2e2ae"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -38014,7 +38011,8 @@
     :lemma-t96a06-rp3-sphere-covering
     :lemma-t96a06-rp3-sphere-twosheeted
     :lemma-t96a06-rp3-rational-homologymap-surjective
-    :lemma-t96a06-rp3-rational-middle-homology],
+    :lemma-t96a06-rp3-rational-middle-homology
+    :lemma-t96a06-sphere3-rational-h3iso],
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
@@ -40043,6 +40041,22 @@
    :id :lemma-pathtwoopensubdivisionrunblockpiece-mem-chart-cases,
    :kind :lemma,
    :depends-on [:lemma-pathtwoopensubdivisionrunblockpiece-mem-chart],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_sphere3_rational_H3Iso", :type "H3(S3;Q) ≅ Q"},
+   :lemma
+   {:name "t96A06_sphere3_rational_H3Iso",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "H3(S3;Q) ≅ Q",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06},
+   :id :lemma-t96a06-sphere3-rational-h3iso,
+   :kind :lemma,
+   :depends-on [:lemma-t96a06-rp3-rational-middle-homology],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
