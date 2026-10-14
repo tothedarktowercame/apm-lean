@@ -838,7 +838,28 @@ theorem apm_t02a01_inner_conj_outer
     ((apm_t02a01_innerLoop hc h4).map (continuous_subtype_val :
         Continuous ((↑) : apm_t02a01_boundarySpace → apm_t02a01_puncturedTorus))).Homotopic
       ((apm_t02a01_delta hr).trans ((apm_t02a01_outerLoop hr).trans (apm_t02a01_delta hr).symm)) := by
-  sorry
+  apply hconj
+    ((apm_t02a01_innerLoop hc h4).map (continuous_subtype_val :
+      Continuous ((↑) : apm_t02a01_boundarySpace → apm_t02a01_puncturedTorus)))
+    (apm_t02a01_outerLoop hr) (apm_t02a01_delta hr)
+    ⟨apm_t02a01_radialPt, hr⟩
+  · intro t
+    change apm_t02a01_radialPt (0, t) =
+      (apm_t02a01_innerPoint (4 * (t : ℝ))).1
+    unfold apm_t02a01_radialPt apm_t02a01_innerPoint
+    apply congrArg (Quotient.mk _)
+    apply Subtype.ext
+    simp [apm_t02a01_radial]
+  · intro t
+    rfl
+  · intro s
+    rfl
+  · intro s
+    change apm_t02a01_radialPt (s, 1) = apm_t02a01_radialPt (s, 0)
+    unfold apm_t02a01_radialPt
+    apply congrArg (Quotient.mk _)
+    apply Subtype.ext
+    norm_num [apm_t02a01_radial, apm_t02a01_perimeter, apm_t02a01_clamp01]
 
 /-- The outer square, read side by side: bottom `A`, right `B`, top `A` reversed, left `B`
 reversed (opposite sides are identified in the torus). -/
