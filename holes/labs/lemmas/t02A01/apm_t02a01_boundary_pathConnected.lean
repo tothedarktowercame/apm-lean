@@ -73,7 +73,15 @@ independent of its construction. -/
 theorem apm_t02a01_boundary_pathConnected
     (h : Nonempty (apm_t02a01_boundarySpace ≃ₜ Circle)) :
     Nonempty (PathConnectedSpace apm_t02a01_boundarySpace) := by
-  sorry
+  let e := h.some
+  haveI : PathConnectedSpace Circle :=
+    isPathConnected_iff_pathConnectedSpace.mp (by
+      change IsPathConnected (Metric.sphere (0 : ℂ) 1)
+      apply isPathConnected_sphere
+      · rw [Complex.rank_real_complex]
+        norm_num
+      · norm_num)
+  exact ⟨e.symm.surjective.pathConnectedSpace e.symm.continuous⟩
 -- END SEAT AREA
 
 /-- Transport local path connectedness across the concrete boundary-circle
