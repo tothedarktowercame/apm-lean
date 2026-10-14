@@ -966,6 +966,51 @@ theorem moduleHurewicz_zpow {X : Type} [TopologicalSpace X] (x : X)
     moduleHurewicz x (g ^ n) = n • moduleHurewicz x g := by
   exact congrArg Multiplicative.toAdd (map_zpow (moduleHurewiczHom x) g n)
 
+/-! ### Algebraic leg-word evaluation -/
+
+/-- A finite word in the common-basepoint positive leg classes, with integer
+exponents. -/
+abbrev FiniteWedgeLegWord (P : PairingData) :=
+  List (PairingOrbit P.pair × ℤ)
+
+/-- Evaluate a leg word in the fundamental group of the finite wedge. -/
+noncomputable def finiteWedgeLegWordGroup (P : PairingData)
+    (w : FiniteWedgeLegWord P) :
+    FundamentalGroup
+      (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge
+        (PairingOrbit P.pair)) (orbitWedgeBase P) :=
+  (w.map fun q => finiteWedgeLegFundamentalClassAtBase P q.1 ^ q.2).prod
+
+/-- The coordinate sum encoded by a leg word, retaining repeated legs. -/
+noncomputable def finiteWedgeLegWordCoordinatesList (P : PairingData)
+    (w : FiniteWedgeLegWord P) : PairingOrbit P.pair → ℤ :=
+  (w.map fun q => q.2 • orbitBasis P q.1 1).sum
+
+/-- Hurewicz evaluation of a finite leg word is the normalized coordinate map
+applied to its list-based coordinate sum. -/
+theorem finiteWedgeLegWord_hurewicz (P : PairingData)
+    (w : FiniteWedgeLegWord P) :
+    moduleHurewicz (orbitWedgeBase P) (finiteWedgeLegWordGroup P w) =
+      finiteWedgeH1CoordinateMap P (finiteWedgeLegWordCoordinatesList P w) := by
+  induction w with
+  | nil =>
+      change moduleHurewicz (orbitWedgeBase P) 1 =
+        finiteWedgeH1CoordinateMap P 0
+      have h := moduleHurewicz_mul (orbitWedgeBase P) 1 1
+      have hz : moduleHurewicz (orbitWedgeBase P) 1 = 0 := by
+        apply add_left_cancel (a := moduleHurewicz (orbitWedgeBase P) 1)
+        simpa using h.symm
+      simpa using hz
+  | cons q w ih =>
+      change moduleHurewicz (orbitWedgeBase P)
+          (finiteWedgeLegFundamentalClassAtBase P q.1 ^ q.2 *
+            finiteWedgeLegWordGroup P w) =
+        finiteWedgeH1CoordinateMap P
+          (q.2 • orbitBasis P q.1 1 + finiteWedgeLegWordCoordinatesList P w)
+      rw [moduleHurewicz_mul, moduleHurewicz_zpow,
+        finiteWedgeLegFundamentalClassAtBase_hurewicz_eq_coordinate,
+        map_add, map_zsmul, ih]
+
 end
 
 end ConstructionTargets.PolygonSurfaceHomology
