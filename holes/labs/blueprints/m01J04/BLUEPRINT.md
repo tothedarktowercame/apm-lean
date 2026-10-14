@@ -27,51 +27,52 @@ proof, smoothness of convolution, has been restored with Mathlib's
 `HasCompactSupport.contDiff_convolution_left`; it compiles for genuine
 `C^∞` and therefore is not an admitted blueprint obligation.
 
-## Remaining lemma
+## Remaining lemmas
 
-### `apm_m01J04_localization_isH1Zero`
+### `apm_m01J04_localization_core_approx`
 
-**Statement in words.**  If `φ` is a smooth compactly supported test multiplier
-whose nonzero set lies in `Ω`, and `f` is represented by the custom weak-`H¹`
-record, then the Leibniz product record `φ f` lies in the closure, for the custom
-`H1dist`, of smooth compactly supported records supported in `Ω`.
+Cut the global localized Sobolev pair off to a positive level core
+`{ε ≤ |φ|}`, with both value and gradient supported there, and make its
+`H1dist` error arbitrarily small.  Estimated proof: 90--140 lines.
 
-**Why true.**  This is the local Friedrichs/Meyers--Serrin argument.  Choose
-smooth scalar cutoffs `θ_j` which vanish where `|φ|` is small and equal one
-where `|φ|` is at least twice that threshold.  The products
-`(θ_j ∘ |φ|) · (φ f)` have support in a positive level set of `|φ|`.
-`apm_m01J04_test_levelSet_exists_cthickening` then gives a positive convolution
-margin inside `Ω`.  Mollify each truncated value with a smooth compact kernel
-of smaller radius.  The weak Leibniz identity already proved in the file shows
-that the prescribed gradient is the distributional gradient; convolution
-commutes with this weak derivative.  Approximate-identity convergence in `L²`
-for both the value and gradient fields gives convergence of the mollified
-records.  Finally send the level threshold to zero.  Dominated convergence
-handles the value and `φ grad f` terms.  The only delicate collar term uses
-`apm_m01J04_contDiff_aeDerivativeZeroOnZeroSet`: `Dφ = 0` almost everywhere on
-`{φ = 0}`, so the collar contribution also converges to zero.  Assemble the
-sequence with `apm_m01J04_localization_isH1Zero_of_globalApprox` (or equivalently
-the already proved epsilon-to-sequence interface).
+Use smooth one-variable cutoffs composed with `|φ|` (or preferably `φ²`, to
+avoid differentiability of `abs` at zero), the already proved weak product
+rule `apm_m01J04_test_mul_weakGradient_volume`, and `MemLp` dominated
+convergence.  The collar-gradient term is justified by
+`apm_m01J04_contDiff_aeDerivativeZeroOnZeroSet`; it is zero a.e. on `{φ=0}`.
+This lemma is independent of the mollifier lemma.
 
-Useful existing interfaces in this file are
-`apm_m01J04_globalLocalizedH1`,
-`apm_m01J04_globalLocalizedH1_contDiff_convolution`,
-`apm_m01J04_H1restrict`,
-`apm_m01J04_H1dist_restrict_le`,
-`apm_m01J04_localization_isH1Zero_of_globalApprox`, and
-`apm_m01J04_test_levelSet_convolution_support`.  The basic Mathlib ingredients
-are `HasCompactSupport.contDiff_convolution_left`, support control through
-`MeasureTheory.support_convolution_subset`, and the standard `L²`
-approximate-identity/mollifier estimates (a seat may need to package the latter
-as a local auxiliary lemma if the API is not already in the desired raw-function
-form).
+### `apm_m01J04_core_exists_smooth_global_approx`
 
-**Expected size.** 180--300 lines.  Most work is choosing the coupled
-value/gradient mollifier and converting its two `L²` estimates into `H1dist`.
+Mollify an arbitrary global encoded `H¹` pair whose value and gradient are
+supported in one positive core.  Produce one smooth compactly supported global
+record, supported in `Ω`, within any prescribed `H1dist` error.  Estimated
+proof: 100--150 lines.  This lemma is independent of the cutoff lemma.
 
-**Dependencies.** Only the definitions and proved declarations preceding it
-in `Blueprint.lean`.  In particular, it does not depend on another admitted
-lemma.
+Use `apm_m01J04_test_levelSet_convolution_support`,
+`apm_m01J04_globalLocalizedH1_contDiff_convolution` as the model for smoothness,
+`HasCompactSupport.contDiff_convolution_left`, and
+`MeasureTheory.support_convolution_subset`.  The analytic inputs are the
+standard approximate-identity convergence in `L²` for both fields and the
+distributional identity that the weak gradient of `κ * u.val` is
+`κ * u.grad`.  If Mathlib has no packaged approximate identity with the
+required raw-function interface, build the usual `ContDiffBump` kernel and
+package that estimate locally; do not import any `SphereCap*` or
+`LinearGraphMeasure` module.
+
+### `apm_m01J04_localization_isH1Zero_of_core_approximations`
+
+Diagonalize the preceding two epsilon statements, use the triangle inequality
+for the two `eLpNorm` summands, and finish with
+`apm_m01J04_localization_isH1Zero_of_globalApprox`.  Estimated proof: 35--70
+lines.  Both analytic conclusions are explicit hypotheses, so this lemma is
+independent and can be proved before either construction lands.
+
+### Assembly
+
+`apm_m01J04_localization_isH1Zero` is now sorry-free.  Its zero-multiplier
+branch uses the proved helpers copied from the partial seat result; its nonzero
+branch merely supplies the two new analytic lemmas to the diagonal assembly.
 
 **Truth check.**  Besides the zero-dimensional and zero-multiplier checks
 above, I checked the model one-dimensional case `Ω = (0,1)`, with a standard
@@ -82,16 +83,23 @@ vanishes there; dominated convergence gives precisely the two error terms in
 the sketch.  This is also the mechanism covered abstractly by the already
 compiled a.e.-derivative-zero lemma.
 
-## Assembly and dependency layers
+## Truth and degeneracy checks
 
-* **Layer 1:** `apm_m01J04_localization_isH1Zero` (one seat).
-* **Layer 2 (already proved):** `apm_m01J04_bridge_1`, bridge sequence and
-  divergence pairing, the principal-difference and compensated-pairing
-  lemmas, and the final theorem.
+For `φ = 0`, the copied helper gives the constant zero approximating sequence.
+For `d = 0`, all gradient coordinates are empty and the same statements reduce
+to scalar `L²` approximation on the one-point Euclidean space.  Positive level
+cores are compact because they are closed subsets of `tsupport φ`; for
+`ε > 0` they lie in the actual support, not merely its closure.  No boundary
+point is lost: `apm_m01J04_test_levelSet_exists_cthickening` gives a positive
+closed-thickening margin inside `Ω`.  The core lemma is not vacuous (it must
+approximate the fixed global localized pair), and the mollifier lemma is not
+overloaded with cutoff convergence.
 
-The restored convolution-smoothness lemma and every other declaration compile
-without `sorry`.  The sole `sorry` is the Layer 1 lemma, and the main theorem
-contains no direct `sorry`.
+The already proved declarations before this split contain the requested product
+rule, including extension by zero to the whole Euclidean space:
+`apm_m01J04_test_mul_weakGradient_volume` and
+`apm_m01J04_globalLocalizedH1`.  Thus this was not duplicated as a new admitted
+leaf.
 
 ## Compilation and axioms
 
@@ -107,5 +115,6 @@ The final output of `#print axioms apm_m01j04` was:
 'apm_m01j04' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
 ```
 
-The single warning identifying `sorry` is at
-`apm_m01J04_localization_isH1Zero`.
+The remaining `sorryAx` paths are precisely the three new leaves above; the
+registered main statement and all declarations imported from `Main.lean` are
+unchanged.

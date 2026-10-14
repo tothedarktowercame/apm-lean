@@ -1912,14 +1912,101 @@ lemma apm_m01J04_localization_isH1Zero_of_forall_exists_smooth
 `apm_m01J04_isH1Zero_mul`, the input is an arbitrary encoded `H¹` function;
 compact localization by `φ` is what must produce the zero-boundary
 approximation. -/
+lemma apm_m01J04_localization_core_approx
+    {d : ℕ} {Ω : Set (EuclideanSpace ℝ (Fin d))}
+    (φ : EuclideanSpace ℝ (Fin d) → ℝ)
+    (hφ : apm_m01J04_isTestFunction Ω φ)
+    (f : apm_m01J04_H1 d Ω) {eta : ℝ} (heta : 0 < eta) :
+    ∃ (epsilon : ℝ) (u : apm_m01J04_H1 d Set.univ),
+      0 < epsilon ∧
+      Function.support u.val ⊆ {x | epsilon ≤ |φ x|} ∧
+      Function.support u.grad ⊆ {x | epsilon ≤ |φ x|} ∧
+      apm_m01J04_H1dist u (apm_m01J04_globalLocalizedH1 φ hφ f) < eta := by
+  sorry
+
+/-- A global Sobolev pair whose two fields lie in one positive multiplier
+core has a support-safe smooth approximation.  This is the isolated
+Friedrichs-mollifier step. -/
+lemma apm_m01J04_core_exists_smooth_global_approx
+    {d : ℕ} {Ω : Set (EuclideanSpace ℝ (Fin d))}
+    (φ : EuclideanSpace ℝ (Fin d) → ℝ)
+    (hφ : apm_m01J04_isTestFunction Ω φ)
+    {epsilon : ℝ} (hepsilon : 0 < epsilon)
+    (u : apm_m01J04_H1 d Set.univ)
+    (huval : Function.support u.val ⊆ {x | epsilon ≤ |φ x|})
+    (hugrad : Function.support u.grad ⊆ {x | epsilon ≤ |φ x|})
+    {eta : ℝ} (heta : 0 < eta) :
+    ∃ a : apm_m01J04_H1 d Set.univ,
+      ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) a.val ∧
+      HasCompactSupport a.val ∧ Function.support a.val ⊆ Ω ∧
+      apm_m01J04_H1dist a u < eta := by
+  sorry
+
+/-- Diagonal assembly of core truncation and support-safe smoothing.  Both
+analytic inputs are hypotheses so this lemma can be proved independently of
+the two construction lemmas above. -/
+lemma apm_m01J04_localization_isH1Zero_of_core_approximations
+    {d : ℕ} {Ω : Set (EuclideanSpace ℝ (Fin d))}
+    (φ : EuclideanSpace ℝ (Fin d) → ℝ)
+    (hφ : apm_m01J04_isTestFunction Ω φ)
+    (f : apm_m01J04_H1 d Ω)
+    (hcore : ∀ eta : ℝ, 0 < eta →
+      ∃ (epsilon : ℝ) (u : apm_m01J04_H1 d Set.univ),
+        0 < epsilon ∧
+        Function.support u.val ⊆ {x | epsilon ≤ |φ x|} ∧
+        Function.support u.grad ⊆ {x | epsilon ≤ |φ x|} ∧
+        apm_m01J04_H1dist u (apm_m01J04_globalLocalizedH1 φ hφ f) < eta)
+    (hsmooth : ∀ (epsilon : ℝ), 0 < epsilon →
+      ∀ (u : apm_m01J04_H1 d Set.univ),
+        Function.support u.val ⊆ {x | epsilon ≤ |φ x|} →
+        Function.support u.grad ⊆ {x | epsilon ≤ |φ x|} →
+        ∀ eta : ℝ, 0 < eta →
+          ∃ a : apm_m01J04_H1 d Set.univ,
+            ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) a.val ∧
+            HasCompactSupport a.val ∧ Function.support a.val ⊆ Ω ∧
+            apm_m01J04_H1dist a u < eta) :
+    apm_m01J04_isH1Zero (apm_m01J04_H1mul φ hφ f) := by
+  sorry
+
+lemma apm_m01J04_localization_isH1Zero_aux_zero_fields
+    {d : ℕ} {Ω : Set (EuclideanSpace ℝ (Fin d))}
+    (h : apm_m01J04_H1 d Ω) (hv : h.val = 0) (hg : h.grad = 0) :
+    apm_m01J04_isH1Zero h := by
+  refine ⟨fun _ ↦ h, ?_, ?_⟩
+  · intro n
+    rw [hv]
+    exact ⟨contDiff_const, HasCompactSupport.zero, by simp⟩
+  · simp [apm_m01J04_H1dist, hv, hg]
+
+lemma apm_m01J04_localization_isH1Zero_aux_zero_multiplier
+    {d : ℕ} {Ω : Set (EuclideanSpace ℝ (Fin d))}
+    (φ : EuclideanSpace ℝ (Fin d) → ℝ)
+    (hφ : apm_m01J04_isTestFunction Ω φ)
+    (f : apm_m01J04_H1 d Ω) (hzero : φ = 0) :
+    apm_m01J04_isH1Zero (apm_m01J04_H1mul φ hφ f) := by
+  apply apm_m01J04_localization_isH1Zero_aux_zero_fields
+  · rw [apm_m01J04_H1mul_val, hzero]
+    funext x
+    simp
+  · rw [apm_m01J04_H1mul_grad, hzero]
+    funext x
+    ext i
+    simp
+
 lemma apm_m01J04_localization_isH1Zero
     {d : ℕ} {Ω : Set (EuclideanSpace ℝ (Fin d))}
     (φ : EuclideanSpace ℝ (Fin d) → ℝ)
     (hφ : apm_m01J04_isTestFunction Ω φ)
     (f : apm_m01J04_H1 d Ω) :
     apm_m01J04_isH1Zero (apm_m01J04_H1mul φ hφ f) := by
-  -- REOPENED 2026-10-13: proof relied on analytic (ω) test functions being 0; statement now at ∞, recheck.
-  sorry
+  by_cases hzero : φ = 0
+  · exact apm_m01J04_localization_isH1Zero_aux_zero_multiplier φ hφ f hzero
+  · apply apm_m01J04_localization_isH1Zero_of_core_approximations φ hφ f
+    · intro eta heta
+      exact apm_m01J04_localization_core_approx φ hφ f heta
+    · intro epsilon hepsilon u huval hugrad eta heta
+      exact apm_m01J04_core_exists_smooth_global_approx
+        φ hφ hepsilon u huval hugrad heta
 
 /-- Why this unblocks `apm_m01j04`: this is the missing bounded multiplier
 and weak Leibniz theorem for the custom `H¹` record. It constructs the
