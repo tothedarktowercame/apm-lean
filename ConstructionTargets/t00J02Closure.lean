@@ -145,6 +145,22 @@ theorem surfaceTopDegree_eq_homologyMap
   rw [show n = n • (1 : ℤ) by simp, map_smul]
   simp [surfaceTopDegree, mul_comm]
 
+/-- Vanishing of the integer top-degree coordinate forces the actual induced
+map on `H₂` to vanish. -/
+theorem surfaceTopHomologyMap_eq_zero_of_surfaceTopDegree_eq_zero
+    {S : Type} [TopologicalSpace S]
+    (e : surfaceHomology S ≅ ModuleCat.of ℤ ℤ) (f : C(S, S))
+    (hdegree : surfaceTopDegree e f = 0) : homologyMap 2 f = 0 := by
+  have hcoordinate : surfaceTopHomologyCoordinateMap e f = 0 := by
+    rw [ModuleCat.hom_ext_iff]
+    apply LinearMap.ext
+    intro n
+    rw [surfaceTopDegree_eq_homologyMap, hdegree]
+    simp
+  apply (cancel_epi e.inv).1
+  apply (cancel_mono e.hom).1
+  simpa [surfaceTopHomologyCoordinateMap] using hcoordinate
+
 /-- A global integral top-homology coordinate together with its expression in
 the canonical local chart generator at every point.  The coefficient is kept
 explicit because its sign is precisely the orientation datum used by the
@@ -195,3 +211,4 @@ end ConstructionTargets.T00J02Closure
 #print axioms ConstructionTargets.T00J02Closure.componentSignedCount_eq_zero_of_componentDegree_eq_zero
 #print axioms ConstructionTargets.T00J02Closure.regularValue_topDegree_eq_zero_of_signedCount
 #print axioms ConstructionTargets.T00J02Closure.surfaceTopDegree_eq_homologyMap
+#print axioms ConstructionTargets.T00J02Closure.surfaceTopHomologyMap_eq_zero_of_surfaceTopDegree_eq_zero
