@@ -36158,6 +36158,17 @@
     [{:cmd "lake build closure",
       :exit 1,
       :correction "qualified Surfaces names"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791935935808-10973-342c5522",
+     :commands
+     ["git show/diff cb0fb3be; scope/representation review"
+      "sha256sum fixture; show --check; placeholder recount"
+      "lake build ConstructionTargets.t93J03Closure; lean fixture"
+      "statement-registry check"],
+     :finding
+     "PASS. Commit cb0fb3be adds compiled, sorry-free standard-axiom progress after 663d4133: it proves PathConnectedSpace for the exact frozen KleinBottle as the continuous surjective image of its defining convex closed-disk quotient, and removes that hypothesis from the C1 adapter. Fixture hash matches; registry 166/166; Main placeholder 1->1. Polygon van Kampen, then C1/C2/Main, remain listed. SemilocallySimplyConnected X is unused, mandated by problem.md."},
     :commit "cb0fb3be9906546a8bd65377dd49fb9b5073ca1a",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
@@ -36169,7 +36180,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -36187,7 +36198,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t93J03Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed C1 polygon adapter; van Kampen and path-connectedness remain.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed frozen Klein path-connectedness and discharged the C1 adapter hypothesis; van Kampen remains.",
    :id :program-2026-10-13-close-t93j03,
    :kind :final-adapter,
    :campaign-priority 30,
@@ -36245,7 +36256,11 @@
     {:job 4,
      :commit "663d41336cbfe993f2c9f2f3d73ec185bdff0dd0",
      :reason
-     "Committed C1 polygon adapter; van Kampen and path-connectedness remain."}]}
+     "Committed C1 polygon adapter; van Kampen and path-connectedness remain."}
+    {:job 5,
+     :commit "cb0fb3be9906546a8bd65377dd49fb9b5073ca1a",
+     :reason
+     "Committed frozen Klein path-connectedness and discharged the C1 adapter hypothesis; van Kampen remains."}]}
   {:consumer :t99J05,
    :stop-count 5,
    :evidence
@@ -37767,7 +37782,7 @@
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "kleinBottlePathConnectedSpace",
@@ -37777,7 +37792,9 @@
     :reported-by [:program-2026-10-13-close-t93j03],
     :type "PathConnectedSpace KleinBottle",
     :area "covering-subgroup-correspondence",
-    :proved-in :program-2026-10-13-close-t93j03},
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "cb0fb3be9906546a8bd65377dd49fb9b5073ca1a"},
    :id :lemma-kleinbottlepathconnectedspace,
    :kind :lemma,
    :depends-on [],
