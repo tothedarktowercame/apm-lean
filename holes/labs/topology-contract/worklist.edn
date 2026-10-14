@@ -113902,6 +113902,17 @@
       "lake build ConstructionTargets.ThreeCirclesFundamentalGroup",
       :exit 1,
       :finding "B12 file absent."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791937373748-11028-ba04c54f",
+     :commands
+     ["git show/diff-tree bef0a985e"
+      "git archive bef0a985e; lake env lean archived PointWedgeVanKampen.lean"
+      "lake build ConstructionTargets.PointWedgeVanKampen"
+      "sha256sum; placeholders; statement-registry.py check"],
+     :finding
+     "Independent review of topo-2 commit bef0a985e: only scoped Lean/doc files changed. Archived Lean and lake build pass; source/doc/fixture hashes 146fc981/0705df57/0bca6ce3 match evidence; placeholders 0->0; registry 166/166. The comparator-map-unitInv cancellation is correctly oriented and leaves the typed source transport between outer connectors; axioms are standard. Valid program STOP with residual transport alignment/projection/B6/B12 listed."},
     :commit "bef0a985e47b8bd16c74331ed12e9961edf20f21",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
@@ -113912,7 +113923,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113933,7 +113944,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Four-factor normal form reassociated at the comparator/unitInv middle.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Typed comparator/map-unitInv middle cancelled inside connector normal form.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -114802,7 +114813,11 @@
     {:job 1,
      :commit "e60d74c0adba4453cacffbd52b0ba6ac6787b9d8",
      :reason
-     "Four-factor normal form reassociated at the comparator/unitInv middle."}]}
+     "Four-factor normal form reassociated at the comparator/unitInv middle."}
+    {:job 2,
+     :commit "bef0a985e47b8bd16c74331ed12e9961edf20f21",
+     :reason
+     "Typed comparator/map-unitInv middle cancelled inside connector normal form."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
