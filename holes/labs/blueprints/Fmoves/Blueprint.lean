@@ -789,7 +789,18 @@ lemma inversePairCancellation_aux_zip_relation {Label : Type*} [DecidableEq Labe
        Relation.EqvGen (WordRel (u ++ v)) (c p) (c q))) :
     ∀ p q : Disk, Relation.EqvGen (WordRel (u ++ [x, inv x] ++ v)) p q ↔
       Relation.EqvGen (WordRel (u ++ v)) (c p) (c q) := by
-  sorry
+  intro p q
+  by_cases hp : ‖(p : ℂ)‖ < 1
+  · exact hinterior p q (Or.inl hp)
+  by_cases hq : ‖(q : ℂ)‖ < 1
+  · exact hinterior p q (Or.inr hq)
+  apply hboundary p q
+  · apply le_antisymm
+    · simpa [dist_zero_right] using (Metric.mem_closedBall.mp p.2)
+    · exact le_of_not_gt hp
+  · apply le_antisymm
+    · simpa [dist_zero_right] using (Metric.mem_closedBall.mp q.2)
+    · exact le_of_not_gt hq
 
 /-- The geometric content of cancellation: zip the arcs `x` and `x⁻¹` together,
 `x(t)` and `x⁻¹(1-t)` going to the same point of a segment running from the
