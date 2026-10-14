@@ -615,6 +615,59 @@ lemma apm_t01A04_torusCoverMap_evenlyCovered_away_aux_reduce
   · exact hT q (apm_t01A04_torusCoverMap_evenlyCovered_away_aux_inl_ne h)
   · exact hC z (apm_t01A04_torusCoverMap_evenlyCovered_away_aux_inr_ne h)
 
+def apm_t01A04_torusCoverMap_evenlyCovered_away_aux_torus_aux_totalRaw :
+    Sum apm_t01a04_Torus (Fin 2 × Circle) → apm_t01a04_Torus
+  | .inl q => q
+  | .inr q => (apm_t01a04_sheetPoint q.1, 1)
+
+lemma apm_t01A04_torusCoverMap_evenlyCovered_away_aux_torus_aux_totalRaw_respects
+    {u v : Sum apm_t01a04_Torus (Fin 2 × Circle)}
+    (h : Relation.EqvGen apm_t01a04_torusCoverRel u v) :
+    apm_t01A04_torusCoverMap_evenlyCovered_away_aux_torus_aux_totalRaw u =
+      apm_t01A04_torusCoverMap_evenlyCovered_away_aux_torus_aux_totalRaw v := by
+  induction h with
+  | rel _ _ h => cases h <;> rfl
+  | refl _ => rfl
+  | symm _ _ _ ih => exact ih.symm
+  | trans _ _ _ _ _ ih₁ ih₂ => exact ih₁.trans ih₂
+
+def apm_t01A04_torusCoverMap_evenlyCovered_away_aux_torus_aux_totalRetraction :
+    apm_t01a04_TorusCover → apm_t01a04_Torus :=
+  Quotient.lift
+    apm_t01A04_torusCoverMap_evenlyCovered_away_aux_torus_aux_totalRaw
+    (fun _ _ h =>
+      apm_t01A04_torusCoverMap_evenlyCovered_away_aux_torus_aux_totalRaw_respects h)
+
+lemma apm_t01A04_torusCoverMap_evenlyCovered_away_aux_torus_aux_base_continuous :
+    Continuous apm_t01A04_circleCoverMap_evenlyCovered_away_aux_torusRetraction := by
+  apply continuous_coinduced_dom.mpr
+  apply continuous_sum_dom.2
+  exact ⟨continuous_id, continuous_const⟩
+
+lemma apm_t01A04_torusCoverMap_evenlyCovered_away_aux_torus_aux_total_continuous :
+    Continuous
+      apm_t01A04_torusCoverMap_evenlyCovered_away_aux_torus_aux_totalRetraction := by
+  apply continuous_coinduced_dom.mpr
+  apply continuous_sum_dom.2
+  constructor
+  · exact continuous_id
+  · exact
+      ((continuous_of_discreteTopology : Continuous apm_t01a04_sheetPoint).comp
+        continuous_fst).prodMk continuous_const
+
+lemma apm_t01A04_torusCoverMap_evenlyCovered_away_aux_torus_aux_square
+    (e : apm_t01a04_TorusCover) :
+    apm_t01A04_circleCoverMap_evenlyCovered_away_aux_torusRetraction
+        (apm_t01a04_torusCoverMap e) =
+      ((apm_t01A04_torusCoverMap_evenlyCovered_away_aux_torus_aux_totalRetraction e).1 ^ 2,
+        (apm_t01A04_torusCoverMap_evenlyCovered_away_aux_torus_aux_totalRetraction e).2) := by
+  refine Quotient.inductionOn e ?_
+  rintro (q | q)
+  · rfl
+  · simp [apm_t01a04_torusCoverMap, apm_t01a04_torusCoverRaw,
+      apm_t01A04_torusCoverMap_evenlyCovered_away_aux_torus_aux_totalRetraction,
+      apm_t01A04_torusCoverMap_evenlyCovered_away_aux_torus_aux_totalRaw]
+
 /-- Torus-summand case: near `q ≠ (1,1)` the cover is `(z, w) ↦ (z², w)`
 on the torus summand; the two square-root arcs in the first coordinate give the
 two sheets (the glued points `(±1, 1)` lie over the excluded base point). -/
