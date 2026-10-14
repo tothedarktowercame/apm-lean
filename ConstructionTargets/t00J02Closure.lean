@@ -196,6 +196,33 @@ theorem groupedComponentSignedCount_eq_zero
     ∑ k, orientationSign k * componentLocalDegreeSum component localDegree k = 0 := by
   simp [hcomponent]
 
+/-- Genuine connected components of a subset, represented by their underlying
+subsets rather than by independently chosen loops through each point. -/
+def PreimageComponentIndex {S : Type} [TopologicalSpace S] (s : Set S) :=
+  Set.range (fun x : s => connectedComponentIn s x)
+
+/-- A point in a literal fiber over the target circle is assigned to its
+actual connected component in the full circle preimage. -/
+def regularFiberComponentIndex
+    {S : Type} [TopologicalSpace S] (f : C(S, S)) (c : C(Circle, S))
+    (y : S) (hy : y ∈ Set.range c) :
+    {x : S // f x = y} → PreimageComponentIndex (f ⁻¹' Set.range c) := by
+  intro x
+  have hx : (x : S) ∈ f ⁻¹' Set.range c := by
+    change f x ∈ Set.range c
+    rw [x.property]
+    exact hy
+  exact ⟨connectedComponentIn (f ⁻¹' Set.range c) x, ⟨⟨x, hx⟩, rfl⟩⟩
+
+theorem regularFiber_mem_indexedComponent
+    {S : Type} [TopologicalSpace S] (f : C(S, S)) (c : C(Circle, S))
+    (y : S) (hy : y ∈ Set.range c) (x : {x : S // f x = y}) :
+    (x : S) ∈ (regularFiberComponentIndex f c y hy x : Set S) := by
+  exact mem_connectedComponentIn (by
+    change f x ∈ Set.range c
+    rw [x.property]
+    exact hy)
+
 /-- Algebraic final step of the regular-value formula: once the top-degree
 coordinate is identified with the component signed count, pointwise zero
 component degrees force that coordinate to vanish. -/
@@ -314,6 +341,8 @@ end ConstructionTargets.T00J02Closure
 #print axioms ConstructionTargets.T00J02Closure.regularFiber_chosenComponentDegree_eq_zero
 #print axioms ConstructionTargets.T00J02Closure.componentSignedCount_eq_zero_of_componentDegree_eq_zero
 #print axioms ConstructionTargets.T00J02Closure.groupedComponentSignedCount_eq_zero
+#print axioms ConstructionTargets.T00J02Closure.regularFiberComponentIndex
+#print axioms ConstructionTargets.T00J02Closure.regularFiber_mem_indexedComponent
 #print axioms ConstructionTargets.T00J02Closure.regularValue_topDegree_eq_zero_of_signedCount
 #print axioms ConstructionTargets.T00J02Closure.surfaceTopDegree_eq_homologyMap
 #print axioms ConstructionTargets.T00J02Closure.surfaceTopHomologyMap_eq_zero_of_surfaceTopDegree_eq_zero
