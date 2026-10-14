@@ -318,7 +318,62 @@ theorem t95A04_augmented_local_inverse
     ∃ q : PartialDiffeomorph (𝓘(ℝ, E 2 × E 4)) (𝓘(ℝ, E 6))
         (E 2 × E 4) (E 6) (⊤ : ℕ∞),
       a ∈ q.source ∧ ∀ z ∈ q.source, q z = G z := by
-  sorry
+  let A : Set (((E 2 × E 4) →L[ℝ] E 6)) :=
+    Set.range ((↑) : ((E 2 × E 4) ≃L[ℝ] E 6) →
+      ((E 2 × E 4) →L[ℝ] E 6))
+  let V : Set (E 2 × E 4) := U ∩ (fderiv ℝ G) ⁻¹' A
+  have hdf : ContinuousOn (fderiv ℝ G) U :=
+    hG.continuousOn_fderiv_of_isOpen hU (by simp)
+  have hV : IsOpen V := by
+    exact hdf.isOpen_inter_preimage hU ContinuousLinearEquiv.isOpen
+  have hea : (e : (E 2 × E 4) →L[ℝ] E 6) = fderiv ℝ G a := by
+    exact hderiv.fderiv.symm
+  have haV : a ∈ V := by
+    refine ⟨haU, ?_⟩
+    exact ⟨e, hea⟩
+  have hGa : ContDiffAt ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) G a :=
+    hG.contDiffAt (hU.mem_nhds haU)
+  let e0 : OpenPartialHomeomorph (E 2 × E 4) (E 6) :=
+    hGa.toOpenPartialHomeomorph G hderiv (by simp)
+  let eo : OpenPartialHomeomorph (E 2 × E 4) (E 6) := e0.restr V
+  have heo_source : eo.source = e0.source ∩ V := by
+    exact e0.restr_source' V hV
+  have hae0 : a ∈ e0.source :=
+    hGa.mem_toOpenPartialHomeomorph_source hderiv (by simp)
+  have hae : a ∈ eo.source := by
+    rw [heo_source]
+    exact ⟨hae0, haV⟩
+  have heoU : eo.source ⊆ U := by
+    intro z hz
+    rw [heo_source] at hz
+    exact hz.2.1
+  have hforward : ContDiffOn ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) eo eo.source := by
+    intro z hz
+    simpa [eo, e0] using (hG z (heoU hz)).mono heoU
+  have hinverse : ContDiffOn ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) eo.symm eo.target := by
+    intro y hy
+    have hzy : eo.symm y ∈ eo.source := eo.symm_mapsTo hy
+    have hzV : eo.symm y ∈ V := by
+      rw [heo_source] at hzy
+      exact hzy.2
+    rcases hzV.2 with ⟨ez, hez⟩
+    have hGz : ContDiffAt ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) G (eo.symm y) :=
+      hG.contDiffAt (hU.mem_nhds hzV.1)
+    have hdz : HasFDerivAt G (ez : (E 2 × E 4) →L[ℝ] E 6) (eo.symm y) := by
+      rw [hez]
+      exact hGz.differentiableAt (by simp) |>.hasFDerivAt
+    exact (eo.contDiffAt_symm hy (by simpa [eo, e0] using hdz)
+      (by simpa [eo, e0] using hGz)).contDiffWithinAt
+  let q : PartialDiffeomorph (𝓘(ℝ, E 2 × E 4)) (𝓘(ℝ, E 6))
+      (E 2 × E 4) (E 6) (⊤ : ℕ∞) :=
+    { toPartialEquiv := OpenPartialHomeomorph.toPartialEquiv eo
+      open_source := OpenPartialHomeomorph.open_source eo
+      open_target := OpenPartialHomeomorph.open_target eo
+      contMDiffOn_toFun := ContDiffOn.contMDiffOn hforward
+      contMDiffOn_invFun := ContDiffOn.contMDiffOn hinverse }
+  refine ⟨q, hae, ?_⟩
+  intro z hz
+  rfl
 -- END SEAT AREA
 
 /-- A local inverse for the augmented map supplies the two charts and the
