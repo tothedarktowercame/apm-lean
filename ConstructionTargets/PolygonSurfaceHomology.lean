@@ -914,6 +914,58 @@ theorem finiteWedgeLegFundamentalClassAtBase_hurewicz_eq_coordinate
     finiteWedgeH1CoordinateMap_single]
   rfl
 
+/-- The comparison-normalized Hurewicz construction is a group homomorphism
+when the additive module target is written multiplicatively.  This is the
+algebraic input for passing from words in wedge-leg classes to sums of their
+coordinate images. -/
+noncomputable def moduleHurewiczHom {X : Type} [TopologicalSpace X] (x : X) :
+    FundamentalGroup X x →*
+      Multiplicative
+        (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 1).obj
+          (ModuleCat.of ℤ ℤ)).obj (TopCat.of X)) where
+  toFun g := Multiplicative.ofAdd (moduleHurewicz x g)
+  map_one' := by
+    change Multiplicative.ofAdd
+      ((ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+        (TopCat.of X) 1).inv
+        (Multiplicative.toAdd
+          (ConstructionTargets.DegreeOneHurewiczMap.fundamentalGroupH1Hom x 1))) = 1
+    rw [map_one]
+    change Multiplicative.ofAdd
+      ((ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+        (TopCat.of X) 1).inv 0) = 1
+    rw [map_zero]
+    rfl
+  map_mul' g h := by
+    change Multiplicative.ofAdd
+      ((ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+        (TopCat.of X) 1).inv
+        (Multiplicative.toAdd
+          (ConstructionTargets.DegreeOneHurewiczMap.fundamentalGroupH1Hom x (g * h)))) = _
+    rw [map_mul]
+    change Multiplicative.ofAdd
+      ((ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+        (TopCat.of X) 1).inv
+        (Multiplicative.toAdd
+          (ConstructionTargets.DegreeOneHurewiczMap.fundamentalGroupH1Hom x g) +
+         Multiplicative.toAdd
+          (ConstructionTargets.DegreeOneHurewiczMap.fundamentalGroupH1Hom x h))) = _
+    rw [map_add]
+    rfl
+
+@[simp]
+theorem moduleHurewicz_mul {X : Type} [TopologicalSpace X] (x : X)
+    (g h : FundamentalGroup X x) :
+    moduleHurewicz x (g * h) =
+      moduleHurewicz x g + moduleHurewicz x h := by
+  exact congrArg Multiplicative.toAdd (map_mul (moduleHurewiczHom x) g h)
+
+@[simp]
+theorem moduleHurewicz_zpow {X : Type} [TopologicalSpace X] (x : X)
+    (g : FundamentalGroup X x) (n : ℤ) :
+    moduleHurewicz x (g ^ n) = n • moduleHurewicz x g := by
+  exact congrArg Multiplicative.toAdd (map_zpow (moduleHurewiczHom x) g n)
+
 end
 
 end ConstructionTargets.PolygonSurfaceHomology
