@@ -3610,6 +3610,45 @@ theorem radialMVSegment (P : PairingData) :
     hasExactArrows_of_exact (radialMVUnionExact P 0),
     hasExactArrows_of_exact (radialMVIntersectionExact P 1)⟩
 
+/-! ### Attaching-map coordinates -/
+
+/-- The algebraic attaching boundary in the additive-group category used by
+the production Mayer--Vietoris sequence. -/
+def attachingBoundaryGroup (P : PairingData) :
+    AddCommGrpCat.of ℤ ⟶ AddCommGrpCat.of (PairingOrbit P.pair → ℤ) :=
+  AddCommGrpCat.ofHom (attachingBoundary P).toAddMonoidHom
+
+@[simp] theorem attachingBoundaryGroup_apply (P : PairingData) (n : ℤ) :
+    attachingBoundaryGroup P n = n • attachingDegree P := rfl
+
+/-- Additive homomorphisms out of the infinite cyclic group are determined
+by the positive generator. -/
+theorem addCommGrpHom_int_ext {A : AddCommGrpCat}
+    (f g : AddCommGrpCat.of ℤ ⟶ A) (h : f 1 = g 1) : f = g := by
+  apply ConcreteCategory.hom_ext
+  intro n
+  calc
+    f n = n • f 1 := by
+      simpa using (map_zsmul f.hom n (1 : ℤ))
+    _ = n • g 1 := congrArg (fun x ↦ n • x) h
+    _ = g n := by
+      simpa using (map_zsmul g.hom n (1 : ℤ)).symm
+
+/-- B7 is reduced exactly to the image of the positive overlap generator;
+no coordinate or sign information is discarded. -/
+theorem radialMV_boundary_eq_iff_one (P : PairingData) :
+    radialMVBoundaryGroup P = attachingBoundaryGroup P ↔
+      radialMVBoundaryGroup P 1 = attachingDegree P := by
+  constructor
+  · intro h
+    rw [h]
+    rw [attachingBoundaryGroup_apply]
+    simp
+  · intro h
+    apply addCommGrpHom_int_ext
+    exact h.trans (by
+      simpa using (attachingBoundaryGroup_apply P 1).symm)
+
 end
 
 end ConstructionTargets.PolygonSurfaceHomology
