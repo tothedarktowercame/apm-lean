@@ -97,7 +97,7 @@ theorem apm_t02a01_restrictedCover_isCovering
     {Stilde : Type*} [TopologicalSpace Stilde]
     (p : Stilde → apm_t02a01_puncturedTorus) (hcover : IsCoveringMap p) :
     IsCoveringMap (apm_t02a01_restrictedCover p) := by
-  sorry
+  exact hcover.restrictPreimage apm_t02a01_boundary
 -- END SEAT AREA
 
 /-- LIBRARY (polygon boundary word): lifting any loop on the inner boundary of
