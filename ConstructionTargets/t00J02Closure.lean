@@ -255,6 +255,26 @@ def componentLocalDegreeSum
     (component : ι → κ) (localDegree : ι → ℤ) (k : κ) : ℤ :=
   ∑ i ∈ Finset.univ.filter (fun i => component i = k), localDegree i
 
+/-- Reindex a pointwise signed regular-fiber count by genuine component. -/
+theorem pointSignedCount_eq_groupedComponentSignedCount
+    {ι κ : Type*} [Fintype ι] [Fintype κ] [DecidableEq κ]
+    (component : ι → κ) (localDegree : ι → ℤ)
+    (orientationSign : κ → ℤ) :
+    ∑ i, orientationSign (component i) * localDegree i =
+      ∑ k, orientationSign k *
+        componentLocalDegreeSum component localDegree k := by
+  rw [← Fintype.sum_fiberwise component
+    (fun i => orientationSign (component i) * localDegree i)]
+  apply Fintype.sum_congr
+  intro k
+  rw [← Finset.sum_subtype (Finset.univ.filter (fun i => component i = k))
+    (by simp) (fun i => orientationSign (component i) * localDegree i)]
+  rw [componentLocalDegreeSum, Finset.mul_sum]
+  apply Finset.sum_congr rfl
+  intro i hi
+  have hik : component i = k := by simpa using hi
+  rw [hik]
+
 /-- If the local degrees on each genuine component sum to zero, then the
 orientation-weighted sum of those component totals is zero.  No pointwise
 vanishing of local degree is asserted. -/
@@ -603,6 +623,7 @@ end ConstructionTargets.T00J02Closure
 #print axioms ConstructionTargets.T00J02Closure.regularFiber_chosenComponentDegree_eq_zero
 #print axioms ConstructionTargets.T00J02Closure.componentSignedCount_eq_zero_of_componentDegree_eq_zero
 #print axioms ConstructionTargets.T00J02Closure.groupedComponentSignedCount_eq_zero
+#print axioms ConstructionTargets.T00J02Closure.pointSignedCount_eq_groupedComponentSignedCount
 #print axioms ConstructionTargets.T00J02Closure.componentLocalDegreeSum_eq_zero_of_comparison
 #print axioms ConstructionTargets.T00J02Closure.groupedComponentSignedCount_eq_zero_of_comparison
 #print axioms ConstructionTargets.T00J02Closure.regularFiberComponentIndex
