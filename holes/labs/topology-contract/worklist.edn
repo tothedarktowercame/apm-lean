@@ -113901,6 +113901,19 @@
       "lake build ConstructionTargets.ThreeCirclesFundamentalGroup",
       :exit 1,
       :finding "B12 file absent"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791963470905-11696-870c8c4f",
+     :commands
+     ["git show/diff-tree 137c47dfbb5b3eecbb304baa6003eb800c4a6941"
+      "archive commit; lake env lean PointWedgeVanKampen.lean"
+      "sha256sum source/doc/blueprint; count sorry/admit"
+      "python3 scripts/statement-registry.py check"
+      "#print axioms mapped connector square"
+      "lake build ConstructionTargets.PointWedgeVanKampen"],
+     :finding
+     "PASS: exact scope and hashes match; archived source compiles; placeholders 0->0; registry 166/166. Functor.map_comp is oriented correctly, preserving factor order across the right-cover equivalence without crossing prematurely to literal Y connectors; standard axioms only. New compiled milestone is recorded; base-change/comap and genericPointWedgeLegCoordinates_vanKampen remain listed."},
     :commit "137c47dfbb5b3eecbb304baa6003eb800c4a6941",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
@@ -113911,7 +113924,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113932,7 +113945,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked the coherent right-cover connector square.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked the right-cover image of the coherent connector square.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -114860,7 +114873,11 @@
      "Banked endpoint transport through the right overlap leg."}
     {:job 7,
      :commit "740fcc702b8cbfc275e88cbc62970d9a30dc6bf3",
-     :reason "Banked the coherent right-cover connector square."}]}
+     :reason "Banked the coherent right-cover connector square."}
+    {:job 8,
+     :commit "137c47dfbb5b3eecbb304baa6003eb800c4a6941",
+     :reason
+     "Banked the right-cover image of the coherent connector square."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
