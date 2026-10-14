@@ -36121,69 +36121,52 @@
   {:consumer :t93J03,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 8,
+   :stop-count 9,
    :review-finding
    "Program STOP commits no new mathematical progress since the prior milestone: KleinPolygonBasedVanKampen merely packages the already-required surjectivity and kernel hypotheses, and both consumers only reapply the previously proved three-input theorem. Prove the based van Kampen surjectivity/kernel result (or winding conjugacy) in scope; extend Mathlib: state and prove the missing theorem in scope.",
    :evidence
    {:placeholder-delta {:t93J03 [1 1]},
     :residual
-    "Replace inner run families/reassemble outer word; reverse kernel/surjectivity; winding; C1/C2/Main.",
+    "Reassemble alternating run representatives into an outer word; reverse kernel/surjectivity; winding; C1/C2/Main.",
     :outcome :stop,
     :warnings ["unused SLSC owner-approved"],
     :missing-theorems
-    [{:name "boolSideRunPartition_exists_slice",
-      :type "bounded start/length slice",
+    [{:name
+      "pathTwoOpenSubdivisionInnerBlock_exists_outerOverlapReplacement",
+      :type
+      "packaged inner block equals one outer-routed overlap path",
       :status :proved,
       :consumers [:t93J03],
-      :depends-on ["boolSideRunPartition_isInfix_finRange"],
-      :area "covering-subgroup-correspondence"}
-     {:name "pathTwoOpenSubdivisionBlockPiece",
-      :type "run reindexed as dependent piece paths",
-      :status :proved,
-      :consumers [:t93J03],
-      :depends-on ["boolSideRunPartition_exists_slice"],
+      :depends-on ["pathTwoOpenSubdivisionBlockPiece"],
       :area "covering-subgroup-correspondence"}
      {:name "t93J03_polygon_based_van_kampen",
       :type "surjectivity; kernel equality",
       :status :partial,
       :consumers [:t93J03],
-      :depends-on ["pathTwoOpenSubdivisionBlockPiece"],
+      :depends-on
+      ["pathTwoOpenSubdivisionInnerBlock_exists_outerOverlapReplacement"],
       :area "covering-subgroup-correspondence"}],
     :statement-hashes {:registry "166/166"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Gave each run bounded slice coordinates and reindexed its pieces as an exact dependent path family; replacement/reassembly remains.",
+    "Proved each packaged nonempty inner block with overlap endpoints equals one overlap path routed through the outer piece; finite run-list reassembly remains.",
     :commands
     [{:cmd "lake build ConstructionTargets.t93J03Closure", :exit 0}
-     {:cmd "fixture; Main; registry; checks", :exit 0}
+     {:cmd "fixture; Main; registry; placeholder; diff/show", :exit 0}
      {:cmd "rg forbidden", :exit 1, :expected-exit 1}],
-    :diagnostic-history
-    [{:cmd "initial builds",
-      :exit 1,
-      :correction "rewrote infix equality; length bound; passed"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1792005613831-12237-53293228",
-     :commands
-     ["git show/check/diff 6e424b22; scope and fixture SHA-256"
-      "lake build ConstructionTargets.t93J03Closure; lean fixture and Main"
-      "statement-registry check; placeholder/axiom recount"],
-     :finding
-     "PASS: 6e424b22 adds compiled, sorry-free progress after 9a19183f. Each contiguous run gains bounded start/length coordinates, then its original subdivision pieces are reindexed as a dependent Path family with exact successive endpoints and pointwise equality. Blueprint is faithful; exact scope/hash match; closure placeholders 0->0; frozen Main remains 1; registry 166/166; standard axioms only. STOP lists inner-run replacement/reassembly, reverse kernel/surjectivity, winding, C1/C2/Main."},
-    :commit "6e424b225407c469abb1967d43e31277e41dcd2c",
+    :commit "06b841a6396013640183b3461ac597cfcaa7e557",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
      "ConstructionTargets/t93J03Closure.blueprint.md"],
     :fixture
-    {:path "/tmp/t93j03_block_family_check.lean",
+    {:path "/tmp/t93j03_packaged_replace_check.lean",
      :sha256
-     "9f996281562a587a85695aeffd0055738d7ec319ec4aca224c67e72cd85e8f8f"},
+     "dfda7e39ffb899c475ac9d60457286d7cc8b08e2615ff55255fb5815ac90640c"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -38684,7 +38667,8 @@
     :lemma-boolsiderunpartition-spec
     :lemma-kleinpolygoninnersiderun-piece-mem
     :lemma-boolsiderunpartition-isinfix-finrange
-    :lemma-pathtwoopensubdivisionblockpiece],
+    :lemma-pathtwoopensubdivisionblockpiece
+    :lemma-pathtwoopensubdivisioninnerblock-exists-outeroverlapreplacement],
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
@@ -39352,6 +39336,26 @@
    :id :lemma-pathtwoopensubdivisionblockpiece,
    :kind :lemma,
    :depends-on [:lemma-boolsiderunpartition-exists-slice],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "pathTwoOpenSubdivisionInnerBlock_exists_outerOverlapReplacement",
+    :type "packaged inner block equals one outer-routed overlap path"},
+   :lemma
+   {:name
+    "pathTwoOpenSubdivisionInnerBlock_exists_outerOverlapReplacement",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type "packaged inner block equals one outer-routed overlap path",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03},
+   :id
+   :lemma-pathtwoopensubdivisioninnerblock-exists-outeroverlapreplacement,
+   :kind :lemma,
+   :depends-on [:lemma-pathtwoopensubdivisionblockpiece],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
