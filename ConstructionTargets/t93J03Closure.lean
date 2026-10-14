@@ -890,6 +890,54 @@ theorem boolSideRunPartition_isInfix_finRange {n : ℕ}
   have hf := h.flatten
   simpa [boolSideRunPartition] using hf
 
+/-- A side run has explicit start and length coordinates inside `finRange`. -/
+theorem boolSideRunPartition_exists_slice {n : ℕ}
+    (side : Fin n → Bool) (block : List (Fin n))
+    (hb : block ∈ boolSideRunPartition side) :
+    ∃ start, start + block.length ≤ n ∧
+      block = ((List.finRange n).drop start).take block.length := by
+  have hi := boolSideRunPartition_isInfix_finRange side block hb
+  rcases hi with ⟨a, b, hab⟩
+  refine ⟨a.length, ?_, ?_⟩
+  · have hlen := congrArg List.length hab
+    simp only [List.length_append, List.length_finRange] at hlen
+    omega
+  · rw [← hab]
+    simp
+
+/-- The endpoint family of a contiguous subdivision block. -/
+def pathTwoOpenSubdivisionBlockPoint
+    {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
+    {U V : Set X} (S : PathTwoOpenSubdivision p U V)
+    (start len : ℕ) (h : start + len ≤ S.n + 1) : Fin (len + 1) → X :=
+  fun k => S.point ⟨start + k, by omega⟩
+
+/-- The original subdivision pieces, reindexed as one dependent path family
+over a contiguous block. -/
+noncomputable def pathTwoOpenSubdivisionBlockPiece
+    {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
+    {U V : Set X} (S : PathTwoOpenSubdivision p U V)
+    (start len : ℕ) (h : start + len ≤ S.n + 1) :
+    (k : Fin len) → Path
+      (pathTwoOpenSubdivisionBlockPoint S start len h k.castSucc)
+      (pathTwoOpenSubdivisionBlockPoint S start len h k.succ) := by
+  intro k
+  let j : Fin (S.n + 1) := ⟨start + k, by omega⟩
+  exact (S.piece j).cast (by rfl) (by
+    apply congrArg S.point
+    apply Fin.ext
+    simp [j]
+    omega)
+
+@[simp] theorem pathTwoOpenSubdivisionBlockPiece_apply
+    {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
+    {U V : Set X} (S : PathTwoOpenSubdivision p U V)
+    (start len : ℕ) (h : start + len ≤ S.n + 1)
+    (k : Fin len) (t : unitInterval) :
+    pathTwoOpenSubdivisionBlockPiece S start len h k t =
+      S.piece ⟨start + k, by omega⟩ t := by
+  rfl
+
 /-- Every piece indexed by an inner run of the exact Klein subdivision stays
 in the inner cover, supplying the range hypothesis for block concatenation. -/
 theorem kleinPolygonInnerSideRun_piece_mem
@@ -2176,6 +2224,8 @@ theorem lift_isEmbedding_assembly
 #print axioms boolSideRunPartition_spec
 #print axioms boolSideRunPartition_mem_side_eq_head
 #print axioms boolSideRunPartition_isInfix_finRange
+#print axioms boolSideRunPartition_exists_slice
+#print axioms pathTwoOpenSubdivisionBlockPiece_apply
 #print axioms kleinPolygonInnerSideRun_piece_mem
 #print axioms pathHomotopicQuotient_concat_eq_of_pieceClass_eq
 #print axioms path_concat_mem_of_piece_mem
