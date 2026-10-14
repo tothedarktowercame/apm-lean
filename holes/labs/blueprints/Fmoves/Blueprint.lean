@@ -3241,9 +3241,52 @@ theorem zip_halfDisk_cone {y : ℂ} (hy : y ∈ zipHalfDisk) :
 
 /-! ### The boundary map -/
 
+lemma zipBoundaryMap_continuous_aux_profile {n k : ℕ} (hn : 0 < n) :
+    Continuous (zipProfile n k) := by
+  unfold zipProfile
+  apply Continuous.if_le (by fun_prop) (by fun_prop) continuous_id continuous_const
+  · intro x hx
+    dsimp at hx ⊢
+    rw [hx]
+    have hn0 : (n : ℝ) ≠ 0 := by exact_mod_cast (Nat.ne_of_gt hn)
+    have hnp2 : (n : ℝ) + 2 ≠ 0 := by positivity
+    have hpi : (Real.pi : ℝ) ≠ 0 := ne_of_gt Real.pi_pos
+    rw [show ((zipStart n k + 4 * Real.pi / ((n : ℝ) + 2) - zipStart n k) *
+          ((n : ℝ) + 2) / (2 * Real.pi) - 1 : ℝ) = 1 by
+      field_simp
+      ring]
+    norm_num
+
 theorem zipBoundaryMap_continuous {n k : ℕ} (hn : 0 < n) :
     Continuous (zipBoundaryMap n k) := by
-  sorry
+  unfold zipBoundaryMap
+  have hcontinuous : Continuous
+      (AddCircle.liftIco (2 * Real.pi) (zipStart n k) (zipProfile n k)) := by
+    apply AddCircle.liftIco_continuous
+    · unfold zipProfile
+      have hn0 : (n : ℝ) ≠ 0 := by exact_mod_cast (Nat.ne_of_gt hn)
+      have hnp2 : (n : ℝ) + 2 ≠ 0 := by positivity
+      have hpi : (Real.pi : ℝ) ≠ 0 := ne_of_gt Real.pi_pos
+      rw [if_pos (by
+        apply le_add_of_nonneg_right
+        positivity)]
+      have hnot : ¬ (zipStart n k + 2 * Real.pi ≤
+          zipStart n k + 4 * Real.pi / ((n : ℝ) + 2)) := by
+        rw [not_le]
+        have hnreal : 0 < (n : ℝ) := by exact_mod_cast hn
+        apply (add_lt_add_iff_left (zipStart n k)).2
+        apply (div_lt_iff₀' (by positivity : 0 < (n : ℝ) + 2)).2
+        nlinarith [Real.pi_pos]
+      rw [if_neg hnot]
+      have harg : ((n : ℝ) + 2) / n *
+          (zipStart n k + 2 * Real.pi - zipStart n k -
+            4 * Real.pi / ((n : ℝ) + 2)) / 2 = Real.pi := by
+        field_simp
+        ring
+      rw [harg, Complex.exp_pi_mul_I]
+      norm_num [hpi]
+    · exact (zipBoundaryMap_continuous_aux_profile hn).continuousOn
+  exact hcontinuous.comp AddCircle.homeomorphCircle'.symm.continuous
 
 theorem zipBoundaryMap_mem {n k : ℕ} (hn : 0 < n) (b : Circle) :
     zipBoundaryMap n k b ∈ zipHalfBoundary := by
