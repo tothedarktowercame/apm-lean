@@ -119109,6 +119109,17 @@
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "hash/placeholders/diff", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1792018083524-12600-cc713103",
+     :commands
+     ["git diff-tree/show 317c855c"
+      "archive 317c855c; lake env lean closure and Main"
+      "sha256sum/placeholders at 317c855c"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS program STOP: new commit changes only t00J02Closure.lean and adds compiled, sorry-free finite-regrouping endpoints. The proof rewrites the weighted point sum as the occupied-component sum, uses each canonical component sum = 0, then applies zero top degree -> zero H2 map in the correct direction. Canonical local degrees, signs, and component indexing stay in one representation. Fixture and frozen Main hashes match; closure has 0 placeholders and Main baseline 1; only standard axioms; registry 166/166. Constructing the canonical formulas from transversality and Main assembly remain listed."},
     :commit "317c855c567bed9d1b46e74cd7ca80b273a585dc",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
@@ -119117,7 +119128,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119135,7 +119146,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t00J02Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked canonical geometric payload.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked canonical finite-regrouping endpoint.",
    :id :program-2026-10-13-close-t00j02,
    :kind :final-adapter,
    :campaign-priority 45,
@@ -119269,7 +119280,10 @@
      :reason "Banked canonical zero-sum H2 endpoint."}
     {:job 5,
      :commit "c5787e160bf304b9420924e4074d581cc5809954",
-     :reason "Banked canonical geometric payload."}]}
+     :reason "Banked canonical geometric payload."}
+    {:job 6,
+     :commit "317c855c567bed9d1b46e74cd7ca80b273a585dc",
+     :reason "Banked canonical finite-regrouping endpoint."}]}
   {:consumer :t98A06,
    :stop-count 4,
    :evidence
@@ -120508,7 +120522,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -120520,7 +120534,9 @@
     :reported-by [:program-2026-10-13-close-t00j02],
     :type "canonical calculations imply H2 zero without lift data",
     :area "oriented-surface-degree",
-    :proved-in :program-2026-10-13-close-t00j02},
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "317c855c567bed9d1b46e74cd7ca80b273a585dc"},
    :id
    :lemma-canonicalregularfiberdegreecalculations-tophomologymap-eq-zero-withoutlifts,
    :kind :lemma,
