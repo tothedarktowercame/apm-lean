@@ -36817,60 +36817,54 @@
    :depends-on [:lemma-cp-zero-subsingleton],
    :other-consumers []}
   {:consumer :t96A06,
-   :stop-count 7,
+   :stop-count 8,
    :review-finding
    "extend Mathlib: state and prove the missing theorem in scope",
    :evidence
    {:placeholder-delta {:t96A06 [1 1]},
     :residual
-    "Apply rational transfer; prove degree four; invariants/Main.",
+    "Apply coefficient transfer and sphere homology; prove degree four; invariants/Main.",
     :outcome :stop,
-    :warnings ["unrelated dirty PointWedge preserved"],
+    :warnings [],
     :missing-theorems
-    [{:name "t96A06_rp3_sphere_covering",
-      :type "IsCoveringMap (sphereProjection 3)",
+    [{:name "t96A06_rp3_sphere_twoSheeted",
+      :type "IsKSheetedCover (sphereProjection 3) 2",
       :status :proved,
       :consumers [:t96A06],
-      :depends-on ["rp3SphereProjection_isLocalHomeomorph"],
+      :depends-on ["t96A06_rp3_sphere_covering"],
       :area "rp-rational-homology"}
      {:name "t96A06_rp3_rational_homology",
       :type "RP3 rational homology Q,0,0,Q",
       :status :partial,
       :consumers [:t96A06],
-      :depends-on ["t96A06_rp3_sphere_covering"],
+      :depends-on ["t96A06_rp3_sphere_twoSheeted"],
       :area "rp-rational-homology"}],
     :statement-hashes {:registry "166/166"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Proved the exact S3-to-RP3 projection is a covering; rational transfer remains.",
+    "Packaged the frozen S3-to-RP3 projection as an exact two-sheeted cover; induced rational homology transfer remains.",
     :commands
     [{:cmd "lake build ConstructionTargets.t96A06Closure", :exit 0}
-     {:cmd "lean fixture; Main; registry; placeholder; diff; show",
-      :exit 0}
-     {:cmd "rg forbidden closure", :exit 1, :expected-exit 1}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1791985355993-11838-5c71f859",
-     :commands
-     ["git show/check/diff 941de27d; scope/math; fixture sha256"
-      "lake build closure; lean fixture and Main"
-      "statement registry; placeholder and axiom recount"],
-     :finding
-     "PASS. Commit 941de27d adds compiled, sorry-free progress: closedness follows from quotient preimage plus antipodal saturation; explicit two-point fibers and the local-homeomorphism branches then satisfy the finite-fiber closed-map covering criterion, proving IsCoveringMap(sphereProjection 3). Scope/hash match; support placeholders 0->0; frozen Main 1->1; standard axioms only; registry 166/166. Rational transfer, degree four, invariants, and Main remain listed."},
-    :commit "941de27ddd408535b6c86c0ed540c3d455cd02c7",
+     {:cmd "lean fixture; Main; registry; diff/show", :exit 0}
+     {:cmd "rg forbidden", :exit 1, :expected-exit 1}],
+    :diagnostic-history
+    [{:cmd "two-sheet probe",
+      :exit 1,
+      :correction
+      "proved antipodal inequality and fiber cardinality explicitly"}],
+    :commit "e25d1d3c16af5c726f6e3d15302b3e75ae6c5a46",
     :changed-paths
     ["ConstructionTargets/t96A06Closure.lean"
      "ConstructionTargets/t96A06Closure.blueprint.md"],
     :fixture
-    {:path "/tmp/t96a06_rp3_covering_check.lean",
+    {:path "/tmp/t96a06_two_sheeted_check.lean",
      :sha256
-     "93be196d029fbd185044f71d43a994cf4647b64fb825be9d5d0b9eeacad016b3"},
+     "aae50311cac7cd5bfad76186fa8f6d4b4fcbba98270258ed5e6ec84d490da9ea"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -37840,7 +37834,8 @@
    :depends-on
    [:lemma-t96a06-rp3-rational-h0
     :lemma-t96a06-rp3-sphere-quotient
-    :lemma-t96a06-rp3-sphere-covering],
+    :lemma-t96a06-rp3-sphere-covering
+    :lemma-t96a06-rp3-sphere-twosheeted],
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
@@ -39063,6 +39058,23 @@
    :kind :lemma,
    :depends-on
    [:lemma-kleinpolygoninner-ambientpathclass-eq-outeroverlapreplacement],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_rp3_sphere_twoSheeted",
+    :type "IsKSheetedCover (sphereProjection 3) 2"},
+   :lemma
+   {:name "t96A06_rp3_sphere_twoSheeted",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "IsKSheetedCover (sphereProjection 3) 2",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06},
+   :id :lemma-t96a06-rp3-sphere-twosheeted,
+   :kind :lemma,
+   :depends-on [:lemma-t96a06-rp3-sphere-covering],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
