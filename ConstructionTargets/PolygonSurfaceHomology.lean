@@ -2206,6 +2206,126 @@ theorem finiteWedgeFinSuccPointWedge_exists_legWord (n : ℕ)
     _ _ P.2.carrier P.1.carrier P.2.isOpen P.1.isOpen
       P.2.mem P.1.mem P.2.contraction P.1.contraction a ha g
 
+/-- A homeomorphism transports the based fundamental group.  This local
+version keeps the successor-wedge induction independent of later closure
+modules that use the same construction. -/
+noncomputable def fundamentalGroupEquivOfHomeomorph
+    {X Y : Type*} [TopologicalSpace X] [TopologicalSpace Y]
+    (e : X ≃ₜ Y) (x : X) :
+    FundamentalGroup X x ≃* FundamentalGroup Y (e x) where
+  toFun := FundamentalGroup.map ⟨e, e.continuous⟩ x
+  invFun := FundamentalGroup.mapOfEq ⟨e.symm, e.symm.continuous⟩
+    (e.symm_apply_apply x)
+  left_inv p := by
+    induction p using Path.Homotopic.Quotient.ind with
+    | mk p =>
+      rw [FundamentalGroup.map_apply]
+      change (FundamentalGroup.mapOfEq _ _)
+        (Path.Homotopic.Quotient.mk (p.map e.continuous)) = _
+      rw [FundamentalGroup.mapOfEq_apply]
+      apply Path.Homotopic.Quotient.eq.mpr
+      convert Path.Homotopic.refl p using 1
+      ext t
+      exact e.symm_apply_apply (p t)
+  right_inv p := by
+    induction p using Path.Homotopic.Quotient.ind with
+    | mk p =>
+      rw [FundamentalGroup.mapOfEq_apply]
+      apply Path.Homotopic.Quotient.eq.mpr
+      convert Path.Homotopic.refl p using 1
+      ext t
+      exact e.apply_symm_apply (p t)
+  map_mul' := map_mul _
+
+/-- The successor splitting homeomorphism, including its basepoint
+identification, induces the based fundamental-group equivalence used to pull
+point-wedge words back to the finite wedge. -/
+noncomputable def finiteWedgeFinSuccFundamentalGroupEquiv (n : ℕ) :
+    FundamentalGroup
+        (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge (Fin ((n + 1) + 1)))
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle
+          (0 : Fin ((n + 1) + 1)) 1) ≃*
+      FundamentalGroup
+        (ConstructionTargets.PointWedgeQuotient.Wedge
+          (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1)
+          (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle () 1))
+        (ConstructionTargets.PointWedgeQuotient.quotientMap
+          (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1)
+          (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle () 1)
+          (.inl (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle
+            (0 : Fin (n + 1)) 1))) := by
+  let e := finiteWedgeFinSuccHomeomorphPointWedge n
+  have he : e (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle
+      (0 : Fin ((n + 1) + 1)) 1) =
+      ConstructionTargets.PointWedgeQuotient.quotientMap
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1)
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle () 1)
+        (.inl (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle
+          (0 : Fin (n + 1)) 1)) := by
+    simpa using finiteWedgeFinSuccHomeomorphPointWedge_castSucc n
+      (0 : Fin (n + 1)) 1
+  rw [← he]
+  exact fundamentalGroupEquivOfHomeomorph e _
+
+/-- Pulling the point-wedge word theorem through the successor homeomorphism
+gives a word theorem on the finite wedge.  Its letters are still grouped into
+the old wedge and final circle; the next induction step expands the old
+letters into individually labelled circle legs. -/
+theorem finiteWedgeFinSucc_exists_splitLegWord (n : ℕ)
+    (g : FundamentalGroup
+      (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge (Fin ((n + 1) + 1)))
+      (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle
+        (0 : Fin ((n + 1) + 1)) 1)) :
+    ∃ w : List
+        (FundamentalGroup
+            (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge (Fin (n + 1)))
+            (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1) ⊕
+          FundamentalGroup
+            (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge Unit)
+            (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle () 1)),
+      coprodLegWordValue
+          (fun a => (finiteWedgeFinSuccFundamentalGroupEquiv n).symm
+            (ConstructionTargets.PointWedgeVanKampen.genericPointWedgeLeftLegMap
+              (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1)
+              (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle () 1) a))
+          (fun b => (finiteWedgeFinSuccFundamentalGroupEquiv n).symm
+            (ConstructionTargets.PointWedgeVanKampen.genericPointWedgeRightLegMap
+              (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1)
+              (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle () 1) b)) w = g := by
+  rcases finiteWedgeFinSuccPointWedge_exists_legWord n
+      (finiteWedgeFinSuccFundamentalGroupEquiv n g) with ⟨w, hw⟩
+  refine ⟨w, ?_⟩
+  apply (finiteWedgeFinSuccFundamentalGroupEquiv n).injective
+  calc
+    finiteWedgeFinSuccFundamentalGroupEquiv n
+        (coprodLegWordValue
+          (fun a => (finiteWedgeFinSuccFundamentalGroupEquiv n).symm
+            (ConstructionTargets.PointWedgeVanKampen.genericPointWedgeLeftLegMap
+              (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1)
+              (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle () 1) a))
+          (fun b => (finiteWedgeFinSuccFundamentalGroupEquiv n).symm
+            (ConstructionTargets.PointWedgeVanKampen.genericPointWedgeRightLegMap
+              (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1)
+              (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle () 1) b)) w) =
+        coprodLegWordValue
+          (ConstructionTargets.PointWedgeVanKampen.genericPointWedgeLeftLegMap
+            (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1)
+            (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle () 1))
+          (ConstructionTargets.PointWedgeVanKampen.genericPointWedgeRightLegMap
+            (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1)
+            (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle () 1)) w := by
+          clear hw g
+          induction w with
+          | nil => simp [coprodLegWordValue]
+          | cons x w ih =>
+              cases x <;>
+                simp only [coprodLegWordValue, List.map_cons, List.prod_cons,
+                  map_mul, Sum.elim_inl, Sum.elim_inr] <;>
+                change _ * (finiteWedgeFinSuccFundamentalGroupEquiv n)
+                    (coprodLegWordValue _ _ w) = _ * coprodLegWordValue _ _ w <;>
+                rw [MulEquiv.apply_symm_apply, ih]
+    _ = finiteWedgeFinSuccFundamentalGroupEquiv n g := hw
+
 end
 
 end ConstructionTargets.PolygonSurfaceHomology
