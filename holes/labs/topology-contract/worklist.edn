@@ -119113,6 +119113,17 @@
     [{:cmd "fintype draft",
       :exit 1,
       :finding "used Set.fintypeRange"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1792004458439-12220-8c97db40",
+     :commands
+     ["git diff-tree/show 63b0cae"
+      "git archive 63b0cae; lake env lean t00J02Closure.lean and Main.lean"
+      "sha256sum and placeholder counts at 63b0cae"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS program STOP: new in-scope commit restricts the component index to the finite range actually occupied by the chosen regular fiber, avoiding any claim that all preimage components meet it and preserving the point/component boundary. Archived files compile; closure has 0 placeholders and standard axioms only; Main remains frozen at 0b3b4888 with baseline 1 placeholder; fixture afb497a6 matches; registry 166/166. Local degrees, occupied-component sum comparison, and final assembly remain listed."},
     :commit "63b0caefb1239e8f32f0e496841f0cb825ac527f",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
@@ -119121,7 +119132,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119139,7 +119150,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t00J02Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked component-degree aggregation.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked finite occupied components.",
    :id :program-2026-10-13-close-t00j02,
    :kind :final-adapter,
    :campaign-priority 45,
@@ -119193,7 +119204,10 @@
      "Banked genuine component indexing for literal fiber points."}
     {:job 5,
      :commit "711b2032df1c48210a7984d09b9c19d057b72ead",
-     :reason "Banked component-degree aggregation."}]}
+     :reason "Banked component-degree aggregation."}
+    {:job 6,
+     :commit "63b0caefb1239e8f32f0e496841f0cb825ac527f",
+     :reason "Banked finite occupied components."}]}
   {:consumer :t98A06,
    :stop-count 1,
    :evidence
@@ -119689,7 +119703,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "OccupiedRegularFiberComponent",
@@ -119699,7 +119713,9 @@
     :reported-by [:program-2026-10-13-close-t00j02],
     :type "finite genuine components meeting the regular fiber",
     :area "oriented-surface-degree",
-    :proved-in :program-2026-10-13-close-t00j02},
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "63b0caefb1239e8f32f0e496841f0cb825ac527f"},
    :id :lemma-occupiedregularfibercomponent,
    :kind :lemma,
    :depends-on [:lemma-regularfibercomponentindex],
