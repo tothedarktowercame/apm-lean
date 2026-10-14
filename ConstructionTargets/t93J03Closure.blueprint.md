@@ -240,6 +240,10 @@ the outer inclusion, providing the factorwise rewrite for the finite-word fold.
 `pathHomotopicQuotient_concat_eq_of_pieceClass_eq` performs that dependent
 finite fold: equality of every segment class implies equality of the complete
 `Path.concat` class used by the subdivision reconstruction.
+`pathTwoOpenSubdivision_quotient_eq_concat_of_pieceClass_eq` now binds that
+fold to the subdivision's reconstruction theorem, including its endpoint
+casts.  Only the concrete normalized outer replacement family remains to be
+chosen pointwise.
 It remains to transport the overlap image through the outer-piece coordinates
 and take its normal closure.
 The outer-to-skeleton equivalence is now restricted at the literal overlap

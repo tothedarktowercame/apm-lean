@@ -855,6 +855,23 @@ theorem pathHomotopicQuotient_concat_eq_of_pieceClass_eq
   exact Path.Homotopic.concat_hcomp point F G
     (fun k => Quotient.eq.mp (h k))
 
+/-- A pointwise replacement of the pieces of a subordinate subdivision
+reconstructs the class of its original path.  This combines the subdivision's
+endpoint casts with the generic dependent finite-fold lemma. -/
+theorem pathTwoOpenSubdivision_quotient_eq_concat_of_pieceClass_eq
+    {X : Type*} [TopologicalSpace X]
+    {x y : X} {p : Path x y} {U V : Set X}
+    (S : PathTwoOpenSubdivision p U V)
+    (G : (k : Fin (S.n + 1)) →
+      Path (S.point k.castSucc) (S.point k.succ))
+    (h : ∀ k, (⟦S.piece k⟧ : Path.Homotopic.Quotient _ _) = ⟦G k⟧) :
+    (⟦p.cast S.point_zero S.point_last⟧ : Path.Homotopic.Quotient _ _) =
+      ⟦Path.concat S.point G⟧ := by
+  calc
+    _ = ⟦Path.concat S.point S.piece⟧ := S.quotient_concat_eq.symm
+    _ = _ := pathHomotopicQuotient_concat_eq_of_pieceClass_eq
+      S.point S.piece G h
+
 /-- The inner vertex of the exact radial cover is contractible, using the
 pointed contraction carried by the polygon cover package. -/
 theorem kleinPolygonInnerContractibleSpace :
@@ -1981,6 +1998,7 @@ theorem lift_isEmbedding_assembly
 #print axioms kleinPolygonPseudopushout_arrow_eq_reconstructed
 #print axioms pathTwoOpenSubdivision_transition_mem_overlap
 #print axioms pathHomotopicQuotient_concat_eq_of_pieceClass_eq
+#print axioms pathTwoOpenSubdivision_quotient_eq_concat_of_pieceClass_eq
 #print axioms kleinPolygonInnerContractibleSpace
 #print axioms kleinPolygonInnerFundamentalGroup_subsingleton
 #print axioms kleinPolygonInnerFundamentalGroupoid_hom_subsingleton
