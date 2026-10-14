@@ -677,6 +677,44 @@ theorem apm_t01A04_torusCoverMap_evenlyCovered_away_aux_torus
       (apm_t01a04_torusCoverMap ⁻¹' {Quotient.mk _ (Sum.inl q)}) := by
   sorry
 
+def apm_t01A04_torusCoverMap_evenlyCovered_away_aux_circle_aux_totalRaw :
+    Sum apm_t01a04_Torus (Fin 2 × Circle) → Circle
+  | .inl _ => 1
+  | .inr q => q.2
+
+lemma apm_t01A04_torusCoverMap_evenlyCovered_away_aux_circle_aux_totalRaw_respects
+    {u v : Sum apm_t01a04_Torus (Fin 2 × Circle)}
+    (h : Relation.EqvGen apm_t01a04_torusCoverRel u v) :
+    apm_t01A04_torusCoverMap_evenlyCovered_away_aux_circle_aux_totalRaw u =
+      apm_t01A04_torusCoverMap_evenlyCovered_away_aux_circle_aux_totalRaw v := by
+  induction h with
+  | rel _ _ h => cases h <;> rfl
+  | refl _ => rfl
+  | symm _ _ _ ih => exact ih.symm
+  | trans _ _ _ _ _ ih₁ ih₂ => exact ih₁.trans ih₂
+
+def apm_t01A04_torusCoverMap_evenlyCovered_away_aux_circle_aux_totalRetraction :
+    apm_t01a04_TorusCover → Circle :=
+  Quotient.lift
+    apm_t01A04_torusCoverMap_evenlyCovered_away_aux_circle_aux_totalRaw
+    (fun _ _ h =>
+      apm_t01A04_torusCoverMap_evenlyCovered_away_aux_circle_aux_totalRaw_respects h)
+
+lemma apm_t01A04_torusCoverMap_evenlyCovered_away_aux_circle_aux_total_continuous :
+    Continuous
+      apm_t01A04_torusCoverMap_evenlyCovered_away_aux_circle_aux_totalRetraction := by
+  apply continuous_coinduced_dom.mpr
+  apply continuous_sum_dom.2
+  exact ⟨continuous_const, continuous_snd⟩
+
+lemma apm_t01A04_torusCoverMap_evenlyCovered_away_aux_circle_aux_compat
+    (e : apm_t01a04_TorusCover) :
+    apm_t01A04_circleCoverMap_evenlyCovered_away_aux_circleRetraction
+        (apm_t01a04_torusCoverMap e) =
+      apm_t01A04_torusCoverMap_evenlyCovered_away_aux_circle_aux_totalRetraction e := by
+  refine Quotient.inductionOn e ?_
+  rintro (q | q) <;> rfl
+
 /-- Circle-summand case: near `z ≠ 1` the cover is the identity on each of the
 two circle sheets `(i, ·)`, `i : Fin 2`. -/
 theorem apm_t01A04_torusCoverMap_evenlyCovered_away_aux_circle
