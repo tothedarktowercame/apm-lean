@@ -1,5 +1,6 @@
 import ConstructionTargets.ManifoldFundamentalClass
 import ConstructionTargets.CircleHomology
+import ConstructionTargets.DiskBoundedPreimageDuality
 
 /-!
 # Local fundamental-class coordinates for t00J02
@@ -62,6 +63,36 @@ theorem circleDegree_eq_zero_of_homologyMap_eq_zero
   rw [circleDegree, circleHomologyCoordinateMap, h]
   simp
 
+/-- Every disk-bounded component of an embedded-circle preimage has zero
+signed circle contribution.  The ambient `H₁` coordinate is only used to
+turn essentiality of the embedded circle into categorical injectivity. -/
+theorem transverseCircle_preimage_component_signedCount
+    {S : Type} [TopologicalSpace S]
+    {Q : Type} [AddCommGroup Q] [Module ℤ Q]
+    [Module.IsTorsionFree ℤ Q]
+    (f : C(S, S)) (c : C(Circle, S)) (hc : Topology.IsEmbedding c)
+    (eS : (((AlgebraicTopology.singularHomologyFunctor
+      (ModuleCat ℤ) 1).obj (ModuleCat.of ℤ ℤ)).obj (TopCat.of S)) ≅
+        ModuleCat.of ℤ Q)
+    (hessential : homologyMap 1 c ≠ 0)
+    (hdisks : ConstructionTargets.DiskBoundaryHomology.ComponentsBoundByDisks
+      (f ⁻¹' Set.range c)) :
+    ∀ x ∈ f ⁻¹' Set.range c,
+      ∃ γ : C(Circle, S), ∃ ℓ : C(Circle, Circle),
+        x ∈ Set.range γ ∧ Set.range γ ⊆ f ⁻¹' Set.range c ∧
+          c.comp ℓ = f.comp γ ∧ circleDegree ℓ = 0 := by
+  letI : Mono (((AlgebraicTopology.singularHomologyFunctor
+      (ModuleCat ℤ) 1).obj (ModuleCat.of ℤ ℤ)).map (TopCat.ofHom c)) :=
+    ConstructionTargets.IntegerCyclic.mono_of_ne_zero_of_iso Q
+      ConstructionTargets.CircleHomology.circleH1IsoInt eS _ hessential
+  have hnull :=
+    ConstructionTargets.DiskBoundedPreimageDuality.hasNullWindingPreimage_of_componentsBoundByDisks
+      (ModuleCat ℤ) (ModuleCat.of ℤ ℤ) 1 one_ne_zero f c hc hdisks
+  intro x hx
+  rcases hnull x hx with ⟨γ, ℓ, hxγ, hγsub, hlift, hℓzero⟩
+  exact ⟨γ, ℓ, hxγ, hγsub, hlift,
+    circleDegree_eq_zero_of_homologyMap_eq_zero ℓ hℓzero⟩
+
 /-- A global integral top-homology coordinate together with its expression in
 the canonical local chart generator at every point.  The coefficient is kept
 explicit because its sign is precisely the orientation datum used by the
@@ -108,3 +139,4 @@ end ConstructionTargets.T00J02Closure
 #print axioms ConstructionTargets.T00J02Closure.surfaceTopHomology_localFundamentalClassIso
 #print axioms ConstructionTargets.T00J02Closure.circleDegree_eq_homologyMap
 #print axioms ConstructionTargets.T00J02Closure.circleDegree_eq_zero_of_homologyMap_eq_zero
+#print axioms ConstructionTargets.T00J02Closure.transverseCircle_preimage_component_signedCount
