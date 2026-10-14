@@ -2049,6 +2049,96 @@ lemma apm_m01J04_localization_core_approx
           hφ.1.continuous hr h)
     exact hx (by simp only [h0, h1]; simp; right; rfl)
 
+/-- Spatial truncation reduces the general auxiliary statement to a genuinely
+compactly supported global Sobolev pair.  The compact carrier lies in
+`closure K`; closed thickening is unchanged on replacing a set by its closure. -/
+lemma apm_m01J04_mollify_exists_compact_core
+    {d : ℕ} (u : apm_m01J04_H1 d Set.univ)
+    {K : Set (EuclideanSpace ℝ (Fin d))}
+    (huval : Function.support u.val ⊆ K)
+    (hugrad : Function.support u.grad ⊆ K)
+    {eta : ℝ} (heta : 0 < eta) :
+    ∃ (w : apm_m01J04_H1 d Set.univ)
+      (C : Set (EuclideanSpace ℝ (Fin d))),
+      IsCompact C ∧ C ⊆ closure K ∧
+      Function.support w.val ⊆ C ∧ Function.support w.grad ⊆ C ∧
+      apm_m01J04_H1dist w u < eta := by
+  sorry
+
+/-- Simultaneous `L²` approximate-identity estimate for the value and weak
+gradient fields.  This leaf contains no differentiation or `H¹` packaging. -/
+lemma apm_m01J04_mollify_exists_L2_kernel
+    {d : ℕ} (w : apm_m01J04_H1 d Set.univ)
+    {delta eta : ℝ} (hdelta : 0 < delta) (heta : 0 < eta) :
+    ∃ κ : EuclideanSpace ℝ (Fin d) → ℝ,
+      ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) κ ∧
+      HasCompactSupport κ ∧
+      Function.support κ ⊆ Metric.closedBall 0 delta ∧
+      (eLpNorm (MeasureTheory.convolution κ w.val
+          (ContinuousLinearMap.lsmul ℝ ℝ) volume - w.val) 2 volume).toReal +
+        (eLpNorm (MeasureTheory.convolution κ w.grad
+          (ContinuousLinearMap.lsmul ℝ ℝ) volume - w.grad) 2 volume).toReal < eta := by
+  sorry
+
+/-- Convolution commutes with the encoded weak gradient.  This is the
+integration-by-parts leaf and is independent of approximate-identity
+convergence. -/
+lemma apm_m01J04_mollify_convolution_weakGradient
+    {d : ℕ} (w : apm_m01J04_H1 d Set.univ)
+    (κ : EuclideanSpace ℝ (Fin d) → ℝ)
+    (hκsmooth : ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) κ)
+    (hκcompact : HasCompactSupport κ) :
+    ∀ (ψ : EuclideanSpace ℝ (Fin d) → ℝ),
+      ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) ψ → HasCompactSupport ψ →
+      ∀ i : Fin d,
+        (∫ x, MeasureTheory.convolution κ w.val
+              (ContinuousLinearMap.lsmul ℝ ℝ) volume x *
+            fderiv ℝ ψ x (EuclideanSpace.single i 1)) =
+          -(∫ x, MeasureTheory.convolution κ w.grad
+              (ContinuousLinearMap.lsmul ℝ ℝ) volume x i * ψ x) := by
+  sorry
+
+/-- Package two convolution fields into the encoded global `H¹` record.  All
+analytic conclusions needed from the other leaves are explicit hypotheses, so
+this assembly can be proved independently. -/
+lemma apm_m01J04_mollify_package
+    {d : ℕ} (w : apm_m01J04_H1 d Set.univ)
+    {C : Set (EuclideanSpace ℝ (Fin d))} (hC : IsCompact C)
+    (hwval : Function.support w.val ⊆ C)
+    (κ : EuclideanSpace ℝ (Fin d) → ℝ)
+    (hκsmooth : ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) κ)
+    (hκcompact : HasCompactSupport κ)
+    {delta eta : ℝ}
+    (hκsupport : Function.support κ ⊆ Metric.closedBall 0 delta)
+    (herror :
+      (eLpNorm (MeasureTheory.convolution κ w.val
+          (ContinuousLinearMap.lsmul ℝ ℝ) volume - w.val) 2 volume).toReal +
+        (eLpNorm (MeasureTheory.convolution κ w.grad
+          (ContinuousLinearMap.lsmul ℝ ℝ) volume - w.grad) 2 volume).toReal < eta)
+    (hweak : ∀ (ψ : EuclideanSpace ℝ (Fin d) → ℝ),
+      ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) ψ → HasCompactSupport ψ →
+      ∀ i : Fin d,
+        (∫ x, MeasureTheory.convolution κ w.val
+              (ContinuousLinearMap.lsmul ℝ ℝ) volume x *
+            fderiv ℝ ψ x (EuclideanSpace.single i 1)) =
+          -(∫ x, MeasureTheory.convolution κ w.grad
+              (ContinuousLinearMap.lsmul ℝ ℝ) volume x i * ψ x)) :
+    ∃ a : apm_m01J04_H1 d Set.univ,
+      ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) a.val ∧
+      HasCompactSupport a.val ∧
+      Function.support a.val ⊆ Metric.cthickening delta C ∧
+      apm_m01J04_H1dist a w < eta := by
+  sorry
+
+/-- Triangle transfer for the two-stage compact-core/mollification error. -/
+lemma apm_m01J04_mollify_error_transfer
+    {d : ℕ} (a w u : apm_m01J04_H1 d Set.univ)
+    {eta : ℝ}
+    (haw : apm_m01J04_H1dist a w < eta / 2)
+    (hwu : apm_m01J04_H1dist w u < eta / 2) :
+    apm_m01J04_H1dist a u < eta := by
+  sorry
+
 lemma apm_m01J04_core_exists_smooth_global_approx_aux_mollify
     {d : ℕ} (u : apm_m01J04_H1 d Set.univ)
     {K : Set (EuclideanSpace ℝ (Fin d))}
@@ -2060,7 +2150,17 @@ lemma apm_m01J04_core_exists_smooth_global_approx_aux_mollify
       HasCompactSupport a.val ∧
       Function.support a.val ⊆ Metric.cthickening delta K ∧
       apm_m01J04_H1dist a u < eta := by
-  sorry
+  obtain ⟨w, C, hCcompact, hCK, hwval, hwgrad, hwu⟩ :=
+    apm_m01J04_mollify_exists_compact_core u huval hugrad (half_pos heta)
+  obtain ⟨κ, hκsmooth, hκcompact, hκsupport, hκerror⟩ :=
+    apm_m01J04_mollify_exists_L2_kernel w hdelta (half_pos heta)
+  have hweak := apm_m01J04_mollify_convolution_weakGradient w κ hκsmooth hκcompact
+  obtain ⟨a, hasmooth, hacompact, hasupport, haw⟩ :=
+    apm_m01J04_mollify_package w hCcompact hwval κ hκsmooth hκcompact hκsupport hκerror hweak
+  refine ⟨a, hasmooth, hacompact, ?_,
+    apm_m01J04_mollify_error_transfer a w u haw hwu⟩
+  rw [← Metric.cthickening_closure]
+  exact hasupport.trans (Metric.cthickening_subset_of_subset delta hCK)
 
 lemma apm_m01J04_core_exists_smooth_global_approx
     {d : ℕ} {Ω : Set (EuclideanSpace ℝ (Fin d))}
