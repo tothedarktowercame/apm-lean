@@ -87938,6 +87938,17 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "git show --check 2a559c336", :exit 0}
      {:cmd "axioms check", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792000857404-12024-7131f716",
+     :commands
+     ["git show/diff 2a559c336; sha256sum"
+      "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology"
+      "lake env lean /dev/stdin (#print axioms)"
+      "placeholder scan; statement-registry check; git show --check"],
+     :finding
+     "PASS: commit 2a559c336 by topo-6 changes only scoped PolygonSurfaceHomology.lean; exact blob SHA-256 317576a237d93147783a28e6e90f291146ad3689bcd62a160e73cb81d54f6fde. Exact snapshot builds; 0 placeholders; new definitions/lemmas use propext/Classical.choice/Quot.sound; registry 166/0. Arbitrary circle loops map into labeled legs via mapOfEq to the common zeroth-leg base. The apply theorem exposes the literal FundamentalGroup.map and exact quotient cast, proved definitionally on representatives; word evaluation preserves label/loop pairs. Real compiled progress; remaining milestones prove successor leg compatibility and inductive expansion, then surjectivity/B6-B10."},
     :commit "2a559c336",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
@@ -87946,7 +87957,7 @@
      "317576a237d93147783a28e6e90f291146ad3689bcd62a160e73cb81d54f6fde"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -87966,7 +87977,7 @@
     :blueprint
     "ConstructionTargets/PolygonSurfaceHomology.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked final-factor transport and installed split words.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked uniform arbitrary-circle-loop leg words.",
    :id :program-2026-10-13-polygon-surface-homology,
    :kind :reusable-theorem,
    :campaign-priority 31,
@@ -88123,7 +88134,10 @@
     {:job 6,
      :commit "0dfafee0b",
      :reason
-     "Banked final-factor transport and installed split words."}]}
+     "Banked final-factor transport and installed split words."}
+    {:job 7,
+     :commit "2a559c336",
+     :reason "Banked uniform arbitrary-circle-loop leg words."}]}
   {:consumer :t97A01,
    :stop-count 0,
    :phase :implementation,
@@ -90487,7 +90501,7 @@
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "finiteWedgeFinLegMap_apply",
@@ -90497,14 +90511,16 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "labeled circle map equals literal leg plus base cast",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :program-2026-10-13-polygon-surface-homology,
+    :banked-commit "2a559c336"},
    :id :lemma-finitewedgefinlegmap-apply,
    :kind :lemma,
    :depends-on [],
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "finiteWedgeFinLoopWordValue",
@@ -90514,7 +90530,9 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "evaluate labeled arbitrary-loop words at common base",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :program-2026-10-13-polygon-surface-homology,
+    :banked-commit "2a559c336"},
    :id :lemma-finitewedgefinloopwordvalue,
    :kind :lemma,
    :depends-on [:lemma-finitewedgefinlegmap-apply],
