@@ -119284,24 +119284,25 @@
      :commit "1dd5348253adc83eb15080b120507a4c4090bbbb",
      :reason "Banked discrete-fiber witness constructor."}]}
   {:consumer :t98A06,
-   :stop-count 4,
+   :stop-count 5,
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
-    :residual "Smooth nearby inverses; compact flow; Main.",
+    :residual
+    "Assemble chartwise smooth local lifts; compact flow; Main.",
     :outcome :stop,
-    :warnings ["sorryAx"],
+    :warnings ["Main sorryAx"],
     :missing-theorems
-    [{:name "rightInverse_of_comp_continuousLinearEquiv",
-      :type "invertible composite gives right inverse",
+    [{:name "contDiff_rightInverse_of_comp_isInvertible",
+      :type "smooth family of corrected right inverses",
       :status :proved,
       :consumers [:t98A06],
-      :depends-on ["surjective_continuousLinearMap_has_rightInverse"],
+      :depends-on ["rightInverse_of_comp_continuousLinearEquiv"],
       :area "smooth-manifold-submersion"}
      {:name "t98A06_local_smooth_submersion_lift",
-      :type "local lifts",
+      :type "local smooth lifts",
       :status :partial,
       :consumers [:t98A06],
-      :depends-on ["rightInverse_of_comp_continuousLinearEquiv"],
+      :depends-on ["contDiff_rightInverse_of_comp_isInvertible"],
       :area "smooth-manifold-submersion"}
      {:name "t98A06_compact_circle_fibers_diffeomorphic",
       :type "fiber diffeo",
@@ -119313,34 +119314,21 @@
     {:source
      "44399e714e0f58588b1b213f3c3b12320dfea50bb6f626693aa89c544b76dd3a",
      :implementation
-     "97db61f17df2a8576afb527bb0a7fae725219014027fe6d3b7b580c7875f775b",
+     "e51411f4272fc4ab9380f64d3f59a2714ee66fa0df7b1cdb04b90851f7045740",
      :blueprint
      "9838452bf081767e1df000700b7c24774e94f50633c1cc10b2aa0e8c82319196",
      :registry "166/166"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-2,
-    :reason "Banked correction.",
+    :reason "Banked smooth fixed-coordinate right inverses.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t98A06Closure.lean",
       :exit 0}
      {:cmd "lake env lean problems/t98A06/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-     {:cmd "hash/diff", :exit 0}],
-    :diagnostic-history
-    [{:cmd "draft", :exit 1, :finding "congruence"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1792015276445-12514-07669c9d",
-     :commands
-     ["git diff-tree/show eebf9455"
-      "archive eebf9455; lake env lean closure and Main"
-      "sha256sum/placeholders at eebf9455"
-      "python3 scripts/statement-registry.py check"],
-     :finding
-     "PASS program STOP: new commit changes only t98A06Closure.lean and proves the correctly oriented correction lemma: from A.comp R = u for a continuous linear equivalence u, composing R with u.symm yields A.comp (...) = id. Domain/codomain and composition order are correct. Fixture/frozen hashes match; closure has 0 placeholders, Main baseline 1; archived files compile with standard axioms; registry 166/166. Smooth local lifts, compact-flow fiber diffeomorphism, and Main assembly remain listed."},
-    :commit "eebf94553a1cef785f5a621f57baf092bc23d1b0",
+     {:cmd "hash/placeholders/diff", :exit 0}],
+    :commit "2914de86857a9e7f16e8e708c0dd33988f173917",
     :changed-paths ["ConstructionTargets/t98A06Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t98A06Closure.blueprint.md",
@@ -119348,7 +119336,7 @@
      "9838452bf081767e1df000700b7c24774e94f50633c1cc10b2aa0e8c82319196"},
     :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t98A06/lean/Main.lean"
     "problems/t98A06/status.json"
@@ -119691,7 +119679,8 @@
    :kind :lemma,
    :depends-on
    [:lemma-surjective-continuouslinearmap-has-rightinverse
-    :lemma-rightinverse-of-comp-continuouslinearequiv],
+    :lemma-rightinverse-of-comp-continuouslinearequiv
+    :lemma-contdiff-rightinverse-of-comp-isinvertible],
    :other-consumers []}
   {:consumer :t98A06,
    :phase :lemma,
@@ -120648,6 +120637,23 @@
    :depends-on
    [:lemma-canonicalregularfiberwitness-of-isdiscrete
     :lemma-isdiscrete-preimage-singleton-of-locallyinjectivealongfiber],
+   :other-consumers []}
+  {:consumer :t98A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "contDiff_rightInverse_of_comp_isInvertible",
+    :type "smooth family of corrected right inverses"},
+   :lemma
+   {:name "contDiff_rightInverse_of_comp_isInvertible",
+    :reported-by [:program-2026-10-13-close-t98a06],
+    :type "smooth family of corrected right inverses",
+    :area "smooth-manifold-submersion",
+    :proved-in :program-2026-10-13-close-t98a06},
+   :id :lemma-contdiff-rightinverse-of-comp-isinvertible,
+   :kind :lemma,
+   :depends-on [:lemma-rightinverse-of-comp-continuouslinearequiv],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
