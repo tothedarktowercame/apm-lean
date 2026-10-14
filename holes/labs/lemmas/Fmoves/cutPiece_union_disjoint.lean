@@ -4430,10 +4430,70 @@ theorem zipMap_boundary_fibre {n k : ℕ} (hn : 0 < n) (hk : k ≤ n)
         change (p : ℂ) = (edgePoint (n + 2) (k + 1) (reverseParameter t) : ℂ) at hv
         exact Subtype.ext hv
 
+lemma zipMap_circle_surj_aux_bnorm (b : Circle) : ‖(b : ℂ)‖ = 1 := by
+  simpa [Circle, Submonoid.unitSphere] using b.2
+
+lemma zipMap_circle_surj_aux_norm (b : Circle) : ‖(circleToDisk b : ℂ)‖ = 1 := by
+  exact zipMap_circle_surj_aux_bnorm b
+
+lemma zipMap_circle_surj_aux_cone {n k : ℕ} (b : Circle) :
+    zipCone n k (circleToDisk b : ℂ) = zipBoundaryMap n k b := by
+  have hp := zipMap_circle_surj_aux_norm b
+  have hp0 : (circleToDisk b : ℂ) ≠ 0 := norm_ne_zero_iff.mp (by simpa [hp])
+  rw [zipCone, dif_neg hp0]
+  simp only [hp, inv_one, Complex.ofReal_one, one_mul]
+  have hc : (⟨(circleToDisk b : ℂ), by
+      simpa [Circle, Submonoid.unitSphere] using hp⟩ : Circle) = b := by
+    apply Subtype.ext
+    rfl
+  rw [hc]
+  ring
+
 theorem zipMap_circle_surj {n k : ℕ} (hn : 0 < n)
     (hsurjB : ∀ {p : ℂ}, p ∈ zipHalfBoundary → ∃ b : Circle, zipBoundaryMap n k b = p)
     {w : Disk} (hw : ‖(w : ℂ)‖ = 1) : ∃ p : Disk, ‖(p : ℂ)‖ = 1 ∧ zipMap n k p = w := by
-  sorry
+  let ω := zipRotation n k
+  let q : ℂ := (w : ℂ) / ω
+  let s : ℂ := (-q) ^ (2⁻¹ : ℂ)
+  let ζ : ℂ := Complex.I * s
+  have hω : ‖ω‖ = 1 := by
+    simp [ω, zipRotation, Complex.norm_exp]
+  have hq : ‖q‖ = 1 := by
+    simp [q, norm_div, hw, hω]
+  have hs_sq : s ^ 2 = -q := by
+    exact Complex.cpow_nat_inv_pow (-q) (by norm_num)
+  have hζ_sq : ζ ^ 2 = q := by
+    simp only [ζ, mul_pow, hs_sq]
+    simp
+  have hζ_norm : ‖ζ‖ = 1 := by
+    have hsqnorm : ‖ζ‖ ^ 2 = 1 := by
+      rw [← norm_pow, hζ_sq, hq]
+    nlinarith [norm_nonneg ζ]
+  have hζ_im : 0 ≤ ζ.im := by
+    simpa only [ζ, Complex.mul_im, Complex.I_re, zero_mul, Complex.I_im,
+      one_mul, zero_add] using (show 0 ≤ s.re by
+      dsimp [s]
+      rw [Complex.cpow_inv_two_re]
+      positivity)
+  have hζ_mem : ζ ∈ zipHalfBoundary := by
+    left
+    exact ⟨hζ_norm, hζ_im⟩
+  obtain ⟨b, hb⟩ := hsurjB hζ_mem
+  let p : Disk := circleToDisk b
+  refine ⟨p, ?_, ?_⟩
+  · simpa [p, circleToDisk, Circle, Submonoid.unitSphere] using b.2
+  · apply Subtype.ext
+    have hp : ‖(p : ℂ)‖ = 1 := by
+      simpa [p, circleToDisk, Circle, Submonoid.unitSphere] using b.2
+    have hcone : zipCone n k (p : ℂ) = ζ := by
+      simpa [p, hb] using zipMap_circle_surj_aux_cone (n := n) (k := k) b
+    have hraw : zipRaw n k (p : ℂ) = (w : ℂ) := by
+      rw [zipRaw, hcone, hζ_sq]
+      change ω * q = (w : ℂ)
+      have hω0 : ω ≠ 0 := norm_ne_zero_iff.mp (by simpa [hω])
+      dsimp [q]
+      field_simp
+    simp [zipMap, hraw, hw.le]
 
 /-! ### Boundary combinatorics, for any map with the zip's edge formulas -/
 
@@ -4461,6 +4521,87 @@ theorem zip_fibre_related {Label : Type*} [DecidableEq Label]
       simpa only [hlen] using
         (inversePairCancellation_aux_collapse_aux_cancelled_pair u v x t).symm)
 
+def zip_forward_aux_index {Label : Type*}
+    (u v : List (Signed Label)) (x : Signed Label)
+    (i : Fin (u ++ [x, inv x] ++ v).length)
+    (h : i.1 < u.length ∨ u.length + 2 ≤ i.1) : Fin (u ++ v).length :=
+  ⟨if i.1 < u.length then i.1 else i.1 - 2, by
+    have hi := i.2
+    simp only [List.length_append, List.length_cons, List.length_nil] at hi ⊢
+    split_ifs <;> omega⟩
+
+lemma zip_forward_aux_fresh_index {Label : Type*} [DecidableEq Label]
+    (u v : List (Signed Label)) (x : Signed Label)
+    (hx : x.1 ∉ (u ++ v).map Prod.fst)
+    (i : Fin (u ++ [x, inv x] ++ v).length)
+    (hi : ((u ++ [x, inv x] ++ v).get i).1 = x.1) :
+    i.1 = u.length ∨ i.1 = u.length + 1 := by
+  have hib := i.2
+  simp only [List.length_append, List.length_cons, List.length_nil] at hib
+  by_cases hlow : i.1 < u.length
+  · have hu : u[i.1] ∈ u := List.getElem_mem hlow
+    have hm : ((u ++ [x, inv x] ++ v).get i).1 ∈ (u ++ v).map Prod.fst := by
+      have hm' : u[i.1].1 ∈ (u ++ v).map Prod.fst := by
+        exact List.mem_map_of_mem (List.mem_append_left v hu)
+      simpa [List.get_eq_getElem, hlow] using hm'
+    exact False.elim (hx (hi ▸ hm))
+  by_cases h0 : i.1 = u.length
+  · exact Or.inl h0
+  by_cases h1 : i.1 = u.length + 1
+  · exact Or.inr h1
+  · have hhigh : u.length + 2 ≤ i.1 := by omega
+    have hv : i.1 - (u.length + 2) < v.length := by omega
+    have hv_mem : v[i.1 - (u.length + 2)] ∈ v := List.getElem_mem hv
+    have hm : ((u ++ [x, inv x] ++ v).get i).1 ∈ (u ++ v).map Prod.fst := by
+      have hm' : v[i.1 - (u.length + 2)].1 ∈ (u ++ v).map Prod.fst := by
+        exact List.mem_map_of_mem (List.mem_append_right u hv_mem)
+      have he : (u ++ [x, inv x] ++ v)[i.1] = v[i.1 - (u.length + 2)] := by
+        rw [List.getElem_append_right (as := u ++ [x, inv x]) (bs := v) (by
+          simp only [List.length_append, List.length_cons, List.length_nil]; omega)]
+        congr 1
+        simp only [List.length_append, List.length_cons, List.length_nil]
+      rw [List.get_eq_getElem, he]
+      exact hm'
+    exact False.elim (hx (hi ▸ hm))
+
+lemma zip_forward_aux_ordinary {Label : Type*} [DecidableEq Label]
+    (u v : List (Signed Label)) (x : Signed Label) (c : Disk → Disk)
+    (hhigh : ∀ j, u.length + 2 ≤ j → j < (u ++ v).length + 2 → ∀ t,
+      c (edgePoint ((u ++ v).length + 2) j t) = edgePoint (u ++ v).length (j - 2) t)
+    (hlow : ∀ j, j < u.length → ∀ t,
+      c (edgePoint ((u ++ v).length + 2) j t) = edgePoint (u ++ v).length j t)
+    (i : Fin (u ++ [x, inv x] ++ v).length)
+    (hi : i.1 < u.length ∨ u.length + 2 ≤ i.1) (s : Icc (0 : ℝ) 1) :
+    (u ++ v).get (zip_forward_aux_index u v x i hi) =
+        (u ++ [x, inv x] ++ v).get i ∧
+      c (edgePoint ((u ++ v).length + 2) i s) =
+        edgePoint (u ++ v).length (zip_forward_aux_index u v x i hi) s := by
+  have hib := i.2
+  simp only [List.length_append, List.length_cons, List.length_nil] at hib
+  rcases hi with hi | hi
+  · constructor
+    · simp [zip_forward_aux_index, List.get_eq_getElem, hi]
+    · simpa [zip_forward_aux_index, hi] using hlow i.1 hi s
+  · have hiv : i.1 - (u.length + 2) < v.length := by omega
+    constructor
+    · rw [List.get_eq_getElem, List.get_eq_getElem]
+      have hnot : ¬i.1 < u.length := by omega
+      simp only [zip_forward_aux_index, Fin.val_mk, if_neg hnot]
+      have hit : i.1 - 2 < (u ++ v).length := by
+        simp only [List.length_append]
+        omega
+      change (u ++ v)[i.1 - 2]'hit = (u ++ [x, inv x] ++ v)[i.1]
+      rw [List.getElem_append_right (as := u) (bs := v) (by omega),
+        List.getElem_append_right (as := u ++ [x, inv x]) (bs := v) (by
+          simp only [List.length_append, List.length_cons, List.length_nil]; omega)]
+      congr 1
+      simp only [List.length_append, List.length_cons, List.length_nil]
+      rw [Nat.sub_sub]
+      congr 1
+      omega
+    · simpa [zip_forward_aux_index, show ¬i.1 < u.length by omega] using
+        hhigh i.1 hi (by simp only [List.length_append] at hib ⊢; omega) s
+
 theorem zip_forward {Label : Type*} [DecidableEq Label]
     (u v : List (Signed Label)) (x : Signed Label)
     (hx : x.1 ∉ (u ++ v).map Prod.fst) (c : Disk → Disk)
@@ -4472,7 +4613,71 @@ theorem zip_forward {Label : Type*} [DecidableEq Label]
       c (edgePoint ((u ++ v).length + 2) (u.length + 1) (reverseParameter t))) :
     ∀ p q, WordRel (u ++ [x, inv x] ++ v) p q →
       Relation.EqvGen (WordRel (u ++ v)) (c p) (c q) := by
-  sorry
+  intro p q h
+  rcases h with ⟨i, j, hij, s, hlab, rfl, rfl⟩
+  have hlen : (u ++ [x, inv x] ++ v).length = (u ++ v).length + 2 := by
+    simp only [List.length_append, List.length_cons, List.length_nil]
+    omega
+  simp only [hlen]
+  by_cases hix : ((u ++ [x, inv x] ++ v).get i).1 = x.1
+  · have hjx : ((u ++ [x, inv x] ++ v).get j).1 = x.1 := hlab.symm.trans hix
+    rcases zip_forward_aux_fresh_index u v x hx i hix with hi | hi <;>
+      rcases zip_forward_aux_fresh_index u v x hx j hjx with hj | hj
+    · exact False.elim (hij (Fin.ext (by omega)))
+    · simp only [hi, hj]
+      by_cases hs : ((u ++ [x, inv x] ++ v).get i).2 =
+          ((u ++ [x, inv x] ++ v).get j).2
+      · simp [List.get_eq_getElem, hi, hj, inv] at hs
+      · rw [if_neg hs, hfold]
+        exact Relation.EqvGen.refl _
+    · simp only [hi, hj]
+      have hr : reverseParameter (reverseParameter s) = s := by
+        apply Subtype.ext
+        simp [reverseParameter]
+      by_cases hs : ((u ++ [x, inv x] ++ v).get i).2 =
+          ((u ++ [x, inv x] ++ v).get j).2
+      · simp [List.get_eq_getElem, hi, hj, inv] at hs
+      · rw [if_neg hs]
+        have he := (hfold (reverseParameter s)).symm
+        rw [hr] at he
+        rw [he]
+        exact Relation.EqvGen.refl _
+    · exact False.elim (hij (Fin.ext (by omega)))
+  · have hjx : ((u ++ [x, inv x] ++ v).get j).1 ≠ x.1 := by
+      intro h
+      exact hix (hlab.trans h)
+    have hi : i.1 < u.length ∨ u.length + 2 ≤ i.1 := by
+      rcases lt_trichotomy i.1 u.length with h | h | h
+      · exact Or.inl h
+      · exact False.elim (hix (by simp [List.get_eq_getElem, h]))
+      · by_cases h1 : i.1 = u.length + 1
+        · exact False.elim (hix (by simp [List.get_eq_getElem, h1, inv]))
+        · exact Or.inr (by omega)
+    have hj : j.1 < u.length ∨ u.length + 2 ≤ j.1 := by
+      rcases lt_trichotomy j.1 u.length with h | h | h
+      · exact Or.inl h
+      · exact False.elim (hjx (by simp [List.get_eq_getElem, h]))
+      · by_cases h1 : j.1 = u.length + 1
+        · exact False.elim (hjx (by simp [List.get_eq_getElem, h1, inv]))
+        · exact Or.inr (by omega)
+    let i' := zip_forward_aux_index u v x i hi
+    let j' := zip_forward_aux_index u v x j hj
+    have hei := zip_forward_aux_ordinary u v x c hhigh hlow i hi s
+    have hej := zip_forward_aux_ordinary u v x c hhigh hlow j hj
+      (if ((u ++ [x, inv x] ++ v).get i).2 =
+        ((u ++ [x, inv x] ++ v).get j).2 then s else reverseParameter s)
+    apply Relation.EqvGen.rel
+    refine ⟨i', j', ?_, s, ?_, hei.2, ?_⟩
+    · intro heq
+      apply hij
+      apply Fin.ext
+      have hv := congrArg Fin.val heq
+      simp only [i', j', zip_forward_aux_index, Fin.val_mk] at hv
+      rcases hi with hi | hi <;> rcases hj with hj | hj <;> split_ifs at hv <;> omega
+    · rw [hei.1, hej.1]
+      exact hlab
+    · rw [hej.2]
+      rw [hei.1, hej.1]
 
 theorem zip_lift_generator {Label : Type*} [DecidableEq Label]
     (u v : List (Signed Label)) (x : Signed Label) (c : Disk → Disk)
@@ -4499,7 +4704,66 @@ theorem zip_boundary_iff {Label : Type*} [DecidableEq Label]
     ∀ p q : Disk, ‖(p : ℂ)‖ = 1 → ‖(q : ℂ)‖ = 1 →
       (Relation.EqvGen (WordRel (u ++ [x, inv x] ++ v)) p q ↔
        Relation.EqvGen (WordRel (u ++ v)) (c p) (c q)) := by
-  sorry
+  intro p q hp hq
+  constructor
+  · intro h
+    exact mergeRepeatedBlock_aux_boundary_relation_aux_eqvGen_map c
+      (fun hxy => hfwd _ _ hxy) h
+  · intro h
+    by_cases hcp : ‖(c p : ℂ)‖ < 1
+    · have heq := wordRel_eqvGen_interior (u ++ v) h hcp
+      exact hfib hp hq heq
+    by_cases hcq : ‖(c q : ℂ)‖ < 1
+    · have heq := wordRel_eqvGen_interior (u ++ v)
+          (Relation.EqvGen.symm _ _ h) hcq
+      exact hfib hp hq heq.symm
+    have hcp_le : ‖(c p : ℂ)‖ ≤ 1 := by
+      have hh := (c p).2
+      rwa [Metric.mem_closedBall, dist_zero_right] at hh
+    have hcq_le : ‖(c q : ℂ)‖ ≤ 1 := by
+      have hh := (c q).2
+      rwa [Metric.mem_closedBall, dist_zero_right] at hh
+    have hcp_eq : ‖(c p : ℂ)‖ = 1 := le_antisymm hcp_le (not_lt.mp hcp)
+    have hcq_eq : ‖(c q : ℂ)‖ = 1 := le_antisymm hcq_le (not_lt.mp hcq)
+    obtain ⟨a, ha⟩ := circleToDisk_of_norm (c p) hcp_eq
+    obtain ⟨b, hb⟩ := circleToDisk_of_norm (c q) hcq_eq
+    have hab : Relation.EqvGen
+        (fun z z' : Circle =>
+          WordRel (u ++ v) (circleToDisk z) (circleToDisk z')) a b := by
+      apply (wordRel_eqvGen_circle (u ++ v) a b).mp
+      simpa [ha, hb] using h
+    have lift_chain : ∀ {a b : Circle},
+        Relation.EqvGen
+          (fun z z' : Circle =>
+            WordRel (u ++ v) (circleToDisk z) (circleToDisk z')) a b →
+        ∀ (P Q : Disk), ‖(P : ℂ)‖ = 1 → ‖(Q : ℂ)‖ = 1 →
+          c P = circleToDisk a → c Q = circleToDisk b →
+          Relation.EqvGen (WordRel (u ++ [x, inv x] ++ v)) P Q := by
+      intro a b hab
+      induction hab with
+      | refl a =>
+          intro P Q hP hQ hPa hQa
+          exact hfib hP hQ (hPa.trans hQa.symm)
+      | rel a b hab =>
+          intro P Q hP hQ hPa hQb
+          obtain ⟨P', Q', hP', hQ', hP'a, hQ'b, hP'Q'⟩ :=
+            hlift (circleToDisk a) (circleToDisk b) hab
+          exact Relation.EqvGen.trans _ _ _
+            (hfib hP hP' (hPa.trans hP'a.symm))
+            (Relation.EqvGen.trans _ _ _ (Relation.EqvGen.rel _ _ hP'Q')
+              (hfib hQ' hQ (hQ'b.trans hQb.symm)))
+      | symm a b hab ih =>
+          intro P Q hP hQ hPa hQb
+          exact Relation.EqvGen.symm _ _ (ih Q P hQ hP hQb hPa)
+      | trans a b d hab hbd ih₁ ih₂ =>
+          intro P Q hP hQ hPa hQd
+          have hb_norm : ‖(circleToDisk b : ℂ)‖ = 1 := by
+            simpa [circleToDisk, Circle, Submonoid.unitSphere] using b.2
+          obtain ⟨R, hR, hRb⟩ := hcirc (circleToDisk b) hb_norm
+          exact Relation.EqvGen.trans _ _ _
+            (ih₁ P R hP hR hPa hRb)
+            (ih₂ R Q hR hQ hRb hQd)
+    exact lift_chain hab p q hp hq ha.symm hb.symm
 
 /-- Leaf (PL construction, 90--130 lines): triangulate the source by the
 centre, the endpoints of the two cancelled arcs, and all remaining vertices;
@@ -5038,20 +5302,109 @@ def CutChartSpec (K : Set ℂ) (β : Circle → ℂ) (φ : ℂ → ℂ) : Prop :
 
 theorem cutPiece_convex_compact (P Q : ℂ) :
     Convex ℝ (cutPiece P Q) ∧ IsCompact (cutPiece P Q) := by
-  sorry
+  let f : ℂ → ℝ := fun z => cutCross (Q - P) z
+  have hf : IsLinearMap ℝ f := .mk
+    (by intro x y; simp [f, cutCross, mul_add]; ring)
+    (by
+      intro c x
+      change cutCross (Q - P) (c • x) = c * cutCross (Q - P) x
+      rw [Complex.real_smul]
+      simp [cutCross]
+      ring)
+  have hpiece : cutPiece P Q = Metric.closedBall 0 1 ∩ {z | f z ≤ f P} := by
+    ext z
+    simp only [cutPiece, Set.mem_setOf_eq, Set.mem_inter_iff, Metric.mem_closedBall,
+      dist_zero_right]
+    change (‖z‖ ≤ 1 ∧ cutCross (Q - P) (z - P) ≤ 0) ↔
+      ‖z‖ ≤ 1 ∧ cutCross (Q - P) z ≤ cutCross (Q - P) P
+    rw [show cutCross (Q - P) (z - P) =
+      cutCross (Q - P) z - cutCross (Q - P) P by
+        simp [cutCross, mul_sub]]
+    constructor <;> rintro ⟨hz, h⟩ <;> exact ⟨hz, by linarith⟩
+  constructor
+  · rw [hpiece]
+    exact (convex_closedBall 0 1).inter (convex_halfSpace_le hf (f P))
+  · rw [hpiece]
+    have hfc : Continuous f := by
+      exact Complex.continuous_im.comp (continuous_const.mul continuous_id)
+    exact (ProperSpace.isCompact_closedBall (0 : ℂ) 1).inter_right
+      (isClosed_le hfc continuous_const)
 
 theorem cutPiece_interior_nonempty {P Q : ℂ} (hP : ‖P‖ = 1) (hQ : ‖Q‖ = 1) (hPQ : P ≠ Q) :
     (interior (cutPiece P Q)).Nonempty := by
-  sorry
+  let M : ℂ := (P + Q) / 2
+  let d : ℝ := ‖Q - P‖
+  have hd : 0 < d := by
+    dsimp [d]
+    exact norm_pos_iff.mpr (sub_ne_zero.mpr hPQ.symm)
+  have hsum : ‖P + Q‖ < 2 := by
+    have hle : ‖P + Q‖ ≤ 2 := by
+      calc
+        ‖P + Q‖ ≤ ‖P‖ + ‖Q‖ := norm_add_le _ _
+        _ = 2 := by rw [hP, hQ]; norm_num
+    apply lt_of_le_of_ne hle
+    intro he
+    have he' : ‖P + Q‖ = ‖P‖ + ‖Q‖ := by rw [hP, hQ]; norm_num at he ⊢; exact he
+    exact hPQ (eq_of_norm_eq_of_norm_add_eq (hP.trans hQ.symm) he')
+  have hM : ‖M‖ < 1 := by
+    dsimp [M]
+    rw [norm_div]
+    norm_num
+    exact (div_lt_one (by norm_num : (0 : ℝ) < 2)).mpr hsum
+  let e : ℝ := (1 - ‖M‖) / (2 * d)
+  have he : 0 < e := by
+    dsimp [e]
+    exact div_pos (sub_pos.mpr hM) (mul_pos (by norm_num) hd)
+  let n : ℂ := -Complex.I * (Q - P)
+  have hn : ‖n‖ = d := by
+    dsimp [n, d]
+    rw [norm_mul, norm_neg, Complex.norm_I, one_mul]
+  let c : ℂ := M + (e : ℂ) * n
+  have hc_norm : ‖c‖ < 1 := by
+    calc
+      ‖c‖ ≤ ‖M‖ + ‖(e : ℂ) * n‖ := by dsimp [c]; exact norm_add_le _ _
+      _ = ‖M‖ + e * d := by simp [norm_mul, hn, abs_of_pos he]
+      _ < 1 := by dsimp [e]; field_simp; linarith
+  have hcross_mid : cutCross (Q - P) (M - P) = 0 := by
+    dsimp [M, cutCross]
+    simp [Complex.div_re, Complex.div_im]
+    ring
+  have hcross_n : cutCross (Q - P) n = -(d ^ 2) := by
+    dsimp [n, d, cutCross]
+    rw [Complex.sq_norm]
+    simp [Complex.normSq_apply]
+    ring
+  have hc_cross : cutCross (Q - P) (c - P) < 0 := by
+    have hlin : cutCross (Q - P) (c - P) =
+        cutCross (Q - P) (M - P) + e * cutCross (Q - P) n := by
+      dsimp [c, cutCross]
+      simp [Complex.mul_im]
+      ring
+    rw [hlin, hcross_mid, hcross_n, zero_add]
+    exact mul_neg_of_pos_of_neg he (neg_neg_of_pos (sq_pos_of_pos hd))
+  let U : Set ℂ := {z | ‖z‖ < 1} ∩ {z | cutCross (Q - P) (z - P) < 0}
+  have hUopen : IsOpen U := by
+    apply IsOpen.inter
+    · exact isOpen_lt continuous_norm continuous_const
+    · exact isOpen_lt
+        ((Complex.continuous_im.comp
+          ((continuous_const.mul (continuous_id.sub continuous_const))))) continuous_const
+  have hcU : c ∈ U := ⟨hc_norm, hc_cross⟩
+  refine ⟨c, mem_interior_iff_mem_nhds.mpr ?_⟩
+  exact Filter.mem_of_superset (hUopen.mem_nhds hcU) (by
+    intro z hz
+    change z ∈ cutPiece P Q
+    exact ⟨le_of_lt hz.1, le_of_lt hz.2⟩)
 
 theorem cutPiece_frontier {P Q : ℂ} (hP : ‖P‖ = 1) (hQ : ‖Q‖ = 1) (hPQ : P ≠ Q) :
     frontier (cutPiece P Q) =
       {z | ‖z‖ = 1 ∧ cutCross (Q - P) (z - P) ≤ 0} ∪ segment ℝ P Q := by
   sorry
 
-/-- The two pieces cover the disk; the interior of one misses the other. -/
+/-- The two pieces cover the disk; for `P ≠ Q` the interior of one misses the other
+(for `P = Q` the piece is the whole disk: blueprint-2, 10-14). -/
 -- BEGIN SEAT AREA
-theorem cutPiece_union_disjoint (P Q : ℂ) :
+theorem cutPiece_union_disjoint (P Q : ℂ) (hPQ : P ≠ Q) :
     cutPiece P Q ∪ cutPiece Q P = Metric.closedBall 0 1 ∧
       interior (cutPiece P Q) ∩ cutPiece Q P = ∅ := by
   sorry
@@ -5217,11 +5570,33 @@ theorem cut_reverse_fibre {Label : Type*} [DecidableEq Label]
   sorry
 
 theorem cutPoint_norm (L m : ℕ) : ‖cutPoint L m‖ = 1 := by
-  sorry
+  unfold cutPoint
+  exact Complex.norm_exp_ofReal_mul_I (cutAlpha L m)
 
 theorem cutPoint_ne {L m m' : ℕ} (h : m < m') (h' : m' < m + L) :
     cutPoint L m ≠ cutPoint L m' := by
-  sorry
+  intro heq
+  have hL : 0 < L := by omega
+  obtain ⟨k, hk⟩ := Complex.exp_eq_exp_iff_exists_int.mp heq
+  have him := congrArg Complex.im hk
+  simp [cutPoint, cutAlpha] at him
+  have hLreal : (0 : ℝ) < L := by exact_mod_cast hL
+  have hratio : (m : ℝ) = (m' : ℝ) + (k : ℝ) * L := by
+    field_simp [ne_of_gt hLreal] at him
+    nlinarith [Real.pi_pos]
+  have hkneg : (k : ℝ) < 0 := by
+    have hmreal : (m : ℝ) < m' := by exact_mod_cast h
+    nlinarith
+  have hk_le : k ≤ -1 := by
+    have hkneg' : k < 0 := by exact_mod_cast hkneg
+    omega
+  have hdiff : (m' : ℝ) - m = (-(k : ℝ)) * L := by
+    nlinarith
+  have hgap : (m' : ℝ) - m < L := by
+    have hh : (m' : ℝ) < m + L := by exact_mod_cast h'
+    linarith
+  have hk_le_real : (k : ℝ) ≤ -1 := by exact_mod_cast hk_le
+  nlinarith
 
 /-- From four piece charts to the two maps `Fin 2 × Disk → Disk` (index `0` = `A`,
 `1` = `B`).  A boundary value of a chart comes from the parameter circle, because
@@ -5346,9 +5721,9 @@ lemma cutAndPaste_aux_triangle_chart_generators {Label : Type*}
     (cutNewB_range hpq hqL (cutPiece_frontier (hn _) (hn _) hPQ'.symm) cutCross_exp)
   have D := cutBoundaryData_concrete hpq hqL
   exact cut_charts_package u v t x _ _ _ _ _ _ _ _ φA φB ψA ψB hφA hφB hψA hψB
-    (cutPiece_union_disjoint _ _).1 (cutPiece_union_disjoint _ _).1
-    (cutPiece_union_disjoint _ _).2 (cutPiece_union_disjoint _ _).2
-    (cutPiece_union_disjoint _ _).2 (cutPiece_union_disjoint _ _).2
+    (cutPiece_union_disjoint _ _ hPQ).1 (cutPiece_union_disjoint _ _ hPQ').1
+    (cutPiece_union_disjoint _ _ hPQ).2 (cutPiece_union_disjoint _ _ hPQ.symm).2
+    (cutPiece_union_disjoint _ _ hPQ').2 (cutPiece_union_disjoint _ _ hPQ'.symm).2
     (fun i i' y y' P P' N N' => cut_forward_generators u v t x hx _ _ _ _ D i i' y y' P P' N N')
     (fun i i' y y' P P' N N' => cut_reverse_generators u v t x hx _ _ _ _ D i i' y y' P P' N N')
     (fun y y' N N' => cut_forward_fibre u v t x _ _ _ _ D y y' N N')
