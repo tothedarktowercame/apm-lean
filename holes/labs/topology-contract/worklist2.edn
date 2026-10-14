@@ -87901,25 +87901,26 @@
   {:consumer :t97A01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 2,
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Transport Fin surjectivity through orbit relabeling; then coordinate epi and B6-B10.",
+    "Prove generator-map comparison, transport Fin surjectivity, then coordinate epi and B6-B10.",
     :outcome :stop,
-    :warnings ["preexisting lint"],
+    :warnings ["lint; unrelated edits preserved"],
     :missing-theorems
-    [{:name "finiteWedgeFinLegFreeGroupMap_surjective",
-      :type "canonical map onto every nonempty Fin-indexed wedge",
+    [{:name "finiteWedgeOrbitFundamentalGroupEquivFin",
+      :type
+      "base-preserving orbit-wedge to finite-coordinate group equivalence",
       :status :proved,
       :consumers [:t97A01 :t94J09],
-      :depends-on ["finiteWedgeFin_exists_legWord"],
+      :depends-on ["finiteWedgeFinLegFreeGroupMap_surjective"],
       :area "polygon-quotient-homology"}
      {:name "finiteWedgeOrbitFreeGroupMapComparison",
-      :type "orbit relabeling identifies canonical generator maps",
-      :status :not-started,
+      :type "based relabeling identifies canonical generator maps",
+      :status :partial,
       :consumers [:t97A01 :t94J09],
-      :depends-on ["finiteWedgeFinLegFreeGroupMap_surjective"],
+      :depends-on ["finiteWedgeOrbitFundamentalGroupEquivFin"],
       :area "polygon-quotient-homology"}
      {:name "finiteWedgeLegFreeGroupMap_surjective",
       :type "canonical orbit-label map is onto",
@@ -87931,8 +87932,7 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason
-    "Banked free-group surjectivity for standard finite wedges.",
+    :reason "Banked base-preserving orbit-to-Fin relabeling.",
     :commands
     [{:cmd
       "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology",
@@ -87940,32 +87940,20 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder scan", :exit 0}
      {:cmd "axioms check", :exit 0}
-     {:cmd "git show --check ffbe2f5eb", :exit 0}],
+     {:cmd "git show --check 9ffce356b", :exit 0}],
     :diagnostic-history
-    [{:cmd "generator-word draft",
+    [{:cmd "relabel draft",
       :exit 1,
-      :correction "refolded tail values"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792002487891-12130-a53b86d7",
-     :commands
-     ["lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology"
-      "lake env lean /dev/stdin (#print axioms)"
-      "placeholder scan"
-      "python3 scripts/statement-registry.py check"
-      "git show --check ffbe2f5eb"],
-     :finding
-     "PASS: ffbe2f5eb by topo-6 changes only scoped PolygonSurfaceHomology.lean; fixture SHA-256 8022a11d2e9103f396da638bf1f5bc0f97d3d8bbfcdd907b49aa740e90d836a2 matches. Exact snapshot builds; 0 placeholders; new milestones use standard axioms; registry 166/0. Integer-power replacement and FreeGroup witnesses preserve labels, exponents, and product order, proving finite-wedge Fin-leg surjectivity. Compiled progress is new; remaining milestones: orbit relabel transport, coordinate epi, B6-B10."},
-    :commit "ffbe2f5eb",
+      :correction "carried orbit-card positivity in Fin zero"}],
+    :commit "9ffce356b",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
     {:path "ConstructionTargets/PolygonSurfaceHomology.lean",
      :sha256
-     "8022a11d2e9103f396da638bf1f5bc0f97d3d8bbfcdd907b49aa740e90d836a2"},
+     "bef3083cb40634d0eb159b85df6c431504d2862d72353e582f04799b39ac3cfd"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -90699,6 +90687,27 @@
     :type "orbit relabeling identifies canonical generator maps",
     :area "polygon-quotient-homology"},
    :id :lemma-finitewedgeorbitfreegroupmapcomparison,
+   :kind :lemma,
+   :depends-on
+   [:lemma-finitewedgefinlegfreegroupmap-surjective
+    :lemma-finitewedgeorbitfundamentalgroupequivfin],
+   :other-consumers [:t94J09]}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "finiteWedgeOrbitFundamentalGroupEquivFin",
+    :type
+    "base-preserving orbit-wedge to finite-coordinate group equivalence"},
+   :lemma
+   {:name "finiteWedgeOrbitFundamentalGroupEquivFin",
+    :reported-by [:program-2026-10-13-polygon-surface-homology],
+    :type
+    "base-preserving orbit-wedge to finite-coordinate group equivalence",
+    :area "polygon-quotient-homology",
+    :proved-in :program-2026-10-13-polygon-surface-homology},
+   :id :lemma-finitewedgeorbitfundamentalgroupequivfin,
    :kind :lemma,
    :depends-on [:lemma-finitewedgefinlegfreegroupmap-surjective],
    :other-consumers [:t94J09]}]}
