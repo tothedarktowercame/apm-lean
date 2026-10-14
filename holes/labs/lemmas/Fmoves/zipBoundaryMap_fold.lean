@@ -3197,7 +3197,86 @@ theorem zipBoundaryMap_fold {n k : ℕ} (hn : 0 < n) (hk : k ≤ n) (t : Icc (0 
     zipBoundaryMap n k ⟨edgePoint (n + 2) (k + 1) t,
         by simpa [Circle, Submonoid.unitSphere] using norm_edgePoint (n + 2) (k + 1) t⟩ =
       ((t : ℝ) : ℂ) := by
-  sorry
+  have hden : (0 : ℝ) < (n : ℝ) + 2 := by positivity
+  have hden' : (2 + (n : ℝ)) ≠ 0 := by positivity
+  have hnR : (0 : ℝ) < (n : ℝ) := by exact_mod_cast hn
+  let a := zipStart n k
+  let φ0 : ℝ := 2 * Real.pi * ((k : ℝ) + t.1) / ((n : ℝ) + 2)
+  let φ1 : ℝ := 2 * Real.pi * (((k + 1 : ℕ) : ℝ) + t.1) / ((n : ℝ) + 2)
+  have hcircle0 :
+      AddCircle.homeomorphCircle'.symm
+          (⟨edgePoint (n + 2) k t, by
+            simpa [Circle, Submonoid.unitSphere] using norm_edgePoint (n + 2) k t⟩ : Circle) =
+        (φ0 : AddCircle (2 * Real.pi)) := by
+    apply AddCircle.homeomorphCircle'.injective
+    rw [Homeomorph.apply_symm_apply, AddCircle.homeomorphCircle'_apply_mk]
+    apply Subtype.ext
+    change Complex.exp _ = Complex.exp _
+    congr 1
+    simp only [φ0]
+    push_cast
+    ring
+  have hcircle1 :
+      AddCircle.homeomorphCircle'.symm
+          (⟨edgePoint (n + 2) (k + 1) t, by
+            simpa [Circle, Submonoid.unitSphere] using norm_edgePoint (n + 2) (k + 1) t⟩ : Circle) =
+        (φ1 : AddCircle (2 * Real.pi)) := by
+    apply AddCircle.homeomorphCircle'.injective
+    rw [Homeomorph.apply_symm_apply, AddCircle.homeomorphCircle'_apply_mk]
+    apply Subtype.ext
+    change Complex.exp _ = Complex.exp _
+    congr 1
+    simp only [φ1]
+    push_cast
+    ring
+  have hφ0 : φ0 ∈ Ico a (a + 2 * Real.pi) := by
+    constructor <;> simp only [φ0, a, zipStart]
+    · apply (div_le_div_iff_of_pos_right hden).2
+      nlinarith [Real.pi_pos, t.2.1]
+    · rw [div_lt_iff₀ hden]
+      field_simp [ne_of_gt hden]
+      have ht := t.2.2
+      have hpi := Real.pi_pos
+      push_cast at hk
+      nlinarith
+  have hφ1 : φ1 ∈ Ico a (a + 2 * Real.pi) := by
+    constructor <;> simp only [φ1, a, zipStart]
+    · apply (div_le_div_iff_of_pos_right hden).2
+      have hpi := Real.pi_pos
+      push_cast
+      nlinarith [t.2.1]
+    · rw [div_lt_iff₀ hden]
+      field_simp [ne_of_gt hden]
+      have ht := t.2.2
+      have hpi := Real.pi_pos
+      push_cast at hk ⊢
+      nlinarith
+  constructor
+  · rw [zipBoundaryMap, hcircle0, AddCircle.liftIco_coe_apply hφ0]
+    rw [zipProfile, if_pos]
+    · simp only [φ0, a, zipStart]
+      norm_cast
+      field_simp [hden']
+      push_cast
+      ring
+    · simp only [φ0, a, zipStart]
+      rw [div_le_iff₀ hden]
+      field_simp [hden']
+      nlinarith [Real.pi_pos, t.2.2]
+  · rw [zipBoundaryMap, hcircle1, AddCircle.liftIco_coe_apply hφ1]
+    rw [zipProfile, if_pos]
+    · simp only [φ1, a, zipStart]
+      norm_cast
+      field_simp [hden']
+      push_cast
+      ring
+    · simp only [φ1, a, zipStart]
+      rw [div_le_iff₀ hden]
+      field_simp [ne_of_gt hden]
+      have ht := t.2.2
+      have hpi := Real.pi_pos
+      push_cast
+      nlinarith
 -- END SEAT AREA
 
 /-! ### The cone -/
