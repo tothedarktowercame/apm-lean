@@ -2339,6 +2339,46 @@ lemma apm_m01J04_mollify_convolution_weakGradient
               (ContinuousLinearMap.lsmul ℝ ℝ) volume x i * ψ x) := by
   sorry
 
+lemma apm_m01J04_mollify_package_aux_val_contDiff
+    {d : ℕ} (w : apm_m01J04_H1 d Set.univ)
+    (κ : EuclideanSpace ℝ (Fin d) → ℝ)
+    (hκsmooth : ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) κ)
+    (hκcompact : HasCompactSupport κ) :
+    ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞)
+      (MeasureTheory.convolution κ w.val
+        (ContinuousLinearMap.lsmul ℝ ℝ) volume) := by
+  have hwloc : LocallyIntegrable w.val volume := by
+    have hw : MemLp w.val 2 volume := by
+      simpa only [Measure.restrict_univ] using w.val_memLp
+    exact hw.locallyIntegrable (by norm_num)
+  exact hκcompact.contDiff_convolution_left
+    (ContinuousLinearMap.lsmul ℝ ℝ) hκsmooth hwloc
+
+lemma apm_m01J04_mollify_package_aux_val_compact
+    {d : ℕ} (w : apm_m01J04_H1 d Set.univ)
+    {C : Set (EuclideanSpace ℝ (Fin d))} (hC : IsCompact C)
+    (hwval : Function.support w.val ⊆ C)
+    (κ : EuclideanSpace ℝ (Fin d) → ℝ)
+    (hκcompact : HasCompactSupport κ) :
+    HasCompactSupport (MeasureTheory.convolution κ w.val
+      (ContinuousLinearMap.lsmul ℝ ℝ) volume) := by
+  have hwcompact : HasCompactSupport w.val :=
+    hC.of_isClosed_subset isClosed_closure
+      (closure_minimal hwval hC.isClosed)
+  exact hκcompact.convolution (ContinuousLinearMap.lsmul ℝ ℝ) hwcompact
+
+lemma apm_m01J04_mollify_package_aux_val_memLp
+    {d : ℕ} (w : apm_m01J04_H1 d Set.univ)
+    {C : Set (EuclideanSpace ℝ (Fin d))} (hC : IsCompact C)
+    (hwval : Function.support w.val ⊆ C)
+    (κ : EuclideanSpace ℝ (Fin d) → ℝ)
+    (hκsmooth : ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) κ)
+    (hκcompact : HasCompactSupport κ) :
+    MemLp (MeasureTheory.convolution κ w.val
+      (ContinuousLinearMap.lsmul ℝ ℝ) volume) 2 volume := by
+  exact (apm_m01J04_mollify_package_aux_val_contDiff w κ hκsmooth hκcompact).continuous.memLp_of_hasCompactSupport
+    (apm_m01J04_mollify_package_aux_val_compact w hC hwval κ hκcompact)
+
 /-- Package two convolution fields into the encoded global `H¹` record.  All
 analytic conclusions needed from the other leaves are explicit hypotheses, so
 this assembly can be proved independently. -/
@@ -2346,6 +2386,7 @@ lemma apm_m01J04_mollify_package
     {d : ℕ} (w : apm_m01J04_H1 d Set.univ)
     {C : Set (EuclideanSpace ℝ (Fin d))} (hC : IsCompact C)
     (hwval : Function.support w.val ⊆ C)
+    (hwgrad : Function.support w.grad ⊆ C)
     (κ : EuclideanSpace ℝ (Fin d) → ℝ)
     (hκsmooth : ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) κ)
     (hκcompact : HasCompactSupport κ)
@@ -2441,7 +2482,7 @@ lemma apm_m01J04_core_exists_smooth_global_approx_aux_mollify
     apm_m01J04_mollify_exists_L2_kernel w hdelta (half_pos heta)
   have hweak := apm_m01J04_mollify_convolution_weakGradient w κ hκsmooth hκcompact
   obtain ⟨a, hasmooth, hacompact, hasupport, haw⟩ :=
-    apm_m01J04_mollify_package w hCcompact hwval κ hκsmooth hκcompact hκsupport hκerror hweak
+    apm_m01J04_mollify_package w hCcompact hwval hwgrad κ hκsmooth hκcompact hκsupport hκerror hweak
   refine ⟨a, hasmooth, hacompact, ?_,
     apm_m01J04_mollify_error_transfer a w u haw hwu⟩
   rw [← Metric.cthickening_closure]
