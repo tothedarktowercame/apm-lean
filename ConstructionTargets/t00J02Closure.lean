@@ -1120,6 +1120,24 @@ structure CanonicalRegularFiberWitness
     CanonicalRegularFiberDegreeCalculations
       (f := f) (c := c) choice.mem_circle e
 
+/-- A discrete singleton fiber on the target circle supplies the finite part
+of the canonical witness; the calculation is stated using that exact derived
+fiber instance. -/
+noncomputable def canonicalRegularFiberWitness_of_isDiscrete
+    {S : Type} [TopologicalSpace S] [T2Space S] [CompactSpace S]
+    [ChartedSpace SurfaceModel S]
+    (f : C(S, S)) (c : C(Circle, S))
+    (e : surfaceHomology S ≅ ModuleCat.of ℤ ℤ)
+    (y : S) (hy : y ∈ Set.range c)
+    (hdiscrete : IsDiscrete (f ⁻¹' {y}))
+    (calculations : letI := regularFiberFintype_of_isDiscrete f y hdiscrete
+      CanonicalRegularFiberDegreeCalculations
+        (f := f) (c := c) hy e) :
+    CanonicalRegularFiberWitness f c e := by
+  let choice : FiniteRegularFiberChoice f c :=
+    ⟨y, hy, regularFiberFintype_of_isDiscrete f y hdiscrete⟩
+  exact { choice := choice, calculations := calculations }
+
 /-- The integrated regular-fiber witness is sufficient for top-homology
 vanishing; no additional component-lift choice is needed at this stage. -/
 theorem CanonicalRegularFiberWitness.topHomologyMap_eq_zero
@@ -1197,6 +1215,7 @@ end ConstructionTargets.T00J02Closure
 #print axioms ConstructionTargets.T00J02Closure.CanonicalRegularFiberDegreeCalculations.surfaceTopDegree_eq_zero
 #print axioms ConstructionTargets.T00J02Closure.CanonicalRegularFiberDegreeCalculations.topHomologyMap_eq_zero_withoutLifts
 #print axioms ConstructionTargets.T00J02Closure.CanonicalRegularFiberWitness.topHomologyMap_eq_zero
+#print axioms ConstructionTargets.T00J02Closure.canonicalRegularFiberWitness_of_isDiscrete
 #print axioms ConstructionTargets.T00J02Closure.topHomologyMap_eq_zero_of_exists_canonicalRegularFiberWitness
 #print axioms ConstructionTargets.T00J02Closure.RegularFiberChartCalculations.topHomologyMap_eq_zero
 #print axioms ConstructionTargets.T00J02Closure.circleDegree_eq_homologyMap
