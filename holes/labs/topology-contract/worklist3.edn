@@ -36158,6 +36158,16 @@
       :exit 1,
       :correction
       "proved source endpoint; deferred target arithmetic"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1792014202354-12472-0497366d",
+     :commands
+     ["exact committed-scope assertion for 8c4eb4f"
+      "fixture SHA-256 assertion; lake env lean frozen interface"
+      "statement-registry check; placeholder/forbidden recount"],
+     :finding
+     "PASS: 8c4eb4f is genuine compiled, sorry-free progress after 263f5d47. The verified interface maps Fin(runs+1) to outer subtype V, and its equality is oriented from subtype coercion to the corresponding ambient canonical boundary. This is the representation bridge required for the next run fold, while van Kampen remains explicitly partial. Hash and scope match; standard axioms only; registry 166/166; Main 1->1 placeholder; residual milestones listed."},
     :commit "b032e84260f3dfcb0272bdfda8f6cd572728231c",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
@@ -36168,7 +36178,7 @@
      "3edb25ba46a065adac7d13a37997d3df3ae3d22803992764e67a6794829d373e"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -36186,7 +36196,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t93J03Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Packaged every indexed maximal run as the exact dependent point/path family consumed by Path.concat; boundary endpoint identification remains.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Proved each selected run block starts at the literal source vertex of its indexed maximal run; target/boundary identification remains.",
    :id :program-2026-10-13-close-t93j03,
    :kind :final-adapter,
    :campaign-priority 30,
@@ -36492,7 +36502,11 @@
     {:job 4,
      :commit "d1f33974b4b2f99f6a186874a1ad29108b7719e6",
      :reason
-     "Packaged every indexed maximal run as the exact dependent point/path family consumed by Path.concat; boundary endpoint identification remains."}]}
+     "Packaged every indexed maximal run as the exact dependent point/path family consumed by Path.concat; boundary endpoint identification remains."}
+    {:job 5,
+     :commit "b032e84260f3dfcb0272bdfda8f6cd572728231c",
+     :reason
+     "Proved each selected run block starts at the literal source vertex of its indexed maximal run; target/boundary identification remains."}]}
   {:consumer :t99J05,
    :stop-count 5,
    :evidence
@@ -39899,7 +39913,7 @@
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "pathTwoOpenSubdivisionRunBlockPoint_zero",
@@ -39909,7 +39923,9 @@
     :reported-by [:program-2026-10-13-close-t93j03],
     :type "run block source equals indexed run head vertex",
     :area "covering-subgroup-correspondence",
-    :proved-in :program-2026-10-13-close-t93j03},
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "b032e84260f3dfcb0272bdfda8f6cd572728231c"},
    :id :lemma-pathtwoopensubdivisionrunblockpoint-zero,
    :kind :lemma,
    :depends-on [:lemma-pathtwoopensubdivisionrunblockpiece],
