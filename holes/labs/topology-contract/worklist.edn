@@ -113856,14 +113856,13 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "Recorded fixture hash mismatch: :fixture.sha256 is 0bca6ce32c019fc3053c7f813c26917169cf817375b44d5e722b864b61a526450c1, but ConstructionTargets/PointWedgeVanKampen.blueprint.md at recorded commit c9b3af27 has exact SHA-256 0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0. Re-record the fixture hash for the reviewed commit.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
    :evidence
    {:placeholder-delta {:source-before 0, :source-after 0},
-    :residual
-    "Simplify explicit source unit/counit factors into the existing connector square; then B6/B12.",
+    :residual "Compare the coherent overlap connector; then B6/B12.",
     :outcome :stop,
     :warnings ["existing linter"],
     :missing-theorems
@@ -113877,9 +113876,9 @@
       :area "fundamental-group-wedge-of-circles"}],
     :statement-hashes
     {:source
-     "736c704dc1a3dbc1eab87f3e553f17dcfa5067521eba1ea544f884518c5e1e4b",
+     "c281a11a315aecace5a28644e2d2bc2d472104e1c67e70c02d1f8dd9ef01abc5",
      :documentation
-     "21ddacb94979a1af6ce30283b67a9e1b2687837fc1555e1c9e45532a0aef14cc",
+     "eff1de850e7f7ada54ca960568c9e51a86e386d862dceea739ca5d8788eab3ed",
      :blueprint
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0",
      :registry "166/166"},
@@ -113887,7 +113886,7 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
     :reason
-    "Named and expanded the pulled-back right source connector system.",
+    "Expanded mapped connector factors; arbitrary connectors lack counit coherence.",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/PointWedgeVanKampen.lean",
@@ -113897,11 +113896,14 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "sha256/diff/placeholders", :exit 0}],
     :diagnostic-history
-    [{:cmd
+    [{:cmd "general counit cancellation draft",
+      :exit 1,
+      :finding "false for arbitrary connectors"}
+     {:cmd
       "lake build ConstructionTargets.ThreeCirclesFundamentalGroup",
       :exit 1,
-      :finding "B12 absent."}],
-    :commit "a34f27639d942b223b57cbe15117e20037fe5a31",
+      :finding "B12 absent"}],
+    :commit "900db39d71f88c8e27a735447e1eab3960c77939",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
      "ConstructionTargets/PointWedgeVanKampen.md"],
@@ -113911,7 +113913,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
