@@ -93,6 +93,34 @@ theorem transverseCircle_preimage_component_signedCount
   exact ⟨γ, ℓ, hxγ, hγsub, hlift,
     circleDegree_eq_zero_of_homologyMap_eq_zero ℓ hℓzero⟩
 
+/-- The signed contribution of finitely many transverse preimage components.
+The orientation sign and the winding degree are kept as separate factors so
+the geometric component theorem can discharge the latter pointwise. -/
+def componentSignedCount {ι : Type*} [Fintype ι]
+    (orientationSign componentDegree : ι → ℤ) : ℤ :=
+  ∑ i, orientationSign i * componentDegree i
+
+/-- If every component winding degree is zero, its total signed contribution
+is zero, independently of the chosen component orientations. -/
+theorem componentSignedCount_eq_zero_of_componentDegree_eq_zero
+    {ι : Type*} [Fintype ι]
+    (orientationSign componentDegree : ι → ℤ)
+    (hdegree : ∀ i, componentDegree i = 0) :
+    componentSignedCount orientationSign componentDegree = 0 := by
+  simp [componentSignedCount, hdegree]
+
+/-- Algebraic final step of the regular-value formula: once the top-degree
+coordinate is identified with the component signed count, pointwise zero
+component degrees force that coordinate to vanish. -/
+theorem regularValue_topDegree_eq_zero_of_signedCount
+    {ι : Type*} [Fintype ι] (topDegree : ℤ)
+    (orientationSign componentDegree : ι → ℤ)
+    (hcount : topDegree = componentSignedCount orientationSign componentDegree)
+    (hdegree : ∀ i, componentDegree i = 0) : topDegree = 0 := by
+  rw [hcount]
+  exact componentSignedCount_eq_zero_of_componentDegree_eq_zero
+    orientationSign componentDegree hdegree
+
 /-- A global integral top-homology coordinate together with its expression in
 the canonical local chart generator at every point.  The coefficient is kept
 explicit because its sign is precisely the orientation datum used by the
@@ -140,3 +168,5 @@ end ConstructionTargets.T00J02Closure
 #print axioms ConstructionTargets.T00J02Closure.circleDegree_eq_homologyMap
 #print axioms ConstructionTargets.T00J02Closure.circleDegree_eq_zero_of_homologyMap_eq_zero
 #print axioms ConstructionTargets.T00J02Closure.transverseCircle_preimage_component_signedCount
+#print axioms ConstructionTargets.T00J02Closure.componentSignedCount_eq_zero_of_componentDegree_eq_zero
+#print axioms ConstructionTargets.T00J02Closure.regularValue_topDegree_eq_zero_of_signedCount
