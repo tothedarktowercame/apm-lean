@@ -1198,6 +1198,37 @@ theorem circleIntegerLoopOneCoordinate_eq_one_or_neg_one :
   exact Int.eq_one_or_neg_one_of_mul_eq_one
     (by simpa [mul_comm] using hc2)
 
+/-- The explicit winding-one class is the existing H₁-normalized positive
+class raised to the orientation coordinate. -/
+theorem circleIntegerLoopOneClass_eq_positive_zpow_coordinate :
+    circleIntegerLoopOneClass =
+      circlePositiveFundamentalClass ^ circleIntegerLoopOneCoordinate := by
+  apply moduleHurewicz_circle_injective
+  rw [moduleHurewicz_zpow, moduleHurewicz_circlePositiveFundamentalClass]
+  apply (show Function.Injective
+      ConstructionTargets.CircleHomology.circleH1IsoInt.hom from by
+    intro x y h
+    have hi := congrArg
+      ConstructionTargets.CircleHomology.circleH1IsoInt.inv h
+    simpa using hi)
+  rw [map_zsmul,
+    ConstructionTargets.CircleHomology.circleH1IsoInt.inv_hom_id_apply]
+  change circleIntegerLoopOneCoordinate =
+    circleIntegerLoopOneCoordinate • (1 : ℤ)
+  simp
+
+/-- Conversely, the previously chosen positive class is the explicit
+winding-one class raised to the same unit sign. -/
+theorem circlePositiveFundamentalClass_eq_integerLoop_zpow_coordinate :
+    circlePositiveFundamentalClass =
+      circleIntegerLoopOneClass ^ circleIntegerLoopOneCoordinate := by
+  have he := circleIntegerLoopOneClass_eq_positive_zpow_coordinate
+  rcases circleIntegerLoopOneCoordinate_eq_one_or_neg_one with h | h
+  · simpa [h] using he.symm
+  · rw [h] at he ⊢
+    rw [he]
+    simp
+
 /-- The boundary map computed in the existing H₁ coordinates.  Its extra
 factor records the only orientation ambiguity left by `circleH1IsoInt`. -/
 noncomputable def orientationSignedAttachingBoundary (P : PairingData) :
