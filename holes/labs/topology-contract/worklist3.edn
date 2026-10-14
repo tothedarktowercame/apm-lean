@@ -36159,6 +36159,16 @@
     [{:cmd "inner-block probe",
       :exit 1,
       :correction "opened overlap namespace; rerun passed"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1792003335031-12172-e4bcf69e",
+     :commands
+     ["git show/check/diff 24e6bfc0; scope and fixture SHA-256"
+      "lake build ConstructionTargets.t93J03Closure; lean fixture and Main"
+      "statement-registry check; placeholder/axiom recount"],
+     :finding
+     "PASS: 24e6bfc0 adds compiled, sorry-free progress beyond 77c92bf3. It combines exact overlap endpoints, nonempty dependent concatenation, and factorwise inner-range control to produce one equal overlap replacement routed through the outer piece in the ambient groupoid. No boundary or van Kampen conclusion is assumed. Exact scope/hash match; support placeholders 0->0; frozen Main remains 1; standard axioms only; registry 166/166. STOP lists side-index partition, outer-factor reassembly, reverse kernel/surjectivity, winding, C1/C2/Main."},
     :commit "24e6bfc0f31c41558794f23c04f50fc568a4110f",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
@@ -36169,7 +36179,7 @@
      "f3f9da19947cc77f80093f0d715a89eecf69b2988699230e709d990791a6120c"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -36187,7 +36197,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t93J03Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Proved every nonempty finite dependent concatenation stays in a set when each factor does; maximal-run index partition remains.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Combined finite inner-factor range control with the raw-run adapter: every overlap-bounded nonempty inner block has one equal outer-routed overlap replacement; side-index partition remains.",
    :id :program-2026-10-13-close-t93j03,
    :kind :final-adapter,
    :campaign-priority 30,
@@ -36417,7 +36427,11 @@
     {:job 3,
      :commit "77c92bf3b7390a1d297408e68d2f41a6b01c7e71",
      :reason
-     "Proved every nonempty finite dependent concatenation stays in a set when each factor does; maximal-run index partition remains."}]}
+     "Proved every nonempty finite dependent concatenation stays in a set when each factor does; maximal-run index partition remains."}
+    {:job 4,
+     :commit "24e6bfc0f31c41558794f23c04f50fc568a4110f",
+     :reason
+     "Combined finite inner-factor range control with the raw-run adapter: every overlap-bounded nonempty inner block has one equal outer-routed overlap replacement; side-index partition remains."}]}
   {:consumer :t99J05,
    :stop-count 5,
    :evidence
@@ -39179,7 +39193,7 @@
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "kleinPolygonInnerBlock_exists_outerOverlapReplacement",
@@ -39191,7 +39205,9 @@
     :type
     "overlap-bounded nonempty inner block equals one overlap path routed through outer piece",
     :area "covering-subgroup-correspondence",
-    :proved-in :program-2026-10-13-close-t93j03},
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "24e6bfc0f31c41558794f23c04f50fc568a4110f"},
    :id :lemma-kleinpolygoninnerblock-exists-outeroverlapreplacement,
    :kind :lemma,
    :depends-on [:lemma-path-concat-mem-of-piece-mem],
