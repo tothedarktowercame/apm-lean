@@ -87940,6 +87940,17 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "git show --check 0dfafee0b", :exit 0}
      {:cmd "axioms check", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792000608574-12013-f8d895c6",
+     :commands
+     ["git show/diff 0dfafee0b; sha256sum"
+      "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology"
+      "lake env lean /dev/stdin (#print axioms)"
+      "placeholder scan; statement-registry check; git show --check"],
+     :finding
+     "PASS: commit 0dfafee0b by topo-6 changes only scoped PolygonSurfaceHomology.lean; exact blob SHA-256 0968a17765b106ba9d2b345d2de1f8bc40cf378d26cf7e399c154bdd61c8926a. Exact snapshot builds; 0 placeholders; new theorems use propext/Classical.choice/Quot.sound; registry 166/0. Final-factor comparison unfolds both based maps, removes both Path.cast terms pointwise, and verifies the homeomorphism/right-inclusion composite. Rewriting old and final transport equalities yields installed split words without swapping factors. Real compiled progress; remaining milestones expand factors into labeled legs, then prove surjectivity/B6-B10."},
     :commit "0dfafee0b",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
@@ -87948,7 +87959,7 @@
      "0968a17765b106ba9d2b345d2de1f8bc40cf378d26cf7e399c154bdd61c8926a"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -87968,7 +87979,7 @@
     :blueprint
     "ConstructionTargets/PolygonSurfaceHomology.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked old-factor group-map transport.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked final-factor transport and installed split words.",
    :id :program-2026-10-13-polygon-surface-homology,
    :kind :reusable-theorem,
    :campaign-priority 31,
@@ -88121,7 +88132,11 @@
      :reason "Banked successor-wedge inclusions and based group maps."}
     {:job 5,
      :commit "02d093b35",
-     :reason "Banked old-factor group-map transport."}]}
+     :reason "Banked old-factor group-map transport."}
+    {:job 6,
+     :commit "0dfafee0b",
+     :reason
+     "Banked final-factor transport and installed split words."}]}
   {:consumer :t97A01,
    :stop-count 0,
    :phase :implementation,
@@ -90445,7 +90460,7 @@
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "finiteWedgeFinSuccLastFundamentalGroupMap_eq_transport",
@@ -90455,14 +90470,16 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "transported right leg equals final-factor map",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :program-2026-10-13-polygon-surface-homology,
+    :banked-commit "0dfafee0b"},
    :id :lemma-finitewedgefinsucclastfundamentalgroupmap-eq-transport,
    :kind :lemma,
    :depends-on [:lemma-finitewedgefinsucclastinclusion-wedgecircle],
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "finiteWedgeFinSucc_exists_installedSplitLegWord",
@@ -90472,7 +90489,9 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "successor loops are installed old/final factor words",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :program-2026-10-13-polygon-surface-homology,
+    :banked-commit "0dfafee0b"},
    :id :lemma-finitewedgefinsucc-exists-installedsplitlegword,
    :kind :lemma,
    :depends-on
