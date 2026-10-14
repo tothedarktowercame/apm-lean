@@ -375,12 +375,51 @@ theorem apm_t02a01_boundary_monodromy_is_deck_commutator_aux_endpoint_deck
         p n deck hdeck_over hdeck_transitive e.1
     exact hy.symm.trans hz.symm
 
-/-- LIBRARY (polygon boundary word): lifting any loop on the inner boundary of
-the square-annulus quotient ends at a deck translate by a commutator.
-Repaired 2026-10-14 (lemma-6 counterexample): `deck` must be an action
-(`hdeck_zero`, `hdeck_add`), else `deck 0` may move points and the statement is
-false for the constant loop; the global cover `hcover` is also supplied, since
-the boundary loop is a commutator only in π₁ of the punctured torus. -/
+/-- LIBRARY (square-annulus polygon word): after inclusion into the punctured
+torus, every based loop on the inner boundary is a power of a commutator.  The
+integer is its winding number.  This is the purely geometric half of the
+boundary-monodromy calculation. -/
+theorem apm_t02a01_boundary_inclusion_word
+    (x : apm_t02a01_boundarySpace)
+    (γ : FundamentalGroup apm_t02a01_boundarySpace x) :
+    ∃ (a b : FundamentalGroup apm_t02a01_puncturedTorus x.1) (k : ℤ),
+      FundamentalGroup.map
+          (⟨((↑) : apm_t02a01_boundarySpace → apm_t02a01_puncturedTorus),
+            continuous_subtype_val⟩ :
+            C(apm_t02a01_boundarySpace, apm_t02a01_puncturedTorus)) x γ =
+        (a * b * a⁻¹ * b⁻¹) ^ k := by
+  sorry
+
+/-- LIBRARY (covering/deck algebra): if the image of a boundary loop is a power
+of a commutator in the base fundamental group, its lifted endpoint is `deck 0`
+because the deck-label group is abelian.  The word equality is an explicit
+input, so this leaf is independent of the square-annulus geometry. -/
+theorem apm_t02a01_monodromy_of_boundary_word
+    {Stilde : Type*} [TopologicalSpace Stilde]
+    (p : Stilde → apm_t02a01_puncturedTorus) (n : ℕ)
+    (hcover : IsCoveringMap p)
+    (hcov : IsCoveringMap (apm_t02a01_restrictedCover p))
+    (deck : ZMod n → Homeomorph Stilde Stilde)
+    (hdeck_zero : deck 0 = Homeomorph.refl Stilde)
+    (hdeck_add : ∀ z w, deck (z + w) = (deck z).trans (deck w))
+    (hdeck_over : ∀ z x, p (deck z x) = p x)
+    (hdeck_transitive : ∀ x y, p x = p y → ∃! z, deck z x = y)
+    (e : p ⁻¹' apm_t02a01_boundary)
+    (γ : FundamentalGroup apm_t02a01_boundarySpace
+      (apm_t02a01_restrictedCover p e))
+    (a b : FundamentalGroup apm_t02a01_puncturedTorus (p e.1)) (k : ℤ)
+    (hword : FundamentalGroup.map
+        (⟨((↑) : apm_t02a01_boundarySpace → apm_t02a01_puncturedTorus),
+          continuous_subtype_val⟩ :
+          C(apm_t02a01_boundarySpace, apm_t02a01_puncturedTorus))
+        (apm_t02a01_restrictedCover p e) γ = (a * b * a⁻¹ * b⁻¹) ^ k) :
+    (hcov.monodromy γ ⟨e, rfl⟩).1.1 = deck 0 e.1 := by
+  sorry
+
+/-- The polygon word and the covering/deck calculation assembled.  Repaired
+2026-10-14 (lemma-6 counterexample): `deck` must be an action (`hdeck_zero`,
+`hdeck_add`), else `deck 0` may move points and the statement is false for the
+constant loop. -/
 theorem apm_t02a01_boundary_monodromy_is_deck_commutator
     {Stilde : Type*} [TopologicalSpace Stilde]
     (p : Stilde → apm_t02a01_puncturedTorus) (n : ℕ)
@@ -396,7 +435,11 @@ theorem apm_t02a01_boundary_monodromy_is_deck_commutator
       (apm_t02a01_restrictedCover p e)) :
     ∃ u v : ZMod n,
       (hcov.monodromy γ ⟨e, rfl⟩).1.1 = deck (u + v - u - v) e.1 := by
-  sorry
+  obtain ⟨a, b, k, hword⟩ :=
+    apm_t02a01_boundary_inclusion_word (apm_t02a01_restrictedCover p e) γ
+  have hzero := apm_t02a01_monodromy_of_boundary_word p n hcover hcov deck
+    hdeck_zero hdeck_add hdeck_over hdeck_transitive e γ a b k hword
+  exact ⟨0, 0, by simpa using hzero⟩
 
 /-- The commutator translation is the identity because the deck group is the
 abelian group `ZMod n`.  This is independent of the boundary geometry. -/

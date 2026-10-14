@@ -79,21 +79,43 @@ Neither definition encodes a desired conclusion.
    use the standard pullback/base-change lemma directly.  Empty boundary would
    still be harmless for this statement, and no surjectivity of `p` is needed.
 
-5. `apm_t02a01_boundary_monodromy_is_deck_commutator` — **LIBRARY**, 100–150
-   lines after leaf 1, otherwise independent because `hcov` and the simply
-   transitive deck action are explicit.  It
-   isolates exactly the polygon calculation: every lifted inner-boundary loop
-   ends at `deck (u + v - u - v) e`.  Use
-   `IsCoveringMap.liftPath`, `liftPath_trans`, `liftPath_lifts`,
+5a. `apm_t02a01_boundary_inclusion_word` — **LIBRARY**, 80–140 lines,
+   independent.  For an arbitrary boundary basepoint and arbitrary boundary
+   loop, its image under the literal subtype inclusion is
+   `(a*b*a⁻¹*b⁻¹)^k` in the punctured-torus fundamental group, where `k : ℤ`
+   is the winding number.  This is only the square-annulus polygon
+   geometry: it mentions no cover or deck action.  Build radial paths from the
+   varying inner-boundary basepoint to a fixed corner/edge basepoint, use
+   `Path.Homotopic.Quotient.mk_surjective`, `FundamentalGroup.map_apply`,
+   `Path.Homotopic.map`, `Path.Homotopic.trans_assoc`, and the explicit
+   edge-pair quotient homotopies.  The closest worked models are
+   `ConstructionTargets.PolygonOuterRadialRelation.surfaceRel_boundary` and
+   the normal-form/path constructions in `PolygonSurfacePiOne`; they cannot be
+   applied verbatim because this file uses `Relation.EqvGen` on the annulus.
+   A constant loop is represented by `k=0`.  Negative winding and reversed
+   boundary orientation are covered by negative `k`.  The exponent is
+   essential: a nontrivial power of a commutator in a free group need not
+   itself be one commutator.
+
+5b. `apm_t02a01_monodromy_of_boundary_word` — **LIBRARY**, 70–120 lines,
+   independent of 5a because the equation identifying the included loop with
+   `(a*b*a⁻¹*b⁻¹)^k` is an explicit hypothesis.  Lift representatives of `a` and
+   `b` in the global cover, use simple transitivity to name their endpoints
+   `deck u e` and `deck v e`, and calculate the lift of the fourfold word.
+   Useful APIs: `FundamentalGroup.toPath`, `IsCoveringMap.liftPath`,
+   `liftPath_trans`, `liftPath_symm`, `liftPath_lifts`,
    `liftPath_apply_one_eq_of_homotopicRel`, `monodromy_trans_apply`, and
-   `Path.Homotopic.Quotient.mk_surjective`.  The required missing input is the
-   square-annulus relation saying the inner boundary represents `[a,b]`; the
-   nearby `ConstructionTargets.PolygonOuterRadialRelation.surfaceRel_boundary`
-   and `PolygonSurfacePiOne` normal-form lemmas are the models, but do not
-   directly cover this quotient.  This leaf deliberately returns endpoint
-   equality, not trivial monodromy, so it does not silently include the
-   abelian-group argument.  Reversing boundary orientation merely replaces the
-   commutator by its inverse, also zero in `ZMod n`.
+   `monodromy_symm_apply`, and the integer-power rules for a group hom; use `hdeck_add` and uniqueness from
+   `hdeck_transitive` to move starting points through successive lifts.
+   Naturality between the restricted lift and the global lift follows from
+   uniqueness of path lifting after applying `Subtype.val`.  At `n=1` all
+   labels are zero.  No positivity is required, and the constant-word case is
+   valid precisely because `hdeck_zero` is assumed.  Its conclusion is the
+   sharp endpoint equality with `deck 0`, not the final existential.
+
+`apm_t02a01_boundary_monodromy_is_deck_commutator` is now a sorry-free
+two-line assembly of 5a and 5b.  It deliberately stops before using
+commutativity of `ZMod n`.
 
 6. `apm_t02a01_deck_commutator_apply` — 10–25 lines, fully independent.  Use
    `sub_eq_add_neg`, `add_comm`, `add_left_neg`, `add_zero`, then
@@ -153,10 +175,11 @@ cardinality argument and does not require `hcover`.
 
 ## Dependency layers
 
-* Layer 1 (fully parallel): leaves 1, 4, 6, 7, 8, and
+* Layer 1 (fully parallel): leaves 1, 4, 5a, 5b, 6, 7, 8, and
   `apm_t02a01_fiber_card`.
-* Layer 1 as well, with explicit inputs supplied as hypotheses: leaves 2, 3,
-  and 5.  Thus no leaf's proof needs another sorry-backed declaration.
+* Layer 1 as well, with explicit inputs supplied as hypotheses: leaves 2 and 3.
+  In particular, 5b receives 5a's eventual conclusion as `hword`, so no leaf's
+  proof needs another sorry-backed declaration.
 * Layer 2 consists only of the three existing sorry-free assembly lemmas.
 * Layer 3 is the unchanged main proof, which installs the geometry instances,
   chooses a boundary point, applies the monodromy/component assemblies, and
