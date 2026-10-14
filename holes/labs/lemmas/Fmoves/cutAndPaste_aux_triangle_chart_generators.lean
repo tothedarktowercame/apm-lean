@@ -1597,6 +1597,46 @@ lemma mergeRepeatedBlock_aux_boundary_relation_aux_reverse_aux_a_fresh
   simp [inv] at ha ⊢
   aesop
 
+/-- Reverse generators for a pair with an ordinary label (both indices in the `u`, `v`, `t` blocks): pull back with the identity-type edge formulas `hg.on_u/on_v/on_t`. -/
+lemma mergeRepeatedBlock_aux_boundary_relation_aux_reverse_aux_common
+    {Label : Type*} [DecidableEq Label]
+    (u v t : List (Signed Label)) (y z a : Signed Label)
+    (hyz : y.1 ≠ z.1)
+    (ha : a.1 ∉ (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t).map Prod.fst)
+    (hy : ((u ++ v ++ t).map Prod.fst).count y.1 = 0)
+    (hz : ((u ++ v ++ t).map Prod.fst).count z.1 = 0)
+    (hw : IsPolygonWord (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t))
+    (g : Circle ≃ₜ Circle) (hg : MergeRepeatedBlockEdgeSpec g u.length v.length t.length)
+    (i j : Fin (u ++ [a] ++ v ++ [inv a] ++ t).length) (hij : i ≠ j) (s : Set.Icc (0 : ℝ) 1)
+    (hlab : ((u ++ [a] ++ v ++ [inv a] ++ t).get i).1 = ((u ++ [a] ++ v ++ [inv a] ++ t).get j).1) (hne : ((u ++ [a] ++ v ++ [inv a] ++ t).get i).1 ≠ a.1)
+    (d₁ d₂ : Circle)
+    (h₁ : circleToDisk d₁ = edgePoint (u ++ [a] ++ v ++ [inv a] ++ t).length i s)
+    (h₂ : circleToDisk d₂ = edgePoint (u ++ [a] ++ v ++ [inv a] ++ t).length j
+      (if ((u ++ [a] ++ v ++ [inv a] ++ t).get i).2 = ((u ++ [a] ++ v ++ [inv a] ++ t).get j).2 then s else reverseParameter s)) :
+    Relation.EqvGen (fun p q : Circle => WordRel (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t) (circleToDisk p) (circleToDisk q))
+      (g.symm d₁) (g.symm d₂) := by
+  sorry
+
+/-- Reverse generators for the `a` / `a⁻¹` pair: split the parameter at `1/2`; the lower half comes from `y` / `y⁻¹`, the upper half from `z` / `z⁻¹` (`hg.on_y/on_z/on_inv_z/on_inv_y`). -/
+lemma mergeRepeatedBlock_aux_boundary_relation_aux_reverse_aux_merged
+    {Label : Type*} [DecidableEq Label]
+    (u v t : List (Signed Label)) (y z a : Signed Label)
+    (hyz : y.1 ≠ z.1)
+    (ha : a.1 ∉ (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t).map Prod.fst)
+    (hy : ((u ++ v ++ t).map Prod.fst).count y.1 = 0)
+    (hz : ((u ++ v ++ t).map Prod.fst).count z.1 = 0)
+    (hw : IsPolygonWord (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t))
+    (g : Circle ≃ₜ Circle) (hg : MergeRepeatedBlockEdgeSpec g u.length v.length t.length)
+    (i j : Fin (u ++ [a] ++ v ++ [inv a] ++ t).length) (hij : i ≠ j) (s : Set.Icc (0 : ℝ) 1)
+    (hlab : ((u ++ [a] ++ v ++ [inv a] ++ t).get i).1 = ((u ++ [a] ++ v ++ [inv a] ++ t).get j).1) (heq : ((u ++ [a] ++ v ++ [inv a] ++ t).get i).1 = a.1)
+    (d₁ d₂ : Circle)
+    (h₁ : circleToDisk d₁ = edgePoint (u ++ [a] ++ v ++ [inv a] ++ t).length i s)
+    (h₂ : circleToDisk d₂ = edgePoint (u ++ [a] ++ v ++ [inv a] ++ t).length j
+      (if ((u ++ [a] ++ v ++ [inv a] ++ t).get i).2 = ((u ++ [a] ++ v ++ [inv a] ++ t).get j).2 then s else reverseParameter s)) :
+    Relation.EqvGen (fun p q : Circle => WordRel (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t) (circleToDisk p) (circleToDisk q))
+      (g.symm d₁) (g.symm d₂) := by
+  sorry
+
 /-- Reverse generators: each identified target pair pulls back under `g⁻¹` to a
 related source pair (split the `a` / `a⁻¹` parameter at `1/2`). -/
 lemma mergeRepeatedBlock_aux_boundary_relation_aux_reverse
@@ -1611,7 +1651,11 @@ lemma mergeRepeatedBlock_aux_boundary_relation_aux_reverse
     ∀ d₁ d₂ : Circle, WordRel (u ++ [a] ++ v ++ [inv a] ++ t) (circleToDisk d₁) (circleToDisk d₂) →
       Relation.EqvGen (fun p q : Circle => WordRel (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t) (circleToDisk p) (circleToDisk q))
         (g.symm d₁) (g.symm d₂) := by
-  sorry
+  intro d₁ d₂ h
+  obtain ⟨i, j, hij, s, hlab, h₁, h₂⟩ := h
+  by_cases hA : ((u ++ [a] ++ v ++ [inv a] ++ t).get i).1 = a.1
+  · exact mergeRepeatedBlock_aux_boundary_relation_aux_reverse_aux_merged u v t y z a hyz ha hy hz hw g hg i j hij s hlab hA d₁ d₂ h₁ h₂
+  · exact mergeRepeatedBlock_aux_boundary_relation_aux_reverse_aux_common u v t y z a hyz ha hy hz hw g hg i j hij s hlab hA d₁ d₂ h₁ h₂
 
 /-- Combinatorial leaf: the seven edge formulas carry generators to
 generators in both directions; `EqvGen` also handles all shared vertices. -/
@@ -1949,7 +1993,32 @@ lemma cutAndPaste_aux_triangle_charts_forward {Label : Type*}
     ∀ y y', cutAndPasteParameterRel u v t x a y y' →
       Relation.EqvGen (WordRel (u ++ [x, x] ++ inverseWord v ++ t))
         (b y) (b y') := by
-  sorry
+  intro y y' h
+  unfold cutAndPasteParameterRel at h
+  have lift : ∀ p q : Disk,
+      Relation.EqvGen (WordRel (u ++ [x] ++ v ++ [x] ++ t)) p q →
+      ∀ yp yq, a yp = p → a yq = q →
+        Relation.EqvGen
+          (WordRel (u ++ [x, x] ++ inverseWord v ++ t)) (b yp) (b yq) := by
+    intro p q hpq
+    induction hpq with
+    | rel p q hpq =>
+        intro yp yq hyp hyq
+        apply hgen yp yq
+        simpa [hyp, hyq] using hpq
+    | refl p =>
+        intro yp yq hyp hyq
+        apply hfib yp yq
+        rw [hyp, hyq]
+    | symm p q _ ih =>
+        intro yp yq hyp hyq
+        exact Relation.EqvGen.symm _ _ (ih yq yp hyq hyp)
+    | trans p q r _ _ ihpq ihqr =>
+        intro yp yr hyp hyr
+        obtain ⟨yq, hyq⟩ := has q
+        exact Relation.EqvGen.trans _ _ _
+          (ihpq yp yq hyp hyq) (ihqr yq yr hyq hyr)
+  exact lift (a y) (a y') h y y' rfl rfl
 
 lemma cutAndPaste_aux_triangle_charts_reverse {Label : Type*}
     [DecidableEq Label] (u v t : List (Signed Label)) (x : Signed Label)
@@ -1962,7 +2031,32 @@ lemma cutAndPaste_aux_triangle_charts_reverse {Label : Type*}
     ∀ y y', Relation.EqvGen
         (WordRel (u ++ [x, x] ++ inverseWord v ++ t)) (b y) (b y') →
       cutAndPasteParameterRel u v t x a y y' := by
-  sorry
+  intro y y' h
+  have lift : ∀ p q,
+      Relation.EqvGen
+          (WordRel (u ++ [x, x] ++ inverseWord v ++ t)) p q →
+        ∀ yp yq, b yp = p → b yq = q →
+          Relation.EqvGen
+            (WordRel (u ++ [x] ++ v ++ [x] ++ t)) (a yp) (a yq) := by
+    intro p q hpq
+    induction hpq with
+    | rel p q hpq =>
+        intro yp yq hyp hyq
+        apply hgen yp yq
+        simpa [hyp, hyq] using hpq
+    | refl p =>
+        intro yp yq hyp hyq
+        apply hfib yp yq
+        rw [hyp, hyq]
+    | symm p q _ ih =>
+        intro yp yq hyp hyq
+        exact Relation.EqvGen.symm _ _ (ih yq yp hyq hyp)
+    | trans p q r _ _ ihpq ihqr =>
+        intro yp yr hyp hyr
+        obtain ⟨yq, hyq⟩ := hbs q
+        exact Relation.EqvGen.trans _ _ _
+          (ihpq yp yq hyp hyq) (ihqr yq yr hyq hyr)
+  exact lift (b y) (b y') h y y' rfl rfl
 
 /-- Sorry-free assembly of the radial construction, generator bookkeeping,
 and the two independent `EqvGen` lifts. -/
