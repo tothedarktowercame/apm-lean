@@ -210,7 +210,15 @@ noncomputable def t96J02_kleinPlaneQuotient_homeomorph_aux_planeOrbitRel :
 This is independent of either polygon presentation. -/
 theorem t96J02_kleinPlaneOrbitQuotient_t2 :
     T2Space ConstructionTargets.KleinOrbitQuotientHomeomorph.PlaneOrbitQuotient := by
-  sorry
+  letI : ContinuousConstSMul T96J02PresentedGroup (ℝ × ℝ) :=
+    ⟨t96J02_kleinPlaneQuotient_pi1_origin_aux_continuous⟩
+  letI : ProperlyDiscontinuousSMul T96J02PresentedGroup (ℝ × ℝ) :=
+    ⟨fun hK hL =>
+      t96J02_kleinPlaneQuotient_pi1_origin_aux_finite_actors hK hL⟩
+  letI : T2Space T96J02KleinPlaneQuotient :=
+    t2Space_of_properlyDiscontinuousSMul_of_t2Space
+      (Γ := T96J02PresentedGroup) (T := ℝ × ℝ)
+  exact t96J02_kleinPlaneQuotient_homeomorph_aux_planeOrbitRel.symm.t2Space
 
 /-- The already-banked fundamental-domain equivalence, packaged as a
 homeomorphism once Hausdorffness is supplied explicitly. -/
