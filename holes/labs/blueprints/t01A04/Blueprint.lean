@@ -864,6 +864,43 @@ lemma apm_t01A04_circleCoverMap_evenlyCovered_basepoint_aux_fiber_points
       apply Subtype.ext
       simpa [Circle.exp, Complex.exp_mul_I] using hz
 
+/-- Basepoint neighbourhood in `X` for the circle cover (same set as the torus
+cover's `apm_t01A04_tbp_U`, defined later; its openness proof transfers verbatim). -/
+def apm_t01A04_cbp_U : Set apm_t01a04_X :=
+  (fun r => (Quotient.mk _ r : apm_t01a04_X)) ''
+    {r | Sum.elim (fun q : apm_t01a04_Torus => 0 < (q.1 : ℂ).re ∧ 0 < (q.2 : ℂ).re)
+      (fun z : Circle => 0 < (z : ℂ).re) r}
+
+/-- Sheet `i`: torus sheet `i` with both coordinates of positive real part, plus
+the arc of the circle summand around `sheetPoint i` on which `z²` has positive
+real part. -/
+def apm_t01A04_cbp_V (i : Fin 2) : Set apm_t01a04_CircleCover :=
+  (fun r => (Quotient.mk _ r : apm_t01a04_CircleCover)) ''
+    {r | Sum.elim (fun p : Fin 2 × apm_t01a04_Torus =>
+        p.1 = i ∧ 0 < (p.2.1 : ℂ).re ∧ 0 < (p.2.2 : ℂ).re)
+      (fun z : Circle =>
+        0 < ((z : ℂ) * star (apm_t01a04_sheetPoint i : ℂ)).re ∧ 0 < ((z : ℂ) ^ 2).re) r}
+
+lemma apm_t01A04_cbp_U_open : apm_t01a04_basepoint ∈ apm_t01A04_cbp_U ∧ IsOpen apm_t01A04_cbp_U := by
+  sorry
+
+lemma apm_t01A04_cbp_V_open (i : Fin 2) : IsOpen (apm_t01A04_cbp_V i) := by
+  sorry
+
+lemma apm_t01A04_cbp_V_disjoint : Pairwise (Function.onFun Disjoint apm_t01A04_cbp_V) := by
+  sorry
+
+lemma apm_t01A04_cbp_preimage :
+    apm_t01a04_circleCoverMap ⁻¹' apm_t01A04_cbp_U = ⋃ i, apm_t01A04_cbp_V i := by
+  sorry
+
+/-- On each sheet the cover map is a homeomorphism onto `U` (inverse: identity
+on torus sheet `i`, square root on the arc around `sheetPoint i`). -/
+lemma apm_t01A04_cbp_sheet_homeomorph (i : Fin 2) :
+    ∃ h : apm_t01A04_cbp_V i ≃ₜ apm_t01A04_cbp_U, ∀ y,
+      (h y : apm_t01a04_X) = apm_t01a04_circleCoverMap y := by
+  sorry
+
 /-- The two sheets over the basepoint (see the plan above). -/
 lemma apm_t01A04_circleCoverMap_evenlyCovered_basepoint_aux_sheets :
     ∃ (U : Set apm_t01a04_X) (V : Fin 2 → Set apm_t01a04_CircleCover),
@@ -872,7 +909,9 @@ lemma apm_t01A04_circleCoverMap_evenlyCovered_basepoint_aux_sheets :
       apm_t01a04_circleCoverMap ⁻¹' U = ⋃ i, V i ∧
       ∀ i, ∃ h : V i ≃ₜ U, ∀ y,
         (h y : apm_t01a04_X) = apm_t01a04_circleCoverMap y := by
-  sorry
+  obtain ⟨hb, hU⟩ := apm_t01A04_cbp_U_open
+  exact ⟨apm_t01A04_cbp_U, apm_t01A04_cbp_V, hb, hU, apm_t01A04_cbp_V_open, apm_t01A04_cbp_V_disjoint,
+    apm_t01A04_cbp_preimage, apm_t01A04_cbp_sheet_homeomorph⟩
 
 /-- Basepoint case.  Plan (from the first attempt): take
 `U = mk '' (inl '' {q | 0 < q.1.re ∧ 0 < q.2.re} ∪ inr '' {z | 0 < z.re})`,
