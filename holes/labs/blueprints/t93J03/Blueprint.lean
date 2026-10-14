@@ -502,10 +502,66 @@ theorem t93J03_cyclicCover_aux_free (n : Multiplicative ℤ) (z : T93J03Puncture
     (h : n • z = z) : n = 1 := by
   sorry
 
+theorem t93J03_cyclicCover_aux_range_aux_mem_range_iff_monodromy
+    {E B : Type*} [TopologicalSpace E] [TopologicalSpace B]
+    (p : E → B) (hp : IsCoveringMap p) (e : E)
+    (g : FundamentalGroup B (p e)) :
+    g ∈ (FundamentalGroup.map ⟨p, hp.continuous⟩ e).range ↔
+      hp.monodromy (FundamentalGroup.toPath g) ⟨e, rfl⟩ = ⟨e, rfl⟩ := by
+  constructor
+  · rintro ⟨a, rfl⟩
+    exact hp.monodromy_map (FundamentalGroup.toPath a)
+  · intro hg
+    obtain ⟨γ, hγ⟩ := Path.Homotopic.Quotient.mk_surjective
+      (FundamentalGroup.toPath g)
+    let Γ := hp.liftPath γ e (by simp)
+    have hΓ0 : Γ 0 = e := hp.liftPath_zero _ _ _
+    have hΓ1 : Γ 1 = e := by
+      have hm : hp.monodromy (Path.Homotopic.Quotient.mk γ) ⟨e, rfl⟩ = ⟨e, rfl⟩ := by
+        rw [hγ]
+        exact hg
+      exact congrArg Subtype.val hm
+    let δ : Path e e := ⟨Γ, hΓ0, hΓ1⟩
+    refine ⟨FundamentalGroup.fromPath (Path.Homotopic.Quotient.mk δ), ?_⟩
+    rw [FundamentalGroup.map_apply]
+    change (Path.Homotopic.Quotient.mk δ).map ⟨p, hp.continuous⟩ = _
+    calc
+      _ = Path.Homotopic.Quotient.mk γ := by
+        rw [← Path.Homotopic.Quotient.mk_map]
+        congr 1
+        ext t
+        exact congr_fun (hp.liftPath_lifts γ e (by simp)) t
+      _ = g := hγ
+
+/-- Lift comparison: a loop at `mk v` comes from `C` exactly when `E` sends the end of
+its lift through `ℝ² → ℝ²/G` (started at `v`) back to `E v`.  The lift of `γ` composed
+with `E` is the `pQ`-lift of `γ` from `E v` (`mk = pQ ∘ E`). -/
+theorem t93J03_cyclicCover_aux_range_aux_lift
+    (hpc : Continuous t93J03_cyc_pQ) (hpQ : IsCoveringMap t93J03_cyc_pQ)
+    (hpE : ∀ v, t93J03_cyc_pQ (t93J03_cyc_E v) = Quotient.mk _ v)
+    (hEc : Continuous t93J03_cyc_E)
+    (v : ℝ × ℝ) (γ : FundamentalGroup T93J03KleinPlaneQuotient (Quotient.mk _ v)) :
+    γ ∈ (FundamentalGroup.mapOfEq ⟨t93J03_cyc_pQ, hpc⟩ (hpE v)).range ↔
+      t93J03_cyc_E ((ConstructionTargets.DeckGroupQuotientFundamentalGroup.quotientMk_isCoveringMap
+          t93J03_kleinPlaneQuotient_pi1_origin_aux_free).monodromy
+            (FundamentalGroup.toPath γ) ⟨v, rfl⟩ : ℝ × ℝ) = t93J03_cyc_E v := by
+  sorry
+
+/-- `E (g • v) = E v` exactly for `g ∈ ⟨a⟩`. -/
+theorem t93J03_cyclicCover_aux_range_aux_fiber
+    (hEeq : ∀ v w : ℝ × ℝ, t93J03_cyc_E v = t93J03_cyc_E w ↔ ∃ n : ℤ, w = (v.1 + n, v.2))
+    (hA : ∀ (n : ℤ) (v : ℝ × ℝ),
+      (KleinPresentedGroupCoordinateModel.generatorA ^ n) • v = (v.1 + n, v.2))
+    (v : ℝ × ℝ) (g : KleinPresentedGroupCoordinateModel.PresentedKleinGroup) :
+    t93J03_cyc_E (g • v) = t93J03_cyc_E v ↔
+      g ∈ Subgroup.zpowers KleinPresentedGroupCoordinateModel.generatorA := by
+  sorry
+
 /-- The image of `π₁(C)` is exactly the preimage of `⟨a⟩` under the deck-group
-monodromy of the plane over the orbit quotient. -/
+monodromy of the plane over the orbit quotient.  (Split 2026-10-14: lemma-1 banked
+`aux_mem_range_iff_monodromy`; the lift comparison and the fibre algebra are leaves.) -/
 theorem t93J03_cyclicCover_aux_range
-    (hpc : Continuous t93J03_cyc_pQ)
+    (hpc : Continuous t93J03_cyc_pQ) (hpQ : IsCoveringMap t93J03_cyc_pQ)
     (hpE : ∀ v, t93J03_cyc_pQ (t93J03_cyc_E v) = Quotient.mk _ v)
     (hEcov : IsCoveringMap t93J03_cyc_E)
     (hEeq : ∀ v w : ℝ × ℝ, t93J03_cyc_E v = t93J03_cyc_E w ↔ ∃ n : ℤ, w = (v.1 + n, v.2))
@@ -516,7 +572,16 @@ theorem t93J03_cyclicCover_aux_range
       ConstructionTargets.DeckGroupQuotientFundamentalGroup.orbitEndpointMonodromy
           t93J03_kleinPlaneQuotient_pi1_origin_aux_free v γ ∈
         Subgroup.zpowers KleinPresentedGroupCoordinateModel.generatorA := by
-  sorry
+  have hm : ((ConstructionTargets.DeckGroupQuotientFundamentalGroup.quotientMk_isCoveringMap
+          t93J03_kleinPlaneQuotient_pi1_origin_aux_free).monodromy
+            (FundamentalGroup.toPath γ) ⟨v, rfl⟩ : ℝ × ℝ) =
+      ConstructionTargets.DeckGroupQuotientFundamentalGroup.orbitEndpointMonodromyRaw
+        t93J03_kleinPlaneQuotient_pi1_origin_aux_free v γ • v :=
+    (congrArg Subtype.val ((ConstructionTargets.DeckGroupQuotientFundamentalGroup.orbitQuotientFiberEquiv
+      t93J03_kleinPlaneQuotient_pi1_origin_aux_free v).apply_symm_apply _)).symm
+  rw [t93J03_cyclicCover_aux_range_aux_lift hpc hpQ hpE hEcov.continuous, hm,
+    t93J03_cyclicCover_aux_range_aux_fiber hEeq hA,
+    ConstructionTargets.DeckGroupQuotientFundamentalGroup.orbitEndpointMonodromy_apply, inv_mem_iff]
 
 /-- Transport the range computation across the homeomorphism to the Klein bottle and
 across any identification of its fundamental group. -/
@@ -579,7 +644,7 @@ theorem t93J03_cyclicCover_zpowers_generatorA
     ⟨Subtype.val, continuous_subtype_val⟩, t93J03_cyc_E v,
     hcov.homeomorph_comp Φ, (show Φ (t93J03_cyc_pQ (t93J03_cyc_E v)) = k by rw [hpE v, hq]), Topology.IsEmbedding.subtypeVal, ?_⟩
   exact t93J03_cyclicCover_aux_transport t93J03_cyc_pQ hcov.continuous Φ _ _ (hpE v) M
-    (fun γ => t93J03_cyclicCover_aux_range hcov.continuous hpE t93J03_cyclicCover_aux_E_covering
+    (fun γ => t93J03_cyclicCover_aux_range hcov.continuous hcov hpE t93J03_cyclicCover_aux_E_covering
       t93J03_cyclicCover_aux_E_eq_iff t93J03_cyclicCover_aux_generatorA_zpow v γ)
     t93J03_cyclicCover_aux_characteristic k hq e
 
