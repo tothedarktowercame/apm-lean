@@ -778,10 +778,128 @@ lemma circleToDisk_of_norm (p : Disk) (hp : ‖(p : ℂ)‖ = 1) :
 /-- Radial (cone) extension of a circle homeomorphism to the disk:
 `r • z ↦ r • g z`. -/
 -- BEGIN SEAT AREA
+def disk_radial_extension_aux_map (g : Circle ≃ₜ Circle) (p : Disk) : Disk :=
+  if hp : (p : ℂ) = 0 then ⟨0, by simp [Metric.mem_closedBall]⟩ else
+    ⟨(‖(p : ℂ)‖ : ℂ) *
+        (g ⟨‖(p : ℂ)‖⁻¹ * (p : ℂ), by
+          simp [Circle, Submonoid.unitSphere, norm_mul, hp]⟩ : ℂ), by
+      rw [Metric.mem_closedBall, dist_zero_right, norm_mul]
+      simp only [Complex.norm_real, Real.norm_eq_abs, abs_norm]
+      have hg : ‖(g ⟨‖(p : ℂ)‖⁻¹ * (p : ℂ), by
+          simp [Circle, Submonoid.unitSphere, norm_mul, hp]⟩ : ℂ)‖ = 1 := by
+        simpa [Circle, Submonoid.unitSphere] using (g _).2
+      rw [hg, mul_one]
+      simpa [dist_zero_right] using (Metric.mem_closedBall.mp p.2)⟩
+
+lemma disk_radial_extension_aux_norm (g : Circle ≃ₜ Circle) (p : Disk) :
+    ‖(disk_radial_extension_aux_map g p : ℂ)‖ = ‖(p : ℂ)‖ := by
+  unfold disk_radial_extension_aux_map
+  split_ifs with hp
+  · simp [hp]
+  · rw [norm_mul]
+    simp only [Complex.norm_real, Real.norm_eq_abs, abs_norm]
+    rw [show ‖(g ⟨‖(p : ℂ)‖⁻¹ * (p : ℂ), by
+        simp [Circle, Submonoid.unitSphere, norm_mul, hp]⟩ : ℂ)‖ = 1 by
+          simpa [Circle, Submonoid.unitSphere] using (g _).2,
+      mul_one]
+
+lemma disk_radial_extension_aux_continuous (g : Circle ≃ₜ Circle) :
+    Continuous (disk_radial_extension_aux_map g) := by
+  rw [continuous_iff_continuousAt]
+  intro p
+  by_cases hp : (p : ℂ) = 0
+  · rw [Metric.continuousAt_iff]
+    intro ε hε
+    refine ⟨ε, hε, fun q hq => ?_⟩
+    have hmp : disk_radial_extension_aux_map g p = 0 := by
+      apply Subtype.ext
+      simp [disk_radial_extension_aux_map, hp]
+    rw [hmp, Subtype.dist_eq]
+    change dist (disk_radial_extension_aux_map g q : ℂ) 0 < ε
+    rw [dist_zero_right]
+    simpa [Subtype.dist_eq, hp, disk_radial_extension_aux_norm] using hq
+  · have hev : ∀ᶠ q : Disk in nhds p, (q : ℂ) ≠ 0 := by
+      exact (isOpen_compl_singleton : IsOpen ({0} : Set ℂ)ᶜ).preimage
+        continuous_subtype_val |>.mem_nhds hp
+    have hopen : IsOpen {q : Disk | (q : ℂ) ≠ 0} :=
+      (isOpen_compl_singleton : IsOpen ({0} : Set ℂ)ᶜ).preimage continuous_subtype_val
+    have hc : ContinuousOn (disk_radial_extension_aux_map g)
+        {q : Disk | (q : ℂ) ≠ 0} := by
+      rw [continuousOn_iff_continuous_restrict]
+      let F : {q : Disk | (q : ℂ) ≠ 0} → Disk := fun q =>
+        ⟨(‖(q.1 : ℂ)‖ : ℂ) *
+          (g ⟨‖(q.1 : ℂ)‖⁻¹ * (q.1 : ℂ), by
+            simpa [Submonoid.unitSphere, norm_mul] using
+              (inv_mul_cancel₀ (norm_ne_zero_iff.mpr q.2))⟩ : ℂ), by
+          rw [Metric.mem_closedBall, dist_zero_right, norm_mul]
+          simp only [Complex.norm_real, Real.norm_eq_abs, abs_norm]
+          rw [show ‖(g _ : ℂ)‖ = 1 by
+            simpa [Circle, Submonoid.unitSphere] using (g _).2, mul_one]
+          simpa [dist_zero_right] using (Metric.mem_closedBall.mp q.1.2)⟩
+      have hF : Continuous F := by
+        dsimp [F]
+        fun_prop (disch := simp [norm_ne_zero_iff, Subtype.property])
+      convert hF using 1
+      funext q
+      simp [F, disk_radial_extension_aux_map, q.2, show (q.1 : ℂ) ≠ 0 from q.2]
+    exact (hc p hp).continuousAt (hopen.mem_nhds hp)
+
+lemma disk_radial_extension_aux_direction (g : Circle ≃ₜ Circle) (p : Disk)
+    (hp : (p : ℂ) ≠ 0) :
+    (⟨‖(disk_radial_extension_aux_map g p : ℂ)‖⁻¹ *
+        (disk_radial_extension_aux_map g p : ℂ), by
+      simp [disk_radial_extension_aux_norm, hp, Circle, Submonoid.unitSphere]⟩ : Circle) =
+      g ⟨‖(p : ℂ)‖⁻¹ * (p : ℂ), by
+        simp [Circle, Submonoid.unitSphere, hp]⟩ := by
+  apply Subtype.ext
+  simp [disk_radial_extension_aux_map, hp, disk_radial_extension_aux_norm,
+    norm_ne_zero_iff.mpr hp]
+
+def disk_radial_extension_aux_homeomorph (g : Circle ≃ₜ Circle) : Disk ≃ₜ Disk where
+  toFun := disk_radial_extension_aux_map g
+  invFun := disk_radial_extension_aux_map g.symm
+  left_inv := by
+    intro p
+    apply Subtype.ext
+    by_cases hp : (p : ℂ) = 0
+    · simp [disk_radial_extension_aux_map, hp]
+    · simp only [disk_radial_extension_aux_map, dif_neg hp]
+      have hm : (disk_radial_extension_aux_map g p : ℂ) ≠ 0 := by
+        intro hm
+        have hm' : disk_radial_extension_aux_map g p = (0 : Disk) := Subtype.ext hm
+        have hh := congrArg (fun q : Disk => ‖(q : ℂ)‖) hm'
+        simpa [disk_radial_extension_aux_norm, hp] using hh
+      simp [hm]
+      have hpD : p ≠ (0 : Disk) := fun h => hp (congrArg Subtype.val h)
+      simp [hpD]
+  right_inv := by
+    intro p
+    apply Subtype.ext
+    by_cases hp : (p : ℂ) = 0
+    · simp [disk_radial_extension_aux_map, hp]
+    · simp only [disk_radial_extension_aux_map, dif_neg hp]
+      have hm : (disk_radial_extension_aux_map g.symm p : ℂ) ≠ 0 := by
+        intro hm
+        have hm' : disk_radial_extension_aux_map g.symm p = (0 : Disk) := Subtype.ext hm
+        have hh := congrArg (fun q : Disk => ‖(q : ℂ)‖) hm'
+        simpa [disk_radial_extension_aux_norm, hp] using hh
+      simp [hm]
+      have hpD : p ≠ (0 : Disk) := fun h => hp (congrArg Subtype.val h)
+      simp [hpD]
+  continuous_toFun := disk_radial_extension_aux_continuous g
+  continuous_invFun := disk_radial_extension_aux_continuous g.symm
+
 lemma disk_radial_extension (g : Circle ≃ₜ Circle) :
     ∃ e : Disk ≃ₜ Disk, (∀ z : Circle, e (circleToDisk z) = circleToDisk (g z)) ∧
       ∀ p : Disk, ‖(p : ℂ)‖ < 1 → ‖(e p : ℂ)‖ < 1 := by
-  sorry
+  refine ⟨disk_radial_extension_aux_homeomorph g, ?_, ?_⟩
+  · intro z
+    apply Subtype.ext
+    simp [disk_radial_extension_aux_homeomorph,
+      disk_radial_extension_aux_map, circleToDisk, z.2]
+  · intro p hp
+    simpa [disk_radial_extension_aux_homeomorph,
+      disk_radial_extension_aux_norm] using hp
 -- END SEAT AREA
 
 /-- Interior points are related only to themselves: `WordRel` only pairs edge
