@@ -2200,13 +2200,57 @@ lemma apm_m01J04_mollify_package
 
 /-- Triangle transfer for the two-stage compact-core/mollification error. -/
 -- BEGIN SEAT AREA
+lemma apm_m01J04_mollify_error_transfer_aux_triangle
+    {d : ℕ} (a w u : apm_m01J04_H1 d Set.univ) :
+    apm_m01J04_H1dist a u ≤
+      apm_m01J04_H1dist a w + apm_m01J04_H1dist w u := by
+  have hv := eLpNorm_add_le
+    (a.val_memLp.sub w.val_memLp).1
+    (w.val_memLp.sub u.val_memLp).1 (by norm_num : (1 : ℝ≥0∞) ≤ 2)
+  have hg := eLpNorm_add_le
+    (a.grad_memLp.sub w.grad_memLp).1
+    (w.grad_memLp.sub u.grad_memLp).1 (by norm_num : (1 : ℝ≥0∞) ≤ 2)
+  have hvtop : eLpNorm (fun x ↦ a.val x - w.val x) 2 (volume.restrict Set.univ) +
+      eLpNorm (fun x ↦ w.val x - u.val x) 2 (volume.restrict Set.univ) ≠ ⊤ :=
+    ENNReal.add_ne_top.2 ⟨(a.val_memLp.sub w.val_memLp).eLpNorm_ne_top,
+      (w.val_memLp.sub u.val_memLp).eLpNorm_ne_top⟩
+  have hgtop : eLpNorm (fun x ↦ a.grad x - w.grad x) 2 (volume.restrict Set.univ) +
+      eLpNorm (fun x ↦ w.grad x - u.grad x) 2 (volume.restrict Set.univ) ≠ ⊤ :=
+    ENNReal.add_ne_top.2 ⟨(a.grad_memLp.sub w.grad_memLp).eLpNorm_ne_top,
+      (w.grad_memLp.sub u.grad_memLp).eLpNorm_ne_top⟩
+  have hv' : (eLpNorm (fun x ↦ a.val x - u.val x) 2 (volume.restrict Set.univ)).toReal ≤
+      (eLpNorm (fun x ↦ a.val x - w.val x) 2 (volume.restrict Set.univ)).toReal +
+      (eLpNorm (fun x ↦ w.val x - u.val x) 2 (volume.restrict Set.univ)).toReal := by
+    calc
+      _ ≤ (eLpNorm (fun x ↦ a.val x - w.val x) 2 (volume.restrict Set.univ) +
+          eLpNorm (fun x ↦ w.val x - u.val x) 2 (volume.restrict Set.univ)).toReal := by
+        apply ENNReal.toReal_mono hvtop
+        simpa only [Pi.add_apply, sub_add_sub_cancel] using hv
+      _ = _ := ENNReal.toReal_add
+        (a.val_memLp.sub w.val_memLp).eLpNorm_ne_top
+        (w.val_memLp.sub u.val_memLp).eLpNorm_ne_top
+  have hg' : (eLpNorm (fun x ↦ a.grad x - u.grad x) 2 (volume.restrict Set.univ)).toReal ≤
+      (eLpNorm (fun x ↦ a.grad x - w.grad x) 2 (volume.restrict Set.univ)).toReal +
+      (eLpNorm (fun x ↦ w.grad x - u.grad x) 2 (volume.restrict Set.univ)).toReal := by
+    calc
+      _ ≤ (eLpNorm (fun x ↦ a.grad x - w.grad x) 2 (volume.restrict Set.univ) +
+          eLpNorm (fun x ↦ w.grad x - u.grad x) 2 (volume.restrict Set.univ)).toReal := by
+        apply ENNReal.toReal_mono hgtop
+        simpa only [Pi.add_apply, sub_add_sub_cancel] using hg
+      _ = _ := ENNReal.toReal_add
+        (a.grad_memLp.sub w.grad_memLp).eLpNorm_ne_top
+        (w.grad_memLp.sub u.grad_memLp).eLpNorm_ne_top
+  dsimp [apm_m01J04_H1dist]
+  linarith
+
 lemma apm_m01J04_mollify_error_transfer
     {d : ℕ} (a w u : apm_m01J04_H1 d Set.univ)
     {eta : ℝ}
     (haw : apm_m01J04_H1dist a w < eta / 2)
     (hwu : apm_m01J04_H1dist w u < eta / 2) :
     apm_m01J04_H1dist a u < eta := by
-  sorry
+  have htri := apm_m01J04_mollify_error_transfer_aux_triangle a w u
+  linarith
 -- END SEAT AREA
 
 lemma apm_m01J04_core_exists_smooth_global_approx_aux_mollify
