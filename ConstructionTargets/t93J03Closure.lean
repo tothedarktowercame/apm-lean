@@ -972,6 +972,15 @@ noncomputable def kleinPolygonOverlapToSkeletonFreeGroup :
     (kleinPolygonOverlapImageFundamentalGroupEquivAtSkeletonPoint.toMonoidHom.comp
       kleinPolygonOverlapToOuterPiOne)
 
+/-- The same overlap inclusion before applying the fixed free-group
+coordinates on the skeleton. -/
+noncomputable def kleinPolygonOverlapToSkeletonPiOne :
+    FundamentalGroup (overlapOpen kleinPairingData.Rel)
+        kleinPolygonOverlapPoint →*
+      FundamentalGroup kleinPairingData.skeleton kleinSkeletonPoint :=
+  kleinPolygonOverlapImageFundamentalGroupEquivAtSkeletonPoint.toMonoidHom.comp
+    kleinPolygonOverlapToOuterPiOne
+
 /-- The same map with the annular source written in integer winding
 coordinates.  Its value at `ofAdd 1` is the sole remaining geometric word
 calculation in the attaching-cell argument. -/
@@ -989,6 +998,19 @@ theorem kleinPolygonOverlapWindingHom_factor
         (kleinPolygonOverlapFundamentalGroupEquivInt g) =
       kleinPolygonOverlapToSkeletonFreeGroup g := by
   simp [kleinPolygonOverlapWindingHom]
+
+/-- Changing the annular source from based loops to integer winding
+coordinates does not change the image subgroup in the skeleton coordinates. -/
+theorem kleinPolygonOverlapWindingHom_range_eq_skeleton_range :
+    kleinPolygonOverlapWindingHom.range =
+      kleinPolygonOverlapToSkeletonFreeGroup.range := by
+  apply le_antisymm
+  · rintro _ ⟨n, rfl⟩
+    exact ⟨kleinPolygonOverlapFundamentalGroupEquivInt.symm n, by
+      simp [kleinPolygonOverlapWindingHom]⟩
+  · rintro _ ⟨g, rfl⟩
+    exact ⟨kleinPolygonOverlapFundamentalGroupEquivInt g,
+      kleinPolygonOverlapWindingHom_factor g⟩
 
 /-- The exact free-group word traced by one positive turn around the radial
 overlap. -/
@@ -1070,6 +1092,34 @@ theorem kleinPolygonOverlapNormalClosure_eq_aabb_of_isConj
     rw [← hc]
     exact Subgroup.normalClosure_normal.conj_mem _
       (Subgroup.subset_normalClosure (Set.mem_singleton _)) c
+
+/-- Once the winding-one word is identified up to conjugacy, the normal
+closure of the actual overlap image in the skeleton group is exactly the
+pullback of the `aabb` relation subgroup. -/
+theorem kleinPolygonOverlapToSkeletonPiOne_normalClosure_eq_aabb
+    (h : IsConj kleinPolygonOverlapWindingOneImage kleinAabbWord) :
+    Subgroup.normalClosure
+        (kleinPolygonOverlapToSkeletonPiOne.range : Set
+          (FundamentalGroup kleinPairingData.skeleton kleinSkeletonPoint)) =
+      Subgroup.comap
+        kleinActualSkeletonFundamentalGroupEquivFreeGroupBool.toMonoidHom
+        (Subgroup.normalClosure kleinPolygonRelations) := by
+  apply Subgroup.map_injective
+    (f := kleinActualSkeletonFundamentalGroupEquivFreeGroupBool.toMonoidHom)
+    kleinActualSkeletonFundamentalGroupEquivFreeGroupBool.injective
+  rw [Subgroup.map_normalClosure _ _
+    kleinActualSkeletonFundamentalGroupEquivFreeGroupBool.surjective]
+  rw [Subgroup.map_comap_eq_self_of_surjective
+    kleinActualSkeletonFundamentalGroupEquivFreeGroupBool.surjective]
+  rw [← kleinPolygonOverlapNormalClosure_eq_aabb_of_isConj h]
+  rw [kleinPolygonOverlapWindingHom_range_eq_skeleton_range]
+  apply congrArg Subgroup.normalClosure
+  ext x
+  constructor
+  · rintro ⟨_, ⟨g, rfl⟩, rfl⟩
+    exact ⟨g, rfl⟩
+  · rintro ⟨g, rfl⟩
+    exact ⟨kleinPolygonOverlapToSkeletonPiOne g, ⟨g, rfl⟩, rfl⟩
 
 def finiteWedgeBoolPoint : FiniteWedge Bool := wedgeCircle false 1
 
@@ -1226,6 +1276,8 @@ theorem lift_isEmbedding_assembly
 #print axioms kleinPolygonOverlapWindingHom_range
 #print axioms kleinPolygonOverlapWindingHom_normalClosure
 #print axioms kleinPolygonOverlapNormalClosure_eq_aabb_of_isConj
+#print axioms kleinPolygonOverlapWindingHom_range_eq_skeleton_range
+#print axioms kleinPolygonOverlapToSkeletonPiOne_normalClosure_eq_aabb
 #print axioms kleinBottle_pi1_every_basepoint_of_polygon_van_kampen
 
 end ConstructionTargets.t93J03Closure

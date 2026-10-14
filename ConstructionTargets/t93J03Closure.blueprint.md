@@ -270,6 +270,12 @@ based quotient extraction: quotienting the actual skeleton group by the
 pulled-back normal closure of `aabb` is the frozen presented group.  The
 remaining van Kampen step must identify the topological kernel with precisely
 this subgroup.
+`kleinPolygonOverlapToSkeletonPiOne_normalClosure_eq_aabb` now performs the
+corresponding image calculation on the topological side: conditional only on
+the geometric winding-one conjugacy, the normal closure of the actual based
+overlap inclusion is the pulled-back `aabb` subgroup.  What remains is the
+based van Kampen theorem identifying this normal closure as the polygon-map
+kernel.
 
 - Layer 1: C1, C3, and C4. C1 and C3 are independent; C4 is already complete.
 - Layer 2: C2 against the explicit C1 equivalence interface.
