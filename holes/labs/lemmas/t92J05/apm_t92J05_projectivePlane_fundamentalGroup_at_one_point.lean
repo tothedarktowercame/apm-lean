@@ -208,7 +208,13 @@ lemma apm_t92J05_projectivePlane_fundamentalGroup_at_one_point
           apm_t92J05_antipodalGroup)) :
     ∃ x : apm_t92J05_RP2,
       Nonempty (FundamentalGroup apm_t92J05_RP2 x ≃* Multiplicative (ZMod 2)) := by
-  sorry
+  let x : apm_t92J05_S2 :=
+    ⟨EuclideanSpace.single 0 1, by simp⟩
+  refine ⟨e (Quotient.mk _ x), ?_⟩
+  obtain ⟨d⟩ := hdeck x
+  exact
+    ⟨(ConstructionTargets.BoundaryTorusHurewiczIsomorphism.fundamentalGroupMulEquivOfHomeomorph
+        e (Quotient.mk _ x)).symm.trans d⟩
 -- END SEAT AREA
 
 /-- **LIBRARY.** The concrete real projective plane is path connected. -/
