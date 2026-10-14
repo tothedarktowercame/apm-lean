@@ -134,3 +134,57 @@ and `cutAndPaste_aux_span_aux_target_polygon` supplies the corresponding
 nonempty/even target check.
 
 Review (claude-14, 2026-10-14): `CancellationZipSpec.interior_iff` was unsatisfiable (zipped arcs map to an interior slit, so boundary ↛ boundary); replaced by `interior_maps` (interior → interior) and a one-sided `interior_injective` (p interior, c p = c q → p = q), which is what zip_interior needs.
+
+## Seat split: merge boundary
+
+`mergeRepeatedBlock_aux_boundary` is now a sorry-free assembly.  Its four
+leaves are parallel: the formula-transfer and relation leaves receive all
+earlier outputs as explicit hypotheses.
+
+- `equivariantCircleLift_homeomorph` is the **LIBRARY** AddCircle leaf
+  (70--110 lines, independent).  Descend `F.toFun` and `F.invFun` through
+  `QuotientAddGroup`; derive all integer-period identities from
+  `toFun_add_period`/`invFun_add_period`, then use `Continuous.quotient_lift`
+  (or `continuous_quot_lift`) and conjugate by
+  `AddCircle.homeomorphCircle`.  Useful declarations:
+  `AddCircle.continuous_mk'`, `QuotientAddGroup.mk_eq_mk_iff`,
+  `AddCircle.homeomorphCircle_apply`, `Homeomorph.trans`, and
+  `Function.LeftInverse`/`RightInverse`.
+- `mergeRepeatedBlock_aux_boundary_lift` is the explicit PL leaf (80--130
+  lines, independent).  Construct a strictly increasing piecewise-affine
+  function on `[0,N]` through breakpoints
+  `0,u,u+2,u+2+v,u+4+v,N` with images
+  `0,u,u+1,u+1+v,u+2+v,N-2`, extend by period `N ↦ N-2`, and construct the
+  inverse from the swapped breakpoint lists.  The structure forces the seven
+  needed formulas and both inverse/continuity proofs.  Likely tools:
+  `Continuous.piecewise`, `continuousOn_iff_continuous_restrict`,
+  `Int.floor`, `Int.fract`, `Int.fract_lt_one`, `Int.floor_add_int`, and
+  `linarith`.  If the periodic extension dominates the proof, first prove a
+  local lemma for a continuous strictly monotone Icc homeomorphism.
+- `mergeRepeatedBlock_aux_boundary_edge_formulas` (35--60 lines,
+  independent given `F,g,hg`) transfers the seven real-coordinate formulas
+  to `edgePoint`.  Unfold `edgePoint`, rewrite the exponential as
+  `AddCircle.toCircle ((e+t : AddCircle n))` (the proof pattern is
+  `edgePointCircle_eq_toCircle` in
+  `ConstructionTargets/PolygonSurfacePiOne.lean`), then use `hg` and the
+  matching field `F.on_u`, `on_y`, ..., `on_t`.  For half parameters build
+  the `Icc` subtype with `constructor <;> linarith [s.2.1, s.2.2]`.
+- `mergeRepeatedBlock_aux_boundary_relation` (90--140 lines, independent
+  given `hg`) is purely finite/combinatorial.  Expand a `WordRel` generator,
+  split its two indices among the seven append blocks with
+  `List.getElem_append`/`List.get_append`, and use the corresponding edge
+  formula.  The occurrence hypotheses `hy`,`hz`,`ha`, plus `hyz`, show that
+  the only altered label pairs are `y/inv y` and `z/inv z`; the reverse
+  direction splits the `a/inv a` parameter at `1/2`.  Lift generator maps
+  through `Relation.EqvGen.rel`, `.symm`, and `.trans`; do not attempt to prove
+  a raw `WordRel ↔ WordRel`, since the old `y|z` vertex maps to the midpoint
+  of the target edge and is represented only after generated closure.
+
+Degenerate checks: `u`, `v`, and `t` may all be empty, but both periods stay
+positive (source has four displayed edges, target two).  Every half-parameter
+lies in `[0,1]`.  At `s=0,1` adjacent formulas agree; in particular the old
+`y|z` and `inv z|inv y` vertices map to the two midpoints.  Sign reversal is
+unchanged: `s/2` pairs with `1-s/2`, while `(1+s)/2` pairs with
+`(1-s)/2`.  Thus endpoint classes must be handled by `EqvGen`, including
+when an adjacent block is empty.  No SphereCap or LinearGraphMeasure import
+is needed.
