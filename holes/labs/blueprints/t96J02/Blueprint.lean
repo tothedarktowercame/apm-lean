@@ -166,12 +166,96 @@ theorem t96J02_presented_finiteIndex_horizontal_step
 
 /-- The set of vertical exponents occurring in a finite-index subgroup is a
 nonzero subgroup `qℤ` of `ℤ`.  This leaf is independent of the horizontal one. -/
+def t96J02_presented_finiteIndex_vertical_step_aux_subgroup
+    (H : Subgroup T96J02PresentedGroup) : AddSubgroup ℤ where
+  carrier := {n | ∃ m : ℤ, t96J02_presented_coordinate m n ∈ H}
+  zero_mem' := by
+    refine ⟨0, ?_⟩
+    change KleinPresentedGroupCoordinateNormalForm.coordinateEquiv.symm
+      ⟨Multiplicative.ofAdd 0, Multiplicative.ofAdd 0⟩ ∈ H
+    simpa using H.one_mem
+  add_mem' := by
+    rintro n k ⟨m, hm⟩ ⟨r, hr⟩
+    let x := t96J02_presented_coordinate m n *
+      t96J02_presented_coordinate r k
+    let s : ℤ := Multiplicative.toAdd
+      (KleinPresentedGroupCoordinateNormalForm.coordinateEquiv x).left
+    refine ⟨s, ?_⟩
+    have hx : x ∈ H := H.mul_mem hm hr
+    suffices t96J02_presented_coordinate s (n + k) = x by
+      simpa [this] using hx
+    apply KleinPresentedGroupCoordinateNormalForm.coordinateEquiv.injective
+    simp only [t96J02_presented_coordinate, MulEquiv.apply_symm_apply]
+    change ⟨Multiplicative.ofAdd s, Multiplicative.ofAdd (n + k)⟩ =
+      KleinPresentedGroupCoordinateNormalForm.coordinateEquiv x
+    apply SemidirectProduct.ext <;>
+      simp [s, x, t96J02_presented_coordinate]
+  neg_mem' := by
+    rintro n ⟨m, hm⟩
+    let x := (t96J02_presented_coordinate m n)⁻¹
+    let s : ℤ := Multiplicative.toAdd
+      (KleinPresentedGroupCoordinateNormalForm.coordinateEquiv x).left
+    refine ⟨s, ?_⟩
+    have hx : x ∈ H := H.inv_mem hm
+    suffices t96J02_presented_coordinate s (-n) = x by
+      simpa [this] using hx
+    apply KleinPresentedGroupCoordinateNormalForm.coordinateEquiv.injective
+    simp only [t96J02_presented_coordinate, MulEquiv.apply_symm_apply]
+    change ⟨Multiplicative.ofAdd s, Multiplicative.ofAdd (-n)⟩ =
+      KleinPresentedGroupCoordinateNormalForm.coordinateEquiv x
+    apply SemidirectProduct.ext <;>
+      simp [s, x, t96J02_presented_coordinate]
+
 theorem t96J02_presented_finiteIndex_vertical_step
     (H : Subgroup T96J02PresentedGroup) (hH : H.FiniteIndex) :
     ∃ q : ℤ, 0 < q ∧
       ∀ n : ℤ,
         (∃ m : ℤ, t96J02_presented_coordinate m n ∈ H) ↔ q ∣ n := by
-  sorry
+  let K := t96J02_presented_finiteIndex_vertical_step_aux_subgroup H
+  obtain ⟨a, ha⟩ := Int.subgroup_cyclic K
+  have hK_ne : K ≠ ⊥ := by
+    intro hzero
+    letI := hH
+    obtain ⟨i, j, hij, heq⟩ :=
+      Finite.exists_ne_map_eq_of_infinite
+        (fun n : ℤ ↦
+          (t96J02_presented_coordinate 0 n :
+            T96J02PresentedGroup ⧸ H))
+    have hmem : (t96J02_presented_coordinate 0 i)⁻¹ *
+        t96J02_presented_coordinate 0 j ∈ H :=
+      QuotientGroup.eq.mp heq
+    let x := (t96J02_presented_coordinate 0 i)⁻¹ *
+      t96J02_presented_coordinate 0 j
+    let s : ℤ := Multiplicative.toAdd
+      (KleinPresentedGroupCoordinateNormalForm.coordinateEquiv x).left
+    have hxcoord : t96J02_presented_coordinate s (j - i) = x := by
+      apply KleinPresentedGroupCoordinateNormalForm.coordinateEquiv.injective
+      simp only [t96J02_presented_coordinate, MulEquiv.apply_symm_apply]
+      change ⟨Multiplicative.ofAdd s, Multiplicative.ofAdd (j - i)⟩ =
+        KleinPresentedGroupCoordinateNormalForm.coordinateEquiv x
+      apply SemidirectProduct.ext <;>
+        simp [s, x, t96J02_presented_coordinate, div_eq_mul_inv, mul_comm]
+    have hjmi : j - i ∈ K := by
+      exact ⟨s, hxcoord.symm ▸ hmem⟩
+    rw [hzero] at hjmi
+    have hz : j - i = 0 := by simpa using hjmi
+    exact hij (sub_eq_zero.mp hz).symm
+  have ha0 : a ≠ 0 := by
+    intro ha0
+    apply hK_ne
+    rw [ha, ha0]
+    simp
+  refine ⟨(a.natAbs : ℤ), ?_, ?_⟩
+  · exact_mod_cast Int.natAbs_pos.mpr ha0
+  · intro n
+    change n ∈ K ↔ _
+    rw [ha]
+    simp only [AddSubgroup.mem_closure_singleton, Int.natAbs_dvd]
+    constructor
+    · rintro ⟨k, rfl⟩
+      exact dvd_mul_left a k
+    · rintro ⟨k, rfl⟩
+      exact ⟨k, mul_comm k a⟩
 
 /-- Choose a subgroup element above the positive generator of its vertical
 projection.  The projection description is an explicit hypothesis so this
