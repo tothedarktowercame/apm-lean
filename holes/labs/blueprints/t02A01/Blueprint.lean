@@ -508,6 +508,102 @@ theorem apm_t02a01_boundary_inclusion_word_aux_generator_aux_cyclic_aux_of_equiv
     rw [hm]
     exact (Multiplicative.ofAdd.apply_symm_apply (e x)).symm
 
+/-! ### Winding of the inner loop (design claude-14, 2026-10-14)
+
+`angleToBoundary` lifts `θ ↦ innerPoint (2θ/π)` from `[0, 2π)` to `AddCircle (2π)`
+(`AddCircle.liftIco`). It is a continuous bijection from a compact space onto the boundary,
+which is T2 because the boundary is a circle. So it is a homeomorphism, and composing with
+`AddCircle.homeomorphCircle'` sends the inner loop to `integerLoop 1`, whose class has winding
+`1` (`CircleUniversalCover.liftBasedLoopEndpointInteger_integerLoop`). -/
+
+theorem apm_t02a01_innerPoint_injOn : Set.InjOn apm_t02a01_innerPoint (Set.Ico 0 4) := by
+  sorry
+
+theorem apm_t02a01_innerPoint_surjOn :
+    ∀ b : apm_t02a01_boundarySpace, ∃ s ∈ Set.Ico (0 : ℝ) 4, apm_t02a01_innerPoint s = b := by
+  sorry
+
+instance apm_t02a01_twoPiPos : Fact (0 < 2 * Real.pi) := ⟨by positivity⟩
+
+noncomputable def apm_t02a01_angleToBoundary
+    (hc : Continuous apm_t02a01_innerPoint)
+    (h4 : apm_t02a01_innerPoint 4 = apm_t02a01_innerBase) :
+    C(AddCircle (2 * Real.pi), apm_t02a01_boundarySpace) :=
+  ⟨AddCircle.liftIco (2 * Real.pi) 0 (fun θ => apm_t02a01_innerPoint (2 * θ / Real.pi)),
+    AddCircle.liftIco_continuous (by
+        have hpi : Real.pi ≠ 0 := Real.pi_ne_zero
+        show apm_t02a01_innerPoint (2 * 0 / Real.pi) =
+          apm_t02a01_innerPoint (2 * (0 + 2 * Real.pi) / Real.pi)
+        rw [show 2 * (0 + 2 * Real.pi) / Real.pi = 4 by field_simp; ring, h4]
+        simp [apm_t02a01_innerBase])
+      ((hc.comp ((continuous_const.mul continuous_id).div_const _)).continuousOn)⟩
+
+theorem apm_t02a01_angleToBoundary_bijective
+    (hc : Continuous apm_t02a01_innerPoint)
+    (h4 : apm_t02a01_innerPoint 4 = apm_t02a01_innerBase)
+    (hinj : Set.InjOn apm_t02a01_innerPoint (Set.Ico 0 4))
+    (hsurj : ∀ b : apm_t02a01_boundarySpace,
+      ∃ s ∈ Set.Ico (0 : ℝ) 4, apm_t02a01_innerPoint s = b) :
+    Function.Bijective (apm_t02a01_angleToBoundary hc h4) := by
+  sorry
+
+/-- The final computation: transport across the homeomorphism (T2 from
+`apm_t02a01_boundary_homeomorph_circle`, `Continuous.homeoOfEquivCompactToT2`) and
+`AddCircle.homeomorphCircle'`. Under it the inner loop is `integerLoop 1`, which
+`circleFundamentalGroupMulEquivInt` sends to `ofAdd 1`. -/
+theorem apm_t02a01_circleWinding_of_bijective
+    (hc : Continuous apm_t02a01_innerPoint)
+    (h4 : apm_t02a01_innerPoint 4 = apm_t02a01_innerBase)
+    (hbij : Function.Bijective (apm_t02a01_angleToBoundary hc h4)) :
+    ∃ e : FundamentalGroup apm_t02a01_boundarySpace apm_t02a01_innerBase ≃*
+        Multiplicative ℤ,
+      e (FundamentalGroup.fromPath (Path.Homotopic.Quotient.mk
+          (apm_t02a01_innerLoop hc h4))) = Multiplicative.ofAdd (1 : ℤ) ∨
+      e (FundamentalGroup.fromPath (Path.Homotopic.Quotient.mk
+          (apm_t02a01_innerLoop hc h4))) = Multiplicative.ofAdd (-1 : ℤ) := by
+  sorry
+
+noncomputable def apm_t02a01_boundary_inclusion_word_aux_generator_aux_cyclic_aux_winding_aux_pi1Homeomorph
+    {X Y : Type*} [TopologicalSpace X] [TopologicalSpace Y]
+    (e : X ≃ₜ Y) (x : X) :
+    FundamentalGroup X x ≃* FundamentalGroup Y (e x) where
+  toFun := FundamentalGroup.map ⟨e, e.continuous⟩ x
+  invFun := FundamentalGroup.mapOfEq ⟨e.symm, e.symm.continuous⟩
+    (e.symm_apply_apply x)
+  left_inv p := by
+    induction p using Path.Homotopic.Quotient.ind with
+    | mk p =>
+      rw [FundamentalGroup.map_apply]
+      change (FundamentalGroup.mapOfEq _ _)
+        (Path.Homotopic.Quotient.mk (p.map e.continuous)) = _
+      rw [FundamentalGroup.mapOfEq_apply]
+      apply Path.Homotopic.Quotient.eq.mpr
+      convert Path.Homotopic.refl p using 1
+      ext t
+      exact e.symm_apply_apply (p t)
+  right_inv p := by
+    induction p using Path.Homotopic.Quotient.ind with
+    | mk p =>
+      rw [FundamentalGroup.mapOfEq_apply]
+      apply Path.Homotopic.Quotient.eq.mpr
+      convert Path.Homotopic.refl p using 1
+      ext t
+      exact e.apply_symm_apply (p t)
+  map_mul' := map_mul _
+
+theorem apm_t02a01_boundary_inclusion_word_aux_generator_aux_cyclic_aux_winding_aux_circleWinding
+    (hc : Continuous apm_t02a01_innerPoint)
+    (h4 : apm_t02a01_innerPoint 4 = apm_t02a01_innerBase) :
+    ∃ e : FundamentalGroup apm_t02a01_boundarySpace apm_t02a01_innerBase ≃*
+        Multiplicative ℤ,
+      e (FundamentalGroup.fromPath (Path.Homotopic.Quotient.mk
+          (apm_t02a01_innerLoop hc h4))) = Multiplicative.ofAdd (1 : ℤ) ∨
+      e (FundamentalGroup.fromPath (Path.Homotopic.Quotient.mk
+          (apm_t02a01_innerLoop hc h4))) = Multiplicative.ofAdd (-1 : ℤ) :=
+  apm_t02a01_circleWinding_of_bijective hc h4
+    (apm_t02a01_angleToBoundary_bijective hc h4 apm_t02a01_innerPoint_injOn
+      apm_t02a01_innerPoint_surjOn)
+
 theorem apm_t02a01_boundary_inclusion_word_aux_generator_aux_cyclic_aux_winding
     (hc : Continuous apm_t02a01_innerPoint)
     (h4 : apm_t02a01_innerPoint 4 = apm_t02a01_innerBase) :
@@ -517,7 +613,9 @@ theorem apm_t02a01_boundary_inclusion_word_aux_generator_aux_cyclic_aux_winding
           (apm_t02a01_innerLoop hc h4))) = Multiplicative.ofAdd (1 : ℤ) ∨
       e (FundamentalGroup.fromPath (Path.Homotopic.Quotient.mk
           (apm_t02a01_innerLoop hc h4))) = Multiplicative.ofAdd (-1 : ℤ) := by
-  sorry
+  exact
+    apm_t02a01_boundary_inclusion_word_aux_generator_aux_cyclic_aux_winding_aux_circleWinding
+      hc h4
 
 theorem apm_t02a01_boundary_inclusion_word_aux_generator_aux_cyclic
     (hc : Continuous apm_t02a01_innerPoint)
