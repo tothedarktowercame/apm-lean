@@ -87901,39 +87901,38 @@
   {:consumer :t97A01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Convert arbitrary circle-loop letters to generator powers; prove free-group surjectivity, coordinate epi, B6-B10.",
+    "Transport Fin surjectivity through orbit relabeling; then coordinate epi and B6-B10.",
     :outcome :stop,
     :warnings ["preexisting lint"],
     :missing-theorems
-    [{:name "finiteWedgeFinSucc_exists_legWord",
-      :type "old word generation implies successor word generation",
+    [{:name "finiteWedgeFinLegFreeGroupMap_surjective",
+      :type "canonical map onto every nonempty Fin-indexed wedge",
       :status :proved,
-      :consumers [:t97A01 :t94J09],
-      :depends-on
-      ["finiteWedgeFinOne_exists_legWord"
-       "finiteWedgeFinSucc_exists_installedSplitLegWord"],
-      :area "polygon-quotient-homology"}
-     {:name "finiteWedgeFin_exists_legWord",
-      :type "every finite-wedge loop is a labeled leg word",
-      :status :proved,
-      :consumers [:t97A01 :t94J09],
-      :depends-on ["finiteWedgeFinSucc_exists_legWord"],
-      :area "polygon-quotient-homology"}
-     {:name "finiteWedgeLegFreeGroupMap_surjective",
-      :type "canonical free-group map is onto",
-      :status :partial,
       :consumers [:t97A01 :t94J09],
       :depends-on ["finiteWedgeFin_exists_legWord"],
+      :area "polygon-quotient-homology"}
+     {:name "finiteWedgeOrbitFreeGroupMapComparison",
+      :type "orbit relabeling identifies canonical generator maps",
+      :status :not-started,
+      :consumers [:t97A01 :t94J09],
+      :depends-on ["finiteWedgeFinLegFreeGroupMap_surjective"],
+      :area "polygon-quotient-homology"}
+     {:name "finiteWedgeLegFreeGroupMap_surjective",
+      :type "canonical orbit-label map is onto",
+      :status :partial,
+      :consumers [:t97A01 :t94J09],
+      :depends-on ["finiteWedgeOrbitFreeGroupMapComparison"],
       :area "polygon-quotient-homology"}],
     :statement-hashes {:registry "166/0"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked finite-wedge labeled leg-word induction.",
+    :reason
+    "Banked free-group surjectivity for standard finite wedges.",
     :commands
     [{:cmd
       "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology",
@@ -87941,20 +87940,20 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder scan", :exit 0}
      {:cmd "axioms check", :exit 0}
-     {:cmd "git show --check f46b344b1", :exit 0}],
+     {:cmd "git show --check ffbe2f5eb", :exit 0}],
     :diagnostic-history
-    [{:cmd "word induction drafts",
+    [{:cmd "generator-word draft",
       :exit 1,
-      :correction "refolded definitions"}],
-    :commit "f46b344b1",
+      :correction "refolded tail values"}],
+    :commit "ffbe2f5eb",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
     {:path "ConstructionTargets/PolygonSurfaceHomology.lean",
      :sha256
-     "cf1d089b5ba56616e98a8289fb21498139421d42159ad8f967825c6ebd05ea11"},
+     "8022a11d2e9103f396da638bf1f5bc0f97d3d8bbfcdd907b49aa740e90d836a2"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -89453,7 +89452,8 @@
     :lemma-exists-coprodlegword-of-mulequiv
     :lemma-finitewedgepointwedge-rightbase-inl
     :lemma-finitewedgefinsucc-exists-legword
-    :lemma-finitewedgefin-exists-legword],
+    :lemma-finitewedgefin-exists-legword
+    :lemma-finitewedgeorbitfreegroupmapcomparison],
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
@@ -90650,4 +90650,37 @@
    :id :lemma-finitewedgefin-exists-legword,
    :kind :lemma,
    :depends-on [:lemma-finitewedgefinsucc-exists-legword],
+   :other-consumers [:t94J09]}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "finiteWedgeFinLegFreeGroupMap_surjective",
+    :type "canonical map onto every nonempty Fin-indexed wedge"},
+   :lemma
+   {:name "finiteWedgeFinLegFreeGroupMap_surjective",
+    :reported-by [:program-2026-10-13-polygon-surface-homology],
+    :type "canonical map onto every nonempty Fin-indexed wedge",
+    :area "polygon-quotient-homology",
+    :proved-in :program-2026-10-13-polygon-surface-homology},
+   :id :lemma-finitewedgefinlegfreegroupmap-surjective,
+   :kind :lemma,
+   :depends-on [:lemma-finitewedgefin-exists-legword],
+   :other-consumers [:t94J09]}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "finiteWedgeOrbitFreeGroupMapComparison",
+    :type "orbit relabeling identifies canonical generator maps"},
+   :lemma
+   {:name "finiteWedgeOrbitFreeGroupMapComparison",
+    :reported-by [:program-2026-10-13-polygon-surface-homology],
+    :type "orbit relabeling identifies canonical generator maps",
+    :area "polygon-quotient-homology"},
+   :id :lemma-finitewedgeorbitfreegroupmapcomparison,
+   :kind :lemma,
+   :depends-on [:lemma-finitewedgefinlegfreegroupmap-surjective],
    :other-consumers [:t94J09]}]}
