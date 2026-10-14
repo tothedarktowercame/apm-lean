@@ -66,7 +66,11 @@ transfer through this covering now has its exact sheet-count input:
 `rp3SphereAntipodal_ne` separates the two points and
 `t96A06_rp3_sphere_twoSheeted` packages finiteness and cardinality two as
 `IsKSheetedCover (sphereProjection 3) 2`.  The induced rational homology
-transfer and its consequences remain.
+transfer is now specialized at this exact cover:
+`t96A06_rp3_rational_homologyMap_surjective` proves that the sphere-to-RP3
+map is onto in rational homology in every degree, using the transfer/projection
+identity and invertibility of two.  Applying the sphere homology calculations
+to identify the four RP3 groups remains.
 
 ## C3. Degree four of the quadratic map — library
 

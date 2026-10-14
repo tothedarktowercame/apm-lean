@@ -5,6 +5,7 @@ import ConstructionTargets.RationalLefschetz
 import ConstructionTargets.CoefficientH0
 import ConstructionTargets.RealProjectiveSmoothTarget
 import ConstructionTargets.CoveringDegree
+import ConstructionTargets.CoefficientCoveringTransfer
 
 /-! Compiled closure milestones for t96A06. -/
 
@@ -304,6 +305,35 @@ theorem t96A06_rp3_sphere_twoSheeted :
       exact ((rp3SphereProjection_eq_iff p z.1).mp
         (hp.trans z.2.symm)).imp Subtype.ext Subtype.ext
 
+/-- The map from the rational homology of the covering sphere onto the
+rational homology of `RP3` is surjective in every degree.  This is the
+coefficient-transfer consequence needed to transport the sphere vanishing
+computations: transfer followed by projection is multiplication by two, and
+two is invertible over `ℚ`. -/
+theorem t96A06_rp3_rational_homologyMap_surjective (n : ℕ) :
+    Function.Surjective
+      (HomologicalComplex.homologyMap
+        (CoefficientH0.singularPostcomposition ℚ
+          ⟨sphereProjection 3, t96A06_rp3_sphere_covering.continuous⟩) n) := by
+  intro y
+  let tr := HomologicalComplex.homologyMap
+    (CoefficientCoveringTransfer.transfer ℚ (sphereProjection 3)
+      t96A06_rp3_sphere_twoSheeted) n
+  refine ⟨(2 : ℚ)⁻¹ • tr y, ?_⟩
+  rw [map_smul]
+  have h := CategoryTheory.ConcreteCategory.congr_hom
+    (CoefficientCoveringTransfer.rational_homology_projection
+      (sphereProjection 3) t96A06_rp3_sphere_twoSheeted n) y
+  have h' :
+      (HomologicalComplex.homologyMap
+        (CoefficientH0.singularPostcomposition ℚ
+          ⟨sphereProjection 3, t96A06_rp3_sphere_covering.continuous⟩) n) (tr y) =
+        (2 : ℚ) • y := by
+    simpa [CategoryTheory.comp_apply, two_smul] using h
+  change (2 : ℚ)⁻¹ • _ = y
+  rw [h']
+  simp
+
 #print axioms polynomialMap_nonzero
 #print axioms polynomialDescent
 #print axioms polynomialDescent_quotientMap
@@ -323,5 +353,6 @@ theorem t96A06_rp3_sphere_twoSheeted :
 #print axioms t96A06_rp3_sphere_covering
 #print axioms rp3SphereAntipodal_ne
 #print axioms t96A06_rp3_sphere_twoSheeted
+#print axioms t96A06_rp3_rational_homologyMap_surjective
 
 end ConstructionTargets.t96A06Closure
