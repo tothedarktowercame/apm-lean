@@ -287,6 +287,12 @@ polygon equivalence through the fixed polygon/Klein homeomorphism and then to
 every basepoint.  It is the complete C1 endpoint conditional only on the
 winding conjugacy and the paired surjectivity/kernel statement of based van
 Kampen; no further basepoint or presentation adapter remains.
+`KleinPolygonBasedVanKampen` is the exact paired output to extract from the
+banked groupoid pseudopushout: the actual skeleton map is surjective and its
+kernel is the normal closure of the actual overlap image.
+`kleinBottle_pi1_every_basepoint_of_basedVanKampen` confirms this single
+topological contract and the independent winding conjugacy are now the only
+C1 inputs.
 
 - Layer 1: C1, C3, and C4. C1 and C3 are independent; C4 is already complete.
 - Layer 2: C2 against the explicit C1 equivalence interface.

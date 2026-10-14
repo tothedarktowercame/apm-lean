@@ -1155,6 +1155,28 @@ noncomputable def kleinPolygonFundamentalGroupEquivPresented_of_vanKampen
         (kleinPolygonOverlapToSkeletonPiOne_normalClosure_eq_aabb hconj))).trans
       kleinSkeletonAabbQuotientEquiv)
 
+/-- Exact based consequence still to extract from the already proved
+fundamental-groupoid pseudopushout.  Surjectivity and the kernel calculation
+belong together because they are the two outputs of the same van Kampen map. -/
+structure KleinPolygonBasedVanKampen : Prop where
+  surjective : Function.Surjective kleinPolygonSkeletonToSpacePiOne
+  ker_eq_overlap_normalClosure :
+    MonoidHom.ker kleinPolygonSkeletonToSpacePiOne =
+      Subgroup.normalClosure
+        (kleinPolygonOverlapToSkeletonPiOne.range : Set
+          (FundamentalGroup kleinPairingData.skeleton kleinSkeletonPoint))
+
+/-- The exact polygon presentation from the packaged based van Kampen
+consequence and the independent geometric winding comparison. -/
+noncomputable def kleinPolygonFundamentalGroupEquivPresented
+    (hconj : IsConj kleinPolygonOverlapWindingOneImage kleinAabbWord)
+    (hvk : KleinPolygonBasedVanKampen) :
+    FundamentalGroup kleinPairingData.Space
+        (kleinPolygonSkeletonToSpace kleinSkeletonPoint) ≃*
+      KleinPolygonPresentedGroup :=
+  kleinPolygonFundamentalGroupEquivPresented_of_vanKampen
+    hconj hvk.surjective hvk.ker_eq_overlap_normalClosure
+
 def finiteWedgeBoolPoint : FiniteWedge Bool := wedgeCircle false 1
 
 @[simp] theorem finiteWedgeBoolHomeomorphTwoCircles_point :
@@ -1197,6 +1219,16 @@ theorem kleinBottle_pi1_every_basepoint_of_vanKampen_inputs
     (kleinPolygonSkeletonToSpace kleinSkeletonPoint)
     ⟨kleinPolygonFundamentalGroupEquivPresented_of_vanKampen
       hconj hsurj hker⟩
+
+/-- C1 in its final two-input form: one geometric word comparison and one
+based consequence of the groupoid pseudopushout. -/
+theorem kleinBottle_pi1_every_basepoint_of_basedVanKampen
+    (hconj : IsConj kleinPolygonOverlapWindingOneImage kleinAabbWord)
+    (hvk : KleinPolygonBasedVanKampen) :
+    ∀ k : KleinBottle,
+      Nonempty (FundamentalGroup KleinBottle k ≃* PresentedKleinGroup) :=
+  kleinBottle_pi1_every_basepoint_of_vanKampen_inputs
+    hconj hvk.surjective hvk.ker_eq_overlap_normalClosure
 
 /-- Once proper discontinuity of the explicit affine action is supplied, the
 banked deck-group theorem computes the fundamental group at the canonical
@@ -1330,7 +1362,9 @@ theorem lift_isEmbedding_assembly
 #print axioms kleinPolygonOverlapWindingHom_range_eq_skeleton_range
 #print axioms kleinPolygonOverlapToSkeletonPiOne_normalClosure_eq_aabb
 #print axioms kleinPolygonFundamentalGroupEquivPresented_of_vanKampen
+#print axioms kleinPolygonFundamentalGroupEquivPresented
 #print axioms kleinBottle_pi1_every_basepoint_of_polygon_van_kampen
 #print axioms kleinBottle_pi1_every_basepoint_of_vanKampen_inputs
+#print axioms kleinBottle_pi1_every_basepoint_of_basedVanKampen
 
 end ConstructionTargets.t93J03Closure
