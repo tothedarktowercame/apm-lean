@@ -121,6 +121,30 @@ theorem regularValue_topDegree_eq_zero_of_signedCount
   exact componentSignedCount_eq_zero_of_componentDegree_eq_zero
     orientationSign componentDegree hdegree
 
+/-- The map on top homology, written in a chosen integral fundamental-class
+coordinate. -/
+noncomputable def surfaceTopHomologyCoordinateMap
+    {S : Type} [TopologicalSpace S]
+    (e : surfaceHomology S ≅ ModuleCat.of ℤ ℤ) (f : C(S, S)) :
+    ModuleCat.of ℤ ℤ ⟶ ModuleCat.of ℤ ℤ :=
+  e.inv ≫ homologyMap 2 f ≫ e.hom
+
+/-- The integer top degree determined by a chosen integral `H₂` coordinate. -/
+noncomputable def surfaceTopDegree
+    {S : Type} [TopologicalSpace S]
+    (e : surfaceHomology S ≅ ModuleCat.of ℤ ℤ) (f : C(S, S)) : ℤ :=
+  surfaceTopHomologyCoordinateMap e f 1
+
+/-- In integral top-homology coordinates, the induced map is multiplication
+by its top degree.  This isolates the global coordinate side of the remaining
+regular-value signed-count comparison. -/
+theorem surfaceTopDegree_eq_homologyMap
+    {S : Type} [TopologicalSpace S]
+    (e : surfaceHomology S ≅ ModuleCat.of ℤ ℤ) (f : C(S, S)) (n : ℤ) :
+    surfaceTopHomologyCoordinateMap e f n = surfaceTopDegree e f * n := by
+  rw [show n = n • (1 : ℤ) by simp, map_smul]
+  simp [surfaceTopDegree, mul_comm]
+
 /-- A global integral top-homology coordinate together with its expression in
 the canonical local chart generator at every point.  The coefficient is kept
 explicit because its sign is precisely the orientation datum used by the
@@ -170,3 +194,4 @@ end ConstructionTargets.T00J02Closure
 #print axioms ConstructionTargets.T00J02Closure.transverseCircle_preimage_component_signedCount
 #print axioms ConstructionTargets.T00J02Closure.componentSignedCount_eq_zero_of_componentDegree_eq_zero
 #print axioms ConstructionTargets.T00J02Closure.regularValue_topDegree_eq_zero_of_signedCount
+#print axioms ConstructionTargets.T00J02Closure.surfaceTopDegree_eq_homologyMap
