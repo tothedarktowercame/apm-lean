@@ -36159,6 +36159,16 @@
     [{:cmd "lean closure",
       :exit 1,
       :correction "opened subdivision namespace; rerun passed"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791999666550-11989-fc04830d",
+     :commands
+     ["git show/check/diff 962be877; scope and fixture SHA-256"
+      "lake build ConstructionTargets.t93J03Closure; lean fixture and Main"
+      "statement-registry check; placeholder/axiom recount"],
+     :finding
+     "PASS: 962be877 adds compiled, sorry-free progress beyond d72cefa5. The generic subdivision lemma correctly identifies every side-change vertex as lying in both opens by matching the preceding target and following source, furnishing overlap endpoints needed to collapse inner runs. It assumes no van Kampen conclusion. Exact scope/hash match; support placeholders 0->0; frozen Main remains 1; standard axioms only; registry 166/166. STOP lists maximal-inner-run normalization, reverse kernel/surjectivity, winding, C1/C2/Main."},
     :commit "962be8771e84a7039a9cffd581eb22c778f1d587",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
@@ -36169,7 +36179,7 @@
      "255f26197269c91f7e9163061e7239b4f923080b3e462ff61cc9952d74205953"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -36187,7 +36197,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t93J03Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Extracted every polygon-groupoid arrow as its pseudopushout reconstruction conjugated by unit components; normalization to the outer piece remains.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Proved every subdivision side-change vertex lies in the overlap, giving the endpoints needed to erase maximal inner runs; normalization remains.",
    :id :program-2026-10-13-close-t93j03,
    :kind :final-adapter,
    :campaign-priority 30,
@@ -36389,7 +36399,11 @@
     {:job 5,
      :commit "d72cefa5d7b7ff749f163173ed9200e7542a62c0",
      :reason
-     "Extracted every polygon-groupoid arrow as its pseudopushout reconstruction conjugated by unit components; normalization to the outer piece remains."}]}
+     "Extracted every polygon-groupoid arrow as its pseudopushout reconstruction conjugated by unit components; normalization to the outer piece remains."}
+    {:job 6,
+     :commit "962be8771e84a7039a9cffd581eb22c778f1d587",
+     :reason
+     "Proved every subdivision side-change vertex lies in the overlap, giving the endpoints needed to erase maximal inner runs; normalization remains."}]}
   {:consumer :t99J05,
    :stop-count 5,
    :evidence
@@ -38939,7 +38953,7 @@
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "pathTwoOpenSubdivision_transition_mem_overlap",
@@ -38949,7 +38963,9 @@
     :reported-by [:program-2026-10-13-close-t93j03],
     :type "adjacent side-change vertex belongs to overlap",
     :area "covering-subgroup-correspondence",
-    :proved-in :program-2026-10-13-close-t93j03},
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "962be8771e84a7039a9cffd581eb22c778f1d587"},
    :id :lemma-pathtwoopensubdivision-transition-mem-overlap,
    :kind :lemma,
    :depends-on
