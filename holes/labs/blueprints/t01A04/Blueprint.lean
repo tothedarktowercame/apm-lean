@@ -1329,10 +1329,51 @@ theorem apm_t01A04_torusCoverMap_range_eq_parity_kernel_aux_character
           apm_t01a04_torusCoverMap ⁻¹' {apm_t01a04_basepoint}) := by
   sorry
 
+def apm_t01A04_torusCoverMap_range_eq_parity_kernel_aux_lifts_pathA :
+    Path apm_t01a04_torusCoverBase
+      (Quotient.mk _ (.inl (Circle.exp Real.pi, (1 : Circle)))) where
+  toFun t := Quotient.mk _ (.inl (Circle.exp (Real.pi * (t : ℝ)), (1 : Circle)))
+  continuous_toFun := continuous_coinduced_rng.comp
+    (continuous_inl.comp ((Circle.exp.continuous.comp
+      (continuous_const.mul continuous_subtype_val)).prodMk continuous_const))
+  source' := by simp [apm_t01a04_torusCoverBase]
+  target' := by simp
+
+def apm_t01A04_torusCoverMap_range_eq_parity_kernel_aux_lifts_pathB :
+    Path apm_t01a04_torusCoverBase apm_t01a04_torusCoverBase :=
+  (ConstructionTargets.CircleUniversalCover.integerLoop 1).map
+    (show Continuous (fun z : Circle =>
+        Quotient.mk _ (Sum.inl ((1 : Circle), z))) from
+      continuous_coinduced_rng.comp
+        (continuous_inl.comp (continuous_const.prodMk continuous_id)))
+
+def apm_t01A04_torusCoverMap_range_eq_parity_kernel_aux_lifts_pathC :
+    Path apm_t01a04_torusCoverBase apm_t01a04_torusCoverBase :=
+  (((ConstructionTargets.CircleUniversalCover.integerLoop 1).map
+    (show Continuous (fun z : Circle =>
+        Quotient.mk _ (Sum.inr ((0 : Fin 2), z))) from
+      continuous_coinduced_rng.comp
+        (continuous_inr.comp (continuous_const.prodMk continuous_id)))).cast
+    (by
+      have h : (Quotient.mk _ (.inl ((1 : Circle), (1 : Circle))) :
+          apm_t01a04_TorusCover) = Quotient.mk _ (.inr ((0 : Fin 2), (1 : Circle))) :=
+        Quotient.sound (by simpa using
+          Relation.EqvGen.rel _ _ (apm_t01a04_torusCoverRel.glue 0))
+      exact h)
+    (by
+      have h : (Quotient.mk _ (.inl ((1 : Circle), (1 : Circle))) :
+          apm_t01a04_TorusCover) = Quotient.mk _ (.inr ((0 : Fin 2), (1 : Circle))) :=
+        Quotient.sound (by simpa using
+          Relation.EqvGen.rel _ _ (apm_t01a04_torusCoverRel.glue 0))
+      exact h))
+
 /-- Explicit lifts from the base point: `loopA` lifts to the half-turn
 `(1,1) ↦ (-1,1)` in the torus summand (the cover squares the first
 coordinate), so it moves the base point; `loopB` lifts to the closed second
-coordinate turn and `loopC` to the closed turn of circle `0`. -/
+coordinate turn and `loopC` to the closed turn of circle `0`.  The three
+explicit lifts are banked above (`_pathA/B/C`); conclude with the
+lift-uniqueness API (`IsCoveringMap.liftPath`, `eq_liftPath_iff`), and separate
+`⟦inl (-1, 1)⟧` from the base point with a quotient-respecting invariant. -/
 theorem apm_t01A04_torusCoverMap_range_eq_parity_kernel_aux_lifts
     (hcov : IsCoveringMap apm_t01a04_torusCoverMap) :
     hcov.monodromy apm_t01A04_loopA (⟨apm_t01a04_torusCoverBase, apm_t01a04_torusCoverMap_base⟩ :
