@@ -36165,6 +36165,16 @@
     [{:cmd "initial compile",
       :exit 1,
       :correction "used literal endpoints and Path record syntax"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1792017228263-12571-d752e1da",
+     :commands
+     ["fixture SHA-256 assertion; lake build closure; lean frozen interface"
+      "git show --check 8c4eb4f recorded closure"
+      "parent/commit placeholder recount; registry 166/166"],
+     :finding
+     "PASS: after rebuilding a missing olean, the frozen fixture passes. Commit 8c4eb4f adds compiled, sorry-free progress beyond 263f5d47: Fin(runs+1) indexes outer-subtype boundaries, and coercion recovers the matching ambient list value in the needed orientation. It does not assume the partial van Kampen result. Scope/hash match; standard axioms only; Main 1->1 placeholder; residual fold, kernel/surjectivity, winding, C1/C2/Main are listed."},
     :commit "b87f68fbe2e6b103154e5df3f961105476ac6537",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
@@ -36175,7 +36185,7 @@
      "aac6a57cab0baa1f9c92578e6c95c0d2e9c7873f970828f5aaad3bf9d16bd2f6"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -36193,7 +36203,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t93J03Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Chose an outer-range representative for every run; boundary casts/fold remain.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Packaged every run representative as an exact outer-boundary path; dependent fold remains.",
    :id :program-2026-10-13-close-t93j03,
    :kind :final-adapter,
    :campaign-priority 30,
@@ -36523,7 +36533,11 @@
     {:job 1,
      :commit "657c9520bc1295803f113d25d5a087cc5a0a191d",
      :reason
-     "Chose an outer-range representative for every run; boundary casts/fold remain."}]}
+     "Chose an outer-range representative for every run; boundary casts/fold remain."}
+    {:job 2,
+     :commit "b87f68fbe2e6b103154e5df3f961105476ac6537",
+     :reason
+     "Packaged every run representative as an exact outer-boundary path; dependent fold remains."}]}
   {:consumer :t99J05,
    :stop-count 5,
    :evidence
@@ -40111,7 +40125,7 @@
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "pathTwoOpenSubdivisionRun_exists_outerBoundaryPath",
@@ -40123,7 +40137,9 @@
     :type
     "exact consecutive outer-boundary path preserving endpoint-cast run class",
     :area "covering-subgroup-correspondence",
-    :proved-in :program-2026-10-13-close-t93j03},
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "b87f68fbe2e6b103154e5df3f961105476ac6537"},
    :id :lemma-pathtwoopensubdivisionrun-exists-outerboundarypath,
    :kind :lemma,
    :depends-on
