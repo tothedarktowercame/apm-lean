@@ -447,8 +447,32 @@ theorem apm_t01A04_torusCoverMap_evenlyCovered_away
     apm_t01A04_torusCoverMap_evenlyCovered_away_aux_torus
     apm_t01A04_torusCoverMap_evenlyCovered_away_aux_circle x hx
 
-/-- At the wedge point, the two inverse product neighborhoods in the doubled
-torus are glued to the corresponding attached-circle neighborhoods. -/
+lemma apm_t01A04_torusCoverMap_evenlyCovered_basepoint_aux_glue (i : Fin 2) :
+    (Quotient.mk _
+        (.inl (apm_t01a04_sheetPoint i, (1 : Circle))) :
+      apm_t01a04_TorusCover) =
+      Quotient.mk _ (.inr (i, (1 : Circle))) := by
+  exact Quotient.sound
+    (Relation.EqvGen.rel _ _ (apm_t01a04_torusCoverRel.glue i))
+
+lemma apm_t01A04_torusCoverMap_evenlyCovered_basepoint_aux_mem_fiber
+    (i : Fin 2) :
+    Quotient.mk _ (.inl (apm_t01a04_sheetPoint i, (1 : Circle))) ∈
+      apm_t01a04_torusCoverMap ⁻¹' {apm_t01a04_basepoint} := by
+  change apm_t01a04_torusCoverMap
+      (Quotient.mk _
+        (.inl (apm_t01a04_sheetPoint i, (1 : Circle)))) =
+    apm_t01a04_basepoint
+  simp [apm_t01a04_torusCoverMap, apm_t01a04_torusCoverRaw,
+    apm_t01a04_basepoint]
+
+/-- Basepoint case.  Plan: take
+`U = mk '' (inl '' {q | 0 < q.1.re ∧ 0 < q.2.re} ∪ inr '' {z | 0 < z.re})`,
+open and saturated in `X`.  Its preimage is the disjoint union over `i : Fin 2`
+of `mk '' (inl '' {q | q.1 ∈ Aᵢ ∧ 0 < q.2.re} ∪ inr '' ({i} × {z | 0 < z.re}))`
+with `Aᵢ` the arc about `sheetPoint i = ±1` on which squaring is a
+homeomorphism onto `{z | 0 < z.re}`; the banked glue lemmas attach circle
+sheet `i` at `(sheetPoint i, 1)`. -/
 theorem apm_t01A04_torusCoverMap_evenlyCovered_basepoint :
     IsEvenlyCovered apm_t01a04_torusCoverMap apm_t01a04_basepoint
       (apm_t01a04_torusCoverMap ⁻¹' {apm_t01a04_basepoint}) := by
