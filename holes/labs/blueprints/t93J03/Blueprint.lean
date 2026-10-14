@@ -207,11 +207,51 @@ theorem t93J03_kleinPlaneQuotient_pi1_every_basepoint
     ⟨(FundamentalGroup.fundamentalGroupMulEquivOfPathConnected
         q T93J03KleinPlaneOrigin).trans e₀⟩
 
+theorem t93J03_kleinPlaneQuotient_homeomorph_aux_sameOrbit
+    (p q : ℝ × ℝ) :
+    KleinSquareEqvGenToCases.SameOrbit p q ↔
+      MulAction.orbitRel
+        KleinPresentedGroupCoordinateModel.PresentedKleinGroup (ℝ × ℝ) p q := by
+  change q ∈ MulAction.orbit
+      KleinPresentedGroupCoordinateModel.PresentedKleinGroup p ↔
+    p ∈ MulAction.orbit
+      KleinPresentedGroupCoordinateModel.PresentedKleinGroup q
+  exact MulAction.mem_orbit_symm
+
+noncomputable def t93J03_kleinPlaneQuotient_homeomorph_aux_planeOrbitRel :
+    ConstructionTargets.KleinOrbitQuotientHomeomorph.PlaneOrbitQuotient ≃ₜ
+      T93J03KleinPlaneQuotient where
+  toFun := Quotient.lift (fun p => Quotient.mk _ p) fun p q h =>
+    Quotient.sound
+      ((t93J03_kleinPlaneQuotient_homeomorph_aux_sameOrbit p q).mp h)
+  invFun := Quotient.lift (fun p => Quotient.mk _ p) fun p q h =>
+    Quotient.sound
+      ((t93J03_kleinPlaneQuotient_homeomorph_aux_sameOrbit p q).mpr h)
+  left_inv := by rintro ⟨p⟩; rfl
+  right_inv := by rintro ⟨p⟩; rfl
+  continuous_toFun := by
+    apply Continuous.quotient_lift
+    exact continuous_coinduced_rng
+  continuous_invFun := by
+    apply Continuous.quotient_lift
+    exact continuous_coinduced_rng
+
+/-- LIBRARY (polygon cut-and-paste, shared with t96J02 and the Fmoves
+foundation): the Mathlib-side plane orbit quotient is the frozen disk-polygon
+Klein bottle.  t96J02 proves the same fact through its T2 / EqvGen /
+closed-square leaves plus `kleinSquarePolygonQuotient_homeomorph_diskPolygon`;
+port that chain here once it closes. -/
+theorem t93J03_kleinPlaneQuotient_homeomorph_aux_planeOrbit :
+    Nonempty (ConstructionTargets.KleinOrbitQuotientHomeomorph.PlaneOrbitQuotient ≃ₜ
+      KleinBottle) := by
+  sorry
+
 /-- The explicit affine orbit quotient is the frozen polygon model of the
-Klein bottle.  This is the sole residual quotient-comparison leaf. -/
+Klein bottle. -/
 theorem t93J03_kleinPlaneQuotient_homeomorph :
     Nonempty (T93J03KleinPlaneQuotient ≃ₜ KleinBottle) := by
-  sorry
+  obtain ⟨e⟩ := t93J03_kleinPlaneQuotient_homeomorph_aux_planeOrbit
+  exact ⟨t93J03_kleinPlaneQuotient_homeomorph_aux_planeOrbitRel.symm.trans e⟩
 
 /-- Transport an all-basepoint fundamental-group calculation across a
 homeomorphism.  Both substantive conclusions are hypotheses, so this seat is
