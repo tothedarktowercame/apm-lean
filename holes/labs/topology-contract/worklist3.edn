@@ -36119,7 +36119,7 @@
   {:consumer :t93J03,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 10,
+   :stop-count 0,
    :review-finding
    "Program STOP commits no new mathematical progress since the prior milestone: KleinPolygonBasedVanKampen merely packages the already-required surjectivity and kernel hypotheses, and both consumers only reapply the previously proved three-input theorem. Prove the based van Kampen surjectivity/kernel result (or winding conjugacy) in scope; extend Mathlib: state and prove the missing theorem in scope.",
    :evidence
@@ -36171,7 +36171,7 @@
      :mode :blocked-by-unrelated-dependency},
     :seat :topo-10},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -36193,7 +36193,7 @@
    :id :program-2026-10-13-close-t93j03,
    :kind :final-adapter,
    :campaign-priority 30,
-   :fail-count 1,
+   :fail-count 0,
    :depends-on [],
    :program true,
    :other-consumers [],
@@ -36815,6 +36815,16 @@
      {:cmd "lean fixture; Main; registry; placeholder; diff; show",
       :exit 0}
      {:cmd "rg forbidden closure", :exit 1, :expected-exit 1}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791985355993-11838-5c71f859",
+     :commands
+     ["git show/check/diff 941de27d; scope/math; fixture sha256"
+      "lake build closure; lean fixture and Main"
+      "statement registry; placeholder and axiom recount"],
+     :finding
+     "PASS. Commit 941de27d adds compiled, sorry-free progress: closedness follows from quotient preimage plus antipodal saturation; explicit two-point fibers and the local-homeomorphism branches then satisfy the finite-fiber closed-map covering criterion, proving IsCoveringMap(sphereProjection 3). Scope/hash match; support placeholders 0->0; frozen Main 1->1; standard axioms only; registry 166/166. Rational transfer, degree four, invariants, and Main remain listed."},
     :commit "941de27ddd408535b6c86c0ed540c3d455cd02c7",
     :changed-paths
     ["ConstructionTargets/t96A06Closure.lean"
@@ -36825,7 +36835,7 @@
      "93be196d029fbd185044f71d43a994cf4647b64fb825be9d5d0b9eeacad016b3"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -36843,7 +36853,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t96A06Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed open-map and local-homeomorphism structure for exact S3-to-RP3 projection; common two-sheet trivialization remains.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Proved the exact S3-to-RP3 projection is a covering; rational transfer remains.",
    :id :program-2026-10-13-close-t96a06,
    :kind :final-adapter,
    :campaign-priority 31,
@@ -36867,7 +36877,11 @@
     {:job 6,
      :commit "ddec9674fe0129e68cff55ab38c5a0d35c42cd58",
      :reason
-     "Committed open-map and local-homeomorphism structure for exact S3-to-RP3 projection; common two-sheet trivialization remains."}]}
+     "Committed open-map and local-homeomorphism structure for exact S3-to-RP3 projection; common two-sheet trivialization remains."}
+    {:job 7,
+     :commit "941de27ddd408535b6c86c0ed540c3d455cd02c7",
+     :reason
+     "Proved the exact S3-to-RP3 projection is a covering; rational transfer remains."}]}
   {:consumer :t96J05,
    :stop-count 0,
    :phase :implementation,
@@ -38499,7 +38513,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t96A06_rp3_sphere_covering",
@@ -38509,7 +38523,9 @@
     :reported-by [:program-2026-10-13-close-t96a06],
     :type "S3 projection is a two-sheeted covering of frozen RP3",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :program-2026-10-13-close-t96a06,
+    :banked-commit "941de27ddd408535b6c86c0ed540c3d455cd02c7"},
    :id :lemma-t96a06-rp3-sphere-covering,
    :kind :lemma,
    :depends-on [:lemma-rp3sphereprojection-islocalhomeomorph],
@@ -38751,7 +38767,7 @@
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -38765,7 +38781,9 @@
     :type
     "concrete outer connector equals inverse deformation unit followed by inverse-mapped skeleton connector",
     :area "covering-subgroup-correspondence",
-    :proved-in :program-2026-10-13-close-t93j03},
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t93J03Closure.lean"]},
    :id
    :lemma-kleinpolygonouterconnector-eq-inverseunit-comp-mappedconnector,
    :kind :lemma,
