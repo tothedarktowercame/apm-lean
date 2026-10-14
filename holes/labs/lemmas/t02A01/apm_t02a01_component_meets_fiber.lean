@@ -1,0 +1,266 @@
+import Mathlib
+import ConstructionTargets.CoveringMonodromyCosets
+
+open Set
+
+def apm_t02a01_boundaryMonodromy (n : ℕ) (a b : ZMod n) : Equiv.Perm (ZMod n) :=
+  Equiv.addRight a * Equiv.addRight b * (Equiv.addRight a)⁻¹ * (Equiv.addRight b)⁻¹
+
+noncomputable def apm_t02a01_boundaryComponentCount (n : ℕ) (a b : ZMod n) : ℕ :=
+  Nat.card {x : ZMod n // apm_t02a01_boundaryMonodromy n a b x = x}
+
+theorem apm_t02a01_previous_encoding :
+    ∀ (n : ℕ), 0 < n → ∀ a b : ZMod n,
+      apm_t02a01_boundaryMonodromy n a b = 1 ∧
+      apm_t02a01_boundaryComponentCount n a b = n := by
+  intro n hn a b
+  have hmon : apm_t02a01_boundaryMonodromy n a b = 1 := by
+    ext x
+    simp [apm_t02a01_boundaryMonodromy, Equiv.Perm.mul_apply]
+    abel
+  constructor
+  · exact hmon
+  · simp [apm_t02a01_boundaryComponentCount, hmon, Nat.card_zmod]
+
+abbrev apm_t02a01_squareAnnulus :=
+  {x : ℝ × ℝ // x.1 ∈ Set.Icc 0 1 ∧ x.2 ∈ Set.Icc 0 1 ∧
+    (1 / 4 : ℝ) ≤ ‖x - (1 / 2, 1 / 2)‖}
+
+inductive apm_t02a01_edgeRel :
+    apm_t02a01_squareAnnulus → apm_t02a01_squareAnnulus → Prop
+  | horizontal (y : ℝ) (hy : y ∈ Set.Icc 0 1)
+      (h₀ : (1 / 4 : ℝ) ≤ ‖((0, y) : ℝ × ℝ) - (1 / 2, 1 / 2)‖)
+      (h₁ : (1 / 4 : ℝ) ≤ ‖((1, y) : ℝ × ℝ) - (1 / 2, 1 / 2)‖) :
+      apm_t02a01_edgeRel ⟨(0, y), ⟨by norm_num, hy, h₀⟩⟩
+        ⟨(1, y), ⟨by norm_num, hy, h₁⟩⟩
+  | vertical (x : ℝ) (hx : x ∈ Set.Icc 0 1)
+      (h₀ : (1 / 4 : ℝ) ≤ ‖((x, 0) : ℝ × ℝ) - (1 / 2, 1 / 2)‖)
+      (h₁ : (1 / 4 : ℝ) ≤ ‖((x, 1) : ℝ × ℝ) - (1 / 2, 1 / 2)‖) :
+      apm_t02a01_edgeRel ⟨(x, 0), ⟨hx, by norm_num, h₀⟩⟩
+        ⟨(x, 1), ⟨hx, by norm_num, h₁⟩⟩
+
+def apm_t02a01_puncturedTorus :=
+  Quotient (Relation.EqvGen.setoid apm_t02a01_edgeRel)
+
+noncomputable instance : TopologicalSpace apm_t02a01_puncturedTorus :=
+  TopologicalSpace.coinduced
+    (fun x : apm_t02a01_squareAnnulus ↦
+      (Quotient.mk _ x : apm_t02a01_puncturedTorus)) inferInstance
+
+def apm_t02a01_boundary : Set apm_t02a01_puncturedTorus :=
+  (fun x : apm_t02a01_squareAnnulus ↦
+    (Quotient.mk _ x : apm_t02a01_puncturedTorus)) ''
+      {x | ‖x.1 - ((1 / 2, 1 / 2) : ℝ × ℝ)‖ = (1 / 4 : ℝ)}
+
+abbrev apm_t02a01_boundarySpace :=
+  apm_t02a01_boundary
+
+def apm_t02a01_restrictedCover {Stilde : Type*} [TopologicalSpace Stilde]
+    (p : Stilde → apm_t02a01_puncturedTorus) :
+    p ⁻¹' apm_t02a01_boundary → apm_t02a01_boundarySpace :=
+  fun x => ⟨p x.1, x.2⟩
+
+/-- LIBRARY (square-annulus quotient): the inner metric circle survives the
+outer-edge quotient and gives the boundary subtype. -/
+theorem apm_t02a01_boundary_homeomorph_circle :
+    Nonempty (apm_t02a01_boundarySpace ≃ₜ Circle) := by
+  sorry
+
+/-- Transport path connectedness across the concrete boundary-circle
+homeomorphism.  The homeomorphism is an explicit hypothesis so this leaf is
+independent of its construction. -/
+theorem apm_t02a01_boundary_pathConnected
+    (h : Nonempty (apm_t02a01_boundarySpace ≃ₜ Circle)) :
+    Nonempty (PathConnectedSpace apm_t02a01_boundarySpace) := by
+  sorry
+
+/-- Transport local path connectedness across the concrete boundary-circle
+homeomorphism. -/
+theorem apm_t02a01_boundary_locPathConnected
+    (h : Nonempty (apm_t02a01_boundarySpace ≃ₜ Circle)) :
+    Nonempty (LocPathConnectedSpace apm_t02a01_boundarySpace) := by
+  sorry
+
+/-- The two geometric instances used below, assembled from the independently
+provable circle leaves. -/
+theorem apm_t02a01_boundary_geometry :
+    Nonempty (PathConnectedSpace apm_t02a01_boundarySpace) ∧
+      Nonempty (LocPathConnectedSpace apm_t02a01_boundarySpace) := by
+  have h := apm_t02a01_boundary_homeomorph_circle
+  exact ⟨apm_t02a01_boundary_pathConnected h,
+    apm_t02a01_boundary_locPathConnected h⟩
+
+/-- Restricting a covering map to the full inverse image of a subtype is again
+a covering map. -/
+theorem apm_t02a01_restrictedCover_isCovering
+    {Stilde : Type*} [TopologicalSpace Stilde]
+    (p : Stilde → apm_t02a01_puncturedTorus) (hcover : IsCoveringMap p) :
+    IsCoveringMap (apm_t02a01_restrictedCover p) := by
+  sorry
+
+/-- LIBRARY (polygon boundary word): lifting any loop on the inner boundary of
+the square-annulus quotient ends at a deck translate by a commutator. -/
+theorem apm_t02a01_boundary_monodromy_is_deck_commutator
+    {Stilde : Type*} [TopologicalSpace Stilde]
+    (p : Stilde → apm_t02a01_puncturedTorus) (n : ℕ)
+    (hcov : IsCoveringMap (apm_t02a01_restrictedCover p))
+    (deck : ZMod n → Homeomorph Stilde Stilde)
+    (hdeck_over : ∀ z x, p (deck z x) = p x)
+    (hdeck_transitive : ∀ x y, p x = p y → ∃! z, deck z x = y)
+    (e : p ⁻¹' apm_t02a01_boundary)
+    (γ : FundamentalGroup apm_t02a01_boundarySpace
+      (apm_t02a01_restrictedCover p e)) :
+    ∃ u v : ZMod n,
+      (hcov.monodromy γ ⟨e, rfl⟩).1.1 = deck (u + v - u - v) e.1 := by
+  sorry
+
+/-- The commutator translation is the identity because the deck group is the
+abelian group `ZMod n`.  This is independent of the boundary geometry. -/
+theorem apm_t02a01_deck_commutator_apply
+    {Stilde : Type*} [TopologicalSpace Stilde] (n : ℕ)
+    (deck : ZMod n → Homeomorph Stilde Stilde)
+    (hdeck_zero : deck 0 = Homeomorph.refl Stilde)
+    (u v : ZMod n) (x : Stilde) :
+    deck (u + v - u - v) x = x := by
+  sorry
+
+/-- LIBRARY (boundary commutator + abelian deck group): monodromy of every
+loop in the restricted boundary cover is trivial. -/
+theorem apm_t02a01_boundary_monodromy_trivial
+    {Stilde : Type*} [TopologicalSpace Stilde]
+    (p : Stilde → apm_t02a01_puncturedTorus) (n : ℕ)
+    (hcover : IsCoveringMap p)
+    (deck : ZMod n → Homeomorph Stilde Stilde)
+    (hdeck_zero : deck 0 = Homeomorph.refl Stilde)
+    (hdeck_add : ∀ z w, deck (z + w) = (deck z).trans (deck w))
+    (hdeck_over : ∀ z x, p (deck z x) = p x)
+    (hdeck_transitive : ∀ x y, p x = p y → ∃! z, deck z x = y) :
+    ∃ hcov : IsCoveringMap (apm_t02a01_restrictedCover p),
+      ∀ (e : p ⁻¹' apm_t02a01_boundary)
+        (γ : FundamentalGroup apm_t02a01_boundarySpace
+          (apm_t02a01_restrictedCover p e)),
+        hcov.monodromy γ ⟨e, rfl⟩ = ⟨e, rfl⟩ := by
+  let hcov := apm_t02a01_restrictedCover_isCovering p hcover
+  refine ⟨hcov, ?_⟩
+  intro e γ
+  obtain ⟨u, v, huv⟩ :=
+    apm_t02a01_boundary_monodromy_is_deck_commutator p n hcov deck hdeck_over
+      hdeck_transitive e γ
+  apply Subtype.ext
+  apply Subtype.ext
+  exact huv.trans (apm_t02a01_deck_commutator_apply n deck hdeck_zero u v e.1)
+
+/-- A covering over a path-connected base has a point above the chosen
+basepoint in every connected component of its total space. -/
+-- BEGIN SEAT AREA
+theorem apm_t02a01_component_meets_fiber
+    {E B : Type*} [TopologicalSpace E] [TopologicalSpace B]
+    [PathConnectedSpace B] [LocPathConnectedSpace B]
+    (q : E → B) (hq : IsCoveringMap q) (e : E) :
+    Function.Surjective
+      (fun x : q ⁻¹' {q e} => (x.1 : ConnectedComponents E)) := by
+  sorry
+-- END SEAT AREA
+
+/-- Trivial based monodromy separates two points of the chosen fiber into
+different connected components. -/
+theorem apm_t02a01_fiber_injective_on_components
+    {E B : Type*} [TopologicalSpace E] [TopologicalSpace B]
+    [PathConnectedSpace B] [LocPathConnectedSpace B]
+    (q : E → B) (hq : IsCoveringMap q) (e : E)
+    (hmono : ∀ γ : FundamentalGroup B (q e),
+      hq.monodromy γ ⟨e, rfl⟩ = ⟨e, rfl⟩) :
+    Function.Injective
+      (fun x : q ⁻¹' {q e} => (x.1 : ConnectedComponents E)) := by
+  sorry
+
+/-- LIBRARY (covering monodromy): a path-connected base with trivial
+monodromy has one connected component per point of a fiber. -/
+theorem apm_t02a01_components_equiv_fiber
+    {E B : Type*} [TopologicalSpace E] [TopologicalSpace B]
+    [PathConnectedSpace B] [LocPathConnectedSpace B]
+    (q : E → B) (hq : IsCoveringMap q)
+    (e : E)
+    (hmono : ∀ γ : FundamentalGroup B (q e),
+      hq.monodromy γ ⟨e, rfl⟩ = ⟨e, rfl⟩) :
+    Nonempty (ConnectedComponents E ≃ q ⁻¹' {q e}) := by
+  let f : q ⁻¹' {q e} → ConnectedComponents E := fun x => x.1
+  have hf : Function.Bijective f :=
+    ⟨apm_t02a01_fiber_injective_on_components q hq e hmono,
+      apm_t02a01_component_meets_fiber q hq e⟩
+  exact ⟨(Equiv.ofBijective f hf).symm⟩
+
+/-- The supplied simply transitive `ZMod n` deck action identifies every
+fiber with `ZMod n`. -/
+theorem apm_t02a01_fiber_card
+    {Stilde : Type*} [TopologicalSpace Stilde]
+    (p : Stilde → apm_t02a01_puncturedTorus) (n : ℕ)
+    (deck : ZMod n → Homeomorph Stilde Stilde)
+    (hdeck_over : ∀ z x, p (deck z x) = p x)
+    (hdeck_transitive : ∀ x y, p x = p y → ∃! z, deck z x = y)
+    (x : p ⁻¹' apm_t02a01_boundary) :
+    Nat.card (apm_t02a01_restrictedCover p ⁻¹'
+      {apm_t02a01_restrictedCover p x}) = n := by
+  let f : ZMod n → (apm_t02a01_restrictedCover p ⁻¹'
+      {apm_t02a01_restrictedCover p x}) := fun z =>
+    ⟨⟨deck z x.1, by
+      change p (deck z x.1) ∈ apm_t02a01_boundary
+      rw [hdeck_over]
+      exact x.2⟩, by
+        apply Subtype.ext
+        exact hdeck_over z x.1⟩
+  have hf_injective : Function.Injective f := by
+    intro z w hzw
+    have hz : deck z x.1 = (f w).1.1 := by
+      simpa [f] using congrArg (fun y => y.1.1) hzw
+    have hw : deck w x.1 = (f w).1.1 := by
+      rfl
+    obtain ⟨u, hu, huniq⟩ := hdeck_transitive x.1 (f w).1.1 (by
+      change p x.1 = p (deck w x.1)
+      symm
+      exact hdeck_over w x.1)
+    exact (huniq z hz).trans (huniq w hw).symm
+  have hf_surjective : Function.Surjective f := by
+    intro y
+    have hpy : p x.1 = p y.1.1 := by
+      have h := congrArg Subtype.val y.2
+      exact h.symm
+    obtain ⟨z, hz, _⟩ := hdeck_transitive x.1 y.1.1 hpy
+    refine ⟨z, ?_⟩
+    apply Subtype.ext
+    apply Subtype.ext
+    exact hz
+  let e : ZMod n ≃ (apm_t02a01_restrictedCover p ⁻¹'
+      {apm_t02a01_restrictedCover p x}) :=
+    Equiv.ofBijective f ⟨hf_injective, hf_surjective⟩
+  rw [← Nat.card_congr e]
+  exact Nat.card_zmod n
+
+theorem apm_t02a01
+    {Stilde : Type*} [TopologicalSpace Stilde]
+    (p : Stilde → apm_t02a01_puncturedTorus) (n : ℕ)
+    (hn : 0 < n)
+    (hcover : IsCoveringMap p)
+    (hp_surjective : Function.Surjective p)
+    (deck : ZMod n → Homeomorph Stilde Stilde)
+    (hdeck_zero : deck 0 = Homeomorph.refl Stilde)
+    (hdeck_add : ∀ z w, deck (z + w) = (deck z).trans (deck w))
+    (hdeck_over : ∀ z x, p (deck z x) = p x)
+    (hdeck_transitive : ∀ x y, p x = p y → ∃! z, deck z x = y) :
+    Nat.card (ConnectedComponents (p ⁻¹' apm_t02a01_boundary)) = n := by
+  letI := (apm_t02a01_boundary_geometry).1.some
+  letI := (apm_t02a01_boundary_geometry).2.some
+  let a := Classical.choice (inferInstance : Nonempty apm_t02a01_boundarySpace)
+  obtain ⟨b, hb⟩ := hp_surjective a.1
+  let e : p ⁻¹' apm_t02a01_boundary := ⟨b, by
+    change p b ∈ apm_t02a01_boundary
+    rw [hb]
+    exact a.property⟩
+  obtain ⟨hcov, hmono⟩ := apm_t02a01_boundary_monodromy_trivial p n hcover deck
+    hdeck_zero hdeck_add hdeck_over hdeck_transitive
+  obtain ⟨equiv⟩ := apm_t02a01_components_equiv_fiber
+    (apm_t02a01_restrictedCover p) hcov e (hmono e)
+  rw [Nat.card_congr equiv]
+  exact apm_t02a01_fiber_card p n deck hdeck_over hdeck_transitive e
+
+#print axioms apm_t02a01
