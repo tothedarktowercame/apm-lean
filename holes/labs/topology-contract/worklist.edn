@@ -113900,6 +113900,19 @@
       "lake build ConstructionTargets.ThreeCirclesFundamentalGroup",
       :exit 1,
       :finding "B12 file absent"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791959339219-11665-04711786",
+     :commands
+     ["git show/diff-tree 25f376324f4dcdcc92ecde368247bf61182c47aa"
+      "archive commit; lake env lean PointWedgeVanKampen.lean"
+      "sha256sum source/doc/blueprint; count sorry/admit"
+      "python3 scripts/statement-registry.py check"
+      "lake build ConstructionTargets.PointWedgeVanKampen"
+      "#print axioms new theorem"],
+     :finding
+     "PASS: exact scope and hashes match; archived source compiles; placeholders 0->0; registry 166/166; right-leg endpoint transport has correct orientation and explicit equivalence boundary; standard axioms only. New milestone advances the program; remaining connector-square installation and genericPointWedgeLegCoordinates_vanKampen are listed."},
     :commit "25f376324f4dcdcc92ecde368247bf61182c47aa",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
@@ -113910,7 +113923,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113931,7 +113944,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked the forward overlap component as named endpoint transport.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked endpoint transport through the right overlap leg.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -114852,7 +114865,11 @@
     {:job 5,
      :commit "b0d880546b5a8cc9b7053a3bd09cb8198be06296",
      :reason
-     "Banked the forward overlap component as named endpoint transport."}]}
+     "Banked the forward overlap component as named endpoint transport."}
+    {:job 6,
+     :commit "25f376324f4dcdcc92ecde368247bf61182c47aa",
+     :reason
+     "Banked endpoint transport through the right overlap leg."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
