@@ -6620,6 +6620,34 @@ theorem genericPointWedgeCoherentRightSource_overlap_connectorSquare :
   rw [ht]
   exact connectorSystem_connectorSquare_eqToHom _ _
 
+omit [PathConnectedSpace X] in
+/-- Mapping the coherent right-cover source square through the right-cover
+equivalence preserves its composition order. -/
+theorem genericPointWedgeCoherentRightSource_overlap_connectorSquare_mapped :
+    let r := genericPointWedgeActualRight x₀ y₀ M N
+    let eK := genericPointWedgeOverlapGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let eR := genericPointWedgeRightGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let z := genericPointWedgeOverlapBase x₀ y₀ M N
+    let F := eK.inverse ⋙ r
+    eR.functor.map
+        (((genericPointWedgeCoherentRightSourceConnectors
+          x₀ y₀ M N hM hN hy hx cM cN).connector
+            (F.obj (eK.functor.obj ((eK.functor ⋙ eK.inverse).obj z)))).hom) ≫
+      eR.functor.map (F.map (eK.functor.map (eK.unitInv.app z))) =
+    eR.functor.map
+        (((genericPointWedgeCoherentRightSourceConnectors
+          x₀ y₀ M N hM hN hy hx cM cN).connector
+            (F.obj (eK.functor.obj z))).hom) := by
+  dsimp only
+  rw [← Functor.map_comp]
+  exact congrArg
+    (genericPointWedgeRightGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN).functor.map
+    (genericPointWedgeCoherentRightSource_overlap_connectorSquare
+      x₀ y₀ M N hM hN hy hx cM cN)
+
 omit [PathConnectedSpace X] [PathConnectedSpace Y] in
 /-- The shifted and unshifted inverse right-span components are dependently
 equal, since their arguments are objects of `FundamentalGroupoid Unit`. -/

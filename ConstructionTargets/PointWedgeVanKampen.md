@@ -1470,6 +1470,8 @@ the induced endpoint equality explicitly.
 `connectorSystem_connectorSquare_eqToHom` is the general connector law for
 such transports, and
 `genericPointWedgeCoherentRightSource_overlap_connectorSquare` applies it to
-the original coherent right-cover system.  The next step is to apply the map,
-base-change, and comap preservation lemmas to install this square in the
-literal `Y` connector system.
+the original coherent right-cover system.
+`genericPointWedgeCoherentRightSource_overlap_connectorSquare_mapped` maps
+that square through the right-cover equivalence without changing its factor
+order.  The next step is to apply the base-change and comap preservation
+lemmas to install this square in the literal `Y` connector system.
