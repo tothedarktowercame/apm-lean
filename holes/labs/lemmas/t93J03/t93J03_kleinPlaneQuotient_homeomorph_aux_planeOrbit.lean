@@ -246,7 +246,16 @@ port that chain here once it closes. -/
 theorem t93J03_kleinPlaneQuotient_homeomorph_aux_planeOrbit :
     Nonempty (ConstructionTargets.KleinOrbitQuotientHomeomorph.PlaneOrbitQuotient ≃ₜ
       KleinBottle) := by
-  sorry
+  letI : ContinuousConstSMul KleinPresentedGroupCoordinateModel.PresentedKleinGroup (ℝ × ℝ) :=
+    ⟨t93J03_kleinPlaneQuotient_pi1_origin_aux_continuous⟩
+  letI : ProperlyDiscontinuousSMul KleinPresentedGroupCoordinateModel.PresentedKleinGroup
+      (ℝ × ℝ) :=
+    ⟨fun hK hL => t93J03_kleinPlaneQuotient_pi1_origin_aux_finite_actors hK hL⟩
+  letI : T2Space T93J03KleinPlaneQuotient :=
+    t2Space_of_properlyDiscontinuousSMul_of_t2Space
+      (Γ := KleinPresentedGroupCoordinateModel.PresentedKleinGroup) (T := ℝ × ℝ)
+  exact KleinSquareDiskCutAndPaste.planeOrbitQuotient_homeomorph_kleinBottle
+    t93J03_kleinPlaneQuotient_homeomorph_aux_planeOrbitRel.symm.t2Space
 -- END SEAT AREA
 
 /-- The explicit affine orbit quotient is the frozen polygon model of the
