@@ -87901,7 +87901,7 @@
   {:consumer :t97A01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 10,
+   :stop-count 0,
    :evidence
    {:placeholder-delta 0,
     :residual
@@ -87952,7 +87952,7 @@
      "c3524a65fb8aa1b6c108ae8c8cf901d4d216b2f3358d1f35de6a7f0a6e2d85c5"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -88152,6 +88152,16 @@
     [{:cmd "initial compile",
       :exit 1,
       :correction "renamed declarations shadowing sum lemmas"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791953670369-11605-0c937b28",
+     :commands
+     ["git show 21ba63c87 blob + #print axioms | lake env lean /dev/stdin"
+      "scope/hash/package-link assertions; Main.lean compile"
+      "statement-registry check/fingerprint t92J06; placeholder scan"],
+     :finding
+     "PASS: 21ba63c87 changes only t92J06Closure.lean; fixture SHA256 cfc39162da05c31f76fa19aeaa5b8753aaf780084ee94498e85a2cd30fb078b8 and frozen statement SHA256 c57f3fb767b5f74c6ec6643c579046e11cb78b4dc6b6423c1f77fd40c33ac017 reproduce. Exact blob compiles with propext/Classical.choice/Quot.sound; placeholders 0; registry 166/0. New progress beyond blueprint commit e1a5bdd1d banks the quotient wedge eliminator, uniqueness, inclusions, basepoint equality, and exact-fiber Covering bundle; both large cover theorems remain listed. The reusable X/Covering mirror the frozen types but are separately named, so final assembly must copy or transport them to apm_t92J06_X/apm_t92J06_Covering."},
     :commit "21ba63c87",
     :changed-paths ["ConstructionTargets/t92J06Closure.lean"],
     :fixture
@@ -88160,7 +88170,7 @@
      "cfc39162da05c31f76fa19aeaa5b8753aaf780084ee94498e85a2cd30fb078b8"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t92J06/lean/Main.lean"
     "problems/t92J06/status.json"
@@ -88178,7 +88188,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t92J06Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Blueprint written; independent review is required before formalization.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked the quotient-wedge API.",
    :id :program-2026-10-13-close-t92j06,
    :kind :final-adapter,
    :campaign-priority 34,
@@ -88190,7 +88200,10 @@
    [{:job 1,
      :commit "e1a5bdd1d",
      :reason
-     "Blueprint written; independent review is required before formalization."}]}
+     "Blueprint written; independent review is required before formalization."}
+    {:job 2,
+     :commit "21ba63c87",
+     :reason "Banked the quotient-wedge API."}]}
   {:consumer :t94A08,
    :phase :lemma,
    :state :banked,
@@ -89409,7 +89422,7 @@
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "pointWedgeToFiniteWedgeSum",
@@ -89419,14 +89432,16 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "continuous point-wedge descent to the sum wedge",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/PolygonSurfaceHomology.lean"]},
    :id :lemma-pointwedgetofinitewedgesum,
    :kind :lemma,
    :depends-on [:lemma-finitewedgesumleftright],
    :other-consumers [:t94J09]}
   {:consumer :t92J06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t92J06_quotientWedgeAPI",
@@ -89436,7 +89451,9 @@
     :reported-by [:program-2026-10-13-close-t92j06],
     :type "wedge eliminator, uniqueness, and covering structure",
     :area "graph-covering-realization",
-    :proved-in :program-2026-10-13-close-t92j06},
+    :proved-in :program-2026-10-13-close-t92j06,
+    :banked-by :program-2026-10-13-close-t92j06,
+    :banked-commit "21ba63c87"},
    :id :lemma-t92j06-quotientwedgeapi,
    :kind :lemma,
    :depends-on [],
