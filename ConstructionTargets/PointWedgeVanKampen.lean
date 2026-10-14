@@ -293,6 +293,33 @@ theorem connectorSystemMapEquivalence_connector_hom
       e.functor.map (S.connector (e.inverse.obj A)).hom ≫
         e.counitIso.hom.app A := rfl
 
+omit [PathConnectedSpace X] [PathConnectedSpace Y] in
+/-- A connector square before transport remains a connector square after
+transport through an equivalence. -/
+theorem connectorSystemMapEquivalence_connectorSquare
+    {C D : Type} [Groupoid C] [Groupoid D]
+    (S : ConnectorSystem C) (e : C ≌ D) {A B : D} (f : A ⟶ B)
+    (h : (S.connector (e.inverse.obj A)).hom ≫ e.inverse.map f =
+      (S.connector (e.inverse.obj B)).hom) :
+    ((connectorSystemMapEquivalence S e).connector A).hom ≫ f =
+      ((connectorSystemMapEquivalence S e).connector B).hom := by
+  rw [connectorSystemMapEquivalence_connector_hom,
+    connectorSystemMapEquivalence_connector_hom]
+  calc
+    _ = e.functor.map (S.connector (e.inverse.obj A)).hom ≫
+        (e.counitIso.hom.app A ≫ f) := Category.assoc _ _ _
+    _ = e.functor.map (S.connector (e.inverse.obj A)).hom ≫
+        (e.functor.map (e.inverse.map f) ≫ e.counitIso.hom.app B) := by
+          congr 1
+          exact (e.counitIso.hom.naturality f).symm
+    _ = (e.functor.map (S.connector (e.inverse.obj A)).hom ≫
+        e.functor.map (e.inverse.map f)) ≫ e.counitIso.hom.app B :=
+          (Category.assoc _ _ _).symm
+    _ = e.functor.map
+          ((S.connector (e.inverse.obj A)).hom ≫ e.inverse.map f) ≫
+        e.counitIso.hom.app B := by rw [Functor.map_comp]
+    _ = _ := by rw [h]
+
 /-- Rebase a connector system along a specified isomorphism.  Keeping the
 isomorphism explicit lets transported connector choices be installed at the
 literal base object used by a based fundamental group. -/

@@ -1445,3 +1445,9 @@ It also records why no general cancellation is available: the connector at
 the forward-inverse object is an arbitrary choice unless the installed system
 supplies the required coherence.  The right-wedge specialization now has that
 coherence by construction; its named base transports remain to be combined.
+`connectorSystemMapEquivalence_connectorSquare` isolates the usable
+naturality principle: a connector square in the source system maps to the
+corresponding square in the target system, with the equivalence counits
+discharged by their naturality equation.  Thus the overlap comparison can now
+be pulled back to the right-piece connector system before its base changes are
+normalized.
