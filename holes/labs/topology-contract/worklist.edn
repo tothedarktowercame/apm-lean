@@ -119066,7 +119066,7 @@
   {:consumer :t00J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 10,
+   :stop-count 0,
    :review-finding
    "Recorded fixture hash is malformed/mismatched: ledger has afb497a6df6187f797ce1df000700b7c24774e94f50633c1cc10b2aa0e8c82319196, but the recorded commit blueprint hashes to afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984. Repair fixture provenance. The archived closure otherwise compiles sorry-free with standard axioms; Main retains its one baseline sorry; registry 166/166.",
    :evidence
@@ -119118,7 +119118,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119328,6 +119328,17 @@
      {:cmd "lake env lean problems/t98A06/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "hash/placeholders/diff", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1792021040917-12697-7c2eab2d",
+     :commands
+     ["git diff-tree/show 2914de86"
+      "archive 2914de86; lake env lean closure and Main"
+      "sha256sum/placeholders at 2914de86"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS program STOP: new commit changes only t98A06Closure.lean and proves a compiled, sorry-free smooth family of corrected right inverses. It sets B(z)=A(z)∘R, uses smooth inversion on the invertible endomorphisms, defines Q(z)=R∘B(z)⁻¹, and reassociates to B(z)∘B(z)⁻¹=id in the correct order; all domains/codomains agree. Fixture, closure, and frozen Main hashes match; closure has 0 placeholders and Main baseline 1; only standard axioms; registry 166/166. Chartwise local lifts, compact flow, and Main remain listed."},
     :commit "2914de86857a9e7f16e8e708c0dd33988f173917",
     :changed-paths ["ConstructionTargets/t98A06Closure.lean"],
     :fixture
@@ -119336,7 +119347,7 @@
      "9838452bf081767e1df000700b7c24774e94f50633c1cc10b2aa0e8c82319196"},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t98A06/lean/Main.lean"
     "problems/t98A06/status.json"
@@ -119354,7 +119365,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t98A06Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked correction.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked smooth fixed-coordinate right inverses.",
    :id :program-2026-10-13-close-t98a06,
    :kind :final-adapter,
    :campaign-priority 50,
@@ -119374,7 +119385,10 @@
      :reason "Banked derivative right inverses."}
     {:job 4,
      :commit "eebf94553a1cef785f5a621f57baf092bc23d1b0",
-     :reason "Banked correction."}]}
+     :reason "Banked correction."}
+    {:job 5,
+     :commit "2914de86857a9e7f16e8e708c0dd33988f173917",
+     :reason "Banked smooth fixed-coordinate right inverses."}]}
   {:consumer :t01A01,
    :stop-count 0,
    :phase :implementation,
@@ -120621,7 +120635,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "canonicalRegularFiberWitness_of_locallyInjective",
@@ -120631,7 +120645,9 @@
     :reported-by [:program-2026-10-13-close-t00j02],
     :type "local injectivity plus calculations gives witness",
     :area "oriented-surface-degree",
-    :proved-in :program-2026-10-13-close-t00j02},
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t00J02Closure.lean"]},
    :id :lemma-canonicalregularfiberwitness-of-locallyinjective,
    :kind :lemma,
    :depends-on
@@ -120640,7 +120656,7 @@
    :other-consumers []}
   {:consumer :t98A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "contDiff_rightInverse_of_comp_isInvertible",
@@ -120650,7 +120666,9 @@
     :reported-by [:program-2026-10-13-close-t98a06],
     :type "smooth family of corrected right inverses",
     :area "smooth-manifold-submersion",
-    :proved-in :program-2026-10-13-close-t98a06},
+    :proved-in :program-2026-10-13-close-t98a06,
+    :banked-by :program-2026-10-13-close-t98a06,
+    :banked-commit "2914de86857a9e7f16e8e708c0dd33988f173917"},
    :id :lemma-contdiff-rightinverse-of-comp-isinvertible,
    :kind :lemma,
    :depends-on [:lemma-rightinverse-of-comp-continuouslinearequiv],
