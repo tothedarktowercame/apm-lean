@@ -728,6 +728,48 @@ def apm_t01A04_canonical_loops_presentation_aux_homeomorph :
         apm_t01a04_basepoint =
       ConstructionTargets.GenericTargetNaturalSourceReconstruction.wedgeBase := rfl
 
+noncomputable def apm_t01A04_canonical_loops_presentation_aux_images_aux_transportHom :
+    apm_t01a04_piOne →*
+      FundamentalGroup
+        (ConstructionTargets.PointWedgeQuotient.Wedge
+          ((1, 1) : apm_t01a04_Torus) (1 : Circle))
+        ConstructionTargets.GenericTargetNaturalSourceReconstruction.wedgeBase :=
+  FundamentalGroup.map
+    ⟨apm_t01A04_canonical_loops_presentation_aux_homeomorph,
+      apm_t01A04_canonical_loops_presentation_aux_homeomorph.continuous⟩
+    apm_t01a04_basepoint
+
+lemma apm_t01A04_canonical_loops_presentation_aux_images_aux_transport_bijective :
+    Function.Bijective
+      apm_t01A04_canonical_loops_presentation_aux_images_aux_transportHom := by
+  constructor
+  · intro x y hxy
+    obtain ⟨x⟩ := x
+    obtain ⟨y⟩ := y
+    apply Quotient.sound
+    convert (Path.Homotopic.Quotient.exact hxy).map
+      ⟨apm_t01A04_canonical_loops_presentation_aux_homeomorph.symm,
+        apm_t01A04_canonical_loops_presentation_aux_homeomorph.symm.continuous⟩ using 1 <;>
+      ext t <;>
+      exact (apm_t01A04_canonical_loops_presentation_aux_homeomorph.symm_apply_apply _).symm
+  · intro y
+    obtain ⟨y⟩ := y
+    refine ⟨Path.Homotopic.Quotient.mk
+      (y.map apm_t01A04_canonical_loops_presentation_aux_homeomorph.symm.continuous), ?_⟩
+    apply Quotient.sound
+    convert Path.Homotopic.refl y using 1 <;> ext t <;>
+      exact apm_t01A04_canonical_loops_presentation_aux_homeomorph.apply_symm_apply _
+
+noncomputable def apm_t01A04_canonical_loops_presentation_aux_images_aux_transport :
+    apm_t01a04_piOne ≃*
+      FundamentalGroup
+        (ConstructionTargets.PointWedgeQuotient.Wedge
+          ((1, 1) : apm_t01a04_Torus) (1 : Circle))
+        ConstructionTargets.GenericTargetNaturalSourceReconstruction.wedgeBase :=
+  MulEquiv.ofBijective
+    apm_t01A04_canonical_loops_presentation_aux_images_aux_transportHom
+    apm_t01A04_canonical_loops_presentation_aux_images_aux_transport_bijective
+
 /-- LIBRARY (van Kampen naturality): some identification of the wedge
 fundamental group with `ℤ² * ℤ` sends the three canonical loops to the
 standard generators.  `wedgeFundamentalGroupMulEquiv` (transported along
