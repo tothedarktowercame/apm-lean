@@ -493,6 +493,203 @@ theorem apm_t02a01_boundary_inclusion_word_aux_generator_aux_cyclic
         (apm_t02a01_innerLoop hc h4))) ^ k := by
   sorry
 
+/-! ### Commutator via the radial homotopy (design claude-14, 2026-10-14)
+
+`apm_t02a01_radial l s = c + (1 + l) • (perimeter s - c)` with `c = (1/2,1/2)`: for `l = 0` it
+is the inner square and for `l = 1` the outer square of the unit square, starting at `(0,0)`.
+The square loop in the torus is the radial family at `l = 1`; its four sides are the
+edge loops `A` (bottom, `(t,0)`) and `B` (right, `(1,t)`), with top and left identified with
+their reverses.  A free homotopy of loops gives conjugation by the radial segment `δ`. -/
+
+/-- Generic: a homotopy of maps from the square whose two vertical sides agree turns the
+bottom loop into the top loop conjugated by the common side. -/
+theorem apm_t02a01_freeHomotopy_conj {X : Type*} [TopologicalSpace X] {x y : X}
+    (γ0 : Path x x) (γ1 : Path y y) (δ : Path x y)
+    (F : C(unitInterval × unitInterval, X))
+    (h0 : ∀ t, F (0, t) = γ0 t) (h1 : ∀ t, F (1, t) = γ1 t)
+    (hl : ∀ s, F (s, 0) = δ s) (hr : ∀ s, F (s, 1) = δ s) :
+    γ0.Homotopic (δ.trans (γ1.trans δ.symm)) := by
+  sorry
+
+noncomputable def apm_t02a01_radial (l s : ℝ) : ℝ × ℝ :=
+  ((1 / 2 : ℝ), (1 / 2 : ℝ)) + (1 + l) • (apm_t02a01_perimeter s - ((1 / 2 : ℝ), (1 / 2 : ℝ)))
+
+theorem apm_t02a01_radial_mem {l : ℝ} (hl0 : 0 ≤ l) (hl1 : l ≤ 1) (s : ℝ) :
+    (apm_t02a01_radial l s).1 ∈ Set.Icc (0 : ℝ) 1 ∧ (apm_t02a01_radial l s).2 ∈ Set.Icc (0 : ℝ) 1 ∧
+      (1 / 4 : ℝ) ≤ ‖apm_t02a01_radial l s - ((1 / 2 : ℝ), (1 / 2 : ℝ))‖ := by
+  obtain ⟨-, -, hn⟩ := apm_t02a01_perimeter_mem s
+  set v := apm_t02a01_perimeter s - ((1 / 2 : ℝ), (1 / 2 : ℝ)) with hv
+  have hsub : apm_t02a01_radial l s - ((1 / 2 : ℝ), (1 / 2 : ℝ)) = (1 + l) • v := by
+    simp [apm_t02a01_radial, hv]
+  have hnorm : ‖(1 + l) • v‖ = (1 + l) / 4 := by
+    rw [norm_smul, Real.norm_of_nonneg (by linarith), hn]; ring
+  have h1 : |((1 + l) • v).1| ≤ (1 + l) / 4 := by
+    rw [← hnorm]; exact (Real.norm_eq_abs _).symm ▸ norm_fst_le _
+  have h2 : |((1 + l) • v).2| ≤ (1 + l) / 4 := by
+    rw [← hnorm]; exact (Real.norm_eq_abs _).symm ▸ norm_snd_le _
+  have e1 : (apm_t02a01_radial l s).1 = 1 / 2 + ((1 + l) • v).1 := by
+    simp [apm_t02a01_radial, hv]
+  have e2 : (apm_t02a01_radial l s).2 = 1 / 2 + ((1 + l) • v).2 := by
+    simp [apm_t02a01_radial, hv]
+  rw [abs_le] at h1 h2
+  refine ⟨⟨by rw [e1]; linarith [h1.1], by rw [e1]; linarith [h1.2]⟩,
+    ⟨by rw [e2]; linarith [h2.1], by rw [e2]; linarith [h2.2]⟩, ?_⟩
+  rw [hsub, hnorm]; linarith
+
+/-- The radial family in the punctured torus, `l` and the loop parameter in `[0,1]`. -/
+noncomputable def apm_t02a01_radialPt (p : unitInterval × unitInterval) :
+    apm_t02a01_puncturedTorus :=
+  Quotient.mk _ ⟨apm_t02a01_radial p.1 (4 * p.2), apm_t02a01_radial_mem p.1.2.1 p.1.2.2 _⟩
+
+theorem apm_t02a01_radialPt_continuous : Continuous apm_t02a01_radialPt := by
+  sorry
+
+/-- The corner `(0,0)` of the torus, where `A` and `B` are based. -/
+noncomputable def apm_t02a01_corner : apm_t02a01_puncturedTorus :=
+  Quotient.mk _ ⟨((0 : ℝ), (0 : ℝ)), by norm_num, by norm_num, by norm_num [Prod.norm_def]⟩
+
+/-- The bottom edge loop `A t = (t, 0)` and right edge loop `B t = (1, t)`. -/
+noncomputable def apm_t02a01_edgeA (t : ℝ) : apm_t02a01_puncturedTorus :=
+  Quotient.mk _ ⟨(max 0 (min 1 t), (0 : ℝ)), ⟨le_max_left _ _, max_le zero_le_one (min_le_left _ _)⟩,
+    by norm_num, by
+      rw [Prod.norm_def]; norm_num⟩
+
+noncomputable def apm_t02a01_edgeB (t : ℝ) : apm_t02a01_puncturedTorus :=
+  Quotient.mk _ ⟨((1 : ℝ), max 0 (min 1 t)), by norm_num,
+    ⟨le_max_left _ _, max_le zero_le_one (min_le_left _ _)⟩, by
+      rw [Prod.norm_def]; norm_num⟩
+
+
+theorem apm_t02a01_radialPt_zero_zero :
+    apm_t02a01_radialPt (0, 0) = apm_t02a01_innerBase.1 := by
+  simp only [apm_t02a01_radialPt, apm_t02a01_innerBase, apm_t02a01_innerPoint]
+  congr 1; apply Subtype.ext; simp [apm_t02a01_radial]
+
+theorem apm_t02a01_radialPt_one_zero :
+    apm_t02a01_radialPt (1, 0) = apm_t02a01_corner := by
+  simp only [apm_t02a01_radialPt, apm_t02a01_corner]
+  congr 1; apply Subtype.ext
+  norm_num [apm_t02a01_radial, apm_t02a01_perimeter, apm_t02a01_clamp01]
+
+theorem apm_t02a01_radialPt_one_one :
+    apm_t02a01_radialPt (1, 1) = apm_t02a01_corner := by
+  simp only [apm_t02a01_radialPt, apm_t02a01_corner]
+  congr 1; apply Subtype.ext
+  norm_num [apm_t02a01_radial, apm_t02a01_perimeter, apm_t02a01_clamp01]
+
+theorem apm_t02a01_corner_eq_one_zero :
+    apm_t02a01_corner = Quotient.mk _ ⟨((1 : ℝ), (0 : ℝ)), by norm_num, by norm_num,
+      by norm_num [Prod.norm_def]⟩ :=
+  Quotient.sound (Relation.EqvGen.rel _ _ (apm_t02a01_edgeRel.horizontal 0 (by norm_num)
+    (by norm_num [Prod.norm_def]) (by norm_num [Prod.norm_def])))
+
+theorem apm_t02a01_corner_eq_one_one :
+    apm_t02a01_corner = Quotient.mk _ ⟨((1 : ℝ), (1 : ℝ)), by norm_num, by norm_num,
+      by norm_num [Prod.norm_def]⟩ := by
+  have hv : apm_t02a01_corner = Quotient.mk _ ⟨((0 : ℝ), (1 : ℝ)), by norm_num, by norm_num,
+      by norm_num [Prod.norm_def]⟩ :=
+    Quotient.sound (Relation.EqvGen.rel _ _ (apm_t02a01_edgeRel.vertical 0 (by norm_num)
+      (by norm_num [Prod.norm_def]) (by norm_num [Prod.norm_def])))
+  rw [hv]
+  exact Quotient.sound (Relation.EqvGen.rel _ _ (apm_t02a01_edgeRel.horizontal 1 (by norm_num)
+    (by norm_num [Prod.norm_def]) (by norm_num [Prod.norm_def])))
+
+/-- The radial segment from the inner base corner `(1/4,1/4)` to the corner `(0,0)`. -/
+noncomputable def apm_t02a01_delta (hc : Continuous apm_t02a01_radialPt) :
+    Path apm_t02a01_innerBase.1 apm_t02a01_corner where
+  toFun s := apm_t02a01_radialPt (s, 0)
+  continuous_toFun := hc.comp (continuous_id.prodMk continuous_const)
+  source' := apm_t02a01_radialPt_zero_zero
+  target' := apm_t02a01_radialPt_one_zero
+
+/-- The outer square loop at the corner. -/
+noncomputable def apm_t02a01_outerLoop (hc : Continuous apm_t02a01_radialPt) :
+    Path apm_t02a01_corner apm_t02a01_corner where
+  toFun t := apm_t02a01_radialPt (1, t)
+  continuous_toFun := hc.comp (continuous_const.prodMk continuous_id)
+  source' := apm_t02a01_radialPt_one_zero
+  target' := apm_t02a01_radialPt_one_one
+
+theorem apm_t02a01_edgeA_continuous : Continuous apm_t02a01_edgeA := by
+  sorry
+
+theorem apm_t02a01_edgeB_continuous : Continuous apm_t02a01_edgeB := by
+  sorry
+
+noncomputable def apm_t02a01_loopA (hA : Continuous apm_t02a01_edgeA) :
+    Path apm_t02a01_corner apm_t02a01_corner where
+  toFun t := apm_t02a01_edgeA t
+  continuous_toFun := hA.comp continuous_subtype_val
+  source' := by
+    simp only [apm_t02a01_edgeA, apm_t02a01_corner, Set.Icc.coe_zero]
+    congr 1; apply Subtype.ext; norm_num
+  target' := by
+    rw [apm_t02a01_corner_eq_one_zero]
+    simp only [apm_t02a01_edgeA, Set.Icc.coe_one]
+    congr 1; apply Subtype.ext; norm_num
+
+noncomputable def apm_t02a01_loopB (hB : Continuous apm_t02a01_edgeB) :
+    Path apm_t02a01_corner apm_t02a01_corner where
+  toFun t := apm_t02a01_edgeB t
+  continuous_toFun := hB.comp continuous_subtype_val
+  source' := by
+    rw [apm_t02a01_corner_eq_one_zero]
+    simp only [apm_t02a01_edgeB, Set.Icc.coe_zero]
+    congr 1; apply Subtype.ext; norm_num
+  target' := by
+    rw [apm_t02a01_corner_eq_one_one]
+    simp only [apm_t02a01_edgeB, Set.Icc.coe_one]
+    congr 1; apply Subtype.ext; norm_num
+
+/-- The inner loop pushed into the torus is the radial family at `l = 0`, and the radial
+family's two vertical sides are both `δ`: so the generic conjugation lemma applies. -/
+theorem apm_t02a01_inner_conj_outer
+    (hc : Continuous apm_t02a01_innerPoint)
+    (h4 : apm_t02a01_innerPoint 4 = apm_t02a01_innerBase)
+    (hr : Continuous apm_t02a01_radialPt)
+    (hconj : ∀ {X : Type} [TopologicalSpace X] {x y : X}
+      (γ0 : Path x x) (γ1 : Path y y) (δ : Path x y)
+      (F : C(unitInterval × unitInterval, X)),
+      (∀ t, F (0, t) = γ0 t) → (∀ t, F (1, t) = γ1 t) →
+      (∀ s, F (s, 0) = δ s) → (∀ s, F (s, 1) = δ s) →
+      γ0.Homotopic (δ.trans (γ1.trans δ.symm))) :
+    ((apm_t02a01_innerLoop hc h4).map (continuous_subtype_val :
+        Continuous ((↑) : apm_t02a01_boundarySpace → apm_t02a01_puncturedTorus))).Homotopic
+      ((apm_t02a01_delta hr).trans ((apm_t02a01_outerLoop hr).trans (apm_t02a01_delta hr).symm)) := by
+  sorry
+
+/-- The outer square, read side by side: bottom `A`, right `B`, top `A` reversed, left `B`
+reversed (opposite sides are identified in the torus). -/
+theorem apm_t02a01_outer_word
+    (hr : Continuous apm_t02a01_radialPt)
+    (hA : Continuous apm_t02a01_edgeA) (hB : Continuous apm_t02a01_edgeB) :
+    (apm_t02a01_outerLoop hr).Homotopic
+      ((apm_t02a01_loopA hA).trans ((apm_t02a01_loopB hB).trans
+        ((apm_t02a01_loopA hA).symm.trans (apm_t02a01_loopB hB).symm))) := by
+  sorry
+
+/-- Algebra: conjugate `A` and `B` by `δ` to get the commutator in `π₁(T, innerBase)`. -/
+theorem apm_t02a01_commutator_of_homotopies
+    (hc : Continuous apm_t02a01_innerPoint)
+    (h4 : apm_t02a01_innerPoint 4 = apm_t02a01_innerBase)
+    (hr : Continuous apm_t02a01_radialPt)
+    (hA : Continuous apm_t02a01_edgeA) (hB : Continuous apm_t02a01_edgeB)
+    (hin : ((apm_t02a01_innerLoop hc h4).map (continuous_subtype_val :
+        Continuous ((↑) : apm_t02a01_boundarySpace → apm_t02a01_puncturedTorus))).Homotopic
+      ((apm_t02a01_delta hr).trans ((apm_t02a01_outerLoop hr).trans (apm_t02a01_delta hr).symm)))
+    (hout : (apm_t02a01_outerLoop hr).Homotopic
+      ((apm_t02a01_loopA hA).trans ((apm_t02a01_loopB hB).trans
+        ((apm_t02a01_loopA hA).symm.trans (apm_t02a01_loopB hB).symm)))) :
+    ∃ a b : FundamentalGroup apm_t02a01_puncturedTorus apm_t02a01_innerBase.1,
+      FundamentalGroup.map
+          (⟨((↑) : apm_t02a01_boundarySpace → apm_t02a01_puncturedTorus),
+            continuous_subtype_val⟩ :
+            C(apm_t02a01_boundarySpace, apm_t02a01_puncturedTorus)) apm_t02a01_innerBase
+          (FundamentalGroup.fromPath (Path.Homotopic.Quotient.mk
+            (apm_t02a01_innerLoop hc h4))) =
+        a * b * a⁻¹ * b⁻¹ := by
+  sorry
+
 /-- In the punctured torus the inner loop is a commutator: deform it radially onto the
 outer square, whose four sides are the two edge loops traversed `a b a⁻¹ b⁻¹`
 (conjugated by the diagonal segment from the corner `(0,0)` to `(1/4,1/4)`). -/
@@ -507,7 +704,12 @@ theorem apm_t02a01_boundary_inclusion_word_aux_generator_aux_commutator
           (FundamentalGroup.fromPath (Path.Homotopic.Quotient.mk
             (apm_t02a01_innerLoop hc h4))) =
         a * b * a⁻¹ * b⁻¹ := by
-  sorry
+  exact apm_t02a01_commutator_of_homotopies hc h4 apm_t02a01_radialPt_continuous
+    apm_t02a01_edgeA_continuous apm_t02a01_edgeB_continuous
+    (apm_t02a01_inner_conj_outer hc h4 apm_t02a01_radialPt_continuous
+      (fun γ0 γ1 δ F h0 h1 hl hr => apm_t02a01_freeHomotopy_conj γ0 γ1 δ F h0 h1 hl hr))
+    (apm_t02a01_outer_word apm_t02a01_radialPt_continuous
+      apm_t02a01_edgeA_continuous apm_t02a01_edgeB_continuous)
 
 theorem apm_t02a01_boundary_inclusion_word_aux_generator_aux_base
     (hcyc : ∀ (hc : Continuous apm_t02a01_innerPoint)
