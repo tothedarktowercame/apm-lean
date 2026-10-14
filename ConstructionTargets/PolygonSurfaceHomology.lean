@@ -1182,6 +1182,19 @@ theorem polygonBoundaryLegWord_hurewicz (P : PairingData) :
       finiteWedgeH1CoordinateMap P (attachingDegree P) := by
   rw [finiteWedgeLegWord_hurewicz, polygonBoundaryLegWord_coordinates]
 
+/-- Once the geometric boundary class is identified with its explicit signed
+leg word, naturality and the word calculation give the precise module-H₁
+coordinate formula needed by B7. -/
+theorem polygonBoundaryWedgeLoop_hurewicz_of_eq_legWord (P : PairingData)
+    (hword : polygonBoundaryFundamentalClass P =
+      finiteWedgeLegWordGroup P (polygonBoundaryLegWord P)) :
+    (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 1).obj
+        (ModuleCat.of ℤ ℤ)).map (TopCat.ofHom (polygonBoundaryWedgeLoop P)))
+        (ConstructionTargets.CircleHomology.circleH1IsoInt.inv 1) =
+      finiteWedgeH1CoordinateMap P (attachingDegree P) := by
+  rw [← polygonBoundaryFundamentalClass_hurewicz, hword,
+    polygonBoundaryLegWord_hurewicz]
+
 /-- The canonical map from the free group on the orbit labels to the
 common-basepoint fundamental group, sending each generator to its positive
 circle-leg class. -/
