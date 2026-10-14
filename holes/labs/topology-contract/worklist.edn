@@ -119066,7 +119066,7 @@
   {:consumer :t00J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 2,
    :review-finding
    "New milestone is not sorry-free: archived commit 0970de36 compiles, but #print axioms canonicalRegularFiberWitness_of_locallyIsolatedFiber includes sorryAx. Repair the locally-isolated-fiber proof/dependency so the reported constructor has only standard axioms; textual placeholder count 0 is insufficient.",
    :evidence
@@ -119074,50 +119074,44 @@
     :residual
     "Derive local fiber isolation and canonical calculations from transversality; assemble Main.",
     :outcome :stop,
-    :warnings ["Main sorryAx"],
+    :warnings ["Main sorryAx" "unrelated edit preserved"],
     :missing-theorems
     [{:name "canonicalRegularFiberWitness_of_locallyIsolatedFiber",
-      :type
-      "locally isolated circle fiber plus calculations gives witness",
+      :type "local isolation plus calculations gives witness",
       :status :proved,
       :consumers [:t00J02],
       :depends-on
-      ["canonicalRegularFiberWitness_of_isDiscrete"
-       "isDiscrete_preimage_singleton_of_locallyIsolatedFiber"],
+      ["isDiscrete_preimage_singleton_of_locallyIsolatedFiber"],
       :area "oriented-surface-degree"}
      {:name "t00J02_transverse_diskBounded_topHomologyMap_eq_zero",
       :type "H2 map zero",
       :status :partial,
       :consumers [:t00J02],
       :depends-on
-      ["canonicalRegularFiberWitness_of_locallyIsolatedFiber"
-       "topHomologyMap_eq_zero_of_exists_canonicalRegularFiberWitness"],
+      ["canonicalRegularFiberWitness_of_locallyIsolatedFiber"],
       :area "oriented-surface-degree"}],
     :statement-hashes
     {:source
      "0b3b4888807bfa06c8d60d86829b75776394ea8aa45a98c933c087165521f923",
      :implementation
-     "9b5f193a7f7380d8ddbe291f69a886d3166dd56330bcc14cddbb15e36981c8b5",
+     "d57ca736f4685eabd0f31bcb7166278c0adbc35485c128848338d7767135b07e",
      :blueprint
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984",
      :registry "166/166"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-2,
-    :reason "Banked locally-isolated fiber witness.",
+    :reason "Repaired locally-isolated witness; standard axioms only.",
     :commands
-    [{:cmd "lake env lean ConstructionTargets/t00J02Closure.lean",
-      :exit 0}
+    [{:cmd "lake env lean -o ... t00J02Closure.lean", :exit 0}
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "hash/placeholders/diff", :exit 0}],
-    :review
-    {:outcome :fail,
-     :seat "codex-3",
-     :job "invoke-1792021379964-12715-c4972f1e",
-     :finding
-     "New milestone is not sorry-free: archived commit 0970de36 compiles, but #print axioms canonicalRegularFiberWitness_of_locallyIsolatedFiber includes sorryAx. Repair the locally-isolated-fiber proof/dependency so the reported constructor has only standard axioms; textual placeholder count 0 is insufficient."},
-    :commit "0970de362d3d6474da5fb26a45bf7317a12f4504",
+    :diagnostic-history
+    [{:cmd "forced source compile",
+      :exit 1,
+      :finding "exposed malformed equality; repaired"}],
+    :commit "163e9b3e435606eb790ee9706686ef5a3a148799",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t00J02Closure.blueprint.md",
@@ -119125,7 +119119,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
