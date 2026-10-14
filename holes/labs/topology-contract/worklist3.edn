@@ -36709,18 +36709,19 @@
    :depends-on [:lemma-cp-zero-subsingleton],
    :other-consumers []}
   {:consumer :t96A06,
-   :stop-count 4,
+   :stop-count 5,
    :review-finding
    "extend Mathlib: state and prove the missing theorem in scope",
    :evidence
    {:placeholder-delta {:t96A06 [1 1]},
     :residual
-    "Complete positive-degree RP3 rational homology; prove degree four; invariants/Main.",
+    "Prove sphere projection is two-sheeted covering; apply rational transfer; degree four; invariants/Main.",
     :outcome :stop,
     :warnings [],
     :missing-theorems
-    [{:name "t96A06_rp3_rational_h0",
-      :type "H0(RP3;Q) equiv Q",
+    [{:name "t96A06_rp3_sphere_quotient",
+      :type
+      "S3 projection has frozen RP3 quotient topology and fibers {p,-p}",
       :status :proved,
       :consumers [:t96A06],
       :depends-on [],
@@ -36729,7 +36730,8 @@
       :type "RP3 rational homology Q,0,0,Q",
       :status :partial,
       :consumers [:t96A06],
-      :depends-on ["t96A06_rp3_rational_h0"],
+      :depends-on
+      ["t96A06_rp3_rational_h0" "t96A06_rp3_sphere_quotient"],
       :area "rp-rational-homology"}
      {:name "t96A06_polynomial_degree_four",
       :type "quadratic acts by 4 on H3",
@@ -36742,41 +36744,25 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Committed exact RP3 path-connectedness and rational H0; positive homology and degree remain.",
+    "Committed the exact S3-to-RP3 quotient projection and antipodal fiber classification; covering transfer remains.",
     :commands
     [{:cmd "lake build ConstructionTargets.t96A06Closure", :exit 0}
-     {:cmd "lake env lean /tmp/t96a06_rp3_h0_check.lean", :exit 0}
-     {:cmd "lake env lean problems/t96A06/lean/Main.lean", :exit 0}
-     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-     {:cmd "rg forbidden closure", :exit 1, :expected-exit 1}
-     {:cmd "git commit; show --check", :exit 0}],
-    :diagnostic-history
-    [{:cmd "lean path probe",
-      :exit 1,
-      :correction "named local instance and rank computation"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1791942615601-11264-2b07fb51",
-     :commands
-     ["git show/diff/show --check 8bcfbf5df"
-      "sha256sum RP3-H0 fixture; placeholders 1->1; scope diff"
-      "lake build ConstructionTargets.t96A06Closure; lean fixture and Main"
-      "python3 scripts/statement-registry.py check"],
-     :finding
-     "PASS: new compiled sorry-free standard-axiom progress. It proves path connectedness of the exact RP3 quotient and derives H0(RP3;Q)≅Q from the coefficient-H0 theorem at an explicit point. Positive-degree RP3 homology and degree four remain accurately listed. Scope/hash verified; registry 166/166; final placeholder remains 1."},
-    :commit "8bcfbf5df1502cf68b51bf1243875543af17e1a0",
+     {:cmd "lean fixture; Main", :exit 0}
+     {:cmd "registry; placeholder; diff", :exit 0}
+     {:cmd "rg forbidden", :exit 1, :expected-exit 1}
+     {:cmd "commit; show --check", :exit 0}],
+    :commit "300329fda93c12ce54fb62b3ba5f243ba812118a",
     :changed-paths
     ["ConstructionTargets/t96A06Closure.lean"
      "ConstructionTargets/t96A06Closure.blueprint.md"],
     :fixture
-    {:path "/tmp/t96a06_rp3_h0_check.lean",
+    {:path "/tmp/t96a06_rp3_sphere_quotient_check.lean",
      :sha256
-     "bb8a04124501b20a6a2fa696ac89635285cadbffaa491748e63e7e60b6a20d22",
+     "723a374caa31898a0eb5f61b83f645777e53307bf0f0e80776ecfcb8a68b4ce5",
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -37721,7 +37707,8 @@
     :area "rp-rational-homology"},
    :id :lemma-t96a06-rp3-rational-homology,
    :kind :lemma,
-   :depends-on [:lemma-t96a06-rp3-rational-h0],
+   :depends-on
+   [:lemma-t96a06-rp3-rational-h0 :lemma-t96a06-rp3-sphere-quotient],
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
@@ -38179,6 +38166,25 @@
    :kind :lemma,
    :depends-on
    [:lemma-kleinpolygonoverlapimagefundamentalgroupequivatskeletonpoint],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_rp3_sphere_quotient",
+    :type
+    "S3 projection has frozen RP3 quotient topology and fibers {p,-p}"},
+   :lemma
+   {:name "t96A06_rp3_sphere_quotient",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "S3 projection has frozen RP3 quotient topology and fibers {p,-p}",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06},
+   :id :lemma-t96a06-rp3-sphere-quotient,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
