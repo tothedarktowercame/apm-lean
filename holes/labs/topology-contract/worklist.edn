@@ -119066,63 +119066,49 @@
   {:consumer :t00J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 3,
+   :stop-count 4,
    :review-finding
    "Recorded fixture hash is malformed/mismatched: ledger has afb497a6df6187f797ce1df000700b7c24774e94f50633c1cc10b2aa0e8c82319196, but the recorded commit blueprint hashes to afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984. Repair fixture provenance. The archived closure otherwise compiles sorry-free with standard axioms; Main retains its one baseline sorry; registry 166/166.",
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
     :residual
-    "Prove canonical component sums vanish and the global signed-count formula; assemble Main.",
+    "Prove canonical component sums vanish and global signed-count formula; assemble Main.",
     :outcome :stop,
-    :warnings ["Main sorryAx"],
+    :warnings ["Main sorryAx" "unrelated t93J03 edits preserved"],
     :missing-theorems
-    [{:name
-      "RegularFiberChartCalculations.ofCanonicalComponentSumsEqZero",
+    [{:name "topHomologyMap_eq_zero_of_canonicalComponentSums",
       :type
-      "zero canonical component sums plus top formula give chart calculations",
+      "canonical component zero sums and top signed-count formula imply H2 zero",
       :status :proved,
       :consumers [:t00J02],
       :depends-on
-      ["RegularFiberChartCalculations.ofCanonicalLocalDegrees"
-       "exactLiftComponentDegree_eq_zero"],
+      ["RegularFiberChartCalculations.ofCanonicalComponentSumsEqZero"],
       :area "oriented-surface-degree"}
      {:name "t00J02_transverse_diskBounded_topHomologyMap_eq_zero",
       :type "H2 map zero",
       :status :partial,
       :consumers [:t00J02],
-      :depends-on
-      ["RegularFiberChartCalculations.ofCanonicalComponentSumsEqZero"],
+      :depends-on ["topHomologyMap_eq_zero_of_canonicalComponentSums"],
       :area "oriented-surface-degree"}],
     :statement-hashes
     {:source
      "0b3b4888807bfa06c8d60d86829b75776394ea8aa45a98c933c087165521f923",
      :implementation
-     "ed31688409882dc62aa0ea679224c1432e66e0f415f96ad5a2083cace8a6aacf",
+     "94ea76ac9947bd6889c6ba7aa918c08ce70e69ee0ebfb20e41c5548e19e8441b",
      :blueprint
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984",
      :registry "166/166"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-2,
-    :reason "Reduced component comparison to canonical zero sums.",
+    :reason "Banked canonical zero-sum H2 endpoint.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t00J02Closure.lean",
       :exit 0}
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "sha256sum/placeholders/diff", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1792016694541-12554-1ad5b257",
-     :commands
-     ["git diff-tree/show 0849f2f5"
-      "archive 0849f2f5; lake env lean closure and Main"
-      "sha256sum/placeholders at 0849f2f5"
-      "python3 scripts/statement-registry.py check"],
-     :finding
-     "PASS program STOP: new commit changes only t00J02Closure.lean and adds a compiled, sorry-free constructor reducing the component equation to canonical local-degree sums equal to zero. The equality chain is correctly oriented (component sum = 0 = exact-lift degree), retains the same occupied-component index and canonical coefficients, and introduces no representation mismatch. Fixture and frozen Main hashes match; closure has 0 placeholders and Main baseline 1; only standard axioms; registry 166/166. Canonical zero-sum and global signed-count proofs plus Main assembly remain listed."},
-    :commit "0849f2f553851b3d9b067f1a3ab2c16121762120",
+    :commit "f28fac1855457bbe2754c4d2a3e31b64ac507894",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t00J02Closure.blueprint.md",
@@ -119130,7 +119116,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119472,7 +119458,8 @@
     :lemma-tophomologymap-eq-zero-of-chartcoefficientcalculations
     :lemma-regularfiberchartcalculations-tophomologymap-eq-zero
     :lemma-regularfiberchartcalculations-ofcanonicallocaldegrees
-    :lemma-regularfiberchartcalculations-ofcanonicalcomponentsumseqzero],
+    :lemma-regularfiberchartcalculations-ofcanonicalcomponentsumseqzero
+    :lemma-tophomologymap-eq-zero-of-canonicalcomponentsums],
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
@@ -120464,6 +120451,26 @@
    :id :lemma-exactliftcomponentdegree-eq-zero,
    :kind :lemma,
    :depends-on [],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "topHomologyMap_eq_zero_of_canonicalComponentSums",
+    :type
+    "canonical component zero sums and top signed-count formula imply H2 zero"},
+   :lemma
+   {:name "topHomologyMap_eq_zero_of_canonicalComponentSums",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type
+    "canonical component zero sums and top signed-count formula imply H2 zero",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02},
+   :id :lemma-tophomologymap-eq-zero-of-canonicalcomponentsums,
+   :kind :lemma,
+   :depends-on
+   [:lemma-regularfiberchartcalculations-ofcanonicalcomponentsumseqzero],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
