@@ -36854,54 +36854,45 @@
    :depends-on [:lemma-cp-zero-subsingleton],
    :other-consumers []}
   {:consumer :t96A06,
-   :stop-count 8,
+   :stop-count 9,
    :review-finding
    "extend Mathlib: state and prove the missing theorem in scope",
    :evidence
    {:placeholder-delta {:t96A06 [1 1]},
     :residual
-    "Apply coefficient transfer and sphere homology; prove degree four; invariants/Main.",
+    "Apply sphere rational homology to the surjection; degree four; invariants/Main.",
     :outcome :stop,
     :warnings [],
     :missing-theorems
-    [{:name "t96A06_rp3_sphere_twoSheeted",
-      :type "IsKSheetedCover (sphereProjection 3) 2",
+    [{:name "t96A06_rp3_rational_homologyMap_surjective",
+      :type
+      "sphereProjection induces a surjection on rational homology in every degree",
       :status :proved,
       :consumers [:t96A06],
-      :depends-on ["t96A06_rp3_sphere_covering"],
+      :depends-on ["t96A06_rp3_sphere_twoSheeted"],
       :area "rp-rational-homology"}
      {:name "t96A06_rp3_rational_homology",
       :type "RP3 rational homology Q,0,0,Q",
       :status :partial,
       :consumers [:t96A06],
-      :depends-on ["t96A06_rp3_sphere_twoSheeted"],
+      :depends-on ["t96A06_rp3_rational_homologyMap_surjective"],
       :area "rp-rational-homology"}],
     :statement-hashes {:registry "166/166"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Packaged the frozen S3-to-RP3 projection as an exact two-sheeted cover; induced rational homology transfer remains.",
+    "Specialized rational transfer to the exact double cover and proved the induced sphere-to-RP3 homology map surjective in every degree; sphere-group identification remains.",
     :commands
     [{:cmd "lake build ConstructionTargets.t96A06Closure", :exit 0}
-     {:cmd "lean fixture; Main; registry; diff/show", :exit 0}
+     {:cmd "fixture; Main; registry; placeholder; diff/show", :exit 0}
      {:cmd "rg forbidden", :exit 1, :expected-exit 1}],
     :diagnostic-history
-    [{:cmd "two-sheet probe",
+    [{:cmd "transfer proof builds",
       :exit 1,
       :correction
-      "proved antipodal inequality and fiber cardinality explicitly"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1792001503608-12064-1fbb6b6e",
-     :commands
-     ["git show/check/diff e25d1d3c; scope and fixture SHA-256"
-      "lake build ConstructionTargets.t96A06Closure; lean fixture and Main"
-      "statement-registry check; placeholder/axiom recount"],
-     :finding
-     "PASS: e25d1d3c adds compiled, sorry-free progress beyond 941de27d. Surjectivity and the antipodal fiber classification bound each exact S3-to-RP3 fiber; norm one proves the antipodal points distinct; Nat.card_eq_two_iff proves every fiber has cardinality two, yielding the correctly oriented IsKSheetedCover interface. Exact scope/hash match; support placeholders 0->0; frozen Main remains 1; standard axioms only; registry 166/166. STOP lists rational coefficient transfer, sphere homology, degree four, invariants/Main."},
-    :commit "e25d1d3c16af5c726f6e3d15302b3e75ae6c5a46",
+      "qualified congr_hom and normalized composite action; passed"}],
+    :commit "f170a303979c4503ee97dc13f70b5ec00dfa6fcd",
     :changed-paths
     ["ConstructionTargets/t96A06Closure.lean"
      "ConstructionTargets/t96A06Closure.blueprint.md"],
@@ -36911,7 +36902,7 @@
      "aae50311cac7cd5bfad76186fa8f6d4b4fcbba98270258ed5e6ec84d490da9ea"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -37886,7 +37877,8 @@
    [:lemma-t96a06-rp3-rational-h0
     :lemma-t96a06-rp3-sphere-quotient
     :lemma-t96a06-rp3-sphere-covering
-    :lemma-t96a06-rp3-sphere-twosheeted],
+    :lemma-t96a06-rp3-sphere-twosheeted
+    :lemma-t96a06-rp3-rational-homologymap-surjective],
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
@@ -39402,6 +39394,25 @@
    :id :lemma-pathtwoopensubdivisionouterblock-exists-outerpath,
    :kind :lemma,
    :depends-on [:lemma-path-concat-exists-subtype-path],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_rp3_rational_homologyMap_surjective",
+    :type
+    "sphereProjection induces a surjection on rational homology in every degree"},
+   :lemma
+   {:name "t96A06_rp3_rational_homologyMap_surjective",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "sphereProjection induces a surjection on rational homology in every degree",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06},
+   :id :lemma-t96a06-rp3-rational-homologymap-surjective,
+   :kind :lemma,
+   :depends-on [:lemma-t96a06-rp3-sphere-twosheeted],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
