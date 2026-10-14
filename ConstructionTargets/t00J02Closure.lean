@@ -120,6 +120,49 @@ theorem transverse_coprodDerivative_surjective
   exact ConstructionTargets.TransversePreimageGeometry.surjective_coprod_of_range_sup_eq_top
     (htrans x z hxz)
 
+/-- One chosen component lift through a point of the inverse image, including
+the zero circle-degree conclusion supplied by disk boundedness. -/
+structure ZeroDegreeComponentLift
+    {S : Type} [TopologicalSpace S] (f : C(S, S)) (c : C(Circle, S)) (x : S) where
+  component : C(Circle, S)
+  lift : C(Circle, Circle)
+  mem_component : x ∈ Set.range component
+  component_subset : Set.range component ⊆ f ⁻¹' Set.range c
+  lift_commutes : c.comp lift = f.comp component
+  degree_eq_zero : circleDegree lift = 0
+
+/-- Pointwise disk-bounded component lifts can be chosen simultaneously over
+one literal point fiber lying on the embedded circle. -/
+noncomputable def regularFiber_zeroDegreeComponentLifts
+    {S : Type} [TopologicalSpace S] (f : C(S, S)) (c : C(Circle, S))
+    (hcomponents : ∀ x ∈ f ⁻¹' Set.range c,
+      ∃ γ : C(Circle, S), ∃ ℓ : C(Circle, Circle),
+        x ∈ Set.range γ ∧ Set.range γ ⊆ f ⁻¹' Set.range c ∧
+          c.comp ℓ = f.comp γ ∧ circleDegree ℓ = 0)
+    (y : S) (hy : y ∈ Set.range c) :
+    ∀ x : {x : S // f x = y}, ZeroDegreeComponentLift f c x := by
+  intro x
+  have hx : (x : S) ∈ f ⁻¹' Set.range c := by
+    change f x ∈ Set.range c
+    rw [x.property]
+    exact hy
+  let hex := hcomponents x hx
+  let γ := Classical.choose hex
+  have hγ := Classical.choose_spec hex
+  let ℓ := Classical.choose hγ
+  have hℓ := Classical.choose_spec hγ
+  exact ⟨γ, ℓ, hℓ.1, hℓ.2.1, hℓ.2.2.1, hℓ.2.2.2⟩
+
+theorem regularFiber_chosenComponentDegree_eq_zero
+    {S : Type} [TopologicalSpace S] (f : C(S, S)) (c : C(Circle, S))
+    (hcomponents : ∀ x ∈ f ⁻¹' Set.range c,
+      ∃ γ : C(Circle, S), ∃ ℓ : C(Circle, Circle),
+        x ∈ Set.range γ ∧ Set.range γ ⊆ f ⁻¹' Set.range c ∧
+          c.comp ℓ = f.comp γ ∧ circleDegree ℓ = 0)
+    (y : S) (hy : y ∈ Set.range c) (x : {x : S // f x = y}) :
+    circleDegree (regularFiber_zeroDegreeComponentLifts f c hcomponents y hy x).lift = 0 :=
+  (regularFiber_zeroDegreeComponentLifts f c hcomponents y hy x).degree_eq_zero
+
 /-- The signed contribution of finitely many transverse preimage components.
 The orientation sign and the winding degree are kept as separate factors so
 the geometric component theorem can discharge the latter pointwise. -/
@@ -250,6 +293,8 @@ end ConstructionTargets.T00J02Closure
 #print axioms ConstructionTargets.T00J02Closure.transverseCircle_preimage_component_signedCount
 #print axioms ConstructionTargets.T00J02Closure.finite_regularFiber_of_isDiscrete
 #print axioms ConstructionTargets.T00J02Closure.transverse_coprodDerivative_surjective
+#print axioms ConstructionTargets.T00J02Closure.regularFiber_zeroDegreeComponentLifts
+#print axioms ConstructionTargets.T00J02Closure.regularFiber_chosenComponentDegree_eq_zero
 #print axioms ConstructionTargets.T00J02Closure.componentSignedCount_eq_zero_of_componentDegree_eq_zero
 #print axioms ConstructionTargets.T00J02Closure.regularValue_topDegree_eq_zero_of_signedCount
 #print axioms ConstructionTargets.T00J02Closure.surfaceTopDegree_eq_homologyMap
