@@ -2267,6 +2267,90 @@ noncomputable def finiteWedgeFinSuccFundamentalGroupEquiv (n : ℕ) :
   rw [← he]
   exact fundamentalGroupEquivOfHomeomorph e _
 
+/-- The old-wedge inclusion into a successor wedge, obtained by pulling the
+literal left point-wedge leg back through the splitting homeomorphism. -/
+noncomputable def finiteWedgeFinSuccOldInclusion (n : ℕ) : C(
+    PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge (Fin (n + 1)),
+    PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge (Fin ((n + 1) + 1))) :=
+  ⟨fun x => (finiteWedgeFinSuccHomeomorphPointWedge n).symm
+      (ConstructionTargets.PointWedgeQuotient.quotientMap
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1)
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle () 1) (.inl x)),
+    (finiteWedgeFinSuccHomeomorphPointWedge n).symm.continuous.comp
+      ((ConstructionTargets.PointWedgeQuotient.continuous_quotientMap _ _).comp
+        continuous_inl)⟩
+
+/-- The final-circle inclusion into a successor wedge, pulled back from the
+literal right point-wedge leg. -/
+noncomputable def finiteWedgeFinSuccLastInclusion (n : ℕ) : C(
+    PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge Unit,
+    PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge (Fin ((n + 1) + 1))) :=
+  ⟨fun x => (finiteWedgeFinSuccHomeomorphPointWedge n).symm
+      (ConstructionTargets.PointWedgeQuotient.quotientMap
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1)
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle () 1) (.inr x)),
+    (finiteWedgeFinSuccHomeomorphPointWedge n).symm.continuous.comp
+      ((ConstructionTargets.PointWedgeQuotient.continuous_quotientMap _ _).comp
+        continuous_inr)⟩
+
+@[simp]
+theorem finiteWedgeFinSuccOldInclusion_wedgeCircle (n : ℕ)
+    (i : Fin (n + 1)) (z : Circle) :
+    finiteWedgeFinSuccOldInclusion n
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle i z) =
+      PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle i.castSucc z := by
+  apply (finiteWedgeFinSuccHomeomorphPointWedge n).injective
+  simp [finiteWedgeFinSuccOldInclusion]
+
+@[simp]
+theorem finiteWedgeFinSuccLastInclusion_wedgeCircle (n : ℕ) (z : Circle) :
+    finiteWedgeFinSuccLastInclusion n
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle () z) =
+      PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (Fin.last (n + 1)) z := by
+  apply (finiteWedgeFinSuccHomeomorphPointWedge n).injective
+  simp [finiteWedgeFinSuccLastInclusion]
+
+/-- The old-factor inclusion is based at the common zeroth-circle point. -/
+theorem finiteWedgeFinSuccOldInclusion_base (n : ℕ) :
+    finiteWedgeFinSuccOldInclusion n
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1) =
+      PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle
+        (0 : Fin ((n + 1) + 1)) 1 := by
+  simpa using finiteWedgeFinSuccOldInclusion_wedgeCircle n (0 : Fin (n + 1)) 1
+
+/-- The final-factor inclusion has the same common wedge basepoint. -/
+theorem finiteWedgeFinSuccLastInclusion_base (n : ℕ) :
+    finiteWedgeFinSuccLastInclusion n
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle () 1) =
+      PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle
+        (0 : Fin ((n + 1) + 1)) 1 := by
+  rw [finiteWedgeFinSuccLastInclusion_wedgeCircle]
+  exact PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle_base_eq _ _
+
+/-- The old factor's based fundamental-group map into the successor wedge. -/
+noncomputable def finiteWedgeFinSuccOldFundamentalGroupMap (n : ℕ) :
+    FundamentalGroup
+        (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge (Fin (n + 1)))
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1) →*
+      FundamentalGroup
+        (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge (Fin ((n + 1) + 1)))
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle
+          (0 : Fin ((n + 1) + 1)) 1) :=
+  FundamentalGroup.mapOfEq (finiteWedgeFinSuccOldInclusion n)
+    (finiteWedgeFinSuccOldInclusion_base n)
+
+/-- The final factor's based fundamental-group map into the successor wedge. -/
+noncomputable def finiteWedgeFinSuccLastFundamentalGroupMap (n : ℕ) :
+    FundamentalGroup
+        (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge Unit)
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle () 1) →*
+      FundamentalGroup
+        (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge (Fin ((n + 1) + 1)))
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle
+          (0 : Fin ((n + 1) + 1)) 1) :=
+  FundamentalGroup.mapOfEq (finiteWedgeFinSuccLastInclusion n)
+    (finiteWedgeFinSuccLastInclusion_base n)
+
 /-- Pulling the point-wedge word theorem through the successor homeomorphism
 gives a word theorem on the finite wedge.  Its letters are still grouped into
 the old wedge and final circle; the next induction step expands the old
