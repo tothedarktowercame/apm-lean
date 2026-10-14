@@ -475,7 +475,11 @@ contiguous slice coordinates in the original subdivision, and has constant
 side equal to its head. `pathTwoOpenSubdivisionRunStart` canonically selects
 those slice coordinates, with bounds and exact-list recovery, while
 `pathTwoOpenSubdivisionRunFamily_piece_mem_chart` packages the uniform chart
-range of every piece in the run. It remains to choose the inner-replaced or literal
+range of every piece in the run. The positive length is now split as
+`pathTwoOpenSubdivisionRunPredLength + 1`, and the `RunBlockPoint` and
+`RunBlockPiece` definitions instantiate the dependent point and path families
+consumed by `Path.concat`. It remains to identify these block endpoints with
+the outer boundary family, then choose the inner-replaced or literal
 outer representative for each indexed run against the boundary family and
 instantiate the fold
 before extracting based surjectivity and the reverse kernel inclusion.

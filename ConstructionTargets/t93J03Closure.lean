@@ -1268,6 +1268,23 @@ theorem pathTwoOpenSubdivisionRunFamily_length_pos
   List.length_pos_iff_ne_nil.mpr
     (pathTwoOpenSubdivisionRunFamily_ne_nil S i)
 
+/-- The predecessor length presenting a nonempty run in the `n + 1` form
+expected by the block replacement lemmas. -/
+def pathTwoOpenSubdivisionRunPredLength
+    {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
+    {U V : Set X} (S : PathTwoOpenSubdivision p U V)
+    (i : Fin (boolSideRunPartition S.side).length) : ℕ :=
+  (pathTwoOpenSubdivisionRunFamily S i).length - 1
+
+@[simp] theorem pathTwoOpenSubdivisionRunPredLength_add_one
+    {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
+    {U V : Set X} (S : PathTwoOpenSubdivision p U V)
+    (i : Fin (boolSideRunPartition S.side).length) :
+    pathTwoOpenSubdivisionRunPredLength S i + 1 =
+      (pathTwoOpenSubdivisionRunFamily S i).length := by
+  unfold pathTwoOpenSubdivisionRunPredLength
+  exact Nat.sub_add_cancel (pathTwoOpenSubdivisionRunFamily_length_pos S i)
+
 /-- Every original piece in an indexed run stays in the chart selected by
 the run head.  This is the uniform range input used to choose either the
 literal outer representative or the contractible-inner replacement. -/
@@ -1315,6 +1332,34 @@ noncomputable def pathTwoOpenSubdivisionBlockPiece
     pathTwoOpenSubdivisionBlockPiece S start len h k t =
       S.piece ⟨start + k, by omega⟩ t := by
   rfl
+
+/-- The selected subdivision points of an indexed maximal run, in the exact
+dependent shape consumed by `Path.concat`. -/
+noncomputable def pathTwoOpenSubdivisionRunBlockPoint
+    {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
+    {U V : Set X} (S : PathTwoOpenSubdivision p U V)
+    (i : Fin (boolSideRunPartition S.side).length) :
+    Fin (pathTwoOpenSubdivisionRunPredLength S i + 2) → X :=
+  pathTwoOpenSubdivisionBlockPoint S
+    (pathTwoOpenSubdivisionRunStart S i)
+    (pathTwoOpenSubdivisionRunPredLength S i + 1) (by
+      rw [pathTwoOpenSubdivisionRunPredLength_add_one]
+      exact pathTwoOpenSubdivisionRunStart_add_length_le S i)
+
+/-- The original subdivision pieces of an indexed maximal run as one
+dependent path family. -/
+noncomputable def pathTwoOpenSubdivisionRunBlockPiece
+    {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
+    {U V : Set X} (S : PathTwoOpenSubdivision p U V)
+    (i : Fin (boolSideRunPartition S.side).length) :
+    (k : Fin (pathTwoOpenSubdivisionRunPredLength S i + 1)) → Path
+      (pathTwoOpenSubdivisionRunBlockPoint S i k.castSucc)
+      (pathTwoOpenSubdivisionRunBlockPoint S i k.succ) :=
+  pathTwoOpenSubdivisionBlockPiece S
+    (pathTwoOpenSubdivisionRunStart S i)
+    (pathTwoOpenSubdivisionRunPredLength S i + 1) (by
+      rw [pathTwoOpenSubdivisionRunPredLength_add_one]
+      exact pathTwoOpenSubdivisionRunStart_add_length_le S i)
 
 /-- Every piece indexed by an inner run of the exact Klein subdivision stays
 in the inner cover, supplying the range hypothesis for block concatenation. -/
