@@ -960,6 +960,24 @@ noncomputable def kleinPolygonInnerToSpace :
     C({q // q ∈ (openCover kleinPairingData).inner}, kleinPairingData.Space) :=
   ⟨Subtype.val, continuous_subtype_val⟩
 
+/-- Any path through the contractible inner piece whose endpoints come from
+the overlap can be replaced, in the fundamental groupoid, by the inner image
+of an actual overlap path.  This is the concrete replacement used on each
+maximal inner run of a subordinate subdivision. -/
+theorem kleinPolygonInner_pathClass_eq_overlapReplacement
+    (x y : overlapOpen kleinPairingData.Rel)
+    (p : Path (kleinPolygonOverlapToInner x)
+      (kleinPolygonOverlapToInner y)) :
+    ∃ q : Path x y,
+      (⟦p⟧ : FundamentalGroupoid.mk (kleinPolygonOverlapToInner x) ⟶
+          FundamentalGroupoid.mk (kleinPolygonOverlapToInner y)) =
+        ⟦q.map kleinPolygonOverlapToInner.continuous⟧ := by
+  letI : PathConnectedSpace (overlapOpen kleinPairingData.Rel) :=
+    kleinPolygonOverlapPathConnectedSpace
+  let q : Path x y := PathConnectedSpace.somePath x y
+  exact ⟨q, kleinPolygonInner_pathClass_eq p
+    (q.map kleinPolygonOverlapToInner.continuous)⟩
+
 /-- Inclusion of the outer radial piece into the polygon quotient. -/
 noncomputable def kleinPolygonOuterToSpace :
     C({q // q ∈ (openCover kleinPairingData).outer}, kleinPairingData.Space) :=
@@ -1928,6 +1946,7 @@ theorem lift_isEmbedding_assembly
 #print axioms kleinPolygonInnerFundamentalGroup_subsingleton
 #print axioms kleinPolygonInnerFundamentalGroupoid_hom_subsingleton
 #print axioms kleinPolygonInner_pathClass_eq
+#print axioms kleinPolygonInner_pathClass_eq_overlapReplacement
 #print axioms kleinPolygonOverlapPathConnectedSpace
 #print axioms kleinPolygonOverlapToOuterPiOne
 #print axioms kleinPolygonOverlapFundamentalGroupEquivInt
