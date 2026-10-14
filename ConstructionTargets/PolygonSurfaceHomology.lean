@@ -3426,6 +3426,47 @@ def radialIntersectionHomeomorphOverlap (P : PairingData) :
     {q // q ∈ (openCover P).inner ∩ (openCover P).outer} ≃ₜ OverlapPiece P :=
   Homeomorph.setCongr (openCover P).overlap_eq.symm
 
+/-- The positive circle in the literal intersection: radius one half with
+the standard counterclockwise circle parameter. -/
+def radialIntersectionPositiveCircle (P : PairingData) :
+    C(Circle, {q // q ∈ (openCover P).inner ∩ (openCover P).outer}) :=
+  (⟨(radialIntersectionHomeomorphOverlap P).symm,
+      (radialIntersectionHomeomorphOverlap P).symm.continuous⟩ :
+    C(OverlapPiece P,
+      {q // q ∈ (openCover P).inner ∩ (openCover P).outer})).comp
+    (overlapHomotopyEquivCircle P).invFun
+
+/-- The chosen intersection circle is exactly the inverse of the positive
+overlap-to-circle equivalence. -/
+theorem radialIntersectionPositiveCircle_toOverlap (P : PairingData)
+    (z : Circle) :
+    radialIntersectionHomeomorphOverlap P
+        (radialIntersectionPositiveCircle P z) =
+      (overlapHomotopyEquivCircle P).invFun z := by
+  rfl
+
+/-- After forgetting the inner-membership proof, the chosen intersection
+circle is the quotient of the literal radius-one-half circle. -/
+theorem radialIntersectionPositiveCircle_val (P : PairingData) (z : Circle) :
+    (radialIntersectionPositiveCircle P z).1 =
+      ConstructionTargets.PolygonRadialOpenCover.quotientMap P.Rel
+        (ConstructionTargets.PolygonAnnulusRadialMaps.halfCircleMap z).1 := by
+  rfl
+
+/-- The same positive overlap circle included in the outer radial member. -/
+def radialOverlapCircleInOuter (P : PairingData) : C(Circle, OuterPiece P) :=
+  (⟨fun q => ⟨q.1, q.2.2⟩, by fun_prop⟩ :
+    C({q // q ∈ (openCover P).inner ∩ (openCover P).outer}, OuterPiece P)).comp
+    (radialIntersectionPositiveCircle P)
+
+/-- The outer-member loop retains the literal radius-one-half quotient
+representative, fixing its orientation before homology is applied. -/
+theorem radialOverlapCircleInOuter_val (P : PairingData) (z : Circle) :
+    (radialOverlapCircleInOuter P z).1 =
+      ConstructionTargets.PolygonRadialOpenCover.quotientMap P.Rel
+        (ConstructionTargets.PolygonAnnulusRadialMaps.halfCircleMap z).1 := by
+  exact radialIntersectionPositiveCircle_val P z
+
 /-- Positive integral coordinates on the actual intersection object occurring
 in the production Mayer--Vietoris sequence. -/
 noncomputable def radialIntersectionH1GroupIsoInt (P : PairingData) :
