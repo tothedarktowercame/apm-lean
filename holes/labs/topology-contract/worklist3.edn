@@ -36115,21 +36115,21 @@
   {:consumer :t93J03,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 2,
+   :stop-count 3,
    :review-finding
    "Program STOP commits nothing new since the prior reviewed attempt: it reuses commit 512a220f, and git history shows no later scoped commit. The unresolved SemilocallySimplyConnected hypothesis-coverage conflict is unchanged. Obtain the required owner specification decision or commit a new compiled milestone before resubmitting.",
    :evidence
    {:placeholder-delta {:t93J03 [1 1]},
     :residual
-    "Extract based normal-closure quotient and identify overlap image as aabb; apply C1, then C2/Main.",
+    "Identify overlap image as aabb and extract based normal-closure quotient; apply C1, then C2/Main.",
     :outcome :stop,
     :warnings ["unused SLSC owner-approved"],
     :missing-theorems
-    [{:name "kleinPolygonFundamentalGroupoidPseudopushout",
-      :type "two-open pseudopushout for exact Klein radial cover",
+    [{:name "kleinPolygonInnerFundamentalGroupTrivial",
+      :type "inner radial piece contractible with subsingleton pi1",
       :status :proved,
       :consumers [:t93J03],
-      :depends-on [],
+      :depends-on ["kleinPolygonFundamentalGroupoidPseudopushout"],
       :area "covering-subgroup-correspondence"}
      {:name "t93J03_polygon_van_kampen",
       :type "polygon pi1 equals PresentedGroup(aabb)",
@@ -36137,50 +36137,37 @@
       :consumers [:t93J03],
       :depends-on
       ["kleinSkeletonAabbPresentationQuotient"
-       "kleinPolygonFundamentalGroupoidPseudopushout"],
+       "kleinPolygonFundamentalGroupoidPseudopushout"
+       "kleinPolygonInnerFundamentalGroupTrivial"],
       :area "covering-subgroup-correspondence"}],
     :statement-hashes {:registry "166/166"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Committed the exact Klein radial-cover fundamental-groupoid pseudopushout; based quotient extraction remains.",
+    "Committed contractibility and trivial pi1 for the exact Klein inner piece; overlap quotient remains.",
     :commands
     [{:cmd "lake build ConstructionTargets.t93J03Closure", :exit 0}
-     {:cmd "lean pseudopushout fixture", :exit 0}
+     {:cmd "lean inner-pi1 fixture", :exit 0}
      {:cmd "lean Main; registry; placeholder; diff", :exit 0}
      {:cmd "rg forbidden", :exit 1, :expected-exit 1}
      {:cmd "commit; show --check", :exit 0}],
     :diagnostic-history
-    [{:cmd "lean closure",
+    [{:cmd "lean cover-groups probe",
       :exit 1,
-      :correction "opened CategoryTheory notation"}
-     {:cmd "lean fixture",
-      :exit 1,
-      :correction "marked check noncomputable"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1791944400544-11335-8a749c4e",
-     :commands
-     ["git show/diff/show --check 9b6869e35"
-      "sha256sum pseudopushout fixture; placeholders 1->1; scope diff"
-      "lake env lean recorded PointWedgeVanKampen + t93J03Closure + fixture + Main"
-      "python3 scripts/statement-registry.py check"],
-     :finding
-     "PASS: new compiled sorry-free standard-axiom progress. The generic two-open pseudopushout is specialized to the exact Klein polygon space and radial cover; based quotient extraction and overlap=aabb remain accurately listed. Exact commit blobs compile and fixture passes; a later unrelated PointWedge working-tree edit fails and is excluded. Scope/hash verified; registry 166/166. SLSC unused, mandated by problem.md."},
-    :commit "9b6869e35db58e98ec18d27545f98f75d01ee7dc",
+      :correction "wrapped homotopy and exposed loop quotient"}],
+    :commit "e251a9299a97771037df3ae785cbe6fd41a14e79",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
      "ConstructionTargets/t93J03Closure.blueprint.md"],
     :fixture
-    {:path "/tmp/t93j03_polygon_pseudopushout_check.lean",
+    {:path "/tmp/t93j03_inner_pi1_check.lean",
      :sha256
-     "5ba01e980b71acf66bb610d5698af75e4d4902d184f76edbcf05210ebfe03b03",
+     "aba368b5e878923a6917a99d19a981cf6f31347e8e8ee0637d820e8c89b3bf0f",
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -37629,7 +37616,8 @@
     :lemma-kleinactualskeletonfundamentalgroupequivcoprod
     :lemma-kleinactualskeletonfundamentalgroupequivfreegroupbool
     :lemma-kleinskeletonaabbpresentationquotient
-    :lemma-kleinpolygonfundamentalgroupoidpseudopushout],
+    :lemma-kleinpolygonfundamentalgroupoidpseudopushout
+    :lemma-kleinpolygoninnerfundamentalgrouptrivial],
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
@@ -37989,6 +37977,23 @@
    :id :lemma-kleinpolygonfundamentalgroupoidpseudopushout,
    :kind :lemma,
    :depends-on [],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "kleinPolygonInnerFundamentalGroupTrivial",
+    :type "inner radial piece contractible with subsingleton pi1"},
+   :lemma
+   {:name "kleinPolygonInnerFundamentalGroupTrivial",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type "inner radial piece contractible with subsingleton pi1",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03},
+   :id :lemma-kleinpolygoninnerfundamentalgrouptrivial,
+   :kind :lemma,
+   :depends-on [:lemma-kleinpolygonfundamentalgroupoidpseudopushout],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
