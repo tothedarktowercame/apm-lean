@@ -36117,23 +36117,21 @@
   {:consumer :t93J03,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 3,
+   :stop-count 4,
    :review-finding
    "Program STOP commits nothing new since the prior reviewed attempt: it reuses commit 512a220f, and git history shows no later scoped commit. The unresolved SemilocallySimplyConnected hypothesis-coverage conflict is unchanged. Obtain the required owner specification decision or commit a new compiled milestone before resubmitting.",
    :evidence
    {:placeholder-delta {:t93J03 [1 1]},
     :residual
-    "Prove winding-one conjugate to aabb; extract based quotient; apply C1/C2/Main.",
+    "Choose canonical connector; compute boundary winding as aabb; extract quotient; apply C1/C2/Main.",
     :outcome :stop,
-    :warnings
-    ["unused SLSC owner-approved"
-     "unrelated dependency build failure"],
+    :warnings ["unused SLSC owner-approved"],
     :missing-theorems
-    [{:name "kleinPolygonOverlapNormalClosure_eq_aabb_of_isConj",
-      :type "conjugacy to aabb identifies normal closures",
+    [{:name "fundamentalGroup_pathTransport_isConj",
+      :type "two path transports of one based loop are conjugate",
       :status :proved,
       :consumers [:t93J03],
-      :depends-on ["kleinPolygonOverlapWindingHom_normalClosure"],
+      :depends-on [],
       :area "covering-subgroup-correspondence"}
      {:name "t93J03_polygon_van_kampen",
       :type "polygon pi1 = PresentedGroup(aabb)",
@@ -36141,47 +36139,33 @@
       :consumers [:t93J03],
       :depends-on
       ["kleinSkeletonAabbPresentationQuotient"
-       "kleinPolygonOverlapNormalClosure_eq_aabb_of_isConj"],
+       "kleinPolygonOverlapNormalClosure_eq_aabb_of_isConj"
+       "fundamentalGroup_pathTransport_isConj"],
       :area "covering-subgroup-correspondence"}],
     :statement-hashes {:registry "166/166"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Committed conjugacy-to-normal-closure adapter; geometric conjugacy and based quotient remain.",
+    "Committed path-transport conjugacy; canonical boundary-loop comparison and quotient remain.",
     :commands
-    [{:cmd "lean closure; Main", :exit 0}
+    [{:cmd "lake build ConstructionTargets.t93J03Closure", :exit 0}
+     {:cmd "lean fixture; Main", :exit 0}
      {:cmd "registry; placeholder; diff", :exit 0}
      {:cmd "rg forbidden", :exit 1, :expected-exit 1}
      {:cmd "commit; show --check", :exit 0}],
-    :diagnostic-history
-    [{:cmd "lake build closure; fixture",
-      :exit 1,
-      :correction
-      "unrelated PolygonSurfaceHomology failure; exact source passed"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1791954819170-11616-fe940fa7",
-     :commands
-     ["git show/diff/show --check b8bce9d8"
-      "sha256sum fixture; scope; placeholders"
-      "lake env lean recorded closure, fixture, Main"
-      "statement-registry.py check"],
-     :finding
-     "PASS: new compiled sorry-free standard-axiom milestone. The adapter correctly accounts for arbitrary basepoint-path conjugacy: conjugate winding-one and aabb words generate equal normal closures, proved by normality in both directions. Geometric conjugacy and quotient extraction remain accurately listed. Exact source and fixture pass; scope/hash verified; frozen placeholders 1->1 (support 0); registry 166/166; SLSC unused, mandated by problem.md."},
-    :commit "b8bce9d8294e1892901bc5969e1bc0967f1927cb",
+    :commit "d033ca7433e3bff48e8b4520d9703ee208bb929b",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
      "ConstructionTargets/t93J03Closure.blueprint.md"],
     :fixture
-    {:path "/tmp/t93j03_overlap_conjugacy_adapter_check.lean",
+    {:path "/tmp/t93j03_path_transport_conjugacy_check.lean",
      :sha256
-     "32b33a49b1c5ee90bf36a8bc2dc501e21b578dcd8785bea69d36e6e7df6f8afd",
-     :mode :export-check-blocked-by-unrelated-dependency},
+     "6e2336f674fdd69f754306096f5675a8f0fea282f7e3fddf1ce0833b0cf24e30",
+     :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -37682,7 +37666,8 @@
     :lemma-kleinpolygonoverlapwindinghom-factor
     :lemma-kleinpolygonoverlapwindinghom-range
     :lemma-kleinpolygonoverlapwindinghom-normalclosure
-    :lemma-kleinpolygonoverlapnormalclosure-eq-aabb-of-isconj],
+    :lemma-kleinpolygonoverlapnormalclosure-eq-aabb-of-isconj
+    :lemma-fundamentalgroup-pathtransport-isconj],
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
@@ -38293,6 +38278,23 @@
    :id :lemma-kleinpolygonoverlapnormalclosure-eq-aabb-of-isconj,
    :kind :lemma,
    :depends-on [:lemma-kleinpolygonoverlapwindinghom-normalclosure],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "fundamentalGroup_pathTransport_isConj",
+    :type "two path transports of one based loop are conjugate"},
+   :lemma
+   {:name "fundamentalGroup_pathTransport_isConj",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type "two path transports of one based loop are conjugate",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03},
+   :id :lemma-fundamentalgroup-pathtransport-isconj,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
