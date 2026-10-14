@@ -1478,3 +1478,8 @@ order, and
 precomposes both sides by the named transport from the literal `Y` base.
 The remaining step is the inverse-round-trip/comap identification that turns
 these rebased mapped connectors into the installed literal `Y` connectors.
+`genericPointWedgeCoherentRightConnectors_functorObj_connector_hom` exposes
+the installed connector at a forward-image endpoint as the literal-base
+change, mapped inverse–forward source connector, and counit.  The remaining
+comparison is exactly the unit/counit identification between that source
+connector and the already rebased mapped connector.

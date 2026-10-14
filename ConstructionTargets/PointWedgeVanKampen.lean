@@ -5038,6 +5038,24 @@ theorem genericPointWedgeCoherentRightConnectors_connector_hom
         e.functor.map (source.connector (e.inverse.obj A)).hom ≫
         e.counitIso.hom.app A := rfl
 
+/-- At a forward-image endpoint, the installed coherent connector exposes
+the inverse–forward source connector and the cover-equivalence counit. -/
+theorem genericPointWedgeCoherentRightConnectors_functorObj_connector_hom
+    (A : FundamentalGroupoid (genericPointWedgeRightPiece x₀ y₀ N)) :
+    let e := genericPointWedgeRightGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let h := genericPointWedgeRightEquiv_obj_rightBase
+      x₀ y₀ M N hM hN hy hx cM cN
+    let source := genericPointWedgeCoherentRightSourceConnectors
+      x₀ y₀ M N hM hN hy hx cM cN
+    ((genericPointWedgeCoherentRightConnectors
+      x₀ y₀ M N hM hN hy hx cM cN).connector
+        (e.functor.obj A)).hom =
+      (eqToIso h.symm).hom ≫
+        e.functor.map (source.connector
+          (e.inverse.obj (e.functor.obj A))).hom ≫
+        e.counitIso.hom.app (e.functor.obj A) := rfl
+
 omit [PathConnectedSpace X] [PathConnectedSpace Y] in
 /-- At the unique coordinate object, the object equality induced by the named
 right-span functor equality is the fixed right-base equality. -/
