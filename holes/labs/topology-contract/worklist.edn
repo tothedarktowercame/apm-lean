@@ -119064,21 +119064,20 @@
    :depends-on [:lemma-apm-t91j06-bridge-compatible-stage-coordinates],
    :other-consumers []}
   {:consumer :t00J02,
-   :stop-count 8,
+   :stop-count 9,
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
     :residual
-    "Prove finite-fiber local-degree signed-count formula; assemble Main.",
+    "Derive regular-fiber discreteness from transversality, prove local-degree formula, assemble Main.",
     :outcome :stop,
-    :warnings ["Main sorryAx"],
+    :warnings
+    ["Main sorryAx" "unrelated PolygonSurfaceHomology edit preserved"],
     :missing-theorems
-    [{:name "topHomologyMap_eq_zero_of_regularValue_signedCount",
-      :type "signed count plus zero components implies H2 map zero",
+    [{:name "finite_regularFiber_of_isDiscrete",
+      :type "compact discrete point fiber is finite",
       :status :proved,
       :consumers [:t00J02],
-      :depends-on
-      ["regularValue_topDegree_eq_zero_of_signedCount"
-       "surfaceTopHomologyMap_eq_zero_of_surfaceTopDegree_eq_zero"],
+      :depends-on [],
       :area "oriented-surface-degree"}
      {:name "t00J02_transverse_diskBounded_topHomologyMap_eq_zero",
       :type "H2 map zero",
@@ -119087,13 +119086,13 @@
       :depends-on
       ["regularValue_topHomologyMap_signedCount"
        "transverseCircle_preimage_component_signedCount"
-       "topHomologyMap_eq_zero_of_regularValue_signedCount"],
+       "finite_regularFiber_of_isDiscrete"],
       :area "oriented-surface-degree"}],
     :statement-hashes
     {:source
      "0b3b4888807bfa06c8d60d86829b75776394ea8aa45a98c933c087165521f923",
      :implementation
-     "651e3754e8f2365185c9f73df85d4e3c1488ef542a605bf920d5ae5417e38ce8",
+     "98790c2b00b9968fee953b8501a666df6fe4ac79a0016f2d3383b540b3715e96",
      :blueprint
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984",
      :registry "166/166"},
@@ -119101,25 +119100,14 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-2,
     :reason
-    "Banked signed-count-to-H2 assembly; geometric formula remains.",
+    "Banked compact-discrete regular-fiber finiteness; transversality-to-discreteness remains.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t00J02Closure.lean",
       :exit 0}
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "sha256/diff/placeholders", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1792001467828-12060-cd7c263e",
-     :commands
-     ["git diff-tree/show 7742824"
-      "git archive 7742824; lake env lean t00J02Closure.lean and Main.lean"
-      "sha256sum and placeholder counts at 7742824"
-      "python3 scripts/statement-registry.py check"],
-     :finding
-     "PASS program STOP: new in-scope commit proves signed-count-to-H2-zero assembly with correct orientations and representation boundary. Archived files compile; closure has 0 placeholders and standard axioms only; Main remains frozen at hash 0b3b4888 with its baseline 1 placeholder; fixture hash afb497a6 matches; registry 166/166. Remaining finite-fiber local-degree formula and final assembly are listed."},
-    :commit "77428242203cb60fa9820ef63b9ae70d86b6afaf",
+    :commit "b3649cbc71b4d78f0a38906c493fc324fe02a28d",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t00J02Closure.blueprint.md",
@@ -119127,7 +119115,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119266,7 +119254,8 @@
     :lemma-regularvalue-topdegree-eq-zero-of-signedcount
     :lemma-surfacetopdegree-eq-homologymap
     :lemma-surfacetophomologymap-eq-zero-of-surfacetopdegree-eq-zero
-    :lemma-tophomologymap-eq-zero-of-regularvalue-signedcount],
+    :lemma-tophomologymap-eq-zero-of-regularvalue-signedcount
+    :lemma-finite-regularfiber-of-isdiscrete],
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
@@ -119417,6 +119406,23 @@
    :depends-on
    [:lemma-regularvalue-topdegree-eq-zero-of-signedcount
     :lemma-surfacetophomologymap-eq-zero-of-surfacetopdegree-eq-zero],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "finite_regularFiber_of_isDiscrete",
+    :type "compact discrete point fiber is finite"},
+   :lemma
+   {:name "finite_regularFiber_of_isDiscrete",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type "compact discrete point fiber is finite",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02},
+   :id :lemma-finite-regularfiber-of-isdiscrete,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
