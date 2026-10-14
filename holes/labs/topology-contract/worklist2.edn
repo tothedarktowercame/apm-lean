@@ -87944,6 +87944,17 @@
       :exit 1,
       :correction
       "dirty PointWedge dependency failed; committed snapshots compile"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791994365516-11942-e948bd35",
+     :commands
+     ["git show/diff 327646036; sha256sum"
+      "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology"
+      "lake env lean /dev/stdin (#print axioms)"
+      "placeholder scan; statement-registry check; git show --check"],
+     :finding
+     "PASS: commit 327646036 by topo-6 changes only scoped PolygonSurfaceHomology.lean; exact blob SHA-256 8219bc5c5dea75936d2b1cffa7ec61e5b84a3d70b7dfeb9324ccfe63c566833f. Exact snapshot and PointWedge dependency build; 0 placeholders; new theorems use propext/Classical.choice/Quot.sound; registry 166/0. Generic proof identifies the overlap component with equality transport, giving the connector square in the correct source≫map=target orientation; the finite specialization then obtains trivial right projection and old-factor membership without crossing group representations. Real compiled program progress; remaining milestone is successor leg-word/free-group surjectivity, then B6-B10."},
     :commit "327646036",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
@@ -87952,7 +87963,7 @@
      "8219bc5c5dea75936d2b1cffa7ec61e5b84a3d70b7dfeb9324ccfe63c566833f"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -87972,7 +87983,7 @@
     :blueprint
     "ConstructionTargets/PolygonSurfaceHomology.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked normal-form step.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked connector square and old-factor membership.",
    :id :program-2026-10-13-polygon-surface-homology,
    :kind :reusable-theorem,
    :campaign-priority 31,
@@ -88109,7 +88120,10 @@
     {:job 8,
      :commit "be50b6265",
      :reason "Banked the exact finite counit normal-form obstruction."}
-    {:job 9, :commit "250866b5e", :reason "Banked normal-form step."}]}
+    {:job 9, :commit "250866b5e", :reason "Banked normal-form step."}
+    {:job 1,
+     :commit "327646036",
+     :reason "Banked connector square and old-factor membership."}]}
   {:consumer :t97A01,
    :stop-count 0,
    :phase :implementation,
@@ -89733,7 +89747,7 @@
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "finiteWedgePointWedge_rightBase_inl",
@@ -89743,7 +89757,9 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "successor right-base conjugator lies in the old factor",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :program-2026-10-13-polygon-surface-homology,
+    :banked-commit "327646036"},
    :id :lemma-finitewedgepointwedge-rightbase-inl,
    :kind :lemma,
    :depends-on
@@ -89849,7 +89865,7 @@
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "finiteWedgeRightConnectorSystemComparison",
@@ -89859,7 +89875,9 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "compare coherent and installed connectors",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :program-2026-10-13-polygon-surface-homology,
+    :banked-commit "327646036"},
    :id :lemma-finitewedgerightconnectorsystemcomparison,
    :kind :lemma,
    :depends-on
