@@ -36161,6 +36161,16 @@
     [{:cmd "ambient replacement probe",
       :exit 1,
       :correction "used induced groupoid functor map"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1792000901457-12026-4893a5e8",
+     :commands
+     ["git show/check/diff 5f821fed; scope and fixture SHA-256"
+      "lake build ConstructionTargets.t93J03Closure; lean fixture and Main"
+      "statement-registry check; placeholder/axiom recount"],
+     :finding
+     "PASS: 5f821fed adds compiled, sorry-free progress beyond 0c1e3c72. Mapping inner-run path-class equality through the actual inner inclusion and simplifying the common ambient composite correctly identifies it with the same overlap path routed through the outer subtype. This preserves the cover-piece boundary and supplies the factorwise rewrite. Exact scope/hash match; support placeholders 0->0; frozen Main remains 1; standard axioms only; registry 166/166. STOP lists finite-word folding, reverse kernel/surjectivity, winding, C1/C2/Main."},
     :commit "5f821fed12858efa2e7aa8bf6df1eaa30e5767c7",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
@@ -36171,7 +36181,7 @@
      "a3c488e9080f7e88ec8e389a74d2449d078af8df3f5616a09ce1c4a8831c8fab"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -36189,7 +36199,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t93J03Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Proved each inner path between overlap endpoints equals an actual overlap-path image; finite-run assembly remains.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Transported each inner-run replacement to equality with an outer-piece arrow in the ambient polygon groupoid; finite fold remains.",
    :id :program-2026-10-13-close-t93j03,
    :kind :final-adapter,
    :campaign-priority 30,
@@ -36403,7 +36413,11 @@
     {:job 8,
      :commit "0c1e3c722fcff7ea48c6781d31c78f8a0ce0827b",
      :reason
-     "Proved each inner path between overlap endpoints equals an actual overlap-path image; finite-run assembly remains."}]}
+     "Proved each inner path between overlap endpoints equals an actual overlap-path image; finite-run assembly remains."}
+    {:job 9,
+     :commit "5f821fed12858efa2e7aa8bf6df1eaa30e5767c7",
+     :reason
+     "Transported each inner-run replacement to equality with an outer-piece arrow in the ambient polygon groupoid; finite fold remains."}]}
   {:consumer :t99J05,
    :stop-count 5,
    :evidence
@@ -39017,7 +39031,7 @@
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -39031,7 +39045,9 @@
     :type
     "ambient inner run equals overlap replacement through outer piece",
     :area "covering-subgroup-correspondence",
-    :proved-in :program-2026-10-13-close-t93j03},
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "5f821fed12858efa2e7aa8bf6df1eaa30e5767c7"},
    :id
    :lemma-kleinpolygoninner-ambientpathclass-eq-outeroverlapreplacement,
    :kind :lemma,
