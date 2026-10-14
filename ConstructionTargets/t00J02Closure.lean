@@ -1108,6 +1108,30 @@ theorem CanonicalRegularFiberDegreeCalculations.topHomologyMap_eq_zero_withoutLi
   surfaceTopHomologyMap_eq_zero_of_surfaceTopDegree_eq_zero e f
     calculations.surfaceTopDegree_eq_zero
 
+/-- A chosen circle value, its finite literal fiber, and the canonical
+component/top-degree calculations at that same value. -/
+structure CanonicalRegularFiberWitness
+    {S : Type} [TopologicalSpace S] [T2Space S]
+    [ChartedSpace SurfaceModel S]
+    (f : C(S, S)) (c : C(Circle, S))
+    (e : surfaceHomology S ≅ ModuleCat.of ℤ ℤ) where
+  choice : FiniteRegularFiberChoice f c
+  calculations : letI := choice.fiberFintype
+    CanonicalRegularFiberDegreeCalculations
+      (f := f) (c := c) choice.mem_circle e
+
+/-- The integrated regular-fiber witness is sufficient for top-homology
+vanishing; no additional component-lift choice is needed at this stage. -/
+theorem CanonicalRegularFiberWitness.topHomologyMap_eq_zero
+    {S : Type} [TopologicalSpace S] [T2Space S]
+    [ChartedSpace SurfaceModel S]
+    {f : C(S, S)} {c : C(Circle, S)}
+    {e : surfaceHomology S ≅ ModuleCat.of ℤ ℤ}
+    (witness : CanonicalRegularFiberWitness f c e) :
+    homologyMap 2 f = 0 := by
+  letI := witness.choice.fiberFintype
+  exact witness.calculations.topHomologyMap_eq_zero_withoutLifts
+
 /-- The canonical geometric calculations, together with the exact
 disk-bounded lifts, imply vanishing of the top-homology map. -/
 theorem CanonicalRegularFiberDegreeCalculations.topHomologyMap_eq_zero
@@ -1161,6 +1185,7 @@ end ConstructionTargets.T00J02Closure
 #print axioms ConstructionTargets.T00J02Closure.CanonicalRegularFiberDegreeCalculations.topHomologyMap_eq_zero
 #print axioms ConstructionTargets.T00J02Closure.CanonicalRegularFiberDegreeCalculations.surfaceTopDegree_eq_zero
 #print axioms ConstructionTargets.T00J02Closure.CanonicalRegularFiberDegreeCalculations.topHomologyMap_eq_zero_withoutLifts
+#print axioms ConstructionTargets.T00J02Closure.CanonicalRegularFiberWitness.topHomologyMap_eq_zero
 #print axioms ConstructionTargets.T00J02Closure.RegularFiberChartCalculations.topHomologyMap_eq_zero
 #print axioms ConstructionTargets.T00J02Closure.circleDegree_eq_homologyMap
 #print axioms ConstructionTargets.T00J02Closure.circleDegree_eq_zero_of_homologyMap_eq_zero
