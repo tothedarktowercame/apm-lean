@@ -87952,6 +87952,18 @@
     [{:cmd "exact-arrow draft",
       :exit 1,
       :correction "indexed by zero proof"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792008830350-12324-39913cc6",
+     :commands
+     ["git show/diff 4e4ae3741; blob sha256; diff --check"
+      "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology"
+      "lake env lean /dev/stdin (#print axioms)"
+      "placeholder scan"
+      "statement-registry.py check"],
+     :finding
+     "PASS: 4e4ae3741 (topo-6) changes only scoped PolygonSurfaceHomology.lean; fixture SHA-256 702a1975b8dce3234342c68034d8a1f2b3abd7bbd16eb9e1e01a0e2451376957 matches. Exact blob builds; 0 placeholders; B6 declarations use standard axioms; registry 166/0. Segment orientations and shifts are correct: reassembly H1 -> connecting 0, connecting 1 -> intersection H1 -> reduced pieces. HasExactArrows preserves the canonical maps and packages only their zero proof/exactness. New compiled progress; remaining: B7 boundary coordinates, then B8-B10."},
     :commit "4e4ae3741",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
@@ -87960,7 +87972,7 @@
      "702a1975b8dce3234342c68034d8a1f2b3abd7bbd16eb9e1e01a0e2451376957"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -87980,7 +87992,7 @@
     :blueprint
     "ConstructionTargets/PolygonSurfaceHomology.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked reduced B6 middle exactness.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked B6 exact segment.",
    :id :program-2026-10-13-polygon-surface-homology,
    :kind :reusable-theorem,
    :campaign-priority 31,
@@ -88182,7 +88194,8 @@
      :reason "Banked radial H1 coordinates and pieces exactness."}
     {:job 1,
      :commit "7b09f5ac4",
-     :reason "Banked reduced B6 middle exactness."}]}
+     :reason "Banked reduced B6 middle exactness."}
+    {:job 2, :commit "4e4ae3741", :reason "Banked B6 exact segment."}]}
   {:consumer :t97A01,
    :stop-count 0,
    :phase :implementation,
@@ -91030,7 +91043,7 @@
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "radialMVSegment", :type "B6 coordinate exact segment"},
@@ -91039,7 +91052,9 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "B6 coordinate exact segment",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :program-2026-10-13-polygon-surface-homology,
+    :banked-commit "4e4ae3741"},
    :id :lemma-radialmvsegment,
    :kind :lemma,
    :depends-on
@@ -91219,7 +91234,7 @@
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "HasExactArrows", :type "exact complex exposing arrows"},
@@ -91228,14 +91243,16 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "exact complex exposing arrows",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :program-2026-10-13-polygon-surface-homology,
+    :banked-commit "4e4ae3741"},
    :id :lemma-hasexactarrows,
    :kind :lemma,
    :depends-on [],
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "hasExactArrows_of_exact",
@@ -91245,7 +91262,9 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "package an exact complex",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :program-2026-10-13-polygon-surface-homology,
+    :banked-commit "4e4ae3741"},
    :id :lemma-hasexactarrows-of-exact,
    :kind :lemma,
    :depends-on [:lemma-hasexactarrows],
