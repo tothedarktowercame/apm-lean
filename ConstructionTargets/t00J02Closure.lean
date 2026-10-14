@@ -687,9 +687,33 @@ theorem surfaceTopHomology_localFundamentalClassIso_topIso
     (e : surfaceHomology S ≅ ModuleCat.of ℤ ℤ) :
     (surfaceTopHomology_localFundamentalClassIso S e).topIso = e := rfl
 
+/-- The integer local degree coordinate at each literal fiber point, obtained
+from the localized global fundamental class. -/
+noncomputable def regularFiberLocalDegree
+    {S : Type} [TopologicalSpace S] [T2Space S]
+    [ChartedSpace SurfaceModel S]
+    (e : surfaceHomology S ≅ ModuleCat.of ℤ ℤ) (f : C(S, S)) (y : S) :
+    {x : S // f x = y} → ℤ :=
+  fun x => (surfaceTopHomology_localFundamentalClassIso S e).localCoefficient x
+
+/-- The regular-fiber local degree is characterized by the actual local
+homology localization equation at its underlying surface point. -/
+theorem regularFiberLocalDegree_localization_eq
+    {S : Type} [TopologicalSpace S] [T2Space S]
+    [ChartedSpace SurfaceModel S]
+    (e : surfaceHomology S ≅ ModuleCat.of ℤ ℤ) (f : C(S, S)) (y : S)
+    (x : {x : S // f x = y}) :
+    regularFiberLocalDegree e f y x •
+        ConstructionTargets.HigherChartLocalGenerator.ambientLocalGenerator
+          (k := 0) (x : S) =
+      localizationMap (x : S) 2
+        (groupGlobalGenerator (TopCat.of S) 2 e) :=
+  (surfaceTopHomology_localFundamentalClassIso S e).localization_eq x
+
 end ConstructionTargets.T00J02Closure
 
 #print axioms ConstructionTargets.T00J02Closure.surfaceTopHomology_localFundamentalClassIso
+#print axioms ConstructionTargets.T00J02Closure.regularFiberLocalDegree_localization_eq
 #print axioms ConstructionTargets.T00J02Closure.circleDegree_eq_homologyMap
 #print axioms ConstructionTargets.T00J02Closure.circleDegree_eq_zero_of_homologyMap_eq_zero
 #print axioms ConstructionTargets.T00J02Closure.transverseCircle_preimage_component_signedCount
