@@ -882,7 +882,34 @@ theorem apm_t02a01_outer_quarter_three (hr : Continuous apm_t02a01_radialPt)
 theorem apm_t02a01_outer_quarter_four (hr : Continuous apm_t02a01_radialPt)
     (t : unitInterval) (ht0 : 3 / 4 ≤ (t : ℝ)) :
     apm_t02a01_outerLoop hr t = apm_t02a01_edgeB (4 - 4 * t) := by
-  sorry
+  have ht1 : (t : ℝ) ≤ 1 := t.2.2
+  have hy0 : 0 ≤ (4 - 4 * (t : ℝ)) := by linarith
+  have hy1 : (4 - 4 * (t : ℝ)) ≤ 1 := by linarith
+  have hclamp : max 0 (min 1 (4 - 4 * (t : ℝ))) = 4 - 4 * (t : ℝ) := by
+    rw [min_eq_right hy1, max_eq_right hy0]
+  simp only [apm_t02a01_outerLoop, apm_t02a01_radialPt,
+    apm_t02a01_edgeB, hclamp]
+  have hc0 : apm_t02a01_clamp01 (4 * (t : ℝ)) = 1 := by
+    unfold apm_t02a01_clamp01
+    rw [min_eq_left (by linarith), max_eq_right] <;> norm_num
+  have hc1 : apm_t02a01_clamp01 (4 * (t : ℝ) - 1) = 1 := by
+    unfold apm_t02a01_clamp01
+    rw [min_eq_left (by linarith), max_eq_right] <;> norm_num
+  have hc2 : apm_t02a01_clamp01 (4 * (t : ℝ) - 2) = 1 := by
+    unfold apm_t02a01_clamp01
+    rw [min_eq_left (by linarith), max_eq_right] <;> norm_num
+  have hc3 : apm_t02a01_clamp01 (4 * (t : ℝ) - 3) = 4 * (t : ℝ) - 3 := by
+    unfold apm_t02a01_clamp01
+    rw [min_eq_right (by linarith), max_eq_right (by linarith)]
+  have hradial : apm_t02a01_radial 1 (4 * (t : ℝ)) =
+      ((0 : ℝ), 4 - 4 * (t : ℝ)) := by
+    norm_num [apm_t02a01_radial, apm_t02a01_perimeter, hc0, hc1, hc2, hc3] <;>
+      ring
+  apply Quotient.sound
+  apply Relation.EqvGen.rel
+  convert apm_t02a01_edgeRel.horizontal (4 - 4 * (t : ℝ)) ⟨hy0, hy1⟩
+      (by norm_num [Prod.norm_def]) (by norm_num [Prod.norm_def]) using 1
+  · exact Subtype.ext hradial
 -- END SEAT AREA
 
 /-- Reassemble the four quarters (`Path.trans_apply` twice; the quarter facts are explicit
