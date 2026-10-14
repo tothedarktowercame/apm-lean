@@ -87955,6 +87955,18 @@
      {:cmd "early axioms query",
       :exit 1,
       :correction "reran post-build"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792008372812-12308-6198c7c6",
+     :commands
+     ["git show/diff 7b09f5ac4; blob sha256; diff --check"
+      "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology"
+      "lake env lean /dev/stdin (#print axioms)"
+      "placeholder scan"
+      "statement-registry.py check"],
+     :finding
+     "PASS: 7b09f5ac4 (topo-6) changes only scoped PolygonSurfaceHomology.lean; fixture SHA-256 1325c3a07fdd687bb233c9c6f3505e60b69e6ca18151010fa50108f60779cfca matches. Exact blob builds; 0 placeholders; three milestones use standard axioms; registry 166/0. For zero inner H1, snd:A+B->B and inr are inverse. The reduced arrows retain intersection->pieces->union orientation, and the short-complex iso correctly transports prior exactness to fixed outer coordinates. New compiled progress; remaining: adjacent B6 exactness, then B7-B10."},
     :commit "7b09f5ac4",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
@@ -87963,7 +87975,7 @@
      "1325c3a07fdd687bb233c9c6f3505e60b69e6ca18151010fa50108f60779cfca"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -87983,7 +87995,7 @@
     :blueprint
     "ConstructionTargets/PolygonSurfaceHomology.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked radial H1 coordinates and pieces exactness.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked reduced B6 middle exactness.",
    :id :program-2026-10-13-polygon-surface-homology,
    :kind :reusable-theorem,
    :campaign-priority 31,
@@ -88182,7 +88194,10 @@
      "Banked finite-wedge and radial outer-piece higher homology vanishing."}
     {:job 9,
      :commit "631731570",
-     :reason "Banked radial H1 coordinates and pieces exactness."}]}
+     :reason "Banked radial H1 coordinates and pieces exactness."}
+    {:job 1,
+     :commit "7b09f5ac4",
+     :reason "Banked reduced B6 middle exactness."}]}
   {:consumer :t97A01,
    :stop-count 0,
    :phase :implementation,
@@ -91162,7 +91177,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "biprodSndIsoOfIsZero", :type "A=0 gives A⊞B≅B"},
@@ -91171,14 +91186,16 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "A=0 gives A⊞B≅B",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :program-2026-10-13-polygon-surface-homology,
+    :banked-commit "7b09f5ac4"},
    :id :lemma-biprodsndisoofiszero,
    :kind :lemma,
    :depends-on [],
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "radialMVPieces_comp_zero",
@@ -91188,14 +91205,16 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "intersection-reassembly composite is zero",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :program-2026-10-13-polygon-surface-homology,
+    :banked-commit "7b09f5ac4"},
    :id :lemma-radialmvpieces-comp-zero,
    :kind :lemma,
    :depends-on [:lemma-radialmvpiecesexact],
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "radialMVReducedPiecesExact",
@@ -91205,7 +91224,9 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "B6 exact at outer coordinates",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :program-2026-10-13-polygon-surface-homology,
+    :banked-commit "7b09f5ac4"},
    :id :lemma-radialmvreducedpiecesexact,
    :kind :lemma,
    :depends-on [:lemma-radialmvboundarygroup],
