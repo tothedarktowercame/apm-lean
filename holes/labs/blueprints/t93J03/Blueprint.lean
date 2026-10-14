@@ -444,7 +444,51 @@ theorem t93J03_cyclicCover_aux_E_covering : IsCoveringMap t93J03_cyc_E := by
 
 theorem t93J03_cyclicCover_aux_E_eq_iff (v w : ℝ × ℝ) :
     t93J03_cyc_E v = t93J03_cyc_E w ↔ ∃ n : ℤ, w = (v.1 + n, v.2) := by
-  sorry
+  constructor
+  · intro h
+    have hval := congrArg Subtype.val h
+    have hx := congrArg Prod.fst hval
+    have hy := congrArg Prod.snd hval
+    dsimp [t93J03_cyc_E] at hx hy
+    have hv := Real.sin_sq_add_cos_sq (2 * Real.pi * v.1)
+    have hw := Real.sin_sq_add_cos_sq (2 * Real.pi * w.1)
+    have he : Real.exp v.2 = Real.exp w.2 := by
+      have hvp : 0 < Real.exp v.2 := Real.exp_pos _
+      have hwp : 0 < Real.exp w.2 := Real.exp_pos _
+      have hsquare : (Real.exp v.2) ^ 2 = (Real.exp w.2) ^ 2 := calc
+        (Real.exp v.2) ^ 2 =
+            (Real.exp v.2 * Real.cos (2 * Real.pi * v.1)) ^ 2 +
+              (Real.exp v.2 * Real.sin (2 * Real.pi * v.1)) ^ 2 := by
+                nlinarith
+        _ = (Real.exp w.2 * Real.cos (2 * Real.pi * w.1)) ^ 2 +
+              (Real.exp w.2 * Real.sin (2 * Real.pi * w.1)) ^ 2 := by rw [hx, hy]
+        _ = (Real.exp w.2) ^ 2 := by nlinarith
+      nlinarith
+    have hsecond : v.2 = w.2 := Real.exp_injective he
+    have hcos : Real.cos (2 * Real.pi * v.1) =
+        Real.cos (2 * Real.pi * w.1) := by
+      exact (mul_left_cancel₀ (Real.exp_ne_zero v.2)) (he ▸ hx)
+    have hsin : Real.sin (2 * Real.pi * v.1) =
+        Real.sin (2 * Real.pi * w.1) := by
+      exact (mul_left_cancel₀ (Real.exp_ne_zero v.2)) (he ▸ hy)
+    have hang : ((2 * Real.pi * v.1 : ℝ) : Real.Angle) =
+        (2 * Real.pi * w.1 : ℝ) := Real.Angle.cos_sin_inj hcos hsin
+    obtain ⟨k, hk⟩ := Real.Angle.angle_eq_iff_two_pi_dvd_sub.mp hang
+    refine ⟨-k, Prod.ext ?_ hsecond.symm⟩
+    dsimp
+    have hpi : Real.pi ≠ 0 := ne_of_gt Real.pi_pos
+    push_cast at hk ⊢
+    apply (mul_left_cancel₀ (mul_ne_zero (by norm_num : (2 : ℝ) ≠ 0) hpi))
+    nlinarith
+  · rintro ⟨n, rfl⟩
+    apply Subtype.ext
+    ext <;> dsimp [t93J03_cyc_E]
+    · rw [show 2 * Real.pi * (v.1 + (n : ℝ)) =
+          2 * Real.pi * v.1 + (n : ℝ) * (2 * Real.pi) by ring,
+        Real.cos_add_int_mul_two_pi]
+    · rw [show 2 * Real.pi * (v.1 + (n : ℝ)) =
+          2 * Real.pi * v.1 + (n : ℝ) * (2 * Real.pi) by ring,
+        Real.sin_add_int_mul_two_pi]
 
 theorem t93J03_cyclicCover_aux_L_E (v : ℝ × ℝ) :
     ∃ n : ℤ, t93J03_cyc_L (t93J03_cyc_E v) = (v.1 + n, v.2) := by
