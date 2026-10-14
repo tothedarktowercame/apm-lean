@@ -282,6 +282,11 @@ its van Kampen kernel equality, and the remaining winding conjugacy, the first
 isomorphism theorem and `kleinSkeletonAabbQuotientEquiv` produce the required
 polygon fundamental-group presentation.  Thus no quotient manipulation
 remains after those two topological facts are proved.
+`kleinBottle_pi1_every_basepoint_of_vanKampen_inputs` carries that assembled
+polygon equivalence through the fixed polygon/Klein homeomorphism and then to
+every basepoint.  It is the complete C1 endpoint conditional only on the
+winding conjugacy and the paired surjectivity/kernel statement of based van
+Kampen; no further basepoint or presentation adapter remains.
 
 - Layer 1: C1, C3, and C4. C1 and C3 are independent; C4 is already complete.
 - Layer 2: C2 against the explicit C1 equivalence interface.

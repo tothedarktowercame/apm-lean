@@ -1181,6 +1181,23 @@ theorem kleinBottle_pi1_every_basepoint_of_polygon_van_kampen
   exact ⟨(FundamentalGroup.fundamentalGroupMulEquivOfPathConnected k
     (kleinPairingSpaceHomeomorph q₀)).trans eimage⟩
 
+/-- Complete C1 assembly from the two remaining topological inputs.  This
+also transports the polygon computation through the fixed Klein-bottle
+homeomorphism and from the skeleton image to every basepoint. -/
+theorem kleinBottle_pi1_every_basepoint_of_vanKampen_inputs
+    (hconj : IsConj kleinPolygonOverlapWindingOneImage kleinAabbWord)
+    (hsurj : Function.Surjective kleinPolygonSkeletonToSpacePiOne)
+    (hker : MonoidHom.ker kleinPolygonSkeletonToSpacePiOne =
+      Subgroup.normalClosure
+        (kleinPolygonOverlapToSkeletonPiOne.range : Set
+          (FundamentalGroup kleinPairingData.skeleton kleinSkeletonPoint))) :
+    ∀ k : KleinBottle,
+      Nonempty (FundamentalGroup KleinBottle k ≃* PresentedKleinGroup) :=
+  kleinBottle_pi1_every_basepoint_of_polygon_van_kampen
+    (kleinPolygonSkeletonToSpace kleinSkeletonPoint)
+    ⟨kleinPolygonFundamentalGroupEquivPresented_of_vanKampen
+      hconj hsurj hker⟩
+
 /-- Once proper discontinuity of the explicit affine action is supplied, the
 banked deck-group theorem computes the fundamental group at the canonical
 orbit of the origin. -/
@@ -1314,5 +1331,6 @@ theorem lift_isEmbedding_assembly
 #print axioms kleinPolygonOverlapToSkeletonPiOne_normalClosure_eq_aabb
 #print axioms kleinPolygonFundamentalGroupEquivPresented_of_vanKampen
 #print axioms kleinBottle_pi1_every_basepoint_of_polygon_van_kampen
+#print axioms kleinBottle_pi1_every_basepoint_of_vanKampen_inputs
 
 end ConstructionTargets.t93J03Closure
