@@ -875,6 +875,44 @@ theorem kleinPolygonOverlapToSpacePiOne_eq_one
   rw [hnat, hinner, map_one]
   rfl
 
+/-- The based fundamental-group map from the outer radial piece into the
+polygon quotient, at the chosen overlap image. -/
+noncomputable def kleinPolygonOuterToSpacePiOne :
+    FundamentalGroup {q // q ∈ (openCover kleinPairingData).outer}
+        (kleinPolygonOverlapToOuter kleinPolygonOverlapPoint) →*
+      FundamentalGroup kleinPairingData.Space
+        (kleinPolygonOuterToSpace
+          (kleinPolygonOverlapToOuter kleinPolygonOverlapPoint)) :=
+  FundamentalGroup.map kleinPolygonOuterToSpace
+    (kleinPolygonOverlapToOuter kleinPolygonOverlapPoint)
+
+/-- The normal closure of the actual overlap image lies in the kernel of the
+outer-piece inclusion.  This promotes the pointwise nullity through the
+normal subgroup closure, giving the forward half of the based van Kampen
+kernel equality before transport from the outer piece to the skeleton. -/
+theorem kleinPolygonOverlapNormalClosure_le_outerToSpacePiOne_ker :
+    Subgroup.normalClosure
+        (kleinPolygonOverlapToOuterPiOne.range : Set
+          (FundamentalGroup {q // q ∈ (openCover kleinPairingData).outer}
+            (kleinPolygonOverlapToOuter kleinPolygonOverlapPoint))) ≤
+      MonoidHom.ker kleinPolygonOuterToSpacePiOne := by
+  apply Subgroup.normalClosure_le_normal
+  rintro x ⟨g, rfl⟩
+  change kleinPolygonOuterToSpacePiOne
+      (kleinPolygonOverlapToOuterPiOne g) = 1
+  have hnat :
+      kleinPolygonOuterToSpacePiOne
+          (kleinPolygonOverlapToOuterPiOne g) =
+        FundamentalGroup.map
+          (kleinPolygonOuterToSpace.comp kleinPolygonOverlapToOuter)
+          kleinPolygonOverlapPoint g := by
+    induction g using Quotient.inductionOn with
+    | h p =>
+      apply Quotient.sound
+      exact ⟨Path.Homotopy.refl _⟩
+  rw [hnat]
+  exact kleinPolygonOverlapToSpacePiOne_eq_one g
+
 /-- Winding number coordinates for the exact annular overlap.  The interval
 factor is contractible, so only the circle coordinate contributes. -/
 noncomputable def kleinPolygonOverlapFundamentalGroupEquivInt :

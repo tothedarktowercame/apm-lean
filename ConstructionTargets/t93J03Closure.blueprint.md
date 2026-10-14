@@ -293,8 +293,10 @@ kernel is the normal closure of the actual overlap image.
 `kleinPolygonOverlapToSpacePiOne_eq_one` proves the first genuine kernel
 inclusion input: every overlap loop dies after inclusion into the polygon,
 because that inclusion factors through the contractible inner radial piece.
-The reverse kernel inclusion and skeleton-map surjectivity remain to extract
-from the pseudopushout.
+`kleinPolygonOverlapNormalClosure_le_outerToSpacePiOne_ker` promotes this to
+the full forward subgroup inclusion for the outer-piece map.  Transport to
+the skeleton, the reverse kernel inclusion, and skeleton-map surjectivity
+remain to extract from the pseudopushout.
 `kleinBottle_pi1_every_basepoint_of_basedVanKampen` confirms this single
 topological contract and the independent winding conjugacy are now the only
 C1 inputs.
