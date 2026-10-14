@@ -87901,31 +87901,31 @@
   {:consumer :t97A01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Prove the inverse and round trips; iterate van Kampen; then coordinate epi and B6-B10.",
+    "Specialize to Fin successors; iterate van Kampen; then coordinate epi and B6-B10.",
     :outcome :stop,
-    :warnings ["preexisting lints" "unrelated edits preserved"],
+    :warnings [],
     :missing-theorems
-    [{:name "finiteWedgeSumLeftRight",
-      :type "continuous sum-wedge inclusions agreeing at basepoints",
+    [{:name "finiteWedgeSumToPointWedge",
+      :type "continuous inverse map",
       :status :proved,
-      :consumers [:t97A01 :t94J09],
-      :depends-on [],
-      :area "polygon-quotient-homology"}
-     {:name "pointWedgeToFiniteWedgeSum",
-      :type "continuous point-wedge descent to the sum wedge",
-      :status :proved,
-      :consumers [:t97A01 :t94J09],
-      :depends-on ["finiteWedgeSumLeftRight"],
-      :area "polygon-quotient-homology"}
-     {:name "finiteWedgeFinSuccHomeomorphPointWedge",
-      :type "Fin successor wedge is a point wedge",
-      :status :partial,
       :consumers [:t97A01 :t94J09],
       :depends-on ["pointWedgeToFiniteWedgeSum"],
+      :area "polygon-quotient-homology"}
+     {:name "finiteWedgeSumHomeomorphPointWedge",
+      :type "sum wedge splits as a point wedge",
+      :status :proved,
+      :consumers [:t97A01 :t94J09],
+      :depends-on ["finiteWedgeSumToPointWedge"],
+      :area "polygon-quotient-homology"}
+     {:name "finiteWedgeFinSuccHomeomorphPointWedge",
+      :type "Fin successor split",
+      :status :partial,
+      :consumers [:t97A01 :t94J09],
+      :depends-on ["finiteWedgeSumHomeomorphPointWedge"],
       :area "polygon-quotient-homology"}
      {:name "finiteWedgeLegFreeGroupMap_surjective",
       :type "canonical free-group map is onto",
@@ -87937,22 +87937,26 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked sum-wedge inclusions and point-wedge descent.",
+    :reason "Banked the finite sum-wedge split.",
     :commands
     [{:cmd "lake build ConstructionTargets.PolygonSurfaceHomology",
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-     {:cmd "git show --check c1a5cd9ec", :exit 0}
+     {:cmd "git show --check d03a5f91d", :exit 0}
      {:cmd "blob axioms | lake env lean /dev/stdin", :exit 0}],
-    :commit "c1a5cd9ec",
+    :diagnostic-history
+    [{:cmd "inverse draft",
+      :exit 1,
+      :correction "normalized basepoints"}],
+    :commit "d03a5f91d",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
     {:path "ConstructionTargets/PolygonSurfaceHomology.lean",
      :sha256
-     "c3524a65fb8aa1b6c108ae8c8cf901d4d216b2f3358d1f35de6a7f0a6e2d85c5"},
+     "26239c9374a6a74eb4e89821a87b68cb64daceda4ba6c2423d242184e35b4c81"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -89401,7 +89405,9 @@
     :area "polygon-quotient-homology"},
    :id :lemma-finitewedgefinsucchomeomorphpointwedge,
    :kind :lemma,
-   :depends-on [:lemma-pointwedgetofinitewedgesum],
+   :depends-on
+   [:lemma-pointwedgetofinitewedgesum
+    :lemma-finitewedgesumhomeomorphpointwedge],
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
@@ -89489,4 +89495,38 @@
    :id :lemma-apm-t92j06-exists-four-threesheeted-covers,
    :kind :lemma,
    :depends-on [:lemma-t92j06-quotientwedgeapi],
-   :other-consumers []}]}
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "finiteWedgeSumToPointWedge",
+    :type "continuous inverse map"},
+   :lemma
+   {:name "finiteWedgeSumToPointWedge",
+    :reported-by [:program-2026-10-13-polygon-surface-homology],
+    :type "continuous inverse map",
+    :area "polygon-quotient-homology",
+    :proved-in :program-2026-10-13-polygon-surface-homology},
+   :id :lemma-finitewedgesumtopointwedge,
+   :kind :lemma,
+   :depends-on [:lemma-pointwedgetofinitewedgesum],
+   :other-consumers [:t94J09]}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "finiteWedgeSumHomeomorphPointWedge",
+    :type "sum wedge splits as a point wedge"},
+   :lemma
+   {:name "finiteWedgeSumHomeomorphPointWedge",
+    :reported-by [:program-2026-10-13-polygon-surface-homology],
+    :type "sum wedge splits as a point wedge",
+    :area "polygon-quotient-homology",
+    :proved-in :program-2026-10-13-polygon-surface-homology},
+   :id :lemma-finitewedgesumhomeomorphpointwedge,
+   :kind :lemma,
+   :depends-on [:lemma-finitewedgesumtopointwedge],
+   :other-consumers [:t94J09]}]}
