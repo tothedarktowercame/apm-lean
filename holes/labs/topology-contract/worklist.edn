@@ -119175,9 +119175,57 @@
      :reason
      "Banked compact-discrete regular-fiber finiteness; transversality-to-discreteness remains."}]}
   {:consumer :t98A06,
-   :stop-count 0,
+   :stop-count 1,
+   :evidence
+   {:placeholder-delta {:source-before 1, :source-after 1},
+    :residual
+    "Review blueprint; then copy B1/B3 and implement B2/B4 before Main assembly.",
+    :outcome :stop,
+    :warnings ["reviewed blueprint and Main contain expected sorryAx"],
+    :missing-theorems
+    [{:name "t98A06_local_smooth_submersion_lift",
+      :type "smooth submersions admit local smooth vector-field lifts",
+      :status :not-started,
+      :consumers [:t98A06],
+      :depends-on [],
+      :area "smooth-manifold-submersion"}
+     {:name "t98A06_global_vectorField_lift",
+      :type "partition-of-unity glues local derivative lifts",
+      :status :not-started,
+      :consumers [:t98A06],
+      :depends-on ["t98A06_local_smooth_submersion_lift"],
+      :area "smooth-manifold-submersion"}
+     {:name "t98A06_compact_circle_fibers_diffeomorphic",
+      :type "compact submersion circle fibers are diffeomorphic",
+      :status :not-started,
+      :consumers [:t98A06],
+      :depends-on ["t98A06_global_vectorField_lift"],
+      :area "smooth-manifold-submersion"}],
+    :statement-hashes
+    {:source
+     "44399e714e0f58588b1b213f3c3b12320dfea50bb6f626693aa89c544b76dd3a",
+     :blueprint
+     "9838452bf081767e1df000700b7c24774e94f50633c1cc10b2aa0e8c82319196",
+     :registry "166/166"},
+    :disposition :stop,
+    :axioms [],
+    :author :topo-2,
+    :reason "Blueprint written; implementation awaits review.",
+    :commands
+    [{:cmd "lake env lean holes/labs/blueprints/t98A06/Blueprint.lean",
+      :exit 0}
+     {:cmd "lake env lean problems/t98A06/lean/Main.lean", :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd "sha256/diff/placeholders", :exit 0}],
+    :commit "fcd285c205339940c0512a1418e00019aaef3c35",
+    :changed-paths ["ConstructionTargets/t98A06Closure.blueprint.md"],
+    :fixture
+    {:path "ConstructionTargets/t98A06Closure.blueprint.md",
+     :sha256
+     "9838452bf081767e1df000700b7c24774e94f50633c1cc10b2aa0e8c82319196"},
+    :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t98A06/lean/Main.lean"
     "problems/t98A06/status.json"
@@ -119448,6 +119496,54 @@
    :id :lemma-transverse-coprodderivative-surjective,
    :kind :lemma,
    :depends-on [],
+   :other-consumers []}
+  {:consumer :t98A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t98A06_local_smooth_submersion_lift",
+    :type "smooth submersions admit local smooth vector-field lifts"},
+   :lemma
+   {:name "t98A06_local_smooth_submersion_lift",
+    :reported-by [:program-2026-10-13-close-t98a06],
+    :type "smooth submersions admit local smooth vector-field lifts",
+    :area "smooth-manifold-submersion"},
+   :id :lemma-t98a06-local-smooth-submersion-lift,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t98A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t98A06_global_vectorField_lift",
+    :type "partition-of-unity glues local derivative lifts"},
+   :lemma
+   {:name "t98A06_global_vectorField_lift",
+    :reported-by [:program-2026-10-13-close-t98a06],
+    :type "partition-of-unity glues local derivative lifts",
+    :area "smooth-manifold-submersion"},
+   :id :lemma-t98a06-global-vectorfield-lift,
+   :kind :lemma,
+   :depends-on [:lemma-t98a06-local-smooth-submersion-lift],
+   :other-consumers []}
+  {:consumer :t98A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t98A06_compact_circle_fibers_diffeomorphic",
+    :type "compact submersion circle fibers are diffeomorphic"},
+   :lemma
+   {:name "t98A06_compact_circle_fibers_diffeomorphic",
+    :reported-by [:program-2026-10-13-close-t98a06],
+    :type "compact submersion circle fibers are diffeomorphic",
+    :area "smooth-manifold-submersion"},
+   :id :lemma-t98a06-compact-circle-fibers-diffeomorphic,
+   :kind :lemma,
+   :depends-on [:lemma-t98a06-global-vectorfield-lift],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
