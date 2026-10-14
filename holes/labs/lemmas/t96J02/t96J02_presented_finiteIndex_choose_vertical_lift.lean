@@ -104,7 +104,7 @@ theorem t96J02_presented_finiteIndex_choose_vertical_lift
     (hq : ∀ n : ℤ,
       (∃ m : ℤ, t96J02_presented_coordinate m n ∈ H) ↔ q ∣ n) :
     ∃ r : ℤ, t96J02_presented_coordinate r q ∈ H := by
-  sorry
+  exact (hq q).2 (dvd_refl q)
 -- END SEAT AREA
 
 /-- The horizontal generator and a chosen lift of the vertical generator
