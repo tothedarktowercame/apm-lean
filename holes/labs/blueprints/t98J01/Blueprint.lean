@@ -40,10 +40,95 @@ def t98J01_reflectionCM : C(T98J01.S1, T98J01.S1) :=
 
 /-- Seat: rational homology of the printed two-sphere is finite-dimensional
 in every degree. -/
+private def t98J01_sphere_homology_finiteDimensional_aux_homeomorph :
+    T98J01.S2 ≃ₜ T02A06.euclideanUnitSphere 3 where
+  toFun x := ⟨WithLp.toLp 2 ![x.1.1, x.1.2.1, x.1.2.2], by
+    rw [Metric.mem_sphere, dist_zero_right, EuclideanSpace.norm_eq]
+    rw [show ∑ i : Fin 3, ‖(WithLp.toLp 2 ![x.1.1, x.1.2.1, x.1.2.2] :
+        EuclideanSpace ℝ (Fin 3)) i‖ ^ 2 = 1 by
+      rw [show (∑ i : Fin 3, ‖(WithLp.toLp 2 ![x.1.1, x.1.2.1, x.1.2.2] :
+          EuclideanSpace ℝ (Fin 3)) i‖ ^ 2) =
+          ‖x.1.1‖ ^ 2 + ‖x.1.2.1‖ ^ 2 + ‖x.1.2.2‖ ^ 2 by
+        norm_num [Fin.sum_univ_succ, add_assoc]]
+      simpa [Real.norm_eq_abs, sq_abs, add_assoc] using x.2]
+    norm_num⟩
+  invFun x := ⟨(x.1 0, x.1 1, x.1 2), by
+    have hx : ‖x.1‖ = 1 := by
+      simpa [Metric.mem_sphere, dist_zero_right] using x.2
+    rw [EuclideanSpace.norm_eq, Fin.sum_univ_succ] at hx
+    simp only [Fin.sum_univ_succ, Fin.val_zero, Fin.sum_univ_zero,
+      WithLp.ofLp_toLp, add_zero] at hx
+    have hs : 0 ≤ ‖x.1 0‖ ^ 2 + (‖x.1 1‖ ^ 2 + ‖x.1 2‖ ^ 2) := by positivity
+    have hh0 := congrArg (fun r : ℝ => r ^ 2) hx
+    change (Real.sqrt (‖x.1 0‖ ^ 2 + (‖x.1 1‖ ^ 2 + ‖x.1 2‖ ^ 2))) ^ 2 = 1 ^ 2 at hh0
+    rw [Real.sq_sqrt hs] at hh0
+    simpa [Real.norm_eq_abs, sq_abs, add_assoc] using hh0⟩
+  left_inv x := rfl
+  right_inv x := by
+    apply Subtype.ext
+    apply PiLp.ext
+    intro i
+    fin_cases i <;> rfl
+  continuous_toFun := by
+    apply Continuous.subtype_mk
+    apply (PiLp.continuous_toLp 2 _).comp
+    apply continuous_pi
+    intro i
+    fin_cases i <;> simp <;> fun_prop
+  continuous_invFun := by
+    apply Continuous.subtype_mk
+    fun_prop
+
+private noncomputable def t98J01_sphere_homology_finiteDimensional_aux_iso (k : ℕ) :
+    ConstructionTargets.RationalLefschetz.Homology T98J01.S2 k ≅
+      ConstructionTargets.CoefficientContractiblePair.H ℚ k
+        (TopCat.of (ConstructionTargets.T02A06HemisphereExcision.ambientSphere 2)) :=
+  ((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℚ) k).obj
+      (ModuleCat.of ℚ ℚ)).mapIso
+    (TopCat.isoOfHomeo t98J01_sphere_homology_finiteDimensional_aux_homeomorph)
+
+private theorem t98J01_sphere_homology_finiteDimensional_aux_of_iso
+    {M N : ModuleCat ℚ} (e : M ≅ N) [FiniteDimensional ℚ N] :
+    FiniteDimensional ℚ M := by
+  apply FiniteDimensional.of_injective e.hom.hom
+  intro x y hxy
+  have := congrArg e.inv.hom hxy
+  simpa using this
+
+private theorem t98J01_sphere_homology_finiteDimensional_aux_of_isZero
+    {M : ModuleCat ℚ} (h : CategoryTheory.Limits.IsZero M) :
+    FiniteDimensional ℚ M := by
+  letI : Subsingleton M := ModuleCat.subsingleton_of_isZero h
+  exact FiniteDimensional.of_injective
+    (0 : M →ₗ[ℚ] (Fin 0 → ℚ)) (fun _ _ _ => Subsingleton.elim _ _)
+
 theorem t98J01_sphere_homology_finiteDimensional :
     ∀ k, FiniteDimensional ℚ
       (ConstructionTargets.RationalLefschetz.Homology T98J01.S2 k) := by
-  sorry
+  intro k
+  rcases k with (_ | _ | _ | k)
+  · letI := t98J01_sphere_homology_finiteDimensional_aux_of_iso
+      ConstructionTargets.CoefficientSphereEndpoints.rationalS2H0
+    exact t98J01_sphere_homology_finiteDimensional_aux_of_iso
+      (t98J01_sphere_homology_finiteDimensional_aux_iso 0)
+  · letI := t98J01_sphere_homology_finiteDimensional_aux_of_iso
+      ConstructionTargets.CoefficientSphereEndpoints.rationalS2H1
+    exact t98J01_sphere_homology_finiteDimensional_aux_of_iso
+      (t98J01_sphere_homology_finiteDimensional_aux_iso 1)
+  · letI := t98J01_sphere_homology_finiteDimensional_aux_of_iso
+      ConstructionTargets.CoefficientSphereEndpoints.rationalS2H2
+    exact t98J01_sphere_homology_finiteDimensional_aux_of_iso
+      (t98J01_sphere_homology_finiteDimensional_aux_iso 2)
+  · let hz : CategoryTheory.Limits.IsZero
+        (ConstructionTargets.CoefficientContractiblePair.H ℚ (k + 3)
+          (TopCat.of (ConstructionTargets.T02A06HemisphereExcision.ambientSphere 2))) := by
+      let e₁ := ConstructionTargets.CoefficientSphereShift.sphereShift ℚ 2 (k + 2) (by omega)
+      let e₀ := ConstructionTargets.CoefficientSphereShift.sphereShift ℚ 1 (k + 1) (by omega)
+      exact (ConstructionTargets.SphereZeroCoefficients.positive_vanishing ℚ (k + 1) (by omega)).of_iso
+        (e₁ ≪≫ e₀)
+    letI := t98J01_sphere_homology_finiteDimensional_aux_of_isZero hz
+    exact t98J01_sphere_homology_finiteDimensional_aux_of_iso
+      (t98J01_sphere_homology_finiteDimensional_aux_iso (k + 3))
 
 /-- Seat: rational homology of the printed two-sphere vanishes above degree 2. -/
 theorem t98J01_sphere_homology_vanishes_above_two_aux_standard
