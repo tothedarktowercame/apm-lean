@@ -290,10 +290,69 @@ theorem t98J01_circle_homology_finiteDimensional :
 
 /-- Seat: rational homology of the printed circle vanishes above degree 1. -/
 -- BEGIN SEAT AREA
+theorem t98J01_circle_homology_vanishes_above_one_aux_standard
+    (k : ℕ) (hk : 1 < k) :
+    CategoryTheory.Limits.IsZero
+      (ConstructionTargets.RationalLefschetz.Homology
+        (T02A06.euclideanUnitSphere 2) k) := by
+  let e : ConstructionTargets.RationalLefschetz.Homology
+      (T02A06.euclideanUnitSphere 2) k ≅
+      ConstructionTargets.RationalLefschetz.Homology
+        (T02A06.euclideanUnitSphere 1) (k - 1) := by
+    simpa [Nat.sub_add_cancel (by omega : 1 ≤ k)] using
+      (ConstructionTargets.CoefficientSphereShift.sphereShift ℚ 1 (k - 1) (by omega))
+  exact (ConstructionTargets.SphereZeroCoefficients.positive_vanishing
+    ℚ (k - 1) (by omega)).of_iso e
+
+noncomputable def t98J01_circle_homology_vanishes_above_one_aux_homeomorph :
+    T98J01.S1 ≃ₜ T02A06.euclideanUnitSphere 2 where
+  toFun x := ⟨WithLp.toLp 2 ![x.1.1, x.1.2], by
+    rw [Metric.mem_sphere, dist_zero_right, EuclideanSpace.norm_eq]
+    rw [show ∑ i : Fin 2, ‖(WithLp.toLp 2 ![x.1.1, x.1.2] :
+        EuclideanSpace ℝ (Fin 2)) i‖ ^ 2 = 1 by
+      rw [show (∑ i : Fin 2, ‖(WithLp.toLp 2 ![x.1.1, x.1.2] :
+          EuclideanSpace ℝ (Fin 2)) i‖ ^ 2) = ‖x.1.1‖ ^ 2 + ‖x.1.2‖ ^ 2 by
+        norm_num [Fin.sum_univ_succ]]
+      simpa [Real.norm_eq_abs, sq_abs] using x.2]
+    norm_num⟩
+  invFun x := ⟨(x.1 0, x.1 1), by
+    have hx : ‖x.1‖ = 1 := by
+      simpa [Metric.mem_sphere, dist_zero_right] using x.2
+    rw [EuclideanSpace.norm_eq, Fin.sum_univ_succ] at hx
+    simp only [Fin.sum_univ_succ, Fin.val_zero, Fin.sum_univ_zero,
+      WithLp.ofLp_toLp, add_zero] at hx
+    have hs : 0 ≤ ‖x.1 0‖ ^ 2 + ‖x.1 1‖ ^ 2 := by positivity
+    have hh := congrArg (fun r : ℝ => r ^ 2) hx
+    change (Real.sqrt (‖x.1 0‖ ^ 2 + ‖x.1 1‖ ^ 2)) ^ 2 = 1 ^ 2 at hh
+    rw [Real.sq_sqrt hs] at hh
+    simpa [Real.norm_eq_abs, sq_abs] using hh⟩
+  left_inv x := rfl
+  right_inv x := by
+    apply Subtype.ext
+    apply PiLp.ext
+    intro i
+    fin_cases i <;> rfl
+  continuous_toFun := by
+    apply Continuous.subtype_mk
+    apply (PiLp.continuous_toLp 2 _).comp
+    apply continuous_pi
+    intro i
+    fin_cases i <;> simp <;> fun_prop
+  continuous_invFun := by
+    apply Continuous.subtype_mk
+    fun_prop
+
 theorem t98J01_circle_homology_vanishes_above_one :
     ∀ k, 1 < k → Subsingleton
       (ConstructionTargets.RationalLefschetz.Homology T98J01.S1 k) := by
-  sorry
+  intro k hk
+  let F := (AlgebraicTopology.singularHomologyFunctor (ModuleCat ℚ) k).obj
+    (ModuleCat.of ℚ ℚ)
+  let e : TopCat.of T98J01.S1 ≅ TopCat.of (T02A06.euclideanUnitSphere 2) :=
+    TopCat.isoOfHomeo t98J01_circle_homology_vanishes_above_one_aux_homeomorph
+  exact ModuleCat.isZero_iff_subsingleton.mp
+    ((t98J01_circle_homology_vanishes_above_one_aux_standard k hk).of_iso
+      (F.mapIso e))
 -- END SEAT AREA
 
 /-- Seat: reflection has trace `1` on rational `H₀(S¹)`. -/
