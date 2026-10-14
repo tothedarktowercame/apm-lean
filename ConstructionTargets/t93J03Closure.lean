@@ -29,6 +29,7 @@ open ConstructionTargets.KleinClosedSquareOrbitInverseContinuity
 open KleinPlaneActionSquareOrbitClassification
 open KleinSquareBoundaryRelation
 open ConstructionTargets.PolygonSurfacePiOne
+open ConstructionTargets.PolygonRadialOpenCover
 open ConstructionTargets.PointWedgeQuotient
 open ConstructionTargets.PointWedgeVanKampen
 open ConstructionTargets.PolygonSurfacePiOne.PointWedgeQuotient
@@ -724,6 +725,47 @@ theorem kleinPolygonInnerFundamentalGroup_subsingleton :
     (openCover kleinPairingData).center (openCover kleinPairingData).center)
   infer_instance
 
+/-- The annular overlap in the exact radial cover is path connected. -/
+theorem kleinPolygonOverlapPathConnectedSpace :
+    PathConnectedSpace (overlapOpen kleinPairingData.Rel) := by
+  letI : PathConnectedSpace (Set.Ioo (0 : ℝ) 1) :=
+    isPathConnected_iff_pathConnectedSpace.mp
+      ((convex_Ioo 0 1).isPathConnected ⟨1 / 2, by norm_num⟩)
+  letI : PathConnectedSpace (Set.Ioo (0 : ℝ) 1 × Circle) :=
+    ⟨⟨(⟨1 / 2, by norm_num⟩, 1)⟩, fun x y ↦
+      ⟨(PathConnectedSpace.joined x.1 y.1).some.prod
+        (PathConnectedSpace.joined x.2 y.2).some⟩⟩
+  exact (openCover kleinPairingData).overlap_homeomorph.symm.surjective.pathConnectedSpace
+    (openCover kleinPairingData).overlap_homeomorph.symm.continuous
+
+/-- A concrete basepoint of the annular overlap. -/
+noncomputable def kleinPolygonOverlapPoint : overlapOpen kleinPairingData.Rel :=
+  (openCover kleinPairingData).overlap_homeomorph.symm
+    (⟨1 / 2, by norm_num⟩, (1 : Circle))
+
+/-- The based overlap-to-outer-piece map used by the remaining quotient calculation. -/
+noncomputable def kleinPolygonOverlapToOuter :
+    C(overlapOpen kleinPairingData.Rel,
+      {q // q ∈ (openCover kleinPairingData).outer}) :=
+  ⟨fun z ↦ ⟨z.1, (by
+      have hz : z.1 ∈ (openCover kleinPairingData).inner ∩
+          (openCover kleinPairingData).outer := by
+        rw [← (openCover kleinPairingData).overlap_eq]
+        exact z.2
+      exact hz.2)⟩,
+    Continuous.subtype_mk continuous_subtype_val (fun z ↦ by
+      have hz : z.1 ∈ (openCover kleinPairingData).inner ∩
+          (openCover kleinPairingData).outer := by
+        rw [← (openCover kleinPairingData).overlap_eq]
+        exact z.2
+      exact hz.2)⟩
+
+noncomputable def kleinPolygonOverlapToOuterPiOne :
+    FundamentalGroup (overlapOpen kleinPairingData.Rel) kleinPolygonOverlapPoint →*
+      FundamentalGroup {q // q ∈ (openCover kleinPairingData).outer}
+        (kleinPolygonOverlapToOuter kleinPolygonOverlapPoint) :=
+  FundamentalGroup.map kleinPolygonOverlapToOuter kleinPolygonOverlapPoint
+
 def finiteWedgeBoolPoint : FiniteWedge Bool := wedgeCircle false 1
 
 @[simp] theorem finiteWedgeBoolHomeomorphTwoCircles_point :
@@ -859,6 +901,8 @@ theorem lift_isEmbedding_assembly
 #print axioms kleinPolygonFundamentalGroupoidPseudopushout
 #print axioms kleinPolygonInnerContractibleSpace
 #print axioms kleinPolygonInnerFundamentalGroup_subsingleton
+#print axioms kleinPolygonOverlapPathConnectedSpace
+#print axioms kleinPolygonOverlapToOuterPiOne
 #print axioms kleinBottle_pi1_every_basepoint_of_polygon_van_kampen
 
 end ConstructionTargets.t93J03Closure

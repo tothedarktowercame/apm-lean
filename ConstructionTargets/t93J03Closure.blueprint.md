@@ -72,6 +72,10 @@ Thus the orbit computation need only establish the equivalence at its
 canonical quotient point; path connectedness transports it to the point in
 the frozen statement.
 
+The exact radial overlap is now compiled as path connected, with a concrete
+basepoint and induced fundamental-group map to the outer piece.  The remaining
+step identifies its range with `aabb` and extracts the based quotient.
+
 For every `k : KleinBottle`, construct an equivalence between
 `FundamentalGroup k` and the frozen `PresentedKleinGroup`.
 
