@@ -119047,21 +119047,22 @@
    :depends-on [:lemma-apm-t91j06-bridge-compatible-stage-coordinates],
    :other-consumers []}
   {:consumer :t00J02,
-   :stop-count 3,
+   :stop-count 4,
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
-    :residual "Prove signed and component counts; assemble Main.",
+    :residual
+    "Prove regular-value signed count; combine and assemble Main.",
     :outcome :stop,
     :warnings ["existing Main sorryAx"],
     :missing-theorems
-    [{:name "circleDegree_eq_homologyMap",
-      :type "coordinate action is multiplication by degree",
+    [{:name "transverseCircle_preimage_component_signedCount",
+      :type "component degree zero",
       :status :proved,
       :consumers [:t00J02],
-      :depends-on [],
+      :depends-on ["circleDegree_eq_homologyMap"],
       :area "oriented-surface-degree"}
      {:name "t00J02_transverse_diskBounded_topHomologyMap_eq_zero",
-      :type "disk-bounded preimage implies H2 map zero",
+      :type "H2 map zero",
       :status :partial,
       :consumers [:t00J02],
       :depends-on
@@ -119075,33 +119076,21 @@
      :blueprint
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984",
      :implementation
-     "6d05ef8bbe7334f23e33cb713febe651525f711b71532412405dd8503c20e1b9",
+     "7f2cdf179151e8b73d06e516feab8dfb016b7a9e698e1e9f276bbb9957d10d0f",
      :registry "166/166"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
-    :reason "Banked circle-degree coordinates.",
+    :reason "Banked zero component signed counts.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t00J02Closure.lean",
       :exit 0}
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-     {:cmd "diff/hash/placeholders", :exit 0}],
+     {:cmd "hash/diff/placeholders", :exit 0}],
     :diagnostic-history
-    [{:cmd "coordinate draft", :exit 1, :finding "normalized smul"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1791969145530-11738-1bbaaea5",
-     :commands
-     ["git show/diff-tree 9642998740f30f564d076dfef0630b8ba7b407a7"
-      "archive commit; lean t00J02Closure.lean and Main.lean"
-      "sha256sum Main/implementation/blueprint; count placeholders"
-      "python3 scripts/statement-registry.py check"
-      "lake env lean ConstructionTargets/t00J02Closure.lean"],
-     :finding
-     "PASS: exact scope and hashes match; both archived files compile; Main placeholder remains 1->1 and new implementation is sorry-free; registry 166/166. Circle homology is transported through the fixed H1 coordinate isomorphism, and the induced endomorphism is correctly multiplication by its value at 1; zero-map corollary is correctly oriented; standard axioms only. New compiled milestone since prior history; signed counts and Main assembly remain listed."},
-    :commit "9642998740f30f564d076dfef0630b8ba7b407a7",
+    [{:cmd "component draft", :exit 1, :finding "made Mono explicit"}],
+    :commit "354ae8990f0293fc6f739ded05d6cbf08e5d576a",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t00J02Closure.blueprint.md",
@@ -119109,7 +119098,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119258,18 +119247,22 @@
    :kind :lemma,
    :depends-on [],
    :other-consumers []}
-  {:consumer :portfolio,
+  {:consumer :t00J02,
    :phase :lemma,
    :state :backlog,
    :scope [],
    :acceptance
-   {:lemma "transverseCircle_preimage_component_signedCount"},
+   {:lemma "transverseCircle_preimage_component_signedCount",
+    :type "component degree zero"},
    :lemma
    {:name "transverseCircle_preimage_component_signedCount",
-    :reported-by []},
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type "component degree zero",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02},
    :id :lemma-transversecircle-preimage-component-signedcount,
    :kind :lemma,
-   :depends-on [],
+   :depends-on [:lemma-circledegree-eq-homologymap],
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
