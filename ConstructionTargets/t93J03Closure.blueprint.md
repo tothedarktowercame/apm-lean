@@ -481,8 +481,10 @@ range of every piece in the run. The positive length is now split as
 consumed by `Path.concat`.
 `pathTwoOpenSubdivisionRunFamily_head_val` identifies the selected start with
 the run head, and `pathTwoOpenSubdivisionRunBlockPoint_zero` consequently
-identifies each block's source vertex literally. It remains to identify the
-target vertex and then both vertices with the outer boundary family before
+identifies each block's source vertex literally. The matching `getLast` index
+calculation and `pathTwoOpenSubdivisionRunBlockPoint_last` now identify the
+block's target vertex literally as well. It remains to identify both vertices
+with the outer boundary family before
 choosing the inner-replaced or literal
 outer representative for each indexed run against the boundary family and
 instantiate the fold

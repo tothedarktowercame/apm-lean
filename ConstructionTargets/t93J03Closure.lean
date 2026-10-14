@@ -1295,6 +1295,59 @@ theorem pathTwoOpenSubdivisionRunFamily_head_val
   rw [hleft, hright] at heq
   exact congrArg Fin.val (Option.some.inj heq)
 
+/-- The successor of the last piece index is exactly the selected slice end. -/
+theorem pathTwoOpenSubdivisionRunFamily_getLast_succ_val
+    {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
+    {U V : Set X} (S : PathTwoOpenSubdivision p U V)
+    (i : Fin (boolSideRunPartition S.side).length) :
+    ((pathTwoOpenSubdivisionRunFamily S i).getLast
+      (pathTwoOpenSubdivisionRunFamily_ne_nil S i)).succ.val =
+        pathTwoOpenSubdivisionRunStart S i +
+          (pathTwoOpenSubdivisionRunFamily S i).length := by
+  have hlen : 0 < (pathTwoOpenSubdivisionRunFamily S i).length :=
+    List.length_pos_iff_ne_nil.mpr
+      (pathTwoOpenSubdivisionRunFamily_ne_nil S i)
+  have hbound := pathTwoOpenSubdivisionRunStart_add_length_le S i
+  have heq := congrArg
+    (fun l => l[(pathTwoOpenSubdivisionRunFamily S i).length - 1]?)
+    (pathTwoOpenSubdivisionRunFamily_eq_slice S i)
+  have hleft : (fun l =>
+      l[(pathTwoOpenSubdivisionRunFamily S i).length - 1]?)
+      (pathTwoOpenSubdivisionRunFamily S i) =
+      some ((pathTwoOpenSubdivisionRunFamily S i).getLast
+        (pathTwoOpenSubdivisionRunFamily_ne_nil S i)) := by
+    dsimp
+    rw [List.getElem?_eq_getElem (by omega)]
+    congr 1
+    rw [List.getLast_eq_getElem]
+  have hidx : pathTwoOpenSubdivisionRunStart S i +
+      (pathTwoOpenSubdivisionRunFamily S i).length - 1 < S.n + 1 := by omega
+  have hidx2 : pathTwoOpenSubdivisionRunStart S i +
+      ((pathTwoOpenSubdivisionRunFamily S i).length - 1) < S.n + 1 := by omega
+  have hright : (fun l =>
+      l[(pathTwoOpenSubdivisionRunFamily S i).length - 1]?)
+      (((List.finRange (S.n + 1)).drop
+        (pathTwoOpenSubdivisionRunStart S i)).take
+          (pathTwoOpenSubdivisionRunFamily S i).length) =
+      some ⟨pathTwoOpenSubdivisionRunStart S i +
+          (pathTwoOpenSubdivisionRunFamily S i).length - 1, hidx⟩ := by
+    dsimp
+    simp [hlen]
+    rw [List.getElem?_eq_getElem (by simpa using hidx2)]
+    apply congrArg some
+    apply Fin.ext
+    simp
+    omega
+  dsimp at heq hleft hright
+  rw [hleft, hright] at heq
+  have hv := congrArg Fin.val (Option.some.inj heq)
+  have hv' : ((pathTwoOpenSubdivisionRunFamily S i).getLast
+      (pathTwoOpenSubdivisionRunFamily_ne_nil S i)).val =
+      pathTwoOpenSubdivisionRunStart S i +
+        (pathTwoOpenSubdivisionRunFamily S i).length - 1 := by simpa using hv
+  simp only [Fin.val_succ]
+  omega
+
 theorem pathTwoOpenSubdivisionRunFamily_length_pos
     {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
     {U V : Set X} (S : PathTwoOpenSubdivision p U V)
@@ -1410,6 +1463,24 @@ theorem pathTwoOpenSubdivisionRunBlockPoint_zero
   apply congrArg S.point
   apply Fin.ext
   simpa using (pathTwoOpenSubdivisionRunFamily_head_val S i).symm
+
+/-- The selected block ends at the literal target vertex of its indexed
+maximal run. -/
+theorem pathTwoOpenSubdivisionRunBlockPoint_last
+    {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
+    {U V : Set X} (S : PathTwoOpenSubdivision p U V)
+    (i : Fin (boolSideRunPartition S.side).length) :
+    pathTwoOpenSubdivisionRunBlockPoint S i
+        (Fin.last (pathTwoOpenSubdivisionRunPredLength S i + 1)) =
+      S.point ((pathTwoOpenSubdivisionRunFamily S i).getLast
+        (pathTwoOpenSubdivisionRunFamily_ne_nil S i)).succ := by
+  unfold pathTwoOpenSubdivisionRunBlockPoint
+  unfold pathTwoOpenSubdivisionBlockPoint
+  apply congrArg S.point
+  apply Fin.ext
+  simp only [Fin.val_last]
+  rw [pathTwoOpenSubdivisionRunPredLength_add_one]
+  exact (pathTwoOpenSubdivisionRunFamily_getLast_succ_val S i).symm
 
 /-- Every piece indexed by an inner run of the exact Klein subdivision stays
 in the inner cover, supplying the range hypothesis for block concatenation. -/
