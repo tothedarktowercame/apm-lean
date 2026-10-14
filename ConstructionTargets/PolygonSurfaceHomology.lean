@@ -3522,6 +3522,54 @@ theorem outerHomotopyEquivWedge_radialOverlapCircle (P : PairingData)
         (1, halfCircleOuter z)).1 = _
   rw [radialHomotopy_one_halfCircle]
 
+/-- Degree-one integral singular homology map induced by a continuous map,
+in the additive-group presentation used by the production MV sequence. -/
+noncomputable def singularH1Map {X Y : Type} [TopologicalSpace X]
+    [TopologicalSpace Y] (f : C(X, Y)) :
+    ConstructionTargets.SingularHomologyConcrete.SingularHomology 1
+        (TopCat.of X) ⟶
+      ConstructionTargets.SingularHomologyConcrete.SingularHomology 1
+        (TopCat.of Y) :=
+  HomologicalComplex.homologyMap
+    (((AlgebraicTopology.SSet.singularChainComplexFunctor AddCommGrpCat).obj
+      (AddCommGrpCat.of ℤ)).map (TopCat.toSSet.map (TopCat.ofHom f))) 1
+
+theorem singularH1Map_comp {X Y Z : Type} [TopologicalSpace X]
+    [TopologicalSpace Y] [TopologicalSpace Z] (f : C(X, Y)) (g : C(Y, Z)) :
+    singularH1Map (g.comp f) = singularH1Map f ≫ singularH1Map g := by
+  change HomologicalComplex.homologyMap
+      (((AlgebraicTopology.SSet.singularChainComplexFunctor AddCommGrpCat).obj
+        (AddCommGrpCat.of ℤ)).map
+        (TopCat.toSSet.map (TopCat.ofHom f ≫ TopCat.ofHom g))) 1 = _
+  rw [Functor.map_comp, Functor.map_comp]
+  simp only [singularH1Map]
+  exact HomologicalComplex.homologyMap_comp _ _ 1
+
+/-- The pointwise radial comparison is equality of the corresponding
+continuous circle maps. -/
+theorem outerHomotopyEquivWedge_comp_radialOverlapCircle (P : PairingData) :
+    (outerHomotopyEquivWedge P).toFun.comp (radialOverlapCircleInOuter P) =
+      polygonBoundaryWedgeLoop P := by
+  apply ContinuousMap.ext
+  exact outerHomotopyEquivWedge_radialOverlapCircle P
+
+/-- Functorial degree-one homology therefore identifies the included overlap
+circle with the ordered signed polygon boundary loop. -/
+theorem radialOverlapCircle_h1_eq_boundaryLoop_h1 (P : PairingData) :
+    singularH1Map
+        ((outerHomotopyEquivWedge P).toFun.comp
+          (radialOverlapCircleInOuter P)) =
+      singularH1Map (polygonBoundaryWedgeLoop P) := by
+  rw [outerHomotopyEquivWedge_comp_radialOverlapCircle]
+
+/-- Expanded through functoriality, the same comparison is a commuting H₁
+triangle from the positive overlap circle through the outer member. -/
+theorem radialOverlapCircle_h1_naturality (P : PairingData) :
+    singularH1Map (radialOverlapCircleInOuter P) ≫
+        singularH1Map (outerHomotopyEquivWedge P).toFun =
+      singularH1Map (polygonBoundaryWedgeLoop P) := by
+  rw [← singularH1Map_comp, radialOverlapCircle_h1_eq_boundaryLoop_h1]
+
 /-- Positive integral coordinates on the actual intersection object occurring
 in the production Mayer--Vietoris sequence. -/
 noncomputable def radialIntersectionH1GroupIsoInt (P : PairingData) :
