@@ -1080,6 +1080,34 @@ theorem pathTwoOpenSubdivisionRunBoundaryPoints_mem_outer
   · exact hx
   · exact pathTwoOpenSubdivision_runTarget_mem_outer S hy block.1 block.2
 
+/-- The canonical run boundaries lifted to the outer subtype.  The attached
+ambient entries supply exactly the membership evidence proved above. -/
+noncomputable def pathTwoOpenSubdivisionOuterRunBoundaryPoints
+    {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
+    {U V : Set X} (S : PathTwoOpenSubdivision p U V)
+    (hx : S.point 0 ∈ V)
+    (hy : S.point (Fin.last (S.n + 1)) ∈ V) : List V :=
+  (pathTwoOpenSubdivisionRunBoundaryPoints S).attach.map fun z =>
+    ⟨z.1, pathTwoOpenSubdivisionRunBoundaryPoints_mem_outer S hx hy z.1 z.2⟩
+
+@[simp] theorem pathTwoOpenSubdivisionOuterRunBoundaryPoints_length
+    {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
+    {U V : Set X} (S : PathTwoOpenSubdivision p U V)
+    (hx : S.point 0 ∈ V)
+    (hy : S.point (Fin.last (S.n + 1)) ∈ V) :
+    (pathTwoOpenSubdivisionOuterRunBoundaryPoints S hx hy).length =
+      (boolSideRunPartition S.side).length + 1 := by
+  simp [pathTwoOpenSubdivisionOuterRunBoundaryPoints]
+
+@[simp] theorem pathTwoOpenSubdivisionOuterRunBoundaryPoints_map_val
+    {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
+    {U V : Set X} (S : PathTwoOpenSubdivision p U V)
+    (hx : S.point 0 ∈ V)
+    (hy : S.point (Fin.last (S.n + 1)) ∈ V) :
+    (pathTwoOpenSubdivisionOuterRunBoundaryPoints S hx hy).map Subtype.val =
+      pathTwoOpenSubdivisionRunBoundaryPoints S := by
+  simp [pathTwoOpenSubdivisionOuterRunBoundaryPoints]
+
 /-- Every member of a maximal Boolean side run has the side recorded at its
 head.  This turns the local chain certificate returned by `splitBy` into the
 pointwise fact needed to package a whole subdivision block. -/
@@ -2599,6 +2627,8 @@ theorem lift_isEmbedding_assembly
 #print axioms pathTwoOpenSubdivisionRunBoundaryPoints_getLast
 #print axioms pathTwoOpenSubdivision_runTarget_mem_outer
 #print axioms pathTwoOpenSubdivisionRunBoundaryPoints_mem_outer
+#print axioms pathTwoOpenSubdivisionOuterRunBoundaryPoints_length
+#print axioms pathTwoOpenSubdivisionOuterRunBoundaryPoints_map_val
 #print axioms boolSideRunPartition_mem_side_eq_head
 #print axioms boolSideRunPartition_isInfix_finRange
 #print axioms boolSideRunPartition_exists_slice

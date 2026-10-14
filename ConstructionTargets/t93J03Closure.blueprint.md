@@ -462,9 +462,12 @@ the final subdivision vertex. `pathTwoOpenSubdivision_runTarget_mem_outer`
 splits each run into final or followed cases, using that final identity or the
 adjacent overlap certificate; consequently
 `pathTwoOpenSubdivisionRunBoundaryPoints_mem_outer` proves every boundary
-outer when the two exterior endpoints are outer.  It remains to lift this
-list to the outer subtype and instantiate the fold before extracting based
-surjectivity and the reverse kernel inclusion.
+outer when the two exterior endpoints are outer.
+`pathTwoOpenSubdivisionOuterRunBoundaryPoints` now lifts the complete list to
+the outer subtype, preserves its run-count-plus-one length, and maps back
+exactly to the ambient boundary list.  It remains to reindex this list by
+`Fin`, package the run representatives against it, and instantiate the fold
+before extracting based surjectivity and the reverse kernel inclusion.
 
 - Layer 1: C1, C3, and C4. C1 and C3 are independent; C4 is already complete.
 - Layer 2: C2 against the explicit C1 equivalence interface.
