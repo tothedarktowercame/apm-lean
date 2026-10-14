@@ -36893,65 +36893,60 @@
    :depends-on [:lemma-cp-zero-subsingleton],
    :other-consumers []}
   {:consumer :t96A06,
-   :stop-count 9,
+   :stop-count 10,
    :review-finding
    "extend Mathlib: state and prove the missing theorem in scope",
    :evidence
    {:placeholder-delta {:t96A06 [1 1]},
     :residual
-    "Apply sphere rational homology to the surjection; degree four; invariants/Main.",
+    "Prove H3(RP3;Q)=Q and higher vanishing; degree four; invariants/Main.",
     :outcome :stop,
     :warnings [],
     :missing-theorems
-    [{:name "t96A06_rp3_rational_homologyMap_surjective",
-      :type
-      "sphereProjection induces a surjection on rational homology in every degree",
+    [{:name "t96A06_rp3_rational_middle_homology",
+      :type "H1(RP3;Q)=0 and H2(RP3;Q)=0",
       :status :proved,
       :consumers [:t96A06],
-      :depends-on ["t96A06_rp3_sphere_twoSheeted"],
+      :depends-on ["t96A06_rp3_rational_homologyMap_surjective"],
       :area "rp-rational-homology"}
      {:name "t96A06_rp3_rational_homology",
       :type "RP3 rational homology Q,0,0,Q",
       :status :partial,
       :consumers [:t96A06],
-      :depends-on ["t96A06_rp3_rational_homologyMap_surjective"],
+      :depends-on ["t96A06_rp3_rational_middle_homology"],
       :area "rp-rational-homology"}],
     :statement-hashes {:registry "166/166"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Specialized rational transfer to the exact double cover and proved the induced sphere-to-RP3 homology map surjective in every degree; sphere-group identification remains.",
+    "Proved H1 and H2 of RP3 over Q vanish; top group and higher-degree vanishing remain.",
     :commands
     [{:cmd "lake build ConstructionTargets.t96A06Closure", :exit 0}
-     {:cmd "fixture; Main; registry; placeholder; diff/show", :exit 0}
+     {:cmd
+      "lake env lean /tmp/t96a06_rational_middle_homology_check.lean",
+      :exit 0}
+     {:cmd "lake env lean problems/t96A06/lean/Main.lean", :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd "placeholder count", :exit 0}
+     {:cmd "git diff --check", :exit 0}
      {:cmd "rg forbidden", :exit 1, :expected-exit 1}],
     :diagnostic-history
-    [{:cmd "transfer proof builds",
+    [{:cmd "initial theorem compiles",
       :exit 1,
       :correction
-      "qualified congr_hom and normalized composite action; passed"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1792006807968-12272-583dcb39",
-     :commands
-     ["git show/check/diff f170a303; scope and fixture SHA-256"
-      "lake build ConstructionTargets.t96A06Closure; lean fixture and Main"
-      "statement-registry check; placeholder/axiom recount"],
-     :finding
-     "PASS: f170a303 adds compiled, sorry-free progress after e25d1d3c. The exact two-sheeted S3-to-RP3 cover transfer satisfies projection∘transfer=2·id, and invertibility of 2 over Q correctly yields surjectivity of the induced homology map in every degree. Blueprint is faithful; exact scope/hash match; closure placeholders 0->0; frozen Main remains 1; registry 166/166; standard axioms only. STOP lists sphere homology identification, degree four, invariants/Main."},
-    :commit "f170a303979c4503ee97dc13f70b5ec00dfa6fcd",
+      "opened Limits, fixed namespace and explicit equality transport"}],
+    :commit "d975a07ebca129c8bde2d78122d8b040a195b74e",
     :changed-paths
     ["ConstructionTargets/t96A06Closure.lean"
      "ConstructionTargets/t96A06Closure.blueprint.md"],
     :fixture
-    {:path "/tmp/t96a06_two_sheeted_check.lean",
+    {:path "/tmp/t96a06_rational_middle_homology_check.lean",
      :sha256
-     "aae50311cac7cd5bfad76186fa8f6d4b4fcbba98270258ed5e6ec84d490da9ea"},
+     "b4d3fef978ebb079b86fd73c99394e058914b6bc19a151325aaf8492b4feb6ae"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :needs-owner,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -37931,7 +37926,8 @@
     :lemma-t96a06-rp3-sphere-quotient
     :lemma-t96a06-rp3-sphere-covering
     :lemma-t96a06-rp3-sphere-twosheeted
-    :lemma-t96a06-rp3-rational-homologymap-surjective],
+    :lemma-t96a06-rp3-rational-homologymap-surjective
+    :lemma-t96a06-rp3-rational-middle-homology],
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
@@ -39698,6 +39694,23 @@
    :kind :lemma,
    :depends-on
    [:lemma-pathtwoopensubdivisionrunboundarypoints-mem-outer],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_rp3_rational_middle_homology",
+    :type "H1(RP3;Q)=0 and H2(RP3;Q)=0"},
+   :lemma
+   {:name "t96A06_rp3_rational_middle_homology",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "H1(RP3;Q)=0 and H2(RP3;Q)=0",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06},
+   :id :lemma-t96a06-rp3-rational-middle-homology,
+   :kind :lemma,
+   :depends-on [:lemma-t96a06-rp3-rational-homologymap-surjective],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
