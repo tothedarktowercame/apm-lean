@@ -36117,19 +36117,18 @@
   {:consumer :t93J03,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 5,
+   :stop-count 6,
    :review-finding
    "Program STOP commits nothing new since the prior reviewed attempt: it reuses commit 512a220f, and git history shows no later scoped commit. The unresolved SemilocallySimplyConnected hypothesis-coverage conflict is unchanged. Obtain the required owner specification decision or commit a new compiled milestone before resubmitting.",
    :evidence
    {:placeholder-delta {:t93J03 [1 1]},
     :residual
-    "Construct explicit connector; compute untransported winding as aabb; extract quotient; apply C1/C2/Main.",
+    "Compute untransported winding along standard-model connector as aabb; extract quotient; apply C1/C2/Main.",
     :outcome :stop,
     :warnings ["unused SLSC owner-approved"],
     :missing-theorems
-    [{:name "kleinPolygonOverlapWindingOne_isConj_aabb_of_path_eq",
-      :type
-      "any connector computing aabb proves winding-one conjugacy",
+    [{:name "kleinPolygonStandardModelConnector",
+      :type "connector pulled back from standard TwoCircles model",
       :status :proved,
       :consumers [:t93J03],
       :depends-on ["fundamentalGroup_pathTransport_isConj"],
@@ -36140,14 +36139,14 @@
       :consumers [:t93J03],
       :depends-on
       ["kleinSkeletonAabbPresentationQuotient"
-       "kleinPolygonOverlapWindingOne_isConj_aabb_of_path_eq"],
+       "kleinPolygonStandardModelConnector"],
       :area "covering-subgroup-correspondence"}],
     :statement-hashes {:registry "166/166"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Committed untransported winding generator and canonical-connector reduction; explicit geometry remains.",
+    "Committed connector pulled back from standard two-circle coordinates; loop computation and quotient remain.",
     :commands
     [{:cmd "lake build ConstructionTargets.t93J03Closure", :exit 0}
      {:cmd "lean fixture; Main", :exit 0}
@@ -36157,30 +36156,19 @@
     :diagnostic-history
     [{:cmd "lean closure",
       :exit 1,
-      :correction "aligned MulEquiv coercion with its monoid hom"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1791956706779-11639-9327dcf5",
-     :commands
-     ["git show/diff/show --check 4b74ccc8"
-      "sha256sum fixture; scope; placeholders"
-      "lake env lean recorded closure, fixture, Main"
-      "statement-registry.py check"],
-     :finding
-     "PASS: new compiled sorry-free standard-axiom milestone. It exposes the positive overlap generator before connector choice, then correctly transfers any explicit-connector calculation equal to aabb into conjugacy with the stored arbitrary-connector image. Explicit connector geometry and quotient extraction remain accurately listed. Scope/hash verified; frozen placeholders 1->1 (support 0); registry 166/166; SLSC unused, mandated by problem.md."},
-    :commit "4b74ccc8d92968bd0d53207c708f14621a659cf8",
+      :correction "used inferred TwoCircles path-connected instance"}],
+    :commit "88eaef2001d953da38c04003bf1887e18d088339",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
      "ConstructionTargets/t93J03Closure.blueprint.md"],
     :fixture
-    {:path "/tmp/t93j03_canonical_connector_reduction_check.lean",
+    {:path "/tmp/t93j03_standard_connector_check.lean",
      :sha256
-     "f04e66476954b91f89b2e241db2f017335ebad0d8ee60b21a626b20d7d1b0e5f",
+     "625b34bb0f0aa25eb624c938282f4f394fd1d4079d9cce331bf3e0de104ae524",
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -37691,7 +37679,8 @@
     :lemma-kleinpolygonoverlapwindinghom-normalclosure
     :lemma-kleinpolygonoverlapnormalclosure-eq-aabb-of-isconj
     :lemma-fundamentalgroup-pathtransport-isconj
-    :lemma-kleinpolygonoverlapwindingone-isconj-aabb-of-path-eq],
+    :lemma-kleinpolygonoverlapwindingone-isconj-aabb-of-path-eq
+    :lemma-kleinpolygonstandardmodelconnector],
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
@@ -38338,6 +38327,23 @@
     :banked-by :program-2026-10-13-close-t93j03,
     :banked-commit "4b74ccc8d92968bd0d53207c708f14621a659cf8"},
    :id :lemma-kleinpolygonoverlapwindingone-isconj-aabb-of-path-eq,
+   :kind :lemma,
+   :depends-on [:lemma-fundamentalgroup-pathtransport-isconj],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "kleinPolygonStandardModelConnector",
+    :type "connector pulled back from standard TwoCircles model"},
+   :lemma
+   {:name "kleinPolygonStandardModelConnector",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type "connector pulled back from standard TwoCircles model",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03},
+   :id :lemma-kleinpolygonstandardmodelconnector,
    :kind :lemma,
    :depends-on [:lemma-fundamentalgroup-pathtransport-isconj],
    :other-consumers []}],
