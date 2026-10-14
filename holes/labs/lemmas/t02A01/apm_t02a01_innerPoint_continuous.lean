@@ -391,7 +391,71 @@ noncomputable def apm_t02a01_perimeter (s : ℝ) : ℝ × ℝ :=
 theorem apm_t02a01_perimeter_mem (s : ℝ) :
     apm_t02a01_perimeter s ∈ {x : ℝ × ℝ | x.1 ∈ Set.Icc 0 1 ∧ x.2 ∈ Set.Icc 0 1 ∧
       ‖x - ((1 / 2, 1 / 2) : ℝ × ℝ)‖ = (1 / 4 : ℝ)} := by
-  sorry
+  rcases le_total s 0 with hs | hs
+  · have hc (k : ℝ) (hk : 0 ≤ k) : apm_t02a01_clamp01 (s - k) = 0 := by
+      unfold apm_t02a01_clamp01
+      rw [max_eq_left]
+      linarith [min_le_right 1 (s - k)]
+    have hc0 : apm_t02a01_clamp01 s = 0 := by simpa using hc 0 (by norm_num)
+    simp [apm_t02a01_perimeter, hc0, hc 1 (by norm_num),
+      hc 2 (by norm_num), hc 3 (by norm_num)]
+    norm_num [Prod.norm_def]
+  rcases le_total s 1 with hs1 | hs1
+  · have hc0 : apm_t02a01_clamp01 s = s := by
+      unfold apm_t02a01_clamp01
+      rw [min_eq_right hs1, max_eq_right hs]
+    have hc (k : ℝ) (hk : 1 ≤ k) : apm_t02a01_clamp01 (s - k) = 0 := by
+      unfold apm_t02a01_clamp01
+      rw [max_eq_left]
+      linarith [min_le_right 1 (s - k)]
+    simp only [apm_t02a01_perimeter, hc0, hc 1 (by norm_num),
+      hc 2 (by norm_num), hc 3 (by norm_num)]
+    norm_num [Prod.norm_def, abs_le] <;> (repeat' constructor) <;> linarith
+  rcases le_total s 2 with hs2 | hs2
+  · have hc0 : apm_t02a01_clamp01 s = 1 := by
+      unfold apm_t02a01_clamp01
+      rw [min_eq_left hs1, max_eq_right] <;> norm_num
+    have hc1 : apm_t02a01_clamp01 (s - 1) = s - 1 := by
+      unfold apm_t02a01_clamp01
+      rw [min_eq_right (by linarith), max_eq_right (by linarith)]
+    have hc (k : ℝ) (hk : 2 ≤ k) : apm_t02a01_clamp01 (s - k) = 0 := by
+      unfold apm_t02a01_clamp01
+      rw [max_eq_left]
+      linarith [min_le_right 1 (s - k)]
+    simp only [apm_t02a01_perimeter, hc0, hc1, hc 2 (by norm_num),
+      hc 3 (by norm_num)]
+    norm_num [Prod.norm_def, abs_le] <;> (repeat' constructor) <;> linarith
+  rcases le_total s 3 with hs3 | hs3
+  · have hc0 : apm_t02a01_clamp01 s = 1 := by
+      unfold apm_t02a01_clamp01; rw [min_eq_left (by linarith), max_eq_right] <;> norm_num
+    have hc1 : apm_t02a01_clamp01 (s - 1) = 1 := by
+      unfold apm_t02a01_clamp01; rw [min_eq_left (by linarith), max_eq_right] <;> norm_num
+    have hc2 : apm_t02a01_clamp01 (s - 2) = s - 2 := by
+      unfold apm_t02a01_clamp01
+      rw [min_eq_right (by linarith), max_eq_right (by linarith)]
+    have hc3 : apm_t02a01_clamp01 (s - 3) = 0 := by
+      unfold apm_t02a01_clamp01
+      rw [max_eq_left]; linarith [min_le_right 1 (s - 3)]
+    simp only [apm_t02a01_perimeter, hc0, hc1, hc2, hc3]
+    norm_num [Prod.norm_def, abs_le] <;> (repeat' constructor) <;> linarith
+  rcases le_total s 4 with hs4 | hs4
+  · have hc (k : ℝ) (hk : k ≤ 2) : apm_t02a01_clamp01 (s - k) = 1 := by
+      unfold apm_t02a01_clamp01
+      rw [min_eq_left (by linarith), max_eq_right] <;> norm_num
+    have hc3 : apm_t02a01_clamp01 (s - 3) = s - 3 := by
+      unfold apm_t02a01_clamp01
+      rw [min_eq_right (by linarith), max_eq_right (by linarith)]
+    have hc0 : apm_t02a01_clamp01 s = 1 := by simpa using hc 0 (by norm_num)
+    simp only [apm_t02a01_perimeter, hc0, hc 1 (by norm_num),
+      hc 2 (by norm_num), hc3]
+    norm_num [Prod.norm_def, abs_le] <;> (repeat' constructor) <;> linarith
+  · have hc (k : ℝ) (hk : k ≤ 3) : apm_t02a01_clamp01 (s - k) = 1 := by
+      unfold apm_t02a01_clamp01
+      rw [min_eq_left (by linarith), max_eq_right] <;> norm_num
+    have hc0 : apm_t02a01_clamp01 s = 1 := by simpa using hc 0 (by norm_num)
+    simp [apm_t02a01_perimeter, hc0, hc 1 (by norm_num),
+      hc 2 (by norm_num), hc 3 (by norm_num)]
+    norm_num [Prod.norm_def]
 
 noncomputable def apm_t02a01_innerPoint (s : ℝ) : apm_t02a01_boundarySpace :=
   ⟨Quotient.mk _ ⟨apm_t02a01_perimeter s, (apm_t02a01_perimeter_mem s).1,
@@ -407,7 +471,10 @@ theorem apm_t02a01_innerPoint_continuous : Continuous apm_t02a01_innerPoint := b
 -- END SEAT AREA
 
 theorem apm_t02a01_innerPoint_four : apm_t02a01_innerPoint 4 = apm_t02a01_innerBase := by
-  sorry
+  have hperimeter : apm_t02a01_perimeter 4 = apm_t02a01_perimeter 0 := by
+    norm_num [apm_t02a01_perimeter, apm_t02a01_clamp01]
+  exact Subtype.ext (congrArg (Quotient.mk _)
+    (Subtype.ext hperimeter))
 
 /-- The inner boundary traversed once, based at the corner `(1/4,1/4)`. -/
 noncomputable def apm_t02a01_innerLoop
@@ -428,6 +495,203 @@ theorem apm_t02a01_boundary_inclusion_word_aux_generator_aux_cyclic
         (apm_t02a01_innerLoop hc h4))) ^ k := by
   sorry
 
+/-! ### Commutator via the radial homotopy (design claude-14, 2026-10-14)
+
+`apm_t02a01_radial l s = c + (1 + l) • (perimeter s - c)` with `c = (1/2,1/2)`: for `l = 0` it
+is the inner square and for `l = 1` the outer square of the unit square, starting at `(0,0)`.
+The square loop in the torus is the radial family at `l = 1`; its four sides are the
+edge loops `A` (bottom, `(t,0)`) and `B` (right, `(1,t)`), with top and left identified with
+their reverses.  A free homotopy of loops gives conjugation by the radial segment `δ`. -/
+
+/-- Generic: a homotopy of maps from the square whose two vertical sides agree turns the
+bottom loop into the top loop conjugated by the common side. -/
+theorem apm_t02a01_freeHomotopy_conj {X : Type*} [TopologicalSpace X] {x y : X}
+    (γ0 : Path x x) (γ1 : Path y y) (δ : Path x y)
+    (F : C(unitInterval × unitInterval, X))
+    (h0 : ∀ t, F (0, t) = γ0 t) (h1 : ∀ t, F (1, t) = γ1 t)
+    (hl : ∀ s, F (s, 0) = δ s) (hr : ∀ s, F (s, 1) = δ s) :
+    γ0.Homotopic (δ.trans (γ1.trans δ.symm)) := by
+  sorry
+
+noncomputable def apm_t02a01_radial (l s : ℝ) : ℝ × ℝ :=
+  ((1 / 2 : ℝ), (1 / 2 : ℝ)) + (1 + l) • (apm_t02a01_perimeter s - ((1 / 2 : ℝ), (1 / 2 : ℝ)))
+
+theorem apm_t02a01_radial_mem {l : ℝ} (hl0 : 0 ≤ l) (hl1 : l ≤ 1) (s : ℝ) :
+    (apm_t02a01_radial l s).1 ∈ Set.Icc (0 : ℝ) 1 ∧ (apm_t02a01_radial l s).2 ∈ Set.Icc (0 : ℝ) 1 ∧
+      (1 / 4 : ℝ) ≤ ‖apm_t02a01_radial l s - ((1 / 2 : ℝ), (1 / 2 : ℝ))‖ := by
+  obtain ⟨-, -, hn⟩ := apm_t02a01_perimeter_mem s
+  set v := apm_t02a01_perimeter s - ((1 / 2 : ℝ), (1 / 2 : ℝ)) with hv
+  have hsub : apm_t02a01_radial l s - ((1 / 2 : ℝ), (1 / 2 : ℝ)) = (1 + l) • v := by
+    simp [apm_t02a01_radial, hv]
+  have hnorm : ‖(1 + l) • v‖ = (1 + l) / 4 := by
+    rw [norm_smul, Real.norm_of_nonneg (by linarith), hn]; ring
+  have h1 : |((1 + l) • v).1| ≤ (1 + l) / 4 := by
+    rw [← hnorm]; exact (Real.norm_eq_abs _).symm ▸ norm_fst_le _
+  have h2 : |((1 + l) • v).2| ≤ (1 + l) / 4 := by
+    rw [← hnorm]; exact (Real.norm_eq_abs _).symm ▸ norm_snd_le _
+  have e1 : (apm_t02a01_radial l s).1 = 1 / 2 + ((1 + l) • v).1 := by
+    simp [apm_t02a01_radial, hv]
+  have e2 : (apm_t02a01_radial l s).2 = 1 / 2 + ((1 + l) • v).2 := by
+    simp [apm_t02a01_radial, hv]
+  rw [abs_le] at h1 h2
+  refine ⟨⟨by rw [e1]; linarith [h1.1], by rw [e1]; linarith [h1.2]⟩,
+    ⟨by rw [e2]; linarith [h2.1], by rw [e2]; linarith [h2.2]⟩, ?_⟩
+  rw [hsub, hnorm]; linarith
+
+/-- The radial family in the punctured torus, `l` and the loop parameter in `[0,1]`. -/
+noncomputable def apm_t02a01_radialPt (p : unitInterval × unitInterval) :
+    apm_t02a01_puncturedTorus :=
+  Quotient.mk _ ⟨apm_t02a01_radial p.1 (4 * p.2), apm_t02a01_radial_mem p.1.2.1 p.1.2.2 _⟩
+
+theorem apm_t02a01_radialPt_continuous : Continuous apm_t02a01_radialPt := by
+  sorry
+
+/-- The corner `(0,0)` of the torus, where `A` and `B` are based. -/
+noncomputable def apm_t02a01_corner : apm_t02a01_puncturedTorus :=
+  Quotient.mk _ ⟨((0 : ℝ), (0 : ℝ)), by norm_num, by norm_num, by norm_num [Prod.norm_def]⟩
+
+/-- The bottom edge loop `A t = (t, 0)` and right edge loop `B t = (1, t)`. -/
+noncomputable def apm_t02a01_edgeA (t : ℝ) : apm_t02a01_puncturedTorus :=
+  Quotient.mk _ ⟨(max 0 (min 1 t), (0 : ℝ)), ⟨le_max_left _ _, max_le zero_le_one (min_le_left _ _)⟩,
+    by norm_num, by
+      rw [Prod.norm_def]; norm_num⟩
+
+noncomputable def apm_t02a01_edgeB (t : ℝ) : apm_t02a01_puncturedTorus :=
+  Quotient.mk _ ⟨((1 : ℝ), max 0 (min 1 t)), by norm_num,
+    ⟨le_max_left _ _, max_le zero_le_one (min_le_left _ _)⟩, by
+      rw [Prod.norm_def]; norm_num⟩
+
+
+theorem apm_t02a01_radialPt_zero_zero :
+    apm_t02a01_radialPt (0, 0) = apm_t02a01_innerBase.1 := by
+  simp only [apm_t02a01_radialPt, apm_t02a01_innerBase, apm_t02a01_innerPoint]
+  congr 1; apply Subtype.ext; simp [apm_t02a01_radial]
+
+theorem apm_t02a01_radialPt_one_zero :
+    apm_t02a01_radialPt (1, 0) = apm_t02a01_corner := by
+  simp only [apm_t02a01_radialPt, apm_t02a01_corner]
+  congr 1; apply Subtype.ext
+  norm_num [apm_t02a01_radial, apm_t02a01_perimeter, apm_t02a01_clamp01]
+
+theorem apm_t02a01_radialPt_one_one :
+    apm_t02a01_radialPt (1, 1) = apm_t02a01_corner := by
+  simp only [apm_t02a01_radialPt, apm_t02a01_corner]
+  congr 1; apply Subtype.ext
+  norm_num [apm_t02a01_radial, apm_t02a01_perimeter, apm_t02a01_clamp01]
+
+theorem apm_t02a01_corner_eq_one_zero :
+    apm_t02a01_corner = Quotient.mk _ ⟨((1 : ℝ), (0 : ℝ)), by norm_num, by norm_num,
+      by norm_num [Prod.norm_def]⟩ :=
+  Quotient.sound (Relation.EqvGen.rel _ _ (apm_t02a01_edgeRel.horizontal 0 (by norm_num)
+    (by norm_num [Prod.norm_def]) (by norm_num [Prod.norm_def])))
+
+theorem apm_t02a01_corner_eq_one_one :
+    apm_t02a01_corner = Quotient.mk _ ⟨((1 : ℝ), (1 : ℝ)), by norm_num, by norm_num,
+      by norm_num [Prod.norm_def]⟩ := by
+  have hv : apm_t02a01_corner = Quotient.mk _ ⟨((0 : ℝ), (1 : ℝ)), by norm_num, by norm_num,
+      by norm_num [Prod.norm_def]⟩ :=
+    Quotient.sound (Relation.EqvGen.rel _ _ (apm_t02a01_edgeRel.vertical 0 (by norm_num)
+      (by norm_num [Prod.norm_def]) (by norm_num [Prod.norm_def])))
+  rw [hv]
+  exact Quotient.sound (Relation.EqvGen.rel _ _ (apm_t02a01_edgeRel.horizontal 1 (by norm_num)
+    (by norm_num [Prod.norm_def]) (by norm_num [Prod.norm_def])))
+
+/-- The radial segment from the inner base corner `(1/4,1/4)` to the corner `(0,0)`. -/
+noncomputable def apm_t02a01_delta (hc : Continuous apm_t02a01_radialPt) :
+    Path apm_t02a01_innerBase.1 apm_t02a01_corner where
+  toFun s := apm_t02a01_radialPt (s, 0)
+  continuous_toFun := hc.comp (continuous_id.prodMk continuous_const)
+  source' := apm_t02a01_radialPt_zero_zero
+  target' := apm_t02a01_radialPt_one_zero
+
+/-- The outer square loop at the corner. -/
+noncomputable def apm_t02a01_outerLoop (hc : Continuous apm_t02a01_radialPt) :
+    Path apm_t02a01_corner apm_t02a01_corner where
+  toFun t := apm_t02a01_radialPt (1, t)
+  continuous_toFun := hc.comp (continuous_const.prodMk continuous_id)
+  source' := apm_t02a01_radialPt_one_zero
+  target' := apm_t02a01_radialPt_one_one
+
+theorem apm_t02a01_edgeA_continuous : Continuous apm_t02a01_edgeA := by
+  sorry
+
+theorem apm_t02a01_edgeB_continuous : Continuous apm_t02a01_edgeB := by
+  sorry
+
+noncomputable def apm_t02a01_loopA (hA : Continuous apm_t02a01_edgeA) :
+    Path apm_t02a01_corner apm_t02a01_corner where
+  toFun t := apm_t02a01_edgeA t
+  continuous_toFun := hA.comp continuous_subtype_val
+  source' := by
+    simp only [apm_t02a01_edgeA, apm_t02a01_corner, Set.Icc.coe_zero]
+    congr 1; apply Subtype.ext; norm_num
+  target' := by
+    rw [apm_t02a01_corner_eq_one_zero]
+    simp only [apm_t02a01_edgeA, Set.Icc.coe_one]
+    congr 1; apply Subtype.ext; norm_num
+
+noncomputable def apm_t02a01_loopB (hB : Continuous apm_t02a01_edgeB) :
+    Path apm_t02a01_corner apm_t02a01_corner where
+  toFun t := apm_t02a01_edgeB t
+  continuous_toFun := hB.comp continuous_subtype_val
+  source' := by
+    rw [apm_t02a01_corner_eq_one_zero]
+    simp only [apm_t02a01_edgeB, Set.Icc.coe_zero]
+    congr 1; apply Subtype.ext; norm_num
+  target' := by
+    rw [apm_t02a01_corner_eq_one_one]
+    simp only [apm_t02a01_edgeB, Set.Icc.coe_one]
+    congr 1; apply Subtype.ext; norm_num
+
+/-- The inner loop pushed into the torus is the radial family at `l = 0`, and the radial
+family's two vertical sides are both `δ`: so the generic conjugation lemma applies. -/
+theorem apm_t02a01_inner_conj_outer
+    (hc : Continuous apm_t02a01_innerPoint)
+    (h4 : apm_t02a01_innerPoint 4 = apm_t02a01_innerBase)
+    (hr : Continuous apm_t02a01_radialPt)
+    (hconj : ∀ {X : Type} [TopologicalSpace X] {x y : X}
+      (γ0 : Path x x) (γ1 : Path y y) (δ : Path x y)
+      (F : C(unitInterval × unitInterval, X)),
+      (∀ t, F (0, t) = γ0 t) → (∀ t, F (1, t) = γ1 t) →
+      (∀ s, F (s, 0) = δ s) → (∀ s, F (s, 1) = δ s) →
+      γ0.Homotopic (δ.trans (γ1.trans δ.symm))) :
+    ((apm_t02a01_innerLoop hc h4).map (continuous_subtype_val :
+        Continuous ((↑) : apm_t02a01_boundarySpace → apm_t02a01_puncturedTorus))).Homotopic
+      ((apm_t02a01_delta hr).trans ((apm_t02a01_outerLoop hr).trans (apm_t02a01_delta hr).symm)) := by
+  sorry
+
+/-- The outer square, read side by side: bottom `A`, right `B`, top `A` reversed, left `B`
+reversed (opposite sides are identified in the torus). -/
+theorem apm_t02a01_outer_word
+    (hr : Continuous apm_t02a01_radialPt)
+    (hA : Continuous apm_t02a01_edgeA) (hB : Continuous apm_t02a01_edgeB) :
+    (apm_t02a01_outerLoop hr).Homotopic
+      ((apm_t02a01_loopA hA).trans ((apm_t02a01_loopB hB).trans
+        ((apm_t02a01_loopA hA).symm.trans (apm_t02a01_loopB hB).symm))) := by
+  sorry
+
+/-- Algebra: conjugate `A` and `B` by `δ` to get the commutator in `π₁(T, innerBase)`. -/
+theorem apm_t02a01_commutator_of_homotopies
+    (hc : Continuous apm_t02a01_innerPoint)
+    (h4 : apm_t02a01_innerPoint 4 = apm_t02a01_innerBase)
+    (hr : Continuous apm_t02a01_radialPt)
+    (hA : Continuous apm_t02a01_edgeA) (hB : Continuous apm_t02a01_edgeB)
+    (hin : ((apm_t02a01_innerLoop hc h4).map (continuous_subtype_val :
+        Continuous ((↑) : apm_t02a01_boundarySpace → apm_t02a01_puncturedTorus))).Homotopic
+      ((apm_t02a01_delta hr).trans ((apm_t02a01_outerLoop hr).trans (apm_t02a01_delta hr).symm)))
+    (hout : (apm_t02a01_outerLoop hr).Homotopic
+      ((apm_t02a01_loopA hA).trans ((apm_t02a01_loopB hB).trans
+        ((apm_t02a01_loopA hA).symm.trans (apm_t02a01_loopB hB).symm)))) :
+    ∃ a b : FundamentalGroup apm_t02a01_puncturedTorus apm_t02a01_innerBase.1,
+      FundamentalGroup.map
+          (⟨((↑) : apm_t02a01_boundarySpace → apm_t02a01_puncturedTorus),
+            continuous_subtype_val⟩ :
+            C(apm_t02a01_boundarySpace, apm_t02a01_puncturedTorus)) apm_t02a01_innerBase
+          (FundamentalGroup.fromPath (Path.Homotopic.Quotient.mk
+            (apm_t02a01_innerLoop hc h4))) =
+        a * b * a⁻¹ * b⁻¹ := by
+  sorry
+
 /-- In the punctured torus the inner loop is a commutator: deform it radially onto the
 outer square, whose four sides are the two edge loops traversed `a b a⁻¹ b⁻¹`
 (conjugated by the diagonal segment from the corner `(0,0)` to `(1/4,1/4)`). -/
@@ -442,7 +706,12 @@ theorem apm_t02a01_boundary_inclusion_word_aux_generator_aux_commutator
           (FundamentalGroup.fromPath (Path.Homotopic.Quotient.mk
             (apm_t02a01_innerLoop hc h4))) =
         a * b * a⁻¹ * b⁻¹ := by
-  sorry
+  exact apm_t02a01_commutator_of_homotopies hc h4 apm_t02a01_radialPt_continuous
+    apm_t02a01_edgeA_continuous apm_t02a01_edgeB_continuous
+    (apm_t02a01_inner_conj_outer hc h4 apm_t02a01_radialPt_continuous
+      (fun γ0 γ1 δ F h0 h1 hl hr => apm_t02a01_freeHomotopy_conj γ0 γ1 δ F h0 h1 hl hr))
+    (apm_t02a01_outer_word apm_t02a01_radialPt_continuous
+      apm_t02a01_edgeA_continuous apm_t02a01_edgeB_continuous)
 
 theorem apm_t02a01_boundary_inclusion_word_aux_generator_aux_base
     (hcyc : ∀ (hc : Continuous apm_t02a01_innerPoint)
@@ -563,7 +832,146 @@ theorem apm_t02a01_monodromy_of_boundary_word
           C(apm_t02a01_boundarySpace, apm_t02a01_puncturedTorus))
         (apm_t02a01_restrictedCover p e) γ = (a * b * a⁻¹ * b⁻¹) ^ k) :
     (hcov.monodromy γ ⟨e, rfl⟩).1.1 = deck 0 e.1 := by
-  sorry
+  let inc : C(apm_t02a01_boundarySpace, apm_t02a01_puncturedTorus) :=
+    ⟨((↑) : apm_t02a01_boundarySpace → apm_t02a01_puncturedTorus),
+      continuous_subtype_val⟩
+  have hequiv (q : FundamentalGroup apm_t02a01_puncturedTorus (p e.1))
+      (z : ZMod n) (x : p ⁻¹' {p e.1}) :
+      (hcover.monodromy (FundamentalGroup.toPath q)
+          ⟨deck z x.1, (hdeck_over z x.1).trans x.2⟩).1 =
+        deck z (hcover.monodromy (FundamentalGroup.toPath q) x).1 := by
+    obtain ⟨δ⟩ := FundamentalGroup.toPath q
+    change hcover.liftPath δ (deck z x.1) _ 1 =
+      deck z (hcover.liftPath δ x.1 _ 1)
+    let L : C(unitInterval, Stilde) :=
+      (⟨deck z, (deck z).continuous⟩ : C(Stilde, Stilde)).comp
+        (hcover.liftPath δ x.1 (by simpa using x.2.symm))
+    have hL : L = hcover.liftPath δ (deck z x.1) (by
+        simpa [hdeck_over] using x.2.symm) := by
+      apply (hcover.eq_liftPath_iff' _).2
+      constructor
+      · funext t
+        exact (hdeck_over z _).trans
+          (congr_fun (hcover.liftPath_lifts δ x.1 (by simpa using x.2.symm)) t)
+      · simp [L, hcover.liftPath_zero]
+    rw [← hL]
+    rfl
+  have hnaturality :
+      (hcover.monodromy (FundamentalGroup.toPath
+          (FundamentalGroup.map inc (apm_t02a01_restrictedCover p e) γ))
+        ⟨e.1, rfl⟩).1 = (hcov.monodromy γ ⟨e, rfl⟩).1.1 := by
+    obtain ⟨δ⟩ := γ
+    change hcover.liftPath (inc.comp δ) e.1 _ 1 =
+      (hcov.liftPath δ e _ 1).1
+    let L : C(unitInterval, Stilde) :=
+      ⟨fun t ↦ (hcov.liftPath δ e δ.source t).1, by fun_prop⟩
+    have hL : L = hcover.liftPath (inc.comp δ) e.1 (by
+        exact congrArg Subtype.val δ.source) := by
+      apply (hcover.eq_liftPath_iff' _).2
+      constructor
+      · funext t
+        exact congrArg Subtype.val
+          (congr_fun (hcov.liftPath_lifts δ e δ.source) t)
+      · simp [L, hcov.liftPath_zero]
+    rw [← hL]
+    rfl
+  have hend (q : FundamentalGroup apm_t02a01_puncturedTorus (p e.1)) :
+      ∃! z : ZMod n,
+        (hcover.monodromy (FundamentalGroup.toPath q) ⟨e.1, rfl⟩).1 = deck z e.1 := by
+    obtain ⟨z, hz, hzu⟩ := hdeck_transitive e.1
+      (hcover.monodromy (FundamentalGroup.toPath q) ⟨e.1, rfl⟩).1
+      (hcover.monodromy (FundamentalGroup.toPath q) ⟨e.1, rfl⟩).2.symm
+    exact ⟨z, hz.symm, fun w hw ↦ hzu w hw.symm⟩
+  let ρ : FundamentalGroup apm_t02a01_puncturedTorus (p e.1) →*
+      Equiv.Perm (p ⁻¹' {p e.1}) :=
+    { toFun := fun q ↦ Equiv.ofBijective
+          (hcover.monodromy (FundamentalGroup.toPath q))
+          (hcover.monodromy_bijective _)
+      map_one' := by
+        apply Equiv.ext
+        intro x
+        exact congrFun hcover.monodromy_refl x
+      map_mul' := by
+        intro q r
+        apply Equiv.ext
+        intro x
+        exact hcover.monodromy_trans_apply _ _ _ }
+  have hrho_comm (q r : FundamentalGroup apm_t02a01_puncturedTorus (p e.1)) :
+      ρ q * ρ r = ρ r * ρ q := by
+    obtain ⟨u, hu, -⟩ := hend q
+    obtain ⟨v, hv, -⟩ := hend r
+    ext x
+    obtain ⟨z, hz, -⟩ := hdeck_transitive e.1 x.1 x.2.symm
+    change (hcover.monodromy (FundamentalGroup.toPath q)
+      (hcover.monodromy (FundamentalGroup.toPath r) x)).1 = _
+    have hq := hequiv q z ⟨e.1, rfl⟩
+    have hr := hequiv r z ⟨e.1, rfl⟩
+    have hqv := hequiv q v ⟨e.1, rfl⟩
+    have hru := hequiv r u ⟨e.1, rfl⟩
+    have hx : x = ⟨deck z e.1, hdeck_over z e.1⟩ := Subtype.ext hz.symm
+    subst x
+    change (hcover.monodromy (FundamentalGroup.toPath q)
+      (hcover.monodromy (FundamentalGroup.toPath r)
+        ⟨deck z e.1, hdeck_over z e.1⟩)).1 =
+      (hcover.monodromy (FundamentalGroup.toPath r)
+        (hcover.monodromy (FundamentalGroup.toPath q)
+          ⟨deck z e.1, hdeck_over z e.1⟩)).1
+    have hr' : hcover.monodromy (FundamentalGroup.toPath r)
+        ⟨deck z e.1, hdeck_over z e.1⟩ =
+        ⟨deck z (hcover.monodromy (FundamentalGroup.toPath r)
+          ⟨e.1, rfl⟩).1,
+          (hdeck_over z _).trans
+            (hcover.monodromy (FundamentalGroup.toPath r) ⟨e.1, rfl⟩).2⟩ :=
+      Subtype.ext hr
+    have hq' : hcover.monodromy (FundamentalGroup.toPath q)
+        ⟨deck z e.1, hdeck_over z e.1⟩ =
+        ⟨deck z (hcover.monodromy (FundamentalGroup.toPath q)
+          ⟨e.1, rfl⟩).1,
+          (hdeck_over z _).trans
+            (hcover.monodromy (FundamentalGroup.toPath q) ⟨e.1, rfl⟩).2⟩ :=
+      Subtype.ext hq
+    have hu' : hcover.monodromy (FundamentalGroup.toPath q) ⟨e.1, rfl⟩ =
+        ⟨deck u e.1, hdeck_over u e.1⟩ := Subtype.ext hu
+    have hv' : hcover.monodromy (FundamentalGroup.toPath r) ⟨e.1, rfl⟩ =
+        ⟨deck v e.1, hdeck_over v e.1⟩ := Subtype.ext hv
+    have hvz : deck z (deck v e.1) = deck (v + z) e.1 := by
+      have := congrArg (fun f : Homeomorph Stilde Stilde ↦ f e.1) (hdeck_add v z)
+      exact this.symm
+    have huz : deck z (deck u e.1) = deck (u + z) e.1 := by
+      have := congrArg (fun f : Homeomorph Stilde Stilde ↦ f e.1) (hdeck_add u z)
+      exact this.symm
+    have hvz' : (⟨deck z (deck v e.1),
+        (hdeck_over z _).trans (hdeck_over v e.1)⟩ : p ⁻¹' {p e.1}) =
+        ⟨deck (v + z) e.1, hdeck_over (v + z) e.1⟩ := Subtype.ext hvz
+    have huz' : (⟨deck z (deck u e.1),
+        (hdeck_over z _).trans (hdeck_over u e.1)⟩ : p ⁻¹' {p e.1}) =
+        ⟨deck (u + z) e.1, hdeck_over (u + z) e.1⟩ := Subtype.ext huz
+    rw [hr', hq', hv', hu', hvz', huz']
+    rw [hequiv q (v + z) ⟨e.1, rfl⟩, hequiv r (u + z) ⟨e.1, rfl⟩,
+      hu, hv]
+    calc
+      deck (v + z) (deck u e.1) = deck (u + (v + z)) e.1 := by
+        exact congrArg (fun f : Homeomorph Stilde Stilde ↦ f e.1)
+          (hdeck_add u (v + z)).symm
+      _ = deck (v + (u + z)) e.1 := by congr 1; abel
+      _ = deck (u + z) (deck v e.1) := by
+        exact congrArg (fun f : Homeomorph Stilde Stilde ↦ f e.1)
+          (hdeck_add v (u + z))
+  have hcomm : ρ (a * b * a⁻¹ * b⁻¹) = 1 := by
+    simp only [map_mul, map_inv]
+    rw [hrho_comm a b]
+    group
+  have hpow : ρ ((a * b * a⁻¹ * b⁻¹) ^ k) = 1 := by
+    rw [map_zpow, hcomm]
+    exact one_zpow k
+  have hendzero :
+      (hcover.monodromy (FundamentalGroup.toPath
+        ((a * b * a⁻¹ * b⁻¹) ^ k)) ⟨e.1, rfl⟩).1 = e.1 := by
+    have := congrFun (congrArg Equiv.toFun hpow) (⟨e.1, rfl⟩ : p ⁻¹' {p e.1})
+    exact congrArg Subtype.val this
+  rw [hword] at hnaturality
+  rw [← hnaturality]
+  exact hendzero.trans (by rw [hdeck_zero]; rfl)
 
 /-- The polygon word and the covering/deck calculation assembled.  Repaired
 2026-10-14 (lemma-6 counterexample): `deck` must be an action (`hdeck_zero`,
