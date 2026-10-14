@@ -465,7 +465,12 @@ independent of the van Kampen computation. -/
 -- BEGIN SEAT AREA
 lemma apm_t92J05_genusTwo_pathConnected :
     PathConnectedSpace (ConstructionTargets.Surfaces.Surface true 2) := by
-  sorry
+  letI : PathConnectedSpace ConstructionTargets.Surfaces.Disk :=
+    isPathConnected_iff_pathConnectedSpace.mp
+      (Metric.isPathConnected_closedBall (by norm_num : (0 : ℝ) ≤ 1))
+  exact
+    (ConstructionTargets.Surfaces.surjective_surfaceQuotient true 2).pathConnectedSpace
+      (ConstructionTargets.Surfaces.continuous_surfaceQuotient true 2)
 -- END SEAT AREA
 
 /-- Basepoint transport, with both inputs explicit so this leaf can be proved
