@@ -60,11 +60,74 @@ def apm_t02a01_restrictedCover {Stilde : Type*} [TopologicalSpace Stilde]
     p ⁻¹' apm_t02a01_boundary → apm_t02a01_boundarySpace :=
   fun x => ⟨p x.1, x.2⟩
 
-/-- LIBRARY (square-annulus quotient): the inner metric circle survives the
-outer-edge quotient and gives the boundary subtype. -/
+def apm_t02a01_boundary_homeomorph_circle_aux_interior
+    (x : apm_t02a01_squareAnnulus) : Prop :=
+  x.1.1 ∈ Set.Ioo (0 : ℝ) 1 ∧ x.1.2 ∈ Set.Ioo (0 : ℝ) 1
+
+theorem apm_t02a01_boundary_homeomorph_circle_aux_rel_not_interior
+    {x y : apm_t02a01_squareAnnulus} (h : apm_t02a01_edgeRel x y) :
+    ¬ apm_t02a01_boundary_homeomorph_circle_aux_interior x ∧
+      ¬ apm_t02a01_boundary_homeomorph_circle_aux_interior y := by
+  cases h with
+  | horizontal y hy h₀ h₁ =>
+      constructor
+      · intro h; exact (lt_irrefl (0 : ℝ)) h.1.1
+      · intro h; exact (lt_irrefl (1 : ℝ)) h.1.2
+  | vertical x hx h₀ h₁ =>
+      constructor
+      · intro h; exact (lt_irrefl (0 : ℝ)) h.2.1
+      · intro h; exact (lt_irrefl (1 : ℝ)) h.2.2
+
+theorem apm_t02a01_boundary_homeomorph_circle_aux_eq_of_eqvGen
+    {x y : apm_t02a01_squareAnnulus}
+    (h : Relation.EqvGen apm_t02a01_edgeRel x y) :
+    (apm_t02a01_boundary_homeomorph_circle_aux_interior x → x = y) ∧
+      (apm_t02a01_boundary_homeomorph_circle_aux_interior y → x = y) := by
+  induction h with
+  | rel x y h =>
+      obtain ⟨hx, hy⟩ :=
+        apm_t02a01_boundary_homeomorph_circle_aux_rel_not_interior h
+      exact ⟨fun hi ↦ (hx hi).elim, fun hi ↦ (hy hi).elim⟩
+  | refl x => exact ⟨fun _ ↦ rfl, fun _ ↦ rfl⟩
+  | symm x y h ih => exact ⟨fun hi ↦ (ih.2 hi).symm, fun hi ↦ (ih.1 hi).symm⟩
+  | trans x y z hxy hyz ihxy ihyz =>
+      constructor
+      · intro hx
+        have hxy' := ihxy.1 hx
+        subst y
+        exact ihyz.1 hx
+      · intro hz
+        have hyz' := ihyz.2 hz
+        subst z
+        exact ihxy.2 hz
+
+/-- The inner sphere of the square annulus (for the max norm on `ℝ × ℝ`, the
+boundary of the square `[1/4, 3/4]²`) is a topological circle, e.g. by radial
+projection `x ↦ (x - c) / ‖x - c‖₂` composed with `Circle` coordinates. -/
+theorem apm_t02a01_boundary_homeomorph_circle_aux_sphere :
+    Nonempty ({x : apm_t02a01_squareAnnulus |
+      ‖x.1 - ((1 / 2, 1 / 2) : ℝ × ℝ)‖ = (1 / 4 : ℝ)} ≃ₜ Circle) := by
+  sorry
+
+/-- The quotient map restricts to a homeomorphism from the inner sphere onto
+the boundary subtype.  Injectivity: inner-sphere points are interior to
+`(0,1)²`, so their classes are singletons
+(`apm_t02a01_boundary_homeomorph_circle_aux_eq_of_eqvGen`).  Openness: the
+interior points form an open saturated set, on which the quotient map is an
+open embedding. -/
+theorem apm_t02a01_boundary_homeomorph_circle_aux_quotient :
+    Nonempty ({x : apm_t02a01_squareAnnulus |
+      ‖x.1 - ((1 / 2, 1 / 2) : ℝ × ℝ)‖ = (1 / 4 : ℝ)} ≃ₜ
+        apm_t02a01_boundarySpace) := by
+  sorry
+
+/-- The inner metric circle survives the outer-edge quotient and gives the
+boundary subtype. -/
 theorem apm_t02a01_boundary_homeomorph_circle :
     Nonempty (apm_t02a01_boundarySpace ≃ₜ Circle) := by
-  sorry
+  obtain ⟨q⟩ := apm_t02a01_boundary_homeomorph_circle_aux_quotient
+  obtain ⟨c⟩ := apm_t02a01_boundary_homeomorph_circle_aux_sphere
+  exact ⟨q.symm.trans c⟩
 
 /-- Transport path connectedness across the concrete boundary-circle
 homeomorphism.  The homeomorphism is an explicit hypothesis so this leaf is
