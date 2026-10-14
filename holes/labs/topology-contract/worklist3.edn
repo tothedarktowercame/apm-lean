@@ -36117,71 +36117,60 @@
   {:consumer :t93J03,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 2,
+   :stop-count 3,
    :review-finding
    "Program STOP commits nothing new since the prior reviewed attempt: it reuses commit 512a220f, and git history shows no later scoped commit. The unresolved SemilocallySimplyConnected hypothesis-coverage conflict is unchanged. Obtain the required owner specification decision or commit a new compiled milestone before resubmitting.",
    :evidence
    {:placeholder-delta {:t93J03 [1 1]},
     :residual
-    "Prove winding-one=aabb; extract based quotient; apply C1/C2/Main.",
+    "Prove winding-one conjugate to aabb; extract based quotient; apply C1/C2/Main.",
     :outcome :stop,
-    :warnings ["unused SLSC owner-approved"],
+    :warnings
+    ["unused SLSC owner-approved"
+     "unrelated dependency build failure"],
     :missing-theorems
-    [{:name "kleinPolygonOverlapWindingHom_normalClosure",
-      :type
-      "normal closure of overlap image equals normal closure of winding-one word",
+    [{:name "kleinPolygonOverlapNormalClosure_eq_aabb_of_isConj",
+      :type "conjugacy to aabb identifies normal closures",
       :status :proved,
       :consumers [:t93J03],
-      :depends-on ["kleinPolygonOverlapWindingHom_range"],
+      :depends-on ["kleinPolygonOverlapWindingHom_normalClosure"],
       :area "covering-subgroup-correspondence"}
      {:name "t93J03_polygon_van_kampen",
-      :type "polygon pi1 equals PresentedGroup(aabb)",
+      :type "polygon pi1 = PresentedGroup(aabb)",
       :status :partial,
       :consumers [:t93J03],
       :depends-on
       ["kleinSkeletonAabbPresentationQuotient"
-       "kleinPolygonOverlapWindingHom_normalClosure"],
+       "kleinPolygonOverlapNormalClosure_eq_aabb_of_isConj"],
       :area "covering-subgroup-correspondence"}],
     :statement-hashes {:registry "166/166"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Committed equality of normal closures for the full overlap image and winding-one generator; word=aabb remains.",
+    "Committed conjugacy-to-normal-closure adapter; geometric conjugacy and based quotient remain.",
     :commands
-    [{:cmd "lake build ConstructionTargets.t93J03Closure", :exit 0}
-     {:cmd "lean fixture; Main", :exit 0}
+    [{:cmd "lean closure; Main", :exit 0}
      {:cmd "registry; placeholder; diff", :exit 0}
      {:cmd "rg forbidden", :exit 1, :expected-exit 1}
      {:cmd "commit; show --check", :exit 0}],
     :diagnostic-history
-    [{:cmd "lean closure",
+    [{:cmd "lake build closure; fixture",
       :exit 1,
       :correction
-      "replaced coerced-set rewrite with zpowers subgroup eliminator"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1791953737396-11608-71856643",
-     :commands
-     ["git show/diff/show --check 1eb08914"
-      "sha256sum fixture; scope; placeholders"
-      "lake env lean recorded closure, fixture, Main"
-      "statement-registry.py check"],
-     :finding
-     "PASS: new compiled sorry-free standard-axiom milestone. Both subgroup inclusions correctly prove that normal-closing the full cyclic overlap image equals normal-closing its winding-one singleton. The geometric winding-one=aabb equality and based quotient remain accurately listed. Scope/hash verified; frozen placeholders 1->1 (support 0); registry 166/166; SLSC unused, mandated by problem.md."},
-    :commit "1eb08914473614efd9eba993c45b8b9a1f93df6a",
+      "unrelated PolygonSurfaceHomology failure; exact source passed"}],
+    :commit "b8bce9d8294e1892901bc5969e1bc0967f1927cb",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
      "ConstructionTargets/t93J03Closure.blueprint.md"],
     :fixture
-    {:path "/tmp/t93j03_overlap_normal_closure_check.lean",
+    {:path "/tmp/t93j03_overlap_conjugacy_adapter_check.lean",
      :sha256
-     "77aabbd03c89dc6cb2ef4779e166aa7e2ac975d43cc75ef8408f2459e3dfc939",
-     :mode :post-build-export-check},
+     "32b33a49b1c5ee90bf36a8bc2dc501e21b578dcd8785bea69d36e6e7df6f8afd",
+     :mode :export-check-blocked-by-unrelated-dependency},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -37677,7 +37666,8 @@
     :lemma-kleinpolygonoverlapimagefundamentalgroupequivatskeletonpoint
     :lemma-kleinpolygonoverlapwindinghom-factor
     :lemma-kleinpolygonoverlapwindinghom-range
-    :lemma-kleinpolygonoverlapwindinghom-normalclosure],
+    :lemma-kleinpolygonoverlapwindinghom-normalclosure
+    :lemma-kleinpolygonoverlapnormalclosure-eq-aabb-of-isconj],
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
@@ -38269,6 +38259,23 @@
    :id :lemma-kleinpolygonoverlapwindinghom-normalclosure,
    :kind :lemma,
    :depends-on [:lemma-kleinpolygonoverlapwindinghom-range],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "kleinPolygonOverlapNormalClosure_eq_aabb_of_isConj",
+    :type "conjugacy to aabb identifies normal closures"},
+   :lemma
+   {:name "kleinPolygonOverlapNormalClosure_eq_aabb_of_isConj",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type "conjugacy to aabb identifies normal closures",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03},
+   :id :lemma-kleinpolygonoverlapnormalclosure-eq-aabb-of-isconj,
+   :kind :lemma,
+   :depends-on [:lemma-kleinpolygonoverlapwindinghom-normalclosure],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
