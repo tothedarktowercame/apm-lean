@@ -226,8 +226,13 @@ fundamental-groupoid van Kampen theorem by
 the based group quotient and identifies its overlap image with `aabb`.
 `kleinPolygonInnerContractibleSpace` and
 `kleinPolygonInnerFundamentalGroup_subsingleton` now discharge the simply
-connected inner-vertex group in that extraction.  It remains to transport the
-overlap image through the outer-piece coordinates and take its normal closure.
+connected inner-vertex group in that extraction.  The arbitrary-endpoint
+versions `kleinPolygonInnerFundamentalGroupoid_hom_subsingleton` and
+`kleinPolygonInner_pathClass_eq` identify any two inner runs between fixed
+overlap vertices.  Together with `pathTwoOpenSubdivision_transition_mem_overlap`,
+this supplies the local replacement step for collapsing maximal inner runs.
+It remains to transport the overlap image through the outer-piece coordinates
+and take its normal closure.
 The outer-to-skeleton equivalence is now restricted at the literal overlap
 image.  Path connectedness transported from the standard two-circle model
 supplies a chosen path from its deformed image to `kleinSkeletonPoint`, and

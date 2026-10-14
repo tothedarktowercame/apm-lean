@@ -866,6 +866,36 @@ theorem kleinPolygonInnerFundamentalGroup_subsingleton :
     (openCover kleinPairingData).center (openCover kleinPairingData).center)
   infer_instance
 
+/-- Contractibility of the inner piece controls paths between arbitrary
+endpoints, not only loops at the chosen center. Thus every inner run with
+fixed overlap endpoints has a unique fundamental-groupoid class. -/
+theorem kleinPolygonInnerFundamentalGroupoid_hom_subsingleton
+    (x y : {q // q ∈ (openCover kleinPairingData).inner}) :
+    Subsingleton (FundamentalGroupoid.mk x ⟶ FundamentalGroupoid.mk y) := by
+  letI : ContractibleSpace
+      {q // q ∈ (openCover kleinPairingData).inner} :=
+    kleinPolygonInnerContractibleSpace
+  letI : SimplyConnectedSpace
+      {q // q ∈ (openCover kleinPairingData).inner} :=
+    SimplyConnectedSpace.ofContractible _
+  change Subsingleton (Path.Homotopic.Quotient x y)
+  infer_instance
+
+/-- Two paths through the inner piece with the same endpoints represent the
+same arrow. This replaces maximal inner runs whose boundary vertices lie in
+the overlap. -/
+theorem kleinPolygonInner_pathClass_eq
+    {x y : {q // q ∈ (openCover kleinPairingData).inner}}
+    (p q : Path x y) :
+    (⟦p⟧ : FundamentalGroupoid.mk x ⟶ FundamentalGroupoid.mk y) = ⟦q⟧ := by
+  letI : ContractibleSpace
+      {q // q ∈ (openCover kleinPairingData).inner} :=
+    kleinPolygonInnerContractibleSpace
+  letI : SimplyConnectedSpace
+      {q // q ∈ (openCover kleinPairingData).inner} :=
+    SimplyConnectedSpace.ofContractible _
+  exact Quotient.sound (SimplyConnectedSpace.paths_homotopic p q)
+
 /-- The annular overlap in the exact radial cover is path connected. -/
 theorem kleinPolygonOverlapPathConnectedSpace :
     PathConnectedSpace (overlapOpen kleinPairingData.Rel) := by
@@ -1896,6 +1926,8 @@ theorem lift_isEmbedding_assembly
 #print axioms pathTwoOpenSubdivision_transition_mem_overlap
 #print axioms kleinPolygonInnerContractibleSpace
 #print axioms kleinPolygonInnerFundamentalGroup_subsingleton
+#print axioms kleinPolygonInnerFundamentalGroupoid_hom_subsingleton
+#print axioms kleinPolygonInner_pathClass_eq
 #print axioms kleinPolygonOverlapPathConnectedSpace
 #print axioms kleinPolygonOverlapToOuterPiOne
 #print axioms kleinPolygonOverlapFundamentalGroupEquivInt
