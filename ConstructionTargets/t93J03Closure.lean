@@ -1087,6 +1087,41 @@ noncomputable def kleinPolygonOverlapToSkeletonPiOne :
   kleinPolygonOverlapImageFundamentalGroupEquivAtSkeletonPoint.toMonoidHom.comp
     kleinPolygonOverlapToOuterPiOne
 
+/-- The outer-to-polygon map expressed on the preferred skeleton group by
+precomposing with the inverse of the already fixed outer-to-skeleton
+basepoint equivalence.  Its target basepoint is deliberately still the
+original overlap image in the polygon; comparison with the literal skeleton
+inclusion requires the remaining geometric basepoint transport. -/
+noncomputable def kleinPolygonTransportedOuterToSpacePiOne :
+    FundamentalGroup kleinPairingData.skeleton kleinSkeletonPoint →*
+      FundamentalGroup kleinPairingData.Space
+        (kleinPolygonOuterToSpace
+          (kleinPolygonOverlapToOuter kleinPolygonOverlapPoint)) :=
+  kleinPolygonOuterToSpacePiOne.comp
+    kleinPolygonOverlapImageFundamentalGroupEquivAtSkeletonPoint.symm.toMonoidHom
+
+/-- Exact forward-kernel transport from outer-piece coordinates to the
+preferred skeleton coordinates.  This is equality-driven transport in the
+direction needed by the consumer: the target skeleton overlap image is
+pulled back through the inverse equivalence before applying the proved outer
+kernel inclusion. -/
+theorem kleinPolygonOverlapSkeletonNormalClosure_le_transportedKernel :
+    Subgroup.normalClosure
+        (kleinPolygonOverlapToSkeletonPiOne.range : Set
+          (FundamentalGroup kleinPairingData.skeleton kleinSkeletonPoint)) ≤
+      MonoidHom.ker kleinPolygonTransportedOuterToSpacePiOne := by
+  apply Subgroup.normalClosure_le_normal
+  rintro x ⟨g, rfl⟩
+  change kleinPolygonTransportedOuterToSpacePiOne
+      (kleinPolygonOverlapToSkeletonPiOne g) = 1
+  change kleinPolygonOuterToSpacePiOne
+      (kleinPolygonOverlapImageFundamentalGroupEquivAtSkeletonPoint.symm
+        (kleinPolygonOverlapImageFundamentalGroupEquivAtSkeletonPoint
+          (kleinPolygonOverlapToOuterPiOne g))) = 1
+  rw [kleinPolygonOverlapImageFundamentalGroupEquivAtSkeletonPoint.symm_apply_apply]
+  exact (kleinPolygonOverlapNormalClosure_le_outerToSpacePiOne_ker
+    (Subgroup.le_normalClosure ⟨g, rfl⟩))
+
 /-- The same map with the annular source written in integer winding
 coordinates.  Its value at `ofAdd 1` is the sole remaining geometric word
 calculation in the attaching-cell argument. -/

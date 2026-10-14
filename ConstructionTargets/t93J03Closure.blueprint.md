@@ -297,6 +297,11 @@ because that inclusion factors through the contractible inner radial piece.
 the full forward subgroup inclusion for the outer-piece map.  Transport to
 the skeleton, the reverse kernel inclusion, and skeleton-map surjectivity
 remain to extract from the pseudopushout.
+`kleinPolygonOverlapSkeletonNormalClosure_le_transportedKernel` now performs
+the exact algebraic transport into the preferred skeleton coordinates.  Its
+kernel map still targets the original polygon basepoint, so the remaining
+geometric seam is comparison with `kleinPolygonSkeletonToSpacePiOne` after
+the induced target-basepoint transport.
 `kleinBottle_pi1_every_basepoint_of_basedVanKampen` confirms this single
 topological contract and the independent winding conjugacy are now the only
 C1 inputs.
