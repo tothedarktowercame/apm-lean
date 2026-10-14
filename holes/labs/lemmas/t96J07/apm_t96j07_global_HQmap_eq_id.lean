@@ -1622,7 +1622,15 @@ theorem apm_t96j07_global_HQmap_eq_id
     (f : C(apm_t96j07_RP3, apm_t96j07_RP3))
     (hhom : ContinuousMap.Homotopic (ContinuousMap.id apm_t96j07_RP3) f) :
     ∀ k : ℕ, apm_t96j07_HQmap k f = 𝟙 (apm_t96j07_HQ k) := by
-  sorry
+  intro k
+  rcases hhom with ⟨H⟩
+  have h :=
+    ConstructionTargets.CoefficientContractiblePair.singularHomology_map_eq_of_topCatHomotopy ℚ
+      (ConstructionTargets.SingularHomologyConcrete.continuousMapHomotopyCylinder H)
+      (ConstructionTargets.SingularHomologyConcrete.continuousMapHomotopyCylinder_zero H)
+      (ConstructionTargets.SingularHomologyConcrete.continuousMapHomotopyCylinder_one H) k
+  rw [TopCat.ofHom_id, CategoryTheory.Functor.map_id] at h
+  exact h.symm
 -- END SEAT AREA
 
 /-- LIBRARY seat: the rational singular homology of `ℝP³` is `ℚ` in
