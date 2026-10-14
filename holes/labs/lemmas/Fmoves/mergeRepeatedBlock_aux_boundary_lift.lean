@@ -1089,13 +1089,153 @@ structure EquivariantCircleLift (sourcePeriod targetPeriod : ℝ) where
 /-- LIBRARY leaf: an equivariant homeomorphism of the universal covers
 descends to the additive circles and hence, through `AddCircle.toCircle`, to
 the unit circle. -/
+lemma equivariantCircleLift_homeomorph_aux_period (sourcePeriod targetPeriod : ℝ)
+    (F : EquivariantCircleLift sourcePeriod targetPeriod) (x : ℝ) :
+    ∀ n : ℤ, F.toFun (x + n * sourcePeriod) = F.toFun x + n * targetPeriod := by
+  intro n
+  cases n with
+  | ofNat n =>
+      induction n with
+      | zero => simp
+      | succ n ih =>
+          norm_num at ih ⊢
+          rw [show x + ((n : ℝ) + 1) * sourcePeriod =
+              (x + (n : ℝ) * sourcePeriod) + sourcePeriod by ring,
+            F.toFun_add_period, ih]
+          ring
+  | negSucc n =>
+      induction n with
+      | zero =>
+          norm_num
+          have h := F.toFun_add_period (x - sourcePeriod)
+          rw [show x - sourcePeriod + sourcePeriod = x by ring] at h
+          push_cast
+          rw [show x + -sourcePeriod = x - sourcePeriod by ring]
+          linarith
+      | succ n ih =>
+          norm_num at ih ⊢
+          have h := F.toFun_add_period
+            (x + (-(n : ℝ) - 2) * sourcePeriod)
+          have ih' : F.toFun (x + (-(n : ℝ) - 1) * sourcePeriod) =
+              F.toFun x + (-(n : ℝ) - 1) * targetPeriod := by
+            convert ih using 1 <;> ring
+          rw [show x + (-(n : ℝ) - 2) * sourcePeriod + sourcePeriod =
+              x + (-(n : ℝ) - 1) * sourcePeriod by ring, ih'] at h
+          calc
+            F.toFun (x + (-1 + (-1 + -(n : ℝ))) * sourcePeriod) =
+                F.toFun (x + (-(n : ℝ) - 2) * sourcePeriod) := by congr 1 <;> ring
+            _ = F.toFun x + (-1 + (-1 + -(n : ℝ))) * targetPeriod := by linarith
+
+lemma equivariantCircleLift_homeomorph_aux_inv_period (sourcePeriod targetPeriod : ℝ)
+    (F : EquivariantCircleLift sourcePeriod targetPeriod) (x : ℝ) :
+    ∀ n : ℤ, F.invFun (x + n * targetPeriod) = F.invFun x + n * sourcePeriod := by
+  intro n
+  cases n with
+  | ofNat n =>
+      induction n with
+      | zero => simp
+      | succ n ih =>
+          norm_num at ih ⊢
+          rw [show x + ((n : ℝ) + 1) * targetPeriod =
+              (x + (n : ℝ) * targetPeriod) + targetPeriod by ring,
+            F.invFun_add_period, ih]
+          ring
+  | negSucc n =>
+      induction n with
+      | zero =>
+          norm_num
+          have h := F.invFun_add_period (x - targetPeriod)
+          rw [show x - targetPeriod + targetPeriod = x by ring] at h
+          push_cast
+          rw [show x + -targetPeriod = x - targetPeriod by ring]
+          linarith
+      | succ n ih =>
+          norm_num at ih ⊢
+          have h := F.invFun_add_period
+            (x + (-(n : ℝ) - 2) * targetPeriod)
+          have ih' : F.invFun (x + (-(n : ℝ) - 1) * targetPeriod) =
+              F.invFun x + (-(n : ℝ) - 1) * sourcePeriod := by
+            convert ih using 1 <;> ring
+          rw [show x + (-(n : ℝ) - 2) * targetPeriod + targetPeriod =
+              x + (-(n : ℝ) - 1) * targetPeriod by ring, ih'] at h
+          calc
+            F.invFun (x + (-1 + (-1 + -(n : ℝ))) * targetPeriod) =
+                F.invFun (x + (-(n : ℝ) - 2) * targetPeriod) := by congr 1 <;> ring
+            _ = F.invFun x + (-1 + (-1 + -(n : ℝ))) * sourcePeriod := by linarith
 lemma equivariantCircleLift_homeomorph (sourcePeriod targetPeriod : ℝ)
     (hs : 0 < sourcePeriod) (ht : 0 < targetPeriod)
     (F : EquivariantCircleLift sourcePeriod targetPeriod) :
     ∃ g : Circle ≃ₜ Circle, ∀ x : ℝ,
       g (AddCircle.toCircle (x : AddCircle sourcePeriod)) =
         AddCircle.toCircle (F.toFun x : AddCircle targetPeriod) := by
-  sorry
+  let f : AddCircle sourcePeriod → AddCircle targetPeriod := fun q =>
+    Quotient.liftOn' q (fun x : ℝ => (F.toFun x : AddCircle targetPeriod)) (by
+      intro x y hxy
+      have hq : (x : AddCircle sourcePeriod) = (y : AddCircle sourcePeriod) :=
+        Quotient.sound hxy
+      rcases (QuotientAddGroup.mk'_eq_mk' (AddSubgroup.zmultiples sourcePeriod)).1 hq with
+        ⟨z, hz, hxyz⟩
+      rcases AddSubgroup.mem_zmultiples_iff.mp hz with ⟨n, rfl⟩
+      rw [← hxyz]
+      change (F.toFun x : AddCircle targetPeriod) =
+        (F.toFun (x + n • sourcePeriod) : AddCircle targetPeriod)
+      rw [show n • sourcePeriod = (n : ℝ) * sourcePeriod by simp,
+        equivariantCircleLift_homeomorph_aux_period]
+      simp [AddCircle.coe_add, AddCircle.coe_zsmul])
+  let finv : AddCircle targetPeriod → AddCircle sourcePeriod := fun q =>
+    Quotient.liftOn' q (fun x : ℝ => (F.invFun x : AddCircle sourcePeriod)) (by
+      intro x y hxy
+      have hq : (x : AddCircle targetPeriod) = (y : AddCircle targetPeriod) :=
+        Quotient.sound hxy
+      rcases (QuotientAddGroup.mk'_eq_mk' (AddSubgroup.zmultiples targetPeriod)).1 hq with
+        ⟨z, hz, hxyz⟩
+      rcases AddSubgroup.mem_zmultiples_iff.mp hz with ⟨n, rfl⟩
+      rw [← hxyz]
+      change (F.invFun x : AddCircle sourcePeriod) =
+        (F.invFun (x + n • targetPeriod) : AddCircle sourcePeriod)
+      rw [show n • targetPeriod = (n : ℝ) * targetPeriod by simp,
+        equivariantCircleLift_homeomorph_aux_inv_period]
+      simp [AddCircle.coe_add, AddCircle.coe_zsmul])
+  have hf_mk (x : ℝ) : f (x : AddCircle sourcePeriod) =
+      (F.toFun x : AddCircle targetPeriod) := rfl
+  have hfinv_mk (x : ℝ) : finv (x : AddCircle targetPeriod) =
+      (F.invFun x : AddCircle sourcePeriod) := rfl
+  have hf_cont : Continuous f := by
+    apply continuous_quot_lift
+    exact (AddCircle.continuous_mk' targetPeriod).comp F.continuous_toFun
+  have hfinv_cont : Continuous finv := by
+    apply continuous_quot_lift
+    exact (AddCircle.continuous_mk' sourcePeriod).comp F.continuous_invFun
+  have hleft : Function.LeftInverse finv f := by
+    intro q
+    obtain ⟨x, rfl⟩ := QuotientAddGroup.mk'_surjective _ q
+    change finv (f (x : AddCircle sourcePeriod)) = (x : AddCircle sourcePeriod)
+    rw [hf_mk, hfinv_mk, F.left_inv]
+  have hright : Function.RightInverse finv f := by
+    intro q
+    obtain ⟨x, rfl⟩ := QuotientAddGroup.mk'_surjective _ q
+    change f (finv (x : AddCircle targetPeriod)) = (x : AddCircle targetPeriod)
+    rw [hfinv_mk, hf_mk, F.right_inv]
+  let e : AddCircle sourcePeriod ≃ₜ AddCircle targetPeriod :=
+    { toEquiv :=
+        { toFun := f
+          invFun := finv
+          left_inv := hleft
+          right_inv := hright }
+      continuous_toFun := hf_cont
+      continuous_invFun := hfinv_cont }
+  let g : Circle ≃ₜ Circle :=
+    (AddCircle.homeomorphCircle hs.ne').symm.trans
+      (e.trans (AddCircle.homeomorphCircle ht.ne'))
+  refine ⟨g, ?_⟩
+  intro x
+  unfold g
+  rw [Homeomorph.trans_apply, Homeomorph.trans_apply]
+  rw [← AddCircle.homeomorphCircle_apply hs.ne' (x : AddCircle sourcePeriod),
+    Homeomorph.symm_apply_apply]
+  change (AddCircle.homeomorphCircle ht.ne')
+    (f (x : AddCircle sourcePeriod)) = _
+  rw [hf_mk, AddCircle.homeomorphCircle_apply]
 
 /-- The explicit lift used by the merge.  Its six formulas say: unchanged
 `u`; the two old edges `y,z` become the two halves of one edge; unchanged
@@ -1271,12 +1411,81 @@ lemma mergeRepeatedBlock_aux_boundary_relation_aux_eqvGen_map
 /-- `WordRel` only relates unit-circle points, and interior points are related
 only to themselves, so its generated relation between circle points is the
 generated relation of its restriction to the circle. -/
+lemma wordRel_eqvGen_circle_aux_forward {L : Type*} [DecidableEq L]
+    (w : List (Signed L)) {p q : Disk}
+    (h : Relation.EqvGen (WordRel w) p q) :
+    ∀ (c d : Circle), circleToDisk c = p → circleToDisk d = q →
+      Relation.EqvGen
+        (fun a b : Circle => WordRel w (circleToDisk a) (circleToDisk b)) c d := by
+  induction h with
+  | refl p =>
+      intro c d hc hd
+      have hcd : c = d :=
+        mergeRepeatedBlock_aux_boundary_relation_aux_circleToDisk_injective
+          (hc.trans hd.symm)
+      subst d
+      exact Relation.EqvGen.refl _
+  | rel p q hpq =>
+      intro c d hc hd
+      apply Relation.EqvGen.rel
+      simpa [hc, hd] using hpq
+  | symm p q hpq ih =>
+      intro c d hc hd
+      exact Relation.EqvGen.symm _ _ (ih d c hd hc)
+  | trans p q r hpq hqr ih₁ ih₂ =>
+      intro c d hc hd
+      have hqnorm : ‖(q : ℂ)‖ = 1 := by
+        rcases wordRel_eqvGen_interior_aux_boundary w hpq with heq | hb
+        · rw [← heq, ← hc]
+          simpa [circleToDisk, Circle, Submonoid.unitSphere] using c.2
+        · exact hb.2
+      obtain ⟨e, he⟩ := circleToDisk_of_norm q hqnorm
+      exact Relation.EqvGen.trans _ _ _ (ih₁ c e hc he) (ih₂ e d he hd)
+
 lemma wordRel_eqvGen_circle {L : Type*} [DecidableEq L]
     (w : List (Signed L)) (c₁ c₂ : Circle) :
     Relation.EqvGen (WordRel w) (circleToDisk c₁) (circleToDisk c₂) ↔
       Relation.EqvGen (fun a b : Circle => WordRel w (circleToDisk a) (circleToDisk b))
         c₁ c₂ := by
-  sorry
+  constructor
+  · intro h
+    exact wordRel_eqvGen_circle_aux_forward w h c₁ c₂ rfl rfl
+  · intro h
+    exact mergeRepeatedBlock_aux_boundary_relation_aux_eqvGen_map circleToDisk
+      (fun hxy => Relation.EqvGen.rel _ _ hxy) h
+
+lemma mergeRepeatedBlock_aux_boundary_relation_aux_forward_aux_partition
+    {Label : Type*} (u v t : List (Signed Label)) (y z : Signed Label)
+    (i : Fin (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t).length) :
+    i.1 < u.length ∨ i.1 = u.length ∨ i.1 = u.length + 1 ∨
+      (∃ k, k < v.length ∧ i.1 = u.length + 2 + k) ∨
+      i.1 = u.length + 2 + v.length ∨
+      i.1 = u.length + 3 + v.length ∨
+      (∃ k, k < t.length ∧ i.1 = u.length + 4 + v.length + k) := by
+  have hi := i.2
+  simp only [List.length_append, List.length_cons, List.length_nil] at hi
+  by_cases h₀ : i.1 < u.length
+  · exact Or.inl h₀
+  by_cases h₁ : i.1 = u.length
+  · exact Or.inr (Or.inl h₁)
+  by_cases h₂ : i.1 = u.length + 1
+  · exact Or.inr (Or.inr (Or.inl h₂))
+  by_cases h₃ : i.1 < u.length + 2 + v.length
+  · exact Or.inr (Or.inr (Or.inr (Or.inl ⟨i.1 - (u.length + 2), by omega, by omega⟩)))
+  by_cases h₄ : i.1 = u.length + 2 + v.length
+  · exact Or.inr (Or.inr (Or.inr (Or.inr (Or.inl h₄))))
+  by_cases h₅ : i.1 = u.length + 3 + v.length
+  · exact Or.inr (Or.inr (Or.inr (Or.inr (Or.inr (Or.inl h₅)))))
+  · exact Or.inr (Or.inr (Or.inr (Or.inr (Or.inr (Or.inr
+      ⟨i.1 - (u.length + 4 + v.length), by omega, by omega⟩)))))
+
+lemma mergeRepeatedBlock_aux_boundary_relation_aux_forward_aux_not_mem
+    {Label : Type*} [DecidableEq Label]
+    (u v t : List (Signed Label)) (x : Label)
+    (h : ((u ++ v ++ t).map Prod.fst).count x = 0) :
+    x ∉ u.map Prod.fst ∧ x ∉ v.map Prod.fst ∧ x ∉ t.map Prod.fst := by
+  have hm : x ∉ (u ++ v ++ t).map Prod.fst := List.count_eq_zero.mp h
+  simpa using hm
 
 /-- Forward generators: each identified source pair maps under `g` to a pair
 related in the target (classify the index among the seven append blocks). -/
@@ -1293,6 +1502,36 @@ lemma mergeRepeatedBlock_aux_boundary_relation_aux_forward
       Relation.EqvGen (fun p q : Circle => WordRel (u ++ [a] ++ v ++ [inv a] ++ t) (circleToDisk p) (circleToDisk q))
         (g c₁) (g c₂) := by
   sorry
+
+lemma mergeRepeatedBlock_aux_boundary_relation_aux_reverse_aux_partition
+    {Label : Type*} (u v t : List (Signed Label)) (a : Signed Label)
+    (i : Fin (u ++ [a] ++ v ++ [inv a] ++ t).length) :
+    i.1 < u.length ∨ i.1 = u.length ∨
+      (∃ k, k < v.length ∧ i.1 = u.length + 1 + k) ∨
+      i.1 = u.length + 1 + v.length ∨
+      (∃ k, k < t.length ∧ i.1 = u.length + 2 + v.length + k) := by
+  have hi := i.2
+  simp only [List.length_append, List.length_cons, List.length_nil] at hi
+  by_cases h₀ : i.1 < u.length
+  · exact Or.inl h₀
+  by_cases h₁ : i.1 = u.length
+  · exact Or.inr (Or.inl h₁)
+  by_cases h₂ : i.1 < u.length + 1 + v.length
+  · exact Or.inr (Or.inr (Or.inl
+      ⟨i.1 - (u.length + 1), by omega, by omega⟩))
+  by_cases h₃ : i.1 = u.length + 1 + v.length
+  · exact Or.inr (Or.inr (Or.inr (Or.inl h₃)))
+  · exact Or.inr (Or.inr (Or.inr (Or.inr
+      ⟨i.1 - (u.length + 2 + v.length), by omega, by omega⟩)))
+
+lemma mergeRepeatedBlock_aux_boundary_relation_aux_reverse_aux_a_fresh
+    {Label : Type*} [DecidableEq Label]
+    (u v t : List (Signed Label)) (y z a : Signed Label)
+    (ha : a.1 ∉ (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t).map Prod.fst) :
+    a.1 ∉ u.map Prod.fst ∧ a.1 ≠ y.1 ∧ a.1 ≠ z.1 ∧
+      a.1 ∉ v.map Prod.fst ∧ a.1 ∉ t.map Prod.fst := by
+  simp [inv] at ha ⊢
+  aesop
 
 /-- Reverse generators: each identified target pair pulls back under `g⁻¹` to a
 related source pair (split the `a` / `a⁻¹` parameter at `1/2`). -/
