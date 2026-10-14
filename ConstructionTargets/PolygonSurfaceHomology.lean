@@ -1648,6 +1648,22 @@ noncomputable def finiteWedgeFinSuccPointWedgeNeighborhoods (n : ℕ) :
   (finiteWedgeFinPointedContractibleNeighborhood n,
     finiteWedgeUnitPointedContractibleNeighborhood)
 
+/-- The reconstruction conjugator for the successor finite-wedge split. -/
+noncomputable def finiteWedgeSuccessorRightBaseElement (n : ℕ) :=
+  let P := finiteWedgeFinSuccPointWedgeNeighborhoods n
+  let x₀ := PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1
+  let y₀ := PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle () 1
+  ConstructionTargets.PointWedgeVanKampen.genericPointWedgeIdentityGlobalRightBaseElement
+    x₀ y₀ P.2.carrier P.1.carrier P.2.isOpen P.1.isOpen
+      P.2.mem P.1.mem P.2.contraction P.1.contraction
+
+/-- The exact left-factor condition needed for partial normalization. -/
+def finiteWedgeRightBaseInOldFactor (n : ℕ) : Prop :=
+  ∃ a : FundamentalGroup
+      (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge (Fin (n + 1)))
+      (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1),
+    finiteWedgeSuccessorRightBaseElement n = Monoid.Coprod.inl a
+
 /-- The exact remaining connector square after specializing generic van Kampen
 to the successor finite-wedge neighborhoods. -/
 def finiteWedgeRightConnectorSquare (n : ℕ) : Prop := by
@@ -1685,6 +1701,16 @@ theorem finiteWedgeRightProjection_eq_one_iff_connectorSquare (n : ℕ) : by
       finiteWedgeRightConnectorSquare n := by
   exact ConstructionTargets.PointWedgeVanKampen.genericPointWedgeRightBase_rightProjection_eq_one_iff_connectorSquare
     _ _ _ _ _ _ _ _ _ _
+
+/-- Left-factor membership implies the connector square.  This is the valid
+direction; trivial right projection alone does not characterize `inl`. -/
+theorem finiteWedgeRightConnectorSquare_of_inOldFactor (n : ℕ)
+    (h : finiteWedgeRightBaseInOldFactor n) :
+    finiteWedgeRightConnectorSquare n := by
+  rcases h with ⟨a, ha⟩
+  apply (finiteWedgeRightProjection_eq_one_iff_connectorSquare n).mp
+  exact ConstructionTargets.PointWedgeVanKampen.genericPointWedgeRightBase_inl_implies_rightProjection_eq_one
+    _ _ _ _ _ _ _ _ _ _ a ha
 
 /-! ### Algebraic word extraction from a point-wedge computation -/
 
