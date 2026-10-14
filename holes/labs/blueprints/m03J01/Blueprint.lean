@@ -1216,6 +1216,62 @@ lemma apm_m03J01_weakSolution_H1size_le {n : ℕ}
   simpa only [V, G, f, Lp.enorm_toLp u.val_memLp,
     Lp.enorm_toLp u.grad_memLp, Lp.enorm_toLp hF, two_mul] using hsum
 
+/-- Weak Hessians add (lemma-4's partial: the derivative coordinate identity
+`fderiv φ x (basis j) = gradient φ x j` and the two integrability side goals
+remain). -/
+lemma apm_m03J01_hessianOperator_exists_aux_add {n : ℕ}
+    {g k : apm_m03J01_E n → apm_m03J01_E n}
+    {H K : apm_m03J01_E n → Fin n → Fin n → ℝ}
+    (hg : MemLp g 2 volume) (hk : MemLp k 2 volume)
+    (hH : apm_m03J01_weakHessian g H) (hK : apm_m03J01_weakHessian k K) :
+    apm_m03J01_weakHessian (g + k) (H + K) := by
+  sorry
+
+/-- Weak Hessians scale. -/
+lemma apm_m03J01_hessianOperator_exists_aux_smul {n : ℕ} (c : ℝ)
+    {g : apm_m03J01_E n → apm_m03J01_E n}
+    {H : apm_m03J01_E n → Fin n → Fin n → ℝ}
+    (hH : apm_m03J01_weakHessian g H) :
+    apm_m03J01_weakHessian (c • g) (c • H) := by
+  sorry
+
+/-- Weak solutions add: the `H01_add_exists` sum of two solutions solves the
+summed equation (integral linearity; all integrands are `L¹` by Hölder). -/
+lemma apm_m03J01_hessianOperator_exists_aux_solution_add {n : ℕ}
+    {Ω : Set (apm_m03J01_E n)} {F G : apm_m03J01_E n → ℝ}
+    (hF : MemLp F 2 volume) (hG : MemLp G 2 volume)
+    {u v : apm_m03J01_H01 n Ω}
+    (hu : apm_m03J01_weakSolution F u) (hv : apm_m03J01_weakSolution G v) :
+    ∃ w : apm_m03J01_H01 n Ω,
+      apm_m03J01_weakSolution (F + G) w ∧ w.grad = u.grad + v.grad := by
+  sorry
+
+/-- Weak solutions scale. -/
+lemma apm_m03J01_hessianOperator_exists_aux_solution_smul {n : ℕ}
+    {Ω : Set (apm_m03J01_E n)} (c : ℝ) {F : apm_m03J01_E n → ℝ}
+    {u : apm_m03J01_H01 n Ω} (hu : apm_m03J01_weakSolution F u) :
+    ∃ w : apm_m03J01_H01 n Ω,
+      apm_m03J01_weakSolution (c • F) w ∧ w.grad = c • u.grad := by
+  sorry
+
+/-- The `L²` class of a weak Hessian depends only on the a.e. class of the
+forcing term. -/
+lemma apm_m03J01_hessianOperator_exists_aux_hessLp_congr {n : ℕ}
+    {Ω : Set (apm_m03J01_E n)} {F F' : apm_m03J01_E n → ℝ}
+    (hFF : F =ᵐ[volume] F') {u u' : apm_m03J01_H01 n Ω}
+    (hu : apm_m03J01_weakSolution F u) (hu' : apm_m03J01_weakSolution F' u')
+    {H H' : apm_m03J01_E n → Fin n → Fin n → ℝ}
+    (hH : apm_m03J01_weakHessian u.grad H)
+    (hH' : apm_m03J01_weakHessian u'.grad H') :
+    hH.1.toLp H = hH'.1.toLp H' := by
+  have hu2 : apm_m03J01_weakSolution F' u :=
+    (apm_m03J01_uniform_H2_bound_aux_weakSolution_congr hFF u).1 hu
+  have hval := apm_m03J01_weakSolution_unique_ae F' u u' hu2 hu'
+  have hgrad := apm_m03J01_gradient_unique_of_val_ae u u' hval
+  have hH2 : apm_m03J01_weakHessian u'.grad H :=
+    (apm_m03J01_uniform_H2_bound_aux_weakHessian_congr hgrad).1 hH
+  exact (MemLp.toLp_eq_toLp_iff _ _).2 (apm_m03J01_weakHessian_unique_ae hH2 hH')
+
 lemma apm_m03J01_hessianOperator_exists {n : ℕ}
     {Ω : Set (apm_m03J01_E n)}
     (hregular : ∀ (F : apm_m03J01_E n → ℝ) (hF : MemLp F 2 volume)
@@ -1223,7 +1279,58 @@ lemma apm_m03J01_hessianOperator_exists {n : ℕ}
         ∃ H, apm_m03J01_weakHessian u.grad H) :
     ∃ T : apm_m03J01_forcingLp n →ₗ[ℝ] apm_m03J01_hessianLp n,
       apm_m03J01_hessianOperatorRealizes (Ω := Ω) T := by
-  sorry
+  classical
+  have hex (f : apm_m03J01_forcingLp n) :=
+    apm_m03J01_weakSolution_exists (Ω := Ω) (fun x => f x) (Lp.memLp f)
+  let sol : apm_m03J01_forcingLp n → apm_m03J01_H01 n Ω := fun f =>
+    Classical.choose (hex f)
+  have hsol (f : apm_m03J01_forcingLp n) :
+      apm_m03J01_weakSolution (fun x => f x) (sol f) :=
+    Classical.choose_spec (hex f)
+  let hes : apm_m03J01_forcingLp n → apm_m03J01_E n → Fin n → Fin n → ℝ :=
+    fun f => Classical.choose (hregular (fun x => f x) (Lp.memLp f) (sol f) (hsol f))
+  have hhes (f : apm_m03J01_forcingLp n) :
+      apm_m03J01_weakHessian (sol f).grad (hes f) :=
+    Classical.choose_spec (hregular (fun x => f x) (Lp.memLp f) (sol f) (hsol f))
+  let out : apm_m03J01_forcingLp n → apm_m03J01_hessianLp n := fun f =>
+    (hhes f).1.toLp (hes f)
+  have key : ∀ (f : apm_m03J01_forcingLp n) (u : apm_m03J01_H01 n Ω)
+      (H : apm_m03J01_E n → Fin n → Fin n → ℝ)
+      (hH : apm_m03J01_weakHessian u.grad H),
+      apm_m03J01_weakSolution (fun x => f x) u → out f = hH.1.toLp H :=
+    fun f u H hH hu =>
+      apm_m03J01_hessianOperator_exists_aux_hessLp_congr
+        (Filter.EventuallyEq.rfl) (hsol f) hu (hhes f) hH
+  have out_add (f g : apm_m03J01_forcingLp n) : out (f + g) = out f + out g := by
+    obtain ⟨w, hw, hwg⟩ :=
+      apm_m03J01_hessianOperator_exists_aux_solution_add
+        (Lp.memLp f) (Lp.memLp g) (hsol f) (hsol g)
+    have hw' : apm_m03J01_weakSolution (fun x => (f + g) x) w :=
+      (apm_m03J01_uniform_H2_bound_aux_weakSolution_congr
+        (Lp.coeFn_add f g).symm w).1 hw
+    have hHw : apm_m03J01_weakHessian w.grad (hes f + hes g) := by
+      rw [hwg]
+      exact apm_m03J01_hessianOperator_exists_aux_add
+        (sol f).grad_memLp (sol g).grad_memLp (hhes f) (hhes g)
+    rw [key (f + g) w _ hHw hw']
+    exact MemLp.toLp_add (hhes f).1 (hhes g).1
+  have out_smul (c : ℝ) (f : apm_m03J01_forcingLp n) : out (c • f) = c • out f := by
+    obtain ⟨w, hw, hwg⟩ :=
+      apm_m03J01_hessianOperator_exists_aux_solution_smul c (hsol f)
+    have hw' : apm_m03J01_weakSolution (fun x => (c • f) x) w :=
+      (apm_m03J01_uniform_H2_bound_aux_weakSolution_congr
+        (Lp.coeFn_smul c f).symm w).1 hw
+    have hHw : apm_m03J01_weakHessian w.grad (c • hes f) := by
+      rw [hwg]
+      exact apm_m03J01_hessianOperator_exists_aux_smul c (hhes f)
+    rw [key (c • f) w _ hHw hw']
+    exact MemLp.toLp_const_smul c (hhes f).1
+  refine ⟨{ toFun := out, map_add' := out_add, map_smul' := out_smul }, ?_⟩
+  intro F hF u hu
+  obtain ⟨H, hH⟩ := hregular F hF u hu
+  refine ⟨H, hH, ?_⟩
+  exact key (hF.toLp F) u H hH
+    ((apm_m03J01_uniform_H2_bound_aux_weakSolution_congr hF.coeFn_toLp.symm u).1 hu)
 
 lemma apm_m03J01_hessianOperator_seq_closed {n : ℕ}
     {Ω : Set (apm_m03J01_E n)}
