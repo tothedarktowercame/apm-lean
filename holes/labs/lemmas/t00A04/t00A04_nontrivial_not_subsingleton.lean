@@ -41,7 +41,7 @@ theorem t00A04_discrete_nullhomotopic_identity_subsingleton
 -- BEGIN SEAT AREA
 theorem t00A04_nontrivial_not_subsingleton
     (X : Type*) [Nontrivial X] : ¬ Subsingleton X := by
-  sorry
+  exact not_subsingleton_iff_nontrivial.mpr inferInstance
 -- END SEAT AREA
 
 /-- Positive-dimensional compact boundaryless manifolds are not

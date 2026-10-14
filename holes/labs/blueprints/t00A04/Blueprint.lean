@@ -70,7 +70,7 @@ theorem t00A04_discrete_nullhomotopic_identity_subsingleton
 /-- A nontrivial type is not a subsingleton. -/
 theorem t00A04_nontrivial_not_subsingleton
     (X : Type*) [Nontrivial X] : ¬ Subsingleton X := by
-  sorry
+  exact not_subsingleton_iff_nontrivial.mpr inferInstance
 
 /-- Positive-dimensional compact boundaryless manifolds are not
 null-homotopic.  This is the remaining global fundamental-class input. -/
