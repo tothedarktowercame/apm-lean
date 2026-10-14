@@ -248,6 +248,57 @@ theorem mergeRepeatedBlock {Label : Type*} [DecidableEq Label]
     mergeRepeatedBlock_aux_disk_reparam u v t y z a hyz ha hy hz hw
   exact mergeRepeatedBlock_aux_quotient_homeomorph e he
 
+lemma cutAndPaste_aux_length
+    {Label : Type*} (u v t : List (Signed Label)) (x : Signed Label) :
+    (u ++ [x] ++ v ++ [x] ++ t).length =
+      (u ++ [x, x] ++ inverseWord v ++ t).length := by
+  simp [inverseWord, Nat.add_assoc, Nat.add_left_comm, Nat.add_comm]
+
+lemma cutAndPaste_aux_target_nonempty
+    {Label : Type*} [DecidableEq Label]
+    (u v t : List (Signed Label)) (x : Signed Label)
+    (hw : IsPolygonWord (u ++ [x] ++ v ++ [x] ++ t)) :
+    u ++ [x, x] ++ inverseWord v ++ t ≠ [] := by
+  simp
+
+lemma cutAndPaste_aux_target_even_length
+    {Label : Type*} [DecidableEq Label]
+    (u v t : List (Signed Label)) (x : Signed Label)
+    (hw : IsPolygonWord (u ++ [x] ++ v ++ [x] ++ t)) :
+    Even (u ++ [x, x] ++ inverseWord v ++ t).length := by
+  rw [← cutAndPaste_aux_length u v t x]
+  exact hw.2.1
+
+/-- Generic descent along a span: a compact space `Y` mapping continuously
+onto both disks, with the two generated relations agreeing on `Y`, gives a
+homeomorphism of the polygon surfaces (each disk map is closed, hence a quotient
+map, so both surfaces are the same quotient of `Y`). -/
+lemma polygonSurface_homeomorph_of_span {L L' Y : Type*}
+    [DecidableEq L] [DecidableEq L'] [TopologicalSpace Y] [CompactSpace Y]
+    (w₁ : List (Signed L)) (w₂ : List (Signed L')) (a b : Y → Disk)
+    (ha : Continuous a) (hb : Continuous b)
+    (hasurj : Function.Surjective a) (hbsurj : Function.Surjective b)
+    (hrel : ∀ y y', Relation.EqvGen (WordRel w₁) (a y) (a y') ↔
+      Relation.EqvGen (WordRel w₂) (b y) (b y')) :
+    Nonempty (PolygonSurface w₁ ≃ₜ PolygonSurface w₂) := by
+  sorry
+
+/-- The geometric content of cut-and-paste: `Y = Fin 2 × Disk` (two triangles,
+each parametrised by a disk).  `a` places them on either side of the diagonal
+from the start of the first `x` to the start of the second; `b` places them
+on either side of the new edge, the old `x` sides now glued along the new
+diagonal.  The relations agree on `Y` because the diagonal is identified on
+both sides in each picture. -/
+lemma cutAndPaste_aux_span {Label : Type*} [DecidableEq Label]
+    (u v t : List (Signed Label)) (x : Signed Label)
+    (hx : x.1 ∉ (u ++ v ++ t).map Prod.fst)
+    (hw : IsPolygonWord (u ++ [x] ++ v ++ [x] ++ t)) :
+    ∃ a b : Fin 2 × Disk → Disk, Continuous a ∧ Continuous b ∧
+      Function.Surjective a ∧ Function.Surjective b ∧
+      ∀ y y', Relation.EqvGen (WordRel (u ++ [x] ++ v ++ [x] ++ t)) (a y) (a y') ↔
+        Relation.EqvGen (WordRel (u ++ [x, x] ++ inverseWord v ++ t)) (b y) (b y') := by
+  sorry
+
 /-- Standard normal-form slide.  Cut from the first `x` to the second, and
 send the two triangles on either side affinely across the new diagonal. -/
 theorem cutAndPaste {Label : Type*} [DecidableEq Label]
@@ -257,7 +308,8 @@ theorem cutAndPaste {Label : Type*} [DecidableEq Label]
     Nonempty
       (PolygonSurface (u ++ [x] ++ v ++ [x] ++ t) ≃ₜ
        PolygonSurface (u ++ [x, x] ++ inverseWord v ++ t)) := by
-  sorry
+  obtain ⟨a, b, ha, hb, hasurj, hbsurj, hrel⟩ := cutAndPaste_aux_span u v t x hx hw
+  exact polygonSurface_homeomorph_of_span _ _ a b ha hb hasurj hbsurj hrel
 
 lemma homeomorph_trans {X Y Z : Type*}
     [TopologicalSpace X] [TopologicalSpace Y] [TopologicalSpace Z]
