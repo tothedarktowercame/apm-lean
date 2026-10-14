@@ -180,7 +180,28 @@ lemma apm_t91J06_package_interval_coordinate
     ∃ Q : apm_t91J06_I ≃ₜ
         Set.Icc (-(n + 2 : ℝ)) (n + 2 : ℝ),
       ∀ x, (Q (t x) : ℝ) = (q x : ℝ) := by
-  sorry
+  let f : apm_t91J06_I → Set.Icc (-(n + 2 : ℝ)) (n + 2 : ℝ) :=
+    fun x ↦ ⟨F x, hFmem x⟩
+  have hf_injective : Function.Injective f := by
+    intro x y hxy
+    apply hFinj
+    exact congrArg Subtype.val hxy
+  have hf_surjective : Function.Surjective f := by
+    intro y
+    obtain ⟨x, hx⟩ := hFsurj y
+    refine ⟨x, Subtype.ext ?_⟩
+    exact hx
+  let e : apm_t91J06_I ≃ Set.Icc (-(n + 2 : ℝ)) (n + 2 : ℝ) :=
+    Equiv.ofBijective f ⟨hf_injective, hf_surjective⟩
+  have he_continuous : Continuous e := by
+    change Continuous f
+    exact hF.subtype_mk hFmem
+  let Q : apm_t91J06_I ≃ₜ Set.Icc (-(n + 2 : ℝ)) (n + 2 : ℝ) :=
+    he_continuous.homeoOfEquivCompactToT2
+  refine ⟨Q, ?_⟩
+  intro x
+  change F (t x) = (q x : ℝ)
+  exact hext x
 -- END SEAT AREA
 
 /-- Extend arbitrary prescribed coordinates across an interval embedded
