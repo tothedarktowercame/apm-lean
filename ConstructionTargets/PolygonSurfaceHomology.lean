@@ -1690,6 +1690,47 @@ theorem genericPointWedgeOuterLeftComparison_mem_inl
     (N := ConstructionTargets.PointWedgeVanKampen.genericPointWedgeRightGroup y₀)).map_mul]
   exact ⟨_, rfl⟩
 
+/-- Dually, the complete outer-right comparison is literally in the right
+coproduct factor. -/
+theorem genericPointWedgeOuterRightComparison_mem_inr
+    {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    [PathConnectedSpace X] [PathConnectedSpace Y]
+    (x₀ : X) (y₀ : Y) (M : Set Y) (N : Set X)
+    (hM : IsOpen M) (hN : IsOpen N) (hy : y₀ ∈ M) (hx : x₀ ∈ N)
+    (cM : ConstructionTargets.PointedPuncturedCircleContraction.PointedContraction
+      M ⟨y₀, hy⟩)
+    (cN : ConstructionTargets.PointedPuncturedCircleContraction.PointedContraction
+      N ⟨x₀, hx⟩) :
+    let r := ConstructionTargets.PointWedgeVanKampen.genericPointWedgeActualRight
+      x₀ y₀ M N
+    let r' := ConstructionTargets.PointWedgeVanKampen.genericPointWedgeCoordinateRight y₀
+    let eK := ConstructionTargets.PointWedgeVanKampen.genericPointWedgeOverlapGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let eR := ConstructionTargets.PointWedgeVanKampen.genericPointWedgeRightGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let aR := ConstructionTargets.PointWedgeVanKampen.genericPointWedgeRightSpanIso
+      x₀ y₀ M N hM hN hy hx cM cN
+    let Q := ConstructionTargets.PointWedgeVanKampen.genericPointWedgeIdentityCoordinateSpan x₀ y₀
+    let z := ConstructionTargets.PointWedgeVanKampen.genericPointWedgeOverlapBase x₀ y₀ M N
+    ∃ b : FundamentalGroup Y y₀,
+      (ConstructionTargets.GenericSpanPseudoCoconeTransport.reverseRightComparison
+        r r' eK eR aR Q.right).hom.app z = Monoid.Coprod.inr b := by
+  dsimp only
+  simp only [ConstructionTargets.PointWedgeVanKampen.genericPointWedgeOverlapBase]
+  rw [ConstructionTargets.PointWedgeVanKampen.genericPointWedgeIdentityOuterRightComparison_app,
+    ConstructionTargets.PointWedgeVanKampen.genericPointWedgeIdentityOuterRightSpanFactor_eq_map,
+    ConstructionTargets.PointWedgeVanKampen.genericPointWedgeIdentityOuterRightRoundTrip_eq_map]
+  simp only [CategoryTheory.SingleObj.comp_as_mul]
+  rw [eq_of_heq
+      (ConstructionTargets.PointWedgeVanKampen.genericPointWedgeIdentityCoordinateSpan_right_map
+        x₀ y₀ _),
+    eq_of_heq
+      (ConstructionTargets.PointWedgeVanKampen.genericPointWedgeIdentityCoordinateSpan_right_map
+        x₀ y₀ _)]
+  rw [← (Monoid.Coprod.inr
+    (M := ConstructionTargets.PointWedgeVanKampen.genericPointWedgeLeftGroup x₀)).map_mul]
+  exact ⟨_, rfl⟩
+
 /-- The reconstruction conjugator for the successor finite-wedge split. -/
 noncomputable def finiteWedgeSuccessorRightBaseElement (n : ℕ) :=
   let P := finiteWedgeFinSuccPointWedgeNeighborhoods n
@@ -1729,6 +1770,21 @@ noncomputable def finiteWedgeSuccessorOuterRightElement (n : ℕ) :
     x₀ y₀ P.2.carrier P.1.carrier
   exact (ConstructionTargets.GenericSpanPseudoCoconeTransport.reverseRightComparison
     r r' eK eR aR Q.right).hom.app z
+
+/-- The named successor outer-right comparison has a literal right-factor
+coordinate. -/
+theorem finiteWedgeSuccessorOuterRight_mem_inr (n : ℕ) :
+    ∃ b : FundamentalGroup
+        (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge Unit)
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle () 1),
+      finiteWedgeSuccessorOuterRightElement n = Monoid.Coprod.inr b := by
+  let P := finiteWedgeFinSuccPointWedgeNeighborhoods n
+  let x₀ := PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1
+  let y₀ := PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle () 1
+  simpa [finiteWedgeSuccessorOuterRightElement] using
+    genericPointWedgeOuterRightComparison_mem_inr
+      x₀ y₀ P.2.carrier P.1.carrier P.2.isOpen P.1.isOpen
+        P.2.mem P.1.mem P.2.contraction P.1.contraction
 
 /-- The successor right-base element is the named outer-right comparison
 followed, in single-object multiplication order, by an old-factor element. -/
@@ -1809,6 +1865,36 @@ theorem finiteWedgeRightProjection_eq_one_iff_connectorSquare (n : ℕ) : by
   exact ConstructionTargets.PointWedgeVanKampen.genericPointWedgeRightBase_rightProjection_eq_one_iff_connectorSquare
     _ _ _ _ _ _ _ _ _ _
 
+/-- For this particular outer-right factor, the connector square does imply
+old-factor membership: the factor is already known to be an `inr`, so its
+trivial right projection forces it to be the identity. -/
+theorem finiteWedgeSuccessorOuterRight_mem_inl_of_connectorSquare (n : ℕ)
+    (h : finiteWedgeRightConnectorSquare n) :
+    ∃ b : FundamentalGroup
+        (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge (Fin (n + 1)))
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1),
+      finiteWedgeSuccessorOuterRightElement n = Monoid.Coprod.inl b := by
+  have hp := (finiteWedgeRightProjection_eq_one_iff_connectorSquare n).mpr h
+  obtain ⟨a, ha⟩ := finiteWedgeSuccessorRightBase_eq_outerRight_mul_inl n
+  obtain ⟨b, hb⟩ := finiteWedgeSuccessorOuterRight_mem_inr n
+  change ConstructionTargets.PointWedgeVanKampen.genericPointWedgeFreeProductRightProjection
+      (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1)
+      (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle () 1)
+      (finiteWedgeSuccessorRightBaseElement n) = 1 at hp
+  have hb1 : b = 1 := by
+    simpa [ha, hb] using hp
+  refine ⟨1, ?_⟩
+  rw [hb, hb1]
+  simp
+
+/-- Thus the specialized connector square is sufficient for the complete
+successor right-base factorization, using the two structural factor lemmas. -/
+theorem finiteWedgeRightBaseInOldFactor_of_connectorSquare (n : ℕ)
+    (h : finiteWedgeRightConnectorSquare n) :
+    finiteWedgeRightBaseInOldFactor n :=
+  finiteWedgeRightBaseInOldFactor_of_outerRightInOldFactor n
+    (finiteWedgeSuccessorOuterRight_mem_inl_of_connectorSquare n h)
+
 /-- Left-factor membership implies the connector square.  This is the valid
 direction; trivial right projection alone does not characterize `inl`. -/
 theorem finiteWedgeRightConnectorSquare_of_inOldFactor (n : ℕ)
@@ -1818,6 +1904,13 @@ theorem finiteWedgeRightConnectorSquare_of_inOldFactor (n : ℕ)
   apply (finiteWedgeRightProjection_eq_one_iff_connectorSquare n).mp
   exact ConstructionTargets.PointWedgeVanKampen.genericPointWedgeRightBase_inl_implies_rightProjection_eq_one
     _ _ _ _ _ _ _ _ _ _ a ha
+
+/-- The structural left/right factorization upgrades the projection
+calculation to the exact old-factor criterion needed for normalization. -/
+theorem finiteWedgeRightBaseInOldFactor_iff_connectorSquare (n : ℕ) :
+    finiteWedgeRightBaseInOldFactor n ↔ finiteWedgeRightConnectorSquare n :=
+  ⟨finiteWedgeRightConnectorSquare_of_inOldFactor n,
+    finiteWedgeRightBaseInOldFactor_of_connectorSquare n⟩
 
 /-! ### Algebraic word extraction from a point-wedge computation -/
 
