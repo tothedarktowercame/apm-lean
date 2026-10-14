@@ -36161,6 +36161,16 @@
      {:cmd "git diff --check", :exit 0}
      {:cmd "rg forbidden", :exit 1, :expected-exit 1}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1792014749379-12493-9d78aa4a",
+     :commands
+     ["fixture SHA-256 assertion; lake env lean frozen interface"
+      "git diff-tree exact committed scope"
+      "registry 166/166; parent/commit placeholder and forbidden recount"],
+     :finding
+     "PASS: 8c4eb4f adds compiled, sorry-free progress since 263f5d47. The frozen fixture verifies a Fin(runs+1)-indexed family in outer subtype V and a correctly oriented theorem recovering the corresponding ambient boundary-list value. This closes the declared subtype-family milestone without assuming the partial van Kampen theorem. Scope/hash match; axioms are propext, Classical.choice, Quot.sound; Main remains 1->1 placeholder; remaining milestones are explicit."},
     :commit "22202c41575e25e4d174a57a8149f7b15881d382",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
@@ -36171,7 +36181,7 @@
      "63e06fab1da057b9f5b142e9d9aaab7f22abbeb40880dd4b8e564112a927ea39"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -36189,7 +36199,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t93J03Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Proved each selected run block ends at its literal target vertex; outer-boundary comparison remains.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Matched outer boundary i.succ exactly to indexed run block target; source boundary i remains.",
    :id :program-2026-10-13-close-t93j03,
    :kind :final-adapter,
    :campaign-priority 30,
@@ -36503,7 +36513,11 @@
     {:job 6,
      :commit "10390da8355dcd72034364c3ddf78c28f2cdf7d3",
      :reason
-     "Proved each selected run block ends at its literal target vertex; outer-boundary comparison remains."}]}
+     "Proved each selected run block ends at its literal target vertex; outer-boundary comparison remains."}
+    {:job 7,
+     :commit "22202c41575e25e4d174a57a8149f7b15881d382",
+     :reason
+     "Matched outer boundary i.succ exactly to indexed run block target; source boundary i remains."}]}
   {:consumer :t99J05,
    :stop-count 5,
    :evidence
@@ -39950,7 +39964,7 @@
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -39962,7 +39976,9 @@
     :reported-by [:program-2026-10-13-close-t93j03],
     :type "boundary i.succ equals run block target",
     :area "covering-subgroup-correspondence",
-    :proved-in :program-2026-10-13-close-t93j03},
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "22202c41575e25e4d174a57a8149f7b15881d382"},
    :id
    :lemma-pathtwoopensubdivisionouterrunboundaryfamily-succ-eq-runblockpoint-last,
    :kind :lemma,
