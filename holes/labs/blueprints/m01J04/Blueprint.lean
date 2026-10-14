@@ -2202,7 +2202,22 @@ lemma apm_m01J04_localization_core_approx_aux_grad_tendsto_aux_collar_fderiv
     fderiv ℝ (apm_m01J04_localization_core_approx_aux_cutoff φ r) x =
       (deriv Real.smoothTransition (φ x ^ 2 / r ^ 2 - 1)) •
         ((2 * φ x / r ^ 2) • fderiv ℝ φ x) := by
-  sorry
+  have hφx : HasFDerivAt φ (fderiv ℝ φ x) x :=
+    (hφ.differentiable (by simp)).differentiableAt.hasFDerivAt
+  have hi : HasFDerivAt (fun y ↦ φ y ^ 2 / r ^ 2 - 1)
+      ((2 * φ x / r ^ 2) • fderiv ℝ φ x) x := by
+    convert ((hφx.pow 2).const_smul (1 / r ^ 2)).sub_const 1 using 1 <;>
+      ext z <;> simp <;> ring
+  have hs : HasDerivAt Real.smoothTransition
+      (deriv Real.smoothTransition (φ x ^ 2 / r ^ 2 - 1))
+      (φ x ^ 2 / r ^ 2 - 1) :=
+    ((@Real.smoothTransition.contDiff 1).differentiable
+      (by norm_num)).differentiableAt.hasDerivAt
+  have hc := (hs.hasFDerivAt.comp x hi).fderiv
+  convert hc using 1 <;>
+    ext z <;>
+    simp [apm_m01J04_localization_core_approx_aux_cutoff, Function.comp_def,
+      smul_smul] <;> ring
 
 /-- Collar term: `(fφ) • ∇χ_r → 0` in `L²`.  Pointwise
 `(fφ) ∇χ_r = f · smoothTransition'(φ²/r² − 1) · 2(φ²/r²) ∇φ`, bounded by
