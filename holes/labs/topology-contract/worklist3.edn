@@ -36121,7 +36121,7 @@
   {:consumer :t93J03,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 10,
+   :stop-count 0,
    :review-finding
    "Program STOP commits no new mathematical progress since the prior milestone: KleinPolygonBasedVanKampen merely packages the already-required surjectivity and kernel hypotheses, and both consumers only reapply the previously proved three-input theorem. Prove the based van Kampen surjectivity/kernel result (or winding conjugacy) in scope; extend Mathlib: state and prove the missing theorem in scope.",
    :evidence
@@ -36171,7 +36171,7 @@
      "9acc7aa9a0d2457e208cd7c13be03f715168a1dcb4962442d91f9538c87b1a74"},
     :seat :topo-10},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -36892,6 +36892,16 @@
       :exit 1,
       :correction
       "qualified congr_hom and normalized composite action; passed"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1792006807968-12272-583dcb39",
+     :commands
+     ["git show/check/diff f170a303; scope and fixture SHA-256"
+      "lake build ConstructionTargets.t96A06Closure; lean fixture and Main"
+      "statement-registry check; placeholder/axiom recount"],
+     :finding
+     "PASS: f170a303 adds compiled, sorry-free progress after e25d1d3c. The exact two-sheeted S3-to-RP3 cover transfer satisfies projection∘transfer=2·id, and invertibility of 2 over Q correctly yields surjectivity of the induced homology map in every degree. Blueprint is faithful; exact scope/hash match; closure placeholders 0->0; frozen Main remains 1; registry 166/166; standard axioms only. STOP lists sphere homology identification, degree four, invariants/Main."},
     :commit "f170a303979c4503ee97dc13f70b5ec00dfa6fcd",
     :changed-paths
     ["ConstructionTargets/t96A06Closure.lean"
@@ -36902,7 +36912,7 @@
      "aae50311cac7cd5bfad76186fa8f6d4b4fcbba98270258ed5e6ec84d490da9ea"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -36920,7 +36930,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t96A06Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Packaged the frozen S3-to-RP3 projection as an exact two-sheeted cover; induced rational homology transfer remains.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Specialized rational transfer to the exact double cover and proved the induced sphere-to-RP3 homology map surjective in every degree; sphere-group identification remains.",
    :id :program-2026-10-13-close-t96a06,
    :kind :final-adapter,
    :campaign-priority 31,
@@ -36952,7 +36962,11 @@
     {:job 8,
      :commit "e25d1d3c16af5c726f6e3d15302b3e75ae6c5a46",
      :reason
-     "Packaged the frozen S3-to-RP3 projection as an exact two-sheeted cover; induced rational homology transfer remains."}]}
+     "Packaged the frozen S3-to-RP3 projection as an exact two-sheeted cover; induced rational homology transfer remains."}
+    {:job 9,
+     :commit "f170a303979c4503ee97dc13f70b5ec00dfa6fcd",
+     :reason
+     "Specialized rational transfer to the exact double cover and proved the induced sphere-to-RP3 homology map surjective in every degree; sphere-group identification remains."}]}
   {:consumer :t96J05,
    :stop-count 0,
    :phase :implementation,
@@ -39363,7 +39377,7 @@
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "path_concat_exists_subtype_path",
@@ -39373,14 +39387,16 @@
     :reported-by [:program-2026-10-13-close-t93j03],
     :type "set-valued finite concat lifts to subtype path",
     :area "covering-subgroup-correspondence",
-    :proved-in :program-2026-10-13-close-t93j03},
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t93J03Closure.lean"]},
    :id :lemma-path-concat-exists-subtype-path,
    :kind :lemma,
    :depends-on [:lemma-path-concat-mem-of-piece-mem],
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "pathTwoOpenSubdivisionOuterBlock_exists_outerPath",
@@ -39390,14 +39406,16 @@
     :reported-by [:program-2026-10-13-close-t93j03],
     :type "packaged outer block is ambient image of outer path",
     :area "covering-subgroup-correspondence",
-    :proved-in :program-2026-10-13-close-t93j03},
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t93J03Closure.lean"]},
    :id :lemma-pathtwoopensubdivisionouterblock-exists-outerpath,
    :kind :lemma,
    :depends-on [:lemma-path-concat-exists-subtype-path],
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t96A06_rp3_rational_homologyMap_surjective",
@@ -39409,7 +39427,9 @@
     :type
     "sphereProjection induces a surjection on rational homology in every degree",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :program-2026-10-13-close-t96a06,
+    :banked-commit "f170a303979c4503ee97dc13f70b5ec00dfa6fcd"},
    :id :lemma-t96a06-rp3-rational-homologymap-surjective,
    :kind :lemma,
    :depends-on [:lemma-t96a06-rp3-sphere-twosheeted],
