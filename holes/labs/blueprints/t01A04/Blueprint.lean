@@ -1293,8 +1293,56 @@ def apm_t01A04_tbp_V (i : Fin 2) : Set apm_t01a04_TorusCover :=
         0 < ((q.1 : ℂ) ^ 2).re ∧ 0 < (q.2 : ℂ).re)
       (fun p : Fin 2 × Circle => p.1 = i ∧ 0 < (p.2 : ℂ).re) r}
 
+lemma apm_t01A04_tbp_U_open_aux_invariant
+    {u v : Sum apm_t01a04_Torus Circle}
+    (h : Relation.EqvGen apm_t01a04_wedgeRel u v) :
+    (Sum.elim
+        (fun q : apm_t01a04_Torus =>
+          0 < (q.1 : ℂ).re ∧ 0 < (q.2 : ℂ).re)
+        (fun z : Circle => 0 < (z : ℂ).re) u ↔
+      Sum.elim
+        (fun q : apm_t01a04_Torus =>
+          0 < (q.1 : ℂ).re ∧ 0 < (q.2 : ℂ).re)
+        (fun z : Circle => 0 < (z : ℂ).re) v) := by
+  induction h with
+  | rel _ _ h => cases h <;> norm_num
+  | refl _ => rfl
+  | symm _ _ _ ih => exact ih.symm
+  | trans _ _ _ _ _ ih₁ ih₂ => exact ih₁.trans ih₂
+
 lemma apm_t01A04_tbp_U_open : apm_t01a04_basepoint ∈ apm_t01A04_tbp_U ∧ IsOpen apm_t01A04_tbp_U := by
-  sorry
+  constructor
+  · refine ⟨Sum.inl ((1 : Circle), (1 : Circle)), ?_, rfl⟩
+    norm_num
+  · change IsOpen ((fun r => (Quotient.mk _ r : apm_t01a04_X)) '' _)
+    rw [isOpen_coinduced]
+    have heq :
+        (fun r : Sum apm_t01a04_Torus Circle =>
+            (Quotient.mk _ r : apm_t01a04_X)) ⁻¹'
+            ((fun r => (Quotient.mk _ r : apm_t01a04_X)) ''
+              {r | Sum.elim
+                (fun q : apm_t01a04_Torus =>
+                  0 < (q.1 : ℂ).re ∧ 0 < (q.2 : ℂ).re)
+                (fun z : Circle => 0 < (z : ℂ).re) r}) =
+          {r | Sum.elim
+            (fun q : apm_t01a04_Torus =>
+              0 < (q.1 : ℂ).re ∧ 0 < (q.2 : ℂ).re)
+            (fun z : Circle => 0 < (z : ℂ).re) r} := by
+      ext r
+      constructor
+      · rintro ⟨s, hs, hrs⟩
+        exact (apm_t01A04_tbp_U_open_aux_invariant
+          (Quotient.exact hrs)).mp hs
+      · intro hr
+        exact ⟨r, hr, rfl⟩
+    rw [heq, isOpen_sum_iff]
+    constructor
+    · exact ((isOpen_lt continuous_const
+          (Complex.continuous_re.comp (continuous_subtype_val.comp continuous_fst))).inter
+        (isOpen_lt continuous_const
+          (Complex.continuous_re.comp (continuous_subtype_val.comp continuous_snd))))
+    · exact isOpen_lt continuous_const
+        (Complex.continuous_re.comp continuous_subtype_val)
 
 lemma apm_t01A04_tbp_V_open (i : Fin 2) : IsOpen (apm_t01A04_tbp_V i) := by
   sorry
