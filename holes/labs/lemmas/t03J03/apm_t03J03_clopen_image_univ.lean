@@ -214,7 +214,49 @@ theorem apm_t03J03_clopen_image_univ {E X : Type}
     [TopologicalSpace E] [TopologicalSpace X] [ConnectedSpace X]
     [LocallyConnectedSpace X] (p : E → X) (hp : IsCoveringMap p)
     (U : Set E) (hU : IsClopen U) (hne : U.Nonempty) : p '' U = Set.univ := by
-  sorry
+  apply IsClopen.eq_univ
+  · refine ⟨?_, hp.isOpenMap U hU.isOpen⟩
+    rw [← isOpen_compl_iff]
+    rw [isOpen_iff_mem_nhds]
+    intro x hx
+    have hx' : x ∉ p '' U := by simpa using hx
+    obtain ⟨_, V, hxV, hV, hpV, H, hH⟩ := hp x
+    obtain ⟨W, hWV, hWopen, hxW, hWconn⟩ :=
+      locallyConnectedSpace_iff_subsets_isOpen_isConnected.mp inferInstance x V
+        (hV.mem_nhds hxV)
+    refine Filter.mem_of_superset (hWopen.mem_nhds hxW) ?_
+    intro y hyW hy_image
+    obtain ⟨e, heU, rfl⟩ := hy_image
+    have hpeV : p e ∈ V := hWV hyW
+    let i := (H ⟨e, hpeV⟩).2
+    let g : W → E := fun z ↦ H.symm (⟨z.1, hWV z.2⟩, i)
+    have hg_cont : Continuous g := by
+      dsimp [g]
+      fun_prop
+    have hge : g ⟨p e, hyW⟩ = e := by
+      change ↑(H.symm (⟨⟨p e, hWV hyW⟩, i⟩)) = e
+      have hpair : (⟨⟨p e, hWV hyW⟩, i⟩ : V × (p ⁻¹' {x})) = H ⟨e, hpeV⟩ := by
+        ext
+        · exact (hH ⟨e, hpeV⟩).symm
+        · rfl
+      rw [hpair]
+      exact congrArg Subtype.val (H.symm_apply_apply ⟨e, hpeV⟩)
+    have hgx_p : p (g ⟨x, hxW⟩) = x := by
+      simpa [g] using (hH (H.symm (⟨⟨x, hWV hxW⟩, i⟩))).symm
+    have hgx_not : g ⟨x, hxW⟩ ∉ U := by
+      intro hgxU
+      exact hx' ⟨g ⟨x, hxW⟩, hgxU, hgx_p⟩
+    letI : ConnectedSpace W := isConnected_iff_connectedSpace.mp hWconn
+    have himage_pre : IsPreconnected (g '' Set.univ) :=
+      ((connectedSpace_iff_univ.mp inferInstance).image g hg_cont.continuousOn).isPreconnected
+    have hge_mem : g ⟨p e, hyW⟩ ∈ g '' Set.univ :=
+      ⟨⟨p e, hyW⟩, Set.mem_univ _, rfl⟩
+    have himage_sub : g '' Set.univ ⊆ U :=
+      himage_pre.subset_isClopen hU ⟨g ⟨p e, hyW⟩, hge_mem, hge.symm ▸ heU⟩
+    have hgx_mem : g ⟨x, hxW⟩ ∈ g '' Set.univ :=
+      ⟨⟨x, hxW⟩, Set.mem_univ _, rfl⟩
+    exact hgx_not (himage_sub hgx_mem)
+  · exact hne.image p
 -- END SEAT AREA
 
 theorem apm_t03J03_disconnected_two_sheeted_split {E X : Type}
