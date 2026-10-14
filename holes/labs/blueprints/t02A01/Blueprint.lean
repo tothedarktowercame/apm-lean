@@ -643,7 +643,45 @@ theorem apm_t02a01_freeHomotopy_conj {X : Type*} [TopologicalSpace X] {x y : X}
     (h0 : ∀ t, F (0, t) = γ0 t) (h1 : ∀ t, F (1, t) = γ1 t)
     (hl : ∀ s, F (s, 0) = δ s) (hr : ∀ s, F (s, 1) = δ s) :
     γ0.Homotopic (δ.trans (γ1.trans δ.symm)) := by
-  sorry
+  let H : γ0.toContinuousMap.Homotopy γ1.toContinuousMap := {
+    toContinuousMap := F
+    map_zero_left := h0
+    map_one_left := h1 }
+  have hsquare := Path.Homotopic.map_trans_evalAt H Path.id
+  have hsquare' := hsquare.pathCast γ0.source.symm γ1.target.symm
+  have hbasic : (γ0.trans δ).Homotopic (δ.trans γ1) := by
+    convert hsquare' using 1 <;> ext t
+    · change (γ0.trans δ) t =
+        ((Path.id.map γ0.continuous).trans (H.evalAt 1)) t
+      rw [Path.trans_apply, Path.trans_apply]
+      split_ifs
+      · rfl
+      · exact (hr _).symm
+    · change (δ.trans γ1) t =
+        ((H.evalAt 0).trans (Path.id.map γ1.continuous)) t
+      rw [Path.trans_apply, Path.trans_apply]
+      split_ifs
+      · exact (hl _).symm
+      · rfl
+  rw [← Path.Homotopic.Quotient.eq]
+  have hq := (Path.Homotopic.Quotient.eq.mpr hbasic)
+  simp only [Path.Homotopic.Quotient.mk_trans,
+    Path.Homotopic.Quotient.mk_symm]
+  let a := Path.Homotopic.Quotient.mk γ0
+  let d := Path.Homotopic.Quotient.mk δ
+  let g := Path.Homotopic.Quotient.mk γ1
+  change a = d.trans (g.trans d.symm)
+  change a.trans d = d.trans g at hq
+  calc
+    a = a.trans (Path.Homotopic.Quotient.refl x) :=
+      (Path.Homotopic.Quotient.trans_refl a).symm
+    _ = a.trans (d.trans d.symm) := by
+      rw [Path.Homotopic.Quotient.trans_symm]
+    _ = (a.trans d).trans d.symm :=
+      (Path.Homotopic.Quotient.trans_assoc a d d.symm).symm
+    _ = (d.trans g).trans d.symm := congrArg (fun q ↦ q.trans d.symm) hq
+    _ = d.trans (g.trans d.symm) :=
+      Path.Homotopic.Quotient.trans_assoc d g d.symm
 
 noncomputable def apm_t02a01_radial (l s : ℝ) : ℝ × ℝ :=
   ((1 / 2 : ℝ), (1 / 2 : ℝ)) + (1 + l) • (apm_t02a01_perimeter s - ((1 / 2 : ℝ), (1 / 2 : ℝ)))
