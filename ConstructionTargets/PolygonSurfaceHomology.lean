@@ -1364,6 +1364,62 @@ noncomputable def finiteWedgeSumHomeomorphPointWedge {L K : Type*}
   continuous_toFun := continuous_finiteWedgeSumToPointWedge l₀ k₀
   continuous_invFun := continuous_pointWedgeToFiniteWedgeSum l₀ k₀
 
+/-- Split the labels of a nonempty successor finite type into its first labels
+and its last label. -/
+def finSuccEquivSumUnit (n : ℕ) : Fin (n + 1) ≃ Fin n ⊕ Unit :=
+  finSumFinEquiv.symm.trans (Equiv.sumCongr (Equiv.refl (Fin n)) finOneEquiv)
+
+@[simp]
+theorem finSuccEquivSumUnit_castSucc (n : ℕ) (i : Fin n) :
+    finSuccEquivSumUnit n i.castSucc = Sum.inl i := by
+  simp [finSuccEquivSumUnit]
+
+@[simp]
+theorem finSuccEquivSumUnit_last (n : ℕ) :
+    finSuccEquivSumUnit n (Fin.last n) = Sum.inr () := by
+  simp [finSuccEquivSumUnit]
+
+/-- A wedge of `n + 1` circles, with `n` nonempty, is the point wedge of the
+first `n` circles and the final circle. -/
+noncomputable def finiteWedgeFinSuccHomeomorphPointWedge (n : ℕ) :
+    PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge (Fin ((n + 1) + 1)) ≃ₜ
+      ConstructionTargets.PointWedgeQuotient.Wedge
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1)
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle () 1) :=
+  (finiteWedgeHomeomorphOfEquiv (finSuccEquivSumUnit (n + 1))).trans
+    (finiteWedgeSumHomeomorphPointWedge (0 : Fin (n + 1)) ())
+
+@[simp]
+theorem finiteWedgeFinSuccHomeomorphPointWedge_castSucc (n : ℕ)
+    (i : Fin (n + 1)) (z : Circle) :
+    finiteWedgeFinSuccHomeomorphPointWedge n
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle i.castSucc z) =
+      ConstructionTargets.PointWedgeQuotient.quotientMap
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1)
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle () 1)
+        (.inl (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle i z)) := by
+  change finiteWedgeSumHomeomorphPointWedge (0 : Fin (n + 1)) ()
+      (finiteWedgeHomeomorphOfEquiv (finSuccEquivSumUnit (n + 1))
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle i.castSucc z)) = _
+  rw [finiteWedgeHomeomorphOfEquiv_wedgeCircle,
+    finSuccEquivSumUnit_castSucc]
+  rfl
+
+@[simp]
+theorem finiteWedgeFinSuccHomeomorphPointWedge_last (n : ℕ) (z : Circle) :
+    finiteWedgeFinSuccHomeomorphPointWedge n
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (Fin.last (n + 1)) z) =
+      ConstructionTargets.PointWedgeQuotient.quotientMap
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1)
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle () 1)
+        (.inr (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle () z)) := by
+  change finiteWedgeSumHomeomorphPointWedge (0 : Fin (n + 1)) ()
+      (finiteWedgeHomeomorphOfEquiv (finSuccEquivSumUnit (n + 1))
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (Fin.last (n + 1)) z)) = _
+  rw [finiteWedgeHomeomorphOfEquiv_wedgeCircle,
+    finSuccEquivSumUnit_last]
+  rfl
+
 end
 
 end ConstructionTargets.PolygonSurfaceHomology
