@@ -3202,7 +3202,65 @@ theorem zipBoundaryMap_fold {n k : ℕ} (hn : 0 < n) (hk : k ≤ n) (t : Icc (0 
 
 theorem zipCone_continuous {n k : ℕ} (hc : Continuous (zipBoundaryMap n k)) :
     Continuous (zipCone n k) := by
-  sorry
+  rw [continuous_iff_continuousAt]
+  intro z
+  by_cases hz : z = 0
+  · subst z
+    rw [Metric.continuousAt_iff]
+    intro ε hε
+    obtain ⟨M, hM⟩ := (isCompact_range hc).isBounded.subset_closedBall 0
+    have hM0 : 0 ≤ M := by
+      have h1 := hM ⟨⟨1, by simp [Circle, Submonoid.unitSphere]⟩, rfl⟩
+      rw [Metric.mem_closedBall, dist_zero_right] at h1
+      exact (norm_nonneg _).trans h1
+    have hc0 : 0 ≤ ‖zipCentre‖ := norm_nonneg _
+    have hden : 0 < M + ‖zipCentre‖ + 1 := by linarith
+    refine ⟨ε / (M + ‖zipCentre‖ + 1), div_pos hε hden, ?_⟩
+    intro w hw
+    simp only [dist_zero_right] at hw
+    by_cases hw0 : w = 0
+    · subst w
+      simpa using hε
+    · rw [zipCone, dif_neg hw0, zipCone, dif_pos rfl]
+      rw [dist_eq_norm, add_sub_cancel_left, norm_mul]
+      have hb : ‖zipBoundaryMap n k
+          ⟨((‖w‖⁻¹ : ℝ) : ℂ) * w, by
+            simp [Circle, Submonoid.unitSphere, norm_mul, hw0]⟩‖ ≤ M := by
+        have hm := hM (show zipBoundaryMap n k
+          ⟨((‖w‖⁻¹ : ℝ) : ℂ) * w, by
+            simp [Circle, Submonoid.unitSphere, norm_mul, hw0]⟩ ∈
+              Set.range (zipBoundaryMap n k) from ⟨_, rfl⟩)
+        simpa [Metric.mem_closedBall, dist_zero_right] using hm
+      have hsub := norm_sub_le (zipBoundaryMap n k
+          ⟨((‖w‖⁻¹ : ℝ) : ℂ) * w, by
+            simp [Circle, Submonoid.unitSphere, norm_mul, hw0]⟩) zipCentre
+      rw [Complex.norm_real, Real.norm_eq_abs, abs_norm]
+      have hw' : ‖w‖ * (M + ‖zipCentre‖ + 1) < ε := by
+        rw [lt_div_iff₀ hden] at hw
+        exact hw
+      nlinarith [norm_nonneg w]
+  · have hopen : IsOpen ({w : ℂ | w ≠ 0}) := isOpen_compl_singleton
+    have hcont : ContinuousOn (zipCone n k) {w : ℂ | w ≠ 0} := by
+      rw [continuousOn_iff_continuous_restrict]
+      have hN : Continuous (fun w : ({w : ℂ | w ≠ 0} : Set ℂ) =>
+          (⟨((‖(w : ℂ)‖⁻¹ : ℝ) : ℂ) * w, by
+            have hw : (w : ℂ) ≠ 0 := w.2
+            simp [Circle, Submonoid.unitSphere, norm_mul, hw]⟩ : Circle)) := by
+        apply Continuous.subtype_mk
+        exact (Complex.continuous_ofReal.comp ((continuous_norm.comp continuous_subtype_val).inv₀
+          (fun w => norm_ne_zero_iff.mpr w.2))).mul continuous_subtype_val
+      have heq : Set.restrict {w : ℂ | w ≠ 0} (zipCone n k) =
+          fun w : ({w : ℂ | w ≠ 0} : Set ℂ) =>
+          zipCentre + (‖(w : ℂ)‖ : ℂ) * (zipBoundaryMap n k
+            ⟨((‖(w : ℂ)‖⁻¹ : ℝ) : ℂ) * w, by
+              have hw : (w : ℂ) ≠ 0 := w.2
+              simp [Circle, Submonoid.unitSphere, norm_mul, hw]⟩ - zipCentre) := by
+        funext w
+        simp only [Set.restrict_apply, zipCone, dif_neg (show (w : ℂ) ≠ 0 from w.2)]
+      rw [heq]
+      exact continuous_const.add ((Complex.continuous_ofReal.comp
+        (continuous_norm.comp continuous_subtype_val)).mul ((hc.comp hN).sub continuous_const))
+    exact hcont.continuousAt (hopen.mem_nhds hz)
 
 theorem zipCone_of_norm_one {n k : ℕ} {z : ℂ} (hz : ‖z‖ = 1) :
     zipCone n k z = zipBoundaryMap n k ⟨z, by simpa [Circle, Submonoid.unitSphere] using hz⟩ := by
