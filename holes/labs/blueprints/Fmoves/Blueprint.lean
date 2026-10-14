@@ -402,6 +402,31 @@ lemma polygonSurface_homeomorph_of_collapse {L L' : Type*}
     continuous_toFun := by simpa [e] using hf_continuous
     continuous_invFun := he_symm_continuous }⟩
 
+lemma inversePairCancellation_aux_collapse_aux_source_polygonWord
+    {Label : Type*} [DecidableEq Label]
+    (u v : List (Signed Label)) (x : Signed Label)
+    (hx : x.1 ∉ (u ++ v).map Prod.fst)
+    (hrest : IsPolygonWord (u ++ v)) :
+    IsPolygonWord (u ++ [x, inv x] ++ v) := by
+  refine ⟨by simp, ?_, ?_⟩
+  · rw [inversePairCancellation_aux_full_length]
+    obtain ⟨k, hk⟩ := hrest.2.1
+    refine ⟨k + 1, by omega⟩
+  · intro a ha
+    by_cases hax : a = x.1
+    · subst a
+      exact inversePairCancellation_aux_fresh_count u v x hx
+    · have ha' : a ∈ (u ++ v).map Prod.fst := by
+        have hh : a ∈ u.map Prod.fst ∨ a = x.1 ∨
+            a ∈ v.map Prod.fst := by
+          simpa using ha
+        rcases hh with hu | ha | hv
+        · simpa using List.mem_append_left (v.map Prod.fst) hu
+        · exact (hax ha).elim
+        · simpa using List.mem_append_right (u.map Prod.fst) hv
+      have hc := hrest.2.2 a ha'
+      simpa [List.count_append, List.count_cons, hax, Ne.symm hax] using hc
+
 /-- The geometric content of cancellation: zip the arcs `x` and `x⁻¹` together,
 `x(t)` and `x⁻¹(1-t)` going to the same point of a segment running from the
 boundary into the interior (NOT to a single point: `c` may identify exactly
