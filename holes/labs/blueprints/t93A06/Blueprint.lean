@@ -408,9 +408,13 @@ theorem t93A06_periodic_form_descent_aux_set_descent
   funext i
   exact (D (lift (projection x))).symm_apply_apply (v i)
 
-/-- Smoothness descends along the local diffeomorphism `projection`.  Both
-the form and the smoothness of its pullback are explicit inputs, making this
-leaf independent of set-level descent. -/
+lemma t93A06_periodic_form_descent_aux_smooth_of_pullback_aux_euclidean
+    (g : Plane → Plane) (y : Plane) (hg : ContDiffAt ℝ ∞ g y)
+    (hsource : ContDiff ℝ ∞ sourceForm) :
+    ContDiffAt ℝ ∞ (fun u ↦ (sourceForm (g u)).compContinuousLinearMap
+      (fderiv ℝ g u)) y := by
+  sorry
+
 theorem t93A06_periodic_form_descent_aux_smooth_of_pullback
     (atlas : SmoothAtlas)
     (form : let _ := atlas.charts; Form Plane Torus 2)
@@ -419,7 +423,90 @@ theorem t93A06_periodic_form_descent_aux_smooth_of_pullback
       pullback projection form = sourceForm) :
     letI := atlas.charts
     IsSmooth form := by
-  sorry
+  letI := atlas.charts
+  letI : IsManifold 𝓘(ℝ, Plane) ∞ Torus := atlas.smooth
+  intro e he
+  intro y hy
+  have hz : e.symm y ∈ e.source := e.map_target hy
+  obtain ⟨x, hx⟩ := t93A06_periodic_form_descent_aux_projection_surjective (e.symm y)
+  let hloc := atlas.quotient_localDiffeomorph x
+  let s := hloc.localInverse
+  let g : Plane → Plane := fun u ↦ s (e.symm u)
+  have hsz : e.symm y ∈ s.source := by
+    rw [← hx]
+    exact hloc.localInverse_mem_source
+  have hg : ContDiffWithinAt ℝ ∞ g e.target y := by
+    change ContDiffWithinAt ℝ ∞ (fun u ↦ s (e.symm u)) e.target y
+    have hsmooth_s : ContMDiffAt 𝓘(ℝ, Plane) 𝓘(ℝ, Plane) ∞ s (e.symm y) :=
+      hloc.localInverse_contMDiffOn.contMDiffAt (s.open_source.mem_nhds hsz)
+    have hsmooth_e : ContMDiffAt 𝓘(ℝ, Plane) 𝓘(ℝ, Plane) ∞ e.symm y :=
+      contMDiffAt_symm_of_mem_maximalAtlas (IsManifold.subset_maximalAtlas he) hy
+    have hcomp := (hsmooth_s.comp y hsmooth_e).contMDiffWithinAt (s := e.target)
+    rw [contMDiffWithinAt_iff_contDiffWithinAt] at hcomp
+    exact hcomp
+  have hrhs : ContDiffWithinAt ℝ ∞
+      (fun u ↦ (sourceForm (g u)).compContinuousLinearMap
+        (fderiv ℝ g u)) e.target y := by
+    have hga : ContDiffAt ℝ ∞ g y := hg.contDiffAt (e.open_target.mem_nhds hy)
+    exact (t93A06_periodic_form_descent_aux_smooth_of_pullback_aux_euclidean
+      g y hga hsource).contDiffWithinAt
+  apply hrhs.congr_of_eventuallyEq
+  filter_upwards [self_mem_nhdsWithin,
+    (e.continuousOn_symm y hy).preimage_mem_nhdsWithin
+      (s.open_source.mem_nhds hsz)] with u hu hus
+  · unfold inChart
+    have hpu : projection (g u) = e.symm u := hloc.localInverse_right_inv hus
+    rw [← hpu, ← congrFun hpull (g u)]
+    unfold pullback
+    apply ContinuousAlternatingMap.ext
+    intro v
+    simp only [ContinuousAlternatingMap.compContinuousLinearMap_apply, Function.comp_apply]
+    have he_smooth : ContMDiffAt 𝓘(ℝ, Plane) 𝓘(ℝ, Plane) ∞ e.symm u :=
+      contMDiffAt_symm_of_mem_maximalAtlas (IsManifold.subset_maximalAtlas he) hu
+    have hs_smooth : ContMDiffAt 𝓘(ℝ, Plane) 𝓘(ℝ, Plane) ∞ s (e.symm u) :=
+      hloc.localInverse_contMDiffOn.contMDiffAt (s.open_source.mem_nhds hus)
+    have hg_smooth : ContDiffAt ℝ ∞ g u := by
+      have hh := hs_smooth.comp u he_smooth
+      rw [contMDiffAt_iff_contDiffAt] at hh
+      exact hh
+    have hp_smooth := (atlas.quotient_localDiffeomorph (g u)).mdifferentiableAt (by simp)
+    have hchain := mfderiv_comp u hp_smooth
+      (mdifferentiableAt_iff_differentiableAt.mpr (hg_smooth.differentiableAt (by simp)))
+    have hev : (projection ∘ g) =ᶠ[nhds u] e.symm := by
+      filter_upwards [(e.continuousAt_symm hu).preimage_mem_nhds
+        (s.open_source.mem_nhds hus)] with v hv
+      exact hloc.localInverse_right_inv hv
+    rw [← hev.mfderiv_eq, hchain]
+    congr 1
+    funext i
+    simp only [mfderiv_eq_fderiv]
+    change ((mfderiv 𝓘(ℝ, Plane) 𝓘(ℝ, Plane) projection (g u)).comp
+      (fderiv ℝ g u)) (v i) = _
+    rw [ContinuousLinearMap.comp_apply]
+    rfl
+  · unfold inChart
+    have hpy : projection (g y) = e.symm y := hloc.localInverse_right_inv hsz
+    rw [← hpy, ← congrFun hpull (g y)]
+    unfold pullback
+    apply ContinuousAlternatingMap.ext
+    intro v
+    simp only [ContinuousAlternatingMap.compContinuousLinearMap_apply, Function.comp_apply]
+    have hga : ContDiffAt ℝ ∞ g y := hg.contDiffAt (e.open_target.mem_nhds hy)
+    have hp_smooth := (atlas.quotient_localDiffeomorph (g y)).mdifferentiableAt (by simp)
+    have hchain := mfderiv_comp y hp_smooth
+      (mdifferentiableAt_iff_differentiableAt.mpr (hga.differentiableAt (by simp)))
+    have hev : (projection ∘ g) =ᶠ[nhds y] e.symm := by
+      filter_upwards [(e.continuousAt_symm hy).preimage_mem_nhds
+        (s.open_source.mem_nhds hsz)] with v hv
+      exact hloc.localInverse_right_inv hv
+    rw [← hev.mfderiv_eq, hchain]
+    congr 1
+    funext i
+    simp only [mfderiv_eq_fderiv]
+    change ((mfderiv 𝓘(ℝ, Plane) 𝓘(ℝ, Plane) projection (g y)).comp
+      (fderiv ℝ g y)) (v i) = _
+    rw [ContinuousLinearMap.comp_apply]
+    rfl
 
 /-- A smooth invariant form descends uniquely through the quotient atlas.
 The fibre characterization is supplied as a hypothesis to keep this seat
