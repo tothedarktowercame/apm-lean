@@ -175,13 +175,118 @@ lemma rotation_aux_relation_forward {Label : Type*} [DecidableEq Label]
   sorry
 
 /-- Leaf: the inverse rotation, symmetrically. -/
+def rotation_aux_relation_reverse_aux_shift {Label : Type*}
+    (u v : List (Signed Label)) (h : 0 < (u ++ v).length)
+    (i : Fin (v ++ u).length) : Fin (u ++ v).length :=
+  if hi : i.1 < v.length then
+    ⟨u.length + i.1, by
+      simp only [List.length_append] at h ⊢
+      omega⟩
+  else
+    ⟨i.1 - v.length, by
+      have hil := i.isLt
+      simp only [List.length_append] at hil ⊢
+      omega⟩
+
+lemma rotation_aux_relation_reverse_aux_get {Label : Type*}
+    (u v : List (Signed Label)) (h : 0 < (u ++ v).length)
+    (i : Fin (v ++ u).length) :
+    (u ++ v).get (rotation_aux_relation_reverse_aux_shift u v h i) =
+      (v ++ u).get i := by
+  by_cases hi : i.1 < v.length
+  · simp [rotation_aux_relation_reverse_aux_shift, hi,
+      List.get_eq_getElem, List.getElem_append]
+  · have hil := i.isLt
+    simp only [List.length_append] at hil
+    have hsub : i.1 - v.length < u.length := by omega
+    simp [rotation_aux_relation_reverse_aux_shift, hi,
+      List.get_eq_getElem, List.getElem_append, hsub,
+      Nat.sub_add_cancel (Nat.le_of_not_gt hi)]
+
+lemma rotation_aux_relation_reverse_aux_edge {Label : Type*}
+    (u v : List (Signed Label)) (h : 0 < (u ++ v).length)
+    (i : Fin (v ++ u).length) (t : Icc (0 : ℝ) 1) :
+    rotation_aux_disk_inv (u ++ v).length v.length
+        (edgePoint (v ++ u).length i t) =
+      edgePoint (u ++ v).length
+        (rotation_aux_relation_reverse_aux_shift u v h i) t := by
+  apply (rotation_aux_disk_equiv (u ++ v).length v.length).injective
+  change rotation_aux_disk (u ++ v).length v.length
+      (rotation_aux_disk_inv (u ++ v).length v.length
+        (edgePoint (v ++ u).length i t)) =
+    rotation_aux_disk (u ++ v).length v.length
+      (edgePoint (u ++ v).length
+        (rotation_aux_relation_reverse_aux_shift u v h i) t)
+  rw [rotation_aux_disk_right_inv]
+  rw [rotation_aux_edgePoint_add]
+  have hedge : edgePoint (v ++ u).length i.1 t =
+      edgePoint (u ++ v).length i.1 t := by
+    simp only [List.length_append]
+    rw [add_comm]
+  rw [hedge]
+  unfold rotation_aux_relation_reverse_aux_shift
+  split_ifs with hi
+  · simp only [Fin.val_mk]
+    change edgePoint (u ++ v).length i.1 t =
+      edgePoint (u ++ v).length (v.length + (u.length + i.1)) t
+    rw [show v.length + (u.length + i.1) = (u ++ v).length + i.1 by
+      simp only [List.length_append]
+      omega]
+    exact (rotation_aux_edgePoint_period _ _ (Nat.ne_of_gt h) t).symm
+  · simp only [Fin.val_mk]
+    change edgePoint (u ++ v).length i.1 t =
+      edgePoint (u ++ v).length (v.length + (i.1 - v.length)) t
+    congr 2
+    omega
+
+lemma rotation_aux_relation_reverse_aux_shift_injective {Label : Type*}
+    (u v : List (Signed Label)) (h : 0 < (u ++ v).length)
+    {i j : Fin (v ++ u).length}
+    (heq : rotation_aux_relation_reverse_aux_shift u v h i =
+      rotation_aux_relation_reverse_aux_shift u v h j) : i = j := by
+  apply Fin.ext
+  have heq' := congrArg Fin.val heq
+  have hil := i.isLt
+  have hjl := j.isLt
+  simp only [List.length_append] at hil hjl
+  by_cases hi : i.1 < v.length <;> by_cases hj : j.1 < v.length
+  · simp [rotation_aux_relation_reverse_aux_shift, hi, hj] at heq'
+    omega
+  · simp [rotation_aux_relation_reverse_aux_shift, hi, hj] at heq'
+    omega
+  · simp [rotation_aux_relation_reverse_aux_shift, hi, hj] at heq'
+    omega
+  · simp [rotation_aux_relation_reverse_aux_shift, hi, hj] at heq'
+    omega
+
 lemma rotation_aux_relation_reverse {Label : Type*} [DecidableEq Label]
     (u v : List (Signed Label)) (hw : IsPolygonWord (u ++ v))
     {p q : Disk} (hpq : Relation.EqvGen (WordRel (v ++ u)) p q) :
     Relation.EqvGen (WordRel (u ++ v))
       (rotation_aux_disk_inv (u ++ v).length v.length p)
       (rotation_aux_disk_inv (u ++ v).length v.length q) := by
-  sorry
+  have hn : 0 < (u ++ v).length := List.length_pos_iff.mpr hw.1
+  induction hpq with
+  | refl x => exact Relation.EqvGen.refl _
+  | symm x y h ih => exact Relation.EqvGen.symm _ _ ih
+  | trans x y z hxy hyz ihxy ihyz =>
+      exact Relation.EqvGen.trans _ _ _ ihxy ihyz
+  | rel p q hpq =>
+      rcases hpq with ⟨i, j, hij, t, hlab, hp, hq⟩
+      apply Relation.EqvGen.rel
+      refine ⟨rotation_aux_relation_reverse_aux_shift u v hn i,
+        rotation_aux_relation_reverse_aux_shift u v hn j, ?_, t, ?_, ?_, ?_⟩
+      · intro heq
+        apply hij
+        exact rotation_aux_relation_reverse_aux_shift_injective u v hn heq
+      · rw [rotation_aux_relation_reverse_aux_get u v hn i,
+          rotation_aux_relation_reverse_aux_get u v hn j]
+        exact hlab
+      · rw [hp, rotation_aux_relation_reverse_aux_edge u v hn]
+      · rw [hq, rotation_aux_relation_reverse_aux_edge u v hn]
+        congr 2
+        simp only [rotation_aux_relation_reverse_aux_get u v hn i,
+          rotation_aux_relation_reverse_aux_get u v hn j]
 
 /-- Radial extension of boundary rotation through the first `u.length` arcs. -/
 theorem rotation {Label : Type*} [DecidableEq Label]
