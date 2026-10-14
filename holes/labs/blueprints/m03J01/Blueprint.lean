@@ -1499,7 +1499,50 @@ lemma apm_m03J01_hessianOperator_seq_closed_aux_grad_tendsto {n : ℕ}
     (hv : apm_m03J01_weakSolution (fun z => x z) v) :
     Tendsto (fun k => eLpNorm (fun z => (u k).grad z - v.grad z) 2 volume)
       atTop (nhds 0) := by
-  sorry
+  have hforcing :
+      Tendsto (fun k => eLpNorm (fun z => f k z - x z) 2 volume)
+        atTop (nhds 0) := by
+    apply (Lp.tendsto_Lp_iff_tendsto_eLpNorm''
+      (fun k z => f k z) (fun k => Lp.memLp (f k))
+      (fun z => x z) (Lp.memLp x)).1
+    simpa only [Lp.toLp_coeFn] using hf
+  have hbound (k : ℕ) :
+      eLpNorm (fun z => (u k).grad z - v.grad z) 2 volume ≤
+        2 * eLpNorm (fun z => f k z - x z) 2 volume := by
+    obtain ⟨nv, hnvval, hnvgrad⟩ := apm_m03J01_H01_smul_exists (-1) v
+    have hnv : apm_m03J01_weakSolution (-(fun z => x z)) nv :=
+      apm_m03J01_hessianOperator_seq_closed_aux_weakSolution_neg hv
+        (by simpa using hnvval) (by simpa using hnvgrad)
+    obtain ⟨w, hwval, hwgrad⟩ := apm_m03J01_H01_add_exists (u k) nv
+    have hw : apm_m03J01_weakSolution
+        ((fun z => f k z) + -(fun z => x z)) w :=
+      apm_m03J01_hessianOperator_seq_closed_aux_weakSolution_add
+        (Lp.memLp (f k)) (Lp.memLp x).neg (hu k) hnv hwval hwgrad
+    have hest := apm_m03J01_weakSolution_H1size_le
+      ((fun z => f k z) + -(fun z => x z))
+      ((Lp.memLp (f k)).add (Lp.memLp x).neg) w hw
+    calc
+      eLpNorm (fun z => (u k).grad z - v.grad z) 2 volume =
+          eLpNorm w.grad 2 volume := by
+            congr 1
+            funext z
+            simp [hwgrad, hnvgrad, sub_eq_add_neg]
+      _ ≤ eLpNorm w.val 2 volume + eLpNorm w.grad 2 volume :=
+        le_add_self
+      _ ≤ 2 * eLpNorm ((fun z => f k z) + -(fun z => x z)) 2 volume := hest
+      _ = 2 * eLpNorm (fun z => f k z - x z) 2 volume := by
+        congr 2
+  apply tendsto_order.2
+  constructor
+  · intro a ha
+    exact (not_lt_of_ge bot_le ha).elim
+  · intro a ha
+    have hscaled :
+        Tendsto (fun k => 2 * eLpNorm (fun z => f k z - x z) 2 volume)
+          atTop (nhds 0) := by
+      simpa using ENNReal.Tendsto.const_mul hforcing (Or.inr (by norm_num))
+    filter_upwards [(tendsto_order.1 hscaled).2 a ha] with k hk
+    exact lt_of_le_of_lt (hbound k) hk
 
 /-- Weak Hessian identities pass to `L²` limits of both the field and the
 Hessian (each side of the defining identity is an `L²` pairing against a
