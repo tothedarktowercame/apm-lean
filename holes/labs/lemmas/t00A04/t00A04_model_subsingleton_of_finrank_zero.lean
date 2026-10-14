@@ -15,7 +15,9 @@ theorem t00A04_model_subsingleton_of_finrank_zero
     (E : Type*) [NormedAddCommGroup E] [NormedSpace ℝ E]
     [FiniteDimensional ℝ E] (hdim : Module.finrank ℝ E = 0) :
     Subsingleton E := by
-  sorry
+  refine ⟨fun x y ↦ ?_⟩
+  rw [finrank_zero_iff_forall_zero.mp hdim x,
+    finrank_zero_iff_forall_zero.mp hdim y]
 -- END SEAT AREA
 
 /-- A manifold modelled on a singleton has the discrete topology.  The
