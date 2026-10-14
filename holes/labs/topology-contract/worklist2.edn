@@ -87901,69 +87901,57 @@
   {:consumer :t97A01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 4,
+   :stop-count 5,
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Prove the specialized connector square; then right-base inl, surjectivity, B6-B10.",
+    "Repair PointWedge dependency; prove installed transport, right-base inl, surjectivity, B6-B10.",
     :outcome :stop,
-    :warnings ["preexisting lints; unrelated edits preserved"],
+    :warnings ["preexisting lints; unrelated edit preserved"],
     :missing-theorems
-    [{:name "genericPointWedgeOuterRightComparison_mem_inr",
-      :type "outer-right comparison is an inr image",
+    [{:name "finiteWedgeRightBaseInOldFactor_iff_connectorTransport",
+      :type
+      "right-base inl membership iff installed endpoint transport",
       :status :proved,
-      :consumers [:t97A01 :t94J09],
-      :depends-on [],
-      :area "polygon-quotient-homology"}
-     {:name "finiteWedgeRightBaseInOldFactor_iff_connectorSquare",
-      :type "right-base inl membership iff connector square",
-      :status :proved,
-      :consumers [:t97A01 :t94J09],
-      :depends-on
-      ["finiteWedgeSuccessorRightBase_eq_outerRight_mul_inl"],
-      :area "polygon-quotient-homology"}
-     {:name "finiteWedgeRightConnectorSystemComparison",
-      :type "prove the specialized connector square",
-      :status :not-started,
       :consumers [:t97A01 :t94J09],
       :depends-on
       ["finiteWedgeRightBaseInOldFactor_iff_connectorSquare"],
+      :area "polygon-quotient-homology"}
+     {:name "finiteWedgeInstalledRightConnectorTransport",
+      :type
+      "overlap counit equals transport from installed connectors",
+      :status :not-started,
+      :consumers [:t97A01 :t94J09],
+      :depends-on
+      ["finiteWedgeRightBaseInOldFactor_iff_connectorTransport"],
       :area "polygon-quotient-homology"}],
     :statement-hashes {:registry "166/0"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
     :reason
-    "Banked exact equivalence of right-base membership and connector square.",
+    "Banked transport reduction; full build blocked by an out-of-scope dirty dependency.",
     :commands
-    [{:cmd "lake build ConstructionTargets.PolygonSurfaceHomology",
+    [{:cmd
+      "lake env lean ConstructionTargets/PolygonSurfaceHomology.lean",
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-     {:cmd "git show --check a720d9d62", :exit 0}
-     {:cmd "exact blob + axioms | lake env lean /dev/stdin", :exit 0}],
+     {:cmd "git show --check 73b6e7834", :exit 0}],
     :diagnostic-history
-    [{:cmd "membership draft",
+    [{:cmd
+      "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology",
       :exit 1,
-      :correction "unfolded finite right-base wrapper"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1791976829861-11774-53302570",
-     :commands
-     ["git show/diff-tree/commit trailers; sha256sum"
-      "exact commit snapshot: lake -Kjobs=1 build PolygonSurfaceHomology"
-      "#print axioms; placeholder scan; statement-registry.py check"],
-     :finding
-     "PASS: independent review of topo-6 commit 4b0d0491e; direct scope is only PolygonSurfaceHomology.lean, exact blob SHA256 12642b9a9e0e1701a6dc3b29769f0afc7f5d2d06c0b81392ea7e6b0db426db01. Exact recorded snapshot and updated van Kampen dependency build serially; new theorems use only propext, Classical.choice, Quot.sound; placeholders 0; registry 166/0. New progress after efaec6039 proves the left outer comparison is literally inl(a), factors rightBase as outerRight*inl(a), and shows outerRight=inl(b) suffices for rightBase=inl(b*a). Single-object composition-to-multiplication order and map_mul orientation are correct. This respects the free-product boundary and does not infer factor membership from a projection kernel. Remaining milestone: prove finiteWedgeSuccessorOuterRightElement lies in the old factor, then apply leg-word extraction."},
-    :commit "a720d9d62",
+      :correction
+      "dirty PointWedgeVanKampen line 5041 fails outside scope"}],
+    :commit "73b6e7834",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
     {:path "ConstructionTargets/PolygonSurfaceHomology.lean",
      :sha256
-     "5051fc93b42590bf23890b59c1c1897beee4b42b1f6693a6b06868b523e4469b"},
+     "99fbfe8dcb25442aa2f8d6690a28e0975236626a0a33368c987ff58e54f9fac5"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -90030,4 +90018,40 @@
    :kind :lemma,
    :depends-on
    [:lemma-finitewedgesuccessorrightbase-eq-outerright-mul-inl],
+   :other-consumers [:t94J09]}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "finiteWedgeRightBaseInOldFactor_iff_connectorTransport",
+    :type
+    "right-base inl membership iff installed endpoint transport"},
+   :lemma
+   {:name "finiteWedgeRightBaseInOldFactor_iff_connectorTransport",
+    :reported-by [:program-2026-10-13-polygon-surface-homology],
+    :type "right-base inl membership iff installed endpoint transport",
+    :area "polygon-quotient-homology",
+    :proved-in :program-2026-10-13-polygon-surface-homology},
+   :id :lemma-finitewedgerightbaseinoldfactor-iff-connectortransport,
+   :kind :lemma,
+   :depends-on
+   [:lemma-finitewedgerightbaseinoldfactor-iff-connectorsquare],
+   :other-consumers [:t94J09]}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "finiteWedgeInstalledRightConnectorTransport",
+    :type "overlap counit equals transport from installed connectors"},
+   :lemma
+   {:name "finiteWedgeInstalledRightConnectorTransport",
+    :reported-by [:program-2026-10-13-polygon-surface-homology],
+    :type "overlap counit equals transport from installed connectors",
+    :area "polygon-quotient-homology"},
+   :id :lemma-finitewedgeinstalledrightconnectortransport,
+   :kind :lemma,
+   :depends-on
+   [:lemma-finitewedgerightbaseinoldfactor-iff-connectortransport],
    :other-consumers [:t94J09]}]}
