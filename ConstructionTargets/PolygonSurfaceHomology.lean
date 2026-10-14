@@ -1145,6 +1145,31 @@ theorem circleArc_eq_integerLoop_one (t : Set.Icc (0 : ℝ) 1) :
     ConstructionTargets.CircleUniversalCover.integerLoop,
     ConstructionTargets.CircleUniversalCover.circleCover, AddCircle.toCircle]
 
+/-- A positively signed polygon edge is the winding-one loop in its wedge
+leg, with the same interval parameter. -/
+theorem polygonBoundaryWedgeLoop_edgePoint_integerLoop_of_sign
+    (P : PairingData) (i : Fin P.edgeCount) (t : Set.Icc (0 : ℝ) 1)
+    (h : P.sign i = true) :
+    polygonBoundaryWedgeLoop P
+        (PolygonSurfacePiOne.edgePointCircle P.edgeCount i t) =
+      PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (P.orbit i)
+        (ConstructionTargets.CircleUniversalCover.integerLoop 1 t) := by
+  rw [polygonBoundaryWedgeLoop_edgePoint,
+    P.signedWedgeArc_of_sign i t h, circleArc_eq_integerLoop_one]
+
+/-- A negatively signed polygon edge is the reverse parametrization of the
+winding-one loop in its wedge leg. -/
+theorem polygonBoundaryWedgeLoop_edgePoint_integerLoop_of_not_sign
+    (P : PairingData) (i : Fin P.edgeCount) (t : Set.Icc (0 : ℝ) 1)
+    (h : P.sign i = false) :
+    polygonBoundaryWedgeLoop P
+        (PolygonSurfacePiOne.edgePointCircle P.edgeCount i t) =
+      PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (P.orbit i)
+        (ConstructionTargets.CircleUniversalCover.integerLoop 1
+          (PolygonSurfacePiOne.reverseIcc t)) := by
+  rw [polygonBoundaryWedgeLoop_edgePoint,
+    P.signedWedgeArc_of_not_sign i t h, circleArc_eq_integerLoop_one]
+
 /-- The explicit winding-one class associated to the polygon-edge
 parametrization. -/
 noncomputable def circleIntegerLoopOneClass : FundamentalGroup Circle 1 :=
