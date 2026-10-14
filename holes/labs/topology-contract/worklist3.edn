@@ -36163,6 +36163,16 @@
     [{:cmd "fold probes",
       :exit 1,
       :correction "fixed mapped trans and declaration order"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1792007326560-12284-6507aa72",
+     :commands
+     ["git show/check/diff 1d93d0b2; scope and fixture SHA-256"
+      "lake build ConstructionTargets.t93J03Closure; lean fixture and Main"
+      "statement-registry check; placeholder/axiom recount"],
+     :finding
+     "PASS: 1d93d0b2 adds compiled, sorry-free program progress. Mapping a dependent subtype-path concatenation commutes with the ordered fold, and factorwise ambient class equalities therefore assemble into one outer-subtype path with the same ambient groupoid class. Zero and successor cases have correct endpoints/order. Blueprint is faithful; exact scope/hash match; closure placeholders 0->0; frozen Main remains 1; registry 166/166; standard axioms only. STOP lists maximal-run instantiation, reverse kernel/surjectivity, winding, C1/C2/Main."},
     :commit "1d93d0b25c6f2fcf77e9296540eea268f893c28b",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
@@ -36173,7 +36183,7 @@
      "cf536bf9c490e286cb8af1944891cb753029c05d241369966b22d6ed9708b4a1"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -36191,7 +36201,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t93J03Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Proved each packaged nonempty inner block with overlap endpoints equals one overlap path routed through the outer piece; finite run-list reassembly remains.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Finite outer-represented factors now concatenate to one outer path with equal ambient groupoid class; maximal-run instantiation remains.",
    :id :program-2026-10-13-close-t93j03,
    :kind :final-adapter,
    :campaign-priority 30,
@@ -36445,7 +36455,11 @@
     {:job 9,
      :commit "06b841a6396013640183b3461ac597cfcaa7e557",
      :reason
-     "Proved each packaged nonempty inner block with overlap endpoints equals one overlap path routed through the outer piece; finite run-list reassembly remains."}]}
+     "Proved each packaged nonempty inner block with overlap endpoints equals one overlap path routed through the outer piece; finite run-list reassembly remains."}
+    {:job 1,
+     :commit "1d93d0b25c6f2fcf77e9296540eea268f893c28b",
+     :reason
+     "Finite outer-represented factors now concatenate to one outer path with equal ambient groupoid class; maximal-run instantiation remains."}]}
   {:consumer :t99J05,
    :stop-count 5,
    :evidence
@@ -39439,7 +39453,7 @@
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "path_concat_map_subtype",
@@ -39449,14 +39463,16 @@
     :reported-by [:program-2026-10-13-close-t93j03],
     :type "subtype concat mapping commutes with concat",
     :area "covering-subgroup-correspondence",
-    :proved-in :program-2026-10-13-close-t93j03},
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "1d93d0b25c6f2fcf77e9296540eea268f893c28b"},
    :id :lemma-path-concat-map-subtype,
    :kind :lemma,
    :depends-on [:lemma-path-concat-exists-subtype-path],
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "path_concat_class_eq_outer_of_pieceClass_eq",
@@ -39466,7 +39482,9 @@
     :reported-by [:program-2026-10-13-close-t93j03],
     :type "outer-represented factors fold to one outer path",
     :area "covering-subgroup-correspondence",
-    :proved-in :program-2026-10-13-close-t93j03},
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "1d93d0b25c6f2fcf77e9296540eea268f893c28b"},
    :id :lemma-path-concat-class-eq-outer-of-piececlass-eq,
    :kind :lemma,
    :depends-on [:lemma-path-concat-map-subtype],
