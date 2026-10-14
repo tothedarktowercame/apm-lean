@@ -1274,6 +1274,33 @@ theorem finiteWedgeExplicitLegClass_eq_positive_zpow {L : Type} (l : L) :
     circleIntegerLoopOneClass_eq_positive_zpow_coordinate, map_zpow]
   rfl
 
+/-- The explicit geometric leg class transported to the common basepoint used
+by the polygon boundary word. -/
+noncomputable def finiteWedgeExplicitLegClassAtBase (P : PairingData)
+    (l : PairingOrbit P.pair) :
+    FundamentalGroup
+      (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge
+        (PairingOrbit P.pair)) (orbitWedgeBase P) :=
+  Path.Homotopic.Quotient.cast (finiteWedgeExplicitLegClass l)
+    (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle_base_eq
+      (P.orbit ⟨0, P.edgeCount_pos⟩) l)
+    (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle_base_eq
+      (P.orbit ⟨0, P.edgeCount_pos⟩) l)
+
+/-- In common-basepoint H₁ coordinates, an explicit once-around leg is the
+normalized basis class multiplied by the single global orientation unit. -/
+theorem finiteWedgeExplicitLegClassAtBase_hurewicz (P : PairingData)
+    (l : PairingOrbit P.pair) :
+    moduleHurewicz (orbitWedgeBase P)
+        (finiteWedgeExplicitLegClassAtBase P l) =
+      circleIntegerLoopOneCoordinate •
+        finiteWedgeH1CoordinateMap P (orbitBasis P l 1) := by
+  rw [finiteWedgeExplicitLegClassAtBase, moduleHurewicz_cast,
+    finiteWedgeExplicitLegClass_eq_positive_zpow, moduleHurewicz_zpow,
+    finiteWedgeLegFundamentalClass_hurewicz,
+    finiteWedgeH1CoordinateMap_single]
+  rfl
+
 /-- The boundary map computed in the existing H₁ coordinates.  Its extra
 factor records the only orientation ambiguity left by `circleH1IsoInt`. -/
 noncomputable def orientationSignedAttachingBoundary (P : PairingData) :
