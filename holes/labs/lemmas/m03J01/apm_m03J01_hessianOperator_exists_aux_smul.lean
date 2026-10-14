@@ -1300,7 +1300,26 @@ lemma apm_m03J01_hessianOperator_exists_aux_smul {n : ℕ} (c : ℝ)
     {H : apm_m03J01_E n → Fin n → Fin n → ℝ}
     (hH : apm_m03J01_weakHessian g H) :
     apm_m03J01_weakHessian (c • g) (c • H) := by
-  sorry
+  constructor
+  · exact hH.1.const_smul c
+  · intro i j φ hφ hφc
+    change (∫ x, (c * g x i) * fderiv ℝ φ x (apm_m03J01_basis n j) ∂volume) =
+      -∫ x, (c * H x i j) * φ x ∂volume
+    calc
+      _ = c * ∫ x, g x i * fderiv ℝ φ x (apm_m03J01_basis n j) ∂volume := by
+        rw [← integral_const_mul]
+        congr 1
+        funext x
+        ring
+      _ = c * (-∫ x, H x i j * φ x ∂volume) := by
+        rw [hH.2 i j φ hφ hφc]
+      _ = -(c * ∫ x, H x i j * φ x ∂volume) := by ring
+      _ = -∫ x, c * (H x i j * φ x) ∂volume := by
+        rw [← integral_const_mul]
+      _ = -∫ x, (c * H x i j) * φ x ∂volume := by
+        congr 1
+        apply integral_congr_ae
+        exact Eventually.of_forall fun x => by ring
 -- END SEAT AREA
 
 /-- Weak solutions add: the `H01_add_exists` sum of two solutions solves the
