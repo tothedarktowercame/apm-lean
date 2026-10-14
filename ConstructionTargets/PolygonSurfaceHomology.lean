@@ -3467,6 +3467,61 @@ theorem radialOverlapCircleInOuter_val (P : PairingData) (z : Circle) :
         (ConstructionTargets.PolygonAnnulusRadialMaps.halfCircleMap z).1 := by
   exact radialIntersectionPositiveCircle_val P z
 
+/-- The radius-one-half representative regarded in the source of the outer
+radial quotient. -/
+def halfCircleOuter (z : Circle) :
+    ConstructionTargets.PolygonOuterRadialDeformation.Outer :=
+  ⟨(ConstructionTargets.PolygonAnnulusRadialMaps.halfCircleMap z).1,
+    (ConstructionTargets.PolygonAnnulusRadialMaps.halfCircleMap z).2.2⟩
+
+/-- At time one, radial deformation of the half-radius representative is the
+unit boundary point with the same positive circle parameter. -/
+theorem radialHomotopy_one_halfCircle (z : Circle) :
+    (ConstructionTargets.PolygonOuterRadialDeformation.radialHomotopy
+      (1, halfCircleOuter z)).1 = circleToPolygonDisk z := by
+  apply Subtype.ext
+  simp [ConstructionTargets.PolygonOuterRadialDeformation.radialHomotopy,
+    ConstructionTargets.PolygonOuterRadialDeformation.scale,
+    halfCircleOuter, ConstructionTargets.PolygonAnnulusRadialMaps.halfCircleMap,
+    ConstructionTargets.PolygonRadialOpenCover.radius, circleToPolygonDisk]
+
+/-- The radial outer deformation carries the positive overlap circle to the
+ordered polygon boundary loop. -/
+theorem outerHomotopyEquivWedge_radialOverlapCircle (P : PairingData)
+    (z : Circle) :
+    outerHomotopyEquivWedge P (radialOverlapCircleInOuter P z) =
+      polygonBoundaryWedgeLoop P z := by
+  change P.skeletonHomeomorphWedge
+      ((outerBoundaryHomeomorphSkeleton P)
+        ((outerHomotopyEquivBoundary P) (radialOverlapCircleInOuter P z))) =
+    P.skeletonHomeomorphWedge (polygonBoundarySkeletonLoop P z)
+  congr 1
+  apply Subtype.ext
+  change
+    (ConstructionTargets.PolygonOuterOpenDeformation.outerOpenHomotopy P.Rel
+      (fun {_ _} h => pairingRel_radius P h)
+      (fun {_ _} h => pairingRel_boundary P h)
+      (1, radialOverlapCircleInOuter P z)).1 =
+      P.quotientMap (circleToPolygonDisk z)
+  simp only [ConstructionTargets.PolygonOuterOpenDeformation.outerOpenHomotopy]
+  rw [show
+    (ConstructionTargets.PolygonOuterRestrictedEqvGen.outerQuotientHomeomorph
+      P.Rel (fun {_ _} h => pairingRel_radius P h)).symm
+        (radialOverlapCircleInOuter P z) =
+      Quotient.mk _ (halfCircleOuter z) by
+        apply (ConstructionTargets.PolygonOuterRestrictedEqvGen.outerQuotientHomeomorph
+          P.Rel (fun {_ _} h => pairingRel_radius P h)).injective
+        rw [Homeomorph.apply_symm_apply,
+          ConstructionTargets.PolygonOuterRestrictedEqvGen.outerQuotientHomeomorph_mk]
+        apply Subtype.ext
+        exact radialOverlapCircleInOuter_val P z]
+  rw [ConstructionTargets.PolygonOuterRadialQuotientDeformation.quotientHomotopy_mk,
+    ConstructionTargets.PolygonOuterRestrictedEqvGen.outerQuotientHomeomorph_mk]
+  change P.quotientMap
+      (ConstructionTargets.PolygonOuterRadialDeformation.radialHomotopy
+        (1, halfCircleOuter z)).1 = _
+  rw [radialHomotopy_one_halfCircle]
+
 /-- Positive integral coordinates on the actual intersection object occurring
 in the production Mayer--Vietoris sequence. -/
 noncomputable def radialIntersectionH1GroupIsoInt (P : PairingData) :
