@@ -2084,6 +2084,25 @@ theorem finiteWedgeRightBaseInOldFactor_iff_connectorTransport (n : ℕ) :
   (finiteWedgeRightBaseInOldFactor_iff_connectorSquare n).trans
     (finiteWedgeRightConnectorTransport_iff_connectorSquare n).symm
 
+/-- The installed successor connector square holds: the overlap comparison
+is literal endpoint transport in the right-piece connector system. -/
+theorem finiteWedgeRightConnectorSystemComparison (n : ℕ) :
+    finiteWedgeRightConnectorSquare n := by
+  apply (finiteWedgeRightProjection_eq_one_iff_connectorSquare n).mp
+  let P := finiteWedgeFinSuccPointWedgeNeighborhoods n
+  let x₀ := PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1
+  let y₀ := PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle () 1
+  exact ConstructionTargets.PointWedgeVanKampen.genericPointWedgeRightBase_rightProjection_eq_one
+    x₀ y₀ P.2.carrier P.1.carrier P.2.isOpen P.1.isOpen
+      P.2.mem P.1.mem P.2.contraction P.1.contraction
+
+/-- The successor reconstruction conjugator lies in the old finite-wedge
+factor, which is the hypothesis required by partial normalization. -/
+theorem finiteWedgePointWedge_rightBase_inl (n : ℕ) :
+    finiteWedgeRightBaseInOldFactor n :=
+  finiteWedgeRightBaseInOldFactor_of_connectorSquare n
+    (finiteWedgeRightConnectorSystemComparison n)
+
 /-! ### Algebraic word extraction from a point-wedge computation -/
 
 /-- Evaluate a word whose letters come from the two factors of a coproduct. -/
