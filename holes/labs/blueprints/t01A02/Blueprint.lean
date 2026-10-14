@@ -749,7 +749,9 @@ lemma apm_t01A02_fixedPoint_of_lift_fixedPoint
     (hrep : ∀ x, f (apm_t01A02_torusExp x) = apm_t01A02_torusExp (F x))
     (hfix : ∃ x, F x = x) :
     ∃ x, f x = x := by
-  sorry
+  obtain ⟨x, hx⟩ := hfix
+  refine ⟨apm_t01A02_torusExp x, ?_⟩
+  simpa [hx] using hrep x
 
 /-- The torus fixed-point dichotomy, assembled from the independent lift,
 compactness, parity, planar Brouwer, and descent pieces above. -/
