@@ -36121,71 +36121,56 @@
   {:consumer :t93J03,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 3,
+   :stop-count 4,
    :review-finding
    "Program STOP commits no new mathematical progress since the prior milestone: KleinPolygonBasedVanKampen merely packages the already-required surjectivity and kernel hypotheses, and both consumers only reapply the previously proved three-input theorem. Prove the based van Kampen surjectivity/kernel result (or winding conjugacy) in scope; extend Mathlib: state and prove the missing theorem in scope.",
    :evidence
    {:placeholder-delta {:t93J03 [1 1]},
     :residual
-    "Package run endpoints; instantiate outer fold; reverse kernel/surjectivity; winding; C1/C2/Main.",
+    "Build subtype endpoint family; instantiate outer fold; reverse kernel/surjectivity; winding; C1/C2/Main.",
     :outcome :stop,
-    :warnings
-    ["full build/fixture blocked by unrelated dirty dependency"],
+    :warnings [],
     :missing-theorems
-    [{:name "pathTwoOpenSubdivision_adjacentRunBoundary_mem_overlap",
-      :type
-      "adjacent maximal runs meet at an overlap subdivision vertex",
+    [{:name "pathTwoOpenSubdivision_runPartition_isChain_overlap",
+      :type "all adjacent run boundaries are overlap vertices",
       :status :proved,
       :consumers [:t93J03],
-      :depends-on ["boolSideRunPartition_adjacent_indices"],
+      :depends-on
+      ["pathTwoOpenSubdivision_adjacentRunBoundary_mem_overlap"],
       :area "covering-subgroup-correspondence"}
      {:name "t93J03_polygon_based_van_kampen",
       :type "surjectivity; kernel equality",
       :status :partial,
       :consumers [:t93J03],
       :depends-on
-      ["pathTwoOpenSubdivision_adjacentRunBoundary_mem_overlap"],
+      ["pathTwoOpenSubdivision_runPartition_isChain_overlap"],
       :area "covering-subgroup-correspondence"}],
     :statement-hashes {:registry "166/166"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Proved adjacent maximal runs meet at an overlap subdivision vertex; endpoint-family packaging remains.",
+    "Packaged every adjacent maximal-run boundary as an overlap vertex; subtype endpoint-family construction remains.",
     :commands
-    [{:cmd "lake env lean ConstructionTargets/t93J03Closure.lean",
+    [{:cmd "lake build ConstructionTargets.t93J03Closure", :exit 0}
+     {:cmd "lake env lean /tmp/t93j03_run_chain_overlap_check.lean",
       :exit 0}
      {:cmd "lake env lean problems/t93J03/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder count", :exit 0}
-     {:cmd "rg forbidden", :exit 1, :expected-exit 1}
-     {:cmd "git diff --check", :exit 0}],
-    :diagnostic-history
-    [{:cmd "lake build ConstructionTargets.t93J03Closure",
-      :exit 1,
-      :correction
-      "unrelated dirty PolygonSurfaceHomology failed; preserved"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1792008292990-12306-78983187",
-     :commands
-     ["git show/check/diff 6aafd2ba; scope and fixture SHA-256"
-      "lake build ConstructionTargets.t93J03Closure; lean fixture and Main"
-      "statement-registry check; placeholder/axiom recount"],
-     :finding
-     "PASS: 6aafd2ba adds compiled, sorry-free progress after eb176725. Consecutive boundary indices are converted to the exact transition index k; the side change then invokes the established transition-overlap theorem, yielding the following run head as the shared overlap vertex. Blueprint is faithful; exact scope/hash match; closure placeholders 0->0; frozen Main remains 1; registry 166/166; standard axioms only. Full build also passes now. STOP lists endpoint packaging, outer-fold instantiation, reverse kernel/surjectivity, winding, C1/C2/Main."},
-    :commit "6aafd2ba0b98dd14a3b138fbb4bc325f143bd289",
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "rg forbidden", :exit 1, :expected-exit 1}],
+    :commit "978a84a40d74390b2f572b313be98c0237bedff4",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
      "ConstructionTargets/t93J03Closure.blueprint.md"],
     :fixture
-    {:path "/tmp/t93j03_run_overlap_check.lean",
+    {:path "/tmp/t93j03_run_chain_overlap_check.lean",
      :sha256
-     "24430fc9631bf175084110d9208877b0458dbc4ae296ef05c6f6583d303e542e"},
+     "db29d867e05854c0851042230248b7bb80df0b56b77686fd9485543ff40fcf92"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -38713,7 +38698,8 @@
     :lemma-pathtwoopensubdivisionouterblock-exists-outerpath
     :lemma-path-concat-class-eq-outer-of-piececlass-eq
     :lemma-boolsiderunpartition-adjacent-indices
-    :lemma-pathtwoopensubdivision-adjacentrunboundary-mem-overlap],
+    :lemma-pathtwoopensubdivision-adjacentrunboundary-mem-overlap
+    :lemma-pathtwoopensubdivision-runpartition-ischain-overlap],
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
@@ -39540,6 +39526,24 @@
    :id :lemma-pathtwoopensubdivision-adjacentrunboundary-mem-overlap,
    :kind :lemma,
    :depends-on [:lemma-boolsiderunpartition-adjacent-indices],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "pathTwoOpenSubdivision_runPartition_isChain_overlap",
+    :type "all adjacent run boundaries are overlap vertices"},
+   :lemma
+   {:name "pathTwoOpenSubdivision_runPartition_isChain_overlap",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type "all adjacent run boundaries are overlap vertices",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03},
+   :id :lemma-pathtwoopensubdivision-runpartition-ischain-overlap,
+   :kind :lemma,
+   :depends-on
+   [:lemma-pathtwoopensubdivision-adjacentrunboundary-mem-overlap],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
