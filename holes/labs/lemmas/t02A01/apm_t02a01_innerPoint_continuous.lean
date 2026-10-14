@@ -467,7 +467,11 @@ noncomputable def apm_t02a01_innerBase : apm_t02a01_boundarySpace :=
 
 -- BEGIN SEAT AREA
 theorem apm_t02a01_innerPoint_continuous : Continuous apm_t02a01_innerPoint := by
-  sorry
+  apply Continuous.subtype_mk
+  exact continuous_coinduced_rng.comp
+    (Continuous.subtype_mk (by
+      unfold apm_t02a01_perimeter apm_t02a01_clamp01
+      fun_prop) _)
 -- END SEAT AREA
 
 theorem apm_t02a01_innerPoint_four : apm_t02a01_innerPoint 4 = apm_t02a01_innerBase := by
