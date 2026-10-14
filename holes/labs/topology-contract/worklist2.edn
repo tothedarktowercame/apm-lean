@@ -87901,17 +87901,16 @@
   {:consumer :t97A01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 2,
+   :stop-count 3,
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Prove generator-map comparison, transport Fin surjectivity, then coordinate epi and B6-B10.",
+    "Expose based-equivalence transport on loop representatives; compare generators, then coordinate epi and B6-B10.",
     :outcome :stop,
-    :warnings ["lint; unrelated edits preserved"],
+    :warnings ["preexisting lint"],
     :missing-theorems
-    [{:name "finiteWedgeOrbitFundamentalGroupEquivFin",
-      :type
-      "base-preserving orbit-wedge to finite-coordinate group equivalence",
+    [{:name "finiteWedgeFinLegFreeGroupMapCard_surjective",
+      :type "canonical map onto every positive-cardinality Fin wedge",
       :status :proved,
       :consumers [:t97A01 :t94J09],
       :depends-on ["finiteWedgeFinLegFreeGroupMap_surjective"],
@@ -87920,7 +87919,7 @@
       :type "based relabeling identifies canonical generator maps",
       :status :partial,
       :consumers [:t97A01 :t94J09],
-      :depends-on ["finiteWedgeOrbitFundamentalGroupEquivFin"],
+      :depends-on ["finiteWedgeFinLegFreeGroupMapCard_surjective"],
       :area "polygon-quotient-homology"}
      {:name "finiteWedgeLegFreeGroupMap_surjective",
       :type "canonical orbit-label map is onto",
@@ -87932,7 +87931,7 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked base-preserving orbit-to-Fin relabeling.",
+    :reason "Banked positive-cardinality surjectivity.",
     :commands
     [{:cmd
       "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology",
@@ -87940,32 +87939,20 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder scan", :exit 0}
      {:cmd "axioms check", :exit 0}
-     {:cmd "git show --check 9ffce356b", :exit 0}],
+     {:cmd "git show --check 0941748c1", :exit 0}],
     :diagnostic-history
-    [{:cmd "relabel draft",
+    [{:cmd "generator comparison draft",
       :exit 1,
-      :correction "carried orbit-card positivity in Fin zero"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792003033859-12155-e15bdc17",
-     :commands
-     ["git show/diff 9ffce356b; blob sha256"
-      "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology"
-      "lake env lean /dev/stdin (#print axioms)"
-      "placeholder scan"
-      "statement-registry.py check; git show --check"],
-     :finding
-     "PASS: 9ffce356b (topo-6) changes only scoped PolygonSurfaceHomology.lean; fixture SHA-256 bef3083cb40634d0eb159b85df6c431504d2862d72353e582f04799b39ac3cfd matches. Exact blob builds; 0 placeholders; new results use standard axioms; registry 166/0. Enumeration followed by a coordinate swap sends the distinguished orbit exactly to Fin zero; the induced homeomorphism preserves wedge-circle labels and its proven base equality yields the correctly oriented fundamental-group equivalence. New compiled progress; remaining: generator-map comparison, surjectivity transport, coordinate epi, B6-B10. Initial clean dependency rebuild hit thread exhaustion; retry with prior exact dependency artifacts passed."},
-    :commit "9ffce356b",
+      :correction "removed draft; banked cardinal bridge"}],
+    :commit "0941748c1",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
     {:path "ConstructionTargets/PolygonSurfaceHomology.lean",
      :sha256
-     "bef3083cb40634d0eb159b85df6c431504d2862d72353e582f04799b39ac3cfd"},
+     "8857d23a01fa39daa58f2d3ebfc32bc1e25499b15be2994cacfdc09b73830e51"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -90705,7 +90692,8 @@
    :kind :lemma,
    :depends-on
    [:lemma-finitewedgefinlegfreegroupmap-surjective
-    :lemma-finitewedgeorbitfundamentalgroupequivfin],
+    :lemma-finitewedgeorbitfundamentalgroupequivfin
+    :lemma-finitewedgefinlegfreegroupmapcard-surjective],
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
@@ -90725,6 +90713,23 @@
     :banked-by :program-2026-10-13-polygon-surface-homology,
     :banked-commit "9ffce356b"},
    :id :lemma-finitewedgeorbitfundamentalgroupequivfin,
+   :kind :lemma,
+   :depends-on [:lemma-finitewedgefinlegfreegroupmap-surjective],
+   :other-consumers [:t94J09]}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "finiteWedgeFinLegFreeGroupMapCard_surjective",
+    :type "canonical map onto every positive-cardinality Fin wedge"},
+   :lemma
+   {:name "finiteWedgeFinLegFreeGroupMapCard_surjective",
+    :reported-by [:program-2026-10-13-polygon-surface-homology],
+    :type "canonical map onto every positive-cardinality Fin wedge",
+    :area "polygon-quotient-homology",
+    :proved-in :program-2026-10-13-polygon-surface-homology},
+   :id :lemma-finitewedgefinlegfreegroupmapcard-surjective,
    :kind :lemma,
    :depends-on [:lemma-finitewedgefinlegfreegroupmap-surjective],
    :other-consumers [:t94J09]}]}
