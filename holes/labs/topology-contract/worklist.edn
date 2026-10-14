@@ -119109,6 +119109,17 @@
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "sha256sum/placeholders/diff", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1792015916343-12539-3284dd05",
+     :commands
+     ["git diff-tree/show c9547173"
+      "archive c9547173; lake env lean closure and Main"
+      "sha256sum/placeholders at c9547173"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS program STOP: new commit changes only t00J02Closure.lean and adds a compiled, sorry-free constructor choosing canonical regular-fiber local degrees. Its localization field is discharged by the existing theorem in the exact required orientation; component and global formulas retain the same coefficients and occupied-component indexing, with no representation mismatch. Fixture and frozen Main hashes match; closure has 0 placeholders and Main baseline 1; only standard axioms; registry 166/166. Canonical component/top identities and Main assembly remain listed."},
     :commit "c95471737d57a6c3d34ecdf85371ce435127078d",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
@@ -119117,7 +119128,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119135,7 +119146,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t00J02Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked bundled chart-calculation H2 consequence.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked canonical chart-calculation constructor.",
    :id :program-2026-10-13-close-t00j02,
    :kind :final-adapter,
    :campaign-priority 45,
@@ -119257,7 +119268,10 @@
      :reason "Banked chart-coefficient top-degree constructor."}
     {:job 1,
      :commit "a52ccee229312c565378d09e95a5eec9bdb4a666",
-     :reason "Banked bundled chart-calculation H2 consequence."}]}
+     :reason "Banked bundled chart-calculation H2 consequence."}
+    {:job 2,
+     :commit "c95471737d57a6c3d34ecdf85371ce435127078d",
+     :reason "Banked canonical chart-calculation constructor."}]}
   {:consumer :t98A06,
    :stop-count 4,
    :evidence
@@ -120386,7 +120400,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "RegularFiberChartCalculations.ofCanonicalLocalDegrees",
@@ -120398,7 +120412,9 @@
     :type
     "canonical local degrees plus component/top formulas give chart calculations",
     :area "oriented-surface-degree",
-    :proved-in :program-2026-10-13-close-t00j02},
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "c95471737d57a6c3d34ecdf85371ce435127078d"},
    :id :lemma-regularfiberchartcalculations-ofcanonicallocaldegrees,
    :kind :lemma,
    :depends-on [:lemma-regularfiberlocaldegree-localization-eq],
