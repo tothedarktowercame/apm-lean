@@ -119111,6 +119111,17 @@
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "sha256sum/placeholders/diff", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1792016694541-12554-1ad5b257",
+     :commands
+     ["git diff-tree/show 0849f2f5"
+      "archive 0849f2f5; lake env lean closure and Main"
+      "sha256sum/placeholders at 0849f2f5"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS program STOP: new commit changes only t00J02Closure.lean and adds a compiled, sorry-free constructor reducing the component equation to canonical local-degree sums equal to zero. The equality chain is correctly oriented (component sum = 0 = exact-lift degree), retains the same occupied-component index and canonical coefficients, and introduces no representation mismatch. Fixture and frozen Main hashes match; closure has 0 placeholders and Main baseline 1; only standard axioms; registry 166/166. Canonical zero-sum and global signed-count proofs plus Main assembly remain listed."},
     :commit "0849f2f553851b3d9b067f1a3ab2c16121762120",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
@@ -119119,7 +119130,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119137,7 +119148,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t00J02Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked canonical chart-calculation constructor.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Reduced component comparison to canonical zero sums.",
    :id :program-2026-10-13-close-t00j02,
    :kind :final-adapter,
    :campaign-priority 45,
@@ -119262,7 +119273,10 @@
      :reason "Banked bundled chart-calculation H2 consequence."}
     {:job 2,
      :commit "c95471737d57a6c3d34ecdf85371ce435127078d",
-     :reason "Banked canonical chart-calculation constructor."}]}
+     :reason "Banked canonical chart-calculation constructor."}
+    {:job 3,
+     :commit "0849f2f553851b3d9b067f1a3ab2c16121762120",
+     :reason "Reduced component comparison to canonical zero sums."}]}
   {:consumer :t98A06,
    :stop-count 4,
    :evidence
@@ -120413,7 +120427,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -120427,7 +120441,9 @@
     :type
     "zero canonical component sums plus top formula give chart calculations",
     :area "oriented-surface-degree",
-    :proved-in :program-2026-10-13-close-t00j02},
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "0849f2f553851b3d9b067f1a3ab2c16121762120"},
    :id
    :lemma-regularfiberchartcalculations-ofcanonicalcomponentsumseqzero,
    :kind :lemma,
@@ -120437,10 +120453,14 @@
    :other-consumers []}
   {:consumer :portfolio,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance {:lemma "exactLiftComponentDegree_eq_zero"},
-   :lemma {:name "exactLiftComponentDegree_eq_zero", :reported-by []},
+   :lemma
+   {:name "exactLiftComponentDegree_eq_zero",
+    :reported-by [],
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t00J02Closure.lean"]},
    :id :lemma-exactliftcomponentdegree-eq-zero,
    :kind :lemma,
    :depends-on [],
