@@ -1,21 +1,6 @@
 import Mathlib
 
-/-!
-# APM m95J05: A first-order fundamental solution
-
-## Statement repairs
-
-None.
-
-## Encoding questions
-
-None. The general definition uses Mathlib's genuine space of distributions.
-For `d/dt + λ`, the distributional equation is stated in its exact weak form
-against test functions, and the inhomogeneous solution is the actual causal
-convolution integral.  The main theorem asserts that the displayed kernel
-satisfies that weak equation; it does not restate the definition of
-`apm_m95J05_isFundamentalSolution` as an equivalence.
--/
+/-! # APM m95J05: a first-order fundamental solution -/
 
 open MeasureTheory Set TopologicalSpace
 open scoped Distributions
@@ -35,9 +20,6 @@ def apm_m95J05_isTestFunction (φ : ℝ → ℝ) : Prop :=
 def apm_m95J05_fundamental (lam t : ℝ) : ℝ :=
   if 0 ≤ t then Real.exp (-lam * t) else 0
 
-/-- A locally integrable kernel is a fundamental solution of `d/dt + λ` when
-its distributional pairing with the formal adjoint sends every test function
-to evaluation at zero. -/
 def apm_m95J05_isFundamentalKernel (lam : ℝ) (E : ℝ → ℝ) : Prop :=
   ∀ ψ : ℝ → ℝ, apm_m95J05_isTestFunction ψ →
     (∫ t, E t * (-deriv ψ t + lam * ψ t)) = ψ 0
@@ -45,8 +27,8 @@ def apm_m95J05_isFundamentalKernel (lam : ℝ) (E : ℝ → ℝ) : Prop :=
 def apm_m95J05_solution (lam : ℝ) (φ : ℝ → ℝ) (t : ℝ) : ℝ :=
   ∫ s in Iic t, Real.exp (-lam * (t - s)) * φ s
 
-/-- The causal exponential kernel satisfies the weak fundamental-solution
-identity. -/
+/-! The already proved fundamental-kernel half is retained verbatim. -/
+
 lemma apm_m95J05_fundamental_isFundamentalKernel (lam : ℝ) :
     apm_m95J05_isFundamentalKernel lam (apm_m95J05_fundamental lam) := by
   intro ψ hψ
@@ -89,6 +71,112 @@ lemma apm_m95J05_fundamental_isFundamentalKernel (lam : ℝ) :
         (integral_neg (μ := volume.restrict (Ioi (0 : ℝ))) (fun t ↦ deriv g t))
     _ = ψ 0 := by rw [hint]; simp [g]
 
+/-! The two remaining obligations are independent and can be proved in parallel. -/
+
+/-- The causal integral has the derivative prescribed by variation of constants. -/
+theorem apm_m95J05_solution_hasDerivAt (lam : ℝ) (φ : ℝ → ℝ)
+    (hφ : apm_m95J05_isTestFunction φ) (t : ℝ) :
+    HasDerivAt (apm_m95J05_solution lam φ)
+      (φ t - lam * apm_m95J05_solution lam φ t) t := by
+  let f : ℝ → ℝ := fun s ↦ Real.exp (lam * s) * φ s
+  let F : ℝ → ℝ := fun u ↦ ∫ s in Iic u, f s
+  have hfcont : Continuous f := by
+    dsimp [f]
+    exact (Real.continuous_exp.comp (continuous_const.mul continuous_id)).mul
+      hφ.1.continuous
+  have hfsupp : HasCompactSupport f := hφ.2.mul_left
+  have hfint : Integrable f := hfcont.integrable_of_hasCompactSupport hfsupp
+  have hFderiv : HasDerivAt F (f t) t := by
+    have hi := intervalIntegral.integral_hasDerivAt_right
+      (hfint.intervalIntegrable) (hfcont.stronglyMeasurableAtFilter volume (nhds t))
+      hfcont.continuousAt
+      (a := 0) (b := t)
+    have heq : F = fun u ↦ (∫ s in (Iic (0 : ℝ)), f s) + ∫ s in (0 : ℝ)..u, f s := by
+      funext u
+      dsimp [F]
+      rw [← intervalIntegral.integral_Iic_sub_Iic
+        (hfint.integrableOn) (hfint.integrableOn)]
+      ring
+    rw [heq]
+    exact hi.const_add (∫ s in (Iic (0 : ℝ)), f s)
+  have hrepr (u : ℝ) : apm_m95J05_solution lam φ u = Real.exp (-lam * u) * F u := by
+    rw [apm_m95J05_solution]
+    dsimp [F, f]
+    rw [← MeasureTheory.integral_const_mul]
+    apply MeasureTheory.integral_congr_ae
+    filter_upwards [] with s
+    rw [show -lam * (u - s) = -lam * u + lam * s by ring, Real.exp_add]
+    ring
+  have hexp : HasDerivAt (fun u : ℝ ↦ Real.exp (-lam * u))
+      (-lam * Real.exp (-lam * t)) t := by
+    convert Real.hasDerivAt_exp (-lam * t) |>.comp t
+      ((hasDerivAt_const t (-lam)).mul (hasDerivAt_id t)) using 1 <;> ring
+  rw [funext hrepr]
+  convert hexp.mul hFderiv using 1
+  · dsimp [f]
+    have he : Real.exp (-lam * t) * Real.exp (lam * t) = 1 := by
+      rw [← Real.exp_add]
+      simp
+    have hep : Real.exp (-lam * t) * (Real.exp (lam * t) * φ t) = φ t := by
+      rw [← mul_assoc, he, one_mul]
+    rw [hep]
+    ring
+
+/-- A causal convolution against a smooth compactly supported function is smooth. -/
+theorem apm_m95J05_solution_contDiff (lam : ℝ) (φ : ℝ → ℝ)
+    (hφ : apm_m95J05_isTestFunction φ) :
+    ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞)
+      (apm_m95J05_solution lam φ) := by
+  let w : ℝ → ℝ := fun s ↦ Real.exp (lam * s) * φ s
+  let F : ℝ → ℝ := fun t ↦ ∫ s in Iic t, w s
+  have hw_smooth : ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) w := by
+    dsimp [w]
+    have he : ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞)
+        (fun s : ℝ ↦ Real.exp (lam * s)) := by fun_prop
+    exact he.mul hφ.1
+  have hw_compact : HasCompactSupport w := hφ.2.mul_left
+  have hw_int : Integrable w :=
+    hw_smooth.continuous.integrable_of_hasCompactSupport hw_compact
+  have hF_eq : F = fun t ↦ F 0 + ∫ s in (0 : ℝ)..t, w s := by
+    funext t
+    dsimp [F]
+    rw [← intervalIntegral.integral_Iic_sub_Iic
+      (hw_int.integrableOn) (hw_int.integrableOn)]
+    ring
+  have hprim_deriv (t : ℝ) :
+      HasDerivAt (fun u ↦ ∫ s in (0 : ℝ)..u, w s) (w t) t := by
+    exact intervalIntegral.integral_hasDerivAt_right
+      (hw_int.intervalIntegrable)
+      (hw_smooth.continuous.stronglyMeasurableAtFilter (μ := volume) (l := nhds t))
+      hw_smooth.continuous.continuousAt
+  have hF_diff : Differentiable ℝ F := by
+    rw [hF_eq]
+    intro t
+    exact (hasDerivAt_const t (F 0)).add (hprim_deriv t) |>.differentiableAt
+  have hF_deriv : deriv F = w := by
+    funext t
+    rw [hF_eq]
+    simpa only [Pi.add_apply, zero_add] using
+      ((hasDerivAt_const t (F 0)).add (hprim_deriv t)).deriv
+  have hF_smooth : ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) F := by
+    rw [contDiff_infty_iff_deriv]
+    exact ⟨hF_diff, hF_deriv ▸ hw_smooth⟩
+  have hsolution : apm_m95J05_solution lam φ =
+      fun t ↦ Real.exp (-lam * t) * F t := by
+    funext t
+    rw [apm_m95J05_solution]
+    dsimp [F, w]
+    rw [← MeasureTheory.integral_const_mul]
+    apply MeasureTheory.integral_congr_ae
+    filter_upwards [] with s
+    rw [← mul_assoc, ← Real.exp_add]
+    congr 2
+    ring
+  rw [hsolution]
+  have he : ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞)
+      (fun t : ℝ ↦ Real.exp (-lam * t)) := by fun_prop
+  exact he.mul hF_smooth
+
 theorem apm_m95j05 :
     (∀ lam : ℝ,
       apm_m95J05_isFundamentalKernel lam (apm_m95J05_fundamental lam)) ∧
@@ -98,5 +186,12 @@ theorem apm_m95j05 :
         ∀ t : ℝ,
           deriv (apm_m95J05_solution lam φ) t +
             lam * apm_m95J05_solution lam φ t = φ t) := by
-  sorry
+  constructor
+  · exact apm_m95J05_fundamental_isFundamentalKernel
+  · intro lam φ hφ
+    refine ⟨apm_m95J05_solution_contDiff lam φ hφ, ?_⟩
+    intro t
+    rw [(apm_m95J05_solution_hasDerivAt lam φ hφ t).deriv]
+    ring
 
+#print axioms apm_m95j05
