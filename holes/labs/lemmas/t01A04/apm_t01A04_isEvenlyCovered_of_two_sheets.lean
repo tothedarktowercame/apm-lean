@@ -578,7 +578,112 @@ lemma apm_t01A04_isEvenlyCovered_of_two_sheets {E X : Type*}
     (hcover : f ⁻¹' U = ⋃ i, V i)
     (hsheet : ∀ i, ∃ h : V i ≃ₜ U, ∀ y, (h y : X) = f y) :
     IsEvenlyCovered f x (f ⁻¹' {x}) := by
-  sorry
+  classical
+  choose h hh using hsheet
+  let ind : f ⁻¹' U → Fin 2 := fun e => if e.1 ∈ V 0 then 0 else 1
+  have mem_sheet (e : f ⁻¹' U) : e.1 ∈ V (ind e) := by
+    by_cases he : e.1 ∈ V 0
+    · simpa [ind, he]
+    · have he' : e.1 ∈ ⋃ i, V i := by
+        rw [← hcover]
+        exact e.2
+      simp only [mem_iUnion] at he'
+      obtain ⟨i, hi⟩ := he'
+      fin_cases i
+      · exact (he hi).elim
+      · simpa [ind, he] using hi
+  have ind_eq (i : Fin 2) (e : V i) : ind ⟨e.1, by
+      rw [hcover]
+      exact mem_iUnion.2 ⟨i, e.2⟩⟩ = i := by
+    by_cases hi : i = 0
+    · subst i
+      simp [ind, e.2]
+    · have hi' : i = 1 := Fin.eq_one_of_ne_zero i hi
+      subst i
+      have hn : e.1 ∉ V 0 := fun he0 =>
+        Set.disjoint_left.1 (hdisj (by decide : (0 : Fin 2) ≠ 1)) he0 e.2
+      simp [ind, hn]
+  let toF : f ⁻¹' U → U × Fin 2 := fun e =>
+    (⟨f e.1, e.2⟩, ind e)
+  let invF : U × Fin 2 → f ⁻¹' U := fun y =>
+    ⟨(h y.2).symm y.1, by
+      change f ((h y.2).symm y.1) ∈ U
+      rw [← hh y.2]
+      exact (h y.2 ((h y.2).symm y.1)).2⟩
+  have hleft : Function.LeftInverse invF toF := by
+    intro e
+    apply Subtype.ext
+    dsimp [toF, invF]
+    let a : V (ind e) := ⟨e.1, mem_sheet e⟩
+    have hu : h (ind e) a = (⟨f e.1, e.2⟩ : U) :=
+      Subtype.ext (hh (ind e) a)
+    calc
+      ↑((h (ind e)).symm ⟨f e.1, e.2⟩) =
+          ↑((h (ind e)).symm (h (ind e) a)) :=
+        congrArg (fun z : U => ((h (ind e)).symm z : E)) hu.symm
+      _ = e.1 := congrArg Subtype.val ((h (ind e)).symm_apply_apply a)
+  have hright : Function.RightInverse invF toF := by
+    rintro ⟨u, i⟩
+    have hi := ind_eq i ((h i).symm u)
+    dsimp [toF, invF]
+    apply Prod.ext
+    · apply Subtype.ext
+      calc
+        f ((h i).symm u) = ↑(h i ((h i).symm u)) :=
+          (hh i ((h i).symm u)).symm
+        _ = u := congrArg Subtype.val ((h i).apply_symm_apply u)
+    · exact hi
+  have hto : Continuous toF := by
+    apply continuous_of_continuousOn_iUnion_of_isOpen
+      (s := fun i => Subtype.val ⁻¹' V i)
+    · intro i
+      rw [continuousOn_iff_continuous_restrict]
+      apply (((h i).continuous.comp
+          (Continuous.subtype_mk (continuous_subtype_val.comp continuous_subtype_val)
+            (fun e => e.2))) |>.prodMk
+              (continuous_const : Continuous (fun _ : (Subtype.val ⁻¹' V i) => i))).congr
+      intro e
+      have hi : ind e.1 = i := ind_eq i ⟨e.1.1, e.2⟩
+      apply Prod.ext
+      · apply Subtype.ext
+        exact hh i ⟨e.1.1, e.2⟩
+      · exact hi.symm
+    · intro i
+      exact (hV i).preimage continuous_subtype_val
+    · apply Set.eq_univ_of_forall
+      intro e
+      exact mem_iUnion.2 ⟨ind e, mem_sheet e⟩
+  have hinv : Continuous invF := by
+    apply continuous_of_continuousOn_iUnion_of_isOpen
+      (s := fun i : Fin 2 => Prod.snd ⁻¹' {i})
+    · intro i
+      rw [continuousOn_iff_continuous_restrict]
+      apply Continuous.subtype_mk
+      have hc : Continuous (fun y : (Prod.snd ⁻¹' {i} : Set (U × Fin 2)) =>
+          (h i).symm y.1.1) :=
+        (h i).symm.continuous.comp
+          ((continuous_fst : Continuous (Prod.fst : U × Fin 2 → U)).comp
+            continuous_subtype_val)
+      apply (continuous_subtype_val.comp hc).congr
+      intro y
+      have hyi : y.1.2 = i := y.2
+      change ((h i).symm y.1.1 : E) = ((h y.1.2).symm y.1.1 : E)
+      rw [hyi]
+    · intro i
+      exact (isOpen_discrete {i}).preimage continuous_snd
+    · ext y
+      simp
+  let H : f ⁻¹' U ≃ₜ U × Fin 2 :=
+    { toEquiv := ⟨toF, invF, hleft, hright⟩
+      continuous_toFun := hto
+      continuous_invFun := hinv }
+  have hev : IsEvenlyCovered f x (Fin 2) := by
+    refine ⟨inferInstance, U, hxU, hU, ?_, H, ?_⟩
+    · rw [hcover]
+      exact isOpen_iUnion hV
+    · intro e
+      rfl
+  exact hev.to_isEvenlyCovered_preimage
 -- END SEAT AREA
 
 lemma apm_t01A04_circleCoverMap_evenlyCovered_basepoint_aux_fiber_points
