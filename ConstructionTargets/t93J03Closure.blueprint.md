@@ -478,8 +478,12 @@ those slice coordinates, with bounds and exact-list recovery, while
 range of every piece in the run. The positive length is now split as
 `pathTwoOpenSubdivisionRunPredLength + 1`, and the `RunBlockPoint` and
 `RunBlockPiece` definitions instantiate the dependent point and path families
-consumed by `Path.concat`. It remains to identify these block endpoints with
-the outer boundary family, then choose the inner-replaced or literal
+consumed by `Path.concat`.
+`pathTwoOpenSubdivisionRunFamily_head_val` identifies the selected start with
+the run head, and `pathTwoOpenSubdivisionRunBlockPoint_zero` consequently
+identifies each block's source vertex literally. It remains to identify the
+target vertex and then both vertices with the outer boundary family before
+choosing the inner-replaced or literal
 outer representative for each indexed run against the boundary family and
 instantiate the fold
 before extracting based surjectivity and the reverse kernel inclusion.

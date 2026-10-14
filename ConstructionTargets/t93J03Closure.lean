@@ -1260,6 +1260,41 @@ theorem pathTwoOpenSubdivisionRunFamily_eq_slice
   (Classical.choose_spec
     (pathTwoOpenSubdivisionRunFamily_exists_slice S i)).2
 
+/-- The head of an indexed run is exactly its selected slice start. -/
+theorem pathTwoOpenSubdivisionRunFamily_head_val
+    {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
+    {U V : Set X} (S : PathTwoOpenSubdivision p U V)
+    (i : Fin (boolSideRunPartition S.side).length) :
+    ((pathTwoOpenSubdivisionRunFamily S i).head
+      (pathTwoOpenSubdivisionRunFamily_ne_nil S i)).val =
+        pathTwoOpenSubdivisionRunStart S i := by
+  have hstart : pathTwoOpenSubdivisionRunStart S i < S.n + 1 := by
+    have hb := pathTwoOpenSubdivisionRunStart_add_length_le S i
+    have hp : 0 < (pathTwoOpenSubdivisionRunFamily S i).length :=
+      List.length_pos_iff_ne_nil.mpr
+        (pathTwoOpenSubdivisionRunFamily_ne_nil S i)
+    omega
+  have heq := congrArg (fun l => l[0]?)
+    (pathTwoOpenSubdivisionRunFamily_eq_slice S i)
+  have hzero : 0 < (pathTwoOpenSubdivisionRunFamily S i).length :=
+    List.length_pos_iff_ne_nil.mpr
+      (pathTwoOpenSubdivisionRunFamily_ne_nil S i)
+  have hleft : (pathTwoOpenSubdivisionRunFamily S i)[0]? =
+      some ((pathTwoOpenSubdivisionRunFamily S i).head
+        (pathTwoOpenSubdivisionRunFamily_ne_nil S i)) := by
+    rw [List.getElem?_eq_getElem hzero]
+    exact congrArg some
+      (List.head_eq_getElem_zero
+        (pathTwoOpenSubdivisionRunFamily_ne_nil S i)).symm
+  have hright : (((List.finRange (S.n + 1)).drop
+      (pathTwoOpenSubdivisionRunStart S i)).take
+        (pathTwoOpenSubdivisionRunFamily S i).length)[0]? =
+      some ⟨pathTwoOpenSubdivisionRunStart S i, hstart⟩ := by
+    simp [hzero, hstart]
+  dsimp at heq
+  rw [hleft, hright] at heq
+  exact congrArg Fin.val (Option.some.inj heq)
+
 theorem pathTwoOpenSubdivisionRunFamily_length_pos
     {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
     {U V : Set X} (S : PathTwoOpenSubdivision p U V)
@@ -1360,6 +1395,21 @@ noncomputable def pathTwoOpenSubdivisionRunBlockPiece
     (pathTwoOpenSubdivisionRunPredLength S i + 1) (by
       rw [pathTwoOpenSubdivisionRunPredLength_add_one]
       exact pathTwoOpenSubdivisionRunStart_add_length_le S i)
+
+/-- The selected block begins at the literal source vertex of its indexed
+maximal run. -/
+theorem pathTwoOpenSubdivisionRunBlockPoint_zero
+    {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
+    {U V : Set X} (S : PathTwoOpenSubdivision p U V)
+    (i : Fin (boolSideRunPartition S.side).length) :
+    pathTwoOpenSubdivisionRunBlockPoint S i 0 =
+      S.point ((pathTwoOpenSubdivisionRunFamily S i).head
+        (pathTwoOpenSubdivisionRunFamily_ne_nil S i)).castSucc := by
+  unfold pathTwoOpenSubdivisionRunBlockPoint
+  unfold pathTwoOpenSubdivisionBlockPoint
+  apply congrArg S.point
+  apply Fin.ext
+  simpa using (pathTwoOpenSubdivisionRunFamily_head_val S i).symm
 
 /-- Every piece indexed by an inner run of the exact Klein subdivision stays
 in the inner cover, supplying the range hypothesis for block concatenation. -/
