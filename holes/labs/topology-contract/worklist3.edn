@@ -36115,22 +36115,21 @@
   {:consumer :t93J03,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 4,
+   :stop-count 5,
    :review-finding
    "Program STOP commits nothing new since the prior reviewed attempt: it reuses commit 512a220f, and git history shows no later scoped commit. The unresolved SemilocallySimplyConnected hypothesis-coverage conflict is unchanged. Obtain the required owner specification decision or commit a new compiled milestone before resubmitting.",
    :evidence
    {:placeholder-delta {:t93J03 [1 1]},
     :residual
-    "Identify overlap-map image as aabb; extract based quotient; apply C1, C2/Main.",
+    "Compute overlap winding-one image=aabb; extract based quotient; apply C1, C2/Main.",
     :outcome :stop,
     :warnings ["unused SLSC owner-approved"],
     :missing-theorems
-    [{:name "kleinPolygonBasedOverlapMap",
-      :type
-      "path-connected exact overlap with based pi1 map to outer piece",
+    [{:name "kleinPolygonOverlapFundamentalGroupEquivInt",
+      :type "exact radial overlap pi1 equiv Multiplicative Z",
       :status :proved,
       :consumers [:t93J03],
-      :depends-on ["kleinPolygonFundamentalGroupoidPseudopushout"],
+      :depends-on ["kleinPolygonBasedOverlapMap"],
       :area "covering-subgroup-correspondence"}
      {:name "t93J03_polygon_van_kampen",
       :type "polygon pi1 equals PresentedGroup(aabb)",
@@ -36138,47 +36137,39 @@
       :consumers [:t93J03],
       :depends-on
       ["kleinSkeletonAabbPresentationQuotient"
-       "kleinPolygonBasedOverlapMap"],
+       "kleinPolygonOverlapFundamentalGroupEquivInt"],
       :area "covering-subgroup-correspondence"}],
     :statement-hashes {:registry "166/166"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Committed path-connected exact overlap, basepoint, and induced pi1 map; image=aabb and based quotient remain.",
+    "Committed exact overlap pi1 equivalence with integer winding; generator image and based quotient remain.",
     :commands
     [{:cmd "lake build ConstructionTargets.t93J03Closure", :exit 0}
-     {:cmd "lake env lean overlap fixture; Main", :exit 0}
-     {:cmd "statement-registry; placeholder; diff", :exit 0}
+     {:cmd "lake env lean overlap-pi1 fixture; Main", :exit 0}
+     {:cmd "registry; placeholder; diff", :exit 0}
      {:cmd "rg forbidden", :exit 1, :expected-exit 1}
      {:cmd "git commit; show --check", :exit 0}],
     :diagnostic-history
     [{:cmd "lean closure",
       :exit 1,
-      :correction "opened PolygonRadialOpenCover"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1791946062162-11395-9563dda6",
-     :commands
-     ["git show/diff/show --check bbe67b779"
-      "sha256sum fixture; scope and placeholders"
-      "lake env lean recorded closure, fixture, Main"
-      "python3 scripts/statement-registry.py check"],
-     :finding
-     "PASS: commit adds compiled sorry-free standard-axiom progress: exact radial overlap path-connectedness, a concrete transported basepoint, and the induced pi1 map from the literal overlap subtype to the outer piece. Image=aabb and based quotient remain accurately listed. Scope and fixture hash verified; source placeholders 0->0; registry 166/166. SemilocallySimplyConnected X is unused, mandated by problem.md."},
-    :commit "bbe67b7794cd9b11293da6a47fb461668b71a91b",
+      :correction "fixed qualified-name line break"}
+     {:cmd "git commit",
+      :exit 128,
+      :correction "transient stale lock vanished; retry passed"}],
+    :commit "4cf4a1fd88248aa249ce06a8e4880af398bbe32e",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
      "ConstructionTargets/t93J03Closure.blueprint.md"],
     :fixture
-    {:path "/tmp/t93j03_overlap_based_check.lean",
+    {:path "/tmp/t93j03_overlap_pi1_check.lean",
      :sha256
-     "989d7b5ba0db1ffac14d89899ecc5db5a035c77f92f15c3f1096f68026095cbe",
+     "5ff25e86e6dc3d40bee63df195d682f8c77e99b28f6a72cca64e012268ae267f",
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -37637,7 +37628,8 @@
     :lemma-kleinskeletonaabbpresentationquotient
     :lemma-kleinpolygonfundamentalgroupoidpseudopushout
     :lemma-kleinpolygoninnerfundamentalgrouptrivial
-    :lemma-kleinpolygonbasedoverlapmap],
+    :lemma-kleinpolygonbasedoverlapmap
+    :lemma-kleinpolygonoverlapfundamentalgroupequivint],
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
@@ -38037,6 +38029,23 @@
    :id :lemma-kleinpolygonbasedoverlapmap,
    :kind :lemma,
    :depends-on [:lemma-kleinpolygonfundamentalgroupoidpseudopushout],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "kleinPolygonOverlapFundamentalGroupEquivInt",
+    :type "exact radial overlap pi1 equiv Multiplicative Z"},
+   :lemma
+   {:name "kleinPolygonOverlapFundamentalGroupEquivInt",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type "exact radial overlap pi1 equiv Multiplicative Z",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03},
+   :id :lemma-kleinpolygonoverlapfundamentalgroupequivint,
+   :kind :lemma,
+   :depends-on [:lemma-kleinpolygonbasedoverlapmap],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
