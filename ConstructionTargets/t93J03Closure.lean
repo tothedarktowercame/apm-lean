@@ -857,6 +857,33 @@ theorem boolSideRunPartition_spec {n : ℕ} (side : Fin n → Bool) :
         ∃ ha hb, (side (a.getLast ha) == side (b.head hb)) = false := by
   exact List.splitBy_eq_iff.mp rfl
 
+/-- For a nonempty finite side assignment, the first maximal run begins at
+index zero and the last maximal run ends at the final index.  Together with
+the overlap certificates between runs, these are the two exterior endpoints
+needed to build the run-level dependent point family. -/
+theorem boolSideRunPartition_end_indices {n : ℕ}
+    (side : Fin (n + 1) → Bool) :
+    let runs := boolSideRunPartition side
+    ∃ hr : runs ≠ [],
+      (runs.head hr).head
+          (List.ne_nil_of_mem_splitBy (List.head_mem hr)) = 0 ∧
+      (runs.getLast hr).getLast
+          (List.ne_nil_of_mem_splitBy (List.getLast_mem hr)) = Fin.last n := by
+  dsimp only
+  have hn : List.finRange (n + 1) ≠ [] := by simp
+  let hr : boolSideRunPartition side ≠ [] := by
+    simpa [boolSideRunPartition] using (List.splitBy_ne_nil.2 hn)
+  refine ⟨hr, ?_, ?_⟩
+  · unfold boolSideRunPartition at hr ⊢
+    rw [List.head_head_splitBy (fun i j => side i == side j) hn]
+    apply Fin.ext
+    simp [List.finRange]
+  · unfold boolSideRunPartition at hr ⊢
+    rw [List.getLast_getLast_splitBy (fun i j => side i == side j) hn]
+    apply Fin.ext
+    rw [List.getLast_eq_getElem]
+    simp
+
 /-- Adjacent maximal side runs meet at consecutive subdivision-piece
 indices.  This recovers the geometric boundary vertex between two blocks,
 not merely the fact that their Boolean labels differ. -/
@@ -2439,6 +2466,7 @@ theorem lift_isEmbedding_assembly
 #print axioms kleinPolygonPseudopushout_arrow_eq_reconstructed
 #print axioms pathTwoOpenSubdivision_transition_mem_overlap
 #print axioms boolSideRunPartition_spec
+#print axioms boolSideRunPartition_end_indices
 #print axioms boolSideRunPartition_adjacent_indices
 #print axioms pathTwoOpenSubdivision_adjacentRunBoundary_mem_overlap
 #print axioms pathTwoOpenSubdivision_runPartition_isChain_overlap
