@@ -1648,6 +1648,48 @@ noncomputable def finiteWedgeFinSuccPointWedgeNeighborhoods (n : ℕ) :
   (finiteWedgeFinPointedContractibleNeighborhood n,
     finiteWedgeUnitPointedContractibleNeighborhood)
 
+/-- The left outer comparison in the generic point-wedge reconstruction is
+literally in the left coproduct factor, not merely in the kernel of the right
+projection. -/
+theorem genericPointWedgeOuterLeftComparison_mem_inl
+    {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    [PathConnectedSpace X] [PathConnectedSpace Y]
+    (x₀ : X) (y₀ : Y) (M : Set Y) (N : Set X)
+    (hM : IsOpen M) (hN : IsOpen N) (hy : y₀ ∈ M) (hx : x₀ ∈ N)
+    (cM : ConstructionTargets.PointedPuncturedCircleContraction.PointedContraction
+      M ⟨y₀, hy⟩)
+    (cN : ConstructionTargets.PointedPuncturedCircleContraction.PointedContraction
+      N ⟨x₀, hx⟩) :
+    let l := ConstructionTargets.PointWedgeVanKampen.genericPointWedgeActualLeft
+      x₀ y₀ M N
+    let l' := ConstructionTargets.PointWedgeVanKampen.genericPointWedgeCoordinateLeft x₀
+    let eK := ConstructionTargets.PointWedgeVanKampen.genericPointWedgeOverlapGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let eL := ConstructionTargets.PointWedgeVanKampen.genericPointWedgeLeftGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let aL := ConstructionTargets.PointWedgeVanKampen.genericPointWedgeLeftSpanIso
+      x₀ y₀ M N hM hN hy hx cM cN
+    let Q := ConstructionTargets.PointWedgeVanKampen.genericPointWedgeIdentityCoordinateSpan x₀ y₀
+    let z := ConstructionTargets.PointWedgeVanKampen.genericPointWedgeOverlapBase x₀ y₀ M N
+    ∃ a : FundamentalGroup X x₀,
+      (ConstructionTargets.GenericSpanPseudoCoconeTransport.reverseLeftComparison
+        l l' eK eL aL Q.left).inv.app z = Monoid.Coprod.inl a := by
+  dsimp only
+  simp only [ConstructionTargets.PointWedgeVanKampen.genericPointWedgeOverlapBase]
+  rw [ConstructionTargets.PointWedgeVanKampen.genericPointWedgeIdentityOuterLeftComparison_app,
+    ConstructionTargets.PointWedgeVanKampen.genericPointWedgeIdentityOuterLeftRoundTrip_eq_map,
+    ConstructionTargets.PointWedgeVanKampen.genericPointWedgeIdentityOuterLeftSpanFactor_eq_map]
+  simp only [CategoryTheory.SingleObj.comp_as_mul]
+  rw [eq_of_heq
+      (ConstructionTargets.PointWedgeVanKampen.genericPointWedgeIdentityCoordinateSpan_left_map
+        x₀ y₀ _),
+    eq_of_heq
+      (ConstructionTargets.PointWedgeVanKampen.genericPointWedgeIdentityCoordinateSpan_left_map
+        x₀ y₀ _)]
+  rw [← (Monoid.Coprod.inl
+    (N := ConstructionTargets.PointWedgeVanKampen.genericPointWedgeRightGroup y₀)).map_mul]
+  exact ⟨_, rfl⟩
+
 /-- The reconstruction conjugator for the successor finite-wedge split. -/
 noncomputable def finiteWedgeSuccessorRightBaseElement (n : ℕ) :=
   let P := finiteWedgeFinSuccPointWedgeNeighborhoods n
@@ -1657,12 +1699,77 @@ noncomputable def finiteWedgeSuccessorRightBaseElement (n : ℕ) :=
     x₀ y₀ P.2.carrier P.1.carrier P.2.isOpen P.1.isOpen
       P.2.mem P.1.mem P.2.contraction P.1.contraction
 
+/-- The named outer-right factor in the successor reconstruction
+conjugator. -/
+noncomputable def finiteWedgeSuccessorOuterRightElement (n : ℕ) :
+    Monoid.Coprod
+      (FundamentalGroup
+        (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge (Fin (n + 1)))
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1))
+      (FundamentalGroup
+        (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge Unit)
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle () 1)) := by
+  let P := finiteWedgeFinSuccPointWedgeNeighborhoods n
+  let x₀ := PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1
+  let y₀ := PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle () 1
+  let r := ConstructionTargets.PointWedgeVanKampen.genericPointWedgeActualRight
+    x₀ y₀ P.2.carrier P.1.carrier
+  let r' := ConstructionTargets.PointWedgeVanKampen.genericPointWedgeCoordinateRight y₀
+  let eK := ConstructionTargets.PointWedgeVanKampen.genericPointWedgeOverlapGroupoidEquivalence
+    x₀ y₀ P.2.carrier P.1.carrier P.2.isOpen P.1.isOpen
+      P.2.mem P.1.mem P.2.contraction P.1.contraction
+  let eR := ConstructionTargets.PointWedgeVanKampen.genericPointWedgeRightGroupoidEquivalence
+    x₀ y₀ P.2.carrier P.1.carrier P.2.isOpen P.1.isOpen
+      P.2.mem P.1.mem P.2.contraction P.1.contraction
+  let aR := ConstructionTargets.PointWedgeVanKampen.genericPointWedgeRightSpanIso
+    x₀ y₀ P.2.carrier P.1.carrier P.2.isOpen P.1.isOpen
+      P.2.mem P.1.mem P.2.contraction P.1.contraction
+  let Q := ConstructionTargets.PointWedgeVanKampen.genericPointWedgeIdentityCoordinateSpan x₀ y₀
+  let z := ConstructionTargets.PointWedgeVanKampen.genericPointWedgeOverlapBase
+    x₀ y₀ P.2.carrier P.1.carrier
+  exact (ConstructionTargets.GenericSpanPseudoCoconeTransport.reverseRightComparison
+    r r' eK eR aR Q.right).hom.app z
+
+/-- The successor right-base element is the named outer-right comparison
+followed, in single-object multiplication order, by an old-factor element. -/
+theorem finiteWedgeSuccessorRightBase_eq_outerRight_mul_inl (n : ℕ) :
+    ∃ a : FundamentalGroup
+        (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge (Fin (n + 1)))
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1),
+      finiteWedgeSuccessorRightBaseElement n =
+        finiteWedgeSuccessorOuterRightElement n * Monoid.Coprod.inl a := by
+  let P := finiteWedgeFinSuccPointWedgeNeighborhoods n
+  let x₀ := PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1
+  let y₀ := PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle () 1
+  obtain ⟨a, ha⟩ := genericPointWedgeOuterLeftComparison_mem_inl
+    x₀ y₀ P.2.carrier P.1.carrier P.2.isOpen P.1.isOpen
+      P.2.mem P.1.mem P.2.contraction P.1.contraction
+  refine ⟨a, ?_⟩
+  rw [finiteWedgeSuccessorRightBaseElement,
+    ConstructionTargets.PointWedgeVanKampen.genericPointWedgeIdentityGlobalRightBaseElement_eq_outerComparisons]
+  change _ = finiteWedgeSuccessorOuterRightElement n * Monoid.Coprod.inl a
+  rw [CategoryTheory.SingleObj.comp_as_mul, ha]
+  rfl
+
 /-- The exact left-factor condition needed for partial normalization. -/
 def finiteWedgeRightBaseInOldFactor (n : ℕ) : Prop :=
   ∃ a : FundamentalGroup
       (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge (Fin (n + 1)))
       (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1),
     finiteWedgeSuccessorRightBaseElement n = Monoid.Coprod.inl a
+
+/-- It is enough to factor the single outer-right comparison through the old
+factor; the other outer comparison is already there structurally. -/
+theorem finiteWedgeRightBaseInOldFactor_of_outerRightInOldFactor (n : ℕ)
+    (h : ∃ b : FundamentalGroup
+        (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge (Fin (n + 1)))
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1),
+      finiteWedgeSuccessorOuterRightElement n = Monoid.Coprod.inl b) :
+    finiteWedgeRightBaseInOldFactor n := by
+  obtain ⟨a, ha⟩ := finiteWedgeSuccessorRightBase_eq_outerRight_mul_inl n
+  obtain ⟨b, hb⟩ := h
+  refine ⟨b * a, ?_⟩
+  rw [ha, hb, map_mul]
 
 /-- The exact remaining connector square after specializing generic van Kampen
 to the successor finite-wedge neighborhoods. -/
