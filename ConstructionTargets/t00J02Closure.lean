@@ -734,11 +734,35 @@ def regularFiberTopDegreeFormula_of_localFundamentalClassComparisons
       component_sum_eq_lift_degree := hcomponent }
   exact { comparison := comparison, topDegree_eq := htop }
 
+/-- Once the component and global localization identities are established for
+the canonical local fundamental-class coefficients, the induced map on top
+homology vanishes. -/
+theorem topHomologyMap_eq_zero_of_localFundamentalClassComparisons
+    {S : Type} [TopologicalSpace S] [T2Space S]
+    [ChartedSpace SurfaceModel S]
+    {f : C(S, S)} {c : C(Circle, S)} {y : S}
+    (hy : y ∈ Set.range c) [Fintype {x : S // f x = y}]
+    (e : surfaceHomology S ≅ ModuleCat.of ℤ ℤ)
+    (lifts : ∀ k : OccupiedRegularFiberComponent f c y hy,
+      ExactZeroDegreeComponentLift f c y hy k)
+    (orientationSign : OccupiedRegularFiberComponent f c y hy → ℤ)
+    (hcomponent : ∀ k, componentLocalDegreeSum
+      (occupiedRegularFiberComponentIndex f c y hy)
+        (regularFiberLocalDegree e f y) k = exactLiftComponentDegree lifts k)
+    (htop : surfaceTopDegree e f = ∑ x,
+      orientationSign (occupiedRegularFiberComponentIndex f c y hy x) *
+        regularFiberLocalDegree e f y x) :
+    homologyMap 2 f = 0 :=
+  topHomologyMap_eq_zero_of_regularFiberTopDegreeFormula e lifts
+    (regularFiberTopDegreeFormula_of_localFundamentalClassComparisons
+      hy e lifts orientationSign hcomponent htop)
+
 end ConstructionTargets.T00J02Closure
 
 #print axioms ConstructionTargets.T00J02Closure.surfaceTopHomology_localFundamentalClassIso
 #print axioms ConstructionTargets.T00J02Closure.regularFiberLocalDegree_localization_eq
 #print axioms ConstructionTargets.T00J02Closure.regularFiberTopDegreeFormula_of_localFundamentalClassComparisons
+#print axioms ConstructionTargets.T00J02Closure.topHomologyMap_eq_zero_of_localFundamentalClassComparisons
 #print axioms ConstructionTargets.T00J02Closure.circleDegree_eq_homologyMap
 #print axioms ConstructionTargets.T00J02Closure.circleDegree_eq_zero_of_homologyMap_eq_zero
 #print axioms ConstructionTargets.T00J02Closure.transverseCircle_preimage_component_signedCount
