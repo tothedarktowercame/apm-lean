@@ -122,6 +122,49 @@ theorem t96J02_presented_finiteIndex_generated
 /-- If the vertical step is even, the two normal-form generators commute and
 give a rank-two free abelian group. -/
 -- BEGIN SEAT AREA
+theorem t96J02_presented_finiteIndex_even_classify_aux_action
+    (q n : ℤ) (hq : Even q) (x : ZMul) :
+    action (Multiplicative.ofAdd (q * n)) x = x := by
+  obtain ⟨k, rfl⟩ := hq
+  change (inversion ^ ((k + k) * n)) x = x
+  rw [show (k + k) * n = 2 * (k * n) by ring, zpow_mul]
+  have hi : inversion ^ (2 : ℤ) = 1 := by
+    ext y
+    change inversion (inversion y) = y
+    simp [inversion]
+  rw [hi, one_zpow]
+  rfl
+
+def t96J02_presented_finiteIndex_even_classify_aux_map
+    (p q r : ℤ) (hq : Even q) :
+    T96J02TorusGroup →* T96J02PresentedGroup :=
+  KleinPresentedGroupCoordinateNormalForm.coordinateEquiv.symm.toMonoidHom.comp
+    { toFun := fun z =>
+        ⟨Multiplicative.ofAdd (p * z.toAdd.1 + r * z.toAdd.2),
+          Multiplicative.ofAdd (q * z.toAdd.2)⟩
+      map_one' := by ext <;> simp
+      map_mul' := by
+        intro x y
+        apply SemidirectProduct.ext
+        · change Multiplicative.ofAdd
+              (p * (x.toAdd.1 + y.toAdd.1) + r * (x.toAdd.2 + y.toAdd.2)) =
+            Multiplicative.ofAdd (p * x.toAdd.1 + r * x.toAdd.2) *
+              action (Multiplicative.ofAdd (q * x.toAdd.2))
+                (Multiplicative.ofAdd (p * y.toAdd.1 + r * y.toAdd.2))
+          rw [t96J02_presented_finiteIndex_even_classify_aux_action q x.toAdd.2 hq]
+          change Multiplicative.ofAdd
+              (p * (x.toAdd.1 + y.toAdd.1) + r * (x.toAdd.2 + y.toAdd.2)) =
+            Multiplicative.ofAdd
+              ((p * x.toAdd.1 + r * x.toAdd.2) +
+                (p * y.toAdd.1 + r * y.toAdd.2))
+          congr 1 <;> ring
+        · change Multiplicative.ofAdd (q * (x.toAdd.2 + y.toAdd.2)) =
+            Multiplicative.ofAdd (q * x.toAdd.2) *
+              Multiplicative.ofAdd (q * y.toAdd.2)
+          change Multiplicative.ofAdd (q * (x.toAdd.2 + y.toAdd.2)) =
+            Multiplicative.ofAdd (q * x.toAdd.2 + q * y.toAdd.2)
+          congr 1 <;> ring }
+
 theorem t96J02_presented_finiteIndex_even_classify
     (H : Subgroup T96J02PresentedGroup) (p q r : ℤ)
     (hp : 0 < p) (hq : 0 < q) (heven : Even q)
@@ -129,7 +172,95 @@ theorem t96J02_presented_finiteIndex_even_classify
       ({t96J02_presented_coordinate p 0,
         t96J02_presented_coordinate r q} : Set T96J02PresentedGroup)) :
     Nonempty (H ≃* T96J02TorusGroup) := by
-  sorry
+  let f := t96J02_presented_finiteIndex_even_classify_aux_map p q r heven
+  have hf_inj : Function.Injective f := by
+    intro x y hxy
+    have hc := congrArg KleinPresentedGroupCoordinateNormalForm.coordinateEquiv hxy
+    change KleinPresentedGroupCoordinateNormalForm.coordinateEquiv
+        (KleinPresentedGroupCoordinateNormalForm.coordinateEquiv.symm
+          ⟨Multiplicative.ofAdd (p * x.toAdd.1 + r * x.toAdd.2),
+            Multiplicative.ofAdd (q * x.toAdd.2)⟩) =
+      KleinPresentedGroupCoordinateNormalForm.coordinateEquiv
+        (KleinPresentedGroupCoordinateNormalForm.coordinateEquiv.symm
+          ⟨Multiplicative.ofAdd (p * y.toAdd.1 + r * y.toAdd.2),
+            Multiplicative.ofAdd (q * y.toAdd.2)⟩) at hc
+    simp only [MulEquiv.apply_symm_apply] at hc
+    have hrgt := congrArg
+      (fun z : Coordinates => Multiplicative.toAdd z.right) hc
+    have hlft := congrArg
+      (fun z : Coordinates => Multiplicative.toAdd z.left) hc
+    have hrgt' : q * x.toAdd.2 = q * y.toAdd.2 := by
+      exact hrgt
+    have hlft' : p * x.toAdd.1 + r * x.toAdd.2 =
+        p * y.toAdd.1 + r * y.toAdd.2 := by
+      exact hlft
+    have hv : x.toAdd.2 = y.toAdd.2 :=
+      mul_left_cancel₀ (ne_of_gt hq) hrgt'
+    rw [hv] at hlft'
+    have hpEq : p * x.toAdd.1 = p * y.toAdd.1 := by omega
+    have hh : x.toAdd.1 = y.toAdd.1 :=
+      mul_left_cancel₀ (ne_of_gt hp) hpEq
+    apply Multiplicative.toAdd.injective
+    apply Prod.ext
+    · change x.toAdd.1 = y.toAdd.1
+      exact hh
+    · change x.toAdd.2 = y.toAdd.2
+      exact hv
+  have hf1 : f (Multiplicative.ofAdd (1, 0)) =
+      t96J02_presented_coordinate p 0 := by
+    apply KleinPresentedGroupCoordinateNormalForm.coordinateEquiv.injective
+    apply SemidirectProduct.ext <;> simp [f,
+      t96J02_presented_finiteIndex_even_classify_aux_map,
+      t96J02_presented_coordinate]
+  have hf2 : f (Multiplicative.ofAdd (0, 1)) =
+      t96J02_presented_coordinate r q := by
+    apply KleinPresentedGroupCoordinateNormalForm.coordinateEquiv.injective
+    apply SemidirectProduct.ext <;> simp [f,
+      t96J02_presented_finiteIndex_even_classify_aux_map,
+      t96J02_presented_coordinate]
+  have hfirst : t96J02_presented_coordinate p 0 ∈ MonoidHom.range f :=
+    ⟨Multiplicative.ofAdd (1, 0), hf1⟩
+  have hsecond : t96J02_presented_coordinate r q ∈ MonoidHom.range f :=
+    ⟨Multiplicative.ofAdd (0, 1), hf2⟩
+  have hrange : MonoidHom.range f = H := by
+    apply le_antisymm
+    · rintro _ ⟨z, rfl⟩
+      rw [hgen]
+      have ha := (Subgroup.closure _).zpow_mem (Subgroup.subset_closure
+        (show t96J02_presented_coordinate p 0 ∈
+          ({t96J02_presented_coordinate p 0,
+            t96J02_presented_coordinate r q} : Set T96J02PresentedGroup) by simp)) z.toAdd.1
+      have hb := (Subgroup.closure _).zpow_mem (Subgroup.subset_closure
+        (show t96J02_presented_coordinate r q ∈
+          ({t96J02_presented_coordinate p 0,
+            t96J02_presented_coordinate r q} : Set T96J02PresentedGroup) by simp)) z.toAdd.2
+      have hz : z = (Multiplicative.ofAdd (1, 0)) ^ z.toAdd.1 *
+          (Multiplicative.ofAdd (0, 1)) ^ z.toAdd.2 := by
+        apply Multiplicative.toAdd.injective
+        ext <;> simp
+      rw [hz, map_mul, map_zpow, map_zpow, hf1, hf2]
+      exact Subgroup.mul_mem _ ha hb
+    · rw [hgen]
+      apply (Subgroup.closure_le _).2
+      intro x hx
+      simp only [Set.mem_insert_iff, Set.mem_singleton_iff] at hx
+      rcases hx with rfl | rfl
+      · exact hfirst
+      · exact hsecond
+  let g : T96J02TorusGroup →* H :=
+    { toFun := fun z => ⟨f z, hrange ▸ ⟨z, rfl⟩⟩
+      map_one' := Subtype.ext f.map_one
+      map_mul' := fun x y => Subtype.ext (f.map_mul x y) }
+  have hg_bij : Function.Bijective g := by
+    constructor
+    · intro x y h
+      apply hf_inj
+      exact congrArg Subtype.val h
+    · intro x
+      have hx : x.1 ∈ MonoidHom.range f := hrange.symm ▸ x.2
+      obtain ⟨z, hz⟩ := hx
+      exact ⟨z, Subtype.ext hz⟩
+  exact ⟨(MulEquiv.ofBijective g hg_bij).symm⟩
 -- END SEAT AREA
 
 /-- If the vertical step is odd, conjugation by its lift inverts the
