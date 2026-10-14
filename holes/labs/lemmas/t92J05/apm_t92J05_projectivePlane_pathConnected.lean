@@ -228,7 +228,17 @@ lemma apm_t92J05_projectivePlane_fundamentalGroup_at_one_point
 -- BEGIN SEAT AREA
 lemma apm_t92J05_projectivePlane_pathConnected :
     PathConnectedSpace apm_t92J05_RP2 := by
-  sorry
+  let V := Fin 3 → ℝ
+  have hrank : 1 < Module.rank ℝ V := by
+    rw [← Module.finrank_eq_rank]
+    norm_num [V]
+  have hnonzero : IsPathConnected ({0}ᶜ : Set V) :=
+    isPathConnected_compl_singleton_of_one_lt_rank hrank 0
+  letI : PathConnectedSpace {v : V // v ≠ 0} := by
+    change PathConnectedSpace {v : V // v ∈ ({0}ᶜ : Set V)}
+    exact isPathConnected_iff_pathConnectedSpace.mp hnonzero
+  exact (Quotient.mk'_surjective (s := projectivizationSetoid ℝ V)).pathConnectedSpace
+    continuous_quotient_mk'
 -- END SEAT AREA
 
 /-- **LIBRARY.** On a path-connected space, one computed fundamental group
