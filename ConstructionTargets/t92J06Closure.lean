@@ -42,6 +42,50 @@ theorem inl_base_eq_inr_base : inl circleBase = inr circleBase := by
   apply Quotient.sound
   exact Relation.EqvGen.rel _ _ WedgeRel.base
 
+private def leftCoordinate : Sum S1 S1 → S1
+  | .inl z => z
+  | .inr _ => circleBase
+
+private def rightCoordinate : Sum S1 S1 → S1
+  | .inl _ => circleBase
+  | .inr z => z
+
+private theorem leftCoordinate_eq_of_eqvGen {a b : Sum S1 S1}
+    (h : Relation.EqvGen WedgeRel a b) : leftCoordinate a = leftCoordinate b := by
+  induction h with
+  | rel _ _ hab => cases hab; rfl
+  | refl => rfl
+  | symm _ _ _ ih => exact ih.symm
+  | trans _ _ _ _ _ ih₁ ih₂ => exact ih₁.trans ih₂
+
+private theorem rightCoordinate_eq_of_eqvGen {a b : Sum S1 S1}
+    (h : Relation.EqvGen WedgeRel a b) : rightCoordinate a = rightCoordinate b := by
+  induction h with
+  | rel _ _ hab => cases hab; rfl
+  | refl => rfl
+  | symm _ _ _ ih => exact ih.symm
+  | trans _ _ _ _ _ ih₁ ih₂ => exact ih₁.trans ih₂
+
+/-- The left circle embeds in the quotient wedge. -/
+theorem inl_injective : Function.Injective inl := by
+  intro z w h
+  exact leftCoordinate_eq_of_eqvGen (Quotient.exact h)
+
+/-- The right circle embeds in the quotient wedge. -/
+theorem inr_injective : Function.Injective inr := by
+  intro z w h
+  exact rightCoordinate_eq_of_eqvGen (Quotient.exact h)
+
+/-- The two embedded circle legs meet exactly at their common basepoint. -/
+theorem inl_eq_inr_iff (z w : S1) :
+    inl z = inr w ↔ z = circleBase ∧ w = circleBase := by
+  constructor
+  · intro h
+    exact ⟨leftCoordinate_eq_of_eqvGen (Quotient.exact h),
+      (rightCoordinate_eq_of_eqvGen (Quotient.exact h)).symm⟩
+  · rintro ⟨rfl, rfl⟩
+    exact inl_base_eq_inr_base
+
 theorem wedgeDesc_respects {Y : Type*} [TopologicalSpace Y]
     (f g : C(S1, Y)) (hbase : f circleBase = g circleBase)
     {x y} (hxy : Relation.EqvGen WedgeRel x y) :
@@ -257,6 +301,22 @@ theorem intervalCircle_injective_on_interior :
   · rcases hends with ⟨rfl, rfl⟩
     exact False.elim (lt_irrefl (1 : ℝ) ht.2)
 
+/-- An interior interval parameter never represents the circle basepoint. -/
+theorem intervalCircle_ne_base {t : UnitInterval}
+    (ht : t.1 ∈ Set.Ioo (0 : ℝ) 1) : intervalCircle t ≠ circleBase := by
+  intro h
+  have h0 : intervalCircle t = intervalCircle intervalZero := by simpa using h
+  rcases intervalCircle_eq_imp_coordinate_cases t intervalZero h0 with htz | hends | hends
+  · subst t
+    exact (lt_irrefl (0 : ℝ)) ht.1
+  · have hz : intervalZero ≠ intervalOne := by
+      intro hz
+      have := congrArg Subtype.val hz
+      norm_num [intervalZero, intervalOne] at this
+    exact hz hends.2
+  · rw [hends.1] at ht
+    exact (lt_irrefl (1 : ℝ)) ht.2
+
 /-- The two interval labels map to the two circle legs of the rose. -/
 def edgeProjection (i : Fin 2) : C(UnitInterval, X) :=
   Fin.cases
@@ -275,6 +335,23 @@ def edgeProjection (i : Fin 2) : C(UnitInterval, X) :=
     edgeProjection i intervalOne = inl circleBase := by
   refine Fin.cases ?_ (fun j => ?_) i <;> simp [edgeProjection]
   exact inl_base_eq_inr_base.symm
+
+/-- Away from the wedge vertex, the projection remembers both the edge label
+and its interval coordinate. -/
+theorem edgeProjection_eq_of_interior (i j : Fin 2) (t u : UnitInterval)
+    (ht : t.1 ∈ Set.Ioo (0 : ℝ) 1) (hu : u.1 ∈ Set.Ioo (0 : ℝ) 1)
+    (h : edgeProjection i t = edgeProjection j u) : i = j ∧ t = u := by
+  fin_cases i <;> fin_cases j
+  · refine ⟨rfl, intervalCircle_injective_on_interior ht hu ?_⟩
+    exact inl_injective h
+  · exfalso
+    have hb := (inl_eq_inr_iff (intervalCircle t) (intervalCircle u)).mp h
+    exact intervalCircle_ne_base ht hb.1
+  · exfalso
+    have hb := (inl_eq_inr_iff (intervalCircle u) (intervalCircle t)).mp h.symm
+    exact intervalCircle_ne_base hu hb.1
+  · refine ⟨rfl, intervalCircle_injective_on_interior ht hu ?_⟩
+    exact inr_injective h
 
 /-- The map before imposing the graph endpoint identifications. -/
 def realizationRawProjection (D : TwoLoopGraphCoverData V) : RealizationRaw V → X
