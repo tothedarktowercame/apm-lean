@@ -113856,14 +113856,14 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 5,
+   :stop-count 6,
    :review-finding
    "Recorded fixture hash mismatch: :fixture.sha256 is 0bca6ce32c019fc3053c7f813c26917169cf817375b44d5e722b864b61a526450c1, but ConstructionTargets/PointWedgeVanKampen.blueprint.md at recorded commit c9b3af27 has exact SHA-256 0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0. Re-record the fixture hash for the reviewed commit.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
    :evidence
    {:placeholder-delta {:source-before 0, :source-after 0},
     :residual
-    "Prove literal Y counit square and shifted endpoint; then B6/B12.",
+    "Prove counit normal form trivial and shifted endpoint; then B6/B12.",
     :outcome :stop,
     :warnings ["existing linters"],
     :missing-theorems
@@ -113877,16 +113877,16 @@
       :area "fundamental-group-wedge-of-circles"}],
     :statement-hashes
     {:source
-     "377abc9850a522945017fe3b352150f337f6e11c61c93a39cbd664b961ab8272",
+     "068bdea0adf3de9d0a00025316885efe91e09337042c81e0842442c7672be7aa",
      :documentation
-     "d0a69e15fa1db3c4a35b08ee9b76ca06d84364f1dfec6953da33c4d81d234a4e",
+     "b16118b67d84c43266993f0b33866369a56eff23a1f6a9e867a2213b4d7d9737",
      :blueprint
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0",
      :registry "166/166"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
-    :reason "Banked fixed-endpoint installed connector reduction.",
+    :reason "Banked literal counit square iff trivial normal form.",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/PointWedgeVanKampen.lean",
@@ -113896,27 +113896,14 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "hashes/diff/placeholders", :exit 0}],
     :diagnostic-history
-    [{:cmd "connector draft",
+    [{:cmd "normal-form drafts",
       :exit 1,
-      :finding "made source-square argument explicit"}
+      :finding "fixed association and cancellation"}
      {:cmd
       "lake build ConstructionTargets.ThreeCirclesFundamentalGroup",
       :exit 1,
       :finding "B12 absent"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1791983663733-11820-fa87daf4",
-     :commands
-     ["git show/diff-tree b05794c9af02edddf90f5cf0fb5a5571fa26217f"
-      "archive commit; lake env lean PointWedgeVanKampen.lean"
-      "sha256sum source/doc/blueprint; count sorry/admit"
-      "python3 scripts/statement-registry.py check"
-      "#print axioms installed-connector reduction"
-      "lake build ConstructionTargets.PointWedgeVanKampen"],
-     :finding
-     "PASS: exact scope and hashes match; archived source compiles; placeholders 0->0; registry 166/166. The literal Y counit premise is correctly transported through the mapped connector system and explicit base change, yielding installed connector = rebased mapped source connector; standard axioms only. New compiled milestone recorded; literal counit square, shifted endpoint, and genericPointWedgeLegCoordinates_vanKampen remain listed."},
-    :commit "b05794c9af02edddf90f5cf0fb5a5571fa26217f",
+    :commit "5464a3cb6490e83ed9c8f90a558ed39da9d8e1ce",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
      "ConstructionTargets/PointWedgeVanKampen.md"],
@@ -113926,7 +113913,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
