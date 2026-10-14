@@ -492,7 +492,40 @@ theorem t93J03_cyclicCover_aux_E_eq_iff (v w : ℝ × ℝ) :
 
 theorem t93J03_cyclicCover_aux_L_E (v : ℝ × ℝ) :
     ∃ n : ℤ, t93J03_cyc_L (t93J03_cyc_E v) = (v.1 + n, v.2) := by
-  sorry
+  let n : ℤ := ⌊(Real.pi - 2 * Real.pi * v.1) / (2 * Real.pi)⌋
+  refine ⟨n, Prod.ext ?_ ?_⟩
+  · change Complex.arg
+        (⟨Real.exp v.2 * Real.cos (2 * Real.pi * v.1),
+          Real.exp v.2 * Real.sin (2 * Real.pi * v.1)⟩ : ℂ) /
+        (2 * Real.pi) = v.1 + n
+    have hc :
+        (⟨Real.exp v.2 * Real.cos (2 * Real.pi * v.1),
+          Real.exp v.2 * Real.sin (2 * Real.pi * v.1)⟩ : ℂ) =
+          (↑(Real.exp v.2) : ℂ) *
+            ((↑(Real.cos (2 * Real.pi * v.1)) : ℂ) +
+              (↑(Real.sin (2 * Real.pi * v.1)) : ℂ) * Complex.I) := by
+      apply Complex.ext <;>
+        simp only [Complex.mul_re, Complex.mul_im, Complex.add_re, Complex.add_im,
+          Complex.ofReal_re, Complex.ofReal_im, Complex.I_re, Complex.I_im] <;>
+        ring
+    have harg := Complex.arg_mul_cos_add_sin_mul_I_sub
+      (Real.exp_pos v.2) (2 * Real.pi * v.1)
+    rw [← Complex.ofReal_cos, ← Complex.ofReal_sin] at harg
+    rw [← hc] at harg
+    rw [div_eq_iff (mul_ne_zero (by norm_num) Real.pi_ne_zero)]
+    linear_combination harg
+  · change Real.log
+        (Real.sqrt
+          ((Real.exp v.2 * Real.cos (2 * Real.pi * v.1)) ^ 2 +
+           (Real.exp v.2 * Real.sin (2 * Real.pi * v.1)) ^ 2)) = v.2
+    rw [show
+      (Real.exp v.2 * Real.cos (2 * Real.pi * v.1)) ^ 2 +
+          (Real.exp v.2 * Real.sin (2 * Real.pi * v.1)) ^ 2 =
+        (Real.exp v.2) ^ 2 by
+      rw [mul_pow, mul_pow, ← mul_add]
+      rw [add_comm, Real.sin_sq_add_cos_sq]
+      ring]
+    rw [Real.sqrt_sq_eq_abs, abs_of_pos (Real.exp_pos v.2), Real.log_exp]
 
 theorem t93J03_cyclicCover_aux_E_L (z : T93J03Punctured) :
     t93J03_cyc_E (t93J03_cyc_L z) = z := by
