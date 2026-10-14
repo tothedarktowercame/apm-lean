@@ -80,11 +80,89 @@ noncomputable def t96J02_presented_coordinate (m n : ℤ) :
 
 /-- A finite-index subgroup meets the horizontal infinite cyclic subgroup in
 a nonzero cyclic subgroup. -/
+theorem t96J02_presented_finiteIndex_horizontal_step_aux_add (m n : ℤ) :
+    t96J02_presented_coordinate (m + n) 0 =
+      t96J02_presented_coordinate m 0 * t96J02_presented_coordinate n 0 := by
+  apply KleinPresentedGroupCoordinateNormalForm.coordinateEquiv.injective
+  simp only [t96J02_presented_coordinate, MulEquiv.apply_symm_apply, map_mul]
+  ext <;> simp
+
+theorem t96J02_presented_finiteIndex_horizontal_step_aux_neg (m : ℤ) :
+    t96J02_presented_coordinate (-m) 0 =
+      (t96J02_presented_coordinate m 0)⁻¹ := by
+  apply eq_inv_of_mul_eq_one_left
+  rw [← t96J02_presented_finiteIndex_horizontal_step_aux_add]
+  simp [t96J02_presented_coordinate]
+
+def t96J02_presented_finiteIndex_horizontal_step_aux_subgroup
+    (H : Subgroup T96J02PresentedGroup) : AddSubgroup ℤ where
+  carrier := {m | t96J02_presented_coordinate m 0 ∈ H}
+  zero_mem' := by
+    change KleinPresentedGroupCoordinateNormalForm.coordinateEquiv.symm
+      ⟨Multiplicative.ofAdd 0, Multiplicative.ofAdd 0⟩ ∈ H
+    simpa using H.one_mem
+  add_mem' := by
+    intro m n hm hn
+    change t96J02_presented_coordinate (m + n) 0 ∈ H
+    change t96J02_presented_coordinate m 0 ∈ H at hm
+    change t96J02_presented_coordinate n 0 ∈ H at hn
+    rw [t96J02_presented_finiteIndex_horizontal_step_aux_add]
+    exact H.mul_mem hm hn
+  neg_mem' := by
+    intro m hm
+    change t96J02_presented_coordinate (-m) 0 ∈ H
+    change t96J02_presented_coordinate m 0 ∈ H at hm
+    rw [t96J02_presented_finiteIndex_horizontal_step_aux_neg]
+    exact H.inv_mem hm
+
 theorem t96J02_presented_finiteIndex_horizontal_step
     (H : Subgroup T96J02PresentedGroup) (hH : H.FiniteIndex) :
     ∃ p : ℤ, 0 < p ∧
       ∀ m : ℤ, t96J02_presented_coordinate m 0 ∈ H ↔ p ∣ m := by
-  sorry
+  let K := t96J02_presented_finiteIndex_horizontal_step_aux_subgroup H
+  obtain ⟨a, ha⟩ := Int.subgroup_cyclic K
+  have hK_ne : K ≠ ⊥ := by
+    intro hzero
+    letI : Finite (T96J02PresentedGroup ⧸ H) :=
+      Subgroup.finiteIndex_iff_finite_quotient.mp hH
+    obtain ⟨i, j, hij, heq⟩ :=
+      Finite.exists_ne_map_eq_of_infinite
+        (fun n : ℤ ↦ (Quotient.mk''
+          (t96J02_presented_coordinate n 0) : T96J02PresentedGroup ⧸ H))
+    have hmem : t96J02_presented_coordinate (j - i) 0 ∈ H := by
+      have hd : (t96J02_presented_coordinate i 0)⁻¹ *
+          t96J02_presented_coordinate j 0 ∈ H :=
+        QuotientGroup.leftRel_apply.mp (Quotient.exact' heq)
+      rw [show t96J02_presented_coordinate (j - i) 0 =
+          (t96J02_presented_coordinate i 0)⁻¹ *
+            t96J02_presented_coordinate j 0 by
+        rw [sub_eq_add_neg, add_comm,
+          t96J02_presented_finiteIndex_horizontal_step_aux_add,
+          t96J02_presented_finiteIndex_horizontal_step_aux_neg]]
+      exact hd
+    have hz : j - i = 0 := by
+      have : j - i ∈ K := hmem
+      rw [hzero] at this
+      simpa using this
+    exact hij (sub_eq_zero.mp hz).symm
+  have ha0 : a ≠ 0 := by
+    intro ha0
+    apply hK_ne
+    rw [ha, ha0]
+    simp
+  refine ⟨(a.natAbs : ℤ), ?_, ?_⟩
+  · exact_mod_cast Int.natAbs_pos.mpr ha0
+  · intro m
+    change m ∈ K ↔ _
+    rw [ha]
+    rw [AddSubgroup.mem_closure_singleton]
+    change (∃ n : ℤ, n * a = m) ↔ (a.natAbs : ℤ) ∣ m
+    rw [Int.natAbs_dvd]
+    constructor
+    · rintro ⟨n, rfl⟩
+      exact dvd_mul_left a n
+    · rintro ⟨n, rfl⟩
+      exact ⟨n, mul_comm n a⟩
 
 /-- The set of vertical exponents occurring in a finite-index subgroup is a
 nonzero subgroup `qℤ` of `ℤ`.  This leaf is independent of the horizontal one. -/
