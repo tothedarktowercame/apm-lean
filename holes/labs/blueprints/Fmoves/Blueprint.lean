@@ -3744,6 +3744,363 @@ lemma cutAndPaste_aux_convex_radial_chart
     dsimp [H, r]
     rfl
 
+/-! ## Cut and paste: explicit boundary maps (design claude-14, 2026-10-14)
+
+`L` sides, the two `x` at sides `p` and `q` (`p < q < L`), `Δ = 2π/L`,
+`α m = m Δ`, `cutPoint m = e^{i α m}`; `P, Q` = vertices `p, q`, `P', Q'` =
+vertices `p + 1, q + 1`.  Old pieces: `A = cutPiece P Q`, the disk on the side of
+the chord `PQ` holding the arc from `P` counterclockwise to `Q` (sides `x v`), and
+`B = cutPiece Q P` (sides `x t u`).  New pieces: `A' = cutPiece P' Q'` (new sides
+`x v⁻¹`, i.e. `p + 1 .. q`) and `B' = cutPiece Q' P'` (`t u` and new side `p`).
+
+Each piece is parametrised by one circle, and the four boundary maps put matching
+boundary pieces at the same parameter:
+* `A` (base `α p`): arc `[α p, α q]` is the identity; `[α q, α p + 2π]` runs along
+  the chord `Q → P`.  `A'`: the old `x` arc goes to the seam `P' → Q'`, the old `v`
+  arcs to the new `v⁻¹` arcs by the reflection `φ ↦ α(q+1) + α(p+1) - φ`, and the
+  chord to the new side `p + 1`, reversed.
+* `B` (base `α q`): arc `[α q, α p + 2π]` is the identity; the rest runs along the
+  chord `P → Q`.  `B'`: the old `x` arc (side `q`) goes to the seam `P' → Q'`, `t`
+  and `u` stay fixed, and the chord goes to the new side `p`.
+The charts are convex-body charts with these boundary maps
+(`cutAndPaste_aux_boundary_chart`).  The combinatorial leaves only use the edge
+formulas, bundled in `CutBoundaryData`. -/
+
+def cutAlpha (L m : ℕ) : ℝ := 2 * Real.pi * m / L
+
+def cutPoint (L m : ℕ) : ℂ := Complex.exp ((cutAlpha L m : ℂ) * Complex.I)
+
+/-- `cutCross w z = Im (conj w · z)`, positive when `z` is to the left of `w`. -/
+def cutCross (w z : ℂ) : ℝ := (starRingEnd ℂ w * z).im
+
+/-- The part of the closed disk on the side of the chord `PQ` that holds the arc
+from `P` counterclockwise to `Q`. -/
+def cutPiece (P Q : ℂ) : Set ℂ := {z | ‖z‖ ≤ 1 ∧ cutCross (Q - P) (z - P) ≤ 0}
+
+def cutSeam (L p q : ℕ) (s : ℝ) : ℂ :=
+  cutPoint L (p + 1) + (s : ℂ) * (cutPoint L (q + 1) - cutPoint L (p + 1))
+
+def cutChordA (L p q : ℕ) (s : ℝ) : ℂ := cutPoint L q + (s : ℂ) * (cutPoint L p - cutPoint L q)
+
+def cutChordB (L p q : ℕ) (s : ℝ) : ℂ := cutPoint L p + (s : ℂ) * (cutPoint L q - cutPoint L p)
+
+/-- Chord parameter on `[α q, α p + 2π]`. -/
+def cutSA (L p q : ℕ) (φ : ℝ) : ℝ :=
+  (φ - cutAlpha L q) / (cutAlpha L p + 2 * Real.pi - cutAlpha L q)
+
+/-- Chord parameter on `[α p + 2π, α q + 2π]`. -/
+def cutSB (L p q : ℕ) (φ : ℝ) : ℝ :=
+  (φ - cutAlpha L p - 2 * Real.pi) / (cutAlpha L q - cutAlpha L p)
+
+def cutProfileOldA (L p q : ℕ) (φ : ℝ) : ℂ :=
+  if φ ≤ cutAlpha L q then Complex.exp ((φ : ℂ) * Complex.I)
+  else cutChordA L p q (cutSA L p q φ)
+
+def cutProfileOldB (L p q : ℕ) (φ : ℝ) : ℂ :=
+  if φ ≤ cutAlpha L p + 2 * Real.pi then Complex.exp ((φ : ℂ) * Complex.I)
+  else cutChordB L p q (cutSB L p q φ)
+
+def cutProfileNewA (L p q : ℕ) (φ : ℝ) : ℂ :=
+  if φ ≤ cutAlpha L (p + 1) then cutSeam L p q ((φ - cutAlpha L p) * L / (2 * Real.pi))
+  else if φ ≤ cutAlpha L q then
+    Complex.exp (((cutAlpha L (q + 1) + cutAlpha L (p + 1) - φ : ℝ) : ℂ) * Complex.I)
+  else Complex.exp (((cutAlpha L (p + 2) - cutSA L p q φ * (2 * Real.pi / L) : ℝ) : ℂ) *
+    Complex.I)
+
+def cutProfileNewB (L p q : ℕ) (φ : ℝ) : ℂ :=
+  if φ ≤ cutAlpha L (q + 1) then cutSeam L p q ((φ - cutAlpha L q) * L / (2 * Real.pi))
+  else if φ ≤ cutAlpha L p + 2 * Real.pi then Complex.exp ((φ : ℂ) * Complex.I)
+  else Complex.exp (((cutAlpha L p + cutSB L p q φ * (2 * Real.pi / L) : ℝ) : ℂ) *
+    Complex.I)
+
+def cutOldA (L p q : ℕ) (b : Circle) : ℂ :=
+  AddCircle.liftIco (2 * Real.pi) (cutAlpha L p) (cutProfileOldA L p q)
+    (AddCircle.homeomorphCircle'.symm b)
+
+def cutOldB (L p q : ℕ) (b : Circle) : ℂ :=
+  AddCircle.liftIco (2 * Real.pi) (cutAlpha L q) (cutProfileOldB L p q)
+    (AddCircle.homeomorphCircle'.symm b)
+
+def cutNewA (L p q : ℕ) (b : Circle) : ℂ :=
+  AddCircle.liftIco (2 * Real.pi) (cutAlpha L p) (cutProfileNewA L p q)
+    (AddCircle.homeomorphCircle'.symm b)
+
+def cutNewB (L p q : ℕ) (b : Circle) : ℂ :=
+  AddCircle.liftIco (2 * Real.pi) (cutAlpha L q) (cutProfileNewB L p q)
+    (AddCircle.homeomorphCircle'.symm b)
+
+/-- A boundary point of side `e`, as a point of the parameter circle. -/
+def cutEdgeCircle (L e : ℕ) (s : Icc (0 : ℝ) 1) : Circle :=
+  ⟨edgePoint L e s, by simpa [Circle, Submonoid.unitSphere] using norm_edgePoint L e s⟩
+
+def cutChordParamA (L p q : ℕ) (s : Icc (0 : ℝ) 1) : Circle :=
+  AddCircle.homeomorphCircle'
+    ((cutAlpha L q + s * (cutAlpha L p + 2 * Real.pi - cutAlpha L q) : ℝ) :
+      AddCircle (2 * Real.pi))
+
+def cutChordParamB (L p q : ℕ) (s : Icc (0 : ℝ) 1) : Circle :=
+  AddCircle.homeomorphCircle'
+    ((cutAlpha L p + 2 * Real.pi + s * (cutAlpha L q - cutAlpha L p) : ℝ) :
+      AddCircle (2 * Real.pi))
+
+/-- The edge formulas of the four boundary maps; the combinatorial leaves only use
+these. -/
+structure CutBoundaryData (L p q : ℕ) (oldA oldB newA newB : Circle → ℂ) : Prop where
+  coverA : ∀ y : Circle,
+    (∃ e s, p ≤ e ∧ e < q ∧ y = cutEdgeCircle L e s) ∨
+      (∃ s : Icc (0 : ℝ) 1, y = cutChordParamA L p q s)
+  coverB : ∀ y : Circle,
+    (∃ e s, ((q ≤ e ∧ e < L) ∨ e < p) ∧ y = cutEdgeCircle L e s) ∨
+      (∃ s : Icc (0 : ℝ) 1, y = cutChordParamB L p q s)
+  oldA_arc : ∀ e s, p ≤ e → e < q → oldA (cutEdgeCircle L e s) = (edgePoint L e s : ℂ)
+  oldA_chord : ∀ s : Icc (0 : ℝ) 1, oldA (cutChordParamA L p q s) = cutChordA L p q s
+  oldB_arc : ∀ e s, ((q ≤ e ∧ e < L) ∨ e < p) →
+    oldB (cutEdgeCircle L e s) = (edgePoint L e s : ℂ)
+  oldB_chord : ∀ s : Icc (0 : ℝ) 1, oldB (cutChordParamB L p q s) = cutChordB L p q s
+  newA_x : ∀ s : Icc (0 : ℝ) 1, newA (cutEdgeCircle L p s) = cutSeam L p q s
+  newA_v : ∀ e s, p + 1 ≤ e → e < q →
+    newA (cutEdgeCircle L e s) = (edgePoint L (q + p + 1 - e) (reverseParameter s) : ℂ)
+  newA_chord : ∀ s : Icc (0 : ℝ) 1,
+    newA (cutChordParamA L p q s) = (edgePoint L (p + 1) (reverseParameter s) : ℂ)
+  newB_x : ∀ s : Icc (0 : ℝ) 1, newB (cutEdgeCircle L q s) = cutSeam L p q s
+  newB_tu : ∀ e s, ((q + 1 ≤ e ∧ e < L) ∨ e < p) →
+    newB (cutEdgeCircle L e s) = (edgePoint L e s : ℂ)
+  newB_chord : ∀ s : Icc (0 : ℝ) 1,
+    newB (cutChordParamB L p q s) = (edgePoint L p s : ℂ)
+
+/-- What a chart of a piece must satisfy. -/
+def CutChartSpec (K : Set ℂ) (β : Circle → ℂ) (φ : ℂ → ℂ) : Prop :=
+  Continuous φ ∧ Set.InjOn φ (Metric.closedBall 0 1) ∧
+    φ '' Metric.closedBall 0 1 = K ∧ (∀ z : Circle, φ z = β z) ∧
+    ∀ z : ℂ, ‖z‖ < 1 → φ z ∈ interior K
+
+/-! ### Geometry of the pieces -/
+
+theorem cutPiece_convex_compact (P Q : ℂ) :
+    Convex ℝ (cutPiece P Q) ∧ IsCompact (cutPiece P Q) := by
+  sorry
+
+theorem cutPiece_interior_nonempty {P Q : ℂ} (hP : ‖P‖ = 1) (hQ : ‖Q‖ = 1) (hPQ : P ≠ Q) :
+    (interior (cutPiece P Q)).Nonempty := by
+  sorry
+
+theorem cutPiece_frontier {P Q : ℂ} (hP : ‖P‖ = 1) (hQ : ‖Q‖ = 1) (hPQ : P ≠ Q) :
+    frontier (cutPiece P Q) =
+      {z | ‖z‖ = 1 ∧ cutCross (Q - P) (z - P) ≤ 0} ∪ segment ℝ P Q := by
+  sorry
+
+/-- The two pieces cover the disk; the interior of one misses the other. -/
+theorem cutPiece_union_disjoint (P Q : ℂ) :
+    cutPiece P Q ∪ cutPiece Q P = Metric.closedBall 0 1 ∧
+      interior (cutPiece P Q) ∩ cutPiece Q P = ∅ := by
+  sorry
+
+theorem cutCross_exp (α γ φ : ℝ) :
+    cutCross (Complex.exp ((γ : ℂ) * Complex.I) - Complex.exp ((α : ℂ) * Complex.I))
+        (Complex.exp ((φ : ℂ) * Complex.I) - Complex.exp ((α : ℂ) * Complex.I)) =
+      4 * Real.sin ((φ - γ) / 2) * Real.sin ((γ - α) / 2) * Real.sin ((φ - α) / 2) := by
+  sorry
+
+/-- A convex body with a prescribed boundary parametrisation: cone `β` from an
+interior point `c` (rays from `c` meet the frontier once:
+`Convex.openSegment_interior_closure_subset_interior`). -/
+theorem cutAndPaste_aux_boundary_chart (K : Set ℂ) (c : ℂ) (hKc : Convex ℝ K)
+    (hKcompact : IsCompact K) (hc : c ∈ interior K) (β : Circle → ℂ)
+    (hβc : Continuous β) (hβi : Function.Injective β) (hβr : Set.range β = frontier K) :
+    ∃ φ : ℂ → ℂ, CutChartSpec K β φ := by
+  sorry
+
+/-! ### The four boundary maps -/
+
+theorem cutOldA_continuous {L p q : ℕ} (hpq : p < q) (hqL : q < L) :
+    Continuous (cutOldA L p q) := by
+  sorry
+
+theorem cutOldB_continuous {L p q : ℕ} (hpq : p < q) (hqL : q < L) :
+    Continuous (cutOldB L p q) := by
+  sorry
+
+theorem cutNewA_continuous {L p q : ℕ} (hpq : p < q) (hqL : q < L) :
+    Continuous (cutNewA L p q) := by
+  sorry
+
+theorem cutNewB_continuous {L p q : ℕ} (hpq : p < q) (hqL : q < L) :
+    Continuous (cutNewB L p q) := by
+  sorry
+
+theorem cutOldA_injective {L p q : ℕ} (hpq : p < q) (hqL : q < L) :
+    Function.Injective (cutOldA L p q) := by
+  sorry
+
+theorem cutOldB_injective {L p q : ℕ} (hpq : p < q) (hqL : q < L) :
+    Function.Injective (cutOldB L p q) := by
+  sorry
+
+theorem cutNewA_injective {L p q : ℕ} (hpq : p < q) (hqL : q < L) :
+    Function.Injective (cutNewA L p q) := by
+  sorry
+
+theorem cutNewB_injective {L p q : ℕ} (hpq : p < q) (hqL : q < L) :
+    Function.Injective (cutNewB L p q) := by
+  sorry
+
+theorem cutOldA_range {L p q : ℕ} (hpq : p < q) (hqL : q < L)
+    (hfront : frontier (cutPiece (cutPoint L p) (cutPoint L q)) =
+      {z | ‖z‖ = 1 ∧ cutCross (cutPoint L q - cutPoint L p) (z - cutPoint L p) ≤ 0} ∪
+        segment ℝ (cutPoint L p) (cutPoint L q))
+    (hcross : ∀ α γ φ : ℝ,
+      cutCross (Complex.exp ((γ : ℂ) * Complex.I) - Complex.exp ((α : ℂ) * Complex.I))
+          (Complex.exp ((φ : ℂ) * Complex.I) - Complex.exp ((α : ℂ) * Complex.I)) =
+        4 * Real.sin ((φ - γ) / 2) * Real.sin ((γ - α) / 2) * Real.sin ((φ - α) / 2)) :
+    Set.range (cutOldA L p q) = frontier (cutPiece (cutPoint L p) (cutPoint L q)) := by
+  sorry
+
+theorem cutOldB_range {L p q : ℕ} (hpq : p < q) (hqL : q < L)
+    (hfront : frontier (cutPiece (cutPoint L q) (cutPoint L p)) =
+      {z | ‖z‖ = 1 ∧ cutCross (cutPoint L p - cutPoint L q) (z - cutPoint L q) ≤ 0} ∪
+        segment ℝ (cutPoint L q) (cutPoint L p))
+    (hcross : ∀ α γ φ : ℝ,
+      cutCross (Complex.exp ((γ : ℂ) * Complex.I) - Complex.exp ((α : ℂ) * Complex.I))
+          (Complex.exp ((φ : ℂ) * Complex.I) - Complex.exp ((α : ℂ) * Complex.I)) =
+        4 * Real.sin ((φ - γ) / 2) * Real.sin ((γ - α) / 2) * Real.sin ((φ - α) / 2)) :
+    Set.range (cutOldB L p q) = frontier (cutPiece (cutPoint L q) (cutPoint L p)) := by
+  sorry
+
+theorem cutNewA_range {L p q : ℕ} (hpq : p < q) (hqL : q < L)
+    (hfront : frontier (cutPiece (cutPoint L (p + 1)) (cutPoint L (q + 1))) =
+      {z | ‖z‖ = 1 ∧
+        cutCross (cutPoint L (q + 1) - cutPoint L (p + 1)) (z - cutPoint L (p + 1)) ≤ 0} ∪
+        segment ℝ (cutPoint L (p + 1)) (cutPoint L (q + 1)))
+    (hcross : ∀ α γ φ : ℝ,
+      cutCross (Complex.exp ((γ : ℂ) * Complex.I) - Complex.exp ((α : ℂ) * Complex.I))
+          (Complex.exp ((φ : ℂ) * Complex.I) - Complex.exp ((α : ℂ) * Complex.I)) =
+        4 * Real.sin ((φ - γ) / 2) * Real.sin ((γ - α) / 2) * Real.sin ((φ - α) / 2)) :
+    Set.range (cutNewA L p q) =
+      frontier (cutPiece (cutPoint L (p + 1)) (cutPoint L (q + 1))) := by
+  sorry
+
+theorem cutNewB_range {L p q : ℕ} (hpq : p < q) (hqL : q < L)
+    (hfront : frontier (cutPiece (cutPoint L (q + 1)) (cutPoint L (p + 1))) =
+      {z | ‖z‖ = 1 ∧
+        cutCross (cutPoint L (p + 1) - cutPoint L (q + 1)) (z - cutPoint L (q + 1)) ≤ 0} ∪
+        segment ℝ (cutPoint L (q + 1)) (cutPoint L (p + 1)))
+    (hcross : ∀ α γ φ : ℝ,
+      cutCross (Complex.exp ((γ : ℂ) * Complex.I) - Complex.exp ((α : ℂ) * Complex.I))
+          (Complex.exp ((φ : ℂ) * Complex.I) - Complex.exp ((α : ℂ) * Complex.I)) =
+        4 * Real.sin ((φ - γ) / 2) * Real.sin ((γ - α) / 2) * Real.sin ((φ - α) / 2)) :
+    Set.range (cutNewB L p q) =
+      frontier (cutPiece (cutPoint L (q + 1)) (cutPoint L (p + 1))) := by
+  sorry
+
+/-- The edge formulas of the concrete maps. -/
+theorem cutBoundaryData_concrete {L p q : ℕ} (hpq : p < q) (hqL : q < L) :
+    CutBoundaryData L p q (cutOldA L p q) (cutOldB L p q) (cutNewA L p q)
+      (cutNewB L p q) := by
+  sorry
+
+/-! ### Boundary combinatorics, for any maps with the edge formulas -/
+
+/-- Old generators between boundary points of the pieces give new `EqvGen`s
+between the corresponding new points (`false` = piece `A`, `true` = `B`). -/
+theorem cut_forward_generators {Label : Type*} [DecidableEq Label]
+    (u v t : List (Signed Label)) (x : Signed Label)
+    (hx : x.1 ∉ (u ++ v ++ t).map Prod.fst)
+    (oldA oldB newA newB : Circle → ℂ)
+    (D : CutBoundaryData (u ++ [x] ++ v ++ [x] ++ t).length u.length
+      (u.length + 1 + v.length) oldA oldB newA newB)
+    (i i' : Bool) (y y' : Circle) (P P' N N' : Disk)
+    (hP : (P : ℂ) = (if i then oldB y else oldA y))
+    (hP' : (P' : ℂ) = (if i' then oldB y' else oldA y'))
+    (hN : (N : ℂ) = (if i then newB y else newA y))
+    (hN' : (N' : ℂ) = (if i' then newB y' else newA y'))
+    (h : WordRel (u ++ [x] ++ v ++ [x] ++ t) P P') :
+    Relation.EqvGen (WordRel (u ++ [x, x] ++ inverseWord v ++ t)) N N' := by
+  sorry
+
+theorem cut_reverse_generators {Label : Type*} [DecidableEq Label]
+    (u v t : List (Signed Label)) (x : Signed Label)
+    (hx : x.1 ∉ (u ++ v ++ t).map Prod.fst)
+    (oldA oldB newA newB : Circle → ℂ)
+    (D : CutBoundaryData (u ++ [x] ++ v ++ [x] ++ t).length u.length
+      (u.length + 1 + v.length) oldA oldB newA newB)
+    (i i' : Bool) (y y' : Circle) (P P' N N' : Disk)
+    (hP : (P : ℂ) = (if i then oldB y else oldA y))
+    (hP' : (P' : ℂ) = (if i' then oldB y' else oldA y'))
+    (hN : (N : ℂ) = (if i then newB y else newA y))
+    (hN' : (N' : ℂ) = (if i' then newB y' else newA y'))
+    (h : WordRel (u ++ [x, x] ++ inverseWord v ++ t) N N') :
+    Relation.EqvGen (WordRel (u ++ [x] ++ v ++ [x] ++ t)) P P' := by
+  sorry
+
+/-- A point on both old pieces (the chord, or `P`, `Q`) has related new images. -/
+theorem cut_forward_fibre {Label : Type*} [DecidableEq Label]
+    (u v t : List (Signed Label)) (x : Signed Label)
+    (oldA oldB newA newB : Circle → ℂ)
+    (D : CutBoundaryData (u ++ [x] ++ v ++ [x] ++ t).length u.length
+      (u.length + 1 + v.length) oldA oldB newA newB)
+    (y y' : Circle) (N N' : Disk) (h : oldA y = oldB y')
+    (hN : (N : ℂ) = newA y) (hN' : (N' : ℂ) = newB y') :
+    Relation.EqvGen (WordRel (u ++ [x, x] ++ inverseWord v ++ t)) N N' := by
+  sorry
+
+/-- A point on both new pieces (the seam, or `P'`, `Q'`) has related old images. -/
+theorem cut_reverse_fibre {Label : Type*} [DecidableEq Label]
+    (u v t : List (Signed Label)) (x : Signed Label)
+    (oldA oldB newA newB : Circle → ℂ)
+    (D : CutBoundaryData (u ++ [x] ++ v ++ [x] ++ t).length u.length
+      (u.length + 1 + v.length) oldA oldB newA newB)
+    (y y' : Circle) (P P' : Disk) (h : newA y = newB y')
+    (hP : (P : ℂ) = oldA y) (hP' : (P' : ℂ) = oldB y') :
+    Relation.EqvGen (WordRel (u ++ [x] ++ v ++ [x] ++ t)) P P' := by
+  sorry
+
+theorem cutPoint_norm (L m : ℕ) : ‖cutPoint L m‖ = 1 := by
+  sorry
+
+theorem cutPoint_ne {L m m' : ℕ} (h : m < m') (h' : m' < m + L) :
+    cutPoint L m ≠ cutPoint L m' := by
+  sorry
+
+/-- From four piece charts to the two maps `Fin 2 × Disk → Disk` (index `0` = `A`,
+`1` = `B`).  A boundary value of a chart comes from the parameter circle, because
+interior points go to the interior of the piece; two pieces share only points of
+their frontiers. -/
+theorem cut_charts_package {Label : Type*} [DecidableEq Label]
+    (u v t : List (Signed Label)) (x : Signed Label)
+    (KA KB KA' KB' : Set ℂ) (oldA oldB newA newB : Circle → ℂ) (φA φB ψA ψB : ℂ → ℂ)
+    (hA : CutChartSpec KA oldA φA) (hB : CutChartSpec KB oldB φB)
+    (hA' : CutChartSpec KA' newA ψA) (hB' : CutChartSpec KB' newB ψB)
+    (hcov : KA ∪ KB = Metric.closedBall 0 1) (hcov' : KA' ∪ KB' = Metric.closedBall 0 1)
+    (hdisj : interior KA ∩ KB = ∅) (hdisjB : interior KB ∩ KA = ∅)
+    (hdisj' : interior KA' ∩ KB' = ∅) (hdisjB' : interior KB' ∩ KA' = ∅)
+    (hfwd : ∀ (i i' : Bool) (y y' : Circle) (P P' N N' : Disk),
+      (P : ℂ) = (if i then oldB y else oldA y) → (P' : ℂ) = (if i' then oldB y' else oldA y') →
+      (N : ℂ) = (if i then newB y else newA y) → (N' : ℂ) = (if i' then newB y' else newA y') →
+      WordRel (u ++ [x] ++ v ++ [x] ++ t) P P' →
+      Relation.EqvGen (WordRel (u ++ [x, x] ++ inverseWord v ++ t)) N N')
+    (hrev : ∀ (i i' : Bool) (y y' : Circle) (P P' N N' : Disk),
+      (P : ℂ) = (if i then oldB y else oldA y) → (P' : ℂ) = (if i' then oldB y' else oldA y') →
+      (N : ℂ) = (if i then newB y else newA y) → (N' : ℂ) = (if i' then newB y' else newA y') →
+      WordRel (u ++ [x, x] ++ inverseWord v ++ t) N N' →
+      Relation.EqvGen (WordRel (u ++ [x] ++ v ++ [x] ++ t)) P P')
+    (hffib : ∀ (y y' : Circle) (N N' : Disk), oldA y = oldB y' →
+      (N : ℂ) = newA y → (N' : ℂ) = newB y' →
+      Relation.EqvGen (WordRel (u ++ [x, x] ++ inverseWord v ++ t)) N N')
+    (hrfib : ∀ (y y' : Circle) (P P' : Disk), newA y = newB y' →
+      (P : ℂ) = oldA y → (P' : ℂ) = oldB y' →
+      Relation.EqvGen (WordRel (u ++ [x] ++ v ++ [x] ++ t)) P P') :
+    ∃ a b : Fin 2 × Disk → Disk, Continuous a ∧ Continuous b ∧
+      Function.Surjective a ∧ Function.Surjective b ∧
+      (∀ y y', WordRel (u ++ [x] ++ v ++ [x] ++ t) (a y) (a y') →
+        Relation.EqvGen (WordRel (u ++ [x, x] ++ inverseWord v ++ t))
+          (b y) (b y')) ∧
+      (∀ y y', WordRel (u ++ [x, x] ++ inverseWord v ++ t) (b y) (b y') →
+        Relation.EqvGen (WordRel (u ++ [x] ++ v ++ [x] ++ t))
+          (a y) (a y')) ∧
+      (∀ y y', a y = a y' → Relation.EqvGen (WordRel (u ++ [x, x] ++ inverseWord v ++ t)) (b y) (b y')) ∧
+      (∀ y y', b y = b y' → Relation.EqvGen (WordRel (u ++ [x] ++ v ++ [x] ++ t)) (a y) (a y')) := by
+  sorry
+
 lemma cutAndPaste_aux_triangle_chart_generators_aux_source_pos {Label : Type*}
     [DecidableEq Label]
     (u v t : List (Signed Label)) (x : Signed Label)
@@ -3796,7 +4153,44 @@ lemma cutAndPaste_aux_triangle_chart_generators {Label : Type*}
           (a y) (a y')) ∧
       (∀ y y', a y = a y' → Relation.EqvGen (WordRel (u ++ [x, x] ++ inverseWord v ++ t)) (b y) (b y')) ∧
       (∀ y y', b y = b y' → Relation.EqvGen (WordRel (u ++ [x] ++ v ++ [x] ++ t)) (a y) (a y')) := by
-  sorry
+  have hpq : u.length < u.length + 1 + v.length := by omega
+  have hqL : u.length + 1 + v.length < (u ++ [x] ++ v ++ [x] ++ t).length := by simp; omega
+  have hPQ : cutPoint (u ++ [x] ++ v ++ [x] ++ t).length u.length ≠
+      cutPoint (u ++ [x] ++ v ++ [x] ++ t).length (u.length + 1 + v.length) :=
+    cutPoint_ne hpq (by omega)
+  have hPQ' : cutPoint (u ++ [x] ++ v ++ [x] ++ t).length (u.length + 1) ≠
+      cutPoint (u ++ [x] ++ v ++ [x] ++ t).length (u.length + 1 + v.length + 1) :=
+    cutPoint_ne (by omega) (by omega)
+  have hn := cutPoint_norm (u ++ [x] ++ v ++ [x] ++ t).length
+  obtain ⟨cA, hcA⟩ := cutPiece_interior_nonempty (hn _) (hn _) hPQ
+  obtain ⟨cB, hcB⟩ := cutPiece_interior_nonempty (hn _) (hn _) hPQ.symm
+  obtain ⟨cA', hcA'⟩ := cutPiece_interior_nonempty (hn _) (hn _) hPQ'
+  obtain ⟨cB', hcB'⟩ := cutPiece_interior_nonempty (hn _) (hn _) hPQ'.symm
+  obtain ⟨φA, hφA⟩ := cutAndPaste_aux_boundary_chart _ cA (cutPiece_convex_compact _ _).1
+    (cutPiece_convex_compact _ _).2 hcA _ (cutOldA_continuous hpq hqL)
+    (cutOldA_injective hpq hqL)
+    (cutOldA_range hpq hqL (cutPiece_frontier (hn _) (hn _) hPQ) cutCross_exp)
+  obtain ⟨φB, hφB⟩ := cutAndPaste_aux_boundary_chart _ cB (cutPiece_convex_compact _ _).1
+    (cutPiece_convex_compact _ _).2 hcB _ (cutOldB_continuous hpq hqL)
+    (cutOldB_injective hpq hqL)
+    (cutOldB_range hpq hqL (cutPiece_frontier (hn _) (hn _) hPQ.symm) cutCross_exp)
+  obtain ⟨ψA, hψA⟩ := cutAndPaste_aux_boundary_chart _ cA' (cutPiece_convex_compact _ _).1
+    (cutPiece_convex_compact _ _).2 hcA' _ (cutNewA_continuous hpq hqL)
+    (cutNewA_injective hpq hqL)
+    (cutNewA_range hpq hqL (cutPiece_frontier (hn _) (hn _) hPQ') cutCross_exp)
+  obtain ⟨ψB, hψB⟩ := cutAndPaste_aux_boundary_chart _ cB' (cutPiece_convex_compact _ _).1
+    (cutPiece_convex_compact _ _).2 hcB' _ (cutNewB_continuous hpq hqL)
+    (cutNewB_injective hpq hqL)
+    (cutNewB_range hpq hqL (cutPiece_frontier (hn _) (hn _) hPQ'.symm) cutCross_exp)
+  have D := cutBoundaryData_concrete hpq hqL
+  exact cut_charts_package u v t x _ _ _ _ _ _ _ _ φA φB ψA ψB hφA hφB hψA hψB
+    (cutPiece_union_disjoint _ _).1 (cutPiece_union_disjoint _ _).1
+    (cutPiece_union_disjoint _ _).2 (cutPiece_union_disjoint _ _).2
+    (cutPiece_union_disjoint _ _).2 (cutPiece_union_disjoint _ _).2
+    (fun i i' y y' P P' N N' => cut_forward_generators u v t x hx _ _ _ _ D i i' y y' P P' N N')
+    (fun i i' y y' P P' N N' => cut_reverse_generators u v t x hx _ _ _ _ D i i' y y' P P' N N')
+    (fun y y' N N' => cut_forward_fibre u v t x _ _ _ _ D y y' N N')
+    (fun y y' P P' => cut_reverse_fibre u v t x _ _ _ _ D y y' P P')
 
 /-- Review 2026-10-14: `hfib` added — `a` is not injective (diagonal points
 have a preimage in each triangle), so generator facts alone do not lift an

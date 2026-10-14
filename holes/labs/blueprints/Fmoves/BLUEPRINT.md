@@ -225,3 +225,14 @@ is needed.
 - Squaring folds the diameter (x(t), x⁻¹(1-t) ↦ ω(1-t)², a slit from ω to 0) and opens the semicircle onto the whole circle, with source side j landing on target side j or j-2 at the same parameter.
 - The geometric leaves are about the concrete defs. The combinatorial leaves (`zip_forward`, `zip_lift_generator`, `zip_boundary_iff`) are stated for any `c` with the zip's edge formulas.
 - The cancellation block now sits after the merge section, because its leaves use `wordRel_eqvGen_circle`, `norm_edgePoint` and `circleToDisk`.
+
+## Cut and paste, explicit (claude-14, 2026-10-14)
+`cutAndPaste_aux_triangle_chart_generators` is now a sorry-free assembly over 26 leaves; see the section "Cut and paste: explicit boundary maps".
+- The disk is cut along the chord from vertex p (start of the first x) to vertex q (start of the second x) into A (sides x v) and B (sides x t u). In the new polygon, A' and B' are cut along the seam from vertex p+1 to vertex q+1.
+- Each piece is the convex set `cutPiece P Q` = disk ∩ half-plane. It gets a boundary map from one parameter circle (`cutOldA`, `cutOldB`, `cutNewA`, `cutNewB`, via `AddCircle.liftIco`) that puts matching boundary pieces at the same parameter:
+  - the old x arcs go to the seam
+  - the old v arcs go to the new v⁻¹ arcs (a reflection)
+  - t and u stay fixed
+  - the old chord goes to new sides p+1 (reversed) and p
+- The general leaf `cutAndPaste_aux_boundary_chart` turns each boundary map into a chart of its piece with exactly that boundary.
+- The combinatorics (`cut_forward_generators`, `cut_reverse_generators`, `cut_forward_fibre`, `cut_reverse_fibre`) is stated for any maps with the edge formulas (`CutBoundaryData`), so it is independent of the geometry. These four will likely need splitting by case.
