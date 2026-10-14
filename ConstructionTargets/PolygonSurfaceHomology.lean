@@ -3070,6 +3070,106 @@ noncomputable def finiteWedgeOrbitFundamentalGroupEquivFinExplicit
       (pairingOrbitFinZero P) 1)
     (finiteWedgeOrbitHomeomorphFinZero_base P)
 
+/-- Explicit orbit relabelling carries an arbitrary based circle loop in an
+orbit leg to the corresponding finite-coordinate leg. -/
+theorem finiteWedgeOrbitFundamentalGroupEquivFinExplicit_legMap
+    (P : PairingData) (l : PairingOrbit P.pair)
+    (g : FundamentalGroup Circle 1) :
+    finiteWedgeOrbitFundamentalGroupEquivFinExplicit P
+        (Path.Homotopic.Quotient.cast
+          (FundamentalGroup.map
+            ⟨PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle l,
+              PolygonSurfacePiOne.PointWedgeQuotient.continuous_wedgeCircle l⟩
+            1 g)
+          (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle_base_eq
+            (P.orbit ⟨0, P.edgeCount_pos⟩) l)
+          (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle_base_eq
+            (P.orbit ⟨0, P.edgeCount_pos⟩) l)) =
+      finiteWedgeFinLegMapCard (Fintype.card (PairingOrbit P.pair))
+        (pairingOrbitCard_pos P) (pairingOrbitEquivFinZero P l)
+        g := by
+  induction g using Path.Homotopic.Quotient.ind with
+  | mk p =>
+      rw [FundamentalGroup.map_apply]
+      unfold finiteWedgeOrbitFundamentalGroupEquivFinExplicit
+        fundamentalGroupEquivOfHomeomorphEq
+      change FundamentalGroup.mapOfEq
+          ⟨finiteWedgeOrbitHomeomorphFinZero P,
+            (finiteWedgeOrbitHomeomorphFinZero P).continuous⟩
+          (finiteWedgeOrbitHomeomorphFinZero_base P)
+          ((Path.Homotopic.Quotient.mk _).cast _ _) = _
+      rw [← Path.Homotopic.Quotient.mk_cast,
+        FundamentalGroup.mapOfEq_apply]
+      rw [finiteWedgeFinLegMapCard, FundamentalGroup.mapOfEq_apply]
+      apply Path.Homotopic.Quotient.eq.mpr
+      convert Path.Homotopic.refl
+        ((p.map
+          (PolygonSurfacePiOne.PointWedgeQuotient.continuous_wedgeCircle
+            (pairingOrbitEquivFinZero P l))).cast _ _) using 1
+
+/-- The positive generators are identified by the explicit based orbit
+relabeling. -/
+theorem finiteWedgeOrbitFundamentalGroupEquivFinExplicit_leg
+    (P : PairingData) (l : PairingOrbit P.pair) :
+    finiteWedgeOrbitFundamentalGroupEquivFinExplicit P
+        (finiteWedgeLegFundamentalClassAtBase P l) =
+      finiteWedgeFinLegMapCard (Fintype.card (PairingOrbit P.pair))
+        (pairingOrbitCard_pos P) (pairingOrbitEquivFinZero P l)
+        circlePositiveFundamentalClass := by
+  simpa [finiteWedgeLegFundamentalClassAtBase,
+    finiteWedgeLegFundamentalClass] using
+    finiteWedgeOrbitFundamentalGroupEquivFinExplicit_legMap P l
+      circlePositiveFundamentalClass
+
+/-- Relabelling the orbit generators before applying the finite-coordinate
+map agrees with applying the orbit map and then transporting fundamental
+groups. -/
+theorem finiteWedgeOrbitFreeGroupMapComparison (P : PairingData)
+    (x : FreeGroup (PairingOrbit P.pair)) :
+    finiteWedgeOrbitFundamentalGroupEquivFinExplicit P
+        (finiteWedgeLegFreeGroupMap P x) =
+      finiteWedgeFinLegFreeGroupMapCard
+          (Fintype.card (PairingOrbit P.pair)) (pairingOrbitCard_pos P)
+        (FreeGroup.map (pairingOrbitEquivFinZero P) x) := by
+  induction x using FreeGroup.induction_on with
+  | C1 =>
+      simp only [map_one]
+      rfl
+  | of l =>
+      simpa [finiteWedgeLegFreeGroupMap,
+        finiteWedgeFinLegFreeGroupMapCard] using
+        finiteWedgeOrbitFundamentalGroupEquivFinExplicit_leg P l
+  | inv_of l _ =>
+      simp only [map_inv]
+      have h :
+          finiteWedgeOrbitFundamentalGroupEquivFinExplicit P
+              (finiteWedgeLegFreeGroupMap P (FreeGroup.of l)) =
+            finiteWedgeFinLegFreeGroupMapCard
+                (Fintype.card (PairingOrbit P.pair)) (pairingOrbitCard_pos P)
+              (FreeGroup.map (pairingOrbitEquivFinZero P) (FreeGroup.of l)) := by
+        simpa [finiteWedgeLegFreeGroupMap,
+          finiteWedgeFinLegFreeGroupMapCard] using
+          finiteWedgeOrbitFundamentalGroupEquivFinExplicit_leg P l
+      exact congrArg (fun z => z⁻¹) h
+  | mul x y hx hy =>
+      simp only [map_mul]
+      rw [hx, hy]
+      rfl
+
+/-- The canonical positive-leg map onto the orbit-indexed finite wedge is
+surjective. -/
+theorem finiteWedgeLegFreeGroupMap_surjective (P : PairingData) :
+    Function.Surjective (finiteWedgeLegFreeGroupMap P) := by
+  intro g
+  obtain ⟨y, hy⟩ :=
+    finiteWedgeFinLegFreeGroupMapCard_surjective
+      (Fintype.card (PairingOrbit P.pair)) (pairingOrbitCard_pos P)
+      (finiteWedgeOrbitFundamentalGroupEquivFinExplicit P g)
+  obtain ⟨x, rfl⟩ := FreeGroup.map_surjective
+    (pairingOrbitEquivFinZero P).surjective y
+  refine ⟨x, (finiteWedgeOrbitFundamentalGroupEquivFinExplicit P).injective ?_⟩
+  rw [finiteWedgeOrbitFreeGroupMapComparison, hy]
+
 end
 
 end ConstructionTargets.PolygonSurfaceHomology
