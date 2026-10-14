@@ -36121,7 +36121,7 @@
   {:consumer :t93J03,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 10,
+   :stop-count 0,
    :review-finding
    "Program STOP commits no new mathematical progress since the prior milestone: KleinPolygonBasedVanKampen merely packages the already-required surjectivity and kernel hypotheses, and both consumers only reapply the previously proved three-input theorem. Prove the based van Kampen surjectivity/kernel result (or winding conjugacy) in scope; extend Mathlib: state and prove the missing theorem in scope.",
    :evidence
@@ -36170,7 +36170,7 @@
      "7b8abac73546b9641946f4a7c405fa5a75ed39129d34c5b7a6ce7a245f189371"},
     :seat :topo-10},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -36967,6 +36967,16 @@
     [{:cmd "initial fixture",
       :exit 1,
       :correction "marked fixture noncomputable"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1792016033470-12544-a46a9afb",
+     :commands
+     ["git show/check/diff b7a01bad; exact scope"
+      "fixture SHA-256 assertion; lean frozen fixture and t96A06 Main"
+      "statement-registry check; parent/commit placeholder and forbidden recount"],
+     :finding
+     "PASS: after history commit f170a303, b7a01bad adds compiled, sorry-free progress: H3(S3;Q) ≅ Q, correctly oriented as the degree-3-to-degree-2 sphere shift followed by the existing H2(S2;Q) endpoint. It does not claim RP3 top homology; antipodal/transfer detection, higher vanishing, degree four, invariants/Main remain listed. Scope/hash match; standard axioms only; registry 166/166; closure forbidden 0->0; Main placeholders 1->1."},
     :commit "b7a01bad22a84df73d65de2605dacd326499232d",
     :changed-paths
     ["ConstructionTargets/t96A06Closure.lean"
@@ -36977,7 +36987,7 @@
      "5cf1651451c0a87909c5d3725219722e4d7ead421cc395dad09f1b6c4fe2e2ae"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -36995,7 +37005,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t96A06Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Specialized rational transfer to the exact double cover and proved the induced sphere-to-RP3 homology map surjective in every degree; sphere-group identification remains.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Proved H3(S3;Q)=Q; identifying H3(RP3;Q) now requires the degree-three antipodal/transfer comparison.",
    :id :program-2026-10-13-close-t96a06,
    :kind :final-adapter,
    :campaign-priority 31,
@@ -37031,7 +37041,11 @@
     {:job 9,
      :commit "f170a303979c4503ee97dc13f70b5ec00dfa6fcd",
      :reason
-     "Specialized rational transfer to the exact double cover and proved the induced sphere-to-RP3 homology map surjective in every degree; sphere-group identification remains."}]}
+     "Specialized rational transfer to the exact double cover and proved the induced sphere-to-RP3 homology map surjective in every degree; sphere-group identification remains."}
+    {:job 1,
+     :commit "b7a01bad22a84df73d65de2605dacd326499232d",
+     :reason
+     "Proved H3(S3;Q)=Q; identifying H3(RP3;Q) now requires the degree-three antipodal/transfer comparison."}]}
   {:consumer :t96J05,
    :stop-count 0,
    :phase :implementation,
@@ -39794,7 +39808,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t96A06_rp3_rational_middle_homology",
@@ -39804,7 +39818,9 @@
     :reported-by [:program-2026-10-13-close-t96a06],
     :type "H1(RP3;Q)=0 and H2(RP3;Q)=0",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :program-2026-10-13-close-t96a06,
+    :banked-commit "b7a01bad22a84df73d65de2605dacd326499232d"},
    :id :lemma-t96a06-rp3-rational-middle-homology,
    :kind :lemma,
    :depends-on [:lemma-t96a06-rp3-rational-homologymap-surjective],
@@ -40044,7 +40060,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t96A06_sphere3_rational_H3Iso", :type "H3(S3;Q) ≅ Q"},
@@ -40053,7 +40069,9 @@
     :reported-by [:program-2026-10-13-close-t96a06],
     :type "H3(S3;Q) ≅ Q",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :program-2026-10-13-close-t96a06,
+    :banked-commit "b7a01bad22a84df73d65de2605dacd326499232d"},
    :id :lemma-t96a06-sphere3-rational-h3iso,
    :kind :lemma,
    :depends-on [:lemma-t96a06-rp3-rational-middle-homology],
