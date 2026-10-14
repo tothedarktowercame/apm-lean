@@ -1307,6 +1307,61 @@ lemma mergeRepeatedBlock_aux_boundary_lift_aux_localInv_continuous (u v : ℝ) :
 /-- Generic: a homeomorphism of `[0, P]` onto `[0, Q]` fixing `0` (given by global
 continuous maps that are mutually inverse on the intervals) extends periodically,
 `x ↦ Q ⌊x/P⌋ + φ (P · fract (x/P))`, to an equivariant lift. -/
+def equivariantLift_of_interval_aux_ext (P Q : ℝ) (f : ℝ → ℝ) (x : ℝ) : ℝ :=
+  Q * (⌊x / P⌋ : ℝ) + f (P * Int.fract (x / P))
+
+lemma equivariantLift_of_interval_aux_continuous (P Q : ℝ) (hP : 0 < P)
+    (f : ℝ → ℝ) (hf : Continuous f) (hf0 : f 0 = 0) (hfP : f P = Q) :
+    Continuous (equivariantLift_of_interval_aux_ext P Q f) := by
+  have hc : ContinuousOn (fun t : ℝ => f (P * t) - Q * t) (Set.Icc 0 1) :=
+    (hf.comp (continuous_const.mul continuous_id)).sub
+      (continuous_const.mul continuous_id) |>.continuousOn
+  have he : f (P * 0) - Q * 0 = f (P * 1) - Q * 1 := by
+    simp [hf0, hfP]
+  have hfract : Continuous ((fun t : ℝ => f (P * t) - Q * t) ∘ Int.fract) :=
+    hc.comp_fract'' he
+  have hdiv : Continuous (fun x : ℝ => x / P) :=
+    continuous_id.div_const P
+  rw [continuous_congr (g := fun x : ℝ =>
+      Q * (x / P) + ((fun t : ℝ => f (P * t) - Q * t) ∘ Int.fract) (x / P))
+      (fun x => ?_)]
+  · exact (continuous_const.mul hdiv).add (hfract.comp hdiv)
+  · unfold equivariantLift_of_interval_aux_ext
+    dsimp [Function.comp_def]
+    have hx := Int.floor_add_fract (x / P)
+    calc
+      Q * (⌊x / P⌋ : ℝ) + f (P * Int.fract (x / P)) =
+          Q * ((⌊x / P⌋ : ℝ) + Int.fract (x / P)) +
+            (f (P * Int.fract (x / P)) - Q * Int.fract (x / P)) := by ring
+      _ = _ := by rw [hx]
+
+lemma equivariantLift_of_interval_aux_eval (P Q : ℝ) (hP : 0 < P)
+    (f : ℝ → ℝ) (n : ℤ) (x : ℝ) (hx : x ∈ Set.Ico 0 P) :
+    equivariantLift_of_interval_aux_ext P Q f (P * n + x) = Q * n + f x := by
+  have hp0 : P ≠ 0 := ne_of_gt hP
+  have hxdiv : x / P ∈ Set.Ico (0 : ℝ) 1 := by
+    exact ⟨div_nonneg hx.1 hP.le, (div_lt_one hP).2 hx.2⟩
+  have hfloor : ⌊x / P⌋ = (0 : ℤ) := Int.floor_eq_zero_iff.mpr hxdiv
+  have hfract : Int.fract (x / P) = x / P := Int.fract_eq_self.mpr hxdiv
+  unfold equivariantLift_of_interval_aux_ext
+  rw [show (P * (n : ℝ) + x) / P = (n : ℝ) + x / P by field_simp <;> ring,
+    Int.floor_intCast_add, Int.fract_intCast_add, hfloor, hfract]
+  norm_num
+  field_simp
+
+lemma equivariantLift_of_interval_aux_add_period (P Q : ℝ) (hP : 0 < P)
+    (f : ℝ → ℝ) (x : ℝ) :
+    equivariantLift_of_interval_aux_ext P Q f (x + P) =
+      equivariantLift_of_interval_aux_ext P Q f x + Q := by
+  unfold equivariantLift_of_interval_aux_ext
+  have hp0 : P ≠ 0 := ne_of_gt hP
+  rw [show (x + P) / P = x / P + 1 by field_simp]
+  simp only [Int.floor_add_one]
+  rw [show Int.fract (x / P + 1) = Int.fract (x / P) by
+    simpa [add_comm] using Int.fract_add_intCast (x / P) 1]
+  push_cast
+  ring
+
 lemma equivariantLift_of_interval (P Q : ℝ) (hP : 0 < P) (hQ : 0 < Q)
     (φ ψ : ℝ → ℝ) (hφ : Continuous φ) (hψ : Continuous ψ)
     (hφ0 : φ 0 = 0) (hφP : φ P = Q) (hψ0 : ψ 0 = 0) (hψQ : ψ Q = P)
@@ -1314,7 +1369,102 @@ lemma equivariantLift_of_interval (P Q : ℝ) (hP : 0 < P) (hQ : 0 < Q)
     (hψmaps : Set.MapsTo ψ (Set.Icc 0 Q) (Set.Icc 0 P))
     (hl : ∀ x ∈ Set.Icc 0 P, ψ (φ x) = x) (hr : ∀ y ∈ Set.Icc 0 Q, φ (ψ y) = y) :
     ∃ F : EquivariantCircleLift P Q, ∀ x ∈ Set.Icc 0 P, F.toFun x = φ x := by
-  sorry
+  let f := equivariantLift_of_interval_aux_ext P Q φ
+  let g := equivariantLift_of_interval_aux_ext Q P ψ
+  have hfg : Function.LeftInverse g f := by
+    intro x
+    let n : ℤ := ⌊x / P⌋
+    let z : ℝ := P * Int.fract (x / P)
+    have hz : z ∈ Set.Ico 0 P := by
+      constructor
+      · exact mul_nonneg hP.le (Int.fract_nonneg _)
+      · exact (mul_lt_iff_lt_one_right hP).2 (Int.fract_lt_one _)
+    have hφz := hφmaps (Set.Ico_subset_Icc_self hz)
+    have hφzlt : φ z < Q := by
+      apply lt_of_le_of_ne hφz.2
+      intro he
+      have := hl z (Set.Ico_subset_Icc_self hz)
+      rw [he, hψQ] at this
+      exact hz.2.ne this.symm
+    have hf : f x = Q * n + φ z := by
+      apply equivariantLift_of_interval_aux_eval P Q hP φ n z hz |>.symm.trans
+      congr 1
+      dsimp [n, z]
+      have hd := Int.floor_add_fract (x / P)
+      calc
+        P * (⌊x / P⌋ : ℝ) + P * Int.fract (x / P) =
+            P * ((⌊x / P⌋ : ℝ) + Int.fract (x / P)) := by ring
+        _ = P * (x / P) := by rw [hd]
+        _ = x := by field_simp
+    rw [hf]
+    change equivariantLift_of_interval_aux_ext Q P ψ _ = x
+    rw [equivariantLift_of_interval_aux_eval Q P hQ ψ n (φ z) ⟨hφz.1, hφzlt⟩,
+      hl z (Set.Ico_subset_Icc_self hz)]
+    dsimp [n, z]
+    have hd := Int.floor_add_fract (x / P)
+    calc
+      P * (⌊x / P⌋ : ℝ) + P * Int.fract (x / P) =
+          P * ((⌊x / P⌋ : ℝ) + Int.fract (x / P)) := by ring
+      _ = P * (x / P) := by rw [hd]
+      _ = x := by field_simp
+  have hgf : Function.RightInverse g f := by
+    intro y
+    let n : ℤ := ⌊y / Q⌋
+    let z : ℝ := Q * Int.fract (y / Q)
+    have hz : z ∈ Set.Ico 0 Q := by
+      constructor
+      · exact mul_nonneg hQ.le (Int.fract_nonneg _)
+      · exact (mul_lt_iff_lt_one_right hQ).2 (Int.fract_lt_one _)
+    have hψz := hψmaps (Set.Ico_subset_Icc_self hz)
+    have hψzlt : ψ z < P := by
+      apply lt_of_le_of_ne hψz.2
+      intro he
+      have := hr z (Set.Ico_subset_Icc_self hz)
+      rw [he, hφP] at this
+      exact hz.2.ne this.symm
+    have hg : g y = P * n + ψ z := by
+      apply equivariantLift_of_interval_aux_eval Q P hQ ψ n z hz |>.symm.trans
+      congr 1
+      dsimp [n, z]
+      have hd := Int.floor_add_fract (y / Q)
+      calc
+        Q * (⌊y / Q⌋ : ℝ) + Q * Int.fract (y / Q) =
+            Q * ((⌊y / Q⌋ : ℝ) + Int.fract (y / Q)) := by ring
+        _ = Q * (y / Q) := by rw [hd]
+        _ = y := by field_simp
+    rw [hg]
+    change equivariantLift_of_interval_aux_ext P Q φ _ = y
+    rw [equivariantLift_of_interval_aux_eval P Q hP φ n (ψ z) ⟨hψz.1, hψzlt⟩,
+      hr z (Set.Ico_subset_Icc_self hz)]
+    dsimp [n, z]
+    have hd := Int.floor_add_fract (y / Q)
+    calc
+      Q * (⌊y / Q⌋ : ℝ) + Q * Int.fract (y / Q) =
+          Q * ((⌊y / Q⌋ : ℝ) + Int.fract (y / Q)) := by ring
+      _ = Q * (y / Q) := by rw [hd]
+      _ = y := by field_simp
+  refine ⟨{
+    toFun := f
+    invFun := g
+    continuous_toFun := equivariantLift_of_interval_aux_continuous P Q hP φ hφ hφ0 hφP
+    continuous_invFun := equivariantLift_of_interval_aux_continuous Q P hQ ψ hψ hψ0 hψQ
+    left_inv := hfg
+    right_inv := hgf
+    toFun_add_period := equivariantLift_of_interval_aux_add_period P Q hP φ
+    invFun_add_period := equivariantLift_of_interval_aux_add_period Q P hQ ψ }, ?_⟩
+  intro x hx
+  by_cases hxp : x = P
+  · subst x
+    change f P = φ P
+    unfold f
+    have he := equivariantLift_of_interval_aux_eval P Q hP φ 1 0
+      (by exact ⟨le_rfl, hP⟩)
+    norm_num at he ⊢
+    linarith [hφ0, hφP]
+  · change f x = φ x
+    unfold f
+    simpa using equivariantLift_of_interval_aux_eval P Q hP φ 0 x
+      ⟨hx.1, lt_of_le_of_ne hx.2 hxp⟩
 
 /-- The local merge map is a homeomorphism of `ℝ` (slopes `1` and `1/2`) with the
 displayed inverse, fixes `0`, and sends the period `u + 2 + v + 2 + t` to
