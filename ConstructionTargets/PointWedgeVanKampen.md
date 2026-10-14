@@ -1483,3 +1483,9 @@ the installed connector at a forward-image endpoint as the literal-base
 change, mapped inverse–forward source connector, and counit.  The remaining
 comparison is exactly the unit/counit identification between that source
 connector and the already rebased mapped connector.
+`genericPointWedgeCoherentRight_overlap_connectorSquare_of_endpoints` packages the
+final installation step: once the source and target inverse-forward
+connectors are identified with their rebased mapped forms, the banked
+right-cover square is literally the connector square in `Y`.  Thus the B6
+residual is reduced to those two endpoint identifications, with no additional
+functorial or reassociation obligations.

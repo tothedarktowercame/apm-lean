@@ -6694,6 +6694,55 @@ theorem genericPointWedgeCoherentRightSource_overlap_connectorSquare_rebased :
     (genericPointWedgeCoherentRightSource_overlap_connectorSquare_mapped
       x₀ y₀ M N hM hN hy hx cM cN)
 
+omit [PathConnectedSpace X] in
+/-- Installing the coherent source system in `Y` turns the transported
+overlap component into the literal connector square used by the based right
+leg.  Both the equivalence counit and the base change are retained by the two
+generic connector-system transports. -/
+theorem genericPointWedgeCoherentRight_overlap_connectorSquare_of_endpoints :
+    let r := genericPointWedgeActualRight x₀ y₀ M N
+    let eK := genericPointWedgeOverlapGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let eR := genericPointWedgeRightGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let z := genericPointWedgeOverlapBase x₀ y₀ M N
+    let F := eK.inverse ⋙ r
+    ∀ (hsource :
+      ((genericPointWedgeCoherentRightConnectors
+      x₀ y₀ M N hM hN hy hx cM cN).connector
+          (eR.functor.obj
+            (F.obj (eK.functor.obj ((eK.functor ⋙ eK.inverse).obj z))))).hom =
+        (eqToIso (genericPointWedgeRightEquiv_obj_rightBase
+          x₀ y₀ M N hM hN hy hx cM cN).symm).hom ≫
+          eR.functor.map
+            ((genericPointWedgeCoherentRightSourceConnectors
+              x₀ y₀ M N hM hN hy hx cM cN).connector
+                (F.obj (eK.functor.obj
+                  ((eK.functor ⋙ eK.inverse).obj z)))).hom)
+    (htarget :
+      ((genericPointWedgeCoherentRightConnectors
+        x₀ y₀ M N hM hN hy hx cM cN).connector
+          (eR.functor.obj (F.obj (eK.functor.obj z)))).hom =
+        (eqToIso (genericPointWedgeRightEquiv_obj_rightBase
+          x₀ y₀ M N hM hN hy hx cM cN).symm).hom ≫
+          eR.functor.map
+            ((genericPointWedgeCoherentRightSourceConnectors
+              x₀ y₀ M N hM hN hy hx cM cN).connector
+                (F.obj (eK.functor.obj z))).hom),
+    ((genericPointWedgeCoherentRightConnectors
+      x₀ y₀ M N hM hN hy hx cM cN).connector
+        (eR.functor.obj
+          (F.obj (eK.functor.obj ((eK.functor ⋙ eK.inverse).obj z))))).hom ≫
+      eR.functor.map (F.map (eK.functor.map (eK.unitInv.app z))) =
+    ((genericPointWedgeCoherentRightConnectors
+      x₀ y₀ M N hM hN hy hx cM cN).connector
+        (eR.functor.obj (F.obj (eK.functor.obj z)))).hom := by
+  dsimp only
+  intro hsource htarget
+  rw [hsource, htarget]
+  exact genericPointWedgeCoherentRightSource_overlap_connectorSquare_rebased
+    x₀ y₀ M N hM hN hy hx cM cN
+
 omit [PathConnectedSpace X] [PathConnectedSpace Y] in
 /-- The shifted and unshifted inverse right-span components are dependently
 equal, since their arguments are objects of `FundamentalGroupoid Unit`. -/
