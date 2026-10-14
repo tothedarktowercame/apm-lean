@@ -694,143 +694,6 @@ structure CancellationZipSpec (n k : ℕ) (c : Disk → Disk) : Prop where
   /-- No other point shares an interior point's image. -/
   interior_injective : ∀ {p q : Disk}, ‖(p : ℂ)‖ < 1 → c p = c q → p = q
 
-/-- Leaf (PL construction, 90--130 lines): triangulate the source by the
-centre, the endpoints of the two cancelled arcs, and all remaining vertices;
-fold just the two incident triangles onto the slit sector and map the
-complementary fan affinely to the target fan. -/
-lemma inversePairCancellation_aux_zip_map {Label : Type*} [DecidableEq Label]
-    (u v : List (Signed Label)) (x : Signed Label)
-    (hx : x.1 ∉ (u ++ v).map Prod.fst)
-    (hrest : IsPolygonWord (u ++ v)) :
-    ∃ c : Disk → Disk,
-      CancellationZipSpec (u ++ v).length u.length c ∧
-      (∀ p q : Disk, ‖(p : ℂ)‖ = 1 → ‖(q : ℂ)‖ = 1 →
-        (Relation.EqvGen (WordRel (u ++ [x, inv x] ++ v)) p q ↔
-         Relation.EqvGen (WordRel (u ++ v)) (c p) (c q))) := by
-  sorry
-
-/-- Leaf (interior/mixed fibres, 45--70 lines): use
-`wordRel_eqvGen_interior`, `CancellationZipSpec.interior_maps`, and
-`interior_injective`; no boundary combinatorics occur here. -/
-lemma inversePairCancellation_aux_zip_interior_aux_boundary
-    {L : Type*} [DecidableEq L] (w : List (Signed L)) {p q : Disk}
-    (h : Relation.EqvGen (WordRel w) p q) :
-    p = q ∨ (‖(p : ℂ)‖ = 1 ∧ ‖(q : ℂ)‖ = 1) := by
-  induction h with
-  | refl x => exact Or.inl rfl
-  | rel p q hpq =>
-      rcases hpq with ⟨i, j, hij, t, hlab, rfl, rfl⟩
-      right
-      constructor <;> simp [edgePoint, Complex.norm_exp]
-  | symm p q hpq ih =>
-      rcases ih with heq | ⟨hp, hq⟩
-      · exact Or.inl heq.symm
-      · exact Or.inr ⟨hq, hp⟩
-  | trans p q r hpq hqr ihpq ihqr =>
-      rcases ihpq with hpq | ⟨hp, hq⟩
-      · subst q
-        exact ihqr
-      · rcases ihqr with hqr | ⟨hq', hr⟩
-        · subst r
-          exact Or.inr ⟨hp, hq⟩
-        · exact Or.inr ⟨hp, hr⟩
-
-lemma inversePairCancellation_aux_zip_interior_aux_eq
-    {L : Type*} [DecidableEq L] (w : List (Signed L)) {p q : Disk}
-    (h : Relation.EqvGen (WordRel w) p q) (hp : ‖(p : ℂ)‖ < 1) : p = q := by
-  rcases inversePairCancellation_aux_zip_interior_aux_boundary w h with
-    heq | ⟨hp', hq⟩
-  · exact heq
-  · exfalso
-    linarith
-
-lemma inversePairCancellation_aux_zip_interior {Label : Type*} [DecidableEq Label]
-    (u v : List (Signed Label)) (x : Signed Label) (c : Disk → Disk)
-    (hc : CancellationZipSpec (u ++ v).length u.length c) :
-    ∀ p q : Disk, (‖(p : ℂ)‖ < 1 ∨ ‖(q : ℂ)‖ < 1) →
-      (Relation.EqvGen (WordRel (u ++ [x, inv x] ++ v)) p q ↔
-       Relation.EqvGen (WordRel (u ++ v)) (c p) (c q)) := by
-  intro p q hint
-  constructor
-  · intro h
-    rcases hint with hp | hq
-    · have heq := inversePairCancellation_aux_zip_interior_aux_eq _ h hp
-      subst q
-      exact Relation.EqvGen.refl
-        (c p)
-    · have heq := inversePairCancellation_aux_zip_interior_aux_eq _
-          (Relation.EqvGen.symm _ _ h) hq
-      subst p
-      exact Relation.EqvGen.refl _
-  · intro h
-    rcases hint with hp | hq
-    · have him : ‖(c p : ℂ)‖ < 1 := hc.interior_maps p hp
-      have heq := inversePairCancellation_aux_zip_interior_aux_eq _ h him
-      have hpq := hc.interior_injective hp heq
-      subst q
-      exact Relation.EqvGen.refl _
-    · have him : ‖(c q : ℂ)‖ < 1 := hc.interior_maps q hq
-      have heq := inversePairCancellation_aux_zip_interior_aux_eq _
-        (Relation.EqvGen.symm _ _ h) him
-      have hqp := hc.interior_injective hq heq
-      subst p
-      exact Relation.EqvGen.refl _
-
-/-- Leaf (case assembly, 30--45 lines), independent of the construction:
-split each disk point into norm `< 1` or `= 1`, then invoke the supplied
-boundary and interior comparisons. -/
-lemma inversePairCancellation_aux_zip_relation {Label : Type*} [DecidableEq Label]
-    (u v : List (Signed Label)) (x : Signed Label) (c : Disk → Disk)
-    (hboundary : ∀ p q : Disk, ‖(p : ℂ)‖ = 1 → ‖(q : ℂ)‖ = 1 →
-      (Relation.EqvGen (WordRel (u ++ [x, inv x] ++ v)) p q ↔
-       Relation.EqvGen (WordRel (u ++ v)) (c p) (c q)))
-    (hinterior : ∀ p q : Disk, (‖(p : ℂ)‖ < 1 ∨ ‖(q : ℂ)‖ < 1) →
-      (Relation.EqvGen (WordRel (u ++ [x, inv x] ++ v)) p q ↔
-       Relation.EqvGen (WordRel (u ++ v)) (c p) (c q))) :
-    ∀ p q : Disk, Relation.EqvGen (WordRel (u ++ [x, inv x] ++ v)) p q ↔
-      Relation.EqvGen (WordRel (u ++ v)) (c p) (c q) := by
-  intro p q
-  by_cases hp : ‖(p : ℂ)‖ < 1
-  · exact hinterior p q (Or.inl hp)
-  by_cases hq : ‖(q : ℂ)‖ < 1
-  · exact hinterior p q (Or.inr hq)
-  apply hboundary p q
-  · apply le_antisymm
-    · simpa [dist_zero_right] using (Metric.mem_closedBall.mp p.2)
-    · exact le_of_not_gt hp
-  · apply le_antisymm
-    · simpa [dist_zero_right] using (Metric.mem_closedBall.mp q.2)
-    · exact le_of_not_gt hq
-
-/-- The geometric content of cancellation: zip the arcs `x` and `x⁻¹` together,
-`x(t)` and `x⁻¹(1-t)` going to the same point of a segment running from the
-boundary into the interior (NOT to a single point: `c` may identify exactly
-the pairs the old relation identifies), and map the rest PL onto the
-`(u ++ v)`-gon. -/
-lemma inversePairCancellation_aux_collapse {Label : Type*} [DecidableEq Label]
-    (u v : List (Signed Label)) (x : Signed Label)
-    (hx : x.1 ∉ (u ++ v).map Prod.fst)
-    (hrest : IsPolygonWord (u ++ v)) :
-    ∃ c : Disk → Disk, Continuous c ∧ Function.Surjective c ∧
-      ∀ p q, Relation.EqvGen (WordRel (u ++ [x, inv x] ++ v)) p q ↔
-        Relation.EqvGen (WordRel (u ++ v)) (c p) (c q) := by
-  obtain ⟨c, hc, hboundary⟩ := inversePairCancellation_aux_zip_map u v x hx hrest
-  refine ⟨c, hc.continuous, hc.surjective, ?_⟩
-  apply inversePairCancellation_aux_zip_relation u v x c
-  · exact hboundary
-  · exact inversePairCancellation_aux_zip_interior u v x c hc
-
-/-- Affinely collapse the two triangles incident to the cancelled vertex and
-map the complementary polygon to the smaller disk. -/
-theorem inversePairCancellation {Label : Type*} [DecidableEq Label]
-    (u v : List (Signed Label)) (x : Signed Label)
-    (hx : x.1 ∉ (u ++ v).map Prod.fst)
-    (hrest : IsPolygonWord (u ++ v)) :
-    Nonempty (PolygonSurface (u ++ [x, inv x] ++ v) ≃ₜ
-      PolygonSurface (u ++ v)) := by
-  obtain ⟨c, hc, hsurj, hrel⟩ := inversePairCancellation_aux_collapse u v x hx hrest
-  exact polygonSurface_homeomorph_of_collapse _ _ c hc hsurj hrel
-
 lemma mergeRepeatedBlock_aux_quotient_homeomorph
     {R S : Disk → Disk → Prop}
     (e : Disk ≃ₜ Disk)
@@ -3223,6 +3086,418 @@ theorem mergeRepeatedBlock {Label : Type*} [DecidableEq Label]
   obtain ⟨e, he⟩ :=
     mergeRepeatedBlock_aux_disk_reparam u v t y z a hyz ha hy hz hw
   exact mergeRepeatedBlock_aux_quotient_homeomorph e he
+
+/-! ## Cancellation: the explicit zip (design claude-14, 2026-10-14)
+
+Notation: `n` target sides, `N = n + 2` source sides, the cancelled pair at
+source sides `k` (`x`) and `k + 1` (`x⁻¹`); `D₊ = {‖p‖ ≤ 1, 0 ≤ im p}` is the
+closed upper half-disk, with centre `I/2`.
+
+* `zipProfile` is the boundary map on one lap of the source circle, starting at
+  the start of `x` (angle `zipStart = 2πk/N`).  The arc `x x⁻¹` goes linearly
+  onto the diameter `[-1, 1]`: `x(t) ↦ t - 1` and `x⁻¹(s) ↦ s`.  The other `n`
+  sides go onto the upper semicircle `e^{iθ}`, `θ` running from `0` to `π`.
+* `zipCone` cones that boundary map from the centre:
+  `r b ↦ I/2 + r (zipBoundaryMap b - I/2)`.  It maps the disk homeomorphically
+  onto `D₊` (every ray from `I/2` leaves `D₊` exactly once).
+* `zipMap z = ω (zipCone z)²` with `ω = exp (2πik/n)`.  Squaring folds the
+  diameter (`±s ↦ s²`, so `x(t)` and `x⁻¹(1-t)` meet on the slit from `ω` to
+  `0`) and opens the semicircle onto the whole circle: source side `j` lands on
+  target side `j` (`j < k`) or `j - 2` (`j ≥ k + 2`) with the same parameter.
+  On `D₊` squaring is injective off the diameter, which gives
+  `interior_injective`. -/
+
+/-- `2π > 0`, for `AddCircle (2 * π)`. -/
+instance zipTwoPiPos : Fact (0 < 2 * Real.pi) := ⟨Real.two_pi_pos⟩
+
+/-- Centre of the closed upper half-disk `D₊`. -/
+def zipCentre : ℂ := Complex.I / 2
+
+/-- The closed upper half-disk `D₊`. -/
+def zipHalfDisk : Set ℂ := {p | ‖p‖ ≤ 1 ∧ 0 ≤ p.im}
+
+/-- The boundary of `D₊`: the upper semicircle and the diameter `[-1, 1]`. -/
+def zipHalfBoundary : Set ℂ :=
+  {p | ‖p‖ = 1 ∧ 0 ≤ p.im} ∪ {p | p.im = 0 ∧ |p.re| ≤ 1}
+
+/-- Angle of the start of `x`, the first cancelled side. -/
+def zipStart (n k : ℕ) : ℝ := 2 * Real.pi * k / ((n : ℝ) + 2)
+
+/-- One lap of the boundary map, on `[zipStart, zipStart + 2π]`. -/
+def zipProfile (n k : ℕ) (φ : ℝ) : ℂ :=
+  if φ ≤ zipStart n k + 4 * Real.pi / ((n : ℝ) + 2) then
+    (((φ - zipStart n k) * ((n : ℝ) + 2) / (2 * Real.pi) - 1 : ℝ) : ℂ)
+  else
+    Complex.exp ((((((n : ℝ) + 2) / n) *
+      (φ - zipStart n k - 4 * Real.pi / ((n : ℝ) + 2)) / 2 : ℝ) : ℂ) * Complex.I)
+
+/-- The boundary map `∂Disk → ∂D₊`. -/
+def zipBoundaryMap (n k : ℕ) (b : Circle) : ℂ :=
+  AddCircle.liftIco (2 * Real.pi) (zipStart n k) (zipProfile n k)
+    (AddCircle.homeomorphCircle'.symm b)
+
+/-- The cone extension `Disk → D₊`. -/
+def zipCone (n k : ℕ) (z : ℂ) : ℂ :=
+  if hz : z = 0 then zipCentre else
+    zipCentre + (‖z‖ : ℂ) * (zipBoundaryMap n k
+      ⟨((‖z‖⁻¹ : ℝ) : ℂ) * z, by simp [Circle, Submonoid.unitSphere, norm_mul, hz]⟩ -
+        zipCentre)
+
+/-- The rotation taking `1` to the target vertex `k`. -/
+def zipRotation (n k : ℕ) : ℂ := Complex.exp (Complex.I * (2 * Real.pi * (k : ℝ) / n))
+
+def zipRaw (n k : ℕ) (z : ℂ) : ℂ := zipRotation n k * zipCone n k z ^ 2
+
+/-- The zip.  The clamp is inactive (`zipMap_spec`); it only makes the type `Disk`. -/
+def zipMap (n k : ℕ) (z : Disk) : Disk :=
+  if h : ‖zipRaw n k (z : ℂ)‖ ≤ 1 then
+    ⟨zipRaw n k (z : ℂ), by simpa [Metric.mem_closedBall, dist_zero_right] using h⟩
+  else ⟨0, by simp [Metric.mem_closedBall]⟩
+
+/-! ### Half-disk geometry -/
+
+/-- Boundary points of `D₊` on one ray from the centre coincide: a point strictly
+between the centre and a point of `D₊` lies in the open half-disk. -/
+theorem zip_halfBoundary_ray {p p' : ℂ} (hp : p ∈ zipHalfBoundary)
+    (hp' : p' ∈ zipHalfBoundary) {r : ℝ} (hr : 0 < r)
+    (h : p' - zipCentre = (r : ℂ) * (p - zipCentre)) : p' = p := by
+  sorry
+
+/-- Every point of `D₊` is on a segment from the centre to a boundary point
+(take the largest `λ` with `I/2 + λ (y - I/2) ∈ D₊`). -/
+theorem zip_halfDisk_cone {y : ℂ} (hy : y ∈ zipHalfDisk) :
+    ∃ p ∈ zipHalfBoundary, ∃ r : ℝ, 0 ≤ r ∧ r ≤ 1 ∧
+      y = zipCentre + (r : ℂ) * (p - zipCentre) := by
+  sorry
+
+/-! ### The boundary map -/
+
+theorem zipBoundaryMap_continuous {n k : ℕ} (hn : 0 < n) :
+    Continuous (zipBoundaryMap n k) := by
+  sorry
+
+theorem zipBoundaryMap_mem {n k : ℕ} (hn : 0 < n) (b : Circle) :
+    zipBoundaryMap n k b ∈ zipHalfBoundary := by
+  sorry
+
+theorem zipBoundaryMap_injective {n k : ℕ} (hn : 0 < n) :
+    Function.Injective (zipBoundaryMap n k) := by
+  sorry
+
+theorem zipBoundaryMap_surjOn {n k : ℕ} (hn : 0 < n) {p : ℂ}
+    (hp : p ∈ zipHalfBoundary) : ∃ b : Circle, zipBoundaryMap n k b = p := by
+  sorry
+
+/-- The cancelled sides go linearly onto the diameter. -/
+theorem zipBoundaryMap_fold {n k : ℕ} (hn : 0 < n) (hk : k ≤ n) (t : Icc (0 : ℝ) 1) :
+    zipBoundaryMap n k ⟨edgePoint (n + 2) k t,
+        by simpa [Circle, Submonoid.unitSphere] using norm_edgePoint (n + 2) k t⟩ =
+      (((t : ℝ) - 1 : ℝ) : ℂ) ∧
+    zipBoundaryMap n k ⟨edgePoint (n + 2) (k + 1) t,
+        by simpa [Circle, Submonoid.unitSphere] using norm_edgePoint (n + 2) (k + 1) t⟩ =
+      ((t : ℝ) : ℂ) := by
+  sorry
+
+/-! ### The cone -/
+
+theorem zipCone_continuous {n k : ℕ} (hc : Continuous (zipBoundaryMap n k)) :
+    Continuous (zipCone n k) := by
+  sorry
+
+theorem zipCone_of_norm_one {n k : ℕ} {z : ℂ} (hz : ‖z‖ = 1) :
+    zipCone n k z = zipBoundaryMap n k ⟨z, by simpa [Circle, Submonoid.unitSphere] using hz⟩ := by
+  sorry
+
+theorem zipCone_mem {n k : ℕ} (hmem : ∀ b, zipBoundaryMap n k b ∈ zipHalfBoundary)
+    {z : ℂ} (hz : ‖z‖ ≤ 1) :
+    zipCone n k z ∈ zipHalfDisk ∧
+      (‖z‖ < 1 → ‖zipCone n k z‖ < 1 ∧ 0 < (zipCone n k z).im) := by
+  sorry
+
+theorem zipCone_injOn {n k : ℕ} (hmem : ∀ b, zipBoundaryMap n k b ∈ zipHalfBoundary)
+    (hinj : Function.Injective (zipBoundaryMap n k))
+    (hray : ∀ {p p' : ℂ}, p ∈ zipHalfBoundary → p' ∈ zipHalfBoundary → ∀ {r : ℝ}, 0 < r →
+      p' - zipCentre = (r : ℂ) * (p - zipCentre) → p' = p)
+    {z w : ℂ} (hz : ‖z‖ ≤ 1) (hw : ‖w‖ ≤ 1) (h : zipCone n k z = zipCone n k w) :
+    z = w := by
+  sorry
+
+theorem zipCone_surjOn {n k : ℕ}
+    (hcone : ∀ {y : ℂ}, y ∈ zipHalfDisk → ∃ p ∈ zipHalfBoundary, ∃ r : ℝ, 0 ≤ r ∧ r ≤ 1 ∧
+      y = zipCentre + (r : ℂ) * (p - zipCentre))
+    (hsurj : ∀ {p : ℂ}, p ∈ zipHalfBoundary → ∃ b : Circle, zipBoundaryMap n k b = p)
+    {y : ℂ} (hy : y ∈ zipHalfDisk) : ∃ z : ℂ, ‖z‖ ≤ 1 ∧ zipCone n k z = y := by
+  sorry
+
+/-! ### The zip -/
+
+/-- Continuity, surjectivity (square root with nonnegative imaginary part), and
+the interior conditions (`(Hz)² = (Hw)²` with `0 < im Hz`, `0 ≤ im Hw` forces
+`Hz = Hw`). -/
+theorem zipMap_spec {n k : ℕ} (hn : 0 < n)
+    (hcont : Continuous (zipCone n k))
+    (hmem : ∀ {z : ℂ}, ‖z‖ ≤ 1 → zipCone n k z ∈ zipHalfDisk ∧
+      (‖z‖ < 1 → ‖zipCone n k z‖ < 1 ∧ 0 < (zipCone n k z).im))
+    (hinj : ∀ {z w : ℂ}, ‖z‖ ≤ 1 → ‖w‖ ≤ 1 → zipCone n k z = zipCone n k w → z = w)
+    (hsurj : ∀ {y : ℂ}, y ∈ zipHalfDisk → ∃ z : ℂ, ‖z‖ ≤ 1 ∧ zipCone n k z = y) :
+    CancellationZipSpec n k (zipMap n k) := by
+  sorry
+
+theorem zipMap_edge_high {n k : ℕ} (hn : 0 < n) (hk : k ≤ n) {j : ℕ} (hj : k + 2 ≤ j)
+    (hjn : j < n + 2) (t : Icc (0 : ℝ) 1) :
+    zipMap n k (edgePoint (n + 2) j t) = edgePoint n (j - 2) t := by
+  sorry
+
+theorem zipMap_edge_low {n k : ℕ} (hn : 0 < n) (hk : k ≤ n) {j : ℕ} (hj : j < k)
+    (t : Icc (0 : ℝ) 1) :
+    zipMap n k (edgePoint (n + 2) j t) = edgePoint n j t := by
+  sorry
+
+theorem zipMap_fold_eq {n k : ℕ}
+    (hfold : ∀ t : Icc (0 : ℝ) 1,
+      zipBoundaryMap n k ⟨edgePoint (n + 2) k t,
+          by simpa [Circle, Submonoid.unitSphere] using norm_edgePoint (n + 2) k t⟩ =
+        (((t : ℝ) - 1 : ℝ) : ℂ) ∧
+      zipBoundaryMap n k ⟨edgePoint (n + 2) (k + 1) t,
+          by simpa [Circle, Submonoid.unitSphere] using norm_edgePoint (n + 2) (k + 1) t⟩ =
+        ((t : ℝ) : ℂ))
+    (t : Icc (0 : ℝ) 1) :
+    zipMap n k (edgePoint (n + 2) k t) =
+      zipMap n k (edgePoint (n + 2) (k + 1) (reverseParameter t)) := by
+  sorry
+
+/-- Boundary fibres of the zip: a point, or a pair `x(t)`, `x⁻¹(1-t)`. -/
+theorem zipMap_boundary_fibre {n k : ℕ} (hn : 0 < n) (hk : k ≤ n)
+    (hmemB : ∀ b, zipBoundaryMap n k b ∈ zipHalfBoundary)
+    (hinjB : Function.Injective (zipBoundaryMap n k))
+    (hfold : ∀ t : Icc (0 : ℝ) 1,
+      zipBoundaryMap n k ⟨edgePoint (n + 2) k t,
+          by simpa [Circle, Submonoid.unitSphere] using norm_edgePoint (n + 2) k t⟩ =
+        (((t : ℝ) - 1 : ℝ) : ℂ) ∧
+      zipBoundaryMap n k ⟨edgePoint (n + 2) (k + 1) t,
+          by simpa [Circle, Submonoid.unitSphere] using norm_edgePoint (n + 2) (k + 1) t⟩ =
+        ((t : ℝ) : ℂ))
+    {p q : Disk} (hp : ‖(p : ℂ)‖ = 1) (hq : ‖(q : ℂ)‖ = 1)
+    (h : zipMap n k p = zipMap n k q) :
+    p = q ∨
+      (∃ t, p = edgePoint (n + 2) k t ∧ q = edgePoint (n + 2) (k + 1) (reverseParameter t)) ∨
+      (∃ t, q = edgePoint (n + 2) k t ∧ p = edgePoint (n + 2) (k + 1) (reverseParameter t)) := by
+  sorry
+
+theorem zipMap_circle_surj {n k : ℕ} (hn : 0 < n)
+    (hsurjB : ∀ {p : ℂ}, p ∈ zipHalfBoundary → ∃ b : Circle, zipBoundaryMap n k b = p)
+    {w : Disk} (hw : ‖(w : ℂ)‖ = 1) : ∃ p : Disk, ‖(p : ℂ)‖ = 1 ∧ zipMap n k p = w := by
+  sorry
+
+/-! ### Boundary combinatorics, for any map with the zip's edge formulas -/
+
+theorem zip_fibre_related {Label : Type*} [DecidableEq Label]
+    (u v : List (Signed Label)) (x : Signed Label) {p q : Disk}
+    (h : p = q ∨
+      (∃ t, p = edgePoint ((u ++ v).length + 2) u.length t ∧
+        q = edgePoint ((u ++ v).length + 2) (u.length + 1) (reverseParameter t)) ∨
+      (∃ t, q = edgePoint ((u ++ v).length + 2) u.length t ∧
+        p = edgePoint ((u ++ v).length + 2) (u.length + 1) (reverseParameter t))) :
+    Relation.EqvGen (WordRel (u ++ [x, inv x] ++ v)) p q := by
+  sorry
+
+theorem zip_forward {Label : Type*} [DecidableEq Label]
+    (u v : List (Signed Label)) (x : Signed Label)
+    (hx : x.1 ∉ (u ++ v).map Prod.fst) (c : Disk → Disk)
+    (hhigh : ∀ j, u.length + 2 ≤ j → j < (u ++ v).length + 2 → ∀ t,
+      c (edgePoint ((u ++ v).length + 2) j t) = edgePoint (u ++ v).length (j - 2) t)
+    (hlow : ∀ j, j < u.length → ∀ t,
+      c (edgePoint ((u ++ v).length + 2) j t) = edgePoint (u ++ v).length j t)
+    (hfold : ∀ t, c (edgePoint ((u ++ v).length + 2) u.length t) =
+      c (edgePoint ((u ++ v).length + 2) (u.length + 1) (reverseParameter t))) :
+    ∀ p q, WordRel (u ++ [x, inv x] ++ v) p q →
+      Relation.EqvGen (WordRel (u ++ v)) (c p) (c q) := by
+  sorry
+
+theorem zip_lift_generator {Label : Type*} [DecidableEq Label]
+    (u v : List (Signed Label)) (x : Signed Label) (c : Disk → Disk)
+    (hhigh : ∀ j, u.length + 2 ≤ j → j < (u ++ v).length + 2 → ∀ t,
+      c (edgePoint ((u ++ v).length + 2) j t) = edgePoint (u ++ v).length (j - 2) t)
+    (hlow : ∀ j, j < u.length → ∀ t,
+      c (edgePoint ((u ++ v).length + 2) j t) = edgePoint (u ++ v).length j t) :
+    ∀ a b, WordRel (u ++ v) a b → ∃ P Q : Disk, ‖(P : ℂ)‖ = 1 ∧ ‖(Q : ℂ)‖ = 1 ∧
+      c P = a ∧ c Q = b ∧ WordRel (u ++ [x, inv x] ++ v) P Q := by
+  sorry
+
+/-- Reverse direction: if `c p` is interior, `EqvGen` forces `c p = c q` and the
+fibre lemma applies; otherwise pass to the circle (`wordRel_eqvGen_circle`) and
+induct, lifting generators with `hlift` and middle points with `hcirc`. -/
+theorem zip_boundary_iff {Label : Type*} [DecidableEq Label]
+    (u v : List (Signed Label)) (x : Signed Label) (c : Disk → Disk)
+    (hfib : ∀ {p q : Disk}, ‖(p : ℂ)‖ = 1 → ‖(q : ℂ)‖ = 1 → c p = c q →
+      Relation.EqvGen (WordRel (u ++ [x, inv x] ++ v)) p q)
+    (hfwd : ∀ p q, WordRel (u ++ [x, inv x] ++ v) p q →
+      Relation.EqvGen (WordRel (u ++ v)) (c p) (c q))
+    (hlift : ∀ a b, WordRel (u ++ v) a b → ∃ P Q : Disk, ‖(P : ℂ)‖ = 1 ∧ ‖(Q : ℂ)‖ = 1 ∧
+      c P = a ∧ c Q = b ∧ WordRel (u ++ [x, inv x] ++ v) P Q)
+    (hcirc : ∀ w : Disk, ‖(w : ℂ)‖ = 1 → ∃ p : Disk, ‖(p : ℂ)‖ = 1 ∧ c p = w) :
+    ∀ p q : Disk, ‖(p : ℂ)‖ = 1 → ‖(q : ℂ)‖ = 1 →
+      (Relation.EqvGen (WordRel (u ++ [x, inv x] ++ v)) p q ↔
+       Relation.EqvGen (WordRel (u ++ v)) (c p) (c q)) := by
+  sorry
+
+/-- Leaf (PL construction, 90--130 lines): triangulate the source by the
+centre, the endpoints of the two cancelled arcs, and all remaining vertices;
+fold just the two incident triangles onto the slit sector and map the
+complementary fan affinely to the target fan. -/
+lemma inversePairCancellation_aux_zip_map {Label : Type*} [DecidableEq Label]
+    (u v : List (Signed Label)) (x : Signed Label)
+    (hx : x.1 ∉ (u ++ v).map Prod.fst)
+    (hrest : IsPolygonWord (u ++ v)) :
+    ∃ c : Disk → Disk,
+      CancellationZipSpec (u ++ v).length u.length c ∧
+      (∀ p q : Disk, ‖(p : ℂ)‖ = 1 → ‖(q : ℂ)‖ = 1 →
+        (Relation.EqvGen (WordRel (u ++ [x, inv x] ++ v)) p q ↔
+         Relation.EqvGen (WordRel (u ++ v)) (c p) (c q))) := by
+  have hn : 0 < (u ++ v).length := by
+    have h := hrest.1
+    contrapose! h
+    simpa using h
+  have hk : u.length ≤ (u ++ v).length := by simp
+  have hlen : (u ++ [x, inv x] ++ v).length = (u ++ v).length + 2 := by simp; omega
+  refine ⟨zipMap (u ++ v).length u.length,
+    zipMap_spec hn (zipCone_continuous (zipBoundaryMap_continuous hn))
+      (fun hz => zipCone_mem (zipBoundaryMap_mem hn) hz)
+      (fun hz hw h => zipCone_injOn (zipBoundaryMap_mem hn) (zipBoundaryMap_injective hn)
+        zip_halfBoundary_ray hz hw h)
+      (fun hy => zipCone_surjOn zip_halfDisk_cone (zipBoundaryMap_surjOn hn) hy), ?_⟩
+  exact zip_boundary_iff u v x _
+    (fun hp hq h => zip_fibre_related u v x
+      (zipMap_boundary_fibre hn hk (zipBoundaryMap_mem hn) (zipBoundaryMap_injective hn)
+        (zipBoundaryMap_fold hn hk) hp hq h))
+    (zip_forward u v x hx _ (fun j hj hjn t => zipMap_edge_high hn hk hj hjn t)
+      (fun j hj t => zipMap_edge_low hn hk hj t)
+      (fun t => zipMap_fold_eq (zipBoundaryMap_fold hn hk) t))
+    (zip_lift_generator u v x _ (fun j hj hjn t => zipMap_edge_high hn hk hj hjn t)
+      (fun j hj t => zipMap_edge_low hn hk hj t))
+    (fun w hw => zipMap_circle_surj hn (zipBoundaryMap_surjOn hn) hw)
+
+/-- Leaf (interior/mixed fibres, 45--70 lines): use
+`wordRel_eqvGen_interior`, `CancellationZipSpec.interior_maps`, and
+`interior_injective`; no boundary combinatorics occur here. -/
+lemma inversePairCancellation_aux_zip_interior_aux_boundary
+    {L : Type*} [DecidableEq L] (w : List (Signed L)) {p q : Disk}
+    (h : Relation.EqvGen (WordRel w) p q) :
+    p = q ∨ (‖(p : ℂ)‖ = 1 ∧ ‖(q : ℂ)‖ = 1) := by
+  induction h with
+  | refl x => exact Or.inl rfl
+  | rel p q hpq =>
+      rcases hpq with ⟨i, j, hij, t, hlab, rfl, rfl⟩
+      right
+      constructor <;> simp [edgePoint, Complex.norm_exp]
+  | symm p q hpq ih =>
+      rcases ih with heq | ⟨hp, hq⟩
+      · exact Or.inl heq.symm
+      · exact Or.inr ⟨hq, hp⟩
+  | trans p q r hpq hqr ihpq ihqr =>
+      rcases ihpq with hpq | ⟨hp, hq⟩
+      · subst q
+        exact ihqr
+      · rcases ihqr with hqr | ⟨hq', hr⟩
+        · subst r
+          exact Or.inr ⟨hp, hq⟩
+        · exact Or.inr ⟨hp, hr⟩
+
+lemma inversePairCancellation_aux_zip_interior_aux_eq
+    {L : Type*} [DecidableEq L] (w : List (Signed L)) {p q : Disk}
+    (h : Relation.EqvGen (WordRel w) p q) (hp : ‖(p : ℂ)‖ < 1) : p = q := by
+  rcases inversePairCancellation_aux_zip_interior_aux_boundary w h with
+    heq | ⟨hp', hq⟩
+  · exact heq
+  · exfalso
+    linarith
+
+lemma inversePairCancellation_aux_zip_interior {Label : Type*} [DecidableEq Label]
+    (u v : List (Signed Label)) (x : Signed Label) (c : Disk → Disk)
+    (hc : CancellationZipSpec (u ++ v).length u.length c) :
+    ∀ p q : Disk, (‖(p : ℂ)‖ < 1 ∨ ‖(q : ℂ)‖ < 1) →
+      (Relation.EqvGen (WordRel (u ++ [x, inv x] ++ v)) p q ↔
+       Relation.EqvGen (WordRel (u ++ v)) (c p) (c q)) := by
+  intro p q hint
+  constructor
+  · intro h
+    rcases hint with hp | hq
+    · have heq := inversePairCancellation_aux_zip_interior_aux_eq _ h hp
+      subst q
+      exact Relation.EqvGen.refl
+        (c p)
+    · have heq := inversePairCancellation_aux_zip_interior_aux_eq _
+          (Relation.EqvGen.symm _ _ h) hq
+      subst p
+      exact Relation.EqvGen.refl _
+  · intro h
+    rcases hint with hp | hq
+    · have him : ‖(c p : ℂ)‖ < 1 := hc.interior_maps p hp
+      have heq := inversePairCancellation_aux_zip_interior_aux_eq _ h him
+      have hpq := hc.interior_injective hp heq
+      subst q
+      exact Relation.EqvGen.refl _
+    · have him : ‖(c q : ℂ)‖ < 1 := hc.interior_maps q hq
+      have heq := inversePairCancellation_aux_zip_interior_aux_eq _
+        (Relation.EqvGen.symm _ _ h) him
+      have hqp := hc.interior_injective hq heq
+      subst p
+      exact Relation.EqvGen.refl _
+
+/-- Leaf (case assembly, 30--45 lines), independent of the construction:
+split each disk point into norm `< 1` or `= 1`, then invoke the supplied
+boundary and interior comparisons. -/
+lemma inversePairCancellation_aux_zip_relation {Label : Type*} [DecidableEq Label]
+    (u v : List (Signed Label)) (x : Signed Label) (c : Disk → Disk)
+    (hboundary : ∀ p q : Disk, ‖(p : ℂ)‖ = 1 → ‖(q : ℂ)‖ = 1 →
+      (Relation.EqvGen (WordRel (u ++ [x, inv x] ++ v)) p q ↔
+       Relation.EqvGen (WordRel (u ++ v)) (c p) (c q)))
+    (hinterior : ∀ p q : Disk, (‖(p : ℂ)‖ < 1 ∨ ‖(q : ℂ)‖ < 1) →
+      (Relation.EqvGen (WordRel (u ++ [x, inv x] ++ v)) p q ↔
+       Relation.EqvGen (WordRel (u ++ v)) (c p) (c q))) :
+    ∀ p q : Disk, Relation.EqvGen (WordRel (u ++ [x, inv x] ++ v)) p q ↔
+      Relation.EqvGen (WordRel (u ++ v)) (c p) (c q) := by
+  intro p q
+  by_cases hp : ‖(p : ℂ)‖ < 1
+  · exact hinterior p q (Or.inl hp)
+  by_cases hq : ‖(q : ℂ)‖ < 1
+  · exact hinterior p q (Or.inr hq)
+  apply hboundary p q
+  · apply le_antisymm
+    · simpa [dist_zero_right] using (Metric.mem_closedBall.mp p.2)
+    · exact le_of_not_gt hp
+  · apply le_antisymm
+    · simpa [dist_zero_right] using (Metric.mem_closedBall.mp q.2)
+    · exact le_of_not_gt hq
+
+/-- The geometric content of cancellation: zip the arcs `x` and `x⁻¹` together,
+`x(t)` and `x⁻¹(1-t)` going to the same point of a segment running from the
+boundary into the interior (NOT to a single point: `c` may identify exactly
+the pairs the old relation identifies), and map the rest PL onto the
+`(u ++ v)`-gon. -/
+lemma inversePairCancellation_aux_collapse {Label : Type*} [DecidableEq Label]
+    (u v : List (Signed Label)) (x : Signed Label)
+    (hx : x.1 ∉ (u ++ v).map Prod.fst)
+    (hrest : IsPolygonWord (u ++ v)) :
+    ∃ c : Disk → Disk, Continuous c ∧ Function.Surjective c ∧
+      ∀ p q, Relation.EqvGen (WordRel (u ++ [x, inv x] ++ v)) p q ↔
+        Relation.EqvGen (WordRel (u ++ v)) (c p) (c q) := by
+  obtain ⟨c, hc, hboundary⟩ := inversePairCancellation_aux_zip_map u v x hx hrest
+  refine ⟨c, hc.continuous, hc.surjective, ?_⟩
+  apply inversePairCancellation_aux_zip_relation u v x c
+  · exact hboundary
+  · exact inversePairCancellation_aux_zip_interior u v x c hc
+
+/-- Affinely collapse the two triangles incident to the cancelled vertex and
+map the complementary polygon to the smaller disk. -/
+theorem inversePairCancellation {Label : Type*} [DecidableEq Label]
+    (u v : List (Signed Label)) (x : Signed Label)
+    (hx : x.1 ∉ (u ++ v).map Prod.fst)
+    (hrest : IsPolygonWord (u ++ v)) :
+    Nonempty (PolygonSurface (u ++ [x, inv x] ++ v) ≃ₜ
+      PolygonSurface (u ++ v)) := by
+  obtain ⟨c, hc, hsurj, hrel⟩ := inversePairCancellation_aux_collapse u v x hx hrest
+  exact polygonSurface_homeomorph_of_collapse _ _ c hc hsurj hrel
 
 lemma cutAndPaste_aux_length
     {Label : Type*} (u v t : List (Signed Label)) (x : Signed Label) :

@@ -218,3 +218,10 @@ unchanged: `s/2` pairs with `1-s/2`, while `(1+s)/2` pairs with
 `(1-s)/2`.  Thus endpoint classes must be handled by `EqvGen`, including
 when an adjacent block is empty.  No SphereCap or LinearGraphMeasure import
 is needed.
+
+## Cancellation zip, explicit (claude-14, 2026-10-14)
+`inversePairCancellation_aux_zip_map` is now a sorry-free assembly over 22 leaves; see the section "Cancellation: the explicit zip".
+- The zip is `zipMap z = ω·(zipCone z)²`. `zipCone` cones a boundary map `∂Disk → ∂D₊` from `I/2`. That boundary map sends the arc x x⁻¹ linearly onto the diameter [-1,1], and the other n sides angle-linearly onto the upper semicircle.
+- Squaring folds the diameter (x(t), x⁻¹(1-t) ↦ ω(1-t)², a slit from ω to 0) and opens the semicircle onto the whole circle, with source side j landing on target side j or j-2 at the same parameter.
+- The geometric leaves are about the concrete defs. The combinatorial leaves (`zip_forward`, `zip_lift_generator`, `zip_boundary_iff`) are stated for any `c` with the zip's edge formulas.
+- The cancellation block now sits after the merge section, because its leaves use `wordRel_eqvGen_circle`, `norm_edgePoint` and `circleToDisk`.
