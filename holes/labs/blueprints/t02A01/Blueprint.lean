@@ -517,8 +517,122 @@ which is T2 because the boundary is a circle. So it is a homeomorphism, and comp
 `AddCircle.homeomorphCircle'` sends the inner loop to `integerLoop 1`, whose class has winding
 `1` (`CircleUniversalCover.liftBasedLoopEndpointInteger_integerLoop`). -/
 
+theorem apm_t02a01_innerPoint_injOn_aux_perimeter_inj :
+    Set.InjOn apm_t02a01_perimeter (Set.Ico (0 : ℝ) 4) := by
+  intro s hs t ht hst
+  have hs4 : s < 4 := hs.2
+  have ht4 : t < 4 := ht.2
+  have h₁ (u : ℝ) (hu0 : 0 ≤ u) (hu1 : u ≤ 1) :
+      apm_t02a01_perimeter u = (1 / 4 + u / 2, 1 / 4) := by
+    have c0 : apm_t02a01_clamp01 u = u := by
+      unfold apm_t02a01_clamp01; rw [min_eq_right hu1, max_eq_right hu0]
+    have ck (k : ℝ) (hk : 1 ≤ k) : apm_t02a01_clamp01 (u-k) = 0 := by
+      unfold apm_t02a01_clamp01; rw [max_eq_left]; linarith [min_le_right 1 (u-k)]
+    simp [apm_t02a01_perimeter, c0, ck 1 (by norm_num), ck 2 (by norm_num),
+      ck 3 (by norm_num)]
+  have h₂ (u : ℝ) (hu1 : 1 ≤ u) (hu2 : u ≤ 2) :
+      apm_t02a01_perimeter u = (3 / 4, 1 / 4 + (u - 1) / 2) := by
+    have c0 : apm_t02a01_clamp01 u = 1 := by
+      unfold apm_t02a01_clamp01; rw [min_eq_left hu1, max_eq_right] <;> linarith
+    have c1 : apm_t02a01_clamp01 (u-1) = u-1 := by
+      unfold apm_t02a01_clamp01
+      rw [min_eq_right (by linarith), max_eq_right (by linarith)]
+    have ck (k : ℝ) (hk : 2 ≤ k) : apm_t02a01_clamp01 (u-k) = 0 := by
+      unfold apm_t02a01_clamp01; rw [max_eq_left]; linarith [min_le_right 1 (u-k)]
+    simp [apm_t02a01_perimeter, c0, c1, ck 2 (by norm_num), ck 3 (by norm_num)]
+    norm_num
+  have h₃ (u : ℝ) (hu2 : 2 ≤ u) (hu3 : u ≤ 3) :
+      apm_t02a01_perimeter u = (3 / 4 - (u - 2) / 2, 3 / 4) := by
+    have c0 : apm_t02a01_clamp01 u = 1 := by
+      unfold apm_t02a01_clamp01; rw [min_eq_left (by linarith), max_eq_right] <;> linarith
+    have c1 : apm_t02a01_clamp01 (u-1) = 1 := by
+      unfold apm_t02a01_clamp01; rw [min_eq_left (by linarith), max_eq_right] <;> linarith
+    have c2 : apm_t02a01_clamp01 (u-2) = u-2 := by
+      unfold apm_t02a01_clamp01
+      rw [min_eq_right (by linarith), max_eq_right (by linarith)]
+    have c3 : apm_t02a01_clamp01 (u-3) = 0 := by
+      unfold apm_t02a01_clamp01; rw [max_eq_left]; linarith [min_le_right 1 (u-3)]
+    simp [apm_t02a01_perimeter, c0, c1, c2, c3]
+    norm_num
+  have h₄ (u : ℝ) (hu3 : 3 ≤ u) (hu4 : u ≤ 4) :
+      apm_t02a01_perimeter u = (1 / 4, 3 / 4 - (u - 3) / 2) := by
+    have ck (k : ℝ) (hk : k ≤ 2) : apm_t02a01_clamp01 (u-k) = 1 := by
+      unfold apm_t02a01_clamp01
+      rw [min_eq_left (by linarith), max_eq_right] <;> norm_num
+    have c3 : apm_t02a01_clamp01 (u-3) = u-3 := by
+      unfold apm_t02a01_clamp01
+      rw [min_eq_right (by linarith), max_eq_right (by linarith)]
+    have c0 : apm_t02a01_clamp01 u = 1 := by simpa using ck 0 (by norm_num)
+    simp [apm_t02a01_perimeter, c0, ck 1 (by norm_num),
+      ck 2 (by norm_num), c3]
+    norm_num
+  by_cases hs1 : s ≤ 1
+  · by_cases ht1 : t ≤ 1
+    · rw [h₁ s hs.1 hs1, h₁ t ht.1 ht1] at hst
+      injection hst with hx hy
+      norm_num at hx
+      linarith
+    · by_cases ht2 : t ≤ 2
+      · rw [h₁ s hs.1 hs1, h₂ t (le_of_not_ge ht1) ht2] at hst
+        norm_num [Prod.ext_iff] at hst ⊢ <;> linarith
+      · by_cases ht3 : t ≤ 3
+        · rw [h₁ s hs.1 hs1, h₃ t (le_of_not_ge ht2) ht3] at hst
+          norm_num [Prod.ext_iff] at hst
+        · rw [h₁ s hs.1 hs1, h₄ t (le_of_not_ge ht3) ht.2.le] at hst
+          norm_num [Prod.ext_iff] at hst ⊢ <;> linarith
+  · by_cases hs2 : s ≤ 2
+    · by_cases ht1 : t ≤ 1
+      · rw [h₂ s (le_of_not_ge hs1) hs2, h₁ t ht.1 ht1] at hst
+        norm_num [Prod.ext_iff] at hst ⊢ <;> linarith
+      · by_cases ht2 : t ≤ 2
+        · rw [h₂ s (le_of_not_ge hs1) hs2, h₂ t (le_of_not_ge ht1) ht2] at hst
+          norm_num [Prod.ext_iff] at hst ⊢ <;> linarith
+        · by_cases ht3 : t ≤ 3
+          · rw [h₂ s (le_of_not_ge hs1) hs2, h₃ t (le_of_not_ge ht2) ht3] at hst
+            norm_num [Prod.ext_iff] at hst ⊢ <;> linarith
+          · rw [h₂ s (le_of_not_ge hs1) hs2, h₄ t (le_of_not_ge ht3) ht.2.le] at hst
+            norm_num [Prod.ext_iff] at hst
+    · by_cases hs3 : s ≤ 3
+      · by_cases ht1 : t ≤ 1
+        · rw [h₃ s (le_of_not_ge hs2) hs3, h₁ t ht.1 ht1] at hst
+          norm_num [Prod.ext_iff] at hst
+        · by_cases ht2 : t ≤ 2
+          · rw [h₃ s (le_of_not_ge hs2) hs3, h₂ t (le_of_not_ge ht1) ht2] at hst
+            norm_num [Prod.ext_iff] at hst ⊢ <;> linarith
+          · by_cases ht3 : t ≤ 3
+            · rw [h₃ s (le_of_not_ge hs2) hs3, h₃ t (le_of_not_ge ht2) ht3] at hst
+              norm_num [Prod.ext_iff] at hst ⊢ <;> linarith
+            · rw [h₃ s (le_of_not_ge hs2) hs3, h₄ t (le_of_not_ge ht3) ht.2.le] at hst
+              norm_num [Prod.ext_iff] at hst ⊢ <;> linarith
+      · by_cases ht1 : t ≤ 1
+        · rw [h₄ s (le_of_not_ge hs3) hs.2.le, h₁ t ht.1 ht1] at hst
+          norm_num [Prod.ext_iff] at hst ⊢ <;> linarith
+        · by_cases ht2 : t ≤ 2
+          · rw [h₄ s (le_of_not_ge hs3) hs.2.le, h₂ t (le_of_not_ge ht1) ht2] at hst
+            norm_num [Prod.ext_iff] at hst
+          · by_cases ht3 : t ≤ 3
+            · rw [h₄ s (le_of_not_ge hs3) hs.2.le, h₃ t (le_of_not_ge ht2) ht3] at hst
+              norm_num [Prod.ext_iff] at hst ⊢ <;> linarith
+            · rw [h₄ s (le_of_not_ge hs3) hs.2.le, h₄ t (le_of_not_ge ht3) ht.2.le] at hst
+              norm_num [Prod.ext_iff] at hst ⊢ <;> linarith
+
 theorem apm_t02a01_innerPoint_injOn : Set.InjOn apm_t02a01_innerPoint (Set.Ico 0 4) := by
-  sorry
+  intro s hs t ht hst
+  have hq :
+      (Quotient.mk _ ⟨apm_t02a01_perimeter s, (apm_t02a01_perimeter_mem s).1,
+        (apm_t02a01_perimeter_mem s).2.1, (apm_t02a01_perimeter_mem s).2.2.ge⟩ :
+          apm_t02a01_puncturedTorus) =
+      Quotient.mk _ ⟨apm_t02a01_perimeter t, (apm_t02a01_perimeter_mem t).1,
+        (apm_t02a01_perimeter_mem t).2.1, (apm_t02a01_perimeter_mem t).2.2.ge⟩ := by
+    exact congrArg Subtype.val hst
+  have hr := Quotient.eq'.mp hq
+  have hi := apm_t02a01_boundary_homeomorph_circle_aux_quotient_aux_interior
+    ⟨apm_t02a01_perimeter s, (apm_t02a01_perimeter_mem s).1,
+      (apm_t02a01_perimeter_mem s).2.1, (apm_t02a01_perimeter_mem s).2.2.ge⟩
+    (apm_t02a01_perimeter_mem s).2.2
+  have he := (apm_t02a01_boundary_homeomorph_circle_aux_eq_of_eqvGen hr).1 hi
+  apply apm_t02a01_innerPoint_injOn_aux_perimeter_inj hs ht
+  exact congrArg Subtype.val he
 
 theorem apm_t02a01_innerPoint_surjOn :
     ∀ b : apm_t02a01_boundarySpace, ∃ s ∈ Set.Ico (0 : ℝ) 4, apm_t02a01_innerPoint s = b := by
