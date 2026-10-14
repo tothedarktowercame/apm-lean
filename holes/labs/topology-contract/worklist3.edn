@@ -36119,19 +36119,19 @@
   {:consumer :t93J03,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 2,
    :review-finding
    "Program STOP commits no new mathematical progress since the prior milestone: KleinPolygonBasedVanKampen merely packages the already-required surjectivity and kernel hypotheses, and both consumers only reapply the previously proved three-input theorem. Prove the based van Kampen surjectivity/kernel result (or winding conjugacy) in scope; extend Mathlib: state and prove the missing theorem in scope.",
    :evidence
    {:placeholder-delta {:t93J03 [1 1]},
     :residual
-    "Reconcile packaged unit/connector casts; reverse kernel/surjectivity; winding; C1/C2/Main.",
+    "Assemble packaged-unit connector; compare kernels; reverse inclusion/surjectivity; winding; C1/C2/Main.",
     :outcome :stop,
     :warnings ["unused SLSC owner-approved"],
     :missing-theorems
-    [{:name "kleinPolygonSkeletonToOuterPiOne_apply_eq_inverse_map",
+    [{:name "kleinPolygonPackagedUnitPath_mk",
       :type
-      "direct skeleton-to-outer map equals equivalence inverse map",
+      "chosen path class equals packaged equivalence unit component",
       :status :proved,
       :consumers [:t93J03],
       :depends-on [],
@@ -36140,45 +36140,35 @@
       :type "surjective skeleton map; overlap-closure kernel",
       :status :partial,
       :consumers [:t93J03],
-      :depends-on
-      ["kleinPolygonSkeletonToOuterPiOne_apply_eq_inverse_map"],
+      :depends-on ["kleinPolygonPackagedUnitPath_mk"],
       :area "covering-subgroup-correspondence"}],
     :statement-hashes {:registry "166/166"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Proved the direct skeleton-to-outer map is literally the equivalence inverse map; packaged unit/connector casts remain.",
+    "Represented Mathlib adjointified equivalence unit by an exact concrete path; packaged connector assembly remains.",
     :commands
     [{:cmd "lake build ConstructionTargets.t93J03Closure", :exit 0}
      {:cmd "lean fixture; Main; registry; placeholder; diff; show",
       :exit 0}
      {:cmd "rg forbidden closure", :exit 1, :expected-exit 1}],
     :diagnostic-history
-    [{:cmd "full source-coordinate probe",
+    [{:cmd "raw-unit rfl probe",
       :exit 1,
-      :correction "split and proved inverse-map side"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1791987439855-11869-e13dd8b7",
-     :commands
-     ["git show/check/diff 135c809b; scope/boundary; fixture sha256"
-      "lake build closure; lean fixture and Main"
-      "statement registry; placeholder and axiom recount"],
-     :finding
-     "PASS. Commit 135c809b adds compiled, sorry-free progress: at the preferred skeleton basepoint it proves the concrete skeleton-to-outer pi1 map is definitionally the inverse functor map, closing the target side of the pending source-coordinate comparison with correct types and orientation. Scope/hash match; support placeholders 0->0; frozen Main 1->1; standard axioms only; registry 166/166. Unit/connector casts, reverse kernel inclusion, surjectivity, and winding remain listed."},
-    :commit "135c809b7929f6786434fdf975d48f1ac0401a4a",
+      :correction
+      "Equivalence.mk adjointifies unit; represented packaged component directly"}],
+    :commit "0fc9df5737f275deaba79ad46c8fdbf8e7a96e5f",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
      "ConstructionTargets/t93J03Closure.blueprint.md"],
     :fixture
-    {:path "/tmp/t93j03_inverse_map_direct_check.lean",
+    {:path "/tmp/t93j03_packaged_unit_path_check.lean",
      :sha256
-     "b981f3142e3c3b06c11719fa655b70f6140842b073ad7a0294ef76423cc084ec"},
+     "576516cade0461807adb797f628a293ef8f2992d7831e832ac91ef17ed395d84"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -38590,7 +38580,8 @@
     :lemma-kleinpolygontargettransportedoutertospacepione-factor
     :lemma-equivalence-unit-mapiso-conj-preimage
     :lemma-kleinpolygonouterconnector-eq-inverseunit-comp-mappedconnector
-    :lemma-kleinpolygonskeletontoouterpione-apply-eq-inverse-map],
+    :lemma-kleinpolygonskeletontoouterpione-apply-eq-inverse-map
+    :lemma-kleinpolygonpackagedunitpath-mk],
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
@@ -38819,6 +38810,25 @@
     :banked-by :program-2026-10-13-close-t93j03,
     :banked-commit "135c809b7929f6786434fdf975d48f1ac0401a4a"},
    :id :lemma-kleinpolygonskeletontoouterpione-apply-eq-inverse-map,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "kleinPolygonPackagedUnitPath_mk",
+    :type
+    "chosen path class equals packaged equivalence unit component"},
+   :lemma
+   {:name "kleinPolygonPackagedUnitPath_mk",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type
+    "chosen path class equals packaged equivalence unit component",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03},
+   :id :lemma-kleinpolygonpackagedunitpath-mk,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}],
