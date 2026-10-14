@@ -4054,7 +4054,88 @@ theorem zipMap_spec {n k : ℕ} (hn : 0 < n)
     (hinj : ∀ {z w : ℂ}, ‖z‖ ≤ 1 → ‖w‖ ≤ 1 → zipCone n k z = zipCone n k w → z = w)
     (hsurj : ∀ {y : ℂ}, y ∈ zipHalfDisk → ∃ z : ℂ, ‖z‖ ≤ 1 ∧ zipCone n k z = y) :
     CancellationZipSpec n k (zipMap n k) := by
-  sorry
+  have hrot : ‖zipRotation n k‖ = 1 := by
+    rw [zipRotation, Complex.norm_exp]
+    simp
+  have hrot0 : zipRotation n k ≠ 0 := by
+    intro h
+    rw [h, norm_zero] at hrot
+    norm_num at hrot
+  have hraw_mem : ∀ z : Disk, ‖zipRaw n k (z : ℂ)‖ ≤ 1 := by
+    intro z
+    have hz : ‖(z : ℂ)‖ ≤ 1 := by
+      simpa [dist_zero_right] using (Metric.mem_closedBall.mp z.property)
+    have hc := (hmem hz).1.1
+    rw [zipRaw, norm_mul, norm_pow, hrot, one_mul]
+    nlinarith [norm_nonneg (zipCone n k (z : ℂ))]
+  have hmap_val : ∀ z : Disk, (zipMap n k z : ℂ) = zipRaw n k (z : ℂ) := by
+    intro z
+    rw [zipMap, dif_pos (hraw_mem z)]
+  refine
+    { source_pos := by omega
+      target_pos := hn
+      continuous := ?_
+      surjective := ?_
+      interior_maps := ?_
+      interior_injective := ?_ }
+  · apply Continuous.subtype_mk
+    have hc : Continuous (fun z : Disk => zipRaw n k (z : ℂ)) :=
+      continuous_const.mul ((hcont.comp continuous_subtype_val).pow 2)
+    convert hc using 1
+    funext z
+    exact hmap_val z
+  · intro w
+    have hw : ‖(w : ℂ)‖ ≤ 1 := by
+      simpa [dist_zero_right] using (Metric.mem_closedBall.mp w.property)
+    let y : ℂ := (zipRotation n k)⁻¹ * (w : ℂ)
+    have hy_norm : ‖y‖ ≤ 1 := by
+      simp only [y, norm_mul, norm_inv, hrot, inv_one, one_mul]
+      exact hw
+    obtain ⟨x, hx⟩ := IsAlgClosed.exists_pow_nat_eq y (by omega : 0 < 2)
+    let ζ : ℂ := if 0 ≤ x.im then x else -x
+    have hζsq : ζ ^ 2 = y := by
+      simp only [ζ]
+      split <;> simp_all
+    have hζim : 0 ≤ ζ.im := by
+      simp only [ζ]
+      split
+      · assumption
+      · simp
+        linarith
+    have hζnorm : ‖ζ‖ ≤ 1 := by
+      have hs : ‖ζ‖ ^ 2 = ‖y‖ := by
+        rw [← norm_pow, hζsq]
+      nlinarith [norm_nonneg ζ]
+    obtain ⟨z, hz, hcone⟩ := hsurj (show ζ ∈ zipHalfDisk from ⟨hζnorm, hζim⟩)
+    have hzDisk : z ∈ Metric.closedBall (0 : ℂ) 1 := by
+      simpa [Metric.mem_closedBall, dist_zero_right] using hz
+    refine ⟨⟨z, hzDisk⟩, Subtype.ext ?_⟩
+    rw [hmap_val]
+    simp only [zipRaw, hcone, hζsq, y]
+    field_simp
+  · intro p hp
+    have hp_le : ‖(p : ℂ)‖ ≤ 1 := le_of_lt hp
+    have hc := (hmem hp_le).2 hp
+    rw [hmap_val, zipRaw, norm_mul, norm_pow, hrot, one_mul]
+    nlinarith [norm_nonneg (zipCone n k (p : ℂ))]
+  · intro p q hp heq
+    have hp_le : ‖(p : ℂ)‖ ≤ 1 := le_of_lt hp
+    have hq_le : ‖(q : ℂ)‖ ≤ 1 := by
+      simpa [dist_zero_right] using (Metric.mem_closedBall.mp q.property)
+    have hsq : zipCone n k (p : ℂ) ^ 2 = zipCone n k (q : ℂ) ^ 2 := by
+      have hv := congrArg (fun z : Disk => (z : ℂ)) heq
+      change (zipMap n k p : ℂ) = (zipMap n k q : ℂ) at hv
+      rw [hmap_val, hmap_val] at hv
+      simp only [zipRaw] at hv
+      exact mul_left_cancel₀ hrot0 hv
+    rcases (sq_eq_sq_iff_eq_or_eq_neg.mp hsq) with hc | hc
+    · apply Subtype.ext
+      exact hinj hp_le hq_le hc
+    · have hpim := ((hmem hp_le).2 hp).2
+      have hqim := (hmem hq_le).1.2
+      have him := congrArg Complex.im hc
+      simp at him
+      linarith
 
 theorem zipMap_edge_high {n k : ℕ} (hn : 0 < n) (hk : k ≤ n) {j : ℕ} (hj : k + 2 ≤ j)
     (hjn : j < n + 2) (t : Icc (0 : ℝ) 1) :
