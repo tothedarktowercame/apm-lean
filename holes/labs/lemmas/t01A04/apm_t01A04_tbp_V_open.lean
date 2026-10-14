@@ -1297,8 +1297,67 @@ lemma apm_t01A04_tbp_U_open : apm_t01a04_basepoint ∈ apm_t01A04_tbp_U ∧ IsOp
   sorry
 
 -- BEGIN SEAT AREA
+lemma apm_t01A04_tbp_V_open_aux_invariant (i : Fin 2)
+    {u v : Sum apm_t01a04_Torus (Fin 2 × Circle)}
+    (h : Relation.EqvGen apm_t01a04_torusCoverRel u v) :
+    (Sum.elim (fun q : apm_t01a04_Torus =>
+        0 < ((q.1 : ℂ) * star (apm_t01a04_sheetPoint i : ℂ)).re ∧
+        0 < ((q.1 : ℂ) ^ 2).re ∧ 0 < (q.2 : ℂ).re)
+      (fun p : Fin 2 × Circle => p.1 = i ∧ 0 < (p.2 : ℂ).re) u ↔
+    Sum.elim (fun q : apm_t01a04_Torus =>
+        0 < ((q.1 : ℂ) * star (apm_t01a04_sheetPoint i : ℂ)).re ∧
+        0 < ((q.1 : ℂ) ^ 2).re ∧ 0 < (q.2 : ℂ).re)
+      (fun p : Fin 2 × Circle => p.1 = i ∧ 0 < (p.2 : ℂ).re) v) := by
+  induction h with
+  | rel _ _ h =>
+      cases h with
+      | glue j =>
+        simp only [Sum.elim_inl, Sum.elim_inr, Prod.fst, Prod.snd,
+          apm_t01a04_sheetPoint_sq]
+        fin_cases i <;> fin_cases j <;>
+          simp [apm_t01a04_sheetPoint, Circle.exp, Complex.exp_mul_I] <;>
+          norm_num
+  | refl _ => rfl
+  | symm _ _ _ ih => exact ih.symm
+  | trans _ _ _ _ _ ih₁ ih₂ => exact ih₁.trans ih₂
+
 lemma apm_t01A04_tbp_V_open (i : Fin 2) : IsOpen (apm_t01A04_tbp_V i) := by
-  sorry
+  change IsOpen ((fun r => (Quotient.mk _ r : apm_t01a04_TorusCover)) '' _)
+  rw [isOpen_coinduced]
+  have heq :
+      (fun r : Sum apm_t01a04_Torus (Fin 2 × Circle) =>
+        (Quotient.mk _ r : apm_t01a04_TorusCover)) ⁻¹'
+        ((fun r => (Quotient.mk _ r : apm_t01a04_TorusCover)) ''
+          {r | Sum.elim (fun q : apm_t01a04_Torus =>
+              0 < ((q.1 : ℂ) * star (apm_t01a04_sheetPoint i : ℂ)).re ∧
+              0 < ((q.1 : ℂ) ^ 2).re ∧ 0 < (q.2 : ℂ).re)
+            (fun p : Fin 2 × Circle => p.1 = i ∧ 0 < (p.2 : ℂ).re) r}) =
+        {r | Sum.elim (fun q : apm_t01a04_Torus =>
+            0 < ((q.1 : ℂ) * star (apm_t01a04_sheetPoint i : ℂ)).re ∧
+            0 < ((q.1 : ℂ) ^ 2).re ∧ 0 < (q.2 : ℂ).re)
+          (fun p : Fin 2 × Circle => p.1 = i ∧ 0 < (p.2 : ℂ).re) r} := by
+    ext r
+    constructor
+    · rintro ⟨s, hs, hrs⟩
+      exact (apm_t01A04_tbp_V_open_aux_invariant i (Quotient.exact hrs)).mp hs
+    · intro hr
+      exact ⟨r, hr, rfl⟩
+  rw [heq, isOpen_sum_iff]
+  constructor
+  · exact ((isOpen_lt continuous_const
+        (Complex.continuous_re.comp
+          ((continuous_subtype_val.comp continuous_fst).mul continuous_const))).inter
+      ((isOpen_lt continuous_const
+        (Complex.continuous_re.comp
+          ((continuous_subtype_val.comp continuous_fst).pow 2))).inter
+        (isOpen_lt continuous_const
+          (Complex.continuous_re.comp
+            (continuous_subtype_val.comp continuous_snd)))))
+  · exact ((isOpen_discrete ({i} : Set (Fin 2))).preimage
+        continuous_fst).inter
+      (isOpen_lt continuous_const
+        (Complex.continuous_re.comp
+          (continuous_subtype_val.comp continuous_snd)))
 -- END SEAT AREA
 
 lemma apm_t01A04_tbp_V_disjoint : Pairwise (Function.onFun Disjoint apm_t01A04_tbp_V) := by
