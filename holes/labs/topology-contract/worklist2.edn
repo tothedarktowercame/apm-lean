@@ -87942,6 +87942,18 @@
      {:cmd "placeholder scan", :exit 0}
      {:cmd "axioms check", :exit 0}
      {:cmd "git show --check 849242d93", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792013332995-12445-0ff50dc4",
+     :commands
+     ["git show/diff 849242d93; blob sha256; diff --check"
+      "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology"
+      "lake env lean /dev/stdin (#print axioms)"
+      "placeholder scan"
+      "statement-registry.py check"],
+     :finding
+     "PASS: reviewer codex-7; 849242d93 (topo-6) changes only scoped PolygonSurfaceHomology.lean; fixture SHA-256 d9a60c8e06ecdfcf08bc90f4a77bf72040723c8cdea336ef74a29cc49563a49b matches. Exact snapshot builds; 0 placeholders; standard axioms; registry 166/0. Since the last program-history entry, the snapshot identifies integer 1 via the inverse circle/overlap/intersection H1 equivalences, maps it through unsigned outer inclusion, and then applies the correctly oriented overlap-to-boundary naturality equality. Thus the chosen MV generator reaches the ordered boundary-loop class without an unintended sign. New compiled progress; remaining signed boundary-arc Hurewicz sum, B7, then B8-B10."},
     :commit "849242d93",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
@@ -87950,7 +87962,7 @@
      "d9a60c8e06ecdfcf08bc90f4a77bf72040723c8cdea336ef74a29cc49563a49b"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -87970,7 +87982,7 @@
     :blueprint
     "ConstructionTargets/PolygonSurfaceHomology.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked degree-one naturality from overlap circle to boundary loop.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked H1 naturality for the exact MV generator.",
    :id :program-2026-10-13-polygon-surface-homology,
    :kind :reusable-theorem,
    :campaign-priority 31,
@@ -88198,7 +88210,10 @@
     {:job 9,
      :commit "a59abd80d",
      :reason
-     "Banked degree-one naturality from overlap circle to boundary loop."}]}
+     "Banked degree-one naturality from overlap circle to boundary loop."}
+    {:job 1,
+     :commit "849242d93",
+     :reason "Banked H1 naturality for the exact MV generator."}]}
   {:consumer :t97A01,
    :stop-count 0,
    :phase :implementation,
@@ -91464,7 +91479,7 @@
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "radialIntersectionToOuterH1_generator_eq_boundaryLoop",
@@ -91474,7 +91489,9 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "overlap inclusion generator is boundary-loop H1 class",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :program-2026-10-13-polygon-surface-homology,
+    :banked-commit "849242d93"},
    :id :lemma-radialintersectiontoouterh1-generator-eq-boundaryloop,
    :kind :lemma,
    :depends-on
