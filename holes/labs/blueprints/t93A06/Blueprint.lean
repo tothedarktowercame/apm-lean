@@ -660,7 +660,13 @@ theorem t93A06_exact_integral_aux_ftc_x
     (Q : ℝ → ℝ → ℝ) (hQ : ∀ y, ContDiff ℝ 1 (fun x ↦ Q x y)) :
     (∫ y : ℝ in 0..1, ∫ x : ℝ in 0..1, deriv (fun s ↦ Q s y) x) =
       ∫ y : ℝ in 0..1, (Q 1 y - Q 0 y) := by
-  sorry
+  apply intervalIntegral.integral_congr
+  intro y _
+  change (∫ x : ℝ in 0..1, deriv (fun s ↦ Q s y) x) = Q 1 y - Q 0 y
+  rw [intervalIntegral.integral_deriv_eq_sub' (fun x ↦ Q x y) rfl]
+  · intro x _
+    exact (hQ y).differentiable (by norm_num) x
+  · fun_prop
 
 /-- Seat: the pulled-back coefficients are jointly `C¹` in `(x, y)`
 (compose `t93A06_exact_integral_aux_coeff_smooth_aux_global` with the
