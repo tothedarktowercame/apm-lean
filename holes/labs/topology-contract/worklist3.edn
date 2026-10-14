@@ -36157,6 +36157,17 @@
     [{:cmd "lean API probe",
       :exit 1,
       :correction "used homEquiv and FundamentalGroup.map"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791949678613-11540-02fcd587",
+     :commands
+     ["git show/diff/show --check f4e25e72"
+      "sha256sum fixture; scope; placeholders"
+      "lake env lean recorded closure, fixture, Main"
+      "statement-registry.py check"],
+     :finding
+     "PASS: new compiled sorry-free standard-axiom milestone. The based equivalence is correctly directed from outer-piece pi1 at the literal overlap image to skeleton pi1 at its deformed image; it does not conflate that point with the preferred skeleton basepoint. The path, winding-one image=aabb, and quotient remain accurately listed. Scope/hash verified; frozen placeholders 1->1 (support 0); registry 166/166; SLSC unused, mandated by problem.md."},
     :commit "f4e25e72be4536e94d2bcbc3e30de690de1f659c",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
@@ -36168,7 +36179,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -36186,7 +36197,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t93J03Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed outer-to-skeleton fundamental-groupoid equivalence with literal skeleton object action.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed based outer-to-skeleton pi1 equivalence at exact overlap image; winding comparison remains.",
    :id :program-2026-10-13-close-t93j03,
    :kind :final-adapter,
    :campaign-priority 30,
@@ -36292,7 +36303,11 @@
     {:job 7,
      :commit "12f3f8882eb9d1253582d8625dd30db41a63a6ab",
      :reason
-     "Committed outer-to-skeleton fundamental-groupoid equivalence with literal skeleton object action."}]}
+     "Committed outer-to-skeleton fundamental-groupoid equivalence with literal skeleton object action."}
+    {:job 8,
+     :commit "f4e25e72be4536e94d2bcbc3e30de690de1f659c",
+     :reason
+     "Committed based outer-to-skeleton pi1 equivalence at exact overlap image; winding comparison remains."}]}
   {:consumer :t99J05,
    :stop-count 5,
    :evidence
@@ -38107,7 +38122,7 @@
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "kleinPolygonOverlapImageFundamentalGroupEquivSkeleton",
@@ -38119,7 +38134,9 @@
     :type
     "based outer pi1 equiv skeleton pi1 at deformed overlap image",
     :area "covering-subgroup-correspondence",
-    :proved-in :program-2026-10-13-close-t93j03},
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "f4e25e72be4536e94d2bcbc3e30de690de1f659c"},
    :id :lemma-kleinpolygonoverlapimagefundamentalgroupequivskeleton,
    :kind :lemma,
    :depends-on
