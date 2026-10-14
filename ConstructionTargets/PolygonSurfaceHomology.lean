@@ -1602,6 +1602,15 @@ noncomputable def pointWedgePointedContractibleNeighborhood
       contraction :=
         ConstructionTargets.PointWedgeVanKampen.PointedContraction.homeomorphSymm e h }
 
+/-- The one-circle wedge indexed by `Unit`, used as the new final leg in a
+successor split. -/
+noncomputable def finiteWedgeUnitPointedContractibleNeighborhood :
+    PointedContractibleNeighborhood
+      (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge Unit)
+      (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle () 1) :=
+  circlePointedContractibleNeighborhood.preimageHomeomorph
+    (finiteWedgeSubsingletonHomeomorphCircle ())
+
 /-- Every nonempty standard finite wedge has a pointed contractible open
 neighborhood, obtained by adjoining its circles one at a time. -/
 noncomputable def finiteWedgeFinPointedContractibleNeighborhood :
@@ -1611,11 +1620,7 @@ noncomputable def finiteWedgeFinPointedContractibleNeighborhood :
   | 0 => finiteWedgeFinOnePointedContractibleNeighborhood
   | n + 1 => by
       let old := finiteWedgeFinPointedContractibleNeighborhood n
-      let last : PointedContractibleNeighborhood
-          (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge Unit)
-          (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle () 1) :=
-        circlePointedContractibleNeighborhood.preimageHomeomorph
-          (finiteWedgeSubsingletonHomeomorphCircle ())
+      let last := finiteWedgeUnitPointedContractibleNeighborhood
       let combined := pointWedgePointedContractibleNeighborhood old last
       let e := finiteWedgeFinSuccHomeomorphPointWedge n
       have he : e
@@ -1630,6 +1635,18 @@ noncomputable def finiteWedgeFinPointedContractibleNeighborhood :
           (0 : Fin (n + 1)) 1
       rw [← he] at combined
       exact combined.preimageHomeomorph e
+
+/-- The two pointed neighborhood packages supplied to van Kampen at a
+successor split, exposed without the recursive implementation details. -/
+noncomputable def finiteWedgeFinSuccPointWedgeNeighborhoods (n : ℕ) :
+    PointedContractibleNeighborhood
+        (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge (Fin (n + 1)))
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1) ×
+      PointedContractibleNeighborhood
+        (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge Unit)
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle () 1) :=
+  (finiteWedgeFinPointedContractibleNeighborhood n,
+    finiteWedgeUnitPointedContractibleNeighborhood)
 
 /-! ### Algebraic word extraction from a point-wedge computation -/
 
