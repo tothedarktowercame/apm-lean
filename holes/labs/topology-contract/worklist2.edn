@@ -87901,39 +87901,38 @@
   {:consumer :t97A01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 5,
+   :stop-count 6,
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Prove winding-one H1 normalization; derive based-loop word identity; finish B7-B10.",
+    "Relate circleH1IsoInt to concrete interval generator to select +1 (or carry unit sign); then boundary word and B7-B10.",
     :outcome :stop,
     :warnings ["preexisting lint; unrelated edits preserved"],
     :missing-theorems
-    [{:name "circleArc_eq_integerLoop_one",
-      :type
-      "polygon circle arc is literal winding-one exponential loop",
+    [{:name "circleIntegerLoopOneClass_generates",
+      :type "explicit winding-one class generates circle pi1",
       :status :proved,
-      :consumers [:t97A01 :t94J09],
-      :depends-on [],
-      :area "polygon-quotient-homology"}
-     {:name "circleH1IsoInt_integerLoop_one",
-      :type "explicit winding-one loop has positive H1 coordinate",
-      :status :not-started,
       :consumers [:t97A01 :t94J09],
       :depends-on ["circleArc_eq_integerLoop_one"],
       :area "polygon-quotient-homology"}
-     {:name "polygonBoundaryWedgeLoop_eq_legWord",
-      :type "based boundary class equals signed word",
+     {:name "circleIntegerLoopOneCoordinate_eq_one_or_neg_one",
+      :type "winding-one H1 coordinate is +1 or -1",
+      :status :proved,
+      :consumers [:t97A01 :t94J09],
+      :depends-on ["circleIntegerLoopOneClass_generates"],
+      :area "polygon-quotient-homology"}
+     {:name "circleH1IsoInt_integerLoop_one",
+      :type "select +1 branch via concrete interval orientation",
       :status :partial,
       :consumers [:t97A01 :t94J09],
-      :depends-on ["circleH1IsoInt_integerLoop_one"],
+      :depends-on ["circleIntegerLoopOneCoordinate_eq_one_or_neg_one"],
       :area "polygon-quotient-homology"}],
     :statement-hashes {:registry "166/0"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
     :reason
-    "Banked literal positive parametrization of every forward boundary arc.",
+    "Banked winding generator and proved H1 orientation is exactly a unit-sign ambiguity.",
     :commands
     [{:cmd
       "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology",
@@ -87941,28 +87940,16 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder scan", :exit 0}
      {:cmd "axioms check", :exit 0}
-     {:cmd "git show --check d7dbc3faf", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792014749495-12494-b5af1874",
-     :commands
-     ["git show/diff d7dbc3faf; blob sha256; diff --check"
-      "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology"
-      "lake env lean /dev/stdin (#print axioms)"
-      "placeholder scan"
-      "statement-registry.py check"],
-     :finding
-     "PASS: reviewer codex-7; d7dbc3faf (topo-6) newly changes only scoped PolygonSurfaceHomology.lean; fixture SHA-256 83ba152d6084afe9779789b2f381bef56c7e44a2e10f12cd74b5a2c3a02f6ef1 matches. Exact blob builds; 0 placeholders; standard axioms; registry 166/0. The polygon edge parametrization simplifies definitionally to the universal-cover integer loop of winding +1, fixing the forward path orientation without reversal. This is concrete path-level progress toward the nonabelian boundary-word comparison; the row accurately leaves positive H1 normalization and the based-loop word identity outstanding. Remaining: prove that normalization and identity, then B7-B10."},
-    :commit "d7dbc3faf",
+     {:cmd "git show --check 2f96f1a83", :exit 0}],
+    :commit "2f96f1a83",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
     {:path "ConstructionTargets/PolygonSurfaceHomology.lean",
      :sha256
-     "83ba152d6084afe9779789b2f381bef56c7e44a2e10f12cd74b5a2c3a02f6ef1"},
+     "d6ab850dd5eb945977e93b9ce26d71685c66fc1e140414dda57e2eb7d56edd7c"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -91841,5 +91828,41 @@
     :area "polygon-quotient-homology"},
    :id :lemma-circleh1isoint-integerloop-one,
    :kind :lemma,
+   :depends-on
+   [:lemma-circlearc-eq-integerloop-one
+    :lemma-circleintegerlooponecoordinate-eq-one-or-neg-one],
+   :other-consumers [:t94J09]}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "circleIntegerLoopOneClass_generates",
+    :type "explicit winding-one class generates circle pi1"},
+   :lemma
+   {:name "circleIntegerLoopOneClass_generates",
+    :reported-by [:program-2026-10-13-polygon-surface-homology],
+    :type "explicit winding-one class generates circle pi1",
+    :area "polygon-quotient-homology",
+    :proved-in :program-2026-10-13-polygon-surface-homology},
+   :id :lemma-circleintegerlooponeclass-generates,
+   :kind :lemma,
    :depends-on [:lemma-circlearc-eq-integerloop-one],
+   :other-consumers [:t94J09]}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "circleIntegerLoopOneCoordinate_eq_one_or_neg_one",
+    :type "winding-one H1 coordinate is +1 or -1"},
+   :lemma
+   {:name "circleIntegerLoopOneCoordinate_eq_one_or_neg_one",
+    :reported-by [:program-2026-10-13-polygon-surface-homology],
+    :type "winding-one H1 coordinate is +1 or -1",
+    :area "polygon-quotient-homology",
+    :proved-in :program-2026-10-13-polygon-surface-homology},
+   :id :lemma-circleintegerlooponecoordinate-eq-one-or-neg-one,
+   :kind :lemma,
+   :depends-on [:lemma-circleintegerlooponeclass-generates],
    :other-consumers [:t94J09]}]}
