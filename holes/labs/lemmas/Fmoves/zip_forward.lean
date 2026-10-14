@@ -3913,6 +3913,87 @@ theorem zip_fibre_related {Label : Type*} [DecidableEq Label]
   sorry
 
 -- BEGIN SEAT AREA
+def zip_forward_aux_index {Label : Type*}
+    (u v : List (Signed Label)) (x : Signed Label)
+    (i : Fin (u ++ [x, inv x] ++ v).length)
+    (h : i.1 < u.length ∨ u.length + 2 ≤ i.1) : Fin (u ++ v).length :=
+  ⟨if i.1 < u.length then i.1 else i.1 - 2, by
+    have hi := i.2
+    simp only [List.length_append, List.length_cons, List.length_nil] at hi ⊢
+    split_ifs <;> omega⟩
+
+lemma zip_forward_aux_fresh_index {Label : Type*} [DecidableEq Label]
+    (u v : List (Signed Label)) (x : Signed Label)
+    (hx : x.1 ∉ (u ++ v).map Prod.fst)
+    (i : Fin (u ++ [x, inv x] ++ v).length)
+    (hi : ((u ++ [x, inv x] ++ v).get i).1 = x.1) :
+    i.1 = u.length ∨ i.1 = u.length + 1 := by
+  have hib := i.2
+  simp only [List.length_append, List.length_cons, List.length_nil] at hib
+  by_cases hlow : i.1 < u.length
+  · have hu : u[i.1] ∈ u := List.getElem_mem hlow
+    have hm : ((u ++ [x, inv x] ++ v).get i).1 ∈ (u ++ v).map Prod.fst := by
+      have hm' : u[i.1].1 ∈ (u ++ v).map Prod.fst := by
+        exact List.mem_map_of_mem (List.mem_append_left v hu)
+      simpa [List.get_eq_getElem, hlow] using hm'
+    exact False.elim (hx (hi ▸ hm))
+  by_cases h0 : i.1 = u.length
+  · exact Or.inl h0
+  by_cases h1 : i.1 = u.length + 1
+  · exact Or.inr h1
+  · have hhigh : u.length + 2 ≤ i.1 := by omega
+    have hv : i.1 - (u.length + 2) < v.length := by omega
+    have hv_mem : v[i.1 - (u.length + 2)] ∈ v := List.getElem_mem hv
+    have hm : ((u ++ [x, inv x] ++ v).get i).1 ∈ (u ++ v).map Prod.fst := by
+      have hm' : v[i.1 - (u.length + 2)].1 ∈ (u ++ v).map Prod.fst := by
+        exact List.mem_map_of_mem (List.mem_append_right u hv_mem)
+      have he : (u ++ [x, inv x] ++ v)[i.1] = v[i.1 - (u.length + 2)] := by
+        rw [List.getElem_append_right (as := u ++ [x, inv x]) (bs := v) (by
+          simp only [List.length_append, List.length_cons, List.length_nil]; omega)]
+        congr 1
+        simp only [List.length_append, List.length_cons, List.length_nil]
+      rw [List.get_eq_getElem, he]
+      exact hm'
+    exact False.elim (hx (hi ▸ hm))
+
+lemma zip_forward_aux_ordinary {Label : Type*} [DecidableEq Label]
+    (u v : List (Signed Label)) (x : Signed Label) (c : Disk → Disk)
+    (hhigh : ∀ j, u.length + 2 ≤ j → j < (u ++ v).length + 2 → ∀ t,
+      c (edgePoint ((u ++ v).length + 2) j t) = edgePoint (u ++ v).length (j - 2) t)
+    (hlow : ∀ j, j < u.length → ∀ t,
+      c (edgePoint ((u ++ v).length + 2) j t) = edgePoint (u ++ v).length j t)
+    (i : Fin (u ++ [x, inv x] ++ v).length)
+    (hi : i.1 < u.length ∨ u.length + 2 ≤ i.1) (s : Icc (0 : ℝ) 1) :
+    (u ++ v).get (zip_forward_aux_index u v x i hi) =
+        (u ++ [x, inv x] ++ v).get i ∧
+      c (edgePoint ((u ++ v).length + 2) i s) =
+        edgePoint (u ++ v).length (zip_forward_aux_index u v x i hi) s := by
+  have hib := i.2
+  simp only [List.length_append, List.length_cons, List.length_nil] at hib
+  rcases hi with hi | hi
+  · constructor
+    · simp [zip_forward_aux_index, List.get_eq_getElem, hi]
+    · simpa [zip_forward_aux_index, hi] using hlow i.1 hi s
+  · have hiv : i.1 - (u.length + 2) < v.length := by omega
+    constructor
+    · rw [List.get_eq_getElem, List.get_eq_getElem]
+      have hnot : ¬i.1 < u.length := by omega
+      simp only [zip_forward_aux_index, Fin.val_mk, if_neg hnot]
+      have hit : i.1 - 2 < (u ++ v).length := by
+        simp only [List.length_append]
+        omega
+      change (u ++ v)[i.1 - 2]'hit = (u ++ [x, inv x] ++ v)[i.1]
+      rw [List.getElem_append_right (as := u) (bs := v) (by omega),
+        List.getElem_append_right (as := u ++ [x, inv x]) (bs := v) (by
+          simp only [List.length_append, List.length_cons, List.length_nil]; omega)]
+      congr 1
+      simp only [List.length_append, List.length_cons, List.length_nil]
+      rw [Nat.sub_sub]
+      congr 1
+      omega
+    · simpa [zip_forward_aux_index, show ¬i.1 < u.length by omega] using
+        hhigh i.1 hi (by simp only [List.length_append] at hib ⊢; omega) s
+
 theorem zip_forward {Label : Type*} [DecidableEq Label]
     (u v : List (Signed Label)) (x : Signed Label)
     (hx : x.1 ∉ (u ++ v).map Prod.fst) (c : Disk → Disk)
@@ -3924,7 +4005,71 @@ theorem zip_forward {Label : Type*} [DecidableEq Label]
       c (edgePoint ((u ++ v).length + 2) (u.length + 1) (reverseParameter t))) :
     ∀ p q, WordRel (u ++ [x, inv x] ++ v) p q →
       Relation.EqvGen (WordRel (u ++ v)) (c p) (c q) := by
-  sorry
+  intro p q h
+  rcases h with ⟨i, j, hij, s, hlab, rfl, rfl⟩
+  have hlen : (u ++ [x, inv x] ++ v).length = (u ++ v).length + 2 := by
+    simp only [List.length_append, List.length_cons, List.length_nil]
+    omega
+  simp only [hlen]
+  by_cases hix : ((u ++ [x, inv x] ++ v).get i).1 = x.1
+  · have hjx : ((u ++ [x, inv x] ++ v).get j).1 = x.1 := hlab.symm.trans hix
+    rcases zip_forward_aux_fresh_index u v x hx i hix with hi | hi <;>
+      rcases zip_forward_aux_fresh_index u v x hx j hjx with hj | hj
+    · exact False.elim (hij (Fin.ext (by omega)))
+    · simp only [hi, hj]
+      by_cases hs : ((u ++ [x, inv x] ++ v).get i).2 =
+          ((u ++ [x, inv x] ++ v).get j).2
+      · simp [List.get_eq_getElem, hi, hj, inv] at hs
+      · rw [if_neg hs, hfold]
+        exact Relation.EqvGen.refl _
+    · simp only [hi, hj]
+      have hr : reverseParameter (reverseParameter s) = s := by
+        apply Subtype.ext
+        simp [reverseParameter]
+      by_cases hs : ((u ++ [x, inv x] ++ v).get i).2 =
+          ((u ++ [x, inv x] ++ v).get j).2
+      · simp [List.get_eq_getElem, hi, hj, inv] at hs
+      · rw [if_neg hs]
+        have he := (hfold (reverseParameter s)).symm
+        rw [hr] at he
+        rw [he]
+        exact Relation.EqvGen.refl _
+    · exact False.elim (hij (Fin.ext (by omega)))
+  · have hjx : ((u ++ [x, inv x] ++ v).get j).1 ≠ x.1 := by
+      intro h
+      exact hix (hlab.trans h)
+    have hi : i.1 < u.length ∨ u.length + 2 ≤ i.1 := by
+      rcases lt_trichotomy i.1 u.length with h | h | h
+      · exact Or.inl h
+      · exact False.elim (hix (by simp [List.get_eq_getElem, h]))
+      · by_cases h1 : i.1 = u.length + 1
+        · exact False.elim (hix (by simp [List.get_eq_getElem, h1, inv]))
+        · exact Or.inr (by omega)
+    have hj : j.1 < u.length ∨ u.length + 2 ≤ j.1 := by
+      rcases lt_trichotomy j.1 u.length with h | h | h
+      · exact Or.inl h
+      · exact False.elim (hjx (by simp [List.get_eq_getElem, h]))
+      · by_cases h1 : j.1 = u.length + 1
+        · exact False.elim (hjx (by simp [List.get_eq_getElem, h1, inv]))
+        · exact Or.inr (by omega)
+    let i' := zip_forward_aux_index u v x i hi
+    let j' := zip_forward_aux_index u v x j hj
+    have hei := zip_forward_aux_ordinary u v x c hhigh hlow i hi s
+    have hej := zip_forward_aux_ordinary u v x c hhigh hlow j hj
+      (if ((u ++ [x, inv x] ++ v).get i).2 =
+        ((u ++ [x, inv x] ++ v).get j).2 then s else reverseParameter s)
+    apply Relation.EqvGen.rel
+    refine ⟨i', j', ?_, s, ?_, hei.2, ?_⟩
+    · intro heq
+      apply hij
+      apply Fin.ext
+      have hv := congrArg Fin.val heq
+      simp only [i', j', zip_forward_aux_index, Fin.val_mk] at hv
+      rcases hi with hi | hi <;> rcases hj with hj | hj <;> split_ifs at hv <;> omega
+    · rw [hei.1, hej.1]
+      exact hlab
+    · rw [hej.2]
+      rw [hei.1, hej.1]
 -- END SEAT AREA
 
 theorem zip_lift_generator {Label : Type*} [DecidableEq Label]
