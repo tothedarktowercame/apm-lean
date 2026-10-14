@@ -87946,6 +87946,18 @@
     [{:cmd "product drafts",
       :exit 1,
       :correction "exposed map-ofFn pointwise"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792018681090-12615-17d0e933",
+     :commands
+     ["git show/diff 047881a1f; blob sha256; diff --check"
+      "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology"
+      "lake env lean /dev/stdin (#print axioms)"
+      "placeholder scan"
+      "statement-registry.py check"],
+     :finding
+     "PASS: reviewer codex-7; 047881a1f (topo-6) newly changes only scoped PolygonSurfaceHomology.lean; fixture SHA-256 198ac314244b68899ee99eb547668cb4a5c302edcdfe978d107ed0a6fee8e747 matches. Exact blob builds; 0 placeholders; standard axioms; registry 166/0. The boundary candidate is the edge-index-ordered List.ofFn product. Hurewicz sends that product to the mapped list sum by induction, and each term rewrites to the reviewed edge-sign times orientation-unit orbit basis. Order and signs are preserved; the geometric subdivision equality remains explicitly partial. New compiled progress; remaining identify boundary class with this product, collapse coordinates, then B7-B10."},
     :commit "047881a1f",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
@@ -87954,7 +87966,7 @@
      "198ac314244b68899ee99eb547668cb4a5c302edcdfe978d107ed0a6fee8e747"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -87974,7 +87986,7 @@
     :blueprint
     "ConstructionTargets/PolygonSurfaceHomology.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked signed explicit-edge factor and H1 coordinate.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked ordered explicit-edge product H1 evaluation.",
    :id :program-2026-10-13-polygon-surface-homology,
    :kind :reusable-theorem,
    :campaign-priority 31,
@@ -88242,7 +88254,10 @@
      :reason "Banked common-base explicit-leg H1 formula."}
     {:job 2,
      :commit "f41451431",
-     :reason "Banked signed explicit-edge factor and H1 coordinate."}]}
+     :reason "Banked signed explicit-edge factor and H1 coordinate."}
+    {:job 3,
+     :commit "047881a1f",
+     :reason "Banked ordered explicit-edge product H1 evaluation."}]}
   {:consumer :t97A01,
    :stop-count 0,
    :phase :implementation,
@@ -92148,7 +92163,7 @@
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "polygonBoundaryExplicitEdgeProduct_hurewicz",
@@ -92158,7 +92173,9 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "ordered signed-edge product maps to coordinate sum",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :program-2026-10-13-polygon-surface-homology,
+    :banked-commit "047881a1f"},
    :id :lemma-polygonboundaryexplicitedgeproduct-hurewicz,
    :kind :lemma,
    :depends-on [:lemma-polygonboundaryexplicitedgeclass-hurewicz],
