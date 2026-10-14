@@ -36164,6 +36164,16 @@
     [{:cmd "prototype",
       :exit 1,
       :correction "built missing olean; passed"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1792018614420-12608-9069bdd8",
+     :commands
+     ["git archive 8c4eb4f snapshot; theorem and forbidden-token audit"
+      "fixture SHA-256 assertion; lean t93J03 Main"
+      "statement-registry check; placeholder recount"],
+     :finding
+     "PASS: recorded snapshot 8c4eb4f was compiled sorry-free with standard axioms and freshly audits clean; divergent later working-tree closure was excluded. It adds real progress after 263f5d47: Fin(runs+1) boundaries in outer subtype V with correctly oriented coercion equality to the ambient list. This enables the run fold without assuming van Kampen. Scope/hash match; registry 166/166; Main 1->1 placeholder; remaining milestones listed."},
     :commit "1a9e51341cedd3aaf263365ff943b0cf0c9c1991",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
@@ -36174,7 +36184,7 @@
      "23ed0f758f360508c3a7e8af2f8ca65753a812d9a7f6066516c99e47e7c3ba54"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -36192,7 +36202,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t93J03Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Chose the dependent outer-run family and folded it to one outer path; comparison with subdivision reconstruction remains.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Rebased the outer run fold at literal subdivision endpoints; regrouping remains.",
    :id :program-2026-10-13-close-t93j03,
    :kind :final-adapter,
    :campaign-priority 30,
@@ -36530,7 +36540,11 @@
     {:job 3,
      :commit "515bbfb930df7f4d01751001d1ad67e427fd6d11",
      :reason
-     "Chose the dependent outer-run family and folded it to one outer path; comparison with subdivision reconstruction remains."}]}
+     "Chose the dependent outer-run family and folded it to one outer path; comparison with subdivision reconstruction remains."}
+    {:job 4,
+     :commit "1a9e51341cedd3aaf263365ff943b0cf0c9c1991",
+     :reason
+     "Rebased the outer run fold at literal subdivision endpoints; regrouping remains."}]}
   {:consumer :t99J05,
    :stop-count 5,
    :evidence
@@ -40162,7 +40176,7 @@
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -40174,7 +40188,9 @@
     :reported-by [:program-2026-10-13-close-t93j03],
     :type "outer run fold at subdivision endpoints",
     :area "covering-subgroup-correspondence",
-    :proved-in :program-2026-10-13-close-t93j03},
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "1a9e51341cedd3aaf263365ff943b0cf0c9c1991"},
    :id
    :lemma-pathtwoopensubdivisionrunfold-exists-outerpath-at-endpoints,
    :kind :lemma,
