@@ -119257,28 +119257,27 @@
      :commit "63c77275209d11d18f575f6d0baf055e57c05a84",
      :reason "Banked chart-coefficient top-degree constructor."}]}
   {:consumer :t98A06,
-   :stop-count 3,
+   :stop-count 4,
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
-    :residual
-    "Make right inverses smooth locally; prove compact-flow fiber diffeomorphism; assemble Main.",
+    :residual "Smooth nearby inverses; compact flow; Main.",
     :outcome :stop,
-    :warnings ["Main sorryAx" "unrelated edit preserved"],
+    :warnings ["sorryAx"],
     :missing-theorems
-    [{:name "surjective_continuousLinearMap_has_rightInverse",
-      :type "surjective CLM has CLM right inverse",
+    [{:name "rightInverse_of_comp_continuousLinearEquiv",
+      :type "invertible composite gives right inverse",
       :status :proved,
-      :consumers [:t98A06],
-      :depends-on [],
-      :area "smooth-manifold-submersion"}
-     {:name "t98A06_local_smooth_submersion_lift",
-      :type "local smooth lifts",
-      :status :partial,
       :consumers [:t98A06],
       :depends-on ["surjective_continuousLinearMap_has_rightInverse"],
       :area "smooth-manifold-submersion"}
+     {:name "t98A06_local_smooth_submersion_lift",
+      :type "local lifts",
+      :status :partial,
+      :consumers [:t98A06],
+      :depends-on ["rightInverse_of_comp_continuousLinearEquiv"],
+      :area "smooth-manifold-submersion"}
      {:name "t98A06_compact_circle_fibers_diffeomorphic",
-      :type "fiber diffeomorphism",
+      :type "fiber diffeo",
       :status :not-started,
       :consumers [:t98A06],
       :depends-on ["t98A06_global_vectorField_lift"],
@@ -119287,32 +119286,23 @@
     {:source
      "44399e714e0f58588b1b213f3c3b12320dfea50bb6f626693aa89c544b76dd3a",
      :implementation
-     "c9ff91f45f851ee40d5cd7d1fc81fc4327c12b242e47118673914830e083a792",
+     "97db61f17df2a8576afb527bb0a7fae725219014027fe6d3b7b580c7875f775b",
      :blueprint
      "9838452bf081767e1df000700b7c24774e94f50633c1cc10b2aa0e8c82319196",
      :registry "166/166"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-2,
-    :reason "Banked derivative right inverses.",
+    :reason "Banked correction.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t98A06Closure.lean",
       :exit 0}
      {:cmd "lake env lean problems/t98A06/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-     {:cmd "hash/placeholders/diff", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1792011038663-12387-00acf884",
-     :commands
-     ["git diff-tree/show c5e1d7cd"
-      "archive c5e1d7cd; lake env lean closure and Main"
-      "sha256sum/placeholders at c5e1d7cd"
-      "python3 scripts/statement-registry.py check"],
-     :finding
-     "PASS program STOP: new commit changes only t98A06Closure.lean and proves the correctly oriented finite-dimensional linear input: a surjective continuous linear map admits a continuous linear right inverse R with L.comp R = id. This is genuine progress toward local smooth lifts without claiming smooth dependence. Fixture/frozen hashes match; closure has 0 placeholders, Main baseline 1; archived files compile with standard axioms; registry 166/166. Smooth local dependence, compact-flow fiber diffeomorphism, and Main assembly remain listed."},
-    :commit "c5e1d7cd37bb0be2debd3ae20a4019307db2a460",
+     {:cmd "hash/diff", :exit 0}],
+    :diagnostic-history
+    [{:cmd "draft", :exit 1, :finding "congruence"}],
+    :commit "eebf94553a1cef785f5a621f57baf092bc23d1b0",
     :changed-paths ["ConstructionTargets/t98A06Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t98A06Closure.blueprint.md",
@@ -119320,7 +119310,7 @@
      "9838452bf081767e1df000700b7c24774e94f50633c1cc10b2aa0e8c82319196"},
     :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t98A06/lean/Main.lean"
     "problems/t98A06/status.json"
@@ -119649,7 +119639,8 @@
    :id :lemma-t98a06-local-smooth-submersion-lift,
    :kind :lemma,
    :depends-on
-   [:lemma-surjective-continuouslinearmap-has-rightinverse],
+   [:lemma-surjective-continuouslinearmap-has-rightinverse
+    :lemma-rightinverse-of-comp-continuouslinearequiv],
    :other-consumers []}
   {:consumer :t98A06,
    :phase :lemma,
@@ -120332,6 +120323,24 @@
    :depends-on
    [:lemma-regularfiberlocalizedtopdegreeformula-of-chartcoefficients
     :lemma-regularfiberlocalizedcomponentformula-of-chartcoefficients],
+   :other-consumers []}
+  {:consumer :t98A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "rightInverse_of_comp_continuousLinearEquiv",
+    :type "invertible composite gives right inverse"},
+   :lemma
+   {:name "rightInverse_of_comp_continuousLinearEquiv",
+    :reported-by [:program-2026-10-13-close-t98a06],
+    :type "invertible composite gives right inverse",
+    :area "smooth-manifold-submersion",
+    :proved-in :program-2026-10-13-close-t98a06},
+   :id :lemma-rightinverse-of-comp-continuouslinearequiv,
+   :kind :lemma,
+   :depends-on
+   [:lemma-surjective-continuouslinearmap-has-rightinverse],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
