@@ -45,79 +45,93 @@ Neither definition encodes a desired conclusion.
 
 ## Lemmas
 
-### 1. `apm_t02a01_boundary_geometry` — LIBRARY
+### Geometry leaves
 
-**Statement in words.** The explicit inner boundary subtype is path connected
-and locally path connected.
+1. `apm_t02a01_boundary_homeomorph_circle` — **LIBRARY**, 100–150 lines,
+   independent.  Construct the centered-radius-`1/4` parametrization and prove
+   that the quotient is injective there.  Useful APIs: `Homeomorph.SetCongr`,
+   `Homeomorph.trans`, `IsQuotientMap`, `Quotient.eq`, and the norm/sphere
+   homeomorphisms in `Mathlib.Topology.MetricSpace.Isometry`.  The missing hard
+   point is the `Relation.EqvGen` normal form: inner points never participate in
+   an outer-edge generator.  The extreme inner-circle points have coordinates
+   `1/4` or `3/4`, never `0` or `1`; radius is positive, so the set is nonempty
+   and not collapsed.  This is the one genuinely missing geometric foundation.
 
-**Why true.** Parametrize it by the radius-`1/4` Euclidean circle centered at
-`(1/2,1/2)`.  This circle lies strictly inside the square, so the outside-edge
-quotient makes no further identifications on it.  The resulting parametrization
-is a homeomorphism from `Circle`; transport the standard instances.
+2. `apm_t02a01_boundary_pathConnected` — 20–40 lines, independent given its
+   explicit homeomorphism hypothesis.  Use `Homeomorph.isPathConnected_image`
+   (or transport a `PathConnectedSpace` instance) and the existing circle
+   instance.  It cannot be vacuous: its conclusion is an instance on the
+   boundary, while its hypothesis is only an equivalence of spaces.
 
-**Estimate.** 80–150 lines.
+3. `apm_t02a01_boundary_locPathConnected` — 20–40 lines, independent given
+   its explicit homeomorphism hypothesis.  Use invariance of
+   `LocPathConnectedSpace` under a homeomorphism and the circle instance.
 
-**Dependencies.** None.
+`apm_t02a01_boundary_geometry` is now a sorry-free assembly of leaves 1–3.
 
-**Truth check.** The four extreme points `(1/4,1/2)`, `(3/4,1/2)`,
-`(1/2,1/4)`, `(1/2,3/4)` all remain away from the glued outer edges.  Radius
-`1/4` is positive, so this is a circle, not a point or empty set.
+### Restricted monodromy leaves
 
-### 2. `apm_t02a01_boundary_monodromy_trivial` — LIBRARY
+4. `apm_t02a01_restrictedCover_isCovering` — 30–70 lines, independent.  Pull
+   each `IsEvenlyCovered` neighborhood back to the boundary subtype.  Relevant
+   Mathlib objects are `IsCoveringMap`, `IsEvenlyCovered`,
+   `LocalHomeomorph.restr`, `LocalHomeomorph.subtypeRestr`, and
+   `IsCoveringMap.isLocalHomeomorph`; if available in the installed version,
+   use the standard pullback/base-change lemma directly.  Empty boundary would
+   still be harmless for this statement, and no surjectivity of `p` is needed.
 
-**Statement in words.** The restriction of the supplied cover to the concrete
-boundary is a covering, and every based boundary loop fixes every point of its
-fiber under covering monodromy.
+5. `apm_t02a01_boundary_monodromy_is_deck_commutator` — **LIBRARY**, 100–150
+   lines after leaf 1, otherwise independent because `hcov` and the simply
+   transitive deck action are explicit.  It
+   isolates exactly the polygon calculation: every lifted inner-boundary loop
+   ends at `deck (u + v - u - v) e`.  Use
+   `IsCoveringMap.liftPath`, `liftPath_trans`, `liftPath_lifts`,
+   `liftPath_apply_one_eq_of_homotopicRel`, `monodromy_trans_apply`, and
+   `Path.Homotopic.Quotient.mk_surjective`.  The required missing input is the
+   square-annulus relation saying the inner boundary represents `[a,b]`; the
+   nearby `ConstructionTargets.PolygonOuterRadialRelation.surfaceRel_boundary`
+   and `PolygonSurfacePiOne` normal-form lemmas are the models, but do not
+   directly cover this quotient.  This leaf deliberately returns endpoint
+   equality, not trivial monodromy, so it does not silently include the
+   abelian-group argument.  Reversing boundary orientation merely replaces the
+   commutator by its inverse, also zero in `ZMod n`.
 
-**Why true.** Restrict the evenly-covered charts of `p` to the boundary
-subtype.  In the square-annulus polygon, the inner boundary word is
-`a b a⁻¹ b⁻¹`.  Lift the four factors successively.  The endpoint actions are
-deck translations by (say) `u`, `v`, `-u`, `-v`; `hdeck_add`, `hdeck_zero`, and
-the abelianness of `ZMod n` make their composite the identity.  Homotopy lifting
-then extends this calculation from the standard boundary parametrization to
-every boundary loop.  Mathlib APIs used by the closest existing development
-are `IsCoveringMap.liftPath`, `IsCoveringMap.monodromy`,
-`IsCoveringMap.monodromy_trans_apply`, and `IsCoveringMap.monodromy_map`; all
-are exercised in the imported `ConstructionTargets.CoveringMonodromyCosets`.
+6. `apm_t02a01_deck_commutator_apply` — 10–25 lines, fully independent.  Use
+   `sub_eq_add_neg`, `add_comm`, `add_left_neg`, `add_zero`, then
+   `hdeck_zero`; `hdeck_add` is intentionally unnecessary because the polygon
+   leaf already packages the endpoint as one deck-group element.  The identity
+   also holds for `ZMod 0` and `ZMod 1`, so this helper has no positivity
+   hypothesis.
 
-**Estimate.** 250–400 lines.  This is marked LIBRARY because the missing part
-is the reusable polygon-boundary/covering-monodromy bridge, not routine glue.
-The closest sorry-free files searched were
-`CoveringMonodromyCosets.lean`, `PolygonBoundaryCircleRelations.lean`,
-`PolygonAnnulusRadialMaps.lean`, and `T01A02PuncturedTorusCoverModels.lean`;
-none identifies this square-annulus quotient's inner boundary word.
+`apm_t02a01_boundary_monodromy_trivial` is now a sorry-free assembly of leaves
+4–6.  Its legacy `hdeck_add` and `hdeck_transitive` parameters remain only to
+keep the registered interface byte-identical downstream.
 
-**Dependencies.** None (it constructs the restricted covering itself).
+### Component/fiber leaves
 
-**Truth check.** Hand computation in the deck group gives
-`u + v - u - v = 0`.  For `n = 1` this is necessarily the identity; for `n = 2`
-all four possible pairs `(u,v)` give identity as well.  No surjectivity or
-connectedness of the total space is silently used.
+7. `apm_t02a01_component_meets_fiber` — 60–100 lines, independent.  Represent
+   a connected component by a point, choose a base path in `B`, and lift it.
+   Convert the lifted path to equality in `ConnectedComponents` using
+   `ConnectedComponents.surjective_coe`, `ConnectedComponents.coe_eq_coe'`,
+   `IsCoveringMap.liftPath`, `liftPath_zero`, and `liftPath_lifts`.  Reversing
+   the chosen base path handles the endpoint convention.  Path connectedness
+   rules out extra base components; the fiber is nonempty because it contains
+   `e`.
 
-### 3. `apm_t02a01_components_equiv_fiber` — LIBRARY
+8. `apm_t02a01_fiber_injective_on_components` — 90–150 lines, independent.
+   Turn equality of connected components into a path between the fiber points;
+   a covering over a locally path-connected base has locally path-connected
+   total space, so connected components are path components.  Project that
+   path to a based loop and identify its lifted endpoint using
+   `hq.monodromy_map`, `hq.eq_liftPath_iff'`,
+   `ConnectedComponents.coe_eq_coe`, and
+   `connectedComponent_eq_pathComponent`.  Then apply `hmono`.  This statement
+   contains the essential monodromy implication but not surjectivity or the
+   equivalence construction.  For a product cover it says distinct sheet
+   labels lie in distinct components.
 
-**Statement in words.** For a covering of a path-connected, locally
-path-connected base, if all monodromy at one chosen fiber point is trivial,
-then connected components of the total space are in bijection with that fiber.
-
-**Why true.** Every component meets the chosen fiber: lift a path from the image
-of any point to the basepoint.  Two points of that fiber lie in the same
-component exactly when a based loop has one as the monodromy image of the
-other.  Trivial monodromy makes each orbit a singleton.  Local path
-connectedness of the base and covering charts make the total space locally path
-connected, so connected components equal path components.  This is the
-component-orbit extension of the machinery already in
-`ConstructionTargets.CoveringMonodromyCosets`.
-
-**Estimate.** 120–220 lines.
-
-**Dependencies.** None; lemma 1's conclusions are passed as typeclass
-hypotheses by the final assembly, so this seat can work independently.
-
-**Truth check.** For the product cover `B × Fin n → B`, monodromy is identity
-and both sides have `n` elements.  Dropping path connectedness would make the
-claim false (extra base components), confirming that the hypotheses are doing
-real work.
+`apm_t02a01_components_equiv_fiber` is now a six-line sorry-free assembly:
+the map from the chosen fiber to connected components is bijective by leaves 7
+and 8, and `Equiv.ofBijective` is reversed.
 
 ### 4. `apm_t02a01_fiber_card`
 
@@ -139,11 +153,14 @@ cardinality argument and does not require `hcover`.
 
 ## Dependency layers
 
-* Layer 1 (fully parallel): lemmas 1, 2, 3, and 4.
-* Layer 2: the sorry-free proof of `apm_t02a01` installs the two instances from
-  lemma 1, chooses a boundary point using surjectivity, obtains trivial
-  restricted monodromy from lemma 2, applies lemma 3, and rewrites the fiber
-  cardinality using lemma 4.
+* Layer 1 (fully parallel): leaves 1, 4, 6, 7, 8, and
+  `apm_t02a01_fiber_card`.
+* Layer 1 as well, with explicit inputs supplied as hypotheses: leaves 2, 3,
+  and 5.  Thus no leaf's proof needs another sorry-backed declaration.
+* Layer 2 consists only of the three existing sorry-free assembly lemmas.
+* Layer 3 is the unchanged main proof, which installs the geometry instances,
+  chooses a boundary point, applies the monodromy/component assemblies, and
+  rewrites by the already-proved fiber-cardinality lemma.
 
 ## Compilation and axiom gate
 
@@ -159,5 +176,5 @@ Output of `#print axioms apm_t02a01`:
 'apm_t02a01' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
 ```
 
-Thus `sorryAx` enters the main theorem only through the four named top-level
-lemmas; the main theorem itself contains no sorry.
+Thus `sorryAx` enters the main theorem only through the eight new leaf lemmas;
+all three formerly coarse library lemmas and the main theorem are sorry-free.

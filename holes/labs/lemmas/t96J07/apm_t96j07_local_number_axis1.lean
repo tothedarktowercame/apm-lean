@@ -576,6 +576,64 @@ theorem apm_t96j07_local_number_axis0
 
 /-- Package the affine chart at the second coordinate axis. -/
 -- BEGIN SEAT AREA
+lemma apm_t96j07_local_number_axis1_aux_rep_ne
+    (v : apm_t96j07_V) (hv : v ≠ 0) (i : Fin 4) (hi : v i ≠ 0) :
+    (Projectivization.mk ℝ v hv).rep i ≠ 0 := by
+  obtain ⟨u, hu⟩ := Projectivization.exists_smul_eq_mk_rep ℝ v hv
+  have hui := congrFun hu i
+  rw [← hui]
+  exact mul_ne_zero (Units.ne_zero u) hi
+
+lemma apm_t96j07_local_number_axis1_aux_chart
+    (hgen : ∀ i : Fin 4, ∃ chart : OpenPartialHomeomorph apm_t96j07_RP3 apm_t96j07_E3,
+        (∀ p, p ∈ chart.source ↔ p.rep i ≠ 0) ∧ chart.target = Set.univ ∧
+        (∀ (x : apm_t96j07_V) (hx : x ≠ 0), x i ≠ 0 →
+          chart (Projectivization.mk ℝ x hx) =
+            WithLp.toLp 2 (fun j => x (i.succAbove j) / x i)) ∧
+        (∀ y : apm_t96j07_E3, ∃ h, chart.symm y =
+          Projectivization.mk ℝ (Fin.insertNth i 1 (WithLp.ofLp y)) h))
+    (f : C(apm_t96j07_RP3, apm_t96j07_RP3))
+    (hformula : ∀ (x : apm_t96j07_V) (hx : x ≠ 0),
+      f (Projectivization.mk ℝ x hx) =
+        Projectivization.mk ℝ (apm_t96j07_A x) (apm_t96j07_A_ne_zero hx)) :
+    ∃ chart : OpenPartialHomeomorph apm_t96j07_RP3 apm_t96j07_E3,
+      (Projectivization.mk ℝ (apm_t96j07_axis 1) (by
+        intro h; have := congrFun h 1; simp [apm_t96j07_axis] at this)) ∈ chart.source ∧
+      chart (Projectivization.mk ℝ (apm_t96j07_axis 1) (by
+        intro h; have := congrFun h 1; simp [apm_t96j07_axis] at this)) = 0 ∧
+      chart.target = Set.univ ∧
+      (∀ y, chart.symm y ∈ chart.source) ∧
+      (∀ y, f (chart.symm y) ∈ chart.source) ∧
+      (∀ y, chart (f (chart.symm y)) =
+        WithLp.toLp 2 (fun j => (![1 / 2, 3 / 2, 2] : Fin 3 → ℝ) j * y j)) := by
+  obtain ⟨chart, hsource, htarget, hchart, hinv⟩ := hgen 1
+  refine ⟨chart, ?_, ?_, htarget, ?_, ?_, ?_⟩
+  · rw [hsource]
+    apply apm_t96j07_local_number_axis1_aux_rep_ne
+    simp [apm_t96j07_axis]
+  · rw [hchart _ _ (by simp [apm_t96j07_axis])]
+    ext j
+    fin_cases j <;> simp [apm_t96j07_axis, Fin.succAbove]
+  · intro y
+    apply chart.map_target
+    rw [htarget]
+    exact Set.mem_univ y
+  · intro y
+    obtain ⟨hv, hy⟩ := hinv y
+    rw [hy, hformula, hsource]
+    apply apm_t96j07_local_number_axis1_aux_rep_ne
+    show apm_t96j07_A (Fin.insertNth 1 1 (WithLp.ofLp y)) 1 ≠ 0
+    norm_num [apm_t96j07_A]
+  · intro y
+    obtain ⟨hv, hy⟩ := hinv y
+    rw [hy, hformula]
+    have hA1 : apm_t96j07_A (Fin.insertNth 1 1 (WithLp.ofLp y)) 1 ≠ 0 := by
+      norm_num [apm_t96j07_A]
+    rw [hchart _ _ hA1]
+    ext j
+    fin_cases j <;> simp [apm_t96j07_A, Fin.succAbove, Fin.insertNth,
+      Fin.succAboveCases, Fin.lt_def] <;> ring
+
 theorem apm_t96j07_local_number_axis1
     (hgen :
   ∀ i : Fin 4, ∃ chart : OpenPartialHomeomorph apm_t96j07_RP3 apm_t96j07_E3,
@@ -604,7 +662,46 @@ theorem apm_t96j07_local_number_axis1
     apm_t96j07_HasLocalLefschetzNumber f
         (Projectivization.mk ℝ (apm_t96j07_axis 1) (by
           intro h; have := congrFun h 1; simp [apm_t96j07_axis] at this)) 1 := by
-  sorry
+  obtain ⟨chart, hq, hq0, htarget, hinv, hfsource, haction⟩ :=
+    apm_t96j07_local_number_axis1_aux_chart hgen f hformula
+  refine ⟨chart, hq, hq0, 1, by norm_num, ?_, ?_, ?_, ?_⟩
+  · rw [htarget]
+    exact Set.subset_univ _
+  · intro y hy
+    exact hfsource y
+  · intro y hy heq
+    rw [haction] at heq
+    ext j
+    have hj := congrArg (fun z : apm_t96j07_E3 => z j) heq
+    simp only [WithLp.ofLp_toLp] at hj
+    fin_cases j <;> norm_num at hj ⊢ <;> linarith
+  · let a : Fin 3 → ℝ := ![1 / 2, 3 / 2, 2]
+    obtain ⟨link, hlink, orientation, horientation⟩ := hdegree a (by
+      intro j
+      fin_cases j <;> norm_num [a])
+    refine ⟨link, ?_, orientation, ?_⟩
+    · intro x
+      have hxsource := hinv ((1 : ℝ) • x.1)
+      have hfxsource := hfsource ((1 : ℝ) • x.1)
+      refine ⟨hxsource, hfxsource, ?_⟩
+      obtain ⟨hne, heq⟩ := hlink x
+      have hd : (1 : ℝ) • x.1 - chart (f (chart.symm ((1 : ℝ) • x.1))) =
+          WithLp.toLp 2 (fun j => (1 - a j) * x.1 j) := by
+        rw [haction]
+        ext j
+        fin_cases j <;> simp [a] <;> ring
+      refine ⟨?_, ?_⟩
+      · rw [hd]
+        exact hne
+      · rw [heq]
+        apply Subtype.ext
+        simp only [Subtype.coe_mk]
+        rw [hd]
+    · intro z
+      rw [horientation]
+      have hp : 0 < ∏ j, (1 - a j) := by
+        norm_num [a, Fin.prod_univ_succ]
+      simp [hp]
 -- END SEAT AREA
 
 /-- Package the affine chart at the third coordinate axis. -/

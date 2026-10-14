@@ -496,6 +496,149 @@ lemma apm_t96j07_affine_chart_aux_insert_ne (i : Fin 4)
   simpa [apm_t96j07_affine_chart_aux_insert] using hi
 
 -- BEGIN SEAT AREA
+noncomputable def apm_t96j07_affine_chart_aux_coord (i : Fin 4)
+    (p : apm_t96j07_RP3) : apm_t96j07_E3 :=
+  WithLp.toLp 2 (fun j => p.rep (i.succAbove j) / p.rep i)
+
+noncomputable def apm_t96j07_affine_chart_aux_inv (i : Fin 4)
+    (y : apm_t96j07_E3) : apm_t96j07_RP3 :=
+  Projectivization.mk ℝ (apm_t96j07_affine_chart_aux_insert i y)
+    (apm_t96j07_affine_chart_aux_insert_ne i y)
+
+lemma apm_t96j07_affine_chart_aux_open (i : Fin 4) :
+    IsOpen {p : apm_t96j07_RP3 | p.rep i ≠ 0} := by
+  rw [isOpen_coinduced]
+  change IsOpen ((Projectivization.mk' ℝ) ⁻¹'
+    {p : apm_t96j07_RP3 | p.rep i ≠ 0})
+  have heq : (Projectivization.mk' ℝ) ⁻¹'
+      {p : apm_t96j07_RP3 | p.rep i ≠ 0} =
+      {v : {v : apm_t96j07_V // v ≠ 0} | v.1 i ≠ 0} := by
+    ext v
+    change (Projectivization.mk ℝ v.1 v.2).rep i ≠ 0 ↔ v.1 i ≠ 0
+    obtain ⟨a, ha⟩ := Projectivization.exists_smul_eq_mk_rep ℝ v.1 v.2
+    rw [← ha]
+    change (a : ℝ) * v.1 i ≠ 0 ↔ v.1 i ≠ 0
+    simp
+  rw [heq]
+  exact isOpen_compl_singleton.preimage
+    ((continuous_apply i).comp continuous_subtype_val)
+
+lemma apm_t96j07_affine_chart_aux_coord_cont (i : Fin 4) :
+    ContinuousOn (apm_t96j07_affine_chart_aux_coord i)
+      {p : apm_t96j07_RP3 | p.rep i ≠ 0} := by
+  let s : Set apm_t96j07_RP3 := {p | p.rep i ≠ 0}
+  let q : {v : apm_t96j07_V // v ≠ 0} → apm_t96j07_RP3 :=
+    Projectivization.mk' ℝ
+  let qr := s.restrictPreimage q
+  have hqr : IsOpenQuotientMap qr := by
+    refine ⟨?_, (ConstructionTargets.ProjectiveSpaceTopology.continuous_quotientMap ℝ 3).restrictPreimage, ?_⟩
+    · rintro ⟨x, hx⟩
+      obtain ⟨v, rfl⟩ :=
+        ConstructionTargets.ProjectiveSpaceTopology.surjective_quotientMap ℝ 3 x
+      exact ⟨⟨v, hx⟩, rfl⟩
+    · exact (ConstructionTargets.ProjectiveQuotientDescent.projectiveQuotientMap_isOpen ℝ 3).restrictPreimage s
+  rw [continuousOn_iff_continuous_restrict]
+  apply hqr.isQuotientMap.continuous_iff.mpr
+  have hc : Continuous (fun v : q ⁻¹' s => WithLp.toLp 2 (fun j : Fin 3 =>
+      v.1.1 (i.succAbove j) / v.1.1 i)) := by
+    apply (PiLp.continuous_toLp 2 _).comp
+    apply continuous_pi
+    intro j
+    apply Continuous.div
+    · exact (continuous_apply _).comp
+        (continuous_subtype_val.comp continuous_subtype_val)
+    · exact (continuous_apply _).comp
+        (continuous_subtype_val.comp continuous_subtype_val)
+    · intro v
+      have hv := v.2
+      change (Projectivization.mk ℝ v.1.1 v.1.2).rep i ≠ 0 at hv
+      obtain ⟨a, ha⟩ := Projectivization.exists_smul_eq_mk_rep ℝ v.1.1 v.1.2
+      rw [← ha] at hv
+      exact (mul_ne_zero_iff.mp hv).2
+  have heq : ({p : apm_t96j07_RP3 | p.rep i ≠ 0}.restrict
+      (apm_t96j07_affine_chart_aux_coord i) ∘ qr) =
+      (fun v : q ⁻¹' s => WithLp.toLp 2 (fun j : Fin 3 =>
+        v.1.1 (i.succAbove j) / v.1.1 i)) := by
+    funext v
+    apply WithLp.ofLp_injective 2
+    funext j
+    change (Projectivization.mk ℝ v.1.1 v.1.2).rep (i.succAbove j) /
+      (Projectivization.mk ℝ v.1.1 v.1.2).rep i = _
+    obtain ⟨a, ha⟩ := Projectivization.exists_smul_eq_mk_rep ℝ v.1.1 v.1.2
+    rw [← ha]
+    change ((a : ℝ) * v.1.1 _ / ((a : ℝ) * v.1.1 i)) = _
+    field_simp
+  rw [heq]
+  exact hc
+
+lemma apm_t96j07_affine_chart_aux_inv_cont (i : Fin 4) :
+    Continuous (apm_t96j07_affine_chart_aux_inv i) := by
+  change Continuous (ConstructionTargets.ProjectiveSpaceTopology.quotientMap ℝ 3 ∘
+    fun y : apm_t96j07_E3 =>
+      ⟨apm_t96j07_affine_chart_aux_insert i y,
+        apm_t96j07_affine_chart_aux_insert_ne i y⟩)
+  apply (ConstructionTargets.ProjectiveSpaceTopology.continuous_quotientMap ℝ 3).comp
+  apply Continuous.subtype_mk
+  apply continuous_pi
+  intro k
+  refine i.succAboveCases ?_ (fun j => ?_) k
+  · simpa [apm_t96j07_affine_chart_aux_insert] using
+      (continuous_const : Continuous (fun _ : apm_t96j07_E3 => (1 : ℝ)))
+  · simpa [apm_t96j07_affine_chart_aux_insert] using
+      ((continuous_apply j).comp (PiLp.continuous_ofLp 2 _))
+
+lemma apm_t96j07_affine_chart_aux_coord_inv (i : Fin 4)
+    (y : apm_t96j07_E3) :
+    apm_t96j07_affine_chart_aux_coord i
+      (apm_t96j07_affine_chart_aux_inv i y) = y := by
+  change WithLp.toLp 2 (fun j =>
+    (Projectivization.mk ℝ (apm_t96j07_affine_chart_aux_insert i y)
+      (apm_t96j07_affine_chart_aux_insert_ne i y)).rep (i.succAbove j) /
+    (Projectivization.mk ℝ (apm_t96j07_affine_chart_aux_insert i y)
+      (apm_t96j07_affine_chart_aux_insert_ne i y)).rep i) = y
+  rw [apm_t96j07_affine_chart_aux_rep_ratio]
+  apply WithLp.ofLp_injective 2
+  funext j
+  simp [apm_t96j07_affine_chart_aux_insert]
+
+lemma apm_t96j07_affine_chart_aux_inv_coord (i : Fin 4)
+    (p : apm_t96j07_RP3) (hp : p.rep i ≠ 0) :
+    apm_t96j07_affine_chart_aux_inv i
+      (apm_t96j07_affine_chart_aux_coord i p) = p := by
+  rw [← Projectivization.mk_rep p]
+  apply (Projectivization.mk_eq_mk_iff' ℝ _ _ _ _).2
+  refine ⟨(p.rep i)⁻¹, ?_⟩
+  funext k
+  refine i.succAboveCases ?_ (fun j => ?_) k
+  · simp [apm_t96j07_affine_chart_aux_insert, hp]
+  · simp [apm_t96j07_affine_chart_aux_insert,
+      apm_t96j07_affine_chart_aux_coord, div_eq_inv_mul]
+
+noncomputable def apm_t96j07_affine_chart_aux_chart (i : Fin 4) :
+    OpenPartialHomeomorph apm_t96j07_RP3 apm_t96j07_E3 where
+  toPartialEquiv := {
+    toFun := apm_t96j07_affine_chart_aux_coord i
+    invFun := apm_t96j07_affine_chart_aux_inv i
+    source := {p | p.rep i ≠ 0}
+    target := Set.univ
+    map_source' := fun _ _ => Set.mem_univ _
+    map_target' := by
+      intro y _
+      change (apm_t96j07_affine_chart_aux_inv i y).rep i ≠ 0
+      unfold apm_t96j07_affine_chart_aux_inv
+      obtain ⟨a, ha⟩ := Projectivization.exists_smul_eq_mk_rep ℝ
+        (apm_t96j07_affine_chart_aux_insert i y)
+        (apm_t96j07_affine_chart_aux_insert_ne i y)
+      rw [← ha]
+      change (a : ℝ) * apm_t96j07_affine_chart_aux_insert i y i ≠ 0
+      simp [apm_t96j07_affine_chart_aux_insert]
+    left_inv' := apm_t96j07_affine_chart_aux_inv_coord i
+    right_inv' := fun y _ => apm_t96j07_affine_chart_aux_coord_inv i y }
+  open_source := apm_t96j07_affine_chart_aux_open i
+  open_target := isOpen_univ
+  continuousOn_toFun := apm_t96j07_affine_chart_aux_coord_cont i
+  continuousOn_invFun := (apm_t96j07_affine_chart_aux_inv_cont i).continuousOn
+
 theorem apm_t96j07_affine_chart :
     ∀ i : Fin 4, ∃ chart : OpenPartialHomeomorph apm_t96j07_RP3 apm_t96j07_E3,
       (∀ p, p ∈ chart.source ↔ p.rep i ≠ 0) ∧ chart.target = Set.univ ∧
@@ -504,7 +647,15 @@ theorem apm_t96j07_affine_chart :
           WithLp.toLp 2 (fun j => x (i.succAbove j) / x i)) ∧
       (∀ y : apm_t96j07_E3, ∃ h, chart.symm y =
         Projectivization.mk ℝ (Fin.insertNth i 1 (WithLp.ofLp y)) h) := by
-  sorry
+  intro i
+  refine ⟨apm_t96j07_affine_chart_aux_chart i, ?_, rfl, ?_, ?_⟩
+  · intro p
+    rfl
+  · intro x hx hxi
+    exact apm_t96j07_affine_chart_aux_rep_ratio i x hx
+  · intro y
+    refine ⟨apm_t96j07_affine_chart_aux_insert_ne i y, ?_⟩
+    rfl
 -- END SEAT AREA
 
 noncomputable def apm_t96j07_local_number_axis0_coords

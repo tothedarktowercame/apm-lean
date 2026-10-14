@@ -55,36 +55,57 @@ than the final genus-two van Kampen equivalence.
 
 ## Remaining lemmas
 
-### `apm_t92J05_bridge_projectivePlane_fundamentalGroup` — LIBRARY
+### Projective-plane leaves (all parallel)
 
-**Statement in words.** At every basepoint of the concrete real projective
-plane, its fundamental group is multiplicatively equivalent to `ZMod 2`.
+The old 300–500 line boundary is now a sorry-free assembly of these seven
+top-level leaves. Dependencies are arguments, not references to other leaves,
+so every seat can compile against the current file independently.
 
-**Why true.** Identify the projectivization of `ℝ³` with the quotient of the
-unit two-sphere by the free antipodal action of `Z/2`. Prove that this
-identification is a homeomorphism and that the sphere quotient projection is
-the corresponding two-sheeted covering. The sphere is simply connected by
-the already imported sphere theorem. Then apply
-`ConstructionTargets.DeckGroupQuotientFundamentalGroup.freeProperlyDiscontinuousQuotient_fundamentalGroupEquiv`
-and transport the resulting equivalence through the homeomorphism and between
-basepoints. The topology audit names precisely the two missing ingredients:
-the antipodal/projectivization covering identification and its adapter to the
-deck-group quotient theorem.
+- `apm_t92J05_antipodalAction_free` (30–50 lines): the antipodal
+  `Multiplicative (ZMod 2)` action is free. Use `fin_cases g`, subtype extensionality,
+  `two_smul`, and `smul_eq_zero`. Radius one excludes the zero vector.
+- `apm_t92J05_antipodalAction_properlyDiscontinuous` (40–80 lines): the action
+  is properly discontinuous. Use finiteness/discreteness of `ZMod 2` and the
+  Mathlib finite-group-action instance/constructor for
+  `ProperlyDiscontinuousSMul`; alternatively separate `x` and `-x` by metric
+  balls. Freeness is deliberately not a hypothesis, so this leaf is independent.
+- `apm_t92J05_projectivePlane_homeomorph_antipodalQuotient` (100–150 lines):
+  normalize each nonzero representative of `Projectivization ℝ (Fin 3 → ℝ)`
+  to the unit sphere, prove that changing a real scalar changes the normalized
+  vector only by sign, and descend in both directions. Use
+  `Projectivization`, `projectivizationSetoid`, `Homeomorph.quotient`/quotient
+  induction, `Real.norm_eq_abs`, and `abs_mul`. This is the largest leaf.
+  The zero vector never represents a projective point; normalization therefore
+  has no zero-denominator case.
+- `apm_t92J05_antipodalQuotient_fundamentalGroup` (20–35 lines): given the
+  free and properly-discontinuous conclusions explicitly, install the latter
+  with `letI`, install sphere simple-connectivity using
+  `ConstructionTargets.SimplyConnectedSphereProducts.euclideanSphere_simplyConnected
+  2 (by norm_num)`, and apply the exact theorem
+  `ConstructionTargets.DeckGroupQuotientFundamentalGroup.freeProperlyDiscontinuousQuotient_fundamentalGroupEquiv`.
+  The needed `T2Space`, `LocallyCompactSpace`, and `LocPathConnectedSpace`
+  instances for the radius-one sphere should infer.
+- `apm_t92J05_projectivePlane_fundamentalGroup_at_one_point` (20–35 lines):
+  choose any sphere point (for example the first coordinate unit vector), use
+  the supplied deck conclusion there, and transport with
+  `ConstructionTargets.BoundaryTorusHurewiczIsomorphism.fundamentalGroupMulEquivOfHomeomorph`.
+  Both the homeomorphism and deck result are explicit hypotheses.
+- `apm_t92J05_projectivePlane_pathConnected` (40–70 lines): prove the concrete
+  projectivization path connected, either from the quotient map from `S²`
+  (using `isPathConnected_sphere` and continuous surjective image) or directly
+  through normalized representatives. Dimension is three and radius is one,
+  so the sphere theorem's rank inequality holds; the antipodal quotient removes
+  the sphere's only sign ambiguity.
+- `apm_t92J05_fundamentalGroup_all_basepoints` (10–20 lines): from an explicit
+  `PathConnectedSpace X` value and one computed basepoint, use
+  `FundamentalGroup.fundamentalGroupMulEquivOfPathConnected`. This lemma is
+  generic and handles the arbitrary-basepoint endpoint without hiding topology.
 
-**Expected size.** LIBRARY, about 300–500 lines. The 2026-10-13 audit estimates
-the antipodal cover construction at 100–180 lines, the generic/simple-cover
-adapter at 80–140 lines, and the concrete final transport at 30–60 lines. The
-generic deck-group quotient computation itself is already sorry-free.
-
-**Dependencies.** Only the definitions block and the imported sorry-free
-covering/deck-group and sphere-simple-connectivity modules. It is independent
-of the genus-two computation.
-
-**Truth check.** The antipodal action on `S²` is free because `u = -u` would
-force `u = 0`, impossible on the radius-one sphere. Its acting group has two
-elements. The standard hand computation therefore gives `π₁(RP²) = Z/2`.
-Changing the basepoint cannot change the group because `RP²` is path connected.
-This also agrees with the alternative CW presentation `⟨a | a²⟩`.
+The action and continuity instances preceding the leaves are already proved.
+The final `apm_t92J05_bridge_projectivePlane_fundamentalGroup` only installs
+the action instance, feeds conclusions into the next adapters, and contains no
+`sorry`. Empty-space vacuity is impossible because the one-point leaf exhibits
+a basepoint; no boundary or dimension-zero case is present.
 
 ### `apm_t92J05_standard_genusTwo_fundamentalGroup` — LIBRARY
 
@@ -135,16 +156,15 @@ the proved genus-two adapter. It has no direct `sorry`.
 
 ## Dependency layers
 
-- **Layer 1, parallel LIBRARY programs:**
-  `apm_t92J05_bridge_projectivePlane_fundamentalGroup` and
-  `apm_t92J05_standard_genusTwo_fundamentalGroup`.
+- **Layer 1, parallel LIBRARY programs:** the seven projective-plane leaves
+  above, and the independent `apm_t92J05_standard_genusTwo_fundamentalGroup`.
 - **Layer 2, already compiled:** the arbitrary-space genus-two transport and
   final conjunction assembly after the two Layer 1 conclusions are supplied.
 
-Lemma count: **2 remaining lemmas**, both genuine LIBRARY boundaries and fully
-independent of one another. There is no mathematical doubt about either
-statement. The only uncertainty is engineering size, especially how much of
-the general polygon van Kampen machinery the shared program still needs.
+Lemma count: **8 remaining lemmas**: seven small projective-plane leaves and
+the independent genus-two LIBRARY boundary. There is no mathematical doubt
+about their statements. The main uncertainty is the exact Mathlib quotient API
+needed by the homeomorphism leaf, and engineering size for genus two.
 
 ## Compilation and axioms
 

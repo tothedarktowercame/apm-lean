@@ -80474,13 +80474,16 @@
      "No topo1 work row remains eligible: both DIRECT consumers are closed; t91J06, t95J02, and t99J04 are held by stop-after-two; the three one-placeholder routes retain reviewed holds; and every other adapter retains its reviewed STOP. Electing another row would violate either stop-after-two or preservation of reviewed holds/STOPs."},
     :seat "topo-4"},
    :phase :strategy,
-   :state :needs-owner,
+   :state :superseded,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
    {:strategy
     "Reread current registered statements, TOPOLOGY-ROUTES.md, all route files, and reviewed receipts; measure t99J04, preserve all reviewed holds and STOPs including the t91J06 and t95J02 stop-after-two holds, recount topo1 placeholders, and determine whether the topo1 portfolio has reached its stop condition."},
+   :superseded-note
+   "t99J04 closed by the blueprint/lemma rounds, lemmas commit fabf5e5b4 (claude-14 2026-10-14)",
    :id :routes-2026-09-29-checkpoint-topo1-after-t99j04-1,
+   :superseded-by :blueprint-t99J04,
    :kind :strategy-checkpoint,
    :depends-on
    [:routes-2026-09-29-t99j04-adapter-closure-1
@@ -117481,7 +117484,7 @@
      "20444d0ef11ddf2ff8afe25a2eefd78117fe2c56a090336be32feb65c0eced51"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :superseded,
    :scope
    ["problems/t91J06/lean/Main.lean"
     "problems/t91J06/status.json"
@@ -117496,9 +117499,12 @@
     :commands
     ["lake env lean problems/t91J06/lean/Main.lean"
      "python3 scripts/statement-registry.py check"]},
+   :superseded-note
+   "t91J06 closed by the blueprint/lemma rounds, lemmas commit 2799dc56f (claude-14 2026-10-14)",
    :continue-from
    "Continue this program from its last commit; earlier jobs: :program-history. Last stop: B1 partial: independent t/q orientation splits compile.",
    :id :program-2026-10-11-close-t91j06,
+   :superseded-by :blueprint-t91J06,
    :kind :final-adapter,
    :campaign-priority 47,
    :fail-count 1,
@@ -118157,7 +118163,7 @@
    :other-consumers []}
   {:consumer :t99J04,
    :phase :implementation,
-   :state :open,
+   :state :superseded,
    :scope
    ["problems/t99J04/lean/Main.lean"
     "problems/t99J04/status.json"
@@ -118172,9 +118178,12 @@
     :commands
     ["lake env lean problems/t99J04/lean/Main.lean"
      "python3 scripts/statement-registry.py check"]},
+   :superseded-note
+   "t99J04 closed by the blueprint/lemma rounds, lemmas commit fabf5e5b4 (claude-14 2026-10-14)",
    :continue-from
    "NEXT JOB: write the blueprint ConstructionTargets/t99J04Closure.blueprint.md (BLUEPRINTS.md) for the remaining chain in ~/notes/closer/audits/t99J04.md, then formalise node by node.",
    :id :program-2026-10-11-close-t99j04,
+   :superseded-by :blueprint-t99J04,
    :kind :final-adapter,
    :campaign-priority 49,
    :depends-on [],
@@ -118182,7 +118191,7 @@
    :other-consumers []}
   {:consumer :t99J06,
    :phase :implementation,
-   :state :open,
+   :state :superseded,
    :scope
    ["problems/t99J06/lean/Main.lean"
     "problems/t99J06/status.json"
@@ -118197,9 +118206,12 @@
     :commands
     ["lake env lean problems/t99J06/lean/Main.lean"
      "python3 scripts/statement-registry.py check"]},
+   :superseded-note
+   "t99J06 closed by the blueprint/lemma rounds, lemmas commit 1522f5470 (claude-14 2026-10-14)",
    :continue-from
    "NEXT JOB: write the blueprint ConstructionTargets/t99J06Closure.blueprint.md (BLUEPRINTS.md) for the remaining chain in ~/notes/closer/audits/t99J06.md, then formalise node by node.",
    :id :program-2026-10-11-close-t99j06,
+   :superseded-by :blueprint-t99J06,
    :kind :final-adapter,
    :campaign-priority 51,
    :depends-on [],

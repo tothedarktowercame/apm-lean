@@ -408,6 +408,44 @@ theorem apm_t96j07_normalizedDiagonal_homotopic_sign (b : Fin 3 → ℝ)
 `H₂(S²; ℤ) ≅ ℤ` by the product of the signs
 (`ConstructionTargets.CoefficientFirstReflection.all_reflections_negative ℤ 2`,
 functoriality; `topIso ℤ 1` for the orientation). -/
+noncomputable def apm_t96j07_signDiagonal_H2_aux_product :
+    List (Fin 3) → C(apm_t96j07_S2, apm_t96j07_S2)
+  | [] => ContinuousMap.id _
+  | i :: s => ConstructionTargets.CoefficientCoordinateReflections.reflectionMap i |>.comp
+      (apm_t96j07_signDiagonal_H2_aux_product s)
+
+lemma apm_t96j07_signDiagonal_H2_aux_coordinate (s : List (Fin 3)) (hs : s.Nodup)
+    (x : apm_t96j07_S2) (j : Fin 3) :
+    (apm_t96j07_signDiagonal_H2_aux_product s x).1 j =
+      if j ∈ s then -x.1 j else x.1 j := by
+  induction s with
+  | nil => simp [apm_t96j07_signDiagonal_H2_aux_product]
+  | cons i s ih =>
+    have hi := List.nodup_cons.mp hs
+    change ConstructionTargets.CoefficientCoordinateReflections.reflection i
+      (apm_t96j07_signDiagonal_H2_aux_product s x).1 j = _
+    rw [ConstructionTargets.CoefficientCoordinateReflections.reflection_apply, ih hi.2]
+    by_cases hji : j = i
+    · subst j
+      simp [hi.1]
+    · simp [hji]
+
+lemma apm_t96j07_signDiagonal_H2_aux_homology (s : List (Fin 3)) :
+    ((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 2).obj
+      (ModuleCat.of ℤ ℤ)).map
+        (TopCat.ofHom (apm_t96j07_signDiagonal_H2_aux_product s)) =
+      ((-1 : ℤ) ^ s.length) • 𝟙 _ := by
+  induction s with
+  | nil => simp [apm_t96j07_signDiagonal_H2_aux_product]
+  | cons i s ih =>
+    have hc : TopCat.ofHom (apm_t96j07_signDiagonal_H2_aux_product (i :: s)) =
+        TopCat.ofHom (apm_t96j07_signDiagonal_H2_aux_product s) ≫
+          TopCat.ofHom
+            (ConstructionTargets.CoefficientCoordinateReflections.reflectionMap i) := rfl
+    rw [hc, Functor.map_comp, ih,
+      ConstructionTargets.CoefficientFirstReflection.all_reflections_negative ℤ 2 (by decide) i]
+    simp [pow_succ, Preadditive.comp_neg]
+
 theorem apm_t96j07_signDiagonal_H2 (ε : Fin 3 → ℝ) (hε : ∀ j, ε j = 1 ∨ ε j = -1)
     (l : C(apm_t96j07_S2, apm_t96j07_S2)) (hl : apm_t96j07_IsNormalizedDiagonal ε l) :
     ∃ orientation : apm_t96j07_H2S2 ≅ ModuleCat.of ℤ ℤ,
@@ -416,11 +454,81 @@ theorem apm_t96j07_signDiagonal_H2 (ε : Fin 3 → ℝ) (hε : ∀ j, ε j = 1 �
             (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 2).obj
               (ModuleCat.of ℤ ℤ)).map (TopCat.ofHom l) z) =
           (if 0 < ∏ j, ε j then 1 else -1) * orientation.hom z := by
-  sorry
+  let s := ([0, 1, 2] : List (Fin 3)).filter (fun j => ε j = -1)
+  have hs : s.Nodup := (by decide : ([0, 1, 2] : List (Fin 3)).Nodup).filter _
+  have hcoord (x : apm_t96j07_S2) (j : Fin 3) :
+      (apm_t96j07_signDiagonal_H2_aux_product s x).1 j = ε j * x.1 j := by
+    rw [apm_t96j07_signDiagonal_H2_aux_coordinate s hs]
+    rcases hε j with hj | hj
+    · norm_num [s, hj]
+    · have hjmem : j ∈ ([0, 1, 2] : List (Fin 3)) := by
+        fin_cases j <;> simp
+      simp [s, hj, hjmem]
+  have hnorm (x : apm_t96j07_S2) :
+      ‖WithLp.toLp 2 (fun j ↦ ε j * x.1 j)‖ = 1 := by
+    have hv : WithLp.toLp 2 (fun j ↦ ε j * x.1 j) =
+        (apm_t96j07_signDiagonal_H2_aux_product s x).1 := by
+      ext j
+      exact (hcoord x j).symm
+    rw [hv]
+    simpa [Metric.mem_sphere, dist_zero_right] using
+      (apm_t96j07_signDiagonal_H2_aux_product s x).2
+  have hl_eq : l = apm_t96j07_signDiagonal_H2_aux_product s := by
+    ext x j
+    obtain ⟨hne, hx⟩ := hl x
+    rw [hx]
+    change (‖WithLp.toLp 2 (fun k ↦ ε k * x.1 k)‖⁻¹ •
+      WithLp.toLp 2 (fun k ↦ ε k * x.1 k)) j = _
+    rw [hnorm]
+    simp [hcoord]
+  let e := ConstructionTargets.CoefficientFirstReflection.topIso ℤ 1
+  refine ⟨e, ?_⟩
+  intro z
+  have hmap := apm_t96j07_signDiagonal_H2_aux_homology s
+  rw [hl_eq, hmap]
+  change e.hom.hom (((((-1 : ℤ) ^ s.length) • 𝟙 _) :
+      apm_t96j07_H2S2 ⟶ apm_t96j07_H2S2).hom z) = _
+  have hsign : (if 0 < ∏ j, ε j then (1 : ℤ) else -1) = (-1 : ℤ) ^ s.length := by
+    have he : ε = ![ε 0, ε 1, ε 2] := by
+      funext j
+      fin_cases j <;> rfl
+    rcases hε 0 with h0 | h0 <;> rcases hε 1 with h1 | h1 <;>
+      rcases hε 2 with h2 | h2
+    all_goals rw [he]
+    all_goals norm_num [s, h0, h1, h2, Fin.prod_univ_succ]
+  rw [hsign]
+  rcases neg_one_pow_eq_or ℤ s.length with hp | hp
+  · rw [hp]
+    simp
+  · rw [hp]
+    simp
 
 /-- Seat (assembly from the three leaves above as hypotheses): homotopy
 invariance (`SingularHomologyHomotopy.singularHomology_map_eq_of_homotopic`) and
 `sign (∏ b j) = ∏ sign (b j)`. -/
+lemma apm_t96j07_diagonal_link_degree_of_parts_aux_sign
+    (b : Fin 3 → ℝ) (hb : ∀ j, b j ≠ 0) :
+    (0 < ∏ j, (if 0 < b j then (1 : ℝ) else -1)) ↔ 0 < ∏ j, b j := by
+  have hneg : ∀ j, ¬ 0 < b j → b j < 0 := by
+    intro j hj
+    exact lt_of_le_of_ne (le_of_not_gt hj) (hb j)
+  by_cases h0 : 0 < b 0 <;> by_cases h1 : 0 < b 1 <;>
+      by_cases h2 : 0 < b 2
+  all_goals simp [Fin.prod_univ_succ, h0, h1, h2]
+  all_goals try have hn0 := hneg 0 h0
+  all_goals try have hn1 := hneg 1 h1
+  all_goals try have hn2 := hneg 2 h2
+  all_goals try positivity
+  all_goals try exact mul_pos_of_neg_of_neg hn1 hn2
+  all_goals try exact mul_pos_of_neg_of_neg hn0 (mul_neg_of_pos_of_neg h1 hn2)
+  all_goals try exact mul_pos_of_neg_of_neg hn0 (mul_neg_of_neg_of_pos hn1 h2)
+  · constructor
+    · norm_num
+    · intro hp
+      have hn : b 0 * (b 1 * b 2) < 0 :=
+        mul_neg_of_neg_of_pos hn0 (mul_pos_of_neg_of_neg hn1 hn2)
+      linarith
+
 theorem apm_t96j07_diagonal_link_degree_of_parts
     (hex : ∀ b : Fin 3 → ℝ, (∀ j, b j ≠ 0) → ∃ link, apm_t96j07_IsNormalizedDiagonal b link)
     (hhom : ∀ (b : Fin 3 → ℝ), (∀ j, b j ≠ 0) → ∀ l l' : C(apm_t96j07_S2, apm_t96j07_S2),
@@ -444,7 +552,39 @@ theorem apm_t96j07_diagonal_link_degree_of_parts
                 (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 2).obj
                   (ModuleCat.of ℤ ℤ)).map (TopCat.ofHom link) z) =
               (if 0 < ∏ j, (1 - a j) then 1 else -1) * orientation.hom z := by
-  sorry
+  intro a ha
+  let b : Fin 3 → ℝ := fun j => 1 - a j
+  obtain ⟨link, hlink⟩ := hex b ha
+  let ε : Fin 3 → ℝ := fun j => if 0 < b j then 1 else -1
+  have hεne : ∀ j, ε j ≠ 0 := by
+    intro j
+    simp only [ε]
+    split_ifs <;> norm_num
+  obtain ⟨signLink, hsignLink⟩ := hex ε hεne
+  have hε : ∀ j, ε j = 1 ∨ ε j = -1 := by
+    intro j
+    simp only [ε]
+    split_ifs <;> simp
+  obtain ⟨orientation, horientation⟩ := hsign ε hε signLink hsignLink
+  obtain ⟨H⟩ := hhom b ha link signLink hlink hsignLink
+  have hmap :=
+    ConstructionTargets.CoefficientContractiblePair.singularHomology_map_eq_of_topCatHomotopy
+      ℤ (ConstructionTargets.SingularHomologyConcrete.continuousMapHomotopyCylinder H)
+      (ConstructionTargets.SingularHomologyConcrete.continuousMapHomotopyCylinder_zero H)
+      (ConstructionTargets.SingularHomologyConcrete.continuousMapHomotopyCylinder_one H) 2
+  refine ⟨link, hlink, orientation, ?_⟩
+  intro z
+  rw [hmap]
+  rw [horientation]
+  have hp := apm_t96j07_diagonal_link_degree_of_parts_aux_sign b ha
+  change (0 < ∏ j, ε j) ↔ 0 < ∏ j, b j at hp
+  have heq : (if 0 < ∏ j, ε j then (1 : ℤ) else -1) =
+      (if 0 < ∏ j, b j then 1 else -1) := by
+    by_cases h : 0 < ∏ j, ε j
+    · simp [h, hp.mp h]
+    · have hn : ¬ 0 < ∏ j, b j := fun hb => h (hp.mpr hb)
+      simp [h, hn]
+  rw [heq]
 
 /-- The degree calculation used in every affine chart.  An invertible diagonal
 displacement on `R^3`, normalized to the unit sphere, acts on integral top
@@ -495,6 +635,149 @@ lemma apm_t96j07_affine_chart_aux_insert_ne (i : Fin 4)
   have hi := congrFun h i
   simpa [apm_t96j07_affine_chart_aux_insert] using hi
 
+noncomputable def apm_t96j07_affine_chart_aux_coord (i : Fin 4)
+    (p : apm_t96j07_RP3) : apm_t96j07_E3 :=
+  WithLp.toLp 2 (fun j => p.rep (i.succAbove j) / p.rep i)
+
+noncomputable def apm_t96j07_affine_chart_aux_inv (i : Fin 4)
+    (y : apm_t96j07_E3) : apm_t96j07_RP3 :=
+  Projectivization.mk ℝ (apm_t96j07_affine_chart_aux_insert i y)
+    (apm_t96j07_affine_chart_aux_insert_ne i y)
+
+lemma apm_t96j07_affine_chart_aux_open (i : Fin 4) :
+    IsOpen {p : apm_t96j07_RP3 | p.rep i ≠ 0} := by
+  rw [isOpen_coinduced]
+  change IsOpen ((Projectivization.mk' ℝ) ⁻¹'
+    {p : apm_t96j07_RP3 | p.rep i ≠ 0})
+  have heq : (Projectivization.mk' ℝ) ⁻¹'
+      {p : apm_t96j07_RP3 | p.rep i ≠ 0} =
+      {v : {v : apm_t96j07_V // v ≠ 0} | v.1 i ≠ 0} := by
+    ext v
+    change (Projectivization.mk ℝ v.1 v.2).rep i ≠ 0 ↔ v.1 i ≠ 0
+    obtain ⟨a, ha⟩ := Projectivization.exists_smul_eq_mk_rep ℝ v.1 v.2
+    rw [← ha]
+    change (a : ℝ) * v.1 i ≠ 0 ↔ v.1 i ≠ 0
+    simp
+  rw [heq]
+  exact isOpen_compl_singleton.preimage
+    ((continuous_apply i).comp continuous_subtype_val)
+
+lemma apm_t96j07_affine_chart_aux_coord_cont (i : Fin 4) :
+    ContinuousOn (apm_t96j07_affine_chart_aux_coord i)
+      {p : apm_t96j07_RP3 | p.rep i ≠ 0} := by
+  let s : Set apm_t96j07_RP3 := {p | p.rep i ≠ 0}
+  let q : {v : apm_t96j07_V // v ≠ 0} → apm_t96j07_RP3 :=
+    Projectivization.mk' ℝ
+  let qr := s.restrictPreimage q
+  have hqr : IsOpenQuotientMap qr := by
+    refine ⟨?_, (ConstructionTargets.ProjectiveSpaceTopology.continuous_quotientMap ℝ 3).restrictPreimage, ?_⟩
+    · rintro ⟨x, hx⟩
+      obtain ⟨v, rfl⟩ :=
+        ConstructionTargets.ProjectiveSpaceTopology.surjective_quotientMap ℝ 3 x
+      exact ⟨⟨v, hx⟩, rfl⟩
+    · exact (ConstructionTargets.ProjectiveQuotientDescent.projectiveQuotientMap_isOpen ℝ 3).restrictPreimage s
+  rw [continuousOn_iff_continuous_restrict]
+  apply hqr.isQuotientMap.continuous_iff.mpr
+  have hc : Continuous (fun v : q ⁻¹' s => WithLp.toLp 2 (fun j : Fin 3 =>
+      v.1.1 (i.succAbove j) / v.1.1 i)) := by
+    apply (PiLp.continuous_toLp 2 _).comp
+    apply continuous_pi
+    intro j
+    apply Continuous.div
+    · exact (continuous_apply _).comp
+        (continuous_subtype_val.comp continuous_subtype_val)
+    · exact (continuous_apply _).comp
+        (continuous_subtype_val.comp continuous_subtype_val)
+    · intro v
+      have hv := v.2
+      change (Projectivization.mk ℝ v.1.1 v.1.2).rep i ≠ 0 at hv
+      obtain ⟨a, ha⟩ := Projectivization.exists_smul_eq_mk_rep ℝ v.1.1 v.1.2
+      rw [← ha] at hv
+      exact (mul_ne_zero_iff.mp hv).2
+  have heq : ({p : apm_t96j07_RP3 | p.rep i ≠ 0}.restrict
+      (apm_t96j07_affine_chart_aux_coord i) ∘ qr) =
+      (fun v : q ⁻¹' s => WithLp.toLp 2 (fun j : Fin 3 =>
+        v.1.1 (i.succAbove j) / v.1.1 i)) := by
+    funext v
+    apply WithLp.ofLp_injective 2
+    funext j
+    change (Projectivization.mk ℝ v.1.1 v.1.2).rep (i.succAbove j) /
+      (Projectivization.mk ℝ v.1.1 v.1.2).rep i = _
+    obtain ⟨a, ha⟩ := Projectivization.exists_smul_eq_mk_rep ℝ v.1.1 v.1.2
+    rw [← ha]
+    change ((a : ℝ) * v.1.1 _ / ((a : ℝ) * v.1.1 i)) = _
+    field_simp
+  rw [heq]
+  exact hc
+
+lemma apm_t96j07_affine_chart_aux_inv_cont (i : Fin 4) :
+    Continuous (apm_t96j07_affine_chart_aux_inv i) := by
+  change Continuous (ConstructionTargets.ProjectiveSpaceTopology.quotientMap ℝ 3 ∘
+    fun y : apm_t96j07_E3 =>
+      ⟨apm_t96j07_affine_chart_aux_insert i y,
+        apm_t96j07_affine_chart_aux_insert_ne i y⟩)
+  apply (ConstructionTargets.ProjectiveSpaceTopology.continuous_quotientMap ℝ 3).comp
+  apply Continuous.subtype_mk
+  apply continuous_pi
+  intro k
+  refine i.succAboveCases ?_ (fun j => ?_) k
+  · simpa [apm_t96j07_affine_chart_aux_insert] using
+      (continuous_const : Continuous (fun _ : apm_t96j07_E3 => (1 : ℝ)))
+  · simpa [apm_t96j07_affine_chart_aux_insert] using
+      ((continuous_apply j).comp (PiLp.continuous_ofLp 2 _))
+
+lemma apm_t96j07_affine_chart_aux_coord_inv (i : Fin 4)
+    (y : apm_t96j07_E3) :
+    apm_t96j07_affine_chart_aux_coord i
+      (apm_t96j07_affine_chart_aux_inv i y) = y := by
+  change WithLp.toLp 2 (fun j =>
+    (Projectivization.mk ℝ (apm_t96j07_affine_chart_aux_insert i y)
+      (apm_t96j07_affine_chart_aux_insert_ne i y)).rep (i.succAbove j) /
+    (Projectivization.mk ℝ (apm_t96j07_affine_chart_aux_insert i y)
+      (apm_t96j07_affine_chart_aux_insert_ne i y)).rep i) = y
+  rw [apm_t96j07_affine_chart_aux_rep_ratio]
+  apply WithLp.ofLp_injective 2
+  funext j
+  simp [apm_t96j07_affine_chart_aux_insert]
+
+lemma apm_t96j07_affine_chart_aux_inv_coord (i : Fin 4)
+    (p : apm_t96j07_RP3) (hp : p.rep i ≠ 0) :
+    apm_t96j07_affine_chart_aux_inv i
+      (apm_t96j07_affine_chart_aux_coord i p) = p := by
+  rw [← Projectivization.mk_rep p]
+  apply (Projectivization.mk_eq_mk_iff' ℝ _ _ _ _).2
+  refine ⟨(p.rep i)⁻¹, ?_⟩
+  funext k
+  refine i.succAboveCases ?_ (fun j => ?_) k
+  · simp [apm_t96j07_affine_chart_aux_insert, hp]
+  · simp [apm_t96j07_affine_chart_aux_insert,
+      apm_t96j07_affine_chart_aux_coord, div_eq_inv_mul]
+
+noncomputable def apm_t96j07_affine_chart_aux_chart (i : Fin 4) :
+    OpenPartialHomeomorph apm_t96j07_RP3 apm_t96j07_E3 where
+  toPartialEquiv := {
+    toFun := apm_t96j07_affine_chart_aux_coord i
+    invFun := apm_t96j07_affine_chart_aux_inv i
+    source := {p | p.rep i ≠ 0}
+    target := Set.univ
+    map_source' := fun _ _ => Set.mem_univ _
+    map_target' := by
+      intro y _
+      change (apm_t96j07_affine_chart_aux_inv i y).rep i ≠ 0
+      unfold apm_t96j07_affine_chart_aux_inv
+      obtain ⟨a, ha⟩ := Projectivization.exists_smul_eq_mk_rep ℝ
+        (apm_t96j07_affine_chart_aux_insert i y)
+        (apm_t96j07_affine_chart_aux_insert_ne i y)
+      rw [← ha]
+      change (a : ℝ) * apm_t96j07_affine_chart_aux_insert i y i ≠ 0
+      simp [apm_t96j07_affine_chart_aux_insert]
+    left_inv' := apm_t96j07_affine_chart_aux_inv_coord i
+    right_inv' := fun y _ => apm_t96j07_affine_chart_aux_coord_inv i y }
+  open_source := apm_t96j07_affine_chart_aux_open i
+  open_target := isOpen_univ
+  continuousOn_toFun := apm_t96j07_affine_chart_aux_coord_cont i
+  continuousOn_invFun := (apm_t96j07_affine_chart_aux_inv_cont i).continuousOn
+
 theorem apm_t96j07_affine_chart :
     ∀ i : Fin 4, ∃ chart : OpenPartialHomeomorph apm_t96j07_RP3 apm_t96j07_E3,
       (∀ p, p ∈ chart.source ↔ p.rep i ≠ 0) ∧ chart.target = Set.univ ∧
@@ -503,7 +786,15 @@ theorem apm_t96j07_affine_chart :
           WithLp.toLp 2 (fun j => x (i.succAbove j) / x i)) ∧
       (∀ y : apm_t96j07_E3, ∃ h, chart.symm y =
         Projectivization.mk ℝ (Fin.insertNth i 1 (WithLp.ofLp y)) h) := by
-  sorry
+  intro i
+  refine ⟨apm_t96j07_affine_chart_aux_chart i, ?_, rfl, ?_, ?_⟩
+  · intro p
+    rfl
+  · intro x hx hxi
+    exact apm_t96j07_affine_chart_aux_rep_ratio i x hx
+  · intro y
+    refine ⟨apm_t96j07_affine_chart_aux_insert_ne i y, ?_⟩
+    rfl
 
 noncomputable def apm_t96j07_local_number_axis0_coords
     (x : apm_t96j07_RP3) : apm_t96j07_E3 :=
@@ -553,6 +844,14 @@ lemma apm_t96j07_local_number_axis0_coords_inv (x : apm_t96j07_RP3)
   · simp [apm_t96j07_local_number_axis0_inv,
       apm_t96j07_local_number_axis0_coords, div_eq_inv_mul]
 
+lemma apm_t96j07_local_number_axis0_aux_chart_rep_ne
+    (v : apm_t96j07_V) (hv : v ≠ 0) (i : Fin 4) (hi : v i ≠ 0) :
+    (Projectivization.mk ℝ v hv).rep i ≠ 0 := by
+  obtain ⟨a, ha⟩ := Projectivization.exists_smul_eq_mk_rep ℝ v hv
+  have hai := congrFun ha i
+  rw [← hai]
+  exact mul_ne_zero (Units.ne_zero a) hi
+
 lemma apm_t96j07_local_number_axis0_aux_chart
     (hgen : ∀ i : Fin 4, ∃ chart : OpenPartialHomeomorph apm_t96j07_RP3 apm_t96j07_E3,
         (∀ p, p ∈ chart.source ↔ p.rep i ≠ 0) ∧ chart.target = Set.univ ∧
@@ -576,7 +875,37 @@ lemma apm_t96j07_local_number_axis0_aux_chart
       (∀ y, f (chart.symm y) ∈ chart.source) ∧
       (∀ y, chart (f (chart.symm y)) =
         WithLp.toLp 2 (fun j => (j.val + 2 : ℝ) * y j)) := by
-  sorry
+  obtain ⟨chart, hsource, htarget, hchart, hinv⟩ := hgen 0
+  refine ⟨chart, ?_, ?_, htarget, ?_, ?_, ?_⟩
+  · rw [hsource]
+    apply apm_t96j07_local_number_axis0_aux_chart_rep_ne
+    simp [apm_t96j07_axis]
+  · rw [hchart _ _ (by simp [apm_t96j07_axis])]
+    ext j
+    simp [apm_t96j07_axis]
+  · intro y
+    apply chart.map_target
+    rw [htarget]
+    exact Set.mem_univ y
+  · intro y
+    obtain ⟨hv, hy⟩ := hinv y
+    rw [hy, hformula]
+    rw [hsource]
+    apply apm_t96j07_local_number_axis0_aux_chart_rep_ne
+    show apm_t96j07_A (Fin.insertNth 0 1 (WithLp.ofLp y)) 0 ≠ 0
+    norm_num [apm_t96j07_A]
+  · intro y
+    obtain ⟨hv, hy⟩ := hinv y
+    rw [hy, hformula]
+    have hA0 : apm_t96j07_A (Fin.insertNth 0 1 (WithLp.ofLp y)) 0 ≠ 0 := by
+      norm_num [apm_t96j07_A]
+    rw [hchart _ _ hA0]
+    ext j
+    simp only [WithLp.ofLp_toLp, apm_t96j07_A, Fin.succAbove_zero,
+      Fin.insertNth_zero, Fin.cons_succ, Fin.cons_zero]
+    simp only [Fin.val_succ, Fin.val_zero, cast_eq, Nat.cast_add, Nat.cast_one,
+      Nat.cast_zero, zero_add, mul_one, div_one]
+    ring
 
 theorem apm_t96j07_local_number_axis0
     (f : C(apm_t96j07_RP3, apm_t96j07_RP3))
@@ -641,6 +970,64 @@ theorem apm_t96j07_local_number_axis0
       norm_num [a, Fin.prod_univ_succ]
 
 /-- Package the affine chart at the second coordinate axis. -/
+lemma apm_t96j07_local_number_axis1_aux_rep_ne
+    (v : apm_t96j07_V) (hv : v ≠ 0) (i : Fin 4) (hi : v i ≠ 0) :
+    (Projectivization.mk ℝ v hv).rep i ≠ 0 := by
+  obtain ⟨u, hu⟩ := Projectivization.exists_smul_eq_mk_rep ℝ v hv
+  have hui := congrFun hu i
+  rw [← hui]
+  exact mul_ne_zero (Units.ne_zero u) hi
+
+lemma apm_t96j07_local_number_axis1_aux_chart
+    (hgen : ∀ i : Fin 4, ∃ chart : OpenPartialHomeomorph apm_t96j07_RP3 apm_t96j07_E3,
+        (∀ p, p ∈ chart.source ↔ p.rep i ≠ 0) ∧ chart.target = Set.univ ∧
+        (∀ (x : apm_t96j07_V) (hx : x ≠ 0), x i ≠ 0 →
+          chart (Projectivization.mk ℝ x hx) =
+            WithLp.toLp 2 (fun j => x (i.succAbove j) / x i)) ∧
+        (∀ y : apm_t96j07_E3, ∃ h, chart.symm y =
+          Projectivization.mk ℝ (Fin.insertNth i 1 (WithLp.ofLp y)) h))
+    (f : C(apm_t96j07_RP3, apm_t96j07_RP3))
+    (hformula : ∀ (x : apm_t96j07_V) (hx : x ≠ 0),
+      f (Projectivization.mk ℝ x hx) =
+        Projectivization.mk ℝ (apm_t96j07_A x) (apm_t96j07_A_ne_zero hx)) :
+    ∃ chart : OpenPartialHomeomorph apm_t96j07_RP3 apm_t96j07_E3,
+      (Projectivization.mk ℝ (apm_t96j07_axis 1) (by
+        intro h; have := congrFun h 1; simp [apm_t96j07_axis] at this)) ∈ chart.source ∧
+      chart (Projectivization.mk ℝ (apm_t96j07_axis 1) (by
+        intro h; have := congrFun h 1; simp [apm_t96j07_axis] at this)) = 0 ∧
+      chart.target = Set.univ ∧
+      (∀ y, chart.symm y ∈ chart.source) ∧
+      (∀ y, f (chart.symm y) ∈ chart.source) ∧
+      (∀ y, chart (f (chart.symm y)) =
+        WithLp.toLp 2 (fun j => (![1 / 2, 3 / 2, 2] : Fin 3 → ℝ) j * y j)) := by
+  obtain ⟨chart, hsource, htarget, hchart, hinv⟩ := hgen 1
+  refine ⟨chart, ?_, ?_, htarget, ?_, ?_, ?_⟩
+  · rw [hsource]
+    apply apm_t96j07_local_number_axis1_aux_rep_ne
+    simp [apm_t96j07_axis]
+  · rw [hchart _ _ (by simp [apm_t96j07_axis])]
+    ext j
+    fin_cases j <;> simp [apm_t96j07_axis, Fin.succAbove]
+  · intro y
+    apply chart.map_target
+    rw [htarget]
+    exact Set.mem_univ y
+  · intro y
+    obtain ⟨hv, hy⟩ := hinv y
+    rw [hy, hformula, hsource]
+    apply apm_t96j07_local_number_axis1_aux_rep_ne
+    show apm_t96j07_A (Fin.insertNth 1 1 (WithLp.ofLp y)) 1 ≠ 0
+    norm_num [apm_t96j07_A]
+  · intro y
+    obtain ⟨hv, hy⟩ := hinv y
+    rw [hy, hformula]
+    have hA1 : apm_t96j07_A (Fin.insertNth 1 1 (WithLp.ofLp y)) 1 ≠ 0 := by
+      norm_num [apm_t96j07_A]
+    rw [hchart _ _ hA1]
+    ext j
+    fin_cases j <;> simp [apm_t96j07_A, Fin.succAbove, Fin.insertNth,
+      Fin.succAboveCases, Fin.lt_def] <;> ring
+
 theorem apm_t96j07_local_number_axis1
     (hgen :
   ∀ i : Fin 4, ∃ chart : OpenPartialHomeomorph apm_t96j07_RP3 apm_t96j07_E3,
@@ -669,7 +1056,46 @@ theorem apm_t96j07_local_number_axis1
     apm_t96j07_HasLocalLefschetzNumber f
         (Projectivization.mk ℝ (apm_t96j07_axis 1) (by
           intro h; have := congrFun h 1; simp [apm_t96j07_axis] at this)) 1 := by
-  sorry
+  obtain ⟨chart, hq, hq0, htarget, hinv, hfsource, haction⟩ :=
+    apm_t96j07_local_number_axis1_aux_chart hgen f hformula
+  refine ⟨chart, hq, hq0, 1, by norm_num, ?_, ?_, ?_, ?_⟩
+  · rw [htarget]
+    exact Set.subset_univ _
+  · intro y hy
+    exact hfsource y
+  · intro y hy heq
+    rw [haction] at heq
+    ext j
+    have hj := congrArg (fun z : apm_t96j07_E3 => z j) heq
+    simp only [WithLp.ofLp_toLp] at hj
+    fin_cases j <;> norm_num at hj ⊢ <;> linarith
+  · let a : Fin 3 → ℝ := ![1 / 2, 3 / 2, 2]
+    obtain ⟨link, hlink, orientation, horientation⟩ := hdegree a (by
+      intro j
+      fin_cases j <;> norm_num [a])
+    refine ⟨link, ?_, orientation, ?_⟩
+    · intro x
+      have hxsource := hinv ((1 : ℝ) • x.1)
+      have hfxsource := hfsource ((1 : ℝ) • x.1)
+      refine ⟨hxsource, hfxsource, ?_⟩
+      obtain ⟨hne, heq⟩ := hlink x
+      have hd : (1 : ℝ) • x.1 - chart (f (chart.symm ((1 : ℝ) • x.1))) =
+          WithLp.toLp 2 (fun j => (1 - a j) * x.1 j) := by
+        rw [haction]
+        ext j
+        fin_cases j <;> simp [a] <;> ring
+      refine ⟨?_, ?_⟩
+      · rw [hd]
+        exact hne
+      · rw [heq]
+        apply Subtype.ext
+        simp only [Subtype.coe_mk]
+        rw [hd]
+    · intro z
+      rw [horientation]
+      have hp : 0 < ∏ j, (1 - a j) := by
+        norm_num [a, Fin.prod_univ_succ]
+      simp [hp]
 
 noncomputable def apm_t96j07_local_number_axis2_aux_coord
     (x : apm_t96j07_RP3) : apm_t96j07_E3 :=
@@ -1054,7 +1480,105 @@ theorem apm_t96j07_local_number_axis3
     apm_t96j07_HasLocalLefschetzNumber f
         (Projectivization.mk ℝ (apm_t96j07_axis 3) (by
           intro h; have := congrFun h 3; simp [apm_t96j07_axis] at this)) 1 := by
-  sorry
+  obtain ⟨chart, hsource, htarget, hcoord, hinv⟩ := hgen 3
+  let a : Fin 3 → ℝ := ![(1 : ℝ) / 4, 1 / 2, 3 / 4]
+  have haw : ∀ j, a j =
+      ((Fin.succAbove (3 : Fin 4) j).val + 1 : ℝ) / 4 := by
+    intro j
+    fin_cases j <;> norm_num [a, Fin.succAbove, Fin.lt_iff_val_lt_val]
+  have ha : ∀ j, 1 - a j ≠ 0 := by
+    intro j
+    fin_cases j <;> norm_num [a]
+  obtain ⟨link, hlink, orientation, horientation⟩ := hdegree a ha
+  have haction : ∀ y : apm_t96j07_E3,
+      f (chart.symm y) ∈ chart.source ∧
+      chart (f (chart.symm y)) =
+        WithLp.toLp 2 (fun j => a j * WithLp.ofLp y j) := by
+    intro y
+    obtain ⟨hv, hy⟩ := hinv y
+    let v : apm_t96j07_V := Fin.insertNth 3 1 (WithLp.ofLp y)
+    have hv3 : v 3 ≠ 0 := by simp [v]
+    have hAv3 : apm_t96j07_A v 3 ≠ 0 := by
+      norm_num [apm_t96j07_A, v]
+    rw [hy, hformula v hv]
+    constructor
+    · rw [hsource]
+      obtain ⟨u, hu⟩ := Projectivization.exists_smul_eq_mk_rep ℝ
+        (apm_t96j07_A v) (apm_t96j07_A_ne_zero hv)
+      rw [← hu]
+      exact mul_ne_zero (Units.ne_zero u) hAv3
+    · rw [hcoord _ _ hAv3]
+      apply WithLp.ofLp_injective 2
+      funext j
+      rw [WithLp.ofLp_toLp]
+      have hs : v ((3 : Fin 4).succAbove j) = WithLp.ofLp y j := by
+        fin_cases j <;> rfl
+      simp only [apm_t96j07_A, hs]
+      rw [show v 3 = 1 by simp [v], haw]
+      fin_cases j <;> norm_num [Fin.succAbove, Fin.lt_def] <;> ring
+  refine ⟨chart, ?_, ?_, 1, by norm_num, ?_, ?_, ?_, link, ?_, orientation, ?_⟩
+  · rw [hsource]
+    obtain ⟨u, hu⟩ := Projectivization.exists_smul_eq_mk_rep ℝ
+      (apm_t96j07_axis 3) (by
+        intro h
+        have hh := congrFun h 3
+        simp [apm_t96j07_axis] at hh)
+    rw [← hu]
+    exact mul_ne_zero (Units.ne_zero u) (by simp [apm_t96j07_axis])
+  · rw [hcoord (apm_t96j07_axis 3) (by
+        intro h
+        have hh := congrFun h 3
+        simp [apm_t96j07_axis] at hh) (by simp [apm_t96j07_axis])]
+    apply WithLp.ofLp_injective 2
+    funext j
+    simp [apm_t96j07_axis]
+  · rw [htarget]
+    exact Set.subset_univ _
+  · intro y hy
+    exact (haction y).1
+  · intro y hy heq
+    rw [(haction y).2] at heq
+    apply WithLp.ofLp_injective 2
+    funext j
+    have hj := congrArg (fun w : apm_t96j07_E3 => WithLp.ofLp w j) heq
+    simp only [WithLp.ofLp_toLp] at hj
+    fin_cases j
+    · norm_num [a] at hj
+      simpa using (show WithLp.ofLp y 0 = 0 by linarith [hj])
+    · norm_num [a] at hj
+      simpa using (show WithLp.ofLp y 1 = 0 by linarith [hj])
+    · norm_num [a] at hj
+      change (3 / 4 : ℝ) * WithLp.ofLp y 2 = WithLp.ofLp y 2 at hj
+      change WithLp.ofLp y 2 = 0
+      linarith [hj]
+  · intro x
+    have hs : chart.symm x.1 ∈ chart.source := chart.map_target (by
+      rw [htarget]
+      exact Set.mem_univ _)
+    have hact := haction x.1
+    refine ⟨by simpa only [one_smul] using hs,
+      by simpa only [one_smul] using hact.1, ?_⟩
+    have hdisp : (1 : ℝ) • x.1 - chart (f (chart.symm ((1 : ℝ) • x.1))) =
+        WithLp.toLp 2 (fun j => (1 - a j) * x.1 j) := by
+      simp only [one_smul]
+      rw [hact.2]
+      apply WithLp.ofLp_injective 2
+      funext j
+      change WithLp.ofLp x.1 j - a j * WithLp.ofLp x.1 j =
+          (1 - a j) * WithLp.ofLp x.1 j
+      ring
+    obtain ⟨hne, heq⟩ := hlink x
+    refine ⟨by rw [hdisp]; exact hne, ?_⟩
+    rw [heq]
+    apply Subtype.ext
+    simp only [Subtype.coe_mk]
+    rw [hdisp]
+  · intro z
+    rw [horientation]
+    have hprod : (∏ j, (1 - a j)) = (3 / 32 : ℝ) := by
+      norm_num [a, Fin.prod_univ_succ]
+    rw [hprod]
+    norm_num
 
 /-- Compute the four intrinsic local indices.  This is only the sorry-free
 assembly of the generic degree calculation and four independent chart leaves. -/

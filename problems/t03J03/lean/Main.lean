@@ -81,7 +81,7 @@ lemma apm_t03J03_euler_N4 : eulerCharacteristic false 4 = -2 := by
 
 lemma apm_t03J03_character_card : Nat.card apm_t03J03_character = 7 := by
   rw [Nat.card_eq_fintype_card]
-  native_decide
+  decide
 
 lemma apm_t03J03_orientationCharacter_ne_zero :
     apm_t03J03_orientationCharacter ≠ 0 := by

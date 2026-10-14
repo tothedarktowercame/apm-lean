@@ -2,22 +2,7 @@ import Mathlib
 import Mathlib.LinearAlgebra.Dual.Lemmas
 import Mathlib.LinearAlgebra.FiniteDimensional.Lemmas
 
-/-!
-# APM t99J04 — inverse function theorem and compact local diffeomorphisms
-
-## Statement repairs
-
-In part (a), `X in an n-dimensional manifold` is read as `X is an
-n-dimensional manifold`. In part (b), the customary implicit assumption that
-the manifold `X` is nonempty is made explicit: without it the empty compact
-manifold would give a counterexample to surjectivity.
-
-## Encoding questions
-
-None. The differentials, their linear independence, local coordinate systems,
-and the everywhere-invertible derivative are represented by Mathlib's genuine
-manifold derivative and local-diffeomorphism structures.
--/
+/-! # APM t99J04 — inverse function theorem and compact local diffeomorphisms -/
 
 open scoped Manifold
 
@@ -29,9 +14,6 @@ def apm_t99J04_coordinateMap {n : ℕ} {X : Type} (f : Fin n → X → ℝ) :
     X → apm_t99J04_Euclidean n :=
   fun p ↦ WithLp.toLp 2 (fun i ↦ f i p)
 
-/-- The finite-dimensional algebra underlying the coordinate-map derivative:
-`n` independent covectors on an `n`-dimensional space give a bijective
-coordinate map. -/
 lemma apm_t99J04_dualCoordinates_bijective
     {n : ℕ} (hn : 0 < n) {V : Type} [AddCommGroup V] [Module ℝ V]
     [FiniteDimensional ℝ V] (hfin : Module.finrank ℝ V = n)
@@ -55,8 +37,7 @@ lemma apm_t99J04_dualCoordinates_bijective
     · intro hv
       apply (Module.forall_dual_apply_eq_zero_iff ℝ v).mp
       intro psi
-      rw [← b.sum_repr psi]
-      rw [LinearMap.sum_apply]
+      rw [← b.sum_repr psi, LinearMap.sum_apply]
       apply Finset.sum_eq_zero
       intro i hi
       rw [hb i]
@@ -69,9 +50,6 @@ lemma apm_t99J04_dualCoordinates_bijective
   exact ⟨hLinj,
     (LinearMap.injective_iff_surjective_of_finrank_eq_finrank hdim).mp hLinj⟩
 
-/-- A local diffeomorphism from a nonempty compact space to a connected
-Hausdorff space is surjective. The range is open by local invertibility and
-closed by compactness. -/
 lemma apm_t99J04_surjective_of_isLocalDiffeomorph
     {E E' X Y : Type}
     [NormedAddCommGroup E] [NormedSpace ℝ E]
@@ -89,9 +67,6 @@ lemma apm_t99J04_surjective_of_isLocalDiffeomorph
       (Set.range_nonempty f)
   exact Set.range_eq_univ.mp hrange
 
-/-- The second conjunct with the missing manifold inverse-function theorem
-made explicit as a local hypothesis.  This isolates the absent library bridge
-from the already-compiled compactness argument. -/
 lemma apm_t99J04_surjective_of_bijective_mfderiv_of_localIFT
     {E E' X Y : Type}
     [NormedAddCommGroup E] [NormedSpace ℝ E]
@@ -99,30 +74,22 @@ lemma apm_t99J04_surjective_of_bijective_mfderiv_of_localIFT
     [NormedAddCommGroup E'] [NormedSpace ℝ E']
     [FiniteDimensional ℝ E'] [CompleteSpace E']
     [TopologicalSpace X] [T2Space X] [CompactSpace X] [Nonempty X]
-    [ChartedSpace E X] [IsManifold (modelWithCornersSelf ℝ E) (⊤ : ℕ∞) X]
+    [ChartedSpace E X] [IsManifold (𝓘(ℝ, E)) (⊤ : ℕ∞) X]
     [TopologicalSpace Y] [T2Space Y] [ConnectedSpace Y]
-    [ChartedSpace E' Y] [IsManifold (modelWithCornersSelf ℝ E') (⊤ : ℕ∞) Y]
-    (f : X → Y) (hf : ContMDiff (modelWithCornersSelf ℝ E)
-      (modelWithCornersSelf ℝ E') (⊤ : ℕ∞) f)
+    [ChartedSpace E' Y] [IsManifold (𝓘(ℝ, E')) (⊤ : ℕ∞) Y]
+    (f : X → Y) (hf : ContMDiff (𝓘(ℝ, E)) (𝓘(ℝ, E')) (⊤ : ℕ∞) f)
     (hbij : ∀ x, Function.Bijective
-      (mfderiv (modelWithCornersSelf ℝ E) (modelWithCornersSelf ℝ E') f x))
+      (mfderiv (𝓘(ℝ, E)) (𝓘(ℝ, E')) f x))
     (hlocalIFT : ∀ x,
-      ContMDiffAt (modelWithCornersSelf ℝ E)
-        (modelWithCornersSelf ℝ E') (⊤ : ℕ∞) f x →
-      Function.Bijective
-        (mfderiv (modelWithCornersSelf ℝ E) (modelWithCornersSelf ℝ E') f x) →
-      IsLocalDiffeomorphAt (modelWithCornersSelf ℝ E)
-        (modelWithCornersSelf ℝ E') (⊤ : ℕ∞) f x) :
+      ContMDiffAt (𝓘(ℝ, E)) (𝓘(ℝ, E')) (⊤ : ℕ∞) f x →
+      Function.Bijective (mfderiv (𝓘(ℝ, E)) (𝓘(ℝ, E')) f x) →
+      IsLocalDiffeomorphAt (𝓘(ℝ, E)) (𝓘(ℝ, E')) (⊤ : ℕ∞) f x) :
     Function.Surjective f := by
   apply apm_t99J04_surjective_of_isLocalDiffeomorph (E := E) (E' := E') f
   intro x
   exact hlocalIFT x hf.contMDiffAt (hbij x)
 
-/-- Why this unblocks `apm_t99j04`: this is the missing manifold inverse
-function theorem.  It converts the pointwise smoothness and invertible
-manifold derivative used in both conjuncts into the local diffeomorphism
-needed by the compiled local and global arguments. -/
-theorem apm_t99J04_bridge_local_inverse_function
+theorem apm_t99J04_bridge_local_inverse_function_aux_chart
     {E E' X Y : Type}
     [NormedAddCommGroup E] [NormedSpace ℝ E]
     [FiniteDimensional ℝ E] [CompleteSpace E]
@@ -136,13 +103,244 @@ theorem apm_t99J04_bridge_local_inverse_function
     (hf : ContMDiffAt (𝓘(ℝ, E)) (𝓘(ℝ, E')) (⊤ : ℕ∞) f x)
     (hbij : Function.Bijective
       (mfderiv (𝓘(ℝ, E)) (𝓘(ℝ, E')) f x)) :
-    IsLocalDiffeomorphAt (𝓘(ℝ, E)) (𝓘(ℝ, E')) (⊤ : ℕ∞) f x := by
-  sorry
+    ∃ q : OpenPartialHomeomorph E E',
+      (extChartAt (𝓘(ℝ, E)) x) x ∈ q.source ∧
+      (q : E → E') = writtenInExtChartAt (𝓘(ℝ, E)) (𝓘(ℝ, E')) x f ∧
+      ContDiffAt ℝ (⊤ : ℕ∞) q.symm
+        ((extChartAt (𝓘(ℝ, E')) (f x)) (f x)) := by
+  let a : E := (extChartAt (𝓘(ℝ, E)) x) x
+  let g : E → E' := writtenInExtChartAt (𝓘(ℝ, E)) (𝓘(ℝ, E')) x f
+  have hg : ContDiffAt ℝ (⊤ : ℕ∞) g a := by
+    rw [contMDiffAt_iff] at hf
+    simpa [g, a, writtenInExtChartAt] using hf.2
+  have hderiv : fderiv ℝ g a = mfderiv (𝓘(ℝ, E)) (𝓘(ℝ, E')) f x := by
+    have hm := (hf.mdifferentiableAt (x := x) (by simp)).mfderiv
+    simpa [g, a] using hm.symm
+  have hb' : Function.Bijective (fderiv ℝ g a) := hderiv.symm ▸ hbij
+  let e : E ≃L[ℝ] E' := ContinuousLinearEquiv.ofBijective (fderiv ℝ g a)
+    (LinearMap.ker_eq_bot.mpr hb'.1) (LinearMap.range_eq_top.mpr hb'.2)
+  have he : HasFDerivAt g (e : E →L[ℝ] E') a := by
+    convert (hg.differentiableAt (by simp)).hasFDerivAt
+  let q : OpenPartialHomeomorph E E' := hg.toOpenPartialHomeomorph g he (by simp)
+  refine ⟨q, hg.mem_toOpenPartialHomeomorph_source he (by simp), rfl, ?_⟩
+  have hi := hg.to_localInverse he (by simp)
+  simpa [q, g, a, writtenInExtChartAt] using hi
 
-/-- Why this unblocks `apm_t99j04`: this is the missing derivative formula
-and finite-dimensional packaging for the coordinate map.  Once its derivative
-is bijective, `apm_t99J04_bridge_local_inverse_function` gives exactly the
-first frozen conjunct. -/
+/-- LIBRARY: the missing boundaryless finite-dimensional manifold inverse
+function theorem. -/
+def apm_t99J04_bridge_local_inverse_function_aux_extChart
+    {E X : Type} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [TopologicalSpace X] [ChartedSpace E X]
+    (x : X) : OpenPartialHomeomorph X E where
+  toPartialEquiv := extChartAt (𝓘(ℝ, E)) x
+  open_source := isOpen_extChartAt_source x
+  open_target := isOpen_extChartAt_target x
+  continuousOn_toFun := continuousOn_extChartAt x
+  continuousOn_invFun := continuousOn_extChartAt_symm x
+
+/-- Seat (claude-14): normed-space inverse function theorem with a C^∞
+neighbourhood: shrink the `HasStrictFDerivAt.toOpenPartialHomeomorph` source so
+the derivative stays invertible (`isOpen_setOf_isUnit`-style openness of
+invertible maps); the inverse is `ContDiffAt` at every target point
+(`ContDiffAt.to_localInverse`), hence `ContDiffOn` on the open target. -/
+theorem apm_t99J04_euclid_local_inverse
+    {E E' : Type} [NormedAddCommGroup E] [NormedSpace ℝ E] [CompleteSpace E]
+    [NormedAddCommGroup E'] [NormedSpace ℝ E'] [CompleteSpace E']
+    (f : E → E') (U : Set E) (hU : IsOpen U) (a : E) (ha : a ∈ U)
+    (hf : ContDiffOn ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) f U) (hb : Function.Bijective (fderiv ℝ f a)) :
+    ∃ e : OpenPartialHomeomorph E E', a ∈ e.source ∧ e.source ⊆ U ∧
+      (∀ x ∈ e.source, e x = f x) ∧ ContDiffOn ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) e e.source ∧
+      ContDiffOn ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) e.symm e.target := by
+  let A : Set (E →L[ℝ] E') := Set.range ((↑) : (E ≃L[ℝ] E') → E →L[ℝ] E')
+  let V : Set E := U ∩ (fderiv ℝ f) ⁻¹' A
+  have hdf : ContinuousOn (fderiv ℝ f) U :=
+    hf.continuousOn_fderiv_of_isOpen hU (by simp)
+  have hV : IsOpen V := by
+    exact hdf.isOpen_inter_preimage hU ContinuousLinearEquiv.isOpen
+  let ea : E ≃L[ℝ] E' := ContinuousLinearEquiv.ofBijective (fderiv ℝ f a)
+    (LinearMap.ker_eq_bot.mpr hb.1) (LinearMap.range_eq_top.mpr hb.2)
+  have hea : (ea : E →L[ℝ] E') = fderiv ℝ f a := by
+    exact ContinuousLinearEquiv.coe_ofBijective _ _ _
+  have haV : a ∈ V := by
+    refine ⟨ha, ?_⟩
+    exact ⟨ea, hea⟩
+  have hfa : ContDiffAt ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) f a :=
+    hf.contDiffAt (hU.mem_nhds ha)
+  have hderiva : HasFDerivAt f (ea : E →L[ℝ] E') a := by
+    rw [hea]
+    exact hfa.differentiableAt (by simp) |>.hasFDerivAt
+  let e0 : OpenPartialHomeomorph E E' :=
+    hfa.toOpenPartialHomeomorph f hderiva (by simp)
+  let e : OpenPartialHomeomorph E E' := e0.restr V
+  have he_source : e.source = e0.source ∩ V := by
+    exact e0.restr_source' V hV
+  have hae0 : a ∈ e0.source := hfa.mem_toOpenPartialHomeomorph_source hderiva (by simp)
+  have hae : a ∈ e.source := by
+    rw [he_source]
+    exact ⟨hae0, haV⟩
+  refine ⟨e, hae, ?_, ?_, ?_, ?_⟩
+  · intro x hx
+    rw [he_source] at hx
+    exact hx.2.1
+  · intro x hx
+    rfl
+  · intro x hx
+    have heU : e.source ⊆ U := by
+      intro z hz
+      rw [he_source] at hz
+      exact hz.2.1
+    simpa [e, e0] using (hf x (heU hx)).mono heU
+  · intro y hy
+    have hxy : e.symm y ∈ e.source := e.symm_mapsTo hy
+    have hxV : e.symm y ∈ V := by
+      rw [he_source] at hxy
+      exact hxy.2
+    rcases hxV.2 with ⟨ex, hex⟩
+    have hfx : ContDiffAt ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) f (e.symm y) :=
+      hf.contDiffAt (hU.mem_nhds hxV.1)
+    have hdx : HasFDerivAt f (ex : E →L[ℝ] E') (e.symm y) := by
+      rw [hex]
+      exact hfx.differentiableAt (by simp) |>.hasFDerivAt
+    exact (e.contDiffAt_symm hy (by simpa [e, e0] using hdx)
+      (by simpa [e, e0] using hfx)).contDiffWithinAt
+
+theorem apm_t99J04_bridge_local_inverse_function
+    {E E' X Y : Type}
+    [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [FiniteDimensional ℝ E] [CompleteSpace E]
+    [NormedAddCommGroup E'] [NormedSpace ℝ E']
+    [FiniteDimensional ℝ E'] [CompleteSpace E']
+    [TopologicalSpace X] [ChartedSpace E X]
+    [IsManifold (𝓘(ℝ, E)) (⊤ : ℕ∞) X]
+    [TopologicalSpace Y] [ChartedSpace E' Y]
+    [IsManifold (𝓘(ℝ, E')) (⊤ : ℕ∞) Y]
+    (heuclid : ∀ (U : Set E) (a : E), IsOpen U → a ∈ U →
+      ∀ g : E → E', ContDiffOn ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) g U → Function.Bijective (fderiv ℝ g a) →
+      ∃ e : OpenPartialHomeomorph E E', a ∈ e.source ∧ e.source ⊆ U ∧
+        (∀ x ∈ e.source, e x = g x) ∧ ContDiffOn ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) e e.source ∧
+        ContDiffOn ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) e.symm e.target)
+    (f : X → Y) (x : X)
+    (hf : ContMDiff (𝓘(ℝ, E)) (𝓘(ℝ, E')) (⊤ : ℕ∞) f)
+    (hbij : Function.Bijective
+      (mfderiv (𝓘(ℝ, E)) (𝓘(ℝ, E')) f x)) :
+    IsLocalDiffeomorphAt (𝓘(ℝ, E)) (𝓘(ℝ, E')) (⊤ : ℕ∞) f x := by
+  let cx := apm_t99J04_bridge_local_inverse_function_aux_extChart (E := E) x
+  let cy := apm_t99J04_bridge_local_inverse_function_aux_extChart (E := E') (f x)
+  let a : E := cx x
+  let g : E → E' := writtenInExtChartAt (𝓘(ℝ, E)) (𝓘(ℝ, E')) x f
+  let U : Set E := cx.target ∩ cx.symm ⁻¹' (f ⁻¹' cy.source)
+  have hU : IsOpen U := by
+    exact cx.continuousOn_invFun.isOpen_inter_preimage cx.open_target
+      (hf.continuous.isOpen_preimage _ cy.open_source)
+  have ha : a ∈ U := by
+    constructor
+    · exact cx.map_source (mem_extChartAt_source x)
+    · change f (cx.symm (cx x)) ∈ cy.source
+      rw [cx.left_inv (mem_extChartAt_source x)]
+      exact mem_extChartAt_source (f x)
+  have hg : ContDiffOn ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) g U := by
+    simpa [g, U, cx, cy, apm_t99J04_bridge_local_inverse_function_aux_extChart,
+      writtenInExtChartAt] using (contMDiff_iff.mp hf).2 x (f x)
+  have hderiv : fderiv ℝ g a = mfderiv (𝓘(ℝ, E)) (𝓘(ℝ, E')) f x := by
+    have hfa : ContMDiffAt (𝓘(ℝ, E)) (𝓘(ℝ, E')) (⊤ : ℕ∞) f x :=
+      hf.contMDiffAt
+    have hm := (hfa.mdifferentiableAt (by simp)).mfderiv
+    simpa [g, a, cx, apm_t99J04_bridge_local_inverse_function_aux_extChart] using hm.symm
+  obtain ⟨e, hae, heU, heq, he, hei⟩ :=
+    heuclid U a hU ha g hg (hderiv.symm ▸ hbij)
+  let qh : OpenPartialHomeomorph X Y := cx.trans (e.trans cy.symm)
+  let q : PartialDiffeomorph (𝓘(ℝ, E)) (𝓘(ℝ, E')) X Y (⊤ : ℕ∞) := {
+    toPartialEquiv := qh.toPartialEquiv
+    open_source := qh.open_source
+    open_target := qh.open_target
+    contMDiffOn_toFun := by
+      change ContMDiffOn (𝓘(ℝ, E)) (𝓘(ℝ, E')) (⊤ : ℕ∞)
+        (cy.symm ∘ e ∘ cx) qh.source
+      have hsx : qh.source ⊆ cx.source := by
+        intro z hz
+        rw [OpenPartialHomeomorph.trans_source] at hz
+        exact hz.1
+      have hse : Set.MapsTo cx qh.source e.source := by
+        intro z hz
+        rw [OpenPartialHomeomorph.trans_source,
+          OpenPartialHomeomorph.trans_source] at hz
+        exact hz.2.1
+      have hsy : Set.MapsTo (e ∘ cx) qh.source cy.target := by
+        intro z hz
+        rw [OpenPartialHomeomorph.trans_source,
+          OpenPartialHomeomorph.trans_source] at hz
+        exact hz.2.2
+      exact (contMDiffOn_extChartAt_symm (f x)).comp
+        (he.contMDiffOn.comp (contMDiffOn_extChartAt.mono (by
+          simpa [cx, apm_t99J04_bridge_local_inverse_function_aux_extChart] using hsx)) hse) hsy
+    contMDiffOn_invFun := by
+      change ContMDiffOn (𝓘(ℝ, E')) (𝓘(ℝ, E)) (⊤ : ℕ∞)
+        (cx.symm ∘ e.symm ∘ cy) qh.target
+      have hsy : qh.target ⊆ cy.source := by
+        intro z hz
+        rw [OpenPartialHomeomorph.trans_target,
+          OpenPartialHomeomorph.trans_target] at hz
+        exact hz.1.1
+      have hse : Set.MapsTo cy qh.target e.target := by
+        intro z hz
+        rw [OpenPartialHomeomorph.trans_target,
+          OpenPartialHomeomorph.trans_target] at hz
+        exact hz.1.2
+      have hsx : Set.MapsTo (e.symm ∘ cy) qh.target cx.target := by
+        intro z hz
+        rw [OpenPartialHomeomorph.trans_target] at hz
+        exact hz.2
+      exact (contMDiffOn_extChartAt_symm x).comp
+        (hei.contMDiffOn.comp (contMDiffOn_extChartAt.mono (by
+          simpa [cy, apm_t99J04_bridge_local_inverse_function_aux_extChart] using hsy)) hse) hsx
+  }
+  refine ⟨q, ?_, ?_⟩
+  · change x ∈ qh.source
+    rw [OpenPartialHomeomorph.trans_source,
+      OpenPartialHomeomorph.trans_source]
+    refine ⟨mem_extChartAt_source x, ?_, ?_⟩
+    · simpa [a, cx] using hae
+    · change e (cx x) ∈ cy.target
+      rw [heq _ (by simpa [a, cx] using hae)]
+      exact writtenInExtChartAt_mapsTo ha
+  · intro z hz
+    change f z = qh z
+    rw [OpenPartialHomeomorph.trans_apply, OpenPartialHomeomorph.trans_apply]
+    have hcz : cx z ∈ e.source := by
+      rw [OpenPartialHomeomorph.trans_source,
+        OpenPartialHomeomorph.trans_source] at hz
+      exact hz.2.1
+    rw [heq _ hcz]
+    change f z = cy.symm (g (cx z))
+    have hzsrc : z ∈ cx.source := by
+      rw [OpenPartialHomeomorph.trans_source] at hz
+      exact hz.1
+    have hcoord : g (cx z) = cy (f z) := by
+      change cy (f (cx.symm (cx z))) = cy (f z)
+      rw [cx.left_inv hzsrc]
+    rw [hcoord, cy.left_inv]
+    simpa [cx.left_inv hzsrc] using (heU hcz).2
+
+theorem apm_t99J04_coordinateMap_contMDiff
+    (n : ℕ) (X : Type) [TopologicalSpace X]
+    [ChartedSpace (apm_t99J04_Euclidean n) X]
+    [IsManifold (𝓘(ℝ, apm_t99J04_Euclidean n)) (⊤ : ℕ∞) X]
+    (f : Fin n → X → ℝ)
+    (hf : ∀ i,
+      ContMDiff (𝓘(ℝ, apm_t99J04_Euclidean n)) 𝓘(ℝ, ℝ) (⊤ : ℕ∞) (f i)) :
+    ContMDiff (𝓘(ℝ, apm_t99J04_Euclidean n))
+      𝓘(ℝ, apm_t99J04_Euclidean n) (⊤ : ℕ∞)
+      (apm_t99J04_coordinateMap f) := by
+  have hpi : ContMDiff (modelWithCornersSelf ℝ (apm_t99J04_Euclidean n))
+      (modelWithCornersSelf ℝ (Fin n → ℝ)) (⊤ : ℕ∞) (fun p i ↦ f i p) :=
+    contMDiff_pi_space.2 hf
+  have hlp : ContMDiff (modelWithCornersSelf ℝ (Fin n → ℝ))
+      (modelWithCornersSelf ℝ (apm_t99J04_Euclidean n)) (⊤ : ℕ∞)
+      (PiLp.continuousLinearEquiv 2 ℝ (fun _ : Fin n ↦ ℝ)).symm :=
+    ContinuousLinearMap.contMDiff
+      (PiLp.continuousLinearEquiv 2 ℝ (fun _ : Fin n ↦ ℝ)).symm.toContinuousLinearMap
+  exact hlp.comp hpi
+
 theorem apm_t99J04_bridge_coordinateMap_mfderiv_bijective
     (n : ℕ) (X : Type) [TopologicalSpace X]
     [ChartedSpace (apm_t99J04_Euclidean n) X]
@@ -150,6 +348,9 @@ theorem apm_t99J04_bridge_coordinateMap_mfderiv_bijective
     (x : X) (f : Fin n → X → ℝ)
     (hf : ∀ i,
       ContMDiff (𝓘(ℝ, apm_t99J04_Euclidean n)) 𝓘(ℝ, ℝ) (⊤ : ℕ∞) (f i))
+    (hcoord : ContMDiff (𝓘(ℝ, apm_t99J04_Euclidean n))
+      𝓘(ℝ, apm_t99J04_Euclidean n) (⊤ : ℕ∞)
+      (apm_t99J04_coordinateMap f))
     (hli : LinearIndependent ℝ
       (fun i : Fin n ↦
         (NormedSpace.fromTangentSpace (f i x)).toContinuousLinearMap ∘L
@@ -157,7 +358,73 @@ theorem apm_t99J04_bridge_coordinateMap_mfderiv_bijective
     Function.Bijective
       (mfderiv (𝓘(ℝ, apm_t99J04_Euclidean n))
         𝓘(ℝ, apm_t99J04_Euclidean n) (apm_t99J04_coordinateMap f) x) := by
-  sorry
+  letI : FiniteDimensional ℝ
+      (TangentSpace (𝓘(ℝ, apm_t99J04_Euclidean n)) x) := by
+    change FiniteDimensional ℝ (apm_t99J04_Euclidean n)
+    infer_instance
+  let D := mfderiv (𝓘(ℝ, apm_t99J04_Euclidean n))
+    𝓘(ℝ, apm_t99J04_Euclidean n) (apm_t99J04_coordinateMap f) x
+  let e := NormedSpace.fromTangentSpace (𝕜 := ℝ) (apm_t99J04_coordinateMap f x)
+  let A : TangentSpace (𝓘(ℝ, apm_t99J04_Euclidean n)) x →L[ℝ]
+      apm_t99J04_Euclidean n := e.toContinuousLinearMap ∘L D
+  have hcomponent : ∀ i, (PiLp.proj 2 (𝕜 := ℝ) (fun _ : Fin n ↦ ℝ) i) ∘L A =
+      (NormedSpace.fromTangentSpace (f i x)).toContinuousLinearMap ∘L
+        mfderiv (𝓘(ℝ, apm_t99J04_Euclidean n)) 𝓘(ℝ, ℝ) (f i) x := by
+    intro i
+    have hc := mfderiv_comp
+      (I := 𝓘(ℝ, apm_t99J04_Euclidean n))
+      (I' := 𝓘(ℝ, apm_t99J04_Euclidean n)) (I'' := 𝓘(ℝ, ℝ)) x
+      (PiLp.proj 2 (𝕜 := ℝ) (fun _ : Fin n ↦ ℝ) i).mdifferentiableAt
+      (hcoord.mdifferentiableAt (by simp))
+    change mfderiv (𝓘(ℝ, apm_t99J04_Euclidean n)) 𝓘(ℝ, ℝ) (f i) x = _ at hc
+    rw [mfderiv_eq_fderiv,
+      (PiLp.proj 2 (𝕜 := ℝ) (fun _ : Fin n ↦ ℝ) i).fderiv] at hc
+    ext v
+    simpa [A, D, e, ContinuousLinearMap.comp_apply,
+      ContinuousLinearMap.fderiv] using congr($(hc) v).symm
+  have hAfin : Module.finrank ℝ (TangentSpace (𝓘(ℝ, apm_t99J04_Euclidean n)) x) = n := by
+    change Module.finrank ℝ (apm_t99J04_Euclidean n) = n
+    simp [apm_t99J04_Euclidean]
+  have hAbi : Function.Bijective A := by
+    by_cases hn : n = 0
+    · subst n
+      letI : Subsingleton
+          (TangentSpace (𝓘(ℝ, apm_t99J04_Euclidean 0)) x) :=
+        Module.finrank_zero_iff.mp (by simpa using hAfin)
+      have hinj : Function.Injective A := by
+        intro u v huv
+        have hu : u = 0 := Subsingleton.elim _ _
+        have hv : v = 0 := Subsingleton.elim _ _
+        simpa [hu, hv]
+      exact ⟨hinj, (LinearMap.injective_iff_surjective_of_finrank_eq_finrank (by
+        simpa [hAfin, apm_t99J04_Euclidean])).mp hinj⟩
+    · have hpos : 0 < n := Nat.pos_of_ne_zero hn
+      have hcoe : (ContinuousLinearMap.coeLM ℝ :
+          (TangentSpace (𝓘(ℝ, apm_t99J04_Euclidean n)) x →L[ℝ] ℝ) →ₗ[ℝ]
+            Module.Dual ℝ (TangentSpace (𝓘(ℝ, apm_t99J04_Euclidean n)) x)).ker = ⊥ := by
+        rw [LinearMap.ker_eq_bot]
+        intro g h gh
+        apply ContinuousLinearMap.coe_injective
+        exact gh
+      have hli' : LinearIndependent ℝ (fun i : Fin n ↦
+          ((NormedSpace.fromTangentSpace (f i x)).toContinuousLinearMap ∘L
+            mfderiv (𝓘(ℝ, apm_t99J04_Euclidean n)) 𝓘(ℝ, ℝ) (f i) x).toLinearMap) := by
+        simpa [Function.comp_def] using
+          hli.map' (ContinuousLinearMap.coeLM ℝ) hcoe
+      have hcoords := apm_t99J04_dualCoordinates_bijective hpos hAfin
+        (fun i : Fin n ↦
+          ((NormedSpace.fromTangentSpace (f i x)).toContinuousLinearMap ∘L
+            mfderiv (𝓘(ℝ, apm_t99J04_Euclidean n)) 𝓘(ℝ, ℝ) (f i) x).toLinearMap) hli'
+      have hinj : Function.Injective A := by
+        intro u v huv
+        apply hcoords.1
+        funext i
+        have hi := congrArg
+          (fun z ↦ (PiLp.proj 2 (𝕜 := ℝ) (fun _ : Fin n ↦ ℝ) i) z) huv
+        simpa only [← ContinuousLinearMap.comp_apply, hcomponent i] using hi
+      exact ⟨hinj, (LinearMap.injective_iff_surjective_of_finrank_eq_finrank (by
+        simpa [hAfin, apm_t99J04_Euclidean])).mp hinj⟩
+  exact e.bijective.comp hAbi
 
 theorem apm_t99j04 :
     (∀ (n : ℕ) (X : Type) [TopologicalSpace X]
@@ -183,67 +450,13 @@ theorem apm_t99j04 :
       ContMDiff (𝓘(ℝ, E)) (𝓘(ℝ, E')) (⊤ : ℕ∞) f →
       (∀ x, Function.Bijective (mfderiv (𝓘(ℝ, E)) (𝓘(ℝ, E')) f x)) →
       Function.Surjective f) := by
-  /-
-  PARTIAL boundary (closer hop 1).
+  constructor
+  · intro n X _ _ _ x f hf hli
+    have hsmooth := apm_t99J04_coordinateMap_contMDiff n X f hf
+    exact apm_t99J04_bridge_local_inverse_function (fun U a hU ha g hg hb => apm_t99J04_euclid_local_inverse g U hU a ha hg hb) _ _ hsmooth
+      (apm_t99J04_bridge_coordinateMap_mfderiv_bijective n X x f hf hsmooth hli)
+  · intro E E' _ _ _ _ _ _ _ _ X Y _ _ _ _ _ _ _ _ _ _ _ f hf hbij
+    exact apm_t99J04_surjective_of_bijective_mfderiv_of_localIFT f hf hbij
+      (fun x _ hb ↦ apm_t99J04_bridge_local_inverse_function (fun U a hU ha g hg hb => apm_t99J04_euclid_local_inverse g U hU a ha hg hb) f x hf hb)
 
-  `apm_t99J04_surjective_of_isLocalDiffeomorph` closes the global topological
-  part of the second conjunct. A local diffeomorphism has open range by
-  `IsLocalDiffeomorph.isOpen_range`; its smoothness makes the range compact,
-  hence closed in the Hausdorff target; connectedness and nonemptiness then
-  force that clopen range to be all of `Y`.
-
-  The remaining common bridge for both frozen conjuncts is the manifold
-  inverse function theorem from derivative data. Mathlib's
-  `ContDiffAt.toOpenPartialHomeomorph` proves the Banach-space theorem in
-  charts, but `Geometry.Manifold.LocalDiffeomorph` explicitly lists as a TODO
-  the desired promotion from `ContMDiffAt` plus invertible `mfderiv` to
-  `IsLocalDiffeomorphAt`. Applying the Banach theorem manually requires
-  transporting through `extChartAt`, proving its coordinate derivative is a
-  continuous linear equivalence, and assembling the resulting chart-local
-  partial homeomorphism into a `PartialDiffeomorph`.
-
-  For the first conjunct one must additionally compute the manifold derivative
-  of `apm_t99J04_coordinateMap` and turn linear independence of its `n`
-  coordinate covectors into bijectivity between the two `n`-dimensional
-  tangent/model spaces. Searches of `LEMMA-INDEX.md`, all
-  `ConstructionTargets/`, manifold/inverse-function siblings, Mathlib's
-  `MFDeriv`, atlas, finite-dimensional dual-basis, and inverse-function
-  sources, and git history found no packaged theorem performing either
-  assembly. The statement is unchanged.
-
-  CLOSER HOP 2: the finite-dimensional algebraic core of the first conjunct
-  now compiles as `apm_t99J04_dualCoordinates_bijective`. For `n > 0`, it
-  upgrades `n` independent covectors on an `n`-dimensional real vector space
-  to a basis of the dual, proves the induced coordinate map injective by dual
-  separation, and obtains surjectivity from equal finrank. This uses
-  `basisOfLinearIndependentOfCardEqFinrank`,
-  `Module.forall_dual_apply_eq_zero_iff`, and
-  `LinearMap.injective_iff_surjective_of_finrank_eq_finrank`; it removes the
-  substantive independence-to-bijectivity step identified in hop 1.
-
-  Renewed searches of `LEMMA-INDEX.md`, `ConstructionTargets/`, manifold IFT
-  siblings, Mathlib's `MFDeriv`, `LocalDiffeomorph`, chart, and inverse-
-  function sources, and git history still found no manifold theorem promoting
-  `ContMDiffAt` plus bijective `mfderiv` to `IsLocalDiffeomorphAt`. Remaining
-  work is the coordinate-map `mfderiv` formula/coercion into the new lemma
-  (with the zero-dimensional case separated), followed by the chart-local
-  Banach inverse-function assembly common to both conjuncts. The frozen
-  statement is unchanged.
-
-  CLOSER HOP 3 additionally compiles
-  `apm_t99J04_surjective_of_bijective_mfderiv_of_localIFT`, which states the
-  second conjunct with the missing local inverse-function implication exposed
-  as a hypothesis and discharges everything else. Thus there is no remaining
-  pointwise-to-global assembly: `ContMDiff` supplies each `ContMDiffAt`, the
-  frozen bijectivity hypothesis supplies the derivative input, and the earlier
-  compact/local-diffeomorphism lemma proves surjectivity.
-
-  Inspection of `Geometry.Manifold.LocalDiffeomorph` confirms that the API
-  only provides the forward implication from a local diffeomorphism to an
-  invertible `mfderiv`; the converse is still absent. The source's chart-level
-  Banach inverse theorem would require constructing a `PartialDiffeomorph`
-  manually. The first conjunct additionally retains the coordinatewise
-  `mfderiv` computation. These genuine local bridges remain open, with no
-  axiom or opaque replacement.
-  -/
-  sorry
+#print axioms apm_t99j04

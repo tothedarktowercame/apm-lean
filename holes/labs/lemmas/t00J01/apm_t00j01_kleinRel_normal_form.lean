@@ -170,12 +170,58 @@ theorem apm_t00j01_sphere_identity_bridge :
 normal form.  This is kept separate from topology so the group calculation and
 the local-chart construction can be proved in parallel. -/
 -- BEGIN SEAT AREA
+lemma apm_t00j01_kleinRel_normal_form_aux_sign (n : ℤ) :
+    ∃ s : ℤ, (s : ℝ) = (-1 : ℝ) ^ n := by
+  refine ⟨if Even n then 1 else -1, ?_⟩
+  simp [neg_one_zpow_eq_ite]
+
 theorem apm_t00j01_kleinRel_normal_form {p q : ℝ × ℝ}
     (h : Relation.EqvGen apm_t00j01_kleinRel p q) :
     ∃ m n : ℤ,
       q.1 = (m : ℝ) + (-1 : ℝ) ^ n * p.1 ∧
       q.2 = (n : ℝ) + p.2 := by
-  sorry
+  induction h with
+  | rel p q hpq =>
+      cases hpq with
+      | horizontal x y =>
+          exact ⟨1, 0, by norm_num [add_comm], by norm_num⟩
+      | twisted x y =>
+          exact ⟨0, 1, by norm_num, by norm_num [add_comm]⟩
+  | refl p =>
+      exact ⟨0, 0, by norm_num, by norm_num⟩
+  | symm p q hpq ih =>
+      obtain ⟨m, n, h1, h2⟩ := ih
+      obtain ⟨s, hs⟩ := apm_t00j01_kleinRel_normal_form_aux_sign n
+      refine ⟨-(s * m), -n, ?_, ?_⟩
+      · rw [h1]
+        have hn : (-1 : ℝ) ^ (-n) = (-1 : ℝ) ^ n := by
+          rw [neg_one_zpow_eq_ite, neg_one_zpow_eq_ite]
+          have : Even (-n) ↔ Even n := by simp
+          simp [this]
+        push_cast
+        rw [hs]
+        rw [hn]
+        have hsquare : ((-1 : ℝ) ^ n) * ((-1 : ℝ) ^ n) = 1 := by
+          rw [neg_one_zpow_eq_ite]
+          split_ifs <;> norm_num
+        rw [mul_add, ← mul_assoc, hsquare]
+        ring
+      · rw [h2]
+        push_cast
+        ring
+  | trans p q r hpq hqr ihpq ihqr =>
+      obtain ⟨m, n, h1, h2⟩ := ihpq
+      obtain ⟨m', n', h1', h2'⟩ := ihqr
+      obtain ⟨s, hs⟩ := apm_t00j01_kleinRel_normal_form_aux_sign n'
+      refine ⟨m' + s * m, n' + n, ?_, ?_⟩
+      · rw [h1', h1]
+        push_cast
+        rw [hs]
+        rw [zpow_add₀ (by norm_num : (-1 : ℝ) ≠ 0)]
+        ring
+      · rw [h2', h2]
+        push_cast
+        ring
 -- END SEAT AREA
 
 /-- The explicit Klein quotient is compact.  The closed fundamental square

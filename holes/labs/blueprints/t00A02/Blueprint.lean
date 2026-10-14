@@ -168,9 +168,99 @@ lemma apm_t00A02_coverWitness.not_regular
 
 /-! ## Remaining independently assignable obligations -/
 
+abbrev apm_t00A02_antipodalCover_isCoveringMap_aux_G := ZMod 2
+
+def apm_t00A02_antipodalCover_isCoveringMap_aux_vadd
+    (g : apm_t00A02_antipodalCover_isCoveringMap_aux_G)
+    (x : apm_t00A02_Sphere2) : apm_t00A02_Sphere2 :=
+  if g = 0 then x else -x
+
+local instance : AddAction apm_t00A02_antipodalCover_isCoveringMap_aux_G
+    apm_t00A02_Sphere2 where
+  vadd := apm_t00A02_antipodalCover_isCoveringMap_aux_vadd
+  zero_vadd x := by
+    change apm_t00A02_antipodalCover_isCoveringMap_aux_vadd 0 x = x
+    simp [apm_t00A02_antipodalCover_isCoveringMap_aux_vadd]
+  add_vadd g h x := by
+    change apm_t00A02_antipodalCover_isCoveringMap_aux_vadd (g + h) x =
+      apm_t00A02_antipodalCover_isCoveringMap_aux_vadd g
+        (apm_t00A02_antipodalCover_isCoveringMap_aux_vadd h x)
+    fin_cases g <;> fin_cases h
+    · change apm_t00A02_antipodalCover_isCoveringMap_aux_vadd 0 x =
+        apm_t00A02_antipodalCover_isCoveringMap_aux_vadd 0
+          (apm_t00A02_antipodalCover_isCoveringMap_aux_vadd 0 x)
+      simp [apm_t00A02_antipodalCover_isCoveringMap_aux_vadd]
+    · change apm_t00A02_antipodalCover_isCoveringMap_aux_vadd 1 x =
+        apm_t00A02_antipodalCover_isCoveringMap_aux_vadd 0
+          (apm_t00A02_antipodalCover_isCoveringMap_aux_vadd 1 x)
+      simp [apm_t00A02_antipodalCover_isCoveringMap_aux_vadd,
+        show (1 : ZMod 2) ≠ 0 by decide]
+    · change apm_t00A02_antipodalCover_isCoveringMap_aux_vadd 1 x =
+        apm_t00A02_antipodalCover_isCoveringMap_aux_vadd 1
+          (apm_t00A02_antipodalCover_isCoveringMap_aux_vadd 0 x)
+      simp [apm_t00A02_antipodalCover_isCoveringMap_aux_vadd,
+        show (1 : ZMod 2) ≠ 0 by decide]
+    · change apm_t00A02_antipodalCover_isCoveringMap_aux_vadd 0 x =
+        apm_t00A02_antipodalCover_isCoveringMap_aux_vadd 1
+          (apm_t00A02_antipodalCover_isCoveringMap_aux_vadd 1 x)
+      simp [apm_t00A02_antipodalCover_isCoveringMap_aux_vadd,
+        show (1 : ZMod 2) ≠ 0 by decide]
+
+local instance : ContinuousConstVAdd
+    apm_t00A02_antipodalCover_isCoveringMap_aux_G apm_t00A02_Sphere2 where
+  continuous_const_vadd g := by
+    fin_cases g
+    · simpa [apm_t00A02_antipodalCover_isCoveringMap_aux_vadd] using
+        (continuous_id : Continuous (id : apm_t00A02_Sphere2 → apm_t00A02_Sphere2))
+    · exact (continuous_neg.comp continuous_subtype_val).subtype_mk _
+
 theorem apm_t00A02_antipodalCover_isCoveringMap :
     IsCoveringMap apm_t00A02_antipodalCover := by
-  sorry
+  let G := apm_t00A02_antipodalCover_isCoveringMap_aux_G
+  have hfree : ∀ g : G, ∀ x : apm_t00A02_Sphere2, g +ᵥ x = x → g = 0 := by
+    intro g x hg
+    fin_cases g
+    · rfl
+    · exfalso
+      have hx0 : (x : EuclideanSpace ℝ (Fin 3)) ≠ 0 := by
+        intro hx
+        have hs := x.property
+        simp [hx] at hs
+      apply hx0
+      have h' : -(x : EuclideanSpace ℝ (Fin 3)) = x := by
+        simpa [apm_t00A02_antipodalCover_isCoveringMap_aux_vadd] using
+          congrArg Subtype.val hg
+      have htwo : (2 : ℝ) • (x : EuclideanSpace ℝ (Fin 3)) = 0 := by
+        rw [two_smul]
+        simpa using (congrArg
+          (fun z ↦ z + (x : EuclideanSpace ℝ (Fin 3))) h').symm
+      exact (smul_eq_zero.mp htwo).resolve_left (by norm_num)
+  have hq : Topology.IsQuotientMap apm_t00A02_antipodalCover :=
+    isQuotientMap_quotient_mk'
+  have horbit : ∀ {x y : apm_t00A02_Sphere2},
+      apm_t00A02_antipodalCover x = apm_t00A02_antipodalCover y ↔
+        x ∈ AddAction.orbit G y := by
+    intro x y
+    rw [apm_t00A02_antipodalCover_eq_iff]
+    constructor
+    · rintro (rfl | rfl)
+      · exact ⟨0, by simp⟩
+      · exact ⟨(1 : ZMod 2), by
+          change apm_t00A02_antipodalCover_isCoveringMap_aux_vadd
+            (1 : ZMod 2) (-x) = x
+          simp only [apm_t00A02_antipodalCover_isCoveringMap_aux_vadd,
+            if_neg (show (1 : ZMod 2) ≠ 0 by decide), neg_neg]⟩
+    · rintro ⟨g, rfl⟩
+      fin_cases g
+      · left
+        change y = apm_t00A02_antipodalCover_isCoveringMap_aux_vadd (0 : ZMod 2) y
+        norm_num [apm_t00A02_antipodalCover_isCoveringMap_aux_vadd]
+      · right
+        change y = -apm_t00A02_antipodalCover_isCoveringMap_aux_vadd (1 : ZMod 2) y
+        norm_num [apm_t00A02_antipodalCover_isCoveringMap_aux_vadd]
+  letI : IsCancelVAdd G apm_t00A02_Sphere2 :=
+    isCancelVAdd_iff_eq_zero_of_vadd_eq.mpr hfree
+  exact (hq.isAddQuotientCoveringMap_of_properlyDiscontinuousVAdd horbit).isCoveringMap _ _
 
 /-- LIBRARY: construct the regular four-sheeted cover from the two commuting
 fixed-point-free involutions `(12)(34)` and `(13)(24)`. -/

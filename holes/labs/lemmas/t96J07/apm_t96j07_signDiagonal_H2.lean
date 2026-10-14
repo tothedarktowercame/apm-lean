@@ -365,6 +365,44 @@ theorem apm_t96j07_normalizedDiagonal_homotopic_sign (b : Fin 3 → ℝ)
 (`ConstructionTargets.CoefficientFirstReflection.all_reflections_negative ℤ 2`,
 functoriality; `topIso ℤ 1` for the orientation). -/
 -- BEGIN SEAT AREA
+noncomputable def apm_t96j07_signDiagonal_H2_aux_product :
+    List (Fin 3) → C(apm_t96j07_S2, apm_t96j07_S2)
+  | [] => ContinuousMap.id _
+  | i :: s => ConstructionTargets.CoefficientCoordinateReflections.reflectionMap i |>.comp
+      (apm_t96j07_signDiagonal_H2_aux_product s)
+
+lemma apm_t96j07_signDiagonal_H2_aux_coordinate (s : List (Fin 3)) (hs : s.Nodup)
+    (x : apm_t96j07_S2) (j : Fin 3) :
+    (apm_t96j07_signDiagonal_H2_aux_product s x).1 j =
+      if j ∈ s then -x.1 j else x.1 j := by
+  induction s with
+  | nil => simp [apm_t96j07_signDiagonal_H2_aux_product]
+  | cons i s ih =>
+    have hi := List.nodup_cons.mp hs
+    change ConstructionTargets.CoefficientCoordinateReflections.reflection i
+      (apm_t96j07_signDiagonal_H2_aux_product s x).1 j = _
+    rw [ConstructionTargets.CoefficientCoordinateReflections.reflection_apply, ih hi.2]
+    by_cases hji : j = i
+    · subst j
+      simp [hi.1]
+    · simp [hji]
+
+lemma apm_t96j07_signDiagonal_H2_aux_homology (s : List (Fin 3)) :
+    ((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 2).obj
+      (ModuleCat.of ℤ ℤ)).map
+        (TopCat.ofHom (apm_t96j07_signDiagonal_H2_aux_product s)) =
+      ((-1 : ℤ) ^ s.length) • 𝟙 _ := by
+  induction s with
+  | nil => simp [apm_t96j07_signDiagonal_H2_aux_product]
+  | cons i s ih =>
+    have hc : TopCat.ofHom (apm_t96j07_signDiagonal_H2_aux_product (i :: s)) =
+        TopCat.ofHom (apm_t96j07_signDiagonal_H2_aux_product s) ≫
+          TopCat.ofHom
+            (ConstructionTargets.CoefficientCoordinateReflections.reflectionMap i) := rfl
+    rw [hc, Functor.map_comp, ih,
+      ConstructionTargets.CoefficientFirstReflection.all_reflections_negative ℤ 2 (by decide) i]
+    simp [pow_succ, Preadditive.comp_neg]
+
 theorem apm_t96j07_signDiagonal_H2 (ε : Fin 3 → ℝ) (hε : ∀ j, ε j = 1 ∨ ε j = -1)
     (l : C(apm_t96j07_S2, apm_t96j07_S2)) (hl : apm_t96j07_IsNormalizedDiagonal ε l) :
     ∃ orientation : apm_t96j07_H2S2 ≅ ModuleCat.of ℤ ℤ,
@@ -373,7 +411,54 @@ theorem apm_t96j07_signDiagonal_H2 (ε : Fin 3 → ℝ) (hε : ∀ j, ε j = 1 �
             (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 2).obj
               (ModuleCat.of ℤ ℤ)).map (TopCat.ofHom l) z) =
           (if 0 < ∏ j, ε j then 1 else -1) * orientation.hom z := by
-  sorry
+  let s := ([0, 1, 2] : List (Fin 3)).filter (fun j => ε j = -1)
+  have hs : s.Nodup := (by decide : ([0, 1, 2] : List (Fin 3)).Nodup).filter _
+  have hcoord (x : apm_t96j07_S2) (j : Fin 3) :
+      (apm_t96j07_signDiagonal_H2_aux_product s x).1 j = ε j * x.1 j := by
+    rw [apm_t96j07_signDiagonal_H2_aux_coordinate s hs]
+    rcases hε j with hj | hj
+    · norm_num [s, hj]
+    · have hjmem : j ∈ ([0, 1, 2] : List (Fin 3)) := by
+        fin_cases j <;> simp
+      simp [s, hj, hjmem]
+  have hnorm (x : apm_t96j07_S2) :
+      ‖WithLp.toLp 2 (fun j ↦ ε j * x.1 j)‖ = 1 := by
+    have hv : WithLp.toLp 2 (fun j ↦ ε j * x.1 j) =
+        (apm_t96j07_signDiagonal_H2_aux_product s x).1 := by
+      ext j
+      exact (hcoord x j).symm
+    rw [hv]
+    simpa [Metric.mem_sphere, dist_zero_right] using
+      (apm_t96j07_signDiagonal_H2_aux_product s x).2
+  have hl_eq : l = apm_t96j07_signDiagonal_H2_aux_product s := by
+    ext x j
+    obtain ⟨hne, hx⟩ := hl x
+    rw [hx]
+    change (‖WithLp.toLp 2 (fun k ↦ ε k * x.1 k)‖⁻¹ •
+      WithLp.toLp 2 (fun k ↦ ε k * x.1 k)) j = _
+    rw [hnorm]
+    simp [hcoord]
+  let e := ConstructionTargets.CoefficientFirstReflection.topIso ℤ 1
+  refine ⟨e, ?_⟩
+  intro z
+  have hmap := apm_t96j07_signDiagonal_H2_aux_homology s
+  rw [hl_eq, hmap]
+  change e.hom.hom (((((-1 : ℤ) ^ s.length) • 𝟙 _) :
+      apm_t96j07_H2S2 ⟶ apm_t96j07_H2S2).hom z) = _
+  have hsign : (if 0 < ∏ j, ε j then (1 : ℤ) else -1) = (-1 : ℤ) ^ s.length := by
+    have he : ε = ![ε 0, ε 1, ε 2] := by
+      funext j
+      fin_cases j <;> rfl
+    rcases hε 0 with h0 | h0 <;> rcases hε 1 with h1 | h1 <;>
+      rcases hε 2 with h2 | h2
+    all_goals rw [he]
+    all_goals norm_num [s, h0, h1, h2, Fin.prod_univ_succ]
+  rw [hsign]
+  rcases neg_one_pow_eq_or ℤ s.length with hp | hp
+  · rw [hp]
+    simp
+  · rw [hp]
+    simp
 -- END SEAT AREA
 
 /-- Seat (assembly from the three leaves above as hypotheses): homotopy

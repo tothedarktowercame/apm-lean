@@ -29,37 +29,72 @@ nevertheless retained verbatim because it is a hypothesis of `problem.md`.
 
 ## Lemmas
 
-### `t93J03_kleinBottle_pi1_every_basepoint` — LIBRARY
+### Four-way split of `t93J03_kleinBottle_pi1_every_basepoint`
 
-**Statement.** For every `k : KleinBottle`, the fundamental group at `k` is
-isomorphic to the frozen presented Klein group.
+The original library lemma is now a sorry-free assembly of the following four
+parallel leaves, mirroring the `t96J02` interface exactly.
 
-**Why true.** Use the banked affine action of `PresentedKleinGroup` on
-`ℝ × ℝ`, the missing homeomorphism from its literal
-`MulAction.orbitRel.Quotient` to the frozen polygon `KleinBottle`, and
-`DeckGroupQuotientFundamentalGroup.freeProperlyDiscontinuousQuotient_fundamentalGroupEquiv`.
-Freeness is already proved by
-`KleinPlaneAffineAction.eq_one_of_smul_eq`; the coordinate model and normal
-form are also banked.  Transport from the quotient basepoint to arbitrary `k`
-uses path connectedness/basepoint change.
+#### `t93J03_kleinPlaneQuotient_pi1_origin`
 
-The topology worklist explicitly warns that
-`ConstructionTargets/KleinOrbitQuotientHomeomorph.lean` does **not** yet give
-the required literal orbit-quotient homeomorphism.  This is the outstanding
-180–300 line library component; it should not be disguised as several small
-lemmas.
+Compute the fundamental group at the orbit of `(0,0)`.  Use
+`DeckGroupQuotientFundamentalGroup.freeProperlyDiscontinuousQuotient_fundamentalGroupEquiv`
+with `KleinPlaneAffineAction.eq_one_of_smul_eq`.  The required action and its
+proper discontinuity instances come through the imported Klein orbit-quotient
+development.  Estimated proof: 30–60 lines.  Independent.
 
-**Estimate.** 180–300 lines for the quotient homeomorphism, then 60–120 lines
-for the fundamental-group adapter.
+Truth check: the theorem identifies the fundamental group with the acting
+group itself, not with an opposite group; the banked theorem's endpoint
+monodromy includes the inversion correcting multiplication order.  Freeness
+at the origin (indeed at every point) rules out stabilizer quotients.
 
-**Dependencies.** None among the blueprint lemmas (but it depends on the
-banked ConstructionTargets listed above).
+#### `t93J03_kleinPlaneQuotient_pi1_every_basepoint`
 
-**Truth check.** The identity element fixes the chosen plane basepoint, and
-the banked freeness theorem shows no nonidentity element does.  The banked
-coordinate equivalence sends the two generators to the expected translation
-and glide-reflection coordinates, so the deck group is exactly the printed
-presentation rather than an accidental quotient.
+Move the supplied origin calculation to an arbitrary quotient point.  Use
+`PathConnectedSpace.somePath`, the basepoint-change isomorphism for
+`FundamentalGroup`, and `MulEquiv.trans`.  Search Mathlib for
+`FundamentalGroup.changeBasepoint` / `FundamentalGroupoid` vertex-group
+transport if the exact API name has moved.  Estimated proof: 40–90 lines.
+Independent because the origin result is an explicit hypothesis.
+
+Truth check: the orbit quotient is path connected as a continuous image of
+the path-connected plane, so every point admits a path from the origin.  No
+claim is made for a disconnected space.
+
+#### `t93J03_kleinPlaneQuotient_homeomorph` — LIBRARY
+
+Identify the literal `MulAction.orbitRel.Quotient PresentedKleinGroup
+(ℝ × ℝ)` with the frozen polygon `KleinBottle`.  Use
+`KleinClosedSquareOrbitQuotientEquiv.closedSquareOrbitQuotientEquiv`,
+`KleinOrbitQuotientHomeomorph.continuous_closedSquareOrbitQuotientEquiv`, and
+the inverse-continuity results in
+`KleinClosedSquareOrbitInverseContinuity`; then compare the closed-square edge
+setoid with `StatementSurfaceModels.KleinBottle`.  Estimated proof: 90–150
+lines if the final comparison API is present; otherwise this remains the one
+genuine 180–300 line library foundation.  Independent.
+
+Truth check: the affine generators act as horizontal translation and vertical
+glide reflection, producing precisely the frozen Klein edge orientation, not
+the torus orientation.  Empty-set and boundary-point issues do not arise:
+the quotient is inhabited by the origin, and the closed-square development
+explicitly handles corners and all four edges.
+
+#### `t93J03_pi1_every_basepoint_of_homeomorph`
+
+Generic transport across a supplied homeomorphism.  For `y`, take
+`x := e.symm y`; use `Homeomorph.toContinuousMap`,
+`FundamentalGroup.map`, and the inverse map to construct the group equivalence,
+or use the existing fundamental-group equivalence induced by a homeomorphism.
+Estimated proof: 30–70 lines.  Fully independent and not Klein-specific.
+
+Truth check: choosing `e.symm y` makes the basepoints definitionally align
+after simplification; no connectedness assumption is needed because this does
+not move basepoints within either space.
+
+#### `t93J03_kleinBottle_pi1_every_basepoint` (assembly)
+
+The original registered library statement contains no `sorry`: obtain the
+homeomorphism, feed the origin leaf to the all-basepoint quotient leaf, and
+apply the generic transport leaf.  Estimated proof: 5 lines, complete.
 
 ### `t93J03_cyclicCover_zpowers_generatorA` — LIBRARY
 
@@ -136,18 +171,19 @@ checks the induced-topology part through embedding cancellation.
 
 ## Dependency layers
 
-- Layer 1 (parallel): `t93J03_kleinBottle_pi1_every_basepoint` (LIBRARY),
+- Layer 1 (parallel): the four new Klein fundamental-group leaves,
   `t93J03_coveringLift_of_subgroup_le`, and the already completed
   `t93J03_lift_isEmbedding_assembly`.
+- Layer 2a: the sorry-free `t93J03_kleinBottle_pi1_every_basepoint` assembly.
 - Layer 2: `t93J03_cyclicCover_zpowers_generatorA` (LIBRARY), against the
-  explicit equivalence interface supplied by layer 1.  Much of its geometric
-  construction can proceed in parallel with layer 1.
+  explicit equivalence interface supplied by the assembly.  Much of its
+  geometric construction can proceed in parallel with layer 1.
 - Layer 3: the main theorem assembly, already complete and sorry-free.
 
-There are four top-level blueprint lemmas, two of them marked LIBRARY and one
-already proved.  I am convinced all four statements are true.  The principal
-risk is implementation size of the literal orbit-quotient homeomorphism, not
-the mathematical statement.
+The principal risk remains implementation size of the literal orbit-quotient
+homeomorphism, not the mathematical statement.  All four leaves are statable
+and provable independently because every cross-leaf conclusion is an explicit
+hypothesis.
 
 ## Compile and axiom gate
 
@@ -163,5 +199,6 @@ Output of `#print axioms apm_t93j03`:
 'apm_t93j03' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
 ```
 
-The main theorem itself contains no `sorry`; `sorryAx` enters only through the
-three unfinished top-level lemmas.
+The main theorem itself and the original fundamental-group library theorem
+contain no `sorry`; `sorryAx` enters only through the new leaves and the
+pre-existing cyclic-cover lemma.

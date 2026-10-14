@@ -1,5 +1,6 @@
 import Mathlib
 import ConstructionTargets.RationalLefschetz
+import ConstructionTargets.CoefficientH0
 
 /-! # APM t02A04 — fixed points after a `(1,2)` cell attachment -/
 
@@ -85,12 +86,68 @@ theorem apm_t02A04_rational_homology :
       ∀ k : ℕ, 0 < k → CategoryTheory.Limits.IsZero (apm_t02A04_HQ k) := by
   sorry
 
-/-- Convert the supplied rational homology calculation into Lefschetz number one. -/
+lemma apm_t02A04_lefschetz_number_aux_trace_H0_aux_induced_eq_id
+    (e : apm_t02A04_HQ 0 ≅ ModuleCat.of ℚ ℚ)
+    (f : C(apm_t02a04_X, apm_t02a04_X)) :
+    (induced f 0).hom = LinearMap.id := by
+  open CategoryTheory ConstructionTargets.CoefficientH0 in
+    letI : FiniteDimensional ℚ (apm_t02A04_HQ 0) :=
+      Module.Finite.equiv e.toLinearEquiv.symm
+    let ε : apm_t02A04_HQ 0 ⟶ ModuleCat.of ℚ ℚ := h0Augmentation ℚ
+    let p : apm_t02a04_X :=
+      apm_t02a04_diskInclusion ⟨0, by simp [apm_t02a04_Disk]⟩
+    have hsurj : Function.Surjective ε := by
+      intro a
+      refine ⟨singularVertexH0Class ℚ p a, ?_⟩
+      exact congrArg (fun g => g a)
+        (singularVertexH0Class_comp_h0Augmentation ℚ p)
+    have hdim : Module.finrank ℚ (apm_t02A04_HQ 0) =
+        Module.finrank ℚ (ModuleCat.of ℚ ℚ) := by
+      simpa using e.toLinearEquiv.finrank_eq
+    have hinj : Function.Injective ε :=
+      (LinearMap.injective_iff_surjective_of_finrank_eq_finrank hdim).2 hsurj
+    letI : CategoryTheory.Mono ε := (ModuleCat.mono_iff_injective ε).2 hinj
+    have hcat : (induced f 0) ≫ ε = (𝟙 _) ≫ ε := by
+      rw [CategoryTheory.Category.id_comp]
+      change HomologicalComplex.homologyMap (singularPostcomposition ℚ f) 0 ≫ ε = ε
+      exact h0Augmentation_naturality ℚ f
+    have h := (CategoryTheory.cancel_mono ε).1 hcat
+    exact congrArg (fun g => g.hom) h
+
+lemma apm_t02A04_lefschetz_number_aux_trace_H0
+    [FiniteDimensional ℚ (apm_t02A04_HQ 0)]
+    (e : apm_t02A04_HQ 0 ≅ ModuleCat.of ℚ ℚ)
+    (f : C(apm_t02a04_X, apm_t02a04_X)) :
+    LinearMap.trace ℚ (apm_t02A04_HQ 0) (induced f 0).hom = 1 := by
+  rw [apm_t02A04_lefschetz_number_aux_trace_H0_aux_induced_eq_id e f,
+    LinearMap.trace_id]
+  have hfinrank : Module.finrank ℚ (apm_t02A04_HQ 0) = 1 := by
+    simpa using e.toLinearEquiv.finrank_eq
+  simp [hfinrank]
+
 theorem apm_t02A04_lefschetz_number
     (hH : Nonempty (apm_t02A04_HQ 0 ≅ ModuleCat.of ℚ ℚ) ∧
       ∀ k : ℕ, 0 < k → CategoryTheory.Limits.IsZero (apm_t02A04_HQ k)) :
     ∀ f : C(apm_t02a04_X, apm_t02a04_X), HasLefschetzNumber f 1 := by
-  sorry
+  intro f
+  obtain ⟨e⟩ := hH.1
+  letI : FiniteDimensional ℚ (apm_t02A04_HQ 0) :=
+    Module.Finite.equiv e.toLinearEquiv.symm
+  have hfd : ∀ k, FiniteDimensional ℚ (apm_t02A04_HQ k) := by
+    intro k
+    by_cases hk : k = 0
+    · subst k; infer_instance
+    · have hz := hH.2 k (Nat.pos_of_ne_zero hk)
+      letI : Subsingleton (apm_t02A04_HQ k) :=
+        ModuleCat.subsingleton_of_isZero hz
+      exact Module.Finite.of_surjective (0 : ℚ →ₗ[ℚ] apm_t02A04_HQ k)
+        (fun x ↦ ⟨0, Subsingleton.elim _ _⟩)
+  refine ⟨hfd, ⟨0, ?_, ?_⟩⟩
+  · intro k hk
+    exact ModuleCat.subsingleton_of_isZero (hH.2 k hk)
+  · simp only [Nat.zero_add, Finset.sum_range_succ, Finset.sum_range_zero,
+      zero_add, pow_zero, one_mul]
+    exact apm_t02A04_lefschetz_number_aux_trace_H0 e f
 
 /-- **LIBRARY.** Specialized compact-polyhedron Lefschetz implication. -/
 theorem apm_t02A04_fixed_point_of_lefschetz
