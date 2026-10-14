@@ -4812,7 +4812,69 @@ theorem cutPiece_convex_compact (P Q : ℂ) :
 -- BEGIN SEAT AREA
 theorem cutPiece_interior_nonempty {P Q : ℂ} (hP : ‖P‖ = 1) (hQ : ‖Q‖ = 1) (hPQ : P ≠ Q) :
     (interior (cutPiece P Q)).Nonempty := by
-  sorry
+  let M : ℂ := (P + Q) / 2
+  let d : ℝ := ‖Q - P‖
+  have hd : 0 < d := by
+    dsimp [d]
+    exact norm_pos_iff.mpr (sub_ne_zero.mpr hPQ.symm)
+  have hsum : ‖P + Q‖ < 2 := by
+    have hle : ‖P + Q‖ ≤ 2 := by
+      calc
+        ‖P + Q‖ ≤ ‖P‖ + ‖Q‖ := norm_add_le _ _
+        _ = 2 := by rw [hP, hQ]; norm_num
+    apply lt_of_le_of_ne hle
+    intro he
+    have he' : ‖P + Q‖ = ‖P‖ + ‖Q‖ := by rw [hP, hQ]; norm_num at he ⊢; exact he
+    exact hPQ (eq_of_norm_eq_of_norm_add_eq (hP.trans hQ.symm) he')
+  have hM : ‖M‖ < 1 := by
+    dsimp [M]
+    rw [norm_div]
+    norm_num
+    exact (div_lt_one (by norm_num : (0 : ℝ) < 2)).mpr hsum
+  let e : ℝ := (1 - ‖M‖) / (2 * d)
+  have he : 0 < e := by
+    dsimp [e]
+    exact div_pos (sub_pos.mpr hM) (mul_pos (by norm_num) hd)
+  let n : ℂ := -Complex.I * (Q - P)
+  have hn : ‖n‖ = d := by
+    dsimp [n, d]
+    rw [norm_mul, norm_neg, Complex.norm_I, one_mul]
+  let c : ℂ := M + (e : ℂ) * n
+  have hc_norm : ‖c‖ < 1 := by
+    calc
+      ‖c‖ ≤ ‖M‖ + ‖(e : ℂ) * n‖ := by dsimp [c]; exact norm_add_le _ _
+      _ = ‖M‖ + e * d := by simp [norm_mul, hn, abs_of_pos he]
+      _ < 1 := by dsimp [e]; field_simp; linarith
+  have hcross_mid : cutCross (Q - P) (M - P) = 0 := by
+    dsimp [M, cutCross]
+    simp [Complex.div_re, Complex.div_im]
+    ring
+  have hcross_n : cutCross (Q - P) n = -(d ^ 2) := by
+    dsimp [n, d, cutCross]
+    rw [Complex.sq_norm]
+    simp [Complex.normSq_apply]
+    ring
+  have hc_cross : cutCross (Q - P) (c - P) < 0 := by
+    have hlin : cutCross (Q - P) (c - P) =
+        cutCross (Q - P) (M - P) + e * cutCross (Q - P) n := by
+      dsimp [c, cutCross]
+      simp [Complex.mul_im]
+      ring
+    rw [hlin, hcross_mid, hcross_n, zero_add]
+    exact mul_neg_of_pos_of_neg he (neg_neg_of_pos (sq_pos_of_pos hd))
+  let U : Set ℂ := {z | ‖z‖ < 1} ∩ {z | cutCross (Q - P) (z - P) < 0}
+  have hUopen : IsOpen U := by
+    apply IsOpen.inter
+    · exact isOpen_lt continuous_norm continuous_const
+    · exact isOpen_lt
+        ((Complex.continuous_im.comp
+          ((continuous_const.mul (continuous_id.sub continuous_const))))) continuous_const
+  have hcU : c ∈ U := ⟨hc_norm, hc_cross⟩
+  refine ⟨c, mem_interior_iff_mem_nhds.mpr ?_⟩
+  exact Filter.mem_of_superset (hUopen.mem_nhds hcU) (by
+    intro z hz
+    change z ∈ cutPiece P Q
+    exact ⟨le_of_lt hz.1, le_of_lt hz.2⟩)
 -- END SEAT AREA
 
 theorem cutPiece_frontier {P Q : ℂ} (hP : ‖P‖ = 1) (hQ : ‖Q‖ = 1) (hPQ : P ≠ Q) :
