@@ -38,6 +38,7 @@ open ConstructionTargets.PointWedgeVanKampen
 open ConstructionTargets.PolygonSurfacePiOne.PointWedgeQuotient
 open ConstructionTargets.TwoOpenFundamentalGroupoidSpan
 open ConstructionTargets.TwoOpenFundamentalGroupoidPseudopushout
+open ConstructionTargets.FundamentalGroupoidOpenCoverSubdivision
 open ConstructionTargets.PolygonSurfaceHomology
 
 /-- An orbit intersection determines both integer normal-form coordinates by
@@ -811,6 +812,34 @@ theorem kleinPolygonPseudopushout_arrow_eq_reconstructed
     ← kleinPolygonPseudopushoutReconstructionUnit.hom.naturality g]
   rw [Category.assoc, Iso.hom_inv_id_app, Category.comp_id]
   rfl
+
+/-- At every change of sides in a subordinate two-open subdivision, the
+shared vertex lies in the overlap.  These are the exact vertices at which
+inner-piece factors can be replaced during based van Kampen normalization. -/
+theorem pathTwoOpenSubdivision_transition_mem_overlap
+    {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
+    {U V : Set X} (S : PathTwoOpenSubdivision p U V)
+    (k : Fin S.n) (hside : S.side k.castSucc ≠ S.side k.succ) :
+    S.point k.succ.castSucc ∈ U ∩ V := by
+  have h₀ := S.piece_mem k.castSucc (1 : unitInterval)
+  have h₁ := S.piece_mem k.succ (0 : unitInterval)
+  have hp₀ : S.piece k.castSucc (1 : unitInterval) =
+      S.point k.succ.castSucc := by
+    calc
+      _ = S.point k.castSucc.succ := (S.piece k.castSucc).target
+      _ = _ := by congr 1
+  have hp₁ : S.piece k.succ (0 : unitInterval) =
+      S.point k.succ.castSucc := by
+    exact (S.piece k.succ).source
+  rw [hp₀] at h₀
+  rw [hp₁] at h₁
+  cases hs₀ : S.side k.castSucc <;> cases hs₁ : S.side k.succ
+  · exact False.elim (hside (by simp [hs₀, hs₁]))
+  · exact ⟨by simpa [twoChart, hs₁] using h₁,
+      by simpa [twoChart, hs₀] using h₀⟩
+  · exact ⟨by simpa [twoChart, hs₀] using h₀,
+      by simpa [twoChart, hs₁] using h₁⟩
+  · exact False.elim (hside (by simp [hs₀, hs₁]))
 
 /-- The inner vertex of the exact radial cover is contractible, using the
 pointed contraction carried by the polygon cover package. -/
@@ -1864,6 +1893,7 @@ theorem lift_isEmbedding_assembly
 #print axioms kleinSkeletonPresentationMap_ker
 #print axioms kleinPolygonFundamentalGroupoidPseudopushout
 #print axioms kleinPolygonPseudopushout_arrow_eq_reconstructed
+#print axioms pathTwoOpenSubdivision_transition_mem_overlap
 #print axioms kleinPolygonInnerContractibleSpace
 #print axioms kleinPolygonInnerFundamentalGroup_subsingleton
 #print axioms kleinPolygonOverlapPathConnectedSpace

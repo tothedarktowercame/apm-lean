@@ -296,6 +296,11 @@ equivalence to the identity polygon-groupoid functor, and
 is its reconstructed cover-piece arrow conjugated by the unit components.
 The remaining based extraction must normalize that reconstructed arrow using
 contractibility of the inner piece and path connectedness of the overlap.
+`pathTwoOpenSubdivision_transition_mem_overlap` supplies the first
+normalization invariant: every vertex where adjacent subdivision pieces
+switch sides is in the intersection.  Thus maximal inner runs have overlap
+endpoints and can be compared through the connected overlap before their
+contractible contribution is erased.
 `kleinPolygonOverlapToSpacePiOne_eq_one` proves the first genuine kernel
 inclusion input: every overlap loop dies after inclusion into the polygon,
 because that inclusion factors through the contractible inner radial piece.
