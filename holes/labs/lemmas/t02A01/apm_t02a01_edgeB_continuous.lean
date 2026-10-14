@@ -647,7 +647,9 @@ theorem apm_t02a01_edgeA_continuous : Continuous apm_t02a01_edgeA := by
 
 -- BEGIN SEAT AREA
 theorem apm_t02a01_edgeB_continuous : Continuous apm_t02a01_edgeB := by
-  sorry
+  exact continuous_coinduced_rng.comp
+    (Continuous.subtype_mk
+      (continuous_const.prodMk (continuous_const.max (continuous_const.min continuous_id))) _)
 -- END SEAT AREA
 
 noncomputable def apm_t02a01_loopA (hA : Continuous apm_t02a01_edgeA) :
