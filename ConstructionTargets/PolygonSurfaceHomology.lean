@@ -1874,6 +1874,51 @@ def finiteWedgeRightConnectorTransport (n : ℕ) : Prop := by
       ((ConstructionTargets.PointWedgeVanKampen.genericPointWedgeConnectors y₀).connector
         ((r ⋙ eR.functor).obj z)).hom
 
+/-- The literal target-side inverse-unit connector square at the fixed right
+cover base. -/
+def finiteWedgeRightBaseTargetUnitSquare (n : ℕ) : Prop := by
+  let P := finiteWedgeFinSuccPointWedgeNeighborhoods n
+  let x₀ := PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1
+  let y₀ := PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle () 1
+  let eR := ConstructionTargets.PointWedgeVanKampen.genericPointWedgeRightGroupoidEquivalence
+    x₀ y₀ P.2.carrier P.1.carrier P.2.isOpen P.1.isOpen
+      P.2.mem P.1.mem P.2.contraction P.1.contraction
+  let b := ConstructionTargets.PointWedgeVanKampen.genericPointWedgeRightBase
+    x₀ y₀ P.1.carrier
+  exact
+    ((ConstructionTargets.PointWedgeVanKampen.genericPointWedgeConnectors y₀).connector
+      (eR.functor.obj (eR.inverse.obj (eR.functor.obj b)))).hom ≫
+        eR.functor.map (eR.unitIso.inv.app b) =
+      ((ConstructionTargets.PointWedgeVanKampen.genericPointWedgeConnectors y₀).connector
+        (eR.functor.obj b)).hom
+
+/-- The coherent source-side inverse-unit square induced at the same base. -/
+def finiteWedgeCoherentRightSourceUnitSquare (n : ℕ) : Prop := by
+  let P := finiteWedgeFinSuccPointWedgeNeighborhoods n
+  let x₀ := PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1
+  let y₀ := PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle () 1
+  let eR := ConstructionTargets.PointWedgeVanKampen.genericPointWedgeRightGroupoidEquivalence
+    x₀ y₀ P.2.carrier P.1.carrier P.2.isOpen P.1.isOpen
+      P.2.mem P.1.mem P.2.contraction P.1.contraction
+  let b := ConstructionTargets.PointWedgeVanKampen.genericPointWedgeRightBase
+    x₀ y₀ P.1.carrier
+  let source := ConstructionTargets.PointWedgeVanKampen.genericPointWedgeCoherentRightSourceConnectors
+    x₀ y₀ P.2.carrier P.1.carrier P.2.isOpen P.1.isOpen
+      P.2.mem P.1.mem P.2.contraction P.1.contraction
+  exact
+    (source.connector (eR.inverse.obj (eR.functor.obj b))).hom ≫
+        eR.unitIso.inv.app b = (source.connector b).hom
+
+/-- The generic connector transport construction specializes without any
+endpoint casts to the finite-wedge successor packages. -/
+theorem finiteWedgeCoherentRightSourceUnitSquare_of_target (n : ℕ)
+    (h : finiteWedgeRightBaseTargetUnitSquare n) :
+    finiteWedgeCoherentRightSourceUnitSquare n := by
+  unfold finiteWedgeRightBaseTargetUnitSquare at h
+  unfold finiteWedgeCoherentRightSourceUnitSquare
+  exact ConstructionTargets.PointWedgeVanKampen.genericPointWedgeCoherentRightSourceConnectors_rightBase_unitInv_of_target
+    _ _ _ _ _ _ _ _ _ _ h
+
 /-- Endpoint transport and connector-square formulations are exactly
 equivalent, with the direction fixed by left cancellation. -/
 theorem finiteWedgeRightConnectorTransport_iff_connectorSquare (n : ℕ) :
