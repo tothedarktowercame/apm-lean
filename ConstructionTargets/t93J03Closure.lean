@@ -870,6 +870,35 @@ noncomputable def kleinPolygonOverlapImageFundamentalGroupEquivSkeleton :
           (kleinPolygonOverlapToOuter kleinPolygonOverlapPoint)) :=
   kleinPolygonOuterFundamentalGroupEquivSkeleton _
 
+/-- The actual polygon skeleton is path connected, transported from the
+standard two-circle wedge along the already fixed homeomorphism. -/
+theorem kleinSkeletonPathConnectedSpace :
+    PathConnectedSpace kleinPairingData.skeleton :=
+  kleinSkeletonHomeomorphStandardTwoCircles.symm.surjective.pathConnectedSpace
+    kleinSkeletonHomeomorphStandardTwoCircles.symm.continuous
+
+/-- A chosen path from the deformed overlap image to the preferred skeleton
+basepoint used by the literal free-group coordinates. -/
+noncomputable def kleinPolygonOverlapImageToSkeletonPointPath :
+    Path
+      (kleinPolygonOuterHomotopyEquivSkeleton
+        (kleinPolygonOverlapToOuter kleinPolygonOverlapPoint))
+      kleinSkeletonPoint := by
+  letI : PathConnectedSpace kleinPairingData.skeleton :=
+    kleinSkeletonPathConnectedSpace
+  exact PathConnectedSpace.somePath _ _
+
+/-- The overlap-image fundamental group transported all the way to the
+preferred skeleton basepoint.  The final winding calculation can therefore
+be stated directly in the fixed `FreeGroup Bool` coordinates. -/
+noncomputable def kleinPolygonOverlapImageFundamentalGroupEquivAtSkeletonPoint :
+    FundamentalGroup {q // q ∈ (openCover kleinPairingData).outer}
+        (kleinPolygonOverlapToOuter kleinPolygonOverlapPoint) ≃*
+      FundamentalGroup kleinPairingData.skeleton kleinSkeletonPoint :=
+  kleinPolygonOverlapImageFundamentalGroupEquivSkeleton.trans
+    (FundamentalGroup.fundamentalGroupMulEquivOfPath
+      kleinPolygonOverlapImageToSkeletonPointPath)
+
 def finiteWedgeBoolPoint : FiniteWedge Bool := wedgeCircle false 1
 
 @[simp] theorem finiteWedgeBoolHomeomorphTwoCircles_point :
@@ -1011,6 +1040,9 @@ theorem lift_isEmbedding_assembly
 #print axioms kleinPolygonOuterHomotopyEquivSkeleton_on_skeleton
 #print axioms kleinPolygonOuterFundamentalGroupoidEquivalence_obj_skeleton
 #print axioms kleinPolygonOverlapImageFundamentalGroupEquivSkeleton
+#print axioms kleinSkeletonPathConnectedSpace
+#print axioms kleinPolygonOverlapImageToSkeletonPointPath
+#print axioms kleinPolygonOverlapImageFundamentalGroupEquivAtSkeletonPoint
 #print axioms kleinBottle_pi1_every_basepoint_of_polygon_van_kampen
 
 end ConstructionTargets.t93J03Closure

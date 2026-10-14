@@ -228,6 +228,12 @@ the based group quotient and identifies its overlap image with `aabb`.
 `kleinPolygonInnerFundamentalGroup_subsingleton` now discharge the simply
 connected inner-vertex group in that extraction.  It remains to transport the
 overlap image through the outer-piece coordinates and take its normal closure.
+The outer-to-skeleton equivalence is now restricted at the literal overlap
+image.  Path connectedness transported from the standard two-circle model
+supplies a chosen path from its deformed image to `kleinSkeletonPoint`, and
+the resulting based equivalence lands at the exact basepoint used by the
+fixed `FreeGroup Bool` coordinates.  The remaining comparison is therefore
+the winding-one image in those coordinates.
 
 - Layer 1: C1, C3, and C4. C1 and C3 are independent; C4 is already complete.
 - Layer 2: C2 against the explicit C1 equivalence interface.
