@@ -565,7 +565,114 @@ theorem apm_t01A04_canonical_loops_presentation_aux_algebra
       ∃! F : apm_t01a04_piOne →* G,
         F apm_t01A04_loopA = ga ∧ F apm_t01A04_loopB = gb ∧
           F apm_t01A04_loopC = gc) := by
-  sorry
+  let a : ConstructionTargets.GenericTargetNaturalSourceReconstruction.FP :=
+    Monoid.Coprod.inl (Multiplicative.ofAdd ((1, 0) : ℤ × ℤ))
+  let b : ConstructionTargets.GenericTargetNaturalSourceReconstruction.FP :=
+    Monoid.Coprod.inl (Multiplicative.ofAdd ((0, 1) : ℤ × ℤ))
+  let c : ConstructionTargets.GenericTargetNaturalSourceReconstruction.FP :=
+    Monoid.Coprod.inr (Multiplicative.ofAdd (1 : ℤ))
+  have hab : a * b = b * a := by
+    dsimp [a, b]
+    rw [← MonoidHom.map_mul, ← MonoidHom.map_mul]
+    congr 1
+  have hcomm : apm_t01A04_loopA * apm_t01A04_loopB =
+      apm_t01A04_loopB * apm_t01A04_loopA := by
+    apply Φ.injective
+    simpa [hA, hB, a, b] using hab
+  have hgen : Subgroup.closure
+      {apm_t01A04_loopA, apm_t01A04_loopB, apm_t01A04_loopC} = ⊤ := by
+    apply top_unique
+    intro x _
+    let K := Subgroup.closure
+      ({apm_t01A04_loopA, apm_t01A04_loopB, apm_t01A04_loopC} :
+        Set apm_t01a04_piOne)
+    have haK : apm_t01A04_loopA ∈ K := Subgroup.subset_closure (by simp)
+    have hbK : apm_t01A04_loopB ∈ K := Subgroup.subset_closure (by simp)
+    have hcK : apm_t01A04_loopC ∈ K := Subgroup.subset_closure (by simp)
+    have hall : ∀ y : ConstructionTargets.GenericTargetNaturalSourceReconstruction.FP,
+        Φ.symm y ∈ K := by
+      intro y
+      induction y using Monoid.Coprod.induction_on with
+      | inl z =>
+          change Φ.symm (Monoid.Coprod.inl z) ∈ K
+          let m : ℤ := z.toAdd.1
+          let n : ℤ := z.toAdd.2
+          rw [show z =
+              Multiplicative.ofAdd ((1, 0) : ℤ × ℤ) ^ m *
+                Multiplicative.ofAdd ((0, 1) : ℤ × ℤ) ^ n by
+                apply Multiplicative.toAdd.injective
+                simp [m, n]]
+          have ha : Φ.symm (Monoid.Coprod.inl
+              (Multiplicative.ofAdd ((1, 0) : ℤ × ℤ))) = apm_t01A04_loopA := by
+            apply Φ.injective
+            simpa using hA.symm
+          have hb : Φ.symm (Monoid.Coprod.inl
+              (Multiplicative.ofAdd ((0, 1) : ℤ × ℤ))) = apm_t01A04_loopB := by
+            apply Φ.injective
+            simpa using hB.symm
+          simp only [map_mul, map_zpow, ha, hb]
+          exact K.mul_mem (K.zpow_mem haK m) (K.zpow_mem hbK n)
+      | inr z =>
+          change Φ.symm (Monoid.Coprod.inr z) ∈ K
+          let n : ℤ := z.toAdd
+          rw [show z = Multiplicative.ofAdd (1 : ℤ) ^ n by
+                apply Multiplicative.toAdd.injective
+                simp [n]]
+          have hc : Φ.symm (Monoid.Coprod.inr
+              (Multiplicative.ofAdd (1 : ℤ))) = apm_t01A04_loopC := by
+            apply Φ.injective
+            simpa using hC.symm
+          simp only [map_zpow, hc]
+          exact K.zpow_mem hcK n
+      | mul u v hu hv =>
+          rw [map_mul]
+          exact K.mul_mem hu hv
+    simpa [K] using hall (Φ x)
+  refine ⟨hcomm, hgen, ?_⟩
+  intro G _ ga gb gc hgab
+  let pairHom : Multiplicative (ℤ × ℤ) →* G :=
+    { toFun := fun z => ga ^ z.toAdd.1 * gb ^ z.toAdd.2
+      map_one' := by simp
+      map_mul' := by
+        intro x y
+        change ga ^ (x.toAdd.1 + y.toAdd.1) * gb ^ (x.toAdd.2 + y.toAdd.2) =
+          (ga ^ x.toAdd.1 * gb ^ x.toAdd.2) *
+            (ga ^ y.toAdd.1 * gb ^ y.toAdd.2)
+        rw [zpow_add, zpow_add]
+        have hg : Commute ga gb := hgab
+        have hp := (Commute.zpow_zpow hg.symm x.toAdd.2 y.toAdd.1).eq
+        calc
+          ga ^ x.toAdd.1 * ga ^ y.toAdd.1 *
+                (gb ^ x.toAdd.2 * gb ^ y.toAdd.2) =
+              ga ^ x.toAdd.1 *
+                (ga ^ y.toAdd.1 * gb ^ x.toAdd.2) * gb ^ y.toAdd.2 := by
+                  simp only [mul_assoc]
+          _ = ga ^ x.toAdd.1 *
+                (gb ^ x.toAdd.2 * ga ^ y.toAdd.1) * gb ^ y.toAdd.2 := by
+                  rw [hp.symm]
+          _ = (ga ^ x.toAdd.1 * gb ^ x.toAdd.2) *
+                (ga ^ y.toAdd.1 * gb ^ y.toAdd.2) := by
+                  simp only [mul_assoc] }
+  let intHom : Multiplicative ℤ →* G :=
+    { toFun := fun z => gc ^ z.toAdd
+      map_one' := by simp
+      map_mul' := by intro x y; simp [zpow_add] }
+  let L : ConstructionTargets.GenericTargetNaturalSourceReconstruction.FP →* G :=
+    Monoid.Coprod.lift pairHom intHom
+  let F : apm_t01a04_piOne →* G := L.comp Φ.toMonoidHom
+  have hFa : F apm_t01A04_loopA = ga := by simp [F, L, pairHom, hA]
+  have hFb : F apm_t01A04_loopB = gb := by simp [F, L, pairHom, hB]
+  have hFc : F apm_t01A04_loopC = gc := by simp [F, L, intHom, hC]
+  refine ⟨F, ⟨hFa, hFb, hFc⟩, ?_⟩
+  intro F' hF'
+  rcases hF' with ⟨hF'a, hF'b, hF'c⟩
+  apply MonoidHom.eq_of_eqOn_dense hgen
+  intro z hz
+  simp only [Set.mem_insert_iff, Set.mem_singleton_iff] at hz
+  rcases hz with rfl | rfl | rfl
+  · exact hF'a.trans hFa.symm
+  · exact hF'b.trans hFb.symm
+  · exact hF'c.trans hFc.symm
 -- END SEAT AREA
 
 /-- The Seifert--van Kampen presentation on the three fixed geometric loops. -/
