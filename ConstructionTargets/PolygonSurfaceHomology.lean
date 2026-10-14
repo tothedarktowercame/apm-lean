@@ -1892,6 +1892,25 @@ def finiteWedgeRightBaseTargetUnitSquare (n : ℕ) : Prop := by
       ((ConstructionTargets.PointWedgeVanKampen.genericPointWedgeConnectors y₀).connector
         (eR.functor.obj b)).hom
 
+/-- The target-side square with the inverse unit rewritten as the right
+equivalence counit.  This is the literal endpoint equation left after the
+equivalence triangle identity. -/
+def finiteWedgeRightBaseCounitSquare (n : ℕ) : Prop := by
+  let P := finiteWedgeFinSuccPointWedgeNeighborhoods n
+  let x₀ := PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1
+  let y₀ := PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle () 1
+  let eR := ConstructionTargets.PointWedgeVanKampen.genericPointWedgeRightGroupoidEquivalence
+    x₀ y₀ P.2.carrier P.1.carrier P.2.isOpen P.1.isOpen
+      P.2.mem P.1.mem P.2.contraction P.1.contraction
+  let b := ConstructionTargets.PointWedgeVanKampen.genericPointWedgeRightBase
+    x₀ y₀ P.1.carrier
+  exact
+    ((ConstructionTargets.PointWedgeVanKampen.genericPointWedgeConnectors y₀).connector
+      (eR.functor.obj (eR.inverse.obj (eR.functor.obj b)))).hom ≫
+        eR.counitIso.hom.app (eR.functor.obj b) =
+      ((ConstructionTargets.PointWedgeVanKampen.genericPointWedgeConnectors y₀).connector
+        (eR.functor.obj b)).hom
+
 /-- The coherent source-side inverse-unit square induced at the same base. -/
 def finiteWedgeCoherentRightSourceUnitSquare (n : ℕ) : Prop := by
   let P := finiteWedgeFinSuccPointWedgeNeighborhoods n
@@ -1917,6 +1936,16 @@ theorem finiteWedgeCoherentRightSourceUnitSquare_of_target (n : ℕ)
   unfold finiteWedgeRightBaseTargetUnitSquare at h
   unfold finiteWedgeCoherentRightSourceUnitSquare
   exact ConstructionTargets.PointWedgeVanKampen.genericPointWedgeCoherentRightSourceConnectors_rightBase_unitInv_of_target
+    _ _ _ _ _ _ _ _ _ _ h
+
+/-- The counit formulation implies the coherent source connector square at
+the successor right base. -/
+theorem finiteWedgeCoherentRightSourceUnitSquare_of_counit (n : ℕ)
+    (h : finiteWedgeRightBaseCounitSquare n) :
+    finiteWedgeCoherentRightSourceUnitSquare n := by
+  unfold finiteWedgeRightBaseCounitSquare at h
+  unfold finiteWedgeCoherentRightSourceUnitSquare
+  exact ConstructionTargets.PointWedgeVanKampen.genericPointWedgeCoherentRightSourceConnectors_rightBase_unitInv_of_counit
     _ _ _ _ _ _ _ _ _ _ h
 
 /-- Endpoint transport and connector-square formulations are exactly
