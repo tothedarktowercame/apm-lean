@@ -1307,6 +1307,61 @@ lemma mergeRepeatedBlock_aux_boundary_lift_aux_localInv_continuous (u v : ℝ) :
 /-- Generic: a homeomorphism of `[0, P]` onto `[0, Q]` fixing `0` (given by global
 continuous maps that are mutually inverse on the intervals) extends periodically,
 `x ↦ Q ⌊x/P⌋ + φ (P · fract (x/P))`, to an equivariant lift. -/
+def equivariantLift_of_interval_aux_ext (P Q : ℝ) (f : ℝ → ℝ) (x : ℝ) : ℝ :=
+  Q * (⌊x / P⌋ : ℝ) + f (P * Int.fract (x / P))
+
+lemma equivariantLift_of_interval_aux_continuous (P Q : ℝ) (hP : 0 < P)
+    (f : ℝ → ℝ) (hf : Continuous f) (hf0 : f 0 = 0) (hfP : f P = Q) :
+    Continuous (equivariantLift_of_interval_aux_ext P Q f) := by
+  have hc : ContinuousOn (fun t : ℝ => f (P * t) - Q * t) (Set.Icc 0 1) :=
+    (hf.comp (continuous_const.mul continuous_id)).sub
+      (continuous_const.mul continuous_id) |>.continuousOn
+  have he : f (P * 0) - Q * 0 = f (P * 1) - Q * 1 := by
+    simp [hf0, hfP]
+  have hfract : Continuous ((fun t : ℝ => f (P * t) - Q * t) ∘ Int.fract) :=
+    hc.comp_fract'' he
+  have hdiv : Continuous (fun x : ℝ => x / P) :=
+    continuous_id.div_const P
+  rw [continuous_congr (g := fun x : ℝ =>
+      Q * (x / P) + ((fun t : ℝ => f (P * t) - Q * t) ∘ Int.fract) (x / P))
+      (fun x => ?_)]
+  · exact (continuous_const.mul hdiv).add (hfract.comp hdiv)
+  · unfold equivariantLift_of_interval_aux_ext
+    dsimp [Function.comp_def]
+    have hx := Int.floor_add_fract (x / P)
+    calc
+      Q * (⌊x / P⌋ : ℝ) + f (P * Int.fract (x / P)) =
+          Q * ((⌊x / P⌋ : ℝ) + Int.fract (x / P)) +
+            (f (P * Int.fract (x / P)) - Q * Int.fract (x / P)) := by ring
+      _ = _ := by rw [hx]
+
+lemma equivariantLift_of_interval_aux_eval (P Q : ℝ) (hP : 0 < P)
+    (f : ℝ → ℝ) (n : ℤ) (x : ℝ) (hx : x ∈ Set.Ico 0 P) :
+    equivariantLift_of_interval_aux_ext P Q f (P * n + x) = Q * n + f x := by
+  have hp0 : P ≠ 0 := ne_of_gt hP
+  have hxdiv : x / P ∈ Set.Ico (0 : ℝ) 1 := by
+    exact ⟨div_nonneg hx.1 hP.le, (div_lt_one hP).2 hx.2⟩
+  have hfloor : ⌊x / P⌋ = (0 : ℤ) := Int.floor_eq_zero_iff.mpr hxdiv
+  have hfract : Int.fract (x / P) = x / P := Int.fract_eq_self.mpr hxdiv
+  unfold equivariantLift_of_interval_aux_ext
+  rw [show (P * (n : ℝ) + x) / P = (n : ℝ) + x / P by field_simp <;> ring,
+    Int.floor_intCast_add, Int.fract_intCast_add, hfloor, hfract]
+  norm_num
+  field_simp
+
+lemma equivariantLift_of_interval_aux_add_period (P Q : ℝ) (hP : 0 < P)
+    (f : ℝ → ℝ) (x : ℝ) :
+    equivariantLift_of_interval_aux_ext P Q f (x + P) =
+      equivariantLift_of_interval_aux_ext P Q f x + Q := by
+  unfold equivariantLift_of_interval_aux_ext
+  have hp0 : P ≠ 0 := ne_of_gt hP
+  rw [show (x + P) / P = x / P + 1 by field_simp]
+  simp only [Int.floor_add_one]
+  rw [show Int.fract (x / P + 1) = Int.fract (x / P) by
+    simpa [add_comm] using Int.fract_add_intCast (x / P) 1]
+  push_cast
+  ring
+
 lemma equivariantLift_of_interval (P Q : ℝ) (hP : 0 < P) (hQ : 0 < Q)
     (φ ψ : ℝ → ℝ) (hφ : Continuous φ) (hψ : Continuous ψ)
     (hφ0 : φ 0 = 0) (hφP : φ P = Q) (hψ0 : ψ 0 = 0) (hψQ : ψ Q = P)
@@ -1314,11 +1369,211 @@ lemma equivariantLift_of_interval (P Q : ℝ) (hP : 0 < P) (hQ : 0 < Q)
     (hψmaps : Set.MapsTo ψ (Set.Icc 0 Q) (Set.Icc 0 P))
     (hl : ∀ x ∈ Set.Icc 0 P, ψ (φ x) = x) (hr : ∀ y ∈ Set.Icc 0 Q, φ (ψ y) = y) :
     ∃ F : EquivariantCircleLift P Q, ∀ x ∈ Set.Icc 0 P, F.toFun x = φ x := by
-  sorry
+  let f := equivariantLift_of_interval_aux_ext P Q φ
+  let g := equivariantLift_of_interval_aux_ext Q P ψ
+  have hfg : Function.LeftInverse g f := by
+    intro x
+    let n : ℤ := ⌊x / P⌋
+    let z : ℝ := P * Int.fract (x / P)
+    have hz : z ∈ Set.Ico 0 P := by
+      constructor
+      · exact mul_nonneg hP.le (Int.fract_nonneg _)
+      · exact (mul_lt_iff_lt_one_right hP).2 (Int.fract_lt_one _)
+    have hφz := hφmaps (Set.Ico_subset_Icc_self hz)
+    have hφzlt : φ z < Q := by
+      apply lt_of_le_of_ne hφz.2
+      intro he
+      have := hl z (Set.Ico_subset_Icc_self hz)
+      rw [he, hψQ] at this
+      exact hz.2.ne this.symm
+    have hf : f x = Q * n + φ z := by
+      apply equivariantLift_of_interval_aux_eval P Q hP φ n z hz |>.symm.trans
+      congr 1
+      dsimp [n, z]
+      have hd := Int.floor_add_fract (x / P)
+      calc
+        P * (⌊x / P⌋ : ℝ) + P * Int.fract (x / P) =
+            P * ((⌊x / P⌋ : ℝ) + Int.fract (x / P)) := by ring
+        _ = P * (x / P) := by rw [hd]
+        _ = x := by field_simp
+    rw [hf]
+    change equivariantLift_of_interval_aux_ext Q P ψ _ = x
+    rw [equivariantLift_of_interval_aux_eval Q P hQ ψ n (φ z) ⟨hφz.1, hφzlt⟩,
+      hl z (Set.Ico_subset_Icc_self hz)]
+    dsimp [n, z]
+    have hd := Int.floor_add_fract (x / P)
+    calc
+      P * (⌊x / P⌋ : ℝ) + P * Int.fract (x / P) =
+          P * ((⌊x / P⌋ : ℝ) + Int.fract (x / P)) := by ring
+      _ = P * (x / P) := by rw [hd]
+      _ = x := by field_simp
+  have hgf : Function.RightInverse g f := by
+    intro y
+    let n : ℤ := ⌊y / Q⌋
+    let z : ℝ := Q * Int.fract (y / Q)
+    have hz : z ∈ Set.Ico 0 Q := by
+      constructor
+      · exact mul_nonneg hQ.le (Int.fract_nonneg _)
+      · exact (mul_lt_iff_lt_one_right hQ).2 (Int.fract_lt_one _)
+    have hψz := hψmaps (Set.Ico_subset_Icc_self hz)
+    have hψzlt : ψ z < P := by
+      apply lt_of_le_of_ne hψz.2
+      intro he
+      have := hr z (Set.Ico_subset_Icc_self hz)
+      rw [he, hφP] at this
+      exact hz.2.ne this.symm
+    have hg : g y = P * n + ψ z := by
+      apply equivariantLift_of_interval_aux_eval Q P hQ ψ n z hz |>.symm.trans
+      congr 1
+      dsimp [n, z]
+      have hd := Int.floor_add_fract (y / Q)
+      calc
+        Q * (⌊y / Q⌋ : ℝ) + Q * Int.fract (y / Q) =
+            Q * ((⌊y / Q⌋ : ℝ) + Int.fract (y / Q)) := by ring
+        _ = Q * (y / Q) := by rw [hd]
+        _ = y := by field_simp
+    rw [hg]
+    change equivariantLift_of_interval_aux_ext P Q φ _ = y
+    rw [equivariantLift_of_interval_aux_eval P Q hP φ n (ψ z) ⟨hψz.1, hψzlt⟩,
+      hr z (Set.Ico_subset_Icc_self hz)]
+    dsimp [n, z]
+    have hd := Int.floor_add_fract (y / Q)
+    calc
+      Q * (⌊y / Q⌋ : ℝ) + Q * Int.fract (y / Q) =
+          Q * ((⌊y / Q⌋ : ℝ) + Int.fract (y / Q)) := by ring
+      _ = Q * (y / Q) := by rw [hd]
+      _ = y := by field_simp
+  refine ⟨{
+    toFun := f
+    invFun := g
+    continuous_toFun := equivariantLift_of_interval_aux_continuous P Q hP φ hφ hφ0 hφP
+    continuous_invFun := equivariantLift_of_interval_aux_continuous Q P hQ ψ hψ hψ0 hψQ
+    left_inv := hfg
+    right_inv := hgf
+    toFun_add_period := equivariantLift_of_interval_aux_add_period P Q hP φ
+    invFun_add_period := equivariantLift_of_interval_aux_add_period Q P hQ ψ }, ?_⟩
+  intro x hx
+  by_cases hxp : x = P
+  · subst x
+    change f P = φ P
+    unfold f
+    have he := equivariantLift_of_interval_aux_eval P Q hP φ 1 0
+      (by exact ⟨le_rfl, hP⟩)
+    norm_num at he ⊢
+    linarith [hφ0, hφP]
+  · change f x = φ x
+    unfold f
+    simpa using equivariantLift_of_interval_aux_eval P Q hP φ 0 x
+      ⟨hx.1, lt_of_le_of_ne hx.2 hxp⟩
 
 /-- The local merge map is a homeomorphism of `ℝ` (slopes `1` and `1/2`) with the
 displayed inverse, fixes `0`, and sends the period `u + 2 + v + 2 + t` to
 `u + 1 + v + 1 + t`. -/
+lemma mergeRepeatedBlock_aux_boundary_lift_aux_local_props_aux_local
+    (u v : ℕ) (x : ℝ) :
+    (True ∧ x ≤ u ∧ mergeRepeatedBlock_aux_boundary_lift_aux_local u v x = x) ∨
+    (u ≤ x ∧ x ≤ u + 2 ∧
+      mergeRepeatedBlock_aux_boundary_lift_aux_local u v x = (x + u) / 2) ∨
+    (u + 2 ≤ x ∧ x ≤ u + 2 + v ∧
+      mergeRepeatedBlock_aux_boundary_lift_aux_local u v x = x - 1) ∨
+    (u + 2 + v ≤ x ∧ x ≤ u + 4 + v ∧
+      mergeRepeatedBlock_aux_boundary_lift_aux_local u v x =
+        (x + (u + 2 + v) - 2) / 2) ∨
+    (u + 4 + v ≤ x ∧ True ∧
+      mergeRepeatedBlock_aux_boundary_lift_aux_local u v x = x - 2) := by
+  have hu : (0 : ℝ) ≤ u := by positivity
+  have hv : (0 : ℝ) ≤ v := by positivity
+  by_cases h₀ : x ≤ u
+  · left
+    refine ⟨trivial, h₀, ?_⟩
+    simp only [mergeRepeatedBlock_aux_boundary_lift_aux_local]
+    rw [mergeRepeatedBlock_aux_boundary_lift_aux_clip_of_le _ _ _ h₀]
+    rw [mergeRepeatedBlock_aux_boundary_lift_aux_clip_of_le]
+    · ring
+    · norm_num
+      linarith
+  · by_cases h₁ : x ≤ u + 2
+    · right; left
+      refine ⟨by linarith, h₁, ?_⟩
+      simp only [mergeRepeatedBlock_aux_boundary_lift_aux_local]
+      rw [mergeRepeatedBlock_aux_boundary_lift_aux_clip_of_mem _ _ _ (by linarith) h₁ (by norm_num)]
+      rw [mergeRepeatedBlock_aux_boundary_lift_aux_clip_of_le]
+      · ring
+      · norm_num
+        linarith
+    · by_cases h₂ : x ≤ u + 2 + v
+      · right; right; left
+        refine ⟨by linarith, h₂, ?_⟩
+        simp only [mergeRepeatedBlock_aux_boundary_lift_aux_local]
+        rw [mergeRepeatedBlock_aux_boundary_lift_aux_clip_of_ge _ _ _ (by linarith) (by norm_num)]
+        rw [mergeRepeatedBlock_aux_boundary_lift_aux_clip_of_le _ _ _ h₂]
+        ring
+      · by_cases h₃ : x ≤ u + 4 + v
+        · right; right; right; left
+          refine ⟨by linarith, h₃, ?_⟩
+          simp only [mergeRepeatedBlock_aux_boundary_lift_aux_local]
+          rw [mergeRepeatedBlock_aux_boundary_lift_aux_clip_of_ge _ _ _ (by linarith) (by norm_num)]
+          rw [mergeRepeatedBlock_aux_boundary_lift_aux_clip_of_mem _ _ _ (by linarith) (by linarith) (by norm_num)]
+          ring
+        · right; right; right; right
+          refine ⟨by linarith, trivial, ?_⟩
+          simp only [mergeRepeatedBlock_aux_boundary_lift_aux_local]
+          rw [mergeRepeatedBlock_aux_boundary_lift_aux_clip_of_ge _ _ _ (by linarith) (by norm_num)]
+          rw [mergeRepeatedBlock_aux_boundary_lift_aux_clip_of_ge _ _ _ (by linarith) (by norm_num)]
+          ring
+
+lemma mergeRepeatedBlock_aux_boundary_lift_aux_local_props_aux_inv
+    (u v : ℕ) (x : ℝ) :
+    (True ∧ x ≤ u ∧ mergeRepeatedBlock_aux_boundary_lift_aux_localInv u v x = x) ∨
+    (u ≤ x ∧ x ≤ u + 1 ∧
+      mergeRepeatedBlock_aux_boundary_lift_aux_localInv u v x = 2 * x - u) ∨
+    (u + 1 ≤ x ∧ x ≤ u + 1 + v ∧
+      mergeRepeatedBlock_aux_boundary_lift_aux_localInv u v x = x + 1) ∨
+    (u + 1 + v ≤ x ∧ x ≤ u + 2 + v ∧
+      mergeRepeatedBlock_aux_boundary_lift_aux_localInv u v x =
+        2 * x + 1 - (u + 1 + v)) ∨
+    (u + 2 + v ≤ x ∧ True ∧
+      mergeRepeatedBlock_aux_boundary_lift_aux_localInv u v x = x + 2) := by
+  have hv : (0 : ℝ) ≤ v := by positivity
+  by_cases h₀ : x ≤ u
+  · left
+    refine ⟨trivial, h₀, ?_⟩
+    simp only [mergeRepeatedBlock_aux_boundary_lift_aux_localInv]
+    rw [mergeRepeatedBlock_aux_boundary_lift_aux_clip_of_le _ _ _ h₀]
+    rw [mergeRepeatedBlock_aux_boundary_lift_aux_clip_of_le]
+    · ring
+    · norm_num
+      linarith
+  · by_cases h₁ : x ≤ u + 1
+    · right; left
+      refine ⟨by linarith, h₁, ?_⟩
+      simp only [mergeRepeatedBlock_aux_boundary_lift_aux_localInv]
+      rw [mergeRepeatedBlock_aux_boundary_lift_aux_clip_of_mem _ _ _ (by linarith) h₁ (by norm_num)]
+      rw [mergeRepeatedBlock_aux_boundary_lift_aux_clip_of_le]
+      · ring
+      · norm_num
+        linarith
+    · by_cases h₂ : x ≤ u + 1 + v
+      · right; right; left
+        refine ⟨by linarith, h₂, ?_⟩
+        simp only [mergeRepeatedBlock_aux_boundary_lift_aux_localInv]
+        rw [mergeRepeatedBlock_aux_boundary_lift_aux_clip_of_ge _ _ _ (by linarith) (by norm_num)]
+        rw [mergeRepeatedBlock_aux_boundary_lift_aux_clip_of_le _ _ _ h₂]
+        ring
+      · by_cases h₃ : x ≤ u + 2 + v
+        · right; right; right; left
+          refine ⟨by linarith, h₃, ?_⟩
+          simp only [mergeRepeatedBlock_aux_boundary_lift_aux_localInv]
+          rw [mergeRepeatedBlock_aux_boundary_lift_aux_clip_of_ge _ _ _ (by linarith) (by norm_num)]
+          rw [mergeRepeatedBlock_aux_boundary_lift_aux_clip_of_mem _ _ _ (by linarith) (by linarith) (by norm_num)]
+          ring
+        · right; right; right; right
+          refine ⟨by linarith, trivial, ?_⟩
+          simp only [mergeRepeatedBlock_aux_boundary_lift_aux_localInv]
+          rw [mergeRepeatedBlock_aux_boundary_lift_aux_clip_of_ge _ _ _ (by linarith) (by norm_num)]
+          rw [mergeRepeatedBlock_aux_boundary_lift_aux_clip_of_ge _ _ _ (by linarith) (by norm_num)]
+          ring
+
 lemma mergeRepeatedBlock_aux_boundary_lift_aux_local_props (uLen vLen tLen : ℕ) :
     (∀ x, mergeRepeatedBlock_aux_boundary_lift_aux_localInv uLen vLen (mergeRepeatedBlock_aux_boundary_lift_aux_local uLen vLen x) = x) ∧
     (∀ y, mergeRepeatedBlock_aux_boundary_lift_aux_local uLen vLen (mergeRepeatedBlock_aux_boundary_lift_aux_localInv uLen vLen y) = y) ∧
@@ -1326,7 +1581,60 @@ lemma mergeRepeatedBlock_aux_boundary_lift_aux_local_props (uLen vLen tLen : ℕ
     mergeRepeatedBlock_aux_boundary_lift_aux_local uLen vLen (uLen + 2 + vLen + 2 + tLen) = uLen + 1 + vLen + 1 + tLen ∧
     mergeRepeatedBlock_aux_boundary_lift_aux_localInv uLen vLen (uLen + 1 + vLen + 1 + tLen) = uLen + 2 + vLen + 2 + tLen ∧
     StrictMono (mergeRepeatedBlock_aux_boundary_lift_aux_local uLen vLen) := by
-  sorry
+  have hl : ∀ x, mergeRepeatedBlock_aux_boundary_lift_aux_localInv uLen vLen
+      (mergeRepeatedBlock_aux_boundary_lift_aux_local uLen vLen x) = x := by
+    intro x
+    rcases mergeRepeatedBlock_aux_boundary_lift_aux_local_props_aux_local uLen vLen x with
+      h | h | h | h | h <;>
+      rcases h with ⟨hlo, hhi, hx⟩ <;>
+      rw [hx] <;>
+      rcases mergeRepeatedBlock_aux_boundary_lift_aux_local_props_aux_inv uLen vLen _ with
+        k | k | k | k | k <;>
+      rcases k with ⟨klo, khi, hk⟩ <;>
+      rw [hk] <;> norm_num at * <;> linarith
+  have hr : ∀ x, mergeRepeatedBlock_aux_boundary_lift_aux_local uLen vLen
+      (mergeRepeatedBlock_aux_boundary_lift_aux_localInv uLen vLen x) = x := by
+    intro x
+    rcases mergeRepeatedBlock_aux_boundary_lift_aux_local_props_aux_inv uLen vLen x with
+      h | h | h | h | h <;>
+      rcases h with ⟨hlo, hhi, hx⟩ <;>
+      rw [hx] <;>
+      rcases mergeRepeatedBlock_aux_boundary_lift_aux_local_props_aux_local uLen vLen _ with
+        k | k | k | k | k <;>
+      rcases k with ⟨klo, khi, hk⟩ <;>
+      rw [hk] <;> norm_num at * <;> linarith
+  have hmono : StrictMono (mergeRepeatedBlock_aux_boundary_lift_aux_local uLen vLen) := by
+    intro x y hxy
+    rcases mergeRepeatedBlock_aux_boundary_lift_aux_local_props_aux_local uLen vLen x with
+      hx | hx | hx | hx | hx <;>
+      rcases mergeRepeatedBlock_aux_boundary_lift_aux_local_props_aux_local uLen vLen y with
+        hy | hy | hy | hy | hy <;>
+      rcases hx with ⟨hxl, hxu, hxe⟩ <;>
+      rcases hy with ⟨hyl, hyu, hye⟩ <;>
+      rw [hxe, hye] <;> norm_num at * <;> linarith
+  have hzero : mergeRepeatedBlock_aux_boundary_lift_aux_local uLen vLen 0 = 0 := by
+    rcases mergeRepeatedBlock_aux_boundary_lift_aux_local_props_aux_local uLen vLen 0 with
+      h | h | h | h | h <;> rcases h with ⟨a, b, e⟩ <;>
+      rw [e] <;> norm_num at * <;> linarith
+  have hperiod : mergeRepeatedBlock_aux_boundary_lift_aux_local uLen vLen
+      (uLen + 2 + vLen + 2 + tLen) = uLen + 1 + vLen + 1 + tLen := by
+    rcases mergeRepeatedBlock_aux_boundary_lift_aux_local_props_aux_local uLen vLen
+        (uLen + 2 + vLen + 2 + tLen) with h | h | h | h | h <;>
+      rcases h with ⟨a, b, e⟩ <;> rw [e] <;>
+      norm_num at * <;> linarith
+  refine ⟨hl, hr, hzero, ?_, hperiod, ?_, hmono⟩
+  · calc
+      mergeRepeatedBlock_aux_boundary_lift_aux_localInv uLen vLen 0 =
+          mergeRepeatedBlock_aux_boundary_lift_aux_localInv uLen vLen
+            (mergeRepeatedBlock_aux_boundary_lift_aux_local uLen vLen 0) := by rw [hzero]
+      _ = 0 := hl 0
+  · calc
+      mergeRepeatedBlock_aux_boundary_lift_aux_localInv uLen vLen
+          (uLen + 1 + vLen + 1 + tLen) =
+          mergeRepeatedBlock_aux_boundary_lift_aux_localInv uLen vLen
+            (mergeRepeatedBlock_aux_boundary_lift_aux_local uLen vLen
+              (uLen + 2 + vLen + 2 + tLen)) := by rw [hperiod]
+      _ = uLen + 2 + vLen + 2 + tLen := hl _
 
 /-- The seven block formulas for the local map (clip arithmetic). -/
 lemma mergeRepeatedBlock_aux_boundary_lift_aux_local_formulas (uLen vLen tLen : ℕ) :
@@ -1342,7 +1650,71 @@ lemma mergeRepeatedBlock_aux_boundary_lift_aux_local_formulas (uLen vLen tLen : 
       mergeRepeatedBlock_aux_boundary_lift_aux_local uLen vLen (uLen + 3 + vLen + s.1) = uLen + 1 + vLen + (1 + s.1) / 2) ∧
     (∀ (i : ℕ), i < tLen → ∀ s : Set.Icc (0 : ℝ) 1,
       mergeRepeatedBlock_aux_boundary_lift_aux_local uLen vLen (uLen + 4 + vLen + i + s.1) = uLen + 2 + vLen + i + s.1) := by
-  sorry
+  constructor
+  · intro i hi s
+    have hi' : (i : ℝ) < uLen := by exact_mod_cast hi
+    have hi_le : (i : ℝ) + 1 ≤ uLen := by exact_mod_cast (Nat.succ_le_iff.mpr hi)
+    have hs0 := s.2.1
+    have hs1 := s.2.2
+    unfold mergeRepeatedBlock_aux_boundary_lift_aux_local
+    rw [mergeRepeatedBlock_aux_boundary_lift_aux_clip_of_le,
+      mergeRepeatedBlock_aux_boundary_lift_aux_clip_of_le]
+    · ring
+    all_goals norm_num at * <;> linarith
+  constructor
+  · intro s
+    have hs0 := s.2.1
+    have hs1 := s.2.2
+    unfold mergeRepeatedBlock_aux_boundary_lift_aux_local
+    rw [mergeRepeatedBlock_aux_boundary_lift_aux_clip_of_mem,
+      mergeRepeatedBlock_aux_boundary_lift_aux_clip_of_le]
+    · ring
+    all_goals norm_num at * <;> linarith
+  constructor
+  · intro s
+    have hs0 := s.2.1
+    have hs1 := s.2.2
+    unfold mergeRepeatedBlock_aux_boundary_lift_aux_local
+    rw [mergeRepeatedBlock_aux_boundary_lift_aux_clip_of_mem,
+      mergeRepeatedBlock_aux_boundary_lift_aux_clip_of_le]
+    · ring
+    all_goals norm_num at * <;> linarith
+  constructor
+  · intro i hi s
+    have hi' : (i : ℝ) < vLen := by exact_mod_cast hi
+    have hi_le : (i : ℝ) + 1 ≤ vLen := by exact_mod_cast (Nat.succ_le_iff.mpr hi)
+    have hs0 := s.2.1
+    have hs1 := s.2.2
+    unfold mergeRepeatedBlock_aux_boundary_lift_aux_local
+    rw [mergeRepeatedBlock_aux_boundary_lift_aux_clip_of_ge,
+      mergeRepeatedBlock_aux_boundary_lift_aux_clip_of_le]
+    · ring
+    all_goals norm_num at * <;> linarith
+  constructor
+  · intro s
+    have hs0 := s.2.1
+    have hs1 := s.2.2
+    unfold mergeRepeatedBlock_aux_boundary_lift_aux_local
+    rw [mergeRepeatedBlock_aux_boundary_lift_aux_clip_of_ge,
+      mergeRepeatedBlock_aux_boundary_lift_aux_clip_of_mem]
+    · ring
+    all_goals norm_num at * <;> linarith
+  constructor
+  · intro s
+    have hs0 := s.2.1
+    have hs1 := s.2.2
+    unfold mergeRepeatedBlock_aux_boundary_lift_aux_local
+    rw [mergeRepeatedBlock_aux_boundary_lift_aux_clip_of_ge,
+      mergeRepeatedBlock_aux_boundary_lift_aux_clip_of_mem]
+    · ring
+    all_goals norm_num at * <;> linarith
+  · intro i hi s
+    have hs0 := s.2.1
+    unfold mergeRepeatedBlock_aux_boundary_lift_aux_local
+    rw [mergeRepeatedBlock_aux_boundary_lift_aux_clip_of_ge,
+      mergeRepeatedBlock_aux_boundary_lift_aux_clip_of_ge]
+    · ring
+    all_goals norm_num at * <;> linarith
 
 /-- Leaf: assemble the lift spec from the periodic extension of the local map
 (each formula point lies in `[0, period]`; rewrite by `F.toFun = local` there and
@@ -1721,6 +2093,32 @@ lemma mergeRepeatedBlock_aux_boundary_relation_aux_reverse_aux_common
       (g.symm d₁) (g.symm d₂) := by
   sorry
 
+lemma mergeRepeatedBlock_aux_boundary_relation_aux_reverse_aux_merged_aux_lower
+    (s : Set.Icc (0 : ℝ) 1) (hs : s.1 ≤ 1 / 2) :
+    2 * s.1 ∈ Set.Icc (0 : ℝ) 1 := by
+  constructor <;> linarith [s.2.1, s.2.2]
+
+lemma mergeRepeatedBlock_aux_boundary_relation_aux_reverse_aux_merged_aux_upper
+    (s : Set.Icc (0 : ℝ) 1) (hs : 1 / 2 ≤ s.1) :
+    2 * s.1 - 1 ∈ Set.Icc (0 : ℝ) 1 := by
+  constructor <;> linarith [s.2.1, s.2.2]
+
+lemma mergeRepeatedBlock_aux_boundary_relation_aux_reverse_aux_merged_aux_lower_reverse
+    (s : Set.Icc (0 : ℝ) 1) (hs : s.1 ≤ 1 / 2) :
+    (1 + (reverseParameter ⟨2 * s.1,
+      mergeRepeatedBlock_aux_boundary_relation_aux_reverse_aux_merged_aux_lower s
+        hs⟩).1) / 2 = 1 - s.1 := by
+  simp [reverseParameter]
+  ring
+
+lemma mergeRepeatedBlock_aux_boundary_relation_aux_reverse_aux_merged_aux_upper_reverse
+    (s : Set.Icc (0 : ℝ) 1) (hs : 1 / 2 ≤ s.1) :
+    (reverseParameter ⟨2 * s.1 - 1,
+      mergeRepeatedBlock_aux_boundary_relation_aux_reverse_aux_merged_aux_upper s
+        hs⟩).1 / 2 = 1 - s.1 := by
+  simp [reverseParameter]
+  ring
+
 /-- Reverse generators for the `a` / `a⁻¹` pair: split the parameter at `1/2`; the lower half comes from `y` / `y⁻¹`, the upper half from `z` / `z⁻¹` (`hg.on_y/on_z/on_inv_z/on_inv_y`). -/
 -- BEGIN SEAT AREA
 lemma mergeRepeatedBlock_aux_boundary_relation_aux_reverse_aux_merged
@@ -2027,7 +2425,103 @@ lemma cutAndPaste_aux_convex_radial_chart
       (∀ z : Disk, ‖(z : ℂ)‖ = 1 ↔ (e z : ℂ) ∈ frontier K) ∧
       ∀ z : Disk, ‖(z : ℂ)‖ = 1 →
         ∃ r : ℝ, 0 < r ∧ (e z : ℂ) = p + r • (z : ℂ) := by
-  sorry
+  let S : Set ℂ := (fun x : ℂ => -p + x) '' K
+  have hSc : Convex ℝ S := hKc.translate (-p)
+  have hScompact : IsCompact S := by
+    simpa [S] using
+      hKcompact.image (Homeomorph.addLeft (-p : ℂ)).continuous
+  have hS₀ : S ∈ nhds (0 : ℂ) := by
+    rw [← mem_interior_iff_mem_nhds]
+    change 0 ∈ interior ((Homeomorph.addLeft (-p : ℂ)) '' K)
+    rw [← (Homeomorph.addLeft (-p : ℂ)).image_interior]
+    exact ⟨p, hp, by simp⟩
+  have hSb : Bornology.IsVonNBounded ℝ S :=
+    NormedSpace.isVonNBounded_of_isBounded ℝ hScompact.isBounded
+  have hBc : Convex ℝ (Metric.ball (0 : ℂ) 1) := convex_ball _ _
+  have hB₀ : Metric.ball (0 : ℂ) 1 ∈ nhds (0 : ℂ) := by
+    simpa using Metric.ball_mem_nhds (0 : ℂ) (by norm_num : (0 : ℝ) < 1)
+  have hBb : Bornology.IsVonNBounded ℝ (Metric.ball (0 : ℂ) 1) :=
+    NormedSpace.isVonNBounded_ball ℝ ℂ 1
+  let H : ℂ ≃ₜ ℂ :=
+    gaugeRescaleHomeomorph S (Metric.ball 0 1) hSc hS₀ hSb hBc hB₀ hBb
+  have hHcl : H '' closure S = Metric.closedBall (0 : ℂ) 1 := by
+    simpa [H, closure_ball] using
+      (image_gaugeRescaleHomeomorph_closure hSc hS₀ hSb hBc hB₀ hBb)
+  have hHint : H '' interior S = Metric.ball (0 : ℂ) 1 := by
+    simpa [H, Metric.isOpen_ball.interior_eq] using
+      (image_gaugeRescaleHomeomorph_interior hSc hS₀ hSb hBc hB₀ hBb)
+  have hHfront : H '' frontier S = Metric.sphere (0 : ℂ) 1 := by
+    rw [← closure_diff_interior, image_diff H.injective, hHcl, hHint]
+    ext z
+    simp [Metric.mem_closedBall, Metric.mem_ball, Metric.mem_sphere,
+      dist_zero_right]
+  have hSclosed : IsClosed S := hScompact.isClosed
+  have htrans : (Homeomorph.addLeft p) '' S = K := by
+    ext z
+    constructor
+    · rintro ⟨y, ⟨x, hx, rfl⟩, rfl⟩
+      simpa using hx
+    · intro hz
+      exact ⟨-p + z, ⟨z, hz, rfl⟩, by simp⟩
+  have hTfront : (Homeomorph.addLeft p) '' frontier S = frontier K := by
+    rw [(Homeomorph.addLeft p).image_frontier, htrans]
+  let G : ℂ ≃ₜ ℂ := H.symm.trans (Homeomorph.addLeft p)
+  have hpre : Metric.closedBall (0 : ℂ) 1 = G ⁻¹' K := by
+    ext z
+    constructor
+    · intro hz
+      rw [← hHcl] at hz
+      rcases hz with ⟨y, hy, rfl⟩
+      have hyS : y ∈ S := hSclosed.closure_eq ▸ hy
+      rcases hyS with ⟨x, hx, rfl⟩
+      simpa [G] using hx
+    · intro hz
+      have hzS : H.symm z ∈ S := by
+        exact ⟨p + H.symm z, by simpa [G] using hz, by ring⟩
+      rw [← hHcl]
+      exact ⟨H.symm z, subset_closure hzS, by simp⟩
+  let e : Disk ≃ₜ K := G.sets hpre
+  refine ⟨e, ?_, ?_⟩
+  · intro z
+    constructor
+    · intro hz
+      have hzsp : (z : ℂ) ∈ Metric.sphere (0 : ℂ) 1 := by
+        simpa [Metric.mem_sphere, dist_zero_right] using hz
+      rw [← hHfront] at hzsp
+      have hzfr : H.symm (z : ℂ) ∈ frontier S := by
+        rcases hzsp with ⟨y, hy, ey⟩
+        simpa [← ey] using hy
+      change G (z : ℂ) ∈ frontier K
+      rw [← hTfront]
+      exact ⟨H.symm (z : ℂ), hzfr, rfl⟩
+    · intro hz
+      change G (z : ℂ) ∈ frontier K at hz
+      rw [← hTfront] at hz
+      have hzfr : H.symm (z : ℂ) ∈ frontier S := by
+        rcases hz with ⟨y, hy, ey⟩
+        have : y = H.symm (z : ℂ) := by
+          apply (Homeomorph.addLeft p).injective
+          simpa [G] using ey
+        simpa [← this] using hy
+      have hzsp : (z : ℂ) ∈ Metric.sphere (0 : ℂ) 1 := by
+        rw [← hHfront]
+        exact ⟨H.symm (z : ℂ), hzfr, by simp⟩
+      simpa [Metric.mem_sphere, dist_zero_right] using hzsp
+  · intro z hz
+    let r : ℝ := gauge (Metric.ball (0 : ℂ) 1) (z : ℂ) / gauge S (z : ℂ)
+    have hz0 : (z : ℂ) ≠ 0 := by
+      intro h
+      simpa [h] using hz
+    have hden : 0 < gauge S (z : ℂ) :=
+      (gauge_pos (absorbent_nhds_zero hS₀) hSb).2 hz0
+    have hr : 0 < r := by
+      dsimp [r]
+      rw [gauge_unit_ball, hz]
+      exact div_pos zero_lt_one hden
+    refine ⟨r, hr, ?_⟩
+    change p + H.symm (z : ℂ) = p + r • (z : ℂ)
+    dsimp [H, r]
+    rfl
 
 lemma cutAndPaste_aux_triangle_chart_generators_aux_source_pos {Label : Type*}
     [DecidableEq Label]
