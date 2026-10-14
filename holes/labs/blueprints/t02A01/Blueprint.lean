@@ -545,7 +545,46 @@ theorem apm_t02a01_angleToBoundary_bijective
     (hsurj : ∀ b : apm_t02a01_boundarySpace,
       ∃ s ∈ Set.Ico (0 : ℝ) 4, apm_t02a01_innerPoint s = b) :
     Function.Bijective (apm_t02a01_angleToBoundary hc h4) := by
-  sorry
+  constructor
+  · intro x y hxy
+    let ex := AddCircle.equivIco (2 * Real.pi) 0 x
+    let ey := AddCircle.equivIco (2 * Real.pi) 0 y
+    have hpi : 0 < Real.pi := Real.pi_pos
+    have hx : 2 * (ex : ℝ) / Real.pi ∈ Set.Ico (0 : ℝ) 4 := by
+      constructor
+      · exact div_nonneg (mul_nonneg (by norm_num) ex.2.1) hpi.le
+      · have := ex.2.2
+        apply (div_lt_iff₀ hpi).2
+        linarith
+    have hy : 2 * (ey : ℝ) / Real.pi ∈ Set.Ico (0 : ℝ) 4 := by
+      constructor
+      · exact div_nonneg (mul_nonneg (by norm_num) ey.2.1) hpi.le
+      · have := ey.2.2
+        apply (div_lt_iff₀ hpi).2
+        linarith
+    apply (AddCircle.equivIco (2 * Real.pi) 0).injective
+    apply Subtype.ext
+    have heq := hinj hx hy (by
+      simpa [apm_t02a01_angleToBoundary, AddCircle.liftIco] using hxy)
+    field_simp [Real.pi_ne_zero] at heq
+    linarith
+  · intro b
+    obtain ⟨s, hs, rfl⟩ := hsurj b
+    refine ⟨((Real.pi * s / 2 : ℝ) : AddCircle (2 * Real.pi)), ?_⟩
+    have htheta : Real.pi * s / 2 ∈ Set.Ico (0 : ℝ) (0 + 2 * Real.pi) := by
+      constructor
+      · exact div_nonneg (mul_nonneg Real.pi_pos.le hs.1) (by norm_num)
+      · have := hs.2
+        nlinarith [Real.pi_pos]
+    rw [show (apm_t02a01_angleToBoundary hc h4 :
+        AddCircle (2 * Real.pi) → apm_t02a01_boundarySpace)
+          (↑(Real.pi * s / 2 : ℝ)) =
+        apm_t02a01_innerPoint (2 * (Real.pi * s / 2) / Real.pi) by
+          simpa [apm_t02a01_angleToBoundary] using
+            (AddCircle.liftIco_coe_apply
+              (f := fun θ ↦ apm_t02a01_innerPoint (2 * θ / Real.pi)) htheta)]
+    congr 1
+    field_simp [Real.pi_ne_zero]
 
 /-- The final computation: transport across the homeomorphism (T2 from
 `apm_t02a01_boundary_homeomorph_circle`, `Continuous.homeoOfEquivCompactToT2`) and
