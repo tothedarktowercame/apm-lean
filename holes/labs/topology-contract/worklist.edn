@@ -119110,6 +119110,17 @@
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "hash/diff/placeholders", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1792010143329-12362-8bc0480b",
+     :commands
+     ["git diff-tree/show 6063ebde"
+      "archive 6063ebde; lake env lean closure and Main"
+      "sha256sum/placeholders at 6063ebde"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS program STOP: new commit changes only t00J02Closure.lean and faithfully specializes the H2 assembly to occupied genuine components, exact zero-degree lifts, and the regular-fiber comparison; local degrees stay point-indexed while signs and lift degrees stay component-indexed. Fixture and frozen hashes match; closure has 0 placeholders, Main retains baseline 1; archived files compile with standard axioms; registry 166/166. Local-degree construction, component-sum/top-degree identities, and Main assembly remain listed."},
     :commit "6063ebde809a66e0c6c27aa8ecd1cfb4eb934985",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
@@ -119118,7 +119129,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119136,7 +119147,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t00J02Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked signed-count H2 assembly.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked exact-lift regular-fiber H2 assembly.",
    :id :program-2026-10-13-close-t00j02,
    :kind :final-adapter,
    :campaign-priority 45,
@@ -119221,7 +119232,10 @@
      :reason "Banked zero point count from component comparison."}
     {:job 7,
      :commit "485f6fe6495199758abf0a8061c388409fbd2141",
-     :reason "Banked signed-count H2 assembly."}]}
+     :reason "Banked signed-count H2 assembly."}
+    {:job 8,
+     :commit "6063ebde809a66e0c6c27aa8ecd1cfb4eb934985",
+     :reason "Banked exact-lift regular-fiber H2 assembly."}]}
   {:consumer :t98A06,
    :stop-count 2,
    :evidence
@@ -119966,7 +119980,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "topHomologyMap_eq_zero_of_regularFiberComparison",
@@ -119976,7 +119990,9 @@
     :reported-by [:program-2026-10-13-close-t00j02],
     :type "exact lifts plus two geometric identities give H2 zero",
     :area "oriented-surface-degree",
-    :proved-in :program-2026-10-13-close-t00j02},
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "6063ebde809a66e0c6c27aa8ecd1cfb4eb934985"},
    :id :lemma-tophomologymap-eq-zero-of-regularfibercomparison,
    :kind :lemma,
    :depends-on
