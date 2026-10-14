@@ -36115,73 +36115,61 @@
   {:consumer :t93J03,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 2,
    :review-finding
    "Program STOP commits nothing new since the prior reviewed attempt: it reuses commit 512a220f, and git history shows no later scoped commit. The unresolved SemilocallySimplyConnected hypothesis-coverage conflict is unchanged. Obtain the required owner specification decision or commit a new compiled milestone before resubmitting.",
    :evidence
    {:placeholder-delta {:t93J03 [1 1]},
     :residual
-    "Identify disk-attachment pi1 with this quotient; apply C1, then C2/Main.",
+    "Extract based normal-closure quotient and identify overlap image as aabb; apply C1, then C2/Main.",
     :outcome :stop,
-    :warnings
-    ["unused SLSC owner-approved"
-     "unrelated PointWedge edits preserved"],
+    :warnings ["unused SLSC owner-approved"],
     :missing-theorems
-    [{:name "kleinSkeletonAabbPresentationQuotient",
-      :type
-      "skeleton quotient is onto, kills aabb, kernel its normal closure",
+    [{:name "kleinPolygonFundamentalGroupoidPseudopushout",
+      :type "two-open pseudopushout for exact Klein radial cover",
       :status :proved,
       :consumers [:t93J03],
-      :depends-on
-      ["kleinActualSkeletonFundamentalGroupEquivFreeGroupBool"],
+      :depends-on [],
       :area "covering-subgroup-correspondence"}
      {:name "t93J03_polygon_van_kampen",
       :type "polygon pi1 equals PresentedGroup(aabb)",
       :status :partial,
       :consumers [:t93J03],
       :depends-on
-      ["kleinPolygon_attaching_arcs"
-       "kleinSkeletonAabbPresentationQuotient"],
+      ["kleinSkeletonAabbPresentationQuotient"
+       "kleinPolygonFundamentalGroupoidPseudopushout"],
       :area "covering-subgroup-correspondence"}],
     :statement-hashes {:registry "166/166"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Committed actual-skeleton aabb quotient; attaching-cell van Kampen remains.",
+    "Committed the exact Klein radial-cover fundamental-groupoid pseudopushout; based quotient extraction remains.",
     :commands
     [{:cmd "lake build ConstructionTargets.t93J03Closure", :exit 0}
-     {:cmd "lean aabb fixture", :exit 0}
+     {:cmd "lean pseudopushout fixture", :exit 0}
      {:cmd "lean Main; registry; placeholder; diff", :exit 0}
      {:cmd "rg forbidden", :exit 1, :expected-exit 1}
      {:cmd "commit; show --check", :exit 0}],
     :diagnostic-history
-    [{:cmd "lake build closure",
+    [{:cmd "lean closure",
       :exit 1,
-      :correction "concurrent PointWedge edit fixed; rerun passed"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1791943938989-11312-fa76a922",
-     :commands
-     ["git show/diff/show --check 417a02133"
-      "sha256sum aabb fixture; placeholders 1->1; scope diff"
-      "lake env lean recorded t93J03Closure; fixture; Main"
-      "python3 scripts/statement-registry.py check"],
-     :finding
-     "PASS: new compiled sorry-free standard-axiom progress. The actual-skeleton map is oriented to the singleton-aabb presented group, is surjective, kills the pulled-back aabb class, and has exactly the pulled-back normal-closure kernel. The disk-attachment identification remains accurately listed. Scope/hash verified; registry 166/166. SLSC unused, mandated by problem.md."},
-    :commit "417a021338a83fb48d5d73127e71f0c9b7faf89f",
+      :correction "opened CategoryTheory notation"}
+     {:cmd "lean fixture",
+      :exit 1,
+      :correction "marked check noncomputable"}],
+    :commit "9b6869e35db58e98ec18d27545f98f75d01ee7dc",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
      "ConstructionTargets/t93J03Closure.blueprint.md"],
     :fixture
-    {:path "/tmp/t93j03_aabb_quotient_check.lean",
+    {:path "/tmp/t93j03_polygon_pseudopushout_check.lean",
      :sha256
-     "5f0966ce74fe2746558454dcb4aad186511b874ce89355d0ccee06ad30ab2118",
+     "5ba01e980b71acf66bb610d5698af75e4d4902d184f76edbcf05210ebfe03b03",
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -37625,7 +37613,8 @@
     :lemma-kleinskeletonhomeomorphstandardtwocircles
     :lemma-kleinactualskeletonfundamentalgroupequivcoprod
     :lemma-kleinactualskeletonfundamentalgroupequivfreegroupbool
-    :lemma-kleinskeletonaabbpresentationquotient],
+    :lemma-kleinskeletonaabbpresentationquotient
+    :lemma-kleinpolygonfundamentalgroupoidpseudopushout],
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
@@ -37966,6 +37955,23 @@
    :kind :lemma,
    :depends-on
    [:lemma-kleinactualskeletonfundamentalgroupequivfreegroupbool],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "kleinPolygonFundamentalGroupoidPseudopushout",
+    :type "two-open pseudopushout for exact Klein radial cover"},
+   :lemma
+   {:name "kleinPolygonFundamentalGroupoidPseudopushout",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type "two-open pseudopushout for exact Klein radial cover",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03},
+   :id :lemma-kleinpolygonfundamentalgroupoidpseudopushout,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
