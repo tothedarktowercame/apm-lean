@@ -325,6 +325,23 @@ theorem connectorSystemComapEquivalence_connector_hom
       e.inverse.map (S.connector (e.functor.obj A)).hom ≫
         e.unitIso.inv.app A := rfl
 
+omit [PathConnectedSpace X] [PathConnectedSpace Y] in
+/-- Mapping a pulled-back connector exposes the inverse-map, inverse-unit,
+and counit factors in their categorical order. -/
+theorem connectorSystemMap_comap_connector_hom_expanded
+    {C D : Type} [Groupoid C] [Groupoid D]
+    (S : ConnectorSystem D) (e : C ≌ D) (A : D) :
+    e.functor.map
+          ((connectorSystemComapEquivalence S e).connector
+            (e.inverse.obj A)).hom ≫ e.counitIso.hom.app A =
+      (e.functor.map (e.inverse.map
+          (S.connector (e.functor.obj (e.inverse.obj A))).hom) ≫
+        e.functor.map (e.unitIso.inv.app (e.inverse.obj A))) ≫
+          e.counitIso.hom.app A := by
+  rw [connectorSystemComapEquivalence_connector_hom]
+  exact congrArg (fun k => k ≫ e.counitIso.hom.app A)
+    (e.functor.map_comp _ _)
+
 theorem genericPointWedgeConnectors_base
     {Z : Type} [TopologicalSpace Z] [PathConnectedSpace Z] (z₀ : Z) :
     (genericPointWedgeConnectors z₀).base = FundamentalGroupoid.mk z₀ := rfl

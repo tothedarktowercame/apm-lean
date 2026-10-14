@@ -1439,3 +1439,9 @@ back source connector rather than reasoning about an opaque path choice.
 and its connector theorem expands it into the right-base change, inverse image
 of the literal `Y` connector, and inverse unit.  The remaining comparison is
 now a triangle/counit simplification of these explicit factors.
+`connectorSystemMap_comap_connector_hom_expanded` exposes the mapped inverse
+connector, mapped inverse unit, and counit in their exact categorical order.
+It also records why no general cancellation is available: the connector at
+the forward-inverse object is an arbitrary choice unless the installed system
+supplies the required coherence.  The right-wedge specialization now has that
+coherence by construction; its named base transports remain to be combined.
