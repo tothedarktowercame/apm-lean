@@ -32,15 +32,115 @@ def h : C(ProductSpace, ProductSpace) where
 
 end T98J01
 
-/-- LIBRARY: rational Künneth/Mayer–Vietoris and trace computation for the
-explicit product map. -/
-theorem t98J01_productSphereCircle_homology_traces :
-    HasLefschetzNumber T98J01.h 8 := by
-  sorry
+def t98J01_rotationCM : C(T98J01.S2, T98J01.S2) :=
+  ⟨T98J01.rotation, by unfold T98J01.rotation; fun_prop⟩
 
-/-- The circle reflection of `Main.lean` as a bundled continuous map. -/
 def t98J01_reflectionCM : C(T98J01.S1, T98J01.S1) :=
   ⟨T98J01.reflection, by unfold T98J01.reflection; fun_prop⟩
+
+/-- Seat: rational homology of the printed two-sphere is finite-dimensional
+in every degree. -/
+theorem t98J01_sphere_homology_finiteDimensional :
+    ∀ k, FiniteDimensional ℚ
+      (ConstructionTargets.RationalLefschetz.Homology T98J01.S2 k) := by
+  sorry
+
+/-- Seat: rational homology of the printed two-sphere vanishes above degree 2. -/
+theorem t98J01_sphere_homology_vanishes_above_two :
+    ∀ k, 2 < k → Subsingleton
+      (ConstructionTargets.RationalLefschetz.Homology T98J01.S2 k) := by
+  sorry
+
+/-- Seat: the half-turn has trace `1` on rational `H₀(S²)`. -/
+theorem t98J01_rotation_trace_zero :
+    LinearMap.trace ℚ
+      (ConstructionTargets.RationalLefschetz.Homology T98J01.S2 0)
+      (ConstructionTargets.RationalLefschetz.induced t98J01_rotationCM 0).hom = 1 := by
+  sorry
+
+/-- Seat: the half-turn has trace `0` on rational `H₁(S²)`. -/
+theorem t98J01_rotation_trace_one :
+    LinearMap.trace ℚ
+      (ConstructionTargets.RationalLefschetz.Homology T98J01.S2 1)
+      (ConstructionTargets.RationalLefschetz.induced t98J01_rotationCM 1).hom = 0 := by
+  sorry
+
+/-- Seat: the orientation-preserving half-turn has trace `1` on `H₂(S²; ℚ)`. -/
+theorem t98J01_rotation_trace_two :
+    LinearMap.trace ℚ
+      (ConstructionTargets.RationalLefschetz.Homology T98J01.S2 2)
+      (ConstructionTargets.RationalLefschetz.induced t98J01_rotationCM 2).hom = 1 := by
+  sorry
+
+/-- Sorry-free assembly of the five independent two-sphere leaves. -/
+theorem t98J01_rotation_lefschetz :
+    HasLefschetzNumber t98J01_rotationCM 2 := by
+  refine ⟨t98J01_sphere_homology_finiteDimensional, 2, ?_, ?_⟩
+  · exact t98J01_sphere_homology_vanishes_above_two
+  · norm_num [Finset.sum_range_succ, t98J01_rotation_trace_zero,
+      t98J01_rotation_trace_one, t98J01_rotation_trace_two]
+
+/-- Seat: rational homology of the printed circle is finite-dimensional in
+every degree. -/
+theorem t98J01_circle_homology_finiteDimensional :
+    ∀ k, FiniteDimensional ℚ
+      (ConstructionTargets.RationalLefschetz.Homology T98J01.S1 k) := by
+  sorry
+
+/-- Seat: rational homology of the printed circle vanishes above degree 1. -/
+theorem t98J01_circle_homology_vanishes_above_one :
+    ∀ k, 1 < k → Subsingleton
+      (ConstructionTargets.RationalLefschetz.Homology T98J01.S1 k) := by
+  sorry
+
+/-- Seat: reflection has trace `1` on rational `H₀(S¹)`. -/
+theorem t98J01_reflection_trace_zero :
+    LinearMap.trace ℚ
+      (ConstructionTargets.RationalLefschetz.Homology T98J01.S1 0)
+      (ConstructionTargets.RationalLefschetz.induced t98J01_reflectionCM 0).hom = 1 := by
+  sorry
+
+/-- Seat: reflection reverses the rational fundamental class of the circle. -/
+theorem t98J01_reflection_trace_one :
+    LinearMap.trace ℚ
+      (ConstructionTargets.RationalLefschetz.Homology T98J01.S1 1)
+      (ConstructionTargets.RationalLefschetz.induced t98J01_reflectionCM 1).hom = -1 := by
+  sorry
+
+/-- Sorry-free assembly of the four independent circle leaves. -/
+theorem t98J01_reflection_lefschetz :
+    HasLefschetzNumber t98J01_reflectionCM 2 := by
+  refine ⟨t98J01_circle_homology_finiteDimensional, 1, ?_, ?_⟩
+  · exact t98J01_circle_homology_vanishes_above_one
+  · norm_num [Finset.sum_range_succ, t98J01_reflection_trace_zero,
+      t98J01_reflection_trace_one]
+
+/-- LIBRARY: multiplicativity of the rational Lefschetz number under products.
+This is the single large missing map-natural Künneth/trace-additivity foundation. -/
+theorem t98J01_lefschetz_product
+    {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    (f : C(X, X)) (g : C(Y, Y)) (a b : ℚ)
+    (hf : HasLefschetzNumber f a) (hg : HasLefschetzNumber g b) :
+    HasLefschetzNumber (f.prodMap g) (a * b) := by
+  sorry
+
+/-- The former library boundary, now a sorry-free assembly from factor
+computations and the isolated generic Künneth foundation. -/
+theorem t98J01_productSphereCircle_homology_traces :
+    HasLefschetzNumber T98J01.h 8 := by
+  have hcircles : HasLefschetzNumber
+      (t98J01_reflectionCM.prodMap t98J01_reflectionCM) 4 := by
+    convert t98J01_lefschetz_product t98J01_reflectionCM
+      t98J01_reflectionCM 2 2 t98J01_reflection_lefschetz
+      t98J01_reflection_lefschetz using 1 <;> norm_num
+  have hproduct := t98J01_lefschetz_product t98J01_rotationCM
+      (t98J01_reflectionCM.prodMap t98J01_reflectionCM) 2 4
+      t98J01_rotation_lefschetz hcircles
+  have hmap : t98J01_rotationCM.prodMap
+      (t98J01_reflectionCM.prodMap t98J01_reflectionCM) = T98J01.h := by
+    ext p <;> rfl
+  rw [hmap] at hproduct
+  convert hproduct using 1 <;> norm_num
 
 /-- Seat: a homotopy `h ≃ id` on `S2 × S1 × S1` restricts (include the middle
 circle at a basepoint, project back to it) to a homotopy `reflection ≃ id`. -/
