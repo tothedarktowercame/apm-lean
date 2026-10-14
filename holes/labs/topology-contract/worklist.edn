@@ -119066,64 +119066,50 @@
   {:consumer :t00J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 2,
    :review-finding
    "Recorded fixture hash is malformed/mismatched: ledger has afb497a6df6187f797ce1df000700b7c24774e94f50633c1cc10b2aa0e8c82319196, but the recorded commit blueprint hashes to afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984. Repair fixture provenance. The archived closure otherwise compiles sorry-free with standard axioms; Main retains its one baseline sorry; registry 166/166.",
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
     :residual
-    "Construct chart calculations from transversality/local homology; assemble Main.",
+    "Prove canonical component-sum and global signed-count identities; assemble Main.",
     :outcome :stop,
     :warnings ["Main sorryAx"],
     :missing-theorems
-    [{:name "RegularFiberChartCalculations.topHomologyMap_eq_zero",
-      :type "bundled chart calculations imply H2 zero",
+    [{:name "RegularFiberChartCalculations.ofCanonicalLocalDegrees",
+      :type
+      "canonical local degrees plus component/top formulas give chart calculations",
       :status :proved,
       :consumers [:t00J02],
-      :depends-on
-      ["topHomologyMap_eq_zero_of_chartCoefficientCalculations"],
+      :depends-on ["regularFiberLocalDegree_localization_eq"],
       :area "oriented-surface-degree"}
      {:name "t00J02_transverse_diskBounded_topHomologyMap_eq_zero",
       :type "H2 map zero",
       :status :partial,
       :consumers [:t00J02],
       :depends-on
-      ["RegularFiberChartCalculations.topHomologyMap_eq_zero"],
+      ["RegularFiberChartCalculations.ofCanonicalLocalDegrees"
+       "RegularFiberChartCalculations.topHomologyMap_eq_zero"],
       :area "oriented-surface-degree"}],
     :statement-hashes
     {:source
      "0b3b4888807bfa06c8d60d86829b75776394ea8aa45a98c933c087165521f923",
      :implementation
-     "76bc210b8edfadfd8d12e8f4b1251421b2412a1478b1e6767752600adec8fabb",
+     "38f4eabf170c45765bff7d1e82cd611d02334497d2ef0a34c5a62ec6fbb236a3",
      :blueprint
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984",
      :registry "166/166"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-2,
-    :reason "Banked bundled chart-calculation H2 consequence.",
+    :reason "Banked canonical chart-calculation constructor.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t00J02Closure.lean",
       :exit 0}
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "sha256sum/placeholders/diff", :exit 0}],
-    :diagnostic-history
-    [{:cmd "frame package-symlink precheck",
-      :exit 1,
-      :finding "canonical checkout; frame-only rule inapplicable"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1792015574796-12525-d2424f2a",
-     :commands
-     ["git diff-tree/show a52ccee2"
-      "archive a52ccee2; lake env lean closure and Main"
-      "sha256sum/placeholders at a52ccee2"
-      "python3 scripts/statement-registry.py check"],
-     :finding
-     "PASS program STOP: new commit changes only t00J02Closure.lean and adds a sorry-free bundled interface/consequence. One coefficient is shared across correctly oriented localization, component-sum, and top-degree equations; the consequence applies the prior chart-calculation H2 theorem without crossing representations. Fixture hash matches; frozen Main hash matches, closure has 0 placeholders and Main its baseline 1; archived files compile with only standard axioms; registry 166/166. Transverse chart calculations and Main assembly remain listed."},
-    :commit "a52ccee229312c565378d09e95a5eec9bdb4a666",
+    :commit "c95471737d57a6c3d34ecdf85371ce435127078d",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t00J02Closure.blueprint.md",
@@ -119131,7 +119117,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119465,7 +119451,8 @@
     :lemma-regularfiberlocalizedcomponentformula-of-chartcoefficients
     :lemma-regularfiberlocalizedtopdegreeformula-of-chartcoefficients
     :lemma-tophomologymap-eq-zero-of-chartcoefficientcalculations
-    :lemma-regularfiberchartcalculations-tophomologymap-eq-zero],
+    :lemma-regularfiberchartcalculations-tophomologymap-eq-zero
+    :lemma-regularfiberchartcalculations-ofcanonicallocaldegrees],
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
@@ -120396,6 +120383,25 @@
    :kind :lemma,
    :depends-on
    [:lemma-tophomologymap-eq-zero-of-chartcoefficientcalculations],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "RegularFiberChartCalculations.ofCanonicalLocalDegrees",
+    :type
+    "canonical local degrees plus component/top formulas give chart calculations"},
+   :lemma
+   {:name "RegularFiberChartCalculations.ofCanonicalLocalDegrees",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type
+    "canonical local degrees plus component/top formulas give chart calculations",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02},
+   :id :lemma-regularfiberchartcalculations-ofcanonicallocaldegrees,
+   :kind :lemma,
+   :depends-on [:lemma-regularfiberlocaldegree-localization-eq],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
