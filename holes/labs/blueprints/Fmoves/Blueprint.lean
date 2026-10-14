@@ -1441,6 +1441,25 @@ structure MergeRepeatedBlockEdgeSpec (g : Circle ≃ₜ Circle)
 of the preceding leaves, so it can be proved without depending on either
 `sorry`: rewrite `edgePoint` using its exponential formula and then use the
 seven fields of `F`. -/
+lemma mergeRepeatedBlock_aux_boundary_edge_formulas_aux_toCircle
+    (n e : ℕ) (s : Icc (0 : ℝ) 1) :
+    (⟨edgePoint n e s, by
+      simpa [Circle, Submonoid.unitSphere] using norm_edgePoint n e s⟩ : Circle) =
+      AddCircle.toCircle ((((e : ℝ) + s.1 : ℝ) : AddCircle (n : ℝ))) := by
+  apply Subtype.ext
+  change Complex.exp _ = Complex.exp _
+  congr 1
+  push_cast
+  field_simp
+
+lemma mergeRepeatedBlock_aux_boundary_edge_formulas_aux_toCircle_period
+    (n e : ℕ) (p : ℝ) (hp : p = (n : ℝ)) (s : Icc (0 : ℝ) 1) :
+    (⟨edgePoint n e s, by
+      simpa [Circle, Submonoid.unitSphere] using norm_edgePoint n e s⟩ : Circle) =
+      AddCircle.toCircle ((((e : ℝ) + s.1 : ℝ) : AddCircle p)) := by
+  subst p
+  exact mergeRepeatedBlock_aux_boundary_edge_formulas_aux_toCircle n e s
+
 lemma mergeRepeatedBlock_aux_boundary_edge_formulas
     (uLen vLen tLen : ℕ) (F : MergeRepeatedBlockLiftSpec uLen vLen tLen)
     (g : Circle ≃ₜ Circle)
@@ -1450,7 +1469,78 @@ lemma mergeRepeatedBlock_aux_boundary_edge_formulas
         AddCircle.toCircle
           (F.toFun x : AddCircle (uLen + 1 + vLen + 1 + tLen : ℝ))) :
     MergeRepeatedBlockEdgeSpec g uLen vLen tLen := by
-  sorry
+  let ns : ℕ := uLen + 2 + vLen + 2 + tLen
+  let nt : ℕ := uLen + 1 + vLen + 1 + tLen
+  have hmap (e e' : ℕ) (s r : Icc (0 : ℝ) 1)
+      (hF : F.toFun ((e : ℝ) + s.1) = (e' : ℝ) + r.1) :
+      g (⟨edgePoint ns e s, by
+        simpa [Circle, Submonoid.unitSphere] using norm_edgePoint ns e s⟩ : Circle) =
+        (⟨edgePoint nt e' r, by
+          simpa [Circle, Submonoid.unitSphere] using norm_edgePoint nt e' r⟩ : Circle) := by
+    calc
+      g (⟨edgePoint ns e s, by
+          simpa [Circle, Submonoid.unitSphere] using norm_edgePoint ns e s⟩ : Circle) =
+          g (AddCircle.toCircle
+            ((((e : ℝ) + s.1 : ℝ) : AddCircle
+              (uLen + 2 + vLen + 2 + tLen : ℝ)))) :=
+        congrArg g
+          (mergeRepeatedBlock_aux_boundary_edge_formulas_aux_toCircle_period ns e _
+            (by simp [ns]) s)
+      _ = AddCircle.toCircle
+          (F.toFun ((e : ℝ) + s.1) : AddCircle
+            (uLen + 1 + vLen + 1 + tLen : ℝ)) :=
+        hg ((e : ℝ) + s.1)
+      _ = AddCircle.toCircle
+          ((((e' : ℝ) + r.1 : ℝ) : AddCircle
+            (uLen + 1 + vLen + 1 + tLen : ℝ))) := by
+        exact congrArg
+          (fun x : ℝ => AddCircle.toCircle
+            (x : AddCircle (uLen + 1 + vLen + 1 + tLen : ℝ))) hF
+      _ = (⟨edgePoint nt e' r, by
+          simpa [Circle, Submonoid.unitSphere] using norm_edgePoint nt e' r⟩ : Circle) :=
+        (mergeRepeatedBlock_aux_boundary_edge_formulas_aux_toCircle_period nt e' _
+          (by simp [nt]) r).symm
+  refine {
+    on_u := ?_
+    on_y := ?_
+    on_z := ?_
+    on_v := ?_
+    on_inv_z := ?_
+    on_inv_y := ?_
+    on_t := ?_ }
+  · intro i hi s
+    apply hmap
+    simpa using F.on_u i hi s
+  · intro s
+    let r : Icc (0 : ℝ) 1 := ⟨s.1 / 2, by
+      constructor <;> linarith [s.2.1, s.2.2]⟩
+    refine ⟨r, rfl, ?_⟩
+    apply hmap
+    simpa [r] using F.on_y s
+  · intro s
+    let r : Icc (0 : ℝ) 1 := ⟨(1 + s.1) / 2, by
+      constructor <;> linarith [s.2.1, s.2.2]⟩
+    refine ⟨r, rfl, ?_⟩
+    apply hmap
+    simpa [r] using F.on_z s
+  · intro i hi s
+    apply hmap
+    simpa using F.on_v i hi s
+  · intro s
+    let r : Icc (0 : ℝ) 1 := ⟨s.1 / 2, by
+      constructor <;> linarith [s.2.1, s.2.2]⟩
+    refine ⟨r, rfl, ?_⟩
+    apply hmap
+    simpa [r] using F.on_inv_z s
+  · intro s
+    let r : Icc (0 : ℝ) 1 := ⟨(1 + s.1) / 2, by
+      constructor <;> linarith [s.2.1, s.2.2]⟩
+    refine ⟨r, rfl, ?_⟩
+    apply hmap
+    simpa [r] using F.on_inv_y s
+  · intro i hi s
+    apply hmap
+    simpa using F.on_t i hi s
 
 lemma mergeRepeatedBlock_aux_boundary_relation_aux_circleToDisk_injective :
     Function.Injective circleToDisk := by
