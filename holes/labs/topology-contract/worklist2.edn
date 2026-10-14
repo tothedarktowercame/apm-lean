@@ -87944,6 +87944,16 @@
     [{:cmd "initial compile",
       :exit 1,
       :correction "reduced categorical composition"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791948216276-11479-ad4a8ae7",
+     :commands
+     ["git show 36bce2fbc blob + #print axioms | lake env lean /dev/stdin"
+      "diff-tree/readlink/sha256 assertions"
+      "statement-registry check; comment-stripped placeholder scan"],
+     :finding
+     "PASS: 36bce2fbc changes only PolygonSurfaceHomology.lean; exact blob SHA256 f3f0d9a08f2a0a583cbabde99a043f024c50728555e133b1cf8f917cd3ed75b4. It compiles with standard axioms propext/Classical.choice/Quot.sound; placeholders 0; registry 166/0. New progress beyond 6c78dadca proves Hurewicz invariance under fundamental-group basepoint casts, transports every positive leg class to orbitWedgeBase, and preserves its normalized positive H1 image. The equality is oriented from the chosen orbit leg basepoint to leg l, matching cast from the l-based loop into the common-basepoint group and closing the representation mismatch noted previously."},
     :commit "602411b84",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
@@ -87952,7 +87962,7 @@
      "ec59756cefb70268a2de0e6db52d14cde5844705dd2be8e37d18ff5e5f2e3742"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -87972,7 +87982,7 @@
     :blueprint
     "ConstructionTargets/PolygonSurfaceHomology.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked common-basepoint leg classes with positive H1 images.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked equality of based leg Hurewicz and coordinate-basis images.",
    :id :program-2026-10-13-polygon-surface-homology,
    :kind :reusable-theorem,
    :campaign-priority 31,
@@ -88032,7 +88042,11 @@
     {:job 4,
      :commit "36bce2fbc",
      :reason
-     "Banked common-basepoint leg classes with positive H1 images."}]}
+     "Banked common-basepoint leg classes with positive H1 images."}
+    {:job 5,
+     :commit "602411b84",
+     :reason
+     "Banked equality of based leg Hurewicz and coordinate-basis images."}]}
   {:consumer :t97A01,
    :stop-count 0,
    :phase :implementation,
@@ -89187,7 +89201,7 @@
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -89199,7 +89213,9 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "based leg Hurewicz equals its coordinate image",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :program-2026-10-13-polygon-surface-homology,
+    :banked-commit "602411b84"},
    :id
    :lemma-finitewedgelegfundamentalclassatbase-hurewicz-eq-coordinate,
    :kind :lemma,
