@@ -87901,7 +87901,7 @@
   {:consumer :t97A01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 10,
+   :stop-count 0,
    :evidence
    {:placeholder-delta 0,
     :residual
@@ -87952,7 +87952,7 @@
      "6bf21b632f5639504ee499ce283ddc1bcf7d79040fa6c894c5898de5f9843004"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -88329,6 +88329,18 @@
      {:cmd "placeholder scan", :exit 0}
      {:cmd "axioms check", :exit 0}
      {:cmd "git show --check 040fde936", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792017288491-12573-a15b666a",
+     :commands
+     ["git show/diff 040fde936; blob sha256; diff --check"
+      "lake -Kjobs=1 build ConstructionTargets.t92J06Closure"
+      "lake env lean problems/t92J06/lean/Main.lean"
+      "lake env lean /dev/stdin (#print axioms)"
+      "placeholder scans; statement-registry.py check"],
+     :finding
+     "PASS: reviewer codex-7; 040fde936 (topo-6) is new beyond program-history and changes only scoped t92J06Closure.lean; fixture SHA-256 f79ad40569c1e6c22950ab6a669138e62699cc9f756c4d5e8bd214658654b9f8 matches. Exact blob and Main compile; changed file has 0 placeholders, Main retains its disclosed prior 1; standard axioms; registry 166/0. Projection equality of lifted interior edge points reduces definitionally to base edgeProjection equality, so the earlier separation theorem correctly fixes edge label and interval coordinate while leaving only the lift vertex free. New sorry-free supporting progress; remaining vertex/interior charts and exact fibers, then Cayley tree and finite invariants."},
     :commit "040fde936",
     :changed-paths ["ConstructionTargets/t92J06Closure.lean"],
     :fixture
@@ -88337,7 +88349,7 @@
      "f79ad40569c1e6c22950ab6a669138e62699cc9f756c4d5e8bd214658654b9f8"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t92J06/lean/Main.lean"
     "problems/t92J06/status.json"
@@ -88355,7 +88367,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t92J06Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked exact wedge-leg and interior projection separation.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked interior fiber label-coordinate separation.",
    :id :program-2026-10-13-close-t92j06,
    :kind :final-adapter,
    :campaign-priority 34,
@@ -88384,7 +88396,10 @@
     {:job 7,
      :commit "016d44b93",
      :reason
-     "Banked exact wedge-leg and interior projection separation."}]}
+     "Banked exact wedge-leg and interior projection separation."}
+    {:job 9,
+     :commit "040fde936",
+     :reason "Banked interior fiber label-coordinate separation."}]}
   {:consumer :t94A08,
    :phase :lemma,
    :state :banked,
@@ -92029,7 +92044,7 @@
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "finiteWedgeExplicitLegClass_eq_positive_zpow",
@@ -92039,7 +92054,9 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "explicit leg equals normalized leg to orientation unit",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/PolygonSurfaceHomology.lean"]},
    :id :lemma-finitewedgeexplicitlegclass-eq-positive-zpow,
    :kind :lemma,
    :depends-on
@@ -92065,7 +92082,7 @@
    :other-consumers [:t94J09]}
   {:consumer :t92J06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "projection_edgePoint_eq_of_interior",
@@ -92075,7 +92092,9 @@
     :reported-by [:program-2026-10-13-close-t92j06],
     :type "interior base equality fixes label and coordinate",
     :area "graph-covering-realization",
-    :proved-in :program-2026-10-13-close-t92j06},
+    :proved-in :program-2026-10-13-close-t92j06,
+    :banked-by :program-2026-10-13-close-t92j06,
+    :banked-commit "040fde936"},
    :id :lemma-projection-edgepoint-eq-of-interior,
    :kind :lemma,
    :depends-on [:lemma-edgeprojection-eq-of-interior],
