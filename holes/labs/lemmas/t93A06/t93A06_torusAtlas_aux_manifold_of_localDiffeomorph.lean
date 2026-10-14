@@ -80,7 +80,50 @@ theorem t93A06_torusAtlas_aux_manifold_of_localDiffeomorph
       (∀ x y : Torus, ∀ z ∈ ((chartAt Plane x).symm.trans (chartAt Plane y)).source, ∃ k : Fin 2 → ℤ, ∀ i, ((chartAt Plane x).symm.trans (chartAt Plane y)) z i = z i + (k i : ℝ))) :
     letI := charts
     IsManifold 𝓘(ℝ,Plane) ∞ Torus := by
-  sorry
+  letI := charts
+  apply isManifold_of_contDiffOn
+  intro e e' he he'
+  obtain ⟨x, rfl⟩ := hatlas e he
+  obtain ⟨y, rfl⟩ := hatlas e' he'
+  let t := (chartAt Plane x).symm.trans (chartAt Plane y)
+  have ht : ContDiffOn ℝ ∞ (↑t) t.source := by
+    intro z hz
+    obtain ⟨k, hk⟩ := htrans x y z hz
+    have hc : ContinuousWithinAt (fun w ↦ t w - w) t.source z :=
+      (t.continuousOn.continuousWithinAt hz).sub continuousWithinAt_id
+    have hev : ∀ᶠ w in nhdsWithin z t.source,
+        dist (t w - w) (t z - z) < 1 :=
+      (Metric.tendsto_nhds.mp hc) 1 zero_lt_one
+    have heq : ∀ᶠ w in nhdsWithin z t.source, t w = w + fun i ↦ (k i : ℝ) := by
+      filter_upwards [hev, self_mem_nhdsWithin] with w hw hws
+      obtain ⟨l, hl⟩ := htrans x y w hws
+      change ∀ i, t w i = w i + (l i : ℝ) at hl
+      change ∀ i, t z i = z i + (k i : ℝ) at hk
+      have hlk : l = k := by
+        funext i
+        have hcoord : |((l i - k i : ℤ) : ℝ)| < 1 := by
+          calc
+            |((l i - k i : ℤ) : ℝ)| = |(t w - w) i - (t z - z) i| := by
+              rw [Int.cast_sub]
+              simp only [Pi.sub_apply]
+              rw [hl i, hk i]
+              ring
+            _ ≤ ‖(t w - w) - (t z - z)‖ :=
+              norm_le_pi_norm ((t w - w) - (t z - z)) i
+            _ = dist (t w - w) (t z - z) := by rw [dist_eq_norm]
+            _ < 1 := hw
+        have hlo : (-1 : ℤ) < l i - k i := by
+          exact_mod_cast (abs_lt.mp hcoord).1
+        have hhi : l i - k i < 1 := by
+          exact_mod_cast (abs_lt.mp hcoord).2
+        omega
+      simpa [hlk] using funext hl
+    apply (contDiff_id.add
+      (contDiff_const : ContDiff ℝ ∞
+        (fun _ : Plane ↦ (fun i ↦ (k i : ℝ))))).contDiffWithinAt.congr_of_eventuallyEq
+      heq
+    exact funext hk
+  simpa using ht
 -- END SEAT AREA
 
 /-- The two independent quotient-chart conclusions assemble into the target
