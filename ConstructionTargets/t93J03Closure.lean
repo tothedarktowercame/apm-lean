@@ -885,6 +885,30 @@ theorem boolSideRunPartition_adjacent_indices {n : ℕ}
       simp
     exact h (a.getLast ha) hlast (b.head hb) hhead
 
+/-- Consecutive runs with different side labels meet at an overlap vertex of
+the original subordinate subdivision.  The conclusion uses the first piece
+index of the second run, exactly matching the endpoint of the preceding
+block and the source of the following block. -/
+theorem pathTwoOpenSubdivision_adjacentRunBoundary_mem_overlap
+    {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
+    {U V : Set X} (S : PathTwoOpenSubdivision p U V)
+    (a b : List (Fin (S.n + 1))) (ha : a ≠ []) (hb : b ≠ [])
+    (hidx : (b.head hb).val = (a.getLast ha).val + 1)
+    (hside : S.side (a.getLast ha) ≠ S.side (b.head hb)) :
+    S.point (b.head hb).castSucc ∈ U ∩ V := by
+  let k : Fin S.n := ⟨(a.getLast ha).val, by
+    have hlt := (b.head hb).isLt
+    omega⟩
+  have hk₀ : k.castSucc = a.getLast ha := by
+    apply Fin.ext
+    rfl
+  have hk₁ : k.succ = b.head hb := by
+    apply Fin.ext
+    exact hidx.symm
+  have hm := pathTwoOpenSubdivision_transition_mem_overlap S k (by
+    simpa [hk₀, hk₁] using hside)
+  simpa [hk₁] using hm
+
 /-- Every member of a maximal Boolean side run has the side recorded at its
 head.  This turns the local chain certificate returned by `splitBy` into the
 pointwise fact needed to package a whole subdivision block. -/
@@ -2395,6 +2419,7 @@ theorem lift_isEmbedding_assembly
 #print axioms pathTwoOpenSubdivision_transition_mem_overlap
 #print axioms boolSideRunPartition_spec
 #print axioms boolSideRunPartition_adjacent_indices
+#print axioms pathTwoOpenSubdivision_adjacentRunBoundary_mem_overlap
 #print axioms boolSideRunPartition_mem_side_eq_head
 #print axioms boolSideRunPartition_isInfix_finRange
 #print axioms boolSideRunPartition_exists_slice

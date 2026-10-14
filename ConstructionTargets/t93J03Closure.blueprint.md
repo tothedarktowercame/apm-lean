@@ -442,9 +442,12 @@ out of a subspace commutes with the fold, and
 any ordered family whose ambient factors are represented by outer paths.
 `boolSideRunPartition_adjacent_indices` now proves that adjacent maximal runs
 meet at consecutive original piece indices, identifying the exact shared
-subdivision vertex at which the side-change overlap lemma applies.  The next
-step is to package these run-boundary vertices as the endpoint family for the
-outer fold, then extract based surjectivity and the reverse kernel inclusion.
+subdivision vertex at which the side-change overlap lemma applies.
+`pathTwoOpenSubdivision_adjacentRunBoundary_mem_overlap` performs that exact
+application, with its conclusion expressed at the head index of the following
+run so it matches both neighboring block endpoints.  The next step is to
+package these vertices as the endpoint family for the outer fold, then extract
+based surjectivity and the reverse kernel inclusion.
 
 - Layer 1: C1, C3, and C4. C1 and C3 are independent; C4 is already complete.
 - Layer 2: C2 against the explicit C1 equivalence interface.
