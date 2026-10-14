@@ -589,6 +589,25 @@ noncomputable def kleinSkeletonHomeomorphStandardTwoCircles :
     (finiteWedgeCongr kleinPairingOrbitEquivBool) |>.trans
       finiteWedgeBoolHomeomorphTwoCircles
 
+/-- The polygon-side basepoint corresponding to the common point of the two
+standard circle legs. -/
+noncomputable def kleinSkeletonPoint : kleinPairingData.skeleton :=
+  kleinSkeletonHomeomorphStandardTwoCircles.symm twoCirclesPoint
+
+/-- The free-product computation transported to the actual boundary skeleton
+and its polygon-side basepoint. -/
+noncomputable def kleinActualSkeletonFundamentalGroupEquivCoprod :
+    FundamentalGroup kleinPairingData.skeleton kleinSkeletonPoint ≃*
+      Monoid.Coprod (FundamentalGroup Circle 1) (FundamentalGroup Circle 1) :=
+  let e := kleinSkeletonHomeomorphStandardTwoCircles
+  let htarget : FundamentalGroup TwoCircles (e kleinSkeletonPoint) ≃*
+      Monoid.Coprod (FundamentalGroup Circle 1) (FundamentalGroup Circle 1) := by
+    have hp : e kleinSkeletonPoint = twoCirclesPoint := by
+      simp [e, kleinSkeletonPoint]
+    rw [hp]
+    exact kleinSkeletonFundamentalGroupEquivCoprod
+  (fundamentalGroupEquivOfHomeomorph e kleinSkeletonPoint).trans htarget
+
 def finiteWedgeBoolPoint : FiniteWedge Bool := wedgeCircle false 1
 
 @[simp] theorem finiteWedgeBoolHomeomorphTwoCircles_point :
@@ -715,6 +734,7 @@ theorem lift_isEmbedding_assembly
 #print axioms finiteWedgeBoolHomeomorphTwoCircles
 #print axioms finiteWedgeCongr
 #print axioms kleinSkeletonHomeomorphStandardTwoCircles
+#print axioms kleinActualSkeletonFundamentalGroupEquivCoprod
 #print axioms kleinBottle_pi1_every_basepoint_of_polygon_van_kampen
 
 end ConstructionTargets.t93J03Closure

@@ -196,6 +196,9 @@ model by `finiteWedgeBoolHomeomorphTwoCircles`: `false` is the left circle,
 `finiteWedgeCongr kleinPairingOrbitEquivBool` performs the preceding orbit
 relabeling, and `kleinSkeletonHomeomorphStandardTwoCircles` composes both
 steps with the polygon skeleton homeomorphism.
+Finally `kleinActualSkeletonFundamentalGroupEquivCoprod` transports the
+two-circle free-product calculation back to the actual polygon boundary at
+the corresponding common-leg basepoint.
 
 - Layer 1: C1, C3, and C4. C1 and C3 are independent; C4 is already complete.
 - Layer 2: C2 against the explicit C1 equivalence interface.
