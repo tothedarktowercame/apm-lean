@@ -87946,6 +87946,18 @@
     [{:cmd "concat draft",
       :exit 1,
       :correction "retained exact subpath endpoint types"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792021677098-12735-4e870f4f",
+     :commands
+     ["git show/diff 86d1671ba; blob sha256; diff --check"
+      "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology"
+      "lake env lean /dev/stdin (#print axioms)"
+      "placeholder scan"
+      "statement-registry.py check"],
+     :finding
+     "PASS: reviewer codex-7; 86d1671ba (topo-6) newly changes only scoped PolygonSurfaceHomology.lean; fixture SHA-256 a42f5baf446bfc58f67f3e6d0a321d58b96c5e329df2360b0b46ce31a1f978a4 matches. Exact blob builds; 0 placeholders; standard axioms; registry 166/0. Subdivision vertices are k/edgeCount in increasing Fin order, with endpoints 0 and 1. Mathlib concat_subpath folds successive castSucc/succ subpaths in that order to the endpoint subpath, with exact dependent endpoint types. The affine-piece identification remains accurately partial. New compiled progress; remaining identify each subpath with its signed edge/product, instantiate B7, then B8-B10."},
     :commit "86d1671ba",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
@@ -87954,7 +87966,7 @@
      "a42f5baf446bfc58f67f3e6d0a321d58b96c5e329df2360b0b46ce31a1f978a4"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -87974,7 +87986,7 @@
     :blueprint
     "ConstructionTargets/PolygonSurfaceHomology.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked exact signed-edge homotopy classes.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked equal-edge subdivision and finite subpath fold.",
    :id :program-2026-10-13-polygon-surface-homology,
    :kind :reusable-theorem,
    :campaign-priority 31,
@@ -88258,7 +88270,11 @@
      :reason "Banked based signed-edge paths."}
     {:job 7,
      :commit "f1fa4894b",
-     :reason "Banked exact signed-edge homotopy classes."}]}
+     :reason "Banked exact signed-edge homotopy classes."}
+    {:job 8,
+     :commit "86d1671ba",
+     :reason
+     "Banked equal-edge subdivision and finite subpath fold."}]}
   {:consumer :t97A01,
    :stop-count 0,
    :phase :implementation,
@@ -92278,7 +92294,7 @@
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "polygonBoundaryIntegerLoop_concatSubpath",
@@ -92290,7 +92306,9 @@
     :type
     "equal subdivision subpaths concatenate to the explicit boundary path",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :program-2026-10-13-polygon-surface-homology,
+    :banked-commit "86d1671ba"},
    :id :lemma-polygonboundaryintegerloop-concatsubpath,
    :kind :lemma,
    :depends-on [:lemma-polygonboundarysignededgepath-mk],
