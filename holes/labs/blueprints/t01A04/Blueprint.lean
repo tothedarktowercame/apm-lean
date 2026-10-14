@@ -236,13 +236,124 @@ def apm_t01A04_loopC : apm_t01a04_piOne :=
       (Quotient.sound (Relation.EqvGen.rel _ _ apm_t01a04_wedgeRel.base))
       (Quotient.sound (Relation.EqvGen.rel _ _ apm_t01a04_wedgeRel.base)))
 
+def apm_t01A04_circleCoverMap_evenlyCovered_away_aux_torusRaw :
+    Sum apm_t01a04_Torus Circle → apm_t01a04_Torus
+  | .inl q => q
+  | .inr _ => (1, 1)
+
+lemma apm_t01A04_circleCoverMap_evenlyCovered_away_aux_torusRaw_respects
+    {u v : Sum apm_t01a04_Torus Circle}
+    (h : Relation.EqvGen apm_t01a04_wedgeRel u v) :
+    apm_t01A04_circleCoverMap_evenlyCovered_away_aux_torusRaw u =
+      apm_t01A04_circleCoverMap_evenlyCovered_away_aux_torusRaw v := by
+  induction h with
+  | rel _ _ h => cases h <;> rfl
+  | refl _ => rfl
+  | symm _ _ _ ih => exact ih.symm
+  | trans _ _ _ _ _ ih₁ ih₂ => exact ih₁.trans ih₂
+
+def apm_t01A04_circleCoverMap_evenlyCovered_away_aux_torusRetraction :
+    apm_t01a04_X → apm_t01a04_Torus :=
+  Quotient.lift apm_t01A04_circleCoverMap_evenlyCovered_away_aux_torusRaw
+    (fun _ _ h =>
+      apm_t01A04_circleCoverMap_evenlyCovered_away_aux_torusRaw_respects h)
+
+@[simp] lemma apm_t01A04_circleCoverMap_evenlyCovered_away_aux_torusRetraction_inl
+    (q : apm_t01a04_Torus) :
+    apm_t01A04_circleCoverMap_evenlyCovered_away_aux_torusRetraction
+        (Quotient.mk _ (Sum.inl q)) = q := rfl
+
+@[simp] lemma apm_t01A04_circleCoverMap_evenlyCovered_away_aux_torusRetraction_inr
+    (z : Circle) :
+    apm_t01A04_circleCoverMap_evenlyCovered_away_aux_torusRetraction
+        (Quotient.mk _ (Sum.inr z)) = (1, 1) := rfl
+
+def apm_t01A04_circleCoverMap_evenlyCovered_away_aux_circleRaw :
+    Sum apm_t01a04_Torus Circle → Circle
+  | .inl _ => 1
+  | .inr z => z
+
+lemma apm_t01A04_circleCoverMap_evenlyCovered_away_aux_circleRaw_respects
+    {u v : Sum apm_t01a04_Torus Circle}
+    (h : Relation.EqvGen apm_t01a04_wedgeRel u v) :
+    apm_t01A04_circleCoverMap_evenlyCovered_away_aux_circleRaw u =
+      apm_t01A04_circleCoverMap_evenlyCovered_away_aux_circleRaw v := by
+  induction h with
+  | rel _ _ h => cases h <;> rfl
+  | refl _ => rfl
+  | symm _ _ _ ih => exact ih.symm
+  | trans _ _ _ _ _ ih₁ ih₂ => exact ih₁.trans ih₂
+
+def apm_t01A04_circleCoverMap_evenlyCovered_away_aux_circleRetraction :
+    apm_t01a04_X → Circle :=
+  Quotient.lift apm_t01A04_circleCoverMap_evenlyCovered_away_aux_circleRaw
+    (fun _ _ h =>
+      apm_t01A04_circleCoverMap_evenlyCovered_away_aux_circleRaw_respects h)
+
+@[simp] lemma apm_t01A04_circleCoverMap_evenlyCovered_away_aux_circleRetraction_inl
+    (q : apm_t01a04_Torus) :
+    apm_t01A04_circleCoverMap_evenlyCovered_away_aux_circleRetraction
+        (Quotient.mk _ (Sum.inl q)) = 1 := rfl
+
+@[simp] lemma apm_t01A04_circleCoverMap_evenlyCovered_away_aux_circleRetraction_inr
+    (z : Circle) :
+    apm_t01A04_circleCoverMap_evenlyCovered_away_aux_circleRetraction
+        (Quotient.mk _ (Sum.inr z)) = z := rfl
+
+lemma apm_t01A04_circleCoverMap_evenlyCovered_away_aux_inl_ne_base
+    {q : apm_t01a04_Torus} (hq : q ≠ (1, 1)) :
+    (Quotient.mk _ (Sum.inl q) : apm_t01a04_X) ≠ apm_t01a04_basepoint := by
+  intro h
+  have := congrArg
+    apm_t01A04_circleCoverMap_evenlyCovered_away_aux_torusRetraction h
+  exact hq this
+
+lemma apm_t01A04_circleCoverMap_evenlyCovered_away_aux_inr_ne_base
+    {z : Circle} (hz : z ≠ 1) :
+    (Quotient.mk _ (Sum.inr z) : apm_t01a04_X) ≠ apm_t01a04_basepoint := by
+  intro h
+  have := congrArg
+    apm_t01A04_circleCoverMap_evenlyCovered_away_aux_circleRetraction h
+  exact hz this
+
+/-- Torus-sheet case away from the wedge point: a neighbourhood of `q` in the
+torus avoiding `(1,1)` is evenly covered by its two copies in sheets `0, 1`.
+The torus retraction above shows the image of that neighbourhood is open in
+`X` and misses the circle summand. -/
+theorem apm_t01A04_circleCoverMap_evenlyCovered_away_aux_torus
+    (q : apm_t01a04_Torus) (hq : q ≠ (1, 1)) :
+    IsEvenlyCovered apm_t01a04_circleCoverMap (Quotient.mk _ (Sum.inl q))
+      (apm_t01a04_circleCoverMap ⁻¹' {Quotient.mk _ (Sum.inl q)}) := by
+  sorry
+
+/-- Circle-summand case away from the wedge point: near `z ≠ 1` the cover is
+the squaring map `Circle → Circle` restricted to an arc avoiding `1`, which is
+evenly covered by arcs around the two square roots of `z`; neither root is
+`±1` (the glued sheet points), so these arcs can be chosen to miss them. -/
+theorem apm_t01A04_circleCoverMap_evenlyCovered_away_aux_circle
+    (z : Circle) (hz : z ≠ 1) :
+    IsEvenlyCovered apm_t01a04_circleCoverMap (Quotient.mk _ (Sum.inr z))
+      (apm_t01a04_circleCoverMap ⁻¹' {Quotient.mk _ (Sum.inr z)}) := by
+  sorry
+
 /-- Away from the wedge point, the circle-doubled quotient is locally either
 an identity sheet over the torus or the ordinary circle-squaring cover. -/
 theorem apm_t01A04_circleCoverMap_evenlyCovered_away
     (x : apm_t01a04_X) (hx : x ≠ apm_t01a04_basepoint) :
     IsEvenlyCovered apm_t01a04_circleCoverMap x
       (apm_t01a04_circleCoverMap ⁻¹' {x}) := by
-  sorry
+  induction x using Quotient.inductionOn with
+  | h u =>
+    cases u with
+    | inl q =>
+      refine apm_t01A04_circleCoverMap_evenlyCovered_away_aux_torus q ?_
+      rintro rfl
+      exact hx rfl
+    | inr z =>
+      refine apm_t01A04_circleCoverMap_evenlyCovered_away_aux_circle z ?_
+      rintro rfl
+      exact hx (Quotient.sound
+        (Relation.EqvGen.symm _ _ (Relation.EqvGen.rel _ _ apm_t01a04_wedgeRel.base)))
 
 /-- At the wedge point, two small inverse arcs of circle squaring, each glued
 to its matching torus neighborhood, give the two open sheets. -/
