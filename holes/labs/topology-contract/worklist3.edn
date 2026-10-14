@@ -36156,6 +36156,16 @@
     [{:cmd "lake build ConstructionTargets.t93J03Closure", :exit 0}
      {:cmd "fixture; Main; registry; placeholder; diff/show", :exit 0}
      {:cmd "rg forbidden", :exit 1, :expected-exit 1}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1792006023023-12250-45c6ba32",
+     :commands
+     ["git show/check/diff 06b841a6; scope and fixture SHA-256"
+      "lake build ConstructionTargets.t93J03Closure; lean fixture and Main"
+      "statement-registry check; placeholder/axiom recount"],
+     :finding
+     "PASS: 06b841a6 adds compiled, sorry-free progress after 6e424b22. It instantiates the raw inner-block replacement at the exact dependent subdivision family, preserving overlap endpoints and the ambient groupoid equality to an overlap path routed through outer space. Blueprint is faithful; exact scope/hash match; closure placeholders 0->0; frozen Main remains 1; registry 166/166; standard axioms only. STOP lists run-list reassembly, reverse kernel/surjectivity, winding, C1/C2/Main."},
     :commit "06b841a6396013640183b3461ac597cfcaa7e557",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
@@ -36166,7 +36176,7 @@
      "dfda7e39ffb899c475ac9d60457286d7cc8b08e2615ff55255fb5815ac90640c"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -36184,7 +36194,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t93J03Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Gave each run bounded slice coordinates and reindexed its pieces as an exact dependent path family; replacement/reassembly remains.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Proved each packaged nonempty inner block with overlap endpoints equals one overlap path routed through the outer piece; finite run-list reassembly remains.",
    :id :program-2026-10-13-close-t93j03,
    :kind :final-adapter,
    :campaign-priority 30,
@@ -36434,7 +36444,11 @@
     {:job 8,
      :commit "6e424b225407c469abb1967d43e31277e41dcd2c",
      :reason
-     "Gave each run bounded slice coordinates and reindexed its pieces as an exact dependent path family; replacement/reassembly remains."}]}
+     "Gave each run bounded slice coordinates and reindexed its pieces as an exact dependent path family; replacement/reassembly remains."}
+    {:job 9,
+     :commit "06b841a6396013640183b3461ac597cfcaa7e557",
+     :reason
+     "Proved each packaged nonempty inner block with overlap endpoints equals one overlap path routed through the outer piece; finite run-list reassembly remains."}]}
   {:consumer :t99J05,
    :stop-count 5,
    :evidence
@@ -39339,7 +39353,7 @@
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -39351,7 +39365,9 @@
     :reported-by [:program-2026-10-13-close-t93j03],
     :type "packaged inner block equals one outer-routed overlap path",
     :area "covering-subgroup-correspondence",
-    :proved-in :program-2026-10-13-close-t93j03},
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "06b841a6396013640183b3461ac597cfcaa7e557"},
    :id
    :lemma-pathtwoopensubdivisioninnerblock-exists-outeroverlapreplacement,
    :kind :lemma,
