@@ -2174,6 +2174,38 @@ theorem genericPointWedge_exists_legWord_of_rightBase_inl
     (ConstructionTargets.PointWedgeVanKampen.genericPointWedgeRightLegMap x₀ y₀)
     hcoords.1 hcoords.2 g
 
+/-- At every successor split, the point-wedge fundamental group is generated
+by words from the old finite wedge and the final one-circle wedge. -/
+theorem finiteWedgeFinSuccPointWedge_exists_legWord (n : ℕ)
+    (g : FundamentalGroup
+      (ConstructionTargets.PointWedgeQuotient.Wedge
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1)
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle () 1))
+      (ConstructionTargets.PointWedgeQuotient.quotientMap
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1)
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle () 1)
+        (.inl (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle
+          (0 : Fin (n + 1)) 1)))) :
+    ∃ w : List
+        (FundamentalGroup
+            (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge (Fin (n + 1)))
+            (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1) ⊕
+          FundamentalGroup
+            (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge Unit)
+            (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle () 1)),
+      coprodLegWordValue
+          (ConstructionTargets.PointWedgeVanKampen.genericPointWedgeLeftLegMap
+            (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1)
+            (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle () 1))
+          (ConstructionTargets.PointWedgeVanKampen.genericPointWedgeRightLegMap
+            (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1)
+            (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle () 1)) w = g := by
+  let P := finiteWedgeFinSuccPointWedgeNeighborhoods n
+  rcases finiteWedgePointWedge_rightBase_inl n with ⟨a, ha⟩
+  exact genericPointWedge_exists_legWord_of_rightBase_inl
+    _ _ P.2.carrier P.1.carrier P.2.isOpen P.1.isOpen
+      P.2.mem P.1.mem P.2.contraction P.1.contraction a ha g
+
 end
 
 end ConstructionTargets.PolygonSurfaceHomology
