@@ -527,11 +527,41 @@ lemma t96J02_cut_disk_vertices (x y : Disk)
 
 /-- The four corners of the square are one class. -/
 -- BEGIN SEAT AREA
+lemma t96J02_cut_square_corners_aux_base (p : T96J02ClosedSquare)
+    (hp : p.1 = (0, 0) ∨ p.1 = (1, 0) ∨ p.1 = (0, 1) ∨ p.1 = (1, 1)) :
+    (Quotient.mk _ p : T96J02SquarePolygonQuotient) =
+      Quotient.mk _ (⟨(0, 0), by
+        norm_num [KleinPlaneActionSquareOrbitClassification.InSquare]⟩ : T96J02ClosedSquare) := by
+  have step : ∀ a b : T96J02ClosedSquare, T96J02ClosedSquareRel a b →
+      (Quotient.mk _ a : T96J02SquarePolygonQuotient) = Quotient.mk _ b :=
+    fun a b h => Quotient.sound (Relation.EqvGen.rel _ _ h)
+  let t0 : Set.Icc (0 : ℝ) 1 := ⟨0, le_refl _, zero_le_one⟩
+  let t1 : Set.Icc (0 : ℝ) 1 := ⟨1, zero_le_one, le_refl _⟩
+  have i11 : KleinPlaneActionSquareOrbitClassification.InSquare ((1 : ℝ), (1 : ℝ)) := by
+    norm_num [KleinPlaneActionSquareOrbitClassification.InSquare]
+  have h11 : (Quotient.mk _ (⟨(1, 1), i11⟩ : T96J02ClosedSquare) : T96J02SquarePolygonQuotient) =
+      Quotient.mk _ (⟨(0, 0), by
+        norm_num [KleinPlaneActionSquareOrbitClassification.InSquare]⟩ : T96J02ClosedSquare) :=
+    (step _ _ (Or.inr ⟨t0, by
+      simp [t0, KleinSquareEdgeOrientation.squareEdge], by
+      simp [t0, KleinSquareEdgeOrientation.squareEdge]⟩)).symm
+  obtain ⟨⟨x, y⟩, hxy⟩ := p
+  simp only [Prod.mk.injEq] at hp
+  rcases hp with ⟨rfl, rfl⟩ | ⟨rfl, rfl⟩ | ⟨rfl, rfl⟩ | ⟨rfl, rfl⟩
+  · rfl
+  · exact (step _ _ (Or.inl ⟨t0, by
+      simp [t0, KleinSquareEdgeOrientation.squareEdge], by
+      simp [t0, KleinSquareEdgeOrientation.squareEdge]⟩)).symm
+  · exact (step _ ⟨(1, 1), i11⟩ (Or.inl ⟨t1, by
+      simp [t1, KleinSquareEdgeOrientation.squareEdge], by
+      simp [t1, KleinSquareEdgeOrientation.squareEdge]⟩)).trans h11
+  · exact h11
+
 lemma t96J02_cut_square_corners (p q : T96J02ClosedSquare)
     (hp : p.1 = (0, 0) ∨ p.1 = (1, 0) ∨ p.1 = (0, 1) ∨ p.1 = (1, 1))
     (hq : q.1 = (0, 0) ∨ q.1 = (1, 0) ∨ q.1 = (0, 1) ∨ q.1 = (1, 1)) :
     (Quotient.mk _ p : T96J02SquarePolygonQuotient) = Quotient.mk _ q := by
-  sorry
+  rw [t96J02_cut_square_corners_aux_base p hp, t96J02_cut_square_corners_aux_base q hq]
 -- END SEAT AREA
 
 lemma t96J02_cut_continuous (hchart : Continuous t96J02_cut_chart) :
