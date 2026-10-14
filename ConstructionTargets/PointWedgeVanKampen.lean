@@ -4889,6 +4889,35 @@ theorem genericPointWedgeRightEquiv_obj_rightBase :
   exact (genericPointWedgePackage
     x₀ y₀ M N hM hN hy hx cM cN).right_inclusion y₀
 
+/-- Pull the literal `Y` connectors back to the right cover and rebase them at
+the fixed right-cover representative. -/
+def genericPointWedgeCoherentRightSourceConnectors : ConnectorSystem
+    (FundamentalGroupoid (genericPointWedgeRightPiece x₀ y₀ N)) :=
+  let e := genericPointWedgeRightGroupoidEquivalence
+    x₀ y₀ M N hM hN hy hx cM cN
+  let h := genericPointWedgeRightEquiv_obj_rightBase
+    x₀ y₀ M N hM hN hy hx cM cN
+  connectorSystemChangeBase
+    (connectorSystemComapEquivalence (genericPointWedgeConnectors y₀) e)
+    (genericPointWedgeRightBase x₀ y₀ N)
+    (e.unitIso.app (genericPointWedgeRightBase x₀ y₀ N) ≪≫
+      e.inverse.mapIso (eqToIso h))
+
+/-- A pulled-back source connector is the base-change map, the inverse image
+of the literal `Y` connector, and the inverse unit, in that order. -/
+theorem genericPointWedgeCoherentRightSourceConnectors_connector_hom
+    (A : FundamentalGroupoid (genericPointWedgeRightPiece x₀ y₀ N)) :
+    let e := genericPointWedgeRightGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let h := genericPointWedgeRightEquiv_obj_rightBase
+      x₀ y₀ M N hM hN hy hx cM cN
+    ((genericPointWedgeCoherentRightSourceConnectors
+      x₀ y₀ M N hM hN hy hx cM cN).connector A).hom =
+      (e.unitIso.app (genericPointWedgeRightBase x₀ y₀ N) ≪≫
+        e.inverse.mapIso (eqToIso h)).hom ≫
+      e.inverse.map (genericPointWedgeBasedConnector y₀
+        (e.functor.obj A)).hom ≫ e.unitIso.inv.app A := rfl
+
 /-- The right-piece connector system transported through the chosen cover
 equivalence and rebased at the literal point `y₀`.  Unlike an independent
 `somePath` choice, its connector square contains the equivalence counit by
@@ -4899,12 +4928,9 @@ def genericPointWedgeCoherentRightConnectors :
     x₀ y₀ M N hM hN hy hx cM cN
   let h := genericPointWedgeRightEquiv_obj_rightBase
     x₀ y₀ M N hM hN hy hx cM cN
-  let source := connectorSystemChangeBase
-    (connectorSystemComapEquivalence (genericPointWedgeConnectors y₀) e)
-    (genericPointWedgeRightBase x₀ y₀ N)
-    (e.unitIso.app (genericPointWedgeRightBase x₀ y₀ N) ≪≫
-      e.inverse.mapIso (eqToIso h))
-  connectorSystemChangeBase (connectorSystemMapEquivalence source e)
+  connectorSystemChangeBase (connectorSystemMapEquivalence
+    (genericPointWedgeCoherentRightSourceConnectors
+      x₀ y₀ M N hM hN hy hx cM cN) e)
     (FundamentalGroupoid.mk y₀) (eqToIso h.symm)
 
 /-- The installed coherent connector is, in exact order, the literal-base
@@ -4916,11 +4942,8 @@ theorem genericPointWedgeCoherentRightConnectors_connector_hom
       x₀ y₀ M N hM hN hy hx cM cN
     let h := genericPointWedgeRightEquiv_obj_rightBase
       x₀ y₀ M N hM hN hy hx cM cN
-    let source := connectorSystemChangeBase
-      (connectorSystemComapEquivalence (genericPointWedgeConnectors y₀) e)
-      (genericPointWedgeRightBase x₀ y₀ N)
-      (e.unitIso.app (genericPointWedgeRightBase x₀ y₀ N) ≪≫
-        e.inverse.mapIso (eqToIso h))
+    let source := genericPointWedgeCoherentRightSourceConnectors
+      x₀ y₀ M N hM hN hy hx cM cN
     ((genericPointWedgeCoherentRightConnectors
       x₀ y₀ M N hM hN hy hx cM cN).connector A).hom =
       (eqToIso h.symm).hom ≫

@@ -1435,3 +1435,7 @@ connector as the literal-base transport, mapped right-piece connector, and
 cover counit in the precise categorical order required by the remaining
 square.  The next comparison can therefore proceed by expanding the pulled
 back source connector rather than reasoning about an opaque path choice.
+`genericPointWedgeCoherentRightSourceConnectors` names that pulled-back system,
+and its connector theorem expands it into the right-base change, inverse image
+of the literal `Y` connector, and inverse unit.  The remaining comparison is
+now a triangle/counit simplification of these explicit factors.
