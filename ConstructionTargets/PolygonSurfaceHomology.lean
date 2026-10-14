@@ -1420,6 +1420,45 @@ theorem finiteWedgeFinSuccHomeomorphPointWedge_last (n : ℕ) (z : Circle) :
     finSuccEquivSumUnit_last]
   rfl
 
+/-! ### Algebraic word extraction from a point-wedge computation -/
+
+/-- Evaluate a word whose letters come from the two factors of a coproduct. -/
+def coprodLegWordValue {A B G : Type*} [Group A] [Group B] [Group G]
+    (left : A → G) (right : B → G) (w : List (A ⊕ B)) : G :=
+  (w.map (Sum.elim left right)).prod
+
+/-- Once a group equivalence with a free product has the expected values on
+the two leg maps, every source element is a finite word in those legs.  This
+is the algebraic induction used at each successor step of the finite wedge. -/
+theorem exists_coprodLegWord_of_mulEquiv
+    {A B G : Type*} [Group A] [Group B] [Group G]
+    (E : G ≃* Monoid.Coprod A B) (left : A → G) (right : B → G)
+    (hleft : ∀ a, E (left a) = Monoid.Coprod.inl a)
+    (hright : ∀ b, E (right b) = Monoid.Coprod.inr b)
+    (x : G) :
+    ∃ w : List (A ⊕ B), coprodLegWordValue left right w = x := by
+  suffices ∀ y : Monoid.Coprod A B,
+      ∃ w : List (A ⊕ B), coprodLegWordValue left right w = E.symm y by
+    simpa using this (E x)
+  intro y
+  induction y using Monoid.Coprod.induction_on with
+  | inl a =>
+      refine ⟨[.inl a], ?_⟩
+      apply E.injective
+      simp [coprodLegWordValue, hleft]
+  | inr b =>
+      refine ⟨[.inr b], ?_⟩
+      apply E.injective
+      simp [coprodLegWordValue, hright]
+  | mul u v hu hv =>
+      rcases hu with ⟨wu, hu⟩
+      rcases hv with ⟨wv, hv⟩
+      refine ⟨wu ++ wv, ?_⟩
+      simp only [coprodLegWordValue, List.map_append, List.prod_append]
+      change coprodLegWordValue left right wu *
+          coprodLegWordValue left right wv = E.symm (u * v)
+      rw [hu, hv, map_mul]
+
 end
 
 end ConstructionTargets.PolygonSurfaceHomology
