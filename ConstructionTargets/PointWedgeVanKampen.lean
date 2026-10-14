@@ -7101,6 +7101,21 @@ theorem connector_normalForm_eq_id_iff
     simp [ConnectorSystem.normalForm]
 
 omit [PathConnectedSpace X] in
+/-- Equality with canonical connector transport is equivalent to the
+corresponding connector square, an orientation suited to naturality. -/
+theorem eq_connectorTransport_iff_connectorSquare
+    {C : Type} [Groupoid C] (S : ConnectorSystem C) {A B : C} (f : A ⟶ B) :
+    f = (S.connector A).inv ≫ (S.connector B).hom ↔
+      (S.connector A).hom ≫ f = (S.connector B).hom := by
+  constructor
+  · intro h
+    rw [h]
+    simp
+  · intro h
+    apply (cancel_epi (S.connector A).hom).mp
+    simpa using h
+
+omit [PathConnectedSpace X] in
 /-- The endpoint transport carries the leading coordinate connector to the
 source connector of the unshifted right round trip. -/
 theorem genericPointWedgeOuterRight_leadingConnector_comp_sourceTransport :
@@ -7220,6 +7235,28 @@ theorem genericPointWedgeRightBase_rightProjection_eq_one_iff_connectorTransport
               (genericPointWedgeRightGroupoidEquivalence
                 x₀ y₀ M N hM hN hy hx cM cN).functor)).hom.app
                   (genericPointWedgeOverlapBase x₀ y₀ M N)))
+
+/-- Naturality-ready form of the remaining obstruction: the source connector
+followed by the unshifted overlap counit image must be the target connector. -/
+theorem genericPointWedgeRightBase_rightProjection_eq_one_iff_connectorSquare :
+    let r := genericPointWedgeActualRight x₀ y₀ M N
+    let eK := genericPointWedgeOverlapGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let eR := genericPointWedgeRightGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let z := genericPointWedgeOverlapBase x₀ y₀ M N
+    genericPointWedgeFreeProductRightProjection x₀ y₀
+        (genericPointWedgeIdentityGlobalRightBaseElement
+          x₀ y₀ M N hM hN hy hx cM cN) = 1 ↔
+      ((genericPointWedgeConnectors y₀).connector
+          ((eK.functor ⋙ eK.inverse ⋙ r ⋙ eR.functor).obj z)).hom ≫
+        (eK.funInvIdAssoc (r ⋙ eR.functor)).hom.app z =
+      ((genericPointWedgeConnectors y₀).connector
+          ((r ⋙ eR.functor).obj z)).hom := by
+  exact genericPointWedgeRightBase_rightProjection_eq_one_iff_connectorTransport
+    x₀ y₀ M N hM hN hy hx cM cN |>.trans
+      (eq_connectorTransport_iff_connectorSquare
+        (genericPointWedgeConnectors y₀) _)
 
 /-- An `inl` factorization of the right-base conjugator forces its canonical
 right projection to be trivial. -/

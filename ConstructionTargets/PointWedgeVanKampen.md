@@ -1416,3 +1416,8 @@ uses it to identify the remaining condition exactly: the unshifted overlap
 counit image must equal the inverse source connector followed by the target
 connector.  This typed connector comparison is the remaining step before the
 right projection, B6, and B12.
+`eq_connectorTransport_iff_connectorSquare` left-cancels the inverse source
+connector, and
+`genericPointWedgeRightBase_rightProjection_eq_one_iff_connectorSquare`
+records the resulting naturality-ready obstruction: source connector followed
+by the unshifted counit image must equal the chosen target connector.
