@@ -1385,7 +1385,28 @@ lemma apm_m03J01_hessianOperator_exists_aux_solution_smul {n : ℕ}
     {u : apm_m03J01_H01 n Ω} (hu : apm_m03J01_weakSolution F u) :
     ∃ w : apm_m03J01_H01 n Ω,
       apm_m03J01_weakSolution (c • F) w ∧ w.grad = c • u.grad := by
-  sorry
+  obtain ⟨w, hwval, hwgrad⟩ := apm_m03J01_H01_smul_exists c u
+  refine ⟨w, ?_, hwgrad⟩
+  intro v
+  rw [hwval, hwgrad]
+  change
+    (∫ x, inner ℝ (c • u.grad x) (v.grad x) + (c • u.val x) * v.val x ∂volume) =
+      ∫ x, (c • F x) * v.val x ∂volume
+  calc
+    _ = c * ∫ x, inner ℝ (u.grad x) (v.grad x) + u.val x * v.val x ∂volume := by
+      rw [← integral_const_mul]
+      apply integral_congr_ae
+      filter_upwards [] with x
+      rw [real_inner_smul_left]
+      simp only [smul_eq_mul]
+      ring
+    _ = c * ∫ x, F x * v.val x ∂volume := congrArg (fun z : ℝ => c * z) (hu v)
+    _ = _ := by
+      rw [← integral_const_mul]
+      apply integral_congr_ae
+      filter_upwards [] with x
+      simp only [smul_eq_mul]
+      ring
 
 /-- The `L²` class of a weak Hessian depends only on the a.e. class of the
 forcing term. -/
@@ -1478,7 +1499,50 @@ lemma apm_m03J01_hessianOperator_seq_closed_aux_grad_tendsto {n : ℕ}
     (hv : apm_m03J01_weakSolution (fun z => x z) v) :
     Tendsto (fun k => eLpNorm (fun z => (u k).grad z - v.grad z) 2 volume)
       atTop (nhds 0) := by
-  sorry
+  have hforcing :
+      Tendsto (fun k => eLpNorm (fun z => f k z - x z) 2 volume)
+        atTop (nhds 0) := by
+    apply (Lp.tendsto_Lp_iff_tendsto_eLpNorm''
+      (fun k z => f k z) (fun k => Lp.memLp (f k))
+      (fun z => x z) (Lp.memLp x)).1
+    simpa only [Lp.toLp_coeFn] using hf
+  have hbound (k : ℕ) :
+      eLpNorm (fun z => (u k).grad z - v.grad z) 2 volume ≤
+        2 * eLpNorm (fun z => f k z - x z) 2 volume := by
+    obtain ⟨nv, hnvval, hnvgrad⟩ := apm_m03J01_H01_smul_exists (-1) v
+    have hnv : apm_m03J01_weakSolution (-(fun z => x z)) nv :=
+      apm_m03J01_hessianOperator_seq_closed_aux_weakSolution_neg hv
+        (by simpa using hnvval) (by simpa using hnvgrad)
+    obtain ⟨w, hwval, hwgrad⟩ := apm_m03J01_H01_add_exists (u k) nv
+    have hw : apm_m03J01_weakSolution
+        ((fun z => f k z) + -(fun z => x z)) w :=
+      apm_m03J01_hessianOperator_seq_closed_aux_weakSolution_add
+        (Lp.memLp (f k)) (Lp.memLp x).neg (hu k) hnv hwval hwgrad
+    have hest := apm_m03J01_weakSolution_H1size_le
+      ((fun z => f k z) + -(fun z => x z))
+      ((Lp.memLp (f k)).add (Lp.memLp x).neg) w hw
+    calc
+      eLpNorm (fun z => (u k).grad z - v.grad z) 2 volume =
+          eLpNorm w.grad 2 volume := by
+            congr 1
+            funext z
+            simp [hwgrad, hnvgrad, sub_eq_add_neg]
+      _ ≤ eLpNorm w.val 2 volume + eLpNorm w.grad 2 volume :=
+        le_add_self
+      _ ≤ 2 * eLpNorm ((fun z => f k z) + -(fun z => x z)) 2 volume := hest
+      _ = 2 * eLpNorm (fun z => f k z - x z) 2 volume := by
+        congr 2
+  apply tendsto_order.2
+  constructor
+  · intro a ha
+    exact (not_lt_of_ge bot_le ha).elim
+  · intro a ha
+    have hscaled :
+        Tendsto (fun k => 2 * eLpNorm (fun z => f k z - x z) 2 volume)
+          atTop (nhds 0) := by
+      simpa using ENNReal.Tendsto.const_mul hforcing (Or.inr (by norm_num))
+    filter_upwards [(tendsto_order.1 hscaled).2 a ha] with k hk
+    exact lt_of_le_of_lt (hbound k) hk
 
 /-- Weak Hessian identities pass to `L²` limits of both the field and the
 Hessian (each side of the defining identity is an `L²` pairing against a
@@ -1486,7 +1550,7 @@ fixed test function). -/
 -- BEGIN SEAT AREA
 lemma apm_m03J01_hessianOperator_seq_closed_aux_weakHessian_limit {n : ℕ}
     {g : ℕ → apm_m03J01_E n → apm_m03J01_E n} {g0 : apm_m03J01_E n → apm_m03J01_E n}
-    (hg0 : MemLp g0 2 volume)
+    (hgk : ∀ k, MemLp (g k) 2 volume) (hg0 : MemLp g0 2 volume)
     (hg : Tendsto (fun k => eLpNorm (fun z => g k z - g0 z) 2 volume)
       atTop (nhds 0))
     {H : ℕ → apm_m03J01_E n → Fin n → Fin n → ℝ}
@@ -1524,7 +1588,7 @@ lemma apm_m03J01_hessianOperator_seq_closed {n : ℕ}
   have hY : Tendsto (fun k => (hH k).1.toLp (H k)) atTop (nhds y) := by
     simpa [Function.comp_def, hTf] using hy
   have hlim := apm_m03J01_hessianOperator_seq_closed_aux_weakHessian_limit
-    v.grad_memLp
+    (fun k => (u k).grad_memLp) v.grad_memLp
     (apm_m03J01_hessianOperator_seq_closed_aux_grad_tendsto hf u hu v hv) hH hY
   obtain ⟨Hx, hHx, hTx⟩ := hT (fun z => x z) (Lp.memLp x) v hv
   rw [Lp.toLp_coeFn] at hTx
