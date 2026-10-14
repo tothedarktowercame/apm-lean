@@ -1175,7 +1175,46 @@ lemma apm_m03J01_weakSolution_H1size_le {n : ℕ}
     (u : apm_m03J01_H01 n Ω) (hu : apm_m03J01_weakSolution F u) :
     eLpNorm u.val 2 volume + eLpNorm u.grad 2 volume ≤
       2 * eLpNorm F 2 volume := by
-  sorry
+  let G := u.grad_memLp.toLp u.grad
+  let V := u.val_memLp.toLp u.val
+  let f := hF.toLp F
+  have hreal (r s : ℝ) : inner ℝ r s = r * s := by
+    calc
+      inner ℝ r s = inner ℝ (r • (1 : ℝ)) (s • (1 : ℝ)) := by simp
+      _ = r * s * inner ℝ (1 : ℝ) 1 := by
+        rw [real_inner_smul_left, real_inner_smul_right]
+        ring
+      _ = r * s := by rw [real_inner_self_eq_norm_sq]; norm_num
+  have henergy : inner ℝ G G + inner ℝ V V = inner ℝ f V := by
+    rw [L2.inner_def, L2.inner_def, L2.inner_def,
+      ← integral_add (L2.integrable_inner G G) (L2.integrable_inner V V)]
+    calc
+      ∫ x, (inner ℝ (G x) (G x) + inner ℝ (V x) (V x)) ∂volume =
+          ∫ x, (inner ℝ (u.grad x) (u.grad x) + u.val x * u.val x) ∂volume := by
+        apply integral_congr_ae
+        filter_upwards [u.grad_memLp.coeFn_toLp, u.val_memLp.coeFn_toLp]
+          with x hg hv
+        simp only [G, V, hg, hv, hreal]
+      _ = ∫ x, F x * u.val x ∂volume := hu u
+      _ = ∫ x, inner ℝ (f x) (V x) ∂volume := by
+        apply integral_congr_ae
+        filter_upwards [hF.coeFn_toLp, u.val_memLp.coeFn_toLp] with x hf hv
+        simp only [f, V, hf, hv, hreal]
+  have hsq : ‖G‖ * ‖G‖ + ‖V‖ * ‖V‖ ≤ ‖f‖ * ‖V‖ := by
+    calc
+      ‖G‖ * ‖G‖ + ‖V‖ * ‖V‖ = inner ℝ G G + inner ℝ V V := by
+        rw [real_inner_self_eq_norm_mul_norm, real_inner_self_eq_norm_mul_norm]
+      _ = inner ℝ f V := henergy
+      _ ≤ ‖f‖ * ‖V‖ := real_inner_le_norm f V
+  have hV : ‖V‖ ≤ ‖f‖ := by
+    nlinarith [norm_nonneg G, norm_nonneg V, norm_nonneg f]
+  have hG : ‖G‖ ≤ ‖f‖ := by
+    nlinarith [norm_nonneg G, norm_nonneg V, norm_nonneg f]
+  have hVe : ‖V‖ₑ ≤ ‖f‖ₑ := enorm_le_iff_norm_le.mpr hV
+  have hGe : ‖G‖ₑ ≤ ‖f‖ₑ := enorm_le_iff_norm_le.mpr hG
+  have hsum : ‖V‖ₑ + ‖G‖ₑ ≤ ‖f‖ₑ + ‖f‖ₑ := add_le_add hVe hGe
+  simpa only [V, G, f, Lp.enorm_toLp u.val_memLp,
+    Lp.enorm_toLp u.grad_memLp, Lp.enorm_toLp hF, two_mul] using hsum
 
 lemma apm_m03J01_hessianOperator_exists {n : ℕ}
     {Ω : Set (apm_m03J01_E n)}
