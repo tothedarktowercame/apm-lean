@@ -87942,6 +87942,17 @@
      {:cmd
       "#print axioms finiteWedgeRightProjection_eq_one_iff_connectorSquare",
       :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791969084306-11736-49a89e15",
+     :commands
+     ["git show/diff-tree/commit trailers; sha256sum"
+      "exact blob | lake env lean /dev/stdin; #print axioms"
+      "placeholder scan; statement-registry.py check"
+      "inspect successor homeomorphism formulas"],
+     :finding
+     "PASS: independent review of topo-6 commit 5b403e34b; only PolygonSurfaceHomology.lean changed, exact blob SHA256 a97bc1d63f619a8d1f80de09749e9301d9bc0f19e046e8d8b6cf9f94c2d359ec. Exact blob compiles with propext, Classical.choice, Quot.sound; placeholders 0; registry 166/0. New progress after d86d0888f recursively packages a pointed contractible open neighborhood for every nonempty Fin-indexed wedge. Base n=0 is the checked one-circle case. At the successor step the old Fin(n+1) wedge and Unit final circle are combined, then pulled backward through the Fin(n+2)-to-point-wedge homeomorphism. Its castSucc formula sends label 0 and circle basepoint 1 to the left point-wedge basepoint, so indexing, basepoint orientation, and transport direction agree. Remaining milestone: prove the successor right-base element lies in the old factor and apply word extraction."},
     :commit "d47191953",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
@@ -87950,7 +87961,7 @@
      "ae6aee87aef5d6aa101712ee6477ea15b9cb3a69673c9002dd5d437a0012911a"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -87970,7 +87981,7 @@
     :blueprint
     "ConstructionTargets/PolygonSurfaceHomology.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked Fin-successor base-neighborhood recursion.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked the specialized connector obstruction.",
    :id :program-2026-10-13-polygon-surface-homology,
    :kind :reusable-theorem,
    :campaign-priority 31,
@@ -88077,7 +88088,10 @@
      :reason "Banked generic point-wedge base neighborhoods."}
     {:job 9,
      :commit "5b403e34b",
-     :reason "Banked Fin-successor base-neighborhood recursion."}]}
+     :reason "Banked Fin-successor base-neighborhood recursion."}
+    {:job 1,
+     :commit "d47191953",
+     :reason "Banked the specialized connector obstruction."}]}
   {:consumer :t97A01,
    :stop-count 0,
    :phase :implementation,
@@ -89871,7 +89885,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "finiteWedgeRightProjection_eq_one_iff_connectorSquare",
@@ -89881,7 +89895,9 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "right projection iff exact installed connector square",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :program-2026-10-13-polygon-surface-homology,
+    :banked-commit "d47191953"},
    :id :lemma-finitewedgerightprojection-eq-one-iff-connectorsquare,
    :kind :lemma,
    :depends-on [:lemma-finitewedgefinsuccpointwedgeneighborhoods],
