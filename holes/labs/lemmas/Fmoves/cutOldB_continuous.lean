@@ -5281,9 +5281,75 @@ theorem cutOldA_continuous {L p q : ℕ} (hpq : p < q) (hqL : q < L) :
   sorry
 
 -- BEGIN SEAT AREA
+lemma cutOldB_continuous_aux_profile {L p q : ℕ} (hpq : p < q) (hqL : q < L) :
+    Continuous (cutProfileOldB L p q) := by
+  unfold cutProfileOldB cutChordB cutSB
+  apply Continuous.if_le (by fun_prop) (by fun_prop) (by fun_prop) (by fun_prop)
+  intro x hx
+  dsimp at hx ⊢
+  rw [hx]
+  unfold cutPoint
+  have hLn : 0 < L := lt_trans (Nat.zero_lt_of_lt hpq) hqL
+  have hL : (L : ℝ) ≠ 0 := by exact_mod_cast (Nat.ne_of_gt hLn)
+  have hden : cutAlpha L q - cutAlpha L p ≠ 0 := by
+    unfold cutAlpha
+    have hLr : 0 < (L : ℝ) := by exact_mod_cast hLn
+    apply ne_of_gt
+    exact sub_pos.mpr ((div_lt_div_iff_of_pos_right hLr).2
+      (mul_lt_mul_of_pos_left (by exact_mod_cast hpq) (by positivity)))
+  rw [show cutAlpha L p + 2 * Real.pi - cutAlpha L p - 2 * Real.pi = 0 by ring,
+    zero_div]
+  rw [show (((cutAlpha L p + 2 * Real.pi : ℝ) : ℂ) * Complex.I) =
+      2 * Real.pi * Complex.I + (cutAlpha L p : ℂ) * Complex.I by
+    push_cast
+    ring]
+  rw [Complex.exp_add, Complex.exp_two_pi_mul_I, one_mul]
+  simp
+
 theorem cutOldB_continuous {L p q : ℕ} (hpq : p < q) (hqL : q < L) :
     Continuous (cutOldB L p q) := by
-  sorry
+  unfold cutOldB
+  have hL : 0 < L := lt_trans (Nat.zero_lt_of_lt hpq) hqL
+  have hperiod : cutProfileOldB L p q (cutAlpha L q) =
+      cutProfileOldB L p q (cutAlpha L q + 2 * Real.pi) := by
+    unfold cutProfileOldB
+    have hbase : cutAlpha L q ≤ cutAlpha L p + 2 * Real.pi := by
+      have hLr : 0 < (L : ℝ) := by exact_mod_cast hL
+      have hq : cutAlpha L q < 2 * Real.pi := by
+        unfold cutAlpha
+        rw [div_lt_iff₀ hLr]
+        nlinarith [show (q : ℝ) < L by exact_mod_cast hqL, Real.pi_pos]
+      have hp : 0 ≤ cutAlpha L p := by
+        unfold cutAlpha
+        positivity
+      linarith
+    rw [if_pos hbase]
+    have hnot : ¬ cutAlpha L q + 2 * Real.pi ≤ cutAlpha L p + 2 * Real.pi := by
+      rw [not_le, add_lt_add_iff_right]
+      unfold cutAlpha
+      have hLr : 0 < (L : ℝ) := by exact_mod_cast hL
+      exact (div_lt_div_iff_of_pos_right hLr).2
+        (mul_lt_mul_of_pos_left (by exact_mod_cast hpq) (by positivity))
+    rw [if_neg hnot]
+    unfold cutChordB cutSB cutPoint
+    have hden : cutAlpha L q - cutAlpha L p ≠ 0 := by
+      exact ne_of_gt (sub_pos.mpr (by
+        unfold cutAlpha
+        have hLr : 0 < (L : ℝ) := by exact_mod_cast hL
+        exact (div_lt_div_iff_of_pos_right hLr).2
+          (mul_lt_mul_of_pos_left (by exact_mod_cast hpq) (by positivity))))
+    rw [show (cutAlpha L q + 2 * Real.pi - cutAlpha L p - 2 * Real.pi) /
+          (cutAlpha L q - cutAlpha L p) = 1 by
+      rw [show cutAlpha L q + 2 * Real.pi - cutAlpha L p - 2 * Real.pi =
+        cutAlpha L q - cutAlpha L p by ring]
+      exact div_self hden]
+    simp
+  have hc : Continuous
+      (AddCircle.liftIco (2 * Real.pi) (cutAlpha L q) (cutProfileOldB L p q)) := by
+    apply AddCircle.liftIco_continuous
+    · exact hperiod
+    · exact (cutOldB_continuous_aux_profile hpq hqL).continuousOn
+  exact hc.comp AddCircle.homeomorphCircle'.symm.continuous
 -- END SEAT AREA
 
 theorem cutNewA_continuous {L p q : ℕ} (hpq : p < q) (hqL : q < L) :
