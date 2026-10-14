@@ -87901,67 +87901,59 @@
   {:consumer :t97A01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 3,
+   :stop-count 4,
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Factor outer-right through inl; then right-base inl, surjectivity, B6-B10.",
+    "Prove the specialized connector square; then right-base inl, surjectivity, B6-B10.",
     :outcome :stop,
-    :warnings ["preexisting lints"],
+    :warnings ["preexisting lints; unrelated edits preserved"],
     :missing-theorems
-    [{:name "genericPointWedgeOuterLeftComparison_mem_inl",
-      :type "outer-left comparison is an inl image",
+    [{:name "genericPointWedgeOuterRightComparison_mem_inr",
+      :type "outer-right comparison is an inr image",
       :status :proved,
       :consumers [:t97A01 :t94J09],
       :depends-on [],
       :area "polygon-quotient-homology"}
-     {:name "finiteWedgeSuccessorRightBase_eq_outerRight_mul_inl",
-      :type "right base equals outer-right times an old-factor image",
+     {:name "finiteWedgeRightBaseInOldFactor_iff_connectorSquare",
+      :type "right-base inl membership iff connector square",
       :status :proved,
-      :consumers [:t97A01 :t94J09],
-      :depends-on ["genericPointWedgeOuterLeftComparison_mem_inl"],
-      :area "polygon-quotient-homology"}
-     {:name "finiteWedgeSuccessorOuterRight_mem_inl",
-      :type "outer-right comparison lies in the old factor",
-      :status :not-started,
       :consumers [:t97A01 :t94J09],
       :depends-on
       ["finiteWedgeSuccessorRightBase_eq_outerRight_mul_inl"],
+      :area "polygon-quotient-homology"}
+     {:name "finiteWedgeRightConnectorSystemComparison",
+      :type "prove the specialized connector square",
+      :status :not-started,
+      :consumers [:t97A01 :t94J09],
+      :depends-on
+      ["finiteWedgeRightBaseInOldFactor_iff_connectorSquare"],
       :area "polygon-quotient-homology"}],
     :statement-hashes {:registry "166/0"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked structural right-base factorization.",
+    :reason
+    "Banked exact equivalence of right-base membership and connector square.",
     :commands
     [{:cmd "lake build ConstructionTargets.PolygonSurfaceHomology",
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-     {:cmd "git show --check 4b0d0491e", :exit 0}
+     {:cmd "git show --check a720d9d62", :exit 0}
      {:cmd "exact blob + axioms | lake env lean /dev/stdin", :exit 0}],
     :diagnostic-history
-    [{:cmd "factor draft",
+    [{:cmd "membership draft",
       :exit 1,
-      :correction "fixed namespace, inference, multiplication order"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1791974050230-11764-a485bb48",
-     :commands
-     ["git show/diff-tree/commit trailers; sha256sum"
-      "exact commit snapshot: lake -Kjobs=1 build PolygonSurfaceHomology"
-      "#print axioms; placeholder scan; statement-registry.py check"],
-     :finding
-     "PASS: independent review of topo-6 commit efaec6039; only PolygonSurfaceHomology.lean changed, exact blob SHA256 2c7d35fbe64158ba6d22bd9513aade0d73bcdfd3cf4ed4d152103cab0d977699. Exact recorded snapshot builds serially; new declarations use only propext, Classical.choice, Quot.sound; placeholders 0; registry 166/0. New progress after d47191953 names the successor reconstruction element and the exact condition exists a, rightBase=inl(a), then proves only the valid direction: old-factor membership implies the connector square via trivial right projection. Parameter order and implication orientation match the generic API. This correctly avoids the false converse from projection=1 to inl membership. Remaining milestone: prove finiteWedgeRightBaseInOldFactor itself, then invoke normalized leg-word extraction."},
-    :commit "4b0d0491e",
+      :correction "unfolded finite right-base wrapper"}],
+    :commit "a720d9d62",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
     {:path "ConstructionTargets/PolygonSurfaceHomology.lean",
      :sha256
-     "12642b9a9e0e1701a6dc3b29769f0afc7f5d2d06c0b81392ea7e6b0db426db01"},
+     "5051fc93b42590bf23890b59c1c1897beee4b42b1f6693a6b06868b523e4469b"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -89854,7 +89846,8 @@
    :kind :lemma,
    :depends-on
    [:lemma-finitewedgefinsuccpointwedgeneighborhoods
-    :lemma-finitewedgerightprojection-eq-one-iff-connectorsquare],
+    :lemma-finitewedgerightprojection-eq-one-iff-connectorsquare
+    :lemma-finitewedgerightbaseinoldfactor-iff-connectorsquare],
    :other-consumers [:t94J09]}
   {:consumer :t92J06,
    :phase :lemma,
@@ -89981,6 +89974,41 @@
     :type "outer-right comparison lies in the old factor",
     :area "polygon-quotient-homology"},
    :id :lemma-finitewedgesuccessorouterright-mem-inl,
+   :kind :lemma,
+   :depends-on
+   [:lemma-finitewedgesuccessorrightbase-eq-outerright-mul-inl],
+   :other-consumers [:t94J09]}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "genericPointWedgeOuterRightComparison_mem_inr",
+    :type "outer-right comparison is an inr image"},
+   :lemma
+   {:name "genericPointWedgeOuterRightComparison_mem_inr",
+    :reported-by [:program-2026-10-13-polygon-surface-homology],
+    :type "outer-right comparison is an inr image",
+    :area "polygon-quotient-homology",
+    :proved-in :program-2026-10-13-polygon-surface-homology},
+   :id :lemma-genericpointwedgeouterrightcomparison-mem-inr,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t94J09]}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "finiteWedgeRightBaseInOldFactor_iff_connectorSquare",
+    :type "right-base inl membership iff connector square"},
+   :lemma
+   {:name "finiteWedgeRightBaseInOldFactor_iff_connectorSquare",
+    :reported-by [:program-2026-10-13-polygon-surface-homology],
+    :type "right-base inl membership iff connector square",
+    :area "polygon-quotient-homology",
+    :proved-in :program-2026-10-13-polygon-surface-homology},
+   :id :lemma-finitewedgerightbaseinoldfactor-iff-connectorsquare,
    :kind :lemma,
    :depends-on
    [:lemma-finitewedgesuccessorrightbase-eq-outerright-mul-inl],
