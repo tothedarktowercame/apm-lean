@@ -159,7 +159,77 @@ lemma apm_t01A02_evenLift_error_bounded
     ∃ C : ℝ, ∀ x : ℝ × ℝ,
       ‖F x - ((2 * (a : ℝ) * x.1 + 2 * (b : ℝ) * x.2),
         (2 * (c : ℝ) * x.1 + 2 * (d : ℝ) * x.2))‖ ≤ C := by
-  sorry
+  let L : ℝ × ℝ → ℝ × ℝ := fun x ↦
+    ((2 * (a : ℝ) * x.1 + 2 * (b : ℝ) * x.2),
+     (2 * (c : ℝ) * x.1 + 2 * (d : ℝ) * x.2))
+  let E : ℝ × ℝ → ℝ × ℝ := fun x ↦ F x - L x
+  have hcont : Continuous E := hF.1.sub (by
+    apply Continuous.prodMk
+    · fun_prop
+    · fun_prop)
+  have hp : Function.Periodic E (2 * Real.pi, 0) := by
+    intro x
+    dsimp [E, L]
+    rw [hF.2.2.1 x]
+    ext <;> simp <;> ring
+  have hq : Function.Periodic E (0, 2 * Real.pi) := by
+    intro x
+    dsimp [E, L]
+    rw [hF.2.2.2 x]
+    ext <;> simp <;> ring
+  have hcompact : IsCompact
+      (Set.Icc (0 : ℝ) (2 * Real.pi) ×ˢ Set.Icc (0 : ℝ) (2 * Real.pi)) :=
+    isCompact_Icc.prod isCompact_Icc
+  obtain ⟨C, hC⟩ := hcompact.exists_bound_of_continuousOn hcont.continuousOn
+  refine ⟨C, ?_⟩
+  intro x
+  let m : ℤ := ⌊x.1 / (2 * Real.pi)⌋
+  let n : ℤ := ⌊x.2 / (2 * Real.pi)⌋
+  let y : ℝ × ℝ :=
+    (x.1 - (m : ℝ) * (2 * Real.pi), x.2 - (n : ℝ) * (2 * Real.pi))
+  have hy₁ : y.1 ∈ Set.Icc (0 : ℝ) (2 * Real.pi) := by
+    constructor
+    · dsimp [y, m]
+      have hm := Int.floor_le (x.1 / (2 * Real.pi))
+      have ht := Real.two_pi_pos
+      apply (sub_nonneg.mpr ?_)
+      exact (le_div_iff₀ ht).mp hm
+    · dsimp [y, m]
+      have hm := Int.lt_floor_add_one (x.1 / (2 * Real.pi))
+      have ht := Real.two_pi_pos
+      have hm' : x.1 < ((⌊x.1 / (2 * Real.pi)⌋ : ℤ) : ℝ) *
+          (2 * Real.pi) + (2 * Real.pi) := by
+        calc
+          x.1 < (((⌊x.1 / (2 * Real.pi)⌋ : ℤ) : ℝ) + 1) *
+              (2 * Real.pi) := (div_lt_iff₀ ht).mp hm
+          _ = _ := by ring
+      linarith
+  have hy₂ : y.2 ∈ Set.Icc (0 : ℝ) (2 * Real.pi) := by
+    constructor
+    · dsimp [y, n]
+      have hn := Int.floor_le (x.2 / (2 * Real.pi))
+      have ht := Real.two_pi_pos
+      apply sub_nonneg.mpr
+      exact (le_div_iff₀ ht).mp hn
+    · dsimp [y, n]
+      have hn := Int.lt_floor_add_one (x.2 / (2 * Real.pi))
+      have ht := Real.two_pi_pos
+      have hn' : x.2 < ((⌊x.2 / (2 * Real.pi)⌋ : ℤ) : ℝ) *
+          (2 * Real.pi) + (2 * Real.pi) := by
+        calc
+          x.2 < (((⌊x.2 / (2 * Real.pi)⌋ : ℤ) : ℝ) + 1) *
+              (2 * Real.pi) := (div_lt_iff₀ ht).mp hn
+          _ = _ := by ring
+      linarith
+  have hEy : E y = E x := by
+    have hm := (hp.zsmul m) y
+    have hn := (hq.zsmul n) (y + m • (2 * Real.pi, 0))
+    rw [← hm, ← hn]
+    congr 1
+    ext <;> simp [y] <;> ring
+  change ‖E x‖ ≤ C
+  rw [← hEy]
+  exact hC y ⟨hy₁, hy₂⟩
 -- END SEAT AREA
 
 /-- Seat (integer parity): `I - 2A` has nonzero determinant for every
