@@ -46,6 +46,55 @@ theorem T96A06_polynomialMap_descends :
     T96A06_polynomialMap_eq_consumerPolynomial] using
     t96A06Polynomial_descends
 
+/-! The invariant calculation is split at the singular-homology interface.
+Each lemma below is independent: in particular, none uses another lemma in
+this block.  This lets the RP³ computation, the four trace computations, and
+homotopy invariance be developed in parallel. -/
+
+lemma T96A06_rp3_rationalHomology_finite (k : ℕ) :
+    FiniteDimensional ℚ (Homology T96A06.RP3 k) := by
+  sorry
+
+lemma T96A06_rp3_rationalHomology_vanishes_above_three (k : ℕ)
+    (hk : 3 < k) :
+    Subsingleton (Homology T96A06.RP3 k) := by
+  sorry
+
+lemma T96A06_polynomialDescent_trace_zero
+    (f : ContinuousMap T96A06.RP3 T96A06.RP3)
+    (hf : T96A06.IsPolynomialDescent f) :
+    LinearMap.trace ℚ (Homology T96A06.RP3 0) (induced f 0).hom = 1 := by
+  sorry
+
+lemma T96A06_polynomialDescent_trace_one
+    (f : ContinuousMap T96A06.RP3 T96A06.RP3)
+    (hf : T96A06.IsPolynomialDescent f) :
+    LinearMap.trace ℚ (Homology T96A06.RP3 1) (induced f 1).hom = 0 := by
+  sorry
+
+lemma T96A06_polynomialDescent_trace_two
+    (f : ContinuousMap T96A06.RP3 T96A06.RP3)
+    (hf : T96A06.IsPolynomialDescent f) :
+    LinearMap.trace ℚ (Homology T96A06.RP3 2) (induced f 2).hom = 0 := by
+  sorry
+
+lemma T96A06_polynomialDescent_trace_three
+    (f : ContinuousMap T96A06.RP3 T96A06.RP3)
+    (hf : T96A06.IsPolynomialDescent f) :
+    LinearMap.trace ℚ (Homology T96A06.RP3 3) (induced f 3).hom = 4 := by
+  sorry
+
+lemma T96A06_identity_trace_three :
+    LinearMap.trace ℚ (Homology T96A06.RP3 3)
+      (induced (ContinuousMap.id T96A06.RP3) 3).hom = 1 := by
+  sorry
+
+lemma T96A06_homotopic_induced_eq
+    (f g : ContinuousMap T96A06.RP3 T96A06.RP3)
+    (h : ContinuousMap.Homotopic f g) (k : ℕ) :
+    induced f k = induced g k := by
+  sorry
+
 /-- **LIBRARY: RP³ rational homology and degree of complex squaring.**
 
 The descended map has degree four.  Since rationally RP³ has homology only
@@ -57,7 +106,25 @@ theorem T96A06_polynomialDescent_invariants
     (hf : T96A06.IsPolynomialDescent f) :
     HasLefschetzNumber f (-3) ∧
       ¬ ContinuousMap.Homotopic f (ContinuousMap.id T96A06.RP3) := by
-  sorry
+  constructor
+  · refine ⟨T96A06_rp3_rationalHomology_finite, 3, ?_, ?_⟩
+    · exact T96A06_rp3_rationalHomology_vanishes_above_three
+    · rw [Finset.sum_range_succ, Finset.sum_range_succ,
+        Finset.sum_range_succ, Finset.sum_range_succ]
+      rw [T96A06_polynomialDescent_trace_zero f hf,
+        T96A06_polynomialDescent_trace_one f hf,
+        T96A06_polynomialDescent_trace_two f hf,
+        T96A06_polynomialDescent_trace_three f hf]
+      norm_num
+  · intro h
+    have heq := T96A06_homotopic_induced_eq f
+      (ContinuousMap.id T96A06.RP3) h 3
+    have htrace := congrArg
+      (fun u => LinearMap.trace ℚ (Homology T96A06.RP3 3) u.hom) heq
+    dsimp only at htrace
+    rw [T96A06_polynomialDescent_trace_three f hf,
+      T96A06_identity_trace_three] at htrace
+    norm_num at htrace
 
 theorem apm_t96a06 :
     ∃ f : ContinuousMap T96A06.RP3 T96A06.RP3,

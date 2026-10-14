@@ -2,93 +2,106 @@
 
 ## Triage
 
-Verdict: **true and faithful**.  The Lean theorem states all three requests in
-the problem: descent of the displayed quadratic formula, Lefschetz number
-`-3`, and failure to be homotopic to the identity.
+Verdict: **true and faithful**. The registered theorem is unchanged. The
+quadratic has no nonzero common zero (`t96A06Polynomial_nonzero`), and the
+already proved `t96A06Polynomial_descends` supplies its continuous descent.
 
-The obvious degeneracy is harmless.  If both complex squares represented by
-the four real coordinates vanish, then both complex inputs vanish, so the
-input vector was zero.  This is already formalized by
-`t96A06Polynomial_nonzero`.  Homogeneity has even degree, so replacing a
-representative by any nonzero real scalar does not change the resulting
-projective point.  The existing sorry-free theorem
-`t96A06Polynomial_descends` supplies the continuous descent.
+The former 1400--2800-line invariant boundary is now split at the rational
+singular-homology interface. All eight leaves below are top-level and
+independent: none mentions another new lemma. The old
+`T96A06_polynomialDescent_invariants` is a sorry-free assembly.
 
-## Definitions
+## Independent leaves
 
-`T96A06.IsPolynomialDescent f` is the pointwise commutative-square condition
-saying that `f` is exactly the projective map induced by the printed
-polynomial.  It contains no invariant or desired conclusion.
+### `T96A06_rp3_rationalHomology_finite` (80--140 lines)
 
-## Open lemma
+Every rational singular homology group of the coinduced model of `RP³` is
+finite-dimensional. Develop the cellular/quotient comparison once, then use
+`FiniteDimensional.of_equiv`. Relevant interfaces are the sphere homology
+equivalences and off-degree vanishing in `ConstructionTargets.SphereHomology`.
+The missing ingredient is comparison of the sphere antipodal quotient with
+`ProjectiveSpaceTopology.Space`; it must be proved, not postulated.
 
-### `T96A06_polynomialDescent_invariants` — LIBRARY
+### `T96A06_rp3_rationalHomology_vanishes_above_three` (80--140 lines)
 
-**Statement in words.** Every continuous self-map of the coinduced model of
-`RP³` which agrees pointwise with the displayed quadratic descent has
-Lefschetz number `-3` and is not homotopic to the identity.
+Rational homology is subsingleton above degree three. Use the same
+quotient/cellular comparison and
+`sphereHomologyObj_offDegree_subsingleton`. This says only `3 < k`, exactly
+the support certificate needed by `HasLefschetzNumber`, and preserves degree
+three.
 
-**Why true.** Identify `ℝ⁴` with `ℂ²`.  The lift is
-`(z,w) ↦ (z²,w²)`.  Its normalized map on `S³` has degree four (a regular
-value has four preimages, all with positive local degree).  Compare the sphere
-double cover with the coinduced projective model to show that the descended
-map acts by multiplication by four on rational `H₃(RP³)`.  Rationally,
-`RP³` has `H₀ ≅ ℚ`, `H₃ ≅ ℚ`, and all other homology zero, hence
-the alternating trace is `1 - 4 = -3`.  Homotopy invariance of induced
-homology maps would give the identity the same Lefschetz number, whereas its
-number is `1 - 1 = 0`.
+### `T96A06_polynomialDescent_trace_zero` (40--90 lines)
 
-This is deliberately one LIBRARY lemma: the topology audit estimates the
-missing RP³ rational-homology package at 500–1000 lines and the sphere degree
-calculation at 700–1500 lines.  Splitting these into nominal 30–150-line
-consumer lemmas would hide, rather than parallelize, the missing foundation.
-The closest sorry-free modules are
-`ConstructionTargets.SphereHomology`,
-`ConstructionTargets.SphereAntipodalHomology`, and
-`ConstructionTargets.CoefficientSphereAntipodal`.  The already attempted
-sphere-to-coinduced-RP³ covering comparison is still missing; the topology
-worklist records two reviewed STOPs because the only attempted package
-postulated its essential fields.  No sorry-containing construction target is
-imported here.
+The induced endomorphism on rational `H₀` has trace one. Show the quotient is
+nonempty and path connected (lift points to `S³`), identify `H₀` with `ℚ`,
+and use functoriality of `AlgebraicTopology.singularHomologyFunctor`.
+`coordinateLine` supplies a point, so there is no empty-space degeneracy.
 
-**Estimate.** 1400–2800 lines total, as a foundation/program rather than a
-single lemma-seat session.
+### `T96A06_polynomialDescent_trace_one` (30--70 lines)
 
-**Dependencies.** None among blueprint lemmas; it uses only the definitions
-block.  Internally the future library program should proceed through: sphere
-covering comparison; rational homology of RP³; degree four of normalized
-complex squaring; transfer of degree to RP³; finite alternating trace and
-homotopy invariance.
+The degree-one trace is zero. Prove rational `H₁(RP³)` vanishes (integrally it
+is `Z/2`, hence is killed over `ℚ`) and use trace on the zero module. Candidate
+tools are the quotient long exact sequence,
+`SphereAntipodalHomology.antipodal_homology`, and
+`LinearMap.trace_eq_matrix_trace`; confirm local names with `#check`.
 
-**Truth check.** For the regular projective value represented by `(1,0,1,0)`,
-the equations `z²,w² ∈ ℝ·(1,1)` give four projective preimages after
-quotienting the common sign, and the real Jacobian determinant away from the
-coordinate axes is positive.  This agrees with degree `4`.  The homology
-calculation gives `1-4=-3`, while the identity gives `0`.
+### `T96A06_polynomialDescent_trace_two` (30--70 lines)
 
-## Already-proved assembly
+The degree-two trace is zero. Use the cellular boundary map (multiplication by
+two in the relevant projective-space degree) or the antipodal quotient
+comparison, then trace on the zero module. Boundary sign conventions are
+irrelevant once that boundary is an isomorphism over `ℚ`.
 
-`T96A06_polynomialMap_eq_consumerPolynomial` and
-`T96A06_polynomialMap_descends` are sorry-free wrappers around the existing
-construction target.  The main theorem merely chooses that descended map,
-packages its nonzero witness, and invokes the LIBRARY lemma.
+### `T96A06_polynomialDescent_trace_three` (100--150 lines)
 
-## Dependency layers
+The substantive degree leaf: the descent acts by multiplication by four on
+rational `H₃`, hence has trace four. Normalize `(z,w) ↦ (z²,w²)` on `S³`;
+a regular value away from the coordinate axes has four preimages after the
+common antipodal identification, all with positive local sign. Transfer this
+through the antipodal quotient. Relevant foundations are
+`ConstructionTargets.SphereHomology`, `SphereAntipodalHomology`, and
+`CoefficientSphereAntipodal`. If the regular-value degree theorem is absent,
+keep that missing foundation visibly LIBRARY rather than postulating fields.
 
-- Layer 0 (already proved): polynomial nonvanishing, orbit compatibility, and
-  continuous projective descent.
-- Layer 1 (program): `T96A06_polynomialDescent_invariants`.
-- Layer 2 (sorry-free assembly): `apm_t96a06`.
+### `T96A06_identity_trace_three` (30--60 lines)
+
+The identity has trace one on rational `H₃(RP³)`. Identify that group with
+`ℚ`, rewrite the induced identity map by functoriality, and use
+`LinearMap.trace_id` plus finrank one. This is separate from the polynomial
+degree leaf, so it cannot inherit that leaf's sorry.
+
+### `T96A06_homotopic_induced_eq` (10--25 lines)
+
+Homotopic maps induce equal rational homology maps. Import
+`ConstructionTargets.SingularHomologyHomotopy` if needed and specialize
+`singularHomology_map_eq_of_homotopic (ModuleCat ℚ) (ModuleCat.of ℚ ℚ)`.
+That theorem is already sorry-free; this leaf should close by `simpa`/`change`.
+
+## Sorry-free assembly
+
+`T96A06_polynomialDescent_invariants` uses bound `3`, expands the four-term
+sum with `Finset.sum_range_succ`, rewrites the four traces, and obtains
+`1 - 4 = -3` by `norm_num`. A hypothetical homotopy makes the degree-three
+endomorphisms equal, so congruence of trace contradicts `4 = 1`.
+
+`apm_t96a06` remains byte-identical and merely chooses the existing descent
+and invokes this assembly.
+
+## Degeneracy and truth audit
+
+- Polynomial nonvanishing is discharged before these leaves.
+- `RP³` is nonempty, so the `H₀` trace is one rather than zero.
+- The support bound is strict (`3 < k`), preserving top homology.
+- Odd-dimensional real projective space is orientable, so rational `H₃` is
+  one-dimensional.
+- Use a regular value with both complex coordinates nonzero; coordinate-axis
+  values are unsuitable for the four-preimage local-degree count.
+- No leaf restates `IsPolynomialDescent`, assumes its own conclusion, or
+  mentions another new leaf.
 
 ## Axiom audit
 
-Compiled with:
-
-```text
-systemd-run --user --scope -q -p MemoryMax=12G lake env lean holes/labs/blueprints/t96A06/Blueprint.lean
-holes/labs/blueprints/t96A06/Blueprint.lean:55:8: warning: declaration uses `sorry`
-'apm_t96a06' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
-```
-
-Thus `sorryAx` reaches the main theorem only through
-`T96A06_polynomialDescent_invariants`.
+The file compiles with eight warnings, one per independent leaf. The assembly
+and main theorem contain no `sorry`; `#print axioms apm_t96a06` reports
+`sorryAx` only through those leaves, with `propext`, `Classical.choice`, and
+`Quot.sound`.
