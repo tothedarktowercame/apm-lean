@@ -399,10 +399,121 @@ noncomputable instance t93J03_cyc_kleinProperlyDiscontinuousSMul :
   ⟨fun hK hL => t93J03_kleinPlaneQuotient_pi1_origin_aux_finite_actors hK hL⟩
 
 /-- `⟨a⟩` is characteristic in the Klein group. -/
+theorem t93J03_cyclicCover_aux_characteristic_aux_mem_iff
+    (g : PresentedKleinGroup) :
+    g ∈ Subgroup.zpowers generatorA ↔
+      (KleinPresentedGroupCoordinateNormalForm.coordinateEquiv g).2 = 1 := by
+  rw [Subgroup.mem_zpowers_iff]
+  constructor
+  · rintro ⟨n, rfl⟩
+    have he : KleinPresentedGroupCoordinateNormalForm.coordinateEquiv
+        (generatorA ^ n) = KleinPresentedGroupCoordinateModel.A ^ n := by
+      change KleinPresentedGroupCoordinateNormalForm.coordinateEquiv
+        (KleinPresentedGroupCoordinateModel.generatorA ^ n) = _
+      exact map_zpow KleinPresentedGroupCoordinateNormalForm.coordinateEquiv
+        KleinPresentedGroupCoordinateModel.generatorA n
+    rw [he]
+    have hi := map_zpow
+      (SemidirectProduct.inl (φ := KleinPresentedGroupCoordinateModel.action))
+      (Multiplicative.ofAdd 1) n
+    change ((SemidirectProduct.inl
+      (φ := KleinPresentedGroupCoordinateModel.action)
+      (Multiplicative.ofAdd 1)) ^ n).2 = 1
+    rw [← hi]
+    rfl
+  · intro h
+    refine ⟨Multiplicative.toAdd
+      (KleinPresentedGroupCoordinateNormalForm.coordinateEquiv g).1, ?_⟩
+    apply KleinPresentedGroupCoordinateNormalForm.coordinateEquiv.injective
+    have he : KleinPresentedGroupCoordinateNormalForm.coordinateEquiv
+        (generatorA ^ Multiplicative.toAdd
+          (KleinPresentedGroupCoordinateNormalForm.coordinateEquiv g).1) =
+        KleinPresentedGroupCoordinateModel.A ^ Multiplicative.toAdd
+          (KleinPresentedGroupCoordinateNormalForm.coordinateEquiv g).1 := by
+      change KleinPresentedGroupCoordinateNormalForm.coordinateEquiv
+        (KleinPresentedGroupCoordinateModel.generatorA ^ _) = _
+      exact map_zpow KleinPresentedGroupCoordinateNormalForm.coordinateEquiv
+        KleinPresentedGroupCoordinateModel.generatorA _
+    rw [he]
+    have hi := map_zpow
+      (SemidirectProduct.inl (φ := KleinPresentedGroupCoordinateModel.action))
+      (Multiplicative.ofAdd 1)
+      (Multiplicative.toAdd
+        (KleinPresentedGroupCoordinateNormalForm.coordinateEquiv g).1)
+    change (SemidirectProduct.inl
+      (φ := KleinPresentedGroupCoordinateModel.action)
+      (Multiplicative.ofAdd 1)) ^
+        Multiplicative.toAdd
+          (KleinPresentedGroupCoordinateNormalForm.coordinateEquiv g).1 =
+      KleinPresentedGroupCoordinateNormalForm.coordinateEquiv g
+    have hcoord : SemidirectProduct.inl
+        (φ := KleinPresentedGroupCoordinateModel.action)
+        ((Multiplicative.ofAdd 1) ^ Multiplicative.toAdd
+          (KleinPresentedGroupCoordinateNormalForm.coordinateEquiv g).1) =
+        KleinPresentedGroupCoordinateNormalForm.coordinateEquiv g := by
+      apply SemidirectProduct.ext
+      · change (Multiplicative.ofAdd 1) ^ Multiplicative.toAdd
+          (KleinPresentedGroupCoordinateNormalForm.coordinateEquiv g).1 =
+          (KleinPresentedGroupCoordinateNormalForm.coordinateEquiv g).1
+        apply Multiplicative.toAdd.injective
+        simp
+      · change 1 =
+          (KleinPresentedGroupCoordinateNormalForm.coordinateEquiv g).2
+        exact h.symm
+    exact hi.symm.trans hcoord
+
+theorem t93J03_cyclicCover_aux_characteristic_aux_conj_iff
+    (g : PresentedKleinGroup) :
+    (∃ x : PresentedKleinGroup, x * g * x⁻¹ = g⁻¹) ↔
+      g ∈ Subgroup.zpowers generatorA := by
+  constructor
+  · rintro ⟨x, hx⟩
+    let p : PresentedKleinGroup →* KleinPresentedGroupCoordinateModel.ZMul :=
+      SemidirectProduct.rightHom.comp
+        KleinPresentedGroupCoordinateNormalForm.coordinateEquiv.toMonoidHom
+    have hp' : p x * p g * (p x)⁻¹ = (p g)⁻¹ := by
+      simpa using congrArg p hx
+    have hpinv : p g = (p g)⁻¹ := by
+      simpa [mul_comm] using hp'
+    have hp := congrArg Multiplicative.toAdd hpinv
+    change Multiplicative.toAdd
+      (KleinPresentedGroupCoordinateNormalForm.coordinateEquiv g).2 =
+      - Multiplicative.toAdd
+      (KleinPresentedGroupCoordinateNormalForm.coordinateEquiv g).2 at hp
+    have hz : Multiplicative.toAdd
+        (KleinPresentedGroupCoordinateNormalForm.coordinateEquiv g).2 = 0 := by
+      omega
+    apply (t93J03_cyclicCover_aux_characteristic_aux_mem_iff g).mpr
+    apply Multiplicative.toAdd.injective
+    simpa using hz
+  · intro hg
+    rw [Subgroup.mem_zpowers_iff] at hg
+    obtain ⟨n, rfl⟩ := hg
+    let x : PresentedKleinGroup :=
+      KleinPresentedGroupCoordinateModel.generatorB⁻¹
+    refine ⟨x, ?_⟩
+    have hc : SemiconjBy x generatorA generatorA⁻¹ := by
+      rw [SemiconjBy]
+      apply (mul_right_cancel (b := x⁻¹))
+      simpa [x, mul_assoc] using KleinPresentedGroupConjugation.conjugateA
+    calc
+      x * generatorA ^ n * x⁻¹ = (generatorA⁻¹) ^ n * x * x⁻¹ := by
+        rw [hc.zpow_right n]
+      _ = (generatorA ^ n)⁻¹ := by simp
+
 theorem t93J03_cyclicCover_aux_characteristic
     (φ : PresentedKleinGroup ≃* PresentedKleinGroup) (g : PresentedKleinGroup) :
     φ g ∈ Subgroup.zpowers generatorA ↔ g ∈ Subgroup.zpowers generatorA := by
-  sorry
+  rw [← t93J03_cyclicCover_aux_characteristic_aux_conj_iff,
+    ← t93J03_cyclicCover_aux_characteristic_aux_conj_iff]
+  constructor
+  · rintro ⟨x, hx⟩
+    refine ⟨φ.symm x, ?_⟩
+    apply φ.injective
+    simpa using hx
+  · rintro ⟨x, hx⟩
+    refine ⟨φ x, ?_⟩
+    simpa using congrArg φ hx
 
 noncomputable def t93J03_cyclicCover_aux_E_covering_aux_source :
     (ℝ × ℝ) ≃ₜ ℂ :=
