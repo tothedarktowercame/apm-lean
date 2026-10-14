@@ -710,6 +710,23 @@ theorem regularFiberLocalDegree_localization_eq
         (groupGlobalGenerator (TopCat.of S) 2 e) :=
   (surfaceTopHomology_localFundamentalClassIso S e).localization_eq x
 
+/-- Uniqueness of the point-local coefficient: any chart calculation that
+localizes the global generator with coefficient `r` computes exactly the
+regular-fiber local degree defined above. -/
+theorem regularFiberLocalDegree_eq_of_localization_eq
+    {S : Type} [TopologicalSpace S] [T2Space S]
+    [ChartedSpace SurfaceModel S]
+    (e : surfaceHomology S ≅ ModuleCat.of ℤ ℤ) (f : C(S, S)) (y : S)
+    (x : {x : S // f x = y}) (r : ℤ)
+    (hr : r •
+        ConstructionTargets.HigherChartLocalGenerator.ambientLocalGenerator
+          (k := 0) (x : S) =
+      localizationMap (x : S) 2
+        (groupGlobalGenerator (TopCat.of S) 2 e)) :
+    regularFiberLocalDegree e f y x = r := by
+  apply ambientLocalGenerator_zsmul_injective 0 (x : S)
+  exact (regularFiberLocalDegree_localization_eq e f y x).trans hr.symm
+
 /-- Package the two remaining geometric identities after fixing the pointwise
 local degrees to the coefficients supplied by local fundamental classes. -/
 def regularFiberTopDegreeFormula_of_localFundamentalClassComparisons
@@ -823,6 +840,7 @@ end ConstructionTargets.T00J02Closure
 
 #print axioms ConstructionTargets.T00J02Closure.surfaceTopHomology_localFundamentalClassIso
 #print axioms ConstructionTargets.T00J02Closure.regularFiberLocalDegree_localization_eq
+#print axioms ConstructionTargets.T00J02Closure.regularFiberLocalDegree_eq_of_localization_eq
 #print axioms ConstructionTargets.T00J02Closure.regularFiberTopDegreeFormula_of_localFundamentalClassComparisons
 #print axioms ConstructionTargets.T00J02Closure.topHomologyMap_eq_zero_of_localFundamentalClassComparisons
 #print axioms ConstructionTargets.T00J02Closure.RegularFiberLocalizedComponentFormula.toComparison
