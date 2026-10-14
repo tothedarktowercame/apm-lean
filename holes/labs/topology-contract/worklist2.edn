@@ -87901,69 +87901,52 @@
   {:consumer :t97A01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 2,
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Prove successor leg-word induction, free-group surjectivity, coordinate epi, B6-B10.",
+    "Transport words through the successor homeomorphism and expand old factors inductively; prove free-group surjectivity, coordinate epi, B6-B10.",
     :outcome :stop,
-    :warnings ["lints; unrelated edit preserved"],
+    :warnings ["preexisting lints; unrelated edit preserved"],
     :missing-theorems
-    [{:name "finiteWedgeRightConnectorSystemComparison",
-      :type "successor connector square",
+    [{:name "finiteWedgeFinSuccPointWedge_exists_legWord",
+      :type "successor split loops are old/final-factor words",
       :status :proved,
       :consumers [:t97A01 :t94J09],
-      :depends-on [],
+      :depends-on ["finiteWedgePointWedge_rightBase_inl"],
       :area "polygon-quotient-homology"}
-     {:name "finiteWedgePointWedge_rightBase_inl",
-      :type "right-base lies in old factor",
-      :status :proved,
+     {:name "finiteWedgeFinSucc_exists_legWord",
+      :type "transport split words to Fin successor legs",
+      :status :not-started,
       :consumers [:t97A01 :t94J09],
-      :depends-on ["finiteWedgeRightConnectorSystemComparison"],
+      :depends-on ["finiteWedgeFinSuccPointWedge_exists_legWord"],
       :area "polygon-quotient-homology"}
      {:name "finiteWedgeLegFreeGroupMap_surjective",
       :type "canonical free-group map is onto",
       :status :partial,
       :consumers [:t97A01 :t94J09],
-      :depends-on ["finiteWedgePointWedge_rightBase_inl"],
+      :depends-on ["finiteWedgeFinSucc_exists_legWord"],
       :area "polygon-quotient-homology"}],
     :statement-hashes {:registry "166/0"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked connector square and old-factor membership.",
+    :reason "Banked successor point-wedge leg-word generation.",
     :commands
-    [{:cmd
-      "lake env lean ConstructionTargets/PolygonSurfaceHomology.lean",
+    [{:cmd "lake build ConstructionTargets.PolygonSurfaceHomology",
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-     {:cmd "git show --check 327646036", :exit 0}
+     {:cmd "git show --check c6f80043b", :exit 0}
      {:cmd "exact blob+axioms | lake env lean /dev/stdin", :exit 0}],
-    :diagnostic-history
-    [{:cmd "lake build ConstructionTargets.PolygonSurfaceHomology",
-      :exit 1,
-      :correction
-      "dirty PointWedge dependency failed; committed snapshots compile"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1791994365516-11942-e948bd35",
-     :commands
-     ["git show/diff 327646036; sha256sum"
-      "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology"
-      "lake env lean /dev/stdin (#print axioms)"
-      "placeholder scan; statement-registry check; git show --check"],
-     :finding
-     "PASS: commit 327646036 by topo-6 changes only scoped PolygonSurfaceHomology.lean; exact blob SHA-256 8219bc5c5dea75936d2b1cffa7ec61e5b84a3d70b7dfeb9324ccfe63c566833f. Exact snapshot and PointWedge dependency build; 0 placeholders; new theorems use propext/Classical.choice/Quot.sound; registry 166/0. Generic proof identifies the overlap component with equality transport, giving the connector square in the correct source≫map=target orientation; the finite specialization then obtains trivial right projection and old-factor membership without crossing group representations. Real compiled program progress; remaining milestone is successor leg-word/free-group surjectivity, then B6-B10."},
-    :commit "327646036",
+    :commit "c6f80043b",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
     {:path "ConstructionTargets/PolygonSurfaceHomology.lean",
      :sha256
-     "8219bc5c5dea75936d2b1cffa7ec61e5b84a3d70b7dfeb9324ccfe63c566833f"},
+     "9e2cd261020793eb6c739154e709344a5592c7a44d252535390f40b39ff50f71"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -89425,7 +89408,8 @@
    [:lemma-finitewedgefinsucchomeomorphpointwedge
     :lemma-finitewedgepointwedge-legcoordinates
     :lemma-exists-coprodlegword-of-mulequiv
-    :lemma-finitewedgepointwedge-rightbase-inl],
+    :lemma-finitewedgepointwedge-rightbase-inl
+    :lemma-finitewedgefinsucc-exists-legword],
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
@@ -90311,4 +90295,37 @@
    :id :lemma-twoloopgraphcoverdata-projection,
    :kind :lemma,
    :depends-on [:lemma-twoloopgraphcoverdata-realizationcarrier],
-   :other-consumers []}]}
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "finiteWedgeFinSuccPointWedge_exists_legWord",
+    :type "successor split loops are old/final-factor words"},
+   :lemma
+   {:name "finiteWedgeFinSuccPointWedge_exists_legWord",
+    :reported-by [:program-2026-10-13-polygon-surface-homology],
+    :type "successor split loops are old/final-factor words",
+    :area "polygon-quotient-homology",
+    :proved-in :program-2026-10-13-polygon-surface-homology},
+   :id :lemma-finitewedgefinsuccpointwedge-exists-legword,
+   :kind :lemma,
+   :depends-on [:lemma-finitewedgepointwedge-rightbase-inl],
+   :other-consumers [:t94J09]}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "finiteWedgeFinSucc_exists_legWord",
+    :type "transport split words to Fin successor legs"},
+   :lemma
+   {:name "finiteWedgeFinSucc_exists_legWord",
+    :reported-by [:program-2026-10-13-polygon-surface-homology],
+    :type "transport split words to Fin successor legs",
+    :area "polygon-quotient-homology"},
+   :id :lemma-finitewedgefinsucc-exists-legword,
+   :kind :lemma,
+   :depends-on [:lemma-finitewedgefinsuccpointwedge-exists-legword],
+   :other-consumers [:t94J09]}]}
