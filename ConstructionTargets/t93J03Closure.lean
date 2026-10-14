@@ -1275,6 +1275,50 @@ noncomputable def kleinPolygonSkeletonToSpacePiOne :
         (kleinPolygonSkeletonToSpace kleinSkeletonPoint) :=
   FundamentalGroup.map kleinPolygonSkeletonToSpace kleinSkeletonPoint
 
+/-- The target-basepoint path matching the two stages already used on the
+domain side.  First the inverse homotopy-equivalence unit runs from the
+overlap image to its radial deformation; then the chosen skeleton connector
+runs to `kleinSkeletonPoint`.  Both stages are included into the polygon. -/
+noncomputable def kleinPolygonOuterImageToSkeletonPointSpacePath :
+    Path
+      (kleinPolygonOuterToSpace
+        (kleinPolygonOverlapToOuter kleinPolygonOverlapPoint))
+      (kleinPolygonSkeletonToSpace kleinSkeletonPoint) := by
+  let x := kleinPolygonOverlapToOuter kleinPolygonOverlapPoint
+  let p₁ := ((kleinPolygonOuterHomotopyEquivSkeleton.left_inv.some.evalAt x).symm.map
+    kleinPolygonOuterToSpace.continuous)
+  let p₂ := kleinPolygonOverlapImageToSkeletonPointPath.map
+    kleinPolygonSkeletonToSpace.continuous
+  exact p₁.trans p₂
+
+/-- The transported outer-to-polygon map after applying the matching target
+basepoint change.  It now has exactly the source and target groups of the
+literal skeleton inclusion map. -/
+noncomputable def kleinPolygonTargetTransportedOuterToSpacePiOne :
+    FundamentalGroup kleinPairingData.skeleton kleinSkeletonPoint →*
+      FundamentalGroup kleinPairingData.Space
+        (kleinPolygonSkeletonToSpace kleinSkeletonPoint) :=
+  (FundamentalGroup.fundamentalGroupMulEquivOfPath
+      kleinPolygonOuterImageToSkeletonPointSpacePath).toMonoidHom.comp
+    kleinPolygonTransportedOuterToSpacePiOne
+
+/-- Target basepoint transport is an equivalence, so the forward kernel
+inclusion survives unchanged and now lands in the kernel of a map with the
+literal skeleton inclusion's exact source and target types. -/
+theorem kleinPolygonOverlapSkeletonNormalClosure_le_targetTransportedKernel :
+    Subgroup.normalClosure
+        (kleinPolygonOverlapToSkeletonPiOne.range : Set
+          (FundamentalGroup kleinPairingData.skeleton kleinSkeletonPoint)) ≤
+      MonoidHom.ker kleinPolygonTargetTransportedOuterToSpacePiOne := by
+  intro g hg
+  change kleinPolygonTargetTransportedOuterToSpacePiOne g = 1
+  change (FundamentalGroup.fundamentalGroupMulEquivOfPath
+    kleinPolygonOuterImageToSkeletonPointSpacePath)
+      (kleinPolygonTransportedOuterToSpacePiOne g) = 1
+  rw [show kleinPolygonTransportedOuterToSpacePiOne g = 1 from
+    kleinPolygonOverlapSkeletonNormalClosure_le_transportedKernel hg]
+  exact map_one _
+
 /-- Quotient assembly after the two remaining topological facts have been
 supplied: winding-one conjugacy identifies the relation subgroup, while based
 van Kampen says that subgroup is exactly the kernel and that the skeleton map

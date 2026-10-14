@@ -302,6 +302,12 @@ the exact algebraic transport into the preferred skeleton coordinates.  Its
 kernel map still targets the original polygon basepoint, so the remaining
 geometric seam is comparison with `kleinPolygonSkeletonToSpacePiOne` after
 the induced target-basepoint transport.
+`kleinPolygonOuterImageToSkeletonPointSpacePath` constructs that target path
+from the inverse deformation-unit path followed by the mapped skeleton
+connector. `kleinPolygonOverlapSkeletonNormalClosure_le_targetTransportedKernel`
+therefore gives the forward kernel inclusion for a map with exactly the
+literal skeleton map's source and target types.  Only equality of those two
+maps remains at this seam.
 `kleinBottle_pi1_every_basepoint_of_basedVanKampen` confirms this single
 topological contract and the independent winding conjugacy are now the only
 C1 inputs.
