@@ -567,6 +567,25 @@ theorem surfaceTopHomologyMap_eq_zero_of_surfaceTopDegree_eq_zero
   apply (cancel_mono e.hom).1
   simpa [surfaceTopHomologyCoordinateMap] using hcoordinate
 
+/-- Final algebraic assembly in the literal regular-fiber representation:
+the regular-value formula identifies top degree with the point signed count,
+and the component comparison makes that count vanish. -/
+theorem topHomologyMap_eq_zero_of_pointSignedCountComparison
+    {S : Type} [TopologicalSpace S] {ι κ : Type*}
+    [Fintype ι] [Fintype κ] [DecidableEq κ]
+    (e : surfaceHomology S ≅ ModuleCat.of ℤ ℤ) (f : C(S, S))
+    (component : ι → κ) (localDegree : ι → ℤ)
+    (componentDegree orientationSign : κ → ℤ)
+    (hcount : surfaceTopDegree e f =
+      ∑ i, orientationSign (component i) * localDegree i)
+    (hsum : ∀ k,
+      componentLocalDegreeSum component localDegree k = componentDegree k)
+    (hdegree : ∀ k, componentDegree k = 0) : homologyMap 2 f = 0 := by
+  apply surfaceTopHomologyMap_eq_zero_of_surfaceTopDegree_eq_zero e f
+  rw [hcount]
+  exact pointSignedCount_eq_zero_of_componentComparison
+    component localDegree componentDegree orientationSign hsum hdegree
+
 /-- Assembly of the signed-count argument after the geometric regular-value
 formula and the component degree calculation have been supplied. -/
 theorem topHomologyMap_eq_zero_of_regularValue_signedCount
@@ -652,4 +671,5 @@ end ConstructionTargets.T00J02Closure
 #print axioms ConstructionTargets.T00J02Closure.regularValue_topDegree_eq_zero_of_signedCount
 #print axioms ConstructionTargets.T00J02Closure.surfaceTopDegree_eq_homologyMap
 #print axioms ConstructionTargets.T00J02Closure.surfaceTopHomologyMap_eq_zero_of_surfaceTopDegree_eq_zero
+#print axioms ConstructionTargets.T00J02Closure.topHomologyMap_eq_zero_of_pointSignedCountComparison
 #print axioms ConstructionTargets.T00J02Closure.topHomologyMap_eq_zero_of_regularValue_signedCount
