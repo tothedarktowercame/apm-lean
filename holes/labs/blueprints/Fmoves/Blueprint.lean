@@ -2086,6 +2086,131 @@ lemma mergeRepeatedBlock_aux_boundary_relation_aux_forward_aux_not_mem
   simpa using hm
 
 /-- Forward generators for an ordinary label (both indices in the `u`, `v`, `t` blocks): push forward with `hg.on_u/on_v/on_t`. -/
+lemma mergeRepeatedBlock_aux_boundary_relation_aux_forward_aux_common_aux_classify
+    {Label : Type*} [DecidableEq Label]
+    (u v t : List (Signed Label)) (y z : Signed Label)
+    (i : Fin (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t).length)
+    (hne : ((u ++ [y, z] ++ v ++ [inv z, inv y] ++ t).get i).1 ≠ y.1 ∧
+      ((u ++ [y, z] ++ v ++ [inv z, inv y] ++ t).get i).1 ≠ z.1) :
+    (i.1 < u.length) ∨
+      (∃ k, k < v.length ∧ i.1 = u.length + 2 + k) ∨
+      (∃ k, k < t.length ∧ i.1 = u.length + 4 + v.length + k) := by
+  rcases mergeRepeatedBlock_aux_boundary_relation_aux_forward_aux_partition u v t y z i with
+    hi | hi | hi | hi | hi | hi | hi
+  · exact Or.inl hi
+  · exfalso
+    rcases hne with ⟨hne, -⟩
+    apply hne
+    rw [List.get_eq_getElem]
+    simp [hi]
+  · exfalso
+    rcases hne with ⟨-, hne⟩
+    apply hne
+    rw [List.get_eq_getElem]
+    simp [hi]
+  · exact Or.inr (Or.inl hi)
+  · exfalso
+    rcases hne with ⟨-, hne⟩
+    apply hne
+    simpa [List.get_eq_getElem, hi, inv, Nat.add_assoc,
+      show 2 + v.length = Nat.succ (Nat.succ v.length) by omega]
+  · exfalso
+    rcases hne with ⟨hne, -⟩
+    apply hne
+    simpa [List.get_eq_getElem, hi, inv, Nat.add_assoc,
+      show 3 + v.length = Nat.succ (Nat.succ (Nat.succ v.length)) by omega]
+  · exact Or.inr (Or.inr hi)
+
+def mergeRepeatedBlock_aux_boundary_relation_aux_forward_aux_common_aux_index
+    {Label : Type*} (u v t : List (Signed Label)) (y z a : Signed Label)
+    (i : Fin (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t).length) :
+    Fin (u ++ [a] ++ v ++ [inv a] ++ t).length :=
+  ⟨if i.1 < u.length then i.1
+    else if i.1 < u.length + 2 + v.length then i.1 - 1 else i.1 - 2, by
+    have hi := i.2
+    simp only [List.length_append, List.length_cons, List.length_nil] at hi ⊢
+    split_ifs <;> omega⟩
+
+lemma mergeRepeatedBlock_aux_boundary_relation_aux_forward_aux_common_aux_index_injective
+    {Label : Type*} [DecidableEq Label]
+    (u v t : List (Signed Label)) (y z a : Signed Label)
+    (i j : Fin (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t).length)
+    (hi : ((u ++ [y, z] ++ v ++ [inv z, inv y] ++ t).get i).1 ≠ y.1 ∧
+      ((u ++ [y, z] ++ v ++ [inv z, inv y] ++ t).get i).1 ≠ z.1)
+    (hj : ((u ++ [y, z] ++ v ++ [inv z, inv y] ++ t).get j).1 ≠ y.1 ∧
+      ((u ++ [y, z] ++ v ++ [inv z, inv y] ++ t).get j).1 ≠ z.1)
+    (h : mergeRepeatedBlock_aux_boundary_relation_aux_forward_aux_common_aux_index u v t y z a i =
+      mergeRepeatedBlock_aux_boundary_relation_aux_forward_aux_common_aux_index u v t y z a j) : i = j := by
+  have hv := congrArg Fin.val h
+  simp only [mergeRepeatedBlock_aux_boundary_relation_aux_forward_aux_common_aux_index,
+    Fin.val_mk] at hv
+  rcases mergeRepeatedBlock_aux_boundary_relation_aux_forward_aux_common_aux_classify
+      u v t y z i hi with hi' | ⟨ki, hki, hi'⟩ | ⟨ki, hki, hi'⟩ <;>
+    rcases mergeRepeatedBlock_aux_boundary_relation_aux_forward_aux_common_aux_classify
+      u v t y z j hj with hj' | ⟨kj, hkj, hj'⟩ | ⟨kj, hkj, hj'⟩ <;>
+    apply Fin.ext <;> split_ifs at hv <;> omega
+
+lemma mergeRepeatedBlock_aux_boundary_relation_aux_forward_aux_common_aux_edge
+    {Label : Type*} [DecidableEq Label]
+    (u v t : List (Signed Label)) (y z a : Signed Label)
+    (g : Circle ≃ₜ Circle) (hg : MergeRepeatedBlockEdgeSpec g u.length v.length t.length)
+    (i : Fin (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t).length)
+    (hne : ((u ++ [y, z] ++ v ++ [inv z, inv y] ++ t).get i).1 ≠ y.1 ∧
+      ((u ++ [y, z] ++ v ++ [inv z, inv y] ++ t).get i).1 ≠ z.1)
+    (s : Set.Icc (0 : ℝ) 1) :
+    let i' := mergeRepeatedBlock_aux_boundary_relation_aux_forward_aux_common_aux_index u v t y z a i
+    (u ++ [a] ++ v ++ [inv a] ++ t).get i' =
+        (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t).get i ∧
+      g ⟨edgePoint (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t).length i s,
+          by simpa [Circle, Submonoid.unitSphere] using
+            norm_edgePoint (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t).length i s⟩ =
+        ⟨edgePoint (u ++ [a] ++ v ++ [inv a] ++ t).length i' s,
+          by simpa [Circle, Submonoid.unitSphere] using
+            norm_edgePoint (u ++ [a] ++ v ++ [inv a] ++ t).length i' s⟩ := by
+  have hib := i.2
+  simp only [List.length_append, List.length_cons, List.length_nil] at hib
+  have hib' : i.1 < u.length + 4 + v.length + t.length := by
+    have h := i.2
+    simp only [List.length_append, List.length_cons, List.length_nil] at h
+    omega
+  have hls : (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t).length =
+      u.length + 2 + v.length + 2 + t.length := by simp; omega
+  have hlt : (u ++ [a] ++ v ++ [inv a] ++ t).length =
+      u.length + 1 + v.length + 1 + t.length := by simp; omega
+  rcases mergeRepeatedBlock_aux_boundary_relation_aux_forward_aux_common_aux_classify
+      u v t y z i hne with hi | ⟨k, hk, hi⟩ | ⟨k, hk, hi⟩
+  · constructor
+    · simp [mergeRepeatedBlock_aux_boundary_relation_aux_forward_aux_common_aux_index,
+        List.get_eq_getElem, hi]
+    · convert hg.on_u i.1 hi s using 1 <;>
+        simp only [mergeRepeatedBlock_aux_boundary_relation_aux_forward_aux_common_aux_index,
+          List.length_append, List.length_cons, List.length_nil] <;> split_ifs <;>
+          first | omega | (congr 1 <;> omega)
+  · constructor
+    · have hkv : k + 2 < 2 + v.length := by omega
+      simp [mergeRepeatedBlock_aux_boundary_relation_aux_forward_aux_common_aux_index,
+        List.get_eq_getElem, hi, hk, Nat.add_assoc,
+        show 2 + k = Nat.succ (Nat.succ k) by omega,
+        show 1 + k = Nat.succ k by omega, hkv]
+    · convert hg.on_v k hk s using 1 <;>
+        simp only [mergeRepeatedBlock_aux_boundary_relation_aux_forward_aux_common_aux_index,
+          hi, List.length_append, List.length_cons, List.length_nil] <;> split_ifs <;>
+          first | omega | (congr 3 <;> omega)
+  · constructor
+    · simp only [mergeRepeatedBlock_aux_boundary_relation_aux_forward_aux_common_aux_index,
+        List.get_eq_getElem, Fin.val_mk]
+      rw [List.getElem_append_right (as := u ++ [a] ++ v ++ [inv a]) (bs := t) (by
+          simp only [List.length_append, List.length_cons, List.length_nil] at hib ⊢; split_ifs <;> omega),
+        List.getElem_append_right (as := u ++ [y, z] ++ v ++ [inv z, inv y]) (bs := t) (by
+          simp only [List.length_append, List.length_cons, List.length_nil] at hib ⊢; omega)]
+      congr 1
+      simp only [List.length_append, List.length_cons, List.length_nil, hi]
+      split_ifs <;> omega
+    · convert hg.on_t k hk s using 1 <;>
+        simp only [mergeRepeatedBlock_aux_boundary_relation_aux_forward_aux_common_aux_index,
+          hi, List.length_append, List.length_cons, List.length_nil] <;> split_ifs <;>
+          first | omega | (congr 3 <;> omega)
+
 lemma mergeRepeatedBlock_aux_boundary_relation_aux_forward_aux_common
     {Label : Type*} [DecidableEq Label]
     (u v t : List (Signed Label)) (y z a : Signed Label)
@@ -2103,7 +2228,47 @@ lemma mergeRepeatedBlock_aux_boundary_relation_aux_forward_aux_common
       (if ((u ++ [y, z] ++ v ++ [inv z, inv y] ++ t).get i).2 = ((u ++ [y, z] ++ v ++ [inv z, inv y] ++ t).get j).2 then s else reverseParameter s)) :
     Relation.EqvGen (fun p q : Circle => WordRel (u ++ [a] ++ v ++ [inv a] ++ t) (circleToDisk p) (circleToDisk q))
       (g c₁) (g c₂) := by
-  sorry
+  have hne_j :
+      ((u ++ [y, z] ++ v ++ [inv z, inv y] ++ t).get j).1 ≠ y.1 ∧
+      ((u ++ [y, z] ++ v ++ [inv z, inv y] ++ t).get j).1 ≠ z.1 := by
+    constructor
+    · intro h
+      exact hne.1 (hlab.trans h)
+    · intro h
+      exact hne.2 (hlab.trans h)
+  let i' := mergeRepeatedBlock_aux_boundary_relation_aux_forward_aux_common_aux_index u v t y z a i
+  let j' := mergeRepeatedBlock_aux_boundary_relation_aux_forward_aux_common_aux_index u v t y z a j
+  have hi := mergeRepeatedBlock_aux_boundary_relation_aux_forward_aux_common_aux_edge
+    u v t y z a g hg i hne s
+  have hj := mergeRepeatedBlock_aux_boundary_relation_aux_forward_aux_common_aux_edge
+    u v t y z a g hg j hne_j
+      (if ((u ++ [y, z] ++ v ++ [inv z, inv y] ++ t).get i).2 =
+          ((u ++ [y, z] ++ v ++ [inv z, inv y] ++ t).get j).2 then s else reverseParameter s)
+  apply Relation.EqvGen.rel
+  refine ⟨i', j', ?_, s, ?_, ?_, ?_⟩
+  · intro h
+    apply hij
+    exact mergeRepeatedBlock_aux_boundary_relation_aux_forward_aux_common_aux_index_injective
+      u v t y z a i j hne hne_j h
+  · rw [hi.1, hj.1]
+    exact hlab
+  · have hc : c₁ = ⟨edgePoint (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t).length i s,
+        by simpa [Circle, Submonoid.unitSphere] using
+          norm_edgePoint (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t).length i s⟩ :=
+      mergeRepeatedBlock_aux_boundary_relation_aux_circleToDisk_injective h₁
+    rw [hc]
+    exact congrArg circleToDisk hi.2
+  · have hc : c₂ = ⟨edgePoint (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t).length j
+        (if ((u ++ [y, z] ++ v ++ [inv z, inv y] ++ t).get i).2 =
+          ((u ++ [y, z] ++ v ++ [inv z, inv y] ++ t).get j).2 then s else reverseParameter s),
+        by simpa [Circle, Submonoid.unitSphere] using
+          norm_edgePoint (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t).length j
+            (if ((u ++ [y, z] ++ v ++ [inv z, inv y] ++ t).get i).2 =
+              ((u ++ [y, z] ++ v ++ [inv z, inv y] ++ t).get j).2 then s else reverseParameter s)⟩ :=
+      mergeRepeatedBlock_aux_boundary_relation_aux_circleToDisk_injective h₂
+    rw [hc]
+    rw [hi.1, hj.1]
+    exact congrArg circleToDisk hj.2
 
 /-- Forward generators for the `y` / `y⁻¹` and `z` / `z⁻¹` pairs: they land on the halves of `a` / `a⁻¹` (`hg.on_y/on_z/on_inv_z/on_inv_y`). -/
 lemma mergeRepeatedBlock_aux_boundary_relation_aux_forward_aux_yz
