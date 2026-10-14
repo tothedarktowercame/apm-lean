@@ -87943,6 +87943,16 @@
       :exit 1,
       :correction
       "added finite orbit instance and fixed coproduct reassociation"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791939822672-11113-d844bf10",
+     :commands
+     ["git show cfd4e0438:PolygonSurfaceHomology.lean | lake env lean /dev/stdin"
+      "statement-registry check; comment-stripped placeholder scan"
+      "git show/diff-tree/readlink/sha256sum"],
+     :finding
+     "PASS: cfd4e0438 changes only PolygonSurfaceHomology.lean; fixture SHA256 7723329e602326b3c92176d382ae870f5430e08952984fca74840b62c852bb36. Exact blob compiles; axioms propext/Classical.choice/Quot.sound; placeholders 0; registry 166/0. New milestone gives the coproduct-to-wedge H1 presentation, finite-coproduct/function-coordinate isomorphism, and positive basis orientation through circleH1IsoInt.inv and the induced leg map. Remaining coordinate-isomorphism and higher-homology milestones are listed."},
     :commit "cfd4e0438",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
@@ -87951,7 +87961,7 @@
      "7723329e602326b3c92176d382ae870f5430e08952984fca74840b62c852bb36"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -87971,7 +87981,7 @@
     :blueprint
     "ConstructionTargets/PolygonSurfaceHomology.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked finite-wedge path connectedness and H0, transported to the outer piece.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked the normalized finite-wedge H1 coordinate presentation.",
    :id :program-2026-10-13-polygon-surface-homology,
    :kind :reusable-theorem,
    :campaign-priority 31,
@@ -87999,7 +88009,11 @@
     {:job 5,
      :commit "25d7ab26a",
      :reason
-     "Banked finite-wedge path connectedness and H0, transported to the outer piece."}]}
+     "Banked finite-wedge path connectedness and H0, transported to the outer piece."}
+    {:job 6,
+     :commit "cfd4e0438",
+     :reason
+     "Banked the normalized finite-wedge H1 coordinate presentation."}]}
   {:consumer :t97A01,
    :stop-count 0,
    :phase :implementation,
@@ -88839,7 +88853,7 @@
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "finiteWedgeH1CoordinateMap_single",
@@ -88849,17 +88863,23 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "basis l n maps to the positive circle-leg H1 class",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :program-2026-10-13-polygon-surface-homology,
+    :banked-commit "cfd4e0438"},
    :id :lemma-finitewedgeh1coordinatemap-single,
    :kind :lemma,
    :depends-on [:lemma-finitewedgeh1presentation],
    :other-consumers [:t94J09]}
   {:consumer :portfolio,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance {:lemma "finiteWedgeH1Presentation"},
-   :lemma {:name "finiteWedgeH1Presentation", :reported-by []},
+   :lemma
+   {:name "finiteWedgeH1Presentation",
+    :reported-by [],
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/PolygonSurfaceHomology.lean"]},
    :id :lemma-finitewedgeh1presentation,
    :kind :lemma,
    :depends-on [],
