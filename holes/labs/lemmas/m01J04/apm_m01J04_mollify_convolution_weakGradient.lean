@@ -2152,6 +2152,63 @@ lemma apm_m01J04_mollify_exists_L2_kernel
 integration-by-parts leaf and is independent of approximate-identity
 convergence. -/
 -- BEGIN SEAT AREA
+lemma apm_m01J04_mollify_convolution_weakGradient_aux_pointwise
+    {d : ℕ} (w : apm_m01J04_H1 d Set.univ)
+    (κ : EuclideanSpace ℝ (Fin d) → ℝ)
+    (hκsmooth : ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) κ)
+    (hκcompact : HasCompactSupport κ) (x : EuclideanSpace ℝ (Fin d))
+    (i : Fin d) :
+    MeasureTheory.convolution (fderiv ℝ κ) w.val
+        ((ContinuousLinearMap.lsmul ℝ ℝ).precompL
+          (EuclideanSpace ℝ (Fin d))) volume x (EuclideanSpace.single i 1) =
+      MeasureTheory.convolution κ w.grad
+        (ContinuousLinearMap.lsmul ℝ ℝ) volume x i := by
+  let e : EuclideanSpace ℝ (Fin d) := EuclideanSpace.single i 1
+  let φ : EuclideanSpace ℝ (Fin d) → ℝ := fun y ↦ κ (x - y)
+  have hφsmooth : ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) φ := by
+    exact hκsmooth.comp (contDiff_const.sub contDiff_id)
+  have hφcompact : HasCompactSupport φ := by
+    exact hκcompact.comp_homeomorph (Homeomorph.subLeft x)
+  have hweak := w.weakGradient φ hφsmooth hφcompact (Set.subset_univ _) i
+  have hfderiv (y : EuclideanSpace ℝ (Fin d)) :
+      fderiv ℝ φ y e = -(fderiv ℝ κ (x - y) e) := by
+    have h := (hκsmooth.differentiable (by simp)).differentiableAt.hasFDerivAt.comp y
+      ((hasFDerivAt_const x y).sub (hasFDerivAt_id y))
+    change (fderiv ℝ (κ ∘ fun z ↦ x - z) y) e = _
+    rw [show fderiv ℝ (κ ∘ fun z ↦ x - z) y =
+        (fderiv ℝ κ (x - y)).comp
+          (0 - ContinuousLinearMap.id ℝ (EuclideanSpace ℝ (Fin d))) by
+      convert h.fderiv using 1 <;> simp]
+    simp [e]
+  have hwloc : LocallyIntegrable w.val volume := by
+    simpa only [Measure.restrict_univ] using w.val_memLp.locallyIntegrable (by norm_num)
+  have hwgloc : LocallyIntegrable w.grad volume := by
+    simpa only [Measure.restrict_univ] using w.grad_memLp.locallyIntegrable (by norm_num)
+  have hleft := (hκcompact.fderiv ℝ).convolutionExists_left
+    ((ContinuousLinearMap.lsmul ℝ ℝ).precompL (EuclideanSpace ℝ (Fin d)))
+    (hκsmooth.continuous_fderiv (by simp)) hwloc x
+  have hright := hκcompact.convolutionExists_left
+    (ContinuousLinearMap.lsmul ℝ ℝ) hκsmooth.continuous hwgloc x
+  simp only [MeasureTheory.convolution]
+  rw [ContinuousLinearMap.integral_apply hleft e]
+  change _ = (PiLp.proj (𝕜 := ℝ) 2 (fun _ : Fin d ↦ ℝ) i)
+    (∫ t, (ContinuousLinearMap.lsmul ℝ ℝ) (κ t) (w.grad (x - t)))
+  rw [← ContinuousLinearMap.integral_comp_comm
+    (PiLp.proj (𝕜 := ℝ) 2 (fun _ : Fin d ↦ ℝ) i) hright]
+  simp only [ContinuousLinearMap.lsmul_apply, PiLp.proj_apply,
+    PiLp.smul_apply, smul_eq_mul]
+  change (∫ t, fderiv ℝ κ t e * w.val (x - t)) =
+    ∫ t, κ t * w.grad (x - t) i
+  rw [← integral_sub_left_eq_self
+    (fun y ↦ fderiv ℝ κ y e * w.val (x - y)) volume x]
+  rw [← integral_sub_left_eq_self
+    (fun y ↦ κ y * w.grad (x - y) i) volume x]
+  simp only [sub_sub_cancel]
+  dsimp [e] at hfderiv
+  simp_rw [hfderiv] at hweak
+  simpa [φ, e, mul_neg, integral_neg, mul_comm] using hweak
+
+set_option maxHeartbeats 800000 in
 lemma apm_m01J04_mollify_convolution_weakGradient
     {d : ℕ} (w : apm_m01J04_H1 d Set.univ)
     (κ : EuclideanSpace ℝ (Fin d) → ℝ)
@@ -2165,7 +2222,56 @@ lemma apm_m01J04_mollify_convolution_weakGradient
             fderiv ℝ ψ x (EuclideanSpace.single i 1)) =
           -(∫ x, MeasureTheory.convolution κ w.grad
               (ContinuousLinearMap.lsmul ℝ ℝ) volume x i * ψ x) := by
-  sorry
+  intro ψ hψsmooth hψcompact i
+  let e : EuclideanSpace ℝ (Fin d) := EuclideanSpace.single i 1
+  let f := MeasureTheory.convolution κ w.val
+    (ContinuousLinearMap.lsmul ℝ ℝ) volume
+  let g := MeasureTheory.convolution κ w.grad
+    (ContinuousLinearMap.lsmul ℝ ℝ) volume
+  have hwloc : LocallyIntegrable w.val volume := by
+    simpa only [Measure.restrict_univ] using w.val_memLp.locallyIntegrable (by norm_num)
+  have hwgloc : LocallyIntegrable w.grad volume := by
+    simpa only [Measure.restrict_univ] using w.grad_memLp.locallyIntegrable (by norm_num)
+  have hfsmooth : ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) f :=
+    hκcompact.contDiff_convolution_left _ hκsmooth hwloc
+  have hgsmooth : ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) g :=
+    hκcompact.contDiff_convolution_left _ hκsmooth hwgloc
+  have hfderiv (x : EuclideanSpace ℝ (Fin d)) :
+      fderiv ℝ f x e = g x i := by
+    have hd := hκcompact.hasFDerivAt_convolution_left
+      (ContinuousLinearMap.lsmul ℝ ℝ) (hκsmooth.of_le (by simp)) hwloc x
+    rw [hd.fderiv]
+    exact apm_m01J04_mollify_convolution_weakGradient_aux_pointwise
+      w κ hκsmooth hκcompact x i
+  have hψderivcompact : HasCompactSupport (fun x ↦ fderiv ℝ ψ x e) := by
+    simpa only [Function.comp_apply] using
+      (hψcompact.fderiv ℝ).comp_left (g := fun L ↦ L e) (by simp)
+  have hψderivcont : Continuous (fun x ↦ fderiv ℝ ψ x e) :=
+    (ContinuousLinearMap.apply ℝ ℝ e).continuous.comp
+      (hψsmooth.continuous_fderiv (by simp))
+  have hfderivcont : Continuous (fun x ↦ fderiv ℝ f x e) :=
+    (ContinuousLinearMap.apply ℝ ℝ e).continuous.comp
+      (hfsmooth.continuous_fderiv (by simp))
+  have hI1 : Integrable (fun x ↦ f x * fderiv ℝ ψ x e) volume := by
+    have h :=
+      (hfsmooth.continuous.locallyIntegrable (μ := volume)).integrable_smul_left_of_hasCompactSupport
+        hψderivcont hψderivcompact
+    exact h.congr (Filter.Eventually.of_forall (fun x ↦ by simp [mul_comm]))
+  have hI2 : Integrable (fun x ↦ fderiv ℝ f x e * ψ x) volume := by
+    simpa [smul_eq_mul, mul_comm] using
+      (hfderivcont.locallyIntegrable (μ := volume))
+        |>.integrable_smul_left_of_hasCompactSupport hψsmooth.continuous hψcompact
+  have hI0 : Integrable (fun x ↦ f x * ψ x) volume := by
+    simpa [smul_eq_mul, mul_comm] using
+      (hfsmooth.continuous.locallyIntegrable (μ := volume)).integrable_smul_left_of_hasCompactSupport
+        hψsmooth.continuous hψcompact
+  rw [integral_mul_fderiv_eq_neg_fderiv_mul_of_integrable hI2 hI1 hI0]
+  · apply congrArg Neg.neg
+    apply integral_congr_ae
+    filter_upwards with x
+    rw [hfderiv x]
+  · exact fun _ _ ↦ hfsmooth.differentiable (by simp) |>.differentiableAt
+  · exact fun _ _ ↦ hψsmooth.differentiable (by simp) |>.differentiableAt
 -- END SEAT AREA
 
 /-- Package two convolution fields into the encoded global `H¹` record.  All
