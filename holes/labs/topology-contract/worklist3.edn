@@ -36119,66 +36119,57 @@
   {:consumer :t93J03,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 2,
+   :stop-count 3,
    :review-finding
    "Program STOP commits no new mathematical progress since the prior milestone: KleinPolygonBasedVanKampen merely packages the already-required surjectivity and kernel hypotheses, and both consumers only reapply the previously proved three-input theorem. Prove the based van Kampen surjectivity/kernel result (or winding conjugacy) in scope; extend Mathlib: state and prove the missing theorem in scope.",
    :evidence
    {:placeholder-delta {:t93J03 [1 1]},
     :residual
-    "Assemble packaged-unit connector; compare kernels; reverse inclusion/surjectivity; winding; C1/C2/Main.",
+    "Compare packaged connector with deformation connector; reverse kernel/surjectivity; winding; C1/C2/Main.",
     :outcome :stop,
     :warnings ["unused SLSC owner-approved"],
     :missing-theorems
-    [{:name "kleinPolygonPackagedUnitPath_mk",
+    [{:name "kleinPolygonPackagedUnitConnector_mk",
       :type
-      "chosen path class equals packaged equivalence unit component",
+      "packaged connector class equals unit followed by inverse-mapped skeleton connector",
       :status :proved,
       :consumers [:t93J03],
-      :depends-on [],
+      :depends-on ["kleinPolygonPackagedUnitPath_mk"],
       :area "covering-subgroup-correspondence"}
      {:name "t93J03_polygon_based_van_kampen",
       :type "surjective skeleton map; overlap-closure kernel",
       :status :partial,
       :consumers [:t93J03],
-      :depends-on ["kleinPolygonPackagedUnitPath_mk"],
+      :depends-on ["kleinPolygonPackagedUnitConnector_mk"],
       :area "covering-subgroup-correspondence"}],
     :statement-hashes {:registry "166/166"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Represented Mathlib adjointified equivalence unit by an exact concrete path; packaged connector assembly remains.",
+    "Committed exact concrete representative of the packaged unit-plus-connector composite; comparison with the deformation connector and based van Kampen remain.",
     :commands
     [{:cmd "lake build ConstructionTargets.t93J03Closure", :exit 0}
      {:cmd "lean fixture; Main; registry; placeholder; diff; show",
       :exit 0}
-     {:cmd "rg forbidden closure", :exit 1, :expected-exit 1}],
-    :diagnostic-history
-    [{:cmd "raw-unit rfl probe",
+     {:cmd "rg forbidden closure additions",
       :exit 1,
-      :correction
-      "Equivalence.mk adjointifies unit; represented packaged component directly"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1791988977045-11908-93cae859",
-     :commands
-     ["git show/check/diff 0fc9df57; verify scope and fixture SHA-256"
-      "lake build ConstructionTargets.t93J03Closure; lake env lean fixture and Main"
-      "statement-registry check; placeholder/axiom recount"],
-     :finding
-     "PASS: 0fc9df57 is new compiled, sorry-free program progress. It chooses a genuine path representing Mathlib’s actual adjointified equivalence-unit component via quotient surjectivity and proves the exact groupoid-class equality, without conflating it with the raw deformation path. Scope and fixture hash match; support placeholders 0->0; frozen Main remains 1; only propext, Classical.choice, Quot.sound; registry 166/166. STOP lists packaged connector assembly, kernel comparison, reverse inclusion/surjectivity, winding, C1/C2/Main."},
-    :commit "0fc9df5737f275deaba79ad46c8fdbf8e7a96e5f",
+      :expected-exit 1}],
+    :diagnostic-history
+    [{:cmd "dependent rw probe",
+      :exit 1,
+      :correction "used typed connector and congrArg"}],
+    :commit "7640486c6397e450fd355dabe430dc4501444963",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
      "ConstructionTargets/t93J03Closure.blueprint.md"],
     :fixture
-    {:path "/tmp/t93j03_packaged_unit_path_check.lean",
+    {:path "/tmp/t93j03_packaged_unit_connector_check.lean",
      :sha256
-     "576516cade0461807adb797f628a293ef8f2992d7831e832ac91ef17ed395d84"},
+     "c62591623ccda04cd09201b3a00068f121af8f7c3f5a049e2ff904a395a7b546"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -38595,7 +38586,8 @@
     :lemma-equivalence-unit-mapiso-conj-preimage
     :lemma-kleinpolygonouterconnector-eq-inverseunit-comp-mappedconnector
     :lemma-kleinpolygonskeletontoouterpione-apply-eq-inverse-map
-    :lemma-kleinpolygonpackagedunitpath-mk],
+    :lemma-kleinpolygonpackagedunitpath-mk
+    :lemma-kleinpolygonpackagedunitconnector-mk],
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
@@ -38847,6 +38839,25 @@
    :id :lemma-kleinpolygonpackagedunitpath-mk,
    :kind :lemma,
    :depends-on [],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "kleinPolygonPackagedUnitConnector_mk",
+    :type
+    "packaged connector class equals unit followed by inverse-mapped skeleton connector"},
+   :lemma
+   {:name "kleinPolygonPackagedUnitConnector_mk",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type
+    "packaged connector class equals unit followed by inverse-mapped skeleton connector",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03},
+   :id :lemma-kleinpolygonpackagedunitconnector-mk,
+   :kind :lemma,
+   :depends-on [:lemma-kleinpolygonpackagedunitpath-mk],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
