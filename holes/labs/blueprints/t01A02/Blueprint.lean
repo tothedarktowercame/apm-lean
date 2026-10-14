@@ -667,7 +667,10 @@ unit disk is zero. -/
 lemma apm_t01A02_disk_H1_isZero :
     IsZero ((((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 1).obj
       (ModuleCat.of ℤ ℤ)).obj (TopCat.of apm_t01A02_Disk))) := by
-  sorry
+  letI : ContractibleSpace apm_t01A02_Disk :=
+    Metric.contractibleSpace_closedBall (by norm_num)
+  exact ConstructionTargets.CoefficientContractiblePair.higher_zero
+    ℤ apm_t01A02_Disk 1 (by norm_num)
 
 /-- Seat (circle homology): integral first singular homology of the boundary
 circle is nonzero. -/
