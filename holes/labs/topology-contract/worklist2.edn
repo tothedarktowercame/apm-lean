@@ -87946,6 +87946,18 @@
     [{:cmd "edge-class drafts",
       :exit 1,
       :correction "expanded group map through quotient map"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792021297171-12709-2f471f58",
+     :commands
+     ["git show/diff f1fa4894b; blob sha256; diff --check"
+      "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology"
+      "lake env lean /dev/stdin (#print axioms)"
+      "placeholder scan"
+      "statement-registry.py check"],
+     :finding
+     "PASS: reviewer codex-7; f1fa4894b (topo-6) newly changes only scoped PolygonSurfaceHomology.lean; fixture SHA-256 b41d7edf1eb3e8a4690005afa64a7995a77bb7da6fb934a9f39a631b738eae41 matches. Exact blob builds; 0 placeholders; standard axioms; registry 166/0. Positive packaged edges are literally winding-one loops mapped into their legs; negative edges are their path reversals. Passing to homotopy classes uses mk_symm, producing exactly the explicit leg class or its inverse before common-base transport. Orientation and representation boundaries are correct. New compiled progress; remaining finite concatenation, B7, then B8-B10."},
     :commit "f1fa4894b",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
@@ -87954,7 +87966,7 @@
      "b41d7edf1eb3e8a4690005afa64a7995a77bb7da6fb934a9f39a631b738eae41"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -87974,7 +87986,7 @@
     :blueprint
     "ConstructionTargets/PolygonSurfaceHomology.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked based signed-edge paths.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked exact signed-edge homotopy classes.",
    :id :program-2026-10-13-polygon-surface-homology,
    :kind :reusable-theorem,
    :campaign-priority 31,
@@ -88255,7 +88267,10 @@
      "Banked B7 reduction from geometric boundary-product equality."}
     {:job 6,
      :commit "b680494d4",
-     :reason "Banked based signed-edge paths."}]}
+     :reason "Banked based signed-edge paths."}
+    {:job 7,
+     :commit "f1fa4894b",
+     :reason "Banked exact signed-edge homotopy classes."}]}
   {:consumer :t97A01,
    :stop-count 0,
    :phase :implementation,
@@ -92252,7 +92267,7 @@
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "polygonBoundarySignedEdgePath_mk",
@@ -92264,7 +92279,9 @@
     :type
     "signed edge path class equals explicit leg factor or inverse",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :program-2026-10-13-polygon-surface-homology,
+    :banked-commit "f1fa4894b"},
    :id :lemma-polygonboundarysignededgepath-mk,
    :kind :lemma,
    :depends-on
