@@ -1425,3 +1425,8 @@ by the unshifted counit image must equal the chosen target connector.
 independent `somePath` choice: it transports source connectors through an
 equivalence and then composes with that equivalence's counit.  The next step
 is to install this construction in the right-piece coordinate comparison.
+`connectorSystemChangeBase` rebases such a transported system along a named
+isomorphism, and `genericPointWedgeCoherentRightConnectors` now installs the
+right-cover system at the literal base `y₀` using the already proved quotient
+representative equality.  The next step is to replace the independent right
+coordinate connectors by this system and identify the resulting comparison.

@@ -293,6 +293,30 @@ theorem connectorSystemMapEquivalence_connector_hom
       e.functor.map (S.connector (e.inverse.obj A)).hom ≫
         e.counitIso.hom.app A := rfl
 
+/-- Rebase a connector system along a specified isomorphism.  Keeping the
+isomorphism explicit lets transported connector choices be installed at the
+literal base object used by a based fundamental group. -/
+def connectorSystemChangeBase
+    {C : Type} [Groupoid C] (S : ConnectorSystem C)
+    (B : C) (b : B ≅ S.base) : ConnectorSystem C where
+  base := B
+  connector A := b ≪≫ S.connector A
+
+omit [PathConnectedSpace X] [PathConnectedSpace Y] in
+theorem connectorSystemChangeBase_connector_hom
+    {C : Type} [Groupoid C] (S : ConnectorSystem C)
+    (B : C) (b : B ≅ S.base) (A : C) :
+    ((connectorSystemChangeBase S B b).connector A).hom =
+      b.hom ≫ (S.connector A).hom := rfl
+
+/-- Pull a connector system back through an equivalence. -/
+def connectorSystemComapEquivalence
+    {C D : Type} [Groupoid C] [Groupoid D]
+    (S : ConnectorSystem D) (e : C ≌ D) : ConnectorSystem C where
+  base := e.inverse.obj S.base
+  connector A := e.inverse.mapIso (S.connector (e.functor.obj A)) ≪≫
+    (e.unitIso.app A).symm
+
 theorem genericPointWedgeConnectors_base
     {Z : Type} [TopologicalSpace Z] [PathConnectedSpace Z] (z₀ : Z) :
     (genericPointWedgeConnectors z₀).base = FundamentalGroupoid.mk z₀ := rfl
@@ -4856,6 +4880,24 @@ theorem genericPointWedgeRightEquiv_obj_rightBase :
   rw [hz]
   exact (genericPointWedgePackage
     x₀ y₀ M N hM hN hy hx cM cN).right_inclusion y₀
+
+/-- The right-piece connector system transported through the chosen cover
+equivalence and rebased at the literal point `y₀`.  Unlike an independent
+`somePath` choice, its connector square contains the equivalence counit by
+construction. -/
+def genericPointWedgeCoherentRightConnectors :
+    ConnectorSystem (FundamentalGroupoid Y) :=
+  let e := genericPointWedgeRightGroupoidEquivalence
+    x₀ y₀ M N hM hN hy hx cM cN
+  let h := genericPointWedgeRightEquiv_obj_rightBase
+    x₀ y₀ M N hM hN hy hx cM cN
+  let source := connectorSystemChangeBase
+    (connectorSystemComapEquivalence (genericPointWedgeConnectors y₀) e)
+    (genericPointWedgeRightBase x₀ y₀ N)
+    (e.unitIso.app (genericPointWedgeRightBase x₀ y₀ N) ≪≫
+      e.inverse.mapIso (eqToIso h))
+  connectorSystemChangeBase (connectorSystemMapEquivalence source e)
+    (FundamentalGroupoid.mk y₀) (eqToIso h.symm)
 
 omit [PathConnectedSpace X] [PathConnectedSpace Y] in
 /-- At the unique coordinate object, the object equality induced by the named
