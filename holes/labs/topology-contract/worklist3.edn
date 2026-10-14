@@ -36121,65 +36121,57 @@
   {:consumer :t93J03,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 4,
+   :stop-count 5,
    :review-finding
    "Program STOP commits no new mathematical progress since the prior milestone: KleinPolygonBasedVanKampen merely packages the already-required surjectivity and kernel hypotheses, and both consumers only reapply the previously proved three-input theorem. Prove the based van Kampen surjectivity/kernel result (or winding conjugacy) in scope; extend Mathlib: state and prove the missing theorem in scope.",
    :evidence
    {:placeholder-delta {:t93J03 [1 1]},
     :residual
-    "Partition subdivision side indices into maximal inner blocks; reassemble with outer factors; reverse kernel/surjectivity; winding; C1/C2/Main.",
+    "Convert blocks to dependent path families; replace inner blocks and reassemble outer word; reverse kernel/surjectivity; winding; C1/C2/Main.",
     :outcome :stop,
     :warnings ["unused SLSC owner-approved"],
     :missing-theorems
-    [{:name "kleinPolygonInnerBlock_exists_outerOverlapReplacement",
+    [{:name "boolSideRunPartition_spec",
       :type
-      "overlap-bounded nonempty inner block equals one overlap path routed through outer piece",
+      "finRange splits into nonempty constant runs with adjacent side changes",
       :status :proved,
       :consumers [:t93J03],
-      :depends-on ["path_concat_mem_of_piece_mem"],
+      :depends-on
+      ["kleinPolygonInnerBlock_exists_outerOverlapReplacement"],
       :area "covering-subgroup-correspondence"}
      {:name "t93J03_polygon_based_van_kampen",
       :type "surjectivity; kernel equality",
       :status :partial,
       :consumers [:t93J03],
-      :depends-on
-      ["kleinPolygonInnerBlock_exists_outerOverlapReplacement"],
+      :depends-on ["boolSideRunPartition_spec"],
       :area "covering-subgroup-correspondence"}],
     :statement-hashes {:registry "166/166"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Combined finite inner-factor range control with the raw-run adapter: every overlap-bounded nonempty inner block has one equal outer-routed overlap replacement; side-index partition remains.",
+    "Partitioned exact side indices into ordered maximal constant runs with flattening, nonempty blocks, constant interiors, and adjacent side changes; converting blocks to dependent path families remains.",
     :commands
     [{:cmd "lake build ConstructionTargets.t93J03Closure", :exit 0}
-     {:cmd "lean fixture; Main; registry; checks", :exit 0}
+     {:cmd "lean fixture; Main; registry; placeholder; diff/show",
+      :exit 0}
      {:cmd "rg forbidden", :exit 1, :expected-exit 1}],
     :diagnostic-history
-    [{:cmd "inner-block probe",
+    [{:cmd "initial build",
       :exit 1,
-      :correction "opened overlap namespace; rerun passed"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1792003335031-12172-e4bcf69e",
-     :commands
-     ["git show/check/diff 24e6bfc0; scope and fixture SHA-256"
-      "lake build ConstructionTargets.t93J03Closure; lean fixture and Main"
-      "statement-registry check; placeholder/axiom recount"],
-     :finding
-     "PASS: 24e6bfc0 adds compiled, sorry-free progress beyond 77c92bf3. It combines exact overlap endpoints, nonempty dependent concatenation, and factorwise inner-range control to produce one equal overlap replacement routed through the outer piece in the ambient groupoid. No boundary or van Kampen conclusion is assumed. Exact scope/hash match; support placeholders 0->0; frozen Main remains 1; standard axioms only; registry 166/166. STOP lists side-index partition, outer-factor reassembly, reverse kernel/surjectivity, winding, C1/C2/Main."},
-    :commit "24e6bfc0f31c41558794f23c04f50fc568a4110f",
+      :correction
+      "moved declaration outside preceding proof; rerun passed"}],
+    :commit "71a51ad224037e3d35a102d8600e0a5ffd1cff25",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
      "ConstructionTargets/t93J03Closure.blueprint.md"],
     :fixture
-    {:path "/tmp/t93j03_inner_block_check.lean",
+    {:path "/tmp/t93j03_side_runs_check.lean",
      :sha256
-     "f3f9da19947cc77f80093f0d715a89eecf69b2988699230e709d990791a6120c"},
+     "f878b136b4e5263066845eaafc395f61dca4a2c46f3034cf12e75cc0cde7b58f"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -38660,7 +38652,8 @@
     :lemma-pathtwoopensubdivision-quotient-eq-concat-of-piececlass-eq
     :lemma-kleinpolygoninnerrun-exists-outeroverlapreplacement
     :lemma-path-concat-mem-of-piece-mem
-    :lemma-kleinpolygoninnerblock-exists-outeroverlapreplacement],
+    :lemma-kleinpolygoninnerblock-exists-outeroverlapreplacement
+    :lemma-boolsiderunpartition-spec],
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
@@ -39211,6 +39204,26 @@
    :id :lemma-kleinpolygoninnerblock-exists-outeroverlapreplacement,
    :kind :lemma,
    :depends-on [:lemma-path-concat-mem-of-piece-mem],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "boolSideRunPartition_spec",
+    :type
+    "finRange splits into nonempty constant runs with adjacent side changes"},
+   :lemma
+   {:name "boolSideRunPartition_spec",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type
+    "finRange splits into nonempty constant runs with adjacent side changes",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03},
+   :id :lemma-boolsiderunpartition-spec,
+   :kind :lemma,
+   :depends-on
+   [:lemma-kleinpolygoninnerblock-exists-outeroverlapreplacement],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
