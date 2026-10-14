@@ -842,10 +842,35 @@ lemma disk_radial_extension (g : Circle ≃ₜ Circle) :
 
 /-- Interior points are related only to themselves: `WordRel` only pairs edge
 points, which have norm `1`. -/
+lemma wordRel_eqvGen_interior_aux_boundary {L : Type*} [DecidableEq L]
+    (w : List (Signed L)) {p q : Disk}
+    (h : Relation.EqvGen (WordRel w) p q) :
+    p = q ∨ (‖(p : ℂ)‖ = 1 ∧ ‖(q : ℂ)‖ = 1) := by
+  induction h with
+  | refl x => exact Or.inl rfl
+  | rel p q hpq =>
+      rcases hpq with ⟨i, j, hij, t, hlab, rfl, rfl⟩
+      right
+      constructor <;> simp [edgePoint, Complex.norm_exp]
+  | symm p q hpq ih =>
+      rcases ih with heq | ⟨hp, hq⟩
+      · exact Or.inl heq.symm
+      · exact Or.inr ⟨hq, hp⟩
+  | trans p q r hpq hqr ihpq ihqr =>
+      rcases ihpq with hpq | ⟨hp, hq⟩
+      · subst q
+        exact ihqr
+      · rcases ihqr with hqr | ⟨hq', hr⟩
+        · subst r
+          exact Or.inr ⟨hp, hq⟩
+        · exact Or.inr ⟨hp, hr⟩
+
 lemma wordRel_eqvGen_interior {L : Type*} [DecidableEq L]
     (w : List (Signed L)) {p q : Disk}
     (h : Relation.EqvGen (WordRel w) p q) (hp : ‖(p : ℂ)‖ < 1) : p = q := by
-  sorry
+  rcases wordRel_eqvGen_interior_aux_boundary w h with heq | ⟨hp', hq⟩
+  · exact heq
+  · exact False.elim (by linarith)
 
 lemma mergeRepeatedBlock_aux_boundary_aux_target_ne_nil {Label : Type*}
     (u v t : List (Signed Label)) (a : Signed Label) :
