@@ -87901,22 +87901,25 @@
   {:consumer :t97A01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 3,
+   :stop-count 4,
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Identify boundary class with explicit product; collapse coordinate sum; derive B7-B10.",
+    "Prove geometric subdivision equality; instantiate B7, then B8-B10.",
     :outcome :stop,
-    :warnings ["preexisting lint; unrelated edits preserved"],
+    :warnings ["preexisting lint"],
     :missing-theorems
-    [{:name "polygonBoundaryExplicitEdgeProduct_hurewicz",
-      :type "ordered signed-edge product maps to coordinate sum",
+    [{:name
+      "polygonBoundaryExplicitEdgeProduct_hurewicz_eq_attachingDegree",
+      :type "product H1 is unit-times attaching vector",
       :status :proved,
       :consumers [:t97A01 :t94J09],
-      :depends-on ["polygonBoundaryExplicitEdgeClass_hurewicz"],
+      :depends-on
+      ["polygonBoundaryExplicitEdgeProduct_hurewicz"
+       "polygonBoundaryLegWord_coordinates"],
       :area "polygon-quotient-homology"}
      {:name "finitePathSubdivision_boundary",
-      :type "boundary class equals explicit edge product",
+      :type "boundary equals explicit edge product",
       :status :partial,
       :consumers [:t97A01 :t94J09],
       :depends-on
@@ -87933,7 +87936,7 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked ordered explicit-edge product H1 evaluation.",
+    :reason "Banked explicit-product attaching-vector formula.",
     :commands
     [{:cmd
       "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology",
@@ -87941,32 +87944,20 @@
      {:cmd "statement-registry.py check", :exit 0}
      {:cmd "placeholder scan", :exit 0}
      {:cmd "axioms check", :exit 0}
-     {:cmd "git show --check 047881a1f", :exit 0}],
+     {:cmd "git show --check 87d6e3b4c", :exit 0}],
     :diagnostic-history
-    [{:cmd "product drafts",
+    [{:cmd "coordinate drafts",
       :exit 1,
-      :correction "exposed map-ofFn pointwise"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792018681090-12615-17d0e933",
-     :commands
-     ["git show/diff 047881a1f; blob sha256; diff --check"
-      "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology"
-      "lake env lean /dev/stdin (#print axioms)"
-      "placeholder scan"
-      "statement-registry.py check"],
-     :finding
-     "PASS: reviewer codex-7; 047881a1f (topo-6) newly changes only scoped PolygonSurfaceHomology.lean; fixture SHA-256 198ac314244b68899ee99eb547668cb4a5c302edcdfe978d107ed0a6fee8e747 matches. Exact blob builds; 0 placeholders; standard axioms; registry 166/0. The boundary candidate is the edge-index-ordered List.ofFn product. Hurewicz sends that product to the mapped list sum by induction, and each term rewrites to the reviewed edge-sign times orientation-unit orbit basis. Order and signs are preserved; the geometric subdivision equality remains explicitly partial. New compiled progress; remaining identify boundary class with this product, collapse coordinates, then B7-B10."},
-    :commit "047881a1f",
+      :correction "finite zsmul induction"}],
+    :commit "87d6e3b4c",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
     {:path "ConstructionTargets/PolygonSurfaceHomology.lean",
      :sha256
-     "198ac314244b68899ee99eb547668cb4a5c302edcdfe978d107ed0a6fee8e747"},
+     "0fd28b3cdd56babd3d21010ea8e3b3549336ca87078efed6c8615961a41d2d2d"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -92179,4 +92170,26 @@
    :id :lemma-polygonboundaryexplicitedgeproduct-hurewicz,
    :kind :lemma,
    :depends-on [:lemma-polygonboundaryexplicitedgeclass-hurewicz],
+   :other-consumers [:t94J09]}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "polygonBoundaryExplicitEdgeProduct_hurewicz_eq_attachingDegree",
+    :type "product H1 is unit-times attaching vector"},
+   :lemma
+   {:name
+    "polygonBoundaryExplicitEdgeProduct_hurewicz_eq_attachingDegree",
+    :reported-by [:program-2026-10-13-polygon-surface-homology],
+    :type "product H1 is unit-times attaching vector",
+    :area "polygon-quotient-homology",
+    :proved-in :program-2026-10-13-polygon-surface-homology},
+   :id
+   :lemma-polygonboundaryexplicitedgeproduct-hurewicz-eq-attachingdegree,
+   :kind :lemma,
+   :depends-on
+   [:lemma-polygonboundaryexplicitedgeproduct-hurewicz
+    :lemma-polygonboundarylegword-coordinates],
    :other-consumers [:t94J09]}]}
