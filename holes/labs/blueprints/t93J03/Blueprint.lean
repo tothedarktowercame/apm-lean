@@ -2,6 +2,7 @@ import Mathlib
 import ConstructionTargets.StatementSurfaceModels
 import ConstructionTargets.DeckGroupQuotientFundamentalGroup
 import ConstructionTargets.KleinOrbitQuotientHomeomorph
+import ConstructionTargets.KleinSquareDiskCutAndPaste
 
 /-! # Blueprint for t93J03
 
