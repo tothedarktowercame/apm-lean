@@ -87941,6 +87941,17 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "git show --check a196e83dc", :exit 0}
      {:cmd "axioms check", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792001203536-12037-187c9581",
+     :commands
+     ["git show/diff a196e83dc; sha256sum"
+      "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology"
+      "lake env lean /dev/stdin (#print axioms)"
+      "placeholder scan; statement-registry check; git show --check"],
+     :finding
+     "PASS: commit a196e83dc by topo-6 changes only scoped PolygonSurfaceHomology.lean; exact blob SHA-256 636f3f8faeb72798c5c5f5dcdd76b2665da3e00c816d4bb60f573c6d78bc7350. Exact snapshot builds; 0 placeholders; both lemmas use propext/Classical.choice/Quot.sound; registry 166/0. Proofs unfold induced maps and mapOfEq on loop representatives: old label i maps to i.castSucc and Unit maps to Fin.last, preserving the arbitrary circle-loop letter and common-base casts. Real compiled progress; remaining milestones inductively expand installed split words into labeled legs, then prove surjectivity/B6-B10."},
     :commit "a196e83dc",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
@@ -87949,7 +87960,7 @@
      "636f3f8faeb72798c5c5f5dcdd76b2665da3e00c816d4bb60f573c6d78bc7350"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -87969,7 +87980,7 @@
     :blueprint
     "ConstructionTargets/PolygonSurfaceHomology.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked uniform arbitrary-circle-loop leg words.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked successor compatibility for arbitrary labeled loop legs.",
    :id :program-2026-10-13-polygon-surface-homology,
    :kind :reusable-theorem,
    :campaign-priority 31,
@@ -88129,7 +88140,11 @@
      "Banked final-factor transport and installed split words."}
     {:job 7,
      :commit "2a559c336",
-     :reason "Banked uniform arbitrary-circle-loop leg words."}]}
+     :reason "Banked uniform arbitrary-circle-loop leg words."}
+    {:job 8,
+     :commit "a196e83dc",
+     :reason
+     "Banked successor compatibility for arbitrary labeled loop legs."}]}
   {:consumer :t97A01,
    :stop-count 0,
    :phase :implementation,
@@ -90549,7 +90564,7 @@
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "finiteWedgeFinSuccOldFundamentalGroupMap_leg",
@@ -90559,14 +90574,16 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "old inclusion sends i-loop to castSucc i-loop",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :program-2026-10-13-polygon-surface-homology,
+    :banked-commit "a196e83dc"},
    :id :lemma-finitewedgefinsuccoldfundamentalgroupmap-leg,
    :kind :lemma,
    :depends-on [:lemma-finitewedgefinlegmap-apply],
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "finiteWedgeFinSuccLastFundamentalGroupMap_leg",
@@ -90576,7 +90593,9 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "final inclusion sends Unit-loop to Fin.last-loop",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :program-2026-10-13-polygon-surface-homology,
+    :banked-commit "a196e83dc"},
    :id :lemma-finitewedgefinsucclastfundamentalgroupmap-leg,
    :kind :lemma,
    :depends-on [:lemma-finitewedgefinlegmap-apply],
