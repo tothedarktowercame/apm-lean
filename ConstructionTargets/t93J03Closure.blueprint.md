@@ -313,6 +313,15 @@ half of that equality: the literal skeleton map is exactly the composite of
 the direct skeleton-to-outer map with outer-to-polygon inclusion.  The
 remaining comparison is solely between this direct outer coordinate and the
 inverse homotopy-equivalence/basepoint transport coordinate.
+`kleinPolygonOuterImageToDirectSkeletonPointPath` now supplies the single
+outer-piece connector used by that comparison: the inverse deformation unit
+followed by the skeleton connector included into the outer piece.
+`kleinPolygonOuterImageToDirectSkeletonPointPath_map` proves its polygon
+image is exactly the already chosen target connector, and
+`kleinPolygonOuterImageFundamentalGroupEquivAtDirectSkeletonPoint` records
+the resulting outer-piece basepoint equivalence.  It remains to prove that
+transport through this equivalence identifies the inverse
+homotopy-equivalence coordinate with the direct skeleton-to-outer map.
 `kleinBottle_pi1_every_basepoint_of_basedVanKampen` confirms this single
 topological contract and the independent winding conjugacy are now the only
 C1 inputs.

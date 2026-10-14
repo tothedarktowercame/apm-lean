@@ -1306,6 +1306,20 @@ theorem kleinPolygonSkeletonToSpacePiOne_eq_outer_comp_direct :
     apply Quotient.sound
     exact ⟨Path.Homotopy.refl _⟩
 
+/-- The outer-piece connector whose two stages underlie both basepoint
+changes.  Its first stage is the inverse homotopy-equivalence unit; its
+second is the chosen connector inside the skeleton, included back into the
+outer piece. -/
+noncomputable def kleinPolygonOuterImageToDirectSkeletonPointPath :
+    Path
+      (kleinPolygonOverlapToOuter kleinPolygonOverlapPoint)
+      (kleinPolygonSkeletonToOuter kleinSkeletonPoint) := by
+  let x := kleinPolygonOverlapToOuter kleinPolygonOverlapPoint
+  let p₁ := (kleinPolygonOuterHomotopyEquivSkeleton.left_inv.some.evalAt x).symm
+  let p₂ := kleinPolygonOverlapImageToSkeletonPointPath.map
+    kleinPolygonSkeletonToOuter.continuous
+  exact p₁.trans p₂
+
 /-- The target-basepoint path matching the two stages already used on the
 domain side.  First the inverse homotopy-equivalence unit runs from the
 overlap image to its radial deformation; then the chosen skeleton connector
@@ -1315,12 +1329,27 @@ noncomputable def kleinPolygonOuterImageToSkeletonPointSpacePath :
       (kleinPolygonOuterToSpace
         (kleinPolygonOverlapToOuter kleinPolygonOverlapPoint))
       (kleinPolygonSkeletonToSpace kleinSkeletonPoint) := by
-  let x := kleinPolygonOverlapToOuter kleinPolygonOverlapPoint
-  let p₁ := ((kleinPolygonOuterHomotopyEquivSkeleton.left_inv.some.evalAt x).symm.map
-    kleinPolygonOuterToSpace.continuous)
-  let p₂ := kleinPolygonOverlapImageToSkeletonPointPath.map
-    kleinPolygonSkeletonToSpace.continuous
-  exact p₁.trans p₂
+  exact kleinPolygonOuterImageToDirectSkeletonPointPath.map
+    kleinPolygonOuterToSpace.continuous
+
+/-- The polygon target connector is exactly the image of the corresponding
+outer-piece connector.  Thus the remaining homomorphism comparison has one
+specified basepoint path rather than two independently chosen transports. -/
+theorem kleinPolygonOuterImageToDirectSkeletonPointPath_map :
+    kleinPolygonOuterImageToDirectSkeletonPointPath.map
+        kleinPolygonOuterToSpace.continuous =
+      kleinPolygonOuterImageToSkeletonPointSpacePath :=
+  rfl
+
+/-- Basepoint transport in the outer piece along the exact connector used by
+the target-side transport. -/
+noncomputable def kleinPolygonOuterImageFundamentalGroupEquivAtDirectSkeletonPoint :
+    FundamentalGroup {q // q ∈ (openCover kleinPairingData).outer}
+        (kleinPolygonOverlapToOuter kleinPolygonOverlapPoint) ≃*
+      FundamentalGroup {q // q ∈ (openCover kleinPairingData).outer}
+        (kleinPolygonSkeletonToOuter kleinSkeletonPoint) :=
+  FundamentalGroup.fundamentalGroupMulEquivOfPath
+    kleinPolygonOuterImageToDirectSkeletonPointPath
 
 /-- The transported outer-to-polygon map after applying the matching target
 basepoint change.  It now has exactly the source and target groups of the
