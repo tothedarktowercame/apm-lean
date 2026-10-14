@@ -1492,7 +1492,71 @@ lemma mergeRepeatedBlock_aux_boundary_lift_aux_local_formulas (uLen vLen tLen : 
       mergeRepeatedBlock_aux_boundary_lift_aux_local uLen vLen (uLen + 3 + vLen + s.1) = uLen + 1 + vLen + (1 + s.1) / 2) ∧
     (∀ (i : ℕ), i < tLen → ∀ s : Set.Icc (0 : ℝ) 1,
       mergeRepeatedBlock_aux_boundary_lift_aux_local uLen vLen (uLen + 4 + vLen + i + s.1) = uLen + 2 + vLen + i + s.1) := by
-  sorry
+  constructor
+  · intro i hi s
+    have hi' : (i : ℝ) < uLen := by exact_mod_cast hi
+    have hi_le : (i : ℝ) + 1 ≤ uLen := by exact_mod_cast (Nat.succ_le_iff.mpr hi)
+    have hs0 := s.2.1
+    have hs1 := s.2.2
+    unfold mergeRepeatedBlock_aux_boundary_lift_aux_local
+    rw [mergeRepeatedBlock_aux_boundary_lift_aux_clip_of_le,
+      mergeRepeatedBlock_aux_boundary_lift_aux_clip_of_le]
+    · ring
+    all_goals norm_num at * <;> linarith
+  constructor
+  · intro s
+    have hs0 := s.2.1
+    have hs1 := s.2.2
+    unfold mergeRepeatedBlock_aux_boundary_lift_aux_local
+    rw [mergeRepeatedBlock_aux_boundary_lift_aux_clip_of_mem,
+      mergeRepeatedBlock_aux_boundary_lift_aux_clip_of_le]
+    · ring
+    all_goals norm_num at * <;> linarith
+  constructor
+  · intro s
+    have hs0 := s.2.1
+    have hs1 := s.2.2
+    unfold mergeRepeatedBlock_aux_boundary_lift_aux_local
+    rw [mergeRepeatedBlock_aux_boundary_lift_aux_clip_of_mem,
+      mergeRepeatedBlock_aux_boundary_lift_aux_clip_of_le]
+    · ring
+    all_goals norm_num at * <;> linarith
+  constructor
+  · intro i hi s
+    have hi' : (i : ℝ) < vLen := by exact_mod_cast hi
+    have hi_le : (i : ℝ) + 1 ≤ vLen := by exact_mod_cast (Nat.succ_le_iff.mpr hi)
+    have hs0 := s.2.1
+    have hs1 := s.2.2
+    unfold mergeRepeatedBlock_aux_boundary_lift_aux_local
+    rw [mergeRepeatedBlock_aux_boundary_lift_aux_clip_of_ge,
+      mergeRepeatedBlock_aux_boundary_lift_aux_clip_of_le]
+    · ring
+    all_goals norm_num at * <;> linarith
+  constructor
+  · intro s
+    have hs0 := s.2.1
+    have hs1 := s.2.2
+    unfold mergeRepeatedBlock_aux_boundary_lift_aux_local
+    rw [mergeRepeatedBlock_aux_boundary_lift_aux_clip_of_ge,
+      mergeRepeatedBlock_aux_boundary_lift_aux_clip_of_mem]
+    · ring
+    all_goals norm_num at * <;> linarith
+  constructor
+  · intro s
+    have hs0 := s.2.1
+    have hs1 := s.2.2
+    unfold mergeRepeatedBlock_aux_boundary_lift_aux_local
+    rw [mergeRepeatedBlock_aux_boundary_lift_aux_clip_of_ge,
+      mergeRepeatedBlock_aux_boundary_lift_aux_clip_of_mem]
+    · ring
+    all_goals norm_num at * <;> linarith
+  · intro i hi s
+    have hs0 := s.2.1
+    unfold mergeRepeatedBlock_aux_boundary_lift_aux_local
+    rw [mergeRepeatedBlock_aux_boundary_lift_aux_clip_of_ge,
+      mergeRepeatedBlock_aux_boundary_lift_aux_clip_of_ge]
+    · ring
+    all_goals norm_num at * <;> linarith
 
 /-- Leaf: assemble the lift spec from the periodic extension of the local map
 (each formula point lies in `[0, period]`; rewrite by `F.toFun = local` there and
