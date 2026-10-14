@@ -1499,6 +1499,65 @@ theorem pathTwoOpenSubdivisionOuterRunBoundaryFamily_succ_eq_runBlockPoint_last
   unfold pathTwoOpenSubdivisionRunBoundaryPoints
   simp [pathTwoOpenSubdivisionRunFamily]
 
+/-- The source of indexed run `i` is exactly outer boundary `i`.  At the
+first run this is the initial subdivision vertex; at every later run it is
+the target of the preceding run, by the maximal-run adjacency certificate. -/
+theorem pathTwoOpenSubdivisionOuterRunBoundaryFamily_castSucc_eq_runBlockPoint_zero
+    {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
+    {U V : Set X} (S : PathTwoOpenSubdivision p U V)
+    (hx : S.point 0 ∈ V)
+    (hy : S.point (Fin.last (S.n + 1)) ∈ V)
+    (i : Fin (boolSideRunPartition S.side).length) :
+    (pathTwoOpenSubdivisionOuterRunBoundaryFamily S hx hy i.castSucc : X) =
+      pathTwoOpenSubdivisionRunBlockPoint S i 0 := by
+  rw [pathTwoOpenSubdivisionRunBlockPoint_zero]
+  rw [pathTwoOpenSubdivisionOuterRunBoundaryFamily_val]
+  by_cases hi : i.val = 0
+  · have hz : 0 < (boolSideRunPartition S.side).length :=
+      Nat.zero_lt_of_lt i.isLt
+    let z : Fin (boolSideRunPartition S.side).length := ⟨0, hz⟩
+    have hieq : i = z := Fin.ext hi
+    subst i
+    obtain ⟨hr, hfirst, _⟩ := boolSideRunPartition_end_indices S.side
+    change (pathTwoOpenSubdivisionRunBoundaryPoints S)[0] = _
+    rw [show (pathTwoOpenSubdivisionRunBoundaryPoints S)[0] = S.point 0 by
+      simp [pathTwoOpenSubdivisionRunBoundaryPoints]]
+    apply congrArg S.point
+    apply Fin.ext
+    have hget : (boolSideRunPartition S.side).get z =
+        (boolSideRunPartition S.side).head hr := by
+      rw [List.get_eq_getElem]
+      exact List.getElem_zero hz
+    have hblock : pathTwoOpenSubdivisionRunFamily S z =
+        (boolSideRunPartition S.side).head hr := hget
+    have hh : (boolSideRunPartition S.side).head hr ≠ [] :=
+      List.ne_nil_of_mem_splitBy (List.head_mem hr)
+    have hhead : (pathTwoOpenSubdivisionRunFamily S z).head
+        (pathTwoOpenSubdivisionRunFamily_ne_nil S z) =
+        ((boolSideRunPartition S.side).head hr).head hh := by
+      apply Option.some.inj
+      rw [← List.head?_eq_some_head, ← List.head?_eq_some_head]
+      exact congrArg List.head? hblock
+    rw [hhead]
+    simpa using (congrArg Fin.val hfirst).symm
+  · obtain ⟨k, hk⟩ := Nat.exists_eq_succ_of_ne_zero hi
+    have hkbound : k + 1 < (boolSideRunPartition S.side).length := by
+      simpa [hk] using i.isLt
+    have hadj := (List.isChain_iff_getElem.mp
+      (pathTwoOpenSubdivision_runPartition_boundary_spec S)) k hkbound
+    have ha : (boolSideRunPartition S.side)[k] ≠ [] := fun h =>
+      (boolSideRunPartition_spec S.side).2.1
+        (h ▸ List.getElem_mem (Nat.lt_of_succ_lt hkbound))
+    have hb : (boolSideRunPartition S.side)[k + 1] ≠ [] := fun h =>
+      (boolSideRunPartition_spec S.side).2.1
+        (h ▸ List.getElem_mem hkbound)
+    have hadj' := (hadj ha hb).1
+    change (pathTwoOpenSubdivisionRunBoundaryPoints S)[i.val] = _
+    unfold pathTwoOpenSubdivisionRunBoundaryPoints
+    simp only [hk, List.getElem_cons_succ, List.getElem_map,
+      List.getElem_attach]
+    simpa [pathTwoOpenSubdivisionRunFamily, List.get_eq_getElem, hk] using hadj'
+
 /-- Every piece indexed by an inner run of the exact Klein subdivision stays
 in the inner cover, supplying the range hypothesis for block concatenation. -/
 theorem kleinPolygonInnerSideRun_piece_mem

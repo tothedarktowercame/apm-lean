@@ -485,8 +485,10 @@ identifies each block's source vertex literally. The matching `getLast` index
 calculation and `pathTwoOpenSubdivisionRunBlockPoint_last` now identify the
 block's target vertex literally as well.
 `pathTwoOpenSubdivisionOuterRunBoundaryFamily_succ_eq_runBlockPoint_last`
-identifies that target with outer boundary `i.succ`. It remains to identify
-the source with outer boundary `i` before
+identifies that target with outer boundary `i.succ`, and
+`pathTwoOpenSubdivisionOuterRunBoundaryFamily_castSucc_eq_runBlockPoint_zero`
+identifies the source with outer boundary `i`. Thus each indexed block now
+has the exact dependent endpoints needed for
 choosing the inner-replaced or literal
 outer representative for each indexed run against the boundary family and
 instantiate the fold
