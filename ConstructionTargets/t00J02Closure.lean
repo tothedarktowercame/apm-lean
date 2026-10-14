@@ -452,6 +452,35 @@ theorem occupiedComponentSignedCount_eq_zero_of_localDegreeComparison
     (exactLiftComponentDegree lifts) orientationSign hsum
   exact exactLiftComponentDegree_eq_zero lifts
 
+/-- The precise geometric comparison still required at a finite regular
+fiber: point-local degrees are grouped by genuine preimage component before
+being compared with the degree of that component's exact boundary lift. -/
+structure RegularFiberLocalDegreeComparison
+    {S : Type} [TopologicalSpace S] {f : C(S, S)} {c : C(Circle, S)}
+    {y : S} (hy : y ∈ Set.range c) [Fintype {x : S // f x = y}]
+    (lifts : ∀ k : OccupiedRegularFiberComponent f c y hy,
+      ExactZeroDegreeComponentLift f c y hy k) where
+  localDegree : {x : S // f x = y} → ℤ
+  orientationSign : OccupiedRegularFiberComponent f c y hy → ℤ
+  component_sum_eq_lift_degree : ∀ k, componentLocalDegreeSum
+    (occupiedRegularFiberComponentIndex f c y hy) localDegree k =
+      exactLiftComponentDegree lifts k
+
+/-- Exact componentwise comparison, together with the previously constructed
+zero-degree lifts, forces the correctly grouped signed count to vanish. -/
+theorem regularFiberSignedCount_eq_zero_of_comparison
+    {S : Type} [TopologicalSpace S] {f : C(S, S)} {c : C(Circle, S)}
+    {y : S} {hy : y ∈ Set.range c} [Fintype {x : S // f x = y}]
+    (lifts : ∀ k : OccupiedRegularFiberComponent f c y hy,
+      ExactZeroDegreeComponentLift f c y hy k)
+    (comparison : RegularFiberLocalDegreeComparison hy lifts) :
+    ∑ k, comparison.orientationSign k * componentLocalDegreeSum
+      (occupiedRegularFiberComponentIndex f c y hy)
+        comparison.localDegree k = 0 :=
+  occupiedComponentSignedCount_eq_zero_of_localDegreeComparison lifts
+    comparison.localDegree comparison.orientationSign
+    comparison.component_sum_eq_lift_degree
+
 /-- Algebraic final step of the regular-value formula: once the top-degree
 coordinate is identified with the component signed count, pointwise zero
 component degrees force that coordinate to vanish. -/
@@ -583,6 +612,7 @@ end ConstructionTargets.T00J02Closure
 #print axioms ConstructionTargets.T00J02Closure.occupiedRegularFiber_exactZeroDegreeLifts
 #print axioms ConstructionTargets.T00J02Closure.exactLiftComponentDegree_eq_zero
 #print axioms ConstructionTargets.T00J02Closure.occupiedComponentSignedCount_eq_zero_of_localDegreeComparison
+#print axioms ConstructionTargets.T00J02Closure.regularFiberSignedCount_eq_zero_of_comparison
 #print axioms ConstructionTargets.T00J02Closure.regularValue_topDegree_eq_zero_of_signedCount
 #print axioms ConstructionTargets.T00J02Closure.surfaceTopDegree_eq_homologyMap
 #print axioms ConstructionTargets.T00J02Closure.surfaceTopHomologyMap_eq_zero_of_surfaceTopDegree_eq_zero
