@@ -714,13 +714,69 @@ lemma inversePairCancellation_aux_zip_map {Label : Type*} [DecidableEq Label]
 /-- Leaf (interior/mixed fibres, 45--70 lines): use
 `wordRel_eqvGen_interior`, `CancellationZipSpec.interior_maps`, and
 `interior_injective`; no boundary combinatorics occur here. -/
+lemma inversePairCancellation_aux_zip_interior_aux_boundary
+    {L : Type*} [DecidableEq L] (w : List (Signed L)) {p q : Disk}
+    (h : Relation.EqvGen (WordRel w) p q) :
+    p = q ∨ (‖(p : ℂ)‖ = 1 ∧ ‖(q : ℂ)‖ = 1) := by
+  induction h with
+  | refl x => exact Or.inl rfl
+  | rel p q hpq =>
+      rcases hpq with ⟨i, j, hij, t, hlab, rfl, rfl⟩
+      right
+      constructor <;> simp [edgePoint, Complex.norm_exp]
+  | symm p q hpq ih =>
+      rcases ih with heq | ⟨hp, hq⟩
+      · exact Or.inl heq.symm
+      · exact Or.inr ⟨hq, hp⟩
+  | trans p q r hpq hqr ihpq ihqr =>
+      rcases ihpq with hpq | ⟨hp, hq⟩
+      · subst q
+        exact ihqr
+      · rcases ihqr with hqr | ⟨hq', hr⟩
+        · subst r
+          exact Or.inr ⟨hp, hq⟩
+        · exact Or.inr ⟨hp, hr⟩
+
+lemma inversePairCancellation_aux_zip_interior_aux_eq
+    {L : Type*} [DecidableEq L] (w : List (Signed L)) {p q : Disk}
+    (h : Relation.EqvGen (WordRel w) p q) (hp : ‖(p : ℂ)‖ < 1) : p = q := by
+  rcases inversePairCancellation_aux_zip_interior_aux_boundary w h with
+    heq | ⟨hp', hq⟩
+  · exact heq
+  · exfalso
+    linarith
+
 lemma inversePairCancellation_aux_zip_interior {Label : Type*} [DecidableEq Label]
     (u v : List (Signed Label)) (x : Signed Label) (c : Disk → Disk)
     (hc : CancellationZipSpec (u ++ v).length u.length c) :
     ∀ p q : Disk, (‖(p : ℂ)‖ < 1 ∨ ‖(q : ℂ)‖ < 1) →
       (Relation.EqvGen (WordRel (u ++ [x, inv x] ++ v)) p q ↔
        Relation.EqvGen (WordRel (u ++ v)) (c p) (c q)) := by
-  sorry
+  intro p q hint
+  constructor
+  · intro h
+    rcases hint with hp | hq
+    · have heq := inversePairCancellation_aux_zip_interior_aux_eq _ h hp
+      subst q
+      exact Relation.EqvGen.refl
+        (c p)
+    · have heq := inversePairCancellation_aux_zip_interior_aux_eq _
+          (Relation.EqvGen.symm _ _ h) hq
+      subst p
+      exact Relation.EqvGen.refl _
+  · intro h
+    rcases hint with hp | hq
+    · have him : ‖(c p : ℂ)‖ < 1 := hc.interior_maps p hp
+      have heq := inversePairCancellation_aux_zip_interior_aux_eq _ h him
+      have hpq := hc.interior_injective hp heq
+      subst q
+      exact Relation.EqvGen.refl _
+    · have him : ‖(c q : ℂ)‖ < 1 := hc.interior_maps q hq
+      have heq := inversePairCancellation_aux_zip_interior_aux_eq _
+        (Relation.EqvGen.symm _ _ h) him
+      have hqp := hc.interior_injective hq heq
+      subst p
+      exact Relation.EqvGen.refl _
 
 /-- Leaf (case assembly, 30--45 lines), independent of the construction:
 split each disk point into norm `< 1` or `= 1`, then invoke the supplied
@@ -735,7 +791,18 @@ lemma inversePairCancellation_aux_zip_relation {Label : Type*} [DecidableEq Labe
        Relation.EqvGen (WordRel (u ++ v)) (c p) (c q))) :
     ∀ p q : Disk, Relation.EqvGen (WordRel (u ++ [x, inv x] ++ v)) p q ↔
       Relation.EqvGen (WordRel (u ++ v)) (c p) (c q) := by
-  sorry
+  intro p q
+  by_cases hp : ‖(p : ℂ)‖ < 1
+  · exact hinterior p q (Or.inl hp)
+  by_cases hq : ‖(q : ℂ)‖ < 1
+  · exact hinterior p q (Or.inr hq)
+  apply hboundary p q
+  · apply le_antisymm
+    · simpa [dist_zero_right] using (Metric.mem_closedBall.mp p.2)
+    · exact le_of_not_gt hp
+  · apply le_antisymm
+    · simpa [dist_zero_right] using (Metric.mem_closedBall.mp q.2)
+    · exact le_of_not_gt hq
 
 /-- The geometric content of cancellation: zip the arcs `x` and `x⁻¹` together,
 `x(t)` and `x⁻¹(1-t)` going to the same point of a segment running from the
@@ -1008,6 +1075,144 @@ lemma mergeRepeatedBlock_aux_boundary_aux_target_even {Label : Type*}
   refine ⟨k - 1, ?_⟩
   omega
 
+/-- Data for descending an increasing lift of a circle map.  The inverse and
+the two period identities are included explicitly so that the quotient
+homeomorphism construction is independent of any particular PL formula. -/
+structure EquivariantCircleLift (sourcePeriod targetPeriod : ℝ) where
+  toFun : ℝ → ℝ
+  invFun : ℝ → ℝ
+  continuous_toFun : Continuous toFun
+  continuous_invFun : Continuous invFun
+  left_inv : Function.LeftInverse invFun toFun
+  right_inv : Function.RightInverse invFun toFun
+  toFun_add_period : ∀ x, toFun (x + sourcePeriod) = toFun x + targetPeriod
+  invFun_add_period : ∀ x, invFun (x + targetPeriod) = invFun x + sourcePeriod
+
+/-- LIBRARY leaf: an equivariant homeomorphism of the universal covers
+descends to the additive circles and hence, through `AddCircle.toCircle`, to
+the unit circle. -/
+lemma equivariantCircleLift_homeomorph (sourcePeriod targetPeriod : ℝ)
+    (hs : 0 < sourcePeriod) (ht : 0 < targetPeriod)
+    (F : EquivariantCircleLift sourcePeriod targetPeriod) :
+    ∃ g : Circle ≃ₜ Circle, ∀ x : ℝ,
+      g (AddCircle.toCircle (x : AddCircle sourcePeriod)) =
+        AddCircle.toCircle (F.toFun x : AddCircle targetPeriod) := by
+  sorry
+
+/-- The explicit lift used by the merge.  Its six formulas say: unchanged
+`u`; the two old edges `y,z` become the two halves of one edge; unchanged
+`v`; the two inverse edges become the two halves of the inverse edge; and the
+tail is reindexed by two. -/
+structure MergeRepeatedBlockLiftSpec (uLen vLen tLen : ℕ)
+    extends EquivariantCircleLift
+      (uLen + 2 + vLen + 2 + tLen : ℝ)
+      (uLen + 1 + vLen + 1 + tLen : ℝ) where
+  on_u : ∀ (i : ℕ), i < uLen → ∀ s : Icc (0 : ℝ) 1,
+    toFun (i + s.1) = i + s.1
+  on_y : ∀ s : Icc (0 : ℝ) 1,
+    toFun (uLen + s.1) = uLen + s.1 / 2
+  on_z : ∀ s : Icc (0 : ℝ) 1,
+    toFun (uLen + 1 + s.1) = uLen + (1 + s.1) / 2
+  on_v : ∀ (i : ℕ), i < vLen → ∀ s : Icc (0 : ℝ) 1,
+    toFun (uLen + 2 + i + s.1) = uLen + 1 + i + s.1
+  on_inv_z : ∀ s : Icc (0 : ℝ) 1,
+    toFun (uLen + 2 + vLen + s.1) = uLen + 1 + vLen + s.1 / 2
+  on_inv_y : ∀ s : Icc (0 : ℝ) 1,
+    toFun (uLen + 3 + vLen + s.1) = uLen + 1 + vLen + (1 + s.1) / 2
+  on_t : ∀ (i : ℕ), i < tLen → ∀ s : Icc (0 : ℝ) 1,
+    toFun (uLen + 4 + vLen + i + s.1) = uLen + 2 + vLen + i + s.1
+
+/-- PL leaf: construct the increasing piecewise-affine lift with slopes
+`1, 1/2, 1/2, 1, 1/2, 1/2, 1`, extended equivariantly to all of `ℝ`. -/
+lemma mergeRepeatedBlock_aux_boundary_lift (uLen vLen tLen : ℕ) :
+    Nonempty (MergeRepeatedBlockLiftSpec uLen vLen tLen) := by
+  sorry
+
+/-- A circle map has the required merge behavior on every source edge. -/
+lemma norm_edgePoint (n e : ℕ)
+    (s : Icc (0 : ℝ) 1) : ‖(edgePoint n e s : ℂ)‖ = 1 := by
+  simp [edgePoint, Complex.norm_exp]
+
+structure MergeRepeatedBlockEdgeSpec (g : Circle ≃ₜ Circle)
+    (uLen vLen tLen : ℕ) where
+  on_u : ∀ (i : ℕ), i < uLen → ∀ s : Icc (0 : ℝ) 1,
+    g ⟨edgePoint (uLen + 2 + vLen + 2 + tLen) i s,
+      by simpa [Circle, Submonoid.unitSphere] using
+        norm_edgePoint (uLen + 2 + vLen + 2 + tLen) i s⟩ =
+      ⟨edgePoint (uLen + 1 + vLen + 1 + tLen) i s,
+        by simpa [Circle, Submonoid.unitSphere] using
+          norm_edgePoint (uLen + 1 + vLen + 1 + tLen) i s⟩
+  on_y : ∀ s : Icc (0 : ℝ) 1, ∃ r : Icc (0 : ℝ) 1,
+    r.1 = s.1 / 2 ∧
+    g ⟨edgePoint (uLen + 2 + vLen + 2 + tLen) uLen s,
+      by simpa [Circle, Submonoid.unitSphere] using
+        norm_edgePoint (uLen + 2 + vLen + 2 + tLen) uLen s⟩ =
+      ⟨edgePoint (uLen + 1 + vLen + 1 + tLen) uLen r,
+        by simpa [Circle, Submonoid.unitSphere] using
+          norm_edgePoint (uLen + 1 + vLen + 1 + tLen) uLen r⟩
+  on_z : ∀ s : Icc (0 : ℝ) 1, ∃ r : Icc (0 : ℝ) 1,
+    r.1 = (1 + s.1) / 2 ∧
+    g ⟨edgePoint (uLen + 2 + vLen + 2 + tLen) (uLen + 1) s,
+      by simpa [Circle, Submonoid.unitSphere] using
+        norm_edgePoint (uLen + 2 + vLen + 2 + tLen) (uLen + 1) s⟩ =
+      ⟨edgePoint (uLen + 1 + vLen + 1 + tLen) uLen r,
+        by simpa [Circle, Submonoid.unitSphere] using
+          norm_edgePoint (uLen + 1 + vLen + 1 + tLen) uLen r⟩
+  on_v : ∀ (i : ℕ), i < vLen → ∀ s : Icc (0 : ℝ) 1,
+    g ⟨edgePoint (uLen + 2 + vLen + 2 + tLen) (uLen + 2 + i) s,
+      by simpa [Circle, Submonoid.unitSphere] using
+        norm_edgePoint (uLen + 2 + vLen + 2 + tLen) (uLen + 2 + i) s⟩ =
+      ⟨edgePoint (uLen + 1 + vLen + 1 + tLen) (uLen + 1 + i) s,
+        by simpa [Circle, Submonoid.unitSphere] using
+          norm_edgePoint (uLen + 1 + vLen + 1 + tLen) (uLen + 1 + i) s⟩
+  on_inv_z : ∀ s : Icc (0 : ℝ) 1, ∃ r : Icc (0 : ℝ) 1,
+    r.1 = s.1 / 2 ∧
+    g ⟨edgePoint (uLen + 2 + vLen + 2 + tLen) (uLen + 2 + vLen) s,
+      by simpa [Circle, Submonoid.unitSphere] using
+        norm_edgePoint (uLen + 2 + vLen + 2 + tLen) (uLen + 2 + vLen) s⟩ =
+      ⟨edgePoint (uLen + 1 + vLen + 1 + tLen) (uLen + 1 + vLen) r,
+        by simpa [Circle, Submonoid.unitSphere] using
+          norm_edgePoint (uLen + 1 + vLen + 1 + tLen) (uLen + 1 + vLen) r⟩
+  on_inv_y : ∀ s : Icc (0 : ℝ) 1, ∃ r : Icc (0 : ℝ) 1,
+    r.1 = (1 + s.1) / 2 ∧
+    g ⟨edgePoint (uLen + 2 + vLen + 2 + tLen) (uLen + 3 + vLen) s,
+      by simpa [Circle, Submonoid.unitSphere] using
+        norm_edgePoint (uLen + 2 + vLen + 2 + tLen) (uLen + 3 + vLen) s⟩ =
+      ⟨edgePoint (uLen + 1 + vLen + 1 + tLen) (uLen + 1 + vLen) r,
+        by simpa [Circle, Submonoid.unitSphere] using
+          norm_edgePoint (uLen + 1 + vLen + 1 + tLen) (uLen + 1 + vLen) r⟩
+  on_t : ∀ (i : ℕ), i < tLen → ∀ s : Icc (0 : ℝ) 1,
+    g ⟨edgePoint (uLen + 2 + vLen + 2 + tLen) (uLen + 4 + vLen + i) s,
+      by simpa [Circle, Submonoid.unitSphere] using
+        norm_edgePoint (uLen + 2 + vLen + 2 + tLen) (uLen + 4 + vLen + i) s⟩ =
+      ⟨edgePoint (uLen + 1 + vLen + 1 + tLen) (uLen + 2 + vLen + i) s,
+        by simpa [Circle, Submonoid.unitSphere] using
+          norm_edgePoint (uLen + 1 + vLen + 1 + tLen) (uLen + 2 + vLen + i) s⟩
+
+/-- Assembly of the generic AddCircle descent and the explicit lift formulas. -/
+lemma mergeRepeatedBlock_aux_boundary_edge_homeomorph
+    (uLen vLen tLen : ℕ) :
+    ∃ g : Circle ≃ₜ Circle, MergeRepeatedBlockEdgeSpec g uLen vLen tLen := by
+  sorry
+
+/-- Combinatorial leaf: the seven edge formulas carry generators to
+generators in both directions; `EqvGen` also handles all shared vertices. -/
+lemma mergeRepeatedBlock_aux_boundary_relation
+    {Label : Type*} [DecidableEq Label]
+    (u v t : List (Signed Label)) (y z a : Signed Label)
+    (hyz : y.1 ≠ z.1)
+    (ha : a.1 ∉ (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t).map Prod.fst)
+    (hy : ((u ++ v ++ t).map Prod.fst).count y.1 = 0)
+    (hz : ((u ++ v ++ t).map Prod.fst).count z.1 = 0)
+    (hw : IsPolygonWord (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t))
+    (g : Circle ≃ₜ Circle) (hg : MergeRepeatedBlockEdgeSpec g u.length v.length t.length) :
+    ∀ c₁ c₂ : Circle,
+      Relation.EqvGen (WordRel (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t))
+          (circleToDisk c₁) (circleToDisk c₂) ↔
+        Relation.EqvGen (WordRel (u ++ [a] ++ v ++ [inv a] ++ t))
+          (circleToDisk (g c₁)) (circleToDisk (g c₂)) := by
+  sorry
+
 /-- The boundary content of the merge: a PL circle homeomorphism sending arcs
 `y, z` to the halves of `a` (and `z⁻¹, y⁻¹` to the halves of `a⁻¹`), every
 other arc linearly to its counterpart, matching the generated relations on the
@@ -1024,7 +1229,10 @@ lemma mergeRepeatedBlock_aux_boundary {Label : Type*} [DecidableEq Label]
           (circleToDisk c₁) (circleToDisk c₂) ↔
         Relation.EqvGen (WordRel (u ++ [a] ++ v ++ [inv a] ++ t))
           (circleToDisk (g c₁)) (circleToDisk (g c₂)) := by
-  sorry
+  obtain ⟨g, hg⟩ :=
+    mergeRepeatedBlock_aux_boundary_edge_homeomorph u.length v.length t.length
+  exact ⟨g, mergeRepeatedBlock_aux_boundary_relation u v t y z a
+    hyz ha hy hz hw g hg⟩
 
 /-- The geometric core: radially extend the increasing piecewise-linear
 reparametrisation which sends the two consecutive `y,z` arcs to the `a` arc
