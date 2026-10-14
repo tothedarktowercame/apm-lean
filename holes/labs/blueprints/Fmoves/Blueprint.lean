@@ -5215,7 +5215,8 @@ theorem cut_reverse_fibre {Label : Type*} [DecidableEq Label]
   sorry
 
 theorem cutPoint_norm (L m : ℕ) : ‖cutPoint L m‖ = 1 := by
-  sorry
+  unfold cutPoint
+  exact Complex.norm_exp_ofReal_mul_I (cutAlpha L m)
 
 theorem cutPoint_ne {L m m' : ℕ} (h : m < m') (h' : m' < m + L) :
     cutPoint L m ≠ cutPoint L m' := by

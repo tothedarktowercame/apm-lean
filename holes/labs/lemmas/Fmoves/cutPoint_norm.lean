@@ -4869,7 +4869,8 @@ theorem cut_reverse_fibre {Label : Type*} [DecidableEq Label]
 
 -- BEGIN SEAT AREA
 theorem cutPoint_norm (L m : ℕ) : ‖cutPoint L m‖ = 1 := by
-  sorry
+  unfold cutPoint
+  exact Complex.norm_exp_ofReal_mul_I (cutAlpha L m)
 -- END SEAT AREA
 
 theorem cutPoint_ne {L m m' : ℕ} (h : m < m') (h' : m' < m + L) :
