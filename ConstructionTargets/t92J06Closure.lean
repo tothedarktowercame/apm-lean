@@ -165,8 +165,11 @@ inductive RealizationRel : RealizationRaw V → RealizationRaw V → Prop
 
 abbrev Realization := Quotient (Relation.EqvGen.setoid D.RealizationRel)
 
+noncomputable instance realizationRawTopology : TopologicalSpace (RealizationRaw V) :=
+  letI : TopologicalSpace V := ⊥
+  inferInstance
+
 noncomputable instance realizationTopology : TopologicalSpace D.Realization :=
-  letI : TopologicalSpace V := ⊤
   TopologicalSpace.coinduced
     (fun z : RealizationRaw V => Quotient.mk (Relation.EqvGen.setoid D.RealizationRel) z)
     inferInstance
@@ -185,6 +188,86 @@ theorem edgePoint_one (i : Fin 2) (v : V) :
     D.edgePoint i v intervalOne = D.vertex (D.step i v) := by
   apply Quotient.sound
   exact Relation.EqvGen.rel _ _ (RealizationRel.target i v)
+
+/-! ## Projection to the two-loop wedge -/
+
+/-- Traverse the unit circle once while the interval parameter runs from zero
+to one. -/
+def intervalCircle : C(UnitInterval, S1) :=
+  ⟨fun t => Circle.exp (2 * Real.pi * t.1),
+    Circle.exp.continuous.comp
+      (continuous_const.mul continuous_subtype_val)⟩
+
+@[simp] theorem intervalCircle_zero : intervalCircle intervalZero = circleBase := by
+  change Circle.exp (2 * Real.pi * 0) = 1
+  simp
+
+@[simp] theorem intervalCircle_one : intervalCircle intervalOne = circleBase := by
+  change Circle.exp (2 * Real.pi * 1) = 1
+  rw [mul_one]
+  exact Circle.exp_two_pi
+
+/-- The two interval labels map to the two circle legs of the rose. -/
+def edgeProjection (i : Fin 2) : C(UnitInterval, X) :=
+  Fin.cases
+    ⟨fun t => inl (intervalCircle t),
+      continuous_leftLeg.comp intervalCircle.continuous⟩
+    (fun _ =>
+      ⟨fun t => inr (intervalCircle t),
+        continuous_rightLeg.comp intervalCircle.continuous⟩) i
+
+@[simp] theorem edgeProjection_zero (i : Fin 2) :
+    edgeProjection i intervalZero = inl circleBase := by
+  refine Fin.cases ?_ (fun j => ?_) i <;> simp [edgeProjection]
+  exact inl_base_eq_inr_base.symm
+
+@[simp] theorem edgeProjection_one (i : Fin 2) :
+    edgeProjection i intervalOne = inl circleBase := by
+  refine Fin.cases ?_ (fun j => ?_) i <;> simp [edgeProjection]
+  exact inl_base_eq_inr_base.symm
+
+/-- The map before imposing the graph endpoint identifications. -/
+def realizationRawProjection (D : TwoLoopGraphCoverData V) : RealizationRaw V → X
+  | .inl _ => inl circleBase
+  | .inr (i, _, t) => edgeProjection i t
+
+theorem realizationRawProjection_respects {a b : RealizationRaw V}
+    (h : Relation.EqvGen D.RealizationRel a b) :
+    D.realizationRawProjection a = D.realizationRawProjection b := by
+  induction h with
+  | rel _ _ hab =>
+      cases hab <;> simp [realizationRawProjection]
+  | refl => rfl
+  | symm _ _ _ ih => exact ih.symm
+  | trans _ _ _ _ _ ih₁ ih₂ => exact ih₁.trans ih₂
+
+theorem continuous_realizationRawProjection :
+    Continuous (D.realizationRawProjection : RealizationRaw V → X) := by
+  letI : TopologicalSpace V := ⊥
+  letI : DiscreteTopology V := ⟨rfl⟩
+  change Continuous (D.realizationRawProjection : RealizationRaw V → X)
+  rw [continuous_sum_dom]
+  constructor
+  · exact continuous_const
+  · rw [continuous_prod_of_discrete_left]
+    intro i
+    rw [continuous_prod_of_discrete_left]
+    intro v
+    exact (edgeProjection i).continuous
+
+/-- The continuous realization map sends each graph edge homeomorphically
+around the circle selected by its label. -/
+def projection : C(D.Realization, X) :=
+  ⟨Quotient.lift D.realizationRawProjection
+      (fun _ _ h => D.realizationRawProjection_respects h),
+    D.continuous_realizationRawProjection.quotient_lift
+      (fun _ _ h => D.realizationRawProjection_respects h)⟩
+
+@[simp] theorem projection_vertex (v : V) :
+    D.projection (D.vertex v) = inl circleBase := rfl
+
+@[simp] theorem projection_edgePoint (i : Fin 2) (v : V) (t : UnitInterval) :
+    D.projection (D.edgePoint i v t) = edgeProjection i t := rfl
 
 end TwoLoopGraphCoverData
 
