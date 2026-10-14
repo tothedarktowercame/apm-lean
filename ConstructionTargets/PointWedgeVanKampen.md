@@ -1517,3 +1517,9 @@ the remaining literal counit square is exactly the assertion that the
 right-equivalence counit has trivial normal form for the chosen `Y`
 connectors. Thus the next proof must establish this normalization (and its
 shifted counterpart), rather than appeal only to equivalence naturality.
+`genericPointWedgeCoherentRightSourceConnectors_unitInv_of_counit_normalForm`
+performs the same reduction at an arbitrary right-piece object. A trivial
+literal counit normal form now supplies the exact inverse-unit square in the
+pulled-back and rebased source system, so the theorem applies directly to the
+shifted overlap endpoint as well as the fixed representative. The two normal
+form triviality proofs remain; no counit-identity assumption is introduced.

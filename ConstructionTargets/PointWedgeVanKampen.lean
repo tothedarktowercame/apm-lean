@@ -5383,6 +5383,33 @@ theorem genericPointWedgeRightBase_counit_connectorSquare_iff_normalForm :
   exact connectorSystem_connectorSquare_iff_normalForm_eq_id
     (genericPointWedgeConnectors y₀) _
 
+/-- At any right-piece endpoint, triviality of the literal `Y` counit normal
+form supplies the inverse-unit connector square in the coherent pulled-back
+source system.  This includes the shifted overlap endpoint. -/
+theorem genericPointWedgeCoherentRightSourceConnectors_unitInv_of_counit_normalForm
+    (A : FundamentalGroupoid (genericPointWedgeRightPiece x₀ y₀ N))
+    (hnormal :
+      (genericPointWedgeConnectors y₀).normalForm
+          ((genericPointWedgeRightGroupoidEquivalence
+            x₀ y₀ M N hM hN hy hx cM cN).counitIso.hom.app
+              ((genericPointWedgeRightGroupoidEquivalence
+                x₀ y₀ M N hM hN hy hx cM cN).functor.obj A)) =
+        𝟙 (genericPointWedgeConnectors y₀).base) :
+    let e := genericPointWedgeRightGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let source := genericPointWedgeCoherentRightSourceConnectors
+      x₀ y₀ M N hM hN hy hx cM cN
+    (source.connector (e.inverse.obj (e.functor.obj A))).hom ≫
+        e.unitIso.inv.app A = (source.connector A).hom := by
+  dsimp only
+  apply connectorSystemChangeBase_connectorSquare
+  apply connectorSystemComapEquivalence_connectorSquare
+  have ht := (connectorSystem_connectorSquare_iff_normalForm_eq_id
+    (genericPointWedgeConnectors y₀) _).mpr hnormal
+  rw [(genericPointWedgeRightGroupoidEquivalence
+    x₀ y₀ M N hM hN hy hx cM cN).counit_app_functor] at ht
+  exact ht
+
 omit [PathConnectedSpace X] in
 /-- The canonical connector normal form with its inverse-unit factor rewritten
 as the equivalence counit.  The chosen source connector stays explicit. -/
@@ -8606,5 +8633,6 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeCoherentRightConnectors_rightBase_of_counit
 #print axioms connectorSystem_connectorSquare_iff_normalForm_eq_id
 #print axioms genericPointWedgeRightBase_counit_connectorSquare_iff_normalForm
+#print axioms genericPointWedgeCoherentRightSourceConnectors_unitInv_of_counit_normalForm
 
 end ConstructionTargets.PointWedgeVanKampen
