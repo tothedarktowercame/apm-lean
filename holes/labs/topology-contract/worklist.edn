@@ -119066,51 +119066,53 @@
   {:consumer :t00J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "Recorded fixture hash is malformed/mismatched: ledger has afb497a6df6187f797ce1df000700b7c24774e94f50633c1cc10b2aa0e8c82319196, but the recorded commit blueprint hashes to afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984. Repair fixture provenance. The archived closure otherwise compiles sorry-free with standard axioms; Main retains its one baseline sorry; registry 166/166.",
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
     :residual
-    "Prove chart component-sum and signed-count identities; assemble Main.",
+    "Construct chart calculations from transversality/local homology; assemble Main.",
     :outcome :stop,
-    :warnings ["Main sorryAx" "unrelated edits preserved"],
+    :warnings ["Main sorryAx"],
     :missing-theorems
-    [{:name "topHomologyMap_eq_zero_of_chartCoefficientCalculations",
-      :type
-      "chart component and signed-count calculations imply H2 zero",
+    [{:name "RegularFiberChartCalculations.topHomologyMap_eq_zero",
+      :type "bundled chart calculations imply H2 zero",
       :status :proved,
       :consumers [:t00J02],
       :depends-on
-      ["regularFiberLocalizedTopDegreeFormula_of_chartCoefficients"
-       "regularFiberLocalizedComponentFormula_of_chartCoefficients"],
+      ["topHomologyMap_eq_zero_of_chartCoefficientCalculations"],
       :area "oriented-surface-degree"}
      {:name "t00J02_transverse_diskBounded_topHomologyMap_eq_zero",
       :type "H2 map zero",
       :status :partial,
       :consumers [:t00J02],
       :depends-on
-      ["topHomologyMap_eq_zero_of_chartCoefficientCalculations"],
+      ["RegularFiberChartCalculations.topHomologyMap_eq_zero"],
       :area "oriented-surface-degree"}],
     :statement-hashes
     {:source
      "0b3b4888807bfa06c8d60d86829b75776394ea8aa45a98c933c087165521f923",
      :implementation
-     "69f7d1d7e6c0838f1378e543e9f4c889263758c7dafcbb62735074a121348a35",
+     "76bc210b8edfadfd8d12e8f4b1251421b2412a1478b1e6767752600adec8fabb",
      :blueprint
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984",
      :registry "166/166"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-2,
-    :reason "Banked chart-coefficient H2 assembly.",
+    :reason "Banked bundled chart-calculation H2 consequence.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t00J02Closure.lean",
       :exit 0}
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-     {:cmd "hash/placeholders/diff", :exit 0}],
-    :commit "226814c540abd7201eb48331e681fd2d432d273d",
+     {:cmd "sha256sum/placeholders/diff", :exit 0}],
+    :diagnostic-history
+    [{:cmd "frame package-symlink precheck",
+      :exit 1,
+      :finding "canonical checkout; frame-only rule inapplicable"}],
+    :commit "a52ccee229312c565378d09e95a5eec9bdb4a666",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t00J02Closure.blueprint.md",
@@ -119118,7 +119120,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119448,7 +119450,8 @@
     :lemma-regularfibersignedsum-eq-of-localizationcoefficients
     :lemma-regularfiberlocalizedcomponentformula-of-chartcoefficients
     :lemma-regularfiberlocalizedtopdegreeformula-of-chartcoefficients
-    :lemma-tophomologymap-eq-zero-of-chartcoefficientcalculations],
+    :lemma-tophomologymap-eq-zero-of-chartcoefficientcalculations
+    :lemma-regularfiberchartcalculations-tophomologymap-eq-zero],
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
@@ -120359,6 +120362,24 @@
    :kind :lemma,
    :depends-on
    [:lemma-surjective-continuouslinearmap-has-rightinverse],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "RegularFiberChartCalculations.topHomologyMap_eq_zero",
+    :type "bundled chart calculations imply H2 zero"},
+   :lemma
+   {:name "RegularFiberChartCalculations.topHomologyMap_eq_zero",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type "bundled chart calculations imply H2 zero",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02},
+   :id :lemma-regularfiberchartcalculations-tophomologymap-eq-zero,
+   :kind :lemma,
+   :depends-on
+   [:lemma-tophomologymap-eq-zero-of-chartcoefficientcalculations],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
