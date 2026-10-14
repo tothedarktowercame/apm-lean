@@ -312,6 +312,29 @@ lemma apm_t91J06_extend_ramp_mono_anti
 /-- The explicit three-piece affine construction when `t` reverses and `q`
 preserves orientation. -/
 -- BEGIN SEAT AREA
+def apm_t91J06_extend_ramp_anti_mono_aux_reflect
+    (x : apm_t91J06_I) : apm_t91J06_I :=
+  ⟨1 - x, by constructor <;> linarith [x.2.1, x.2.2]⟩
+
+lemma apm_t91J06_extend_ramp_anti_mono_aux_reflect_facts :
+    Continuous apm_t91J06_extend_ramp_anti_mono_aux_reflect ∧
+    StrictAnti apm_t91J06_extend_ramp_anti_mono_aux_reflect ∧
+    Function.Involutive apm_t91J06_extend_ramp_anti_mono_aux_reflect ∧
+    Set.MapsTo apm_t91J06_extend_ramp_anti_mono_aux_reflect
+      apm_t91J06_Iinterior apm_t91J06_Iinterior := by
+  refine ⟨?_, ?_, ?_, ?_⟩
+  · exact (continuous_const.sub continuous_subtype_val).subtype_mk _
+  · intro x y hxy
+    have hxy' : (x : ℝ) < (y : ℝ) := hxy
+    change (1 - (y : ℝ)) < 1 - (x : ℝ)
+    linarith
+  · intro x
+    apply Subtype.ext
+    simp [apm_t91J06_extend_ramp_anti_mono_aux_reflect]
+  · intro x hx
+    change 1 - (x : ℝ) ∈ Set.Ioo (0 : ℝ) 1
+    constructor <;> linarith [hx.1, hx.2]
+
 lemma apm_t91J06_extend_ramp_anti_mono
     (n : ℕ) (t : apm_t91J06_I → apm_t91J06_I)
     (ht : Continuous t) (htint : Set.range t ⊆ apm_t91J06_Iinterior)
@@ -324,7 +347,29 @@ lemma apm_t91J06_extend_ramp_anti_mono
       F ⟨0, by norm_num⟩ = (n + 2 : ℝ) ∧
       F ⟨1, by norm_num⟩ = -(n + 2 : ℝ) ∧
       ∀ x, F (t x) = (q x : ℝ) := by
-  sorry
+  let r := apm_t91J06_extend_ramp_anti_mono_aux_reflect
+  have hrcont : Continuous r :=
+    apm_t91J06_extend_ramp_anti_mono_aux_reflect_facts.1
+  have hranti : StrictAnti r :=
+    apm_t91J06_extend_ramp_anti_mono_aux_reflect_facts.2.1
+  have hrinv : Function.Involutive r :=
+    apm_t91J06_extend_ramp_anti_mono_aux_reflect_facts.2.2.1
+  have hrint : Set.MapsTo r apm_t91J06_Iinterior apm_t91J06_Iinterior :=
+    apm_t91J06_extend_ramp_anti_mono_aux_reflect_facts.2.2.2
+  have hrtmono : StrictMono (fun x => r (t x)) := hranti.comp htanti
+  have hrtint : Set.range (fun x => r (t x)) ⊆ apm_t91J06_Iinterior := by
+    rintro _ ⟨x, rfl⟩
+    exact hrint (htint ⟨x, rfl⟩)
+  obtain ⟨G, hGcont, hGmono, hGmem, hG0, hG1, hGext⟩ :=
+    apm_t91J06_extend_ramp_mono_mono n (fun x => r (t x))
+      (hrcont.comp ht) hrtint q hrtmono hqmono
+  refine ⟨fun x => G (r x), hGcont.comp hrcont,
+    hGmono.comp_strictAnti hranti, ?_, ?_, ?_, ?_⟩
+  · exact fun x => hGmem (r x)
+  · simpa [r, apm_t91J06_extend_ramp_anti_mono_aux_reflect] using hG1
+  · simpa [r, apm_t91J06_extend_ramp_anti_mono_aux_reflect] using hG0
+  · intro x
+    simpa only [hrinv (t x)] using hGext x
 -- END SEAT AREA
 
 /-- IVT surjectivity for a continuous increasing coordinate with prescribed
