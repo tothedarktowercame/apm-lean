@@ -87901,66 +87901,57 @@
   {:consumer :t97A01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 9,
+   :stop-count 10,
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Prove successor right-base equality; then free-group surjectivity, coordinate epi, B6-B10.",
+    "Compare right connectors; derive right-base inl, surjectivity, B6-B10.",
     :outcome :stop,
-    :warnings ["preexisting lints; unrelated edits preserved"],
+    :warnings ["preexisting lints"],
     :missing-theorems
-    [{:name "finiteWedgeFinPointedContractibleNeighborhood",
-      :type "Fin wedges have base neighborhoods",
+    [{:name "finiteWedgeFinSuccPointWedgeNeighborhoods",
+      :type "old/final-leg inputs",
       :status :proved,
-      :consumers [:t97A01 :t94J09],
-      :depends-on ["pointWedgePointedContractibleNeighborhood"],
-      :area "polygon-quotient-homology"}
-     {:name "finiteWedgePointWedge_rightBase_inl",
-      :type "right-base conjugator lies in old factor",
-      :status :not-started,
       :consumers [:t97A01 :t94J09],
       :depends-on ["finiteWedgeFinPointedContractibleNeighborhood"],
       :area "polygon-quotient-homology"}
-     {:name "finiteWedgeLegFreeGroupMap_surjective",
-      :type "canonical free-group map is onto",
-      :status :partial,
+     {:name "finiteWedgeRightConnectorSystemComparison",
+      :type "compare coherent and installed connectors",
+      :status :not-started,
       :consumers [:t97A01 :t94J09],
-      :depends-on ["finiteWedgePointWedge_rightBase_inl"],
+      :depends-on ["finiteWedgeFinSuccPointWedgeNeighborhoods"],
+      :area "polygon-quotient-homology"}
+     {:name "finiteWedgePointWedge_rightBase_inl",
+      :type "right-base lies in old factor",
+      :status :not-started,
+      :consumers [:t97A01 :t94J09],
+      :depends-on ["finiteWedgeRightConnectorSystemComparison"],
       :area "polygon-quotient-homology"}],
     :statement-hashes {:registry "166/0"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked Fin-successor base-neighborhood recursion.",
+    :reason "Banked successor van Kampen inputs.",
     :commands
     [{:cmd "lake build ConstructionTargets.PolygonSurfaceHomology",
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-     {:cmd "git show --check 5b403e34b", :exit 0}
-     {:cmd "exact commit blob | lake env lean /dev/stdin", :exit 0}
-     {:cmd
-      "#print axioms finiteWedgeFinPointedContractibleNeighborhood",
-      :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1791963994582-11709-04bd1c8b",
-     :commands
-     ["git show/diff-tree; sha256sum"
-      "exact blob | lake env lean /dev/stdin; #print axioms"
-      "placeholder scan; statement-registry.py check"
-      "inspect restricted-open homeomorphism at commit"],
-     :finding
-     "PASS: d86d0888f changes only PolygonSurfaceHomology.lean; exact blob SHA256 553f92245166d009a26681fccc333bba0c26d3a5761d44db00aac7c1486cc6f5. Exact blob compiles with propext, Classical.choice, Quot.sound; placeholders 0; registry 166/0. New progress after 52485b99d constructs pointed contractible base-neighborhood data for a point wedge from such data on both factors. The carrier is the open restricted wedge; its basepoint witness is on the left. The recorded homeomorphism maps that subtype basepoint to the small wedge left basepoint, after which homeomorphSymm transports the contraction in the correct direction. Thus openness, quotient/subtype representation, and basepoint orientation agree. Remaining milestones: recursively package finite-wedge neighborhoods and prove the successor right-base element lies in the old factor."},
-    :commit "5b403e34b",
+     {:cmd "git show --check a789ee4d2", :exit 0}
+     {:cmd "exact blob | lake env lean /dev/stdin", :exit 0}
+     {:cmd "#print axioms successor neighborhoods", :exit 0}],
+    :diagnostic-history
+    [{:cmd "coherent-square shortcut",
+      :exit 1,
+      :correction "isolated connector comparison"}],
+    :commit "a789ee4d2",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
     {:path "ConstructionTargets/PolygonSurfaceHomology.lean",
      :sha256
-     "a97bc1d63f619a8d1f80de09749e9301d9bc0f19e046e8d8b6cf9f94c2d359ec"},
+     "701e9526befe68411d5afb982ee50cd3272174a32b6d266e2e4ea14e9c5e366f"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :needs-owner,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -89720,7 +89711,8 @@
    :kind :lemma,
    :depends-on
    [:lemma-finitewedgebaseneighborhood-contraction
-    :lemma-finitewedgefinpointedcontractibleneighborhood],
+    :lemma-finitewedgefinpointedcontractibleneighborhood
+    :lemma-finitewedgerightconnectorsystemcomparison],
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
@@ -89797,4 +89789,37 @@
    :id :lemma-finitewedgefinpointedcontractibleneighborhood,
    :kind :lemma,
    :depends-on [:lemma-pointwedgepointedcontractibleneighborhood],
+   :other-consumers [:t94J09]}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "finiteWedgeFinSuccPointWedgeNeighborhoods",
+    :type "old/final-leg inputs"},
+   :lemma
+   {:name "finiteWedgeFinSuccPointWedgeNeighborhoods",
+    :reported-by [:program-2026-10-13-polygon-surface-homology],
+    :type "old/final-leg inputs",
+    :area "polygon-quotient-homology",
+    :proved-in :program-2026-10-13-polygon-surface-homology},
+   :id :lemma-finitewedgefinsuccpointwedgeneighborhoods,
+   :kind :lemma,
+   :depends-on [:lemma-finitewedgefinpointedcontractibleneighborhood],
+   :other-consumers [:t94J09]}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "finiteWedgeRightConnectorSystemComparison",
+    :type "compare coherent and installed connectors"},
+   :lemma
+   {:name "finiteWedgeRightConnectorSystemComparison",
+    :reported-by [:program-2026-10-13-polygon-surface-homology],
+    :type "compare coherent and installed connectors",
+    :area "polygon-quotient-homology"},
+   :id :lemma-finitewedgerightconnectorsystemcomparison,
+   :kind :lemma,
+   :depends-on [:lemma-finitewedgefinsuccpointwedgeneighborhoods],
    :other-consumers [:t94J09]}]}
