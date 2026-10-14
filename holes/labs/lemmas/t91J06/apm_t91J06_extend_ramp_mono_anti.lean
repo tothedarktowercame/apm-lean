@@ -308,7 +308,29 @@ lemma apm_t91J06_extend_ramp_mono_anti
       F ⟨0, by norm_num⟩ = (n + 2 : ℝ) ∧
       F ⟨1, by norm_num⟩ = -(n + 2 : ℝ) ∧
       ∀ x, F (t x) = (q x : ℝ) := by
-  sorry
+  let negI : Set.Icc (-(n + 1 : ℝ)) (n + 1 : ℝ) ≃ₜ
+      Set.Icc (-(n + 1 : ℝ)) (n + 1 : ℝ) :=
+    (Homeomorph.neg ℝ).subtype (fun x => by
+      constructor <;> intro hx <;> constructor <;> dsimp at * <;> linarith [hx.1, hx.2])
+  let q' : apm_t91J06_I ≃ₜ Set.Icc (-(n + 1 : ℝ)) (n + 1 : ℝ) :=
+    q.trans negI
+  have hq'mono : StrictMono (fun x ↦ (q' x : ℝ)) := by
+    simpa [q', negI] using hqanti.neg
+  rcases apm_t91J06_extend_ramp_mono_mono n t ht htint q' htmono hq'mono with
+    ⟨G, hGcont, hGmono, hGmem, hG0, hG1, hGcompat⟩
+  refine ⟨fun x => -G x, hGcont.neg, hGmono.neg, ?_, ?_, ?_, ?_⟩
+  · intro x
+    have hx := hGmem x
+    constructor <;> linarith [hx.1, hx.2]
+  · change -G ⟨0, by norm_num⟩ = (n + 2 : ℝ)
+    rw [hG0]
+    ring
+  · change -G ⟨1, by norm_num⟩ = -(n + 2 : ℝ)
+    rw [hG1]
+  · intro x
+    change -G (t x) = (q x : ℝ)
+    rw [hGcompat]
+    simp [q', negI]
 -- END SEAT AREA
 
 /-- The explicit three-piece affine construction when `t` reverses and `q`
