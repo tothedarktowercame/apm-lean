@@ -505,7 +505,57 @@ lemma t96J02_cut_edge_succ (t : Set.Icc (0 : ℝ) 1) :
 lemma t96J02_cut_edge_zero_iff (z : Disk) :
     (∃ t : Set.Icc (0 : ℝ) 1, z = edgePoint 4 0 t) ↔
       ‖(z : ℂ)‖ = 1 ∧ 0 ≤ (z : ℂ).re ∧ 0 ≤ (z : ℂ).im := by
-  sorry
+  constructor
+  · rintro ⟨t, rfl⟩
+    have hθ : 0 ≤ Real.pi / 2 * (t : ℝ) ∧
+        Real.pi / 2 * (t : ℝ) ≤ Real.pi / 2 := by
+      constructor
+      · exact mul_nonneg (by positivity) t.2.1
+      · exact mul_le_of_le_one_right (by positivity) t.2.2
+    have he : ((edgePoint 4 0 t : Disk) : ℂ) =
+        Complex.exp (Complex.I * ((Real.pi / 2 * (t : ℝ) : ℝ) : ℂ)) := by
+      simp only [edgePoint, Subtype.coe_mk]
+      congr 1
+      push_cast
+      ring
+    rw [he]
+    constructor
+    · simp [Complex.norm_exp]
+    constructor
+    · rw [Complex.exp_re]
+      simp only [Complex.mul_re, Complex.I_re, Complex.I_im, zero_mul, sub_zero,
+        Complex.ofReal_im, Complex.ofReal_re, mul_zero, Real.exp_zero, one_mul,
+        Complex.mul_im, zero_add, mul_one]
+      exact Real.cos_nonneg_of_mem_Icc ⟨by linarith [Real.pi_pos], hθ.2⟩
+    · rw [Complex.exp_im]
+      simp only [Complex.mul_re, Complex.I_re, Complex.I_im, zero_mul, sub_zero,
+        Complex.ofReal_im, Complex.ofReal_re, mul_zero, Real.exp_zero,
+        Complex.mul_im, zero_add, one_mul]
+      exact Real.sin_nonneg_of_mem_Icc ⟨hθ.1, by linarith [Real.pi_pos]⟩
+  · rintro ⟨hn, hre, him⟩
+    have harg0 : 0 ≤ Complex.arg (z : ℂ) := Complex.arg_nonneg_iff.mpr him
+    have harg1 : Complex.arg (z : ℂ) ≤ Real.pi / 2 :=
+      Complex.arg_le_pi_div_two_iff.mpr (Or.inl hre)
+    let t : Set.Icc (0 : ℝ) 1 :=
+      ⟨2 * Complex.arg (z : ℂ) / Real.pi, by
+        constructor
+        · positivity
+        · apply (div_le_one Real.pi_pos).mpr
+          linarith⟩
+    refine ⟨t, Subtype.ext ?_⟩
+    simp only [edgePoint, Subtype.coe_mk]
+    have hexp : Complex.exp (Complex.arg (z : ℂ) * Complex.I) = (z : ℂ) := by
+      calc
+        Complex.exp (Complex.arg (z : ℂ) * Complex.I) =
+            ‖(z : ℂ)‖ * Complex.exp (Complex.arg (z : ℂ) * Complex.I) := by
+              rw [hn]; simp
+        _ = (z : ℂ) := Complex.norm_mul_exp_arg_mul_I _
+    rw [← hexp]
+    congr 1
+    dsimp [t]
+    push_cast
+    field_simp [Real.pi_ne_zero]
+    ring
 
 lemma t96J02_cut_edge_two_iff (z : Disk) :
     (∃ t : Set.Icc (0 : ℝ) 1, z = edgePoint 4 2 t) ↔
