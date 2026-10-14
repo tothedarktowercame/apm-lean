@@ -87950,6 +87950,18 @@
     [{:cmd "group-map draft",
       :exit 1,
       :correction "used additive hom; fixed orientation"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792009358118-12338-0afc80d9",
+     :commands
+     ["git show/diff 289c2bd64; blob sha256; diff --check"
+      "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology"
+      "lake env lean /dev/stdin (#print axioms)"
+      "placeholder scan"
+      "statement-registry.py check"],
+     :finding
+     "PASS: 289c2bd64 (topo-6) changes only scoped PolygonSurfaceHomology.lean; fixture SHA-256 dc9f4927058030be17646e6ef0884362235635651cec97614335d6e7aaa35153 matches. Exact blob builds; 0 placeholders; new declarations use standard axioms; registry 166/0. attachingBoundaryGroup is n |-> n*attachingDegree. Additive maps from Z are determined by 1, so the iff correctly reduces full B7 equality to the signed positive-generator image without changing coordinates. New compiled progress; remaining: compute radial boundary at 1, finish B7, then B8-B10."},
     :commit "289c2bd64",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
@@ -87958,7 +87970,7 @@
      "dc9f4927058030be17646e6ef0884362235635651cec97614335d6e7aaa35153"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -87978,7 +87990,7 @@
     :blueprint
     "ConstructionTargets/PolygonSurfaceHomology.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked B6 exact segment.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Reduced B7 to its generator image.",
    :id :program-2026-10-13-polygon-surface-homology,
    :kind :reusable-theorem,
    :campaign-priority 31,
@@ -88181,7 +88193,10 @@
     {:job 1,
      :commit "7b09f5ac4",
      :reason "Banked reduced B6 middle exactness."}
-    {:job 2, :commit "4e4ae3741", :reason "Banked B6 exact segment."}]}
+    {:job 2, :commit "4e4ae3741", :reason "Banked B6 exact segment."}
+    {:job 3,
+     :commit "289c2bd64",
+     :reason "Reduced B7 to its generator image."}]}
   {:consumer :t97A01,
    :stop-count 0,
    :phase :implementation,
@@ -91274,7 +91289,7 @@
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "addCommGrpHom_int_ext",
@@ -91284,14 +91299,16 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "Z-maps agree when equal on 1",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :program-2026-10-13-polygon-surface-homology,
+    :banked-commit "289c2bd64"},
    :id :lemma-addcommgrphom-int-ext,
    :kind :lemma,
    :depends-on [],
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "radialMV_boundary_eq_iff_one",
@@ -91301,7 +91318,9 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "B7 iff generator equality",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :program-2026-10-13-polygon-surface-homology,
+    :banked-commit "289c2bd64"},
    :id :lemma-radialmv-boundary-eq-iff-one,
    :kind :lemma,
    :depends-on [:lemma-radialmvsegment],
