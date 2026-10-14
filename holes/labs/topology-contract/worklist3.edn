@@ -36117,68 +36117,59 @@
   {:consumer :t93J03,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 7,
+   :stop-count 8,
    :review-finding
    "Program STOP commits nothing new since the prior reviewed attempt: it reuses commit 512a220f, and git history shows no later scoped commit. The unresolved SemilocallySimplyConnected hypothesis-coverage conflict is unchanged. Obtain the required owner specification decision or commit a new compiled milestone before resubmitting.",
    :evidence
    {:placeholder-delta {:t93J03 [1 1]},
     :residual
-    "Identify overlap kernel with pulled-back aabb; extract based quotient; apply C1/C2/Main.",
+    "Prove winding-one conjugacy; identify polygon-map kernel by based van Kampen; compose quotient; apply C1/C2/Main.",
     :outcome :stop,
     :warnings ["unused SLSC owner-approved"],
     :missing-theorems
-    [{:name "kleinSkeletonAabbQuotientEquiv",
+    [{:name "kleinPolygonOverlapToSkeletonPiOne_normalClosure_eq_aabb",
       :type
-      "skeleton pi1 / pulled-back normalClosure(aabb) equiv PresentedGroup(aabb)",
+      "winding conjugacy implies overlap normal closure equals pulled-back aabb",
       :status :proved,
       :consumers [:t93J03],
-      :depends-on ["kleinSkeletonAabbPresentationQuotient"],
+      :depends-on
+      ["kleinPolygonStandardModelConnector"
+       "kleinSkeletonAabbQuotientEquiv"],
       :area "covering-subgroup-correspondence"}
      {:name "t93J03_polygon_van_kampen",
       :type "polygon pi1 = PresentedGroup(aabb)",
       :status :partial,
       :consumers [:t93J03],
       :depends-on
-      ["kleinSkeletonAabbQuotientEquiv"
-       "kleinPolygonStandardModelConnector"],
+      ["kleinPolygonOverlapToSkeletonPiOne_normalClosure_eq_aabb"],
       :area "covering-subgroup-correspondence"}],
     :statement-hashes {:registry "166/166"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Committed skeleton aabb quotient equivalence; topological kernel identification remains.",
+    "Committed actual overlap-image normal closure in skeleton coordinates; geometric conjugacy and van Kampen kernel remain.",
     :commands
     [{:cmd "lake build ConstructionTargets.t93J03Closure", :exit 0}
      {:cmd "lean fixture; Main", :exit 0}
      {:cmd "registry; placeholder; diff; show --check", :exit 0}
      {:cmd "rg forbidden closure", :exit 1, :expected-exit 1}],
     :diagnostic-history
-    [{:cmd "lean fixture",
+    [{:cmd "lean closure",
       :exit 1,
-      :correction "fixed namespace case; rerun passed"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1791959163693-11663-ea08d8b0",
-     :commands
-     ["git show/diff/show --check e40aea65"
-      "sha256sum fixture; scope; placeholders"
-      "lake env lean recorded closure, fixture, Main"
-      "statement-registry.py check"],
-     :finding
-     "PASS: new compiled sorry-free standard-axiom milestone. The quotient equivalence correctly rewrites the pulled-back normalClosure(aabb) as the presentation-map kernel and applies the surjective quotient equivalence, landing in the frozen presented group. It does not assume the remaining topological kernel identification. Scope/hash verified; frozen placeholders 1->1 (support 0); registry 166/166; SLSC unused, mandated by problem.md."},
-    :commit "e40aea65bdeaf4a7c03b693c382fade2502196de",
+      :correction
+      "fixed theorem placement and subgroup-image witnesses; rerun passed"}],
+    :commit "cb58e058246984b895a459e89324c923288a9b51",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
      "ConstructionTargets/t93J03Closure.blueprint.md"],
     :fixture
-    {:path "/tmp/t93j03_skeleton_quotient_check.lean",
+    {:path "/tmp/t93j03_overlap_skeleton_normal_closure_check.lean",
      :sha256
-     "9c3edafa512a73f23df4cd8025d1150ddbf2f37e98c43ed99de8bfe66d99aaa5"},
+     "7d76ee8a6af92bdb4042b0f9a6d9d979999f2f0516f19c3a612a9753203162ea"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -37699,7 +37690,8 @@
     :lemma-fundamentalgroup-pathtransport-isconj
     :lemma-kleinpolygonoverlapwindingone-isconj-aabb-of-path-eq
     :lemma-kleinpolygonstandardmodelconnector
-    :lemma-kleinskeletonaabbquotientequiv],
+    :lemma-kleinskeletonaabbquotientequiv
+    :lemma-kleinpolygonoverlaptoskeletonpione-normalclosure-eq-aabb],
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
@@ -38388,6 +38380,27 @@
    :id :lemma-kleinskeletonaabbquotientequiv,
    :kind :lemma,
    :depends-on [:lemma-kleinskeletonaabbpresentationquotient],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "kleinPolygonOverlapToSkeletonPiOne_normalClosure_eq_aabb",
+    :type
+    "winding conjugacy implies overlap normal closure equals pulled-back aabb"},
+   :lemma
+   {:name "kleinPolygonOverlapToSkeletonPiOne_normalClosure_eq_aabb",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type
+    "winding conjugacy implies overlap normal closure equals pulled-back aabb",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03},
+   :id :lemma-kleinpolygonoverlaptoskeletonpione-normalclosure-eq-aabb,
+   :kind :lemma,
+   :depends-on
+   [:lemma-kleinpolygonstandardmodelconnector
+    :lemma-kleinskeletonaabbquotientequiv],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
