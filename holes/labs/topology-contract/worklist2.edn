@@ -87901,40 +87901,37 @@
   {:consumer :t97A01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 5,
+   :stop-count 6,
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Prove unsigned overlap-generator inclusion is the negative attaching class; then B8-B10.",
+    "Identify overlap inclusion with the ordered loop and compute its Hurewicz sum; then B8-B10.",
     :outcome :stop,
     :warnings ["lint"],
     :missing-theorems
-    [{:name "radialIntersectionArrow_snd",
-      :type "MV outer projection is negative inclusion",
+    [{:name "polygonBoundaryWedgeLoop_edgePoint",
+      :type "ordered boundary restricts to each signed wedge arc",
       :status :proved,
       :consumers [:t97A01 :t94J09],
       :depends-on [],
       :area "polygon-quotient-homology"}
-     {:name
-      "radialIntersectionToOuterH1_generator_eq_neg_attachingOuterClass",
-      :type "boundary-loop naturality",
+     {:name "radialIntersectionToOuterH1_generator_eq_boundaryLoop",
+      :type "overlap inclusion generator is boundary-loop H1 class",
       :status :not-started,
       :consumers [:t97A01 :t94J09],
-      :depends-on ["radialIntersectionArrow_snd"],
+      :depends-on ["polygonBoundaryWedgeLoop_edgePoint"],
       :area "polygon-quotient-homology"}
-     {:name "radialMV_boundary_eq",
-      :type "B7 boundary equality",
-      :status :partial,
+     {:name "polygonBoundaryWedgeLoop_hurewicz",
+      :type "boundary-loop H1 coordinates equal attachingDegree",
+      :status :not-started,
       :consumers [:t97A01 :t94J09],
-      :depends-on
-      ["radialIntersectionToOuterH1_generator_eq_neg_attachingOuterClass"],
+      :depends-on ["polygonBoundaryWedgeLoop_edgePoint"],
       :area "polygon-quotient-homology"}],
     :statement-hashes {:registry "166/0"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason
-    "Banked MV outer-projection sign and raw-equality reduction.",
+    :reason "Banked the ordered signed polygon boundary loop.",
     :commands
     [{:cmd
       "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology",
@@ -87942,32 +87939,20 @@
      {:cmd "statement-registry.py check", :exit 0}
      {:cmd "placeholder scan", :exit 0}
      {:cmd "axioms check", :exit 0}
-     {:cmd "git show --check 9331c2324", :exit 0}],
+     {:cmd "git show --check bda198ead", :exit 0}],
     :diagnostic-history
-    [{:cmd "alias draft",
+    [{:cmd "boundary-loop drafts",
       :exit 1,
-      :correction "used categorical equality"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792010247355-12366-368829df",
-     :commands
-     ["git show/diff 9331c2324; blob sha256; diff --check"
-      "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology"
-      "lake env lean /dev/stdin (#print axioms)"
-      "placeholder scan"
-      "statement-registry.py check"],
-     :finding
-     "PASS: 9331c2324 (topo-6) changes only scoped PolygonSurfaceHomology.lean; fixture SHA-256 2ce6a0b5d7337b3268b05c1715affe0ffbfdcd0041e942951459f1220aebfcc8 matches. Exact blob builds; 0 placeholders; new milestones use standard axioms; registry 166/0. Production MV intersection arrow has outer component -inclusion; snd projection and generator evaluation preserve that sign. Thus the signed boundary goal is faithfully reduced to unsigned inclusion(generator) = -attachingOuterClass. New compiled progress; remaining: prove that raw equality, finish B7, then B8-B10."},
-    :commit "9331c2324",
+      :correction "fixed types and coercions"}],
+    :commit "bda198ead",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
     {:path "ConstructionTargets/PolygonSurfaceHomology.lean",
      :sha256
-     "2ce6a0b5d7337b3268b05c1715affe0ffbfdcd0041e942951459f1220aebfcc8"},
+     "35551ff125402cc32e9e821c394b26d6e4063d870ebec3583c29bb16a028a081"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -91439,4 +91424,53 @@
    :lemma-radialintersectiontoouterh1-generator-eq-neg-attachingouterclass,
    :kind :lemma,
    :depends-on [:lemma-radialintersectionarrow-snd],
+   :other-consumers [:t94J09]}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "polygonBoundaryWedgeLoop_edgePoint",
+    :type "ordered boundary restricts to each signed wedge arc"},
+   :lemma
+   {:name "polygonBoundaryWedgeLoop_edgePoint",
+    :reported-by [:program-2026-10-13-polygon-surface-homology],
+    :type "ordered boundary restricts to each signed wedge arc",
+    :area "polygon-quotient-homology",
+    :proved-in :program-2026-10-13-polygon-surface-homology},
+   :id :lemma-polygonboundarywedgeloop-edgepoint,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t94J09]}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "radialIntersectionToOuterH1_generator_eq_boundaryLoop",
+    :type "overlap inclusion generator is boundary-loop H1 class"},
+   :lemma
+   {:name "radialIntersectionToOuterH1_generator_eq_boundaryLoop",
+    :reported-by [:program-2026-10-13-polygon-surface-homology],
+    :type "overlap inclusion generator is boundary-loop H1 class",
+    :area "polygon-quotient-homology"},
+   :id :lemma-radialintersectiontoouterh1-generator-eq-boundaryloop,
+   :kind :lemma,
+   :depends-on [:lemma-polygonboundarywedgeloop-edgepoint],
+   :other-consumers [:t94J09]}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "polygonBoundaryWedgeLoop_hurewicz",
+    :type "boundary-loop H1 coordinates equal attachingDegree"},
+   :lemma
+   {:name "polygonBoundaryWedgeLoop_hurewicz",
+    :reported-by [:program-2026-10-13-polygon-surface-homology],
+    :type "boundary-loop H1 coordinates equal attachingDegree",
+    :area "polygon-quotient-homology"},
+   :id :lemma-polygonboundarywedgeloop-hurewicz,
+   :kind :lemma,
+   :depends-on [:lemma-polygonboundarywedgeloop-edgepoint],
    :other-consumers [:t94J09]}]}
