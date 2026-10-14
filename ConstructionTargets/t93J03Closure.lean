@@ -843,6 +843,33 @@ theorem kleinPolygonOuterFundamentalGroupoidEquivalence_obj_skeleton
     (skeletonToOuter kleinPairingData z)) = FundamentalGroupoid.mk z
   rw [kleinPolygonOuterHomotopyEquivSkeleton_on_skeleton]
 
+/-- Restriction of the outer groupoid equivalence to the automorphism group
+at any literal outer-piece basepoint. -/
+noncomputable def kleinPolygonOuterFundamentalGroupEquivSkeleton
+    (x : OuterPiece kleinPairingData) :
+    FundamentalGroup (OuterPiece kleinPairingData) x ≃*
+      FundamentalGroup kleinPairingData.skeleton
+        (kleinPolygonOuterHomotopyEquivSkeleton x) := by
+  let e := kleinPolygonOuterFundamentalGroupoidEquivalence
+  let h := e.fullyFaithfulFunctor
+  let m := FundamentalGroup.map
+    kleinPolygonOuterHomotopyEquivSkeleton.toFun x
+  exact
+    { toFun := m
+      invFun := fun g ↦ h.preimage g
+      left_inv := fun g ↦ h.preimage_map g
+      right_inv := fun g ↦ h.map_preimage g
+      map_mul' := m.map_mul }
+
+/-- The based restriction at the actual image of the chosen overlap point. -/
+noncomputable def kleinPolygonOverlapImageFundamentalGroupEquivSkeleton :
+    FundamentalGroup {q // q ∈ (openCover kleinPairingData).outer}
+        (kleinPolygonOverlapToOuter kleinPolygonOverlapPoint) ≃*
+      FundamentalGroup kleinPairingData.skeleton
+        (kleinPolygonOuterHomotopyEquivSkeleton
+          (kleinPolygonOverlapToOuter kleinPolygonOverlapPoint)) :=
+  kleinPolygonOuterFundamentalGroupEquivSkeleton _
+
 def finiteWedgeBoolPoint : FiniteWedge Bool := wedgeCircle false 1
 
 @[simp] theorem finiteWedgeBoolHomeomorphTwoCircles_point :
@@ -983,6 +1010,7 @@ theorem lift_isEmbedding_assembly
 #print axioms kleinPolygonOverlapFundamentalGroupEquivInt
 #print axioms kleinPolygonOuterHomotopyEquivSkeleton_on_skeleton
 #print axioms kleinPolygonOuterFundamentalGroupoidEquivalence_obj_skeleton
+#print axioms kleinPolygonOverlapImageFundamentalGroupEquivSkeleton
 #print axioms kleinBottle_pi1_every_basepoint_of_polygon_van_kampen
 
 end ConstructionTargets.t93J03Closure

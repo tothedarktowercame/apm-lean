@@ -82,6 +82,8 @@ to the actual polygon skeleton, proved to restrict to the identity on skeleton
 points.  The remaining comparison transports the winding generator through it.
 The induced fundamental-groupoid equivalence is now compiled as well, with its
 object action on embedded skeleton points reduced to literal equality.
+Restricting it to automorphism groups is now compiled at every outer basepoint,
+and specialized to the chosen overlap point's image.
 
 For every `k : KleinBottle`, construct an equivalence between
 `FundamentalGroup k` and the frozen `PresentedKleinGroup`.
