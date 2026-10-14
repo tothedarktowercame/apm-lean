@@ -53,6 +53,13 @@ with `sphereProjection 3` is the original nonzero-vector quotient map, and
 before constructing the two-sheeted covering transfer.  The companion theorem
 `rp3SphereProjection_eq_iff` computes every fiber as exactly a point and its
 antipode.
+The local half of the covering construction is also compiled:
+`rp3SphereProjection_isOpenMap` follows from the quotient authority and the
+antipodal saturation formula, while positive hemispheres give injective open
+restrictions around every sphere point.  Hence
+`rp3SphereProjection_isLocalHomeomorph`.  The remaining covering milestone
+must assemble the two antipodal local branches over one common target
+neighborhood.
 
 ## C3. Degree four of the quadratic map — library
 

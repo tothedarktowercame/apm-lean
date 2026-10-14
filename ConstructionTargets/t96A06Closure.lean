@@ -153,6 +153,82 @@ theorem rp3SphereProjection_eq_iff (p q : Sphere 3) :
       ext i
       simp [sphereAntipodalN]
 
+theorem rp3SphereAntipodal_continuous :
+    Continuous (sphereAntipodalN 3) := by
+  apply Continuous.subtype_mk
+  fun_prop
+
+theorem rp3SphereProjection_preimage_image (U : Set (Sphere 3)) :
+    sphereProjection 3 ⁻¹' (sphereProjection 3 '' U) =
+      U ∪ sphereAntipodalN 3 ⁻¹' U := by
+  ext q
+  constructor
+  · rintro ⟨p, hp, hpq⟩
+    rcases (rp3SphereProjection_eq_iff p q).mp hpq with h | h
+    · exact Or.inl (h.symm ▸ hp)
+    · right
+      change sphereAntipodalN 3 q ∈ U
+      subst q
+      simpa [sphereAntipodalN] using hp
+  · rintro (hq | hq)
+    · exact ⟨q, hq, rfl⟩
+    · exact ⟨sphereAntipodalN 3 q, hq,
+        (rp3SphereProjection_eq_iff (sphereAntipodalN 3 q) q).mpr (by
+          right
+          apply Subtype.ext
+          simp [sphereAntipodalN])⟩
+
+theorem rp3SphereProjection_isOpenMap : IsOpenMap (sphereProjection 3) := by
+  intro U hU
+  apply (rp3SphereProjection_isQuotientMap.isOpen_preimage).mp
+  rw [rp3SphereProjection_preimage_image]
+  exact hU.union (rp3SphereAntipodal_continuous.isOpen_preimage _ hU)
+
+def rp3PositiveHemisphere (p : Sphere 3) : Set (Sphere 3) :=
+  {q | 0 < inner ℝ p.1 q.1}
+
+theorem rp3PositiveHemisphere_isOpen (p : Sphere 3) :
+    IsOpen (rp3PositiveHemisphere p) :=
+  isOpen_lt continuous_const (by fun_prop)
+
+theorem rp3_self_mem_positiveHemisphere (p : Sphere 3) :
+    p ∈ rp3PositiveHemisphere p := by
+  change 0 < inner ℝ p.1 p.1
+  rw [real_inner_self_pos]
+  intro hp
+  have hn : ‖p.1‖ = 1 := by
+    simpa only [Metric.mem_sphere, dist_zero_right] using p.2
+  rw [hp] at hn
+  norm_num at hn
+
+theorem rp3SphereProjection_injOn_positiveHemisphere (p : Sphere 3) :
+    Set.InjOn (sphereProjection 3) (rp3PositiveHemisphere p) := by
+  intro q hq r hr hqr
+  rcases (rp3SphereProjection_eq_iff q r).mp hqr with h | h
+  · exact h.symm
+  · exfalso
+    subst r
+    change 0 < inner ℝ p.1 (-q.1) at hr
+    rw [inner_neg_right] at hr
+    exact (not_lt_of_ge (le_of_lt hq)) (neg_pos.mp hr)
+
+/-- The exact sphere projection is locally a homeomorphism; together with its
+two-point fibers this is the local input for the remaining covering proof. -/
+theorem rp3SphereProjection_isLocalHomeomorph :
+    IsLocalHomeomorph (sphereProjection 3) := by
+  rw [isLocalHomeomorph_iff_isOpenEmbedding_restrict]
+  intro p
+  refine ⟨rp3PositiveHemisphere p,
+    (rp3PositiveHemisphere_isOpen p).mem_nhds
+      (rp3_self_mem_positiveHemisphere p), ?_⟩
+  apply Topology.IsOpenEmbedding.of_continuous_injective_isOpenMap
+  · exact rp3SphereProjection_continuous.comp continuous_subtype_val
+  · intro q r hqr
+    apply Subtype.ext
+    exact rp3SphereProjection_injOn_positiveHemisphere p q.2 r.2 hqr
+  · exact rp3SphereProjection_isOpenMap.restrict
+      (rp3PositiveHemisphere_isOpen p)
+
 #print axioms polynomialMap_nonzero
 #print axioms polynomialDescent
 #print axioms polynomialDescent_quotientMap
@@ -166,5 +242,7 @@ theorem rp3SphereProjection_eq_iff (p q : Sphere 3) :
 #print axioms rp3SphereProjection_comp_radial
 #print axioms rp3SphereProjection_isQuotientMap
 #print axioms rp3SphereProjection_eq_iff
+#print axioms rp3SphereProjection_isOpenMap
+#print axioms rp3SphereProjection_isLocalHomeomorph
 
 end ConstructionTargets.t96A06Closure
