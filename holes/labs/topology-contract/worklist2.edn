@@ -87901,29 +87901,18 @@
   {:consumer :t97A01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 2,
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Specialize to Fin successors; iterate van Kampen; then coordinate epi and B6-B10.",
+    "Iterate van Kampen to prove free-group surjectivity; then coordinate epi, higher vanishing, and B6-B10.",
     :outcome :stop,
-    :warnings [],
+    :warnings ["preexisting lints" "unrelated t93J03 edits preserved"],
     :missing-theorems
-    [{:name "finiteWedgeSumToPointWedge",
-      :type "continuous inverse map",
+    [{:name "finiteWedgeFinSuccHomeomorphPointWedge",
+      :type
+      "Fin successor wedge splits as a point wedge, preserving old and last legs",
       :status :proved,
-      :consumers [:t97A01 :t94J09],
-      :depends-on ["pointWedgeToFiniteWedgeSum"],
-      :area "polygon-quotient-homology"}
-     {:name "finiteWedgeSumHomeomorphPointWedge",
-      :type "sum wedge splits as a point wedge",
-      :status :proved,
-      :consumers [:t97A01 :t94J09],
-      :depends-on ["finiteWedgeSumToPointWedge"],
-      :area "polygon-quotient-homology"}
-     {:name "finiteWedgeFinSuccHomeomorphPointWedge",
-      :type "Fin successor split",
-      :status :partial,
       :consumers [:t97A01 :t94J09],
       :depends-on ["finiteWedgeSumHomeomorphPointWedge"],
       :area "polygon-quotient-homology"}
@@ -87937,36 +87926,32 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked the finite sum-wedge split.",
+    :reason
+    "Banked the Fin-successor wedge split and its leg formulas.",
     :commands
     [{:cmd "lake build ConstructionTargets.PolygonSurfaceHomology",
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-     {:cmd "git show --check d03a5f91d", :exit 0}
-     {:cmd "blob axioms | lake env lean /dev/stdin", :exit 0}],
+     {:cmd "git show --check e39d313f1", :exit 0}
+     {:cmd
+      "git show e39d313f1:ConstructionTargets/PolygonSurfaceHomology.lean | lake env lean /dev/stdin",
+      :exit 0}
+     {:cmd "#print axioms successor split | lake env lean /dev/stdin",
+      :exit 0}],
     :diagnostic-history
-    [{:cmd "inverse draft",
+    [{:cmd "generator-formula drafts",
       :exit 1,
-      :correction "normalized basepoints"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1791954963329-11619-d0419b28",
-     :commands
-     ["git show 1798bb36e blob + #print axioms | lake env lean /dev/stdin"
-      "diff-tree/readlink/sha256 assertions"
-      "statement-registry check; comment-stripped placeholder scan"],
-     :finding
-     "PASS: 1798bb36e changes only PolygonSurfaceHomology.lean; exact blob SHA256 459f6679314523eabf2ff7a4c773dc92c3b42e2eefcb87129f6d45bd746e4000. It compiles with standard axioms propext/Classical.choice/Quot.sound; placeholders 0; registry 166/0. New progress beyond 0e953f171 constructs a quotient-respecting homeomorphism between finite wedges under any label equivalence, proves its action on each circle leg, and specializes orbit labels to Fin(card). Forward/inverse relabelling and continuity use matching discrete label topologies, so the representation boundary preserves circle coordinates exactly. Free-group surjectivity remains the explicit next topological milestone."},
-    :commit "d03a5f91d",
+      :correction
+      "exposed composed homeomorph and rewrote relabelled legs"}],
+    :commit "e39d313f1",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
     {:path "ConstructionTargets/PolygonSurfaceHomology.lean",
      :sha256
-     "26239c9374a6a74eb4e89821a87b68cb64daceda4ba6c2423d242184e35b4c81"},
+     "de8557c3722466c4af67cc92e01455aecac235213c66b6e6e14d343f87fbeaf1"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -89415,7 +89400,8 @@
    {:name "finiteWedgeFinSuccHomeomorphPointWedge",
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "Fin successor wedge splits as a point wedge",
-    :area "polygon-quotient-homology"},
+    :area "polygon-quotient-homology",
+    :proved-in :program-2026-10-13-polygon-surface-homology},
    :id :lemma-finitewedgefinsucchomeomorphpointwedge,
    :kind :lemma,
    :depends-on
