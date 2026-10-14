@@ -516,6 +516,8 @@ identify the run-block fold with the original piece fold.
 `pathTwoOpenSubdivisionRunStart_zero` and
 `pathTwoOpenSubdivisionRunLast_end` prove the slices start at zero and finish
 at `S.n + 1`; the run slices therefore cover the full subdivision.
+`pathTwoOpenSubdivisionRunStart_eq_prefixLength` strengthens adjacency to the
+cumulative identity: run `i` starts after exactly the pieces in prior runs.
 
 - Layer 1: C1, C3, and C4. C1 and C3 are independent; C4 is already complete.
 - Layer 2: C2 against the explicit C1 equivalence interface.

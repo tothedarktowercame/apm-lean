@@ -1424,6 +1424,37 @@ theorem pathTwoOpenSubdivisionRunLast_end
     simpa [hfamily] using hlast
   simp [heq]
 
+/-- Number of original subdivision pieces contained in the maximal runs
+strictly preceding `k`. -/
+def pathTwoOpenSubdivisionRunPrefixLength
+    {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
+    {U V : Set X} (S : PathTwoOpenSubdivision p U V) (k : ℕ) : ℕ :=
+  (((boolSideRunPartition S.side).take k).flatten).length
+
+/-- The selected slice start of every maximal run is its cumulative prefix
+length in the run partition. -/
+theorem pathTwoOpenSubdivisionRunStart_eq_prefixLength
+    {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
+    {U V : Set X} (S : PathTwoOpenSubdivision p U V)
+    (i : Fin (boolSideRunPartition S.side).length) :
+    pathTwoOpenSubdivisionRunStart S i =
+      pathTwoOpenSubdivisionRunPrefixLength S i.val := by
+  induction hval : i.val using Nat.rec generalizing i with
+  | zero =>
+      have hi : i = 0 := Fin.ext hval
+      subst i
+      simp [pathTwoOpenSubdivisionRunPrefixLength]
+  | succ k ih =>
+      have hklt : k < (boolSideRunPartition S.side).length := by omega
+      let j : Fin (boolSideRunPartition S.side).length := ⟨k, hklt⟩
+      have hij : i.val = j.val + 1 := by simp [j, hval]
+      rw [pathTwoOpenSubdivisionRunStart_eq_previous_end S j i hij]
+      rw [ih j rfl]
+      unfold pathTwoOpenSubdivisionRunPrefixLength
+      rw [show i.val = k + 1 by omega, List.take_succ,
+        List.flatten_append, List.length_append]
+      simp [pathTwoOpenSubdivisionRunFamily, List.get_eq_getElem, j]
+
 theorem pathTwoOpenSubdivisionRunFamily_length_pos
     {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
     {U V : Set X} (S : PathTwoOpenSubdivision p U V)
