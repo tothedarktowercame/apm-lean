@@ -559,6 +559,61 @@ lemma t96J02_cut_rel
   sorry
 
 -- BEGIN SEAT AREA
+lemma t96J02_paste_rel_aux_clamp (z : ℂ) (hz : ‖z‖ ≤ 1) :
+    (t96J02_cut_clampDisk z : ℂ) = z := by
+  change ((1 / max 1 ‖z‖ : ℝ) : ℂ) * z = z
+  simp [max_eq_left hz]
+
+lemma t96J02_paste_rel_aux_clamp_chart (w : ℂ) (hw : t96J02_cut_l1 w ≤ 1) :
+    (t96J02_cut_clampDisk (t96J02_cut_chartInv w) : ℂ) =
+      t96J02_cut_chartInv w := by
+  apply t96J02_paste_rel_aux_clamp
+  simpa [t96J02_cut_norm_chartInv] using hw
+
+lemma t96J02_paste_rel_aux_chart_mi :
+    t96J02_cut_chartInv ⟨0, -1⟩ = -Complex.I := by
+  rw [t96J02_cut_chartInv, if_neg]
+  · norm_num [t96J02_cut_l1, Complex.norm_def]
+    apply Complex.ext <;> norm_num
+  · intro h
+    have := congrArg Complex.im h
+    norm_num at this
+
+lemma t96J02_paste_rel_aux_chart_i :
+    t96J02_cut_chartInv ⟨0, 1⟩ = Complex.I := by
+  rw [t96J02_cut_chartInv, if_neg]
+  · norm_num [t96J02_cut_l1, Complex.norm_def]
+    apply Complex.ext <;> norm_num
+  · intro h
+    have := congrArg Complex.im h
+    norm_num at this
+
+lemma t96J02_paste_rel_aux_chart_mone :
+    t96J02_cut_chartInv ⟨-1, 0⟩ = -1 := by
+  rw [t96J02_cut_chartInv, if_neg]
+  · norm_num [t96J02_cut_l1, Complex.norm_def]
+    apply Complex.ext <;> norm_num
+  · intro h
+    have := congrArg Complex.re h
+    norm_num at this
+
+/-- `paste_raw` at a square point, as a complex number, given the branch input. -/
+lemma t96J02_paste_rel_aux_eval (p : T96J02ClosedSquare) (w : ℂ)
+    (hw : (if p.1.2 ≤ p.1.1 then t96J02_paste_L p.1 else t96J02_paste_R p.1) = w)
+    (hl : t96J02_cut_l1 w ≤ 1) :
+    (t96J02_paste_raw p : ℂ) = t96J02_cut_chartInv w := by
+  unfold t96J02_paste_raw
+  rw [hw]
+  exact t96J02_paste_rel_aux_clamp_chart w hl
+
+lemma t96J02_paste_rel_aux_quadrant (w : ℂ) (hl : t96J02_cut_l1 w = 1)
+    (hre : 0 ≤ w.re) (him : 0 ≤ w.im) :
+    ‖t96J02_cut_chartInv w‖ = 1 ∧ 0 ≤ (t96J02_cut_chartInv w).re ∧
+      0 ≤ (t96J02_cut_chartInv w).im := by
+  obtain ⟨c, hc, hcw⟩ := t96J02_cut_chartInv_pos w
+  refine ⟨by rw [t96J02_cut_norm_chartInv, hl], ?_, ?_⟩ <;>
+    rw [hcw] <;> simp <;> positivity
+
 lemma t96J02_paste_rel
     (hedge0 : ∀ z : Disk, ‖(z : ℂ)‖ = 1 → 0 ≤ (z : ℂ).re → 0 ≤ (z : ℂ).im →
       ∃ t : Set.Icc (0 : ℝ) 1, z = edgePoint 4 0 t)
@@ -571,7 +626,75 @@ lemma t96J02_paste_rel
     (p q : T96J02ClosedSquare) (h : T96J02ClosedSquareRel p q) :
     surfaceQuotient false 2 (t96J02_paste_raw p) =
       surfaceQuotient false 2 (t96J02_paste_raw q) := by
-  sorry
+  obtain ⟨⟨u, v⟩, hp⟩ := p
+  obtain ⟨⟨u', v'⟩, hq⟩ := q
+  rcases h with ⟨t, hpt, hqt⟩ | ⟨t, hpt, hqt⟩
+  · simp only [KleinSquareEdgeOrientation.squareEdge_zero,
+      KleinSquareEdgeOrientation.squareEdge_one, Prod.mk.injEq] at hpt hqt
+    obtain ⟨rfl, rfl⟩ := hpt
+    obtain ⟨rfl, rfl⟩ := hqt
+    obtain ⟨s, hs0, hs1⟩ := t
+    simp only at hp hq ⊢
+    rcases eq_or_lt_of_le hs0 with rfl | hpos
+    · apply hvertices
+      · right; right; right
+        rw [t96J02_paste_rel_aux_eval _ ⟨0, -1⟩ (by
+              rw [if_pos (le_refl _)]; apply Complex.ext <;>
+                simp [t96J02_paste_L]) (by norm_num [t96J02_cut_l1]),
+          t96J02_paste_rel_aux_chart_mi]
+      · right; left
+        rw [t96J02_paste_rel_aux_eval _ ⟨0, 1⟩ (by
+              rw [if_pos zero_le_one]; apply Complex.ext <;>
+                simp [t96J02_paste_L]; norm_num) (by norm_num [t96J02_cut_l1]),
+          t96J02_paste_rel_aux_chart_i]
+    · set w : ℂ := ⟨1 - s, s⟩ with hwdef
+      have hl : t96J02_cut_l1 w = 1 := by
+        simp [t96J02_cut_l1, w, abs_of_nonneg (sub_nonneg.mpr hs1), abs_of_pos hpos]
+      have hP := t96J02_paste_rel_aux_eval ⟨(0, s), hp⟩ w (by
+        rw [if_neg (not_le.mpr hpos)]; apply Complex.ext <;> simp [t96J02_paste_R, w])
+        hl.le
+      have hQ := t96J02_paste_rel_aux_eval ⟨(1, s), hq⟩ (Complex.I * w) (by
+        rw [if_pos hs1]; apply Complex.ext <;> simp [t96J02_paste_L, w]; ring)
+        (by rw [t96J02_cut_l1_I, hl])
+      obtain ⟨hn, hre, him⟩ := t96J02_paste_rel_aux_quadrant w hl
+        (by simp [w]; linarith) (by simp [w]; linarith)
+      rw [← hP] at hn hre him
+      obtain ⟨r, hr⟩ := hedge0 _ hn hre him
+      have hQ' : t96J02_paste_raw ⟨(1, s), hq⟩ = edgePoint 4 1 r := by
+        apply Subtype.ext
+        rw [hQ, t96J02_cut_chartInv_I, ← hP, hr, (t96J02_cut_edge_succ r).1]
+      rw [hr, hQ']
+      exact Quotient.sound (Relation.EqvGen.rel _ _
+        ((KleinSurfaceRelNormalForm.surfaceRel_false_two_iff _ _).mpr
+          (Or.inl ⟨r, rfl, rfl⟩)))
+  · simp only [KleinSquareEdgeOrientation.squareEdge_two,
+      KleinSquareEdgeOrientation.squareEdge_three, Prod.mk.injEq] at hpt hqt
+    obtain ⟨rfl, rfl⟩ := hpt
+    obtain ⟨rfl, rfl⟩ := hqt
+    obtain ⟨s, hs0, hs1⟩ := t
+    simp only at hp hq ⊢
+    rcases eq_or_lt_of_le hs0 with rfl | hpos
+    · apply hvertices
+      · right; right; right
+        rw [t96J02_paste_rel_aux_eval _ ⟨0, -1⟩ (by
+              rw [if_pos (le_refl _)]; apply Complex.ext <;>
+                simp [t96J02_paste_L]) (by norm_num [t96J02_cut_l1]),
+          t96J02_paste_rel_aux_chart_mi]
+      · right; right; left
+        rw [t96J02_paste_rel_aux_eval _ ⟨-1, 0⟩ (by
+              rw [if_pos (by norm_num)]; apply Complex.ext <;>
+                simp [t96J02_paste_L]; norm_num) (by norm_num [t96J02_cut_l1]),
+          t96J02_paste_rel_aux_chart_mone]
+    · have hl : t96J02_cut_l1 ⟨0, 2 * s - 1⟩ ≤ 1 := by
+        simp only [t96J02_cut_l1, abs_zero, zero_add]
+        rw [abs_le]; constructor <;> linarith
+      have hP := t96J02_paste_rel_aux_eval ⟨(s, 0), hp⟩ ⟨0, 2 * s - 1⟩ (by
+        rw [if_pos hs0]; apply Complex.ext <;> simp [t96J02_paste_L]) hl
+      have hQ := t96J02_paste_rel_aux_eval ⟨(1 - s, 1), hq⟩ ⟨0, 2 * s - 1⟩ (by
+        rw [if_neg (by linarith)]; apply Complex.ext <;> simp [t96J02_paste_R]; ring) hl
+      have : t96J02_paste_raw ⟨(s, 0), hp⟩ = t96J02_paste_raw ⟨(1 - s, 1), hq⟩ :=
+        Subtype.ext (hP.trans hQ.symm)
+      rw [this]
 -- END SEAT AREA
 
 lemma t96J02_paste_cut
