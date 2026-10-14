@@ -572,7 +572,43 @@ theorem apm_t01A04_canonical_parity_characters
       phia apm_t01A04_loopC = Multiplicative.ofAdd 0 ∧
       Function.Surjective phic ∧ Function.Surjective phia ∧
       phic.ker.index = 2 ∧ phia.ker.index = 2 ∧ phic.ker ≠ phia.ker := by
-  sorry
+  obtain ⟨phic, hphic, -⟩ := huniv apm_t01a04_Parity
+    (Multiplicative.ofAdd 0) (Multiplicative.ofAdd 0) (Multiplicative.ofAdd 1) (by simp)
+  obtain ⟨phia, hphia, -⟩ := huniv apm_t01a04_Parity
+    (Multiplicative.ofAdd 1) (Multiplicative.ofAdd 0) (Multiplicative.ofAdd 0) (by simp)
+  rcases hphic with ⟨hca, hcb, hcc⟩
+  rcases hphia with ⟨haa, hab, hac⟩
+  have hsc : Function.Surjective phic := by
+    intro y
+    change ZMod 2 at y
+    fin_cases y
+    · refine ⟨(1 : apm_t01a04_piOne), ?_⟩
+      exact phic.map_one
+    · exact ⟨apm_t01A04_loopC, hcc⟩
+  have hsa : Function.Surjective phia := by
+    intro y
+    change ZMod 2 at y
+    fin_cases y
+    · refine ⟨(1 : apm_t01a04_piOne), ?_⟩
+      exact phia.map_one
+    · exact ⟨apm_t01A04_loopA, haa⟩
+  have hic : phic.ker.index = 2 := by
+    rw [Subgroup.index_ker]
+    rw [MonoidHom.range_eq_top.mpr hsc]
+    simp
+  have hia : phia.ker.index = 2 := by
+    rw [Subgroup.index_ker]
+    rw [MonoidHom.range_eq_top.mpr hsa]
+    simp
+  have hne : phic.ker ≠ phia.ker := by
+    intro heq
+    have ha_mem_c : apm_t01A04_loopA ∈ phic.ker := by
+      simp [MonoidHom.mem_ker, hca]
+    have ha_mem_a : apm_t01A04_loopA ∈ phia.ker := heq ▸ ha_mem_c
+    have : (1 : ZMod 2) = 0 := by
+      simpa [MonoidHom.mem_ker, haa] using ha_mem_a
+    norm_num at this
+  exact ⟨phic, phia, hca, hcb, hcc, haa, hab, hac, hsc, hsa, hic, hia, hne⟩
 
 /-- The monodromy calculation for the circle-doubled cover.  Its covering
 hypothesis is explicit, so this leaf can be proved before the local covering
