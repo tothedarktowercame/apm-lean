@@ -320,6 +320,24 @@ theorem connectorSystemMapEquivalence_connectorSquare
         e.counitIso.hom.app B := by rw [Functor.map_comp]
     _ = _ := by rw [h]
 
+omit [PathConnectedSpace X] [PathConnectedSpace Y] in
+/-- At a forward-image object, an installed mapped connector is the direct
+image of the source connector exactly when the source connector respects the
+equivalence inverse-unit there. -/
+theorem connectorSystemMapEquivalence_functorObj_connector_hom_eq_map
+    {C D : Type} [Groupoid C] [Groupoid D]
+    (S : ConnectorSystem C) (e : C ≌ D) (A : C)
+    (h : (S.connector (e.inverse.obj (e.functor.obj A))).hom ≫
+      e.unitIso.inv.app A = (S.connector A).hom) :
+    ((connectorSystemMapEquivalence S e).connector
+      (e.functor.obj A)).hom = e.functor.map (S.connector A).hom := by
+  rw [connectorSystemMapEquivalence_connector_hom, e.counit_app_functor]
+  calc
+    _ = e.functor.map
+        ((S.connector (e.inverse.obj (e.functor.obj A))).hom ≫
+          e.unitIso.inv.app A) := (e.functor.map_comp _ _).symm
+    _ = _ := congrArg e.functor.map h
+
 /-- Rebase a connector system along a specified isomorphism.  Keeping the
 isomorphism explicit lets transported connector choices be installed at the
 literal base object used by a based fundamental group. -/

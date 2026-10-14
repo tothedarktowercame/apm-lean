@@ -1489,3 +1489,8 @@ connectors are identified with their rebased mapped forms, the banked
 right-cover square is literally the connector square in `Y`.  Thus the B6
 residual is reduced to those two endpoint identifications, with no additional
 functorial or reassociation obligations.
+`connectorSystemMapEquivalence_functorObj_connector_hom_eq_map` isolates the
+condition needed at either endpoint: the source connector must respect the
+right equivalence inverse-unit. Under that square, functoriality and the
+equivalence triangle identify the installed connector with the mapped source
+connector. The next job proves this source square at the two overlap endpoints.
