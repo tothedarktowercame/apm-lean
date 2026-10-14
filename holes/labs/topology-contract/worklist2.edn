@@ -87901,30 +87901,27 @@
   {:consumer :t97A01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 5,
+   :stop-count 6,
    :evidence
    {:placeholder-delta 0,
-    :residual
-    "Prove geometric subdivision equality; instantiate B7, then B8-B10.",
+    :residual "Concatenate edge paths; instantiate B7, then B8-B10.",
     :outcome :stop,
-    :warnings ["preexisting lint; unrelated t00J02 edit preserved"],
+    :warnings ["preexisting lint"],
     :missing-theorems
-    [{:name
-      "polygonBoundaryWedgeLoop_hurewicz_of_eq_explicitEdgeProduct",
-      :type
-      "geometric product equality implies orientation-signed B7 generator formula",
+    [{:name "polygonBoundaryWedgeLoop_edgePoint_eq_signedEdgePath",
+      :type "each boundary interval is a based signed-edge path",
       :status :proved,
-      :consumers [:t97A01 :t94J09],
-      :depends-on
-      ["polygonBoundaryExplicitEdgeProduct_hurewicz_eq_attachingDegree"],
-      :area "polygon-quotient-homology"}
-     {:name "finitePathSubdivision_boundary",
-      :type "boundary equals explicit edge product",
-      :status :partial,
       :consumers [:t97A01 :t94J09],
       :depends-on
       ["polygonBoundaryWedgeLoop_edgePoint_integerLoop_of_sign"
        "polygonBoundaryWedgeLoop_edgePoint_integerLoop_of_not_sign"],
+      :area "polygon-quotient-homology"}
+     {:name "finitePathSubdivision_boundary",
+      :type "boundary equals ordered signed-edge product",
+      :status :partial,
+      :consumers [:t97A01 :t94J09],
+      :depends-on
+      ["polygonBoundaryWedgeLoop_edgePoint_eq_signedEdgePath"],
       :area "polygon-quotient-homology"}
      {:name "radialMV_boundary_eq_orientationSigned",
       :type "B7 sign-corrected map",
@@ -87936,8 +87933,7 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason
-    "Banked B7 reduction from geometric boundary-product equality.",
+    :reason "Banked based signed-edge paths.",
     :commands
     [{:cmd
       "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology",
@@ -87945,28 +87941,20 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder scan", :exit 0}
      {:cmd "axioms check", :exit 0}
-     {:cmd "git show --check 392a3d957", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792020115472-12659-2df817c2",
-     :commands
-     ["git show/diff 392a3d957; blob sha256; diff --check"
-      "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology"
-      "lake env lean /dev/stdin (#print axioms)"
-      "placeholder scan"
-      "statement-registry.py check"],
-     :finding
-     "PASS: reviewer codex-7; 392a3d957 (topo-6) newly changes only scoped PolygonSurfaceHomology.lean; fixture SHA-256 1ddaa78f1ef924fb9e258e87813e93f6508f3e1bbac848d16f2d763caf8c3156 matches. Exact blob builds; 0 placeholders; standard axioms; registry 166/0. The theorem states the missing geometric boundary/product equality as an explicit hypothesis, then rewrites boundary Hurewicz by naturality and applies the proved orientation-signed product formula. Equality direction and ModuleCat representation are correct; it does not claim subdivision is solved. Valid new compiled reduction; remaining prove subdivision, instantiate B7, then B8-B10."},
-    :commit "392a3d957",
+     {:cmd "git show --check b680494d4", :exit 0}],
+    :diagnostic-history
+    [{:cmd "edge-path drafts",
+      :exit 1,
+      :correction "used signed-arc continuity and endpoint lemmas"}],
+    :commit "b680494d4",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
     {:path "ConstructionTargets/PolygonSurfaceHomology.lean",
      :sha256
-     "1ddaa78f1ef924fb9e258e87813e93f6508f3e1bbac848d16f2d763caf8c3156"},
+     "981211422c722bec1fae01b9a4248fe60a92f3336f7dd2ec2d5ea387c44541d8"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -92109,7 +92097,8 @@
    :depends-on
    [:lemma-polygonboundarywedgeloop-edgepoint-integerloop-of-sign
     :lemma-polygonboundarywedgeloop-edgepoint-integerloop-of-not-sign
-    :lemma-polygonboundaryexplicitedgeclass-hurewicz],
+    :lemma-polygonboundaryexplicitedgeclass-hurewicz
+    :lemma-polygonboundarywedgeloop-edgepoint-eq-signededgepath],
    :other-consumers [:t94J09]}
   {:consumer :t92J06,
    :phase :lemma,
@@ -92235,4 +92224,23 @@
    :kind :lemma,
    :depends-on
    [:lemma-polygonboundaryexplicitedgeproduct-hurewicz-eq-attachingdegree],
+   :other-consumers [:t94J09]}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "polygonBoundaryWedgeLoop_edgePoint_eq_signedEdgePath",
+    :type "each boundary interval is a based signed-edge path"},
+   :lemma
+   {:name "polygonBoundaryWedgeLoop_edgePoint_eq_signedEdgePath",
+    :reported-by [:program-2026-10-13-polygon-surface-homology],
+    :type "each boundary interval is a based signed-edge path",
+    :area "polygon-quotient-homology",
+    :proved-in :program-2026-10-13-polygon-surface-homology},
+   :id :lemma-polygonboundarywedgeloop-edgepoint-eq-signededgepath,
+   :kind :lemma,
+   :depends-on
+   [:lemma-polygonboundarywedgeloop-edgepoint-integerloop-of-sign
+    :lemma-polygonboundarywedgeloop-edgepoint-integerloop-of-not-sign],
    :other-consumers [:t94J09]}]}
