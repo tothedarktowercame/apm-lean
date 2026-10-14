@@ -87901,67 +87901,60 @@
   {:consumer :t97A01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 5,
+   :stop-count 6,
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Repair PointWedge dependency; prove installed transport, right-base inl, surjectivity, B6-B10.",
+    "Prove target inverse-unit square and installed transport; then right-base inl, surjectivity, B6-B10.",
     :outcome :stop,
-    :warnings ["preexisting lints; unrelated edit preserved"],
+    :warnings ["preexisting lints"],
     :missing-theorems
-    [{:name "finiteWedgeRightBaseInOldFactor_iff_connectorTransport",
+    [{:name "finiteWedgeCoherentRightSourceUnitSquare_of_target",
       :type
-      "right-base inl membership iff installed endpoint transport",
+      "target inverse-unit connector square induces coherent source square",
       :status :proved,
       :consumers [:t97A01 :t94J09],
-      :depends-on
-      ["finiteWedgeRightBaseInOldFactor_iff_connectorSquare"],
+      :depends-on [],
+      :area "polygon-quotient-homology"}
+     {:name "finiteWedgeRightBaseTargetUnitSquare",
+      :type
+      "literal final-leg connectors respect the mapped inverse unit",
+      :status :not-started,
+      :consumers [:t97A01 :t94J09],
+      :depends-on [],
       :area "polygon-quotient-homology"}
      {:name "finiteWedgeInstalledRightConnectorTransport",
       :type
-      "overlap counit equals transport from installed connectors",
+      "coherent source square yields installed overlap transport",
       :status :not-started,
       :consumers [:t97A01 :t94J09],
-      :depends-on
-      ["finiteWedgeRightBaseInOldFactor_iff_connectorTransport"],
+      :depends-on ["finiteWedgeRightBaseTargetUnitSquare"],
       :area "polygon-quotient-homology"}],
     :statement-hashes {:registry "166/0"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
     :reason
-    "Banked transport reduction; full build blocked by an out-of-scope dirty dependency.",
+    "Banked finite specialization of the inverse-unit connector implication.",
     :commands
-    [{:cmd
-      "lake env lean ConstructionTargets/PolygonSurfaceHomology.lean",
+    [{:cmd "lake build ConstructionTargets.PolygonSurfaceHomology",
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-     {:cmd "git show --check 73b6e7834", :exit 0}],
+     {:cmd "git show --check 556268129", :exit 0}
+     {:cmd "exact blob + axioms | lake env lean /dev/stdin", :exit 0}],
     :diagnostic-history
-    [{:cmd
-      "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology",
+    [{:cmd "specialization draft",
       :exit 1,
-      :correction
-      "dirty PointWedgeVanKampen line 5041 fails outside scope"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1791979808732-11790-10bef94d",
-     :commands
-     ["git show/diff-tree/commit trailers; sha256sum"
-      "exact commit snapshot: lake -Kjobs=1 build PolygonSurfaceHomology"
-      "#print axioms; placeholder scan; statement-registry.py check"],
-     :finding
-     "PASS: independent review of topo-6 commit a720d9d62; direct scope only PolygonSurfaceHomology.lean, exact blob SHA256 5051fc93b42590bf23890b59c1c1897beee4b42b1f6693a6b06868b523e4469b. Exact recorded snapshot plus updated van Kampen dependency build serially; new theorems use only propext, Classical.choice, Quot.sound; placeholders 0; registry 166/0. New progress after 4b0d0491e proves outerRight=inr(b). Given the connector square, right projection of rightBase=outerRight*inl(a) is 1, hence b=1; thus outerRight=inr(1)=inl(1), yielding rightBase in the old factor. Together with the prior forward implication this gives an exact iff. Factor order and left/right coproduct embeddings are correct; the proof does not use the invalid kernel converse for arbitrary words. Remaining milestone: prove the specialized connector square, then apply leg-word extraction."},
-    :commit "73b6e7834",
+      :correction "supplied explicit generic parameters"}],
+    :commit "556268129",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
     {:path "ConstructionTargets/PolygonSurfaceHomology.lean",
      :sha256
-     "99fbfe8dcb25442aa2f8d6690a28e0975236626a0a33368c987ff58e54f9fac5"},
+     "14a704d85c7355f4c4c57b694731ce276cb6cbc2964c2d91ccc515419f7e0cb9"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -90069,5 +90062,43 @@
    :id :lemma-finitewedgeinstalledrightconnectortransport,
    :kind :lemma,
    :depends-on
-   [:lemma-finitewedgerightbaseinoldfactor-iff-connectortransport],
+   [:lemma-finitewedgerightbaseinoldfactor-iff-connectortransport
+    :lemma-finitewedgerightbasetargetunitsquare],
+   :other-consumers [:t94J09]}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "finiteWedgeCoherentRightSourceUnitSquare_of_target",
+    :type
+    "target inverse-unit connector square induces coherent source square"},
+   :lemma
+   {:name "finiteWedgeCoherentRightSourceUnitSquare_of_target",
+    :reported-by [:program-2026-10-13-polygon-surface-homology],
+    :type
+    "target inverse-unit connector square induces coherent source square",
+    :area "polygon-quotient-homology",
+    :proved-in :program-2026-10-13-polygon-surface-homology},
+   :id :lemma-finitewedgecoherentrightsourceunitsquare-of-target,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t94J09]}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "finiteWedgeRightBaseTargetUnitSquare",
+    :type
+    "literal final-leg connectors respect the mapped inverse unit"},
+   :lemma
+   {:name "finiteWedgeRightBaseTargetUnitSquare",
+    :reported-by [:program-2026-10-13-polygon-surface-homology],
+    :type
+    "literal final-leg connectors respect the mapped inverse unit",
+    :area "polygon-quotient-homology"},
+   :id :lemma-finitewedgerightbasetargetunitsquare,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers [:t94J09]}]}
