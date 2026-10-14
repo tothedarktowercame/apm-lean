@@ -73,12 +73,45 @@ theorem t93J03_kleinPlaneQuotient_homeomorph :
 homeomorphism.  Both substantive conclusions are hypotheses, so this seat is
 independent of the Klein-specific geometry. -/
 -- BEGIN SEAT AREA
+noncomputable def t93J03_pi1_every_basepoint_of_homeomorph_aux_equiv
+    {X Y : Type*} [TopologicalSpace X] [TopologicalSpace Y]
+    (e : X ≃ₜ Y) (x : X) :
+    FundamentalGroup X x ≃* FundamentalGroup Y (e x) where
+  toFun := FundamentalGroup.map ⟨e, e.continuous⟩ x
+  invFun := FundamentalGroup.mapOfEq ⟨e.symm, e.symm.continuous⟩
+    (e.symm_apply_apply x)
+  left_inv p := by
+    induction p using Path.Homotopic.Quotient.ind with
+    | mk p =>
+      rw [FundamentalGroup.map_apply]
+      change (FundamentalGroup.mapOfEq _ _)
+        (Path.Homotopic.Quotient.mk (p.map e.continuous)) = _
+      rw [FundamentalGroup.mapOfEq_apply]
+      apply Path.Homotopic.Quotient.eq.mpr
+      convert Path.Homotopic.refl p using 1
+      ext t
+      exact e.symm_apply_apply (p t)
+  right_inv p := by
+    induction p using Path.Homotopic.Quotient.ind with
+    | mk p =>
+      rw [FundamentalGroup.mapOfEq_apply]
+      apply Path.Homotopic.Quotient.eq.mpr
+      convert Path.Homotopic.refl p using 1
+      ext t
+      exact e.apply_symm_apply (p t)
+  map_mul' := map_mul _
+
 theorem t93J03_pi1_every_basepoint_of_homeomorph
     {X Y G : Type*} [TopologicalSpace X] [TopologicalSpace Y] [Group G]
     (e : X ≃ₜ Y)
     (hX : ∀ x : X, Nonempty (FundamentalGroup X x ≃* G)) :
     ∀ y : Y, Nonempty (FundamentalGroup Y y ≃* G) := by
-  sorry
+  intro y
+  obtain ⟨eX⟩ := hX (e.symm y)
+  let E := (t93J03_pi1_every_basepoint_of_homeomorph_aux_equiv
+    e (e.symm y)).symm.trans eX
+  rw [e.apply_symm_apply y] at E
+  exact ⟨E⟩
 -- END SEAT AREA
 
 /-- The fundamental group of the frozen Klein polygon is its standard
