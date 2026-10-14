@@ -87944,6 +87944,18 @@
     [{:cmd "generator comparison draft",
       :exit 1,
       :correction "removed draft; banked cardinal bridge"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792003935409-12203-c5adf30c",
+     :commands
+     ["git show/diff 0941748c1; blob sha256; diff --check"
+      "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology"
+      "lake env lean /dev/stdin (#print axioms)"
+      "placeholder scan"
+      "statement-registry.py check"],
+     :finding
+     "PASS: 0941748c1 (topo-6) changes only scoped PolygonSurfaceHomology.lean; fixture SHA-256 8857d23a01fa39daa58f2d3ebfc32bc1e25499b15be2994cacfdc09b73830e51 matches. Exact blob builds; 0 placeholders; new theorem uses standard axioms; registry 166/0. The positive-cardinality map faithfully restates the existing Fin(n+1) map: N=0 is impossible, while N=succ n reduces definitionally (proof arguments are irrelevant), so surjectivity orientation is correct. New compiled progress; remaining milestones: expose based loop transport, compare generators, coordinate epi, B6-B10."},
     :commit "0941748c1",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
@@ -87952,7 +87964,7 @@
      "8857d23a01fa39daa58f2d3ebfc32bc1e25499b15be2994cacfdc09b73830e51"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -87972,7 +87984,7 @@
     :blueprint
     "ConstructionTargets/PolygonSurfaceHomology.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked base-preserving orbit-to-Fin relabeling.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked positive-cardinality surjectivity.",
    :id :program-2026-10-13-polygon-surface-homology,
    :kind :reusable-theorem,
    :campaign-priority 31,
@@ -88147,7 +88159,10 @@
      "Banked free-group surjectivity for standard finite wedges."}
     {:job 2,
      :commit "9ffce356b",
-     :reason "Banked base-preserving orbit-to-Fin relabeling."}]}
+     :reason "Banked base-preserving orbit-to-Fin relabeling."}
+    {:job 3,
+     :commit "0941748c1",
+     :reason "Banked positive-cardinality surjectivity."}]}
   {:consumer :t97A01,
    :stop-count 0,
    :phase :implementation,
@@ -90718,7 +90733,7 @@
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "finiteWedgeFinLegFreeGroupMapCard_surjective",
@@ -90728,7 +90743,9 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "canonical map onto every positive-cardinality Fin wedge",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :program-2026-10-13-polygon-surface-homology,
+    :banked-commit "0941748c1"},
    :id :lemma-finitewedgefinlegfreegroupmapcard-surjective,
    :kind :lemma,
    :depends-on [:lemma-finitewedgefinlegfreegroupmap-surjective],
