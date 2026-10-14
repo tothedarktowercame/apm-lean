@@ -1027,7 +1027,84 @@ theorem t93A06_exact_integral_aux_square_formula_integral_split
         deriv (fun s ↦ Q ![s, y]) x) -
       (∫ y : ℝ in 0..1, ∫ x : ℝ in 0..1,
         deriv (fun t ↦ P ![x, t]) y) := by
-  sorry
+  have hP_deriv (x y : ℝ) :
+      deriv (fun t ↦ P ![x, t]) y =
+        fderiv ℝ P ![x, y] (Pi.single 1 1) := by
+    have hv : HasDerivAt (fun t : ℝ ↦ (![x, t] : Plane)) (Pi.single 1 1) y := by
+      apply hasDerivAt_pi.mpr
+      intro i
+      fin_cases i
+      · simpa using (hasDerivAt_const (x := y) x)
+      · simpa using (hasDerivAt_id y)
+    exact ((hC1P.differentiable (by norm_num) ![x, y]).hasFDerivAt.comp_hasDerivAt
+      y hv).deriv
+  have hQ_deriv (x y : ℝ) :
+      deriv (fun s ↦ Q ![s, y]) x =
+        fderiv ℝ Q ![x, y] (Pi.single 0 1) := by
+    have hv : HasDerivAt (fun s : ℝ ↦ (![s, y] : Plane)) (Pi.single 0 1) x := by
+      apply hasDerivAt_pi.mpr
+      intro i
+      fin_cases i
+      · simpa using (hasDerivAt_id x)
+      · simpa using (hasDerivAt_const (x := x) y)
+    exact ((hC1Q.differentiable (by norm_num) ![x, y]).hasFDerivAt.comp_hasDerivAt
+      x hv).deriv
+  have hP_cont : Continuous (Function.uncurry fun y x : ℝ ↦
+      deriv (fun t ↦ P ![x, t]) y) := by
+    simp_rw [hP_deriv]
+    have hv : Continuous (fun z : ℝ × ℝ ↦ (![z.2, z.1] : Plane)) := by
+      apply continuous_pi
+      intro i
+      fin_cases i <;> simp <;> fun_prop
+    exact (hC1P.continuous_fderiv (by norm_num)).clm_apply continuous_const |>.comp
+      hv
+  have hQ_cont : Continuous (Function.uncurry fun y x : ℝ ↦
+      deriv (fun s ↦ Q ![s, y]) x) := by
+    simp_rw [hQ_deriv]
+    have hv : Continuous (fun z : ℝ × ℝ ↦ (![z.2, z.1] : Plane)) := by
+      apply continuous_pi
+      intro i
+      fin_cases i <;> simp <;> fun_prop
+    exact (hC1Q.continuous_fderiv (by norm_num)).clm_apply continuous_const |>.comp
+      hv
+  have hP_outer : IntervalIntegrable (fun y : ℝ ↦ ∫ x : ℝ in 0..1,
+      deriv (fun t ↦ P ![x, t]) y) MeasureTheory.volume 0 1 := by
+    have hc := continuous_parametric_integral_of_continuous
+      (μ := MeasureTheory.volume) hP_cont
+      (isCompact_uIcc : IsCompact (Set.uIcc (0 : ℝ) 1))
+    have hc' : IntervalIntegrable (fun y : ℝ ↦ ∫ x : ℝ in Set.uIcc (0 : ℝ) 1,
+        deriv (fun t ↦ P ![x, t]) y) MeasureTheory.volume 0 1 :=
+      hc.intervalIntegrable 0 1
+    simpa [intervalIntegral.integral_of_le (by norm_num : (0 : ℝ) ≤ 1),
+      Set.uIcc_of_le (by norm_num : (0 : ℝ) ≤ 1),
+      MeasureTheory.integral_Icc_eq_integral_Ioc] using hc'
+  have hQ_outer : IntervalIntegrable (fun y : ℝ ↦ ∫ x : ℝ in 0..1,
+      deriv (fun s ↦ Q ![s, y]) x) MeasureTheory.volume 0 1 := by
+    have hc := continuous_parametric_integral_of_continuous
+      (μ := MeasureTheory.volume) hQ_cont
+      (isCompact_uIcc : IsCompact (Set.uIcc (0 : ℝ) 1))
+    have hc' : IntervalIntegrable (fun y : ℝ ↦ ∫ x : ℝ in Set.uIcc (0 : ℝ) 1,
+        deriv (fun s ↦ Q ![s, y]) x) MeasureTheory.volume 0 1 :=
+      hc.intervalIntegrable 0 1
+    simpa [intervalIntegral.integral_of_le (by norm_num : (0 : ℝ) ≤ 1),
+      Set.uIcc_of_le (by norm_num : (0 : ℝ) ≤ 1),
+      MeasureTheory.integral_Icc_eq_integral_Ioc] using hc'
+  simp_rw [hcoord]
+  calc
+    (∫ y : ℝ in 0..1, ∫ x : ℝ in 0..1,
+        deriv (fun s ↦ Q ![s, y]) x - deriv (fun t ↦ P ![x, t]) y) =
+        ∫ y : ℝ in 0..1,
+          ((∫ x : ℝ in 0..1, deriv (fun s ↦ Q ![s, y]) x) -
+           (∫ x : ℝ in 0..1, deriv (fun t ↦ P ![x, t]) y)) := by
+      apply intervalIntegral.integral_congr
+      intro y _
+      dsimp
+      apply intervalIntegral.integral_sub
+      · simpa [Function.comp_apply] using
+          (hQ_cont.comp (continuous_const.prodMk continuous_id)).intervalIntegrable 0 1
+      · simpa [Function.comp_apply] using
+          (hP_cont.comp (continuous_const.prodMk continuous_id)).intervalIntegrable 0 1
+    _ = _ := intervalIntegral.integral_sub hQ_outer hP_outer
 -- END SEAT AREA
 
 /-- Coordinate formula for the integral of an exterior derivative.  This is
