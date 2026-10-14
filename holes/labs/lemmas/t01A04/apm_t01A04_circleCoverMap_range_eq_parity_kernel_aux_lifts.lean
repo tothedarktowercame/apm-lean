@@ -2097,6 +2097,39 @@ def apm_t01A04_circleCoverMap_range_eq_parity_kernel_aux_lifts_pathC :
 `loopC` lifts through squaring to the half-turn from `1` to `-1`, i.e. from
 sheet point `0` to sheet point `1`, so it moves the base point. -/
 -- BEGIN SEAT AREA
+def apm_t01A04_circleCoverMap_range_eq_parity_kernel_aux_lifts_sheetValueRaw :
+    Sum (Fin 2 × apm_t01a04_Torus) Circle → Circle
+  | .inl q => apm_t01a04_sheetPoint q.1
+  | .inr z => z
+
+lemma apm_t01A04_circleCoverMap_range_eq_parity_kernel_aux_lifts_sheetValueRaw_respects
+    {x y} (h : Relation.EqvGen apm_t01a04_circleCoverRel x y) :
+    apm_t01A04_circleCoverMap_range_eq_parity_kernel_aux_lifts_sheetValueRaw x =
+      apm_t01A04_circleCoverMap_range_eq_parity_kernel_aux_lifts_sheetValueRaw y := by
+  induction h with
+  | rel a b hab => cases hab <;> rfl
+  | refl a => rfl
+  | symm a b _ ih => exact ih.symm
+  | trans a b c _ _ ih₁ ih₂ => exact ih₁.trans ih₂
+
+def apm_t01A04_circleCoverMap_range_eq_parity_kernel_aux_lifts_sheetValue :
+    apm_t01a04_CircleCover → Circle :=
+  Quotient.lift
+    apm_t01A04_circleCoverMap_range_eq_parity_kernel_aux_lifts_sheetValueRaw
+    (fun _ _ h =>
+      apm_t01A04_circleCoverMap_range_eq_parity_kernel_aux_lifts_sheetValueRaw_respects h)
+
+lemma apm_t01A04_circleCoverMap_range_eq_parity_kernel_aux_lifts_endpoint_ne :
+    (Quotient.mk _ (Sum.inr (Circle.exp Real.pi)) : apm_t01a04_CircleCover) ≠
+      apm_t01a04_circleCoverBase := by
+  intro h
+  have := congrArg
+    apm_t01A04_circleCoverMap_range_eq_parity_kernel_aux_lifts_sheetValue h
+  exact apm_t01A04_circleCoverMap_range_eq_parity_kernel_aux_lifts_exp_ne
+    (by simpa [apm_t01A04_circleCoverMap_range_eq_parity_kernel_aux_lifts_sheetValue,
+      apm_t01A04_circleCoverMap_range_eq_parity_kernel_aux_lifts_sheetValueRaw,
+      apm_t01a04_circleCoverBase] using this)
+
 lemma apm_t01A04_circleCoverMap_range_eq_parity_kernel_aux_lifts
     (hcov : IsCoveringMap apm_t01a04_circleCoverMap) :
     hcov.monodromy (FundamentalGroup.toPath apm_t01A04_loopA)
@@ -2105,7 +2138,69 @@ lemma apm_t01A04_circleCoverMap_range_eq_parity_kernel_aux_lifts
           ⟨apm_t01a04_circleCoverBase, apm_t01a04_circleCoverMap_base⟩ = ⟨apm_t01a04_circleCoverBase, apm_t01a04_circleCoverMap_base⟩ ∧
     hcov.monodromy (FundamentalGroup.toPath apm_t01A04_loopC)
           ⟨apm_t01a04_circleCoverBase, apm_t01a04_circleCoverMap_base⟩ ≠ ⟨apm_t01a04_circleCoverBase, apm_t01a04_circleCoverMap_base⟩ := by
-  sorry
+  refine ⟨?_, ?_, ?_⟩
+  · simpa [apm_t01A04_circleCoverMap_range_eq_parity_kernel_aux_lifts_pathA,
+      apm_t01A04_loopA, apm_t01a04_circleCoverMap,
+      apm_t01a04_circleCoverRaw] using
+      hcov.monodromy_map
+        (Path.Homotopic.Quotient.mk
+          apm_t01A04_circleCoverMap_range_eq_parity_kernel_aux_lifts_pathA)
+  · simpa [apm_t01A04_circleCoverMap_range_eq_parity_kernel_aux_lifts_pathB,
+      apm_t01A04_loopB, apm_t01a04_circleCoverMap,
+      apm_t01a04_circleCoverRaw] using
+      hcov.monodromy_map
+        (Path.Homotopic.Quotient.mk
+          apm_t01A04_circleCoverMap_range_eq_parity_kernel_aux_lifts_pathB)
+  · intro h
+    apply apm_t01A04_circleCoverMap_range_eq_parity_kernel_aux_lifts_endpoint_ne
+    let q : C(apm_t01a04_CircleCover, apm_t01a04_X) :=
+      ⟨apm_t01a04_circleCoverMap, hcov.continuous⟩
+    have hs : apm_t01a04_basepoint = q apm_t01a04_circleCoverBase :=
+      apm_t01a04_circleCoverMap_base.symm
+    have ht : apm_t01a04_basepoint =
+        q (Quotient.mk _ (Sum.inr (Circle.exp Real.pi))) := by
+      change Quotient.mk _ (Sum.inl ((1 : Circle), (1 : Circle))) =
+        Quotient.mk _ (Sum.inr (Circle.exp Real.pi ^ 2))
+      rw [show Circle.exp Real.pi ^ 2 = 1 by
+        simpa using apm_t01a04_sheetPoint_sq (1 : Fin 2)]
+      exact Quotient.sound
+        (Relation.EqvGen.rel _ _ apm_t01a04_wedgeRel.base)
+    have hp :
+        ((Path.Homotopic.Quotient.mk
+            apm_t01A04_circleCoverMap_range_eq_parity_kernel_aux_lifts_pathC).map q).cast
+              hs ht =
+          FundamentalGroup.toPath apm_t01A04_loopC := by
+      rw [← Path.Homotopic.Quotient.mk_map, ← Path.Homotopic.Quotient.mk_cast]
+      congr 1
+      ext t
+      change Quotient.mk _
+          (Sum.inr (Circle.exp (Real.pi * (t : ℝ)) ^ 2)) =
+        Quotient.mk _ (Sum.inr
+          (Circle.exp (((1 : ℤ) • (2 * Real.pi)) * (t : ℝ))))
+      congr 2
+      rw [pow_two, ← Circle.exp_add]
+      congr 1
+      simp
+      ring
+    have hm :
+        hcov.monodromy (FundamentalGroup.toPath apm_t01A04_loopC)
+            ⟨apm_t01a04_circleCoverBase, apm_t01a04_circleCoverMap_base⟩ =
+          ⟨Quotient.mk _ (Sum.inr (Circle.exp Real.pi)), by
+            change Quotient.mk _ (Sum.inr (Circle.exp Real.pi ^ 2)) =
+              Quotient.mk _ (Sum.inl ((1 : Circle), (1 : Circle)))
+            rw [show Circle.exp Real.pi ^ 2 = 1 by
+              simpa using apm_t01a04_sheetPoint_sq (1 : Fin 2)]
+            exact Quotient.sound
+              (Relation.EqvGen.symm _ _
+                (Relation.EqvGen.rel _ _ apm_t01a04_wedgeRel.base))⟩ := by
+      rw [← hp]
+      apply Subtype.ext
+      simpa [q, Path.Homotopic.Quotient.cast, IsCoveringMap.monodromy] using
+        congrArg Subtype.val (hcov.monodromy_map
+          (Path.Homotopic.Quotient.mk
+            apm_t01A04_circleCoverMap_range_eq_parity_kernel_aux_lifts_pathC))
+    have he := h.symm.trans hm
+    exact (congrArg Subtype.val he).symm
 -- END SEAT AREA
 
 lemma apm_t01A04_circleCoverMap_range_eq_parity_kernel_aux_monodromy_iff
