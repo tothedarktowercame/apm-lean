@@ -87899,25 +87899,26 @@
      :reason
      "Banked preconnectedness of the alleged chart's punctured ball source."}]}
   {:consumer :t97A01,
-   :stop-count 7,
+   :stop-count 8,
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Prove off-diagonal collapse vanishing and coordinate monicity; then surjectivity, higher vanishing, and B6-B10.",
+    "Deduce coordinate monicity from the collapse matrix; then prove surjectivity, higher vanishing, and B6-B10.",
     :outcome :stop,
     :warnings ["preexisting dependency lints"],
     :missing-theorems
-    [{:name "finiteWedgeLegH1_collapse_self",
-      :type "leg inclusion then collapse induces identity on H1",
+    [{:name "finiteWedgeH1_leg_collapse_matrix",
+      :type
+      "leg k then collapse l is identity for k=l and zero otherwise",
       :status :proved,
       :consumers [:t97A01 :t94J09],
-      :depends-on ["finiteWedgeH1CoordinateMap_single"],
+      :depends-on ["finiteWedgeLegH1_collapse_self"],
       :area "polygon-quotient-homology"}
      {:name "finiteWedgeH1CoordinateMap_mono",
       :type "normalized coordinate map is monic",
       :status :partial,
       :consumers [:t97A01 :t94J09],
-      :depends-on ["finiteWedgeLegH1_collapse_self"],
+      :depends-on ["finiteWedgeH1_leg_collapse_matrix"],
       :area "polygon-quotient-homology"}
      {:name "outerHomology",
       :type "H0=Z,H1=(PairingOrbit->Z),Hk=0(k>=2)",
@@ -87930,36 +87931,25 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
     :reason
-    "Banked continuous circle-leg collapses and their H1 self-retraction.",
+    "Banked the finite-wedge H1 inclusion-collapse Kronecker matrix.",
     :commands
     [{:cmd "lake build ConstructionTargets.PolygonSurfaceHomology",
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-     {:cmd "git show --check f68f6c6e6", :exit 0}],
+     {:cmd "git show --check 263a0516c", :exit 0}],
     :diagnostic-history
-    [{:cmd "draft compiles",
+    [{:cmd "matrix draft",
       :exit 1,
-      :correction
-      "fixed quotient relation, topology, and functor composition"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1791940660974-11147-43d139ae",
-     :commands
-     ["exact commit blob + #print axioms via lake env lean /dev/stdin"
-      "scope/hash/package-link assertions"
-      "statement-registry check; comment-stripped placeholder scan"],
-     :finding
-     "PASS: cfd4e0438 changes only PolygonSurfaceHomology.lean; fixture SHA256 7723329e602326b3c92176d382ae870f5430e08952984fca74840b62c852bb36. Exact blob compiles with standard axioms propext/Classical.choice/Quot.sound; placeholders 0; registry 166/0. New program progress constructs the H1 coproduct presentation and finite function-coordinate representation, with Pi.single l n mapped in the declared positive orientation through circleH1IsoInt.inv then the induced leg map. The coordinate isomorphism and higher-homology milestones remain explicitly listed."},
-    :commit "f68f6c6e6",
+      :correction "used right-associated composition rewrites"}],
+    :commit "263a0516c",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
     {:path "ConstructionTargets/PolygonSurfaceHomology.lean",
      :sha256
-     "e53824670d25ab846f6882e93ae9920008a26506b0b2178b4e7fa32775759f54"},
+     "91eeb7d0d347fba714e542621e54559b4bcfe799b2bfd969075e6614bf7ad650"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -88935,6 +88925,27 @@
     :type "normalized coordinate map is monic",
     :area "polygon-quotient-homology"},
    :id :lemma-finitewedgeh1coordinatemap-mono,
+   :kind :lemma,
+   :depends-on
+   [:lemma-finitewedgelegh1-collapse-self
+    :lemma-finitewedgeh1-leg-collapse-matrix],
+   :other-consumers [:t94J09]}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "finiteWedgeH1_leg_collapse_matrix",
+    :type
+    "leg k then collapse l is identity for k=l and zero otherwise"},
+   :lemma
+   {:name "finiteWedgeH1_leg_collapse_matrix",
+    :reported-by [:program-2026-10-13-polygon-surface-homology],
+    :type
+    "leg k then collapse l is identity for k=l and zero otherwise",
+    :area "polygon-quotient-homology",
+    :proved-in :program-2026-10-13-polygon-surface-homology},
+   :id :lemma-finitewedgeh1-leg-collapse-matrix,
    :kind :lemma,
    :depends-on [:lemma-finitewedgelegh1-collapse-self],
    :other-consumers [:t94J09]}]}
