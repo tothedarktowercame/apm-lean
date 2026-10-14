@@ -1501,6 +1501,36 @@ lemma mergeRepeatedBlock_aux_boundary_relation_aux_forward
         (g c₁) (g c₂) := by
   sorry
 
+lemma mergeRepeatedBlock_aux_boundary_relation_aux_reverse_aux_partition
+    {Label : Type*} (u v t : List (Signed Label)) (a : Signed Label)
+    (i : Fin (u ++ [a] ++ v ++ [inv a] ++ t).length) :
+    i.1 < u.length ∨ i.1 = u.length ∨
+      (∃ k, k < v.length ∧ i.1 = u.length + 1 + k) ∨
+      i.1 = u.length + 1 + v.length ∨
+      (∃ k, k < t.length ∧ i.1 = u.length + 2 + v.length + k) := by
+  have hi := i.2
+  simp only [List.length_append, List.length_cons, List.length_nil] at hi
+  by_cases h₀ : i.1 < u.length
+  · exact Or.inl h₀
+  by_cases h₁ : i.1 = u.length
+  · exact Or.inr (Or.inl h₁)
+  by_cases h₂ : i.1 < u.length + 1 + v.length
+  · exact Or.inr (Or.inr (Or.inl
+      ⟨i.1 - (u.length + 1), by omega, by omega⟩))
+  by_cases h₃ : i.1 = u.length + 1 + v.length
+  · exact Or.inr (Or.inr (Or.inr (Or.inl h₃)))
+  · exact Or.inr (Or.inr (Or.inr (Or.inr
+      ⟨i.1 - (u.length + 2 + v.length), by omega, by omega⟩)))
+
+lemma mergeRepeatedBlock_aux_boundary_relation_aux_reverse_aux_a_fresh
+    {Label : Type*} [DecidableEq Label]
+    (u v t : List (Signed Label)) (y z a : Signed Label)
+    (ha : a.1 ∉ (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t).map Prod.fst) :
+    a.1 ∉ u.map Prod.fst ∧ a.1 ≠ y.1 ∧ a.1 ≠ z.1 ∧
+      a.1 ∉ v.map Prod.fst ∧ a.1 ∉ t.map Prod.fst := by
+  simp [inv] at ha ⊢
+  aesop
+
 /-- Reverse generators: each identified target pair pulls back under `g⁻¹` to a
 related source pair (split the `a` / `a⁻¹` parameter at `1/2`). -/
 lemma mergeRepeatedBlock_aux_boundary_relation_aux_reverse
