@@ -165,7 +165,50 @@ abbrev apm_t02a02_square :=
 -- BEGIN SEAT AREA
 theorem apm_t02a02_source_octagon_homeomorph :
     Nonempty (apm_t02a02_F ≃ₜ apm_t02a02_octagon) := by
-  sorry
+  have hrel : apm_t02a02_gluingRel =
+      boundaryRel 8 apm_t02a02_perm8 apm_t02a02_sign8 := by
+    funext x y
+    apply propext
+    simp only [apm_t02a02_gluingRel, boundaryRel]
+    constructor
+    · rintro ⟨i, t, hx, hy⟩
+      refine ⟨i, t, hx, ?_⟩
+      fin_cases i <;>
+        simpa [apm_t02a02_perm8, apm_t02a02_pair,
+          apm_t02a02_sign8, apm_t02a02_word, pairedParameter,
+          reverseIcc] using hy
+    · rintro ⟨i, t, hx, hy⟩
+      refine ⟨i, t, hx, ?_⟩
+      fin_cases i <;>
+        simpa [apm_t02a02_perm8, apm_t02a02_pair,
+          apm_t02a02_sign8, apm_t02a02_word, pairedParameter,
+          reverseIcc] using hy
+  refine ⟨{
+    toFun := Quotient.lift (fun x => Quotient.mk _ x) (by
+      intro a b hab
+      apply Quotient.sound
+      change Relation.EqvGen apm_t02a02_gluingRel a b at hab
+      change Relation.EqvGen
+        (boundaryRel 8 apm_t02a02_perm8 apm_t02a02_sign8) a b
+      rw [← hrel]
+      exact hab)
+    invFun := Quotient.lift (fun x => Quotient.mk _ x) (by
+      intro a b hab
+      apply Quotient.sound
+      change Relation.EqvGen
+        (boundaryRel 8 apm_t02a02_perm8 apm_t02a02_sign8) a b at hab
+      change Relation.EqvGen apm_t02a02_gluingRel a b
+      rw [hrel]
+      exact hab)
+    left_inv := by rintro ⟨x⟩; rfl
+    right_inv := by rintro ⟨x⟩; rfl
+    continuous_toFun := by
+      apply Continuous.quotient_lift
+      exact continuous_coinduced_rng
+    continuous_invFun := by
+      apply Continuous.quotient_lift
+      exact continuous_coinduced_rng
+  }⟩
 -- END SEAT AREA
 
 /-- Cancelling the adjacent `cc⁻¹` pair gives the indicated hexagon. -/
