@@ -2377,6 +2377,179 @@ so `‖∇b_n‖∞ = O(1/n)` since the ratio is fixed) converges to the identit
 `H1dist`: value and bulk-gradient terms by dominated convergence, the
 `u.val • ∇b_n` term by the `O(1/n)` bound. -/
 -- BEGIN SEAT AREA
+lemma apm_m01J04_mollify_exists_compact_core_aux_tendsto_aux_scale
+    {d : ℕ} (n : ℕ) (x : EuclideanSpace ℝ (Fin d)) :
+    apm_m01J04_mollify_exists_compact_core_aux_cutoff n x =
+      apm_m01J04_mollify_exists_compact_core_aux_cutoff 0
+        ((n + 1 : ℝ)⁻¹ • x) := by
+  have hr : 2 * (n + 1 : ℝ) / (n + 1) = 2 := by
+    field_simp
+  unfold apm_m01J04_mollify_exists_compact_core_aux_cutoff
+    apm_m01J04_mollify_exists_compact_core_aux_bump
+  rw [ContDiffBump.apply, ContDiffBump.apply]
+  dsimp only
+  rw [hr]
+  norm_num
+
+lemma apm_m01J04_mollify_exists_compact_core_aux_tendsto_aux_fderiv
+    {d : ℕ} (n : ℕ) (x : EuclideanSpace ℝ (Fin d)) :
+    fderiv ℝ (apm_m01J04_mollify_exists_compact_core_aux_cutoff n) x =
+      (n + 1 : ℝ)⁻¹ • fderiv ℝ
+        (apm_m01J04_mollify_exists_compact_core_aux_cutoff 0)
+        ((n + 1 : ℝ)⁻¹ • x) := by
+  have heq : apm_m01J04_mollify_exists_compact_core_aux_cutoff (d := d) n =
+      apm_m01J04_mollify_exists_compact_core_aux_cutoff 0 ∘
+        fun x ↦ (n + 1 : ℝ)⁻¹ • x := by
+    funext y
+    exact apm_m01J04_mollify_exists_compact_core_aux_tendsto_aux_scale n y
+  rw [heq, fderiv_comp]
+  · ext y
+    have hs : fderiv ℝ (fun z : EuclideanSpace ℝ (Fin d) ↦
+        (n + 1 : ℝ)⁻¹ • z) x =
+        (n + 1 : ℝ)⁻¹ • ContinuousLinearMap.id ℝ
+          (EuclideanSpace ℝ (Fin d)) := by
+      simpa using fderiv_const_smul (𝕜 := ℝ)
+        (x := x) differentiableAt_id (n + 1 : ℝ)⁻¹
+    rw [hs]
+    simp
+  · exact (apm_m01J04_mollify_exists_compact_core_aux_test (d := d) 0).1.differentiable
+      (by simp) _
+  · fun_prop
+
+lemma apm_m01J04_mollify_exists_compact_core_aux_tendsto_aux_eventually_one
+    {d : ℕ} (x : EuclideanSpace ℝ (Fin d)) :
+    ∀ᶠ n : ℕ in atTop,
+      apm_m01J04_mollify_exists_compact_core_aux_cutoff n x = 1 := by
+  obtain ⟨N : ℕ, hN⟩ := exists_nat_gt ‖x‖
+  filter_upwards [eventually_atTop.2 ⟨N, fun _ hn ↦ hn⟩] with n hn
+  apply (apm_m01J04_mollify_exists_compact_core_aux_bump n).one_of_mem_closedBall
+  rw [Metric.mem_closedBall, dist_zero_right]
+  change ‖x‖ ≤ (n + 1 : ℝ)
+  exact hN.le.trans (by exact_mod_cast Nat.le_add_right_of_le hn)
+
+lemma apm_m01J04_mollify_exists_compact_core_aux_tendsto_aux_mul
+    {d : ℕ} {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    (f : EuclideanSpace ℝ (Fin d) → E) (hf : MemLp f 2 volume) :
+    Tendsto (fun n ↦ (eLpNorm (fun x ↦
+      apm_m01J04_mollify_exists_compact_core_aux_cutoff n x • f x - f x)
+      2 volume).toReal) atTop (nhds 0) := by
+  let b : ℕ → EuclideanSpace ℝ (Fin d) → ℝ := fun n ↦
+    apm_m01J04_mollify_exists_compact_core_aux_cutoff n
+  let e : ℕ → EuclideanSpace ℝ (Fin d) → E := fun n x ↦ b n x • f x - f x
+  have he_mem (n : ℕ) : MemLp (e n) 2 volume := by
+    apply hf.of_le
+    · exact ((((apm_m01J04_mollify_exists_compact_core_aux_test n).1.continuous
+          ).aestronglyMeasurable.smul hf.1).sub hf.1)
+    · filter_upwards [] with x
+      rw [show e n x = (b n x - 1) • f x by simp [e, b, sub_smul], norm_smul]
+      have h0 := (apm_m01J04_mollify_exists_compact_core_aux_bump n).nonneg' x
+      have h1 := (apm_m01J04_mollify_exists_compact_core_aux_bump n).le_one (x := x)
+      apply mul_le_of_le_one_left (norm_nonneg _)
+      simpa [b, apm_m01J04_mollify_exists_compact_core_aux_cutoff,
+        Real.norm_eq_abs, abs_of_nonpos (sub_nonpos.mpr h1)] using h0
+  have hbound (n : ℕ) : ∀ᵐ x ∂volume,
+      ‖e n x‖ₑ ^ (2 : ℝ) ≤ ‖f x‖ₑ ^ (2 : ℝ) := by
+    filter_upwards [] with x
+    rw [show e n x = (b n x - 1) • f x by simp [e, b, sub_smul], enorm_smul]
+    apply ENNReal.rpow_le_rpow _ (by norm_num)
+    apply mul_le_of_le_one_left (bot_le)
+    rw [Real.enorm_eq_ofReal_abs, ENNReal.ofReal_le_one]
+    have h0 := (apm_m01J04_mollify_exists_compact_core_aux_bump n).nonneg' x
+    have h1 := (apm_m01J04_mollify_exists_compact_core_aux_bump n).le_one (x := x)
+    simpa [b, apm_m01J04_mollify_exists_compact_core_aux_cutoff,
+      abs_of_nonpos (sub_nonpos.mpr h1)] using h0
+  have hfin : (∫⁻ x, ‖f x‖ₑ ^ (2 : ℝ) ∂volume) ≠ ∞ :=
+    ne_of_lt (lintegral_rpow_enorm_lt_top_of_eLpNorm_lt_top
+      (by norm_num : (2 : ℝ≥0∞) ≠ 0) (by norm_num : (2 : ℝ≥0∞) ≠ ∞)
+      hf.eLpNorm_lt_top)
+  have hpoint (x : EuclideanSpace ℝ (Fin d)) :
+      Tendsto (fun n ↦ ‖e n x‖ₑ ^ (2 : ℝ)) atTop (nhds 0) := by
+    apply (tendsto_const_nhds : Tendsto (fun _ : ℕ ↦ (0 : ℝ≥0∞)) atTop (nhds 0)).congr'
+    filter_upwards [apm_m01J04_mollify_exists_compact_core_aux_tendsto_aux_eventually_one x]
+      with n hn
+    simp [e, b, hn]
+  have hlin : Tendsto (fun n ↦ ∫⁻ x, ‖e n x‖ₑ ^ (2 : ℝ) ∂volume)
+      atTop (nhds 0) := by
+    simpa using tendsto_lintegral_of_dominated_convergence'
+      (fun x ↦ ‖f x‖ₑ ^ (2 : ℝ))
+      (fun n ↦ (he_mem n).1.enorm.pow_const _) hbound hfin (ae_of_all _ hpoint)
+  have help : Tendsto (fun n ↦ eLpNorm (e n) 2 volume) atTop (nhds 0) := by
+    simp_rw [eLpNorm_eq_lintegral_rpow_enorm (by norm_num : (2 : ℝ≥0∞) ≠ 0)
+      (by norm_num : (2 : ℝ≥0∞) ≠ ∞)]
+    norm_num
+    have hc : Continuous (fun z : ℝ≥0∞ ↦ z ^ (1 / 2 : ℝ)) :=
+      ENNReal.continuous_rpow_const
+    simpa [Function.comp_def] using hc.continuousAt.tendsto.comp hlin
+  have hreal := (ENNReal.tendsto_toReal_iff
+    (fun n ↦ (he_mem n).eLpNorm_ne_top) ENNReal.zero_ne_top).2 help
+  simpa [e, b] using hreal
+
+lemma apm_m01J04_mollify_exists_compact_core_aux_tendsto_aux_lower
+    {d : ℕ} (f : EuclideanSpace ℝ (Fin d) → ℝ) (hf : MemLp f 2 volume) :
+    Tendsto (fun n ↦ (eLpNorm (fun x ↦ f x • WithLp.toLp 2
+      (fun i ↦ fderiv ℝ
+        (apm_m01J04_mollify_exists_compact_core_aux_cutoff n) x
+          (EuclideanSpace.single i 1))) 2 volume).toReal) atTop (nhds 0) := by
+  let D : ℕ → EuclideanSpace ℝ (Fin d) → EuclideanSpace ℝ (Fin d) := fun n x ↦
+    WithLp.toLp 2 (fun i ↦ fderiv ℝ
+      (apm_m01J04_mollify_exists_compact_core_aux_cutoff n) x
+        (EuclideanSpace.single i 1))
+  have hDcont (n : ℕ) : Continuous (D n) :=
+    (PiLp.continuous_toLp 2 (fun _ : Fin d ↦ ℝ)).comp
+      (continuous_pi fun i ↦
+        ((apm_m01J04_mollify_exists_compact_core_aux_test n).1.continuous_fderiv
+          (by simp)).clm_apply continuous_const)
+  have hD0supp : HasCompactSupport (D 0) := by
+    apply ((apm_m01J04_mollify_exists_compact_core_aux_test (d := d) 0).2.1.fderiv ℝ).mono'
+    intro x hx
+    contrapose! hx
+    simp only [Function.mem_support, ne_eq, not_not] at hx ⊢
+    have hz : fderiv ℝ (apm_m01J04_mollify_exists_compact_core_aux_cutoff 0) x = 0 :=
+      image_eq_zero_of_notMem_tsupport hx
+    ext i
+    simp [D, hz]
+  obtain ⟨C, hC⟩ := hD0supp.exists_bound_of_continuous (hDcont 0)
+  let s : ℕ → ℝ := fun n ↦ (n + 1 : ℝ)⁻¹
+  have hDs (n : ℕ) (x : EuclideanSpace ℝ (Fin d)) :
+      D n x = s n • D 0 (s n • x) := by
+    ext i
+    change fderiv ℝ (apm_m01J04_mollify_exists_compact_core_aux_cutoff n) x
+        (EuclideanSpace.single i 1) = _
+    rw [apm_m01J04_mollify_exists_compact_core_aux_tendsto_aux_fderiv]
+    simp [D, s]
+  have hDnorm (n : ℕ) (x : EuclideanSpace ℝ (Fin d)) :
+      ‖D n x‖ ≤ s n * |C| := by
+    rw [hDs, norm_smul, Real.norm_eq_abs, abs_of_nonneg (by positivity : 0 ≤ s n)]
+    exact mul_le_mul_of_nonneg_left ((hC _).trans (le_abs_self C)) (by positivity)
+  have hDtop (n : ℕ) : eLpNorm (D n) ⊤ volume ≤ ENNReal.ofReal (s n * |C|) := by
+    have h := eLpNorm_le_of_ae_bound (p := (⊤ : ℝ≥0∞))
+      (μ := volume) (ae_of_all volume (hDnorm n))
+    simpa using h
+  have hle (n : ℕ) : eLpNorm (fun x ↦ f x • D n x) 2 volume ≤
+      eLpNorm f 2 volume * ENNReal.ofReal (s n * |C|) := by
+    exact (eLpNorm_smul_le_mul_eLpNorm (p := 2) (q := ⊤) (r := 2)
+      (hDcont n).aestronglyMeasurable hf.1).trans
+        (mul_le_mul_left' (hDtop n) _)
+  have hreal (n : ℕ) : (eLpNorm (fun x ↦ f x • D n x) 2 volume).toReal ≤
+      (eLpNorm f 2 volume).toReal * (s n * |C|) := by
+    have htop : eLpNorm f 2 volume * ENNReal.ofReal (s n * |C|) ≠ ⊤ :=
+      ENNReal.mul_ne_top hf.eLpNorm_ne_top ENNReal.ofReal_ne_top
+    calc
+      _ ≤ (eLpNorm f 2 volume * ENNReal.ofReal (s n * |C|)).toReal :=
+        ENNReal.toReal_mono htop (hle n)
+      _ = _ := by rw [ENNReal.toReal_mul, ENNReal.toReal_ofReal (by positivity)]
+  apply squeeze_zero (fun n ↦ ENNReal.toReal_nonneg) hreal
+  have hs : Tendsto s atTop (nhds 0) := by
+    exact tendsto_inv_atTop_zero.comp
+      (tendsto_atTop_add_const_right atTop 1
+        (tendsto_natCast_atTop_atTop : Tendsto (fun n : ℕ ↦ (n : ℝ)) atTop atTop))
+  convert
+    ((tendsto_const_nhds : Tendsto (fun _ : ℕ ↦ (eLpNorm f 2 volume).toReal)
+      atTop (nhds (eLpNorm f 2 volume).toReal)).mul
+      (hs.mul (tendsto_const_nhds : Tendsto (fun _ : ℕ ↦ |C|) atTop (nhds |C|))) : Tendsto
+      (fun n ↦ (eLpNorm f 2 volume).toReal * (s n * |C|))
+        atTop (nhds ((eLpNorm f 2 volume).toReal * (0 * |C|)))) using 1 <;> simp
+
 lemma apm_m01J04_mollify_exists_compact_core_aux_tendsto
     {d : ℕ} (u : apm_m01J04_H1 d Set.univ) :
     Tendsto (fun n ↦ apm_m01J04_H1dist
@@ -2384,7 +2557,77 @@ lemma apm_m01J04_mollify_exists_compact_core_aux_tendsto
         (apm_m01J04_mollify_exists_compact_core_aux_cutoff n)
         (apm_m01J04_mollify_exists_compact_core_aux_test n) u) u)
       atTop (nhds 0) := by
-  sorry
+  let b : ℕ → EuclideanSpace ℝ (Fin d) → ℝ := fun n ↦
+    apm_m01J04_mollify_exists_compact_core_aux_cutoff n
+  let hb (n : ℕ) := apm_m01J04_mollify_exists_compact_core_aux_test (d := d) n
+  let a (n : ℕ) := apm_m01J04_H1mul (b n) (hb n) u
+  have hval : Tendsto (fun n ↦
+      (eLpNorm (fun x ↦ (a n).val x - u.val x) 2 volume).toReal)
+      atTop (nhds 0) := by
+    simpa [a, b, hb, apm_m01J04_H1mul_val, mul_comm] using
+      apm_m01J04_mollify_exists_compact_core_aux_tendsto_aux_mul u.val
+        (by simpa using u.val_memLp)
+  let bulk : ℕ → EuclideanSpace ℝ (Fin d) → EuclideanSpace ℝ (Fin d) :=
+    fun n x ↦ b n x • u.grad x - u.grad x
+  let lower : ℕ → EuclideanSpace ℝ (Fin d) → EuclideanSpace ℝ (Fin d) :=
+    fun n x ↦ u.val x • WithLp.toLp 2 (fun i ↦
+      fderiv ℝ (b n) x (EuclideanSpace.single i 1))
+  have hbulk : Tendsto (fun n ↦ (eLpNorm (bulk n) 2 volume).toReal)
+      atTop (nhds 0) := by
+    simpa [bulk, b] using
+      apm_m01J04_mollify_exists_compact_core_aux_tendsto_aux_mul u.grad
+        (by simpa using u.grad_memLp)
+  have hlower : Tendsto (fun n ↦ (eLpNorm (lower n) 2 volume).toReal)
+      atTop (nhds 0) := by
+    simpa [lower, b] using
+      apm_m01J04_mollify_exists_compact_core_aux_tendsto_aux_lower u.val
+        (by simpa using u.val_memLp)
+  have heq (n : ℕ) : (fun x ↦ (a n).grad x - u.grad x) =
+      fun x ↦ bulk n x + lower n x := by
+    funext x
+    simp only [a, b, bulk, lower, apm_m01J04_H1mul_grad]
+    abel
+  have hlower_mem (n : ℕ) : MemLp (lower n) 2 volume := by
+    have hD := apm_m01J04_isTestFunction_fderivField_memLp (hb n) ⊤
+    simpa [lower, b, smul_comm] using hD.smul u.val_memLp
+  have hbulk_mem (n : ℕ) : MemLp (bulk n) 2 volume := by
+    have ha : MemLp (a n).grad 2 volume := by simpa using (a n).grad_memLp
+    have hu : MemLp u.grad 2 volume := by simpa using u.grad_memLp
+    have h := (ha.sub hu).sub (hlower_mem n)
+    convert h using 1
+    funext x
+    have hx := congrFun (heq n) x
+    simp only [Pi.sub_apply]
+    rw [hx]
+    abel
+  have hbound (n : ℕ) :
+      (eLpNorm (fun x ↦ (a n).grad x - u.grad x) 2 volume).toReal ≤
+        (eLpNorm (bulk n) 2 volume).toReal +
+          (eLpNorm (lower n) 2 volume).toReal := by
+    rw [heq]
+    have hle := eLpNorm_add_le (hbulk_mem n).1 (hlower_mem n).1
+      (by norm_num : (1 : ℝ≥0∞) ≤ 2)
+    have htop : eLpNorm (bulk n) 2 volume + eLpNorm (lower n) 2 volume ≠ ⊤ :=
+      ENNReal.add_ne_top.2
+        ⟨(hbulk_mem n).eLpNorm_ne_top, (hlower_mem n).eLpNorm_ne_top⟩
+    calc
+      _ ≤ (eLpNorm (bulk n) 2 volume + eLpNorm (lower n) 2 volume).toReal :=
+        ENNReal.toReal_mono htop hle
+      _ = _ := ENNReal.toReal_add (hbulk_mem n).eLpNorm_ne_top
+        (hlower_mem n).eLpNorm_ne_top
+  have hgrad : Tendsto (fun n ↦
+      (eLpNorm (fun x ↦ (a n).grad x - u.grad x) 2 volume).toReal)
+      atTop (nhds 0) := by
+    apply squeeze_zero (fun n ↦ ENNReal.toReal_nonneg) hbound
+    simpa using hbulk.add hlower
+  have hval' : Tendsto (fun n ↦
+      (eLpNorm (fun x ↦ (a n).val x - u.val x) 2
+        (volume.restrict Set.univ)).toReal) atTop (nhds 0) := by simpa using hval
+  have hgrad' : Tendsto (fun n ↦
+      (eLpNorm (fun x ↦ (a n).grad x - u.grad x) 2
+        (volume.restrict Set.univ)).toReal) atTop (nhds 0) := by simpa using hgrad
+  simpa [a, b, hb] using
+    apm_m01J04_H1dist_tendsto_zero_of_components a u hval' hgrad'
 -- END SEAT AREA
 
 /-- Spatial truncation reduces the general auxiliary statement to a genuinely
