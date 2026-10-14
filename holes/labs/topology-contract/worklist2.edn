@@ -87901,25 +87901,25 @@
   {:consumer :t97A01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 2,
+   :stop-count 3,
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Transport words through the successor homeomorphism and expand old factors inductively; prove free-group surjectivity, coordinate epi, B6-B10.",
+    "Prove leg-map formulas, expand old factors inductively, then free-group surjectivity, coordinate epi, B6-B10.",
     :outcome :stop,
-    :warnings ["preexisting lints; unrelated edit preserved"],
+    :warnings ["preexisting lints"],
     :missing-theorems
-    [{:name "finiteWedgeFinSuccPointWedge_exists_legWord",
-      :type "successor split loops are old/final-factor words",
+    [{:name "finiteWedgeFinSucc_exists_splitLegWord",
+      :type "successor split words transported to the finite wedge",
       :status :proved,
       :consumers [:t97A01 :t94J09],
-      :depends-on ["finiteWedgePointWedge_rightBase_inl"],
+      :depends-on ["finiteWedgeFinSuccPointWedge_exists_legWord"],
       :area "polygon-quotient-homology"}
      {:name "finiteWedgeFinSucc_exists_legWord",
-      :type "transport split words to Fin successor legs",
+      :type "expand old-factor words into labeled Fin legs",
       :status :not-started,
       :consumers [:t97A01 :t94J09],
-      :depends-on ["finiteWedgeFinSuccPointWedge_exists_legWord"],
+      :depends-on ["finiteWedgeFinSucc_exists_splitLegWord"],
       :area "polygon-quotient-homology"}
      {:name "finiteWedgeLegFreeGroupMap_surjective",
       :type "canonical free-group map is onto",
@@ -87931,33 +87931,29 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked successor point-wedge leg-word generation.",
+    :reason
+    "Banked successor homeomorphism transport and split-factor word theorem.",
     :commands
-    [{:cmd "lake build ConstructionTargets.PolygonSurfaceHomology",
+    [{:cmd
+      "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology",
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-     {:cmd "git show --check c6f80043b", :exit 0}
-     {:cmd "exact blob+axioms | lake env lean /dev/stdin", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1791998219127-11958-bdb9a6b7",
-     :commands
-     ["git show/diff c6f80043b; sha256sum"
-      "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology"
-      "lake env lean /dev/stdin (#print axioms)"
-      "placeholder scan; statement-registry check; git show --check"],
-     :finding
-     "PASS: commit c6f80043b by topo-6 changes only scoped PolygonSurfaceHomology.lean; exact blob SHA-256 9e2cd261020793eb6c739154e709344a5592c7a44d252535390f40b39ff50f71. Exact snapshot builds; 0 placeholders; theorem uses propext/Classical.choice/Quot.sound; registry 166/0. Coproduct induction is complete because letters range over entire factor groups (including inverses); concatenation preserves multiplication. Specialization keeps old Fin(n+1) wedge as inl and final Unit wedge as inr, matching the proved right-base factorization. Real compiled progress; remaining milestones transport words through the successor homeomorphism, inductively expand old factors, then prove free-group surjectivity/B6-B10."},
-    :commit "c6f80043b",
+     {:cmd "git show --check 57fe1358b", :exit 0}
+     {:cmd "exact theorem axioms | lake env lean /dev/stdin",
+      :exit 0}],
+    :diagnostic-history
+    [{:cmd "transport proof drafts",
+      :exit 1,
+      :correction "made product transport induction explicit"}],
+    :commit "57fe1358b",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
     {:path "ConstructionTargets/PolygonSurfaceHomology.lean",
      :sha256
-     "9e2cd261020793eb6c739154e709344a5592c7a44d252535390f40b39ff50f71"},
+     "4834db7e4f75c89093c4f09f3a2efbbfd2f62c93446d8840b605af4facfdbf5e"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -90342,6 +90338,25 @@
     :type "transport split words to Fin successor legs",
     :area "polygon-quotient-homology"},
    :id :lemma-finitewedgefinsucc-exists-legword,
+   :kind :lemma,
+   :depends-on
+   [:lemma-finitewedgefinsuccpointwedge-exists-legword
+    :lemma-finitewedgefinsucc-exists-splitlegword],
+   :other-consumers [:t94J09]}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "finiteWedgeFinSucc_exists_splitLegWord",
+    :type "successor split words transported to the finite wedge"},
+   :lemma
+   {:name "finiteWedgeFinSucc_exists_splitLegWord",
+    :reported-by [:program-2026-10-13-polygon-surface-homology],
+    :type "successor split words transported to the finite wedge",
+    :area "polygon-quotient-homology",
+    :proved-in :program-2026-10-13-polygon-surface-homology},
+   :id :lemma-finitewedgefinsucc-exists-splitlegword,
    :kind :lemma,
    :depends-on [:lemma-finitewedgefinsuccpointwedge-exists-legword],
    :other-consumers [:t94J09]}]}
