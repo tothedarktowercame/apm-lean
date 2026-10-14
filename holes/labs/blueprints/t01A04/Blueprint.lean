@@ -894,12 +894,127 @@ lemma apm_t01A04_cbp_preimage :
     apm_t01a04_circleCoverMap ⁻¹' apm_t01A04_cbp_U = ⋃ i, apm_t01A04_cbp_V i := by
   sorry
 
+noncomputable def apm_t01A04_cbp_sheet_homeomorph_aux_root
+    (i : Fin 2) (z : Circle) : Circle :=
+  apm_t01a04_sheetPoint i * Circle.exp (Complex.arg z / 2)
+
+lemma apm_t01A04_cbp_sheet_homeomorph_aux_root_sq
+    (i : Fin 2) (z : Circle) :
+    apm_t01A04_cbp_sheet_homeomorph_aux_root i z ^ 2 = z := by
+  rw [apm_t01A04_cbp_sheet_homeomorph_aux_root, mul_pow,
+    apm_t01a04_sheetPoint_sq, one_mul, pow_two, ← Circle.exp_add]
+  convert Circle.exp_arg z using 1 <;> ring
+
+lemma apm_t01A04_cbp_sheet_homeomorph_aux_branch_unique
+    (i : Fin 2) (x y : Circle) (hsq : x ^ 2 = y ^ 2)
+    (hx : 0 < ((x : ℂ) * star (apm_t01a04_sheetPoint i : ℂ)).re)
+    (hy : 0 < ((y : ℂ) * star (apm_t01a04_sheetPoint i : ℂ)).re) :
+    x = y := by
+  have hsq' : (x : ℂ) ^ 2 = (y : ℂ) ^ 2 := congrArg Subtype.val hsq
+  rcases (sq_eq_sq_iff_eq_or_eq_neg).mp hsq' with h | h
+  · exact Subtype.ext h
+  · exfalso
+    have hxy :
+        ((x : ℂ) * star (apm_t01a04_sheetPoint i : ℂ)).re =
+          -((y : ℂ) * star (apm_t01a04_sheetPoint i : ℂ)).re := by
+      rw [h]
+      simp
+    linarith
+
+noncomputable def apm_t01A04_cbp_sheet_homeomorph_aux_invRaw (i : Fin 2) :
+    Sum apm_t01a04_Torus Circle → apm_t01a04_CircleCover
+  | .inl q => Quotient.mk _ (.inl (i, q))
+  | .inr z => Quotient.mk _ (.inr
+      (apm_t01A04_cbp_sheet_homeomorph_aux_root i z))
+
+lemma apm_t01A04_cbp_sheet_homeomorph_aux_invRaw_respects (i : Fin 2)
+    {u v} (h : Relation.EqvGen apm_t01a04_wedgeRel u v) :
+    apm_t01A04_cbp_sheet_homeomorph_aux_invRaw i u =
+      apm_t01A04_cbp_sheet_homeomorph_aux_invRaw i v := by
+  induction h with
+  | rel _ _ h =>
+      cases h with
+      | base =>
+        change Quotient.mk _ (Sum.inl (i, ((1 : Circle), (1 : Circle)))) =
+          Quotient.mk _ (Sum.inr
+            (apm_t01A04_cbp_sheet_homeomorph_aux_root i 1))
+        have hr : apm_t01A04_cbp_sheet_homeomorph_aux_root i 1 =
+            apm_t01a04_sheetPoint i := by
+          simp [apm_t01A04_cbp_sheet_homeomorph_aux_root]
+        rw [hr]
+        exact apm_t01A04_circleCoverMap_evenlyCovered_basepoint_aux_glue i
+  | refl _ => rfl
+  | symm _ _ _ ih => exact ih.symm
+  | trans _ _ _ _ _ ih₁ ih₂ => exact ih₁.trans ih₂
+
+noncomputable def apm_t01A04_cbp_sheet_homeomorph_aux_inv (i : Fin 2) :
+    apm_t01a04_X → apm_t01a04_CircleCover :=
+  Quotient.lift (apm_t01A04_cbp_sheet_homeomorph_aux_invRaw i)
+    (fun _ _ h => apm_t01A04_cbp_sheet_homeomorph_aux_invRaw_respects i h)
+
+noncomputable def apm_t01A04_cbp_sheet_homeomorph_aux_to (i : Fin 2) :
+    apm_t01A04_cbp_V i → apm_t01A04_cbp_U := fun y =>
+  ⟨apm_t01a04_circleCoverMap y.1, by
+    rcases y.2 with ⟨r, hr, hry⟩
+    rw [← hry]
+    rcases r with p | z
+    · refine ⟨Sum.inl p.2, hr.2, rfl⟩
+    · refine ⟨Sum.inr (z ^ 2), ?_, rfl⟩
+      change 0 < ((↑(z ^ 2) : ℂ)).re
+      simpa using hr.2⟩
+
+noncomputable def apm_t01A04_cbp_sheet_homeomorph_aux_from (i : Fin 2) :
+    apm_t01A04_cbp_U → apm_t01A04_cbp_V i := fun x =>
+  ⟨apm_t01A04_cbp_sheet_homeomorph_aux_inv i x.1, by
+    rcases x.2 with ⟨r, hr, hrx⟩
+    rw [← hrx]
+    rcases r with q | z
+    · exact ⟨Sum.inl (i, q), ⟨rfl, hr⟩, rfl⟩
+    · refine ⟨Sum.inr
+          (apm_t01A04_cbp_sheet_homeomorph_aux_root i z), ?_, rfl⟩
+      constructor
+      · have hlo := Complex.neg_pi_lt_arg (z : ℂ)
+        have hhi : Complex.arg (z : ℂ) < Real.pi :=
+          Complex.arg_lt_pi_iff.mpr (Or.inl hr.le)
+        have hc : 0 < Real.cos (Complex.arg (z : ℂ) / 2) := by
+          apply Real.cos_pos_of_mem_Ioo
+          constructor <;> linarith [Real.pi_pos]
+        fin_cases i <;>
+          simpa [apm_t01A04_cbp_sheet_homeomorph_aux_root,
+            apm_t01a04_sheetPoint, Circle.exp, Complex.exp_mul_I,
+            ← Complex.ofReal_cos, ← Complex.ofReal_sin] using hc
+      · change 0 < ((↑(apm_t01A04_cbp_sheet_homeomorph_aux_root i z) : ℂ) ^ 2).re
+        rw [← Circle.coe_pow, apm_t01A04_cbp_sheet_homeomorph_aux_root_sq]
+        exact hr⟩
+
+/-- The quotient-level inverse is continuous on `U`. -/
+lemma apm_t01A04_cbp_sheet_homeomorph_aux_inv_continuous (i : Fin 2) :
+    ContinuousOn (apm_t01A04_cbp_sheet_homeomorph_aux_inv i) apm_t01A04_cbp_U := by
+  sorry
+
+/-- Left inverse on sheet `i`. -/
+lemma apm_t01A04_cbp_sheet_homeomorph_aux_left (i : Fin 2) :
+    ∀ y ∈ apm_t01A04_cbp_V i, apm_t01A04_cbp_sheet_homeomorph_aux_inv i (apm_t01a04_circleCoverMap y) = y := by
+  sorry
+
+/-- Right inverse on `U`. -/
+lemma apm_t01A04_cbp_sheet_homeomorph_aux_right (i : Fin 2) :
+    ∀ x ∈ apm_t01A04_cbp_U, apm_t01a04_circleCoverMap (apm_t01A04_cbp_sheet_homeomorph_aux_inv i x) = x := by
+  sorry
+
 /-- On each sheet the cover map is a homeomorphism onto `U` (inverse: identity
 on torus sheet `i`, square root on the arc around `sheetPoint i`). -/
 lemma apm_t01A04_cbp_sheet_homeomorph (i : Fin 2) :
     ∃ h : apm_t01A04_cbp_V i ≃ₜ apm_t01A04_cbp_U, ∀ y,
       (h y : apm_t01a04_X) = apm_t01a04_circleCoverMap y := by
-  sorry
+  refine ⟨Homeomorph.mk ⟨apm_t01A04_cbp_sheet_homeomorph_aux_to i, apm_t01A04_cbp_sheet_homeomorph_aux_from i, ?_, ?_⟩ ?_ ?_, fun y => rfl⟩
+  · intro y
+    exact Subtype.ext (apm_t01A04_cbp_sheet_homeomorph_aux_left i y.1 y.2)
+  · intro x
+    exact Subtype.ext (apm_t01A04_cbp_sheet_homeomorph_aux_right i x.1 x.2)
+  · exact (apm_t01a04_circleCoverMap.continuous.comp continuous_subtype_val).subtype_mk _
+  · exact ((apm_t01A04_cbp_sheet_homeomorph_aux_inv_continuous i).comp_continuous continuous_subtype_val
+      (fun x => x.2)).subtype_mk _
 
 /-- The two sheets over the basepoint (see the plan above). -/
 lemma apm_t01A04_circleCoverMap_evenlyCovered_basepoint_aux_sheets :
