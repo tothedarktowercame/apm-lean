@@ -119066,23 +119066,22 @@
   {:consumer :t00J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 2,
+   :stop-count 3,
    :review-finding
    "Representation-boundary defect: regularFiber_componentSignedCount_eq_zero indexes literal fiber points but assigns each point the global circleDegree of a chosen whole-component lift. Degree zero does not imply each local degree is zero (a degree-zero circle map may have regular preimages of local degrees +1 and -1), so the listed next step local-degree/component-degree equality is false and this lemma cannot bridge to the regular-value signed count. Repair by grouping fiber points by genuine preimage components and proving that the sum of local degrees on each component equals the lift degree, then sum the zero component totals. Archived files compile; hashes/placeholders/registry reproduce.",
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
     :residual
-    "Derive a locally-injective circle value from transversality; prove local-degree comparison; assemble Main.",
+    "Prove geometric comparison and regular-value identity; assemble Main.",
     :outcome :stop,
-    :warnings ["Main sorryAx"],
+    :warnings ["Main sorryAx" "unrelated t93J03 edits"],
     :missing-theorems
-    [{:name "finiteRegularFiberChoice_of_locallyInjective",
-      :type
-      "circle value plus local injectivity gives finite fiber datum",
+    [{:name "regularFiberSignedCount_eq_zero_of_comparison",
+      :type "comparison gives zero signed count",
       :status :proved,
       :consumers [:t00J02],
       :depends-on
-      ["regularFiberFintype_of_locallyInjectiveAlongFiber"],
+      ["occupiedComponentSignedCount_eq_zero_of_localDegreeComparison"],
       :area "oriented-surface-degree"}
      {:name "t00J02_transverse_diskBounded_topHomologyMap_eq_zero",
       :type "H2 map zero",
@@ -119091,38 +119090,27 @@
       :depends-on
       ["regularValue_topHomologyMap_signedCount"
        "finiteRegularFiberChoice_of_locallyInjective"
-       "occupiedComponentSignedCount_eq_zero_of_localDegreeComparison"],
+       "regularFiberSignedCount_eq_zero_of_comparison"],
       :area "oriented-surface-degree"}],
     :statement-hashes
     {:source
      "0b3b4888807bfa06c8d60d86829b75776394ea8aa45a98c933c087165521f923",
      :implementation
-     "ab3c6432a11427608760efdc9c9f25a201b6f38275a63706f04b7b8be661dd92",
+     "ad088e57579c5685ef26c934ff0bbe50ef5ee4094b042e81bd0a04a1a3b2188c",
      :blueprint
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984",
      :registry "166/166"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-2,
-    :reason "Banked finite regular-fiber choice representation.",
+    :reason "Banked componentwise degree comparison interface.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t00J02Closure.lean",
       :exit 0}
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "hash/diff/placeholders", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1792007832017-12294-a0584116",
-     :commands
-     ["git diff-tree/show 6ab093e"
-      "git archive 6ab093e; lake env lean t00J02Closure.lean and Main.lean"
-      "sha256sum and placeholder counts at 6ab093e"
-      "python3 scripts/statement-registry.py check"],
-     :finding
-     "PASS program STOP: new in-scope commit packages a circle value and the literal equality-fiber Fintype derived from local injectivity through the compact-discrete chain, without assuming regularity or local degrees. Archived files compile; closure has 0 placeholders and standard axioms only; Main remains frozen at 0b3b4888 with baseline 1 placeholder; fixture afb497a6 matches; registry 166/166. Deriving a suitable value from transversality, local degrees, component comparison, and final assembly remain listed."},
-    :commit "6ab093ec8c4d7c0afadb809e9949b87fa0b735c5",
+    :commit "dcfc7440576fc0692eb98db5bf2c6600a61a89d0",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t00J02Closure.blueprint.md",
@@ -119130,7 +119118,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119387,7 +119375,8 @@
     :lemma-regularfiberfintype-of-isdiscrete
     :lemma-isdiscrete-preimage-singleton-of-locallyinjectivealongfiber
     :lemma-regularfiberfintype-of-locallyinjectivealongfiber
-    :lemma-finiteregularfiberchoice-of-locallyinjective],
+    :lemma-finiteregularfiberchoice-of-locallyinjective
+    :lemma-regularfibersignedcount-eq-zero-of-comparison],
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
@@ -119876,6 +119865,24 @@
    :kind :lemma,
    :depends-on
    [:lemma-regularfiberfintype-of-locallyinjectivealongfiber],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "regularFiberSignedCount_eq_zero_of_comparison",
+    :type "comparison gives zero signed count"},
+   :lemma
+   {:name "regularFiberSignedCount_eq_zero_of_comparison",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type "comparison gives zero signed count",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02},
+   :id :lemma-regularfibersignedcount-eq-zero-of-comparison,
+   :kind :lemma,
+   :depends-on
+   [:lemma-occupiedcomponentsignedcount-eq-zero-of-localdegreecomparison],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
