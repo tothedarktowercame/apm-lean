@@ -87901,7 +87901,7 @@
   {:consumer :t97A01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 10,
+   :stop-count 0,
    :evidence
    {:placeholder-delta 0,
     :residual
@@ -87960,7 +87960,7 @@
      "c8b8179ff1f522550e1dc55623491ff8db14d4dd0b3a1f45d0c2892c3055b1e7"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -88286,6 +88286,18 @@
      {:cmd "axioms query",
       :exit 1,
       :correction "qualified namespace"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792007831835-12293-1eee024f",
+     :commands
+     ["git show/diff b6557d1f4; blob sha256; diff --check"
+      "lake -Kjobs=1 build ConstructionTargets.t92J06Closure"
+      "lake env lean problems/t92J06/lean/Main.lean"
+      "lake env lean /dev/stdin (#print axioms)"
+      "placeholder scan; statement-registry.py check"],
+     :finding
+     "PASS: b6557d1f4 (topo-6) changes only scoped t92J06Closure.lean; fixture SHA-256 381db41ab6c7e65001439ef6fd6a71f87fba942574f95b69de5a65ad9a827ea0 matches. Exact target and Main elaborate; closure has 0 placeholders, Main retains 1 prior placeholder; new lemmas use standard axioms; registry 166/0. exp equality gives t=u+k with k in {-1,0,1}; signs correctly identify the two endpoint pairs, and interior hypotheses exclude them. New sorry-free compiled progress; remaining: local charts/fibers, Cayley tree, finite invariants."},
     :commit "b6557d1f4",
     :changed-paths ["ConstructionTargets/t92J06Closure.lean"],
     :fixture
@@ -88294,7 +88306,7 @@
      "381db41ab6c7e65001439ef6fd6a71f87fba942574f95b69de5a65ad9a827ea0"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t92J06/lean/Main.lean"
     "problems/t92J06/status.json"
@@ -88312,7 +88324,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t92J06Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked the graph projection.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked edge-interval injectivity.",
    :id :program-2026-10-13-close-t92j06,
    :kind :final-adapter,
    :campaign-priority 34,
@@ -88334,7 +88346,10 @@
      :reason "Banked the graph realization quotient carrier."}
     {:job 5,
      :commit "4b0a1ca1a",
-     :reason "Banked the graph projection."}]}
+     :reason "Banked the graph projection."}
+    {:job 6,
+     :commit "b6557d1f4",
+     :reason "Banked edge-interval injectivity."}]}
   {:consumer :t94A08,
    :phase :lemma,
    :state :banked,
@@ -91031,7 +91046,7 @@
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "radialMVUnionExact", :type "MV exact at surface"},
@@ -91040,14 +91055,16 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "MV exact at surface",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/PolygonSurfaceHomology.lean"]},
    :id :lemma-radialmvunionexact,
    :kind :lemma,
    :depends-on [],
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "radialMVIntersectionExact",
@@ -91057,14 +91074,16 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "MV exact at intersection",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/PolygonSurfaceHomology.lean"]},
    :id :lemma-radialmvintersectionexact,
    :kind :lemma,
    :depends-on [],
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance {:lemma "radialInnerH1GroupIsZero", :type "inner H1=0"},
    :lemma
@@ -91072,14 +91091,16 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "inner H1=0",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/PolygonSurfaceHomology.lean"]},
    :id :lemma-radialinnerh1groupiszero,
    :kind :lemma,
    :depends-on [],
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "radialMVBoundaryGroup", :type "coordinate boundary"},
@@ -91088,14 +91109,16 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "coordinate boundary",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/PolygonSurfaceHomology.lean"]},
    :id :lemma-radialmvboundarygroup,
    :kind :lemma,
    :depends-on [:lemma-radialmvpiecesexact],
    :other-consumers [:t94J09]}
   {:consumer :t92J06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "intervalCircle_eq_imp_coordinate_cases",
@@ -91105,14 +91128,16 @@
     :reported-by [:program-2026-10-13-close-t92j06],
     :type "equal images give equal coordinates or endpoints",
     :area "graph-covering-realization",
-    :proved-in :program-2026-10-13-close-t92j06},
+    :proved-in :program-2026-10-13-close-t92j06,
+    :banked-by :program-2026-10-13-close-t92j06,
+    :banked-commit "b6557d1f4"},
    :id :lemma-intervalcircle-eq-imp-coordinate-cases,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}
   {:consumer :t92J06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "intervalCircle_injective_on_interior",
@@ -91122,7 +91147,9 @@
     :reported-by [:program-2026-10-13-close-t92j06],
     :type "injective for 0<t<1",
     :area "graph-covering-realization",
-    :proved-in :program-2026-10-13-close-t92j06},
+    :proved-in :program-2026-10-13-close-t92j06,
+    :banked-by :program-2026-10-13-close-t92j06,
+    :banked-commit "b6557d1f4"},
    :id :lemma-intervalcircle-injective-on-interior,
    :kind :lemma,
    :depends-on [:lemma-intervalcircle-eq-imp-coordinate-cases],
