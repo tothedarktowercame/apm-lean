@@ -1604,15 +1604,68 @@ theorem apm_t96j07_local_numbers
     apm_t96j07_local_number_axis2 apm_t96j07_affine_chart f hformula apm_t96j07_diagonal_link_degree,
     apm_t96j07_local_number_axis3 apm_t96j07_affine_chart f hformula apm_t96j07_diagonal_link_degree⟩
 
-/-- Compute the rational-homological Lefschetz number.  The action formula is
-supplied directly so this lemma is parallel to map construction. -/
+/-- Seat: the positive diagonal path `diag(1,1+t,1+2t,1+3t)` descends to a
+homotopy from the identity to `f`. -/
+theorem apm_t96j07_global_positiveDiagonal_homotopy
+    (f : C(apm_t96j07_RP3, apm_t96j07_RP3))
+    (hformula : ∀ (x : apm_t96j07_V) (hx : x ≠ 0),
+      f (Projectivization.mk ℝ x hx) =
+        Projectivization.mk ℝ (apm_t96j07_A x) (apm_t96j07_A_ne_zero hx)) :
+    ContinuousMap.Homotopic (ContinuousMap.id apm_t96j07_RP3) f := by
+  sorry
+
+/-- Seat: homotopic maps induce equal maps on rational singular homology.
+The homotopy is an explicit hypothesis, so this leaf is independent of the
+positive-diagonal construction. -/
+theorem apm_t96j07_global_HQmap_eq_id
+    (f : C(apm_t96j07_RP3, apm_t96j07_RP3))
+    (hhom : ContinuousMap.Homotopic (ContinuousMap.id apm_t96j07_RP3) f) :
+    ∀ k : ℕ, apm_t96j07_HQmap k f = 𝟙 (apm_t96j07_HQ k) := by
+  sorry
+
+/-- LIBRARY seat: the rational singular homology of `ℝP³` is `ℚ` in
+degrees zero and three and zero in degrees one and two.  Keeping these four
+bases together avoids duplicating the missing cellular-homology foundation. -/
+theorem apm_t96j07_global_rationalHomology_bases :
+    Nonempty (apm_t96j07_HQ 0 ≅ ModuleCat.of ℚ ℚ) ∧
+    Nonempty (apm_t96j07_HQ 1 ≅ ModuleCat.of ℚ (Fin 0 → ℚ)) ∧
+    Nonempty (apm_t96j07_HQ 2 ≅ ModuleCat.of ℚ (Fin 0 → ℚ)) ∧
+    Nonempty (apm_t96j07_HQ 3 ≅ ModuleCat.of ℚ ℚ) := by
+  sorry
+
+/-- Sorry-free algebraic assembly of the homotopy and rational-homology
+inputs.  Every substantial input is explicit, so its seats are parallel. -/
+theorem apm_t96j07_global_number_of_parts
+    (f : C(apm_t96j07_RP3, apm_t96j07_RP3))
+    (hmap : ∀ k : ℕ, apm_t96j07_HQmap k f = 𝟙 (apm_t96j07_HQ k))
+    (h0 : Nonempty (apm_t96j07_HQ 0 ≅ ModuleCat.of ℚ ℚ))
+    (h1 : Nonempty (apm_t96j07_HQ 1 ≅ ModuleCat.of ℚ (Fin 0 → ℚ)))
+    (h2 : Nonempty (apm_t96j07_HQ 2 ≅ ModuleCat.of ℚ (Fin 0 → ℚ)))
+    (h3 : Nonempty (apm_t96j07_HQ 3 ≅ ModuleCat.of ℚ ℚ)) :
+    apm_t96j07_HasLefschetzNumber f 0 := by
+  rcases h0 with ⟨e0⟩
+  rcases h1 with ⟨e1⟩
+  rcases h2 with ⟨e2⟩
+  rcases h3 with ⟨e3⟩
+  refine ⟨e0, e1, e2, e3, ?_⟩
+  rw [hmap 0, hmap 1, hmap 2, hmap 3]
+  simp
+
+/-- Compute the rational-homological Lefschetz number.  This is only the
+sorry-free wiring of the independent geometric and homological leaves. -/
 theorem apm_t96j07_global_number
     (f : C(apm_t96j07_RP3, apm_t96j07_RP3))
     (hformula : ∀ (x : apm_t96j07_V) (hx : x ≠ 0),
       f (Projectivization.mk ℝ x hx) =
         Projectivization.mk ℝ (apm_t96j07_A x) (apm_t96j07_A_ne_zero hx)) :
     apm_t96j07_HasLefschetzNumber f 0 := by
-  sorry
+  apply apm_t96j07_global_number_of_parts f
+  · exact apm_t96j07_global_HQmap_eq_id f
+      (apm_t96j07_global_positiveDiagonal_homotopy f hformula)
+  · exact apm_t96j07_global_rationalHomology_bases.1
+  · exact apm_t96j07_global_rationalHomology_bases.2.1
+  · exact apm_t96j07_global_rationalHomology_bases.2.2.1
+  · exact apm_t96j07_global_rationalHomology_bases.2.2.2
 
 /-- Fixed points, local Lefschetz numbers, and the global homological
 Lefschetz number for the stated diagonal self-map of `ℝP³`. -/
