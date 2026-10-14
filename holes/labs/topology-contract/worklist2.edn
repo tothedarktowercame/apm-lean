@@ -87949,6 +87949,18 @@
      {:cmd "git show --check 6a558df58", :exit 0}],
     :diagnostic-history
     [{:cmd "raw draft", :exit 1, :correction "explicit evaluation"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792009786212-12349-340e223d",
+     :commands
+     ["git show/diff 6a558df58; blob sha256; diff --check"
+      "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology"
+      "lake env lean /dev/stdin (#print axioms)"
+      "placeholder scan"
+      "statement-registry.py check"],
+     :finding
+     "PASS: 6a558df58 (topo-6) changes only scoped PolygonSurfaceHomology.lean; fixture SHA-256 edb75aa10a6fbbe2cec31f45e4d35a4c855760148a7881b28565400bea442c00 matches. Exact blob builds; 0 placeholders; new declarations use standard axioms; registry 166/0. The raw generator is the outer projection of intersection-arrow(positive generator); attachingOuterClass is the inverse-coordinate image of attachingDegree. Since the coordinate map is an iso, the iff faithfully removes coordinates without changing sign/orientation. New compiled progress; remaining: raw boundary-loop equality, finish B7, then B8-B10."},
     :commit "6a558df58",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
@@ -87957,7 +87969,7 @@
      "edb75aa10a6fbbe2cec31f45e4d35a4c855760148a7881b28565400bea442c00"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -87977,7 +87989,7 @@
     :blueprint
     "ConstructionTargets/PolygonSurfaceHomology.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Reduced B7 to its generator image.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Reduced B7 to raw H1 equality.",
    :id :program-2026-10-13-polygon-surface-homology,
    :kind :reusable-theorem,
    :campaign-priority 31,
@@ -88183,7 +88195,10 @@
     {:job 2, :commit "4e4ae3741", :reason "Banked B6 exact segment."}
     {:job 3,
      :commit "289c2bd64",
-     :reason "Reduced B7 to its generator image."}]}
+     :reason "Reduced B7 to its generator image."}
+    {:job 4,
+     :commit "6a558df58",
+     :reason "Reduced B7 to raw H1 equality."}]}
   {:consumer :t97A01,
    :stop-count 0,
    :phase :implementation,
@@ -91332,7 +91347,7 @@
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "radialMVBoundaryGroup_one_formula",
@@ -91342,14 +91357,16 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "coordinates of raw generator",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :program-2026-10-13-polygon-surface-homology,
+    :banked-commit "6a558df58"},
    :id :lemma-radialmvboundarygroup-one-formula,
    :kind :lemma,
    :depends-on [],
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "radialMVBoundaryGroup_one_iff_outerClass",
@@ -91359,7 +91376,9 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "generator iff raw-class equality",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :program-2026-10-13-polygon-surface-homology,
+    :banked-commit "6a558df58"},
    :id :lemma-radialmvboundarygroup-one-iff-outerclass,
    :kind :lemma,
    :depends-on [:lemma-radialmvboundarygroup-one-formula],
