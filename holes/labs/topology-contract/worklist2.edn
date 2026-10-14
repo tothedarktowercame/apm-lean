@@ -87948,6 +87948,16 @@
     [{:cmd "relabel draft",
       :exit 1,
       :correction "used quotient representatives"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791952111387-11585-db8f6758",
+     :commands
+     ["git show 0e953f171 blob + #print axioms | lake env lean /dev/stdin"
+      "diff-tree/readlink/sha256 assertions"
+      "statement-registry check; comment-stripped placeholder scan"],
+     :finding
+     "PASS: 0e953f171 changes only PolygonSurfaceHomology.lean; exact blob SHA256 6ee3bca9446bec9ce4841f86ab081e27164706ca004858f635dcc653aec7515d. It compiles with standard axioms propext/Classical.choice/Quot.sound; placeholders 0; registry 166/0. New progress beyond d06aefa52 defines the canonical free-group map from orbit labels to common-basepoint leg classes, proves by FreeGroup induction that every source element evaluates to an integer-exponent leg word, and correctly reduces fundamental-group leg-word generation to surjectivity of that map. Identity, generator, inverse, multiplication, word concatenation, and map direction are handled explicitly; free-group surjectivity remains listed."},
     :commit "1798bb36e",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
@@ -87956,7 +87966,7 @@
      "459f6679314523eabf2ff7a4c773dc92c3b42e2eefcb87129f6d45bd746e4000"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -87976,7 +87986,7 @@
     :blueprint
     "ConstructionTargets/PolygonSurfaceHomology.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Reduced word generation to free-group surjectivity.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked finite-wedge relabelling.",
    :id :program-2026-10-13-polygon-surface-homology,
    :kind :reusable-theorem,
    :campaign-priority 31,
@@ -88051,7 +88061,10 @@
      "Banked Hurewicz evaluation of finite integer-exponent leg words."}
     {:job 8,
      :commit "0e953f171",
-     :reason "Reduced word generation to free-group surjectivity."}]}
+     :reason "Reduced word generation to free-group surjectivity."}
+    {:job 9,
+     :commit "1798bb36e",
+     :reason "Banked finite-wedge relabelling."}]}
   {:consumer :t97A01,
    :stop-count 0,
    :phase :implementation,
@@ -89329,7 +89342,7 @@
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "finiteWedgeHomeomorphOfEquiv",
@@ -89339,14 +89352,16 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "relabels finite wedges",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :program-2026-10-13-polygon-surface-homology,
+    :banked-commit "1798bb36e"},
    :id :lemma-finitewedgehomeomorphofequiv,
    :kind :lemma,
    :depends-on [],
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "finiteWedgeOrbitHomeomorphFin",
@@ -89356,7 +89371,9 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "orbit wedge relabelled by Fin",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :program-2026-10-13-polygon-surface-homology,
+    :banked-commit "1798bb36e"},
    :id :lemma-finitewedgeorbithomeomorphfin,
    :kind :lemma,
    :depends-on [:lemma-finitewedgehomeomorphofequiv],
