@@ -87944,6 +87944,18 @@
      {:cmd "placeholder scan", :exit 0}
      {:cmd "axioms check", :exit 0}
      {:cmd "git show --check 34e4a3658", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792015982440-12541-0495d65e",
+     :commands
+     ["git show/diff 34e4a3658; blob sha256; diff --check"
+      "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology"
+      "lake env lean /dev/stdin (#print axioms)"
+      "placeholder scan"
+      "statement-registry.py check"],
+     :finding
+     "PASS: reviewer codex-7; 34e4a3658 (topo-6) newly changes only scoped PolygonSurfaceHomology.lean; fixture SHA-256 25bc9217471c36c1304235bab209a6c02490186dbcd01e34438424470fd3610f matches. Exact blob builds; 0 placeholders; standard axioms; registry 166/0. Pointwise edge formulas preserve the edge-orbit label: positive edges use integerLoop 1 at t, while negative edges use the same loop at reverseIcc t, giving precisely the required path reversal and no extra sign. New compiled progress toward the explicit boundary word; remaining finite subdivision/concatenation, sign-corrected B7, then B8-B10."},
     :commit "34e4a3658",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
@@ -87952,7 +87964,7 @@
      "25bc9217471c36c1304235bab209a6c02490186dbcd01e34438424470fd3610f"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -87972,7 +87984,7 @@
     :blueprint
     "ConstructionTargets/PolygonSurfaceHomology.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked unit-power comparison of explicit and normalized circle generators.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked explicit winding-one formulas for forward and reversed boundary edges.",
    :id :program-2026-10-13-polygon-surface-homology,
    :kind :reusable-theorem,
    :campaign-priority 31,
@@ -88230,7 +88242,11 @@
     {:job 8,
      :commit "dad8a4fd9",
      :reason
-     "Banked unit-power comparison of explicit and normalized circle generators."}]}
+     "Banked unit-power comparison of explicit and normalized circle generators."}
+    {:job 9,
+     :commit "34e4a3658",
+     :reason
+     "Banked explicit winding-one formulas for forward and reversed boundary edges."}]}
   {:consumer :t97A01,
    :stop-count 0,
    :phase :implementation,
@@ -92005,7 +92021,7 @@
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "polygonBoundaryWedgeLoop_edgePoint_integerLoop_of_sign",
@@ -92015,14 +92031,16 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "forward edge is explicit winding-one leg",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :program-2026-10-13-polygon-surface-homology,
+    :banked-commit "34e4a3658"},
    :id :lemma-polygonboundarywedgeloop-edgepoint-integerloop-of-sign,
    :kind :lemma,
    :depends-on [:lemma-circlearc-eq-integerloop-one],
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -92033,7 +92051,9 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "reverse edge is reversed winding-one leg",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :program-2026-10-13-polygon-surface-homology,
+    :banked-commit "34e4a3658"},
    :id
    :lemma-polygonboundarywedgeloop-edgepoint-integerloop-of-not-sign,
    :kind :lemma,
