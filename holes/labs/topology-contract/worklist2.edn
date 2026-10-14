@@ -87942,6 +87942,16 @@
     [{:cmd "cast drafts",
       :exit 1,
       :correction "used quotient induction"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791947914606-11464-36d8071c",
+     :commands
+     ["git show 6c78dadca blob + #print axioms | lake env lean /dev/stdin"
+      "diff-tree/readlink/sha256 assertions"
+      "statement-registry check; comment-stripped placeholder scan"],
+     :finding
+     "PASS: 6c78dadca changes only PolygonSurfaceHomology.lean; exact blob SHA256 f0b652aca1b824a5001b205788a27dd323f0ab10a3e56d5f7a5d9695b620ed5a. It compiles with standard axioms propext/Classical.choice/Quot.sound; placeholders 0; registry 166/0. New progress beyond 721b9f1a1 proves module-valued Hurewicz naturality across the AddCommGrp/ModuleCat comparison, maps the chosen positive circle class into each wedge leg, and proves its image is exactly finiteWedgeLegH1 l applied to circleH1IsoInt.inv 1. Map direction and positive orientation agree with the coordinate presentation; later work must identify the common wedge basepoint for word generation."},
     :commit "36bce2fbc",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
@@ -87950,7 +87960,7 @@
      "f3f0d9a08f2a0a583cbabde99a043f024c50728555e133b1cf8f917cd3ed75b4"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -87970,7 +87980,7 @@
     :blueprint
     "ConstructionTargets/PolygonSurfaceHomology.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked naturality and positive H1 normalization of wedge-leg classes.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked common-basepoint leg classes with positive H1 images.",
    :id :program-2026-10-13-polygon-surface-homology,
    :kind :reusable-theorem,
    :campaign-priority 31,
@@ -88026,7 +88036,11 @@
     {:job 3,
      :commit "6c78dadca",
      :reason
-     "Banked naturality and positive H1 normalization of wedge-leg classes."}]}
+     "Banked naturality and positive H1 normalization of wedge-leg classes."}
+    {:job 4,
+     :commit "36bce2fbc",
+     :reason
+     "Banked common-basepoint leg classes with positive H1 images."}]}
   {:consumer :t97A01,
    :stop-count 0,
    :phase :implementation,
@@ -89161,7 +89175,7 @@
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "finiteWedgeLegFundamentalClassAtBase_hurewicz",
@@ -89171,7 +89185,9 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "based leg class has positive H1 image",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :program-2026-10-13-polygon-surface-homology,
+    :banked-commit "36bce2fbc"},
    :id :lemma-finitewedgelegfundamentalclassatbase-hurewicz,
    :kind :lemma,
    :depends-on [:lemma-finitewedgelegfundamentalclass-hurewicz],
