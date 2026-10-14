@@ -1482,6 +1482,23 @@ theorem pathTwoOpenSubdivisionRunBlockPoint_last
   rw [pathTwoOpenSubdivisionRunPredLength_add_one]
   exact (pathTwoOpenSubdivisionRunFamily_getLast_succ_val S i).symm
 
+/-- The target of indexed run `i` is exactly outer boundary `i.succ`.
+This is the target-endpoint identification needed to place the run
+representative between consecutive entries of the outer boundary family. -/
+theorem pathTwoOpenSubdivisionOuterRunBoundaryFamily_succ_eq_runBlockPoint_last
+    {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
+    {U V : Set X} (S : PathTwoOpenSubdivision p U V)
+    (hx : S.point 0 ∈ V)
+    (hy : S.point (Fin.last (S.n + 1)) ∈ V)
+    (i : Fin (boolSideRunPartition S.side).length) :
+    (pathTwoOpenSubdivisionOuterRunBoundaryFamily S hx hy i.succ : X) =
+      pathTwoOpenSubdivisionRunBlockPoint S i
+        (Fin.last (pathTwoOpenSubdivisionRunPredLength S i + 1)) := by
+  rw [pathTwoOpenSubdivisionRunBlockPoint_last]
+  rw [pathTwoOpenSubdivisionOuterRunBoundaryFamily_val]
+  unfold pathTwoOpenSubdivisionRunBoundaryPoints
+  simp [pathTwoOpenSubdivisionRunFamily]
+
 /-- Every piece indexed by an inner run of the exact Klein subdivision stays
 in the inner cover, supplying the range hypothesis for block concatenation. -/
 theorem kleinPolygonInnerSideRun_piece_mem
