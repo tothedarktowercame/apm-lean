@@ -2456,7 +2456,98 @@ theorem apm_t01A04_torusCoverMap_range_eq_parity_kernel_aux_lifts
     hcov.monodromy apm_t01A04_loopC (⟨apm_t01a04_torusCoverBase, apm_t01a04_torusCoverMap_base⟩ :
           apm_t01a04_torusCoverMap ⁻¹' {apm_t01a04_basepoint}) = (⟨apm_t01a04_torusCoverBase, apm_t01a04_torusCoverMap_base⟩ :
           apm_t01a04_torusCoverMap ⁻¹' {apm_t01a04_basepoint}) := by
-  sorry
+  let γA : Path apm_t01a04_basepoint apm_t01a04_basepoint :=
+    (ConstructionTargets.CircleUniversalCover.integerLoop 1).map
+      (show Continuous (fun z : Circle =>
+          Quotient.mk _ (Sum.inl (z, (1 : Circle)))) from
+        continuous_coinduced_rng.comp
+          (continuous_inl.comp (continuous_id.prodMk continuous_const)))
+  let γB : Path apm_t01a04_basepoint apm_t01a04_basepoint :=
+    (ConstructionTargets.CircleUniversalCover.integerLoop 1).map
+      (show Continuous (fun z : Circle =>
+          Quotient.mk _ (Sum.inl ((1 : Circle), z))) from
+        continuous_coinduced_rng.comp
+          (continuous_inl.comp (continuous_const.prodMk continuous_id)))
+  let γC : Path apm_t01a04_basepoint apm_t01a04_basepoint :=
+    ((ConstructionTargets.CircleUniversalCover.integerLoop 1).map
+      (show Continuous (fun z : Circle => Quotient.mk _ (Sum.inr z)) from
+        continuous_coinduced_rng.comp continuous_inr)).cast
+      (Quotient.sound (Relation.EqvGen.rel _ _ apm_t01a04_wedgeRel.base))
+      (Quotient.sound (Relation.EqvGen.rel _ _ apm_t01a04_wedgeRel.base))
+  have hliftA : apm_t01A04_torusCoverMap_range_eq_parity_kernel_aux_lifts_pathA =
+      hcov.liftPath γA apm_t01a04_torusCoverBase
+        (γA.source.trans apm_t01a04_torusCoverMap_base.symm) := by
+    apply (hcov.eq_liftPath_iff' _).2
+    constructor
+    · funext t
+      simp [γA, apm_t01A04_torusCoverMap_range_eq_parity_kernel_aux_lifts_pathA,
+        apm_t01a04_torusCoverMap, apm_t01a04_torusCoverRaw,
+        ConstructionTargets.CircleUniversalCover.integerLoop,
+        ConstructionTargets.CircleUniversalCover.circleCover, pow_two,
+        ← Circle.exp_add]
+      ring
+      rfl
+    · exact apm_t01A04_torusCoverMap_range_eq_parity_kernel_aux_lifts_pathA.source
+  have hliftB : apm_t01A04_torusCoverMap_range_eq_parity_kernel_aux_lifts_pathB =
+      hcov.liftPath γB apm_t01a04_torusCoverBase
+        (γB.source.trans apm_t01a04_torusCoverMap_base.symm) := by
+    apply (hcov.eq_liftPath_iff' _).2
+    constructor
+    · funext t
+      simp [γB, apm_t01A04_torusCoverMap_range_eq_parity_kernel_aux_lifts_pathB,
+        apm_t01a04_torusCoverMap, apm_t01a04_torusCoverRaw]
+      dsimp [Quotient.map', Quot.map, Path.map]
+      apply Quotient.sound
+      simpa [apm_t01a04_torusCoverRaw] using
+        (Relation.EqvGen.refl (r := apm_t01a04_wedgeRel)
+          (Sum.inl ((1 : Circle),
+            ConstructionTargets.CircleUniversalCover.integerLoop 1 t)))
+    · exact apm_t01A04_torusCoverMap_range_eq_parity_kernel_aux_lifts_pathB.source
+  have hliftC : apm_t01A04_torusCoverMap_range_eq_parity_kernel_aux_lifts_pathC =
+      hcov.liftPath γC apm_t01a04_torusCoverBase
+        (γC.source.trans apm_t01a04_torusCoverMap_base.symm) := by
+    apply (hcov.eq_liftPath_iff' _).2
+    constructor
+    · funext t
+      change Quotient.mk _ (Sum.inr
+          (ConstructionTargets.CircleUniversalCover.integerLoop 1 t) :
+            Sum apm_t01a04_Torus Circle) =
+        Quotient.mk _ (Sum.inr
+          (ConstructionTargets.CircleUniversalCover.integerLoop 1 t) :
+            Sum apm_t01a04_Torus Circle)
+      rfl
+    · exact apm_t01A04_torusCoverMap_range_eq_parity_kernel_aux_lifts_pathC.source
+  have hloopA : apm_t01A04_loopA = Path.Homotopic.Quotient.mk γA := rfl
+  have hloopB : apm_t01A04_loopB = Path.Homotopic.Quotient.mk γB := rfl
+  have hloopC : apm_t01A04_loopC = Path.Homotopic.Quotient.mk γC := rfl
+  rw [hloopA, hloopB, hloopC]
+  refine ⟨?_, ?_, ?_⟩
+  · intro heq
+    have heq' := congrArg Subtype.val heq
+    change hcov.liftPath γA apm_t01a04_torusCoverBase _ 1 =
+      apm_t01a04_torusCoverBase at heq'
+    rw [← hliftA] at heq'
+    have he : (Quotient.mk _
+        (.inl (Circle.exp Real.pi, (1 : Circle))) : apm_t01a04_TorusCover) =
+        apm_t01a04_torusCoverBase :=
+      apm_t01A04_torusCoverMap_range_eq_parity_kernel_aux_lifts_pathA.target.symm.trans
+        heq'
+    have hh := Quotient.exact he
+    have hl :=
+      apm_t01A04_torusCoverMap_range_eq_parity_kernel_aux_character_label_eq hh
+    change (if (Circle.exp Real.pi : ℂ) = 1 then (0 : Fin 2) else 1) =
+      (if ((1 : Circle) : ℂ) = 1 then (0 : Fin 2) else 1) at hl
+    norm_num [Circle.exp, Complex.exp_mul_I] at hl
+  · apply Subtype.ext
+    change hcov.liftPath γB apm_t01a04_torusCoverBase _ 1 =
+      apm_t01a04_torusCoverBase
+    rw [← hliftB]
+    exact apm_t01A04_torusCoverMap_range_eq_parity_kernel_aux_lifts_pathB.target
+  · apply Subtype.ext
+    change hcov.liftPath γC apm_t01a04_torusCoverBase _ 1 =
+      apm_t01a04_torusCoverBase
+    rw [← hliftC]
+    exact apm_t01A04_torusCoverMap_range_eq_parity_kernel_aux_lifts_pathC.target
 
 /-- The monodromy calculation for the torus-doubled cover.  As above, the
 covering fact is an input rather than a dependency on another admitted leaf. -/
