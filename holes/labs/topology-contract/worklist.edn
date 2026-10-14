@@ -119206,28 +119206,27 @@
      :commit "8b9632e39322f6ee0d3885c58b2adc21349418c2",
      :reason "Banked literal regular-fiber Fintype."}]}
   {:consumer :t98A06,
-   :stop-count 1,
+   :stop-count 2,
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
-    :residual
-    "Review blueprint; then copy B1/B3 and implement B2/B4 before Main assembly.",
+    :residual "Prove B2/B4; assemble Main.",
     :outcome :stop,
-    :warnings ["reviewed blueprint and Main contain expected sorryAx"],
+    :warnings ["Main sorryAx" "unrelated t96A06 edits preserved"],
     :missing-theorems
-    [{:name "t98A06_local_smooth_submersion_lift",
-      :type "smooth submersions admit local smooth vector-field lifts",
+    [{:name "t98A06_global_vectorField_lift",
+      :type "local lifts glue globally",
+      :status :proved,
+      :consumers [:t98A06],
+      :depends-on ["t98A06_local_smooth_submersion_lift"],
+      :area "smooth-manifold-submersion"}
+     {:name "t98A06_local_smooth_submersion_lift",
+      :type "local smooth lifts",
       :status :not-started,
       :consumers [:t98A06],
       :depends-on [],
       :area "smooth-manifold-submersion"}
-     {:name "t98A06_global_vectorField_lift",
-      :type "partition-of-unity glues local derivative lifts",
-      :status :not-started,
-      :consumers [:t98A06],
-      :depends-on ["t98A06_local_smooth_submersion_lift"],
-      :area "smooth-manifold-submersion"}
      {:name "t98A06_compact_circle_fibers_diffeomorphic",
-      :type "compact submersion circle fibers are diffeomorphic",
+      :type "fiber diffeomorphism",
       :status :not-started,
       :consumers [:t98A06],
       :depends-on ["t98A06_global_vectorField_lift"],
@@ -119235,39 +119234,30 @@
     :statement-hashes
     {:source
      "44399e714e0f58588b1b213f3c3b12320dfea50bb6f626693aa89c544b76dd3a",
+     :implementation
+     "2fc891f21b15e788e35a5f77ec27cc01aa2f793eadc5b41f5065860e649235d9",
      :blueprint
      "9838452bf081767e1df000700b7c24774e94f50633c1cc10b2aa0e8c82319196",
      :registry "166/166"},
     :disposition :stop,
-    :axioms [],
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-2,
-    :reason "Blueprint written; implementation awaits review.",
+    :reason "Banked B1 representations and B3 gluing.",
     :commands
-    [{:cmd "lake env lean holes/labs/blueprints/t98A06/Blueprint.lean",
+    [{:cmd "lake env lean ConstructionTargets/t98A06Closure.lean",
       :exit 0}
      {:cmd "lake env lean problems/t98A06/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-     {:cmd "sha256/diff/placeholders", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1792002437527-12124-b4909d17",
-     :commands
-     ["git diff-tree/show fcd285c"
-      "git archive fcd285c; lake env lean Blueprint.lean and Main.lean"
-      "sha256sum and placeholder counts at fcd285c"
-      "python3 scripts/statement-registry.py check"],
-     :finding
-     "PASS initial program blueprint: new scoped commit faithfully decomposes the true registered theorem into local smooth lift, convex gluing, compact-flow fiber equivalence, and assembly with correct dependency directions and representations. Fixture hash 9838452b and frozen Main hash 44399e71 match; archived Lean blueprint/Main compile with expected unresolved library sorries; registry 166/166. Milestones are explicit."},
-    :commit "fcd285c205339940c0512a1418e00019aaef3c35",
-    :changed-paths ["ConstructionTargets/t98A06Closure.blueprint.md"],
+     {:cmd "hash/diff/placeholders", :exit 0}],
+    :commit "1f334efd354c87554eb3f200daefb09084b9b525",
+    :changed-paths ["ConstructionTargets/t98A06Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t98A06Closure.blueprint.md",
      :sha256
      "9838452bf081767e1df000700b7c24774e94f50633c1cc10b2aa0e8c82319196"},
     :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t98A06/lean/Main.lean"
     "problems/t98A06/status.json"
@@ -119582,7 +119572,8 @@
    {:name "t98A06_global_vectorField_lift",
     :reported-by [:program-2026-10-13-close-t98a06],
     :type "partition-of-unity glues local derivative lifts",
-    :area "smooth-manifold-submersion"},
+    :area "smooth-manifold-submersion",
+    :proved-in :program-2026-10-13-close-t98a06},
    :id :lemma-t98a06-global-vectorfield-lift,
    :kind :lemma,
    :depends-on [:lemma-t98a06-local-smooth-submersion-lift],
