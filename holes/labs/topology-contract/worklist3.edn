@@ -36121,34 +36121,34 @@
   {:consumer :t93J03,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 2,
+   :stop-count 3,
    :review-finding
    "Program STOP commits no new mathematical progress since the prior milestone: KleinPolygonBasedVanKampen merely packages the already-required surjectivity and kernel hypotheses, and both consumers only reapply the previously proved three-input theorem. Prove the based van Kampen surjectivity/kernel result (or winding conjugacy) in scope; extend Mathlib: state and prove the missing theorem in scope.",
    :evidence
    {:placeholder-delta {:t93J03 [1 1]},
     :residual
-    "Choose outer run representatives; align endpoints; fold; reverse kernel/surjectivity; winding; C1/C2/Main.",
+    "Choose outer representative per run; identify boundary endpoints; fold; reverse kernel/surjectivity; winding; C1/C2/Main.",
     :outcome :stop,
     :warnings [],
     :missing-theorems
-    [{:name "pathTwoOpenSubdivisionRunFamily_exists_slice",
-      :type "indexed nonempty runs; exact slices; constant side",
+    [{:name "pathTwoOpenSubdivisionRunFamily_piece_mem_chart",
+      :type "canonical run slice; every piece stays in head chart",
       :status :proved,
       :consumers [:t93J03],
-      :depends-on ["pathTwoOpenSubdivisionOuterRunBoundaryFamily_val"],
+      :depends-on ["pathTwoOpenSubdivisionRunFamily_exists_slice"],
       :area "covering-subgroup-correspondence"}
      {:name "t93J03_polygon_based_van_kampen",
       :type "surjectivity; kernel equality",
       :status :partial,
       :consumers [:t93J03],
-      :depends-on ["pathTwoOpenSubdivisionRunFamily_exists_slice"],
+      :depends-on ["pathTwoOpenSubdivisionRunFamily_piece_mem_chart"],
       :area "covering-subgroup-correspondence"}],
     :statement-hashes {:registry "166/166"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Indexed maximal runs with membership, nonemptiness, exact slices and constant side; representative choice remains.",
+    "Selected bounded slice coordinates for every indexed run and proved every piece stays in its head-selected chart; outer representative choice remains.",
     :commands
     [{:cmd "lake build ConstructionTargets.t93J03Closure", :exit 0}
      {:cmd "fixture; Main; registry; placeholder; diff", :exit 0}
@@ -36157,28 +36157,18 @@
     [{:cmd "initial builds",
       :exit 1,
       :correction
-      "fixed syntax/nonempty proof; reran fixture after build"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1792012949657-12436-62911e93",
-     :commands
-     ["git show/check/diff-tree 8c4eb4f; exact scope assertion"
-      "fixture sha256 assertion; lake env lean frozen fixture"
-      "statement-registry check; placeholder/forbidden recount"],
-     :finding
-     "PASS: commit 8c4eb4f is new compiled, sorry-free progress after 263f5d47. The Fin(runs+1) family lands in outer subtype V, and its value theorem has the correct orientation back to the ambient canonical-boundary list, enabling the next run-representative fold without claiming van Kampen. Fixture hash matches; only standard axioms; registry 166/166; Main remains 1->1 placeholder. Remaining fold, reverse kernel/surjectivity, winding, C1/C2/Main are listed."},
-    :commit "daed472889c76a6ad1d273f5dc8cc6bea11a1a75",
+      "rebuilt concurrent dependency; corrected length lemma"}],
+    :commit "1824df6191b36a90b7bc50eb8b3fa89a54c78f19",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
      "ConstructionTargets/t93J03Closure.blueprint.md"],
     :fixture
-    {:path "/tmp/t93j03_run_family_check.lean",
+    {:path "/tmp/t93j03_run_start_check.lean",
      :sha256
-     "52741be3c90ca59ffa72c4b4062ef02ba65f78e2c3b9d4cae1e05201a7f96066"},
+     "361990ea759cea43612fdba81954457fc9d1b3f2c52bf701a03a0ffd1556dbc9"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -38798,7 +38788,8 @@
     :lemma-pathtwoopensubdivisionrunboundarypoints-mem-outer
     :lemma-pathtwoopensubdivisionouterrunboundarypoints-map-val
     :lemma-pathtwoopensubdivisionouterrunboundaryfamily-val
-    :lemma-pathtwoopensubdivisionrunfamily-exists-slice],
+    :lemma-pathtwoopensubdivisionrunfamily-exists-slice
+    :lemma-pathtwoopensubdivisionrunfamily-piece-mem-chart],
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
@@ -39854,6 +39845,23 @@
    :kind :lemma,
    :depends-on
    [:lemma-pathtwoopensubdivisionouterrunboundaryfamily-val],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "pathTwoOpenSubdivisionRunFamily_piece_mem_chart",
+    :type "canonical run slice; every piece stays in head chart"},
+   :lemma
+   {:name "pathTwoOpenSubdivisionRunFamily_piece_mem_chart",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type "canonical run slice; every piece stays in head chart",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03},
+   :id :lemma-pathtwoopensubdivisionrunfamily-piece-mem-chart,
+   :kind :lemma,
+   :depends-on [:lemma-pathtwoopensubdivisionrunfamily-exists-slice],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
