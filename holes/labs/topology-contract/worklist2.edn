@@ -87901,38 +87901,39 @@
   {:consumer :t97A01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 4,
+   :stop-count 5,
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Compare generator maps using explicit loop transport; derive orbit surjectivity, coordinate epi, B6-B10.",
+    "Prove coordinate epi from loop generation; then B6-B10.",
     :outcome :stop,
     :warnings ["preexisting lint"],
     :missing-theorems
-    [{:name "fundamentalGroupEquivOfHomeomorphEq",
-      :type
-      "explicit mapOfEq equivalence for a homeomorphism and target-base equality",
+    [{:name "finiteWedgeOrbitFundamentalGroupEquivFinExplicit_legMap",
+      :type "relabeling preserves arbitrary leg loops",
       :status :proved,
-      :consumers [:t97A01 :t94J09],
-      :depends-on [],
-      :area "polygon-quotient-homology"}
-     {:name "finiteWedgeOrbitFundamentalGroupEquivFinExplicit",
-      :type "orbit relabeling with transparent based loop maps",
-      :status :proved,
-      :consumers [:t97A01 :t94J09],
-      :depends-on ["fundamentalGroupEquivOfHomeomorphEq"],
-      :area "polygon-quotient-homology"}
-     {:name "finiteWedgeOrbitFreeGroupMapComparison",
-      :type "based relabeling identifies canonical generator maps",
-      :status :partial,
       :consumers [:t97A01 :t94J09],
       :depends-on ["finiteWedgeOrbitFundamentalGroupEquivFinExplicit"],
+      :area "polygon-quotient-homology"}
+     {:name "finiteWedgeOrbitFreeGroupMapComparison",
+      :type "relabeling identifies generator maps",
+      :status :proved,
+      :consumers [:t97A01 :t94J09],
+      :depends-on
+      ["finiteWedgeOrbitFundamentalGroupEquivFinExplicit_legMap"],
+      :area "polygon-quotient-homology"}
+     {:name "finiteWedgeLegFreeGroupMap_surjective",
+      :type "canonical orbit-label map is onto",
+      :status :proved,
+      :consumers [:t97A01 :t94J09],
+      :depends-on ["finiteWedgeOrbitFreeGroupMapComparison"],
       :area "polygon-quotient-homology"}],
     :statement-hashes {:registry "166/0"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked explicit based loop transport.",
+    :reason
+    "Banked generator comparison and orbit-wedge surjectivity.",
     :commands
     [{:cmd
       "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology",
@@ -87940,32 +87941,21 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder scan", :exit 0}
      {:cmd "axioms check", :exit 0}
-     {:cmd "git show --check b9a2fa337", :exit 0}],
+     {:cmd "git show --check c3a9b395c", :exit 0}],
     :diagnostic-history
-    [{:cmd "inverse-law draft",
+    [{:cmd "transport/comparison drafts",
       :exit 1,
-      :correction "removed nested path casts pointwise"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792004381403-12216-d2d447b0",
-     :commands
-     ["git show/diff b9a2fa337; blob sha256; diff --check"
-      "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology"
-      "lake env lean /dev/stdin (#print axioms)"
-      "placeholder scan"
-      "statement-registry.py check"],
-     :finding
-     "PASS: b9a2fa337 (topo-6) changes only scoped PolygonSurfaceHomology.lean; fixture SHA-256 61531d29d135b899ef67ba449d0a8bdfa849fd70446da460e75ef483e4ca5b5b matches. Exact blob builds; 0 placeholders; new declarations use standard axioms; registry 166/0. The explicit equivalence has forward map exactly mapOfEq, inverse map along the inverse homeomorphism, and correctly oriented base equalities; inverse laws are proved on loop representatives through path casts. New compiled progress; remaining: generator comparison, orbit surjectivity, coordinate epi, B6-B10."},
-    :commit "b9a2fa337",
+      :correction
+      "used casted target path and explicit group induction"}],
+    :commit "c3a9b395c",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
     {:path "ConstructionTargets/PolygonSurfaceHomology.lean",
      :sha256
-     "61531d29d135b899ef67ba449d0a8bdfa849fd70446da460e75ef483e4ca5b5b"},
+     "a0a890b0f8c1304648861c83a3f34ebdb1fcbd0ff4d224aed5fcbfc58130c31c"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -89468,7 +89458,8 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type
     "canonical free-group map onto finite-wedge fundamental group is surjective",
-    :area "polygon-quotient-homology"},
+    :area "polygon-quotient-homology",
+    :proved-in :program-2026-10-13-polygon-surface-homology},
    :id :lemma-finitewedgelegfreegroupmap-surjective,
    :kind :lemma,
    :depends-on
@@ -90706,14 +90697,16 @@
    {:name "finiteWedgeOrbitFreeGroupMapComparison",
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "orbit relabeling identifies canonical generator maps",
-    :area "polygon-quotient-homology"},
+    :area "polygon-quotient-homology",
+    :proved-in :program-2026-10-13-polygon-surface-homology},
    :id :lemma-finitewedgeorbitfreegroupmapcomparison,
    :kind :lemma,
    :depends-on
    [:lemma-finitewedgefinlegfreegroupmap-surjective
     :lemma-finitewedgeorbitfundamentalgroupequivfin
     :lemma-finitewedgefinlegfreegroupmapcard-surjective
-    :lemma-finitewedgeorbitfundamentalgroupequivfinexplicit],
+    :lemma-finitewedgeorbitfundamentalgroupequivfinexplicit
+    :lemma-finitewedgeorbitfundamentalgroupequivfinexplicit-legmap],
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
@@ -90794,4 +90787,22 @@
    :id :lemma-finitewedgeorbitfundamentalgroupequivfinexplicit,
    :kind :lemma,
    :depends-on [:lemma-fundamentalgroupequivofhomeomorpheq],
+   :other-consumers [:t94J09]}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "finiteWedgeOrbitFundamentalGroupEquivFinExplicit_legMap",
+    :type "relabeling preserves arbitrary leg loops"},
+   :lemma
+   {:name "finiteWedgeOrbitFundamentalGroupEquivFinExplicit_legMap",
+    :reported-by [:program-2026-10-13-polygon-surface-homology],
+    :type "relabeling preserves arbitrary leg loops",
+    :area "polygon-quotient-homology",
+    :proved-in :program-2026-10-13-polygon-surface-homology},
+   :id :lemma-finitewedgeorbitfundamentalgroupequivfinexplicit-legmap,
+   :kind :lemma,
+   :depends-on
+   [:lemma-finitewedgeorbitfundamentalgroupequivfinexplicit],
    :other-consumers [:t94J09]}]}
