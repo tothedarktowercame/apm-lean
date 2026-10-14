@@ -36121,65 +36121,57 @@
   {:consumer :t93J03,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 6,
+   :stop-count 7,
    :review-finding
    "Program STOP commits no new mathematical progress since the prior milestone: KleinPolygonBasedVanKampen merely packages the already-required surjectivity and kernel hypotheses, and both consumers only reapply the previously proved three-input theorem. Prove the based van Kampen surjectivity/kernel result (or winding conjugacy) in scope; extend Mathlib: state and prove the missing theorem in scope.",
    :evidence
    {:placeholder-delta {:t93J03 [1 1]},
     :residual
-    "Collapse maximal inner runs between overlap vertices; reverse kernel/surjectivity; winding; C1/C2/Main.",
+    "Assemble inner-run replacements; reverse kernel/surjectivity; winding; C1/C2/Main.",
     :outcome :stop,
-    :warnings
-    ["unused SLSC owner-approved"
-     "dirty PolygonSurfaceHomology preserved"],
+    :warnings ["unused SLSC owner-approved"],
     :missing-theorems
-    [{:name "pathTwoOpenSubdivision_transition_mem_overlap",
-      :type "adjacent side-change vertex belongs to overlap",
+    [{:name "kleinPolygonInnerFundamentalGroupoid_hom_subsingleton",
+      :type "inner hom sets subsingleton",
       :status :proved,
       :consumers [:t93J03],
-      :depends-on ["kleinPolygonPseudopushout_arrow_eq_reconstructed"],
+      :depends-on ["pathTwoOpenSubdivision_transition_mem_overlap"],
       :area "covering-subgroup-correspondence"}
      {:name "t93J03_polygon_based_van_kampen",
       :type "surjectivity; kernel equality",
       :status :partial,
       :consumers [:t93J03],
-      :depends-on ["pathTwoOpenSubdivision_transition_mem_overlap"],
+      :depends-on
+      ["kleinPolygonInnerFundamentalGroupoid_hom_subsingleton"],
       :area "covering-subgroup-correspondence"}],
     :statement-hashes {:registry "166/166"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Proved every subdivision side-change vertex lies in the overlap, giving the endpoints needed to erase maximal inner runs; normalization remains.",
+    "Proved arbitrary-endpoint inner path-class uniqueness; run assembly and based van Kampen remain.",
     :commands
-    [{:cmd "lake build ConstructionTargets.t93J03Closure", :exit 0}
+    [{:cmd "lake build closure", :exit 0}
      {:cmd "lean fixture; Main; registry; checks", :exit 0}
      {:cmd "rg forbidden", :exit 1, :expected-exit 1}],
     :diagnostic-history
-    [{:cmd "lean closure",
+    [{:cmd "inner hom probe",
       :exit 1,
-      :correction "opened subdivision namespace; rerun passed"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1791999666550-11989-fc04830d",
-     :commands
-     ["git show/check/diff 962be877; scope and fixture SHA-256"
-      "lake build ConstructionTargets.t93J03Closure; lean fixture and Main"
-      "statement-registry check; placeholder/axiom recount"],
-     :finding
-     "PASS: 962be877 adds compiled, sorry-free progress beyond d72cefa5. The generic subdivision lemma correctly identifies every side-change vertex as lying in both opens by matching the preceding target and following source, furnishing overlap endpoints needed to collapse inner runs. It assumes no van Kampen conclusion. Exact scope/hash match; support placeholders 0->0; frozen Main remains 1; standard axioms only; registry 166/166. STOP lists maximal-inner-run normalization, reverse kernel/surjectivity, winding, C1/C2/Main."},
-    :commit "962be8771e84a7039a9cffd581eb22c778f1d587",
+      :correction "installed local instances"}
+     {:cmd "initial build",
+      :exit 1,
+      :correction "dirty dependency later completed; rerun passed"}],
+    :commit "ebda004808872a29a245f67338ad64f23bb87e52",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
      "ConstructionTargets/t93J03Closure.blueprint.md"],
     :fixture
-    {:path "/tmp/t93j03_transition_overlap_check.lean",
+    {:path "/tmp/t93j03_inner_groupoid_subsingleton_check.lean",
      :sha256
-     "255f26197269c91f7e9163061e7239b4f923080b3e462ff61cc9952d74205953"},
+     "cae820a202c44c144929c1094c106a855886460ec3c300d5d4502bf96baddd9e"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -38615,7 +38607,8 @@
     :lemma-kleinpolygonpackagedunitpath-mk
     :lemma-kleinpolygonpackagedunitconnector-mk
     :lemma-kleinpolygonpseudopushout-arrow-eq-reconstructed
-    :lemma-pathtwoopensubdivision-transition-mem-overlap],
+    :lemma-pathtwoopensubdivision-transition-mem-overlap
+    :lemma-kleinpolygoninnerfundamentalgroupoid-hom-subsingleton],
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
@@ -38970,6 +38963,23 @@
    :kind :lemma,
    :depends-on
    [:lemma-kleinpolygonpseudopushout-arrow-eq-reconstructed],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "kleinPolygonInnerFundamentalGroupoid_hom_subsingleton",
+    :type "inner hom sets subsingleton"},
+   :lemma
+   {:name "kleinPolygonInnerFundamentalGroupoid_hom_subsingleton",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type "inner hom sets subsingleton",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03},
+   :id :lemma-kleinpolygoninnerfundamentalgroupoid-hom-subsingleton,
+   :kind :lemma,
+   :depends-on [:lemma-pathtwoopensubdivision-transition-mem-overlap],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
