@@ -142,6 +142,50 @@ def threeSheetData : Fin 4 → TwoLoopGraphCoverData (Fin 3) := ![
   ⟨fun i ↦ if i = 0 then finThreeCycle else Equiv.refl (Fin 3)⟩,
   ⟨fun _ ↦ finThreeCycle⟩]
 
+/-! ## Topological realization carrier -/
+
+abbrev UnitInterval := Set.Icc (0 : ℝ) 1
+
+/-- Vertices together with one closed interval for every labeled directed
+edge. -/
+abbrev RealizationRaw (V : Type*) := V ⊕ (Fin 2 × V × UnitInterval)
+
+def intervalZero : UnitInterval := ⟨0, by simp⟩
+
+def intervalOne : UnitInterval := ⟨1, by simp⟩
+
+/-- Endpoint identifications for the graph realization.  The initial endpoint
+is glued to the source vertex and the terminal endpoint to the vertex selected
+by the corresponding transition permutation. -/
+inductive RealizationRel : RealizationRaw V → RealizationRaw V → Prop
+  | source (i : Fin 2) (v : V) :
+      RealizationRel (.inr (i, v, intervalZero)) (.inl v)
+  | target (i : Fin 2) (v : V) :
+      RealizationRel (.inr (i, v, intervalOne)) (.inl (D.step i v))
+
+abbrev Realization := Quotient (Relation.EqvGen.setoid D.RealizationRel)
+
+noncomputable instance realizationTopology : TopologicalSpace D.Realization :=
+  letI : TopologicalSpace V := ⊤
+  TopologicalSpace.coinduced
+    (fun z : RealizationRaw V => Quotient.mk (Relation.EqvGen.setoid D.RealizationRel) z)
+    inferInstance
+
+def vertex (v : V) : D.Realization := Quotient.mk _ (.inl v)
+
+def edgePoint (i : Fin 2) (v : V) (t : UnitInterval) : D.Realization :=
+  Quotient.mk _ (.inr (i, v, t))
+
+theorem edgePoint_zero (i : Fin 2) (v : V) :
+    D.edgePoint i v intervalZero = D.vertex v := by
+  apply Quotient.sound
+  exact Relation.EqvGen.rel _ _ (RealizationRel.source i v)
+
+theorem edgePoint_one (i : Fin 2) (v : V) :
+    D.edgePoint i v intervalOne = D.vertex (D.step i v) := by
+  apply Quotient.sound
+  exact Relation.EqvGen.rel _ _ (RealizationRel.target i v)
+
 end TwoLoopGraphCoverData
 
 end ConstructionTargets.t92J06Closure
