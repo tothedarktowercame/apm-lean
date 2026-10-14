@@ -807,7 +807,39 @@ theorem t93A06_exact_integral_aux_ftc_y
     (P : ℝ → ℝ → ℝ) (hP : ContDiff ℝ 1 (fun p : ℝ × ℝ ↦ P p.1 p.2)) :
     (∫ y : ℝ in 0..1, ∫ x : ℝ in 0..1, deriv (fun t ↦ P x t) y) =
       ∫ x : ℝ in 0..1, (P x 1 - P x 0) := by
-  sorry
+  let f : ℝ × ℝ → ℝ := fun p ↦ deriv (fun t ↦ P p.1 t) p.2
+  have hf_eq (p : ℝ × ℝ) :
+      f p = fderiv ℝ (fun q : ℝ × ℝ ↦ P q.1 q.2) p (0, 1) := by
+    have hp := (hP.differentiable one_ne_zero) p
+    have hg : HasDerivAt (fun t : ℝ ↦ (p.1, t)) (0, 1) p.2 :=
+      (hasDerivAt_const p.2 p.1).prodMk (hasDerivAt_id p.2)
+    have hs : HasDerivAt (fun t ↦ P p.1 t)
+        (fderiv ℝ (fun q : ℝ × ℝ ↦ P q.1 q.2) p (0, 1)) p.2 := by
+      simpa only [Function.comp_apply, ContinuousLinearMap.comp_apply,
+        ContinuousLinearMap.toSpanSingleton_apply, one_smul] using
+        (hp.hasFDerivAt.comp p.2 hg.hasFDerivAt).hasDerivAt
+    exact hs.deriv
+  have hf : Continuous f := by
+    rw [show f = fun p ↦ fderiv ℝ (fun q : ℝ × ℝ ↦ P q.1 q.2) p (0, 1) from
+      funext hf_eq]
+    fun_prop
+  have hint : MeasureTheory.Integrable (Function.uncurry fun y x ↦ f (x, y))
+      ((MeasureTheory.volume.restrict (Set.uIoc (0 : ℝ) 1)).prod
+        (MeasureTheory.volume.restrict (Set.uIoc (0 : ℝ) 1))) := by
+    rw [MeasureTheory.Measure.prod_restrict]
+    simp only [Set.uIoc_of_le zero_le_one]
+    exact ((hf.comp continuous_swap).continuousOn.integrableOn_compact
+      (isCompact_Icc.prod isCompact_Icc)).mono_set
+        (Set.prod_mono Set.Ioc_subset_Icc_self Set.Ioc_subset_Icc_self)
+  rw [show (∫ y : ℝ in 0..1, ∫ x : ℝ in 0..1,
+      deriv (fun t ↦ P x t) y) =
+      ∫ x : ℝ in 0..1, ∫ y : ℝ in 0..1, deriv (fun t ↦ P x t) y by
+    simpa [f, intervalIntegral.integral_of_le zero_le_one] using
+      (MeasureTheory.integral_integral_swap hint)]
+  apply intervalIntegral.integral_congr
+  intro x hx
+  exact intervalIntegral.integral_deriv_of_contDiffOn_Icc
+    ((hP.comp (by fun_prop : ContDiff ℝ 1 (fun t : ℝ ↦ (x, t)))).contDiffOn) zero_le_one
 
 /-- Pullback coefficients agree on opposite sides of the unit square. -/
 lemma t93A06_exact_integral_aux_periodic_aux_shift (atlas : SmoothAtlas)
