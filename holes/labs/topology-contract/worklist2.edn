@@ -87901,67 +87901,60 @@
   {:consumer :t97A01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 2,
+   :stop-count 3,
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Iterate van Kampen to prove free-group surjectivity; then coordinate epi, higher vanishing, and B6-B10.",
+    "Prove split leg coordinates; iterate to free-group surjectivity, then coordinate epi and B6-B10.",
     :outcome :stop,
-    :warnings ["preexisting lints" "unrelated t93J03 edits preserved"],
+    :warnings ["preexisting lints; unrelated edits preserved"],
     :missing-theorems
-    [{:name "finiteWedgeFinSuccHomeomorphPointWedge",
-      :type
-      "Fin successor wedge splits as a point wedge, preserving old and last legs",
+    [{:name "exists_coprodLegWord_of_mulEquiv",
+      :type "normalized coproduct equivalence yields leg words",
       :status :proved,
       :consumers [:t97A01 :t94J09],
-      :depends-on ["finiteWedgeSumHomeomorphPointWedge"],
+      :depends-on [],
+      :area "polygon-quotient-homology"}
+     {:name "finiteWedgePointWedge_legCoordinates",
+      :type "van Kampen sends old/final legs to coproduct injections",
+      :status :not-started,
+      :consumers [:t97A01 :t94J09],
+      :depends-on ["finiteWedgeFinSuccHomeomorphPointWedge"],
       :area "polygon-quotient-homology"}
      {:name "finiteWedgeLegFreeGroupMap_surjective",
       :type "canonical free-group map is onto",
       :status :partial,
       :consumers [:t97A01 :t94J09],
-      :depends-on ["finiteWedgeFinSuccHomeomorphPointWedge"],
+      :depends-on
+      ["finiteWedgePointWedge_legCoordinates"
+       "exists_coprodLegWord_of_mulEquiv"],
       :area "polygon-quotient-homology"}],
     :statement-hashes {:registry "166/0"},
     :disposition :stop,
-    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :axioms ["propext" "Quot.sound"],
     :author "topo-6",
-    :reason
-    "Banked the Fin-successor wedge split and its leg formulas.",
+    :reason "Banked coproduct word extraction.",
     :commands
     [{:cmd "lake build ConstructionTargets.PolygonSurfaceHomology",
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-     {:cmd "git show --check e39d313f1", :exit 0}
+     {:cmd "git show --check 993db480e", :exit 0}
      {:cmd
-      "git show e39d313f1:ConstructionTargets/PolygonSurfaceHomology.lean | lake env lean /dev/stdin",
-      :exit 0}
-     {:cmd "#print axioms successor split | lake env lean /dev/stdin",
+      "git show 993db480e:ConstructionTargets/PolygonSurfaceHomology.lean | lake env lean /dev/stdin",
       :exit 0}],
     :diagnostic-history
-    [{:cmd "generator-formula drafts",
+    [{:cmd "multiplication draft",
       :exit 1,
-      :correction
-      "exposed composed homeomorph and rewrote relabelled legs"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1791956162078-11628-75e6fbcb",
-     :commands
-     ["git show d03a5f91d blob + #print axioms | lake env lean /dev/stdin"
-      "diff-tree/readlink/sha256 assertions"
-      "statement-registry check; comment-stripped placeholder scan"],
-     :finding
-     "PASS: d03a5f91d changes only PolygonSurfaceHomology.lean; exact blob SHA256 26239c9374a6a74eb4e89821a87b68cb64daceda4ba6c2423d242184e35b4c81. It compiles with standard axioms propext/Classical.choice/Quot.sound; placeholders 0; registry 166/0. New progress beyond 1798bb36e includes continuous inclusions of the two subfamily wedges into the sum-indexed wedge, mutually inverse quotient maps, and a homeomorphism from FiniteWedge (L ⊕ K) to their binary point wedge. Basepoint identifications, quotient relation descent, inverse directions, and both continuity obligations are explicit. The l₀/k₀ parameters correctly express the required nonempty subfamilies; free-group surjectivity remains."},
-    :commit "e39d313f1",
+      :correction "exposed named word values"}],
+    :commit "993db480e",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
     {:path "ConstructionTargets/PolygonSurfaceHomology.lean",
      :sha256
-     "de8557c3722466c4af67cc92e01455aecac235213c66b6e6e14d343f87fbeaf1"},
+     "380d45b46b96fa6b586acc568a9883c8b4318aa0bddd2f3fc5768890be4bcd67"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -89363,7 +89356,10 @@
     :area "polygon-quotient-homology"},
    :id :lemma-finitewedgelegfreegroupmap-surjective,
    :kind :lemma,
-   :depends-on [:lemma-finitewedgefinsucchomeomorphpointwedge],
+   :depends-on
+   [:lemma-finitewedgefinsucchomeomorphpointwedge
+    :lemma-finitewedgepointwedge-legcoordinates
+    :lemma-exists-coprodlegword-of-mulequiv],
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
@@ -89550,4 +89546,37 @@
    :id :lemma-finitewedgesumhomeomorphpointwedge,
    :kind :lemma,
    :depends-on [:lemma-finitewedgesumtopointwedge],
+   :other-consumers [:t94J09]}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "exists_coprodLegWord_of_mulEquiv",
+    :type "normalized coproduct equivalence yields leg words"},
+   :lemma
+   {:name "exists_coprodLegWord_of_mulEquiv",
+    :reported-by [:program-2026-10-13-polygon-surface-homology],
+    :type "normalized coproduct equivalence yields leg words",
+    :area "polygon-quotient-homology",
+    :proved-in :program-2026-10-13-polygon-surface-homology},
+   :id :lemma-exists-coprodlegword-of-mulequiv,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t94J09]}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "finiteWedgePointWedge_legCoordinates",
+    :type "van Kampen sends old/final legs to coproduct injections"},
+   :lemma
+   {:name "finiteWedgePointWedge_legCoordinates",
+    :reported-by [:program-2026-10-13-polygon-surface-homology],
+    :type "van Kampen sends old/final legs to coproduct injections",
+    :area "polygon-quotient-homology"},
+   :id :lemma-finitewedgepointwedge-legcoordinates,
+   :kind :lemma,
+   :depends-on [:lemma-finitewedgefinsucchomeomorphpointwedge],
    :other-consumers [:t94J09]}]}
