@@ -688,9 +688,11 @@ structure CancellationZipSpec (n k : ℕ) (c : Disk → Disk) : Prop where
   target_pos : 0 < n
   continuous : Continuous c
   surjective : Function.Surjective c
-  interior_injective : ∀ {p q : Disk}, ‖(p : ℂ)‖ < 1 → ‖(q : ℂ)‖ < 1 →
-    c p = c q → p = q
-  interior_iff : ∀ p : Disk, ‖(c p : ℂ)‖ < 1 ↔ ‖(p : ℂ)‖ < 1
+  /-- Interior points go to interior points (the converse is FALSE for a zip:
+  the zipped arcs `x`, `x⁻¹` land on an interior slit — review 2026-10-14). -/
+  interior_maps : ∀ p : Disk, ‖(p : ℂ)‖ < 1 → ‖(c p : ℂ)‖ < 1
+  /-- No other point shares an interior point's image. -/
+  interior_injective : ∀ {p q : Disk}, ‖(p : ℂ)‖ < 1 → c p = c q → p = q
 
 /-- Leaf (PL construction, 90--130 lines): triangulate the source by the
 centre, the endpoints of the two cancelled arcs, and all remaining vertices;
@@ -708,15 +710,71 @@ lemma inversePairCancellation_aux_zip_map {Label : Type*} [DecidableEq Label]
   sorry
 
 /-- Leaf (interior/mixed fibres, 45--70 lines): use
-`wordRel_eqvGen_interior`, `CancellationZipSpec.interior_iff`, and
+`wordRel_eqvGen_interior`, `CancellationZipSpec.interior_maps`, and
 `interior_injective`; no boundary combinatorics occur here. -/
+lemma inversePairCancellation_aux_zip_interior_aux_boundary
+    {L : Type*} [DecidableEq L] (w : List (Signed L)) {p q : Disk}
+    (h : Relation.EqvGen (WordRel w) p q) :
+    p = q ∨ (‖(p : ℂ)‖ = 1 ∧ ‖(q : ℂ)‖ = 1) := by
+  induction h with
+  | refl x => exact Or.inl rfl
+  | rel p q hpq =>
+      rcases hpq with ⟨i, j, hij, t, hlab, rfl, rfl⟩
+      right
+      constructor <;> simp [edgePoint, Complex.norm_exp]
+  | symm p q hpq ih =>
+      rcases ih with heq | ⟨hp, hq⟩
+      · exact Or.inl heq.symm
+      · exact Or.inr ⟨hq, hp⟩
+  | trans p q r hpq hqr ihpq ihqr =>
+      rcases ihpq with hpq | ⟨hp, hq⟩
+      · subst q
+        exact ihqr
+      · rcases ihqr with hqr | ⟨hq', hr⟩
+        · subst r
+          exact Or.inr ⟨hp, hq⟩
+        · exact Or.inr ⟨hp, hr⟩
+
+lemma inversePairCancellation_aux_zip_interior_aux_eq
+    {L : Type*} [DecidableEq L] (w : List (Signed L)) {p q : Disk}
+    (h : Relation.EqvGen (WordRel w) p q) (hp : ‖(p : ℂ)‖ < 1) : p = q := by
+  rcases inversePairCancellation_aux_zip_interior_aux_boundary w h with
+    heq | ⟨hp', hq⟩
+  · exact heq
+  · exfalso
+    linarith
+
 lemma inversePairCancellation_aux_zip_interior {Label : Type*} [DecidableEq Label]
     (u v : List (Signed Label)) (x : Signed Label) (c : Disk → Disk)
     (hc : CancellationZipSpec (u ++ v).length u.length c) :
     ∀ p q : Disk, (‖(p : ℂ)‖ < 1 ∨ ‖(q : ℂ)‖ < 1) →
       (Relation.EqvGen (WordRel (u ++ [x, inv x] ++ v)) p q ↔
        Relation.EqvGen (WordRel (u ++ v)) (c p) (c q)) := by
-  sorry
+  intro p q hint
+  constructor
+  · intro h
+    rcases hint with hp | hq
+    · have heq := inversePairCancellation_aux_zip_interior_aux_eq _ h hp
+      subst q
+      exact Relation.EqvGen.refl
+        (c p)
+    · have heq := inversePairCancellation_aux_zip_interior_aux_eq _
+          (Relation.EqvGen.symm _ _ h) hq
+      subst p
+      exact Relation.EqvGen.refl _
+  · intro h
+    rcases hint with hp | hq
+    · have him : ‖(c p : ℂ)‖ < 1 := hc.interior_maps p hp
+      have heq := inversePairCancellation_aux_zip_interior_aux_eq _ h him
+      have hpq := hc.interior_injective hp heq
+      subst q
+      exact Relation.EqvGen.refl _
+    · have him : ‖(c q : ℂ)‖ < 1 := hc.interior_maps q hq
+      have heq := inversePairCancellation_aux_zip_interior_aux_eq _
+        (Relation.EqvGen.symm _ _ h) him
+      have hqp := hc.interior_injective hq heq
+      subst p
+      exact Relation.EqvGen.refl _
 
 /-- Leaf (case assembly, 30--45 lines), independent of the construction:
 split each disk point into norm `< 1` or `= 1`, then invoke the supplied
@@ -833,17 +891,176 @@ lemma circleToDisk_of_norm (p : Disk) (hp : ‖(p : ℂ)‖ = 1) :
 
 /-- Radial (cone) extension of a circle homeomorphism to the disk:
 `r • z ↦ r • g z`. -/
+def disk_radial_extension_aux_map (g : Circle ≃ₜ Circle) (p : Disk) : Disk :=
+  if hp : (p : ℂ) = 0 then ⟨0, by simp [Metric.mem_closedBall]⟩ else
+    ⟨(‖(p : ℂ)‖ : ℂ) *
+        (g ⟨‖(p : ℂ)‖⁻¹ * (p : ℂ), by
+          simp [Circle, Submonoid.unitSphere, norm_mul, hp]⟩ : ℂ), by
+      rw [Metric.mem_closedBall, dist_zero_right, norm_mul]
+      simp only [Complex.norm_real, Real.norm_eq_abs, abs_norm]
+      have hg : ‖(g ⟨‖(p : ℂ)‖⁻¹ * (p : ℂ), by
+          simp [Circle, Submonoid.unitSphere, norm_mul, hp]⟩ : ℂ)‖ = 1 := by
+        simpa [Circle, Submonoid.unitSphere] using (g _).2
+      rw [hg, mul_one]
+      simpa [dist_zero_right] using (Metric.mem_closedBall.mp p.2)⟩
+
+lemma disk_radial_extension_aux_norm (g : Circle ≃ₜ Circle) (p : Disk) :
+    ‖(disk_radial_extension_aux_map g p : ℂ)‖ = ‖(p : ℂ)‖ := by
+  unfold disk_radial_extension_aux_map
+  split_ifs with hp
+  · simp [hp]
+  · rw [norm_mul]
+    simp only [Complex.norm_real, Real.norm_eq_abs, abs_norm]
+    rw [show ‖(g ⟨‖(p : ℂ)‖⁻¹ * (p : ℂ), by
+        simp [Circle, Submonoid.unitSphere, norm_mul, hp]⟩ : ℂ)‖ = 1 by
+          simpa [Circle, Submonoid.unitSphere] using (g _).2,
+      mul_one]
+
+lemma disk_radial_extension_aux_continuous (g : Circle ≃ₜ Circle) :
+    Continuous (disk_radial_extension_aux_map g) := by
+  rw [continuous_iff_continuousAt]
+  intro p
+  by_cases hp : (p : ℂ) = 0
+  · rw [Metric.continuousAt_iff]
+    intro ε hε
+    refine ⟨ε, hε, fun q hq => ?_⟩
+    have hmp : disk_radial_extension_aux_map g p = 0 := by
+      apply Subtype.ext
+      simp [disk_radial_extension_aux_map, hp]
+    rw [hmp, Subtype.dist_eq]
+    change dist (disk_radial_extension_aux_map g q : ℂ) 0 < ε
+    rw [dist_zero_right]
+    simpa [Subtype.dist_eq, hp, disk_radial_extension_aux_norm] using hq
+  · have hev : ∀ᶠ q : Disk in nhds p, (q : ℂ) ≠ 0 := by
+      exact (isOpen_compl_singleton : IsOpen ({0} : Set ℂ)ᶜ).preimage
+        continuous_subtype_val |>.mem_nhds hp
+    have hopen : IsOpen {q : Disk | (q : ℂ) ≠ 0} :=
+      (isOpen_compl_singleton : IsOpen ({0} : Set ℂ)ᶜ).preimage continuous_subtype_val
+    have hc : ContinuousOn (disk_radial_extension_aux_map g)
+        {q : Disk | (q : ℂ) ≠ 0} := by
+      rw [continuousOn_iff_continuous_restrict]
+      let F : {q : Disk | (q : ℂ) ≠ 0} → Disk := fun q =>
+        ⟨(‖(q.1 : ℂ)‖ : ℂ) *
+          (g ⟨‖(q.1 : ℂ)‖⁻¹ * (q.1 : ℂ), by
+            simpa [Submonoid.unitSphere, norm_mul] using
+              (inv_mul_cancel₀ (norm_ne_zero_iff.mpr q.2))⟩ : ℂ), by
+          rw [Metric.mem_closedBall, dist_zero_right, norm_mul]
+          simp only [Complex.norm_real, Real.norm_eq_abs, abs_norm]
+          rw [show ‖(g _ : ℂ)‖ = 1 by
+            simpa [Circle, Submonoid.unitSphere] using (g _).2, mul_one]
+          simpa [dist_zero_right] using (Metric.mem_closedBall.mp q.1.2)⟩
+      have hF : Continuous F := by
+        dsimp [F]
+        fun_prop (disch := simp [norm_ne_zero_iff, Subtype.property])
+      convert hF using 1
+      funext q
+      simp [F, disk_radial_extension_aux_map, q.2, show (q.1 : ℂ) ≠ 0 from q.2]
+    exact (hc p hp).continuousAt (hopen.mem_nhds hp)
+
+lemma disk_radial_extension_aux_direction (g : Circle ≃ₜ Circle) (p : Disk)
+    (hp : (p : ℂ) ≠ 0) :
+    (⟨‖(disk_radial_extension_aux_map g p : ℂ)‖⁻¹ *
+        (disk_radial_extension_aux_map g p : ℂ), by
+      simp [disk_radial_extension_aux_norm, hp, Circle, Submonoid.unitSphere]⟩ : Circle) =
+      g ⟨‖(p : ℂ)‖⁻¹ * (p : ℂ), by
+        simp [Circle, Submonoid.unitSphere, hp]⟩ := by
+  apply Subtype.ext
+  simp [disk_radial_extension_aux_map, hp, disk_radial_extension_aux_norm,
+    norm_ne_zero_iff.mpr hp]
+
+def disk_radial_extension_aux_homeomorph (g : Circle ≃ₜ Circle) : Disk ≃ₜ Disk where
+  toFun := disk_radial_extension_aux_map g
+  invFun := disk_radial_extension_aux_map g.symm
+  left_inv := by
+    intro p
+    apply Subtype.ext
+    by_cases hp : (p : ℂ) = 0
+    · simp [disk_radial_extension_aux_map, hp]
+    · simp only [disk_radial_extension_aux_map, dif_neg hp]
+      have hm : (disk_radial_extension_aux_map g p : ℂ) ≠ 0 := by
+        intro hm
+        have hm' : disk_radial_extension_aux_map g p = (0 : Disk) := Subtype.ext hm
+        have hh := congrArg (fun q : Disk => ‖(q : ℂ)‖) hm'
+        simpa [disk_radial_extension_aux_norm, hp] using hh
+      simp [hm]
+      have hpD : p ≠ (0 : Disk) := fun h => hp (congrArg Subtype.val h)
+      simp [hpD]
+  right_inv := by
+    intro p
+    apply Subtype.ext
+    by_cases hp : (p : ℂ) = 0
+    · simp [disk_radial_extension_aux_map, hp]
+    · simp only [disk_radial_extension_aux_map, dif_neg hp]
+      have hm : (disk_radial_extension_aux_map g.symm p : ℂ) ≠ 0 := by
+        intro hm
+        have hm' : disk_radial_extension_aux_map g.symm p = (0 : Disk) := Subtype.ext hm
+        have hh := congrArg (fun q : Disk => ‖(q : ℂ)‖) hm'
+        simpa [disk_radial_extension_aux_norm, hp] using hh
+      simp [hm]
+      have hpD : p ≠ (0 : Disk) := fun h => hp (congrArg Subtype.val h)
+      simp [hpD]
+  continuous_toFun := disk_radial_extension_aux_continuous g
+  continuous_invFun := disk_radial_extension_aux_continuous g.symm
+
 lemma disk_radial_extension (g : Circle ≃ₜ Circle) :
     ∃ e : Disk ≃ₜ Disk, (∀ z : Circle, e (circleToDisk z) = circleToDisk (g z)) ∧
       ∀ p : Disk, ‖(p : ℂ)‖ < 1 → ‖(e p : ℂ)‖ < 1 := by
-  sorry
+  refine ⟨disk_radial_extension_aux_homeomorph g, ?_, ?_⟩
+  · intro z
+    apply Subtype.ext
+    simp [disk_radial_extension_aux_homeomorph,
+      disk_radial_extension_aux_map, circleToDisk, z.2]
+  · intro p hp
+    simpa [disk_radial_extension_aux_homeomorph,
+      disk_radial_extension_aux_norm] using hp
 
 /-- Interior points are related only to themselves: `WordRel` only pairs edge
 points, which have norm `1`. -/
+lemma wordRel_eqvGen_interior_aux_boundary {L : Type*} [DecidableEq L]
+    (w : List (Signed L)) {p q : Disk}
+    (h : Relation.EqvGen (WordRel w) p q) :
+    p = q ∨ (‖(p : ℂ)‖ = 1 ∧ ‖(q : ℂ)‖ = 1) := by
+  induction h with
+  | refl x => exact Or.inl rfl
+  | rel p q hpq =>
+      rcases hpq with ⟨i, j, hij, t, hlab, rfl, rfl⟩
+      right
+      constructor <;> simp [edgePoint, Complex.norm_exp]
+  | symm p q hpq ih =>
+      rcases ih with heq | ⟨hp, hq⟩
+      · exact Or.inl heq.symm
+      · exact Or.inr ⟨hq, hp⟩
+  | trans p q r hpq hqr ihpq ihqr =>
+      rcases ihpq with hpq | ⟨hp, hq⟩
+      · subst q
+        exact ihqr
+      · rcases ihqr with hqr | ⟨hq', hr⟩
+        · subst r
+          exact Or.inr ⟨hp, hq⟩
+        · exact Or.inr ⟨hp, hr⟩
+
 lemma wordRel_eqvGen_interior {L : Type*} [DecidableEq L]
     (w : List (Signed L)) {p q : Disk}
     (h : Relation.EqvGen (WordRel w) p q) (hp : ‖(p : ℂ)‖ < 1) : p = q := by
-  sorry
+  rcases wordRel_eqvGen_interior_aux_boundary w h with heq | ⟨hp', hq⟩
+  · exact heq
+  · exact False.elim (by linarith)
+
+lemma mergeRepeatedBlock_aux_boundary_aux_target_ne_nil {Label : Type*}
+    (u v t : List (Signed Label)) (a : Signed Label) :
+    u ++ [a] ++ v ++ [inv a] ++ t ≠ [] := by
+  simp
+
+lemma mergeRepeatedBlock_aux_boundary_aux_target_even {Label : Type*}
+    [DecidableEq Label]
+    (u v t : List (Signed Label)) (y z a : Signed Label)
+    (hw : IsPolygonWord (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t)) :
+    Even (u ++ [a] ++ v ++ [inv a] ++ t).length := by
+  have hs := hw.2.1
+  rw [mergeRepeatedBlock_aux_disk_reparam_aux_length u v t y z a] at hs
+  obtain ⟨k, hk⟩ := hs
+  refine ⟨k - 1, ?_⟩
+  omega
 
 /-- The boundary content of the merge: a PL circle homeomorphism sending arcs
 `y, z` to the halves of `a` (and `z⁻¹, y⁻¹` to the halves of `a⁻¹`), every
