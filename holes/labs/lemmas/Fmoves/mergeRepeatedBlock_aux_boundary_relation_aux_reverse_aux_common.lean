@@ -1689,6 +1689,92 @@ lemma mergeRepeatedBlock_aux_boundary_relation_aux_reverse_aux_a_fresh
 
 /-- Reverse generators for a pair with an ordinary label (both indices in the `u`, `v`, `t` blocks): pull back with the identity-type edge formulas `hg.on_u/on_v/on_t`. -/
 -- BEGIN SEAT AREA
+def mergeRepeatedBlock_aux_boundary_relation_aux_reverse_aux_common_aux_index
+    {Label : Type*} (u v t : List (Signed Label)) (a : Signed Label)
+    (i : Fin (u ++ [a] ++ v ++ [inv a] ++ t).length) :
+    Fin (u ++ [a, a] ++ v ++ [a, a] ++ t).length :=
+  ⟨if i.1 < u.length then i.1
+    else if i.1 < u.length + 1 + v.length then i.1 + 1 else i.1 + 2, by
+    have hi := i.2
+    simp only [List.length_append, List.length_cons, List.length_nil] at hi ⊢
+    split_ifs <;> omega⟩
+
+lemma mergeRepeatedBlock_aux_boundary_relation_aux_reverse_aux_common_aux_index_injective
+    {Label : Type*} (u v t : List (Signed Label)) (a : Signed Label) :
+    Function.Injective
+      (mergeRepeatedBlock_aux_boundary_relation_aux_reverse_aux_common_aux_index u v t a) := by
+  intro i j h
+  apply Fin.ext
+  have hval := congrArg Fin.val h
+  simp only [mergeRepeatedBlock_aux_boundary_relation_aux_reverse_aux_common_aux_index,
+    Fin.val_mk] at hval
+  split_ifs at hval <;> omega
+
+lemma mergeRepeatedBlock_aux_boundary_relation_aux_reverse_aux_common_aux_edge
+    {Label : Type*} [DecidableEq Label]
+    (u v t : List (Signed Label)) (y z a : Signed Label)
+    (g : Circle ≃ₜ Circle) (hg : MergeRepeatedBlockEdgeSpec g u.length v.length t.length)
+    (i : Fin (u ++ [a] ++ v ++ [inv a] ++ t).length)
+    (hne : ((u ++ [a] ++ v ++ [inv a] ++ t).get i).1 ≠ a.1)
+    (s : Set.Icc (0 : ℝ) 1) :
+    ∃ i' : Fin (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t).length,
+      (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t).get i' =
+        (u ++ [a] ++ v ++ [inv a] ++ t).get i ∧
+      i'.1 = (mergeRepeatedBlock_aux_boundary_relation_aux_reverse_aux_common_aux_index u v t a i).1 ∧
+      g ⟨edgePoint (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t).length i' s,
+          by simpa [Circle, Submonoid.unitSphere] using
+            norm_edgePoint (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t).length i' s⟩ =
+        ⟨edgePoint (u ++ [a] ++ v ++ [inv a] ++ t).length i s,
+          by simpa [Circle, Submonoid.unitSphere] using
+            norm_edgePoint (u ++ [a] ++ v ++ [inv a] ++ t).length i s⟩ := by
+  rcases mergeRepeatedBlock_aux_boundary_relation_aux_reverse_aux_partition u v t a i with
+    hi | hi | ⟨k, hk, hi⟩ | hi | ⟨k, hk, hi⟩
+  · let i' : Fin (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t).length :=
+      ⟨i.1, by simp only [List.length_append, List.length_cons, List.length_nil]; omega⟩
+    refine ⟨i', ?_, ?_, ?_⟩
+    · simp [i', List.get_eq_getElem, List.getElem_append, hi]
+    · simp [i', mergeRepeatedBlock_aux_boundary_relation_aux_reverse_aux_common_aux_index, hi]
+    · convert hg.on_u i.1 hi s using 1 <;>
+        simp only [i', List.length_append, List.length_cons, List.length_nil] <;> omega
+  · exfalso
+    rw [List.get_eq_getElem] at hne
+    simp [List.getElem_append, hi, inv] at hne
+  · let i' : Fin (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t).length :=
+      ⟨u.length + 2 + k, by simp only [List.length_append, List.length_cons, List.length_nil]; omega⟩
+    refine ⟨i', ?_, ?_, ?_⟩
+    · simp [i', List.get_eq_getElem, List.getElem_append, hi, hk, Nat.add_assoc,
+        show 2 + k = Nat.succ (Nat.succ k) by omega,
+        show 1 + k = Nat.succ k by omega]
+    · simp [i', mergeRepeatedBlock_aux_boundary_relation_aux_reverse_aux_common_aux_index,
+        hi, hk, Nat.add_assoc] <;> omega
+    · convert hg.on_v k hk s using 1 <;>
+        simp only [i', hi, List.length_append, List.length_cons, List.length_nil] <;> omega
+  · exfalso
+    rw [List.get_eq_getElem] at hne
+    simp [List.getElem_append, hi, inv, Nat.add_assoc,
+      show 1 + v.length = Nat.succ v.length by omega] at hne
+  · let i' : Fin (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t).length :=
+      ⟨u.length + 4 + v.length + k, by
+        simp only [List.length_append, List.length_cons, List.length_nil]; omega⟩
+    refine ⟨i', ?_, ?_, ?_⟩
+    · simp only [i', List.get_eq_getElem]
+      rw [List.getElem_append_right
+          (as := u ++ [y, z] ++ v ++ [inv z, inv y]) (bs := t) (by
+            simp only [i', List.length_append, List.length_cons, List.length_nil]
+            omega),
+        List.getElem_append_right
+          (as := u ++ [a] ++ v ++ [inv a]) (bs := t) (by
+            simp only [List.length_append, List.length_cons, List.length_nil]
+            omega)]
+      congr 1
+      simp only [i', hi, List.length_append, List.length_cons, List.length_nil]
+      omega
+    · simp only [i', mergeRepeatedBlock_aux_boundary_relation_aux_reverse_aux_common_aux_index,
+        Fin.val_mk]
+      split_ifs <;> omega
+    · convert hg.on_t k hk s using 1 <;>
+        simp only [i', hi, List.length_append, List.length_cons, List.length_nil] <;> omega
+
 lemma mergeRepeatedBlock_aux_boundary_relation_aux_reverse_aux_common
     {Label : Type*} [DecidableEq Label]
     (u v t : List (Signed Label)) (y z a : Signed Label)
@@ -1706,7 +1792,56 @@ lemma mergeRepeatedBlock_aux_boundary_relation_aux_reverse_aux_common
       (if ((u ++ [a] ++ v ++ [inv a] ++ t).get i).2 = ((u ++ [a] ++ v ++ [inv a] ++ t).get j).2 then s else reverseParameter s)) :
     Relation.EqvGen (fun p q : Circle => WordRel (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t) (circleToDisk p) (circleToDisk q))
       (g.symm d₁) (g.symm d₂) := by
-  sorry
+  let r := if ((u ++ [a] ++ v ++ [inv a] ++ t).get i).2 =
+      ((u ++ [a] ++ v ++ [inv a] ++ t).get j).2 then s else reverseParameter s
+  have hne' : ((u ++ [a] ++ v ++ [inv a] ++ t).get j).1 ≠ a.1 := by
+    rw [← hlab]
+    exact hne
+  obtain ⟨i', hgeti, hvali, hedgei⟩ :=
+    mergeRepeatedBlock_aux_boundary_relation_aux_reverse_aux_common_aux_edge
+      u v t y z a g hg i hne s
+  obtain ⟨j', hgetj, hvalj, hedgej⟩ :=
+    mergeRepeatedBlock_aux_boundary_relation_aux_reverse_aux_common_aux_edge
+      u v t y z a g hg j hne' r
+  apply Relation.EqvGen.rel
+  refine ⟨i', j', ?_, s, ?_, ?_, ?_⟩
+  · intro heq
+    apply hij
+    apply mergeRepeatedBlock_aux_boundary_relation_aux_reverse_aux_common_aux_index_injective
+      u v t a
+    apply Fin.ext
+    simpa [hvali, hvalj] using congrArg Fin.val heq
+  · rw [hgeti, hgetj]
+    exact hlab
+  · let ci : Circle := ⟨edgePoint (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t).length i' s,
+        by simpa [Circle, Submonoid.unitSphere] using
+          norm_edgePoint (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t).length i' s⟩
+    let di : Circle := ⟨edgePoint (u ++ [a] ++ v ++ [inv a] ++ t).length i s,
+        by simpa [Circle, Submonoid.unitSphere] using
+          norm_edgePoint (u ++ [a] ++ v ++ [inv a] ++ t).length i s⟩
+    have hd : d₁ = di := mergeRepeatedBlock_aux_boundary_relation_aux_circleToDisk_injective (by
+      simpa [di, circleToDisk] using h₁)
+    have hc : g.symm di = ci := by simpa [ci, di] using g.symm_apply_eq.mpr hedgei.symm
+    rw [hd, hc]
+    rfl
+  ·
+    have hsigned : ((u ++ [y, z] ++ v ++ [inv z, inv y] ++ t).get i').2 =
+          ((u ++ [y, z] ++ v ++ [inv z, inv y] ++ t).get j').2 ↔
+        ((u ++ [a] ++ v ++ [inv a] ++ t).get i).2 =
+          ((u ++ [a] ++ v ++ [inv a] ++ t).get j).2 := by
+      rw [hgeti, hgetj]
+    simp only [hsigned]
+    let cj : Circle := ⟨edgePoint (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t).length j' r,
+        by simpa [Circle, Submonoid.unitSphere] using
+          norm_edgePoint (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t).length j' r⟩
+    let dj : Circle := ⟨edgePoint (u ++ [a] ++ v ++ [inv a] ++ t).length j r,
+        by simpa [Circle, Submonoid.unitSphere] using
+          norm_edgePoint (u ++ [a] ++ v ++ [inv a] ++ t).length j r⟩
+    have hd : d₂ = dj := mergeRepeatedBlock_aux_boundary_relation_aux_circleToDisk_injective (by
+      simpa [dj, r, circleToDisk] using h₂)
+    have hc : g.symm dj = cj := by simpa [cj, dj] using g.symm_apply_eq.mpr hedgej.symm
+    rw [hd, hc]
+    rfl
 -- END SEAT AREA
 
 /-- Reverse generators for the `a` / `a⁻¹` pair: split the parameter at `1/2`; the lower half comes from `y` / `y⁻¹`, the upper half from `z` / `z⁻¹` (`hg.on_y/on_z/on_inv_z/on_inv_y`). -/
