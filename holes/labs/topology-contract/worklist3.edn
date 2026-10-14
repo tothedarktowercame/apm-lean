@@ -36121,7 +36121,7 @@
   {:consumer :t93J03,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 10,
+   :stop-count 0,
    :review-finding
    "Program STOP commits no new mathematical progress since the prior milestone: KleinPolygonBasedVanKampen merely packages the already-required surjectivity and kernel hypotheses, and both consumers only reapply the previously proved three-input theorem. Prove the based van Kampen surjectivity/kernel result (or winding conjugacy) in scope; extend Mathlib: state and prove the missing theorem in scope.",
    :evidence
@@ -36165,7 +36165,7 @@
      "57669ee92b655e88fde71c50d99aa588dee734adbcfbcb4e1fcf6863c7a0b085"},
     :seat :topo-10},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -36996,6 +36996,16 @@
      {:cmd "git diff --check", :exit 0}
      {:cmd "sha256sum fixture", :exit 0}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1792021593294-12731-31571867",
+     :commands
+     ["git show/check/diff-tree b7a01bad exact scope and source audit"
+      "fixture SHA-256; inspect committed H3 construction; lean t96A06 Main"
+      "statement-registry check; parent/commit placeholder recount"],
+     :finding
+     "PASS: b7a01bad adds compiled, sorry-free progress after f170a303. The committed equivalence has the correct representation and orientation: H3(S3;Q) shifts to H2(S2;Q), then uses the existing sphere endpoint to Q. It does not claim the unresolved RP3 top group; antipodal/transfer detection, higher vanishing, degree four, invariants/Main remain listed. Scope/hash match; standard axioms; registry 166/166; closure forbidden 0->0; Main 1->1 placeholder."},
     :commit nil,
     :changed-paths [],
     :fixture
@@ -37004,7 +37014,7 @@
      "5cf1651451c0a87909c5d3725219722e4d7ead421cc395dad09f1b6c4fe2e2ae"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -37022,7 +37032,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t96A06Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Proved H3(S3;Q)=Q; identifying H3(RP3;Q) now requires the degree-three antipodal/transfer comparison.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: .lake/packages is a real directory, not the canonical APM package-authority symlink; AGENTS.md forbids Lake verification or implementation until lifecycle provisioning repairs it.",
    :id :program-2026-10-13-close-t96a06,
    :kind :final-adapter,
    :campaign-priority 31,
@@ -37062,7 +37072,11 @@
     {:job 1,
      :commit "b7a01bad22a84df73d65de2605dacd326499232d",
      :reason
-     "Proved H3(S3;Q)=Q; identifying H3(RP3;Q) now requires the degree-three antipodal/transfer comparison."}]}
+     "Proved H3(S3;Q)=Q; identifying H3(RP3;Q) now requires the degree-three antipodal/transfer comparison."}
+    {:job 2,
+     :commit nil,
+     :reason
+     ".lake/packages is a real directory, not the canonical APM package-authority symlink; AGENTS.md forbids Lake verification or implementation until lifecycle provisioning repairs it."}]}
   {:consumer :t96J05,
    :stop-count 0,
    :phase :implementation,
