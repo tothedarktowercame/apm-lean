@@ -246,7 +246,107 @@ theorem t93A06_exact_integral_aux_pullback_d (atlas : SmoothAtlas)
     letI := atlas.charts
     pullback projection (exteriorDerivative η) =
       exteriorDerivative (E := Plane) (M := Plane) (pullback projection η) := by
-  sorry
+  letI := atlas.charts
+  letI := atlas.smooth
+  funext x
+  let e := chartAt Plane (projection x)
+  let g : Plane → Plane := fun y ↦ e (projection y)
+  have hxsrc : projection x ∈ e.source := mem_chart_source Plane (projection x)
+  have hxtgt : e (projection x) ∈ e.target := e.map_source hxsrc
+  have hω : DifferentiableAt ℝ (inChart η e) (e (projection x)) := by
+    have hs := hη e (chart_mem_atlas _ _)
+    exact (hs.differentiableOn (by simp)).differentiableAt
+      (e.open_target.mem_nhds hxtgt)
+  have hg : ContDiffAt ℝ ∞ g x := by
+    have hp : ContMDiffAt 𝓘(ℝ, Plane) 𝓘(ℝ, Plane) ∞ projection x :=
+      (atlas.quotient_localDiffeomorph x).contMDiffAt
+    have he : ContMDiffAt 𝓘(ℝ, Plane) 𝓘(ℝ, Plane) ∞ e (projection x) :=
+      (contMDiffOn_chart (x := projection x)).contMDiffAt
+        ((e.open_source.mem_nhds hxsrc))
+    simpa [g, contMDiffAt_iff_contDiffAt] using he.comp x hp
+  have hlocal : pullback projection η =ᶠ[nhds x]
+      fun y ↦ ((inChart η e) (g y)).compContinuousLinearMap (fderiv ℝ g y) := by
+    filter_upwards [(atlas.quotient_localDiffeomorph x).contMDiffAt.continuousAt.preimage_mem_nhds
+      (e.open_source.mem_nhds hxsrc)] with y hy
+    unfold pullback inChart
+    rw [e.left_inv hy]
+    rw [show fderiv ℝ g y =
+        (mfderiv 𝓘(ℝ, Plane) 𝓘(ℝ, Plane) e (projection y)).comp
+          (mfderiv 𝓘(ℝ, Plane) 𝓘(ℝ, Plane) projection y) by
+      rw [← mfderiv_comp y
+        (((contMDiffOn_chart (x := projection x)).contMDiffAt
+          (e.open_source.mem_nhds hy)).mdifferentiableAt
+            (show (∞ : WithTop ℕ∞) ≠ 0 by simp))
+        ((atlas.quotient_localDiffeomorph y).mdifferentiableAt
+          (show (∞ : WithTop ℕ∞) ≠ 0 by simp))]
+      rw [mfderiv_eq_fderiv]
+      change fderiv ℝ g y = fderiv ℝ g y
+      rfl]
+    apply ContinuousAlternatingMap.ext
+    intro v
+    simp only [ContinuousAlternatingMap.compContinuousLinearMap_apply,
+      Function.comp_apply]
+    have hc := (mdifferentiable_chart (I := 𝓘(ℝ, Plane))
+      (projection x)).symm_comp_deriv hy
+    congr 1
+    funext i
+    change (mfderiv 𝓘(ℝ, Plane) 𝓘(ℝ, Plane) projection y) (v i) =
+      (mfderiv 𝓘(ℝ, Plane) 𝓘(ℝ, Plane) e.symm (e (projection y)))
+        ((mfderiv 𝓘(ℝ, Plane) 𝓘(ℝ, Plane) e (projection y))
+          ((mfderiv 𝓘(ℝ, Plane) 𝓘(ℝ, Plane) projection y) (v i)))
+    rw [← ContinuousLinearMap.comp_apply, hc]
+    rfl
+  have hdg : fderiv ℝ g x =
+      (mfderiv 𝓘(ℝ, Plane) 𝓘(ℝ, Plane) e (projection x)).comp
+        (mfderiv 𝓘(ℝ, Plane) 𝓘(ℝ, Plane) projection x) := by
+    rw [← mfderiv_comp x
+      (((contMDiffOn_chart (x := projection x)).contMDiffAt
+        (e.open_source.mem_nhds hxsrc)).mdifferentiableAt
+          (show (∞ : WithTop ℕ∞) ≠ 0 by simp))
+      ((atlas.quotient_localDiffeomorph x).mdifferentiableAt
+        (show (∞ : WithTop ℕ∞) ≠ 0 by simp))]
+    rw [mfderiv_eq_fderiv]
+    change fderiv ℝ g x = fderiv ℝ g x
+    rfl
+  have hself : inChart (pullback projection η) (OpenPartialHomeomorph.refl Plane) =
+      pullback projection η := by
+    funext y
+    apply ContinuousAlternatingMap.ext
+    intro v
+    have hr : mfderiv 𝓘(ℝ, Plane) 𝓘(ℝ, Plane)
+        (OpenPartialHomeomorph.refl Plane).symm y = ContinuousLinearMap.id ℝ Plane := by
+      simpa only [OpenPartialHomeomorph.refl_symm] using
+        (mfderiv_id (I := 𝓘(ℝ, Plane)) (x := y))
+    unfold inChart
+    rw [hr]
+    congr 1
+  unfold exteriorDerivative
+  simp only [chartAt_self_eq, OpenPartialHomeomorph.refl_apply, hself, mfderiv_id]
+  change ((extDeriv (inChart η e) (g x)).compContinuousLinearMap
+      (mfderiv 𝓘(ℝ, Plane) 𝓘(ℝ, Plane) e (projection x))).compContinuousLinearMap
+        (mfderiv 𝓘(ℝ, Plane) 𝓘(ℝ, Plane) projection x) =
+      (extDeriv (pullback projection η) x).compContinuousLinearMap
+        (ContinuousLinearMap.id ℝ Plane)
+  apply ContinuousAlternatingMap.ext
+  intro v
+  change extDeriv (inChart η e) (g x)
+      (fun i ↦ (mfderiv 𝓘(ℝ, Plane) 𝓘(ℝ, Plane) e (projection x))
+        (mfderiv 𝓘(ℝ, Plane) 𝓘(ℝ, Plane) projection x (v i))) =
+    extDeriv (pullback projection η) x v
+  rw [show (fun i ↦ (mfderiv 𝓘(ℝ, Plane) 𝓘(ℝ, Plane) e (projection x))
+      (mfderiv 𝓘(ℝ, Plane) 𝓘(ℝ, Plane) projection x (v i))) =
+      fun i ↦ fderiv ℝ g x (v i) by
+    funext i
+    rw [hdg]
+    rfl]
+  rw [hlocal.extDeriv_eq]
+  have hn : extDeriv (fun y ↦ ((inChart η e) (g y)).compContinuousLinearMap
+        (fderiv ℝ g y)) x =
+      (extDeriv (inChart η e) (g x)).compContinuousLinearMap (fderiv ℝ g x) :=
+    extDeriv_pullback hω hg (by
+      rw [minSmoothness_of_isRCLikeNormedField]
+      exact WithTop.coe_le_coe.2 le_top)
+  exact congrArg (fun q ↦ q v) hn.symm
 -- END SEAT AREA
 
 /-- Smoothness of a torus one-form gives smooth coefficient functions after

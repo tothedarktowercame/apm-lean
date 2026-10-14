@@ -776,7 +776,107 @@ theorem t93A06_exact_integral_aux_pullback_d (atlas : SmoothAtlas)
     letI := atlas.charts
     pullback projection (exteriorDerivative η) =
       exteriorDerivative (E := Plane) (M := Plane) (pullback projection η) := by
-  sorry
+  letI := atlas.charts
+  letI := atlas.smooth
+  funext x
+  let e := chartAt Plane (projection x)
+  let g : Plane → Plane := fun y ↦ e (projection y)
+  have hxsrc : projection x ∈ e.source := mem_chart_source Plane (projection x)
+  have hxtgt : e (projection x) ∈ e.target := e.map_source hxsrc
+  have hω : DifferentiableAt ℝ (inChart η e) (e (projection x)) := by
+    have hs := hη e (chart_mem_atlas _ _)
+    exact (hs.differentiableOn (by simp)).differentiableAt
+      (e.open_target.mem_nhds hxtgt)
+  have hg : ContDiffAt ℝ ∞ g x := by
+    have hp : ContMDiffAt 𝓘(ℝ, Plane) 𝓘(ℝ, Plane) ∞ projection x :=
+      (atlas.quotient_localDiffeomorph x).contMDiffAt
+    have he : ContMDiffAt 𝓘(ℝ, Plane) 𝓘(ℝ, Plane) ∞ e (projection x) :=
+      (contMDiffOn_chart (x := projection x)).contMDiffAt
+        ((e.open_source.mem_nhds hxsrc))
+    simpa [g, contMDiffAt_iff_contDiffAt] using he.comp x hp
+  have hlocal : pullback projection η =ᶠ[nhds x]
+      fun y ↦ ((inChart η e) (g y)).compContinuousLinearMap (fderiv ℝ g y) := by
+    filter_upwards [(atlas.quotient_localDiffeomorph x).contMDiffAt.continuousAt.preimage_mem_nhds
+      (e.open_source.mem_nhds hxsrc)] with y hy
+    unfold pullback inChart
+    rw [e.left_inv hy]
+    rw [show fderiv ℝ g y =
+        (mfderiv 𝓘(ℝ, Plane) 𝓘(ℝ, Plane) e (projection y)).comp
+          (mfderiv 𝓘(ℝ, Plane) 𝓘(ℝ, Plane) projection y) by
+      rw [← mfderiv_comp y
+        (((contMDiffOn_chart (x := projection x)).contMDiffAt
+          (e.open_source.mem_nhds hy)).mdifferentiableAt
+            (show (∞ : WithTop ℕ∞) ≠ 0 by simp))
+        ((atlas.quotient_localDiffeomorph y).mdifferentiableAt
+          (show (∞ : WithTop ℕ∞) ≠ 0 by simp))]
+      rw [mfderiv_eq_fderiv]
+      change fderiv ℝ g y = fderiv ℝ g y
+      rfl]
+    apply ContinuousAlternatingMap.ext
+    intro v
+    simp only [ContinuousAlternatingMap.compContinuousLinearMap_apply,
+      Function.comp_apply]
+    have hc := (mdifferentiable_chart (I := 𝓘(ℝ, Plane))
+      (projection x)).symm_comp_deriv hy
+    congr 1
+    funext i
+    change (mfderiv 𝓘(ℝ, Plane) 𝓘(ℝ, Plane) projection y) (v i) =
+      (mfderiv 𝓘(ℝ, Plane) 𝓘(ℝ, Plane) e.symm (e (projection y)))
+        ((mfderiv 𝓘(ℝ, Plane) 𝓘(ℝ, Plane) e (projection y))
+          ((mfderiv 𝓘(ℝ, Plane) 𝓘(ℝ, Plane) projection y) (v i)))
+    rw [← ContinuousLinearMap.comp_apply, hc]
+    rfl
+  have hdg : fderiv ℝ g x =
+      (mfderiv 𝓘(ℝ, Plane) 𝓘(ℝ, Plane) e (projection x)).comp
+        (mfderiv 𝓘(ℝ, Plane) 𝓘(ℝ, Plane) projection x) := by
+    rw [← mfderiv_comp x
+      (((contMDiffOn_chart (x := projection x)).contMDiffAt
+        (e.open_source.mem_nhds hxsrc)).mdifferentiableAt
+          (show (∞ : WithTop ℕ∞) ≠ 0 by simp))
+      ((atlas.quotient_localDiffeomorph x).mdifferentiableAt
+        (show (∞ : WithTop ℕ∞) ≠ 0 by simp))]
+    rw [mfderiv_eq_fderiv]
+    change fderiv ℝ g x = fderiv ℝ g x
+    rfl
+  have hself : inChart (pullback projection η) (OpenPartialHomeomorph.refl Plane) =
+      pullback projection η := by
+    funext y
+    apply ContinuousAlternatingMap.ext
+    intro v
+    have hr : mfderiv 𝓘(ℝ, Plane) 𝓘(ℝ, Plane)
+        (OpenPartialHomeomorph.refl Plane).symm y = ContinuousLinearMap.id ℝ Plane := by
+      simpa only [OpenPartialHomeomorph.refl_symm] using
+        (mfderiv_id (I := 𝓘(ℝ, Plane)) (x := y))
+    unfold inChart
+    rw [hr]
+    congr 1
+  unfold exteriorDerivative
+  simp only [chartAt_self_eq, OpenPartialHomeomorph.refl_apply, hself, mfderiv_id]
+  change ((extDeriv (inChart η e) (g x)).compContinuousLinearMap
+      (mfderiv 𝓘(ℝ, Plane) 𝓘(ℝ, Plane) e (projection x))).compContinuousLinearMap
+        (mfderiv 𝓘(ℝ, Plane) 𝓘(ℝ, Plane) projection x) =
+      (extDeriv (pullback projection η) x).compContinuousLinearMap
+        (ContinuousLinearMap.id ℝ Plane)
+  apply ContinuousAlternatingMap.ext
+  intro v
+  change extDeriv (inChart η e) (g x)
+      (fun i ↦ (mfderiv 𝓘(ℝ, Plane) 𝓘(ℝ, Plane) e (projection x))
+        (mfderiv 𝓘(ℝ, Plane) 𝓘(ℝ, Plane) projection x (v i))) =
+    extDeriv (pullback projection η) x v
+  rw [show (fun i ↦ (mfderiv 𝓘(ℝ, Plane) 𝓘(ℝ, Plane) e (projection x))
+      (mfderiv 𝓘(ℝ, Plane) 𝓘(ℝ, Plane) projection x (v i))) =
+      fun i ↦ fderiv ℝ g x (v i) by
+    funext i
+    rw [hdg]
+    rfl]
+  rw [hlocal.extDeriv_eq]
+  have hn : extDeriv (fun y ↦ ((inChart η e) (g y)).compContinuousLinearMap
+        (fderiv ℝ g y)) x =
+      (extDeriv (inChart η e) (g x)).compContinuousLinearMap (fderiv ℝ g x) :=
+    extDeriv_pullback hω hg (by
+      rw [minSmoothness_of_isRCLikeNormedField]
+      exact WithTop.coe_le_coe.2 le_top)
+  exact congrArg (fun q ↦ q v) hn.symm
 
 lemma t93A06_exact_integral_aux_coeff_smooth_aux_global
     (atlas : SmoothAtlas)
@@ -806,8 +906,53 @@ theorem t93A06_exact_integral_aux_coeff_smooth (atlas : SmoothAtlas)
     intro i
     fin_cases i <;> simp <;> fun_prop
 
-/-- Coordinate formula for the integral of an exterior derivative.  The
-naturality equality is an explicit input so this leaf is parallel to it. -/
+/-- Unfold the fundamental-square integral and use the supplied naturality
+identity.  This leaf contains no coordinate differentiation or integration
+linearity. -/
+theorem t93A06_exact_integral_aux_square_formula_unfold (atlas : SmoothAtlas)
+    (η : let _ := atlas.charts; Form Plane Torus 1)
+    (hnat : letI := atlas.charts
+      pullback projection (exteriorDerivative η) =
+        exteriorDerivative (E := Plane) (M := Plane) (pullback projection η)) :
+    letI := atlas.charts
+    torusIntegral (exteriorDerivative η) =
+      ∫ y : ℝ in 0..1, ∫ x : ℝ in 0..1,
+        exteriorDerivative (E := Plane) (M := Plane) (pullback projection η)
+          ![x, y] ![Pi.single 0 1, Pi.single 1 1] := by
+  sorry
+
+/-- The Euclidean exterior derivative of the pulled-back one-form, on the
+positive coordinate basis, is `∂x Q - ∂y P`.  Global `C¹` regularity is
+an explicit input, so this leaf is independent of both naturality and the
+integral manipulation below. -/
+theorem t93A06_exact_integral_aux_square_formula_pointwise (atlas : SmoothAtlas)
+    (η : let _ := atlas.charts; Form Plane Torus 1)
+    (hC1 : ∀ i : Fin 2, ContDiff ℝ 1 (t93A06_pulledCoeff atlas η i)) :
+    letI := atlas.charts
+    ∀ x y : ℝ,
+      exteriorDerivative (E := Plane) (M := Plane) (pullback projection η)
+          ![x, y] ![Pi.single 0 1, Pi.single 1 1] =
+        deriv (fun s ↦ t93A06_pulledCoeff atlas η 1 ![s, y]) x -
+        deriv (fun t ↦ t93A06_pulledCoeff atlas η 0 ![x, t]) y := by
+  sorry
+
+/-- Move the pointwise coordinate identity through the two interval integrals
+and split the integral of a difference.  The identity is passed explicitly,
+so this seat can be proved before the coordinate-calculus seat lands. -/
+theorem t93A06_exact_integral_aux_square_formula_integral_split
+    (F : ℝ → ℝ → ℝ) (P Q : Plane → ℝ)
+    (hC1P : ContDiff ℝ 1 P) (hC1Q : ContDiff ℝ 1 Q)
+    (hcoord : ∀ x y : ℝ, F x y =
+      deriv (fun s ↦ Q ![s, y]) x - deriv (fun t ↦ P ![x, t]) y) :
+    (∫ y : ℝ in 0..1, ∫ x : ℝ in 0..1, F x y) =
+      (∫ y : ℝ in 0..1, ∫ x : ℝ in 0..1,
+        deriv (fun s ↦ Q ![s, y]) x) -
+      (∫ y : ℝ in 0..1, ∫ x : ℝ in 0..1,
+        deriv (fun t ↦ P ![x, t]) y) := by
+  sorry
+
+/-- Coordinate formula for the integral of an exterior derivative.  This is
+only the assembly of the three independent leaves above. -/
 theorem t93A06_exact_integral_aux_square_formula (atlas : SmoothAtlas)
     (η : let _ := atlas.charts; Form Plane Torus 1)
     (hnat : letI := atlas.charts
@@ -820,7 +965,14 @@ theorem t93A06_exact_integral_aux_square_formula (atlas : SmoothAtlas)
         deriv (fun s ↦ t93A06_pulledCoeff atlas η 1 ![s, y]) x) -
       (∫ y : ℝ in 0..1, ∫ x : ℝ in 0..1,
         deriv (fun t ↦ t93A06_pulledCoeff atlas η 0 ![x, t]) y) := by
-  sorry
+  letI := atlas.charts
+  rw [t93A06_exact_integral_aux_square_formula_unfold atlas η hnat]
+  exact t93A06_exact_integral_aux_square_formula_integral_split
+    (fun x y ↦ exteriorDerivative (E := Plane) (M := Plane)
+      (pullback projection η) ![x, y] ![Pi.single 0 1, Pi.single 1 1])
+    (t93A06_pulledCoeff atlas η 0) (t93A06_pulledCoeff atlas η 1)
+    (hC1 0) (hC1 1)
+    (t93A06_exact_integral_aux_square_formula_pointwise atlas η hC1)
 
 /-- One-variable FTC for the `x` derivative, already integrated in `y`. -/
 theorem t93A06_exact_integral_aux_ftc_x
