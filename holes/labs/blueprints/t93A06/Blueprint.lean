@@ -175,7 +175,64 @@ theorem t93A06_periodic_form_descent_aux_set_descent
     letI := atlas.charts
     ∃ form : Form Plane Torus 2,
       pullback projection form = sourceForm := by
-  sorry
+  letI := atlas.charts
+  classical
+  let lift : Torus → Plane := fun z ↦
+    Classical.choose (t93A06_periodic_form_descent_aux_projection_surjective z)
+  have hlift (z : Torus) : projection (lift z) = z :=
+    Classical.choose_spec (t93A06_periodic_form_descent_aux_projection_surjective z)
+  let D (x : Plane) : Plane ≃L[ℝ] Plane :=
+    atlas.quotient_localDiffeomorph.mfderivToContinuousLinearEquiv (by simp) x
+  let form : Form Plane Torus 2 := fun z ↦
+    (sourceForm (lift z)).compContinuousLinearMap (D (lift z)).symm
+  refine ⟨form, funext fun x ↦ ?_⟩
+  obtain ⟨k, hk⟩ :=
+    (hfib x (lift (projection x))).mp (hlift (projection x)).symm
+  have hproj : (fun y : Plane ↦ projection (fun i ↦ y i + (k i : ℝ))) =
+      projection := by
+    funext y
+    exact ((hfib y (fun i ↦ y i + (k i : ℝ))).mpr
+      ⟨k, fun i ↦ rfl⟩).symm
+  have htrans : mfderiv 𝓘(ℝ,Plane) 𝓘(ℝ,Plane)
+      (fun y : Plane ↦ fun i ↦ y i + (k i : ℝ)) x =
+      ContinuousLinearMap.id ℝ Plane := by
+    rw [mfderiv_eq_fderiv]
+    exact ((hasFDerivAt_id x).add_const (fun i ↦ (k i : ℝ))).fderiv
+  have hlift_eq : lift (projection x) = (fun i ↦ x i + (k i : ℝ)) := by
+    funext i
+    exact hk i
+  have hd : mfderiv 𝓘(ℝ,Plane) 𝓘(ℝ,Plane) projection
+      (lift (projection x)) =
+      mfderiv 𝓘(ℝ,Plane) 𝓘(ℝ,Plane) projection x := by
+    rw [hlift_eq]
+    have hc := mfderiv_comp x
+      ((atlas.quotient_localDiffeomorph
+        (fun i ↦ x i + (k i : ℝ))).mdifferentiableAt (by simp))
+      (show MDifferentiableAt 𝓘(ℝ,Plane) 𝓘(ℝ,Plane)
+        (fun y : Plane ↦ fun i ↦ y i + (k i : ℝ)) x by
+          rw [mdifferentiableAt_iff_differentiableAt]
+          exact ((hasFDerivAt_id x).add_const
+            (fun i ↦ (k i : ℝ))).differentiableAt)
+    rw [show (projection ∘ (fun y : Plane ↦ fun i ↦ y i + (k i : ℝ))) =
+      projection by funext y; exact congrFun hproj y,
+      htrans] at hc
+    simpa using hc.symm
+  apply ContinuousAlternatingMap.ext
+  intro v
+  change sourceForm (lift (projection x))
+      (fun i ↦ (D (lift (projection x))).symm
+        (mfderiv 𝓘(ℝ,Plane) 𝓘(ℝ,Plane) projection x (v i))) =
+    sourceForm x v
+  rw [show sourceForm (lift (projection x)) = sourceForm x by
+    rw [hlift_eq, hperiodic x k]]
+  have hD : (D (lift (projection x)) : Plane →L[ℝ] Plane) =
+      mfderiv 𝓘(ℝ,Plane) 𝓘(ℝ,Plane) projection x := by
+    change mfderiv 𝓘(ℝ,Plane) 𝓘(ℝ,Plane) projection (lift (projection x)) = _
+    exact hd
+  rw [← hD]
+  congr 1
+  funext i
+  exact (D (lift (projection x))).symm_apply_apply (v i)
 
 /-- Smoothness descends along the local diffeomorphism `projection`.  Both
 the form and the smoothness of its pullback are explicit inputs, making this
