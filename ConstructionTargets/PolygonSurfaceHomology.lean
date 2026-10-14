@@ -9,6 +9,7 @@ import ConstructionTargets.CoefficientSigmaConstFinsuppComparison
 import ConstructionTargets.SingularHomologyHomotopy
 import ConstructionTargets.DegreeOneHurewiczSurjective
 import ConstructionTargets.CircleHurewiczIsomorphism
+import ConstructionTargets.CircleUniversalCover
 import ConstructionTargets.PointWedgeVanKampen
 
 /-!
@@ -1131,6 +1132,18 @@ noncomputable def polygonBoundaryLegWord (P : PairingData) :
     FiniteWedgeLegWord P :=
   List.ofFn fun i : Fin P.edgeCount =>
     (P.orbit i, if P.sign i then (1 : ℤ) else -1)
+
+/-- The interval parametrization used by every polygon edge is literally the
+once-around loop from the exponential universal-cover model.  This fixes the
+path-level orientation needed to compare the geometric boundary with the
+positive circle generator; the remaining comparison is solely the Hurewicz
+normalization of that explicit loop. -/
+theorem circleArc_eq_integerLoop_one (t : Set.Icc (0 : ℝ) 1) :
+    PolygonSurfacePiOne.circleArc t =
+      ConstructionTargets.CircleUniversalCover.integerLoop 1 t := by
+  simp [PolygonSurfacePiOne.circleArc,
+    ConstructionTargets.CircleUniversalCover.integerLoop,
+    ConstructionTargets.CircleUniversalCover.circleCover, AddCircle.toCircle]
 
 /-- The coordinate sum of the ordered signed boundary word is precisely the
 attaching degree vector fixed at the start of the calculation. -/
