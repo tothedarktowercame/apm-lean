@@ -36158,6 +36158,16 @@
      {:cmd "placeholder count", :exit 0}
      {:cmd "git diff --check", :exit 0}
      {:cmd "rg forbidden", :exit 1, :expected-exit 1}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1792010141220-12361-46eedbaa",
+     :commands
+     ["git show/check/diff fde20b59; scope and fixture SHA-256"
+      "lake build ConstructionTargets.t93J03Closure; lean fixture and Main"
+      "statement-registry check; placeholder/axiom recount"],
+     :finding
+     "PASS: fde20b59 adds compiled, sorry-free progress after 83b52a40. The last boundary-list entry is the target of the final run; the final-run index theorem identifies its last piece with Fin.last S.n, whose successor is the literal final subdivision point Fin.last(S.n+1). Blueprint is faithful; exact scope/hash match; closure placeholders 0->0; frozen Main remains 1; registry 166/166; standard axioms only. STOP lists intermediate outer membership, subtype lifting, fold instantiation, reverse kernel/surjectivity, winding, C1/C2/Main."},
     :commit "fde20b59294e670ee4f473d71714c9ac0198fa8d",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
@@ -36168,7 +36178,7 @@
      "ba96b6c46379199da120d120267578ab44c3dba048ba77ce81e45ba580bac980"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -36186,7 +36196,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t93J03Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Defined the canonical run-boundary list with exact length and initial vertex; outer-membership remains.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Proved the run-boundary list ends at the final subdivision vertex; intermediate outer-membership remains.",
    :id :program-2026-10-13-close-t93j03,
    :kind :final-adapter,
    :campaign-priority 30,
@@ -36468,7 +36478,11 @@
     {:job 7,
      :commit "83b52a407f4be5673b93570b691710c7bd6ab7ed",
      :reason
-     "Defined the canonical run-boundary list with exact length and initial vertex; outer-membership remains."}]}
+     "Defined the canonical run-boundary list with exact length and initial vertex; outer-membership remains."}
+    {:job 8,
+     :commit "fde20b59294e670ee4f473d71714c9ac0198fa8d",
+     :reason
+     "Proved the run-boundary list ends at the final subdivision vertex; intermediate outer-membership remains."}]}
   {:consumer :t99J05,
    :stop-count 5,
    :evidence
@@ -39628,7 +39642,7 @@
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "pathTwoOpenSubdivisionRunBoundaryPoints_getLast",
@@ -39638,7 +39652,9 @@
     :reported-by [:program-2026-10-13-close-t93j03],
     :type "final boundary point equals final subdivision vertex",
     :area "covering-subgroup-correspondence",
-    :proved-in :program-2026-10-13-close-t93j03},
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "fde20b59294e670ee4f473d71714c9ac0198fa8d"},
    :id :lemma-pathtwoopensubdivisionrunboundarypoints-getlast,
    :kind :lemma,
    :depends-on [:lemma-pathtwoopensubdivisionrunboundarypoints],
