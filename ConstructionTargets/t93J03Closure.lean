@@ -945,6 +945,20 @@ theorem kleinPolygonOverlapWindingHom_range :
   rw [hhom]
   exact Subgroup.range_zpowersHom _
 
+/-- Passing from the cyclic overlap image to its winding-one generator does
+not change the normal subgroup imposed by van Kampen. -/
+theorem kleinPolygonOverlapWindingHom_normalClosure :
+    Subgroup.normalClosure
+        (kleinPolygonOverlapWindingHom.range : Set (FreeGroup Bool)) =
+      Subgroup.normalClosure {kleinPolygonOverlapWindingOneImage} := by
+  rw [kleinPolygonOverlapWindingHom_range]
+  apply le_antisymm
+  · apply Subgroup.normalClosure_le_normal
+    exact Subgroup.zpowers_le_of_mem
+      (Subgroup.subset_normalClosure (Set.mem_singleton _))
+  · apply Subgroup.normalClosure_mono
+    exact Set.singleton_subset_iff.mpr (Subgroup.mem_zpowers _)
+
 def finiteWedgeBoolPoint : FiniteWedge Bool := wedgeCircle false 1
 
 @[simp] theorem finiteWedgeBoolHomeomorphTwoCircles_point :
@@ -1094,6 +1108,7 @@ theorem lift_isEmbedding_assembly
 #print axioms kleinPolygonOverlapWindingHom_factor
 #print axioms kleinPolygonOverlapWindingOneImage
 #print axioms kleinPolygonOverlapWindingHom_range
+#print axioms kleinPolygonOverlapWindingHom_normalClosure
 #print axioms kleinBottle_pi1_every_basepoint_of_polygon_van_kampen
 
 end ConstructionTargets.t93J03Closure
