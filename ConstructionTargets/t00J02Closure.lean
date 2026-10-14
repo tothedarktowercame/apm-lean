@@ -161,6 +161,19 @@ theorem surfaceTopHomologyMap_eq_zero_of_surfaceTopDegree_eq_zero
   apply (cancel_mono e.hom).1
   simpa [surfaceTopHomologyCoordinateMap] using hcoordinate
 
+/-- Assembly of the signed-count argument after the geometric regular-value
+formula and the component degree calculation have been supplied. -/
+theorem topHomologyMap_eq_zero_of_regularValue_signedCount
+    {S : Type} [TopologicalSpace S] {ι : Type*} [Fintype ι]
+    (e : surfaceHomology S ≅ ModuleCat.of ℤ ℤ) (f : C(S, S))
+    (orientationSign componentDegree : ι → ℤ)
+    (hcount : surfaceTopDegree e f =
+      componentSignedCount orientationSign componentDegree)
+    (hdegree : ∀ i, componentDegree i = 0) : homologyMap 2 f = 0 := by
+  apply surfaceTopHomologyMap_eq_zero_of_surfaceTopDegree_eq_zero e f
+  exact regularValue_topDegree_eq_zero_of_signedCount
+    (surfaceTopDegree e f) orientationSign componentDegree hcount hdegree
+
 /-- A global integral top-homology coordinate together with its expression in
 the canonical local chart generator at every point.  The coefficient is kept
 explicit because its sign is precisely the orientation datum used by the
@@ -212,3 +225,4 @@ end ConstructionTargets.T00J02Closure
 #print axioms ConstructionTargets.T00J02Closure.regularValue_topDegree_eq_zero_of_signedCount
 #print axioms ConstructionTargets.T00J02Closure.surfaceTopDegree_eq_homologyMap
 #print axioms ConstructionTargets.T00J02Closure.surfaceTopHomologyMap_eq_zero_of_surfaceTopDegree_eq_zero
+#print axioms ConstructionTargets.T00J02Closure.topHomologyMap_eq_zero_of_regularValue_signedCount
