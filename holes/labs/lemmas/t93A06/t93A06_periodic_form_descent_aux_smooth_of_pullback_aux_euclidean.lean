@@ -414,7 +414,33 @@ lemma t93A06_periodic_form_descent_aux_smooth_of_pullback_aux_euclidean
     (hsource : ContDiff ℝ ∞ sourceForm) :
     ContDiffAt ℝ ∞ (fun u ↦ (sourceForm (g u)).compContinuousLinearMap
       (fderiv ℝ g u)) y := by
-  sorry
+  have hd : ContDiffAt ℝ ∞ (fderiv ℝ g) y :=
+    hg.fderiv_right (by norm_cast)
+  clear hsource
+  have heq : (fun u ↦ (sourceForm (g u)).compContinuousLinearMap
+      (fderiv ℝ g u)) = fun u ↦
+      ((Real.sin (2 * Real.pi * g u 0) ^ 2 *
+          Real.cos (2 * Real.pi * g u 1) ^ 2) *
+        areaForm (⇑(fderiv ℝ g u) ∘ ⇑(Pi.basisFun ℝ (Fin 2)))) • areaForm := by
+    funext u
+    apply ContinuousAlternatingMap.ext
+    intro v
+    have h := congrArg (fun q ↦ q v) (AlternatingMap.eq_smul_basis_det
+      (Pi.basisFun ℝ (Fin 2))
+      ((sourceForm (g u)).compContinuousLinearMap
+        (fderiv ℝ g u)).toAlternatingMap)
+    simpa [sourceForm, areaForm] using h
+  rw [heq]
+  have hv : ContDiffAt ℝ ∞
+      (fun u ↦ ⇑(fderiv ℝ g u) ∘ ⇑(Pi.basisFun ℝ (Fin 2))) y := by
+    rw [contDiffAt_pi]
+    intro i
+    exact hd.clm_apply contDiffAt_const
+  have ha : ContDiffAt ℝ ∞
+      (fun u ↦ areaForm
+        (⇑(fderiv ℝ g u) ∘ ⇑(Pi.basisFun ℝ (Fin 2)))) y :=
+    areaForm.toContinuousMultilinearMap.contDiff.contDiffAt.comp y hv
+  fun_prop
 -- END SEAT AREA
 
 theorem t93A06_periodic_form_descent_aux_smooth_of_pullback
