@@ -87949,6 +87949,18 @@
     [{:cmd "pointwise comparison rfl",
       :exit 1,
       :correction "isolated radial-deformation equality"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792011093131-12390-29b4c289",
+     :commands
+     ["git show/diff 039a9e812; blob sha256; diff --check"
+      "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology"
+      "lake env lean /dev/stdin (#print axioms)"
+      "placeholder scan"
+      "statement-registry.py check"],
+     :finding
+     "PASS: reviewer codex-7; 039a9e812 (topo-6) changes only scoped PolygonSurfaceHomology.lean; fixture SHA-256 d20401ca31dbf6fb7d160445e34cb0f46178edd045ab201b5e6680440f690e18 matches. Exact blob builds; 0 placeholders; new results use standard axioms; registry 166/0. The positive intersection circle is the inverse of the established overlap-to-circle equivalence and definitionally the radius-half quotient loop; outer inclusion changes only membership proof, so no reparameterization or reversal. New compiled progress; remaining: relate outer deformation to ordered boundary loop, compute Hurewicz, then B8-B10."},
     :commit "039a9e812",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
@@ -87957,7 +87969,7 @@
      "d20401ca31dbf6fb7d160445e34cb0f46178edd045ab201b5e6680440f690e18"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -87977,7 +87989,7 @@
     :blueprint
     "ConstructionTargets/PolygonSurfaceHomology.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked the ordered signed polygon boundary loop.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked the literal positive overlap circle and outer inclusion.",
    :id :program-2026-10-13-polygon-surface-homology,
    :kind :reusable-theorem,
    :campaign-priority 31,
@@ -88193,7 +88205,11 @@
      "Banked MV outer-projection sign and raw-equality reduction."}
     {:job 6,
      :commit "bda198ead",
-     :reason "Banked the ordered signed polygon boundary loop."}]}
+     :reason "Banked the ordered signed polygon boundary loop."}
+    {:job 7,
+     :commit "039a9e812",
+     :reason
+     "Banked the literal positive overlap circle and outer inclusion."}]}
   {:consumer :t97A01,
    :stop-count 0,
    :phase :implementation,
@@ -91488,7 +91504,7 @@
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "radialOverlapCircleInOuter_val",
@@ -91500,7 +91516,9 @@
     :type
     "positive overlap circle is literal half-radius quotient loop",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :program-2026-10-13-polygon-surface-homology,
+    :banked-commit "039a9e812"},
    :id :lemma-radialoverlapcircleinouter-val,
    :kind :lemma,
    :depends-on [],
