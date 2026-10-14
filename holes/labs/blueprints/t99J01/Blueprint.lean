@@ -62,7 +62,15 @@ theorem t99J01_twoCircles_fundamentalGroup_freeGroup
     (hwedge : Nonempty (FundamentalGroup TwoCircles twoCirclesPoint ≃*
       Monoid.Coprod (FundamentalGroup Circle 1) (FundamentalGroup Circle 1))) :
     Nonempty (FundamentalGroup TwoCircles twoCirclesPoint ≃* FreeGroup (Fin 2)) := by
-  sorry
+  obtain ⟨circle⟩ := hcircle
+  obtain ⟨wedge⟩ := hwedge
+  exact ⟨wedge.trans
+    ((MulEquiv.coprodCongr circle circle).trans
+      ((ConstructionTargets.PointWedgeVanKampen.coprodFreeGroupEquivFreeGroupSum
+          (Fin 1) (Fin 1)).trans
+        (MulEquiv.ofBijective (FreeGroup.map finSumFinEquiv)
+          ⟨FreeGroup.map_injective finSumFinEquiv.injective,
+            FreeGroup.map_surjective finSumFinEquiv.surjective⟩)))⟩
 
 /-- The second concrete specialization of point-wedge van Kampen. -/
 theorem t99J01_threeCircles_fundamentalGroup_coprod :
