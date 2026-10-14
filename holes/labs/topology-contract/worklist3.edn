@@ -36115,24 +36115,22 @@
   {:consumer :t93J03,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 9,
+   :stop-count 10,
    :review-finding
    "Program STOP commits nothing new since the prior reviewed attempt: it reuses commit 512a220f, and git history shows no later scoped commit. The unresolved SemilocallySimplyConnected hypothesis-coverage conflict is unchanged. Obtain the required owner specification decision or commit a new compiled milestone before resubmitting.",
    :evidence
    {:placeholder-delta {:t93J03 [1 1]},
-    :residual
-    "Quotient actual skeleton pi1 by aabb; apply C1, then C2/Main.",
+    :residual "Kill aabb in FreeGroup Bool; apply C1, then C2/Main.",
     :outcome :stop,
-    :warnings ["unused SLSC owner-approved"],
+    :warnings
+    ["unused SLSC owner-approved"
+     "unrelated PolygonSurfaceHomology edit preserved"],
     :missing-theorems
-    [{:name "kleinActualSkeletonFundamentalGroupEquivCoprod",
-      :type
-      "actual polygon skeleton pi1 equiv coproduct of circle pi1 groups",
+    [{:name "kleinActualSkeletonFundamentalGroupEquivFreeGroupBool",
+      :type "actual skeleton pi1 equiv FreeGroup Bool",
       :status :proved,
       :consumers [:t93J03],
-      :depends-on
-      ["kleinSkeletonHomeomorphStandardTwoCircles"
-       "kleinSkeletonFundamentalGroupEquivCoprod"],
+      :depends-on ["kleinActualSkeletonFundamentalGroupEquivCoprod"],
       :area "covering-subgroup-correspondence"}
      {:name "t93J03_polygon_van_kampen",
       :type "polygon pi1 equals PresentedGroup(aabb)",
@@ -36140,47 +36138,32 @@
       :consumers [:t93J03],
       :depends-on
       ["kleinPolygon_attaching_arcs"
-       "kleinActualSkeletonFundamentalGroupEquivCoprod"],
+       "kleinActualSkeletonFundamentalGroupEquivFreeGroupBool"],
       :area "covering-subgroup-correspondence"}],
     :statement-hashes {:registry "166/166"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Committed pi1 coproduct at the actual polygon skeleton basepoint; attaching-cell quotient remains.",
+    "Committed actual skeleton pi1 in literal FreeGroup Bool coordinates; attaching quotient remains.",
     :commands
     [{:cmd "lake build ConstructionTargets.t93J03Closure", :exit 0}
-     {:cmd "lake env lean actual-skeleton fixture", :exit 0}
+     {:cmd "lake env lean skeleton-freegroup fixture", :exit 0}
      {:cmd "registry; placeholder; diff", :exit 0}
      {:cmd "rg forbidden", :exit 1, :expected-exit 1}
      {:cmd "git commit; show --check", :exit 0}],
-    :diagnostic-history
-    [{:cmd "lake build closure",
-      :exit 1,
-      :correction "fixed homeomorphism pi1 equivalence orientation"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1791940714905-11150-93e9223b",
-     :commands
-     ["git show/diff/show --check 33cccc3ae"
-      "sha256sum actual-skeleton fixture; placeholders 1->1; scope diff"
-      "lake env lean recorded t93J03Closure; lake env lean fixture"
-      "python3 scripts/statement-registry.py check"],
-     :finding
-     "PASS: new compiled sorry-free standard-axiom progress. The homeomorphism-induced pi1 equivalence has the required actual-skeleton-to-standard orientation and is composed with the coproduct computation at an explicitly transported basepoint. The aabb quotient remains listed. Scope/hash verified; registry 166/166. SLSC unused, mandated by problem.md."},
-    :commit "33cccc3aedf6134515aba4835d383ee934c7b7ca",
+    :commit "92b3dfe022bc0622552cfb5082baaadd7ca212b5",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
      "ConstructionTargets/t93J03Closure.blueprint.md"],
     :fixture
-    {:path "/tmp/t93j03_actual_skeleton_pi1_check.lean",
+    {:path "/tmp/t93j03_skeleton_freegroup_check.lean",
      :sha256
-     "939ec7da3008c68078e28691d543856c2f5e46c4983a6ede11b0f930f92177cb",
+     "951dc02b2286c69a5b33e7cfb866e4d5963dd3aa11485115a50108503583ea60",
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :needs-owner,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -37617,7 +37600,8 @@
     :lemma-kleinrelator-generatorchange-eq-one-iff
     :lemma-kleinskeletonfundamentalgroupequivcoprod
     :lemma-kleinskeletonhomeomorphstandardtwocircles
-    :lemma-kleinactualskeletonfundamentalgroupequivcoprod],
+    :lemma-kleinactualskeletonfundamentalgroupequivcoprod
+    :lemma-kleinactualskeletonfundamentalgroupequivfreegroupbool],
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
@@ -37899,6 +37883,23 @@
    :depends-on
    [:lemma-kleinskeletonhomeomorphstandardtwocircles
     :lemma-kleinskeletonfundamentalgroupequivcoprod],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "kleinActualSkeletonFundamentalGroupEquivFreeGroupBool",
+    :type "actual skeleton pi1 equiv FreeGroup Bool"},
+   :lemma
+   {:name "kleinActualSkeletonFundamentalGroupEquivFreeGroupBool",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type "actual skeleton pi1 equiv FreeGroup Bool",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03},
+   :id :lemma-kleinactualskeletonfundamentalgroupequivfreegroupbool,
+   :kind :lemma,
+   :depends-on [:lemma-kleinactualskeletonfundamentalgroupequivcoprod],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
