@@ -36117,7 +36117,7 @@
   {:consumer :t93J03,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 10,
+   :stop-count 0,
    :review-finding
    "Program STOP commits nothing new since the prior reviewed attempt: it reuses commit 512a220f, and git history shows no later scoped commit. The unresolved SemilocallySimplyConnected hypothesis-coverage conflict is unchanged. Obtain the required owner specification decision or commit a new compiled milestone before resubmitting.",
    :evidence
@@ -36166,7 +36166,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -36751,6 +36751,17 @@
      {:cmd "registry; placeholder; diff", :exit 0}
      {:cmd "rg forbidden", :exit 1, :expected-exit 1}
      {:cmd "commit; show --check", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791952168011-11589-c1625870",
+     :commands
+     ["git show/diff/show --check 300329fd"
+      "sha256sum fixture; scope; placeholders"
+      "lake env lean recorded closure, fixture, Main"
+      "statement-registry.py check"],
+     :finding
+     "PASS: new compiled sorry-free standard-axiom milestone. Radial normalization from nonzero vectors to the concrete unit S3 composes with sphereProjection to the frozen RP3 quotient map, proving quotientness; the fiber theorem correctly gives exactly p or its antipode. The two-sheeted covering, rational transfer, degree four, and Main remain accurately listed. Scope/hash verified; frozen placeholders 1->1 (support 0); registry 166/166."},
     :commit "300329fda93c12ce54fb62b3ba5f243ba812118a",
     :changed-paths
     ["ConstructionTargets/t96A06Closure.lean"
@@ -36762,7 +36773,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -36780,7 +36791,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t96A06Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed exact RP3 path-connectedness and rational H0; positive homology and degree remain.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed the exact S3-to-RP3 quotient projection and antipodal fiber classification; covering transfer remains.",
    :id :program-2026-10-13-close-t96a06,
    :kind :final-adapter,
    :campaign-priority 31,
@@ -36796,7 +36807,11 @@
     {:job 4,
      :commit "8bcfbf5df1502cf68b51bf1243875543af17e1a0",
      :reason
-     "Committed exact RP3 path-connectedness and rational H0; positive homology and degree remain."}]}
+     "Committed exact RP3 path-connectedness and rational H0; positive homology and degree remain."}
+    {:job 5,
+     :commit "300329fda93c12ce54fb62b3ba5f243ba812118a",
+     :reason
+     "Committed the exact S3-to-RP3 quotient projection and antipodal fiber classification; covering transfer remains."}]}
   {:consumer :t96J05,
    :stop-count 0,
    :phase :implementation,
@@ -38149,7 +38164,7 @@
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "kleinPolygonOverlapWindingHom_factor",
@@ -38161,7 +38176,9 @@
     :type
     "based overlap map factors through integer winding into FreeGroup Bool",
     :area "covering-subgroup-correspondence",
-    :proved-in :program-2026-10-13-close-t93j03},
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t93J03Closure.lean"]},
    :id :lemma-kleinpolygonoverlapwindinghom-factor,
    :kind :lemma,
    :depends-on
@@ -38169,7 +38186,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t96A06_rp3_sphere_quotient",
@@ -38181,7 +38198,9 @@
     :type
     "S3 projection has frozen RP3 quotient topology and fibers {p,-p}",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :program-2026-10-13-close-t96a06,
+    :banked-commit "300329fda93c12ce54fb62b3ba5f243ba812118a"},
    :id :lemma-t96a06-rp3-sphere-quotient,
    :kind :lemma,
    :depends-on [],
