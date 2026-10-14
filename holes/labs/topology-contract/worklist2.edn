@@ -87901,44 +87901,40 @@
   {:consumer :t97A01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 4,
+   :stop-count 5,
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Prove raw equality by boundary-loop naturality; then B8-B10.",
+    "Prove unsigned overlap-generator inclusion is the negative attaching class; then B8-B10.",
     :outcome :stop,
     :warnings ["lint"],
     :missing-theorems
-    [{:name "radialMVBoundaryGroup_one_formula",
-      :type "coordinates of raw generator",
+    [{:name "radialIntersectionArrow_snd",
+      :type "MV outer projection is negative inclusion",
       :status :proved,
       :consumers [:t97A01 :t94J09],
       :depends-on [],
       :area "polygon-quotient-homology"}
-     {:name "radialMVBoundaryGroup_one_iff_outerClass",
-      :type "generator iff raw-class equality",
-      :status :proved,
-      :consumers [:t97A01 :t94J09],
-      :depends-on ["radialMVBoundaryGroup_one_formula"],
-      :area "polygon-quotient-homology"}
-     {:name "radialOuterBoundaryGenerator_eq_attachingOuterClass",
-      :type "raw overlap class equals raw attaching class",
+     {:name
+      "radialIntersectionToOuterH1_generator_eq_neg_attachingOuterClass",
+      :type "boundary-loop naturality",
       :status :not-started,
       :consumers [:t97A01 :t94J09],
-      :depends-on ["radialMVBoundaryGroup_one_iff_outerClass"],
+      :depends-on ["radialIntersectionArrow_snd"],
       :area "polygon-quotient-homology"}
      {:name "radialMV_boundary_eq",
       :type "B7 boundary equality",
       :status :partial,
       :consumers [:t97A01 :t94J09],
       :depends-on
-      ["radialOuterBoundaryGenerator_eq_attachingOuterClass"],
+      ["radialIntersectionToOuterH1_generator_eq_neg_attachingOuterClass"],
       :area "polygon-quotient-homology"}],
     :statement-hashes {:registry "166/0"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Reduced B7 to raw H1 equality.",
+    :reason
+    "Banked MV outer-projection sign and raw-equality reduction.",
     :commands
     [{:cmd
       "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology",
@@ -87946,30 +87942,20 @@
      {:cmd "statement-registry.py check", :exit 0}
      {:cmd "placeholder scan", :exit 0}
      {:cmd "axioms check", :exit 0}
-     {:cmd "git show --check 6a558df58", :exit 0}],
+     {:cmd "git show --check 9331c2324", :exit 0}],
     :diagnostic-history
-    [{:cmd "raw draft", :exit 1, :correction "explicit evaluation"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792009786212-12349-340e223d",
-     :commands
-     ["git show/diff 6a558df58; blob sha256; diff --check"
-      "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology"
-      "lake env lean /dev/stdin (#print axioms)"
-      "placeholder scan"
-      "statement-registry.py check"],
-     :finding
-     "PASS: 6a558df58 (topo-6) changes only scoped PolygonSurfaceHomology.lean; fixture SHA-256 edb75aa10a6fbbe2cec31f45e4d35a4c855760148a7881b28565400bea442c00 matches. Exact blob builds; 0 placeholders; new declarations use standard axioms; registry 166/0. The raw generator is the outer projection of intersection-arrow(positive generator); attachingOuterClass is the inverse-coordinate image of attachingDegree. Since the coordinate map is an iso, the iff faithfully removes coordinates without changing sign/orientation. New compiled progress; remaining: raw boundary-loop equality, finish B7, then B8-B10."},
-    :commit "6a558df58",
+    [{:cmd "alias draft",
+      :exit 1,
+      :correction "used categorical equality"}],
+    :commit "9331c2324",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
     {:path "ConstructionTargets/PolygonSurfaceHomology.lean",
      :sha256
-     "edb75aa10a6fbbe2cec31f45e4d35a4c855760148a7881b28565400bea442c00"},
+     "2ce6a0b5d7337b3268b05c1715affe0ffbfdcd0041e942951459f1220aebfcc8"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -91289,7 +91275,8 @@
    :depends-on
    [:lemma-radialmvsegment
     :lemma-radialmvboundarygroup-one
-    :lemma-radialouterboundarygenerator-eq-attachingouterclass],
+    :lemma-radialouterboundarygenerator-eq-attachingouterclass
+    :lemma-radialintersectiontoouterh1-generator-eq-neg-attachingouterclass],
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
@@ -91398,4 +91385,40 @@
    :id :lemma-radialouterboundarygenerator-eq-attachingouterclass,
    :kind :lemma,
    :depends-on [:lemma-radialmvboundarygroup-one-iff-outerclass],
+   :other-consumers [:t94J09]}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "radialIntersectionArrow_snd",
+    :type "MV outer projection is negative inclusion"},
+   :lemma
+   {:name "radialIntersectionArrow_snd",
+    :reported-by [:program-2026-10-13-polygon-surface-homology],
+    :type "MV outer projection is negative inclusion",
+    :area "polygon-quotient-homology",
+    :proved-in :program-2026-10-13-polygon-surface-homology},
+   :id :lemma-radialintersectionarrow-snd,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t94J09]}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "radialIntersectionToOuterH1_generator_eq_neg_attachingOuterClass",
+    :type "boundary-loop naturality"},
+   :lemma
+   {:name
+    "radialIntersectionToOuterH1_generator_eq_neg_attachingOuterClass",
+    :reported-by [:program-2026-10-13-polygon-surface-homology],
+    :type "boundary-loop naturality",
+    :area "polygon-quotient-homology"},
+   :id
+   :lemma-radialintersectiontoouterh1-generator-eq-neg-attachingouterclass,
+   :kind :lemma,
+   :depends-on [:lemma-radialintersectionarrow-snd],
    :other-consumers [:t94J09]}]}
