@@ -713,13 +713,69 @@ lemma inversePairCancellation_aux_zip_map {Label : Type*} [DecidableEq Label]
 `wordRel_eqvGen_interior`, `CancellationZipSpec.interior_maps`, and
 `interior_injective`; no boundary combinatorics occur here. -/
 -- BEGIN SEAT AREA
+lemma inversePairCancellation_aux_zip_interior_aux_boundary
+    {L : Type*} [DecidableEq L] (w : List (Signed L)) {p q : Disk}
+    (h : Relation.EqvGen (WordRel w) p q) :
+    p = q ∨ (‖(p : ℂ)‖ = 1 ∧ ‖(q : ℂ)‖ = 1) := by
+  induction h with
+  | refl x => exact Or.inl rfl
+  | rel p q hpq =>
+      rcases hpq with ⟨i, j, hij, t, hlab, rfl, rfl⟩
+      right
+      constructor <;> simp [edgePoint, Complex.norm_exp]
+  | symm p q hpq ih =>
+      rcases ih with heq | ⟨hp, hq⟩
+      · exact Or.inl heq.symm
+      · exact Or.inr ⟨hq, hp⟩
+  | trans p q r hpq hqr ihpq ihqr =>
+      rcases ihpq with hpq | ⟨hp, hq⟩
+      · subst q
+        exact ihqr
+      · rcases ihqr with hqr | ⟨hq', hr⟩
+        · subst r
+          exact Or.inr ⟨hp, hq⟩
+        · exact Or.inr ⟨hp, hr⟩
+
+lemma inversePairCancellation_aux_zip_interior_aux_eq
+    {L : Type*} [DecidableEq L] (w : List (Signed L)) {p q : Disk}
+    (h : Relation.EqvGen (WordRel w) p q) (hp : ‖(p : ℂ)‖ < 1) : p = q := by
+  rcases inversePairCancellation_aux_zip_interior_aux_boundary w h with
+    heq | ⟨hp', hq⟩
+  · exact heq
+  · exfalso
+    linarith
+
 lemma inversePairCancellation_aux_zip_interior {Label : Type*} [DecidableEq Label]
     (u v : List (Signed Label)) (x : Signed Label) (c : Disk → Disk)
     (hc : CancellationZipSpec (u ++ v).length u.length c) :
     ∀ p q : Disk, (‖(p : ℂ)‖ < 1 ∨ ‖(q : ℂ)‖ < 1) →
       (Relation.EqvGen (WordRel (u ++ [x, inv x] ++ v)) p q ↔
        Relation.EqvGen (WordRel (u ++ v)) (c p) (c q)) := by
-  sorry
+  intro p q hint
+  constructor
+  · intro h
+    rcases hint with hp | hq
+    · have heq := inversePairCancellation_aux_zip_interior_aux_eq _ h hp
+      subst q
+      exact Relation.EqvGen.refl
+        (c p)
+    · have heq := inversePairCancellation_aux_zip_interior_aux_eq _
+          (Relation.EqvGen.symm _ _ h) hq
+      subst p
+      exact Relation.EqvGen.refl _
+  · intro h
+    rcases hint with hp | hq
+    · have him : ‖(c p : ℂ)‖ < 1 := hc.interior_maps p hp
+      have heq := inversePairCancellation_aux_zip_interior_aux_eq _ h him
+      have hpq := hc.interior_injective hp heq
+      subst q
+      exact Relation.EqvGen.refl _
+    · have him : ‖(c q : ℂ)‖ < 1 := hc.interior_maps q hq
+      have heq := inversePairCancellation_aux_zip_interior_aux_eq _
+        (Relation.EqvGen.symm _ _ h) him
+      have hqp := hc.interior_injective hq heq
+      subst p
+      exact Relation.EqvGen.refl _
 -- END SEAT AREA
 
 /-- Leaf (case assembly, 30--45 lines), independent of the construction:
