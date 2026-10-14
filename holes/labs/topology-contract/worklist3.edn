@@ -36161,6 +36161,16 @@
     [{:cmd "endpoint prototypes",
       :exit 1,
       :correction "used getElem? slice and Fin ext"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1792014511532-12482-43e85ac1",
+     :commands
+     ["git show --check 8c4eb4f recorded closure"
+      "fixture SHA-256 assertion; lake env lean frozen interface"
+      "parent/commit placeholder recount; registry 166/166"],
+     :finding
+     "PASS: commit 8c4eb4f adds compiled, sorry-free progress beyond program-history commit 263f5d47. The fixture confirms the family has domain Fin(runs+1), codomain outer subtype V, and an equality oriented from its coerced value to the matching ambient boundary-list entry. This is the promised subtype representation bridge; van Kampen remains listed as partial. Exact scope/hash, standard axioms, and 1->1 Main placeholder count verified."},
     :commit "10390da8355dcd72034364c3ddf78c28f2cdf7d3",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
@@ -36171,7 +36181,7 @@
      "f6219dd33752cac70b47336bf931eae791cbfbda2cd4da6cc3bb81a727ba54c8"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -36189,7 +36199,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t93J03Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Proved each selected run block starts at the literal source vertex of its indexed maximal run; target/boundary identification remains.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Proved each selected run block ends at its literal target vertex; outer-boundary comparison remains.",
    :id :program-2026-10-13-close-t93j03,
    :kind :final-adapter,
    :campaign-priority 30,
@@ -36499,7 +36509,11 @@
     {:job 5,
      :commit "b032e84260f3dfcb0272bdfda8f6cd572728231c",
      :reason
-     "Proved each selected run block starts at the literal source vertex of its indexed maximal run; target/boundary identification remains."}]}
+     "Proved each selected run block starts at the literal source vertex of its indexed maximal run; target/boundary identification remains."}
+    {:job 6,
+     :commit "10390da8355dcd72034364c3ddf78c28f2cdf7d3",
+     :reason
+     "Proved each selected run block ends at its literal target vertex; outer-boundary comparison remains."}]}
   {:consumer :t99J05,
    :stop-count 5,
    :evidence
@@ -39926,7 +39940,7 @@
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "pathTwoOpenSubdivisionRunBlockPoint_last",
@@ -39936,7 +39950,9 @@
     :reported-by [:program-2026-10-13-close-t93j03],
     :type "run block target equals literal successor vertex",
     :area "covering-subgroup-correspondence",
-    :proved-in :program-2026-10-13-close-t93j03},
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "10390da8355dcd72034364c3ddf78c28f2cdf7d3"},
    :id :lemma-pathtwoopensubdivisionrunblockpoint-last,
    :kind :lemma,
    :depends-on [:lemma-pathtwoopensubdivisionrunblockpoint-zero],
