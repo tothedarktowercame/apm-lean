@@ -1262,4 +1262,3 @@ theorem fourteenGon_assembly {X : Type*} [TopologicalSpace X]
   exact t02A02_assembly w₀ w₁ w₂ hbridge h₁ h₂
 
 end PolygonMoves
--- refreshed 2026-10-14T02:58:14Z
