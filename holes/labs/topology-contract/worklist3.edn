@@ -36117,23 +36117,23 @@
   {:consumer :t93J03,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 8,
+   :stop-count 9,
    :review-finding
    "Program STOP commits nothing new since the prior reviewed attempt: it reuses commit 512a220f, and git history shows no later scoped commit. The unresolved SemilocallySimplyConnected hypothesis-coverage conflict is unchanged. Obtain the required owner specification decision or commit a new compiled milestone before resubmitting.",
    :evidence
    {:placeholder-delta {:t93J03 [1 1]},
     :residual
-    "Prove winding-one conjugacy; identify polygon-map kernel by based van Kampen; compose quotient; apply C1/C2/Main.",
+    "Prove winding-one conjugacy and based van Kampen surjectivity/kernel; instantiate quotient; apply C1/C2/Main.",
     :outcome :stop,
     :warnings ["unused SLSC owner-approved"],
     :missing-theorems
-    [{:name "kleinPolygonOverlapToSkeletonPiOne_normalClosure_eq_aabb",
+    [{:name "kleinPolygonFundamentalGroupEquivPresented_of_vanKampen",
       :type
-      "winding conjugacy implies overlap normal closure equals pulled-back aabb",
+      "winding conjugacy plus surjective skeleton map and overlap-normal-closure kernel imply polygon pi1 equiv PresentedGroup(aabb)",
       :status :proved,
       :consumers [:t93J03],
       :depends-on
-      ["kleinPolygonStandardModelConnector"
+      ["kleinPolygonOverlapToSkeletonPiOne_normalClosure_eq_aabb"
        "kleinSkeletonAabbQuotientEquiv"],
       :area "covering-subgroup-correspondence"}
      {:name "t93J03_polygon_van_kampen",
@@ -36141,14 +36141,14 @@
       :status :partial,
       :consumers [:t93J03],
       :depends-on
-      ["kleinPolygonOverlapToSkeletonPiOne_normalClosure_eq_aabb"],
+      ["kleinPolygonFundamentalGroupEquivPresented_of_vanKampen"],
       :area "covering-subgroup-correspondence"}],
     :statement-hashes {:registry "166/166"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Committed actual overlap-image normal closure in skeleton coordinates; geometric conjugacy and van Kampen kernel remain.",
+    "Committed exact first-isomorphism assembly from winding conjugacy and based van Kampen hypotheses.",
     :commands
     [{:cmd "lake build ConstructionTargets.t93J03Closure", :exit 0}
      {:cmd "lean fixture; Main", :exit 0}
@@ -36158,29 +36158,18 @@
     [{:cmd "lean closure",
       :exit 1,
       :correction
-      "fixed theorem placement and subgroup-image witnesses; rerun passed"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1791961663953-11677-9fcf6327",
-     :commands
-     ["git show/diff/show --check cb58e058"
-      "sha256sum fixture; scope; placeholders"
-      "lake env lean recorded closure, fixture, Main"
-      "statement-registry.py check"],
-     :finding
-     "PASS: new compiled sorry-free standard-axiom milestone. Reparameterization by integer winding is proved image-preserving, and under the explicitly retained winding-one conjugacy hypothesis the actual based overlap-image normal closure is correctly transported back from FreeGroup coordinates to the skeleton group. Geometric conjugacy and van Kampen kernel identification remain listed. Scope/hash verified; frozen placeholders 1->1 (support 0); registry 166/166; SLSC unused, mandated by problem.md."},
-    :commit "cb58e058246984b895a459e89324c923288a9b51",
+      "replaced later local inclusion name with explicit continuous subtype map"}],
+    :commit "922abd5ab2afae5570d16d39dffb443a274990d7",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
      "ConstructionTargets/t93J03Closure.blueprint.md"],
     :fixture
-    {:path "/tmp/t93j03_overlap_skeleton_normal_closure_check.lean",
+    {:path "/tmp/t93j03_polygon_quotient_assembly_check.lean",
      :sha256
-     "7d76ee8a6af92bdb4042b0f9a6d9d979999f2f0516f19c3a612a9753203162ea"},
+     "99bf556d884aad65acb50e01b211988debca95d422f5a794eef888b7eeb9e681"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -37706,7 +37695,8 @@
     :lemma-kleinpolygonoverlapwindingone-isconj-aabb-of-path-eq
     :lemma-kleinpolygonstandardmodelconnector
     :lemma-kleinskeletonaabbquotientequiv
-    :lemma-kleinpolygonoverlaptoskeletonpione-normalclosure-eq-aabb],
+    :lemma-kleinpolygonoverlaptoskeletonpione-normalclosure-eq-aabb
+    :lemma-kleinpolygonfundamentalgroupequivpresented-of-vankampen],
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
@@ -38417,6 +38407,27 @@
    :kind :lemma,
    :depends-on
    [:lemma-kleinpolygonstandardmodelconnector
+    :lemma-kleinskeletonaabbquotientequiv],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "kleinPolygonFundamentalGroupEquivPresented_of_vanKampen",
+    :type
+    "winding conjugacy plus surjective skeleton map and overlap-normal-closure kernel imply polygon pi1 equiv PresentedGroup(aabb)"},
+   :lemma
+   {:name "kleinPolygonFundamentalGroupEquivPresented_of_vanKampen",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type
+    "winding conjugacy plus surjective skeleton map and overlap-normal-closure kernel imply polygon pi1 equiv PresentedGroup(aabb)",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03},
+   :id :lemma-kleinpolygonfundamentalgroupequivpresented-of-vankampen,
+   :kind :lemma,
+   :depends-on
+   [:lemma-kleinpolygonoverlaptoskeletonpione-normalclosure-eq-aabb
     :lemma-kleinskeletonaabbquotientequiv],
    :other-consumers []}],
  :consumer-baselines {},
