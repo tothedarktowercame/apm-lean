@@ -1121,6 +1121,40 @@ theorem kleinPolygonOverlapToSkeletonPiOne_normalClosure_eq_aabb
   · rintro ⟨g, rfl⟩
     exact ⟨kleinPolygonOverlapToSkeletonPiOne g, ⟨g, rfl⟩, rfl⟩
 
+/-- Inclusion of the actual polygon skeleton into the polygon quotient. -/
+noncomputable def kleinPolygonSkeletonToSpace :
+    C(kleinPairingData.skeleton, kleinPairingData.Space) :=
+  ⟨Subtype.val, continuous_subtype_val⟩
+
+/-- The based map whose kernel is computed by the attaching-cell form of
+van Kampen. -/
+noncomputable def kleinPolygonSkeletonToSpacePiOne :
+    FundamentalGroup kleinPairingData.skeleton kleinSkeletonPoint →*
+      FundamentalGroup kleinPairingData.Space
+        (kleinPolygonSkeletonToSpace kleinSkeletonPoint) :=
+  FundamentalGroup.map kleinPolygonSkeletonToSpace kleinSkeletonPoint
+
+/-- Quotient assembly after the two remaining topological facts have been
+supplied: winding-one conjugacy identifies the relation subgroup, while based
+van Kampen says that subgroup is exactly the kernel and that the skeleton map
+is onto. -/
+noncomputable def kleinPolygonFundamentalGroupEquivPresented_of_vanKampen
+    (hconj : IsConj kleinPolygonOverlapWindingOneImage kleinAabbWord)
+    (hsurj : Function.Surjective kleinPolygonSkeletonToSpacePiOne)
+    (hker : MonoidHom.ker kleinPolygonSkeletonToSpacePiOne =
+      Subgroup.normalClosure
+        (kleinPolygonOverlapToSkeletonPiOne.range : Set
+          (FundamentalGroup kleinPairingData.skeleton kleinSkeletonPoint))) :
+    FundamentalGroup kleinPairingData.Space
+        (kleinPolygonSkeletonToSpace kleinSkeletonPoint) ≃*
+      KleinPolygonPresentedGroup :=
+  (QuotientGroup.quotientKerEquivOfSurjective
+      kleinPolygonSkeletonToSpacePiOne hsurj).symm.trans
+    ((QuotientGroup.quotientMulEquivOfEq
+      (hker.trans
+        (kleinPolygonOverlapToSkeletonPiOne_normalClosure_eq_aabb hconj))).trans
+      kleinSkeletonAabbQuotientEquiv)
+
 def finiteWedgeBoolPoint : FiniteWedge Bool := wedgeCircle false 1
 
 @[simp] theorem finiteWedgeBoolHomeomorphTwoCircles_point :
@@ -1278,6 +1312,7 @@ theorem lift_isEmbedding_assembly
 #print axioms kleinPolygonOverlapNormalClosure_eq_aabb_of_isConj
 #print axioms kleinPolygonOverlapWindingHom_range_eq_skeleton_range
 #print axioms kleinPolygonOverlapToSkeletonPiOne_normalClosure_eq_aabb
+#print axioms kleinPolygonFundamentalGroupEquivPresented_of_vanKampen
 #print axioms kleinBottle_pi1_every_basepoint_of_polygon_van_kampen
 
 end ConstructionTargets.t93J03Closure
