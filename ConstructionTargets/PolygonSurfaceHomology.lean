@@ -2831,6 +2831,87 @@ theorem finiteWedgeFin_exists_legWord (n : ℕ)
   | zero => exact finiteWedgeFinOne_exists_legWord g
   | succ n ih => exact finiteWedgeFinSucc_exists_legWord n ih g
 
+/-- Integer-exponent words in the positive generators of a standard finite
+wedge. -/
+abbrev FiniteWedgeFinGeneratorWord (n : ℕ) := List (Fin (n + 1) × ℤ)
+
+noncomputable def finiteWedgeFinGeneratorWordValue (n : ℕ)
+    (w : FiniteWedgeFinGeneratorWord n) :
+    FundamentalGroup
+      (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge (Fin (n + 1)))
+      (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1) :=
+  (w.map fun q =>
+    finiteWedgeFinLegMap n q.1 circlePositiveFundamentalClass ^ q.2).prod
+
+/-- Replace every arbitrary circle-loop letter by an integer power of the
+fixed positive circle class. -/
+theorem finiteWedgeFinLoopWord_exists_generatorWord (n : ℕ)
+    (w : FiniteWedgeFinLoopWord n) :
+    ∃ u : FiniteWedgeFinGeneratorWord n,
+      finiteWedgeFinGeneratorWordValue n u =
+        finiteWedgeFinLoopWordValue n w := by
+  induction w with
+  | nil =>
+      exact ⟨[], by simp [finiteWedgeFinGeneratorWordValue,
+        finiteWedgeFinLoopWordValue]⟩
+  | cons q w ih =>
+      rcases circlePositiveFundamentalClass_generates q.2 with ⟨z, hz⟩
+      rcases ih with ⟨u, hu⟩
+      refine ⟨(q.1, z) :: u, ?_⟩
+      simp only [finiteWedgeFinGeneratorWordValue, finiteWedgeFinLoopWordValue,
+        List.map_cons, List.prod_cons]
+      rw [← map_zpow, hz]
+      change finiteWedgeFinLegMap n q.1 q.2 *
+          finiteWedgeFinGeneratorWordValue n u =
+        finiteWedgeFinLegMap n q.1 q.2 * finiteWedgeFinLoopWordValue n w
+      rw [hu]
+
+/-- Every finite-wedge loop is an integer-exponent word in the fixed positive
+leg generators. -/
+theorem finiteWedgeFin_exists_generatorWord (n : ℕ)
+    (g : FundamentalGroup
+      (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge (Fin (n + 1)))
+      (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1)) :
+    ∃ w : FiniteWedgeFinGeneratorWord n,
+      finiteWedgeFinGeneratorWordValue n w = g := by
+  rcases finiteWedgeFin_exists_legWord n g with ⟨w, hw⟩
+  rcases finiteWedgeFinLoopWord_exists_generatorWord n w with ⟨u, hu⟩
+  exact ⟨u, hu.trans hw⟩
+
+/-- The canonical free-group map for the standard `Fin`-labelled wedge. -/
+noncomputable def finiteWedgeFinLegFreeGroupMap (n : ℕ) :
+    FreeGroup (Fin (n + 1)) →*
+      FundamentalGroup
+        (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge (Fin (n + 1)))
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1) :=
+  FreeGroup.lift (fun i =>
+    finiteWedgeFinLegMap n i circlePositiveFundamentalClass)
+
+/-- A generator word is the image of the corresponding product in the free
+group. -/
+theorem finiteWedgeFinGeneratorWord_in_freeGroupImage (n : ℕ)
+    (w : FiniteWedgeFinGeneratorWord n) :
+    ∃ x : FreeGroup (Fin (n + 1)),
+      finiteWedgeFinLegFreeGroupMap n x =
+        finiteWedgeFinGeneratorWordValue n w := by
+  induction w with
+  | nil => exact ⟨1, by simp [finiteWedgeFinGeneratorWordValue]⟩
+  | cons q w ih =>
+      rcases ih with ⟨x, hx⟩
+      refine ⟨FreeGroup.of q.1 ^ q.2 * x, ?_⟩
+      rw [map_mul, map_zpow, hx]
+      simp [finiteWedgeFinLegFreeGroupMap,
+        finiteWedgeFinGeneratorWordValue]
+
+/-- The canonical free-group map onto a nonempty finite circle wedge is
+surjective. -/
+theorem finiteWedgeFinLegFreeGroupMap_surjective (n : ℕ) :
+    Function.Surjective (finiteWedgeFinLegFreeGroupMap n) := by
+  intro g
+  rcases finiteWedgeFin_exists_generatorWord n g with ⟨w, hw⟩
+  rcases finiteWedgeFinGeneratorWord_in_freeGroupImage n w with ⟨x, hx⟩
+  exact ⟨x, hx.trans hw⟩
+
 end
 
 end ConstructionTargets.PolygonSurfaceHomology
