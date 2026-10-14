@@ -36155,6 +36155,16 @@
     [{:cmd "lake build ConstructionTargets.t93J03Closure", :exit 0}
      {:cmd "lean fixture; Main; registry; diff; show", :exit 0}
      {:cmd "rg forbidden", :exit 1, :expected-exit 1}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791977590652-11786-0ec5a1eb",
+     :commands
+     ["git show/check/diff 44f5d424; scope/math review; fixture sha256"
+      "lean closure/fixture attempted: blocked by unrelated dirty PointWedge missing olean"
+      "statement registry; placeholder recount"],
+     :finding
+     "PASS. Commit 44f5d424 adds sorry-free progress: the literal skeleton-to-polygon pi1 map is proved equal to outer inclusion composed with the direct skeleton-to-outer map, with correct source, target, and orientation. Scope and fixture hash match; support placeholders 0->0; registry 166/166; no new axioms. Fresh compilation is blocked upstream by an unrelated dirty PointWedgeVanKampen file/missing olean; no workaround used. Coordinate comparison, reverse inclusion, surjectivity, and winding remain listed."},
     :commit "44f5d424e3ef2ac634898fb671808a5e07c04bef",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
@@ -36165,7 +36175,7 @@
      "34022561a00f378ef13ea1f1cbb600a68cac44825de11af8e69aa544b5410f4e"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -36183,7 +36193,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t93J03Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed target-basepoint path and forward kernel inclusion after transport; map equality, reverse inclusion, surjectivity and winding remain.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Proved the literal skeleton map is exactly the direct skeleton-to-outer composite; equivalence-coordinate comparison, reverse inclusion, surjectivity and winding remain.",
    :id :program-2026-10-13-close-t93j03,
    :kind :final-adapter,
    :campaign-priority 30,
@@ -36349,7 +36359,11 @@
     {:job 5,
      :commit "d7297e3e75e94a762e551350420cfd1c40478a33",
      :reason
-     "Committed target-basepoint path and forward kernel inclusion after transport; map equality, reverse inclusion, surjectivity and winding remain."}]}
+     "Committed target-basepoint path and forward kernel inclusion after transport; map equality, reverse inclusion, surjectivity and winding remain."}
+    {:job 6,
+     :commit "44f5d424e3ef2ac634898fb671808a5e07c04bef",
+     :reason
+     "Proved the literal skeleton map is exactly the direct skeleton-to-outer composite; equivalence-coordinate comparison, reverse inclusion, surjectivity and winding remain."}]}
   {:consumer :t99J05,
    :stop-count 5,
    :evidence
@@ -38657,7 +38671,7 @@
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "kleinPolygonSkeletonToSpacePiOne_eq_outer_comp_direct",
@@ -38669,7 +38683,9 @@
     :type
     "literal skeleton pi1 map equals outer inclusion composed with direct skeleton-to-outer map",
     :area "covering-subgroup-correspondence",
-    :proved-in :program-2026-10-13-close-t93j03},
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "44f5d424e3ef2ac634898fb671808a5e07c04bef"},
    :id :lemma-kleinpolygonskeletontospacepione-eq-outer-comp-direct,
    :kind :lemma,
    :depends-on [],
