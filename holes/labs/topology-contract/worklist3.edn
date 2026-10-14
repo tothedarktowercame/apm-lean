@@ -36121,69 +36121,54 @@
   {:consumer :t93J03,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 6,
+   :stop-count 7,
    :review-finding
    "Program STOP commits no new mathematical progress since the prior milestone: KleinPolygonBasedVanKampen merely packages the already-required surjectivity and kernel hypotheses, and both consumers only reapply the previously proved three-input theorem. Prove the based van Kampen surjectivity/kernel result (or winding conjugacy) in scope; extend Mathlib: state and prove the missing theorem in scope.",
    :evidence
    {:placeholder-delta {:t93J03 [1 1]},
     :residual
-    "Package contiguous runs as dependent paths; replace inner blocks/reassemble outer word; reverse kernel/surjectivity; winding; C1/C2/Main.",
+    "Construct dependent path family for each contiguous run; replace inner blocks/reassemble outer word; reverse kernel/surjectivity; winding; C1/C2/Main.",
     :outcome :stop,
-    :warnings ["unused SLSC owner-approved"],
+    :warnings
+    ["unused SLSC owner-approved" "unrelated worklist tmp preserved"],
     :missing-theorems
-    [{:name "boolSideRunPartition_mem_side_eq_head",
-      :type "run members have head side",
+    [{:name "boolSideRunPartition_isInfix_finRange",
+      :type "each side run is a contiguous finRange block",
       :status :proved,
       :consumers [:t93J03],
-      :depends-on ["boolSideRunPartition_spec"],
-      :area "covering-subgroup-correspondence"}
-     {:name "kleinPolygonInnerSideRun_piece_mem",
-      :type "true-run pieces stay inner",
-      :status :proved,
-      :consumers [:t93J03],
-      :depends-on ["boolSideRunPartition_mem_side_eq_head"],
+      :depends-on ["kleinPolygonInnerSideRun_piece_mem"],
       :area "covering-subgroup-correspondence"}
      {:name "t93J03_polygon_based_van_kampen",
       :type "surjectivity; kernel equality",
       :status :partial,
       :consumers [:t93J03],
-      :depends-on ["kleinPolygonInnerSideRun_piece_mem"],
+      :depends-on ["boolSideRunPartition_isInfix_finRange"],
       :area "covering-subgroup-correspondence"}],
     :statement-hashes {:registry "166/166"},
     :disposition :stop,
-    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :axioms ["propext" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Proved every maximal-run index has the head side, so each true-run piece stays in the inner cover; dependent block packaging remains.",
+    "Proved every side run is a contiguous infix of finRange, preserving subdivision index and endpoint order; constructing its dependent Path.concat family remains.",
     :commands
     [{:cmd "lake build ConstructionTargets.t93J03Closure", :exit 0}
      {:cmd "fixture; Main; registry; placeholder; diff/show", :exit 0}
      {:cmd "rg forbidden", :exit 1, :expected-exit 1}],
     :diagnostic-history
-    [{:cmd "membership probe",
+    [{:cmd "infix probe",
       :exit 1,
-      :correction "explicit transitivity; true=inner; passed"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1792004257654-12213-916b44d4",
-     :commands
-     ["git show/check/diff 9f16b239; scope and fixture SHA-256"
-      "lake build ConstructionTargets.t93J03Closure; lean fixture and Main"
-      "statement-registry check; placeholder/axiom recount"],
-     :finding
-     "PASS: 9f16b239 adds compiled, sorry-free progress after 71a51ad2. Run-chain equality is correctly extended from the head to every member, and a true-side run is correctly mapped through piece_mem to inner-cover range membership. Blueprint is faithful; exact scope/hash match; closure placeholders 0->0; frozen Main remains 1; registry 166/166; standard axioms only. STOP lists dependent block packaging, replacement/reassembly, reverse kernel/surjectivity, winding, C1/C2/Main."},
-    :commit "9f16b2393d73376ac4f97e72ef39c7f17ce5f637",
+      :correction "flattened singleton outer infix; passed"}],
+    :commit "9a19183ffc9cd2c1c59f0084eeabaa564135ee68",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
      "ConstructionTargets/t93J03Closure.blueprint.md"],
     :fixture
-    {:path "/tmp/t93j03_run_piece_check.lean",
+    {:path "/tmp/t93j03_run_infix_check.lean",
      :sha256
-     "2cebca541e4c45ac178ab60d8cf2745905431c992c1eb6807f26dd91f2ee5bb1"},
+     "8dfcbc612ce987bb79fc6396206a041749722d9d42089b1e7ca5a50466784ac3"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -38674,7 +38659,8 @@
     :lemma-path-concat-mem-of-piece-mem
     :lemma-kleinpolygoninnerblock-exists-outeroverlapreplacement
     :lemma-boolsiderunpartition-spec
-    :lemma-kleinpolygoninnersiderun-piece-mem],
+    :lemma-kleinpolygoninnersiderun-piece-mem
+    :lemma-boolsiderunpartition-isinfix-finrange],
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
@@ -39285,6 +39271,23 @@
    :id :lemma-kleinpolygoninnersiderun-piece-mem,
    :kind :lemma,
    :depends-on [:lemma-boolsiderunpartition-mem-side-eq-head],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "boolSideRunPartition_isInfix_finRange",
+    :type "each side run is a contiguous finRange block"},
+   :lemma
+   {:name "boolSideRunPartition_isInfix_finRange",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type "each side run is a contiguous finRange block",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03},
+   :id :lemma-boolsiderunpartition-isinfix-finrange,
+   :kind :lemma,
+   :depends-on [:lemma-kleinpolygoninnersiderun-piece-mem],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
