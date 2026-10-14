@@ -892,7 +892,98 @@ lemma apm_t01A04_cbp_V_disjoint : Pairwise (Function.onFun Disjoint apm_t01A04_c
 
 lemma apm_t01A04_cbp_preimage :
     apm_t01a04_circleCoverMap ⁻¹' apm_t01A04_cbp_U = ⋃ i, apm_t01A04_cbp_V i := by
-  sorry
+  ext e
+  refine Quotient.inductionOn e ?_
+  rintro (p | z)
+  · constructor
+    · rintro ⟨r, hr, her⟩
+      have hq := congrArg
+        apm_t01A04_circleCoverMap_evenlyCovered_away_aux_torusRetraction her
+      have hp : 0 < (p.2.1 : ℂ).re ∧ 0 < (p.2.2 : ℂ).re := by
+        cases r with
+        | inl q =>
+          simp [apm_t01a04_circleCoverMap, apm_t01a04_circleCoverRaw,
+            apm_t01A04_circleCoverMap_evenlyCovered_away_aux_torusRetraction,
+            apm_t01A04_circleCoverMap_evenlyCovered_away_aux_torusRaw] at hq
+          simpa [← hq] using hr
+        | inr w =>
+          simp [apm_t01a04_circleCoverMap, apm_t01a04_circleCoverRaw,
+            apm_t01A04_circleCoverMap_evenlyCovered_away_aux_torusRetraction,
+            apm_t01A04_circleCoverMap_evenlyCovered_away_aux_torusRaw] at hq
+          simpa [← hq]
+      refine Set.mem_iUnion.2 ⟨p.1, ?_⟩
+      exact ⟨Sum.inl p, ⟨rfl, hp.1, hp.2⟩, rfl⟩
+    · rintro h
+      rcases Set.mem_iUnion.1 h with ⟨i, r, hr, her⟩
+      have hq := congrArg
+        apm_t01A04_circleCoverMap_evenlyCovered_away_aux_torus_aux_totalRetraction her
+      have hp : 0 < (p.2.1 : ℂ).re ∧ 0 < (p.2.2 : ℂ).re := by
+        cases r with
+        | inl q =>
+          simp [apm_t01A04_circleCoverMap_evenlyCovered_away_aux_torus_aux_totalRetraction,
+            apm_t01A04_circleCoverMap_evenlyCovered_away_aux_torus_aux_totalRaw] at hq
+          simpa [← hq] using hr.2
+        | inr w =>
+          simp [apm_t01A04_circleCoverMap_evenlyCovered_away_aux_torus_aux_totalRetraction,
+            apm_t01A04_circleCoverMap_evenlyCovered_away_aux_torus_aux_totalRaw] at hq
+          simpa [← hq]
+      exact ⟨Sum.inl p.2, ⟨hp.1, hp.2⟩, rfl⟩
+  · constructor
+    · rintro ⟨r, hr, her⟩
+      have hz := congrArg
+        apm_t01A04_circleCoverMap_evenlyCovered_away_aux_circleRetraction her
+      have hz2 : 0 < ((z : ℂ) ^ 2).re := by
+        cases r with
+        | inl q =>
+          simp [apm_t01a04_circleCoverMap, apm_t01a04_circleCoverRaw,
+            apm_t01A04_circleCoverMap_evenlyCovered_away_aux_circleRetraction,
+            apm_t01A04_circleCoverMap_evenlyCovered_away_aux_circleRaw] at hz
+          calc
+            0 < (((1 : Circle) : ℂ)).re := by norm_num
+            _ = ((z ^ 2 : Circle) : ℂ).re := congrArg (fun u : Circle => (u : ℂ).re) hz
+        | inr w =>
+          simp [apm_t01a04_circleCoverMap, apm_t01a04_circleCoverRaw,
+            apm_t01A04_circleCoverMap_evenlyCovered_away_aux_circleRetraction,
+            apm_t01A04_circleCoverMap_evenlyCovered_away_aux_circleRaw] at hz
+          calc
+            0 < (w : ℂ).re := hr
+            _ = ((z ^ 2 : Circle) : ℂ).re := congrArg (fun u : Circle => (u : ℂ).re) hz
+      have hz0 : (z : ℂ).re ≠ 0 := by
+        intro hzero
+        have : ((z : ℂ) ^ 2).re ≤ 0 := by
+          simp [pow_two, Complex.mul_re, hzero]
+          exact mul_self_nonneg _
+        exact (not_lt_of_ge this) hz2
+      by_cases hzpos : 0 < (z : ℂ).re
+      · refine Set.mem_iUnion.2 ⟨0, ?_⟩
+        exact ⟨Sum.inr z, ⟨by simpa, hz2⟩, rfl⟩
+      · have hzneg : (z : ℂ).re < 0 := lt_of_le_of_ne (le_of_not_gt hzpos) hz0
+        refine Set.mem_iUnion.2 ⟨1, ?_⟩
+        refine ⟨Sum.inr z, ⟨?_, hz2⟩, rfl⟩
+        simpa [apm_t01a04_sheetPoint, Circle.exp, Complex.exp_mul_I] using neg_pos.mpr hzneg
+    · rintro h
+      rcases Set.mem_iUnion.1 h with ⟨i, r, hr, her⟩
+      have hz := congrArg
+        apm_t01A04_circleCoverMap_evenlyCovered_away_aux_circle_aux_totalRetraction her
+      have hz2 : 0 < ((z : ℂ) ^ 2).re := by
+        cases r with
+        | inl q =>
+          simp [apm_t01A04_circleCoverMap_evenlyCovered_away_aux_circle_aux_totalRetraction,
+            apm_t01A04_circleCoverMap_evenlyCovered_away_aux_circle_aux_totalRaw,
+            apm_t01a04_sheetPoint_sq] at hz
+          calc
+            0 < (((1 : Circle) : ℂ)).re := by norm_num
+            _ = ((apm_t01a04_sheetPoint q.1 ^ 2 : Circle) : ℂ).re := by
+              rw [apm_t01a04_sheetPoint_sq]
+            _ = ((z ^ 2 : Circle) : ℂ).re := congrArg (fun u : Circle => (u : ℂ).re)
+              (congrArg (fun u : Circle => u ^ 2) hz)
+        | inr w =>
+          simp [apm_t01A04_circleCoverMap_evenlyCovered_away_aux_circle_aux_totalRetraction,
+            apm_t01A04_circleCoverMap_evenlyCovered_away_aux_circle_aux_totalRaw] at hz
+          calc
+            0 < ((w ^ 2 : Circle) : ℂ).re := hr.2
+            _ = ((z ^ 2 : Circle) : ℂ).re := congrArg (fun u : Circle => ((u ^ 2 : Circle) : ℂ).re) hz
+      exact ⟨Sum.inr (z ^ 2), by simpa using hz2, rfl⟩
 
 noncomputable def apm_t01A04_cbp_sheet_homeomorph_aux_root
     (i : Fin 2) (z : Circle) : Circle :=
