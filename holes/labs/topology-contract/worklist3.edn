@@ -36160,6 +36160,16 @@
       :exit 1,
       :correction
       "dirty PointWedge failed and removed olean; scoped source passed"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791974046058-11763-d947fd03",
+     :commands
+     ["git show/check/diff 761b8821; scope/math review; fixture sha256"
+      "lean closure/fixture attempted: blocked by unrelated dirty PointWedge missing olean"
+      "statement registry; placeholder recount"],
+     :finding
+     "PASS. Commit 761b8821 adds sorry-free progress after the prior milestone: it transports normalClosure(range overlap) <= ker from outer-piece coordinates through the inverse skeleton equivalence, with the target-basepoint comparison explicitly left open. Scope and fixture hash match; support placeholders 0->0; registry 166/166; no new axioms. Fresh compilation is blocked upstream by an unrelated dirty PointWedgeVanKampen error/missing olean, matching the recorded warning; no workaround used. Comparison, reverse inclusion, surjectivity, and winding remain listed."},
     :commit "761b8821a80e774da35733af17705fbf7f177221",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
@@ -36171,7 +36181,7 @@
      :mode :blocked-by-unrelated-dependency},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -36189,7 +36199,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t93J03Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Proved the overlap-image normal closure lies in the outer-to-polygon kernel; skeleton transport, reverse inclusion, surjectivity and winding remain.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Transported forward kernel inclusion to skeleton coordinates; comparison, reverse inclusion, surjectivity and winding remain.",
    :id :program-2026-10-13-close-t93j03,
    :kind :final-adapter,
    :campaign-priority 30,
@@ -36347,7 +36357,11 @@
     {:job 3,
      :commit "fc950d9a2e0bdc8863b80786dedf8f035a21e793",
      :reason
-     "Proved the overlap-image normal closure lies in the outer-to-polygon kernel; skeleton transport, reverse inclusion, surjectivity and winding remain."}]}
+     "Proved the overlap-image normal closure lies in the outer-to-polygon kernel; skeleton transport, reverse inclusion, surjectivity and winding remain."}
+    {:job 4,
+     :commit "761b8821a80e774da35733af17705fbf7f177221",
+     :reason
+     "Transported forward kernel inclusion to skeleton coordinates; comparison, reverse inclusion, surjectivity and winding remain."}]}
   {:consumer :t99J05,
    :stop-count 5,
    :evidence
@@ -38607,7 +38621,7 @@
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -38619,7 +38633,9 @@
     :reported-by [:program-2026-10-13-close-t93j03],
     :type "forward kernel inclusion in skeleton coordinates",
     :area "covering-subgroup-correspondence",
-    :proved-in :program-2026-10-13-close-t93j03},
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "761b8821a80e774da35733af17705fbf7f177221"},
    :id
    :lemma-kleinpolygonoverlapskeletonnormalclosure-le-transportedkernel,
    :kind :lemma,
