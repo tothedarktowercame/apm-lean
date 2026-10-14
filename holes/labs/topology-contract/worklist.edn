@@ -113856,7 +113856,7 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 10,
+   :stop-count 0,
    :review-finding
    "Recorded fixture hash mismatch: :fixture.sha256 is 0bca6ce32c019fc3053c7f813c26917169cf817375b44d5e722b864b61a526450c1, but ConstructionTargets/PointWedgeVanKampen.blueprint.md at recorded commit c9b3af27 has exact SHA-256 0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0. Re-record the fixture hash for the reviewed commit.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
@@ -113914,7 +113914,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -119056,6 +119056,18 @@
      {:cmd "diff/hash/placeholders", :exit 0}],
     :diagnostic-history
     [{:cmd "coordinate draft", :exit 1, :finding "normalized smul"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791969145530-11738-1bbaaea5",
+     :commands
+     ["git show/diff-tree 9642998740f30f564d076dfef0630b8ba7b407a7"
+      "archive commit; lean t00J02Closure.lean and Main.lean"
+      "sha256sum Main/implementation/blueprint; count placeholders"
+      "python3 scripts/statement-registry.py check"
+      "lake env lean ConstructionTargets/t00J02Closure.lean"],
+     :finding
+     "PASS: exact scope and hashes match; both archived files compile; Main placeholder remains 1->1 and new implementation is sorry-free; registry 166/166. Circle homology is transported through the fixed H1 coordinate isomorphism, and the induced endomorphism is correctly multiplication by its value at 1; zero-map corollary is correctly oriented; standard axioms only. New compiled milestone since prior history; signed counts and Main assembly remain listed."},
     :commit "9642998740f30f564d076dfef0630b8ba7b407a7",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
@@ -119064,7 +119076,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119082,7 +119094,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t00J02Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked local fundamental-class coordinates.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked circle-degree coordinates.",
    :id :program-2026-10-13-close-t00j02,
    :kind :final-adapter,
    :campaign-priority 45,
@@ -119096,7 +119108,10 @@
      :reason "Blueprint written."}
     {:job 2,
      :commit "b389f11d593ba185db398a8b0e85d00e8eec18ed",
-     :reason "Banked local fundamental-class coordinates."}]}
+     :reason "Banked local fundamental-class coordinates."}
+    {:job 3,
+     :commit "9642998740f30f564d076dfef0630b8ba7b407a7",
+     :reason "Banked circle-degree coordinates."}]}
   {:consumer :t98A06,
    :stop-count 0,
    :phase :implementation,
@@ -119225,7 +119240,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "circleDegree_eq_homologyMap",
@@ -119235,7 +119250,9 @@
     :reported-by [:program-2026-10-13-close-t00j02],
     :type "coordinate action is multiplication by degree",
     :area "oriented-surface-degree",
-    :proved-in :program-2026-10-13-close-t00j02},
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "9642998740f30f564d076dfef0630b8ba7b407a7"},
    :id :lemma-circledegree-eq-homologymap,
    :kind :lemma,
    :depends-on [],
