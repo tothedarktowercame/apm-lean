@@ -36121,66 +36121,57 @@
   {:consumer :t93J03,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 8,
+   :stop-count 9,
    :review-finding
    "Program STOP commits no new mathematical progress since the prior milestone: KleinPolygonBasedVanKampen merely packages the already-required surjectivity and kernel hypotheses, and both consumers only reapply the previously proved three-input theorem. Prove the based van Kampen surjectivity/kernel result (or winding conjugacy) in scope; extend Mathlib: state and prove the missing theorem in scope.",
    :evidence
    {:placeholder-delta {:t93J03 [1 1]},
     :residual
-    "Fold overlap replacements through reconstructed finite words; reverse kernel/surjectivity; winding; C1/C2/Main.",
+    "Fold factorwise replacements through reconstructed words; reverse kernel/surjectivity; winding; C1/C2/Main.",
     :outcome :stop,
     :warnings ["unused SLSC owner-approved"],
     :missing-theorems
-    [{:name "kleinPolygonInner_pathClass_eq_overlapReplacement",
+    [{:name
+      "kleinPolygonInner_ambientPathClass_eq_outerOverlapReplacement",
       :type
-      "inner path between overlap endpoints equals image of an overlap path",
+      "ambient inner run equals overlap replacement through outer piece",
       :status :proved,
       :consumers [:t93J03],
       :depends-on
-      ["kleinPolygonInnerFundamentalGroupoid_hom_subsingleton"],
+      ["kleinPolygonInner_pathClass_eq_overlapReplacement"],
       :area "covering-subgroup-correspondence"}
      {:name "t93J03_polygon_based_van_kampen",
       :type "surjectivity; kernel equality",
       :status :partial,
       :consumers [:t93J03],
       :depends-on
-      ["kleinPolygonInner_pathClass_eq_overlapReplacement"],
+      ["kleinPolygonInner_ambientPathClass_eq_outerOverlapReplacement"],
       :area "covering-subgroup-correspondence"}],
     :statement-hashes {:registry "166/166"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Proved each inner path between overlap endpoints equals an actual overlap-path image; finite-run assembly remains.",
+    "Transported each inner-run replacement to equality with an outer-piece arrow in the ambient polygon groupoid; finite fold remains.",
     :commands
     [{:cmd "lake build ConstructionTargets.t93J03Closure", :exit 0}
      {:cmd "lean fixture; Main; registry; diff/show", :exit 0}
      {:cmd "rg forbidden", :exit 1, :expected-exit 1}],
     :diagnostic-history
-    [{:cmd "replacement probe",
+    [{:cmd "ambient replacement probe",
       :exit 1,
-      :correction "opened overlap namespace; rerun passed"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1792000651948-12016-d87ae130",
-     :commands
-     ["git show/check/diff 0c1e3c72; scope and fixture SHA-256"
-      "lake build ConstructionTargets.t93J03Closure; lean fixture and Main"
-      "statement-registry check; placeholder/axiom recount"],
-     :finding
-     "PASS: 0c1e3c72 adds compiled, sorry-free progress beyond ebda0048. Path connectedness chooses an actual overlap path between the exact overlap endpoints; mapping it into the contractible inner piece and applying arbitrary-endpoint path-class uniqueness proves the required inner-run replacement without conflating the two subtypes. Exact scope/hash match; support placeholders 0->0; frozen Main remains 1; standard axioms only; registry 166/166. STOP lists finite-word replacement assembly, reverse kernel/surjectivity, winding, C1/C2/Main."},
-    :commit "0c1e3c722fcff7ea48c6781d31c78f8a0ce0827b",
+      :correction "used induced groupoid functor map"}],
+    :commit "5f821fed12858efa2e7aa8bf6df1eaa30e5767c7",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
      "ConstructionTargets/t93J03Closure.blueprint.md"],
     :fixture
-    {:path "/tmp/t93j03_overlap_replacement_check.lean",
+    {:path "/tmp/t93j03_ambient_replacement_check.lean",
      :sha256
-     "bd6fc156804120f30cb2d922a72c520f4ef67e8acb0abe66074f2e2100006f35"},
+     "a3c488e9080f7e88ec8e389a74d2449d078af8df3f5616a09ce1c4a8831c8fab"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -38626,7 +38617,8 @@
     :lemma-kleinpolygonpseudopushout-arrow-eq-reconstructed
     :lemma-pathtwoopensubdivision-transition-mem-overlap
     :lemma-kleinpolygoninnerfundamentalgroupoid-hom-subsingleton
-    :lemma-kleinpolygoninner-pathclass-eq-overlapreplacement],
+    :lemma-kleinpolygoninner-pathclass-eq-overlapreplacement
+    :lemma-kleinpolygoninner-ambientpathclass-eq-outeroverlapreplacement],
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
@@ -39022,6 +39014,29 @@
    :kind :lemma,
    :depends-on
    [:lemma-kleinpolygoninnerfundamentalgroupoid-hom-subsingleton],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "kleinPolygonInner_ambientPathClass_eq_outerOverlapReplacement",
+    :type
+    "ambient inner run equals overlap replacement through outer piece"},
+   :lemma
+   {:name
+    "kleinPolygonInner_ambientPathClass_eq_outerOverlapReplacement",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type
+    "ambient inner run equals overlap replacement through outer piece",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03},
+   :id
+   :lemma-kleinpolygoninner-ambientpathclass-eq-outeroverlapreplacement,
+   :kind :lemma,
+   :depends-on
+   [:lemma-kleinpolygoninner-pathclass-eq-overlapreplacement],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
