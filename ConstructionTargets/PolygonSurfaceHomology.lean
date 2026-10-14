@@ -3649,6 +3649,47 @@ theorem radialMV_boundary_eq_iff_one (P : PairingData) :
     exact h.trans (by
       simpa using (attachingBoundaryGroup_apply P 1).symm)
 
+/-- The uncoordinatized outer-piece H₁ class obtained by including the
+positive overlap generator into the outer member of the radial cover. -/
+noncomputable def radialOuterBoundaryGenerator (P : PairingData) :
+    ConstructionTargets.SingularHomologyConcrete.SingularHomology 1
+      (TopCat.of (OuterPiece P)) :=
+  (biprod.snd : _ ⟶
+    ConstructionTargets.SingularHomologyConcrete.SingularHomology 1
+      (TopCat.of (OuterPiece P)))
+    (ConstructionTargets.ProductionOpenCoverMayerVietoris.productionIntersectionArrow
+      (openCover P).inner (openCover P).outer 1
+      ((radialIntersectionH1GroupIsoInt P).inv 1))
+
+/-- The raw outer-piece class whose fixed coordinates are the signed
+attaching-degree vector. -/
+noncomputable def attachingOuterClass (P : PairingData) :
+    ConstructionTargets.SingularHomologyConcrete.SingularHomology 1
+      (TopCat.of (OuterPiece P)) :=
+  (radialOuterH1GroupIsoCoordinates P).inv (attachingDegree P)
+
+theorem radialMVBoundaryGroup_one_formula (P : PairingData) :
+    radialMVBoundaryGroup P 1 =
+      (radialOuterH1GroupIsoCoordinates P).hom
+        (radialOuterBoundaryGenerator P) := by
+  change (radialOuterH1GroupIsoCoordinates P).hom.hom
+    (radialOuterBoundaryGenerator P) = _
+  rfl
+
+/-- The remaining generator computation can equivalently be carried out
+before outer-piece coordinates are applied. -/
+theorem radialMVBoundaryGroup_one_iff_outerClass (P : PairingData) :
+    radialMVBoundaryGroup P 1 = attachingDegree P ↔
+      radialOuterBoundaryGenerator P = attachingOuterClass P := by
+  rw [radialMVBoundaryGroup_one_formula]
+  constructor
+  · intro h
+    apply_fun (radialOuterH1GroupIsoCoordinates P).inv at h
+    simpa [attachingOuterClass] using h
+  · intro h
+    rw [h, attachingOuterClass]
+    simp
+
 end
 
 end ConstructionTargets.PolygonSurfaceHomology
