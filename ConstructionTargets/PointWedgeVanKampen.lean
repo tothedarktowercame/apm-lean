@@ -6557,6 +6557,25 @@ theorem genericPointWedgeOverlap_functor_map_unitInv_eq_endpointTransport :
   exact Subsingleton.elim _ _
 
 omit [PathConnectedSpace X] [PathConnectedSpace Y] in
+/-- Carrying the coordinate endpoint transport through the right overlap leg
+gives the corresponding endpoint transport between its right-piece images. -/
+theorem genericPointWedgeRightLeg_map_overlapUnitInv_eq_endpointTransport :
+    let r := genericPointWedgeActualRight x₀ y₀ M N
+    let eK := genericPointWedgeOverlapGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let eR := genericPointWedgeRightGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let z := genericPointWedgeOverlapBase x₀ y₀ M N
+    (eK.inverse ⋙ r ⋙ eR.functor).map
+        (eK.functor.map (eK.unitInv.app z)) =
+      eqToHom (congrArg (eK.inverse ⋙ r ⋙ eR.functor).obj
+        (genericPointWedgeOverlap_shiftedCoordinateObject_eq
+          x₀ y₀ M N hM hN hy hx cM cN)) := by
+  dsimp only
+  rw [genericPointWedgeOverlap_functor_map_unitInv_eq_endpointTransport]
+  exact eqToHom_map _ _
+
+omit [PathConnectedSpace X] [PathConnectedSpace Y] in
 /-- The shifted and unshifted inverse right-span components are dependently
 equal, since their arguments are objects of `FundamentalGroupoid Unit`. -/
 theorem genericPointWedgeOuterRightSpan_shiftedComponent_heq :

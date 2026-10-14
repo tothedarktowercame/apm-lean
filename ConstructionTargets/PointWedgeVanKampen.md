@@ -1464,5 +1464,8 @@ forward image with the based endpoint transport already calculated below.
 `genericPointWedgeOverlap_functor_map_unitInv_eq_endpointTransport` makes that
 identification in the coordinate groupoid: its hom-set is subsingleton, so the
 forward image is exactly transport along the named shifted-object equality.
-The next step is to carry this equality through the right-piece leg and apply
-the three connector-square preservation lemmas to the installed system.
+`genericPointWedgeRightLeg_map_overlapUnitInv_eq_endpointTransport` carries
+that equality through the inverse overlap and right-piece functors, retaining
+the induced endpoint equality explicitly.  The next step is to use this
+transport in the original right-piece connector square and apply the three
+connector-square preservation lemmas to the installed system.
