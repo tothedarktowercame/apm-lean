@@ -58,7 +58,16 @@ theorem t99J01_threeCircles_fundamentalGroup_coprod :
     Nonempty (FundamentalGroup ThreeCircles T99J01ThreeCirclesPoint ≃*
       Monoid.Coprod (FundamentalGroup TwoCircles twoCirclesPoint)
         (FundamentalGroup Circle 1)) := by
-  sorry
+  exact ⟨ConstructionTargets.PointWedgeVanKampen.genericPointWedgeFundamentalGroupEquiv
+    twoCirclesPoint (1 : Circle)
+    ConstructionTargets.PointWedgeVanKampen.circleBaseNeighborhood
+    ConstructionTargets.PointWedgeVanKampen.twoCirclesBaseNeighborhood
+    ConstructionTargets.PointWedgeVanKampen.circleBaseNeighborhood_isOpen
+    ConstructionTargets.PointWedgeVanKampen.twoCirclesBaseNeighborhood_isOpen
+    ConstructionTargets.PointWedgeVanKampen.circleBase_mem
+    ConstructionTargets.PointWedgeVanKampen.twoCirclesBase_mem
+    ConstructionTargets.PointWedgeVanKampen.circleBaseNeighborhood_contraction
+    ConstructionTargets.PointWedgeVanKampen.twoCirclesBaseNeighborhood_contraction⟩
 -- END SEAT AREA
 
 /-- Algebraic conversion of the second van Kampen coproduct to rank three.
