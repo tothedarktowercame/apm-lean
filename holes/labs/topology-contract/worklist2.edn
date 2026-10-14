@@ -87901,23 +87901,22 @@
   {:consumer :t97A01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Prove finite subdivision product, then sign-corrected B7 and B8-B10.",
+    "Prove finite subdivision product; derive B7, then B8-B10.",
     :outcome :stop,
     :warnings ["preexisting lint; unrelated edits preserved"],
     :missing-theorems
-    [{:name "finiteWedgeExplicitLegClass_eq_positive_zpow",
-      :type "explicit leg equals normalized leg to orientation unit",
+    [{:name "finiteWedgeExplicitLegClassAtBase_hurewicz",
+      :type "explicit leg has orientation-unit basis H1 class",
       :status :proved,
       :consumers [:t97A01 :t94J09],
-      :depends-on
-      ["circleIntegerLoopOneClass_eq_positive_zpow_coordinate"],
+      :depends-on ["finiteWedgeExplicitLegClass_eq_positive_zpow"],
       :area "polygon-quotient-homology"}
      {:name "finitePathSubdivision_boundary",
-      :type "boundary circle class is ordered product of edge classes",
+      :type "boundary class is ordered edge product",
       :status :not-started,
       :consumers [:t97A01 :t94J09],
       :depends-on
@@ -87925,7 +87924,7 @@
        "polygonBoundaryWedgeLoop_edgePoint_integerLoop_of_not_sign"],
       :area "polygon-quotient-homology"}
      {:name "radialMV_boundary_eq_orientationSigned",
-      :type "B7 equals sign-corrected attaching map",
+      :type "B7 sign-corrected map",
       :status :partial,
       :consumers [:t97A01 :t94J09],
       :depends-on ["finitePathSubdivision_boundary"],
@@ -87934,25 +87933,28 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason
-    "Banked explicit wedge-leg class as normalized generator to the orientation unit.",
+    :reason "Banked common-base explicit-leg H1 formula.",
     :commands
     [{:cmd
       "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology",
       :exit 0}
-     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd "statement-registry.py check", :exit 0}
      {:cmd "placeholder scan", :exit 0}
      {:cmd "axioms check", :exit 0}
-     {:cmd "git show --check 8a9449e5d", :exit 0}],
-    :commit "8a9449e5d",
+     {:cmd "git show --check 487d67321", :exit 0}],
+    :diagnostic-history
+    [{:cmd "first formula build",
+      :exit 1,
+      :correction "used local-base Hurewicz"}],
+    :commit "487d67321",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
     {:path "ConstructionTargets/PolygonSurfaceHomology.lean",
      :sha256
-     "6bf21b632f5639504ee499ce283ddc1bcf7d79040fa6c894c5898de5f9843004"},
+     "eb26089987415931014eff7888012198de52351bd9ab5040fac3b43e51f08569"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -92098,4 +92100,21 @@
    :id :lemma-projection-edgepoint-eq-of-interior,
    :kind :lemma,
    :depends-on [:lemma-edgeprojection-eq-of-interior],
-   :other-consumers []}]}
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "finiteWedgeExplicitLegClassAtBase_hurewicz",
+    :type "explicit leg has orientation-unit basis H1 class"},
+   :lemma
+   {:name "finiteWedgeExplicitLegClassAtBase_hurewicz",
+    :reported-by [:program-2026-10-13-polygon-surface-homology],
+    :type "explicit leg has orientation-unit basis H1 class",
+    :area "polygon-quotient-homology",
+    :proved-in :program-2026-10-13-polygon-surface-homology},
+   :id :lemma-finitewedgeexplicitlegclassatbase-hurewicz,
+   :kind :lemma,
+   :depends-on [:lemma-finitewedgeexplicitlegclass-eq-positive-zpow],
+   :other-consumers [:t94J09]}]}
