@@ -36121,71 +36121,56 @@
   {:consumer :t93J03,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 2,
+   :stop-count 3,
    :review-finding
    "Program STOP commits no new mathematical progress since the prior milestone: KleinPolygonBasedVanKampen merely packages the already-required surjectivity and kernel hypotheses, and both consumers only reapply the previously proved three-input theorem. Prove the based van Kampen surjectivity/kernel result (or winding conjugacy) in scope; extend Mathlib: state and prove the missing theorem in scope.",
    :evidence
    {:placeholder-delta {:t93J03 [1 1]},
     :residual
-    "Choose dependent path family; fold; reverse kernel/surjectivity; winding; C1/C2/Main.",
+    "Compare run fold with subdivision reconstruction; reverse kernel/surjectivity; winding; C1/C2/Main.",
     :outcome :stop,
     :warnings [],
     :missing-theorems
-    [{:name "pathTwoOpenSubdivisionRun_exists_outerBoundaryPath",
+    [{:name "pathTwoOpenSubdivisionRunFold_exists_outerPath",
       :type
-      "exact consecutive outer-boundary path preserving endpoint-cast run class",
+      "dependent maximal-run fold has one equal-class outer path",
       :status :proved,
       :consumers [:t93J03],
       :depends-on
-      ["pathTwoOpenSubdivisionRun_exists_outerRepresentative"],
+      ["pathTwoOpenSubdivisionRun_exists_outerBoundaryPath"],
       :area "covering-subgroup-correspondence"}
      {:name "t93J03_polygon_based_van_kampen",
       :type "surjectivity; kernel equality",
       :status :partial,
       :consumers [:t93J03],
-      :depends-on
-      ["pathTwoOpenSubdivisionRun_exists_outerBoundaryPath"],
+      :depends-on ["pathTwoOpenSubdivisionRunFold_exists_outerPath"],
       :area "covering-subgroup-correspondence"}],
     :statement-hashes {:registry "166/166"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Packaged every run representative as an exact outer-boundary path; dependent fold remains.",
+    "Chose the dependent outer-run family and folded it to one outer path; comparison with subdivision reconstruction remains.",
     :commands
     [{:cmd "lake build ConstructionTargets.t93J03Closure", :exit 0}
-     {:cmd "lake env lean /tmp/t93j03_outer_boundary_path_check.lean",
-      :exit 0}
+     {:cmd "lake env lean /tmp/t93j03_run_fold_check.lean", :exit 0}
      {:cmd "lake env lean problems/t93J03/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder count", :exit 0}
      {:cmd "git diff --check", :exit 0}
      {:cmd "rg forbidden", :exit 1, :expected-exit 1}],
-    :diagnostic-history
-    [{:cmd "initial compile",
-      :exit 1,
-      :correction "used literal endpoints and Path record syntax"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1792017228263-12571-d752e1da",
-     :commands
-     ["fixture SHA-256 assertion; lake build closure; lean frozen interface"
-      "git show --check 8c4eb4f recorded closure"
-      "parent/commit placeholder recount; registry 166/166"],
-     :finding
-     "PASS: after rebuilding a missing olean, the frozen fixture passes. Commit 8c4eb4f adds compiled, sorry-free progress beyond 263f5d47: Fin(runs+1) indexes outer-subtype boundaries, and coercion recovers the matching ambient list value in the needed orientation. It does not assume the partial van Kampen result. Scope/hash match; standard axioms only; Main 1->1 placeholder; residual fold, kernel/surjectivity, winding, C1/C2/Main are listed."},
-    :commit "b87f68fbe2e6b103154e5df3f961105476ac6537",
+    :diagnostic-history [],
+    :commit "515bbfb930df7f4d01751001d1ad67e427fd6d11",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
      "ConstructionTargets/t93J03Closure.blueprint.md"],
     :fixture
-    {:path "/tmp/t93j03_outer_boundary_path_check.lean",
+    {:path "/tmp/t93j03_run_fold_check.lean",
      :sha256
-     "aac6a57cab0baa1f9c92578e6c95c0d2e9c7873f970828f5aaad3bf9d16bd2f6"},
+     "3607b39c2bf46776d67ab44eb591201d4d7693f4731fdc3cbc5bf662e53bf2fe"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -38863,7 +38848,8 @@
     :lemma-pathtwoopensubdivisionrunblockpiece-mem-chart
     :lemma-pathtwoopensubdivisionrunblockpiece-mem-chart-cases
     :lemma-pathtwoopensubdivisionrun-exists-outerrepresentative
-    :lemma-pathtwoopensubdivisionrun-exists-outerboundarypath],
+    :lemma-pathtwoopensubdivisionrun-exists-outerboundarypath
+    :lemma-pathtwoopensubdivisionrunfold-exists-outerpath],
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
@@ -40144,6 +40130,24 @@
    :kind :lemma,
    :depends-on
    [:lemma-pathtwoopensubdivisionrun-exists-outerrepresentative],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "pathTwoOpenSubdivisionRunFold_exists_outerPath",
+    :type "dependent maximal-run fold has one equal-class outer path"},
+   :lemma
+   {:name "pathTwoOpenSubdivisionRunFold_exists_outerPath",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type "dependent maximal-run fold has one equal-class outer path",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03},
+   :id :lemma-pathtwoopensubdivisionrunfold-exists-outerpath,
+   :kind :lemma,
+   :depends-on
+   [:lemma-pathtwoopensubdivisionrun-exists-outerboundarypath],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
