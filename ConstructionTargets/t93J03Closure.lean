@@ -957,6 +957,30 @@ theorem pathTwoOpenSubdivision_runPartition_isChain_overlap
   exact pathTwoOpenSubdivision_adjacentRunBoundary_mem_overlap
     S a b ha hb hidx hsides'
 
+/-- The complete boundary specification for consecutive maximal runs: the
+target vertex of the preceding block is literally the source vertex of the
+following block, and that common vertex lies in the overlap (hence in the
+outer piece).  This is the dependent endpoint relation used by reassembly. -/
+theorem pathTwoOpenSubdivision_runPartition_boundary_spec
+    {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
+    {U V : Set X} (S : PathTwoOpenSubdivision p U V) :
+    (boolSideRunPartition S.side).IsChain fun a b =>
+      ∀ (ha : a ≠ []) (hb : b ≠ []),
+        S.point (a.getLast ha).succ = S.point (b.head hb).castSucc ∧
+          S.point (b.head hb).castSucc ∈ U ∩ V := by
+  rw [List.isChain_iff_forall_rel_of_append_cons_cons]
+  intro a b l₁ l₂ hab ha hb
+  have hidx := (List.isChain_iff_forall_rel_of_append_cons_cons.mp
+    (boolSideRunPartition_adjacent_indices S.side)) hab ha hb
+  have hpoint : S.point (a.getLast ha).succ =
+      S.point (b.head hb).castSucc := by
+    apply congrArg S.point
+    apply Fin.ext
+    exact hidx.symm
+  have hoverlap := (List.isChain_iff_forall_rel_of_append_cons_cons.mp
+    (pathTwoOpenSubdivision_runPartition_isChain_overlap S)) hab ha hb
+  exact ⟨hpoint, hoverlap⟩
+
 /-- Every member of a maximal Boolean side run has the side recorded at its
 head.  This turns the local chain certificate returned by `splitBy` into the
 pointwise fact needed to package a whole subdivision block. -/
@@ -2470,6 +2494,7 @@ theorem lift_isEmbedding_assembly
 #print axioms boolSideRunPartition_adjacent_indices
 #print axioms pathTwoOpenSubdivision_adjacentRunBoundary_mem_overlap
 #print axioms pathTwoOpenSubdivision_runPartition_isChain_overlap
+#print axioms pathTwoOpenSubdivision_runPartition_boundary_spec
 #print axioms boolSideRunPartition_mem_side_eq_head
 #print axioms boolSideRunPartition_isInfix_finRange
 #print axioms boolSideRunPartition_exists_slice

@@ -450,9 +450,12 @@ run so it matches both neighboring block endpoints.
 over the complete ordered run list: every adjacent run boundary is an overlap
 vertex. `boolSideRunPartition_end_indices` identifies the remaining exterior
 boundaries: the first run starts at piece zero and the last ends at the final
-piece.  The next step is to turn these exterior and interior certificates into
-the subtype endpoint family for the outer fold, then extract based
-surjectivity and the reverse kernel inclusion.
+piece. `pathTwoOpenSubdivision_runPartition_boundary_spec` combines the
+interior certificate with literal equality between each preceding block target
+and following block source.  The next step is to use this boundary
+specification and the exterior endpoint identities to define the subtype
+endpoint family for the outer fold, then extract based surjectivity and the
+reverse kernel inclusion.
 
 - Layer 1: C1, C3, and C4. C1 and C3 are independent; C4 is already complete.
 - Layer 2: C2 against the explicit C1 equivalence interface.
