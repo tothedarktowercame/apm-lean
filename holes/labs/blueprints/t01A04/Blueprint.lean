@@ -882,7 +882,43 @@ def apm_t01A04_cbp_V (i : Fin 2) : Set apm_t01a04_CircleCover :=
         0 < ((z : ℂ) * star (apm_t01a04_sheetPoint i : ℂ)).re ∧ 0 < ((z : ℂ) ^ 2).re) r}
 
 lemma apm_t01A04_cbp_U_open : apm_t01a04_basepoint ∈ apm_t01A04_cbp_U ∧ IsOpen apm_t01A04_cbp_U := by
-  sorry
+  have ht : Continuous
+      apm_t01A04_circleCoverMap_evenlyCovered_away_aux_torusRetraction := by
+    apply continuous_coinduced_dom.mpr
+    apply continuous_sum_dom.2
+    exact ⟨continuous_id, continuous_const⟩
+  have hc : Continuous
+      apm_t01A04_circleCoverMap_evenlyCovered_away_aux_circleRetraction :=
+    apm_t01A04_circleCoverMap_evenlyCovered_away_aux_circle_aux_base_continuous
+  let T : Set apm_t01a04_Torus :=
+    {q | 0 < (q.1 : ℂ).re ∧ 0 < (q.2 : ℂ).re}
+  let A : Set Circle := {z | 0 < (z : ℂ).re}
+  have hT : IsOpen T := by
+    dsimp [T]
+    exact (isOpen_lt continuous_const
+      (Complex.continuous_re.comp (continuous_subtype_val.comp continuous_fst))).inter
+      (isOpen_lt continuous_const
+        (Complex.continuous_re.comp (continuous_subtype_val.comp continuous_snd)))
+  have hA : IsOpen A := by
+    apply isOpen_lt continuous_const
+    exact Complex.continuous_re.comp continuous_subtype_val
+  have hU : apm_t01A04_cbp_U =
+      apm_t01A04_circleCoverMap_evenlyCovered_away_aux_torusRetraction ⁻¹' T ∩
+        apm_t01A04_circleCoverMap_evenlyCovered_away_aux_circleRetraction ⁻¹' A := by
+    ext x
+    refine Quotient.inductionOn x ?_
+    intro r
+    constructor
+    · rintro ⟨s, hs, hsr⟩
+      rw [← hsr]
+      cases s <;> simpa [T, A] using hs
+    · intro hr
+      refine ⟨r, ?_, rfl⟩
+      cases r <;> simpa [T, A] using hr
+  constructor
+  · exact ⟨Sum.inl ((1 : Circle), (1 : Circle)), by norm_num, rfl⟩
+  · rw [hU]
+    exact (hT.preimage ht).inter (hA.preimage hc)
 
 lemma apm_t01A04_cbp_V_open_aux_invariant (i : Fin 2)
     {u v : Sum (Fin 2 × apm_t01a04_Torus) Circle}
