@@ -178,7 +178,34 @@ four-dimensional continuous complement. -/
 theorem t95A04_injective_clm_has_four_complement
     (L : E 2 →L[ℝ] E 6) (hL : Function.Injective L) :
     ∃ e : (E 2 × E 4) ≃L[ℝ] E 6, ∀ v, e (v, 0) = L v := by
-  sorry
+  let R : Submodule ℝ (E 6) := L.range
+  have hR : IsClosed (R : Set (E 6)) := R.closed_of_finiteDimensional
+  let eL : E 2 ≃L[ℝ] R := L.equivRange hL hR
+  have hdimR : Module.finrank ℝ R = 2 := by
+    simpa [R] using LinearMap.finrank_range_of_inj (f := L.toLinearMap) hL
+  have hdim_perp : Module.finrank ℝ (Submodule.orthogonal R) = 4 := by
+    have hsum := R.finrank_add_finrank_orthogonal
+    simp only [hdimR] at hsum
+    have hdim6 : Module.finrank ℝ (E 6) = 6 := by simp
+    rw [hdim6] at hsum
+    omega
+  let eK : E 4 ≃L[ℝ] Submodule.orthogonal R :=
+    (LinearEquiv.ofFinrankEq (E 4) (Submodule.orthogonal R)
+      (by simpa using hdim_perp.symm)).toContinuousLinearEquiv
+  let split : E 6 ≃L[ℝ] R × Submodule.orthogonal R :=
+    R.orthogonalDecomposition.toContinuousLinearEquiv.trans
+      (WithLp.prodContinuousLinearEquiv 2 ℝ R (Submodule.orthogonal R))
+  let e : (E 2 × E 4) ≃L[ℝ] E 6 := (eL.prodCongr eK).trans split.symm
+  refine ⟨e, ?_⟩
+  intro v
+  simp only [e, ContinuousLinearEquiv.trans_apply,
+    ContinuousLinearEquiv.prodCongr_apply, map_zero]
+  simp only [split, ContinuousLinearEquiv.symm_trans_apply,
+    WithLp.prodContinuousLinearEquiv_symm_apply,
+    LinearIsometryEquiv.coe_toContinuousLinearEquiv,
+    Submodule.orthogonalDecomposition_symm_apply]
+  change L v + 0 = L v
+  simp
 -- END SEAT AREA
 
 /-- The derivative of the manifold map, expressed in its extended charts, is
