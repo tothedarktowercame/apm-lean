@@ -510,6 +510,9 @@ that block fold with the original subdivision reconstruction remains. The
 `_BoundaryFamily_zero`/`_last` lemmas and
 `pathTwoOpenSubdivisionRunFold_exists_outerPath_at_endpoints` already rebase
 the folded representative at the literal subdivision endpoints.
+`pathTwoOpenSubdivisionRunStart_eq_previous_end` proves consecutive selected
+run slices are arithmetically contiguous, the induction invariant needed to
+identify the run-block fold with the original piece fold.
 
 - Layer 1: C1, C3, and C4. C1 and C3 are independent; C4 is already complete.
 - Layer 2: C2 against the explicit C1 equivalence interface.

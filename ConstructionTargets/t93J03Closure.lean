@@ -1348,6 +1348,42 @@ theorem pathTwoOpenSubdivisionRunFamily_getLast_succ_val
   simp only [Fin.val_succ]
   omega
 
+/-- Consecutive maximal runs have contiguous slice coordinates: the next
+run begins exactly one past the last piece of the preceding run. -/
+theorem pathTwoOpenSubdivisionRunStart_eq_previous_end
+    {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
+    {U V : Set X} (S : PathTwoOpenSubdivision p U V)
+    (i j : Fin (boolSideRunPartition S.side).length)
+    (hij : j.val = i.val + 1) :
+    pathTwoOpenSubdivisionRunStart S j =
+      pathTwoOpenSubdivisionRunStart S i +
+        (pathTwoOpenSubdivisionRunFamily S i).length := by
+  have hibound : i.val + 1 < (boolSideRunPartition S.side).length := by
+    simpa [hij] using j.isLt
+  have hadj := (List.isChain_iff_getElem.mp
+    (boolSideRunPartition_adjacent_indices S.side)) i.val hibound
+  have hne_i : (boolSideRunPartition S.side)[i.val] ≠ [] := by
+    exact List.ne_nil_of_mem_splitBy (List.getElem_mem _ _)
+  have hne_j : (boolSideRunPartition S.side)[i.val + 1] ≠ [] := by
+    exact List.ne_nil_of_mem_splitBy (List.getElem_mem _ _)
+  have hidx := hadj hne_i hne_j
+  have hidx' : ((pathTwoOpenSubdivisionRunFamily S j).head
+        (pathTwoOpenSubdivisionRunFamily_ne_nil S j)).val =
+      ((pathTwoOpenSubdivisionRunFamily S i).getLast
+        (pathTwoOpenSubdivisionRunFamily_ne_nil S i)).val + 1 := by
+    simpa [pathTwoOpenSubdivisionRunFamily, List.get_eq_getElem, hij] using hidx
+  calc
+    pathTwoOpenSubdivisionRunStart S j =
+        ((pathTwoOpenSubdivisionRunFamily S j).head
+          (pathTwoOpenSubdivisionRunFamily_ne_nil S j)).val :=
+      (pathTwoOpenSubdivisionRunFamily_head_val S j).symm
+    _ = ((pathTwoOpenSubdivisionRunFamily S i).getLast
+          (pathTwoOpenSubdivisionRunFamily_ne_nil S i)).succ.val := by
+      simpa using hidx'
+    _ = pathTwoOpenSubdivisionRunStart S i +
+          (pathTwoOpenSubdivisionRunFamily S i).length :=
+      pathTwoOpenSubdivisionRunFamily_getLast_succ_val S i
+
 theorem pathTwoOpenSubdivisionRunFamily_length_pos
     {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
     {U V : Set X} (S : PathTwoOpenSubdivision p U V)
