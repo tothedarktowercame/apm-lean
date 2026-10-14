@@ -36119,59 +36119,56 @@
   {:consumer :t93J03,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "Program STOP commits no new mathematical progress since the prior milestone: KleinPolygonBasedVanKampen merely packages the already-required surjectivity and kernel hypotheses, and both consumers only reapply the previously proved three-input theorem. Prove the based van Kampen surjectivity/kernel result (or winding conjugacy) in scope; extend Mathlib: state and prove the missing theorem in scope.",
    :evidence
    {:placeholder-delta {:t93J03 [1 1]},
     :residual
-    "Reconcile packaged-unit casts; source map equality; reverse kernel/surjectivity; winding; C1/C2/Main.",
+    "Reconcile packaged unit/connector casts; reverse kernel/surjectivity; winding; C1/C2/Main.",
     :outcome :stop,
-    :warnings
-    ["unused SLSC owner-approved" "dirty PointWedge preserved"],
+    :warnings ["unused SLSC owner-approved"],
     :missing-theorems
-    [{:name
-      "kleinPolygonOuterConnector_eq_inverseUnit_comp_mappedConnector",
+    [{:name "kleinPolygonSkeletonToOuterPiOne_apply_eq_inverse_map",
       :type
-      "concrete outer connector equals inverse deformation unit followed by inverse-mapped skeleton connector",
+      "direct skeleton-to-outer map equals equivalence inverse map",
       :status :proved,
       :consumers [:t93J03],
-      :depends-on ["equivalence_unit_mapIso_conj_preimage"],
+      :depends-on [],
       :area "covering-subgroup-correspondence"}
      {:name "t93J03_polygon_based_van_kampen",
       :type "surjective skeleton map; overlap-closure kernel",
       :status :partial,
       :consumers [:t93J03],
       :depends-on
-      ["kleinPolygonOuterConnector_eq_inverseUnit_comp_mappedConnector"],
+      ["kleinPolygonSkeletonToOuterPiOne_apply_eq_inverse_map"],
       :area "covering-subgroup-correspondence"}],
     :statement-hashes {:registry "166/166"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Committed exact fundamental-groupoid identification of the concrete outer connector; packaged-unit cast comparison remains.",
+    "Proved the direct skeleton-to-outer map is literally the equivalence inverse map; packaged unit/connector casts remain.",
     :commands
-    [{:cmd "lean closure", :exit 0}
-     {:cmd "registry; placeholder; diff; show", :exit 0}
-     {:cmd "rg forbidden", :exit 1, :expected-exit 1}],
+    [{:cmd "lake build ConstructionTargets.t93J03Closure", :exit 0}
+     {:cmd "lean fixture; Main; registry; placeholder; diff; show",
+      :exit 0}
+     {:cmd "rg forbidden closure", :exit 1, :expected-exit 1}],
     :diagnostic-history
-    [{:cmd "fixture",
+    [{:cmd "full source-coordinate probe",
       :exit 1,
-      :correction
-      "dirty PointWedge prevented new olean; scoped source passed"}],
-    :commit "422b43d69f339f0bcad25249e94a92f1d9b1716a",
+      :correction "split and proved inverse-map side"}],
+    :commit "135c809b7929f6786434fdf975d48f1ac0401a4a",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
      "ConstructionTargets/t93J03Closure.blueprint.md"],
     :fixture
-    {:path "/tmp/t93j03_outer_connector_quotient_check.lean",
+    {:path "/tmp/t93j03_inverse_map_direct_check.lean",
      :sha256
-     "9727b4cacbf75249fef5e76e39fbb2648887bdc7527d5fa27994394abe5e0df5",
-     :mode :blocked-by-unrelated-dependency},
+     "b981f3142e3c3b06c11719fa655b70f6140842b073ad7a0294ef76423cc084ec"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -38578,7 +38575,8 @@
     :lemma-kleinpolygonouterimagetodirectskeletonpointpath-map
     :lemma-kleinpolygontargettransportedoutertospacepione-factor
     :lemma-equivalence-unit-mapiso-conj-preimage
-    :lemma-kleinpolygonouterconnector-eq-inverseunit-comp-mappedconnector],
+    :lemma-kleinpolygonouterconnector-eq-inverseunit-comp-mappedconnector
+    :lemma-kleinpolygonskeletontoouterpione-apply-eq-inverse-map],
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
@@ -38788,6 +38786,25 @@
    :lemma-kleinpolygonouterconnector-eq-inverseunit-comp-mappedconnector,
    :kind :lemma,
    :depends-on [:lemma-equivalence-unit-mapiso-conj-preimage],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "kleinPolygonSkeletonToOuterPiOne_apply_eq_inverse_map",
+    :type
+    "direct skeleton-to-outer map equals equivalence inverse map"},
+   :lemma
+   {:name "kleinPolygonSkeletonToOuterPiOne_apply_eq_inverse_map",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type
+    "direct skeleton-to-outer map equals equivalence inverse map",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03},
+   :id :lemma-kleinpolygonskeletontoouterpione-apply-eq-inverse-map,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
