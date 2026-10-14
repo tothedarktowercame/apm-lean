@@ -87901,25 +87901,24 @@
   {:consumer :t97A01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 7,
+   :stop-count 8,
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Prove literal counit square; derive installed transport, right-base inl, surjectivity, B6-B10.",
+    "Prove counit normal form is identity; derive transport, right-base inl, surjectivity, B6-B10.",
     :outcome :stop,
     :warnings ["preexisting lints"],
     :missing-theorems
-    [{:name "finiteWedgeCoherentRightSourceUnitSquare_of_counit",
+    [{:name "finiteWedgeRightBaseCounitSquare_iff_normalFormTrivial",
       :type
-      "counit square implies coherent source inverse-unit square",
+      "literal counit square iff its connector normal form is identity",
       :status :proved,
       :consumers [:t97A01 :t94J09],
-      :depends-on
-      ["finiteWedgeCoherentRightSourceUnitSquare_of_target"],
+      :depends-on [],
       :area "polygon-quotient-homology"}
-     {:name "finiteWedgeRightBaseCounitSquare_holds",
+     {:name "finiteWedgeRightBaseCounitNormalFormTrivial_holds",
       :type
-      "literal final-leg connectors respect the right-equivalence counit",
+      "right-equivalence counit has trivial connector normal form",
       :status :not-started,
       :consumers [:t97A01 :t94J09],
       :depends-on [],
@@ -87929,44 +87928,33 @@
       "coherent source square yields installed overlap transport",
       :status :not-started,
       :consumers [:t97A01 :t94J09],
-      :depends-on ["finiteWedgeRightBaseCounitSquare_holds"],
+      :depends-on
+      ["finiteWedgeRightBaseCounitNormalFormTrivial_holds"],
       :area "polygon-quotient-homology"}],
     :statement-hashes {:registry "166/0"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason
-    "Banked finite successor specialization of the fixed-endpoint counit implication.",
+    :reason "Banked the exact finite counit normal-form obstruction.",
     :commands
     [{:cmd
       "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology",
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-     {:cmd "git show --check 7ab20a080", :exit 0}
+     {:cmd "git show --check be50b6265", :exit 0}
      {:cmd "exact commit blob | lake env lean /dev/stdin", :exit 0}
      {:cmd
-      "#print axioms finiteWedgeCoherentRightSourceUnitSquare_of_counit",
+      "#print axioms finiteWedgeRightBaseCounitSquare_iff_normalFormTrivial",
       :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1791983832795-11824-c7726d89",
-     :commands
-     ["git show/diff 7ab20a080; sha256sum"
-      "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology"
-      "lake env lean /dev/stdin (#print axioms)"
-      "placeholder scan; statement-registry check; git show --check"],
-     :finding
-     "PASS: commit 7ab20a080 by topo-6 changes only the scoped Lean file; exact blob SHA-256 e6229da33337db23b6f5c3dbdd8738f8b14d6ff4acffaba6367d6c8bf959e3dc. Exact snapshot builds; 0 placeholders; theorem axioms are propext/Classical.choice/Quot.sound; registry 166/0. Counit square orientation connector.hom≫counit.hom=connector.hom matches the generic hypothesis, which rewrites mapped unit⁻¹ via the triangle identity and yields the coherent source square. Real compiled program progress; remaining milestones list proving finiteWedgeRightBaseCounitSquare, then installed overlap transport."},
-    :commit "7ab20a080",
+    :commit "be50b6265",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
     {:path "ConstructionTargets/PolygonSurfaceHomology.lean",
      :sha256
-     "e6229da33337db23b6f5c3dbdd8738f8b14d6ff4acffaba6367d6c8bf959e3dc"},
+     "d9271e4ad7700d097cf2090826a715f522e8c33fdba2da5e2dd182655d4ccec4"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -90084,7 +90072,8 @@
    :depends-on
    [:lemma-finitewedgerightbaseinoldfactor-iff-connectortransport
     :lemma-finitewedgerightbasetargetunitsquare
-    :lemma-finitewedgerightbasecounitsquare-holds],
+    :lemma-finitewedgerightbasecounitsquare-holds
+    :lemma-finitewedgerightbasecounitnormalformtrivial-holds],
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
@@ -90162,6 +90151,42 @@
     "literal final-leg connectors respect the right-equivalence counit",
     :area "polygon-quotient-homology"},
    :id :lemma-finitewedgerightbasecounitsquare-holds,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t94J09]}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "finiteWedgeRightBaseCounitSquare_iff_normalFormTrivial",
+    :type
+    "literal counit square iff its connector normal form is identity"},
+   :lemma
+   {:name "finiteWedgeRightBaseCounitSquare_iff_normalFormTrivial",
+    :reported-by [:program-2026-10-13-polygon-surface-homology],
+    :type
+    "literal counit square iff its connector normal form is identity",
+    :area "polygon-quotient-homology",
+    :proved-in :program-2026-10-13-polygon-surface-homology},
+   :id :lemma-finitewedgerightbasecounitsquare-iff-normalformtrivial,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t94J09]}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "finiteWedgeRightBaseCounitNormalFormTrivial_holds",
+    :type
+    "right-equivalence counit has trivial connector normal form"},
+   :lemma
+   {:name "finiteWedgeRightBaseCounitNormalFormTrivial_holds",
+    :reported-by [:program-2026-10-13-polygon-surface-homology],
+    :type "right-equivalence counit has trivial connector normal form",
+    :area "polygon-quotient-homology"},
+   :id :lemma-finitewedgerightbasecounitnormalformtrivial-holds,
    :kind :lemma,
    :depends-on [],
    :other-consumers [:t94J09]}]}
