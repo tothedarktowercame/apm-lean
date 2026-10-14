@@ -87901,64 +87901,56 @@
   {:consumer :t97A01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Apply H1 naturality and compute signed arc sum; then B8-B10.",
+    "Compute the signed boundary-arc Hurewicz sum; then finish B7 and B8-B10.",
     :outcome :stop,
-    :warnings ["preexisting lint"],
+    :warnings ["preexisting lint; unrelated edits preserved"],
     :missing-theorems
-    [{:name "singularHomologyIsoOfHomotopyEquiv_inv_h1",
-      :type "inverse iso map",
+    [{:name "radialIntersectionToOuterH1_generator_eq_boundaryLoop",
+      :type "chosen generator maps to boundary-loop H1 class",
       :status :proved,
       :consumers [:t97A01 :t94J09],
-      :depends-on [],
+      :depends-on
+      ["radialOverlapCircle_h1_naturality"
+       "radialIntersectionToOuterH1_positiveGenerator_eq"],
       :area "polygon-quotient-homology"}
-     {:name "radialIntersectionPositiveGenerator_eq",
-      :type "generator is circle class",
-      :status :proved,
-      :consumers [:t97A01 :t94J09],
-      :depends-on [],
-      :area "polygon-quotient-homology"}
-     {:name "radialIntersectionToOuterH1_positiveGenerator_eq",
-      :type "outer image is overlap class",
-      :status :proved,
-      :consumers [:t97A01 :t94J09],
-      :depends-on ["radialIntersectionPositiveGenerator_eq"],
-      :area "polygon-quotient-homology"}
-     {:name "radialIntersectionToOuterH1_generator_eq_boundaryLoop",
-      :type "generator maps to boundary loop",
+     {:name "polygonBoundaryWedgeLoop_hurewicz",
+      :type "boundary-loop coordinates equal attachingDegree",
       :status :partial,
       :consumers [:t97A01 :t94J09],
-      :depends-on ["radialOverlapCircle_h1_naturality"],
+      :depends-on ["polygonBoundaryWedgeLoop_edgePoint"],
+      :area "polygon-quotient-homology"}
+     {:name "radialMV_boundary_eq",
+      :type "B7 boundary equality",
+      :status :partial,
+      :consumers [:t97A01 :t94J09],
+      :depends-on ["polygonBoundaryWedgeLoop_hurewicz"],
       :area "polygon-quotient-homology"}],
     :statement-hashes {:registry "166/0"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked intersection generator and unsigned outer image.",
+    :reason "Banked H1 naturality for the exact MV generator.",
     :commands
     [{:cmd
       "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology",
       :exit 0}
-     {:cmd "statement-registry.py check", :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder scan", :exit 0}
      {:cmd "axioms check", :exit 0}
-     {:cmd "git show --check c18e32fe2", :exit 0}],
-    :diagnostic-history
-    [{:cmd "proof drafts",
-      :exit 1,
-      :correction "cancellation and categorical application"}],
-    :commit "c18e32fe2",
+     {:cmd "git show --check 849242d93", :exit 0}],
+    :commit "849242d93",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
     {:path "ConstructionTargets/PolygonSurfaceHomology.lean",
      :sha256
-     "7d42fbfad72de3febc57c5d64235ed00fe51606c84217755bae63f682b5930e1"},
+     "d9a60c8e06ecdfcf08bc90f4a77bf72040723c8cdea336ef74a29cc49563a49b"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -91302,7 +91294,8 @@
    [:lemma-radialmvsegment
     :lemma-radialmvboundarygroup-one
     :lemma-radialouterboundarygenerator-eq-attachingouterclass
-    :lemma-radialintersectiontoouterh1-generator-eq-neg-attachingouterclass],
+    :lemma-radialintersectiontoouterh1-generator-eq-neg-attachingouterclass
+    :lemma-polygonboundarywedgeloop-hurewicz],
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
@@ -91480,13 +91473,15 @@
    {:name "radialIntersectionToOuterH1_generator_eq_boundaryLoop",
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "overlap inclusion generator is boundary-loop H1 class",
-    :area "polygon-quotient-homology"},
+    :area "polygon-quotient-homology",
+    :proved-in :program-2026-10-13-polygon-surface-homology},
    :id :lemma-radialintersectiontoouterh1-generator-eq-boundaryloop,
    :kind :lemma,
    :depends-on
    [:lemma-polygonboundarywedgeloop-edgepoint
     :lemma-outerhomotopyequivwedge-radialoverlapcircle
-    :lemma-radialoverlapcircle-h1-naturality],
+    :lemma-radialoverlapcircle-h1-naturality
+    :lemma-radialintersectiontoouterh1-positivegenerator-eq],
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
