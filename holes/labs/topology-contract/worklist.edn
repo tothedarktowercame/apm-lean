@@ -119066,21 +119066,21 @@
   {:consumer :t00J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 6,
+   :stop-count 7,
    :review-finding
    "Representation-boundary defect: regularFiber_componentSignedCount_eq_zero indexes literal fiber points but assigns each point the global circleDegree of a chosen whole-component lift. Degree zero does not imply each local degree is zero (a degree-zero circle map may have regular preimages of local degrees +1 and -1), so the listed next step local-degree/component-degree equality is false and this lemma cannot bridge to the regular-value signed count. Repair by grouping fiber points by genuine preimage components and proving that the sum of local degrees on each component equals the lift degree, then sum the zero component totals. Archived files compile; hashes/placeholders/registry reproduce.",
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
     :residual
-    "Construct local degrees; prove each occupied component sum equals its lift degree; assemble Main.",
+    "Construct local degrees; prove component sums equal lift degrees; assemble Main.",
     :outcome :stop,
-    :warnings ["Main sorryAx"],
+    :warnings ["Main sorryAx" "unrelated edit"],
     :missing-theorems
-    [{:name "OccupiedRegularFiberComponent",
-      :type "finite genuine components meeting the regular fiber",
+    [{:name "occupiedRegularFiber_exactZeroDegreeLifts",
+      :type "exact occupied-component lifts have degree zero",
       :status :proved,
       :consumers [:t00J02],
-      :depends-on ["regularFiberComponentIndex"],
+      :depends-on ["OccupiedRegularFiberComponent"],
       :area "oriented-surface-degree"}
      {:name "t00J02_transverse_diskBounded_topHomologyMap_eq_zero",
       :type "H2 map zero",
@@ -119088,21 +119088,21 @@
       :consumers [:t00J02],
       :depends-on
       ["regularValue_topHomologyMap_signedCount"
-       "OccupiedRegularFiberComponent"
+       "occupiedRegularFiber_exactZeroDegreeLifts"
        "groupedComponentSignedCount_eq_zero_of_comparison"],
       :area "oriented-surface-degree"}],
     :statement-hashes
     {:source
      "0b3b4888807bfa06c8d60d86829b75776394ea8aa45a98c933c087165521f923",
      :implementation
-     "ab5afddbcf942747e9e1765faee4fc39db1ca350ff58de3f6ec8517dfceef737",
+     "4a82963b73d8f7ff020c81c93e43c3d0288df2d9788cf383255b55c729fa58d9",
      :blueprint
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984",
      :registry "166/166"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-2,
-    :reason "Banked finite occupied components.",
+    :reason "Banked exact component lifts.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t00J02Closure.lean",
       :exit 0}
@@ -119110,21 +119110,8 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "hash/diff/placeholders", :exit 0}],
     :diagnostic-history
-    [{:cmd "fintype draft",
-      :exit 1,
-      :finding "used Set.fintypeRange"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1792004458439-12220-8c97db40",
-     :commands
-     ["git diff-tree/show 63b0cae"
-      "git archive 63b0cae; lake env lean t00J02Closure.lean and Main.lean"
-      "sha256sum and placeholder counts at 63b0cae"
-      "python3 scripts/statement-registry.py check"],
-     :finding
-     "PASS program STOP: new in-scope commit restricts the component index to the finite range actually occupied by the chosen regular fiber, avoiding any claim that all preimage components meet it and preserving the point/component boundary. Archived files compile; closure has 0 placeholders and standard axioms only; Main remains frozen at 0b3b4888 with baseline 1 placeholder; fixture afb497a6 matches; registry 166/166. Local degrees, occupied-component sum comparison, and final assembly remain listed."},
-    :commit "63b0caefb1239e8f32f0e496841f0cb825ac527f",
+    [{:cmd "lift draft", :exit 1, :finding "fixed casts/choice/Mono"}],
+    :commit "8aa8be49e5271bdc8f77f9ad025131f3f38d45de",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t00J02Closure.blueprint.md",
@@ -119132,7 +119119,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119364,7 +119351,8 @@
     :lemma-groupedcomponentsignedcount-eq-zero
     :lemma-regularfibercomponentindex
     :lemma-groupedcomponentsignedcount-eq-zero-of-comparison
-    :lemma-occupiedregularfibercomponent],
+    :lemma-occupiedregularfibercomponent
+    :lemma-occupiedregularfiber-exactzerodegreelifts],
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
@@ -119719,6 +119707,23 @@
    :id :lemma-occupiedregularfibercomponent,
    :kind :lemma,
    :depends-on [:lemma-regularfibercomponentindex],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "occupiedRegularFiber_exactZeroDegreeLifts",
+    :type "exact occupied-component lifts have degree zero"},
+   :lemma
+   {:name "occupiedRegularFiber_exactZeroDegreeLifts",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type "exact occupied-component lifts have degree zero",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02},
+   :id :lemma-occupiedregularfiber-exactzerodegreelifts,
+   :kind :lemma,
+   :depends-on [:lemma-occupiedregularfibercomponent],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
