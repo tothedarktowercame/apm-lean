@@ -12,7 +12,8 @@ the integer coefficient records that later signed choice explicitly.
 -/
 
 open CategoryTheory
-open scoped Manifold
+open Filter
+open scoped Manifold Topology
 noncomputable section
 set_option autoImplicit false
 
@@ -117,6 +118,34 @@ preimage to the literal equality fiber used by the signed-count construction. -/
     (fun x : {x : S // f x = y} =>
       (⟨x, by simp⟩ : f ⁻¹' {y}))
     (fun _ _ h => Subtype.ext (congrArg Subtype.val h))
+
+/-- Pointwise local injectivity along one fiber, the exact topological output
+needed from the later regular-value construction. -/
+def LocallyInjectiveAlongFiber
+    {X Y : Type} [TopologicalSpace X] (f : X → Y) (y : Y) : Prop :=
+  ∀ x, f x = y → ∃ U ∈ 𝓝 x, Set.InjOn f U
+
+/-- Local injectivity at every point of a fiber makes the singleton preimage
+a discrete subset. -/
+theorem isDiscrete_preimage_singleton_of_locallyInjectiveAlongFiber
+    {X Y : Type} [TopologicalSpace X] (f : X → Y) (y : Y)
+    (hlocal : LocallyInjectiveAlongFiber f y) : IsDiscrete (f ⁻¹' {y}) := by
+  rw [isDiscrete_iff_forall_exists_isOpen]
+  intro x hx
+  have hxy : f x = y := by simpa using hx
+  rcases hlocal x hxy with ⟨U, hU, hinj⟩
+  rcases mem_nhds_iff.mp hU with ⟨V, hVU, hVopen, hxV⟩
+  refine ⟨V, hVopen, ?_⟩
+  ext z
+  constructor
+  · intro hz
+    have hzy : f z = y := by simpa using hz.2
+    have hzx : z = x := hinj (hVU hz.1) (hVU hxV) (hzy.trans hxy.symm)
+    exact hzx ▸ Set.mem_singleton x
+  · intro hz
+    have hzx : z = x := Set.mem_singleton_iff.mp hz
+    subst z
+    exact ⟨hxV, hx⟩
 
 /-- The range-sum formulation used by the frozen surface problem gives the
 operational coproduct-surjectivity witness at every incidence point. -/
@@ -511,6 +540,7 @@ end ConstructionTargets.T00J02Closure
 #print axioms ConstructionTargets.T00J02Closure.transverseCircle_preimage_component_signedCount
 #print axioms ConstructionTargets.T00J02Closure.finite_regularFiber_of_isDiscrete
 #print axioms ConstructionTargets.T00J02Closure.regularFiberFintype_of_isDiscrete
+#print axioms ConstructionTargets.T00J02Closure.isDiscrete_preimage_singleton_of_locallyInjectiveAlongFiber
 #print axioms ConstructionTargets.T00J02Closure.transverse_coprodDerivative_surjective
 #print axioms ConstructionTargets.T00J02Closure.regularFiber_zeroDegreeComponentLifts
 #print axioms ConstructionTargets.T00J02Closure.regularFiber_chosenComponentDegree_eq_zero
