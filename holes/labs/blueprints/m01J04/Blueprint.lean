@@ -2445,6 +2445,62 @@ lemma apm_m01J04_mollify_exists_L2_kernel_aux_kernel
   rw [φ.support_normed_eq]
   exact Metric.ball_subset_closedBall
 
+lemma apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity_integrable
+    {d : ℕ} (κ : EuclideanSpace ℝ (Fin d) → ℝ)
+    (hκ : ∀ x, 0 ≤ κ x) (hint : (∫ x, κ x ∂volume) = 1) :
+    Integrable κ volume := by
+  exact integrable_of_integral_eq_one hint
+
+lemma apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity_L1
+    {d : ℕ} (κ : EuclideanSpace ℝ (Fin d) → ℝ)
+    (hκ : ∀ x, 0 ≤ κ x) (hint : (∫ x, κ x ∂volume) = 1) :
+    eLpNorm κ 1 volume = 1 := by
+  have hi : Integrable κ volume :=
+    apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity_integrable κ hκ hint
+  rw [eLpNorm_one_eq_lintegral_enorm,
+    ← ofReal_integral_norm_eq_lintegral_enorm hi]
+  simp_rw [Real.norm_eq_abs, abs_of_nonneg (hκ _), hint, ENNReal.ofReal_one]
+
+lemma apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity_smooth_dense
+    {d : ℕ} {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    (f : EuclideanSpace ℝ (Fin d) → E) (hf : MemLp f 2 volume)
+    {a : ℝ} (ha : 0 < a) :
+    ∃ g : EuclideanSpace ℝ (Fin d) → E,
+      HasCompactSupport g ∧ ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) g ∧
+      (eLpNorm (f - g) 2 volume).toReal ≤ a := by
+  obtain ⟨g, hgK, hgS, hg⟩ := hf.exist_eLpNorm_sub_le
+    (by norm_num : (2 : ℝ≥0∞) ≠ ⊤) (by norm_num : (1 : ℝ≥0∞) ≤ 2) ha
+  refine ⟨g, hgK, hgS, ?_⟩
+  calc
+    (eLpNorm (f - g) 2 volume).toReal
+        ≤ (ENNReal.ofReal a).toReal :=
+          ENNReal.toReal_mono ENNReal.ofReal_ne_top hg
+    _ = a := ENNReal.toReal_ofReal ha.le
+
+/-- `L²` continuity of translation. -/
+lemma apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity_translate
+    {d : ℕ} {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E] [CompleteSpace E]
+    (f : EuclideanSpace ℝ (Fin d) → E) (hf : MemLp f 2 volume)
+    {ε : ℝ} (hε : 0 < ε) :
+    ∃ ρ0 : ℝ, 0 < ρ0 ∧ ∀ y : EuclideanSpace ℝ (Fin d), ‖y‖ ≤ ρ0 →
+      (eLpNorm (fun x ↦ f (x - y) - f x) 2 volume).toReal ≤ ε := by
+  sorry
+
+/-- Minkowski's integral inequality for a probability kernel supported in the
+`ρ`-ball: the mollification error is at most the worst translation error. -/
+lemma apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity_minkowski
+    {d : ℕ} {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E] [CompleteSpace E]
+    (f : EuclideanSpace ℝ (Fin d) → E) (hf : MemLp f 2 volume)
+    {ρ ε : ℝ} (hε : 0 ≤ ε)
+    (htr : ∀ y : EuclideanSpace ℝ (Fin d), ‖y‖ ≤ ρ →
+      (eLpNorm (fun x ↦ f (x - y) - f x) 2 volume).toReal ≤ ε)
+    (κ : EuclideanSpace ℝ (Fin d) → ℝ) (hκ : Continuous κ) (hκ0 : ∀ x, 0 ≤ κ x)
+    (hκ1 : (∫ x, κ x ∂volume) = 1)
+    (hκs : Function.support κ ⊆ Metric.closedBall 0 ρ) :
+    (eLpNorm (MeasureTheory.convolution κ f
+      (ContinuousLinearMap.lsmul ℝ ℝ) volume - f) 2 volume).toReal ≤ ε := by
+  sorry
+
 /-- Approximate identity in `L²`, uniformly over normalised nonnegative
 kernels supported in small balls: `‖κ ⋆ f - f‖₂ ≤ sup_{|y| ≤ ρ} ‖τ_y f - f‖₂`
 (Minkowski's integral inequality) and translation is continuous in `L²`. -/
@@ -2457,7 +2513,10 @@ lemma apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity
         (∫ x, κ x ∂volume) = 1 → Function.support κ ⊆ Metric.closedBall 0 ρ →
         (eLpNorm (MeasureTheory.convolution κ f
           (ContinuousLinearMap.lsmul ℝ ℝ) volume - f) 2 volume).toReal ≤ ε := by
-  sorry
+  obtain ⟨ρ0, hρ0, htr⟩ := apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity_translate f hf hε
+  refine ⟨ρ0, hρ0, fun ρ hρ hρρ0 κ hκ hκ0 hκ1 hκs => ?_⟩
+  exact apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity_minkowski f hf hε.le
+    (fun y hy => htr y (hy.trans hρρ0)) κ hκ hκ0 hκ1 hκs
 
 /-- Simultaneous `L²` approximate-identity estimate for the value and weak
 gradient fields.  This leaf contains no differentiation or `H¹` packaging. -/
