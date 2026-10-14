@@ -119109,6 +119109,17 @@
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "hash/placeholders/diff", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1792020161047-12663-e3e79f72",
+     :commands
+     ["git diff-tree/show 1dd53482"
+      "archive 1dd53482; lake env lean closure and Main"
+      "sha256sum/placeholders at 1dd53482"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS program STOP: new commit changes only t00J02Closure.lean and adds a compiled, sorry-free constructor from a discrete singleton fiber and canonical calculations. The witness stores the same y and circle-membership proof, and its Fintype is definitionally the exact regularFiberFintype_of_isDiscrete instance used by the calculation, avoiding a dependent-instance mismatch. Fixture and frozen Main hashes match; closure has 0 placeholders and Main baseline 1; only standard axioms; registry 166/166. Finding the discrete fiber and proving its calculations from transversality, then Main assembly, remain listed."},
     :commit "1dd5348253adc83eb15080b120507a4c4090bbbb",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
@@ -119117,7 +119128,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119135,7 +119146,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t00J02Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked existential regular-fiber endpoint.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked discrete-fiber witness constructor.",
    :id :program-2026-10-13-close-t00j02,
    :kind :final-adapter,
    :campaign-priority 45,
@@ -119278,7 +119289,10 @@
      :reason "Banked integrated canonical regular-fiber witness."}
     {:job 8,
      :commit "13721a38d02fa8d5a808082d2b96d81e47b93d2c",
-     :reason "Banked existential regular-fiber endpoint."}]}
+     :reason "Banked existential regular-fiber endpoint."}
+    {:job 9,
+     :commit "1dd5348253adc83eb15080b120507a4c4090bbbb",
+     :reason "Banked discrete-fiber witness constructor."}]}
   {:consumer :t98A06,
    :stop-count 4,
    :evidence
@@ -120606,7 +120620,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "canonicalRegularFiberWitness_of_isDiscrete",
@@ -120618,7 +120632,9 @@
     :type
     "discrete circle fiber plus canonical calculations gives witness",
     :area "oriented-surface-degree",
-    :proved-in :program-2026-10-13-close-t00j02},
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "1dd5348253adc83eb15080b120507a4c4090bbbb"},
    :id :lemma-canonicalregularfiberwitness-of-isdiscrete,
    :kind :lemma,
    :depends-on [:lemma-regularfiberfintype-of-isdiscrete],
