@@ -53,11 +53,61 @@ theorem t98J01_sphere_homology_vanishes_above_two :
 
 /-- Seat: the half-turn has trace `1` on rational `H₀(S²)`. -/
 -- BEGIN SEAT AREA
+noncomputable def t98J01_rotation_trace_zero_aux_homeomorph :
+    T98J01.S2 ≃ₜ T02A06.euclideanUnitSphere 3 where
+  toFun p := ⟨WithLp.toLp 2 ![p.1.1, p.1.2.1, p.1.2.2], by
+    rw [Metric.mem_sphere, dist_zero_right, EuclideanSpace.norm_eq]
+    rw [show (∑ i : Fin 3, ‖(WithLp.toLp 2 ![p.1.1, p.1.2.1, p.1.2.2] :
+        EuclideanSpace ℝ (Fin 3)) i‖ ^ 2) = 1 by
+      norm_num [Fin.sum_univ_succ, Real.norm_eq_abs, sq_abs]
+      simpa [add_assoc] using p.2]
+    norm_num⟩
+  invFun x := ⟨(x.1 0, x.1 1, x.1 2), by
+    have hx : ‖x.1‖ = 1 := by
+      simpa [Metric.mem_sphere, dist_zero_right] using x.2
+    rw [EuclideanSpace.norm_eq] at hx
+    norm_num [Fin.sum_univ_succ] at hx
+    have hh : (‖x.1 0‖ ^ 2 + ‖x.1 1‖ ^ 2 + ‖x.1 2‖ ^ 2) = 1 := by
+      simpa [Real.norm_eq_abs, sq_abs, add_assoc] using hx
+    simpa [Real.norm_eq_abs, sq_abs, add_assoc] using hh⟩
+  left_inv p := by ext <;> rfl
+  right_inv x := by ext i; fin_cases i <;> rfl
+  continuous_toFun := by
+    apply Continuous.subtype_mk
+    apply (PiLp.continuous_toLp 2 _).comp
+    apply continuous_pi
+    intro i
+    fin_cases i <;> simp <;> fun_prop
+  continuous_invFun := by
+    apply Continuous.subtype_mk
+    fun_prop
+
 theorem t98J01_rotation_trace_zero :
     LinearMap.trace ℚ
       (ConstructionTargets.RationalLefschetz.Homology T98J01.S2 0)
       (ConstructionTargets.RationalLefschetz.induced t98J01_rotationCM 0).hom = 1 := by
-  sorry
+  letI : PathConnectedSpace T98J01.S2 :=
+    t98J01_rotation_trace_zero_aux_homeomorph.symm.surjective.pathConnectedSpace
+      t98J01_rotation_trace_zero_aux_homeomorph.symm.continuous
+  let p : T98J01.S2 := ⟨(0, 0, 1), by norm_num⟩
+  let e := ConstructionTargets.CoefficientH0.h0Iso ℚ p
+  have hmap : ConstructionTargets.RationalLefschetz.induced
+      t98J01_rotationCM 0 = CategoryTheory.CategoryStruct.id _ := by
+    apply (CategoryTheory.cancel_mono e.hom).mp
+    simpa [e, ConstructionTargets.RationalLefschetz.induced,
+      ConstructionTargets.CoefficientH0.singularPostcomposition] using
+      (ConstructionTargets.CoefficientH0.h0Augmentation_naturality ℚ
+        t98J01_rotationCM)
+  letI : FiniteDimensional ℚ
+      (ConstructionTargets.RationalLefschetz.Homology T98J01.S2 0) :=
+    FiniteDimensional.of_injective e.hom.hom e.toLinearEquiv.injective
+  rw [hmap]
+  change LinearMap.trace ℚ _ LinearMap.id = 1
+  rw [LinearMap.trace_id]
+  have he : (ConstructionTargets.RationalLefschetz.Homology T98J01.S2 0) ≃ₗ[ℚ] ℚ :=
+    e.toLinearEquiv
+  rw [he.finrank_eq]
+  simp
 -- END SEAT AREA
 
 /-- Seat: the half-turn has trace `0` on rational `H₁(S²)`. -/
