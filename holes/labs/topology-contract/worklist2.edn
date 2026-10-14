@@ -88266,40 +88266,40 @@
    :program true,
    :other-consumers []}
   {:consumer :t92J06,
-   :stop-count 6,
+   :stop-count 7,
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Build local charts/fibers; then Cayley tree and finite invariants.",
+    "Build edge/vertex charts and exact fibers; then Cayley tree and finite invariants.",
     :outcome :stop,
     :warnings
     ["Main: 1 prior placeholder; prior lint/unrelated edits preserved"],
     :missing-theorems
-    [{:name "intervalCircle_eq_imp_coordinate_cases",
-      :type "equal images give equal coordinates or endpoints",
+    [{:name "inl_eq_inr_iff",
+      :type "wedge legs meet only at basepoint",
       :status :proved,
       :consumers [:t92J06],
       :depends-on [],
       :area "graph-covering-realization"}
-     {:name "intervalCircle_injective_on_interior",
-      :type "injective for 0<t<1",
+     {:name "edgeProjection_eq_of_interior",
+      :type "interior image determines label and coordinate",
       :status :proved,
       :consumers [:t92J06],
-      :depends-on ["intervalCircle_eq_imp_coordinate_cases"],
+      :depends-on
+      ["intervalCircle_injective_on_interior" "inl_eq_inr_iff"],
       :area "graph-covering-realization"}
      {:name "twoLoopGraphCoverData_realization",
       :type "local charts and fibers",
       :status :partial,
       :consumers [:t92J06],
-      :depends-on
-      ["twoLoopGraphCoverData_projection"
-       "intervalCircle_injective_on_interior"],
+      :depends-on ["edgeProjection_eq_of_interior"],
       :area "graph-covering-realization"}],
     :statement-hashes {:registry "166/0"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked edge-interval injectivity.",
+    :reason
+    "Banked exact wedge-leg and interior projection separation.",
     :commands
     [{:cmd "lake -Kjobs=1 build ConstructionTargets.t92J06Closure",
       :exit 0}
@@ -88307,33 +88307,20 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder scan", :exit 0}
      {:cmd "axioms check", :exit 0}
-     {:cmd "git show --check b6557d1f4", :exit 0}],
+     {:cmd "git show --check 016d44b93", :exit 0}],
     :diagnostic-history
-    [{:cmd "endpoint proof", :exit 1, :correction "swapped signs"}
-     {:cmd "axioms query",
+    [{:cmd "endpoint-case draft",
       :exit 1,
-      :correction "qualified namespace"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792007831835-12293-1eee024f",
-     :commands
-     ["git show/diff b6557d1f4; blob sha256; diff --check"
-      "lake -Kjobs=1 build ConstructionTargets.t92J06Closure"
-      "lake env lean problems/t92J06/lean/Main.lean"
-      "lake env lean /dev/stdin (#print axioms)"
-      "placeholder scan; statement-registry.py check"],
-     :finding
-     "PASS: b6557d1f4 (topo-6) changes only scoped t92J06Closure.lean; fixture SHA-256 381db41ab6c7e65001439ef6fd6a71f87fba942574f95b69de5a65ad9a827ea0 matches. Exact target and Main elaborate; closure has 0 placeholders, Main retains 1 prior placeholder; new lemmas use standard axioms; registry 166/0. exp equality gives t=u+k with k in {-1,0,1}; signs correctly identify the two endpoint pairs, and interior hypotheses exclude them. New sorry-free compiled progress; remaining: local charts/fibers, Cayley tree, finite invariants."},
-    :commit "b6557d1f4",
+      :correction "separated endpoint alternatives"}],
+    :commit "016d44b93",
     :changed-paths ["ConstructionTargets/t92J06Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t92J06Closure.lean",
      :sha256
-     "381db41ab6c7e65001439ef6fd6a71f87fba942574f95b69de5a65ad9a827ea0"},
+     "2a7eab33420848d73d91722b184f1a1d0ce856246744bc0f741eef26e46a24c8"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t92J06/lean/Main.lean"
     "problems/t92J06/status.json"
@@ -90033,7 +90020,8 @@
    :depends-on
    [:lemma-twoloopgraphcoverdata-localstars
     :lemma-twoloopgraphcoverdata-projection
-    :lemma-intervalcircle-injective-on-interior],
+    :lemma-intervalcircle-injective-on-interior
+    :lemma-edgeprojection-eq-of-interior],
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
@@ -91613,4 +91601,39 @@
    :id :lemma-radialintersectiontoouterh1-positivegenerator-eq,
    :kind :lemma,
    :depends-on [:lemma-radialintersectionpositivegenerator-eq],
-   :other-consumers [:t94J09]}]}
+   :other-consumers [:t94J09]}
+  {:consumer :t92J06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "inl_eq_inr_iff",
+    :type "wedge legs meet only at basepoint"},
+   :lemma
+   {:name "inl_eq_inr_iff",
+    :reported-by [:program-2026-10-13-close-t92j06],
+    :type "wedge legs meet only at basepoint",
+    :area "graph-covering-realization",
+    :proved-in :program-2026-10-13-close-t92j06},
+   :id :lemma-inl-eq-inr-iff,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t92J06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "edgeProjection_eq_of_interior",
+    :type "interior image determines label and coordinate"},
+   :lemma
+   {:name "edgeProjection_eq_of_interior",
+    :reported-by [:program-2026-10-13-close-t92j06],
+    :type "interior image determines label and coordinate",
+    :area "graph-covering-realization",
+    :proved-in :program-2026-10-13-close-t92j06},
+   :id :lemma-edgeprojection-eq-of-interior,
+   :kind :lemma,
+   :depends-on
+   [:lemma-intervalcircle-injective-on-interior :lemma-inl-eq-inr-iff],
+   :other-consumers []}]}
