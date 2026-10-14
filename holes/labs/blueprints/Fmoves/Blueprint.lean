@@ -2299,6 +2299,64 @@ lemma mergeRepeatedBlock_aux_boundary_relation_aux_reverse_aux_merged_aux_upper_
   simp [reverseParameter]
   ring
 
+/-- The `a`-labelled generators are exactly the pairs (edge `a` at `s`, edge
+`a⁻¹` at `1 - s`), in either order (freshness of `a`; opposite signs). -/
+lemma mergeRepeatedBlock_aux_boundary_relation_aux_reverse_aux_merged_aux_cases
+    {Label : Type*} [DecidableEq Label]
+    (u v t : List (Signed Label)) (y z a : Signed Label)
+    (hyz : y.1 ≠ z.1)
+    (ha : a.1 ∉ (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t).map Prod.fst)
+    (hy : ((u ++ v ++ t).map Prod.fst).count y.1 = 0)
+    (hz : ((u ++ v ++ t).map Prod.fst).count z.1 = 0)
+    (hw : IsPolygonWord (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t))
+    (g : Circle ≃ₜ Circle) (hg : MergeRepeatedBlockEdgeSpec g u.length v.length t.length)
+    (i j : Fin (u ++ [a] ++ v ++ [inv a] ++ t).length) (hij : i ≠ j) (s : Set.Icc (0 : ℝ) 1)
+    (hlab : ((u ++ [a] ++ v ++ [inv a] ++ t).get i).1 = ((u ++ [a] ++ v ++ [inv a] ++ t).get j).1) (heq : ((u ++ [a] ++ v ++ [inv a] ++ t).get i).1 = a.1)
+    (d₁ d₂ : Circle)
+    (h₁ : circleToDisk d₁ = edgePoint (u ++ [a] ++ v ++ [inv a] ++ t).length i s)
+    (h₂ : circleToDisk d₂ = edgePoint (u ++ [a] ++ v ++ [inv a] ++ t).length j
+      (if ((u ++ [a] ++ v ++ [inv a] ++ t).get i).2 = ((u ++ [a] ++ v ++ [inv a] ++ t).get j).2 then s else reverseParameter s)) :
+    ∃ s' : Set.Icc (0 : ℝ) 1,
+      (circleToDisk d₁ = edgePoint (u ++ [a] ++ v ++ [inv a] ++ t).length u.length s' ∧
+        circleToDisk d₂ = edgePoint (u ++ [a] ++ v ++ [inv a] ++ t).length (u.length + 1 + v.length) (reverseParameter s')) ∨
+      (circleToDisk d₂ = edgePoint (u ++ [a] ++ v ++ [inv a] ++ t).length u.length s' ∧
+        circleToDisk d₁ = edgePoint (u ++ [a] ++ v ++ [inv a] ++ t).length (u.length + 1 + v.length) (reverseParameter s')) := by
+  sorry
+
+/-- Lower half of `a`: it is the image of `y`, glued to `y⁻¹`. -/
+lemma mergeRepeatedBlock_aux_boundary_relation_aux_reverse_aux_merged_aux_lowerHalf
+    {Label : Type*} [DecidableEq Label]
+    (u v t : List (Signed Label)) (y z a : Signed Label)
+    (hyz : y.1 ≠ z.1)
+    (ha : a.1 ∉ (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t).map Prod.fst)
+    (hy : ((u ++ v ++ t).map Prod.fst).count y.1 = 0)
+    (hz : ((u ++ v ++ t).map Prod.fst).count z.1 = 0)
+    (hw : IsPolygonWord (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t))
+    (g : Circle ≃ₜ Circle) (hg : MergeRepeatedBlockEdgeSpec g u.length v.length t.length)
+    (s : Set.Icc (0 : ℝ) 1) (hs : s.1 ≤ 1 / 2) (d₁ d₂ : Circle)
+    (h₁ : circleToDisk d₁ = edgePoint (u ++ [a] ++ v ++ [inv a] ++ t).length u.length s)
+    (h₂ : circleToDisk d₂ = edgePoint (u ++ [a] ++ v ++ [inv a] ++ t).length (u.length + 1 + v.length) (reverseParameter s)) :
+    Relation.EqvGen (fun p q : Circle => WordRel (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t) (circleToDisk p) (circleToDisk q))
+      (g.symm d₁) (g.symm d₂) := by
+  sorry
+
+/-- Upper half of `a`: it is the image of `z`, glued to `z⁻¹`. -/
+lemma mergeRepeatedBlock_aux_boundary_relation_aux_reverse_aux_merged_aux_upperHalf
+    {Label : Type*} [DecidableEq Label]
+    (u v t : List (Signed Label)) (y z a : Signed Label)
+    (hyz : y.1 ≠ z.1)
+    (ha : a.1 ∉ (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t).map Prod.fst)
+    (hy : ((u ++ v ++ t).map Prod.fst).count y.1 = 0)
+    (hz : ((u ++ v ++ t).map Prod.fst).count z.1 = 0)
+    (hw : IsPolygonWord (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t))
+    (g : Circle ≃ₜ Circle) (hg : MergeRepeatedBlockEdgeSpec g u.length v.length t.length)
+    (s : Set.Icc (0 : ℝ) 1) (hs : 1 / 2 ≤ s.1) (d₁ d₂ : Circle)
+    (h₁ : circleToDisk d₁ = edgePoint (u ++ [a] ++ v ++ [inv a] ++ t).length u.length s)
+    (h₂ : circleToDisk d₂ = edgePoint (u ++ [a] ++ v ++ [inv a] ++ t).length (u.length + 1 + v.length) (reverseParameter s)) :
+    Relation.EqvGen (fun p q : Circle => WordRel (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t) (circleToDisk p) (circleToDisk q))
+      (g.symm d₁) (g.symm d₂) := by
+  sorry
+
 /-- Reverse generators for the `a` / `a⁻¹` pair: split the parameter at `1/2`; the lower half comes from `y` / `y⁻¹`, the upper half from `z` / `z⁻¹` (`hg.on_y/on_z/on_inv_z/on_inv_y`). -/
 lemma mergeRepeatedBlock_aux_boundary_relation_aux_reverse_aux_merged
     {Label : Type*} [DecidableEq Label]
@@ -2317,7 +2375,15 @@ lemma mergeRepeatedBlock_aux_boundary_relation_aux_reverse_aux_merged
       (if ((u ++ [a] ++ v ++ [inv a] ++ t).get i).2 = ((u ++ [a] ++ v ++ [inv a] ++ t).get j).2 then s else reverseParameter s)) :
     Relation.EqvGen (fun p q : Circle => WordRel (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t) (circleToDisk p) (circleToDisk q))
       (g.symm d₁) (g.symm d₂) := by
-  sorry
+  obtain ⟨s', h⟩ := mergeRepeatedBlock_aux_boundary_relation_aux_reverse_aux_merged_aux_cases u v t y z a hyz ha hy hz hw g hg i j hij s hlab heq d₁ d₂ h₁ h₂
+  rcases h with ⟨e₁, e₂⟩ | ⟨e₁, e₂⟩
+  · rcases le_total s'.1 (1 / 2) with hs | hs
+    · exact mergeRepeatedBlock_aux_boundary_relation_aux_reverse_aux_merged_aux_lowerHalf u v t y z a hyz ha hy hz hw g hg s' hs d₁ d₂ e₁ e₂
+    · exact mergeRepeatedBlock_aux_boundary_relation_aux_reverse_aux_merged_aux_upperHalf u v t y z a hyz ha hy hz hw g hg s' hs d₁ d₂ e₁ e₂
+  · apply Relation.EqvGen.symm
+    rcases le_total s'.1 (1 / 2) with hs | hs
+    · exact mergeRepeatedBlock_aux_boundary_relation_aux_reverse_aux_merged_aux_lowerHalf u v t y z a hyz ha hy hz hw g hg s' hs d₂ d₁ e₁ e₂
+    · exact mergeRepeatedBlock_aux_boundary_relation_aux_reverse_aux_merged_aux_upperHalf u v t y z a hyz ha hy hz hw g hg s' hs d₂ d₁ e₁ e₂
 
 /-- Reverse generators: each identified target pair pulls back under `g⁻¹` to a
 related source pair (split the `a` / `a⁻¹` parameter at `1/2`). -/
