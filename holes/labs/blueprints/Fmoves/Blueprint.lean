@@ -968,6 +968,30 @@ lemma cutAndPaste_aux_span_aux_x_count {Label : Type*} [DecidableEq Label]
   simp [List.count_eq_zero.mpr hu, List.count_eq_zero.mpr hv,
     List.count_eq_zero.mpr ht]
 
+lemma cutAndPaste_aux_span_aux_label_counts {Label : Type*} [DecidableEq Label]
+    (u v t : List (Signed Label)) (x : Signed Label) (a : Label) :
+    ((u ++ [x] ++ v ++ [x] ++ t).map Prod.fst).count a =
+      ((u ++ [x, x] ++ inverseWord v ++ t).map Prod.fst).count a := by
+  have hv : (inverseWord v).map Prod.fst = (v.map Prod.fst).reverse := by
+    simp [inverseWord, Function.comp_def, inv]
+  simp only [List.map_append, List.count_append, List.map_cons, List.map_nil]
+  rw [hv, List.count_reverse]
+  simp [List.count_cons]
+  omega
+
+lemma cutAndPaste_aux_span_aux_target_polygon {Label : Type*} [DecidableEq Label]
+    (u v t : List (Signed Label)) (x : Signed Label)
+    (hw : IsPolygonWord (u ++ [x] ++ v ++ [x] ++ t)) :
+    IsPolygonWord (u ++ [x, x] ++ inverseWord v ++ t) := by
+  refine ⟨cutAndPaste_aux_target_nonempty u v t x hw,
+    cutAndPaste_aux_target_even_length u v t x hw, ?_⟩
+  intro a ha
+  rw [← cutAndPaste_aux_span_aux_label_counts u v t x a]
+  apply hw.2.2
+  apply List.count_pos_iff.mp
+  rw [cutAndPaste_aux_span_aux_label_counts u v t x a]
+  exact List.count_pos_iff.mpr ha
+
 /-- The geometric content of cut-and-paste: `Y = Fin 2 × Disk` (two triangles,
 each parametrised by a disk).  `a` places them on either side of the diagonal
 from the start of the first `x` to the start of the second; `b` places them
