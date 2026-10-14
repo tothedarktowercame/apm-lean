@@ -658,6 +658,29 @@ lemma inversePairCancellation_aux_collapse_aux_source_polygonWord
       have hc := hrest.2.2 a ha'
       simpa [List.count_append, List.count_cons, hax, Ne.symm hax] using hc
 
+lemma inversePairCancellation_aux_collapse_aux_cancelled_pair
+    {Label : Type*} [DecidableEq Label]
+    (u v : List (Signed Label)) (x : Signed Label)
+    (t : Icc (0 : ℝ) 1) :
+    Relation.EqvGen (WordRel (u ++ [x, inv x] ++ v))
+      (edgePoint (u ++ [x, inv x] ++ v).length u.length t)
+      (edgePoint (u ++ [x, inv x] ++ v).length (u.length + 1)
+        (reverseParameter t)) := by
+  apply Relation.EqvGen.rel
+  let i : Fin (u ++ [x, inv x] ++ v).length :=
+    ⟨u.length, by simp⟩
+  let j : Fin (u ++ [x, inv x] ++ v).length :=
+    ⟨u.length + 1, by simp⟩
+  refine ⟨i, j, ?_, t, ?_, ?_, ?_⟩
+  · intro hij
+    have := congrArg Fin.val hij
+    simp [i, j] at this
+  · simp [i, j]
+  · rfl
+  · have hsign : x.2 ≠ (inv x).2 :=
+      Ne.symm (inversePairCancellation_aux_inv_snd_ne x)
+    simp [i, j, hsign]
+
 /-- The geometric content of cancellation: zip the arcs `x` and `x⁻¹` together,
 `x(t)` and `x⁻¹(1-t)` going to the same point of a segment running from the
 boundary into the interior (NOT to a single point: `c` may identify exactly
