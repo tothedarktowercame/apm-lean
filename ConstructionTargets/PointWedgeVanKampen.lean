@@ -5024,6 +5024,40 @@ theorem genericPointWedgeCoherentRightSourceConnectors_connector_hom
       e.inverse.map (genericPointWedgeBasedConnector y₀
         (e.functor.obj A)).hom ≫ e.unitIso.inv.app A := rfl
 
+/-- At the fixed right-cover representative, a literal `Y` connector square
+along the mapped inverse unit supplies the corresponding source square. -/
+theorem genericPointWedgeCoherentRightSourceConnectors_rightBase_unitInv_of_target
+    (htarget :
+      ((genericPointWedgeConnectors y₀).connector
+        ((genericPointWedgeRightGroupoidEquivalence
+          x₀ y₀ M N hM hN hy hx cM cN).functor.obj
+          ((genericPointWedgeRightGroupoidEquivalence
+            x₀ y₀ M N hM hN hy hx cM cN).inverse.obj
+            ((genericPointWedgeRightGroupoidEquivalence
+              x₀ y₀ M N hM hN hy hx cM cN).functor.obj
+              (genericPointWedgeRightBase x₀ y₀ N))))).hom ≫
+        (genericPointWedgeRightGroupoidEquivalence
+          x₀ y₀ M N hM hN hy hx cM cN).functor.map
+          ((genericPointWedgeRightGroupoidEquivalence
+            x₀ y₀ M N hM hN hy hx cM cN).unitIso.inv.app
+            (genericPointWedgeRightBase x₀ y₀ N)) =
+      ((genericPointWedgeConnectors y₀).connector
+        ((genericPointWedgeRightGroupoidEquivalence
+          x₀ y₀ M N hM hN hy hx cM cN).functor.obj
+          (genericPointWedgeRightBase x₀ y₀ N))).hom) :
+    let e := genericPointWedgeRightGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let source := genericPointWedgeCoherentRightSourceConnectors
+      x₀ y₀ M N hM hN hy hx cM cN
+    (source.connector (e.inverse.obj (e.functor.obj
+      (genericPointWedgeRightBase x₀ y₀ N)))).hom ≫
+        e.unitIso.inv.app (genericPointWedgeRightBase x₀ y₀ N) =
+      (source.connector (genericPointWedgeRightBase x₀ y₀ N)).hom := by
+  dsimp only
+  apply connectorSystemChangeBase_connectorSquare
+  apply connectorSystemComapEquivalence_connectorSquare
+  exact htarget
+
 /-- The right-piece connector system transported through the chosen cover
 equivalence and rebased at the literal point `y₀`.  Unlike an independent
 `somePath` choice, its connector square contains the equivalence counit by

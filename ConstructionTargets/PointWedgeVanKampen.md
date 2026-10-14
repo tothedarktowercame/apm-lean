@@ -1494,3 +1494,8 @@ condition needed at either endpoint: the source connector must respect the
 right equivalence inverse-unit. Under that square, functoriality and the
 equivalence triangle identify the installed connector with the mapped source
 connector. The next job proves this source square at the two overlap endpoints.
+`genericPointWedgeCoherentRightSourceConnectors_rightBase_unitInv_of_target`
+specializes the unshifted source endpoint to the fixed right-cover
+representative. Its source inverse-unit square now follows from one literal
+`Y` connector square along the mapped inverse unit, retaining the dependent
+endpoint rather than rewriting it away.
