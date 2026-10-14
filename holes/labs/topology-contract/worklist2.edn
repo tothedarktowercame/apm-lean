@@ -87946,6 +87946,18 @@
     [{:cmd "outer H1 drafts",
       :exit 1,
       :correction "inserted concrete/module comparison iso"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792006088560-12254-6f71025a",
+     :commands
+     ["git show/diff 2a5c82eda; blob sha256; diff --check"
+      "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology"
+      "lake env lean /dev/stdin (#check/#print axioms)"
+      "placeholder scan"
+      "statement-registry.py check"],
+     :finding
+     "PASS: 2a5c82eda (topo-6) changes only scoped PolygonSurfaceHomology.lean; fixture SHA-256 df29ab76b6af8128868e847270b56310341ab5f82ccd777901742e8dac3724da matches. Exact blob builds; 0 placeholders; new iso uses standard axioms; registry 166/0. The composition is correctly oriented outer H1 -> wedge concrete H1 -> wedge module H1 -> fixed orbit coordinates, and #check confirms the stated boundary SpaceH(OuterPiece P,1) ~= (orbit -> Z). New compiled progress; remaining: finite-wedge/outer higher vanishing, B6-B10."},
     :commit "2a5c82eda",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
@@ -87954,7 +87966,7 @@
      "df29ab76b6af8128868e847270b56310341ab5f82ccd777901742e8dac3724da"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -87974,7 +87986,7 @@
     :blueprint
     "ConstructionTargets/PolygonSurfaceHomology.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked coordinate surjectivity and fixed-basis H1 isomorphism.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked radial outer-piece H1 coordinates.",
    :id :program-2026-10-13-polygon-surface-homology,
    :kind :reusable-theorem,
    :campaign-priority 31,
@@ -88163,7 +88175,10 @@
     {:job 6,
      :commit "c1423123c",
      :reason
-     "Banked coordinate surjectivity and fixed-basis H1 isomorphism."}]}
+     "Banked coordinate surjectivity and fixed-basis H1 isomorphism."}
+    {:job 7,
+     :commit "2a5c82eda",
+     :reason "Banked radial outer-piece H1 coordinates."}]}
   {:consumer :t97A01,
    :stop-count 0,
    :phase :implementation,
@@ -90866,7 +90881,7 @@
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "outerH1IsoCoordinates",
@@ -90876,7 +90891,9 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "outer radial H1 equals fixed orbit coordinates",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :program-2026-10-13-polygon-surface-homology,
+    :banked-commit "2a5c82eda"},
    :id :lemma-outerh1isocoordinates,
    :kind :lemma,
    :depends-on
