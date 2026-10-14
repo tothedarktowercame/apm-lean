@@ -88239,68 +88239,62 @@
    :program true,
    :other-consumers []}
   {:consumer :t92J06,
-   :stop-count 5,
+   :stop-count 6,
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Prove local trivializations and fibers; then Cayley tree and finite invariants.",
+    "Build local charts/fibers; then Cayley tree and finite invariants.",
     :outcome :stop,
-    :warnings ["Main has one placeholder; fixed carrier topology"],
+    :warnings
+    ["Main: 1 prior placeholder; prior lint/unrelated edits preserved"],
     :missing-theorems
-    [{:name "twoLoopGraphCoverData_projection",
-      :type
-      "continuous quotient map sending each interval around its circle leg",
+    [{:name "intervalCircle_eq_imp_coordinate_cases",
+      :type "equal images give equal coordinates or endpoints",
       :status :proved,
       :consumers [:t92J06],
-      :depends-on ["twoLoopGraphCoverData_realizationCarrier"],
+      :depends-on [],
+      :area "graph-covering-realization"}
+     {:name "intervalCircle_injective_on_interior",
+      :type "injective for 0<t<1",
+      :status :proved,
+      :consumers [:t92J06],
+      :depends-on ["intervalCircle_eq_imp_coordinate_cases"],
       :area "graph-covering-realization"}
      {:name "twoLoopGraphCoverData_realization",
-      :type "local trivializations and exact fibers",
+      :type "local charts and fibers",
       :status :partial,
       :consumers [:t92J06],
-      :depends-on ["twoLoopGraphCoverData_projection"],
-      :area "graph-covering-realization"}
-     {:name "apm_t92J06_exists_simplyConnected_cover",
-      :type "simply connected Cayley-tree cover",
-      :status :not-started,
-      :consumers [:t92J06],
-      :depends-on ["twoLoopGraphCoverData_realization"],
+      :depends-on
+      ["twoLoopGraphCoverData_projection"
+       "intervalCircle_injective_on_interior"],
       :area "graph-covering-realization"}],
     :statement-hashes {:registry "166/0"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked the graph projection.",
+    :reason "Banked edge-interval injectivity.",
     :commands
-    [{:cmd "lake build ConstructionTargets.t92J06Closure", :exit 0}
+    [{:cmd "lake -Kjobs=1 build ConstructionTargets.t92J06Closure",
+      :exit 0}
      {:cmd "lake env lean problems/t92J06/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-     {:cmd "placeholder+axioms checks", :exit 0}
-     {:cmd "git show --check 4b0a1ca1a", :exit 0}],
+     {:cmd "placeholder scan", :exit 0}
+     {:cmd "axioms check", :exit 0}
+     {:cmd "git show --check b6557d1f4", :exit 0}],
     :diagnostic-history
-    [{:cmd "projection drafts",
+    [{:cmd "endpoint proof", :exit 1, :correction "swapped signs"}
+     {:cmd "axioms query",
       :exit 1,
-      :correction "explicit D; discrete carrier"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792002210554-12107-03e85530",
-     :commands
-     ["git show/diff 4b0a1ca1a; sha256sum"
-      "lake -Kjobs=1 build ConstructionTargets.t92J06Closure"
-      "lake env lean problems/t92J06/lean/Main.lean"
-      "#print axioms; placeholder scan; registry check; git show --check"],
-     :finding
-     "PASS: commit 4b0a1ca1a by topo-6 changes only scoped t92J06Closure.lean; exact blob SHA-256 1b1a0443fa9df2c4362290b8fe896cd179cd441d1e1989a71b519d35e0c48809. Exact snapshot builds; Main checks with its recorded one sorry; support file has 0 placeholders; new declarations use propext/Classical.choice/Quot.sound; registry 166/0. Raw carrier uses Mathlib discrete topology ⊥, quotient topology is coinduced, interval endpoints both map to the rose base, and EqvGen invariance covers source/target, symmetry, and transitivity before quotient_lift continuity. Real compiled progress; remaining milestones are local trivializations/fibers, Cayley tree, and finite-cover invariants."},
-    :commit "4b0a1ca1a",
+      :correction "qualified namespace"}],
+    :commit "b6557d1f4",
     :changed-paths ["ConstructionTargets/t92J06Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t92J06Closure.lean",
      :sha256
-     "1b1a0443fa9df2c4362290b8fe896cd179cd441d1e1989a71b519d35e0c48809"},
+     "381db41ab6c7e65001439ef6fd6a71f87fba942574f95b69de5a65ad9a827ea0"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t92J06/lean/Main.lean"
     "problems/t92J06/status.json"
@@ -89996,7 +89990,8 @@
    :kind :lemma,
    :depends-on
    [:lemma-twoloopgraphcoverdata-localstars
-    :lemma-twoloopgraphcoverdata-projection],
+    :lemma-twoloopgraphcoverdata-projection
+    :lemma-intervalcircle-injective-on-interior],
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
@@ -91097,4 +91092,38 @@
    :id :lemma-radialmvboundarygroup,
    :kind :lemma,
    :depends-on [:lemma-radialmvpiecesexact],
-   :other-consumers [:t94J09]}]}
+   :other-consumers [:t94J09]}
+  {:consumer :t92J06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "intervalCircle_eq_imp_coordinate_cases",
+    :type "equal images give equal coordinates or endpoints"},
+   :lemma
+   {:name "intervalCircle_eq_imp_coordinate_cases",
+    :reported-by [:program-2026-10-13-close-t92j06],
+    :type "equal images give equal coordinates or endpoints",
+    :area "graph-covering-realization",
+    :proved-in :program-2026-10-13-close-t92j06},
+   :id :lemma-intervalcircle-eq-imp-coordinate-cases,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t92J06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "intervalCircle_injective_on_interior",
+    :type "injective for 0<t<1"},
+   :lemma
+   {:name "intervalCircle_injective_on_interior",
+    :reported-by [:program-2026-10-13-close-t92j06],
+    :type "injective for 0<t<1",
+    :area "graph-covering-realization",
+    :proved-in :program-2026-10-13-close-t92j06},
+   :id :lemma-intervalcircle-injective-on-interior,
+   :kind :lemma,
+   :depends-on [:lemma-intervalcircle-eq-imp-coordinate-cases],
+   :other-consumers []}]}
