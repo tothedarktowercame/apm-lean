@@ -259,6 +259,31 @@ theorem regularFiber_mem_indexedComponent
     rw [x.property]
     exact hy)
 
+/-- The genuine preimage components which actually meet one chosen literal
+fiber.  Restricting to this range avoids asserting that every component of the
+whole circle preimage occurs in the regular fiber. -/
+def OccupiedRegularFiberComponent
+    {S : Type} [TopologicalSpace S] (f : C(S, S)) (c : C(Circle, S))
+    (y : S) (hy : y ∈ Set.range c) :=
+  Set.range (regularFiberComponentIndex f c y hy)
+
+/-- A finite regular fiber meets only finitely many genuine preimage
+components. -/
+noncomputable instance occupiedRegularFiberComponent_fintype
+    {S : Type} [TopologicalSpace S] (f : C(S, S)) (c : C(Circle, S))
+    (y : S) (hy : y ∈ Set.range c) [Fintype {x : S // f x = y}] :
+    Fintype (OccupiedRegularFiberComponent f c y hy) := by
+  classical
+  exact Set.fintypeRange (regularFiberComponentIndex f c y hy)
+
+/-- Every point of the chosen fiber has a canonical index in the finite type
+of genuine components which meet that fiber. -/
+def occupiedRegularFiberComponentIndex
+    {S : Type} [TopologicalSpace S] (f : C(S, S)) (c : C(Circle, S))
+    (y : S) (hy : y ∈ Set.range c) :
+    {x : S // f x = y} → OccupiedRegularFiberComponent f c y hy :=
+  fun x => ⟨regularFiberComponentIndex f c y hy x, ⟨x, rfl⟩⟩
+
 /-- Algebraic final step of the regular-value formula: once the top-degree
 coordinate is identified with the component signed count, pointwise zero
 component degrees force that coordinate to vanish. -/
@@ -381,6 +406,8 @@ end ConstructionTargets.T00J02Closure
 #print axioms ConstructionTargets.T00J02Closure.groupedComponentSignedCount_eq_zero_of_comparison
 #print axioms ConstructionTargets.T00J02Closure.regularFiberComponentIndex
 #print axioms ConstructionTargets.T00J02Closure.regularFiber_mem_indexedComponent
+#print axioms ConstructionTargets.T00J02Closure.OccupiedRegularFiberComponent
+#print axioms ConstructionTargets.T00J02Closure.occupiedRegularFiberComponentIndex
 #print axioms ConstructionTargets.T00J02Closure.regularValue_topDegree_eq_zero_of_signedCount
 #print axioms ConstructionTargets.T00J02Closure.surfaceTopDegree_eq_homologyMap
 #print axioms ConstructionTargets.T00J02Closure.surfaceTopHomologyMap_eq_zero_of_surfaceTopDegree_eq_zero
