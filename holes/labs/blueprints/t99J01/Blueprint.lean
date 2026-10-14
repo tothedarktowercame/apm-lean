@@ -44,7 +44,16 @@ theorem t99J01_circle_fundamentalGroup :
 theorem t99J01_twoCircles_fundamentalGroup_coprod :
     Nonempty (FundamentalGroup TwoCircles twoCirclesPoint ≃*
       Monoid.Coprod (FundamentalGroup Circle 1) (FundamentalGroup Circle 1)) := by
-  sorry
+  exact ⟨ConstructionTargets.PointWedgeVanKampen.genericPointWedgeFundamentalGroupEquiv
+    (1 : Circle) (1 : Circle)
+    ConstructionTargets.PointWedgeVanKampen.circleBaseNeighborhood
+    ConstructionTargets.PointWedgeVanKampen.circleBaseNeighborhood
+    ConstructionTargets.PointWedgeVanKampen.circleBaseNeighborhood_isOpen
+    ConstructionTargets.PointWedgeVanKampen.circleBaseNeighborhood_isOpen
+    ConstructionTargets.PointWedgeVanKampen.circleBase_mem
+    ConstructionTargets.PointWedgeVanKampen.circleBase_mem
+    ConstructionTargets.PointWedgeVanKampen.circleBaseNeighborhood_contraction
+    ConstructionTargets.PointWedgeVanKampen.circleBaseNeighborhood_contraction⟩
 
 /-- Algebraic conversion of the first van Kampen coproduct to rank two.  Both
 geometric inputs are hypotheses so this leaf is independent of them. -/
