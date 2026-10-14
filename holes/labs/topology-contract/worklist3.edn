@@ -37197,9 +37197,47 @@
    :depends-on [],
    :other-consumers []}
   {:consumer :t97J07,
-   :stop-count 0,
+   :stop-count 1,
+   :evidence
+   {:placeholder-delta {:t97J07 [2 2]},
+    :residual
+    "Create closure module; copy proved adapters; prove fixed set; build CP2 rational homology/Euler characteristic; assemble Main.",
+    :outcome :stop,
+    :warnings [],
+    :missing-theorems
+    [{:name "t97J07_fixed_set",
+      :type "fixed locus of diag(1,1,3) is CP1 plus isolated axis",
+      :status :not-started,
+      :consumers [:t97J07],
+      :depends-on [],
+      :area "projective-quotient-fixed-locus"}
+     {:name "t97J07_eulerCharacteristic",
+      :type "HasEulerCharacteristic CP2 3",
+      :status :not-started,
+      :consumers [:t97J07],
+      :depends-on [],
+      :area "rational-homology-cpn"}],
+    :statement-hashes {:registry "166/166"},
+    :disposition :stop,
+    :axioms [],
+    :author :topo-10,
+    :reason
+    "Blueprint written; implementation begins next program job.",
+    :commands
+    [{:cmd "test/rg blueprint nodes", :exit 0}
+     {:cmd "lake env lean problems/t97J07/lean/Main.lean", :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd "placeholder count", :exit 0}
+     {:cmd "git diff --check", :exit 0}],
+    :commit "2725995b4f6766e9f90e2a3366745404fda5f4dd",
+    :changed-paths ["ConstructionTargets/t97J07Closure.blueprint.md"],
+    :fixture
+    {:path "ConstructionTargets/t97J07Closure.blueprint.md",
+     :sha256
+     "3fa01c79e1a49b4fddfb9d897e2d6b13ff505e4da9002e02666678554176dbe7"},
+    :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t97J07/lean/Main.lean"
     "problems/t97J07/status.json"
@@ -39711,6 +39749,38 @@
    :id :lemma-t96a06-rp3-rational-middle-homology,
    :kind :lemma,
    :depends-on [:lemma-t96a06-rp3-rational-homologymap-surjective],
+   :other-consumers []}
+  {:consumer :t97J07,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t97J07_fixed_set",
+    :type "fixed locus of diag(1,1,3) is CP1 plus isolated axis"},
+   :lemma
+   {:name "t97J07_fixed_set",
+    :reported-by [:program-2026-10-13-close-t97j07],
+    :type "fixed locus of diag(1,1,3) is CP1 plus isolated axis",
+    :area "projective-quotient-fixed-locus"},
+   :id :lemma-t97j07-fixed-set,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t97J07,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t97J07_eulerCharacteristic",
+    :type "HasEulerCharacteristic CP2 3"},
+   :lemma
+   {:name "t97J07_eulerCharacteristic",
+    :reported-by [:program-2026-10-13-close-t97j07],
+    :type "HasEulerCharacteristic CP2 3",
+    :area "rational-homology-cpn"},
+   :id :lemma-t97j07-eulercharacteristic,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
