@@ -2112,6 +2112,15 @@ lemma apm_m01J04_localization_core_approx_aux_grad_tendsto_aux_bulk
           (apm_m01J04_globalLocalizedH1 φ hφ f).grad x) 2 volume).toReal) atTop (nhds 0) := by
   sorry
 
+/-- Chain rule for the rescaled cutoff. -/
+lemma apm_m01J04_localization_core_approx_aux_grad_tendsto_aux_collar_fderiv
+    {d : ℕ} (φ : EuclideanSpace ℝ (Fin d) → ℝ)
+    (hφ : ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) φ) (r : ℝ) (x) :
+    fderiv ℝ (apm_m01J04_localization_core_approx_aux_cutoff φ r) x =
+      (deriv Real.smoothTransition (φ x ^ 2 / r ^ 2 - 1)) •
+        ((2 * φ x / r ^ 2) • fderiv ℝ φ x) := by
+  sorry
+
 /-- Collar term: `(fφ) • ∇χ_r → 0` in `L²`.  Pointwise
 `(fφ) ∇χ_r = f · smoothTransition'(φ²/r² − 1) · 2(φ²/r²) ∇φ`, bounded by
 `4M |f| |∇φ|` (on the collar `φ² ≤ 2r²`) and eventually `0` at each point. -/
