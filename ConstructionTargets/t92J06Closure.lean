@@ -396,6 +396,17 @@ def projection : C(D.Realization, X) :=
 @[simp] theorem projection_edgePoint (i : Fin 2) (v : V) (t : UnitInterval) :
     D.projection (D.edgePoint i v t) = edgeProjection i t := rfl
 
+/-- Over an interior point of either circle, equality in the base already
+determines the edge label and interval coordinate.  Thus the only remaining
+freedom in an interior fiber is the graph vertex indexing the lifted edge. -/
+theorem projection_edgePoint_eq_of_interior (i j : Fin 2) (v w : V)
+    (t u : UnitInterval) (ht : t.1 ∈ Set.Ioo (0 : ℝ) 1)
+    (hu : u.1 ∈ Set.Ioo (0 : ℝ) 1)
+    (h : D.projection (D.edgePoint i v t) =
+      D.projection (D.edgePoint j w u)) : i = j ∧ t = u := by
+  apply edgeProjection_eq_of_interior i j t u ht hu
+  simpa only [projection_edgePoint] using h
+
 end TwoLoopGraphCoverData
 
 end ConstructionTargets.t92J06Closure
