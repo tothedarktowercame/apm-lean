@@ -3158,10 +3158,79 @@ def zipMap (n k : ℕ) (z : Disk) : Disk :=
 
 /-- Boundary points of `D₊` on one ray from the centre coincide: a point strictly
 between the centre and a point of `D₊` lies in the open half-disk. -/
+lemma zip_halfBoundary_ray_aux_mem {q : ℂ} (hq : q ∈ zipHalfBoundary) :
+    ‖q‖ ≤ 1 ∧ 0 ≤ q.im := by
+  rcases hq with hq | hq
+  · exact ⟨hq.1.le, hq.2⟩
+  · refine ⟨?_, hq.1.symm.le⟩
+    rw [Complex.norm_def]
+    simp [Complex.normSq, hq.1, Real.sqrt_sq_eq_abs]
+    rcases (abs_le.mp hq.2) with ⟨hl, hu⟩
+    nlinarith
+
+lemma zip_halfBoundary_ray_aux_interior {q : ℂ} (hq : q ∈ zipHalfBoundary)
+    {s : ℝ} (hs0 : 0 ≤ s) (hs1 : s < 1) :
+    zipCentre + (s : ℂ) * (q - zipCentre) ∉ zipHalfBoundary := by
+  have hqm := zip_halfBoundary_ray_aux_mem hq
+  let z := zipCentre + (s : ℂ) * (q - zipCentre)
+  have hzform : z = ((1 - s : ℝ) : ℂ) * zipCentre + (s : ℂ) * q := by
+    dsimp [z]
+    push_cast
+    ring
+  have hc : ‖zipCentre‖ = (1 / 2 : ℝ) := by
+    simp [zipCentre, Complex.norm_def]
+  have hznorm : ‖z‖ < 1 := by
+    rw [hzform]
+    calc
+      ‖((1 - s : ℝ) : ℂ) * zipCentre + (s : ℂ) * q‖ ≤
+          ‖((1 - s : ℝ) : ℂ) * zipCentre‖ + ‖(s : ℂ) * q‖ := norm_add_le _ _
+      _ = (1 - s) / 2 + s * ‖q‖ := by
+        have hs_norm : ‖((s : ℝ) : ℂ)‖ = s := by
+          rw [Complex.norm_real]
+          exact Real.norm_of_nonneg hs0
+        have hsub_norm : ‖((1 - s : ℝ) : ℂ)‖ = 1 - s := by
+          rw [Complex.norm_real]
+          exact Real.norm_of_nonneg (sub_nonneg.mpr hs1.le)
+        rw [norm_mul, norm_mul, hc]
+        rw [hs_norm, hsub_norm]
+        ring
+      _ ≤ (1 - s) / 2 + s := by nlinarith
+      _ < 1 := by linarith
+  have hzim : 0 < z.im := by
+    rw [hzform]
+    simp [zipCentre]
+    nlinarith [hqm.2]
+  intro hz
+  rcases hz with hz | hz
+  · exact (ne_of_lt hznorm) (by simpa [z] using hz.1)
+  · exact (ne_of_gt hzim) hz.1
+
 theorem zip_halfBoundary_ray {p p' : ℂ} (hp : p ∈ zipHalfBoundary)
     (hp' : p' ∈ zipHalfBoundary) {r : ℝ} (hr : 0 < r)
     (h : p' - zipCentre = (r : ℂ) * (p - zipCentre)) : p' = p := by
-  sorry
+  rcases lt_trichotomy r 1 with hr1 | hr1 | hr1
+  · have hn := zip_halfBoundary_ray_aux_interior hp (le_of_lt hr) hr1
+    exfalso
+    apply hn
+    rw [← show p' = zipCentre + (r : ℂ) * (p - zipCentre) by
+      rw [show p' = zipCentre + (p' - zipCentre) by ring, h]]
+    exact hp'
+  · subst r
+    simpa using congrArg (fun z : ℂ => z + zipCentre) h
+  · have hs0 : 0 ≤ r⁻¹ := (inv_pos.mpr hr).le
+    have hs1 : r⁻¹ < 1 := inv_lt_one_of_one_lt₀ hr1
+    have hn := zip_halfBoundary_ray_aux_interior hp' hs0 hs1
+    exfalso
+    apply hn
+    rw [← show p = zipCentre + (r⁻¹ : ℝ) * (p' - zipCentre) by
+      calc
+        p = zipCentre + (p - zipCentre) := by ring
+        _ = zipCentre + (r⁻¹ : ℝ) * ((r : ℂ) * (p - zipCentre)) := by
+          push_cast
+          rw [← mul_assoc, inv_mul_cancel₀ (by exact_mod_cast hr.ne')]
+          ring
+        _ = zipCentre + (r⁻¹ : ℝ) * (p' - zipCentre) := by rw [h]]
+    exact hp
 
 /-- Every point of `D₊` is on a segment from the centre to a boundary point
 (take the largest `λ` with `I/2 + λ (y - I/2) ∈ D₊`). -/
@@ -3174,21 +3243,362 @@ theorem zip_halfDisk_cone {y : ℂ} (hy : y ∈ zipHalfDisk) :
 
 /-! ### The boundary map -/
 
+lemma zipBoundaryMap_continuous_aux_profile {n k : ℕ} (hn : 0 < n) :
+    Continuous (zipProfile n k) := by
+  unfold zipProfile
+  apply Continuous.if_le (by fun_prop) (by fun_prop) continuous_id continuous_const
+  · intro x hx
+    dsimp at hx ⊢
+    rw [hx]
+    have hn0 : (n : ℝ) ≠ 0 := by exact_mod_cast (Nat.ne_of_gt hn)
+    have hnp2 : (n : ℝ) + 2 ≠ 0 := by positivity
+    have hpi : (Real.pi : ℝ) ≠ 0 := ne_of_gt Real.pi_pos
+    rw [show ((zipStart n k + 4 * Real.pi / ((n : ℝ) + 2) - zipStart n k) *
+          ((n : ℝ) + 2) / (2 * Real.pi) - 1 : ℝ) = 1 by
+      field_simp
+      ring]
+    norm_num
+
 theorem zipBoundaryMap_continuous {n k : ℕ} (hn : 0 < n) :
     Continuous (zipBoundaryMap n k) := by
-  sorry
+  unfold zipBoundaryMap
+  have hcontinuous : Continuous
+      (AddCircle.liftIco (2 * Real.pi) (zipStart n k) (zipProfile n k)) := by
+    apply AddCircle.liftIco_continuous
+    · unfold zipProfile
+      have hn0 : (n : ℝ) ≠ 0 := by exact_mod_cast (Nat.ne_of_gt hn)
+      have hnp2 : (n : ℝ) + 2 ≠ 0 := by positivity
+      have hpi : (Real.pi : ℝ) ≠ 0 := ne_of_gt Real.pi_pos
+      rw [if_pos (by
+        apply le_add_of_nonneg_right
+        positivity)]
+      have hnot : ¬ (zipStart n k + 2 * Real.pi ≤
+          zipStart n k + 4 * Real.pi / ((n : ℝ) + 2)) := by
+        rw [not_le]
+        have hnreal : 0 < (n : ℝ) := by exact_mod_cast hn
+        apply (add_lt_add_iff_left (zipStart n k)).2
+        apply (div_lt_iff₀' (by positivity : 0 < (n : ℝ) + 2)).2
+        nlinarith [Real.pi_pos]
+      rw [if_neg hnot]
+      have harg : ((n : ℝ) + 2) / n *
+          (zipStart n k + 2 * Real.pi - zipStart n k -
+            4 * Real.pi / ((n : ℝ) + 2)) / 2 = Real.pi := by
+        field_simp
+        ring
+      rw [harg, Complex.exp_pi_mul_I]
+      norm_num [hpi]
+    · exact (zipBoundaryMap_continuous_aux_profile hn).continuousOn
+  exact hcontinuous.comp AddCircle.homeomorphCircle'.symm.continuous
 
 theorem zipBoundaryMap_mem {n k : ℕ} (hn : 0 < n) (b : Circle) :
     zipBoundaryMap n k b ∈ zipHalfBoundary := by
-  sorry
+  let x : AddCircle (2 * Real.pi) := AddCircle.homeomorphCircle'.symm b
+  let φ := AddCircle.equivIco (2 * Real.pi) (zipStart n k) x
+  have hφ : (φ : ℝ) ∈ Set.Ico (zipStart n k) (zipStart n k + 2 * Real.pi) := φ.2
+  change zipProfile n k (φ : ℝ) ∈ zipHalfBoundary
+  rw [zipProfile]
+  split_ifs with hcut
+  · right
+    constructor
+    · simp [Complex.div_im, Complex.mul_im]
+    · rw [Complex.ofReal_re, abs_le]
+      constructor
+      · have hn2 : 0 < (n : ℝ) + 2 := by positivity
+        have hpi : 0 < 2 * Real.pi := Real.two_pi_pos
+        have hd : 0 ≤ (φ : ℝ) - zipStart n k := by linarith [hφ.1]
+        have : 0 ≤ ((φ : ℝ) - zipStart n k) * ((n : ℝ) + 2) /
+            (2 * Real.pi) := div_nonneg (mul_nonneg hd hn2.le) hpi.le
+        linarith
+      · have hn2 : 0 < (n : ℝ) + 2 := by positivity
+        have hpi : 0 < 2 * Real.pi := Real.two_pi_pos
+        have hbound :
+            ((φ : ℝ) - zipStart n k) * ((n : ℝ) + 2) /
+                (2 * Real.pi) ≤ 2 := by
+          apply (div_le_iff₀ hpi).2
+          have hdle : (φ : ℝ) - zipStart n k ≤
+              4 * Real.pi / ((n : ℝ) + 2) := by linarith
+          have hm := (le_div_iff₀ hn2).mp hdle
+          nlinarith
+        linarith
+  · left
+    let θ : ℝ := ((n : ℝ) + 2) / n *
+      ((φ : ℝ) - zipStart n k - 4 * Real.pi / ((n : ℝ) + 2)) / 2
+    have hnR : 0 < (n : ℝ) := by exact_mod_cast hn
+    have hn2 : 0 < (n : ℝ) + 2 := by positivity
+    have hθ0 : 0 ≤ θ := by
+      dsimp [θ]
+      have : 0 ≤ (φ : ℝ) - zipStart n k -
+          4 * Real.pi / ((n : ℝ) + 2) := by
+        linarith [not_le.mp hcut]
+      positivity
+    have hθpi : θ ≤ Real.pi := by
+      dsimp [θ]
+      have hu := hφ.2.le
+      field_simp
+      nlinarith [Real.pi_pos]
+    constructor
+    · change ‖Complex.exp ((θ : ℝ) * Complex.I)‖ = 1
+      exact Complex.norm_exp_ofReal_mul_I θ
+    · change 0 ≤ (Complex.exp ((θ : ℝ) * Complex.I)).im
+      rw [Complex.exp_im]
+      simpa using Real.sin_nonneg_of_nonneg_of_le_pi hθ0 hθpi
 
 theorem zipBoundaryMap_injective {n k : ℕ} (hn : 0 < n) :
     Function.Injective (zipBoundaryMap n k) := by
-  sorry
+  intro b₁ b₂ h
+  let x := AddCircle.equivIco (2 * Real.pi) (zipStart n k)
+    (AddCircle.homeomorphCircle'.symm b₁)
+  let y := AddCircle.equivIco (2 * Real.pi) (zipStart n k)
+    (AddCircle.homeomorphCircle'.symm b₂)
+  have hx : x.1 ∈ Set.Ico (zipStart n k) (zipStart n k + 2 * Real.pi) := x.2
+  have hy : y.1 ∈ Set.Ico (zipStart n k) (zipStart n k + 2 * Real.pi) := y.2
+  have hxy : zipProfile n k x.1 = zipProfile n k y.1 := by
+    simpa only [zipBoundaryMap, AddCircle.liftIco, Function.comp_apply,
+      Set.restrict_apply] using h
+  have hnR : (0 : ℝ) < n := by exact_mod_cast hn
+  have hn2 : (0 : ℝ) < (n : ℝ) + 2 := by positivity
+  let c := zipStart n k + 4 * Real.pi / ((n : ℝ) + 2)
+  have hc_lt : c < zipStart n k + 2 * Real.pi := by
+    dsimp [c]
+    have hpi : 0 < Real.pi := Real.pi_pos
+    rw [add_lt_add_iff_left]
+    apply (div_lt_iff₀ hn2).2
+    nlinarith
+  have hval : x.1 = y.1 := by
+    by_cases hxc : x.1 ≤ c
+    · by_cases hyc : y.1 ≤ c
+      · simp only [zipProfile, show x.1 ≤ zipStart n k + 4 * Real.pi /
+            ((n : ℝ) + 2) from hxc,
+          show y.1 ≤ zipStart n k + 4 * Real.pi / ((n : ℝ) + 2) from hyc,
+          if_pos] at hxy
+        have hre : (x.1 - zipStart n k) * ((n : ℝ) + 2) /
+              (2 * Real.pi) - 1 =
+            (y.1 - zipStart n k) * ((n : ℝ) + 2) / (2 * Real.pi) - 1 := by
+          exact_mod_cast hxy
+        have hA : 0 < ((n : ℝ) + 2) / (2 * Real.pi) := by positivity
+        rw [mul_div_assoc, mul_div_assoc] at hre
+        nlinarith
+      · have hyc' : c < y.1 := lt_of_not_ge hyc
+        simp only [zipProfile, show x.1 ≤ zipStart n k + 4 * Real.pi /
+            ((n : ℝ) + 2) from hxc, if_pos,
+          show ¬y.1 ≤ zipStart n k + 4 * Real.pi / ((n : ℝ) + 2) from hyc,
+          if_neg] at hxy
+        let θ := ((n : ℝ) + 2) / n *
+            (y.1 - zipStart n k - 4 * Real.pi / ((n : ℝ) + 2)) / 2
+        have him : (0 : ℝ) = Real.sin θ := by
+          have hraw := congrArg Complex.im hxy
+          simp [Complex.exp_im, Complex.mul_im, Complex.div_re,
+            Complex.div_im, Complex.normSq_apply, Nat.cast_add,
+            Nat.cast_ofNat] at hraw
+          have heq : (n + 2 : ℝ) * n / (n * n) *
+                (y.1 - zipStart n k - 4 * Real.pi * (n + 2) / ((n + 2) * (n + 2))) / 2 = θ := by
+            dsimp [θ]
+            field_simp [ne_of_gt hnR, ne_of_gt hn2]
+          rwa [heq] at hraw
+        have htheta_pos : 0 < ((n : ℝ) + 2) / n *
+            (y.1 - zipStart n k - 4 * Real.pi / ((n : ℝ) + 2)) / 2 := by
+          exact div_pos (mul_pos (div_pos hn2 hnR) (by linarith)) (by norm_num)
+        have htheta_lt : ((n : ℝ) + 2) / n *
+            (y.1 - zipStart n k - 4 * Real.pi / ((n : ℝ) + 2)) / 2 < Real.pi := by
+          have := hy.2
+          field_simp [ne_of_gt hnR, ne_of_gt hn2]
+          field_simp [ne_of_gt hnR, ne_of_gt hn2] at this
+          nlinarith [Real.pi_pos]
+        have hs := Real.sin_pos_of_pos_of_lt_pi htheta_pos htheta_lt
+        dsimp [θ] at him
+        linarith
+    · have hxc' : c < x.1 := lt_of_not_ge hxc
+      by_cases hyc : y.1 ≤ c
+      · exfalso
+        have hrev := hxy.symm
+        simp only [zipProfile, show y.1 ≤ zipStart n k + 4 * Real.pi /
+              ((n : ℝ) + 2) from hyc, if_pos,
+            show ¬x.1 ≤ zipStart n k + 4 * Real.pi / ((n : ℝ) + 2) from hxc,
+            if_neg] at hrev
+        let θ := ((n : ℝ) + 2) / n *
+            (x.1 - zipStart n k - 4 * Real.pi / ((n : ℝ) + 2)) / 2
+        have him : (0 : ℝ) = Real.sin θ := by
+          have hraw := congrArg Complex.im hrev
+          simp [Complex.exp_im, Complex.mul_im, Complex.div_re,
+            Complex.div_im, Complex.normSq_apply, Nat.cast_add,
+            Nat.cast_ofNat] at hraw
+          have heq : (n + 2 : ℝ) * n / (n * n) *
+                (x.1 - zipStart n k - 4 * Real.pi * (n + 2) / ((n + 2) * (n + 2))) / 2 = θ := by
+            dsimp [θ]
+            field_simp [ne_of_gt hnR, ne_of_gt hn2]
+          rwa [heq] at hraw
+        have htpos : 0 < ((n : ℝ) + 2) / n *
+              (x.1 - zipStart n k - 4 * Real.pi / ((n : ℝ) + 2)) / 2 := by
+          exact div_pos (mul_pos (div_pos hn2 hnR) (by linarith)) (by norm_num)
+        have htlt : ((n : ℝ) + 2) / n *
+              (x.1 - zipStart n k - 4 * Real.pi / ((n : ℝ) + 2)) / 2 < Real.pi := by
+          have := hx.2
+          field_simp [ne_of_gt hnR, ne_of_gt hn2]
+          field_simp [ne_of_gt hnR, ne_of_gt hn2] at this
+          nlinarith [Real.pi_pos]
+        have hs := Real.sin_pos_of_pos_of_lt_pi htpos htlt
+        dsimp [θ] at him
+        linarith
+      · simp only [zipProfile,
+          show ¬x.1 ≤ zipStart n k + 4 * Real.pi / ((n : ℝ) + 2) from hxc,
+          show ¬y.1 ≤ zipStart n k + 4 * Real.pi / ((n : ℝ) + 2) from hyc,
+          if_neg] at hxy
+        let θx := ((n : ℝ) + 2) / n *
+            (x.1 - zipStart n k - 4 * Real.pi / ((n : ℝ) + 2)) / 2
+        let θy := ((n : ℝ) + 2) / n *
+            (y.1 - zipStart n k - 4 * Real.pi / ((n : ℝ) + 2)) / 2
+        have hre : Real.cos θx = Real.cos θy := by
+          have hraw := congrArg Complex.re hxy
+          simp [Complex.exp_re, Complex.mul_im, Complex.div_re,
+            Complex.div_im, Complex.normSq_apply, Nat.cast_add,
+            Nat.cast_ofNat] at hraw
+          have hex (z : ℝ) : (n + 2 : ℝ) * n / (n * n) *
+                (z - zipStart n k - 4 * Real.pi * (n + 2) / ((n + 2) * (n + 2))) / 2 =
+                ((n : ℝ) + 2) / n *
+                  (z - zipStart n k - 4 * Real.pi / ((n : ℝ) + 2)) / 2 := by
+            field_simp [ne_of_gt hnR, ne_of_gt hn2]
+          simpa [θx, θy, hex] using hraw
+        have hθx : θx ∈ Set.Icc 0 Real.pi := by
+          constructor
+          · dsimp [θx]
+            exact le_of_lt (div_pos (mul_pos (div_pos hn2 hnR) (by linarith)) (by norm_num))
+          · dsimp [θx]
+            have := hx.2
+            field_simp [ne_of_gt hnR, ne_of_gt hn2]
+            field_simp [ne_of_gt hnR, ne_of_gt hn2] at this
+            nlinarith [Real.pi_pos]
+        have hθy : θy ∈ Set.Icc 0 Real.pi := by
+          constructor
+          · dsimp [θy]
+            exact le_of_lt (div_pos (mul_pos (div_pos hn2 hnR) (by linarith)) (by norm_num))
+          · dsimp [θy]
+            have := hy.2
+            field_simp [ne_of_gt hnR, ne_of_gt hn2]
+            field_simp [ne_of_gt hnR, ne_of_gt hn2] at this
+            nlinarith [Real.pi_pos]
+        have ht := Real.strictAntiOn_cos.injOn hθx hθy hre
+        dsimp [θx, θy] at ht
+        field_simp [ne_of_gt hnR, ne_of_gt hn2] at ht
+        nlinarith [hn2]
+  have hcircle : AddCircle.homeomorphCircle'.symm b₁ =
+      AddCircle.homeomorphCircle'.symm b₂ := by
+    apply (AddCircle.equivIco (2 * Real.pi) (zipStart n k)).injective
+    exact Subtype.ext hval
+  calc
+    b₁ = AddCircle.homeomorphCircle' (AddCircle.homeomorphCircle'.symm b₁) :=
+      (AddCircle.homeomorphCircle'.apply_symm_apply b₁).symm
+    _ = AddCircle.homeomorphCircle' (AddCircle.homeomorphCircle'.symm b₂) :=
+      congrArg AddCircle.homeomorphCircle' hcircle
+    _ = b₂ := AddCircle.homeomorphCircle'.apply_symm_apply b₂
 
 theorem zipBoundaryMap_surjOn {n k : ℕ} (hn : 0 < n) {p : ℂ}
     (hp : p ∈ zipHalfBoundary) : ∃ b : Circle, zipBoundaryMap n k b = p := by
-  sorry
+  have hdiam : ∀ {q : ℂ}, q.im = 0 → |q.re| ≤ 1 →
+      ∃ b : Circle, zipBoundaryMap n k b = q := by
+    intro q hqim hqabs
+    let φ : ℝ := zipStart n k + (q.re + 1) * 2 * Real.pi / ((n : ℝ) + 2)
+    have hnR : 0 < (n : ℝ) := by exact_mod_cast hn
+    have hden : 0 < (n : ℝ) + 2 := by positivity
+    have hrelo : -1 ≤ q.re := (abs_le.mp hqabs).1
+    have hrehi : q.re ≤ 1 := (abs_le.mp hqabs).2
+    have hφ : φ ∈ Ico (zipStart n k) (zipStart n k + 2 * Real.pi) := by
+      constructor
+      · dsimp [φ]
+        have hq : 0 ≤ q.re + 1 := by linarith
+        have : 0 ≤ (q.re + 1) * 2 * Real.pi / ((n : ℝ) + 2) := by positivity
+        linarith
+      · dsimp [φ]
+        rw [add_lt_add_iff_left, div_lt_iff₀ hden]
+        nlinarith [Real.pi_pos]
+    refine ⟨AddCircle.homeomorphCircle' (φ : AddCircle (2 * Real.pi)), ?_⟩
+    rw [zipBoundaryMap]
+    simp only [Homeomorph.symm_apply_apply]
+    rw [AddCircle.liftIco_coe_apply hφ]
+    rw [zipProfile, if_pos]
+    · have hs : (φ - zipStart n k) * ((n : ℝ) + 2) /
+          (2 * Real.pi) - 1 = q.re := by
+        dsimp [φ]
+        field_simp
+        ring
+      rw [hs]
+      apply Complex.ext <;> simp [hqim]
+    · dsimp [φ]
+      rw [add_le_add_iff_left]
+      apply div_le_div_of_nonneg_right _ hden.le
+      nlinarith [Real.pi_pos]
+  rcases hp with hp | hp
+  · have hnorm : ‖p‖ = 1 := hp.1
+    have him : 0 ≤ p.im := hp.2
+    by_cases hi : p.im = 0
+    · have hreabs : |p.re| ≤ 1 := by
+        calc |p.re| ≤ ‖p‖ := Complex.abs_re_le_norm p
+          _ = 1 := hnorm
+      exact hdiam hi hreabs
+    · have himpos : 0 < p.im := lt_of_le_of_ne him (Ne.symm hi)
+      let θ : ℝ := Complex.arg p
+      have hp0 : p ≠ 0 := by
+        intro h
+        rw [h] at hnorm
+        simp at hnorm
+      have hθle : θ ≤ Real.pi := (Complex.arg_mem_Ioc p).2
+      have hθpos : 0 < θ := by
+        by_contra h
+        have hsnonpos : Real.sin θ ≤ 0 :=
+          Real.sin_nonpos_of_nonpos_of_neg_pi_le (le_of_not_gt h)
+            (le_of_lt (Complex.arg_mem_Ioc p).1)
+        have hspos : 0 < Real.sin θ := by
+          rw [Complex.sin_arg, hnorm, div_one]
+          exact himpos
+        linarith
+      let φ : ℝ := zipStart n k + 4 * Real.pi / ((n : ℝ) + 2) +
+        2 * θ * n / ((n : ℝ) + 2)
+      have hnR : 0 < (n : ℝ) := by exact_mod_cast hn
+      have hden : 0 < (n : ℝ) + 2 := by positivity
+      have hφ : φ ∈ Ico (zipStart n k) (zipStart n k + 2 * Real.pi) := by
+        constructor
+        · dsimp [φ]
+          have hfour : 0 < 4 * Real.pi / ((n : ℝ) + 2) := by positivity
+          have hlast : 0 < 2 * θ * n / ((n : ℝ) + 2) := by positivity
+          linarith
+        · dsimp [φ]
+          have hθlt : θ < Real.pi := by
+            apply lt_of_le_of_ne hθle
+            intro he
+            have hs : Real.sin θ = 0 := by rw [he, Real.sin_pi]
+            rw [Complex.sin_arg, hnorm, div_one] at hs
+            linarith
+          rw [show zipStart n k + 4 * Real.pi / ((n : ℝ) + 2) +
+            2 * θ * n / ((n : ℝ) + 2) = zipStart n k +
+              (4 * Real.pi / ((n : ℝ) + 2) +
+                2 * θ * n / ((n : ℝ) + 2)) by ring]
+          rw [add_lt_add_iff_left]
+          rw [← add_div]
+          rw [div_lt_iff₀ hden]
+          nlinarith [Real.pi_pos]
+      refine ⟨AddCircle.homeomorphCircle' (φ : AddCircle (2 * Real.pi)), ?_⟩
+      rw [zipBoundaryMap]
+      simp only [Homeomorph.symm_apply_apply]
+      rw [AddCircle.liftIco_coe_apply hφ]
+      rw [zipProfile, if_neg]
+      · have hexp : Complex.exp ((((((n : ℝ) + 2) / n) *
+            (φ - zipStart n k - 4 * Real.pi / ((n : ℝ) + 2)) / 2 : ℝ) : ℂ) *
+            Complex.I) = Complex.exp ((θ : ℂ) * Complex.I) := by
+          have hreal : ((n : ℝ) + 2) / n *
+              (φ - zipStart n k - 4 * Real.pi / ((n : ℝ) + 2)) / 2 = θ := by
+            dsimp [φ]
+            field_simp
+            ring
+          rw [hreal]
+        rw [hexp]
+        calc
+          Complex.exp ((θ : ℂ) * Complex.I) =
+              (‖p‖ : ℂ) * Complex.exp ((Complex.arg p : ℂ) * Complex.I) := by
+                simp [θ, hnorm]
+          _ = p := Complex.norm_mul_exp_arg_mul_I p
+      · dsimp [φ]
+        have : 0 < 2 * θ * (n : ℝ) / ((n : ℝ) + 2) := by positivity
+        linarith
+  · exact hdiam hp.1 hp.2
 
 /-- The cancelled sides go linearly onto the diameter. -/
 theorem zipBoundaryMap_fold {n k : ℕ} (hn : 0 < n) (hk : k ≤ n) (t : Icc (0 : ℝ) 1) :
@@ -3204,17 +3614,149 @@ theorem zipBoundaryMap_fold {n k : ℕ} (hn : 0 < n) (hk : k ≤ n) (t : Icc (0 
 
 theorem zipCone_continuous {n k : ℕ} (hc : Continuous (zipBoundaryMap n k)) :
     Continuous (zipCone n k) := by
-  sorry
+  rw [continuous_iff_continuousAt]
+  intro z
+  by_cases hz : z = 0
+  · subst z
+    rw [Metric.continuousAt_iff]
+    intro ε hε
+    obtain ⟨M, hM⟩ := (isCompact_range hc).isBounded.subset_closedBall 0
+    have hM0 : 0 ≤ M := by
+      have h1 := hM ⟨⟨1, by simp [Circle, Submonoid.unitSphere]⟩, rfl⟩
+      rw [Metric.mem_closedBall, dist_zero_right] at h1
+      exact (norm_nonneg _).trans h1
+    have hc0 : 0 ≤ ‖zipCentre‖ := norm_nonneg _
+    have hden : 0 < M + ‖zipCentre‖ + 1 := by linarith
+    refine ⟨ε / (M + ‖zipCentre‖ + 1), div_pos hε hden, ?_⟩
+    intro w hw
+    simp only [dist_zero_right] at hw
+    by_cases hw0 : w = 0
+    · subst w
+      simpa using hε
+    · rw [zipCone, dif_neg hw0, zipCone, dif_pos rfl]
+      rw [dist_eq_norm, add_sub_cancel_left, norm_mul]
+      have hb : ‖zipBoundaryMap n k
+          ⟨((‖w‖⁻¹ : ℝ) : ℂ) * w, by
+            simp [Circle, Submonoid.unitSphere, norm_mul, hw0]⟩‖ ≤ M := by
+        have hm := hM (show zipBoundaryMap n k
+          ⟨((‖w‖⁻¹ : ℝ) : ℂ) * w, by
+            simp [Circle, Submonoid.unitSphere, norm_mul, hw0]⟩ ∈
+              Set.range (zipBoundaryMap n k) from ⟨_, rfl⟩)
+        simpa [Metric.mem_closedBall, dist_zero_right] using hm
+      have hsub := norm_sub_le (zipBoundaryMap n k
+          ⟨((‖w‖⁻¹ : ℝ) : ℂ) * w, by
+            simp [Circle, Submonoid.unitSphere, norm_mul, hw0]⟩) zipCentre
+      rw [Complex.norm_real, Real.norm_eq_abs, abs_norm]
+      have hw' : ‖w‖ * (M + ‖zipCentre‖ + 1) < ε := by
+        rw [lt_div_iff₀ hden] at hw
+        exact hw
+      nlinarith [norm_nonneg w]
+  · have hopen : IsOpen ({w : ℂ | w ≠ 0}) := isOpen_compl_singleton
+    have hcont : ContinuousOn (zipCone n k) {w : ℂ | w ≠ 0} := by
+      rw [continuousOn_iff_continuous_restrict]
+      have hN : Continuous (fun w : ({w : ℂ | w ≠ 0} : Set ℂ) =>
+          (⟨((‖(w : ℂ)‖⁻¹ : ℝ) : ℂ) * w, by
+            have hw : (w : ℂ) ≠ 0 := w.2
+            simp [Circle, Submonoid.unitSphere, norm_mul, hw]⟩ : Circle)) := by
+        apply Continuous.subtype_mk
+        exact (Complex.continuous_ofReal.comp ((continuous_norm.comp continuous_subtype_val).inv₀
+          (fun w => norm_ne_zero_iff.mpr w.2))).mul continuous_subtype_val
+      have heq : Set.restrict {w : ℂ | w ≠ 0} (zipCone n k) =
+          fun w : ({w : ℂ | w ≠ 0} : Set ℂ) =>
+          zipCentre + (‖(w : ℂ)‖ : ℂ) * (zipBoundaryMap n k
+            ⟨((‖(w : ℂ)‖⁻¹ : ℝ) : ℂ) * w, by
+              have hw : (w : ℂ) ≠ 0 := w.2
+              simp [Circle, Submonoid.unitSphere, norm_mul, hw]⟩ - zipCentre) := by
+        funext w
+        simp only [Set.restrict_apply, zipCone, dif_neg (show (w : ℂ) ≠ 0 from w.2)]
+      rw [heq]
+      exact continuous_const.add ((Complex.continuous_ofReal.comp
+        (continuous_norm.comp continuous_subtype_val)).mul ((hc.comp hN).sub continuous_const))
+    exact hcont.continuousAt (hopen.mem_nhds hz)
 
 theorem zipCone_of_norm_one {n k : ℕ} {z : ℂ} (hz : ‖z‖ = 1) :
     zipCone n k z = zipBoundaryMap n k ⟨z, by simpa [Circle, Submonoid.unitSphere] using hz⟩ := by
-  sorry
+  have hz0 : z ≠ 0 := by
+    intro h
+    subst z
+    simp at hz
+  let b : Circle :=
+    ⟨((‖z‖⁻¹ : ℝ) : ℂ) * z, by
+      simp [Circle, Submonoid.unitSphere, norm_mul, hz0]⟩
+  have hb : b = ⟨z, by simpa [Circle, Submonoid.unitSphere] using hz⟩ := by
+    apply Subtype.ext
+    simp [b, hz]
+  rw [zipCone, dif_neg hz0]
+  change zipCentre + (‖z‖ : ℂ) * (zipBoundaryMap n k b - zipCentre) = _
+  rw [show (‖z‖ : ℂ) = 1 by exact_mod_cast hz, hb]
+  ring
 
 theorem zipCone_mem {n k : ℕ} (hmem : ∀ b, zipBoundaryMap n k b ∈ zipHalfBoundary)
     {z : ℂ} (hz : ‖z‖ ≤ 1) :
     zipCone n k z ∈ zipHalfDisk ∧
       (‖z‖ < 1 → ‖zipCone n k z‖ < 1 ∧ 0 < (zipCone n k z).im) := by
-  sorry
+  by_cases hzero : z = 0
+  · subst z
+    norm_num [zipCone, zipHalfDisk, zipCentre, Complex.norm_def]
+  · let b : Circle :=
+      ⟨((‖z‖⁻¹ : ℝ) : ℂ) * z,
+        by simp [Circle, Submonoid.unitSphere, norm_mul, hzero]⟩
+    let p : ℂ := zipBoundaryMap n k b
+    have hp : p ∈ zipHalfBoundary := hmem b
+    have hp_norm : ‖p‖ ≤ 1 := by
+      rcases hp with hp | hp
+      · exact hp.1.le
+      · have hpreal : p = (p.re : ℂ) := by
+          apply Complex.ext
+          · simp
+          · simpa using hp.1
+        rw [hpreal, Complex.norm_real]
+        exact hp.2
+    have hp_im : 0 ≤ p.im := by
+      rcases hp with hp | hp
+      · exact hp.2
+      · simp [hp.1]
+    have hr0 : 0 ≤ ‖z‖ := norm_nonneg z
+    have hformula : zipCone n k z =
+        ((1 - ‖z‖ : ℝ) : ℂ) * zipCentre + ((‖z‖ : ℝ) : ℂ) * p := by
+      simp only [zipCone, hzero, ↓reduceDIte, p, b]
+      push_cast
+      ring
+    have hc : ‖zipCentre‖ = (1 : ℝ) / 2 := by
+      norm_num [zipCentre, Complex.norm_def]
+    have hnorm : ‖zipCone n k z‖ ≤ (1 - ‖z‖) / 2 + ‖z‖ := by
+      rw [hformula]
+      calc
+        ‖((1 - ‖z‖ : ℝ) : ℂ) * zipCentre + ((‖z‖ : ℝ) : ℂ) * p‖
+            ≤ ‖((1 - ‖z‖ : ℝ) : ℂ) * zipCentre‖ +
+                ‖((‖z‖ : ℝ) : ℂ) * p‖ := norm_add_le _ _
+        _ = (1 - ‖z‖) / 2 + ‖z‖ * ‖p‖ := by
+          rw [norm_mul, norm_mul, Complex.norm_real, Complex.norm_real, hc]
+          simp only [Real.norm_eq_abs, abs_of_nonneg hr0,
+            abs_of_nonneg (sub_nonneg.mpr hz)]
+          ring
+        _ ≤ (1 - ‖z‖) / 2 + ‖z‖ := by
+          simpa using add_le_add_left (mul_le_mul_of_nonneg_left hp_norm hr0)
+            ((1 - ‖z‖) / 2)
+    have him : (zipCone n k z).im = (1 - ‖z‖) / 2 + ‖z‖ * p.im := by
+      rw [hformula]
+      simp [zipCentre]
+      ring
+    constructor
+    · rw [zipHalfDisk]
+      constructor
+      · linarith
+      · rw [him]
+        nlinarith [mul_nonneg hr0 hp_im]
+    · intro hstrict
+      constructor
+      · linarith
+      · rw [him]
+        have : 0 < (1 - ‖z‖) / 2 := by linarith
+        nlinarith [mul_nonneg hr0 hp_im]
+
+lemma zipCone_injOn_aux_centre_not_mem : zipCentre ∉ zipHalfBoundary := by
+  norm_num [zipCentre, zipHalfBoundary, Complex.norm_def]
 
 theorem zipCone_injOn {n k : ℕ} (hmem : ∀ b, zipBoundaryMap n k b ∈ zipHalfBoundary)
     (hinj : Function.Injective (zipBoundaryMap n k))
@@ -3222,7 +3764,76 @@ theorem zipCone_injOn {n k : ℕ} (hmem : ∀ b, zipBoundaryMap n k b ∈ zipHal
       p' - zipCentre = (r : ℂ) * (p - zipCentre) → p' = p)
     {z w : ℂ} (hz : ‖z‖ ≤ 1) (hw : ‖w‖ ≤ 1) (h : zipCone n k z = zipCone n k w) :
     z = w := by
-  sorry
+  by_cases hz0 : z = 0
+  · subst z
+    by_contra hw0
+    have hw0' : w ≠ 0 := Ne.symm hw0
+    have hwpos : 0 < ‖w‖ := norm_pos_iff.mpr hw0'
+    have heq : (‖w‖ : ℂ) *
+        (zipBoundaryMap n k ⟨((‖w‖⁻¹ : ℝ) : ℂ) * w, by
+          simp [Circle, Submonoid.unitSphere, norm_mul, hw0']⟩ - zipCentre) = 0 := by
+      simpa [zipCone, hw0'] using sub_eq_zero.mpr h
+    have hd : zipBoundaryMap n k ⟨((‖w‖⁻¹ : ℝ) : ℂ) * w, by
+          simp [Circle, Submonoid.unitSphere, norm_mul, hw0']⟩ = zipCentre := by
+      apply sub_eq_zero.mp
+      exact (mul_eq_zero.mp heq).resolve_left (by exact_mod_cast ne_of_gt hwpos)
+    exact zipCone_injOn_aux_centre_not_mem (hd ▸ hmem _)
+  · by_cases hw0 : w = 0
+    · subst w
+      by_contra hz_ne
+      have hzpos : 0 < ‖z‖ := norm_pos_iff.mpr hz0
+      have heq : (‖z‖ : ℂ) *
+          (zipBoundaryMap n k ⟨((‖z‖⁻¹ : ℝ) : ℂ) * z, by
+            simp [Circle, Submonoid.unitSphere, norm_mul, hz0]⟩ - zipCentre) = 0 := by
+        simpa [zipCone, hz0] using sub_eq_zero.mpr h
+      have hd : zipBoundaryMap n k ⟨((‖z‖⁻¹ : ℝ) : ℂ) * z, by
+            simp [Circle, Submonoid.unitSphere, norm_mul, hz0]⟩ = zipCentre := by
+        apply sub_eq_zero.mp
+        exact (mul_eq_zero.mp heq).resolve_left (by exact_mod_cast ne_of_gt hzpos)
+      exact zipCone_injOn_aux_centre_not_mem (hd ▸ hmem _)
+    · let bz : Circle := ⟨((‖z‖⁻¹ : ℝ) : ℂ) * z, by
+          simp [Circle, Submonoid.unitSphere, norm_mul, hz0]⟩
+      let bw : Circle := ⟨((‖w‖⁻¹ : ℝ) : ℂ) * w, by
+          simp [Circle, Submonoid.unitSphere, norm_mul, hw0]⟩
+      have hzpos : 0 < ‖z‖ := norm_pos_iff.mpr hz0
+      have hwpos : 0 < ‖w‖ := norm_pos_iff.mpr hw0
+      have heq : (‖z‖ : ℂ) * (zipBoundaryMap n k bz - zipCentre) =
+          (‖w‖ : ℂ) * (zipBoundaryMap n k bw - zipCentre) := by
+        have he := congrArg (fun x => x - zipCentre) h
+        simpa [zipCone, hz0, hw0, bz, bw] using he
+      have hscaled : zipBoundaryMap n k bw - zipCentre =
+          ((‖z‖ / ‖w‖ : ℝ) : ℂ) * (zipBoundaryMap n k bz - zipCentre) := by
+        calc
+          zipBoundaryMap n k bw - zipCentre =
+              ((‖w‖ : ℝ) : ℂ)⁻¹ * ((‖w‖ : ℂ) *
+                (zipBoundaryMap n k bw - zipCentre)) := by
+                  rw [← mul_assoc, inv_mul_cancel₀
+                    (show ((‖w‖ : ℝ) : ℂ) ≠ 0 by exact_mod_cast ne_of_gt hwpos), one_mul]
+          _ = ((‖w‖ : ℝ) : ℂ)⁻¹ * ((‖z‖ : ℂ) *
+                (zipBoundaryMap n k bz - zipCentre)) := by rw [heq]
+          _ = ((‖z‖ / ‖w‖ : ℝ) : ℂ) *
+                (zipBoundaryMap n k bz - zipCentre) := by
+              push_cast
+              rw [div_eq_mul_inv]
+              ring
+      have hbmap : zipBoundaryMap n k bw = zipBoundaryMap n k bz :=
+        hray (hmem bz) (hmem bw) (div_pos hzpos hwpos) hscaled
+      have hbw : bw = bz := hinj hbmap
+      have hnorm : ‖z‖ = ‖w‖ := by
+        have hdiff : zipBoundaryMap n k bz - zipCentre ≠ 0 := by
+          intro hd
+          apply zipCone_injOn_aux_centre_not_mem
+          have : zipBoundaryMap n k bz = zipCentre := sub_eq_zero.mp hd
+          exact this ▸ hmem bz
+        have hm : (‖z‖ : ℂ) = (‖w‖ : ℂ) := by
+          apply mul_right_cancel₀ hdiff
+          simpa [hbmap] using heq
+        exact_mod_cast hm
+      have hv : ((‖z‖⁻¹ : ℝ) : ℂ) * z = ((‖w‖⁻¹ : ℝ) : ℂ) * w :=
+        (congrArg Subtype.val hbw).symm
+      rw [← hnorm] at hv
+      have := congrArg (fun x : ℂ => ((‖z‖ : ℝ) : ℂ) * x) hv
+      simpa [mul_assoc, hz0] using this
 
 theorem zipCone_surjOn {n k : ℕ}
     (hcone : ∀ {y : ℂ}, y ∈ zipHalfDisk → ∃ p ∈ zipHalfBoundary, ∃ r : ℝ, 0 ≤ r ∧ r ≤ 1 ∧
@@ -3746,6 +4357,363 @@ lemma cutAndPaste_aux_convex_radial_chart
     dsimp [H, r]
     rfl
 
+/-! ## Cut and paste: explicit boundary maps (design claude-14, 2026-10-14)
+
+`L` sides, the two `x` at sides `p` and `q` (`p < q < L`), `Δ = 2π/L`,
+`α m = m Δ`, `cutPoint m = e^{i α m}`; `P, Q` = vertices `p, q`, `P', Q'` =
+vertices `p + 1, q + 1`.  Old pieces: `A = cutPiece P Q`, the disk on the side of
+the chord `PQ` holding the arc from `P` counterclockwise to `Q` (sides `x v`), and
+`B = cutPiece Q P` (sides `x t u`).  New pieces: `A' = cutPiece P' Q'` (new sides
+`x v⁻¹`, i.e. `p + 1 .. q`) and `B' = cutPiece Q' P'` (`t u` and new side `p`).
+
+Each piece is parametrised by one circle, and the four boundary maps put matching
+boundary pieces at the same parameter:
+* `A` (base `α p`): arc `[α p, α q]` is the identity; `[α q, α p + 2π]` runs along
+  the chord `Q → P`.  `A'`: the old `x` arc goes to the seam `P' → Q'`, the old `v`
+  arcs to the new `v⁻¹` arcs by the reflection `φ ↦ α(q+1) + α(p+1) - φ`, and the
+  chord to the new side `p + 1`, reversed.
+* `B` (base `α q`): arc `[α q, α p + 2π]` is the identity; the rest runs along the
+  chord `P → Q`.  `B'`: the old `x` arc (side `q`) goes to the seam `P' → Q'`, `t`
+  and `u` stay fixed, and the chord goes to the new side `p`.
+The charts are convex-body charts with these boundary maps
+(`cutAndPaste_aux_boundary_chart`).  The combinatorial leaves only use the edge
+formulas, bundled in `CutBoundaryData`. -/
+
+def cutAlpha (L m : ℕ) : ℝ := 2 * Real.pi * m / L
+
+def cutPoint (L m : ℕ) : ℂ := Complex.exp ((cutAlpha L m : ℂ) * Complex.I)
+
+/-- `cutCross w z = Im (conj w · z)`, positive when `z` is to the left of `w`. -/
+def cutCross (w z : ℂ) : ℝ := (starRingEnd ℂ w * z).im
+
+/-- The part of the closed disk on the side of the chord `PQ` that holds the arc
+from `P` counterclockwise to `Q`. -/
+def cutPiece (P Q : ℂ) : Set ℂ := {z | ‖z‖ ≤ 1 ∧ cutCross (Q - P) (z - P) ≤ 0}
+
+def cutSeam (L p q : ℕ) (s : ℝ) : ℂ :=
+  cutPoint L (p + 1) + (s : ℂ) * (cutPoint L (q + 1) - cutPoint L (p + 1))
+
+def cutChordA (L p q : ℕ) (s : ℝ) : ℂ := cutPoint L q + (s : ℂ) * (cutPoint L p - cutPoint L q)
+
+def cutChordB (L p q : ℕ) (s : ℝ) : ℂ := cutPoint L p + (s : ℂ) * (cutPoint L q - cutPoint L p)
+
+/-- Chord parameter on `[α q, α p + 2π]`. -/
+def cutSA (L p q : ℕ) (φ : ℝ) : ℝ :=
+  (φ - cutAlpha L q) / (cutAlpha L p + 2 * Real.pi - cutAlpha L q)
+
+/-- Chord parameter on `[α p + 2π, α q + 2π]`. -/
+def cutSB (L p q : ℕ) (φ : ℝ) : ℝ :=
+  (φ - cutAlpha L p - 2 * Real.pi) / (cutAlpha L q - cutAlpha L p)
+
+def cutProfileOldA (L p q : ℕ) (φ : ℝ) : ℂ :=
+  if φ ≤ cutAlpha L q then Complex.exp ((φ : ℂ) * Complex.I)
+  else cutChordA L p q (cutSA L p q φ)
+
+def cutProfileOldB (L p q : ℕ) (φ : ℝ) : ℂ :=
+  if φ ≤ cutAlpha L p + 2 * Real.pi then Complex.exp ((φ : ℂ) * Complex.I)
+  else cutChordB L p q (cutSB L p q φ)
+
+def cutProfileNewA (L p q : ℕ) (φ : ℝ) : ℂ :=
+  if φ ≤ cutAlpha L (p + 1) then cutSeam L p q ((φ - cutAlpha L p) * L / (2 * Real.pi))
+  else if φ ≤ cutAlpha L q then
+    Complex.exp (((cutAlpha L (q + 1) + cutAlpha L (p + 1) - φ : ℝ) : ℂ) * Complex.I)
+  else Complex.exp (((cutAlpha L (p + 2) - cutSA L p q φ * (2 * Real.pi / L) : ℝ) : ℂ) *
+    Complex.I)
+
+def cutProfileNewB (L p q : ℕ) (φ : ℝ) : ℂ :=
+  if φ ≤ cutAlpha L (q + 1) then cutSeam L p q ((φ - cutAlpha L q) * L / (2 * Real.pi))
+  else if φ ≤ cutAlpha L p + 2 * Real.pi then Complex.exp ((φ : ℂ) * Complex.I)
+  else Complex.exp (((cutAlpha L p + cutSB L p q φ * (2 * Real.pi / L) : ℝ) : ℂ) *
+    Complex.I)
+
+def cutOldA (L p q : ℕ) (b : Circle) : ℂ :=
+  AddCircle.liftIco (2 * Real.pi) (cutAlpha L p) (cutProfileOldA L p q)
+    (AddCircle.homeomorphCircle'.symm b)
+
+def cutOldB (L p q : ℕ) (b : Circle) : ℂ :=
+  AddCircle.liftIco (2 * Real.pi) (cutAlpha L q) (cutProfileOldB L p q)
+    (AddCircle.homeomorphCircle'.symm b)
+
+def cutNewA (L p q : ℕ) (b : Circle) : ℂ :=
+  AddCircle.liftIco (2 * Real.pi) (cutAlpha L p) (cutProfileNewA L p q)
+    (AddCircle.homeomorphCircle'.symm b)
+
+def cutNewB (L p q : ℕ) (b : Circle) : ℂ :=
+  AddCircle.liftIco (2 * Real.pi) (cutAlpha L q) (cutProfileNewB L p q)
+    (AddCircle.homeomorphCircle'.symm b)
+
+/-- A boundary point of side `e`, as a point of the parameter circle. -/
+def cutEdgeCircle (L e : ℕ) (s : Icc (0 : ℝ) 1) : Circle :=
+  ⟨edgePoint L e s, by simpa [Circle, Submonoid.unitSphere] using norm_edgePoint L e s⟩
+
+def cutChordParamA (L p q : ℕ) (s : Icc (0 : ℝ) 1) : Circle :=
+  AddCircle.homeomorphCircle'
+    ((cutAlpha L q + s * (cutAlpha L p + 2 * Real.pi - cutAlpha L q) : ℝ) :
+      AddCircle (2 * Real.pi))
+
+def cutChordParamB (L p q : ℕ) (s : Icc (0 : ℝ) 1) : Circle :=
+  AddCircle.homeomorphCircle'
+    ((cutAlpha L p + 2 * Real.pi + s * (cutAlpha L q - cutAlpha L p) : ℝ) :
+      AddCircle (2 * Real.pi))
+
+/-- The edge formulas of the four boundary maps; the combinatorial leaves only use
+these. -/
+structure CutBoundaryData (L p q : ℕ) (oldA oldB newA newB : Circle → ℂ) : Prop where
+  coverA : ∀ y : Circle,
+    (∃ e s, p ≤ e ∧ e < q ∧ y = cutEdgeCircle L e s) ∨
+      (∃ s : Icc (0 : ℝ) 1, y = cutChordParamA L p q s)
+  coverB : ∀ y : Circle,
+    (∃ e s, ((q ≤ e ∧ e < L) ∨ e < p) ∧ y = cutEdgeCircle L e s) ∨
+      (∃ s : Icc (0 : ℝ) 1, y = cutChordParamB L p q s)
+  oldA_arc : ∀ e s, p ≤ e → e < q → oldA (cutEdgeCircle L e s) = (edgePoint L e s : ℂ)
+  oldA_chord : ∀ s : Icc (0 : ℝ) 1, oldA (cutChordParamA L p q s) = cutChordA L p q s
+  oldB_arc : ∀ e s, ((q ≤ e ∧ e < L) ∨ e < p) →
+    oldB (cutEdgeCircle L e s) = (edgePoint L e s : ℂ)
+  oldB_chord : ∀ s : Icc (0 : ℝ) 1, oldB (cutChordParamB L p q s) = cutChordB L p q s
+  newA_x : ∀ s : Icc (0 : ℝ) 1, newA (cutEdgeCircle L p s) = cutSeam L p q s
+  newA_v : ∀ e s, p + 1 ≤ e → e < q →
+    newA (cutEdgeCircle L e s) = (edgePoint L (q + p + 1 - e) (reverseParameter s) : ℂ)
+  newA_chord : ∀ s : Icc (0 : ℝ) 1,
+    newA (cutChordParamA L p q s) = (edgePoint L (p + 1) (reverseParameter s) : ℂ)
+  newB_x : ∀ s : Icc (0 : ℝ) 1, newB (cutEdgeCircle L q s) = cutSeam L p q s
+  newB_tu : ∀ e s, ((q + 1 ≤ e ∧ e < L) ∨ e < p) →
+    newB (cutEdgeCircle L e s) = (edgePoint L e s : ℂ)
+  newB_chord : ∀ s : Icc (0 : ℝ) 1,
+    newB (cutChordParamB L p q s) = (edgePoint L p s : ℂ)
+
+/-- What a chart of a piece must satisfy. -/
+def CutChartSpec (K : Set ℂ) (β : Circle → ℂ) (φ : ℂ → ℂ) : Prop :=
+  Continuous φ ∧ Set.InjOn φ (Metric.closedBall 0 1) ∧
+    φ '' Metric.closedBall 0 1 = K ∧ (∀ z : Circle, φ z = β z) ∧
+    ∀ z : ℂ, ‖z‖ < 1 → φ z ∈ interior K
+
+/-! ### Geometry of the pieces -/
+
+theorem cutPiece_convex_compact (P Q : ℂ) :
+    Convex ℝ (cutPiece P Q) ∧ IsCompact (cutPiece P Q) := by
+  sorry
+
+theorem cutPiece_interior_nonempty {P Q : ℂ} (hP : ‖P‖ = 1) (hQ : ‖Q‖ = 1) (hPQ : P ≠ Q) :
+    (interior (cutPiece P Q)).Nonempty := by
+  sorry
+
+theorem cutPiece_frontier {P Q : ℂ} (hP : ‖P‖ = 1) (hQ : ‖Q‖ = 1) (hPQ : P ≠ Q) :
+    frontier (cutPiece P Q) =
+      {z | ‖z‖ = 1 ∧ cutCross (Q - P) (z - P) ≤ 0} ∪ segment ℝ P Q := by
+  sorry
+
+/-- The two pieces cover the disk; the interior of one misses the other. -/
+theorem cutPiece_union_disjoint (P Q : ℂ) :
+    cutPiece P Q ∪ cutPiece Q P = Metric.closedBall 0 1 ∧
+      interior (cutPiece P Q) ∩ cutPiece Q P = ∅ := by
+  sorry
+
+theorem cutCross_exp (α γ φ : ℝ) :
+    cutCross (Complex.exp ((γ : ℂ) * Complex.I) - Complex.exp ((α : ℂ) * Complex.I))
+        (Complex.exp ((φ : ℂ) * Complex.I) - Complex.exp ((α : ℂ) * Complex.I)) =
+      4 * Real.sin ((φ - γ) / 2) * Real.sin ((γ - α) / 2) * Real.sin ((φ - α) / 2) := by
+  sorry
+
+/-- A convex body with a prescribed boundary parametrisation: cone `β` from an
+interior point `c` (rays from `c` meet the frontier once:
+`Convex.openSegment_interior_closure_subset_interior`). -/
+theorem cutAndPaste_aux_boundary_chart (K : Set ℂ) (c : ℂ) (hKc : Convex ℝ K)
+    (hKcompact : IsCompact K) (hc : c ∈ interior K) (β : Circle → ℂ)
+    (hβc : Continuous β) (hβi : Function.Injective β) (hβr : Set.range β = frontier K) :
+    ∃ φ : ℂ → ℂ, CutChartSpec K β φ := by
+  sorry
+
+/-! ### The four boundary maps -/
+
+theorem cutOldA_continuous {L p q : ℕ} (hpq : p < q) (hqL : q < L) :
+    Continuous (cutOldA L p q) := by
+  sorry
+
+theorem cutOldB_continuous {L p q : ℕ} (hpq : p < q) (hqL : q < L) :
+    Continuous (cutOldB L p q) := by
+  sorry
+
+theorem cutNewA_continuous {L p q : ℕ} (hpq : p < q) (hqL : q < L) :
+    Continuous (cutNewA L p q) := by
+  sorry
+
+theorem cutNewB_continuous {L p q : ℕ} (hpq : p < q) (hqL : q < L) :
+    Continuous (cutNewB L p q) := by
+  sorry
+
+theorem cutOldA_injective {L p q : ℕ} (hpq : p < q) (hqL : q < L) :
+    Function.Injective (cutOldA L p q) := by
+  sorry
+
+theorem cutOldB_injective {L p q : ℕ} (hpq : p < q) (hqL : q < L) :
+    Function.Injective (cutOldB L p q) := by
+  sorry
+
+theorem cutNewA_injective {L p q : ℕ} (hpq : p < q) (hqL : q < L) :
+    Function.Injective (cutNewA L p q) := by
+  sorry
+
+theorem cutNewB_injective {L p q : ℕ} (hpq : p < q) (hqL : q < L) :
+    Function.Injective (cutNewB L p q) := by
+  sorry
+
+theorem cutOldA_range {L p q : ℕ} (hpq : p < q) (hqL : q < L)
+    (hfront : frontier (cutPiece (cutPoint L p) (cutPoint L q)) =
+      {z | ‖z‖ = 1 ∧ cutCross (cutPoint L q - cutPoint L p) (z - cutPoint L p) ≤ 0} ∪
+        segment ℝ (cutPoint L p) (cutPoint L q))
+    (hcross : ∀ α γ φ : ℝ,
+      cutCross (Complex.exp ((γ : ℂ) * Complex.I) - Complex.exp ((α : ℂ) * Complex.I))
+          (Complex.exp ((φ : ℂ) * Complex.I) - Complex.exp ((α : ℂ) * Complex.I)) =
+        4 * Real.sin ((φ - γ) / 2) * Real.sin ((γ - α) / 2) * Real.sin ((φ - α) / 2)) :
+    Set.range (cutOldA L p q) = frontier (cutPiece (cutPoint L p) (cutPoint L q)) := by
+  sorry
+
+theorem cutOldB_range {L p q : ℕ} (hpq : p < q) (hqL : q < L)
+    (hfront : frontier (cutPiece (cutPoint L q) (cutPoint L p)) =
+      {z | ‖z‖ = 1 ∧ cutCross (cutPoint L p - cutPoint L q) (z - cutPoint L q) ≤ 0} ∪
+        segment ℝ (cutPoint L q) (cutPoint L p))
+    (hcross : ∀ α γ φ : ℝ,
+      cutCross (Complex.exp ((γ : ℂ) * Complex.I) - Complex.exp ((α : ℂ) * Complex.I))
+          (Complex.exp ((φ : ℂ) * Complex.I) - Complex.exp ((α : ℂ) * Complex.I)) =
+        4 * Real.sin ((φ - γ) / 2) * Real.sin ((γ - α) / 2) * Real.sin ((φ - α) / 2)) :
+    Set.range (cutOldB L p q) = frontier (cutPiece (cutPoint L q) (cutPoint L p)) := by
+  sorry
+
+theorem cutNewA_range {L p q : ℕ} (hpq : p < q) (hqL : q < L)
+    (hfront : frontier (cutPiece (cutPoint L (p + 1)) (cutPoint L (q + 1))) =
+      {z | ‖z‖ = 1 ∧
+        cutCross (cutPoint L (q + 1) - cutPoint L (p + 1)) (z - cutPoint L (p + 1)) ≤ 0} ∪
+        segment ℝ (cutPoint L (p + 1)) (cutPoint L (q + 1)))
+    (hcross : ∀ α γ φ : ℝ,
+      cutCross (Complex.exp ((γ : ℂ) * Complex.I) - Complex.exp ((α : ℂ) * Complex.I))
+          (Complex.exp ((φ : ℂ) * Complex.I) - Complex.exp ((α : ℂ) * Complex.I)) =
+        4 * Real.sin ((φ - γ) / 2) * Real.sin ((γ - α) / 2) * Real.sin ((φ - α) / 2)) :
+    Set.range (cutNewA L p q) =
+      frontier (cutPiece (cutPoint L (p + 1)) (cutPoint L (q + 1))) := by
+  sorry
+
+theorem cutNewB_range {L p q : ℕ} (hpq : p < q) (hqL : q < L)
+    (hfront : frontier (cutPiece (cutPoint L (q + 1)) (cutPoint L (p + 1))) =
+      {z | ‖z‖ = 1 ∧
+        cutCross (cutPoint L (p + 1) - cutPoint L (q + 1)) (z - cutPoint L (q + 1)) ≤ 0} ∪
+        segment ℝ (cutPoint L (q + 1)) (cutPoint L (p + 1)))
+    (hcross : ∀ α γ φ : ℝ,
+      cutCross (Complex.exp ((γ : ℂ) * Complex.I) - Complex.exp ((α : ℂ) * Complex.I))
+          (Complex.exp ((φ : ℂ) * Complex.I) - Complex.exp ((α : ℂ) * Complex.I)) =
+        4 * Real.sin ((φ - γ) / 2) * Real.sin ((γ - α) / 2) * Real.sin ((φ - α) / 2)) :
+    Set.range (cutNewB L p q) =
+      frontier (cutPiece (cutPoint L (q + 1)) (cutPoint L (p + 1))) := by
+  sorry
+
+/-- The edge formulas of the concrete maps. -/
+theorem cutBoundaryData_concrete {L p q : ℕ} (hpq : p < q) (hqL : q < L) :
+    CutBoundaryData L p q (cutOldA L p q) (cutOldB L p q) (cutNewA L p q)
+      (cutNewB L p q) := by
+  sorry
+
+/-! ### Boundary combinatorics, for any maps with the edge formulas -/
+
+/-- Old generators between boundary points of the pieces give new `EqvGen`s
+between the corresponding new points (`false` = piece `A`, `true` = `B`). -/
+theorem cut_forward_generators {Label : Type*} [DecidableEq Label]
+    (u v t : List (Signed Label)) (x : Signed Label)
+    (hx : x.1 ∉ (u ++ v ++ t).map Prod.fst)
+    (oldA oldB newA newB : Circle → ℂ)
+    (D : CutBoundaryData (u ++ [x] ++ v ++ [x] ++ t).length u.length
+      (u.length + 1 + v.length) oldA oldB newA newB)
+    (i i' : Bool) (y y' : Circle) (P P' N N' : Disk)
+    (hP : (P : ℂ) = (if i then oldB y else oldA y))
+    (hP' : (P' : ℂ) = (if i' then oldB y' else oldA y'))
+    (hN : (N : ℂ) = (if i then newB y else newA y))
+    (hN' : (N' : ℂ) = (if i' then newB y' else newA y'))
+    (h : WordRel (u ++ [x] ++ v ++ [x] ++ t) P P') :
+    Relation.EqvGen (WordRel (u ++ [x, x] ++ inverseWord v ++ t)) N N' := by
+  sorry
+
+theorem cut_reverse_generators {Label : Type*} [DecidableEq Label]
+    (u v t : List (Signed Label)) (x : Signed Label)
+    (hx : x.1 ∉ (u ++ v ++ t).map Prod.fst)
+    (oldA oldB newA newB : Circle → ℂ)
+    (D : CutBoundaryData (u ++ [x] ++ v ++ [x] ++ t).length u.length
+      (u.length + 1 + v.length) oldA oldB newA newB)
+    (i i' : Bool) (y y' : Circle) (P P' N N' : Disk)
+    (hP : (P : ℂ) = (if i then oldB y else oldA y))
+    (hP' : (P' : ℂ) = (if i' then oldB y' else oldA y'))
+    (hN : (N : ℂ) = (if i then newB y else newA y))
+    (hN' : (N' : ℂ) = (if i' then newB y' else newA y'))
+    (h : WordRel (u ++ [x, x] ++ inverseWord v ++ t) N N') :
+    Relation.EqvGen (WordRel (u ++ [x] ++ v ++ [x] ++ t)) P P' := by
+  sorry
+
+/-- A point on both old pieces (the chord, or `P`, `Q`) has related new images. -/
+theorem cut_forward_fibre {Label : Type*} [DecidableEq Label]
+    (u v t : List (Signed Label)) (x : Signed Label)
+    (oldA oldB newA newB : Circle → ℂ)
+    (D : CutBoundaryData (u ++ [x] ++ v ++ [x] ++ t).length u.length
+      (u.length + 1 + v.length) oldA oldB newA newB)
+    (y y' : Circle) (N N' : Disk) (h : oldA y = oldB y')
+    (hN : (N : ℂ) = newA y) (hN' : (N' : ℂ) = newB y') :
+    Relation.EqvGen (WordRel (u ++ [x, x] ++ inverseWord v ++ t)) N N' := by
+  sorry
+
+/-- A point on both new pieces (the seam, or `P'`, `Q'`) has related old images. -/
+theorem cut_reverse_fibre {Label : Type*} [DecidableEq Label]
+    (u v t : List (Signed Label)) (x : Signed Label)
+    (oldA oldB newA newB : Circle → ℂ)
+    (D : CutBoundaryData (u ++ [x] ++ v ++ [x] ++ t).length u.length
+      (u.length + 1 + v.length) oldA oldB newA newB)
+    (y y' : Circle) (P P' : Disk) (h : newA y = newB y')
+    (hP : (P : ℂ) = oldA y) (hP' : (P' : ℂ) = oldB y') :
+    Relation.EqvGen (WordRel (u ++ [x] ++ v ++ [x] ++ t)) P P' := by
+  sorry
+
+theorem cutPoint_norm (L m : ℕ) : ‖cutPoint L m‖ = 1 := by
+  sorry
+
+theorem cutPoint_ne {L m m' : ℕ} (h : m < m') (h' : m' < m + L) :
+    cutPoint L m ≠ cutPoint L m' := by
+  sorry
+
+/-- From four piece charts to the two maps `Fin 2 × Disk → Disk` (index `0` = `A`,
+`1` = `B`).  A boundary value of a chart comes from the parameter circle, because
+interior points go to the interior of the piece; two pieces share only points of
+their frontiers. -/
+theorem cut_charts_package {Label : Type*} [DecidableEq Label]
+    (u v t : List (Signed Label)) (x : Signed Label)
+    (KA KB KA' KB' : Set ℂ) (oldA oldB newA newB : Circle → ℂ) (φA φB ψA ψB : ℂ → ℂ)
+    (hA : CutChartSpec KA oldA φA) (hB : CutChartSpec KB oldB φB)
+    (hA' : CutChartSpec KA' newA ψA) (hB' : CutChartSpec KB' newB ψB)
+    (hcov : KA ∪ KB = Metric.closedBall 0 1) (hcov' : KA' ∪ KB' = Metric.closedBall 0 1)
+    (hdisj : interior KA ∩ KB = ∅) (hdisjB : interior KB ∩ KA = ∅)
+    (hdisj' : interior KA' ∩ KB' = ∅) (hdisjB' : interior KB' ∩ KA' = ∅)
+    (hfwd : ∀ (i i' : Bool) (y y' : Circle) (P P' N N' : Disk),
+      (P : ℂ) = (if i then oldB y else oldA y) → (P' : ℂ) = (if i' then oldB y' else oldA y') →
+      (N : ℂ) = (if i then newB y else newA y) → (N' : ℂ) = (if i' then newB y' else newA y') →
+      WordRel (u ++ [x] ++ v ++ [x] ++ t) P P' →
+      Relation.EqvGen (WordRel (u ++ [x, x] ++ inverseWord v ++ t)) N N')
+    (hrev : ∀ (i i' : Bool) (y y' : Circle) (P P' N N' : Disk),
+      (P : ℂ) = (if i then oldB y else oldA y) → (P' : ℂ) = (if i' then oldB y' else oldA y') →
+      (N : ℂ) = (if i then newB y else newA y) → (N' : ℂ) = (if i' then newB y' else newA y') →
+      WordRel (u ++ [x, x] ++ inverseWord v ++ t) N N' →
+      Relation.EqvGen (WordRel (u ++ [x] ++ v ++ [x] ++ t)) P P')
+    (hffib : ∀ (y y' : Circle) (N N' : Disk), oldA y = oldB y' →
+      (N : ℂ) = newA y → (N' : ℂ) = newB y' →
+      Relation.EqvGen (WordRel (u ++ [x, x] ++ inverseWord v ++ t)) N N')
+    (hrfib : ∀ (y y' : Circle) (P P' : Disk), newA y = newB y' →
+      (P : ℂ) = oldA y → (P' : ℂ) = oldB y' →
+      Relation.EqvGen (WordRel (u ++ [x] ++ v ++ [x] ++ t)) P P') :
+    ∃ a b : Fin 2 × Disk → Disk, Continuous a ∧ Continuous b ∧
+      Function.Surjective a ∧ Function.Surjective b ∧
+      (∀ y y', WordRel (u ++ [x] ++ v ++ [x] ++ t) (a y) (a y') →
+        Relation.EqvGen (WordRel (u ++ [x, x] ++ inverseWord v ++ t))
+          (b y) (b y')) ∧
+      (∀ y y', WordRel (u ++ [x, x] ++ inverseWord v ++ t) (b y) (b y') →
+        Relation.EqvGen (WordRel (u ++ [x] ++ v ++ [x] ++ t))
+          (a y) (a y')) ∧
+      (∀ y y', a y = a y' → Relation.EqvGen (WordRel (u ++ [x, x] ++ inverseWord v ++ t)) (b y) (b y')) ∧
+      (∀ y y', b y = b y' → Relation.EqvGen (WordRel (u ++ [x] ++ v ++ [x] ++ t)) (a y) (a y')) := by
+  sorry
+
 lemma cutAndPaste_aux_triangle_chart_generators_aux_source_pos {Label : Type*}
     [DecidableEq Label]
     (u v t : List (Signed Label)) (x : Signed Label)
@@ -3798,7 +4766,44 @@ lemma cutAndPaste_aux_triangle_chart_generators {Label : Type*}
           (a y) (a y')) ∧
       (∀ y y', a y = a y' → Relation.EqvGen (WordRel (u ++ [x, x] ++ inverseWord v ++ t)) (b y) (b y')) ∧
       (∀ y y', b y = b y' → Relation.EqvGen (WordRel (u ++ [x] ++ v ++ [x] ++ t)) (a y) (a y')) := by
-  sorry
+  have hpq : u.length < u.length + 1 + v.length := by omega
+  have hqL : u.length + 1 + v.length < (u ++ [x] ++ v ++ [x] ++ t).length := by simp; omega
+  have hPQ : cutPoint (u ++ [x] ++ v ++ [x] ++ t).length u.length ≠
+      cutPoint (u ++ [x] ++ v ++ [x] ++ t).length (u.length + 1 + v.length) :=
+    cutPoint_ne hpq (by omega)
+  have hPQ' : cutPoint (u ++ [x] ++ v ++ [x] ++ t).length (u.length + 1) ≠
+      cutPoint (u ++ [x] ++ v ++ [x] ++ t).length (u.length + 1 + v.length + 1) :=
+    cutPoint_ne (by omega) (by omega)
+  have hn := cutPoint_norm (u ++ [x] ++ v ++ [x] ++ t).length
+  obtain ⟨cA, hcA⟩ := cutPiece_interior_nonempty (hn _) (hn _) hPQ
+  obtain ⟨cB, hcB⟩ := cutPiece_interior_nonempty (hn _) (hn _) hPQ.symm
+  obtain ⟨cA', hcA'⟩ := cutPiece_interior_nonempty (hn _) (hn _) hPQ'
+  obtain ⟨cB', hcB'⟩ := cutPiece_interior_nonempty (hn _) (hn _) hPQ'.symm
+  obtain ⟨φA, hφA⟩ := cutAndPaste_aux_boundary_chart _ cA (cutPiece_convex_compact _ _).1
+    (cutPiece_convex_compact _ _).2 hcA _ (cutOldA_continuous hpq hqL)
+    (cutOldA_injective hpq hqL)
+    (cutOldA_range hpq hqL (cutPiece_frontier (hn _) (hn _) hPQ) cutCross_exp)
+  obtain ⟨φB, hφB⟩ := cutAndPaste_aux_boundary_chart _ cB (cutPiece_convex_compact _ _).1
+    (cutPiece_convex_compact _ _).2 hcB _ (cutOldB_continuous hpq hqL)
+    (cutOldB_injective hpq hqL)
+    (cutOldB_range hpq hqL (cutPiece_frontier (hn _) (hn _) hPQ.symm) cutCross_exp)
+  obtain ⟨ψA, hψA⟩ := cutAndPaste_aux_boundary_chart _ cA' (cutPiece_convex_compact _ _).1
+    (cutPiece_convex_compact _ _).2 hcA' _ (cutNewA_continuous hpq hqL)
+    (cutNewA_injective hpq hqL)
+    (cutNewA_range hpq hqL (cutPiece_frontier (hn _) (hn _) hPQ') cutCross_exp)
+  obtain ⟨ψB, hψB⟩ := cutAndPaste_aux_boundary_chart _ cB' (cutPiece_convex_compact _ _).1
+    (cutPiece_convex_compact _ _).2 hcB' _ (cutNewB_continuous hpq hqL)
+    (cutNewB_injective hpq hqL)
+    (cutNewB_range hpq hqL (cutPiece_frontier (hn _) (hn _) hPQ'.symm) cutCross_exp)
+  have D := cutBoundaryData_concrete hpq hqL
+  exact cut_charts_package u v t x _ _ _ _ _ _ _ _ φA φB ψA ψB hφA hφB hψA hψB
+    (cutPiece_union_disjoint _ _).1 (cutPiece_union_disjoint _ _).1
+    (cutPiece_union_disjoint _ _).2 (cutPiece_union_disjoint _ _).2
+    (cutPiece_union_disjoint _ _).2 (cutPiece_union_disjoint _ _).2
+    (fun i i' y y' P P' N N' => cut_forward_generators u v t x hx _ _ _ _ D i i' y y' P P' N N')
+    (fun i i' y y' P P' N N' => cut_reverse_generators u v t x hx _ _ _ _ D i i' y y' P P' N N')
+    (fun y y' N N' => cut_forward_fibre u v t x _ _ _ _ D y y' N N')
+    (fun y y' P P' => cut_reverse_fibre u v t x _ _ _ _ D y y' P P')
 
 /-- Review 2026-10-14: `hfib` added — `a` is not injective (diagonal points
 have a preimage in each triangle), so generator facts alone do not lift an
