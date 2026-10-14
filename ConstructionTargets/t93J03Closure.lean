@@ -1275,6 +1275,37 @@ noncomputable def kleinPolygonSkeletonToSpacePiOne :
         (kleinPolygonSkeletonToSpace kleinSkeletonPoint) :=
   FundamentalGroup.map kleinPolygonSkeletonToSpace kleinSkeletonPoint
 
+/-- The literal skeleton inclusion factored through the radial outer piece. -/
+noncomputable def kleinPolygonSkeletonToOuter :
+    C(kleinPairingData.skeleton,
+      {q // q ∈ (openCover kleinPairingData).outer}) :=
+  ⟨skeletonToOuter kleinPairingData,
+    Continuous.subtype_mk continuous_subtype_val
+      (skeleton_mem_outer kleinPairingData)⟩
+
+/-- The induced map of the direct skeleton-to-outer inclusion at the preferred
+basepoint. -/
+noncomputable def kleinPolygonSkeletonToOuterPiOne :
+    FundamentalGroup kleinPairingData.skeleton kleinSkeletonPoint →*
+      FundamentalGroup {q // q ∈ (openCover kleinPairingData).outer}
+        (kleinPolygonSkeletonToOuter kleinSkeletonPoint) :=
+  FundamentalGroup.map kleinPolygonSkeletonToOuter kleinSkeletonPoint
+
+/-- Exact equality from the outer-piece composite representation to the
+literal skeleton-in-polygon representation.  This proves the geometric half
+of the remaining map comparison; no basepoint change occurs in this direct
+factorization. -/
+theorem kleinPolygonSkeletonToSpacePiOne_eq_outer_comp_direct :
+    (FundamentalGroup.map kleinPolygonOuterToSpace
+        (kleinPolygonSkeletonToOuter kleinSkeletonPoint)).comp
+        kleinPolygonSkeletonToOuterPiOne =
+      kleinPolygonSkeletonToSpacePiOne := by
+  ext g
+  induction g using Quotient.inductionOn with
+  | h p =>
+    apply Quotient.sound
+    exact ⟨Path.Homotopy.refl _⟩
+
 /-- The target-basepoint path matching the two stages already used on the
 domain side.  First the inverse homotopy-equivalence unit runs from the
 overlap image to its radial deformation; then the chosen skeleton connector

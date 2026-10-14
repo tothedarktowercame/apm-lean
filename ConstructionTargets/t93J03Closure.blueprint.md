@@ -308,6 +308,11 @@ connector. `kleinPolygonOverlapSkeletonNormalClosure_le_targetTransportedKernel`
 therefore gives the forward kernel inclusion for a map with exactly the
 literal skeleton map's source and target types.  Only equality of those two
 maps remains at this seam.
+`kleinPolygonSkeletonToSpacePiOne_eq_outer_comp_direct` proves the geometric
+half of that equality: the literal skeleton map is exactly the composite of
+the direct skeleton-to-outer map with outer-to-polygon inclusion.  The
+remaining comparison is solely between this direct outer coordinate and the
+inverse homotopy-equivalence/basepoint transport coordinate.
 `kleinBottle_pi1_every_basepoint_of_basedVanKampen` confirms this single
 topological contract and the independent winding conjugacy are now the only
 C1 inputs.
