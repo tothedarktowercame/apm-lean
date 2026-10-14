@@ -36159,6 +36159,16 @@
     [{:cmd "prototypes",
       :exit 1,
       :correction "used ambient paths and Fin casts"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1792016751914-12556-cb7561f7",
+     :commands
+     ["exact diff-tree scope assertion for 8c4eb4f"
+      "fixture SHA-256 assertion; lake env lean frozen interface"
+      "statement-registry check; placeholder/forbidden recount"],
+     :finding
+     "PASS: 8c4eb4f adds compiled, sorry-free progress after 263f5d47. The frozen type is Fin(runs+1) -> V, and its theorem correctly recovers the matching ambient boundary-list entry after subtype coercion. This is the representation bridge needed to package run representatives; it neither assumes nor claims the remaining based van Kampen result. Scope/hash match; standard axioms only; registry 166/166; Main stays 1->1 placeholder; remaining milestones are listed."},
     :commit "657c9520bc1295803f113d25d5a087cc5a0a191d",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
@@ -36169,7 +36179,7 @@
      "61cb3c3db053058b8708fd0c7b9ebbd8def02a9d77c8d1ebe53c6786cf5c1a18"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -36187,7 +36197,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t93J03Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Proved every reindexed run-block piece stays in its head-selected chart; Boolean representative choice remains.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Chose an outer-range representative for every run; boundary casts/fold remain.",
    :id :program-2026-10-13-close-t93j03,
    :kind :final-adapter,
    :campaign-priority 30,
@@ -36513,7 +36523,11 @@
     {:job 9,
      :commit "e1ece6539bc8be947cc0b71eed2ab9d3a26c581f",
      :reason
-     "Proved every reindexed run-block piece stays in its head-selected chart; Boolean representative choice remains."}]}
+     "Proved every reindexed run-block piece stays in its head-selected chart; Boolean representative choice remains."}
+    {:job 1,
+     :commit "657c9520bc1295803f113d25d5a087cc5a0a191d",
+     :reason
+     "Chose an outer-range representative for every run; boundary casts/fold remain."}]}
   {:consumer :t99J05,
    :stop-count 5,
    :evidence
@@ -40043,7 +40057,7 @@
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "pathTwoOpenSubdivisionRunBlockPiece_mem_chart_cases",
@@ -40053,7 +40067,9 @@
     :reported-by [:program-2026-10-13-close-t93j03],
     :type "true gives inner range; false gives outer range",
     :area "covering-subgroup-correspondence",
-    :proved-in :program-2026-10-13-close-t93j03},
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "657c9520bc1295803f113d25d5a087cc5a0a191d"},
    :id :lemma-pathtwoopensubdivisionrunblockpiece-mem-chart-cases,
    :kind :lemma,
    :depends-on [:lemma-pathtwoopensubdivisionrunblockpiece-mem-chart],
@@ -40078,7 +40094,7 @@
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "pathTwoOpenSubdivisionRun_exists_outerRepresentative",
@@ -40088,7 +40104,9 @@
     :reported-by [:program-2026-10-13-close-t93j03],
     :type "equal-class outer path per run",
     :area "covering-subgroup-correspondence",
-    :proved-in :program-2026-10-13-close-t93j03},
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "657c9520bc1295803f113d25d5a087cc5a0a191d"},
    :id :lemma-pathtwoopensubdivisionrun-exists-outerrepresentative,
    :kind :lemma,
    :depends-on
