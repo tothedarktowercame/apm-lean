@@ -2261,7 +2261,56 @@ lemma apm_t01A04_tbp_sheet_homeomorph_aux_inv_continuous (i : Fin 2) :
 -- BEGIN SEAT AREA
 lemma apm_t01A04_tbp_sheet_homeomorph_aux_left (i : Fin 2) :
     ∀ y ∈ apm_t01A04_tbp_V i, apm_t01A04_tbp_sheet_homeomorph_aux_inv i (apm_t01a04_torusCoverMap y) = y := by
-  sorry
+  intro y hy
+  refine Quotient.inductionOn y ?_ hy
+  rintro (q | p) hy
+  · have hy' := (apm_t01A04_tbp_preimage_aux_mem_V i (Sum.inl q)).mp hy
+    change Quotient.mk _ (Sum.inl
+        (apm_t01A04_tbp_sheet_homeomorph_aux_root i (q.1 ^ 2), q.2)) =
+      Quotient.mk _ (Sum.inl q)
+    apply congrArg (fun r : Sum apm_t01a04_Torus (Fin 2 × Circle) =>
+      (Quotient.mk _ r : apm_t01a04_TorusCover))
+    apply congrArg Sum.inl
+    apply Prod.ext
+    · apply apm_t01A04_tbp_sheet_homeomorph_aux_branch_unique i
+      · rw [apm_t01A04_tbp_sheet_homeomorph_aux_root_sq]
+      · have hlo : -Real.pi <
+            Complex.arg (((q.1 : Circle) ^ 2 : Circle) : ℂ) :=
+          Complex.neg_pi_lt_arg _
+        have hhi : Complex.arg (((q.1 : Circle) ^ 2 : Circle) : ℂ) < Real.pi :=
+          Complex.arg_lt_pi_iff.mpr (Or.inl hy'.2.1.le)
+        have hc : 0 < Real.cos
+            (Complex.arg (((q.1 : Circle) ^ 2 : Circle) : ℂ) / 2) := by
+          apply Real.cos_pos_of_mem_Ioo
+          constructor <;> nlinarith [Real.pi_pos]
+        fin_cases i
+        · change 0 < (((1 : ℂ) *
+            (Circle.exp (Complex.arg (((q.1 : Circle) ^ 2 : Circle) : ℂ) / 2) : ℂ)) *
+              star (1 : ℂ)).re
+          rw [star_one, mul_one, one_mul, Circle.coe_exp,
+            Complex.exp_ofReal_mul_I_re]
+          exact hc
+        · have hsp : (apm_t01a04_sheetPoint (1 : Fin 2) : ℂ) = -1 := by
+            rw [apm_t01a04_sheetPoint_one, Circle.coe_exp,
+              Complex.exp_pi_mul_I]
+          change 0 < (((apm_t01a04_sheetPoint (1 : Fin 2) : ℂ) *
+            (Circle.exp (Complex.arg (((q.1 : Circle) ^ 2 : Circle) : ℂ) / 2) : ℂ)) *
+              star (apm_t01a04_sheetPoint (1 : Fin 2) : ℂ)).re
+          rw [hsp]
+          have hm : star (-1 : ℂ) = (-1 : ℂ) := by
+            norm_num
+          rw [hm]
+          change 0 < (((-1 : ℂ) *
+            (Circle.exp (Complex.arg (((q.1 : Circle) ^ 2 : Circle) : ℂ) / 2) : ℂ)) *
+              (-1 : ℂ)).re
+          rw [neg_one_mul, mul_neg, mul_one, neg_neg]
+          rw [Circle.coe_exp, Complex.exp_ofReal_mul_I_re]
+          convert hc using 1 <;> ring
+      · exact hy'.1
+    · rfl
+  · have hy' := (apm_t01A04_tbp_preimage_aux_mem_V i (Sum.inr p)).mp hy
+    change Quotient.mk _ (Sum.inr (i, p.2)) = Quotient.mk _ (Sum.inr p)
+    rw [← hy'.1]
 -- END SEAT AREA
 
 /-- Right inverse on `U`. -/
