@@ -6576,6 +6576,51 @@ theorem genericPointWedgeRightLeg_map_overlapUnitInv_eq_endpointTransport :
   exact eqToHom_map _ _
 
 omit [PathConnectedSpace X] [PathConnectedSpace Y] in
+/-- Every connector system carries equality transport to its target connector. -/
+theorem connectorSystem_connectorSquare_eqToHom
+    {C : Type} [Groupoid C] (S : ConnectorSystem C) {A B : C} (h : A = B) :
+    (S.connector A).hom ≫ eqToHom h = (S.connector B).hom := by
+  subst B
+  simp
+
+omit [PathConnectedSpace X] in
+/-- The transported overlap component satisfies the connector square in the
+coherent right-cover connector system before mapping and base change. -/
+theorem genericPointWedgeCoherentRightSource_overlap_connectorSquare :
+    let r := genericPointWedgeActualRight x₀ y₀ M N
+    let eK := genericPointWedgeOverlapGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let z := genericPointWedgeOverlapBase x₀ y₀ M N
+    let F := eK.inverse ⋙ r
+    ((genericPointWedgeCoherentRightSourceConnectors
+      x₀ y₀ M N hM hN hy hx cM cN).connector
+        (F.obj (eK.functor.obj ((eK.functor ⋙ eK.inverse).obj z)))).hom ≫
+      F.map (eK.functor.map (eK.unitInv.app z)) =
+    ((genericPointWedgeCoherentRightSourceConnectors
+      x₀ y₀ M N hM hN hy hx cM cN).connector
+        (F.obj (eK.functor.obj z))).hom := by
+  dsimp only
+  have ht :
+      ((genericPointWedgeOverlapGroupoidEquivalence
+          x₀ y₀ M N hM hN hy hx cM cN).inverse ⋙
+        genericPointWedgeActualRight x₀ y₀ M N).map
+          ((genericPointWedgeOverlapGroupoidEquivalence
+            x₀ y₀ M N hM hN hy hx cM cN).functor.map
+              ((genericPointWedgeOverlapGroupoidEquivalence
+                x₀ y₀ M N hM hN hy hx cM cN).unitInv.app
+                  (genericPointWedgeOverlapBase x₀ y₀ M N))) =
+        eqToHom (congrArg
+          ((genericPointWedgeOverlapGroupoidEquivalence
+            x₀ y₀ M N hM hN hy hx cM cN).inverse ⋙
+              genericPointWedgeActualRight x₀ y₀ M N).obj
+            (genericPointWedgeOverlap_shiftedCoordinateObject_eq
+              x₀ y₀ M N hM hN hy hx cM cN)) := by
+    rw [genericPointWedgeOverlap_functor_map_unitInv_eq_endpointTransport]
+    exact eqToHom_map _ _
+  rw [ht]
+  exact connectorSystem_connectorSquare_eqToHom _ _
+
+omit [PathConnectedSpace X] [PathConnectedSpace Y] in
 /-- The shifted and unshifted inverse right-span components are dependently
 equal, since their arguments are objects of `FundamentalGroupoid Unit`. -/
 theorem genericPointWedgeOuterRightSpan_shiftedComponent_heq :

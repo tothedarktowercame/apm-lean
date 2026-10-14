@@ -1466,6 +1466,10 @@ identification in the coordinate groupoid: its hom-set is subsingleton, so the
 forward image is exactly transport along the named shifted-object equality.
 `genericPointWedgeRightLeg_map_overlapUnitInv_eq_endpointTransport` carries
 that equality through the inverse overlap and right-piece functors, retaining
-the induced endpoint equality explicitly.  The next step is to use this
-transport in the original right-piece connector square and apply the three
-connector-square preservation lemmas to the installed system.
+the induced endpoint equality explicitly.
+`connectorSystem_connectorSquare_eqToHom` is the general connector law for
+such transports, and
+`genericPointWedgeCoherentRightSource_overlap_connectorSquare` applies it to
+the original coherent right-cover system.  The next step is to apply the map,
+base-change, and comap preservation lemmas to install this square in the
+literal `Y` connector system.
