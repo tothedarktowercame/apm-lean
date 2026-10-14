@@ -60,11 +60,68 @@ def apm_t02a01_restrictedCover {Stilde : Type*} [TopologicalSpace Stilde]
     p ⁻¹' apm_t02a01_boundary → apm_t02a01_boundarySpace :=
   fun x => ⟨p x.1, x.2⟩
 
-/-- LIBRARY (punctured-torus geometry): the concrete inner boundary is a
-circle, with the local hypotheses needed for covering monodromy. -/
+/-- LIBRARY (square-annulus quotient): the inner metric circle survives the
+outer-edge quotient and gives the boundary subtype. -/
+theorem apm_t02a01_boundary_homeomorph_circle :
+    Nonempty (apm_t02a01_boundarySpace ≃ₜ Circle) := by
+  sorry
+
+/-- Transport path connectedness across the concrete boundary-circle
+homeomorphism.  The homeomorphism is an explicit hypothesis so this leaf is
+independent of its construction. -/
+theorem apm_t02a01_boundary_pathConnected
+    (h : Nonempty (apm_t02a01_boundarySpace ≃ₜ Circle)) :
+    Nonempty (PathConnectedSpace apm_t02a01_boundarySpace) := by
+  sorry
+
+/-- Transport local path connectedness across the concrete boundary-circle
+homeomorphism. -/
+theorem apm_t02a01_boundary_locPathConnected
+    (h : Nonempty (apm_t02a01_boundarySpace ≃ₜ Circle)) :
+    Nonempty (LocPathConnectedSpace apm_t02a01_boundarySpace) := by
+  sorry
+
+/-- The two geometric instances used below, assembled from the independently
+provable circle leaves. -/
 theorem apm_t02a01_boundary_geometry :
     Nonempty (PathConnectedSpace apm_t02a01_boundarySpace) ∧
       Nonempty (LocPathConnectedSpace apm_t02a01_boundarySpace) := by
+  have h := apm_t02a01_boundary_homeomorph_circle
+  exact ⟨apm_t02a01_boundary_pathConnected h,
+    apm_t02a01_boundary_locPathConnected h⟩
+
+/-- Restricting a covering map to the full inverse image of a subtype is again
+a covering map. -/
+theorem apm_t02a01_restrictedCover_isCovering
+    {Stilde : Type*} [TopologicalSpace Stilde]
+    (p : Stilde → apm_t02a01_puncturedTorus) (hcover : IsCoveringMap p) :
+    IsCoveringMap (apm_t02a01_restrictedCover p) := by
+  sorry
+
+/-- LIBRARY (polygon boundary word): lifting any loop on the inner boundary of
+the square-annulus quotient ends at a deck translate by a commutator. -/
+theorem apm_t02a01_boundary_monodromy_is_deck_commutator
+    {Stilde : Type*} [TopologicalSpace Stilde]
+    (p : Stilde → apm_t02a01_puncturedTorus) (n : ℕ)
+    (hcov : IsCoveringMap (apm_t02a01_restrictedCover p))
+    (deck : ZMod n → Homeomorph Stilde Stilde)
+    (hdeck_over : ∀ z x, p (deck z x) = p x)
+    (hdeck_transitive : ∀ x y, p x = p y → ∃! z, deck z x = y)
+    (e : p ⁻¹' apm_t02a01_boundary)
+    (γ : FundamentalGroup apm_t02a01_boundarySpace
+      (apm_t02a01_restrictedCover p e)) :
+    ∃ u v : ZMod n,
+      (hcov.monodromy γ ⟨e, rfl⟩).1.1 = deck (u + v - u - v) e.1 := by
+  sorry
+
+/-- The commutator translation is the identity because the deck group is the
+abelian group `ZMod n`.  This is independent of the boundary geometry. -/
+theorem apm_t02a01_deck_commutator_apply
+    {Stilde : Type*} [TopologicalSpace Stilde] (n : ℕ)
+    (deck : ZMod n → Homeomorph Stilde Stilde)
+    (hdeck_zero : deck 0 = Homeomorph.refl Stilde)
+    (u v : ZMod n) (x : Stilde) :
+    deck (u + v - u - v) x = x := by
   sorry
 
 /-- LIBRARY (boundary commutator + abelian deck group): monodromy of every
@@ -83,6 +140,36 @@ theorem apm_t02a01_boundary_monodromy_trivial
         (γ : FundamentalGroup apm_t02a01_boundarySpace
           (apm_t02a01_restrictedCover p e)),
         hcov.monodromy γ ⟨e, rfl⟩ = ⟨e, rfl⟩ := by
+  let hcov := apm_t02a01_restrictedCover_isCovering p hcover
+  refine ⟨hcov, ?_⟩
+  intro e γ
+  obtain ⟨u, v, huv⟩ :=
+    apm_t02a01_boundary_monodromy_is_deck_commutator p n hcov deck hdeck_over
+      hdeck_transitive e γ
+  apply Subtype.ext
+  apply Subtype.ext
+  exact huv.trans (apm_t02a01_deck_commutator_apply n deck hdeck_zero u v e.1)
+
+/-- A covering over a path-connected base has a point above the chosen
+basepoint in every connected component of its total space. -/
+theorem apm_t02a01_component_meets_fiber
+    {E B : Type*} [TopologicalSpace E] [TopologicalSpace B]
+    [PathConnectedSpace B] [LocPathConnectedSpace B]
+    (q : E → B) (hq : IsCoveringMap q) (e : E) :
+    Function.Surjective
+      (fun x : q ⁻¹' {q e} => (x.1 : ConnectedComponents E)) := by
+  sorry
+
+/-- Trivial based monodromy separates two points of the chosen fiber into
+different connected components. -/
+theorem apm_t02a01_fiber_injective_on_components
+    {E B : Type*} [TopologicalSpace E] [TopologicalSpace B]
+    [PathConnectedSpace B] [LocPathConnectedSpace B]
+    (q : E → B) (hq : IsCoveringMap q) (e : E)
+    (hmono : ∀ γ : FundamentalGroup B (q e),
+      hq.monodromy γ ⟨e, rfl⟩ = ⟨e, rfl⟩) :
+    Function.Injective
+      (fun x : q ⁻¹' {q e} => (x.1 : ConnectedComponents E)) := by
   sorry
 
 /-- LIBRARY (covering monodromy): a path-connected base with trivial
@@ -95,7 +182,11 @@ theorem apm_t02a01_components_equiv_fiber
     (hmono : ∀ γ : FundamentalGroup B (q e),
       hq.monodromy γ ⟨e, rfl⟩ = ⟨e, rfl⟩) :
     Nonempty (ConnectedComponents E ≃ q ⁻¹' {q e}) := by
-  sorry
+  let f : q ⁻¹' {q e} → ConnectedComponents E := fun x => x.1
+  have hf : Function.Bijective f :=
+    ⟨apm_t02a01_fiber_injective_on_components q hq e hmono,
+      apm_t02a01_component_meets_fiber q hq e⟩
+  exact ⟨(Equiv.ofBijective f hf).symm⟩
 
 /-- The supplied simply transitive `ZMod n` deck action identifies every
 fiber with `ZMod n`. -/
