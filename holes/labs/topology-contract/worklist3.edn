@@ -36159,6 +36159,16 @@
      {:cmd "lean closure; fixture; Main; registry; diff; show --check",
       :exit 0}
      {:cmd "rg forbidden additions", :exit 1, :expected-exit 1}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791972757635-11754-a4f89547",
+     :commands
+     ["git show/check/diff fc950d9a; scope and orientation review"
+      "sha256sum fixture; lean closure, fixture, Main"
+      "statement registry; placeholder and axiom recount"],
+     :finding
+     "PASS. Commit fc950d9a proves normalClosure(range overlap) <= ker(outer-to-polygon) from the prior pointwise nullity theorem, using the correctly oriented normal-closure universal property. This is compiled, sorry-free program progress. Scope and fixture hash match; support placeholders 0->0; frozen Main placeholder 1->1; standard axioms only; registry 166/166. Skeleton transport, reverse inclusion, surjectivity, and winding conjugacy remain listed."},
     :commit "fc950d9a2e0bdc8863b80786dedf8f035a21e793",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
@@ -36169,7 +36179,7 @@
      "ef20e52196e5b63734635ab19b12e8f17fb9a95279f8b4081a5c074b300001ab"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -36187,7 +36197,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t93J03Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Proved overlap loops die via the contractible inner radial piece; reverse kernel inclusion, surjectivity and winding remain.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Proved the overlap-image normal closure lies in the outer-to-polygon kernel; skeleton transport, reverse inclusion, surjectivity and winding remain.",
    :id :program-2026-10-13-close-t93j03,
    :kind :final-adapter,
    :campaign-priority 30,
@@ -36341,7 +36351,11 @@
     {:job 2,
      :commit "c454760138501d322f23734cecc5d356b4fa717d",
      :reason
-     "Proved overlap loops die via the contractible inner radial piece; reverse kernel inclusion, surjectivity and winding remain."}]}
+     "Proved overlap loops die via the contractible inner radial piece; reverse kernel inclusion, surjectivity and winding remain."}
+    {:job 3,
+     :commit "fc950d9a2e0bdc8863b80786dedf8f035a21e793",
+     :reason
+     "Proved the overlap-image normal closure lies in the outer-to-polygon kernel; skeleton transport, reverse inclusion, surjectivity and winding remain."}]}
   {:consumer :t99J05,
    :stop-count 5,
    :evidence
@@ -38578,7 +38592,7 @@
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "kleinPolygonOverlapNormalClosure_le_outerToSpacePiOne_ker",
@@ -38590,7 +38604,9 @@
     :type
     "normal closure of actual overlap image is contained in outer-to-polygon kernel",
     :area "covering-subgroup-correspondence",
-    :proved-in :program-2026-10-13-close-t93j03},
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "fc950d9a2e0bdc8863b80786dedf8f035a21e793"},
    :id
    :lemma-kleinpolygonoverlapnormalclosure-le-outertospacepione-ker,
    :kind :lemma,
