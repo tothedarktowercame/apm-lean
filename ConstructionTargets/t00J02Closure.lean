@@ -284,6 +284,68 @@ def occupiedRegularFiberComponentIndex
     {x : S // f x = y} → OccupiedRegularFiberComponent f c y hy :=
   fun x => ⟨regularFiberComponentIndex f c y hy x, ⟨x, rfl⟩⟩
 
+/-- A boundary parametrization and circle lift for exactly one genuine
+component meeting the chosen fiber. -/
+structure ExactZeroDegreeComponentLift
+    {S : Type} [TopologicalSpace S] (f : C(S, S)) (c : C(Circle, S))
+    (y : S) (hy : y ∈ Set.range c)
+    (k : OccupiedRegularFiberComponent f c y hy) where
+  component : C(Circle, S)
+  lift : C(Circle, Circle)
+  range_component : Set.range component = k.1.1
+  lift_commutes : c.comp lift = f.comp component
+  degree_eq_zero : circleDegree lift = 0
+
+/-- Disk boundedness supplies an exact boundary parametrization for every
+genuine component meeting the fiber; essentiality of the target circle makes
+the corresponding circle lift have degree zero. -/
+noncomputable def occupiedRegularFiber_exactZeroDegreeLifts
+    {S : Type} [TopologicalSpace S]
+    {Q : Type} [AddCommGroup Q] [Module ℤ Q] [Module.IsTorsionFree ℤ Q]
+    (f : C(S, S)) (c : C(Circle, S)) (hc : Topology.IsEmbedding c)
+    (eS : (((AlgebraicTopology.singularHomologyFunctor
+      (ModuleCat ℤ) 1).obj (ModuleCat.of ℤ ℤ)).obj (TopCat.of S)) ≅
+        ModuleCat.of ℤ Q)
+    (hessential : homologyMap 1 c ≠ 0)
+    (hdisks : ConstructionTargets.DiskBoundaryHomology.ComponentsBoundByDisks
+      (f ⁻¹' Set.range c))
+    (y : S) (hy : y ∈ Set.range c) [Fintype {x : S // f x = y}] :
+    ∀ k : OccupiedRegularFiberComponent f c y hy,
+      ExactZeroDegreeComponentLift f c y hy k := by
+  classical
+  letI : Mono (((AlgebraicTopology.singularHomologyFunctor
+      (ModuleCat ℤ) 1).obj (ModuleCat.of ℤ ℤ)).map (TopCat.ofHom c)) :=
+    ConstructionTargets.IntegerCyclic.mono_of_ne_zero_of_iso Q
+      ConstructionTargets.CircleHomology.circleH1IsoInt eS _ hessential
+  intro k
+  let x := Classical.choose k.property
+  have hk := Classical.choose_spec k.property
+  have hx : (x : S) ∈ f ⁻¹' Set.range c := by
+    change f x ∈ Set.range c
+    rw [x.property]
+    exact hy
+  let hex :=
+    ConstructionTargets.DiskBoundaryHomology.exists_boundary_eq_component_and_singularHomology_map_eq_zero
+      (ModuleCat ℤ) (ModuleCat.of ℤ ℤ) hdisks hx 1 one_ne_zero
+  let γ := Classical.choose hex
+  have hγ := Classical.choose_spec hex
+  have hγrange := hγ.1
+  have hγzero := hγ.2
+  have hγsub : Set.range γ ⊆ f ⁻¹' Set.range c := by
+    rw [hγrange]
+    exact connectedComponentIn_subset _ _
+  let hlift := ConstructionTargets.EmbeddedCircleLift.map_component_lift_eq_zero
+      ((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 1).obj
+        (ModuleCat.of ℤ ℤ)) f c hc γ hγsub hγzero
+  let ℓ := Classical.choose hlift
+  have hℓ := Classical.choose_spec hlift
+  have hcommutes := hℓ.1
+  have hℓzero := hℓ.2
+  refine ⟨γ, ℓ, ?_, hcommutes,
+    circleDegree_eq_zero_of_homologyMap_eq_zero ℓ hℓzero⟩
+  rw [hγrange]
+  exact congrArg Subtype.val hk
+
 /-- Algebraic final step of the regular-value formula: once the top-degree
 coordinate is identified with the component signed count, pointwise zero
 component degrees force that coordinate to vanish. -/
@@ -408,6 +470,7 @@ end ConstructionTargets.T00J02Closure
 #print axioms ConstructionTargets.T00J02Closure.regularFiber_mem_indexedComponent
 #print axioms ConstructionTargets.T00J02Closure.OccupiedRegularFiberComponent
 #print axioms ConstructionTargets.T00J02Closure.occupiedRegularFiberComponentIndex
+#print axioms ConstructionTargets.T00J02Closure.occupiedRegularFiber_exactZeroDegreeLifts
 #print axioms ConstructionTargets.T00J02Closure.regularValue_topDegree_eq_zero_of_signedCount
 #print axioms ConstructionTargets.T00J02Closure.surfaceTopDegree_eq_homologyMap
 #print axioms ConstructionTargets.T00J02Closure.surfaceTopHomologyMap_eq_zero_of_surfaceTopDegree_eq_zero
