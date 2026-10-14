@@ -113901,6 +113901,17 @@
       "lake build ConstructionTargets.ThreeCirclesFundamentalGroup",
       :exit 1,
       :finding "B12 absent."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791948723408-11500-7784c018",
+     :commands
+     ["git show/diff-tree ba328d3e8"
+      "git archive ba328d3e8; lake env lean archived PointWedgeVanKampen.lean"
+      "lake build ConstructionTargets.PointWedgeVanKampen"
+      "sha256sum; placeholders; statement-registry.py check"],
+     :finding
+     "Independent review of topo-2 commit ba328d3e8: only scoped Lean/doc files changed. Archived Lean and lake build pass; source/doc/fixture hashes ce231883/561c4d68/0bca6ce3 match evidence; placeholders 0->0; registry 166/166. Comap and coherent connector formulas preserve endpoints and expose inverse-map/unit and base-transport/map/counit in the correct categorical order; axioms are standard. Valid program STOP; source comparison/B6/B12 remain listed."},
     :commit "ba328d3e84b981caadf9e85b826223ba81c9d7bb",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
@@ -113911,7 +113922,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113932,7 +113943,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Installed coherent right connectors at the literal base.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Exposed the coherent right connector in exact transport-map-counit order.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -114829,7 +114840,11 @@
     {:job 8,
      :commit "dc3608fabab77541b24109719459b19c110d339d",
      :reason
-     "Installed coherent right connectors at the literal base."}]}
+     "Installed coherent right connectors at the literal base."}
+    {:job 9,
+     :commit "ba328d3e84b981caadf9e85b826223ba81c9d7bb",
+     :reason
+     "Exposed the coherent right connector in exact transport-map-counit order."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
