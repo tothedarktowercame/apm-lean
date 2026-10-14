@@ -363,7 +363,58 @@ theorem t95A04_isImmersionAt_of_augmented_local_inverse
     (hqG : ∀ z ∈ q.source,
       q z = writtenInExtChartAt (𝓡 2) (𝓡 6) x veroneseDescended z.1 + e (0, z.2)) :
     Manifold.IsImmersionAt (𝓡 2) (𝓡 6) ∞ veroneseDescended x := by
-  sorry
+  let c : OpenPartialHomeomorph (E 6) (E 6) :=
+    q.symm.toOpenPartialHomeomorph.trans e.toHomeomorph.toOpenPartialHomeomorph
+  let s : Set (Space ℝ 2) := (chartAt (E 2) x).source ∩
+    (chartAt (E 2) x) ⁻¹' {u : E 2 | (u, (0 : E 4)) ∈ q.source}
+  have hscoord : IsOpen {u : E 2 | (u, (0 : E 4)) ∈ q.source} :=
+    q.open_source.preimage (continuous_id.prodMk continuous_const)
+  have hs : IsOpen s :=
+    (chartAt (E 2) x).continuousOn_toFun.isOpen_inter_preimage
+      (chartAt (E 2) x).open_source hscoord
+  let d : OpenPartialHomeomorph (Space ℝ 2) (E 2) := (chartAt (E 2) x).restr s
+  apply Manifold.IsImmersionAt.mk_of_continuousAt
+    veroneseDescended_contMDiff.continuous.continuousAt e
+    d c
+  · dsimp [d]
+    simp only [OpenPartialHomeomorph.restr_source, hs.interior_eq, s,
+      Set.mem_inter_iff, mem_chart_source, true_and, Set.mem_preimage]
+    simpa using hq
+  · dsimp [c]
+    simp only [Set.mem_inter_iff, Set.mem_univ, and_true]
+    change veroneseDescended x ∈ q.target
+    have hm := q.map_source hq
+    rw [hqG _ hq] at hm
+    have he0 : e (0, (0 : E 4)) = 0 := map_zero e
+    simpa [writtenInExtChartAt, he0] using hm
+  · dsimp [d]
+    exact restr_mem_maximalAtlas _ (IsManifold.chart_mem_maximalAtlas x) hs
+  · rw [IsManifold.mem_maximalAtlas_iff]
+    apply StructureGroupoid.mem_maximalAtlas_of_mem_groupoid
+    rw [contDiffGroupoid, mem_groupoid_of_pregroupoid, contDiffPregroupoid]
+    constructor
+    · simpa [c] using e.contDiff.comp_contDiffOn
+        q.symm.contMDiffOn_toFun.contDiffOn
+    · simpa [c] using
+        (show ContDiffOn ℝ ∞ (q ∘ e.symm) (e.symm ⁻¹' q.source) by
+          exact q.contMDiffOn_toFun.contDiffOn.comp e.symm.contDiff.contDiffOn
+              (Set.mapsTo_preimage _ _))
+  · intro u hu
+    dsimp [c, d] at hu ⊢
+    have huz : (u, (0 : E 4)) ∈ q.source := by
+      have hus : (chartAt (E 2) x).symm u ∈ s := by
+        rw [← hs.interior_eq]
+        exact hu.2.2
+      have hur := (chartAt (E 2) x).right_inv hu.2.1
+      simpa [s, hur] using hus.2
+    have hqval := hqG (u, (0 : E 4)) huz
+    have hqval' : q (u, (0 : E 4)) =
+        veroneseDescended ((chartAt (E 2) x).symm u) := by
+      have he0 : e (0, (0 : E 4)) = 0 := map_zero e
+      simpa [writtenInExtChartAt, he0] using hqval
+    rw [← hqval']
+    change e (q.symm (q (u, (0 : E 4)))) = e (u, 0)
+    exact congrArg e (q.toPartialEquiv.left_inv huz)
 
 /-- Pointwise normal forms are exactly the global immersion predicate. -/
 theorem t95A04_isImmersion_of_isImmersionAt
