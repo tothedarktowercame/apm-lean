@@ -404,8 +404,43 @@ theorem t93J03_cyclicCover_aux_characteristic
     φ g ∈ Subgroup.zpowers generatorA ↔ g ∈ Subgroup.zpowers generatorA := by
   sorry
 
+noncomputable def t93J03_cyclicCover_aux_E_covering_aux_source :
+    (ℝ × ℝ) ≃ₜ ℂ :=
+  (Homeomorph.prodComm ℝ ℝ).trans
+    (((Homeomorph.refl ℝ).prodCongr
+      (Homeomorph.mulLeft₀ (2 * Real.pi) (mul_ne_zero (by norm_num) Real.pi_ne_zero))).trans
+    Complex.equivRealProdCLM.toHomeomorph.symm)
+
+noncomputable def t93J03_cyclicCover_aux_E_covering_aux_target :
+    {z : ℂ // z ≠ 0} ≃ₜ T93J03Punctured where
+  toFun z := ⟨(z.1.re, z.1.im), by
+    intro h
+    apply z.2
+    apply Complex.ext
+    · exact congrArg Prod.fst h
+    · exact congrArg Prod.snd h⟩
+  invFun z := ⟨⟨z.1.1, z.1.2⟩, by
+    intro h
+    apply z.2
+    exact Prod.ext (congrArg Complex.re h) (congrArg Complex.im h)⟩
+  left_inv z := by ext <;> rfl
+  right_inv z := by ext <;> rfl
+  continuous_toFun := by
+    apply Continuous.subtype_mk
+    exact Complex.equivRealProdCLM.continuous.comp continuous_subtype_val
+  continuous_invFun := by
+    apply Continuous.subtype_mk
+    exact Complex.equivRealProdCLM.symm.continuous.comp continuous_subtype_val
+
 theorem t93J03_cyclicCover_aux_E_covering : IsCoveringMap t93J03_cyc_E := by
-  sorry
+  have h := (Complex.isCoveringMap_exp.comp_homeomorph
+    t93J03_cyclicCover_aux_E_covering_aux_source).homeomorph_comp
+      t93J03_cyclicCover_aux_E_covering_aux_target
+  convert h using 1
+  funext v
+  apply Subtype.ext
+  ext <;> simp [t93J03_cyc_E, t93J03_cyclicCover_aux_E_covering_aux_source,
+    t93J03_cyclicCover_aux_E_covering_aux_target, Complex.exp_re, Complex.exp_im]
 
 theorem t93J03_cyclicCover_aux_E_eq_iff (v w : ℝ × ℝ) :
     t93J03_cyc_E v = t93J03_cyc_E w ↔ ∃ n : ℤ, w = (v.1 + n, v.2) := by
