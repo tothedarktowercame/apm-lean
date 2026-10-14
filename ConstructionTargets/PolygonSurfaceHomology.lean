@@ -2658,6 +2658,47 @@ theorem finiteWedgeFinSucc_exists_installedSplitLegWord (n : ℕ)
   simpa only [finiteWedgeFinSuccOldFundamentalGroupMap_eq_transport,
     finiteWedgeFinSuccLastFundamentalGroupMap_eq_transport] using hw
 
+/-- The one-leg finite wedge has the based fundamental group of the circle. -/
+noncomputable def finiteWedgeFinOneFundamentalGroupEquiv :
+    FundamentalGroup
+        (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge (Fin 1))
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin 1) 1) ≃*
+      FundamentalGroup Circle 1 := by
+  simpa [finiteWedgeFinOneHomeomorphCircle] using
+    (fundamentalGroupEquivOfHomeomorph finiteWedgeFinOneHomeomorphCircle
+      (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin 1) 1))
+
+/-- Under the one-circle identification, the unique arbitrary-loop leg map
+is the identity map on the circle fundamental group. -/
+theorem finiteWedgeFinOneFundamentalGroupEquiv_leg
+    (g : FundamentalGroup Circle 1) :
+    finiteWedgeFinOneFundamentalGroupEquiv (finiteWedgeFinLegMap 0 0 g) = g := by
+  induction g using Path.Homotopic.Quotient.ind with
+  | mk p =>
+      rw [finiteWedgeFinLegMap, FundamentalGroup.mapOfEq_apply]
+      change FundamentalGroup.map
+          ⟨finiteWedgeFinOneHomeomorphCircle,
+            finiteWedgeFinOneHomeomorphCircle.continuous⟩ _
+          (Path.Homotopic.Quotient.mk
+            ((p.map
+              (PolygonSurfacePiOne.PointWedgeQuotient.continuous_wedgeCircle
+                (0 : Fin 1))).cast _ _)) = _
+      rw [FundamentalGroup.map_apply]
+      apply Path.Homotopic.Quotient.eq.mpr
+      convert Path.Homotopic.refl p using 1
+
+/-- Every loop on the one-leg finite wedge is a one-letter labelled leg word. -/
+theorem finiteWedgeFinOne_exists_legWord
+    (g : FundamentalGroup
+      (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge (Fin 1))
+      (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin 1) 1)) :
+    ∃ w : FiniteWedgeFinLoopWord 0,
+      finiteWedgeFinLoopWordValue 0 w = g := by
+  refine ⟨[((0 : Fin 1), finiteWedgeFinOneFundamentalGroupEquiv g)], ?_⟩
+  apply finiteWedgeFinOneFundamentalGroupEquiv.injective
+  simp [finiteWedgeFinLoopWordValue,
+    finiteWedgeFinOneFundamentalGroupEquiv_leg]
+
 end
 
 end ConstructionTargets.PolygonSurfaceHomology
