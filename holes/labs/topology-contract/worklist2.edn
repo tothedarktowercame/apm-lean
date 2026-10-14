@@ -87899,7 +87899,9 @@
      :reason
      "Banked preconnectedness of the alleged chart's punctured ball source."}]}
   {:consumer :t97A01,
-   :stop-count 10,
+   :owner-reopen
+   "reopened: a lemma this row reported missing is now banked",
+   :stop-count 0,
    :evidence
    {:placeholder-delta 0,
     :residual
@@ -87950,7 +87952,7 @@
      "645748a825cd5e088f3d675908a4861c1fbe7d54affe5752d332bf114bf3b115"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -88096,6 +88098,16 @@
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "git show --check e1a5bdd1d", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791944345734-11332-923206b7",
+     :commands
+     ["lake env lean holes/labs/blueprints/t92J06/Blueprint.lean"
+      "statement-registry check/fingerprint t92J06; placeholder scan"
+      "cmp exact commit blob to source blueprint; git show --check; scope/hash assertions"],
+     :finding
+     "PASS: reviewer codex-7. e1a5bdd1d changes only t92J06Closure.blueprint.md; fixture SHA256 af4e6370eb1aa4f3daad9ad61c3b5a6d8367b3366ce50a3a62c68bf9b6e8a21b and frozen statement SHA256 c57f3fb767b5f74c6ec6643c579046e11cb78b4dc6b6423c1f77fd40c33ac017 reproduce. Blueprint compiles; registry 166/0; exactly two intended LIBRARY sorries. Mathematics checks: Cayley realization is a simply connected wedge cover; permutation-pair orbit counts are 3,2,1,1, and branch-point incidence separates the connected covers with three loop edges versus none. The two independent library contracts imply both conjuncts exactly, with no unused hypotheses."},
     :commit "e1a5bdd1d",
     :changed-paths ["ConstructionTargets/t92J06Closure.blueprint.md"],
     :fixture
@@ -88104,7 +88116,7 @@
      "af4e6370eb1aa4f3daad9ad61c3b5a6d8367b3366ce50a3a62c68bf9b6e8a21b"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t92J06/lean/Main.lean"
     "problems/t92J06/status.json"
@@ -88122,14 +88134,19 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t92J06Closure.blueprint.md"},
    :continue-from
-   "NEXT JOB: copy holes/labs/blueprints/t92J06/BLUEPRINT.md's plan into ConstructionTargets/t92J06Closure.blueprint.md, move the blueprint's proved lemmas into place, then build the LIBRARY obligations one milestone per job.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Blueprint written; independent review is required before formalization.",
    :id :program-2026-10-13-close-t92j06,
    :kind :final-adapter,
    :campaign-priority 34,
    :fail-count 0,
    :depends-on [],
    :program true,
-   :other-consumers []}
+   :other-consumers [],
+   :program-history
+   [{:job 1,
+     :commit "e1a5bdd1d",
+     :reason
+     "Blueprint written; independent review is required before formalization."}]}
   {:consumer :t94A08,
    :phase :lemma,
    :state :banked,
@@ -89012,7 +89029,7 @@
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "finiteWedgeModuleHurewicz_surjective",
@@ -89024,7 +89041,9 @@
     :type
     "every module H1 class of the orbit wedge has a based-loop representative",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/PolygonSurfaceHomology.lean"]},
    :id :lemma-finitewedgemodulehurewicz-surjective,
    :kind :lemma,
    :depends-on [],
