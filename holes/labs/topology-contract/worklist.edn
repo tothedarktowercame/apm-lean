@@ -119112,6 +119112,17 @@
     [{:cmd "closure draft",
       :exit 1,
       :finding "fixed implicit parameters"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1792017572188-12583-2531125d",
+     :commands
+     ["git diff-tree/show c5787e16"
+      "archive c5787e16; lake env lean closure and Main"
+      "sha256sum/placeholders at c5787e16"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS program STOP: new commit changes only t00J02Closure.lean and adds a compiled, sorry-free canonical geometric payload plus its H2 consequence. One orientation-sign choice is shared by component sums and the top-degree formula; canonical local degrees and occupied-component indexing are preserved, and the endpoint passes its fields in the required directions without a representation mismatch. Fixture and frozen Main hashes match; closure has 0 placeholders and Main baseline 1; only standard axioms; registry 166/166. Constructing the two formulas from transversality and Main assembly remain listed."},
     :commit "c5787e160bf304b9420924e4074d581cc5809954",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
@@ -119120,7 +119131,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119138,7 +119149,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t00J02Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked canonical zero-sum H2 endpoint.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked canonical geometric payload.",
    :id :program-2026-10-13-close-t00j02,
    :kind :final-adapter,
    :campaign-priority 45,
@@ -119269,7 +119280,10 @@
      :reason "Reduced component comparison to canonical zero sums."}
     {:job 4,
      :commit "f28fac1855457bbe2754c4d2a3e31b64ac507894",
-     :reason "Banked canonical zero-sum H2 endpoint."}]}
+     :reason "Banked canonical zero-sum H2 endpoint."}
+    {:job 5,
+     :commit "c5787e160bf304b9420924e4074d581cc5809954",
+     :reason "Banked canonical geometric payload."}]}
   {:consumer :t98A06,
    :stop-count 4,
    :evidence
@@ -120484,7 +120498,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -120496,7 +120510,9 @@
     :reported-by [:program-2026-10-13-close-t00j02],
     :type "canonical component/top calculations imply H2 zero",
     :area "oriented-surface-degree",
-    :proved-in :program-2026-10-13-close-t00j02},
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "c5787e160bf304b9420924e4074d581cc5809954"},
    :id
    :lemma-canonicalregularfiberdegreecalculations-tophomologymap-eq-zero,
    :kind :lemma,
