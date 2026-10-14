@@ -110,7 +110,10 @@ theorem t99J01_threeCircles_wedgePoint_fundamentalGroup
 theorem t99J01_threeCircles_basepoint_transport (x : ThreeCircles) :
     Nonempty (FundamentalGroup ThreeCircles x ≃*
       FundamentalGroup ThreeCircles T99J01ThreeCirclesPoint) := by
-  sorry
+  letI : PathConnectedSpace ThreeCircles :=
+    ConstructionTargets.PointWedgeVanKampen.threeCircles_pathConnected
+  exact ⟨FundamentalGroup.fundamentalGroupMulEquivOfPathConnected
+    x T99J01ThreeCirclesPoint⟩
 
 /-- The iterated point-wedge model used by the problem has free fundamental
 group on three generators, at every basepoint. -/
