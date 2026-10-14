@@ -87946,6 +87946,16 @@
     [{:cmd "multiplication draft",
       :exit 1,
       :correction "exposed named word values"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791956662155-11637-1708643f",
+     :commands
+     ["git show e39d313f1 blob + #print axioms | lake env lean /dev/stdin"
+      "diff-tree/readlink/sha256 assertions"
+      "statement-registry check; comment-stripped placeholder scan"],
+     :finding
+     "PASS: e39d313f1 changes only PolygonSurfaceHomology.lean; exact blob SHA256 de8557c3722466c4af67cc92e01455aecac235213c66b6e6e14d343f87fbeaf1. It compiles with standard axioms propext/Classical.choice/Quot.sound; placeholders 0; registry 166/0. New progress beyond d03a5f91d gives the explicit Fin(n+2) equivalence with Fin(n+1) ⊕ Unit, composes it with the sum-wedge homeomorphism, and proves formulas for every castSucc leg and the last leg. The type deliberately keeps the first summand nonempty for point-wedge induction; label orientation and circle coordinates are preserved. Free-group surjectivity remains the next milestone."},
     :commit "993db480e",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
@@ -87954,7 +87964,7 @@
      "380d45b46b96fa6b586acc568a9883c8b4318aa0bddd2f3fc5768890be4bcd67"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -87974,7 +87984,7 @@
     :blueprint
     "ConstructionTargets/PolygonSurfaceHomology.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked the Fin-successor wedge split and its leg formulas.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked coproduct word extraction.",
    :id :program-2026-10-13-polygon-surface-homology,
    :kind :reusable-theorem,
    :campaign-priority 31,
@@ -88059,7 +88069,10 @@
     {:job 2,
      :commit "e39d313f1",
      :reason
-     "Banked the Fin-successor wedge split and its leg formulas."}]}
+     "Banked the Fin-successor wedge split and its leg formulas."}
+    {:job 3,
+     :commit "993db480e",
+     :reason "Banked coproduct word extraction."}]}
   {:consumer :t97A01,
    :stop-count 0,
    :phase :implementation,
@@ -89549,7 +89562,7 @@
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "exists_coprodLegWord_of_mulEquiv",
@@ -89559,7 +89572,9 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "normalized coproduct equivalence yields leg words",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :program-2026-10-13-polygon-surface-homology,
+    :banked-commit "993db480e"},
    :id :lemma-exists-coprodlegword-of-mulequiv,
    :kind :lemma,
    :depends-on [],
