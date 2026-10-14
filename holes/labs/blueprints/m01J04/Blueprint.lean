@@ -3066,6 +3066,65 @@ lemma apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity_minkowski_aux_tran
   exact ⟨hf.comp_measurePreserving hmp,
     eLpNorm_comp_measurePreserving hf.1 hmp⟩
 
+lemma apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity_minkowski_aux_support
+    {d : ℕ} {ρ : ℝ} (κ : EuclideanSpace ℝ (Fin d) → ℝ)
+    (hκs : Function.support κ ⊆ Metric.closedBall 0 ρ) :
+    ∀ y, κ y ≠ 0 → ‖y‖ ≤ ρ := by
+  intro y hy
+  simpa [Metric.mem_closedBall, dist_zero_right] using hκs hy
+
+lemma apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity_minkowski_aux_bound
+    {d : ℕ} {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    (f : EuclideanSpace ℝ (Fin d) → E) (hf : MemLp f 2 volume)
+    {ρ ε : ℝ} (hε : 0 ≤ ε)
+    (htr : ∀ y : EuclideanSpace ℝ (Fin d), ‖y‖ ≤ ρ →
+      (eLpNorm (fun x ↦ f (x - y) - f x) 2 volume).toReal ≤ ε) :
+    ∀ y, ‖y‖ ≤ ρ →
+      eLpNorm (fun x ↦ f (x - y) - f x) 2 volume ≤ ENNReal.ofReal ε := by
+  intro y hy
+  have htrans :=
+    apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity_minkowski_aux_translate
+      f hf y
+  have hmem : MemLp (fun x ↦ f (x - y) - f x) 2 volume := htrans.1.sub hf
+  rw [← ENNReal.toReal_le_toReal hmem.eLpNorm_ne_top ENNReal.ofReal_ne_top,
+    ENNReal.toReal_ofReal hε]
+  exact htr y hy
+
+/-- The mollification error is the kernel average of translation errors
+(pointwise; all integrands are integrable since `κ` is continuous with compact
+support and `f` is locally integrable). -/
+lemma apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity_minkowski_aux_identify
+    {d : ℕ} {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E] [CompleteSpace E]
+    (f : EuclideanSpace ℝ (Fin d) → E) (hf : MemLp f 2 volume) {ρ : ℝ}
+    (κ : EuclideanSpace ℝ (Fin d) → ℝ) (hκ : Continuous κ)
+    (hκ1 : (∫ x, κ x ∂volume) = 1)
+    (hκs : Function.support κ ⊆ Metric.closedBall 0 ρ) :
+    (MeasureTheory.convolution κ f (ContinuousLinearMap.lsmul ℝ ℝ) volume - f) =
+      fun x ↦ ∫ y, κ y • (f (x - y) - f x) ∂volume := by
+  sorry
+
+/-- Joint measurability of the translation-error family. -/
+lemma apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity_minkowski_aux_joint_meas
+    {d : ℕ} {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    (f : EuclideanSpace ℝ (Fin d) → E) (hf : MemLp f 2 volume) :
+    AEStronglyMeasurable
+      (Function.uncurry fun (y x : EuclideanSpace ℝ (Fin d)) ↦ f (x - y) - f x)
+      ((volume : Measure (EuclideanSpace ℝ (Fin d))).prod volume) := by
+  sorry
+
+/-- Minkowski's integral inequality for a probability kernel: the `L²` norm of
+a kernel average is at most the worst `L²` norm on the kernel's support. -/
+lemma apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity_minkowski_aux_avg_bound
+    {d : ℕ} {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E] [CompleteSpace E]
+    (κ : EuclideanSpace ℝ (Fin d) → ℝ) (hκ0 : ∀ x, 0 ≤ κ x) (hκint : Integrable κ volume)
+    (hκ1 : (∫ x, κ x ∂volume) = 1)
+    (G : EuclideanSpace ℝ (Fin d) → EuclideanSpace ℝ (Fin d) → E)
+    (hG : AEStronglyMeasurable (Function.uncurry G)
+      ((volume : Measure (EuclideanSpace ℝ (Fin d))).prod volume))
+    {C : ℝ≥0∞} (hC : ∀ y, κ y ≠ 0 → eLpNorm (G y) 2 volume ≤ C) :
+    eLpNorm (fun x ↦ ∫ y, κ y • G y x ∂volume) 2 volume ≤ C := by
+  sorry
+
 /-- Minkowski's integral inequality for a probability kernel supported in the
 `ρ`-ball: the mollification error is at most the worst translation error. -/
 lemma apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity_minkowski
@@ -3079,7 +3138,18 @@ lemma apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity_minkowski
     (hκs : Function.support κ ⊆ Metric.closedBall 0 ρ) :
     (eLpNorm (MeasureTheory.convolution κ f
       (ContinuousLinearMap.lsmul ℝ ℝ) volume - f) 2 volume).toReal ≤ ε := by
-  sorry
+  have htsupp : tsupport κ ⊆ Metric.closedBall 0 ρ :=
+    closure_minimal hκs Metric.isClosed_closedBall
+  have hκc : HasCompactSupport κ :=
+    (isCompact_closedBall 0 ρ).of_isClosed_subset (isClosed_tsupport _) htsupp
+  have hκint : Integrable κ volume := hκ.integrable_of_hasCompactSupport hκc
+  rw [apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity_minkowski_aux_identify f hf κ hκ hκ1 hκs]
+  have hle := apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity_minkowski_aux_avg_bound κ hκ0 hκint hκ1
+    (fun y x ↦ f (x - y) - f x) (apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity_minkowski_aux_joint_meas f hf)
+    (C := ENNReal.ofReal ε) (fun y hy ↦
+      apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity_minkowski_aux_bound f hf hε htr y
+        (apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity_minkowski_aux_support κ hκs y hy))
+  exact ENNReal.toReal_le_of_le_ofReal hε hle
 
 /-- Approximate identity in `L²`, uniformly over normalised nonnegative
 kernels supported in small balls: `‖κ ⋆ f - f‖₂ ≤ sup_{|y| ≤ ρ} ‖τ_y f - f‖₂`
