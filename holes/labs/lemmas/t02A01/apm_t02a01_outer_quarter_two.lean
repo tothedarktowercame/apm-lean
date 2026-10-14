@@ -872,7 +872,23 @@ theorem apm_t02a01_outer_quarter_one (hr : Continuous apm_t02a01_radialPt)
 theorem apm_t02a01_outer_quarter_two (hr : Continuous apm_t02a01_radialPt)
     (t : unitInterval) (ht0 : 1 / 4 ≤ (t : ℝ)) (ht1 : (t : ℝ) ≤ 1 / 2) :
     apm_t02a01_outerLoop hr t = apm_t02a01_edgeB (4 * t - 1) := by
-  sorry
+  change apm_t02a01_radialPt (1, t) = apm_t02a01_edgeB (4 * t - 1)
+  unfold apm_t02a01_radialPt apm_t02a01_edgeB
+  congr 1
+  apply Subtype.ext
+  unfold apm_t02a01_radial apm_t02a01_perimeter apm_t02a01_clamp01
+  have h0 : max (0 : ℝ) (min 1 (4 * t)) = 1 := by
+    rw [min_eq_left (by linarith), max_eq_right] <;> norm_num
+  have h1 : max (0 : ℝ) (min 1 (4 * t - 1)) = 4 * t - 1 := by
+    rw [min_eq_right (by linarith), max_eq_right (by linarith)]
+  have h2 : max (0 : ℝ) (min 1 (4 * t - 2)) = 0 := by
+    rw [max_eq_left]
+    linarith [min_le_right 1 (4 * (t : ℝ) - 2)]
+  have h3 : max (0 : ℝ) (min 1 (4 * t - 3)) = 0 := by
+    rw [max_eq_left]
+    linarith [min_le_right 1 (4 * (t : ℝ) - 3)]
+  simp [h0, h1, h2, h3]
+  constructor <;> norm_num <;> ring
 -- END SEAT AREA
 
 theorem apm_t02a01_outer_quarter_three (hr : Continuous apm_t02a01_radialPt)
