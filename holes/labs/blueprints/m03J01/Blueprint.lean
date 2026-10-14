@@ -1119,6 +1119,102 @@ lemma apm_m03J01_weakHessian_unique_ae {n : ℕ}
 
 /-- Qualitative `H²` regularity upgrades to a uniform estimate by applying
 the closed graph theorem to the solution/weak-Hessian graph. -/
+lemma apm_m03J01_uniform_H2_bound_aux_weakSolution_congr {n : ℕ}
+    {Ω : Set (apm_m03J01_E n)} {F G : apm_m03J01_E n → ℝ}
+    (hFG : F =ᵐ[volume] G) (u : apm_m03J01_H01 n Ω) :
+    apm_m03J01_weakSolution F u ↔ apm_m03J01_weakSolution G u := by
+  constructor <;> intro hu v
+  · calc
+      _ = ∫ x, F x * v.val x ∂volume := hu v
+      _ = ∫ x, G x * v.val x ∂volume := by
+        apply integral_congr_ae
+        filter_upwards [hFG] with x hx
+        rw [hx]
+  · calc
+      _ = ∫ x, G x * v.val x ∂volume := hu v
+      _ = ∫ x, F x * v.val x ∂volume := by
+        apply integral_congr_ae
+        filter_upwards [hFG] with x hx
+        rw [hx]
+
+lemma apm_m03J01_uniform_H2_bound_aux_weakHessian_congr {n : ℕ}
+    {g k : apm_m03J01_E n → apm_m03J01_E n}
+    {H : apm_m03J01_E n → Fin n → Fin n → ℝ}
+    (hgk : g =ᵐ[volume] k) :
+    apm_m03J01_weakHessian g H ↔ apm_m03J01_weakHessian k H := by
+  constructor <;> intro h
+  · refine ⟨h.1, fun i j φ hφ hφc => ?_⟩
+    rw [← h.2 i j φ hφ hφc]
+    apply integral_congr_ae
+    filter_upwards [hgk] with x hx
+    rw [hx]
+  · refine ⟨h.1, fun i j φ hφ hφc => ?_⟩
+    rw [← h.2 i j φ hφ hφc]
+    apply integral_congr_ae
+    filter_upwards [hgk] with x hx
+    rw [hx]
+
+noncomputable abbrev apm_m03J01_forcingLp (n : ℕ) :=
+  Lp ℝ 2 (volume : Measure (apm_m03J01_E n))
+
+noncomputable abbrev apm_m03J01_hessianLp (n : ℕ) :=
+  Lp (Fin n → Fin n → ℝ) 2 (volume : Measure (apm_m03J01_E n))
+
+def apm_m03J01_hessianOperatorRealizes {n : ℕ}
+    {Ω : Set (apm_m03J01_E n)}
+    (T : apm_m03J01_forcingLp n →ₗ[ℝ] apm_m03J01_hessianLp n) : Prop :=
+  ∀ (F : apm_m03J01_E n → ℝ) (hF : MemLp F 2 volume)
+    (u : apm_m03J01_H01 n Ω), apm_m03J01_weakSolution F u →
+      ∃ (H : apm_m03J01_E n → Fin n → Fin n → ℝ)
+        (hH : apm_m03J01_weakHessian u.grad H),
+        T (hF.toLp F) = hH.1.toLp H
+
+lemma apm_m03J01_weakSolution_H1size_le {n : ℕ}
+    {Ω : Set (apm_m03J01_E n)}
+    (F : apm_m03J01_E n → ℝ) (hF : MemLp F 2 volume)
+    (u : apm_m03J01_H01 n Ω) (hu : apm_m03J01_weakSolution F u) :
+    eLpNorm u.val 2 volume + eLpNorm u.grad 2 volume ≤
+      2 * eLpNorm F 2 volume := by
+  sorry
+
+lemma apm_m03J01_hessianOperator_exists {n : ℕ}
+    {Ω : Set (apm_m03J01_E n)}
+    (hregular : ∀ (F : apm_m03J01_E n → ℝ) (hF : MemLp F 2 volume)
+      (u : apm_m03J01_H01 n Ω), apm_m03J01_weakSolution F u →
+        ∃ H, apm_m03J01_weakHessian u.grad H) :
+    ∃ T : apm_m03J01_forcingLp n →ₗ[ℝ] apm_m03J01_hessianLp n,
+      apm_m03J01_hessianOperatorRealizes (Ω := Ω) T := by
+  sorry
+
+lemma apm_m03J01_hessianOperator_seq_closed {n : ℕ}
+    {Ω : Set (apm_m03J01_E n)}
+    (T : apm_m03J01_forcingLp n →ₗ[ℝ] apm_m03J01_hessianLp n)
+    (hT : apm_m03J01_hessianOperatorRealizes (Ω := Ω) T) :
+    ∀ (f : ℕ → apm_m03J01_forcingLp n) (x : apm_m03J01_forcingLp n)
+      (y : apm_m03J01_hessianLp n),
+      Tendsto f atTop (nhds x) → Tendsto (T ∘ f) atTop (nhds y) → y = T x := by
+  sorry
+
+lemma apm_m03J01_hessianOperator_norm_bound {n : ℕ}
+    (T : apm_m03J01_forcingLp n →ₗ[ℝ] apm_m03J01_hessianLp n)
+    (hclosed : ∀ (f : ℕ → apm_m03J01_forcingLp n)
+      (x : apm_m03J01_forcingLp n) (y : apm_m03J01_hessianLp n),
+      Tendsto f atTop (nhds x) → Tendsto (T ∘ f) atTop (nhds y) → y = T x) :
+    ∃ A : ℝ, 0 ≤ A ∧ ∀ f, ‖T f‖ ≤ A * ‖f‖ := by
+  sorry
+
+lemma apm_m03J01_H2_bound_of_hessianOperator_bound {n : ℕ}
+    {Ω : Set (apm_m03J01_E n)}
+    (T : apm_m03J01_forcingLp n →ₗ[ℝ] apm_m03J01_hessianLp n)
+    (hT : apm_m03J01_hessianOperatorRealizes (Ω := Ω) T)
+    (A : ℝ) (hA : 0 ≤ A) (hbound : ∀ f, ‖T f‖ ≤ A * ‖f‖) :
+    ∃ C : ENNReal, C < ⊤ ∧
+      ∀ (F : apm_m03J01_E n → ℝ) (hF : MemLp F 2 volume)
+        (u : apm_m03J01_H01 n Ω), apm_m03J01_weakSolution F u →
+          ∃ H, apm_m03J01_weakHessian u.grad H ∧
+            apm_m03J01_H2size u H ≤ C * eLpNorm F 2 volume := by
+  sorry
+
 lemma apm_m03J01_uniform_H2_bound
     (n : ℕ) (Ω : Set (apm_m03J01_E n))
     (hΩopen : IsOpen Ω) (hΩbounded : Bornology.IsBounded Ω)
@@ -1131,7 +1227,10 @@ lemma apm_m03J01_uniform_H2_bound
         (u : apm_m03J01_H01 n Ω), apm_m03J01_weakSolution F u →
           ∃ H, apm_m03J01_weakHessian u.grad H ∧
             apm_m03J01_H2size u H ≤ C * eLpNorm F 2 volume := by
-  sorry
+  obtain ⟨T, hT⟩ := apm_m03J01_hessianOperator_exists hregular
+  have hclosed := apm_m03J01_hessianOperator_seq_closed T hT
+  obtain ⟨A, hA, hbound⟩ := apm_m03J01_hessianOperator_norm_bound T hclosed
+  exact apm_m03J01_H2_bound_of_hessianOperator_bound T hT A hA hbound
 
 set_option linter.unusedVariables false in
 theorem apm_m03j01 :

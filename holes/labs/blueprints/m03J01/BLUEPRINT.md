@@ -2,127 +2,99 @@
 
 ## Triage
 
-Verdict: **true and faithful**.
+Verdict: **true and faithful**. The Lean statement uses `ContDiff ℝ ∞` and
+repairs the printed typo `U ∈ H²(U)` to `u ∈ H²(Ω)`. The custom `H₀¹`
+space, weak-solution existence/value uniqueness, gradient closability, and
+weak-Hessian uniqueness are already proved. The two a.e.-invariance helpers
+from `m03J01_H2bound.v1.lean` are copied in as proved lemmas; both use
+`integral_congr_ae`.
 
-The reopened Lean statement now uses `ContDiff ℝ ∞`, so its test space is the
-usual smooth compactly supported space rather than the analytic space produced
-by `ContDiff ℝ ω`.  This matches the definition of `H₀¹(Ω)` in the source.
-The theorem also retains the documented repair of the source typo
-`U ∈ H²(U)` to `u ∈ H²(Ω)`.
+## New leaves
 
-I checked the principal degeneracies.  In dimension zero, the already proved
-lemmas show that every gradient is zero and that testing the weak equation with
-the solution gives the required `L²` bound.  For zero forcing, uniqueness forces
-the value of every solution to vanish a.e.; closability of the weak gradient
-then forces its gradient to vanish, and uniqueness of distributional
-derivatives forces any weak Hessian to vanish a.e.  Thus the homogeneous case
-is compatible with an estimate whose right side is zero.  Nonempty bounded open
-sets do not exist in dimension zero, so that exceptional case is in fact
-vacuous in the two PDE clauses.  No counterexample was present in the available
-solve-loop records.
+### `apm_m03J01_weakSolution_H1size_le`
 
-`Blueprint.lean` copies all currently compiled definitions and proofs from
-`Main.lean`.  In particular, construction of the custom `H₀¹` closure,
-existence and value-uniqueness of weak solutions, the abstract Riesz theorem,
-and elementary weak-Hessian facts are proved rather than admitted.  Only the
-three reopened obligations below contain `sorry`.
+Tests the weak equation with `u` and bounds the value-plus-gradient `L²` size
+by twice the forcing norm. Expected 50–90 lines. Rewrite integrals as `L²`
+inner products with `L2.inner_def`, `MemLp.coeFn_toLp`, and
+`integral_congr_ae`; apply `real_inner_le_norm`, then convert using
+`Lp.enorm_toLp` and `enorm_le_iff_norm_le`.
 
-## Remaining lemmas
+Independent of every regularity/operator leaf. If `F = 0`, both norms vanish.
+For `n = 0`, the gradient vanishes and
+`apm_m03J01_zero_dim_eLpNorm_val_le` is sharper. The non-sharp factor `2`
+avoids square-root edge cases.
 
-### `apm_m03J01_gradient_unique_of_val_ae`
+### `apm_m03J01_hessianOperator_exists`
 
-**Statement in words.** Two elements of the custom `H₀¹` closure with equal
-value functions almost everywhere have equal weak gradients almost everywhere.
+Constructs the solution-Hessian assignment as a linear map between the two
+`Lp` spaces. Expected 100–150 lines. Use the coerced `Lp` representative and
+`Lp.memLp`, `apm_m03J01_weakSolution_exists`, and `hregular`; return
+`hH.1.toLp H`. Representative independence uses
+`apm_m03J01_uniform_H2_bound_aux_weakSolution_congr`,
+`apm_m03J01_weakSolution_unique_ae`,
+`apm_m03J01_gradient_unique_of_val_ae`,
+`apm_m03J01_uniform_H2_bound_aux_weakHessian_congr`,
+`apm_m03J01_weakHessian_unique_ae`, and `MemLp.toLp_congr`. Establish
+additivity/scalar compatibility using `apm_m03J01_H01_add_exists`,
+`apm_m03J01_H01_smul_exists`, `integral_add`, `integral_smul`, `MemLp.add`,
+and `MemLp.smul`.
 
-**Why true.** Subtract the two approximating test-function sequences (using the
-proved additive and scalar closure lemmas).  Their values tend to zero in
-`L²`, while their gradients tend to the gradient difference.  The classical
-closability argument for the gradient tests the limit against derivatives of
-smooth compactly supported scalar functions: integration by parts makes the
-pairing tend to zero from value convergence, while gradient convergence
-identifies the limit.  Density of test functions then says every coordinate of
-the gradient difference is zero.  The useful Mathlib infrastructure is
-`Lp.tendsto_Lp_iff_tendsto_eLpNorm''`, `integral_congr_ae`, and the density of
-compactly supported smooth functions / fundamental lemma of distributions.
+Independent of closedness/boundedness. The realization predicate quantifies
+over every representative, so this is not a vacuous restatement of
+`hregular`. At zero the output is the zero class by uniqueness; for `n = 0`
+the Hessian codomain is subsingleton.
 
-**Expected size.** 180–300 lines.
+### `apm_m03J01_hessianOperator_seq_closed`
 
-**Dependencies.** Definitions and proved test-function/closure lemmas only.
+Shows any realizing operator has sequentially closed graph. Expected 100–150
+lines. Coerce sequence terms and limits to representatives with `Lp.memLp`.
+Use the difference energy identity to get convergence of solution values and
+gradients. Pass fixed-test-function weak-solution and weak-Hessian identities
+to the limit with `L2.inner_def`, `Filter.Tendsto.inner`,
+`L2.integrable_inner`, and `tendsto_nhds_unique`; identify the limit using the
+three a.e.-uniqueness lemmas and `MemLp.toLp_congr`/`Lp.ext`.
 
-**Truth check.** For equal representatives this is immediate.  For the key
-zero-value case, the hand calculation is
-`∫ (∂ᵢφₖ) ψ = -∫ φₖ (∂ᵢψ) → 0`; the left side also tends to
-`∫ gᵢ ψ`, so `gᵢ = 0` distributionally and hence a.e.  Compact support makes
-all pairings integrable.
+Independent of operator construction because realization is an explicit
+hypothesis. Empty coordinate types make the Hessian conclusion automatic;
+zero forcing is handled without division.
 
-### `apm_m03J01_weakHessian_unique_ae`
+### `apm_m03J01_hessianOperator_norm_bound`
 
-**Statement in words.** Two `L²` weak Hessians of the same weak gradient agree
-almost everywhere.
+Pure closed-graph leaf, expected 20–40 lines. Build
+`ContinuousLinearMap.ofSeqClosedGraph hclosed`, take its operator norm, use
+`norm_nonneg` and `ContinuousLinearMap.le_opNorm`, and simplify applications
+with `ContinuousLinearMap.coeFn_ofSeqClosedGraph`. Equivalently start from
+`LinearMap.continuous_of_seq_closed_graph`. `Lp` completeness is supplied by
+`MeasureTheory.Lp.instCompleteSpace` (with `Fact (1 ≤ 2)`). This leaf depends
+only on `T` and the explicit sequential-closedness hypothesis. The zero
+operator gives `A = 0`.
 
-**Why true.** Subtract their distributional identities.  For every pair of
-coordinates and every compactly supported smooth test function, the integral
-of `(H-K)ᵢⱼ φ` is zero.  The fundamental lemma of distributions gives
-`(H-K)ᵢⱼ = 0` a.e.; finiteness of `Fin n × Fin n` combines the coordinatewise
-statements into function-valued a.e. equality.  Relevant library operations
-include `MemLp.sub`, `integral_sub`, and `Filter.Eventually` finite intersections.
+### `apm_m03J01_H2_bound_of_hessianOperator_bound`
 
-**Expected size.** 80–160 lines, assuming the distributional fundamental lemma
-is available in a directly applicable form; otherwise 200–300 lines to bridge
-its test-function encoding.
+Translates the real operator norm into the exact registered `ENNReal` bound.
+Expected 50–100 lines. Obtain `H,hH` from realization, rewrite the norm bound
+using that equality and `Lp.enorm_toLp`, and combine it with
+`apm_m03J01_weakSolution_H1size_le`. Choose
+`C = 2 + ENNReal.ofReal A`; use `ENNReal.ofReal_lt_top`,
+`ENNReal.ofReal_mul hA`, `enorm_le_iff_norm_le`, and distributivity.
+`apm_m03J01_H2size_lt_top` handles any remaining finiteness side condition.
 
-**Dependencies.** Definitions only; independent of gradient uniqueness.
+Independent of construction and closedness because both conclusions are
+explicit hypotheses. At `F = 0`, the component estimates force the chosen
+Hessian class to zero, so the required zero right-hand side is genuine.
+Dimension zero and `A = 0` are harmless.
 
-**Truth check.** In dimension zero the conclusion is pointwise true because
-the codomain `Fin 0 → Fin 0 → ℝ` is subsingleton.  In positive dimension the
-hand subtraction above is the standard uniqueness proof for distributions.
+## Assembly and dependency layers
 
-### `apm_m03J01_uniform_H2_bound`
+`apm_m03J01_uniform_H2_bound` is sorry-free: choose the operator, apply
+sequential closedness, obtain a norm bound, and invoke the translation leaf.
+The registered main theorem and everything copied from `Main.lean` remain
+unchanged.
 
-**Statement in words.** On a fixed bounded domain, the qualitative hypothesis
-that every weak solution has an `L²` weak Hessian implies one finite constant
-bounding the displayed `H²` size by the forcing `L²` norm.
-
-**Why true.** Form quotient Banach spaces for `L²` forcing and for triples
-`(u, ∇u, H)` satisfying the approximation and weak-Hessian relations.  The
-preceding two uniqueness lemmas make the solution operator single-valued on
-a.e. classes.  The already proved energy argument gives uniqueness and the
-continuous `L² → H₀¹` estimate.  If `Fₖ → F` in `L²` and the corresponding
-triples converge in the graph norm, pass to the weak equation and the
-distributional Hessian identities to identify the limit with the solution for
-`F`.  Hence the graph is sequentially closed.  Apply
-`LinearMap.continuous_of_seq_closed_graph`, extract its operator-norm bound,
-and translate the real norm inequality to `ENNReal`; the proved
-`apm_m03J01_H2size_lt_top` handles finiteness.  Finally choose representatives
-to obtain the existential Hessian in the exact theorem statement.
-
-**Expected size.** 250–450 lines.  Most of the length is quotient/graph-space
-plumbing; the analytic argument itself is short.
-
-**Dependencies.** Both preceding uniqueness lemmas, plus the already proved
-weak-solution existence/uniqueness and `H2size_lt_top` lemmas.
-
-**Truth check.** At `F = 0`, uniqueness plus the two preceding lemmas makes all
-three graph components zero a.e., exactly as the asserted zero right-hand side
-requires.  For scalar multiples, linearity of the weak equation and weak
-Hessian identity scales both sides equally.  The sequential closed-graph
-calculation agrees with the informal solution's standard proof.
-
-## Assembly
-
-The main theorem contains no `sorry`.  Its abstract clause is
-`apm_m03J01_abstract_variational`; its weak-existence clause directly combines
-`apm_m03J01_weakSolution_exists` and
-`apm_m03J01_weakSolution_unique_ae`; and its regularity clause is the final
-blueprint lemma.
-
-## Dependency layers
-
-* **Layer 1 (parallel):**
-  `apm_m03J01_gradient_unique_of_val_ae`,
-  `apm_m03J01_weakHessian_unique_ae`.
-* **Layer 2:** `apm_m03J01_uniform_H2_bound`.
-* **Layer 3 (already compiled):** assembly of `apm_m03j01`.
+* **Layer 1 (parallel):** all five leaves above. Conclusions needed from other
+  leaves are explicit hypotheses.
+* **Layer 2 (sorry-free):** `apm_m03J01_uniform_H2_bound`.
+* **Layer 3 (already compiled):** `apm_m03j01`.
 
 ## Compilation and axioms
 
@@ -132,11 +104,7 @@ Compiled with:
 systemd-run --user --scope -q -p MemoryMax=12G lake env lean holes/labs/blueprints/m03J01/Blueprint.lean
 ```
 
-The final output of `#print axioms apm_m03j01` was:
-
-```text
-'apm_m03j01' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
-```
-
-The three warnings identifying `sorry` are exactly the three lemmas listed
-above.  The main theorem has no direct `sorry`.
+`#print axioms apm_m03j01` reports
+`[propext, sorryAx, Classical.choice, Quot.sound]`; `sorryAx` enters only through
+the five leaves above. The copied a.e.-invariance helpers and both assembly
+theorems are proved.
