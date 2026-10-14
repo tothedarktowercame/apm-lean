@@ -119066,22 +119066,23 @@
   {:consumer :t00J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "Representation-boundary defect: regularFiber_componentSignedCount_eq_zero indexes literal fiber points but assigns each point the global circleDegree of a chosen whole-component lift. Degree zero does not imply each local degree is zero (a degree-zero circle map may have regular preimages of local degrees +1 and -1), so the listed next step local-degree/component-degree equality is false and this lemma cannot bridge to the regular-value signed count. Repair by grouping fiber points by genuine preimage components and proving that the sum of local degrees on each component equals the lift degree, then sum the zero component totals. Archived files compile; hashes/placeholders/registry reproduce.",
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
     :residual
-    "Choose regular circle value; prove local injectivity, local degrees and component comparison; assemble Main.",
+    "Choose regular value; prove local injectivity and degree comparison; assemble Main.",
     :outcome :stop,
     :warnings ["Main sorryAx"],
     :missing-theorems
-    [{:name
-      "isDiscrete_preimage_singleton_of_locallyInjectiveAlongFiber",
-      :type "local injectivity implies discrete fiber",
+    [{:name "regularFiberFintype_of_locallyInjectiveAlongFiber",
+      :type "locally-injective fiber Fintype",
       :status :proved,
       :consumers [:t00J02],
-      :depends-on [],
+      :depends-on
+      ["isDiscrete_preimage_singleton_of_locallyInjectiveAlongFiber"
+       "regularFiberFintype_of_isDiscrete"],
       :area "oriented-surface-degree"}
      {:name "t00J02_transverse_diskBounded_topHomologyMap_eq_zero",
       :type "H2 map zero",
@@ -119089,30 +119090,28 @@
       :consumers [:t00J02],
       :depends-on
       ["regularValue_topHomologyMap_signedCount"
-       "isDiscrete_preimage_singleton_of_locallyInjectiveAlongFiber"
+       "regularFiberFintype_of_locallyInjectiveAlongFiber"
        "occupiedComponentSignedCount_eq_zero_of_localDegreeComparison"],
       :area "oriented-surface-degree"}],
     :statement-hashes
     {:source
      "0b3b4888807bfa06c8d60d86829b75776394ea8aa45a98c933c087165521f923",
      :implementation
-     "374fd37b618fe105ad1f03580b9dfc7c9b66f0192473902612ed19a737a53a81",
+     "05d0c833dc98b3c6fbbb6d7899b030998723533e79d84e0ef2f2032d520b08c7",
      :blueprint
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984",
      :registry "166/166"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-2,
-    :reason "Banked discreteness.",
+    :reason "Banked locally-injective fiber Fintype.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t00J02Closure.lean",
       :exit 0}
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "hash/diff/placeholders", :exit 0}],
-    :diagnostic-history
-    [{:cmd "draft", :exit 1, :finding "opened scope"}],
-    :commit "2cb4d0126f6d6200b278f3b2f70a67e21ccb3cce",
+    :commit "46b552a85a8e7fe4748fe055a8c5544cfa99df66",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t00J02Closure.blueprint.md",
@@ -119120,7 +119119,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119369,7 +119368,8 @@
     :lemma-occupiedregularfiber-exactzerodegreelifts
     :lemma-occupiedcomponentsignedcount-eq-zero-of-localdegreecomparison
     :lemma-regularfiberfintype-of-isdiscrete
-    :lemma-isdiscrete-preimage-singleton-of-locallyinjectivealongfiber],
+    :lemma-isdiscrete-preimage-singleton-of-locallyinjectivealongfiber
+    :lemma-regularfiberfintype-of-locallyinjectivealongfiber],
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
@@ -119815,6 +119815,25 @@
    :lemma-isdiscrete-preimage-singleton-of-locallyinjectivealongfiber,
    :kind :lemma,
    :depends-on [],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "regularFiberFintype_of_locallyInjectiveAlongFiber",
+    :type "locally-injective fiber Fintype"},
+   :lemma
+   {:name "regularFiberFintype_of_locallyInjectiveAlongFiber",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type "locally-injective fiber Fintype",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02},
+   :id :lemma-regularfiberfintype-of-locallyinjectivealongfiber,
+   :kind :lemma,
+   :depends-on
+   [:lemma-isdiscrete-preimage-singleton-of-locallyinjectivealongfiber
+    :lemma-regularfiberfintype-of-isdiscrete],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
