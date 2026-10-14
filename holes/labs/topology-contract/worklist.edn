@@ -119110,6 +119110,17 @@
      {:cmd "sha256/diff/placeholders", :exit 0}],
     :diagnostic-history
     [{:cmd "choice draft", :exit 1, :finding "used Classical.choose"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1792002728517-12136-bb55f40b",
+     :commands
+     ["git diff-tree/show 72ea790"
+      "git archive 72ea790; lake env lean t00J02Closure.lean and Main.lean"
+      "sha256sum and placeholder counts at 72ea790"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS program STOP: new in-scope commit chooses prior zero-degree component-lift witnesses over the literal regular-fiber subtype with correct premise direction and representation. Archived files compile; closure has 0 placeholders and standard axioms only; Main remains frozen at 0b3b4888 with baseline 1 placeholder; fixture afb497a6 matches; registry 166/166. Local/component degree matching, signed-count formula, and Main assembly remain listed."},
     :commit "72ea7906636c48bcf45ac21c24cea72cf7b653a4",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
@@ -119118,7 +119129,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119136,7 +119147,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t00J02Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked compact-discrete regular-fiber finiteness; transversality-to-discreteness remains.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked zero-degree fiber choices; local-degree formula remains.",
    :id :program-2026-10-13-close-t00j02,
    :kind :final-adapter,
    :campaign-priority 45,
@@ -119175,7 +119186,11 @@
     {:job 9,
      :commit "b3649cbc71b4d78f0a38906c493fc324fe02a28d",
      :reason
-     "Banked compact-discrete regular-fiber finiteness; transversality-to-discreteness remains."}]}
+     "Banked compact-discrete regular-fiber finiteness; transversality-to-discreteness remains."}
+    {:job 1,
+     :commit "72ea7906636c48bcf45ac21c24cea72cf7b653a4",
+     :reason
+     "Banked zero-degree fiber choices; local-degree formula remains."}]}
   {:consumer :t98A06,
    :stop-count 1,
    :evidence
@@ -119567,7 +119582,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "regularFiber_zeroDegreeComponentLifts",
@@ -119577,7 +119592,9 @@
     :reported-by [:program-2026-10-13-close-t00j02],
     :type "zero-degree lift at each fiber point",
     :area "oriented-surface-degree",
-    :proved-in :program-2026-10-13-close-t00j02},
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "72ea7906636c48bcf45ac21c24cea72cf7b653a4"},
    :id :lemma-regularfiber-zerodegreecomponentlifts,
    :kind :lemma,
    :depends-on
