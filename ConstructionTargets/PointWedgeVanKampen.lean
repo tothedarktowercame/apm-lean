@@ -6544,6 +6544,19 @@ theorem genericPointWedgeOverlap_shiftedCoordinateObject_eq :
   exact Subsingleton.elim _ _
 
 omit [PathConnectedSpace X] [PathConnectedSpace Y] in
+/-- The forward image of the unshifted overlap component is precisely the
+canonical endpoint transport in the one-object coordinate groupoid. -/
+theorem genericPointWedgeOverlap_functor_map_unitInv_eq_endpointTransport :
+    let eK := genericPointWedgeOverlapGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let z := genericPointWedgeOverlapBase x₀ y₀ M N
+    eK.functor.map (eK.unitInv.app z) =
+      eqToHom (genericPointWedgeOverlap_shiftedCoordinateObject_eq
+        x₀ y₀ M N hM hN hy hx cM cN) := by
+  dsimp only
+  exact Subsingleton.elim _ _
+
+omit [PathConnectedSpace X] [PathConnectedSpace Y] in
 /-- The shifted and unshifted inverse right-span components are dependently
 equal, since their arguments are objects of `FundamentalGroupoid Unit`. -/
 theorem genericPointWedgeOuterRightSpan_shiftedComponent_heq :

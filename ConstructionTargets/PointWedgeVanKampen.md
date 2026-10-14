@@ -1461,3 +1461,8 @@ transport step.  Its proof uses inverse-unit naturality, so the right-piece
 square is reduced to the literal `Y` connector square for the forward image
 of the overlap component.  The remaining specialization must identify that
 forward image with the based endpoint transport already calculated below.
+`genericPointWedgeOverlap_functor_map_unitInv_eq_endpointTransport` makes that
+identification in the coordinate groupoid: its hom-set is subsingleton, so the
+forward image is exactly transport along the named shifted-object equality.
+The next step is to carry this equality through the right-piece leg and apply
+the three connector-square preservation lemmas to the installed system.
