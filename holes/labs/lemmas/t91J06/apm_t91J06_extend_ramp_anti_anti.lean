@@ -292,7 +292,43 @@ lemma apm_t91J06_extend_ramp_anti_anti
       F ⟨0, by norm_num⟩ = -(n + 2 : ℝ) ∧
       F ⟨1, by norm_num⟩ = (n + 2 : ℝ) ∧
       ∀ x, F (t x) = (q x : ℝ) := by
-  sorry
+  let r : apm_t91J06_I → apm_t91J06_I := fun x =>
+    ⟨1 - (x : ℝ), by constructor <;> linarith [x.2.1, x.2.2]⟩
+  have rr (x : apm_t91J06_I) : r (r x) = x := by
+    apply Subtype.ext
+    simp [r]
+  have hrcont : Continuous r := by
+    apply Continuous.subtype_mk
+    fun_prop
+  let R : apm_t91J06_I ≃ₜ apm_t91J06_I :=
+    { toEquiv :=
+        { toFun := r
+          invFun := r
+          left_inv := rr
+          right_inv := rr }
+      continuous_toFun := hrcont
+      continuous_invFun := hrcont }
+  have hranti : StrictAnti r := by
+    intro x y hxy
+    have hxy' : (x : ℝ) < (y : ℝ) := hxy
+    change 1 - (y : ℝ) < 1 - (x : ℝ)
+    linarith
+  let t' : apm_t91J06_I → apm_t91J06_I := fun x => t (r x)
+  let q' : apm_t91J06_I ≃ₜ Set.Icc (-(n + 1 : ℝ)) (n + 1 : ℝ) := R.trans q
+  have ht' : Continuous t' := ht.comp hrcont
+  have ht'int : Set.range t' ⊆ apm_t91J06_Iinterior := by
+    rintro _ ⟨x, rfl⟩
+    exact htint ⟨r x, rfl⟩
+  have ht'mono : StrictMono t' := htanti.comp hranti
+  have hq'mono : StrictMono (fun x ↦ (q' x : ℝ)) := by
+    intro x y hxy
+    exact hqanti (hranti hxy)
+  rcases apm_t91J06_extend_ramp_mono_mono n t' ht' ht'int q' ht'mono hq'mono with
+    ⟨F, hFc, hFm, hFmem, hF0, hF1, hFext⟩
+  refine ⟨F, hFc, hFm, hFmem, hF0, hF1, ?_⟩
+  intro x
+  have h := hFext (r x)
+  simpa [t', q', R, rr x] using h
 -- END SEAT AREA
 
 /-- The explicit three-piece affine construction when `t` preserves and `q`
