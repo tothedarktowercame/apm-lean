@@ -1268,6 +1268,53 @@ theorem polygonBoundarySignedEdgePath_of_not_sign (P : PairingData)
   rw [P.signedWedgeArc_of_not_sign i t h, circleArc_eq_integerLoop_one]
   rfl
 
+/-- The equally spaced subdivision vertices of the explicit once-around
+boundary path. -/
+def polygonBoundarySubdivisionVertex (P : PairingData)
+    (k : Fin (P.edgeCount + 1)) : Set.Icc (0 : ℝ) 1 :=
+  ⟨(k : ℝ) / P.edgeCount, by
+    constructor
+    · positivity
+    · apply (div_le_one (by exact_mod_cast P.edgeCount_pos)).2
+      exact_mod_cast Nat.le_of_lt_succ k.isLt⟩
+
+@[simp] theorem polygonBoundarySubdivisionVertex_zero (P : PairingData) :
+    polygonBoundarySubdivisionVertex P 0 = 0 := by
+  apply Subtype.ext
+  simp [polygonBoundarySubdivisionVertex]
+
+@[simp] theorem polygonBoundarySubdivisionVertex_last (P : PairingData) :
+    polygonBoundarySubdivisionVertex P (Fin.last P.edgeCount) = 1 := by
+  apply Subtype.ext
+  simp [polygonBoundarySubdivisionVertex, ne_of_gt P.edgeCount_pos]
+
+/-- The explicit once-around circle path followed by the geometric polygon
+boundary loop. -/
+noncomputable def polygonBoundaryIntegerLoopPath (P : PairingData) :
+    Path (orbitWedgeBase P) (orbitWedgeBase P) :=
+  ((ConstructionTargets.CircleUniversalCover.integerLoop 1).map
+    (polygonBoundaryWedgeLoop P).continuous).cast
+      (by simpa using (polygonBoundaryWedgeLoop_one P).symm)
+      (by simpa using (polygonBoundaryWedgeLoop_one P).symm)
+
+/-- Mathlib's finite subpath concatenation theorem applied to the equally
+spaced polygon vertices.  It remains only to identify each subpath with the
+corresponding packaged signed edge. -/
+theorem polygonBoundaryIntegerLoop_concatSubpath (P : PairingData) :
+    Path.Homotopic
+      (Path.concat
+        (polygonBoundaryIntegerLoopPath P ∘
+          polygonBoundarySubdivisionVertex P)
+        (fun k => (polygonBoundaryIntegerLoopPath P).subpath
+          (polygonBoundarySubdivisionVertex P k.castSucc)
+          (polygonBoundarySubdivisionVertex P k.succ)))
+      ((polygonBoundaryIntegerLoopPath P).subpath
+        (polygonBoundarySubdivisionVertex P 0)
+        (polygonBoundarySubdivisionVertex P (Fin.last P.edgeCount))) := by
+  exact Path.Homotopic.concat_subpath
+    (polygonBoundaryIntegerLoopPath P)
+    (polygonBoundarySubdivisionVertex P)
+
 /-- The explicit winding-one class associated to the polygon-edge
 parametrization. -/
 noncomputable def circleIntegerLoopOneClass : FundamentalGroup Circle 1 :=
