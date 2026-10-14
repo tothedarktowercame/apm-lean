@@ -87944,6 +87944,18 @@
     [{:cmd "boundary-loop drafts",
       :exit 1,
       :correction "fixed types and coercions"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792010645770-12376-708d22f4",
+     :commands
+     ["git show/diff bda198ead; blob sha256; diff --check"
+      "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology"
+      "lake env lean /dev/stdin (#print axioms)"
+      "placeholder scan"
+      "statement-registry.py check"],
+     :finding
+     "PASS: bda198ead (topo-6) changes only scoped PolygonSurfaceHomology.lean; fixture SHA-256 35551ff125402cc32e9e821c394b26d6e4063d870ebec3583c29bb16a028a081 matches. Exact blob builds; 0 placeholders; new edge formula uses standard axioms; registry 166/0. The positive unit-circle boundary is mapped through the polygon quotient and fixed signed skeleton-to-wedge homeomorphism; on each ordered edge interval the proved formula is exactly signedWedgeArc, preserving order and sign. New compiled progress; remaining: identify overlap inclusion with this loop, compute Hurewicz sum, then B8-B10."},
     :commit "bda198ead",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
@@ -87952,7 +87964,7 @@
      "35551ff125402cc32e9e821c394b26d6e4063d870ebec3583c29bb16a028a081"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -87972,7 +87984,7 @@
     :blueprint
     "ConstructionTargets/PolygonSurfaceHomology.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked MV outer-projection sign and raw-equality reduction.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked the ordered signed polygon boundary loop.",
    :id :program-2026-10-13-polygon-surface-homology,
    :kind :reusable-theorem,
    :campaign-priority 31,
@@ -88185,7 +88197,10 @@
     {:job 5,
      :commit "9331c2324",
      :reason
-     "Banked MV outer-projection sign and raw-equality reduction."}]}
+     "Banked MV outer-projection sign and raw-equality reduction."}
+    {:job 6,
+     :commit "bda198ead",
+     :reason "Banked the ordered signed polygon boundary loop."}]}
   {:consumer :t97A01,
    :stop-count 0,
    :phase :implementation,
@@ -91427,7 +91442,7 @@
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "polygonBoundaryWedgeLoop_edgePoint",
@@ -91437,7 +91452,9 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "ordered boundary restricts to each signed wedge arc",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :program-2026-10-13-polygon-surface-homology,
+    :banked-commit "bda198ead"},
    :id :lemma-polygonboundarywedgeloop-edgepoint,
    :kind :lemma,
    :depends-on [],
