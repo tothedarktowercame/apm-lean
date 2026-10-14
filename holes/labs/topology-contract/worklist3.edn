@@ -36160,6 +36160,16 @@
      {:cmd "placeholder count", :exit 0}
      {:cmd "git diff --check", :exit 0}
      {:cmd "rg forbidden", :exit 1, :expected-exit 1}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1792009392587-12340-a2367de2",
+     :commands
+     ["git show/check/diff d23066eb; scope and fixture SHA-256"
+      "lake build ConstructionTargets.t93J03Closure; lean fixture and Main"
+      "statement-registry check; placeholder/axiom recount"],
+     :finding
+     "PASS: d23066eb adds compiled, sorry-free progress after 32d3aa6e. For every adjacent run pair, consecutive indices lift to literal equality of the preceding block target and following block source, while the same source is certified in the overlap. Blueprint is faithful; exact scope/hash match; closure placeholders 0->0; frozen Main remains 1; registry 166/166; standard axioms only. STOP lists the boundary outer-subtype family, outer-fold instantiation, reverse kernel/surjectivity, winding, C1/C2/Main."},
     :commit "d23066ebf135266f6492546e82217349a47bc686",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
@@ -36170,7 +36180,7 @@
      "a4a1147ca50308438585fdbde0eefc763ff1c7c948506f8b87fe8300a68893f1"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -36188,7 +36198,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t93J03Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Identified the first and last maximal-run boundaries with subdivision indices zero and final; full subtype endpoint family remains.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Packaged each adjacent run boundary with literal endpoint equality and overlap membership; subtype family remains.",
    :id :program-2026-10-13-close-t93j03,
    :kind :final-adapter,
    :campaign-priority 30,
@@ -36462,7 +36472,11 @@
     {:job 5,
      :commit "32d3aa6e76fbf4739749aef6f1d274fec06bc885",
      :reason
-     "Identified the first and last maximal-run boundaries with subdivision indices zero and final; full subtype endpoint family remains."}]}
+     "Identified the first and last maximal-run boundaries with subdivision indices zero and final; full subtype endpoint family remains."}
+    {:job 6,
+     :commit "d23066ebf135266f6492546e82217349a47bc686",
+     :reason
+     "Packaged each adjacent run boundary with literal endpoint equality and overlap membership; subtype family remains."}]}
   {:consumer :t99J05,
    :stop-count 5,
    :evidence
@@ -39579,7 +39593,7 @@
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "pathTwoOpenSubdivision_runPartition_boundary_spec",
@@ -39591,7 +39605,9 @@
     :type
     "adjacent run targets equal following sources and lie in overlap",
     :area "covering-subgroup-correspondence",
-    :proved-in :program-2026-10-13-close-t93j03},
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "d23066ebf135266f6492546e82217349a47bc686"},
    :id :lemma-pathtwoopensubdivision-runpartition-boundary-spec,
    :kind :lemma,
    :depends-on [:lemma-boolsiderunpartition-end-indices],
