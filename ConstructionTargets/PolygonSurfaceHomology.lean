@@ -1648,6 +1648,44 @@ noncomputable def finiteWedgeFinSuccPointWedgeNeighborhoods (n : ℕ) :
   (finiteWedgeFinPointedContractibleNeighborhood n,
     finiteWedgeUnitPointedContractibleNeighborhood)
 
+/-- The exact remaining connector square after specializing generic van Kampen
+to the successor finite-wedge neighborhoods. -/
+def finiteWedgeRightConnectorSquare (n : ℕ) : Prop := by
+  let P := finiteWedgeFinSuccPointWedgeNeighborhoods n
+  let x₀ := PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1
+  let y₀ := PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle () 1
+  let r := ConstructionTargets.PointWedgeVanKampen.genericPointWedgeActualRight
+    x₀ y₀ P.2.carrier P.1.carrier
+  let eK := ConstructionTargets.PointWedgeVanKampen.genericPointWedgeOverlapGroupoidEquivalence
+    x₀ y₀ P.2.carrier P.1.carrier P.2.isOpen P.1.isOpen
+      P.2.mem P.1.mem P.2.contraction P.1.contraction
+  let eR := ConstructionTargets.PointWedgeVanKampen.genericPointWedgeRightGroupoidEquivalence
+    x₀ y₀ P.2.carrier P.1.carrier P.2.isOpen P.1.isOpen
+      P.2.mem P.1.mem P.2.contraction P.1.contraction
+  let z := ConstructionTargets.PointWedgeVanKampen.genericPointWedgeOverlapBase
+    x₀ y₀ P.2.carrier P.1.carrier
+  exact
+    ((ConstructionTargets.PointWedgeVanKampen.genericPointWedgeConnectors y₀).connector
+      ((eK.functor ⋙ eK.inverse ⋙ r ⋙ eR.functor).obj z)).hom ≫
+        (eK.funInvIdAssoc (r ⋙ eR.functor)).hom.app z =
+      ((ConstructionTargets.PointWedgeVanKampen.genericPointWedgeConnectors y₀).connector
+        ((r ⋙ eR.functor).obj z)).hom
+
+/-- For the successor finite wedge, triviality of the reconstruction
+conjugator's right projection is exactly the named connector square above. -/
+theorem finiteWedgeRightProjection_eq_one_iff_connectorSquare (n : ℕ) : by
+    let P := finiteWedgeFinSuccPointWedgeNeighborhoods n
+    let x₀ := PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1
+    let y₀ := PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle () 1
+    exact ConstructionTargets.PointWedgeVanKampen.genericPointWedgeFreeProductRightProjection
+      x₀ y₀
+      (ConstructionTargets.PointWedgeVanKampen.genericPointWedgeIdentityGlobalRightBaseElement
+        x₀ y₀ P.2.carrier P.1.carrier P.2.isOpen P.1.isOpen
+          P.2.mem P.1.mem P.2.contraction P.1.contraction) = 1 ↔
+      finiteWedgeRightConnectorSquare n := by
+  exact ConstructionTargets.PointWedgeVanKampen.genericPointWedgeRightBase_rightProjection_eq_one_iff_connectorSquare
+    _ _ _ _ _ _ _ _ _ _
+
 /-! ### Algebraic word extraction from a point-wedge computation -/
 
 /-- Evaluate a word whose letters come from the two factors of a coproduct. -/
