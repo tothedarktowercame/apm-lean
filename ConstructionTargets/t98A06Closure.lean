@@ -31,6 +31,22 @@ def HasSmoothLift {n m : ℕ} {X Y : Type}
   ∃ w : ∀ x : X, TangentSpace (𝓡 n) x,
     SmoothVectorField w ∧ ∀ x, mfderiv (𝓡 n) (𝓡 m) f x (w x) = v (f x)
 
+/-- The pointwise linear-algebra input to the local submersion theorem: in
+finite-dimensional manifold coordinates, every surjective derivative admits
+a continuous linear right inverse. -/
+theorem surjective_continuousLinearMap_has_rightInverse {n m : ℕ}
+    (L : E n →L[ℝ] E m) (hL : Function.Surjective L) :
+    ∃ R : E m →L[ℝ] E n,
+      L.comp R = ContinuousLinearMap.id ℝ (E m) := by
+  obtain ⟨R, hR⟩ := L.toLinearMap.exists_rightInverse_of_surjective
+    (LinearMap.range_eq_top.mpr hL)
+  refine ⟨LinearMap.toContinuousLinearMap R, ?_⟩
+  apply ContinuousLinearMap.ext
+  intro y
+  exact LinearMap.congr_fun hR y
+
+#print axioms surjective_continuousLinearMap_has_rightInverse
+
 theorem t98A06_global_vectorField_lift
     (hlocal : ∀ (n m : ℕ) (X Y : Type) [TopologicalSpace X] [TopologicalSpace Y]
       [T2Space X] [T2Space Y] [SecondCountableTopology X] [SecondCountableTopology Y]
