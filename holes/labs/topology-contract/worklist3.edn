@@ -36163,6 +36163,16 @@
     [{:cmd "range prototype",
       :exit 1,
       :correction "proved slice membership via getElem?"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1792015512763-12521-7b442054",
+     :commands
+     ["exact diff-tree assertion and git show --check for 8c4eb4f"
+      "fixture SHA-256 assertion; lake env lean frozen interface"
+      "registry 166/166; parent/commit placeholder and forbidden recount"],
+     :finding
+     "PASS: 8c4eb4f records genuine compiled, sorry-free progress after 263f5d47. The checked declaration maps Fin(runs+1) into outer subtype V, and its theorem correctly identifies each coerced value with the corresponding ambient canonical boundary. This closes the subtype-family representation step needed for the run fold; van Kampen remains explicitly partial. Scope/hash match; standard axioms only; Main remains 1->1 placeholder; residual milestones listed."},
     :commit "e1ece6539bc8be947cc0b71eed2ab9d3a26c581f",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
@@ -36173,7 +36183,7 @@
      "a4beb67e7bb6445d9316614b6b1078cc5d43b9fb1449c3a9d43388a23cd987f9"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -36191,7 +36201,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t93J03Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Matched outer boundary i exactly to indexed run block source; representative choice remains.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Proved every reindexed run-block piece stays in its head-selected chart; Boolean representative choice remains.",
    :id :program-2026-10-13-close-t93j03,
    :kind :final-adapter,
    :campaign-priority 30,
@@ -36513,7 +36523,11 @@
     {:job 8,
      :commit "e48debde7dffad504dff78f1acd08acc1d137d16",
      :reason
-     "Matched outer boundary i exactly to indexed run block source; representative choice remains."}]}
+     "Matched outer boundary i exactly to indexed run block source; representative choice remains."}
+    {:job 9,
+     :commit "e1ece6539bc8be947cc0b71eed2ab9d3a26c581f",
+     :reason
+     "Proved every reindexed run-block piece stays in its head-selected chart; Boolean representative choice remains."}]}
   {:consumer :t99J05,
    :stop-count 5,
    :evidence
@@ -40007,7 +40021,7 @@
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "pathTwoOpenSubdivisionRunBlockPiece_mem_chart",
@@ -40017,7 +40031,9 @@
     :reported-by [:program-2026-10-13-close-t93j03],
     :type "indexed dependent run block stays in selected chart",
     :area "covering-subgroup-correspondence",
-    :proved-in :program-2026-10-13-close-t93j03},
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "e1ece6539bc8be947cc0b71eed2ab9d3a26c581f"},
    :id :lemma-pathtwoopensubdivisionrunblockpiece-mem-chart,
    :kind :lemma,
    :depends-on
