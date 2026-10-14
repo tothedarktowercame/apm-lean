@@ -1557,7 +1557,84 @@ lemma apm_m03J01_hessianOperator_seq_closed_aux_weakHessian_limit {n : ℕ}
     {Y : apm_m03J01_hessianLp n}
     (hY : Tendsto (fun k => (hH k).1.toLp (H k)) atTop (nhds Y)) :
     apm_m03J01_weakHessian g0 (fun z => Y z) := by
-  sorry
+  classical
+  refine ⟨Lp.memLp Y, ?_⟩
+  intro i j φ hφ hφc
+  let dφ : apm_m03J01_E n → ℝ :=
+    fun z => fderiv ℝ φ z (apm_m03J01_basis n j)
+  have hdφcont : Continuous dφ :=
+    (hφ.continuous_fderiv (by simp)).clm_apply continuous_const
+  have hdφsupp : HasCompactSupport dφ :=
+    hφc.fderiv_apply ℝ (apm_m03J01_basis n j)
+  let D : apm_m03J01_E n → apm_m03J01_E n :=
+    fun z => dφ z • apm_m03J01_basis n i
+  have hD : MemLp D 2 volume :=
+    (hdφcont.smul continuous_const).memLp_of_hasCompactSupport hdφsupp.smul_right
+  have hφLp : MemLp φ 2 volume := hφ.continuous.memLp_of_hasCompactSupport hφc
+  let ev : (Fin n → Fin n → ℝ) →L[ℝ] ℝ :=
+    { toFun := fun q => q i j
+      map_add' := fun _ _ => rfl
+      map_smul' := fun _ _ => rfl
+      cont := (continuous_apply j).comp (continuous_apply i) }
+  let evLp := ev.compLpL 2 (volume : Measure (apm_m03J01_E n))
+  have hgLp : Tendsto (fun k => (hgk k).toLp (g k)) atTop (nhds (hg0.toLp g0)) :=
+    (Lp.tendsto_Lp_iff_tendsto_eLpNorm'' g hgk g0 hg0).2
+      (by simpa only [Pi.sub_apply] using hg)
+  have hleft : Tendsto
+      (fun k => inner ℝ (hD.toLp D) ((hgk k).toLp (g k))) atTop
+      (nhds (inner ℝ (hD.toLp D) (hg0.toLp g0))) :=
+    tendsto_const_nhds.inner hgLp
+  have hright : Tendsto
+      (fun k => -(inner ℝ (hφLp.toLp φ) (evLp ((hH k).1.toLp (H k))))) atTop
+      (nhds (-(inner ℝ (hφLp.toLp φ) (evLp Y)))) :=
+    (tendsto_const_nhds.inner (evLp.continuous.continuousAt.tendsto.comp hY)).neg
+  have hpair (k : ℕ) :
+      inner ℝ (hD.toLp D) ((hgk k).toLp (g k)) =
+        -(inner ℝ (hφLp.toLp φ) (evLp ((hH k).1.toLp (H k)))) := by
+    rw [L2.inner_def, L2.inner_def]
+    have hl : (∫ z, inner ℝ ((hD.toLp D) z) (((hgk k).toLp (g k)) z) ∂volume) =
+        ∫ z, g k z i * dφ z ∂volume := integral_congr_ae (by
+      filter_upwards [hD.coeFn_toLp, (hgk k).coeFn_toLp] with z hzD hzg
+      rw [hzD, hzg]
+      rw [show D z = dφ z • apm_m03J01_basis n i by rfl, real_inner_smul_left]
+      rw [show inner ℝ (apm_m03J01_basis n i) (g k z) = g k z i by
+        simpa [apm_m03J01_basis] using
+          EuclideanSpace.inner_single_left (𝕜 := ℝ) i (1 : ℝ) (g k z)]
+      ring)
+    have hr : (∫ z, inner ℝ ((hφLp.toLp φ) z)
+        ((evLp ((hH k).1.toLp (H k))) z) ∂volume) =
+        ∫ z, H k z i j * φ z ∂volume := integral_congr_ae (by
+      filter_upwards [hφLp.coeFn_toLp, ev.coeFn_compLp ((hH k).1.toLp (H k)),
+        (hH k).1.coeFn_toLp] with z hzφ hzev hzH
+      rw [hzφ]
+      change inner ℝ (φ z) ((ev.compLp ((hH k).1.toLp (H k))) z) = _
+      rw [hzev, hzH]
+      simp [ev, real_inner_eq_re_inner, mul_comm])
+    rw [hl, hr]
+    exact hH k |>.2 i j φ hφ hφc
+  have hlimit : inner ℝ (hD.toLp D) (hg0.toLp g0) =
+      -(inner ℝ (hφLp.toLp φ) (evLp Y)) :=
+    tendsto_nhds_unique hleft
+      (hright.congr' (Eventually.of_forall fun k => (hpair k).symm))
+  rw [L2.inner_def, L2.inner_def] at hlimit
+  have hl : (∫ z, inner ℝ ((hD.toLp D) z) ((hg0.toLp g0) z) ∂volume) =
+      ∫ z, g0 z i * dφ z ∂volume := integral_congr_ae (by
+    filter_upwards [hD.coeFn_toLp, hg0.coeFn_toLp] with z hzD hzg
+    rw [hzD, hzg]
+    rw [show D z = dφ z • apm_m03J01_basis n i by rfl, real_inner_smul_left]
+    rw [show inner ℝ (apm_m03J01_basis n i) (g0 z) = g0 z i by
+      simpa [apm_m03J01_basis] using
+        EuclideanSpace.inner_single_left (𝕜 := ℝ) i (1 : ℝ) (g0 z)]
+    ring)
+  have hr : (∫ z, inner ℝ ((hφLp.toLp φ) z) ((evLp Y) z) ∂volume) =
+      ∫ z, Y z i j * φ z ∂volume := integral_congr_ae (by
+    filter_upwards [hφLp.coeFn_toLp, ev.coeFn_compLp Y] with z hzφ hzev
+    rw [hzφ]
+    change inner ℝ (φ z) ((ev.compLp Y) z) = _
+    rw [hzev]
+    simp [ev, real_inner_eq_re_inner, mul_comm])
+  rw [hl, hr] at hlimit
+  exact hlimit
 
 lemma apm_m03J01_hessianOperator_seq_closed {n : ℕ}
     {Ω : Set (apm_m03J01_E n)}
