@@ -177,7 +177,34 @@ four-dimensional continuous complement. -/
 theorem t95A04_injective_clm_has_four_complement
     (L : E 2 →L[ℝ] E 6) (hL : Function.Injective L) :
     ∃ e : (E 2 × E 4) ≃L[ℝ] E 6, ∀ v, e (v, 0) = L v := by
-  sorry
+  let R : Submodule ℝ (E 6) := L.range
+  have hR : IsClosed (R : Set (E 6)) := R.closed_of_finiteDimensional
+  let eL : E 2 ≃L[ℝ] R := L.equivRange hL hR
+  have hdimR : Module.finrank ℝ R = 2 := by
+    simpa [R] using LinearMap.finrank_range_of_inj (f := L.toLinearMap) hL
+  have hdim_perp : Module.finrank ℝ (Submodule.orthogonal R) = 4 := by
+    have hsum := R.finrank_add_finrank_orthogonal
+    simp only [hdimR] at hsum
+    have hdim6 : Module.finrank ℝ (E 6) = 6 := by simp
+    rw [hdim6] at hsum
+    omega
+  let eK : E 4 ≃L[ℝ] Submodule.orthogonal R :=
+    (LinearEquiv.ofFinrankEq (E 4) (Submodule.orthogonal R)
+      (by simpa using hdim_perp.symm)).toContinuousLinearEquiv
+  let split : E 6 ≃L[ℝ] R × Submodule.orthogonal R :=
+    R.orthogonalDecomposition.toContinuousLinearEquiv.trans
+      (WithLp.prodContinuousLinearEquiv 2 ℝ R (Submodule.orthogonal R))
+  let e : (E 2 × E 4) ≃L[ℝ] E 6 := (eL.prodCongr eK).trans split.symm
+  refine ⟨e, ?_⟩
+  intro v
+  simp only [e, ContinuousLinearEquiv.trans_apply,
+    ContinuousLinearEquiv.prodCongr_apply, map_zero]
+  simp only [split, ContinuousLinearEquiv.symm_trans_apply,
+    WithLp.prodContinuousLinearEquiv_symm_apply,
+    LinearIsometryEquiv.coe_toContinuousLinearEquiv,
+    Submodule.orthogonalDecomposition_symm_apply]
+  change L v + 0 = L v
+  simp
 
 /-- The derivative of the manifold map, expressed in its extended charts, is
 the manifold derivative. -/
@@ -185,7 +212,9 @@ theorem t95A04_writtenInExtChart_hasFDerivAt
     (x : Space ℝ 2) :
     HasFDerivAt (writtenInExtChartAt (𝓡 2) (𝓡 6) x veroneseDescended)
       (mfderiv (𝓡 2) (𝓡 6) veroneseDescended x) (extChartAt (𝓡 2) x x) := by
-  sorry
+  have h := veroneseDescended_contMDiff.mdifferentiableAt (x := x) (by simp)
+  simpa only [ModelWithCorners.range_eq_univ, hasFDerivWithinAt_univ] using
+    h.hasMFDerivAt.2
 
 /-- The augmented coordinate map has derivative equal to a continuous linear
 extension of the derivative of its first component. -/
@@ -195,7 +224,34 @@ theorem t95A04_augmented_hasFDerivAt
     (he : ∀ v, e (v, 0) = L v) :
     HasFDerivAt (fun z : E 2 × E 4 ↦ g z.1 + e (0, z.2))
       (e : (E 2 × E 4) →L[ℝ] E 6) (a, 0) := by
-  sorry
+  have hfst : HasFDerivAt (Prod.fst : E 2 × E 4 → E 2)
+      (ContinuousLinearMap.fst ℝ (E 2) (E 4)) (a, 0) := hasFDerivAt_fst
+  have hg' := hg.comp (a, (0 : E 4)) hfst
+  have hsn : HasFDerivAt (Prod.snd : E 2 × E 4 → E 4)
+      (ContinuousLinearMap.snd ℝ (E 2) (E 4)) (a, 0) := hasFDerivAt_snd
+  have hinr : HasFDerivAt (fun z : E 2 × E 4 => (0, z.2))
+      ((ContinuousLinearMap.inr ℝ (E 2) (E 4)).comp
+        (ContinuousLinearMap.snd ℝ (E 2) (E 4))) (a, 0) :=
+    (ContinuousLinearMap.inr ℝ (E 2) (E 4)).hasFDerivAt.comp (a, 0) hsn
+  have hk : HasFDerivAt (fun z : E 2 × E 4 => e (0, z.2))
+      ((e : (E 2 × E 4) →L[ℝ] E 6).comp
+        ((ContinuousLinearMap.inr ℝ (E 2) (E 4)).comp
+          (ContinuousLinearMap.snd ℝ (E 2) (E 4)))) (a, 0) :=
+    (e : (E 2 × E 4) →L[ℝ] E 6).hasFDerivAt.comp
+      (a, (0 : E 4)) hinr
+  have hder : L.comp (ContinuousLinearMap.fst ℝ (E 2) (E 4)) +
+      (e : (E 2 × E 4) →L[ℝ] E 6).comp
+        ((ContinuousLinearMap.inr ℝ (E 2) (E 4)).comp
+          (ContinuousLinearMap.snd ℝ (E 2) (E 4))) = e := by
+    apply ContinuousLinearMap.ext
+    intro z
+    rw [ContinuousLinearMap.add_apply, ContinuousLinearMap.comp_apply,
+      ContinuousLinearMap.comp_apply, ContinuousLinearMap.comp_apply]
+    change L z.1 + e (0, z.2) = e z
+    rw [← he z.1, ← map_add]
+    simp
+  rw [← hder]
+  simpa only [Function.comp_apply] using hg'.add hk
 
 /-- Smoothness near the base point of the augmented coordinate map. -/
 theorem t95A04_augmented_contDiffAt
@@ -204,6 +260,50 @@ theorem t95A04_augmented_contDiffAt
       (fun z : E 2 × E 4 ↦
         writtenInExtChartAt (𝓡 2) (𝓡 6) x veroneseDescended z.1 + e (0, z.2))
       (extChartAt (𝓡 2) x x, 0) := by
+  let a : E 2 := extChartAt (𝓡 2) x x
+  let U : Set (E 2) :=
+    (extChartAt (𝓡 2) x).target ∩
+      (extChartAt (𝓡 2) x).symm ⁻¹'
+        (veroneseDescended ⁻¹' (extChartAt (𝓡 6) (veroneseDescended x)).source)
+  have ha : a ∈ U := by
+    constructor
+    · exact (extChartAt (𝓡 2) x).map_source (mem_extChartAt_source x)
+    · change veroneseDescended ((extChartAt (𝓡 2) x).symm
+          (extChartAt (𝓡 2) x x)) ∈
+        (extChartAt (𝓡 6) (veroneseDescended x)).source
+      rw [(extChartAt (𝓡 2) x).left_inv (mem_extChartAt_source x)]
+      exact mem_extChartAt_source (veroneseDescended x)
+  have hU : U ∈ nhds a := by
+    apply Filter.inter_mem (extChartAt_target_mem_nhds x)
+    apply (continuousAt_extChartAt_symm x).preimage_mem_nhds
+    have ht : veroneseDescended ⁻¹'
+        (extChartAt (𝓡 6) (veroneseDescended x)).source ∈ nhds x := by
+      apply veroneseDescended_contMDiff.continuous.continuousAt.preimage_mem_nhds
+      exact (isOpen_extChartAt_source (veroneseDescended x)).mem_nhds
+        (mem_extChartAt_source (veroneseDescended x))
+    simpa [a, (extChartAt (𝓡 2) x).left_inv (mem_extChartAt_source x)] using ht
+  have hg_on : ContDiffOn ℝ ((⊤ : ℕ∞) : WithTop ℕ∞)
+      (writtenInExtChartAt (𝓡 2) (𝓡 6) x veroneseDescended) U := by
+    simpa [U, writtenInExtChartAt] using
+      (contMDiff_iff.mp veroneseDescended_contMDiff).2 x (veroneseDescended x)
+  have hg : ContDiffAt ℝ ((⊤ : ℕ∞) : WithTop ℕ∞)
+      (writtenInExtChartAt (𝓡 2) (𝓡 6) x veroneseDescended) a :=
+    hg_on.contDiffAt hU
+  have he : ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞)
+      (fun z : E 2 × E 4 ↦ e (0, z.2)) := by
+    exact e.contDiff.comp (contDiff_const.prodMk contDiff_snd)
+  simpa [a] using (hg.fst' (y := (0 : E 4))).add he.contDiffAt
+
+/-- Seat (claude-14): the augmented map is `C^∞` on an open neighbourhood of
+the base point (`veroneseDescended` is smooth everywhere; `writtenInExtChartAt`
+is smooth on the open set `(extChartAt x).target ∩ (extChartAt x).symm ⁻¹'
+(f ⁻¹' (extChartAt (f x)).source)`, boundaryless models). -/
+theorem t95A04_augmented_contDiffOn
+    (x : Space ℝ 2) (e : (E 2 × E 4) ≃L[ℝ] E 6) :
+    ∃ U : Set (E 2 × E 4), IsOpen U ∧ (extChartAt (𝓡 2) x x, 0) ∈ U ∧
+      ContDiffOn ℝ ((⊤ : ℕ∞) : WithTop ℕ∞)
+        (fun z : E 2 × E 4 ↦
+          writtenInExtChartAt (𝓡 2) (𝓡 6) x veroneseDescended z.1 + e (0, z.2)) U := by
   sorry
 
 /-- Euclidean inverse-function theorem in the exact local form needed by the
@@ -211,7 +311,8 @@ augmented coordinate map. -/
 -- BEGIN SEAT AREA
 theorem t95A04_augmented_local_inverse
     (G : (E 2 × E 4) → E 6) (a : E 2 × E 4)
-    (hG : ContDiffAt ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) G a)
+    (U : Set (E 2 × E 4)) (hU : IsOpen U) (haU : a ∈ U)
+    (hG : ContDiffOn ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) G U)
     (e : (E 2 × E 4) ≃L[ℝ] E 6)
     (hderiv : HasFDerivAt G (e : (E 2 × E 4) →L[ℝ] E 6) a) :
     ∃ q : PartialDiffeomorph (𝓘(ℝ, E 2 × E 4)) (𝓘(ℝ, E 6))
@@ -259,9 +360,9 @@ theorem t95A04_isImmersion_of_injective_mfderiv
     simpa [g, L, a] using t95A04_writtenInExtChart_hasFDerivAt x
   have hG : HasFDerivAt G (e : (E 2 × E 4) →L[ℝ] E 6) (a, 0) := by
     simpa [G] using t95A04_augmented_hasFDerivAt g a L hg e he
-  have hGsmooth : ContDiffAt ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) G (a, 0) := by
-    simpa [G, g, a] using t95A04_augmented_contDiffAt x e
-  obtain ⟨q, hqa, hqG⟩ := t95A04_augmented_local_inverse G (a, 0) hGsmooth e hG
+  obtain ⟨U, hU, haU, hGsmooth⟩ := t95A04_augmented_contDiffOn x e
+  obtain ⟨q, hqa, hqG⟩ := t95A04_augmented_local_inverse G (a, 0) U hU haU
+    (by simpa [G, g] using hGsmooth) e hG
   exact t95A04_isImmersionAt_of_augmented_local_inverse x e q
     (by simpa [a] using hqa) (by
       intro z hz
