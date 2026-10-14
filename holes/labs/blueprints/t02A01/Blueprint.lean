@@ -469,7 +469,10 @@ theorem apm_t02a01_innerPoint_continuous : Continuous apm_t02a01_innerPoint := b
   sorry
 
 theorem apm_t02a01_innerPoint_four : apm_t02a01_innerPoint 4 = apm_t02a01_innerBase := by
-  sorry
+  have hperimeter : apm_t02a01_perimeter 4 = apm_t02a01_perimeter 0 := by
+    norm_num [apm_t02a01_perimeter, apm_t02a01_clamp01]
+  exact Subtype.ext (congrArg (Quotient.mk _)
+    (Subtype.ext hperimeter))
 
 /-- The inner boundary traversed once, based at the corner `(1/4,1/4)`. -/
 noncomputable def apm_t02a01_innerLoop
