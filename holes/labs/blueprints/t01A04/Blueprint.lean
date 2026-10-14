@@ -1781,12 +1781,98 @@ lemma apm_t01A04_tbp_sheet_homeomorph_aux_branch_unique
       simp
     linarith
 
+noncomputable def apm_t01A04_tbp_sheet_homeomorph_aux_invRaw (i : Fin 2) :
+    Sum apm_t01a04_Torus Circle → apm_t01a04_TorusCover
+  | .inl q => Quotient.mk _ (.inl
+      (apm_t01A04_tbp_sheet_homeomorph_aux_root i q.1, q.2))
+  | .inr z => Quotient.mk _ (.inr (i, z))
+
+lemma apm_t01A04_tbp_sheet_homeomorph_aux_invRaw_respects (i : Fin 2)
+    {u v} (h : Relation.EqvGen apm_t01a04_wedgeRel u v) :
+    apm_t01A04_tbp_sheet_homeomorph_aux_invRaw i u =
+      apm_t01A04_tbp_sheet_homeomorph_aux_invRaw i v := by
+  induction h with
+  | rel _ _ h =>
+      cases h with
+      | base =>
+        change Quotient.mk _ (Sum.inl
+            (apm_t01A04_tbp_sheet_homeomorph_aux_root i 1, 1)) =
+          Quotient.mk _ (Sum.inr (i, 1))
+        have hr : apm_t01A04_tbp_sheet_homeomorph_aux_root i 1 =
+            apm_t01a04_sheetPoint i := by
+          simp [apm_t01A04_tbp_sheet_homeomorph_aux_root]
+        rw [hr]
+        exact apm_t01A04_torusCoverMap_evenlyCovered_basepoint_aux_glue i
+  | refl _ => rfl
+  | symm _ _ _ ih => exact ih.symm
+  | trans _ _ _ _ _ ih₁ ih₂ => exact ih₁.trans ih₂
+
+noncomputable def apm_t01A04_tbp_sheet_homeomorph_aux_inv (i : Fin 2) :
+    apm_t01a04_X → apm_t01a04_TorusCover :=
+  Quotient.lift (apm_t01A04_tbp_sheet_homeomorph_aux_invRaw i)
+    (fun _ _ h => apm_t01A04_tbp_sheet_homeomorph_aux_invRaw_respects i h)
+
+/-- The quotient-level inverse is continuous on `U`. -/
+lemma apm_t01A04_tbp_sheet_homeomorph_aux_inv_continuous (i : Fin 2) :
+    ContinuousOn (apm_t01A04_tbp_sheet_homeomorph_aux_inv i) apm_t01A04_tbp_U := by
+  sorry
+
+/-- Left inverse on sheet `i`. -/
+lemma apm_t01A04_tbp_sheet_homeomorph_aux_left (i : Fin 2) :
+    ∀ y ∈ apm_t01A04_tbp_V i, apm_t01A04_tbp_sheet_homeomorph_aux_inv i (apm_t01a04_torusCoverMap y) = y := by
+  sorry
+
+/-- Right inverse on `U`. -/
+lemma apm_t01A04_tbp_sheet_homeomorph_aux_right (i : Fin 2) :
+    ∀ x ∈ apm_t01A04_tbp_U, apm_t01a04_torusCoverMap (apm_t01A04_tbp_sheet_homeomorph_aux_inv i x) = x := by
+  sorry
+
 /-- On each sheet the cover map is a homeomorphism onto `U` (inverse: square
 root on the arc around `sheetPoint i`, identity on circle sheet `i`). -/
 lemma apm_t01A04_tbp_sheet_homeomorph (i : Fin 2) :
     ∃ h : apm_t01A04_tbp_V i ≃ₜ apm_t01A04_tbp_U, ∀ y,
       (h y : apm_t01a04_X) = apm_t01a04_torusCoverMap y := by
-  sorry
+  let f : apm_t01A04_tbp_V i → apm_t01A04_tbp_U := fun y =>
+    ⟨apm_t01a04_torusCoverMap y.1, by
+      rcases y.2 with ⟨r, hr, hry⟩
+      rw [← hry]
+      rcases r with q | p
+      · refine ⟨Sum.inl (q.1 ^ 2, q.2), ?_, rfl⟩
+        exact ⟨hr.2.1, hr.2.2⟩
+      · refine ⟨Sum.inr p.2, hr.2, rfl⟩⟩
+  let g : apm_t01A04_tbp_U → apm_t01A04_tbp_V i := fun x =>
+    ⟨apm_t01A04_tbp_sheet_homeomorph_aux_inv i x.1, by
+      rcases x.2 with ⟨r, hr, hrx⟩
+      rw [← hrx]
+      rcases r with q | z
+      · refine ⟨Sum.inl
+            (apm_t01A04_tbp_sheet_homeomorph_aux_root i q.1, q.2), ?_, rfl⟩
+        dsimp
+        constructor
+        · have hlo := Complex.neg_pi_lt_arg (q.1 : ℂ)
+          have hhi : Complex.arg (q.1 : ℂ) < Real.pi :=
+            Complex.arg_lt_pi_iff.mpr (Or.inl hr.1.le)
+          have hc : 0 < Real.cos (Complex.arg (q.1 : ℂ) / 2) := by
+            apply Real.cos_pos_of_mem_Ioo
+            constructor <;> linarith [Real.pi_pos]
+          fin_cases i <;>
+            simpa [apm_t01A04_tbp_sheet_homeomorph_aux_root,
+              apm_t01a04_sheetPoint, Circle.exp, Complex.exp_mul_I,
+              ← Complex.ofReal_cos, ← Complex.ofReal_sin] using hc
+        · change 0 < ((↑(apm_t01A04_tbp_sheet_homeomorph_aux_root i q.1) : ℂ) ^ 2).re ∧
+              0 < (q.2 : ℂ).re
+          rw [← Circle.coe_pow, apm_t01A04_tbp_sheet_homeomorph_aux_root_sq]
+          exact hr
+      · refine ⟨Sum.inr (i, z), ?_, rfl⟩
+        exact ⟨rfl, hr⟩⟩
+  refine ⟨Homeomorph.mk ⟨f, g, ?_, ?_⟩ ?_ ?_, fun y => rfl⟩
+  · intro y
+    exact Subtype.ext (apm_t01A04_tbp_sheet_homeomorph_aux_left i y.1 y.2)
+  · intro x
+    exact Subtype.ext (apm_t01A04_tbp_sheet_homeomorph_aux_right i x.1 x.2)
+  · exact (apm_t01a04_torusCoverMap.continuous.comp continuous_subtype_val).subtype_mk _
+  · exact ((apm_t01A04_tbp_sheet_homeomorph_aux_inv_continuous i).comp_continuous continuous_subtype_val
+      (fun x => x.2)).subtype_mk _
 
 /-- The two sheets over the basepoint (see the plan above). -/
 lemma apm_t01A04_torusCoverMap_evenlyCovered_basepoint_aux_sheets :
