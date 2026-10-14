@@ -1437,6 +1437,37 @@ theorem polygonBoundaryLegWord_coordinates (P : PairingData) :
     by_cases hs : P.sign i <;> simp [hs]
   · by_cases hs : P.sign i <;> simp [ho, hs]
 
+/-- The ordered explicit-edge product already has the complete
+orientation-signed attaching-vector H₁ class.  The remaining boundary
+subdivision theorem is therefore purely a geometric identification. -/
+theorem polygonBoundaryExplicitEdgeProduct_hurewicz_eq_attachingDegree
+    (P : PairingData) :
+    moduleHurewicz (orbitWedgeBase P)
+        (polygonBoundaryExplicitEdgeProduct P) =
+      finiteWedgeH1CoordinateMap P
+        (circleIntegerLoopOneCoordinate • attachingDegree P) := by
+  rw [polygonBoundaryExplicitEdgeProduct_hurewicz,
+    ← polygonBoundaryLegWord_coordinates, map_zsmul]
+  simp only [finiteWedgeLegWordCoordinatesList, polygonBoundaryLegWord,
+    List.map_ofFn, List.sum_ofFn, map_sum]
+  let F := fun x : Fin P.edgeCount => finiteWedgeH1CoordinateMap P
+    (((fun q => q.2 • orbitBasis P q.1 1) ∘
+      fun i => (P.orbit i, if P.sign i then (1 : ℤ) else -1)) x)
+  have hdist (s : Finset (Fin P.edgeCount)) :
+      circleIntegerLoopOneCoordinate • (∑ x ∈ s, F x) =
+        ∑ x ∈ s, circleIntegerLoopOneCoordinate • F x := by
+    induction s using Finset.induction_on with
+    | empty => rw [Finset.sum_empty, Finset.sum_empty, zsmul_zero]
+    | @insert a s ha ih =>
+        rw [Finset.sum_insert ha, Finset.sum_insert ha, zsmul_add, ih]
+  change _ = circleIntegerLoopOneCoordinate • ∑ x, F x
+  rw [show circleIntegerLoopOneCoordinate • (∑ x, F x) =
+      ∑ x, circleIntegerLoopOneCoordinate • F x by
+    simpa using hdist Finset.univ]
+  apply Finset.sum_congr rfl
+  intro i _
+  by_cases hs : P.sign i <;> simp [F, hs]
+
 /-- Hurewicz evaluation of a finite leg word is the normalized coordinate map
 applied to its list-based coordinate sum. -/
 theorem finiteWedgeLegWord_hurewicz (P : PairingData)
