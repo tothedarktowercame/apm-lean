@@ -120,7 +120,13 @@ lemma homeomorph_trans {X Y Z : Type*}
     Nonempty (X ≃ₜ Z) := by
   exact ⟨(Classical.choice hXY).trans (Classical.choice hYZ)⟩
 
-/-! ## Consumer bridges and sorry-free assemblies -/
+/-! ## Consumer bridges and sorry-free assemblies
+
+Removed 2026-10-14: generic `kleinSquare_bridge` / `t02A02_bridge` /
+`fourteenGon_bridge` quantified over an arbitrary space `F` (false: `F :=
+Empty`, blueprint-1).  A bridge `X ≃ₜ PolygonSurface w` is a leaf of each
+CONSUMER blueprint, about its own literal quotient type; the assemblies below
+take it as the hypothesis `hbridge`. -/
 
 inductive KleinLabel | a | b deriving DecidableEq
 
@@ -130,30 +136,9 @@ def kleinWord : List (Signed KleinLabel) :=
 def crosscapTwoWord : List (Signed KleinLabel) :=
   [(.a, true), (.a, true), (.b, true), (.b, true)]
 
-/-- First consumer bridge: radial square-to-disk map, on all four arcs. -/
-theorem kleinSquare_bridge
-    (KleinSquare : Type*) [TopologicalSpace KleinSquare] :
-    Nonempty (KleinSquare ≃ₜ PolygonSurface kleinWord) := by
-  sorry
-
 /-- Compare the word `aabb` with `SurfaceRel false 2`. -/
 theorem crosscapTwo_bridge :
     Nonempty (PolygonSurface crosscapTwoWord ≃ₜ Surface false 2) := by
-  sorry
-
-/-- Consumer bridge for the literal octagon quotient. -/
-theorem t02A02_bridge
-    (F : Type*) [TopologicalSpace F]
-    (OctLabel : Type*) [DecidableEq OctLabel]
-    (w : List (Signed OctLabel)) :
-    Nonempty (F ≃ₜ PolygonSurface w) := by
-  sorry
-
-/-- Shared bridge for each literal fourteen-gon quotient. -/
-theorem fourteenGon_bridge
-    (F : Type*) [TopologicalSpace F]
-    (Label : Type*) [DecidableEq Label] (w : List (Signed Label)) :
-    Nonempty (F ≃ₜ PolygonSurface w) := by
   sorry
 
 /-- Klein consumer: bridge, word slide, and standard-target bridge. -/
