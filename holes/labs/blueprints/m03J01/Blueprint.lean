@@ -1291,7 +1291,53 @@ lemma apm_m03J01_hessianOperator_exists_aux_add {n : ℕ}
     (hg : MemLp g 2 volume) (hk : MemLp k 2 volume)
     (hH : apm_m03J01_weakHessian g H) (hK : apm_m03J01_weakHessian k K) :
     apm_m03J01_weakHessian (g + k) (H + K) := by
-  sorry
+  refine ⟨hH.1.add hK.1, ?_⟩
+  intro i j φ hφ hc
+  have ht : apm_m03J01_testFunction n univ φ := ⟨hφ, hc, by simp⟩
+  have hd := apm_m03J01_testFunction_grad_memLp ht
+  have hv := apm_m03J01_testFunction_val_memLp ht
+  have hderiv : (fun x => fderiv ℝ φ x (apm_m03J01_basis n j)) =
+      (fun x => apm_m03J01_gradient n φ x j) := by
+    classical
+    funext x
+    simp [apm_m03J01_gradient, apm_m03J01_basis]
+    rw [Finset.sum_eq_single j]
+    · simp
+    · intro b hb hbj
+      simp [Ne.symm hbj]
+    · simp
+  have igH : Integrable
+      (fun x => g x i * fderiv ℝ φ x (apm_m03J01_basis n j)) volume := by
+    have hgi : MemLp (fun x => g x i) 2 volume :=
+      hg.continuousLinearMap_comp (EuclideanSpace.proj (𝕜 := ℝ) i)
+    have hdj : MemLp (fun x => apm_m03J01_gradient n φ x j) 2 volume :=
+      hd.continuousLinearMap_comp (EuclideanSpace.proj (𝕜 := ℝ) j)
+    apply (hgi.integrable_mul hdj).congr
+    exact Eventually.of_forall fun x => by
+      change g x i * apm_m03J01_gradient n φ x j =
+        g x i * fderiv ℝ φ x (apm_m03J01_basis n j)
+      rw [← congrFun hderiv x]
+  have igK : Integrable
+      (fun x => k x i * fderiv ℝ φ x (apm_m03J01_basis n j)) volume := by
+    have hki : MemLp (fun x => k x i) 2 volume :=
+      hk.continuousLinearMap_comp (EuclideanSpace.proj (𝕜 := ℝ) i)
+    have hdj : MemLp (fun x => apm_m03J01_gradient n φ x j) 2 volume :=
+      hd.continuousLinearMap_comp (EuclideanSpace.proj (𝕜 := ℝ) j)
+    apply (hki.integrable_mul hdj).congr
+    exact Eventually.of_forall fun x => by
+      change k x i * apm_m03J01_gradient n φ x j =
+        k x i * fderiv ℝ φ x (apm_m03J01_basis n j)
+      rw [← congrFun hderiv x]
+  have iH : Integrable (fun x => H x i j * φ x) volume :=
+    ((hH.1.eval i).eval j).integrable_mul hv
+  have iK : Integrable (fun x => K x i j * φ x) volume :=
+    ((hK.1.eval i).eval j).integrable_mul hv
+  change (∫ x, (g x i + k x i) * fderiv ℝ φ x (apm_m03J01_basis n j) ∂volume) =
+    -∫ x, (H x i j + K x i j) * φ x ∂volume
+  simp only [add_mul]
+  rw [integral_add igH igK, hH.2 i j φ hφ hc, hK.2 i j φ hφ hc,
+    integral_add iH iK]
+  ring
 
 /-- Weak Hessians scale. -/
 lemma apm_m03J01_hessianOperator_exists_aux_smul {n : ℕ} (c : ℝ)
