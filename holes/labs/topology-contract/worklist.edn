@@ -119108,6 +119108,18 @@
      {:cmd "sha256/diff/placeholders", :exit 0}],
     :diagnostic-history
     [{:cmd "hom-ext draft", :exit 1, :finding "used LinearMap.ext"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1792000938480-12028-746465b0",
+     :commands
+     ["git show/diff-tree 1e9d1d107df204f2f79e20eed70c3fd9a33de03f"
+      "archive commit; lean t00J02Closure.lean and Main.lean"
+      "sha256sum Main/implementation/blueprint; count placeholders"
+      "python3 scripts/statement-registry.py check"
+      "lake env lean ConstructionTargets/t00J02Closure.lean"],
+     :finding
+     "PASS: exact scope and hashes match; both archived files compile; Main placeholder remains 1->1 and implementation is sorry-free; registry 166/166. Degree zero makes the conjugated integer H2 map zero by extensionality, then epi/mono cancellation through the coordinate isomorphism correctly recovers the actual induced H2 map as zero. Standard axioms only. New milestone recorded; localization, signed-count identity, and Main assembly remain listed."},
     :commit "1e9d1d107df204f2f79e20eed70c3fd9a33de03f",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
@@ -119116,7 +119128,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119134,7 +119146,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t00J02Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked the global H2 integer-coordinate action; the geometric regular-value localization identity remains.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked zero H2-degree to zero-map; localization remains.",
    :id :program-2026-10-13-close-t00j02,
    :kind :final-adapter,
    :campaign-priority 45,
@@ -119161,7 +119173,11 @@
     {:job 6,
      :commit "23d28b99d91d0474720fe052af9e9e7f5153b48b",
      :reason
-     "Banked the global H2 integer-coordinate action; the geometric regular-value localization identity remains."}]}
+     "Banked the global H2 integer-coordinate action; the geometric regular-value localization identity remains."}
+    {:job 7,
+     :commit "1e9d1d107df204f2f79e20eed70c3fd9a33de03f",
+     :reason
+     "Banked zero H2-degree to zero-map; localization remains."}]}
   {:consumer :t98A06,
    :stop-count 0,
    :phase :implementation,
@@ -119359,7 +119375,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "surfaceTopHomologyMap_eq_zero_of_surfaceTopDegree_eq_zero",
@@ -119369,7 +119385,9 @@
     :reported-by [:program-2026-10-13-close-t00j02],
     :type "zero H2 degree implies zero H2 map",
     :area "oriented-surface-degree",
-    :proved-in :program-2026-10-13-close-t00j02},
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "1e9d1d107df204f2f79e20eed70c3fd9a33de03f"},
    :id
    :lemma-surfacetophomologymap-eq-zero-of-surfacetopdegree-eq-zero,
    :kind :lemma,
