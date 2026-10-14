@@ -113899,6 +113899,19 @@
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "hash/diff/placeholders", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791999420549-11984-fe234fb5",
+     :commands
+     ["git show/diff-tree 64a4242e...,138677800..."
+      "archive final commit; lean PointWedgeVanKampen.lean and ThreeCirclesFundamentalGroup.lean"
+      "sha256sum source/doc/implementation/blueprint; count placeholders"
+      "python3 scripts/statement-registry.py check"
+      "#print axioms B6/final"
+      "lake build both targets"],
+     :finding
+     "PASS: both commits have exact in-scope paths and all recorded hashes match; archived files compile; placeholders 0->0; registry 166/166. B6 obtains rightBase=inl from explicit outer-factor representations, then proves both literal leg coordinates. B12 composes the inner and outer wedge equivalences with circle/free-group coordinates to the exact type FundamentalGroup ThreeCircles threeBase ≃* FreeGroup (Fin 3). Standard axioms only; program complete."},
     :commit "138677800d75266909157be691407b56795dcdef",
     :commits
     ["64a4242e04051bc5bb0eb213b76c4e82183087ca"
@@ -113912,7 +113925,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -114974,7 +114987,7 @@
    :other-consumers []}
   {:consumer :t99J01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "PointWedgeVanKampen.threeCirclesFundamentalGroupEquiv",
@@ -114986,7 +114999,9 @@
     :type
     "FundamentalGroup ThreeCircles threeBase ≃* FreeGroup (Fin 3)",
     :area "fundamental-group-wedge-of-circles",
-    :proved-in :program-2026-10-11-point-wedge-van-kampen},
+    :proved-in :program-2026-10-11-point-wedge-van-kampen,
+    :banked-by :program-2026-10-11-point-wedge-van-kampen,
+    :banked-commit "138677800d75266909157be691407b56795dcdef"},
    :id :lemma-pointwedgevankampen-threecirclesfundamentalgroupequiv,
    :kind :lemma,
    :depends-on
