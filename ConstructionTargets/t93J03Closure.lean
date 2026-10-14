@@ -1376,6 +1376,32 @@ theorem kleinPolygonOuterConnector_eq_inverseUnit_comp_mappedConnector :
             ⟦kleinPolygonOverlapImageToSkeletonPointPath⟧ := by
   rfl
 
+/-- A concrete path representative of the unit component actually packaged
+by Mathlib's groupoid equivalence.  `Equivalence.mk` adjointifies the raw
+homotopy unit, so this representative is kept distinct from the deformation
+path used above. -/
+theorem exists_kleinPolygonPackagedUnitPath :
+    ∃ p : Path
+      (kleinPolygonOverlapToOuter kleinPolygonOverlapPoint)
+      (kleinPolygonOuterFundamentalGroupoidEquivalence.inverse.obj
+        (kleinPolygonOuterFundamentalGroupoidEquivalence.functor.obj
+          (FundamentalGroupoid.mk
+            (kleinPolygonOverlapToOuter kleinPolygonOverlapPoint)))).as,
+      ⟦p⟧ = kleinPolygonOuterFundamentalGroupoidEquivalence.unitIso.hom.app
+        (FundamentalGroupoid.mk
+          (kleinPolygonOverlapToOuter kleinPolygonOverlapPoint)) := by
+  exact Path.Homotopic.Quotient.mk_surjective _
+
+noncomputable def kleinPolygonPackagedUnitPath :=
+  Classical.choose exists_kleinPolygonPackagedUnitPath
+
+theorem kleinPolygonPackagedUnitPath_mk :
+    ⟦kleinPolygonPackagedUnitPath⟧ =
+      kleinPolygonOuterFundamentalGroupoidEquivalence.unitIso.hom.app
+        (FundamentalGroupoid.mk
+          (kleinPolygonOverlapToOuter kleinPolygonOverlapPoint)) :=
+  Classical.choose_spec exists_kleinPolygonPackagedUnitPath
+
 /-- On the preferred skeleton basepoint, the direct skeleton-to-outer map is
 literally the inverse functor of the groupoid equivalence.  This removes the
 target-side cast from the remaining source-coordinate comparison. -/
@@ -1687,6 +1713,7 @@ theorem lift_isEmbedding_assembly
 #print axioms kleinPolygonOverlapNormalClosure_eq_aabb_of_isConj
 #print axioms kleinPolygonOverlapWindingHom_range_eq_skeleton_range
 #print axioms kleinPolygonOverlapToSkeletonPiOne_normalClosure_eq_aabb
+#print axioms kleinPolygonPackagedUnitPath_mk
 #print axioms kleinPolygonSkeletonToOuterPiOne_apply_eq_inverse_map
 #print axioms kleinPolygonFundamentalGroupEquivPresented_of_vanKampen
 #print axioms kleinPolygonFundamentalGroupEquivPresented

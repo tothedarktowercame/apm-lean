@@ -349,6 +349,12 @@ identity.
 target side of that cast comparison: at the preferred skeleton point, the
 literal direct skeleton-to-outer homomorphism is definitionally the inverse
 functor map.  Thus only the packaged unit/connector conjugation remains.
+Mathlib's `Equivalence.mk` adjointifies the raw homotopy unit, so it need not
+be definitionally the deformation path used in the concrete connector.
+`kleinPolygonPackagedUnitPath` now chooses a genuine path representing that
+actual packaged unit, and `kleinPolygonPackagedUnitPath_mk` proves its exact
+fundamental-groupoid class.  The next comparison can therefore use this path
+without unfolding or equating proof-dependent casts.
 `kleinBottle_pi1_every_basepoint_of_basedVanKampen` confirms this single
 topological contract and the independent winding conjugacy are now the only
 C1 inputs.
