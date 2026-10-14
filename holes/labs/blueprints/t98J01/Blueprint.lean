@@ -543,11 +543,93 @@ theorem t98J01_reflection_trace_zero :
   simp
 
 /-- Seat: reflection reverses the rational fundamental class of the circle. -/
+noncomputable def t98J01_reflection_trace_one_aux_homeomorph :
+    T98J01.S1 ≃ₜ T02A06.euclideanUnitSphere 2 where
+  toFun x := ⟨WithLp.toLp 2 ![x.1.1, x.1.2], by
+    rw [Metric.mem_sphere, dist_zero_right, EuclideanSpace.norm_eq,
+      Fin.sum_univ_two]
+    simp only [Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.head_cons,
+      Matrix.tail_cons, WithLp.ofLp_toLp]
+    rw [show ‖x.1.1‖ ^ 2 + ‖x.1.2‖ ^ 2 = 1 by
+      simpa [Real.norm_eq_abs, sq_abs] using x.2]
+    norm_num⟩
+  invFun x := ⟨(x.1 0, x.1 1), by
+    have hx : ‖x.1‖ = 1 := by
+      simpa [Metric.mem_sphere, dist_zero_right] using x.2
+    rw [EuclideanSpace.norm_eq, Fin.sum_univ_two] at hx
+    have hs : 0 ≤ ‖x.1 0‖ ^ 2 + ‖x.1 1‖ ^ 2 := by positivity
+    have hh : (Real.sqrt (‖x.1 0‖ ^ 2 + ‖x.1 1‖ ^ 2)) ^ 2 = 1 := by
+      rw [hx]
+      norm_num
+    rw [Real.sq_sqrt hs] at hh
+    simpa [Real.norm_eq_abs, sq_abs] using hh⟩
+  left_inv x := by ext <;> rfl
+  right_inv x := by ext i; fin_cases i <;> rfl
+  continuous_toFun := by
+    apply Continuous.subtype_mk
+    apply (PiLp.continuous_toLp 2 _).comp
+    apply continuous_pi
+    intro i
+    fin_cases i <;> simp <;> fun_prop
+  continuous_invFun := by
+    apply Continuous.subtype_mk
+    fun_prop
+
 theorem t98J01_reflection_trace_one :
     LinearMap.trace ℚ
       (ConstructionTargets.RationalLefschetz.Homology T98J01.S1 1)
       (ConstructionTargets.RationalLefschetz.induced t98J01_reflectionCM 1).hom = -1 := by
-  sorry
+  open CategoryTheory in
+  let F := (AlgebraicTopology.singularHomologyFunctor (ModuleCat ℚ) 1).obj
+    (ModuleCat.of ℚ ℚ)
+  let e : TopCat.of T98J01.S1 ≅ TopCat.of (T02A06.euclideanUnitSphere 2) :=
+    TopCat.isoOfHomeo t98J01_reflection_trace_one_aux_homeomorph
+  let E := F.mapIso e
+  let r := ConstructionTargets.CoefficientCoordinateReflections.reflectionMap
+    (d := 2) 0
+  have hconj : (e.inv ≫ TopCat.ofHom t98J01_reflectionCM ≫ e.hom) =
+      TopCat.ofHom r := by
+    ext x i
+    fin_cases i <;>
+      simp [e, t98J01_reflection_trace_one_aux_homeomorph, r,
+        t98J01_reflectionCM, T98J01.reflection,
+        ConstructionTargets.CoefficientCoordinateReflections.reflectionMap,
+        ConstructionTargets.CoefficientCoordinateReflections.sphereHomeo,
+        ConstructionTargets.CoefficientCoordinateReflections.reflection_apply]
+  have hmap : E.inv ≫ ConstructionTargets.RationalLefschetz.induced
+      t98J01_reflectionCM 1 ≫ E.hom = -𝟙 _ := by
+    change F.map e.inv ≫ F.map (TopCat.ofHom t98J01_reflectionCM) ≫
+      F.map e.hom = -𝟙 _
+    rw [← F.map_comp, ← F.map_comp, hconj]
+    exact ConstructionTargets.CoefficientFirstReflection.circle_negative ℚ
+  let u := ConstructionTargets.CoefficientFirstReflection.topIso ℚ 0
+  letI : FiniteDimensional ℚ
+      (ConstructionTargets.RationalLefschetz.Homology
+        (T02A06.euclideanUnitSphere 2) 1) :=
+    FiniteDimensional.of_injective u.hom.hom u.toLinearEquiv.injective
+  letI : FiniteDimensional ℚ
+      (ConstructionTargets.RationalLefschetz.Homology T98J01.S1 1) :=
+    FiniteDimensional.of_injective E.hom.hom E.toLinearEquiv.injective
+  have ht := LinearMap.trace_comp_comm' E.hom.hom
+    ((ConstructionTargets.RationalLefschetz.induced t98J01_reflectionCM 1).hom.comp
+      E.inv.hom)
+  have hmaplin : E.hom.hom.comp
+      ((ConstructionTargets.RationalLefschetz.induced t98J01_reflectionCM 1).hom.comp
+        E.inv.hom) = -LinearMap.id := by
+    simpa only [ModuleCat.hom_comp, ModuleCat.hom_neg, ModuleCat.hom_id] using
+      congrArg ModuleCat.Hom.hom hmap
+  rw [hmaplin] at ht
+  have hinvlin : E.inv.hom.comp E.hom.hom = LinearMap.id := by
+    simpa only [ModuleCat.hom_comp, ModuleCat.hom_id] using
+      congrArg ModuleCat.Hom.hom E.hom_inv_id
+  rw [LinearMap.comp_assoc, hinvlin, LinearMap.comp_id] at ht
+  have hdim : Module.finrank ℚ
+      (ConstructionTargets.RationalLefschetz.Homology
+        (T02A06.euclideanUnitSphere 2) 1) = 1 := by
+    rw [u.toLinearEquiv.finrank_eq]
+    simp
+  dsimp [F] at ht
+  simpa [hdim] using ht
 
 /-- Sorry-free assembly of the four independent circle leaves. -/
 theorem t98J01_reflection_lefschetz :
