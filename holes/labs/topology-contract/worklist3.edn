@@ -36782,25 +36782,19 @@
    :depends-on [:lemma-cp-zero-subsingleton],
    :other-consumers []}
   {:consumer :t96A06,
-   :stop-count 6,
+   :stop-count 7,
    :review-finding
    "extend Mathlib: state and prove the missing theorem in scope",
    :evidence
    {:placeholder-delta {:t96A06 [1 1]},
     :residual
-    "Assemble common antipodal two-sheet trivializations; apply rational transfer; prove degree four; invariants/Main.",
+    "Apply rational transfer; prove degree four; invariants/Main.",
     :outcome :stop,
-    :warnings [],
+    :warnings ["unrelated dirty PointWedge preserved"],
     :missing-theorems
-    [{:name "rp3SphereProjection_isLocalHomeomorph",
-      :type "S3 projection to frozen RP3 is a local homeomorphism",
+    [{:name "t96A06_rp3_sphere_covering",
+      :type "IsCoveringMap (sphereProjection 3)",
       :status :proved,
-      :consumers [:t96A06],
-      :depends-on ["t96A06_rp3_sphere_quotient"],
-      :area "rp-rational-homology"}
-     {:name "t96A06_rp3_sphere_covering",
-      :type "S3 projection is a two-sheeted covering of frozen RP3",
-      :status :partial,
       :consumers [:t96A06],
       :depends-on ["rp3SphereProjection_isLocalHomeomorph"],
       :area "rp-rational-homology"}
@@ -36815,34 +36809,23 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Committed open-map and local-homeomorphism structure for exact S3-to-RP3 projection; common two-sheet trivialization remains.",
+    "Proved the exact S3-to-RP3 projection is a covering; rational transfer remains.",
     :commands
     [{:cmd "lake build ConstructionTargets.t96A06Closure", :exit 0}
-     {:cmd "lean fixture; Main", :exit 0}
-     {:cmd "registry; placeholder; diff; show --check", :exit 0}
+     {:cmd "lean fixture; Main; registry; placeholder; diff; show",
+      :exit 0}
      {:cmd "rg forbidden closure", :exit 1, :expected-exit 1}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1791963840968-11703-25b508ad",
-     :commands
-     ["git show/diff/show --check ddec9674"
-      "sha256sum fixture; scope; placeholders"
-      "lake env lean recorded closure, fixture, Main"
-      "statement-registry.py check"],
-     :finding
-     "PASS: new compiled sorry-free standard-axiom milestone. The antipodal fiber formula yields the exact saturation identity and open-map proof; positive hemispheres are open neighborhoods on which the projection is injective, establishing the local-homeomorphism orientation. Common two-sheet trivializations, transfer, degree four, and Main remain accurately listed. Scope/hash verified; frozen placeholders 1->1 (support 0); registry 166/166."},
-    :commit "ddec9674fe0129e68cff55ab38c5a0d35c42cd58",
+    :commit "941de27ddd408535b6c86c0ed540c3d455cd02c7",
     :changed-paths
     ["ConstructionTargets/t96A06Closure.lean"
      "ConstructionTargets/t96A06Closure.blueprint.md"],
     :fixture
-    {:path "/tmp/t96a06_rp3_local_homeomorph_check.lean",
+    {:path "/tmp/t96a06_rp3_covering_check.lean",
      :sha256
-     "24189c1dc94adcf4d15a03196b4105c737fd41828514844d150757cca2cd3ce7"},
+     "93be196d029fbd185044f71d43a994cf4647b64fb825be9d5d0b9eeacad016b3"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -38525,7 +38508,8 @@
    {:name "t96A06_rp3_sphere_covering",
     :reported-by [:program-2026-10-13-close-t96a06],
     :type "S3 projection is a two-sheeted covering of frozen RP3",
-    :area "rp-rational-homology"},
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06},
    :id :lemma-t96a06-rp3-sphere-covering,
    :kind :lemma,
    :depends-on [:lemma-rp3sphereprojection-islocalhomeomorph],
