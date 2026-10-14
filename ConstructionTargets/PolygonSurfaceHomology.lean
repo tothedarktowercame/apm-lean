@@ -1565,6 +1565,43 @@ noncomputable def finiteWedgeFinOnePointedContractibleNeighborhood :
   circlePointedContractibleNeighborhood.preimageHomeomorph
     finiteWedgeFinOneHomeomorphCircle
 
+/-- Contractible pointed neighborhoods on two spaces combine to one on their
+point wedge.  The carrier is the restricted open wedge of the two carriers. -/
+noncomputable def pointWedgePointedContractibleNeighborhood
+    {X Y : Type*} [TopologicalSpace X] [TopologicalSpace Y]
+    {x₀ : X} {y₀ : Y}
+    (PX : PointedContractibleNeighborhood X x₀)
+    (PY : PointedContractibleNeighborhood Y y₀) :
+    PointedContractibleNeighborhood
+      (ConstructionTargets.PointWedgeQuotient.Wedge x₀ y₀)
+      (ConstructionTargets.PointWedgeQuotient.quotientMap x₀ y₀ (.inl x₀)) := by
+  let U := ConstructionTargets.PointWedgeRestrictedOpenQuotient.restrictedOpen x₀ y₀
+    PX.carrier PY.carrier
+  have hU : IsOpen U :=
+    ConstructionTargets.PointWedgeRestrictedOpenQuotient.restrictedOpen_isOpen
+      PX.isOpen PY.isOpen PX.mem PY.mem
+  have hb : ConstructionTargets.PointWedgeQuotient.quotientMap x₀ y₀ (.inl x₀) ∈ U :=
+    ⟨.inl x₀, PX.mem, rfl⟩
+  let e : U ≃ₜ ConstructionTargets.PointWedgeQuotient.Wedge
+      (⟨x₀, PX.mem⟩ : PX.carrier) (⟨y₀, PY.mem⟩ : PY.carrier) :=
+    ConstructionTargets.PointWedgeRestrictedOpenQuotient.restrictedOpenHomeomorphWedge
+      PX.isOpen PY.isOpen PX.mem PY.mem
+  let h := ConstructionTargets.PointWedgeVanKampen.wedgePointedContraction
+    PX.contraction PY.contraction
+  have he : e ⟨_, hb⟩ =
+      ConstructionTargets.PointWedgeQuotient.quotientMap
+        (⟨x₀, PX.mem⟩ : PX.carrier) (⟨y₀, PY.mem⟩ : PY.carrier)
+        (.inl ⟨x₀, PX.mem⟩) := by
+    exact ConstructionTargets.PointWedgeRestrictedOpenQuotient.restrictedOpenHomeomorphWedge_left
+      _ _ _ _ _ _
+  rw [← he] at h
+  exact
+    { carrier := U
+      isOpen := hU
+      mem := hb
+      contraction :=
+        ConstructionTargets.PointWedgeVanKampen.PointedContraction.homeomorphSymm e h }
+
 /-! ### Algebraic word extraction from a point-wedge computation -/
 
 /-- Evaluate a word whose letters come from the two factors of a coproduct. -/
