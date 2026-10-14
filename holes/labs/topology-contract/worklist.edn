@@ -119066,19 +119066,19 @@
   {:consumer :t00J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 2,
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
     :residual
-    "Match local/component degrees; prove signed-count formula; assemble Main.",
+    "Prove local-degree/component-degree equality and global signed-count formula; assemble Main.",
     :outcome :stop,
-    :warnings ["Main sorryAx"],
+    :warnings ["Main sorryAx" "unrelated worktree edits preserved"],
     :missing-theorems
-    [{:name "regularFiber_zeroDegreeComponentLifts",
-      :type "zero-degree lift at each fiber point",
+    [{:name "regularFiber_componentSignedCount_eq_zero",
+      :type "chosen finite-fiber component signed sum is zero",
       :status :proved,
       :consumers [:t00J02],
-      :depends-on ["transverseCircle_preimage_component_signedCount"],
+      :depends-on ["regularFiber_zeroDegreeComponentLifts"],
       :area "oriented-surface-degree"}
      {:name "t00J02_transverse_diskBounded_topHomologyMap_eq_zero",
       :type "H2 map zero",
@@ -119086,14 +119086,14 @@
       :consumers [:t00J02],
       :depends-on
       ["regularValue_topHomologyMap_signedCount"
-       "regularFiber_zeroDegreeComponentLifts"
+       "regularFiber_componentSignedCount_eq_zero"
        "topHomologyMap_eq_zero_of_regularValue_signedCount"],
       :area "oriented-surface-degree"}],
     :statement-hashes
     {:source
      "0b3b4888807bfa06c8d60d86829b75776394ea8aa45a98c933c087165521f923",
      :implementation
-     "f2423049f27a21ce0867b0c3fad2649751e6c1199f8fcd47fefed7032da6c9a1",
+     "c9b3b262ef2f163202f50019d10368a669dc401a72de0767d7a7bef08841b188",
      :blueprint
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984",
      :registry "166/166"},
@@ -119101,27 +119101,14 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-2,
     :reason
-    "Banked zero-degree fiber choices; local-degree formula remains.",
+    "Banked vanishing of the finite fiber component signed sum; local-degree comparison remains.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t00J02Closure.lean",
       :exit 0}
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "sha256/diff/placeholders", :exit 0}],
-    :diagnostic-history
-    [{:cmd "choice draft", :exit 1, :finding "used Classical.choose"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1792002728517-12136-bb55f40b",
-     :commands
-     ["git diff-tree/show 72ea790"
-      "git archive 72ea790; lake env lean t00J02Closure.lean and Main.lean"
-      "sha256sum and placeholder counts at 72ea790"
-      "python3 scripts/statement-registry.py check"],
-     :finding
-     "PASS program STOP: new in-scope commit chooses prior zero-degree component-lift witnesses over the literal regular-fiber subtype with correct premise direction and representation. Archived files compile; closure has 0 placeholders and standard axioms only; Main remains frozen at 0b3b4888 with baseline 1 placeholder; fixture afb497a6 matches; registry 166/166. Local/component degree matching, signed-count formula, and Main assembly remain listed."},
-    :commit "72ea7906636c48bcf45ac21c24cea72cf7b653a4",
+    :commit "b17554a4c6e5227b2ec9db71da5563ea233154c1",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t00J02Closure.blueprint.md",
@@ -119129,7 +119116,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119342,7 +119329,8 @@
     :lemma-tophomologymap-eq-zero-of-regularvalue-signedcount
     :lemma-finite-regularfiber-of-isdiscrete
     :lemma-transverse-coprodderivative-surjective
-    :lemma-regularfiber-zerodegreecomponentlifts],
+    :lemma-regularfiber-zerodegreecomponentlifts
+    :lemma-regularfiber-componentsignedcount-eq-zero],
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
@@ -119599,6 +119587,23 @@
    :kind :lemma,
    :depends-on
    [:lemma-transversecircle-preimage-component-signedcount],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "regularFiber_componentSignedCount_eq_zero",
+    :type "chosen finite-fiber component signed sum is zero"},
+   :lemma
+   {:name "regularFiber_componentSignedCount_eq_zero",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type "chosen finite-fiber component signed sum is zero",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02},
+   :id :lemma-regularfiber-componentsignedcount-eq-zero,
+   :kind :lemma,
+   :depends-on [:lemma-regularfiber-zerodegreecomponentlifts],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
