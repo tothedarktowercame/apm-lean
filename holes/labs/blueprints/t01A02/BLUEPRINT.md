@@ -121,30 +121,129 @@ modulo `2`; `omega` should close after exposing the expression, or use
 **Truth checks.** This covers singular `A`, including the zero matrix.  Signs
 of the off-diagonal terms agree with `det (I - 2A)`; their product is `4bc`.
 
-#### `apm_t01A02_planar_fixedPoint_of_bounded_affine_error` (LIBRARY)
+#### Second-level split of planar Brouwer
 
-**Statement.** If a continuous `F : ℝ² → ℝ²` differs boundedly from `2A`,
-and `I - 2A` is nonsingular, then `F` has a fixed point.
+`apm_t01A02_planar_fixedPoint_of_bounded_affine_error` is now a sorry-free
+two-line assembly.  The disk is the subtype
+`Metric.closedBall (0 : EuclideanSpace ℝ (Fin 2)) 1`, and its boundary is the
+corresponding `Metric.sphere`.  The following seven leaves are mutually
+independent: whenever an assembly needs another leaf's result, it receives
+that result as an explicit hypothesis.
 
-**Proof route.** Apply Brouwer to a sufficiently large closed ball after
-rewriting the equation as `(I - 2A)x = error(x)`.  The inverse linear map sends
-the bounded error into a fixed ball.  Mathlib has the finite-dimensional
-linear algebra needed (`Matrix.det_ne_zero`, `LinearMap.inverse`, operator-norm
-bounds, compact/convex closed balls), but the search found no ready-made
-Brouwer fixed-point theorem.  Therefore this one leaf remains honestly
-**LIBRARY**: it needs a 2-dimensional Brouwer/degree foundation rather than an
-adapter disguised as a small lemma.
+##### `apm_t01A02_bounded_affine_error_reduces_to_disk`
 
-**Estimated size.** 150–300 lines if Brouwer must be developed/imported; about
-60–100 lines if a suitable existing fixed-point theorem is located.
-**Independent:** yes; continuity, boundedness, and determinant are explicit
-hypotheses.
+**Statement.** The bounded-error hypotheses and nonzero determinant produce a
+continuous disk self-map whose fixed point yields a fixed point of `F`.
 
-**Truth checks.** The bound may be negative only when the domain is impossible;
-since the domain is inhabited, the hypothesis itself forces `C ≥ 0`.  Constant
-errors and `A=0` reduce to the obvious constant-map fixed point.  Nonsingularity
-is essential: translation by a nonzero constant is a bounded perturbation of
-the identity and has no fixed point.
+**Proof route / Mathlib tools.** Let `L = I - 2A`, put
+`e(x) = F(x)-2A x`, and use the explicit inverse of the two-by-two matrix
+`L`.  Boundedness of `e` bounds `L⁻¹e`; choose a positive radius at least that
+bound and conjugate the resulting closed-radius-ball self-map by scalar
+rescaling.  Useful tools: `Matrix.det_fin_two`, `Matrix.mulVec`,
+`Matrix.mulVecLin`, `Matrix.inv_def`, `Continuous.matrix_mulVec`,
+`ContinuousMap.restrict`, `Metric.mem_closedBall`, and `norm_smul`.
+
+**Estimated size.** 90–140 lines.  **Independent:** yes.
+
+**Truth checks.** The existential bound is automatically nonnegative by
+evaluating it at `0`; nevertheless choose radius `max 1 (...)`, so division by
+zero is impossible.  With `A=0` this is just the bounded-map case.  The fixed
+point implication (rather than a claimed fixed point) prevents this leaf from
+hiding Brouwer.
+
+##### `apm_t01A02_disk_ray_hits_boundary_unique`
+
+**Statement.** For distinct disk points `x,y`, exactly one `t ≥ 0` satisfies
+`‖x+t(x-y)‖=1`.
+
+**Proof route / Mathlib tools.** Square the norm and solve
+`‖x-y‖²t² + 2⟪x,x-y⟫t + (‖x‖²-1)=0`.  The leading coefficient is positive;
+the constant coefficient is nonpositive.  Existence can also use the
+intermediate value theorem plus coercivity, and uniqueness follows from strict
+increase on the outward ray.  Useful tools: `real_inner_self_eq_norm_sq`,
+`norm_sq`, `sq_sqrt`, `Real.sqrt_nonneg`, `inner_sub_left`, Cauchy--Schwarz,
+`intermediate_value_Icc`, and `nlinarith`.
+
+**Estimated size.** 70–120 lines.  **Independent:** yes.
+
+**Truth checks.** If `x` is already on the boundary, the unique parameter is
+`0`.  If `x=0`, the positive root is `1/‖y‖`; distinctness ensures the
+quadratic is not degenerate.  The ray points away from `y`, not toward it.
+
+##### `apm_t01A02_continuous_boundary_hit_of_no_fixedPoint`
+
+**Statement.** Given uniqueness of the ray parameter pointwise, a continuous
+fixed-point-free disk map has a continuous boundary-hit map, together with its
+ray characterization.
+
+**Proof route / Mathlib tools.** Use the positive quadratic root
+`(-b + sqrt (b²-a*c))/a` (with a consistent factor-of-two convention).
+Continuity follows since `‖x-g x‖²>0`; then package the norm-one value as a
+subtype.  Useful tools: `Continuous.inner`, `Continuous.norm`,
+`Continuous.sqrt`, `Continuous.div`, `continuous_subtype_mk`, and the supplied
+uniqueness hypothesis to identify the formula's root.
+
+**Estimated size.** 80–130 lines.  **Independent:** yes; ray existence and
+uniqueness is an explicit hypothesis.
+
+**Truth checks.** The denominator never vanishes because `g x ≠ x`.  The
+discriminant is nonnegative for disk points.  No choice-continuity principle is
+assumed: continuity comes from the explicit formula.
+
+##### `apm_t01A02_boundary_ray_parameter_eq_zero`
+
+**Statement.** If `‖x‖=1`, `‖y‖≤1`, `t≥0`, and
+`‖x+t(x-y)‖=1`, then `t=0`.
+
+**Proof route / Mathlib tools.** Expand squared norms and use
+`⟪x,y⟫≤‖x‖‖y‖≤1`; every nonzero outward displacement strictly increases the
+norm.  Use `real_inner_le_norm`, `real_inner_self_eq_norm_sq`, and `nlinarith`.
+
+**Estimated size.** 25–45 lines.  **Independent:** yes.
+
+**Truth checks.** Equality cases such as `y=-x` still force `t=0`.  The
+`x ≠ y` hypothesis is essential: if `x=y`, the sphere equation holds for every
+`t`.  The retraction assembly obtains distinctness from `g x ≠ x`.
+
+##### `apm_t01A02_disk_H1_isZero`
+
+**Statement.** Integral `H₁` of the closed disk is zero.
+
+**Proof route / Mathlib tools.** Install
+`Metric.contractibleSpace_closedBall (by norm_num)` and apply
+`ConstructionTargets.CoefficientContractiblePair.higher_zero ℤ _ 1`.
+
+**Estimated size.** 10–20 lines.  **Independent:** yes.
+
+##### `apm_t01A02_diskBoundary_H1_not_isZero`
+
+**Statement.** Integral `H₁` of the boundary sphere is nonzero.
+
+**Proof route / Mathlib tools.** The boundary is definitionally the
+one-sphere used by `ConstructionTargets.SphereHomology`; use
+`sphereModuleTopHomologyIsoInt 1` and transport nonzeroness from
+`ModuleCat.of ℤ ℤ` (witness `1`).  `CoefficientFirstReflection.topIso ℤ 0`
+is an alternative coordinate.
+
+**Estimated size.** 20–35 lines.  **Independent:** yes.
+
+##### `apm_t01A02_no_disk_boundary_retraction`
+
+**Statement.** Explicit disk-H1 vanishing and boundary-H1 nonvanishing rule
+out a strict retraction.  Both homology facts are explicit hypotheses.
+
+**Proof route / Mathlib tools.** Define boundary inclusion `i`; functoriality
+and `i ≫ r = 𝟙` give `H₁(i) ≫ H₁(r)=𝟙`.  The source of `H₁(r)` is zero, hence
+the composite and identity are zero, making boundary H1 zero.  Use
+`Functor.map_comp`, `Functor.map_id`, `IsZero.eq_of_src`, and
+`IsZero.iff_id_eq_zero`.
+
+**Estimated size.** 35–60 lines.  **Independent:** yes.
+
+`apm_t01A02_disk_retraction_of_no_fixedPoint`,
+`apm_t01A02_disk_fixedPoint`, and the original planar lemma are sorry-free
+assemblies.  The retraction assembly threads `g x ≠ x` into the boundary-sign
+leaf and uses only the explicit boundary-hit hypothesis.
 
 #### `apm_t01A02_fixedPoint_of_lift_fixedPoint`
 
@@ -170,8 +269,9 @@ the given non-surjectivity hypothesis.  The main theorem has no direct
 
 ## Dependency layers
 
-* **Layer 1 (parallel):** the five fixed-point leaves above (their inputs are
-  explicit hypotheses), independently of `apm_t01A02_punctured_H2_isZero`.
+* **Layer 1 (parallel):** the original four non-Brouwer leaves plus the seven
+  new Brouwer leaves above (their inputs are explicit hypotheses), independently
+  of `apm_t01A02_punctured_H2_isZero`.
 * **Layer 2 (sorry-free assembly):**
   `apm_t01A02_fixedPoint_or_surjective_of_lift` selects the fixed-point
   disjunct and composes the five leaves.
@@ -191,6 +291,7 @@ The output of `#print axioms apm_t01a02` was:
 'apm_t01a02' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
 ```
 
-The five warnings identifying `sorry` are exactly the five fixed-point leaves.
-The former LIBRARY theorem is now a sorry-free assembly.  The punctured-torus
-lemma remains proved and unchanged.
+The eleven warnings identifying `sorry` are exactly the four original
+fixed-point leaves and the seven new Brouwer leaves.  The former LIBRARY
+theorem and all intermediate Brouwer/retraction steps are now sorry-free
+assemblies.  The punctured-torus lemma remains proved and unchanged.
