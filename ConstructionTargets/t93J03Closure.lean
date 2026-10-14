@@ -933,6 +933,22 @@ noncomputable def kleinPolygonUntransportedWindingOne :
       (kleinPolygonOverlapFundamentalGroupEquivInt.symm
         (Multiplicative.ofAdd (1 : ℤ))))
 
+/-- A connector chosen in the standard two-circle model and pulled back to
+the actual polygon skeleton.  This moves the remaining calculation entirely
+into the coordinates in which the two free generators were defined. -/
+noncomputable def kleinPolygonStandardModelConnector :
+    Path
+      (kleinPolygonOuterHomotopyEquivSkeleton
+        (kleinPolygonOverlapToOuter kleinPolygonOverlapPoint))
+      kleinSkeletonPoint := by
+  let z := kleinPolygonOuterHomotopyEquivSkeleton
+    (kleinPolygonOverlapToOuter kleinPolygonOverlapPoint)
+  let q : Path (kleinSkeletonHomeomorphStandardTwoCircles z) twoCirclesPoint := by
+    letI : PathConnectedSpace TwoCircles := inferInstance
+    exact PathConnectedSpace.somePath _ _
+  exact (q.map kleinSkeletonHomeomorphStandardTwoCircles.symm.continuous).cast
+    (kleinSkeletonHomeomorphStandardTwoCircles.symm_apply_apply z).symm rfl
+
 /-- The overlap inclusion expressed directly in the fixed free-group
 coordinates on the actual polygon skeleton. -/
 noncomputable def kleinPolygonOverlapToSkeletonFreeGroup :
@@ -1191,6 +1207,7 @@ theorem lift_isEmbedding_assembly
 #print axioms kleinPolygonOverlapWindingHom_factor
 #print axioms kleinPolygonOverlapWindingOneImage
 #print axioms kleinPolygonUntransportedWindingOne
+#print axioms kleinPolygonStandardModelConnector
 #print axioms kleinPolygonOverlapWindingOne_isConj_aabb_of_path_eq
 #print axioms kleinPolygonOverlapWindingHom_range
 #print axioms kleinPolygonOverlapWindingHom_normalClosure

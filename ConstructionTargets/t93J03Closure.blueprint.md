@@ -257,6 +257,10 @@ therefore choose a convenient connector without changing the quotient.
 connector, and `kleinPolygonOverlapWindingOne_isConj_aabb_of_path_eq` reduces
 the required conjugacy to computing its image along any convenient explicit
 path as `kleinAabbWord`.
+`kleinPolygonStandardModelConnector` supplies that connector by choosing it
+after applying `kleinSkeletonHomeomorphStandardTwoCircles` and pulling it back.
+Consequently the remaining loop calculation is wholly in the same standard
+two-circle model used to define the fixed free-group coordinates.
 `kleinPolygonOverlapNormalClosure_eq_aabb_of_isConj` proves that conjugacy of
 the winding-one image with `kleinAabbWord` gives exactly the required normal
 closure equality.  The remaining geometric comparison should therefore be
