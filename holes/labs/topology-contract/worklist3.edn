@@ -36119,69 +36119,57 @@
   {:consumer :t93J03,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 4,
+   :stop-count 5,
    :review-finding
    "Program STOP commits no new mathematical progress since the prior milestone: KleinPolygonBasedVanKampen merely packages the already-required surjectivity and kernel hypotheses, and both consumers only reapply the previously proved three-input theorem. Prove the based van Kampen surjectivity/kernel result (or winding conjugacy) in scope; extend Mathlib: state and prove the missing theorem in scope.",
    :evidence
    {:placeholder-delta {:t93J03 [1 1]},
-    :residual "Reverse kernel/surjectivity; winding; C1/C2/Main.",
+    :residual
+    "Normalize reconstructed arrows using inner contractibility and overlap connectivity; reverse kernel/surjectivity; winding; C1/C2/Main.",
     :outcome :stop,
-    :warnings ["unused SLSC owner-approved"],
+    :warnings
+    ["unused SLSC owner-approved"
+     "dirty PolygonSurfaceHomology preserved"],
     :missing-theorems
-    [{:name "kleinPolygonPackagedSourceCoordinate_eq_direct",
-      :type "packaged source equals direct",
+    [{:name "kleinPolygonPseudopushout_arrow_eq_reconstructed",
+      :type
+      "ambient arrow equals unit-conjugated pseudopushout reconstruction",
       :status :proved,
       :consumers [:t93J03],
-      :depends-on ["kleinPolygonPackagedUnitConnector_mk"],
-      :area "covering-subgroup-correspondence"}
-     {:name
-      "kleinPolygonOverlapSkeletonNormalClosure_le_skeletonToSpaceKernel",
-      :type "forward kernel inclusion",
-      :status :proved,
-      :consumers [:t93J03],
-      :depends-on ["kleinPolygonPackagedSourceCoordinate_eq_direct"],
+      :depends-on ["kleinPolygonFundamentalGroupoidPseudopushout"],
       :area "covering-subgroup-correspondence"}
      {:name "t93J03_polygon_based_van_kampen",
       :type "surjectivity; kernel equality",
       :status :partial,
       :consumers [:t93J03],
-      :depends-on ["kleinPolygonFundamentalGroupoidPseudopushout"],
+      :depends-on ["kleinPolygonPseudopushout_arrow_eq_reconstructed"],
       :area "covering-subgroup-correspondence"}],
     :statement-hashes {:registry "166/166"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Proved literal-map equality and forward kernel inclusion; reverse inclusion/surjectivity remain.",
+    "Extracted every polygon-groupoid arrow as its pseudopushout reconstruction conjugated by unit components; normalization to the outer piece remains.",
     :commands
-    [{:cmd "lake build ConstructionTargets.t93J03Closure", :exit 0}
-     {:cmd "lean fixture; Main; registry; checks", :exit 0}
+    [{:cmd "lean closure; Main; registry; checks", :exit 0}
      {:cmd "rg forbidden", :exit 1, :expected-exit 1}],
     :diagnostic-history
-    [{:cmd "source compile",
+    [{:cmd "lake build ConstructionTargets.t93J03Closure",
       :exit 1,
-      :correction "removed forward reference"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1791998163190-11956-f0619cb6",
-     :commands
-     ["git show/check/diff a6f0c4b6; scope and fixture SHA-256"
-      "lake build ConstructionTargets.t93J03Closure; lean fixture and Main"
-      "statement-registry check; placeholder/axiom recount"],
-     :finding
-     "PASS: a6f0c4b6 adds compiled, sorry-free progress beyond 7640486c. The equivalence-unit identity proves the packaged source coordinate equals the literal skeleton-to-outer map; naturality then identifies the transported polygon map with the literal skeleton inclusion and yields the forward normal-closure/kernel inclusion in final coordinates. No representation boundary is collapsed. Exact scope/hash match; support placeholders 0->0; frozen Main remains 1; standard axioms only; registry 166/166. STOP lists reverse kernel inclusion, surjectivity, winding, C1/C2/Main."},
-    :commit "a6f0c4b61e88c36e45b9bbfb5d394decf1fd8f2f",
+      :correction
+      "dirty PolygonSurfaceHomology failed; scoped source passed"}],
+    :commit "d72cefa5d7b7ff749f163173ed9200e7542a62c0",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
      "ConstructionTargets/t93J03Closure.blueprint.md"],
     :fixture
-    {:path "/tmp/t93j03_packaged_source_kernel_check.lean",
+    {:path "/tmp/t93j03_pseudopushout_reconstruction_check.lean",
      :sha256
-     "bc019ff1e6c0445a6763c14c2ec1f9d8de882755373ea7b541c1bd1286f5448a"},
+     "f4e9a2e95ee7f50ba7d3c65411712a11bd87d898bf37b628b2fdbe1228d9eac5",
+     :mode :blocked-by-unrelated-dependency},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -38607,7 +38595,8 @@
     :lemma-kleinpolygonouterconnector-eq-inverseunit-comp-mappedconnector
     :lemma-kleinpolygonskeletontoouterpione-apply-eq-inverse-map
     :lemma-kleinpolygonpackagedunitpath-mk
-    :lemma-kleinpolygonpackagedunitconnector-mk],
+    :lemma-kleinpolygonpackagedunitconnector-mk
+    :lemma-kleinpolygonpseudopushout-arrow-eq-reconstructed],
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
@@ -38921,6 +38910,25 @@
    :lemma-kleinpolygonoverlapskeletonnormalclosure-le-skeletontospacekernel,
    :kind :lemma,
    :depends-on [:lemma-kleinpolygonpackagedsourcecoordinate-eq-direct],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "kleinPolygonPseudopushout_arrow_eq_reconstructed",
+    :type
+    "ambient arrow equals unit-conjugated pseudopushout reconstruction"},
+   :lemma
+   {:name "kleinPolygonPseudopushout_arrow_eq_reconstructed",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type
+    "ambient arrow equals unit-conjugated pseudopushout reconstruction",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03},
+   :id :lemma-kleinpolygonpseudopushout-arrow-eq-reconstructed,
+   :kind :lemma,
+   :depends-on [:lemma-kleinpolygonfundamentalgroupoidpseudopushout],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
