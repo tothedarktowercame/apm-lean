@@ -1385,7 +1385,28 @@ lemma apm_m03J01_hessianOperator_exists_aux_solution_smul {n : ℕ}
     {u : apm_m03J01_H01 n Ω} (hu : apm_m03J01_weakSolution F u) :
     ∃ w : apm_m03J01_H01 n Ω,
       apm_m03J01_weakSolution (c • F) w ∧ w.grad = c • u.grad := by
-  sorry
+  obtain ⟨w, hwval, hwgrad⟩ := apm_m03J01_H01_smul_exists c u
+  refine ⟨w, ?_, hwgrad⟩
+  intro v
+  rw [hwval, hwgrad]
+  change
+    (∫ x, inner ℝ (c • u.grad x) (v.grad x) + (c • u.val x) * v.val x ∂volume) =
+      ∫ x, (c • F x) * v.val x ∂volume
+  calc
+    _ = c * ∫ x, inner ℝ (u.grad x) (v.grad x) + u.val x * v.val x ∂volume := by
+      rw [← integral_const_mul]
+      apply integral_congr_ae
+      filter_upwards [] with x
+      rw [real_inner_smul_left]
+      simp only [smul_eq_mul]
+      ring
+    _ = c * ∫ x, F x * v.val x ∂volume := congrArg (fun z : ℝ => c * z) (hu v)
+    _ = _ := by
+      rw [← integral_const_mul]
+      apply integral_congr_ae
+      filter_upwards [] with x
+      simp only [smul_eq_mul]
+      ring
 
 /-- The `L²` class of a weak Hessian depends only on the a.e. class of the
 forcing term. -/
