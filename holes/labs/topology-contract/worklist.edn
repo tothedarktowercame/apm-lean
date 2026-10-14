@@ -119109,6 +119109,18 @@
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "sha256/diff/placeholders", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1792000610927-12014-2ed3141e",
+     :commands
+     ["git show/diff-tree 23d28b99d91d0474720fe052af9e9e7f5153b48b"
+      "archive commit; lean t00J02Closure.lean and Main.lean"
+      "sha256sum Main/implementation/blueprint; count placeholders"
+      "python3 scripts/statement-registry.py check"
+      "lake env lean ConstructionTargets/t00J02Closure.lean"],
+     :finding
+     "PASS: exact scope and hashes match; both archived files compile; Main placeholder remains 1->1 and implementation is sorry-free; registry 166/166. Conjugating the induced H2 map by the chosen integral coordinate gives a linear endomorphism, correctly proved multiplication by its value at 1; the missing geometric localization identity is not assumed. Standard axioms only. New milestone recorded; localization, regular-value identity, and Main assembly remain listed."},
     :commit "23d28b99d91d0474720fe052af9e9e7f5153b48b",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
@@ -119117,7 +119129,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119135,7 +119147,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t00J02Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked finite signed-count aggregation.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked the global H2 integer-coordinate action; the geometric regular-value localization identity remains.",
    :id :program-2026-10-13-close-t00j02,
    :kind :final-adapter,
    :campaign-priority 45,
@@ -119158,7 +119170,11 @@
      :reason "Banked zero component signed counts."}
     {:job 5,
      :commit "6fb31fac2ba6584bcf268151f80f2b7511f2bd0a",
-     :reason "Banked finite signed-count aggregation."}]}
+     :reason "Banked finite signed-count aggregation."}
+    {:job 6,
+     :commit "23d28b99d91d0474720fe052af9e9e7f5153b48b",
+     :reason
+     "Banked the global H2 integer-coordinate action; the geometric regular-value localization identity remains."}]}
   {:consumer :t98A06,
    :stop-count 0,
    :phase :implementation,
@@ -119334,7 +119350,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "surfaceTopDegree_eq_homologyMap",
@@ -119346,7 +119362,9 @@
     :type
     "chosen H2 coordinate action is multiplication by top degree",
     :area "oriented-surface-degree",
-    :proved-in :program-2026-10-13-close-t00j02},
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "23d28b99d91d0474720fe052af9e9e7f5153b48b"},
    :id :lemma-surfacetopdegree-eq-homologymap,
    :kind :lemma,
    :depends-on [],
