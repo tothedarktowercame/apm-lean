@@ -522,7 +522,99 @@ theorem apm_t02a01_innerPoint_injOn : Set.InjOn apm_t02a01_innerPoint (Set.Ico 0
 -- BEGIN SEAT AREA
 theorem apm_t02a01_innerPoint_surjOn :
     ∀ b : apm_t02a01_boundarySpace, ∃ s ∈ Set.Ico (0 : ℝ) 4, apm_t02a01_innerPoint s = b := by
-  sorry
+  rintro ⟨_, ⟨x, hx, rfl⟩⟩
+  have hx1 : (1 / 4 : ℝ) ≤ x.1.1 ∧ x.1.1 ≤ 3 / 4 := by
+    have h := norm_fst_le (x.1 - ((1 / 2, 1 / 2) : ℝ × ℝ))
+    rw [hx] at h
+    change |x.1.1 - (1 / 2 : ℝ)| ≤ 1 / 4 at h
+    constructor <;> linarith [neg_le_of_abs_le h, le_abs_self (x.1.1 - 1 / 2)]
+  have hx2 : (1 / 4 : ℝ) ≤ x.1.2 ∧ x.1.2 ≤ 3 / 4 := by
+    have h := norm_snd_le (x.1 - ((1 / 2, 1 / 2) : ℝ × ℝ))
+    rw [hx] at h
+    change |x.1.2 - (1 / 2 : ℝ)| ≤ 1 / 4 at h
+    constructor <;> linarith [neg_le_of_abs_le h, le_abs_self (x.1.2 - 1 / 2)]
+  have hedge : x.1.2 = 1 / 4 ∨ x.1.1 = 3 / 4 ∨
+      x.1.2 = 3 / 4 ∨ x.1.1 = 1 / 4 := by
+    by_cases hb : x.1.2 = 1 / 4
+    · exact Or.inl hb
+    · right
+      change ‖x.1 - ((1 / 2, 1 / 2) : ℝ × ℝ)‖ = (1 / 4 : ℝ) at hx
+      rw [Prod.norm_def] at hx
+      dsimp at hx
+      rcases max_cases |x.1.1 - 1 / 2| |x.1.2 - 1 / 2| with h | h
+      · have ha : |x.1.1 - 1 / 2| = (1 / 4 : ℝ) := by rw [h.1] at hx; exact hx
+        rcases abs_eq (by norm_num : (0 : ℝ) ≤ 1 / 4) |>.mp ha with ha | ha
+        · exact Or.inl (by linarith)
+        · exact Or.inr (Or.inr (by linarith))
+      · have ha : |x.1.2 - 1 / 2| = (1 / 4 : ℝ) := by rw [h.1] at hx; exact hx
+        rcases abs_eq (by norm_num : (0 : ℝ) ≤ 1 / 4) |>.mp ha with ha | ha
+        · exact Or.inr (Or.inl (by linarith))
+        · exfalso; apply hb; linarith
+  have clamp_mid (t : ℝ) (ht0 : 0 ≤ t) (ht1 : t ≤ 1) :
+      apm_t02a01_clamp01 t = t := by
+    unfold apm_t02a01_clamp01
+    rw [min_eq_right ht1, max_eq_right ht0]
+  have clamp_zero (t : ℝ) (ht : t ≤ 0) : apm_t02a01_clamp01 t = 0 := by
+    unfold apm_t02a01_clamp01
+    rw [max_eq_left]
+    exact (min_le_right _ _).trans ht
+  have clamp_one (t : ℝ) (ht : 1 ≤ t) : apm_t02a01_clamp01 t = 1 := by
+    unfold apm_t02a01_clamp01
+    rw [min_eq_left ht, max_eq_right] <;> norm_num
+  rcases hedge with hb | hr | ht | hl
+  · let s : ℝ := 2 * (x.1.1 - 1 / 4)
+    have cs : apm_t02a01_clamp01 s = s := clamp_mid _ (by dsimp [s]; linarith [hx1.1]) (by dsimp [s]; linarith [hx1.2])
+    have cs1 : apm_t02a01_clamp01 (s - 1) = 0 := clamp_zero _ (by dsimp [s]; linarith [hx1.2])
+    have cs2 : apm_t02a01_clamp01 (s - 2) = 0 := clamp_zero _ (by dsimp [s]; linarith [hx1.2])
+    have cs3 : apm_t02a01_clamp01 (s - 3) = 0 := clamp_zero _ (by dsimp [s]; linarith [hx1.2])
+    refine ⟨s, ⟨by dsimp [s]; linarith [hx1.1], by dsimp [s]; linarith [hx1.2]⟩, ?_⟩
+    apply Subtype.ext
+    apply congrArg (Quotient.mk _)
+    apply Subtype.ext
+    apply Prod.ext
+    all_goals simp only [apm_t02a01_perimeter, cs, cs1, cs2, cs3, Prod.fst, Prod.snd]; dsimp [s] at * <;> norm_num at * <;> linarith
+  · let s : ℝ := 1 + 2 * (x.1.2 - 1 / 4)
+    have cs : apm_t02a01_clamp01 s = 1 := clamp_one _ (by dsimp [s]; linarith [hx2.1])
+    have cs1 : apm_t02a01_clamp01 (s - 1) = s - 1 := clamp_mid _ (by dsimp [s]; linarith [hx2.1]) (by dsimp [s]; linarith [hx2.2])
+    have cs2 : apm_t02a01_clamp01 (s - 2) = 0 := clamp_zero _ (by dsimp [s]; linarith [hx2.2])
+    have cs3 : apm_t02a01_clamp01 (s - 3) = 0 := clamp_zero _ (by dsimp [s]; linarith [hx2.2])
+    refine ⟨s, ⟨by dsimp [s]; linarith [hx2.1], by dsimp [s]; linarith [hx2.2]⟩, ?_⟩
+    apply Subtype.ext
+    apply congrArg (Quotient.mk _)
+    apply Subtype.ext
+    apply Prod.ext
+    all_goals simp only [apm_t02a01_perimeter, cs, cs1, cs2, cs3, Prod.fst, Prod.snd]; dsimp [s] at * <;> norm_num at * <;> linarith
+  · let s : ℝ := 2 + 2 * (3 / 4 - x.1.1)
+    have cs : apm_t02a01_clamp01 s = 1 := clamp_one _ (by dsimp [s]; linarith [hx1.2])
+    have cs1 : apm_t02a01_clamp01 (s - 1) = 1 := clamp_one _ (by dsimp [s]; linarith [hx1.2])
+    have cs2 : apm_t02a01_clamp01 (s - 2) = s - 2 := clamp_mid _ (by dsimp [s]; linarith [hx1.2]) (by dsimp [s]; linarith [hx1.1])
+    have cs3 : apm_t02a01_clamp01 (s - 3) = 0 := clamp_zero _ (by dsimp [s]; linarith [hx1.1])
+    refine ⟨s, ⟨by dsimp [s]; linarith [hx1.2], by dsimp [s]; linarith [hx1.1]⟩, ?_⟩
+    apply Subtype.ext
+    apply congrArg (Quotient.mk _)
+    apply Subtype.ext
+    apply Prod.ext
+    all_goals simp only [apm_t02a01_perimeter, cs, cs1, cs2, cs3, Prod.fst, Prod.snd]; dsimp [s] at * <;> norm_num at * <;> linarith
+  · let s : ℝ := 3 + 2 * (3 / 4 - x.1.2)
+    by_cases hc : x.1.2 = 1 / 4
+    · refine ⟨0, by norm_num, ?_⟩
+      apply Subtype.ext
+      apply congrArg (Quotient.mk _)
+      apply Subtype.ext
+      apply Prod.ext <;>
+        norm_num [apm_t02a01_innerPoint, apm_t02a01_perimeter,
+          apm_t02a01_clamp01, hl, hc]
+    have hlow : (1 / 4 : ℝ) < x.1.2 := lt_of_le_of_ne hx2.1 (Ne.symm hc)
+    have cs : apm_t02a01_clamp01 s = 1 := clamp_one _ (by dsimp [s]; linarith [hx2.2])
+    have cs1 : apm_t02a01_clamp01 (s - 1) = 1 := clamp_one _ (by dsimp [s]; linarith [hx2.2])
+    have cs2 : apm_t02a01_clamp01 (s - 2) = 1 := clamp_one _ (by dsimp [s]; linarith [hx2.2])
+    have cs3 : apm_t02a01_clamp01 (s - 3) = s - 3 := clamp_mid _ (by dsimp [s]; linarith [hx2.2]) (by dsimp [s]; linarith [hx2.1])
+    refine ⟨s, ⟨by dsimp [s]; linarith [hx2.2], by dsimp [s]; linarith [hx2.1]⟩, ?_⟩
+    apply Subtype.ext
+    apply congrArg (Quotient.mk _)
+    apply Subtype.ext
+    apply Prod.ext
+    all_goals simp only [apm_t02a01_perimeter, cs, cs1, cs2, cs3, Prod.fst, Prod.snd]; dsimp [s] at * <;> norm_num at * <;> linarith
 -- END SEAT AREA
 
 instance apm_t02a01_twoPiPos : Fact (0 < 2 * Real.pi) := ⟨by positivity⟩
