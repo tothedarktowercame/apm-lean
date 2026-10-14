@@ -44,7 +44,28 @@ theorem t91A02_hasEulerCharacteristic_unique
     (ha : HasEulerCharacteristic X a)
     (hb : HasEulerCharacteristic X b) :
     a = b := by
-  sorry
+  rcases ha with ⟨hfinite, m, hm, rfl⟩
+  rcases hb with ⟨_, n, hn, rfl⟩
+  let N := max m n
+  have hmN : m + 1 ≤ N + 1 := Nat.add_le_add_right (le_max_left m n) 1
+  have hnN : n + 1 ≤ N + 1 := Nat.add_le_add_right (le_max_right m n) 1
+  have extend (r : ℕ) (hrN : r + 1 ≤ N + 1)
+      (hr : ∀ k, r < k → Subsingleton (Homology X k)) :
+      (∑ k ∈ Finset.range (r + 1),
+          (-1 : ℚ)^k * LinearMap.trace ℚ (Homology X k)
+            (induced (ContinuousMap.id X) k).hom) =
+        ∑ k ∈ Finset.range (N + 1),
+          (-1 : ℚ)^k * LinearMap.trace ℚ (Homology X k)
+            (induced (ContinuousMap.id X) k).hom := by
+    apply Finset.sum_subset (Finset.range_mono hrN)
+    intro k hkN hkr
+    have hrk : r < k := by
+      simpa [Finset.mem_range] using hkr
+    letI : FiniteDimensional ℚ (Homology X k) := hfinite k
+    haveI : Subsingleton (Homology X k) := hr k hrk
+    have hz : (induced (ContinuousMap.id X) k).hom = 0 := Subsingleton.elim _ _
+    simp [hz]
+  exact (extend m hmN hm).trans (extend n hnN hn).symm
 
 /-- **LIBRARY.** Euler characteristic is multiplicative for the finite cover
 between the two concrete nonorientable polygon surfaces occurring in the
