@@ -87901,7 +87901,7 @@
   {:consumer :t97A01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 8,
+   :stop-count 9,
    :evidence
    {:placeholder-delta 0,
     :residual
@@ -87909,58 +87909,53 @@
     :outcome :stop,
     :warnings ["lints; unrelated edits preserved"],
     :missing-theorems
-    [{:name "finiteWedgeFinSuccOldFundamentalGroupMap_leg",
-      :type "old inclusion sends i-loop to castSucc i-loop",
+    [{:name "finiteWedgeFinOne_exists_legWord",
+      :type "every Fin-one wedge loop is a labeled leg word",
       :status :proved,
       :consumers [:t97A01 :t94J09],
-      :depends-on ["finiteWedgeFinLegMap_apply"],
-      :area "polygon-quotient-homology"}
-     {:name "finiteWedgeFinSuccLastFundamentalGroupMap_leg",
-      :type "final inclusion sends Unit-loop to Fin.last-loop",
-      :status :proved,
-      :consumers [:t97A01 :t94J09],
-      :depends-on ["finiteWedgeFinLegMap_apply"],
+      :depends-on [],
       :area "polygon-quotient-homology"}
      {:name "finiteWedgeFinSucc_exists_legWord",
-      :type "inductively expand factor words into Fin legs",
+      :type "inductively expand installed split words into Fin legs",
       :status :not-started,
       :consumers [:t97A01 :t94J09],
       :depends-on
-      ["finiteWedgeFinSuccOldFundamentalGroupMap_leg"
-       "finiteWedgeFinSuccLastFundamentalGroupMap_leg"],
+      ["finiteWedgeFinOne_exists_legWord"
+       "finiteWedgeFinSucc_exists_installedSplitLegWord"],
+      :area "polygon-quotient-homology"}
+     {:name "finiteWedgeLegFreeGroupMap_surjective",
+      :type "canonical free-group map is onto",
+      :status :partial,
+      :consumers [:t97A01 :t94J09],
+      :depends-on ["finiteWedgeFinSucc_exists_legWord"],
       :area "polygon-quotient-homology"}],
     :statement-hashes {:registry "166/0"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
     :reason
-    "Banked successor compatibility for arbitrary labeled loop legs.",
+    "Banked the Fin-one base case for labeled leg-word generation.",
     :commands
-    [{:cmd "lake build ConstructionTargets.PolygonSurfaceHomology",
+    [{:cmd
+      "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology",
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-     {:cmd "git show --check a196e83dc", :exit 0}
-     {:cmd "axioms check", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792001203536-12037-187c9581",
-     :commands
-     ["git show/diff a196e83dc; sha256sum"
-      "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology"
-      "lake env lean /dev/stdin (#print axioms)"
-      "placeholder scan; statement-registry check; git show --check"],
-     :finding
-     "PASS: commit a196e83dc by topo-6 changes only scoped PolygonSurfaceHomology.lean; exact blob SHA-256 636f3f8faeb72798c5c5f5dcdd76b2665da3e00c816d4bb60f573c6d78bc7350. Exact snapshot builds; 0 placeholders; both lemmas use propext/Classical.choice/Quot.sound; registry 166/0. Proofs unfold induced maps and mapOfEq on loop representatives: old label i maps to i.castSucc and Unit maps to Fin.last, preserving the arbitrary circle-loop letter and common-base casts. Real compiled progress; remaining milestones inductively expand installed split words into labeled legs, then prove surjectivity/B6-B10."},
-    :commit "a196e83dc",
+     {:cmd "placeholder scan", :exit 0}
+     {:cmd "axioms check", :exit 0}
+     {:cmd "git show --check 2adc9b939", :exit 0}],
+    :diagnostic-history
+    [{:cmd "initial base proof compile",
+      :exit 1,
+      :correction "removed tactic block after convert closed goal"}],
+    :commit "2adc9b939",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
     {:path "ConstructionTargets/PolygonSurfaceHomology.lean",
      :sha256
-     "636f3f8faeb72798c5c5f5dcdd76b2665da3e00c816d4bb60f573c6d78bc7350"},
+     "5a60d2ab47dc9755604d9304e626ecf9a46877b3a9d8c7dc4107473ddccc7d3e"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -90372,7 +90367,8 @@
     :lemma-finitewedgefinsucc-exists-splitlegword
     :lemma-finitewedgefinsucc-exists-installedsplitlegword
     :lemma-finitewedgefinsuccoldfundamentalgroupmap-leg
-    :lemma-finitewedgefinsucclastfundamentalgroupmap-leg],
+    :lemma-finitewedgefinsucclastfundamentalgroupmap-leg
+    :lemma-finitewedgefinone-exists-legword],
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
@@ -90599,4 +90595,21 @@
    :id :lemma-finitewedgefinsucclastfundamentalgroupmap-leg,
    :kind :lemma,
    :depends-on [:lemma-finitewedgefinlegmap-apply],
+   :other-consumers [:t94J09]}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "finiteWedgeFinOne_exists_legWord",
+    :type "every Fin-one wedge loop is a labeled leg word"},
+   :lemma
+   {:name "finiteWedgeFinOne_exists_legWord",
+    :reported-by [:program-2026-10-13-polygon-surface-homology],
+    :type "every Fin-one wedge loop is a labeled leg word",
+    :area "polygon-quotient-homology",
+    :proved-in :program-2026-10-13-polygon-surface-homology},
+   :id :lemma-finitewedgefinone-exists-legword,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers [:t94J09]}]}
