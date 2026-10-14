@@ -1183,6 +1183,55 @@ theorem boolSideRunPartition_exists_slice {n : ℕ}
   · rw [← hab]
     simp
 
+/-- The maximal subdivision runs as an exact finite family.  This is the
+indexing used by the outer boundary family: run `i` lies between boundaries
+`i` and `i.succ`. -/
+def pathTwoOpenSubdivisionRunFamily
+    {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
+    {U V : Set X} (S : PathTwoOpenSubdivision p U V) :
+    Fin (boolSideRunPartition S.side).length → List (Fin (S.n + 1)) :=
+  fun i => (boolSideRunPartition S.side).get i
+
+theorem pathTwoOpenSubdivisionRunFamily_mem
+    {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
+    {U V : Set X} (S : PathTwoOpenSubdivision p U V)
+    (i : Fin (boolSideRunPartition S.side).length) :
+    pathTwoOpenSubdivisionRunFamily S i ∈ boolSideRunPartition S.side := by
+  exact List.get_mem _ _
+
+theorem pathTwoOpenSubdivisionRunFamily_ne_nil
+    {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
+    {U V : Set X} (S : PathTwoOpenSubdivision p U V)
+    (i : Fin (boolSideRunPartition S.side).length) :
+    pathTwoOpenSubdivisionRunFamily S i ≠ [] := by
+  exact List.ne_nil_of_mem_splitBy
+    (pathTwoOpenSubdivisionRunFamily_mem S i)
+
+/-- Each indexed maximal run comes with exact contiguous slice coordinates
+inside the original ordered subdivision pieces. -/
+theorem pathTwoOpenSubdivisionRunFamily_exists_slice
+    {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
+    {U V : Set X} (S : PathTwoOpenSubdivision p U V)
+    (i : Fin (boolSideRunPartition S.side).length) :
+    ∃ start, start + (pathTwoOpenSubdivisionRunFamily S i).length ≤ S.n + 1 ∧
+      pathTwoOpenSubdivisionRunFamily S i =
+        ((List.finRange (S.n + 1)).drop start).take
+          (pathTwoOpenSubdivisionRunFamily S i).length := by
+  exact boolSideRunPartition_exists_slice S.side _
+    (pathTwoOpenSubdivisionRunFamily_mem S i)
+
+/-- Every piece of an indexed run has the side recorded by that run's head. -/
+theorem pathTwoOpenSubdivisionRunFamily_mem_side_eq_head
+    {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
+    {U V : Set X} (S : PathTwoOpenSubdivision p U V)
+    (i : Fin (boolSideRunPartition S.side).length) :
+    ∀ k ∈ pathTwoOpenSubdivisionRunFamily S i,
+      S.side k = S.side ((pathTwoOpenSubdivisionRunFamily S i).head
+        (pathTwoOpenSubdivisionRunFamily_ne_nil S i)) := by
+  exact boolSideRunPartition_mem_side_eq_head S.side _
+    (pathTwoOpenSubdivisionRunFamily_mem S i)
+    (pathTwoOpenSubdivisionRunFamily_ne_nil S i)
+
 /-- The endpoint family of a contiguous subdivision block. -/
 def pathTwoOpenSubdivisionBlockPoint
     {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
