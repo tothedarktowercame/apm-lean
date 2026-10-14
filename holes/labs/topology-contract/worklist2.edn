@@ -87901,70 +87901,59 @@
   {:consumer :t97A01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 3,
+   :stop-count 4,
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Prove split leg coordinates; iterate to free-group surjectivity, then coordinate epi and B6-B10.",
+    "Then iterate to free-group surjectivity, coordinate epi, and B6-B10.",
     :outcome :stop,
     :warnings ["preexisting lints; unrelated edits preserved"],
     :missing-theorems
-    [{:name "exists_coprodLegWord_of_mulEquiv",
-      :type "normalized coproduct equivalence yields leg words",
+    [{:name "finiteWedgeSubsingletonHomeomorphCircle",
+      :type "a uniquely indexed wedge is its circle",
       :status :proved,
       :consumers [:t97A01 :t94J09],
       :depends-on [],
       :area "polygon-quotient-homology"}
+     {:name "circlePositiveFundamentalClass_generates",
+      :type
+      "circle classes are powers of the normalized positive class",
+      :status :not-started,
+      :consumers [:t97A01 :t94J09],
+      :depends-on [],
+      :area "polygon-quotient-homology"}
      {:name "finiteWedgePointWedge_legCoordinates",
-      :type "van Kampen sends old/final legs to coproduct injections",
+      :type "van Kampen sends both legs to coproduct injections",
       :status :not-started,
       :consumers [:t97A01 :t94J09],
       :depends-on ["finiteWedgeFinSuccHomeomorphPointWedge"],
-      :area "polygon-quotient-homology"}
-     {:name "finiteWedgeLegFreeGroupMap_surjective",
-      :type "canonical free-group map is onto",
-      :status :partial,
-      :consumers [:t97A01 :t94J09],
-      :depends-on
-      ["finiteWedgePointWedge_legCoordinates"
-       "exists_coprodLegWord_of_mulEquiv"],
       :area "polygon-quotient-homology"}],
     :statement-hashes {:registry "166/0"},
     :disposition :stop,
-    :axioms ["propext" "Quot.sound"],
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked coproduct word extraction.",
+    :reason "Banked the one-circle wedge homeomorphism.",
     :commands
     [{:cmd "lake build ConstructionTargets.PolygonSurfaceHomology",
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-     {:cmd "git show --check 993db480e", :exit 0}
+     {:cmd "git show --check 45f611d32", :exit 0}
      {:cmd
-      "git show 993db480e:ConstructionTargets/PolygonSurfaceHomology.lean | lake env lean /dev/stdin",
+      "git show 45f611d32:ConstructionTargets/PolygonSurfaceHomology.lean | lake env lean /dev/stdin",
       :exit 0}],
     :diagnostic-history
-    [{:cmd "multiplication draft",
+    [{:cmd "homeomorphism draft",
       :exit 1,
-      :correction "exposed named word values"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1791956662155-11637-1708643f",
-     :commands
-     ["git show e39d313f1 blob + #print axioms | lake env lean /dev/stdin"
-      "diff-tree/readlink/sha256 assertions"
-      "statement-registry check; comment-stripped placeholder scan"],
-     :finding
-     "PASS: e39d313f1 changes only PolygonSurfaceHomology.lean; exact blob SHA256 de8557c3722466c4af67cc92e01455aecac235213c66b6e6e14d343f87fbeaf1. It compiles with standard axioms propext/Classical.choice/Quot.sound; placeholders 0; registry 166/0. New progress beyond d03a5f91d gives the explicit Fin(n+2) equivalence with Fin(n+1) ⊕ Unit, composes it with the sum-wedge homeomorphism, and proves formulas for every castSucc leg and the last leg. The type deliberately keeps the first summand nonempty for point-wedge induction; label orientation and circle coordinates are preserved. Free-group surjectivity remains the next milestone."},
-    :commit "993db480e",
+      :correction "fixed universe and quotient inverse"}],
+    :commit "45f611d32",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
     {:path "ConstructionTargets/PolygonSurfaceHomology.lean",
      :sha256
-     "380d45b46b96fa6b586acc568a9883c8b4318aa0bddd2f3fc5768890be4bcd67"},
+     "f47761e76b30a906bf2e17300f80dee9a92ac0d4ec80129873ad9e071bf00798"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -89594,4 +89583,38 @@
    :id :lemma-finitewedgepointwedge-legcoordinates,
    :kind :lemma,
    :depends-on [:lemma-finitewedgefinsucchomeomorphpointwedge],
+   :other-consumers [:t94J09]}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "finiteWedgeSubsingletonHomeomorphCircle",
+    :type "a uniquely indexed wedge is its circle"},
+   :lemma
+   {:name "finiteWedgeSubsingletonHomeomorphCircle",
+    :reported-by [:program-2026-10-13-polygon-surface-homology],
+    :type "a uniquely indexed wedge is its circle",
+    :area "polygon-quotient-homology",
+    :proved-in :program-2026-10-13-polygon-surface-homology},
+   :id :lemma-finitewedgesubsingletonhomeomorphcircle,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t94J09]}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "circlePositiveFundamentalClass_generates",
+    :type
+    "circle classes are powers of the normalized positive class"},
+   :lemma
+   {:name "circlePositiveFundamentalClass_generates",
+    :reported-by [:program-2026-10-13-polygon-surface-homology],
+    :type "circle classes are powers of the normalized positive class",
+    :area "polygon-quotient-homology"},
+   :id :lemma-circlepositivefundamentalclass-generates,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers [:t94J09]}]}
