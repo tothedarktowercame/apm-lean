@@ -36158,6 +36158,16 @@
      {:cmd "git diff --check", :exit 0}
      {:cmd "rg forbidden", :exit 1, :expected-exit 1}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1792020631578-12678-597e6fde",
+     :commands
+     ["exact recorded scope and fixture SHA-256 assertions"
+      "git show 8c4eb4f theorem orientation; recorded snapshot Lean compile"
+      "statement-registry check; parent/commit placeholder recount"],
+     :finding
+     "PASS: 8c4eb4f is compiled, sorry-free progress after 263f5d47. The committed interface is faithful: Fin(runs+1) indexes values in outer subtype V, and coercion equals the corresponding ambient run-boundary entry in the useful direction. It enables the declared representative-family fold without concealing the still-partial van Kampen obligation. Hash/scope match; standard axioms; registry 166/166; Main 1->1 placeholder; residual milestones listed."},
     :commit "bd5ebdee7d40582e385b90e9070b60791e06ac10",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
@@ -36168,7 +36178,7 @@
      "d9a19dc2426e0a8401e9cf3784471154228f0212fcaf163a324e260aa9b51b24"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -36186,7 +36196,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t93J03Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Proved first/last run-slice coverage; quotient-class fold induction remains.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Identified each run start with the flattened preceding-run length; quotient fold induction remains.",
    :id :program-2026-10-13-close-t93j03,
    :kind :final-adapter,
    :campaign-priority 30,
@@ -36536,7 +36546,11 @@
     {:job 6,
      :commit "04869b05c2fca01f44f7ddac411a81f39399d36f",
      :reason
-     "Proved first/last run-slice coverage; quotient-class fold induction remains."}]}
+     "Proved first/last run-slice coverage; quotient-class fold induction remains."}
+    {:job 7,
+     :commit "bd5ebdee7d40582e385b90e9070b60791e06ac10",
+     :reason
+     "Identified each run start with the flattened preceding-run length; quotient fold induction remains."}]}
   {:consumer :t99J05,
    :stop-count 5,
    :evidence
@@ -40232,7 +40246,7 @@
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "pathTwoOpenSubdivisionRunStart_eq_prefixLength",
@@ -40242,7 +40256,9 @@
     :reported-by [:program-2026-10-13-close-t93j03],
     :type "run start equals preceding flattened-run length",
     :area "covering-subgroup-correspondence",
-    :proved-in :program-2026-10-13-close-t93j03},
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "bd5ebdee7d40582e385b90e9070b60791e06ac10"},
    :id :lemma-pathtwoopensubdivisionrunstart-eq-prefixlength,
    :kind :lemma,
    :depends-on [:lemma-pathtwoopensubdivisionrunlast-end],
