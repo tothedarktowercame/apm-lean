@@ -1449,6 +1449,54 @@ theorem kleinPolygonPackagedUnitConnector_mk :
       congrArg (fun f => f ≫ q) kleinPolygonPackagedUnitPath_mk
     _ = _ := by congr 1
 
+/-- Basepoint transport in the outer piece along the connector belonging to
+the actual unit packaged by Mathlib's groupoid equivalence. -/
+noncomputable def kleinPolygonPackagedOuterImageFundamentalGroupEquivAtDirectSkeletonPoint :
+    FundamentalGroup {q // q ∈ (openCover kleinPairingData).outer}
+        (kleinPolygonOverlapToOuter kleinPolygonOverlapPoint) ≃*
+      FundamentalGroup {q // q ∈ (openCover kleinPairingData).outer}
+        (kleinPolygonSkeletonToOuter kleinSkeletonPoint) :=
+  FundamentalGroup.fundamentalGroupMulEquivOfPath
+    kleinPolygonPackagedUnitConnector
+
+/-- In packaged equivalence coordinates, returning from the skeleton and
+then transporting along the packaged connector is exactly the literal
+skeleton-to-outer map. -/
+theorem kleinPolygonPackagedSourceCoordinate_eq_direct :
+    kleinPolygonPackagedOuterImageFundamentalGroupEquivAtDirectSkeletonPoint.toMonoidHom.comp
+        kleinPolygonOverlapImageFundamentalGroupEquivAtSkeletonPoint.symm.toMonoidHom =
+      kleinPolygonSkeletonToOuterPiOne := by
+  ext g
+  change kleinPolygonPackagedOuterImageFundamentalGroupEquivAtDirectSkeletonPoint
+      (kleinPolygonOverlapImageFundamentalGroupEquivAtSkeletonPoint.symm g) = _
+  let q : kleinPolygonOuterFundamentalGroupoidEquivalence.functor.obj
+        (FundamentalGroupoid.mk
+          (kleinPolygonOverlapToOuter kleinPolygonOverlapPoint)) ≅
+      FundamentalGroupoid.mk kleinSkeletonPoint :=
+    (CategoryTheory.Groupoid.isoEquivHom _ _).symm
+      ⟦kleinPolygonOverlapImageToSkeletonPointPath⟧
+  have hinv :
+      kleinPolygonOverlapImageFundamentalGroupEquivAtSkeletonPoint.symm g =
+        kleinPolygonOuterFundamentalGroupoidEquivalence.fullyFaithfulFunctor.preimage
+          (q.symm.conj g) := by rfl
+  rw [hinv]
+  change ((CategoryTheory.Groupoid.isoEquivHom _ _).symm
+      ⟦kleinPolygonPackagedUnitConnector⟧).conj
+      (kleinPolygonOuterFundamentalGroupoidEquivalence.fullyFaithfulFunctor.preimage
+        (q.symm.conj g)) = _
+  have hconn : (CategoryTheory.Groupoid.isoEquivHom _ _).symm
+        ⟦kleinPolygonPackagedUnitConnector⟧ =
+      (kleinPolygonOuterFundamentalGroupoidEquivalence.unitIso.app _) ≪≫
+        kleinPolygonOuterFundamentalGroupoidEquivalence.inverse.mapIso q := by
+    apply Iso.ext
+    exact kleinPolygonPackagedUnitConnector_mk
+  have h₁ := congrArg (fun z => z.conj
+      (kleinPolygonOuterFundamentalGroupoidEquivalence.fullyFaithfulFunctor.preimage
+        (q.symm.conj g))) hconn
+  have h₂ := equivalence_unit_mapIso_conj_preimage
+    kleinPolygonOuterFundamentalGroupoidEquivalence _ _ q g
+  exact h₁.trans h₂
+
 /-- On the preferred skeleton basepoint, the direct skeleton-to-outer map is
 literally the inverse functor of the groupoid equivalence.  This removes the
 target-side cast from the remaining source-coordinate comparison. -/
@@ -1516,6 +1564,36 @@ theorem kleinPolygonTargetTransportedOuterToSpacePiOne_factor :
       kleinPolygonOuterImageToDirectSkeletonPointPath)
     (kleinPolygonOverlapImageFundamentalGroupEquivAtSkeletonPoint.symm g)
 
+/-- The packaged connector included into the polygon quotient. -/
+noncomputable def kleinPolygonPackagedUnitConnectorSpacePath : Path
+    (kleinPolygonOuterToSpace
+      (kleinPolygonOverlapToOuter kleinPolygonOverlapPoint))
+    (kleinPolygonSkeletonToSpace kleinSkeletonPoint) :=
+  kleinPolygonPackagedUnitConnector.map kleinPolygonOuterToSpace.continuous
+
+/-- The outer-to-polygon map transported using the actual connector belonging
+to the packaged groupoid equivalence. -/
+noncomputable def kleinPolygonPackagedTargetTransportedOuterToSpacePiOne :
+    FundamentalGroup kleinPairingData.skeleton kleinSkeletonPoint →*
+      FundamentalGroup kleinPairingData.Space
+        (kleinPolygonSkeletonToSpace kleinSkeletonPoint) :=
+  (FundamentalGroup.fundamentalGroupMulEquivOfPath
+      kleinPolygonPackagedUnitConnectorSpacePath).toMonoidHom.comp
+    kleinPolygonTransportedOuterToSpacePiOne
+
+/-- Naturality and the packaged source-coordinate identity identify the
+packaged transported map with the literal skeleton inclusion map. -/
+theorem kleinPolygonPackagedTargetTransportedOuterToSpacePiOne_eq_direct :
+    kleinPolygonPackagedTargetTransportedOuterToSpacePiOne =
+      kleinPolygonSkeletonToSpacePiOne := by
+  rw [← kleinPolygonSkeletonToSpacePiOne_eq_outer_comp_direct,
+    ← kleinPolygonPackagedSourceCoordinate_eq_direct]
+  ext g
+  exact DFunLike.congr_fun
+    (fundamentalGroup_map_pathTransport_natural kleinPolygonOuterToSpace
+      kleinPolygonPackagedUnitConnector)
+    (kleinPolygonOverlapImageFundamentalGroupEquivAtSkeletonPoint.symm g)
+
 /-- Target basepoint transport is an equivalence, so the forward kernel
 inclusion survives unchanged and now lands in the kernel of a map with the
 literal skeleton inclusion's exact source and target types. -/
@@ -1528,6 +1606,22 @@ theorem kleinPolygonOverlapSkeletonNormalClosure_le_targetTransportedKernel :
   change kleinPolygonTargetTransportedOuterToSpacePiOne g = 1
   change (FundamentalGroup.fundamentalGroupMulEquivOfPath
     kleinPolygonOuterImageToSkeletonPointSpacePath)
+      (kleinPolygonTransportedOuterToSpacePiOne g) = 1
+  rw [show kleinPolygonTransportedOuterToSpacePiOne g = 1 from
+    kleinPolygonOverlapSkeletonNormalClosure_le_transportedKernel hg]
+  exact map_one _
+
+/-- The already proved forward van Kampen kernel inclusion, now expressed for
+the literal skeleton-to-polygon map via the packaged connector identity. -/
+theorem kleinPolygonOverlapSkeletonNormalClosure_le_skeletonToSpaceKernel :
+    Subgroup.normalClosure
+        (kleinPolygonOverlapToSkeletonPiOne.range : Set
+          (FundamentalGroup kleinPairingData.skeleton kleinSkeletonPoint)) ≤
+      MonoidHom.ker kleinPolygonSkeletonToSpacePiOne := by
+  rw [← kleinPolygonPackagedTargetTransportedOuterToSpacePiOne_eq_direct]
+  intro g hg
+  change (FundamentalGroup.fundamentalGroupMulEquivOfPath
+    kleinPolygonPackagedUnitConnectorSpacePath)
       (kleinPolygonTransportedOuterToSpacePiOne g) = 1
   rw [show kleinPolygonTransportedOuterToSpacePiOne g = 1 from
     kleinPolygonOverlapSkeletonNormalClosure_le_transportedKernel hg]
@@ -1762,6 +1856,9 @@ theorem lift_isEmbedding_assembly
 #print axioms kleinPolygonOverlapToSkeletonPiOne_normalClosure_eq_aabb
 #print axioms kleinPolygonPackagedUnitPath_mk
 #print axioms kleinPolygonPackagedUnitConnector_mk
+#print axioms kleinPolygonPackagedSourceCoordinate_eq_direct
+#print axioms kleinPolygonPackagedTargetTransportedOuterToSpacePiOne_eq_direct
+#print axioms kleinPolygonOverlapSkeletonNormalClosure_le_skeletonToSpaceKernel
 #print axioms kleinPolygonSkeletonToOuterPiOne_apply_eq_inverse_map
 #print axioms kleinPolygonFundamentalGroupEquivPresented_of_vanKampen
 #print axioms kleinPolygonFundamentalGroupEquivPresented

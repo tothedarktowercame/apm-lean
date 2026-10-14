@@ -360,6 +360,18 @@ inverse-mapped skeleton connector, and
 `kleinPolygonPackagedUnitConnector_mk` proves that its class is exactly the
 packaged unit followed by the inverse functor map.  Comparing this connector
 with the earlier concrete deformation connector is the remaining cast seam.
+Rather than equating those chosen paths,
+`kleinPolygonPackagedSourceCoordinate_eq_direct` applies the equivalence-unit
+identity to prove that the packaged source-coordinate map is exactly the
+literal skeleton-to-outer map.  The remaining comparison may transport the
+outer-to-polygon map along this packaged connector, whose target-side map has
+the same kernel as any other basepoint transport.
+`kleinPolygonPackagedTargetTransportedOuterToSpacePiOne_eq_direct` performs
+that transport and proves exact equality with the literal skeleton map.
+Consequently
+`kleinPolygonOverlapSkeletonNormalClosure_le_skeletonToSpaceKernel` supplies
+the forward kernel inclusion in the final coordinates; only the reverse
+inclusion and surjectivity remain in the based van Kampen extraction.
 `kleinBottle_pi1_every_basepoint_of_basedVanKampen` confirms this single
 topological contract and the independent winding conjugacy are now the only
 C1 inputs.
