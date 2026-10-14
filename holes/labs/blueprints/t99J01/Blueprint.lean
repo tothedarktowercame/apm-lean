@@ -99,7 +99,12 @@ theorem t99J01_threeCircles_wedgePoint_fundamentalGroup
         (FundamentalGroup Circle 1))) :
     Nonempty (FundamentalGroup ThreeCircles T99J01ThreeCirclesPoint ≃*
       FreeGroup (Fin 3)) := by
-  sorry
+  obtain ⟨circle⟩ := hcircle
+  obtain ⟨two⟩ := htwo
+  obtain ⟨wedge⟩ := hwedge
+  exact ⟨wedge.trans
+    ((MulEquiv.coprodCongr two circle).trans
+      ConstructionTargets.PointWedgeVanKampen.coprodFreeGroupFinTwoFinOne_equiv)⟩
 
 /-- Basepoint transport, isolated from both van Kampen specializations. -/
 theorem t99J01_threeCircles_basepoint_transport (x : ThreeCircles) :
