@@ -855,6 +855,54 @@ theorem pathHomotopicQuotient_concat_eq_of_pieceClass_eq
   exact Path.Homotopic.concat_hcomp point F G
     (fun k => Quotient.eq.mp (h k))
 
+/-- A nonempty dependent finite concatenation stays in a set whenever each
+of its factors does.  This supplies the range proof for every maximal inner
+block extracted from a subordinate subdivision. -/
+theorem path_concat_mem_of_piece_mem
+    {X : Type*} [TopologicalSpace X] {U : Set X} {n : ℕ}
+    (point : Fin (n + 2) → X)
+    (F : (k : Fin (n + 1)) → Path (point k.castSucc) (point k.succ))
+    (hF : ∀ k t, F k t ∈ U) :
+    ∀ t, Path.concat point F t ∈ U := by
+  induction n with
+  | zero =>
+      intro t
+      rw [Path.concat_succ]
+      rw [Path.concat_zero]
+      have ht : ((Path.concat (point ∘ Fin.castSucc)
+          (fun k => F k.castSucc)).trans (F (Fin.last 0))) t ∈
+          Set.range ((Path.concat (point ∘ Fin.castSucc)
+            (fun k => F k.castSucc)).trans (F (Fin.last 0))) :=
+        Set.mem_range_self t
+      rw [Path.concat_zero] at ht
+      rw [Path.trans_range] at ht
+      rcases ht with ht | ht
+      · rcases ht with ⟨s, hs⟩
+        have hm : (Path.refl ((point ∘ Fin.castSucc) 0)) s ∈ U := by
+          change point 0 ∈ U
+          convert hF 0 0 using 1
+          rw [(F 0).source]
+          congr 1
+        exact hs ▸ hm
+      · rcases ht with ⟨s, hs⟩
+        have hm : (F (Fin.last 0)) s ∈ U := hF _ s
+        exact hs ▸ hm
+  | succ n ih =>
+      intro t
+      rw [Path.concat_succ]
+      change ((Path.concat (point ∘ Fin.castSucc)
+        (fun k => F k.castSucc)).trans (F (Fin.last (n + 1)))) t ∈ U
+      have ht : ((Path.concat (point ∘ Fin.castSucc)
+          (fun k => F k.castSucc)).trans (F (Fin.last (n + 1)))) t ∈
+          Set.range ((Path.concat (point ∘ Fin.castSucc)
+            (fun k => F k.castSucc)).trans (F (Fin.last (n + 1)))) :=
+        Set.mem_range_self t
+      rw [Path.trans_range] at ht
+      rcases ht with ⟨s, hs⟩ | ⟨s, hs⟩
+      · exact hs ▸ ih (point ∘ Fin.castSucc) (fun k => F k.castSucc)
+          (fun k u => hF k.castSucc u) s
+      · exact hs ▸ hF (Fin.last (n + 1)) s
+
 /-- A pointwise replacement of the pieces of a subordinate subdivision
 reconstructs the class of its original path.  This combines the subdivision's
 endpoint casts with the generic dependent finite-fold lemma. -/
@@ -2034,6 +2082,7 @@ theorem lift_isEmbedding_assembly
 #print axioms kleinPolygonPseudopushout_arrow_eq_reconstructed
 #print axioms pathTwoOpenSubdivision_transition_mem_overlap
 #print axioms pathHomotopicQuotient_concat_eq_of_pieceClass_eq
+#print axioms path_concat_mem_of_piece_mem
 #print axioms pathTwoOpenSubdivision_quotient_eq_concat_of_pieceClass_eq
 #print axioms kleinPolygonInnerContractibleSpace
 #print axioms kleinPolygonInnerFundamentalGroup_subsingleton

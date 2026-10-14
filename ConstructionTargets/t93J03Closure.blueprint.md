@@ -247,6 +247,10 @@ finite fold: equality of every segment class implies equality of the complete
 fold to the subdivision's reconstruction theorem, including its endpoint
 casts.  Only the concrete normalized outer replacement family remains to be
 chosen pointwise.
+For the required maximal-run partition, `path_concat_mem_of_piece_mem` proves
+that every nonempty concatenated block stays in the inner open when each of
+its subdivision factors does; this supplies the range hypothesis of the raw
+inner-run replacement adapter.
 It remains to transport the overlap image through the outer-piece coordinates
 and take its normal closure.
 The outer-to-skeleton equivalence is now restricted at the literal overlap
