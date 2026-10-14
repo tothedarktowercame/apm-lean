@@ -1120,6 +1120,50 @@ structure MergeRepeatedBlockLiftSpec (uLen vLen tLen : ℕ)
   on_t : ∀ (i : ℕ), i < tLen → ∀ s : Icc (0 : ℝ) 1,
     toFun (uLen + 4 + vLen + i + s.1) = uLen + 2 + vLen + i + s.1
 
+def mergeRepeatedBlock_aux_boundary_lift_aux_clip (a b x : ℝ) : ℝ :=
+  max 0 (min (x - a) b)
+
+lemma mergeRepeatedBlock_aux_boundary_lift_aux_clip_continuous (a b : ℝ) :
+    Continuous (mergeRepeatedBlock_aux_boundary_lift_aux_clip a b) := by
+  exact continuous_const.max ((continuous_id.sub continuous_const).min continuous_const)
+
+lemma mergeRepeatedBlock_aux_boundary_lift_aux_clip_of_le (a b x : ℝ) (h : x ≤ a) :
+    mergeRepeatedBlock_aux_boundary_lift_aux_clip a b x = 0 := by
+  unfold mergeRepeatedBlock_aux_boundary_lift_aux_clip
+  rw [max_eq_left] <;> linarith [min_le_left (x - a) b]
+
+lemma mergeRepeatedBlock_aux_boundary_lift_aux_clip_of_mem (a b x : ℝ)
+    (h₀ : a ≤ x) (h₁ : x ≤ a + b) (hb : 0 ≤ b) :
+    mergeRepeatedBlock_aux_boundary_lift_aux_clip a b x = x - a := by
+  unfold mergeRepeatedBlock_aux_boundary_lift_aux_clip
+  rw [min_eq_left (by linarith), max_eq_right (by linarith)]
+
+lemma mergeRepeatedBlock_aux_boundary_lift_aux_clip_of_ge (a b x : ℝ)
+    (h : a + b ≤ x) (hb : 0 ≤ b) :
+    mergeRepeatedBlock_aux_boundary_lift_aux_clip a b x = b := by
+  unfold mergeRepeatedBlock_aux_boundary_lift_aux_clip
+  rw [min_eq_right (by linarith), max_eq_right hb]
+
+def mergeRepeatedBlock_aux_boundary_lift_aux_local (u v : ℝ) (x : ℝ) : ℝ :=
+  x - mergeRepeatedBlock_aux_boundary_lift_aux_clip u 2 x / 2 -
+    mergeRepeatedBlock_aux_boundary_lift_aux_clip (u + 2 + v) 2 x / 2
+
+def mergeRepeatedBlock_aux_boundary_lift_aux_localInv (u v : ℝ) (x : ℝ) : ℝ :=
+  x + mergeRepeatedBlock_aux_boundary_lift_aux_clip u 1 x +
+    mergeRepeatedBlock_aux_boundary_lift_aux_clip (u + 1 + v) 1 x
+
+lemma mergeRepeatedBlock_aux_boundary_lift_aux_local_continuous (u v : ℝ) :
+    Continuous (mergeRepeatedBlock_aux_boundary_lift_aux_local u v) := by
+  exact (continuous_id.sub
+    ((mergeRepeatedBlock_aux_boundary_lift_aux_clip_continuous u 2).div_const 2)).sub
+      ((mergeRepeatedBlock_aux_boundary_lift_aux_clip_continuous (u + 2 + v) 2).div_const 2)
+
+lemma mergeRepeatedBlock_aux_boundary_lift_aux_localInv_continuous (u v : ℝ) :
+    Continuous (mergeRepeatedBlock_aux_boundary_lift_aux_localInv u v) := by
+  exact (continuous_id.add
+    (mergeRepeatedBlock_aux_boundary_lift_aux_clip_continuous u 1)).add
+      (mergeRepeatedBlock_aux_boundary_lift_aux_clip_continuous (u + 1 + v) 1)
+
 /-- PL leaf: construct the increasing piecewise-affine lift with slopes
 `1, 1/2, 1/2, 1, 1/2, 1/2, 1`, extended equivariantly to all of `ℝ`. -/
 -- BEGIN SEAT AREA
@@ -1204,6 +1248,68 @@ lemma mergeRepeatedBlock_aux_boundary_edge_formulas
     MergeRepeatedBlockEdgeSpec g uLen vLen tLen := by
   sorry
 
+lemma mergeRepeatedBlock_aux_boundary_relation_aux_circleToDisk_injective :
+    Function.Injective circleToDisk := by
+  intro c d h
+  apply Subtype.ext
+  change (c : ℂ) = (d : ℂ)
+  have hh := congrArg (fun x : Disk => (x : ℂ)) h
+  exact hh
+
+lemma mergeRepeatedBlock_aux_boundary_relation_aux_eqvGen_map
+    {α β : Type*} {r : α → α → Prop} {s : β → β → Prop}
+    (f : α → β) (hgen : ∀ {x y}, r x y → Relation.EqvGen s (f x) (f y)) :
+    ∀ {x y}, Relation.EqvGen r x y → Relation.EqvGen s (f x) (f y) := by
+  intro x y h
+  induction h with
+  | refl x => exact Relation.EqvGen.refl _
+  | rel x y hxy => exact hgen hxy
+  | symm x y hxy ih => exact Relation.EqvGen.symm _ _ ih
+  | trans x y z hxy hyz ih₁ ih₂ =>
+      exact Relation.EqvGen.trans _ _ _ ih₁ ih₂
+
+/-- `WordRel` only relates unit-circle points, and interior points are related
+only to themselves, so its generated relation between circle points is the
+generated relation of its restriction to the circle. -/
+lemma wordRel_eqvGen_circle {L : Type*} [DecidableEq L]
+    (w : List (Signed L)) (c₁ c₂ : Circle) :
+    Relation.EqvGen (WordRel w) (circleToDisk c₁) (circleToDisk c₂) ↔
+      Relation.EqvGen (fun a b : Circle => WordRel w (circleToDisk a) (circleToDisk b))
+        c₁ c₂ := by
+  sorry
+
+/-- Forward generators: each identified source pair maps under `g` to a pair
+related in the target (classify the index among the seven append blocks). -/
+lemma mergeRepeatedBlock_aux_boundary_relation_aux_forward
+    {Label : Type*} [DecidableEq Label]
+    (u v t : List (Signed Label)) (y z a : Signed Label)
+    (hyz : y.1 ≠ z.1)
+    (ha : a.1 ∉ (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t).map Prod.fst)
+    (hy : ((u ++ v ++ t).map Prod.fst).count y.1 = 0)
+    (hz : ((u ++ v ++ t).map Prod.fst).count z.1 = 0)
+    (hw : IsPolygonWord (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t))
+    (g : Circle ≃ₜ Circle) (hg : MergeRepeatedBlockEdgeSpec g u.length v.length t.length) :
+    ∀ c₁ c₂ : Circle, WordRel (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t) (circleToDisk c₁) (circleToDisk c₂) →
+      Relation.EqvGen (fun p q : Circle => WordRel (u ++ [a] ++ v ++ [inv a] ++ t) (circleToDisk p) (circleToDisk q))
+        (g c₁) (g c₂) := by
+  sorry
+
+/-- Reverse generators: each identified target pair pulls back under `g⁻¹` to a
+related source pair (split the `a` / `a⁻¹` parameter at `1/2`). -/
+lemma mergeRepeatedBlock_aux_boundary_relation_aux_reverse
+    {Label : Type*} [DecidableEq Label]
+    (u v t : List (Signed Label)) (y z a : Signed Label)
+    (hyz : y.1 ≠ z.1)
+    (ha : a.1 ∉ (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t).map Prod.fst)
+    (hy : ((u ++ v ++ t).map Prod.fst).count y.1 = 0)
+    (hz : ((u ++ v ++ t).map Prod.fst).count z.1 = 0)
+    (hw : IsPolygonWord (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t))
+    (g : Circle ≃ₜ Circle) (hg : MergeRepeatedBlockEdgeSpec g u.length v.length t.length) :
+    ∀ d₁ d₂ : Circle, WordRel (u ++ [a] ++ v ++ [inv a] ++ t) (circleToDisk d₁) (circleToDisk d₂) →
+      Relation.EqvGen (fun p q : Circle => WordRel (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t) (circleToDisk p) (circleToDisk q))
+        (g.symm d₁) (g.symm d₂) := by
+  sorry
+
 /-- Combinatorial leaf: the seven edge formulas carry generators to
 generators in both directions; `EqvGen` also handles all shared vertices. -/
 lemma mergeRepeatedBlock_aux_boundary_relation
@@ -1220,7 +1326,16 @@ lemma mergeRepeatedBlock_aux_boundary_relation
           (circleToDisk c₁) (circleToDisk c₂) ↔
         Relation.EqvGen (WordRel (u ++ [a] ++ v ++ [inv a] ++ t))
           (circleToDisk (g c₁)) (circleToDisk (g c₂)) := by
-  sorry
+  intro c₁ c₂
+  rw [wordRel_eqvGen_circle, wordRel_eqvGen_circle]
+  constructor
+  · intro h
+    exact mergeRepeatedBlock_aux_boundary_relation_aux_eqvGen_map g
+      (fun hxy => mergeRepeatedBlock_aux_boundary_relation_aux_forward u v t y z a hyz ha hy hz hw g hg _ _ hxy) h
+  · intro h
+    have h' := mergeRepeatedBlock_aux_boundary_relation_aux_eqvGen_map g.symm
+      (fun hxy => mergeRepeatedBlock_aux_boundary_relation_aux_reverse u v t y z a hyz ha hy hz hw g hg _ _ hxy) h
+    simpa using h'
 
 /-- The boundary content of the merge: a PL circle homeomorphism sending arcs
 `y, z` to the halves of `a` (and `z⁻¹, y⁻¹` to the halves of `a⁻¹`), every
@@ -1449,11 +1564,68 @@ lemma cutAndPaste_aux_triangle_charts_aux_snd_surjective :
   intro z
   exact ⟨(0, z), rfl⟩
 
-/-- Leaf (PL toolkit/construction, 100--150 lines): construct two closed
-triangles as radial fans of the regular polygon and parametrise each by a
-disk.  The two copies have opposite orientations along the cutting diagonal.
-This is the one place that may be promoted to a LIBRARY polygon/triangle PL
-toolkit if Mathlib has no suitable convex-polygon homeomorphism. -/
+/-- A radial Schoenflies chart for a compact convex planar body.  The last
+clause records the feature needed below: boundary points are reached along
+rays based at the chosen interior point. -/
+lemma cutAndPaste_aux_convex_radial_chart
+    (K : Set ℂ) (p : ℂ) (hKc : Convex ℝ K) (hKcompact : IsCompact K)
+    (hp : p ∈ interior K) :
+    ∃ e : Disk ≃ₜ K,
+      (∀ z : Disk, ‖(z : ℂ)‖ = 1 ↔ (e z : ℂ) ∈ frontier K) ∧
+      ∀ z : Disk, ‖(z : ℂ)‖ = 1 →
+        ∃ r : ℝ, 0 < r ∧ (e z : ℂ) = p + r • (z : ℂ) := by
+  sorry
+
+/-- The generator-level boundary bookkeeping for the two radial charts.
+This is deliberately weaker than the desired fibre equivalence: lifting the
+generators through `EqvGen` is done in two independent lemmas below. -/
+lemma cutAndPaste_aux_triangle_chart_generators {Label : Type*}
+    [DecidableEq Label]
+    (u v t : List (Signed Label)) (x : Signed Label)
+    (hx : x.1 ∉ (u ++ v ++ t).map Prod.fst)
+    (hw : IsPolygonWord (u ++ [x] ++ v ++ [x] ++ t))
+    (hradial : ∀ (K : Set ℂ) (p : ℂ), Convex ℝ K → IsCompact K →
+      p ∈ interior K →
+      ∃ e : Disk ≃ₜ K,
+        (∀ z : Disk, ‖(z : ℂ)‖ = 1 ↔ (e z : ℂ) ∈ frontier K) ∧
+        ∀ z : Disk, ‖(z : ℂ)‖ = 1 →
+          ∃ r : ℝ, 0 < r ∧ (e z : ℂ) = p + r • (z : ℂ)) :
+    ∃ a b : Fin 2 × Disk → Disk, Continuous a ∧ Continuous b ∧
+      Function.Surjective a ∧ Function.Surjective b ∧
+      (∀ y y', WordRel (u ++ [x] ++ v ++ [x] ++ t) (a y) (a y') →
+        Relation.EqvGen (WordRel (u ++ [x, x] ++ inverseWord v ++ t))
+          (b y) (b y')) ∧
+      (∀ y y', WordRel (u ++ [x, x] ++ inverseWord v ++ t) (b y) (b y') →
+        Relation.EqvGen (WordRel (u ++ [x] ++ v ++ [x] ++ t))
+          (a y) (a y')) := by
+  sorry
+
+lemma cutAndPaste_aux_triangle_charts_forward {Label : Type*}
+    [DecidableEq Label] (u v t : List (Signed Label)) (x : Signed Label)
+    (a b : Fin 2 × Disk → Disk)
+    (has : Function.Surjective a)
+    (hgen : ∀ y y', WordRel (u ++ [x] ++ v ++ [x] ++ t) (a y) (a y') →
+      Relation.EqvGen (WordRel (u ++ [x, x] ++ inverseWord v ++ t))
+        (b y) (b y')) :
+    ∀ y y', cutAndPasteParameterRel u v t x a y y' →
+      Relation.EqvGen (WordRel (u ++ [x, x] ++ inverseWord v ++ t))
+        (b y) (b y') := by
+  sorry
+
+lemma cutAndPaste_aux_triangle_charts_reverse {Label : Type*}
+    [DecidableEq Label] (u v t : List (Signed Label)) (x : Signed Label)
+    (a b : Fin 2 × Disk → Disk)
+    (hbs : Function.Surjective b)
+    (hgen : ∀ y y', WordRel (u ++ [x, x] ++ inverseWord v ++ t) (b y) (b y') →
+      Relation.EqvGen (WordRel (u ++ [x] ++ v ++ [x] ++ t))
+        (a y) (a y')) :
+    ∀ y y', Relation.EqvGen
+        (WordRel (u ++ [x, x] ++ inverseWord v ++ t)) (b y) (b y') →
+      cutAndPasteParameterRel u v t x a y y' := by
+  sorry
+
+/-- Sorry-free assembly of the radial construction, generator bookkeeping,
+and the two independent `EqvGen` lifts. -/
 lemma cutAndPaste_aux_triangle_charts {Label : Type*} [DecidableEq Label]
     (u v t : List (Signed Label)) (x : Signed Label)
     (hx : x.1 ∉ (u ++ v ++ t).map Prod.fst)
@@ -1466,7 +1638,13 @@ lemma cutAndPaste_aux_triangle_charts {Label : Type*} [DecidableEq Label]
       (∀ y y', Relation.EqvGen
           (WordRel (u ++ [x, x] ++ inverseWord v ++ t)) (b y) (b y') →
         cutAndPasteParameterRel u v t x a y y') := by
-  sorry
+  obtain ⟨a, b, ha, hb, has, hbs, hf, hr⟩ :=
+    cutAndPaste_aux_triangle_chart_generators u v t x hx hw
+      (fun K p hKc hKcompact hp =>
+        cutAndPaste_aux_convex_radial_chart K p hKc hKcompact hp)
+  exact ⟨a, b, ha, hb, has, hbs,
+    cutAndPaste_aux_triangle_charts_forward u v t x a b has hf,
+    cutAndPaste_aux_triangle_charts_reverse u v t x a b hbs hr⟩
 
 /-- Leaf (relation assembly, 25--40 lines): combine the independently usable
 forward and reverse fibre calculations. -/
