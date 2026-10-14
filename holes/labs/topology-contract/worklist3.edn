@@ -36157,6 +36157,17 @@
     [{:cmd "lean closure",
       :exit 1,
       :correction "used inferred TwoCircles path-connected instance"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791957968657-11653-524d8e48",
+     :commands
+     ["git show/diff/show --check 88eaef20"
+      "sha256sum fixture; scope; placeholders"
+      "lake env lean recorded closure, fixture, Main"
+      "statement-registry.py check"],
+     :finding
+     "PASS: new compiled sorry-free standard-axiom milestone. The connector is correctly formed by choosing a path in TwoCircles and pulling it back through the fixed skeleton homeomorphism, with endpoints cast correctly. Its inner path remains a noncomputable somePath, so the actual transported-loop calculation is not proved; that residual and quotient extraction are accurately listed. Scope/hash verified; frozen placeholders 1->1 (support 0); registry 166/166; SLSC unused, mandated by problem.md."},
     :commit "88eaef2001d953da38c04003bf1887e18d088339",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
@@ -36168,7 +36179,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -36186,7 +36197,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t93J03Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed untransported winding generator and canonical-connector reduction; explicit geometry remains.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed connector pulled back from standard two-circle coordinates; loop computation and quotient remain.",
    :id :program-2026-10-13-close-t93j03,
    :kind :final-adapter,
    :campaign-priority 30,
@@ -36320,7 +36331,11 @@
     {:job 5,
      :commit "4b74ccc8d92968bd0d53207c708f14621a659cf8",
      :reason
-     "Committed untransported winding generator and canonical-connector reduction; explicit geometry remains."}]}
+     "Committed untransported winding generator and canonical-connector reduction; explicit geometry remains."}
+    {:job 6,
+     :commit "88eaef2001d953da38c04003bf1887e18d088339",
+     :reason
+     "Committed connector pulled back from standard two-circle coordinates; loop computation and quotient remain."}]}
   {:consumer :t99J05,
    :stop-count 5,
    :evidence
@@ -38332,7 +38347,7 @@
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "kleinPolygonStandardModelConnector",
@@ -38342,7 +38357,9 @@
     :reported-by [:program-2026-10-13-close-t93j03],
     :type "connector pulled back from standard TwoCircles model",
     :area "covering-subgroup-correspondence",
-    :proved-in :program-2026-10-13-close-t93j03},
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "88eaef2001d953da38c04003bf1887e18d088339"},
    :id :lemma-kleinpolygonstandardmodelconnector,
    :kind :lemma,
    :depends-on [:lemma-fundamentalgroup-pathtransport-isconj],
