@@ -87947,6 +87947,16 @@
       :exit 1,
       :correction
       "used abelianized Hurewicz and winding equivalences"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791958492177-11658-43813f35",
+     :commands
+     ["git diff-tree/show + sha256sum"
+      "lake env lean /dev/stdin; #print axioms"
+      "placeholder scan; statement-registry.py check"],
+     :finding
+     "PASS: commit 45f611d32 changes only PolygonSurfaceHomology.lean; exact blob SHA256 f47761e76b30a906bf2e17300f80dee9a92ac0d4ec80129873ad9e071bf00798. Exact blob compiles; axioms are propext, Classical.choice, Quot.sound; placeholders 0; registry 166/0. New progress beyond 993db480e proves the chosen subsingleton finite wedge homeomorphic to Circle and its Fin 1 specialization. Collapse and wedgeCircle are continuous mutual inverses, with the leg formula preserving circle coordinates: the correct induction base and representation boundary. Remaining milestone: normalized point-wedge/free-product step."},
     :commit "5ccf3e302",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
@@ -87955,7 +87965,7 @@
      "21e30470029fff2a47614b1e08a5e312af9501b26f2f68363f665bb133ec994b"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -87975,7 +87985,7 @@
     :blueprint
     "ConstructionTargets/PolygonSurfaceHomology.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked the one-circle wedge homeomorphism.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked generation by the normalized positive circle class.",
    :id :program-2026-10-13-polygon-surface-homology,
    :kind :reusable-theorem,
    :campaign-priority 31,
@@ -88066,7 +88076,11 @@
      :reason "Banked coproduct word extraction."}
     {:job 4,
      :commit "45f611d32",
-     :reason "Banked the one-circle wedge homeomorphism."}]}
+     :reason "Banked the one-circle wedge homeomorphism."}
+    {:job 5,
+     :commit "5ccf3e302",
+     :reason
+     "Banked generation by the normalized positive circle class."}]}
   {:consumer :t97A01,
    :stop-count 0,
    :phase :implementation,
@@ -89610,7 +89624,7 @@
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "circlePositiveFundamentalClass_generates",
@@ -89621,14 +89635,16 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "circle classes are powers of the normalized positive class",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :program-2026-10-13-polygon-surface-homology,
+    :banked-commit "5ccf3e302"},
    :id :lemma-circlepositivefundamentalclass-generates,
    :kind :lemma,
    :depends-on [:lemma-modulehurewicz-circle-injective],
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "moduleHurewicz_circle_injective",
@@ -89638,7 +89654,9 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "normalized Hurewicz is injective on the circle group",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :program-2026-10-13-polygon-surface-homology,
+    :banked-commit "5ccf3e302"},
    :id :lemma-modulehurewicz-circle-injective,
    :kind :lemma,
    :depends-on [],
