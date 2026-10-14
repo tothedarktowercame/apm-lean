@@ -207,6 +207,56 @@ def intervalCircle : C(UnitInterval, S1) :=
   rw [mul_one]
   exact Circle.exp_two_pi
 
+/-- Equality along the closed interval parametrization is literal except for
+the two endpoint representatives of the circle basepoint. -/
+theorem intervalCircle_eq_imp_coordinate_cases (t u : UnitInterval)
+    (h : intervalCircle t = intervalCircle u) :
+    t = u ∨ (t = intervalZero ∧ u = intervalOne) ∨
+      (t = intervalOne ∧ u = intervalZero) := by
+  change Circle.exp (2 * Real.pi * t.1) =
+    Circle.exp (2 * Real.pi * u.1) at h
+  obtain ⟨k, hk⟩ := Circle.exp_eq_exp.mp h
+  have hp : 0 < Real.pi := Real.pi_pos
+  have htu : (t : ℝ) = u + k := by
+    nlinarith
+  have hkloR : (-1 : ℝ) ≤ k := by nlinarith [t.2.1, u.2.2]
+  have hkhiR : (k : ℝ) ≤ 1 := by nlinarith [t.2.2, u.2.1]
+  have hklo : (-1 : ℤ) ≤ k := by exact_mod_cast hkloR
+  have hkhi : k ≤ (1 : ℤ) := by exact_mod_cast hkhiR
+  rcases (show k = -1 ∨ k = 0 ∨ k = 1 by omega) with rfl | rfl | rfl
+  · right; left
+    norm_num at htu
+    constructor
+    · apply Subtype.ext
+      dsimp [intervalZero]
+      nlinarith [t.2.1, u.2.2]
+    · apply Subtype.ext
+      dsimp [intervalOne]
+      nlinarith [t.2.1, u.2.2]
+  · left
+    norm_num at htu
+    exact Subtype.ext htu
+  · right; right
+    norm_num at htu
+    constructor
+    · apply Subtype.ext
+      dsimp [intervalOne]
+      nlinarith [t.2.2, u.2.1]
+    · apply Subtype.ext
+      dsimp [intervalZero]
+      nlinarith [t.2.2, u.2.1]
+
+/-- The edge parametrization is injective away from the glued endpoints. -/
+theorem intervalCircle_injective_on_interior :
+    Set.InjOn intervalCircle {t : UnitInterval | t.1 ∈ Set.Ioo (0 : ℝ) 1} := by
+  intro t ht u hu h
+  rcases intervalCircle_eq_imp_coordinate_cases t u h with htu | hends | hends
+  · exact htu
+  · rcases hends with ⟨rfl, rfl⟩
+    exact False.elim (lt_irrefl (0 : ℝ) ht.1)
+  · rcases hends with ⟨rfl, rfl⟩
+    exact False.elim (lt_irrefl (1 : ℝ) ht.2)
+
 /-- The two interval labels map to the two circle legs of the rose. -/
 def edgeProjection (i : Fin 2) : C(UnitInterval, X) :=
   Fin.cases
