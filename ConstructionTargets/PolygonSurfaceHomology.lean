@@ -1255,6 +1255,115 @@ theorem pointWedgeToFiniteWedgeSum_right {L K : Type*} (l₀ : L) (k₀ : K)
           (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle k₀ 1) (.inr y)) =
       finiteWedgeSumRight y := rfl
 
+/-- Send a sum-indexed finite wedge to the binary point wedge of its two
+subfamilies. -/
+noncomputable def finiteWedgeSumToPointWedge {L K : Type*} (l₀ : L) (k₀ : K) :
+    PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge (L ⊕ K) →
+      ConstructionTargets.PointWedgeQuotient.Wedge
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle l₀ 1)
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle k₀ 1) :=
+  Quotient.lift
+    (fun p => match p.1 with
+      | .inl l => ConstructionTargets.PointWedgeQuotient.quotientMap
+          (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle l₀ 1)
+          (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle k₀ 1)
+          (.inl (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle l p.2))
+      | .inr k => ConstructionTargets.PointWedgeQuotient.quotientMap
+          (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle l₀ 1)
+          (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle k₀ 1)
+          (.inr (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle k p.2)))
+    fun p q h => by
+      change Relation.EqvGen
+        (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedgeRel (L ⊕ K)) p q at h
+      rw [PolygonSurfacePiOne.PointWedgeQuotient.eqvGen_finiteWedgeRel_iff] at h
+      rcases h with rfl | ⟨hp, hq⟩
+      · rfl
+      · cases p with
+        | mk sp zp =>
+          cases q with
+          | mk sq zq =>
+            have hzp : zp = 1 := Subtype.ext hp
+            have hzq : zq = 1 := Subtype.ext hq
+            subst zp
+            subst zq
+            let qmap := ConstructionTargets.PointWedgeQuotient.quotientMap
+              (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle l₀ 1)
+              (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle k₀ 1)
+            have hb : ∀ s : L ⊕ K,
+                (match s with
+                  | .inl l => qmap (.inl
+                      (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle l 1))
+                  | .inr k => qmap (.inr
+                      (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle k 1))) =
+                  qmap (.inl
+                    (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle l₀ 1)) := by
+              rintro (l | k)
+              · exact congrArg (fun x => qmap (.inl x))
+                  (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle_base_eq l l₀)
+              · calc
+                  qmap (.inr
+                      (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle k 1)) =
+                      qmap (.inr
+                        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle k₀ 1)) :=
+                    congrArg (fun x => qmap (.inr x))
+                      (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle_base_eq k k₀)
+                  _ = qmap (.inl
+                      (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle l₀ 1)) :=
+                    (Quotient.sound (Relation.EqvGen.rel _ _
+                      ConstructionTargets.PointWedgeQuotient.Rel.base)).symm
+            exact (hb sp).trans (hb sq).symm
+
+theorem continuous_finiteWedgeSumToPointWedge {L K : Type*} (l₀ : L) (k₀ : K) :
+    Continuous (finiteWedgeSumToPointWedge l₀ k₀) := by
+  letI : TopologicalSpace (L ⊕ K) := ⊥
+  letI : DiscreteTopology (L ⊕ K) := ⟨rfl⟩
+  apply Continuous.quotient_lift
+  rw [continuous_prod_of_discrete_left]
+  rintro (l | k)
+  · exact (ConstructionTargets.PointWedgeQuotient.continuous_quotientMap _ _).comp
+      (continuous_inl.comp
+        (PolygonSurfacePiOne.PointWedgeQuotient.continuous_wedgeCircle l))
+  · exact (ConstructionTargets.PointWedgeQuotient.continuous_quotientMap _ _).comp
+      (continuous_inr.comp
+        (PolygonSurfacePiOne.PointWedgeQuotient.continuous_wedgeCircle k))
+
+theorem pointWedgeToFiniteWedgeSum_finiteWedgeSumToPointWedge
+    {L K : Type*} (l₀ : L) (k₀ : K)
+    (x : PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge (L ⊕ K)) :
+    pointWedgeToFiniteWedgeSum l₀ k₀ (finiteWedgeSumToPointWedge l₀ k₀ x) = x := by
+  refine Quotient.inductionOn x ?_
+  rintro ⟨l | k, z⟩ <;> rfl
+
+theorem finiteWedgeSumToPointWedge_pointWedgeToFiniteWedgeSum
+    {L K : Type*} (l₀ : L) (k₀ : K)
+    (x : ConstructionTargets.PointWedgeQuotient.Wedge
+      (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle l₀ 1)
+      (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle k₀ 1)) :
+    finiteWedgeSumToPointWedge l₀ k₀ (pointWedgeToFiniteWedgeSum l₀ k₀ x) = x := by
+  refine Quotient.inductionOn x ?_
+  rintro (x | y)
+  · refine Quotient.inductionOn x ?_
+    rintro ⟨l, z⟩
+    rfl
+  · refine Quotient.inductionOn y ?_
+    rintro ⟨k, z⟩
+    rfl
+
+/-- A finite wedge indexed by a sum is the binary point wedge of the two
+subfamily wedges, with chosen representatives of their common basepoints. -/
+noncomputable def finiteWedgeSumHomeomorphPointWedge {L K : Type*}
+    (l₀ : L) (k₀ : K) :
+    PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge (L ⊕ K) ≃ₜ
+      ConstructionTargets.PointWedgeQuotient.Wedge
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle l₀ 1)
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle k₀ 1) where
+  toFun := finiteWedgeSumToPointWedge l₀ k₀
+  invFun := pointWedgeToFiniteWedgeSum l₀ k₀
+  left_inv := pointWedgeToFiniteWedgeSum_finiteWedgeSumToPointWedge l₀ k₀
+  right_inv := finiteWedgeSumToPointWedge_pointWedgeToFiniteWedgeSum l₀ k₀
+  continuous_toFun := continuous_finiteWedgeSumToPointWedge l₀ k₀
+  continuous_invFun := continuous_pointWedgeToFiniteWedgeSum l₀ k₀
+
 end
 
 end ConstructionTargets.PolygonSurfaceHomology
