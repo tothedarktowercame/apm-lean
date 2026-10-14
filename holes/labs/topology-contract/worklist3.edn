@@ -36121,13 +36121,13 @@
   {:consumer :t93J03,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 9,
+   :stop-count 10,
    :review-finding
    "Program STOP commits no new mathematical progress since the prior milestone: KleinPolygonBasedVanKampen merely packages the already-required surjectivity and kernel hypotheses, and both consumers only reapply the previously proved three-input theorem. Prove the based van Kampen surjectivity/kernel result (or winding conjugacy) in scope; extend Mathlib: state and prove the missing theorem in scope.",
    :evidence
    {:placeholder-delta {:t93J03 [1 1]},
     :residual
-    "Provision canonical .lake/packages symlink; then quotient run-fold induction, reverse kernel/surjectivity, winding, C1/C2/Main.",
+    "Externally repair package authority; then quotient run-fold induction, reverse kernel/surjectivity, winding, C1/C2/Main.",
     :outcome :stop,
     :warnings ["No Lake command run; scoped files unchanged."],
     :missing-theorems
@@ -36148,26 +36148,15 @@
     :axioms [],
     :author :topo-10,
     :reason
-    "Second consecutive invocation finds .lake/packages as a real directory; canonical-authority symlink remains absent, so AGENTS.md forbids Lake verification or implementation.",
+    "Third consecutive invocation confirms .lake/packages is a real directory, not the required canonical-authority symlink. Workspace policy forbids Lake work until lifecycle provisioning repairs it.",
     :commands
     [{:cmd "stat .lake/packages; test -L .lake/packages",
       :exit 1,
       :expected-exit 1}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder count", :exit 0}
-     {:cmd "git diff --check", :exit 0}
-     {:cmd "sha256sum fixture", :exit 0}],
+     {:cmd "git diff --check", :exit 0}],
     :diagnostic-history [],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1792021353109-12712-c123d032",
-     :commands
-     ["git show/check/diff-tree 8c4eb4f exact scope"
-      "fixture SHA-256 and committed forbidden-token assertions; recorded snapshot compile"
-      "statement-registry check; parent/commit placeholder recount"],
-     :finding
-     "PASS: recorded 8c4eb4f is compiled, sorry-free standard-axiom progress beyond 263f5d47. It defines a Fin(runs+1) family in outer subtype V and proves the correctly oriented coercion equality to each ambient canonical boundary. This closes the representation step for assembling the run fold without assuming based van Kampen. Scope/hash match; registry 166/166; Main 1->1 placeholder; remaining fold, kernel/surjectivity, winding, C1/C2/Main are listed."},
     :commit nil,
     :changed-paths [],
     :fixture
@@ -36176,7 +36165,7 @@
      "57669ee92b655e88fde71c50d99aa588dee734adbcfbcb4e1fcf6863c7a0b085"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :needs-owner,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
