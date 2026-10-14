@@ -87943,6 +87943,18 @@
      {:cmd "placeholder scan", :exit 0}
      {:cmd "axioms check", :exit 0}
      {:cmd "git show --check 708644972", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792014449968-12479-bc40a5a0",
+     :commands
+     ["git show/diff 708644972; blob sha256; diff --check"
+      "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology"
+      "lake env lean /dev/stdin (#print axioms)"
+      "placeholder scan"
+      "statement-registry.py check"],
+     :finding
+     "PASS: reviewer codex-7; 708644972 (topo-6) newly changes only scoped PolygonSurfaceHomology.lean; fixture SHA-256 b2294b1b63b0e6eaae011c9531f27b174d9a69ce6a36ed833b0037901a346761 matches. Exact blob builds; 0 placeholders; standard axioms; registry 166/0. The theorem explicitly assumes the still-missing based boundary-class/signed-word equality, rewrites geometric Hurewicz by naturality to the fundamental-class image, then uses the proved signed-word Hurewicz calculation. Equality directions and ModuleCat representation agree. This is a valid new compiled reduction, not a claim that the missing identity is solved. Remaining: prove that identity, instantiate the reduction, finish B7-B10."},
     :commit "708644972",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
@@ -87951,7 +87963,7 @@
      "b2294b1b63b0e6eaae011c9531f27b174d9a69ce6a36ed833b0037901a346761"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -87971,7 +87983,7 @@
     :blueprint
     "ConstructionTargets/PolygonSurfaceHomology.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked the based geometric boundary class and its Hurewicz naturality.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked the exact reduction from the boundary word identity to B7 module coordinates.",
    :id :program-2026-10-13-polygon-surface-homology,
    :kind :reusable-theorem,
    :campaign-priority 31,
@@ -88209,7 +88221,11 @@
     {:job 3,
      :commit "356ca78e0",
      :reason
-     "Banked the based geometric boundary class and its Hurewicz naturality."}]}
+     "Banked the based geometric boundary class and its Hurewicz naturality."}
+    {:job 4,
+     :commit "708644972",
+     :reason
+     "Banked the exact reduction from the boundary word identity to B7 module coordinates."}]}
   {:consumer :t97A01,
    :stop-count 0,
    :phase :implementation,
@@ -91768,7 +91784,7 @@
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "polygonBoundaryWedgeLoop_hurewicz_of_eq_legWord",
@@ -91778,7 +91794,9 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "word identity implies attaching-vector H1 formula",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :program-2026-10-13-polygon-surface-homology,
+    :banked-commit "708644972"},
    :id :lemma-polygonboundarywedgeloop-hurewicz-of-eq-legword,
    :kind :lemma,
    :depends-on
