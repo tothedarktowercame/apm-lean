@@ -87901,38 +87901,46 @@
   {:consumer :t97A01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 8,
+   :stop-count 9,
    :evidence
    {:placeholder-delta 0,
-    :residual "Build B6 Mayer-Vietoris exact segment, then B7-B10.",
+    :residual
+    "Finish B6 connecting exactness and remove inner H1=0; then B7-B10.",
     :outcome :stop,
     :warnings ["preexisting lint"],
     :missing-theorems
-    [{:name "pointWedgeHigherHomologyIsZero",
-      :type "point wedge preserves H_n=0 for n>=2",
+    [{:name "radialIntersectionH1GroupIsoInt",
+      :type "intersection H1 integer coordinates",
       :status :proved,
       :consumers [:t97A01 :t94J09],
       :depends-on [],
       :area "polygon-quotient-homology"}
-     {:name "finiteWedgeHigherHomologyIsZero",
-      :type "finite circle-wedge homology vanishes above degree one",
+     {:name "radialOuterH1GroupIsoCoordinates",
+      :type "outer H1 orbit coordinates",
       :status :proved,
       :consumers [:t97A01 :t94J09],
-      :depends-on ["pointWedgeHigherHomologyIsZero"],
+      :depends-on [],
       :area "polygon-quotient-homology"}
-     {:name "outerHigherHomologyIsZero",
-      :type "outer radial homology vanishes above degree one",
+     {:name "radialMVPiecesExact",
+      :type "radial MV exact at pieces",
       :status :proved,
+      :consumers [:t97A01 :t94J09],
+      :depends-on [],
+      :area "polygon-quotient-homology"}
+     {:name "radialMVSegment",
+      :type "B6 coordinate exact segment",
+      :status :partial,
       :consumers [:t97A01 :t94J09],
       :depends-on
-      ["finiteWedgeHigherHomologyIsZero" "outerHomotopyEquivWedge"],
+      ["radialIntersectionH1GroupIsoInt"
+       "radialOuterH1GroupIsoCoordinates"
+       "radialMVPiecesExact"],
       :area "polygon-quotient-homology"}],
     :statement-hashes {:registry "166/0"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason
-    "Banked finite-wedge and radial outer-piece higher homology vanishing.",
+    :reason "Banked radial H1 coordinates and pieces exactness.",
     :commands
     [{:cmd
       "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology",
@@ -87940,32 +87948,20 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder scan", :exit 0}
      {:cmd "axioms check", :exit 0}
-     {:cmd "git show --check 061d4d710", :exit 0}],
+     {:cmd "git show --check 631731570", :exit 0}],
     :diagnostic-history
-    [{:cmd "MV/transport drafts",
+    [{:cmd "exactness drafts",
       :exit 1,
-      :correction "fixed namespaces and iso orientations"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792006666006-12266-93949341",
-     :commands
-     ["git show/diff 061d4d710; blob sha256; diff --check"
-      "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology"
-      "lake env lean /dev/stdin (#print axioms)"
-      "placeholder scan"
-      "statement-registry.py check"],
-     :finding
-     "PASS: 061d4d710 (topo-6) changes only scoped PolygonSurfaceHomology.lean; fixture SHA-256 a438062c8f74c4be2ea3c2bdffda7b62f994accef55f1ca59263c571e7c858c1 matches. Exact blob builds; 0 placeholders; three milestones use standard axioms; registry 166/0. MV uses intersection vanishing in n and n-1 (valid for n>=2) to make reassembly mono and epi. Induction correctly uses Fin1=circle and successor wedge splitting; isomorphisms transport vanishing to orbit wedges and the outer piece in the correct direction. New compiled progress; remaining: B6-B10."},
-    :commit "061d4d710",
+      :correction "expanded zero proof"}],
+    :commit "631731570",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
     {:path "ConstructionTargets/PolygonSurfaceHomology.lean",
      :sha256
-     "a438062c8f74c4be2ea3c2bdffda7b62f994accef55f1ca59263c571e7c858c1"},
+     "ff1859cefcf186e06ba049a891ed8c18792063b7740bba474b0fca8fe3d238fb"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -90960,4 +90956,72 @@
    :id :lemma-pointwedgehigherhomologyiszero,
    :kind :lemma,
    :depends-on [],
+   :other-consumers [:t94J09]}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "radialIntersectionH1GroupIsoInt",
+    :type "intersection H1 integer coordinates"},
+   :lemma
+   {:name "radialIntersectionH1GroupIsoInt",
+    :reported-by [:program-2026-10-13-polygon-surface-homology],
+    :type "intersection H1 integer coordinates",
+    :area "polygon-quotient-homology",
+    :proved-in :program-2026-10-13-polygon-surface-homology},
+   :id :lemma-radialintersectionh1groupisoint,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t94J09]}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "radialOuterH1GroupIsoCoordinates",
+    :type "outer H1 orbit coordinates"},
+   :lemma
+   {:name "radialOuterH1GroupIsoCoordinates",
+    :reported-by [:program-2026-10-13-polygon-surface-homology],
+    :type "outer H1 orbit coordinates",
+    :area "polygon-quotient-homology",
+    :proved-in :program-2026-10-13-polygon-surface-homology},
+   :id :lemma-radialouterh1groupisocoordinates,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t94J09]}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "radialMVPiecesExact", :type "radial MV exact at pieces"},
+   :lemma
+   {:name "radialMVPiecesExact",
+    :reported-by [:program-2026-10-13-polygon-surface-homology],
+    :type "radial MV exact at pieces",
+    :area "polygon-quotient-homology",
+    :proved-in :program-2026-10-13-polygon-surface-homology},
+   :id :lemma-radialmvpiecesexact,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t94J09]}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "radialMVSegment", :type "B6 coordinate exact segment"},
+   :lemma
+   {:name "radialMVSegment",
+    :reported-by [:program-2026-10-13-polygon-surface-homology],
+    :type "B6 coordinate exact segment",
+    :area "polygon-quotient-homology"},
+   :id :lemma-radialmvsegment,
+   :kind :lemma,
+   :depends-on
+   [:lemma-radialintersectionh1groupisoint
+    :lemma-radialouterh1groupisocoordinates
+    :lemma-radialmvpiecesexact],
    :other-consumers [:t94J09]}]}
