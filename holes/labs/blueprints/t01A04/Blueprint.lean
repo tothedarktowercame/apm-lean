@@ -362,13 +362,70 @@ theorem apm_t01A04_circleCoverMap_evenlyCovered_basepoint :
       (apm_t01a04_circleCoverMap ⁻¹' {apm_t01a04_basepoint}) := by
   sorry
 
+lemma apm_t01A04_torusCoverMap_evenlyCovered_away_aux_inl_ne
+    {q : apm_t01a04_Torus}
+    (h : (Quotient.mk _ (Sum.inl q) : apm_t01a04_X) ≠
+      apm_t01a04_basepoint) :
+    q ≠ (1, 1) := by
+  intro hq
+  apply h
+  subst q
+  rfl
+
+lemma apm_t01A04_torusCoverMap_evenlyCovered_away_aux_inr_ne
+    {z : Circle}
+    (h : (Quotient.mk _ (Sum.inr z) : apm_t01a04_X) ≠
+      apm_t01a04_basepoint) :
+    z ≠ 1 := by
+  intro hz
+  apply h
+  subst z
+  exact (Quotient.sound
+    (Relation.EqvGen.rel _ _ apm_t01a04_wedgeRel.base)).symm
+
+lemma apm_t01A04_torusCoverMap_evenlyCovered_away_aux_reduce
+    (hT : ∀ q : apm_t01a04_Torus, q ≠ (1, 1) →
+      IsEvenlyCovered apm_t01a04_torusCoverMap
+        (Quotient.mk _ (Sum.inl q))
+        (apm_t01a04_torusCoverMap ⁻¹' {Quotient.mk _ (Sum.inl q)}))
+    (hC : ∀ z : Circle, z ≠ 1 →
+      IsEvenlyCovered apm_t01a04_torusCoverMap
+        (Quotient.mk _ (Sum.inr z))
+        (apm_t01a04_torusCoverMap ⁻¹' {Quotient.mk _ (Sum.inr z)}))
+    (x : apm_t01a04_X) (hx : x ≠ apm_t01a04_basepoint) :
+    IsEvenlyCovered apm_t01a04_torusCoverMap x
+      (apm_t01a04_torusCoverMap ⁻¹' {x}) := by
+  refine Quotient.inductionOn x ?_ hx
+  rintro (q | z) h
+  · exact hT q (apm_t01A04_torusCoverMap_evenlyCovered_away_aux_inl_ne h)
+  · exact hC z (apm_t01A04_torusCoverMap_evenlyCovered_away_aux_inr_ne h)
+
+/-- Torus-summand case: near `q ≠ (1,1)` the cover is `(z, w) ↦ (z², w)`
+on the torus summand; the two square-root arcs in the first coordinate give the
+two sheets (the glued points `(±1, 1)` lie over the excluded base point). -/
+theorem apm_t01A04_torusCoverMap_evenlyCovered_away_aux_torus
+    (q : apm_t01a04_Torus) (hq : q ≠ (1, 1)) :
+    IsEvenlyCovered apm_t01a04_torusCoverMap (Quotient.mk _ (Sum.inl q))
+      (apm_t01a04_torusCoverMap ⁻¹' {Quotient.mk _ (Sum.inl q)}) := by
+  sorry
+
+/-- Circle-summand case: near `z ≠ 1` the cover is the identity on each of the
+two circle sheets `(i, ·)`, `i : Fin 2`. -/
+theorem apm_t01A04_torusCoverMap_evenlyCovered_away_aux_circle
+    (z : Circle) (hz : z ≠ 1) :
+    IsEvenlyCovered apm_t01a04_torusCoverMap (Quotient.mk _ (Sum.inr z))
+      (apm_t01a04_torusCoverMap ⁻¹' {Quotient.mk _ (Sum.inr z)}) := by
+  sorry
+
 /-- Away from the wedge point, the torus-doubled quotient is locally either
 circle squaring in the first torus coordinate or an identity circle sheet. -/
 theorem apm_t01A04_torusCoverMap_evenlyCovered_away
     (x : apm_t01a04_X) (hx : x ≠ apm_t01a04_basepoint) :
     IsEvenlyCovered apm_t01a04_torusCoverMap x
-      (apm_t01a04_torusCoverMap ⁻¹' {x}) := by
-  sorry
+      (apm_t01a04_torusCoverMap ⁻¹' {x}) :=
+  apm_t01A04_torusCoverMap_evenlyCovered_away_aux_reduce
+    apm_t01A04_torusCoverMap_evenlyCovered_away_aux_torus
+    apm_t01A04_torusCoverMap_evenlyCovered_away_aux_circle x hx
 
 /-- At the wedge point, the two inverse product neighborhoods in the doubled
 torus are glued to the corresponding attached-circle neighborhoods. -/
