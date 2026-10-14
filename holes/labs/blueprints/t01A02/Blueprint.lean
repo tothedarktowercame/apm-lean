@@ -674,7 +674,15 @@ circle is nonzero. -/
 lemma apm_t01A02_diskBoundary_H1_not_isZero :
     ¬ IsZero ((((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 1).obj
       (ModuleCat.of ℤ ℤ)).obj (TopCat.of apm_t01A02_DiskBoundary))) := by
-  sorry
+  intro h
+  have hz : IsZero (ModuleCat.of ℤ ℤ) :=
+    h.of_iso
+      (ConstructionTargets.SphereHomology.sphereModuleTopHomologyIsoInt
+        1 one_pos).symm
+  have hid : 𝟙 (ModuleCat.of ℤ ℤ) = 0 :=
+    (IsZero.iff_id_eq_zero _).mp hz
+  have hone := ConcreteCategory.congr_hom hid (1 : ℤ)
+  norm_num at hone
 
 /-- Seat (homological obstruction): a strict retraction of the disk onto its
 boundary contradicts the two explicit H1 facts.  Both facts are hypotheses,
