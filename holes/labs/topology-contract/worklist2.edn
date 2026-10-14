@@ -88138,67 +88138,60 @@
    :program true,
    :other-consumers []}
   {:consumer :t92J06,
-   :stop-count 2,
+   :stop-count 3,
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Build graph-cover realization; then Cayley-tree and four finite covers; assemble Main.",
+    "Realize graph data; prove Cayley tree and finite invariants; assemble Main.",
     :outcome :stop,
-    :warnings
-    ["Main retains one placeholder" "unrelated artifact preserved"],
+    :warnings ["Main placeholder; unrelated edits preserved"],
     :missing-theorems
-    [{:name "t92J06_quotientWedgeAPI",
-      :type "wedge eliminator, uniqueness, and covering structure",
+    [{:name "twoLoopGraphCoverData_localStars",
+      :type "transition star equivalences",
       :status :proved,
       :consumers [:t92J06],
-      :depends-on [],
+      :depends-on ["t92J06_quotientWedgeAPI"],
+      :area "graph-covering-realization"}
+     {:name "twoLoopGraphCoverData_realization",
+      :type "realize data as cover",
+      :status :not-started,
+      :consumers [:t92J06],
+      :depends-on ["twoLoopGraphCoverData_localStars"],
       :area "graph-covering-realization"}
      {:name "apm_t92J06_exists_simplyConnected_cover",
-      :type "simply connected cover of the two-circle wedge",
+      :type "simply connected cover",
       :status :not-started,
       :consumers [:t92J06],
-      :depends-on ["t92J06_quotientWedgeAPI"],
+      :depends-on ["twoLoopGraphCoverData_realization"],
       :area "graph-covering-realization"}
      {:name "apm_t92J06_exists_four_threeSheeted_covers",
-      :type "four nonhomeomorphic three-sheet covers",
+      :type "four 3-sheet covers",
       :status :not-started,
       :consumers [:t92J06],
-      :depends-on ["t92J06_quotientWedgeAPI"],
+      :depends-on ["twoLoopGraphCoverData_realization"],
       :area "graph-covering-realization"}],
     :statement-hashes {:registry "166/0"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked the quotient-wedge API.",
+    :reason "Banked graph data.",
     :commands
     [{:cmd "lake build ConstructionTargets.t92J06Closure", :exit 0}
      {:cmd "lake env lean problems/t92J06/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-     {:cmd "git show --check 21ba63c87", :exit 0}
-     {:cmd "blob axioms | lake env lean /dev/stdin", :exit 0}],
+     {:cmd "git show --check b19eb4dfe", :exit 0}
+     {:cmd "blob+axioms | lake env lean /dev/stdin", :exit 0}],
     :diagnostic-history
-    [{:cmd "initial compile",
-      :exit 1,
-      :correction "renamed declarations shadowing sum lemmas"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1791953670369-11605-0c937b28",
-     :commands
-     ["git show 21ba63c87 blob + #print axioms | lake env lean /dev/stdin"
-      "scope/hash/package-link assertions; Main.lean compile"
-      "statement-registry check/fingerprint t92J06; placeholder scan"],
-     :finding
-     "PASS: 21ba63c87 changes only t92J06Closure.lean; fixture SHA256 cfc39162da05c31f76fa19aeaa5b8753aaf780084ee94498e85a2cd30fb078b8 and frozen statement SHA256 c57f3fb767b5f74c6ec6643c579046e11cb78b4dc6b6423c1f77fd40c33ac017 reproduce. Exact blob compiles with propext/Classical.choice/Quot.sound; placeholders 0; registry 166/0. New progress beyond blueprint commit e1a5bdd1d banks the quotient wedge eliminator, uniqueness, inclusions, basepoint equality, and exact-fiber Covering bundle; both large cover theorems remain listed. The reusable X/Covering mirror the frozen types but are separately named, so final assembly must copy or transport them to apm_t92J06_X/apm_t92J06_Covering."},
-    :commit "21ba63c87",
+    [{:cmd "star draft", :exit 1, :correction "explicit edge type"}],
+    :commit "b19eb4dfe",
     :changed-paths ["ConstructionTargets/t92J06Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t92J06Closure.lean",
      :sha256
-     "cfc39162da05c31f76fa19aeaa5b8753aaf780084ee94498e85a2cd30fb078b8"},
+     "1d86d1ce02f5a40fcae9c1a98709a7981777e9c2a68654053c760cf6f6f07c67"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t92J06/lean/Main.lean"
     "problems/t92J06/status.json"
@@ -89511,7 +89504,9 @@
     :area "graph-covering-realization"},
    :id :lemma-apm-t92j06-exists-simplyconnected-cover,
    :kind :lemma,
-   :depends-on [:lemma-t92j06-quotientwedgeapi],
+   :depends-on
+   [:lemma-t92j06-quotientwedgeapi
+    :lemma-twoloopgraphcoverdata-realization],
    :other-consumers []}
   {:consumer :t92J06,
    :phase :lemma,
@@ -89527,7 +89522,9 @@
     :area "graph-covering-realization"},
    :id :lemma-apm-t92j06-exists-four-threesheeted-covers,
    :kind :lemma,
-   :depends-on [:lemma-t92j06-quotientwedgeapi],
+   :depends-on
+   [:lemma-t92j06-quotientwedgeapi
+    :lemma-twoloopgraphcoverdata-realization],
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
@@ -89822,4 +89819,37 @@
    :id :lemma-finitewedgerightconnectorsystemcomparison,
    :kind :lemma,
    :depends-on [:lemma-finitewedgefinsuccpointwedgeneighborhoods],
-   :other-consumers [:t94J09]}]}
+   :other-consumers [:t94J09]}
+  {:consumer :t92J06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "twoLoopGraphCoverData_localStars",
+    :type "transition star equivalences"},
+   :lemma
+   {:name "twoLoopGraphCoverData_localStars",
+    :reported-by [:program-2026-10-13-close-t92j06],
+    :type "transition star equivalences",
+    :area "graph-covering-realization",
+    :proved-in :program-2026-10-13-close-t92j06},
+   :id :lemma-twoloopgraphcoverdata-localstars,
+   :kind :lemma,
+   :depends-on [:lemma-t92j06-quotientwedgeapi],
+   :other-consumers []}
+  {:consumer :t92J06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "twoLoopGraphCoverData_realization",
+    :type "realize data as cover"},
+   :lemma
+   {:name "twoLoopGraphCoverData_realization",
+    :reported-by [:program-2026-10-13-close-t92j06],
+    :type "realize data as cover",
+    :area "graph-covering-realization"},
+   :id :lemma-twoloopgraphcoverdata-realization,
+   :kind :lemma,
+   :depends-on [:lemma-twoloopgraphcoverdata-localstars],
+   :other-consumers []}]}
