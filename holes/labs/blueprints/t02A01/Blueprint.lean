@@ -195,14 +195,16 @@ theorem apm_t02a01_component_meets_fiber
   apply pathComponent_subset_component x
   exact ⟨⟨Γ, hΓ0, rfl⟩⟩
 
-/-- Trivial based monodromy separates two points of the chosen fiber into
-different connected components. -/
+/-- Trivial monodromy (at every point) separates two points of the chosen
+fiber into different connected components.  Repaired 2026-10-14 (lemma-2
+counterexample): monodromy trivial only at `e` is not enough — add a connected
+two-sheet cover as a second summand. -/
 theorem apm_t02a01_fiber_injective_on_components
     {E B : Type*} [TopologicalSpace E] [TopologicalSpace B]
     [PathConnectedSpace B] [LocPathConnectedSpace B]
     (q : E → B) (hq : IsCoveringMap q) (e : E)
-    (hmono : ∀ γ : FundamentalGroup B (q e),
-      hq.monodromy γ ⟨e, rfl⟩ = ⟨e, rfl⟩) :
+    (hmono : ∀ (x : E) (γ : FundamentalGroup B (q x)),
+      hq.monodromy γ ⟨x, rfl⟩ = ⟨x, rfl⟩) :
     Function.Injective
       (fun x : q ⁻¹' {q e} => (x.1 : ConnectedComponents E)) := by
   sorry
@@ -214,8 +216,8 @@ theorem apm_t02a01_components_equiv_fiber
     [PathConnectedSpace B] [LocPathConnectedSpace B]
     (q : E → B) (hq : IsCoveringMap q)
     (e : E)
-    (hmono : ∀ γ : FundamentalGroup B (q e),
-      hq.monodromy γ ⟨e, rfl⟩ = ⟨e, rfl⟩) :
+    (hmono : ∀ (x : E) (γ : FundamentalGroup B (q x)),
+      hq.monodromy γ ⟨x, rfl⟩ = ⟨x, rfl⟩) :
     Nonempty (ConnectedComponents E ≃ q ⁻¹' {q e}) := by
   let f : q ⁻¹' {q e} → ConnectedComponents E := fun x => x.1
   have hf : Function.Bijective f :=
@@ -292,7 +294,7 @@ theorem apm_t02a01
   obtain ⟨hcov, hmono⟩ := apm_t02a01_boundary_monodromy_trivial p n hcover deck
     hdeck_zero hdeck_add hdeck_over hdeck_transitive
   obtain ⟨equiv⟩ := apm_t02a01_components_equiv_fiber
-    (apm_t02a01_restrictedCover p) hcov e (hmono e)
+    (apm_t02a01_restrictedCover p) hcov e hmono
   rw [Nat.card_congr equiv]
   exact apm_t02a01_fiber_card p n deck hdeck_over hdeck_transitive e
 
