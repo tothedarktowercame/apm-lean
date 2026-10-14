@@ -3373,6 +3373,73 @@ theorem outerHigherHomologyIsZero (P : PairingData) (n : ℕ) (hn : 2 ≤ n) :
   (finiteWedgeHigherHomologyIsZero P n hn).of_iso
     (spaceHHomotopyEquivIso (outerHomotopyEquivWedge P) n)
 
+/-! ### Radial Mayer--Vietoris segment -/
+
+/-- The literal intersection of the two radial cover members, identified
+with the annular overlap model used by B5. -/
+def radialIntersectionHomeomorphOverlap (P : PairingData) :
+    {q // q ∈ (openCover P).inner ∩ (openCover P).outer} ≃ₜ OverlapPiece P :=
+  Homeomorph.setCongr (openCover P).overlap_eq.symm
+
+/-- Positive integral coordinates on the actual intersection object occurring
+in the production Mayer--Vietoris sequence. -/
+noncomputable def radialIntersectionH1GroupIsoInt (P : PairingData) :
+    ConstructionTargets.SingularHomologyConcrete.SingularHomology 1
+        (TopCat.of {q // q ∈ (openCover P).inner ∩ (openCover P).outer}) ≅
+      AddCommGrpCat.of ℤ :=
+  ConstructionTargets.SingularHomologyConcrete.singularHomologyIsoOfHomotopyEquiv
+      (radialIntersectionHomeomorphOverlap P).toHomotopyEquiv 1 ≪≫
+    ConstructionTargets.SingularHomologyConcrete.singularHomologyIsoOfHomotopyEquiv
+      (overlapHomotopyEquivCircle P) 1 ≪≫
+    circleGroupH1IsoInt
+
+/-- Fixed orbit coordinates on the outer term of the production sequence. -/
+noncomputable def radialOuterH1GroupIsoCoordinates (P : PairingData) :
+    ConstructionTargets.SingularHomologyConcrete.SingularHomology 1
+        (TopCat.of (OuterPiece P)) ≅
+      AddCommGrpCat.of (PairingOrbit P.pair → ℤ) :=
+  (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+      (TopCat.of (OuterPiece P)) 1).symm ≪≫
+    ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.mapIso
+      (outerH1IsoCoordinates P)
+
+/-- B6 before coordinate transport: exactness at the two radial pieces in
+every degree. -/
+theorem radialMVPiecesExact (P : PairingData) (n : ℕ) :
+    (ShortComplex.mk
+      (ConstructionTargets.ProductionOpenCoverMayerVietoris.productionIntersectionArrow
+        (openCover P).inner (openCover P).outer n)
+      (ConstructionTargets.ProductionOpenCoverMayerVietoris.productionReassemblyArrow
+        (openCover P).inner (openCover P).outer n)
+      (by
+        rw [← ConstructionTargets.ProductionOpenCoverMayerVietoris.booleanIntersectionArrow_eq_production,
+          ← ConstructionTargets.ProductionOpenCoverMayerVietoris.booleanReassemblyArrow_eq_production
+            (openCover P).inner (openCover P).outer
+            (openCover P).inner_open (openCover P).outer_open (openCover P).cover]
+        simp only [Category.assoc, Iso.hom_inv_id_assoc]
+        have hz :
+            HomologicalComplex.homologyMap
+                (ConstructionTargets.BooleanTwoCoverScaffold.shortComplex
+                  (openCover P).inner (openCover P).outer).f n ≫
+              HomologicalComplex.homologyMap
+                (ConstructionTargets.BooleanTwoCoverScaffold.shortComplex
+                  (openCover P).inner (openCover P).outer).g n = 0 := by
+          rw [← HomologicalComplex.homologyMap_comp,
+            (ConstructionTargets.BooleanTwoCoverScaffold.shortComplex
+              (openCover P).inner (openCover P).outer).zero,
+            HomologicalComplex.homologyMap_zero]
+        simpa only [Category.assoc, zero_comp, comp_zero] using
+          congrArg (fun k ↦
+            (ConstructionTargets.ProductionOpenCoverMayerVietoris.booleanIntersectionProductionHomologyIso
+              (openCover P).inner (openCover P).outer n).inv ≫ k ≫
+            (ConstructionTargets.ProductionOpenCoverMayerVietoris.booleanUnionProductionHomologyIso
+              (openCover P).inner (openCover P).outer
+              (openCover P).inner_open (openCover P).outer_open
+              (openCover P).cover n).hom) hz)).Exact :=
+  ConstructionTargets.ProductionOpenCoverMayerVietoris.productionMayerVietoris_exact_pieces
+    (openCover P).inner (openCover P).outer
+    (openCover P).inner_open (openCover P).outer_open (openCover P).cover n
+
 end
 
 end ConstructionTargets.PolygonSurfaceHomology
