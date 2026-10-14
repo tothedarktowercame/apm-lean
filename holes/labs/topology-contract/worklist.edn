@@ -113856,14 +113856,14 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 6,
+   :stop-count 7,
    :review-finding
    "Recorded fixture hash mismatch: :fixture.sha256 is 0bca6ce32c019fc3053c7f813c26917169cf817375b44d5e722b864b61a526450c1, but ConstructionTargets/PointWedgeVanKampen.blueprint.md at recorded commit c9b3af27 has exact SHA-256 0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0. Re-record the fixture hash for the reviewed commit.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
    :evidence
    {:placeholder-delta {:source-before 0, :source-after 0},
     :residual
-    "Prove counit normal form trivial and shifted endpoint; then B6/B12.",
+    "Prove two endpoint counit normal forms; then installed overlap square, B6/B12.",
     :outcome :stop,
     :warnings ["existing linters"],
     :missing-theorems
@@ -113877,16 +113877,16 @@
       :area "fundamental-group-wedge-of-circles"}],
     :statement-hashes
     {:source
-     "068bdea0adf3de9d0a00025316885efe91e09337042c81e0842442c7672be7aa",
+     "27a9505a918753a80666230efc6334d112372561843663f71e97787a13846891",
      :documentation
-     "b16118b67d84c43266993f0b33866369a56eff23a1f6a9e867a2213b4d7d9737",
+     "b3348d7d1150f173f56135cd658cedbb3c507fc2590d54c5f4ec7e33ca8cf923",
      :blueprint
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0",
      :registry "166/166"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
-    :reason "Banked literal counit square iff trivial normal form.",
+    :reason "Banked arbitrary-endpoint counit-normal-form reduction.",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/PointWedgeVanKampen.lean",
@@ -113896,27 +113896,14 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "hashes/diff/placeholders", :exit 0}],
     :diagnostic-history
-    [{:cmd "normal-form drafts",
+    [{:cmd "endpoint draft",
       :exit 1,
-      :finding "fixed association and cancellation"}
+      :finding "rewrote counit in derived target square"}
      {:cmd
       "lake build ConstructionTargets.ThreeCirclesFundamentalGroup",
       :exit 1,
       :finding "B12 absent"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1791985584993-11853-e2e5f4b5",
-     :commands
-     ["git show/diff-tree 5464a3cb6490e83ed9c8f90a558ed39da9d8e1ce"
-      "archive commit; lake env lean PointWedgeVanKampen.lean"
-      "sha256sum source/doc/blueprint; count sorry/admit"
-      "python3 scripts/statement-registry.py check"
-      "#print axioms two normal-form theorems"
-      "lake build ConstructionTargets.PointWedgeVanKampen"],
-     :finding
-     "PASS: exact scope and hashes match; archived source compiles; placeholders 0->0; registry 166/166. Connector-square iff identity-normal-form is proved in both directions by exact connector cancellation/injectivity, and its counit specialization has faithful endpoints; standard axioms only. New compiled milestone recorded; counit normal-form triviality, shifted endpoint, and genericPointWedgeLegCoordinates_vanKampen remain listed."},
-    :commit "5464a3cb6490e83ed9c8f90a558ed39da9d8e1ce",
+    :commit "a6d0d9ddb90ab82dc72d9023e826c0d78943eecb",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
      "ConstructionTargets/PointWedgeVanKampen.md"],
@@ -113926,7 +113913,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
