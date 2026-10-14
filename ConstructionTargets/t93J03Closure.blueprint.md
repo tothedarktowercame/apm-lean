@@ -254,6 +254,10 @@ inner-run replacement adapter.
 `kleinPolygonInnerBlock_exists_outerOverlapReplacement` combines these facts:
 a nonempty dependent inner block whose two boundary vertices lie in the
 overlap is equal to a single overlap path routed through the outer piece.
+`boolSideRunPartition` now partitions the exact finite side-index word into
+ordered maximal constant runs.  `boolSideRunPartition_spec` proves flattening,
+nonemptiness, constant sides inside runs, and side changes across adjacent
+run boundaries; these boundary changes feed the overlap-vertex theorem.
 It remains to transport the overlap image through the outer-piece coordinates
 and take its normal closure.
 The outer-to-skeleton equivalence is now restricted at the literal overlap

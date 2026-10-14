@@ -841,6 +841,22 @@ theorem pathTwoOpenSubdivision_transition_mem_overlap
       by simpa [twoChart, hs₁] using h₁⟩
   · exact False.elim (hside (by simp [hs₀, hs₁]))
 
+/-- Partition a finite Boolean side assignment into its ordered maximal
+constant runs.  Flattening recovers every original index; blocks are nonempty
+and constant-sided, while adjacent block boundaries change side. -/
+def boolSideRunPartition {n : ℕ} (side : Fin n → Bool) :
+    List (List (Fin n)) :=
+  (List.finRange n).splitBy (fun i j => side i == side j)
+
+theorem boolSideRunPartition_spec {n : ℕ} (side : Fin n → Bool) :
+    List.finRange n = (boolSideRunPartition side).flatten ∧
+      [] ∉ boolSideRunPartition side ∧
+      (∀ block ∈ boolSideRunPartition side,
+        block.IsChain fun i j => side i == side j) ∧
+      (boolSideRunPartition side).IsChain fun a b =>
+        ∃ ha hb, (side (a.getLast ha) == side (b.head hb)) = false := by
+  exact List.splitBy_eq_iff.mp rfl
+
 /-- Equality of the homotopy class of every factor propagates through the
 dependent finite concatenation used by a subordinate subdivision.  This is
 the finite-fold assembly step for replacing all maximal inner runs. -/
@@ -2107,6 +2123,7 @@ theorem lift_isEmbedding_assembly
 #print axioms kleinPolygonFundamentalGroupoidPseudopushout
 #print axioms kleinPolygonPseudopushout_arrow_eq_reconstructed
 #print axioms pathTwoOpenSubdivision_transition_mem_overlap
+#print axioms boolSideRunPartition_spec
 #print axioms pathHomotopicQuotient_concat_eq_of_pieceClass_eq
 #print axioms path_concat_mem_of_piece_mem
 #print axioms pathTwoOpenSubdivision_quotient_eq_concat_of_pieceClass_eq
