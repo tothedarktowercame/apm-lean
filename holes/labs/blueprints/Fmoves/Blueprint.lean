@@ -566,7 +566,54 @@ lemma polygonSurface_homeomorph_of_span {L L' Y : Type*}
     (hrel : ∀ y y', Relation.EqvGen (WordRel w₁) (a y) (a y') ↔
       Relation.EqvGen (WordRel w₂) (b y) (b y')) :
     Nonempty (PolygonSurface w₁ ≃ₜ PolygonSurface w₂) := by
-  sorry
+  let A : Y → PolygonSurface w₁ := polygonQuotient w₁ ∘ a
+  let B : Y → PolygonSurface w₂ := polygonQuotient w₂ ∘ b
+  have hqa : Topology.IsQuotientMap A := by
+    exact isQuotientMap_quot_mk.comp
+      (IsQuotientMap.of_surjective_continuous hasurj ha)
+  have hqb : Topology.IsQuotientMap B := by
+    exact isQuotientMap_quot_mk.comp
+      (IsQuotientMap.of_surjective_continuous hbsurj hb)
+  have hfib : ∀ y y', A y = A y' ↔ B y = B y' := by
+    intro y y'
+    change Quotient.mk _ (a y) = Quotient.mk _ (a y') ↔
+      Quotient.mk _ (b y) = Quotient.mk _ (b y')
+    rw [Quotient.eq, Quotient.eq]
+    exact hrel y y'
+  obtain ⟨sA, hsA⟩ := hqa.surjective.hasRightInverse
+  obtain ⟨sB, hsB⟩ := hqb.surjective.hasRightInverse
+  let f : PolygonSurface w₁ → PolygonSurface w₂ := B ∘ sA
+  let g : PolygonSurface w₂ → PolygonSurface w₁ := A ∘ sB
+  have hfA : f ∘ A = B := by
+    funext y
+    change B (sA (A y)) = B y
+    apply (hfib (sA (A y)) y).mp
+    exact hsA (A y)
+  have hgB : g ∘ B = A := by
+    funext y
+    change A (sB (B y)) = A y
+    apply (hfib (sB (B y)) y).mpr
+    exact hsB (B y)
+  have hfg : Function.LeftInverse g f := by
+    intro x
+    obtain ⟨y, rfl⟩ := hqa.surjective x
+    change g (f (A y)) = A y
+    rw [show f (A y) = B y from congrFun hfA y]
+    exact congrFun hgB y
+  have hgf : Function.RightInverse g f := by
+    intro x
+    obtain ⟨y, rfl⟩ := hqb.surjective x
+    change f (g (B y)) = B y
+    rw [show g (B y) = A y from congrFun hgB y]
+    exact congrFun hfA y
+  refine ⟨{
+    toEquiv := { toFun := f, invFun := g, left_inv := hfg, right_inv := hgf }
+    continuous_toFun := hqa.continuous_iff.mpr ?_
+    continuous_invFun := hqb.continuous_iff.mpr ?_ }⟩
+  · rw [hfA]
+    exact (continuous_polygonQuotient w₂).comp hb
+  · rw [hgB]
+    exact (continuous_polygonQuotient w₁).comp ha
 
 /-- The geometric content of cut-and-paste: `Y = Fin 2 × Disk` (two triangles,
 each parametrised by a disk).  `a` places them on either side of the diagonal
