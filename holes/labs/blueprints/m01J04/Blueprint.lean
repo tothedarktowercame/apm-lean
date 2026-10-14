@@ -1961,6 +1961,62 @@ lemma apm_m01J04_core_exists_smooth_global_approx
 /-- Diagonal assembly of core truncation and support-safe smoothing.  Both
 analytic inputs are hypotheses so this lemma can be proved independently of
 the two construction lemmas above. -/
+lemma apm_m01J04_localization_isH1Zero_of_core_approximations_aux_triangle
+    {d : ℕ} {Ω : Set (EuclideanSpace ℝ (Fin d))}
+    (a u v : apm_m01J04_H1 d Ω) :
+    apm_m01J04_H1dist a v ≤
+      apm_m01J04_H1dist a u + apm_m01J04_H1dist u v := by
+  have hv := eLpNorm_add_le
+    (a.val_memLp.sub u.val_memLp).1
+    (u.val_memLp.sub v.val_memLp).1 (by norm_num : (1 : ℝ≥0∞) ≤ 2)
+  have hg := eLpNorm_add_le
+    (a.grad_memLp.sub u.grad_memLp).1
+    (u.grad_memLp.sub v.grad_memLp).1 (by norm_num : (1 : ℝ≥0∞) ≤ 2)
+  have hvtop : eLpNorm (fun x ↦ a.val x - u.val x) 2
+        (volume.restrict Ω) +
+      eLpNorm (fun x ↦ u.val x - v.val x) 2
+        (volume.restrict Ω) ≠ ⊤ :=
+    ENNReal.add_ne_top.2 ⟨(a.val_memLp.sub u.val_memLp).eLpNorm_ne_top,
+      (u.val_memLp.sub v.val_memLp).eLpNorm_ne_top⟩
+  have hgtop : eLpNorm (fun x ↦ a.grad x - u.grad x) 2
+        (volume.restrict Ω) +
+      eLpNorm (fun x ↦ u.grad x - v.grad x) 2
+        (volume.restrict Ω) ≠ ⊤ :=
+    ENNReal.add_ne_top.2 ⟨(a.grad_memLp.sub u.grad_memLp).eLpNorm_ne_top,
+      (u.grad_memLp.sub v.grad_memLp).eLpNorm_ne_top⟩
+  have hv' : (eLpNorm (fun x ↦ a.val x - v.val x) 2
+        (volume.restrict Ω)).toReal ≤
+      (eLpNorm (fun x ↦ a.val x - u.val x) 2
+        (volume.restrict Ω)).toReal +
+      (eLpNorm (fun x ↦ u.val x - v.val x) 2
+        (volume.restrict Ω)).toReal := by
+    calc
+      _ ≤ (eLpNorm (fun x ↦ a.val x - u.val x) 2
+          (volume.restrict Ω) + eLpNorm (fun x ↦ u.val x - v.val x) 2
+          (volume.restrict Ω)).toReal := by
+        apply ENNReal.toReal_mono hvtop
+        simpa only [Pi.add_apply, sub_add_sub_cancel] using hv
+      _ = _ := ENNReal.toReal_add
+        (a.val_memLp.sub u.val_memLp).eLpNorm_ne_top
+        (u.val_memLp.sub v.val_memLp).eLpNorm_ne_top
+  have hg' : (eLpNorm (fun x ↦ a.grad x - v.grad x) 2
+        (volume.restrict Ω)).toReal ≤
+      (eLpNorm (fun x ↦ a.grad x - u.grad x) 2
+        (volume.restrict Ω)).toReal +
+      (eLpNorm (fun x ↦ u.grad x - v.grad x) 2
+        (volume.restrict Ω)).toReal := by
+    calc
+      _ ≤ (eLpNorm (fun x ↦ a.grad x - u.grad x) 2
+          (volume.restrict Ω) + eLpNorm (fun x ↦ u.grad x - v.grad x) 2
+          (volume.restrict Ω)).toReal := by
+        apply ENNReal.toReal_mono hgtop
+        simpa only [Pi.add_apply, sub_add_sub_cancel] using hg
+      _ = _ := ENNReal.toReal_add
+        (a.grad_memLp.sub u.grad_memLp).eLpNorm_ne_top
+        (u.grad_memLp.sub v.grad_memLp).eLpNorm_ne_top
+  dsimp [apm_m01J04_H1dist]
+  linarith
+
 lemma apm_m01J04_localization_isH1Zero_of_core_approximations
     {d : ℕ} {Ω : Set (EuclideanSpace ℝ (Fin d))}
     (φ : EuclideanSpace ℝ (Fin d) → ℝ)
@@ -1982,7 +2038,38 @@ lemma apm_m01J04_localization_isH1Zero_of_core_approximations
             HasCompactSupport a.val ∧ Function.support a.val ⊆ Ω ∧
             apm_m01J04_H1dist a u < eta) :
     apm_m01J04_isH1Zero (apm_m01J04_H1mul φ hφ f) := by
-  sorry
+  let eta : ℕ → ℝ := fun n ↦ 1 / (2 * (n + 1 : ℝ))
+  have heta (n : ℕ) : 0 < eta n := by
+    dsimp [eta]
+    positivity
+  let core (n : ℕ) := Classical.choose (hcore (eta n) (heta n))
+  let u (n : ℕ) := Classical.choose (Classical.choose_spec
+    (hcore (eta n) (heta n)))
+  have hcore_spec (n : ℕ) := Classical.choose_spec (Classical.choose_spec
+    (hcore (eta n) (heta n)))
+  let a (n : ℕ) := Classical.choose
+    (hsmooth (core n) (hcore_spec n).1 (u n) (hcore_spec n).2.1
+      (hcore_spec n).2.2.1 (eta n) (heta n))
+  have ha_spec (n : ℕ) := Classical.choose_spec
+    (hsmooth (core n) (hcore_spec n).1 (u n) (hcore_spec n).2.1
+      (hcore_spec n).2.2.1 (eta n) (heta n))
+  apply apm_m01J04_localization_isH1Zero_of_globalApprox φ hφ f a
+  · intro n
+    exact ⟨(ha_spec n).1, (ha_spec n).2.1, (ha_spec n).2.2.1⟩
+  · apply squeeze_zero
+      (fun n ↦ add_nonneg ENNReal.toReal_nonneg ENNReal.toReal_nonneg)
+      (fun n ↦ le_trans
+        (apm_m01J04_localization_isH1Zero_of_core_approximations_aux_triangle
+          (a n) (u n) (apm_m01J04_globalLocalizedH1 φ hφ f))
+        (add_le_add (ha_spec n).2.2.2.le (hcore_spec n).2.2.2.le))
+    have hlim : Tendsto (fun n : ℕ ↦ (1 : ℝ) / (n + 1)) atTop (nhds 0) :=
+      tendsto_one_div_add_atTop_nhds_zero_nat
+    convert hlim using 1
+    funext n
+    dsimp [eta]
+    have hn : (n + 1 : ℝ) ≠ 0 := by positivity
+    field_simp
+    norm_num
 
 lemma apm_m01J04_localization_isH1Zero_aux_zero_fields
     {d : ℕ} {Ω : Set (EuclideanSpace ℝ (Fin d))}
