@@ -36121,13 +36121,13 @@
   {:consumer :t93J03,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "Program STOP commits no new mathematical progress since the prior milestone: KleinPolygonBasedVanKampen merely packages the already-required surjectivity and kernel hypotheses, and both consumers only reapply the previously proved three-input theorem. Prove the based van Kampen surjectivity/kernel result (or winding conjugacy) in scope; extend Mathlib: state and prove the missing theorem in scope.",
    :evidence
    {:placeholder-delta {:t93J03 [1 1]},
     :residual
-    "Externally repair package authority; then quotient run-fold induction, reverse kernel/surjectivity, winding, C1/C2/Main.",
+    "Repair package authority; then quotient run-fold induction, reverse kernel/surjectivity, winding, C1/C2/Main.",
     :outcome :stop,
     :warnings ["No Lake command run; scoped files unchanged."],
     :missing-theorems
@@ -36148,7 +36148,7 @@
     :axioms [],
     :author :topo-10,
     :reason
-    "Third consecutive invocation confirms .lake/packages is a real directory, not the required canonical-authority symlink. Workspace policy forbids Lake work until lifecycle provisioning repairs it.",
+    "Fresh check still finds .lake/packages as a real directory rather than the canonical-authority symlink; workspace policy forbids Lake verification and implementation.",
     :commands
     [{:cmd "stat .lake/packages; test -L .lake/packages",
       :exit 1,
@@ -36165,7 +36165,7 @@
      "57669ee92b655e88fde71c50d99aa588dee734adbcfbcb4e1fcf6863c7a0b085"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
