@@ -87942,6 +87942,18 @@
      {:cmd "placeholder scan", :exit 0}
      {:cmd "axioms check", :exit 0}
      {:cmd "git show --check d7dbc3faf", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792014749495-12494-b5af1874",
+     :commands
+     ["git show/diff d7dbc3faf; blob sha256; diff --check"
+      "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology"
+      "lake env lean /dev/stdin (#print axioms)"
+      "placeholder scan"
+      "statement-registry.py check"],
+     :finding
+     "PASS: reviewer codex-7; d7dbc3faf (topo-6) newly changes only scoped PolygonSurfaceHomology.lean; fixture SHA-256 83ba152d6084afe9779789b2f381bef56c7e44a2e10f12cd74b5a2c3a02f6ef1 matches. Exact blob builds; 0 placeholders; standard axioms; registry 166/0. The polygon edge parametrization simplifies definitionally to the universal-cover integer loop of winding +1, fixing the forward path orientation without reversal. This is concrete path-level progress toward the nonabelian boundary-word comparison; the row accurately leaves positive H1 normalization and the based-loop word identity outstanding. Remaining: prove that normalization and identity, then B7-B10."},
     :commit "d7dbc3faf",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
@@ -87950,7 +87962,7 @@
      "83ba152d6084afe9779789b2f381bef56c7e44a2e10f12cd74b5a2c3a02f6ef1"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -87970,7 +87982,7 @@
     :blueprint
     "ConstructionTargets/PolygonSurfaceHomology.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked the exact reduction from the boundary word identity to B7 module coordinates.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked literal positive parametrization of every forward boundary arc.",
    :id :program-2026-10-13-polygon-surface-homology,
    :kind :reusable-theorem,
    :campaign-priority 31,
@@ -88212,7 +88224,11 @@
     {:job 4,
      :commit "708644972",
      :reason
-     "Banked the exact reduction from the boundary word identity to B7 module coordinates."}]}
+     "Banked the exact reduction from the boundary word identity to B7 module coordinates."}
+    {:job 5,
+     :commit "d7dbc3faf",
+     :reason
+     "Banked literal positive parametrization of every forward boundary arc."}]}
   {:consumer :t97A01,
    :stop-count 0,
    :phase :implementation,
@@ -91793,7 +91809,7 @@
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "circleArc_eq_integerLoop_one",
@@ -91804,7 +91820,9 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "polygon circle arc is literal winding-one exponential loop",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :program-2026-10-13-polygon-surface-homology,
+    :banked-commit "d7dbc3faf"},
    :id :lemma-circlearc-eq-integerloop-one,
    :kind :lemma,
    :depends-on [],
