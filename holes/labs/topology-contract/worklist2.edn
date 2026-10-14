@@ -87943,6 +87943,18 @@
      {:cmd "placeholder scan", :exit 0}
      {:cmd "axioms check", :exit 0}
      {:cmd "git show --check f41451431", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792018156595-12602-91532edc",
+     :commands
+     ["git show/diff f41451431; blob sha256; diff --check"
+      "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology"
+      "lake env lean /dev/stdin (#print axioms)"
+      "placeholder scan"
+      "statement-registry.py check"],
+     :finding
+     "PASS: reviewer codex-7; f41451431 (topo-6) newly changes only scoped PolygonSurfaceHomology.lean; fixture SHA-256 ce67447c69ab558f4da15ba9bfa36405cee1f0b018d506f902295d297da151d1 matches. Exact blob builds; 0 placeholders; standard axioms; registry 166/0. A positive boundary edge is the explicit common-base leg class and a negative edge its inverse. Hurewicz inversion supplies exactly one additive minus, so each factor maps to edge-sign times the global orientation unit times its orbit basis. Signs and basepoint representation are consistent. New compiled progress; remaining assemble the finite signed-edge product, derive B7, then B8-B10."},
     :commit "f41451431",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
@@ -87951,7 +87963,7 @@
      "ce67447c69ab558f4da15ba9bfa36405cee1f0b018d506f902295d297da151d1"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -87971,7 +87983,7 @@
     :blueprint
     "ConstructionTargets/PolygonSurfaceHomology.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked common-base explicit-leg H1 formula.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked signed explicit-edge factor and H1 coordinate.",
    :id :program-2026-10-13-polygon-surface-homology,
    :kind :reusable-theorem,
    :campaign-priority 31,
@@ -88236,7 +88248,10 @@
      "Banked explicit winding-one formulas for forward and reversed boundary edges."}
     {:job 1,
      :commit "487d67321",
-     :reason "Banked common-base explicit-leg H1 formula."}]}
+     :reason "Banked common-base explicit-leg H1 formula."}
+    {:job 2,
+     :commit "f41451431",
+     :reason "Banked signed explicit-edge factor and H1 coordinate."}]}
   {:consumer :t97A01,
    :stop-count 0,
    :phase :implementation,
@@ -92123,7 +92138,7 @@
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "polygonBoundaryExplicitEdgeClass_hurewicz",
@@ -92133,7 +92148,9 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "signed edge has unit-times-signed basis H1 class",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :program-2026-10-13-polygon-surface-homology,
+    :banked-commit "f41451431"},
    :id :lemma-polygonboundaryexplicitedgeclass-hurewicz,
    :kind :lemma,
    :depends-on [:lemma-finitewedgeexplicitlegclassatbase-hurewicz],
