@@ -113903,6 +113903,19 @@
       "lake build ConstructionTargets.ThreeCirclesFundamentalGroup",
       :exit 1,
       :finding "B12 absent"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791983663733-11820-fa87daf4",
+     :commands
+     ["git show/diff-tree b05794c9af02edddf90f5cf0fb5a5571fa26217f"
+      "archive commit; lake env lean PointWedgeVanKampen.lean"
+      "sha256sum source/doc/blueprint; count sorry/admit"
+      "python3 scripts/statement-registry.py check"
+      "#print axioms installed-connector reduction"
+      "lake build ConstructionTargets.PointWedgeVanKampen"],
+     :finding
+     "PASS: exact scope and hashes match; archived source compiles; placeholders 0->0; registry 166/166. The literal Y counit premise is correctly transported through the mapped connector system and explicit base change, yielding installed connector = rebased mapped source connector; standard axioms only. New compiled milestone recorded; literal counit square, shifted endpoint, and genericPointWedgeLegCoordinates_vanKampen remain listed."},
     :commit "b05794c9af02edddf90f5cf0fb5a5571fa26217f",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
@@ -113913,7 +113926,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113934,7 +113947,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked fixed-base reduction from mapped inverse unit to the literal Y counit square.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked fixed-endpoint installed connector reduction.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -114886,7 +114899,10 @@
     {:job 4,
      :commit "59133341b92aa3e8db20e25fa2b39479a6a048a5",
      :reason
-     "Banked fixed-base reduction from mapped inverse unit to the literal Y counit square."}]}
+     "Banked fixed-base reduction from mapped inverse unit to the literal Y counit square."}
+    {:job 5,
+     :commit "b05794c9af02edddf90f5cf0fb5a5571fa26217f",
+     :reason "Banked fixed-endpoint installed connector reduction."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
