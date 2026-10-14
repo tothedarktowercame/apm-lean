@@ -420,10 +420,54 @@ theorem t93J03_cyclicCover_aux_E_L (z : T93J03Punctured) :
   sorry
 
 /-- Orbits of the affine Klein action in coordinates. -/
+theorem t93J03_cyclicCover_aux_orbit_iff_aux_sign_nat (n : ℕ) :
+    ((Multiplicative.toAdd
+        ((KleinPresentedGroupCoordinateModel.inversion ^ n)
+          (Multiplicative.ofAdd 1)) : ℤ) : ℝ) = (-1 : ℝ) ^ n := by
+  induction n with
+  | zero => simp
+  | succ n ih =>
+      rw [pow_succ, pow_succ]
+      simpa [KleinPresentedGroupCoordinateModel.inversion] using congrArg Neg.neg ih
+
+theorem t93J03_cyclicCover_aux_orbit_iff_aux_sign (n : ℤ) :
+    ((Multiplicative.toAdd
+        ((KleinPresentedGroupCoordinateModel.inversion ^ n)
+          (Multiplicative.ofAdd 1)) : ℤ) : ℝ) = (-1 : ℝ) ^ n := by
+  rcases n.eq_nat_or_neg with ⟨k, hk | hk⟩ <;> subst n
+  · simpa using t93J03_cyclicCover_aux_orbit_iff_aux_sign_nat k
+  · simp only [zpow_neg, zpow_natCast]
+    have hinv : KleinPresentedGroupCoordinateModel.inversion⁻¹ =
+        KleinPresentedGroupCoordinateModel.inversion := by
+      ext z
+      rfl
+    rw [← inv_pow, hinv, t93J03_cyclicCover_aux_orbit_iff_aux_sign_nat]
+    rw [neg_one_pow_eq_ite]
+    split <;> simp
+
 theorem t93J03_cyclicCover_aux_orbit_iff (v w : ℝ × ℝ) :
     (∃ g : KleinPresentedGroupCoordinateModel.PresentedKleinGroup, g • v = w) ↔
       ∃ m n : ℤ, w = (m + (-1 : ℝ) ^ n * v.1, n + v.2) := by
-  sorry
+  constructor
+  · rintro ⟨g, rfl⟩
+    let c := KleinPresentedGroupCoordinateNormalForm.coordinateEquiv g
+    refine ⟨Multiplicative.toAdd c.1, Multiplicative.toAdd c.2, ?_⟩
+    change KleinPlaneAffineAction.coordinateAct c v = _
+    ext <;>
+      simp [KleinPlaneAffineAction.coordinateAct,
+        KleinPresentedGroupCoordinateModel.action,
+        t93J03_cyclicCover_aux_orbit_iff_aux_sign]
+  · rintro ⟨m, n, rfl⟩
+    refine ⟨KleinPresentedGroupCoordinateNormalForm.coordinateEquiv.symm
+      ⟨Multiplicative.ofAdd m, Multiplicative.ofAdd n⟩, ?_⟩
+    change KleinPlaneAffineAction.coordinateAct
+      (KleinPresentedGroupCoordinateNormalForm.coordinateEquiv
+        (KleinPresentedGroupCoordinateNormalForm.coordinateEquiv.symm _)) v = _
+    rw [KleinPresentedGroupCoordinateNormalForm.coordinateEquiv.apply_symm_apply]
+    ext <;>
+      simp [KleinPlaneAffineAction.coordinateAct,
+        KleinPresentedGroupCoordinateModel.action,
+        t93J03_cyclicCover_aux_orbit_iff_aux_sign]
 
 theorem t93J03_cyclicCover_aux_generatorA_zpow (n : ℤ) (v : ℝ × ℝ) :
     (KleinPresentedGroupCoordinateModel.generatorA ^ n) • v = (v.1 + n, v.2) := by
