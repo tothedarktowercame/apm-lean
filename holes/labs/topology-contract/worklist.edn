@@ -119110,6 +119110,17 @@
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "hash/placeholders/diff", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1792014811422-12498-340ec078",
+     :commands
+     ["git diff-tree/show 63c77275"
+      "archive 63c77275; lake env lean closure and Main"
+      "sha256sum/placeholders at 63c77275"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS program STOP: new commit changes only t00J02Closure.lean and correctly constructs the global localized top-degree formula from a chart-coefficient signed count. The transport equality is reversed exactly where needed, yielding topDegree = canonical signed sum, with signs still component-indexed. Fixture/frozen hashes match; closure has 0 placeholders, Main baseline 1; archived files compile with standard axioms; registry 166/166. Chart component-sum/signed-count identities and Main assembly remain listed."},
     :commit "63c77275209d11d18f575f6d0baf055e57c05a84",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
@@ -119118,7 +119129,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119136,7 +119147,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t00J02Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked chart-coefficient component constructor.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked chart-coefficient top-degree constructor.",
    :id :program-2026-10-13-close-t00j02,
    :kind :final-adapter,
    :campaign-priority 45,
@@ -119252,7 +119263,10 @@
      :reason "Banked signed-sum coefficient transport."}
     {:job 8,
      :commit "7bdf2eec630cc25bda7e18480b330cde48f5c03e",
-     :reason "Banked chart-coefficient component constructor."}]}
+     :reason "Banked chart-coefficient component constructor."}
+    {:job 9,
+     :commit "63c77275209d11d18f575f6d0baf055e57c05a84",
+     :reason "Banked chart-coefficient top-degree constructor."}]}
   {:consumer :t98A06,
    :stop-count 3,
    :evidence
@@ -120288,7 +120302,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -120299,7 +120313,9 @@
     :reported-by [:program-2026-10-13-close-t00j02],
     :type "chart localization and signed sum construct top formula",
     :area "oriented-surface-degree",
-    :proved-in :program-2026-10-13-close-t00j02},
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "63c77275209d11d18f575f6d0baf055e57c05a84"},
    :id
    :lemma-regularfiberlocalizedtopdegreeformula-of-chartcoefficients,
    :kind :lemma,
