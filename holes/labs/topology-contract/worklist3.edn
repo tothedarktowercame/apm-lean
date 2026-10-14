@@ -36121,7 +36121,7 @@
   {:consumer :t93J03,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 10,
+   :stop-count 0,
    :review-finding
    "Program STOP commits no new mathematical progress since the prior milestone: KleinPolygonBasedVanKampen merely packages the already-required surjectivity and kernel hypotheses, and both consumers only reapply the previously proved three-input theorem. Prove the based van Kampen surjectivity/kernel result (or winding conjugacy) in scope; extend Mathlib: state and prove the missing theorem in scope.",
    :evidence
@@ -36170,7 +36170,7 @@
      "dbb431f79c6d0e64be04e2a83ca7639317d7cea61e0852f6a712259376bc0c3d"},
     :seat :topo-10},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -36854,6 +36854,16 @@
       :exit 1,
       :correction
       "proved antipodal inequality and fiber cardinality explicitly"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1792001503608-12064-1fbb6b6e",
+     :commands
+     ["git show/check/diff e25d1d3c; scope and fixture SHA-256"
+      "lake build ConstructionTargets.t96A06Closure; lean fixture and Main"
+      "statement-registry check; placeholder/axiom recount"],
+     :finding
+     "PASS: e25d1d3c adds compiled, sorry-free progress beyond 941de27d. Surjectivity and the antipodal fiber classification bound each exact S3-to-RP3 fiber; norm one proves the antipodal points distinct; Nat.card_eq_two_iff proves every fiber has cardinality two, yielding the correctly oriented IsKSheetedCover interface. Exact scope/hash match; support placeholders 0->0; frozen Main remains 1; standard axioms only; registry 166/166. STOP lists rational coefficient transfer, sphere homology, degree four, invariants/Main."},
     :commit "e25d1d3c16af5c726f6e3d15302b3e75ae6c5a46",
     :changed-paths
     ["ConstructionTargets/t96A06Closure.lean"
@@ -36864,7 +36874,7 @@
      "aae50311cac7cd5bfad76186fa8f6d4b4fcbba98270258ed5e6ec84d490da9ea"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -36882,7 +36892,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t96A06Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Proved the exact S3-to-RP3 projection is a covering; rational transfer remains.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Packaged the frozen S3-to-RP3 projection as an exact two-sheeted cover; induced rational homology transfer remains.",
    :id :program-2026-10-13-close-t96a06,
    :kind :final-adapter,
    :campaign-priority 31,
@@ -36910,7 +36920,11 @@
     {:job 7,
      :commit "941de27ddd408535b6c86c0ed540c3d455cd02c7",
      :reason
-     "Proved the exact S3-to-RP3 projection is a covering; rational transfer remains."}]}
+     "Proved the exact S3-to-RP3 projection is a covering; rational transfer remains."}
+    {:job 8,
+     :commit "e25d1d3c16af5c726f6e3d15302b3e75ae6c5a46",
+     :reason
+     "Packaged the frozen S3-to-RP3 projection as an exact two-sheeted cover; induced rational homology transfer remains."}]}
   {:consumer :t96J05,
    :stop-count 0,
    :phase :implementation,
@@ -39041,7 +39055,7 @@
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "pathHomotopicQuotient_concat_eq_of_pieceClass_eq",
@@ -39053,7 +39067,9 @@
     :type
     "pointwise path-class equality implies finite concatenation equality",
     :area "covering-subgroup-correspondence",
-    :proved-in :program-2026-10-13-close-t93j03},
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t93J03Closure.lean"]},
    :id :lemma-pathhomotopicquotient-concat-eq-of-piececlass-eq,
    :kind :lemma,
    :depends-on
@@ -39061,7 +39077,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t96A06_rp3_sphere_twoSheeted",
@@ -39071,7 +39087,9 @@
     :reported-by [:program-2026-10-13-close-t96a06],
     :type "IsKSheetedCover (sphereProjection 3) 2",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :program-2026-10-13-close-t96a06,
+    :banked-commit "e25d1d3c16af5c726f6e3d15302b3e75ae6c5a46"},
    :id :lemma-t96a06-rp3-sphere-twosheeted,
    :kind :lemma,
    :depends-on [:lemma-t96a06-rp3-sphere-covering],
