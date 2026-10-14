@@ -36119,67 +36119,59 @@
   {:consumer :t93J03,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 3,
+   :stop-count 4,
    :review-finding
    "Program STOP commits no new mathematical progress since the prior milestone: KleinPolygonBasedVanKampen merely packages the already-required surjectivity and kernel hypotheses, and both consumers only reapply the previously proved three-input theorem. Prove the based van Kampen surjectivity/kernel result (or winding conjugacy) in scope; extend Mathlib: state and prove the missing theorem in scope.",
    :evidence
    {:placeholder-delta {:t93J03 [1 1]},
-    :residual
-    "Compare packaged connector with deformation connector; reverse kernel/surjectivity; winding; C1/C2/Main.",
+    :residual "Reverse kernel/surjectivity; winding; C1/C2/Main.",
     :outcome :stop,
     :warnings ["unused SLSC owner-approved"],
     :missing-theorems
-    [{:name "kleinPolygonPackagedUnitConnector_mk",
-      :type
-      "packaged connector class equals unit followed by inverse-mapped skeleton connector",
+    [{:name "kleinPolygonPackagedSourceCoordinate_eq_direct",
+      :type "packaged source equals direct",
       :status :proved,
       :consumers [:t93J03],
-      :depends-on ["kleinPolygonPackagedUnitPath_mk"],
+      :depends-on ["kleinPolygonPackagedUnitConnector_mk"],
+      :area "covering-subgroup-correspondence"}
+     {:name
+      "kleinPolygonOverlapSkeletonNormalClosure_le_skeletonToSpaceKernel",
+      :type "forward kernel inclusion",
+      :status :proved,
+      :consumers [:t93J03],
+      :depends-on ["kleinPolygonPackagedSourceCoordinate_eq_direct"],
       :area "covering-subgroup-correspondence"}
      {:name "t93J03_polygon_based_van_kampen",
-      :type "surjective skeleton map; overlap-closure kernel",
+      :type "surjectivity; kernel equality",
       :status :partial,
       :consumers [:t93J03],
-      :depends-on ["kleinPolygonPackagedUnitConnector_mk"],
+      :depends-on ["kleinPolygonFundamentalGroupoidPseudopushout"],
       :area "covering-subgroup-correspondence"}],
     :statement-hashes {:registry "166/166"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Committed exact concrete representative of the packaged unit-plus-connector composite; comparison with the deformation connector and based van Kampen remain.",
+    "Proved literal-map equality and forward kernel inclusion; reverse inclusion/surjectivity remain.",
     :commands
     [{:cmd "lake build ConstructionTargets.t93J03Closure", :exit 0}
-     {:cmd "lean fixture; Main; registry; placeholder; diff; show",
-      :exit 0}
-     {:cmd "rg forbidden closure additions",
-      :exit 1,
-      :expected-exit 1}],
+     {:cmd "lean fixture; Main; registry; checks", :exit 0}
+     {:cmd "rg forbidden", :exit 1, :expected-exit 1}],
     :diagnostic-history
-    [{:cmd "dependent rw probe",
+    [{:cmd "source compile",
       :exit 1,
-      :correction "used typed connector and congrArg"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1791991036037-11924-2cf0202c",
-     :commands
-     ["git show/check/diff 7640486c; scope and fixture SHA-256"
-      "lake build ConstructionTargets.t93J03Closure; lean fixture and Main"
-      "statement-registry check; placeholder/axiom recount"],
-     :finding
-     "PASS: 7640486c adds compiled, sorry-free progress beyond 0fc9df57. It composes the genuine representative of the adjointified unit with the inverse-mapped skeleton connector and proves the correctly oriented groupoid-class equality; it does not equate this proof-dependent connector with the deformation connector. Exact scope and fixture hash match; support placeholders 0->0; frozen Main remains 1; only standard axioms; registry 166/166. STOP lists connector comparison, reverse kernel/surjectivity, winding, C1/C2/Main."},
-    :commit "7640486c6397e450fd355dabe430dc4501444963",
+      :correction "removed forward reference"}],
+    :commit "a6f0c4b61e88c36e45b9bbfb5d394decf1fd8f2f",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
      "ConstructionTargets/t93J03Closure.blueprint.md"],
     :fixture
-    {:path "/tmp/t93j03_packaged_unit_connector_check.lean",
+    {:path "/tmp/t93j03_packaged_source_kernel_check.lean",
      :sha256
-     "c62591623ccda04cd09201b3a00068f121af8f7c3f5a049e2ff904a395a7b546"},
+     "bc019ff1e6c0445a6763c14c2ec1f9d8de882755373ea7b541c1bd1286f5448a"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -38874,6 +38866,43 @@
    :id :lemma-kleinpolygonpackagedunitconnector-mk,
    :kind :lemma,
    :depends-on [:lemma-kleinpolygonpackagedunitpath-mk],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "kleinPolygonPackagedSourceCoordinate_eq_direct",
+    :type "packaged source equals direct"},
+   :lemma
+   {:name "kleinPolygonPackagedSourceCoordinate_eq_direct",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type "packaged source equals direct",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03},
+   :id :lemma-kleinpolygonpackagedsourcecoordinate-eq-direct,
+   :kind :lemma,
+   :depends-on [:lemma-kleinpolygonpackagedunitconnector-mk],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "kleinPolygonOverlapSkeletonNormalClosure_le_skeletonToSpaceKernel",
+    :type "forward kernel inclusion"},
+   :lemma
+   {:name
+    "kleinPolygonOverlapSkeletonNormalClosure_le_skeletonToSpaceKernel",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type "forward kernel inclusion",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03},
+   :id
+   :lemma-kleinpolygonoverlapskeletonnormalclosure-le-skeletontospacekernel,
+   :kind :lemma,
+   :depends-on [:lemma-kleinpolygonpackagedsourcecoordinate-eq-direct],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
