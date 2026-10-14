@@ -373,6 +373,64 @@ disk self-map, the boundary point selected by the outward ray varies
 continuously.  Its value is characterized by a nonnegative ray parameter,
 which lets the retraction equation be proved independently. -/
 -- BEGIN SEAT AREA
+lemma apm_t01A02_continuous_boundary_hit_of_no_fixedPoint_aux_formula
+    (x y : apm_t01A02_Plane) (hxy : x ≠ y) (hx : ‖x‖ ≤ 1) :
+    let A := ‖x - y‖ ^ 2
+    let B := inner ℝ (x - y) x
+    let C := ‖x‖ ^ 2 - 1
+    let t := (-B + Real.sqrt (B ^ 2 - A * C)) / A
+    0 ≤ t ∧ ‖x + t • (x - y)‖ = 1 := by
+  dsimp
+  have hA : 0 < ‖x - y‖ ^ 2 := sq_pos_of_pos (norm_pos_iff.mpr (sub_ne_zero.mpr hxy))
+  have hC : ‖x‖ ^ 2 - 1 ≤ 0 := by
+    have := (sq_le_sq₀ (norm_nonneg x) (by norm_num : (0:ℝ) ≤ 1)).mpr hx
+    nlinarith
+  have hdisc : 0 ≤ inner ℝ (x - y) x ^ 2 - ‖x - y‖ ^ 2 * (‖x‖ ^ 2 - 1) := by
+    nlinarith [mul_nonneg hA.le (neg_nonneg.mpr hC)]
+  have hsquare := Real.sq_sqrt hdisc
+  have hsnonneg := Real.sqrt_nonneg
+    (inner ℝ (x - y) x ^ 2 - ‖x - y‖ ^ 2 * (‖x‖ ^ 2 - 1))
+  have ht : 0 ≤ (-inner ℝ (x - y) x +
+      Real.sqrt (inner ℝ (x - y) x ^ 2 - ‖x - y‖ ^ 2 * (‖x‖ ^ 2 - 1))) /
+      ‖x - y‖ ^ 2 := by
+    apply div_nonneg
+    · have habs : |inner ℝ (x - y) x| ≤ Real.sqrt
+          (inner ℝ (x - y) x ^ 2 - ‖x - y‖ ^ 2 * (‖x‖ ^ 2 - 1)) := by
+        rw [← sq_le_sq₀ (abs_nonneg _) hsnonneg]
+        rw [sq_abs, hsquare]
+        nlinarith
+      nlinarith [le_trans (neg_le_abs _) habs]
+    · exact hA.le
+  refine ⟨ht, ?_⟩
+  have hquad :
+      ‖x - y‖ ^ 2 * ((-inner ℝ (x - y) x +
+        Real.sqrt (inner ℝ (x - y) x ^ 2 - ‖x - y‖ ^ 2 * (‖x‖ ^ 2 - 1))) /
+          ‖x - y‖ ^ 2) ^ 2 +
+      2 * inner ℝ (x - y) x * ((-inner ℝ (x - y) x +
+        Real.sqrt (inner ℝ (x - y) x ^ 2 - ‖x - y‖ ^ 2 * (‖x‖ ^ 2 - 1))) /
+          ‖x - y‖ ^ 2) + (‖x‖ ^ 2 - 1) = 0 := by
+    have hmul : ‖x - y‖ ^ 2 *
+        ((-inner ℝ (x - y) x +
+          Real.sqrt (inner ℝ (x - y) x ^ 2 - ‖x - y‖ ^ 2 * (‖x‖ ^ 2 - 1))) /
+            ‖x - y‖ ^ 2) =
+        -inner ℝ (x - y) x +
+          Real.sqrt (inner ℝ (x - y) x ^ 2 - ‖x - y‖ ^ 2 * (‖x‖ ^ 2 - 1)) := by
+      have hn : ‖x - y‖ ≠ 0 := norm_ne_zero_iff.mpr (sub_ne_zero.mpr hxy)
+      field_simp [ne_of_gt hA, hn]
+    nlinarith [hsquare, mul_nonneg hA.le (sq_nonneg
+      ((-inner ℝ (x - y) x +
+        Real.sqrt (inner ℝ (x - y) x ^ 2 - ‖x - y‖ ^ 2 * (‖x‖ ^ 2 - 1))) /
+          ‖x - y‖ ^ 2))]
+  apply (sq_eq_sq₀ (norm_nonneg _) (by norm_num : (0:ℝ) ≤ 1)).mp
+  rw [one_pow]
+  rw [← real_inner_self_eq_norm_sq]
+  simp only [inner_add_left, inner_add_right, real_inner_smul_left,
+    real_inner_smul_right, real_inner_self_eq_norm_sq]
+  simp only [norm_smul, Real.norm_eq_abs]
+  rw [abs_of_nonneg ht]
+  have hi : inner ℝ x (x - y) = inner ℝ (x - y) x := real_inner_comm _ _
+  nlinarith
+
 lemma apm_t01A02_continuous_boundary_hit_of_no_fixedPoint
     (g : C(apm_t01A02_Disk, apm_t01A02_Disk))
     (hfix : ∀ x, g x ≠ x)
@@ -382,7 +440,46 @@ lemma apm_t01A02_continuous_boundary_hit_of_no_fixedPoint
     ∃ r : C(apm_t01A02_Disk, apm_t01A02_DiskBoundary),
       ∀ x, ∃ t : Set.Ici (0 : ℝ),
         (r x).1 = x.1 + t.1 • (x.1 - (g x).1) := by
-  sorry
+  let v : apm_t01A02_Disk → apm_t01A02_Plane := fun x ↦ x.1 - (g x).1
+  let A : apm_t01A02_Disk → ℝ := fun x ↦ ‖v x‖ ^ 2
+  let B : apm_t01A02_Disk → ℝ := fun x ↦ inner ℝ (v x) x.1
+  let C : apm_t01A02_Disk → ℝ := fun x ↦ ‖x.1‖ ^ 2 - 1
+  let t : apm_t01A02_Disk → ℝ := fun x ↦
+    (-B x + Real.sqrt (B x ^ 2 - A x * C x)) / A x
+  have hvcont : Continuous v := continuous_subtype_val.sub
+    (continuous_subtype_val.comp g.continuous)
+  have hAcont : Continuous A := (hvcont.norm.pow 2)
+  have hBcont : Continuous B :=
+    (hvcont.inner continuous_subtype_val)
+  have hCcont : Continuous C := (continuous_subtype_val.norm.pow 2).sub continuous_const
+  have hAne : ∀ x, A x ≠ 0 := by
+    intro x
+    have hvne : v x ≠ 0 := by
+      intro hv
+      apply hfix x
+      apply Subtype.ext
+      dsimp [v] at hv
+      exact sub_eq_zero.mp hv |>.symm
+    exact pow_ne_zero _ (norm_ne_zero_iff.mpr hvne)
+  have htcont : Continuous t := by
+    exact (hBcont.neg.add (((hBcont.pow 2).sub (hAcont.mul hCcont)).sqrt)).div
+      hAcont hAne
+  have htprop : ∀ x, 0 ≤ t x ∧ ‖x.1 + t x • v x‖ = 1 := by
+    intro x
+    apply apm_t01A02_continuous_boundary_hit_of_no_fixedPoint_aux_formula
+    · intro heq
+      exact hfix x (Subtype.ext heq.symm)
+    · rw [← dist_zero_right]
+      exact x.2
+  let r : C(apm_t01A02_Disk, apm_t01A02_DiskBoundary) :=
+    ⟨fun x ↦ ⟨x.1 + t x • v x, by
+        rw [Metric.mem_sphere, dist_zero_right]
+        exact (htprop x).2⟩,
+      by
+        apply Continuous.subtype_mk
+        exact continuous_subtype_val.add (htcont.smul hvcont)⟩
+  refine ⟨r, fun x ↦ ⟨⟨t x, (htprop x).1⟩, ?_⟩⟩
+  rfl
 -- END SEAT AREA
 
 /-- Seat (boundary sign): an outward ray based at a boundary point of the
