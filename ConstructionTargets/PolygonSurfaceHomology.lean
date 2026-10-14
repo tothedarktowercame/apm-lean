@@ -2699,6 +2699,138 @@ theorem finiteWedgeFinOne_exists_legWord
   simp [finiteWedgeFinLoopWordValue,
     finiteWedgeFinOneFundamentalGroupEquiv_leg]
 
+/-- The uniquely labelled `Unit` wedge has the based fundamental group of the
+circle. -/
+noncomputable def finiteWedgeUnitFundamentalGroupEquiv :
+    FundamentalGroup
+        (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge Unit)
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle () 1) ≃*
+      FundamentalGroup Circle 1 := by
+  simpa using
+    (fundamentalGroupEquivOfHomeomorph
+      (finiteWedgeSubsingletonHomeomorphCircle ())
+      (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle () 1))
+
+theorem finiteWedgeUnitFundamentalGroupEquiv_leg
+    (g : FundamentalGroup Circle 1) :
+    finiteWedgeUnitFundamentalGroupEquiv (finiteWedgeUnitLegMap g) = g := by
+  induction g using Path.Homotopic.Quotient.ind with
+  | mk p =>
+      rw [finiteWedgeUnitLegMap, FundamentalGroup.map_apply]
+      change FundamentalGroup.map
+          ⟨finiteWedgeSubsingletonHomeomorphCircle (),
+            (finiteWedgeSubsingletonHomeomorphCircle ()).continuous⟩ _
+          (Path.Homotopic.Quotient.mk
+            (p.map
+              (PolygonSurfacePiOne.PointWedgeQuotient.continuous_wedgeCircle ()))) = _
+      rw [FundamentalGroup.map_apply]
+      apply Path.Homotopic.Quotient.eq.mpr
+      convert Path.Homotopic.refl p using 1
+
+/-- Every loop in the final `Unit` factor is an arbitrary circle-loop leg. -/
+theorem finiteWedgeUnitLegMap_surjective
+    (g : FundamentalGroup
+      (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge Unit)
+      (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle () 1)) :
+    ∃ a, finiteWedgeUnitLegMap a = g := by
+  refine ⟨finiteWedgeUnitFundamentalGroupEquiv g, ?_⟩
+  apply finiteWedgeUnitFundamentalGroupEquiv.injective
+  simp [finiteWedgeUnitFundamentalGroupEquiv_leg]
+
+/-- Relabelling an old-factor word by `Fin.castSucc` realizes its image under
+the installed old-factor map. -/
+theorem finiteWedgeFinSucc_oldLoopWordValue (n : ℕ)
+    (w : FiniteWedgeFinLoopWord n) :
+    finiteWedgeFinLoopWordValue (n + 1)
+        (w.map fun q => (q.1.castSucc, q.2)) =
+      finiteWedgeFinSuccOldFundamentalGroupMap n
+        (finiteWedgeFinLoopWordValue n w) := by
+  induction w with
+  | nil => simp [finiteWedgeFinLoopWordValue]
+  | cons q w ih =>
+      simp only [List.map_cons, finiteWedgeFinLoopWordValue, List.prod_cons,
+        map_mul]
+      rw [finiteWedgeFinSuccOldFundamentalGroupMap_leg]
+      change finiteWedgeFinLegMap (n + 1) q.1.castSucc q.2 *
+          finiteWedgeFinLoopWordValue (n + 1)
+            (w.map fun q => (q.1.castSucc, q.2)) =
+        finiteWedgeFinLegMap (n + 1) q.1.castSucc q.2 *
+          finiteWedgeFinSuccOldFundamentalGroupMap n
+            (finiteWedgeFinLoopWordValue n w)
+      rw [ih]
+
+/-- Substitute labelled words for every old/final letter of an installed
+successor split word. -/
+theorem finiteWedgeFinSucc_expand_splitWord (n : ℕ)
+    (hold : ∀ g, ∃ w : FiniteWedgeFinLoopWord n,
+      finiteWedgeFinLoopWordValue n w = g)
+    (w : List
+      (FundamentalGroup
+          (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge (Fin (n + 1)))
+          (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1) ⊕
+        FundamentalGroup
+          (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge Unit)
+          (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle () 1))) :
+    ∃ v : FiniteWedgeFinLoopWord (n + 1),
+      finiteWedgeFinLoopWordValue (n + 1) v =
+        coprodLegWordValue
+          (finiteWedgeFinSuccOldFundamentalGroupMap n)
+          (finiteWedgeFinSuccLastFundamentalGroupMap n) w := by
+  induction w with
+  | nil =>
+      refine ⟨[], ?_⟩
+      simp [finiteWedgeFinLoopWordValue, coprodLegWordValue]
+  | cons q w ih =>
+      rcases ih with ⟨vw, hvw⟩
+      cases q with
+      | inl a =>
+          rcases hold a with ⟨wa, hwa⟩
+          refine ⟨(wa.map fun q => (q.1.castSucc, q.2)) ++ vw, ?_⟩
+          rw [finiteWedgeFinLoopWordValue, List.map_append, List.prod_append]
+          change finiteWedgeFinLoopWordValue (n + 1)
+              (wa.map fun q => (q.1.castSucc, q.2)) *
+              finiteWedgeFinLoopWordValue (n + 1) vw = _
+          rw [finiteWedgeFinSucc_oldLoopWordValue, hwa, hvw]
+          rfl
+      | inr b =>
+          rcases finiteWedgeUnitLegMap_surjective b with ⟨a, ha⟩
+          refine ⟨((Fin.last (n + 1), a) :: vw), ?_⟩
+          simp only [finiteWedgeFinLoopWordValue, List.map_cons, List.prod_cons]
+          rw [← finiteWedgeFinSuccLastFundamentalGroupMap_leg n a, ha]
+          change finiteWedgeFinSuccLastFundamentalGroupMap n b *
+              finiteWedgeFinLoopWordValue (n + 1) vw =
+            finiteWedgeFinSuccLastFundamentalGroupMap n b *
+              coprodLegWordValue
+                (finiteWedgeFinSuccOldFundamentalGroupMap n)
+                (finiteWedgeFinSuccLastFundamentalGroupMap n) w
+          rw [hvw]
+
+/-- If old finite-wedge loops have labelled words, successor loops do too. -/
+theorem finiteWedgeFinSucc_exists_legWord (n : ℕ)
+    (hold : ∀ g, ∃ w : FiniteWedgeFinLoopWord n,
+      finiteWedgeFinLoopWordValue n w = g)
+    (g : FundamentalGroup
+      (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge (Fin ((n + 1) + 1)))
+      (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle
+        (0 : Fin ((n + 1) + 1)) 1)) :
+    ∃ w : FiniteWedgeFinLoopWord (n + 1),
+      finiteWedgeFinLoopWordValue (n + 1) w = g := by
+  rcases finiteWedgeFinSucc_exists_installedSplitLegWord n g with ⟨w, hw⟩
+  rcases finiteWedgeFinSucc_expand_splitWord n hold w with ⟨v, hv⟩
+  exact ⟨v, hv.trans hw⟩
+
+/-- Every loop in a nonempty standard finite wedge is a finite word in its
+individually labelled circle legs. -/
+theorem finiteWedgeFin_exists_legWord (n : ℕ)
+    (g : FundamentalGroup
+      (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge (Fin (n + 1)))
+      (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1)) :
+    ∃ w : FiniteWedgeFinLoopWord n,
+      finiteWedgeFinLoopWordValue n w = g := by
+  induction n with
+  | zero => exact finiteWedgeFinOne_exists_legWord g
+  | succ n ih => exact finiteWedgeFinSucc_exists_legWord n ih g
+
 end
 
 end ConstructionTargets.PolygonSurfaceHomology
