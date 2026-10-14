@@ -1011,6 +1011,50 @@ theorem finiteWedgeLegWord_hurewicz (P : PairingData)
         finiteWedgeLegFundamentalClassAtBase_hurewicz_eq_coordinate,
         map_add, map_zsmul, ih]
 
+/-- The canonical map from the free group on the orbit labels to the
+common-basepoint fundamental group, sending each generator to its positive
+circle-leg class. -/
+noncomputable def finiteWedgeLegFreeGroupMap (P : PairingData) :
+    FreeGroup (PairingOrbit P.pair) →*
+      FundamentalGroup
+        (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge
+          (PairingOrbit P.pair)) (orbitWedgeBase P) :=
+  FreeGroup.lift (finiteWedgeLegFundamentalClassAtBase P)
+
+/-- Every element in the image of the canonical free-group map has the exact
+finite integer-exponent leg-word form used by `finiteWedgeLegWord_hurewicz`. -/
+theorem finiteWedgeLegFreeGroupMap_exists_word (P : PairingData)
+    (x : FreeGroup (PairingOrbit P.pair)) :
+    ∃ w : FiniteWedgeLegWord P,
+      finiteWedgeLegWordGroup P w = finiteWedgeLegFreeGroupMap P x := by
+  induction x using FreeGroup.induction_on with
+  | C1 =>
+      exact ⟨[], by simp [finiteWedgeLegWordGroup]⟩
+  | of l =>
+      exact ⟨[(l, 1)], by
+        simp [finiteWedgeLegWordGroup, finiteWedgeLegFreeGroupMap]⟩
+  | inv_of l _ =>
+      exact ⟨[(l, -1)], by
+        simp [finiteWedgeLegWordGroup, finiteWedgeLegFreeGroupMap]⟩
+  | mul x y ihx ihy =>
+      rcases ihx with ⟨wx, hx⟩
+      rcases ihy with ⟨wy, hy⟩
+      exact ⟨wx ++ wy, by
+        rw [map_mul]
+        simpa only [finiteWedgeLegWordGroup, List.map_append, List.prod_append]
+          using congrArg₂ (· * ·) hx hy⟩
+
+/-- Surjectivity of the canonical free-group map is precisely the remaining
+topological input needed to obtain leg-word generation. -/
+theorem finiteWedgeFundamentalGroup_generated_by_legs_of_freeGroup_surjective
+    (P : PairingData) (hsurj : Function.Surjective (finiteWedgeLegFreeGroupMap P))
+    (g : FundamentalGroup
+      (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge
+        (PairingOrbit P.pair)) (orbitWedgeBase P)) :
+    ∃ w : FiniteWedgeLegWord P, finiteWedgeLegWordGroup P w = g := by
+  rcases hsurj g with ⟨x, rfl⟩
+  exact finiteWedgeLegFreeGroupMap_exists_word P x
+
 end
 
 end ConstructionTargets.PolygonSurfaceHomology
