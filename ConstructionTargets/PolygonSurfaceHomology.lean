@@ -902,6 +902,18 @@ theorem finiteWedgeLegFundamentalClassAtBase_hurewicz (P : PairingData)
   rw [finiteWedgeLegFundamentalClassAtBase, moduleHurewicz_cast,
     finiteWedgeLegFundamentalClass_hurewicz]
 
+/-- At the common wedge basepoint, the Hurewicz image of the `l`th leg
+fundamental class is literally the normalized coordinate-map image of the
+`l`th standard basis vector. -/
+theorem finiteWedgeLegFundamentalClassAtBase_hurewicz_eq_coordinate
+    (P : PairingData) (l : PairingOrbit P.pair) :
+    moduleHurewicz (orbitWedgeBase P)
+        (finiteWedgeLegFundamentalClassAtBase P l) =
+      finiteWedgeH1CoordinateMap P (orbitBasis P l 1) := by
+  rw [finiteWedgeLegFundamentalClassAtBase_hurewicz,
+    finiteWedgeH1CoordinateMap_single]
+  rfl
+
 end
 
 end ConstructionTargets.PolygonSurfaceHomology
