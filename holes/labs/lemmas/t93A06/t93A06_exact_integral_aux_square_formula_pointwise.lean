@@ -1012,7 +1012,77 @@ theorem t93A06_exact_integral_aux_square_formula_pointwise (atlas : SmoothAtlas)
           ![x, y] ![Pi.single 0 1, Pi.single 1 1] =
         deriv (fun s ↦ t93A06_pulledCoeff atlas η 1 ![s, y]) x -
         deriv (fun t ↦ t93A06_pulledCoeff atlas η 0 ![x, t]) y := by
-  sorry
+  letI := atlas.charts
+  intro x y
+  let form1 : Form Plane Plane 1 := pullback projection η
+  let b (i : Fin 2) : Plane [⋀^Fin 1]→L[ℝ] ℝ :=
+    ContinuousAlternatingMap.ofSubsingletonLIE (𝕜 := ℝ) (E := Plane)
+      (F := ℝ) 0 (ContinuousLinearMap.proj i)
+  have hform : form1 = fun z ↦
+      t93A06_pulledCoeff atlas η 0 z • b 0 +
+        t93A06_pulledCoeff atlas η 1 z • b 1 := by
+    funext z
+    apply (ContinuousAlternatingMap.ofSubsingletonLIE (𝕜 := ℝ)
+      (E := Plane) (F := ℝ) (ι := Fin 1) 0).symm.injective
+    apply ContinuousLinearMap.coe_injective
+    apply (Pi.basisFun ℝ (Fin 2)).ext
+    intro i
+    fin_cases i <;>
+      simp [b, t93A06_pulledCoeff, form1, add_comm, mul_comm]
+  have hformC1 : ContDiff ℝ 1 form1 := by
+    rw [hform]
+    exact ((hC1 0).smul contDiff_const).add ((hC1 1).smul contDiff_const)
+  simp [exteriorDerivative]
+  unfold inChart
+  simp
+  change extDeriv form1 ![x, y] ![Pi.single 0 1, Pi.single 1 1] = _
+  have hdiff : Differentiable ℝ form1 := hformC1.differentiable (by norm_num)
+  rw [extDeriv_apply hdiff.differentiableAt, Fin.sum_univ_two]
+  have hr0 : Fin.removeNth 0 ![Pi.single 0 (1 : ℝ), Pi.single 1 (1 : ℝ)] =
+      (fun _ : Fin 1 ↦ (Pi.single 1 (1 : ℝ) : Plane)) := by
+    funext i j
+    fin_cases i
+    fin_cases j <;> simp [Fin.removeNth]
+  have hr1 : Fin.removeNth 1 ![Pi.single 0 (1 : ℝ), Pi.single 1 (1 : ℝ)] =
+      (fun _ : Fin 1 ↦ (Pi.single 0 (1 : ℝ) : Plane)) := by
+    funext i
+    have hi : i = 0 := Subsingleton.elim _ _
+    subst i
+    change ![(Pi.single 0 (1 : ℝ) : Plane), (Pi.single 1 (1 : ℝ) : Plane)]
+      ((1 : Fin 2).succAbove 0) = Pi.single 0 1
+    have hs : (1 : Fin 2).succAbove 0 = 0 := by decide
+    rw [hs]
+    rfl
+  rw [hr0, hr1]
+  norm_num
+  change
+    fderiv ℝ (t93A06_pulledCoeff atlas η 1) ![x, y] (Pi.single 0 1) -
+      fderiv ℝ (t93A06_pulledCoeff atlas η 0) ![x, y] (Pi.single 1 1) = _
+  have hcurve0 : HasDerivAt (fun s : ℝ ↦ ![s, y])
+      (Pi.single 0 (1 : ℝ) : Plane) x := by
+    apply hasDerivAt_pi.mpr
+    intro i
+    fin_cases i
+    · simpa using hasDerivAt_id x
+    · simpa using hasDerivAt_const x y
+  have hcurve1 : HasDerivAt (fun t : ℝ ↦ ![x, t])
+      (Pi.single 1 (1 : ℝ) : Plane) y := by
+    apply hasDerivAt_pi.mpr
+    intro i
+    fin_cases i
+    · simpa using hasDerivAt_const y x
+    · simpa using hasDerivAt_id y
+  have hQ := ((hC1 1).differentiable (by norm_num)).differentiableAt.hasFDerivAt
+    |>.comp_hasDerivAt x hcurve0
+  have hP := ((hC1 0).differentiable (by norm_num)).differentiableAt.hasFDerivAt
+    |>.comp_hasDerivAt y hcurve1
+  have hQ' : deriv (fun s ↦ t93A06_pulledCoeff atlas η 1 ![s, y]) x =
+      fderiv ℝ (t93A06_pulledCoeff atlas η 1) ![x, y] (Pi.single 0 1) := by
+    simpa [Function.comp_def] using hQ.deriv
+  have hP' : deriv (fun t ↦ t93A06_pulledCoeff atlas η 0 ![x, t]) y =
+      fderiv ℝ (t93A06_pulledCoeff atlas η 0) ![x, y] (Pi.single 1 1) := by
+    simpa [Function.comp_def] using hP.deriv
+  rw [hQ', hP']
 -- END SEAT AREA
 
 /-- Move the pointwise coordinate identity through the two interval integrals
