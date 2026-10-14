@@ -50,7 +50,22 @@ theorem t00A04_discrete_nullhomotopic_identity_subsingleton
     (X : Type*) [TopologicalSpace X] [DiscreteTopology X]
     (hnull : apm_t00a04_NullHomotopic (fun x : X => x)) :
     Subsingleton X := by
-  sorry
+  rcases hnull with ⟨y, H, hH, hH0, hH1⟩
+  constructor
+  intro x x'
+  have hx : x = y := by
+    have hpath : Continuous (fun t : ℝ ↦ H (x, t)) :=
+      hH.comp (Continuous.prodMk_right x)
+    have hend : H (x, 0) = H (x, 1) :=
+      TotallyDisconnectedSpace.eq_of_continuous _ hpath 0 1
+    simpa only [hH0 x, hH1 x] using hend
+  have hx' : x' = y := by
+    have hpath : Continuous (fun t : ℝ ↦ H (x', t)) :=
+      hH.comp (Continuous.prodMk_right x')
+    have hend : H (x', 0) = H (x', 1) :=
+      TotallyDisconnectedSpace.eq_of_continuous _ hpath 0 1
+    simpa only [hH0 x', hH1 x'] using hend
+  exact hx.trans hx'.symm
 
 /-- A nontrivial type is not a subsingleton. -/
 theorem t00A04_nontrivial_not_subsingleton
