@@ -3343,13 +3343,85 @@ theorem zipCone_mem {n k : ℕ} (hmem : ∀ b, zipBoundaryMap n k b ∈ zipHalfB
         have : 0 < (1 - ‖z‖) / 2 := by linarith
         nlinarith [mul_nonneg hr0 hp_im]
 
+lemma zipCone_injOn_aux_centre_not_mem : zipCentre ∉ zipHalfBoundary := by
+  norm_num [zipCentre, zipHalfBoundary, Complex.norm_def]
+
 theorem zipCone_injOn {n k : ℕ} (hmem : ∀ b, zipBoundaryMap n k b ∈ zipHalfBoundary)
     (hinj : Function.Injective (zipBoundaryMap n k))
     (hray : ∀ {p p' : ℂ}, p ∈ zipHalfBoundary → p' ∈ zipHalfBoundary → ∀ {r : ℝ}, 0 < r →
       p' - zipCentre = (r : ℂ) * (p - zipCentre) → p' = p)
     {z w : ℂ} (hz : ‖z‖ ≤ 1) (hw : ‖w‖ ≤ 1) (h : zipCone n k z = zipCone n k w) :
     z = w := by
-  sorry
+  by_cases hz0 : z = 0
+  · subst z
+    by_contra hw0
+    have hw0' : w ≠ 0 := Ne.symm hw0
+    have hwpos : 0 < ‖w‖ := norm_pos_iff.mpr hw0'
+    have heq : (‖w‖ : ℂ) *
+        (zipBoundaryMap n k ⟨((‖w‖⁻¹ : ℝ) : ℂ) * w, by
+          simp [Circle, Submonoid.unitSphere, norm_mul, hw0']⟩ - zipCentre) = 0 := by
+      simpa [zipCone, hw0'] using sub_eq_zero.mpr h
+    have hd : zipBoundaryMap n k ⟨((‖w‖⁻¹ : ℝ) : ℂ) * w, by
+          simp [Circle, Submonoid.unitSphere, norm_mul, hw0']⟩ = zipCentre := by
+      apply sub_eq_zero.mp
+      exact (mul_eq_zero.mp heq).resolve_left (by exact_mod_cast ne_of_gt hwpos)
+    exact zipCone_injOn_aux_centre_not_mem (hd ▸ hmem _)
+  · by_cases hw0 : w = 0
+    · subst w
+      by_contra hz_ne
+      have hzpos : 0 < ‖z‖ := norm_pos_iff.mpr hz0
+      have heq : (‖z‖ : ℂ) *
+          (zipBoundaryMap n k ⟨((‖z‖⁻¹ : ℝ) : ℂ) * z, by
+            simp [Circle, Submonoid.unitSphere, norm_mul, hz0]⟩ - zipCentre) = 0 := by
+        simpa [zipCone, hz0] using sub_eq_zero.mpr h
+      have hd : zipBoundaryMap n k ⟨((‖z‖⁻¹ : ℝ) : ℂ) * z, by
+            simp [Circle, Submonoid.unitSphere, norm_mul, hz0]⟩ = zipCentre := by
+        apply sub_eq_zero.mp
+        exact (mul_eq_zero.mp heq).resolve_left (by exact_mod_cast ne_of_gt hzpos)
+      exact zipCone_injOn_aux_centre_not_mem (hd ▸ hmem _)
+    · let bz : Circle := ⟨((‖z‖⁻¹ : ℝ) : ℂ) * z, by
+          simp [Circle, Submonoid.unitSphere, norm_mul, hz0]⟩
+      let bw : Circle := ⟨((‖w‖⁻¹ : ℝ) : ℂ) * w, by
+          simp [Circle, Submonoid.unitSphere, norm_mul, hw0]⟩
+      have hzpos : 0 < ‖z‖ := norm_pos_iff.mpr hz0
+      have hwpos : 0 < ‖w‖ := norm_pos_iff.mpr hw0
+      have heq : (‖z‖ : ℂ) * (zipBoundaryMap n k bz - zipCentre) =
+          (‖w‖ : ℂ) * (zipBoundaryMap n k bw - zipCentre) := by
+        have he := congrArg (fun x => x - zipCentre) h
+        simpa [zipCone, hz0, hw0, bz, bw] using he
+      have hscaled : zipBoundaryMap n k bw - zipCentre =
+          ((‖z‖ / ‖w‖ : ℝ) : ℂ) * (zipBoundaryMap n k bz - zipCentre) := by
+        calc
+          zipBoundaryMap n k bw - zipCentre =
+              ((‖w‖ : ℝ) : ℂ)⁻¹ * ((‖w‖ : ℂ) *
+                (zipBoundaryMap n k bw - zipCentre)) := by
+                  rw [← mul_assoc, inv_mul_cancel₀
+                    (show ((‖w‖ : ℝ) : ℂ) ≠ 0 by exact_mod_cast ne_of_gt hwpos), one_mul]
+          _ = ((‖w‖ : ℝ) : ℂ)⁻¹ * ((‖z‖ : ℂ) *
+                (zipBoundaryMap n k bz - zipCentre)) := by rw [heq]
+          _ = ((‖z‖ / ‖w‖ : ℝ) : ℂ) *
+                (zipBoundaryMap n k bz - zipCentre) := by
+              push_cast
+              rw [div_eq_mul_inv]
+              ring
+      have hbmap : zipBoundaryMap n k bw = zipBoundaryMap n k bz :=
+        hray (hmem bz) (hmem bw) (div_pos hzpos hwpos) hscaled
+      have hbw : bw = bz := hinj hbmap
+      have hnorm : ‖z‖ = ‖w‖ := by
+        have hdiff : zipBoundaryMap n k bz - zipCentre ≠ 0 := by
+          intro hd
+          apply zipCone_injOn_aux_centre_not_mem
+          have : zipBoundaryMap n k bz = zipCentre := sub_eq_zero.mp hd
+          exact this ▸ hmem bz
+        have hm : (‖z‖ : ℂ) = (‖w‖ : ℂ) := by
+          apply mul_right_cancel₀ hdiff
+          simpa [hbmap] using heq
+        exact_mod_cast hm
+      have hv : ((‖z‖⁻¹ : ℝ) : ℂ) * z = ((‖w‖⁻¹ : ℝ) : ℂ) * w :=
+        (congrArg Subtype.val hbw).symm
+      rw [← hnorm] at hv
+      have := congrArg (fun x : ℂ => ((‖z‖ : ℝ) : ℂ) * x) hv
+      simpa [mul_assoc, hz0] using this
 
 theorem zipCone_surjOn {n k : ℕ}
     (hcone : ∀ {y : ℂ}, y ∈ zipHalfDisk → ∃ p ∈ zipHalfBoundary, ∃ r : ℝ, 0 ≤ r ∧ r ≤ 1 ∧
