@@ -36164,6 +36164,16 @@
       :exit 1,
       :correction
       "concurrent dependency olean absent; rebuilt; passed"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1792003063648-12158-55074ca9",
+     :commands
+     ["git show/check/diff 77c92bf3; scope and fixture SHA-256"
+      "lake build ConstructionTargets.t93J03Closure; lean fixture and Main"
+      "statement-registry check; placeholder/axiom recount"],
+     :finding
+     "PASS: 77c92bf3 adds compiled, sorry-free progress beyond f8ea046c. The induction proves exactly that a nonempty dependent finite concatenation stays in U when every factor does: the base derives the constant prefix from the sole factor source, and the successor splits the trans range between the prefix and final factor. Exact scope/hash match; support placeholders 0->0; frozen Main remains 1; standard axioms only; registry 166/166. STOP lists maximal-inner-block partition, replacement/outer-word assembly, reverse kernel/surjectivity, winding, C1/C2/Main."},
     :commit "77c92bf3b7390a1d297408e68d2f41a6b01c7e71",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
@@ -36174,7 +36184,7 @@
      "620efbb6c1f0ff9c1c2d88b2f24704f0df2ef24575c62e964e9805f3c641fb19"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -36192,7 +36202,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t93J03Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Converted any ambient inner run with overlap endpoints into an equal overlap path routed through the outer piece; finite maximal-run partition remains.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Proved every nonempty finite dependent concatenation stays in a set when each factor does; maximal-run index partition remains.",
    :id :program-2026-10-13-close-t93j03,
    :kind :final-adapter,
    :campaign-priority 30,
@@ -36418,7 +36428,11 @@
     {:job 2,
      :commit "f8ea046cd937e69a6595922a691bea2dc1247706",
      :reason
-     "Converted any ambient inner run with overlap endpoints into an equal overlap path routed through the outer piece; finite maximal-run partition remains."}]}
+     "Converted any ambient inner run with overlap endpoints into an equal overlap path routed through the outer piece; finite maximal-run partition remains."}
+    {:job 3,
+     :commit "77c92bf3b7390a1d297408e68d2f41a6b01c7e71",
+     :reason
+     "Proved every nonempty finite dependent concatenation stays in a set when each factor does; maximal-run index partition remains."}]}
   {:consumer :t99J05,
    :stop-count 5,
    :evidence
@@ -39157,7 +39171,7 @@
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "path_concat_mem_of_piece_mem",
@@ -39169,7 +39183,9 @@
     :type
     "nonempty finite path concat stays in U when each factor stays in U",
     :area "covering-subgroup-correspondence",
-    :proved-in :program-2026-10-13-close-t93j03},
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "77c92bf3b7390a1d297408e68d2f41a6b01c7e71"},
    :id :lemma-path-concat-mem-of-piece-mem,
    :kind :lemma,
    :depends-on
