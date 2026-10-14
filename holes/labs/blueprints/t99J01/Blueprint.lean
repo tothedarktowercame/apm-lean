@@ -8,6 +8,7 @@ import ConstructionTargets.CyclicThreeCirclesPullbackPathConnected
 import ConstructionTargets.CyclicThreeCirclesPullbackCover
 import ConstructionTargets.FiniteIndexFreeGroupSchreierRank
 import ConstructionTargets.T99J01CoverSubgroupIndex
+import ConstructionTargets.PointWedgeVanKampen
 
 /-! # t99J01: finite covers of a wedge of three circles
 
@@ -25,12 +26,72 @@ def T99J01ComponentSheets {E : Type} [TopologicalSpace E]
     (p : E → ThreeCircles) (e : E) : ℕ :=
   Nat.card {x : E // p x = p e ∧ Joined e x}
 
-/-- **LIBRARY.** The iterated point-wedge model used by the problem has free
-fundamental group on three generators, at every basepoint. -/
+/-- The distinguished point in the concrete second point-wedge. -/
+def T99J01ThreeCirclesPoint : ThreeCircles :=
+  ConstructionTargets.PointWedgeQuotient.quotientMap twoCirclesPoint 1
+    (Sum.inl twoCirclesPoint)
+
+/-- The circle group in the rank-one free-group coordinates used by the two
+successive point-wedge computations. -/
+theorem t99J01_circle_fundamentalGroup :
+    Nonempty (FundamentalGroup Circle 1 ≃* FreeGroup (Fin 1)) := by
+  sorry
+
+/-- The first concrete specialization of point-wedge van Kampen. -/
+theorem t99J01_twoCircles_fundamentalGroup_coprod :
+    Nonempty (FundamentalGroup TwoCircles twoCirclesPoint ≃*
+      Monoid.Coprod (FundamentalGroup Circle 1) (FundamentalGroup Circle 1)) := by
+  sorry
+
+/-- Algebraic conversion of the first van Kampen coproduct to rank two.  Both
+geometric inputs are hypotheses so this leaf is independent of them. -/
+theorem t99J01_twoCircles_fundamentalGroup_freeGroup
+    (hcircle : Nonempty (FundamentalGroup Circle 1 ≃* FreeGroup (Fin 1)))
+    (hwedge : Nonempty (FundamentalGroup TwoCircles twoCirclesPoint ≃*
+      Monoid.Coprod (FundamentalGroup Circle 1) (FundamentalGroup Circle 1))) :
+    Nonempty (FundamentalGroup TwoCircles twoCirclesPoint ≃* FreeGroup (Fin 2)) := by
+  sorry
+
+/-- The second concrete specialization of point-wedge van Kampen. -/
+theorem t99J01_threeCircles_fundamentalGroup_coprod :
+    Nonempty (FundamentalGroup ThreeCircles T99J01ThreeCirclesPoint ≃*
+      Monoid.Coprod (FundamentalGroup TwoCircles twoCirclesPoint)
+        (FundamentalGroup Circle 1)) := by
+  sorry
+
+/-- Algebraic conversion of the second van Kampen coproduct to rank three.
+All earlier conclusions are explicit hypotheses, so this is a parallel leaf. -/
+theorem t99J01_threeCircles_wedgePoint_fundamentalGroup
+    (hcircle : Nonempty (FundamentalGroup Circle 1 ≃* FreeGroup (Fin 1)))
+    (htwo : Nonempty
+      (FundamentalGroup TwoCircles twoCirclesPoint ≃* FreeGroup (Fin 2)))
+    (hwedge : Nonempty (FundamentalGroup ThreeCircles T99J01ThreeCirclesPoint ≃*
+      Monoid.Coprod (FundamentalGroup TwoCircles twoCirclesPoint)
+        (FundamentalGroup Circle 1))) :
+    Nonempty (FundamentalGroup ThreeCircles T99J01ThreeCirclesPoint ≃*
+      FreeGroup (Fin 3)) := by
+  sorry
+
+/-- Basepoint transport, isolated from both van Kampen specializations. -/
+theorem t99J01_threeCircles_basepoint_transport (x : ThreeCircles) :
+    Nonempty (FundamentalGroup ThreeCircles x ≃*
+      FundamentalGroup ThreeCircles T99J01ThreeCirclesPoint) := by
+  sorry
+
+/-- The iterated point-wedge model used by the problem has free fundamental
+group on three generators, at every basepoint. -/
 theorem t99J01_threeCircles_fundamentalGroup
     (x : ThreeCircles) :
     Nonempty (FundamentalGroup ThreeCircles x ≃* FreeGroup (Fin 3)) := by
-  sorry
+  obtain ⟨hcircle⟩ := t99J01_circle_fundamentalGroup
+  obtain ⟨htwoWedge⟩ := t99J01_twoCircles_fundamentalGroup_coprod
+  obtain ⟨htwo⟩ := t99J01_twoCircles_fundamentalGroup_freeGroup
+    ⟨hcircle⟩ ⟨htwoWedge⟩
+  obtain ⟨hthreeWedge⟩ := t99J01_threeCircles_fundamentalGroup_coprod
+  obtain ⟨hthree⟩ := t99J01_threeCircles_wedgePoint_fundamentalGroup
+    ⟨hcircle⟩ ⟨htwo⟩ ⟨hthreeWedge⟩
+  obtain ⟨htransport⟩ := t99J01_threeCircles_basepoint_transport x
+  exact ⟨htransport.trans hthree⟩
 
 /-- The cyclic pullback of the degree-`n` circle map along collapse to the
 first circle is a connected `n`-sheeted cover. -/
