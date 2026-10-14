@@ -578,7 +578,12 @@ noncomputable def apm_t02a01_radialPt (p : unitInterval × unitInterval) :
   Quotient.mk _ ⟨apm_t02a01_radial p.1 (4 * p.2), apm_t02a01_radial_mem p.1.2.1 p.1.2.2 _⟩
 
 theorem apm_t02a01_radialPt_continuous : Continuous apm_t02a01_radialPt := by
-  sorry
+  apply continuous_coinduced_rng.comp
+  apply Continuous.subtype_mk
+  change Continuous (fun p : unitInterval × unitInterval ↦
+    apm_t02a01_radial p.1 (4 * p.2))
+  fun_prop (disch := aesop) [apm_t02a01_radial, apm_t02a01_perimeter,
+    apm_t02a01_clamp01]
 
 /-- The corner `(0,0)` of the torus, where `A` and `B` are based. -/
 noncomputable def apm_t02a01_corner : apm_t02a01_puncturedTorus :=

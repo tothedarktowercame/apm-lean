@@ -543,7 +543,12 @@ noncomputable def apm_t02a01_radialPt (p : unitInterval × unitInterval) :
 
 -- BEGIN SEAT AREA
 theorem apm_t02a01_radialPt_continuous : Continuous apm_t02a01_radialPt := by
-  sorry
+  apply continuous_coinduced_rng.comp
+  apply Continuous.subtype_mk
+  change Continuous (fun p : unitInterval × unitInterval ↦
+    apm_t02a01_radial p.1 (4 * p.2))
+  fun_prop (disch := aesop) [apm_t02a01_radial, apm_t02a01_perimeter,
+    apm_t02a01_clamp01]
 -- END SEAT AREA
 
 /-- The corner `(0,0)` of the torus, where `A` and `B` are based. -/
