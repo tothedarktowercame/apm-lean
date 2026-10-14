@@ -87945,6 +87945,18 @@
     [{:cmd "H1 composition drafts",
       :exit 1,
       :correction "used exact homologyMap_comp"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792011856951-12414-51abf39b",
+     :commands
+     ["git show/diff a59abd80d; blob sha256; diff --check"
+      "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology"
+      "lake env lean /dev/stdin (#print axioms)"
+      "placeholder scan"
+      "statement-registry.py check"],
+     :finding
+     "PASS: reviewer codex-7; a59abd80d (topo-6) newly changes only scoped PolygonSurfaceHomology.lean; fixture SHA-256 cd28f78085efc4b28d14ae940d1533791cafc5a6aec4fe7b72d8d62dd0225a63 matches. Exact blob builds; 0 placeholders; standard axioms; registry 166/0. Covariant H1 composition is oriented overlap-to-outer then outer-to-wedge, yielding the ordered boundary-loop map; the representation boundaries and map order are correct, and no sign is inserted prematurely. New compiled milestone; remaining: identify chosen generator, compute signed arc/Hurewicz sum, then B8-B10."},
     :commit "a59abd80d",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
@@ -87953,7 +87965,7 @@
      "cd28f78085efc4b28d14ae940d1533791cafc5a6aec4fe7b72d8d62dd0225a63"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -87973,7 +87985,7 @@
     :blueprint
     "ConstructionTargets/PolygonSurfaceHomology.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked the radial-overlap to ordered-boundary comparison.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked degree-one naturality from overlap circle to boundary loop.",
    :id :program-2026-10-13-polygon-surface-homology,
    :kind :reusable-theorem,
    :campaign-priority 31,
@@ -88197,7 +88209,11 @@
     {:job 8,
      :commit "7ce50e825",
      :reason
-     "Banked the radial-overlap to ordered-boundary comparison."}]}
+     "Banked the radial-overlap to ordered-boundary comparison."}
+    {:job 9,
+     :commit "a59abd80d",
+     :reason
+     "Banked degree-one naturality from overlap circle to boundary loop."}]}
   {:consumer :t97A01,
    :stop-count 0,
    :phase :implementation,
@@ -91537,7 +91553,7 @@
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "radialOverlapCircle_h1_naturality",
@@ -91547,7 +91563,9 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "H1 overlap-to-outer-to-wedge equals boundary-loop H1",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :program-2026-10-13-polygon-surface-homology,
+    :banked-commit "a59abd80d"},
    :id :lemma-radialoverlapcircle-h1-naturality,
    :kind :lemma,
    :depends-on [:lemma-outerhomotopyequivwedge-radialoverlapcircle],
