@@ -119108,6 +119108,17 @@
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "hash/placeholders/diff", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1792014157118-12469-9e8ba04b",
+     :commands
+     ["git diff-tree/show 8500d6f9"
+      "archive 8500d6f9; lake env lean closure and Main"
+      "sha256sum/placeholders at 8500d6f9"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS program STOP: new commit changes only t00J02Closure.lean and correctly transports pointwise localization coefficients through the global signed sum while keeping orientation signs component-indexed. The proof uses the verified coefficient-uniqueness theorem pointwise and preserves equality direction. Fixture/frozen hashes match; closure has 0 placeholders, Main baseline 1; archived files compile with standard axioms; registry 166/166. Computing coefficients against lifts/top degree and assembling Main remain listed."},
     :commit "8500d6f95c3bc1b4889fc0b45f2cfbcea8027eaa",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
@@ -119116,7 +119127,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119134,7 +119145,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t00J02Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked component-sum coefficient transport.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked signed-sum coefficient transport.",
    :id :program-2026-10-13-close-t00j02,
    :kind :final-adapter,
    :campaign-priority 45,
@@ -119244,7 +119255,10 @@
      :reason "Banked local-degree coefficient uniqueness."}
     {:job 6,
      :commit "d362f7092f6d53eacae6e022043554bb7bc8ba1e",
-     :reason "Banked component-sum coefficient transport."}]}
+     :reason "Banked component-sum coefficient transport."}
+    {:job 7,
+     :commit "8500d6f95c3bc1b4889fc0b45f2cfbcea8027eaa",
+     :reason "Banked signed-sum coefficient transport."}]}
   {:consumer :t98A06,
    :stop-count 3,
    :evidence
@@ -120237,7 +120251,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "regularFiberSignedSum_eq_of_localizationCoefficients",
@@ -120247,7 +120261,9 @@
     :reported-by [:program-2026-10-13-close-t00j02],
     :type "chart coefficients replace local degrees in signed sum",
     :area "oriented-surface-degree",
-    :proved-in :program-2026-10-13-close-t00j02},
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "8500d6f95c3bc1b4889fc0b45f2cfbcea8027eaa"},
    :id :lemma-regularfibersignedsum-eq-of-localizationcoefficients,
    :kind :lemma,
    :depends-on [:lemma-regularfiberlocaldegree-eq-of-localization-eq],
