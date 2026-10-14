@@ -636,6 +636,53 @@ noncomputable def kleinActualSkeletonFundamentalGroupEquivFreeGroupBool :
   kleinActualSkeletonFundamentalGroupEquivCoprod.trans
     circleFundamentalGroupCoprodEquivFreeGroupBool
 
+/-- The literal attaching word read from the four polygon arcs. -/
+def kleinAabbWord : FreeGroup Bool :=
+  FreeGroup.of false * FreeGroup.of false *
+    FreeGroup.of true * FreeGroup.of true
+
+/-- The attaching class in the fundamental group of the actual polygon
+skeleton, expressed by pulling `aabb` back through its free-group coordinates. -/
+noncomputable def kleinSkeletonAttachingClass :
+    FundamentalGroup kleinPairingData.skeleton kleinSkeletonPoint :=
+  kleinActualSkeletonFundamentalGroupEquivFreeGroupBool.symm kleinAabbWord
+
+/-- The algebraic quotient map that imposes the polygon attaching relation on
+the actual skeleton fundamental group. -/
+noncomputable def kleinSkeletonPresentationMap :
+    FundamentalGroup kleinPairingData.skeleton kleinSkeletonPoint →*
+      KleinPolygonPresentedGroup :=
+  (PresentedGroup.mk kleinPolygonRelations).comp
+    kleinActualSkeletonFundamentalGroupEquivFreeGroupBool.toMonoidHom
+
+theorem kleinSkeletonPresentationMap_surjective :
+    Function.Surjective kleinSkeletonPresentationMap :=
+  (PresentedGroup.mk_surjective kleinPolygonRelations).comp
+    kleinActualSkeletonFundamentalGroupEquivFreeGroupBool.surjective
+
+/-- The exact `aabb` attaching class is killed by the presentation map. -/
+@[simp] theorem kleinSkeletonPresentationMap_attachingClass :
+    kleinSkeletonPresentationMap kleinSkeletonAttachingClass = 1 := by
+  rw [kleinSkeletonPresentationMap, kleinSkeletonAttachingClass,
+    MonoidHom.comp_apply]
+  change PresentedGroup.mk kleinPolygonRelations
+    (kleinActualSkeletonFundamentalGroupEquivFreeGroupBool
+      (kleinActualSkeletonFundamentalGroupEquivFreeGroupBool.symm kleinAabbWord)) = 1
+  rw [MulEquiv.apply_symm_apply]
+  exact PresentedGroup.one_of_mem (Set.mem_singleton kleinAabbWord)
+
+/-- Its kernel is exactly the pullback of the normal closure of `aabb`; this
+is the algebraic target of the remaining attaching-cell van Kampen theorem. -/
+theorem kleinSkeletonPresentationMap_ker :
+    MonoidHom.ker kleinSkeletonPresentationMap =
+      Subgroup.comap
+        kleinActualSkeletonFundamentalGroupEquivFreeGroupBool.toMonoidHom
+        (Subgroup.normalClosure kleinPolygonRelations) := by
+  ext g
+  simp only [MonoidHom.mem_ker, Subgroup.mem_comap,
+    kleinSkeletonPresentationMap, MonoidHom.coe_comp, Function.comp_apply,
+    PresentedGroup.mk_eq_one_iff]
+
 def finiteWedgeBoolPoint : FiniteWedge Bool := wedgeCircle false 1
 
 @[simp] theorem finiteWedgeBoolHomeomorphTwoCircles_point :
@@ -765,6 +812,9 @@ theorem lift_isEmbedding_assembly
 #print axioms kleinActualSkeletonFundamentalGroupEquivCoprod
 #print axioms circleFundamentalGroupCoprodEquivFreeGroupBool
 #print axioms kleinActualSkeletonFundamentalGroupEquivFreeGroupBool
+#print axioms kleinSkeletonPresentationMap_surjective
+#print axioms kleinSkeletonPresentationMap_attachingClass
+#print axioms kleinSkeletonPresentationMap_ker
 #print axioms kleinBottle_pi1_every_basepoint_of_polygon_van_kampen
 
 end ConstructionTargets.t93J03Closure

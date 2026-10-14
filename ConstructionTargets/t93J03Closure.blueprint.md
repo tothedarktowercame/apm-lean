@@ -202,6 +202,11 @@ the corresponding common-leg basepoint.
 `kleinActualSkeletonFundamentalGroupEquivFreeGroupBool` then uses winding
 numbers on both circle legs and the left/right `Fin 1 ⊕ Fin 1 ≃ Bool`
 labeling to put this group in the literal coordinates of the `aabb` word.
+`kleinSkeletonPresentationMap` now imposes that relation on the actual
+skeleton group: it is surjective, kills the pulled-back attaching class, and
+its kernel is exactly the pulled-back normal closure of `aabb`.  The remaining
+topological step is to identify the disk-attachment map on fundamental groups
+with this quotient.
 
 - Layer 1: C1, C3, and C4. C1 and C3 are independent; C4 is already complete.
 - Layer 2: C2 against the explicit C1 equivalence interface.
