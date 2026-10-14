@@ -415,7 +415,146 @@ theorem apm_t02a01_monodromy_of_boundary_word
           C(apm_t02a01_boundarySpace, apm_t02a01_puncturedTorus))
         (apm_t02a01_restrictedCover p e) γ = (a * b * a⁻¹ * b⁻¹) ^ k) :
     (hcov.monodromy γ ⟨e, rfl⟩).1.1 = deck 0 e.1 := by
-  sorry
+  let inc : C(apm_t02a01_boundarySpace, apm_t02a01_puncturedTorus) :=
+    ⟨((↑) : apm_t02a01_boundarySpace → apm_t02a01_puncturedTorus),
+      continuous_subtype_val⟩
+  have hequiv (q : FundamentalGroup apm_t02a01_puncturedTorus (p e.1))
+      (z : ZMod n) (x : p ⁻¹' {p e.1}) :
+      (hcover.monodromy (FundamentalGroup.toPath q)
+          ⟨deck z x.1, (hdeck_over z x.1).trans x.2⟩).1 =
+        deck z (hcover.monodromy (FundamentalGroup.toPath q) x).1 := by
+    obtain ⟨δ⟩ := FundamentalGroup.toPath q
+    change hcover.liftPath δ (deck z x.1) _ 1 =
+      deck z (hcover.liftPath δ x.1 _ 1)
+    let L : C(unitInterval, Stilde) :=
+      (⟨deck z, (deck z).continuous⟩ : C(Stilde, Stilde)).comp
+        (hcover.liftPath δ x.1 (by simpa using x.2.symm))
+    have hL : L = hcover.liftPath δ (deck z x.1) (by
+        simpa [hdeck_over] using x.2.symm) := by
+      apply (hcover.eq_liftPath_iff' _).2
+      constructor
+      · funext t
+        exact (hdeck_over z _).trans
+          (congr_fun (hcover.liftPath_lifts δ x.1 (by simpa using x.2.symm)) t)
+      · simp [L, hcover.liftPath_zero]
+    rw [← hL]
+    rfl
+  have hnaturality :
+      (hcover.monodromy (FundamentalGroup.toPath
+          (FundamentalGroup.map inc (apm_t02a01_restrictedCover p e) γ))
+        ⟨e.1, rfl⟩).1 = (hcov.monodromy γ ⟨e, rfl⟩).1.1 := by
+    obtain ⟨δ⟩ := γ
+    change hcover.liftPath (inc.comp δ) e.1 _ 1 =
+      (hcov.liftPath δ e _ 1).1
+    let L : C(unitInterval, Stilde) :=
+      ⟨fun t ↦ (hcov.liftPath δ e δ.source t).1, by fun_prop⟩
+    have hL : L = hcover.liftPath (inc.comp δ) e.1 (by
+        exact congrArg Subtype.val δ.source) := by
+      apply (hcover.eq_liftPath_iff' _).2
+      constructor
+      · funext t
+        exact congrArg Subtype.val
+          (congr_fun (hcov.liftPath_lifts δ e δ.source) t)
+      · simp [L, hcov.liftPath_zero]
+    rw [← hL]
+    rfl
+  have hend (q : FundamentalGroup apm_t02a01_puncturedTorus (p e.1)) :
+      ∃! z : ZMod n,
+        (hcover.monodromy (FundamentalGroup.toPath q) ⟨e.1, rfl⟩).1 = deck z e.1 := by
+    obtain ⟨z, hz, hzu⟩ := hdeck_transitive e.1
+      (hcover.monodromy (FundamentalGroup.toPath q) ⟨e.1, rfl⟩).1
+      (hcover.monodromy (FundamentalGroup.toPath q) ⟨e.1, rfl⟩).2.symm
+    exact ⟨z, hz.symm, fun w hw ↦ hzu w hw.symm⟩
+  let ρ : FundamentalGroup apm_t02a01_puncturedTorus (p e.1) →*
+      Equiv.Perm (p ⁻¹' {p e.1}) :=
+    { toFun := fun q ↦ Equiv.ofBijective
+          (hcover.monodromy (FundamentalGroup.toPath q))
+          (hcover.monodromy_bijective _)
+      map_one' := by
+        apply Equiv.ext
+        intro x
+        exact congrFun hcover.monodromy_refl x
+      map_mul' := by
+        intro q r
+        apply Equiv.ext
+        intro x
+        exact hcover.monodromy_trans_apply _ _ _ }
+  have hrho_comm (q r : FundamentalGroup apm_t02a01_puncturedTorus (p e.1)) :
+      ρ q * ρ r = ρ r * ρ q := by
+    obtain ⟨u, hu, -⟩ := hend q
+    obtain ⟨v, hv, -⟩ := hend r
+    ext x
+    obtain ⟨z, hz, -⟩ := hdeck_transitive e.1 x.1 x.2.symm
+    change (hcover.monodromy (FundamentalGroup.toPath q)
+      (hcover.monodromy (FundamentalGroup.toPath r) x)).1 = _
+    have hq := hequiv q z ⟨e.1, rfl⟩
+    have hr := hequiv r z ⟨e.1, rfl⟩
+    have hqv := hequiv q v ⟨e.1, rfl⟩
+    have hru := hequiv r u ⟨e.1, rfl⟩
+    have hx : x = ⟨deck z e.1, hdeck_over z e.1⟩ := Subtype.ext hz.symm
+    subst x
+    change (hcover.monodromy (FundamentalGroup.toPath q)
+      (hcover.monodromy (FundamentalGroup.toPath r)
+        ⟨deck z e.1, hdeck_over z e.1⟩)).1 =
+      (hcover.monodromy (FundamentalGroup.toPath r)
+        (hcover.monodromy (FundamentalGroup.toPath q)
+          ⟨deck z e.1, hdeck_over z e.1⟩)).1
+    have hr' : hcover.monodromy (FundamentalGroup.toPath r)
+        ⟨deck z e.1, hdeck_over z e.1⟩ =
+        ⟨deck z (hcover.monodromy (FundamentalGroup.toPath r)
+          ⟨e.1, rfl⟩).1,
+          (hdeck_over z _).trans
+            (hcover.monodromy (FundamentalGroup.toPath r) ⟨e.1, rfl⟩).2⟩ :=
+      Subtype.ext hr
+    have hq' : hcover.monodromy (FundamentalGroup.toPath q)
+        ⟨deck z e.1, hdeck_over z e.1⟩ =
+        ⟨deck z (hcover.monodromy (FundamentalGroup.toPath q)
+          ⟨e.1, rfl⟩).1,
+          (hdeck_over z _).trans
+            (hcover.monodromy (FundamentalGroup.toPath q) ⟨e.1, rfl⟩).2⟩ :=
+      Subtype.ext hq
+    have hu' : hcover.monodromy (FundamentalGroup.toPath q) ⟨e.1, rfl⟩ =
+        ⟨deck u e.1, hdeck_over u e.1⟩ := Subtype.ext hu
+    have hv' : hcover.monodromy (FundamentalGroup.toPath r) ⟨e.1, rfl⟩ =
+        ⟨deck v e.1, hdeck_over v e.1⟩ := Subtype.ext hv
+    have hvz : deck z (deck v e.1) = deck (v + z) e.1 := by
+      have := congrArg (fun f : Homeomorph Stilde Stilde ↦ f e.1) (hdeck_add v z)
+      exact this.symm
+    have huz : deck z (deck u e.1) = deck (u + z) e.1 := by
+      have := congrArg (fun f : Homeomorph Stilde Stilde ↦ f e.1) (hdeck_add u z)
+      exact this.symm
+    have hvz' : (⟨deck z (deck v e.1),
+        (hdeck_over z _).trans (hdeck_over v e.1)⟩ : p ⁻¹' {p e.1}) =
+        ⟨deck (v + z) e.1, hdeck_over (v + z) e.1⟩ := Subtype.ext hvz
+    have huz' : (⟨deck z (deck u e.1),
+        (hdeck_over z _).trans (hdeck_over u e.1)⟩ : p ⁻¹' {p e.1}) =
+        ⟨deck (u + z) e.1, hdeck_over (u + z) e.1⟩ := Subtype.ext huz
+    rw [hr', hq', hv', hu', hvz', huz']
+    rw [hequiv q (v + z) ⟨e.1, rfl⟩, hequiv r (u + z) ⟨e.1, rfl⟩,
+      hu, hv]
+    calc
+      deck (v + z) (deck u e.1) = deck (u + (v + z)) e.1 := by
+        exact congrArg (fun f : Homeomorph Stilde Stilde ↦ f e.1)
+          (hdeck_add u (v + z)).symm
+      _ = deck (v + (u + z)) e.1 := by congr 1; abel
+      _ = deck (u + z) (deck v e.1) := by
+        exact congrArg (fun f : Homeomorph Stilde Stilde ↦ f e.1)
+          (hdeck_add v (u + z))
+  have hcomm : ρ (a * b * a⁻¹ * b⁻¹) = 1 := by
+    simp only [map_mul, map_inv]
+    rw [hrho_comm a b]
+    group
+  have hpow : ρ ((a * b * a⁻¹ * b⁻¹) ^ k) = 1 := by
+    rw [map_zpow, hcomm]
+    exact one_zpow k
+  have hendzero :
+      (hcover.monodromy (FundamentalGroup.toPath
+        ((a * b * a⁻¹ * b⁻¹) ^ k)) ⟨e.1, rfl⟩).1 = e.1 := by
+    have := congrFun (congrArg Equiv.toFun hpow) (⟨e.1, rfl⟩ : p ⁻¹' {p e.1})
+    exact congrArg Subtype.val this
+  rw [hword] at hnaturality
+  rw [← hnaturality]
+  exact hendzero.trans (by rw [hdeck_zero]; rfl)
 -- END SEAT AREA
 
 /-- The polygon word and the covering/deck calculation assembled.  Repaired
