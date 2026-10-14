@@ -1198,6 +1198,55 @@ theorem circleIntegerLoopOneCoordinate_eq_one_or_neg_one :
   exact Int.eq_one_or_neg_one_of_mul_eq_one
     (by simpa [mul_comm] using hc2)
 
+/-- The boundary map computed in the existing H₁ coordinates.  Its extra
+factor records the only orientation ambiguity left by `circleH1IsoInt`. -/
+noncomputable def orientationSignedAttachingBoundary (P : PairingData) :
+    ℤ →ₗ[ℤ] (PairingOrbit P.pair → ℤ) where
+  toFun n := n • (circleIntegerLoopOneCoordinate • attachingDegree P)
+  map_add' m n := by simp [add_smul]
+  map_smul' m n := by
+    ext l
+    simp [mul_assoc, mul_left_comm]
+
+/-- Multiplying the attaching vector by the unresolved orientation unit does
+not change its kernel. -/
+theorem orientationSignedAttachingBoundary_ker (P : PairingData) :
+    LinearMap.ker (orientationSignedAttachingBoundary P) = BoundaryKernel P := by
+  rcases circleIntegerLoopOneCoordinate_eq_one_or_neg_one with h | h
+  · have hm : orientationSignedAttachingBoundary P = attachingBoundary P := by
+      apply LinearMap.ext
+      intro n
+      funext l
+      simp [orientationSignedAttachingBoundary, h]
+    rw [hm]
+  · have hm : orientationSignedAttachingBoundary P = -(attachingBoundary P) := by
+      apply LinearMap.ext
+      intro n
+      funext l
+      simp [orientationSignedAttachingBoundary, h]
+    rw [hm]
+    ext n
+    simp
+
+/-- Multiplying the attaching vector by the unresolved orientation unit does
+not change its range, hence does not change the quotient used for H₁. -/
+theorem orientationSignedAttachingBoundary_range (P : PairingData) :
+    LinearMap.range (orientationSignedAttachingBoundary P) =
+      LinearMap.range (attachingBoundary P) := by
+  rcases circleIntegerLoopOneCoordinate_eq_one_or_neg_one with h | h
+  · have hm : orientationSignedAttachingBoundary P = attachingBoundary P := by
+      apply LinearMap.ext
+      intro n
+      funext l
+      simp [orientationSignedAttachingBoundary, h]
+    rw [hm]
+  · have hm : orientationSignedAttachingBoundary P = -(attachingBoundary P) := by
+      apply LinearMap.ext
+      intro n
+      funext l
+      simp [orientationSignedAttachingBoundary, h]
+    rw [hm, LinearMap.range_neg]
+
 /-- The coordinate sum of the ordered signed boundary word is precisely the
 attaching degree vector fixed at the start of the calculation. -/
 theorem polygonBoundaryLegWord_coordinates (P : PairingData) :
