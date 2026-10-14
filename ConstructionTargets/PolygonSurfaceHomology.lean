@@ -1468,6 +1468,21 @@ theorem polygonBoundaryExplicitEdgeProduct_hurewicz_eq_attachingDegree
   intro i _
   by_cases hs : P.sign i <;> simp [F, hs]
 
+/-- Once finite subdivision identifies the geometric boundary class with the
+explicit edge product, naturality gives the complete orientation-signed H₁
+formula needed by B7. -/
+theorem polygonBoundaryWedgeLoop_hurewicz_of_eq_explicitEdgeProduct
+    (P : PairingData)
+    (hprod : polygonBoundaryFundamentalClass P =
+      polygonBoundaryExplicitEdgeProduct P) :
+    (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 1).obj
+        (ModuleCat.of ℤ ℤ)).map (TopCat.ofHom (polygonBoundaryWedgeLoop P)))
+        (ConstructionTargets.CircleHomology.circleH1IsoInt.inv 1) =
+      finiteWedgeH1CoordinateMap P
+        (circleIntegerLoopOneCoordinate • attachingDegree P) := by
+  rw [← polygonBoundaryFundamentalClass_hurewicz, hprod,
+    polygonBoundaryExplicitEdgeProduct_hurewicz_eq_attachingDegree]
+
 /-- Hurewicz evaluation of a finite leg word is the normalized coordinate map
 applied to its list-based coordinate sum. -/
 theorem finiteWedgeLegWord_hurewicz (P : PairingData)
