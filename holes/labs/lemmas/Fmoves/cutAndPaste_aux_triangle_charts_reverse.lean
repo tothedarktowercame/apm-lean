@@ -1933,7 +1933,32 @@ lemma cutAndPaste_aux_triangle_charts_reverse {Label : Type*}
     ∀ y y', Relation.EqvGen
         (WordRel (u ++ [x, x] ++ inverseWord v ++ t)) (b y) (b y') →
       cutAndPasteParameterRel u v t x a y y' := by
-  sorry
+  intro y y' h
+  have lift : ∀ p q,
+      Relation.EqvGen
+          (WordRel (u ++ [x, x] ++ inverseWord v ++ t)) p q →
+        ∀ yp yq, b yp = p → b yq = q →
+          Relation.EqvGen
+            (WordRel (u ++ [x] ++ v ++ [x] ++ t)) (a yp) (a yq) := by
+    intro p q hpq
+    induction hpq with
+    | rel p q hpq =>
+        intro yp yq hyp hyq
+        apply hgen yp yq
+        simpa [hyp, hyq] using hpq
+    | refl p =>
+        intro yp yq hyp hyq
+        apply hfib yp yq
+        rw [hyp, hyq]
+    | symm p q _ ih =>
+        intro yp yq hyp hyq
+        exact Relation.EqvGen.symm _ _ (ih yq yp hyq hyp)
+    | trans p q r _ _ ihpq ihqr =>
+        intro yp yr hyp hyr
+        obtain ⟨yq, hyq⟩ := hbs q
+        exact Relation.EqvGen.trans _ _ _
+          (ihpq yp yq hyp hyq) (ihqr yq yr hyq hyr)
+  exact lift (b y) (b y') h y y' rfl rfl
 -- END SEAT AREA
 
 /-- Sorry-free assembly of the radial construction, generator bookkeeping,
