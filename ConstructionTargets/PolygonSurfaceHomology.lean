@@ -3578,6 +3578,38 @@ theorem radialMVReducedPiecesExact (P : PairingData) :
             (ConstructionTargets.ProductionOpenCoverMayerVietoris.productionReassemblyArrow
               (openCover P).inner (openCover P).outer 1)))
 
+/-- A proof-relevant exactness package exposing the two arrows while hiding
+only the proof that their composite is zero. -/
+def HasExactArrows {C : Type*} [Category C] [HasZeroMorphisms C]
+    {X Y Z : C} (f : X ⟶ Y) (g : Y ⟶ Z) : Prop :=
+  ∃ h : f ≫ g = 0, (ShortComplex.mk f g h).Exact
+
+theorem hasExactArrows_of_exact {C : Type*} [Category C] [HasZeroMorphisms C]
+    {S : ShortComplex C} (hS : S.Exact) : HasExactArrows S.f S.g :=
+  ⟨S.zero, by simpa only using hS⟩
+
+/-- B6: the degree-two/degree-one radial Mayer--Vietoris fragment.  The
+middle short complex is in the fixed integer/orbit coordinates; the adjacent
+packages expose the production connecting, reassembly, and intersection
+arrows in their long-exact-sequence order. -/
+theorem radialMVSegment (P : PairingData) :
+    (radialMVReducedPieces P).Exact ∧
+      HasExactArrows
+        (ConstructionTargets.ProductionOpenCoverMayerVietoris.productionReassemblyArrow
+          (openCover P).inner (openCover P).outer 1)
+        (ConstructionTargets.ProductionOpenCoverMayerVietoris.productionConnecting
+          (openCover P).inner (openCover P).outer
+          (openCover P).inner_open (openCover P).outer_open (openCover P).cover 0) ∧
+      HasExactArrows
+        (ConstructionTargets.ProductionOpenCoverMayerVietoris.productionConnecting
+          (openCover P).inner (openCover P).outer
+          (openCover P).inner_open (openCover P).outer_open (openCover P).cover 1)
+        (ConstructionTargets.ProductionOpenCoverMayerVietoris.productionIntersectionArrow
+          (openCover P).inner (openCover P).outer 1) := by
+  exact ⟨radialMVReducedPiecesExact P,
+    hasExactArrows_of_exact (radialMVUnionExact P 0),
+    hasExactArrows_of_exact (radialMVIntersectionExact P 1)⟩
+
 end
 
 end ConstructionTargets.PolygonSurfaceHomology
