@@ -113903,6 +113903,19 @@
       "lake build ConstructionTargets.ThreeCirclesFundamentalGroup",
       :exit 1,
       :finding "B12 module absent"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791990418204-11918-6b7f33b0",
+     :commands
+     ["git show/diff-tree 940f6fd89d940ebab6bc2c77cb38bdb808a44c3c"
+      "archive commit; lake env lean PointWedgeVanKampen.lean"
+      "sha256sum source/doc/blueprint; count sorry/admit"
+      "python3 scripts/statement-registry.py check"
+      "#print axioms overlap square/projection"
+      "lake build ConstructionTargets.PointWedgeVanKampen"],
+     :finding
+     "PASS: exact scope and hashes match; archived source compiles; placeholders 0->0; registry 166/166. The transported overlap morphism is correctly identified as endpoint equality transport, giving the literal Y connector square; the banked iff criterion then proves right projection = 1 with explicit representation crossings; standard axioms only. New compiled milestone recorded; coproduct-kernel extraction and genericPointWedgeLegCoordinates_vanKampen remain listed."},
     :commit "940f6fd89d940ebab6bc2c77cb38bdb808a44c3c",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
@@ -113913,7 +113926,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113934,7 +113947,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked arbitrary-endpoint counit-normal-form reduction.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked the literal overlap connector square and trivial right-factor projection.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -114895,8 +114908,11 @@
      :reason "Banked literal counit square iff trivial normal form."}
     {:job 7,
      :commit "a6d0d9ddb90ab82dc72d9023e826c0d78943eecb",
+     :reason "Banked arbitrary-endpoint counit-normal-form reduction."}
+    {:job 8,
+     :commit "940f6fd89d940ebab6bc2c77cb38bdb808a44c3c",
      :reason
-     "Banked arbitrary-endpoint counit-normal-form reduction."}]}
+     "Banked the literal overlap connector square and trivial right-factor projection."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
