@@ -159,7 +159,106 @@ lemma t93A06_torusAtlas_aux_quotient_charts_aux_inverse_smooth (x : Plane) :
       t93A06_torusAtlas_aux_quotient_charts_aux_open_projection
       (t93A06_torusAtlas_aux_quotient_charts_aux_box_open x)
     ContMDiffOn 𝓘(ℝ,Plane) 𝓘(ℝ,Plane) ∞ e.symm e.target := by
-  sorry
+  letI := t93A06_torusAtlas_aux_quotient_charts_aux_charts
+  dsimp only
+  let e := OpenPartialHomeomorph.ofContinuousOpen
+    ((t93A06_torusAtlas_aux_quotient_charts_aux_box_inj x).toPartialEquiv
+      projection (t93A06_torusAtlas_aux_quotient_charts_aux_box x))
+    (show Continuous projection from by unfold projection; fun_prop).continuousOn
+    t93A06_torusAtlas_aux_quotient_charts_aux_open_projection
+    (t93A06_torusAtlas_aux_quotient_charts_aux_box_open x)
+  change ContMDiffOn 𝓘(ℝ, Plane) 𝓘(ℝ, Plane) ∞ e.symm e.target
+  intro z hz
+  rw [contMDiffWithinAt_iff]
+  constructor
+  · exact e.symm.continuousOn.continuousWithinAt hz
+  · let a := t93A06_torusAtlas_aux_quotient_charts_aux_lift z
+    let c := t93A06_torusAtlas_aux_quotient_charts_aux_chart a
+    have hza : projection a = z :=
+      t93A06_torusAtlas_aux_quotient_charts_aux_lift_spec z
+    have hzc : z ∈ c.source := by
+      rw [t93A06_torusAtlas_aux_quotient_charts_aux_chart_source]
+      exact ⟨a, t93A06_torusAtlas_aux_quotient_charts_aux_mem_box a, hza⟩
+    have hc_eq : chartAt Plane z = c := rfl
+    let t := c.symm.trans e.symm
+    have ha : a ∈ t.source := by
+      constructor
+      · simpa [c, t93A06_torusAtlas_aux_quotient_charts_aux_chart] using
+          t93A06_torusAtlas_aux_quotient_charts_aux_mem_box a
+      · simpa [t, c, t93A06_torusAtlas_aux_quotient_charts_aux_chart, hza] using hz
+    have hta : t a = e.symm z := by
+      simp [t, c, t93A06_torusAtlas_aux_quotient_charts_aux_chart, hza]
+    have hcont : ContinuousWithinAt (fun w ↦ t w - w) t.source a :=
+      (t.continuousOn.continuousWithinAt ha).sub continuousWithinAt_id
+    have hev : ∀ᶠ w in nhdsWithin a t.source,
+        dist (t w - w) (t a - a) < 1 :=
+      (Metric.tendsto_nhds.mp hcont) 1 zero_lt_one
+    have heq : ∀ᶠ w in nhdsWithin (extChartAt 𝓘(ℝ, Plane) z z)
+        ((extChartAt 𝓘(ℝ, Plane) z).symm ⁻¹' e.target ∩ Set.range (𝓘(ℝ, Plane))),
+        (extChartAt 𝓘(ℝ, Plane) (e.symm z) ∘ e.symm ∘
+          (extChartAt 𝓘(ℝ, Plane) z).symm) w =
+          w + (e.symm z - a) := by
+      have hcenter : extChartAt 𝓘(ℝ, Plane) z z = a := by
+        change c z = a
+        rw [← hza]
+        exact t93A06_torusAtlas_aux_quotient_charts_aux_chart_proj a a
+          (t93A06_torusAtlas_aux_quotient_charts_aux_mem_box a)
+      rw [hcenter]
+      rw [eventually_nhdsWithin_iff] at hev ⊢
+      filter_upwards [hev, c.open_target.eventually_mem
+        (by simpa [c, t93A06_torusAtlas_aux_quotient_charts_aux_chart] using
+          t93A06_torusAtlas_aux_quotient_charts_aux_mem_box a)] with w hw hwc hwd
+      have hproj : (extChartAt 𝓘(ℝ, Plane) z).symm w = projection w := by
+        simp [extChartAt, hc_eq, c,
+          t93A06_torusAtlas_aux_quotient_charts_aux_chart]
+      have hwe : projection w ∈ e.target := by
+        simpa [hproj] using hwd.1
+      have hwt : w ∈ t.source := ⟨hwc, by simpa [t, hproj] using hwe⟩
+      have hw := hw hwt
+      have hfib : projection (e.symm (projection w)) = projection w := by
+        exact e.right_inv hwe
+      obtain ⟨k, hk⟩ :=
+        (t93A06_torusAtlas_aux_quotient_charts_aux_fibers w
+          (e.symm (projection w))).mp hfib.symm
+      have hfibz : projection a = projection (e.symm z) := by
+        rw [hza]
+        simpa [e] using (e.right_inv hz).symm
+      obtain ⟨q, hq⟩ :=
+        (t93A06_torusAtlas_aux_quotient_charts_aux_fibers a (e.symm z)).mp hfibz
+      have hkz : k = q := by
+        funext i
+        have hcproj : c.symm w = projection w := by
+          simp [c, t93A06_torusAtlas_aux_quotient_charts_aux_chart]
+        have htw : t w = e.symm (projection w) := by
+          simp [t, hcproj]
+        have hcoord : |((k i - q i : ℤ) : ℝ)| < 1 := by
+          calc
+            |((k i - q i : ℤ) : ℝ)| = |(t w - w) i - (t a - a) i| := by
+              rw [Int.cast_sub]
+              simp only [Pi.sub_apply, hta, htw, hk i, hq i]
+              ring
+            _ ≤ ‖(t w - w) - (t a - a)‖ :=
+              norm_le_pi_norm ((t w - w) - (t a - a)) i
+            _ = dist (t w - w) (t a - a) := by rw [dist_eq_norm]
+            _ < 1 := hw
+        have hlo : (-1 : ℤ) < k i - q i := by exact_mod_cast (abs_lt.mp hcoord).1
+        have hhi : k i - q i < 1 := by exact_mod_cast (abs_lt.mp hcoord).2
+        omega
+      funext i
+      change e.symm (projection w) i = w i + (e.symm z i - a i)
+      rw [hk i]
+      rw [hkz, hq i]
+      ring
+    apply (contDiff_id.add (contDiff_const : ContDiff ℝ ∞
+      (fun _ : Plane ↦ e.symm z - a))).contDiffWithinAt.congr_of_eventuallyEq heq
+    have : (chartAt Plane z) z = a := by
+      rw [hc_eq, ← hza]
+      exact t93A06_torusAtlas_aux_quotient_charts_aux_chart_proj a a
+        (t93A06_torusAtlas_aux_quotient_charts_aux_mem_box a)
+    change e.symm ((chartAt Plane z).symm ((chartAt Plane z) z)) =
+      (chartAt Plane z) z + (e.symm z - a)
+    rw [(chartAt Plane z).left_inv hzc, this]
+    ring
 theorem t93A06_torusAtlas_aux_quotient_charts :
     ∃ charts : ChartedSpace Plane Torus,
       letI := charts
