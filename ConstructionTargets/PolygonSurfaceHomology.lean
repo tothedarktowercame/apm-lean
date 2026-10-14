@@ -2409,6 +2409,76 @@ theorem finiteWedgeFinSuccOldFundamentalGroupMap_eq_transport (n : ℕ)
   rw [MulEquiv.apply_symm_apply,
     finiteWedgeFinSuccOldFundamentalGroupMap_comparison]
 
+/-- Mapping the installed final-factor inclusion across the splitting
+homeomorphism recovers the literal right point-wedge leg map, including its
+quotient basepoint transport. -/
+theorem finiteWedgeFinSuccLastFundamentalGroupMap_comparison (n : ℕ)
+    (a : FundamentalGroup
+      (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge Unit)
+      (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle () 1)) :
+    finiteWedgeFinSuccFundamentalGroupEquiv n
+        (finiteWedgeFinSuccLastFundamentalGroupMap n a) =
+      ConstructionTargets.PointWedgeVanKampen.genericPointWedgeRightLegMap
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1)
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle () 1) a := by
+  induction a using Path.Homotopic.Quotient.ind with
+  | mk p =>
+      rw [finiteWedgeFinSuccLastFundamentalGroupMap,
+        FundamentalGroup.mapOfEq_apply]
+      change finiteWedgeFinSuccFundamentalGroupEquiv n
+          (Path.Homotopic.Quotient.mk
+            ((p.map (finiteWedgeFinSuccLastInclusion n).continuous).cast _ _)) = _
+      change FundamentalGroup.map
+          ⟨finiteWedgeFinSuccHomeomorphPointWedge n,
+            (finiteWedgeFinSuccHomeomorphPointWedge n).continuous⟩ _
+          (Path.Homotopic.Quotient.mk
+            ((p.map (finiteWedgeFinSuccLastInclusion n).continuous).cast _ _)) = _
+      rw [FundamentalGroup.map_apply,
+        ConstructionTargets.PointWedgeVanKampen.genericPointWedgeRightLegMap,
+        FundamentalGroup.mapOfEq_apply]
+      apply Path.Homotopic.Quotient.eq.mpr
+      convert Path.Homotopic.refl
+        ((p.map ((ConstructionTargets.PointWedgeQuotient.continuous_quotientMap
+          (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1)
+          (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle () 1)).comp
+            continuous_inr)).cast _ _) using 1
+      ext t
+      change finiteWedgeFinSuccHomeomorphPointWedge n
+          (((p.map (finiteWedgeFinSuccLastInclusion n).continuous).cast _ _) t) = _
+      rw [show ((p.map (finiteWedgeFinSuccLastInclusion n).continuous).cast _ _) t =
+          (p.map (finiteWedgeFinSuccLastInclusion n).continuous) t by
+        exact congrFun (Path.cast_coe _ _ _) t]
+      rw [show ((p.map ((ConstructionTargets.PointWedgeQuotient.continuous_quotientMap
+          (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1)
+          (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle () 1)).comp
+            continuous_inr)).cast _ _) t =
+          (p.map ((ConstructionTargets.PointWedgeQuotient.continuous_quotientMap
+            (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1)
+            (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle () 1)).comp
+              continuous_inr)) t by
+        exact congrFun (Path.cast_coe _ _ _) t]
+      change finiteWedgeFinSuccHomeomorphPointWedge n
+          (finiteWedgeFinSuccLastInclusion n (p t)) =
+        ConstructionTargets.PointWedgeQuotient.quotientMap
+          (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1)
+          (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle () 1) (.inr (p t))
+      simp [finiteWedgeFinSuccLastInclusion]
+
+/-- In the pullback orientation used by the split-word theorem, the literal
+right leg is exactly the installed final-factor map. -/
+theorem finiteWedgeFinSuccLastFundamentalGroupMap_eq_transport (n : ℕ)
+    (a : FundamentalGroup
+      (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge Unit)
+      (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle () 1)) :
+    (finiteWedgeFinSuccFundamentalGroupEquiv n).symm
+        (ConstructionTargets.PointWedgeVanKampen.genericPointWedgeRightLegMap
+          (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1)
+          (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle () 1) a) =
+      finiteWedgeFinSuccLastFundamentalGroupMap n a := by
+  apply (finiteWedgeFinSuccFundamentalGroupEquiv n).injective
+  rw [MulEquiv.apply_symm_apply,
+    finiteWedgeFinSuccLastFundamentalGroupMap_comparison]
+
 /-- Pulling the point-wedge word theorem through the successor homeomorphism
 gives a word theorem on the finite wedge.  Its letters are still grouped into
 the old wedge and final circle; the next induction step expands the old
@@ -2467,6 +2537,28 @@ theorem finiteWedgeFinSucc_exists_splitLegWord (n : ℕ)
                     (coprodLegWordValue _ _ w) = _ * coprodLegWordValue _ _ w <;>
                 rw [MulEquiv.apply_symm_apply, ih]
     _ = finiteWedgeFinSuccFundamentalGroupEquiv n g := hw
+
+/-- The transported split word can be stated entirely with the installed
+old- and final-factor maps on the successor finite wedge. -/
+theorem finiteWedgeFinSucc_exists_installedSplitLegWord (n : ℕ)
+    (g : FundamentalGroup
+      (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge (Fin ((n + 1) + 1)))
+      (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle
+        (0 : Fin ((n + 1) + 1)) 1)) :
+    ∃ w : List
+        (FundamentalGroup
+            (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge (Fin (n + 1)))
+            (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1) ⊕
+          FundamentalGroup
+            (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge Unit)
+            (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle () 1)),
+      coprodLegWordValue
+          (finiteWedgeFinSuccOldFundamentalGroupMap n)
+          (finiteWedgeFinSuccLastFundamentalGroupMap n) w = g := by
+  rcases finiteWedgeFinSucc_exists_splitLegWord n g with ⟨w, hw⟩
+  refine ⟨w, ?_⟩
+  simpa only [finiteWedgeFinSuccOldFundamentalGroupMap_eq_transport,
+    finiteWedgeFinSuccLastFundamentalGroupMap_eq_transport] using hw
 
 end
 
