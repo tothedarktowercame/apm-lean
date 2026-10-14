@@ -29,11 +29,140 @@ independent lemma seats. -/
 
 /-- The deck-group calculation at the canonical orbit of the origin. -/
 -- BEGIN SEAT AREA
+theorem t96J02_kleinPlaneQuotient_pi1_origin_aux_coordinates
+    (g : T96J02PresentedGroup) (p q : ℝ × ℝ) (h : g • p = q) :
+    (((Multiplicative.toAdd
+      (KleinPresentedGroupCoordinateNormalForm.coordinateEquiv g).2 : ℤ) : ℝ) =
+        q.2 - p.2) ∧
+    (((Multiplicative.toAdd
+      (KleinPresentedGroupCoordinateNormalForm.coordinateEquiv g).1 : ℤ) : ℝ) =
+        q.1 - ((Multiplicative.toAdd
+          (action (KleinPresentedGroupCoordinateNormalForm.coordinateEquiv g).2
+            (Multiplicative.ofAdd 1)) : ℤ) : ℝ) * p.1) := by
+  change KleinPlaneAffineAction.coordinateAct
+    (KleinPresentedGroupCoordinateNormalForm.coordinateEquiv g) p = q at h
+  constructor
+  · have hy := congrArg Prod.snd h
+    dsimp [KleinPlaneAffineAction.coordinateAct] at hy
+    linarith
+  · have hx := congrArg Prod.fst h
+    dsimp [KleinPlaneAffineAction.coordinateAct] at hx
+    linarith
+
+theorem t96J02_kleinPlaneQuotient_pi1_origin_aux_finite_cast
+    {A : Type*} [TopologicalSpace A] {K : Set A} (hK : IsCompact K)
+    (f : A → ℝ) (hf : Continuous f) :
+    {z : ZMul | ((Multiplicative.toAdd z : ℤ) : ℝ) ∈ f '' K}.Finite := by
+  let S : Set ZMul :=
+    {z | ((Multiplicative.toAdd z : ℤ) : ℝ) ∈ f '' K}
+  have hc : IsCompact (f '' K) := hK.image hf
+  obtain ⟨a, ha⟩ := hc.bddBelow
+  obtain ⟨b, hb⟩ := hc.bddAbove
+  obtain ⟨za : ℤ, hza : (za : ℝ) ≤ a⟩ := exists_int_le a
+  obtain ⟨zb : ℤ, hzb : b ≤ (zb : ℝ)⟩ := exists_int_ge b
+  have hbelow : BddBelow S := by
+    refine ⟨Multiplicative.ofAdd za, ?_⟩
+    intro z hz
+    change za ≤ Multiplicative.toAdd z
+    rw [← Int.cast_le (R := ℝ)]
+    exact hza.trans (ha hz)
+  have habove : BddAbove S := by
+    refine ⟨Multiplicative.ofAdd zb, ?_⟩
+    intro z hz
+    change Multiplicative.toAdd z ≤ zb
+    rw [← Int.cast_le (R := ℝ)]
+    exact (hb hz).trans hzb
+  exact hbelow.finite_of_bddAbove habove
+
+theorem t96J02_kleinPlaneQuotient_pi1_origin_aux_finite_vertical
+    {K L : Set (ℝ × ℝ)} (hK : IsCompact K) (hL : IsCompact L) :
+    {n : ZMul | ((Multiplicative.toAdd n : ℤ) : ℝ) ∈
+      (fun pq : (ℝ × ℝ) × (ℝ × ℝ) => pq.2.2 - pq.1.2) '' (K ×ˢ L)}.Finite := by
+  apply t96J02_kleinPlaneQuotient_pi1_origin_aux_finite_cast (hK.prod hL)
+  fun_prop
+
+theorem t96J02_kleinPlaneQuotient_pi1_origin_aux_finite_horizontal
+    {K L : Set (ℝ × ℝ)} (hK : IsCompact K) (hL : IsCompact L) (n : ZMul) :
+    {m : ZMul | ((Multiplicative.toAdd m : ℤ) : ℝ) ∈
+      (fun pq : (ℝ × ℝ) × (ℝ × ℝ) => pq.2.1 -
+        ((Multiplicative.toAdd (action n (Multiplicative.ofAdd 1)) : ℤ) : ℝ) *
+          pq.1.1) '' (K ×ˢ L)}.Finite := by
+  apply t96J02_kleinPlaneQuotient_pi1_origin_aux_finite_cast (hK.prod hL)
+  fun_prop
+
+theorem t96J02_kleinPlaneQuotient_pi1_origin_aux_finite_actors
+    {K L : Set (ℝ × ℝ)} (hK : IsCompact K) (hL : IsCompact L) :
+    {g : T96J02PresentedGroup | ((g • ·) '' K ∩ L).Nonempty}.Finite := by
+  let V : Set ZMul := {n | ((Multiplicative.toAdd n : ℤ) : ℝ) ∈
+    (fun pq : (ℝ × ℝ) × (ℝ × ℝ) => pq.2.2 - pq.1.2) '' (K ×ˢ L)}
+  let H : ZMul → Set ZMul := fun n => {m |
+    ((Multiplicative.toAdd m : ℤ) : ℝ) ∈
+      (fun pq : (ℝ × ℝ) × (ℝ × ℝ) => pq.2.1 -
+        ((Multiplicative.toAdd (action n (Multiplicative.ofAdd 1)) : ℤ) : ℝ) *
+          pq.1.1) '' (K ×ˢ L)}
+  have hV : V.Finite :=
+    t96J02_kleinPlaneQuotient_pi1_origin_aux_finite_vertical hK hL
+  have hH : ∀ n, (H n).Finite := fun n =>
+    t96J02_kleinPlaneQuotient_pi1_origin_aux_finite_horizontal hK hL n
+  have hPairs : (⋃ n ∈ V, H n ×ˢ ({n} : Set ZMul)).Finite :=
+    hV.biUnion fun n _ => (hH n).prod (Set.finite_singleton n)
+  apply (hPairs.preimage
+    KleinPresentedGroupCoordinateNormalForm.coordinatePairEquiv.injective.injOn).subset
+  intro g hg
+  obtain ⟨q, ⟨p, hp, hgp⟩, hq⟩ := hg
+  have heq := t96J02_kleinPlaneQuotient_pi1_origin_aux_coordinates g p q hgp
+  apply Set.mem_iUnion₂.mpr
+  refine ⟨(KleinPresentedGroupCoordinateNormalForm.coordinateEquiv g).2, ?_, ?_⟩
+  · exact ⟨⟨p, q⟩, ⟨hp, hq⟩, heq.1.symm⟩
+  · change (KleinPresentedGroupCoordinateNormalForm.coordinateEquiv g).1 ∈
+        H (KleinPresentedGroupCoordinateNormalForm.coordinateEquiv g).2 ∧
+      (KleinPresentedGroupCoordinateNormalForm.coordinateEquiv g).2 ∈
+        ({(KleinPresentedGroupCoordinateNormalForm.coordinateEquiv g).2} : Set ZMul)
+    exact ⟨⟨⟨p, q⟩, ⟨hp, hq⟩, heq.2.symm⟩, Set.mem_singleton _⟩
+
+theorem t96J02_kleinPlaneQuotient_pi1_origin_aux_continuous
+    (g : T96J02PresentedGroup) : Continuous (fun p : ℝ × ℝ => g • p) := by
+  change Continuous (fun p : ℝ × ℝ => KleinPlaneAffineAction.coordinateAct
+    (KleinPresentedGroupCoordinateNormalForm.coordinateEquiv g) p)
+  exact (continuous_const.add (continuous_const.mul continuous_fst)).prodMk
+    (continuous_const.add continuous_snd)
+
+theorem t96J02_kleinPlaneQuotient_pi1_origin_aux_free
+    (g : T96J02PresentedGroup) (p : ℝ × ℝ) (h : g • p = p) : g = 1 := by
+  let c := KleinPresentedGroupCoordinateNormalForm.coordinateEquiv g
+  have hc : KleinPlaneAffineAction.coordinateAct c p = p := by
+    simpa [c, KleinPlaneAffineAction.planeAction] using h
+  have hy := congrArg Prod.snd hc
+  have hnR : ((Multiplicative.toAdd c.2 : ℤ) : ℝ) = 0 := by
+    dsimp [KleinPlaneAffineAction.coordinateAct] at hy
+    linarith
+  have hn : Multiplicative.toAdd c.2 = 0 := by exact_mod_cast hnR
+  have hc2 : c.2 = 1 := by
+    apply Multiplicative.toAdd.injective
+    simpa using hn
+  have hx := congrArg Prod.fst hc
+  have hc1 : c.1 = 1 := by
+    dsimp [KleinPlaneAffineAction.coordinateAct] at hx
+    simpa [hc2] using hx
+  apply KleinPresentedGroupCoordinateNormalForm.coordinateEquiv.injective
+  change c = KleinPresentedGroupCoordinateNormalForm.coordinateEquiv 1
+  rw [map_one]
+  apply SemidirectProduct.ext
+  · exact hc1
+  · exact hc2
+
 theorem t96J02_kleinPlaneQuotient_pi1_origin :
     Nonempty
       (FundamentalGroup T96J02KleinPlaneQuotient T96J02KleinPlaneOrigin ≃*
         T96J02PresentedGroup) := by
-  sorry
+  letI : ContinuousConstSMul T96J02PresentedGroup (ℝ × ℝ) :=
+    ⟨t96J02_kleinPlaneQuotient_pi1_origin_aux_continuous⟩
+  letI : ProperlyDiscontinuousSMul T96J02PresentedGroup (ℝ × ℝ) :=
+    ⟨fun hK hL =>
+      t96J02_kleinPlaneQuotient_pi1_origin_aux_finite_actors hK hL⟩
+  exact
+    ConstructionTargets.DeckGroupQuotientFundamentalGroup.freeProperlyDiscontinuousQuotient_fundamentalGroupEquiv
+      t96J02_kleinPlaneQuotient_pi1_origin_aux_free (0, 0)
 -- END SEAT AREA
 
 /-- Move the deck-group calculation to every point of the orbit quotient.
