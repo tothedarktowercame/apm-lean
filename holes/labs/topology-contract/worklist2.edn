@@ -87941,6 +87941,16 @@
       :exit 1,
       :correction
       "fixed quotient relation, topology, and functor composition"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791940660974-11147-43d139ae",
+     :commands
+     ["exact commit blob + #print axioms via lake env lean /dev/stdin"
+      "scope/hash/package-link assertions"
+      "statement-registry check; comment-stripped placeholder scan"],
+     :finding
+     "PASS: cfd4e0438 changes only PolygonSurfaceHomology.lean; fixture SHA256 7723329e602326b3c92176d382ae870f5430e08952984fca74840b62c852bb36. Exact blob compiles with standard axioms propext/Classical.choice/Quot.sound; placeholders 0; registry 166/0. New program progress constructs the H1 coproduct presentation and finite function-coordinate representation, with Pi.single l n mapped in the declared positive orientation through circleH1IsoInt.inv then the induced leg map. The coordinate isomorphism and higher-homology milestones remain explicitly listed."},
     :commit "f68f6c6e6",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
@@ -87949,7 +87959,7 @@
      "e53824670d25ab846f6882e93ae9920008a26506b0b2178b4e7fa32775759f54"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -87969,7 +87979,7 @@
     :blueprint
     "ConstructionTargets/PolygonSurfaceHomology.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked the normalized finite-wedge H1 coordinate presentation.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked continuous circle-leg collapses and their H1 self-retraction.",
    :id :program-2026-10-13-polygon-surface-homology,
    :kind :reusable-theorem,
    :campaign-priority 31,
@@ -88001,7 +88011,11 @@
     {:job 6,
      :commit "cfd4e0438",
      :reason
-     "Banked the normalized finite-wedge H1 coordinate presentation."}]}
+     "Banked the normalized finite-wedge H1 coordinate presentation."}
+    {:job 7,
+     :commit "f68f6c6e6",
+     :reason
+     "Banked continuous circle-leg collapses and their H1 self-retraction."}]}
   {:consumer :t97A01,
    :stop-count 0,
    :phase :implementation,
@@ -88891,7 +88905,7 @@
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "finiteWedgeLegH1_collapse_self",
@@ -88901,7 +88915,9 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "leg inclusion then collapse induces identity on H1",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :program-2026-10-13-polygon-surface-homology,
+    :banked-commit "f68f6c6e6"},
    :id :lemma-finitewedgelegh1-collapse-self,
    :kind :lemma,
    :depends-on [:lemma-finitewedgeh1coordinatemap-single],
