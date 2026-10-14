@@ -3935,7 +3935,33 @@ theorem zipCone_surjOn {n k : ℕ}
       y = zipCentre + (r : ℂ) * (p - zipCentre))
     (hsurj : ∀ {p : ℂ}, p ∈ zipHalfBoundary → ∃ b : Circle, zipBoundaryMap n k b = p)
     {y : ℂ} (hy : y ∈ zipHalfDisk) : ∃ z : ℂ, ‖z‖ ≤ 1 ∧ zipCone n k z = y := by
-  sorry
+  obtain ⟨p, hp, r, hr0, hr1, hy⟩ := hcone hy
+  obtain ⟨b, hb⟩ := hsurj hp
+  by_cases hr : r = 0
+  · refine ⟨0, by simp, ?_⟩
+    simp [zipCone, hy, hr]
+  · let z : ℂ := (r : ℂ) * (b : ℂ)
+    have hbnorm : ‖(b : ℂ)‖ = 1 := by
+      simpa [Circle, Submonoid.unitSphere] using b.property
+    have hznorm : ‖z‖ = r := by
+      simp [z, norm_mul, hbnorm, abs_of_nonneg hr0]
+    have hz0 : z ≠ 0 := by
+      intro hz
+      have : r = 0 := by simpa [hznorm] using congrArg norm hz
+      exact hr this
+    refine ⟨z, hznorm.trans_le hr1, ?_⟩
+    rw [zipCone, dif_neg hz0]
+    let q : Circle :=
+      ⟨((‖z‖⁻¹ : ℝ) : ℂ) * z, by
+        simp [Circle, Submonoid.unitSphere, norm_mul, hz0]⟩
+    change zipCentre + (‖z‖ : ℂ) * (zipBoundaryMap n k q - zipCentre) = y
+    have hq : q = b := by
+      apply Subtype.ext
+      change ((‖z‖⁻¹ : ℝ) : ℂ) * z = (b : ℂ)
+      rw [hznorm]
+      simp [z, hr]
+    rw [hznorm, hq, hb]
+    exact hy.symm
 
 /-! ### The zip -/
 
