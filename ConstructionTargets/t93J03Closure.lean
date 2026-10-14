@@ -1384,6 +1384,46 @@ theorem pathTwoOpenSubdivisionRunStart_eq_previous_end
           (pathTwoOpenSubdivisionRunFamily S i).length :=
       pathTwoOpenSubdivisionRunFamily_getLast_succ_val S i
 
+/-- The first maximal run begins at the first subdivision piece. -/
+@[simp] theorem pathTwoOpenSubdivisionRunStart_zero
+    {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
+    {U V : Set X} (S : PathTwoOpenSubdivision p U V) :
+    pathTwoOpenSubdivisionRunStart S 0 = 0 := by
+  obtain ⟨hr, hfirst, _⟩ := boolSideRunPartition_end_indices S.side
+  have hfamily : pathTwoOpenSubdivisionRunFamily S 0 =
+      (boolSideRunPartition S.side).head hr := by
+    unfold pathTwoOpenSubdivisionRunFamily
+    rw [List.get_eq_getElem, ← List.head_eq_getElem_zero]
+  rw [pathTwoOpenSubdivisionRunFamily_head_val]
+  have hne : pathTwoOpenSubdivisionRunFamily S 0 ≠ [] :=
+    pathTwoOpenSubdivisionRunFamily_ne_nil S 0
+  simpa [hfamily] using congrArg Fin.val hfirst
+
+/-- The last maximal run ends immediately after the final subdivision piece. -/
+theorem pathTwoOpenSubdivisionRunLast_end
+    {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
+    {U V : Set X} (S : PathTwoOpenSubdivision p U V) :
+    pathTwoOpenSubdivisionRunStart S
+        (Fin.last ((boolSideRunPartition S.side).length - 1)) +
+      (pathTwoOpenSubdivisionRunFamily S
+        (Fin.last ((boolSideRunPartition S.side).length - 1))).length =
+      S.n + 1 := by
+  obtain ⟨hr, _, hlast⟩ := boolSideRunPartition_end_indices S.side
+  let i : Fin (boolSideRunPartition S.side).length :=
+    Fin.last ((boolSideRunPartition S.side).length - 1)
+  have hfamily : pathTwoOpenSubdivisionRunFamily S i =
+      (boolSideRunPartition S.side).getLast hr := by
+    unfold pathTwoOpenSubdivisionRunFamily
+    rw [List.getLast_eq_getElem, List.get_eq_getElem]
+    congr 1
+  rw [← pathTwoOpenSubdivisionRunFamily_getLast_succ_val S i]
+  have hne : pathTwoOpenSubdivisionRunFamily S i ≠ [] :=
+    pathTwoOpenSubdivisionRunFamily_ne_nil S i
+  have heq : (pathTwoOpenSubdivisionRunFamily S i).getLast hne =
+      Fin.last S.n := by
+    simpa [hfamily] using hlast
+  simp [heq]
+
 theorem pathTwoOpenSubdivisionRunFamily_length_pos
     {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
     {U V : Set X} (S : PathTwoOpenSubdivision p U V)

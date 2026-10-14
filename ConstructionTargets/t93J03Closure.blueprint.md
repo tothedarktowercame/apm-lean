@@ -513,6 +513,9 @@ the folded representative at the literal subdivision endpoints.
 `pathTwoOpenSubdivisionRunStart_eq_previous_end` proves consecutive selected
 run slices are arithmetically contiguous, the induction invariant needed to
 identify the run-block fold with the original piece fold.
+`pathTwoOpenSubdivisionRunStart_zero` and
+`pathTwoOpenSubdivisionRunLast_end` prove the slices start at zero and finish
+at `S.n + 1`; the run slices therefore cover the full subdivision.
 
 - Layer 1: C1, C3, and C4. C1 and C3 are independent; C4 is already complete.
 - Layer 2: C2 against the explicit C1 equivalence interface.
