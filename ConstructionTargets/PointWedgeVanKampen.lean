@@ -5266,6 +5266,45 @@ theorem genericPointWedgeRightEquiv_map_unitInv_rightBase :
     x₀ y₀ M N hM hN hy hx cM cN).counit_app_functor
       (genericPointWedgeRightBase x₀ y₀ N)).symm
 
+/-- At the fixed right-cover representative, it is enough to verify the
+literal `Y` connector square against the right-equivalence counit. -/
+theorem genericPointWedgeCoherentRightSourceConnectors_rightBase_unitInv_of_counit
+    (htarget :
+      ((genericPointWedgeConnectors y₀).connector
+        ((genericPointWedgeRightGroupoidEquivalence
+          x₀ y₀ M N hM hN hy hx cM cN).functor.obj
+          ((genericPointWedgeRightGroupoidEquivalence
+            x₀ y₀ M N hM hN hy hx cM cN).inverse.obj
+            ((genericPointWedgeRightGroupoidEquivalence
+              x₀ y₀ M N hM hN hy hx cM cN).functor.obj
+              (genericPointWedgeRightBase x₀ y₀ N))))).hom ≫
+        (genericPointWedgeRightGroupoidEquivalence
+          x₀ y₀ M N hM hN hy hx cM cN).counitIso.hom.app
+          ((genericPointWedgeRightGroupoidEquivalence
+            x₀ y₀ M N hM hN hy hx cM cN).functor.obj
+            (genericPointWedgeRightBase x₀ y₀ N)) =
+      ((genericPointWedgeConnectors y₀).connector
+        ((genericPointWedgeRightGroupoidEquivalence
+          x₀ y₀ M N hM hN hy hx cM cN).functor.obj
+          (genericPointWedgeRightBase x₀ y₀ N))).hom) :
+    let e := genericPointWedgeRightGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let source := genericPointWedgeCoherentRightSourceConnectors
+      x₀ y₀ M N hM hN hy hx cM cN
+    (source.connector (e.inverse.obj (e.functor.obj
+      (genericPointWedgeRightBase x₀ y₀ N)))).hom ≫
+        e.unitIso.inv.app (genericPointWedgeRightBase x₀ y₀ N) =
+      (source.connector (genericPointWedgeRightBase x₀ y₀ N)).hom := by
+  apply genericPointWedgeCoherentRightSourceConnectors_rightBase_unitInv_of_target
+  let eR := genericPointWedgeRightGroupoidEquivalence
+    x₀ y₀ M N hM hN hy hx cM cN
+  let c := ((genericPointWedgeConnectors y₀).connector
+    (eR.functor.obj (eR.inverse.obj
+      (eR.functor.obj (genericPointWedgeRightBase x₀ y₀ N))))).hom
+  have hu := genericPointWedgeRightEquiv_map_unitInv_rightBase
+    x₀ y₀ M N hM hN hy hx cM cN
+  exact (congrArg (fun k => c ≫ k) hu).trans htarget
+
 omit [PathConnectedSpace X] in
 /-- The canonical connector normal form with its inverse-unit factor rewritten
 as the equivalence counit.  The chosen source connector stays explicit. -/

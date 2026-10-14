@@ -1499,3 +1499,8 @@ specializes the unshifted source endpoint to the fixed right-cover
 representative. Its source inverse-unit square now follows from one literal
 `Y` connector square along the mapped inverse unit, retaining the dependent
 endpoint rather than rewriting it away.
+`genericPointWedgeCoherentRightSourceConnectors_rightBase_unitInv_of_counit`
+uses the equivalence triangle to replace that mapped inverse unit by the
+right-equivalence counit under the exact dependent connector prefix. The
+unshifted endpoint is therefore reduced to one literal connector–counit
+square; the shifted endpoint remains separate.
