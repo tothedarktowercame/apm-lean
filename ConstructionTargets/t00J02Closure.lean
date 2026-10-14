@@ -1,4 +1,5 @@
 import ConstructionTargets.ManifoldFundamentalClass
+import ConstructionTargets.CircleHomology
 
 /-!
 # Local fundamental-class coordinates for t00J02
@@ -23,6 +24,43 @@ abbrev SurfaceModel := EuclideanSpace ℝ (Fin 2)
 private abbrev surfaceHomology (S : Type) [TopologicalSpace S] :=
   (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 2).obj
     (ModuleCat.of ℤ ℤ)).obj (TopCat.of S))
+
+private abbrev circleHomology :=
+  (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 1).obj
+    (ModuleCat.of ℤ ℤ)).obj (TopCat.of Circle))
+
+private def homologyMap {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    (k : ℕ) (f : C(X, Y)) :=
+  ((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) k).obj
+    (ModuleCat.of ℤ ℤ)).map (TopCat.ofHom f)
+
+/-- The endomorphism of integral circle homology, expressed in the standard
+integer coordinate. -/
+noncomputable def circleHomologyCoordinateMap (f : C(Circle, Circle)) :
+    ModuleCat.of ℤ ℤ ⟶ ModuleCat.of ℤ ℤ :=
+  ConstructionTargets.CircleHomology.circleH1IsoInt.inv ≫
+    homologyMap 1 f ≫
+    ConstructionTargets.CircleHomology.circleH1IsoInt.hom
+
+/-- The homological degree of a circle self-map is its coordinate action on
+the positive integer generator. -/
+noncomputable def circleDegree (f : C(Circle, Circle)) : ℤ :=
+  circleHomologyCoordinateMap f 1
+
+/-- Every integral circle-homology class is multiplied by the homological
+degree.  This is the coordinate identity needed to turn a vanishing induced
+map on a preimage component into a zero signed component contribution. -/
+theorem circleDegree_eq_homologyMap (f : C(Circle, Circle)) (n : ℤ) :
+    circleHomologyCoordinateMap f n = circleDegree f * n := by
+  rw [show n = n • (1 : ℤ) by simp, map_smul]
+  simp [circleDegree, mul_comm]
+
+/-- A homologically trivial circle self-map has degree zero. -/
+theorem circleDegree_eq_zero_of_homologyMap_eq_zero
+    (f : C(Circle, Circle)) (h : homologyMap 1 f = 0) :
+    circleDegree f = 0 := by
+  rw [circleDegree, circleHomologyCoordinateMap, h]
+  simp
 
 /-- A global integral top-homology coordinate together with its expression in
 the canonical local chart generator at every point.  The coefficient is kept
@@ -68,3 +106,5 @@ theorem surfaceTopHomology_localFundamentalClassIso_topIso
 end ConstructionTargets.T00J02Closure
 
 #print axioms ConstructionTargets.T00J02Closure.surfaceTopHomology_localFundamentalClassIso
+#print axioms ConstructionTargets.T00J02Closure.circleDegree_eq_homologyMap
+#print axioms ConstructionTargets.T00J02Closure.circleDegree_eq_zero_of_homologyMap_eq_zero
