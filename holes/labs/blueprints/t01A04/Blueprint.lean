@@ -515,6 +515,66 @@ theorem apm_t01A04_circleCoverMap_range_eq_parity_kernel
           apm_t01a04_circleCoverBase) = phic.ker := by
   sorry
 
+lemma apm_t01A04_torusCoverMap_range_eq_parity_kernel_aux_ext
+    {G : Type*} [Group G]
+    (f g : apm_t01a04_piOne →* G)
+    (hgen : Subgroup.closure
+      {apm_t01A04_loopA, apm_t01A04_loopB, apm_t01A04_loopC} = ⊤)
+    (ha : f apm_t01A04_loopA = g apm_t01A04_loopA)
+    (hb : f apm_t01A04_loopB = g apm_t01A04_loopB)
+    (hc : f apm_t01A04_loopC = g apm_t01A04_loopC) :
+    f = g := by
+  apply MonoidHom.eq_of_eqOn_dense hgen
+  intro x hx
+  simp only [Set.mem_insert_iff, Set.mem_singleton_iff] at hx
+  rcases hx with rfl | rfl | rfl
+  · exact ha
+  · exact hb
+  · exact hc
+
+/-- Range of the induced map = stabilizer of the base point under monodromy
+(the `hstab` argument inside `ConstructionTargets.coveringFiberEquivCosets`). -/
+theorem apm_t01A04_torusCoverMap_range_eq_parity_kernel_aux_range_iff
+    (hcov : IsCoveringMap apm_t01a04_torusCoverMap) (γ : apm_t01a04_piOne) :
+    γ ∈ MonoidHom.range
+      (apm_t01a04_torusCoverMap_base ▸
+        FundamentalGroup.map apm_t01a04_torusCoverMap
+          apm_t01a04_torusCoverBase) ↔
+      hcov.monodromy γ
+        (⟨apm_t01a04_torusCoverBase, apm_t01a04_torusCoverMap_base⟩ :
+          apm_t01a04_torusCoverMap ⁻¹' {apm_t01a04_basepoint}) = (⟨apm_t01a04_torusCoverBase, apm_t01a04_torusCoverMap_base⟩ :
+          apm_t01a04_torusCoverMap ⁻¹' {apm_t01a04_basepoint}) := by
+  sorry
+
+/-- The base fiber has two points, so monodromy is a parity character: it is
+trivial exactly on loops whose lift from the base point closes up. -/
+theorem apm_t01A04_torusCoverMap_range_eq_parity_kernel_aux_character
+    (hcov : IsCoveringMap apm_t01a04_torusCoverMap) :
+    ∃ ψ : apm_t01a04_piOne →* apm_t01a04_Parity, ∀ γ : apm_t01a04_piOne,
+      ψ γ = 1 ↔
+        hcov.monodromy γ
+          (⟨apm_t01a04_torusCoverBase, apm_t01a04_torusCoverMap_base⟩ :
+          apm_t01a04_torusCoverMap ⁻¹' {apm_t01a04_basepoint}) = (⟨apm_t01a04_torusCoverBase, apm_t01a04_torusCoverMap_base⟩ :
+          apm_t01a04_torusCoverMap ⁻¹' {apm_t01a04_basepoint}) := by
+  sorry
+
+/-- Explicit lifts from the base point: `loopA` lifts to the half-turn
+`(1,1) ↦ (-1,1)` in the torus summand (the cover squares the first
+coordinate), so it moves the base point; `loopB` lifts to the closed second
+coordinate turn and `loopC` to the closed turn of circle `0`. -/
+theorem apm_t01A04_torusCoverMap_range_eq_parity_kernel_aux_lifts
+    (hcov : IsCoveringMap apm_t01a04_torusCoverMap) :
+    hcov.monodromy apm_t01A04_loopA (⟨apm_t01a04_torusCoverBase, apm_t01a04_torusCoverMap_base⟩ :
+          apm_t01a04_torusCoverMap ⁻¹' {apm_t01a04_basepoint}) ≠ (⟨apm_t01a04_torusCoverBase, apm_t01a04_torusCoverMap_base⟩ :
+          apm_t01a04_torusCoverMap ⁻¹' {apm_t01a04_basepoint}) ∧
+    hcov.monodromy apm_t01A04_loopB (⟨apm_t01a04_torusCoverBase, apm_t01a04_torusCoverMap_base⟩ :
+          apm_t01a04_torusCoverMap ⁻¹' {apm_t01a04_basepoint}) = (⟨apm_t01a04_torusCoverBase, apm_t01a04_torusCoverMap_base⟩ :
+          apm_t01a04_torusCoverMap ⁻¹' {apm_t01a04_basepoint}) ∧
+    hcov.monodromy apm_t01A04_loopC (⟨apm_t01a04_torusCoverBase, apm_t01a04_torusCoverMap_base⟩ :
+          apm_t01a04_torusCoverMap ⁻¹' {apm_t01a04_basepoint}) = (⟨apm_t01a04_torusCoverBase, apm_t01a04_torusCoverMap_base⟩ :
+          apm_t01a04_torusCoverMap ⁻¹' {apm_t01a04_basepoint}) := by
+  sorry
+
 /-- The monodromy calculation for the torus-doubled cover.  As above, the
 covering fact is an input rather than a dependency on another admitted leaf. -/
 theorem apm_t01A04_torusCoverMap_range_eq_parity_kernel
@@ -529,7 +589,21 @@ theorem apm_t01A04_torusCoverMap_range_eq_parity_kernel
       (apm_t01a04_torusCoverMap_base ▸
         FundamentalGroup.map apm_t01a04_torusCoverMap
           apm_t01a04_torusCoverBase) = phia.ker := by
-  sorry
+  obtain ⟨ψ, hψ⟩ :=
+    apm_t01A04_torusCoverMap_range_eq_parity_kernel_aux_character hcov
+  obtain ⟨hA, hB, hC⟩ :=
+    apm_t01A04_torusCoverMap_range_eq_parity_kernel_aux_lifts hcov
+  have hpar : ∀ x : apm_t01a04_Parity, x ≠ 1 → x = Multiplicative.ofAdd 1 := by
+    decide
+  have hψphia : ψ = phia := by
+    apply apm_t01A04_torusCoverMap_range_eq_parity_kernel_aux_ext ψ phia hgen
+    · rw [haa]; exact hpar _ (fun h ↦ hA ((hψ _).1 h))
+    · rw [hab]; exact (hψ _).2 hB
+    · rw [hac]; exact (hψ _).2 hC
+  subst hψphia
+  ext γ
+  rw [apm_t01A04_torusCoverMap_range_eq_parity_kernel_aux_range_iff hcov,
+    MonoidHom.mem_ker, hψ]
 
 /-- Why this unblocks `apm_t01a04`: this is the Seifert--van Kampen
 presentation of `T² ∨ S¹`, together with the two parity characters and the
