@@ -36121,69 +36121,53 @@
   {:consumer :t93J03,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 2,
    :review-finding
    "Program STOP commits no new mathematical progress since the prior milestone: KleinPolygonBasedVanKampen merely packages the already-required surjectivity and kernel hypotheses, and both consumers only reapply the previously proved three-input theorem. Prove the based van Kampen surjectivity/kernel result (or winding conjugacy) in scope; extend Mathlib: state and prove the missing theorem in scope.",
    :evidence
    {:placeholder-delta {:t93J03 [1 1]},
     :residual
-    "Instantiate maximal runs; reverse kernel/surjectivity; winding; C1/C2/Main.",
+    "Package run-boundary endpoint family; instantiate outer fold; reverse kernel/surjectivity; winding; C1/C2/Main.",
     :outcome :stop,
     :warnings [],
     :missing-theorems
-    [{:name "path_concat_map_subtype",
-      :type "subtype concat mapping commutes with concat",
+    [{:name "boolSideRunPartition_adjacent_indices",
+      :type "adjacent runs have consecutive boundary indices",
       :status :proved,
       :consumers [:t93J03],
-      :depends-on ["path_concat_exists_subtype_path"],
-      :area "covering-subgroup-correspondence"}
-     {:name "path_concat_class_eq_outer_of_pieceClass_eq",
-      :type "outer-represented factors fold to one outer path",
-      :status :proved,
-      :consumers [:t93J03],
-      :depends-on ["path_concat_map_subtype"],
+      :depends-on ["path_concat_class_eq_outer_of_pieceClass_eq"],
       :area "covering-subgroup-correspondence"}
      {:name "t93J03_polygon_based_van_kampen",
       :type "surjectivity; kernel equality",
       :status :partial,
       :consumers [:t93J03],
-      :depends-on ["path_concat_class_eq_outer_of_pieceClass_eq"],
+      :depends-on ["boolSideRunPartition_adjacent_indices"],
       :area "covering-subgroup-correspondence"}],
     :statement-hashes {:registry "166/166"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Finite outer-represented factors now concatenate to one outer path with equal ambient groupoid class; maximal-run instantiation remains.",
+    "Proved adjacent maximal side runs end and begin at consecutive original piece indices, identifying their shared subdivision boundary; endpoint-family packaging remains.",
     :commands
     [{:cmd "lake build ConstructionTargets.t93J03Closure", :exit 0}
      {:cmd "fixture; Main; registry; checks", :exit 0}
      {:cmd "rg forbidden", :exit 1, :expected-exit 1}],
     :diagnostic-history
-    [{:cmd "fold probes",
+    [{:cmd "boundary build",
       :exit 1,
-      :correction "fixed mapped trans and declaration order"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1792007326560-12284-6507aa72",
-     :commands
-     ["git show/check/diff 1d93d0b2; scope and fixture SHA-256"
-      "lake build ConstructionTargets.t93J03Closure; lean fixture and Main"
-      "statement-registry check; placeholder/axiom recount"],
-     :finding
-     "PASS: 1d93d0b2 adds compiled, sorry-free program progress. Mapping a dependent subtype-path concatenation commutes with the ordered fold, and factorwise ambient class equalities therefore assemble into one outer-subtype path with the same ambient groupoid class. Zero and successor cases have correct endpoints/order. Blueprint is faithful; exact scope/hash match; closure placeholders 0->0; frozen Main remains 1; registry 166/166; standard axioms only. STOP lists maximal-run instantiation, reverse kernel/surjectivity, winding, C1/C2/Main."},
-    :commit "1d93d0b25c6f2fcf77e9296540eea268f893c28b",
+      :correction "supplied getLast?/head? membership equalities"}],
+    :commit "eb1767255ebf00e330120719700e7c8f8da63be0",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
      "ConstructionTargets/t93J03Closure.blueprint.md"],
     :fixture
-    {:path "/tmp/t93j03_outer_fold_check.lean",
+    {:path "/tmp/t93j03_run_boundary_check.lean",
      :sha256
-     "cf536bf9c490e286cb8af1944891cb753029c05d241369966b22d6ed9708b4a1"},
+     "a03095302c41ea2b4f329578e491b6acb9b2214ac348e6e32fe5162b70943879"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -38701,7 +38685,8 @@
     :lemma-pathtwoopensubdivisionblockpiece
     :lemma-pathtwoopensubdivisioninnerblock-exists-outeroverlapreplacement
     :lemma-pathtwoopensubdivisionouterblock-exists-outerpath
-    :lemma-path-concat-class-eq-outer-of-piececlass-eq],
+    :lemma-path-concat-class-eq-outer-of-piececlass-eq
+    :lemma-boolsiderunpartition-adjacent-indices],
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
@@ -39488,6 +39473,23 @@
    :id :lemma-path-concat-class-eq-outer-of-piececlass-eq,
    :kind :lemma,
    :depends-on [:lemma-path-concat-map-subtype],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "boolSideRunPartition_adjacent_indices",
+    :type "adjacent runs have consecutive boundary indices"},
+   :lemma
+   {:name "boolSideRunPartition_adjacent_indices",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type "adjacent runs have consecutive boundary indices",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03},
+   :id :lemma-boolsiderunpartition-adjacent-indices,
+   :kind :lemma,
+   :depends-on [:lemma-path-concat-class-eq-outer-of-piececlass-eq],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
