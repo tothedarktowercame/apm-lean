@@ -87947,6 +87947,18 @@
     [{:cmd "basepoint drafts",
       :exit 1,
       :correction "used signed endpoint cases"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792014162100-12470-50a7a9b4",
+     :commands
+     ["git show/diff 356ca78e0; blob sha256; diff --check"
+      "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology"
+      "lake env lean /dev/stdin (#print axioms)"
+      "placeholder scan"
+      "statement-registry.py check"],
+     :finding
+     "PASS: reviewer codex-7; 356ca78e0 (topo-6) newly changes only scoped PolygonSurfaceHomology.lean; fixture SHA-256 5740c18fc5007437f0556177085e21dece7996255f4591166a6c9515a46359cc matches. Exact blob builds; 0 placeholders; standard axioms; registry 166/0. Edge 0 at parameter 0 identifies circle point 1 with the common wedge basepoint for either sign orientation. The fundamental-group class then casts both endpoints along that equality, and Hurewicz naturality yields the homology class induced by the geometric boundary circle with positive generator. Representation and equality directions are correct. New compiled progress; remaining explicit based-loop word identity, B7, then B8-B10."},
     :commit "356ca78e0",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
@@ -87955,7 +87967,7 @@
      "5740c18fc5007437f0556177085e21dece7996255f4591166a6c9515a46359cc"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -87975,7 +87987,7 @@
     :blueprint
     "ConstructionTargets/PolygonSurfaceHomology.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked signed boundary-word Hurewicz evaluation.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked the based geometric boundary class and its Hurewicz naturality.",
    :id :program-2026-10-13-polygon-surface-homology,
    :kind :reusable-theorem,
    :campaign-priority 31,
@@ -88209,7 +88221,11 @@
      :reason "Banked H1 naturality for the exact MV generator."}
     {:job 2,
      :commit "fb7c01109",
-     :reason "Banked signed boundary-word Hurewicz evaluation."}]}
+     :reason "Banked signed boundary-word Hurewicz evaluation."}
+    {:job 3,
+     :commit "356ca78e0",
+     :reason
+     "Banked the based geometric boundary class and its Hurewicz naturality."}]}
   {:consumer :t97A01,
    :stop-count 0,
    :phase :implementation,
@@ -91729,7 +91745,7 @@
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "polygonBoundaryWedgeLoop_one",
@@ -91739,14 +91755,16 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "boundary loop has canonical wedge basepoint",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :program-2026-10-13-polygon-surface-homology,
+    :banked-commit "356ca78e0"},
    :id :lemma-polygonboundarywedgeloop-one,
    :kind :lemma,
    :depends-on [:lemma-polygonboundarywedgeloop-edgepoint],
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "polygonBoundaryFundamentalClass_hurewicz",
@@ -91756,7 +91774,9 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "geometric boundary Hurewicz is induced circle map",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :program-2026-10-13-polygon-surface-homology,
+    :banked-commit "356ca78e0"},
    :id :lemma-polygonboundaryfundamentalclass-hurewicz,
    :kind :lemma,
    :depends-on [:lemma-polygonboundarywedgeloop-one],
