@@ -5,6 +5,7 @@ import ConstructionTargets.SingularHomologyConcrete
 import ConstructionTargets.IntegralSingularHomologyComparison
 import ConstructionTargets.CircleHomology
 import ConstructionTargets.T02A06SphereH0
+import ConstructionTargets.CoefficientSigmaConstFinsuppComparison
 
 /-!
 # Homology of one-vertex polygon quotients
@@ -388,6 +389,95 @@ noncomputable def outerH0IsoInt (P : PairingData) :
     (TopCat.of (OuterPiece P)) 0 (ModuleCat.of ℤ ℤ)
       (ConstructionTargets.SingularHomologyConcrete.singularHomologyIsoOfHomotopyEquiv
         (outerHomotopyEquivWedge P) 0 ≪≫ finiteWedgeGroupH0IsoInt P)
+
+/-! ### The degree-one coordinate presentation -/
+
+/-- The map on first homology induced by inclusion of one circle leg in the
+finite wedge. -/
+noncomputable def finiteWedgeLegH1 {L : Type} (l : L) :
+    SpaceH Circle 1 ⟶
+      SpaceH (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge L) 1 :=
+  ((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 1).obj
+    (ModuleCat.of ℤ ℤ)).map
+      (TopCat.ofHom ⟨PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle l,
+        PolygonSurfacePiOne.PointWedgeQuotient.continuous_wedgeCircle l⟩)
+
+/-- The coproduct of one integral generator for every wedge circle maps to
+the corresponding positive circle class in wedge homology. -/
+noncomputable def finiteWedgeH1Presentation (L : Type) :
+    (∐ fun _ : L => ModuleCat.of ℤ ℤ) ⟶
+      SpaceH (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge L) 1 :=
+  Sigma.desc fun l =>
+    ConstructionTargets.CircleHomology.circleH1IsoInt.inv ≫ finiteWedgeLegH1 l
+
+@[simp, reassoc]
+theorem sigma_ι_finiteWedgeH1Presentation (L : Type) (l : L) :
+    Sigma.ι (fun _ : L => ModuleCat.of ℤ ℤ) l ≫
+      finiteWedgeH1Presentation L =
+        ConstructionTargets.CircleHomology.circleH1IsoInt.inv ≫
+          finiteWedgeLegH1 l := by
+  rw [finiteWedgeH1Presentation, Sigma.ι_desc]
+
+/-- For a finite index type, the coproduct source is the requested function
+module, with its standard basis orientation. -/
+noncomputable def finiteWedgeH1SourceIso (L : Type) [Fintype L]
+    [DecidableEq L] :
+    (∐ fun _ : L => ModuleCat.of ℤ ℤ) ≅ ModuleCat.of ℤ (L → ℤ) :=
+  ModuleCat.coprodIsoDirectSum (fun _ : L => ModuleCat.of ℤ ℤ) ≪≫
+    (DirectSum.linearEquivFunOnFintype ℤ L (fun _ => ℤ)).toModuleIso
+
+@[simp]
+theorem sigma_ι_finiteWedgeH1SourceIso_hom_apply
+    (L : Type) [Fintype L] [DecidableEq L] (l : L) (n : ℤ) :
+    (Sigma.ι (fun _ : L => ModuleCat.of ℤ ℤ) l ≫
+      (finiteWedgeH1SourceIso L).hom) n = Pi.single l n := by
+  classical
+  change ((Sigma.ι (fun _ : L => ModuleCat.of ℤ ℤ) l ≫
+      (ModuleCat.coprodIsoDirectSum (fun _ : L => ModuleCat.of ℤ ℤ)).hom ≫
+      (DirectSum.linearEquivFunOnFintype ℤ L (fun _ => ℤ)).toModuleIso.hom) n) = _
+  rw [← Category.assoc, ModuleCat.ι_coprodIsoDirectSum_hom]
+  exact DirectSum.linearEquivFunOnFintype_lof (M := fun _ : L => ℤ) ℤ l n
+
+/-- The edge-orbit quotient is finite because every orbit is represented by
+one of the finitely many polygon edges. -/
+noncomputable instance pairingOrbitFinite (P : PairingData) :
+    Finite (PairingOrbit P.pair) :=
+  Finite.of_surjective P.orbit Quotient.mk_surjective
+
+/-- A standard basis vector in the finite orbit-coordinate module. -/
+noncomputable def orbitBasis (P : PairingData)
+    (l : PairingOrbit P.pair) (n : ℤ) : PairingOrbit P.pair → ℤ := by
+  classical
+  exact Pi.single l n
+
+/-- The orbit-coordinate map into first homology of the finite wedge.  The
+next B4 step proves this explicitly normalized map is an isomorphism. -/
+noncomputable def finiteWedgeH1CoordinateMap (P : PairingData) :
+    ModuleCat.of ℤ (PairingOrbit P.pair → ℤ) ⟶
+      SpaceH
+        (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge
+          (PairingOrbit P.pair)) 1 := by
+  letI : Fintype (PairingOrbit P.pair) := Fintype.ofFinite _
+  letI : DecidableEq (PairingOrbit P.pair) := Classical.decEq _
+  exact (finiteWedgeH1SourceIso (PairingOrbit P.pair)).inv ≫
+    finiteWedgeH1Presentation (PairingOrbit P.pair)
+
+theorem finiteWedgeH1CoordinateMap_single (P : PairingData)
+    (l : PairingOrbit P.pair) (n : ℤ) :
+    finiteWedgeH1CoordinateMap P (orbitBasis P l n) =
+      (ConstructionTargets.CircleHomology.circleH1IsoInt.inv ≫
+        finiteWedgeLegH1 l) n := by
+  letI : Fintype (PairingOrbit P.pair) := Fintype.ofFinite _
+  letI : DecidableEq (PairingOrbit P.pair) := Classical.decEq _
+  change finiteWedgeH1CoordinateMap P (Pi.single l n) = _
+  rw [← sigma_ι_finiteWedgeH1SourceIso_hom_apply
+    (PairingOrbit P.pair) l n]
+  rw [finiteWedgeH1CoordinateMap]
+  change ((Sigma.ι (fun _ : PairingOrbit P.pair => ModuleCat.of ℤ ℤ) l ≫
+    ((finiteWedgeH1SourceIso (PairingOrbit P.pair)).hom ≫
+      (finiteWedgeH1SourceIso (PairingOrbit P.pair)).inv ≫
+        finiteWedgeH1Presentation (PairingOrbit P.pair))) n) = _
+  rw [Iso.hom_inv_id_assoc, sigma_ι_finiteWedgeH1Presentation]
 
 end
 
