@@ -2744,7 +2744,45 @@ lemma apm_m01J04_mollify_package
       HasCompactSupport a.val ∧
       Function.support a.val ⊆ Metric.cthickening delta C ∧
       apm_m01J04_H1dist a w < eta := by
-  sorry
+  let v := MeasureTheory.convolution κ w.val
+    (ContinuousLinearMap.lsmul ℝ ℝ) volume
+  let g := MeasureTheory.convolution κ w.grad
+    (ContinuousLinearMap.lsmul ℝ ℝ) volume
+  have hvLp : MemLp v 2 volume := by
+    exact apm_m01J04_mollify_package_aux_val_memLp
+      w hC hwval κ hκsmooth hκcompact
+  have hwgradCompact : HasCompactSupport w.grad :=
+    hC.of_isClosed_subset isClosed_closure
+      (closure_minimal hwgrad hC.isClosed)
+  have hgCompact : HasCompactSupport g := by
+    exact hκcompact.convolution (ContinuousLinearMap.lsmul ℝ ℝ) hwgradCompact
+  have hwgradLoc : LocallyIntegrable w.grad volume := by
+    have hm : MemLp w.grad 2 volume := by
+      simpa only [Measure.restrict_univ] using w.grad_memLp
+    exact hm.locallyIntegrable (by norm_num)
+  have hgSmooth : ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) g := by
+    exact hκcompact.contDiff_convolution_left
+      (ContinuousLinearMap.lsmul ℝ ℝ) hκsmooth hwgradLoc
+  have hgLp : MemLp g 2 volume :=
+    hgSmooth.continuous.memLp_of_hasCompactSupport hgCompact
+  let a : apm_m01J04_H1 d Set.univ :=
+    { val := v
+      grad := g
+      val_memLp := by simpa only [Measure.restrict_univ] using hvLp
+      grad_memLp := by simpa only [Measure.restrict_univ] using hgLp
+      weakGradient := by
+        intro ψ hψsmooth hψcompact _ i
+        simpa only [Measure.restrict_univ, v, g] using
+          hweak ψ hψsmooth hψcompact i }
+  refine ⟨a, ?_, ?_, ?_, ?_⟩
+  · exact apm_m01J04_mollify_package_aux_val_contDiff
+      w κ hκsmooth hκcompact
+  · exact apm_m01J04_mollify_package_aux_val_compact
+      w hC hwval κ hκcompact
+  · exact apm_m01J04_support_convolution_subset_cthickening
+      hκsupport hwval
+  · simpa only [apm_m01J04_H1dist, a, v, g,
+      Measure.restrict_univ] using herror
 
 /-- Triangle transfer for the two-stage compact-core/mollification error. -/
 lemma apm_m01J04_mollify_error_transfer_aux_triangle
