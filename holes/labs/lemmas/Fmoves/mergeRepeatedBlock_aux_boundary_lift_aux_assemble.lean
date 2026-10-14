@@ -1351,7 +1351,20 @@ apply `_aux_local_formulas`). -/
 lemma mergeRepeatedBlock_aux_boundary_lift_aux_assemble (uLen vLen tLen : ℕ)
     (F : EquivariantCircleLift (uLen + 2 + vLen + 2 + tLen : ℝ) (uLen + 1 + vLen + 1 + tLen : ℝ))
     (hF : ∀ x ∈ Set.Icc (0 : ℝ) (uLen + 2 + vLen + 2 + tLen),
-      F.toFun x = mergeRepeatedBlock_aux_boundary_lift_aux_local uLen vLen x) :
+      F.toFun x = mergeRepeatedBlock_aux_boundary_lift_aux_local uLen vLen x)
+    (hform :
+    (∀ (i : ℕ), i < uLen → ∀ s : Set.Icc (0 : ℝ) 1,
+      mergeRepeatedBlock_aux_boundary_lift_aux_local uLen vLen (i + s.1) = i + s.1) ∧
+    (∀ s : Set.Icc (0 : ℝ) 1, mergeRepeatedBlock_aux_boundary_lift_aux_local uLen vLen (uLen + s.1) = uLen + s.1 / 2) ∧
+    (∀ s : Set.Icc (0 : ℝ) 1, mergeRepeatedBlock_aux_boundary_lift_aux_local uLen vLen (uLen + 1 + s.1) = uLen + (1 + s.1) / 2) ∧
+    (∀ (i : ℕ), i < vLen → ∀ s : Set.Icc (0 : ℝ) 1,
+      mergeRepeatedBlock_aux_boundary_lift_aux_local uLen vLen (uLen + 2 + i + s.1) = uLen + 1 + i + s.1) ∧
+    (∀ s : Set.Icc (0 : ℝ) 1,
+      mergeRepeatedBlock_aux_boundary_lift_aux_local uLen vLen (uLen + 2 + vLen + s.1) = uLen + 1 + vLen + s.1 / 2) ∧
+    (∀ s : Set.Icc (0 : ℝ) 1,
+      mergeRepeatedBlock_aux_boundary_lift_aux_local uLen vLen (uLen + 3 + vLen + s.1) = uLen + 1 + vLen + (1 + s.1) / 2) ∧
+    (∀ (i : ℕ), i < tLen → ∀ s : Set.Icc (0 : ℝ) 1,
+      mergeRepeatedBlock_aux_boundary_lift_aux_local uLen vLen (uLen + 4 + vLen + i + s.1) = uLen + 2 + vLen + i + s.1)) :
     Nonempty (MergeRepeatedBlockLiftSpec uLen vLen tLen) := by
   sorry
 -- END SEAT AREA
@@ -1377,6 +1390,7 @@ lemma mergeRepeatedBlock_aux_boundary_lift (uLen vLen tLen : ℕ) :
     (fun y hy => ⟨hi0 ▸ hstrictInv.monotone hy.1, hiQ ▸ hstrictInv.monotone hy.2⟩)
     (fun x _ => hl x) (fun y _ => hr y)
   exact mergeRepeatedBlock_aux_boundary_lift_aux_assemble uLen vLen tLen F hF
+    (mergeRepeatedBlock_aux_boundary_lift_aux_local_formulas uLen vLen tLen)
 
 /-- A circle map has the required merge behavior on every source edge. -/
 lemma norm_edgePoint (n e : ℕ)
@@ -1443,6 +1457,25 @@ structure MergeRepeatedBlockEdgeSpec (g : Circle ≃ₜ Circle)
 of the preceding leaves, so it can be proved without depending on either
 `sorry`: rewrite `edgePoint` using its exponential formula and then use the
 seven fields of `F`. -/
+lemma mergeRepeatedBlock_aux_boundary_edge_formulas_aux_toCircle
+    (n e : ℕ) (s : Icc (0 : ℝ) 1) :
+    (⟨edgePoint n e s, by
+      simpa [Circle, Submonoid.unitSphere] using norm_edgePoint n e s⟩ : Circle) =
+      AddCircle.toCircle ((((e : ℝ) + s.1 : ℝ) : AddCircle (n : ℝ))) := by
+  apply Subtype.ext
+  change Complex.exp _ = Complex.exp _
+  congr 1
+  push_cast
+  field_simp
+
+lemma mergeRepeatedBlock_aux_boundary_edge_formulas_aux_toCircle_period
+    (n e : ℕ) (p : ℝ) (hp : p = (n : ℝ)) (s : Icc (0 : ℝ) 1) :
+    (⟨edgePoint n e s, by
+      simpa [Circle, Submonoid.unitSphere] using norm_edgePoint n e s⟩ : Circle) =
+      AddCircle.toCircle ((((e : ℝ) + s.1 : ℝ) : AddCircle p)) := by
+  subst p
+  exact mergeRepeatedBlock_aux_boundary_edge_formulas_aux_toCircle n e s
+
 lemma mergeRepeatedBlock_aux_boundary_edge_formulas
     (uLen vLen tLen : ℕ) (F : MergeRepeatedBlockLiftSpec uLen vLen tLen)
     (g : Circle ≃ₜ Circle)
@@ -1452,7 +1485,78 @@ lemma mergeRepeatedBlock_aux_boundary_edge_formulas
         AddCircle.toCircle
           (F.toFun x : AddCircle (uLen + 1 + vLen + 1 + tLen : ℝ))) :
     MergeRepeatedBlockEdgeSpec g uLen vLen tLen := by
-  sorry
+  let ns : ℕ := uLen + 2 + vLen + 2 + tLen
+  let nt : ℕ := uLen + 1 + vLen + 1 + tLen
+  have hmap (e e' : ℕ) (s r : Icc (0 : ℝ) 1)
+      (hF : F.toFun ((e : ℝ) + s.1) = (e' : ℝ) + r.1) :
+      g (⟨edgePoint ns e s, by
+        simpa [Circle, Submonoid.unitSphere] using norm_edgePoint ns e s⟩ : Circle) =
+        (⟨edgePoint nt e' r, by
+          simpa [Circle, Submonoid.unitSphere] using norm_edgePoint nt e' r⟩ : Circle) := by
+    calc
+      g (⟨edgePoint ns e s, by
+          simpa [Circle, Submonoid.unitSphere] using norm_edgePoint ns e s⟩ : Circle) =
+          g (AddCircle.toCircle
+            ((((e : ℝ) + s.1 : ℝ) : AddCircle
+              (uLen + 2 + vLen + 2 + tLen : ℝ)))) :=
+        congrArg g
+          (mergeRepeatedBlock_aux_boundary_edge_formulas_aux_toCircle_period ns e _
+            (by simp [ns]) s)
+      _ = AddCircle.toCircle
+          (F.toFun ((e : ℝ) + s.1) : AddCircle
+            (uLen + 1 + vLen + 1 + tLen : ℝ)) :=
+        hg ((e : ℝ) + s.1)
+      _ = AddCircle.toCircle
+          ((((e' : ℝ) + r.1 : ℝ) : AddCircle
+            (uLen + 1 + vLen + 1 + tLen : ℝ))) := by
+        exact congrArg
+          (fun x : ℝ => AddCircle.toCircle
+            (x : AddCircle (uLen + 1 + vLen + 1 + tLen : ℝ))) hF
+      _ = (⟨edgePoint nt e' r, by
+          simpa [Circle, Submonoid.unitSphere] using norm_edgePoint nt e' r⟩ : Circle) :=
+        (mergeRepeatedBlock_aux_boundary_edge_formulas_aux_toCircle_period nt e' _
+          (by simp [nt]) r).symm
+  refine {
+    on_u := ?_
+    on_y := ?_
+    on_z := ?_
+    on_v := ?_
+    on_inv_z := ?_
+    on_inv_y := ?_
+    on_t := ?_ }
+  · intro i hi s
+    apply hmap
+    simpa using F.on_u i hi s
+  · intro s
+    let r : Icc (0 : ℝ) 1 := ⟨s.1 / 2, by
+      constructor <;> linarith [s.2.1, s.2.2]⟩
+    refine ⟨r, rfl, ?_⟩
+    apply hmap
+    simpa [r] using F.on_y s
+  · intro s
+    let r : Icc (0 : ℝ) 1 := ⟨(1 + s.1) / 2, by
+      constructor <;> linarith [s.2.1, s.2.2]⟩
+    refine ⟨r, rfl, ?_⟩
+    apply hmap
+    simpa [r] using F.on_z s
+  · intro i hi s
+    apply hmap
+    simpa using F.on_v i hi s
+  · intro s
+    let r : Icc (0 : ℝ) 1 := ⟨s.1 / 2, by
+      constructor <;> linarith [s.2.1, s.2.2]⟩
+    refine ⟨r, rfl, ?_⟩
+    apply hmap
+    simpa [r] using F.on_inv_z s
+  · intro s
+    let r : Icc (0 : ℝ) 1 := ⟨(1 + s.1) / 2, by
+      constructor <;> linarith [s.2.1, s.2.2]⟩
+    refine ⟨r, rfl, ?_⟩
+    apply hmap
+    simpa [r] using F.on_inv_y s
+  · intro i hi s
+    apply hmap
+    simpa using F.on_t i hi s
 
 lemma mergeRepeatedBlock_aux_boundary_relation_aux_circleToDisk_injective :
     Function.Injective circleToDisk := by
@@ -2031,7 +2135,32 @@ lemma cutAndPaste_aux_triangle_charts_reverse {Label : Type*}
     ∀ y y', Relation.EqvGen
         (WordRel (u ++ [x, x] ++ inverseWord v ++ t)) (b y) (b y') →
       cutAndPasteParameterRel u v t x a y y' := by
-  sorry
+  intro y y' h
+  have lift : ∀ p q,
+      Relation.EqvGen
+          (WordRel (u ++ [x, x] ++ inverseWord v ++ t)) p q →
+        ∀ yp yq, b yp = p → b yq = q →
+          Relation.EqvGen
+            (WordRel (u ++ [x] ++ v ++ [x] ++ t)) (a yp) (a yq) := by
+    intro p q hpq
+    induction hpq with
+    | rel p q hpq =>
+        intro yp yq hyp hyq
+        apply hgen yp yq
+        simpa [hyp, hyq] using hpq
+    | refl p =>
+        intro yp yq hyp hyq
+        apply hfib yp yq
+        rw [hyp, hyq]
+    | symm p q _ ih =>
+        intro yp yq hyp hyq
+        exact Relation.EqvGen.symm _ _ (ih yq yp hyq hyp)
+    | trans p q r _ _ ihpq ihqr =>
+        intro yp yr hyp hyr
+        obtain ⟨yq, hyq⟩ := hbs q
+        exact Relation.EqvGen.trans _ _ _
+          (ihpq yp yq hyp hyq) (ihqr yq yr hyq hyr)
+  exact lift (b y) (b y') h y y' rfl rfl
 
 /-- Sorry-free assembly of the radial construction, generator bookkeeping,
 and the two independent `EqvGen` lifts. -/
