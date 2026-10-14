@@ -3206,7 +3206,20 @@ theorem zipCone_continuous {n k : ℕ} (hc : Continuous (zipBoundaryMap n k)) :
 
 theorem zipCone_of_norm_one {n k : ℕ} {z : ℂ} (hz : ‖z‖ = 1) :
     zipCone n k z = zipBoundaryMap n k ⟨z, by simpa [Circle, Submonoid.unitSphere] using hz⟩ := by
-  sorry
+  have hz0 : z ≠ 0 := by
+    intro h
+    subst z
+    simp at hz
+  let b : Circle :=
+    ⟨((‖z‖⁻¹ : ℝ) : ℂ) * z, by
+      simp [Circle, Submonoid.unitSphere, norm_mul, hz0]⟩
+  have hb : b = ⟨z, by simpa [Circle, Submonoid.unitSphere] using hz⟩ := by
+    apply Subtype.ext
+    simp [b, hz]
+  rw [zipCone, dif_neg hz0]
+  change zipCentre + (‖z‖ : ℂ) * (zipBoundaryMap n k b - zipCentre) = _
+  rw [show (‖z‖ : ℂ) = 1 by exact_mod_cast hz, hb]
+  ring
 
 theorem zipCone_mem {n k : ℕ} (hmem : ∀ b, zipBoundaryMap n k b ∈ zipHalfBoundary)
     {z : ℂ} (hz : ‖z‖ ≤ 1) :
