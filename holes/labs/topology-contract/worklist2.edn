@@ -87901,68 +87901,58 @@
   {:consumer :t97A01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 6,
+   :stop-count 7,
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Build base neighborhoods and prove the right-base equality; then iterate to free-group surjectivity and B6-B10.",
+    "Combine packages and recurse through Fin successors; then prove the right-base equality and B6-B10.",
     :outcome :stop,
     :warnings ["preexisting lints"],
     :missing-theorems
-    [{:name "genericPointWedge_exists_legWord_of_rightBase_inl",
-      :type "left-factor equality yields literal leg words",
+    [{:name "PointedContractibleNeighborhood.preimageHomeomorph",
+      :type "packages pull back through homeomorphisms",
       :status :proved,
       :consumers [:t97A01 :t94J09],
-      :depends-on ["exists_coprodLegWord_of_mulEquiv"],
+      :depends-on [],
       :area "polygon-quotient-homology"}
-     {:name "finiteWedgeBaseNeighborhood_contraction",
-      :type "open contractible base neighborhood",
+     {:name "finiteWedgeFinOnePointedContractibleNeighborhood",
+      :type "Fin-one wedge has a contractible base neighborhood",
+      :status :proved,
+      :consumers [:t97A01 :t94J09],
+      :depends-on ["finiteWedgeSubsingletonHomeomorphCircle"],
+      :area "polygon-quotient-homology"}
+     {:name "pointWedgePointedContractibleNeighborhood",
+      :type "combine two packages on a restricted point wedge",
       :status :not-started,
       :consumers [:t97A01 :t94J09],
-      :depends-on ["finiteWedgeFinSuccHomeomorphPointWedge"],
-      :area "polygon-quotient-homology"}
-     {:name "finiteWedgePointWedge_rightBase_inl",
-      :type "successor right-base conjugator lies in the old factor",
-      :status :not-started,
-      :consumers [:t97A01 :t94J09],
-      :depends-on ["finiteWedgeBaseNeighborhood_contraction"],
+      :depends-on [],
       :area "polygon-quotient-homology"}],
     :statement-hashes {:registry "166/0"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Reduced wedge words to a right-base equality.",
+    :reason "Banked Fin-one base-neighborhood data.",
     :commands
     [{:cmd "lake build ConstructionTargets.PolygonSurfaceHomology",
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-     {:cmd "git show --check 6d1319c77", :exit 0}
+     {:cmd "git show --check 52485b99d", :exit 0}
      {:cmd
-      "git show 6d1319c77:ConstructionTargets/PolygonSurfaceHomology.lean | lake env lean /dev/stdin",
+      "git show 52485b99d:ConstructionTargets/PolygonSurfaceHomology.lean | lake env lean /dev/stdin",
       :exit 0}],
     :diagnostic-history
-    [{:cmd "adapter draft",
+    [{:cmd "subtype-homeomorphism lookup",
       :exit 1,
-      :correction "qualified constants"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1791960192549-11670-fe01d18d",
-     :commands
-     ["git show/diff-tree; sha256sum"
-      "exact blob | lake env lean /dev/stdin; #print axioms"
-      "placeholder scan; statement-registry.py check"],
-     :finding
-     "PASS: 5ccf3e302 changes only PolygonSurfaceHomology.lean; exact blob SHA256 21e30470029fff2a47614b1e08a5e312af9501b26f2f68363f665bb133ec994b. Exact blob compiles; both new theorems use only propext, Classical.choice, Quot.sound; placeholders 0; registry 166/0. This is new progress after 45f611d32: normalized circle Hurewicz injectivity and generation by integer powers of the positive class. Orientations align: the chosen class maps to 1, zpow maps to integer scalar multiplication, and the H1 equivalence recovers the exponent. The proof crosses fundamental group, abelianization, multiplicative H1, additive singular H1, and comparison equivalence without reversing a map. Remaining milestones are the finite-wedge point-wedge leg-coordinate/right-base results."},
-    :commit "6d1319c77",
+      :correction "defined it directly"}],
+    :commit "52485b99d",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
     {:path "ConstructionTargets/PolygonSurfaceHomology.lean",
      :sha256
-     "43cfceead157ef371b66621b1768a02d25c78d841cad16c19743c1c0275b795b"},
+     "1ae365027c301431c4f8199ad7080c23051b37f9fbb9ad2148aa2be86d68117f"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -89711,4 +89701,54 @@
    :id :lemma-finitewedgepointwedge-rightbase-inl,
    :kind :lemma,
    :depends-on [:lemma-finitewedgebaseneighborhood-contraction],
+   :other-consumers [:t94J09]}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "PointedContractibleNeighborhood.preimageHomeomorph",
+    :type "packages pull back through homeomorphisms"},
+   :lemma
+   {:name "PointedContractibleNeighborhood.preimageHomeomorph",
+    :reported-by [:program-2026-10-13-polygon-surface-homology],
+    :type "packages pull back through homeomorphisms",
+    :area "polygon-quotient-homology",
+    :proved-in :program-2026-10-13-polygon-surface-homology},
+   :id :lemma-pointedcontractibleneighborhood-preimagehomeomorph,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t94J09]}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "finiteWedgeFinOnePointedContractibleNeighborhood",
+    :type "Fin-one wedge has a contractible base neighborhood"},
+   :lemma
+   {:name "finiteWedgeFinOnePointedContractibleNeighborhood",
+    :reported-by [:program-2026-10-13-polygon-surface-homology],
+    :type "Fin-one wedge has a contractible base neighborhood",
+    :area "polygon-quotient-homology",
+    :proved-in :program-2026-10-13-polygon-surface-homology},
+   :id :lemma-finitewedgefinonepointedcontractibleneighborhood,
+   :kind :lemma,
+   :depends-on [:lemma-finitewedgesubsingletonhomeomorphcircle],
+   :other-consumers [:t94J09]}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "pointWedgePointedContractibleNeighborhood",
+    :type "combine two packages on a restricted point wedge"},
+   :lemma
+   {:name "pointWedgePointedContractibleNeighborhood",
+    :reported-by [:program-2026-10-13-polygon-surface-homology],
+    :type "combine two packages on a restricted point wedge",
+    :area "polygon-quotient-homology"},
+   :id :lemma-pointwedgepointedcontractibleneighborhood,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers [:t94J09]}]}
