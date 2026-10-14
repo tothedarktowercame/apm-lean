@@ -87941,6 +87941,18 @@
      {:cmd "placeholder scan", :exit 0}
      {:cmd "axioms check", :exit 0}
      {:cmd "git show --check 2f96f1a83", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792015137533-12505-7742af98",
+     :commands
+     ["git show/diff 2f96f1a83; blob sha256; diff --check"
+      "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology"
+      "lake env lean /dev/stdin (#print axioms)"
+      "placeholder scan"
+      "statement-registry.py check"],
+     :finding
+     "PASS: reviewer codex-7; 2f96f1a83 (topo-6) newly changes only scoped PolygonSurfaceHomology.lean; fixture SHA-256 d6ab850dd5eb945977e93b9ce26d71685c66fc1e140414dda57e2eb7d56edd7c matches. Exact blob builds; 0 placeholders; standard axioms; registry 166/0. Universal-cover winding proves the explicit +1 loop generates circle pi1. Applying Hurewicz and the existing H1 coordinate isomorphism to a power representing the normalized positive class gives n*coordinate=1, correctly restricting the coordinate to +1 or -1 without pretending the orientation is selected. New compiled progress; remaining: resolve that unit sign (or carry it), prove the boundary word identity, then B7-B10."},
     :commit "2f96f1a83",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
@@ -87949,7 +87961,7 @@
      "d6ab850dd5eb945977e93b9ce26d71685c66fc1e140414dda57e2eb7d56edd7c"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -87969,7 +87981,7 @@
     :blueprint
     "ConstructionTargets/PolygonSurfaceHomology.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked literal positive parametrization of every forward boundary arc.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked winding generator and proved H1 orientation is exactly a unit-sign ambiguity.",
    :id :program-2026-10-13-polygon-surface-homology,
    :kind :reusable-theorem,
    :campaign-priority 31,
@@ -88215,7 +88227,11 @@
     {:job 5,
      :commit "d7dbc3faf",
      :reason
-     "Banked literal positive parametrization of every forward boundary arc."}]}
+     "Banked literal positive parametrization of every forward boundary arc."}
+    {:job 6,
+     :commit "2f96f1a83",
+     :reason
+     "Banked winding generator and proved H1 orientation is exactly a unit-sign ambiguity."}]}
   {:consumer :t97A01,
    :stop-count 0,
    :phase :implementation,
@@ -91834,7 +91850,7 @@
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "circleIntegerLoopOneClass_generates",
@@ -91844,14 +91860,16 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "explicit winding-one class generates circle pi1",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :program-2026-10-13-polygon-surface-homology,
+    :banked-commit "2f96f1a83"},
    :id :lemma-circleintegerlooponeclass-generates,
    :kind :lemma,
    :depends-on [:lemma-circlearc-eq-integerloop-one],
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "circleIntegerLoopOneCoordinate_eq_one_or_neg_one",
@@ -91861,7 +91879,9 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "winding-one H1 coordinate is +1 or -1",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :program-2026-10-13-polygon-surface-homology,
+    :banked-commit "2f96f1a83"},
    :id :lemma-circleintegerlooponecoordinate-eq-one-or-neg-one,
    :kind :lemma,
    :depends-on [:lemma-circleintegerlooponeclass-generates],
