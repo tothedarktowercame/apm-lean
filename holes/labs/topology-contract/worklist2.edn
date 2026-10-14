@@ -87943,6 +87943,16 @@
     [{:cmd "factor draft",
       :exit 1,
       :correction "fixed namespace, inference, multiplication order"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791974050230-11764-a485bb48",
+     :commands
+     ["git show/diff-tree/commit trailers; sha256sum"
+      "exact commit snapshot: lake -Kjobs=1 build PolygonSurfaceHomology"
+      "#print axioms; placeholder scan; statement-registry.py check"],
+     :finding
+     "PASS: independent review of topo-6 commit efaec6039; only PolygonSurfaceHomology.lean changed, exact blob SHA256 2c7d35fbe64158ba6d22bd9513aade0d73bcdfd3cf4ed4d152103cab0d977699. Exact recorded snapshot builds serially; new declarations use only propext, Classical.choice, Quot.sound; placeholders 0; registry 166/0. New progress after d47191953 names the successor reconstruction element and the exact condition exists a, rightBase=inl(a), then proves only the valid direction: old-factor membership implies the connector square via trivial right projection. Parameter order and implication orientation match the generic API. This correctly avoids the false converse from projection=1 to inl membership. Remaining milestone: prove finiteWedgeRightBaseInOldFactor itself, then invoke normalized leg-word extraction."},
     :commit "4b0d0491e",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
@@ -87951,7 +87961,7 @@
      "12642b9a9e0e1701a6dc3b29769f0afc7f5d2d06c0b81392ea7e6b0db426db01"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -87971,7 +87981,7 @@
     :blueprint
     "ConstructionTargets/PolygonSurfaceHomology.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked the valid right-base-to-connector direction; corrected the dependency order.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked structural right-base factorization.",
    :id :program-2026-10-13-polygon-surface-homology,
    :kind :reusable-theorem,
    :campaign-priority 31,
@@ -88085,7 +88095,10 @@
     {:job 2,
      :commit "efaec6039",
      :reason
-     "Banked the valid right-base-to-connector direction; corrected the dependency order."}]}
+     "Banked the valid right-base-to-connector direction; corrected the dependency order."}
+    {:job 3,
+     :commit "4b0d0491e",
+     :reason "Banked structural right-base factorization."}]}
   {:consumer :t97A01,
    :stop-count 0,
    :phase :implementation,
@@ -89919,7 +89932,7 @@
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "genericPointWedgeOuterLeftComparison_mem_inl",
@@ -89929,14 +89942,16 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "outer-left comparison is an inl image",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :program-2026-10-13-polygon-surface-homology,
+    :banked-commit "4b0d0491e"},
    :id :lemma-genericpointwedgeouterleftcomparison-mem-inl,
    :kind :lemma,
    :depends-on [],
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "finiteWedgeSuccessorRightBase_eq_outerRight_mul_inl",
@@ -89946,7 +89961,9 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "right base equals outer-right times an old-factor image",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :program-2026-10-13-polygon-surface-homology,
+    :banked-commit "4b0d0491e"},
    :id :lemma-finitewedgesuccessorrightbase-eq-outerright-mul-inl,
    :kind :lemma,
    :depends-on [:lemma-genericpointwedgeouterleftcomparison-mem-inl],
