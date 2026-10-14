@@ -36158,6 +36158,16 @@
       :exit 1,
       :correction
       "fixed syntax/nonempty proof; reran fixture after build"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1792012949657-12436-62911e93",
+     :commands
+     ["git show/check/diff-tree 8c4eb4f; exact scope assertion"
+      "fixture sha256 assertion; lake env lean frozen fixture"
+      "statement-registry check; placeholder/forbidden recount"],
+     :finding
+     "PASS: commit 8c4eb4f is new compiled, sorry-free progress after 263f5d47. The Fin(runs+1) family lands in outer subtype V, and its value theorem has the correct orientation back to the ambient canonical-boundary list, enabling the next run-representative fold without claiming van Kampen. Fixture hash matches; only standard axioms; registry 166/166; Main remains 1->1 placeholder. Remaining fold, reverse kernel/surjectivity, winding, C1/C2/Main are listed."},
     :commit "daed472889c76a6ad1d273f5dc8cc6bea11a1a75",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
@@ -36168,7 +36178,7 @@
      "52741be3c90ca59ffa72c4b4062ef02ba65f78e2c3b9d4cae1e05201a7f96066"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -36186,7 +36196,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t93J03Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Indexed outer boundaries by Fin(runs+1) with exact ambient values; run representative family remains.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Indexed maximal runs with membership, nonemptiness, exact slices and constant side; representative choice remains.",
    :id :program-2026-10-13-close-t93j03,
    :kind :final-adapter,
    :campaign-priority 30,
@@ -36480,7 +36490,11 @@
     {:job 1,
      :commit "8c4eb4f96b95d89f92b10c478320a1c73ac05bf6",
      :reason
-     "Indexed outer boundaries by Fin(runs+1) with exact ambient values; run representative family remains."}]}
+     "Indexed outer boundaries by Fin(runs+1) with exact ambient values; run representative family remains."}
+    {:job 2,
+     :commit "daed472889c76a6ad1d273f5dc8cc6bea11a1a75",
+     :reason
+     "Indexed maximal runs with membership, nonemptiness, exact slices and constant side; representative choice remains."}]}
   {:consumer :t99J05,
    :stop-count 5,
    :evidence
@@ -39823,7 +39837,7 @@
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "pathTwoOpenSubdivisionRunFamily_exists_slice",
@@ -39833,7 +39847,9 @@
     :reported-by [:program-2026-10-13-close-t93j03],
     :type "indexed nonempty runs; exact slices; constant side",
     :area "covering-subgroup-correspondence",
-    :proved-in :program-2026-10-13-close-t93j03},
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "daed472889c76a6ad1d273f5dc8cc6bea11a1a75"},
    :id :lemma-pathtwoopensubdivisionrunfamily-exists-slice,
    :kind :lemma,
    :depends-on
