@@ -36157,6 +36157,17 @@
     [{:cmd "lake build closure",
       :exit 1,
       :correction "concurrent dependency fixed; rerun passed"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791947983900-11469-1160ee46",
+     :commands
+     ["git show/diff/show --check dda49fe9"
+      "sha256sum fixture; scope; placeholders"
+      "lake env lean recorded closure, fixture, Main"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS: new compiled sorry-free standard-axiom milestone. The outer radial piece is homotopy equivalent to the actual polygon skeleton, and the companion theorem proves literal identity on embedded skeleton points. This preserves the representation boundary and does not assume the remaining winding-one image=aabb comparison or based quotient. Scope/hash verified; frozen placeholders 1->1 (support 0); registry 166/166; SLSC unused, mandated by problem.md."},
     :commit "dda49fe91bcd60e9628fc0ebc7e44c19f94ffd29",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
@@ -36168,7 +36179,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -36186,7 +36197,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t93J03Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed exact overlap pi1 equivalence with integer winding; generator image and based quotient remain.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed outer-piece homotopy equivalence to the actual skeleton; generator comparison remains.",
    :id :program-2026-10-13-close-t93j03,
    :kind :final-adapter,
    :campaign-priority 30,
@@ -36284,7 +36295,11 @@
     {:job 5,
      :commit "4cf4a1fd88248aa249ce06a8e4880af398bbe32e",
      :reason
-     "Committed exact overlap pi1 equivalence with integer winding; generator image and based quotient remain."}]}
+     "Committed exact overlap pi1 equivalence with integer winding; generator image and based quotient remain."}
+    {:job 6,
+     :commit "dda49fe91bcd60e9628fc0ebc7e44c19f94ffd29",
+     :reason
+     "Committed outer-piece homotopy equivalence to the actual skeleton; generator comparison remains."}]}
   {:consumer :t99J05,
    :stop-count 5,
    :evidence
@@ -38055,7 +38070,7 @@
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "kleinPolygonOuterHomotopyEquivSkeleton",
@@ -38067,7 +38082,9 @@
     :type
     "outer piece homotopy equiv actual skeleton; identity on skeleton",
     :area "covering-subgroup-correspondence",
-    :proved-in :program-2026-10-13-close-t93j03},
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "dda49fe91bcd60e9628fc0ebc7e44c19f94ffd29"},
    :id :lemma-kleinpolygonouterhomotopyequivskeleton,
    :kind :lemma,
    :depends-on [:lemma-kleinpolygonbasedoverlapmap],
