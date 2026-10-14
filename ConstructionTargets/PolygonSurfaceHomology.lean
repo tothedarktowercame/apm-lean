@@ -6,6 +6,7 @@ import ConstructionTargets.IntegralSingularHomologyComparison
 import ConstructionTargets.CircleHomology
 import ConstructionTargets.T02A06SphereH0
 import ConstructionTargets.CoefficientSigmaConstFinsuppComparison
+import ConstructionTargets.SingularHomologyHomotopy
 
 /-!
 # Homology of one-vertex polygon quotients
@@ -558,6 +559,41 @@ theorem finiteWedgeLegH1_collapse_self {L : Type} [DecidableEq L] (l : L) :
       (finiteWedgeCollapse_wedgeCircle_self l z)
   rw [hc]
   exact CategoryTheory.Functor.map_id _ _
+
+/-- A different circle leg becomes constant after collapse, hence induces
+the zero map on positive-degree homology. -/
+theorem finiteWedgeLegH1_collapse_of_ne {L : Type} [DecidableEq L]
+    {l k : L} (h : k ≠ l) :
+    finiteWedgeLegH1 k ≫ finiteWedgeCollapseH1 l = 0 := by
+  rw [finiteWedgeLegH1, finiteWedgeCollapseH1, ← Functor.map_comp]
+  have hc :
+      TopCat.ofHom ⟨PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle k,
+          PolygonSurfacePiOne.PointWedgeQuotient.continuous_wedgeCircle k⟩ ≫
+        TopCat.ofHom ⟨finiteWedgeCollapse l,
+          continuous_finiteWedgeCollapse l⟩ =
+      TopCat.ofHom (ContinuousMap.const Circle (1 : Circle)) := by
+    ext z
+    exact congrArg ((↑) : Circle → ℂ)
+      (finiteWedgeCollapse_wedgeCircle_of_ne h z)
+  rw [hc]
+  exact ConstructionTargets.SingularHomologyHomotopy.singularHomology_map_const_eq_zero
+      (ModuleCat ℤ)
+      (ModuleCat.of ℤ ℤ) 1 one_ne_zero 1
+
+/-- The leg inclusions and collapses form the Kronecker-delta matrix on
+degree-one circle generators. -/
+theorem finiteWedgeH1_leg_collapse_matrix {L : Type} [DecidableEq L]
+    (k l : L) :
+    ConstructionTargets.CircleHomology.circleH1IsoInt.inv ≫
+        finiteWedgeLegH1 k ≫ finiteWedgeCollapseH1 l =
+      if k = l then ConstructionTargets.CircleHomology.circleH1IsoInt.inv
+      else 0 := by
+  by_cases h : k = l
+  · subst k
+    rw [if_pos rfl, finiteWedgeLegH1_collapse_self,
+      Category.comp_id]
+  · rw [if_neg h, finiteWedgeLegH1_collapse_of_ne h,
+      comp_zero]
 
 end
 
