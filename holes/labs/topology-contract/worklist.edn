@@ -119014,19 +119014,17 @@
    :depends-on [:lemma-apm-t91j06-bridge-compatible-stage-coordinates],
    :other-consumers []}
   {:consumer :t00J02,
-   :stop-count 2,
+   :stop-count 3,
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
-    :residual
-    "Implement regular-value signed count, component counts, circle degree, assembly.",
+    :residual "Prove signed and component counts; assemble Main.",
     :outcome :stop,
-    :warnings
-    ["existing Main sorryAx" "unrelated t93J03 edits preserved"],
+    :warnings ["existing Main sorryAx"],
     :missing-theorems
-    [{:name "surfaceTopHomology_localFundamentalClassIso",
-      :type "H2 coordinate with local coefficients",
+    [{:name "circleDegree_eq_homologyMap",
+      :type "coordinate action is multiplication by degree",
       :status :proved,
-      :consumers [:t00J02 :t98A02],
+      :consumers [:t00J02],
       :depends-on [],
       :area "oriented-surface-degree"}
      {:name "t00J02_transverse_diskBounded_topHomologyMap_eq_zero",
@@ -119044,29 +119042,21 @@
      :blueprint
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984",
      :implementation
-     "e4eb00561a840321f95c935b0dc3cb9a83929996378e7627ede9e8a6ff489b49",
+     "6d05ef8bbe7334f23e33cb713febe651525f711b71532412405dd8503c20e1b9",
      :registry "166/166"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
-    :reason "Banked local fundamental-class coordinates.",
+    :reason "Banked circle-degree coordinates.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t00J02Closure.lean",
       :exit 0}
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-     {:cmd "sha256/diff/placeholders", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1791950197548-11549-f9fecee3",
-     :commands
-     ["git show/diff-tree b389f11d5"
-      "git archive b389f11d5; lake env lean archived t00J02Closure.lean and Main.lean"
-      "sha256sum; placeholders; statement-registry.py check"],
-     :finding
-     "Independent review of topo-2 commit b389f11d5: only scoped t00J02Closure.lean added. Archived closure and registered Main compile; source/blueprint/implementation hashes 0b3b4888/afb497a6/e4eb0056 match evidence; placeholders 1->1 (existing Main only); registry 166/166. The local H2-coordinate package faithfully applies the existing localization theorem with correct scalar/equality orientation and standard axioms. Valid program STOP; signed-count/component/circle-degree/assembly milestones remain listed."},
-    :commit "b389f11d593ba185db398a8b0e85d00e8eec18ed",
+     {:cmd "diff/hash/placeholders", :exit 0}],
+    :diagnostic-history
+    [{:cmd "coordinate draft", :exit 1, :finding "normalized smul"}],
+    :commit "9642998740f30f564d076dfef0630b8ba7b407a7",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t00J02Closure.blueprint.md",
@@ -119074,7 +119064,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119233,12 +119223,19 @@
    :kind :lemma,
    :depends-on [],
    :other-consumers []}
-  {:consumer :portfolio,
+  {:consumer :t00J02,
    :phase :lemma,
    :state :backlog,
    :scope [],
-   :acceptance {:lemma "circleDegree_eq_homologyMap"},
-   :lemma {:name "circleDegree_eq_homologyMap", :reported-by []},
+   :acceptance
+   {:lemma "circleDegree_eq_homologyMap",
+    :type "coordinate action is multiplication by degree"},
+   :lemma
+   {:name "circleDegree_eq_homologyMap",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type "coordinate action is multiplication by degree",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02},
    :id :lemma-circledegree-eq-homologymap,
    :kind :lemma,
    :depends-on [],
