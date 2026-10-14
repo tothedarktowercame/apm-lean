@@ -924,13 +924,175 @@ lemma apm_m03J01_abstract_variational :
       nlinarith [norm_nonneg (u - T f)]
     exact sub_eq_zero.mp (norm_eq_zero.mp hz)
 
-/-- The closure definition of `H₀¹` makes the weak gradient independent of
-the chosen representative of the value function. -/
+set_option maxHeartbeats 4000000 in
+lemma apm_m03J01_gradient_unique_of_val_ae_aux_closable_aux_main {n : ℕ}
+    {Ω : Set (apm_m03J01_E n)} (w : apm_m03J01_H01 n Ω)
+    (hw : w.val =ᵐ[volume] 0) : w.grad =ᵐ[volume] 0 := by
+  classical
+  rcases w.approximable with ⟨φ, hφtest, hφval, hφgrad⟩
+  have hgradLp :
+      Tendsto
+        (fun k => (apm_m03J01_testFunction_grad_memLp (hφtest k)).toLp
+          (apm_m03J01_gradient n (φ k))) atTop
+        (nhds (w.grad_memLp.toLp w.grad)) := by
+    refine (Lp.tendsto_Lp_iff_tendsto_eLpNorm''
+      (fun k => apm_m03J01_gradient n (φ k))
+      (fun k => apm_m03J01_testFunction_grad_memLp (hφtest k))
+      w.grad w.grad_memLp).2 ?_
+    simpa only [Pi.sub_apply] using hφgrad
+  have hvalLp :
+      Tendsto
+        (fun k => (apm_m03J01_testFunction_val_memLp (hφtest k)).toLp (φ k))
+        atTop (nhds (0 : Lp ℝ 2 (volume : Measure (apm_m03J01_E n)))) := by
+    have hzero : w.val_memLp.toLp w.val = 0 := by
+      have hz : MemLp (0 : apm_m03J01_E n → ℝ) 2 volume := by simp
+      calc
+        w.val_memLp.toLp w.val = hz.toLp 0 := MemLp.toLp_congr w.val_memLp hz hw
+        _ = 0 := MemLp.toLp_zero hz
+    have ht := (Lp.tendsto_Lp_iff_tendsto_eLpNorm''
+      φ (fun k => apm_m03J01_testFunction_val_memLp (hφtest k))
+      w.val w.val_memLp).2 (by simpa only [Pi.sub_apply] using hφval)
+    simpa only [hzero] using ht
+  apply ae_eq_zero_of_integral_contDiff_smul_eq_zero
+    (w.grad_memLp.locallyIntegrable (by norm_num))
+  intro ψ hψ hsψ
+  apply PiLp.ext fun i => ?_
+  let b := apm_m03J01_basis n i
+  let dψ : apm_m03J01_E n → ℝ := fun x => fderiv ℝ ψ x b
+  have hdψcont : Continuous dψ :=
+    (hψ.continuous_fderiv (by simp)).clm_apply continuous_const
+  have hdψsupp : HasCompactSupport dψ := hsψ.fderiv_apply ℝ b
+  have hdψmem : MemLp dψ 2 volume :=
+    hdψcont.memLp_of_hasCompactSupport hdψsupp
+  have hψbmem : MemLp (fun x : apm_m03J01_E n => ψ x • b) 2 volume :=
+    (hψ.continuous.smul continuous_const).memLp_of_hasCompactSupport hsψ.smul_right
+  let Ψ : Lp (apm_m03J01_E n) 2 volume := hψbmem.toLp (fun x => ψ x • b)
+  let DΨ : Lp ℝ 2 volume := hdψmem.toLp dψ
+  have hleft : Tendsto
+      (fun k => inner ℝ Ψ
+        ((apm_m03J01_testFunction_grad_memLp (hφtest k)).toLp
+          (apm_m03J01_gradient n (φ k)))) atTop
+      (nhds (inner ℝ Ψ (w.grad_memLp.toLp w.grad))) :=
+    tendsto_const_nhds.inner hgradLp
+  have hright : Tendsto
+      (fun k => -(inner ℝ
+        ((apm_m03J01_testFunction_val_memLp (hφtest k)).toLp (φ k)) DΨ))
+      atTop (nhds 0) := by
+    simpa using (hvalLp.inner (𝕜 := ℝ) tendsto_const_nhds).neg
+  have hip (k : ℕ) :
+      inner ℝ Ψ
+          ((apm_m03J01_testFunction_grad_memLp (hφtest k)).toLp
+            (apm_m03J01_gradient n (φ k))) =
+        -(inner ℝ
+          ((apm_m03J01_testFunction_val_memLp (hφtest k)).toLp (φ k)) DΨ) := by
+    rw [L2.inner_def, L2.inner_def]
+    have hφdiff : Differentiable ℝ (φ k) :=
+      (hφtest k).1.differentiable (by simp)
+    have hφderivcont : Continuous (fun x => fderiv ℝ (φ k) x b) :=
+      ((hφtest k).1.continuous_fderiv (by simp)).clm_apply continuous_const
+    have hibp := integral_mul_fderiv_eq_neg_fderiv_mul_of_integrable
+      (μ := volume) (f := φ k) (g := ψ) (v := b)
+      ((hφderivcont.mul hψ.continuous).integrable_of_hasCompactSupport
+        hsψ.mul_left)
+      ((hφtest k).1.continuous.mul hdψcont |>.integrable_of_hasCompactSupport
+        hdψsupp.mul_left)
+      ((hφtest k).1.continuous.mul hψ.continuous |>.integrable_of_hasCompactSupport
+        hsψ.mul_left)
+      (fun x _ => hφdiff x) (fun x _ => hψ.differentiable (by simp) x)
+    have hcoeff (x : apm_m03J01_E n) :
+        inner ℝ (ψ x • b) (apm_m03J01_gradient n (φ k) x) =
+          ψ x * fderiv ℝ (φ k) x b := by
+      rw [real_inner_smul_left]
+      dsimp only [b, apm_m03J01_basis]
+      have hbcoord : inner ℝ (EuclideanSpace.single i (1 : ℝ))
+          (apm_m03J01_gradient n (φ k) x) =
+          (apm_m03J01_gradient n (φ k) x) i := by
+        simpa using EuclideanSpace.inner_single_left (𝕜 := ℝ) i (1 : ℝ)
+          (apm_m03J01_gradient n (φ k) x)
+      rw [hbcoord]
+      have hgradcoord : (apm_m03J01_gradient n (φ k) x) i =
+          fderiv ℝ (φ k) x (EuclideanSpace.single i 1) := by
+        simp [apm_m03J01_gradient, apm_m03J01_basis, Pi.single_apply]
+      rw [hgradcoord]
+    have hcoeΨ := hψbmem.coeFn_toLp
+    have hcoeG := (apm_m03J01_testFunction_grad_memLp (hφtest k)).coeFn_toLp
+    have hcoeV := (apm_m03J01_testFunction_val_memLp (hφtest k)).coeFn_toLp
+    have hcoeD := hdψmem.coeFn_toLp
+    calc
+      (∫ x, inner ℝ (Ψ x)
+          ((apm_m03J01_testFunction_grad_memLp (hφtest k)).toLp
+            (apm_m03J01_gradient n (φ k)) x) ∂volume) =
+          ∫ x, ψ x * fderiv ℝ (φ k) x b ∂volume := by
+            apply integral_congr_ae
+            filter_upwards [hcoeΨ, hcoeG] with x hxΨ hxG
+            rw [hxΨ, hxG, hcoeff]
+      _ = -(∫ x, φ k x * dψ x ∂volume) := by
+            dsimp only [dψ]
+            have hcomm :
+                (∫ x, ψ x * fderiv ℝ (φ k) x b ∂volume) =
+                  ∫ x, fderiv ℝ (φ k) x b * ψ x ∂volume := by
+              apply integral_congr_ae
+              exact Eventually.of_forall fun x => mul_comm _ _
+            rw [hcomm]
+            linarith
+      _ = -(∫ x, inner ℝ
+          (((apm_m03J01_testFunction_val_memLp (hφtest k)).toLp (φ k)) x)
+          (DΨ x) ∂volume) := by
+            congr 1
+            apply integral_congr_ae
+            filter_upwards [hcoeV, hcoeD] with x hxV hxD
+            rw [hxV, hxD]
+            change φ k x * dψ x = dψ x * φ k x
+            exact mul_comm _ _
+  have hz : inner ℝ Ψ (w.grad_memLp.toLp w.grad) = 0 := by
+    exact tendsto_nhds_unique hleft
+      (hright.congr' (Eventually.of_forall fun k => (hip k).symm))
+  rw [L2.inner_def] at hz
+  have hcoeΨ := hψbmem.coeFn_toLp
+  have hcoeW := w.grad_memLp.coeFn_toLp
+  rw [integral_congr_ae (by
+    filter_upwards [hcoeΨ, hcoeW] with x hxΨ hxW
+    rw [hxΨ, hxW])] at hz
+  have hint (j : Fin n) :
+      Integrable (fun x : apm_m03J01_E n => (ψ x • w.grad x) j) volume := by
+    let bj := apm_m03J01_basis n j
+    have hψbj : MemLp (fun x : apm_m03J01_E n => ψ x • bj) 2 volume :=
+      (hψ.continuous.smul continuous_const).memLp_of_hasCompactSupport hsψ.smul_right
+    have hi := L2.integrable_inner (𝕜 := ℝ)
+      (hψbj.toLp (fun x => ψ x • bj)) (w.grad_memLp.toLp w.grad)
+    apply hi.congr
+    filter_upwards [hψbj.coeFn_toLp, w.grad_memLp.coeFn_toLp] with x hx1 hx2
+    rw [hx1, hx2, real_inner_smul_left]
+    dsimp only [bj, apm_m03J01_basis]
+    have hjcoord : inner ℝ (EuclideanSpace.single j (1 : ℝ)) (w.grad x) =
+        w.grad x j := by
+      simpa using EuclideanSpace.inner_single_left (𝕜 := ℝ) j (1 : ℝ) (w.grad x)
+    rw [hjcoord]
+    rfl
+  rw [MeasureTheory.eval_integral_piLp hint i]
+  have hbcoord (x : apm_m03J01_E n) :
+      inner ℝ (EuclideanSpace.single i (1 : ℝ)) (w.grad x) = w.grad x i := by
+    simpa using EuclideanSpace.inner_single_left (𝕜 := ℝ) i (1 : ℝ) (w.grad x)
+  simpa [b, apm_m03J01_basis, Pi.smul_apply, real_inner_smul_left,
+    hbcoord, mul_comm] using hz
+
+lemma apm_m03J01_gradient_unique_of_val_ae_aux_closable {n : ℕ}
+    {Ω : Set (apm_m03J01_E n)} (w : apm_m03J01_H01 n Ω)
+    (hw : w.val =ᵐ[volume] 0) : w.grad =ᵐ[volume] 0 := by
+  exact apm_m03J01_gradient_unique_of_val_ae_aux_closable_aux_main w hw
+
 lemma apm_m03J01_gradient_unique_of_val_ae {n : ℕ}
     {Ω : Set (apm_m03J01_E n)} (u v : apm_m03J01_H01 n Ω)
     (hval : u.val =ᵐ[volume] v.val) :
     u.grad =ᵐ[volume] v.grad := by
-  sorry
+  rcases apm_m03J01_H01_smul_exists (-1) v with ⟨nv, hnvval, hnvgrad⟩
+  rcases apm_m03J01_H01_add_exists u nv with ⟨w, hwval, hwgrad⟩
+  have hwzero : w.val =ᵐ[volume] 0 := by
+    filter_upwards [hval] with x hx
+    simp [hwval, hnvval, hx]
+  have hgzero := apm_m03J01_gradient_unique_of_val_ae_aux_closable w hwzero
+  filter_upwards [hgzero] with x hx
+  exact eq_of_sub_eq_zero (by simpa [hwgrad, hnvgrad] using hx)
 
 /-- Distributional first derivatives are unique in `L²`. -/
 lemma apm_m03J01_weakHessian_unique_ae {n : ℕ}
@@ -939,7 +1101,21 @@ lemma apm_m03J01_weakHessian_unique_ae {n : ℕ}
     (hH : apm_m03J01_weakHessian g H)
     (hK : apm_m03J01_weakHessian g K) :
     H =ᵐ[volume] K := by
-  sorry
+  have hcoord (i j : Fin n) :
+      (fun x => H x i j) =ᵐ[volume] (fun x => K x i j) := by
+    apply ae_eq_of_integral_contDiff_smul_eq
+    · exact ((hH.1.eval i).eval j).locallyIntegrable (by norm_num)
+    · exact ((hK.1.eval i).eval j).locallyIntegrable (by norm_num)
+    · intro φ hφ hφc
+      have heq := (hH.2 i j φ hφ hφc).symm.trans (hK.2 i j φ hφ hφc)
+      have : (∫ x, H x i j * φ x ∂volume) = ∫ x, K x i j * φ x ∂volume := by
+        linarith
+      simpa [smul_eq_mul, mul_comm] using this
+  have hall : ∀ᶠ x in ae volume, ∀ i j, H x i j = K x i j :=
+    eventually_all.mpr fun i => eventually_all.mpr fun j => hcoord i j
+  filter_upwards [hall] with x hx
+  funext i j
+  exact hx i j
 
 /-- Qualitative `H²` regularity upgrades to a uniform estimate by applying
 the closed graph theorem to the solution/weak-Hessian graph. -/
