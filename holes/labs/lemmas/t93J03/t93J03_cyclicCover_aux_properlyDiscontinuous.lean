@@ -449,7 +449,40 @@ theorem t93J03_cyclicCover_aux_pQ_fiber
 -- BEGIN SEAT AREA
 theorem t93J03_cyclicCover_aux_properlyDiscontinuous :
     ProperlyDiscontinuousSMul (Multiplicative ℤ) T93J03Punctured := by
-  sorry
+  constructor
+  intro K L hK hL
+  let f : T93J03Punctured × T93J03Punctured → ℝ :=
+    fun zw => Real.log ‖zw.2.1‖ - Real.log ‖zw.1.1‖
+  have hf : Continuous f := by
+    apply Continuous.sub
+    · apply Continuous.log (continuous_norm.comp (continuous_subtype_val.comp continuous_snd))
+      intro zw h
+      exact zw.2.2 (norm_eq_zero.mp h)
+    · apply Continuous.log (continuous_norm.comp (continuous_subtype_val.comp continuous_fst))
+      intro zw h
+      exact zw.1.2 (norm_eq_zero.mp h)
+  have hfinite :
+      {n : Multiplicative ℤ |
+        ((Multiplicative.toAdd n : ℤ) : ℝ) ∈ f '' (K ×ˢ L)}.Finite :=
+    t93J03_kleinPlaneQuotient_pi1_origin_aux_finite_cast (hK.prod hL) f hf
+  apply hfinite.subset
+  intro n hn
+  obtain ⟨w, ⟨z, hzK, hzw⟩, hwL⟩ := hn
+  refine ⟨(z, w), ⟨hzK, hwL⟩, ?_⟩
+  change Real.log ‖w.1‖ - Real.log ‖z.1‖ =
+    ((Multiplicative.toAdd n : ℤ) : ℝ)
+  have hnorm : ‖w.1‖ = Real.exp ((Multiplicative.toAdd n : ℤ) : ℝ) * ‖z.1‖ := by
+    calc
+      ‖w.1‖ = ‖(n • z).1‖ := congrArg (fun u : T93J03Punctured => ‖u.1‖) hzw.symm
+      _ = _ := by
+        change ‖(Real.exp ((Multiplicative.toAdd n : ℤ) : ℝ) * z.1.1,
+          Real.exp ((Multiplicative.toAdd n : ℤ) : ℝ) *
+            ((-1 : ℝ) ^ (Multiplicative.toAdd n) * z.1.2))‖ = _
+        simp [Prod.norm_def, Real.norm_eq_abs, Real.abs_exp,
+          mul_max_of_nonneg, Real.exp_nonneg]
+  rw [hnorm, Real.log_mul (Real.exp_ne_zero _) (norm_ne_zero_iff.mpr z.2),
+    Real.log_exp]
+  ring
 -- END SEAT AREA
 
 theorem t93J03_cyclicCover_aux_free (n : Multiplicative ℤ) (z : T93J03Punctured)
