@@ -113856,7 +113856,7 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 10,
+   :stop-count 0,
    :review-finding
    "Recorded fixture hash mismatch: :fixture.sha256 is 0bca6ce32c019fc3053c7f813c26917169cf817375b44d5e722b864b61a526450c1, but ConstructionTargets/PointWedgeVanKampen.blueprint.md at recorded commit c9b3af27 has exact SHA-256 0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0. Re-record the fixture hash for the reviewed commit.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
@@ -113911,7 +113911,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -119018,6 +119018,16 @@
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "sha256/diff/placeholders", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791950197548-11549-f9fecee3",
+     :commands
+     ["git show/diff-tree b389f11d5"
+      "git archive b389f11d5; lake env lean archived t00J02Closure.lean and Main.lean"
+      "sha256sum; placeholders; statement-registry.py check"],
+     :finding
+     "Independent review of topo-2 commit b389f11d5: only scoped t00J02Closure.lean added. Archived closure and registered Main compile; source/blueprint/implementation hashes 0b3b4888/afb497a6/e4eb0056 match evidence; placeholders 1->1 (existing Main only); registry 166/166. The local H2-coordinate package faithfully applies the existing localization theorem with correct scalar/equality orientation and standard axioms. Valid program STOP; signed-count/component/circle-degree/assembly milestones remain listed."},
     :commit "b389f11d593ba185db398a8b0e85d00e8eec18ed",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
@@ -119026,7 +119036,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119044,7 +119054,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t00J02Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Blueprint written.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked local fundamental-class coordinates.",
    :id :program-2026-10-13-close-t00j02,
    :kind :final-adapter,
    :campaign-priority 45,
@@ -119055,7 +119065,10 @@
    :program-history
    [{:job 1,
      :commit "7d9f683de2d6d5ad371b9c3bd59cdf0d3220b4a9",
-     :reason "Blueprint written."}]}
+     :reason "Blueprint written."}
+    {:job 2,
+     :commit "b389f11d593ba185db398a8b0e85d00e8eec18ed",
+     :reason "Banked local fundamental-class coordinates."}]}
   {:consumer :t98A06,
    :stop-count 0,
    :phase :implementation,
@@ -119141,7 +119154,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "surfaceTopHomology_localFundamentalClassIso",
@@ -119151,7 +119164,9 @@
     :reported-by [:program-2026-10-13-close-t00j02],
     :type "H2 coordinate with local coefficients",
     :area "oriented-surface-degree",
-    :proved-in :program-2026-10-13-close-t00j02},
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "b389f11d593ba185db398a8b0e85d00e8eec18ed"},
    :id :lemma-surfacetophomology-localfundamentalclassiso,
    :kind :lemma,
    :depends-on [],
