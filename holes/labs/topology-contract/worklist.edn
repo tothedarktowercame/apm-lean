@@ -119066,51 +119066,53 @@
   {:consumer :t00J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "Recorded fixture hash is malformed/mismatched: ledger has afb497a6df6187f797ce1df000700b7c24774e94f50633c1cc10b2aa0e8c82319196, but the recorded commit blueprint hashes to afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984. Repair fixture provenance. The archived closure otherwise compiles sorry-free with standard axioms; Main retains its one baseline sorry; registry 166/166.",
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
     :residual
-    "Prove component sums and top degree for constructed local coordinates; assemble Main.",
+    "Prove component-sum/top-degree equalities; assemble Main.",
     :outcome :stop,
-    :warnings ["Main sorryAx" "unrelated t93J03 edits"],
+    :warnings ["Main sorryAx" "unrelated edit"],
     :missing-theorems
-    [{:name "regularFiberLocalDegree_localization_eq",
-      :type
-      "fiber local degree is the localized global fundamental-class coefficient",
+    [{:name
+      "regularFiberTopDegreeFormula_of_localFundamentalClassComparisons",
+      :type "two localized equalities package formula",
       :status :proved,
       :consumers [:t00J02],
-      :depends-on ["surfaceTopHomology_localFundamentalClassIso"],
+      :depends-on ["regularFiberLocalDegree_localization_eq"],
       :area "oriented-surface-degree"}
      {:name "t00J02_transverse_diskBounded_topHomologyMap_eq_zero",
       :type "H2 map zero",
       :status :partial,
       :consumers [:t00J02],
       :depends-on
-      ["RegularFiberTopDegreeFormula"
-       "regularFiberLocalDegree_localization_eq"],
+      ["regularFiberTopDegreeFormula_of_localFundamentalClassComparisons"],
       :area "oriented-surface-degree"}],
     :statement-hashes
     {:source
      "0b3b4888807bfa06c8d60d86829b75776394ea8aa45a98c933c087165521f923",
      :implementation
-     "7e8e9db4adcae0550d14a0db84e79d7033bb939698d3632296df452918b33804",
+     "4d67a0d7f2b9085e094f9c997fb6322b7b6a1df5c31e6fb4481432675decafff",
      :blueprint
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984",
      :registry "166/166"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-2,
-    :reason
-    "Banked local degree coordinates and localization equation.",
+    :reason "Banked localized formula constructor.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t00J02Closure.lean",
       :exit 0}
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-     {:cmd "hash/diff/placeholders", :exit 0}],
-    :commit "2d51d75f6e481ad54e66d7707aa9818068acf600",
+     {:cmd "hash/placeholders/diff", :exit 0}],
+    :diagnostic-history
+    [{:cmd "constructor draft",
+      :exit 1,
+      :finding "structure result requires def"}],
+    :commit "9cf78a1a3e6d97570c7b25f8232393cfb36c104e",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t00J02Closure.blueprint.md",
@@ -119118,7 +119120,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119407,7 +119409,8 @@
     :lemma-tophomologymap-eq-zero-of-regularfibercomparison
     :lemma-regularfibertopdegreeformula
     :lemma-tophomologymap-eq-zero-of-regularfibertopdegreeformula
-    :lemma-regularfiberlocaldegree-localization-eq],
+    :lemma-regularfiberlocaldegree-localization-eq
+    :lemma-regularfibertopdegreeformula-of-localfundamentalclasscomparisons],
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
@@ -120073,6 +120076,26 @@
    :id :lemma-surjective-continuouslinearmap-has-rightinverse,
    :kind :lemma,
    :depends-on [],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "regularFiberTopDegreeFormula_of_localFundamentalClassComparisons",
+    :type "two localized equalities package formula"},
+   :lemma
+   {:name
+    "regularFiberTopDegreeFormula_of_localFundamentalClassComparisons",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type "two localized equalities package formula",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02},
+   :id
+   :lemma-regularfibertopdegreeformula-of-localfundamentalclasscomparisons,
+   :kind :lemma,
+   :depends-on [:lemma-regularfiberlocaldegree-localization-eq],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
