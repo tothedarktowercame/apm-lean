@@ -1079,6 +1079,31 @@ noncomputable def finiteWedgeLegWordCoordinatesList (P : PairingData)
     (w : FiniteWedgeLegWord P) : PairingOrbit P.pair → ℤ :=
   (w.map fun q => q.2 • orbitBasis P q.1 1).sum
 
+/-- The ordered polygon boundary as a signed word in its paired-edge orbit
+labels.  Each geometric edge occurs once and contributes according to the
+orientation fixed by `P.sign`. -/
+noncomputable def polygonBoundaryLegWord (P : PairingData) :
+    FiniteWedgeLegWord P :=
+  List.ofFn fun i : Fin P.edgeCount =>
+    (P.orbit i, if P.sign i then (1 : ℤ) else -1)
+
+/-- The coordinate sum of the ordered signed boundary word is precisely the
+attaching degree vector fixed at the start of the calculation. -/
+theorem polygonBoundaryLegWord_coordinates (P : PairingData) :
+    finiteWedgeLegWordCoordinatesList P (polygonBoundaryLegWord P) =
+      attachingDegree P := by
+  classical
+  ext l
+  simp [finiteWedgeLegWordCoordinatesList, polygonBoundaryLegWord,
+    attachingDegree, edgeOrbitContribution, edgeAttachingDegree,
+    orbitBasis, List.sum_ofFn]
+  apply Finset.sum_congr rfl
+  intro i _
+  by_cases ho : P.orbit i = l
+  · subst l
+    by_cases hs : P.sign i <;> simp [hs]
+  · by_cases hs : P.sign i <;> simp [ho, hs]
+
 /-- Hurewicz evaluation of a finite leg word is the normalized coordinate map
 applied to its list-based coordinate sum. -/
 theorem finiteWedgeLegWord_hurewicz (P : PairingData)
@@ -1103,6 +1128,14 @@ theorem finiteWedgeLegWord_hurewicz (P : PairingData)
       rw [moduleHurewicz_mul, moduleHurewicz_zpow,
         finiteWedgeLegFundamentalClassAtBase_hurewicz_eq_coordinate,
         map_add, map_zsmul, ih]
+
+/-- The signed polygon word has Hurewicz image equal to the normalized
+coordinate-map image of the attaching degree vector. -/
+theorem polygonBoundaryLegWord_hurewicz (P : PairingData) :
+    moduleHurewicz (orbitWedgeBase P)
+        (finiteWedgeLegWordGroup P (polygonBoundaryLegWord P)) =
+      finiteWedgeH1CoordinateMap P (attachingDegree P) := by
+  rw [finiteWedgeLegWord_hurewicz, polygonBoundaryLegWord_coordinates]
 
 /-- The canonical map from the free group on the orbit labels to the
 common-basepoint fundamental group, sending each generator to its positive
