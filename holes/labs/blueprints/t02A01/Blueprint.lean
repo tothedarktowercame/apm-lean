@@ -861,15 +861,64 @@ theorem apm_t02a01_inner_conj_outer
     apply Subtype.ext
     norm_num [apm_t02a01_radial, apm_t02a01_perimeter, apm_t02a01_clamp01]
 
-/-- The outer square, read side by side: bottom `A`, right `B`, top `A` reversed, left `B`
-reversed (opposite sides are identified in the torus). -/
+/-- The outer loop on each quarter: bottom side `A`, right side `B`, top side (identified
+with the bottom, reversed), left side (identified with the right, reversed). -/
+theorem apm_t02a01_outer_quarter_one (hr : Continuous apm_t02a01_radialPt)
+    (t : unitInterval) (ht : (t : ℝ) ≤ 1 / 4) :
+    apm_t02a01_outerLoop hr t = apm_t02a01_edgeA (4 * t) := by
+  sorry
+
+theorem apm_t02a01_outer_quarter_two (hr : Continuous apm_t02a01_radialPt)
+    (t : unitInterval) (ht0 : 1 / 4 ≤ (t : ℝ)) (ht1 : (t : ℝ) ≤ 1 / 2) :
+    apm_t02a01_outerLoop hr t = apm_t02a01_edgeB (4 * t - 1) := by
+  sorry
+
+theorem apm_t02a01_outer_quarter_three (hr : Continuous apm_t02a01_radialPt)
+    (t : unitInterval) (ht0 : 1 / 2 ≤ (t : ℝ)) (ht1 : (t : ℝ) ≤ 3 / 4) :
+    apm_t02a01_outerLoop hr t = apm_t02a01_edgeA (3 - 4 * t) := by
+  sorry
+
+theorem apm_t02a01_outer_quarter_four (hr : Continuous apm_t02a01_radialPt)
+    (t : unitInterval) (ht0 : 3 / 4 ≤ (t : ℝ)) :
+    apm_t02a01_outerLoop hr t = apm_t02a01_edgeB (4 - 4 * t) := by
+  sorry
+
+/-- Reassemble the four quarters (`Path.trans_apply` twice; the quarter facts are explicit
+hypotheses so this is independent of them). -/
+theorem apm_t02a01_balanced_of_quarters
+    (hr : Continuous apm_t02a01_radialPt)
+    (hA : Continuous apm_t02a01_edgeA) (hB : Continuous apm_t02a01_edgeB)
+    (q1 : ∀ t : unitInterval, (t : ℝ) ≤ 1 / 4 →
+      apm_t02a01_outerLoop hr t = apm_t02a01_edgeA (4 * t))
+    (q2 : ∀ t : unitInterval, 1 / 4 ≤ (t : ℝ) → (t : ℝ) ≤ 1 / 2 →
+      apm_t02a01_outerLoop hr t = apm_t02a01_edgeB (4 * t - 1))
+    (q3 : ∀ t : unitInterval, 1 / 2 ≤ (t : ℝ) → (t : ℝ) ≤ 3 / 4 →
+      apm_t02a01_outerLoop hr t = apm_t02a01_edgeA (3 - 4 * t))
+    (q4 : ∀ t : unitInterval, 3 / 4 ≤ (t : ℝ) →
+      apm_t02a01_outerLoop hr t = apm_t02a01_edgeB (4 - 4 * t)) :
+    apm_t02a01_outerLoop hr =
+      ((apm_t02a01_loopA hA).trans (apm_t02a01_loopB hB)).trans
+        ((apm_t02a01_loopA hA).symm.trans (apm_t02a01_loopB hB).symm) := by
+  sorry
+
+theorem apm_t02a01_outer_word_aux_balanced
+    (hr : Continuous apm_t02a01_radialPt)
+    (hA : Continuous apm_t02a01_edgeA) (hB : Continuous apm_t02a01_edgeB) :
+    apm_t02a01_outerLoop hr =
+      ((apm_t02a01_loopA hA).trans (apm_t02a01_loopB hB)).trans
+        ((apm_t02a01_loopA hA).symm.trans (apm_t02a01_loopB hB).symm) :=
+  apm_t02a01_balanced_of_quarters hr hA hB (apm_t02a01_outer_quarter_one hr)
+    (apm_t02a01_outer_quarter_two hr) (apm_t02a01_outer_quarter_three hr)
+    (apm_t02a01_outer_quarter_four hr)
+
 theorem apm_t02a01_outer_word
     (hr : Continuous apm_t02a01_radialPt)
     (hA : Continuous apm_t02a01_edgeA) (hB : Continuous apm_t02a01_edgeB) :
     (apm_t02a01_outerLoop hr).Homotopic
       ((apm_t02a01_loopA hA).trans ((apm_t02a01_loopB hB).trans
         ((apm_t02a01_loopA hA).symm.trans (apm_t02a01_loopB hB).symm))) := by
-  sorry
+  rw [apm_t02a01_outer_word_aux_balanced hr hA hB]
+  exact Path.Homotopic.trans_assoc _ _ _
 
 /-- Algebra: conjugate `A` and `B` by `δ` to get the commutator in `π₁(T, innerBase)`. -/
 theorem apm_t02a01_commutator_of_homotopies
