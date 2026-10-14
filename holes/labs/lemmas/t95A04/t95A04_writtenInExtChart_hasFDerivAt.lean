@@ -186,7 +186,9 @@ theorem t95A04_writtenInExtChart_hasFDerivAt
     (x : Space ℝ 2) :
     HasFDerivAt (writtenInExtChartAt (𝓡 2) (𝓡 6) x veroneseDescended)
       (mfderiv (𝓡 2) (𝓡 6) veroneseDescended x) (extChartAt (𝓡 2) x x) := by
-  sorry
+  have h := veroneseDescended_contMDiff.mdifferentiableAt (x := x) (by simp)
+  simpa only [ModelWithCorners.range_eq_univ, hasFDerivWithinAt_univ] using
+    h.hasMFDerivAt.2
 -- END SEAT AREA
 
 /-- The augmented coordinate map has derivative equal to a continuous linear
