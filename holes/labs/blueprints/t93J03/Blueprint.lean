@@ -529,7 +529,37 @@ theorem t93J03_cyclicCover_aux_L_E (v : ℝ × ℝ) :
 
 theorem t93J03_cyclicCover_aux_E_L (z : T93J03Punctured) :
     t93J03_cyc_E (t93J03_cyc_L z) = z := by
-  sorry
+  apply Subtype.ext
+  let c : ℂ := ⟨z.1.1, z.1.2⟩
+  have hc : c ≠ 0 := by
+    intro h
+    apply z.2
+    apply Prod.ext
+    · exact congrArg Complex.re h
+    · exact congrArg Complex.im h
+  have hs : 0 < z.1.1 ^ 2 + z.1.2 ^ 2 := by
+    by_contra h
+    have hx : z.1.1 ^ 2 = 0 := by
+      nlinarith [sq_nonneg z.1.1, sq_nonneg z.1.2]
+    have hy : z.1.2 ^ 2 = 0 := by
+      nlinarith [sq_nonneg z.1.1, sq_nonneg z.1.2]
+    apply z.2
+    exact Prod.ext (eq_zero_of_pow_eq_zero hx) (eq_zero_of_pow_eq_zero hy)
+  have hr : Real.exp (Real.log (Real.sqrt (z.1.1 ^ 2 + z.1.2 ^ 2))) = ‖c‖ := by
+    rw [Real.exp_log (Real.sqrt_pos.2 hs), Complex.norm_def,
+      Complex.normSq_apply]
+    congr 1
+    dsimp [c]
+    ring
+  have hangle : 2 * Real.pi * (Complex.arg c / (2 * Real.pi)) = Complex.arg c := by
+    field_simp [Real.pi_ne_zero]
+  change
+    (Real.exp (Real.log (Real.sqrt (z.1.1 ^ 2 + z.1.2 ^ 2))) *
+        Real.cos (2 * Real.pi * (Complex.arg c / (2 * Real.pi))),
+      Real.exp (Real.log (Real.sqrt (z.1.1 ^ 2 + z.1.2 ^ 2))) *
+        Real.sin (2 * Real.pi * (Complex.arg c / (2 * Real.pi)))) = z.1
+  rw [hr, hangle]
+  exact Prod.ext (Complex.norm_mul_cos_arg c) (Complex.norm_mul_sin_arg c)
 
 /-- Orbits of the affine Klein action in coordinates. -/
 theorem t93J03_cyclicCover_aux_orbit_iff_aux_sign_nat (n : ℕ) :
