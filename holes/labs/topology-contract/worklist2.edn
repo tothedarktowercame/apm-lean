@@ -87946,6 +87946,17 @@
     [{:cmd "specialization draft",
       :exit 1,
       :correction "supplied explicit generic parameters"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791981971075-11808-0ea0fd15",
+     :commands
+     ["git diff/show 556268129; sha256sum"
+      "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology"
+      "lake env lean /dev/stdin (#print axioms)"
+      "placeholder scan; statement-registry check; git show --check"],
+     :finding
+     "PASS: recorded commit 556268129 by topo-6 changes only PolygonSurfaceHomology.lean; exact fixture SHA-256 14a704d85c7355f4c4c57b694731ce276cb6cbc2964c2d91ccc515419f7e0cb9. Exact snapshot builds; 0 placeholders; new theorem uses only propext/Classical.choice/Quot.sound. Target inverse-unit connector square is oriented hom≫map(unit⁻¹)=hom; generic change-base/comap theorem faithfully yields the source square. Real compiled program progress; next milestone proves the target square, then connector transport/leg-word extraction."},
     :commit "556268129",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
@@ -87954,7 +87965,7 @@
      "14a704d85c7355f4c4c57b694731ce276cb6cbc2964c2d91ccc515419f7e0cb9"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -87974,7 +87985,7 @@
     :blueprint
     "ConstructionTargets/PolygonSurfaceHomology.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked transport reduction; full build blocked by an out-of-scope dirty dependency.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked finite specialization of the inverse-unit connector implication.",
    :id :program-2026-10-13-polygon-surface-homology,
    :kind :reusable-theorem,
    :campaign-priority 31,
@@ -88099,7 +88110,11 @@
     {:job 5,
      :commit "73b6e7834",
      :reason
-     "Banked transport reduction; full build blocked by an out-of-scope dirty dependency."}]}
+     "Banked transport reduction; full build blocked by an out-of-scope dirty dependency."}
+    {:job 6,
+     :commit "556268129",
+     :reason
+     "Banked finite specialization of the inverse-unit connector implication."}]}
   {:consumer :t97A01,
    :stop-count 0,
    :phase :implementation,
@@ -90067,7 +90082,7 @@
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "finiteWedgeCoherentRightSourceUnitSquare_of_target",
@@ -90079,14 +90094,16 @@
     :type
     "target inverse-unit connector square induces coherent source square",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :program-2026-10-13-polygon-surface-homology,
+    :banked-commit "556268129"},
    :id :lemma-finitewedgecoherentrightsourceunitsquare-of-target,
    :kind :lemma,
    :depends-on [],
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "finiteWedgeRightBaseTargetUnitSquare",
@@ -90097,7 +90114,9 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type
     "literal final-leg connectors respect the mapped inverse unit",
-    :area "polygon-quotient-homology"},
+    :area "polygon-quotient-homology",
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/PolygonSurfaceHomology.lean"]},
    :id :lemma-finitewedgerightbasetargetunitsquare,
    :kind :lemma,
    :depends-on [],
