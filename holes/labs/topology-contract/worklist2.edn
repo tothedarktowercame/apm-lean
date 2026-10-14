@@ -87946,6 +87946,18 @@
     [{:cmd "edge-path drafts",
       :exit 1,
       :correction "used signed-arc continuity and endpoint lemmas"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792020734320-12686-a324cb89",
+     :commands
+     ["git show/diff b680494d4; blob sha256; diff --check"
+      "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology"
+      "lake env lean /dev/stdin (#print axioms)"
+      "placeholder scan"
+      "statement-registry.py check"],
+     :finding
+     "PASS: reviewer codex-7; b680494d4 (topo-6) newly changes only scoped PolygonSurfaceHomology.lean; fixture SHA-256 981211422c722bec1fae01b9a4248fe60a92f3336f7dd2ec2d5ea387c44541d8 matches. Exact blob builds; 0 placeholders; standard axioms; registry 166/0. Each signed edge is a continuous loop at its wedge-leg basepoint: forward endpoints are 0/1, while reverseIcc swaps them for negative sign, and all map to circle point 1. The geometric boundary restriction is pointwise this path. Endpoint and orientation cases are correct; concatenation remains explicitly partial. New compiled progress; remaining concatenate edge paths, instantiate B7, then B8-B10."},
     :commit "b680494d4",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
@@ -87954,7 +87966,7 @@
      "981211422c722bec1fae01b9a4248fe60a92f3336f7dd2ec2d5ea387c44541d8"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -87974,7 +87986,7 @@
     :blueprint
     "ConstructionTargets/PolygonSurfaceHomology.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked B7 reduction from geometric boundary-product equality.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked based signed-edge paths.",
    :id :program-2026-10-13-polygon-surface-homology,
    :kind :reusable-theorem,
    :campaign-priority 31,
@@ -88252,7 +88264,10 @@
     {:job 5,
      :commit "392a3d957",
      :reason
-     "Banked B7 reduction from geometric boundary-product equality."}]}
+     "Banked B7 reduction from geometric boundary-product equality."}
+    {:job 6,
+     :commit "b680494d4",
+     :reason "Banked based signed-edge paths."}]}
   {:consumer :t97A01,
    :stop-count 0,
    :phase :implementation,
@@ -92227,7 +92242,7 @@
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "polygonBoundaryWedgeLoop_edgePoint_eq_signedEdgePath",
@@ -92237,7 +92252,9 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "each boundary interval is a based signed-edge path",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :program-2026-10-13-polygon-surface-homology,
+    :banked-commit "b680494d4"},
    :id :lemma-polygonboundarywedgeloop-edgepoint-eq-signededgepath,
    :kind :lemma,
    :depends-on
