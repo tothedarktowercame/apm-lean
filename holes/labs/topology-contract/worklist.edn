@@ -119110,6 +119110,17 @@
       :exit 0}
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1792009021566-12328-2e73f0e6",
+     :commands
+     ["git show/diff-tree 45dab813"
+      "archive 45dab813; lake env lean closure and Main"
+      "sha256sum/placeholders at 45dab813"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS program STOP: commit changes only t00J02Closure.lean and banks a valid fiberwise reindexing from point signs to genuine-component grouped local-degree sums, with orientation sign attached to the component on both sides. Corrected fixture afb497a6 matches the archived blueprint; closure/source hashes match evidence; closure has 0 placeholders, Main retains baseline 1; archived files compile with standard axioms; registry 166/166. Geometric comparison, regular-value identity, and Main assembly remain explicitly listed."},
     :commit "45dab8131ff80411fe29265826a71b06cd9fdc26",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
@@ -119118,7 +119129,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119136,7 +119147,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t00J02Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked componentwise degree comparison interface.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Corrected fixture provenance; signed-count reindexing remains banked.",
    :id :program-2026-10-13-close-t00j02,
    :kind :final-adapter,
    :campaign-priority 45,
@@ -119211,7 +119222,11 @@
      :reason "Banked finite regular-fiber choice representation."}
     {:job 3,
      :commit "dcfc7440576fc0692eb98db5bf2c6600a61a89d0",
-     :reason "Banked componentwise degree comparison interface."}]}
+     :reason "Banked componentwise degree comparison interface."}
+    {:job 5,
+     :commit "45dab8131ff80411fe29265826a71b06cd9fdc26",
+     :reason
+     "Corrected fixture provenance; signed-count reindexing remains banked."}]}
   {:consumer :t98A06,
    :stop-count 2,
    :evidence
@@ -119892,7 +119907,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "pointSignedCount_eq_groupedComponentSignedCount",
@@ -119902,7 +119917,9 @@
     :reported-by [:program-2026-10-13-close-t00j02],
     :type "point sum equals component sum",
     :area "oriented-surface-degree",
-    :proved-in :program-2026-10-13-close-t00j02},
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "45dab8131ff80411fe29265826a71b06cd9fdc26"},
    :id :lemma-pointsignedcount-eq-groupedcomponentsignedcount,
    :kind :lemma,
    :depends-on [],
