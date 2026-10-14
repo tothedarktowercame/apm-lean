@@ -87948,6 +87948,18 @@
     [{:cmd "quotient comparison draft",
       :exit 1,
       :correction "used quotient-homeomorphism injectivity"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792011464141-12400-daca4f87",
+     :commands
+     ["git show/diff 7ce50e825; blob sha256; diff --check"
+      "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology"
+      "lake env lean /dev/stdin (#print axioms)"
+      "placeholder scan"
+      "statement-registry.py check"],
+     :finding
+     "PASS: reviewer codex-7; 7ce50e825 (topo-6) newly changes only scoped PolygonSurfaceHomology.lean; fixture SHA-256 279a9e6d9c5af884b9a09560ec94e948c54751f5f1382aed8793ab3d8f71f2b4 matches. Exact blob builds; 0 placeholders; standard axioms; registry 166/0. The proof takes the literal half-radius representative through the restricted quotient deformation to the unit boundary with the same positive circle parameter, then through the skeleton/wedge homeomorphism; direction and representation transitions are correct, with no reversal. New milestone proved; remaining H1 transport, signed arc/Hurewicz computation, then B8-B10."},
     :commit "7ce50e825",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
@@ -87956,7 +87968,7 @@
      "279a9e6d9c5af884b9a09560ec94e948c54751f5f1382aed8793ab3d8f71f2b4"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -87976,7 +87988,7 @@
     :blueprint
     "ConstructionTargets/PolygonSurfaceHomology.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked the literal positive overlap circle and outer inclusion.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked the radial-overlap to ordered-boundary comparison.",
    :id :program-2026-10-13-polygon-surface-homology,
    :kind :reusable-theorem,
    :campaign-priority 31,
@@ -88196,7 +88208,11 @@
     {:job 7,
      :commit "039a9e812",
      :reason
-     "Banked the literal positive overlap circle and outer inclusion."}]}
+     "Banked the literal positive overlap circle and outer inclusion."}
+    {:job 8,
+     :commit "7ce50e825",
+     :reason
+     "Banked the radial-overlap to ordered-boundary comparison."}]}
   {:consumer :t97A01,
    :stop-count 0,
    :phase :implementation,
@@ -91512,7 +91528,7 @@
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "outerHomotopyEquivWedge_radialOverlapCircle",
@@ -91524,7 +91540,9 @@
     :type
     "outer deformation sends overlap loop to ordered boundary loop",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :program-2026-10-13-polygon-surface-homology,
+    :banked-commit "7ce50e825"},
    :id :lemma-outerhomotopyequivwedge-radialoverlapcircle,
    :kind :lemma,
    :depends-on
