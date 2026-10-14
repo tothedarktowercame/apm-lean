@@ -80,6 +80,8 @@ by discarding the contractible radial interval and taking circle winding number.
 The outer cover piece is also now equipped with the exact homotopy equivalence
 to the actual polygon skeleton, proved to restrict to the identity on skeleton
 points.  The remaining comparison transports the winding generator through it.
+The induced fundamental-groupoid equivalence is now compiled as well, with its
+object action on embedded skeleton points reduced to literal equality.
 
 For every `k : KleinBottle`, construct an equivalence between
 `FundamentalGroup k` and the frozen `PresentedKleinGroup`.

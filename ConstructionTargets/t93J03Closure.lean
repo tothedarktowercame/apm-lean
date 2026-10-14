@@ -824,6 +824,25 @@ theorem kleinPolygonOuterHomotopyEquivSkeleton_on_skeleton
       ((mem_outerBoundarySkeleton_iff kleinPairingData
         (skeletonToOuter kleinPairingData z)).mpr z.2))
 
+/-- The preceding deformation equivalence at the fundamental-groupoid level;
+this retains all basepoints while the winding generator is transported. -/
+noncomputable def kleinPolygonOuterFundamentalGroupoidEquivalence :
+    FundamentalGroupoid (OuterPiece kleinPairingData) ≌
+      FundamentalGroupoid kleinPairingData.skeleton :=
+  FundamentalGroupoidFunctor.equivOfHomotopyEquiv
+    kleinPolygonOuterHomotopyEquivSkeleton
+
+/-- On embedded skeleton objects, the groupoid equivalence has the literal
+skeleton object as its target. -/
+theorem kleinPolygonOuterFundamentalGroupoidEquivalence_obj_skeleton
+    (z : kleinPairingData.skeleton) :
+    kleinPolygonOuterFundamentalGroupoidEquivalence.functor.obj
+        (FundamentalGroupoid.mk (skeletonToOuter kleinPairingData z)) =
+      FundamentalGroupoid.mk z := by
+  change FundamentalGroupoid.mk (kleinPolygonOuterHomotopyEquivSkeleton
+    (skeletonToOuter kleinPairingData z)) = FundamentalGroupoid.mk z
+  rw [kleinPolygonOuterHomotopyEquivSkeleton_on_skeleton]
+
 def finiteWedgeBoolPoint : FiniteWedge Bool := wedgeCircle false 1
 
 @[simp] theorem finiteWedgeBoolHomeomorphTwoCircles_point :
@@ -963,6 +982,7 @@ theorem lift_isEmbedding_assembly
 #print axioms kleinPolygonOverlapToOuterPiOne
 #print axioms kleinPolygonOverlapFundamentalGroupEquivInt
 #print axioms kleinPolygonOuterHomotopyEquivSkeleton_on_skeleton
+#print axioms kleinPolygonOuterFundamentalGroupoidEquivalence_obj_skeleton
 #print axioms kleinBottle_pi1_every_basepoint_of_polygon_van_kampen
 
 end ConstructionTargets.t93J03Closure
