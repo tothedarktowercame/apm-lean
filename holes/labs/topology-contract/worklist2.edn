@@ -87899,71 +87899,57 @@
      :reason
      "Banked preconnectedness of the alleged chart's punctured ball source."}]}
   {:consumer :t97A01,
-   :stop-count 4,
+   :stop-count 5,
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Compute finite-wedge homology to finish B4, then B6-B10.",
+    "Prove finite-wedge H1 coordinates and higher vanishing to finish B4, then B6-B10.",
     :outcome :stop,
     :warnings ["preexisting dependency lints"],
     :missing-theorems
-    [{:name "outerHomotopyEquivWedge",
-      :type
-      "OuterPiece P ≃ₕ FiniteWedge (PairingOrbit P.pair), signed on boundary",
+    [{:name "finiteWedgeH0IsoInt",
+      :type "H0(FiniteWedge L;Z)=Z for nonempty L",
       :status :proved,
       :consumers [:t97A01 :t94J09],
       :depends-on [],
       :area "polygon-quotient-homology"}
-     {:name "outerHomology",
-      :type "outer H0≅ℤ, H1≅(PairingOrbit P.pair→ℤ), Hk=0(k≥2)",
-      :status :partial,
+     {:name "outerH0IsoInt",
+      :type "H0(OuterPiece P;Z)=Z",
+      :status :proved,
       :consumers [:t97A01 :t94J09],
-      :depends-on ["outerHomotopyEquivWedge"],
+      :depends-on ["outerHomotopyEquivWedge" "finiteWedgeH0IsoInt"],
       :area "polygon-quotient-homology"}
-     {:name "polygonQuotient_homology",
-      :type "H0=ℤ; H1=cokernel; H2=kernel; Hk=0,k≥3",
+     {:name "outerHomology",
+      :type "H0=Z,H1=(PairingOrbit->Z),Hk=0(k>=2)",
       :status :partial,
       :consumers [:t97A01 :t94J09],
-      :depends-on
-      ["outerHomology" "innerOverlapHomology" "attachingBoundary"],
+      :depends-on ["outerH0IsoInt"],
       :area "polygon-quotient-homology"}],
     :statement-hashes {:registry "166/0"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
     :reason
-    "Banked signed outer-piece homotopy equivalence, the geometric half of B4.",
+    "Banked finite-wedge path connectedness and H0, transported to the outer piece.",
     :commands
     [{:cmd "lake build ConstructionTargets.PolygonSurfaceHomology",
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-     {:cmd "git show --check 41bf54103", :exit 0}],
+     {:cmd "git show --check 25d7ab26a", :exit 0}],
     :diagnostic-history
-    [{:cmd "geometry drafts",
+    [{:cmd "draft compiles",
       :exit 1,
       :correction
-      "explicit reverse homotopy; corrected composition and subtype projection"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1791935888775-10967-635264c4",
-     :commands
-     ["scope/SHA256 checks at 41bf54103"
-      "recorded blob | lake env lean /dev/stdin"
-      "comment-stripped placeholder scan (0)"
-      "#print axioms signed outer equivalence"
-      "statement-registry.py check (166/0)"],
-     :finding
-     "Valid program STOP with new compiled B4 geometry beyond history commit f28078582. The outer deformation retract lands in the boundary subspace, that subspace is homeomorphic to P.skeleton, and composition with skeletonHomeomorphWedge has the correct outer-to-wedge direction. Its restriction to the skeleton is definitionally the reviewed signed map. Exact one-file scope/hash match; placeholders 0; only standard axioms. Remaining: finite-wedge homology, then B6-B10."},
-    :commit "41bf54103",
+      "fixed path constructor, Circle instance, Joined map, and IsIso"}],
+    :commit "25d7ab26a",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
     {:path "ConstructionTargets/PolygonSurfaceHomology.lean",
      :sha256
-     "176116a5e2181a025666c5359916148ff786f05c29578bac1d0b055c2fe31d54"},
+     "2d7914a2bf72367dc0ebd4412e377aba4d88f8a4417388fe71f27b03483f6643"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -88782,7 +88768,7 @@
     :area "polygon-quotient-homology"},
    :id :lemma-outerhomology,
    :kind :lemma,
-   :depends-on [:lemma-outerhomotopyequivwedge],
+   :depends-on [:lemma-outerhomotopyequivwedge :lemma-outerh0isoint],
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
@@ -88804,4 +88790,37 @@
    :id :lemma-outerhomotopyequivwedge,
    :kind :lemma,
    :depends-on [],
+   :other-consumers [:t94J09]}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "finiteWedgeH0IsoInt",
+    :type "H0(FiniteWedge L;Z)=Z for nonempty L"},
+   :lemma
+   {:name "finiteWedgeH0IsoInt",
+    :reported-by [:program-2026-10-13-polygon-surface-homology],
+    :type "H0(FiniteWedge L;Z)=Z for nonempty L",
+    :area "polygon-quotient-homology",
+    :proved-in :program-2026-10-13-polygon-surface-homology},
+   :id :lemma-finitewedgeh0isoint,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t94J09]}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance {:lemma "outerH0IsoInt", :type "H0(OuterPiece P;Z)=Z"},
+   :lemma
+   {:name "outerH0IsoInt",
+    :reported-by [:program-2026-10-13-polygon-surface-homology],
+    :type "H0(OuterPiece P;Z)=Z",
+    :area "polygon-quotient-homology",
+    :proved-in :program-2026-10-13-polygon-surface-homology},
+   :id :lemma-outerh0isoint,
+   :kind :lemma,
+   :depends-on
+   [:lemma-outerhomotopyequivwedge :lemma-finitewedgeh0isoint],
    :other-consumers [:t94J09]}]}
