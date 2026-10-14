@@ -146,7 +146,20 @@ lemma apm_t91J06_mono_endpoint_surjective
     {a b : ℝ} (F : apm_t91J06_I → ℝ) (hF : Continuous F)
     (h0 : F ⟨0, by norm_num⟩ = a) (h1 : F ⟨1, by norm_num⟩ = b) :
     ∀ y : Set.Icc a b, ∃ x, F x = y := by
-  sorry
+  intro y
+  let x0 : apm_t91J06_I := ⟨0, by norm_num⟩
+  let x1 : apm_t91J06_I := ⟨1, by norm_num⟩
+  have hx01 : x0 ≤ x1 := by
+    change (0 : ℝ) ≤ 1
+    norm_num
+  have hy : (y : ℝ) ∈ Set.Icc (F x0) (F x1) := by
+    change F ⟨0, by norm_num⟩ ≤ (y : ℝ) ∧
+      (y : ℝ) ≤ F ⟨1, by norm_num⟩
+    rw [h0, h1]
+    exact y.property
+  rcases intermediate_value_Icc hx01 hF.continuousOn hy with
+    ⟨x, _hx, hxy⟩
+  exact ⟨x, hxy⟩
 
 /-- IVT surjectivity for a continuous decreasing coordinate with prescribed
 endpoint values. -/
@@ -154,7 +167,20 @@ lemma apm_t91J06_anti_endpoint_surjective
     {a b : ℝ} (F : apm_t91J06_I → ℝ) (hF : Continuous F)
     (h0 : F ⟨0, by norm_num⟩ = b) (h1 : F ⟨1, by norm_num⟩ = a) :
     ∀ y : Set.Icc a b, ∃ x, F x = y := by
-  sorry
+  intro y
+  let x0 : apm_t91J06_I := ⟨0, by norm_num⟩
+  let x1 : apm_t91J06_I := ⟨1, by norm_num⟩
+  have hx01 : x0 ≤ x1 := by
+    change (0 : ℝ) ≤ 1
+    norm_num
+  have hy : (y : ℝ) ∈ Set.Icc (F x1) (F x0) := by
+    change F ⟨1, by norm_num⟩ ≤ (y : ℝ) ∧
+      (y : ℝ) ≤ F ⟨0, by norm_num⟩
+    rw [h0, h1]
+    exact y.property
+  rcases intermediate_value_Icc' hx01 hF.continuousOn hy with
+    ⟨x, _hx, hxy⟩
+  exact ⟨x, hxy⟩
 
 /-- Package a continuous bijective real coordinate as a homeomorphism. -/
 lemma apm_t91J06_package_interval_coordinate
@@ -168,7 +194,28 @@ lemma apm_t91J06_package_interval_coordinate
     ∃ Q : apm_t91J06_I ≃ₜ
         Set.Icc (-(n + 2 : ℝ)) (n + 2 : ℝ),
       ∀ x, (Q (t x) : ℝ) = (q x : ℝ) := by
-  sorry
+  let f : apm_t91J06_I → Set.Icc (-(n + 2 : ℝ)) (n + 2 : ℝ) :=
+    fun x ↦ ⟨F x, hFmem x⟩
+  have hf_injective : Function.Injective f := by
+    intro x y hxy
+    apply hFinj
+    exact congrArg Subtype.val hxy
+  have hf_surjective : Function.Surjective f := by
+    intro y
+    obtain ⟨x, hx⟩ := hFsurj y
+    refine ⟨x, Subtype.ext ?_⟩
+    exact hx
+  let e : apm_t91J06_I ≃ Set.Icc (-(n + 2 : ℝ)) (n + 2 : ℝ) :=
+    Equiv.ofBijective f ⟨hf_injective, hf_surjective⟩
+  have he_continuous : Continuous e := by
+    change Continuous f
+    exact hF.subtype_mk hFmem
+  let Q : apm_t91J06_I ≃ₜ Set.Icc (-(n + 2 : ℝ)) (n + 2 : ℝ) :=
+    he_continuous.homeoOfEquivCompactToT2
+  refine ⟨Q, ?_⟩
+  intro x
+  change F (t x) = (q x : ℝ)
+  exact hext x
 
 /-- Extend arbitrary prescribed coordinates across an interval embedded
 strictly inside the unit interval. -/
