@@ -586,6 +586,25 @@ theorem topHomologyMap_eq_zero_of_pointSignedCountComparison
   exact pointSignedCount_eq_zero_of_componentComparison
     component localDegree componentDegree orientationSign hsum hdegree
 
+/-- Specialization of the H₂ assembly to the exact zero-degree component
+lifts constructed from disk-boundedness. -/
+theorem topHomologyMap_eq_zero_of_regularFiberComparison
+    {S : Type} [TopologicalSpace S] {f : C(S, S)} {c : C(Circle, S)}
+    {y : S} {hy : y ∈ Set.range c} [Fintype {x : S // f x = y}]
+    (e : surfaceHomology S ≅ ModuleCat.of ℤ ℤ)
+    (lifts : ∀ k : OccupiedRegularFiberComponent f c y hy,
+      ExactZeroDegreeComponentLift f c y hy k)
+    (comparison : RegularFiberLocalDegreeComparison hy lifts)
+    (hcount : surfaceTopDegree e f = ∑ x,
+      comparison.orientationSign
+          (occupiedRegularFiberComponentIndex f c y hy x) *
+        comparison.localDegree x) : homologyMap 2 f = 0 := by
+  exact topHomologyMap_eq_zero_of_pointSignedCountComparison e f
+    (occupiedRegularFiberComponentIndex f c y hy)
+    comparison.localDegree (exactLiftComponentDegree lifts)
+    comparison.orientationSign hcount comparison.component_sum_eq_lift_degree
+    (exactLiftComponentDegree_eq_zero lifts)
+
 /-- Assembly of the signed-count argument after the geometric regular-value
 formula and the component degree calculation have been supplied. -/
 theorem topHomologyMap_eq_zero_of_regularValue_signedCount
@@ -672,4 +691,5 @@ end ConstructionTargets.T00J02Closure
 #print axioms ConstructionTargets.T00J02Closure.surfaceTopDegree_eq_homologyMap
 #print axioms ConstructionTargets.T00J02Closure.surfaceTopHomologyMap_eq_zero_of_surfaceTopDegree_eq_zero
 #print axioms ConstructionTargets.T00J02Closure.topHomologyMap_eq_zero_of_pointSignedCountComparison
+#print axioms ConstructionTargets.T00J02Closure.topHomologyMap_eq_zero_of_regularFiberComparison
 #print axioms ConstructionTargets.T00J02Closure.topHomologyMap_eq_zero_of_regularValue_signedCount
