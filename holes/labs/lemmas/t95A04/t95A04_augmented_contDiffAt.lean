@@ -205,7 +205,39 @@ theorem t95A04_augmented_contDiffAt
       (fun z : E 2 × E 4 ↦
         writtenInExtChartAt (𝓡 2) (𝓡 6) x veroneseDescended z.1 + e (0, z.2))
       (extChartAt (𝓡 2) x x, 0) := by
-  sorry
+  let a : E 2 := extChartAt (𝓡 2) x x
+  let U : Set (E 2) :=
+    (extChartAt (𝓡 2) x).target ∩
+      (extChartAt (𝓡 2) x).symm ⁻¹'
+        (veroneseDescended ⁻¹' (extChartAt (𝓡 6) (veroneseDescended x)).source)
+  have ha : a ∈ U := by
+    constructor
+    · exact (extChartAt (𝓡 2) x).map_source (mem_extChartAt_source x)
+    · change veroneseDescended ((extChartAt (𝓡 2) x).symm
+          (extChartAt (𝓡 2) x x)) ∈
+        (extChartAt (𝓡 6) (veroneseDescended x)).source
+      rw [(extChartAt (𝓡 2) x).left_inv (mem_extChartAt_source x)]
+      exact mem_extChartAt_source (veroneseDescended x)
+  have hU : U ∈ nhds a := by
+    apply Filter.inter_mem (extChartAt_target_mem_nhds x)
+    apply (continuousAt_extChartAt_symm x).preimage_mem_nhds
+    have ht : veroneseDescended ⁻¹'
+        (extChartAt (𝓡 6) (veroneseDescended x)).source ∈ nhds x := by
+      apply veroneseDescended_contMDiff.continuous.continuousAt.preimage_mem_nhds
+      exact (isOpen_extChartAt_source (veroneseDescended x)).mem_nhds
+        (mem_extChartAt_source (veroneseDescended x))
+    simpa [a, (extChartAt (𝓡 2) x).left_inv (mem_extChartAt_source x)] using ht
+  have hg_on : ContDiffOn ℝ ((⊤ : ℕ∞) : WithTop ℕ∞)
+      (writtenInExtChartAt (𝓡 2) (𝓡 6) x veroneseDescended) U := by
+    simpa [U, writtenInExtChartAt] using
+      (contMDiff_iff.mp veroneseDescended_contMDiff).2 x (veroneseDescended x)
+  have hg : ContDiffAt ℝ ((⊤ : ℕ∞) : WithTop ℕ∞)
+      (writtenInExtChartAt (𝓡 2) (𝓡 6) x veroneseDescended) a :=
+    hg_on.contDiffAt hU
+  have he : ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞)
+      (fun z : E 2 × E 4 ↦ e (0, z.2)) := by
+    exact e.contDiff.comp (contDiff_const.prodMk contDiff_snd)
+  simpa [a] using (hg.fst' (y := (0 : E 4))).add he.contDiffAt
 -- END SEAT AREA
 
 /-- Euclidean inverse-function theorem in the exact local form needed by the
