@@ -87901,25 +87901,26 @@
   {:consumer :t97A01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Compare right connectors; derive right-base inl, surjectivity, B6-B10.",
+    "Prove named connector square; derive right-base inl, surjectivity, B6-B10.",
     :outcome :stop,
-    :warnings ["preexisting lints"],
+    :warnings ["preexisting lints; unrelated edit preserved"],
     :missing-theorems
-    [{:name "finiteWedgeFinSuccPointWedgeNeighborhoods",
-      :type "old/final-leg inputs",
+    [{:name "finiteWedgeRightProjection_eq_one_iff_connectorSquare",
+      :type "right projection iff exact installed connector square",
       :status :proved,
       :consumers [:t97A01 :t94J09],
-      :depends-on ["finiteWedgeFinPointedContractibleNeighborhood"],
+      :depends-on ["finiteWedgeFinSuccPointWedgeNeighborhoods"],
       :area "polygon-quotient-homology"}
      {:name "finiteWedgeRightConnectorSystemComparison",
-      :type "compare coherent and installed connectors",
-      :status :not-started,
+      :type "prove the specialized connector square",
+      :status :partial,
       :consumers [:t97A01 :t94J09],
-      :depends-on ["finiteWedgeFinSuccPointWedgeNeighborhoods"],
+      :depends-on
+      ["finiteWedgeRightProjection_eq_one_iff_connectorSquare"],
       :area "polygon-quotient-homology"}
      {:name "finiteWedgePointWedge_rightBase_inl",
       :type "right-base lies in old factor",
@@ -87931,27 +87932,25 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked successor van Kampen inputs.",
+    :reason "Banked the specialized connector obstruction.",
     :commands
     [{:cmd "lake build ConstructionTargets.PolygonSurfaceHomology",
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-     {:cmd "git show --check a789ee4d2", :exit 0}
+     {:cmd "git show --check d47191953", :exit 0}
      {:cmd "exact blob | lake env lean /dev/stdin", :exit 0}
-     {:cmd "#print axioms successor neighborhoods", :exit 0}],
-    :diagnostic-history
-    [{:cmd "coherent-square shortcut",
-      :exit 1,
-      :correction "isolated connector comparison"}],
-    :commit "a789ee4d2",
+     {:cmd
+      "#print axioms finiteWedgeRightProjection_eq_one_iff_connectorSquare",
+      :exit 0}],
+    :commit "d47191953",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
     {:path "ConstructionTargets/PolygonSurfaceHomology.lean",
      :sha256
-     "701e9526befe68411d5afb982ee50cd3272174a32b6d266e2e4ea14e9c5e366f"},
+     "ae6aee87aef5d6aa101712ee6477ea15b9cb3a69673c9002dd5d437a0012911a"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -89831,7 +89830,9 @@
     :area "polygon-quotient-homology"},
    :id :lemma-finitewedgerightconnectorsystemcomparison,
    :kind :lemma,
-   :depends-on [:lemma-finitewedgefinsuccpointwedgeneighborhoods],
+   :depends-on
+   [:lemma-finitewedgefinsuccpointwedgeneighborhoods
+    :lemma-finitewedgerightprojection-eq-one-iff-connectorsquare],
    :other-consumers [:t94J09]}
   {:consumer :t92J06,
    :phase :lemma,
@@ -89867,4 +89868,21 @@
    :id :lemma-twoloopgraphcoverdata-realization,
    :kind :lemma,
    :depends-on [:lemma-twoloopgraphcoverdata-localstars],
-   :other-consumers []}]}
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "finiteWedgeRightProjection_eq_one_iff_connectorSquare",
+    :type "right projection iff exact installed connector square"},
+   :lemma
+   {:name "finiteWedgeRightProjection_eq_one_iff_connectorSquare",
+    :reported-by [:program-2026-10-13-polygon-surface-homology],
+    :type "right projection iff exact installed connector square",
+    :area "polygon-quotient-homology",
+    :proved-in :program-2026-10-13-polygon-surface-homology},
+   :id :lemma-finitewedgerightprojection-eq-one-iff-connectorsquare,
+   :kind :lemma,
+   :depends-on [:lemma-finitewedgefinsuccpointwedgeneighborhoods],
+   :other-consumers [:t94J09]}]}
