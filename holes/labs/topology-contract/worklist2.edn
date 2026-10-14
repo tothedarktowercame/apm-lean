@@ -87944,6 +87944,17 @@
     [{:cmd "subtype-homeomorphism lookup",
       :exit 1,
       :correction "defined it directly"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791962312917-11685-906444de",
+     :commands
+     ["git show/diff-tree; sha256sum"
+      "exact blob | lake env lean /dev/stdin; #print axioms"
+      "placeholder scan; statement-registry.py check"
+      "inspect recorded PointWedgeVanKampen coordinate theorem"],
+     :finding
+     "PASS: 6d1319c77 changes only PolygonSurfaceHomology.lean; exact blob SHA256 43cfceead157ef371b66621b1768a02d25c78d841cad16c19743c1c0275b795b. Exact blob compiles with propext, Classical.choice, Quot.sound; placeholders 0; registry 166/0. New progress after 5ccf3e302: under the explicit right-base=inl(a) hypothesis, every generic point-wedge loop is represented by a finite list of left/right leg classes. The adapter uses the partially normalized equivalence in the correct wedge-to-coproduct direction; its coordinate theorem maps left and right leg maps to inl and inr, exactly matching coproduct word extraction. Remaining milestones: prove the finite-wedge base-neighborhood contraction and discharge the successor right-base=inl condition, then specialize the leg-word result."},
     :commit "52485b99d",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
@@ -87952,7 +87963,7 @@
      "1ae365027c301431c4f8199ad7080c23051b37f9fbb9ad2148aa2be86d68117f"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -87972,7 +87983,7 @@
     :blueprint
     "ConstructionTargets/PolygonSurfaceHomology.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Reduced wedge words to a right-base equality.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked Fin-one base-neighborhood data.",
    :id :program-2026-10-13-polygon-surface-homology,
    :kind :reusable-theorem,
    :campaign-priority 31,
@@ -88070,7 +88081,10 @@
      "Banked generation by the normalized positive circle class."}
     {:job 6,
      :commit "6d1319c77",
-     :reason "Reduced wedge words to a right-base equality."}]}
+     :reason "Reduced wedge words to a right-base equality."}
+    {:job 7,
+     :commit "52485b99d",
+     :reason "Banked Fin-one base-neighborhood data."}]}
   {:consumer :t97A01,
    :stop-count 0,
    :phase :implementation,
@@ -89704,7 +89718,7 @@
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "PointedContractibleNeighborhood.preimageHomeomorph",
@@ -89714,14 +89728,16 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "packages pull back through homeomorphisms",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :program-2026-10-13-polygon-surface-homology,
+    :banked-commit "52485b99d"},
    :id :lemma-pointedcontractibleneighborhood-preimagehomeomorph,
    :kind :lemma,
    :depends-on [],
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "finiteWedgeFinOnePointedContractibleNeighborhood",
@@ -89731,7 +89747,9 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "Fin-one wedge has a contractible base neighborhood",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :program-2026-10-13-polygon-surface-homology,
+    :banked-commit "52485b99d"},
    :id :lemma-finitewedgefinonepointedcontractibleneighborhood,
    :kind :lemma,
    :depends-on [:lemma-finitewedgesubsingletonhomeomorphcircle],
