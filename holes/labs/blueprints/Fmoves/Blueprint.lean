@@ -5401,8 +5401,9 @@ theorem cutPiece_frontier {P Q : ℂ} (hP : ‖P‖ = 1) (hQ : ‖Q‖ = 1) (hPQ
       {z | ‖z‖ = 1 ∧ cutCross (Q - P) (z - P) ≤ 0} ∪ segment ℝ P Q := by
   sorry
 
-/-- The two pieces cover the disk; the interior of one misses the other. -/
-theorem cutPiece_union_disjoint (P Q : ℂ) :
+/-- The two pieces cover the disk; for `P ≠ Q` the interior of one misses the other
+(for `P = Q` the piece is the whole disk: blueprint-2, 10-14). -/
+theorem cutPiece_union_disjoint (P Q : ℂ) (hPQ : P ≠ Q) :
     cutPiece P Q ∪ cutPiece Q P = Metric.closedBall 0 1 ∧
       interior (cutPiece P Q) ∩ cutPiece Q P = ∅ := by
   sorry
@@ -5718,9 +5719,9 @@ lemma cutAndPaste_aux_triangle_chart_generators {Label : Type*}
     (cutNewB_range hpq hqL (cutPiece_frontier (hn _) (hn _) hPQ'.symm) cutCross_exp)
   have D := cutBoundaryData_concrete hpq hqL
   exact cut_charts_package u v t x _ _ _ _ _ _ _ _ φA φB ψA ψB hφA hφB hψA hψB
-    (cutPiece_union_disjoint _ _).1 (cutPiece_union_disjoint _ _).1
-    (cutPiece_union_disjoint _ _).2 (cutPiece_union_disjoint _ _).2
-    (cutPiece_union_disjoint _ _).2 (cutPiece_union_disjoint _ _).2
+    (cutPiece_union_disjoint _ _ hPQ).1 (cutPiece_union_disjoint _ _ hPQ').1
+    (cutPiece_union_disjoint _ _ hPQ).2 (cutPiece_union_disjoint _ _ hPQ.symm).2
+    (cutPiece_union_disjoint _ _ hPQ').2 (cutPiece_union_disjoint _ _ hPQ'.symm).2
     (fun i i' y y' P P' N N' => cut_forward_generators u v t x hx _ _ _ _ D i i' y y' P P' N N')
     (fun i i' y y' P P' N N' => cut_reverse_generators u v t x hx _ _ _ _ D i i' y y' P P' N N')
     (fun y y' N N' => cut_forward_fibre u v t x _ _ _ _ D y y' N N')
