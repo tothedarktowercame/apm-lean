@@ -983,6 +983,30 @@ noncomputable def kleinPolygonOuterToSpace :
     C({q // q ∈ (openCover kleinPairingData).outer}, kleinPairingData.Space) :=
   ⟨Subtype.val, continuous_subtype_val⟩
 
+/-- After inclusion into the polygon quotient, an inner run between overlap
+vertices is equal to an overlap replacement routed through the outer piece.
+This is the factorwise equality needed to normalize a reconstructed finite
+word to outer-piece arrows. -/
+theorem kleinPolygonInner_ambientPathClass_eq_outerOverlapReplacement
+    (x y : overlapOpen kleinPairingData.Rel)
+    (p : Path (kleinPolygonOverlapToInner x)
+      (kleinPolygonOverlapToInner y)) :
+    ∃ q : Path x y,
+      (⟦p.map kleinPolygonInnerToSpace.continuous⟧ :
+          FundamentalGroupoid.mk x.1 ⟶ FundamentalGroupoid.mk y.1) =
+        ⟦(q.map kleinPolygonOverlapToOuter.continuous).map
+          kleinPolygonOuterToSpace.continuous⟧ := by
+  obtain ⟨q, hq⟩ :=
+    kleinPolygonInner_pathClass_eq_overlapReplacement x y p
+  refine ⟨q, ?_⟩
+  have hmap := congrArg
+    (fun z : FundamentalGroupoid.mk (kleinPolygonOverlapToInner x) ⟶
+        FundamentalGroupoid.mk (kleinPolygonOverlapToInner y) =>
+      (FundamentalGroupoid.map kleinPolygonInnerToSpace).map z)
+    hq
+  simpa [kleinPolygonInnerToSpace, kleinPolygonOverlapToInner,
+    kleinPolygonOuterToSpace, kleinPolygonOverlapToOuter] using hmap
+
 /-- Every overlap loop maps trivially in the polygon quotient.  This is the
 kernel inclusion in based van Kampen: the overlap inclusion factors through
 the contractible inner radial piece. -/
@@ -1947,6 +1971,7 @@ theorem lift_isEmbedding_assembly
 #print axioms kleinPolygonInnerFundamentalGroupoid_hom_subsingleton
 #print axioms kleinPolygonInner_pathClass_eq
 #print axioms kleinPolygonInner_pathClass_eq_overlapReplacement
+#print axioms kleinPolygonInner_ambientPathClass_eq_outerOverlapReplacement
 #print axioms kleinPolygonOverlapPathConnectedSpace
 #print axioms kleinPolygonOverlapToOuterPiOne
 #print axioms kleinPolygonOverlapFundamentalGroupEquivInt

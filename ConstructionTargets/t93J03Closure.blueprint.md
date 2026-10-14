@@ -234,6 +234,9 @@ this supplies the local replacement step for collapsing maximal inner runs.
 The specialized `kleinPolygonInner_pathClass_eq_overlapReplacement` chooses
 an actual overlap path and proves that its inner image represents the given
 inner run, so the replacement is now available in the exact cover coordinates.
+`kleinPolygonInner_ambientPathClass_eq_outerOverlapReplacement` maps this
+equality into the polygon and identifies the same overlap path routed through
+the outer inclusion, providing the factorwise rewrite for the finite-word fold.
 It remains to transport the overlap image through the outer-piece coordinates
 and take its normal closure.
 The outer-to-skeleton equivalence is now restricted at the literal overlap
