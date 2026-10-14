@@ -31,6 +31,7 @@ open KleinSquareBoundaryRelation
 open ConstructionTargets.PolygonSurfacePiOne
 open ConstructionTargets.PointWedgeQuotient
 open ConstructionTargets.PointWedgeVanKampen
+open ConstructionTargets.PolygonSurfacePiOne.PointWedgeQuotient
 
 /-- An orbit intersection determines both integer normal-form coordinates by
 the source and target points.  These are the equations used to bound the
@@ -488,6 +489,111 @@ noncomputable def kleinSkeletonFundamentalGroupEquivCoprod :
     circleBase_mem circleBase_mem
     circleBaseNeighborhood_contraction circleBaseNeighborhood_contraction
 
+/-- Relabel the two orbit-indexed circle legs by the standard binary wedge,
+preserving `false` as the left leg and `true` as the right leg. -/
+noncomputable def finiteWedgeBoolHomeomorphTwoCircles :
+    FiniteWedge Bool ≃ₜ TwoCircles where
+  toFun := Quotient.lift
+    (fun p => match p.1 with
+      | false => quotientMap (1 : Circle) (1 : Circle) (.inl p.2)
+      | true => quotientMap (1 : Circle) (1 : Circle) (.inr p.2)) fun p q h => by
+        change Relation.EqvGen (FiniteWedgeRel Bool) p q at h
+        rw [eqvGen_finiteWedgeRel_iff] at h
+        rcases h with rfl | ⟨hp, hq⟩
+        · rfl
+        · cases p with | mk bp zp => cases q with | mk bq zq =>
+          have hzp : zp = 1 := Subtype.ext hp
+          have hzq : zq = 1 := Subtype.ext hq
+          subst zp
+          subst zq
+          cases bp <;> cases bq
+          · rfl
+          · simpa [hp, hq] using
+              Quotient.sound (Relation.EqvGen.rel _ _ Rel.base)
+          · simpa [hp, hq] using
+              (Quotient.sound (Relation.EqvGen.rel _ _ Rel.base)).symm
+          · rfl
+  invFun := Quotient.lift
+    (fun s => match s with
+      | .inl z => wedgeCircle false z
+      | .inr z => wedgeCircle true z) fun _ _ h => by
+        induction h with
+        | rel _ _ h => cases h; exact wedgeCircle_base_eq false true
+        | refl => rfl
+        | symm _ _ _ ih => exact ih.symm
+        | trans _ _ _ _ _ ih₁ ih₂ => exact ih₁.trans ih₂
+  left_inv := by rintro ⟨⟨b, z⟩⟩; cases b <;> rfl
+  right_inv := by rintro ⟨s⟩; cases s <;> rfl
+  continuous_toFun := by
+    apply Continuous.quotient_lift
+    rw [continuous_prod_of_discrete_left]
+    intro b
+    cases b
+    · exact (continuous_quotientMap (1 : Circle) (1 : Circle)).comp continuous_inl
+    · exact (continuous_quotientMap (1 : Circle) (1 : Circle)).comp continuous_inr
+  continuous_invFun := by
+    apply Continuous.quotient_lift
+    rw [continuous_sum_dom]
+    exact ⟨continuous_wedgeCircle false, continuous_wedgeCircle true⟩
+
+/-- Relabel a finite circle wedge along an equivalence of its leg indices. -/
+noncomputable def finiteWedgeCongr {L K : Type*} (e : L ≃ K) :
+    FiniteWedge L ≃ₜ FiniteWedge K where
+  toFun := Quotient.lift (fun p => wedgeCircle (e p.1) p.2) fun p q h => by
+    change Relation.EqvGen (FiniteWedgeRel L) p q at h
+    rw [eqvGen_finiteWedgeRel_iff] at h
+    rcases h with rfl | ⟨hp, hq⟩
+    · rfl
+    · apply Quotient.sound
+      change Relation.EqvGen (FiniteWedgeRel K) (e p.1, p.2) (e q.1, q.2)
+      rw [eqvGen_finiteWedgeRel_iff]
+      exact Or.inr ⟨hp, hq⟩
+  invFun := Quotient.lift (fun p => wedgeCircle (e.symm p.1) p.2) fun p q h => by
+    change Relation.EqvGen (FiniteWedgeRel K) p q at h
+    rw [eqvGen_finiteWedgeRel_iff] at h
+    rcases h with rfl | ⟨hp, hq⟩
+    · rfl
+    · apply Quotient.sound
+      change Relation.EqvGen (FiniteWedgeRel L)
+        (e.symm p.1, p.2) (e.symm q.1, q.2)
+      rw [eqvGen_finiteWedgeRel_iff]
+      exact Or.inr ⟨hp, hq⟩
+  left_inv := by
+    rintro ⟨⟨l, z⟩⟩
+    change wedgeCircle (e.symm (e l)) z = _
+    rw [e.symm_apply_apply]
+    rfl
+  right_inv := by
+    rintro ⟨⟨k, z⟩⟩
+    change wedgeCircle (e (e.symm k)) z = _
+    rw [e.apply_symm_apply]
+    rfl
+  continuous_toFun := by
+    letI : TopologicalSpace L := ⊥
+    letI : DiscreteTopology L := ⟨rfl⟩
+    apply Continuous.quotient_lift
+    rw [continuous_prod_of_discrete_left]
+    exact fun l => continuous_wedgeCircle (e l)
+  continuous_invFun := by
+    letI : TopologicalSpace K := ⊥
+    letI : DiscreteTopology K := ⟨rfl⟩
+    apply Continuous.quotient_lift
+    rw [continuous_prod_of_discrete_left]
+    exact fun k => continuous_wedgeCircle (e.symm k)
+
+/-- The actual polygon boundary skeleton, with its orbit labels changed to
+the frozen Boolean generators, is the standard two-circle wedge. -/
+noncomputable def kleinSkeletonHomeomorphStandardTwoCircles :
+    kleinPairingData.skeleton ≃ₜ TwoCircles :=
+  kleinSkeletonHomeomorphTwoCircles |>.trans
+    (finiteWedgeCongr kleinPairingOrbitEquivBool) |>.trans
+      finiteWedgeBoolHomeomorphTwoCircles
+
+def finiteWedgeBoolPoint : FiniteWedge Bool := wedgeCircle false 1
+
+@[simp] theorem finiteWedgeBoolHomeomorphTwoCircles_point :
+    finiteWedgeBoolHomeomorphTwoCircles finiteWedgeBoolPoint = twoCirclesPoint := rfl
+
 /-- Final C1 adapter: a van Kampen computation of the `aabb` presentation at
 one point of the polygon model yields the registered presentation at every
 basepoint of the frozen Klein bottle. -/
@@ -606,6 +712,9 @@ theorem lift_isEmbedding_assembly
 #print axioms kleinBottlePathConnectedSpace
 #print axioms kleinPairingSpacePathConnectedSpace
 #print axioms kleinSkeletonFundamentalGroupEquivCoprod
+#print axioms finiteWedgeBoolHomeomorphTwoCircles
+#print axioms finiteWedgeCongr
+#print axioms kleinSkeletonHomeomorphStandardTwoCircles
 #print axioms kleinBottle_pi1_every_basepoint_of_polygon_van_kampen
 
 end ConstructionTargets.t93J03Closure
