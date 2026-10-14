@@ -166,22 +166,253 @@ lemma rotation_aux_edgePoint_period (n e : ℕ) (hn : n ≠ 0)
 `i + v.length (mod n)` of `v ++ u`, which carries the same signed label
 (`rotation_aux_edgePoint_add`, `rotation_aux_edgePoint_period`); so each
 generating `WordRel` pair maps to a generating pair. -/
+def rotation_aux_relation_forward_aux_shift {Label : Type*}
+    (u v : List (Signed Label)) (h : 0 < (u ++ v).length)
+    (i : Fin (u ++ v).length) : Fin (v ++ u).length :=
+  ⟨(v.length + i.1) % (u ++ v).length, by
+    simp only [List.length_append] at h ⊢
+    have := Nat.mod_lt (v.length + i.1) (by omega : 0 < u.length + v.length)
+    omega⟩
+
+lemma rotation_aux_relation_forward_aux_get {Label : Type*}
+    (u v : List (Signed Label)) (h : 0 < (u ++ v).length)
+    (i : Fin (u ++ v).length) :
+    (v ++ u).get (rotation_aux_relation_forward_aux_shift u v h i) =
+      (u ++ v).get i := by
+  rw [List.get_eq_getElem, List.get_eq_getElem]
+  simp only [rotation_aux_relation_forward_aux_shift, Fin.val_mk]
+  by_cases hi : i.1 < u.length
+  · have hm : (v.length + i.1) % (u ++ v).length = v.length + i.1 := by
+      apply Nat.mod_eq_of_lt
+      simp only [List.length_append]
+      omega
+    simp only [hm]
+    simp [List.getElem_append, hi]
+  · have hieq : u.length + (i.1 - u.length) = i.1 := by omega
+    have ilen : i.1 < u.length + v.length := by
+      simpa only [List.length_append] using i.2
+    have hm : (v.length + i.1) % (u ++ v).length = i.1 - u.length := by
+      have he : v.length + i.1 = (u ++ v).length + (i.1 - u.length) := by
+        simp only [List.length_append]
+        omega
+      rw [he, Nat.add_mod_left]
+      apply Nat.mod_eq_of_lt
+      simp only [List.length_append] at i ⊢
+      omega
+    simp only [hm]
+    have hr : i.1 - u.length < v.length := by omega
+    simp only [List.getElem_append]
+    split <;> rename_i hh
+    · rfl
+    · omega
+
+lemma rotation_aux_relation_forward_aux_edge {Label : Type*}
+    (u v : List (Signed Label)) (h : 0 < (u ++ v).length)
+    (i : Fin (u ++ v).length) (t : Icc (0 : ℝ) 1) :
+    rotation_aux_disk (u ++ v).length v.length
+        (edgePoint (u ++ v).length i t) =
+      edgePoint (v ++ u).length
+        (rotation_aux_relation_forward_aux_shift u v h i) t := by
+  rw [rotation_aux_edgePoint_add]
+  simp only [rotation_aux_relation_forward_aux_shift, Fin.val_mk]
+  have hlen : (v ++ u).length = (u ++ v).length := by
+    simp only [List.length_append]
+    omega
+  simp only [hlen]
+  change edgePoint (u ++ v).length (v.length + i.1) t =
+    edgePoint (u ++ v).length
+      ((v.length + i.1) % (u ++ v).length) t
+  by_cases hlt : v.length + i.1 < (u ++ v).length
+  · rw [Nat.mod_eq_of_lt hlt]
+  · have heq : v.length + i.1 = (u ++ v).length +
+        ((v.length + i.1) % (u ++ v).length) := by
+      have hil : i.1 < (u ++ v).length := i.2
+      have hub : v.length + i.1 < 2 * (u ++ v).length := by
+        simp only [List.length_append] at h hil ⊢
+        omega
+      rw [Nat.mod_eq_sub_mod (by omega : v.length + i.1 ≥ (u ++ v).length),
+        Nat.mod_eq_of_lt (by omega : v.length + i.1 - (u ++ v).length < (u ++ v).length)]
+      omega
+    calc
+      edgePoint (u ++ v).length (v.length + i.1) t =
+          edgePoint (u ++ v).length
+            ((u ++ v).length + (v.length + i.1) % (u ++ v).length) t :=
+        congrArg (fun e => edgePoint (u ++ v).length e t) heq
+      _ = edgePoint (u ++ v).length
+            ((v.length + i.1) % (u ++ v).length) t :=
+        @rotation_aux_edgePoint_period
+          ((u ++ v).length)
+          ((v.length + i.1) % (u ++ v).length)
+          (Nat.ne_of_gt h) t
+
+lemma rotation_aux_relation_forward_aux_shift_injective {Label : Type*}
+    (u v : List (Signed Label)) (h : 0 < (u ++ v).length)
+    {i j : Fin (u ++ v).length}
+    (heq : rotation_aux_relation_forward_aux_shift u v h i =
+      rotation_aux_relation_forward_aux_shift u v h j) : i = j := by
+  apply Fin.ext
+  have heq' := congrArg Fin.val heq
+  simp only [rotation_aux_relation_forward_aux_shift] at heq'
+  have hi0 : i.1 < u.length + v.length := by simpa using i.2
+  have hj0 : j.1 < u.length + v.length := by simpa using j.2
+  simp only [List.length_append] at h heq' ⊢
+  by_cases hi : v.length + i.1 < u.length + v.length
+  · rw [Nat.mod_eq_of_lt hi] at heq'
+    by_cases hj : v.length + j.1 < u.length + v.length
+    · rw [Nat.mod_eq_of_lt hj] at heq'; omega
+    · rw [Nat.mod_eq_sub_mod (by omega : v.length + j.1 ≥ u.length + v.length),
+          Nat.mod_eq_of_lt (by omega : v.length + j.1 - (u.length + v.length) < u.length + v.length)] at heq'
+      omega
+  · rw [Nat.mod_eq_sub_mod (by omega : v.length + i.1 ≥ u.length + v.length),
+        Nat.mod_eq_of_lt (by omega : v.length + i.1 - (u.length + v.length) < u.length + v.length)] at heq'
+    by_cases hj : v.length + j.1 < u.length + v.length
+    · rw [Nat.mod_eq_of_lt hj] at heq'; omega
+    · rw [Nat.mod_eq_sub_mod (by omega : v.length + j.1 ≥ u.length + v.length),
+          Nat.mod_eq_of_lt (by omega : v.length + j.1 - (u.length + v.length) < u.length + v.length)] at heq'
+      omega
+
 lemma rotation_aux_relation_forward {Label : Type*} [DecidableEq Label]
     (u v : List (Signed Label)) (hw : IsPolygonWord (u ++ v))
     {p q : Disk} (hpq : Relation.EqvGen (WordRel (u ++ v)) p q) :
     Relation.EqvGen (WordRel (v ++ u))
       (rotation_aux_disk (u ++ v).length v.length p)
       (rotation_aux_disk (u ++ v).length v.length q) := by
-  sorry
+  have hn : 0 < (u ++ v).length := List.length_pos_iff.mpr hw.1
+  induction hpq with
+  | refl x => exact Relation.EqvGen.refl _
+  | symm x y h ih => exact Relation.EqvGen.symm _ _ ih
+  | trans x y z hxy hyz ihxy ihyz =>
+      exact Relation.EqvGen.trans _ _ _ ihxy ihyz
+  | rel p q hpq =>
+      rcases hpq with ⟨i, j, hij, t, hlab, hp, hq⟩
+      apply Relation.EqvGen.rel
+      refine ⟨rotation_aux_relation_forward_aux_shift u v hn i,
+        rotation_aux_relation_forward_aux_shift u v hn j, ?_, t, ?_, ?_, ?_⟩
+      · intro heq
+        apply hij
+        exact rotation_aux_relation_forward_aux_shift_injective u v hn heq
+      · rw [rotation_aux_relation_forward_aux_get u v hn i,
+          rotation_aux_relation_forward_aux_get u v hn j]
+        exact hlab
+      · rw [hp, rotation_aux_relation_forward_aux_edge u v hn]
+      · rw [hq, rotation_aux_relation_forward_aux_edge u v hn]
+        congr 2
+        simp only [rotation_aux_relation_forward_aux_get u v hn i,
+          rotation_aux_relation_forward_aux_get u v hn j]
 
 /-- Leaf: the inverse rotation, symmetrically. -/
+def rotation_aux_relation_reverse_aux_shift {Label : Type*}
+    (u v : List (Signed Label)) (h : 0 < (u ++ v).length)
+    (i : Fin (v ++ u).length) : Fin (u ++ v).length :=
+  if hi : i.1 < v.length then
+    ⟨u.length + i.1, by
+      simp only [List.length_append] at h ⊢
+      omega⟩
+  else
+    ⟨i.1 - v.length, by
+      have hil := i.isLt
+      simp only [List.length_append] at hil ⊢
+      omega⟩
+
+lemma rotation_aux_relation_reverse_aux_get {Label : Type*}
+    (u v : List (Signed Label)) (h : 0 < (u ++ v).length)
+    (i : Fin (v ++ u).length) :
+    (u ++ v).get (rotation_aux_relation_reverse_aux_shift u v h i) =
+      (v ++ u).get i := by
+  by_cases hi : i.1 < v.length
+  · simp [rotation_aux_relation_reverse_aux_shift, hi,
+      List.get_eq_getElem, List.getElem_append]
+  · have hil := i.isLt
+    simp only [List.length_append] at hil
+    have hsub : i.1 - v.length < u.length := by omega
+    simp [rotation_aux_relation_reverse_aux_shift, hi,
+      List.get_eq_getElem, List.getElem_append, hsub,
+      Nat.sub_add_cancel (Nat.le_of_not_gt hi)]
+
+lemma rotation_aux_relation_reverse_aux_edge {Label : Type*}
+    (u v : List (Signed Label)) (h : 0 < (u ++ v).length)
+    (i : Fin (v ++ u).length) (t : Icc (0 : ℝ) 1) :
+    rotation_aux_disk_inv (u ++ v).length v.length
+        (edgePoint (v ++ u).length i t) =
+      edgePoint (u ++ v).length
+        (rotation_aux_relation_reverse_aux_shift u v h i) t := by
+  apply (rotation_aux_disk_equiv (u ++ v).length v.length).injective
+  change rotation_aux_disk (u ++ v).length v.length
+      (rotation_aux_disk_inv (u ++ v).length v.length
+        (edgePoint (v ++ u).length i t)) =
+    rotation_aux_disk (u ++ v).length v.length
+      (edgePoint (u ++ v).length
+        (rotation_aux_relation_reverse_aux_shift u v h i) t)
+  rw [rotation_aux_disk_right_inv]
+  rw [rotation_aux_edgePoint_add]
+  have hedge : edgePoint (v ++ u).length i.1 t =
+      edgePoint (u ++ v).length i.1 t := by
+    simp only [List.length_append]
+    rw [add_comm]
+  rw [hedge]
+  unfold rotation_aux_relation_reverse_aux_shift
+  split_ifs with hi
+  · simp only [Fin.val_mk]
+    change edgePoint (u ++ v).length i.1 t =
+      edgePoint (u ++ v).length (v.length + (u.length + i.1)) t
+    rw [show v.length + (u.length + i.1) = (u ++ v).length + i.1 by
+      simp only [List.length_append]
+      omega]
+    exact (rotation_aux_edgePoint_period _ _ (Nat.ne_of_gt h) t).symm
+  · simp only [Fin.val_mk]
+    change edgePoint (u ++ v).length i.1 t =
+      edgePoint (u ++ v).length (v.length + (i.1 - v.length)) t
+    congr 2
+    omega
+
+lemma rotation_aux_relation_reverse_aux_shift_injective {Label : Type*}
+    (u v : List (Signed Label)) (h : 0 < (u ++ v).length)
+    {i j : Fin (v ++ u).length}
+    (heq : rotation_aux_relation_reverse_aux_shift u v h i =
+      rotation_aux_relation_reverse_aux_shift u v h j) : i = j := by
+  apply Fin.ext
+  have heq' := congrArg Fin.val heq
+  have hil := i.isLt
+  have hjl := j.isLt
+  simp only [List.length_append] at hil hjl
+  by_cases hi : i.1 < v.length <;> by_cases hj : j.1 < v.length
+  · simp [rotation_aux_relation_reverse_aux_shift, hi, hj] at heq'
+    omega
+  · simp [rotation_aux_relation_reverse_aux_shift, hi, hj] at heq'
+    omega
+  · simp [rotation_aux_relation_reverse_aux_shift, hi, hj] at heq'
+    omega
+  · simp [rotation_aux_relation_reverse_aux_shift, hi, hj] at heq'
+    omega
+
 lemma rotation_aux_relation_reverse {Label : Type*} [DecidableEq Label]
     (u v : List (Signed Label)) (hw : IsPolygonWord (u ++ v))
     {p q : Disk} (hpq : Relation.EqvGen (WordRel (v ++ u)) p q) :
     Relation.EqvGen (WordRel (u ++ v))
       (rotation_aux_disk_inv (u ++ v).length v.length p)
       (rotation_aux_disk_inv (u ++ v).length v.length q) := by
-  sorry
+  have hn : 0 < (u ++ v).length := List.length_pos_iff.mpr hw.1
+  induction hpq with
+  | refl x => exact Relation.EqvGen.refl _
+  | symm x y h ih => exact Relation.EqvGen.symm _ _ ih
+  | trans x y z hxy hyz ihxy ihyz =>
+      exact Relation.EqvGen.trans _ _ _ ihxy ihyz
+  | rel p q hpq =>
+      rcases hpq with ⟨i, j, hij, t, hlab, hp, hq⟩
+      apply Relation.EqvGen.rel
+      refine ⟨rotation_aux_relation_reverse_aux_shift u v hn i,
+        rotation_aux_relation_reverse_aux_shift u v hn j, ?_, t, ?_, ?_, ?_⟩
+      · intro heq
+        apply hij
+        exact rotation_aux_relation_reverse_aux_shift_injective u v hn heq
+      · rw [rotation_aux_relation_reverse_aux_get u v hn i,
+          rotation_aux_relation_reverse_aux_get u v hn j]
+        exact hlab
+      · rw [hp, rotation_aux_relation_reverse_aux_edge u v hn]
+      · rw [hq, rotation_aux_relation_reverse_aux_edge u v hn]
+        congr 2
+        simp only [rotation_aux_relation_reverse_aux_get u v hn i,
+          rotation_aux_relation_reverse_aux_get u v hn j]
 
 /-- Radial extension of boundary rotation through the first `u.length` arcs. -/
 theorem rotation {Label : Type*} [DecidableEq Label]
@@ -358,7 +589,74 @@ lemma polygonSurface_homeomorph_of_collapse {L L' : Type*}
     (hrel : ∀ p q, Relation.EqvGen (WordRel w₁) p q ↔
       Relation.EqvGen (WordRel w₂) (c p) (c q)) :
     Nonempty (PolygonSurface w₁ ≃ₜ PolygonSurface w₂) := by
-  sorry
+  let f : PolygonSurface w₁ → PolygonSurface w₂ :=
+    Quotient.map c (fun p q hpq ↦ (hrel p q).mp hpq)
+  have hf_injective : Function.Injective f := by
+    intro x y hxy
+    induction x using Quotient.inductionOn with
+    | _ p =>
+      induction y using Quotient.inductionOn with
+      | _ q =>
+        apply Quotient.sound
+        apply (hrel p q).mpr
+        exact Quotient.exact hxy
+  have hf_surjective : Function.Surjective f := by
+    intro y
+    induction y using Quotient.inductionOn with
+    | _ q =>
+      obtain ⟨p, hp⟩ := hsurj q
+      refine ⟨Quotient.mk _ p, ?_⟩
+      apply Quotient.sound
+      simpa [hp]
+  let e : PolygonSurface w₁ ≃ PolygonSurface w₂ :=
+    Equiv.ofBijective f ⟨hf_injective, hf_surjective⟩
+  have hf_continuous : Continuous f := by
+    rw [continuous_coinduced_dom]
+    change Continuous (polygonQuotient w₂ ∘ c)
+    exact (continuous_polygonQuotient w₂).comp hc
+  have hc_quotient : Topology.IsQuotientMap c :=
+    IsQuotientMap.of_surjective_continuous hsurj hc
+  have hq₂ : Topology.IsQuotientMap (polygonQuotient w₂) :=
+    ⟨Quotient.mk_surjective, rfl⟩
+  have he_symm_continuous : Continuous e.symm := by
+    apply hq₂.continuous_iff.mpr
+    apply hc_quotient.continuous_iff.mpr
+    convert continuous_polygonQuotient w₁ using 1
+    funext p
+    apply e.injective
+    change e (e.symm (polygonQuotient w₂ (c p))) =
+      e (polygonQuotient w₁ p)
+    rw [e.apply_symm_apply]
+    rfl
+  exact ⟨{
+    toEquiv := e
+    continuous_toFun := by simpa [e] using hf_continuous
+    continuous_invFun := he_symm_continuous }⟩
+
+lemma inversePairCancellation_aux_collapse_aux_source_polygonWord
+    {Label : Type*} [DecidableEq Label]
+    (u v : List (Signed Label)) (x : Signed Label)
+    (hx : x.1 ∉ (u ++ v).map Prod.fst)
+    (hrest : IsPolygonWord (u ++ v)) :
+    IsPolygonWord (u ++ [x, inv x] ++ v) := by
+  refine ⟨by simp, ?_, ?_⟩
+  · rw [inversePairCancellation_aux_full_length]
+    obtain ⟨k, hk⟩ := hrest.2.1
+    refine ⟨k + 1, by omega⟩
+  · intro a ha
+    by_cases hax : a = x.1
+    · subst a
+      exact inversePairCancellation_aux_fresh_count u v x hx
+    · have ha' : a ∈ (u ++ v).map Prod.fst := by
+        have hh : a ∈ u.map Prod.fst ∨ a = x.1 ∨
+            a ∈ v.map Prod.fst := by
+          simpa using ha
+        rcases hh with hu | ha | hv
+        · simpa using List.mem_append_left (v.map Prod.fst) hu
+        · exact (hax ha).elim
+        · simpa using List.mem_append_right (u.map Prod.fst) hv
+      have hc := hrest.2.2 a ha'
+      simpa [List.count_append, List.count_cons, hax, Ne.symm hax] using hc
 
 /-- The geometric content of cancellation: zip the arcs `x` and `x⁻¹` together,
 `x(t)` and `x⁻¹(1-t)` going to the same point of a segment running from the
@@ -429,6 +727,65 @@ lemma mergeRepeatedBlock_aux_quotient_homeomorph
     continuous_toFun := hf
     continuous_invFun := hg }⟩
 
+lemma mergeRepeatedBlock_aux_disk_reparam_aux_length {Label : Type*}
+    (u v t : List (Signed Label)) (y z a : Signed Label) :
+    (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t).length =
+      (u ++ [a] ++ v ++ [inv a] ++ t).length + 2 := by
+  simp
+  omega
+
+lemma mergeRepeatedBlock_aux_disk_reparam_aux_source_pos
+    {Label : Type*} [DecidableEq Label]
+    (u v t : List (Signed Label)) (y z : Signed Label)
+    (hw : IsPolygonWord (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t)) :
+    0 < (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t).length := by
+  simp
+
+lemma mergeRepeatedBlock_aux_disk_reparam_aux_target_pos
+    {Label : Type*} (u v t : List (Signed Label)) (a : Signed Label) :
+    0 < (u ++ [a] ++ v ++ [inv a] ++ t).length := by
+  simp
+
+/-- A unit-circle point viewed in the closed disk. -/
+def circleToDisk (z : Circle) : Disk :=
+  ⟨(z : ℂ), by simp [Metric.mem_closedBall]⟩
+
+lemma circleToDisk_of_norm (p : Disk) (hp : ‖(p : ℂ)‖ = 1) :
+    ∃ z : Circle, circleToDisk z = p :=
+  ⟨⟨(p : ℂ), by simpa [Circle, Submonoid.unitSphere] using hp⟩, rfl⟩
+
+/-- Radial (cone) extension of a circle homeomorphism to the disk:
+`r • z ↦ r • g z`. -/
+lemma disk_radial_extension (g : Circle ≃ₜ Circle) :
+    ∃ e : Disk ≃ₜ Disk, (∀ z : Circle, e (circleToDisk z) = circleToDisk (g z)) ∧
+      ∀ p : Disk, ‖(p : ℂ)‖ < 1 → ‖(e p : ℂ)‖ < 1 := by
+  sorry
+
+/-- Interior points are related only to themselves: `WordRel` only pairs edge
+points, which have norm `1`. -/
+lemma wordRel_eqvGen_interior {L : Type*} [DecidableEq L]
+    (w : List (Signed L)) {p q : Disk}
+    (h : Relation.EqvGen (WordRel w) p q) (hp : ‖(p : ℂ)‖ < 1) : p = q := by
+  sorry
+
+/-- The boundary content of the merge: a PL circle homeomorphism sending arcs
+`y, z` to the halves of `a` (and `z⁻¹, y⁻¹` to the halves of `a⁻¹`), every
+other arc linearly to its counterpart, matching the generated relations on the
+circle. -/
+lemma mergeRepeatedBlock_aux_boundary {Label : Type*} [DecidableEq Label]
+    (u v t : List (Signed Label)) (y z a : Signed Label)
+    (hyz : y.1 ≠ z.1)
+    (ha : a.1 ∉ (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t).map Prod.fst)
+    (hy : ((u ++ v ++ t).map Prod.fst).count y.1 = 0)
+    (hz : ((u ++ v ++ t).map Prod.fst).count z.1 = 0)
+    (hw : IsPolygonWord (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t)) :
+    ∃ g : Circle ≃ₜ Circle, ∀ c₁ c₂ : Circle,
+      Relation.EqvGen (WordRel (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t))
+          (circleToDisk c₁) (circleToDisk c₂) ↔
+        Relation.EqvGen (WordRel (u ++ [a] ++ v ++ [inv a] ++ t))
+          (circleToDisk (g c₁)) (circleToDisk (g c₂)) := by
+  sorry
+
 /-- The geometric core: radially extend the increasing piecewise-linear
 reparametrisation which sends the two consecutive `y,z` arcs to the `a` arc
 and, simultaneously, the consecutive `inv z, inv y` arcs to `inv a`.
@@ -450,7 +807,32 @@ lemma mergeRepeatedBlock_aux_disk_reparam {Label : Type*} [DecidableEq Label]
           (WordRel (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t)) p q ↔
       Relation.EqvGen
           (WordRel (u ++ [a] ++ v ++ [inv a] ++ t)) (e p) (e q) := by
-  sorry
+  obtain ⟨g, hg⟩ := mergeRepeatedBlock_aux_boundary u v t y z a hyz ha hy hz hw
+  obtain ⟨e, he, hint⟩ := disk_radial_extension g
+  refine ⟨e, fun p q => ?_⟩
+  have hle : ∀ r : Disk, ‖(r : ℂ)‖ ≤ 1 := fun r => by
+    have := r.2
+    rwa [Metric.mem_closedBall, dist_zero_right] at this
+  by_cases hp : ‖(p : ℂ)‖ < 1
+  · constructor
+    · intro h
+      rw [wordRel_eqvGen_interior _ h hp]
+      exact Relation.EqvGen.refl _
+    · intro h
+      rw [e.injective (wordRel_eqvGen_interior _ h (hint p hp))]
+      exact Relation.EqvGen.refl _
+  by_cases hq : ‖(q : ℂ)‖ < 1
+  · constructor
+    · intro h
+      rw [← wordRel_eqvGen_interior _ (Relation.EqvGen.symm _ _ h) hq]
+      exact Relation.EqvGen.refl _
+    · intro h
+      rw [e.injective (wordRel_eqvGen_interior _ (Relation.EqvGen.symm _ _ h) (hint q hq))]
+      exact Relation.EqvGen.refl _
+  obtain ⟨zp, rfl⟩ := circleToDisk_of_norm p (le_antisymm (hle p) (not_lt.mp hp))
+  obtain ⟨zq, rfl⟩ := circleToDisk_of_norm q (le_antisymm (hle q) (not_lt.mp hq))
+  rw [he, he]
+  exact hg zp zq
 
 /-- Replace the quadrilateral `y z` / `(y z)⁻¹` by one fresh paired side.
 The count hypotheses say the displayed block contains every `y` and `z`. -/
@@ -501,7 +883,69 @@ lemma polygonSurface_homeomorph_of_span {L L' Y : Type*}
     (hrel : ∀ y y', Relation.EqvGen (WordRel w₁) (a y) (a y') ↔
       Relation.EqvGen (WordRel w₂) (b y) (b y')) :
     Nonempty (PolygonSurface w₁ ≃ₜ PolygonSurface w₂) := by
-  sorry
+  let A : Y → PolygonSurface w₁ := polygonQuotient w₁ ∘ a
+  let B : Y → PolygonSurface w₂ := polygonQuotient w₂ ∘ b
+  have hqa : Topology.IsQuotientMap A := by
+    exact isQuotientMap_quot_mk.comp
+      (IsQuotientMap.of_surjective_continuous hasurj ha)
+  have hqb : Topology.IsQuotientMap B := by
+    exact isQuotientMap_quot_mk.comp
+      (IsQuotientMap.of_surjective_continuous hbsurj hb)
+  have hfib : ∀ y y', A y = A y' ↔ B y = B y' := by
+    intro y y'
+    change Quotient.mk _ (a y) = Quotient.mk _ (a y') ↔
+      Quotient.mk _ (b y) = Quotient.mk _ (b y')
+    rw [Quotient.eq, Quotient.eq]
+    exact hrel y y'
+  obtain ⟨sA, hsA⟩ := hqa.surjective.hasRightInverse
+  obtain ⟨sB, hsB⟩ := hqb.surjective.hasRightInverse
+  let f : PolygonSurface w₁ → PolygonSurface w₂ := B ∘ sA
+  let g : PolygonSurface w₂ → PolygonSurface w₁ := A ∘ sB
+  have hfA : f ∘ A = B := by
+    funext y
+    change B (sA (A y)) = B y
+    apply (hfib (sA (A y)) y).mp
+    exact hsA (A y)
+  have hgB : g ∘ B = A := by
+    funext y
+    change A (sB (B y)) = A y
+    apply (hfib (sB (B y)) y).mpr
+    exact hsB (B y)
+  have hfg : Function.LeftInverse g f := by
+    intro x
+    obtain ⟨y, rfl⟩ := hqa.surjective x
+    change g (f (A y)) = A y
+    rw [show f (A y) = B y from congrFun hfA y]
+    exact congrFun hgB y
+  have hgf : Function.RightInverse g f := by
+    intro x
+    obtain ⟨y, rfl⟩ := hqb.surjective x
+    change f (g (B y)) = B y
+    rw [show g (B y) = A y from congrFun hgB y]
+    exact congrFun hfA y
+  refine ⟨{
+    toEquiv := { toFun := f, invFun := g, left_inv := hfg, right_inv := hgf }
+    continuous_toFun := hqa.continuous_iff.mpr ?_
+    continuous_invFun := hqb.continuous_iff.mpr ?_ }⟩
+  · rw [hfA]
+    exact (continuous_polygonQuotient w₂).comp hb
+  · rw [hgB]
+    exact (continuous_polygonQuotient w₁).comp ha
+
+lemma cutAndPaste_aux_span_aux_x_fresh {Label : Type*} [DecidableEq Label]
+    (u v t : List (Signed Label)) (x : Signed Label)
+    (hx : x.1 ∉ (u ++ v ++ t).map Prod.fst) :
+    x.1 ∉ u.map Prod.fst ∧ x.1 ∉ v.map Prod.fst ∧
+      x.1 ∉ t.map Prod.fst := by
+  simpa using hx
+
+lemma cutAndPaste_aux_span_aux_x_count {Label : Type*} [DecidableEq Label]
+    (u v t : List (Signed Label)) (x : Signed Label)
+    (hx : x.1 ∉ (u ++ v ++ t).map Prod.fst) :
+    ((u ++ [x] ++ v ++ [x] ++ t).map Prod.fst).count x.1 = 2 := by
+  obtain ⟨hu, hv, ht⟩ := cutAndPaste_aux_span_aux_x_fresh u v t x hx
+  simp [List.count_eq_zero.mpr hu, List.count_eq_zero.mpr hv,
+    List.count_eq_zero.mpr ht]
 
 /-- The geometric content of cut-and-paste: `Y = Fin 2 × Disk` (two triangles,
 each parametrised by a disk).  `a` places them on either side of the diagonal
