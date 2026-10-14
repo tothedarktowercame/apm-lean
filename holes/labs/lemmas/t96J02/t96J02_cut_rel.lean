@@ -557,7 +557,105 @@ lemma t96J02_cut_rel
     (x y : Disk) (h : SurfaceRel false 2 x y) :
     (Quotient.mk _ (t96J02_cut_raw x) : T96J02SquarePolygonQuotient) =
       Quotient.mk _ (t96J02_cut_raw y) := by
-  sorry
+  rw [KleinSurfaceRelNormalForm.surfaceRel_false_two_iff] at h
+  rcases h with ⟨t, rfl, rfl⟩ | ⟨t, rfl, rfl⟩
+  · let x : Disk := edgePoint 4 0 t
+    let y : Disk := edgePoint 4 1 t
+    change (Quotient.mk _ (t96J02_cut_raw x) : T96J02SquarePolygonQuotient) =
+      Quotient.mk _ (t96J02_cut_raw y)
+    let w : ℂ := t96J02_cut_chart x
+    have hy : (y : ℂ) = Complex.I * x :=
+      (t96J02_cut_edge_succ t).1
+    have hwI : t96J02_cut_chart y = Complex.I * w := by
+      rw [hy, t96J02_cut_chart_I]
+    obtain ⟨c, hc, hw⟩ := t96J02_cut_chart_pos (x : ℂ)
+    have hx := hedge0 t
+    have hwr : 0 ≤ w.re := by
+      change 0 ≤ (t96J02_cut_chart x).re
+      rw [hw]; simp only [Complex.mul_re, Complex.ofReal_re, Complex.ofReal_im,
+        zero_mul, sub_zero]; exact mul_nonneg hc.le hx.2.1
+    have hwi : 0 ≤ w.im := by
+      change 0 ≤ (t96J02_cut_chart x).im
+      rw [hw]; simp only [Complex.mul_im, Complex.ofReal_re, Complex.ofReal_im,
+        zero_mul, add_zero]; exact mul_nonneg hc.le hx.2.2
+    have hsum : w.re + w.im = 1 := by
+      have := t96J02_cut_l1_chart (x : ℂ)
+      rw [hx.1] at this
+      simpa [w, t96J02_cut_l1, abs_of_nonneg hwr, abs_of_nonneg hwi] using this
+    have hwdef : t96J02_cut_chart x = w := rfl
+    by_cases hz : w.re = 0
+    · have hi : w.im = 1 := by linarith
+      apply hcorners
+      · exact Or.inr (Or.inl (by
+        simp [t96J02_cut_raw, hwdef, hwr, t96J02_cut_L,
+          t96J02_cut_clampSquare, hz, hi] <;> norm_num))
+      · exact Or.inr (Or.inr (Or.inr (by
+          simp [t96J02_cut_raw, hwdef, hwI, t96J02_cut_L,
+            t96J02_cut_clampSquare, hz, hi] <;> norm_num)))
+    · have hwr' : 0 < w.re := lt_of_le_of_ne hwr (Ne.symm hz)
+      have hwi1 : w.im ≤ 1 := by linarith
+      have hwr1 : w.re ≤ 1 := by linarith
+      apply Quotient.sound
+      apply Relation.EqvGen.rel
+      left
+      let s : Set.Icc (0 : ℝ) 1 := ⟨w.im, hwi, by linarith⟩
+      have he0 : (2 : ℝ)⁻¹ - w.re / 2 - w.im / 2 = 0 := by linarith
+      have he1 : (2 : ℝ)⁻¹ - -w.im / 2 + w.re / 2 = 1 := by linarith
+      refine ⟨s, ?_, ?_⟩
+      · simp [t96J02_cut_raw, hwdef, hwr, t96J02_cut_L, t96J02_cut_R,
+          t96J02_cut_clampSquare, not_le.mpr hwr', hsum, hwi, hwi1, hwr1, he0, s]
+        simp [KleinSquareEdgeOrientation.squareEdge]
+        linarith
+      · simp [t96J02_cut_raw, hwdef, hwI, t96J02_cut_R,
+          t96J02_cut_clampSquare, hwi, hwi1, hwr', hwr1, hsum, s,
+          t96J02_cut_L, he1]
+        simp [KleinSquareEdgeOrientation.squareEdge]
+  · let x : Disk := edgePoint 4 2 t
+    let y : Disk := edgePoint 4 3 t
+    change (Quotient.mk _ (t96J02_cut_raw x) : T96J02SquarePolygonQuotient) =
+      Quotient.mk _ (t96J02_cut_raw y)
+    let w : ℂ := t96J02_cut_chart x
+    have hy : (y : ℂ) = Complex.I * x :=
+      (t96J02_cut_edge_succ t).2
+    have hwI : t96J02_cut_chart y = Complex.I * w := by
+      rw [hy, t96J02_cut_chart_I]
+    obtain ⟨c, hc, hw⟩ := t96J02_cut_chart_pos (x : ℂ)
+    have hx := hedge2 t
+    have hwr : w.re ≤ 0 := by
+      change (t96J02_cut_chart x).re ≤ 0
+      rw [hw]; simp only [Complex.mul_re, Complex.ofReal_re, Complex.ofReal_im,
+        zero_mul, sub_zero]; exact mul_nonpos_of_nonneg_of_nonpos hc.le hx.2.1
+    have hwi : w.im ≤ 0 := by
+      change (t96J02_cut_chart x).im ≤ 0
+      rw [hw]; simp only [Complex.mul_im, Complex.ofReal_re, Complex.ofReal_im,
+        zero_mul, add_zero]; exact mul_nonpos_of_nonneg_of_nonpos hc.le hx.2.2
+    have hsum : w.re + w.im = -1 := by
+      have := t96J02_cut_l1_chart (x : ℂ)
+      rw [hx.1] at this
+      simp [w, t96J02_cut_l1, abs_of_nonpos hwr, abs_of_nonpos hwi] at this
+      linarith
+    have hwdef : t96J02_cut_chart x = w := rfl
+    by_cases hz : w.im = 0
+    · have hr : w.re = -1 := by linarith
+      apply hcorners
+      · exact Or.inr (Or.inr (Or.inr (by
+          simp [t96J02_cut_raw, hwdef, hwr, t96J02_cut_L,
+            t96J02_cut_clampSquare, hz, hr] <;> norm_num)))
+      · left
+        simp [t96J02_cut_raw, hwdef, hwI, t96J02_cut_L,
+          t96J02_cut_clampSquare, hz, hr] <;> norm_num
+    · have hwi' : w.im < 0 := lt_of_le_of_ne hwi hz
+      have hnr0 : 0 ≤ -w.re := by linarith
+      have hnr1 : -w.re ≤ 1 := by linarith
+      have hib0 : 0 ≤ 1 + w.im := by linarith
+      have hib1 : 1 + w.im ≤ 1 := by linarith
+      congr 1
+      apply Subtype.ext
+      simp [t96J02_cut_raw, hwdef, hwI, hwr, not_le.mpr hwi', t96J02_cut_L,
+        t96J02_cut_R, t96J02_cut_clampSquare, hsum, hnr0, hnr1, hib0, hib1]
+      constructor
+      · congr 2 <;> ring
+      · linarith
 -- END SEAT AREA
 
 lemma t96J02_paste_rel
