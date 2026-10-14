@@ -36158,6 +36158,17 @@
      {:cmd "lean fixture",
       :exit 1,
       :correction "marked check noncomputable"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791944400544-11335-8a749c4e",
+     :commands
+     ["git show/diff/show --check 9b6869e35"
+      "sha256sum pseudopushout fixture; placeholders 1->1; scope diff"
+      "lake env lean recorded PointWedgeVanKampen + t93J03Closure + fixture + Main"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS: new compiled sorry-free standard-axiom progress. The generic two-open pseudopushout is specialized to the exact Klein polygon space and radial cover; based quotient extraction and overlap=aabb remain accurately listed. Exact commit blobs compile and fixture passes; a later unrelated PointWedge working-tree edit fails and is excluded. Scope/hash verified; registry 166/166. SLSC unused, mandated by problem.md."},
     :commit "9b6869e35db58e98ec18d27545f98f75d01ee7dc",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
@@ -36169,7 +36180,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -36187,7 +36198,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t93J03Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed actual-skeleton aabb quotient; attaching-cell van Kampen remains.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed the exact Klein radial-cover fundamental-groupoid pseudopushout; based quotient extraction remains.",
    :id :program-2026-10-13-close-t93j03,
    :kind :final-adapter,
    :campaign-priority 30,
@@ -36269,7 +36280,11 @@
     {:job 1,
      :commit "417a021338a83fb48d5d73127e71f0c9b7faf89f",
      :reason
-     "Committed actual-skeleton aabb quotient; attaching-cell van Kampen remains."}]}
+     "Committed actual-skeleton aabb quotient; attaching-cell van Kampen remains."}
+    {:job 2,
+     :commit "9b6869e35db58e98ec18d27545f98f75d01ee7dc",
+     :reason
+     "Committed the exact Klein radial-cover fundamental-groupoid pseudopushout; based quotient extraction remains."}]}
   {:consumer :t99J05,
    :stop-count 5,
    :evidence
@@ -37958,7 +37973,7 @@
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "kleinPolygonFundamentalGroupoidPseudopushout",
@@ -37968,7 +37983,9 @@
     :reported-by [:program-2026-10-13-close-t93j03],
     :type "two-open pseudopushout for exact Klein radial cover",
     :area "covering-subgroup-correspondence",
-    :proved-in :program-2026-10-13-close-t93j03},
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "9b6869e35db58e98ec18d27545f98f75d01ee7dc"},
    :id :lemma-kleinpolygonfundamentalgroupoidpseudopushout,
    :kind :lemma,
    :depends-on [],
