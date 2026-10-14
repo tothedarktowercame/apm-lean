@@ -113905,6 +113905,19 @@
       "lake build ConstructionTargets.ThreeCirclesFundamentalGroup",
       :exit 1,
       :finding "B12 absent"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791979948585-11794-c99b72e8",
+     :commands
+     ["git show/diff-tree a59f2c33bb1ce3f3503d916b269f3faa4792f345"
+      "archive commit; lake env lean PointWedgeVanKampen.lean"
+      "sha256sum source/doc/blueprint; count sorry/admit"
+      "python3 scripts/statement-registry.py check"
+      "#print axioms fixed-base reduction"
+      "lake build ConstructionTargets.PointWedgeVanKampen"],
+     :finding
+     "PASS: exact scope and hashes match; archived source compiles; placeholders 0->0; registry 166/166. Literal Y connector square is correctly comapped through the right equivalence and base-changed to the fixed-cover source square, retaining dependent endpoints; standard axioms only. New compiled milestone recorded; literal Y endpoint squares and genericPointWedgeLegCoordinates_vanKampen remain listed."},
     :commit "a59f2c33bb1ce3f3503d916b269f3faa4792f345",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
@@ -113915,7 +113928,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113936,7 +113949,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked mapped-connector reduction to a source inverse-unit square.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked fixed-right-base source-square reduction to the literal Y connector square.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -114880,7 +114893,11 @@
     {:job 2,
      :commit "2e1d7a4742f5c0829bce99b25b2269d05d7c8b87",
      :reason
-     "Banked mapped-connector reduction to a source inverse-unit square."}]}
+     "Banked mapped-connector reduction to a source inverse-unit square."}
+    {:job 3,
+     :commit "a59f2c33bb1ce3f3503d916b269f3faa4792f345",
+     :reason
+     "Banked fixed-right-base source-square reduction to the literal Y connector square."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
