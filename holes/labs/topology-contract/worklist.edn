@@ -113904,6 +113904,17 @@
       "lake build ConstructionTargets.ThreeCirclesFundamentalGroup",
       :exit 1,
       :finding "B12 absent"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791954821176-11617-fadf6b35",
+     :commands
+     ["git show/diff-tree cefbe6145"
+      "git archive cefbe6145; lake env lean archived PointWedgeVanKampen.lean"
+      "lake build ConstructionTargets.PointWedgeVanKampen"
+      "sha256sum; placeholders; statement-registry.py check"],
+     :finding
+     "Independent review of topo-2 commit cefbe6145: only scoped Lean/doc files changed. Archived Lean and lake build pass; source/doc/fixture hashes 277a164f/4fa6f5ab/0bca6ce3 match evidence; placeholders 0->0; registry 166/166. Base change precomposes both connector legs by the same isomorphism, and reassociation preserves the connector square with correct endpoints; axioms are standard. Valid program STOP; unrebased overlap square/B6/B12 remain listed."},
     :commit "cefbe61453e46e88b155c34ddefd80d57d23c096",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
@@ -113914,7 +113925,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113935,7 +113946,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked source-to-target connector-square transport through an equivalence.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked preservation of connector squares under explicit base change.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -114844,7 +114855,11 @@
     {:job 2,
      :commit "331fdbde8cca3e5cb96271723ab8b9793d036848",
      :reason
-     "Banked source-to-target connector-square transport through an equivalence."}]}
+     "Banked source-to-target connector-square transport through an equivalence."}
+    {:job 3,
+     :commit "cefbe61453e46e88b155c34ddefd80d57d23c096",
+     :reason
+     "Banked preservation of connector squares under explicit base change."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
