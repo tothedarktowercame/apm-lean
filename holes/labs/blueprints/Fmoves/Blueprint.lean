@@ -4228,7 +4228,21 @@ theorem zip_fibre_related {Label : Type*} [DecidableEq Label]
       (∃ t, q = edgePoint ((u ++ v).length + 2) u.length t ∧
         p = edgePoint ((u ++ v).length + 2) (u.length + 1) (reverseParameter t))) :
     Relation.EqvGen (WordRel (u ++ [x, inv x] ++ v)) p q := by
-  sorry
+  rcases h with rfl | h | h
+  · exact Relation.EqvGen.refl p
+  · rcases h with ⟨t, rfl, rfl⟩
+    have hlen : (u ++ [x, inv x] ++ v).length = (u ++ v).length + 2 := by
+      simp
+      omega
+    simpa only [hlen] using
+      inversePairCancellation_aux_collapse_aux_cancelled_pair u v x t
+  · rcases h with ⟨t, rfl, rfl⟩
+    have hlen : (u ++ [x, inv x] ++ v).length = (u ++ v).length + 2 := by
+      simp
+      omega
+    exact (by
+      simpa only [hlen] using
+        (inversePairCancellation_aux_collapse_aux_cancelled_pair u v x t).symm)
 
 theorem zip_forward {Label : Type*} [DecidableEq Label]
     (u v : List (Signed Label)) (x : Signed Label)
