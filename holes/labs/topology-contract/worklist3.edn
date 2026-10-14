@@ -36121,62 +36121,57 @@
   {:consumer :t93J03,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 9,
+   :stop-count 10,
    :review-finding
    "Program STOP commits no new mathematical progress since the prior milestone: KleinPolygonBasedVanKampen merely packages the already-required surjectivity and kernel hypotheses, and both consumers only reapply the previously proved three-input theorem. Prove the based van Kampen surjectivity/kernel result (or winding conjugacy) in scope; extend Mathlib: state and prove the missing theorem in scope.",
    :evidence
    {:placeholder-delta {:t93J03 [1 1]},
     :residual
-    "Reassemble alternating run representatives into an outer word; reverse kernel/surjectivity; winding; C1/C2/Main.",
+    "Fold alternating outer arrows into one outer word; reverse kernel/surjectivity; winding; C1/C2/Main.",
     :outcome :stop,
-    :warnings ["unused SLSC owner-approved"],
+    :warnings
+    ["unused SLSC owner-approved" "dirty t00J02Closure preserved"],
     :missing-theorems
-    [{:name
-      "pathTwoOpenSubdivisionInnerBlock_exists_outerOverlapReplacement",
-      :type
-      "packaged inner block equals one outer-routed overlap path",
+    [{:name "path_concat_exists_subtype_path",
+      :type "set-valued finite concat lifts to subtype path",
       :status :proved,
       :consumers [:t93J03],
-      :depends-on ["pathTwoOpenSubdivisionBlockPiece"],
+      :depends-on ["path_concat_mem_of_piece_mem"],
+      :area "covering-subgroup-correspondence"}
+     {:name "pathTwoOpenSubdivisionOuterBlock_exists_outerPath",
+      :type "packaged outer block is ambient image of outer path",
+      :status :proved,
+      :consumers [:t93J03],
+      :depends-on ["path_concat_exists_subtype_path"],
       :area "covering-subgroup-correspondence"}
      {:name "t93J03_polygon_based_van_kampen",
       :type "surjectivity; kernel equality",
       :status :partial,
       :consumers [:t93J03],
       :depends-on
-      ["pathTwoOpenSubdivisionInnerBlock_exists_outerOverlapReplacement"],
+      ["pathTwoOpenSubdivisionOuterBlock_exists_outerPath"],
       :area "covering-subgroup-correspondence"}],
     :statement-hashes {:registry "166/166"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Proved each packaged nonempty inner block with overlap endpoints equals one overlap path routed through the outer piece; finite run-list reassembly remains.",
+    "Proved every unchanged packaged outer block is literally the ambient image of an outer-piece path; both run kinds now yield outer arrows, and finite folding remains.",
     :commands
     [{:cmd "lake build ConstructionTargets.t93J03Closure", :exit 0}
      {:cmd "fixture; Main; registry; placeholder; diff/show", :exit 0}
      {:cmd "rg forbidden", :exit 1, :expected-exit 1}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1792006023023-12250-45c6ba32",
-     :commands
-     ["git show/check/diff 06b841a6; scope and fixture SHA-256"
-      "lake build ConstructionTargets.t93J03Closure; lean fixture and Main"
-      "statement-registry check; placeholder/axiom recount"],
-     :finding
-     "PASS: 06b841a6 adds compiled, sorry-free progress after 6e424b22. It instantiates the raw inner-block replacement at the exact dependent subdivision family, preserving overlap endpoints and the ambient groupoid equality to an overlap path routed through outer space. Blueprint is faithful; exact scope/hash match; closure placeholders 0->0; frozen Main remains 1; registry 166/166; standard axioms only. STOP lists run-list reassembly, reverse kernel/surjectivity, winding, C1/C2/Main."},
-    :commit "06b841a6396013640183b3461ac597cfcaa7e557",
+    :commit "9267ddcf896ed621e6c7d806f79fe4419ae7c37b",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
      "ConstructionTargets/t93J03Closure.blueprint.md"],
     :fixture
-    {:path "/tmp/t93j03_packaged_replace_check.lean",
+    {:path "/tmp/t93j03_outer_block_check.lean",
      :sha256
-     "dfda7e39ffb899c475ac9d60457286d7cc8b08e2615ff55255fb5815ac90640c"},
+     "9acc7aa9a0d2457e208cd7c13be03f715168a1dcb4962442d91f9538c87b1a74"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :needs-owner,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -38682,7 +38677,8 @@
     :lemma-kleinpolygoninnersiderun-piece-mem
     :lemma-boolsiderunpartition-isinfix-finrange
     :lemma-pathtwoopensubdivisionblockpiece
-    :lemma-pathtwoopensubdivisioninnerblock-exists-outeroverlapreplacement],
+    :lemma-pathtwoopensubdivisioninnerblock-exists-outeroverlapreplacement
+    :lemma-pathtwoopensubdivisionouterblock-exists-outerpath],
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
@@ -39372,6 +39368,40 @@
    :lemma-pathtwoopensubdivisioninnerblock-exists-outeroverlapreplacement,
    :kind :lemma,
    :depends-on [:lemma-pathtwoopensubdivisionblockpiece],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "path_concat_exists_subtype_path",
+    :type "set-valued finite concat lifts to subtype path"},
+   :lemma
+   {:name "path_concat_exists_subtype_path",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type "set-valued finite concat lifts to subtype path",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03},
+   :id :lemma-path-concat-exists-subtype-path,
+   :kind :lemma,
+   :depends-on [:lemma-path-concat-mem-of-piece-mem],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "pathTwoOpenSubdivisionOuterBlock_exists_outerPath",
+    :type "packaged outer block is ambient image of outer path"},
+   :lemma
+   {:name "pathTwoOpenSubdivisionOuterBlock_exists_outerPath",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type "packaged outer block is ambient image of outer path",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03},
+   :id :lemma-pathtwoopensubdivisionouterblock-exists-outerpath,
+   :kind :lemma,
+   :depends-on [:lemma-path-concat-exists-subtype-path],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
