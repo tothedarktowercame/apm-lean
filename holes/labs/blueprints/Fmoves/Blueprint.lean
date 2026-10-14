@@ -725,6 +725,65 @@ lemma mergeRepeatedBlock_aux_quotient_homeomorph
     continuous_toFun := hf
     continuous_invFun := hg }⟩
 
+lemma mergeRepeatedBlock_aux_disk_reparam_aux_length {Label : Type*}
+    (u v t : List (Signed Label)) (y z a : Signed Label) :
+    (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t).length =
+      (u ++ [a] ++ v ++ [inv a] ++ t).length + 2 := by
+  simp
+  omega
+
+lemma mergeRepeatedBlock_aux_disk_reparam_aux_source_pos
+    {Label : Type*} [DecidableEq Label]
+    (u v t : List (Signed Label)) (y z : Signed Label)
+    (hw : IsPolygonWord (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t)) :
+    0 < (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t).length := by
+  simp
+
+lemma mergeRepeatedBlock_aux_disk_reparam_aux_target_pos
+    {Label : Type*} (u v t : List (Signed Label)) (a : Signed Label) :
+    0 < (u ++ [a] ++ v ++ [inv a] ++ t).length := by
+  simp
+
+/-- A unit-circle point viewed in the closed disk. -/
+def circleToDisk (z : Circle) : Disk :=
+  ⟨(z : ℂ), by simp [Metric.mem_closedBall]⟩
+
+lemma circleToDisk_of_norm (p : Disk) (hp : ‖(p : ℂ)‖ = 1) :
+    ∃ z : Circle, circleToDisk z = p :=
+  ⟨⟨(p : ℂ), by simpa [Circle, Submonoid.unitSphere] using hp⟩, rfl⟩
+
+/-- Radial (cone) extension of a circle homeomorphism to the disk:
+`r • z ↦ r • g z`. -/
+lemma disk_radial_extension (g : Circle ≃ₜ Circle) :
+    ∃ e : Disk ≃ₜ Disk, (∀ z : Circle, e (circleToDisk z) = circleToDisk (g z)) ∧
+      ∀ p : Disk, ‖(p : ℂ)‖ < 1 → ‖(e p : ℂ)‖ < 1 := by
+  sorry
+
+/-- Interior points are related only to themselves: `WordRel` only pairs edge
+points, which have norm `1`. -/
+lemma wordRel_eqvGen_interior {L : Type*} [DecidableEq L]
+    (w : List (Signed L)) {p q : Disk}
+    (h : Relation.EqvGen (WordRel w) p q) (hp : ‖(p : ℂ)‖ < 1) : p = q := by
+  sorry
+
+/-- The boundary content of the merge: a PL circle homeomorphism sending arcs
+`y, z` to the halves of `a` (and `z⁻¹, y⁻¹` to the halves of `a⁻¹`), every
+other arc linearly to its counterpart, matching the generated relations on the
+circle. -/
+lemma mergeRepeatedBlock_aux_boundary {Label : Type*} [DecidableEq Label]
+    (u v t : List (Signed Label)) (y z a : Signed Label)
+    (hyz : y.1 ≠ z.1)
+    (ha : a.1 ∉ (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t).map Prod.fst)
+    (hy : ((u ++ v ++ t).map Prod.fst).count y.1 = 0)
+    (hz : ((u ++ v ++ t).map Prod.fst).count z.1 = 0)
+    (hw : IsPolygonWord (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t)) :
+    ∃ g : Circle ≃ₜ Circle, ∀ c₁ c₂ : Circle,
+      Relation.EqvGen (WordRel (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t))
+          (circleToDisk c₁) (circleToDisk c₂) ↔
+        Relation.EqvGen (WordRel (u ++ [a] ++ v ++ [inv a] ++ t))
+          (circleToDisk (g c₁)) (circleToDisk (g c₂)) := by
+  sorry
+
 /-- The geometric core: radially extend the increasing piecewise-linear
 reparametrisation which sends the two consecutive `y,z` arcs to the `a` arc
 and, simultaneously, the consecutive `inv z, inv y` arcs to `inv a`.
@@ -746,7 +805,32 @@ lemma mergeRepeatedBlock_aux_disk_reparam {Label : Type*} [DecidableEq Label]
           (WordRel (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t)) p q ↔
       Relation.EqvGen
           (WordRel (u ++ [a] ++ v ++ [inv a] ++ t)) (e p) (e q) := by
-  sorry
+  obtain ⟨g, hg⟩ := mergeRepeatedBlock_aux_boundary u v t y z a hyz ha hy hz hw
+  obtain ⟨e, he, hint⟩ := disk_radial_extension g
+  refine ⟨e, fun p q => ?_⟩
+  have hle : ∀ r : Disk, ‖(r : ℂ)‖ ≤ 1 := fun r => by
+    have := r.2
+    rwa [Metric.mem_closedBall, dist_zero_right] at this
+  by_cases hp : ‖(p : ℂ)‖ < 1
+  · constructor
+    · intro h
+      rw [wordRel_eqvGen_interior _ h hp]
+      exact Relation.EqvGen.refl _
+    · intro h
+      rw [e.injective (wordRel_eqvGen_interior _ h (hint p hp))]
+      exact Relation.EqvGen.refl _
+  by_cases hq : ‖(q : ℂ)‖ < 1
+  · constructor
+    · intro h
+      rw [← wordRel_eqvGen_interior _ (Relation.EqvGen.symm _ _ h) hq]
+      exact Relation.EqvGen.refl _
+    · intro h
+      rw [e.injective (wordRel_eqvGen_interior _ (Relation.EqvGen.symm _ _ h) (hint q hq))]
+      exact Relation.EqvGen.refl _
+  obtain ⟨zp, rfl⟩ := circleToDisk_of_norm p (le_antisymm (hle p) (not_lt.mp hp))
+  obtain ⟨zq, rfl⟩ := circleToDisk_of_norm q (le_antisymm (hle q) (not_lt.mp hq))
+  rw [he, he]
+  exact hg zp zq
 
 /-- Replace the quadrilateral `y z` / `(y z)⁻¹` by one fresh paired side.
 The count hypotheses say the displayed block contains every `y` and `z`. -/
