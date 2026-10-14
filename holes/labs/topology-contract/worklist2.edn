@@ -87901,68 +87901,58 @@
   {:consumer :t97A01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 2,
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Compute the signed boundary-arc Hurewicz sum; then finish B7 and B8-B10.",
+    "Identify boundary class with signed word; finish B7, then B8-B10.",
     :outcome :stop,
     :warnings ["preexisting lint; unrelated edits preserved"],
     :missing-theorems
-    [{:name "radialIntersectionToOuterH1_generator_eq_boundaryLoop",
-      :type "chosen generator maps to boundary-loop H1 class",
+    [{:name "polygonBoundaryLegWord_coordinates",
+      :type "signed sum equals attachingDegree",
       :status :proved,
       :consumers [:t97A01 :t94J09],
-      :depends-on
-      ["radialOverlapCircle_h1_naturality"
-       "radialIntersectionToOuterH1_positiveGenerator_eq"],
+      :depends-on [],
       :area "polygon-quotient-homology"}
-     {:name "polygonBoundaryWedgeLoop_hurewicz",
-      :type "boundary-loop coordinates equal attachingDegree",
-      :status :partial,
+     {:name "polygonBoundaryLegWord_hurewicz",
+      :type "word Hurewicz equals attaching image",
+      :status :proved,
+      :consumers [:t97A01 :t94J09],
+      :depends-on ["polygonBoundaryLegWord_coordinates"],
+      :area "polygon-quotient-homology"}
+     {:name "polygonBoundaryWedgeLoop_eq_legWord",
+      :type "boundary class equals signed word",
+      :status :not-started,
       :consumers [:t97A01 :t94J09],
       :depends-on ["polygonBoundaryWedgeLoop_edgePoint"],
-      :area "polygon-quotient-homology"}
-     {:name "radialMV_boundary_eq",
-      :type "B7 boundary equality",
-      :status :partial,
-      :consumers [:t97A01 :t94J09],
-      :depends-on ["polygonBoundaryWedgeLoop_hurewicz"],
       :area "polygon-quotient-homology"}],
     :statement-hashes {:registry "166/0"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked H1 naturality for the exact MV generator.",
+    :reason "Banked signed boundary-word Hurewicz evaluation.",
     :commands
     [{:cmd
       "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology",
       :exit 0}
-     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd "statement-registry.py check", :exit 0}
      {:cmd "placeholder scan", :exit 0}
      {:cmd "axioms check", :exit 0}
-     {:cmd "git show --check 849242d93", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792013332995-12445-0ff50dc4",
-     :commands
-     ["git show/diff 849242d93; blob sha256; diff --check"
-      "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology"
-      "lake env lean /dev/stdin (#print axioms)"
-      "placeholder scan"
-      "statement-registry.py check"],
-     :finding
-     "PASS: reviewer codex-7; 849242d93 (topo-6) changes only scoped PolygonSurfaceHomology.lean; fixture SHA-256 d9a60c8e06ecdfcf08bc90f4a77bf72040723c8cdea336ef74a29cc49563a49b matches. Exact snapshot builds; 0 placeholders; standard axioms; registry 166/0. Since the last program-history entry, the snapshot identifies integer 1 via the inverse circle/overlap/intersection H1 equivalences, maps it through unsigned outer inclusion, and then applies the correctly oriented overlap-to-boundary naturality equality. Thus the chosen MV generator reaches the ordered boundary-loop class without an unintended sign. New compiled progress; remaining signed boundary-arc Hurewicz sum, B7, then B8-B10."},
-    :commit "849242d93",
+     {:cmd "git show --check fb7c01109", :exit 0}],
+    :diagnostic-history
+    [{:cmd "coordinate drafts",
+      :exit 1,
+      :correction "expanded sum pointwise"}],
+    :commit "fb7c01109",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
     {:path "ConstructionTargets/PolygonSurfaceHomology.lean",
      :sha256
-     "d9a60c8e06ecdfcf08bc90f4a77bf72040723c8cdea336ef74a29cc49563a49b"},
+     "e5ab161e1ef3f4e578ea402be88a5fee0d758c2fd8cad3ed70d2cb00466e44e6"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -91674,4 +91664,54 @@
    :kind :lemma,
    :depends-on
    [:lemma-intervalcircle-injective-on-interior :lemma-inl-eq-inr-iff],
-   :other-consumers []}]}
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "polygonBoundaryLegWord_coordinates",
+    :type "signed sum equals attachingDegree"},
+   :lemma
+   {:name "polygonBoundaryLegWord_coordinates",
+    :reported-by [:program-2026-10-13-polygon-surface-homology],
+    :type "signed sum equals attachingDegree",
+    :area "polygon-quotient-homology",
+    :proved-in :program-2026-10-13-polygon-surface-homology},
+   :id :lemma-polygonboundarylegword-coordinates,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t94J09]}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "polygonBoundaryLegWord_hurewicz",
+    :type "word Hurewicz equals attaching image"},
+   :lemma
+   {:name "polygonBoundaryLegWord_hurewicz",
+    :reported-by [:program-2026-10-13-polygon-surface-homology],
+    :type "word Hurewicz equals attaching image",
+    :area "polygon-quotient-homology",
+    :proved-in :program-2026-10-13-polygon-surface-homology},
+   :id :lemma-polygonboundarylegword-hurewicz,
+   :kind :lemma,
+   :depends-on [:lemma-polygonboundarylegword-coordinates],
+   :other-consumers [:t94J09]}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "polygonBoundaryWedgeLoop_eq_legWord",
+    :type "boundary class equals signed word"},
+   :lemma
+   {:name "polygonBoundaryWedgeLoop_eq_legWord",
+    :reported-by [:program-2026-10-13-polygon-surface-homology],
+    :type "boundary class equals signed word",
+    :area "polygon-quotient-homology"},
+   :id :lemma-polygonboundarywedgeloop-eq-legword,
+   :kind :lemma,
+   :depends-on [:lemma-polygonboundarywedgeloop-edgepoint],
+   :other-consumers [:t94J09]}]}
