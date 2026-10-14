@@ -113856,38 +113856,37 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 9,
+   :stop-count 10,
    :review-finding
    "Recorded fixture hash mismatch: :fixture.sha256 is 0bca6ce32c019fc3053c7f813c26917169cf817375b44d5e722b864b61a526450c1, but ConstructionTargets/PointWedgeVanKampen.blueprint.md at recorded commit c9b3af27 has exact SHA-256 0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0. Re-record the fixture hash for the reviewed commit.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
    :evidence
    {:placeholder-delta {:source-before 0, :source-after 0},
     :residual
-    "Express inverse outer-left comparison as inl; derive rightBase=inl; then B6/B12.",
+    "Build B11 restricted TwoCircles neighborhood, then B12 final equivalence.",
     :outcome :stop,
     :warnings ["existing linters"],
     :missing-theorems
     [{:name
       "PointWedgeVanKampen.genericPointWedgeLegCoordinates_vanKampen",
       :type "Leg equivalence",
-      :status :partial,
+      :status :proved,
       :consumers [:t99J01 :t01A03 :t92J06 :t97A01 :t97A03],
       :depends-on
       ["PointWedgeVanKampen.genericPointWedgeSourceEquivalence"],
       :area "fundamental-group-wedge-of-circles"}],
     :statement-hashes
     {:source
-     "dc2f6338628e3e96a2665cf0ed62885231ece2b3d5c606438bea2f6abb85abdf",
+     "9015735d1111638d415245efc42d52b6af07ff9066439d8ce8d0f79a657275a8",
      :documentation
-     "fc0da817db258ca6c095839c3e27759ee8814e75946c12301f5bab01ca82f5cb",
+     "db0f99d304a5508cca92347d03a33051048c2c25bbf71cfbe00c8992b05565e2",
      :blueprint
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0",
      :registry "166/166"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
-    :reason
-    "Banked right-factor representation and eliminated the outer-right comparison.",
+    :reason "B6 banked; B11 and B12 remain.",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/PointWedgeVanKampen.lean",
@@ -113897,27 +113896,14 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "sha256/diff/placeholders", :exit 0}],
     :diagnostic-history
-    [{:cmd "outer-right drafts",
+    [{:cmd "rightBase factorization drafts",
       :exit 1,
-      :finding "fixed dependent coproduct/unit annotations"}
+      :finding "fixed multiplication order and unfolded lets"}
      {:cmd
       "lake build ConstructionTargets.ThreeCirclesFundamentalGroup",
       :exit 1,
       :finding "B12 module absent"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1791994610876-11946-97e1877c",
-     :commands
-     ["git show/diff-tree 73ca2d97834e7ee98776825ce0a1220b132e7444"
-      "archive commit; lake env lean PointWedgeVanKampen.lean"
-      "sha256sum source/doc/blueprint; count sorry/admit"
-      "python3 scripts/statement-registry.py check"
-      "#print axioms outer-right theorems"
-      "lake build ConstructionTargets.PointWedgeVanKampen"],
-     :finding
-     "PASS: exact scope and hashes match; archived source compiles; placeholders 0->0; registry 166/166. The false general projection-kernel shortcut is rejected; the actual outer-right comparison is proved to be inr of its coordinate, whose established trivial projection makes it the unit. Representation steps and factor order are explicit; standard axioms only. New milestone recorded; outer-left representation, rightBase factorization, and genericPointWedgeLegCoordinates_vanKampen remain listed."},
-    :commit "73ca2d97834e7ee98776825ce0a1220b132e7444",
+    :commit "64a4242e04051bc5bb0eb213b76c4e82183087ca",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
      "ConstructionTargets/PointWedgeVanKampen.md"],
@@ -113927,7 +113913,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :needs-owner,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -114933,7 +114919,8 @@
     :reported-by [:program-2026-10-11-point-wedge-van-kampen],
     :type
     "For a point wedge of two path-connected spaces with contractible-to-basepoint open neighbourhoods of the wedge point, FundamentalGroup of the wedge is multiplicatively equivalent to the coproduct of the two piece fundamental groups, with literal leg coordinates.",
-    :area "fundamental-group-wedge-of-circles"},
+    :area "fundamental-group-wedge-of-circles",
+    :proved-in :program-2026-10-11-point-wedge-van-kampen},
    :id
    :lemma-pointwedgevankampen-genericpointwedgelegcoordinates-vankampen,
    :kind :lemma,
