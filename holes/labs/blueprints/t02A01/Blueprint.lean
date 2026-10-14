@@ -106,12 +106,19 @@ theorem apm_t02a01_restrictedCover_isCovering
   sorry
 
 /-- LIBRARY (polygon boundary word): lifting any loop on the inner boundary of
-the square-annulus quotient ends at a deck translate by a commutator. -/
+the square-annulus quotient ends at a deck translate by a commutator.
+Repaired 2026-10-14 (lemma-6 counterexample): `deck` must be an action
+(`hdeck_zero`, `hdeck_add`), else `deck 0` may move points and the statement is
+false for the constant loop; the global cover `hcover` is also supplied, since
+the boundary loop is a commutator only in π₁ of the punctured torus. -/
 theorem apm_t02a01_boundary_monodromy_is_deck_commutator
     {Stilde : Type*} [TopologicalSpace Stilde]
     (p : Stilde → apm_t02a01_puncturedTorus) (n : ℕ)
+    (hcover : IsCoveringMap p)
     (hcov : IsCoveringMap (apm_t02a01_restrictedCover p))
     (deck : ZMod n → Homeomorph Stilde Stilde)
+    (hdeck_zero : deck 0 = Homeomorph.refl Stilde)
+    (hdeck_add : ∀ z w, deck (z + w) = (deck z).trans (deck w))
     (hdeck_over : ∀ z x, p (deck z x) = p x)
     (hdeck_transitive : ∀ x y, p x = p y → ∃! z, deck z x = y)
     (e : p ⁻¹' apm_t02a01_boundary)
@@ -154,8 +161,8 @@ theorem apm_t02a01_boundary_monodromy_trivial
   refine ⟨hcov, ?_⟩
   intro e γ
   obtain ⟨u, v, huv⟩ :=
-    apm_t02a01_boundary_monodromy_is_deck_commutator p n hcov deck hdeck_over
-      hdeck_transitive e γ
+    apm_t02a01_boundary_monodromy_is_deck_commutator p n hcover hcov deck
+      hdeck_zero hdeck_add hdeck_over hdeck_transitive e γ
   apply Subtype.ext
   apply Subtype.ext
   exact huv.trans (apm_t02a01_deck_commutator_apply n deck hdeck_zero u v e.1)
