@@ -87938,6 +87938,17 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "git show --check c6f80043b", :exit 0}
      {:cmd "exact blob+axioms | lake env lean /dev/stdin", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791998219127-11958-bdb9a6b7",
+     :commands
+     ["git show/diff c6f80043b; sha256sum"
+      "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology"
+      "lake env lean /dev/stdin (#print axioms)"
+      "placeholder scan; statement-registry check; git show --check"],
+     :finding
+     "PASS: commit c6f80043b by topo-6 changes only scoped PolygonSurfaceHomology.lean; exact blob SHA-256 9e2cd261020793eb6c739154e709344a5592c7a44d252535390f40b39ff50f71. Exact snapshot builds; 0 placeholders; theorem uses propext/Classical.choice/Quot.sound; registry 166/0. Coproduct induction is complete because letters range over entire factor groups (including inverses); concatenation preserves multiplication. Specialization keeps old Fin(n+1) wedge as inl and final Unit wedge as inr, matching the proved right-base factorization. Real compiled progress; remaining milestones transport words through the successor homeomorphism, inductively expand old factors, then prove free-group surjectivity/B6-B10."},
     :commit "c6f80043b",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
@@ -87946,7 +87957,7 @@
      "9e2cd261020793eb6c739154e709344a5592c7a44d252535390f40b39ff50f71"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -87966,7 +87977,7 @@
     :blueprint
     "ConstructionTargets/PolygonSurfaceHomology.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked connector square and old-factor membership.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked successor point-wedge leg-word generation.",
    :id :program-2026-10-13-polygon-surface-homology,
    :kind :reusable-theorem,
    :campaign-priority 31,
@@ -88106,7 +88117,10 @@
     {:job 9, :commit "250866b5e", :reason "Banked normal-form step."}
     {:job 1,
      :commit "327646036",
-     :reason "Banked connector square and old-factor membership."}]}
+     :reason "Banked connector square and old-factor membership."}
+    {:job 2,
+     :commit "c6f80043b",
+     :reason "Banked successor point-wedge leg-word generation."}]}
   {:consumer :t97A01,
    :stop-count 0,
    :phase :implementation,
@@ -90298,7 +90312,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "finiteWedgeFinSuccPointWedge_exists_legWord",
@@ -90308,7 +90322,9 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "successor split loops are old/final-factor words",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :program-2026-10-13-polygon-surface-homology,
+    :banked-commit "c6f80043b"},
    :id :lemma-finitewedgefinsuccpointwedge-exists-legword,
    :kind :lemma,
    :depends-on [:lemma-finitewedgepointwedge-rightbase-inl],
