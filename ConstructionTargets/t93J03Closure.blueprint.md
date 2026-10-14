@@ -497,6 +497,11 @@ now supply their exact range hypotheses; it remains to choose the corresponding
 outer representative for each indexed run against the boundary family and
 instantiate the fold
 before extracting based surjectivity and the reverse kernel inclusion.
+`pathTwoOpenSubdivisionRun_exists_outerRepresentative` now performs that
+Boolean choice: every indexed maximal run has a literal ambient path with the
+same groupoid class as its dependent block, exact block endpoints, and range
+contained in the outer piece.  Casting these representatives to consecutive
+entries of the canonical outer boundary family and folding them remains.
 
 - Layer 1: C1, C3, and C4. C1 and C3 are independent; C4 is already complete.
 - Layer 2: C2 against the explicit C1 equivalence interface.

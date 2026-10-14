@@ -2095,6 +2095,84 @@ theorem pathTwoOpenSubdivisionOuterBlock_exists_outerPath
       (pathTwoOpenSubdivisionBlockPoint S start (n + 1) h)
       (pathTwoOpenSubdivisionBlockPiece S start (n + 1) h) hF)
 
+/-- Every indexed maximal run has one representative in the outer piece.
+For an outer run this is its literal dependent concatenation; for an inner
+run it is the overlap replacement supplied by contractibility of the inner
+piece.  The representative has the literal ambient block endpoints and its
+whole range lies in the outer piece, ready for the canonical-boundary fold. -/
+theorem pathTwoOpenSubdivisionRun_exists_outerRepresentative
+    {x y : kleinPairingData.Space} {p : Path x y}
+    (S : PathTwoOpenSubdivision p (openCover kleinPairingData).inner
+      (openCover kleinPairingData).outer)
+    (hx : S.point 0 ∈ (openCover kleinPairingData).outer)
+    (hy : S.point (Fin.last (S.n + 1)) ∈ (openCover kleinPairingData).outer)
+    (i : Fin (boolSideRunPartition S.side).length) :
+    ∃ q : Path (pathTwoOpenSubdivisionRunBlockPoint S i 0)
+        (pathTwoOpenSubdivisionRunBlockPoint S i
+          (Fin.last (pathTwoOpenSubdivisionRunPredLength S i + 1))),
+      (∀ t, q t ∈ (openCover kleinPairingData).outer) ∧
+      (⟦Path.concat (pathTwoOpenSubdivisionRunBlockPoint S i)
+          (pathTwoOpenSubdivisionRunBlockPiece S i)⟧ :
+        FundamentalGroupoid.mk (pathTwoOpenSubdivisionRunBlockPoint S i 0) ⟶
+          FundamentalGroupoid.mk (pathTwoOpenSubdivisionRunBlockPoint S i
+            (Fin.last (pathTwoOpenSubdivisionRunPredLength S i + 1)))) =
+        ⟦q⟧ := by
+  let side := S.side ((pathTwoOpenSubdivisionRunFamily S i).head
+    (pathTwoOpenSubdivisionRunFamily_ne_nil S i))
+  have hbound := pathTwoOpenSubdivisionRunStart_add_length_le S i
+  have hbound' : pathTwoOpenSubdivisionRunStart S i +
+      (pathTwoOpenSubdivisionRunPredLength S i + 1) ≤ S.n + 1 := by
+    rw [pathTwoOpenSubdivisionRunPredLength_add_one]
+    exact hbound
+  by_cases hs : side = true
+  · have hF := pathTwoOpenSubdivisionRunBlockPiece_mem_inner_of_side_eq_true S i hs
+    have hxInner : pathTwoOpenSubdivisionRunBlockPoint S i 0 ∈
+        (openCover kleinPairingData).inner := by
+      have hz : (0 : Fin (pathTwoOpenSubdivisionRunPredLength S i + 2)) =
+          (0 : Fin (pathTwoOpenSubdivisionRunPredLength S i + 1)).castSucc := rfl
+      rw [hz]
+      rw [← (pathTwoOpenSubdivisionRunBlockPiece S i 0).source]
+      exact hF 0 0
+    have hyInner : pathTwoOpenSubdivisionRunBlockPoint S i
+        (Fin.last (pathTwoOpenSubdivisionRunPredLength S i + 1)) ∈
+        (openCover kleinPairingData).inner := by
+      have hi : (Fin.last (pathTwoOpenSubdivisionRunPredLength S i)).succ =
+          Fin.last (pathTwoOpenSubdivisionRunPredLength S i + 1) := by
+        apply Fin.ext
+        simp
+      rw [← hi]
+      rw [← (pathTwoOpenSubdivisionRunBlockPiece S i
+        (Fin.last (pathTwoOpenSubdivisionRunPredLength S i))).target]
+      exact hF (Fin.last (pathTwoOpenSubdivisionRunPredLength S i)) 1
+    have hxOuter : pathTwoOpenSubdivisionRunBlockPoint S i 0 ∈
+        (openCover kleinPairingData).outer := by
+      rw [← pathTwoOpenSubdivisionOuterRunBoundaryFamily_castSucc_eq_runBlockPoint_zero
+        S hx hy i]
+      exact (pathTwoOpenSubdivisionOuterRunBoundaryFamily _ _ _ _).property
+    have hyOuter : pathTwoOpenSubdivisionRunBlockPoint S i
+        (Fin.last (pathTwoOpenSubdivisionRunPredLength S i + 1)) ∈
+        (openCover kleinPairingData).outer := by
+      rw [← pathTwoOpenSubdivisionOuterRunBoundaryFamily_succ_eq_runBlockPoint_last
+        S hx hy i]
+      exact (pathTwoOpenSubdivisionOuterRunBoundaryFamily _ _ _ _).property
+    obtain ⟨q, hq⟩ := pathTwoOpenSubdivisionInnerBlock_exists_outerOverlapReplacement
+      S (pathTwoOpenSubdivisionRunStart S i)
+      (pathTwoOpenSubdivisionRunPredLength S i) hbound'
+      ⟨hxInner, hxOuter⟩ ⟨hyInner, hyOuter⟩ hF
+    refine ⟨(q.map kleinPolygonOverlapToOuter.continuous).map
+      kleinPolygonOuterToSpace.continuous, ?_, hq⟩
+    intro t
+    exact ((q.map kleinPolygonOverlapToOuter.continuous) t).property
+  · have hs' : side = false := Bool.eq_false_of_not_eq_true hs
+    have hF := pathTwoOpenSubdivisionRunBlockPiece_mem_outer_of_side_eq_false S i hs'
+    obtain ⟨q, hq⟩ := pathTwoOpenSubdivisionOuterBlock_exists_outerPath
+      S (pathTwoOpenSubdivisionRunStart S i)
+      (pathTwoOpenSubdivisionRunPredLength S i) hbound' hF
+    refine ⟨q.map kleinPolygonOuterToSpace.continuous, ?_, ?_⟩
+    · intro t
+      exact (q t).property
+    · exact congrArg Path.Homotopic.Quotient.mk hq.symm
+
 /-- Every overlap loop maps trivially in the polygon quotient.  This is the
 kernel inclusion in based van Kampen: the overlap inclusion factors through
 the contractible inner radial piece. -/
@@ -3089,6 +3167,7 @@ theorem lift_isEmbedding_assembly
 #print axioms kleinPolygonInnerBlock_exists_outerOverlapReplacement
 #print axioms pathTwoOpenSubdivisionInnerBlock_exists_outerOverlapReplacement
 #print axioms pathTwoOpenSubdivisionOuterBlock_exists_outerPath
+#print axioms pathTwoOpenSubdivisionRun_exists_outerRepresentative
 #print axioms kleinPolygonOverlapPathConnectedSpace
 #print axioms kleinPolygonOverlapToOuterPiOne
 #print axioms kleinPolygonOverlapFundamentalGroupEquivInt
