@@ -1270,12 +1270,48 @@ lemma mergeRepeatedBlock_aux_boundary_relation_aux_eqvGen_map
 only to themselves, so its generated relation between circle points is the
 generated relation of its restriction to the circle. -/
 -- BEGIN SEAT AREA
+lemma wordRel_eqvGen_circle_aux_forward {L : Type*} [DecidableEq L]
+    (w : List (Signed L)) {p q : Disk}
+    (h : Relation.EqvGen (WordRel w) p q) :
+    ∀ (c d : Circle), circleToDisk c = p → circleToDisk d = q →
+      Relation.EqvGen
+        (fun a b : Circle => WordRel w (circleToDisk a) (circleToDisk b)) c d := by
+  induction h with
+  | refl p =>
+      intro c d hc hd
+      have hcd : c = d :=
+        mergeRepeatedBlock_aux_boundary_relation_aux_circleToDisk_injective
+          (hc.trans hd.symm)
+      subst d
+      exact Relation.EqvGen.refl _
+  | rel p q hpq =>
+      intro c d hc hd
+      apply Relation.EqvGen.rel
+      simpa [hc, hd] using hpq
+  | symm p q hpq ih =>
+      intro c d hc hd
+      exact Relation.EqvGen.symm _ _ (ih d c hd hc)
+  | trans p q r hpq hqr ih₁ ih₂ =>
+      intro c d hc hd
+      have hqnorm : ‖(q : ℂ)‖ = 1 := by
+        rcases wordRel_eqvGen_interior_aux_boundary w hpq with heq | hb
+        · rw [← heq, ← hc]
+          simpa [circleToDisk, Circle, Submonoid.unitSphere] using c.2
+        · exact hb.2
+      obtain ⟨e, he⟩ := circleToDisk_of_norm q hqnorm
+      exact Relation.EqvGen.trans _ _ _ (ih₁ c e hc he) (ih₂ e d he hd)
+
 lemma wordRel_eqvGen_circle {L : Type*} [DecidableEq L]
     (w : List (Signed L)) (c₁ c₂ : Circle) :
     Relation.EqvGen (WordRel w) (circleToDisk c₁) (circleToDisk c₂) ↔
       Relation.EqvGen (fun a b : Circle => WordRel w (circleToDisk a) (circleToDisk b))
         c₁ c₂ := by
-  sorry
+  constructor
+  · intro h
+    exact wordRel_eqvGen_circle_aux_forward w h c₁ c₂ rfl rfl
+  · intro h
+    exact mergeRepeatedBlock_aux_boundary_relation_aux_eqvGen_map circleToDisk
+      (fun hxy => Relation.EqvGen.rel _ _ hxy) h
 -- END SEAT AREA
 
 /-- Forward generators: each identified source pair maps under `g` to a pair
