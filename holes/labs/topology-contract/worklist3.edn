@@ -36119,7 +36119,7 @@
    "reopened: a lemma this row reported missing is now banked",
    :stop-count 1,
    :review-finding
-   "Program STOP commits nothing new since the prior reviewed attempt: it reuses commit 512a220f, and git history shows no later scoped commit. The unresolved SemilocallySimplyConnected hypothesis-coverage conflict is unchanged. Obtain the required owner specification decision or commit a new compiled milestone before resubmitting.",
+   "Program STOP commits no new mathematical progress since the prior milestone: KleinPolygonBasedVanKampen merely packages the already-required surjectivity and kernel hypotheses, and both consumers only reapply the previously proved three-input theorem. Prove the based van Kampen surjectivity/kernel result (or winding conjugacy) in scope; extend Mathlib: state and prove the missing theorem in scope.",
    :evidence
    {:placeholder-delta {:t93J03 [1 1]},
     :residual
@@ -36161,6 +36161,12 @@
       :exit 1,
       :correction
       "unrelated PointWedge rewrite failed; exact source passed"}],
+    :review
+    {:outcome :fail,
+     :seat "codex-11",
+     :job "invoke-1791965027455-11712-df22a5ed",
+     :finding
+     "Program STOP commits no new mathematical progress since the prior milestone: KleinPolygonBasedVanKampen merely packages the already-required surjectivity and kernel hypotheses, and both consumers only reapply the previously proved three-input theorem. Prove the based van Kampen surjectivity/kernel result (or winding conjugacy) in scope; extend Mathlib: state and prove the missing theorem in scope."},
     :commit "8267cca681693d10f6d2bfafd9e9fe363d3c9b70",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
@@ -36172,7 +36178,7 @@
      :mode :blocked-by-unrelated-dependency},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :repair,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -36194,7 +36200,7 @@
    :id :program-2026-10-13-close-t93j03,
    :kind :final-adapter,
    :campaign-priority 30,
-   :fail-count 0,
+   :fail-count 1,
    :depends-on [],
    :program true,
    :other-consumers [],
