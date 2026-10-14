@@ -445,9 +445,12 @@ meet at consecutive original piece indices, identifying the exact shared
 subdivision vertex at which the side-change overlap lemma applies.
 `pathTwoOpenSubdivision_adjacentRunBoundary_mem_overlap` performs that exact
 application, with its conclusion expressed at the head index of the following
-run so it matches both neighboring block endpoints.  The next step is to
-package these vertices as the endpoint family for the outer fold, then extract
-based surjectivity and the reverse kernel inclusion.
+run so it matches both neighboring block endpoints.
+`pathTwoOpenSubdivision_runPartition_isChain_overlap` packages this result
+over the complete ordered run list: every adjacent run boundary is an overlap
+vertex.  The next step is to turn these certified boundaries into the subtype
+endpoint family for the outer fold, then extract based surjectivity and the
+reverse kernel inclusion.
 
 - Layer 1: C1, C3, and C4. C1 and C3 are independent; C4 is already complete.
 - Layer 2: C2 against the explicit C1 equivalence interface.

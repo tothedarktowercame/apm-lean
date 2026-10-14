@@ -909,6 +909,27 @@ theorem pathTwoOpenSubdivision_adjacentRunBoundary_mem_overlap
     simpa [hk₀, hk₁] using hside)
   simpa [hk₁] using hm
 
+/-- Every boundary between consecutive maximal side runs is an overlap
+vertex.  This packages the local transition calculation over the complete
+ordered run list, ready to serve as the endpoint data for the outer fold. -/
+theorem pathTwoOpenSubdivision_runPartition_isChain_overlap
+    {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
+    {U V : Set X} (S : PathTwoOpenSubdivision p U V) :
+    (boolSideRunPartition S.side).IsChain fun a b =>
+      ∀ (ha : a ≠ []) (hb : b ≠ []),
+        S.point (b.head hb).castSucc ∈ U ∩ V := by
+  rw [List.isChain_iff_forall_rel_of_append_cons_cons]
+  intro a b l₁ l₂ hab ha hb
+  have hsides := (List.isChain_iff_forall_rel_of_append_cons_cons.mp
+    (boolSideRunPartition_spec S.side).2.2.2) hab
+  obtain ⟨ha', hb', hsides⟩ := hsides
+  have hsides' : S.side (a.getLast ha) ≠ S.side (b.head hb) := by
+    simpa using hsides
+  have hidx := (List.isChain_iff_forall_rel_of_append_cons_cons.mp
+    (boolSideRunPartition_adjacent_indices S.side)) hab ha hb
+  exact pathTwoOpenSubdivision_adjacentRunBoundary_mem_overlap
+    S a b ha hb hidx hsides'
+
 /-- Every member of a maximal Boolean side run has the side recorded at its
 head.  This turns the local chain certificate returned by `splitBy` into the
 pointwise fact needed to package a whole subdivision block. -/
@@ -2420,6 +2441,7 @@ theorem lift_isEmbedding_assembly
 #print axioms boolSideRunPartition_spec
 #print axioms boolSideRunPartition_adjacent_indices
 #print axioms pathTwoOpenSubdivision_adjacentRunBoundary_mem_overlap
+#print axioms pathTwoOpenSubdivision_runPartition_isChain_overlap
 #print axioms boolSideRunPartition_mem_side_eq_head
 #print axioms boolSideRunPartition_isInfix_finRange
 #print axioms boolSideRunPartition_exists_slice
