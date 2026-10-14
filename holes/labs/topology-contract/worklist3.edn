@@ -36119,21 +36119,25 @@
   {:consumer :t93J03,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 2,
+   :stop-count 3,
    :review-finding
    "Program STOP commits no new mathematical progress since the prior milestone: KleinPolygonBasedVanKampen merely packages the already-required surjectivity and kernel hypotheses, and both consumers only reapply the previously proved three-input theorem. Prove the based van Kampen surjectivity/kernel result (or winding conjugacy) in scope; extend Mathlib: state and prove the missing theorem in scope.",
    :evidence
    {:placeholder-delta {:t93J03 [1 1]},
     :residual
-    "Extend to normalClosure<=kernel; prove reverse inclusion and surjectivity from pseudopushout; winding conjugacy; C1/C2/Main.",
+    "Transport forward inclusion to skeleton; prove reverse kernel inclusion and surjectivity from pseudopushout; winding conjugacy; C1/C2/Main.",
     :outcome :stop,
-    :warnings ["unused SLSC owner-approved"],
+    :warnings
+    ["unused SLSC owner-approved"
+     "PointWedge dependency rebuild preserved"],
     :missing-theorems
-    [{:name "kleinPolygonOverlapToSpacePiOne_eq_one",
-      :type "overlap loops map trivially via contractible inner piece",
+    [{:name
+      "kleinPolygonOverlapNormalClosure_le_outerToSpacePiOne_ker",
+      :type
+      "normal closure of actual overlap image is contained in outer-to-polygon kernel",
       :status :proved,
       :consumers [:t93J03],
-      :depends-on ["kleinPolygonInnerContractibleSpace"],
+      :depends-on ["kleinPolygonOverlapToSpacePiOne_eq_one"],
       :area "covering-subgroup-correspondence"}
      {:name "t93J03_polygon_based_van_kampen",
       :type
@@ -36141,7 +36145,7 @@
       :status :partial,
       :consumers [:t93J03],
       :depends-on
-      ["kleinPolygonOverlapToSpacePiOne_eq_one"
+      ["kleinPolygonOverlapNormalClosure_le_outerToSpacePiOne_ker"
        "kleinPolygonFundamentalGroupoidPseudopushout"],
       :area "covering-subgroup-correspondence"}],
     :statement-hashes {:registry "166/166"},
@@ -36149,36 +36153,23 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Proved overlap loops die via the contractible inner radial piece; reverse kernel inclusion, surjectivity and winding remain.",
+    "Proved the overlap-image normal closure lies in the outer-to-polygon kernel; skeleton transport, reverse inclusion, surjectivity and winding remain.",
     :commands
     [{:cmd "lake build ConstructionTargets.t93J03Closure", :exit 0}
-     {:cmd "lean fixture; Main; registry; diff; show --check", :exit 0}
+     {:cmd "lean closure; fixture; Main; registry; diff; show --check",
+      :exit 0}
      {:cmd "rg forbidden additions", :exit 1, :expected-exit 1}],
-    :diagnostic-history
-    [{:cmd "fixture before build",
-      :exit 1,
-      :correction "built olean; fixture passed"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1791968643185-11730-7640e8b7",
-     :commands
-     ["git show/check/diff c4547601; exact scope/source"
-      "sha256sum fixture; lake env lean closure, fixture, Main"
-      "statement-registry check; placeholder/axiom recount"],
-     :finding
-     "PASS. Commit c4547601 adds compiled, sorry-free progress: the overlap inclusion into the polygon is definitionally the same through the outer and contractible inner pieces, so every overlap loop maps to 1, with the correct forward-kernel orientation. Fixture hash matches; scope exact; standard axioms only; registry 166/166; Lean placeholder count 0->0. Reverse kernel inclusion, surjectivity, and winding conjugacy remain listed."},
-    :commit "c454760138501d322f23734cecc5d356b4fa717d",
+    :commit "fc950d9a2e0bdc8863b80786dedf8f035a21e793",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
      "ConstructionTargets/t93J03Closure.blueprint.md"],
     :fixture
-    {:path "/tmp/t93j03_overlap_kernel_forward_check.lean",
+    {:path "/tmp/t93j03_overlap_normalclosure_kernel_check.lean",
      :sha256
-     "fde4784323289cc220b6ae2ef3e4bb638ba0e012bbb79c5e6fd4ae261f76d9dd"},
+     "ef20e52196e5b63734635ab19b12e8f17fb9a95279f8b4081a5c074b300001ab"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -38549,7 +38540,8 @@
    :kind :lemma,
    :depends-on
    [:lemma-kleinpolygonfundamentalgroupoidpseudopushout
-    :lemma-kleinpolygonoverlaptospacepione-eq-one],
+    :lemma-kleinpolygonoverlaptospacepione-eq-one
+    :lemma-kleinpolygonoverlapnormalclosure-le-outertospacepione-ker],
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
@@ -38583,6 +38575,26 @@
    :id :lemma-kleinpolygoninnercontractiblespace,
    :kind :lemma,
    :depends-on [],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "kleinPolygonOverlapNormalClosure_le_outerToSpacePiOne_ker",
+    :type
+    "normal closure of actual overlap image is contained in outer-to-polygon kernel"},
+   :lemma
+   {:name "kleinPolygonOverlapNormalClosure_le_outerToSpacePiOne_ker",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type
+    "normal closure of actual overlap image is contained in outer-to-polygon kernel",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03},
+   :id
+   :lemma-kleinpolygonoverlapnormalclosure-le-outertospacepione-ker,
+   :kind :lemma,
+   :depends-on [:lemma-kleinpolygonoverlaptospacepione-eq-one],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
