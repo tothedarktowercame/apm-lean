@@ -87901,7 +87901,7 @@
   {:consumer :t97A01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 10,
+   :stop-count 0,
    :evidence
    {:placeholder-delta 0,
     :residual
@@ -87951,7 +87951,7 @@
      "701e9526befe68411d5afb982ee50cd3272174a32b6d266e2e4ea14e9c5e366f"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -88183,6 +88183,16 @@
      {:cmd "blob+axioms | lake env lean /dev/stdin", :exit 0}],
     :diagnostic-history
     [{:cmd "star draft", :exit 1, :correction "explicit edge type"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791968618723-11728-92e9fa84",
+     :commands
+     ["git show/diff-tree/commit trailers; sha256sum"
+      "exact blob | lake env lean /dev/stdin; #print axioms"
+      "placeholder scan; statement-registry.py check; frozen hashes"],
+     :finding
+     "PASS: independent review of topo-6 commit 21ba63c87; sole path ConstructionTargets/t92J06Closure.lean, blob SHA256 cfc39162da05c31f76fa19aeaa5b8753aaf780084ee94498e85a2cd30fb078b8. Exact blob compiles; wedgeDesc and uniqueness use only propext, Classical.choice, Quot.sound; placeholders 0; registry 166/0. Frozen STATEMENTS hash eb49a622..., recorded Main hash 85f64495..., blueprint hash af4e6370.... This is new progress after the blueprint: it implements the quotient topology, continuous two-leg cocone, maps-out eliminator and uniqueness, and an actual IsCoveringMap bundle with exact fiber cardinality. Map directions are faithful: the coinduced quotient receives both circle legs, while wedgeDesc maps out and agrees on each leg. Remaining milestones are explicitly the simply connected Cayley-tree cover and four pairwise nonhomeomorphic exact three-sheet covers."},
     :commit "b19eb4dfe",
     :changed-paths ["ConstructionTargets/t92J06Closure.lean"],
     :fixture
@@ -88191,7 +88201,7 @@
      "1d86d1ce02f5a40fcae9c1a98709a7981777e9c2a68654053c760cf6f6f07c67"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t92J06/lean/Main.lean"
     "problems/t92J06/status.json"
@@ -88209,7 +88219,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t92J06Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked the quotient-wedge API.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked graph data.",
    :id :program-2026-10-13-close-t92j06,
    :kind :final-adapter,
    :campaign-priority 34,
@@ -88224,7 +88234,8 @@
      "Blueprint written; independent review is required before formalization."}
     {:job 2,
      :commit "21ba63c87",
-     :reason "Banked the quotient-wedge API."}]}
+     :reason "Banked the quotient-wedge API."}
+    {:job 3, :commit "b19eb4dfe", :reason "Banked graph data."}]}
   {:consumer :t94A08,
    :phase :lemma,
    :state :banked,
@@ -89789,7 +89800,7 @@
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "finiteWedgeFinSuccPointWedgeNeighborhoods",
@@ -89799,7 +89810,9 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "old/final-leg inputs",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/PolygonSurfaceHomology.lean"]},
    :id :lemma-finitewedgefinsuccpointwedgeneighborhoods,
    :kind :lemma,
    :depends-on [:lemma-finitewedgefinpointedcontractibleneighborhood],
@@ -89822,7 +89835,7 @@
    :other-consumers [:t94J09]}
   {:consumer :t92J06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "twoLoopGraphCoverData_localStars",
@@ -89832,7 +89845,9 @@
     :reported-by [:program-2026-10-13-close-t92j06],
     :type "transition star equivalences",
     :area "graph-covering-realization",
-    :proved-in :program-2026-10-13-close-t92j06},
+    :proved-in :program-2026-10-13-close-t92j06,
+    :banked-by :program-2026-10-13-close-t92j06,
+    :banked-commit "b19eb4dfe"},
    :id :lemma-twoloopgraphcoverdata-localstars,
    :kind :lemma,
    :depends-on [:lemma-t92j06-quotientwedgeapi],
