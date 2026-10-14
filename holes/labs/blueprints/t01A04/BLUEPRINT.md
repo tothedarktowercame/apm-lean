@@ -26,69 +26,101 @@ relations, descend continuously, preserve basepoints, and are surjective.
 
 ## Remaining lemmas
 
-### `apm_t01A04_bridge_quotient_maps_are_coverings` — LIBRARY
+### Covering-map leaves (four independent seats)
 
-**Statement.** Both explicit quotient maps are covering maps.
+* `apm_t01A04_circleCoverMap_evenlyCovered_away` (80–130 lines): construct an
+  evenly covered neighborhood of every non-wedge point.  On a torus
+  representative use a neighborhood avoiding `(1,1)` and two identity
+  sheets; on a circle representative use
+  `Circle.isQuotientCoveringMap_npow 2`, shrinking away from `1` when needed.
+* `apm_t01A04_circleCoverMap_evenlyCovered_basepoint` (100–150 lines): take a
+  small arc `U` about `1` with its two inverse arcs under squaring and glue the
+  corresponding small torus neighborhoods to those arcs in each sheet.
+* `apm_t01A04_torusCoverMap_evenlyCovered_away` (80–130 lines): the analogous
+  non-wedge construction, using circle squaring in the first torus coordinate
+  and two identity copies on the attached circle.
+* `apm_t01A04_torusCoverMap_evenlyCovered_basepoint` (100–150 lines): use the
+  two inverse product neighborhoods near `(1,1)` and `(-1,1)`, glued to the
+  matching neighborhoods in the two attached circles.
 
-**Why true.** Away from the glued points this is the disjoint union of copies
-of an identity map and the standard circle squaring cover.  At the wedge point,
-choose small product/circle arcs evenly covered by squaring.  Their copies in
-the source quotient are disjoint open sheets and each maps homeomorphically to
-the corresponding wedged neighborhood.  This is precisely the missing
-EqvGen-quotient covering-gluing theorem recorded by the topology loop.
-Surjectivity is already proved by
-`apm_t01a04_circleCoverMap_surjective` and
-`apm_t01a04_torusCoverMap_surjective`.
+All four statements use Mathlib's native
+`IsEvenlyCovered f x (f ⁻¹' {x})`, so they are independently provable and no
+leaf imports another leaf's `sorry`.  Useful API: the definition of
+`IsEvenlyCovered`, `IsEvenlyCovered.of_openPartialHomeomorph`,
+`IsEvenlyCovered.reindex`, `Circle.isQuotientCoveringMap_npow`,
+`IsCoveringMap.isEvenlyCovered`, `Homeomorph.prodCongr`,
+`isQuotientMap_quotient_mk'.isOpen_preimage`, and
+`Topology.IsQuotientMap.continuous_iff`.  The most direct proof is to give the
+open set and homeomorphism required by `IsEvenlyCovered`; quotient equality is
+handled by induction on `Relation.EqvGen`.
 
-**Expected size.** 200–400 lines.  This is marked LIBRARY rather than split
-into fake local lemmas: the reusable deliverable should be a general
-point-wedge covering-gluing theorem (also useful to t00A02, t92J06, t97A03,
-and t98A03), followed by a short specialization.
+Degenerate check: the away hypotheses exclude the only point at which the two
+summands meet.  The basepoint fibers have exactly two points, not one: the
+attachment identifies within each sheet but never identifies the two sheets.
+The inverse arcs must be chosen disjoint (including their endpoints), so no
+branching is hidden at `1` or `-1`.
 
-**Dependencies.** Definitions and proved lemmas in this file only.
+`apm_t01A04_bridge_quotient_maps_are_coverings` is now a sorry-free 12-line
+assembly: split on `x = apm_t01a04_basepoint` and apply the relevant local
+leaf.
 
-**Truth check.** Over the wedge point each map has exactly two preimages.  For
-the circle-doubled cover these are the attachment points on the doubled circle;
-for the torus-doubled cover they are `(1,1)` and `(-1,1)` on the doubled first
-torus coordinate.  Circle squaring has two disjoint local inverse arcs at
-those points, so the gluing creates no branching.
+### Canonical loops, presentation, parity, and ranges
 
-### `apm_t01A04_bridge_piOne_presentation_and_ranges`
+The definitions `apm_t01A04_loopA`, `apm_t01A04_loopB`, and
+`apm_t01A04_loopC` are sorry-free.  They are the FundamentalGroup classes of
+explicit paths: one positive `integerLoop` in respectively the first torus
+coordinate, second torus coordinate, and extra circle.  The last path is cast
+at both endpoints using the defining wedge relation.  Thus none of the range
+claims quantifies over a replaceable abstract generating triple.
 
-**Statement.** The concrete fundamental group has generators `a,b,c` with
-the universal presentation `⟨a,b,c | ab=ba⟩`; the two parity characters
-have the displayed values, are onto with distinct index-two kernels, and the
-two concrete induced maps have exactly those ranges.
+* `apm_t01A04_canonical_loops_presentation` (100–150 lines, independent):
+  prove that these particular loops commute in the first two entries, generate,
+  and satisfy the displayed universal property.  Compare the concrete EqvGen
+  relation with `ConstructionTargets.PointWedgeQuotient.Rel` using
+  `quotientHomeomorphOfRelIff`, then use
+  `ConstructionTargets.GenericTargetNaturalSourceReconstruction.wedgeFundamentalGroupMulEquiv`.
+  The key remaining naturality computation sends the explicit `integerLoop`
+  paths to `Monoid.Coprod.inl (Multiplicative.ofAdd (1,0))`,
+  `Monoid.Coprod.inl (Multiplicative.ofAdd (0,1))`, and
+  `Monoid.Coprod.inr (Multiplicative.ofAdd 1)`.  Finish with
+  `Monoid.Coprod.lift`, `MonoidHom.ext`, and `Subgroup.closure_eq_top`.
+* `apm_t01A04_canonical_parity_characters` (40–80 lines, independent given
+  its explicit universal-property hypothesis): instantiate that hypothesis
+  twice with values `(0,0,1)` and `(1,0,0)`.  Use `ZMod.eq_zero_or_eq_one`,
+  `Subgroup.index_ker`, and `SetLike.ext'` (or distinguish the kernels on
+  `loopA`/`loopC`) for surjectivity, index two, and inequality.
+* `apm_t01A04_circleCoverMap_range_eq_parity_kernel` (80–140 lines): given
+  values on the canonical loops and an explicit `IsCoveringMap` hypothesis,
+  compute lifted endpoints.  `loopA` and `loopB` have closed lifts in torus
+  sheet zero, while `loopC` lifts along circle squaring from `1` to `-1` and
+  is not closed.  Use `IsCoveringMap.monodromy`,
+  `IsCoveringMap.monodromy_trans_apply`, `FundamentalGroup.toPath`, and the
+  lift/range criterion developed in
+  `ConstructionTargets.DeckGroupQuotientFundamentalGroup`.
+* `apm_t01A04_torusCoverMap_range_eq_parity_kernel` (80–140 lines): the same
+  argument with `loopA` lifting under first-coordinate squaring from `1` to
+  `-1`, while `loopB` stays closed in the torus and `loopC` stays closed in
+  attached circle sheet zero.
 
-**Why true.** Transport
-`ConstructionTargets.GenericTargetNaturalSourceReconstruction.wedgeFundamentalGroupMulEquiv`
-across the definitional/homeomorphic identification of the local quotient
-`apm_t01a04_X` with its `GenericWedge`.  The free-product injections give `a`,
-`b`, and `c`; the universal property of `Monoid.Coprod` proves the displayed
-mapping property and defines the two maps to `ZMod 2`.  Kernel index is two by
-surjectivity.  For the range clauses, compute monodromy: the first cover flips
-sheets exactly on `c`, and the second exactly on `a`.  The standard lifting
-criterion says that a loop lies in the induced range iff its monodromy fixes
-the chosen sheet.  `ConstructionTargets.DeckGroupQuotientFundamentalGroup`
-contains the closest sorry-free quotient-cover/fundamental-group machinery,
-but not this point-wedge specialization.
+The two range leaves take `IsCoveringMap` as an explicit hypothesis; hence
+they can be proved before any covering leaf lands.  They also take generator
+values and the closure statement for the three fixed loops.  Replacing a
+generator by (for example) `loopA * loopC` is therefore impossible; this is
+the defect in the previous statements.  The range leaves, presentation leaf,
+and parity leaf have no sorry-dependency on one another because every needed
+conclusion is passed as an explicit hypothesis.
 
-**Expected size.** 120–220 lines after the concrete inclusion naturality and
-two-sheet monodromy API are available.  The audit separates those reusable
-foundations as `apm_t01a04_piOneEquiv_inclusions` and
-`two_sheet_monodromy_character_range`; this exact bridge is the bounded
-consumer adapter.
+Truth check: abelianization is `ℤ³`; the characters are the nonzero forms
+`(0,0,1)` and `(1,0,0)`.  Their kernels therefore have index two and differ.
+For a connected two-sheet cover, the induced fundamental-group range is the
+stabilizer of the chosen sheet; in a two-point fiber that stabilizer is exactly
+the kernel of the computed parity character.  There are no empty-fiber or
+dimension-zero cases because both maps are already proved surjective and both
+basepoint fibers are inhabited.
 
-**Dependencies.** Definitions and proved lemmas in this file.  It does not
-take the preceding covering proof as a Lean hypothesis, so the two seats can
-run in parallel; its proof may establish the required local lifting facts or
-use the shared covering-gluing result once banked.
-
-**Truth check.** Abelianizing the presentation gives `ℤ³`; the two characters
-are the distinct nonzero linear forms selecting the `c` and `a` coordinates.
-Thus each has quotient of order two.  Direct path lifting of the three
-generator loops yields monodromy `(0,0,1)` and `(1,0,0)`, exactly matching the
-claimed kernels.
+`apm_t01A04_bridge_piOne_presentation_and_ranges` is now a sorry-free
+assembly.  It obtains the two covering hypotheses from the first bridge and
+passes them explicitly to the two range leaves.
 
 ### `apm_t01A04_bridge_total_spaces_not_homeomorphic` — LIBRARY
 
@@ -130,11 +162,15 @@ imported.  Both imported files are sorry-free.
 
 ## Dependency layers
 
-* **Layer 1 (parallel):** all three remaining lemmas.  Their statements are
-  closed over the definitions block and none mentions another lemma's local
-  proof data.
-* **Layer 2 (already proved):** `apm_t01a04` destructures the presentation data,
-  selects the two concrete maps, and combines the three Layer 1 results.
+* **Layer 1 (parallel):** the four evenly-covered leaves, canonical-loop
+  presentation leaf, parity-character leaf (with the universal property as an
+  input), the two range leaves (with closure, values, and covering as inputs),
+  and the unchanged total-space nonhomeomorphism leaf.  All nine seats are
+  independent.
+* **Layer 2 (sorry-free):** the two named bridge lemmas assemble the first
+  seven leaves.
+* **Layer 3 (already proved):** `apm_t01a04` destructures the bridge data,
+  selects the concrete maps, and adds the nonhomeomorphism leaf.
 
 ## Compilation and axioms
 
@@ -144,7 +180,9 @@ Compiled with:
 systemd-run --user --scope -q -p MemoryMax=12G lake env lean holes/labs/blueprints/t01A04/Blueprint.lean
 ```
 
-The warnings identify exactly the three top-level admitted lemmas.  The final
+The warnings identify exactly the eight revised leaf lemmas plus the unchanged
+total-space nonhomeomorphism lemma.  Both requested bridge lemmas are
+sorry-free.  The final
 output of `#print axioms apm_t01a04` is:
 
 ```text
@@ -152,4 +190,4 @@ output of `#print axioms apm_t01a04` is:
 ```
 
 Thus the main theorem has no direct `sorry`; `sorryAx` reaches it only through
-the three isolated obligations above.
+the eight isolated leaves above.
