@@ -261,6 +261,9 @@ run boundaries; these boundary changes feed the overlap-vertex theorem.
 `boolSideRunPartition_mem_side_eq_head` extracts pointwise side equality from
 each run, and `kleinPolygonInnerSideRun_piece_mem` turns a true-side run into
 the exact inner-cover range proof needed for its dependent path concatenation.
+`boolSideRunPartition_isInfix_finRange` proves each run is a contiguous block
+of the ordered finite index list, preserving the endpoint order needed to
+package its pieces as one dependent path family.
 It remains to transport the overlap image through the outer-piece coordinates
 and take its normal closure.
 The outer-to-skeleton equivalence is now restricted at the literal overlap

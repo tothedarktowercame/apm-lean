@@ -878,6 +878,18 @@ theorem boolSideRunPartition_mem_side_eq_head {n : ℕ}
   · rfl
   · exact ((List.pairwise_cons.mp hc').1 k hk).symm
 
+/-- Every Boolean side run is a contiguous block of the original ordered
+finite index list.  Thus its subdivision pieces retain their endpoint order
+when they are repackaged as one dependent concatenation. -/
+theorem boolSideRunPartition_isInfix_finRange {n : ℕ}
+    (side : Fin n → Bool) (block : List (Fin n))
+    (hb : block ∈ boolSideRunPartition side) :
+    block <:+: List.finRange n := by
+  have h : [block] <:+: boolSideRunPartition side :=
+    (List.singleton_infix_iff block _).2 hb
+  have hf := h.flatten
+  simpa [boolSideRunPartition] using hf
+
 /-- Every piece indexed by an inner run of the exact Klein subdivision stays
 in the inner cover, supplying the range hypothesis for block concatenation. -/
 theorem kleinPolygonInnerSideRun_piece_mem
@@ -2163,6 +2175,7 @@ theorem lift_isEmbedding_assembly
 #print axioms pathTwoOpenSubdivision_transition_mem_overlap
 #print axioms boolSideRunPartition_spec
 #print axioms boolSideRunPartition_mem_side_eq_head
+#print axioms boolSideRunPartition_isInfix_finRange
 #print axioms kleinPolygonInnerSideRun_piece_mem
 #print axioms pathHomotopicQuotient_concat_eq_of_pieceClass_eq
 #print axioms path_concat_mem_of_piece_mem
