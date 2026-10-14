@@ -975,7 +975,93 @@ lemma t96J02_paste_cut
 lemma t96J02_cut_paste (p : T96J02ClosedSquare) :
     (Quotient.mk _ (t96J02_cut_raw (t96J02_paste_raw p)) : T96J02SquarePolygonQuotient) =
       Quotient.mk _ p := by
-  sorry
+  rcases p with ⟨⟨u, v⟩, hu0, hu1, hv0, hv1⟩
+  change 0 ≤ u at hu0
+  change u ≤ 1 at hu1
+  change 0 ≤ v at hv0
+  change v ≤ 1 at hv1
+  simp only [t96J02_paste_raw]
+  by_cases hvu : v ≤ u
+  · have hwre : (t96J02_paste_L (u, v)).re ≤ 0 := by
+      simpa [t96J02_paste_L] using (neg_nonpos.mpr hv0)
+    have hwl1 : t96J02_cut_l1 (t96J02_paste_L (u, v)) ≤ 1 := by
+      rw [show t96J02_cut_l1 (t96J02_paste_L (u, v)) =
+          v + |2 * u - 1 - v| by
+        simp [t96J02_cut_l1, t96J02_paste_L, abs_of_nonneg hv0]]
+      have habs : |2 * u - 1 - v| ≤ 1 - v :=
+        (abs_le).2 ⟨by linarith, by linarith⟩
+      linarith
+    have hclamp : t96J02_cut_clampDisk
+        (t96J02_cut_chartInv (t96J02_paste_L (u, v))) =
+        ⟨t96J02_cut_chartInv (t96J02_paste_L (u, v)), by
+          simpa [Metric.mem_closedBall, dist_zero_right, t96J02_cut_norm_chartInv] using hwl1⟩ := by
+      apply Subtype.ext
+      simp [t96J02_cut_clampDisk, t96J02_cut_norm_chartInv, hwl1]
+    rw [if_pos hvu, hclamp]
+    simp only [t96J02_cut_raw, t96J02_cut_chart_chartInv, hwre, if_pos]
+    congr 1
+    apply Subtype.ext
+    simp only [t96J02_cut_clampSquare, t96J02_cut_L, t96J02_paste_L,
+      Prod.fst, Prod.snd]
+    ext
+    · rw [show 1 / 2 - -v / 2 + (2*u-1-v)/2 = u by ring]
+      simp [hu0, hu1]
+    · simp [hv0, hv1]
+  · have huv : u < v := lt_of_not_ge hvu
+    by_cases hvtop : v = 1
+    · subst v
+      have hwl1 : t96J02_cut_l1 (t96J02_paste_R (u, 1)) ≤ 1 := by
+        rw [show t96J02_cut_l1 (t96J02_paste_R (u, 1)) = |1 - 2*u| by
+          simp [t96J02_cut_l1, t96J02_paste_R]]
+        exact (abs_le).2 ⟨by linarith, by linarith⟩
+      have hclamp : t96J02_cut_clampDisk
+          (t96J02_cut_chartInv (t96J02_paste_R (u, 1))) =
+          ⟨t96J02_cut_chartInv (t96J02_paste_R (u, 1)), by
+            simpa [Metric.mem_closedBall, dist_zero_right, t96J02_cut_norm_chartInv] using hwl1⟩ := by
+        apply Subtype.ext
+        simp [t96J02_cut_clampDisk, t96J02_cut_norm_chartInv, hwl1]
+      rw [if_neg hvu, hclamp]
+      simp only [t96J02_cut_raw, t96J02_cut_chart_chartInv]
+      rw [if_pos (by simp [t96J02_paste_R])]
+      apply Quotient.sound
+      apply Relation.EqvGen.rel
+      right
+      let t : Set.Icc (0 : ℝ) 1 := ⟨1 - u, by constructor <;> linarith⟩
+      refine ⟨t, ?_, ?_⟩
+      · simp only [t96J02_cut_clampSquare, t96J02_cut_L, t96J02_paste_R,
+          KleinSquareEdgeOrientation.squareEdge, t,
+          Prod.fst, Prod.snd]
+        ext
+        · simp only [Prod.fst, sub_self, sub_zero, zero_div]
+          rw [show 1 / 2 + (1 - 2*u)/2 = 1-u by ring]
+          simp [hu0, hu1]
+        · simp
+      · simp [KleinSquareEdgeOrientation.squareEdge, t]
+    · have hwre : 0 < (t96J02_paste_R (u, v)).re := by
+        simp [t96J02_paste_R]
+        exact lt_of_le_of_ne hv1 hvtop
+      have hwl1 : t96J02_cut_l1 (t96J02_paste_R (u, v)) ≤ 1 := by
+        rw [show t96J02_cut_l1 (t96J02_paste_R (u, v)) =
+            (1 - v) + |v - 2 * u| by
+          simp [t96J02_cut_l1, t96J02_paste_R, abs_of_nonneg (by linarith : 0 ≤ 1-v)]]
+        have habs : |v - 2*u| ≤ v := (abs_le).2 ⟨by linarith, by linarith⟩
+        linarith
+      have hclamp : t96J02_cut_clampDisk
+          (t96J02_cut_chartInv (t96J02_paste_R (u, v))) =
+          ⟨t96J02_cut_chartInv (t96J02_paste_R (u, v)), by
+            simpa [Metric.mem_closedBall, dist_zero_right, t96J02_cut_norm_chartInv] using hwl1⟩ := by
+        apply Subtype.ext
+        simp [t96J02_cut_clampDisk, t96J02_cut_norm_chartInv, hwl1]
+      rw [if_neg hvu, hclamp]
+      simp only [t96J02_cut_raw, t96J02_cut_chart_chartInv, not_le.mpr hwre, if_false]
+      congr 1
+      apply Subtype.ext
+      simp only [t96J02_cut_clampSquare, t96J02_cut_R, t96J02_paste_R,
+        Prod.fst, Prod.snd]
+      ext
+      · rw [show 1 / 2 - (1-v)/2 - (v-2*u)/2 = u by ring]
+        simp [hu0, hu1]
+      · simp [hv0, hv1]
 
 /-- The genuine polygon-move bridge: the opposite-edge square presentation
 and the frozen adjacent-arc disk presentation have homeomorphic quotient
