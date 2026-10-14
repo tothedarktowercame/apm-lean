@@ -26,7 +26,22 @@ theorem t00A04_manifold_discrete_of_model_subsingleton
     (I : ModelWithCorners ℝ E E) [Subsingleton E]
     [TopologicalSpace X] [ChartedSpace E X] [IsManifold I ∞ X] :
     DiscreteTopology X := by
-  sorry
+  rw [discreteTopology_iff_isOpen_singleton]
+  intro x
+  have hsource : (chartAt E x).source = ({x} : Set X) := by
+    ext y
+    constructor
+    · intro hy
+      have hxy : chartAt E x y = chartAt E x x := Subsingleton.elim _ _
+      have hx : x ∈ (chartAt E x).source := mem_chart_source E x
+      have := congrArg (chartAt E x).symm hxy
+      simpa [(chartAt E x).left_inv hy, (chartAt E x).left_inv hx] using this
+    · intro hy
+      have hyx : y = x := Set.mem_singleton_iff.mp hy
+      subst y
+      exact mem_chart_source E x
+  rw [← hsource]
+  exact (chartAt E x).open_source
 
 /-- A continuous real-parameter homotopy cannot move a point in a discrete
 space.  Thus a null-homotopic identity on a discrete space forces the space to
