@@ -258,6 +258,9 @@ overlap is equal to a single overlap path routed through the outer piece.
 ordered maximal constant runs.  `boolSideRunPartition_spec` proves flattening,
 nonemptiness, constant sides inside runs, and side changes across adjacent
 run boundaries; these boundary changes feed the overlap-vertex theorem.
+`boolSideRunPartition_mem_side_eq_head` extracts pointwise side equality from
+each run, and `kleinPolygonInnerSideRun_piece_mem` turns a true-side run into
+the exact inner-cover range proof needed for its dependent path concatenation.
 It remains to transport the overlap image through the outer-piece coordinates
 and take its normal closure.
 The outer-to-skeleton equivalence is now restricted at the literal overlap

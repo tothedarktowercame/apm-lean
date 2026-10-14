@@ -857,6 +857,44 @@ theorem boolSideRunPartition_spec {n : ℕ} (side : Fin n → Bool) :
         ∃ ha hb, (side (a.getLast ha) == side (b.head hb)) = false := by
   exact List.splitBy_eq_iff.mp rfl
 
+/-- Every member of a maximal Boolean side run has the side recorded at its
+head.  This turns the local chain certificate returned by `splitBy` into the
+pointwise fact needed to package a whole subdivision block. -/
+theorem boolSideRunPartition_mem_side_eq_head {n : ℕ}
+    (side : Fin n → Bool) (block : List (Fin n))
+    (hb : block ∈ boolSideRunPartition side) (hne : block ≠ []) :
+    ∀ k ∈ block, side k = side (block.head hne) := by
+  have hc := (boolSideRunPartition_spec side).2.2.1 block hb
+  have hc' : block.IsChain (fun i j => side i = side j) :=
+    hc.imp fun h => by simpa using h
+  letI : Trans (fun i j => side i = side j)
+      (fun i j => side i = side j) (fun i j => side i = side j) :=
+    ⟨fun h₁ h₂ => Eq.trans h₁ h₂⟩
+  rw [List.isChain_iff_pairwise] at hc'
+  obtain ⟨a, l, rfl⟩ := List.exists_cons_of_ne_nil hne
+  intro k hk
+  simp only [List.mem_cons] at hk
+  rcases hk with rfl | hk
+  · rfl
+  · exact ((List.pairwise_cons.mp hc').1 k hk).symm
+
+/-- Every piece indexed by an inner run of the exact Klein subdivision stays
+in the inner cover, supplying the range hypothesis for block concatenation. -/
+theorem kleinPolygonInnerSideRun_piece_mem
+    {x y : kleinPairingData.Space} {p : Path x y}
+    (S : PathTwoOpenSubdivision p (openCover kleinPairingData).inner
+      (openCover kleinPairingData).outer)
+    (block : List (Fin (S.n + 1)))
+    (hb : block ∈ boolSideRunPartition S.side) (hne : block ≠ [])
+    (hs : S.side (block.head hne) = true) :
+    ∀ k ∈ block, ∀ t,
+      S.piece k t ∈ (openCover kleinPairingData).inner := by
+  intro k hk t
+  have hkSide := boolSideRunPartition_mem_side_eq_head
+    S.side block hb hne k hk
+  have hm := S.piece_mem k t
+  simpa [twoChart, hkSide, hs] using hm
+
 /-- Equality of the homotopy class of every factor propagates through the
 dependent finite concatenation used by a subordinate subdivision.  This is
 the finite-fold assembly step for replacing all maximal inner runs. -/
@@ -2124,6 +2162,8 @@ theorem lift_isEmbedding_assembly
 #print axioms kleinPolygonPseudopushout_arrow_eq_reconstructed
 #print axioms pathTwoOpenSubdivision_transition_mem_overlap
 #print axioms boolSideRunPartition_spec
+#print axioms boolSideRunPartition_mem_side_eq_head
+#print axioms kleinPolygonInnerSideRun_piece_mem
 #print axioms pathHomotopicQuotient_concat_eq_of_pieceClass_eq
 #print axioms path_concat_mem_of_piece_mem
 #print axioms pathTwoOpenSubdivision_quotient_eq_concat_of_pieceClass_eq
