@@ -36117,24 +36117,23 @@
   {:consumer :t93J03,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 9,
+   :stop-count 10,
    :review-finding
    "Program STOP commits nothing new since the prior reviewed attempt: it reuses commit 512a220f, and git history shows no later scoped commit. The unresolved SemilocallySimplyConnected hypothesis-coverage conflict is unchanged. Obtain the required owner specification decision or commit a new compiled milestone before resubmitting.",
    :evidence
    {:placeholder-delta {:t93J03 [1 1]},
     :residual
-    "Map winding-one to aabb; extract quotient; apply C1/C2/Main.",
+    "Prove winding-one image equals aabb; extract quotient; apply C1/C2/Main.",
     :outcome :stop,
     :warnings ["unused SLSC owner-approved"],
     :missing-theorems
-    [{:name
-      "kleinPolygonOverlapImageFundamentalGroupEquivAtSkeletonPoint",
+    [{:name "kleinPolygonOverlapWindingHom_factor",
       :type
-      "overlap-image pi1 equiv skeleton pi1 at preferred basepoint",
+      "based overlap map factors through integer winding into FreeGroup Bool",
       :status :proved,
       :consumers [:t93J03],
       :depends-on
-      ["kleinPolygonOverlapImageFundamentalGroupEquivSkeleton"],
+      ["kleinPolygonOverlapImageFundamentalGroupEquivAtSkeletonPoint"],
       :area "covering-subgroup-correspondence"}
      {:name "t93J03_polygon_van_kampen",
       :type "polygon pi1 equals PresentedGroup(aabb)",
@@ -36142,48 +36141,32 @@
       :consumers [:t93J03],
       :depends-on
       ["kleinSkeletonAabbPresentationQuotient"
-       "kleinPolygonOverlapFundamentalGroupEquivInt"
-       "kleinPolygonOverlapImageFundamentalGroupEquivAtSkeletonPoint"],
+       "kleinPolygonOverlapWindingHom_factor"],
       :area "covering-subgroup-correspondence"}],
     :statement-hashes {:registry "166/166"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Committed path and pi1 transport to preferred skeleton point; winding comparison remains.",
+    "Committed the exact overlap winding homomorphism in fixed FreeGroup coordinates; winding-one=aabb remains.",
     :commands
     [{:cmd "lake build ConstructionTargets.t93J03Closure", :exit 0}
      {:cmd "lean fixture; Main", :exit 0}
      {:cmd "registry; placeholder; diff", :exit 0}
      {:cmd "rg forbidden", :exit 1, :expected-exit 1}
      {:cmd "commit; show --check", :exit 0}],
-    :diagnostic-history
-    [{:cmd "lean fixture",
-      :exit 1,
-      :correction "marked check noncomputable; rerun passed"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1791950290055-11552-553be1d8",
-     :commands
-     ["git show/diff/show --check 04bd64ef"
-      "sha256sum fixture; scope; placeholders"
-      "lake env lean recorded closure, fixture, Main"
-      "statement-registry.py check"],
-     :finding
-     "PASS: new compiled sorry-free standard-axiom milestone. Skeleton path-connectedness supplies a path from the deformed overlap image to the preferred skeleton point; composing the correctly oriented path transport lands at the exact basepoint used by fixed FreeGroup coordinates. Winding-one image=aabb and quotient remain accurately listed. Scope/hash verified; frozen placeholders 1->1 (support 0); registry 166/166; SLSC unused, mandated by problem.md."},
-    :commit "04bd64ef15ae2e68a2145986ee81c2c153d272b4",
+    :commit "5b36d9c30adce17ffa68e48aad6a40c4f8d505a1",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
      "ConstructionTargets/t93J03Closure.blueprint.md"],
     :fixture
-    {:path "/tmp/t93j03_overlap_basepoint_path_check.lean",
+    {:path "/tmp/t93j03_overlap_winding_hom_check.lean",
      :sha256
-     "af8896161c4ab4835c1b4ed778bc170fcb677524ea6d788a28cc35cfd04e8e8d",
+     "a5967587adb6fc127f427f4e7d8daef8864194d9520b6191d527d96c8183b7ee",
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :needs-owner,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -37667,7 +37650,8 @@
     :lemma-kleinpolygonouterhomotopyequivskeleton
     :lemma-kleinpolygonouterfundamentalgroupoidequivalence
     :lemma-kleinpolygonoverlapimagefundamentalgroupequivskeleton
-    :lemma-kleinpolygonoverlapimagefundamentalgroupequivatskeletonpoint],
+    :lemma-kleinpolygonoverlapimagefundamentalgroupequivatskeletonpoint
+    :lemma-kleinpolygonoverlapwindinghom-factor],
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
@@ -38175,6 +38159,26 @@
    :kind :lemma,
    :depends-on
    [:lemma-kleinpolygonoverlapimagefundamentalgroupequivskeleton],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "kleinPolygonOverlapWindingHom_factor",
+    :type
+    "based overlap map factors through integer winding into FreeGroup Bool"},
+   :lemma
+   {:name "kleinPolygonOverlapWindingHom_factor",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type
+    "based overlap map factors through integer winding into FreeGroup Bool",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03},
+   :id :lemma-kleinpolygonoverlapwindinghom-factor,
+   :kind :lemma,
+   :depends-on
+   [:lemma-kleinpolygonoverlapimagefundamentalgroupequivatskeletonpoint],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
