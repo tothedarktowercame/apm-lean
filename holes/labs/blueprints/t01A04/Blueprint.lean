@@ -1564,6 +1564,33 @@ lemma apm_t01A04_tbp_preimage :
     apm_t01a04_torusCoverMap ⁻¹' apm_t01A04_tbp_U = ⋃ i, apm_t01A04_tbp_V i := by
   sorry
 
+noncomputable def apm_t01A04_tbp_sheet_homeomorph_aux_root
+    (i : Fin 2) (z : Circle) : Circle :=
+  apm_t01a04_sheetPoint i * Circle.exp (Complex.arg z / 2)
+
+lemma apm_t01A04_tbp_sheet_homeomorph_aux_root_sq
+    (i : Fin 2) (z : Circle) :
+    apm_t01A04_tbp_sheet_homeomorph_aux_root i z ^ 2 = z := by
+  rw [apm_t01A04_tbp_sheet_homeomorph_aux_root, mul_pow,
+    apm_t01a04_sheetPoint_sq, one_mul, pow_two, ← Circle.exp_add]
+  convert Circle.exp_arg z using 1 <;> ring
+
+lemma apm_t01A04_tbp_sheet_homeomorph_aux_branch_unique
+    (i : Fin 2) (x y : Circle) (hsq : x ^ 2 = y ^ 2)
+    (hx : 0 < ((x : ℂ) * star (apm_t01a04_sheetPoint i : ℂ)).re)
+    (hy : 0 < ((y : ℂ) * star (apm_t01a04_sheetPoint i : ℂ)).re) :
+    x = y := by
+  have hsq' : (x : ℂ) ^ 2 = (y : ℂ) ^ 2 := congrArg Subtype.val hsq
+  rcases (sq_eq_sq_iff_eq_or_eq_neg).mp hsq' with h | h
+  · exact Subtype.ext h
+  · exfalso
+    have hxy :
+        ((x : ℂ) * star (apm_t01a04_sheetPoint i : ℂ)).re =
+          -((y : ℂ) * star (apm_t01a04_sheetPoint i : ℂ)).re := by
+      rw [h]
+      simp
+    linarith
+
 /-- On each sheet the cover map is a homeomorphism onto `U` (inverse: square
 root on the arc around `sheetPoint i`, identity on circle sheet `i`). -/
 lemma apm_t01A04_tbp_sheet_homeomorph (i : Fin 2) :
