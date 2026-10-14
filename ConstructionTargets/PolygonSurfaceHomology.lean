@@ -318,6 +318,51 @@ theorem outerHomotopyEquivWedge_skeleton (P : PairingData) (z : P.skeleton) :
     ((punctureDeformationRetract P).fixed 1 (skeletonToOuter P z)
       ((mem_outerBoundarySkeleton_iff P (skeletonToOuter P z)).mpr z.2))
 
+/-! ### The ordered polygon boundary loop -/
+
+/-- The unit circle regarded as the boundary of the polygon disk. -/
+def circleToPolygonDisk (z : Circle) : ConstructionTargets.Surfaces.Disk :=
+  ⟨(z : ℂ), by
+    rw [Metric.mem_closedBall, dist_zero_right, Circle.norm_coe]⟩
+
+theorem continuous_circleToPolygonDisk : Continuous circleToPolygonDisk :=
+  continuous_subtype_val.subtype_mk _
+
+/-- The positively oriented geometric boundary circle, with its image
+remembered as a point of the quotient boundary skeleton. -/
+def polygonBoundarySkeletonLoop (P : PairingData) : C(Circle, P.skeleton) where
+  toFun z :=
+    ⟨P.quotientMap (circleToPolygonDisk z),
+      ⟨circleToPolygonDisk z, by
+        change ‖(z : ℂ)‖ = 1
+        exact Circle.norm_coe z, rfl⟩⟩
+  continuous_toFun := by
+    apply Continuous.subtype_mk
+    exact P.continuous_quotientMap.comp continuous_circleToPolygonDisk
+
+/-- The ordered boundary loop in the fixed orbit-indexed wedge coordinates. -/
+noncomputable def polygonBoundaryWedgeLoop (P : PairingData) :
+    C(Circle,
+      PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge
+        (PairingOrbit P.pair)) :=
+  (⟨P.skeletonHomeomorphWedge, P.skeletonHomeomorphWedge.continuous⟩ :
+    C(P.skeleton,
+      PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge
+        (PairingOrbit P.pair))).comp (polygonBoundarySkeletonLoop P)
+
+/-- On the `i`th polygon interval the ordered boundary loop is exactly the
+signed wedge arc fixed by the pairing data. -/
+theorem polygonBoundaryWedgeLoop_edgePoint (P : PairingData)
+    (i : Fin P.edgeCount) (t : Set.Icc (0 : ℝ) 1) :
+    polygonBoundaryWedgeLoop P
+        (PolygonSurfacePiOne.edgePointCircle P.edgeCount i t) =
+      P.signedWedgeArc i t := by
+  change P.skeletonHomeomorphWedge
+      (polygonBoundarySkeletonLoop P
+        (PolygonSurfacePiOne.edgePointCircle P.edgeCount i t)) = _
+  rw [← P.skeletonHomeomorphWedge_skeletonArc i t]
+  congr 1
+
 /-! ### Degree zero of a finite circle wedge -/
 
 /-- Every nonempty indexed wedge of circles is path connected.  The proof
