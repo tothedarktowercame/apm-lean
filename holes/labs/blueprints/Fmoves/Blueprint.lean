@@ -137,9 +137,74 @@ def crosscapTwoWord : List (Signed KleinLabel) :=
   [(.a, true), (.a, true), (.b, true), (.b, true)]
 
 /-- Compare the word `aabb` with `SurfaceRel false 2`. -/
+lemma crosscapTwo_bridge_aux_surface_to_word {x y : Disk}
+    (h : SurfaceRel false 2 x y) : WordRel crosscapTwoWord x y := by
+  simp only [SurfaceRel, Bool.false_eq_true, ↓reduceIte] at h
+  rcases h with ⟨j, hj, t, rfl, rfl⟩
+  interval_cases j
+  · change WordRel
+      [(KleinLabel.a, true), (KleinLabel.a, true),
+       (KleinLabel.b, true), (KleinLabel.b, true)] _ _
+    refine ⟨0, 1, by decide, t, ?_, rfl, ?_⟩
+    · rfl
+    · rfl
+  · change WordRel
+      [(KleinLabel.a, true), (KleinLabel.a, true),
+       (KleinLabel.b, true), (KleinLabel.b, true)] _ _
+    refine ⟨2, 3, by decide, t, ?_, rfl, ?_⟩
+    · rfl
+    · rfl
+
+lemma crosscapTwo_bridge_aux_word_to_surface {x y : Disk}
+    (h : WordRel crosscapTwoWord x y) :
+    Relation.EqvGen (SurfaceRel false 2) x y := by
+  rcases h with ⟨i, j, hij, t, hlabel, rfl, rfl⟩
+  fin_cases i <;> fin_cases j
+  all_goals simp [crosscapTwoWord] at hij hlabel ⊢
+  · exact Relation.EqvGen.rel _ _ ⟨0, by omega, t, rfl, rfl⟩
+  · exact Relation.EqvGen.symm _ _
+      (Relation.EqvGen.rel _ _ ⟨0, by omega, t, rfl, rfl⟩)
+  · exact Relation.EqvGen.rel _ _ ⟨1, by omega, t, rfl, rfl⟩
+  · exact Relation.EqvGen.symm _ _
+      (Relation.EqvGen.rel _ _ ⟨1, by omega, t, rfl, rfl⟩)
+
+lemma crosscapTwo_bridge_aux_eqv (x y : Disk) :
+    Relation.EqvGen (WordRel crosscapTwoWord) x y ↔
+      Relation.EqvGen (SurfaceRel false 2) x y := by
+  constructor
+  · intro h
+    induction h with
+    | rel x y h => exact crosscapTwo_bridge_aux_word_to_surface h
+    | refl x => exact Relation.EqvGen.refl x
+    | symm x y _ ih => exact Relation.EqvGen.symm _ _ ih
+    | trans x y z _ _ ih₁ ih₂ => exact Relation.EqvGen.trans _ _ _ ih₁ ih₂
+  · intro h
+    induction h with
+    | rel x y h =>
+        exact Relation.EqvGen.rel _ _ (crosscapTwo_bridge_aux_surface_to_word h)
+    | refl x => exact Relation.EqvGen.refl x
+    | symm x y _ ih => exact Relation.EqvGen.symm _ _ ih
+    | trans x y z _ _ ih₁ ih₂ => exact Relation.EqvGen.trans _ _ _ ih₁ ih₂
+
+def crosscapTwo_bridge_aux_equiv :
+    PolygonSurface crosscapTwoWord ≃ Surface false 2 :=
+  Quotient.congrRight crosscapTwo_bridge_aux_eqv
+
 theorem crosscapTwo_bridge :
     Nonempty (PolygonSurface crosscapTwoWord ≃ₜ Surface false 2) := by
-  sorry
+  refine ⟨{ toEquiv := crosscapTwo_bridge_aux_equiv
+            continuous_toFun := ?_
+            continuous_invFun := ?_ }⟩
+  · apply isQuotientMap_quotient_mk'.continuous_iff.mpr
+    change Continuous (fun x : Disk =>
+      crosscapTwo_bridge_aux_equiv (Quotient.mk _ x))
+    simpa [crosscapTwo_bridge_aux_equiv] using
+      (continuous_surfaceQuotient false 2)
+  · apply isQuotientMap_quotient_mk'.continuous_iff.mpr
+    change Continuous (fun x : Disk =>
+      crosscapTwo_bridge_aux_equiv.symm (Quotient.mk _ x))
+    simpa [crosscapTwo_bridge_aux_equiv] using
+      (continuous_polygonQuotient crosscapTwoWord)
 
 /-- Klein consumer: bridge, word slide, and standard-target bridge. -/
 theorem kleinSquare_assembly
