@@ -31,29 +31,67 @@ LIBRARY obligation below.
 
 ## Remaining lemmas
 
-### `t93A06_torusAtlas` — LIBRARY
+### `t93A06_torusAtlas_aux_quotient_charts` — LIBRARY
 
-**Statement.** `SmoothAtlas` is nonempty: there is a charted structure on
-`(AddCircle 1)²` making it a smooth two-manifold and making the actual
-coordinate quotient projection a local diffeomorphism.
+**Statement.** There is a `ChartedSpace Plane Torus` for which the actual map
+`projection : Plane → Torus` is an `IsLocalDiffeomorph`.
 
-**Why true.** Give each circle the standard quotient charts obtained by
-choosing a lift on an interval shorter than one, take product charts, and use
-the local lift as the inverse of `projection`.  Transition maps differ by
-locally constant integer translations and hence are smooth.  This is the exact
-`SmoothAtlas` interface already requested by the topology worklist under
-`torusAtlas`.
+**Proof plan.** For a lift `a : Plane`, restrict `projection` to the open box
+`Set.pi Set.univ (fun i ↦ Set.Ioo (a i - 1/4) (a i + 1/4))`.  Prove injectivity
+with `AddCircle.coe_eq_zero_iff` (the difference is an integer of absolute
+value `< 1`), and prove openness using the quotient-map/open-map API for
+`QuotientAddGroup.mk`.  Turn the restriction into an
+`OpenPartialHomeomorph`; use these maps as the atlas in `ChartedSpace.mk`.
+On an overlap, equality in the quotient gives an integer vector `k`; on each
+connected box component the transition is `x ↦ x + k`.  Discharge smoothness
+with `contDiff_const.add contDiff_id` / `ContDiff.contDiffOn`, and build the
+pointwise local diffeomorphism using `LocalDiffeomorph` and
+`IsLocalDiffeomorphAt` constructors.  The closest worked model is
+`apm_t00j01_klein_local_chart`, especially its `Set.InjOn`, `IsOpenMap`, and
+`Equiv.Set.imageOfInjOn`/`toHomeomorphOfContinuousOpen` steps.  Useful Mathlib
+facts include `QuotientAddGroup.mk_surjective`, `AddCircle.coe_sub`,
+`AddCircle.coe_eq_zero_iff`, `ChartedSpace.mk`, `isOpen_Ioo`, and
+`IsOpenMap.restrict`.
 
-**Expected size.** 300–600 lines.  This is intentionally one LIBRARY program,
-not several fake short lemmas; the atlas, manifold proof, and local-
-diffeomorphism certificate share the same chart construction.
+**Expected size.** 120–150 lines after factoring the coordinate arguments as
+local `have`s.  It is independent of the manifold-coverage seat below.
 
-**Dependencies.** Definitions only.
+**Truth check.** Width `1/2` is strictly below the period `1`, so no two points
+of a box differ by a nonzero lattice vector.  Boxes are nonempty at every
+lift, including representatives lying on a conventional fundamental-square
+boundary; charts are centered at the lift, so there is no endpoint case.
+Dimension is fixed at `Fin 2`, and the translation derivative is the identity,
+so there is no sign convention.
 
-**Truth check.** On each factor, the quotient map restricted to
-`(a-1/2,a+1/2)` is injective and has a continuous inverse onto its image.  The
-product of two such neighborhoods supplies the required local inverse at every
-point; there is no endpoint case because the chart center can be moved.
+### `t93A06_torusAtlas_aux_manifold_of_localDiffeomorph` — LIBRARY
+
+**Statement.** For an arbitrary candidate `charts`, if the surjective
+`projection` is locally a diffeomorphism, then those charts make `Torus` an
+`IsManifold`.
+
+**Proof plan.** At `z : Torus`, choose `x` with `projection x = z` using
+`t93A06_periodic_form_descent_aux_projection_surjective`'s two-line argument
+(or directly, coordinatewise `QuotientAddGroup.mk_surjective`).  Apply
+`hlocal x`; its local diffeomorphism supplies a chart neighborhood of `z` and
+the required model-range condition.  Transfer the source-plane manifold
+property across that local diffeomorphism.  Search/use the Mathlib lemmas
+around `IsLocalDiffeomorphAt.isManifold` and
+`IsManifold.of_surjective`; if the packaged theorem is absent, unfold
+`IsManifold` and use the target/source and `range` fields of the local
+diffeomorphism.
+
+**Expected size.** 30–70 lines.  Independent: `charts` and the local-
+diffeomorphism conclusion are explicit hypotheses, so this lemma's axioms do
+not include the chart-construction sorry.
+
+**Truth check.** Surjectivity prevents a vacuous target point.  The source is
+the nonempty two-dimensional plane, and every target point has a chosen lift.
+
+### `t93A06_torusAtlas` — assembly (sorry-free)
+
+Obtains `charts, hlocal` from the chart-construction leaf, applies the manifold
+leaf with `hlocal` as an explicit argument, and fills the two fields of
+`SmoothAtlas`.  This is deliberately only structure assembly.
 
 ### `t93A06_projection_fibers`
 

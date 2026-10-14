@@ -11,10 +11,35 @@ open scoped Manifold ContDiff
 open ConstructionTargets.ManifoldFormTargets ConstructionTargets.TorusFormTargets
 noncomputable section
 
-/-- LIBRARY: the coordinatewise quotient by `ℤ²` has a smooth atlas for which
-the actual projection is a local diffeomorphism. -/
-theorem t93A06_torusAtlas : Nonempty SmoothAtlas := by
+/-- LIBRARY (chart construction): construct quotient charts for which the
+actual coordinate projection is locally a diffeomorphism.  This is separated
+from the manifold-coverage argument below. -/
+theorem t93A06_torusAtlas_aux_quotient_charts :
+    ∃ charts : ChartedSpace Plane Torus,
+      letI := charts
+      IsLocalDiffeomorph 𝓘(ℝ,Plane) 𝓘(ℝ,Plane) ∞ projection := by
   sorry
+
+/-- LIBRARY (atlas coverage): a charted structure on the quotient for which
+the surjective projection from the plane is locally a diffeomorphism is a
+smooth two-manifold.  Its input is explicit, so this seat does not depend on
+the sorry proving `t93A06_torusAtlas_aux_quotient_charts`. -/
+theorem t93A06_torusAtlas_aux_manifold_of_localDiffeomorph
+    (charts : ChartedSpace Plane Torus)
+    (hlocal : letI := charts
+      IsLocalDiffeomorph 𝓘(ℝ,Plane) 𝓘(ℝ,Plane) ∞ projection) :
+    letI := charts
+    IsManifold 𝓘(ℝ,Plane) ∞ Torus := by
+  sorry
+
+/-- The two independent quotient-chart conclusions assemble into the target
+atlas structure. -/
+theorem t93A06_torusAtlas : Nonempty SmoothAtlas := by
+  obtain ⟨charts, hlocal⟩ := t93A06_torusAtlas_aux_quotient_charts
+  letI := charts
+  exact ⟨⟨charts,
+    t93A06_torusAtlas_aux_manifold_of_localDiffeomorph charts hlocal,
+    hlocal⟩⟩
 
 /-- The fibres of the printed quotient projection are precisely integer
 translates. -/
