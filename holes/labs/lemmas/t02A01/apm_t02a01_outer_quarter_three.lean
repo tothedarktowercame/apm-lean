@@ -877,7 +877,50 @@ theorem apm_t02a01_outer_quarter_two (hr : Continuous apm_t02a01_radialPt)
 theorem apm_t02a01_outer_quarter_three (hr : Continuous apm_t02a01_radialPt)
     (t : unitInterval) (ht0 : 1 / 2 ≤ (t : ℝ)) (ht1 : (t : ℝ) ≤ 3 / 4) :
     apm_t02a01_outerLoop hr t = apm_t02a01_edgeA (3 - 4 * t) := by
-  sorry
+  have hx : 3 - 4 * (t : ℝ) ∈ Set.Icc (0 : ℝ) 1 := by
+    constructor <;> linarith
+  have hq :
+      (Quotient.mk _ ⟨(3 - 4 * (t : ℝ), (0 : ℝ)),
+        ⟨hx, by norm_num, by norm_num [Prod.norm_def]⟩⟩ :
+          apm_t02a01_puncturedTorus) =
+      Quotient.mk _ ⟨(3 - 4 * (t : ℝ), (1 : ℝ)),
+        ⟨hx, by norm_num, by norm_num [Prod.norm_def]⟩⟩ :=
+    Quotient.sound (Relation.EqvGen.rel _ _
+      (apm_t02a01_edgeRel.vertical (3 - 4 * (t : ℝ)) hx
+        (by norm_num [Prod.norm_def]) (by norm_num [Prod.norm_def])))
+  have hc0 : apm_t02a01_clamp01 (4 * (t : ℝ)) = 1 := by
+    unfold apm_t02a01_clamp01
+    rw [min_eq_left (by linarith), max_eq_right] <;> norm_num
+  have hc1 : apm_t02a01_clamp01 (4 * (t : ℝ) - 1) = 1 := by
+    unfold apm_t02a01_clamp01
+    rw [min_eq_left (by linarith), max_eq_right] <;> norm_num
+  have hc2 : apm_t02a01_clamp01 (4 * (t : ℝ) - 2) = 4 * (t : ℝ) - 2 := by
+    unfold apm_t02a01_clamp01
+    rw [min_eq_right (by linarith), max_eq_right (by linarith)]
+  have hc3 : apm_t02a01_clamp01 (4 * (t : ℝ) - 3) = 0 := by
+    unfold apm_t02a01_clamp01
+    rw [max_eq_left]
+    linarith [min_le_right 1 (4 * (t : ℝ) - 3)]
+  have htop : apm_t02a01_outerLoop hr t =
+        Quotient.mk _ ⟨(3 - 4 * (t : ℝ), (1 : ℝ)),
+          ⟨hx, by norm_num, by norm_num [Prod.norm_def]⟩⟩ := by
+    change apm_t02a01_radialPt (1, t) = _
+    unfold apm_t02a01_radialPt
+    congr 1
+    apply Subtype.ext
+    simp only [apm_t02a01_radial, apm_t02a01_perimeter, hc0, hc1, hc2, hc3]
+    norm_num <;> ring
+  have hedge :
+      (Quotient.mk _ ⟨(3 - 4 * (t : ℝ), (0 : ℝ)),
+        ⟨hx, by norm_num, by norm_num [Prod.norm_def]⟩⟩ :
+          apm_t02a01_puncturedTorus) =
+      apm_t02a01_edgeA (3 - 4 * (t : ℝ)) := by
+    unfold apm_t02a01_edgeA
+    congr 1
+    apply Subtype.ext
+    simp only [Prod.mk.injEq, and_true]
+    rw [min_eq_right hx.2, max_eq_right hx.1]
+  exact htop.trans (hq.symm.trans hedge)
 -- END SEAT AREA
 
 theorem apm_t02a01_outer_quarter_four (hr : Continuous apm_t02a01_radialPt)
