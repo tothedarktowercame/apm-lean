@@ -6577,6 +6577,38 @@ theorem genericPointWedgeOuterRightComparison_rightProjection_eq_normalForms :
     x₀ y₀ _)]
   rfl
 
+/-- The forward outer-right comparison itself lies in the right coproduct
+factor, with coordinate given by the same ordered normal-form product as its
+right projection. -/
+theorem genericPointWedgeOuterRightComparison_eq_inr_normalForms :
+    let r := genericPointWedgeActualRight x₀ y₀ M N
+    let r' := genericPointWedgeCoordinateRight y₀
+    let eK := genericPointWedgeOverlapGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let eR := genericPointWedgeRightGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let aR := genericPointWedgeRightSpanIso
+      x₀ y₀ M N hM hN hy hx cM cN
+    let Q := genericPointWedgeIdentityCoordinateSpan x₀ y₀
+    let z := genericPointWedgeOverlapBase x₀ y₀ M N
+    (reverseRightComparison r r' eK eR aR Q.right).hom.app z =
+      (Monoid.Coprod.inr
+        ((genericPointWedgeConnectors y₀).normalForm
+            (aR.inv.app (eK.functor.obj z)) *
+          (genericPointWedgeConnectors y₀).normalForm
+            ((eK.funInvIdAssoc (r ⋙ eR.functor)).hom.app z)) :
+        genericPointWedgeFreeProduct x₀ y₀) := by
+  dsimp only
+  simp only [genericPointWedgeOverlapBase]
+  rw [genericPointWedgeIdentityOuterRightComparison_app,
+    genericPointWedgeIdentityOuterRightSpanFactor_eq_map,
+    genericPointWedgeIdentityOuterRightRoundTrip_eq_map]
+  simp only [SingleObj.comp_as_mul]
+  rw [eq_of_heq (genericPointWedgeIdentityCoordinateSpan_right_map
+    x₀ y₀ _), eq_of_heq (genericPointWedgeIdentityCoordinateSpan_right_map
+    x₀ y₀ _)]
+  exact (Monoid.Coprod.inr.map_mul _ _).symm
+
 /-- Expand the overlap round-trip factor in the projected forward-right
 comparison into its endpoint connectors and component.  Together with the
 existing expansion of the inverse span factor, this exposes the exact six
@@ -7887,6 +7919,51 @@ theorem genericPointWedgeRightBase_rightProjection_eq_one :
   simpa using genericPointWedgeRightLeg_overlap_connectorSquare
     x₀ y₀ M N hM hN hy hx cM cN
 
+/-- The forward outer-right comparison is the unit: it lies in the right
+factor, and its right coordinate is the already trivial projection of the
+global base-change element. -/
+theorem genericPointWedgeOuterRightComparison_eq_one :
+    let r := genericPointWedgeActualRight x₀ y₀ M N
+    let r' := genericPointWedgeCoordinateRight y₀
+    let eK := genericPointWedgeOverlapGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let eR := genericPointWedgeRightGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let aR := genericPointWedgeRightSpanIso
+      x₀ y₀ M N hM hN hy hx cM cN
+    let Q := genericPointWedgeIdentityCoordinateSpan x₀ y₀
+    let z := genericPointWedgeOverlapBase x₀ y₀ M N
+    (reverseRightComparison r r' eK eR aR Q.right).hom.app z =
+      (1 : genericPointWedgeFreeProduct x₀ y₀) := by
+  dsimp only
+  rw [genericPointWedgeOuterRightComparison_eq_inr_normalForms]
+  have hp := genericPointWedgeRightBase_rightProjection_eq_outerRight
+    x₀ y₀ M N hM hN hy hx cM cN
+  have ho := genericPointWedgeRightBase_rightProjection_eq_one
+    x₀ y₀ M N hM hN hy hx cM cN
+  have hn := genericPointWedgeOuterRightComparison_rightProjection_eq_normalForms
+    x₀ y₀ M N hM hN hy hx cM cN
+  dsimp only at hp ho hn
+  have hcoord :
+      (genericPointWedgeConnectors y₀).normalForm
+          ((genericPointWedgeRightSpanIso
+            x₀ y₀ M N hM hN hy hx cM cN).inv.app
+              ((genericPointWedgeOverlapGroupoidEquivalence
+                x₀ y₀ M N hM hN hy hx cM cN).functor.obj
+                  (genericPointWedgeOverlapBase x₀ y₀ M N))) *
+        (genericPointWedgeConnectors y₀).normalForm
+          (((genericPointWedgeOverlapGroupoidEquivalence
+            x₀ y₀ M N hM hN hy hx cM cN).funInvIdAssoc
+              (genericPointWedgeActualRight x₀ y₀ M N ⋙
+                (genericPointWedgeRightGroupoidEquivalence
+                  x₀ y₀ M N hM hN hy hx cM cN).functor)).hom.app
+                    (genericPointWedgeOverlapBase x₀ y₀ M N)) = 1 := by
+    rw [← hn, ← hp]
+    exact ho
+  rw [hcoord]
+  exact (Monoid.Coprod.inr
+    (M := genericPointWedgeLeftGroup x₀)).map_one
+
 /-- An `inl` factorization of the right-base conjugator forces its canonical
 right projection to be trivial. -/
 theorem genericPointWedgeRightBase_inl_implies_rightProjection_eq_one
@@ -8670,5 +8747,7 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeCoherentRightSourceConnectors_unitInv_of_counit_normalForm
 #print axioms genericPointWedgeRightLeg_overlap_connectorSquare
 #print axioms genericPointWedgeRightBase_rightProjection_eq_one
+#print axioms genericPointWedgeOuterRightComparison_eq_inr_normalForms
+#print axioms genericPointWedgeOuterRightComparison_eq_one
 
 end ConstructionTargets.PointWedgeVanKampen

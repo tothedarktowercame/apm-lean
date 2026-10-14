@@ -1531,3 +1531,13 @@ connector law proves the required square directly.
 banked projection criterion and proves that the B3 base-change element has
 trivial right-factor projection. The remaining B6 step is the coproduct
 kernel statement extracting an `inl` factor from this equality.
+The kernel implication is false for a general free-product element: the
+kernel also contains conjugates of left-factor elements.
+`genericPointWedgeOuterRightComparison_eq_inr_normalForms` instead records
+the special representation available here—the forward outer-right comparison
+is itself a right injection.
+`genericPointWedgeOuterRightComparison_eq_one` combines that representation
+with the trivial global right projection, proving that this whole comparison
+is the unit. It remains to express the inverse outer-left comparison as an
+`inl`; the global comparison formula will then give the required B6
+factorization directly.
