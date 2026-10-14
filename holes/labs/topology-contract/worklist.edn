@@ -119066,19 +119066,19 @@
   {:consumer :t00J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
     :residual
-    "Build transversality-to-local-degree producer; assemble Main.",
+    "Match local/component degrees; prove signed-count formula; assemble Main.",
     :outcome :stop,
     :warnings ["Main sorryAx"],
     :missing-theorems
-    [{:name "transverse_coprodDerivative_surjective",
-      :type "range-sum implies coproduct derivative surjective",
+    [{:name "regularFiber_zeroDegreeComponentLifts",
+      :type "zero-degree lift at each fiber point",
       :status :proved,
       :consumers [:t00J02],
-      :depends-on [],
+      :depends-on ["transverseCircle_preimage_component_signedCount"],
       :area "oriented-surface-degree"}
      {:name "t00J02_transverse_diskBounded_topHomologyMap_eq_zero",
       :type "H2 map zero",
@@ -119086,14 +119086,14 @@
       :consumers [:t00J02],
       :depends-on
       ["regularValue_topHomologyMap_signedCount"
-       "transverseCircle_preimage_component_signedCount"
-       "transverse_coprodDerivative_surjective"],
+       "regularFiber_zeroDegreeComponentLifts"
+       "topHomologyMap_eq_zero_of_regularValue_signedCount"],
       :area "oriented-surface-degree"}],
     :statement-hashes
     {:source
      "0b3b4888807bfa06c8d60d86829b75776394ea8aa45a98c933c087165521f923",
      :implementation
-     "997a7ddf8c233a462fd5c4b2def40e0b64dcbf3e37f10719bc3fe36b23421de4",
+     "f2423049f27a21ce0867b0c3fad2649751e6c1199f8fcd47fefed7032da6c9a1",
      :blueprint
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984",
      :registry "166/166"},
@@ -119101,7 +119101,7 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-2,
     :reason
-    "Banked range-sum to derivative surjectivity; local-degree producer remains.",
+    "Banked zero-degree fiber choices; local-degree formula remains.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t00J02Closure.lean",
       :exit 0}
@@ -119109,8 +119109,8 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "sha256/diff/placeholders", :exit 0}],
     :diagnostic-history
-    [{:cmd "derivative draft", :exit 1, :finding "named model alias"}],
-    :commit "73619740810c1756f3393d9af33542e7eb5a7109",
+    [{:cmd "choice draft", :exit 1, :finding "used Classical.choose"}],
+    :commit "72ea7906636c48bcf45ac21c24cea72cf7b653a4",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t00J02Closure.blueprint.md",
@@ -119118,7 +119118,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119326,7 +119326,8 @@
     :lemma-surfacetophomologymap-eq-zero-of-surfacetopdegree-eq-zero
     :lemma-tophomologymap-eq-zero-of-regularvalue-signedcount
     :lemma-finite-regularfiber-of-isdiscrete
-    :lemma-transverse-coprodderivative-surjective],
+    :lemma-transverse-coprodderivative-surjective
+    :lemma-regularfiber-zerodegreecomponentlifts],
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
@@ -119563,6 +119564,24 @@
    :id :lemma-t98a06-compact-circle-fibers-diffeomorphic,
    :kind :lemma,
    :depends-on [:lemma-t98a06-global-vectorfield-lift],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "regularFiber_zeroDegreeComponentLifts",
+    :type "zero-degree lift at each fiber point"},
+   :lemma
+   {:name "regularFiber_zeroDegreeComponentLifts",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type "zero-degree lift at each fiber point",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02},
+   :id :lemma-regularfiber-zerodegreecomponentlifts,
+   :kind :lemma,
+   :depends-on
+   [:lemma-transversecircle-preimage-component-signedcount],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
