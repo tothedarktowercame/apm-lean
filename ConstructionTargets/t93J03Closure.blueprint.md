@@ -488,8 +488,11 @@ block's target vertex literally as well.
 identifies that target with outer boundary `i.succ`, and
 `pathTwoOpenSubdivisionOuterRunBoundaryFamily_castSucc_eq_runBlockPoint_zero`
 identifies the source with outer boundary `i`. Thus each indexed block now
-has the exact dependent endpoints needed for
-choosing the inner-replaced or literal
+has the exact dependent endpoints needed for representative selection.
+`pathTwoOpenSubdivisionRunBlockPiece_mem_chart` additionally transports the
+run's uniform chart certificate to the dependent block family, so the next
+step can apply the existing inner-replacement or literal-outer constructors,
+choosing the corresponding
 outer representative for each indexed run against the boundary family and
 instantiate the fold
 before extracting based surjectivity and the reverse kernel inclusion.

@@ -1449,6 +1449,49 @@ noncomputable def pathTwoOpenSubdivisionRunBlockPiece
       rw [pathTwoOpenSubdivisionRunPredLength_add_one]
       exact pathTwoOpenSubdivisionRunStart_add_length_le S i)
 
+/-- Reindexing a maximal run as a dependent block preserves its uniform
+chart-range certificate.  This is the final range input needed to choose the
+literal outer path or the inner-to-outer replacement for the run. -/
+theorem pathTwoOpenSubdivisionRunBlockPiece_mem_chart
+    {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
+    {U V : Set X} (S : PathTwoOpenSubdivision p U V)
+    (i : Fin (boolSideRunPartition S.side).length) :
+    ∀ k t, pathTwoOpenSubdivisionRunBlockPiece S i k t ∈
+      twoChart U V (S.side ((pathTwoOpenSubdivisionRunFamily S i).head
+        (pathTwoOpenSubdivisionRunFamily_ne_nil S i))) := by
+  intro k t
+  have hlen := pathTwoOpenSubdivisionRunPredLength_add_one S i
+  have hbound := pathTwoOpenSubdivisionRunStart_add_length_le S i
+  unfold pathTwoOpenSubdivisionRunBlockPiece
+  change S.piece ⟨pathTwoOpenSubdivisionRunStart S i + k, by omega⟩ t ∈ _
+  apply pathTwoOpenSubdivisionRunFamily_piece_mem_chart S i
+  let j : Fin (S.n + 1) :=
+    ⟨pathTwoOpenSubdivisionRunStart S i + k, by omega⟩
+  let kr : Fin (pathTwoOpenSubdivisionRunFamily S i).length :=
+    ⟨k, by omega⟩
+  have hm : (pathTwoOpenSubdivisionRunFamily S i).get kr ∈
+      pathTwoOpenSubdivisionRunFamily S i := List.get_mem _ _
+  have heq := congrArg (fun l => l[k.val]?)
+    (pathTwoOpenSubdivisionRunFamily_eq_slice S i)
+  have hleft : (pathTwoOpenSubdivisionRunFamily S i)[k.val]? =
+      some ((pathTwoOpenSubdivisionRunFamily S i).get kr) := by
+    rw [List.getElem?_eq_getElem (by exact kr.isLt)]
+    rfl
+  have hright : (((List.finRange (S.n + 1)).drop
+      (pathTwoOpenSubdivisionRunStart S i)).take
+        (pathTwoOpenSubdivisionRunFamily S i).length)[k.val]? = some j := by
+    dsimp [j]
+    rw [List.getElem?_eq_getElem (by simp; omega)]
+    apply congrArg some
+    apply Fin.ext
+    simp
+  dsimp at heq
+  rw [hleft, hright] at heq
+  have hj : (pathTwoOpenSubdivisionRunFamily S i).get kr = j :=
+    Option.some.inj heq
+  have hjmem : j ∈ pathTwoOpenSubdivisionRunFamily S i := hj ▸ hm
+  exact hjmem
+
 /-- The selected block begins at the literal source vertex of its indexed
 maximal run. -/
 theorem pathTwoOpenSubdivisionRunBlockPoint_zero
