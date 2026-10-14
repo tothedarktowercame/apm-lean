@@ -1021,6 +1021,65 @@ and last entries, while all intermediate entries come from overlap changes. -/
   simp only [List.getLast_attach]
   simpa [hlast]
 
+/-- The target of every maximal run lies in the outer set, provided the final
+subdivision vertex does.  A nonfinal run is followed by another run, so its
+target is their certified overlap boundary; the final run uses the endpoint
+identity above. -/
+theorem pathTwoOpenSubdivision_runTarget_mem_outer
+    {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
+    {U V : Set X} (S : PathTwoOpenSubdivision p U V)
+    (hy : S.point (Fin.last (S.n + 1)) ∈ V)
+    (block : List (Fin (S.n + 1)))
+    (hb : block ∈ boolSideRunPartition S.side) :
+    S.point (block.getLast (fun h =>
+      (boolSideRunPartition_spec S.side).2.1 (h ▸ hb))).succ ∈ V := by
+  obtain ⟨pre, suffix, hsplit⟩ := List.mem_iff_append.mp hb
+  cases suffix with
+  | nil =>
+      obtain ⟨hr, _, hlast⟩ := boolSideRunPartition_end_indices S.side
+      have hne : block ≠ [] := fun h =>
+        (boolSideRunPartition_spec S.side).2.1 (h ▸ hb)
+      have hout : (boolSideRunPartition S.side).getLast hr = block := by
+        calc
+          _ = (pre ++ [block]).getLast (by simp) :=
+            List.getLast_congr hr (by simp) hsplit
+          _ = block := List.getLast_append_singleton pre
+      have hneLast : (boolSideRunPartition S.side).getLast hr ≠ [] :=
+        fun h => (boolSideRunPartition_spec S.side).2.1
+          (h ▸ List.getLast_mem hr)
+      have hidx : block.getLast hne = Fin.last S.n := by
+        calc
+          _ = ((boolSideRunPartition S.side).getLast hr).getLast hneLast :=
+            List.getLast_congr hne hneLast hout.symm
+          _ = _ := hlast
+      simpa [hidx] using hy
+  | cons next rest =>
+      have hadj := (List.isChain_iff_forall_rel_of_append_cons_cons.mp
+        (pathTwoOpenSubdivision_runPartition_boundary_spec S)) hsplit
+      have hs := hadj
+        (fun h => (boolSideRunPartition_spec S.side).2.1 (h ▸ hb))
+        (fun h => (boolSideRunPartition_spec S.side).2.1 (by
+          rw [hsplit]
+          simp [h]))
+      rw [hs.1]
+      exact hs.2.2
+
+/-- With outer endpoints, every entry of the canonical run-boundary list lies
+in the outer set.  This is exactly the pointwise proof needed to lift the
+ambient list to the outer subtype. -/
+theorem pathTwoOpenSubdivisionRunBoundaryPoints_mem_outer
+    {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
+    {U V : Set X} (S : PathTwoOpenSubdivision p U V)
+    (hx : S.point 0 ∈ V)
+    (hy : S.point (Fin.last (S.n + 1)) ∈ V) :
+    ∀ z ∈ pathTwoOpenSubdivisionRunBoundaryPoints S, z ∈ V := by
+  intro z hz
+  simp only [pathTwoOpenSubdivisionRunBoundaryPoints, List.mem_cons,
+    List.mem_map] at hz
+  rcases hz with rfl | ⟨block, _, rfl⟩
+  · exact hx
+  · exact pathTwoOpenSubdivision_runTarget_mem_outer S hy block.1 block.2
+
 /-- Every member of a maximal Boolean side run has the side recorded at its
 head.  This turns the local chain certificate returned by `splitBy` into the
 pointwise fact needed to package a whole subdivision block. -/
@@ -2538,6 +2597,8 @@ theorem lift_isEmbedding_assembly
 #print axioms pathTwoOpenSubdivisionRunBoundaryPoints_length
 #print axioms pathTwoOpenSubdivisionRunBoundaryPoints_head
 #print axioms pathTwoOpenSubdivisionRunBoundaryPoints_getLast
+#print axioms pathTwoOpenSubdivision_runTarget_mem_outer
+#print axioms pathTwoOpenSubdivisionRunBoundaryPoints_mem_outer
 #print axioms boolSideRunPartition_mem_side_eq_head
 #print axioms boolSideRunPartition_isInfix_finRange
 #print axioms boolSideRunPartition_exists_slice

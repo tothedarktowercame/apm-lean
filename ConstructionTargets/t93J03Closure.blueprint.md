@@ -458,9 +458,13 @@ endpoint family for the outer fold. The ambient family is now concretely
 `pathTwoOpenSubdivisionRunBoundaryPoints`: subdivision point zero followed by
 the target of each attached maximal run, with length exactly one more than the
 run count and literal initial point. Its last entry is now also proved to be
-the final subdivision vertex.  It remains to prove the intermediate entries
-outer from the overlap chain and lift this list to the outer subtype before
-extracting based surjectivity and the reverse kernel inclusion.
+the final subdivision vertex. `pathTwoOpenSubdivision_runTarget_mem_outer`
+splits each run into final or followed cases, using that final identity or the
+adjacent overlap certificate; consequently
+`pathTwoOpenSubdivisionRunBoundaryPoints_mem_outer` proves every boundary
+outer when the two exterior endpoints are outer.  It remains to lift this
+list to the outer subtype and instantiate the fold before extracting based
+surjectivity and the reverse kernel inclusion.
 
 - Layer 1: C1, C3, and C4. C1 and C3 are independent; C4 is already complete.
 - Layer 2: C2 against the explicit C1 equivalence interface.
