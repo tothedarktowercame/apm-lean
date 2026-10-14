@@ -2436,7 +2436,59 @@ lemma mergeRepeatedBlock_aux_boundary_relation_aux_forward_aux_yz_aux_zpair
     (h₂ : circleToDisk c₂ = edgePoint (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t).length (u.length + 2 + v.length) (reverseParameter s)) :
     Relation.EqvGen (fun p q : Circle => WordRel (u ++ [a] ++ v ++ [inv a] ++ t) (circleToDisk p) (circleToDisk q))
       (g c₁) (g c₂) := by
-  sorry
+  let iz : Fin (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t).length :=
+    ⟨u.length + 1, by
+      simp only [List.length_append, List.length_cons, List.length_nil]
+      omega⟩
+  let iiz : Fin (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t).length :=
+    ⟨u.length + 2 + v.length, by
+      simp only [List.length_append, List.length_cons, List.length_nil]
+      omega⟩
+  let ia : Fin (u ++ [a] ++ v ++ [inv a] ++ t).length :=
+    ⟨u.length, by
+      simp only [List.length_append, List.length_cons, List.length_nil]
+      omega⟩
+  let iia : Fin (u ++ [a] ++ v ++ [inv a] ++ t).length :=
+    ⟨u.length + 1 + v.length, by
+      simp only [List.length_append, List.length_cons, List.length_nil]
+      omega⟩
+  obtain ⟨qz, hqz, hzmap⟩ := hg.on_z s
+  obtain ⟨qiz, hqiz, hizmap⟩ := hg.on_inv_z (reverseParameter s)
+  have hqiz' : qiz = reverseParameter qz := by
+    apply Subtype.ext
+    change qiz.1 = 1 - qz.1
+    rw [hqiz, hqz]
+    change (1 - s.1) / 2 = 1 - (1 + s.1) / 2
+    ring
+  have hc₁ : c₁ =
+      ⟨edgePoint (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t).length iz s,
+        by simpa [Circle, Submonoid.unitSphere] using
+          norm_edgePoint (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t).length iz s⟩ :=
+    mergeRepeatedBlock_aux_boundary_relation_aux_circleToDisk_injective (by
+      simpa [iz] using h₁)
+  have hc₂ : c₂ =
+      ⟨edgePoint (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t).length iiz
+          (reverseParameter s),
+        by simpa [Circle, Submonoid.unitSphere] using
+          norm_edgePoint (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t).length iiz
+            (reverseParameter s)⟩ :=
+    mergeRepeatedBlock_aux_boundary_relation_aux_circleToDisk_injective (by
+      simpa [iiz] using h₂)
+  rw [hc₁, hc₂]
+  apply Relation.EqvGen.rel
+  refine ⟨ia, iia, ?_, qz, ?_, ?_, ?_⟩
+  · intro he
+    have hv := congrArg Fin.val he
+    simp only [ia, iia, Fin.val_mk] at hv
+    omega
+  · simp [ia, iia, List.get_eq_getElem, inv, Nat.add_assoc,
+      show 1 + v.length = Nat.succ v.length by omega]
+  · simpa [ia, iz, List.length_append, Nat.add_assoc, Nat.add_comm,
+      Nat.add_left_comm] using congrArg circleToDisk hzmap
+  · simpa [ia, iia, iiz, hqiz', List.get_eq_getElem, List.length_append,
+      Nat.add_assoc, Nat.add_comm, Nat.add_left_comm, inv, reverseParameter,
+      show 1 + v.length = Nat.succ v.length by omega] using
+      congrArg circleToDisk hizmap
 
 /-- Forward generators for the `y` / `y⁻¹` and `z` / `z⁻¹` pairs: they land on the halves of `a` / `a⁻¹` (`hg.on_y/on_z/on_inv_z/on_inv_y`). -/
 lemma mergeRepeatedBlock_aux_boundary_relation_aux_forward_aux_yz
