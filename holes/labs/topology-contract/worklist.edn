@@ -119064,19 +119064,22 @@
    :depends-on [:lemma-apm-t91j06-bridge-compatible-stage-coordinates],
    :other-consumers []}
   {:consumer :t00J02,
-   :stop-count 5,
+   :stop-count 6,
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
     :residual
-    "Prove top-H2 regular-value signed-count identity; assemble Main.",
+    "Prove localization/regular-value signed-count identity, derive H2 map zero, assemble Main.",
     :outcome :stop,
-    :warnings ["existing Main sorryAx"],
+    :warnings
+    ["existing Main sorryAx"
+     "unrelated t93J03 worktree edits preserved"],
     :missing-theorems
-    [{:name "regularValue_topDegree_eq_zero_of_signedCount",
-      :type "signed count of zero component degrees is zero",
+    [{:name "surfaceTopDegree_eq_homologyMap",
+      :type
+      "chosen H2 coordinate action is multiplication by top degree",
       :status :proved,
       :consumers [:t00J02],
-      :depends-on ["transverseCircle_preimage_component_signedCount"],
+      :depends-on [],
       :area "oriented-surface-degree"}
      {:name "t00J02_transverse_diskBounded_topHomologyMap_eq_zero",
       :type "H2 map zero",
@@ -119084,39 +119087,29 @@
       :consumers [:t00J02],
       :depends-on
       ["regularValue_topHomologyMap_signedCount"
-       "regularValue_topDegree_eq_zero_of_signedCount"],
+       "regularValue_topDegree_eq_zero_of_signedCount"
+       "surfaceTopDegree_eq_homologyMap"],
       :area "oriented-surface-degree"}],
     :statement-hashes
     {:source
      "0b3b4888807bfa06c8d60d86829b75776394ea8aa45a98c933c087165521f923",
+     :implementation
+     "ff551a0722b18e404bfd0e19ee500effd95a1b7fbeb153d46d97b792cdeb15a8",
      :blueprint
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984",
-     :implementation
-     "5187744f256c90bdb173bc1679185d3df16194556f48f1d2e75a8e37598f280f",
      :registry "166/166"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
-    :reason "Banked finite signed-count aggregation.",
+    :reason
+    "Banked the global H2 integer-coordinate action; the geometric regular-value localization identity remains.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t00J02Closure.lean",
       :exit 0}
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-     {:cmd "hash/diff/placeholders", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1792000218553-12000-6de489a4",
-     :commands
-     ["git show/diff-tree 6fb31fac2ba6584bcf268151f80f2b7511f2bd0a"
-      "archive commit; lean t00J02Closure.lean and Main.lean"
-      "sha256sum Main/implementation/blueprint; count placeholders"
-      "python3 scripts/statement-registry.py check"
-      "lake env lean ConstructionTargets/t00J02Closure.lean"],
-     :finding
-     "PASS: exact scope and hashes match; both archived files compile; Main placeholder remains 1->1 and implementation is sorry-free; registry 166/166. The finite signed sum correctly separates orientation signs from component degrees, vanishes from pointwise zero degrees, and transfers through an explicit count equality; no missing geometric H2 identity is assumed. Standard axioms only. New milestone recorded; regular-value H2 identity and Main assembly remain listed."},
-    :commit "6fb31fac2ba6584bcf268151f80f2b7511f2bd0a",
+     {:cmd "sha256/diff/placeholders", :exit 0}],
+    :commit "23d28b99d91d0474720fe052af9e9e7f5153b48b",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t00J02Closure.blueprint.md",
@@ -119124,7 +119117,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119248,7 +119241,8 @@
     :lemma-regularvalue-tophomologymap-signedcount
     :lemma-transversecircle-preimage-component-signedcount
     :lemma-circledegree-eq-homologymap
-    :lemma-regularvalue-topdegree-eq-zero-of-signedcount],
+    :lemma-regularvalue-topdegree-eq-zero-of-signedcount
+    :lemma-surfacetopdegree-eq-homologymap],
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
@@ -119337,6 +119331,25 @@
    :kind :lemma,
    :depends-on
    [:lemma-transversecircle-preimage-component-signedcount],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "surfaceTopDegree_eq_homologyMap",
+    :type
+    "chosen H2 coordinate action is multiplication by top degree"},
+   :lemma
+   {:name "surfaceTopDegree_eq_homologyMap",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type
+    "chosen H2 coordinate action is multiplication by top degree",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02},
+   :id :lemma-surfacetopdegree-eq-homologymap,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
