@@ -3690,6 +3690,63 @@ theorem radialMVBoundaryGroup_one_iff_outerClass (P : PairingData) :
     rw [h, attachingOuterClass]
     simp
 
+/-- The unsigned inclusion-induced H₁ map from the radial intersection to
+the outer cover member.  The production MV arrow uses its negative. -/
+noncomputable def radialIntersectionToOuterH1 (P : PairingData) :
+    ConstructionTargets.SingularHomologyConcrete.SingularHomology 1
+        (TopCat.of {q // q ∈ (openCover P).inner ∩ (openCover P).outer}) ⟶
+      ConstructionTargets.SingularHomologyConcrete.SingularHomology 1
+        (TopCat.of (OuterPiece P)) :=
+  HomologicalComplex.homologyMap
+    (((AlgebraicTopology.SSet.singularChainComplexFunctor AddCommGrpCat).obj
+      (AddCommGrpCat.of ℤ)).map
+      (TopCat.toSSet.map
+        (ConstructionTargets.SingularExcision.topologicalSubspaceInclusion
+          (Set.inter_subset_right)))) 1
+
+/-- The outer projection of the production intersection arrow is literally
+the negative outer inclusion, fixing the MV sign before the geometric loop
+calculation begins. -/
+theorem radialIntersectionArrow_snd (P : PairingData) :
+    ConstructionTargets.ProductionOpenCoverMayerVietoris.productionIntersectionArrow
+          (openCover P).inner (openCover P).outer 1 ≫
+        (Limits.biprod.snd :
+          (ConstructionTargets.SingularHomologyConcrete.SingularHomology 1
+              (TopCat.of (InnerPiece P)) ⊞
+            ConstructionTargets.SingularHomologyConcrete.SingularHomology 1
+              (TopCat.of (OuterPiece P))) ⟶
+          ConstructionTargets.SingularHomologyConcrete.SingularHomology 1
+            (TopCat.of (OuterPiece P))) =
+      -radialIntersectionToOuterH1 P := by
+  change Limits.biprod.lift _ (-radialIntersectionToOuterH1 P) ≫
+      Limits.biprod.snd = -radialIntersectionToOuterH1 P
+  simp
+
+theorem radialOuterBoundaryGenerator_eq_neg_inclusion (P : PairingData) :
+    radialOuterBoundaryGenerator P =
+      -radialIntersectionToOuterH1 P
+        ((radialIntersectionH1GroupIsoInt P).inv 1) := by
+  change
+    (ConstructionTargets.ProductionOpenCoverMayerVietoris.productionIntersectionArrow
+          (openCover P).inner (openCover P).outer 1 ≫ Limits.biprod.snd)
+        ((radialIntersectionH1GroupIsoInt P).inv 1) = _
+  have h := congrArg ConcreteCategory.hom (radialIntersectionArrow_snd P)
+  have hx := congrArg
+    (fun f => f ((radialIntersectionH1GroupIsoInt P).inv 1)) h
+  simpa using hx
+
+/-- Consequently the remaining raw B7 equality is exactly the statement
+that the unsigned outer inclusion has the negative attaching class. -/
+theorem radialOuterBoundaryGenerator_eq_attachingOuterClass_iff (P : PairingData) :
+    radialOuterBoundaryGenerator P = attachingOuterClass P ↔
+      radialIntersectionToOuterH1 P
+          ((radialIntersectionH1GroupIsoInt P).inv 1) =
+        -attachingOuterClass P := by
+  rw [radialOuterBoundaryGenerator_eq_neg_inclusion]
+  constructor <;> intro h
+  · simpa only [neg_eq_iff_eq_neg] using h
+  · simpa only [neg_eq_iff_eq_neg] using h
+
 end
 
 end ConstructionTargets.PolygonSurfaceHomology
