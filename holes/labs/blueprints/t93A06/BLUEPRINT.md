@@ -230,14 +230,69 @@ the relevant torus chart.  APIs: `IsLocalDiffeomorph.localInverse`,
 `ContDiff.of_le`.  The statement supplies exactly the regularity required by
 the FTC leaves and does not depend on naturality.
 
-#### `t93A06_exact_integral_aux_square_formula` — 80–140 lines, independent
+#### `t93A06_exact_integral_aux_square_formula_unfold` — 10–25 lines, independent
 
-Given naturality explicitly, unfolds `torusIntegral`, `exteriorDerivative`,
-`extDeriv`, and the determinant on `(e₀,e₁)` to obtain
-`∫∫ ∂x Q - ∫∫ ∂y P`.  Use `Matrix.det_fin_two`,
-`ContinuousAlternatingMap.alternating`, `intervalIntegral.integral_sub`, and
-the coordinate `fderiv`/`deriv` lemmas.  Sign check: for `P dx + Q dy`, the
-positive basis `(e₀,e₁)` gives `∂x Q - ∂y P`, not its negative.
+Unfolds `ConstructionTargets.TorusFormTargets.torusIntegral` and rewrites by
+the explicitly supplied naturality equality.  The result is precisely the
+iterated integral of the Euclidean `exteriorDerivative (pullback projection
+η)` evaluated at `![x,y]` on `![Pi.single 0 1, Pi.single 1 1]`.  The useful
+operations are only `unfold`/`rw [hnat]` (possibly `change` to expose the
+implicit atlas).  This intentionally small definitional leaf isolates all
+manifold content from the coordinate seat.
+
+**Truth check.** `torusIntegral` uses the closed interval endpoints only as
+integration bounds, so no boundary convention is introduced here.  Its basis
+order is literally `e₀,e₁`, hence positive.  No regularity is needed for the
+definitional equality.
+
+#### `t93A06_exact_integral_aux_square_formula_pointwise` — 60–120 lines, independent
+
+At arbitrary `x y`, proves that the Euclidean exterior derivative of the
+pulled-back one-form on `(e₀,e₁)` is `∂x Q - ∂y P`.  Unfold the plane instance
+of `exteriorDerivative`; the global chart and its inverse have derivative the
+identity, reducing the goal to `extDeriv`.  The most useful Mathlib theorem is
+`extDeriv_apply_vectorField_of_pairwise_commute`, with the two constant vector
+fields `Pi.single 0 1` and `Pi.single 1 1`; discharge their derivatives and
+Lie bracket by `differentiableAt_const` and `simp [lieBracket]`.  Alternatively
+unfold `extDeriv`, `alternatizeUncurryFin`, and evaluate the two `Fin 2` terms.
+Convert the resulting directional `fderiv`s to the displayed one-variable
+`deriv`s with `HasFDerivAt.comp`/`HasDerivAt.fderiv` and `hC1 i`'s
+`Differentiable` consequence.  Useful coordinate facts are
+`ContinuousAlternatingMap.compContinuousLinearMap_apply`,
+`fderiv_continuousLinearMap_apply_const_apply`, `Pi.single_apply`, and
+`Fin.sum_univ_two`.
+
+**Truth check.** For `P dx + Q dy`, Mathlib's `extDeriv` convention on the
+ordered basis `(e₀,e₁)` is `∂x Q - ∂y P`.  The statement fixes `Plane = Fin 2
+→ ℝ`, so there is no dimension-zero degeneration.  It is pointwise on all of
+`ℝ²`, including square-boundary points.
+
+#### `t93A06_exact_integral_aux_square_formula_integral_split` — 40–80 lines, independent
+
+This is generic in `F P Q` and receives the pointwise coordinate identity as
+an explicit hypothesis, so it can be proved before the pointwise seat.  First
+use `intervalIntegral.integral_congr` twice to replace `F` by the difference.
+Then use `intervalIntegral.integral_sub` for the inner integral and again for
+the outer integral.  Obtain continuity, hence interval integrability, of the
+partial derivatives from `hC1P.continuous_fderiv one_ne_zero` and
+`hC1Q.continuous_fderiv one_ne_zero`, followed by continuous-linear-map
+evaluation and composition with `x ↦ ![x,y]` or `y ↦ ![x,y]`.  Useful lemmas
+are `Continuous.intervalIntegrable`, `Continuous.clm_apply`,
+`intervalIntegral.intervalIntegrable_iff`, and
+`intervalIntegral.integral_sub`.
+
+**Truth check.** Oriented interval integrals are linear even if bounds are
+reversed; here both are `0..1`.  Continuity gives genuine integrability, so
+the subtraction rule does not rely on the Bochner integral's nonintegrable
+fallback value.  Constant or zero coefficients reduce both sides to zero.
+
+#### `t93A06_exact_integral_aux_square_formula` — assembly, sorry-free
+
+Rewrites with the unfold leaf, instantiates the generic integral-splitting
+leaf with the exterior-derivative integrand and the two pulled coefficients,
+and supplies the pointwise leaf plus `hC1 0` and `hC1 1`.  Naturality is used
+only by the unfold leaf.  Thus none of the three new leaves has another new
+leaf's `sorry` among its axioms.
 
 #### `t93A06_exact_integral_aux_ftc_x` — 25–50 lines, independent
 
