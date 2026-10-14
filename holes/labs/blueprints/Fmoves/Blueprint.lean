@@ -2413,7 +2413,70 @@ lemma mergeRepeatedBlock_aux_boundary_relation_aux_reverse_aux_merged_aux_upperH
     (h₂ : circleToDisk d₂ = edgePoint (u ++ [a] ++ v ++ [inv a] ++ t).length (u.length + 1 + v.length) (reverseParameter s)) :
     Relation.EqvGen (fun p q : Circle => WordRel (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t) (circleToDisk p) (circleToDisk q))
       (g.symm d₁) (g.symm d₂) := by
-  sorry
+  let r : Set.Icc (0 : ℝ) 1 :=
+    ⟨2 * s.1 - 1,
+      mergeRepeatedBlock_aux_boundary_relation_aux_reverse_aux_merged_aux_upper s hs⟩
+  let iz : Fin (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t).length :=
+    ⟨u.length + 1, by
+      simp only [List.length_append, List.length_cons, List.length_nil]
+      omega⟩
+  let iiz : Fin (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t).length :=
+    ⟨u.length + 2 + v.length, by
+      simp only [List.length_append, List.length_cons, List.length_nil]
+      omega⟩
+  let cz : Circle :=
+    ⟨edgePoint (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t).length iz r,
+      by simpa [Circle, Submonoid.unitSphere] using
+        norm_edgePoint (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t).length iz r⟩
+  let ciz : Circle :=
+    ⟨edgePoint (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t).length iiz
+        (reverseParameter r),
+      by simpa [Circle, Submonoid.unitSphere] using
+        norm_edgePoint (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t).length iiz
+          (reverseParameter r)⟩
+  let da : Circle :=
+    ⟨edgePoint (u ++ [a] ++ v ++ [inv a] ++ t).length u.length s,
+      by simpa [Circle, Submonoid.unitSphere] using
+        norm_edgePoint (u ++ [a] ++ v ++ [inv a] ++ t).length u.length s⟩
+  let dia : Circle :=
+    ⟨edgePoint (u ++ [a] ++ v ++ [inv a] ++ t).length
+        (u.length + 1 + v.length) (reverseParameter s),
+      by simpa [Circle, Submonoid.unitSphere] using
+        norm_edgePoint (u ++ [a] ++ v ++ [inv a] ++ t).length
+          (u.length + 1 + v.length) (reverseParameter s)⟩
+  have hd₁ : d₁ = da := mergeRepeatedBlock_aux_boundary_relation_aux_circleToDisk_injective (by
+    simpa [da, circleToDisk] using h₁)
+  have hd₂ : d₂ = dia := mergeRepeatedBlock_aux_boundary_relation_aux_circleToDisk_injective (by
+    simpa [dia, circleToDisk] using h₂)
+  obtain ⟨qz, hqz, hzmap⟩ := hg.on_z r
+  have hqz' : qz = s := by
+    apply Subtype.ext
+    simp only [hqz, r]
+    ring
+  have hzmap' : g cz = da := by
+    simpa [cz, da, iz, hqz', List.length_append, Nat.add_assoc,
+      Nat.add_comm, Nat.add_left_comm] using hzmap
+  obtain ⟨qiz, hqiz, hizmap⟩ := hg.on_inv_z (reverseParameter r)
+  have hqiz' : qiz = reverseParameter s := by
+    apply Subtype.ext
+    rw [hqiz]
+    exact mergeRepeatedBlock_aux_boundary_relation_aux_reverse_aux_merged_aux_upper_reverse s hs
+  have hizmap' : g ciz = dia := by
+    simpa [ciz, dia, iiz, hqiz', List.length_append, Nat.add_assoc,
+      Nat.add_comm, Nat.add_left_comm] using hizmap
+  rw [hd₁, hd₂, show g.symm da = cz by exact g.symm_apply_eq.mpr hzmap'.symm,
+    show g.symm dia = ciz by exact g.symm_apply_eq.mpr hizmap'.symm]
+  apply Relation.EqvGen.rel
+  refine ⟨iz, iiz, ?_, r, ?_, rfl, ?_⟩
+  · intro hidx
+    have hv := congrArg Fin.val hidx
+    simp only [iz, iiz, Fin.val_mk] at hv
+    omega
+  · simp [iz, iiz, List.get_eq_getElem, List.getElem_append, inv,
+      Nat.add_assoc, show 2 + v.length = Nat.succ (Nat.succ v.length) by omega]
+  · simp [ciz, circleToDisk, iz, iiz, List.get_eq_getElem,
+      List.getElem_append, inv, Nat.add_assoc,
+      show 2 + v.length = Nat.succ (Nat.succ v.length) by omega]
 
 /-- Reverse generators for the `a` / `a⁻¹` pair: split the parameter at `1/2`; the lower half comes from `y` / `y⁻¹`, the upper half from `z` / `z⁻¹` (`hg.on_y/on_z/on_inv_z/on_inv_y`). -/
 lemma mergeRepeatedBlock_aux_boundary_relation_aux_reverse_aux_merged
