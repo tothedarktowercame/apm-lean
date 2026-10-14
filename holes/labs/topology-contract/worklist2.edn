@@ -87901,28 +87901,27 @@
   {:consumer :t97A01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 2,
+   :stop-count 3,
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Assemble signed edge factors by finite subdivision; derive B7, then B8-B10.",
+    "Identify boundary class with explicit product; collapse coordinate sum; derive B7-B10.",
     :outcome :stop,
     :warnings ["preexisting lint; unrelated edits preserved"],
     :missing-theorems
-    [{:name "polygonBoundaryExplicitEdgeClass_hurewicz",
-      :type "signed edge has unit-times-signed basis H1 class",
+    [{:name "polygonBoundaryExplicitEdgeProduct_hurewicz",
+      :type "ordered signed-edge product maps to coordinate sum",
       :status :proved,
       :consumers [:t97A01 :t94J09],
-      :depends-on ["finiteWedgeExplicitLegClassAtBase_hurewicz"],
+      :depends-on ["polygonBoundaryExplicitEdgeClass_hurewicz"],
       :area "polygon-quotient-homology"}
      {:name "finitePathSubdivision_boundary",
-      :type "boundary class is ordered signed-edge product",
+      :type "boundary class equals explicit edge product",
       :status :partial,
       :consumers [:t97A01 :t94J09],
       :depends-on
       ["polygonBoundaryWedgeLoop_edgePoint_integerLoop_of_sign"
-       "polygonBoundaryWedgeLoop_edgePoint_integerLoop_of_not_sign"
-       "polygonBoundaryExplicitEdgeClass_hurewicz"],
+       "polygonBoundaryWedgeLoop_edgePoint_integerLoop_of_not_sign"],
       :area "polygon-quotient-homology"}
      {:name "radialMV_boundary_eq_orientationSigned",
       :type "B7 sign-corrected map",
@@ -87934,7 +87933,7 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked signed explicit-edge factor and H1 coordinate.",
+    :reason "Banked ordered explicit-edge product H1 evaluation.",
     :commands
     [{:cmd
       "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology",
@@ -87942,28 +87941,20 @@
      {:cmd "statement-registry.py check", :exit 0}
      {:cmd "placeholder scan", :exit 0}
      {:cmd "axioms check", :exit 0}
-     {:cmd "git show --check f41451431", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792018156595-12602-91532edc",
-     :commands
-     ["git show/diff f41451431; blob sha256; diff --check"
-      "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology"
-      "lake env lean /dev/stdin (#print axioms)"
-      "placeholder scan"
-      "statement-registry.py check"],
-     :finding
-     "PASS: reviewer codex-7; f41451431 (topo-6) newly changes only scoped PolygonSurfaceHomology.lean; fixture SHA-256 ce67447c69ab558f4da15ba9bfa36405cee1f0b018d506f902295d297da151d1 matches. Exact blob builds; 0 placeholders; standard axioms; registry 166/0. A positive boundary edge is the explicit common-base leg class and a negative edge its inverse. Hurewicz inversion supplies exactly one additive minus, so each factor maps to edge-sign times the global orientation unit times its orbit basis. Signs and basepoint representation are consistent. New compiled progress; remaining assemble the finite signed-edge product, derive B7, then B8-B10."},
-    :commit "f41451431",
+     {:cmd "git show --check 047881a1f", :exit 0}],
+    :diagnostic-history
+    [{:cmd "product drafts",
+      :exit 1,
+      :correction "exposed map-ofFn pointwise"}],
+    :commit "047881a1f",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
     {:path "ConstructionTargets/PolygonSurfaceHomology.lean",
      :sha256
-     "ce67447c69ab558f4da15ba9bfa36405cee1f0b018d506f902295d297da151d1"},
+     "198ac314244b68899ee99eb547668cb4a5c302edcdfe978d107ed0a6fee8e747"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -92154,4 +92145,21 @@
    :id :lemma-polygonboundaryexplicitedgeclass-hurewicz,
    :kind :lemma,
    :depends-on [:lemma-finitewedgeexplicitlegclassatbase-hurewicz],
+   :other-consumers [:t94J09]}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "polygonBoundaryExplicitEdgeProduct_hurewicz",
+    :type "ordered signed-edge product maps to coordinate sum"},
+   :lemma
+   {:name "polygonBoundaryExplicitEdgeProduct_hurewicz",
+    :reported-by [:program-2026-10-13-polygon-surface-homology],
+    :type "ordered signed-edge product maps to coordinate sum",
+    :area "polygon-quotient-homology",
+    :proved-in :program-2026-10-13-polygon-surface-homology},
+   :id :lemma-polygonboundaryexplicitedgeproduct-hurewicz,
+   :kind :lemma,
+   :depends-on [:lemma-polygonboundaryexplicitedgeclass-hurewicz],
    :other-consumers [:t94J09]}]}
