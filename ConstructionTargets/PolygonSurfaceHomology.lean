@@ -8,6 +8,7 @@ import ConstructionTargets.T02A06SphereH0
 import ConstructionTargets.CoefficientSigmaConstFinsuppComparison
 import ConstructionTargets.SingularHomologyHomotopy
 import ConstructionTargets.DegreeOneHurewiczSurjective
+import ConstructionTargets.CircleHurewiczIsomorphism
 
 /-!
 # Homology of one-vertex polygon quotients
@@ -832,6 +833,38 @@ theorem moduleHurewicz_circlePositiveFundamentalClass :
           (e.hom (ConstructionTargets.CircleHomology.circleH1IsoInt.inv 1))))]
   exact e.hom_inv_id_apply _
 
+/-- The comparison-normalized Hurewicz map is injective on the circle's
+fundamental group. -/
+theorem moduleHurewicz_circle_injective :
+    Function.Injective (moduleHurewicz (1 : Circle)) := by
+  intro p q hpq
+  let e :=
+    ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+      (TopCat.of Circle) 1
+  have hadd : Multiplicative.toAdd
+        (ConstructionTargets.DegreeOneHurewiczMap.fundamentalGroupH1Hom 1 p) =
+      Multiplicative.toAdd
+        (ConstructionTargets.DegreeOneHurewiczMap.fundamentalGroupH1Hom 1 q) := by
+    have h := congrArg (fun z => e.hom z) hpq
+    simpa [moduleHurewicz, e] using h
+  have hmul :
+      ConstructionTargets.DegreeOneHurewiczMap.fundamentalGroupH1Hom 1 p =
+        ConstructionTargets.DegreeOneHurewiczMap.fundamentalGroupH1Hom 1 q :=
+    Multiplicative.toAdd.injective hadd
+  have hab : Abelianization.of p = Abelianization.of q := by
+    apply ConstructionTargets.CircleHurewiczIsomorphism.circleAbelianizedFundamentalGroupH1MulEquiv.injective
+    change ConstructionTargets.DegreeOneHurewiczMap.abelianizedFundamentalGroupToH1 1
+        (Abelianization.of p) =
+      ConstructionTargets.DegreeOneHurewiczMap.abelianizedFundamentalGroupToH1 1
+        (Abelianization.of q)
+    simpa using hmul
+  apply ConstructionTargets.CircleUniversalCover.circleFundamentalGroupMulEquivInt.injective
+  have hcoord := congrArg
+    ConstructionTargets.CircleHurewiczIsomorphism.circleAbelianizedFundamentalGroupMulEquivInt hab
+  simpa [ConstructionTargets.CircleHurewiczIsomorphism.circleAbelianizedFundamentalGroupMulEquivInt,
+    ConstructionTargets.CircleHurewiczIsomorphism.commGroupAbelianizationMulEquiv]
+    using hcoord
+
 /-- The positive circle fundamental class mapped into the `l`th wedge leg. -/
 noncomputable def finiteWedgeLegFundamentalClass {L : Type} (l : L) :
     FundamentalGroup
@@ -965,6 +998,20 @@ theorem moduleHurewicz_zpow {X : Type} [TopologicalSpace X] (x : X)
     (g : FundamentalGroup X x) (n : ℤ) :
     moduleHurewicz x (g ^ n) = n • moduleHurewicz x g := by
   exact congrArg Multiplicative.toAdd (map_zpow (moduleHurewiczHom x) g n)
+
+/-- Every circle fundamental-group class is an integer power of the positive
+class fixed by the homology orientation. -/
+theorem circlePositiveFundamentalClass_generates
+    (g : FundamentalGroup Circle 1) :
+    ∃ n : ℤ, circlePositiveFundamentalClass ^ n = g := by
+  let n : ℤ := ConstructionTargets.CircleHomology.circleH1IsoInt.hom
+    (moduleHurewicz (1 : Circle) g)
+  refine ⟨n, moduleHurewicz_circle_injective ?_⟩
+  rw [moduleHurewicz_zpow, moduleHurewicz_circlePositiveFundamentalClass]
+  rw [← map_zsmul]
+  simp only [smul_eq_mul, mul_one]
+  change ConstructionTargets.CircleHomology.circleH1IsoInt.inv n = _
+  exact ConstructionTargets.CircleHomology.circleH1IsoInt.hom_inv_id_apply _
 
 /-! ### Algebraic leg-word evaluation -/
 
