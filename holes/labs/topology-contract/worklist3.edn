@@ -36121,56 +36121,57 @@
   {:consumer :t93J03,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "Program STOP commits no new mathematical progress since the prior milestone: KleinPolygonBasedVanKampen merely packages the already-required surjectivity and kernel hypotheses, and both consumers only reapply the previously proved three-input theorem. Prove the based van Kampen surjectivity/kernel result (or winding conjugacy) in scope; extend Mathlib: state and prove the missing theorem in scope.",
    :evidence
    {:placeholder-delta {:t93J03 [1 1]},
     :residual
-    "Construct normalized outer factor family for each subdivision; derive surjectivity/reverse kernel; winding; C1/C2/Main.",
+    "Choose exact outer replacement factors; derive surjectivity/reverse kernel; winding; C1/C2/Main.",
     :outcome :stop,
     :warnings ["unused SLSC owner-approved"],
     :missing-theorems
-    [{:name "pathHomotopicQuotient_concat_eq_of_pieceClass_eq",
+    [{:name
+      "pathTwoOpenSubdivision_quotient_eq_concat_of_pieceClass_eq",
       :type
-      "pointwise path-class equality implies finite concatenation equality",
+      "subdivision path class equals concat of any pointwise-equal replacement family",
       :status :proved,
       :consumers [:t93J03],
-      :depends-on
-      ["kleinPolygonInner_ambientPathClass_eq_outerOverlapReplacement"],
+      :depends-on ["pathHomotopicQuotient_concat_eq_of_pieceClass_eq"],
       :area "covering-subgroup-correspondence"}
      {:name "t93J03_polygon_based_van_kampen",
       :type "surjectivity; kernel equality",
       :status :partial,
       :consumers [:t93J03],
-      :depends-on ["pathHomotopicQuotient_concat_eq_of_pieceClass_eq"],
+      :depends-on
+      ["pathTwoOpenSubdivision_quotient_eq_concat_of_pieceClass_eq"],
       :area "covering-subgroup-correspondence"}],
     :statement-hashes {:registry "166/166"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Proved pointwise segment-class equality folds through the dependent finite Path.concat used by subdivision reconstruction; concrete factor family remains.",
+    "Bound the generic finite fold to the actual subdivision reconstruction and endpoint casts; the concrete normalized outer factor family remains.",
     :commands
     [{:cmd "lake build ConstructionTargets.t93J03Closure", :exit 0}
-     {:cmd "lean fixture; Main; registry; diff/show", :exit 0}
+     {:cmd "lean fixture; Main; registry; checks", :exit 0}
      {:cmd "rg forbidden", :exit 1, :expected-exit 1}],
     :diagnostic-history
-    [{:cmd "initial build",
+    [{:cmd "frame package-link precheck",
       :exit 1,
       :correction
-      "concurrent dirty dependency; preserved; rerun passed"}],
-    :commit "194bd26dab68af2ed5a3d8622fb72db505537752",
+      "canonical master checkout, not frame; Lake build passed"}],
+    :commit "52b6d5e5a66da6c1c5b00e71e16b58967f3ae4bc",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
      "ConstructionTargets/t93J03Closure.blueprint.md"],
     :fixture
-    {:path "/tmp/t93j03_concat_fold_check.lean",
+    {:path "/tmp/t93j03_subdivision_fold_check.lean",
      :sha256
-     "dbb431f79c6d0e64be04e2a83ca7639317d7cea61e0852f6a712259376bc0c3d"},
+     "7a63bd4992e5496b0ace13c4c08c00a2dcd7793aaeae4230080f3681ef4b5ccd"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -38631,7 +38632,8 @@
     :lemma-kleinpolygoninnerfundamentalgroupoid-hom-subsingleton
     :lemma-kleinpolygoninner-pathclass-eq-overlapreplacement
     :lemma-kleinpolygoninner-ambientpathclass-eq-outeroverlapreplacement
-    :lemma-pathhomotopicquotient-concat-eq-of-piececlass-eq],
+    :lemma-pathhomotopicquotient-concat-eq-of-piececlass-eq
+    :lemma-pathtwoopensubdivision-quotient-eq-concat-of-piececlass-eq],
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
@@ -39093,6 +39095,28 @@
    :id :lemma-t96a06-rp3-sphere-twosheeted,
    :kind :lemma,
    :depends-on [:lemma-t96a06-rp3-sphere-covering],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "pathTwoOpenSubdivision_quotient_eq_concat_of_pieceClass_eq",
+    :type
+    "subdivision path class equals concat of any pointwise-equal replacement family"},
+   :lemma
+   {:name "pathTwoOpenSubdivision_quotient_eq_concat_of_pieceClass_eq",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type
+    "subdivision path class equals concat of any pointwise-equal replacement family",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03},
+   :id
+   :lemma-pathtwoopensubdivision-quotient-eq-concat-of-piececlass-eq,
+   :kind :lemma,
+   :depends-on
+   [:lemma-pathhomotopicquotient-concat-eq-of-piececlass-eq],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
