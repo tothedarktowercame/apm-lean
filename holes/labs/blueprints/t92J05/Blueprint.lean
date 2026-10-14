@@ -192,7 +192,16 @@ lemma apm_t92J05_antipodalQuotient_fundamentalGroup
           (MulAction.orbitRel.Quotient apm_t92J05_antipodalGroup apm_t92J05_S2)
           (Quotient.mk _ x) ≃*
         apm_t92J05_antipodalGroup) := by
-  sorry
+  letI : ProperlyDiscontinuousSMul
+      apm_t92J05_antipodalGroup apm_t92J05_S2 := hproper
+  letI : SimplyConnectedSpace apm_t92J05_S2 :=
+    ConstructionTargets.SimplyConnectedSphereProducts.euclideanSphere_simplyConnected
+      2 (by norm_num)
+  letI : LocPathConnectedSpace apm_t92J05_S2 :=
+    ChartedSpace.locPathConnectedSpace (EuclideanSpace ℝ (Fin 2)) apm_t92J05_S2
+  exact
+    ConstructionTargets.DeckGroupQuotientFundamentalGroup.freeProperlyDiscontinuousQuotient_fundamentalGroupEquiv
+      hfree x
 
 /-- **LIBRARY.** A quotient/projectivization homeomorphism transports the deck
 calculation to at least one concrete projective-plane basepoint. -/
