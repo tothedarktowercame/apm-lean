@@ -87941,6 +87941,17 @@
      {:cmd
       "#print axioms finiteWedgeFinPointedContractibleNeighborhood",
       :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791963994582-11709-04bd1c8b",
+     :commands
+     ["git show/diff-tree; sha256sum"
+      "exact blob | lake env lean /dev/stdin; #print axioms"
+      "placeholder scan; statement-registry.py check"
+      "inspect restricted-open homeomorphism at commit"],
+     :finding
+     "PASS: d86d0888f changes only PolygonSurfaceHomology.lean; exact blob SHA256 553f92245166d009a26681fccc333bba0c26d3a5761d44db00aac7c1486cc6f5. Exact blob compiles with propext, Classical.choice, Quot.sound; placeholders 0; registry 166/0. New progress after 52485b99d constructs pointed contractible base-neighborhood data for a point wedge from such data on both factors. The carrier is the open restricted wedge; its basepoint witness is on the left. The recorded homeomorphism maps that subtype basepoint to the small wedge left basepoint, after which homeomorphSymm transports the contraction in the correct direction. Thus openness, quotient/subtype representation, and basepoint orientation agree. Remaining milestones: recursively package finite-wedge neighborhoods and prove the successor right-base element lies in the old factor."},
     :commit "5b403e34b",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
@@ -87949,7 +87960,7 @@
      "a97bc1d63f619a8d1f80de09749e9301d9bc0f19e046e8d8b6cf9f94c2d359ec"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -87969,7 +87980,7 @@
     :blueprint
     "ConstructionTargets/PolygonSurfaceHomology.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked generic point-wedge base neighborhoods.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked Fin-successor base-neighborhood recursion.",
    :id :program-2026-10-13-polygon-surface-homology,
    :kind :reusable-theorem,
    :campaign-priority 31,
@@ -88073,7 +88084,10 @@
      :reason "Banked Fin-one base-neighborhood data."}
     {:job 8,
      :commit "d86d0888f",
-     :reason "Banked generic point-wedge base neighborhoods."}]}
+     :reason "Banked generic point-wedge base neighborhoods."}
+    {:job 9,
+     :commit "5b403e34b",
+     :reason "Banked Fin-successor base-neighborhood recursion."}]}
   {:consumer :t97A01,
    :stop-count 0,
    :phase :implementation,
@@ -89767,7 +89781,7 @@
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "finiteWedgeFinPointedContractibleNeighborhood",
@@ -89777,7 +89791,9 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "Fin wedges have base neighborhoods",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :program-2026-10-13-polygon-surface-homology,
+    :banked-commit "5b403e34b"},
    :id :lemma-finitewedgefinpointedcontractibleneighborhood,
    :kind :lemma,
    :depends-on [:lemma-pointwedgepointedcontractibleneighborhood],
