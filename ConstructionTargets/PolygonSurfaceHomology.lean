@@ -860,6 +860,48 @@ theorem finiteWedgeLegFundamentalClass_hurewicz {L : Type} (l : L) :
     moduleHurewicz_circlePositiveFundamentalClass]
   rfl
 
+/-- Changing a fundamental-group basepoint along a literal equality does not
+change its comparison-normalized Hurewicz class. -/
+theorem moduleHurewicz_cast {X : Type} [TopologicalSpace X] {x y : X}
+    (h : x = y) (g : FundamentalGroup X y) :
+    moduleHurewicz x (Path.Homotopic.Quotient.cast g h h) =
+      moduleHurewicz y g := by
+  subst h
+  induction g using Quotient.inductionOn with
+  | _ p =>
+      change moduleHurewicz x
+          ((Path.Homotopic.Quotient.mk p).cast rfl rfl) =
+        moduleHurewicz x (Path.Homotopic.Quotient.mk p)
+      rw [← Path.Homotopic.Quotient.mk_cast]
+      have hp : p.cast rfl rfl = p := by
+        ext t
+        rfl
+      rw [hp]
+
+/-- The positive `l`th leg class transported to the single common basepoint
+used for words in the orbit-indexed finite wedge. -/
+noncomputable def finiteWedgeLegFundamentalClassAtBase (P : PairingData)
+    (l : PairingOrbit P.pair) :
+    FundamentalGroup
+      (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge
+        (PairingOrbit P.pair)) (orbitWedgeBase P) :=
+  Path.Homotopic.Quotient.cast (finiteWedgeLegFundamentalClass l)
+    (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle_base_eq
+      (P.orbit ⟨0, P.edgeCount_pos⟩) l)
+    (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle_base_eq
+      (P.orbit ⟨0, P.edgeCount_pos⟩) l)
+
+/-- Transporting a leg class to the common wedge basepoint preserves its
+positive coordinate-presentation H1 class. -/
+theorem finiteWedgeLegFundamentalClassAtBase_hurewicz (P : PairingData)
+    (l : PairingOrbit P.pair) :
+    moduleHurewicz (orbitWedgeBase P)
+        (finiteWedgeLegFundamentalClassAtBase P l) =
+      finiteWedgeLegH1 l
+        (ConstructionTargets.CircleHomology.circleH1IsoInt.inv 1) := by
+  rw [finiteWedgeLegFundamentalClassAtBase, moduleHurewicz_cast,
+    finiteWedgeLegFundamentalClass_hurewicz]
+
 end
 
 end ConstructionTargets.PolygonSurfaceHomology
