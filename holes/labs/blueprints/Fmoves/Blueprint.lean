@@ -3247,7 +3247,56 @@ theorem zipBoundaryMap_continuous {n k : ℕ} (hn : 0 < n) :
 
 theorem zipBoundaryMap_mem {n k : ℕ} (hn : 0 < n) (b : Circle) :
     zipBoundaryMap n k b ∈ zipHalfBoundary := by
-  sorry
+  let x : AddCircle (2 * Real.pi) := AddCircle.homeomorphCircle'.symm b
+  let φ := AddCircle.equivIco (2 * Real.pi) (zipStart n k) x
+  have hφ : (φ : ℝ) ∈ Set.Ico (zipStart n k) (zipStart n k + 2 * Real.pi) := φ.2
+  change zipProfile n k (φ : ℝ) ∈ zipHalfBoundary
+  rw [zipProfile]
+  split_ifs with hcut
+  · right
+    constructor
+    · simp [Complex.div_im, Complex.mul_im]
+    · rw [Complex.ofReal_re, abs_le]
+      constructor
+      · have hn2 : 0 < (n : ℝ) + 2 := by positivity
+        have hpi : 0 < 2 * Real.pi := Real.two_pi_pos
+        have hd : 0 ≤ (φ : ℝ) - zipStart n k := by linarith [hφ.1]
+        have : 0 ≤ ((φ : ℝ) - zipStart n k) * ((n : ℝ) + 2) /
+            (2 * Real.pi) := div_nonneg (mul_nonneg hd hn2.le) hpi.le
+        linarith
+      · have hn2 : 0 < (n : ℝ) + 2 := by positivity
+        have hpi : 0 < 2 * Real.pi := Real.two_pi_pos
+        have hbound :
+            ((φ : ℝ) - zipStart n k) * ((n : ℝ) + 2) /
+                (2 * Real.pi) ≤ 2 := by
+          apply (div_le_iff₀ hpi).2
+          have hdle : (φ : ℝ) - zipStart n k ≤
+              4 * Real.pi / ((n : ℝ) + 2) := by linarith
+          have hm := (le_div_iff₀ hn2).mp hdle
+          nlinarith
+        linarith
+  · left
+    let θ : ℝ := ((n : ℝ) + 2) / n *
+      ((φ : ℝ) - zipStart n k - 4 * Real.pi / ((n : ℝ) + 2)) / 2
+    have hnR : 0 < (n : ℝ) := by exact_mod_cast hn
+    have hn2 : 0 < (n : ℝ) + 2 := by positivity
+    have hθ0 : 0 ≤ θ := by
+      dsimp [θ]
+      have : 0 ≤ (φ : ℝ) - zipStart n k -
+          4 * Real.pi / ((n : ℝ) + 2) := by
+        linarith [not_le.mp hcut]
+      positivity
+    have hθpi : θ ≤ Real.pi := by
+      dsimp [θ]
+      have hu := hφ.2.le
+      field_simp
+      nlinarith [Real.pi_pos]
+    constructor
+    · change ‖Complex.exp ((θ : ℝ) * Complex.I)‖ = 1
+      exact Complex.norm_exp_ofReal_mul_I θ
+    · change 0 ≤ (Complex.exp ((θ : ℝ) * Complex.I)).im
+      rw [Complex.exp_im]
+      simpa using Real.sin_nonneg_of_nonneg_of_le_pi hθ0 hθpi
 
 theorem zipBoundaryMap_injective {n k : ℕ} (hn : 0 < n) :
     Function.Injective (zipBoundaryMap n k) := by
