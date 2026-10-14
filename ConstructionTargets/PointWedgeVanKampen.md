@@ -1410,3 +1410,9 @@ substitutes the inverse-span identity into the exact projection criterion and
 removes the remaining group inverse.  Thus the right projection is now
 equivalent directly to triviality of the single unshifted round-trip normal
 form; no inverse-span comparison remains.
+`connector_normalForm_eq_id_iff` makes faithfulness explicit, and
+`genericPointWedgeRightBase_rightProjection_eq_one_iff_connectorTransport`
+uses it to identify the remaining condition exactly: the unshifted overlap
+counit image must equal the inverse source connector followed by the target
+connector.  This typed connector comparison is the remaining step before the
+right projection, B6, and B12.
