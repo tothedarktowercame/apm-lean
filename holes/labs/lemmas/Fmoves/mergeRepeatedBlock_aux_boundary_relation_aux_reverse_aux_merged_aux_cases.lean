@@ -2302,6 +2302,49 @@ lemma mergeRepeatedBlock_aux_boundary_relation_aux_reverse_aux_merged_aux_upper_
 /-- The `a`-labelled generators are exactly the pairs (edge `a` at `s`, edge
 `a⁻¹` at `1 - s`), in either order (freshness of `a`; opposite signs). -/
 -- BEGIN SEAT AREA
+lemma mergeRepeatedBlock_aux_boundary_relation_aux_reverse_aux_merged_aux_cases_aux_index
+    {Label : Type*} [DecidableEq Label]
+    (u v t : List (Signed Label)) (y z a : Signed Label)
+    (ha : a.1 ∉ (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t).map Prod.fst)
+    (i : Fin (u ++ [a] ++ v ++ [inv a] ++ t).length)
+    (hi : ((u ++ [a] ++ v ++ [inv a] ++ t).get i).1 = a.1) :
+    i.1 = u.length ∨ i.1 = u.length + 1 + v.length := by
+  have hf :=
+    mergeRepeatedBlock_aux_boundary_relation_aux_reverse_aux_a_fresh u v t y z a ha
+  rcases mergeRepeatedBlock_aux_boundary_relation_aux_reverse_aux_partition u v t a i with
+    hu | hu | ⟨k, hk, hu⟩ | hu | ⟨k, hk, hu⟩
+  · exfalso
+    rw [List.get_eq_getElem] at hi
+    have hm : (u[i.1]'hu).1 ∈ u.map Prod.fst :=
+      List.mem_map.mpr ⟨u[i.1]'hu, List.getElem_mem hu, rfl⟩
+    simp [List.getElem_append, hu] at hi
+    exact hf.1 (hi ▸ hm)
+  · exact Or.inl hu
+  · exfalso
+    rw [List.get_eq_getElem] at hi
+    have hm : (v[k]'hk).1 ∈ v.map Prod.fst :=
+      List.mem_map.mpr ⟨v[k]'hk, List.getElem_mem hk, rfl⟩
+    simp [List.getElem_append, hu, hk, Nat.add_assoc,
+      show 1 + k = Nat.succ k by omega] at hi
+    exact hf.2.2.2.1 (hi ▸ hm)
+  · exact Or.inr hu
+  · exfalso
+    rw [List.get_eq_getElem] at hi
+    have hm : (t[k]'hk).1 ∈ t.map Prod.fst :=
+      List.mem_map.mpr ⟨t[k]'hk, List.getElem_mem hk, rfl⟩
+    have hget : (u ++ [a] ++ v ++ [inv a] ++ t).get i = t.get ⟨k, hk⟩ := by
+      rw [List.get_eq_getElem, List.get_eq_getElem]
+      rw [List.getElem_append_right
+        (as := u ++ [a] ++ v ++ [inv a]) (bs := t) (by
+          simp only [List.length_append, List.length_cons, List.length_nil]
+          omega)]
+      congr 1
+      simp only [hu, List.length_append, List.length_cons, List.length_nil]
+      omega
+    rw [← List.get_eq_getElem] at hi
+    rw [hget] at hi
+    exact hf.2.2.2.2 (hi ▸ hm)
+
 lemma mergeRepeatedBlock_aux_boundary_relation_aux_reverse_aux_merged_aux_cases
     {Label : Type*} [DecidableEq Label]
     (u v t : List (Signed Label)) (y z a : Signed Label)
@@ -2322,7 +2365,54 @@ lemma mergeRepeatedBlock_aux_boundary_relation_aux_reverse_aux_merged_aux_cases
         circleToDisk d₂ = edgePoint (u ++ [a] ++ v ++ [inv a] ++ t).length (u.length + 1 + v.length) (reverseParameter s')) ∨
       (circleToDisk d₂ = edgePoint (u ++ [a] ++ v ++ [inv a] ++ t).length u.length s' ∧
         circleToDisk d₁ = edgePoint (u ++ [a] ++ v ++ [inv a] ++ t).length (u.length + 1 + v.length) (reverseParameter s')) := by
-  sorry
+  have hi := mergeRepeatedBlock_aux_boundary_relation_aux_reverse_aux_merged_aux_cases_aux_index
+    u v t y z a ha i heq
+  have hjlab : ((u ++ [a] ++ v ++ [inv a] ++ t).get j).1 = a.1 := by
+    rw [← hlab]
+    exact heq
+  have hj := mergeRepeatedBlock_aux_boundary_relation_aux_reverse_aux_merged_aux_cases_aux_index
+    u v t y z a ha j hjlab
+  rcases hi with hi | hi <;> rcases hj with hj | hj
+  · exfalso
+    apply hij
+    apply Fin.ext
+    omega
+  · refine ⟨s, Or.inl ⟨?_, ?_⟩⟩
+    · simpa [hi] using h₁
+    · have hgeti : (u ++ [a] ++ v ++ [inv a] ++ t).get i = a := by
+        rw [List.get_eq_getElem]
+        simp [hi, List.getElem_append]
+      have hgetj : (u ++ [a] ++ v ++ [inv a] ++ t).get j = inv a := by
+        rw [List.get_eq_getElem]
+        simp [hj, List.getElem_append, Nat.add_assoc]
+        simp [Nat.add_comm, List.getElem_append]
+      have hsign :
+          ((u ++ [a] ++ v ++ [inv a] ++ t).get i).2 ≠
+            ((u ++ [a] ++ v ++ [inv a] ++ t).get j).2 := by
+        rw [hgeti, hgetj]
+        simp [inv]
+      rw [if_neg hsign] at h₂
+      simpa [hi, hj] using h₂
+  · refine ⟨reverseParameter s, Or.inr ⟨?_, ?_⟩⟩
+    · have hgeti : (u ++ [a] ++ v ++ [inv a] ++ t).get i = inv a := by
+        rw [List.get_eq_getElem]
+        simp [hi, List.getElem_append, Nat.add_assoc]
+        simp [Nat.add_comm, List.getElem_append]
+      have hgetj : (u ++ [a] ++ v ++ [inv a] ++ t).get j = a := by
+        rw [List.get_eq_getElem]
+        simp [hj, List.getElem_append]
+      have hsign :
+          ((u ++ [a] ++ v ++ [inv a] ++ t).get i).2 ≠
+            ((u ++ [a] ++ v ++ [inv a] ++ t).get j).2 := by
+        rw [hgeti, hgetj]
+        simp [inv]
+      rw [if_neg hsign] at h₂
+      simpa [hi, hj] using h₂
+    · simpa [hi, reverseParameter] using h₁
+  · exfalso
+    apply hij
+    apply Fin.ext
+    omega
 -- END SEAT AREA
 
 /-- Lower half of `a`: it is the image of `y`, glued to `y⁻¹`. -/
