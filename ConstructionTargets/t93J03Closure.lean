@@ -1359,6 +1359,23 @@ noncomputable def kleinPolygonOuterImageToDirectSkeletonPointPath :
     kleinPolygonSkeletonToOuter.continuous
   exact p₁.trans p₂
 
+/-- In the fundamental groupoid, the concrete outer connector is exactly the
+inverse deformation-unit arrow followed by the inverse map of the chosen
+skeleton connector.  This is the geometric identification required by
+`equivalence_unit_mapIso_conj_preimage`. -/
+theorem kleinPolygonOuterConnector_eq_inverseUnit_comp_mappedConnector :
+    (⟦kleinPolygonOuterImageToDirectSkeletonPointPath⟧ :
+      FundamentalGroupoid.mk
+          (kleinPolygonOverlapToOuter kleinPolygonOverlapPoint) ⟶
+        FundamentalGroupoid.mk
+          (kleinPolygonSkeletonToOuter kleinSkeletonPoint)) =
+      ⟦(kleinPolygonOuterHomotopyEquivSkeleton.left_inv.some.evalAt
+        (kleinPolygonOverlapToOuter kleinPolygonOverlapPoint)).symm⟧ ≫
+        (FundamentalGroupoid.map
+          kleinPolygonOuterHomotopyEquivSkeleton.invFun).map
+            ⟦kleinPolygonOverlapImageToSkeletonPointPath⟧ := by
+  rfl
+
 /-- The target-basepoint path matching the two stages already used on the
 domain side.  First the inverse homotopy-equivalence unit runs from the
 overlap image to its radial deformation; then the chosen skeleton connector

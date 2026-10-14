@@ -338,6 +338,13 @@ to identify the quotient class of
 `kleinPolygonOuterImageToDirectSkeletonPointPath` with that unit--mapped
 connector composite; the source-coordinate equality then follows from this
 general theorem.
+`kleinPolygonOuterConnector_eq_inverseUnit_comp_mappedConnector` proves the
+corresponding geometric equality directly in the fundamental groupoid: the
+chosen concrete outer path is the inverse deformation-unit arrow followed
+by the inverse-map image of the skeleton connector.  What remains at this
+seam is only reconciling Mathlib's casts in the packaged equivalence unit
+with this explicit quotient arrow, then applying the preceding categorical
+identity.
 `kleinBottle_pi1_every_basepoint_of_basedVanKampen` confirms this single
 topological contract and the independent winding conjugacy are now the only
 C1 inputs.
