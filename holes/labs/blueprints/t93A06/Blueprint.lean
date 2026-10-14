@@ -56,16 +56,147 @@ lemma t93A06_torusAtlas_aux_quotient_charts_aux_box_inj (a : Plane) :
   symm
   simpa [hk0] using hk i
 
-/-- LIBRARY (chart construction): construct quotient charts for which the
-actual coordinate projection is locally a diffeomorphism.  This is separated
-from the manifold-coverage argument below. -/
+def t93A06_torusAtlas_aux_quotient_charts_aux_box (a : Plane) : Set Plane :=
+  Set.pi Set.univ (fun i : Fin 2 => Set.Ioo (a i - (1 / 4 : ℝ)) (a i + 1 / 4))
+
+lemma t93A06_torusAtlas_aux_quotient_charts_aux_box_open (a : Plane) :
+    IsOpen (t93A06_torusAtlas_aux_quotient_charts_aux_box a) := by
+  exact isOpen_set_pi Set.finite_univ fun i _ => isOpen_Ioo
+
+lemma t93A06_torusAtlas_aux_quotient_charts_aux_mem_box (a : Plane) :
+    a ∈ t93A06_torusAtlas_aux_quotient_charts_aux_box a := by
+  intro i _
+  constructor <;> linarith
+
+lemma t93A06_torusAtlas_aux_quotient_charts_aux_open_projection :
+    IsOpenMap projection := by
+  unfold projection
+  exact IsOpenMap.piMap
+    (fun _ : Fin 2 => (QuotientAddGroup.isOpenMap_coe :
+      IsOpenMap (fun x : ℝ => (x : AddCircle (1 : ℝ)))))
+    (Filter.Eventually.of_forall fun _ => QuotientAddGroup.mk_surjective)
+
+noncomputable def t93A06_torusAtlas_aux_quotient_charts_aux_chart (a : Plane) :
+    OpenPartialHomeomorph Torus Plane :=
+  (OpenPartialHomeomorph.ofContinuousOpen
+    ((t93A06_torusAtlas_aux_quotient_charts_aux_box_inj a).toPartialEquiv
+      projection (t93A06_torusAtlas_aux_quotient_charts_aux_box a))
+    (show Continuous projection from by
+      unfold projection
+      fun_prop).continuousOn
+    t93A06_torusAtlas_aux_quotient_charts_aux_open_projection
+    (t93A06_torusAtlas_aux_quotient_charts_aux_box_open a)).symm
+
+lemma t93A06_torusAtlas_aux_quotient_charts_aux_chart_source (a : Plane) :
+    (t93A06_torusAtlas_aux_quotient_charts_aux_chart a).source =
+      projection '' t93A06_torusAtlas_aux_quotient_charts_aux_box a := by
+  simp [t93A06_torusAtlas_aux_quotient_charts_aux_chart]
+
+lemma t93A06_torusAtlas_aux_quotient_charts_aux_chart_target (a : Plane) :
+    (t93A06_torusAtlas_aux_quotient_charts_aux_chart a).target =
+      t93A06_torusAtlas_aux_quotient_charts_aux_box a := by
+  simp [t93A06_torusAtlas_aux_quotient_charts_aux_chart]
+
+lemma t93A06_torusAtlas_aux_quotient_charts_aux_chart_proj
+    (a x : Plane) (hx : x ∈ t93A06_torusAtlas_aux_quotient_charts_aux_box a) :
+    t93A06_torusAtlas_aux_quotient_charts_aux_chart a (projection x) = x := by
+  apply OpenPartialHomeomorph.left_inv
+  simpa [t93A06_torusAtlas_aux_quotient_charts_aux_chart] using hx
+
+noncomputable def t93A06_torusAtlas_aux_quotient_charts_aux_lift (z : Torus) : Plane :=
+  Classical.choose (show ∃ x, projection x = z by
+    choose x hx using fun i => QuotientAddGroup.mk_surjective (z i)
+    exact ⟨x, funext fun i => hx i⟩)
+
+lemma t93A06_torusAtlas_aux_quotient_charts_aux_lift_spec (z : Torus) :
+    projection (t93A06_torusAtlas_aux_quotient_charts_aux_lift z) = z := by
+  exact Classical.choose_spec (show ∃ x, projection x = z by
+    choose x hx using fun i => QuotientAddGroup.mk_surjective (z i)
+    exact ⟨x, funext fun i => hx i⟩)
+
+noncomputable def t93A06_torusAtlas_aux_quotient_charts_aux_charts :
+    ChartedSpace Plane Torus :=
+  { atlas := Set.range (fun z =>
+      t93A06_torusAtlas_aux_quotient_charts_aux_chart
+        (t93A06_torusAtlas_aux_quotient_charts_aux_lift z))
+    chartAt := fun z => t93A06_torusAtlas_aux_quotient_charts_aux_chart
+        (t93A06_torusAtlas_aux_quotient_charts_aux_lift z)
+    mem_chart_source := fun z => by
+      rw [t93A06_torusAtlas_aux_quotient_charts_aux_chart_source]
+      refine ⟨t93A06_torusAtlas_aux_quotient_charts_aux_lift z,
+        t93A06_torusAtlas_aux_quotient_charts_aux_mem_box _, ?_⟩
+      exact t93A06_torusAtlas_aux_quotient_charts_aux_lift_spec z
+    chart_mem_atlas := fun z => ⟨z, rfl⟩ }
+
+lemma t93A06_torusAtlas_aux_quotient_charts_aux_transition
+    (x y : Torus) (z : Plane)
+    (hz : z ∈ ((t93A06_torusAtlas_aux_quotient_charts_aux_chart
+      (t93A06_torusAtlas_aux_quotient_charts_aux_lift x)).symm.trans
+        (t93A06_torusAtlas_aux_quotient_charts_aux_chart
+          (t93A06_torusAtlas_aux_quotient_charts_aux_lift y))).source) :
+    ∃ k : Fin 2 → ℤ, ∀ i,
+      ((t93A06_torusAtlas_aux_quotient_charts_aux_chart
+        (t93A06_torusAtlas_aux_quotient_charts_aux_lift x)).symm.trans
+          (t93A06_torusAtlas_aux_quotient_charts_aux_chart
+            (t93A06_torusAtlas_aux_quotient_charts_aux_lift y))) z i =
+        z i + (k i : ℝ) := by
+  apply (t93A06_torusAtlas_aux_quotient_charts_aux_fibers z _).mp
+  simpa [t93A06_torusAtlas_aux_quotient_charts_aux_chart] using
+    (((t93A06_torusAtlas_aux_quotient_charts_aux_chart
+      (t93A06_torusAtlas_aux_quotient_charts_aux_lift y))).left_inv hz.2).symm
+
+lemma t93A06_torusAtlas_aux_quotient_charts_aux_projection_smooth :
+    letI := t93A06_torusAtlas_aux_quotient_charts_aux_charts
+    ContMDiff 𝓘(ℝ,Plane) 𝓘(ℝ,Plane) ∞ projection := by
+  sorry
+
+lemma t93A06_torusAtlas_aux_quotient_charts_aux_inverse_smooth (x : Plane) :
+    letI := t93A06_torusAtlas_aux_quotient_charts_aux_charts
+    let e := OpenPartialHomeomorph.ofContinuousOpen
+      ((t93A06_torusAtlas_aux_quotient_charts_aux_box_inj x).toPartialEquiv
+        projection (t93A06_torusAtlas_aux_quotient_charts_aux_box x))
+      (show Continuous projection from by unfold projection; fun_prop).continuousOn
+      t93A06_torusAtlas_aux_quotient_charts_aux_open_projection
+      (t93A06_torusAtlas_aux_quotient_charts_aux_box_open x)
+    ContMDiffOn 𝓘(ℝ,Plane) 𝓘(ℝ,Plane) ∞ e.symm e.target := by
+  sorry
 theorem t93A06_torusAtlas_aux_quotient_charts :
     ∃ charts : ChartedSpace Plane Torus,
       letI := charts
       (∀ e ∈ atlas Plane Torus, ∃ x : Torus, e = chartAt Plane x) ∧
-      (∀ x y : Torus, ∀ z ∈ ((chartAt Plane x).symm.trans (chartAt Plane y)).source, ∃ k : Fin 2 → ℤ, ∀ i, ((chartAt Plane x).symm.trans (chartAt Plane y)) z i = z i + (k i : ℝ)) ∧
+      (∀ x y : Torus, ∀ z ∈ ((chartAt Plane x).symm.trans (chartAt Plane y)).source,
+        ∃ k : Fin 2 → ℤ, ∀ i,
+          ((chartAt Plane x).symm.trans (chartAt Plane y)) z i =
+            z i + (k i : ℝ)) ∧
       IsLocalDiffeomorph 𝓘(ℝ,Plane) 𝓘(ℝ,Plane) ∞ projection := by
-  sorry
+  let charts := t93A06_torusAtlas_aux_quotient_charts_aux_charts
+  refine ⟨charts, ?_, ?_, ?_⟩
+  · rintro e ⟨z, rfl⟩
+    exact ⟨z, rfl⟩
+  · exact t93A06_torusAtlas_aux_quotient_charts_aux_transition
+  · letI := charts
+    have hsmooth : ContMDiff 𝓘(ℝ,Plane) 𝓘(ℝ,Plane) ∞ projection :=
+      t93A06_torusAtlas_aux_quotient_charts_aux_projection_smooth
+    intro x
+    let e := OpenPartialHomeomorph.ofContinuousOpen
+      ((t93A06_torusAtlas_aux_quotient_charts_aux_box_inj x).toPartialEquiv
+        projection (t93A06_torusAtlas_aux_quotient_charts_aux_box x))
+      (show Continuous projection from by unfold projection; fun_prop).continuousOn
+      t93A06_torusAtlas_aux_quotient_charts_aux_open_projection
+      (t93A06_torusAtlas_aux_quotient_charts_aux_box_open x)
+    let de : PartialDiffeomorph 𝓘(ℝ,Plane) 𝓘(ℝ,Plane) Plane Torus ∞ :=
+      { toPartialEquiv := e.toPartialEquiv
+        open_source := e.open_source
+        open_target := e.open_target
+        contMDiffOn_toFun := by
+          intro y hy
+          exact (hsmooth y).contMDiffWithinAt
+        contMDiffOn_invFun := by
+          exact t93A06_torusAtlas_aux_quotient_charts_aux_inverse_smooth x }
+    refine ⟨de, ?_, ?_⟩
+    · exact t93A06_torusAtlas_aux_quotient_charts_aux_mem_box x
+    · intro y hy
+      rfl
 
 /-- LIBRARY (atlas coverage): a charted structure on the quotient for which
 the surjective projection from the plane is locally a diffeomorphism is a
