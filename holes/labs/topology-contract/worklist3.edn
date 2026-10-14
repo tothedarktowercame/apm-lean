@@ -36121,39 +36121,39 @@
   {:consumer :t93J03,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "Program STOP commits no new mathematical progress since the prior milestone: KleinPolygonBasedVanKampen merely packages the already-required surjectivity and kernel hypotheses, and both consumers only reapply the previously proved three-input theorem. Prove the based van Kampen surjectivity/kernel result (or winding conjugacy) in scope; extend Mathlib: state and prove the missing theorem in scope.",
    :evidence
    {:placeholder-delta {:t93J03 [1 1]},
     :residual
-    "Fin reindex; representatives; fold; reverse kernel/surjectivity; winding; C1/C2/Main.",
+    "Package run representatives against boundary family; instantiate fold; reverse kernel/surjectivity; winding; C1/C2/Main.",
     :outcome :stop,
     :warnings [],
     :missing-theorems
-    [{:name "pathTwoOpenSubdivisionOuterRunBoundaryPoints_map_val",
-      :type "outer boundary list with exact map",
+    [{:name "pathTwoOpenSubdivisionOuterRunBoundaryFamily_val",
+      :type "Fin-indexed outer boundaries recover ambient list",
       :status :proved,
       :consumers [:t93J03],
       :depends-on
-      ["pathTwoOpenSubdivisionRunBoundaryPoints_mem_outer"],
+      ["pathTwoOpenSubdivisionOuterRunBoundaryPoints_map_val"],
       :area "covering-subgroup-correspondence"}
      {:name "t93J03_polygon_based_van_kampen",
       :type "surjectivity; kernel equality",
       :status :partial,
       :consumers [:t93J03],
-      :depends-on
-      ["pathTwoOpenSubdivisionOuterRunBoundaryPoints_map_val"],
+      :depends-on ["pathTwoOpenSubdivisionOuterRunBoundaryFamily_val"],
       :area "covering-subgroup-correspondence"}],
     :statement-hashes {:registry "166/166"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Outer-subtype boundary list proved; Fin reindexing remains.",
+    "Indexed outer boundaries by Fin(runs+1) with exact ambient values; run representative family remains.",
     :commands
     [{:cmd "lake build ConstructionTargets.t93J03Closure", :exit 0}
-     {:cmd "lake env lean /tmp/t93j03_outer_boundary_lift_check.lean",
+     {:cmd
+      "lake env lean /tmp/t93j03_outer_boundary_family_check.lean",
       :exit 0}
      {:cmd "lake env lean problems/t93J03/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
@@ -36161,20 +36161,20 @@
      {:cmd "git diff --check", :exit 0}
      {:cmd "rg forbidden", :exit 1, :expected-exit 1}],
     :diagnostic-history
-    [{:cmd "early fixture",
+    [{:cmd "family proof compiles",
       :exit 1,
-      :correction "reran after concurrent build"}],
-    :commit "958411c2cb30598f4c92686e3ef42f7984c603ac",
+      :correction "unfolded lifted list at indexed value"}],
+    :commit "8c4eb4f96b95d89f92b10c478320a1c73ac05bf6",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
      "ConstructionTargets/t93J03Closure.blueprint.md"],
     :fixture
-    {:path "/tmp/t93j03_outer_boundary_lift_check.lean",
+    {:path "/tmp/t93j03_outer_boundary_family_check.lean",
      :sha256
-     "7cde577b448e464f14850729ce8156c56c418efdcdde6ed5e76e607028c656d7"},
+     "f94677c88f20478f56facb6b083e3431c25b11e312d331848f1f68b1ef084b76"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -38784,7 +38784,8 @@
     :lemma-pathtwoopensubdivisionrunboundarypoints
     :lemma-pathtwoopensubdivisionrunboundarypoints-getlast
     :lemma-pathtwoopensubdivisionrunboundarypoints-mem-outer
-    :lemma-pathtwoopensubdivisionouterrunboundarypoints-map-val],
+    :lemma-pathtwoopensubdivisionouterrunboundarypoints-map-val
+    :lemma-pathtwoopensubdivisionouterrunboundaryfamily-val],
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
@@ -39798,6 +39799,24 @@
    :id :lemma-t97j07-eulercharacteristic,
    :kind :lemma,
    :depends-on [],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "pathTwoOpenSubdivisionOuterRunBoundaryFamily_val",
+    :type "Fin-indexed outer boundaries recover ambient list"},
+   :lemma
+   {:name "pathTwoOpenSubdivisionOuterRunBoundaryFamily_val",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type "Fin-indexed outer boundaries recover ambient list",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03},
+   :id :lemma-pathtwoopensubdivisionouterrunboundaryfamily-val,
+   :kind :lemma,
+   :depends-on
+   [:lemma-pathtwoopensubdivisionouterrunboundarypoints-map-val],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
