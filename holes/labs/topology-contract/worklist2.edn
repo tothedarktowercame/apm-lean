@@ -87945,6 +87945,18 @@
     [{:cmd "inverse-law draft",
       :exit 1,
       :correction "removed nested path casts pointwise"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792004381403-12216-d2d447b0",
+     :commands
+     ["git show/diff b9a2fa337; blob sha256; diff --check"
+      "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology"
+      "lake env lean /dev/stdin (#print axioms)"
+      "placeholder scan"
+      "statement-registry.py check"],
+     :finding
+     "PASS: b9a2fa337 (topo-6) changes only scoped PolygonSurfaceHomology.lean; fixture SHA-256 61531d29d135b899ef67ba449d0a8bdfa849fd70446da460e75ef483e4ca5b5b matches. Exact blob builds; 0 placeholders; new declarations use standard axioms; registry 166/0. The explicit equivalence has forward map exactly mapOfEq, inverse map along the inverse homeomorphism, and correctly oriented base equalities; inverse laws are proved on loop representatives through path casts. New compiled progress; remaining: generator comparison, orbit surjectivity, coordinate epi, B6-B10."},
     :commit "b9a2fa337",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
@@ -87953,7 +87965,7 @@
      "61531d29d135b899ef67ba449d0a8bdfa849fd70446da460e75ef483e4ca5b5b"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -87973,7 +87985,7 @@
     :blueprint
     "ConstructionTargets/PolygonSurfaceHomology.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked positive-cardinality surjectivity.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked explicit based loop transport.",
    :id :program-2026-10-13-polygon-surface-homology,
    :kind :reusable-theorem,
    :campaign-priority 31,
@@ -88151,7 +88163,10 @@
      :reason "Banked base-preserving orbit-to-Fin relabeling."}
     {:job 3,
      :commit "0941748c1",
-     :reason "Banked positive-cardinality surjectivity."}]}
+     :reason "Banked positive-cardinality surjectivity."}
+    {:job 4,
+     :commit "b9a2fa337",
+     :reason "Banked explicit based loop transport."}]}
   {:consumer :t97A01,
    :stop-count 0,
    :phase :implementation,
@@ -90742,7 +90757,7 @@
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "fundamentalGroupEquivOfHomeomorphEq",
@@ -90754,14 +90769,16 @@
     :type
     "explicit mapOfEq equivalence for a homeomorphism and target-base equality",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :program-2026-10-13-polygon-surface-homology,
+    :banked-commit "b9a2fa337"},
    :id :lemma-fundamentalgroupequivofhomeomorpheq,
    :kind :lemma,
    :depends-on [],
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "finiteWedgeOrbitFundamentalGroupEquivFinExplicit",
@@ -90771,7 +90788,9 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "orbit relabeling with transparent based loop maps",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :program-2026-10-13-polygon-surface-homology,
+    :banked-commit "b9a2fa337"},
    :id :lemma-finitewedgeorbitfundamentalgroupequivfinexplicit,
    :kind :lemma,
    :depends-on [:lemma-fundamentalgroupequivofhomeomorpheq],
