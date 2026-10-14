@@ -883,7 +883,84 @@ lemma t93A06_exact_integral_aux_coeff_smooth_aux_global
     (η : let _ := atlas.charts; Form Plane Torus 1)
     (hη : letI := atlas.charts; IsSmooth η) (i : Fin 2) :
     ContDiff ℝ 1 (t93A06_pulledCoeff atlas η i) := by
-  sorry
+  letI := atlas.charts
+  letI : IsManifold 𝓘(ℝ,Plane) ∞ Torus := atlas.smooth
+  rw [contDiff_iff_contDiffAt]
+  intro x
+  let e := chartAt Plane (projection x)
+  let g : Plane → Plane := fun y ↦ e (projection y)
+  have hp : ContMDiffAt 𝓘(ℝ,Plane) 𝓘(ℝ,Plane) ∞ projection x :=
+    atlas.quotient_localDiffeomorph.contMDiff x
+  have he : ContMDiffAt 𝓘(ℝ,Plane) 𝓘(ℝ,Plane) ∞ e (projection x) :=
+    (contMDiffOn_chart (I := 𝓘(ℝ,Plane)) (n := ∞)).contMDiffAt
+      (e.open_source.mem_nhds (mem_chart_source Plane (projection x)))
+  have hg : ContDiffAt ℝ ∞ g x :=
+    (he.comp x hp).contDiffAt
+  have hform : ContDiffAt ℝ ∞ (inChart η e) (g x) := by
+    apply (hη e (chart_mem_atlas Plane (projection x))).contDiffAt
+    exact e.open_target.mem_nhds (mem_chart_target Plane (projection x))
+  have hcomp : ContDiffAt ℝ ∞ (fun y ↦ inChart η e (g y)) x :=
+    hform.comp x hg
+  have hdg : ContDiffAt ℝ 1 (fun y ↦ fderiv ℝ g y
+      (Pi.single i (1 : ℝ) : Plane)) x := by
+    have hle : (1 : WithTop ℕ∞) + 1 ≤ (∞ : WithTop ℕ∞) := by
+      change ((2 : ℕ∞) : WithTop ℕ∞) ≤ ((⊤ : ℕ∞) : WithTop ℕ∞)
+      exact_mod_cast (le_top : (2 : ℕ∞) ≤ ⊤)
+    exact (hg.fderiv_right hle).clm_apply contDiffAt_const
+  have hsmooth : ContDiffAt ℝ 1 (fun y ↦
+      (inChart η e (g y))
+        (fun _ : Fin 1 ↦ fderiv ℝ g y (Pi.single i (1 : ℝ) : Plane))) x := by
+    let ev : (Plane [⋀^Fin 1]→L[ℝ] ℝ) →ₗ[ℝ] (Plane →L[ℝ] ℝ) :=
+      { toFun := fun A ↦ LinearMap.toContinuousLinearMap
+          { toFun := fun v ↦ A (fun _ ↦ v)
+            map_add' := by
+              intro u v
+              simpa [Function.update_eq_const_of_subsingleton] using
+                A.map_update_add (fun _ ↦ u) 0 u v
+            map_smul' := by
+              intro m v
+              simpa [Function.update_eq_const_of_subsingleton] using
+                A.map_update_smul (fun _ ↦ v) 0 m v }
+        map_add' := by intro A B; ext v; simp
+        map_smul' := by intro c A; ext v; simp }
+    let evc : (Plane [⋀^Fin 1]→L[ℝ] ℝ) →L[ℝ] (Plane →L[ℝ] ℝ) :=
+      ev.mkContinuous 1 (fun A ↦ by
+        apply ContinuousLinearMap.opNorm_le_bound _ (by positivity)
+        intro v
+        simpa using A.le_opNorm (fun _ : Fin 1 ↦ v))
+    have hev : ContDiffAt ℝ 1 (fun y ↦ evc (inChart η e (g y))) x := by
+      have hle : (1 : WithTop ℕ∞) ≤ (∞ : WithTop ℕ∞) := by
+        change ((1 : ℕ∞) : WithTop ℕ∞) ≤ ((⊤ : ℕ∞) : WithTop ℕ∞)
+        exact_mod_cast (le_top : (1 : ℕ∞) ≤ ⊤)
+      exact evc.contDiff.contDiffAt.comp x (hcomp.of_le hle)
+    simpa [evc, ev] using hev.clm_apply hdg
+  apply hsmooth.congr_of_eventuallyEq
+  have hnhds : projection ⁻¹' e.source ∈ nhds x :=
+    hp.continuousAt.preimage_mem_nhds
+      (e.open_source.mem_nhds (mem_chart_source Plane (projection x)))
+  filter_upwards [hnhds] with y hy
+  unfold t93A06_pulledCoeff pullback inChart
+  simp only [g, e]
+  rw [e.left_inv hy]
+  change η (projection y) (fun _ ↦
+      mfderiv 𝓘(ℝ,Plane) 𝓘(ℝ,Plane) projection y (Pi.single i 1)) =
+    (η (projection y)).compContinuousLinearMap
+      (mfderiv 𝓘(ℝ,Plane) 𝓘(ℝ,Plane) e.symm (e (projection y)))
+      (fun _ ↦ fderiv ℝ (e ∘ projection) y (Pi.single i 1))
+  rw [← mfderiv_eq_fderiv]
+  rw [mfderiv_comp y
+    (((contMDiffOn_chart (I := 𝓘(ℝ,Plane)) (n := ∞)).contMDiffAt
+      (e.open_source.mem_nhds hy)).mdifferentiableAt (by simp))
+    (atlas.quotient_localDiffeomorph.mdifferentiable (by simp) y)]
+  simp only [e]
+  simp only [ContinuousAlternatingMap.compContinuousLinearMap_apply,
+    ContinuousLinearMap.comp_apply]
+  congr 1
+  funext j
+  have hder := congrArg (fun L : Plane →L[ℝ] Plane ↦
+      L (mfderiv 𝓘(ℝ,Plane) 𝓘(ℝ,Plane) projection y (Pi.single i 1)))
+    ((mdifferentiable_chart (I := 𝓘(ℝ,Plane)) (projection x)).symm_comp_deriv hy)
+  simpa using hder.symm
 
 theorem t93A06_exact_integral_aux_coeff_smooth (atlas : SmoothAtlas)
     (η : let _ := atlas.charts; Form Plane Torus 1)
