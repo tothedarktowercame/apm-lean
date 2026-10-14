@@ -1508,6 +1508,63 @@ noncomputable def finiteWedgeFinOneHomeomorphCircle :
     PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge (Fin 1) ≃ₜ Circle :=
   finiteWedgeSubsingletonHomeomorphCircle 0
 
+/-! ### Pointed contractible base neighborhoods -/
+
+/-- The local datum required by the generic point-wedge van Kampen theorem. -/
+structure PointedContractibleNeighborhood (X : Type*) [TopologicalSpace X]
+    (x₀ : X) where
+  carrier : Set X
+  isOpen : IsOpen carrier
+  mem : x₀ ∈ carrier
+  contraction :
+    ConstructionTargets.PointedPuncturedCircleContraction.PointedContraction
+      carrier ⟨x₀, mem⟩
+
+/-- A homeomorphism restricts to a homeomorphism from the preimage of a set
+onto that set. -/
+def homeomorphPreimageSet {X Y : Type*} [TopologicalSpace X]
+    [TopologicalSpace Y] (e : X ≃ₜ Y) (S : Set Y) :
+    {x : X // e x ∈ S} ≃ₜ S where
+  toFun x := ⟨e x.1, x.2⟩
+  invFun y := ⟨e.symm y.1, by rw [e.apply_symm_apply]; exact y.2⟩
+  left_inv x := by ext; exact e.symm_apply_apply x.1
+  right_inv y := by ext; exact e.apply_symm_apply y.1
+  continuous_toFun := Continuous.subtype_mk
+    (e.continuous.comp continuous_subtype_val) _
+  continuous_invFun := Continuous.subtype_mk
+    (e.symm.continuous.comp continuous_subtype_val) _
+
+/-- Pull a pointed contractible open neighborhood backward through a
+homeomorphism. -/
+noncomputable def PointedContractibleNeighborhood.preimageHomeomorph
+    {X Y : Type*} [TopologicalSpace X] [TopologicalSpace Y]
+    {x₀ : X} (e : X ≃ₜ Y)
+    (P : PointedContractibleNeighborhood Y (e x₀)) :
+    PointedContractibleNeighborhood X x₀ where
+  carrier := e ⁻¹' P.carrier
+  isOpen := P.isOpen.preimage e.continuous
+  mem := P.mem
+  contraction :=
+    ConstructionTargets.PointWedgeVanKampen.PointedContraction.homeomorphSymm
+      (homeomorphPreimageSet e P.carrier) P.contraction
+
+/-- The standard punctured-circle neighborhood as packaged local data. -/
+def circlePointedContractibleNeighborhood :
+    PointedContractibleNeighborhood Circle 1 where
+  carrier := ConstructionTargets.PointWedgeVanKampen.circleBaseNeighborhood
+  isOpen := ConstructionTargets.PointWedgeVanKampen.circleBaseNeighborhood_isOpen
+  mem := ConstructionTargets.PointWedgeVanKampen.circleBase_mem
+  contraction :=
+    ConstructionTargets.PointWedgeVanKampen.circleBaseNeighborhood_contraction
+
+/-- The contractible base neighborhood for the one-circle finite wedge. -/
+noncomputable def finiteWedgeFinOnePointedContractibleNeighborhood :
+    PointedContractibleNeighborhood
+      (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge (Fin 1))
+      (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle 0 1) :=
+  circlePointedContractibleNeighborhood.preimageHomeomorph
+    finiteWedgeFinOneHomeomorphCircle
+
 /-! ### Algebraic word extraction from a point-wedge computation -/
 
 /-- Evaluate a word whose letters come from the two factors of a coproduct. -/
