@@ -88294,30 +88294,18 @@
    :program true,
    :other-consumers []}
   {:consumer :t92J06,
-   :stop-count 7,
+   :stop-count 8,
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Build edge/vertex charts and exact fibers; then Cayley tree and finite invariants.",
+    "Repair/provision .lake/packages through canonical workspace lifecycle; then build edge/vertex charts and fibers.",
     :outcome :stop,
     :warnings
-    ["Main: 1 prior placeholder; prior lint/unrelated edits preserved"],
+    ["Lake not run: canonical package-link invariant failed"
+     "Main retains 1 prior placeholder"],
     :missing-theorems
-    [{:name "inl_eq_inr_iff",
-      :type "wedge legs meet only at basepoint",
-      :status :proved,
-      :consumers [:t92J06],
-      :depends-on [],
-      :area "graph-covering-realization"}
-     {:name "edgeProjection_eq_of_interior",
-      :type "interior image determines label and coordinate",
-      :status :proved,
-      :consumers [:t92J06],
-      :depends-on
-      ["intervalCircle_injective_on_interior" "inl_eq_inr_iff"],
-      :area "graph-covering-realization"}
-     {:name "twoLoopGraphCoverData_realization",
-      :type "local charts and fibers",
+    [{:name "twoLoopGraphCoverData_realization",
+      :type "local charts and exact fibers",
       :status :partial,
       :consumers [:t92J06],
       :depends-on ["edgeProjection_eq_of_interior"],
@@ -88327,40 +88315,21 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
     :reason
-    "Banked exact wedge-leg and interior projection separation.",
+    "Workspace invariant blocks Lake: .lake/packages is a real directory, not the canonical authority symlink. No files changed.",
     :commands
-    [{:cmd "lake -Kjobs=1 build ConstructionTargets.t92J06Closure",
-      :exit 0}
-     {:cmd "lake env lean problems/t92J06/lean/Main.lean", :exit 0}
+    [{:cmd "stat -c %F .lake/packages", :exit 0, :result "directory"}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder scan", :exit 0}
-     {:cmd "axioms check", :exit 0}
-     {:cmd "git show --check 016d44b93", :exit 0}],
-    :diagnostic-history
-    [{:cmd "endpoint-case draft",
-      :exit 1,
-      :correction "separated endpoint alternatives"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792012873323-12434-da5ef094",
-     :commands
-     ["git show/diff 016d44b93; blob sha256; diff --check"
-      "lake -Kjobs=1 build ConstructionTargets.t92J06Closure"
-      "lake env lean problems/t92J06/lean/Main.lean"
-      "lake env lean /dev/stdin (#print axioms)"
-      "placeholder scans; statement-registry.py check"],
-     :finding
-     "PASS: reviewer codex-7; 016d44b93 (topo-6) newly changes only scoped t92J06Closure.lean; fixture SHA-256 2a7eab33420848d73d91722b184f1a1d0ce856246744bc0f741eef26e46a24c8 matches. Exact blob and Main compile; changed file has 0 placeholders, Main retains its disclosed prior 1; standard axioms; registry 166/0. Coordinate invariance under EqvGen correctly descends through the quotient, proving the two wedge legs meet only at basepoint; interior non-basepoint and leg injectivity then give label-and-parameter separation. New sorry-free supporting progress; remaining charts/fibers, Cayley tree, finite invariants."},
+     {:cmd "git diff --check", :exit 0}],
     :commit "016d44b93",
-    :changed-paths ["ConstructionTargets/t92J06Closure.lean"],
+    :changed-paths [],
     :fixture
     {:path "ConstructionTargets/t92J06Closure.lean",
      :sha256
      "2a7eab33420848d73d91722b184f1a1d0ce856246744bc0f741eef26e46a24c8"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t92J06/lean/Main.lean"
     "problems/t92J06/status.json"
