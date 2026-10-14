@@ -681,18 +681,18 @@ lemma inversePairCancellation_aux_collapse_aux_cancelled_pair
       Ne.symm (inversePairCancellation_aux_inv_snd_ne x)
     simp [i, j, hsign]
 
-/-- Geometric certificate for the honest PL zip used in cancellation.  The
-certificate deliberately records a triangulation and affine formulas rather
-than merely recording the conclusions needed below: this prevents a radial
-fold (which has nontrivial interior fibres) from satisfying the interface. -/
+/-- The non-boundary fibre properties required of the honest PL zip.  In
+particular, a radial fold cannot satisfy `interior_injective`. -/
 structure CancellationZipSpec (n k : ℕ) (c : Disk → Disk) : Prop where
   source_pos : 0 < n + 2
   target_pos : 0 < n
   continuous : Continuous c
   surjective : Function.Surjective c
-  interior_injective : ∀ {p q : Disk}, ‖(p : ℂ)‖ < 1 → ‖(q : ℂ)‖ < 1 →
-    c p = c q → p = q
-  interior_iff : ∀ p : Disk, ‖(c p : ℂ)‖ < 1 ↔ ‖(p : ℂ)‖ < 1
+  /-- Interior points go to interior points (the converse is FALSE for a zip:
+  the zipped arcs `x`, `x⁻¹` land on an interior slit — review 2026-10-14). -/
+  interior_maps : ∀ p : Disk, ‖(p : ℂ)‖ < 1 → ‖(c p : ℂ)‖ < 1
+  /-- No other point shares an interior point's image. -/
+  interior_injective : ∀ {p q : Disk}, ‖(p : ℂ)‖ < 1 → c p = c q → p = q
 
 /-- Leaf (PL construction, 90--130 lines): triangulate the source by the
 centre, the endpoints of the two cancelled arcs, and all remaining vertices;
@@ -703,30 +703,19 @@ lemma inversePairCancellation_aux_zip_map {Label : Type*} [DecidableEq Label]
     (hx : x.1 ∉ (u ++ v).map Prod.fst)
     (hrest : IsPolygonWord (u ++ v)) :
     ∃ c : Disk → Disk,
-      CancellationZipSpec (u ++ v).length u.length c := by
-  sorry
-
-/-- Leaf (boundary calculation, 80--120 lines): on the unit circle the zip
-identifies precisely the oppositely parametrised cancelled arcs and sends all
-other arcs, in cyclic order, to their corresponding target arcs.  This lemma
-is independent: the geometric certificate is an explicit hypothesis. -/
-lemma inversePairCancellation_aux_zip_boundary {Label : Type*} [DecidableEq Label]
-    (u v : List (Signed Label)) (x : Signed Label)
-    (hx : x.1 ∉ (u ++ v).map Prod.fst)
-    (hrest : IsPolygonWord (u ++ v)) (c : Disk → Disk)
-    (hc : CancellationZipSpec (u ++ v).length u.length c) :
-    ∀ p q, ‖(p : ℂ)‖ = 1 → ‖(q : ℂ)‖ = 1 →
-      (Relation.EqvGen (WordRel (u ++ [x, inv x] ++ v)) p q ↔
-       Relation.EqvGen (WordRel (u ++ v)) (c p) (c q)) := by
+      CancellationZipSpec (u ++ v).length u.length c ∧
+      (∀ p q : Disk, ‖(p : ℂ)‖ = 1 → ‖(q : ℂ)‖ = 1 →
+        (Relation.EqvGen (WordRel (u ++ [x, inv x] ++ v)) p q ↔
+         Relation.EqvGen (WordRel (u ++ v)) (c p) (c q))) := by
   sorry
 
 /-- Leaf (interior/mixed fibres, 45--70 lines): use
-`wordRel_eqvGen_interior`, `CancellationZipSpec.interior_iff`, and
+`wordRel_eqvGen_interior`, `CancellationZipSpec.interior_maps`, and
 `interior_injective`; no boundary combinatorics occur here. -/
 lemma inversePairCancellation_aux_zip_interior {Label : Type*} [DecidableEq Label]
     (u v : List (Signed Label)) (x : Signed Label) (c : Disk → Disk)
     (hc : CancellationZipSpec (u ++ v).length u.length c) :
-    ∀ p q, (‖(p : ℂ)‖ < 1 ∨ ‖(q : ℂ)‖ < 1) →
+    ∀ p q : Disk, (‖(p : ℂ)‖ < 1 ∨ ‖(q : ℂ)‖ < 1) →
       (Relation.EqvGen (WordRel (u ++ [x, inv x] ++ v)) p q ↔
        Relation.EqvGen (WordRel (u ++ v)) (c p) (c q)) := by
   sorry
@@ -736,13 +725,13 @@ split each disk point into norm `< 1` or `= 1`, then invoke the supplied
 boundary and interior comparisons. -/
 lemma inversePairCancellation_aux_zip_relation {Label : Type*} [DecidableEq Label]
     (u v : List (Signed Label)) (x : Signed Label) (c : Disk → Disk)
-    (hboundary : ∀ p q, ‖(p : ℂ)‖ = 1 → ‖(q : ℂ)‖ = 1 →
+    (hboundary : ∀ p q : Disk, ‖(p : ℂ)‖ = 1 → ‖(q : ℂ)‖ = 1 →
       (Relation.EqvGen (WordRel (u ++ [x, inv x] ++ v)) p q ↔
        Relation.EqvGen (WordRel (u ++ v)) (c p) (c q)))
-    (hinterior : ∀ p q, (‖(p : ℂ)‖ < 1 ∨ ‖(q : ℂ)‖ < 1) →
+    (hinterior : ∀ p q : Disk, (‖(p : ℂ)‖ < 1 ∨ ‖(q : ℂ)‖ < 1) →
       (Relation.EqvGen (WordRel (u ++ [x, inv x] ++ v)) p q ↔
        Relation.EqvGen (WordRel (u ++ v)) (c p) (c q))) :
-    ∀ p q, Relation.EqvGen (WordRel (u ++ [x, inv x] ++ v)) p q ↔
+    ∀ p q : Disk, Relation.EqvGen (WordRel (u ++ [x, inv x] ++ v)) p q ↔
       Relation.EqvGen (WordRel (u ++ v)) (c p) (c q) := by
   sorry
 
@@ -758,10 +747,10 @@ lemma inversePairCancellation_aux_collapse {Label : Type*} [DecidableEq Label]
     ∃ c : Disk → Disk, Continuous c ∧ Function.Surjective c ∧
       ∀ p q, Relation.EqvGen (WordRel (u ++ [x, inv x] ++ v)) p q ↔
         Relation.EqvGen (WordRel (u ++ v)) (c p) (c q) := by
-  obtain ⟨c, hc⟩ := inversePairCancellation_aux_zip_map u v x hx hrest
+  obtain ⟨c, hc, hboundary⟩ := inversePairCancellation_aux_zip_map u v x hx hrest
   refine ⟨c, hc.continuous, hc.surjective, ?_⟩
   apply inversePairCancellation_aux_zip_relation u v x c
-  · exact inversePairCancellation_aux_zip_boundary u v x hx hrest c hc
+  · exact hboundary
   · exact inversePairCancellation_aux_zip_interior u v x c hc
 
 /-- Affinely collapse the two triangles incident to the cancelled vertex and
@@ -859,6 +848,22 @@ lemma wordRel_eqvGen_interior {L : Type*} [DecidableEq L]
     (h : Relation.EqvGen (WordRel w) p q) (hp : ‖(p : ℂ)‖ < 1) : p = q := by
   sorry
 -- END SEAT AREA
+
+lemma mergeRepeatedBlock_aux_boundary_aux_target_ne_nil {Label : Type*}
+    (u v t : List (Signed Label)) (a : Signed Label) :
+    u ++ [a] ++ v ++ [inv a] ++ t ≠ [] := by
+  simp
+
+lemma mergeRepeatedBlock_aux_boundary_aux_target_even {Label : Type*}
+    [DecidableEq Label]
+    (u v t : List (Signed Label)) (y z a : Signed Label)
+    (hw : IsPolygonWord (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t)) :
+    Even (u ++ [a] ++ v ++ [inv a] ++ t).length := by
+  have hs := hw.2.1
+  rw [mergeRepeatedBlock_aux_disk_reparam_aux_length u v t y z a] at hs
+  obtain ⟨k, hk⟩ := hs
+  refine ⟨k - 1, ?_⟩
+  omega
 
 /-- The boundary content of the merge: a PL circle homeomorphism sending arcs
 `y, z` to the halves of `a` (and `z⁻¹, y⁻¹` to the halves of `a⁻¹`), every
@@ -1063,6 +1068,50 @@ lemma cutAndPaste_aux_span_aux_target_polygon {Label : Type*} [DecidableEq Label
   rw [cutAndPaste_aux_span_aux_label_counts u v t x a]
   exact List.count_pos_iff.mpr ha
 
+/-- The common fibre relation on the two parametrising triangles.  Giving it
+a name lets the old- and new-polygon calculations be proved in parallel. -/
+def cutAndPasteParameterRel {Label : Type*} [DecidableEq Label]
+    (u v t : List (Signed Label)) (x : Signed Label)
+    (a : Fin 2 × Disk → Disk) (y y' : Fin 2 × Disk) : Prop :=
+  Relation.EqvGen (WordRel (u ++ [x] ++ v ++ [x] ++ t)) (a y) (a y')
+
+/-- Leaf (PL toolkit/construction, 100--150 lines): construct two closed
+triangles as radial fans of the regular polygon and parametrise each by a
+disk.  The two copies have opposite orientations along the cutting diagonal.
+This is the one place that may be promoted to a LIBRARY polygon/triangle PL
+toolkit if Mathlib has no suitable convex-polygon homeomorphism. -/
+lemma cutAndPaste_aux_triangle_charts {Label : Type*} [DecidableEq Label]
+    (u v t : List (Signed Label)) (x : Signed Label)
+    (hx : x.1 ∉ (u ++ v ++ t).map Prod.fst)
+    (hw : IsPolygonWord (u ++ [x] ++ v ++ [x] ++ t)) :
+    ∃ a b : Fin 2 × Disk → Disk, Continuous a ∧ Continuous b ∧
+      Function.Surjective a ∧ Function.Surjective b ∧
+      (∀ y y', cutAndPasteParameterRel u v t x a y y' →
+        Relation.EqvGen (WordRel (u ++ [x, x] ++ inverseWord v ++ t))
+          (b y) (b y')) ∧
+      (∀ y y', Relation.EqvGen
+          (WordRel (u ++ [x, x] ++ inverseWord v ++ t)) (b y) (b y') →
+        cutAndPasteParameterRel u v t x a y y') := by
+  sorry
+
+/-- Leaf (relation assembly, 25--40 lines): combine the independently usable
+forward and reverse fibre calculations. -/
+lemma cutAndPaste_aux_relation_iff {Label : Type*} [DecidableEq Label]
+    (u v t : List (Signed Label)) (x : Signed Label)
+    (a b : Fin 2 × Disk → Disk)
+    (hf : ∀ y y', cutAndPasteParameterRel u v t x a y y' →
+      Relation.EqvGen (WordRel (u ++ [x, x] ++ inverseWord v ++ t))
+        (b y) (b y'))
+    (hr : ∀ y y', Relation.EqvGen
+        (WordRel (u ++ [x, x] ++ inverseWord v ++ t)) (b y) (b y') →
+      cutAndPasteParameterRel u v t x a y y') :
+    ∀ y y', Relation.EqvGen (WordRel (u ++ [x] ++ v ++ [x] ++ t))
+        (a y) (a y') ↔
+      Relation.EqvGen (WordRel (u ++ [x, x] ++ inverseWord v ++ t))
+        (b y) (b y') := by
+  intro y y'
+  exact ⟨hf y y', hr y y'⟩
+
 /-- The geometric content of cut-and-paste: `Y = Fin 2 × Disk` (two triangles,
 each parametrised by a disk).  `a` places them on either side of the diagonal
 from the start of the first `x` to the start of the second; `b` places them
@@ -1077,7 +1126,10 @@ lemma cutAndPaste_aux_span {Label : Type*} [DecidableEq Label]
       Function.Surjective a ∧ Function.Surjective b ∧
       ∀ y y', Relation.EqvGen (WordRel (u ++ [x] ++ v ++ [x] ++ t)) (a y) (a y') ↔
         Relation.EqvGen (WordRel (u ++ [x, x] ++ inverseWord v ++ t)) (b y) (b y') := by
-  sorry
+  obtain ⟨a, b, ha, hb, has, hbs, hf, hr⟩ :=
+    cutAndPaste_aux_triangle_charts u v t x hx hw
+  exact ⟨a, b, ha, hb, has, hbs,
+    cutAndPaste_aux_relation_iff u v t x a b hf hr⟩
 
 /-- Standard normal-form slide.  Cut from the first `x` to the second, and
 send the two triangles on either side affinely across the new diagonal. -/
