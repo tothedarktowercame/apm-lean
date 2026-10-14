@@ -1187,10 +1187,19 @@ structure MergeRepeatedBlockEdgeSpec (g : Circle ≃ₜ Circle)
         by simpa [Circle, Submonoid.unitSphere] using
           norm_edgePoint (uLen + 1 + vLen + 1 + tLen) (uLen + 2 + vLen + i) s⟩
 
-/-- Assembly of the generic AddCircle descent and the explicit lift formulas. -/
-lemma mergeRepeatedBlock_aux_boundary_edge_homeomorph
-    (uLen vLen tLen : ℕ) :
-    ∃ g : Circle ≃ₜ Circle, MergeRepeatedBlockEdgeSpec g uLen vLen tLen := by
+/-- Formula-transfer leaf.  It is deliberately parameterized by both outputs
+of the preceding leaves, so it can be proved without depending on either
+`sorry`: rewrite `edgePoint` using its exponential formula and then use the
+seven fields of `F`. -/
+lemma mergeRepeatedBlock_aux_boundary_edge_formulas
+    (uLen vLen tLen : ℕ) (F : MergeRepeatedBlockLiftSpec uLen vLen tLen)
+    (g : Circle ≃ₜ Circle)
+    (hg : ∀ x : ℝ,
+      g (AddCircle.toCircle
+          (x : AddCircle (uLen + 2 + vLen + 2 + tLen : ℝ))) =
+        AddCircle.toCircle
+          (F.toFun x : AddCircle (uLen + 1 + vLen + 1 + tLen : ℝ))) :
+    MergeRepeatedBlockEdgeSpec g uLen vLen tLen := by
   sorry
 
 /-- Combinatorial leaf: the seven edge formulas carry generators to
@@ -1227,10 +1236,15 @@ lemma mergeRepeatedBlock_aux_boundary {Label : Type*} [DecidableEq Label]
           (circleToDisk c₁) (circleToDisk c₂) ↔
         Relation.EqvGen (WordRel (u ++ [a] ++ v ++ [inv a] ++ t))
           (circleToDisk (g c₁)) (circleToDisk (g c₂)) := by
-  obtain ⟨g, hg⟩ :=
-    mergeRepeatedBlock_aux_boundary_edge_homeomorph u.length v.length t.length
+  obtain ⟨F⟩ := mergeRepeatedBlock_aux_boundary_lift u.length v.length t.length
+  obtain ⟨g, hg⟩ := equivariantCircleLift_homeomorph
+    (u.length + 2 + v.length + 2 + t.length : ℝ)
+    (u.length + 1 + v.length + 1 + t.length : ℝ)
+    (by positivity) (by positivity) F.toEquivariantCircleLift
+  have hedge := mergeRepeatedBlock_aux_boundary_edge_formulas
+    u.length v.length t.length F g hg
   exact ⟨g, mergeRepeatedBlock_aux_boundary_relation u v t y z a
-    hyz ha hy hz hw g hg⟩
+    hyz ha hy hz hw g hedge⟩
 
 /-- The geometric core: radially extend the increasing piecewise-linear
 reparametrisation which sends the two consecutive `y,z` arcs to the `a` arc
@@ -1423,6 +1437,15 @@ def cutAndPasteParameterRel {Label : Type*} [DecidableEq Label]
     (u v t : List (Signed Label)) (x : Signed Label)
     (a : Fin 2 × Disk → Disk) (y y' : Fin 2 × Disk) : Prop :=
   Relation.EqvGen (WordRel (u ++ [x] ++ v ++ [x] ++ t)) (a y) (a y')
+
+lemma cutAndPaste_aux_triangle_charts_aux_snd_continuous :
+    Continuous (fun y : Fin 2 × Disk => y.2) := by
+  exact continuous_snd
+
+lemma cutAndPaste_aux_triangle_charts_aux_snd_surjective :
+    Function.Surjective (fun y : Fin 2 × Disk => y.2) := by
+  intro z
+  exact ⟨(0, z), rfl⟩
 
 /-- Leaf (PL toolkit/construction, 100--150 lines): construct two closed
 triangles as radial fans of the regular polygon and parametrise each by a
