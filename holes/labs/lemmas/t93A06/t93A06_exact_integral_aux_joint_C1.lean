@@ -1072,7 +1072,10 @@ theorem t93A06_exact_integral_aux_joint_C1 (atlas : SmoothAtlas)
     (η : let _ := atlas.charts; Form Plane Torus 1)
     (hη : letI := atlas.charts; IsSmooth η) (i : Fin 2) :
     ContDiff ℝ 1 (fun p : ℝ × ℝ ↦ t93A06_pulledCoeff atlas η i ![p.1, p.2]) := by
-  sorry
+  apply (t93A06_exact_integral_aux_coeff_smooth_aux_global atlas η hη i).comp
+  rw [contDiff_pi]
+  intro j
+  fin_cases j <;> simp <;> fun_prop
 -- END SEAT AREA
 
 /-- One-variable FTC for the `y` derivative, already integrated in `x`. -/
