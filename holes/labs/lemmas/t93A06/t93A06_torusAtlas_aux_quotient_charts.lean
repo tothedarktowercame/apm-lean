@@ -64,6 +64,7 @@ theorem t93A06_torusAtlas_aux_quotient_charts :
     ∃ charts : ChartedSpace Plane Torus,
       letI := charts
       (∀ e ∈ atlas Plane Torus, ∃ x : Torus, e = chartAt Plane x) ∧
+      (∀ x y : Torus, ∀ z ∈ ((chartAt Plane x).symm.trans (chartAt Plane y)).source, ∃ k : Fin 2 → ℤ, ∀ i, ((chartAt Plane x).symm.trans (chartAt Plane y)) z i = z i + (k i : ℝ)) ∧
       IsLocalDiffeomorph 𝓘(ℝ,Plane) 𝓘(ℝ,Plane) ∞ projection := by
   sorry
 -- END SEAT AREA
@@ -76,19 +77,62 @@ theorem t93A06_torusAtlas_aux_manifold_of_localDiffeomorph
     (charts : ChartedSpace Plane Torus)
     (hatlas : letI := charts
       (∀ e ∈ atlas Plane Torus, ∃ x : Torus, e = chartAt Plane x))
-    (hlocal : letI := charts
-      IsLocalDiffeomorph 𝓘(ℝ,Plane) 𝓘(ℝ,Plane) ∞ projection) :
+    (htrans : letI := charts
+      (∀ x y : Torus, ∀ z ∈ ((chartAt Plane x).symm.trans (chartAt Plane y)).source, ∃ k : Fin 2 → ℤ, ∀ i, ((chartAt Plane x).symm.trans (chartAt Plane y)) z i = z i + (k i : ℝ))) :
     letI := charts
     IsManifold 𝓘(ℝ,Plane) ∞ Torus := by
-  sorry
+  letI := charts
+  apply isManifold_of_contDiffOn
+  intro e e' he he'
+  obtain ⟨x, rfl⟩ := hatlas e he
+  obtain ⟨y, rfl⟩ := hatlas e' he'
+  let t := (chartAt Plane x).symm.trans (chartAt Plane y)
+  have ht : ContDiffOn ℝ ∞ (↑t) t.source := by
+    intro z hz
+    obtain ⟨k, hk⟩ := htrans x y z hz
+    have hc : ContinuousWithinAt (fun w ↦ t w - w) t.source z :=
+      (t.continuousOn.continuousWithinAt hz).sub continuousWithinAt_id
+    have hev : ∀ᶠ w in nhdsWithin z t.source,
+        dist (t w - w) (t z - z) < 1 :=
+      (Metric.tendsto_nhds.mp hc) 1 zero_lt_one
+    have heq : ∀ᶠ w in nhdsWithin z t.source, t w = w + fun i ↦ (k i : ℝ) := by
+      filter_upwards [hev, self_mem_nhdsWithin] with w hw hws
+      obtain ⟨l, hl⟩ := htrans x y w hws
+      change ∀ i, t w i = w i + (l i : ℝ) at hl
+      change ∀ i, t z i = z i + (k i : ℝ) at hk
+      have hlk : l = k := by
+        funext i
+        have hcoord : |((l i - k i : ℤ) : ℝ)| < 1 := by
+          calc
+            |((l i - k i : ℤ) : ℝ)| = |(t w - w) i - (t z - z) i| := by
+              rw [Int.cast_sub]
+              simp only [Pi.sub_apply]
+              rw [hl i, hk i]
+              ring
+            _ ≤ ‖(t w - w) - (t z - z)‖ :=
+              norm_le_pi_norm ((t w - w) - (t z - z)) i
+            _ = dist (t w - w) (t z - z) := by rw [dist_eq_norm]
+            _ < 1 := hw
+        have hlo : (-1 : ℤ) < l i - k i := by
+          exact_mod_cast (abs_lt.mp hcoord).1
+        have hhi : l i - k i < 1 := by
+          exact_mod_cast (abs_lt.mp hcoord).2
+        omega
+      simpa [hlk] using funext hl
+    apply (contDiff_id.add
+      (contDiff_const : ContDiff ℝ ∞
+        (fun _ : Plane ↦ (fun i ↦ (k i : ℝ))))).contDiffWithinAt.congr_of_eventuallyEq
+      heq
+    exact funext hk
+  simpa using ht
 
 /-- The two independent quotient-chart conclusions assemble into the target
 atlas structure. -/
 theorem t93A06_torusAtlas : Nonempty SmoothAtlas := by
-  obtain ⟨charts, hatlas, hlocal⟩ := t93A06_torusAtlas_aux_quotient_charts
+  obtain ⟨charts, hatlas, htrans, hlocal⟩ := t93A06_torusAtlas_aux_quotient_charts
   letI := charts
   exact ⟨⟨charts,
-    t93A06_torusAtlas_aux_manifold_of_localDiffeomorph charts hatlas hlocal,
+    t93A06_torusAtlas_aux_manifold_of_localDiffeomorph charts hatlas htrans,
     hlocal⟩⟩
 
 /-- The fibres of the printed quotient projection are precisely integer
@@ -176,7 +220,64 @@ theorem t93A06_periodic_form_descent_aux_set_descent
     letI := atlas.charts
     ∃ form : Form Plane Torus 2,
       pullback projection form = sourceForm := by
-  sorry
+  letI := atlas.charts
+  classical
+  let lift : Torus → Plane := fun z ↦
+    Classical.choose (t93A06_periodic_form_descent_aux_projection_surjective z)
+  have hlift (z : Torus) : projection (lift z) = z :=
+    Classical.choose_spec (t93A06_periodic_form_descent_aux_projection_surjective z)
+  let D (x : Plane) : Plane ≃L[ℝ] Plane :=
+    atlas.quotient_localDiffeomorph.mfderivToContinuousLinearEquiv (by simp) x
+  let form : Form Plane Torus 2 := fun z ↦
+    (sourceForm (lift z)).compContinuousLinearMap (D (lift z)).symm
+  refine ⟨form, funext fun x ↦ ?_⟩
+  obtain ⟨k, hk⟩ :=
+    (hfib x (lift (projection x))).mp (hlift (projection x)).symm
+  have hproj : (fun y : Plane ↦ projection (fun i ↦ y i + (k i : ℝ))) =
+      projection := by
+    funext y
+    exact ((hfib y (fun i ↦ y i + (k i : ℝ))).mpr
+      ⟨k, fun i ↦ rfl⟩).symm
+  have htrans : mfderiv 𝓘(ℝ,Plane) 𝓘(ℝ,Plane)
+      (fun y : Plane ↦ fun i ↦ y i + (k i : ℝ)) x =
+      ContinuousLinearMap.id ℝ Plane := by
+    rw [mfderiv_eq_fderiv]
+    exact ((hasFDerivAt_id x).add_const (fun i ↦ (k i : ℝ))).fderiv
+  have hlift_eq : lift (projection x) = (fun i ↦ x i + (k i : ℝ)) := by
+    funext i
+    exact hk i
+  have hd : mfderiv 𝓘(ℝ,Plane) 𝓘(ℝ,Plane) projection
+      (lift (projection x)) =
+      mfderiv 𝓘(ℝ,Plane) 𝓘(ℝ,Plane) projection x := by
+    rw [hlift_eq]
+    have hc := mfderiv_comp x
+      ((atlas.quotient_localDiffeomorph
+        (fun i ↦ x i + (k i : ℝ))).mdifferentiableAt (by simp))
+      (show MDifferentiableAt 𝓘(ℝ,Plane) 𝓘(ℝ,Plane)
+        (fun y : Plane ↦ fun i ↦ y i + (k i : ℝ)) x by
+          rw [mdifferentiableAt_iff_differentiableAt]
+          exact ((hasFDerivAt_id x).add_const
+            (fun i ↦ (k i : ℝ))).differentiableAt)
+    rw [show (projection ∘ (fun y : Plane ↦ fun i ↦ y i + (k i : ℝ))) =
+      projection by funext y; exact congrFun hproj y,
+      htrans] at hc
+    simpa using hc.symm
+  apply ContinuousAlternatingMap.ext
+  intro v
+  change sourceForm (lift (projection x))
+      (fun i ↦ (D (lift (projection x))).symm
+        (mfderiv 𝓘(ℝ,Plane) 𝓘(ℝ,Plane) projection x (v i))) =
+    sourceForm x v
+  rw [show sourceForm (lift (projection x)) = sourceForm x by
+    rw [hlift_eq, hperiodic x k]]
+  have hD : (D (lift (projection x)) : Plane →L[ℝ] Plane) =
+      mfderiv 𝓘(ℝ,Plane) 𝓘(ℝ,Plane) projection x := by
+    change mfderiv 𝓘(ℝ,Plane) 𝓘(ℝ,Plane) projection (lift (projection x)) = _
+    exact hd
+  rw [← hD]
+  congr 1
+  funext i
+  exact (D (lift (projection x))).symm_apply_apply (v i)
 
 /-- Smoothness descends along the local diffeomorphism `projection`.  Both
 the form and the smoothness of its pullback are explicit inputs, making this
@@ -294,8 +395,13 @@ theorem t93A06_exact_integral_aux_pullback_d (atlas : SmoothAtlas)
       exteriorDerivative (E := Plane) (M := Plane) (pullback projection η) := by
   sorry
 
-/-- Smoothness of a torus one-form gives smooth coefficient functions after
-pullback to the plane. -/
+lemma t93A06_exact_integral_aux_coeff_smooth_aux_global
+    (atlas : SmoothAtlas)
+    (η : let _ := atlas.charts; Form Plane Torus 1)
+    (hη : letI := atlas.charts; IsSmooth η) (i : Fin 2) :
+    ContDiff ℝ 1 (t93A06_pulledCoeff atlas η i) := by
+  sorry
+
 theorem t93A06_exact_integral_aux_coeff_smooth (atlas : SmoothAtlas)
     (η : let _ := atlas.charts; Form Plane Torus 1)
     (hη : letI := atlas.charts; IsSmooth η) :
@@ -303,7 +409,19 @@ theorem t93A06_exact_integral_aux_coeff_smooth (atlas : SmoothAtlas)
       (fun x ↦ t93A06_pulledCoeff atlas η 1 ![x, y])) ∧
     (∀ x : ℝ, ContDiff ℝ 1
       (fun y ↦ t93A06_pulledCoeff atlas η 0 ![x, y])) := by
-  sorry
+  have h0 := t93A06_exact_integral_aux_coeff_smooth_aux_global atlas η hη 0
+  have h1 := t93A06_exact_integral_aux_coeff_smooth_aux_global atlas η hη 1
+  constructor
+  · intro y
+    apply h1.comp
+    apply contDiff_pi.mpr
+    intro i
+    fin_cases i <;> simp <;> fun_prop
+  · intro x
+    apply h0.comp
+    apply contDiff_pi.mpr
+    intro i
+    fin_cases i <;> simp <;> fun_prop
 
 /-- Coordinate formula for the integral of an exterior derivative.  The
 naturality equality is an explicit input so this leaf is parallel to it. -/
@@ -311,7 +429,8 @@ theorem t93A06_exact_integral_aux_square_formula (atlas : SmoothAtlas)
     (η : let _ := atlas.charts; Form Plane Torus 1)
     (hnat : letI := atlas.charts
       pullback projection (exteriorDerivative η) =
-        exteriorDerivative (E := Plane) (M := Plane) (pullback projection η)) :
+        exteriorDerivative (E := Plane) (M := Plane) (pullback projection η))
+    (hC1 : ∀ i : Fin 2, ContDiff ℝ 1 (t93A06_pulledCoeff atlas η i)) :
     letI := atlas.charts
     torusIntegral (exteriorDerivative η) =
       (∫ y : ℝ in 0..1, ∫ x : ℝ in 0..1,
@@ -364,6 +483,7 @@ theorem t93A06_not_exact_of_integral_quarter (atlas : SmoothAtlas)
   rintro ⟨η, hη, rfl⟩
   have hnat := t93A06_exact_integral_aux_pullback_d atlas η hη
   have hsquare := t93A06_exact_integral_aux_square_formula atlas η hnat
+    (fun i ↦ t93A06_exact_integral_aux_coeff_smooth_aux_global atlas η hη i)
   let P : ℝ → ℝ → ℝ := fun x y ↦ t93A06_pulledCoeff atlas η 0 ![x, y]
   let Q : ℝ → ℝ → ℝ := fun x y ↦ t93A06_pulledCoeff atlas η 1 ![x, y]
   obtain ⟨hQy, hPx⟩ := t93A06_exact_integral_aux_coeff_smooth atlas η hη
