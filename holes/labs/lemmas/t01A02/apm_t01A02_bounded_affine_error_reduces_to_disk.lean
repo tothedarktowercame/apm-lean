@@ -352,6 +352,19 @@ reduces to the fixed-point problem for one continuous self-map of the closed
 unit disk.  The implication is deliberately exposed so this leaf does not
 assume Brouwer. -/
 -- BEGIN SEAT AREA
+lemma apm_t01A02_bounded_affine_error_reduces_to_disk_aux_norm
+    (u v : ℝ) :
+    ‖(WithLp.toLp 2 ![u, v] : apm_t01A02_Plane)‖ ≤ |u| + |v| := by
+  rw [EuclideanSpace.norm_eq, Fin.sum_univ_two]
+  simp only [WithLp.ofLp_toLp, Matrix.cons_val_zero, Matrix.cons_val_one,
+    Real.norm_eq_abs]
+  have hs : 0 ≤ u ^ 2 + v ^ 2 := by positivity
+  have hr := Real.sq_sqrt hs
+  have hn := Real.sqrt_nonneg (u ^ 2 + v ^ 2)
+  have hr' : (Real.sqrt (|u| ^ 2 + |v| ^ 2)) ^ 2 =
+      |u| ^ 2 + |v| ^ 2 := Real.sq_sqrt (by positivity)
+  nlinarith [abs_nonneg u, abs_nonneg v]
+
 lemma apm_t01A02_bounded_affine_error_reduces_to_disk
     (F : ℝ × ℝ → ℝ × ℝ) (a b c d : ℤ)
     (hcont : Continuous F)
@@ -361,7 +374,123 @@ lemma apm_t01A02_bounded_affine_error_reduces_to_disk
     (hdet : ((1 - 2 * a) * (1 - 2 * d) - (-2 * b) * (-2 * c)) ≠ 0) :
     ∃ g : C(apm_t01A02_Disk, apm_t01A02_Disk),
       (∃ y, g y = y) → ∃ x, F x = x := by
-  sorry
+  let α : ℝ := 1 - 2 * (a : ℝ)
+  let β : ℝ := -2 * (b : ℝ)
+  let γ : ℝ := -2 * (c : ℝ)
+  let δ : ℝ := 1 - 2 * (d : ℝ)
+  let D : ℝ := α * δ - β * γ
+  have hD : D ≠ 0 := by
+    intro h
+    apply hdet
+    dsimp [D, α, β, γ, δ] at h
+    exact_mod_cast h
+  let E : ℝ × ℝ → ℝ × ℝ := fun x ↦
+    F x - ((2 * (a : ℝ) * x.1 + 2 * (b : ℝ) * x.2),
+      (2 * (c : ℝ) * x.1 + 2 * (d : ℝ) * x.2))
+  obtain ⟨C, hC⟩ := hbounded
+  have hC0 : 0 ≤ C := le_trans (norm_nonneg (E (0, 0))) (hC (0, 0))
+  let T : ℝ × ℝ → ℝ × ℝ := fun x ↦
+    ((δ * (E x).1 - β * (E x).2) / D,
+      (-γ * (E x).1 + α * (E x).2) / D)
+  have hTcont : Continuous T := by
+    apply Continuous.prodMk <;> dsimp [T, E]
+    · fun_prop
+    · fun_prop
+  let K : ℝ :=
+    ((|δ| + |β| + |γ| + |α|) * C) / |D|
+  have hK0 : 0 ≤ K := by positivity
+  have hTbound (x : ℝ × ℝ) : |(T x).1| + |(T x).2| ≤ K := by
+    have he := hC x
+    change ‖E x‖ ≤ C at he
+    have he1 : |(E x).1| ≤ C := by
+      rw [← Real.norm_eq_abs]
+      exact (norm_fst_le (E x)).trans he
+    have he2 : |(E x).2| ≤ C := by
+      rw [← Real.norm_eq_abs]
+      exact (norm_snd_le (E x)).trans he
+    have hDabs : 0 < |D| := abs_pos.mpr hD
+    dsimp [T, K]
+    rw [abs_div, abs_div]
+    have h1 := abs_sub (δ * (E x).1) (β * (E x).2)
+    have h2 := abs_add_le (-γ * (E x).1) (α * (E x).2)
+    rw [abs_mul, abs_mul] at h1 h2
+    rw [abs_neg] at h2
+    rw [← add_div]
+    apply div_le_div_of_nonneg_right
+    · nlinarith [mul_le_mul_of_nonneg_left he1 (abs_nonneg δ),
+      mul_le_mul_of_nonneg_left he2 (abs_nonneg β),
+      mul_le_mul_of_nonneg_left he1 (abs_nonneg γ),
+      mul_le_mul_of_nonneg_left he2 (abs_nonneg α)]
+    · exact hDabs.le
+  let R : ℝ := K + 1
+  have hR : 0 < R := by dsimp [R]; linarith
+  let p : apm_t01A02_Plane → ℝ × ℝ := fun z ↦ (R * z 0, R * z 1)
+  let q : ℝ × ℝ → apm_t01A02_Plane := fun x ↦
+    WithLp.toLp 2 ![x.1 / R, x.2 / R]
+  have hqT (z : apm_t01A02_Plane) : ‖q (T (p z))‖ ≤ 1 := by
+    refine (apm_t01A02_bounded_affine_error_reduces_to_disk_aux_norm
+      ((T (p z)).1 / R) ((T (p z)).2 / R)).trans ?_
+    have hb := hTbound (p z)
+    calc
+      |(T (p z)).1 / R| + |(T (p z)).2 / R|
+          = (|(T (p z)).1| + |(T (p z)).2|) / R := by
+              simp only [abs_div, abs_of_pos hR]
+              ring
+      _ ≤ K / R := div_le_div_of_nonneg_right hb hR.le
+      _ ≤ 1 := by apply (div_le_iff₀ hR).2; dsimp [R]; linarith
+  let g : C(apm_t01A02_Disk, apm_t01A02_Disk) :=
+    ⟨fun z ↦ ⟨q (T (p z.1)), by
+        simpa only [Metric.mem_closedBall, dist_zero_right] using hqT z.1⟩,
+      by
+        apply Continuous.subtype_mk
+        dsimp [q, p]
+        apply (PiLp.continuous_toLp 2 (fun _ : Fin 2 ↦ ℝ)).comp
+        apply continuous_pi
+        intro i
+        fin_cases i <;> simp <;> fun_prop⟩
+  refine ⟨g, ?_⟩
+  rintro ⟨y, hy⟩
+  let x : ℝ × ℝ := p y.1
+  have hcoords : T x = x := by
+    have heq : q (T x) = y.1 := congr_arg Subtype.val hy
+    apply Prod.ext
+    · have := congr_fun (congr_arg WithLp.ofLp heq) 0
+      dsimp [q, x, p] at this ⊢
+      field_simp [hR.ne'] at this
+      linarith
+    · have := congr_fun (congr_arg WithLp.ofLp heq) 1
+      dsimp [q, x, p] at this ⊢
+      field_simp [hR.ne'] at this
+      linarith
+  refine ⟨x, ?_⟩
+  have hlin :
+      (α * x.1 + β * x.2, γ * x.1 + δ * x.2) = E x := by
+    have ht1 := congr_arg Prod.fst hcoords
+    have ht2 := congr_arg Prod.snd hcoords
+    apply Prod.ext <;> dsimp [T]
+    · dsimp [T] at ht1 ht2
+      field_simp [hD] at ht1 ht2
+      calc
+        α * x.1 + β * x.2 =
+            (α * (D * x.1) + β * (D * x.2)) / D := by field_simp [hD]
+        _ = (α * (δ * (E x).1 - β * (E x).2) +
+            β * (-((E x).1 * γ) + (E x).2 * α)) / D := by rw [ht1, ht2]
+        _ = (E x).1 := by field_simp [hD]; dsimp [D]; ring
+    · dsimp [T] at ht1 ht2
+      field_simp [hD] at ht1 ht2
+      calc
+        γ * x.1 + δ * x.2 =
+            (γ * (D * x.1) + δ * (D * x.2)) / D := by field_simp [hD]
+        _ = (γ * (δ * (E x).1 - β * (E x).2) +
+            δ * (-((E x).1 * γ) + (E x).2 * α)) / D := by rw [ht1, ht2]
+        _ = (E x).2 := by field_simp [hD]; dsimp [D]; ring
+  apply Prod.ext
+  · have := congr_arg Prod.fst hlin
+    dsimp [E, α, β] at this
+    linarith
+  · have := congr_arg Prod.snd hlin
+    dsimp [E, γ, δ] at this
+    linarith
 -- END SEAT AREA
 
 /-- Seat (ray geometry): from distinct points `x,y` of the closed disk, the
