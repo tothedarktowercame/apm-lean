@@ -275,6 +275,24 @@ def genericPointWedgeConnectors
   base := FundamentalGroupoid.mk z₀
   connector := genericPointWedgeBasedConnector z₀
 
+/-- Transport a connector system through an equivalence.  The connector at a
+target object is the mapped connector at its inverse image followed by the
+equivalence counit, so the coordinate choice is coherent with the equivalence. -/
+def connectorSystemMapEquivalence
+    {C D : Type} [Groupoid C] [Groupoid D]
+    (S : ConnectorSystem C) (e : C ≌ D) : ConnectorSystem D where
+  base := e.functor.obj S.base
+  connector A := e.functor.mapIso (S.connector (e.inverse.obj A)) ≪≫
+    e.counitIso.app A
+
+omit [PathConnectedSpace X] [PathConnectedSpace Y] in
+theorem connectorSystemMapEquivalence_connector_hom
+    {C D : Type} [Groupoid C] [Groupoid D]
+    (S : ConnectorSystem C) (e : C ≌ D) (A : D) :
+    ((connectorSystemMapEquivalence S e).connector A).hom =
+      e.functor.map (S.connector (e.inverse.obj A)).hom ≫
+        e.counitIso.hom.app A := rfl
+
 theorem genericPointWedgeConnectors_base
     {Z : Type} [TopologicalSpace Z] [PathConnectedSpace Z] (z₀ : Z) :
     (genericPointWedgeConnectors z₀).base = FundamentalGroupoid.mk z₀ := rfl

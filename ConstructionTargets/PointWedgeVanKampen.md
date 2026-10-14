@@ -1421,3 +1421,7 @@ connector, and
 `genericPointWedgeRightBase_rightProjection_eq_one_iff_connectorSquare`
 records the resulting naturality-ready obstruction: source connector followed
 by the unshifted counit image must equal the chosen target connector.
+`connectorSystemMapEquivalence` supplies the coherent replacement for an
+independent `somePath` choice: it transports source connectors through an
+equivalence and then composes with that equivalence's counit.  The next step
+is to install this construction in the right-piece coordinate comparison.
