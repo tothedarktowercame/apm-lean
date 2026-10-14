@@ -87945,6 +87945,16 @@
       :exit 1,
       :correction
       "derived identity value additively; used map_zsmul"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791950198100-11550-1cc945d0",
+     :commands
+     ["git show 83bf9106a blob + #print axioms | lake env lean /dev/stdin"
+      "diff-tree/readlink/sha256 assertions"
+      "statement-registry check; comment-stripped placeholder scan"],
+     :finding
+     "PASS: 83bf9106a changes only PolygonSurfaceHomology.lean; exact blob SHA256 45da19a2e9ffb614e227cbee50807ed3ecfdd62bbcf0d49aaded6e2c536941c2. It compiles with standard axioms propext/Classical.choice/Quot.sound; placeholders 0; registry 166/0. New progress beyond 602411b84 packages the comparison-normalized Hurewicz map as a homomorphism into the multiplicative wrapper of module H1 and derives the required product-to-sum and integer-power-to-scalar-multiple formulas. The Multiplicative.ofAdd/toAdd boundary is explicit and the zpower orientation n • H(g) is correct for converting leg words into coordinate sums."},
     :commit "d06aefa52",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
@@ -87953,7 +87963,7 @@
      "604ce710faf830f9df099a2861cdfa095ea8e831f6eeaf0fa8c5c0334b405265"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -87973,7 +87983,7 @@
     :blueprint
     "ConstructionTargets/PolygonSurfaceHomology.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked normalized Hurewicz as a group homomorphism with product and zpower formulas.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked Hurewicz evaluation of finite integer-exponent leg words.",
    :id :program-2026-10-13-polygon-surface-homology,
    :kind :reusable-theorem,
    :campaign-priority 31,
@@ -88041,7 +88051,11 @@
     {:job 6,
      :commit "83bf9106a",
      :reason
-     "Banked normalized Hurewicz as a group homomorphism with product and zpower formulas."}]}
+     "Banked normalized Hurewicz as a group homomorphism with product and zpower formulas."}
+    {:job 7,
+     :commit "d06aefa52",
+     :reason
+     "Banked Hurewicz evaluation of finite integer-exponent leg words."}]}
   {:consumer :t97A01,
    :stop-count 0,
    :phase :implementation,
@@ -89239,7 +89253,7 @@
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "finiteWedgeLegWord_hurewicz",
@@ -89249,7 +89263,9 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "finite leg words map to their summed H1 coordinates",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :program-2026-10-13-polygon-surface-homology,
+    :banked-commit "d06aefa52"},
    :id :lemma-finitewedgelegword-hurewicz,
    :kind :lemma,
    :depends-on
