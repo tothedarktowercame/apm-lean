@@ -1911,6 +1911,32 @@ def finiteWedgeRightBaseCounitSquare (n : ℕ) : Prop := by
       ((ConstructionTargets.PointWedgeVanKampen.genericPointWedgeConnectors y₀).connector
         (eR.functor.obj b)).hom
 
+/-- The remaining counit obstruction expressed at the common connector
+base: its chosen connector normal form must be the identity. -/
+def finiteWedgeRightBaseCounitNormalFormTrivial (n : ℕ) : Prop := by
+  let P := finiteWedgeFinSuccPointWedgeNeighborhoods n
+  let x₀ := PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1
+  let y₀ := PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle () 1
+  let eR := ConstructionTargets.PointWedgeVanKampen.genericPointWedgeRightGroupoidEquivalence
+    x₀ y₀ P.2.carrier P.1.carrier P.2.isOpen P.1.isOpen
+      P.2.mem P.1.mem P.2.contraction P.1.contraction
+  let b := ConstructionTargets.PointWedgeVanKampen.genericPointWedgeRightBase
+    x₀ y₀ P.1.carrier
+  exact
+    (ConstructionTargets.PointWedgeVanKampen.genericPointWedgeConnectors y₀).normalForm
+        (eR.counitIso.hom.app (eR.functor.obj b)) =
+      𝟙 (ConstructionTargets.PointWedgeVanKampen.genericPointWedgeConnectors y₀).base
+
+/-- The literal finite-wedge counit square is exactly triviality of its
+connector normal form. -/
+theorem finiteWedgeRightBaseCounitSquare_iff_normalFormTrivial (n : ℕ) :
+    finiteWedgeRightBaseCounitSquare n ↔
+      finiteWedgeRightBaseCounitNormalFormTrivial n := by
+  unfold finiteWedgeRightBaseCounitSquare
+  unfold finiteWedgeRightBaseCounitNormalFormTrivial
+  exact ConstructionTargets.PointWedgeVanKampen.genericPointWedgeRightBase_counit_connectorSquare_iff_normalForm
+    _ _ _ _ _ _ _ _ _ _
+
 /-- The coherent source-side inverse-unit square induced at the same base. -/
 def finiteWedgeCoherentRightSourceUnitSquare (n : ℕ) : Prop := by
   let P := finiteWedgeFinSuccPointWedgeNeighborhoods n
