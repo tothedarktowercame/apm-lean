@@ -5511,10 +5511,48 @@ theorem cutPiece_interior_nonempty {P Q : ℂ} (hP : ‖P‖ = 1) (hQ : ‖Q‖ 
     change z ∈ cutPiece P Q
     exact ⟨le_of_lt hz.1, le_of_lt hz.2⟩)
 
+lemma cutPiece_frontier_aux_line {P Q z : ℂ} (hPQ : P ≠ Q)
+    (hz : cutCross (Q - P) (z - P) = 0) :
+    ∃ t : ℝ, z = (1 - t) • P + t • Q := by
+  sorry
+
+lemma cutPiece_frontier_aux_chord {P Q z : ℂ} (hP : ‖P‖ = 1) (hQ : ‖Q‖ = 1)
+    (hPQ : P ≠ Q)
+    (hline : cutCross (Q - P) (z - P) = 0 → ∃ t : ℝ, z = (1 - t) • P + t • Q) :
+    (‖z‖ ≤ 1 ∧ cutCross (Q - P) (z - P) = 0) ↔ z ∈ segment ℝ P Q := by
+  sorry
+
+lemma cutPiece_frontier_aux_closed (P Q : ℂ) : IsClosed (cutPiece P Q) := by
+  rw [cutPiece]
+  apply (isClosed_le continuous_norm continuous_const).inter
+  change IsClosed {z : ℂ | cutCross (Q - P) (z - P) ≤ 0}
+  apply isClosed_le _ continuous_const
+  unfold cutCross
+  exact Complex.continuous_im.comp
+    (continuous_const.mul (continuous_id.sub continuous_const))
+
+lemma cutPiece_frontier_aux_interior {P Q : ℂ} (hPQ : P ≠ Q) :
+    interior (cutPiece P Q) =
+      {z | ‖z‖ < 1 ∧ cutCross (Q - P) (z - P) < 0} := by
+  sorry
+
 theorem cutPiece_frontier {P Q : ℂ} (hP : ‖P‖ = 1) (hQ : ‖Q‖ = 1) (hPQ : P ≠ Q) :
     frontier (cutPiece P Q) =
       {z | ‖z‖ = 1 ∧ cutCross (Q - P) (z - P) ≤ 0} ∪ segment ℝ P Q := by
-  sorry
+  rw [frontier, (cutPiece_frontier_aux_closed P Q).closure_eq,
+    cutPiece_frontier_aux_interior hPQ]
+  ext z
+  simp only [Set.mem_union]
+  rw [← cutPiece_frontier_aux_chord (z := z) hP hQ hPQ (cutPiece_frontier_aux_line hPQ)]
+  simp only [cutPiece, Set.mem_diff, Set.mem_setOf_eq, not_and_or, not_lt]
+  constructor
+  · rintro ⟨⟨hz1, hc⟩, h⟩
+    rcases h with h | h
+    · exact Or.inl ⟨le_antisymm hz1 h, hc⟩
+    · exact Or.inr ⟨hz1, le_antisymm hc h⟩
+  · rintro (⟨h1, hc⟩ | ⟨h1, hc⟩)
+    · exact ⟨⟨h1.le, hc⟩, Or.inl h1.ge⟩
+    · exact ⟨⟨h1, hc.le⟩, Or.inr hc.ge⟩
 
 /-- The two pieces cover the disk; for `P ≠ Q` the interior of one misses the other
 (for `P = Q` the piece is the whole disk: blueprint-2, 10-14). -/
