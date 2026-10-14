@@ -12,6 +12,7 @@ the integer coefficient records that later signed choice explicitly.
 -/
 
 open CategoryTheory
+open scoped Manifold
 noncomputable section
 set_option autoImplicit false
 
@@ -21,6 +22,7 @@ open ConstructionTargets.SingularHomologyConcrete
 open ConstructionTargets.ManifoldFundamentalClass
 
 abbrev SurfaceModel := EuclideanSpace ℝ (Fin 2)
+abbrev SurfaceModelWithCorners := 𝓘(ℝ, SurfaceModel)
 
 private abbrev surfaceHomology (S : Type) [TopologicalSpace S] :=
   (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 2).obj
@@ -101,6 +103,22 @@ theorem finite_regularFiber_of_isDiscrete
     (f : C(S, S)) (y : S) (hdiscrete : IsDiscrete (f ⁻¹' {y})) :
     (f ⁻¹' {y}).Finite := by
   exact (isClosed_singleton.preimage f.continuous).isCompact.finite hdiscrete
+
+/-- The range-sum formulation used by the frozen surface problem gives the
+operational coproduct-surjectivity witness at every incidence point. -/
+theorem transverse_coprodDerivative_surjective
+    {S : Type} [TopologicalSpace S] [ChartedSpace SurfaceModel S]
+    (f : S → S) (c : Circle → S)
+    (htrans : ∀ x z, f x = c z →
+      LinearMap.range (mfderiv SurfaceModelWithCorners SurfaceModelWithCorners f x).toLinearMap ⊔
+        LinearMap.range (mfderiv (𝓡 1) SurfaceModelWithCorners c z).toLinearMap = ⊤) :
+    ∀ x z, f x = c z → Function.Surjective
+      (LinearMap.coprod
+        (mfderiv SurfaceModelWithCorners SurfaceModelWithCorners f x).toLinearMap
+        (mfderiv (𝓡 1) SurfaceModelWithCorners c z).toLinearMap) := by
+  intro x z hxz
+  exact ConstructionTargets.TransversePreimageGeometry.surjective_coprod_of_range_sup_eq_top
+    (htrans x z hxz)
 
 /-- The signed contribution of finitely many transverse preimage components.
 The orientation sign and the winding degree are kept as separate factors so
@@ -231,6 +249,7 @@ end ConstructionTargets.T00J02Closure
 #print axioms ConstructionTargets.T00J02Closure.circleDegree_eq_zero_of_homologyMap_eq_zero
 #print axioms ConstructionTargets.T00J02Closure.transverseCircle_preimage_component_signedCount
 #print axioms ConstructionTargets.T00J02Closure.finite_regularFiber_of_isDiscrete
+#print axioms ConstructionTargets.T00J02Closure.transverse_coprodDerivative_surjective
 #print axioms ConstructionTargets.T00J02Closure.componentSignedCount_eq_zero_of_componentDegree_eq_zero
 #print axioms ConstructionTargets.T00J02Closure.regularValue_topDegree_eq_zero_of_signedCount
 #print axioms ConstructionTargets.T00J02Closure.surfaceTopDegree_eq_homologyMap
