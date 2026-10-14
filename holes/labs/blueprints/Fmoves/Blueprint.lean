@@ -1304,11 +1304,77 @@ lemma mergeRepeatedBlock_aux_boundary_lift_aux_localInv_continuous (u v : ℝ) :
     (mergeRepeatedBlock_aux_boundary_lift_aux_clip_continuous u 1)).add
       (mergeRepeatedBlock_aux_boundary_lift_aux_clip_continuous (u + 1 + v) 1)
 
+/-- Generic: a homeomorphism of `[0, P]` onto `[0, Q]` fixing `0` (given by global
+continuous maps that are mutually inverse on the intervals) extends periodically,
+`x ↦ Q ⌊x/P⌋ + φ (P · fract (x/P))`, to an equivariant lift. -/
+lemma equivariantLift_of_interval (P Q : ℝ) (hP : 0 < P) (hQ : 0 < Q)
+    (φ ψ : ℝ → ℝ) (hφ : Continuous φ) (hψ : Continuous ψ)
+    (hφ0 : φ 0 = 0) (hφP : φ P = Q) (hψ0 : ψ 0 = 0) (hψQ : ψ Q = P)
+    (hφmaps : Set.MapsTo φ (Set.Icc 0 P) (Set.Icc 0 Q))
+    (hψmaps : Set.MapsTo ψ (Set.Icc 0 Q) (Set.Icc 0 P))
+    (hl : ∀ x ∈ Set.Icc 0 P, ψ (φ x) = x) (hr : ∀ y ∈ Set.Icc 0 Q, φ (ψ y) = y) :
+    ∃ F : EquivariantCircleLift P Q, ∀ x ∈ Set.Icc 0 P, F.toFun x = φ x := by
+  sorry
+
+/-- The local merge map is a homeomorphism of `ℝ` (slopes `1` and `1/2`) with the
+displayed inverse, fixes `0`, and sends the period `u + 2 + v + 2 + t` to
+`u + 1 + v + 1 + t`. -/
+lemma mergeRepeatedBlock_aux_boundary_lift_aux_local_props (uLen vLen tLen : ℕ) :
+    (∀ x, mergeRepeatedBlock_aux_boundary_lift_aux_localInv uLen vLen (mergeRepeatedBlock_aux_boundary_lift_aux_local uLen vLen x) = x) ∧
+    (∀ y, mergeRepeatedBlock_aux_boundary_lift_aux_local uLen vLen (mergeRepeatedBlock_aux_boundary_lift_aux_localInv uLen vLen y) = y) ∧
+    mergeRepeatedBlock_aux_boundary_lift_aux_local uLen vLen 0 = 0 ∧ mergeRepeatedBlock_aux_boundary_lift_aux_localInv uLen vLen 0 = 0 ∧
+    mergeRepeatedBlock_aux_boundary_lift_aux_local uLen vLen (uLen + 2 + vLen + 2 + tLen) = uLen + 1 + vLen + 1 + tLen ∧
+    mergeRepeatedBlock_aux_boundary_lift_aux_localInv uLen vLen (uLen + 1 + vLen + 1 + tLen) = uLen + 2 + vLen + 2 + tLen ∧
+    StrictMono (mergeRepeatedBlock_aux_boundary_lift_aux_local uLen vLen) := by
+  sorry
+
+/-- The seven block formulas for the local map (clip arithmetic). -/
+lemma mergeRepeatedBlock_aux_boundary_lift_aux_local_formulas (uLen vLen tLen : ℕ) :
+    (∀ (i : ℕ), i < uLen → ∀ s : Set.Icc (0 : ℝ) 1,
+      mergeRepeatedBlock_aux_boundary_lift_aux_local uLen vLen (i + s.1) = i + s.1) ∧
+    (∀ s : Set.Icc (0 : ℝ) 1, mergeRepeatedBlock_aux_boundary_lift_aux_local uLen vLen (uLen + s.1) = uLen + s.1 / 2) ∧
+    (∀ s : Set.Icc (0 : ℝ) 1, mergeRepeatedBlock_aux_boundary_lift_aux_local uLen vLen (uLen + 1 + s.1) = uLen + (1 + s.1) / 2) ∧
+    (∀ (i : ℕ), i < vLen → ∀ s : Set.Icc (0 : ℝ) 1,
+      mergeRepeatedBlock_aux_boundary_lift_aux_local uLen vLen (uLen + 2 + i + s.1) = uLen + 1 + i + s.1) ∧
+    (∀ s : Set.Icc (0 : ℝ) 1,
+      mergeRepeatedBlock_aux_boundary_lift_aux_local uLen vLen (uLen + 2 + vLen + s.1) = uLen + 1 + vLen + s.1 / 2) ∧
+    (∀ s : Set.Icc (0 : ℝ) 1,
+      mergeRepeatedBlock_aux_boundary_lift_aux_local uLen vLen (uLen + 3 + vLen + s.1) = uLen + 1 + vLen + (1 + s.1) / 2) ∧
+    (∀ (i : ℕ), i < tLen → ∀ s : Set.Icc (0 : ℝ) 1,
+      mergeRepeatedBlock_aux_boundary_lift_aux_local uLen vLen (uLen + 4 + vLen + i + s.1) = uLen + 2 + vLen + i + s.1) := by
+  sorry
+
+/-- Leaf: assemble the lift spec from the periodic extension of the local map
+(each formula point lies in `[0, period]`; rewrite by `F.toFun = local` there and
+apply `_aux_local_formulas`). -/
+lemma mergeRepeatedBlock_aux_boundary_lift_aux_assemble (uLen vLen tLen : ℕ)
+    (F : EquivariantCircleLift (uLen + 2 + vLen + 2 + tLen : ℝ) (uLen + 1 + vLen + 1 + tLen : ℝ))
+    (hF : ∀ x ∈ Set.Icc (0 : ℝ) (uLen + 2 + vLen + 2 + tLen),
+      F.toFun x = mergeRepeatedBlock_aux_boundary_lift_aux_local uLen vLen x) :
+    Nonempty (MergeRepeatedBlockLiftSpec uLen vLen tLen) := by
+  sorry
+
 /-- PL leaf: construct the increasing piecewise-affine lift with slopes
 `1, 1/2, 1/2, 1, 1/2, 1/2, 1`, extended equivariantly to all of `ℝ`. -/
 lemma mergeRepeatedBlock_aux_boundary_lift (uLen vLen tLen : ℕ) :
     Nonempty (MergeRepeatedBlockLiftSpec uLen vLen tLen) := by
-  sorry
+  obtain ⟨hl, hr, h0, hi0, hP, hiQ, hmono⟩ := mergeRepeatedBlock_aux_boundary_lift_aux_local_props uLen vLen tLen
+  have hPpos : (0 : ℝ) < uLen + 2 + vLen + 2 + tLen := by positivity
+  have hQpos : (0 : ℝ) < uLen + 1 + vLen + 1 + tLen := by positivity
+  have hstrictInv : StrictMono (mergeRepeatedBlock_aux_boundary_lift_aux_localInv uLen vLen) := by
+    intro a b hab
+    by_contra hle
+    push_neg at hle
+    have := hmono.monotone hle
+    rw [hr, hr] at this
+    linarith
+  obtain ⟨F, hF⟩ := equivariantLift_of_interval _ _ hPpos hQpos
+    (mergeRepeatedBlock_aux_boundary_lift_aux_local uLen vLen) (mergeRepeatedBlock_aux_boundary_lift_aux_localInv uLen vLen)
+    (mergeRepeatedBlock_aux_boundary_lift_aux_local_continuous uLen vLen) (mergeRepeatedBlock_aux_boundary_lift_aux_localInv_continuous uLen vLen) h0 hP hi0 hiQ
+    (fun x hx => ⟨h0 ▸ hmono.monotone hx.1, hP ▸ hmono.monotone hx.2⟩)
+    (fun y hy => ⟨hi0 ▸ hstrictInv.monotone hy.1, hiQ ▸ hstrictInv.monotone hy.2⟩)
+    (fun x _ => hl x) (fun y _ => hr y)
+  exact mergeRepeatedBlock_aux_boundary_lift_aux_assemble uLen vLen tLen F hF
 
 /-- A circle map has the required merge behavior on every source edge. -/
 lemma norm_edgePoint (n e : ℕ)
