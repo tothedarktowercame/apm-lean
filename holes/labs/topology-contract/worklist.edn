@@ -119066,62 +119066,50 @@
   {:consumer :t00J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 5,
+   :stop-count 6,
    :review-finding
    "Recorded fixture hash is malformed/mismatched: ledger has afb497a6df6187f797ce1df000700b7c24774e94f50633c1cc10b2aa0e8c82319196, but the recorded commit blueprint hashes to afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984. Repair fixture provenance. The archived closure otherwise compiles sorry-free with standard axioms; Main retains its one baseline sorry; registry 166/166.",
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
     :residual
-    "Use coefficient uniqueness to prove component/top-degree formulas; assemble Main.",
+    "Compute chart coefficients per component and global top degree; assemble Main.",
     :outcome :stop,
-    :warnings ["Main sorryAx" "unrelated edits preserved"],
+    :warnings ["Main sorryAx" "unrelated edit preserved"],
     :missing-theorems
-    [{:name "regularFiberLocalDegree_eq_of_localization_eq",
-      :type "localized chart coefficient equals point local degree",
+    [{:name "componentLocalDegreeSum_eq_of_localizationCoefficients",
+      :type
+      "chart coefficients replace local degrees in component sums",
       :status :proved,
       :consumers [:t00J02],
-      :depends-on
-      ["regularFiberLocalDegree_localization_eq"
-       "ambientLocalGenerator_zsmul_injective"],
+      :depends-on ["regularFiberLocalDegree_eq_of_localization_eq"],
       :area "oriented-surface-degree"}
      {:name "t00J02_transverse_diskBounded_topHomologyMap_eq_zero",
       :type "H2 map zero",
       :status :partial,
       :consumers [:t00J02],
       :depends-on
-      ["regularFiberLocalDegree_eq_of_localization_eq"
+      ["componentLocalDegreeSum_eq_of_localizationCoefficients"
        "regularFiberTopDegreeFormula_of_localizedFormulas"],
       :area "oriented-surface-degree"}],
     :statement-hashes
     {:source
      "0b3b4888807bfa06c8d60d86829b75776394ea8aa45a98c933c087165521f923",
      :implementation
-     "1f1fa4e2f0ec390a34a72a8e972c159fef9722e3651ea6e4c8e298a2cb436eb5",
+     "bf52e8eb525d8bde9374c19e25a928622c89969306a7db5016a0754d8b5d0b66",
      :blueprint
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984",
      :registry "166/166"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-2,
-    :reason "Banked local-degree coefficient uniqueness.",
+    :reason "Banked component-sum coefficient transport.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t00J02Closure.lean",
       :exit 0}
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "hash/placeholders/diff", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1792013337000-12446-c997b354",
-     :commands
-     ["git diff-tree/show 636cca07"
-      "archive 636cca07; lake env lean closure and Main"
-      "sha256sum/placeholders at 636cca07"
-      "python3 scripts/statement-registry.py check"],
-     :finding
-     "PASS program STOP: new commit changes only t00J02Closure.lean and proves the correctly oriented coefficient-uniqueness bridge: any integer producing the same localized global class equals the chosen point coefficient, using injectivity of integer multiples of the ambient local generator. This is reusable progress toward the geometric formulas. Fixture/frozen hashes match; closure has 0 placeholders, Main baseline 1; archived files compile with standard axioms; registry 166/166. Component/top-degree formulas and Main assembly remain listed."},
-    :commit "636cca0780ffd4ea44101fbedb0538af96f40a40",
+    :commit "d362f7092f6d53eacae6e022043554bb7bc8ba1e",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t00J02Closure.blueprint.md",
@@ -119129,7 +119117,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119438,7 +119426,8 @@
     :lemma-tophomologymap-eq-zero-of-localfundamentalclasscomparisons
     :lemma-regularfiberlocalizedcomponentformula-tocomparison
     :lemma-regularfibertopdegreeformula-of-localizedformulas
-    :lemma-regularfiberlocaldegree-eq-of-localization-eq],
+    :lemma-regularfiberlocaldegree-eq-of-localization-eq
+    :lemma-componentlocaldegreesum-eq-of-localizationcoefficients],
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
@@ -120222,6 +120211,24 @@
    :id :lemma-ambientlocalgenerator-zsmul-injective,
    :kind :lemma,
    :depends-on [],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "componentLocalDegreeSum_eq_of_localizationCoefficients",
+    :type
+    "chart coefficients replace local degrees in component sums"},
+   :lemma
+   {:name "componentLocalDegreeSum_eq_of_localizationCoefficients",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type "chart coefficients replace local degrees in component sums",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02},
+   :id :lemma-componentlocaldegreesum-eq-of-localizationcoefficients,
+   :kind :lemma,
+   :depends-on [:lemma-regularfiberlocaldegree-eq-of-localization-eq],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
