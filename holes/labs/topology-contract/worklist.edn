@@ -119112,6 +119112,17 @@
     [{:cmd "frame package-symlink precheck",
       :exit 1,
       :finding "canonical checkout; frame-only rule inapplicable"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1792015574796-12525-d2424f2a",
+     :commands
+     ["git diff-tree/show a52ccee2"
+      "archive a52ccee2; lake env lean closure and Main"
+      "sha256sum/placeholders at a52ccee2"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS program STOP: new commit changes only t00J02Closure.lean and adds a sorry-free bundled interface/consequence. One coefficient is shared across correctly oriented localization, component-sum, and top-degree equations; the consequence applies the prior chart-calculation H2 theorem without crossing representations. Fixture hash matches; frozen Main hash matches, closure has 0 placeholders and Main its baseline 1; archived files compile with only standard axioms; registry 166/166. Transverse chart calculations and Main assembly remain listed."},
     :commit "a52ccee229312c565378d09e95a5eec9bdb4a666",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
@@ -119120,7 +119131,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119138,7 +119149,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t00J02Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked chart-coefficient top-degree constructor.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked bundled chart-calculation H2 consequence.",
    :id :program-2026-10-13-close-t00j02,
    :kind :final-adapter,
    :campaign-priority 45,
@@ -119257,7 +119268,10 @@
      :reason "Banked chart-coefficient component constructor."}
     {:job 9,
      :commit "63c77275209d11d18f575f6d0baf055e57c05a84",
-     :reason "Banked chart-coefficient top-degree constructor."}]}
+     :reason "Banked chart-coefficient top-degree constructor."}
+    {:job 1,
+     :commit "a52ccee229312c565378d09e95a5eec9bdb4a666",
+     :reason "Banked bundled chart-calculation H2 consequence."}]}
   {:consumer :t98A06,
    :stop-count 4,
    :evidence
@@ -120365,7 +120379,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "RegularFiberChartCalculations.topHomologyMap_eq_zero",
@@ -120375,7 +120389,9 @@
     :reported-by [:program-2026-10-13-close-t00j02],
     :type "bundled chart calculations imply H2 zero",
     :area "oriented-surface-degree",
-    :proved-in :program-2026-10-13-close-t00j02},
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "a52ccee229312c565378d09e95a5eec9bdb4a666"},
    :id :lemma-regularfiberchartcalculations-tophomologymap-eq-zero,
    :kind :lemma,
    :depends-on
