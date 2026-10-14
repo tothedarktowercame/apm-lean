@@ -6,6 +6,7 @@ import ConstructionTargets.DeckGroupQuotientFundamentalGroup
 import ConstructionTargets.KleinClosedSquareOrbitInverseContinuity
 import ConstructionTargets.KleinSquareEqvGenCasesIff
 import ConstructionTargets.PolygonSurfacePiOne
+import ConstructionTargets.PointWedgeVanKampen
 
 /-! # Generic closing lemmas for t93J03
 
@@ -28,6 +29,8 @@ open ConstructionTargets.KleinClosedSquareOrbitInverseContinuity
 open KleinPlaneActionSquareOrbitClassification
 open KleinSquareBoundaryRelation
 open ConstructionTargets.PolygonSurfacePiOne
+open ConstructionTargets.PointWedgeQuotient
+open ConstructionTargets.PointWedgeVanKampen
 
 /-- An orbit intersection determines both integer normal-form coordinates by
 the source and target points.  These are the equations used to bound the
@@ -473,6 +476,18 @@ noncomputable instance kleinPairingSpacePathConnectedSpace :
   kleinPairingSpaceHomeomorph.symm.surjective.pathConnectedSpace
     kleinPairingSpaceHomeomorph.symm.continuous
 
+/-- The exact two-circle skeleton occurring in the Klein polygon has the
+free-product fundamental group supplied by the generic point-wedge theorem. -/
+noncomputable def kleinSkeletonFundamentalGroupEquivCoprod :
+    FundamentalGroup TwoCircles twoCirclesPoint ≃*
+      Monoid.Coprod (FundamentalGroup Circle 1) (FundamentalGroup Circle 1) :=
+  genericPointWedgeNormalizedFundamentalGroupEquiv
+    (1 : Circle) (1 : Circle)
+    circleBaseNeighborhood circleBaseNeighborhood
+    circleBaseNeighborhood_isOpen circleBaseNeighborhood_isOpen
+    circleBase_mem circleBase_mem
+    circleBaseNeighborhood_contraction circleBaseNeighborhood_contraction
+
 /-- Final C1 adapter: a van Kampen computation of the `aabb` presentation at
 one point of the polygon model yields the registered presentation at every
 basepoint of the frozen Klein bottle. -/
@@ -590,6 +605,7 @@ theorem lift_isEmbedding_assembly
 #print axioms kleinPolygonPresentedGroupEquiv
 #print axioms kleinBottlePathConnectedSpace
 #print axioms kleinPairingSpacePathConnectedSpace
+#print axioms kleinSkeletonFundamentalGroupEquivCoprod
 #print axioms kleinBottle_pi1_every_basepoint_of_polygon_van_kampen
 
 end ConstructionTargets.t93J03Closure

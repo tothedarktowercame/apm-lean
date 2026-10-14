@@ -186,6 +186,10 @@ The source polygon quotient now has its own compiled `PathConnectedSpace`
 instance, transported back through `kleinPairingSpaceHomeomorph`, so the
 remaining van Kampen proof can use path-connectedness without rebuilding the
 quotient geometry.
+The generic point-wedge van Kampen theorem is now specialized as
+`kleinSkeletonFundamentalGroupEquivCoprod`, computing the exact two-circle
+skeleton fundamental group as the coproduct of its two circle groups.  The
+remaining polygon calculation only has to impose the `aabb` attaching word.
 
 - Layer 1: C1, C3, and C4. C1 and C3 are independent; C4 is already complete.
 - Layer 2: C2 against the explicit C1 equivalence interface.
