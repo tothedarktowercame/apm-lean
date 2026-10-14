@@ -2912,6 +2912,37 @@ theorem finiteWedgeFinLegFreeGroupMap_surjective (n : ℕ) :
   rcases finiteWedgeFinGeneratorWord_in_freeGroupImage n w with ⟨x, hx⟩
   exact ⟨x, hx.trans hw⟩
 
+/-- The same leg map indexed by an arbitrary positive finite cardinal, with
+its proof-carrying zero coordinate made explicit. -/
+noncomputable def finiteWedgeFinLegMapCard (N : ℕ) (hN : 0 < N)
+    (i : Fin N) :
+    FundamentalGroup Circle 1 →*
+      FundamentalGroup
+        (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge (Fin N))
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle ⟨0, hN⟩ 1) :=
+  FundamentalGroup.mapOfEq
+    ⟨PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle i,
+      PolygonSurfacePiOne.PointWedgeQuotient.continuous_wedgeCircle i⟩
+    (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle_base_eq i ⟨0, hN⟩)
+
+noncomputable def finiteWedgeFinLegFreeGroupMapCard (N : ℕ) (hN : 0 < N) :
+    FreeGroup (Fin N) →*
+      FundamentalGroup
+        (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge (Fin N))
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle ⟨0, hN⟩ 1) :=
+  FreeGroup.lift (fun i =>
+    finiteWedgeFinLegMapCard N hN i circlePositiveFundamentalClass)
+
+/-- Surjectivity in the proof-carrying positive-cardinality presentation. -/
+theorem finiteWedgeFinLegFreeGroupMapCard_surjective (N : ℕ) (hN : 0 < N) :
+    Function.Surjective (finiteWedgeFinLegFreeGroupMapCard N hN) := by
+  cases N with
+  | zero => omega
+  | succ n =>
+      simpa [finiteWedgeFinLegFreeGroupMapCard, finiteWedgeFinLegMapCard,
+        finiteWedgeFinLegFreeGroupMap, finiteWedgeFinLegMap] using
+        finiteWedgeFinLegFreeGroupMap_surjective n
+
 /-- A finite coordinate labelling chosen so that the polygon's distinguished
 orbit is sent to coordinate zero. -/
 theorem pairingOrbitCard_pos (P : PairingData) :
