@@ -169,7 +169,7 @@ lemma apm_t92J05_antipodalAction_free :
 /-- **LIBRARY.** The finite antipodal action is properly discontinuous. -/
 lemma apm_t92J05_antipodalAction_properlyDiscontinuous :
     ProperlyDiscontinuousSMul apm_t92J05_antipodalGroup apm_t92J05_S2 := by
-  sorry
+  infer_instance
 
 /-- **LIBRARY.** Real projective two-space is the orbit quotient of the unit
 two-sphere by the antipodal action. -/

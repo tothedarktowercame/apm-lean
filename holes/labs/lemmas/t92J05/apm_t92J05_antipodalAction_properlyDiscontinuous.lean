@@ -152,7 +152,7 @@ lemma apm_t92J05_antipodalAction_free :
 -- BEGIN SEAT AREA
 lemma apm_t92J05_antipodalAction_properlyDiscontinuous :
     ProperlyDiscontinuousSMul apm_t92J05_antipodalGroup apm_t92J05_S2 := by
-  sorry
+  infer_instance
 -- END SEAT AREA
 
 /-- **LIBRARY.** Real projective two-space is the orbit quotient of the unit
