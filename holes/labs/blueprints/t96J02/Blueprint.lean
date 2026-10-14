@@ -557,10 +557,111 @@ lemma t96J02_cut_edge_zero_iff (z : Disk) :
     field_simp [Real.pi_ne_zero]
     ring
 
+lemma t96J02_cut_edge_two_iff_aux_neg (t : Set.Icc (0 : ℝ) 1) :
+    (edgePoint 4 2 t : ℂ) = -(edgePoint 4 0 t : ℂ) := by
+  have hneg : Complex.exp (Complex.I * (Real.pi : ℝ)) = -1 := by
+    rw [mul_comm, Complex.exp_mul_I, ← Complex.ofReal_cos, ← Complex.ofReal_sin,
+      Real.cos_pi, Real.sin_pi]
+    simp
+  simp only [edgePoint]
+  have hexp : Complex.I * (2 * (Real.pi : ℂ) * ((2 : ℂ) + t.1) / 4) =
+      Complex.I * Real.pi + Complex.I * (2 * Real.pi * ((0 : ℂ) + t.1) / 4) := by
+    push_cast
+    ring
+  calc
+    Complex.exp (Complex.I *
+        (2 * (Real.pi : ℂ) * (((2 : ℕ) : ℝ) + t.1) / ((4 : ℕ) : ℝ))) =
+        Complex.exp (Complex.I * (2 * (Real.pi : ℂ) * ((2 : ℂ) + t.1) / 4)) := by
+          congr 2 <;> norm_num
+    _ = -Complex.exp (Complex.I *
+        (2 * (Real.pi : ℂ) * (((0 : ℕ) : ℝ) + t.1) / ((4 : ℕ) : ℝ))) := by
+      rw [hexp, Complex.exp_add, hneg]
+      norm_num
+
+lemma t96J02_cut_edge_two_iff_aux_zero (z : Disk) :
+    (∃ t : Set.Icc (0 : ℝ) 1, z = edgePoint 4 0 t) ↔
+      ‖(z : ℂ)‖ = 1 ∧ 0 ≤ (z : ℂ).re ∧ 0 ≤ (z : ℂ).im := by
+  constructor
+  · rintro ⟨t, rfl⟩
+    have hexp : Complex.I * (2 * (Real.pi : ℂ) * ((0 : ℂ) + t.1) / 4) =
+        Complex.I * (Real.pi / 2 * t.1 : ℝ) := by
+      push_cast
+      ring
+    simp only [edgePoint]
+    change ‖Complex.exp (Complex.I *
+        (2 * (Real.pi : ℂ) * (((0 : ℕ) : ℝ) + t.1) / ((4 : ℕ) : ℝ)))‖ = 1 ∧
+      0 ≤ (Complex.exp (Complex.I *
+        (2 * (Real.pi : ℂ) * (((0 : ℕ) : ℝ) + t.1) / ((4 : ℕ) : ℝ)))).re ∧
+      0 ≤ (Complex.exp (Complex.I *
+        (2 * (Real.pi : ℂ) * (((0 : ℕ) : ℝ) + t.1) / ((4 : ℕ) : ℝ)))).im
+    have hcast : Complex.I *
+        (2 * (Real.pi : ℂ) * (((0 : ℕ) : ℝ) + t.1) / ((4 : ℕ) : ℝ)) =
+        Complex.I * (2 * (Real.pi : ℂ) * ((0 : ℂ) + t.1) / 4) := by norm_num
+    rw [hcast, hexp]
+    have ht0 : 0 ≤ Real.pi / 2 * t.1 :=
+      mul_nonneg (div_nonneg Real.pi_pos.le zero_le_two) t.2.1
+    have ht1 : Real.pi / 2 * t.1 ≤ Real.pi / 2 := by
+      exact mul_le_of_le_one_right (div_nonneg Real.pi_pos.le zero_le_two) t.2.2
+    constructor
+    · exact Complex.norm_exp_I_mul_ofReal _
+    · constructor
+      · rw [mul_comm, Complex.exp_ofReal_mul_I_re]
+        exact Real.cos_nonneg_of_mem_Icc ⟨by linarith [Real.pi_pos], ht1⟩
+      · rw [mul_comm, Complex.exp_ofReal_mul_I_im]
+        exact Real.sin_nonneg_of_mem_Icc ⟨ht0, ht1.trans (by linarith [Real.pi_pos])⟩
+  · rintro ⟨hn, hre, him⟩
+    let tval : ℝ := 2 * Complex.arg (z : ℂ) / Real.pi
+    have ha0 : 0 ≤ Complex.arg (z : ℂ) := Complex.arg_nonneg_iff.mpr him
+    have ha1 : Complex.arg (z : ℂ) ≤ Real.pi / 2 :=
+      Complex.arg_le_pi_div_two_iff.mpr (Or.inl hre)
+    have ht0 : 0 ≤ tval := div_nonneg (mul_nonneg zero_le_two ha0) Real.pi_pos.le
+    have ht1 : tval ≤ 1 := by
+      dsimp [tval]
+      apply (div_le_one Real.pi_pos).mpr
+      linarith
+    let t : Set.Icc (0 : ℝ) 1 := ⟨tval, ht0, ht1⟩
+    refine ⟨t, Subtype.ext ?_⟩
+    simp only [edgePoint]
+    have hexp : Complex.I * (2 * (Real.pi : ℂ) * ((0 : ℂ) + t.1) / 4) =
+        Complex.arg (z : ℂ) * Complex.I := by
+      dsimp [t, tval]
+      push_cast
+      field_simp [Real.pi_ne_zero]
+      ring
+    change (z : ℂ) = Complex.exp (Complex.I *
+      (2 * (Real.pi : ℂ) * (((0 : ℕ) : ℝ) + t.1) / ((4 : ℕ) : ℝ)))
+    have hcast : Complex.I *
+        (2 * (Real.pi : ℂ) * (((0 : ℕ) : ℝ) + t.1) / ((4 : ℕ) : ℝ)) =
+        Complex.I * (2 * (Real.pi : ℂ) * ((0 : ℂ) + t.1) / 4) := by norm_num
+    rw [hcast, hexp]
+    have hpolar := Complex.norm_mul_exp_arg_mul_I (z : ℂ)
+    rw [hn] at hpolar
+    norm_num at hpolar
+    exact hpolar.symm
+
 lemma t96J02_cut_edge_two_iff (z : Disk) :
     (∃ t : Set.Icc (0 : ℝ) 1, z = edgePoint 4 2 t) ↔
       ‖(z : ℂ)‖ = 1 ∧ (z : ℂ).re ≤ 0 ∧ (z : ℂ).im ≤ 0 := by
-  sorry
+  let nz : Disk := ⟨-(z : ℂ), by
+    simpa only [Metric.mem_closedBall, dist_zero_right, norm_neg] using z.2⟩
+  have hrhs :
+      (‖(z : ℂ)‖ = 1 ∧ (z : ℂ).re ≤ 0 ∧ (z : ℂ).im ≤ 0) ↔
+        ‖(nz : ℂ)‖ = 1 ∧ 0 ≤ (nz : ℂ).re ∧ 0 ≤ (nz : ℂ).im := by
+    simp [nz]
+  rw [hrhs, ← t96J02_cut_edge_two_iff_aux_zero nz]
+  constructor
+  · rintro ⟨t, ht⟩
+    refine ⟨t, Subtype.ext ?_⟩
+    have h := congrArg (fun w : Disk => (w : ℂ)) ht
+    dsimp [nz] at h ⊢
+    rw [h, t96J02_cut_edge_two_iff_aux_neg]
+    simp
+  · rintro ⟨t, ht⟩
+    refine ⟨t, Subtype.ext ?_⟩
+    have h := congrArg (fun w : Disk => (w : ℂ)) ht
+    dsimp [nz] at h
+    rw [t96J02_cut_edge_two_iff_aux_neg, ← h]
+    simp
 
 lemma t96J02_cut_chart_continuous_aux_norm_le (z : ℂ) :
     ‖t96J02_cut_chart z‖ ≤ ‖z‖ := by
