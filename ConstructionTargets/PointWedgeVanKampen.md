@@ -1548,3 +1548,8 @@ partial conjugation construction applies without a projection-kernel claim.
 `genericPointWedgeLegCoordinatesEquiv` and
 `genericPointWedgeLegCoordinates_vanKampen` complete blueprint node B6: both
 literal wedge legs map to their corresponding coproduct injections.
+`PointWedgeVanKampen.threeCirclesFundamentalGroupEquiv` completes
+B12.  The inner B6 equivalence is converted to `FreeGroup (Fin 2)` using the
+two circle winding coordinates; the outer B6 equivalence adds the final
+rank-one factor, and B7 identifies the resulting coproduct with
+`FreeGroup (Fin 3)` at the literal `threeBase` representative.
