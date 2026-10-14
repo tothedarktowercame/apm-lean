@@ -7,6 +7,7 @@ import ConstructionTargets.RealProjectiveSmoothTarget
 import ConstructionTargets.CoveringDegree
 import ConstructionTargets.CoefficientCoveringTransfer
 import ConstructionTargets.CoefficientConnectedH0Map
+import ConstructionTargets.CoefficientSphereEndpoints
 
 /-! Compiled closure milestones for t96A06. -/
 
@@ -364,6 +365,15 @@ theorem t96A06_sphere3_rational_H2_isZero :
   exact (CoefficientConnectedH0Map.sphereTwo_H1_zero ℚ).of_iso
     (CoefficientSphereShift.sphereShift ℚ 3 1 (by decide))
 
+/-- Rational top homology of the concrete three-sphere is one-dimensional.
+This is the coefficient sphere shift from degree three to the already
+computed degree-two endpoint for the concrete two-sphere. -/
+noncomputable def t96A06_sphere3_rational_H3Iso :
+    CoefficientH0.SingularHomology ℚ 3 (TopCat.of (Sphere 3)) ≅
+      ModuleCat.of ℚ ℚ :=
+  CoefficientSphereShift.sphereShift ℚ 3 2 (by decide) ≪≫
+    CoefficientSphereEndpoints.sphereH2 ℚ
+
 /-- A surjection from a zero sphere-homology group forces the corresponding
 homology group of the projective quotient to be zero. -/
 theorem t96A06_rp3_rational_homology_isZero_of_sphere
@@ -415,6 +425,7 @@ theorem t96A06_rp3_rational_H2_isZero :
 #print axioms t96A06_rp3_rational_homologyMap_surjective
 #print axioms t96A06_sphere3_rational_H1_isZero
 #print axioms t96A06_sphere3_rational_H2_isZero
+#print axioms t96A06_sphere3_rational_H3Iso
 #print axioms t96A06_rp3_rational_homology_isZero_of_sphere
 #print axioms t96A06_rp3_rational_H1_isZero
 #print axioms t96A06_rp3_rational_H2_isZero

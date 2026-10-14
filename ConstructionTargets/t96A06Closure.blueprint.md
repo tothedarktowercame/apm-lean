@@ -73,7 +73,12 @@ identity and invertibility of two.  The coefficient sphere shift and connected
 boundary calculation now prove rational `H₁(S³)` and `H₂(S³)` vanish; the
 surjection consequently gives `t96A06_rp3_rational_H1_isZero` and
 `t96A06_rp3_rational_H2_isZero`.  The top group `H₃(RP³; ℚ)` and vanishing
-above degree three remain.
+above degree three remain.  The sphere-side top group is now computed by
+`t96A06_sphere3_rational_H3Iso`, which composes the coefficient sphere shift
+with the compiled `H₂(S²; ℚ) ≅ ℚ` endpoint.  Identifying the projective top
+group still requires proving that the rational transfer detects all of this
+one-dimensional sphere group (equivalently, that the antipodal action is
+trivial in degree three).
 
 ## C3. Degree four of the quadratic map — library
 
