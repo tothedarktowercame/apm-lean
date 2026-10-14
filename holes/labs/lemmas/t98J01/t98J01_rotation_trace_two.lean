@@ -268,11 +268,53 @@ theorem t98J01_rotation_trace_one :
 
 /-- Seat: the orientation-preserving half-turn has trace `1` on `H₂(S²; ℚ)`. -/
 -- BEGIN SEAT AREA
+private def t98J01_rotation_trace_two_aux_homotopy :
+    ContinuousMap.Homotopy t98J01_rotationCM (ContinuousMap.id T98J01.S2) := by
+  let F : unitInterval × T98J01.S2 → T98J01.S2 := fun tx =>
+    let a := Real.pi * (1 - tx.1.1)
+    let c := Real.cos a
+    let s := Real.sin a
+    ⟨(c * tx.2.1.1 - s * tx.2.1.2.1,
+      s * tx.2.1.1 + c * tx.2.1.2.1, tx.2.1.2.2), by
+        have htrig := Real.sin_sq_add_cos_sq a
+        have hp := tx.2.2
+        dsimp only [c, s]
+        nlinarith⟩
+  have hF : Continuous F := by
+    apply Continuous.subtype_mk
+    dsimp only [F]
+    fun_prop
+  refine ContinuousMap.Homotopy.mk
+    (f₀ := t98J01_rotationCM) (f₁ := ContinuousMap.id T98J01.S2) ⟨F, hF⟩ ?_ ?_
+  · intro x
+    apply Subtype.ext
+    simp [F, t98J01_rotationCM, T98J01.rotation]
+  · intro x
+    apply Subtype.ext
+    simp [F]
+
 theorem t98J01_rotation_trace_two :
     LinearMap.trace ℚ
       (ConstructionTargets.RationalLefschetz.Homology T98J01.S2 2)
       (ConstructionTargets.RationalLefschetz.induced t98J01_rotationCM 2).hom = 1 := by
-  sorry
+  let M := ConstructionTargets.RationalLefschetz.Homology T98J01.S2 2
+  let e : M ≅ ModuleCat.of ℚ ℚ :=
+    t98J01_sphere_homology_finiteDimensional_aux_iso 2 ≪≫
+      ConstructionTargets.CoefficientSphereEndpoints.rationalS2H2
+  letI : FiniteDimensional ℚ M :=
+    FiniteDimensional.of_injective e.hom.hom e.toLinearEquiv.injective
+  have hmap : ConstructionTargets.RationalLefschetz.induced
+      t98J01_rotationCM 2 = CategoryTheory.CategoryStruct.id M := by
+    simpa [ConstructionTargets.RationalLefschetz.induced, M] using
+      (ConstructionTargets.SingularHomologyHomotopy.singularHomology_map_eq_of_homotopic
+        (ModuleCat ℚ) (ModuleCat.of ℚ ℚ)
+          ⟨t98J01_rotation_trace_two_aux_homotopy⟩ 2)
+  rw [hmap]
+  change LinearMap.trace ℚ M LinearMap.id = 1
+  rw [LinearMap.trace_id]
+  have he : M ≃ₗ[ℚ] ℚ := e.toLinearEquiv
+  rw [he.finrank_eq]
+  simp
 -- END SEAT AREA
 
 /-- Sorry-free assembly of the five independent two-sphere leaves. -/
