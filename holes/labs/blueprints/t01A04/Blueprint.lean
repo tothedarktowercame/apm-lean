@@ -1200,6 +1200,42 @@ lemma apm_t01A04_circleCoverMap_range_eq_parity_kernel_aux_character
           ⟨apm_t01a04_circleCoverBase, apm_t01a04_circleCoverMap_base⟩ = ⟨apm_t01a04_circleCoverBase, apm_t01a04_circleCoverMap_base⟩ := by
   sorry
 
+def apm_t01A04_circleCoverMap_range_eq_parity_kernel_aux_lifts_pathA :
+    Path apm_t01a04_circleCoverBase apm_t01a04_circleCoverBase :=
+  (ConstructionTargets.CircleUniversalCover.integerLoop 1).map
+    (show Continuous (fun z : Circle =>
+        Quotient.mk _ (Sum.inl ((0 : Fin 2), (z, (1 : Circle))))) from
+      continuous_coinduced_rng.comp
+        (continuous_inl.comp
+          (continuous_const.prodMk (continuous_id.prodMk continuous_const))))
+
+def apm_t01A04_circleCoverMap_range_eq_parity_kernel_aux_lifts_pathB :
+    Path apm_t01a04_circleCoverBase apm_t01a04_circleCoverBase :=
+  (ConstructionTargets.CircleUniversalCover.integerLoop 1).map
+    (show Continuous (fun z : Circle =>
+        Quotient.mk _ (Sum.inl ((0 : Fin 2), ((1 : Circle), z)))) from
+      continuous_coinduced_rng.comp
+        (continuous_inl.comp
+          (continuous_const.prodMk (continuous_const.prodMk continuous_id))))
+
+lemma apm_t01A04_circleCoverMap_range_eq_parity_kernel_aux_lifts_exp_ne :
+    Circle.exp Real.pi ≠ (1 : Circle) := Circle.exp_pi_ne_one
+
+def apm_t01A04_circleCoverMap_range_eq_parity_kernel_aux_lifts_pathC :
+    Path apm_t01a04_circleCoverBase
+      (Quotient.mk _ (Sum.inr (Circle.exp Real.pi))) where
+  toFun t := Quotient.mk _ (.inr (Circle.exp (Real.pi * (t : ℝ))))
+  continuous_toFun := continuous_coinduced_rng.comp
+    (continuous_inr.comp
+      (ConstructionTargets.CircleUniversalCover.circleCover_isCoveringMap.continuous.comp
+        (continuous_const.mul continuous_subtype_val)))
+  source' := by
+    change Quotient.mk _ (.inr (1 : Circle)) = _
+    symm
+    exact Quotient.sound (Relation.EqvGen.rel _ _
+      (apm_t01a04_circleCoverRel.glue 0))
+  target' := by simp
+
 /-- Explicit lifts: `loopA`, `loopB` lift to closed loops in torus sheet `0`;
 `loopC` lifts through squaring to the half-turn from `1` to `-1`, i.e. from
 sheet point `0` to sheet point `1`, so it moves the base point. -/
