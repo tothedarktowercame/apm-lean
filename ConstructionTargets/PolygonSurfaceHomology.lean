@@ -733,6 +733,52 @@ noncomputable def moduleHurewicz {X : Type} [TopologicalSpace X] (x : X) :
       (Multiplicative.toAdd
         (ConstructionTargets.DegreeOneHurewiczMap.fundamentalGroupH1Hom x g))
 
+/-- The comparison-normalized module Hurewicz class is natural under a
+continuous map. -/
+theorem moduleHurewicz_naturality {X Y : Type} [TopologicalSpace X]
+    [TopologicalSpace Y] (f : C(X, Y)) (x : X) (g : FundamentalGroup X x) :
+    moduleHurewicz (f x) (FundamentalGroup.map f x g) =
+      (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 1).obj
+        (ModuleCat.of ℤ ℤ)).map (TopCat.ofHom f)) (moduleHurewicz x g) := by
+  let eX :=
+    ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+      (TopCat.of X) 1
+  let eY :=
+    ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+      (TopCat.of Y) 1
+  let a := Multiplicative.toAdd
+    (ConstructionTargets.DegreeOneHurewiczMap.fundamentalGroupH1Hom x g)
+  apply (AddCommGrpCat.mono_iff_injective eY.hom).mp inferInstance
+  have hcomparison := congrArg
+    (fun q => q (eX.inv a))
+    (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison_naturality
+      (TopCat.ofHom f) 1)
+  have hhurewicz :=
+    ConstructionTargets.DegreeOneHurewiczMap.fundamentalGroupH1Hom_naturality
+      f x g
+  change eY.hom (eY.inv
+      (Multiplicative.toAdd
+        (ConstructionTargets.DegreeOneHurewiczMap.fundamentalGroupH1Hom
+          (f x) (FundamentalGroup.map f x g)))) = _
+  rw [eY.inv_hom_id_apply]
+  change _ = eY.hom
+    ((((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 1).obj
+      (ModuleCat.of ℤ ℤ)).map (TopCat.ofHom f)) (eX.inv a))
+  have hc : eY.hom
+      ((((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 1).obj
+        (ModuleCat.of ℤ ℤ)).map (TopCat.ofHom f)) (eX.inv a)) =
+      (((AlgebraicTopology.singularHomologyFunctor AddCommGrpCat 1).obj
+        (AddCommGrpCat.of ℤ)).map (TopCat.ofHom f)) a := by
+    change eY.hom
+        ((((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 1).obj
+          (ModuleCat.of ℤ ℤ)).map (TopCat.ofHom f)) (eX.inv a)) =
+      (((AlgebraicTopology.singularHomologyFunctor AddCommGrpCat 1).obj
+        (AddCommGrpCat.of ℤ)).map (TopCat.ofHom f)) (eX.hom (eX.inv a)) at hcomparison
+    rw [eX.inv_hom_id_apply] at hcomparison
+    exact hcomparison
+  rw [hc]
+  exact congrArg Multiplicative.toAdd hhurewicz.symm
+
 /-- A based circle class whose Hurewicz image is the positive generator fixed
 by `circleH1IsoInt`.  Choosing it through Hurewicz surjectivity avoids adding
 a second, potentially incompatible orientation convention for explicit
@@ -785,6 +831,34 @@ theorem moduleHurewicz_circlePositiveFundamentalClass :
         (Multiplicative.ofAdd
           (e.hom (ConstructionTargets.CircleHomology.circleH1IsoInt.inv 1))))]
   exact e.hom_inv_id_apply _
+
+/-- The positive circle fundamental class mapped into the `l`th wedge leg. -/
+noncomputable def finiteWedgeLegFundamentalClass {L : Type} (l : L) :
+    FundamentalGroup
+      (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge L)
+      (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle l 1) :=
+  FundamentalGroup.map
+    ⟨PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle l,
+      PolygonSurfacePiOne.PointWedgeQuotient.continuous_wedgeCircle l⟩
+    1 circlePositiveFundamentalClass
+
+/-- The leg fundamental class has exactly the positive H1 class used in the
+finite-wedge coordinate presentation. -/
+theorem finiteWedgeLegFundamentalClass_hurewicz {L : Type} (l : L) :
+    moduleHurewicz
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle l 1)
+        (finiteWedgeLegFundamentalClass l) =
+      finiteWedgeLegH1 l
+        (ConstructionTargets.CircleHomology.circleH1IsoInt.inv 1) := by
+  let f : C(Circle,
+      PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge L) :=
+    ⟨PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle l,
+      PolygonSurfacePiOne.PointWedgeQuotient.continuous_wedgeCircle l⟩
+  change moduleHurewicz (f 1)
+      (FundamentalGroup.map f 1 circlePositiveFundamentalClass) = _
+  rw [moduleHurewicz_naturality,
+    moduleHurewicz_circlePositiveFundamentalClass]
+  rfl
 
 end
 
