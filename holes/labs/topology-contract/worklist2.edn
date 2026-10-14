@@ -87941,6 +87941,16 @@
     [{:cmd "matrix draft",
       :exit 1,
       :correction "used right-associated composition rewrites"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791942208955-11241-edd6f021",
+     :commands
+     ["git show f68f6c6e6 blob + #print axioms | lake env lean /dev/stdin"
+      "diff-tree/readlink/sha256 assertions"
+      "statement-registry check; comment-stripped placeholder scan"],
+     :finding
+     "PASS: f68f6c6e6 changes only PolygonSurfaceHomology.lean; exact blob SHA256 e53824670d25ab846f6882e93ae9920008a26506b0b2178b4e7fa32775759f54. It compiles with standard axioms propext/Classical.choice/Quot.sound; placeholders 0; registry 166/0. New progress beyond cfd4e0438 defines the quotient-respecting continuous collapse of a finite wedge onto a selected circle, proves selected/nonselected leg orientations, and proves inclusion then collapse induces identity on H1. This is a genuine self-retraction toward the listed coordinate-map monicity milestone."},
     :commit "263a0516c",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
@@ -87949,7 +87959,7 @@
      "91eeb7d0d347fba714e542621e54559b4bcfe799b2bfd969075e6614bf7ad650"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -87969,7 +87979,7 @@
     :blueprint
     "ConstructionTargets/PolygonSurfaceHomology.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked continuous circle-leg collapses and their H1 self-retraction.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked the finite-wedge H1 inclusion-collapse Kronecker matrix.",
    :id :program-2026-10-13-polygon-surface-homology,
    :kind :reusable-theorem,
    :campaign-priority 31,
@@ -88005,7 +88015,11 @@
     {:job 7,
      :commit "f68f6c6e6",
      :reason
-     "Banked continuous circle-leg collapses and their H1 self-retraction."}]}
+     "Banked continuous circle-leg collapses and their H1 self-retraction."}
+    {:job 8,
+     :commit "263a0516c",
+     :reason
+     "Banked the finite-wedge H1 inclusion-collapse Kronecker matrix."}]}
   {:consumer :t97A01,
    :stop-count 0,
    :phase :implementation,
@@ -88932,7 +88946,7 @@
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "finiteWedgeH1_leg_collapse_matrix",
@@ -88944,7 +88958,9 @@
     :type
     "leg k then collapse l is identity for k=l and zero otherwise",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :program-2026-10-13-polygon-surface-homology,
+    :banked-commit "263a0516c"},
    :id :lemma-finitewedgeh1-leg-collapse-matrix,
    :kind :lemma,
    :depends-on [:lemma-finitewedgelegh1-collapse-self],
