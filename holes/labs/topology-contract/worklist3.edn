@@ -36115,7 +36115,7 @@
   {:consumer :t93J03,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 10,
+   :stop-count 0,
    :review-finding
    "Program STOP commits nothing new since the prior reviewed attempt: it reuses commit 512a220f, and git history shows no later scoped commit. The unresolved SemilocallySimplyConnected hypothesis-coverage conflict is unchanged. Obtain the required owner specification decision or commit a new compiled milestone before resubmitting.",
    :evidence
@@ -36163,7 +36163,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -36715,6 +36715,17 @@
     [{:cmd "lean path probe",
       :exit 1,
       :correction "named local instance and rank computation"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791942615601-11264-2b07fb51",
+     :commands
+     ["git show/diff/show --check 8bcfbf5df"
+      "sha256sum RP3-H0 fixture; placeholders 1->1; scope diff"
+      "lake build ConstructionTargets.t96A06Closure; lean fixture and Main"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS: new compiled sorry-free standard-axiom progress. It proves path connectedness of the exact RP3 quotient and derives H0(RP3;Q)≅Q from the coefficient-H0 theorem at an explicit point. Positive-degree RP3 homology and degree four remain accurately listed. Scope/hash verified; registry 166/166; final placeholder remains 1."},
     :commit "8bcfbf5df1502cf68b51bf1243875543af17e1a0",
     :changed-paths
     ["ConstructionTargets/t96A06Closure.lean"
@@ -36726,7 +36737,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -36744,7 +36755,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t96A06Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed fixed quadratic descent and formula; homology/degree remain.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed exact RP3 path-connectedness and rational H0; positive homology and degree remain.",
    :id :program-2026-10-13-close-t96a06,
    :kind :final-adapter,
    :campaign-priority 31,
@@ -36756,7 +36767,11 @@
    [{:job 3,
      :commit "9f24553dfb349e6292f6f0b2305b37378e3ed403",
      :reason
-     "Committed fixed quadratic descent and formula; homology/degree remain."}]}
+     "Committed fixed quadratic descent and formula; homology/degree remain."}
+    {:job 4,
+     :commit "8bcfbf5df1502cf68b51bf1243875543af17e1a0",
+     :reason
+     "Committed exact RP3 path-connectedness and rational H0; positive homology and degree remain."}]}
   {:consumer :t96J05,
    :stop-count 0,
    :phase :implementation,
@@ -37872,7 +37887,7 @@
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "kleinActualSkeletonFundamentalGroupEquivFreeGroupBool",
@@ -37882,14 +37897,16 @@
     :reported-by [:program-2026-10-13-close-t93j03],
     :type "actual skeleton pi1 equiv FreeGroup Bool",
     :area "covering-subgroup-correspondence",
-    :proved-in :program-2026-10-13-close-t93j03},
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t93J03Closure.lean"]},
    :id :lemma-kleinactualskeletonfundamentalgroupequivfreegroupbool,
    :kind :lemma,
    :depends-on [:lemma-kleinactualskeletonfundamentalgroupequivcoprod],
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t96A06_rp3_rational_h0", :type "H0(RP3;Q) equiv Q"},
@@ -37898,7 +37915,9 @@
     :reported-by [:program-2026-10-13-close-t96a06],
     :type "H0(RP3;Q) equiv Q",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :program-2026-10-13-close-t96a06,
+    :banked-commit "8bcfbf5df1502cf68b51bf1243875543af17e1a0"},
    :id :lemma-t96a06-rp3-rational-h0,
    :kind :lemma,
    :depends-on [],
