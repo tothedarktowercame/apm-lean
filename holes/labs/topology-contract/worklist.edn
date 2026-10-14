@@ -119066,21 +119066,23 @@
   {:consumer :t00J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 5,
+   :stop-count 6,
    :review-finding
    "Recorded fixture hash is malformed/mismatched: ledger has afb497a6df6187f797ce1df000700b7c24774e94f50633c1cc10b2aa0e8c82319196, but the recorded commit blueprint hashes to afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984. Repair fixture provenance. The archived closure otherwise compiles sorry-free with standard axioms; Main retains its one baseline sorry; registry 166/166.",
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
     :residual
-    "Prove geometric comparison and regular-value identity; assemble Main.",
+    "Prove geometric component comparison and regular-value top-degree identity; assemble Main.",
     :outcome :stop,
     :warnings ["Main sorryAx" "unrelated t93J03 edits"],
     :missing-theorems
-    [{:name "pointSignedCount_eq_groupedComponentSignedCount",
-      :type "point sum equals component sum",
+    [{:name "pointSignedCount_eq_zero_of_componentComparison",
+      :type "component comparison gives zero point count",
       :status :proved,
       :consumers [:t00J02],
-      :depends-on [],
+      :depends-on
+      ["pointSignedCount_eq_groupedComponentSignedCount"
+       "groupedComponentSignedCount_eq_zero_of_comparison"],
       :area "oriented-surface-degree"}
      {:name "t00J02_transverse_diskBounded_topHomologyMap_eq_zero",
       :type "H2 map zero",
@@ -119088,40 +119090,27 @@
       :consumers [:t00J02],
       :depends-on
       ["regularValue_topHomologyMap_signedCount"
-       "pointSignedCount_eq_groupedComponentSignedCount"
-       "regularFiberSignedCount_eq_zero_of_comparison"],
+       "pointSignedCount_eq_zero_of_componentComparison"],
       :area "oriented-surface-degree"}],
     :statement-hashes
     {:source
      "0b3b4888807bfa06c8d60d86829b75776394ea8aa45a98c933c087165521f923",
      :implementation
-     "dd1901149423c84f268541d171b41ebae02091eb8401421d362a4750352d87a0",
+     "d47e432ca841da0e66eaae68f3f7788d921ead019e8c906f87d7537d94073fac",
      :blueprint
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984",
      :registry "166/166"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-2,
-    :reason
-    "Corrected fixture provenance; signed-count reindexing remains banked.",
+    :reason "Banked zero point count from component comparison.",
     :commands
-    [{:cmd "sha256sum fixture/closure/Main", :exit 0}
-     {:cmd "lake env lean ConstructionTargets/t00J02Closure.lean",
+    [{:cmd "lake env lean ConstructionTargets/t00J02Closure.lean",
       :exit 0}
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
-     {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1792009021566-12328-2e73f0e6",
-     :commands
-     ["git show/diff-tree 45dab813"
-      "archive 45dab813; lake env lean closure and Main"
-      "sha256sum/placeholders at 45dab813"
-      "python3 scripts/statement-registry.py check"],
-     :finding
-     "PASS program STOP: commit changes only t00J02Closure.lean and banks a valid fiberwise reindexing from point signs to genuine-component grouped local-degree sums, with orientation sign attached to the component on both sides. Corrected fixture afb497a6 matches the archived blueprint; closure/source hashes match evidence; closure has 0 placeholders, Main retains baseline 1; archived files compile with standard axioms; registry 166/166. Geometric comparison, regular-value identity, and Main assembly remain explicitly listed."},
-    :commit "45dab8131ff80411fe29265826a71b06cd9fdc26",
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd "hash/diff/placeholders", :exit 0}],
+    :commit "6bda52066b6b819f9c6f1b27a16a8bed1d3457cd",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t00J02Closure.blueprint.md",
@@ -119129,7 +119118,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119395,7 +119384,8 @@
     :lemma-regularfiberfintype-of-locallyinjectivealongfiber
     :lemma-finiteregularfiberchoice-of-locallyinjective
     :lemma-regularfibersignedcount-eq-zero-of-comparison
-    :lemma-pointsignedcount-eq-groupedcomponentsignedcount],
+    :lemma-pointsignedcount-eq-groupedcomponentsignedcount
+    :lemma-pointsignedcount-eq-zero-of-componentcomparison],
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
@@ -119923,6 +119913,25 @@
    :id :lemma-pointsignedcount-eq-groupedcomponentsignedcount,
    :kind :lemma,
    :depends-on [],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "pointSignedCount_eq_zero_of_componentComparison",
+    :type "component comparison gives zero point count"},
+   :lemma
+   {:name "pointSignedCount_eq_zero_of_componentComparison",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type "component comparison gives zero point count",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02},
+   :id :lemma-pointsignedcount-eq-zero-of-componentcomparison,
+   :kind :lemma,
+   :depends-on
+   [:lemma-pointsignedcount-eq-groupedcomponentsignedcount
+    :lemma-groupedcomponentsignedcount-eq-zero-of-comparison],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
