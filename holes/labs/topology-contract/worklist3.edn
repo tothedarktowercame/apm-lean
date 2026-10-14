@@ -36117,68 +36117,56 @@
   {:consumer :t93J03,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 2,
    :review-finding
    "Program STOP commits no new mathematical progress since the prior milestone: KleinPolygonBasedVanKampen merely packages the already-required surjectivity and kernel hypotheses, and both consumers only reapply the previously proved three-input theorem. Prove the based van Kampen surjectivity/kernel result (or winding conjugacy) in scope; extend Mathlib: state and prove the missing theorem in scope.",
    :evidence
    {:placeholder-delta {:t93J03 [1 1]},
     :residual
-    "Prove based van Kampen contract and winding conjugacy; instantiate C1; apply C2/Main.",
+    "Extend to normalClosure<=kernel; prove reverse inclusion and surjectivity from pseudopushout; winding conjugacy; C1/C2/Main.",
     :outcome :stop,
-    :warnings
-    ["unused SLSC owner-approved"
-     "unrelated PointWedge edits preserved"],
+    :warnings ["unused SLSC owner-approved"],
     :missing-theorems
-    [{:name "kleinBottle_pi1_every_basepoint_of_basedVanKampen",
-      :type
-      "winding conjugacy plus based van Kampen imply C1 everywhere",
+    [{:name "kleinPolygonOverlapToSpacePiOne_eq_one",
+      :type "overlap loops map trivially via contractible inner piece",
       :status :proved,
       :consumers [:t93J03],
-      :depends-on
-      ["kleinBottle_pi1_every_basepoint_of_vanKampen_inputs"],
+      :depends-on ["kleinPolygonInnerContractibleSpace"],
       :area "covering-subgroup-correspondence"}
      {:name "t93J03_polygon_based_van_kampen",
       :type
-      "skeleton map surjective; kernel equals overlap normal closure",
+      "skeleton map surjective; kernel is overlap normal closure",
       :status :partial,
       :consumers [:t93J03],
-      :depends-on ["kleinPolygonFundamentalGroupoidPseudopushout"],
+      :depends-on
+      ["kleinPolygonOverlapToSpacePiOne_eq_one"
+       "kleinPolygonFundamentalGroupoidPseudopushout"],
       :area "covering-subgroup-correspondence"}],
     :statement-hashes {:registry "166/166"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Committed paired based-van-Kampen contract and final C1 consumer; contract proof and winding conjugacy remain.",
+    "Proved overlap loops die via the contractible inner radial piece; reverse kernel inclusion, surjectivity and winding remain.",
     :commands
-    [{:cmd "lake env lean ConstructionTargets/t93J03Closure.lean",
-      :exit 0}
-     {:cmd "Main; registry; placeholder; diff", :exit 0}
-     {:cmd "rg forbidden", :exit 1, :expected-exit 1}
-     {:cmd "commit; show --check", :exit 0}],
+    [{:cmd "lake build ConstructionTargets.t93J03Closure", :exit 0}
+     {:cmd "lean fixture; Main; registry; diff; show --check", :exit 0}
+     {:cmd "rg forbidden additions", :exit 1, :expected-exit 1}],
     :diagnostic-history
-    [{:cmd "lake build closure",
+    [{:cmd "fixture before build",
       :exit 1,
-      :correction
-      "unrelated PointWedge rewrite failed; exact source passed"}],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1791965027455-11712-df22a5ed",
-     :finding
-     "Program STOP commits no new mathematical progress since the prior milestone: KleinPolygonBasedVanKampen merely packages the already-required surjectivity and kernel hypotheses, and both consumers only reapply the previously proved three-input theorem. Prove the based van Kampen surjectivity/kernel result (or winding conjugacy) in scope; extend Mathlib: state and prove the missing theorem in scope."},
-    :commit "8267cca681693d10f6d2bfafd9e9fe363d3c9b70",
+      :correction "built olean; fixture passed"}],
+    :commit "c454760138501d322f23734cecc5d356b4fa717d",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
      "ConstructionTargets/t93J03Closure.blueprint.md"],
     :fixture
-    {:path "/tmp/t93j03_based_vankampen_contract_check.lean",
+    {:path "/tmp/t93j03_overlap_kernel_forward_check.lean",
      :sha256
-     "3dc3a32aa067b8f0d6b87b73b180e4954d8ae57b97a00a131b14348f681ee02e",
-     :mode :blocked-by-unrelated-dependency},
+     "fde4784323289cc220b6ae2ef3e4bb638ba0e012bbb79c5e6fd4ae261f76d9dd"},
     :seat :topo-10},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -38541,7 +38529,37 @@
     :area "covering-subgroup-correspondence"},
    :id :lemma-t93j03-polygon-based-van-kampen,
    :kind :lemma,
-   :depends-on [:lemma-kleinpolygonfundamentalgroupoidpseudopushout],
+   :depends-on
+   [:lemma-kleinpolygonfundamentalgroupoidpseudopushout
+    :lemma-kleinpolygonoverlaptospacepione-eq-one],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "kleinPolygonOverlapToSpacePiOne_eq_one",
+    :type "overlap loops map trivially via contractible inner piece"},
+   :lemma
+   {:name "kleinPolygonOverlapToSpacePiOne_eq_one",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type "overlap loops map trivially via contractible inner piece",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03},
+   :id :lemma-kleinpolygonoverlaptospacepione-eq-one,
+   :kind :lemma,
+   :depends-on [:lemma-kleinpolygoninnercontractiblespace],
+   :other-consumers []}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance {:lemma "kleinPolygonInnerContractibleSpace"},
+   :lemma
+   {:name "kleinPolygonInnerContractibleSpace", :reported-by []},
+   :id :lemma-kleinpolygoninnercontractiblespace,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
