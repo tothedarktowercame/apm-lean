@@ -36121,7 +36121,7 @@
   {:consumer :t93J03,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 10,
+   :stop-count 0,
    :review-finding
    "Program STOP commits no new mathematical progress since the prior milestone: KleinPolygonBasedVanKampen merely packages the already-required surjectivity and kernel hypotheses, and both consumers only reapply the previously proved three-input theorem. Prove the based van Kampen surjectivity/kernel result (or winding conjugacy) in scope; extend Mathlib: state and prove the missing theorem in scope.",
    :evidence
@@ -36174,7 +36174,7 @@
      "7cde577b448e464f14850729ce8156c56c418efdcdde6ed5e76e607028c656d7"},
     :seat :topo-10},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -36893,7 +36893,9 @@
    :depends-on [:lemma-cp-zero-subsingleton],
    :other-consumers []}
   {:consumer :t96A06,
-   :stop-count 10,
+   :owner-reopen
+   "reopened: a lemma this row reported missing is now banked",
+   :stop-count 0,
    :review-finding
    "extend Mathlib: state and prove the missing theorem in scope",
    :evidence
@@ -36946,7 +36948,7 @@
      "b4d3fef978ebb079b86fd73c99394e058914b6bc19a151325aaf8492b4feb6ae"},
     :seat :topo-10},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -36968,7 +36970,7 @@
    :id :program-2026-10-13-close-t96a06,
    :kind :final-adapter,
    :campaign-priority 31,
-   :fail-count 2,
+   :fail-count 0,
    :depends-on [],
    :program true,
    :other-consumers [],
@@ -37229,6 +37231,16 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder count", :exit 0}
      {:cmd "git diff --check", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1792011810680-12411-08a69c40",
+     :commands
+     ["git show --check/stat 2725995b; exact path and fixture SHA-256 assertions"
+      "lake env lean problems/t97J07/lean/Main.lean"
+      "statement-registry check; placeholder recount"],
+     :finding
+     "PASS: committed scope is exactly the closure blueprint and its frozen hash matches. Mathematics is sound: diag(1,1,3) fixes CP1 z2=0 plus [0:0:1]; CP2 rational homology is Q in degrees 0,2,4, yielding Euler characteristic 3. Milestones and representation boundaries are coherent; the final theorem has no hypotheses. Main compiles, registry 166/166, placeholders remain 2->2. Singular-placeholder prose is editorial only."},
     :commit "2725995b4f6766e9f90e2a3366745404fda5f4dd",
     :changed-paths ["ConstructionTargets/t97J07Closure.blueprint.md"],
     :fixture
@@ -37237,7 +37249,7 @@
      "3fa01c79e1a49b4fddfb9d897e2d6b13ff505e4da9002e02666678554176dbe7"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97J07/lean/Main.lean"
     "problems/t97J07/status.json"
@@ -37255,14 +37267,19 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t97J07Closure.blueprint.md"},
    :continue-from
-   "NEXT JOB: copy holes/labs/blueprints/t97J07/BLUEPRINT.md's plan into ConstructionTargets/t97J07Closure.blueprint.md, move the blueprint's proved lemmas into place, then build the LIBRARY obligations one milestone per job.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Blueprint written; implementation begins next program job.",
    :id :program-2026-10-13-close-t97j07,
    :kind :final-adapter,
    :campaign-priority 31,
    :fail-count 0,
    :depends-on [],
    :program true,
-   :other-consumers []}
+   :other-consumers [],
+   :program-history
+   [{:job 1,
+     :commit "2725995b4f6766e9f90e2a3366745404fda5f4dd",
+     :reason
+     "Blueprint written; implementation begins next program job."}]}
   {:consumer :t95J05,
    :stop-count 0,
    :phase :implementation,
