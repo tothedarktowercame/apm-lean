@@ -36160,6 +36160,16 @@
       :exit 1,
       :correction
       "dirty PointWedge line 5299 failed; scoped source passed first"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791981897477-11806-75ffe75e",
+     :commands
+     ["git show/check/diff 1f843184; scope/orientation; fixture sha256"
+      "lake build closure; lean fixture and Main"
+      "statement registry; placeholder and axiom recount"],
+     :finding
+     "PASS. Commit 1f843184 proves general fundamental-group path-transport naturality and specializes it to factor the target-transported Klein map through outer inclusion and the two source-coordinate maps, with correct orientation. After rebuilding a stale olean, closure, fixture, and Main pass. Scope/hash match; support placeholders 0->0; frozen Main 1->1; standard axioms only; registry 166/166. Source-coordinate equality, reverse kernel inclusion, surjectivity, and winding remain listed."},
     :commit "1f843184e63c1069706c11cc8498750d603ddc22",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
@@ -36171,7 +36181,7 @@
      :mode :blocked-by-unrelated-dependency},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -36189,7 +36199,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t93J03Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed exact outer-piece connector, its polygon image equality, and induced basepoint equivalence; map comparison and based van Kampen remain.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed path-transport naturality and target-map factorization; source equality and based van Kampen remain.",
    :id :program-2026-10-13-close-t93j03,
    :kind :final-adapter,
    :campaign-priority 30,
@@ -36363,7 +36373,11 @@
     {:job 7,
      :commit "f869be3704ca9938a77d7108060a03e2ea600652",
      :reason
-     "Committed exact outer-piece connector, its polygon image equality, and induced basepoint equivalence; map comparison and based van Kampen remain."}]}
+     "Committed exact outer-piece connector, its polygon image equality, and induced basepoint equivalence; map comparison and based van Kampen remain."}
+    {:job 8,
+     :commit "1f843184e63c1069706c11cc8498750d603ddc22",
+     :reason
+     "Committed path-transport naturality and target-map factorization; source equality and based van Kampen remain."}]}
   {:consumer :t99J05,
    :stop-count 5,
    :evidence
@@ -38714,7 +38728,7 @@
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "kleinPolygonTargetTransportedOuterToSpacePiOne_factor",
@@ -38726,7 +38740,9 @@
     :type
     "target map factors through outer inclusion and source-coordinate comparison",
     :area "covering-subgroup-correspondence",
-    :proved-in :program-2026-10-13-close-t93j03},
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "1f843184e63c1069706c11cc8498750d603ddc22"},
    :id :lemma-kleinpolygontargettransportedoutertospacepione-factor,
    :kind :lemma,
    :depends-on
