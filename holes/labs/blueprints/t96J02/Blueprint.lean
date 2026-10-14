@@ -261,7 +261,30 @@ theorem t96J02_kleinClosedSquareOrbit_homeomorph_squarePolygon
     Nonempty
       (ConstructionTargets.KleinOrbitQuotientHomeomorph.ClosedSquareOrbitQuotient ≃ₜ
         T96J02SquarePolygonQuotient) := by
-  sorry
+  let f : ConstructionTargets.KleinOrbitQuotientHomeomorph.ClosedSquareOrbitQuotient →
+      T96J02SquarePolygonQuotient :=
+    Quotient.lift (fun p => Quotient.mk _ p) (fun p q hpq =>
+      Quotient.sound ((hrel p q).mp hpq))
+  let g : T96J02SquarePolygonQuotient →
+      ConstructionTargets.KleinOrbitQuotientHomeomorph.ClosedSquareOrbitQuotient :=
+    Quotient.lift (fun p => Quotient.mk _ p) (fun p q hpq =>
+      Quotient.sound ((hrel p q).mpr hpq))
+  refine ⟨{
+    toFun := f
+    invFun := g
+    left_inv := ?_
+    right_inv := ?_
+    continuous_toFun := ?_
+    continuous_invFun := ?_
+  }⟩
+  · rintro ⟨p⟩
+    rfl
+  · rintro ⟨p⟩
+    rfl
+  · apply Continuous.quotient_lift
+    exact continuous_coinduced_rng
+  · apply Continuous.quotient_lift
+    exact continuous_coinduced_rng
 
 /-- The genuine polygon-move bridge: the opposite-edge square presentation
 and the frozen adjacent-arc disk presentation have homeomorphic quotient
