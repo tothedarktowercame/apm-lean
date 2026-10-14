@@ -36115,22 +36115,22 @@
   {:consumer :t93J03,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 6,
+   :stop-count 7,
    :review-finding
    "Program STOP commits nothing new since the prior reviewed attempt: it reuses commit 512a220f, and git history shows no later scoped commit. The unresolved SemilocallySimplyConnected hypothesis-coverage conflict is unchanged. Obtain the required owner specification decision or commit a new compiled milestone before resubmitting.",
    :evidence
    {:placeholder-delta {:t93J03 [1 1]},
     :residual
-    "Map winding-one to aabb; extract quotient; apply C1, C2/Main.",
+    "Restrict groupoid equivalence at based overlap image; map winding-one to aabb; extract quotient; apply C1/C2/Main.",
     :outcome :stop,
     :warnings ["unused SLSC owner-approved"],
     :missing-theorems
-    [{:name "kleinPolygonOuterHomotopyEquivSkeleton",
+    [{:name "kleinPolygonOuterFundamentalGroupoidEquivalence",
       :type
-      "outer piece homotopy equiv actual skeleton; identity on skeleton",
+      "outer-to-skeleton groupoid equivalence with literal object action",
       :status :proved,
       :consumers [:t93J03],
-      :depends-on ["kleinPolygonBasedOverlapMap"],
+      :depends-on ["kleinPolygonOuterHomotopyEquivSkeleton"],
       :area "covering-subgroup-correspondence"}
      {:name "t93J03_polygon_van_kampen",
       :type "polygon pi1 equals PresentedGroup(aabb)",
@@ -36139,47 +36139,32 @@
       :depends-on
       ["kleinSkeletonAabbPresentationQuotient"
        "kleinPolygonOverlapFundamentalGroupEquivInt"
-       "kleinPolygonOuterHomotopyEquivSkeleton"],
+       "kleinPolygonOuterFundamentalGroupoidEquivalence"],
       :area "covering-subgroup-correspondence"}],
     :statement-hashes {:registry "166/166"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Committed outer-piece homotopy equivalence to the actual skeleton; generator comparison remains.",
+    "Committed outer-to-skeleton fundamental-groupoid equivalence with literal skeleton object action.",
     :commands
     [{:cmd "lake build ConstructionTargets.t93J03Closure", :exit 0}
      {:cmd "lean fixture; Main", :exit 0}
      {:cmd "registry; placeholder; diff", :exit 0}
      {:cmd "rg forbidden", :exit 1, :expected-exit 1}
      {:cmd "commit; show --check", :exit 0}],
-    :diagnostic-history
-    [{:cmd "lake build closure",
-      :exit 1,
-      :correction "concurrent dependency fixed; rerun passed"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1791947983900-11469-1160ee46",
-     :commands
-     ["git show/diff/show --check dda49fe9"
-      "sha256sum fixture; scope; placeholders"
-      "lake env lean recorded closure, fixture, Main"
-      "python3 scripts/statement-registry.py check"],
-     :finding
-     "PASS: new compiled sorry-free standard-axiom milestone. The outer radial piece is homotopy equivalent to the actual polygon skeleton, and the companion theorem proves literal identity on embedded skeleton points. This preserves the representation boundary and does not assume the remaining winding-one image=aabb comparison or based quotient. Scope/hash verified; frozen placeholders 1->1 (support 0); registry 166/166; SLSC unused, mandated by problem.md."},
-    :commit "dda49fe91bcd60e9628fc0ebc7e44c19f94ffd29",
+    :commit "12f3f8882eb9d1253582d8625dd30db41a63a6ab",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
      "ConstructionTargets/t93J03Closure.blueprint.md"],
     :fixture
-    {:path "/tmp/t93j03_outer_skeleton_check.lean",
+    {:path "/tmp/t93j03_outer_groupoid_check.lean",
      :sha256
-     "5a9a61a09ec5b704749bb29472530b40105fe525d419455a2ce16d463d6e2d2f",
+     "a6826f5e584afee42fc846f5ad1d99b2df8de0776b0e66101e45ce6d403d0a99",
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -37648,7 +37633,8 @@
     :lemma-kleinpolygoninnerfundamentalgrouptrivial
     :lemma-kleinpolygonbasedoverlapmap
     :lemma-kleinpolygonoverlapfundamentalgroupequivint
-    :lemma-kleinpolygonouterhomotopyequivskeleton],
+    :lemma-kleinpolygonouterhomotopyequivskeleton
+    :lemma-kleinpolygonouterfundamentalgroupoidequivalence],
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
@@ -38088,6 +38074,25 @@
    :id :lemma-kleinpolygonouterhomotopyequivskeleton,
    :kind :lemma,
    :depends-on [:lemma-kleinpolygonbasedoverlapmap],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "kleinPolygonOuterFundamentalGroupoidEquivalence",
+    :type
+    "outer-to-skeleton groupoid equivalence with literal object action"},
+   :lemma
+   {:name "kleinPolygonOuterFundamentalGroupoidEquivalence",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type
+    "outer-to-skeleton groupoid equivalence with literal object action",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03},
+   :id :lemma-kleinpolygonouterfundamentalgroupoidequivalence,
+   :kind :lemma,
+   :depends-on [:lemma-kleinpolygonouterhomotopyequivskeleton],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
