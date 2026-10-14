@@ -1242,7 +1242,14 @@ lemma apm_t01A04_cbp_sheet_homeomorph_aux_left (i : Fin 2) :
 -- BEGIN SEAT AREA
 lemma apm_t01A04_cbp_sheet_homeomorph_aux_right (i : Fin 2) :
     ∀ x ∈ apm_t01A04_cbp_U, apm_t01a04_circleCoverMap (apm_t01A04_cbp_sheet_homeomorph_aux_inv i x) = x := by
-  sorry
+  intro x _
+  refine Quotient.inductionOn x ?_
+  rintro (q | z)
+  · rfl
+  · change Quotient.mk _ (Sum.inr
+        (apm_t01A04_cbp_sheet_homeomorph_aux_root i z ^ 2)) =
+      Quotient.mk _ (Sum.inr z)
+    rw [apm_t01A04_cbp_sheet_homeomorph_aux_root_sq]
 -- END SEAT AREA
 
 /-- On each sheet the cover map is a homeomorphism onto `U` (inverse: identity
