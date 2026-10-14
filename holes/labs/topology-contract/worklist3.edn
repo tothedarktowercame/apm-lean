@@ -29526,7 +29526,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "circleDegree_eq_homologyMap",
@@ -29537,7 +29537,9 @@
     :reported-by [:owner],
     :type
     "The signed degree of a smooth circle map equals the integer represented by its induced H_1 morphism  (size: 180-350 lines / 1-2 days)",
-    :area "circle-degree-signed-count"},
+    :area "circle-degree-signed-count",
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t00J02Closure.lean"]},
    :id :lemma-circledegree-eq-homologymap,
    :kind :lemma,
    :depends-on [],
@@ -36156,6 +36158,16 @@
     [{:cmd "fixture before build",
       :exit 1,
       :correction "built olean; fixture passed"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791968643185-11730-7640e8b7",
+     :commands
+     ["git show/check/diff c4547601; exact scope/source"
+      "sha256sum fixture; lake env lean closure, fixture, Main"
+      "statement-registry check; placeholder/axiom recount"],
+     :finding
+     "PASS. Commit c4547601 adds compiled, sorry-free progress: the overlap inclusion into the polygon is definitionally the same through the outer and contractible inner pieces, so every overlap loop maps to 1, with the correct forward-kernel orientation. Fixture hash matches; scope exact; standard axioms only; registry 166/166; Lean placeholder count 0->0. Reverse kernel inclusion, surjectivity, and winding conjugacy remain listed."},
     :commit "c454760138501d322f23734cecc5d356b4fa717d",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
@@ -36166,7 +36178,7 @@
      "fde4784323289cc220b6ae2ef3e4bb638ba0e012bbb79c5e6fd4ae261f76d9dd"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -36184,7 +36196,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t93J03Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed exact first-isomorphism assembly from winding conjugacy and based van Kampen hypotheses.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Proved overlap loops die via the contractible inner radial piece; reverse kernel inclusion, surjectivity and winding remain.",
    :id :program-2026-10-13-close-t93j03,
    :kind :final-adapter,
    :campaign-priority 30,
@@ -36334,7 +36346,11 @@
     {:job 9,
      :commit "922abd5ab2afae5570d16d39dffb443a274990d7",
      :reason
-     "Committed exact first-isomorphism assembly from winding conjugacy and based van Kampen hypotheses."}]}
+     "Committed exact first-isomorphism assembly from winding conjugacy and based van Kampen hypotheses."}
+    {:job 2,
+     :commit "c454760138501d322f23734cecc5d356b4fa717d",
+     :reason
+     "Proved overlap loops die via the contractible inner radial piece; reverse kernel inclusion, surjectivity and winding remain."}]}
   {:consumer :t99J05,
    :stop-count 5,
    :evidence
@@ -38495,7 +38511,7 @@
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "kleinBottle_pi1_every_basepoint_of_basedVanKampen",
@@ -38507,7 +38523,9 @@
     :type
     "winding conjugacy plus based van Kampen imply C1 everywhere",
     :area "covering-subgroup-correspondence",
-    :proved-in :program-2026-10-13-close-t93j03},
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "c454760138501d322f23734cecc5d356b4fa717d"},
    :id :lemma-kleinbottle-pi1-every-basepoint-of-basedvankampen,
    :kind :lemma,
    :depends-on
@@ -38535,7 +38553,7 @@
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "kleinPolygonOverlapToSpacePiOne_eq_one",
@@ -38545,18 +38563,23 @@
     :reported-by [:program-2026-10-13-close-t93j03],
     :type "overlap loops map trivially via contractible inner piece",
     :area "covering-subgroup-correspondence",
-    :proved-in :program-2026-10-13-close-t93j03},
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "c454760138501d322f23734cecc5d356b4fa717d"},
    :id :lemma-kleinpolygonoverlaptospacepione-eq-one,
    :kind :lemma,
    :depends-on [:lemma-kleinpolygoninnercontractiblespace],
    :other-consumers []}
   {:consumer :portfolio,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance {:lemma "kleinPolygonInnerContractibleSpace"},
    :lemma
-   {:name "kleinPolygonInnerContractibleSpace", :reported-by []},
+   {:name "kleinPolygonInnerContractibleSpace",
+    :reported-by [],
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t93J03Closure.lean"]},
    :id :lemma-kleinpolygoninnercontractiblespace,
    :kind :lemma,
    :depends-on [],
