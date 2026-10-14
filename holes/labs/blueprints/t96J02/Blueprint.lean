@@ -340,13 +340,292 @@ theorem t96J02_kleinClosedSquareOrbit_homeomorph_squarePolygon
   · apply Continuous.quotient_lift
     exact continuous_coinduced_rng
 
+/-! ## Cut-and-paste: square `b a b a⁻¹` versus disk `a a b b` (design 2026-10-14)
+
+The disk is carried onto the ℓ¹ diamond `|re| + |im| ≤ 1` by the `I`-equivariant
+radial chart `z ↦ (‖z‖ / ℓ¹ z) • z`.  The four disk arcs become the four sides, and
+both disk pairings become `w ↦ I * w` (first-quadrant side to second, third to
+fourth).  The diamond is cut along the imaginary axis: the left half goes affinely
+onto the lower-right triangle `v ≤ u` of the square (`t96J02_cut_L`, vertices
+`-I, I, -1 ↦ (0,0), (1,0), (1,1)`), the right half onto the upper-left triangle
+(`t96J02_cut_R`, vertices `1, I, -I ↦ (0,0), (0,1), (1,1)`).  The cut becomes the
+bottom/top pairing `(t,0) ~ (1-t,1)`, the disk `a` pairing becomes `(0,s) ~ (1,s)`,
+and the disk `b` pairing lands on the square's diagonal, where the two halves meet.
+`t96J02_paste_L/R` are the affine inverses.  The clamps are the identity on every
+point actually used; they only make the raw maps total. -/
+
+section T96J02CutAndPaste
+open ConstructionTargets.Surfaces
+
+noncomputable def t96J02_cut_l1 (w : ℂ) : ℝ := |w.re| + |w.im|
+
+noncomputable def t96J02_cut_chart (z : ℂ) : ℂ :=
+  if z = 0 then 0 else ((‖z‖ / t96J02_cut_l1 z : ℝ) : ℂ) * z
+
+noncomputable def t96J02_cut_chartInv (w : ℂ) : ℂ :=
+  if w = 0 then 0 else ((t96J02_cut_l1 w / ‖w‖ : ℝ) : ℂ) * w
+
+noncomputable def t96J02_cut_L (w : ℂ) : ℝ × ℝ := (1/2 - w.re/2 + w.im/2, -w.re)
+noncomputable def t96J02_cut_R (w : ℂ) : ℝ × ℝ := (1/2 - w.re/2 - w.im/2, 1 - w.re)
+noncomputable def t96J02_paste_L (p : ℝ × ℝ) : ℂ := ⟨-p.2, 2 * p.1 - 1 - p.2⟩
+noncomputable def t96J02_paste_R (p : ℝ × ℝ) : ℂ := ⟨1 - p.2, p.2 - 2 * p.1⟩
+
+noncomputable def t96J02_cut_clampSquare (p : ℝ × ℝ) : T96J02ClosedSquare :=
+  ⟨(max 0 (min 1 p.1), max 0 (min 1 p.2)), by
+    refine ⟨le_max_left _ _, ?_, le_max_left _ _, ?_⟩ <;>
+      exact max_le zero_le_one (min_le_left _ _)⟩
+
+noncomputable def t96J02_cut_clampDisk (z : ℂ) : Disk :=
+  ⟨((1 / max 1 ‖z‖ : ℝ) : ℂ) * z, by
+    rw [Metric.mem_closedBall, dist_zero_right, norm_mul, Complex.norm_real,
+      Real.norm_eq_abs, abs_of_pos (by positivity)]
+    rw [div_mul_eq_mul_div, one_mul, div_le_one (by positivity)]
+    exact le_max_right _ _⟩
+
+noncomputable def t96J02_cut_raw (z : Disk) : T96J02ClosedSquare :=
+  if (t96J02_cut_chart z).re ≤ 0 then t96J02_cut_clampSquare (t96J02_cut_L (t96J02_cut_chart z))
+  else t96J02_cut_clampSquare (t96J02_cut_R (t96J02_cut_chart z))
+
+noncomputable def t96J02_paste_raw (p : T96J02ClosedSquare) : Disk :=
+  t96J02_cut_clampDisk (t96J02_cut_chartInv
+    (if p.1.2 ≤ p.1.1 then t96J02_paste_L p.1 else t96J02_paste_R p.1))
+
+lemma t96J02_cut_l1_smul (c : ℝ) (hc : 0 ≤ c) (z : ℂ) :
+    t96J02_cut_l1 ((c : ℂ) * z) = c * t96J02_cut_l1 z := by
+  simp [t96J02_cut_l1, abs_mul, abs_of_nonneg hc, mul_add]
+
+lemma t96J02_cut_l1_pos {z : ℂ} (hz : z ≠ 0) : 0 < t96J02_cut_l1 z := by
+  unfold t96J02_cut_l1
+  by_contra h
+  push_neg at h
+  have h1 : |z.re| = 0 := le_antisymm (by linarith [abs_nonneg z.im]) (abs_nonneg _)
+  have h2 : |z.im| = 0 := le_antisymm (by linarith [abs_nonneg z.re]) (abs_nonneg _)
+  exact hz (Complex.ext (by simpa using h1) (by simpa using h2))
+
+lemma t96J02_cut_l1_chart (z : ℂ) : t96J02_cut_l1 (t96J02_cut_chart z) = ‖z‖ := by
+  unfold t96J02_cut_chart
+  split_ifs with hz
+  · simp [hz, t96J02_cut_l1]
+  · rw [t96J02_cut_l1_smul _ (div_nonneg (norm_nonneg _) (t96J02_cut_l1_pos hz).le), div_mul_cancel₀ _ (t96J02_cut_l1_pos hz).ne']
+
+lemma t96J02_cut_norm_chartInv (w : ℂ) : ‖t96J02_cut_chartInv w‖ = t96J02_cut_l1 w := by
+  unfold t96J02_cut_chartInv
+  split_ifs with hw
+  · simp [hw, t96J02_cut_l1]
+  · rw [norm_mul, Complex.norm_real, Real.norm_eq_abs,
+      abs_of_nonneg (div_nonneg (t96J02_cut_l1_pos hw).le (norm_nonneg _)),
+      div_mul_cancel₀ _ (norm_ne_zero_iff.mpr hw)]
+
+lemma t96J02_cut_chart_pos (z : ℂ) :
+    ∃ c : ℝ, 0 < c ∧ t96J02_cut_chart z = (c : ℂ) * z := by
+  unfold t96J02_cut_chart
+  split_ifs with hz
+  · exact ⟨1, one_pos, by simp [hz]⟩
+  · exact ⟨_, div_pos (norm_pos_iff.mpr hz) (t96J02_cut_l1_pos hz), rfl⟩
+
+lemma t96J02_cut_chartInv_pos (w : ℂ) :
+    ∃ c : ℝ, 0 < c ∧ t96J02_cut_chartInv w = (c : ℂ) * w := by
+  unfold t96J02_cut_chartInv
+  split_ifs with hw
+  · exact ⟨1, one_pos, by simp [hw]⟩
+  · exact ⟨_, div_pos (t96J02_cut_l1_pos hw) (norm_pos_iff.mpr hw), rfl⟩
+
+lemma t96J02_cut_l1_I (z : ℂ) : t96J02_cut_l1 (Complex.I * z) = t96J02_cut_l1 z := by
+  simp [t96J02_cut_l1, add_comm]
+
+lemma t96J02_cut_chart_I (z : ℂ) :
+    t96J02_cut_chart (Complex.I * z) = Complex.I * t96J02_cut_chart z := by
+  unfold t96J02_cut_chart
+  by_cases hz : z = 0
+  · simp [hz]
+  · rw [if_neg (mul_ne_zero Complex.I_ne_zero hz), if_neg hz, t96J02_cut_l1_I]
+    simp; ring
+
+lemma t96J02_cut_chartInv_I (w : ℂ) :
+    t96J02_cut_chartInv (Complex.I * w) = Complex.I * t96J02_cut_chartInv w := by
+  unfold t96J02_cut_chartInv
+  by_cases hw : w = 0
+  · simp [hw]
+  · rw [if_neg (mul_ne_zero Complex.I_ne_zero hw), if_neg hw, t96J02_cut_l1_I]
+    simp; ring
+
+lemma t96J02_cut_chartInv_chart (z : ℂ) :
+    t96J02_cut_chartInv (t96J02_cut_chart z) = z := by
+  by_cases hz : z = 0
+  · simp [t96J02_cut_chart, t96J02_cut_chartInv, hz]
+  have hc : t96J02_cut_chart z ≠ 0 := by
+    obtain ⟨c, hc, h⟩ := t96J02_cut_chart_pos z
+    rw [h]; exact mul_ne_zero (by exact_mod_cast hc.ne') hz
+  have hn : ‖t96J02_cut_chart z‖ = ‖z‖ ^ 2 / t96J02_cut_l1 z := by
+    rw [t96J02_cut_chart, if_neg hz, norm_mul, Complex.norm_real, Real.norm_eq_abs,
+      abs_of_nonneg (div_nonneg (norm_nonneg _) (t96J02_cut_l1_pos hz).le)]; ring
+  rw [t96J02_cut_chartInv, if_neg hc, t96J02_cut_l1_chart, hn, t96J02_cut_chart, if_neg hz,
+    ← mul_assoc, ← Complex.ofReal_mul]
+  have h1 := norm_pos_iff.mpr hz
+  have h2 := t96J02_cut_l1_pos hz
+  have : ‖z‖ / (‖z‖ ^ 2 / t96J02_cut_l1 z) * (‖z‖ / t96J02_cut_l1 z) = 1 := by
+    field_simp
+  rw [this]; simp
+
+lemma t96J02_cut_chart_chartInv (w : ℂ) :
+    t96J02_cut_chart (t96J02_cut_chartInv w) = w := by
+  by_cases hw : w = 0
+  · simp [t96J02_cut_chart, t96J02_cut_chartInv, hw]
+  have hc : t96J02_cut_chartInv w ≠ 0 := by
+    obtain ⟨c, hc, h⟩ := t96J02_cut_chartInv_pos w
+    rw [h]; exact mul_ne_zero (by exact_mod_cast hc.ne') hw
+  have hl : t96J02_cut_l1 (t96J02_cut_chartInv w) = t96J02_cut_l1 w ^ 2 / ‖w‖ := by
+    rw [t96J02_cut_chartInv, if_neg hw,
+      t96J02_cut_l1_smul _ (div_nonneg (t96J02_cut_l1_pos hw).le (norm_nonneg _))]; ring
+  rw [t96J02_cut_chart, if_neg hc, t96J02_cut_norm_chartInv, hl, t96J02_cut_chartInv, if_neg hw,
+    ← mul_assoc, ← Complex.ofReal_mul]
+  have h1 := norm_pos_iff.mpr hw
+  have h2 := t96J02_cut_l1_pos hw
+  have : t96J02_cut_l1 w / (t96J02_cut_l1 w ^ 2 / ‖w‖) * (t96J02_cut_l1 w / ‖w‖) = 1 := by
+    field_simp
+  rw [this]; simp
+
+lemma t96J02_cut_edge_succ (t : Set.Icc (0 : ℝ) 1) :
+    (edgePoint 4 1 t : ℂ) = Complex.I * edgePoint 4 0 t ∧
+      (edgePoint 4 3 t : ℂ) = Complex.I * edgePoint 4 2 t := by
+  have hI : Complex.exp (Complex.I * (Real.pi / 2 : ℝ)) = Complex.I := by
+    rw [mul_comm, Complex.exp_mul_I, ← Complex.ofReal_cos, ← Complex.ofReal_sin,
+      Real.cos_pi_div_two, Real.sin_pi_div_two]; simp
+  have hmul : ∀ w, Complex.I * Complex.exp w =
+      Complex.exp (Complex.I * (Real.pi / 2 : ℝ) + w) := by
+    intro w; rw [Complex.exp_add, hI]
+  constructor <;>
+  · simp only [edgePoint]
+    rw [hmul]
+    congr 1
+    push_cast
+    ring
+
+/-- The two quadrant edges of the disk, by membership. -/
+lemma t96J02_cut_edge_zero_iff (z : Disk) :
+    (∃ t : Set.Icc (0 : ℝ) 1, z = edgePoint 4 0 t) ↔
+      ‖(z : ℂ)‖ = 1 ∧ 0 ≤ (z : ℂ).re ∧ 0 ≤ (z : ℂ).im := by
+  sorry
+
+lemma t96J02_cut_edge_two_iff (z : Disk) :
+    (∃ t : Set.Icc (0 : ℝ) 1, z = edgePoint 4 2 t) ↔
+      ‖(z : ℂ)‖ = 1 ∧ (z : ℂ).re ≤ 0 ∧ (z : ℂ).im ≤ 0 := by
+  sorry
+
+lemma t96J02_cut_chart_continuous : Continuous t96J02_cut_chart := by
+  sorry
+
+lemma t96J02_cut_chartInv_continuous : Continuous t96J02_cut_chartInv := by
+  sorry
+
+/-- The four polygon vertices `1, I, -1, -I` of the `aabb` disk are one class. -/
+lemma t96J02_cut_disk_vertices (x y : Disk)
+    (hx : (x : ℂ) = 1 ∨ (x : ℂ) = Complex.I ∨ (x : ℂ) = -1 ∨ (x : ℂ) = -Complex.I)
+    (hy : (y : ℂ) = 1 ∨ (y : ℂ) = Complex.I ∨ (y : ℂ) = -1 ∨ (y : ℂ) = -Complex.I) :
+    surfaceQuotient false 2 x = surfaceQuotient false 2 y := by
+  sorry
+
+/-- The four corners of the square are one class. -/
+lemma t96J02_cut_square_corners (p q : T96J02ClosedSquare)
+    (hp : p.1 = (0, 0) ∨ p.1 = (1, 0) ∨ p.1 = (0, 1) ∨ p.1 = (1, 1))
+    (hq : q.1 = (0, 0) ∨ q.1 = (1, 0) ∨ q.1 = (0, 1) ∨ q.1 = (1, 1)) :
+    (Quotient.mk _ p : T96J02SquarePolygonQuotient) = Quotient.mk _ q := by
+  sorry
+
+lemma t96J02_cut_continuous (hchart : Continuous t96J02_cut_chart) :
+    Continuous (fun z : Disk =>
+      (Quotient.mk _ (t96J02_cut_raw z) : T96J02SquarePolygonQuotient)) := by
+  sorry
+
+lemma t96J02_paste_continuous (hinv : Continuous t96J02_cut_chartInv)
+    (hedge2 : ∀ z : Disk, ‖(z : ℂ)‖ = 1 → (z : ℂ).re ≤ 0 → (z : ℂ).im ≤ 0 →
+      ∃ t : Set.Icc (0 : ℝ) 1, z = edgePoint 4 2 t) :
+    Continuous (fun p : T96J02ClosedSquare =>
+      surfaceQuotient false 2 (t96J02_paste_raw p)) := by
+  sorry
+
+lemma t96J02_cut_rel
+    (hedge0 : ∀ t : Set.Icc (0 : ℝ) 1, ‖(edgePoint 4 0 t : ℂ)‖ = 1 ∧
+      0 ≤ (edgePoint 4 0 t : ℂ).re ∧ 0 ≤ (edgePoint 4 0 t : ℂ).im)
+    (hedge2 : ∀ t : Set.Icc (0 : ℝ) 1, ‖(edgePoint 4 2 t : ℂ)‖ = 1 ∧
+      (edgePoint 4 2 t : ℂ).re ≤ 0 ∧ (edgePoint 4 2 t : ℂ).im ≤ 0)
+    (hcorners : ∀ p q : T96J02ClosedSquare,
+      (p.1 = (0, 0) ∨ p.1 = (1, 0) ∨ p.1 = (0, 1) ∨ p.1 = (1, 1)) →
+      (q.1 = (0, 0) ∨ q.1 = (1, 0) ∨ q.1 = (0, 1) ∨ q.1 = (1, 1)) →
+      (Quotient.mk _ p : T96J02SquarePolygonQuotient) = Quotient.mk _ q)
+    (x y : Disk) (h : SurfaceRel false 2 x y) :
+    (Quotient.mk _ (t96J02_cut_raw x) : T96J02SquarePolygonQuotient) =
+      Quotient.mk _ (t96J02_cut_raw y) := by
+  sorry
+
+lemma t96J02_paste_rel
+    (hedge0 : ∀ z : Disk, ‖(z : ℂ)‖ = 1 → 0 ≤ (z : ℂ).re → 0 ≤ (z : ℂ).im →
+      ∃ t : Set.Icc (0 : ℝ) 1, z = edgePoint 4 0 t)
+    (hedge2 : ∀ z : Disk, ‖(z : ℂ)‖ = 1 → (z : ℂ).re ≤ 0 → (z : ℂ).im ≤ 0 →
+      ∃ t : Set.Icc (0 : ℝ) 1, z = edgePoint 4 2 t)
+    (hvertices : ∀ x y : Disk,
+      ((x : ℂ) = 1 ∨ (x : ℂ) = Complex.I ∨ (x : ℂ) = -1 ∨ (x : ℂ) = -Complex.I) →
+      ((y : ℂ) = 1 ∨ (y : ℂ) = Complex.I ∨ (y : ℂ) = -1 ∨ (y : ℂ) = -Complex.I) →
+      surfaceQuotient false 2 x = surfaceQuotient false 2 y)
+    (p q : T96J02ClosedSquare) (h : T96J02ClosedSquareRel p q) :
+    surfaceQuotient false 2 (t96J02_paste_raw p) =
+      surfaceQuotient false 2 (t96J02_paste_raw q) := by
+  sorry
+
+lemma t96J02_paste_cut
+    (hedge2 : ∀ z : Disk, ‖(z : ℂ)‖ = 1 → (z : ℂ).re ≤ 0 → (z : ℂ).im ≤ 0 →
+      ∃ t : Set.Icc (0 : ℝ) 1, z = edgePoint 4 2 t)
+    (x : Disk) :
+    surfaceQuotient false 2 (t96J02_paste_raw (t96J02_cut_raw x)) =
+      surfaceQuotient false 2 x := by
+  sorry
+
+lemma t96J02_cut_paste (p : T96J02ClosedSquare) :
+    (Quotient.mk _ (t96J02_cut_raw (t96J02_paste_raw p)) : T96J02SquarePolygonQuotient) =
+      Quotient.mk _ p := by
+  sorry
+
 /-- The genuine polygon-move bridge: the opposite-edge square presentation
 and the frozen adjacent-arc disk presentation have homeomorphic quotient
 spaces.  This cannot be induced by a homeomorphism of the two carriers; a
 proof needs a cut-and-paste map defined only after passage to the quotient. -/
 theorem t96J02_kleinSquarePolygonQuotient_homeomorph_diskPolygon :
     Nonempty (T96J02SquarePolygonQuotient ≃ₜ KleinBottle) := by
-  sorry
+  have hedge0 := t96J02_cut_edge_zero_iff
+  have hedge2 := t96J02_cut_edge_two_iff
+  have hcut := t96J02_cut_continuous t96J02_cut_chart_continuous
+  have hpaste := t96J02_paste_continuous t96J02_cut_chartInv_continuous
+    (fun z h1 h2 h3 => (hedge2 z).mpr ⟨h1, h2, h3⟩)
+  have hcr := t96J02_cut_rel (fun t => (hedge0 _).mp ⟨t, rfl⟩)
+    (fun t => (hedge2 _).mp ⟨t, rfl⟩) t96J02_cut_square_corners
+  have hpr := t96J02_paste_rel (fun z h1 h2 h3 => (hedge0 z).mpr ⟨h1, h2, h3⟩)
+    (fun z h1 h2 h3 => (hedge2 z).mpr ⟨h1, h2, h3⟩) t96J02_cut_disk_vertices
+  have hpc := t96J02_paste_cut (fun z h1 h2 h3 => (hedge2 z).mpr ⟨h1, h2, h3⟩)
+  let f : T96J02SquarePolygonQuotient → KleinBottle :=
+    Quotient.lift (fun p => surfaceQuotient false 2 (t96J02_paste_raw p)) (by
+      intro p q h
+      induction h with
+      | rel p q h => exact hpr p q h
+      | refl p => rfl
+      | symm p q _ ih => exact ih.symm
+      | trans p q r _ _ ih₁ ih₂ => exact ih₁.trans ih₂)
+  let g : KleinBottle → T96J02SquarePolygonQuotient :=
+    Quotient.lift (fun z => (Quotient.mk _ (t96J02_cut_raw z) : T96J02SquarePolygonQuotient)) (by
+      intro x y h
+      induction h with
+      | rel x y h => exact hcr x y h
+      | refl x => rfl
+      | symm x y _ ih => exact ih.symm
+      | trans x y z _ _ ih₁ ih₂ => exact ih₁.trans ih₂)
+  refine ⟨Homeomorph.mk ⟨f, g, ?_, ?_⟩ ?_ ?_⟩
+  · rintro ⟨p⟩
+    exact t96J02_cut_paste p
+  · rintro ⟨x⟩
+    exact hpc x
+  · exact Continuous.quotient_lift hpaste _
+  · exact Continuous.quotient_lift hcut _
+
+end T96J02CutAndPaste
 
 theorem t96J02_kleinPlaneQuotient_homeomorph :
     Nonempty (T96J02KleinPlaneQuotient ≃ₜ KleinBottle) := by
