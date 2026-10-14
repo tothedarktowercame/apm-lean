@@ -79,7 +79,14 @@ homeomorphism. -/
 theorem apm_t02a01_boundary_locPathConnected
     (h : Nonempty (apm_t02a01_boundarySpace ≃ₜ Circle)) :
     Nonempty (LocPathConnectedSpace apm_t02a01_boundarySpace) := by
-  sorry
+  obtain ⟨e⟩ := h
+  let circleEquiv : AddCircle (1 : ℝ) ≃ₜ Circle :=
+    AddCircle.homeomorphCircle one_ne_zero
+  letI : LocPathConnectedSpace (AddCircle (1 : ℝ)) :=
+    isQuotientMap_quotient_mk'.locPathConnectedSpace
+  letI : LocPathConnectedSpace Circle :=
+    circleEquiv.isQuotientMap.locPathConnectedSpace
+  exact ⟨e.symm.isQuotientMap.locPathConnectedSpace⟩
 
 /-- The two geometric instances used below, assembled from the independently
 provable circle leaves. -/
