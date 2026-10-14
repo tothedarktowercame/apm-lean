@@ -900,7 +900,27 @@ theorem apm_t02a01_balanced_of_quarters
     apm_t02a01_outerLoop hr =
       ((apm_t02a01_loopA hA).trans (apm_t02a01_loopB hB)).trans
         ((apm_t02a01_loopA hA).symm.trans (apm_t02a01_loopB hB).symm) := by
-  sorry
+  ext t
+  rw [Path.trans_apply]
+  split_ifs with hhalf
+  · rw [Path.trans_apply]
+    split_ifs with hquarter
+    · change apm_t02a01_outerLoop hr t =
+        apm_t02a01_edgeA (2 * (2 * (t : ℝ)))
+      convert q1 t (by linarith) using 1 <;> ring
+    · change apm_t02a01_outerLoop hr t =
+        apm_t02a01_edgeB (2 * (2 * (t : ℝ)) - 1)
+      convert q2 t (by linarith) (by linarith) using 1 <;> ring
+  · rw [Path.trans_apply]
+    split_ifs with hthreequarter
+    · rw [Path.symm_apply]
+      change apm_t02a01_outerLoop hr t =
+        apm_t02a01_edgeA (1 - 2 * (2 * (t : ℝ) - 1))
+      convert q3 t (by linarith) (by linarith) using 1 <;> ring
+    · rw [Path.symm_apply]
+      change apm_t02a01_outerLoop hr t =
+        apm_t02a01_edgeB (1 - (2 * (2 * (t : ℝ) - 1) - 1))
+      convert q4 t (by linarith) using 1 <;> ring
 -- END SEAT AREA
 
 theorem apm_t02a01_outer_word_aux_balanced
