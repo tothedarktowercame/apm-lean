@@ -87901,22 +87901,22 @@
   {:consumer :t97A01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 4,
+   :stop-count 5,
    :evidence
    {:placeholder-delta 0,
     :residual
     "Prove geometric subdivision equality; instantiate B7, then B8-B10.",
     :outcome :stop,
-    :warnings ["preexisting lint"],
+    :warnings ["preexisting lint; unrelated t00J02 edit preserved"],
     :missing-theorems
     [{:name
-      "polygonBoundaryExplicitEdgeProduct_hurewicz_eq_attachingDegree",
-      :type "product H1 is unit-times attaching vector",
+      "polygonBoundaryWedgeLoop_hurewicz_of_eq_explicitEdgeProduct",
+      :type
+      "geometric product equality implies orientation-signed B7 generator formula",
       :status :proved,
       :consumers [:t97A01 :t94J09],
       :depends-on
-      ["polygonBoundaryExplicitEdgeProduct_hurewicz"
-       "polygonBoundaryLegWord_coordinates"],
+      ["polygonBoundaryExplicitEdgeProduct_hurewicz_eq_attachingDegree"],
       :area "polygon-quotient-homology"}
      {:name "finitePathSubdivision_boundary",
       :type "boundary equals explicit edge product",
@@ -87936,40 +87936,25 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked explicit-product attaching-vector formula.",
+    :reason
+    "Banked B7 reduction from geometric boundary-product equality.",
     :commands
     [{:cmd
       "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology",
       :exit 0}
-     {:cmd "statement-registry.py check", :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder scan", :exit 0}
      {:cmd "axioms check", :exit 0}
-     {:cmd "git show --check 87d6e3b4c", :exit 0}],
-    :diagnostic-history
-    [{:cmd "coordinate drafts",
-      :exit 1,
-      :correction "finite zsmul induction"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792019766778-12645-d0936e0b",
-     :commands
-     ["git show/diff 87d6e3b4c; blob sha256; diff --check"
-      "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology"
-      "lake env lean /dev/stdin (#print axioms)"
-      "placeholder scan"
-      "statement-registry.py check"],
-     :finding
-     "PASS: reviewer codex-7; 87d6e3b4c (topo-6) newly changes only scoped PolygonSurfaceHomology.lean; fixture SHA-256 0fd28b3cdd56babd3d21010ea8e3b3549336ca87078efed6c8615961a41d2d2d matches. Exact blob builds; 0 placeholders; standard axioms; registry 166/0. Rewriting attachingDegree through signed leg-word coordinates and distributing the global orientation zsmul over the finite sum yields the explicit product H1 class termwise; edge sign and orientation scalar commute over Z, so no sign/order mismatch occurs. New compiled progress; the remaining geometric subdivision equality is accurately partial. Remaining instantiate B7, then B8-B10."},
-    :commit "87d6e3b4c",
+     {:cmd "git show --check 392a3d957", :exit 0}],
+    :commit "392a3d957",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
     {:path "ConstructionTargets/PolygonSurfaceHomology.lean",
      :sha256
-     "0fd28b3cdd56babd3d21010ea8e3b3549336ca87078efed6c8615961a41d2d2d"},
+     "1ddaa78f1ef924fb9e258e87813e93f6508f3e1bbac848d16f2d763caf8c3156"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -92209,4 +92194,27 @@
    :depends-on
    [:lemma-polygonboundaryexplicitedgeproduct-hurewicz
     :lemma-polygonboundarylegword-coordinates],
+   :other-consumers [:t94J09]}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "polygonBoundaryWedgeLoop_hurewicz_of_eq_explicitEdgeProduct",
+    :type
+    "geometric product equality implies orientation-signed B7 generator formula"},
+   :lemma
+   {:name
+    "polygonBoundaryWedgeLoop_hurewicz_of_eq_explicitEdgeProduct",
+    :reported-by [:program-2026-10-13-polygon-surface-homology],
+    :type
+    "geometric product equality implies orientation-signed B7 generator formula",
+    :area "polygon-quotient-homology",
+    :proved-in :program-2026-10-13-polygon-surface-homology},
+   :id
+   :lemma-polygonboundarywedgeloop-hurewicz-of-eq-explicitedgeproduct,
+   :kind :lemma,
+   :depends-on
+   [:lemma-polygonboundaryexplicitedgeproduct-hurewicz-eq-attachingdegree],
    :other-consumers [:t94J09]}]}
