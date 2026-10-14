@@ -981,6 +981,30 @@ theorem pathTwoOpenSubdivision_runPartition_boundary_spec
     (pathTwoOpenSubdivision_runPartition_isChain_overlap S)) hab ha hb
   exact ⟨hpoint, hoverlap⟩
 
+/-- The canonical ordered boundary list for the maximal side runs: the
+initial subdivision vertex followed by the target vertex of every run.  Each
+attached run carries the membership proof needed to recover its nonemptiness.
+This is the ambient list underlying the forthcoming outer-subtype family. -/
+noncomputable def pathTwoOpenSubdivisionRunBoundaryPoints
+    {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
+    {U V : Set X} (S : PathTwoOpenSubdivision p U V) : List X :=
+    S.point 0 :: (boolSideRunPartition S.side).attach.map fun block =>
+    S.point (block.1.getLast
+      (fun h => (boolSideRunPartition_spec S.side).2.1 (h ▸ block.2))).succ
+
+@[simp] theorem pathTwoOpenSubdivisionRunBoundaryPoints_length
+    {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
+    {U V : Set X} (S : PathTwoOpenSubdivision p U V) :
+    (pathTwoOpenSubdivisionRunBoundaryPoints S).length =
+      (boolSideRunPartition S.side).length + 1 := by
+  simp [pathTwoOpenSubdivisionRunBoundaryPoints]
+
+@[simp] theorem pathTwoOpenSubdivisionRunBoundaryPoints_head
+    {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
+    {U V : Set X} (S : PathTwoOpenSubdivision p U V) :
+    (pathTwoOpenSubdivisionRunBoundaryPoints S).head? = some (S.point 0) := by
+  simp [pathTwoOpenSubdivisionRunBoundaryPoints]
+
 /-- Every member of a maximal Boolean side run has the side recorded at its
 head.  This turns the local chain certificate returned by `splitBy` into the
 pointwise fact needed to package a whole subdivision block. -/
@@ -2495,6 +2519,8 @@ theorem lift_isEmbedding_assembly
 #print axioms pathTwoOpenSubdivision_adjacentRunBoundary_mem_overlap
 #print axioms pathTwoOpenSubdivision_runPartition_isChain_overlap
 #print axioms pathTwoOpenSubdivision_runPartition_boundary_spec
+#print axioms pathTwoOpenSubdivisionRunBoundaryPoints_length
+#print axioms pathTwoOpenSubdivisionRunBoundaryPoints_head
 #print axioms boolSideRunPartition_mem_side_eq_head
 #print axioms boolSideRunPartition_isInfix_finRange
 #print axioms boolSideRunPartition_exists_slice
