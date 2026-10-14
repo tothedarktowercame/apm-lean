@@ -119066,51 +119066,52 @@
   {:consumer :t00J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "Recorded fixture hash is malformed/mismatched: ledger has afb497a6df6187f797ce1df000700b7c24774e94f50633c1cc10b2aa0e8c82319196, but the recorded commit blueprint hashes to afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984. Repair fixture provenance. The archived closure otherwise compiles sorry-free with standard axioms; Main retains its one baseline sorry; registry 166/166.",
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
     :residual
-    "Derive local injectivity and canonical calculations from transversality; assemble Main.",
+    "Derive local fiber isolation and canonical calculations from transversality; assemble Main.",
     :outcome :stop,
-    :warnings ["Main sorryAx" "unrelated edit preserved"],
+    :warnings ["Main sorryAx"],
     :missing-theorems
-    [{:name "canonicalRegularFiberWitness_of_locallyInjective",
-      :type "local injectivity plus calculations gives witness",
+    [{:name "canonicalRegularFiberWitness_of_locallyIsolatedFiber",
+      :type
+      "locally isolated circle fiber plus calculations gives witness",
       :status :proved,
       :consumers [:t00J02],
       :depends-on
       ["canonicalRegularFiberWitness_of_isDiscrete"
-       "isDiscrete_preimage_singleton_of_locallyInjectiveAlongFiber"],
+       "isDiscrete_preimage_singleton_of_locallyIsolatedFiber"],
       :area "oriented-surface-degree"}
      {:name "t00J02_transverse_diskBounded_topHomologyMap_eq_zero",
       :type "H2 map zero",
       :status :partial,
       :consumers [:t00J02],
       :depends-on
-      ["canonicalRegularFiberWitness_of_locallyInjective"
+      ["canonicalRegularFiberWitness_of_locallyIsolatedFiber"
        "topHomologyMap_eq_zero_of_exists_canonicalRegularFiberWitness"],
       :area "oriented-surface-degree"}],
     :statement-hashes
     {:source
      "0b3b4888807bfa06c8d60d86829b75776394ea8aa45a98c933c087165521f923",
      :implementation
-     "13ed7a9a08b3a1eabc4a4c005749162cfafef32db7251624ad342ee092b3a7e5",
+     "9b5f193a7f7380d8ddbe291f69a886d3166dd56330bcc14cddbb15e36981c8b5",
      :blueprint
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984",
      :registry "166/166"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-2,
-    :reason "Banked local-injective witness.",
+    :reason "Banked locally-isolated fiber witness.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t00J02Closure.lean",
       :exit 0}
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "hash/placeholders/diff", :exit 0}],
-    :commit "4246f61ddcff3616b51f3bd8deb0a75e0bc3b3c7",
+    :commit "0970de362d3d6474da5fb26a45bf7317a12f4504",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t00J02Closure.blueprint.md",
@@ -119118,7 +119119,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119487,7 +119488,8 @@
     :lemma-canonicalregularfiberwitness-tophomologymap-eq-zero
     :lemma-tophomologymap-eq-zero-of-exists-canonicalregularfiberwitness
     :lemma-canonicalregularfiberwitness-of-isdiscrete
-    :lemma-canonicalregularfiberwitness-of-locallyinjective],
+    :lemma-canonicalregularfiberwitness-of-locallyinjective
+    :lemma-canonicalregularfiberwitness-of-locallyisolatedfiber],
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
@@ -120672,6 +120674,40 @@
    :id :lemma-contdiff-rightinverse-of-comp-isinvertible,
    :kind :lemma,
    :depends-on [:lemma-rightinverse-of-comp-continuouslinearequiv],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "canonicalRegularFiberWitness_of_locallyIsolatedFiber",
+    :type
+    "locally isolated circle fiber plus calculations gives witness"},
+   :lemma
+   {:name "canonicalRegularFiberWitness_of_locallyIsolatedFiber",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type
+    "locally isolated circle fiber plus calculations gives witness",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02},
+   :id :lemma-canonicalregularfiberwitness-of-locallyisolatedfiber,
+   :kind :lemma,
+   :depends-on
+   [:lemma-canonicalregularfiberwitness-of-isdiscrete
+    :lemma-isdiscrete-preimage-singleton-of-locallyisolatedfiber],
+   :other-consumers []}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "isDiscrete_preimage_singleton_of_locallyIsolatedFiber"},
+   :lemma
+   {:name "isDiscrete_preimage_singleton_of_locallyIsolatedFiber",
+    :reported-by []},
+   :id :lemma-isdiscrete-preimage-singleton-of-locallyisolatedfiber,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
