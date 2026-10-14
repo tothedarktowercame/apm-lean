@@ -1145,6 +1145,59 @@ theorem circleArc_eq_integerLoop_one (t : Set.Icc (0 : ℝ) 1) :
     ConstructionTargets.CircleUniversalCover.integerLoop,
     ConstructionTargets.CircleUniversalCover.circleCover, AddCircle.toCircle]
 
+/-- The explicit winding-one class associated to the polygon-edge
+parametrization. -/
+noncomputable def circleIntegerLoopOneClass : FundamentalGroup Circle 1 :=
+  Path.Homotopic.Quotient.mk
+    (ConstructionTargets.CircleUniversalCover.integerLoop 1)
+
+/-- The explicit winding-one class generates the circle fundamental group.
+This conclusion uses the universal-cover winding coordinate and is therefore
+independent of the orientation chosen by the singular-homology isomorphism. -/
+theorem circleIntegerLoopOneClass_generates (g : FundamentalGroup Circle 1) :
+    ∃ n : ℤ, circleIntegerLoopOneClass ^ n = g := by
+  open ConstructionTargets.CircleUniversalCover in
+    let n : ℤ := Multiplicative.toAdd (circleFundamentalGroupMulEquivInt g)
+    refine ⟨n, ?_⟩
+    apply circleFundamentalGroupMulEquivInt.injective
+    change circleWindingHom (circleIntegerLoopOneClass ^ n) = circleWindingHom g
+    rw [map_zpow]
+    have ha : circleWindingHom circleIntegerLoopOneClass =
+        Multiplicative.ofAdd 1 := by
+      simp [circleIntegerLoopOneClass, circleWindingHom_mk]
+    rw [ha]
+    change Multiplicative.ofAdd (n • (1 : ℤ)) =
+      circleFundamentalGroupMulEquivInt g
+    simp [n]
+
+/-- The integer coordinate assigned by the existing singular-homology
+isomorphism to the explicit winding-one loop. -/
+noncomputable def circleIntegerLoopOneCoordinate : ℤ :=
+  ConstructionTargets.CircleHomology.circleH1IsoInt.hom
+    (moduleHurewicz (1 : Circle) circleIntegerLoopOneClass)
+
+/-- The existing H₁ coordinate can differ from winding orientation only by
+the unique unit ambiguity.  Thus the missing normalization is exactly the
+choice between `+1` and `-1`, rather than any further geometric comparison. -/
+theorem circleIntegerLoopOneCoordinate_eq_one_or_neg_one :
+    circleIntegerLoopOneCoordinate = 1 ∨
+      circleIntegerLoopOneCoordinate = -1 := by
+  obtain ⟨n, hn⟩ :=
+    circleIntegerLoopOneClass_generates circlePositiveFundamentalClass
+  have hh := congrArg (moduleHurewicz (1 : Circle)) hn
+  rw [moduleHurewicz_zpow,
+    moduleHurewicz_circlePositiveFundamentalClass] at hh
+  have hc := congrArg
+    (fun z => ConstructionTargets.CircleHomology.circleH1IsoInt.hom z) hh
+  have hc2 : n • circleIntegerLoopOneCoordinate =
+      ConstructionTargets.CircleHomology.circleH1IsoInt.hom
+        (ConstructionTargets.CircleHomology.circleH1IsoInt.inv 1) := by
+    simpa [circleIntegerLoopOneCoordinate] using hc
+  rw [ConstructionTargets.CircleHomology.circleH1IsoInt.inv_hom_id_apply] at hc2
+  rw [smul_eq_mul] at hc2
+  exact Int.eq_one_or_neg_one_of_mul_eq_one
+    (by simpa [mul_comm] using hc2)
+
 /-- The coordinate sum of the ordered signed boundary word is precisely the
 attaching degree vector fixed at the start of the calculation. -/
 theorem polygonBoundaryLegWord_coordinates (P : PairingData) :
