@@ -119066,23 +119066,22 @@
   {:consumer :t00J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 4,
+   :stop-count 5,
    :review-finding
    "Representation-boundary defect: regularFiber_componentSignedCount_eq_zero indexes literal fiber points but assigns each point the global circleDegree of a chosen whole-component lift. Degree zero does not imply each local degree is zero (a degree-zero circle map may have regular preimages of local degrees +1 and -1), so the listed next step local-degree/component-degree equality is false and this lemma cannot bridge to the regular-value signed count. Repair by grouping fiber points by genuine preimage components and proving that the sum of local degrees on each component equals the lift degree, then sum the zero component totals. Archived files compile; hashes/placeholders/registry reproduce.",
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
     :residual
-    "Prove each component local-degree sum equals its exact boundary-lift degree; assemble signed count and Main.",
+    "Construct local degrees; prove each component sum equals its boundary-lift degree; assemble Main.",
     :outcome :stop,
-    :warnings
-    ["Main sorryAx" "unrelated PolygonSurfaceHomology edit preserved"],
+    :warnings ["Main sorryAx" "unrelated edits preserved"],
     :missing-theorems
-    [{:name "regularFiberComponentIndex",
+    [{:name "groupedComponentSignedCount_eq_zero_of_comparison",
       :type
-      "fiber points map to genuine connected preimage components",
+      "component sums equal zero lift degrees imply weighted total zero",
       :status :proved,
       :consumers [:t00J02],
-      :depends-on [],
+      :depends-on ["groupedComponentSignedCount_eq_zero"],
       :area "oriented-surface-degree"}
      {:name "t00J02_transverse_diskBounded_topHomologyMap_eq_zero",
       :type "H2 map zero",
@@ -119091,39 +119090,27 @@
       :depends-on
       ["regularValue_topHomologyMap_signedCount"
        "regularFiberComponentIndex"
-       "groupedComponentSignedCount_eq_zero"],
+       "groupedComponentSignedCount_eq_zero_of_comparison"],
       :area "oriented-surface-degree"}],
     :statement-hashes
     {:source
      "0b3b4888807bfa06c8d60d86829b75776394ea8aa45a98c933c087165521f923",
      :implementation
-     "b736d1f77f76407ba80057cc153f2a95c6a84d1297534b5a92315044913c4265",
+     "2fbd9e7a00b4030a68cfe05d7aa0fb473d67aabef1951677a00e061fe6a59b49",
      :blueprint
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984",
      :registry "166/166"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-2,
-    :reason
-    "Banked genuine component indexing for literal fiber points.",
+    :reason "Banked component-degree aggregation.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t00J02Closure.lean",
       :exit 0}
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-     {:cmd "sha256sum/diff/placeholders", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1792003869973-12200-8a724426",
-     :commands
-     ["git diff-tree/show d46cfd9"
-      "git archive d46cfd9; lake env lean t00J02Closure.lean and Main.lean"
-      "sha256sum and placeholder counts at d46cfd9"
-      "python3 scripts/statement-registry.py check"],
-     :finding
-     "PASS program STOP: new in-scope commit represents genuine preimage components by connectedComponentIn subsets and maps each literal fiber point to its actual component, repairing the prior point/component boundary. Archived files compile; closure has 0 placeholders and standard axioms only; Main remains frozen at 0b3b4888 with baseline 1 placeholder; fixture afb497a6 matches; registry 166/166. Per-component local-degree sum identity and final assembly remain listed."},
-    :commit "d46cfd969b54f992c84a36c1416a8333521e6196",
+     {:cmd "hash/diff/placeholders", :exit 0}],
+    :commit "711b2032df1c48210a7984d09b9c19d057b72ead",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t00J02Closure.blueprint.md",
@@ -119131,7 +119118,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119355,7 +119342,8 @@
     :lemma-regularfiber-zerodegreecomponentlifts
     :lemma-regularfiber-componentsignedcount-eq-zero
     :lemma-groupedcomponentsignedcount-eq-zero
-    :lemma-regularfibercomponentindex],
+    :lemma-regularfibercomponentindex
+    :lemma-groupedcomponentsignedcount-eq-zero-of-comparison],
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
@@ -119670,6 +119658,25 @@
    :id :lemma-regularfibercomponentindex,
    :kind :lemma,
    :depends-on [],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "groupedComponentSignedCount_eq_zero_of_comparison",
+    :type
+    "component sums equal zero lift degrees imply weighted total zero"},
+   :lemma
+   {:name "groupedComponentSignedCount_eq_zero_of_comparison",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type
+    "component sums equal zero lift degrees imply weighted total zero",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02},
+   :id :lemma-groupedcomponentsignedcount-eq-zero-of-comparison,
+   :kind :lemma,
+   :depends-on [:lemma-groupedcomponentsignedcount-eq-zero],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
