@@ -1541,3 +1541,10 @@ with the trivial global right projection, proving that this whole comparison
 is the unit. It remains to express the inverse outer-left comparison as an
 `inl`; the global comparison formula will then give the required B6
 factorization directly.
+`genericPointWedgeOuterLeftComparison_eq_inl_normalForms` supplies that
+literal left-factor representation. Together with the unit outer-right
+comparison it yields `genericPointWedgeRightBase_exists_inl`, so the existing
+partial conjugation construction applies without a projection-kernel claim.
+`genericPointWedgeLegCoordinatesEquiv` and
+`genericPointWedgeLegCoordinates_vanKampen` complete blueprint node B6: both
+literal wedge legs map to their corresponding coproduct injections.
