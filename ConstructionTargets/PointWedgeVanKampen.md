@@ -1405,3 +1405,8 @@ and `genericPointWedgeOuterRight_inverseSpan_normalForm_eq_one` show that the
 chosen-base inverse-span normal form is the identity.  The remaining
 projection criterion now only needs the inverse unshifted round-trip normal
 form normalized to the same identity.
+`genericPointWedgeRightBase_rightProjection_eq_one_iff_roundTrip_eq_one`
+substitutes the inverse-span identity into the exact projection criterion and
+removes the remaining group inverse.  Thus the right projection is now
+equivalent directly to triviality of the single unshifted round-trip normal
+form; no inverse-span comparison remains.
