@@ -1908,6 +1908,109 @@ lemma apm_m01J04_localization_isH1Zero_of_forall_exists_smooth
     (tendsto_one_div_add_atTop_nhds_zero_nat :
       Tendsto (fun n : ℕ ↦ (1 : ℝ) / (n + 1)) atTop (nhds 0))
 
+/-- Collar cutoff for the core approximation: `0` where `|φ| ≤ r`, `1` where
+`|φ| ≥ √2 r`.  The rescaling by `r²` matters: as `r → 0` it tends to `1` on
+`{φ ≠ 0}`, and the collar gradient carries a factor `φ/r²` that the factor `φ`
+inside `globalLocalizedH1` cancels. -/
+noncomputable def apm_m01J04_localization_core_approx_aux_cutoff
+    {d : ℕ} (phi : EuclideanSpace ℝ (Fin d) → ℝ) (r : ℝ) :
+    EuclideanSpace ℝ (Fin d) → ℝ :=
+  fun x ↦ Real.smoothTransition (phi x ^ 2 / r ^ 2 - 1)
+
+lemma apm_m01J04_localization_core_approx_aux_cutoff_contDiff
+    {d : ℕ} {phi : EuclideanSpace ℝ (Fin d) → ℝ}
+    (hphi : ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) phi) (r : ℝ) :
+    ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞)
+      (apm_m01J04_localization_core_approx_aux_cutoff phi r) :=
+  Real.smoothTransition.contDiff.comp
+    (((hphi.pow 2).div_const _).sub contDiff_const)
+
+lemma apm_m01J04_localization_core_approx_aux_cutoff_support
+    {d : ℕ} {phi : EuclideanSpace ℝ (Fin d) → ℝ} {r : ℝ}
+    (hr : 0 < r) :
+    Function.support (apm_m01J04_localization_core_approx_aux_cutoff phi r) ⊆
+      {x | r ≤ |phi x|} := by
+  intro x hx
+  have harg : 0 < phi x ^ 2 / r ^ 2 - 1 :=
+    lt_of_not_ge (Real.smoothTransition.zero_iff_nonpos.not.mp hx)
+  have hsquares : r ^ 2 < |phi x| ^ 2 := by
+    have h1 : 1 < phi x ^ 2 / r ^ 2 := by linarith
+    rw [one_lt_div (by positivity)] at h1
+    simpa [sq_abs] using h1
+  change r ≤ |phi x|
+  nlinarith [abs_nonneg (phi x), sq_nonneg (r - |phi x|)]
+
+lemma apm_m01J04_localization_core_approx_aux_cutoff_compact
+    {d : ℕ} {Omega : Set (EuclideanSpace ℝ (Fin d))}
+    {phi : EuclideanSpace ℝ (Fin d) → ℝ}
+    (hphi : apm_m01J04_isTestFunction Omega phi) (r : ℝ) :
+    HasCompactSupport
+      (apm_m01J04_localization_core_approx_aux_cutoff phi r) := by
+  apply hphi.2.1.mono
+  intro x hx
+  contrapose! hx
+  have hz : phi x = 0 := Function.notMem_support.mp hx
+  simp [apm_m01J04_localization_core_approx_aux_cutoff, hz]
+
+lemma apm_m01J04_localization_core_approx_aux_cutoff_isTestFunction
+    {d : ℕ} {Omega : Set (EuclideanSpace ℝ (Fin d))}
+    {phi : EuclideanSpace ℝ (Fin d) → ℝ}
+    (hphi : apm_m01J04_isTestFunction Omega phi) (r : ℝ) :
+    apm_m01J04_isTestFunction Set.univ
+      (apm_m01J04_localization_core_approx_aux_cutoff phi r) :=
+  ⟨apm_m01J04_localization_core_approx_aux_cutoff_contDiff hphi.1 r,
+    apm_m01J04_localization_core_approx_aux_cutoff_compact hphi r,
+    Set.subset_univ _⟩
+
+/-- The gradient of the cutoff lives where the cutoff's closed support does. -/
+lemma apm_m01J04_localization_core_approx_aux_cutoff_fderiv_support
+    {d : ℕ} {phi : EuclideanSpace ℝ (Fin d) → ℝ}
+    (hphi : Continuous phi) {r : ℝ} (hr : 0 < r) :
+    Function.support (fun x ↦
+      fderiv ℝ (apm_m01J04_localization_core_approx_aux_cutoff phi r) x) ⊆
+      {x | r ≤ |phi x|} := by
+  refine (support_fderiv_subset ℝ).trans ?_
+  exact closure_minimal
+    (apm_m01J04_localization_core_approx_aux_cutoff_support hr)
+    (isClosed_le continuous_const (continuous_abs.comp hphi))
+
+/-- Value part of the core convergence: `χ_{1/(n+1)} · (f φ) → f φ` in `L²`
+(dominated convergence; `χ_r → 1` pointwise on `{φ ≠ 0}`, `|χ_r| ≤ 1`). -/
+lemma apm_m01J04_localization_core_approx_aux_val_tendsto
+    {d : ℕ} {Ω : Set (EuclideanSpace ℝ (Fin d))}
+    (φ : EuclideanSpace ℝ (Fin d) → ℝ)
+    (hφ : apm_m01J04_isTestFunction Ω φ)
+    (f : apm_m01J04_H1 d Ω) :
+    Tendsto (fun n : ℕ ↦
+      (eLpNorm (fun x ↦
+        (apm_m01J04_H1mul
+          (apm_m01J04_localization_core_approx_aux_cutoff φ (1 / (n + 1 : ℝ)))
+          (apm_m01J04_localization_core_approx_aux_cutoff_isTestFunction hφ _)
+          (apm_m01J04_globalLocalizedH1 φ hφ f)).val x -
+        (apm_m01J04_globalLocalizedH1 φ hφ f).val x) 2
+        (volume.restrict Set.univ)).toReal) atTop (nhds 0) := by
+  sorry
+
+/-- Gradient part of the core convergence.  The product gradient is
+`χ_r • ∇(fφ) + (fφ) • ∇χ_r`; the first term converges as in the value case,
+and the collar term `f φ · smoothTransition'(φ²/r² − 1) · 2φ∇φ / r²` is
+bounded by `4 M |f| |∇φ|` (since `φ² ≤ 2r²` on the collar) and tends to `0`
+pointwise, so dominated convergence applies. -/
+lemma apm_m01J04_localization_core_approx_aux_grad_tendsto
+    {d : ℕ} {Ω : Set (EuclideanSpace ℝ (Fin d))}
+    (φ : EuclideanSpace ℝ (Fin d) → ℝ)
+    (hφ : apm_m01J04_isTestFunction Ω φ)
+    (f : apm_m01J04_H1 d Ω) :
+    Tendsto (fun n : ℕ ↦
+      (eLpNorm (fun x ↦
+        (apm_m01J04_H1mul
+          (apm_m01J04_localization_core_approx_aux_cutoff φ (1 / (n + 1 : ℝ)))
+          (apm_m01J04_localization_core_approx_aux_cutoff_isTestFunction hφ _)
+          (apm_m01J04_globalLocalizedH1 φ hφ f)).grad x -
+        (apm_m01J04_globalLocalizedH1 φ hφ f).grad x) 2
+        (volume.restrict Set.univ)).toReal) atTop (nhds 0) := by
+  sorry
+
 /-- The remaining local Meyers--Serrin interface.  Unlike
 `apm_m01J04_isH1Zero_mul`, the input is an arbitrary encoded `H¹` function;
 compact localization by `φ` is what must produce the zero-boundary
@@ -1922,7 +2025,29 @@ lemma apm_m01J04_localization_core_approx
       Function.support u.val ⊆ {x | epsilon ≤ |φ x|} ∧
       Function.support u.grad ⊆ {x | epsilon ≤ |φ x|} ∧
       apm_m01J04_H1dist u (apm_m01J04_globalLocalizedH1 φ hφ f) < eta := by
-  sorry
+  set g := apm_m01J04_globalLocalizedH1 φ hφ f
+  have hT := apm_m01J04_H1dist_tendsto_zero_of_components _ g
+    (apm_m01J04_localization_core_approx_aux_val_tendsto φ hφ f)
+    (apm_m01J04_localization_core_approx_aux_grad_tendsto φ hφ f)
+  obtain ⟨n, hn⟩ := ((hT.eventually (gt_mem_nhds heta))).exists
+  have hr : (0 : ℝ) < 1 / (n + 1 : ℝ) := by positivity
+  refine ⟨1 / (n + 1 : ℝ), _, hr, ?_, ?_, hn⟩
+  · rw [apm_m01J04_H1mul_val]
+    intro x hx
+    exact apm_m01J04_localization_core_approx_aux_cutoff_support hr
+      (Function.support_mul_subset_right _ _ hx)
+  · rw [apm_m01J04_H1mul_grad]
+    intro x hx
+    by_contra hxr
+    have h0 : apm_m01J04_localization_core_approx_aux_cutoff φ (1 / (n + 1 : ℝ)) x = 0 :=
+      Function.notMem_support.mp fun h ↦ hxr
+        (apm_m01J04_localization_core_approx_aux_cutoff_support hr h)
+    have h1 : fderiv ℝ (apm_m01J04_localization_core_approx_aux_cutoff φ
+        (1 / (n + 1 : ℝ))) x = 0 :=
+      Function.notMem_support.mp fun h ↦ hxr
+        (apm_m01J04_localization_core_approx_aux_cutoff_fderiv_support
+          hφ.1.continuous hr h)
+    exact hx (by simp only [h0, h1]; simp; right; rfl)
 
 lemma apm_m01J04_core_exists_smooth_global_approx_aux_mollify
     {d : ℕ} (u : apm_m01J04_H1 d Set.univ)
