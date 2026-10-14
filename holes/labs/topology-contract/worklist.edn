@@ -119066,21 +119066,22 @@
   {:consumer :t00J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 9,
+   :stop-count 10,
    :review-finding
    "Recorded fixture hash is malformed/mismatched: ledger has afb497a6df6187f797ce1df000700b7c24774e94f50633c1cc10b2aa0e8c82319196, but the recorded commit blueprint hashes to afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984. Repair fixture provenance. The archived closure otherwise compiles sorry-free with standard axioms; Main retains its one baseline sorry; registry 166/166.",
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
     :residual
-    "Construct RegularFiberTopDegreeFormula from transversality/local homology; assemble Main.",
+    "Prove component sums and top degree for constructed local coordinates; assemble Main.",
     :outcome :stop,
-    :warnings ["Main sorryAx"],
+    :warnings ["Main sorryAx" "unrelated t93J03 edits"],
     :missing-theorems
-    [{:name "topHomologyMap_eq_zero_of_regularFiberTopDegreeFormula",
-      :type "bundled component/top-degree formula implies H2 zero",
+    [{:name "regularFiberLocalDegree_localization_eq",
+      :type
+      "fiber local degree is the localized global fundamental-class coefficient",
       :status :proved,
       :consumers [:t00J02],
-      :depends-on ["topHomologyMap_eq_zero_of_regularFiberComparison"],
+      :depends-on ["surfaceTopHomology_localFundamentalClassIso"],
       :area "oriented-surface-degree"}
      {:name "t00J02_transverse_diskBounded_topHomologyMap_eq_zero",
       :type "H2 map zero",
@@ -119088,13 +119089,13 @@
       :consumers [:t00J02],
       :depends-on
       ["RegularFiberTopDegreeFormula"
-       "topHomologyMap_eq_zero_of_regularFiberTopDegreeFormula"],
+       "regularFiberLocalDegree_localization_eq"],
       :area "oriented-surface-degree"}],
     :statement-hashes
     {:source
      "0b3b4888807bfa06c8d60d86829b75776394ea8aa45a98c933c087165521f923",
      :implementation
-     "8471411d345f7d5adb2fc3b0729e72d33e935c6f3ece905ee17f1bd226882e4b",
+     "7e8e9db4adcae0550d14a0db84e79d7033bb939698d3632296df452918b33804",
      :blueprint
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984",
      :registry "166/166"},
@@ -119102,25 +119103,14 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-2,
     :reason
-    "Banked exact geometric formula interface and H2 consequence.",
+    "Banked local degree coordinates and localization equation.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t00J02Closure.lean",
       :exit 0}
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "hash/diff/placeholders", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1792010588577-12373-d3588995",
-     :commands
-     ["git diff-tree/show 8a490595"
-      "archive 8a490595; lake env lean closure and Main"
-      "sha256sum/placeholders at 8a490595"
-      "python3 scripts/statement-registry.py check"],
-     :finding
-     "PASS program STOP: new commit changes only t00J02Closure.lean and defines the exact remaining geometric interface—componentwise local-degree comparison plus top-degree equality—then correctly derives H2 vanishing. It does not claim the interface is constructed; that construction remains explicitly listed. Point-local and component-indexed data remain distinct. Fixture/frozen hashes match; closure has 0 placeholders, Main baseline 1; archived files compile with standard axioms; registry 166/166."},
-    :commit "8a49059565653885f645d112eaaf316b43107802",
+    :commit "2d51d75f6e481ad54e66d7707aa9818068acf600",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t00J02Closure.blueprint.md",
@@ -119128,7 +119118,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :needs-owner,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119412,7 +119402,8 @@
     :lemma-tophomologymap-eq-zero-of-pointsignedcountcomparison
     :lemma-tophomologymap-eq-zero-of-regularfibercomparison
     :lemma-regularfibertopdegreeformula
-    :lemma-tophomologymap-eq-zero-of-regularfibertopdegreeformula],
+    :lemma-tophomologymap-eq-zero-of-regularfibertopdegreeformula
+    :lemma-regularfiberlocaldegree-localization-eq],
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
@@ -120037,6 +120028,25 @@
    :id :lemma-regularfibertopdegreeformula,
    :kind :lemma,
    :depends-on [],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "regularFiberLocalDegree_localization_eq",
+    :type
+    "fiber local degree is the localized global fundamental-class coefficient"},
+   :lemma
+   {:name "regularFiberLocalDegree_localization_eq",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type
+    "fiber local degree is the localized global fundamental-class coefficient",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02},
+   :id :lemma-regularfiberlocaldegree-localization-eq,
+   :kind :lemma,
+   :depends-on [:lemma-surfacetophomology-localfundamentalclassiso],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
