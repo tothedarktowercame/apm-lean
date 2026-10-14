@@ -173,11 +173,154 @@ lemma apm_t92J05_antipodalAction_properlyDiscontinuous :
 
 /-- **LIBRARY.** Real projective two-space is the orbit quotient of the unit
 two-sphere by the antipodal action. -/
+def apm_t92J05_projectivePlane_homeomorph_antipodalQuotient_aux_toP
+    (x : apm_t92J05_S2) : apm_t92J05_RP2 :=
+  Projectivization.mk ℝ x.1.ofLp (by
+    intro hx
+    have := x.property
+    have hx' : (x : EuclideanSpace ℝ (Fin 3)) = 0 := by
+      apply WithLp.ofLp_injective 2
+      simpa using hx
+    rw [Metric.mem_sphere, dist_zero_right, hx', norm_zero] at this
+    norm_num at this)
+
+lemma apm_t92J05_projectivePlane_homeomorph_antipodalQuotient_aux_toP_continuous :
+    Continuous apm_t92J05_projectivePlane_homeomorph_antipodalQuotient_aux_toP := by
+  apply continuous_quotient_mk'.comp
+  exact Continuous.subtype_mk
+    (EuclideanSpace.equiv (Fin 3) ℝ |>.continuous.comp continuous_subtype_val) _
+
+def apm_t92J05_projectivePlane_homeomorph_antipodalQuotient_aux_toQ0
+    (v : {v : Fin 3 → ℝ // v ≠ 0}) :
+    MulAction.orbitRel.Quotient apm_t92J05_antipodalGroup apm_t92J05_S2 :=
+  let w : EuclideanSpace ℝ (Fin 3) := WithLp.toLp 2 (v : Fin 3 → ℝ)
+  Quotient.mk'' ⟨(‖w‖⁻¹ : ℝ) • w, by
+    rw [Metric.mem_sphere, dist_zero_right, norm_smul, Real.norm_eq_abs,
+      abs_inv, abs_norm, inv_mul_cancel₀]
+    exact norm_ne_zero_iff.mpr (by
+      change WithLp.toLp 2 (v : Fin 3 → ℝ) ≠ 0
+      exact (WithLp.linearEquiv 2 ℝ (Fin 3 → ℝ)).symm.injective.ne v.property)⟩
+
+lemma apm_t92J05_projectivePlane_homeomorph_antipodalQuotient_aux_toQ0_continuous :
+    Continuous apm_t92J05_projectivePlane_homeomorph_antipodalQuotient_aux_toQ0 := by
+  apply continuous_quotient_mk'.comp
+  apply Continuous.subtype_mk
+  · let e : (Fin 3 → ℝ) ≃L[ℝ] EuclideanSpace ℝ (Fin 3) :=
+      (EuclideanSpace.equiv (Fin 3) ℝ).symm
+    exact ((continuous_norm.comp (e.continuous.comp continuous_subtype_val)).inv₀
+      (fun (v : {v : Fin 3 → ℝ // v ≠ 0}) hv => v.property (by
+        have := congrArg WithLp.ofLp (norm_eq_zero.mp hv)
+        simpa using this))).smul
+        (e.continuous.comp continuous_subtype_val)
+
+lemma apm_t92J05_projectivePlane_homeomorph_antipodalQuotient_aux_toQ0_scale
+    (a b : {v : Fin 3 → ℝ // v ≠ 0}) (t : ℝ)
+    (h : (a : Fin 3 → ℝ) = t • b) :
+    apm_t92J05_projectivePlane_homeomorph_antipodalQuotient_aux_toQ0 a =
+      apm_t92J05_projectivePlane_homeomorph_antipodalQuotient_aux_toQ0 b := by
+  have ht : t ≠ 0 := by
+    intro ht
+    apply a.property
+    simpa [ht] using h
+  apply Quotient.sound
+  by_cases hpos : 0 < t
+  · refine ⟨Multiplicative.ofAdd 0, ?_⟩
+    apply Subtype.ext
+    change (‖WithLp.toLp 2 (b : Fin 3 → ℝ)‖⁻¹ : ℝ) • WithLp.toLp 2 (b : Fin 3 → ℝ) =
+      (‖WithLp.toLp 2 (a : Fin 3 → ℝ)‖⁻¹ : ℝ) • WithLp.toLp 2 (a : Fin 3 → ℝ)
+    rw [h, WithLp.toLp_smul, norm_smul, Real.norm_eq_abs, abs_of_pos hpos]
+    rw [mul_inv_rev, smul_smul]
+    congr 1
+    field_simp
+  · refine ⟨Multiplicative.ofAdd 1, ?_⟩
+    apply Subtype.ext
+    change -_ = _
+    have htneg : t < 0 := lt_of_le_of_ne (le_of_not_gt hpos) ht
+    change -((‖WithLp.toLp 2 (b : Fin 3 → ℝ)‖⁻¹ : ℝ) • WithLp.toLp 2 (b : Fin 3 → ℝ)) =
+      (‖WithLp.toLp 2 (a : Fin 3 → ℝ)‖⁻¹ : ℝ) • WithLp.toLp 2 (a : Fin 3 → ℝ)
+    rw [h, WithLp.toLp_smul, norm_smul, Real.norm_eq_abs, abs_of_neg htneg]
+    rw [mul_inv_rev]
+    simp only [one_div, neg_smul, smul_smul]
+    congr 1
+    field_simp
+    simp
+
+def apm_t92J05_projectivePlane_homeomorph_antipodalQuotient_aux_toQ
+    (p : apm_t92J05_RP2) :
+    MulAction.orbitRel.Quotient apm_t92J05_antipodalGroup apm_t92J05_S2 :=
+  Projectivization.lift
+    apm_t92J05_projectivePlane_homeomorph_antipodalQuotient_aux_toQ0
+    apm_t92J05_projectivePlane_homeomorph_antipodalQuotient_aux_toQ0_scale p
+
+lemma apm_t92J05_projectivePlane_homeomorph_antipodalQuotient_aux_toQ_continuous :
+    Continuous apm_t92J05_projectivePlane_homeomorph_antipodalQuotient_aux_toQ := by
+  apply isQuotientMap_quot_mk.continuous_iff.mpr
+  exact apm_t92J05_projectivePlane_homeomorph_antipodalQuotient_aux_toQ0_continuous
+
+lemma apm_t92J05_projectivePlane_homeomorph_antipodalQuotient_aux_toP_invariant
+    (x y : apm_t92J05_S2)
+    (h : MulAction.orbitRel apm_t92J05_antipodalGroup apm_t92J05_S2 x y) :
+    apm_t92J05_projectivePlane_homeomorph_antipodalQuotient_aux_toP x =
+      apm_t92J05_projectivePlane_homeomorph_antipodalQuotient_aux_toP y := by
+  rcases h with ⟨g, rfl⟩
+  fin_cases g
+  · rfl
+  · apply (Projectivization.mk_eq_mk_iff' ℝ _ _ _ _).2
+    refine ⟨-1, ?_⟩
+    change (-1 : ℝ) • y.1.ofLp =
+      (apm_t92J05_antipodalSMul (Multiplicative.ofAdd 1) y).1.ofLp
+    ext i
+    simp [apm_t92J05_antipodalSMul]
+
+def apm_t92J05_projectivePlane_homeomorph_antipodalQuotient_aux_toPQ :
+    MulAction.orbitRel.Quotient apm_t92J05_antipodalGroup apm_t92J05_S2 →
+      apm_t92J05_RP2 :=
+  Quotient.lift
+    apm_t92J05_projectivePlane_homeomorph_antipodalQuotient_aux_toP
+    apm_t92J05_projectivePlane_homeomorph_antipodalQuotient_aux_toP_invariant
+
+lemma apm_t92J05_projectivePlane_homeomorph_antipodalQuotient_aux_toPQ_continuous :
+    Continuous apm_t92J05_projectivePlane_homeomorph_antipodalQuotient_aux_toPQ := by
+  apply isQuotientMap_quot_mk.continuous_iff.mpr
+  exact apm_t92J05_projectivePlane_homeomorph_antipodalQuotient_aux_toP_continuous
+
+lemma apm_t92J05_projectivePlane_homeomorph_antipodalQuotient_aux_left
+    (q : MulAction.orbitRel.Quotient apm_t92J05_antipodalGroup apm_t92J05_S2) :
+    apm_t92J05_projectivePlane_homeomorph_antipodalQuotient_aux_toQ
+      (apm_t92J05_projectivePlane_homeomorph_antipodalQuotient_aux_toPQ q) = q := by
+  induction q using Quotient.inductionOn with
+  | _ x =>
+    apply Quotient.sound
+    refine ⟨Multiplicative.ofAdd 0, ?_⟩
+    apply Subtype.ext
+    change (x : EuclideanSpace ℝ (Fin 3)) =
+      (‖WithLp.toLp 2 x.1.ofLp‖⁻¹ : ℝ) • WithLp.toLp 2 x.1.ofLp
+    have hx : ‖(x : EuclideanSpace ℝ (Fin 3))‖ = 1 := by
+      simpa [Metric.mem_sphere] using x.property
+    simp [hx]
+
+lemma apm_t92J05_projectivePlane_homeomorph_antipodalQuotient_aux_right
+    (p : apm_t92J05_RP2) :
+    apm_t92J05_projectivePlane_homeomorph_antipodalQuotient_aux_toPQ
+      (apm_t92J05_projectivePlane_homeomorph_antipodalQuotient_aux_toQ p) = p := by
+  induction p using Projectivization.ind with
+  | h v hv =>
+    apply (Projectivization.mk_eq_mk_iff' ℝ _ _ _ _).2
+    refine ⟨‖WithLp.toLp 2 v‖⁻¹, ?_⟩
+    ext i
+    rfl
+
 lemma apm_t92J05_projectivePlane_homeomorph_antipodalQuotient :
     Nonempty
       (MulAction.orbitRel.Quotient apm_t92J05_antipodalGroup apm_t92J05_S2 ≃ₜ
         apm_t92J05_RP2) := by
-  sorry
+  exact ⟨{
+    toFun := apm_t92J05_projectivePlane_homeomorph_antipodalQuotient_aux_toPQ
+    invFun := apm_t92J05_projectivePlane_homeomorph_antipodalQuotient_aux_toQ
+    left_inv := apm_t92J05_projectivePlane_homeomorph_antipodalQuotient_aux_left
+    right_inv := apm_t92J05_projectivePlane_homeomorph_antipodalQuotient_aux_right
+    continuous_toFun := apm_t92J05_projectivePlane_homeomorph_antipodalQuotient_aux_toPQ_continuous
+    continuous_invFun := apm_t92J05_projectivePlane_homeomorph_antipodalQuotient_aux_toQ_continuous }⟩
 
 /-- **LIBRARY.** Specialization of the deck-group quotient theorem to the
 antipodal action, with the two action obligations supplied explicitly. -/
