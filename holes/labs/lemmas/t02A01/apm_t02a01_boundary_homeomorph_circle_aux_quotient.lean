@@ -116,11 +116,105 @@ the boundary subtype.  Injectivity: inner-sphere points are interior to
 interior points form an open saturated set, on which the quotient map is an
 open embedding. -/
 -- BEGIN SEAT AREA
+theorem apm_t02a01_boundary_homeomorph_circle_aux_quotient_aux_interior
+    (x : apm_t02a01_squareAnnulus)
+    (hx : ‖x.1 - ((1 / 2, 1 / 2) : ℝ × ℝ)‖ = (1 / 4 : ℝ)) :
+    apm_t02a01_boundary_homeomorph_circle_aux_interior x := by
+  have h₁ : ‖x.1.1 - (1 / 2 : ℝ)‖ ≤ (1 / 4 : ℝ) := by
+    have h := norm_fst_le (x.1 - ((1 / 2, 1 / 2) : ℝ × ℝ))
+    change ‖x.1.1 - (1 / 2 : ℝ)‖ ≤
+      ‖x.1 - ((1 / 2, 1 / 2) : ℝ × ℝ)‖ at h
+    rw [hx] at h
+    exact h
+  have h₂ : ‖x.1.2 - (1 / 2 : ℝ)‖ ≤ (1 / 4 : ℝ) := by
+    have h := norm_snd_le (x.1 - ((1 / 2, 1 / 2) : ℝ × ℝ))
+    change ‖x.1.2 - (1 / 2 : ℝ)‖ ≤
+      ‖x.1 - ((1 / 2, 1 / 2) : ℝ × ℝ)‖ at h
+    rw [hx] at h
+    exact h
+  constructor <;> constructor
+  · have := (neg_le_of_abs_le h₁)
+    norm_num at this ⊢
+    linarith
+  · have := (le_abs_self (x.1.1 - (1 / 2 : ℝ))).trans h₁
+    norm_num at this ⊢
+    linarith
+  · have := (neg_le_of_abs_le h₂)
+    norm_num at this ⊢
+    linarith
+  · have := (le_abs_self (x.1.2 - (1 / 2 : ℝ))).trans h₂
+    norm_num at this ⊢
+    linarith
+
 theorem apm_t02a01_boundary_homeomorph_circle_aux_quotient :
     Nonempty ({x : apm_t02a01_squareAnnulus |
       ‖x.1 - ((1 / 2, 1 / 2) : ℝ × ℝ)‖ = (1 / 4 : ℝ)} ≃ₜ
         apm_t02a01_boundarySpace) := by
-  sorry
+  let q : apm_t02a01_squareAnnulus → apm_t02a01_puncturedTorus :=
+    fun x ↦ Quotient.mk _ x
+  let S : Set apm_t02a01_squareAnnulus :=
+    {x | ‖x.1 - ((1 / 2, 1 / 2) : ℝ × ℝ)‖ = (1 / 4 : ℝ)}
+  let f : S → apm_t02a01_boundarySpace := fun x ↦
+    ⟨q x, ⟨x, x.2, rfl⟩⟩
+  have hf_inj : Function.Injective f := by
+    intro x y hxy
+    apply Subtype.ext
+    have hq : q x = q y := congrArg Subtype.val hxy
+    have hr : Relation.EqvGen apm_t02a01_edgeRel x y := Quotient.eq'.mp hq
+    exact (apm_t02a01_boundary_homeomorph_circle_aux_eq_of_eqvGen hr).1
+      (apm_t02a01_boundary_homeomorph_circle_aux_quotient_aux_interior x x.2)
+  have hf_surj : Function.Surjective f := by
+    rintro ⟨z, ⟨x, hx, rfl⟩⟩
+    exact ⟨⟨x, hx⟩, rfl⟩
+  have hf_cont : Continuous f := by
+    exact Continuous.subtype_mk
+      (continuous_coinduced_rng.comp continuous_subtype_val) _
+  let e : S ≃ apm_t02a01_boundarySpace := Equiv.ofBijective f ⟨hf_inj, hf_surj⟩
+  refine ⟨e.toHomeomorphOfContinuousOpen ?_ ?_⟩
+  · exact hf_cont
+  · intro U hU
+    rw [isOpen_induced_iff] at hU
+    obtain ⟨V, hV, rfl⟩ := hU
+    let I : Set apm_t02a01_squareAnnulus :=
+      {x | apm_t02a01_boundary_homeomorph_circle_aux_interior x}
+    have hI : IsOpen I := by
+      exact ((isOpen_Ioo.preimage (continuous_fst.comp continuous_subtype_val)).inter
+        (isOpen_Ioo.preimage (continuous_snd.comp continuous_subtype_val)))
+    let W : Set apm_t02a01_puncturedTorus := q '' (V ∩ I)
+    have hq : Topology.IsQuotientMap q := ⟨Quotient.mk_surjective, rfl⟩
+    have hpre : q ⁻¹' W = V ∩ I := by
+      ext x
+      constructor
+      · rintro ⟨y, hy, heq⟩
+        have hr : Relation.EqvGen apm_t02a01_edgeRel y x := Quotient.eq'.mp heq
+        have hyx :=
+          (apm_t02a01_boundary_homeomorph_circle_aux_eq_of_eqvGen hr).1 hy.2
+        subst x
+        exact hy
+      · intro hx
+        exact ⟨x, hx, rfl⟩
+    have hW : IsOpen W := hq.isOpen_preimage.mp (hpre.symm ▸ hV.inter hI)
+    have himage : e '' (Subtype.val ⁻¹' V) =
+        Subtype.val ⁻¹' W := by
+      ext z
+      constructor
+      · rintro ⟨x, hx, rfl⟩
+        change q x ∈ W
+        exact ⟨x, ⟨hx,
+          apm_t02a01_boundary_homeomorph_circle_aux_quotient_aux_interior x x.2⟩,
+          rfl⟩
+      · intro hz
+        rcases z with ⟨z, hzbd⟩
+        change z ∈ W at hz
+        rcases hz with ⟨x, hx, rfl⟩
+        rcases hzbd with ⟨y, hy, heq⟩
+        have hr : Relation.EqvGen apm_t02a01_edgeRel y x := Quotient.eq'.mp heq
+        have hyx :=
+          (apm_t02a01_boundary_homeomorph_circle_aux_eq_of_eqvGen hr).2 hx.2
+        subst y
+        exact ⟨⟨x, hy⟩, hx.1, rfl⟩
+    rw [himage]
+    exact hW.preimage continuous_subtype_val
 -- END SEAT AREA
 
 /-- The inner metric circle survives the outer-edge quotient and gives the
