@@ -752,6 +752,30 @@ lemma apm_t01A04_torusCoverMap_evenlyCovered_basepoint_aux_mem_fiber
   simp [apm_t01a04_torusCoverMap, apm_t01a04_torusCoverRaw,
     apm_t01a04_basepoint]
 
+lemma apm_t01A04_torusCoverMap_evenlyCovered_basepoint_aux_square_root
+    (z : Circle) (hz : z ^ 2 = 1) :
+    ∃ i : Fin 2, z = apm_t01a04_sheetPoint i := by
+  have hz' : (z : ℂ) ^ 2 = 1 := congrArg Subtype.val hz
+  rcases (sq_eq_one_iff.mp hz') with h | h
+  · refine ⟨0, ?_⟩
+    apply Subtype.ext
+    simpa using h
+  · refine ⟨1, ?_⟩
+    apply Subtype.ext
+    rw [apm_t01a04_sheetPoint_one, Circle.coe_exp, Complex.exp_pi_mul_I]
+    exact h
+
+lemma apm_t01A04_torusCoverMap_evenlyCovered_basepoint_aux_sheetPoint_injective :
+    Function.Injective apm_t01a04_sheetPoint := by
+  intro i j hij
+  fin_cases i <;> fin_cases j
+  · rfl
+  · exfalso
+    exact Circle.exp_pi_ne_one hij.symm
+  · exfalso
+    exact Circle.exp_pi_ne_one hij
+  · rfl
+
 /-- Basepoint case.  Plan: take
 `U = mk '' (inl '' {q | 0 < q.1.re ∧ 0 < q.2.re} ∪ inr '' {z | 0 < z.re})`,
 open and saturated in `X`.  Its preimage is the disjoint union over `i : Fin 2`
