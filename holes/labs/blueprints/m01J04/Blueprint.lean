@@ -3160,6 +3160,50 @@ lemma apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity_minkowski_aux_join
     hf.1.comp_quasiMeasurePreserving Measure.quasiMeasurePreserving_snd
   simpa [μ, Function.uncurry] using h₁.sub h₂
 
+lemma apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity_minkowski_aux_avg_bound_aux_weighted
+    {d : ℕ} {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    (κ : EuclideanSpace ℝ (Fin d) → ℝ) (hκ0 : ∀ x, 0 ≤ κ x)
+    (G : EuclideanSpace ℝ (Fin d) → EuclideanSpace ℝ (Fin d) → E)
+    {C : ℝ≥0∞} (hC : ∀ y, κ y ≠ 0 → eLpNorm (G y) 2 volume ≤ C) :
+    ∀ y, eLpNorm (fun x ↦ κ y • G y x) 2 volume ≤ ENNReal.ofReal (κ y) * C := by
+  intro y
+  by_cases hy : κ y = 0
+  · simp [hy]
+  · rw [show (fun x ↦ κ y • G y x) = κ y • G y by rfl,
+      eLpNorm_const_smul]
+    simpa [← ofReal_norm_eq_enorm, Real.norm_eq_abs, abs_of_nonneg (hκ0 y)] using
+      mul_le_mul_left' (hC y hy) (ENNReal.ofReal (κ y))
+
+/-- Jensen for the probability kernel `κ` (pointwise in `x`). -/
+lemma apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity_minkowski_aux_avg_bound_aux_pointwise
+    {d : ℕ} {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E] [CompleteSpace E]
+    (κ : EuclideanSpace ℝ (Fin d) → ℝ) (hκ0 : ∀ x, 0 ≤ κ x) (hκint : Integrable κ volume)
+    (hκ1 : (∫ x, κ x ∂volume) = 1)
+    (G : EuclideanSpace ℝ (Fin d) → EuclideanSpace ℝ (Fin d) → E) (x : EuclideanSpace ℝ (Fin d)) :
+    ‖∫ y, κ y • G y x ∂volume‖ₑ ^ 2 ≤
+      ∫⁻ y, ENNReal.ofReal (κ y) * ‖G y x‖ₑ ^ 2 ∂volume := by
+  sorry
+
+/-- Tonelli: integrate the Jensen bound in `x` and use the section bound. -/
+lemma apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity_minkowski_aux_avg_bound_aux_tonelli
+    {d : ℕ} {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E] [CompleteSpace E]
+    (κ : EuclideanSpace ℝ (Fin d) → ℝ) (hκ0 : ∀ x, 0 ≤ κ x) (hκint : Integrable κ volume)
+    (hκ1 : (∫ x, κ x ∂volume) = 1)
+    (G : EuclideanSpace ℝ (Fin d) → EuclideanSpace ℝ (Fin d) → E)
+    (hG : AEStronglyMeasurable (Function.uncurry G)
+      ((volume : Measure (EuclideanSpace ℝ (Fin d))).prod volume))
+    {C : ℝ≥0∞} (hC : ∀ y, κ y ≠ 0 → eLpNorm (G y) 2 volume ≤ C) :
+    ∫⁻ x, ∫⁻ y, ENNReal.ofReal (κ y) * ‖G y x‖ₑ ^ 2 ∂volume ∂volume ≤ C ^ 2 := by
+  sorry
+
+/-- An `L²` bound from a bound on the integral of the squared norm. -/
+lemma apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity_minkowski_aux_avg_bound_aux_from_sq
+    {d : ℕ} {E : Type*} [NormedAddCommGroup E]
+    (F : EuclideanSpace ℝ (Fin d) → E) {C : ℝ≥0∞}
+    (h : ∫⁻ x, ‖F x‖ₑ ^ 2 ∂volume ≤ C ^ 2) :
+    eLpNorm F 2 volume ≤ C := by
+  sorry
+
 /-- Minkowski's integral inequality for a probability kernel: the `L²` norm of
 a kernel average is at most the worst `L²` norm on the kernel's support. -/
 lemma apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity_minkowski_aux_avg_bound
@@ -3171,7 +3215,11 @@ lemma apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity_minkowski_aux_avg_
       ((volume : Measure (EuclideanSpace ℝ (Fin d))).prod volume))
     {C : ℝ≥0∞} (hC : ∀ y, κ y ≠ 0 → eLpNorm (G y) 2 volume ≤ C) :
     eLpNorm (fun x ↦ ∫ y, κ y • G y x ∂volume) 2 volume ≤ C := by
-  sorry
+  apply apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity_minkowski_aux_avg_bound_aux_from_sq
+  calc ∫⁻ x, ‖∫ y, κ y • G y x ∂volume‖ₑ ^ 2 ∂volume
+      ≤ ∫⁻ x, ∫⁻ y, ENNReal.ofReal (κ y) * ‖G y x‖ₑ ^ 2 ∂volume ∂volume :=
+        lintegral_mono fun x => apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity_minkowski_aux_avg_bound_aux_pointwise κ hκ0 hκint hκ1 G x
+    _ ≤ C ^ 2 := apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity_minkowski_aux_avg_bound_aux_tonelli κ hκ0 hκint hκ1 G hG hC
 
 /-- Minkowski's integral inequality for a probability kernel supported in the
 `ρ`-ball: the mollification error is at most the worst translation error. -/
