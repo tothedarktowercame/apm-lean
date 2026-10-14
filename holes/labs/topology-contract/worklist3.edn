@@ -36159,6 +36159,16 @@
     [{:cmd "dependent rw probe",
       :exit 1,
       :correction "used typed connector and congrArg"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791991036037-11924-2cf0202c",
+     :commands
+     ["git show/check/diff 7640486c; scope and fixture SHA-256"
+      "lake build ConstructionTargets.t93J03Closure; lean fixture and Main"
+      "statement-registry check; placeholder/axiom recount"],
+     :finding
+     "PASS: 7640486c adds compiled, sorry-free progress beyond 0fc9df57. It composes the genuine representative of the adjointified unit with the inverse-mapped skeleton connector and proves the correctly oriented groupoid-class equality; it does not equate this proof-dependent connector with the deformation connector. Exact scope and fixture hash match; support placeholders 0->0; frozen Main remains 1; only standard axioms; registry 166/166. STOP lists connector comparison, reverse kernel/surjectivity, winding, C1/C2/Main."},
     :commit "7640486c6397e450fd355dabe430dc4501444963",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
@@ -36169,7 +36179,7 @@
      "c62591623ccda04cd09201b3a00068f121af8f7c3f5a049e2ff904a395a7b546"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -36187,7 +36197,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t93J03Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Represented Mathlib adjointified equivalence unit by an exact concrete path; packaged connector assembly remains.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed exact concrete representative of the packaged unit-plus-connector composite; comparison with the deformation connector and based van Kampen remain.",
    :id :program-2026-10-13-close-t93j03,
    :kind :final-adapter,
    :campaign-priority 30,
@@ -36377,7 +36387,11 @@
     {:job 2,
      :commit "0fc9df5737f275deaba79ad46c8fdbf8e7a96e5f",
      :reason
-     "Represented Mathlib adjointified equivalence unit by an exact concrete path; packaged connector assembly remains."}]}
+     "Represented Mathlib adjointified equivalence unit by an exact concrete path; packaged connector assembly remains."}
+    {:job 3,
+     :commit "7640486c6397e450fd355dabe430dc4501444963",
+     :reason
+     "Committed exact concrete representative of the packaged unit-plus-connector composite; comparison with the deformation connector and based van Kampen remain."}]}
   {:consumer :t99J05,
    :stop-count 5,
    :evidence
@@ -38842,7 +38856,7 @@
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "kleinPolygonPackagedUnitConnector_mk",
@@ -38854,7 +38868,9 @@
     :type
     "packaged connector class equals unit followed by inverse-mapped skeleton connector",
     :area "covering-subgroup-correspondence",
-    :proved-in :program-2026-10-13-close-t93j03},
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "7640486c6397e450fd355dabe430dc4501444963"},
    :id :lemma-kleinpolygonpackagedunitconnector-mk,
    :kind :lemma,
    :depends-on [:lemma-kleinpolygonpackagedunitpath-mk],
