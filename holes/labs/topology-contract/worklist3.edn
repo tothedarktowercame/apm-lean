@@ -36115,22 +36115,25 @@
   {:consumer :t93J03,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "Program STOP commits nothing new since the prior reviewed attempt: it reuses commit 512a220f, and git history shows no later scoped commit. The unresolved SemilocallySimplyConnected hypothesis-coverage conflict is unchanged. Obtain the required owner specification decision or commit a new compiled milestone before resubmitting.",
    :evidence
    {:placeholder-delta {:t93J03 [1 1]},
-    :residual "Kill aabb in FreeGroup Bool; apply C1, then C2/Main.",
+    :residual
+    "Identify disk-attachment pi1 with this quotient; apply C1, then C2/Main.",
     :outcome :stop,
     :warnings
     ["unused SLSC owner-approved"
-     "unrelated PolygonSurfaceHomology edit preserved"],
+     "unrelated PointWedge edits preserved"],
     :missing-theorems
-    [{:name "kleinActualSkeletonFundamentalGroupEquivFreeGroupBool",
-      :type "actual skeleton pi1 equiv FreeGroup Bool",
+    [{:name "kleinSkeletonAabbPresentationQuotient",
+      :type
+      "skeleton quotient is onto, kills aabb, kernel its normal closure",
       :status :proved,
       :consumers [:t93J03],
-      :depends-on ["kleinActualSkeletonFundamentalGroupEquivCoprod"],
+      :depends-on
+      ["kleinActualSkeletonFundamentalGroupEquivFreeGroupBool"],
       :area "covering-subgroup-correspondence"}
      {:name "t93J03_polygon_van_kampen",
       :type "polygon pi1 equals PresentedGroup(aabb)",
@@ -36138,32 +36141,36 @@
       :consumers [:t93J03],
       :depends-on
       ["kleinPolygon_attaching_arcs"
-       "kleinActualSkeletonFundamentalGroupEquivFreeGroupBool"],
+       "kleinSkeletonAabbPresentationQuotient"],
       :area "covering-subgroup-correspondence"}],
     :statement-hashes {:registry "166/166"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Committed actual skeleton pi1 in literal FreeGroup Bool coordinates; attaching quotient remains.",
+    "Committed actual-skeleton aabb quotient; attaching-cell van Kampen remains.",
     :commands
     [{:cmd "lake build ConstructionTargets.t93J03Closure", :exit 0}
-     {:cmd "lake env lean skeleton-freegroup fixture", :exit 0}
-     {:cmd "registry; placeholder; diff", :exit 0}
+     {:cmd "lean aabb fixture", :exit 0}
+     {:cmd "lean Main; registry; placeholder; diff", :exit 0}
      {:cmd "rg forbidden", :exit 1, :expected-exit 1}
-     {:cmd "git commit; show --check", :exit 0}],
-    :commit "92b3dfe022bc0622552cfb5082baaadd7ca212b5",
+     {:cmd "commit; show --check", :exit 0}],
+    :diagnostic-history
+    [{:cmd "lake build closure",
+      :exit 1,
+      :correction "concurrent PointWedge edit fixed; rerun passed"}],
+    :commit "417a021338a83fb48d5d73127e71f0c9b7faf89f",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
      "ConstructionTargets/t93J03Closure.blueprint.md"],
     :fixture
-    {:path "/tmp/t93j03_skeleton_freegroup_check.lean",
+    {:path "/tmp/t93j03_aabb_quotient_check.lean",
      :sha256
-     "951dc02b2286c69a5b33e7cfb866e4d5963dd3aa11485115a50108503583ea60",
+     "5f0966ce74fe2746558454dcb4aad186511b874ce89355d0ccee06ad30ab2118",
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -37602,7 +37609,8 @@
     :lemma-kleinskeletonfundamentalgroupequivcoprod
     :lemma-kleinskeletonhomeomorphstandardtwocircles
     :lemma-kleinactualskeletonfundamentalgroupequivcoprod
-    :lemma-kleinactualskeletonfundamentalgroupequivfreegroupbool],
+    :lemma-kleinactualskeletonfundamentalgroupequivfreegroupbool
+    :lemma-kleinskeletonaabbpresentationquotient],
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
@@ -37921,6 +37929,26 @@
    :id :lemma-t96a06-rp3-rational-h0,
    :kind :lemma,
    :depends-on [],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "kleinSkeletonAabbPresentationQuotient",
+    :type
+    "skeleton quotient is onto, kills aabb, kernel its normal closure"},
+   :lemma
+   {:name "kleinSkeletonAabbPresentationQuotient",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type
+    "skeleton quotient is onto, kills aabb, kernel its normal closure",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03},
+   :id :lemma-kleinskeletonaabbpresentationquotient,
+   :kind :lemma,
+   :depends-on
+   [:lemma-kleinactualskeletonfundamentalgroupequivfreegroupbool],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
