@@ -92,7 +92,8 @@ lemma apm_t91J03_rank_one_scalar_unique
     (hm : ∀ a : apm_t91J03_H1Circle,
       f a = m * orientation.hom a) :
     n = m := by
-  sorry
+  have h := (hn (orientation.inv 1)).symm.trans (hm (orientation.inv 1))
+  simpa using h
 
 /-- An integer of absolute value two cannot have absolute value at most one.
 Kept separate so this leaf has no topological dependencies. -/
