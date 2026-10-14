@@ -87943,6 +87943,17 @@
      {:cmd
       "#print axioms finiteWedgeRightConnectorSquare_of_inOldFactor",
       :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791972673343-11752-194f7903",
+     :commands
+     ["git show/diff-tree/commit trailers; sha256sum"
+      "exact blob | lake env lean /dev/stdin; #print axioms"
+      "placeholder scan; statement-registry.py check"
+      "inspect generic connector iff and projection/inl API"],
+     :finding
+     "PASS: independent review of topo-6 commit d47191953; only PolygonSurfaceHomology.lean changed, exact blob SHA256 ae6aee87aef5d6aa101712ee6477ea15b9cb3a69673c9002dd5d437a0012911a. Exact blob compiles with propext, Classical.choice, Quot.sound; placeholders 0; registry 166/0. New compiled progress after 5b403e34b exposes successor neighborhood inputs and specializes the generic theorem: the right-base element has trivial right projection iff the stated connector square commutes. The specialization preserves parameter order: final-circle neighborhood is M/right and old-wedge neighborhood is N/left; the iff orientation exactly matches the generic theorem. Important remaining boundary: projection=1 is necessary but not sufficient for membership in the left coproduct factor. The program must still prove an actual rightBase=inl(a) factorization before applying leg-word extraction."},
     :commit "efaec6039",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
@@ -87951,7 +87962,7 @@
      "2c7d35fbe64158ba6d22bd9513aade0d73bcdfd3cf4ed4d152103cab0d977699"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -87971,7 +87982,7 @@
     :blueprint
     "ConstructionTargets/PolygonSurfaceHomology.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked the specialized connector obstruction.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked the valid right-base-to-connector direction; corrected the dependency order.",
    :id :program-2026-10-13-polygon-surface-homology,
    :kind :reusable-theorem,
    :campaign-priority 31,
@@ -88081,7 +88092,11 @@
      :reason "Banked Fin-successor base-neighborhood recursion."}
     {:job 1,
      :commit "d47191953",
-     :reason "Banked the specialized connector obstruction."}]}
+     :reason "Banked the specialized connector obstruction."}
+    {:job 2,
+     :commit "efaec6039",
+     :reason
+     "Banked the valid right-base-to-connector direction; corrected the dependency order."}]}
   {:consumer :t97A01,
    :stop-count 0,
    :phase :implementation,
@@ -89895,7 +89910,7 @@
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "finiteWedgeRightConnectorSquare_of_inOldFactor",
@@ -89905,7 +89920,9 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "inl membership implies connector square",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :program-2026-10-13-polygon-surface-homology,
+    :banked-commit "efaec6039"},
    :id :lemma-finitewedgerightconnectorsquare-of-inoldfactor,
    :kind :lemma,
    :depends-on
