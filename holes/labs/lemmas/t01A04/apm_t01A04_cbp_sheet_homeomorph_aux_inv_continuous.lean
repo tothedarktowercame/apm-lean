@@ -1142,9 +1142,100 @@ noncomputable def apm_t01A04_cbp_sheet_homeomorph_aux_from (i : Fin 2) :
 
 /-- The quotient-level inverse is continuous on `U`. -/
 -- BEGIN SEAT AREA
+lemma apm_t01A04_cbp_sheet_homeomorph_aux_inv_continuous_aux_invariant
+    {u v : Sum apm_t01a04_Torus Circle}
+    (h : Relation.EqvGen apm_t01a04_wedgeRel u v) :
+    (Sum.elim (fun q : apm_t01a04_Torus =>
+        0 < (q.1 : ℂ).re ∧ 0 < (q.2 : ℂ).re)
+      (fun z : Circle => 0 < (z : ℂ).re) u ↔
+    Sum.elim (fun q : apm_t01a04_Torus =>
+        0 < (q.1 : ℂ).re ∧ 0 < (q.2 : ℂ).re)
+      (fun z : Circle => 0 < (z : ℂ).re) v) := by
+  induction h with
+  | rel _ _ h => cases h <;> norm_num
+  | refl _ => rfl
+  | symm _ _ _ ih => exact ih.symm
+  | trans _ _ _ _ _ ih₁ ih₂ => exact ih₁.trans ih₂
+
+lemma apm_t01A04_cbp_sheet_homeomorph_aux_inv_continuous_aux_preimage :
+    (fun r : Sum apm_t01a04_Torus Circle =>
+      (Quotient.mk _ r : apm_t01a04_X)) ⁻¹' apm_t01A04_cbp_U =
+      {r | Sum.elim (fun q : apm_t01a04_Torus =>
+          0 < (q.1 : ℂ).re ∧ 0 < (q.2 : ℂ).re)
+        (fun z : Circle => 0 < (z : ℂ).re) r} := by
+  ext r
+  constructor
+  · rintro ⟨s, hs, hrs⟩
+    exact
+      (apm_t01A04_cbp_sheet_homeomorph_aux_inv_continuous_aux_invariant
+        (Quotient.exact hrs)).mp hs
+  · intro hr
+    exact ⟨r, hr, rfl⟩
+
+lemma apm_t01A04_cbp_sheet_homeomorph_aux_inv_continuous_aux_open :
+    IsOpen apm_t01A04_cbp_U := by
+  change @IsOpen _ (TopologicalSpace.coinduced
+    (fun r : Sum apm_t01a04_Torus Circle =>
+      (Quotient.mk _ r : apm_t01a04_X)) inferInstance) apm_t01A04_cbp_U
+  rw [isOpen_coinduced,
+    apm_t01A04_cbp_sheet_homeomorph_aux_inv_continuous_aux_preimage,
+    isOpen_sum_iff]
+  constructor
+  · exact
+      (isOpen_lt continuous_const
+        (Complex.continuous_re.comp
+          (continuous_subtype_val.comp continuous_fst))).inter
+      (isOpen_lt continuous_const
+        (Complex.continuous_re.comp
+          (continuous_subtype_val.comp continuous_snd)))
+  · exact isOpen_lt continuous_const
+      (Complex.continuous_re.comp continuous_subtype_val)
+
 lemma apm_t01A04_cbp_sheet_homeomorph_aux_inv_continuous (i : Fin 2) :
     ContinuousOn (apm_t01A04_cbp_sheet_homeomorph_aux_inv i) apm_t01A04_cbp_U := by
-  sorry
+  have hq : Topology.IsQuotientMap (fun r : Sum apm_t01a04_Torus Circle =>
+      (Quotient.mk _ r : apm_t01a04_X)) :=
+    ⟨Quotient.mk_surjective, rfl⟩
+  have hc : ContinuousOn
+      (apm_t01A04_cbp_sheet_homeomorph_aux_inv i ∘
+        fun r : Sum apm_t01a04_Torus Circle => (Quotient.mk _ r : apm_t01a04_X))
+      ((fun r : Sum apm_t01a04_Torus Circle =>
+        (Quotient.mk _ r : apm_t01a04_X)) ⁻¹' apm_t01A04_cbp_U) := by
+    rw [apm_t01A04_cbp_sheet_homeomorph_aux_inv_continuous_aux_preimage]
+    change ContinuousOn (apm_t01A04_cbp_sheet_homeomorph_aux_invRaw i) _
+    intro r hr
+    cases r with
+    | inl q =>
+        have hb : ContinuousAt (fun q : apm_t01a04_Torus =>
+            Quotient.mk _ (Sum.inl (i, q)) : apm_t01a04_Torus →
+              apm_t01a04_CircleCover) q :=
+          ((continuous_coinduced_rng : Continuous
+          (fun r : Sum (Fin 2 × apm_t01a04_Torus) Circle =>
+            (Quotient.mk _ r : apm_t01a04_CircleCover))).comp
+              (continuous_inl.comp
+                (continuous_const.prodMk continuous_id))).continuousAt
+        exact ((Topology.IsOpenEmbedding.inl.continuousAt_iff
+          (g := apm_t01A04_cbp_sheet_homeomorph_aux_invRaw i)).mp hb).continuousWithinAt
+    | inr z =>
+        have harg : ContinuousAt (fun w : Circle => Complex.arg (w : ℂ)) z :=
+          (Complex.continuousAt_arg (Or.inl hr)).comp continuousAt_subtype_val
+        have hroot : ContinuousAt
+            (apm_t01A04_cbp_sheet_homeomorph_aux_root i) z := by
+          exact continuousAt_const.mul
+            (Circle.exp.continuous.continuousAt.comp (harg.div_const 2))
+        have hb : ContinuousAt (fun z : Circle => Quotient.mk _ (Sum.inr
+            (apm_t01A04_cbp_sheet_homeomorph_aux_root i z)) : Circle →
+              apm_t01a04_CircleCover) z :=
+          ((continuous_coinduced_rng : Continuous
+            (fun r : Sum (Fin 2 × apm_t01a04_Torus) Circle =>
+            (Quotient.mk _ r : apm_t01a04_CircleCover))).continuousAt.comp
+              (continuous_inr.continuousAt.comp hroot))
+        exact ((Topology.IsOpenEmbedding.inr.continuousAt_iff
+          (g := apm_t01A04_cbp_sheet_homeomorph_aux_invRaw i)).mp hb).continuousWithinAt
+  exact (hq.continuousOn_isOpen_iff
+    (g := apm_t01A04_cbp_sheet_homeomorph_aux_inv i)
+    (s := apm_t01A04_cbp_U)
+    apm_t01A04_cbp_sheet_homeomorph_aux_inv_continuous_aux_open).mpr hc
 -- END SEAT AREA
 
 /-- Left inverse on sheet `i`. -/
