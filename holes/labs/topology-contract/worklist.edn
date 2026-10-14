@@ -119066,23 +119066,23 @@
   {:consumer :t00J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 6,
+   :stop-count 7,
    :review-finding
    "Recorded fixture hash is malformed/mismatched: ledger has afb497a6df6187f797ce1df000700b7c24774e94f50633c1cc10b2aa0e8c82319196, but the recorded commit blueprint hashes to afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984. Repair fixture provenance. The archived closure otherwise compiles sorry-free with standard axioms; Main retains its one baseline sorry; registry 166/166.",
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
     :residual
-    "Prove geometric component comparison and regular-value top-degree identity; assemble Main.",
+    "Prove geometric comparison and regular-value identity; assemble Main.",
     :outcome :stop,
-    :warnings ["Main sorryAx" "unrelated t93J03 edits"],
+    :warnings ["Main sorryAx" "unrelated edits"],
     :missing-theorems
-    [{:name "pointSignedCount_eq_zero_of_componentComparison",
-      :type "component comparison gives zero point count",
+    [{:name "topHomologyMap_eq_zero_of_pointSignedCountComparison",
+      :type "point count comparison gives H2 zero",
       :status :proved,
       :consumers [:t00J02],
       :depends-on
-      ["pointSignedCount_eq_groupedComponentSignedCount"
-       "groupedComponentSignedCount_eq_zero_of_comparison"],
+      ["pointSignedCount_eq_zero_of_componentComparison"
+       "surfaceTopHomologyMap_eq_zero_of_surfaceTopDegree_eq_zero"],
       :area "oriented-surface-degree"}
      {:name "t00J02_transverse_diskBounded_topHomologyMap_eq_zero",
       :type "H2 map zero",
@@ -119090,38 +119090,27 @@
       :consumers [:t00J02],
       :depends-on
       ["regularValue_topHomologyMap_signedCount"
-       "pointSignedCount_eq_zero_of_componentComparison"],
+       "topHomologyMap_eq_zero_of_pointSignedCountComparison"],
       :area "oriented-surface-degree"}],
     :statement-hashes
     {:source
      "0b3b4888807bfa06c8d60d86829b75776394ea8aa45a98c933c087165521f923",
      :implementation
-     "d47e432ca841da0e66eaae68f3f7788d921ead019e8c906f87d7537d94073fac",
+     "c4fd4ee40f6115c51e1d6c6517b25ce0c6ceba417c38c85fd92a032a3beca488",
      :blueprint
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984",
      :registry "166/166"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-2,
-    :reason "Banked zero point count from component comparison.",
+    :reason "Banked signed-count H2 assembly.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t00J02Closure.lean",
       :exit 0}
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "hash/diff/placeholders", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1792009355937-12337-d8522808",
-     :commands
-     ["git diff-tree/show 6bda5206"
-      "archive 6bda5206; lake env lean closure and Main"
-      "sha256sum/placeholders at 6bda5206"
-      "python3 scripts/statement-registry.py check"],
-     :finding
-     "PASS program STOP: new commit changes only t00J02Closure.lean and correctly derives zero pointwise signed count by the prior fiberwise reindexing plus component-sum/degree comparison; signs remain indexed by genuine component and no point/component representation is conflated. Fixture and frozen hashes match; closure has 0 placeholders, Main retains baseline 1; archived files compile with standard axioms; registry 166/166. Geometric component comparison, regular-value top-degree identity, and Main assembly remain listed."},
-    :commit "6bda52066b6b819f9c6f1b27a16a8bed1d3457cd",
+    :commit "485f6fe6495199758abf0a8061c388409fbd2141",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t00J02Closure.blueprint.md",
@@ -119129,7 +119118,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119399,7 +119388,8 @@
     :lemma-finiteregularfiberchoice-of-locallyinjective
     :lemma-regularfibersignedcount-eq-zero-of-comparison
     :lemma-pointsignedcount-eq-groupedcomponentsignedcount
-    :lemma-pointsignedcount-eq-zero-of-componentcomparison],
+    :lemma-pointsignedcount-eq-zero-of-componentcomparison
+    :lemma-tophomologymap-eq-zero-of-pointsignedcountcomparison],
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
@@ -119948,6 +119938,25 @@
    :depends-on
    [:lemma-pointsignedcount-eq-groupedcomponentsignedcount
     :lemma-groupedcomponentsignedcount-eq-zero-of-comparison],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "topHomologyMap_eq_zero_of_pointSignedCountComparison",
+    :type "point count comparison gives H2 zero"},
+   :lemma
+   {:name "topHomologyMap_eq_zero_of_pointSignedCountComparison",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type "point count comparison gives H2 zero",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02},
+   :id :lemma-tophomologymap-eq-zero-of-pointsignedcountcomparison,
+   :kind :lemma,
+   :depends-on
+   [:lemma-pointsignedcount-eq-zero-of-componentcomparison
+    :lemma-surfacetophomologymap-eq-zero-of-surfacetopdegree-eq-zero],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
