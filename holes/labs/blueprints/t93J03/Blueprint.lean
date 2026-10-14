@@ -536,6 +536,50 @@ theorem t93J03_cyclicCover_aux_range_aux_mem_range_iff_monodromy
 /-- Lift comparison: a loop at `mk v` comes from `C` exactly when `E` sends the end of
 its lift through `ℝ² → ℝ²/G` (started at `v`) back to `E v`.  The lift of `γ` composed
 with `E` is the `pQ`-lift of `γ` from `E v` (`mk = pQ ∘ E`). -/
+theorem t93J03_cyclicCover_aux_range_aux_lift_aux_mapOfEq
+    {E B : Type*} [TopologicalSpace E] [TopologicalSpace B]
+    (p : E → B) (hp : IsCoveringMap p) (e : E) (b : B) (h : p e = b)
+    (g : FundamentalGroup B b) :
+    g ∈ (FundamentalGroup.mapOfEq ⟨p, hp.continuous⟩ h).range ↔
+      hp.monodromy (FundamentalGroup.toPath g) ⟨e, h⟩ = ⟨e, h⟩ := by
+  constructor
+  · rintro ⟨a, rfl⟩
+    obtain ⟨δ, rfl⟩ := Path.Homotopic.Quotient.mk_surjective
+      (FundamentalGroup.toPath a)
+    rw [FundamentalGroup.mapOfEq_apply]
+    apply Subtype.ext
+    change hp.liftPath ((δ.map hp.continuous).cast h.symm h.symm) e
+      (by simpa using h.symm) 1 = e
+    have hlift : (fun t => δ t) =
+        hp.liftPath ((δ.map hp.continuous).cast h.symm h.symm) e
+          (by simpa using h.symm) := by
+      apply (hp.eq_liftPath_iff _).mpr
+      refine ⟨δ.continuous, ?_, δ.source⟩
+      funext t
+      rfl
+    rw [← hlift]
+    exact δ.target
+  · intro hg
+    obtain ⟨γ, hγ⟩ := Path.Homotopic.Quotient.mk_surjective
+      (FundamentalGroup.toPath g)
+    let Δ := hp.liftPath γ e (by simpa using h.symm)
+    have hΔ0 : Δ 0 = e := hp.liftPath_zero _ _ _
+    have hΔ1 : Δ 1 = e := by
+      have hm : hp.monodromy (Path.Homotopic.Quotient.mk γ) ⟨e, h⟩ = ⟨e, h⟩ := by
+        rw [hγ]
+        exact hg
+      exact congrArg Subtype.val hm
+    let δ : Path e e := ⟨Δ, hΔ0, hΔ1⟩
+    refine ⟨FundamentalGroup.fromPath (Path.Homotopic.Quotient.mk δ), ?_⟩
+    rw [FundamentalGroup.mapOfEq_apply]
+    calc
+      _ = FundamentalGroup.fromPath (Path.Homotopic.Quotient.mk γ) := by
+        apply Path.Homotopic.Quotient.eq.mpr
+        convert Path.Homotopic.refl γ using 1
+        ext t
+        exact congr_fun (hp.liftPath_lifts γ e (by simpa using h.symm)) t
+      _ = g := hγ
+
 theorem t93J03_cyclicCover_aux_range_aux_lift
     (hpc : Continuous t93J03_cyc_pQ) (hpQ : IsCoveringMap t93J03_cyc_pQ)
     (hpE : ∀ v, t93J03_cyc_pQ (t93J03_cyc_E v) = Quotient.mk _ v)
@@ -545,7 +589,32 @@ theorem t93J03_cyclicCover_aux_range_aux_lift
       t93J03_cyc_E ((ConstructionTargets.DeckGroupQuotientFundamentalGroup.quotientMk_isCoveringMap
           t93J03_kleinPlaneQuotient_pi1_origin_aux_free).monodromy
             (FundamentalGroup.toPath γ) ⟨v, rfl⟩ : ℝ × ℝ) = t93J03_cyc_E v := by
-  sorry
+  let hpM :=
+    ConstructionTargets.DeckGroupQuotientFundamentalGroup.quotientMk_isCoveringMap
+      t93J03_kleinPlaneQuotient_pi1_origin_aux_free
+  rw [t93J03_cyclicCover_aux_range_aux_lift_aux_mapOfEq
+    t93J03_cyc_pQ hpQ (t93J03_cyc_E v) _ (hpE v) γ]
+  rw [Subtype.ext_iff]
+  obtain ⟨η, hη⟩ := Path.Homotopic.Quotient.mk_surjective
+    (FundamentalGroup.toPath γ)
+  have hend :
+      (hpQ.monodromy (FundamentalGroup.toPath γ)
+        ⟨t93J03_cyc_E v, hpE v⟩ : T93J03Punctured) =
+      t93J03_cyc_E
+        (hpM.monodromy (FundamentalGroup.toPath γ) ⟨v, rfl⟩ : ℝ × ℝ) := by
+    rw [← hη]
+    change hpQ.liftPath η (t93J03_cyc_E v) _ 1 =
+      t93J03_cyc_E (hpM.liftPath η v _ 1)
+    have hlift : (fun t => t93J03_cyc_E (hpM.liftPath η v (by simp) t)) =
+        hpQ.liftPath η (t93J03_cyc_E v) (by simpa using (hpE v).symm) := by
+      apply (hpQ.eq_liftPath_iff _).mpr
+      refine ⟨hEc.comp (hpM.liftPath η v (by simp)).continuous, ?_, ?_⟩
+      · funext t
+        rw [Function.comp_apply, hpE]
+        exact congr_fun (hpM.liftPath_lifts η v (by simp)) t
+      · rw [hpM.liftPath_zero]
+    exact (congr_fun hlift 1).symm
+  rw [hend]
 
 /-- `E (g • v) = E v` exactly for `g ∈ ⟨a⟩`. -/
 theorem t93J03_cyclicCover_aux_range_aux_fiber
