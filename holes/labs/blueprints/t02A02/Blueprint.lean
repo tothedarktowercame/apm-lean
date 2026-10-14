@@ -224,7 +224,38 @@ names and simultaneous reversal of both occurrences do not affect its
 signed pairing relation. -/
 theorem apm_t02a02_square_standard_homeomorph :
     Nonempty (apm_t02a02_square ≃ₜ Surface false 2) := by
-  sorry
+  have hg : 0 < 2 := by decide
+  let P := standardPairingData false 2 hg
+  have hpair : apm_t02a02_perm4 = P.pair := by
+    dsimp [P, standardPairingData, nonorientableStandardPairingData,
+      standardPairingDataOfOneVertex]
+    apply Equiv.ext
+    decide
+  have hparam (i : Fin 4) (t : Set.Icc (0 : ℝ) 1) :
+      pairedParameter apm_t02a02_perm4 apm_t02a02_sign4 i t =
+        pairedParameter P.pair P.sign i t := by
+    rw [← hpair]
+    change pairedParameter apm_t02a02_perm4 apm_t02a02_sign4 i t =
+      pairedParameter apm_t02a02_perm4 (fun _ => false) i t
+    fin_cases i <;> rfl
+  have hrel :
+      boundaryRel 4 apm_t02a02_perm4 apm_t02a02_sign4 =
+        boundaryRel 4 P.pair P.sign := by
+    funext x y
+    apply propext
+    constructor
+    · rintro ⟨i, t, rfl, rfl⟩
+      refine ⟨i, t, rfl, ?_⟩
+      simpa only [← hpair] using congrArg (edgePoint 4 (apm_t02a02_perm4 i)) (hparam i t)
+    · rintro ⟨i, t, rfl, rfl⟩
+      refine ⟨i, t, rfl, ?_⟩
+      simpa only [← hpair] using
+        (congrArg (edgePoint 4 (apm_t02a02_perm4 i)) (hparam i t)).symm
+  have e := standardPairingData_space_homeomorph false 2 hg
+  change Quotient (Relation.EqvGen.setoid
+    (boundaryRel 4 P.pair P.sign)) ≃ₜ Surface false 2 at e
+  rw [← hrel] at e
+  exact ⟨e⟩
 
 theorem apm_t02a02_cutPaste_continuous_bijection :
     ∃ f : C(apm_t02a02_F, Surface false 2), Function.Bijective f := by
