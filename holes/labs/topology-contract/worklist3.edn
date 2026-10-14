@@ -36119,69 +36119,57 @@
   {:consumer :t93J03,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 8,
+   :stop-count 9,
    :review-finding
    "Program STOP commits no new mathematical progress since the prior milestone: KleinPolygonBasedVanKampen merely packages the already-required surjectivity and kernel hypotheses, and both consumers only reapply the previously proved three-input theorem. Prove the based van Kampen surjectivity/kernel result (or winding conjugacy) in scope; extend Mathlib: state and prove the missing theorem in scope.",
    :evidence
    {:placeholder-delta {:t93J03 [1 1]},
     :residual
-    "Prove source-coordinate map equals direct skeleton map; reverse kernel/surjectivity; winding; C1/C2/Main.",
+    "Identify concrete outer connector with unit/mapped connector; source map equality; reverse kernel/surjectivity; winding; C1/C2/Main.",
     :outcome :stop,
     :warnings
     ["unused SLSC owner-approved" "dirty PointWedge preserved"],
     :missing-theorems
-    [{:name "kleinPolygonTargetTransportedOuterToSpacePiOne_factor",
+    [{:name "equivalence_unit_mapIso_conj_preimage",
       :type
-      "target map factors through outer inclusion and source-coordinate comparison",
+      "unit and inverse-mapped connector conjugation of preimage equals inverse-functor map",
       :status :proved,
       :consumers [:t93J03],
-      :depends-on
-      ["kleinPolygonOuterImageToDirectSkeletonPointPath_map"],
+      :depends-on [],
       :area "covering-subgroup-correspondence"}
      {:name "t93J03_polygon_based_van_kampen",
       :type "surjective skeleton map; overlap-closure kernel",
       :status :partial,
       :consumers [:t93J03],
-      :depends-on
-      ["kleinPolygonTargetTransportedOuterToSpacePiOne_factor"],
+      :depends-on ["equivalence_unit_mapIso_conj_preimage"],
       :area "covering-subgroup-correspondence"}],
     :statement-hashes {:registry "166/166"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Committed path-transport naturality and target-map factorization; source equality and based van Kampen remain.",
+    "Committed the categorical equivalence-unit/preimage identity; concrete outer-connector identification remains.",
     :commands
     [{:cmd "lean closure", :exit 0}
      {:cmd "registry; placeholder; diff; show", :exit 0}
      {:cmd "rg forbidden", :exit 1, :expected-exit 1}],
     :diagnostic-history
-    [{:cmd "build; fixture",
+    [{:cmd "build; fixture; Main",
       :exit 1,
       :correction
-      "dirty PointWedge line 5299 failed; scoped source passed first"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1791981897477-11806-75ffe75e",
-     :commands
-     ["git show/check/diff 1f843184; scope/orientation; fixture sha256"
-      "lake build closure; lean fixture and Main"
-      "statement registry; placeholder and axiom recount"],
-     :finding
-     "PASS. Commit 1f843184 proves general fundamental-group path-transport naturality and specializes it to factor the target-transported Klein map through outer inclusion and the two source-coordinate maps, with correct orientation. After rebuilding a stale olean, closure, fixture, and Main pass. Scope/hash match; support placeholders 0->0; frozen Main 1->1; standard axioms only; registry 166/166. Source-coordinate equality, reverse kernel inclusion, surjectivity, and winding remain listed."},
-    :commit "1f843184e63c1069706c11cc8498750d603ddc22",
+      "dirty PointWedge line 5330 failed and removed olean; scoped source passed first"}],
+    :commit "a99d1a8d1b73e3760af0f8cb89a9a4151be047d8",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
      "ConstructionTargets/t93J03Closure.blueprint.md"],
     :fixture
-    {:path "/tmp/t93j03_path_transport_naturality_check.lean",
+    {:path "/tmp/t93j03_equivalence_preimage_check.lean",
      :sha256
-     "a7e989f4ca18e02a2a5deedd5186772e04c63ef059396b6aedf1e5ddff7ac2bc",
+     "22e01fdadce6d02d59c7b3e6f5b8291a0474deeccc082867076868b296a4a96a",
      :mode :blocked-by-unrelated-dependency},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -38582,7 +38570,8 @@
     :lemma-kleinpolygonoverlapskeletonnormalclosure-le-targettransportedkernel
     :lemma-kleinpolygonskeletontospacepione-eq-outer-comp-direct
     :lemma-kleinpolygonouterimagetodirectskeletonpointpath-map
-    :lemma-kleinpolygontargettransportedoutertospacepione-factor],
+    :lemma-kleinpolygontargettransportedoutertospacepione-factor
+    :lemma-equivalence-unit-mapiso-conj-preimage],
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
@@ -38747,6 +38736,25 @@
    :kind :lemma,
    :depends-on
    [:lemma-kleinpolygonouterimagetodirectskeletonpointpath-map],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "equivalence_unit_mapIso_conj_preimage",
+    :type
+    "unit and inverse-mapped connector conjugation of preimage equals inverse-functor map"},
+   :lemma
+   {:name "equivalence_unit_mapIso_conj_preimage",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type
+    "unit and inverse-mapped connector conjugation of preimage equals inverse-functor map",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03},
+   :id :lemma-equivalence-unit-mapiso-conj-preimage,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
