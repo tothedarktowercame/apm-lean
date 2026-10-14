@@ -87941,6 +87941,18 @@
      {:cmd "placeholder scan", :exit 0}
      {:cmd "axioms check", :exit 0}
      {:cmd "git show --check c1423123c", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792005786510-12244-1df38570",
+     :commands
+     ["git show/diff c1423123c; blob sha256; diff --check"
+      "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology"
+      "lake env lean /dev/stdin (#print axioms)"
+      "placeholder scan"
+      "statement-registry.py check"],
+     :finding
+     "PASS: c1423123c (topo-6) changes only scoped PolygonSurfaceHomology.lean; fixture SHA-256 ac018385c4b8d51979391e56a590a9e4fc1a0278679dabffc87e4386950209c6 matches. Exact blob builds; 0 placeholders; three milestones use standard axioms; registry 166/0. Generated leg words give coordinates with the existing Hurewicz equality in the correct orientation; prior degree-one Hurewicz generation yields coordinate surjectivity, and existing split monicity plus epi yields the normalized positive-basis H1 isomorphism. New compiled progress; remaining: outer-piece transport/higher vanishing, B6-B10."},
     :commit "c1423123c",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
@@ -87949,7 +87961,7 @@
      "ac018385c4b8d51979391e56a590a9e4fc1a0278679dabffc87e4386950209c6"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -87969,7 +87981,7 @@
     :blueprint
     "ConstructionTargets/PolygonSurfaceHomology.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked generator comparison and orbit-wedge surjectivity.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked coordinate surjectivity and fixed-basis H1 isomorphism.",
    :id :program-2026-10-13-polygon-surface-homology,
    :kind :reusable-theorem,
    :campaign-priority 31,
@@ -88154,7 +88166,11 @@
     {:job 5,
      :commit "c3a9b395c",
      :reason
-     "Banked generator comparison and orbit-wedge surjectivity."}]}
+     "Banked generator comparison and orbit-wedge surjectivity."}
+    {:job 6,
+     :commit "c1423123c",
+     :reason
+     "Banked coordinate surjectivity and fixed-basis H1 isomorphism."}]}
   {:consumer :t97A01,
    :stop-count 0,
    :phase :implementation,
@@ -89103,7 +89119,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "finiteWedgeH1CoordinateIso",
@@ -89113,7 +89129,9 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "(L->Z) isomorphic to H1(FiniteWedge L), preserving basis",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :program-2026-10-13-polygon-surface-homology,
+    :banked-commit "c1423123c"},
    :id :lemma-finitewedgeh1coordinateiso,
    :kind :lemma,
    :depends-on
@@ -89183,7 +89201,7 @@
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "finiteWedgeH1CoordinateMap_epi",
@@ -89192,7 +89210,9 @@
    {:name "finiteWedgeH1CoordinateMap_epi",
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "normalized coordinate map is epic",
-    :area "polygon-quotient-homology"},
+    :area "polygon-quotient-homology",
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/PolygonSurfaceHomology.lean"]},
    :id :lemma-finitewedgeh1coordinatemap-epi,
    :kind :lemma,
    :depends-on
@@ -90815,7 +90835,7 @@
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "finiteWedgeHurewicz_generated_by_coordinates",
@@ -90825,14 +90845,16 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "every loop Hurewicz class has coordinates",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :program-2026-10-13-polygon-surface-homology,
+    :banked-commit "c1423123c"},
    :id :lemma-finitewedgehurewicz-generated-by-coordinates,
    :kind :lemma,
    :depends-on [:lemma-finitewedgelegfreegroupmap-surjective],
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "finiteWedgeH1CoordinateMap_surjective",
@@ -90842,7 +90864,9 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "normalized coordinate map is onto",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :program-2026-10-13-polygon-surface-homology,
+    :banked-commit "c1423123c"},
    :id :lemma-finitewedgeh1coordinatemap-surjective,
    :kind :lemma,
    :depends-on [:lemma-finitewedgehurewicz-generated-by-coordinates],
