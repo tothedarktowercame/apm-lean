@@ -117,6 +117,33 @@ lemma t93A06_periodic_form_descent_aux_source_smooth :
   unfold sourceForm areaForm
   fun_prop
 
+/-- Set-level descent of the periodic covector field.  Periodicity is an
+explicit input so this leaf can be proved independently of the trigonometric
+calculation above. -/
+theorem t93A06_periodic_form_descent_aux_set_descent
+    (atlas : SmoothAtlas)
+    (hfib : ∀ x y : Plane, projection x = projection y ↔
+      ∃ k : Fin 2 → ℤ, ∀ i, y i = x i + (k i : ℝ))
+    (hperiodic : ∀ (x : Plane) (k : Fin 2 → ℤ),
+      sourceForm (fun i ↦ x i + (k i : ℝ)) = sourceForm x) :
+    letI := atlas.charts
+    ∃ form : Form Plane Torus 2,
+      pullback projection form = sourceForm := by
+  sorry
+
+/-- Smoothness descends along the local diffeomorphism `projection`.  Both
+the form and the smoothness of its pullback are explicit inputs, making this
+leaf independent of set-level descent. -/
+theorem t93A06_periodic_form_descent_aux_smooth_of_pullback
+    (atlas : SmoothAtlas)
+    (form : let _ := atlas.charts; Form Plane Torus 2)
+    (hsource : ContDiff ℝ ∞ sourceForm)
+    (hpull : letI := atlas.charts
+      pullback projection form = sourceForm) :
+    letI := atlas.charts
+    IsSmooth form := by
+  sorry
+
 /-- A smooth invariant form descends uniquely through the quotient atlas.
 The fibre characterization is supplied as a hypothesis to keep this seat
 independent of the atlas and fibre seats. -/
@@ -128,7 +155,17 @@ theorem t93A06_periodic_form_descent (atlas : SmoothAtlas)
       IsSmooth form ∧ pullback projection form = sourceForm ∧
       (∀ other : Form Plane Torus 2, IsSmooth other →
         pullback projection other = sourceForm → other = form) := by
-  sorry
+  letI := atlas.charts
+  obtain ⟨form, hpull⟩ :=
+    t93A06_periodic_form_descent_aux_set_descent atlas hfib
+      t93A06_periodic_form_descent_aux_source_periodic
+  have hsmooth : IsSmooth form :=
+    t93A06_periodic_form_descent_aux_smooth_of_pullback atlas form
+      t93A06_periodic_form_descent_aux_source_smooth hpull
+  refine ⟨form, hsmooth, hpull, ?_⟩
+  intro other _ hother
+  exact t93A06_periodic_form_descent_aux_pullback_injective atlas
+    (hother.trans hpull.symm)
 
 /-- The fundamental-square integral is `1/4` for any form whose pullback is
 the printed periodic form. -/

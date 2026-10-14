@@ -111,29 +111,76 @@ direction.
 test `y=x+![2,-3]`, quotient equality holds in both coordinates.  A half-
 integer displacement fails, as required.
 
-### `t93A06_periodic_form_descent`
+### `t93A06_periodic_form_descent_aux_set_descent`
 
-**Statement.** Given a quotient atlas and the independently supplied fibre
-characterization, there is a unique smooth torus two-form pulling back to
-`sourceForm`.
+**Statement.** Given an atlas, the fibre characterization, and periodicity of
+`sourceForm` as explicit hypotheses, there is a (not yet asserted smooth) form
+on `Torus` whose pullback by `projection` is `sourceForm`.
 
-**Why true.** The scalar coefficient has period one in each coordinate, since
-adding an integer changes each trigonometric argument by an integral multiple
-of `2π`; the constant area form is translation invariant.  Define the form in
-each local inverse chart by transporting `sourceForm`.  Fibre invariance makes
-the definition independent of the lift, local smoothness follows from the
-explicit coefficient, and surjectivity plus local invertibility of projection
-makes pullback injective, giving uniqueness.
+**Proof plan.** For `z : Torus`, choose a lift `x` using
+`t93A06_periodic_form_descent_aux_projection_surjective`.  Since
+`atlas.quotient_localDiffeomorph` makes `mfderiv projection x` a continuous
+linear equivalence, define the value at `z` by composing `sourceForm x` with
+the inverse derivative.  Use `Classical.choose` (or quotient lifting) to make
+this a global function.  If `y` is another lift, `hfib` writes it as
+`x + k`; `hperiodic` identifies the source covectors.  The remaining derivative
+identity follows because `projection` is a continuous group quotient and
+integer translation has derivative the identity.  Useful Mathlib lemmas are
+`IsLocalDiffeomorph.mfderivToContinuousLinearEquiv`,
+`ContinuousLinearEquiv.apply_symm_apply`, `mfderiv_comp`,
+`HasMFDerivAt.mfderiv`, `QuotientAddGroup.mk_surjective`, and the
+`ContMDiff`/derivative lemmas for `QuotientAddGroup.mk` available through the
+local-diffeomorphism hypothesis.  A robust alternative is to compare both
+candidate values after composing with the invertible derivative and use
+`ContinuousAlternatingMap.ext`.
 
-**Expected size.** 180–300 lines.
+**Expected size.** 70–130 lines.  Independent of the smoothness leaf: its only
+nondefinition inputs are `hfib` and `hperiodic`.
 
-**Dependencies.** It takes the conclusions of `t93A06_torusAtlas` and
-`t93A06_projection_fibers` as hypotheses, so its seat can compile in parallel.
+**Truth check.** Every torus point has a lift.  Fibres are nonempty and two
+lifts differ by an integer vector, including points represented on a
+fundamental-domain boundary.  The derivative is invertible at every lift, so
+the transported covector is defined even where the scalar coefficient is
+zero.  This is genuine existence, not merely a restatement of `hperiodic`.
 
-**Truth check.** Translation by each basis vector `(1,0)` and `(0,1)` leaves
-the coefficient and determinant covector unchanged.  The same argument then
-handles every integer vector.  The form is nonzero at the lift `(1/4,0)`, so
-the construction is not accidentally the zero form.
+### `t93A06_periodic_form_descent_aux_smooth_of_pullback`
+
+**Statement.** For any form on the torus, if its pullback is `sourceForm` and
+`sourceForm` is smooth as a Euclidean covector field, then the form is smooth
+in every chart of the supplied quotient atlas.
+
+**Proof plan.** Fix `e ∈ atlas Plane Torus` and a point of `e.target`.
+Choose the corresponding torus point and a lift.  Apply
+`atlas.quotient_localDiffeomorph` at that lift and use its
+`localInverse`; after shrinking to the intersection with `e.source`, the
+inverse is a smooth local section of `projection`.  Rewrite `inChart form e`
+locally by `hpull` as `sourceForm` composed with this section and with the
+appropriate derivatives.  Smoothness follows from `hsource`, smoothness of
+the chart transition, and smoothness of `mfderiv` for the local diffeomorphism.
+Patch the pointwise neighborhoods with `contDiffOn_iff_contDiffAt` (or
+`ContDiffOn.of_locally`).  Relevant API is in
+`Mathlib/Geometry/Manifold/LocalDiffeomorph`: `IsLocalDiffeomorph.localInverse`,
+`localInverse_mem_source`, `right_inv`, `contMDiffOn_localInverse`, and
+`mfderivToContinuousLinearEquiv`; also use `mem_atlas_iff`/
+`writtenInExtChartAt` transition smoothness, `mfderiv_comp`, and
+`ContDiffOn.contDiffAt`.
+
+**Expected size.** 100–150 lines.  Independent of set-level descent because
+`form`, `hsource`, and `hpull` are all explicit hypotheses.
+
+**Truth check.** Smoothness is local and projection has a local inverse at
+every lift; surjectivity rules out uncovered torus points.  Zeros of
+`sourceForm` cause no issue because the argument uses invertibility of the
+projection derivative, not division by the coefficient.  The assertion is
+for every atlas chart, not only a preferred quotient chart.
+
+### `t93A06_periodic_form_descent` — assembly (sorry-free)
+
+Obtains a form and its pullback equality from the set-descent leaf, applies
+the smoothness leaf using the already proved source-smoothness lemma, and gets
+uniqueness from the already proved pullback-injectivity lemma.  The smoothness
+hypothesis on a competing form is intentionally unused: injectivity is the
+stronger statement.
 
 ### `t93A06_torusIntegral_quarter`
 
