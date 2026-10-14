@@ -710,10 +710,35 @@ theorem regularFiberLocalDegree_localization_eq
         (groupGlobalGenerator (TopCat.of S) 2 e) :=
   (surfaceTopHomology_localFundamentalClassIso S e).localization_eq x
 
+/-- Package the two remaining geometric identities after fixing the pointwise
+local degrees to the coefficients supplied by local fundamental classes. -/
+def regularFiberTopDegreeFormula_of_localFundamentalClassComparisons
+    {S : Type} [TopologicalSpace S] [T2Space S]
+    [ChartedSpace SurfaceModel S]
+    {f : C(S, S)} {c : C(Circle, S)} {y : S}
+    (hy : y ∈ Set.range c) [Fintype {x : S // f x = y}]
+    (e : surfaceHomology S ≅ ModuleCat.of ℤ ℤ)
+    (lifts : ∀ k : OccupiedRegularFiberComponent f c y hy,
+      ExactZeroDegreeComponentLift f c y hy k)
+    (orientationSign : OccupiedRegularFiberComponent f c y hy → ℤ)
+    (hcomponent : ∀ k, componentLocalDegreeSum
+      (occupiedRegularFiberComponentIndex f c y hy)
+        (regularFiberLocalDegree e f y) k = exactLiftComponentDegree lifts k)
+    (htop : surfaceTopDegree e f = ∑ x,
+      orientationSign (occupiedRegularFiberComponentIndex f c y hy x) *
+        regularFiberLocalDegree e f y x) :
+    RegularFiberTopDegreeFormula hy e lifts := by
+  let comparison : RegularFiberLocalDegreeComparison hy lifts :=
+    { localDegree := regularFiberLocalDegree e f y
+      orientationSign := orientationSign
+      component_sum_eq_lift_degree := hcomponent }
+  exact { comparison := comparison, topDegree_eq := htop }
+
 end ConstructionTargets.T00J02Closure
 
 #print axioms ConstructionTargets.T00J02Closure.surfaceTopHomology_localFundamentalClassIso
 #print axioms ConstructionTargets.T00J02Closure.regularFiberLocalDegree_localization_eq
+#print axioms ConstructionTargets.T00J02Closure.regularFiberTopDegreeFormula_of_localFundamentalClassComparisons
 #print axioms ConstructionTargets.T00J02Closure.circleDegree_eq_homologyMap
 #print axioms ConstructionTargets.T00J02Closure.circleDegree_eq_zero_of_homologyMap_eq_zero
 #print axioms ConstructionTargets.T00J02Closure.transverseCircle_preimage_component_signedCount
