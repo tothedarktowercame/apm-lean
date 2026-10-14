@@ -1242,6 +1242,32 @@ theorem polygonBoundaryWedgeLoop_edgePoint_eq_signedEdgePath
       polygonBoundarySignedEdgePath P i t := by
   exact polygonBoundaryWedgeLoop_edgePoint P i t
 
+/-- A positive packaged edge is literally the winding-one circle path mapped
+into its wedge leg. -/
+theorem polygonBoundarySignedEdgePath_of_sign (P : PairingData)
+    (i : Fin P.edgeCount) (h : P.sign i = true) :
+    polygonBoundarySignedEdgePath P i =
+      (ConstructionTargets.CircleUniversalCover.integerLoop 1).map
+        (PolygonSurfacePiOne.PointWedgeQuotient.continuous_wedgeCircle
+          (P.orbit i)) := by
+  ext t
+  change P.signedWedgeArc i t = _
+  rw [P.signedWedgeArc_of_sign i t h, circleArc_eq_integerLoop_one]
+  rfl
+
+/-- A negative packaged edge is literally the reverse of the winding-one
+circle path mapped into its wedge leg. -/
+theorem polygonBoundarySignedEdgePath_of_not_sign (P : PairingData)
+    (i : Fin P.edgeCount) (h : P.sign i = false) :
+    polygonBoundarySignedEdgePath P i =
+      ((ConstructionTargets.CircleUniversalCover.integerLoop 1).map
+        (PolygonSurfacePiOne.PointWedgeQuotient.continuous_wedgeCircle
+          (P.orbit i))).symm := by
+  ext t
+  change P.signedWedgeArc i t = _
+  rw [P.signedWedgeArc_of_not_sign i t h, circleArc_eq_integerLoop_one]
+  rfl
+
 /-- The explicit winding-one class associated to the polygon-edge
 parametrization. -/
 noncomputable def circleIntegerLoopOneClass : FundamentalGroup Circle 1 :=
@@ -1336,6 +1362,26 @@ noncomputable def finiteWedgeExplicitLegClass {L : Type} (l : L) :
     ⟨PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle l,
       PolygonSurfacePiOne.PointWedgeQuotient.continuous_wedgeCircle l⟩
     1 circleIntegerLoopOneClass
+
+/-- The homotopy class of each packaged geometric edge is exactly the
+explicit signed wedge-leg factor, before common-basepoint transport. -/
+theorem polygonBoundarySignedEdgePath_mk (P : PairingData)
+    (i : Fin P.edgeCount) :
+    Path.Homotopic.Quotient.mk (polygonBoundarySignedEdgePath P i) =
+      if P.sign i then finiteWedgeExplicitLegClass (P.orbit i)
+      else (finiteWedgeExplicitLegClass (P.orbit i))⁻¹ := by
+  cases hs : P.sign i
+  · rw [if_neg (Bool.false_ne_true),
+      polygonBoundarySignedEdgePath_of_not_sign P i hs,
+      Path.Homotopic.Quotient.mk_symm]
+    rw [finiteWedgeExplicitLegClass, circleIntegerLoopOneClass,
+      FundamentalGroup.map_apply,
+      ← Path.Homotopic.Quotient.mk_map]
+    rfl
+  · rw [if_pos rfl, polygonBoundarySignedEdgePath_of_sign P i hs]
+    rw [finiteWedgeExplicitLegClass, circleIntegerLoopOneClass,
+      FundamentalGroup.map_apply,
+      ← Path.Homotopic.Quotient.mk_map]
 
 /-- In every wedge leg, the explicit geometric loop differs from the
 H₁-normalized leg generator by exactly the global orientation unit. -/
