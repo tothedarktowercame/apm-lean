@@ -29508,7 +29508,7 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "transverseCircle_preimage_component_signedCount",
@@ -29519,7 +29519,9 @@
     :reported-by [:owner],
     :type
     "For f transverse to an embedded smooth circle, group the signed local-degree count by compact one-manifold preimage components, each equal to plus-or-minus the circle degree  (size: 350-700 lines / 3-6 days)",
-    :area "transverse-preimage-submanifold"},
+    :area "transverse-preimage-submanifold",
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t00J02Closure.lean"]},
    :id :lemma-transversecircle-preimage-component-signedcount,
    :kind :lemma,
    :depends-on [:lemma-regularvalue-tophomologymap-signedcount],
@@ -36158,6 +36160,16 @@
       :exit 1,
       :correction
       "dirty PolygonSurfaceHomology failed; scoped source passed"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791999202439-11975-5a993be2",
+     :commands
+     ["git show/check/diff d72cefa5; scope and fixture SHA-256"
+      "lake build ConstructionTargets.t93J03Closure; lean fixture and Main"
+      "statement-registry check; placeholder/axiom recount"],
+     :finding
+     "PASS: d72cefa5 adds compiled, sorry-free progress beyond a6f0c4b6. Applying the proved pseudopushout equivalence to the identity functor produces a reconstruction, and unit naturality correctly expresses every ambient groupoid arrow as the reconstructed arrow conjugated by unit components. This is an extraction step, not an assumed based van Kampen conclusion. Exact scope/hash match; support placeholders 0->0; frozen Main remains 1; standard axioms only; registry 166/166. STOP lists reconstruction normalization, reverse kernel/surjectivity, winding, C1/C2/Main."},
     :commit "d72cefa5d7b7ff749f163173ed9200e7542a62c0",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
@@ -36169,7 +36181,7 @@
      :mode :blocked-by-unrelated-dependency},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -36187,7 +36199,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t93J03Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Proved literal-map equality and forward kernel inclusion; reverse inclusion/surjectivity remain.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Extracted every polygon-groupoid arrow as its pseudopushout reconstruction conjugated by unit components; normalization to the outer piece remains.",
    :id :program-2026-10-13-close-t93j03,
    :kind :final-adapter,
    :campaign-priority 30,
@@ -36385,7 +36397,11 @@
     {:job 4,
      :commit "a6f0c4b61e88c36e45b9bbfb5d394decf1fd8f2f",
      :reason
-     "Proved literal-map equality and forward kernel inclusion; reverse inclusion/surjectivity remain."}]}
+     "Proved literal-map equality and forward kernel inclusion; reverse inclusion/surjectivity remain."}
+    {:job 5,
+     :commit "d72cefa5d7b7ff749f163173ed9200e7542a62c0",
+     :reason
+     "Extracted every polygon-groupoid arrow as its pseudopushout reconstruction conjugated by unit components; normalization to the outer piece remains."}]}
   {:consumer :t99J05,
    :stop-count 5,
    :evidence
@@ -38913,7 +38929,7 @@
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "kleinPolygonPseudopushout_arrow_eq_reconstructed",
@@ -38925,7 +38941,9 @@
     :type
     "ambient arrow equals unit-conjugated pseudopushout reconstruction",
     :area "covering-subgroup-correspondence",
-    :proved-in :program-2026-10-13-close-t93j03},
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "d72cefa5d7b7ff749f163173ed9200e7542a62c0"},
    :id :lemma-kleinpolygonpseudopushout-arrow-eq-reconstructed,
    :kind :lemma,
    :depends-on [:lemma-kleinpolygonfundamentalgroupoidpseudopushout],
