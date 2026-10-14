@@ -36159,6 +36159,17 @@
     [{:cmd "lake build closure",
       :exit 1,
       :correction "concurrent PointWedge edit fixed; rerun passed"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791943938989-11312-fa76a922",
+     :commands
+     ["git show/diff/show --check 417a02133"
+      "sha256sum aabb fixture; placeholders 1->1; scope diff"
+      "lake env lean recorded t93J03Closure; fixture; Main"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS: new compiled sorry-free standard-axiom progress. The actual-skeleton map is oriented to the singleton-aabb presented group, is surjective, kills the pulled-back aabb class, and has exactly the pulled-back normal-closure kernel. The disk-attachment identification remains accurately listed. Scope/hash verified; registry 166/166. SLSC unused, mandated by problem.md."},
     :commit "417a021338a83fb48d5d73127e71f0c9b7faf89f",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
@@ -36170,7 +36181,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -36188,7 +36199,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t93J03Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed pi1 coproduct at the actual polygon skeleton basepoint; attaching-cell quotient remains.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed actual-skeleton aabb quotient; attaching-cell van Kampen remains.",
    :id :program-2026-10-13-close-t93j03,
    :kind :final-adapter,
    :campaign-priority 30,
@@ -36266,7 +36277,11 @@
     {:job 9,
      :commit "33cccc3aedf6134515aba4835d383ee934c7b7ca",
      :reason
-     "Committed pi1 coproduct at the actual polygon skeleton basepoint; attaching-cell quotient remains."}]}
+     "Committed pi1 coproduct at the actual polygon skeleton basepoint; attaching-cell quotient remains."}
+    {:job 1,
+     :commit "417a021338a83fb48d5d73127e71f0c9b7faf89f",
+     :reason
+     "Committed actual-skeleton aabb quotient; attaching-cell van Kampen remains."}]}
   {:consumer :t99J05,
    :stop-count 5,
    :evidence
@@ -37932,7 +37947,7 @@
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "kleinSkeletonAabbPresentationQuotient",
@@ -37944,7 +37959,9 @@
     :type
     "skeleton quotient is onto, kills aabb, kernel its normal closure",
     :area "covering-subgroup-correspondence",
-    :proved-in :program-2026-10-13-close-t93j03},
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "417a021338a83fb48d5d73127e71f0c9b7faf89f"},
    :id :lemma-kleinskeletonaabbpresentationquotient,
    :kind :lemma,
    :depends-on
