@@ -149,7 +149,49 @@ lemma t93A06_torusAtlas_aux_quotient_charts_aux_transition
 lemma t93A06_torusAtlas_aux_quotient_charts_aux_projection_smooth :
     letI := t93A06_torusAtlas_aux_quotient_charts_aux_charts
     ContMDiff 𝓘(ℝ,Plane) 𝓘(ℝ,Plane) ∞ projection := by
-  sorry
+  letI := t93A06_torusAtlas_aux_quotient_charts_aux_charts
+  intro x
+  rw [contMDiffAt_iff]
+  constructor
+  · exact (show Continuous projection from by unfold projection; fun_prop).continuousAt
+  · simp only [mfld_simps]
+    let a := t93A06_torusAtlas_aux_quotient_charts_aux_lift (projection x)
+    obtain ⟨k, hk⟩ :=
+      (t93A06_torusAtlas_aux_quotient_charts_aux_fibers x a).mp
+        (t93A06_torusAtlas_aux_quotient_charts_aux_lift_spec (projection x)).symm
+    let c : Plane := fun i => (k i : ℝ)
+    have hac : x + c = a := by
+      funext i
+      exact (hk i).symm
+    have hg : ContDiff ℝ ∞ (fun w : Plane => w + c) :=
+      contDiff_id.add contDiff_const
+    have hevN : ∀ᶠ w in nhds x,
+        w + c ∈ t93A06_torusAtlas_aux_quotient_charts_aux_box a := by
+      apply hg.continuous.continuousAt
+      change t93A06_torusAtlas_aux_quotient_charts_aux_box a ∈ nhds (x + c)
+      rw [hac]
+      exact (t93A06_torusAtlas_aux_quotient_charts_aux_box_open a).mem_nhds
+        (t93A06_torusAtlas_aux_quotient_charts_aux_mem_box a)
+    have hev : ∀ᶠ w in nhdsWithin x Set.univ,
+        w + c ∈ t93A06_torusAtlas_aux_quotient_charts_aux_box a :=
+      Filter.Eventually.filter_mono inf_le_left hevN
+    apply hg.contDiffAt.contDiffWithinAt.congr_of_eventuallyEq
+    · filter_upwards [hev] with w hw
+      have hp : projection w = projection (w + c) := by
+        apply (t93A06_torusAtlas_aux_quotient_charts_aux_fibers w (w + c)).mpr
+        exact ⟨k, fun i => rfl⟩
+      change
+        t93A06_torusAtlas_aux_quotient_charts_aux_chart a (projection w) = w + c
+      rw [hp]
+      exact t93A06_torusAtlas_aux_quotient_charts_aux_chart_proj a (w + c) hw
+    · change
+        t93A06_torusAtlas_aux_quotient_charts_aux_chart a (projection x) = x + c
+      rw [hac]
+      have hpa : projection x = projection a :=
+        (t93A06_torusAtlas_aux_quotient_charts_aux_lift_spec (projection x)).symm
+      rw [hpa]
+      exact t93A06_torusAtlas_aux_quotient_charts_aux_chart_proj a a
+        (t93A06_torusAtlas_aux_quotient_charts_aux_mem_box a)
 -- END SEAT AREA
 
 lemma t93A06_torusAtlas_aux_quotient_charts_aux_inverse_smooth (x : Plane) :
