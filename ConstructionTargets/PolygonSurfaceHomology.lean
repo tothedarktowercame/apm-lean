@@ -3007,6 +3007,69 @@ noncomputable def finiteWedgeOrbitFundamentalGroupEquivFin (P : PairingData) :
   rw [← he]
   exact fundamentalGroupEquivOfHomeomorph e (orbitWedgeBase P)
 
+/-- A homeomorphism with a separately specified target basepoint induces a
+group equivalence whose forward map is definitionally `mapOfEq`. -/
+noncomputable def fundamentalGroupEquivOfHomeomorphEq
+    {X Y : Type*} [TopologicalSpace X] [TopologicalSpace Y]
+    (e : X ≃ₜ Y) (x : X) (y : Y) (h : e x = y) :
+    FundamentalGroup X x ≃* FundamentalGroup Y y := by
+  have hs : e.symm y = x := by rw [← h, e.symm_apply_apply]
+  exact
+    { toFun := FundamentalGroup.mapOfEq ⟨e, e.continuous⟩ h
+      invFun := FundamentalGroup.mapOfEq ⟨e.symm, e.symm.continuous⟩ hs
+      left_inv := by
+        intro p
+        induction p using Path.Homotopic.Quotient.ind with
+        | mk p =>
+            rw [FundamentalGroup.mapOfEq_apply,
+              FundamentalGroup.mapOfEq_apply]
+            apply Path.Homotopic.Quotient.eq.mpr
+            convert Path.Homotopic.refl p using 1
+            ext t
+            rw [show (((p.map e.continuous).cast _ _).map
+                e.symm.continuous).cast _ _ t =
+                e.symm (e (p t)) by
+              rw [congrFun (Path.cast_coe _ _ _) t]
+              change e.symm (((p.map e.continuous).cast _ _) t) = _
+              rw [congrFun (Path.cast_coe _ _ _) t]
+              rfl]
+            exact e.symm_apply_apply (p t)
+      right_inv := by
+        intro p
+        induction p using Path.Homotopic.Quotient.ind with
+        | mk p =>
+            rw [FundamentalGroup.mapOfEq_apply,
+              FundamentalGroup.mapOfEq_apply]
+            apply Path.Homotopic.Quotient.eq.mpr
+            convert Path.Homotopic.refl p using 1
+            ext t
+            rw [show (((p.map e.symm.continuous).cast _ _).map
+                e.continuous).cast _ _ t =
+                e (e.symm (p t)) by
+              rw [congrFun (Path.cast_coe _ _ _) t]
+              change e (((p.map e.symm.continuous).cast _ _) t) = _
+              rw [congrFun (Path.cast_coe _ _ _) t]
+              rfl]
+            exact e.apply_symm_apply (p t)
+      map_mul' := map_mul _ }
+
+/-- The orbit relabelling equivalence in the explicit based-map presentation. -/
+noncomputable def finiteWedgeOrbitFundamentalGroupEquivFinExplicit
+    (P : PairingData) :
+    FundamentalGroup
+        (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge (PairingOrbit P.pair))
+        (orbitWedgeBase P) ≃*
+      FundamentalGroup
+        (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge
+          (Fin (Fintype.card (PairingOrbit P.pair))))
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle
+          (pairingOrbitFinZero P) 1) :=
+  fundamentalGroupEquivOfHomeomorphEq
+    (finiteWedgeOrbitHomeomorphFinZero P) (orbitWedgeBase P)
+    (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle
+      (pairingOrbitFinZero P) 1)
+    (finiteWedgeOrbitHomeomorphFinZero_base P)
+
 end
 
 end ConstructionTargets.PolygonSurfaceHomology
