@@ -36121,67 +36121,59 @@
   {:consumer :t93J03,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 5,
+   :stop-count 6,
    :review-finding
    "Program STOP commits no new mathematical progress since the prior milestone: KleinPolygonBasedVanKampen merely packages the already-required surjectivity and kernel hypotheses, and both consumers only reapply the previously proved three-input theorem. Prove the based van Kampen surjectivity/kernel result (or winding conjugacy) in scope; extend Mathlib: state and prove the missing theorem in scope.",
    :evidence
    {:placeholder-delta {:t93J03 [1 1]},
     :residual
-    "Convert blocks to dependent path families; replace inner blocks and reassemble outer word; reverse kernel/surjectivity; winding; C1/C2/Main.",
+    "Package contiguous runs as dependent paths; replace inner blocks/reassemble outer word; reverse kernel/surjectivity; winding; C1/C2/Main.",
     :outcome :stop,
     :warnings ["unused SLSC owner-approved"],
     :missing-theorems
-    [{:name "boolSideRunPartition_spec",
-      :type
-      "finRange splits into nonempty constant runs with adjacent side changes",
+    [{:name "boolSideRunPartition_mem_side_eq_head",
+      :type "run members have head side",
       :status :proved,
       :consumers [:t93J03],
-      :depends-on
-      ["kleinPolygonInnerBlock_exists_outerOverlapReplacement"],
+      :depends-on ["boolSideRunPartition_spec"],
+      :area "covering-subgroup-correspondence"}
+     {:name "kleinPolygonInnerSideRun_piece_mem",
+      :type "true-run pieces stay inner",
+      :status :proved,
+      :consumers [:t93J03],
+      :depends-on ["boolSideRunPartition_mem_side_eq_head"],
       :area "covering-subgroup-correspondence"}
      {:name "t93J03_polygon_based_van_kampen",
       :type "surjectivity; kernel equality",
       :status :partial,
       :consumers [:t93J03],
-      :depends-on ["boolSideRunPartition_spec"],
+      :depends-on ["kleinPolygonInnerSideRun_piece_mem"],
       :area "covering-subgroup-correspondence"}],
     :statement-hashes {:registry "166/166"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Partitioned exact side indices into ordered maximal constant runs with flattening, nonempty blocks, constant interiors, and adjacent side changes; converting blocks to dependent path families remains.",
+    "Proved every maximal-run index has the head side, so each true-run piece stays in the inner cover; dependent block packaging remains.",
     :commands
     [{:cmd "lake build ConstructionTargets.t93J03Closure", :exit 0}
-     {:cmd "lean fixture; Main; registry; placeholder; diff/show",
-      :exit 0}
+     {:cmd "fixture; Main; registry; placeholder; diff/show", :exit 0}
      {:cmd "rg forbidden", :exit 1, :expected-exit 1}],
     :diagnostic-history
-    [{:cmd "initial build",
+    [{:cmd "membership probe",
       :exit 1,
-      :correction
-      "moved declaration outside preceding proof; rerun passed"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1792003693030-12194-9c5cc9f3",
-     :commands
-     ["git show/check/diff 71a51ad2; scope and fixture SHA-256"
-      "lake build ConstructionTargets.t93J03Closure; lean fixture and Main"
-      "statement-registry check; placeholder/axiom recount"],
-     :finding
-     "PASS: 71a51ad2 adds compiled, sorry-free progress after 24e6bfc0. Boolean splitBy proves ordered exhaustive nonempty constant-side runs with side changes at adjacent boundaries, hence maximal runs. Exact scope and fixture hash match; closure placeholders 0->0; frozen Main remains 1; registry 166/166; standard axioms only. STOP lists dependent path families, replacement/reassembly, reverse kernel/surjectivity, winding, C1/C2/Main."},
-    :commit "71a51ad224037e3d35a102d8600e0a5ffd1cff25",
+      :correction "explicit transitivity; true=inner; passed"}],
+    :commit "9f16b2393d73376ac4f97e72ef39c7f17ce5f637",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
      "ConstructionTargets/t93J03Closure.blueprint.md"],
     :fixture
-    {:path "/tmp/t93j03_side_runs_check.lean",
+    {:path "/tmp/t93j03_run_piece_check.lean",
      :sha256
-     "f878b136b4e5263066845eaafc395f61dca4a2c46f3034cf12e75cc0cde7b58f"},
+     "2cebca541e4c45ac178ab60d8cf2745905431c992c1eb6807f26dd91f2ee5bb1"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -38667,7 +38659,8 @@
     :lemma-kleinpolygoninnerrun-exists-outeroverlapreplacement
     :lemma-path-concat-mem-of-piece-mem
     :lemma-kleinpolygoninnerblock-exists-outeroverlapreplacement
-    :lemma-boolsiderunpartition-spec],
+    :lemma-boolsiderunpartition-spec
+    :lemma-kleinpolygoninnersiderun-piece-mem],
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
@@ -39240,6 +39233,40 @@
    :kind :lemma,
    :depends-on
    [:lemma-kleinpolygoninnerblock-exists-outeroverlapreplacement],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "boolSideRunPartition_mem_side_eq_head",
+    :type "run members have head side"},
+   :lemma
+   {:name "boolSideRunPartition_mem_side_eq_head",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type "run members have head side",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03},
+   :id :lemma-boolsiderunpartition-mem-side-eq-head,
+   :kind :lemma,
+   :depends-on [:lemma-boolsiderunpartition-spec],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "kleinPolygonInnerSideRun_piece_mem",
+    :type "true-run pieces stay inner"},
+   :lemma
+   {:name "kleinPolygonInnerSideRun_piece_mem",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type "true-run pieces stay inner",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03},
+   :id :lemma-kleinpolygoninnersiderun-piece-mem,
+   :kind :lemma,
+   :depends-on [:lemma-boolsiderunpartition-mem-side-eq-head],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
