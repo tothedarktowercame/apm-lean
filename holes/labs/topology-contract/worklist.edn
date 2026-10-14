@@ -119066,60 +119066,51 @@
   {:consumer :t00J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 7,
+   :stop-count 8,
    :review-finding
    "Recorded fixture hash is malformed/mismatched: ledger has afb497a6df6187f797ce1df000700b7c24774e94f50633c1cc10b2aa0e8c82319196, but the recorded commit blueprint hashes to afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984. Repair fixture provenance. The archived closure otherwise compiles sorry-free with standard axioms; Main retains its one baseline sorry; registry 166/166.",
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
     :residual
-    "Compute chart coefficients against component lifts/top degree; assemble Main.",
+    "Compute chart component sums and top-degree signed sum; assemble Main.",
     :outcome :stop,
-    :warnings ["Main sorryAx" "unrelated edit preserved"],
+    :warnings ["Main sorryAx"],
     :missing-theorems
-    [{:name "regularFiberSignedSum_eq_of_localizationCoefficients",
-      :type "chart coefficients replace local degrees in signed sum",
+    [{:name
+      "regularFiberLocalizedComponentFormula_of_chartCoefficients",
+      :type "chart localization and component sums construct formula",
       :status :proved,
       :consumers [:t00J02],
-      :depends-on ["regularFiberLocalDegree_eq_of_localization_eq"],
+      :depends-on
+      ["componentLocalDegreeSum_eq_of_localizationCoefficients"],
       :area "oriented-surface-degree"}
      {:name "t00J02_transverse_diskBounded_topHomologyMap_eq_zero",
       :type "H2 map zero",
       :status :partial,
       :consumers [:t00J02],
       :depends-on
-      ["regularFiberSignedSum_eq_of_localizationCoefficients"
-       "componentLocalDegreeSum_eq_of_localizationCoefficients"],
+      ["regularFiberLocalizedComponentFormula_of_chartCoefficients"
+       "regularFiberSignedSum_eq_of_localizationCoefficients"],
       :area "oriented-surface-degree"}],
     :statement-hashes
     {:source
      "0b3b4888807bfa06c8d60d86829b75776394ea8aa45a98c933c087165521f923",
      :implementation
-     "882a9a8cb2cffbe73244024d42c4a3304517fb16bf15c49655b6686bc6939366",
+     "d6cc1f3f8b0c9c6cd6a9b8869c165e776e1147b9909792030e76a3953405186a",
      :blueprint
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984",
      :registry "166/166"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-2,
-    :reason "Banked signed-sum coefficient transport.",
+    :reason "Banked chart-coefficient component constructor.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t00J02Closure.lean",
       :exit 0}
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "hash/placeholders/diff", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1792014157118-12469-9e8ba04b",
-     :commands
-     ["git diff-tree/show 8500d6f9"
-      "archive 8500d6f9; lake env lean closure and Main"
-      "sha256sum/placeholders at 8500d6f9"
-      "python3 scripts/statement-registry.py check"],
-     :finding
-     "PASS program STOP: new commit changes only t00J02Closure.lean and correctly transports pointwise localization coefficients through the global signed sum while keeping orientation signs component-indexed. The proof uses the verified coefficient-uniqueness theorem pointwise and preserves equality direction. Fixture/frozen hashes match; closure has 0 placeholders, Main baseline 1; archived files compile with standard axioms; registry 166/166. Computing coefficients against lifts/top degree and assembling Main remain listed."},
-    :commit "8500d6f95c3bc1b4889fc0b45f2cfbcea8027eaa",
+    :commit "7bdf2eec630cc25bda7e18480b330cde48f5c03e",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t00J02Closure.blueprint.md",
@@ -119127,7 +119118,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119444,7 +119435,8 @@
     :lemma-regularfibertopdegreeformula-of-localizedformulas
     :lemma-regularfiberlocaldegree-eq-of-localization-eq
     :lemma-componentlocaldegreesum-eq-of-localizationcoefficients
-    :lemma-regularfibersignedsum-eq-of-localizationcoefficients],
+    :lemma-regularfibersignedsum-eq-of-localizationcoefficients
+    :lemma-regularfiberlocalizedcomponentformula-of-chartcoefficients],
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
@@ -120267,6 +120259,26 @@
    :id :lemma-regularfibersignedsum-eq-of-localizationcoefficients,
    :kind :lemma,
    :depends-on [:lemma-regularfiberlocaldegree-eq-of-localization-eq],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "regularFiberLocalizedComponentFormula_of_chartCoefficients",
+    :type "chart localization and component sums construct formula"},
+   :lemma
+   {:name "regularFiberLocalizedComponentFormula_of_chartCoefficients",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type "chart localization and component sums construct formula",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02},
+   :id
+   :lemma-regularfiberlocalizedcomponentformula-of-chartcoefficients,
+   :kind :lemma,
+   :depends-on
+   [:lemma-componentlocaldegreesum-eq-of-localizationcoefficients],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
