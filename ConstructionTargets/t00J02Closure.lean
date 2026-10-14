@@ -125,6 +125,28 @@ def LocallyInjectiveAlongFiber
     {X Y : Type} [TopologicalSpace X] (f : X → Y) (y : Y) : Prop :=
   ∀ x, f x = y → ∃ U ∈ 𝓝 x, Set.InjOn f U
 
+/-- The exact local conclusion needed for discreteness of one point fiber.
+Unlike local injectivity of the ambient map, this allows transverse fold
+behavior away from the selected fiber. -/
+def LocallyIsolatedFiber
+    {X Y : Type} [TopologicalSpace X] (f : X → Y) (y : Y) : Prop :=
+  ∀ x, f x = y → ∃ U ∈ 𝓝 x, U ∩ f ⁻¹' {y} = {x}
+
+/-- A locally isolated point fiber is discrete. -/
+theorem isDiscrete_preimage_singleton_of_locallyIsolatedFiber
+    {X Y : Type} [TopologicalSpace X] (f : X → Y) (y : Y)
+    (hlocal : LocallyIsolatedFiber f y) : IsDiscrete (f ⁻¹' {y}) := by
+  rw [isDiscrete_iff_forall_exists_isOpen]
+  intro x hx
+  have hxy : f x = y := by simpa using hx
+  rcases hlocal x hxy with ⟨U, hU, hUfiber⟩
+  rcases mem_nhds_iff.mp hU with ⟨V, hVU, hVopen, hxV⟩
+  refine ⟨V, hVopen, ?_⟩
+  calc
+    V ∩ f ⁻¹' {y} ⊆ U ∩ f ⁻¹' {y} := Set.inter_subset_inter_left _ hVU
+    _ = {x} := hUfiber
+    _ ⊆ V ∩ f ⁻¹' {y} := by simpa using ⟨hxV, hx⟩
+
 /-- Local injectivity at every point of a fiber makes the singleton preimage
 a discrete subset. -/
 theorem isDiscrete_preimage_singleton_of_locallyInjectiveAlongFiber
@@ -1138,6 +1160,24 @@ noncomputable def canonicalRegularFiberWitness_of_isDiscrete
     ⟨y, hy, regularFiberFintype_of_isDiscrete f y hdiscrete⟩
   exact { choice := choice, calculations := calculations }
 
+/-- Local isolation of a selected point fiber supplies exactly the discrete
+fiber input of the canonical witness constructor. -/
+noncomputable def canonicalRegularFiberWitness_of_locallyIsolatedFiber
+    {S : Type} [TopologicalSpace S] [T2Space S] [CompactSpace S]
+    [ChartedSpace SurfaceModel S]
+    (f : C(S, S)) (c : C(Circle, S))
+    (e : surfaceHomology S ≅ ModuleCat.of ℤ ℤ)
+    (y : S) (hy : y ∈ Set.range c)
+    (hlocal : LocallyIsolatedFiber f y)
+    (calculations : letI := regularFiberFintype_of_isDiscrete f y
+        (isDiscrete_preimage_singleton_of_locallyIsolatedFiber f y hlocal)
+      CanonicalRegularFiberDegreeCalculations
+        (f := f) (c := c) hy e) :
+    CanonicalRegularFiberWitness f c e :=
+  canonicalRegularFiberWitness_of_isDiscrete f c e y hy
+    (isDiscrete_preimage_singleton_of_locallyIsolatedFiber f y hlocal)
+    calculations
+
 /-- Pointwise local injectivity along a circle fiber supplies the discrete
 fiber required by `canonicalRegularFiberWitness_of_isDiscrete`. -/
 noncomputable def canonicalRegularFiberWitness_of_locallyInjective
@@ -1234,6 +1274,7 @@ end ConstructionTargets.T00J02Closure
 #print axioms ConstructionTargets.T00J02Closure.CanonicalRegularFiberDegreeCalculations.topHomologyMap_eq_zero_withoutLifts
 #print axioms ConstructionTargets.T00J02Closure.CanonicalRegularFiberWitness.topHomologyMap_eq_zero
 #print axioms ConstructionTargets.T00J02Closure.canonicalRegularFiberWitness_of_isDiscrete
+#print axioms ConstructionTargets.T00J02Closure.canonicalRegularFiberWitness_of_locallyIsolatedFiber
 #print axioms ConstructionTargets.T00J02Closure.canonicalRegularFiberWitness_of_locallyInjective
 #print axioms ConstructionTargets.T00J02Closure.topHomologyMap_eq_zero_of_exists_canonicalRegularFiberWitness
 #print axioms ConstructionTargets.T00J02Closure.RegularFiberChartCalculations.topHomologyMap_eq_zero
