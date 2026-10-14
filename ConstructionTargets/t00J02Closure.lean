@@ -346,6 +346,43 @@ noncomputable def occupiedRegularFiber_exactZeroDegreeLifts
   rw [hγrange]
   exact congrArg Subtype.val hk
 
+/-- The component degree function attached to exact boundary lifts. -/
+def exactLiftComponentDegree
+    {S : Type} [TopologicalSpace S] {f : C(S, S)} {c : C(Circle, S)}
+    {y : S} {hy : y ∈ Set.range c}
+    (lifts : ∀ k : OccupiedRegularFiberComponent f c y hy,
+      ExactZeroDegreeComponentLift f c y hy k) :
+    OccupiedRegularFiberComponent f c y hy → ℤ :=
+  fun k => circleDegree (lifts k).lift
+
+theorem exactLiftComponentDegree_eq_zero
+    {S : Type} [TopologicalSpace S] {f : C(S, S)} {c : C(Circle, S)}
+    {y : S} {hy : y ∈ Set.range c}
+    (lifts : ∀ k : OccupiedRegularFiberComponent f c y hy,
+      ExactZeroDegreeComponentLift f c y hy k) :
+    ∀ k, exactLiftComponentDegree lifts k = 0 := by
+  intro k
+  exact (lifts k).degree_eq_zero
+
+/-- Once local degrees are compared with the degrees of the exact component
+lifts, their orientation-weighted grouped total vanishes. -/
+theorem occupiedComponentSignedCount_eq_zero_of_localDegreeComparison
+    {S : Type} [TopologicalSpace S] {f : C(S, S)} {c : C(Circle, S)}
+    {y : S} {hy : y ∈ Set.range c} [Fintype {x : S // f x = y}]
+    (lifts : ∀ k : OccupiedRegularFiberComponent f c y hy,
+      ExactZeroDegreeComponentLift f c y hy k)
+    (localDegree : {x : S // f x = y} → ℤ)
+    (orientationSign : OccupiedRegularFiberComponent f c y hy → ℤ)
+    (hsum : ∀ k, componentLocalDegreeSum
+      (occupiedRegularFiberComponentIndex f c y hy) localDegree k =
+        exactLiftComponentDegree lifts k) :
+    ∑ k, orientationSign k * componentLocalDegreeSum
+      (occupiedRegularFiberComponentIndex f c y hy) localDegree k = 0 := by
+  apply groupedComponentSignedCount_eq_zero_of_comparison
+    (occupiedRegularFiberComponentIndex f c y hy) localDegree
+    (exactLiftComponentDegree lifts) orientationSign hsum
+  exact exactLiftComponentDegree_eq_zero lifts
+
 /-- Algebraic final step of the regular-value formula: once the top-degree
 coordinate is identified with the component signed count, pointwise zero
 component degrees force that coordinate to vanish. -/
@@ -471,6 +508,8 @@ end ConstructionTargets.T00J02Closure
 #print axioms ConstructionTargets.T00J02Closure.OccupiedRegularFiberComponent
 #print axioms ConstructionTargets.T00J02Closure.occupiedRegularFiberComponentIndex
 #print axioms ConstructionTargets.T00J02Closure.occupiedRegularFiber_exactZeroDegreeLifts
+#print axioms ConstructionTargets.T00J02Closure.exactLiftComponentDegree_eq_zero
+#print axioms ConstructionTargets.T00J02Closure.occupiedComponentSignedCount_eq_zero_of_localDegreeComparison
 #print axioms ConstructionTargets.T00J02Closure.regularValue_topDegree_eq_zero_of_signedCount
 #print axioms ConstructionTargets.T00J02Closure.surfaceTopDegree_eq_homologyMap
 #print axioms ConstructionTargets.T00J02Closure.surfaceTopHomologyMap_eq_zero_of_surfaceTopDegree_eq_zero
