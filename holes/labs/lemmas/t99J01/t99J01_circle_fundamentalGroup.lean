@@ -36,7 +36,10 @@ successive point-wedge computations. -/
 -- BEGIN SEAT AREA
 theorem t99J01_circle_fundamentalGroup :
     Nonempty (FundamentalGroup Circle 1 ≃* FreeGroup (Fin 1)) := by
-  sorry
+  exact ⟨
+    ConstructionTargets.CircleUniversalCover.circleFundamentalGroupMulEquivInt.trans
+      ConstructionTargets.PointWedgeVanKampen.multiplicativeIntEquivFreeGroupFinOne
+  ⟩
 -- END SEAT AREA
 
 /-- The first concrete specialization of point-wedge van Kampen. -/

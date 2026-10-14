@@ -35,7 +35,10 @@ def T99J01ThreeCirclesPoint : ThreeCircles :=
 successive point-wedge computations. -/
 theorem t99J01_circle_fundamentalGroup :
     Nonempty (FundamentalGroup Circle 1 ≃* FreeGroup (Fin 1)) := by
-  sorry
+  exact ⟨
+    ConstructionTargets.CircleUniversalCover.circleFundamentalGroupMulEquivInt.trans
+      ConstructionTargets.PointWedgeVanKampen.multiplicativeIntEquivFreeGroupFinOne
+  ⟩
 
 /-- The first concrete specialization of point-wedge van Kampen. -/
 theorem t99J01_twoCircles_fundamentalGroup_coprod :
