@@ -358,7 +358,49 @@ lemma polygonSurface_homeomorph_of_collapse {L L' : Type*}
     (hrel : ∀ p q, Relation.EqvGen (WordRel w₁) p q ↔
       Relation.EqvGen (WordRel w₂) (c p) (c q)) :
     Nonempty (PolygonSurface w₁ ≃ₜ PolygonSurface w₂) := by
-  sorry
+  let f : PolygonSurface w₁ → PolygonSurface w₂ :=
+    Quotient.map c (fun p q hpq ↦ (hrel p q).mp hpq)
+  have hf_injective : Function.Injective f := by
+    intro x y hxy
+    induction x using Quotient.inductionOn with
+    | _ p =>
+      induction y using Quotient.inductionOn with
+      | _ q =>
+        apply Quotient.sound
+        apply (hrel p q).mpr
+        exact Quotient.exact hxy
+  have hf_surjective : Function.Surjective f := by
+    intro y
+    induction y using Quotient.inductionOn with
+    | _ q =>
+      obtain ⟨p, hp⟩ := hsurj q
+      refine ⟨Quotient.mk _ p, ?_⟩
+      apply Quotient.sound
+      simpa [hp]
+  let e : PolygonSurface w₁ ≃ PolygonSurface w₂ :=
+    Equiv.ofBijective f ⟨hf_injective, hf_surjective⟩
+  have hf_continuous : Continuous f := by
+    rw [continuous_coinduced_dom]
+    change Continuous (polygonQuotient w₂ ∘ c)
+    exact (continuous_polygonQuotient w₂).comp hc
+  have hc_quotient : Topology.IsQuotientMap c :=
+    IsQuotientMap.of_surjective_continuous hsurj hc
+  have hq₂ : Topology.IsQuotientMap (polygonQuotient w₂) :=
+    ⟨Quotient.mk_surjective, rfl⟩
+  have he_symm_continuous : Continuous e.symm := by
+    apply hq₂.continuous_iff.mpr
+    apply hc_quotient.continuous_iff.mpr
+    convert continuous_polygonQuotient w₁ using 1
+    funext p
+    apply e.injective
+    change e (e.symm (polygonQuotient w₂ (c p))) =
+      e (polygonQuotient w₁ p)
+    rw [e.apply_symm_apply]
+    rfl
+  exact ⟨{
+    toEquiv := e
+    continuous_toFun := by simpa [e] using hf_continuous
+    continuous_invFun := he_symm_continuous }⟩
 
 /-- The geometric content of cancellation: zip the arcs `x` and `x⁻¹` together,
 `x(t)` and `x⁻¹(1-t)` going to the same point of a segment running from the
