@@ -1392,3 +1392,7 @@ comparator and mapped `unitInv` are one literal middle subexpression. Applying
 their cancellation there, then aligning the endpoint transport with the two
 outer connectors, is the next step before the right-projection criterion
 closes.
+`genericPointWedgeOuterRight_typedComposite_normalForm_eq_sourceTransport`
+now performs that literal middle cancellation: the normal form consists only
+of the two outer connectors with the named source endpoint transport between
+them.  Aligning that transport with the source connector is the next step.

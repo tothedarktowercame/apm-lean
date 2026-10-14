@@ -7051,6 +7051,30 @@ theorem genericPointWedgeOuterRight_typedComposite_normalForm_reassociated :
   rw [genericPointWedgeOuterRight_typedComposite_normalForm_expanded]
   simp only [Category.assoc]
 
+/-- Cancelling the literal middle inverse/unit pair leaves the endpoint
+transport between the two outer connectors. -/
+theorem genericPointWedgeOuterRight_typedComposite_normalForm_eq_sourceTransport :
+    let r := genericPointWedgeActualRight x₀ y₀ M N
+    let eK := genericPointWedgeOverlapGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let eR := genericPointWedgeRightGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let z := genericPointWedgeOverlapBase x₀ y₀ M N
+    (genericPointWedgeConnectors y₀).normalForm
+        (genericPointWedgeOuterRight_typedTransportComposite
+            x₀ y₀ M N hM hN hy hx cM cN ≫
+          (r ⋙ eR.functor).map (eK.unitInv.app z)) =
+      ((genericPointWedgeConnectors y₀).connector
+          ((genericPointWedgeCoordinateRight y₀).obj
+            (eK.functor.obj z))).hom ≫
+        genericPointWedgeOuterRight_sourceTransport
+          x₀ y₀ M N hM hN hy hx cM cN ≫
+        ((genericPointWedgeConnectors y₀).connector
+          ((r ⋙ eR.functor).obj z)).inv := by
+  simpa only [genericPointWedgeOuterRight_typedTransportComposite_comp_map_unitInv] using
+    genericPointWedgeOuterRight_typedComposite_normalForm_reassociated
+      x₀ y₀ M N hM hN hy hx cM cN
+
 /-- An `inl` factorization of the right-base conjugator forces its canonical
 right projection to be trivial. -/
 theorem genericPointWedgeRightBase_inl_implies_rightProjection_eq_one
@@ -7807,6 +7831,7 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeOuterRight_typedTransportComposite
 #print axioms genericPointWedgeOuterRight_typedTransportComposite_eq_transport
 #print axioms genericPointWedgeOuterRight_typedTransportComposite_eq_map
+#print axioms genericPointWedgeOuterRight_typedTransportComposite_comp_map_unitInv
 #print axioms genericPointWedgeOuterRightSpan_component_eq_typedComposite_comp_map
 #print axioms genericPointWedgeOuterRight_inverseSpan_normalForm_eq_typedComposite
 #print axioms genericPointWedgeOuterRight_typedComposite_normalForm_expanded
@@ -7816,6 +7841,7 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeOuterRight_sourceConnector_hom_inv_id
 #print axioms genericPointWedgeOuterRight_sourceConnector_hom_inv_id_at_basepoint
 #print axioms genericPointWedgeOuterRight_typedComposite_normalForm_reassociated
+#print axioms genericPointWedgeOuterRight_typedComposite_normalForm_eq_sourceTransport
 #print axioms genericPointWedgeRightBase_inl_implies_rightProjection_eq_one
 #print axioms genericPointWedgeLegCoordinates_of_mapped
 #print axioms genericPointWedgeLegCoordinates_iff_mapped
