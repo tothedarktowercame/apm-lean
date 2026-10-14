@@ -1473,5 +1473,8 @@ such transports, and
 the original coherent right-cover system.
 `genericPointWedgeCoherentRightSource_overlap_connectorSquare_mapped` maps
 that square through the right-cover equivalence without changing its factor
-order.  The next step is to apply the base-change and comap preservation
-lemmas to install this square in the literal `Y` connector system.
+order, and
+`genericPointWedgeCoherentRightSource_overlap_connectorSquare_rebased`
+precomposes both sides by the named transport from the literal `Y` base.
+The remaining step is the inverse-round-trip/comap identification that turns
+these rebased mapped connectors into the installed literal `Y` connectors.

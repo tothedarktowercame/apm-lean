@@ -6648,6 +6648,34 @@ theorem genericPointWedgeCoherentRightSource_overlap_connectorSquare_mapped :
     (genericPointWedgeCoherentRightSource_overlap_connectorSquare
       x₀ y₀ M N hM hN hy hx cM cN)
 
+omit [PathConnectedSpace X] in
+/-- Rebasing the mapped coherent square at the literal `Y` base preserves the
+same right-leg connector equation. -/
+theorem genericPointWedgeCoherentRightSource_overlap_connectorSquare_rebased :
+    let r := genericPointWedgeActualRight x₀ y₀ M N
+    let eK := genericPointWedgeOverlapGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let eR := genericPointWedgeRightGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let z := genericPointWedgeOverlapBase x₀ y₀ M N
+    let F := eK.inverse ⋙ r
+    let source := genericPointWedgeCoherentRightSourceConnectors
+      x₀ y₀ M N hM hN hy hx cM cN
+    let b := eqToIso (genericPointWedgeRightEquiv_obj_rightBase
+      x₀ y₀ M N hM hN hy hx cM cN).symm
+    (b.hom ≫ eR.functor.map
+        (source.connector
+          (F.obj (eK.functor.obj ((eK.functor ⋙ eK.inverse).obj z)))).hom) ≫
+      eR.functor.map (F.map (eK.functor.map (eK.unitInv.app z))) =
+    b.hom ≫ eR.functor.map
+      (source.connector (F.obj (eK.functor.obj z))).hom := by
+  dsimp only
+  simpa only [Category.assoc] using congrArg
+    (fun q => (eqToIso (genericPointWedgeRightEquiv_obj_rightBase
+      x₀ y₀ M N hM hN hy hx cM cN).symm).hom ≫ q)
+    (genericPointWedgeCoherentRightSource_overlap_connectorSquare_mapped
+      x₀ y₀ M N hM hN hy hx cM cN)
+
 omit [PathConnectedSpace X] [PathConnectedSpace Y] in
 /-- The shifted and unshifted inverse right-span components are dependently
 equal, since their arguments are objects of `FundamentalGroupoid Unit`. -/
