@@ -36165,6 +36165,16 @@
     [{:cmd "first fixture",
       :exit 1,
       :correction "rebuilt concurrently missing olean; reran"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1792015191815-12508-cfa39bf9",
+     :commands
+     ["fixture SHA-256 assertion; lake env lean frozen interface"
+      "statement-registry check"
+      "git show --check 8c4eb4f; placeholder/forbidden recount"],
+     :finding
+     "PASS: 8c4eb4f is new compiled, sorry-free progress after 263f5d47. The exported family is exactly Fin(runs+1) -> V, and its theorem is correctly oriented from the coerced subtype value to the matching ambient canonical boundary. It supplies the next fold’s representation bridge without assuming the partial van Kampen result. Scope/hash match; standard axioms only; registry 166/166; Main remains 1->1 placeholder; residual milestones are explicit."},
     :commit "e48debde7dffad504dff78f1acd08acc1d137d16",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
@@ -36175,7 +36185,7 @@
      "7e0160bbcb49879df030f9d88b9be3b449cee72072d5bf6add755343e1cdb240"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -36193,7 +36203,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t93J03Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Matched outer boundary i.succ exactly to indexed run block target; source boundary i remains.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Matched outer boundary i exactly to indexed run block source; representative choice remains.",
    :id :program-2026-10-13-close-t93j03,
    :kind :final-adapter,
    :campaign-priority 30,
@@ -36511,7 +36521,11 @@
     {:job 7,
      :commit "22202c41575e25e4d174a57a8149f7b15881d382",
      :reason
-     "Matched outer boundary i.succ exactly to indexed run block target; source boundary i remains."}]}
+     "Matched outer boundary i.succ exactly to indexed run block target; source boundary i remains."}
+    {:job 8,
+     :commit "e48debde7dffad504dff78f1acd08acc1d137d16",
+     :reason
+     "Matched outer boundary i exactly to indexed run block source; representative choice remains."}]}
   {:consumer :t99J05,
    :stop-count 5,
    :evidence
@@ -39981,7 +39995,7 @@
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -39993,7 +40007,9 @@
     :reported-by [:program-2026-10-13-close-t93j03],
     :type "boundary i equals run block source",
     :area "covering-subgroup-correspondence",
-    :proved-in :program-2026-10-13-close-t93j03},
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "e48debde7dffad504dff78f1acd08acc1d137d16"},
    :id
    :lemma-pathtwoopensubdivisionouterrunboundaryfamily-castsucc-eq-runblockpoint-zero,
    :kind :lemma,
