@@ -207,6 +207,10 @@ skeleton group: it is surjective, kills the pulled-back attaching class, and
 its kernel is exactly the pulled-back normal closure of `aabb`.  The remaining
 topological step is to identify the disk-attachment map on fundamental groups
 with this quotient.
+The exact radial polygon cover is now connected to the generic two-open
+fundamental-groupoid van Kampen theorem by
+`kleinPolygonFundamentalGroupoidPseudopushout`; the remaining step extracts
+the based group quotient and identifies its overlap image with `aabb`.
 
 - Layer 1: C1, C3, and C4. C1 and C3 are independent; C4 is already complete.
 - Layer 2: C2 against the explicit C1 equivalence interface.

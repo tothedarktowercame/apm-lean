@@ -15,7 +15,7 @@ subgroup equality.  These lemmas contain the already proved generic lifting
 and embedding arguments used after that equality is available.
 -/
 
-open ConstructionTargets.StatementSurfaceModels Set
+open ConstructionTargets.StatementSurfaceModels Set CategoryTheory
 noncomputable section
 namespace ConstructionTargets.t93J03Closure
 
@@ -32,6 +32,8 @@ open ConstructionTargets.PolygonSurfacePiOne
 open ConstructionTargets.PointWedgeQuotient
 open ConstructionTargets.PointWedgeVanKampen
 open ConstructionTargets.PolygonSurfacePiOne.PointWedgeQuotient
+open ConstructionTargets.TwoOpenFundamentalGroupoidSpan
+open ConstructionTargets.TwoOpenFundamentalGroupoidPseudopushout
 
 /-- An orbit intersection determines both integer normal-form coordinates by
 the source and target points.  These are the equations used to bound the
@@ -683,6 +685,20 @@ theorem kleinSkeletonPresentationMap_ker :
     kleinSkeletonPresentationMap, MonoidHom.coe_comp, Function.comp_apply,
     PresentedGroup.mk_eq_one_iff]
 
+/-- The generic two-open van Kampen mapping equivalence specialized to the
+exact radial cover of the Klein polygon quotient.  This is the topological
+input from which the remaining based normal-closure quotient is extracted. -/
+noncomputable def kleinPolygonFundamentalGroupoidPseudopushout
+    (C : Type*) [CategoryTheory.Category C] :
+    (FundamentalGroupoid kleinPairingData.Space ⥤ C) ≌
+      @PseudoFunctorCocone kleinPairingData.Space _
+        (openCover kleinPairingData).inner
+        (openCover kleinPairingData).outer C _ :=
+  twoOpenFundamentalGroupoidPseudopushoutEquivalence
+    (openCover kleinPairingData).inner_open
+    (openCover kleinPairingData).outer_open
+    (openCover kleinPairingData).cover
+
 def finiteWedgeBoolPoint : FiniteWedge Bool := wedgeCircle false 1
 
 @[simp] theorem finiteWedgeBoolHomeomorphTwoCircles_point :
@@ -815,6 +831,7 @@ theorem lift_isEmbedding_assembly
 #print axioms kleinSkeletonPresentationMap_surjective
 #print axioms kleinSkeletonPresentationMap_attachingClass
 #print axioms kleinSkeletonPresentationMap_ker
+#print axioms kleinPolygonFundamentalGroupoidPseudopushout
 #print axioms kleinBottle_pi1_every_basepoint_of_polygon_van_kampen
 
 end ConstructionTargets.t93J03Closure
