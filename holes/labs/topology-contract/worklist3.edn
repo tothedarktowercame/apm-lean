@@ -36165,6 +36165,16 @@
       :exit 1,
       :correction
       "unrelated dirty PolygonSurfaceHomology failed; preserved"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1792008292990-12306-78983187",
+     :commands
+     ["git show/check/diff 6aafd2ba; scope and fixture SHA-256"
+      "lake build ConstructionTargets.t93J03Closure; lean fixture and Main"
+      "statement-registry check; placeholder/axiom recount"],
+     :finding
+     "PASS: 6aafd2ba adds compiled, sorry-free progress after eb176725. Consecutive boundary indices are converted to the exact transition index k; the side change then invokes the established transition-overlap theorem, yielding the following run head as the shared overlap vertex. Blueprint is faithful; exact scope/hash match; closure placeholders 0->0; frozen Main remains 1; registry 166/166; standard axioms only. Full build also passes now. STOP lists endpoint packaging, outer-fold instantiation, reverse kernel/surjectivity, winding, C1/C2/Main."},
     :commit "6aafd2ba0b98dd14a3b138fbb4bc325f143bd289",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
@@ -36175,7 +36185,7 @@
      "24430fc9631bf175084110d9208877b0458dbc4ae296ef05c6f6583d303e542e"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -36193,7 +36203,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t93J03Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Proved adjacent maximal side runs end and begin at consecutive original piece indices, identifying their shared subdivision boundary; endpoint-family packaging remains.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Proved adjacent maximal runs meet at an overlap subdivision vertex; endpoint-family packaging remains.",
    :id :program-2026-10-13-close-t93j03,
    :kind :final-adapter,
    :campaign-priority 30,
@@ -36455,7 +36465,11 @@
     {:job 2,
      :commit "eb1767255ebf00e330120719700e7c8f8da63be0",
      :reason
-     "Proved adjacent maximal side runs end and begin at consecutive original piece indices, identifying their shared subdivision boundary; endpoint-family packaging remains."}]}
+     "Proved adjacent maximal side runs end and begin at consecutive original piece indices, identifying their shared subdivision boundary; endpoint-family packaging remains."}
+    {:job 3,
+     :commit "6aafd2ba0b98dd14a3b138fbb4bc325f143bd289",
+     :reason
+     "Proved adjacent maximal runs meet at an overlap subdivision vertex; endpoint-family packaging remains."}]}
   {:consumer :t99J05,
    :stop-count 5,
    :evidence
@@ -39508,7 +39522,7 @@
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "pathTwoOpenSubdivision_adjacentRunBoundary_mem_overlap",
@@ -39520,7 +39534,9 @@
     :type
     "adjacent maximal runs meet at an overlap subdivision vertex",
     :area "covering-subgroup-correspondence",
-    :proved-in :program-2026-10-13-close-t93j03},
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "6aafd2ba0b98dd14a3b138fbb4bc325f143bd289"},
    :id :lemma-pathtwoopensubdivision-adjacentrunboundary-mem-overlap,
    :kind :lemma,
    :depends-on [:lemma-boolsiderunpartition-adjacent-indices],
