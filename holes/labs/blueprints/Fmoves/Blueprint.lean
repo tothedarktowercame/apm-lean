@@ -2359,7 +2359,43 @@ lemma mergeRepeatedBlock_aux_boundary_relation_aux_forward_aux_yz_aux_cases
         circleToDisk c₂ = edgePoint (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t).length e.2 (reverseParameter s')) ∨
        (circleToDisk c₂ = edgePoint (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t).length e.1 s' ∧
         circleToDisk c₁ = edgePoint (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t).length e.2 (reverseParameter s'))) := by
-  sorry
+  have hi := mergeRepeatedBlock_aux_boundary_relation_aux_forward_aux_yz_aux_class
+    u v t y z hy hz i hyz'
+  have hyzj :
+      ((u ++ [y, z] ++ v ++ [inv z, inv y] ++ t).get j).1 = y.1 ∨
+      ((u ++ [y, z] ++ v ++ [inv z, inv y] ++ t).get j).1 = z.1 := by
+    rcases hyz' with h | h
+    · exact Or.inl (hlab.symm.trans h)
+    · exact Or.inr (hlab.symm.trans h)
+  have hj := mergeRepeatedBlock_aux_boundary_relation_aux_forward_aux_yz_aux_class
+    u v t y z hy hz j hyzj
+  rcases hi with hi | hi | hi | hi <;>
+    rcases hj with hj | hj | hj | hj
+  all_goals
+    try { exfalso; apply hij; apply Fin.ext; omega }
+  all_goals
+    simp [List.get_eq_getElem, hi, hj, inv, Nat.add_assoc, Nat.add_comm,
+      Nat.add_left_comm,
+      show 2 + v.length = Nat.succ (Nat.succ v.length) by omega] at hlab h₂
+  all_goals
+    try { simp [hyz] at hlab }
+  all_goals
+    try { exact (hyz hlab.symm).elim }
+  · refine ⟨s, (u.length, u.length + 3 + v.length), Or.inl rfl, Or.inl ⟨?_, ?_⟩⟩
+    · simpa [hi] using h₁
+    · simpa [List.length_append, Nat.add_assoc, Nat.add_comm, Nat.add_left_comm] using h₂
+  · refine ⟨s, (u.length + 1, u.length + 2 + v.length), Or.inr rfl,
+      Or.inl ⟨?_, ?_⟩⟩
+    · simpa [hi] using h₁
+    · simpa [List.length_append, Nat.add_assoc, Nat.add_comm, Nat.add_left_comm] using h₂
+  · refine ⟨reverseParameter s, (u.length + 1, u.length + 2 + v.length),
+      Or.inr rfl, Or.inr ⟨?_, ?_⟩⟩
+    · simpa [List.length_append, Nat.add_assoc, Nat.add_comm, Nat.add_left_comm] using h₂
+    · simpa [hi, reverseParameter] using h₁
+  · refine ⟨reverseParameter s, (u.length, u.length + 3 + v.length),
+      Or.inl rfl, Or.inr ⟨?_, ?_⟩⟩
+    · simpa [List.length_append, Nat.add_assoc, Nat.add_comm, Nat.add_left_comm] using h₂
+    · simpa [hi, reverseParameter] using h₁
 
 /-- `y` at `s` and `y⁻¹` at `1 - s` map to `a` at `s/2` and `a⁻¹` at `1 - s/2`. -/
 lemma mergeRepeatedBlock_aux_boundary_relation_aux_forward_aux_yz_aux_ypair
