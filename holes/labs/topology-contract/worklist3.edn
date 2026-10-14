@@ -36162,6 +36162,16 @@
       :exit 1,
       :correction "missing olean exposed package check; stopped"}
      {:cmd "file .lake/packages", :exit 127, :correction "used stat"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1792021218537-12703-d5e3f270",
+     :commands
+     ["git show --check 8c4eb4f; committed forbidden-token audit"
+      "fixture SHA-256 assertion; recorded snapshot Lean compile"
+      "statement-registry check; parent/commit placeholder recount"],
+     :finding
+     "PASS: recorded commit 8c4eb4f compiles sorry-free with standard axioms and advances beyond 263f5d47. The exact interface maps Fin(runs+1) to outer subtype V and proves its coercion equals the matching ambient canonical boundary, in the orientation needed by the next fold. It does not hide or assume based van Kampen. Scope/hash match; registry 166/166; Main placeholders 1->1; fold, kernel/surjectivity, winding, C1/C2/Main remain listed."},
     :commit nil,
     :changed-paths [],
     :fixture
@@ -36170,7 +36180,7 @@
      "57669ee92b655e88fde71c50d99aa588dee734adbcfbcb4e1fcf6863c7a0b085"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -36188,7 +36198,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t93J03Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Identified each run start with the flattened preceding-run length; quotient fold induction remains.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: .lake/packages is a real directory, not the required canonical-authority symlink; AGENTS.md requires stopping before further Lake verification. Scoped edits were reverted and no commit made.",
    :id :program-2026-10-13-close-t93j03,
    :kind :final-adapter,
    :campaign-priority 30,
@@ -36542,7 +36552,11 @@
     {:job 7,
      :commit "bd5ebdee7d40582e385b90e9070b60791e06ac10",
      :reason
-     "Identified each run start with the flattened preceding-run length; quotient fold induction remains."}]}
+     "Identified each run start with the flattened preceding-run length; quotient fold induction remains."}
+    {:job 8,
+     :commit nil,
+     :reason
+     ".lake/packages is a real directory, not the required canonical-authority symlink; AGENTS.md requires stopping before further Lake verification. Scoped edits were reverted and no commit made."}]}
   {:consumer :t99J05,
    :stop-count 5,
    :evidence
