@@ -483,11 +483,64 @@ theorem t98J01_circle_homology_vanishes_above_one :
       (F.mapIso e))
 
 /-- Seat: reflection has trace `1` on rational `H₀(S¹)`. -/
+private noncomputable def t98J01_reflection_trace_zero_aux_homeomorph :
+    T98J01.S1 ≃ₜ T02A06.euclideanUnitSphere 2 where
+  toFun p := ⟨WithLp.toLp 2 ![p.1.1, p.1.2], by
+    rw [Metric.mem_sphere, dist_zero_right, EuclideanSpace.norm_eq,
+      Fin.sum_univ_two]
+    simp only [Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.head_cons,
+      Matrix.tail_cons, WithLp.ofLp_toLp]
+    rw [show ‖p.1.1‖ ^ 2 + ‖p.1.2‖ ^ 2 = 1 by
+      simpa [Real.norm_eq_abs, sq_abs] using p.2]
+    norm_num⟩
+  invFun p := ⟨(p.1 0, p.1 1), by
+    have hp : ‖p.1‖ = 1 := by
+      simpa [Metric.mem_sphere, dist_zero_right] using p.2
+    rw [EuclideanSpace.norm_eq, Fin.sum_univ_two] at hp
+    have hs : 0 ≤ ‖p.1 0‖ ^ 2 + ‖p.1 1‖ ^ 2 := by positivity
+    have hh : (Real.sqrt (‖p.1 0‖ ^ 2 + ‖p.1 1‖ ^ 2)) ^ 2 = 1 := by
+      rw [hp]
+      norm_num
+    rw [Real.sq_sqrt hs] at hh
+    simpa [Real.norm_eq_abs, sq_abs] using hh⟩
+  left_inv p := by ext <;> rfl
+  right_inv p := by ext i; fin_cases i <;> rfl
+  continuous_toFun := by
+    apply Continuous.subtype_mk
+    apply (PiLp.continuous_toLp 2 _).comp
+    apply continuous_pi
+    intro i
+    fin_cases i <;> simp <;> fun_prop
+  continuous_invFun := by
+    apply Continuous.subtype_mk
+    fun_prop
+
 theorem t98J01_reflection_trace_zero :
     LinearMap.trace ℚ
       (ConstructionTargets.RationalLefschetz.Homology T98J01.S1 0)
       (ConstructionTargets.RationalLefschetz.induced t98J01_reflectionCM 0).hom = 1 := by
-  sorry
+  letI : PathConnectedSpace T98J01.S1 :=
+    t98J01_reflection_trace_zero_aux_homeomorph.symm.surjective.pathConnectedSpace
+      t98J01_reflection_trace_zero_aux_homeomorph.symm.continuous
+  let p : T98J01.S1 := ⟨(0, 1), by norm_num⟩
+  let e := ConstructionTargets.CoefficientH0.h0Iso ℚ p
+  have hmap : ConstructionTargets.RationalLefschetz.induced
+      t98J01_reflectionCM 0 = CategoryTheory.CategoryStruct.id _ := by
+    apply (CategoryTheory.cancel_mono e.hom).mp
+    simpa [e, ConstructionTargets.RationalLefschetz.induced,
+      ConstructionTargets.CoefficientH0.singularPostcomposition] using
+      (ConstructionTargets.CoefficientH0.h0Augmentation_naturality ℚ
+        t98J01_reflectionCM)
+  letI : FiniteDimensional ℚ
+      (ConstructionTargets.RationalLefschetz.Homology T98J01.S1 0) :=
+    FiniteDimensional.of_injective e.hom.hom e.toLinearEquiv.injective
+  rw [hmap]
+  change LinearMap.trace ℚ _ LinearMap.id = 1
+  rw [LinearMap.trace_id]
+  have he : (ConstructionTargets.RationalLefschetz.Homology T98J01.S1 0) ≃ₗ[ℚ] ℚ :=
+    e.toLinearEquiv
+  rw [he.finrank_eq]
+  simp
 
 /-- Seat: reflection reverses the rational fundamental class of the circle. -/
 theorem t98J01_reflection_trace_one :
