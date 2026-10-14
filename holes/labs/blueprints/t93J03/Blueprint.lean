@@ -740,7 +740,31 @@ theorem t93J03_cyclicCover_aux_properlyDiscontinuous :
 
 theorem t93J03_cyclicCover_aux_free (n : Multiplicative ℤ) (z : T93J03Punctured)
     (h : n • z = z) : n = 1 := by
-  sorry
+  have hz := congrArg Subtype.val h
+  change
+    (Real.exp ((Multiplicative.toAdd n : ℤ) : ℝ) * z.1.1,
+      Real.exp ((Multiplicative.toAdd n : ℤ) : ℝ) *
+        ((-1 : ℝ) ^ (Multiplicative.toAdd n) * z.1.2)) = z.1 at hz
+  have hx := congrArg Prod.fst hz
+  have hy := congrArg Prod.snd hz
+  have he : Real.exp ((Multiplicative.toAdd n : ℤ) : ℝ) = 1 := by
+    by_cases hx0 : z.1.1 = 0
+    · have hy0 : z.1.2 ≠ 0 := by
+        intro hy0
+        apply z.2
+        exact Prod.ext hx0 hy0
+      have ha := congrArg abs hy
+      simp only [abs_mul, abs_zpow, abs_neg, abs_one, one_zpow,
+        abs_of_pos (Real.exp_pos _)] at ha
+      apply mul_right_cancel₀ (abs_ne_zero.mpr hy0)
+      simpa [mul_assoc] using ha
+    · apply mul_right_cancel₀ hx0
+      simpa using hx
+  have hn : Multiplicative.toAdd n = 0 := by
+    apply_fun Real.log at he
+    simpa using he
+  apply Multiplicative.toAdd.injective
+  simpa using hn
 
 theorem t93J03_cyclicCover_aux_range_aux_mem_range_iff_monodromy
     {E B : Type*} [TopologicalSpace E] [TopologicalSpace B]
