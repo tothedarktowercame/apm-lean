@@ -1879,6 +1879,34 @@ lemma cutAndPaste_aux_convex_radial_chart
         ∃ r : ℝ, 0 < r ∧ (e z : ℂ) = p + r • (z : ℂ) := by
   sorry
 
+lemma cutAndPaste_aux_triangle_chart_generators_aux_source_pos {Label : Type*}
+    [DecidableEq Label]
+    (u v t : List (Signed Label)) (x : Signed Label)
+    (hw : IsPolygonWord (u ++ [x] ++ v ++ [x] ++ t)) :
+    0 < (u ++ [x] ++ v ++ [x] ++ t).length := by
+  simpa using hw.1
+
+lemma cutAndPaste_aux_triangle_chart_generators_aux_target_pos {Label : Type*}
+    [DecidableEq Label]
+    (u v t : List (Signed Label)) (x : Signed Label)
+    (hw : IsPolygonWord (u ++ [x] ++ v ++ [x] ++ t)) :
+    0 < (u ++ [x, x] ++ inverseWord v ++ t).length := by
+  simpa using cutAndPaste_aux_target_nonempty u v t x hw
+
+lemma cutAndPaste_aux_triangle_chart_generators_aux_lengths {Label : Type*}
+    (u v t : List (Signed Label)) (x : Signed Label) :
+    (u ++ [x] ++ v ++ [x] ++ t).length =
+      (u ++ [x, x] ++ inverseWord v ++ t).length := by
+  exact cutAndPaste_aux_length u v t x
+
+lemma cutAndPaste_aux_triangle_chart_generators_aux_fresh {Label : Type*}
+    [DecidableEq Label]
+    (u v t : List (Signed Label)) (x : Signed Label)
+    (hx : x.1 ∉ (u ++ v ++ t).map Prod.fst) :
+    x.1 ∉ u.map Prod.fst ∧ x.1 ∉ v.map Prod.fst ∧
+      x.1 ∉ t.map Prod.fst := by
+  exact cutAndPaste_aux_span_aux_x_fresh u v t x hx
+
 /-- The generator-level boundary bookkeeping for the two radial charts.
 This is deliberately weaker than the desired fibre equivalence: lifting the
 generators through `EqvGen` is done in two independent lemmas below. -/
