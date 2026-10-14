@@ -1254,6 +1254,26 @@ theorem circlePositiveFundamentalClass_eq_integerLoop_zpow_coordinate :
     rw [he]
     simp
 
+/-- The explicit winding-one circle class mapped into a wedge leg, before
+transporting that leg's basepoint to the common word basepoint. -/
+noncomputable def finiteWedgeExplicitLegClass {L : Type} (l : L) :
+    FundamentalGroup
+      (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge L)
+      (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle l 1) :=
+  FundamentalGroup.map
+    ⟨PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle l,
+      PolygonSurfacePiOne.PointWedgeQuotient.continuous_wedgeCircle l⟩
+    1 circleIntegerLoopOneClass
+
+/-- In every wedge leg, the explicit geometric loop differs from the
+H₁-normalized leg generator by exactly the global orientation unit. -/
+theorem finiteWedgeExplicitLegClass_eq_positive_zpow {L : Type} (l : L) :
+    finiteWedgeExplicitLegClass l =
+      finiteWedgeLegFundamentalClass l ^ circleIntegerLoopOneCoordinate := by
+  rw [finiteWedgeExplicitLegClass,
+    circleIntegerLoopOneClass_eq_positive_zpow_coordinate, map_zpow]
+  rfl
+
 /-- The boundary map computed in the existing H₁ coordinates.  Its extra
 factor records the only orientation ambiguity left by `circleH1IsoInt`. -/
 noncomputable def orientationSignedAttachingBoundary (P : PairingData) :
