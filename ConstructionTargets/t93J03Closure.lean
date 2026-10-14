@@ -713,6 +713,20 @@ theorem kleinSkeletonPresentationMap_ker :
     kleinSkeletonPresentationMap, MonoidHom.coe_comp, Function.comp_apply,
     PresentedGroup.mk_eq_one_iff]
 
+/-- The algebraic quotient demanded by based van Kampen is already the
+frozen `aabb` presentation.  Thus the remaining topological extraction only
+has to identify its kernel with this pulled-back normal closure. -/
+noncomputable def kleinSkeletonAabbQuotientEquiv :
+    (FundamentalGroup kleinPairingData.skeleton kleinSkeletonPoint ⧸
+      Subgroup.comap
+        kleinActualSkeletonFundamentalGroupEquivFreeGroupBool.toMonoidHom
+        (Subgroup.normalClosure kleinPolygonRelations)) ≃*
+      KleinPolygonPresentedGroup :=
+  (QuotientGroup.quotientMulEquivOfEq
+      kleinSkeletonPresentationMap_ker.symm).trans
+    (QuotientGroup.quotientKerEquivOfSurjective
+      kleinSkeletonPresentationMap kleinSkeletonPresentationMap_surjective)
+
 /-- The generic two-open van Kampen mapping equivalence specialized to the
 exact radial cover of the Klein polygon quotient.  This is the topological
 input from which the remaining based normal-closure quotient is extracted. -/

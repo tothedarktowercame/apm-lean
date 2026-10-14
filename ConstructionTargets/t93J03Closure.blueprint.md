@@ -265,6 +265,11 @@ two-circle model used to define the fixed free-group coordinates.
 the winding-one image with `kleinAabbWord` gives exactly the required normal
 closure equality.  The remaining geometric comparison should therefore be
 stated as conjugacy, not literal equality.
+`kleinSkeletonAabbQuotientEquiv` completes the independent algebraic half of
+based quotient extraction: quotienting the actual skeleton group by the
+pulled-back normal closure of `aabb` is the frozen presented group.  The
+remaining van Kampen step must identify the topological kernel with precisely
+this subgroup.
 
 - Layer 1: C1, C3, and C4. C1 and C3 are independent; C4 is already complete.
 - Layer 2: C2 against the explicit C1 equivalence interface.
