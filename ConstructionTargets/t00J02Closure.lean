@@ -1013,6 +1013,28 @@ def RegularFiberChartCalculations.ofCanonicalLocalDegrees
     component_sum_eq := hcomponent
     topDegree_eq := htop }
 
+/-- Since every exact disk-bounded lift has degree zero, it is enough to
+compute zero for each canonical local-degree component sum. -/
+def RegularFiberChartCalculations.ofCanonicalComponentSumsEqZero
+    {S : Type} [TopologicalSpace S] [T2Space S]
+    [ChartedSpace SurfaceModel S]
+    {f : C(S, S)} {c : C(Circle, S)} {y : S}
+    (hy : y ∈ Set.range c) [Fintype {x : S // f x = y}]
+    (e : surfaceHomology S ≅ ModuleCat.of ℤ ℤ)
+    (lifts : ∀ k : OccupiedRegularFiberComponent f c y hy,
+      ExactZeroDegreeComponentLift f c y hy k)
+    (orientationSign : OccupiedRegularFiberComponent f c y hy → ℤ)
+    (hcomponent : ∀ k, componentLocalDegreeSum
+      (occupiedRegularFiberComponentIndex f c y hy)
+        (regularFiberLocalDegree e f y) k = 0)
+    (htop : surfaceTopDegree e f = ∑ x,
+      orientationSign (occupiedRegularFiberComponentIndex f c y hy x) *
+        regularFiberLocalDegree e f y x) :
+    RegularFiberChartCalculations hy e lifts :=
+  RegularFiberChartCalculations.ofCanonicalLocalDegrees hy e lifts
+    orientationSign (fun k => (hcomponent k).trans
+      (exactLiftComponentDegree_eq_zero lifts k).symm) htop
+
 theorem RegularFiberChartCalculations.topHomologyMap_eq_zero
     {S : Type} [TopologicalSpace S] [T2Space S]
     [ChartedSpace SurfaceModel S]
@@ -1043,6 +1065,7 @@ end ConstructionTargets.T00J02Closure
 #print axioms ConstructionTargets.T00J02Closure.regularFiberLocalizedTopDegreeFormula_of_chartCoefficients
 #print axioms ConstructionTargets.T00J02Closure.topHomologyMap_eq_zero_of_chartCoefficientCalculations
 #print axioms ConstructionTargets.T00J02Closure.RegularFiberChartCalculations.ofCanonicalLocalDegrees
+#print axioms ConstructionTargets.T00J02Closure.RegularFiberChartCalculations.ofCanonicalComponentSumsEqZero
 #print axioms ConstructionTargets.T00J02Closure.RegularFiberChartCalculations.topHomologyMap_eq_zero
 #print axioms ConstructionTargets.T00J02Closure.circleDegree_eq_homologyMap
 #print axioms ConstructionTargets.T00J02Closure.circleDegree_eq_zero_of_homologyMap_eq_zero
