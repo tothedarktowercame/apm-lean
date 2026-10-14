@@ -1991,7 +1991,32 @@ lemma cutAndPaste_aux_triangle_charts_forward {Label : Type*}
     ∀ y y', cutAndPasteParameterRel u v t x a y y' →
       Relation.EqvGen (WordRel (u ++ [x, x] ++ inverseWord v ++ t))
         (b y) (b y') := by
-  sorry
+  intro y y' h
+  unfold cutAndPasteParameterRel at h
+  have lift : ∀ p q : Disk,
+      Relation.EqvGen (WordRel (u ++ [x] ++ v ++ [x] ++ t)) p q →
+      ∀ yp yq, a yp = p → a yq = q →
+        Relation.EqvGen
+          (WordRel (u ++ [x, x] ++ inverseWord v ++ t)) (b yp) (b yq) := by
+    intro p q hpq
+    induction hpq with
+    | rel p q hpq =>
+        intro yp yq hyp hyq
+        apply hgen yp yq
+        simpa [hyp, hyq] using hpq
+    | refl p =>
+        intro yp yq hyp hyq
+        apply hfib yp yq
+        rw [hyp, hyq]
+    | symm p q _ ih =>
+        intro yp yq hyp hyq
+        exact Relation.EqvGen.symm _ _ (ih yq yp hyq hyp)
+    | trans p q r _ _ ihpq ihqr =>
+        intro yp yr hyp hyr
+        obtain ⟨yq, hyq⟩ := has q
+        exact Relation.EqvGen.trans _ _ _
+          (ihpq yp yq hyp hyq) (ihqr yq yr hyq hyr)
+  exact lift (a y) (a y') h y y' rfl rfl
 
 lemma cutAndPaste_aux_triangle_charts_reverse {Label : Type*}
     [DecidableEq Label] (u v t : List (Signed Label)) (x : Signed Label)
