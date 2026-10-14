@@ -79,6 +79,83 @@ theorem relabelInvert {Label Label' : Type*}
       PolygonSurface (w.map fun x => (e x.1, xor x.2 (flip x.1)))) := by
   sorry
 
+lemma inversePairCancellation_aux_rest_ne_nil {Label : Type*} [DecidableEq Label]
+    (u v : List (Signed Label)) (hrest : IsPolygonWord (u ++ v)) :
+    u ++ v ≠ [] := by
+  exact hrest.1
+
+lemma inversePairCancellation_aux_rest_length_pos {Label : Type*} [DecidableEq Label]
+    (u v : List (Signed Label)) (hrest : IsPolygonWord (u ++ v)) :
+    0 < (u ++ v).length := by
+  exact List.length_pos_iff.mpr hrest.1
+
+lemma inversePairCancellation_aux_rest_length_even {Label : Type*} [DecidableEq Label]
+    (u v : List (Signed Label)) (hrest : IsPolygonWord (u ++ v)) :
+    Even (u ++ v).length := by
+  exact hrest.2.1
+
+lemma inversePairCancellation_aux_rest_length_two_le {Label : Type*} [DecidableEq Label]
+    (u v : List (Signed Label)) (hrest : IsPolygonWord (u ++ v)) :
+    2 ≤ (u ++ v).length := by
+  obtain ⟨k, hk⟩ := hrest.2.1
+  have hp : 0 < (u ++ v).length := List.length_pos_iff.mpr hrest.1
+  omega
+
+@[simp] lemma inversePairCancellation_aux_inv_fst {Label : Type*}
+    (x : Signed Label) : (inv x).1 = x.1 := by
+  rfl
+
+@[simp] lemma inversePairCancellation_aux_inv_snd_ne {Label : Type*}
+    (x : Signed Label) : (inv x).2 ≠ x.2 := by
+  rcases x with ⟨a, b⟩
+  cases b <;> simp [inv]
+
+lemma inversePairCancellation_aux_full_length {Label : Type*}
+    (u v : List (Signed Label)) (x : Signed Label) :
+    (u ++ [x, inv x] ++ v).length = (u ++ v).length + 2 := by
+  simp [Nat.add_comm, Nat.add_left_comm, Nat.add_assoc]
+
+lemma inversePairCancellation_aux_fresh_count {Label : Type*} [DecidableEq Label]
+    (u v : List (Signed Label)) (x : Signed Label)
+    (hx : x.1 ∉ (u ++ v).map Prod.fst) :
+    ((u ++ [x, inv x] ++ v).map Prod.fst).count x.1 = 2 := by
+  have hu : x.1 ∉ u.map Prod.fst := by
+    intro h
+    exact hx (by simpa using List.mem_append_left (v.map Prod.fst) h)
+  have hv : x.1 ∉ v.map Prod.fst := by
+    intro h
+    exact hx (by simpa using List.mem_append_right (u.map Prod.fst) h)
+  rw [List.map_append, List.count_append, List.map_append, List.count_append,
+    List.count_eq_zero_of_not_mem hu, List.count_eq_zero_of_not_mem hv]
+  simp
+
+/-- Generic descent along a collapse: a continuous surjection of the disk that
+matches the two generated relations induces a homeomorphism of the polygon
+surfaces.  (`Disk` is compact and Hausdorff, so `c` is a closed, hence quotient,
+map; both surfaces are then quotients of `Disk` by the same relation.) -/
+lemma polygonSurface_homeomorph_of_collapse {L L' : Type*}
+    [DecidableEq L] [DecidableEq L']
+    (w₁ : List (Signed L)) (w₂ : List (Signed L')) (c : Disk → Disk)
+    (hc : Continuous c) (hsurj : Function.Surjective c)
+    (hrel : ∀ p q, Relation.EqvGen (WordRel w₁) p q ↔
+      Relation.EqvGen (WordRel w₂) (c p) (c q)) :
+    Nonempty (PolygonSurface w₁ ≃ₜ PolygonSurface w₂) := by
+  sorry
+
+/-- The geometric content of cancellation: zip the arcs `x` and `x⁻¹` together,
+`x(t)` and `x⁻¹(1-t)` going to the same point of a segment running from the
+boundary into the interior (NOT to a single point: `c` may identify exactly
+the pairs the old relation identifies), and map the rest PL onto the
+`(u ++ v)`-gon. -/
+lemma inversePairCancellation_aux_collapse {Label : Type*} [DecidableEq Label]
+    (u v : List (Signed Label)) (x : Signed Label)
+    (hx : x.1 ∉ (u ++ v).map Prod.fst)
+    (hrest : IsPolygonWord (u ++ v)) :
+    ∃ c : Disk → Disk, Continuous c ∧ Function.Surjective c ∧
+      ∀ p q, Relation.EqvGen (WordRel (u ++ [x, inv x] ++ v)) p q ↔
+        Relation.EqvGen (WordRel (u ++ v)) (c p) (c q) := by
+  sorry
+
 /-- Affinely collapse the two triangles incident to the cancelled vertex and
 map the complementary polygon to the smaller disk. -/
 theorem inversePairCancellation {Label : Type*} [DecidableEq Label]
@@ -87,7 +164,8 @@ theorem inversePairCancellation {Label : Type*} [DecidableEq Label]
     (hrest : IsPolygonWord (u ++ v)) :
     Nonempty (PolygonSurface (u ++ [x, inv x] ++ v) ≃ₜ
       PolygonSurface (u ++ v)) := by
-  sorry
+  obtain ⟨c, hc, hsurj, hrel⟩ := inversePairCancellation_aux_collapse u v x hx hrest
+  exact polygonSurface_homeomorph_of_collapse _ _ c hc hsurj hrel
 
 lemma mergeRepeatedBlock_aux_quotient_homeomorph
     {R S : Disk → Disk → Prop}
