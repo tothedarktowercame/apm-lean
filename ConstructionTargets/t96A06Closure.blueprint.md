@@ -62,7 +62,11 @@ compiled as well: `rp3SphereProjection_isClosedMap` uses the same antipodal
 saturation formula for closed sets, and
 `t96A06_rp3_sphere_covering` applies the finite-fiber local-homeomorphism
 criterion after bounding each fiber by its explicit antipodal pair.  Rational
-transfer through this two-sheeted covering remains.
+transfer through this covering now has its exact sheet-count input:
+`rp3SphereAntipodal_ne` separates the two points and
+`t96A06_rp3_sphere_twoSheeted` packages finiteness and cardinality two as
+`IsKSheetedCover (sphereProjection 3) 2`.  The induced rational homology
+transfer and its consequences remain.
 
 ## C3. Degree four of the quadratic map — library
 

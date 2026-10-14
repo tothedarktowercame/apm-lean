@@ -4,6 +4,7 @@ import ConstructionTargets.ProjectiveConsumerLiftDemonstrations
 import ConstructionTargets.RationalLefschetz
 import ConstructionTargets.CoefficientH0
 import ConstructionTargets.RealProjectiveSmoothTarget
+import ConstructionTargets.CoveringDegree
 
 /-! Compiled closure milestones for t96A06. -/
 
@@ -11,6 +12,7 @@ open ConstructionTargets.ProjectiveSpaceTopology
 open ConstructionTargets.ProjectiveConsumerLiftDemonstrations
 open ConstructionTargets.RationalLefschetz
 open ConstructionTargets.RealProjectiveSmoothTarget
+open ConstructionTargets.CoveringDegree
 
 noncomputable section
 namespace ConstructionTargets.t96A06Closure
@@ -257,6 +259,51 @@ theorem t96A06_rp3_sphere_covering :
     obtain ⟨φ, heφ, hφ⟩ := rp3SphereProjection_isLocalHomeomorph e
     exact ⟨φ, heφ, hφ.symm⟩
 
+/-- A unit vector cannot equal its antipode. -/
+theorem rp3SphereAntipodal_ne (p : Sphere 3) :
+    sphereAntipodalN 3 p ≠ p := by
+  intro h
+  have hv := congrArg Subtype.val h
+  have hneg : -(p : EuclideanSpace ℝ (Fin 4)) = p := by
+    simpa [sphereAntipodalN] using hv
+  have hadd : (p : EuclideanSpace ℝ (Fin 4)) + p = 0 := by
+    calc
+      (p : EuclideanSpace ℝ (Fin 4)) + p = -p + p :=
+        congrArg (fun z => z + (p : EuclideanSpace ℝ (Fin 4))) hneg.symm
+      _ = 0 := neg_add_cancel _
+  have hp0 : (p : EuclideanSpace ℝ (Fin 4)) = 0 := by
+    have hsmul : (2 : ℝ) • (p : EuclideanSpace ℝ (Fin 4)) = 0 := by
+      simpa [two_smul] using hadd
+    exact (smul_eq_zero.mp hsmul).resolve_left (by norm_num)
+  have hn := p.2
+  simpa [Metric.mem_sphere, hp0] using hn
+
+/-- The exact covering has two sheets in the finite-fiber sense required by
+the rational chain transfer. -/
+theorem t96A06_rp3_sphere_twoSheeted :
+    IsKSheetedCover (sphereProjection 3) 2 := by
+  refine ⟨t96A06_rp3_sphere_covering, ?_, ?_⟩
+  · intro b
+    obtain ⟨p, hp⟩ := rp3SphereProjection_isQuotientMap.surjective b
+    refine ({p, sphereAntipodalN 3 p} : Set (Sphere 3)).toFinite.subset ?_
+    intro q hq
+    exact (rp3SphereProjection_eq_iff p q).mp (hp.trans hq.symm)
+  · intro b
+    obtain ⟨p, hp⟩ := rp3SphereProjection_isQuotientMap.surjective b
+    rw [Nat.card_eq_two_iff]
+    refine ⟨⟨p, hp⟩,
+      ⟨sphereAntipodalN 3 p, ?_⟩, ?_, ?_⟩
+    · exact ((rp3SphereProjection_eq_iff p (sphereAntipodalN 3 p)).mpr
+        (Or.inr rfl)).symm.trans hp
+    · intro h
+      have hv := congrArg Subtype.val h
+      exact rp3SphereAntipodal_ne p hv.symm
+    · ext z
+      simp only [Set.mem_insert_iff, Set.mem_singleton_iff,
+        Set.mem_univ, iff_true]
+      exact ((rp3SphereProjection_eq_iff p z.1).mp
+        (hp.trans z.2.symm)).imp Subtype.ext Subtype.ext
+
 #print axioms polynomialMap_nonzero
 #print axioms polynomialDescent
 #print axioms polynomialDescent_quotientMap
@@ -274,5 +321,7 @@ theorem t96A06_rp3_sphere_covering :
 #print axioms rp3SphereProjection_isLocalHomeomorph
 #print axioms rp3SphereProjection_isClosedMap
 #print axioms t96A06_rp3_sphere_covering
+#print axioms rp3SphereAntipodal_ne
+#print axioms t96A06_rp3_sphere_twoSheeted
 
 end ConstructionTargets.t96A06Closure
