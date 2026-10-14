@@ -89,6 +89,71 @@ theorem inversePairCancellation {Label : Type*} [DecidableEq Label]
       PolygonSurface (u ++ v)) := by
   sorry
 
+lemma mergeRepeatedBlock_aux_quotient_homeomorph
+    {R S : Disk → Disk → Prop}
+    (e : Disk ≃ₜ Disk)
+    (hrel : ∀ p q,
+      Relation.EqvGen R p q ↔ Relation.EqvGen S (e p) (e q)) :
+    Nonempty
+      (Quotient (Relation.EqvGen.setoid R) ≃ₜ
+       Quotient (Relation.EqvGen.setoid S)) := by
+  let f : Quotient (Relation.EqvGen.setoid R) →
+      Quotient (Relation.EqvGen.setoid S) :=
+    Quotient.map e (fun _ _ h ↦ (hrel _ _).mp h)
+  let g : Quotient (Relation.EqvGen.setoid S) →
+      Quotient (Relation.EqvGen.setoid R) :=
+    Quotient.map e.symm (fun p q h ↦ by
+      have := (hrel (e.symm p) (e.symm q)).mpr
+        (by simpa using h)
+      simpa using this)
+  have hfg : Function.LeftInverse g f := by
+    intro x
+    induction x using Quotient.inductionOn with
+    | _ p => simp [f, g]
+  have hgf : Function.RightInverse g f := by
+    intro x
+    induction x using Quotient.inductionOn with
+    | _ p => simp [f, g]
+  have hf : Continuous f := by
+    apply continuous_coinduced_dom.mpr
+    simpa [Function.comp_def, f] using
+      (continuous_coinduced_rng.comp e.continuous)
+  have hg : Continuous g := by
+    apply continuous_coinduced_dom.mpr
+    simpa [Function.comp_def, g] using
+      (continuous_coinduced_rng.comp e.symm.continuous)
+  exact ⟨{
+    toEquiv := {
+      toFun := f
+      invFun := g
+      left_inv := hfg
+      right_inv := hgf }
+    continuous_toFun := hf
+    continuous_invFun := hg }⟩
+
+/-- The geometric core: radially extend the increasing piecewise-linear
+reparametrisation which sends the two consecutive `y,z` arcs to the `a` arc
+and, simultaneously, the consecutive `inv z, inv y` arcs to `inv a`.
+The occurrence assumptions make this reparametrisation preserve precisely the
+generated boundary relation.  Concretely: a PL disk homeomorphism sending arcs `y`, `z` to
+the two halves of arc `a` (`y(t) ↦ a(t/2)`, `z(t) ↦ a(1/2 + t/2)`), likewise
+`z⁻¹, y⁻¹` to the halves of `a⁻¹`, and every other arc linearly to its
+counterpart.  Checked: `y(t) ~ y⁻¹(1-t)` goes to `a(t/2) ~ a⁻¹(1-t/2)`, and the
+`yz` vertex class `{yz, z⁻¹y⁻¹}` goes to the midpoint class of `a, a⁻¹`. -/
+lemma mergeRepeatedBlock_aux_disk_reparam {Label : Type*} [DecidableEq Label]
+    (u v t : List (Signed Label)) (y z a : Signed Label)
+    (hyz : y.1 ≠ z.1)
+    (ha : a.1 ∉ (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t).map Prod.fst)
+    (hy : ((u ++ v ++ t).map Prod.fst).count y.1 = 0)
+    (hz : ((u ++ v ++ t).map Prod.fst).count z.1 = 0)
+    (hw : IsPolygonWord (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t)) :
+    ∃ e : Disk ≃ₜ Disk, ∀ p q,
+      Relation.EqvGen
+          (WordRel (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t)) p q ↔
+      Relation.EqvGen
+          (WordRel (u ++ [a] ++ v ++ [inv a] ++ t)) (e p) (e q) := by
+  sorry
+
 /-- Replace the quadrilateral `y z` / `(y z)⁻¹` by one fresh paired side.
 The count hypotheses say the displayed block contains every `y` and `z`. -/
 theorem mergeRepeatedBlock {Label : Type*} [DecidableEq Label]
@@ -101,7 +166,9 @@ theorem mergeRepeatedBlock {Label : Type*} [DecidableEq Label]
     Nonempty
       (PolygonSurface (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t) ≃ₜ
        PolygonSurface (u ++ [a] ++ v ++ [inv a] ++ t)) := by
-  sorry
+  obtain ⟨e, he⟩ :=
+    mergeRepeatedBlock_aux_disk_reparam u v t y z a hyz ha hy hz hw
+  exact mergeRepeatedBlock_aux_quotient_homeomorph e he
 
 /-- Standard normal-form slide.  Cut from the first `x` to the second, and
 send the two triangles on either side affinely across the new diagonal. -/
