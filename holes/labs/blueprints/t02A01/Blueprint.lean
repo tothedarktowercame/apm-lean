@@ -168,7 +168,17 @@ theorem apm_t02a01_component_meets_fiber
     (q : E → B) (hq : IsCoveringMap q) (e : E) :
     Function.Surjective
       (fun x : q ⁻¹' {q e} => (x.1 : ConnectedComponents E)) := by
-  sorry
+  intro c
+  obtain ⟨x, rfl⟩ := ConnectedComponents.surjective_coe c
+  obtain ⟨γ⟩ := PathConnectedSpace.joined (q x) (q e)
+  let Γ := hq.liftPath γ x (by simp)
+  have hΓ0 : Γ 0 = x := hq.liftPath_zero γ x (by simp)
+  have hΓ1 : q (Γ 1) = q e := by
+    exact (congr_fun (hq.liftPath_lifts γ x (by simp)) 1).trans γ.target
+  refine ⟨⟨Γ 1, by simpa using hΓ1⟩, ?_⟩
+  rw [ConnectedComponents.coe_eq_coe']
+  apply pathComponent_subset_component x
+  exact ⟨⟨Γ, hΓ0, rfl⟩⟩
 
 /-- Trivial based monodromy separates two points of the chosen fiber into
 different connected components. -/
