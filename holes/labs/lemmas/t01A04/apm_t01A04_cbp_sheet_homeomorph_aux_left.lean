@@ -1237,7 +1237,30 @@ lemma apm_t01A04_cbp_sheet_homeomorph_aux_inv_continuous (i : Fin 2) :
 -- BEGIN SEAT AREA
 lemma apm_t01A04_cbp_sheet_homeomorph_aux_left (i : Fin 2) :
     ∀ y ∈ apm_t01A04_cbp_V i, apm_t01A04_cbp_sheet_homeomorph_aux_inv i (apm_t01a04_circleCoverMap y) = y := by
-  sorry
+  intro y hy
+  rcases hy with ⟨r, hr, rfl⟩
+  rcases r with p | z
+  · change p.1 = i ∧ _ at hr
+    rw [← hr.1]
+    rfl
+  · change
+      Quotient.mk _ (Sum.inr
+        (apm_t01A04_cbp_sheet_homeomorph_aux_root i (z ^ 2))) =
+        Quotient.mk _ (Sum.inr z)
+    apply congrArg (fun w : Circle => Quotient.mk _ (Sum.inr w))
+    apply apm_t01A04_cbp_sheet_homeomorph_aux_branch_unique i
+    · rw [apm_t01A04_cbp_sheet_homeomorph_aux_root_sq]
+    · have hlo := Complex.neg_pi_lt_arg ((z ^ 2 : Circle) : ℂ)
+      have hhi : Complex.arg ((z ^ 2 : Circle) : ℂ) < Real.pi :=
+        Complex.arg_lt_pi_iff.mpr (Or.inl hr.2.le)
+      have hc : 0 < Real.cos (Complex.arg ((z ^ 2 : Circle) : ℂ) / 2) := by
+        apply Real.cos_pos_of_mem_Ioo
+        constructor <;> linarith [Real.pi_pos]
+      fin_cases i <;>
+        simpa [apm_t01A04_cbp_sheet_homeomorph_aux_root,
+          apm_t01a04_sheetPoint, Circle.exp, Complex.exp_mul_I,
+          ← Complex.ofReal_cos, ← Complex.ofReal_sin] using hc
+    · exact hr.1
 -- END SEAT AREA
 
 /-- Right inverse on `U`. -/
