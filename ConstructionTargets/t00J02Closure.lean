@@ -757,12 +757,44 @@ theorem topHomologyMap_eq_zero_of_localFundamentalClassComparisons
     (regularFiberTopDegreeFormula_of_localFundamentalClassComparisons
       hy e lifts orientationSign hcomponent htop)
 
+/-- The componentwise half of the geometric localization formula, stated
+independently of the global top-degree equality. -/
+structure RegularFiberLocalizedComponentFormula
+    {S : Type} [TopologicalSpace S] [T2Space S]
+    [ChartedSpace SurfaceModel S]
+    {f : C(S, S)} {c : C(Circle, S)} {y : S}
+    (hy : y ∈ Set.range c) [Fintype {x : S // f x = y}]
+    (e : surfaceHomology S ≅ ModuleCat.of ℤ ℤ)
+    (lifts : ∀ k : OccupiedRegularFiberComponent f c y hy,
+      ExactZeroDegreeComponentLift f c y hy k) where
+  orientationSign : OccupiedRegularFiberComponent f c y hy → ℤ
+  component_sum_eq : ∀ k, componentLocalDegreeSum
+    (occupiedRegularFiberComponentIndex f c y hy)
+      (regularFiberLocalDegree e f y) k = exactLiftComponentDegree lifts k
+
+/-- A proved component-localization formula supplies the comparison object
+used by the signed-count argument. -/
+def RegularFiberLocalizedComponentFormula.toComparison
+    {S : Type} [TopologicalSpace S] [T2Space S]
+    [ChartedSpace SurfaceModel S]
+    {f : C(S, S)} {c : C(Circle, S)} {y : S}
+    {hy : y ∈ Set.range c} [Fintype {x : S // f x = y}]
+    {e : surfaceHomology S ≅ ModuleCat.of ℤ ℤ}
+    {lifts : ∀ k : OccupiedRegularFiberComponent f c y hy,
+      ExactZeroDegreeComponentLift f c y hy k}
+    (formula : RegularFiberLocalizedComponentFormula hy e lifts) :
+    RegularFiberLocalDegreeComparison hy lifts :=
+  { localDegree := regularFiberLocalDegree e f y
+    orientationSign := formula.orientationSign
+    component_sum_eq_lift_degree := formula.component_sum_eq }
+
 end ConstructionTargets.T00J02Closure
 
 #print axioms ConstructionTargets.T00J02Closure.surfaceTopHomology_localFundamentalClassIso
 #print axioms ConstructionTargets.T00J02Closure.regularFiberLocalDegree_localization_eq
 #print axioms ConstructionTargets.T00J02Closure.regularFiberTopDegreeFormula_of_localFundamentalClassComparisons
 #print axioms ConstructionTargets.T00J02Closure.topHomologyMap_eq_zero_of_localFundamentalClassComparisons
+#print axioms ConstructionTargets.T00J02Closure.RegularFiberLocalizedComponentFormula.toComparison
 #print axioms ConstructionTargets.T00J02Closure.circleDegree_eq_homologyMap
 #print axioms ConstructionTargets.T00J02Closure.circleDegree_eq_zero_of_homologyMap_eq_zero
 #print axioms ConstructionTargets.T00J02Closure.transverseCircle_preimage_component_signedCount
