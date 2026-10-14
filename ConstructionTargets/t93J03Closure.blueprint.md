@@ -211,6 +211,10 @@ The exact radial polygon cover is now connected to the generic two-open
 fundamental-groupoid van Kampen theorem by
 `kleinPolygonFundamentalGroupoidPseudopushout`; the remaining step extracts
 the based group quotient and identifies its overlap image with `aabb`.
+`kleinPolygonInnerContractibleSpace` and
+`kleinPolygonInnerFundamentalGroup_subsingleton` now discharge the simply
+connected inner-vertex group in that extraction.  It remains to transport the
+overlap image through the outer-piece coordinates and take its normal closure.
 
 - Layer 1: C1, C3, and C4. C1 and C3 are independent; C4 is already complete.
 - Layer 2: C2 against the explicit C1 equivalence interface.

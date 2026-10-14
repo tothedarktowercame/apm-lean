@@ -699,6 +699,31 @@ noncomputable def kleinPolygonFundamentalGroupoidPseudopushout
     (openCover kleinPairingData).outer_open
     (openCover kleinPairingData).cover
 
+/-- The inner vertex of the exact radial cover is contractible, using the
+pointed contraction carried by the polygon cover package. -/
+theorem kleinPolygonInnerContractibleSpace :
+    ContractibleSpace
+      {q // q ∈ (openCover kleinPairingData).inner} := by
+  rw [contractible_iff_id_nullhomotopic]
+  exact ⟨(openCover kleinPairingData).center,
+    ⟨(openCover kleinPairingData).contraction.homotopy⟩⟩
+
+/-- Hence the based fundamental group contributed by the inner cover piece
+is trivial in the exact cover used for the Klein polygon. -/
+theorem kleinPolygonInnerFundamentalGroup_subsingleton :
+    Subsingleton
+      (FundamentalGroup {q // q ∈ (openCover kleinPairingData).inner}
+        (openCover kleinPairingData).center) := by
+  letI : ContractibleSpace
+      {q // q ∈ (openCover kleinPairingData).inner} :=
+    kleinPolygonInnerContractibleSpace
+  letI : SimplyConnectedSpace
+      {q // q ∈ (openCover kleinPairingData).inner} :=
+    SimplyConnectedSpace.ofContractible _
+  change Subsingleton (Path.Homotopic.Quotient
+    (openCover kleinPairingData).center (openCover kleinPairingData).center)
+  infer_instance
+
 def finiteWedgeBoolPoint : FiniteWedge Bool := wedgeCircle false 1
 
 @[simp] theorem finiteWedgeBoolHomeomorphTwoCircles_point :
@@ -832,6 +857,8 @@ theorem lift_isEmbedding_assembly
 #print axioms kleinSkeletonPresentationMap_attachingClass
 #print axioms kleinSkeletonPresentationMap_ker
 #print axioms kleinPolygonFundamentalGroupoidPseudopushout
+#print axioms kleinPolygonInnerContractibleSpace
+#print axioms kleinPolygonInnerFundamentalGroup_subsingleton
 #print axioms kleinBottle_pi1_every_basepoint_of_polygon_van_kampen
 
 end ConstructionTargets.t93J03Closure
