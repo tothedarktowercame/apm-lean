@@ -833,6 +833,33 @@ structure RegularFiberLocalizedComponentFormula
     (occupiedRegularFiberComponentIndex f c y hy)
       (regularFiberLocalDegree e f y) k = exactLiftComponentDegree lifts k
 
+/-- Chart coefficients satisfying the local homology equation and the
+component boundary calculation construct the component-localization formula. -/
+def regularFiberLocalizedComponentFormula_of_chartCoefficients
+    {S : Type} [TopologicalSpace S] [T2Space S]
+    [ChartedSpace SurfaceModel S]
+    {f : C(S, S)} {c : C(Circle, S)} {y : S}
+    (hy : y ∈ Set.range c) [Fintype {x : S // f x = y}]
+    (e : surfaceHomology S ≅ ModuleCat.of ℤ ℤ)
+    (lifts : ∀ k : OccupiedRegularFiberComponent f c y hy,
+      ExactZeroDegreeComponentLift f c y hy k)
+    (orientationSign : OccupiedRegularFiberComponent f c y hy → ℤ)
+    (coefficient : {x : S // f x = y} → ℤ)
+    (hcoefficient : ∀ x, coefficient x •
+        ConstructionTargets.HigherChartLocalGenerator.ambientLocalGenerator
+          (k := 0) (x : S) =
+      localizationMap (x : S) 2
+        (groupGlobalGenerator (TopCat.of S) 2 e))
+    (hcomponent : ∀ k, componentLocalDegreeSum
+      (occupiedRegularFiberComponentIndex f c y hy) coefficient k =
+        exactLiftComponentDegree lifts k) :
+    RegularFiberLocalizedComponentFormula hy e lifts :=
+  { orientationSign := orientationSign
+    component_sum_eq := fun k =>
+      (componentLocalDegreeSum_eq_of_localizationCoefficients e f y
+        (occupiedRegularFiberComponentIndex f c y hy) coefficient
+        hcoefficient k).trans (hcomponent k) }
+
 /-- A proved component-localization formula supplies the comparison object
 used by the signed-count argument. -/
 def RegularFiberLocalizedComponentFormula.toComparison
@@ -890,6 +917,7 @@ end ConstructionTargets.T00J02Closure
 #print axioms ConstructionTargets.T00J02Closure.regularFiberTopDegreeFormula_of_localFundamentalClassComparisons
 #print axioms ConstructionTargets.T00J02Closure.topHomologyMap_eq_zero_of_localFundamentalClassComparisons
 #print axioms ConstructionTargets.T00J02Closure.RegularFiberLocalizedComponentFormula.toComparison
+#print axioms ConstructionTargets.T00J02Closure.regularFiberLocalizedComponentFormula_of_chartCoefficients
 #print axioms ConstructionTargets.T00J02Closure.regularFiberTopDegreeFormula_of_localizedFormulas
 #print axioms ConstructionTargets.T00J02Closure.circleDegree_eq_homologyMap
 #print axioms ConstructionTargets.T00J02Closure.circleDegree_eq_zero_of_homologyMap_eq_zero
