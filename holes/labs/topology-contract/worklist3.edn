@@ -36117,7 +36117,7 @@
   {:consumer :t93J03,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 10,
+   :stop-count 0,
    :review-finding
    "Program STOP commits nothing new since the prior reviewed attempt: it reuses commit 512a220f, and git history shows no later scoped commit. The unresolved SemilocallySimplyConnected hypothesis-coverage conflict is unchanged. Obtain the required owner specification decision or commit a new compiled milestone before resubmitting.",
    :evidence
@@ -36168,7 +36168,7 @@
      "a51785242f9fe34607ae04cdc8c459d9b0cf355380a55a5355be69324756bf8c"},
     :seat :topo-10},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -36786,6 +36786,17 @@
      {:cmd "lean fixture; Main", :exit 0}
      {:cmd "registry; placeholder; diff; show --check", :exit 0}
      {:cmd "rg forbidden closure", :exit 1, :expected-exit 1}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791963840968-11703-25b508ad",
+     :commands
+     ["git show/diff/show --check ddec9674"
+      "sha256sum fixture; scope; placeholders"
+      "lake env lean recorded closure, fixture, Main"
+      "statement-registry.py check"],
+     :finding
+     "PASS: new compiled sorry-free standard-axiom milestone. The antipodal fiber formula yields the exact saturation identity and open-map proof; positive hemispheres are open neighborhoods on which the projection is injective, establishing the local-homeomorphism orientation. Common two-sheet trivializations, transfer, degree four, and Main remain accurately listed. Scope/hash verified; frozen placeholders 1->1 (support 0); registry 166/166."},
     :commit "ddec9674fe0129e68cff55ab38c5a0d35c42cd58",
     :changed-paths
     ["ConstructionTargets/t96A06Closure.lean"
@@ -36796,7 +36807,7 @@
      "24189c1dc94adcf4d15a03196b4105c737fd41828514844d150757cca2cd3ce7"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -36814,7 +36825,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t96A06Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed the exact S3-to-RP3 quotient projection and antipodal fiber classification; covering transfer remains.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed open-map and local-homeomorphism structure for exact S3-to-RP3 projection; common two-sheet trivialization remains.",
    :id :program-2026-10-13-close-t96a06,
    :kind :final-adapter,
    :campaign-priority 31,
@@ -36834,7 +36845,11 @@
     {:job 5,
      :commit "300329fda93c12ce54fb62b3ba5f243ba812118a",
      :reason
-     "Committed the exact S3-to-RP3 quotient projection and antipodal fiber classification; covering transfer remains."}]}
+     "Committed the exact S3-to-RP3 quotient projection and antipodal fiber classification; covering transfer remains."}
+    {:job 6,
+     :commit "ddec9674fe0129e68cff55ab38c5a0d35c42cd58",
+     :reason
+     "Committed open-map and local-homeomorphism structure for exact S3-to-RP3 projection; common two-sheet trivialization remains."}]}
   {:consumer :t96J05,
    :stop-count 0,
    :phase :implementation,
@@ -38425,7 +38440,7 @@
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "kleinBottle_pi1_every_basepoint_of_vanKampen_inputs",
@@ -38437,7 +38452,9 @@
     :type
     "winding conjugacy plus based van Kampen imply Klein pi1 presentation at every basepoint",
     :area "covering-subgroup-correspondence",
-    :proved-in :program-2026-10-13-close-t93j03},
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t93J03Closure.lean"]},
    :id :lemma-kleinbottle-pi1-every-basepoint-of-vankampen-inputs,
    :kind :lemma,
    :depends-on
@@ -38445,7 +38462,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "rp3SphereProjection_isLocalHomeomorph",
@@ -38455,7 +38472,9 @@
     :reported-by [:program-2026-10-13-close-t96a06],
     :type "S3 projection to frozen RP3 is a local homeomorphism",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :program-2026-10-13-close-t96a06,
+    :banked-commit "ddec9674fe0129e68cff55ab38c5a0d35c42cd58"},
    :id :lemma-rp3sphereprojection-islocalhomeomorph,
    :kind :lemma,
    :depends-on [:lemma-t96a06-rp3-sphere-quotient],
