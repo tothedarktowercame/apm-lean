@@ -631,12 +631,96 @@ lemma t96J02_cut_continuous (hchart : Continuous t96J02_cut_chart) :
       (Quotient.mk _ (t96J02_cut_raw z) : T96J02SquarePolygonQuotient)) := by
   sorry
 
+lemma t96J02_paste_continuous_aux_clamp :
+    Continuous t96J02_cut_clampDisk := by
+  apply Continuous.subtype_mk
+  have hm : Continuous (fun z : ℂ => max 1 ‖z‖) :=
+    continuous_const.max continuous_norm
+  have hd : Continuous (fun z : ℂ => (1 / max 1 ‖z‖ : ℝ)) :=
+    continuous_const.div hm (fun z => ne_of_gt (lt_of_lt_of_le zero_lt_one (le_max_left _ _)))
+  exact (Complex.continuous_ofReal.comp hd).mul continuous_id
+
+lemma t96J02_paste_continuous_aux_L :
+    Continuous (fun p : T96J02ClosedSquare => t96J02_paste_L p.1) := by
+  convert Complex.equivRealProdCLM.symm.continuous.comp
+    ((continuous_snd.comp continuous_subtype_val).neg.prodMk
+    (((continuous_const.mul (continuous_fst.comp continuous_subtype_val)).sub
+      continuous_const).sub (continuous_snd.comp continuous_subtype_val))) using 1
+
+lemma t96J02_paste_continuous_aux_R :
+    Continuous (fun p : T96J02ClosedSquare => t96J02_paste_R p.1) := by
+  convert Complex.equivRealProdCLM.symm.continuous.comp
+    ((continuous_const.sub (continuous_snd.comp continuous_subtype_val)).prodMk
+    ((continuous_snd.comp continuous_subtype_val).sub
+      (continuous_const.mul (continuous_fst.comp continuous_subtype_val)))) using 1
+
 lemma t96J02_paste_continuous (hinv : Continuous t96J02_cut_chartInv)
     (hedge2 : ∀ z : Disk, ‖(z : ℂ)‖ = 1 → (z : ℂ).re ≤ 0 → (z : ℂ).im ≤ 0 →
       ∃ t : Set.Icc (0 : ℝ) 1, z = edgePoint 4 2 t) :
     Continuous (fun p : T96J02ClosedSquare =>
       surfaceQuotient false 2 (t96J02_paste_raw p)) := by
-  sorry
+  let fL : T96J02ClosedSquare → Surface false 2 := fun p =>
+    surfaceQuotient false 2
+      (t96J02_cut_clampDisk (t96J02_cut_chartInv (t96J02_paste_L p.1)))
+  let fR : T96J02ClosedSquare → Surface false 2 := fun p =>
+    surfaceQuotient false 2
+      (t96J02_cut_clampDisk (t96J02_cut_chartInv (t96J02_paste_R p.1)))
+  have hL : Continuous fL := by
+    apply (continuous_surfaceQuotient false 2).comp
+    apply t96J02_paste_continuous_aux_clamp.comp
+    apply hinv.comp
+    exact t96J02_paste_continuous_aux_L
+  have hR : Continuous fR := by
+    apply (continuous_surfaceQuotient false 2).comp
+    apply t96J02_paste_continuous_aux_clamp.comp
+    apply hinv.comp
+    exact t96J02_paste_continuous_aux_R
+  have hif : Continuous (fun p : T96J02ClosedSquare =>
+      if p.1.2 ≤ p.1.1 then fL p else fR p) := by
+    apply hL.if_le hR (continuous_snd.comp continuous_subtype_val)
+      (continuous_fst.comp continuous_subtype_val)
+    intro p hp
+    change p.1.2 = p.1.1 at hp
+    have hp0 : 0 ≤ p.1.1 := p.2.1
+    have hp1 : p.1.1 ≤ 1 := p.2.2.1
+    have hw : t96J02_paste_R p.1 = Complex.I * t96J02_paste_L p.1 := by
+      apply Complex.ext <;> simp [t96J02_paste_L, t96J02_paste_R, hp] <;> ring
+    let z : Disk := t96J02_cut_clampDisk
+      (t96J02_cut_chartInv (t96J02_paste_L p.1))
+    have hl1 : t96J02_cut_l1 (t96J02_paste_L p.1) = 1 := by
+      unfold t96J02_cut_l1 t96J02_paste_L
+      rw [show 2 * p.1.1 - 1 - p.1.2 = p.1.1 - 1 by rw [hp]; ring]
+      simp [hp, abs_of_nonneg hp0,
+        abs_of_nonpos (sub_nonpos.mpr hp1)]
+    have hn : ‖(z : ℂ)‖ = 1 := by
+      simp [z, t96J02_cut_clampDisk, t96J02_cut_norm_chartInv, hl1]
+    obtain ⟨c, hc, hcz⟩ := t96J02_cut_chartInv_pos (t96J02_paste_L p.1)
+    have hzval : (z : ℂ) = t96J02_cut_chartInv (t96J02_paste_L p.1) := by
+      simp [z, t96J02_cut_clampDisk, t96J02_cut_norm_chartInv, hl1]
+    have hzre : (z : ℂ).re ≤ 0 := by
+      rw [hzval, hcz]
+      simp [t96J02_paste_L]
+      exact mul_nonneg hc.le (hp ▸ hp0)
+    have hzim : (z : ℂ).im ≤ 0 := by
+      rw [hzval, hcz]
+      simp [t96J02_paste_L, hp, hc.le]
+      nlinarith
+    obtain ⟨t, ht⟩ := hedge2 z hn hzre hzim
+    have hright : t96J02_cut_clampDisk
+        (t96J02_cut_chartInv (t96J02_paste_R p.1)) = edgePoint 4 3 t := by
+      rw [hw, t96J02_cut_chartInv_I]
+      apply Subtype.ext
+      rw [← hzval, ht, (t96J02_cut_edge_succ t).2]
+      simp [t96J02_cut_clampDisk, edgePoint, Complex.norm_exp]
+    change surfaceQuotient false 2 z = surfaceQuotient false 2 _
+    rw [hright, ht]
+    apply Quotient.sound
+    exact Relation.EqvGen.rel _ _
+      (KleinSquareEdgeOrientation.surfaceRel_edge_two_three t)
+  apply hif.congr
+  intro p
+  simp only [t96J02_paste_raw, fL, fR]
+  split <;> rfl
 
 lemma t96J02_cut_rel
     (hedge0 : ∀ t : Set.Icc (0 : ℝ) 1, ‖(edgePoint 4 0 t : ℂ)‖ = 1 ∧
