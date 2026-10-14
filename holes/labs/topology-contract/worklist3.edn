@@ -36159,6 +36159,17 @@
       :exit 1,
       :correction
       "replaced later local inclusion name with explicit continuous subtype map"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791962372837-11688-124a6eba",
+     :commands
+     ["git show/diff/show --check 922abd5a"
+      "sha256sum fixture; scope; placeholders"
+      "lake env lean recorded closure, fixture, Main"
+      "statement-registry.py check"],
+     :finding
+     "PASS: new compiled sorry-free standard-axiom milestone. Given the explicitly retained winding conjugacy, skeleton-map surjectivity, and van Kampen kernel equality, the equivalence is assembled in the correct direction by inverting the first-isomorphism map, rewriting the quotient subgroup, and applying the skeleton presentation equivalence. Those topological hypotheses remain accurately listed. Scope/hash verified; frozen placeholders 1->1 (support 0); registry 166/166; SLSC unused, mandated by problem.md."},
     :commit "922abd5ab2afae5570d16d39dffb443a274990d7",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
@@ -36169,7 +36180,7 @@
      "99bf556d884aad65acb50e01b211988debca95d422f5a794eef888b7eeb9e681"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -36187,7 +36198,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t93J03Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed actual overlap-image normal closure in skeleton coordinates; geometric conjugacy and van Kampen kernel remain.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed exact first-isomorphism assembly from winding conjugacy and based van Kampen hypotheses.",
    :id :program-2026-10-13-close-t93j03,
    :kind :final-adapter,
    :campaign-priority 30,
@@ -36333,7 +36344,11 @@
     {:job 8,
      :commit "cb58e058246984b895a459e89324c923288a9b51",
      :reason
-     "Committed actual overlap-image normal closure in skeleton coordinates; geometric conjugacy and van Kampen kernel remain."}]}
+     "Committed actual overlap-image normal closure in skeleton coordinates; geometric conjugacy and van Kampen kernel remain."}
+    {:job 9,
+     :commit "922abd5ab2afae5570d16d39dffb443a274990d7",
+     :reason
+     "Committed exact first-isomorphism assembly from winding conjugacy and based van Kampen hypotheses."}]}
   {:consumer :t99J05,
    :stop-count 5,
    :evidence
@@ -38411,7 +38426,7 @@
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "kleinPolygonFundamentalGroupEquivPresented_of_vanKampen",
@@ -38423,7 +38438,9 @@
     :type
     "winding conjugacy plus surjective skeleton map and overlap-normal-closure kernel imply polygon pi1 equiv PresentedGroup(aabb)",
     :area "covering-subgroup-correspondence",
-    :proved-in :program-2026-10-13-close-t93j03},
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "922abd5ab2afae5570d16d39dffb443a274990d7"},
    :id :lemma-kleinpolygonfundamentalgroupequivpresented-of-vankampen,
    :kind :lemma,
    :depends-on
