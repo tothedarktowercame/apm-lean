@@ -87945,6 +87945,18 @@
     [{:cmd "MV/transport drafts",
       :exit 1,
       :correction "fixed namespaces and iso orientations"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792006666006-12266-93949341",
+     :commands
+     ["git show/diff 061d4d710; blob sha256; diff --check"
+      "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology"
+      "lake env lean /dev/stdin (#print axioms)"
+      "placeholder scan"
+      "statement-registry.py check"],
+     :finding
+     "PASS: 061d4d710 (topo-6) changes only scoped PolygonSurfaceHomology.lean; fixture SHA-256 a438062c8f74c4be2ea3c2bdffda7b62f994accef55f1ca59263c571e7c858c1 matches. Exact blob builds; 0 placeholders; three milestones use standard axioms; registry 166/0. MV uses intersection vanishing in n and n-1 (valid for n>=2) to make reassembly mono and epi. Induction correctly uses Fin1=circle and successor wedge splitting; isomorphisms transport vanishing to orbit wedges and the outer piece in the correct direction. New compiled progress; remaining: B6-B10."},
     :commit "061d4d710",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
@@ -87953,7 +87965,7 @@
      "a438062c8f74c4be2ea3c2bdffda7b62f994accef55f1ca59263c571e7c858c1"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -87973,7 +87985,7 @@
     :blueprint
     "ConstructionTargets/PolygonSurfaceHomology.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked radial outer-piece H1 coordinates.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked finite-wedge and radial outer-piece higher homology vanishing.",
    :id :program-2026-10-13-polygon-surface-homology,
    :kind :reusable-theorem,
    :campaign-priority 31,
@@ -88165,7 +88177,11 @@
      "Banked coordinate surjectivity and fixed-basis H1 isomorphism."}
     {:job 7,
      :commit "2a5c82eda",
-     :reason "Banked radial outer-piece H1 coordinates."}]}
+     :reason "Banked radial outer-piece H1 coordinates."}
+    {:job 8,
+     :commit "061d4d710",
+     :reason
+     "Banked finite-wedge and radial outer-piece higher homology vanishing."}]}
   {:consumer :t97A01,
    :stop-count 0,
    :phase :implementation,
@@ -90888,7 +90904,7 @@
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "finiteWedgeHigherHomologyIsZero",
@@ -90898,14 +90914,16 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "finite circle-wedge homology vanishes above degree one",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :program-2026-10-13-polygon-surface-homology,
+    :banked-commit "061d4d710"},
    :id :lemma-finitewedgehigherhomologyiszero,
    :kind :lemma,
    :depends-on [:lemma-pointwedgehigherhomologyiszero],
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "outerHigherHomologyIsZero",
@@ -90915,7 +90933,9 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "outer radial homology vanishes above degree one",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :program-2026-10-13-polygon-surface-homology,
+    :banked-commit "061d4d710"},
    :id :lemma-outerhigherhomologyiszero,
    :kind :lemma,
    :depends-on
@@ -90924,7 +90944,7 @@
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "pointWedgeHigherHomologyIsZero",
@@ -90934,7 +90954,9 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "point wedge preserves H_n=0 for n>=2",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :program-2026-10-13-polygon-surface-homology,
+    :banked-commit "061d4d710"},
    :id :lemma-pointwedgehigherhomologyiszero,
    :kind :lemma,
    :depends-on [],
