@@ -29470,7 +29470,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "surfaceTopHomology_localFundamentalClassIso",
@@ -29481,7 +29481,9 @@
     :reported-by [:owner],
     :type
     "For a compact oriented surface S and y : S, H_2(S;Z) -> H_2(S,S\\{y};Z) is an isomorphism and the local group is Z, naturally in maps  (size: 250-500 lines / 2-4 days residual)",
-    :area "manifold-fundamental-class"},
+    :area "manifold-fundamental-class",
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t00J02Closure.lean"]},
    :id :lemma-surfacetophomology-localfundamentalclassiso,
    :kind :lemma,
    :depends-on [],
@@ -36159,6 +36161,17 @@
     [{:cmd "lean fixture",
       :exit 1,
       :correction "marked check noncomputable; rerun passed"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791950290055-11552-553be1d8",
+     :commands
+     ["git show/diff/show --check 04bd64ef"
+      "sha256sum fixture; scope; placeholders"
+      "lake env lean recorded closure, fixture, Main"
+      "statement-registry.py check"],
+     :finding
+     "PASS: new compiled sorry-free standard-axiom milestone. Skeleton path-connectedness supplies a path from the deformed overlap image to the preferred skeleton point; composing the correctly oriented path transport lands at the exact basepoint used by fixed FreeGroup coordinates. Winding-one image=aabb and quotient remain accurately listed. Scope/hash verified; frozen placeholders 1->1 (support 0); registry 166/166; SLSC unused, mandated by problem.md."},
     :commit "04bd64ef15ae2e68a2145986ee81c2c153d272b4",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
@@ -36170,7 +36183,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -36188,7 +36201,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t93J03Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed based outer-to-skeleton pi1 equivalence at exact overlap image; winding comparison remains.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed path and pi1 transport to preferred skeleton point; winding comparison remains.",
    :id :program-2026-10-13-close-t93j03,
    :kind :final-adapter,
    :campaign-priority 30,
@@ -36298,7 +36311,11 @@
     {:job 8,
      :commit "f4e25e72be4536e94d2bcbc3e30de690de1f659c",
      :reason
-     "Committed based outer-to-skeleton pi1 equivalence at exact overlap image; winding comparison remains."}]}
+     "Committed based outer-to-skeleton pi1 equivalence at exact overlap image; winding comparison remains."}
+    {:job 9,
+     :commit "04bd64ef15ae2e68a2145986ee81c2c153d272b4",
+     :reason
+     "Committed path and pi1 transport to preferred skeleton point; winding comparison remains."}]}
   {:consumer :t99J05,
    :stop-count 5,
    :evidence
@@ -38136,7 +38153,7 @@
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -38150,7 +38167,9 @@
     :type
     "overlap-image pi1 equiv skeleton pi1 at preferred basepoint",
     :area "covering-subgroup-correspondence",
-    :proved-in :program-2026-10-13-close-t93j03},
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "04bd64ef15ae2e68a2145986ee81c2c153d272b4"},
    :id
    :lemma-kleinpolygonoverlapimagefundamentalgroupequivatskeletonpoint,
    :kind :lemma,
