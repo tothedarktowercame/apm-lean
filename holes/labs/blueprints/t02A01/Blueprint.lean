@@ -176,6 +176,41 @@ theorem apm_t02a01_restrictedCover_isCovering
     IsCoveringMap (apm_t02a01_restrictedCover p) := by
   exact hcover.restrictPreimage apm_t02a01_boundary
 
+theorem apm_t02a01_boundary_monodromy_is_deck_commutator_aux_deck_injective
+    {Stilde : Type*} [TopologicalSpace Stilde]
+    (p : Stilde → apm_t02a01_puncturedTorus) (n : ℕ)
+    (deck : ZMod n → Homeomorph Stilde Stilde)
+    (hdeck_over : ∀ z x, p (deck z x) = p x)
+    (hdeck_transitive : ∀ x y, p x = p y → ∃! z, deck z x = y)
+    (x : Stilde) : Function.Injective (fun z ↦ deck z x) := by
+  intro z w hzw
+  obtain ⟨q, hq, hqu⟩ :=
+    hdeck_transitive x (deck z x) (hdeck_over z x).symm
+  exact (hqu z rfl).trans (hqu w hzw.symm).symm
+
+theorem apm_t02a01_boundary_monodromy_is_deck_commutator_aux_endpoint_deck
+    {Stilde : Type*} [TopologicalSpace Stilde]
+    (p : Stilde → apm_t02a01_puncturedTorus) (n : ℕ)
+    (hcov : IsCoveringMap (apm_t02a01_restrictedCover p))
+    (deck : ZMod n → Homeomorph Stilde Stilde)
+    (hdeck_over : ∀ z x, p (deck z x) = p x)
+    (hdeck_transitive : ∀ x y, p x = p y → ∃! z, deck z x = y)
+    (e : p ⁻¹' apm_t02a01_boundary)
+    (gamma : FundamentalGroup apm_t02a01_boundarySpace
+      (apm_t02a01_restrictedCover p e)) :
+    ∃! z : ZMod n, (hcov.monodromy gamma ⟨e, rfl⟩).1.1 = deck z e.1 := by
+  let y : Stilde := (hcov.monodromy gamma ⟨e, rfl⟩).1.1
+  have hpy : p e.1 = p y := by
+    have hy := congrArg Subtype.val (hcov.monodromy gamma ⟨e, rfl⟩).2
+    change p y = p e.1 at hy
+    exact hy.symm
+  obtain ⟨z, hz, hzu⟩ := hdeck_transitive e.1 y hpy
+  apply ExistsUnique.intro z hz.symm
+  · intro y hy
+    apply apm_t02a01_boundary_monodromy_is_deck_commutator_aux_deck_injective
+        p n deck hdeck_over hdeck_transitive e.1
+    exact hy.symm.trans hz.symm
+
 /-- LIBRARY (polygon boundary word): lifting any loop on the inner boundary of
 the square-annulus quotient ends at a deck translate by a commutator.
 Repaired 2026-10-14 (lemma-6 counterexample): `deck` must be an action
