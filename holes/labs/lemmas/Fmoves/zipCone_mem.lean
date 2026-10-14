@@ -3213,7 +3213,65 @@ theorem zipCone_mem {n k : ℕ} (hmem : ∀ b, zipBoundaryMap n k b ∈ zipHalfB
     {z : ℂ} (hz : ‖z‖ ≤ 1) :
     zipCone n k z ∈ zipHalfDisk ∧
       (‖z‖ < 1 → ‖zipCone n k z‖ < 1 ∧ 0 < (zipCone n k z).im) := by
-  sorry
+  by_cases hzero : z = 0
+  · subst z
+    norm_num [zipCone, zipHalfDisk, zipCentre, Complex.norm_def]
+  · let b : Circle :=
+      ⟨((‖z‖⁻¹ : ℝ) : ℂ) * z,
+        by simp [Circle, Submonoid.unitSphere, norm_mul, hzero]⟩
+    let p : ℂ := zipBoundaryMap n k b
+    have hp : p ∈ zipHalfBoundary := hmem b
+    have hp_norm : ‖p‖ ≤ 1 := by
+      rcases hp with hp | hp
+      · exact hp.1.le
+      · have hpreal : p = (p.re : ℂ) := by
+          apply Complex.ext
+          · simp
+          · simpa using hp.1
+        rw [hpreal, Complex.norm_real]
+        exact hp.2
+    have hp_im : 0 ≤ p.im := by
+      rcases hp with hp | hp
+      · exact hp.2
+      · simp [hp.1]
+    have hr0 : 0 ≤ ‖z‖ := norm_nonneg z
+    have hformula : zipCone n k z =
+        ((1 - ‖z‖ : ℝ) : ℂ) * zipCentre + ((‖z‖ : ℝ) : ℂ) * p := by
+      simp only [zipCone, hzero, ↓reduceDIte, p, b]
+      push_cast
+      ring
+    have hc : ‖zipCentre‖ = (1 : ℝ) / 2 := by
+      norm_num [zipCentre, Complex.norm_def]
+    have hnorm : ‖zipCone n k z‖ ≤ (1 - ‖z‖) / 2 + ‖z‖ := by
+      rw [hformula]
+      calc
+        ‖((1 - ‖z‖ : ℝ) : ℂ) * zipCentre + ((‖z‖ : ℝ) : ℂ) * p‖
+            ≤ ‖((1 - ‖z‖ : ℝ) : ℂ) * zipCentre‖ +
+                ‖((‖z‖ : ℝ) : ℂ) * p‖ := norm_add_le _ _
+        _ = (1 - ‖z‖) / 2 + ‖z‖ * ‖p‖ := by
+          rw [norm_mul, norm_mul, Complex.norm_real, Complex.norm_real, hc]
+          simp only [Real.norm_eq_abs, abs_of_nonneg hr0,
+            abs_of_nonneg (sub_nonneg.mpr hz)]
+          ring
+        _ ≤ (1 - ‖z‖) / 2 + ‖z‖ := by
+          simpa using add_le_add_left (mul_le_mul_of_nonneg_left hp_norm hr0)
+            ((1 - ‖z‖) / 2)
+    have him : (zipCone n k z).im = (1 - ‖z‖) / 2 + ‖z‖ * p.im := by
+      rw [hformula]
+      simp [zipCentre]
+      ring
+    constructor
+    · rw [zipHalfDisk]
+      constructor
+      · linarith
+      · rw [him]
+        nlinarith [mul_nonneg hr0 hp_im]
+    · intro hstrict
+      constructor
+      · linarith
+      · rw [him]
+        have : 0 < (1 - ‖z‖) / 2 := by linarith
+        nlinarith [mul_nonneg hr0 hp_im]
 -- END SEAT AREA
 
 theorem zipCone_injOn {n k : ℕ} (hmem : ∀ b, zipBoundaryMap n k b ∈ zipHalfBoundary)
