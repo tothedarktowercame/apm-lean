@@ -2413,6 +2413,42 @@ noncomputable def finiteWedgeFinLoopWordValue (n : ℕ)
       (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1) :=
   (w.map fun q => finiteWedgeFinLegMap n q.1 q.2).prod
 
+/-- The installed old-factor map preserves arbitrary loop letters and sends
+their labels through `Fin.castSucc`. -/
+theorem finiteWedgeFinSuccOldFundamentalGroupMap_leg (n : ℕ)
+    (i : Fin (n + 1)) (g : FundamentalGroup Circle 1) :
+    finiteWedgeFinSuccOldFundamentalGroupMap n (finiteWedgeFinLegMap n i g) =
+      finiteWedgeFinLegMap (n + 1) i.castSucc g := by
+  induction g using Path.Homotopic.Quotient.ind with
+  | mk p =>
+      rw [finiteWedgeFinLegMap, finiteWedgeFinSuccOldFundamentalGroupMap,
+        FundamentalGroup.mapOfEq_apply, FundamentalGroup.mapOfEq_apply,
+        finiteWedgeFinLegMap, FundamentalGroup.mapOfEq_apply]
+      apply Path.Homotopic.Quotient.eq.mpr
+      convert Path.Homotopic.refl
+        ((p.map (PolygonSurfacePiOne.PointWedgeQuotient.continuous_wedgeCircle
+          i.castSucc)).cast _ _) using 1
+
+/-- The installed final-factor map preserves arbitrary loop letters and sends
+the unique label to `Fin.last`. -/
+theorem finiteWedgeFinSuccLastFundamentalGroupMap_leg (n : ℕ)
+    (g : FundamentalGroup Circle 1) :
+    finiteWedgeFinSuccLastFundamentalGroupMap n (finiteWedgeUnitLegMap g) =
+      finiteWedgeFinLegMap (n + 1) (Fin.last (n + 1)) g := by
+  induction g using Path.Homotopic.Quotient.ind with
+  | mk p =>
+      rw [finiteWedgeUnitLegMap, FundamentalGroup.map_apply,
+        finiteWedgeFinSuccLastFundamentalGroupMap]
+      change (FundamentalGroup.mapOfEq (finiteWedgeFinSuccLastInclusion n) _)
+          (Path.Homotopic.Quotient.mk
+            (p.map (PolygonSurfacePiOne.PointWedgeQuotient.continuous_wedgeCircle ()))) = _
+      rw [FundamentalGroup.mapOfEq_apply, finiteWedgeFinLegMap,
+        FundamentalGroup.mapOfEq_apply]
+      apply Path.Homotopic.Quotient.eq.mpr
+      convert Path.Homotopic.refl
+        ((p.map (PolygonSurfacePiOne.PointWedgeQuotient.continuous_wedgeCircle
+          (Fin.last (n + 1)))).cast _ _) using 1
+
 /-- Mapping the installed old-factor inclusion across the splitting
 homeomorphism recovers the literal left point-wedge leg map. -/
 theorem finiteWedgeFinSuccOldFundamentalGroupMap_comparison (n : ℕ)
