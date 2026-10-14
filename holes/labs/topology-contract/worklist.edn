@@ -119111,6 +119111,17 @@
      {:cmd "hash/diff/placeholders", :exit 0}],
     :diagnostic-history
     [{:cmd "lift draft", :exit 1, :finding "fixed casts/choice/Mono"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1792005136538-12230-4c723f19",
+     :commands
+     ["git diff-tree/show 8aa8be4"
+      "git archive 8aa8be4; lake env lean t00J02Closure.lean and Main.lean"
+      "sha256sum and placeholder counts at 8aa8be4"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS program STOP: new in-scope commit assigns every occupied genuine component an exact boundary parametrization with equal range and a commuting circle lift of degree zero, using disk boundedness and essentiality in the correct directions. Archived files compile; closure has 0 placeholders and standard axioms only; Main remains frozen at 0b3b4888 with baseline 1 placeholder; fixture afb497a6 matches; registry 166/166. Local degrees, component-sum comparison, and final assembly remain listed."},
     :commit "8aa8be49e5271bdc8f77f9ad025131f3f38d45de",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
@@ -119119,7 +119130,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119137,7 +119148,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t00J02Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked finite occupied components.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked exact component lifts.",
    :id :program-2026-10-13-close-t00j02,
    :kind :final-adapter,
    :campaign-priority 45,
@@ -119194,7 +119205,10 @@
      :reason "Banked component-degree aggregation."}
     {:job 6,
      :commit "63b0caefb1239e8f32f0e496841f0cb825ac527f",
-     :reason "Banked finite occupied components."}]}
+     :reason "Banked finite occupied components."}
+    {:job 7,
+     :commit "8aa8be49e5271bdc8f77f9ad025131f3f38d45de",
+     :reason "Banked exact component lifts."}]}
   {:consumer :t98A06,
    :stop-count 1,
    :evidence
@@ -119710,7 +119724,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "occupiedRegularFiber_exactZeroDegreeLifts",
@@ -119720,7 +119734,9 @@
     :reported-by [:program-2026-10-13-close-t00j02],
     :type "exact occupied-component lifts have degree zero",
     :area "oriented-surface-degree",
-    :proved-in :program-2026-10-13-close-t00j02},
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "8aa8be49e5271bdc8f77f9ad025131f3f38d45de"},
    :id :lemma-occupiedregularfiber-exactzerodegreelifts,
    :kind :lemma,
    :depends-on [:lemma-occupiedregularfibercomponent],
