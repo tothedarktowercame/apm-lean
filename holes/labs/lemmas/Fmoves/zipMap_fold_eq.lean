@@ -3535,7 +3535,42 @@ theorem zipMap_fold_eq {n k : ℕ}
     (t : Icc (0 : ℝ) 1) :
     zipMap n k (edgePoint (n + 2) k t) =
       zipMap n k (edgePoint (n + 2) (k + 1) (reverseParameter t)) := by
-  sorry
+  have hnorm₁ : ‖(edgePoint (n + 2) k t : ℂ)‖ = 1 :=
+    norm_edgePoint (n + 2) k t
+  have hnorm₂ : ‖(edgePoint (n + 2) (k + 1) (reverseParameter t) : ℂ)‖ = 1 :=
+    norm_edgePoint (n + 2) (k + 1) (reverseParameter t)
+  have hcone₁ :
+      zipCone n k (edgePoint (n + 2) k t : ℂ) =
+        (((t : ℝ) - 1 : ℝ) : ℂ) := by
+    rw [zipCone_of_norm_one hnorm₁]
+    exact (hfold t).1
+  have hcone₂ :
+      zipCone n k (edgePoint (n + 2) (k + 1) (reverseParameter t) : ℂ) =
+        (((1 : ℝ) - t : ℝ) : ℂ) := by
+    rw [zipCone_of_norm_one hnorm₂]
+    simpa [reverseParameter] using (hfold (reverseParameter t)).2
+  have hraw :
+      zipRaw n k (edgePoint (n + 2) k t : ℂ) =
+        zipRaw n k
+          (edgePoint (n + 2) (k + 1) (reverseParameter t) : ℂ) := by
+    rw [zipRaw, zipRaw, hcone₁, hcone₂]
+    congr 1
+    push_cast
+    ring
+  unfold zipMap
+  by_cases hle :
+      ‖zipRaw n k (edgePoint (n + 2) k t : ℂ)‖ ≤ 1
+  · have hle' :
+        ‖zipRaw n k
+          (edgePoint (n + 2) (k + 1) (reverseParameter t) : ℂ)‖ ≤ 1 := by
+      rwa [← hraw]
+    rw [dif_pos hle, dif_pos hle']
+    exact Subtype.ext hraw
+  · have hle' :
+        ¬ ‖zipRaw n k
+          (edgePoint (n + 2) (k + 1) (reverseParameter t) : ℂ)‖ ≤ 1 := by
+      rwa [← hraw]
+    rw [dif_neg hle, dif_neg hle']
 -- END SEAT AREA
 
 /-- Boundary fibres of the zip: a point, or a pair `x(t)`, `x⁻¹(1-t)`. -/
