@@ -9,6 +9,7 @@ import ConstructionTargets.CoefficientSigmaConstFinsuppComparison
 import ConstructionTargets.SingularHomologyHomotopy
 import ConstructionTargets.DegreeOneHurewiczSurjective
 import ConstructionTargets.CircleHurewiczIsomorphism
+import ConstructionTargets.PointWedgeVanKampen
 
 /-!
 # Homology of one-vertex polygon quotients
@@ -1545,6 +1546,38 @@ theorem exists_coprodLegWord_of_mulEquiv
       change coprodLegWordValue left right wu *
           coprodLegWordValue left right wv = E.symm (u * v)
       rw [hu, hv, map_mul]
+
+/-- The generic van Kampen computation supplies literal leg words as soon as
+its remaining right-base conjugator is known to lie in the left factor. -/
+theorem genericPointWedge_exists_legWord_of_rightBase_inl
+    {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    [PathConnectedSpace X] [PathConnectedSpace Y]
+    (x₀ : X) (y₀ : Y) (M : Set Y) (N : Set X)
+    (hM : IsOpen M) (hN : IsOpen N) (hy : y₀ ∈ M) (hx : x₀ ∈ N)
+    (cM : ConstructionTargets.PointedPuncturedCircleContraction.PointedContraction
+      M ⟨y₀, hy⟩)
+    (cN : ConstructionTargets.PointedPuncturedCircleContraction.PointedContraction
+      N ⟨x₀, hx⟩)
+    (a : FundamentalGroup X x₀)
+    (ha : ConstructionTargets.PointWedgeVanKampen.genericPointWedgeIdentityGlobalRightBaseElement
+          x₀ y₀ M N hM hN hy hx cM cN = Monoid.Coprod.inl a)
+    (g : FundamentalGroup
+      (ConstructionTargets.PointWedgeQuotient.Wedge x₀ y₀)
+      (ConstructionTargets.PointWedgeQuotient.quotientMap x₀ y₀ (.inl x₀))) :
+    ∃ w : List (FundamentalGroup X x₀ ⊕ FundamentalGroup Y y₀),
+      coprodLegWordValue
+          (ConstructionTargets.PointWedgeVanKampen.genericPointWedgeLeftLegMap x₀ y₀)
+          (ConstructionTargets.PointWedgeVanKampen.genericPointWedgeRightLegMap x₀ y₀)
+          w = g := by
+  have hcoords :=
+    ConstructionTargets.PointWedgeVanKampen.genericPointWedgePartiallyNormalized_legCoordinates
+        x₀ y₀ M N hM hN hy hx cM cN a ha
+  exact exists_coprodLegWord_of_mulEquiv
+    (ConstructionTargets.PointWedgeVanKampen.genericPointWedgePartiallyNormalizedFundamentalGroupEquiv
+        x₀ y₀ M N hM hN hy hx cM cN a)
+    (ConstructionTargets.PointWedgeVanKampen.genericPointWedgeLeftLegMap x₀ y₀)
+    (ConstructionTargets.PointWedgeVanKampen.genericPointWedgeRightLegMap x₀ y₀)
+    hcoords.1 hcoords.2 g
 
 end
 
