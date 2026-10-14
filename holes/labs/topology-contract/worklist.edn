@@ -119066,60 +119066,53 @@
   {:consumer :t00J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 3,
+   :stop-count 4,
    :review-finding
    "Recorded fixture hash is malformed/mismatched: ledger has afb497a6df6187f797ce1df000700b7c24774e94f50633c1cc10b2aa0e8c82319196, but the recorded commit blueprint hashes to afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984. Repair fixture provenance. The archived closure otherwise compiles sorry-free with standard axioms; Main retains its one baseline sorry; registry 166/166.",
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
     :residual
-    "Prove component formula and global top-degree equality; assemble Main.",
+    "Construct component and top-degree localization formulas; assemble Main.",
     :outcome :stop,
-    :warnings ["Main sorryAx" "unrelated edit preserved"],
+    :warnings ["Main sorryAx" "unrelated t93J03 edits"],
     :missing-theorems
-    [{:name "RegularFiberLocalizedComponentFormula.toComparison",
-      :type "component localization supplies signed-count comparison",
+    [{:name "regularFiberTopDegreeFormula_of_localizedFormulas",
+      :type "component and top-degree formulas combine",
       :status :proved,
       :consumers [:t00J02],
-      :depends-on ["regularFiberLocalDegree_localization_eq"],
+      :depends-on
+      ["RegularFiberLocalizedComponentFormula.toComparison"],
       :area "oriented-surface-degree"}
      {:name "t00J02_transverse_diskBounded_topHomologyMap_eq_zero",
       :type "H2 map zero",
       :status :partial,
       :consumers [:t00J02],
       :depends-on
-      ["RegularFiberLocalizedComponentFormula.toComparison"
-       "topHomologyMap_eq_zero_of_localFundamentalClassComparisons"],
+      ["regularFiberTopDegreeFormula_of_localizedFormulas"],
       :area "oriented-surface-degree"}],
     :statement-hashes
     {:source
      "0b3b4888807bfa06c8d60d86829b75776394ea8aa45a98c933c087165521f923",
      :implementation
-     "42173f329aaaa05e30dd745bdc5c8e92b6b057c09c638597db3417228ab1919b",
+     "9c99a30aeab5f1df3ebc772bd08e624b61c94b0837141751c073b87f73a1aa5e",
      :blueprint
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984",
      :registry "166/166"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-2,
-    :reason "Banked component-localization interface.",
+    :reason "Banked top-degree localization interface.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t00J02Closure.lean",
       :exit 0}
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "hash/placeholders/diff", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1792012422558-12423-55d98b06",
-     :commands
-     ["git diff-tree/show d9b53e27"
-      "archive d9b53e27; lake env lean closure and Main"
-      "sha256sum/placeholders at d9b53e27"
-      "python3 scripts/statement-registry.py check"],
-     :finding
-     "PASS program STOP: new commit changes only t00J02Closure.lean and separates the componentwise localization obligation into an exact interface whose conversion preserves point-indexed local coefficients, component-indexed signs, and component sums equal to exact lift degrees. It does not claim the component formula or global top-degree equality is proved; both remain listed. Fixture/frozen hashes match; closure has 0 placeholders, Main baseline 1; archived files compile with standard axioms; registry 166/166."},
-    :commit "d9b53e27fd1b748a76d2241581da652f5532e6b4",
+    :diagnostic-history
+    [{:cmd "shared-sign draft",
+      :exit 1,
+      :finding "made sign an index"}],
+    :commit "a7feb28a91ce4aae5595b82b5cb443b7906e593d",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t00J02Closure.blueprint.md",
@@ -119127,7 +119120,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119428,7 +119421,8 @@
     :lemma-regularfiberlocaldegree-localization-eq
     :lemma-regularfibertopdegreeformula-of-localfundamentalclasscomparisons
     :lemma-tophomologymap-eq-zero-of-localfundamentalclasscomparisons
-    :lemma-regularfiberlocalizedcomponentformula-tocomparison],
+    :lemma-regularfiberlocalizedcomponentformula-tocomparison
+    :lemma-regularfibertopdegreeformula-of-localizedformulas],
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
@@ -120157,6 +120151,24 @@
    :id :lemma-regularfiberlocalizedcomponentformula-tocomparison,
    :kind :lemma,
    :depends-on [:lemma-regularfiberlocaldegree-localization-eq],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "regularFiberTopDegreeFormula_of_localizedFormulas",
+    :type "component and top-degree formulas combine"},
+   :lemma
+   {:name "regularFiberTopDegreeFormula_of_localizedFormulas",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type "component and top-degree formulas combine",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02},
+   :id :lemma-regularfibertopdegreeformula-of-localizedformulas,
+   :kind :lemma,
+   :depends-on
+   [:lemma-regularfiberlocalizedcomponentformula-tocomparison],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
