@@ -43,8 +43,93 @@ abbrev H (k : ℕ) (W : Type) [TopologicalSpace W] :=
 
 end APMT99A01
 
-/-- **LIBRARY boundary.** Van Kampen and integral cellular/singular homology
-for the three concrete finite two-dimensional CW quotients in this problem. -/
+/-- **LIBRARY boundary.** Van Kampen for the quotient with one degree-two cell. -/
+theorem t99A01_piOne_X :
+    Nonempty (FundamentalGroup APMT99A01.X
+      (APMT99A01.basepoint APMT99A01.degreeX) ≃*
+        Multiplicative (ZMod 2)) := by
+  sorry
+
+/-- **LIBRARY boundary.** Van Kampen for the quotient with degree-two and
+degree-four cells. -/
+theorem t99A01_piOne_Y :
+    Nonempty (FundamentalGroup APMT99A01.Y
+      (APMT99A01.basepoint APMT99A01.degreeY) ≃*
+        Multiplicative (ZMod 2)) := by
+  sorry
+
+/-- **LIBRARY boundary.** Van Kampen for the quotient with cells of degrees
+two, four, and five. -/
+theorem t99A01_piOne_Z :
+    Subsingleton (FundamentalGroup APMT99A01.Z
+      (APMT99A01.basepoint APMT99A01.degreeZ)) := by
+  sorry
+
+/-- **LIBRARY boundary.** The degree-zero integral homology of `X`. -/
+theorem t99A01_hZero_X :
+    Nonempty (APMT99A01.H 0 APMT99A01.X ≅ ModuleCat.of ℤ ℤ) := by
+  sorry
+
+/-- **LIBRARY boundary.** The degree-one integral homology of `X`. -/
+theorem t99A01_hOne_X :
+    Nonempty (APMT99A01.H 1 APMT99A01.X ≅ ModuleCat.of ℤ (ZMod 2)) := by
+  sorry
+
+/-- **LIBRARY boundary.** The degree-two integral homology of `X`. -/
+theorem t99A01_hTwo_X :
+    Limits.IsZero (APMT99A01.H 2 APMT99A01.X) := by
+  sorry
+
+/-- **LIBRARY boundary.** The degree-zero integral homology of `Y`. -/
+theorem t99A01_hZero_Y :
+    Nonempty (APMT99A01.H 0 APMT99A01.Y ≅ ModuleCat.of ℤ ℤ) := by
+  sorry
+
+/-- **LIBRARY boundary.** The degree-one integral homology of `Y`. -/
+theorem t99A01_hOne_Y :
+    Nonempty (APMT99A01.H 1 APMT99A01.Y ≅ ModuleCat.of ℤ (ZMod 2)) := by
+  sorry
+
+/-- **LIBRARY boundary.** The degree-two integral homology of `Y`. -/
+theorem t99A01_hTwo_Y :
+    Nonempty (APMT99A01.H 2 APMT99A01.Y ≅ ModuleCat.of ℤ ℤ) := by
+  sorry
+
+/-- **LIBRARY boundary.** The degree-zero integral homology of `Z`. -/
+theorem t99A01_hZero_Z :
+    Nonempty (APMT99A01.H 0 APMT99A01.Z ≅ ModuleCat.of ℤ ℤ) := by
+  sorry
+
+/-- **LIBRARY boundary.** The degree-one integral homology of `Z`. -/
+theorem t99A01_hOne_Z :
+    Limits.IsZero (APMT99A01.H 1 APMT99A01.Z) := by
+  sorry
+
+/-- **LIBRARY boundary.** The degree-two integral homology of `Z`. -/
+theorem t99A01_hTwo_Z :
+    Nonempty (APMT99A01.H 2 APMT99A01.Z ≅
+      ModuleCat.of ℤ (Fin 2 → ℤ)) := by
+  sorry
+
+/-- **LIBRARY boundary.** Integral homology of `X` vanishes above its CW
+dimension. -/
+theorem t99A01_hHigher_X (k : ℕ) (hk : 3 ≤ k) :
+    Limits.IsZero (APMT99A01.H k APMT99A01.X) := by
+  sorry
+
+/-- **LIBRARY boundary.** Integral homology of `Y` vanishes above its CW
+dimension. -/
+theorem t99A01_hHigher_Y (k : ℕ) (hk : 3 ≤ k) :
+    Limits.IsZero (APMT99A01.H k APMT99A01.Y) := by
+  sorry
+
+/-- **LIBRARY boundary.** Integral homology of `Z` vanishes above its CW
+dimension. -/
+theorem t99A01_hHigher_Z (k : ℕ) (hk : 3 ≤ k) :
+    Limits.IsZero (APMT99A01.H k APMT99A01.Z) := by
+  sorry
+
+/-- Assembly of the independent van Kampen and homology computations. -/
 theorem t99A01_attached_cells_computation :
     Nonempty (FundamentalGroup APMT99A01.X
       (APMT99A01.basepoint APMT99A01.degreeX) ≃*
@@ -68,7 +153,12 @@ theorem t99A01_attached_cells_computation :
       Limits.IsZero (APMT99A01.H k APMT99A01.X) ∧
       Limits.IsZero (APMT99A01.H k APMT99A01.Y) ∧
       Limits.IsZero (APMT99A01.H k APMT99A01.Z)) := by
-  sorry
+  exact ⟨t99A01_piOne_X, t99A01_piOne_Y, t99A01_piOne_Z,
+    t99A01_hZero_X, t99A01_hOne_X, t99A01_hTwo_X,
+    t99A01_hZero_Y, t99A01_hOne_Y, t99A01_hTwo_Y,
+    t99A01_hZero_Z, t99A01_hOne_Z, t99A01_hTwo_Z,
+    fun k hk ↦ ⟨t99A01_hHigher_X k hk, t99A01_hHigher_Y k hk,
+      t99A01_hHigher_Z k hk⟩⟩
 
 theorem apm_t99a01 :
     Nonempty (FundamentalGroup APMT99A01.X
