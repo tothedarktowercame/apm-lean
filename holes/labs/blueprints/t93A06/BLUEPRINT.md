@@ -203,34 +203,79 @@ period, so their product has average `1/4`.  Reversing the basis-vector order
 would change the determinant sign, but the definition uses `(e₀,e₁)`, the
 positive order.
 
-### `t93A06_not_exact_of_integral_quarter` — LIBRARY
+### Exactness/integral split
 
-**Statement.** A smooth torus two-form whose fundamental-square integral is
-`1/4` is not exact.
+The former 300–500 line LIBRARY leaf is split into the following parallel
+leaves.  `t93A06_pulledCoeff atlas η i x` is the coefficient of
+`projection*η` on the constant coordinate vector `eᵢ`.
 
-**Why true.** If `form = dη`, naturality of exterior derivative identifies its
-pullback with `d(projection*η)`.  That pulled-back one-form is periodic on
-opposite sides of the square.  Stokes/Green on the square expresses the
-integral as four boundary integrals; opposite edges cancel, so it is zero,
-contradicting `1/4 ≠ 0`.
+#### `t93A06_exact_integral_aux_pullback_d` — 100–150 lines, independent
 
-**Expected size.** 300–500 lines with the current low-level `Form`,
-`IsSmooth`, and `exteriorDerivative` definitions.  This is marked LIBRARY
-because the missing ingredient is the general chart calculus/naturality and
-Stokes interface identified by the audit (`manifoldForm_smooth_calculus`), not
-a problem-specific algebraic trick.  The closest sorry-free files are
-`ConstructionTargets.ManifoldFormTargets` (the definitions) and
-`ConstructionTargets.ExteriorDerivativeSimplexCalculus` (Euclidean simplex
-calculus), but neither supplies the required torus exact-integral theorem.
+Proves naturality `projection*(dη) = d(projection*η)`.  Unfold `pullback`,
+`exteriorDerivative`, and `inChart`; use the atlas compatibility of
+`chartAt Plane (projection x)` with the global identity chart on `Plane`,
+`atlas.quotient_localDiffeomorph`, `mfderiv_comp`, and the chain rule for
+`fderiv`.  Useful APIs are `HasMFDerivAt.mfderiv`,
+`IsLocalDiffeomorph.mfderivToContinuousLinearEquiv`, `extDeriv`,
+`fderiv_comp`, and `ContinuousAlternatingMap.compContinuousLinearMap`.
+This is the riskiest leaf: the local `exteriorDerivative` definition has no
+packaged naturality theorem, so its chart-change calculation must be exposed.
 
-**Dependencies.** It receives an atlas, smoothness, and the nonzero integral
-as hypotheses.  It can therefore be developed independently of the atlas,
-descent, and integral seats.
+#### `t93A06_exact_integral_aux_coeff_smooth` — 60–110 lines, independent
 
-**Truth check.** For an exact periodic one-form `P dx + Q dy`, Green's theorem
-gives the four edge terms; period one makes the top/bottom and left/right pairs
-cancel.  The check includes the constant and zero primitives, both of which
-give integral zero.  Since `(1/4 : ℝ) ≠ 0`, the stated conclusion follows.
+From `IsSmooth η`, proves the two one-variable coefficient slices are `C¹`.
+Use a local inverse of `projection` and rewrite the pulled-back coefficient in
+the relevant torus chart.  APIs: `IsLocalDiffeomorph.localInverse`,
+`contMDiffOn_localInverse`, `mfderiv_comp`, `ContDiff.comp`, and
+`ContDiff.of_le`.  The statement supplies exactly the regularity required by
+the FTC leaves and does not depend on naturality.
+
+#### `t93A06_exact_integral_aux_square_formula` — 80–140 lines, independent
+
+Given naturality explicitly, unfolds `torusIntegral`, `exteriorDerivative`,
+`extDeriv`, and the determinant on `(e₀,e₁)` to obtain
+`∫∫ ∂x Q - ∫∫ ∂y P`.  Use `Matrix.det_fin_two`,
+`ContinuousAlternatingMap.alternating`, `intervalIntegral.integral_sub`, and
+the coordinate `fderiv`/`deriv` lemmas.  Sign check: for `P dx + Q dy`, the
+positive basis `(e₀,e₁)` gives `∂x Q - ∂y P`, not its negative.
+
+#### `t93A06_exact_integral_aux_ftc_x` — 25–50 lines, independent
+
+Applies the one-dimensional FTC to `x ↦ Q x y`, pointwise in `y`, then
+rewrites under the outer integral.  Prefer
+`intervalIntegral.integral_deriv_eq_sub'`; alternatively produce
+`HasDerivAt` from `ContDiff.differentiable` and use
+`intervalIntegral.integral_eq_sub_of_hasDerivAt`.  `ContDiff` supplies both
+continuity of the derivative and interval integrability.
+
+#### `t93A06_exact_integral_aux_ftc_y` — 25–50 lines, independent
+
+The same argument for `y ↦ P x y`.  It is deliberately separate so both FTC
+seats can land in parallel.
+
+#### `t93A06_exact_integral_aux_periodic` — 40–80 lines, independent
+
+Proves opposite-edge equality of pulled-back coefficients.  The base points
+have equal projections by `AddCircle.coe_add_intCast`/`AddCircle.coe_one`, and
+the derivatives of projection at integer translates agree.  Unfold
+`t93A06_pulledCoeff` and `pullback`; use `projection`'s coordinate definition,
+`mfderiv` congruence, and extensionality.  Boundary points are harmless:
+`0` and `1` are literally the same `AddCircle 1` point, while the unrestricted
+other coordinate agrees on both sides.
+
+#### `t93A06_exact_integral_aux_boundary_cancel` — 5–15 lines, independent
+
+Rewrite both integrands to zero using the two periodicity hypotheses and
+`simp`.  This small leaf makes the cancellation/sign endpoint explicit.
+
+#### `t93A06_not_exact_of_integral_quarter` — assembly, sorry-free
+
+Destructs exactness as `form = dη`, applies naturality and the square formula,
+uses the two FTC identities and periodic cancellation, and contradicts
+`torusIntegral form = 1/4` by `linarith`.  Every preceding conclusion is
+passed explicitly, so no new leaf's axioms include another leaf's `sorry`.
+The zero and constant primitives yield zero on both sides; there is no empty
+domain or dimension-zero case (`Plane = Fin 2 → ℝ`, square `[0,1]²`).
 
 ### `t93A06_primitive_calculus`
 

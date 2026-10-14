@@ -231,16 +231,104 @@ theorem t93A06_torusIntegral_quarter (atlas : SmoothAtlas)
   change Matrix.det ![Pi.single 0 (1 : ℝ), Pi.single 1 (1 : ℝ)] = 1
   norm_num [Matrix.det_fin_two, Matrix.cons_val_zero, Matrix.cons_val_one]
 
-/-- LIBRARY: on this closed quotient torus, a smooth exact top form has zero
-fundamental-square integral.  Hence the descended form with integral `1/4`
-is not exact. -/
+/-- The two coordinate coefficients of the pullback of a torus one-form. -/
+def t93A06_pulledCoeff (atlas : SmoothAtlas)
+    (η : let _ := atlas.charts; Form Plane Torus 1) (i : Fin 2) (x : Plane) : ℝ := by
+  letI := atlas.charts
+  exact (pullback projection η x) (fun _ : Fin 1 ↦ (Pi.single i (1 : ℝ) : Plane))
+
+/-- Naturality of `exteriorDerivative` for the quotient local diffeomorphism.
+This is isolated from the subsequent coordinate integration. -/
+theorem t93A06_exact_integral_aux_pullback_d (atlas : SmoothAtlas)
+    (η : let _ := atlas.charts; Form Plane Torus 1)
+    (hη : letI := atlas.charts; IsSmooth η) :
+    letI := atlas.charts
+    pullback projection (exteriorDerivative η) =
+      exteriorDerivative (E := Plane) (M := Plane) (pullback projection η) := by
+  sorry
+
+/-- Smoothness of a torus one-form gives smooth coefficient functions after
+pullback to the plane. -/
+theorem t93A06_exact_integral_aux_coeff_smooth (atlas : SmoothAtlas)
+    (η : let _ := atlas.charts; Form Plane Torus 1)
+    (hη : letI := atlas.charts; IsSmooth η) :
+    (∀ y : ℝ, ContDiff ℝ 1
+      (fun x ↦ t93A06_pulledCoeff atlas η 1 ![x, y])) ∧
+    (∀ x : ℝ, ContDiff ℝ 1
+      (fun y ↦ t93A06_pulledCoeff atlas η 0 ![x, y])) := by
+  sorry
+
+/-- Coordinate formula for the integral of an exterior derivative.  The
+naturality equality is an explicit input so this leaf is parallel to it. -/
+theorem t93A06_exact_integral_aux_square_formula (atlas : SmoothAtlas)
+    (η : let _ := atlas.charts; Form Plane Torus 1)
+    (hnat : letI := atlas.charts
+      pullback projection (exteriorDerivative η) =
+        exteriorDerivative (E := Plane) (M := Plane) (pullback projection η)) :
+    letI := atlas.charts
+    torusIntegral (exteriorDerivative η) =
+      (∫ y : ℝ in 0..1, ∫ x : ℝ in 0..1,
+        deriv (fun s ↦ t93A06_pulledCoeff atlas η 1 ![s, y]) x) -
+      (∫ y : ℝ in 0..1, ∫ x : ℝ in 0..1,
+        deriv (fun t ↦ t93A06_pulledCoeff atlas η 0 ![x, t]) y) := by
+  sorry
+
+/-- One-variable FTC for the `x` derivative, already integrated in `y`. -/
+theorem t93A06_exact_integral_aux_ftc_x
+    (Q : ℝ → ℝ → ℝ) (hQ : ∀ y, ContDiff ℝ 1 (fun x ↦ Q x y)) :
+    (∫ y : ℝ in 0..1, ∫ x : ℝ in 0..1, deriv (fun s ↦ Q s y) x) =
+      ∫ y : ℝ in 0..1, (Q 1 y - Q 0 y) := by
+  sorry
+
+/-- One-variable FTC for the `y` derivative, already integrated in `x`. -/
+theorem t93A06_exact_integral_aux_ftc_y
+    (P : ℝ → ℝ → ℝ) (hP : ∀ x, ContDiff ℝ 1 (fun y ↦ P x y)) :
+    (∫ y : ℝ in 0..1, ∫ x : ℝ in 0..1, deriv (fun t ↦ P x t) y) =
+      ∫ x : ℝ in 0..1, (P x 1 - P x 0) := by
+  sorry
+
+/-- Pullback coefficients agree on opposite sides of the unit square. -/
+theorem t93A06_exact_integral_aux_periodic (atlas : SmoothAtlas)
+    (η : let _ := atlas.charts; Form Plane Torus 1) :
+    (∀ y : ℝ, t93A06_pulledCoeff atlas η 1 ![1, y] =
+      t93A06_pulledCoeff atlas η 1 ![0, y]) ∧
+    (∀ x : ℝ, t93A06_pulledCoeff atlas η 0 ![x, 1] =
+      t93A06_pulledCoeff atlas η 0 ![x, 0]) := by
+  sorry
+
+/-- The two FTC boundary terms vanish under opposite-edge periodicity. -/
+theorem t93A06_exact_integral_aux_boundary_cancel
+    (P Q : ℝ → ℝ → ℝ)
+    (hQ : ∀ y, Q 1 y = Q 0 y) (hP : ∀ x, P x 1 = P x 0) :
+    (∫ y : ℝ in 0..1, (Q 1 y - Q 0 y)) -
+      (∫ x : ℝ in 0..1, (P x 1 - P x 0)) = 0 := by
+  sorry
+
+/-- On this closed quotient torus, a smooth exact top form has zero
+fundamental-square integral.  The proof is now only assembly of naturality,
+coordinate FTC, and periodic cancellation. -/
 theorem t93A06_not_exact_of_integral_quarter (atlas : SmoothAtlas)
     (form : let _ := atlas.charts; Form Plane Torus 2)
     (hsmooth : letI := atlas.charts; IsSmooth form)
     (hint : letI := atlas.charts; torusIntegral form = 1 / 4) :
     letI := atlas.charts
     ¬ IsExact form := by
-  sorry
+  letI := atlas.charts
+  rintro ⟨η, hη, rfl⟩
+  have hnat := t93A06_exact_integral_aux_pullback_d atlas η hη
+  have hsquare := t93A06_exact_integral_aux_square_formula atlas η hnat
+  let P : ℝ → ℝ → ℝ := fun x y ↦ t93A06_pulledCoeff atlas η 0 ![x, y]
+  let Q : ℝ → ℝ → ℝ := fun x y ↦ t93A06_pulledCoeff atlas η 1 ![x, y]
+  obtain ⟨hQy, hPx⟩ := t93A06_exact_integral_aux_coeff_smooth atlas η hη
+  have hftcx := t93A06_exact_integral_aux_ftc_x Q hQy
+  have hftcy := t93A06_exact_integral_aux_ftc_y P hPx
+  obtain ⟨hQper, hPper⟩ := t93A06_exact_integral_aux_periodic atlas η
+  have hcancel := t93A06_exact_integral_aux_boundary_cancel P Q hQper hPper
+  have hz : torusIntegral (exteriorDerivative η) = 0 := by
+    rw [hsquare]
+    rw [hftcx, hftcy]
+    exact hcancel
+  linarith
 
 /-- Coordinate calculus for the explicit primitive: it is smooth and its
 exterior derivative is the source form. -/
