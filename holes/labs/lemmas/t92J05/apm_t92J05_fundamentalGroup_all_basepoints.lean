@@ -237,7 +237,11 @@ lemma apm_t92J05_fundamentalGroup_all_basepoints
     (hpath : PathConnectedSpace X)
     (hone : ∃ x₀ : X, Nonempty (FundamentalGroup X x₀ ≃* G)) :
     ∀ x : X, Nonempty (FundamentalGroup X x ≃* G) := by
-  sorry
+  letI : PathConnectedSpace X := hpath
+  obtain ⟨x₀, e⟩ := hone
+  intro x
+  exact
+    ⟨(FundamentalGroup.fundamentalGroupMulEquivOfPathConnected x x₀).trans e.some⟩
 -- END SEAT AREA
 
 /-- The antipodal two-sphere cover computes the fundamental group of the
