@@ -119110,6 +119110,17 @@
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "hash/diff/placeholders", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1792009355937-12337-d8522808",
+     :commands
+     ["git diff-tree/show 6bda5206"
+      "archive 6bda5206; lake env lean closure and Main"
+      "sha256sum/placeholders at 6bda5206"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS program STOP: new commit changes only t00J02Closure.lean and correctly derives zero pointwise signed count by the prior fiberwise reindexing plus component-sum/degree comparison; signs remain indexed by genuine component and no point/component representation is conflated. Fixture and frozen hashes match; closure has 0 placeholders, Main retains baseline 1; archived files compile with standard axioms; registry 166/166. Geometric component comparison, regular-value top-degree identity, and Main assembly remain listed."},
     :commit "6bda52066b6b819f9c6f1b27a16a8bed1d3457cd",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
@@ -119118,7 +119129,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119136,7 +119147,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t00J02Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Corrected fixture provenance; signed-count reindexing remains banked.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked zero point count from component comparison.",
    :id :program-2026-10-13-close-t00j02,
    :kind :final-adapter,
    :campaign-priority 45,
@@ -119215,7 +119226,10 @@
     {:job 5,
      :commit "45dab8131ff80411fe29265826a71b06cd9fdc26",
      :reason
-     "Corrected fixture provenance; signed-count reindexing remains banked."}]}
+     "Corrected fixture provenance; signed-count reindexing remains banked."}
+    {:job 6,
+     :commit "6bda52066b6b819f9c6f1b27a16a8bed1d3457cd",
+     :reason "Banked zero point count from component comparison."}]}
   {:consumer :t98A06,
    :stop-count 2,
    :evidence
@@ -119916,7 +119930,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "pointSignedCount_eq_zero_of_componentComparison",
@@ -119926,7 +119940,9 @@
     :reported-by [:program-2026-10-13-close-t00j02],
     :type "component comparison gives zero point count",
     :area "oriented-surface-degree",
-    :proved-in :program-2026-10-13-close-t00j02},
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "6bda52066b6b819f9c6f1b27a16a8bed1d3457cd"},
    :id :lemma-pointsignedcount-eq-zero-of-componentcomparison,
    :kind :lemma,
    :depends-on
