@@ -394,7 +394,42 @@ lemma apm_t01A02_boundary_ray_parameter_eq_zero
     (t : ℝ) (ht : 0 ≤ t)
     (htsphere : ‖x + t • (x - y)‖ = 1) :
     t = 0 := by
-  sorry
+  have hxy_norm : 0 < ‖x - y‖ ^ 2 := by
+    exact sq_pos_of_pos (norm_pos_iff.mpr (sub_ne_zero.mpr hxy))
+  have hinner_xy : inner ℝ x y ≤ 1 := by
+    calc
+      inner ℝ x y ≤ ‖x‖ * ‖y‖ := real_inner_le_norm x y
+      _ ≤ 1 * 1 := mul_le_mul hx.le hy (norm_nonneg y) (by norm_num)
+      _ = 1 := by norm_num
+  have hinner_nonneg : 0 ≤ inner ℝ x (x - y) := by
+    rw [inner_sub_right, real_inner_self_eq_norm_sq, hx]
+    norm_num at *
+    linarith
+  have hsquared :
+      inner ℝ (x + t • (x - y)) (x + t • (x - y)) = inner ℝ x x := by
+    rw [real_inner_self_eq_norm_sq, real_inner_self_eq_norm_sq,
+      htsphere, hx]
+  have heq :
+      t * inner ℝ (x - y) x + t * inner ℝ x (x - y) +
+        t ^ 2 * ‖x - y‖ ^ 2 = 0 := by
+    have hnormsmul : ‖t • (x - y)‖ ^ 2 = t ^ 2 * ‖x - y‖ ^ 2 := by
+      rw [norm_smul, Real.norm_eq_abs, abs_of_nonneg ht]
+      ring
+    simp only [inner_add_left, inner_add_right, real_inner_smul_left,
+      real_inner_smul_right, real_inner_self_eq_norm_sq] at hsquared
+    rw [hnormsmul] at hsquared
+    nlinarith
+  apply le_antisymm ?_ ht
+  by_contra hnot
+  have htpos : 0 < t := lt_of_not_ge hnot
+  have hinner_nonneg' : 0 ≤ inner ℝ (x - y) x := by
+    rwa [real_inner_comm]
+  have hfirst :
+      0 ≤ t * inner ℝ (x - y) x + t * inner ℝ x (x - y) :=
+    add_nonneg (mul_nonneg ht hinner_nonneg') (mul_nonneg ht hinner_nonneg)
+  have hsecond : 0 < t ^ 2 * ‖x - y‖ ^ 2 :=
+    mul_pos (sq_pos_of_pos htpos) hxy_norm
+  linarith
 -- END SEAT AREA
 
 /-- Sorry-free assembly of the ray leaves: a fixed-point-free disk self-map
