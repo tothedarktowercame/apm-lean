@@ -36164,6 +36164,16 @@
       :exit 1,
       :correction
       "rebuilt concurrent dependency; fixed nonempty proof"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1792009816796-12352-bf1489c8",
+     :commands
+     ["git show/check/diff 83b52a40; scope and fixture SHA-256"
+      "lake build ConstructionTargets.t93J03Closure; lean fixture and Main"
+      "statement-registry check; placeholder/axiom recount"],
+     :finding
+     "PASS: 83b52a40 adds compiled, sorry-free progress after d23066eb. The canonical boundary list is the initial subdivision point followed by each attached nonempty run target, giving exactly runs+1 points and the literal initial head. Blueprint is faithful; exact scope/hash match; closure placeholders 0->0; frozen Main remains 1; registry 166/166; standard axioms only. STOP lists outer-membership and subtype lifting of boundary points, fold instantiation, reverse kernel/surjectivity, winding, C1/C2/Main."},
     :commit "83b52a407f4be5673b93570b691710c7bd6ab7ed",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
@@ -36174,7 +36184,7 @@
      "3dd725e7a2a9785a40c2367d3cdb44dbc4722350d5decfc36583ca36d5514af1"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -36192,7 +36202,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t93J03Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Packaged each adjacent run boundary with literal endpoint equality and overlap membership; subtype family remains.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Defined the canonical run-boundary list with exact length and initial vertex; outer-membership remains.",
    :id :program-2026-10-13-close-t93j03,
    :kind :final-adapter,
    :campaign-priority 30,
@@ -36470,7 +36480,11 @@
     {:job 6,
      :commit "d23066ebf135266f6492546e82217349a47bc686",
      :reason
-     "Packaged each adjacent run boundary with literal endpoint equality and overlap membership; subtype family remains."}]}
+     "Packaged each adjacent run boundary with literal endpoint equality and overlap membership; subtype family remains."}
+    {:job 7,
+     :commit "83b52a407f4be5673b93570b691710c7bd6ab7ed",
+     :reason
+     "Defined the canonical run-boundary list with exact length and initial vertex; outer-membership remains."}]}
   {:consumer :t99J05,
    :stop-count 5,
    :evidence
@@ -39609,7 +39623,7 @@
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "pathTwoOpenSubdivisionRunBoundaryPoints",
@@ -39619,7 +39633,9 @@
     :reported-by [:program-2026-10-13-close-t93j03],
     :type "canonical boundary list, length runs+1, head point zero",
     :area "covering-subgroup-correspondence",
-    :proved-in :program-2026-10-13-close-t93j03},
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "83b52a407f4be5673b93570b691710c7bd6ab7ed"},
    :id :lemma-pathtwoopensubdivisionrunboundarypoints,
    :kind :lemma,
    :depends-on
