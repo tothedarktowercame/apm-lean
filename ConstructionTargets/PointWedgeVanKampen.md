@@ -1451,3 +1451,8 @@ corresponding square in the target system, with the equivalence counits
 discharged by their naturality equation.  Thus the overlap comparison can now
 be pulled back to the right-piece connector system before its base changes are
 normalized.
+`connectorSystemChangeBase_connectorSquare` removes the remaining bookkeeping
+around those base changes: precomposing both connectors by the same rebasing
+isomorphism preserves the square.  Together the two generic lemmas reduce the
+installed target comparison to the corresponding square in the original
+pulled-back right-piece connector system.

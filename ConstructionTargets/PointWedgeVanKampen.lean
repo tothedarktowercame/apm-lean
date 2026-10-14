@@ -336,6 +336,21 @@ theorem connectorSystemChangeBase_connector_hom
     ((connectorSystemChangeBase S B b).connector A).hom =
       b.hom ≫ (S.connector A).hom := rfl
 
+omit [PathConnectedSpace X] [PathConnectedSpace Y] in
+/-- Changing the base connector preserves a connector square. -/
+theorem connectorSystemChangeBase_connectorSquare
+    {C : Type} [Groupoid C] (S : ConnectorSystem C)
+    (O : C) (o : O ≅ S.base) {A B : C} (f : A ⟶ B)
+    (h : (S.connector A).hom ≫ f = (S.connector B).hom) :
+    ((connectorSystemChangeBase S O o).connector A).hom ≫ f =
+      ((connectorSystemChangeBase S O o).connector B).hom := by
+  rw [connectorSystemChangeBase_connector_hom,
+    connectorSystemChangeBase_connector_hom]
+  calc
+    (o.hom ≫ (S.connector A).hom) ≫ f =
+        o.hom ≫ ((S.connector A).hom ≫ f) := Category.assoc _ _ _
+    _ = _ := by rw [h]
+
 /-- Pull a connector system back through an equivalence. -/
 def connectorSystemComapEquivalence
     {C D : Type} [Groupoid C] [Groupoid D]
