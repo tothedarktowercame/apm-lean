@@ -847,6 +847,22 @@ lemma wordRel_eqvGen_interior {L : Type*} [DecidableEq L]
     (h : Relation.EqvGen (WordRel w) p q) (hp : ‖(p : ℂ)‖ < 1) : p = q := by
   sorry
 
+lemma mergeRepeatedBlock_aux_boundary_aux_target_ne_nil {Label : Type*}
+    (u v t : List (Signed Label)) (a : Signed Label) :
+    u ++ [a] ++ v ++ [inv a] ++ t ≠ [] := by
+  simp
+
+lemma mergeRepeatedBlock_aux_boundary_aux_target_even {Label : Type*}
+    [DecidableEq Label]
+    (u v t : List (Signed Label)) (y z a : Signed Label)
+    (hw : IsPolygonWord (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t)) :
+    Even (u ++ [a] ++ v ++ [inv a] ++ t).length := by
+  have hs := hw.2.1
+  rw [mergeRepeatedBlock_aux_disk_reparam_aux_length u v t y z a] at hs
+  obtain ⟨k, hk⟩ := hs
+  refine ⟨k - 1, ?_⟩
+  omega
+
 /-- The boundary content of the merge: a PL circle homeomorphism sending arcs
 `y, z` to the halves of `a` (and `z⁻¹, y⁻¹` to the halves of `a⁻¹`), every
 other arc linearly to its counterpart, matching the generated relations on the
