@@ -36160,6 +36160,16 @@
      {:cmd "placeholder count", :exit 0}
      {:cmd "git diff --check", :exit 0}
      {:cmd "rg forbidden", :exit 1, :expected-exit 1}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1792008635994-12318-34234e4d",
+     :commands
+     ["git show/check/diff 978a84a4; scope and fixture SHA-256"
+      "lake build ConstructionTargets.t93J03Closure; lean fixture and Main"
+      "statement-registry check; placeholder/axiom recount"],
+     :finding
+     "PASS: 978a84a4 adds compiled, sorry-free progress after 6aafd2ba. For every adjacent run pair it combines the partition side-change certificate with the consecutive-index theorem, then obtains the following run head as an overlap vertex. Blueprint is faithful; exact scope/hash match; closure placeholders 0->0; frozen Main remains 1; registry 166/166; standard axioms only. STOP lists subtype endpoint construction, outer-fold instantiation, reverse kernel/surjectivity, winding, C1/C2/Main."},
     :commit "978a84a40d74390b2f572b313be98c0237bedff4",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
@@ -36170,7 +36180,7 @@
      "db29d867e05854c0851042230248b7bb80df0b56b77686fd9485543ff40fcf92"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -36188,7 +36198,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t93J03Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Proved adjacent maximal runs meet at an overlap subdivision vertex; endpoint-family packaging remains.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Packaged every adjacent maximal-run boundary as an overlap vertex; subtype endpoint-family construction remains.",
    :id :program-2026-10-13-close-t93j03,
    :kind :final-adapter,
    :campaign-priority 30,
@@ -36454,7 +36464,11 @@
     {:job 3,
      :commit "6aafd2ba0b98dd14a3b138fbb4bc325f143bd289",
      :reason
-     "Proved adjacent maximal runs meet at an overlap subdivision vertex; endpoint-family packaging remains."}]}
+     "Proved adjacent maximal runs meet at an overlap subdivision vertex; endpoint-family packaging remains."}
+    {:job 4,
+     :commit "978a84a40d74390b2f572b313be98c0237bedff4",
+     :reason
+     "Packaged every adjacent maximal-run boundary as an overlap vertex; subtype endpoint-family construction remains."}]}
   {:consumer :t99J05,
    :stop-count 5,
    :evidence
@@ -39529,7 +39543,7 @@
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "pathTwoOpenSubdivision_runPartition_isChain_overlap",
@@ -39539,7 +39553,9 @@
     :reported-by [:program-2026-10-13-close-t93j03],
     :type "all adjacent run boundaries are overlap vertices",
     :area "covering-subgroup-correspondence",
-    :proved-in :program-2026-10-13-close-t93j03},
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "978a84a40d74390b2f572b313be98c0237bedff4"},
    :id :lemma-pathtwoopensubdivision-runpartition-ischain-overlap,
    :kind :lemma,
    :depends-on
