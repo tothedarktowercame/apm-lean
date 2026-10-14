@@ -36157,6 +36157,16 @@
     [{:cmd "boundary build",
       :exit 1,
       :correction "supplied getLast?/head? membership equalities"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1792007870391-12296-141f728e",
+     :commands
+     ["git show/check/diff eb176725; scope and fixture SHA-256"
+      "lake build ConstructionTargets.t93J03Closure; lean fixture and Main"
+      "statement-registry check; placeholder/axiom recount"],
+     :finding
+     "PASS: eb176725 adds compiled, sorry-free program progress after 1d93d0b2. Exact flattening to finRange and List.isChain_flatten prove that adjacent nonempty runs end/start at consecutive original piece indices, supplying the shared subdivision boundary needed for overlap endpoints. Blueprint is faithful; exact scope/hash match; closure placeholders 0->0; frozen Main remains 1; registry 166/166; standard axioms only. STOP lists endpoint-family packaging, outer-fold instantiation, reverse kernel/surjectivity, winding, C1/C2/Main."},
     :commit "eb1767255ebf00e330120719700e7c8f8da63be0",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
@@ -36167,7 +36177,7 @@
      "a03095302c41ea2b4f329578e491b6acb9b2214ac348e6e32fe5162b70943879"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -36185,7 +36195,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t93J03Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Finite outer-represented factors now concatenate to one outer path with equal ambient groupoid class; maximal-run instantiation remains.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Proved adjacent maximal side runs end and begin at consecutive original piece indices, identifying their shared subdivision boundary; endpoint-family packaging remains.",
    :id :program-2026-10-13-close-t93j03,
    :kind :final-adapter,
    :campaign-priority 30,
@@ -36443,7 +36453,11 @@
     {:job 1,
      :commit "1d93d0b25c6f2fcf77e9296540eea268f893c28b",
      :reason
-     "Finite outer-represented factors now concatenate to one outer path with equal ambient groupoid class; maximal-run instantiation remains."}]}
+     "Finite outer-represented factors now concatenate to one outer path with equal ambient groupoid class; maximal-run instantiation remains."}
+    {:job 2,
+     :commit "eb1767255ebf00e330120719700e7c8f8da63be0",
+     :reason
+     "Proved adjacent maximal side runs end and begin at consecutive original piece indices, identifying their shared subdivision boundary; endpoint-family packaging remains."}]}
   {:consumer :t99J05,
    :stop-count 5,
    :evidence
@@ -39476,7 +39490,7 @@
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "boolSideRunPartition_adjacent_indices",
@@ -39486,7 +39500,9 @@
     :reported-by [:program-2026-10-13-close-t93j03],
     :type "adjacent runs have consecutive boundary indices",
     :area "covering-subgroup-correspondence",
-    :proved-in :program-2026-10-13-close-t93j03},
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "eb1767255ebf00e330120719700e7c8f8da63be0"},
    :id :lemma-boolsiderunpartition-adjacent-indices,
    :kind :lemma,
    :depends-on [:lemma-path-concat-class-eq-outer-of-piececlass-eq],
