@@ -87944,6 +87944,18 @@
     [{:cmd "coordinate drafts",
       :exit 1,
       :correction "expanded sum pointwise"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792013763427-12457-15e85d4f",
+     :commands
+     ["git show/diff fb7c01109; blob sha256; diff --check"
+      "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology"
+      "lake env lean /dev/stdin (#print axioms)"
+      "placeholder scan"
+      "statement-registry.py check"],
+     :finding
+     "PASS: reviewer codex-7; fb7c01109 (topo-6) newly changes only scoped PolygonSurfaceHomology.lean; fixture SHA-256 e5ab161e1ef3f4e578ea402be88a5fee0d758c2fd8cad3ed70d2cb00466e44e6 matches. Exact blob builds; 0 placeholders; standard axioms; registry 166/0. The ordered word retains every edge occurrence and uses exponent +1 for the forward signed arc and -1 for its reversal, exactly matching edgeAttachingDegree; pointwise orbit-basis summation therefore equals attachingDegree, and the existing word-Hurewicz theorem transports this equality correctly. New compiled progress; remaining: identify boundary class with this signed word, finish B7, then B8-B10."},
     :commit "fb7c01109",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
@@ -87952,7 +87964,7 @@
      "e5ab161e1ef3f4e578ea402be88a5fee0d758c2fd8cad3ed70d2cb00466e44e6"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -87972,7 +87984,7 @@
     :blueprint
     "ConstructionTargets/PolygonSurfaceHomology.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked H1 naturality for the exact MV generator.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked signed boundary-word Hurewicz evaluation.",
    :id :program-2026-10-13-polygon-surface-homology,
    :kind :reusable-theorem,
    :campaign-priority 31,
@@ -88203,7 +88215,10 @@
      "Banked degree-one naturality from overlap circle to boundary loop."}
     {:job 1,
      :commit "849242d93",
-     :reason "Banked H1 naturality for the exact MV generator."}]}
+     :reason "Banked H1 naturality for the exact MV generator."}
+    {:job 2,
+     :commit "fb7c01109",
+     :reason "Banked signed boundary-word Hurewicz evaluation."}]}
   {:consumer :t97A01,
    :stop-count 0,
    :phase :implementation,
@@ -91667,7 +91682,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "polygonBoundaryLegWord_coordinates",
@@ -91677,14 +91692,16 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "signed sum equals attachingDegree",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :program-2026-10-13-polygon-surface-homology,
+    :banked-commit "fb7c01109"},
    :id :lemma-polygonboundarylegword-coordinates,
    :kind :lemma,
    :depends-on [],
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "polygonBoundaryLegWord_hurewicz",
@@ -91694,7 +91711,9 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "word Hurewicz equals attaching image",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :program-2026-10-13-polygon-surface-homology,
+    :banked-commit "fb7c01109"},
    :id :lemma-polygonboundarylegword-hurewicz,
    :kind :lemma,
    :depends-on [:lemma-polygonboundarylegword-coordinates],
