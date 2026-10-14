@@ -1091,6 +1091,12 @@ theorem moduleHurewicz_zpow {X : Type} [TopologicalSpace X] (x : X)
     moduleHurewicz x (g ^ n) = n • moduleHurewicz x g := by
   exact congrArg Multiplicative.toAdd (map_zpow (moduleHurewiczHom x) g n)
 
+@[simp]
+theorem moduleHurewicz_inv {X : Type} [TopologicalSpace X] (x : X)
+    (g : FundamentalGroup X x) :
+    moduleHurewicz x g⁻¹ = -moduleHurewicz x g := by
+  exact congrArg Multiplicative.toAdd (map_inv (moduleHurewiczHom x) g)
+
 /-- Every circle fundamental-group class is an integer power of the positive
 class fixed by the homology orientation. -/
 theorem circlePositiveFundamentalClass_generates
@@ -1300,6 +1306,29 @@ theorem finiteWedgeExplicitLegClassAtBase_hurewicz (P : PairingData)
     finiteWedgeLegFundamentalClass_hurewicz,
     finiteWedgeH1CoordinateMap_single]
   rfl
+
+/-- The explicit common-basepoint factor contributed by one oriented polygon
+edge: the forward leg for positive sign and its inverse for negative sign. -/
+noncomputable def polygonBoundaryExplicitEdgeClass (P : PairingData)
+    (i : Fin P.edgeCount) :
+    FundamentalGroup
+      (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge
+        (PairingOrbit P.pair)) (orbitWedgeBase P) :=
+  if P.sign i then finiteWedgeExplicitLegClassAtBase P (P.orbit i)
+  else (finiteWedgeExplicitLegClassAtBase P (P.orbit i))⁻¹
+
+/-- Each explicit signed edge factor has the expected signed orbit-basis H₁
+coordinate, including the global circle-orientation unit. -/
+theorem polygonBoundaryExplicitEdgeClass_hurewicz (P : PairingData)
+    (i : Fin P.edgeCount) :
+    moduleHurewicz (orbitWedgeBase P)
+        (polygonBoundaryExplicitEdgeClass P i) =
+      (if P.sign i then (1 : ℤ) else -1) •
+        (circleIntegerLoopOneCoordinate •
+          finiteWedgeH1CoordinateMap P (orbitBasis P (P.orbit i) 1)) := by
+  cases hs : P.sign i <;>
+    simp [polygonBoundaryExplicitEdgeClass, hs,
+      finiteWedgeExplicitLegClassAtBase_hurewicz]
 
 /-- The boundary map computed in the existing H₁ coordinates.  Its extra
 factor records the only orientation ambiguity left by `circleH1IsoInt`. -/
