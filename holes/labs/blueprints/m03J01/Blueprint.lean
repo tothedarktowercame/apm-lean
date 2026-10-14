@@ -924,13 +924,24 @@ lemma apm_m03J01_abstract_variational :
       nlinarith [norm_nonneg (u - T f)]
     exact sub_eq_zero.mp (norm_eq_zero.mp hz)
 
-/-- The closure definition of `H₀¹` makes the weak gradient independent of
-the chosen representative of the value function. -/
+lemma apm_m03J01_gradient_unique_of_val_ae_aux_closable {n : ℕ}
+    {Ω : Set (apm_m03J01_E n)} (w : apm_m03J01_H01 n Ω)
+    (hw : w.val =ᵐ[volume] 0) : w.grad =ᵐ[volume] 0 := by
+  set_option maxHeartbeats 800000 in
+  sorry
+
 lemma apm_m03J01_gradient_unique_of_val_ae {n : ℕ}
     {Ω : Set (apm_m03J01_E n)} (u v : apm_m03J01_H01 n Ω)
     (hval : u.val =ᵐ[volume] v.val) :
     u.grad =ᵐ[volume] v.grad := by
-  sorry
+  rcases apm_m03J01_H01_smul_exists (-1) v with ⟨nv, hnvval, hnvgrad⟩
+  rcases apm_m03J01_H01_add_exists u nv with ⟨w, hwval, hwgrad⟩
+  have hwzero : w.val =ᵐ[volume] 0 := by
+    filter_upwards [hval] with x hx
+    simp [hwval, hnvval, hx]
+  have hgzero := apm_m03J01_gradient_unique_of_val_ae_aux_closable w hwzero
+  filter_upwards [hgzero] with x hx
+  exact eq_of_sub_eq_zero (by simpa [hwgrad, hnvgrad] using hx)
 
 /-- Distributional first derivatives are unique in `L²`. -/
 lemma apm_m03J01_weakHessian_unique_ae {n : ℕ}
