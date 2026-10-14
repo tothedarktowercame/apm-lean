@@ -997,7 +997,9 @@ theorem t93A06_exact_integral_aux_square_formula_unfold (atlas : SmoothAtlas)
       ∫ y : ℝ in 0..1, ∫ x : ℝ in 0..1,
         exteriorDerivative (E := Plane) (M := Plane) (pullback projection η)
           ![x, y] ![Pi.single 0 1, Pi.single 1 1] := by
-  sorry
+  letI := atlas.charts
+  unfold ConstructionTargets.TorusFormTargets.torusIntegral
+  rw [hnat]
 -- END SEAT AREA
 
 /-- The Euclidean exterior derivative of the pulled-back one-form, on the
