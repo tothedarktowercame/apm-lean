@@ -87901,46 +87901,49 @@
   {:consumer :t97A01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 9,
+   :stop-count 10,
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Finish B6 connecting exactness and remove inner H1=0; then B7-B10.",
+    "Transport exactness through inner-zero reduction; then B7-B10.",
     :outcome :stop,
-    :warnings ["preexisting lint"],
+    :warnings ["lint" "unrelated tmp preserved"],
     :missing-theorems
-    [{:name "radialIntersectionH1GroupIsoInt",
-      :type "intersection H1 integer coordinates",
+    [{:name "radialMVUnionExact",
+      :type "MV exact at surface",
       :status :proved,
       :consumers [:t97A01 :t94J09],
       :depends-on [],
       :area "polygon-quotient-homology"}
-     {:name "radialOuterH1GroupIsoCoordinates",
-      :type "outer H1 orbit coordinates",
+     {:name "radialMVIntersectionExact",
+      :type "MV exact at intersection",
       :status :proved,
       :consumers [:t97A01 :t94J09],
       :depends-on [],
       :area "polygon-quotient-homology"}
-     {:name "radialMVPiecesExact",
-      :type "radial MV exact at pieces",
+     {:name "radialInnerH1GroupIsZero",
+      :type "inner H1=0",
       :status :proved,
       :consumers [:t97A01 :t94J09],
       :depends-on [],
+      :area "polygon-quotient-homology"}
+     {:name "radialMVBoundaryGroup",
+      :type "coordinate boundary",
+      :status :proved,
+      :consumers [:t97A01 :t94J09],
+      :depends-on ["radialMVPiecesExact"],
       :area "polygon-quotient-homology"}
      {:name "radialMVSegment",
       :type "B6 coordinate exact segment",
       :status :partial,
       :consumers [:t97A01 :t94J09],
-      :depends-on
-      ["radialIntersectionH1GroupIsoInt"
-       "radialOuterH1GroupIsoCoordinates"
-       "radialMVPiecesExact"],
+      :depends-on ["radialMVBoundaryGroup"],
       :area "polygon-quotient-homology"}],
     :statement-hashes {:registry "166/0"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked radial H1 coordinates and pieces exactness.",
+    :reason "Banked radial exactness and reduced boundary.",
     :commands
     [{:cmd
       "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology",
@@ -87948,32 +87951,16 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder scan", :exit 0}
      {:cmd "axioms check", :exit 0}
-     {:cmd "git show --check 631731570", :exit 0}],
-    :diagnostic-history
-    [{:cmd "exactness drafts",
-      :exit 1,
-      :correction "expanded zero proof"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792006996473-12278-d1e84dde",
-     :commands
-     ["git show/diff 631731570; blob sha256; diff --check"
-      "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology"
-      "lake env lean /dev/stdin (#print axioms)"
-      "placeholder scan"
-      "statement-registry.py check"],
-     :finding
-     "PASS: 631731570 (topo-6) changes only scoped PolygonSurfaceHomology.lean; fixture SHA-256 ff1859cefcf186e06ba049a891ed8c18792063b7740bba474b0fca8fe3d238fb matches. Exact blob builds; 0 placeholders; three milestones use standard axioms; registry 166/0. Intersection and outer H1 isomorphisms follow the established geometric/model comparisons in the correct direction. The exact short complex is intersection -> inner+outer -> union, transported from the Boolean cover with its composite proved zero. New compiled progress; remaining: finish B6 connecting exactness/remove inner H1, then B7-B10."},
-    :commit "631731570",
+     {:cmd "git show --check cbe0d57d2", :exit 0}],
+    :commit "cbe0d57d2",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
     {:path "ConstructionTargets/PolygonSurfaceHomology.lean",
      :sha256
-     "ff1859cefcf186e06ba049a891ed8c18792063b7740bba474b0fca8fe3d238fb"},
+     "c8b8179ff1f522550e1dc55623491ff8db14d4dd0b3a1f45d0c2892c3055b1e7"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :needs-owner,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -91044,5 +91031,70 @@
    :depends-on
    [:lemma-radialintersectionh1groupisoint
     :lemma-radialouterh1groupisocoordinates
-    :lemma-radialmvpiecesexact],
+    :lemma-radialmvpiecesexact
+    :lemma-radialmvboundarygroup],
+   :other-consumers [:t94J09]}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "radialMVUnionExact", :type "MV exact at surface"},
+   :lemma
+   {:name "radialMVUnionExact",
+    :reported-by [:program-2026-10-13-polygon-surface-homology],
+    :type "MV exact at surface",
+    :area "polygon-quotient-homology",
+    :proved-in :program-2026-10-13-polygon-surface-homology},
+   :id :lemma-radialmvunionexact,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t94J09]}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "radialMVIntersectionExact",
+    :type "MV exact at intersection"},
+   :lemma
+   {:name "radialMVIntersectionExact",
+    :reported-by [:program-2026-10-13-polygon-surface-homology],
+    :type "MV exact at intersection",
+    :area "polygon-quotient-homology",
+    :proved-in :program-2026-10-13-polygon-surface-homology},
+   :id :lemma-radialmvintersectionexact,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t94J09]}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance {:lemma "radialInnerH1GroupIsZero", :type "inner H1=0"},
+   :lemma
+   {:name "radialInnerH1GroupIsZero",
+    :reported-by [:program-2026-10-13-polygon-surface-homology],
+    :type "inner H1=0",
+    :area "polygon-quotient-homology",
+    :proved-in :program-2026-10-13-polygon-surface-homology},
+   :id :lemma-radialinnerh1groupiszero,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t94J09]}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "radialMVBoundaryGroup", :type "coordinate boundary"},
+   :lemma
+   {:name "radialMVBoundaryGroup",
+    :reported-by [:program-2026-10-13-polygon-surface-homology],
+    :type "coordinate boundary",
+    :area "polygon-quotient-homology",
+    :proved-in :program-2026-10-13-polygon-surface-homology},
+   :id :lemma-radialmvboundarygroup,
+   :kind :lemma,
+   :depends-on [:lemma-radialmvpiecesexact],
    :other-consumers [:t94J09]}]}
