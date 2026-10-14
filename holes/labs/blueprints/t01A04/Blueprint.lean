@@ -395,10 +395,66 @@ theorem apm_t01A04_bridge_quotient_maps_are_coverings :
       exact apm_t01A04_torusCoverMap_evenlyCovered_basepoint
     · exact apm_t01A04_torusCoverMap_evenlyCovered_away x hx
 
-/-- The Seifert--van Kampen presentation on the three fixed geometric loops.
-This is the naturality calculation connecting the imported abstract wedge
-equivalence to the concrete quotient and its explicit paths. -/
-theorem apm_t01A04_canonical_loops_presentation :
+lemma apm_t01A04_canonical_loops_presentation_aux_rel_iff
+    (x y : Sum apm_t01a04_Torus Circle) :
+    apm_t01a04_wedgeRel x y ↔
+      ConstructionTargets.PointWedgeQuotient.Rel
+        ((1, 1) : apm_t01a04_Torus) (1 : Circle) x y := by
+  constructor
+  · intro h
+    cases h
+    exact ConstructionTargets.PointWedgeQuotient.Rel.base
+  · intro h
+    cases h
+    exact apm_t01a04_wedgeRel.base
+
+/-- The concrete quotient used in the problem is literally the library's
+point-wedge quotient on representatives. -/
+def apm_t01A04_canonical_loops_presentation_aux_homeomorph :
+    apm_t01a04_X ≃ₜ
+      ConstructionTargets.PointWedgeQuotient.Wedge
+        ((1, 1) : apm_t01a04_Torus) (1 : Circle) :=
+  ConstructionTargets.PointWedgeQuotient.quotientHomeomorphOfRelIff
+    apm_t01a04_wedgeRel
+    (ConstructionTargets.PointWedgeQuotient.Rel
+      ((1, 1) : apm_t01a04_Torus) (1 : Circle))
+    apm_t01A04_canonical_loops_presentation_aux_rel_iff
+
+@[simp] lemma apm_t01A04_canonical_loops_presentation_aux_homeomorph_mk
+    (z : Sum apm_t01a04_Torus Circle) :
+    apm_t01A04_canonical_loops_presentation_aux_homeomorph
+        (Quotient.mk _ z) =
+      ConstructionTargets.PointWedgeQuotient.quotientMap
+        ((1, 1) : apm_t01a04_Torus) (1 : Circle) z := rfl
+
+@[simp] lemma apm_t01A04_canonical_loops_presentation_aux_homeomorph_base :
+    apm_t01A04_canonical_loops_presentation_aux_homeomorph
+        apm_t01a04_basepoint =
+      ConstructionTargets.GenericTargetNaturalSourceReconstruction.wedgeBase := rfl
+
+/-- LIBRARY (van Kampen naturality): some identification of the wedge
+fundamental group with `ℤ² * ℤ` sends the three canonical loops to the
+standard generators.  `wedgeFundamentalGroupMulEquiv` (transported along
+`apm_t01A04_canonical_loops_presentation_aux_homeomorph`) is the candidate, but
+the import computes no generator images; composing with a free-product
+automorphism is allowed. -/
+theorem apm_t01A04_canonical_loops_presentation_aux_images :
+    ∃ Φ : apm_t01a04_piOne ≃* ConstructionTargets.GenericTargetNaturalSourceReconstruction.FP,
+      Φ apm_t01A04_loopA = Monoid.Coprod.inl (Multiplicative.ofAdd ((1, 0) : ℤ × ℤ)) ∧
+      Φ apm_t01A04_loopB = Monoid.Coprod.inl (Multiplicative.ofAdd ((0, 1) : ℤ × ℤ)) ∧
+      Φ apm_t01A04_loopC = Monoid.Coprod.inr (Multiplicative.ofAdd (1 : ℤ)) := by
+  sorry
+
+/-- Pure group theory: a group isomorphic to `ℤ² * ℤ` with the three loops on
+the standard generators has the stated presentation.  Commutation is
+commutation in `ℤ²`; generation and the universal property come from
+`Monoid.Coprod.lift` and the free abelian group `ℤ²` on two commuting
+generators. -/
+theorem apm_t01A04_canonical_loops_presentation_aux_algebra
+    (Φ : apm_t01a04_piOne ≃* ConstructionTargets.GenericTargetNaturalSourceReconstruction.FP)
+    (hA : Φ apm_t01A04_loopA = Monoid.Coprod.inl (Multiplicative.ofAdd ((1, 0) : ℤ × ℤ)))
+    (hB : Φ apm_t01A04_loopB = Monoid.Coprod.inl (Multiplicative.ofAdd ((0, 1) : ℤ × ℤ)))
+    (hC : Φ apm_t01A04_loopC = Monoid.Coprod.inr (Multiplicative.ofAdd (1 : ℤ))) :
     apm_t01A04_loopA * apm_t01A04_loopB =
         apm_t01A04_loopB * apm_t01A04_loopA ∧
     Subgroup.closure
@@ -408,6 +464,19 @@ theorem apm_t01A04_canonical_loops_presentation :
         F apm_t01A04_loopA = ga ∧ F apm_t01A04_loopB = gb ∧
           F apm_t01A04_loopC = gc) := by
   sorry
+
+/-- The Seifert--van Kampen presentation on the three fixed geometric loops. -/
+theorem apm_t01A04_canonical_loops_presentation :
+    apm_t01A04_loopA * apm_t01A04_loopB =
+        apm_t01A04_loopB * apm_t01A04_loopA ∧
+    Subgroup.closure
+        {apm_t01A04_loopA, apm_t01A04_loopB, apm_t01A04_loopC} = ⊤ ∧
+    (∀ (G : Type) [Group G] (ga gb gc : G), ga * gb = gb * ga →
+      ∃! F : apm_t01a04_piOne →* G,
+        F apm_t01A04_loopA = ga ∧ F apm_t01A04_loopB = gb ∧
+          F apm_t01A04_loopC = gc) := by
+  obtain ⟨Φ, hA, hB, hC⟩ := apm_t01A04_canonical_loops_presentation_aux_images
+  exact apm_t01A04_canonical_loops_presentation_aux_algebra Φ hA hB hC
 
 /-- The two parity characters obtained from the universal property of the
 canonical presentation.  The presentation conclusion is an explicit input,
