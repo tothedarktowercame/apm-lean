@@ -87948,6 +87948,17 @@
     [{:cmd "initial build",
       :exit 1,
       :correction "dependency stabilized; rerun passed"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791987769785-11877-2f71fefa",
+     :commands
+     ["git show/diff 250866b5e; sha256sum"
+      "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology"
+      "lake env lean /dev/stdin (#print axioms)"
+      "placeholder scan; statement-registry check; git show --check"],
+     :finding
+     "PASS: commit 250866b5e by topo-6 changes only the scoped Lean file; exact blob SHA-256 c9239a043df1ab05131688f294647a591847a7b22f53f6e3beced0a462187c31. Exact snapshot builds; 0 placeholders; theorem uses propext/Classical.choice/Quot.sound; registry 166/0. From normalForm=𝟙 it applies the prior iff in the correct .mpr direction to obtain the counit connector square, then the established counit-to-coherent-source implication. No representation boundary is crossed. Real compiled program progress; remaining milestones prove counit normal-form identity, then installed transport."},
     :commit "250866b5e",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
@@ -87956,7 +87967,7 @@
      "c9239a043df1ab05131688f294647a591847a7b22f53f6e3beced0a462187c31"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -87976,7 +87987,7 @@
     :blueprint
     "ConstructionTargets/PolygonSurfaceHomology.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked the exact finite counit normal-form obstruction.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked normal-form step.",
    :id :program-2026-10-13-polygon-surface-homology,
    :kind :reusable-theorem,
    :campaign-priority 31,
@@ -88112,8 +88123,8 @@
      "Banked finite successor specialization of the fixed-endpoint counit implication."}
     {:job 8,
      :commit "be50b6265",
-     :reason
-     "Banked the exact finite counit normal-form obstruction."}]}
+     :reason "Banked the exact finite counit normal-form obstruction."}
+    {:job 9, :commit "250866b5e", :reason "Banked normal-form step."}]}
   {:consumer :t97A01,
    :stop-count 0,
    :phase :implementation,
@@ -90200,7 +90211,7 @@
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -90212,7 +90223,9 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "identity implies source square",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :program-2026-10-13-polygon-surface-homology,
+    :banked-commit "250866b5e"},
    :id
    :lemma-finitewedgecoherentrightsourceunitsquare-of-counitnormalformtrivial,
    :kind :lemma,
