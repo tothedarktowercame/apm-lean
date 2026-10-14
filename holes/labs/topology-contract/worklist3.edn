@@ -36117,28 +36117,29 @@
   {:consumer :t93J03,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 6,
+   :stop-count 7,
    :review-finding
    "Program STOP commits nothing new since the prior reviewed attempt: it reuses commit 512a220f, and git history shows no later scoped commit. The unresolved SemilocallySimplyConnected hypothesis-coverage conflict is unchanged. Obtain the required owner specification decision or commit a new compiled milestone before resubmitting.",
    :evidence
    {:placeholder-delta {:t93J03 [1 1]},
     :residual
-    "Compute untransported winding along standard-model connector as aabb; extract quotient; apply C1/C2/Main.",
+    "Identify overlap kernel with pulled-back aabb; extract based quotient; apply C1/C2/Main.",
     :outcome :stop,
     :warnings ["unused SLSC owner-approved"],
     :missing-theorems
-    [{:name "kleinPolygonStandardModelConnector",
-      :type "connector pulled back from standard TwoCircles model",
+    [{:name "kleinSkeletonAabbQuotientEquiv",
+      :type
+      "skeleton pi1 / pulled-back normalClosure(aabb) equiv PresentedGroup(aabb)",
       :status :proved,
       :consumers [:t93J03],
-      :depends-on ["fundamentalGroup_pathTransport_isConj"],
+      :depends-on ["kleinSkeletonAabbPresentationQuotient"],
       :area "covering-subgroup-correspondence"}
      {:name "t93J03_polygon_van_kampen",
       :type "polygon pi1 = PresentedGroup(aabb)",
       :status :partial,
       :consumers [:t93J03],
       :depends-on
-      ["kleinSkeletonAabbPresentationQuotient"
+      ["kleinSkeletonAabbQuotientEquiv"
        "kleinPolygonStandardModelConnector"],
       :area "covering-subgroup-correspondence"}],
     :statement-hashes {:registry "166/166"},
@@ -36146,40 +36147,27 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Committed connector pulled back from standard two-circle coordinates; loop computation and quotient remain.",
+    "Committed skeleton aabb quotient equivalence; topological kernel identification remains.",
     :commands
     [{:cmd "lake build ConstructionTargets.t93J03Closure", :exit 0}
      {:cmd "lean fixture; Main", :exit 0}
-     {:cmd "registry; placeholder; diff", :exit 0}
-     {:cmd "rg forbidden", :exit 1, :expected-exit 1}
-     {:cmd "commit; show --check", :exit 0}],
+     {:cmd "registry; placeholder; diff; show --check", :exit 0}
+     {:cmd "rg forbidden closure", :exit 1, :expected-exit 1}],
     :diagnostic-history
-    [{:cmd "lean closure",
+    [{:cmd "lean fixture",
       :exit 1,
-      :correction "used inferred TwoCircles path-connected instance"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1791957968657-11653-524d8e48",
-     :commands
-     ["git show/diff/show --check 88eaef20"
-      "sha256sum fixture; scope; placeholders"
-      "lake env lean recorded closure, fixture, Main"
-      "statement-registry.py check"],
-     :finding
-     "PASS: new compiled sorry-free standard-axiom milestone. The connector is correctly formed by choosing a path in TwoCircles and pulling it back through the fixed skeleton homeomorphism, with endpoints cast correctly. Its inner path remains a noncomputable somePath, so the actual transported-loop calculation is not proved; that residual and quotient extraction are accurately listed. Scope/hash verified; frozen placeholders 1->1 (support 0); registry 166/166; SLSC unused, mandated by problem.md."},
-    :commit "88eaef2001d953da38c04003bf1887e18d088339",
+      :correction "fixed namespace case; rerun passed"}],
+    :commit "e40aea65bdeaf4a7c03b693c382fade2502196de",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
      "ConstructionTargets/t93J03Closure.blueprint.md"],
     :fixture
-    {:path "/tmp/t93j03_standard_connector_check.lean",
+    {:path "/tmp/t93j03_skeleton_quotient_check.lean",
      :sha256
-     "625b34bb0f0aa25eb624c938282f4f394fd1d4079d9cce331bf3e0de104ae524",
-     :mode :post-build-export-check},
+     "9c3edafa512a73f23df4cd8025d1150ddbf2f37e98c43ed99de8bfe66d99aaa5"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -37695,7 +37683,8 @@
     :lemma-kleinpolygonoverlapnormalclosure-eq-aabb-of-isconj
     :lemma-fundamentalgroup-pathtransport-isconj
     :lemma-kleinpolygonoverlapwindingone-isconj-aabb-of-path-eq
-    :lemma-kleinpolygonstandardmodelconnector],
+    :lemma-kleinpolygonstandardmodelconnector
+    :lemma-kleinskeletonaabbquotientequiv],
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
@@ -38363,6 +38352,25 @@
    :id :lemma-kleinpolygonstandardmodelconnector,
    :kind :lemma,
    :depends-on [:lemma-fundamentalgroup-pathtransport-isconj],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "kleinSkeletonAabbQuotientEquiv",
+    :type
+    "skeleton pi1 / pulled-back normalClosure(aabb) equiv PresentedGroup(aabb)"},
+   :lemma
+   {:name "kleinSkeletonAabbQuotientEquiv",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type
+    "skeleton pi1 / pulled-back normalClosure(aabb) equiv PresentedGroup(aabb)",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03},
+   :id :lemma-kleinskeletonaabbquotientequiv,
+   :kind :lemma,
+   :depends-on [:lemma-kleinskeletonaabbpresentationquotient],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
