@@ -88167,70 +88167,53 @@
    :program true,
    :other-consumers []}
   {:consumer :t92J06,
-   :stop-count 3,
+   :stop-count 4,
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Realize graph data; prove Cayley tree and finite invariants; assemble Main.",
+    "Define the interval-to-circle projection, prove quotient continuity and local trivializations; then Cayley tree and finite invariants.",
     :outcome :stop,
-    :warnings ["Main placeholder; unrelated edits preserved"],
+    :warnings ["Main retains one placeholder"],
     :missing-theorems
-    [{:name "twoLoopGraphCoverData_localStars",
-      :type "transition star equivalences",
+    [{:name "twoLoopGraphCoverData_realizationCarrier",
+      :type
+      "interval-edge quotient with source/target endpoint equalities",
       :status :proved,
-      :consumers [:t92J06],
-      :depends-on ["t92J06_quotientWedgeAPI"],
-      :area "graph-covering-realization"}
-     {:name "twoLoopGraphCoverData_realization",
-      :type "realize data as cover",
-      :status :not-started,
       :consumers [:t92J06],
       :depends-on ["twoLoopGraphCoverData_localStars"],
       :area "graph-covering-realization"}
-     {:name "apm_t92J06_exists_simplyConnected_cover",
-      :type "simply connected cover",
+     {:name "twoLoopGraphCoverData_projection",
+      :type "continuous realization map to the two-circle wedge",
       :status :not-started,
       :consumers [:t92J06],
-      :depends-on ["twoLoopGraphCoverData_realization"],
+      :depends-on ["twoLoopGraphCoverData_realizationCarrier"],
       :area "graph-covering-realization"}
-     {:name "apm_t92J06_exists_four_threeSheeted_covers",
-      :type "four 3-sheet covers",
-      :status :not-started,
+     {:name "twoLoopGraphCoverData_realization",
+      :type "local trivializations and exact fibers",
+      :status :partial,
       :consumers [:t92J06],
-      :depends-on ["twoLoopGraphCoverData_realization"],
+      :depends-on ["twoLoopGraphCoverData_projection"],
       :area "graph-covering-realization"}],
     :statement-hashes {:registry "166/0"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked graph data.",
+    :reason "Banked the graph realization quotient carrier.",
     :commands
     [{:cmd "lake build ConstructionTargets.t92J06Closure", :exit 0}
      {:cmd "lake env lean problems/t92J06/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-     {:cmd "git show --check b19eb4dfe", :exit 0}
-     {:cmd "blob+axioms | lake env lean /dev/stdin", :exit 0}],
-    :diagnostic-history
-    [{:cmd "star draft", :exit 1, :correction "explicit edge type"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1791968618723-11728-92e9fa84",
-     :commands
-     ["git show/diff-tree/commit trailers; sha256sum"
-      "exact blob | lake env lean /dev/stdin; #print axioms"
-      "placeholder scan; statement-registry.py check; frozen hashes"],
-     :finding
-     "PASS: independent review of topo-6 commit 21ba63c87; sole path ConstructionTargets/t92J06Closure.lean, blob SHA256 cfc39162da05c31f76fa19aeaa5b8753aaf780084ee94498e85a2cd30fb078b8. Exact blob compiles; wedgeDesc and uniqueness use only propext, Classical.choice, Quot.sound; placeholders 0; registry 166/0. Frozen STATEMENTS hash eb49a622..., recorded Main hash 85f64495..., blueprint hash af4e6370.... This is new progress after the blueprint: it implements the quotient topology, continuous two-leg cocone, maps-out eliminator and uniqueness, and an actual IsCoveringMap bundle with exact fiber cardinality. Map directions are faithful: the coinduced quotient receives both circle legs, while wedgeDesc maps out and agrees on each leg. Remaining milestones are explicitly the simply connected Cayley-tree cover and four pairwise nonhomeomorphic exact three-sheet covers."},
-    :commit "b19eb4dfe",
+     {:cmd "git show --check bbbdf0ca4", :exit 0}
+     {:cmd "exact blob+axioms | lake env lean /dev/stdin", :exit 0}],
+    :commit "bbbdf0ca4",
     :changed-paths ["ConstructionTargets/t92J06Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t92J06Closure.lean",
      :sha256
-     "1d86d1ce02f5a40fcae9c1a98709a7981777e9c2a68654053c760cf6f6f07c67"},
+     "53da628730e125b338e73e7993150c1fae1ee2c4b7a99689ecd7c53f46eabf6e"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t92J06/lean/Main.lean"
     "problems/t92J06/status.json"
@@ -89899,7 +89882,9 @@
     :area "graph-covering-realization"},
    :id :lemma-twoloopgraphcoverdata-realization,
    :kind :lemma,
-   :depends-on [:lemma-twoloopgraphcoverdata-localstars],
+   :depends-on
+   [:lemma-twoloopgraphcoverdata-localstars
+    :lemma-twoloopgraphcoverdata-projection],
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
@@ -90251,4 +90236,39 @@
    :id :lemma-finitewedgeshiftedcounitnormalformtrivial-holds,
    :kind :lemma,
    :depends-on [],
-   :other-consumers [:t94J09]}]}
+   :other-consumers [:t94J09]}
+  {:consumer :t92J06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "twoLoopGraphCoverData_realizationCarrier",
+    :type
+    "interval-edge quotient with source/target endpoint equalities"},
+   :lemma
+   {:name "twoLoopGraphCoverData_realizationCarrier",
+    :reported-by [:program-2026-10-13-close-t92j06],
+    :type
+    "interval-edge quotient with source/target endpoint equalities",
+    :area "graph-covering-realization",
+    :proved-in :program-2026-10-13-close-t92j06},
+   :id :lemma-twoloopgraphcoverdata-realizationcarrier,
+   :kind :lemma,
+   :depends-on [:lemma-twoloopgraphcoverdata-localstars],
+   :other-consumers []}
+  {:consumer :t92J06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "twoLoopGraphCoverData_projection",
+    :type "continuous realization map to the two-circle wedge"},
+   :lemma
+   {:name "twoLoopGraphCoverData_projection",
+    :reported-by [:program-2026-10-13-close-t92j06],
+    :type "continuous realization map to the two-circle wedge",
+    :area "graph-covering-realization"},
+   :id :lemma-twoloopgraphcoverdata-projection,
+   :kind :lemma,
+   :depends-on [:lemma-twoloopgraphcoverdata-realizationcarrier],
+   :other-consumers []}]}
