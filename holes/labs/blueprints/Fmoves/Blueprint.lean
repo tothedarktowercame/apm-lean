@@ -1202,6 +1202,68 @@ lemma mergeRepeatedBlock_aux_boundary_edge_formulas
     MergeRepeatedBlockEdgeSpec g uLen vLen tLen := by
   sorry
 
+lemma mergeRepeatedBlock_aux_boundary_relation_aux_circleToDisk_injective :
+    Function.Injective circleToDisk := by
+  intro c d h
+  apply Subtype.ext
+  change (c : ℂ) = (d : ℂ)
+  have hh := congrArg (fun x : Disk => (x : ℂ)) h
+  exact hh
+
+lemma mergeRepeatedBlock_aux_boundary_relation_aux_eqvGen_map
+    {α β : Type*} {r : α → α → Prop} {s : β → β → Prop}
+    (f : α → β) (hgen : ∀ {x y}, r x y → Relation.EqvGen s (f x) (f y)) :
+    ∀ {x y}, Relation.EqvGen r x y → Relation.EqvGen s (f x) (f y) := by
+  intro x y h
+  induction h with
+  | refl x => exact Relation.EqvGen.refl _
+  | rel x y hxy => exact hgen hxy
+  | symm x y hxy ih => exact Relation.EqvGen.symm _ _ ih
+  | trans x y z hxy hyz ih₁ ih₂ =>
+      exact Relation.EqvGen.trans _ _ _ ih₁ ih₂
+
+/-- `WordRel` only relates unit-circle points, and interior points are related
+only to themselves, so its generated relation between circle points is the
+generated relation of its restriction to the circle. -/
+lemma wordRel_eqvGen_circle {L : Type*} [DecidableEq L]
+    (w : List (Signed L)) (c₁ c₂ : Circle) :
+    Relation.EqvGen (WordRel w) (circleToDisk c₁) (circleToDisk c₂) ↔
+      Relation.EqvGen (fun a b : Circle => WordRel w (circleToDisk a) (circleToDisk b))
+        c₁ c₂ := by
+  sorry
+
+/-- Forward generators: each identified source pair maps under `g` to a pair
+related in the target (classify the index among the seven append blocks). -/
+lemma mergeRepeatedBlock_aux_boundary_relation_aux_forward
+    {Label : Type*} [DecidableEq Label]
+    (u v t : List (Signed Label)) (y z a : Signed Label)
+    (hyz : y.1 ≠ z.1)
+    (ha : a.1 ∉ (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t).map Prod.fst)
+    (hy : ((u ++ v ++ t).map Prod.fst).count y.1 = 0)
+    (hz : ((u ++ v ++ t).map Prod.fst).count z.1 = 0)
+    (hw : IsPolygonWord (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t))
+    (g : Circle ≃ₜ Circle) (hg : MergeRepeatedBlockEdgeSpec g u.length v.length t.length) :
+    ∀ c₁ c₂ : Circle, WordRel (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t) (circleToDisk c₁) (circleToDisk c₂) →
+      Relation.EqvGen (fun p q : Circle => WordRel (u ++ [a] ++ v ++ [inv a] ++ t) (circleToDisk p) (circleToDisk q))
+        (g c₁) (g c₂) := by
+  sorry
+
+/-- Reverse generators: each identified target pair pulls back under `g⁻¹` to a
+related source pair (split the `a` / `a⁻¹` parameter at `1/2`). -/
+lemma mergeRepeatedBlock_aux_boundary_relation_aux_reverse
+    {Label : Type*} [DecidableEq Label]
+    (u v t : List (Signed Label)) (y z a : Signed Label)
+    (hyz : y.1 ≠ z.1)
+    (ha : a.1 ∉ (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t).map Prod.fst)
+    (hy : ((u ++ v ++ t).map Prod.fst).count y.1 = 0)
+    (hz : ((u ++ v ++ t).map Prod.fst).count z.1 = 0)
+    (hw : IsPolygonWord (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t))
+    (g : Circle ≃ₜ Circle) (hg : MergeRepeatedBlockEdgeSpec g u.length v.length t.length) :
+    ∀ d₁ d₂ : Circle, WordRel (u ++ [a] ++ v ++ [inv a] ++ t) (circleToDisk d₁) (circleToDisk d₂) →
+      Relation.EqvGen (fun p q : Circle => WordRel (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t) (circleToDisk p) (circleToDisk q))
+        (g.symm d₁) (g.symm d₂) := by
+  sorry
+
 /-- Combinatorial leaf: the seven edge formulas carry generators to
 generators in both directions; `EqvGen` also handles all shared vertices. -/
 lemma mergeRepeatedBlock_aux_boundary_relation
@@ -1218,7 +1280,16 @@ lemma mergeRepeatedBlock_aux_boundary_relation
           (circleToDisk c₁) (circleToDisk c₂) ↔
         Relation.EqvGen (WordRel (u ++ [a] ++ v ++ [inv a] ++ t))
           (circleToDisk (g c₁)) (circleToDisk (g c₂)) := by
-  sorry
+  intro c₁ c₂
+  rw [wordRel_eqvGen_circle, wordRel_eqvGen_circle]
+  constructor
+  · intro h
+    exact mergeRepeatedBlock_aux_boundary_relation_aux_eqvGen_map g
+      (fun hxy => mergeRepeatedBlock_aux_boundary_relation_aux_forward u v t y z a hyz ha hy hz hw g hg _ _ hxy) h
+  · intro h
+    have h' := mergeRepeatedBlock_aux_boundary_relation_aux_eqvGen_map g.symm
+      (fun hxy => mergeRepeatedBlock_aux_boundary_relation_aux_reverse u v t y z a hyz ha hy hz hw g hg _ _ hxy) h
+    simpa using h'
 
 /-- The boundary content of the merge: a PL circle homeomorphism sending arcs
 `y, z` to the halves of `a` (and `z⁻¹, y⁻¹` to the halves of `a⁻¹`), every
