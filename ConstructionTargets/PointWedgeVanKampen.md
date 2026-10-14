@@ -1430,3 +1430,8 @@ isomorphism, and `genericPointWedgeCoherentRightConnectors` now installs the
 right-cover system at the literal base `y₀` using the already proved quotient
 representative equality.  The next step is to replace the independent right
 coordinate connectors by this system and identify the resulting comparison.
+`genericPointWedgeCoherentRightConnectors_connector_hom` exposes each such
+connector as the literal-base transport, mapped right-piece connector, and
+cover counit in the precise categorical order required by the remaining
+square.  The next comparison can therefore proceed by expanding the pulled
+back source connector rather than reasoning about an opaque path choice.

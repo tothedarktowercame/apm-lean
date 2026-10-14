@@ -317,6 +317,14 @@ def connectorSystemComapEquivalence
   connector A := e.inverse.mapIso (S.connector (e.functor.obj A)) ≪≫
     (e.unitIso.app A).symm
 
+omit [PathConnectedSpace X] [PathConnectedSpace Y] in
+theorem connectorSystemComapEquivalence_connector_hom
+    {C D : Type} [Groupoid C] [Groupoid D]
+    (S : ConnectorSystem D) (e : C ≌ D) (A : C) :
+    ((connectorSystemComapEquivalence S e).connector A).hom =
+      e.inverse.map (S.connector (e.functor.obj A)).hom ≫
+        e.unitIso.inv.app A := rfl
+
 theorem genericPointWedgeConnectors_base
     {Z : Type} [TopologicalSpace Z] [PathConnectedSpace Z] (z₀ : Z) :
     (genericPointWedgeConnectors z₀).base = FundamentalGroupoid.mk z₀ := rfl
@@ -4898,6 +4906,26 @@ def genericPointWedgeCoherentRightConnectors :
       e.inverse.mapIso (eqToIso h))
   connectorSystemChangeBase (connectorSystemMapEquivalence source e)
     (FundamentalGroupoid.mk y₀) (eqToIso h.symm)
+
+/-- The installed coherent connector is, in exact order, the literal-base
+transport, the mapped right-piece connector, and the cover-equivalence
+counit.  This is the form consumed by the remaining connector square. -/
+theorem genericPointWedgeCoherentRightConnectors_connector_hom
+    (A : FundamentalGroupoid Y) :
+    let e := genericPointWedgeRightGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let h := genericPointWedgeRightEquiv_obj_rightBase
+      x₀ y₀ M N hM hN hy hx cM cN
+    let source := connectorSystemChangeBase
+      (connectorSystemComapEquivalence (genericPointWedgeConnectors y₀) e)
+      (genericPointWedgeRightBase x₀ y₀ N)
+      (e.unitIso.app (genericPointWedgeRightBase x₀ y₀ N) ≪≫
+        e.inverse.mapIso (eqToIso h))
+    ((genericPointWedgeCoherentRightConnectors
+      x₀ y₀ M N hM hN hy hx cM cN).connector A).hom =
+      (eqToIso h.symm).hom ≫
+        e.functor.map (source.connector (e.inverse.obj A)).hom ≫
+        e.counitIso.hom.app A := rfl
 
 omit [PathConnectedSpace X] [PathConnectedSpace Y] in
 /-- At the unique coordinate object, the object equality induced by the named
