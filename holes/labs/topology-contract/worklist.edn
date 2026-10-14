@@ -119068,7 +119068,7 @@
    "reopened: a lemma this row reported missing is now banked",
    :stop-count 4,
    :review-finding
-   "Representation-boundary defect: regularFiber_componentSignedCount_eq_zero indexes literal fiber points but assigns each point the global circleDegree of a chosen whole-component lift. Degree zero does not imply each local degree is zero (a degree-zero circle map may have regular preimages of local degrees +1 and -1), so the listed next step local-degree/component-degree equality is false and this lemma cannot bridge to the regular-value signed count. Repair by grouping fiber points by genuine preimage components and proving that the sum of local degrees on each component equals the lift degree, then sum the zero component totals. Archived files compile; hashes/placeholders/registry reproduce.",
+   "Recorded fixture hash is malformed/mismatched: ledger has afb497a6df6187f797ce1df000700b7c24774e94f50633c1cc10b2aa0e8c82319196, but the recorded commit blueprint hashes to afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984. Repair fixture provenance. The archived closure otherwise compiles sorry-free with standard axioms; Main retains its one baseline sorry; registry 166/166.",
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
     :residual
@@ -119111,6 +119111,12 @@
      {:cmd "hash/diff/placeholders", :exit 0}],
     :diagnostic-history
     [{:cmd "reindex draft", :exit 1, :finding "needed subtype sum"}],
+    :review
+    {:outcome :fail,
+     :seat "codex-3",
+     :job "invoke-1792008610008-12316-d2fa45c6",
+     :finding
+     "Recorded fixture hash is malformed/mismatched: ledger has afb497a6df6187f797ce1df000700b7c24774e94f50633c1cc10b2aa0e8c82319196, but the recorded commit blueprint hashes to afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984. Repair fixture provenance. The archived closure otherwise compiles sorry-free with standard axioms; Main retains its one baseline sorry; registry 166/166."},
     :commit "45dab8131ff80411fe29265826a71b06cd9fdc26",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
@@ -119119,7 +119125,7 @@
      "afb497a6df6187f797ce1df000700b7c24774e94f50633c1cc10b2aa0e8c82319196"},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :repair,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119141,7 +119147,7 @@
    :id :program-2026-10-13-close-t00j02,
    :kind :final-adapter,
    :campaign-priority 45,
-   :fail-count 0,
+   :fail-count 1,
    :depends-on [],
    :program true,
    :other-consumers [],
