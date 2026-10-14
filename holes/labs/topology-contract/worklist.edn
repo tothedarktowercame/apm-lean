@@ -113901,6 +113901,17 @@
       "lake build ConstructionTargets.ThreeCirclesFundamentalGroup",
       :exit 1,
       :finding "B12 file absent."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791942094497-11220-35a73594",
+     :commands
+     ["git show/diff-tree d18dfc701"
+      "git archive d18dfc701; lake env lean archived PointWedgeVanKampen.lean"
+      "lake build ConstructionTargets.PointWedgeVanKampen"
+      "sha256sum; placeholders; statement-registry.py check"],
+     :finding
+     "Independent review of topo-2 commit d18dfc701: only scoped Lean/doc files changed. Archived Lean and lake build pass; source/doc/fixture hashes b8dba7a5/107d9920/0bca6ce3 match evidence; placeholders 0->0; registry 166/166. The iff correctly substitutes inverse-span normalForm=1 and removes the remaining inverse, reducing right projection=1 to the unshifted round-trip normal form=1; axioms are standard. Valid program STOP; round-trip/projection/B6/B12 remain listed."},
     :commit "d18dfc701f62f3b67e2a9bd0dd6d1ec49667b6f2",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
@@ -113911,7 +113922,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113932,7 +113943,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Chosen-base inverse-span connector normal form proved identity.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Projection criterion reduced to one unshifted round-trip normal form.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -114809,7 +114820,11 @@
     {:job 3,
      :commit "264ae65e6c7e9fa675c6504ae7fd58e6af895aa7",
      :reason
-     "Chosen-base inverse-span connector normal form proved identity."}]}
+     "Chosen-base inverse-span connector normal form proved identity."}
+    {:job 4,
+     :commit "d18dfc701f62f3b67e2a9bd0dd6d1ec49667b6f2",
+     :reason
+     "Projection criterion reduced to one unshifted round-trip normal form."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
