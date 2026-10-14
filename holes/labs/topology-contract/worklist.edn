@@ -119066,21 +119066,25 @@
   {:consumer :t00J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 7,
+   :stop-count 8,
    :review-finding
    "Representation-boundary defect: regularFiber_componentSignedCount_eq_zero indexes literal fiber points but assigns each point the global circleDegree of a chosen whole-component lift. Degree zero does not imply each local degree is zero (a degree-zero circle map may have regular preimages of local degrees +1 and -1), so the listed next step local-degree/component-degree equality is false and this lemma cannot bridge to the regular-value signed count. Repair by grouping fiber points by genuine preimage components and proving that the sum of local degrees on each component equals the lift degree, then sum the zero component totals. Archived files compile; hashes/placeholders/registry reproduce.",
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
     :residual
-    "Construct local degrees; prove component sums equal lift degrees; assemble Main.",
+    "Construct local degrees; prove component sums equal lift degrees; prove regular-value formula; assemble Main.",
     :outcome :stop,
-    :warnings ["Main sorryAx" "unrelated edit"],
+    :warnings ["Main sorryAx"],
     :missing-theorems
-    [{:name "occupiedRegularFiber_exactZeroDegreeLifts",
-      :type "exact occupied-component lifts have degree zero",
+    [{:name
+      "occupiedComponentSignedCount_eq_zero_of_localDegreeComparison",
+      :type
+      "component comparison and zero lift degrees imply zero signed count",
       :status :proved,
       :consumers [:t00J02],
-      :depends-on ["OccupiedRegularFiberComponent"],
+      :depends-on
+      ["occupiedRegularFiber_exactZeroDegreeLifts"
+       "groupedComponentSignedCount_eq_zero_of_comparison"],
       :area "oriented-surface-degree"}
      {:name "t00J02_transverse_diskBounded_topHomologyMap_eq_zero",
       :type "H2 map zero",
@@ -119088,41 +119092,27 @@
       :consumers [:t00J02],
       :depends-on
       ["regularValue_topHomologyMap_signedCount"
-       "occupiedRegularFiber_exactZeroDegreeLifts"
-       "groupedComponentSignedCount_eq_zero_of_comparison"],
+       "occupiedComponentSignedCount_eq_zero_of_localDegreeComparison"],
       :area "oriented-surface-degree"}],
     :statement-hashes
     {:source
      "0b3b4888807bfa06c8d60d86829b75776394ea8aa45a98c933c087165521f923",
      :implementation
-     "4a82963b73d8f7ff020c81c93e43c3d0288df2d9788cf383255b55c729fa58d9",
+     "afa956fc1da0cb6d46eab0541e8521523346eb67c28e334fb9a187c57f671847",
      :blueprint
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984",
      :registry "166/166"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-2,
-    :reason "Banked exact component lifts.",
+    :reason "Banked lift-degree aggregation.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t00J02Closure.lean",
       :exit 0}
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "hash/diff/placeholders", :exit 0}],
-    :diagnostic-history
-    [{:cmd "lift draft", :exit 1, :finding "fixed casts/choice/Mono"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1792005136538-12230-4c723f19",
-     :commands
-     ["git diff-tree/show 8aa8be4"
-      "git archive 8aa8be4; lake env lean t00J02Closure.lean and Main.lean"
-      "sha256sum and placeholder counts at 8aa8be4"
-      "python3 scripts/statement-registry.py check"],
-     :finding
-     "PASS program STOP: new in-scope commit assigns every occupied genuine component an exact boundary parametrization with equal range and a commuting circle lift of degree zero, using disk boundedness and essentiality in the correct directions. Archived files compile; closure has 0 placeholders and standard axioms only; Main remains frozen at 0b3b4888 with baseline 1 placeholder; fixture afb497a6 matches; registry 166/166. Local degrees, component-sum comparison, and final assembly remain listed."},
-    :commit "8aa8be49e5271bdc8f77f9ad025131f3f38d45de",
+    :commit "5aeeae275e75b2397c2bc241f214652218fa1525",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t00J02Closure.blueprint.md",
@@ -119130,7 +119120,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119366,7 +119356,8 @@
     :lemma-regularfibercomponentindex
     :lemma-groupedcomponentsignedcount-eq-zero-of-comparison
     :lemma-occupiedregularfibercomponent
-    :lemma-occupiedregularfiber-exactzerodegreelifts],
+    :lemma-occupiedregularfiber-exactzerodegreelifts
+    :lemma-occupiedcomponentsignedcount-eq-zero-of-localdegreecomparison],
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
@@ -119740,6 +119731,30 @@
    :id :lemma-occupiedregularfiber-exactzerodegreelifts,
    :kind :lemma,
    :depends-on [:lemma-occupiedregularfibercomponent],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "occupiedComponentSignedCount_eq_zero_of_localDegreeComparison",
+    :type
+    "component comparison and zero lift degrees imply zero signed count"},
+   :lemma
+   {:name
+    "occupiedComponentSignedCount_eq_zero_of_localDegreeComparison",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type
+    "component comparison and zero lift degrees imply zero signed count",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02},
+   :id
+   :lemma-occupiedcomponentsignedcount-eq-zero-of-localdegreecomparison,
+   :kind :lemma,
+   :depends-on
+   [:lemma-occupiedregularfiber-exactzerodegreelifts
+    :lemma-groupedcomponentsignedcount-eq-zero-of-comparison],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
