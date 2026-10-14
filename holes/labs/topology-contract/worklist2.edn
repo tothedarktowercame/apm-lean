@@ -87901,7 +87901,7 @@
   {:consumer :t97A01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 10,
+   :stop-count 0,
    :evidence
    {:placeholder-delta 0,
     :residual
@@ -87954,7 +87954,7 @@
      "cf1d089b5ba56616e98a8289fb21498139421d42159ad8f967825c6ebd05ea11"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -88244,6 +88244,17 @@
     [{:cmd "projection drafts",
       :exit 1,
       :correction "explicit D; discrete carrier"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792002210554-12107-03e85530",
+     :commands
+     ["git show/diff 4b0a1ca1a; sha256sum"
+      "lake -Kjobs=1 build ConstructionTargets.t92J06Closure"
+      "lake env lean problems/t92J06/lean/Main.lean"
+      "#print axioms; placeholder scan; registry check; git show --check"],
+     :finding
+     "PASS: commit 4b0a1ca1a by topo-6 changes only scoped t92J06Closure.lean; exact blob SHA-256 1b1a0443fa9df2c4362290b8fe896cd179cd441d1e1989a71b519d35e0c48809. Exact snapshot builds; Main checks with its recorded one sorry; support file has 0 placeholders; new declarations use propext/Classical.choice/Quot.sound; registry 166/0. Raw carrier uses Mathlib discrete topology ⊥, quotient topology is coinduced, interval endpoints both map to the rose base, and EqvGen invariance covers source/target, symmetry, and transitivity before quotient_lift continuity. Real compiled progress; remaining milestones are local trivializations/fibers, Cayley tree, and finite-cover invariants."},
     :commit "4b0a1ca1a",
     :changed-paths ["ConstructionTargets/t92J06Closure.lean"],
     :fixture
@@ -88252,7 +88263,7 @@
      "1b1a0443fa9df2c4362290b8fe896cd179cd441d1e1989a71b519d35e0c48809"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t92J06/lean/Main.lean"
     "problems/t92J06/status.json"
@@ -88270,7 +88281,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t92J06Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked the graph realization quotient carrier.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked the graph projection.",
    :id :program-2026-10-13-close-t92j06,
    :kind :final-adapter,
    :campaign-priority 34,
@@ -88289,7 +88300,10 @@
     {:job 3, :commit "b19eb4dfe", :reason "Banked graph data."}
     {:job 4,
      :commit "bbbdf0ca4",
-     :reason "Banked the graph realization quotient carrier."}]}
+     :reason "Banked the graph realization quotient carrier."}
+    {:job 5,
+     :commit "4b0a1ca1a",
+     :reason "Banked the graph projection."}]}
   {:consumer :t94A08,
    :phase :lemma,
    :state :banked,
@@ -90312,7 +90326,7 @@
    :other-consumers []}
   {:consumer :t92J06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "twoLoopGraphCoverData_projection",
@@ -90322,7 +90336,9 @@
     :reported-by [:program-2026-10-13-close-t92j06],
     :type "continuous realization map to the two-circle wedge",
     :area "graph-covering-realization",
-    :proved-in :program-2026-10-13-close-t92j06},
+    :proved-in :program-2026-10-13-close-t92j06,
+    :banked-by :program-2026-10-13-close-t92j06,
+    :banked-commit "4b0a1ca1a"},
    :id :lemma-twoloopgraphcoverdata-projection,
    :kind :lemma,
    :depends-on [:lemma-twoloopgraphcoverdata-realizationcarrier],
@@ -90348,7 +90364,7 @@
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "finiteWedgeFinSucc_exists_legWord",
@@ -90358,7 +90374,9 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "transport split words to Fin successor legs",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/PolygonSurfaceHomology.lean"]},
    :id :lemma-finitewedgefinsucc-exists-legword,
    :kind :lemma,
    :depends-on
@@ -90616,7 +90634,7 @@
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "finiteWedgeFin_exists_legWord",
@@ -90626,7 +90644,9 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "every finite-wedge loop is a labeled leg word",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/PolygonSurfaceHomology.lean"]},
    :id :lemma-finitewedgefin-exists-legword,
    :kind :lemma,
    :depends-on [:lemma-finitewedgefinsucc-exists-legword],
