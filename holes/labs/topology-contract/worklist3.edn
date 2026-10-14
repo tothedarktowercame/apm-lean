@@ -36121,70 +36121,54 @@
   {:consumer :t93J03,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 2,
    :review-finding
    "Program STOP commits no new mathematical progress since the prior milestone: KleinPolygonBasedVanKampen merely packages the already-required surjectivity and kernel hypotheses, and both consumers only reapply the previously proved three-input theorem. Prove the based van Kampen surjectivity/kernel result (or winding conjugacy) in scope; extend Mathlib: state and prove the missing theorem in scope.",
    :evidence
    {:placeholder-delta {:t93J03 [1 1]},
     :residual
-    "Package run representatives against boundary family; instantiate fold; reverse kernel/surjectivity; winding; C1/C2/Main.",
+    "Choose outer run representatives; align endpoints; fold; reverse kernel/surjectivity; winding; C1/C2/Main.",
     :outcome :stop,
     :warnings [],
     :missing-theorems
-    [{:name "pathTwoOpenSubdivisionOuterRunBoundaryFamily_val",
-      :type "Fin-indexed outer boundaries recover ambient list",
+    [{:name "pathTwoOpenSubdivisionRunFamily_exists_slice",
+      :type "indexed nonempty runs; exact slices; constant side",
       :status :proved,
       :consumers [:t93J03],
-      :depends-on
-      ["pathTwoOpenSubdivisionOuterRunBoundaryPoints_map_val"],
+      :depends-on ["pathTwoOpenSubdivisionOuterRunBoundaryFamily_val"],
       :area "covering-subgroup-correspondence"}
      {:name "t93J03_polygon_based_van_kampen",
       :type "surjectivity; kernel equality",
       :status :partial,
       :consumers [:t93J03],
-      :depends-on ["pathTwoOpenSubdivisionOuterRunBoundaryFamily_val"],
+      :depends-on ["pathTwoOpenSubdivisionRunFamily_exists_slice"],
       :area "covering-subgroup-correspondence"}],
     :statement-hashes {:registry "166/166"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Indexed outer boundaries by Fin(runs+1) with exact ambient values; run representative family remains.",
+    "Indexed maximal runs with membership, nonemptiness, exact slices and constant side; representative choice remains.",
     :commands
     [{:cmd "lake build ConstructionTargets.t93J03Closure", :exit 0}
-     {:cmd
-      "lake env lean /tmp/t93j03_outer_boundary_family_check.lean",
-      :exit 0}
-     {:cmd "lake env lean problems/t93J03/lean/Main.lean", :exit 0}
-     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-     {:cmd "placeholder count", :exit 0}
-     {:cmd "git diff --check", :exit 0}
+     {:cmd "fixture; Main; registry; placeholder; diff", :exit 0}
      {:cmd "rg forbidden", :exit 1, :expected-exit 1}],
     :diagnostic-history
-    [{:cmd "family proof compiles",
+    [{:cmd "initial builds",
       :exit 1,
-      :correction "unfolded lifted list at indexed value"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1792012425560-12424-5a8f68dd",
-     :commands
-     ["git show/check/diff 8c4eb4f; exact scope and fixture sha256"
-      "lake build ConstructionTargets.t93J03Closure; lean frozen fixture and Main"
-      "statement-registry check; parent/commit placeholder and forbidden recount"],
-     :finding
-     "PASS: since history commit 263f5d47, 8c4eb4f adds compiled, sorry-free progress: a Fin(runs+1)-indexed family in outer subtype V and an exactly oriented coercion theorem recovering each ambient canonical boundary. This is the required representation bridge for packaging run representatives, not a facade over the still-missing van Kampen result. Scope and fixture hash match; standard axioms only; registry 166/166; Main placeholders 1->1; remaining fold, reverse kernel/surjectivity, winding, C1/C2/Main are listed."},
-    :commit "8c4eb4f96b95d89f92b10c478320a1c73ac05bf6",
+      :correction
+      "fixed syntax/nonempty proof; reran fixture after build"}],
+    :commit "daed472889c76a6ad1d273f5dc8cc6bea11a1a75",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
      "ConstructionTargets/t93J03Closure.blueprint.md"],
     :fixture
-    {:path "/tmp/t93j03_outer_boundary_family_check.lean",
+    {:path "/tmp/t93j03_run_family_check.lean",
      :sha256
-     "f94677c88f20478f56facb6b083e3431c25b11e312d331848f1f68b1ef084b76"},
+     "52741be3c90ca59ffa72c4b4062ef02ba65f78e2c3b9d4cae1e05201a7f96066"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -38799,7 +38783,8 @@
     :lemma-pathtwoopensubdivisionrunboundarypoints-getlast
     :lemma-pathtwoopensubdivisionrunboundarypoints-mem-outer
     :lemma-pathtwoopensubdivisionouterrunboundarypoints-map-val
-    :lemma-pathtwoopensubdivisionouterrunboundaryfamily-val],
+    :lemma-pathtwoopensubdivisionouterrunboundaryfamily-val
+    :lemma-pathtwoopensubdivisionrunfamily-exists-slice],
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
@@ -39835,6 +39820,24 @@
    :kind :lemma,
    :depends-on
    [:lemma-pathtwoopensubdivisionouterrunboundarypoints-map-val],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "pathTwoOpenSubdivisionRunFamily_exists_slice",
+    :type "indexed nonempty runs; exact slices; constant side"},
+   :lemma
+   {:name "pathTwoOpenSubdivisionRunFamily_exists_slice",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type "indexed nonempty runs; exact slices; constant side",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03},
+   :id :lemma-pathtwoopensubdivisionrunfamily-exists-slice,
+   :kind :lemma,
+   :depends-on
+   [:lemma-pathtwoopensubdivisionouterrunboundaryfamily-val],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
