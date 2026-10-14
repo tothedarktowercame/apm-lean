@@ -113903,6 +113903,19 @@
       "lake build ConstructionTargets.ThreeCirclesFundamentalGroup",
       :exit 1,
       :finding "B12 absent"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791987718525-11875-8e320208",
+     :commands
+     ["git show/diff-tree a6d0d9ddb90ab82dc72d9023e826c0d78943eecb"
+      "archive commit; lake env lean PointWedgeVanKampen.lean"
+      "sha256sum source/doc/blueprint; count sorry/admit"
+      "python3 scripts/statement-registry.py check"
+      "#print axioms arbitrary-endpoint reduction"
+      "lake build ConstructionTargets.PointWedgeVanKampen"],
+     :finding
+     "PASS: exact scope and hashes match; archived source compiles; placeholders 0->0; registry 166/166. At any endpoint, literal Y counit-normal-form triviality correctly yields the target connector square, then the triangle identity, comap, and base change yield source inverse-unit coherence; standard axioms only. New compiled milestone recorded; two endpoint normal forms, installed overlap square, and genericPointWedgeLegCoordinates_vanKampen remain listed."},
     :commit "a6d0d9ddb90ab82dc72d9023e826c0d78943eecb",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
@@ -113913,7 +113926,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113934,7 +113947,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked literal counit square iff trivial normal form.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked arbitrary-endpoint counit-normal-form reduction.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -114892,7 +114905,11 @@
      :reason "Banked fixed-endpoint installed connector reduction."}
     {:job 6,
      :commit "5464a3cb6490e83ed9c8f90a558ed39da9d8e1ce",
-     :reason "Banked literal counit square iff trivial normal form."}]}
+     :reason "Banked literal counit square iff trivial normal form."}
+    {:job 7,
+     :commit "a6d0d9ddb90ab82dc72d9023e826c0d78943eecb",
+     :reason
+     "Banked arbitrary-endpoint counit-normal-form reduction."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
