@@ -119110,6 +119110,17 @@
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "hash/placeholders/diff", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1792013337000-12446-c997b354",
+     :commands
+     ["git diff-tree/show 636cca07"
+      "archive 636cca07; lake env lean closure and Main"
+      "sha256sum/placeholders at 636cca07"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS program STOP: new commit changes only t00J02Closure.lean and proves the correctly oriented coefficient-uniqueness bridge: any integer producing the same localized global class equals the chosen point coefficient, using injectivity of integer multiples of the ambient local generator. This is reusable progress toward the geometric formulas. Fixture/frozen hashes match; closure has 0 placeholders, Main baseline 1; archived files compile with standard axioms; registry 166/166. Component/top-degree formulas and Main assembly remain listed."},
     :commit "636cca0780ffd4ea44101fbedb0538af96f40a40",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
@@ -119118,7 +119129,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119136,7 +119147,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t00J02Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked top-degree localization interface.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked local-degree coefficient uniqueness.",
    :id :program-2026-10-13-close-t00j02,
    :kind :final-adapter,
    :campaign-priority 45,
@@ -119240,7 +119251,10 @@
      :reason "Banked component-localization interface."}
     {:job 4,
      :commit "a7feb28a91ce4aae5595b82b5cb443b7906e593d",
-     :reason "Banked top-degree localization interface."}]}
+     :reason "Banked top-degree localization interface."}
+    {:job 5,
+     :commit "636cca0780ffd4ea44101fbedb0538af96f40a40",
+     :reason "Banked local-degree coefficient uniqueness."}]}
   {:consumer :t98A06,
    :stop-count 3,
    :evidence
@@ -120176,7 +120190,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "regularFiberLocalDegree_eq_of_localization_eq",
@@ -120186,7 +120200,9 @@
     :reported-by [:program-2026-10-13-close-t00j02],
     :type "localized chart coefficient equals point local degree",
     :area "oriented-surface-degree",
-    :proved-in :program-2026-10-13-close-t00j02},
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "636cca0780ffd4ea44101fbedb0538af96f40a40"},
    :id :lemma-regularfiberlocaldegree-eq-of-localization-eq,
    :kind :lemma,
    :depends-on
@@ -120195,11 +120211,14 @@
    :other-consumers []}
   {:consumer :portfolio,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance {:lemma "ambientLocalGenerator_zsmul_injective"},
    :lemma
-   {:name "ambientLocalGenerator_zsmul_injective", :reported-by []},
+   {:name "ambientLocalGenerator_zsmul_injective",
+    :reported-by [],
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/ManifoldFundamentalClass.lean"]},
    :id :lemma-ambientlocalgenerator-zsmul-injective,
    :kind :lemma,
    :depends-on [],
