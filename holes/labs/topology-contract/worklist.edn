@@ -113853,14 +113853,14 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 2,
+   :stop-count 3,
    :review-finding
    "Recorded fixture hash mismatch: :fixture.sha256 is 0bca6ce32c019fc3053c7f813c26917169cf817375b44d5e722b864b61a526450c1, but ConstructionTargets/PointWedgeVanKampen.blueprint.md at recorded commit c9b3af27 has exact SHA-256 0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0. Re-record the fixture hash for the reviewed commit.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
    :evidence
    {:placeholder-delta {:source-before 0, :source-after 0},
     :residual
-    "Align source transport with outer connectors; then projection/B6/B12.",
+    "Normalize inverse unshifted round-trip; then projection/B6/B12.",
     :outcome :stop,
     :warnings ["existing linter"],
     :missing-theorems
@@ -113874,9 +113874,9 @@
       :area "fundamental-group-wedge-of-circles"}],
     :statement-hashes
     {:source
-     "146fc98142b08ed5b42c2ce5676b5386017e3e0ccb7d4a0cb0e187c8d9b06f4d",
+     "8bb68ee6a3176693ba07a379e56f3273b35e8980d9dea196cc90bf92e5e020b8",
      :documentation
-     "0705df57f8c8344cd74a95ec39b13bf0b89d777f6e4f5b3ace1b9a3dc266b7db",
+     "d9574d19ce41d4bae32c5cdb08a49e720f992b2e43faba717662ad9391cc9f20",
      :blueprint
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0",
      :registry "166/166"},
@@ -113884,7 +113884,7 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
     :reason
-    "Typed comparator/map-unitInv middle cancelled inside connector normal form.",
+    "Chosen-base inverse-span connector normal form proved identity.",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/PointWedgeVanKampen.lean",
@@ -113894,26 +113894,15 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "sha256/diff/placeholders", :exit 0}],
     :diagnostic-history
-    [{:cmd "explicit cancellation drafts",
+    [{:cmd "dependent endpoint drafts",
       :exit 1,
       :finding
-      "Dependent reassociation rejected; retained audited standard simp."}
+      "Concrete elimination failed; abstract connector transport compiled."}
      {:cmd
       "lake build ConstructionTargets.ThreeCirclesFundamentalGroup",
       :exit 1,
       :finding "B12 file absent."}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1791937373748-11028-ba04c54f",
-     :commands
-     ["git show/diff-tree bef0a985e"
-      "git archive bef0a985e; lake env lean archived PointWedgeVanKampen.lean"
-      "lake build ConstructionTargets.PointWedgeVanKampen"
-      "sha256sum; placeholders; statement-registry.py check"],
-     :finding
-     "Independent review of topo-2 commit bef0a985e: only scoped Lean/doc files changed. Archived Lean and lake build pass; source/doc/fixture hashes 146fc981/0705df57/0bca6ce3 match evidence; placeholders 0->0; registry 166/166. The comparator-map-unitInv cancellation is correctly oriented and leaves the typed source transport between outer connectors; axioms are standard. Valid program STOP with residual transport alignment/projection/B6/B12 listed."},
-    :commit "bef0a985e47b8bd16c74331ed12e9961edf20f21",
+    :commit "264ae65e6c7e9fa675c6504ae7fd58e6af895aa7",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
      "ConstructionTargets/PointWedgeVanKampen.md"],
@@ -113923,7 +113912,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
