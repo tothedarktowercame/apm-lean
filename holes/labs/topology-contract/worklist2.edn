@@ -87901,61 +87901,54 @@
   {:consumer :t97A01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 5,
+   :stop-count 6,
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Prove final-factor transport; expand factors; then surjectivity, coordinate epi, B6-B10.",
+    "Expand old/final factors into labeled legs; then surjectivity, coordinate epi, B6-B10.",
     :outcome :stop,
-    :warnings ["lints; unrelated edits preserved"],
+    :warnings ["preexisting lints"],
     :missing-theorems
-    [{:name "finiteWedgeFinSuccOldFundamentalGroupMap_eq_transport",
-      :type "transported left leg equals old-factor map",
+    [{:name "finiteWedgeFinSuccLastFundamentalGroupMap_eq_transport",
+      :type "transported right leg equals final-factor map",
       :status :proved,
       :consumers [:t97A01 :t94J09],
-      :depends-on ["finiteWedgeFinSuccOldInclusion_wedgeCircle"],
+      :depends-on ["finiteWedgeFinSuccLastInclusion_wedgeCircle"],
       :area "polygon-quotient-homology"}
-     {:name "finiteWedgeFinSuccLastFundamentalGroupMap_eq_transport",
-      :type "transported right leg equals final-factor map",
+     {:name "finiteWedgeFinSucc_exists_installedSplitLegWord",
+      :type "successor loops are installed old/final factor words",
+      :status :proved,
+      :consumers [:t97A01 :t94J09],
+      :depends-on
+      ["finiteWedgeFinSuccOldFundamentalGroupMap_eq_transport"
+       "finiteWedgeFinSuccLastFundamentalGroupMap_eq_transport"],
+      :area "polygon-quotient-homology"}
+     {:name "finiteWedgeFinSucc_exists_legWord",
+      :type "expand factor words into Fin legs",
       :status :not-started,
       :consumers [:t97A01 :t94J09],
-      :depends-on ["finiteWedgeFinSuccLastInclusion_wedgeCircle"],
+      :depends-on ["finiteWedgeFinSucc_exists_installedSplitLegWord"],
       :area "polygon-quotient-homology"}],
     :statement-hashes {:registry "166/0"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked old-factor group-map transport.",
+    :reason "Banked final-factor transport and installed split words.",
     :commands
     [{:cmd "lake build ConstructionTargets.PolygonSurfaceHomology",
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-     {:cmd "git show --check 02d093b35", :exit 0}
+     {:cmd "git show --check 0dfafee0b", :exit 0}
      {:cmd "axioms check", :exit 0}],
-    :diagnostic-history
-    [{:cmd "comparison drafts",
-      :exit 1,
-      :correction "explicit path cast"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792000215415-11999-6b47a0bd",
-     :commands
-     ["git show/diff 02d093b35; sha256sum"
-      "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology"
-      "lake env lean /dev/stdin (#print axioms)"
-      "placeholder scan; statement-registry check; git show --check"],
-     :finding
-     "PASS: commit 02d093b35 by topo-6 changes only scoped PolygonSurfaceHomology.lean; exact blob SHA-256 5d20114209eb2f0f6b89d61a72249bac250d6887b75f0fcd7f4d9ca8cd4a34e0. Exact snapshot builds; 0 placeholders; new theorems use propext/Classical.choice/Quot.sound; registry 166/0. On loop representatives the proof unfolds both induced maps, removes the explicit Path.cast pointwise, and verifies homeomorphism∘old-inclusion equals the left quotient leg. The reverse transport equality uses equivalence injectivity in the correct direction. Real compiled progress; remaining milestones prove final-factor transport, expand factors, then surjectivity/B6-B10."},
-    :commit "02d093b35",
+    :commit "0dfafee0b",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
     {:path "ConstructionTargets/PolygonSurfaceHomology.lean",
      :sha256
-     "5d20114209eb2f0f6b89d61a72249bac250d6887b75f0fcd7f4d9ca8cd4a34e0"},
+     "0968a17765b106ba9d2b345d2de1f8bc40cf378d26cf7e399c154bdd61c8926a"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -90353,7 +90346,8 @@
    :kind :lemma,
    :depends-on
    [:lemma-finitewedgefinsuccpointwedge-exists-legword
-    :lemma-finitewedgefinsucc-exists-splitlegword],
+    :lemma-finitewedgefinsucc-exists-splitlegword
+    :lemma-finitewedgefinsucc-exists-installedsplitlegword],
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
@@ -90460,8 +90454,28 @@
    {:name "finiteWedgeFinSuccLastFundamentalGroupMap_eq_transport",
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "transported right leg equals final-factor map",
-    :area "polygon-quotient-homology"},
+    :area "polygon-quotient-homology",
+    :proved-in :program-2026-10-13-polygon-surface-homology},
    :id :lemma-finitewedgefinsucclastfundamentalgroupmap-eq-transport,
    :kind :lemma,
    :depends-on [:lemma-finitewedgefinsucclastinclusion-wedgecircle],
+   :other-consumers [:t94J09]}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "finiteWedgeFinSucc_exists_installedSplitLegWord",
+    :type "successor loops are installed old/final factor words"},
+   :lemma
+   {:name "finiteWedgeFinSucc_exists_installedSplitLegWord",
+    :reported-by [:program-2026-10-13-polygon-surface-homology],
+    :type "successor loops are installed old/final factor words",
+    :area "polygon-quotient-homology",
+    :proved-in :program-2026-10-13-polygon-surface-homology},
+   :id :lemma-finitewedgefinsucc-exists-installedsplitlegword,
+   :kind :lemma,
+   :depends-on
+   [:lemma-finitewedgefinsuccoldfundamentalgroupmap-eq-transport
+    :lemma-finitewedgefinsucclastfundamentalgroupmap-eq-transport],
    :other-consumers [:t94J09]}]}
