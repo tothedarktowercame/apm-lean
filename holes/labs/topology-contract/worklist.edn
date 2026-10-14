@@ -113902,6 +113902,17 @@
       "lake build ConstructionTargets.ThreeCirclesFundamentalGroup",
       :exit 1,
       :finding "B12 file absent."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791940146589-11123-b9b532e5",
+     :commands
+     ["git show/diff-tree 264ae65e6"
+      "git archive 264ae65e6; lake env lean archived PointWedgeVanKampen.lean"
+      "lake build ConstructionTargets.PointWedgeVanKampen"
+      "sha256sum; placeholders; statement-registry.py check"],
+     :finding
+     "Independent review of topo-2 commit 264ae65e6: only scoped Lean/doc files changed. Archived Lean and lake build pass; source/doc/fixture hashes 8bb68ee6/d9574d19/0bca6ce3 match evidence; placeholders 0->0; registry 166/166. Endpoint transport and connector orientations are correct, yielding the chosen-base inverse-span normal form = identity with standard axioms. Valid program STOP; inverse round-trip/projection/B6/B12 remain listed."},
     :commit "264ae65e6c7e9fa675c6504ae7fd58e6af895aa7",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
@@ -113912,7 +113923,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113933,7 +113944,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Typed comparator/map-unitInv middle cancelled inside connector normal form.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Chosen-base inverse-span connector normal form proved identity.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -114806,7 +114817,11 @@
     {:job 2,
      :commit "bef0a985e47b8bd16c74331ed12e9961edf20f21",
      :reason
-     "Typed comparator/map-unitInv middle cancelled inside connector normal form."}]}
+     "Typed comparator/map-unitInv middle cancelled inside connector normal form."}
+    {:job 3,
+     :commit "264ae65e6c7e9fa675c6504ae7fd58e6af895aa7",
+     :reason
+     "Chosen-base inverse-span connector normal form proved identity."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
