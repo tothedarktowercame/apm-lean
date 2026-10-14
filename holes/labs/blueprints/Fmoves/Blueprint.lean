@@ -4499,7 +4499,66 @@ theorem zip_boundary_iff {Label : Type*} [DecidableEq Label]
     ∀ p q : Disk, ‖(p : ℂ)‖ = 1 → ‖(q : ℂ)‖ = 1 →
       (Relation.EqvGen (WordRel (u ++ [x, inv x] ++ v)) p q ↔
        Relation.EqvGen (WordRel (u ++ v)) (c p) (c q)) := by
-  sorry
+  intro p q hp hq
+  constructor
+  · intro h
+    exact mergeRepeatedBlock_aux_boundary_relation_aux_eqvGen_map c
+      (fun hxy => hfwd _ _ hxy) h
+  · intro h
+    by_cases hcp : ‖(c p : ℂ)‖ < 1
+    · have heq := wordRel_eqvGen_interior (u ++ v) h hcp
+      exact hfib hp hq heq
+    by_cases hcq : ‖(c q : ℂ)‖ < 1
+    · have heq := wordRel_eqvGen_interior (u ++ v)
+          (Relation.EqvGen.symm _ _ h) hcq
+      exact hfib hp hq heq.symm
+    have hcp_le : ‖(c p : ℂ)‖ ≤ 1 := by
+      have hh := (c p).2
+      rwa [Metric.mem_closedBall, dist_zero_right] at hh
+    have hcq_le : ‖(c q : ℂ)‖ ≤ 1 := by
+      have hh := (c q).2
+      rwa [Metric.mem_closedBall, dist_zero_right] at hh
+    have hcp_eq : ‖(c p : ℂ)‖ = 1 := le_antisymm hcp_le (not_lt.mp hcp)
+    have hcq_eq : ‖(c q : ℂ)‖ = 1 := le_antisymm hcq_le (not_lt.mp hcq)
+    obtain ⟨a, ha⟩ := circleToDisk_of_norm (c p) hcp_eq
+    obtain ⟨b, hb⟩ := circleToDisk_of_norm (c q) hcq_eq
+    have hab : Relation.EqvGen
+        (fun z z' : Circle =>
+          WordRel (u ++ v) (circleToDisk z) (circleToDisk z')) a b := by
+      apply (wordRel_eqvGen_circle (u ++ v) a b).mp
+      simpa [ha, hb] using h
+    have lift_chain : ∀ {a b : Circle},
+        Relation.EqvGen
+          (fun z z' : Circle =>
+            WordRel (u ++ v) (circleToDisk z) (circleToDisk z')) a b →
+        ∀ (P Q : Disk), ‖(P : ℂ)‖ = 1 → ‖(Q : ℂ)‖ = 1 →
+          c P = circleToDisk a → c Q = circleToDisk b →
+          Relation.EqvGen (WordRel (u ++ [x, inv x] ++ v)) P Q := by
+      intro a b hab
+      induction hab with
+      | refl a =>
+          intro P Q hP hQ hPa hQa
+          exact hfib hP hQ (hPa.trans hQa.symm)
+      | rel a b hab =>
+          intro P Q hP hQ hPa hQb
+          obtain ⟨P', Q', hP', hQ', hP'a, hQ'b, hP'Q'⟩ :=
+            hlift (circleToDisk a) (circleToDisk b) hab
+          exact Relation.EqvGen.trans _ _ _
+            (hfib hP hP' (hPa.trans hP'a.symm))
+            (Relation.EqvGen.trans _ _ _ (Relation.EqvGen.rel _ _ hP'Q')
+              (hfib hQ' hQ (hQ'b.trans hQb.symm)))
+      | symm a b hab ih =>
+          intro P Q hP hQ hPa hQb
+          exact Relation.EqvGen.symm _ _ (ih Q P hQ hP hQb hPa)
+      | trans a b d hab hbd ih₁ ih₂ =>
+          intro P Q hP hQ hPa hQd
+          have hb_norm : ‖(circleToDisk b : ℂ)‖ = 1 := by
+            simpa [circleToDisk, Circle, Submonoid.unitSphere] using b.2
+          obtain ⟨R, hR, hRb⟩ := hcirc (circleToDisk b) hb_norm
+          exact Relation.EqvGen.trans _ _ _
+            (ih₁ P R hP hR hPa hRb)
+            (ih₂ R Q hR hQ hRb hQd)
+    exact lift_chain hab p q hp hq ha.symm hb.symm
 
 /-- Leaf (PL construction, 90--130 lines): triangulate the source by the
 centre, the endpoints of the two cancelled arcs, and all remaining vertices;
