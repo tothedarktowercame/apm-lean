@@ -1516,7 +1516,65 @@ lemma mergeRepeatedBlock_aux_boundary_lift_aux_assemble (uLen vLen tLen : ℕ)
     (∀ (i : ℕ), i < tLen → ∀ s : Set.Icc (0 : ℝ) 1,
       mergeRepeatedBlock_aux_boundary_lift_aux_local uLen vLen (uLen + 4 + vLen + i + s.1) = uLen + 2 + vLen + i + s.1)) :
     Nonempty (MergeRepeatedBlockLiftSpec uLen vLen tLen) := by
-  sorry
+  rcases hform with ⟨hu, hy, hz, hv, hiz, hiy, ht⟩
+  have hu0 : (0 : ℝ) ≤ uLen := by positivity
+  have hv0 : (0 : ℝ) ≤ vLen := by positivity
+  have ht0 : (0 : ℝ) ≤ tLen := by positivity
+  refine ⟨{ toEquivariantCircleLift := F
+            on_u := ?_
+            on_y := ?_
+            on_z := ?_
+            on_v := ?_
+            on_inv_z := ?_
+            on_inv_y := ?_
+            on_t := ?_ }⟩
+  · intro i hi s
+    have hi' : (i : ℝ) < uLen := by exact_mod_cast hi
+    rw [hF]
+    · exact hu i hi s
+    · constructor
+      · linarith [s.2.1]
+      · linarith [s.2.2]
+  · intro s
+    rw [hF]
+    · exact hy s
+    · constructor
+      · linarith [s.2.1]
+      · linarith [s.2.2]
+  · intro s
+    rw [hF]
+    · exact hz s
+    · constructor
+      · linarith [s.2.1]
+      · linarith [s.2.2]
+  · intro i hi s
+    have hi' : (i : ℝ) < vLen := by exact_mod_cast hi
+    rw [hF]
+    · exact hv i hi s
+    · constructor
+      · linarith [s.2.1]
+      · linarith [s.2.2]
+  · intro s
+    rw [hF]
+    · exact hiz s
+    · constructor
+      · linarith [s.2.1]
+      · linarith [s.2.2]
+  · intro s
+    rw [hF]
+    · exact hiy s
+    · constructor
+      · linarith [s.2.1]
+      · linarith [s.2.2]
+  · intro i hi s
+    have hi' : (i : ℝ) < tLen := by exact_mod_cast hi
+    have hi1 : (i + 1 : ℕ) ≤ tLen := by omega
+    have hi1' : (i : ℝ) + 1 ≤ tLen := by exact_mod_cast hi1
+    rw [hF]
+    · exact ht i hi s
+    · constructor
+      · linarith [s.2.1]
+      · linarith [s.2.2]
 -- END SEAT AREA
 
 /-- PL leaf: construct the increasing piecewise-affine lift with slopes
