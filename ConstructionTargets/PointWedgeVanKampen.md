@@ -1396,3 +1396,12 @@ closes.
 now performs that literal middle cancellation: the normal form consists only
 of the two outer connectors with the named source endpoint transport between
 them.  Aligning that transport with the source connector is the next step.
+`connector_hom_comp_eqToHom` records the general endpoint-transport law for
+a connector system, and
+`genericPointWedgeOuterRight_leadingConnector_comp_sourceTransport` applies it
+to the right comparison without eliminating the concrete dependent object.
+Consequently `genericPointWedgeOuterRight_typedComposite_normalForm_eq_one`
+and `genericPointWedgeOuterRight_inverseSpan_normalForm_eq_one` show that the
+chosen-base inverse-span normal form is the identity.  The remaining
+projection criterion now only needs the inverse unshifted round-trip normal
+form normalized to the same identity.

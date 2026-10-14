@@ -7075,6 +7075,78 @@ theorem genericPointWedgeOuterRight_typedComposite_normalForm_eq_sourceTransport
     genericPointWedgeOuterRight_typedComposite_normalForm_reassociated
       x₀ y₀ M N hM hN hy hx cM cN
 
+omit [PathConnectedSpace X] in
+/-- A connector followed by propositional transport of its endpoint is the
+connector at the transported endpoint. -/
+theorem connector_hom_comp_eqToHom
+    {C : Type} [Groupoid C] (S : ConnectorSystem C) {A B : C} (h : A = B) :
+    (S.connector A).hom ≫ eqToHom h = (S.connector B).hom := by
+  subst B
+  simp
+
+omit [PathConnectedSpace X] in
+/-- The endpoint transport carries the leading coordinate connector to the
+source connector of the unshifted right round trip. -/
+theorem genericPointWedgeOuterRight_leadingConnector_comp_sourceTransport :
+    let r := genericPointWedgeActualRight x₀ y₀ M N
+    let eK := genericPointWedgeOverlapGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let eR := genericPointWedgeRightGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let z := genericPointWedgeOverlapBase x₀ y₀ M N
+    ((genericPointWedgeConnectors y₀).connector
+        ((genericPointWedgeCoordinateRight y₀).obj
+          (eK.functor.obj z))).hom ≫
+      genericPointWedgeOuterRight_sourceTransport
+        x₀ y₀ M N hM hN hy hx cM cN =
+      ((genericPointWedgeConnectors y₀).connector
+        ((r ⋙ eR.functor).obj z)).hom := by
+  have h := (genericPointWedgeOuterRight_middleComponent_endpoints
+    x₀ y₀ M N hM hN hy hx cM cN).1
+  have ht : genericPointWedgeOuterRight_sourceTransport
+      x₀ y₀ M N hM hN hy hx cM cN = eqToHom h := by
+    unfold genericPointWedgeOuterRight_sourceTransport
+    congr 1
+  rw [ht]
+  exact connector_hom_comp_eqToHom (genericPointWedgeConnectors y₀) h
+
+/-- After endpoint alignment, the cancelled comparator normal form is the
+identity at the literal right basepoint. -/
+theorem genericPointWedgeOuterRight_typedComposite_normalForm_eq_one :
+    let r := genericPointWedgeActualRight x₀ y₀ M N
+    let eK := genericPointWedgeOverlapGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let eR := genericPointWedgeRightGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let z := genericPointWedgeOverlapBase x₀ y₀ M N
+    (genericPointWedgeConnectors y₀).normalForm
+        (genericPointWedgeOuterRight_typedTransportComposite
+            x₀ y₀ M N hM hN hy hx cM cN ≫
+          (r ⋙ eR.functor).map (eK.unitInv.app z)) =
+      𝟙 (FundamentalGroupoid.mk y₀) := by
+  dsimp only
+  rw [genericPointWedgeOuterRight_typedComposite_normalForm_eq_sourceTransport]
+  rw [← Category.assoc]
+  rw [genericPointWedgeOuterRight_leadingConnector_comp_sourceTransport]
+  exact genericPointWedgeOuterRight_sourceConnector_hom_inv_id_at_basepoint
+    x₀ y₀ M N hM hN hy hx cM cN
+
+/-- The chosen-base inverse-span component therefore has trivial connector
+normal form. -/
+theorem genericPointWedgeOuterRight_inverseSpan_normalForm_eq_one :
+    let eK := genericPointWedgeOverlapGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let aR := genericPointWedgeRightSpanIso
+      x₀ y₀ M N hM hN hy hx cM cN
+    let z := genericPointWedgeOverlapBase x₀ y₀ M N
+    (genericPointWedgeConnectors y₀).normalForm
+        (aR.inv.app (eK.functor.obj z)) =
+      𝟙 (FundamentalGroupoid.mk y₀) := by
+  dsimp only
+  rw [genericPointWedgeOuterRight_inverseSpan_normalForm_eq_typedComposite]
+  exact genericPointWedgeOuterRight_typedComposite_normalForm_eq_one
+    x₀ y₀ M N hM hN hy hx cM cN
+
 /-- An `inl` factorization of the right-base conjugator forces its canonical
 right projection to be trivial. -/
 theorem genericPointWedgeRightBase_inl_implies_rightProjection_eq_one
@@ -7842,6 +7914,10 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeOuterRight_sourceConnector_hom_inv_id_at_basepoint
 #print axioms genericPointWedgeOuterRight_typedComposite_normalForm_reassociated
 #print axioms genericPointWedgeOuterRight_typedComposite_normalForm_eq_sourceTransport
+#print axioms connector_hom_comp_eqToHom
+#print axioms genericPointWedgeOuterRight_leadingConnector_comp_sourceTransport
+#print axioms genericPointWedgeOuterRight_typedComposite_normalForm_eq_one
+#print axioms genericPointWedgeOuterRight_inverseSpan_normalForm_eq_one
 #print axioms genericPointWedgeRightBase_inl_implies_rightProjection_eq_one
 #print axioms genericPointWedgeLegCoordinates_of_mapped
 #print axioms genericPointWedgeLegCoordinates_iff_mapped
