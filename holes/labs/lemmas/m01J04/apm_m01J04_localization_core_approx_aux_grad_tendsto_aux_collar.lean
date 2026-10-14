@@ -2208,6 +2208,29 @@ lemma apm_m01J04_localization_core_approx_aux_grad_tendsto_aux_collar_fderiv
 `(fφ) ∇χ_r = f · smoothTransition'(φ²/r² − 1) · 2(φ²/r²) ∇φ`, bounded by
 `4M |f| |∇φ|` (on the collar `φ² ≤ 2r²`) and eventually `0` at each point. -/
 -- BEGIN SEAT AREA
+lemma apm_m01J04_localization_core_approx_aux_grad_tendsto_aux_collar_aux_fderiv
+    {d : ℕ} (φ : EuclideanSpace ℝ (Fin d) → ℝ)
+    (hφ : ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) φ) (r : ℝ) (x) :
+    fderiv ℝ (apm_m01J04_localization_core_approx_aux_cutoff φ r) x =
+      (deriv Real.smoothTransition (φ x ^ 2 / r ^ 2 - 1)) •
+        ((2 * φ x / r ^ 2) • fderiv ℝ φ x) := by
+  have hφx : HasFDerivAt φ (fderiv ℝ φ x) x :=
+    (hφ.differentiable (by simp)).differentiableAt.hasFDerivAt
+  have hi : HasFDerivAt (fun y ↦ φ y ^ 2 / r ^ 2 - 1)
+      ((2 * φ x / r ^ 2) • fderiv ℝ φ x) x := by
+    convert ((hφx.pow 2).const_smul (1 / r ^ 2)).sub_const 1 using 1 <;>
+      ext z <;> simp <;> ring
+  have hs : HasDerivAt Real.smoothTransition
+      (deriv Real.smoothTransition (φ x ^ 2 / r ^ 2 - 1))
+      (φ x ^ 2 / r ^ 2 - 1) :=
+    ((@Real.smoothTransition.contDiff 1).differentiable
+      (by norm_num)).differentiableAt.hasDerivAt
+  have hc := (hs.hasFDerivAt.comp x hi).fderiv
+  convert hc using 1 <;>
+    ext z <;>
+    simp [apm_m01J04_localization_core_approx_aux_cutoff, Function.comp_def,
+      smul_smul] <;> ring
+
 lemma apm_m01J04_localization_core_approx_aux_grad_tendsto_aux_collar
     {d : ℕ} {Ω : Set (EuclideanSpace ℝ (Fin d))}
     (φ : EuclideanSpace ℝ (Fin d) → ℝ)
@@ -2217,7 +2240,160 @@ lemma apm_m01J04_localization_core_approx_aux_grad_tendsto_aux_collar
     Tendsto (fun n : ℕ ↦
       (eLpNorm (fun x ↦ (apm_m01J04_globalLocalizedH1 φ hφ f).val x • WithLp.toLp 2 (fun i ↦
           fderiv ℝ (apm_m01J04_localization_core_approx_aux_cutoff φ (1 / (n + 1 : ℝ))) x (EuclideanSpace.single i 1))) 2 volume).toReal) atTop (nhds 0) := by
-  sorry
+  let D : EuclideanSpace ℝ (Fin d) → EuclideanSpace ℝ (Fin d) := fun x ↦
+    WithLp.toLp 2 (fun i ↦ fderiv ℝ φ x (EuclideanSpace.single i 1))
+  let e : ℕ → EuclideanSpace ℝ (Fin d) → EuclideanSpace ℝ (Fin d) := fun n x ↦
+    (apm_m01J04_globalLocalizedH1 φ hφ f).val x • WithLp.toLp 2 (fun i ↦
+      fderiv ℝ (apm_m01J04_localization_core_approx_aux_cutoff φ
+        (1 / (n + 1 : ℝ))) x (EuclideanSpace.single i 1))
+  have hM0 : 0 ≤ M :=
+    (abs_nonneg (deriv Real.smoothTransition 0)).trans (hM 0)
+  have hprod : MemLp (fun x ↦ f.val x • D x) 2 volume := by
+    have hlocal : MemLp (fun x ↦ f.val x • D x) 2 (volume.restrict Ω) := by
+      exact (apm_m01J04_isTestFunction_fderivField_memLp hφ ⊤).smul f.val_memLp
+    apply apm_m01J04_memLp_of_ae_eq_zero_outside
+      hφ.1.continuous.isOpen_support.measurableSet hφ.2.2 hlocal
+    filter_upwards
+      [apm_m01J04_contDiff_aeDerivativeZeroOnZeroSet hφ.1] with x hx
+    intro hxs
+    have hz : φ x = 0 := Function.notMem_support.mp hxs
+    simp [D, hx hz]
+  have he_meas (n : ℕ) : AEStronglyMeasurable (e n) volume := by
+    have hc := (apm_m01J04_localization_core_approx_aux_cutoff_contDiff hφ.1
+      (1 / (n + 1 : ℝ))).continuous
+    have hD := apm_m01J04_isTestFunction_fderivField_memLp
+      (apm_m01J04_localization_core_approx_aux_cutoff_isTestFunction hφ
+        (1 / (n + 1 : ℝ))) ⊤
+    simpa [e] using
+      (apm_m01J04_globalLocalizedH1 φ hφ f).val_memLp.1.smul hD.1
+  have hnorm (n : ℕ) (x : EuclideanSpace ℝ (Fin d)) :
+      ‖e n x‖ ≤ ‖(4 * M) • (f.val x • D x)‖ := by
+    let r : ℝ := 1 / (n + 1 : ℝ)
+    let a : ℝ := φ x ^ 2 / r ^ 2 - 1
+    have hr : 0 < r := by simp [r]; positivity
+    simp only [e]
+    rw [apm_m01J04_localization_core_approx_aux_grad_tendsto_aux_collar_aux_fderiv
+      φ hφ.1 r x]
+    have hfield : WithLp.toLp 2 (fun i ↦
+        ((deriv Real.smoothTransition a) •
+          ((2 * φ x / r ^ 2) • fderiv ℝ φ x))
+          (EuclideanSpace.single i 1)) =
+        (deriv Real.smoothTransition a * (2 * φ x / r ^ 2)) • D x := by
+      ext i
+      simp [D, smul_smul]
+    rw [hfield]
+    change ‖(f.val x * φ x) •
+      ((deriv Real.smoothTransition a * (2 * φ x / r ^ 2)) • D x)‖ ≤
+        ‖(4 * M) • (f.val x • D x)‖
+    simp only [smul_smul, norm_smul, Real.norm_eq_abs]
+    by_cases ha : a ∈ Set.Icc (0 : ℝ) 1
+    · have hratio : φ x ^ 2 / r ^ 2 ≤ 2 := by
+        dsimp [a] at ha
+        linarith [ha.2]
+      have habsratio : |φ x * (2 * φ x / r ^ 2)| ≤ 4 := by
+        have hr2 : 0 < r ^ 2 := sq_pos_of_pos hr
+        calc
+          |φ x * (2 * φ x / r ^ 2)| = 2 * (φ x ^ 2 / r ^ 2) := by
+            rw [show φ x * (2 * φ x / r ^ 2) = 2 * (φ x ^ 2 / r ^ 2) by ring]
+            exact abs_of_nonneg (by positivity)
+          _ ≤ 4 := by linarith
+      have hcoef :
+          |φ x * (deriv Real.smoothTransition a * (2 * φ x / r ^ 2))| ≤
+            |4 * M| := by
+        rw [abs_of_nonneg (mul_nonneg (by norm_num) hM0)]
+        calc
+          |φ x * (deriv Real.smoothTransition a * (2 * φ x / r ^ 2))| =
+              |φ x * (2 * φ x / r ^ 2)| * |deriv Real.smoothTransition a| := by
+                rw [abs_mul, abs_mul, abs_mul]
+                ring
+          _ ≤ 4 * M := mul_le_mul habsratio (hM a) (abs_nonneg _) (by norm_num)
+      have hh := mul_le_mul_of_nonneg_left hcoef (abs_nonneg (f.val x))
+      have hhh := mul_le_mul_of_nonneg_right hh (norm_nonneg (D x))
+      simpa only [abs_mul, mul_assoc, mul_left_comm, mul_comm] using hhh
+    · have hout : a < 0 ∨ 1 < a := by
+        by_cases h0 : 0 ≤ a
+        · exact Or.inr (lt_of_not_ge fun h1 ↦ ha ⟨h0, h1⟩)
+        · exact Or.inl (lt_of_not_ge h0)
+      have hd : deriv Real.smoothTransition a = 0 := by
+        rcases hout with hneg | hpos
+        · have heq : Filter.EventuallyEq (nhds a) Real.smoothTransition (fun _ ↦ 0) := by
+            filter_upwards [eventually_lt_nhds hneg] with y hy
+            exact Real.smoothTransition.zero_of_nonpos hy.le
+          rw [heq.deriv_eq]
+          simp
+        · have heq : Filter.EventuallyEq (nhds a) Real.smoothTransition (fun _ ↦ 1) := by
+            filter_upwards [eventually_gt_nhds hpos] with y hy
+            exact Real.smoothTransition.one_of_one_le hy.le
+          rw [heq.deriv_eq]
+          simp
+      simp [hd]
+      positivity
+  have he_mem (n : ℕ) : MemLp (e n) 2 volume :=
+    (hprod.const_smul (4 * M)).of_le (he_meas n) (ae_of_all _ (hnorm n))
+  have hbound (n : ℕ) : ∀ᵐ x ∂volume,
+      ‖e n x‖ₑ ^ (2 : ℝ) ≤ ‖(4 * M) • (f.val x • D x)‖ₑ ^ (2 : ℝ) := by
+    filter_upwards [] with x
+    apply ENNReal.rpow_le_rpow _ (by norm_num)
+    rw [← ofReal_norm_eq_enorm, ← ofReal_norm_eq_enorm]
+    exact ENNReal.ofReal_le_ofReal (hnorm n x)
+  have hfin : (∫⁻ x, ‖(4 * M) • (f.val x • D x)‖ₑ ^ (2 : ℝ) ∂volume) ≠ ∞ :=
+    ne_of_lt (lintegral_rpow_enorm_lt_top_of_eLpNorm_lt_top
+      (by norm_num : (2 : ℝ≥0∞) ≠ 0) (by norm_num : (2 : ℝ≥0∞) ≠ ∞)
+      (hprod.const_smul (4 * M)).eLpNorm_lt_top)
+  have hpoint (x : EuclideanSpace ℝ (Fin d)) :
+      Tendsto (fun n ↦ ‖e n x‖ₑ ^ (2 : ℝ)) atTop (nhds 0) := by
+    by_cases hx : φ x = 0
+    · simp [e, apm_m01J04_globalLocalizedH1, apm_m01J04_H1mul_val, hx]
+    · obtain ⟨N : ℕ, hN⟩ := exists_nat_gt (Real.sqrt 2 / |φ x|)
+      have hev : ∀ᶠ n : ℕ in atTop, e n x = 0 := by
+        filter_upwards [eventually_atTop.2 ⟨N, fun _ hn ↦ hn⟩] with n hn
+        have habs : Real.sqrt 2 < (n + 1 : ℝ) * |φ x| := by
+          have hp : 0 < |φ x| := abs_pos.mpr hx
+          apply (div_lt_iff₀ hp).mp
+          exact lt_of_lt_of_le hN (by exact_mod_cast Nat.le_add_right_of_le hn)
+        have hsquares : (2 : ℝ) < (n + 1 : ℝ) ^ 2 * φ x ^ 2 := by
+          have := (sq_lt_sq₀ (Real.sqrt_nonneg 2)
+            (mul_nonneg (by positivity) (abs_nonneg _))).2 habs
+          rw [Real.sq_sqrt (by norm_num), mul_pow, sq_abs] at this
+          exact this
+        have harg : 1 < φ x ^ 2 / (1 / (n + 1 : ℝ)) ^ 2 - 1 := by
+          have hnpos : 0 < (n + 1 : ℝ) := by positivity
+          field_simp
+          nlinarith
+        have heq : Filter.EventuallyEq (nhds
+            (φ x ^ 2 / (1 / (n + 1 : ℝ)) ^ 2 - 1))
+            Real.smoothTransition (fun _ ↦ 1) := by
+          filter_upwards [eventually_gt_nhds harg] with y hy
+          exact Real.smoothTransition.one_of_one_le hy.le
+        have hd : deriv Real.smoothTransition
+            (φ x ^ 2 / (1 / (n + 1 : ℝ)) ^ 2 - 1) = 0 := by
+          rw [heq.deriv_eq]
+          simp
+        simp only [e]
+        rw [apm_m01J04_localization_core_approx_aux_grad_tendsto_aux_collar_aux_fderiv
+          φ hφ.1]
+        apply smul_eq_zero.mpr
+        right
+        rw [hd]
+        rw [WithLp.toLp_eq_zero]
+        funext i
+        simp
+      exact tendsto_const_nhds.congr' (hev.mono fun n hn ↦ by simp [hn])
+  have hlin : Tendsto (fun n ↦ ∫⁻ x, ‖e n x‖ₑ ^ (2 : ℝ) ∂volume)
+      atTop (nhds 0) := by
+    simpa using tendsto_lintegral_of_dominated_convergence'
+      (fun x ↦ ‖(4 * M) • (f.val x • D x)‖ₑ ^ (2 : ℝ))
+      (fun n ↦ (he_mem n).1.enorm.pow_const _) hbound hfin (ae_of_all _ hpoint)
+  have help : Tendsto (fun n ↦ eLpNorm (e n) 2 volume) atTop (nhds 0) := by
+    simp_rw [eLpNorm_eq_lintegral_rpow_enorm (by norm_num : (2 : ℝ≥0∞) ≠ 0)
+      (by norm_num : (2 : ℝ≥0∞) ≠ ∞)]
+    norm_num
+    have hc : Continuous (fun z : ℝ≥0∞ ↦ z ^ (1 / 2 : ℝ)) :=
+      ENNReal.continuous_rpow_const
+    simpa [Function.comp_def] using hc.continuousAt.tendsto.comp hlin
+  have hreal := (ENNReal.tendsto_toReal_iff
+    (fun n ↦ (he_mem n).eLpNorm_ne_top) ENNReal.zero_ne_top).2 help
+  simpa [e] using hreal
 -- END SEAT AREA
 
 /-- Triangle inequality: the product-rule gradient difference is the bulk term
