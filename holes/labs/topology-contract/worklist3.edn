@@ -36119,63 +36119,59 @@
   {:consumer :t93J03,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 7,
+   :stop-count 8,
    :review-finding
    "Program STOP commits no new mathematical progress since the prior milestone: KleinPolygonBasedVanKampen merely packages the already-required surjectivity and kernel hypotheses, and both consumers only reapply the previously proved three-input theorem. Prove the based van Kampen surjectivity/kernel result (or winding conjugacy) in scope; extend Mathlib: state and prove the missing theorem in scope.",
    :evidence
    {:placeholder-delta {:t93J03 [1 1]},
     :residual
-    "Compare transported inverse equivalence with direct skeleton-to-outer map; reverse kernel inclusion/surjectivity; winding; C1/C2/Main.",
+    "Prove source-coordinate map equals direct skeleton map; reverse kernel/surjectivity; winding; C1/C2/Main.",
     :outcome :stop,
-    :warnings ["unused SLSC owner-approved"],
+    :warnings
+    ["unused SLSC owner-approved" "dirty PointWedge preserved"],
     :missing-theorems
-    [{:name "kleinPolygonOuterImageToDirectSkeletonPointPath_map",
-      :type "outer connector maps exactly to target polygon connector",
+    [{:name "kleinPolygonTargetTransportedOuterToSpacePiOne_factor",
+      :type
+      "target map factors through outer inclusion and source-coordinate comparison",
       :status :proved,
       :consumers [:t93J03],
       :depends-on
-      ["kleinPolygonSkeletonToSpacePiOne_eq_outer_comp_direct"],
+      ["kleinPolygonOuterImageToDirectSkeletonPointPath_map"],
       :area "covering-subgroup-correspondence"}
      {:name "t93J03_polygon_based_van_kampen",
       :type "surjective skeleton map; overlap-closure kernel",
       :status :partial,
       :consumers [:t93J03],
       :depends-on
-      ["kleinPolygonOuterImageToDirectSkeletonPointPath_map"
-       "kleinPolygonFundamentalGroupoidPseudopushout"],
+      ["kleinPolygonTargetTransportedOuterToSpacePiOne_factor"],
       :area "covering-subgroup-correspondence"}],
     :statement-hashes {:registry "166/166"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Committed exact outer-piece connector, its polygon image equality, and induced basepoint equivalence; map comparison and based van Kampen remain.",
+    "Committed path-transport naturality and target-map factorization; source equality and based van Kampen remain.",
     :commands
-    [{:cmd "lake build ConstructionTargets.t93J03Closure", :exit 0}
-     {:cmd "lean closure; fixture; Main; registry", :exit 0}
-     {:cmd "placeholder; diff; show --check", :exit 0}
-     {:cmd "rg forbidden additions", :exit 1, :expected-exit 1}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1791980348158-11797-b3b89160",
-     :commands
-     ["git show/check/diff f869be37; scope and boundary review"
-      "sha256sum fixture; lean closure, fixture, Main"
-      "statement registry; placeholder and axiom recount"],
-     :finding
-     "PASS. Commit f869be37 adds compiled, sorry-free progress: it constructs the outer-piece connector from the inverse deformation-unit path and skeleton connector, proves its polygon image is the chosen target connector, and obtains the correctly typed basepoint equivalence. Scope and fixture hash match; support placeholders 0->0; frozen Main 1->1; standard axioms only; registry 166/166. The transported/direct map comparison, reverse inclusion, surjectivity, and winding remain listed."},
-    :commit "f869be3704ca9938a77d7108060a03e2ea600652",
+    [{:cmd "lean closure", :exit 0}
+     {:cmd "registry; placeholder; diff; show", :exit 0}
+     {:cmd "rg forbidden", :exit 1, :expected-exit 1}],
+    :diagnostic-history
+    [{:cmd "build; fixture",
+      :exit 1,
+      :correction
+      "dirty PointWedge line 5299 failed; scoped source passed first"}],
+    :commit "1f843184e63c1069706c11cc8498750d603ddc22",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
      "ConstructionTargets/t93J03Closure.blueprint.md"],
     :fixture
-    {:path "/tmp/t93j03_outer_connector_check.lean",
+    {:path "/tmp/t93j03_path_transport_naturality_check.lean",
      :sha256
-     "8af1904fb72d77b91380336de88d07bdb92545f284cf4292a36fd932f9c0da72"},
+     "a7e989f4ca18e02a2a5deedd5186772e04c63ef059396b6aedf1e5ddff7ac2bc",
+     :mode :blocked-by-unrelated-dependency},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -38571,7 +38567,8 @@
     :lemma-kleinpolygonoverlapskeletonnormalclosure-le-transportedkernel
     :lemma-kleinpolygonoverlapskeletonnormalclosure-le-targettransportedkernel
     :lemma-kleinpolygonskeletontospacepione-eq-outer-comp-direct
-    :lemma-kleinpolygonouterimagetodirectskeletonpointpath-map],
+    :lemma-kleinpolygonouterimagetodirectskeletonpointpath-map
+    :lemma-kleinpolygontargettransportedoutertospacepione-factor],
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
@@ -38714,6 +38711,26 @@
    :kind :lemma,
    :depends-on
    [:lemma-kleinpolygonskeletontospacepione-eq-outer-comp-direct],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "kleinPolygonTargetTransportedOuterToSpacePiOne_factor",
+    :type
+    "target map factors through outer inclusion and source-coordinate comparison"},
+   :lemma
+   {:name "kleinPolygonTargetTransportedOuterToSpacePiOne_factor",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type
+    "target map factors through outer inclusion and source-coordinate comparison",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03},
+   :id :lemma-kleinpolygontargettransportedoutertospacepione-factor,
+   :kind :lemma,
+   :depends-on
+   [:lemma-kleinpolygonouterimagetodirectskeletonpointpath-map],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
