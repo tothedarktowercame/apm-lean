@@ -87940,6 +87940,16 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "git show --check 721b9f1a1", :exit 0}
      {:cmd "commit blob | lake env lean /dev/stdin", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791945919303-11389-057387ae",
+     :commands
+     ["git show 7141ba569 blob + #print axioms | lake env lean /dev/stdin"
+      "diff-tree/readlink/sha256 assertions"
+      "statement-registry check; comment-stripped placeholder scan"],
+     :finding
+     "PASS: 7141ba569 changes only PolygonSurfaceHomology.lean; exact blob SHA256 d37b04d9dddbcb69999b2644f074e03424203dd237dbda7676895b07ab33e7f8. It compiles with standard axioms propext/Classical.choice/Quot.sound; placeholders 0; registry 166/0. New progress beyond 3a371cac1 includes the module/AddCommGrp Hurewicz comparison and proves its surjectivity, then correctly reduces coordinate-map surjectivity to generation of each based-loop Hurewicz class. The equality orientation matches the desired preimage equation, and the remaining loop-generation milestone is explicit."},
     :commit "721b9f1a1",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
@@ -87948,7 +87958,7 @@
      "12cb0a1f0d25ddef641e100008ea116a4c911392445cfeb6475870e98699190d"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -87968,7 +87978,7 @@
     :blueprint
     "ConstructionTargets/PolygonSurfaceHomology.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked the exact reduction from finite-wedge loop generation to coordinate surjectivity.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked a positive circle fundamental class with the required H1 normalization.",
    :id :program-2026-10-13-polygon-surface-homology,
    :kind :reusable-theorem,
    :campaign-priority 31,
@@ -88016,7 +88026,11 @@
     {:job 1,
      :commit "7141ba569",
      :reason
-     "Banked the exact reduction from finite-wedge loop generation to coordinate surjectivity."}]}
+     "Banked the exact reduction from finite-wedge loop generation to coordinate surjectivity."}
+    {:job 2,
+     :commit "721b9f1a1",
+     :reason
+     "Banked a positive circle fundamental class with the required H1 normalization."}]}
   {:consumer :t97A01,
    :stop-count 0,
    :phase :implementation,
@@ -89091,7 +89105,7 @@
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "moduleHurewicz_circlePositiveFundamentalClass",
@@ -89101,7 +89115,9 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "positive circle class has normalized H1 image",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :program-2026-10-13-polygon-surface-homology,
+    :banked-commit "721b9f1a1"},
    :id :lemma-modulehurewicz-circlepositivefundamentalclass,
    :kind :lemma,
    :depends-on [],
