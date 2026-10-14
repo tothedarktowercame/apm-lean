@@ -322,6 +322,14 @@ image is exactly the already chosen target connector, and
 the resulting outer-piece basepoint equivalence.  It remains to prove that
 transport through this equivalence identifies the inverse
 homotopy-equivalence coordinate with the direct skeleton-to-outer map.
+`fundamentalGroup_map_pathTransport_natural` proves the general naturality
+equation needed to move a mapped basepoint change across an induced
+fundamental-group map.  Its specialization
+`kleinPolygonTargetTransportedOuterToSpacePiOne_factor` rewrites the entire
+target-transported map as outer inclusion after the two competing source
+coordinates.  The remaining equality is therefore exactly between those
+source maps into the outer-piece fundamental group; no target transport
+remains in the comparison.
 `kleinBottle_pi1_every_basepoint_of_basedVanKampen` confirms this single
 topological contract and the independent winding conjugacy are now the only
 C1 inputs.

@@ -490,6 +490,28 @@ theorem fundamentalGroup_pathTransport_isConj
   simp only [CategoryTheory.Category.assoc,
     CategoryTheory.Iso.hom_inv_id_assoc]
 
+/-- Mapping a loop and then changing its basepoint along the mapped path is
+the same as first changing basepoint and then mapping the loop.  This is the
+based fundamental-group form of functoriality of conjugation. -/
+theorem fundamentalGroup_map_pathTransport_natural
+    {X Y : Type*} [TopologicalSpace X] [TopologicalSpace Y]
+    {x₀ x₁ : X} (f : C(X, Y)) (p : Path x₀ x₁) :
+    (FundamentalGroup.fundamentalGroupMulEquivOfPath
+        (p.map f.continuous)).toMonoidHom.comp
+        (FundamentalGroup.map f x₀) =
+      (FundamentalGroup.map f x₁).comp
+        (FundamentalGroup.fundamentalGroupMulEquivOfPath p).toMonoidHom := by
+  ext g
+  induction g using Quotient.inductionOn with
+  | h q =>
+    change
+      ((FundamentalGroupoid.map f).mapIso
+        ((CategoryTheory.Groupoid.isoEquivHom _ _).symm ⟦p⟧)).conj
+          ((FundamentalGroupoid.map f).map ⟦q⟧) =
+        (FundamentalGroupoid.map f).map
+          (((CategoryTheory.Groupoid.isoEquivHom _ _).symm ⟦p⟧).conj ⟦q⟧)
+    exact ((FundamentalGroupoid.map f).map_conj _ _).symm
+
 /-- The frozen Klein bottle is path connected because it is the continuous
 surjective image of the convex closed disk under its defining quotient map. -/
 noncomputable instance kleinBottlePathConnectedSpace :
@@ -1361,6 +1383,22 @@ noncomputable def kleinPolygonTargetTransportedOuterToSpacePiOne :
   (FundamentalGroup.fundamentalGroupMulEquivOfPath
       kleinPolygonOuterImageToSkeletonPointSpacePath).toMonoidHom.comp
     kleinPolygonTransportedOuterToSpacePiOne
+
+/-- Naturality moves the target-side path transport through the outer-piece
+inclusion.  Consequently the remaining comparison with the literal skeleton
+map is entirely a comparison of the two source-coordinate maps into the
+outer-piece fundamental group. -/
+theorem kleinPolygonTargetTransportedOuterToSpacePiOne_factor :
+    kleinPolygonTargetTransportedOuterToSpacePiOne =
+      (FundamentalGroup.map kleinPolygonOuterToSpace
+        (kleinPolygonSkeletonToOuter kleinSkeletonPoint)).comp
+        (kleinPolygonOuterImageFundamentalGroupEquivAtDirectSkeletonPoint.toMonoidHom.comp
+          kleinPolygonOverlapImageFundamentalGroupEquivAtSkeletonPoint.symm.toMonoidHom) := by
+  ext g
+  exact DFunLike.congr_fun
+    (fundamentalGroup_map_pathTransport_natural kleinPolygonOuterToSpace
+      kleinPolygonOuterImageToDirectSkeletonPointPath)
+    (kleinPolygonOverlapImageFundamentalGroupEquivAtSkeletonPoint.symm g)
 
 /-- Target basepoint transport is an equivalence, so the forward kernel
 inclusion survives unchanged and now lands in the kernel of a map with the
