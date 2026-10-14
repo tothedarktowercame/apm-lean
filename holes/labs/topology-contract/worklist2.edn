@@ -87942,6 +87942,16 @@
     [{:cmd "naturality drafts",
       :exit 1,
       :correction "evaluated comparison via AddCommGrp monicity"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791946934756-11428-c54e9b06",
+     :commands
+     ["git show 721b9f1a1 blob + #print axioms | lake env lean /dev/stdin"
+      "diff-tree/readlink/sha256 assertions"
+      "statement-registry check; comment-stripped placeholder scan"],
+     :finding
+     "PASS: 721b9f1a1 changes only PolygonSurfaceHomology.lean; exact blob SHA256 12cb0a1f0d25ddef641e100008ea116a4c911392445cfeb6475870e98699190d. It compiles with standard axioms propext/Classical.choice/Quot.sound; placeholders 0; registry 166/0. New progress beyond 7141ba569 defines a general module-valued Hurewicz class across the AddCommGrp/ModuleCat comparison and chooses a circle fundamental-group element whose image is exactly circleH1IsoInt.inv 1. The orientation is fixed by the existing circle isomorphism rather than an independent path convention, so it is compatible with the finite-wedge coordinate presentation."},
     :commit "6c78dadca",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
@@ -87950,7 +87960,7 @@
      "f0b652aca1b824a5001b205788a27dd323f0ab10a3e56d5f7a5d9695b620ed5a"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -87970,7 +87980,7 @@
     :blueprint
     "ConstructionTargets/PolygonSurfaceHomology.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked a positive circle fundamental class with the required H1 normalization.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked naturality and positive H1 normalization of wedge-leg classes.",
    :id :program-2026-10-13-polygon-surface-homology,
    :kind :reusable-theorem,
    :campaign-priority 31,
@@ -88022,7 +88032,11 @@
     {:job 2,
      :commit "721b9f1a1",
      :reason
-     "Banked a positive circle fundamental class with the required H1 normalization."}]}
+     "Banked a positive circle fundamental class with the required H1 normalization."}
+    {:job 3,
+     :commit "6c78dadca",
+     :reason
+     "Banked naturality and positive H1 normalization of wedge-leg classes."}]}
   {:consumer :t97A01,
    :stop-count 0,
    :phase :implementation,
@@ -89118,7 +89132,7 @@
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "finiteWedgeLegFundamentalClass_hurewicz",
@@ -89130,7 +89144,9 @@
     :type
     "positive circle class mapped into leg l has basis coordinate l",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :program-2026-10-13-polygon-surface-homology,
+    :banked-commit "6c78dadca"},
    :id :lemma-finitewedgelegfundamentalclass-hurewicz,
    :kind :lemma,
    :depends-on [:lemma-modulehurewicz-circlepositivefundamentalclass],
