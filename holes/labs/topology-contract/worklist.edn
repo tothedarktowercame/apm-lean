@@ -119109,6 +119109,17 @@
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "hash/diff/placeholders", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1792010588577-12373-d3588995",
+     :commands
+     ["git diff-tree/show 8a490595"
+      "archive 8a490595; lake env lean closure and Main"
+      "sha256sum/placeholders at 8a490595"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS program STOP: new commit changes only t00J02Closure.lean and defines the exact remaining geometric interface—componentwise local-degree comparison plus top-degree equality—then correctly derives H2 vanishing. It does not claim the interface is constructed; that construction remains explicitly listed. Point-local and component-indexed data remain distinct. Fixture/frozen hashes match; closure has 0 placeholders, Main baseline 1; archived files compile with standard axioms; registry 166/166."},
     :commit "8a49059565653885f645d112eaaf316b43107802",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
@@ -119117,7 +119128,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119135,7 +119146,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t00J02Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked exact-lift regular-fiber H2 assembly.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked exact geometric formula interface and H2 consequence.",
    :id :program-2026-10-13-close-t00j02,
    :kind :final-adapter,
    :campaign-priority 45,
@@ -119223,7 +119234,11 @@
      :reason "Banked signed-count H2 assembly."}
     {:job 8,
      :commit "6063ebde809a66e0c6c27aa8ecd1cfb4eb934985",
-     :reason "Banked exact-lift regular-fiber H2 assembly."}]}
+     :reason "Banked exact-lift regular-fiber H2 assembly."}
+    {:job 9,
+     :commit "8a49059565653885f645d112eaaf316b43107802",
+     :reason
+     "Banked exact geometric formula interface and H2 consequence."}]}
   {:consumer :t98A06,
    :stop-count 2,
    :evidence
@@ -119991,7 +120006,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "topHomologyMap_eq_zero_of_regularFiberTopDegreeFormula",
@@ -120001,7 +120016,9 @@
     :reported-by [:program-2026-10-13-close-t00j02],
     :type "bundled component/top-degree formula implies H2 zero",
     :area "oriented-surface-degree",
-    :proved-in :program-2026-10-13-close-t00j02},
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "8a49059565653885f645d112eaaf316b43107802"},
    :id :lemma-tophomologymap-eq-zero-of-regularfibertopdegreeformula,
    :kind :lemma,
    :depends-on
@@ -120009,10 +120026,14 @@
    :other-consumers []}
   {:consumer :portfolio,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance {:lemma "RegularFiberTopDegreeFormula"},
-   :lemma {:name "RegularFiberTopDegreeFormula", :reported-by []},
+   :lemma
+   {:name "RegularFiberTopDegreeFormula",
+    :reported-by [],
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t00J02Closure.lean"]},
    :id :lemma-regularfibertopdegreeformula,
    :kind :lemma,
    :depends-on [],
