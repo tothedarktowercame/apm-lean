@@ -47,6 +47,24 @@ theorem surjective_continuousLinearMap_has_rightInverse {n m : ℕ}
 
 #print axioms surjective_continuousLinearMap_has_rightInverse
 
+/-- Algebraic correction used in the local submersion theorem: if `A ∘ R`
+is invertible, correcting `R` by that inverse gives an exact right inverse of
+`A`. -/
+theorem rightInverse_of_comp_continuousLinearEquiv {n m : ℕ}
+    (A : E n →L[ℝ] E m) (R : E m →L[ℝ] E n)
+    (u : E m ≃L[ℝ] E m)
+    (hu : A.comp R = u.toContinuousLinearMap) :
+    A.comp (R.comp u.symm.toContinuousLinearMap) =
+      ContinuousLinearMap.id ℝ (E m) := by
+  apply ContinuousLinearMap.ext
+  intro y
+  change A (R (u.symm y)) = y
+  rw [show A (R (u.symm y)) = u (u.symm y) by
+    exact DFunLike.congr_fun hu (u.symm y)]
+  exact u.apply_symm_apply y
+
+#print axioms rightInverse_of_comp_continuousLinearEquiv
+
 theorem t98A06_global_vectorField_lift
     (hlocal : ∀ (n m : ℕ) (X Y : Type) [TopologicalSpace X] [TopologicalSpace Y]
       [T2Space X] [T2Space Y] [SecondCountableTopology X] [SecondCountableTopology Y]
