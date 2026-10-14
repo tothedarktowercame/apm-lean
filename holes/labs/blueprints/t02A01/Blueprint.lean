@@ -797,6 +797,60 @@ theorem apm_t02a01_angleToBoundary_bijective
 `apm_t02a01_boundary_homeomorph_circle`, `Continuous.homeoOfEquivCompactToT2`) and
 `AddCircle.homeomorphCircle'`. Under it the inner loop is `integerLoop 1`, which
 `circleFundamentalGroupMulEquivInt` sends to `ofAdd 1`. -/
+noncomputable def apm_t02a01_circleWinding_of_bijective_aux_pi1Homeomorph
+    {X Y : Type*} [TopologicalSpace X] [TopologicalSpace Y]
+    (e : X ≃ₜ Y) (x : X) :
+    FundamentalGroup X x ≃* FundamentalGroup Y (e x) where
+  toFun := FundamentalGroup.map ⟨e, e.continuous⟩ x
+  invFun := FundamentalGroup.mapOfEq ⟨e.symm, e.symm.continuous⟩
+    (e.symm_apply_apply x)
+  left_inv p := by
+    induction p using Path.Homotopic.Quotient.ind with
+    | mk p =>
+      rw [FundamentalGroup.map_apply]
+      change (FundamentalGroup.mapOfEq _ _)
+        (Path.Homotopic.Quotient.mk (p.map e.continuous)) = _
+      rw [FundamentalGroup.mapOfEq_apply]
+      apply Path.Homotopic.Quotient.eq.mpr
+      convert Path.Homotopic.refl p using 1
+      ext t
+      exact e.symm_apply_apply (p t)
+  right_inv p := by
+    induction p using Path.Homotopic.Quotient.ind with
+    | mk p =>
+      rw [FundamentalGroup.mapOfEq_apply]
+      apply Path.Homotopic.Quotient.eq.mpr
+      convert Path.Homotopic.refl p using 1
+      ext t
+      exact e.apply_symm_apply (p t)
+  map_mul' := map_mul _
+
+noncomputable def apm_t02a01_circleWinding_of_bijective_aux_pi1HomeomorphOfEq
+    {X Y : Type*} [TopologicalSpace X] [TopologicalSpace Y]
+    (e : X ≃ₜ Y) (x : X) (y : Y) (h : e x = y) :
+    FundamentalGroup X x ≃* FundamentalGroup Y y where
+  toFun := FundamentalGroup.mapOfEq ⟨e, e.continuous⟩ h
+  invFun := FundamentalGroup.mapOfEq ⟨e.symm, e.symm.continuous⟩ (by
+    rw [← h]
+    exact e.symm_apply_apply x)
+  left_inv p := by
+    induction p using Path.Homotopic.Quotient.ind with
+    | mk p =>
+      rw [FundamentalGroup.mapOfEq_apply, FundamentalGroup.mapOfEq_apply]
+      apply Path.Homotopic.Quotient.eq.mpr
+      convert Path.Homotopic.refl p using 1
+      ext t
+      exact e.symm_apply_apply (p t)
+  right_inv p := by
+    induction p using Path.Homotopic.Quotient.ind with
+    | mk p =>
+      rw [FundamentalGroup.mapOfEq_apply, FundamentalGroup.mapOfEq_apply]
+      apply Path.Homotopic.Quotient.eq.mpr
+      convert Path.Homotopic.refl p using 1
+      ext t
+      exact e.apply_symm_apply (p t)
+  map_mul' := map_mul _
+
 theorem apm_t02a01_circleWinding_of_bijective
     (hc : Continuous apm_t02a01_innerPoint)
     (h4 : apm_t02a01_innerPoint 4 = apm_t02a01_innerBase)
@@ -807,7 +861,125 @@ theorem apm_t02a01_circleWinding_of_bijective
           (apm_t02a01_innerLoop hc h4))) = Multiplicative.ofAdd (1 : ℤ) ∨
       e (FundamentalGroup.fromPath (Path.Homotopic.Quotient.mk
           (apm_t02a01_innerLoop hc h4))) = Multiplicative.ofAdd (-1 : ℤ) := by
-  sorry
+  let boundaryCircle := (apm_t02a01_boundary_homeomorph_circle).some
+  letI : T2Space apm_t02a01_boundarySpace := boundaryCircle.symm.t2Space
+  let H : AddCircle (2 * Real.pi) ≃ₜ apm_t02a01_boundarySpace :=
+    Continuous.homeoOfEquivCompactToT2
+      (f := Equiv.ofBijective (apm_t02a01_angleToBoundary hc h4) hbij)
+      (apm_t02a01_angleToBoundary hc h4).continuous
+  let Phi : Circle ≃ₜ apm_t02a01_boundarySpace :=
+    AddCircle.homeomorphCircle'.symm.trans H
+  have hPhi : Phi (1 : Circle) = apm_t02a01_innerBase := by
+    change (apm_t02a01_angleToBoundary hc h4)
+      (AddCircle.homeomorphCircle'.symm (1 : Circle)) = apm_t02a01_innerBase
+    rw [show AddCircle.homeomorphCircle'.symm (1 : Circle) =
+        ((0 : ℝ) : AddCircle (2 * Real.pi)) by
+      apply AddCircle.homeomorphCircle'.injective
+      simp]
+    rw [show (apm_t02a01_angleToBoundary hc h4)
+        ((0 : ℝ) : AddCircle (2 * Real.pi)) =
+        apm_t02a01_innerPoint (2 * 0 / Real.pi) by
+      simpa [apm_t02a01_angleToBoundary] using
+        (AddCircle.liftIco_coe_apply
+          (f := fun θ ↦ apm_t02a01_innerPoint (2 * θ / Real.pi))
+          (show (0 : ℝ) ∈ Set.Ico 0 (0 + 2 * Real.pi) by
+            constructor <;> positivity))]
+    simp [apm_t02a01_innerBase]
+  have hbase : Phi.symm apm_t02a01_innerBase = (1 : Circle) := by
+    apply Phi.injective
+    simpa using hPhi.symm
+  let E1 : FundamentalGroup apm_t02a01_boundarySpace apm_t02a01_innerBase ≃*
+      FundamentalGroup Circle 1 :=
+    apm_t02a01_circleWinding_of_bijective_aux_pi1HomeomorphOfEq Phi.symm
+      apm_t02a01_innerBase 1 hbase
+  let E := E1.trans
+    ConstructionTargets.CircleUniversalCover.circleFundamentalGroupMulEquivInt
+  refine ⟨E, Or.inl ?_⟩
+  change ConstructionTargets.CircleUniversalCover.circleWindingHom
+      (E1 (FundamentalGroup.fromPath (Path.Homotopic.Quotient.mk
+        (apm_t02a01_innerLoop hc h4)))) = Multiplicative.ofAdd (1 : ℤ)
+  change ConstructionTargets.CircleUniversalCover.circleWindingHom
+    (FundamentalGroup.mapOfEq ⟨Phi.symm, Phi.symm.continuous⟩ hbase
+      (FundamentalGroup.fromPath (Path.Homotopic.Quotient.mk
+        (apm_t02a01_innerLoop hc h4)))) = Multiplicative.ofAdd (1 : ℤ)
+  rw [FundamentalGroup.mapOfEq_apply]
+  rw [ConstructionTargets.CircleUniversalCover.circleWindingHom_mk]
+  change Multiplicative.ofAdd
+      (ConstructionTargets.CircleUniversalCover.liftBasedLoopEndpointInteger
+        ((apm_t02a01_innerLoop hc h4).map Phi.symm.continuous)
+        _ _) = Multiplicative.ofAdd (1 : ℤ)
+  have hloop :
+      (↑((apm_t02a01_innerLoop hc h4).map Phi.symm.continuous) :
+        C(Set.Icc (0 : ℝ) 1, Circle)) =
+      (↑(ConstructionTargets.CircleUniversalCover.integerLoop 1) :
+        C(Set.Icc (0 : ℝ) 1, Circle)) := by
+    apply ContinuousMap.ext
+    intro t
+    apply Phi.injective
+    change Phi (Phi.symm (apm_t02a01_innerPoint (4 * (t : ℝ)))) =
+      Phi (ConstructionTargets.CircleUniversalCover.circleCover
+        (((1 : ℤ) • (2 * Real.pi)) * (t : ℝ)))
+    rw [Phi.apply_symm_apply]
+    change apm_t02a01_innerPoint (4 * (t : ℝ)) =
+      (apm_t02a01_angleToBoundary hc h4)
+        (AddCircle.homeomorphCircle'.symm
+          (ConstructionTargets.CircleUniversalCover.circleCover
+            (((1 : ℤ) • (2 * Real.pi)) * (t : ℝ))))
+    rw [show AddCircle.homeomorphCircle'.symm
+        (ConstructionTargets.CircleUniversalCover.circleCover
+          (((1 : ℤ) • (2 * Real.pi)) * (t : ℝ))) =
+        ((((2 * Real.pi) * (t : ℝ)) : ℝ) : AddCircle (2 * Real.pi)) by
+      rw [show ConstructionTargets.CircleUniversalCover.circleCover
+          (((1 : ℤ) • (2 * Real.pi)) * (t : ℝ)) =
+          AddCircle.homeomorphCircle'
+            ((((2 * Real.pi) * (t : ℝ)) : ℝ) : AddCircle (2 * Real.pi)) by
+        change Circle.exp (((1 : ℤ) • (2 * Real.pi)) * (t : ℝ)) =
+          Circle.exp ((2 * Real.pi) * (t : ℝ))
+        norm_num]
+      exact AddCircle.homeomorphCircle'.symm_apply_apply _]
+    by_cases ht : (t : ℝ) = 1
+    · rw [ht]
+      norm_num
+      rw [show (((2 * Real.pi) : ℝ) : AddCircle (2 * Real.pi)) =
+          ((0 : ℝ) : AddCircle (2 * Real.pi)) by
+        apply QuotientAddGroup.eq_iff_sub_mem.mpr
+        exact ⟨1, by simp⟩]
+      rw [show (apm_t02a01_angleToBoundary hc h4)
+          ((0 : ℝ) : AddCircle (2 * Real.pi)) =
+          apm_t02a01_innerPoint 0 by
+        simpa [apm_t02a01_angleToBoundary] using
+          (AddCircle.liftIco_coe_apply
+            (f := fun θ ↦ apm_t02a01_innerPoint (2 * θ / Real.pi))
+            (show (0 : ℝ) ∈ Set.Ico 0 (0 + 2 * Real.pi) by
+              constructor <;> positivity))]
+      exact h4
+    · have htlt : (t : ℝ) < 1 := lt_of_le_of_ne t.2.2 ht
+      rw [show (apm_t02a01_angleToBoundary hc h4)
+          ((((2 * Real.pi) * (t : ℝ)) : ℝ) : AddCircle (2 * Real.pi)) =
+          apm_t02a01_innerPoint
+            (2 * ((2 * Real.pi) * (t : ℝ)) / Real.pi) by
+        simpa [apm_t02a01_angleToBoundary] using
+          (AddCircle.liftIco_coe_apply
+            (f := fun θ ↦ apm_t02a01_innerPoint (2 * θ / Real.pi))
+            (show (2 * Real.pi) * (t : ℝ) ∈
+                Set.Ico 0 (0 + 2 * Real.pi) by
+              constructor
+              · exact mul_nonneg (by positivity) t.2.1
+              · nlinarith [Real.pi_pos]))]
+      congr 1
+      field_simp [Real.pi_ne_zero]
+      ring
+  have hhom :
+      (↑((apm_t02a01_innerLoop hc h4).map Phi.symm.continuous) :
+        C(Set.Icc (0 : ℝ) 1, Circle)).HomotopicRel
+        (↑(ConstructionTargets.CircleUniversalCover.integerLoop 1) :
+          C(Set.Icc (0 : ℝ) 1, Circle)) {0, 1} := by
+    rw [hloop]
+    exact ContinuousMap.HomotopicRel.refl _
+  rw [ConstructionTargets.CircleUniversalCover.liftBasedLoopEndpointInteger_eq_of_homotopicRel
+    hhom _ _ (ConstructionTargets.CircleUniversalCover.integerLoop 1).source
+      (ConstructionTargets.CircleUniversalCover.integerLoop 1).target]
+  simp
 
 noncomputable def apm_t02a01_boundary_inclusion_word_aux_generator_aux_cyclic_aux_winding_aux_pi1Homeomorph
     {X Y : Type*} [TopologicalSpace X] [TopologicalSpace Y]
