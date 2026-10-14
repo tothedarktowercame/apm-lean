@@ -479,7 +479,10 @@ lemma apm_t92J05_genusTwo_all_basepoints
     Nonempty
       (FundamentalGroup (ConstructionTargets.Surfaces.Surface true 2) x ≃*
         apm_t92J05_genusTwoGroup) := by
-  sorry
+  letI : PathConnectedSpace
+      (ConstructionTargets.Surfaces.Surface true 2) := hpc
+  exact ⟨(FundamentalGroup.fundamentalGroupMulEquivOfPathConnected
+    x apm_t92J05_genusTwo_center).trans hcenter.some⟩
 -- END SEAT AREA
 
 /-- Sorry-free assembly of the polygon calculation and basepoint transport. -/
