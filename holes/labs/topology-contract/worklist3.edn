@@ -36156,6 +36156,17 @@
     [{:cmd "lean cover-groups probe",
       :exit 1,
       :correction "wrapped homotopy and exposed loop quotient"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791945471542-11371-57f3d5bb",
+     :commands
+     ["git show/diff/show --check e251a9299"
+      "sha256sum inner-pi1 fixture; placeholders 1->1; scope diff"
+      "lake env lean recorded t93J03Closure + fixture + Main"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS: new compiled sorry-free standard-axiom progress. The exact radial-cover inner subtype is proved contractible from its packaged pointed contraction, yielding a subsingleton fundamental group at the cover center. Overlap-image=aabb and based quotient extraction remain accurately listed. Scope/hash verified; registry 166/166. SLSC unused, mandated by problem.md."},
     :commit "e251a9299a97771037df3ae785cbe6fd41a14e79",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
@@ -36167,7 +36178,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -36185,7 +36196,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t93J03Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed the exact Klein radial-cover fundamental-groupoid pseudopushout; based quotient extraction remains.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed contractibility and trivial pi1 for the exact Klein inner piece; overlap quotient remains.",
    :id :program-2026-10-13-close-t93j03,
    :kind :final-adapter,
    :campaign-priority 30,
@@ -36271,7 +36282,11 @@
     {:job 2,
      :commit "9b6869e35db58e98ec18d27545f98f75d01ee7dc",
      :reason
-     "Committed the exact Klein radial-cover fundamental-groupoid pseudopushout; based quotient extraction remains."}]}
+     "Committed the exact Klein radial-cover fundamental-groupoid pseudopushout; based quotient extraction remains."}
+    {:job 3,
+     :commit "e251a9299a97771037df3ae785cbe6fd41a14e79",
+     :reason
+     "Committed contractibility and trivial pi1 for the exact Klein inner piece; overlap quotient remains."}]}
   {:consumer :t99J05,
    :stop-count 5,
    :evidence
@@ -37980,7 +37995,7 @@
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "kleinPolygonInnerFundamentalGroupTrivial",
@@ -37990,7 +38005,9 @@
     :reported-by [:program-2026-10-13-close-t93j03],
     :type "inner radial piece contractible with subsingleton pi1",
     :area "covering-subgroup-correspondence",
-    :proved-in :program-2026-10-13-close-t93j03},
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "e251a9299a97771037df3ae785cbe6fd41a14e79"},
    :id :lemma-kleinpolygoninnerfundamentalgrouptrivial,
    :kind :lemma,
    :depends-on [:lemma-kleinpolygonfundamentalgroupoidpseudopushout],
