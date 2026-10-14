@@ -4430,10 +4430,70 @@ theorem zipMap_boundary_fibre {n k : ℕ} (hn : 0 < n) (hk : k ≤ n)
         change (p : ℂ) = (edgePoint (n + 2) (k + 1) (reverseParameter t) : ℂ) at hv
         exact Subtype.ext hv
 
+lemma zipMap_circle_surj_aux_bnorm (b : Circle) : ‖(b : ℂ)‖ = 1 := by
+  simpa [Circle, Submonoid.unitSphere] using b.2
+
+lemma zipMap_circle_surj_aux_norm (b : Circle) : ‖(circleToDisk b : ℂ)‖ = 1 := by
+  exact zipMap_circle_surj_aux_bnorm b
+
+lemma zipMap_circle_surj_aux_cone {n k : ℕ} (b : Circle) :
+    zipCone n k (circleToDisk b : ℂ) = zipBoundaryMap n k b := by
+  have hp := zipMap_circle_surj_aux_norm b
+  have hp0 : (circleToDisk b : ℂ) ≠ 0 := norm_ne_zero_iff.mp (by simpa [hp])
+  rw [zipCone, dif_neg hp0]
+  simp only [hp, inv_one, Complex.ofReal_one, one_mul]
+  have hc : (⟨(circleToDisk b : ℂ), by
+      simpa [Circle, Submonoid.unitSphere] using hp⟩ : Circle) = b := by
+    apply Subtype.ext
+    rfl
+  rw [hc]
+  ring
+
 theorem zipMap_circle_surj {n k : ℕ} (hn : 0 < n)
     (hsurjB : ∀ {p : ℂ}, p ∈ zipHalfBoundary → ∃ b : Circle, zipBoundaryMap n k b = p)
     {w : Disk} (hw : ‖(w : ℂ)‖ = 1) : ∃ p : Disk, ‖(p : ℂ)‖ = 1 ∧ zipMap n k p = w := by
-  sorry
+  let ω := zipRotation n k
+  let q : ℂ := (w : ℂ) / ω
+  let s : ℂ := (-q) ^ (2⁻¹ : ℂ)
+  let ζ : ℂ := Complex.I * s
+  have hω : ‖ω‖ = 1 := by
+    simp [ω, zipRotation, Complex.norm_exp]
+  have hq : ‖q‖ = 1 := by
+    simp [q, norm_div, hw, hω]
+  have hs_sq : s ^ 2 = -q := by
+    exact Complex.cpow_nat_inv_pow (-q) (by norm_num)
+  have hζ_sq : ζ ^ 2 = q := by
+    simp only [ζ, mul_pow, hs_sq]
+    simp
+  have hζ_norm : ‖ζ‖ = 1 := by
+    have hsqnorm : ‖ζ‖ ^ 2 = 1 := by
+      rw [← norm_pow, hζ_sq, hq]
+    nlinarith [norm_nonneg ζ]
+  have hζ_im : 0 ≤ ζ.im := by
+    simpa only [ζ, Complex.mul_im, Complex.I_re, zero_mul, Complex.I_im,
+      one_mul, zero_add] using (show 0 ≤ s.re by
+      dsimp [s]
+      rw [Complex.cpow_inv_two_re]
+      positivity)
+  have hζ_mem : ζ ∈ zipHalfBoundary := by
+    left
+    exact ⟨hζ_norm, hζ_im⟩
+  obtain ⟨b, hb⟩ := hsurjB hζ_mem
+  let p : Disk := circleToDisk b
+  refine ⟨p, ?_, ?_⟩
+  · simpa [p, circleToDisk, Circle, Submonoid.unitSphere] using b.2
+  · apply Subtype.ext
+    have hp : ‖(p : ℂ)‖ = 1 := by
+      simpa [p, circleToDisk, Circle, Submonoid.unitSphere] using b.2
+    have hcone : zipCone n k (p : ℂ) = ζ := by
+      simpa [p, hb] using zipMap_circle_surj_aux_cone (n := n) (k := k) b
+    have hraw : zipRaw n k (p : ℂ) = (w : ℂ) := by
+      rw [zipRaw, hcone, hζ_sq]
+      change ω * q = (w : ℂ)
+      have hω0 : ω ≠ 0 := norm_ne_zero_iff.mp (by simpa [hω])
+      dsimp [q]
+      field_simp
+    simp [zipMap, hraw, hw.le]
 
 /-! ### Boundary combinatorics, for any map with the zip's edge formulas -/
 
