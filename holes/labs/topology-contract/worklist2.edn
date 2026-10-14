@@ -87901,7 +87901,7 @@
   {:consumer :t97A01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 10,
+   :stop-count 0,
    :evidence
    {:placeholder-delta 0,
     :residual
@@ -87950,7 +87950,7 @@
      "c2df5cf692d6a854736fe0c05a05e89067beac8b93d5d2253fd8de26cd2f53a2"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -88205,6 +88205,17 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "git show --check bbbdf0ca4", :exit 0}
      {:cmd "exact blob+axioms | lake env lean /dev/stdin", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791990828851-11920-897290a3",
+     :commands
+     ["git show/diff bbbdf0ca4; sha256sum"
+      "lake -Kjobs=1 build ConstructionTargets.t92J06Closure"
+      "lake env lean problems/t92J06/lean/Main.lean"
+      "#print axioms; placeholder scan; registry check; git show --check"],
+     :finding
+     "PASS: commit bbbdf0ca4 by topo-6 changes only scoped t92J06Closure.lean; exact blob SHA-256 53da628730e125b338e73e7993150c1fae1ee2c4b7a99689ecd7c53f46eabf6e. Exact snapshot builds; Main checks with its recorded one remaining sorry; support file has 0 placeholders; endpoint lemmas use propext/Classical.choice/Quot.sound; registry 166/0. Carrier is the equivalence closure quotient of discrete vertices plus labelled intervals; source and target orientations match step i v, and topology is coinduced from the quotient map. Real compiled program progress; remaining milestones are projection continuity/local trivializations, Cayley-tree cover, and finite-cover invariants."},
     :commit "bbbdf0ca4",
     :changed-paths ["ConstructionTargets/t92J06Closure.lean"],
     :fixture
@@ -88213,7 +88224,7 @@
      "53da628730e125b338e73e7993150c1fae1ee2c4b7a99689ecd7c53f46eabf6e"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t92J06/lean/Main.lean"
     "problems/t92J06/status.json"
@@ -88231,7 +88242,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t92J06Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked graph data.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked the graph realization quotient carrier.",
    :id :program-2026-10-13-close-t92j06,
    :kind :final-adapter,
    :campaign-priority 34,
@@ -88247,7 +88258,10 @@
     {:job 2,
      :commit "21ba63c87",
      :reason "Banked the quotient-wedge API."}
-    {:job 3, :commit "b19eb4dfe", :reason "Banked graph data."}]}
+    {:job 3, :commit "b19eb4dfe", :reason "Banked graph data."}
+    {:job 4,
+     :commit "bbbdf0ca4",
+     :reason "Banked the graph realization quotient carrier."}]}
   {:consumer :t94A08,
    :phase :lemma,
    :state :banked,
@@ -90203,7 +90217,7 @@
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -90215,7 +90229,9 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "endpoint counit identity implies source square",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/PolygonSurfaceHomology.lean"]},
    :id
    :lemma-finitewedgecoherentrightsourceunitsquare-at-of-counitnormalform,
    :kind :lemma,
@@ -90239,7 +90255,7 @@
    :other-consumers [:t94J09]}
   {:consumer :t92J06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "twoLoopGraphCoverData_realizationCarrier",
@@ -90251,7 +90267,9 @@
     :type
     "interval-edge quotient with source/target endpoint equalities",
     :area "graph-covering-realization",
-    :proved-in :program-2026-10-13-close-t92j06},
+    :proved-in :program-2026-10-13-close-t92j06,
+    :banked-by :program-2026-10-13-close-t92j06,
+    :banked-commit "bbbdf0ca4"},
    :id :lemma-twoloopgraphcoverdata-realizationcarrier,
    :kind :lemma,
    :depends-on [:lemma-twoloopgraphcoverdata-localstars],
