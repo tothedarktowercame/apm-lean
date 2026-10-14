@@ -87946,6 +87946,18 @@
      {:cmd "placeholder scan", :exit 0}
      {:cmd "axioms check", :exit 0}
      {:cmd "git show --check 392a3d957", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792020115472-12659-2df817c2",
+     :commands
+     ["git show/diff 392a3d957; blob sha256; diff --check"
+      "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology"
+      "lake env lean /dev/stdin (#print axioms)"
+      "placeholder scan"
+      "statement-registry.py check"],
+     :finding
+     "PASS: reviewer codex-7; 392a3d957 (topo-6) newly changes only scoped PolygonSurfaceHomology.lean; fixture SHA-256 1ddaa78f1ef924fb9e258e87813e93f6508f3e1bbac848d16f2d763caf8c3156 matches. Exact blob builds; 0 placeholders; standard axioms; registry 166/0. The theorem states the missing geometric boundary/product equality as an explicit hypothesis, then rewrites boundary Hurewicz by naturality and applies the proved orientation-signed product formula. Equality direction and ModuleCat representation are correct; it does not claim subdivision is solved. Valid new compiled reduction; remaining prove subdivision, instantiate B7, then B8-B10."},
     :commit "392a3d957",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
@@ -87954,7 +87966,7 @@
      "1ddaa78f1ef924fb9e258e87813e93f6508f3e1bbac848d16f2d763caf8c3156"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -87974,7 +87986,7 @@
     :blueprint
     "ConstructionTargets/PolygonSurfaceHomology.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked explicit-product attaching-vector formula.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked B7 reduction from geometric boundary-product equality.",
    :id :program-2026-10-13-polygon-surface-homology,
    :kind :reusable-theorem,
    :campaign-priority 31,
@@ -88248,7 +88260,11 @@
      :reason "Banked ordered explicit-edge product H1 evaluation."}
     {:job 4,
      :commit "87d6e3b4c",
-     :reason "Banked explicit-product attaching-vector formula."}]}
+     :reason "Banked explicit-product attaching-vector formula."}
+    {:job 5,
+     :commit "392a3d957",
+     :reason
+     "Banked B7 reduction from geometric boundary-product equality."}]}
   {:consumer :t97A01,
    :stop-count 0,
    :phase :implementation,
@@ -92197,7 +92213,7 @@
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -92211,7 +92227,9 @@
     :type
     "geometric product equality implies orientation-signed B7 generator formula",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :program-2026-10-13-polygon-surface-homology,
+    :banked-commit "392a3d957"},
    :id
    :lemma-polygonboundarywedgeloop-hurewicz-of-eq-explicitedgeproduct,
    :kind :lemma,
