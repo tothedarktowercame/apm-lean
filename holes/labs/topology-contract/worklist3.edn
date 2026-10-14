@@ -36158,6 +36158,17 @@
      {:cmd "git commit",
       :exit 128,
       :correction "transient stale lock vanished; retry passed"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791946981983-11432-5ff52728",
+     :commands
+     ["git show/diff/show --check 4cf4a1fd"
+      "sha256sum fixture; scope; placeholders"
+      "lake env lean recorded closure, fixture, Main"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS: new compiled sorry-free standard-axiom milestone. The exact overlap pi1 at the recorded basepoint is correctly oriented and identified with Multiplicative Z via overlap homeomorphism, product splitting, and circle winding. It does not assume the remaining image=aabb or based-quotient results, which are accurately listed. Scope and fixture hash verified; frozen placeholders 1->1 (support file 0); registry 166/166; SLSC unused, mandated by problem.md."},
     :commit "4cf4a1fd88248aa249ce06a8e4880af398bbe32e",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
@@ -36169,7 +36180,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -36187,7 +36198,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t93J03Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed path-connected exact overlap, basepoint, and induced pi1 map; image=aabb and based quotient remain.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed exact overlap pi1 equivalence with integer winding; generator image and based quotient remain.",
    :id :program-2026-10-13-close-t93j03,
    :kind :final-adapter,
    :campaign-priority 30,
@@ -36281,7 +36292,11 @@
     {:job 4,
      :commit "bbe67b7794cd9b11293da6a47fb461668b71a91b",
      :reason
-     "Committed path-connected exact overlap, basepoint, and induced pi1 map; image=aabb and based quotient remain."}]}
+     "Committed path-connected exact overlap, basepoint, and induced pi1 map; image=aabb and based quotient remain."}
+    {:job 5,
+     :commit "4cf4a1fd88248aa249ce06a8e4880af398bbe32e",
+     :reason
+     "Committed exact overlap pi1 equivalence with integer winding; generator image and based quotient remain."}]}
   {:consumer :t99J05,
    :stop-count 5,
    :evidence
@@ -38032,7 +38047,7 @@
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "kleinPolygonOverlapFundamentalGroupEquivInt",
@@ -38042,7 +38057,9 @@
     :reported-by [:program-2026-10-13-close-t93j03],
     :type "exact radial overlap pi1 equiv Multiplicative Z",
     :area "covering-subgroup-correspondence",
-    :proved-in :program-2026-10-13-close-t93j03},
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "4cf4a1fd88248aa249ce06a8e4880af398bbe32e"},
    :id :lemma-kleinpolygonoverlapfundamentalgroupequivint,
    :kind :lemma,
    :depends-on [:lemma-kleinpolygonbasedoverlapmap],
