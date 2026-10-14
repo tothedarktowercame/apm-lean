@@ -3602,7 +3602,116 @@ theorem zipMap_boundary_fibre {n k : ℕ} (hn : 0 < n) (hk : k ≤ n)
     p = q ∨
       (∃ t, p = edgePoint (n + 2) k t ∧ q = edgePoint (n + 2) (k + 1) (reverseParameter t)) ∨
       (∃ t, q = edgePoint (n + 2) k t ∧ p = edgePoint (n + 2) (k + 1) (reverseParameter t)) := by
-  sorry
+  let bp : Circle := ⟨(p : ℂ), by simpa [Circle, Submonoid.unitSphere] using hp⟩
+  let bq : Circle := ⟨(q : ℂ), by simpa [Circle, Submonoid.unitSphere] using hq⟩
+  have hcp : zipCone n k (p : ℂ) = zipBoundaryMap n k bp :=
+    zipCone_of_norm_one hp
+  have hcq : zipCone n k (q : ℂ) = zipBoundaryMap n k bq :=
+    zipCone_of_norm_one hq
+  have hrnorm (b : Circle) : ‖zipRaw n k (b : ℂ)‖ ≤ 1 := by
+    have hrot : ‖zipRotation n k‖ = 1 := by
+      rw [zipRotation, Complex.norm_exp]
+      simp
+    rw [zipRaw, zipCone_of_norm_one (z := (b : ℂ)) (by simpa using b.2),
+      norm_mul, hrot, one_mul, norm_pow]
+    have hm := zip_halfBoundary_ray_aux_mem (hmemB b)
+    exact pow_le_one₀ (norm_nonneg _) hm.1
+  have hsquares : zipBoundaryMap n k bp ^ 2 = zipBoundaryMap n k bq ^ 2 := by
+    have hv := congrArg Subtype.val h
+    have hpraw := hrnorm bp
+    have hqraw := hrnorm bq
+    change ‖zipRaw n k (p : ℂ)‖ ≤ 1 at hpraw
+    change ‖zipRaw n k (q : ℂ)‖ ≤ 1 at hqraw
+    rw [zipMap, dif_pos hpraw, zipMap, dif_pos hqraw] at hv
+    change zipRotation n k * zipCone n k (p : ℂ) ^ 2 =
+      zipRotation n k * zipCone n k (q : ℂ) ^ 2 at hv
+    rw [hcp, hcq] at hv
+    exact mul_left_cancel₀ (Complex.exp_ne_zero _) hv
+  rcases eq_or_eq_neg_of_sq_eq_sq _ _ hsquares with heq | hneg
+  · left
+    have : bp = bq := hinjB heq
+    have hv := congrArg (fun x : Circle => (x : ℂ)) this
+    change (p : ℂ) = (q : ℂ) at hv
+    exact Subtype.ext hv
+  · have himp : (zipBoundaryMap n k bp).im = 0 := by
+      have hpim := (zip_halfBoundary_ray_aux_mem (hmemB bp)).2
+      have hqim := (zip_halfBoundary_ray_aux_mem (hmemB bq)).2
+      have hi := congrArg Complex.im hneg
+      rw [Complex.neg_im] at hi
+      linarith
+    have himq : (zipBoundaryMap n k bq).im = 0 := by
+      have hi := congrArg Complex.im hneg
+      rw [Complex.neg_im, himp] at hi
+      linarith
+    have habsp : |(zipBoundaryMap n k bp).re| ≤ 1 := by
+      rcases hmemB bp with hpB | hpB
+      · exact (Complex.abs_re_le_norm _).trans hpB.1.le
+      · exact hpB.2
+    by_cases hs : (zipBoundaryMap n k bp).re ≤ 0
+    · right; left
+      let t : Icc (0 : ℝ) 1 := ⟨(zipBoundaryMap n k bp).re + 1, by
+        constructor <;> linarith [(abs_le.mp habsp).1, (abs_le.mp habsp).2]⟩
+      refine ⟨t, ?_, ?_⟩
+      · have hmap : zipBoundaryMap n k bp = zipBoundaryMap n k
+            ⟨edgePoint (n + 2) k t, by
+              simpa [Circle, Submonoid.unitSphere] using norm_edgePoint (n + 2) k t⟩ := by
+          rw [(hfold t).1]
+          apply Complex.ext <;> simp [t, himp]
+        have hb := hinjB hmap
+        have hv := congrArg (fun x : Circle => (x : ℂ)) hb
+        change (p : ℂ) = (edgePoint (n + 2) k t : ℂ) at hv
+        exact Subtype.ext hv
+      · have hmap : zipBoundaryMap n k bq = zipBoundaryMap n k
+            ⟨edgePoint (n + 2) (k + 1) (reverseParameter t), by
+              simpa [Circle, Submonoid.unitSphere] using
+                norm_edgePoint (n + 2) (k + 1) (reverseParameter t)⟩ := by
+          rw [(hfold (reverseParameter t)).2]
+          apply Complex.ext
+          · have hre := congrArg Complex.re hneg
+            rw [Complex.neg_re] at hre
+            simp [reverseParameter, t]
+            linarith
+          · simp [himq]
+        have hb := hinjB hmap
+        have hv := congrArg (fun x : Circle => (x : ℂ)) hb
+        change (q : ℂ) = (edgePoint (n + 2) (k + 1) (reverseParameter t) : ℂ) at hv
+        exact Subtype.ext hv
+    · right; right
+      have hsq : (zipBoundaryMap n k bq).re ≤ 0 := by
+        have hre := congrArg Complex.re hneg
+        rw [Complex.neg_re] at hre
+        linarith
+      have habsq : |(zipBoundaryMap n k bq).re| ≤ 1 := by
+        rcases hmemB bq with hqB | hqB
+        · exact (Complex.abs_re_le_norm _).trans hqB.1.le
+        · exact hqB.2
+      let t : Icc (0 : ℝ) 1 := ⟨(zipBoundaryMap n k bq).re + 1, by
+        constructor <;> linarith [(abs_le.mp habsq).1, (abs_le.mp habsq).2]⟩
+      refine ⟨t, ?_, ?_⟩
+      · have hmap : zipBoundaryMap n k bq = zipBoundaryMap n k
+            ⟨edgePoint (n + 2) k t, by
+              simpa [Circle, Submonoid.unitSphere] using norm_edgePoint (n + 2) k t⟩ := by
+          rw [(hfold t).1]
+          apply Complex.ext <;> simp [t, himq]
+        have hb := hinjB hmap
+        have hv := congrArg (fun x : Circle => (x : ℂ)) hb
+        change (q : ℂ) = (edgePoint (n + 2) k t : ℂ) at hv
+        exact Subtype.ext hv
+      · have hmap : zipBoundaryMap n k bp = zipBoundaryMap n k
+            ⟨edgePoint (n + 2) (k + 1) (reverseParameter t), by
+              simpa [Circle, Submonoid.unitSphere] using
+                norm_edgePoint (n + 2) (k + 1) (reverseParameter t)⟩ := by
+          rw [(hfold (reverseParameter t)).2]
+          apply Complex.ext
+          · have hre := congrArg Complex.re hneg
+            rw [Complex.neg_re] at hre
+            simp [reverseParameter, t]
+            linarith
+          · simp [himp]
+        have hb := hinjB hmap
+        have hv := congrArg (fun x : Circle => (x : ℂ)) hb
+        change (p : ℂ) = (edgePoint (n + 2) (k + 1) (reverseParameter t) : ℂ) at hv
+        exact Subtype.ext hv
 -- END SEAT AREA
 
 theorem zipMap_circle_surj {n k : ℕ} (hn : 0 < n)
