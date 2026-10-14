@@ -119064,17 +119064,16 @@
    :depends-on [:lemma-apm-t91j06-bridge-compatible-stage-coordinates],
    :other-consumers []}
   {:consumer :t00J02,
-   :stop-count 9,
+   :stop-count 10,
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
     :residual
-    "Derive regular-fiber discreteness from transversality, prove local-degree formula, assemble Main.",
+    "Build transversality-to-local-degree producer; assemble Main.",
     :outcome :stop,
-    :warnings
-    ["Main sorryAx" "unrelated PolygonSurfaceHomology edit preserved"],
+    :warnings ["Main sorryAx"],
     :missing-theorems
-    [{:name "finite_regularFiber_of_isDiscrete",
-      :type "compact discrete point fiber is finite",
+    [{:name "transverse_coprodDerivative_surjective",
+      :type "range-sum implies coproduct derivative surjective",
       :status :proved,
       :consumers [:t00J02],
       :depends-on [],
@@ -119086,13 +119085,13 @@
       :depends-on
       ["regularValue_topHomologyMap_signedCount"
        "transverseCircle_preimage_component_signedCount"
-       "finite_regularFiber_of_isDiscrete"],
+       "transverse_coprodDerivative_surjective"],
       :area "oriented-surface-degree"}],
     :statement-hashes
     {:source
      "0b3b4888807bfa06c8d60d86829b75776394ea8aa45a98c933c087165521f923",
      :implementation
-     "98790c2b00b9968fee953b8501a666df6fe4ac79a0016f2d3383b540b3715e96",
+     "997a7ddf8c233a462fd5c4b2def40e0b64dcbf3e37f10719bc3fe36b23421de4",
      :blueprint
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984",
      :registry "166/166"},
@@ -119100,25 +119099,16 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-2,
     :reason
-    "Banked compact-discrete regular-fiber finiteness; transversality-to-discreteness remains.",
+    "Banked range-sum to derivative surjectivity; local-degree producer remains.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t00J02Closure.lean",
       :exit 0}
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "sha256/diff/placeholders", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1792001924622-12089-e944e0b8",
-     :commands
-     ["git diff-tree/show b3649cb"
-      "git archive b3649cb; lake env lean t00J02Closure.lean and Main.lean"
-      "sha256sum and placeholder counts at b3649cb"
-      "python3 scripts/statement-registry.py check"],
-     :finding
-     "PASS program STOP: new in-scope commit proves compact discrete point fibers finite with correct theorem direction and subtype boundary. Archived files compile; closure has 0 placeholders and standard axioms only; Main remains frozen at hash 0b3b4888 with baseline 1 placeholder; fixture afb497a6 matches; registry 166/166. Transversality-to-discreteness, local-degree formula, and final assembly remain listed."},
-    :commit "b3649cbc71b4d78f0a38906c493fc324fe02a28d",
+    :diagnostic-history
+    [{:cmd "derivative draft", :exit 1, :finding "named model alias"}],
+    :commit "73619740810c1756f3393d9af33542e7eb5a7109",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t00J02Closure.blueprint.md",
@@ -119126,7 +119116,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :needs-owner,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119270,7 +119260,8 @@
     :lemma-surfacetopdegree-eq-homologymap
     :lemma-surfacetophomologymap-eq-zero-of-surfacetopdegree-eq-zero
     :lemma-tophomologymap-eq-zero-of-regularvalue-signedcount
-    :lemma-finite-regularfiber-of-isdiscrete],
+    :lemma-finite-regularfiber-of-isdiscrete
+    :lemma-transverse-coprodderivative-surjective],
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
@@ -119438,6 +119429,23 @@
     :banked-by :program-2026-10-13-close-t00j02,
     :banked-commit "b3649cbc71b4d78f0a38906c493fc324fe02a28d"},
    :id :lemma-finite-regularfiber-of-isdiscrete,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "transverse_coprodDerivative_surjective",
+    :type "range-sum implies coproduct derivative surjective"},
+   :lemma
+   {:name "transverse_coprodDerivative_surjective",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type "range-sum implies coproduct derivative surjective",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02},
+   :id :lemma-transverse-coprodderivative-surjective,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}],
