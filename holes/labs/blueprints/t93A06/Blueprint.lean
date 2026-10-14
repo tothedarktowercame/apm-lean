@@ -63,6 +63,7 @@ theorem t93A06_torusAtlas_aux_quotient_charts :
     ∃ charts : ChartedSpace Plane Torus,
       letI := charts
       (∀ e ∈ atlas Plane Torus, ∃ x : Torus, e = chartAt Plane x) ∧
+      (∀ x y : Torus, ∀ z ∈ ((chartAt Plane x).symm.trans (chartAt Plane y)).source, ∃ k : Fin 2 → ℤ, ∀ i, ((chartAt Plane x).symm.trans (chartAt Plane y)) z i = z i + (k i : ℝ)) ∧
       IsLocalDiffeomorph 𝓘(ℝ,Plane) 𝓘(ℝ,Plane) ∞ projection := by
   sorry
 
@@ -74,8 +75,8 @@ theorem t93A06_torusAtlas_aux_manifold_of_localDiffeomorph
     (charts : ChartedSpace Plane Torus)
     (hatlas : letI := charts
       (∀ e ∈ atlas Plane Torus, ∃ x : Torus, e = chartAt Plane x))
-    (hlocal : letI := charts
-      IsLocalDiffeomorph 𝓘(ℝ,Plane) 𝓘(ℝ,Plane) ∞ projection) :
+    (htrans : letI := charts
+      (∀ x y : Torus, ∀ z ∈ ((chartAt Plane x).symm.trans (chartAt Plane y)).source, ∃ k : Fin 2 → ℤ, ∀ i, ((chartAt Plane x).symm.trans (chartAt Plane y)) z i = z i + (k i : ℝ))) :
     letI := charts
     IsManifold 𝓘(ℝ,Plane) ∞ Torus := by
   sorry
@@ -83,10 +84,10 @@ theorem t93A06_torusAtlas_aux_manifold_of_localDiffeomorph
 /-- The two independent quotient-chart conclusions assemble into the target
 atlas structure. -/
 theorem t93A06_torusAtlas : Nonempty SmoothAtlas := by
-  obtain ⟨charts, hatlas, hlocal⟩ := t93A06_torusAtlas_aux_quotient_charts
+  obtain ⟨charts, hatlas, htrans, hlocal⟩ := t93A06_torusAtlas_aux_quotient_charts
   letI := charts
   exact ⟨⟨charts,
-    t93A06_torusAtlas_aux_manifold_of_localDiffeomorph charts hatlas hlocal,
+    t93A06_torusAtlas_aux_manifold_of_localDiffeomorph charts hatlas htrans,
     hlocal⟩⟩
 
 /-- The fibres of the printed quotient projection are precisely integer
