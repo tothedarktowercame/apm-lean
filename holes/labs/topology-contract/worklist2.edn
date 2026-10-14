@@ -87944,6 +87944,16 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "git show --check 7141ba569", :exit 0}
      {:cmd "exact commit blob | lake env lean /dev/stdin", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791945447390-11369-1af936b3",
+     :commands
+     ["git show 3a371cac1 blob + #print axioms | lake env lean /dev/stdin"
+      "diff-tree/readlink/sha256 assertions"
+      "statement-registry check; comment-stripped placeholder scan"],
+     :finding
+     "PASS: 3a371cac1 changes only PolygonSurfaceHomology.lean; exact blob SHA256 a2dca60ca3b4e80282106e46c4df8dc12076c4498b19577c39fff3157ff3bb52. It compiles with standard axioms propext/Classical.choice/Quot.sound; placeholders 0; registry 166/0. New progress beyond 263a0516c defines the map H1(wedge) to orbit-indexed integer functions by leg collapses, proves presentation then collapse equals the standard coproduct/function isomorphism, and obtains coordinate-map then collapse = identity. The direction is correct: collapse coordinates are a left inverse, hence the coordinate map is monic."},
     :commit "7141ba569",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
@@ -87952,7 +87962,7 @@
      "d37b04d9dddbcb69999b2644f074e03424203dd237dbda7676895b07ab33e7f8"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -87972,7 +87982,7 @@
     :blueprint
     "ConstructionTargets/PolygonSurfaceHomology.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked a collapse-coordinate left inverse and monicity of the normalized H1 map.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked the exact reduction from finite-wedge loop generation to coordinate surjectivity.",
    :id :program-2026-10-13-polygon-surface-homology,
    :kind :reusable-theorem,
    :campaign-priority 31,
@@ -88016,7 +88026,11 @@
     {:job 9,
      :commit "3a371cac1",
      :reason
-     "Banked a collapse-coordinate left inverse and monicity of the normalized H1 map."}]}
+     "Banked a collapse-coordinate left inverse and monicity of the normalized H1 map."}
+    {:job 1,
+     :commit "7141ba569",
+     :reason
+     "Banked the exact reduction from finite-wedge loop generation to coordinate surjectivity."}]}
   {:consumer :t97A01,
    :stop-count 0,
    :phase :implementation,
@@ -89051,7 +89065,7 @@
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -89063,7 +89077,9 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "loop-class generation implies coordinate-map surjectivity",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :program-2026-10-13-polygon-surface-homology,
+    :banked-commit "7141ba569"},
    :id
    :lemma-finitewedgeh1coordinatemap-surjective-of-hurewicz-generation,
    :kind :lemma,
