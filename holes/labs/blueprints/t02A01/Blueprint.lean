@@ -391,7 +391,71 @@ noncomputable def apm_t02a01_perimeter (s : ℝ) : ℝ × ℝ :=
 theorem apm_t02a01_perimeter_mem (s : ℝ) :
     apm_t02a01_perimeter s ∈ {x : ℝ × ℝ | x.1 ∈ Set.Icc 0 1 ∧ x.2 ∈ Set.Icc 0 1 ∧
       ‖x - ((1 / 2, 1 / 2) : ℝ × ℝ)‖ = (1 / 4 : ℝ)} := by
-  sorry
+  rcases le_total s 0 with hs | hs
+  · have hc (k : ℝ) (hk : 0 ≤ k) : apm_t02a01_clamp01 (s - k) = 0 := by
+      unfold apm_t02a01_clamp01
+      rw [max_eq_left]
+      linarith [min_le_right 1 (s - k)]
+    have hc0 : apm_t02a01_clamp01 s = 0 := by simpa using hc 0 (by norm_num)
+    simp [apm_t02a01_perimeter, hc0, hc 1 (by norm_num),
+      hc 2 (by norm_num), hc 3 (by norm_num)]
+    norm_num [Prod.norm_def]
+  rcases le_total s 1 with hs1 | hs1
+  · have hc0 : apm_t02a01_clamp01 s = s := by
+      unfold apm_t02a01_clamp01
+      rw [min_eq_right hs1, max_eq_right hs]
+    have hc (k : ℝ) (hk : 1 ≤ k) : apm_t02a01_clamp01 (s - k) = 0 := by
+      unfold apm_t02a01_clamp01
+      rw [max_eq_left]
+      linarith [min_le_right 1 (s - k)]
+    simp only [apm_t02a01_perimeter, hc0, hc 1 (by norm_num),
+      hc 2 (by norm_num), hc 3 (by norm_num)]
+    norm_num [Prod.norm_def, abs_le] <;> (repeat' constructor) <;> linarith
+  rcases le_total s 2 with hs2 | hs2
+  · have hc0 : apm_t02a01_clamp01 s = 1 := by
+      unfold apm_t02a01_clamp01
+      rw [min_eq_left hs1, max_eq_right] <;> norm_num
+    have hc1 : apm_t02a01_clamp01 (s - 1) = s - 1 := by
+      unfold apm_t02a01_clamp01
+      rw [min_eq_right (by linarith), max_eq_right (by linarith)]
+    have hc (k : ℝ) (hk : 2 ≤ k) : apm_t02a01_clamp01 (s - k) = 0 := by
+      unfold apm_t02a01_clamp01
+      rw [max_eq_left]
+      linarith [min_le_right 1 (s - k)]
+    simp only [apm_t02a01_perimeter, hc0, hc1, hc 2 (by norm_num),
+      hc 3 (by norm_num)]
+    norm_num [Prod.norm_def, abs_le] <;> (repeat' constructor) <;> linarith
+  rcases le_total s 3 with hs3 | hs3
+  · have hc0 : apm_t02a01_clamp01 s = 1 := by
+      unfold apm_t02a01_clamp01; rw [min_eq_left (by linarith), max_eq_right] <;> norm_num
+    have hc1 : apm_t02a01_clamp01 (s - 1) = 1 := by
+      unfold apm_t02a01_clamp01; rw [min_eq_left (by linarith), max_eq_right] <;> norm_num
+    have hc2 : apm_t02a01_clamp01 (s - 2) = s - 2 := by
+      unfold apm_t02a01_clamp01
+      rw [min_eq_right (by linarith), max_eq_right (by linarith)]
+    have hc3 : apm_t02a01_clamp01 (s - 3) = 0 := by
+      unfold apm_t02a01_clamp01
+      rw [max_eq_left]; linarith [min_le_right 1 (s - 3)]
+    simp only [apm_t02a01_perimeter, hc0, hc1, hc2, hc3]
+    norm_num [Prod.norm_def, abs_le] <;> (repeat' constructor) <;> linarith
+  rcases le_total s 4 with hs4 | hs4
+  · have hc (k : ℝ) (hk : k ≤ 2) : apm_t02a01_clamp01 (s - k) = 1 := by
+      unfold apm_t02a01_clamp01
+      rw [min_eq_left (by linarith), max_eq_right] <;> norm_num
+    have hc3 : apm_t02a01_clamp01 (s - 3) = s - 3 := by
+      unfold apm_t02a01_clamp01
+      rw [min_eq_right (by linarith), max_eq_right (by linarith)]
+    have hc0 : apm_t02a01_clamp01 s = 1 := by simpa using hc 0 (by norm_num)
+    simp only [apm_t02a01_perimeter, hc0, hc 1 (by norm_num),
+      hc 2 (by norm_num), hc3]
+    norm_num [Prod.norm_def, abs_le] <;> (repeat' constructor) <;> linarith
+  · have hc (k : ℝ) (hk : k ≤ 3) : apm_t02a01_clamp01 (s - k) = 1 := by
+      unfold apm_t02a01_clamp01
+      rw [min_eq_left (by linarith), max_eq_right] <;> norm_num
+    have hc0 : apm_t02a01_clamp01 s = 1 := by simpa using hc 0 (by norm_num)
+    simp [apm_t02a01_perimeter, hc0, hc 1 (by norm_num),
+      hc 2 (by norm_num), hc 3 (by norm_num)]
+    norm_num [Prod.norm_def]
 
 noncomputable def apm_t02a01_innerPoint (s : ℝ) : apm_t02a01_boundarySpace :=
   ⟨Quotient.mk _ ⟨apm_t02a01_perimeter s, (apm_t02a01_perimeter_mem s).1,
