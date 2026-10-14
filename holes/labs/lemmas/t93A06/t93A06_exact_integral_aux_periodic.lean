@@ -453,13 +453,61 @@ theorem t93A06_exact_integral_aux_ftc_y
 
 /-- Pullback coefficients agree on opposite sides of the unit square. -/
 -- BEGIN SEAT AREA
+lemma t93A06_exact_integral_aux_periodic_aux_shift (atlas : SmoothAtlas)
+    (η : let _ := atlas.charts; Form Plane Torus 1) (i : Fin 2)
+    (x : Plane) (k : Fin 2 → ℤ) :
+    t93A06_pulledCoeff atlas η i (fun j ↦ x j + (k j : ℝ)) =
+      t93A06_pulledCoeff atlas η i x := by
+  letI := atlas.charts
+  let c : Plane := fun j ↦ (k j : ℝ)
+  let τ : Plane → Plane := fun y ↦ y + c
+  have hproj : projection ∘ τ = projection := by
+    funext y j
+    change ((y j + (k j : ℝ) : ℝ) : AddCircle (1 : ℝ)) = (y j : AddCircle (1 : ℝ))
+    rw [AddCircle.coe_add]
+    simp
+  have hτ : mfderiv 𝓘(ℝ,Plane) 𝓘(ℝ,Plane) τ x = ContinuousLinearMap.id ℝ Plane := by
+    rw [mfderiv_eq_fderiv]
+    dsimp [τ]
+    exact ((hasFDerivAt_id (𝕜 := ℝ) x).add_const c).fderiv
+  have hd := mfderiv_comp x
+    ((atlas.quotient_localDiffeomorph (τ x)).mdifferentiableAt (by simp))
+    (show MDifferentiableAt 𝓘(ℝ,Plane) 𝓘(ℝ,Plane) τ x by
+      rw [mdifferentiableAt_iff_differentiableAt]
+      dsimp [τ]
+      exact (((contDiff_id : ContDiff ℝ ∞ (id : Plane → Plane)).add
+        (contDiff_const : ContDiff ℝ ∞ (fun _ : Plane ↦ c))).differentiable
+          (by simp)).differentiableAt)
+  rw [hproj] at hd
+  rw [hτ] at hd
+  have hd' : mfderiv 𝓘(ℝ,Plane) 𝓘(ℝ,Plane) projection (τ x) =
+      mfderiv 𝓘(ℝ,Plane) 𝓘(ℝ,Plane) projection x := by
+    apply ContinuousLinearMap.ext
+    intro v
+    have hv := congrArg (fun L : Plane →L[ℝ] Plane ↦ L v) hd
+    simpa using hv.symm
+  unfold t93A06_pulledCoeff ConstructionTargets.ManifoldFormTargets.pullback
+  change (η (projection (τ x))).compContinuousLinearMap
+      (mfderiv 𝓘(ℝ,Plane) 𝓘(ℝ,Plane) projection (τ x)) _ = _
+  rw [show projection (τ x) = projection x by
+    exact congrFun hproj x, hd']
+  rfl
+
 theorem t93A06_exact_integral_aux_periodic (atlas : SmoothAtlas)
     (η : let _ := atlas.charts; Form Plane Torus 1) :
     (∀ y : ℝ, t93A06_pulledCoeff atlas η 1 ![1, y] =
       t93A06_pulledCoeff atlas η 1 ![0, y]) ∧
     (∀ x : ℝ, t93A06_pulledCoeff atlas η 0 ![x, 1] =
       t93A06_pulledCoeff atlas η 0 ![x, 0]) := by
-  sorry
+  constructor
+  · intro y
+    convert t93A06_exact_integral_aux_periodic_aux_shift atlas η 1
+      (![0, y] : Plane) (![1, 0] : Fin 2 → ℤ) using 1 <;>
+      congr 1 <;> funext j <;> fin_cases j <;> simp
+  · intro x
+    convert t93A06_exact_integral_aux_periodic_aux_shift atlas η 0
+      (![x, 0] : Plane) (![0, 1] : Fin 2 → ℤ) using 1 <;>
+      congr 1 <;> funext j <;> fin_cases j <;> simp
 -- END SEAT AREA
 
 /-- The two FTC boundary terms vanish under opposite-edge periodicity. -/
