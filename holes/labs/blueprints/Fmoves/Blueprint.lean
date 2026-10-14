@@ -3158,10 +3158,79 @@ def zipMap (n k : ℕ) (z : Disk) : Disk :=
 
 /-- Boundary points of `D₊` on one ray from the centre coincide: a point strictly
 between the centre and a point of `D₊` lies in the open half-disk. -/
+lemma zip_halfBoundary_ray_aux_mem {q : ℂ} (hq : q ∈ zipHalfBoundary) :
+    ‖q‖ ≤ 1 ∧ 0 ≤ q.im := by
+  rcases hq with hq | hq
+  · exact ⟨hq.1.le, hq.2⟩
+  · refine ⟨?_, hq.1.symm.le⟩
+    rw [Complex.norm_def]
+    simp [Complex.normSq, hq.1, Real.sqrt_sq_eq_abs]
+    rcases (abs_le.mp hq.2) with ⟨hl, hu⟩
+    nlinarith
+
+lemma zip_halfBoundary_ray_aux_interior {q : ℂ} (hq : q ∈ zipHalfBoundary)
+    {s : ℝ} (hs0 : 0 ≤ s) (hs1 : s < 1) :
+    zipCentre + (s : ℂ) * (q - zipCentre) ∉ zipHalfBoundary := by
+  have hqm := zip_halfBoundary_ray_aux_mem hq
+  let z := zipCentre + (s : ℂ) * (q - zipCentre)
+  have hzform : z = ((1 - s : ℝ) : ℂ) * zipCentre + (s : ℂ) * q := by
+    dsimp [z]
+    push_cast
+    ring
+  have hc : ‖zipCentre‖ = (1 / 2 : ℝ) := by
+    simp [zipCentre, Complex.norm_def]
+  have hznorm : ‖z‖ < 1 := by
+    rw [hzform]
+    calc
+      ‖((1 - s : ℝ) : ℂ) * zipCentre + (s : ℂ) * q‖ ≤
+          ‖((1 - s : ℝ) : ℂ) * zipCentre‖ + ‖(s : ℂ) * q‖ := norm_add_le _ _
+      _ = (1 - s) / 2 + s * ‖q‖ := by
+        have hs_norm : ‖((s : ℝ) : ℂ)‖ = s := by
+          rw [Complex.norm_real]
+          exact Real.norm_of_nonneg hs0
+        have hsub_norm : ‖((1 - s : ℝ) : ℂ)‖ = 1 - s := by
+          rw [Complex.norm_real]
+          exact Real.norm_of_nonneg (sub_nonneg.mpr hs1.le)
+        rw [norm_mul, norm_mul, hc]
+        rw [hs_norm, hsub_norm]
+        ring
+      _ ≤ (1 - s) / 2 + s := by nlinarith
+      _ < 1 := by linarith
+  have hzim : 0 < z.im := by
+    rw [hzform]
+    simp [zipCentre]
+    nlinarith [hqm.2]
+  intro hz
+  rcases hz with hz | hz
+  · exact (ne_of_lt hznorm) (by simpa [z] using hz.1)
+  · exact (ne_of_gt hzim) hz.1
+
 theorem zip_halfBoundary_ray {p p' : ℂ} (hp : p ∈ zipHalfBoundary)
     (hp' : p' ∈ zipHalfBoundary) {r : ℝ} (hr : 0 < r)
     (h : p' - zipCentre = (r : ℂ) * (p - zipCentre)) : p' = p := by
-  sorry
+  rcases lt_trichotomy r 1 with hr1 | hr1 | hr1
+  · have hn := zip_halfBoundary_ray_aux_interior hp (le_of_lt hr) hr1
+    exfalso
+    apply hn
+    rw [← show p' = zipCentre + (r : ℂ) * (p - zipCentre) by
+      rw [show p' = zipCentre + (p' - zipCentre) by ring, h]]
+    exact hp'
+  · subst r
+    simpa using congrArg (fun z : ℂ => z + zipCentre) h
+  · have hs0 : 0 ≤ r⁻¹ := (inv_pos.mpr hr).le
+    have hs1 : r⁻¹ < 1 := inv_lt_one_of_one_lt₀ hr1
+    have hn := zip_halfBoundary_ray_aux_interior hp' hs0 hs1
+    exfalso
+    apply hn
+    rw [← show p = zipCentre + (r⁻¹ : ℝ) * (p' - zipCentre) by
+      calc
+        p = zipCentre + (p - zipCentre) := by ring
+        _ = zipCentre + (r⁻¹ : ℝ) * ((r : ℂ) * (p - zipCentre)) := by
+          push_cast
+          rw [← mul_assoc, inv_mul_cancel₀ (by exact_mod_cast hr.ne')]
+          ring
+        _ = zipCentre + (r⁻¹ : ℝ) * (p' - zipCentre) := by rw [h]]
+    exact hp
 
 /-- Every point of `D₊` is on a segment from the centre to a boundary point
 (take the largest `λ` with `I/2 + λ (y - I/2) ∈ D₊`). -/
