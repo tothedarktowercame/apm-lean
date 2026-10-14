@@ -36161,6 +36161,16 @@
     [{:cmd "source compile",
       :exit 1,
       :correction "removed forward reference"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791998163190-11956-f0619cb6",
+     :commands
+     ["git show/check/diff a6f0c4b6; scope and fixture SHA-256"
+      "lake build ConstructionTargets.t93J03Closure; lean fixture and Main"
+      "statement-registry check; placeholder/axiom recount"],
+     :finding
+     "PASS: a6f0c4b6 adds compiled, sorry-free progress beyond 7640486c. The equivalence-unit identity proves the packaged source coordinate equals the literal skeleton-to-outer map; naturality then identifies the transported polygon map with the literal skeleton inclusion and yields the forward normal-closure/kernel inclusion in final coordinates. No representation boundary is collapsed. Exact scope/hash match; support placeholders 0->0; frozen Main remains 1; standard axioms only; registry 166/166. STOP lists reverse kernel inclusion, surjectivity, winding, C1/C2/Main."},
     :commit "a6f0c4b61e88c36e45b9bbfb5d394decf1fd8f2f",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
@@ -36171,7 +36181,7 @@
      "bc019ff1e6c0445a6763c14c2ec1f9d8de882755373ea7b541c1bd1286f5448a"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -36189,7 +36199,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t93J03Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed exact concrete representative of the packaged unit-plus-connector composite; comparison with the deformation connector and based van Kampen remain.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Proved literal-map equality and forward kernel inclusion; reverse inclusion/surjectivity remain.",
    :id :program-2026-10-13-close-t93j03,
    :kind :final-adapter,
    :campaign-priority 30,
@@ -36383,7 +36393,11 @@
     {:job 3,
      :commit "7640486c6397e450fd355dabe430dc4501444963",
      :reason
-     "Committed exact concrete representative of the packaged unit-plus-connector composite; comparison with the deformation connector and based van Kampen remain."}]}
+     "Committed exact concrete representative of the packaged unit-plus-connector composite; comparison with the deformation connector and based van Kampen remain."}
+    {:job 4,
+     :commit "a6f0c4b61e88c36e45b9bbfb5d394decf1fd8f2f",
+     :reason
+     "Proved literal-map equality and forward kernel inclusion; reverse inclusion/surjectivity remain."}]}
   {:consumer :t99J05,
    :stop-count 5,
    :evidence
@@ -38869,7 +38883,7 @@
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "kleinPolygonPackagedSourceCoordinate_eq_direct",
@@ -38879,14 +38893,16 @@
     :reported-by [:program-2026-10-13-close-t93j03],
     :type "packaged source equals direct",
     :area "covering-subgroup-correspondence",
-    :proved-in :program-2026-10-13-close-t93j03},
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "a6f0c4b61e88c36e45b9bbfb5d394decf1fd8f2f"},
    :id :lemma-kleinpolygonpackagedsourcecoordinate-eq-direct,
    :kind :lemma,
    :depends-on [:lemma-kleinpolygonpackagedunitconnector-mk],
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -38898,7 +38914,9 @@
     :reported-by [:program-2026-10-13-close-t93j03],
     :type "forward kernel inclusion",
     :area "covering-subgroup-correspondence",
-    :proved-in :program-2026-10-13-close-t93j03},
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "a6f0c4b61e88c36e45b9bbfb5d394decf1fd8f2f"},
    :id
    :lemma-kleinpolygonoverlapskeletonnormalclosure-le-skeletontospacekernel,
    :kind :lemma,
