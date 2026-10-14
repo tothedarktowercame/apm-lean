@@ -220,13 +220,82 @@ theorem rotation {Label : Type*} [DecidableEq Label]
 
 /-- Rename labels and optionally invert both occurrences of each label.  The
 carrier map is the identity on each radial sector. -/
+lemma relabelInvert_aux_xor_eq (a b c : Bool) :
+    (xor a c = xor b c) ↔ (a = b) := by
+  cases a <;> cases b <;> cases c <;> simp
+
+lemma relabelInvert_aux_wordRel {Label Label' : Type*}
+    [DecidableEq Label] [DecidableEq Label']
+    (w : List (Signed Label)) (e : Label ≃ Label') (flip : Label → Bool) :
+    WordRel (w.map fun x => (e x.1, xor x.2 (flip x.1))) = WordRel w := by
+  funext p q
+  apply propext
+  let w' := w.map fun x => (e x.1, xor x.2 (flip x.1))
+  have hlen : w'.length = w.length := by simp [w']
+  constructor
+  · rintro ⟨i, j, hij, t, hlab, hp, hq⟩
+    let i' : Fin w.length := ⟨i.1, by simpa [w'] using i.2⟩
+    let j' : Fin w.length := ⟨j.1, by simpa [w'] using j.2⟩
+    have hi : (w'.get i).1 = e (w.get i').1 := by
+      simp [w', i']
+    have hj : (w'.get j).1 = e (w.get j').1 := by
+      simp [w', j']
+    have hlab' : (w.get i').1 = (w.get j').1 := by
+      apply e.injective
+      simpa [hi, hj] using hlab
+    have hij' : i' ≠ j' := by
+      intro h
+      exact hij (Fin.ext (by simpa [i', j'] using congrArg Fin.val h))
+    refine ⟨i', j', hij', t, hlab', ?_, ?_⟩
+    · simpa [i', w'] using hp
+    · have hsign :
+          ((w'.get i).2 = (w'.get j).2) ↔
+            ((w.get i').2 = (w.get j').2) := by
+        simp only [w', i', j', List.get_eq_getElem, List.getElem_map]
+        have hf := congrArg flip hlab'
+        simp only [List.get_eq_getElem] at hf
+        rw [hf]
+        exact relabelInvert_aux_xor_eq _ _ _
+      rw [hq]
+      simp only [List.length_map]
+      apply congrArg (edgePoint w.length j.1)
+      exact if_congr hsign rfl rfl
+  · rintro ⟨i, j, hij, t, hlab, hp, hq⟩
+    let i' : Fin w'.length := ⟨i.1, by simpa [w'] using i.2⟩
+    let j' : Fin w'.length := ⟨j.1, by simpa [w'] using j.2⟩
+    have hij' : i' ≠ j' := by
+      intro h
+      exact hij (Fin.ext (by simpa [i', j'] using congrArg Fin.val h))
+    have hlab' : (w'.get i').1 = (w'.get j').1 := by
+      simpa [w', i', j'] using congrArg e hlab
+    refine ⟨i', j', hij', t, hlab', ?_, ?_⟩
+    · simpa [i', w'] using hp
+    · have hsign :
+          ((w'.get i').2 = (w'.get j').2) ↔
+            ((w.get i).2 = (w.get j).2) := by
+        simp only [w', i', j', List.get_eq_getElem, List.getElem_map]
+        have hf := congrArg flip hlab
+        simp only [List.get_eq_getElem] at hf
+        rw [hf]
+        exact relabelInvert_aux_xor_eq _ _ _
+      rw [hq]
+      simp only [List.length_map]
+      apply congrArg (edgePoint w.length j.1)
+      exact if_congr hsign.symm rfl rfl
+
 theorem relabelInvert {Label Label' : Type*}
     [DecidableEq Label] [DecidableEq Label']
     (w : List (Signed Label)) (e : Label ≃ Label') (flip : Label → Bool)
     (hw : IsPolygonWord w) :
     Nonempty (PolygonSurface w ≃ₜ
       PolygonSurface (w.map fun x => (e x.1, xor x.2 (flip x.1)))) := by
-  sorry
+  let w' := w.map fun x => (e x.1, xor x.2 (flip x.1))
+  have h : WordRel w' = WordRel w := relabelInvert_aux_wordRel w e flip
+  change Nonempty
+    (Quotient (Relation.EqvGen.setoid (WordRel w)) ≃ₜ
+      Quotient (Relation.EqvGen.setoid (WordRel w')))
+  rw [h]
+  exact ⟨Homeomorph.refl _⟩
 
 lemma inversePairCancellation_aux_rest_ne_nil {Label : Type*} [DecidableEq Label]
     (u v : List (Signed Label)) (hrest : IsPolygonWord (u ++ v)) :
