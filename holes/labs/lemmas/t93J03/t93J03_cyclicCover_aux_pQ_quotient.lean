@@ -434,7 +434,11 @@ theorem t93J03_cyclicCover_aux_pQ_quotient
     (hEcov : IsCoveringMap t93J03_cyc_E) (hEs : Function.Surjective t93J03_cyc_E)
     (hpE : ∀ v, t93J03_cyc_pQ (t93J03_cyc_E v) = Quotient.mk _ v) :
     Topology.IsQuotientMap t93J03_cyc_pQ := by
-  sorry
+  apply (hEcov.isQuotientMap hEs).of_comp_isQuotientMap
+  have hcomp : t93J03_cyc_pQ ∘ t93J03_cyc_E =
+      (fun v : ℝ × ℝ => Quotient.mk _ v) := funext hpE
+  rw [hcomp]
+  exact isQuotientMap_quot_mk
 -- END SEAT AREA
 
 theorem t93J03_cyclicCover_aux_pQ_fiber
