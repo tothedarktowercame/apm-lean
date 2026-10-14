@@ -179,6 +179,21 @@ theorem componentSignedCount_eq_zero_of_componentDegree_eq_zero
     componentSignedCount orientationSign componentDegree = 0 := by
   simp [componentSignedCount, hdegree]
 
+/-- The chosen component lifts over a finite literal fiber have zero total
+signed contribution, for any assignment of orientation signs. -/
+theorem regularFiber_componentSignedCount_eq_zero
+    {S : Type} [TopologicalSpace S] (f : C(S, S)) (c : C(Circle, S))
+    (hcomponents : ∀ x ∈ f ⁻¹' Set.range c,
+      ∃ γ : C(Circle, S), ∃ ℓ : C(Circle, Circle),
+        x ∈ Set.range γ ∧ Set.range γ ⊆ f ⁻¹' Set.range c ∧
+          c.comp ℓ = f.comp γ ∧ circleDegree ℓ = 0)
+    (y : S) (hy : y ∈ Set.range c) [Fintype {x : S // f x = y}]
+    (orientationSign : {x : S // f x = y} → ℤ) :
+    componentSignedCount orientationSign (fun x =>
+      circleDegree (regularFiber_zeroDegreeComponentLifts f c hcomponents y hy x).lift) = 0 := by
+  apply componentSignedCount_eq_zero_of_componentDegree_eq_zero
+  exact regularFiber_chosenComponentDegree_eq_zero f c hcomponents y hy
+
 /-- Algebraic final step of the regular-value formula: once the top-degree
 coordinate is identified with the component signed count, pointwise zero
 component degrees force that coordinate to vanish. -/
@@ -296,6 +311,7 @@ end ConstructionTargets.T00J02Closure
 #print axioms ConstructionTargets.T00J02Closure.regularFiber_zeroDegreeComponentLifts
 #print axioms ConstructionTargets.T00J02Closure.regularFiber_chosenComponentDegree_eq_zero
 #print axioms ConstructionTargets.T00J02Closure.componentSignedCount_eq_zero_of_componentDegree_eq_zero
+#print axioms ConstructionTargets.T00J02Closure.regularFiber_componentSignedCount_eq_zero
 #print axioms ConstructionTargets.T00J02Closure.regularValue_topDegree_eq_zero_of_signedCount
 #print axioms ConstructionTargets.T00J02Closure.surfaceTopDegree_eq_homologyMap
 #print axioms ConstructionTargets.T00J02Closure.surfaceTopHomologyMap_eq_zero_of_surfaceTopDegree_eq_zero
