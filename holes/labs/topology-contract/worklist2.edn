@@ -87945,6 +87945,17 @@
     [{:cmd "transport proof drafts",
       :exit 1,
       :correction "made product transport induction explicit"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791999182192-11973-183e2927",
+     :commands
+     ["git show/diff 57fe1358b; sha256sum"
+      "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology"
+      "lake env lean /dev/stdin (#print axioms)"
+      "placeholder scan; statement-registry check; git show --check"],
+     :finding
+     "PASS: commit 57fe1358b by topo-6 changes only scoped PolygonSurfaceHomology.lean; exact blob SHA-256 4834db7e4f75c89093c4f09f3a2efbbfd2f62c93446d8840b605af4facfdbf5e. Exact snapshot builds; 0 placeholders; new equivalence/theorem use propext/Classical.choice/Quot.sound; registry 166/0. Homeomorphism transport handles the changed basepoint explicitly with mapOfEq and proves both inverses on loop representatives. Split-word transport preserves products by list induction and keeps old/final factors correctly oriented. Real compiled progress; remaining milestones prove leg-map formulas, expand old factors inductively, then free-group surjectivity/B6-B10."},
     :commit "57fe1358b",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
@@ -87953,7 +87964,7 @@
      "4834db7e4f75c89093c4f09f3a2efbbfd2f62c93446d8840b605af4facfdbf5e"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -87973,7 +87984,7 @@
     :blueprint
     "ConstructionTargets/PolygonSurfaceHomology.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked successor point-wedge leg-word generation.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked successor homeomorphism transport and split-factor word theorem.",
    :id :program-2026-10-13-polygon-surface-homology,
    :kind :reusable-theorem,
    :campaign-priority 31,
@@ -88116,7 +88127,11 @@
      :reason "Banked connector square and old-factor membership."}
     {:job 2,
      :commit "c6f80043b",
-     :reason "Banked successor point-wedge leg-word generation."}]}
+     :reason "Banked successor point-wedge leg-word generation."}
+    {:job 3,
+     :commit "57fe1358b",
+     :reason
+     "Banked successor homeomorphism transport and split-factor word theorem."}]}
   {:consumer :t97A01,
    :stop-count 0,
    :phase :implementation,
@@ -90345,7 +90360,7 @@
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "finiteWedgeFinSucc_exists_splitLegWord",
@@ -90355,7 +90370,9 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "successor split words transported to the finite wedge",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :program-2026-10-13-polygon-surface-homology,
+    :banked-commit "57fe1358b"},
    :id :lemma-finitewedgefinsucc-exists-splitlegword,
    :kind :lemma,
    :depends-on [:lemma-finitewedgefinsuccpointwedge-exists-legword],
