@@ -615,6 +615,21 @@ lemma polygonSurface_homeomorph_of_span {L L' Y : Type*}
   · rw [hgB]
     exact (continuous_polygonQuotient w₁).comp ha
 
+lemma cutAndPaste_aux_span_aux_x_fresh {Label : Type*} [DecidableEq Label]
+    (u v t : List (Signed Label)) (x : Signed Label)
+    (hx : x.1 ∉ (u ++ v ++ t).map Prod.fst) :
+    x.1 ∉ u.map Prod.fst ∧ x.1 ∉ v.map Prod.fst ∧
+      x.1 ∉ t.map Prod.fst := by
+  simpa using hx
+
+lemma cutAndPaste_aux_span_aux_x_count {Label : Type*} [DecidableEq Label]
+    (u v t : List (Signed Label)) (x : Signed Label)
+    (hx : x.1 ∉ (u ++ v ++ t).map Prod.fst) :
+    ((u ++ [x] ++ v ++ [x] ++ t).map Prod.fst).count x.1 = 2 := by
+  obtain ⟨hu, hv, ht⟩ := cutAndPaste_aux_span_aux_x_fresh u v t x hx
+  simp [List.count_eq_zero.mpr hu, List.count_eq_zero.mpr hv,
+    List.count_eq_zero.mpr ht]
+
 /-- The geometric content of cut-and-paste: `Y = Fin 2 × Disk` (two triangles,
 each parametrised by a disk).  `a` places them on either side of the diagonal
 from the start of the first `x` to the start of the second; `b` places them
