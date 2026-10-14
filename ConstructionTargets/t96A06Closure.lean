@@ -2,6 +2,7 @@ import Mathlib
 import ConstructionTargets.ProjectiveSpaceTopology
 import ConstructionTargets.ProjectiveConsumerLiftDemonstrations
 import ConstructionTargets.RationalLefschetz
+import ConstructionTargets.CoefficientH0
 
 /-! Compiled closure milestones for t96A06. -/
 
@@ -50,9 +51,36 @@ theorem exists_polynomialDescent_formula :
   intro v
   exact ⟨polynomialMap_nonzero v, polynomialDescent_quotientMap v⟩
 
+/-- The nonzero-vector model covering `RP3` is path connected. -/
+theorem nonzeroVectors3PathConnectedSpace :
+    PathConnectedSpace (NonzeroVectors ℝ 3) := by
+  apply isPathConnected_iff_pathConnectedSpace.mp
+  change IsPathConnected ({0}ᶜ : Set (Fin 4 → ℝ))
+  apply isPathConnected_compl_singleton_of_one_lt_rank
+  rw [← Module.finrank_eq_rank]
+  norm_num [Module.finrank_fin_fun]
+
+/-- The exact quotient model of real projective three-space is path connected. -/
+theorem rp3PathConnectedSpace : PathConnectedSpace RP3 := by
+  letI : PathConnectedSpace (NonzeroVectors ℝ 3) :=
+    nonzeroVectors3PathConnectedSpace
+  exact (surjective_quotientMap ℝ 3).pathConnectedSpace
+    (continuous_quotientMap ℝ 3)
+
+/-- The degree-zero calculation `H₀(RP³; ℚ) ≅ ℚ`. -/
+noncomputable def rp3RationalH0Iso :
+    ConstructionTargets.CoefficientH0.SingularHomology ℚ 0 (TopCat.of RP3) ≅
+      ModuleCat.of ℚ ℚ := by
+  letI : PathConnectedSpace RP3 := rp3PathConnectedSpace
+  exact ConstructionTargets.CoefficientH0.h0Iso ℚ
+    (coordinateLine ℝ 3 0)
+
 #print axioms polynomialMap_nonzero
 #print axioms polynomialDescent
 #print axioms polynomialDescent_quotientMap
 #print axioms exists_polynomialDescent_formula
+#print axioms nonzeroVectors3PathConnectedSpace
+#print axioms rp3PathConnectedSpace
+#print axioms rp3RationalH0Iso
 
 end ConstructionTargets.t96A06Closure

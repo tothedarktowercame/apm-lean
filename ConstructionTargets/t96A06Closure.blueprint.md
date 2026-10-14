@@ -42,6 +42,11 @@ facts in a local structure whose fields directly discharge
 Shared dependency: reuse the coefficient/sphere and trace infrastructure also
 needed by t99J05, but do not identify real and complex projective homology.
 
+The first part now compiles in `t96A06Closure.lean`:
+`nonzeroVectors3PathConnectedSpace` and `rp3PathConnectedSpace` establish
+connectedness of the exact quotient model, and `rp3RationalH0Iso` computes
+its degree-zero rational homology as `ℚ`.
+
 ## C3. Degree four of the quadratic map — library
 
 Restrict complex squaring `(u,v) ↦ (u²,v²)` radially to S³ and prove that
