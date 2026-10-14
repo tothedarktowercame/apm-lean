@@ -798,7 +798,30 @@ theorem apm_t02a01_boundary_inclusion_word_aux_generator_aux_transport
             continuous_subtype_val⟩ :
             C(apm_t02a01_boundarySpace, apm_t02a01_puncturedTorus)) x delta =
         a * b * a⁻¹ * b⁻¹ := by
-  sorry
+  letI : PathConnectedSpace apm_t02a01_boundarySpace := hpc.some
+  obtain ⟨delta₀, a₀, b₀, hcyc, hcomm⟩ := h0
+  let i : C(apm_t02a01_boundarySpace, apm_t02a01_puncturedTorus) :=
+    ⟨((↑) : apm_t02a01_boundarySpace → apm_t02a01_puncturedTorus),
+      continuous_subtype_val⟩
+  let p : Path apm_t02a01_innerBase x :=
+    PathConnectedSpace.somePath apm_t02a01_innerBase x
+  let q : Path apm_t02a01_innerBase.1 x.1 := p.map continuous_subtype_val
+  let e := FundamentalGroup.fundamentalGroupMulEquivOfPath p
+  let E := FundamentalGroup.fundamentalGroupMulEquivOfPath q
+  refine ⟨e delta₀, E a₀, E b₀, ?_, ?_⟩
+  · intro gamma
+    obtain ⟨gamma₀, rfl⟩ := e.surjective gamma
+    obtain ⟨k, hk⟩ := hcyc gamma₀
+    refine ⟨k, ?_⟩
+    rw [hk, map_zpow]
+  · have hnatur :
+        FundamentalGroup.map i x (e delta₀) =
+          E (FundamentalGroup.map i apm_t02a01_innerBase delta₀) := by
+      exact CategoryTheory.Functor.map_conj
+        (FundamentalGroupoid.map i)
+        ((CategoryTheory.Groupoid.isoEquivHom _ _).symm
+          (Path.Homotopic.Quotient.mk p)) delta₀
+    rw [hnatur, hcomm, map_mul, map_mul, map_mul, map_inv, map_inv]
 
 theorem apm_t02a01_boundary_inclusion_word_aux_generator
     (x : apm_t02a01_boundarySpace) :
