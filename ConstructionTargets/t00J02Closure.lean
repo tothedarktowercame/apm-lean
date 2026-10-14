@@ -321,6 +321,20 @@ theorem groupedComponentSignedCount_eq_zero_of_comparison
   exact componentLocalDegreeSum_eq_zero_of_comparison
     component localDegree componentDegree hsum hdegree
 
+/-- If componentwise local-degree sums equal vanishing component degrees,
+then the equivalent pointwise regular-fiber signed count also vanishes. -/
+theorem pointSignedCount_eq_zero_of_componentComparison
+    {ι κ : Type*} [Fintype ι] [Fintype κ] [DecidableEq κ]
+    (component : ι → κ) (localDegree : ι → ℤ)
+    (componentDegree orientationSign : κ → ℤ)
+    (hsum : ∀ k,
+      componentLocalDegreeSum component localDegree k = componentDegree k)
+    (hdegree : ∀ k, componentDegree k = 0) :
+    ∑ i, orientationSign (component i) * localDegree i = 0 := by
+  rw [pointSignedCount_eq_groupedComponentSignedCount]
+  exact groupedComponentSignedCount_eq_zero_of_comparison
+    component localDegree componentDegree orientationSign hsum hdegree
+
 /-- Genuine connected components of a subset, represented by their underlying
 subsets rather than by independently chosen loops through each point. -/
 def PreimageComponentIndex {S : Type} [TopologicalSpace S] (s : Set S) :=
@@ -626,6 +640,7 @@ end ConstructionTargets.T00J02Closure
 #print axioms ConstructionTargets.T00J02Closure.pointSignedCount_eq_groupedComponentSignedCount
 #print axioms ConstructionTargets.T00J02Closure.componentLocalDegreeSum_eq_zero_of_comparison
 #print axioms ConstructionTargets.T00J02Closure.groupedComponentSignedCount_eq_zero_of_comparison
+#print axioms ConstructionTargets.T00J02Closure.pointSignedCount_eq_zero_of_componentComparison
 #print axioms ConstructionTargets.T00J02Closure.regularFiberComponentIndex
 #print axioms ConstructionTargets.T00J02Closure.regularFiber_mem_indexedComponent
 #print axioms ConstructionTargets.T00J02Closure.OccupiedRegularFiberComponent
