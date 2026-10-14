@@ -36155,6 +36155,16 @@
      {:cmd "lean closure; fixture; Main; registry", :exit 0}
      {:cmd "placeholder; diff; show --check", :exit 0}
      {:cmd "rg forbidden additions", :exit 1, :expected-exit 1}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791980348158-11797-b3b89160",
+     :commands
+     ["git show/check/diff f869be37; scope and boundary review"
+      "sha256sum fixture; lean closure, fixture, Main"
+      "statement registry; placeholder and axiom recount"],
+     :finding
+     "PASS. Commit f869be37 adds compiled, sorry-free progress: it constructs the outer-piece connector from the inverse deformation-unit path and skeleton connector, proves its polygon image is the chosen target connector, and obtains the correctly typed basepoint equivalence. Scope and fixture hash match; support placeholders 0->0; frozen Main 1->1; standard axioms only; registry 166/166. The transported/direct map comparison, reverse inclusion, surjectivity, and winding remain listed."},
     :commit "f869be3704ca9938a77d7108060a03e2ea600652",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
@@ -36165,7 +36175,7 @@
      "8af1904fb72d77b91380336de88d07bdb92545f284cf4292a36fd932f9c0da72"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -36183,7 +36193,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t93J03Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Proved the literal skeleton map is exactly the direct skeleton-to-outer composite; equivalence-coordinate comparison, reverse inclusion, surjectivity and winding remain.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed exact outer-piece connector, its polygon image equality, and induced basepoint equivalence; map comparison and based van Kampen remain.",
    :id :program-2026-10-13-close-t93j03,
    :kind :final-adapter,
    :campaign-priority 30,
@@ -36353,7 +36363,11 @@
     {:job 6,
      :commit "44f5d424e3ef2ac634898fb671808a5e07c04bef",
      :reason
-     "Proved the literal skeleton map is exactly the direct skeleton-to-outer composite; equivalence-coordinate comparison, reverse inclusion, surjectivity and winding remain."}]}
+     "Proved the literal skeleton map is exactly the direct skeleton-to-outer composite; equivalence-coordinate comparison, reverse inclusion, surjectivity and winding remain."}
+    {:job 7,
+     :commit "f869be3704ca9938a77d7108060a03e2ea600652",
+     :reason
+     "Committed exact outer-piece connector, its polygon image equality, and induced basepoint equivalence; map comparison and based van Kampen remain."}]}
   {:consumer :t99J05,
    :stop-count 5,
    :evidence
@@ -38683,7 +38697,7 @@
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "kleinPolygonOuterImageToDirectSkeletonPointPath_map",
@@ -38693,7 +38707,9 @@
     :reported-by [:program-2026-10-13-close-t93j03],
     :type "outer connector maps exactly to target polygon connector",
     :area "covering-subgroup-correspondence",
-    :proved-in :program-2026-10-13-close-t93j03},
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "f869be3704ca9938a77d7108060a03e2ea600652"},
    :id :lemma-kleinpolygonouterimagetodirectskeletonpointpath-map,
    :kind :lemma,
    :depends-on
