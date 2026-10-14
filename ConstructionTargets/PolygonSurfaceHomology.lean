@@ -718,6 +718,74 @@ theorem finiteWedgeH1CoordinateMap_surjective_of_hurewicz_generation
   obtain ⟨g, rfl⟩ := finiteWedgeModuleHurewicz_surjective P h
   exact hgenerate g
 
+/-! ### A normalized circle element for finite-wedge words -/
+
+/-- The module-valued Hurewicz class of a based loop, for an arbitrary
+space.  This comparison-normalized form is convenient when mapping the
+positive circle generator into individual wedge legs. -/
+noncomputable def moduleHurewicz {X : Type} [TopologicalSpace X] (x : X) :
+    FundamentalGroup X x →
+      (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 1).obj
+        (ModuleCat.of ℤ ℤ)).obj (TopCat.of X)) :=
+  fun g =>
+    (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+      (TopCat.of X) 1).inv
+      (Multiplicative.toAdd
+        (ConstructionTargets.DegreeOneHurewiczMap.fundamentalGroupH1Hom x g))
+
+/-- A based circle class whose Hurewicz image is the positive generator fixed
+by `circleH1IsoInt`.  Choosing it through Hurewicz surjectivity avoids adding
+a second, potentially incompatible orientation convention for explicit
+circle paths. -/
+noncomputable def circlePositiveFundamentalClass :
+    FundamentalGroup Circle 1 := by
+  letI : PathConnectedSpace Circle :=
+    pathConnectedSpace_iff_univ.mpr (by
+      have h : IsPathConnected
+          (ConstructionTargets.CircleHomology.circleHomeomorphSphereOne ⁻¹'
+            (Set.univ : Set (ConstructionTargets.SphereHomology.Sphere 1))) :=
+        ConstructionTargets.CircleHomology.circleHomeomorphSphereOne
+          |>.isPathConnected_preimage.mpr isPathConnected_univ
+      simpa using h)
+  let e :=
+    ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+      (TopCat.of Circle) 1
+  exact Classical.choose
+    (ConstructionTargets.DegreeOneHurewiczSurjective.fundamentalGroupH1Hom_surjective
+      (1 : Circle)
+      (Multiplicative.ofAdd
+        (e.hom (ConstructionTargets.CircleHomology.circleH1IsoInt.inv 1))))
+
+/-- The chosen circle class has exactly the positive module-homology
+normalization required by the wedge coordinate presentation. -/
+theorem moduleHurewicz_circlePositiveFundamentalClass :
+    moduleHurewicz (1 : Circle) circlePositiveFundamentalClass =
+      ConstructionTargets.CircleHomology.circleH1IsoInt.inv 1 := by
+  letI : PathConnectedSpace Circle :=
+    pathConnectedSpace_iff_univ.mpr (by
+      have h : IsPathConnected
+          (ConstructionTargets.CircleHomology.circleHomeomorphSphereOne ⁻¹'
+            (Set.univ : Set (ConstructionTargets.SphereHomology.Sphere 1))) :=
+        ConstructionTargets.CircleHomology.circleHomeomorphSphereOne
+          |>.isPathConnected_preimage.mpr isPathConnected_univ
+      simpa using h)
+  let e :=
+    ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+      (TopCat.of Circle) 1
+  change e.inv (Multiplicative.toAdd
+    (ConstructionTargets.DegreeOneHurewiczMap.fundamentalGroupH1Hom
+      (1 : Circle) circlePositiveFundamentalClass)) = _
+  rw [show ConstructionTargets.DegreeOneHurewiczMap.fundamentalGroupH1Hom
+      (1 : Circle) circlePositiveFundamentalClass =
+      Multiplicative.ofAdd
+        (e.hom (ConstructionTargets.CircleHomology.circleH1IsoInt.inv 1)) from
+    Classical.choose_spec
+      (ConstructionTargets.DegreeOneHurewiczSurjective.fundamentalGroupH1Hom_surjective
+        (1 : Circle)
+        (Multiplicative.ofAdd
+          (e.hom (ConstructionTargets.CircleHomology.circleH1IsoInt.inv 1))))]
+  exact e.hom_inv_id_apply _
+
 end
 
 end ConstructionTargets.PolygonSurfaceHomology
