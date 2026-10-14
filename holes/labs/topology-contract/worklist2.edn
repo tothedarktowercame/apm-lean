@@ -87901,7 +87901,7 @@
   {:consumer :t97A01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 10,
+   :stop-count 0,
    :evidence
    {:placeholder-delta 0,
     :residual
@@ -87958,7 +87958,7 @@
      "7d42fbfad72de3febc57c5d64235ed00fe51606c84217755bae63f682b5930e1"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -88312,6 +88312,18 @@
     [{:cmd "endpoint-case draft",
       :exit 1,
       :correction "separated endpoint alternatives"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792012873323-12434-da5ef094",
+     :commands
+     ["git show/diff 016d44b93; blob sha256; diff --check"
+      "lake -Kjobs=1 build ConstructionTargets.t92J06Closure"
+      "lake env lean problems/t92J06/lean/Main.lean"
+      "lake env lean /dev/stdin (#print axioms)"
+      "placeholder scans; statement-registry.py check"],
+     :finding
+     "PASS: reviewer codex-7; 016d44b93 (topo-6) newly changes only scoped t92J06Closure.lean; fixture SHA-256 2a7eab33420848d73d91722b184f1a1d0ce856246744bc0f741eef26e46a24c8 matches. Exact blob and Main compile; changed file has 0 placeholders, Main retains its disclosed prior 1; standard axioms; registry 166/0. Coordinate invariance under EqvGen correctly descends through the quotient, proving the two wedge legs meet only at basepoint; interior non-basepoint and leg injectivity then give label-and-parameter separation. New sorry-free supporting progress; remaining charts/fibers, Cayley tree, finite invariants."},
     :commit "016d44b93",
     :changed-paths ["ConstructionTargets/t92J06Closure.lean"],
     :fixture
@@ -88320,7 +88332,7 @@
      "2a7eab33420848d73d91722b184f1a1d0ce856246744bc0f741eef26e46a24c8"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t92J06/lean/Main.lean"
     "problems/t92J06/status.json"
@@ -88338,7 +88350,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t92J06Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked edge-interval injectivity.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked exact wedge-leg and interior projection separation.",
    :id :program-2026-10-13-close-t92j06,
    :kind :final-adapter,
    :campaign-priority 34,
@@ -88363,7 +88375,11 @@
      :reason "Banked the graph projection."}
     {:job 6,
      :commit "b6557d1f4",
-     :reason "Banked edge-interval injectivity."}]}
+     :reason "Banked edge-interval injectivity."}
+    {:job 7,
+     :commit "016d44b93",
+     :reason
+     "Banked exact wedge-leg and interior projection separation."}]}
   {:consumer :t94A08,
    :phase :lemma,
    :state :banked,
@@ -91553,7 +91569,7 @@
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "singularHomologyIsoOfHomotopyEquiv_inv_h1",
@@ -91563,14 +91579,16 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "inverse iso map",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/PolygonSurfaceHomology.lean"]},
    :id :lemma-singularhomologyisoofhomotopyequiv-inv-h1,
    :kind :lemma,
    :depends-on [],
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "radialIntersectionPositiveGenerator_eq",
@@ -91580,14 +91598,16 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "generator is circle class",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/PolygonSurfaceHomology.lean"]},
    :id :lemma-radialintersectionpositivegenerator-eq,
    :kind :lemma,
    :depends-on [],
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "radialIntersectionToOuterH1_positiveGenerator_eq",
@@ -91597,14 +91617,16 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "outer image is overlap class",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/PolygonSurfaceHomology.lean"]},
    :id :lemma-radialintersectiontoouterh1-positivegenerator-eq,
    :kind :lemma,
    :depends-on [:lemma-radialintersectionpositivegenerator-eq],
    :other-consumers [:t94J09]}
   {:consumer :t92J06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "inl_eq_inr_iff",
@@ -91614,14 +91636,16 @@
     :reported-by [:program-2026-10-13-close-t92j06],
     :type "wedge legs meet only at basepoint",
     :area "graph-covering-realization",
-    :proved-in :program-2026-10-13-close-t92j06},
+    :proved-in :program-2026-10-13-close-t92j06,
+    :banked-by :program-2026-10-13-close-t92j06,
+    :banked-commit "016d44b93"},
    :id :lemma-inl-eq-inr-iff,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}
   {:consumer :t92J06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "edgeProjection_eq_of_interior",
@@ -91631,7 +91655,9 @@
     :reported-by [:program-2026-10-13-close-t92j06],
     :type "interior image determines label and coordinate",
     :area "graph-covering-realization",
-    :proved-in :program-2026-10-13-close-t92j06},
+    :proved-in :program-2026-10-13-close-t92j06,
+    :banked-by :program-2026-10-13-close-t92j06,
+    :banked-commit "016d44b93"},
    :id :lemma-edgeprojection-eq-of-interior,
    :kind :lemma,
    :depends-on
