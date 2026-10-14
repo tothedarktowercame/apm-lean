@@ -295,7 +295,41 @@ theorem t97J07_eulerCharacteristic_of_homologyData
     (h : T97J07CP2RationalHomologyData) :
     ConstructionTargets.RationalLefschetz.HasEulerCharacteristic
       T97J07CP2 3 := by
-  sorry
+  unfold ConstructionTargets.RationalLefschetz.HasEulerCharacteristic
+  unfold ConstructionTargets.RationalLefschetz.HasLefschetzNumber
+  constructor
+  · exact h.finiteDimensional
+  · refine ⟨4, h.vanishesAbove, ?_⟩
+    letI (k : ℕ) : FiniteDimensional ℚ
+        (ConstructionTargets.RationalLefschetz.Homology T97J07CP2 k) :=
+      h.finiteDimensional k
+    have h0 : Module.finrank ℚ
+        (ConstructionTargets.RationalLefschetz.Homology T97J07CP2 0) = 1 := by
+      rw [LinearEquiv.finrank_eq h.zeroEquiv]
+      simp
+    have h1 : Module.finrank ℚ
+        (ConstructionTargets.RationalLefschetz.Homology T97J07CP2 1) = 0 := by
+      letI : Subsingleton
+          (ConstructionTargets.RationalLefschetz.Homology T97J07CP2 1) :=
+        h.oneSubsingleton
+      exact Module.finrank_eq_zero_of_subsingleton ℚ _
+    have h2 : Module.finrank ℚ
+        (ConstructionTargets.RationalLefschetz.Homology T97J07CP2 2) = 1 := by
+      rw [LinearEquiv.finrank_eq h.twoEquiv]
+      simp
+    have h3 : Module.finrank ℚ
+        (ConstructionTargets.RationalLefschetz.Homology T97J07CP2 3) = 0 := by
+      letI : Subsingleton
+          (ConstructionTargets.RationalLefschetz.Homology T97J07CP2 3) :=
+        h.threeSubsingleton
+      exact Module.finrank_eq_zero_of_subsingleton ℚ _
+    have h4 : Module.finrank ℚ
+        (ConstructionTargets.RationalLefschetz.Homology T97J07CP2 4) = 1 := by
+      rw [LinearEquiv.finrank_eq h.fourEquiv]
+      simp
+    simp only [ConstructionTargets.RationalLefschetz.induced,
+      CategoryTheory.Functor.map_id, LinearMap.trace_id]
+    norm_num [Finset.sum_range_succ, h0, h1, h2, h3, h4]
 
 /-- The rational singular-homology Euler characteristic of complex
 projective two-space is 3.  This declaration is only the assembly of the
