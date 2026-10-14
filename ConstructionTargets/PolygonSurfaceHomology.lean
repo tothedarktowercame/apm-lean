@@ -704,6 +704,20 @@ theorem finiteWedgeModuleHurewicz_surjective (P : PairingData) :
   rw [hg]
   exact e.hom_inv_id_apply h
 
+/-- To prove that the normalized coordinate map is onto, it suffices to
+express every based-loop Hurewicz class as a finite linear combination of the
+circle-leg generators.  Degree-one Hurewicz surjectivity then supplies a loop
+representing an arbitrary homology class. -/
+theorem finiteWedgeH1CoordinateMap_surjective_of_hurewicz_generation
+    (P : PairingData)
+    (hgenerate : ∀ g,
+      ∃ v : PairingOrbit P.pair → ℤ,
+        finiteWedgeH1CoordinateMap P v = finiteWedgeModuleHurewicz P g) :
+    Function.Surjective (finiteWedgeH1CoordinateMap P) := by
+  intro h
+  obtain ⟨g, rfl⟩ := finiteWedgeModuleHurewicz_surjective P h
+  exact hgenerate g
+
 end
 
 end ConstructionTargets.PolygonSurfaceHomology
