@@ -1230,10 +1230,11 @@ def apm_t01A04_circleCoverMap_range_eq_parity_kernel_aux_lifts_pathC :
       (ConstructionTargets.CircleUniversalCover.circleCover_isCoveringMap.continuous.comp
         (continuous_const.mul continuous_subtype_val)))
   source' := by
-    change Quotient.mk _ (.inr (1 : Circle)) = _
-    symm
-    exact Quotient.sound (Relation.EqvGen.rel _ _
-      (apm_t01a04_circleCoverRel.glue 0))
+    simp only [Set.Icc.coe_zero, mul_zero, Circle.exp_zero]
+    have h := Quotient.sound (s := Relation.EqvGen.setoid apm_t01a04_circleCoverRel)
+      (Relation.EqvGen.rel _ _ (apm_t01a04_circleCoverRel.glue 0))
+    simp only [apm_t01a04_sheetPoint_zero] at h
+    exact h.symm
   target' := by simp
 
 /-- Explicit lifts: `loopA`, `loopB` lift to closed loops in torus sheet `0`;
