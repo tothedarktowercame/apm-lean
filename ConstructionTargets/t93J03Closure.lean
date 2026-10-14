@@ -466,6 +466,13 @@ noncomputable instance kleinBottlePathConnectedSpace :
   exact (ConstructionTargets.Surfaces.surjective_surfaceQuotient false 2).pathConnectedSpace
     (ConstructionTargets.Surfaces.continuous_surfaceQuotient false 2)
 
+/-- The exact polygon quotient used by the van Kampen calculation is path
+connected, transported back along its homeomorphism with the frozen model. -/
+noncomputable instance kleinPairingSpacePathConnectedSpace :
+    PathConnectedSpace kleinPairingData.Space :=
+  kleinPairingSpaceHomeomorph.symm.surjective.pathConnectedSpace
+    kleinPairingSpaceHomeomorph.symm.continuous
+
 /-- Final C1 adapter: a van Kampen computation of the `aabb` presentation at
 one point of the polygon model yields the registered presentation at every
 basepoint of the frozen Klein bottle. -/
@@ -582,6 +589,7 @@ theorem lift_isEmbedding_assembly
 #print axioms kleinRelator_generatorChange_eq_one_iff
 #print axioms kleinPolygonPresentedGroupEquiv
 #print axioms kleinBottlePathConnectedSpace
+#print axioms kleinPairingSpacePathConnectedSpace
 #print axioms kleinBottle_pi1_every_basepoint_of_polygon_van_kampen
 
 end ConstructionTargets.t93J03Closure

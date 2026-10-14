@@ -182,6 +182,10 @@ now has exactly one remaining input, the topological van Kampen calculation.
 The required frozen path-connectedness instance is also compiled directly
 from the convex closed disk and the continuous surjective surface quotient;
 it is no longer an input to the C1 adapter.
+The source polygon quotient now has its own compiled `PathConnectedSpace`
+instance, transported back through `kleinPairingSpaceHomeomorph`, so the
+remaining van Kampen proof can use path-connectedness without rebuilding the
+quotient geometry.
 
 - Layer 1: C1, C3, and C4. C1 and C3 are independent; C4 is already complete.
 - Layer 2: C2 against the explicit C1 equivalence interface.
