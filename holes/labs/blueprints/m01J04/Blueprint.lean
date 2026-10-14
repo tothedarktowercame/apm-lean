@@ -1991,6 +1991,70 @@ lemma apm_m01J04_localization_core_approx_aux_val_tendsto
         (volume.restrict Set.univ)).toReal) atTop (nhds 0) := by
   sorry
 
+lemma apm_m01J04_localization_core_approx_aux_grad_tendsto_aux_zeroSet
+    {d : ℕ} {Ω : Set (EuclideanSpace ℝ (Fin d))}
+    (φ : EuclideanSpace ℝ (Fin d) → ℝ)
+    (hφ : apm_m01J04_isTestFunction Ω φ) :
+    ∀ᵐ x ∂volume, φ x = 0 →
+      WithLp.toLp 2 (fun i ↦
+        fderiv ℝ φ x (EuclideanSpace.single i 1)) = 0 := by
+  exact apm_m01J04_contDiff_aeDerivativeZeroOnZeroSet hφ.1
+
+/-- `smoothTransition` has bounded derivative (smooth, constant outside `[0,1]`). -/
+lemma apm_m01J04_localization_core_approx_aux_grad_tendsto_aux_deriv_bound :
+    ∃ M : ℝ, ∀ t : ℝ, |deriv Real.smoothTransition t| ≤ M := by
+  sorry
+
+/-- Bulk term: `χ_r • ∇(fφ) → ∇(fφ)` in `L²` (dominated convergence, `|χ_r| ≤ 1`,
+`χ_r → 1` on `{φ ≠ 0}`, and `∇(fφ) = 0` a.e. on `{φ = 0}` by the banked
+zero-set lemma). -/
+lemma apm_m01J04_localization_core_approx_aux_grad_tendsto_aux_bulk
+    {d : ℕ} {Ω : Set (EuclideanSpace ℝ (Fin d))}
+    (φ : EuclideanSpace ℝ (Fin d) → ℝ)
+    (hφ : apm_m01J04_isTestFunction Ω φ)
+    (f : apm_m01J04_H1 d Ω) :
+    Tendsto (fun n : ℕ ↦
+      (eLpNorm (fun x ↦ apm_m01J04_localization_core_approx_aux_cutoff φ (1 / (n + 1 : ℝ)) x • (apm_m01J04_globalLocalizedH1 φ hφ f).grad x -
+          (apm_m01J04_globalLocalizedH1 φ hφ f).grad x) 2 volume).toReal) atTop (nhds 0) := by
+  sorry
+
+/-- Collar term: `(fφ) • ∇χ_r → 0` in `L²`.  Pointwise
+`(fφ) ∇χ_r = f · smoothTransition'(φ²/r² − 1) · 2(φ²/r²) ∇φ`, bounded by
+`4M |f| |∇φ|` (on the collar `φ² ≤ 2r²`) and eventually `0` at each point. -/
+lemma apm_m01J04_localization_core_approx_aux_grad_tendsto_aux_collar
+    {d : ℕ} {Ω : Set (EuclideanSpace ℝ (Fin d))}
+    (φ : EuclideanSpace ℝ (Fin d) → ℝ)
+    (hφ : apm_m01J04_isTestFunction Ω φ)
+    (f : apm_m01J04_H1 d Ω)
+    {M : ℝ} (hM : ∀ t : ℝ, |deriv Real.smoothTransition t| ≤ M) :
+    Tendsto (fun n : ℕ ↦
+      (eLpNorm (fun x ↦ (apm_m01J04_globalLocalizedH1 φ hφ f).val x • WithLp.toLp 2 (fun i ↦
+          fderiv ℝ (apm_m01J04_localization_core_approx_aux_cutoff φ (1 / (n + 1 : ℝ))) x (EuclideanSpace.single i 1))) 2 volume).toReal) atTop (nhds 0) := by
+  sorry
+
+/-- Triangle inequality: the product-rule gradient difference is the bulk term
+plus the collar term (`apm_m01J04_H1mul_grad`). -/
+lemma apm_m01J04_localization_core_approx_aux_grad_tendsto_aux_split
+    {d : ℕ} {Ω : Set (EuclideanSpace ℝ (Fin d))}
+    (φ : EuclideanSpace ℝ (Fin d) → ℝ)
+    (hφ : apm_m01J04_isTestFunction Ω φ)
+    (f : apm_m01J04_H1 d Ω)
+    (hbulk : Tendsto (fun n : ℕ ↦
+      (eLpNorm (fun x ↦ apm_m01J04_localization_core_approx_aux_cutoff φ (1 / (n + 1 : ℝ)) x • (apm_m01J04_globalLocalizedH1 φ hφ f).grad x -
+          (apm_m01J04_globalLocalizedH1 φ hφ f).grad x) 2 volume).toReal) atTop (nhds 0))
+    (hcollar : Tendsto (fun n : ℕ ↦
+      (eLpNorm (fun x ↦ (apm_m01J04_globalLocalizedH1 φ hφ f).val x • WithLp.toLp 2 (fun i ↦
+          fderiv ℝ (apm_m01J04_localization_core_approx_aux_cutoff φ (1 / (n + 1 : ℝ))) x (EuclideanSpace.single i 1))) 2 volume).toReal) atTop (nhds 0)) :
+    Tendsto (fun n : ℕ ↦
+      (eLpNorm (fun x ↦
+        (apm_m01J04_H1mul
+          (apm_m01J04_localization_core_approx_aux_cutoff φ (1 / (n + 1 : ℝ)))
+          (apm_m01J04_localization_core_approx_aux_cutoff_isTestFunction hφ _)
+          (apm_m01J04_globalLocalizedH1 φ hφ f)).grad x -
+        (apm_m01J04_globalLocalizedH1 φ hφ f).grad x) 2
+        (volume.restrict Set.univ)).toReal) atTop (nhds 0) := by
+  sorry
+
 /-- Gradient part of the core convergence.  The product gradient is
 `χ_r • ∇(fφ) + (fφ) • ∇χ_r`; the first term converges as in the value case,
 and the collar term `f φ · smoothTransition'(φ²/r² − 1) · 2φ∇φ / r²` is
@@ -2009,7 +2073,11 @@ lemma apm_m01J04_localization_core_approx_aux_grad_tendsto
           (apm_m01J04_globalLocalizedH1 φ hφ f)).grad x -
         (apm_m01J04_globalLocalizedH1 φ hφ f).grad x) 2
         (volume.restrict Set.univ)).toReal) atTop (nhds 0) := by
-  sorry
+  obtain ⟨M, hM⟩ :=
+    apm_m01J04_localization_core_approx_aux_grad_tendsto_aux_deriv_bound
+  exact apm_m01J04_localization_core_approx_aux_grad_tendsto_aux_split φ hφ f
+    (apm_m01J04_localization_core_approx_aux_grad_tendsto_aux_bulk φ hφ f)
+    (apm_m01J04_localization_core_approx_aux_grad_tendsto_aux_collar φ hφ f hM)
 
 /-- The remaining local Meyers--Serrin interface.  Unlike
 `apm_m01J04_isH1Zero_mul`, the input is an arbitrary encoded `H¹` function;
