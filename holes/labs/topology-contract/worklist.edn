@@ -119064,7 +119064,9 @@
    :depends-on [:lemma-apm-t91j06-bridge-compatible-stage-coordinates],
    :other-consumers []}
   {:consumer :t00J02,
-   :stop-count 10,
+   :owner-reopen
+   "reopened: a lemma this row reported missing is now banked",
+   :stop-count 0,
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
     :residual
@@ -119116,7 +119118,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119217,6 +119219,17 @@
      {:cmd "lake env lean problems/t98A06/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "sha256/diff/placeholders", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1792002437527-12124-b4909d17",
+     :commands
+     ["git diff-tree/show fcd285c"
+      "git archive fcd285c; lake env lean Blueprint.lean and Main.lean"
+      "sha256sum and placeholder counts at fcd285c"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS initial program blueprint: new scoped commit faithfully decomposes the true registered theorem into local smooth lift, convex gluing, compact-flow fiber equivalence, and assembly with correct dependency directions and representations. Fixture hash 9838452b and frozen Main hash 44399e71 match; archived Lean blueprint/Main compile with expected unresolved library sorries; registry 166/166. Milestones are explicit."},
     :commit "fcd285c205339940c0512a1418e00019aaef3c35",
     :changed-paths ["ConstructionTargets/t98A06Closure.blueprint.md"],
     :fixture
@@ -119225,7 +119238,7 @@
      "9838452bf081767e1df000700b7c24774e94f50633c1cc10b2aa0e8c82319196"},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t98A06/lean/Main.lean"
     "problems/t98A06/status.json"
@@ -119243,14 +119256,18 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t98A06Closure.blueprint.md"},
    :continue-from
-   "NEXT JOB: copy holes/labs/blueprints/t98A06/BLUEPRINT.md's plan into ConstructionTargets/t98A06Closure.blueprint.md, move the blueprint's proved lemmas into place, then build the LIBRARY obligations one milestone per job.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Blueprint written; implementation awaits review.",
    :id :program-2026-10-13-close-t98a06,
    :kind :final-adapter,
    :campaign-priority 50,
    :fail-count 0,
    :depends-on [],
    :program true,
-   :other-consumers []}
+   :other-consumers [],
+   :program-history
+   [{:job 1,
+     :commit "fcd285c205339940c0512a1418e00019aaef3c35",
+     :reason "Blueprint written; implementation awaits review."}]}
   {:consumer :t01A01,
    :stop-count 0,
    :phase :implementation,
@@ -119482,7 +119499,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "transverse_coprodDerivative_surjective",
@@ -119492,7 +119509,9 @@
     :reported-by [:program-2026-10-13-close-t00j02],
     :type "range-sum implies coproduct derivative surjective",
     :area "oriented-surface-degree",
-    :proved-in :program-2026-10-13-close-t00j02},
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t00J02Closure.lean"]},
    :id :lemma-transverse-coprodderivative-surjective,
    :kind :lemma,
    :depends-on [],
