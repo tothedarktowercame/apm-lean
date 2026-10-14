@@ -889,6 +889,30 @@ structure RegularFiberLocalizedTopDegreeFormula
     orientationSign (occupiedRegularFiberComponentIndex f c y hy x) *
       regularFiberLocalDegree e f y x
 
+/-- A chart-level signed-count computation constructs the canonical global
+top-degree formula once its coefficients satisfy local homology localization. -/
+def regularFiberLocalizedTopDegreeFormula_of_chartCoefficients
+    {S : Type} [TopologicalSpace S] [T2Space S]
+    [ChartedSpace SurfaceModel S]
+    {f : C(S, S)} {c : C(Circle, S)} {y : S}
+    (hy : y ∈ Set.range c) [Fintype {x : S // f x = y}]
+    (e : surfaceHomology S ≅ ModuleCat.of ℤ ℤ)
+    (orientationSign : OccupiedRegularFiberComponent f c y hy → ℤ)
+    (coefficient : {x : S // f x = y} → ℤ)
+    (hcoefficient : ∀ x, coefficient x •
+        ConstructionTargets.HigherChartLocalGenerator.ambientLocalGenerator
+          (k := 0) (x : S) =
+      localizationMap (x : S) 2
+        (groupGlobalGenerator (TopCat.of S) 2 e))
+    (htop : surfaceTopDegree e f = ∑ x,
+      orientationSign (occupiedRegularFiberComponentIndex f c y hy x) *
+        coefficient x) :
+    RegularFiberLocalizedTopDegreeFormula hy e orientationSign :=
+  { topDegree_eq := htop.trans
+      (regularFiberSignedSum_eq_of_localizationCoefficients e f y
+        (occupiedRegularFiberComponentIndex f c y hy) orientationSign
+        coefficient hcoefficient).symm }
+
 /-- Componentwise and global localization formulas with the same orientation
 signs combine into the full regular-fiber top-degree formula. -/
 def regularFiberTopDegreeFormula_of_localizedFormulas
@@ -919,6 +943,7 @@ end ConstructionTargets.T00J02Closure
 #print axioms ConstructionTargets.T00J02Closure.RegularFiberLocalizedComponentFormula.toComparison
 #print axioms ConstructionTargets.T00J02Closure.regularFiberLocalizedComponentFormula_of_chartCoefficients
 #print axioms ConstructionTargets.T00J02Closure.regularFiberTopDegreeFormula_of_localizedFormulas
+#print axioms ConstructionTargets.T00J02Closure.regularFiberLocalizedTopDegreeFormula_of_chartCoefficients
 #print axioms ConstructionTargets.T00J02Closure.circleDegree_eq_homologyMap
 #print axioms ConstructionTargets.T00J02Closure.circleDegree_eq_zero_of_homologyMap_eq_zero
 #print axioms ConstructionTargets.T00J02Closure.transverseCircle_preimage_component_signedCount
