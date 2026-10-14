@@ -119112,6 +119112,17 @@
     [{:cmd "shared-sign draft",
       :exit 1,
       :finding "made sign an index"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1792012871355-12433-d4e80b18",
+     :commands
+     ["git diff-tree/show a7feb28a"
+      "archive a7feb28a; lake env lean closure and Main"
+      "sha256sum/placeholders at a7feb28a"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS program STOP: new commit changes only t00J02Closure.lean and introduces the global localized top-degree interface with signs indexed by genuine occupied components, then combines it with the component formula only when both use exactly the same sign function. This repairs the noted representation boundary; neither geometric formula is claimed proved. Fixture/frozen hashes match; closure has 0 placeholders, Main baseline 1; archived files compile with standard axioms; registry 166/166. Both geometric formulas and Main assembly remain listed."},
     :commit "a7feb28a91ce4aae5595b82b5cb443b7906e593d",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
@@ -119120,7 +119131,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119138,7 +119149,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t00J02Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked component-localization interface.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked top-degree localization interface.",
    :id :program-2026-10-13-close-t00j02,
    :kind :final-adapter,
    :campaign-priority 45,
@@ -119239,7 +119250,10 @@
      :reason "Banked localized H2 assembly."}
     {:job 3,
      :commit "d9b53e27fd1b748a76d2241581da652f5532e6b4",
-     :reason "Banked component-localization interface."}]}
+     :reason "Banked component-localization interface."}
+    {:job 4,
+     :commit "a7feb28a91ce4aae5595b82b5cb443b7906e593d",
+     :reason "Banked top-degree localization interface."}]}
   {:consumer :t98A06,
    :stop-count 3,
    :evidence
@@ -120154,7 +120168,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "regularFiberTopDegreeFormula_of_localizedFormulas",
@@ -120164,7 +120178,9 @@
     :reported-by [:program-2026-10-13-close-t00j02],
     :type "component and top-degree formulas combine",
     :area "oriented-surface-degree",
-    :proved-in :program-2026-10-13-close-t00j02},
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "a7feb28a91ce4aae5595b82b5cb443b7906e593d"},
    :id :lemma-regularfibertopdegreeformula-of-localizedformulas,
    :kind :lemma,
    :depends-on
