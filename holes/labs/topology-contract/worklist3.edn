@@ -36119,30 +36119,30 @@
   {:consumer :t93J03,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 4,
+   :stop-count 5,
    :review-finding
    "Program STOP commits no new mathematical progress since the prior milestone: KleinPolygonBasedVanKampen merely packages the already-required surjectivity and kernel hypotheses, and both consumers only reapply the previously proved three-input theorem. Prove the based van Kampen surjectivity/kernel result (or winding conjugacy) in scope; extend Mathlib: state and prove the missing theorem in scope.",
    :evidence
    {:placeholder-delta {:t93J03 [1 1]},
     :residual
-    "Compare transported/literal skeleton maps after target-basepoint transport; reverse inclusion/surjectivity; winding; C1/C2/Main.",
+    "Prove transported map equals literal skeleton map; reverse kernel inclusion/surjectivity from pseudopushout; winding; C1/C2/Main.",
     :outcome :stop,
     :warnings ["unused SLSC owner-approved"],
     :missing-theorems
     [{:name
-      "kleinPolygonOverlapSkeletonNormalClosure_le_transportedKernel",
-      :type "forward kernel inclusion in skeleton coordinates",
+      "kleinPolygonOverlapSkeletonNormalClosure_le_targetTransportedKernel",
+      :type "forward kernel inclusion after target transport",
       :status :proved,
       :consumers [:t93J03],
       :depends-on
-      ["kleinPolygonOverlapNormalClosure_le_outerToSpacePiOne_ker"],
+      ["kleinPolygonOverlapSkeletonNormalClosure_le_transportedKernel"],
       :area "covering-subgroup-correspondence"}
      {:name "t93J03_polygon_based_van_kampen",
       :type "surjective skeleton map; overlap-closure kernel",
       :status :partial,
       :consumers [:t93J03],
       :depends-on
-      ["kleinPolygonOverlapSkeletonNormalClosure_le_transportedKernel"
+      ["kleinPolygonOverlapSkeletonNormalClosure_le_targetTransportedKernel"
        "kleinPolygonFundamentalGroupoidPseudopushout"],
       :area "covering-subgroup-correspondence"}],
     :statement-hashes {:registry "166/166"},
@@ -36150,38 +36150,27 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Transported forward kernel inclusion to skeleton coordinates; comparison, reverse inclusion, surjectivity and winding remain.",
+    "Committed target-basepoint path and forward kernel inclusion after transport; map equality, reverse inclusion, surjectivity and winding remain.",
     :commands
-    [{:cmd "lean closure", :exit 0}
-     {:cmd "registry; placeholder; diff; show", :exit 0}
+    [{:cmd "lake build closure", :exit 0}
+     {:cmd "fixture; Main; registry; diff; show", :exit 0}
      {:cmd "rg forbidden", :exit 1, :expected-exit 1}],
     :diagnostic-history
-    [{:cmd "build; fixture; Main",
+    [{:cmd "lean closure",
       :exit 1,
       :correction
-      "dirty PointWedge failed and removed olean; scoped source passed"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1791974046058-11763-d947fd03",
-     :commands
-     ["git show/check/diff 761b8821; scope/math review; fixture sha256"
-      "lean closure/fixture attempted: blocked by unrelated dirty PointWedge missing olean"
-      "statement registry; placeholder recount"],
-     :finding
-     "PASS. Commit 761b8821 adds sorry-free progress after the prior milestone: it transports normalClosure(range overlap) <= ker from outer-piece coordinates through the inverse skeleton equivalence, with the target-basepoint comparison explicitly left open. Scope and fixture hash match; support placeholders 0->0; registry 166/166; no new axioms. Fresh compilation is blocked upstream by an unrelated dirty PointWedgeVanKampen error/missing olean, matching the recorded warning; no workaround used. Comparison, reverse inclusion, surjectivity, and winding remain listed."},
-    :commit "761b8821a80e774da35733af17705fbf7f177221",
+      "rebuilt missing PolygonSurfaceHomology olean; passed"}],
+    :commit "d7297e3e75e94a762e551350420cfd1c40478a33",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
      "ConstructionTargets/t93J03Closure.blueprint.md"],
     :fixture
-    {:path "/tmp/t93j03_skeleton_forward_kernel_transport_check.lean",
+    {:path "/tmp/t93j03_target_basepoint_kernel_check.lean",
      :sha256
-     "4921567c758718ca257cd0be7e39adb5b106548d4c0beef54a2fe891799a5b9e",
-     :mode :blocked-by-unrelated-dependency},
+     "7bd20059df1ca855d52c0fc3187e43be76221e4047202a1fa3027ac301ee3d5f"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -38562,7 +38551,8 @@
    [:lemma-kleinpolygonfundamentalgroupoidpseudopushout
     :lemma-kleinpolygonoverlaptospacepione-eq-one
     :lemma-kleinpolygonoverlapnormalclosure-le-outertospacepione-ker
-    :lemma-kleinpolygonoverlapskeletonnormalclosure-le-transportedkernel],
+    :lemma-kleinpolygonoverlapskeletonnormalclosure-le-transportedkernel
+    :lemma-kleinpolygonoverlapskeletonnormalclosure-le-targettransportedkernel],
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
@@ -38641,6 +38631,27 @@
    :kind :lemma,
    :depends-on
    [:lemma-kleinpolygonoverlapnormalclosure-le-outertospacepione-ker],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "kleinPolygonOverlapSkeletonNormalClosure_le_targetTransportedKernel",
+    :type "forward kernel inclusion after target transport"},
+   :lemma
+   {:name
+    "kleinPolygonOverlapSkeletonNormalClosure_le_targetTransportedKernel",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type "forward kernel inclusion after target transport",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03},
+   :id
+   :lemma-kleinpolygonoverlapskeletonnormalclosure-le-targettransportedkernel,
+   :kind :lemma,
+   :depends-on
+   [:lemma-kleinpolygonoverlapskeletonnormalclosure-le-transportedkernel],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
