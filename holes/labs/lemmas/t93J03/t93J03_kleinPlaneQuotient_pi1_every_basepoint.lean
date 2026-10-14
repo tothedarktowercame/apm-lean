@@ -58,7 +58,11 @@ theorem t93J03_kleinPlaneQuotient_pi1_every_basepoint
       Nonempty
         (FundamentalGroup T93J03KleinPlaneQuotient q ≃*
           PresentedKleinGroup) := by
-  sorry
+  intro q
+  obtain ⟨e₀⟩ := h₀
+  exact
+    ⟨(FundamentalGroup.fundamentalGroupMulEquivOfPathConnected
+        q T93J03KleinPlaneOrigin).trans e₀⟩
 -- END SEAT AREA
 
 /-- The explicit affine orbit quotient is the frozen polygon model of the
