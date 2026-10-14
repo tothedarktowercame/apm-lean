@@ -87899,69 +87899,59 @@
      :reason
      "Banked preconnectedness of the alleged chart's punctured ball source."}]}
   {:consumer :t97A01,
-   :stop-count 5,
+   :stop-count 6,
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Prove finite-wedge H1 coordinates and higher vanishing to finish B4, then B6-B10.",
+    "Prove the normalized coordinate map is an H1 isomorphism and finite-wedge higher vanishing; then B6-B10.",
     :outcome :stop,
-    :warnings ["preexisting dependency lints"],
+    :warnings
+    ["preexisting dependency lints"
+     "unrelated PointWedgeVanKampen edit and review directory preserved"],
     :missing-theorems
-    [{:name "finiteWedgeH0IsoInt",
-      :type "H0(FiniteWedge L;Z)=Z for nonempty L",
+    [{:name "finiteWedgeH1CoordinateMap_single",
+      :type "basis l n maps to the positive circle-leg H1 class",
       :status :proved,
       :consumers [:t97A01 :t94J09],
-      :depends-on [],
+      :depends-on ["finiteWedgeH1Presentation"],
       :area "polygon-quotient-homology"}
-     {:name "outerH0IsoInt",
-      :type "H0(OuterPiece P;Z)=Z",
-      :status :proved,
+     {:name "finiteWedgeH1CoordinateIso",
+      :type "(L->Z) isomorphic to H1(FiniteWedge L), preserving basis",
+      :status :partial,
       :consumers [:t97A01 :t94J09],
-      :depends-on ["outerHomotopyEquivWedge" "finiteWedgeH0IsoInt"],
+      :depends-on ["finiteWedgeH1CoordinateMap_single"],
       :area "polygon-quotient-homology"}
      {:name "outerHomology",
       :type "H0=Z,H1=(PairingOrbit->Z),Hk=0(k>=2)",
       :status :partial,
       :consumers [:t97A01 :t94J09],
-      :depends-on ["outerH0IsoInt"],
+      :depends-on ["finiteWedgeH1CoordinateIso" "outerH0IsoInt"],
       :area "polygon-quotient-homology"}],
     :statement-hashes {:registry "166/0"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
     :reason
-    "Banked finite-wedge path connectedness and H0, transported to the outer piece.",
+    "Banked the normalized finite-wedge H1 coordinate presentation.",
     :commands
     [{:cmd "lake build ConstructionTargets.PolygonSurfaceHomology",
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-     {:cmd "git show --check 25d7ab26a", :exit 0}],
+     {:cmd "git show --check cfd4e0438", :exit 0}],
     :diagnostic-history
     [{:cmd "draft compiles",
       :exit 1,
       :correction
-      "fixed path constructor, Circle instance, Joined map, and IsIso"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1791937528192-11039-05f86f85",
-     :commands
-     ["scope/SHA256 checks at 25d7ab26a"
-      "recorded blob | lake env lean /dev/stdin"
-      "comment-stripped placeholder scan (0)"
-      "#print axioms outerH0IsoInt"
-      "statement-registry.py check (166/0)"],
-     :finding
-     "Valid program STOP with new compiled B4 progress beyond history commit 41bf54103. For nonempty L, every wedge representative joins its leg base, and wedgeCircle_base_eq joins all leg bases; PairingData.edgeCount_pos supplies a concrete orbit index. singularVertexH0Class is used in the correct Z-to-H0 direction then inverted, and outer-to-wedge transport yields outer H0 to Z. Exact scope/hash match; placeholders 0; only standard axioms. Remaining: wedge H1/higher vanishing, then B6-B10."},
-    :commit "25d7ab26a",
+      "added finite orbit instance and fixed coproduct reassociation"}],
+    :commit "cfd4e0438",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
     {:path "ConstructionTargets/PolygonSurfaceHomology.lean",
      :sha256
-     "2d7914a2bf72367dc0ebd4412e377aba4d88f8a4417388fe71f27b03483f6643"},
+     "7723329e602326b3c92176d382ae870f5430e08952984fca74840b62c852bb36"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -88784,7 +88774,10 @@
     :area "polygon-quotient-homology"},
    :id :lemma-outerhomology,
    :kind :lemma,
-   :depends-on [:lemma-outerhomotopyequivwedge :lemma-outerh0isoint],
+   :depends-on
+   [:lemma-outerhomotopyequivwedge
+    :lemma-outerh0isoint
+    :lemma-finitewedgeh1coordinateiso],
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
@@ -88843,4 +88836,47 @@
    :kind :lemma,
    :depends-on
    [:lemma-outerhomotopyequivwedge :lemma-finitewedgeh0isoint],
+   :other-consumers [:t94J09]}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "finiteWedgeH1CoordinateMap_single",
+    :type "basis l n maps to the positive circle-leg H1 class"},
+   :lemma
+   {:name "finiteWedgeH1CoordinateMap_single",
+    :reported-by [:program-2026-10-13-polygon-surface-homology],
+    :type "basis l n maps to the positive circle-leg H1 class",
+    :area "polygon-quotient-homology",
+    :proved-in :program-2026-10-13-polygon-surface-homology},
+   :id :lemma-finitewedgeh1coordinatemap-single,
+   :kind :lemma,
+   :depends-on [:lemma-finitewedgeh1presentation],
+   :other-consumers [:t94J09]}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance {:lemma "finiteWedgeH1Presentation"},
+   :lemma {:name "finiteWedgeH1Presentation", :reported-by []},
+   :id :lemma-finitewedgeh1presentation,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "finiteWedgeH1CoordinateIso",
+    :type "(L->Z) isomorphic to H1(FiniteWedge L), preserving basis"},
+   :lemma
+   {:name "finiteWedgeH1CoordinateIso",
+    :reported-by [:program-2026-10-13-polygon-surface-homology],
+    :type "(L->Z) isomorphic to H1(FiniteWedge L), preserving basis",
+    :area "polygon-quotient-homology"},
+   :id :lemma-finitewedgeh1coordinateiso,
+   :kind :lemma,
+   :depends-on [:lemma-finitewedgeh1coordinatemap-single],
    :other-consumers [:t94J09]}]}
