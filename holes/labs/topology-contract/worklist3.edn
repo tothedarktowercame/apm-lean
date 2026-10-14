@@ -36158,6 +36158,17 @@
       :exit 1,
       :correction
       "qualified finite-wedge namespace and explicit quotient relations"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791940200894-11126-0a9e4b46",
+     :commands
+     ["git show/diff/show --check 12d2dbccc"
+      "sha256sum skeleton-transport fixture; placeholders 1->1"
+      "lake build ConstructionTargets.t93J03Closure; lake env lean fixture"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS: new compiled sorry-free standard-axiom progress. The orbit-indexed skeleton is relabeled through Bool to TwoCircles in the required direction, preserving the Boolean wedge basepoint; the attaching-cell van Kampen quotient remains listed. Exact scope/hash verified; registry 166/166. SLSC unused, mandated by problem.md."},
     :commit "12d2dbcccd4882bd3a769a6b01710e6a76ccdf5d",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
@@ -36169,7 +36180,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -36187,7 +36198,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t93J03Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed exact two-circle skeleton pi1 coproduct; attaching-cell van Kampen remains.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed exact orbit-indexed skeleton transport to standard TwoCircles; attaching-cell quotient remains.",
    :id :program-2026-10-13-close-t93j03,
    :kind :final-adapter,
    :campaign-priority 30,
@@ -36257,7 +36268,11 @@
     {:job 7,
      :commit "8da45fbae8f9a7f426a863fe55042dff748063c0",
      :reason
-     "Committed exact two-circle skeleton pi1 coproduct; attaching-cell van Kampen remains."}]}
+     "Committed exact two-circle skeleton pi1 coproduct; attaching-cell van Kampen remains."}
+    {:job 8,
+     :commit "12d2dbcccd4882bd3a769a6b01710e6a76ccdf5d",
+     :reason
+     "Committed exact orbit-indexed skeleton transport to standard TwoCircles; attaching-cell quotient remains."}]}
   {:consumer :t99J05,
    :stop-count 5,
    :evidence
@@ -37838,7 +37853,7 @@
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "kleinSkeletonHomeomorphStandardTwoCircles",
@@ -37850,7 +37865,9 @@
     :type
     "polygon skeleton homeomorphic to Boolean-labeled TwoCircles",
     :area "covering-subgroup-correspondence",
-    :proved-in :program-2026-10-13-close-t93j03},
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "12d2dbcccd4882bd3a769a6b01710e6a76ccdf5d"},
    :id :lemma-kleinskeletonhomeomorphstandardtwocircles,
    :kind :lemma,
    :depends-on [:lemma-kleinpairingorbitequivbool],
