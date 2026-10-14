@@ -119111,6 +119111,17 @@
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "hash/diff/placeholders", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1792007832017-12294-a0584116",
+     :commands
+     ["git diff-tree/show 6ab093e"
+      "git archive 6ab093e; lake env lean t00J02Closure.lean and Main.lean"
+      "sha256sum and placeholder counts at 6ab093e"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS program STOP: new in-scope commit packages a circle value and the literal equality-fiber Fintype derived from local injectivity through the compact-discrete chain, without assuming regularity or local degrees. Archived files compile; closure has 0 placeholders and standard axioms only; Main remains frozen at 0b3b4888 with baseline 1 placeholder; fixture afb497a6 matches; registry 166/166. Deriving a suitable value from transversality, local degrees, component comparison, and final assembly remain listed."},
     :commit "6ab093ec8c4d7c0afadb809e9949b87fa0b735c5",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
@@ -119119,7 +119130,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119137,7 +119148,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t00J02Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked locally-injective fiber Fintype.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked finite regular-fiber choice representation.",
    :id :program-2026-10-13-close-t00j02,
    :kind :final-adapter,
    :campaign-priority 45,
@@ -119206,7 +119217,10 @@
      :reason "Banked literal regular-fiber Fintype."}
     {:job 1,
      :commit "46b552a85a8e7fe4748fe055a8c5544cfa99df66",
-     :reason "Banked locally-injective fiber Fintype."}]}
+     :reason "Banked locally-injective fiber Fintype."}
+    {:job 2,
+     :commit "6ab093ec8c4d7c0afadb809e9949b87fa0b735c5",
+     :reason "Banked finite regular-fiber choice representation."}]}
   {:consumer :t98A06,
    :stop-count 2,
    :evidence
@@ -119843,7 +119857,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "finiteRegularFiberChoice_of_locallyInjective",
@@ -119855,7 +119869,9 @@
     :type
     "circle value plus local injectivity gives finite fiber datum",
     :area "oriented-surface-degree",
-    :proved-in :program-2026-10-13-close-t00j02},
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "6ab093ec8c4d7c0afadb809e9949b87fa0b735c5"},
    :id :lemma-finiteregularfiberchoice-of-locallyinjective,
    :kind :lemma,
    :depends-on
