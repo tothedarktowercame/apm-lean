@@ -126,9 +126,71 @@ noncomputable def apm_t02a02_targetT2 : T2Space (Surface false 2) := by
 `aabcc⁻¹d⁻¹bd⁻¹` admits a continuous bijective reduction to the standard
 two-crosscap polygon.  This is the geometric content of the usual sequence
 of folding, vertex removal, and folding moves. -/
+noncomputable def apm_t02a02_perm6 : Equiv.Perm (Fin 6) :=
+  Equiv.ofBijective (![1, 0, 4, 5, 2, 3] : Fin 6 → Fin 6) (by decide)
+
+noncomputable def apm_t02a02_perm4 : Equiv.Perm (Fin 4) :=
+  Equiv.ofBijective (![1, 0, 3, 2] : Fin 4 → Fin 4) (by decide)
+
+noncomputable def apm_t02a02_perm8 : Equiv.Perm (Fin 8) :=
+  Equiv.ofBijective apm_t02a02_pair (by decide)
+
+def apm_t02a02_sign8 : Fin 8 → Bool :=
+  ![true, true, true, true, false, false, true, false]
+
+def apm_t02a02_sign6 : Fin 6 → Bool :=
+  ![true, true, true, false, true, false]
+
+def apm_t02a02_sign4 : Fin 4 → Bool :=
+  ![true, true, false, false]
+
+def apm_t02a02_polygonSpace (n : ℕ) (pair : Equiv.Perm (Fin n))
+    (sign : Fin n → Bool) :=
+  Quotient (Relation.EqvGen.setoid (boundaryRel n pair sign))
+
+noncomputable instance (n : ℕ) (pair : Equiv.Perm (Fin n)) (sign : Fin n → Bool) :
+    TopologicalSpace (apm_t02a02_polygonSpace n pair sign) :=
+  TopologicalSpace.coinduced (fun x : Disk => Quotient.mk _ x) inferInstance
+
+abbrev apm_t02a02_octagon :=
+  apm_t02a02_polygonSpace 8 apm_t02a02_perm8 apm_t02a02_sign8
+
+abbrev apm_t02a02_hexagon :=
+  apm_t02a02_polygonSpace 6 apm_t02a02_perm6 apm_t02a02_sign6
+
+abbrev apm_t02a02_square :=
+  apm_t02a02_polygonSpace 4 apm_t02a02_perm4 apm_t02a02_sign4
+
+/-- The handwritten relation is exactly the generic signed-octagon relation. -/
+theorem apm_t02a02_source_octagon_homeomorph :
+    Nonempty (apm_t02a02_F ≃ₜ apm_t02a02_octagon) := by
+  sorry
+
+/-- Cancelling the adjacent `cc⁻¹` pair gives the indicated hexagon. -/
+theorem apm_t02a02_cancel_c_homeomorph :
+    Nonempty (apm_t02a02_octagon ≃ₜ apm_t02a02_hexagon) := by
+  sorry
+
+/-- Cutting from the redundant vertex and regluing removes the `b` pair. -/
+theorem apm_t02a02_remove_redundant_vertex_homeomorph :
+    Nonempty (apm_t02a02_hexagon ≃ₜ apm_t02a02_square) := by
+  sorry
+
+/-- The square word `aad⁻¹d⁻¹` is the standard two-crosscap square: edge
+names and simultaneous reversal of both occurrences do not affect its
+signed pairing relation. -/
+theorem apm_t02a02_square_standard_homeomorph :
+    Nonempty (apm_t02a02_square ≃ₜ Surface false 2) := by
+  sorry
+
 theorem apm_t02a02_cutPaste_continuous_bijection :
     ∃ f : C(apm_t02a02_F, Surface false 2), Function.Bijective f := by
-  sorry
+  let e₀ := Classical.choice apm_t02a02_source_octagon_homeomorph
+  let e₁ := Classical.choice apm_t02a02_cancel_c_homeomorph
+  let e₂ := Classical.choice apm_t02a02_remove_redundant_vertex_homeomorph
+  let e₃ := Classical.choice apm_t02a02_square_standard_homeomorph
+  let e := e₀.trans (e₁.trans (e₂.trans e₃))
+  exact ⟨⟨e, e.continuous⟩, e.bijective⟩
 
 /-- Faithful answer: the glued surface is homeomorphic to the Klein bottle,
 the connected sum of two real projective planes. -/
