@@ -196,6 +196,42 @@ theorem groupedComponentSignedCount_eq_zero
     ∑ k, orientationSign k * componentLocalDegreeSum component localDegree k = 0 := by
   simp [hcomponent]
 
+/-- The representation boundary between local degrees and component degrees:
+the degree attached to a genuine component is the sum of the local degrees of
+exactly the fiber points assigned to that component. -/
+structure ComponentLocalDegreeComparison
+    {ι κ : Type*} [Fintype ι] [DecidableEq κ]
+    (component : ι → κ) (localDegree : ι → ℤ) (componentDegree : κ → ℤ) where
+  sum_eq_degree : ∀ k,
+    componentLocalDegreeSum component localDegree k = componentDegree k
+
+/-- Once the geometric comparison is made componentwise, zero boundary-lift
+degree gives zero local-degree sum on every genuine component. -/
+theorem componentLocalDegreeSum_eq_zero_of_comparison
+    {ι κ : Type*} [Fintype ι] [DecidableEq κ]
+    (component : ι → κ) (localDegree : ι → ℤ) (componentDegree : κ → ℤ)
+    (hsum : ∀ k,
+      componentLocalDegreeSum component localDegree k = componentDegree k)
+    (hdegree : ∀ k, componentDegree k = 0) :
+    ∀ k, componentLocalDegreeSum component localDegree k = 0 := by
+  intro k
+  rw [hsum k, hdegree k]
+
+/-- The repaired global aggregation: local degrees are first summed on each
+genuine component, compared with that component's boundary-lift degree, and
+only then weighted by its orientation sign. -/
+theorem groupedComponentSignedCount_eq_zero_of_comparison
+    {ι κ : Type*} [Fintype ι] [Fintype κ] [DecidableEq κ]
+    (component : ι → κ) (localDegree : ι → ℤ)
+    (componentDegree orientationSign : κ → ℤ)
+    (hsum : ∀ k,
+      componentLocalDegreeSum component localDegree k = componentDegree k)
+    (hdegree : ∀ k, componentDegree k = 0) :
+    ∑ k, orientationSign k * componentLocalDegreeSum component localDegree k = 0 := by
+  apply groupedComponentSignedCount_eq_zero component localDegree orientationSign
+  exact componentLocalDegreeSum_eq_zero_of_comparison
+    component localDegree componentDegree hsum hdegree
+
 /-- Genuine connected components of a subset, represented by their underlying
 subsets rather than by independently chosen loops through each point. -/
 def PreimageComponentIndex {S : Type} [TopologicalSpace S] (s : Set S) :=
@@ -341,6 +377,8 @@ end ConstructionTargets.T00J02Closure
 #print axioms ConstructionTargets.T00J02Closure.regularFiber_chosenComponentDegree_eq_zero
 #print axioms ConstructionTargets.T00J02Closure.componentSignedCount_eq_zero_of_componentDegree_eq_zero
 #print axioms ConstructionTargets.T00J02Closure.groupedComponentSignedCount_eq_zero
+#print axioms ConstructionTargets.T00J02Closure.componentLocalDegreeSum_eq_zero_of_comparison
+#print axioms ConstructionTargets.T00J02Closure.groupedComponentSignedCount_eq_zero_of_comparison
 #print axioms ConstructionTargets.T00J02Closure.regularFiberComponentIndex
 #print axioms ConstructionTargets.T00J02Closure.regularFiber_mem_indexedComponent
 #print axioms ConstructionTargets.T00J02Closure.regularValue_topDegree_eq_zero_of_signedCount
