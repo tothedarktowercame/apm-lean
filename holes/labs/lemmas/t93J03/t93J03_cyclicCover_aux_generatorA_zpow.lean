@@ -472,7 +472,20 @@ theorem t93J03_cyclicCover_aux_orbit_iff (v w : ℝ × ℝ) :
 -- BEGIN SEAT AREA
 theorem t93J03_cyclicCover_aux_generatorA_zpow (n : ℤ) (v : ℝ × ℝ) :
     (KleinPresentedGroupCoordinateModel.generatorA ^ n) • v = (v.1 + n, v.2) := by
-  sorry
+  change KleinPlaneAffineAction.coordinateAct
+    (KleinPresentedGroupCoordinateNormalForm.coordinateEquiv
+      (KleinPresentedGroupCoordinateModel.generatorA ^ n)) v = _
+  rw [map_zpow, KleinPresentedGroupCoordinateNormalForm.coordinateEquiv_a]
+  have hA : KleinPresentedGroupCoordinateModel.A ^ n =
+      SemidirectProduct.inl (Multiplicative.ofAdd n) := by
+    rw [KleinPresentedGroupCoordinateModel.A, ← map_zpow]
+    congr
+    simpa using (Int.ofAdd_mul 1 n).symm
+  rw [hA]
+  simp only [KleinPlaneAffineAction.coordinateAct,
+    SemidirectProduct.left_inl, SemidirectProduct.right_inl]
+  simp
+  ring
 -- END SEAT AREA
 
 theorem t93J03_cyclicCover_aux_pQ_quotient
