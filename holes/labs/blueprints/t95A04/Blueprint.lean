@@ -304,7 +304,41 @@ theorem t95A04_augmented_contDiffOn
       ContDiffOn ℝ ((⊤ : ℕ∞) : WithTop ℕ∞)
         (fun z : E 2 × E 4 ↦
           writtenInExtChartAt (𝓡 2) (𝓡 6) x veroneseDescended z.1 + e (0, z.2)) U := by
-  sorry
+  let a : E 2 := extChartAt (𝓡 2) x x
+  let V : Set (E 2) :=
+    (extChartAt (𝓡 2) x).target ∩
+      (extChartAt (𝓡 2) x).symm ⁻¹'
+        (veroneseDescended ⁻¹' (extChartAt (𝓡 6) (veroneseDescended x)).source)
+  have hV_open : IsOpen V := by
+    exact (continuousOn_extChartAt_symm x).isOpen_inter_preimage
+      (isOpen_extChartAt_target x)
+      ((isOpen_extChartAt_source (veroneseDescended x)).preimage
+        veroneseDescended_contMDiff.continuous)
+  have haV : a ∈ V := by
+    constructor
+    · exact (extChartAt (𝓡 2) x).map_source (mem_extChartAt_source x)
+    · change veroneseDescended ((extChartAt (𝓡 2) x).symm
+          (extChartAt (𝓡 2) x x)) ∈
+        (extChartAt (𝓡 6) (veroneseDescended x)).source
+      rw [(extChartAt (𝓡 2) x).left_inv (mem_extChartAt_source x)]
+      exact mem_extChartAt_source (veroneseDescended x)
+  have hg : ContDiffOn ℝ ((⊤ : ℕ∞) : WithTop ℕ∞)
+      (writtenInExtChartAt (𝓡 2) (𝓡 6) x veroneseDescended) V := by
+    simpa [V, writtenInExtChartAt] using
+      (contMDiff_iff.mp veroneseDescended_contMDiff).2 x (veroneseDescended x)
+  refine ⟨V ×ˢ Set.univ, hV_open.prod isOpen_univ, ?_, ?_⟩
+  · exact ⟨haV, Set.mem_univ 0⟩
+  · have hg' : ContDiffOn ℝ ((⊤ : ℕ∞) : WithTop ℕ∞)
+        (fun z : E 2 × E 4 =>
+          writtenInExtChartAt (𝓡 2) (𝓡 6) x veroneseDescended z.1)
+        (V ×ˢ Set.univ) :=
+      hg.comp contDiffOn_fst (by
+        intro z hz
+        exact hz.1)
+    have he' : ContDiffOn ℝ ((⊤ : ℕ∞) : WithTop ℕ∞)
+        (fun z : E 2 × E 4 => e (0, z.2)) (V ×ˢ Set.univ) :=
+      (e.contDiff.comp (contDiff_const.prodMk contDiff_snd)).contDiffOn
+    exact hg'.add he'
 
 /-- Euclidean inverse-function theorem in the exact local form needed by the
 augmented coordinate map. -/
