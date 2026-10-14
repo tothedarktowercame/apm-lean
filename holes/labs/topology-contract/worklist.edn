@@ -119066,7 +119066,7 @@
   {:consumer :t00J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 10,
+   :stop-count 0,
    :review-finding
    "Recorded fixture hash is malformed/mismatched: ledger has afb497a6df6187f797ce1df000700b7c24774e94f50633c1cc10b2aa0e8c82319196, but the recorded commit blueprint hashes to afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984. Repair fixture provenance. The archived closure otherwise compiles sorry-free with standard axioms; Main retains its one baseline sorry; registry 166/166.",
    :evidence
@@ -119118,7 +119118,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119140,7 +119140,7 @@
    :id :program-2026-10-13-close-t00j02,
    :kind :final-adapter,
    :campaign-priority 45,
-   :fail-count 1,
+   :fail-count 0,
    :depends-on [],
    :program true,
    :other-consumers [],
@@ -119274,6 +119274,17 @@
      {:cmd "lake env lean problems/t98A06/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "hash/placeholders/diff", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1792011038663-12387-00acf884",
+     :commands
+     ["git diff-tree/show c5e1d7cd"
+      "archive c5e1d7cd; lake env lean closure and Main"
+      "sha256sum/placeholders at c5e1d7cd"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS program STOP: new commit changes only t98A06Closure.lean and proves the correctly oriented finite-dimensional linear input: a surjective continuous linear map admits a continuous linear right inverse R with L.comp R = id. This is genuine progress toward local smooth lifts without claiming smooth dependence. Fixture/frozen hashes match; closure has 0 placeholders, Main baseline 1; archived files compile with standard axioms; registry 166/166. Smooth local dependence, compact-flow fiber diffeomorphism, and Main assembly remain listed."},
     :commit "c5e1d7cd37bb0be2debd3ae20a4019307db2a460",
     :changed-paths ["ConstructionTargets/t98A06Closure.lean"],
     :fixture
@@ -119282,7 +119293,7 @@
      "9838452bf081767e1df000700b7c24774e94f50633c1cc10b2aa0e8c82319196"},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t98A06/lean/Main.lean"
     "problems/t98A06/status.json"
@@ -119300,7 +119311,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t98A06Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked B1 representations and B3 gluing.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked derivative right inverses.",
    :id :program-2026-10-13-close-t98a06,
    :kind :final-adapter,
    :campaign-priority 50,
@@ -119314,7 +119325,10 @@
      :reason "Blueprint written; implementation awaits review."}
     {:job 2,
      :commit "1f334efd354c87554eb3f200daefb09084b9b525",
-     :reason "Banked B1 representations and B3 gluing."}]}
+     :reason "Banked B1 representations and B3 gluing."}
+    {:job 3,
+     :commit "c5e1d7cd37bb0be2debd3ae20a4019307db2a460",
+     :reason "Banked derivative right inverses."}]}
   {:consumer :t01A01,
    :stop-count 0,
    :phase :implementation,
@@ -120022,7 +120036,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "regularFiberLocalDegree_localization_eq",
@@ -120034,14 +120048,16 @@
     :type
     "fiber local degree is the localized global fundamental-class coefficient",
     :area "oriented-surface-degree",
-    :proved-in :program-2026-10-13-close-t00j02},
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t00J02Closure.lean"]},
    :id :lemma-regularfiberlocaldegree-localization-eq,
    :kind :lemma,
    :depends-on [:lemma-surfacetophomology-localfundamentalclassiso],
    :other-consumers []}
   {:consumer :t98A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "surjective_continuousLinearMap_has_rightInverse",
@@ -120051,7 +120067,9 @@
     :reported-by [:program-2026-10-13-close-t98a06],
     :type "surjective CLM has CLM right inverse",
     :area "smooth-manifold-submersion",
-    :proved-in :program-2026-10-13-close-t98a06},
+    :proved-in :program-2026-10-13-close-t98a06,
+    :banked-by :program-2026-10-13-close-t98a06,
+    :banked-commit "c5e1d7cd37bb0be2debd3ae20a4019307db2a460"},
    :id :lemma-surjective-continuouslinearmap-has-rightinverse,
    :kind :lemma,
    :depends-on [],
