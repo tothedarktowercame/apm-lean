@@ -99,7 +99,7 @@ lemma apm_t91J03_rank_one_scalar_unique
 Kept separate so this leaf has no topological dependencies. -/
 lemma apm_t91J03_natAbs_two_not_le_one
     (n : ℤ) (htwo : n.natAbs = 2) (hle : n.natAbs ≤ 1) : False := by
-  sorry
+  omega
 
 /-- An embedded annular circle cannot have homological winding of absolute
 value two.  This assembly is sorry-free; its three inputs can be proved in
