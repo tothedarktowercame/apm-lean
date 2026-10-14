@@ -367,7 +367,100 @@ lemma apm_t01A02_disk_ray_hits_boundary_unique
     (x y : apm_t01A02_Disk) (hxy : x ≠ y) :
     ∃! t : Set.Ici (0 : ℝ),
       ‖(x.1 + t.1 • (x.1 - y.1) : apm_t01A02_Plane)‖ = 1 := by
-  sorry
+  let v : apm_t01A02_Plane := x.1 - y.1
+  let A : ℝ := ‖v‖ ^ 2
+  let B : ℝ := inner ℝ x.1 v
+  let C : ℝ := ‖x.1‖ ^ 2 - 1
+  have hv : v ≠ 0 := by
+    intro hv
+    apply hxy
+    apply Subtype.ext
+    dsimp [v] at hv
+    exact sub_eq_zero.mp hv
+  have hA : 0 < A := by
+    dsimp [A]
+    positivity
+  have hx : ‖x.1‖ ≤ 1 := by
+    simpa only [Metric.mem_closedBall, dist_zero_right] using x.2
+  have hy : ‖y.1‖ ≤ 1 := by
+    simpa only [Metric.mem_closedBall, dist_zero_right] using y.2
+  have hC : C ≤ 0 := by
+    dsimp [C]
+    nlinarith [norm_nonneg x.1]
+  have hquad (t : ℝ) :
+      ‖x.1 + t • v‖ ^ 2 = A * t ^ 2 + 2 * B * t + (C + 1) := by
+    simp only [norm_add_sq_real, real_inner_smul_right,
+      real_inner_self_eq_norm_sq, norm_smul, Real.norm_eq_abs]
+    dsimp [A, B, C]
+    rw [mul_pow, sq_abs]
+    ring
+  have hBbound : A + C ≤ 2 * B := by
+    have hnormy : ‖y.1‖ ^ 2 ≤ 1 := by nlinarith [norm_nonneg y.1]
+    have hvnorm :
+        A = ‖x.1‖ ^ 2 + ‖y.1‖ ^ 2 - 2 * inner ℝ x.1 y.1 := by
+      dsimp [A, v]
+      rw [← real_inner_self_eq_norm_sq]
+      simp only [inner_sub_left, inner_sub_right,
+        real_inner_self_eq_norm_sq, real_inner_comm]
+      ring
+    have hBform : 2 * B =
+        2 * ‖x.1‖ ^ 2 - 2 * inner ℝ x.1 y.1 := by
+      dsimp [B, v]
+      simp only [inner_sub_right, real_inner_self_eq_norm_sq]
+      ring
+    rw [hvnorm, hBform]
+    dsimp [C]
+    linarith
+  let D : ℝ := B ^ 2 - A * C
+  have hD : 0 ≤ D := by
+    dsimp [D]
+    nlinarith [sq_nonneg B]
+  let r : ℝ := (-B + Real.sqrt D) / A
+  have hsqrt : (Real.sqrt D) ^ 2 = D := Real.sq_sqrt hD
+  have hr : 0 ≤ r := by
+    have habs : |B| ≤ Real.sqrt D := by
+      have hDb : B ^ 2 ≤ D := by
+        dsimp [D]
+        nlinarith
+      nlinarith [sq_abs B, abs_nonneg B, Real.sqrt_nonneg D]
+    have : B ≤ Real.sqrt D := le_trans (le_abs_self B) habs
+    apply div_nonneg
+    · linarith
+    · exact hA.le
+  have hrquad : A * r ^ 2 + 2 * B * r + C = 0 := by
+    dsimp [r]
+    field_simp [ne_of_gt hA]
+    dsimp [D] at hsqrt
+    nlinarith [hsqrt]
+  have hrsphere : ‖x.1 + r • v‖ = 1 := by
+    have hs : ‖x.1 + r • v‖ ^ 2 = 1 := by
+      rw [hquad]
+      linarith
+    nlinarith [norm_nonneg (x.1 + r • v)]
+  refine ⟨⟨r, hr⟩, ?_, ?_⟩
+  · simpa [v] using hrsphere
+  · intro s hs
+    apply Subtype.ext
+    have hsquad : A * s.1 ^ 2 + 2 * B * s.1 + C = 0 := by
+      have := hquad s.1
+      rw [show ‖x.1 + s.1 • v‖ = 1 by simpa [v] using hs] at this
+      nlinarith
+    have hfactor : (s.1 - r) * (A * (s.1 + r) + 2 * B) = 0 := by
+      nlinarith [hrquad]
+    rcases mul_eq_zero.mp hfactor with hsr | hsum
+    · linarith
+    · have hprod : C = A * s.1 * r := by
+        nlinarith [hrquad, hsquad]
+      have hCzero : C = 0 := by
+        have hsnonneg : 0 ≤ s.1 := s.2
+        have hp : 0 ≤ A * s.1 * r := mul_nonneg (mul_nonneg hA.le hsnonneg) hr
+        linarith
+      have hBpos : 0 < B := by
+        nlinarith
+      have : 0 < A * (s.1 + r) + 2 * B := by
+        have hsnonneg : 0 ≤ s.1 := s.2
+        positivity
+      exact (this.ne' hsum).elim
 -- END SEAT AREA
 
 /-- Seat (quadratic-formula continuity): for a continuous fixed-point-free
