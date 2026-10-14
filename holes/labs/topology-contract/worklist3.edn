@@ -36158,6 +36158,16 @@
     [{:cmd "full source-coordinate probe",
       :exit 1,
       :correction "split and proved inverse-map side"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791987439855-11869-e13dd8b7",
+     :commands
+     ["git show/check/diff 135c809b; scope/boundary; fixture sha256"
+      "lake build closure; lean fixture and Main"
+      "statement registry; placeholder and axiom recount"],
+     :finding
+     "PASS. Commit 135c809b adds compiled, sorry-free progress: at the preferred skeleton basepoint it proves the concrete skeleton-to-outer pi1 map is definitionally the inverse functor map, closing the target side of the pending source-coordinate comparison with correct types and orientation. Scope/hash match; support placeholders 0->0; frozen Main 1->1; standard axioms only; registry 166/166. Unit/connector casts, reverse kernel inclusion, surjectivity, and winding remain listed."},
     :commit "135c809b7929f6786434fdf975d48f1ac0401a4a",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
@@ -36168,7 +36178,7 @@
      "b981f3142e3c3b06c11719fa655b70f6140842b073ad7a0294ef76423cc084ec"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -36186,7 +36196,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t93J03Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed the categorical equivalence-unit/preimage identity; concrete outer-connector identification remains.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Proved the direct skeleton-to-outer map is literally the equivalence inverse map; packaged unit/connector casts remain.",
    :id :program-2026-10-13-close-t93j03,
    :kind :final-adapter,
    :campaign-priority 30,
@@ -36368,7 +36378,11 @@
     {:job 9,
      :commit "a99d1a8d1b73e3760af0f8cb89a9a4151be047d8",
      :reason
-     "Committed the categorical equivalence-unit/preimage identity; concrete outer-connector identification remains."}]}
+     "Committed the categorical equivalence-unit/preimage identity; concrete outer-connector identification remains."}
+    {:job 1,
+     :commit "135c809b7929f6786434fdf975d48f1ac0401a4a",
+     :reason
+     "Proved the direct skeleton-to-outer map is literally the equivalence inverse map; packaged unit/connector casts remain."}]}
   {:consumer :t99J05,
    :stop-count 5,
    :evidence
@@ -38789,7 +38803,7 @@
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "kleinPolygonSkeletonToOuterPiOne_apply_eq_inverse_map",
@@ -38801,7 +38815,9 @@
     :type
     "direct skeleton-to-outer map equals equivalence inverse map",
     :area "covering-subgroup-correspondence",
-    :proved-in :program-2026-10-13-close-t93j03},
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "135c809b7929f6786434fdf975d48f1ac0401a4a"},
    :id :lemma-kleinpolygonskeletontoouterpione-apply-eq-inverse-map,
    :kind :lemma,
    :depends-on [],
