@@ -330,7 +330,11 @@ lemma apm_t01A02_evenLift_error_bounded
 two-by-two integer matrix `A`. -/
 lemma apm_t01A02_even_matrix_fixedPoint_det_ne_zero (a b c d : ℤ) :
     ((1 - 2 * a) * (1 - 2 * d) - (-2 * b) * (-2 * c)) ≠ 0 := by
-  sorry
+  intro h
+  have hodd :
+      (1 - 2 * (a + d) + 4 * (a * d - b * c) : ℤ) = 0 := by
+    nlinarith
+  omega
 
 /-- The Euclidean plane used by the two-dimensional Brouwer leaves. -/
 abbrev apm_t01A02_Plane := EuclideanSpace ℝ (Fin 2)
