@@ -1549,7 +1549,7 @@ Hessian (each side of the defining identity is an `L²` pairing against a
 fixed test function). -/
 lemma apm_m03J01_hessianOperator_seq_closed_aux_weakHessian_limit {n : ℕ}
     {g : ℕ → apm_m03J01_E n → apm_m03J01_E n} {g0 : apm_m03J01_E n → apm_m03J01_E n}
-    (hg0 : MemLp g0 2 volume)
+    (hgk : ∀ k, MemLp (g k) 2 volume) (hg0 : MemLp g0 2 volume)
     (hg : Tendsto (fun k => eLpNorm (fun z => g k z - g0 z) 2 volume)
       atTop (nhds 0))
     {H : ℕ → apm_m03J01_E n → Fin n → Fin n → ℝ}
@@ -1586,7 +1586,7 @@ lemma apm_m03J01_hessianOperator_seq_closed {n : ℕ}
   have hY : Tendsto (fun k => (hH k).1.toLp (H k)) atTop (nhds y) := by
     simpa [Function.comp_def, hTf] using hy
   have hlim := apm_m03J01_hessianOperator_seq_closed_aux_weakHessian_limit
-    v.grad_memLp
+    (fun k => (u k).grad_memLp) v.grad_memLp
     (apm_m03J01_hessianOperator_seq_closed_aux_grad_tendsto hf u hu v hv) hH hY
   obtain ⟨Hx, hHx, hTx⟩ := hT (fun z => x z) (Lp.memLp x) v hv
   rw [Lp.toLp_coeFn] at hTx
