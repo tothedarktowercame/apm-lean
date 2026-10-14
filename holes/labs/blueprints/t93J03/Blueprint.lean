@@ -767,6 +767,34 @@ theorem t93J03_cyclicCover_aux_range
 
 /-- Transport the range computation across the homeomorphism to the Klein bottle and
 across any identification of its fundamental group. -/
+def t93J03_cyclicCover_aux_transport_homeomorphEquiv
+    {X Y : Type*} [TopologicalSpace X] [TopologicalSpace Y]
+    (f : X ≃ₜ Y) (x : X) :
+    FundamentalGroup X x ≃* FundamentalGroup Y (f x) where
+  toFun := FundamentalGroup.map ⟨f, f.continuous⟩ x
+  invFun := FundamentalGroup.mapOfEq ⟨f.symm, f.symm.continuous⟩
+    (f.symm_apply_apply x)
+  left_inv p := by
+    induction p using Path.Homotopic.Quotient.ind with
+    | mk p =>
+      rw [FundamentalGroup.map_apply]
+      change (FundamentalGroup.mapOfEq _ _)
+        (Path.Homotopic.Quotient.mk (p.map f.continuous)) = _
+      rw [FundamentalGroup.mapOfEq_apply]
+      apply Path.Homotopic.Quotient.eq.mpr
+      convert Path.Homotopic.refl p using 1
+      ext t
+      exact f.symm_apply_apply (p t)
+  right_inv p := by
+    induction p using Path.Homotopic.Quotient.ind with
+    | mk p =>
+      rw [FundamentalGroup.mapOfEq_apply]
+      apply Path.Homotopic.Quotient.eq.mpr
+      convert Path.Homotopic.refl p using 1
+      ext t
+      exact f.apply_symm_apply (p t)
+  map_mul' := map_mul _
+
 theorem t93J03_cyclicCover_aux_transport
     {C : Type} [TopologicalSpace C] (pQ : C → T93J03KleinPlaneQuotient)
     (hpQ : Continuous pQ) (Φ : T93J03KleinPlaneQuotient ≃ₜ KleinBottle)
@@ -781,7 +809,46 @@ theorem t93J03_cyclicCover_aux_transport
     (FundamentalGroup.mapOfEq ⟨Φ ∘ pQ, Φ.continuous.comp hpQ⟩
         (show Φ (pQ c) = k by rw [hc, hk])).range =
       Subgroup.comap e.toMonoidHom (Subgroup.zpowers generatorA) := by
-  sorry
+  subst q
+  subst k
+  let F := t93J03_cyclicCover_aux_transport_homeomorphEquiv Φ (pQ c)
+  let e' : FundamentalGroup KleinBottle (Φ (pQ c)) ≃* PresentedKleinGroup :=
+    F.symm.trans M
+  have hcomp :
+      FundamentalGroup.mapOfEq ⟨Φ ∘ pQ, Φ.continuous.comp hpQ⟩ rfl =
+        F.toMonoidHom.comp (FundamentalGroup.mapOfEq ⟨pQ, hpQ⟩ rfl) := by
+    ext γ
+    change (1 * FundamentalGroup.map ⟨Φ ∘ pQ, Φ.continuous.comp hpQ⟩ c γ * 1) =
+      F (1 * FundamentalGroup.map ⟨pQ, hpQ⟩ c γ * 1)
+    simp only [one_mul, mul_one]
+    induction γ using Path.Homotopic.Quotient.ind with
+    | mk γ => rfl
+  ext γ
+  constructor
+  · rintro ⟨δ, hδ⟩
+    have hmap := DFunLike.congr_fun hcomp δ
+    have hδ' : F ((FundamentalGroup.mapOfEq ⟨pQ, hpQ⟩ rfl) δ) = γ :=
+      hmap.symm.trans hδ
+    change e γ ∈ Subgroup.zpowers generatorA
+    apply (hchar (e.symm.trans e') (e γ)).mp
+    have heprime : e' γ ∈ Subgroup.zpowers generatorA := by
+      rw [← hδ']
+      simpa [e'] using
+        (hrange ((FundamentalGroup.mapOfEq ⟨pQ, hpQ⟩ rfl) δ)).mp ⟨δ, rfl⟩
+    simpa [e'] using heprime
+  · intro hγ
+    change e γ ∈ Subgroup.zpowers generatorA at hγ
+    have he' : e' γ ∈ Subgroup.zpowers generatorA := by
+      simpa [e'] using (hchar (e.symm.trans e') (e γ)).mpr hγ
+    have hr : F.symm γ ∈
+        (FundamentalGroup.mapOfEq ⟨pQ, hpQ⟩ rfl).range :=
+      (hrange (F.symm γ)).mpr he'
+    obtain ⟨δ, hδ⟩ := hr
+    refine ⟨δ, ?_⟩
+    have hmap := DFunLike.congr_fun hcomp δ
+    apply hmap.trans
+    change F ((FundamentalGroup.mapOfEq ⟨pQ, hpQ⟩ rfl) δ) = γ
+    rw [hδ, F.apply_symm_apply]
 
 end T93J03CyclicCover
 
