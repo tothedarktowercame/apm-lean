@@ -87941,6 +87941,18 @@
      {:cmd "placeholder scan", :exit 0}
      {:cmd "axioms check", :exit 0}
      {:cmd "git show --check 219012ae3", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792015496406-12519-52218cfc",
+     :commands
+     ["git show/diff 219012ae3; blob sha256; diff --check"
+      "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology"
+      "lake env lean /dev/stdin (#print axioms)"
+      "placeholder scan"
+      "statement-registry.py check"],
+     :finding
+     "PASS: reviewer codex-7; 219012ae3 (topo-6) newly changes only scoped PolygonSurfaceHomology.lean; fixture SHA-256 cbbbe7a0ff8128571eb302129d32cecf8bbebcbf141c501fec0c5271e1f1854c matches. Exact blob builds; 0 placeholders; standard axioms; registry 166/0. The unresolved circle orientation is retained as a scalar unit. Splitting its proved +1/-1 alternatives identifies the new map exactly with attachingBoundary or its negation; the kernel and range equalities follow, so no orientation choice or invariant is bypassed. New compiled progress; remaining: identify B7 with this sign-corrected map, then apply the proved kernel/range results for B8-B10."},
     :commit "219012ae3",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
@@ -87949,7 +87961,7 @@
      "cbbbe7a0ff8128571eb302129d32cecf8bbebcbf141c501fec0c5271e1f1854c"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -87969,7 +87981,7 @@
     :blueprint
     "ConstructionTargets/PolygonSurfaceHomology.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked winding generator and proved H1 orientation is exactly a unit-sign ambiguity.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked sign-corrected attaching map with unchanged kernel and range.",
    :id :program-2026-10-13-polygon-surface-homology,
    :kind :reusable-theorem,
    :campaign-priority 31,
@@ -88219,7 +88231,11 @@
     {:job 6,
      :commit "2f96f1a83",
      :reason
-     "Banked winding generator and proved H1 orientation is exactly a unit-sign ambiguity."}]}
+     "Banked winding generator and proved H1 orientation is exactly a unit-sign ambiguity."}
+    {:job 7,
+     :commit "219012ae3",
+     :reason
+     "Banked sign-corrected attaching map with unchanged kernel and range."}]}
   {:consumer :t97A01,
    :stop-count 0,
    :phase :implementation,
@@ -91876,7 +91892,7 @@
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "orientationSignedAttachingBoundary_ker",
@@ -91886,7 +91902,9 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "unit-sign attaching map has BoundaryKernel",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :program-2026-10-13-polygon-surface-homology,
+    :banked-commit "219012ae3"},
    :id :lemma-orientationsignedattachingboundary-ker,
    :kind :lemma,
    :depends-on
@@ -91894,7 +91912,7 @@
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "orientationSignedAttachingBoundary_range",
@@ -91904,7 +91922,9 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "unit-sign attaching map has attachingBoundary range",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :program-2026-10-13-polygon-surface-homology,
+    :banked-commit "219012ae3"},
    :id :lemma-orientationsignedattachingboundary-range,
    :kind :lemma,
    :depends-on
